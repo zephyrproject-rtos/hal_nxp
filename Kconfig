@@ -1,0 +1,5 @@
+
+rsource "mcux/Kconfig"
+
+rsource "imx/Kconfig"
+
