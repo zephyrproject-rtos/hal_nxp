@@ -20,11 +20,7 @@ import shutil
 import sys
 import tempfile
 
-if "ZEPHYR_BASE" not in os.environ:
-    sys.stderr.write("$ZEPHYR_BASE environment variable undefined.\n")
-    exit(1)
-
-ZEPHYR_BASE = os.environ["ZEPHYR_BASE"]
+MCUX_HAL_BASE = os.path.join(sys.path[0], '..')
 
 def get_soc_family(device):
     if device.startswith('MK'):
@@ -61,8 +57,8 @@ def import_sdk(directory):
 
     for device in devices:
         family = get_soc_family(device)
-        shared_dst = os.path.join(ZEPHYR_BASE, 'ext/hal/nxp/mcux/drivers', family)
-        device_dst = os.path.join(ZEPHYR_BASE, 'ext/hal/nxp/mcux/devices', device)
+        shared_dst = os.path.join(MCUX_HAL_BASE, 'drivers', family)
+        device_dst = os.path.join(MCUX_HAL_BASE, 'devices', device)
 
         device_src = os.path.join(directory, 'devices', device)
         device_pattern = "|".join([device, 'fsl_device_registers'])
@@ -91,7 +87,7 @@ def import_sdk(directory):
 
     for board in boards:
         board_src = os.path.join(directory, 'boards', board)
-        board_dst = os.path.join(ZEPHYR_BASE, 'ext/hal/nxp/mcux/boards', board)
+        board_dst = os.path.join(MCUX_HAL_BASE, 'boards', board)
 
         xip_config_src = os.path.join(board_src, 'xip')
         xip_config_pattern = ".*"
