@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-11-16
-**     Build:               b181120
+**     Build:               b190319
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2019 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -132,6 +132,8 @@
 #define FSL_FEATURE_ADC_SUPPORT_HARDWARE_TRIGGER_REMOVE (0)
 /* @brief Remove ALT Clock selection feature. */
 #define FSL_FEATURE_ADC_SUPPORT_ALTCLK_REMOVE (1)
+/* @brief Conversion control count (related to number of registers HCn and Rn). */
+#define FSL_FEATURE_ADC_CONVERSION_CONTROL_COUNT (8)
 
 /* ADC_ETC module features */
 
@@ -209,6 +211,12 @@
 #define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (1)
 /* @brief Number of DMA channels with asynchronous request capability (register EARS). (Valid only for eDMA modules.) */
 #define FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT (32)
+/* @brief Channel IRQ entry shared offset. */
+#define FSL_FEATURE_EDMA_MODULE_CHANNEL_IRQ_ENTRY_SHARED_OFFSET (16)
+/* @brief If 8 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_8_BYTES_TRANSFER (1)
+/* @brief If 16 bytes transfer supported. */
+#define FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER (0)
 
 /* DMAMUX module features */
 
@@ -239,9 +247,9 @@
 /* EWM module features */
 
 /* @brief Has clock select (register CLKCTRL). */
-#define FSL_FEATURE_EWM_HAS_CLOCK_SELECT  (1)
+#define FSL_FEATURE_EWM_HAS_CLOCK_SELECT (1)
 /* @brief Has clock prescaler (register CLKPRESCALER). */
-#define FSL_FEATURE_EWM_HAS_PRESCALER  (1)
+#define FSL_FEATURE_EWM_HAS_PRESCALER (1)
 
 /* FLEXIO module features */
 
@@ -265,6 +273,8 @@
 #define FSL_FEATURE_FLEXIO_VERID_RESET_VALUE (0x1010001)
 /* @brief Reset value of the FLEXIO_PARAM register */
 #define FSL_FEATURE_FLEXIO_PARAM_RESET_VALUE (0x2200808)
+/* @brief Flexio DMA request base channel */
+#define FSL_FEATURE_FLEXIO_DMA_REQUEST_BASE_CHANNEL (0)
 
 /* FLEXRAM module features */
 
@@ -450,7 +460,10 @@
 /* @brief Receive/transmit FIFO size in item count (register bit fields TCSR[FRDE], TCSR[FRIE], TCSR[FRF], TCR1[TFW], RCSR[FRDE], RCSR[FRIE], RCSR[FRF], RCR1[RFW], registers TFRn, RFRn). */
 #define FSL_FEATURE_SAI_FIFO_COUNT (32)
 /* @brief Receive/transmit channel number (register bit fields TCR3[TCE], RCR3[RCE], registers TDRn and RDRn). */
-#define FSL_FEATURE_SAI_CHANNEL_COUNT (4)
+#define FSL_FEATURE_SAI_CHANNEL_COUNTn(x) \
+    (((x) == SAI1) ? (4) : \
+    (((x) == SAI2) ? (1) : \
+    (((x) == SAI3) ? (1) : (-1))))
 /* @brief Maximum words per frame (register bit fields TCR3[WDFL], TCR4[FRSZ], TMR[TWM], RCR3[WDFL], RCR4[FRSZ], RMR[RWM]). */
 #define FSL_FEATURE_SAI_MAX_WORDS_PER_FRAME (32)
 /* @brief Has support of combining multiple data channel FIFOs into single channel FIFO (register bit fields TCR3[CFR], TCR4[FCOMB], TFR0[WCP], TFR1[WCP], RCR3[CFR], RCR4[FCOMB], RFR0[RCP], RFR1[RCP]). */
@@ -475,6 +488,10 @@
 #define FSL_FEATURE_SAI_HAS_MDR (0)
 /* @brief Has support the BCLK bypass mode when BCLK = MCLK. */
 #define FSL_FEATURE_SAI_HAS_BCLK_BYPASS (0)
+/* @brief Has DIV bit fields of MCR register (register bit fields MCR[DIV]. */
+#define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (0)
+/* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
+#define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (1)
 
 /* SEMC module features */
 
@@ -575,14 +592,8 @@
 
 /* XBARA module features */
 
-/* @brief DMA_CH_MUX_REQ_30. */
-#define FSL_FEATURE_XBARA_OUTPUT_DMA_CH_MUX_REQ_30 (1)
-/* @brief DMA_CH_MUX_REQ_31. */
-#define FSL_FEATURE_XBARA_OUTPUT_DMA_CH_MUX_REQ_31 (1)
-/* @brief DMA_CH_MUX_REQ_94. */
-#define FSL_FEATURE_XBARA_OUTPUT_DMA_CH_MUX_REQ_94 (1)
-/* @brief DMA_CH_MUX_REQ_95. */
-#define FSL_FEATURE_XBARA_OUTPUT_DMA_CH_MUX_REQ_95 (1)
+/* @brief Number of interrupt requests. */
+#define FSL_FEATURE_XBARA_INTERRUPT_COUNT (4)
 
 #endif /* _MIMXRT1021_FEATURES_H_ */
 

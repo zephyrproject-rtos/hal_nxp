@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief GPIO driver version 2.0.1. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief GPIO driver version 2.0.2. */
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*! @brief GPIO direction definition. */
@@ -45,7 +45,7 @@ typedef enum _gpio_interrupt_mode
 } gpio_interrupt_mode_t;
 
 /*! @brief GPIO Init structure definition. */
-typedef struct z_gpio_pin_config
+typedef struct _gpio_pin_config
 {
     gpio_pin_direction_t direction; /*!< Specifies the pin direction. */
     uint8_t outputLogic;            /*!< Set a default output logic, which has no use in input */

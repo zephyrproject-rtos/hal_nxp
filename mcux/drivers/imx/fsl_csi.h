@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018, NXP Semiconductors, Inc.
+ * Copyright  2017-2019 NXP
  * All rights reserved.
  *
  *
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*! @brief Size of the frame buffer queue used in CSI transactional function. */
@@ -63,7 +63,9 @@
 #error CSI_CSICR3_INT_EN_MASK could not cover all interrupt bits in CSICR3.
 #endif
 
-#if ((~CSI_CSICR18_INT_EN_MASK) & ((CSI_CSICR18_FIELD0_DONE_IE_MASK | CSI_CSICR18_DMA_FIELD1_DONE_IE_MASK | CSI_CSICR18_BASEADDR_CHANGE_ERROR_IE_MASK) << 6U))
+#if ((~CSI_CSICR18_INT_EN_MASK) & ((CSI_CSICR18_FIELD0_DONE_IE_MASK | CSI_CSICR18_DMA_FIELD1_DONE_IE_MASK | \
+                                    CSI_CSICR18_BASEADDR_CHANGE_ERROR_IE_MASK)                              \
+                                   << 6U))
 #error CSI_CSICR18_INT_EN_MASK could not cover all interrupt bits in CSICR18.
 #endif
 
@@ -71,7 +73,7 @@
 enum _csi_status
 {
     kStatus_CSI_NoEmptyBuffer = MAKE_STATUS(kStatusGroup_CSI, 0), /*!< No empty frame buffer in queue to load to CSI. */
-    kStatus_CSI_NoFullBuffer = MAKE_STATUS(kStatusGroup_CSI, 1),  /*!< No full frame buffer in queue to read out. */
+    kStatus_CSI_NoFullBuffer  = MAKE_STATUS(kStatusGroup_CSI, 1), /*!< No full frame buffer in queue to read out. */
     kStatus_CSI_QueueFull = MAKE_STATUS(kStatusGroup_CSI, 2), /*!< Queue is full, no room to save new empty buffer. */
     kStatus_CSI_FrameDone = MAKE_STATUS(kStatusGroup_CSI, 3), /*!< New frame received and saved to queue. */
 };
@@ -83,9 +85,9 @@ enum _csi_status
  */
 typedef enum _csi_work_mode
 {
-    kCSI_GatedClockMode = CSI_CSICR1_GCLK_MODE(1U),       /*!< HSYNC, VSYNC, and PIXCLK signals are used. */
-    kCSI_NonGatedClockMode = 0U,                          /*!< VSYNC, and PIXCLK signals are used. */
-    kCSI_CCIR656ProgressiveMode = CSI_CSICR1_CCIR_EN(1U), /*!< CCIR656 progressive mode. */
+    kCSI_GatedClockMode         = CSI_CSICR1_GCLK_MODE(1U), /*!< HSYNC, VSYNC, and PIXCLK signals are used. */
+    kCSI_NonGatedClockMode      = 0U,                       /*!< VSYNC, and PIXCLK signals are used. */
+    kCSI_CCIR656ProgressiveMode = CSI_CSICR1_CCIR_EN(1U),   /*!< CCIR656 progressive mode. */
 } csi_work_mode_t;
 
 /*!
@@ -101,12 +103,12 @@ typedef enum _csi_data_bus
 /*! @brief CSI signal polarity. */
 enum _csi_polarity_flags
 {
-    kCSI_HsyncActiveLow = 0U,                           /*!< HSYNC is active low. */
-    kCSI_HsyncActiveHigh = CSI_CSICR1_HSYNC_POL_MASK,   /*!< HSYNC is active high. */
-    kCSI_DataLatchOnRisingEdge = CSI_CSICR1_REDGE_MASK, /*!< Pixel data latched at rising edge of pixel clock. */
-    kCSI_DataLatchOnFallingEdge = 0U,                   /*!< Pixel data latched at falling edge of pixel clock. */
-    kCSI_VsyncActiveHigh = 0U,                          /*!< VSYNC is active high. */
-    kCSI_VsyncActiveLow = CSI_CSICR1_SOF_POL_MASK,      /*!< VSYNC is active low. */
+    kCSI_HsyncActiveLow         = 0U,                        /*!< HSYNC is active low. */
+    kCSI_HsyncActiveHigh        = CSI_CSICR1_HSYNC_POL_MASK, /*!< HSYNC is active high. */
+    kCSI_DataLatchOnRisingEdge  = CSI_CSICR1_REDGE_MASK,     /*!< Pixel data latched at rising edge of pixel clock. */
+    kCSI_DataLatchOnFallingEdge = 0U,                        /*!< Pixel data latched at falling edge of pixel clock. */
+    kCSI_VsyncActiveHigh        = 0U,                        /*!< VSYNC is active high. */
+    kCSI_VsyncActiveLow         = CSI_CSICR1_SOF_POL_MASK,   /*!< VSYNC is active low. */
 };
 
 /*! @brief Configuration to initialize the CSI module. */
@@ -130,33 +132,34 @@ typedef struct _csi_config
 /*! @brief The CSI FIFO, used for FIFO operation. */
 typedef enum _csi_fifo
 {
-    kCSI_RxFifo = (1U << 0U),   /*!< RXFIFO. */
-    kCSI_StatFifo = (1U << 1U), /*!< STAT FIFO. */
-    kCSI_AllFifo = 0x01 | 0x02, /*!< Both RXFIFO and STAT FIFO. */
+    kCSI_RxFifo   = (1U << 0U),  /*!< RXFIFO. */
+    kCSI_StatFifo = (1U << 1U),  /*!< STAT FIFO. */
+    kCSI_AllFifo  = 0x01 | 0x02, /*!< Both RXFIFO and STAT FIFO. */
 } csi_fifo_t;
 
 /*! @brief CSI feature interrupt source. */
 enum _csi_interrupt_enable
 {
-    kCSI_EndOfFrameInterruptEnable = CSI_CSICR1_EOF_INT_EN_MASK,       /*!< End of frame interrupt enable. */
-    kCSI_ChangeOfFieldInterruptEnable = CSI_CSICR1_COF_INT_EN_MASK,    /*!< Change of field interrupt enable. */
+    kCSI_EndOfFrameInterruptEnable      = CSI_CSICR1_EOF_INT_EN_MASK,  /*!< End of frame interrupt enable. */
+    kCSI_ChangeOfFieldInterruptEnable   = CSI_CSICR1_COF_INT_EN_MASK,  /*!< Change of field interrupt enable. */
     kCSI_StatFifoOverrunInterruptEnable = CSI_CSICR1_SF_OR_INTEN_MASK, /*!< STAT FIFO overrun interrupt enable. */
-    kCSI_RxFifoOverrunInterruptEnable = CSI_CSICR1_RF_OR_INTEN_MASK,   /*!< RXFIFO overrun interrupt enable. */
+    kCSI_RxFifoOverrunInterruptEnable   = CSI_CSICR1_RF_OR_INTEN_MASK, /*!< RXFIFO overrun interrupt enable. */
     kCSI_StatFifoDmaDoneInterruptEnable =
         CSI_CSICR1_SFF_DMA_DONE_INTEN_MASK,                          /*!< STAT FIFO DMA done interrupt enable. */
     kCSI_StatFifoFullInterruptEnable = CSI_CSICR1_STATFF_INTEN_MASK, /*!< STAT FIFO full interrupt enable. */
     kCSI_RxBuffer1DmaDoneInterruptEnable =
         CSI_CSICR1_FB2_DMA_DONE_INTEN_MASK, /*!< RX frame buffer 1 DMA transfer done. */
     kCSI_RxBuffer0DmaDoneInterruptEnable =
-        CSI_CSICR1_FB1_DMA_DONE_INTEN_MASK,                       /*!< RX frame buffer 0 DMA transfer done. */
-    kCSI_RxFifoFullInterruptEnable = CSI_CSICR1_RXFF_INTEN_MASK,  /*!< RXFIFO full interrupt enable. */
-    kCSI_StartOfFrameInterruptEnable = CSI_CSICR1_SOF_INTEN_MASK, /*!< Start of frame (SOF) interrupt enable. */
+        CSI_CSICR1_FB1_DMA_DONE_INTEN_MASK,                        /*!< RX frame buffer 0 DMA transfer done. */
+    kCSI_RxFifoFullInterruptEnable   = CSI_CSICR1_RXFF_INTEN_MASK, /*!< RXFIFO full interrupt enable. */
+    kCSI_StartOfFrameInterruptEnable = CSI_CSICR1_SOF_INTEN_MASK,  /*!< Start of frame (SOF) interrupt enable. */
 
-    kCSI_EccErrorInterruptEnable = CSI_CSICR3_ECC_INT_EN_MASK,      /*!< ECC error detection interrupt enable. */
+    kCSI_EccErrorInterruptEnable    = CSI_CSICR3_ECC_INT_EN_MASK,   /*!< ECC error detection interrupt enable. */
     kCSI_AhbResErrorInterruptEnable = CSI_CSICR3_HRESP_ERR_EN_MASK, /*!< AHB response Error interrupt enable. */
 
-    kCSI_BaseAddrChangeErrorInterruptEnable = CSI_CSICR18_BASEADDR_CHANGE_ERROR_IE_MASK << 6U, /*!< The DMA output buffer base address
-                                                                               changes before DMA completed. */
+    kCSI_BaseAddrChangeErrorInterruptEnable = CSI_CSICR18_BASEADDR_CHANGE_ERROR_IE_MASK
+                                              << 6U,                            /*!< The DMA output buffer base address
+                                                                changes before DMA completed. */
     kCSI_Field0DoneInterruptEnable = CSI_CSICR18_FIELD0_DONE_IE_MASK << 6U,     /*!< Field 0 done interrupt enable. */
     kCSI_Field1DoneInterruptEnable = CSI_CSICR18_DMA_FIELD1_DONE_IE_MASK << 6U, /*!< Field 1 done interrupt enable. */
 };
@@ -181,23 +184,23 @@ enum _csi_interrupt_enable
  */
 enum _csi_flags
 {
-    kCSI_RxFifoDataReadyFlag = CSI_CSISR_DRDY_MASK,      /*!< RXFIFO data ready. */
-    kCSI_EccErrorFlag = CSI_CSISR_ECC_INT_MASK,          /*!< ECC error detected. */
-    kCSI_AhbResErrorFlag = CSI_CSISR_HRESP_ERR_INT_MASK, /*!< Hresponse (AHB bus response) Error. */
-    kCSI_ChangeOfFieldFlag = CSI_CSISR_COF_INT_MASK,     /*!< Change of field. */
-    kCSI_Field0PresentFlag = CSI_CSISR_F1_INT_MASK,      /*!< Field 0 present in CCIR mode. */
-    kCSI_Field1PresentFlag = CSI_CSISR_F2_INT_MASK,      /*!< Field 1 present in CCIR mode. */
-    kCSI_StartOfFrameFlag = CSI_CSISR_SOF_INT_MASK,      /*!< Start of frame (SOF) detected. */
-    kCSI_EndOfFrameFlag = CSI_CSISR_EOF_INT_MASK,        /*!< End of frame (EOF) detected. */
-    kCSI_RxFifoFullFlag = CSI_CSISR_RxFF_INT_MASK,       /*!< RXFIFO full (Number of data reaches trigger level). */
-    kCSI_RxBuffer1DmaDoneFlag = CSI_CSISR_DMA_TSF_DONE_FB2_MASK,          /*!< RX frame buffer 1 DMA transfer done. */
-    kCSI_RxBuffer0DmaDoneFlag = CSI_CSISR_DMA_TSF_DONE_FB1_MASK,          /*!< RX frame buffer 0 DMA transfer done. */
-    kCSI_StatFifoFullFlag = CSI_CSISR_STATFF_INT_MASK,                    /*!< STAT FIFO full (Reach trigger level). */
-    kCSI_StatFifoDmaDoneFlag = CSI_CSISR_DMA_TSF_DONE_SFF_MASK,           /*!< STAT FIFO DMA transfer done. */
-    kCSI_StatFifoOverrunFlag = CSI_CSISR_SF_OR_INT_MASK,                  /*!< STAT FIFO overrun. */
-    kCSI_RxFifoOverrunFlag = CSI_CSISR_RF_OR_INT_MASK,                    /*!< RXFIFO overrun. */
-    kCSI_Field0DoneFlag = CSI_CSISR_DMA_FIELD0_DONE_MASK,                 /*!< Field 0 transfer done. */
-    kCSI_Field1DoneFlag = CSI_CSISR_DMA_FIELD1_DONE_MASK,                 /*!< Field 1 transfer done. */
+    kCSI_RxFifoDataReadyFlag     = CSI_CSISR_DRDY_MASK,          /*!< RXFIFO data ready. */
+    kCSI_EccErrorFlag            = CSI_CSISR_ECC_INT_MASK,       /*!< ECC error detected. */
+    kCSI_AhbResErrorFlag         = CSI_CSISR_HRESP_ERR_INT_MASK, /*!< Hresponse (AHB bus response) Error. */
+    kCSI_ChangeOfFieldFlag       = CSI_CSISR_COF_INT_MASK,       /*!< Change of field. */
+    kCSI_Field0PresentFlag       = CSI_CSISR_F1_INT_MASK,        /*!< Field 0 present in CCIR mode. */
+    kCSI_Field1PresentFlag       = CSI_CSISR_F2_INT_MASK,        /*!< Field 1 present in CCIR mode. */
+    kCSI_StartOfFrameFlag        = CSI_CSISR_SOF_INT_MASK,       /*!< Start of frame (SOF) detected. */
+    kCSI_EndOfFrameFlag          = CSI_CSISR_EOF_INT_MASK,       /*!< End of frame (EOF) detected. */
+    kCSI_RxFifoFullFlag          = CSI_CSISR_RxFF_INT_MASK, /*!< RXFIFO full (Number of data reaches trigger level). */
+    kCSI_RxBuffer1DmaDoneFlag    = CSI_CSISR_DMA_TSF_DONE_FB2_MASK,       /*!< RX frame buffer 1 DMA transfer done. */
+    kCSI_RxBuffer0DmaDoneFlag    = CSI_CSISR_DMA_TSF_DONE_FB1_MASK,       /*!< RX frame buffer 0 DMA transfer done. */
+    kCSI_StatFifoFullFlag        = CSI_CSISR_STATFF_INT_MASK,             /*!< STAT FIFO full (Reach trigger level). */
+    kCSI_StatFifoDmaDoneFlag     = CSI_CSISR_DMA_TSF_DONE_SFF_MASK,       /*!< STAT FIFO DMA transfer done. */
+    kCSI_StatFifoOverrunFlag     = CSI_CSISR_SF_OR_INT_MASK,              /*!< STAT FIFO overrun. */
+    kCSI_RxFifoOverrunFlag       = CSI_CSISR_RF_OR_INT_MASK,              /*!< RXFIFO overrun. */
+    kCSI_Field0DoneFlag          = CSI_CSISR_DMA_FIELD0_DONE_MASK,        /*!< Field 0 transfer done. */
+    kCSI_Field1DoneFlag          = CSI_CSISR_DMA_FIELD1_DONE_MASK,        /*!< Field 1 transfer done. */
     kCSI_BaseAddrChangeErrorFlag = CSI_CSISR_BASEADDR_CHHANGE_ERROR_MASK, /*!< The DMA output buffer base address
                                                                                changes before DMA completed. */
 };

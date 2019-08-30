@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2018 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -16,23 +16,22 @@
  * @{
  */
 
-
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CMP driver version 2.0.0. */
-#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief CMP driver version 2.0.1. */
+#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*!
-* @brief Interrupt enable/disable mask.
-*/
+ * @brief Interrupt enable/disable mask.
+ */
 enum _cmp_interrupt_enable
 {
-    kCMP_OutputRisingInterruptEnable = CMP_SCR_IER_MASK,  /*!< Comparator interrupt enable rising. */
+    kCMP_OutputRisingInterruptEnable  = CMP_SCR_IER_MASK, /*!< Comparator interrupt enable rising. */
     kCMP_OutputFallingInterruptEnable = CMP_SCR_IEF_MASK, /*!< Comparator interrupt enable falling. */
 };
 
@@ -41,9 +40,9 @@ enum _cmp_interrupt_enable
  */
 enum _cmp_status_flags
 {
-    kCMP_OutputRisingEventFlag = CMP_SCR_CFR_MASK,  /*!< Rising-edge on the comparison output has occurred. */
-    kCMP_OutputFallingEventFlag = CMP_SCR_CFF_MASK, /*!< Falling-edge on the comparison output has occurred. */
-    kCMP_OutputAssertEventFlag = CMP_SCR_COUT_MASK, /*!< Return the current value of the analog comparator output. */
+    kCMP_OutputRisingEventFlag  = CMP_SCR_CFR_MASK,  /*!< Rising-edge on the comparison output has occurred. */
+    kCMP_OutputFallingEventFlag = CMP_SCR_CFF_MASK,  /*!< Falling-edge on the comparison output has occurred. */
+    kCMP_OutputAssertEventFlag  = CMP_SCR_COUT_MASK, /*!< Return the current value of the analog comparator output. */
 };
 
 /*!
@@ -100,7 +99,7 @@ typedef struct _cmp_filter_config
 typedef struct _cmp_dac_config
 {
     cmp_reference_voltage_source_t referenceVoltageSource; /*!< Supply voltage reference source. */
-    uint8_t DACValue;                                      /*!< Value for the DAC Output Voltage. Available range is 0-63.*/
+    uint8_t DACValue; /*!< Value for the DAC Output Voltage. Available range is 0-63.*/
 } cmp_dac_config_t;
 
 #if defined(__cplusplus)
@@ -160,25 +159,25 @@ static inline void CMP_Enable(CMP_Type *base, bool enable)
     }
     else
     {
-        base->CR1 &= ~CMP_CR1_EN_MASK;
+        base->CR1 &= ~(uint8_t)CMP_CR1_EN_MASK;
     }
 }
 
 /*!
-* @brief Initializes the CMP user configuration structure.
-*
-* This function initializes the user configuration structure to these default values.
-* @code
-*   config->enableCmp           = true;
-*   config->hysteresisMode      = kCMP_HysteresisLevel0;
-*   config->enableHighSpeed     = false;
-*   config->enableInvertOutput  = false;
-*   config->useUnfilteredOutput = false;
-*   config->enablePinOut        = false;
-*   config->enableTriggerMode   = false;
-* @endcode
-* @param config Pointer to the configuration structure.
-*/
+ * @brief Initializes the CMP user configuration structure.
+ *
+ * This function initializes the user configuration structure to these default values.
+ * @code
+ *   config->enableCmp           = true;
+ *   config->hysteresisMode      = kCMP_HysteresisLevel0;
+ *   config->enableHighSpeed     = false;
+ *   config->enableInvertOutput  = false;
+ *   config->useUnfilteredOutput = false;
+ *   config->enablePinOut        = false;
+ *   config->enableTriggerMode   = false;
+ * @endcode
+ * @param config Pointer to the configuration structure.
+ */
 void CMP_GetDefaultConfig(cmp_config_t *config);
 
 /*!
@@ -206,7 +205,8 @@ void CMP_SetInputChannels(CMP_Type *base, uint8_t positiveChannel, uint8_t negat
  * @brief Enables/disables the DMA request for rising/falling events.
  *
  * This function enables/disables the DMA request for rising/falling events. Either event triggers the generation of
- * the DMA request from CMP if the DMA feature is enabled. Both events are ignored for generating the DMA request from the CMP
+ * the DMA request from CMP if the DMA feature is enabled. Both events are ignored for generating the DMA request from
+ * the CMP
  * if the DMA is disabled.
  *
  * @param base CMP peripheral base address.

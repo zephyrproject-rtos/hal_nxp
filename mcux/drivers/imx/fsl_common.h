@@ -39,7 +39,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief common driver version 2.0.1. */
-#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /* Debug console type definition. */
@@ -150,6 +150,9 @@ enum _status_groups
     kStatusGroup_OSA = 143,                   /*!< Group number for OSA status codes. */
     kStatusGroup_COMMON_TASK = 144,           /*!< Group number for Common task status codes. */
     kStatusGroup_MSG = 145,                   /*!< Group number for messaging status codes. */
+    kStatusGroup_SDK_OCOTP = 146,             /*!< Group number for OCOTP status codes. */
+    kStatusGroup_SDK_FLEXSPINOR = 147,        /*!< Group number for FLEXSPINOR status codes.*/
+    kStatusGroup_CODEC = 148,                 /*!< Group number for codec status codes. */
 };
 
 /*! @brief Generic status return codes. */
@@ -483,6 +486,9 @@ _Pragma("diag_suppress=Pm120")
      */
     static inline uint32_t DisableGlobalIRQ(void)
     {
+#if defined (__XCC__)
+        return 0;
+#else
 #if defined(CPSR_I_Msk)
         uint32_t cpsr = __get_CPSR() & CPSR_I_Msk;
 
@@ -495,6 +501,7 @@ _Pragma("diag_suppress=Pm120")
     __disable_irq();
 
     return regPrimask;
+#endif
 #endif
     }
 
@@ -510,10 +517,13 @@ _Pragma("diag_suppress=Pm120")
      */
     static inline void EnableGlobalIRQ(uint32_t primask)
     {
+#if defined (__XCC__)
+#else
 #if defined(CPSR_I_Msk)
         __set_CPSR((__get_CPSR() & ~CPSR_I_Msk) | primask);
 #else
     __set_PRIMASK(primask);
+#endif
 #endif
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, NXP Semiconductors, Inc.
+ * Copyright  2017 NXP
  * All rights reserved.
  *
  *
@@ -142,7 +142,7 @@ void ELCDIF_RgbModeInit(LCDIF_Type *base, const elcdif_rgb_mode_config_t *config
     base->VDCTRL4 = LCDIF_VDCTRL4_SYNC_SIGNALS_ON_MASK |
                     ((uint32_t)config->panelWidth << LCDIF_VDCTRL4_DOTCLK_H_VALID_DATA_CNT_SHIFT);
 
-    base->CUR_BUF = config->bufferAddr;
+    base->CUR_BUF  = config->bufferAddr;
     base->NEXT_BUF = config->bufferAddr;
 }
 
@@ -178,19 +178,36 @@ void ELCDIF_RgbModeGetDefaultConfig(elcdif_rgb_mode_config_t *config)
     /* Initializes the configure structure to zero. */
     memset(config, 0, sizeof(*config));
 
-    config->panelWidth = 480U;
-    config->panelHeight = 272U;
-    config->hsw = 41;
-    config->hfp = 4;
-    config->hbp = 8;
-    config->vsw = 10;
-    config->vfp = 4;
-    config->vbp = 2;
+    config->panelWidth    = 480U;
+    config->panelHeight   = 272U;
+    config->hsw           = 41;
+    config->hfp           = 4;
+    config->hbp           = 8;
+    config->vsw           = 10;
+    config->vfp           = 4;
+    config->vbp           = 2;
     config->polarityFlags = kELCDIF_VsyncActiveLow | kELCDIF_HsyncActiveLow | kELCDIF_DataEnableActiveLow |
                             kELCDIF_DriveDataOnFallingClkEdge;
-    config->bufferAddr = 0U;
+    config->bufferAddr  = 0U;
     config->pixelFormat = kELCDIF_PixelFormatRGB888;
-    config->dataBus = kELCDIF_DataBus24Bit;
+    config->dataBus     = kELCDIF_DataBus24Bit;
+}
+
+/*!
+ * brief Set the pixel format in RGB (DOTCLK) mode.
+ *
+ * param base eLCDIF peripheral base address.
+ * param pixelFormat The pixel format.
+ */
+void ELCDIF_RgbModeSetPixelFormat(LCDIF_Type *base, elcdif_pixel_format_t pixelFormat)
+{
+    assert(pixelFormat < ARRAY_SIZE(s_pixelFormatReg));
+
+    base->CTRL = (base->CTRL & ~(LCDIF_CTRL_WORD_LENGTH_MASK | LCDIF_CTRL_DATA_FORMAT_24_BIT_MASK |
+                                 LCDIF_CTRL_DATA_FORMAT_18_BIT_MASK | LCDIF_CTRL_DATA_FORMAT_16_BIT_MASK)) |
+                 s_pixelFormatReg[(uint32_t)pixelFormat].regCtrl;
+
+    base->CTRL1 = s_pixelFormatReg[(uint32_t)pixelFormat].regCtrl1;
 }
 
 /*!
@@ -272,8 +289,8 @@ void ELCDIF_SetAlphaSurfaceBufferConfig(LCDIF_Type *base, const elcdif_as_buffer
 {
     assert(config);
 
-    base->AS_CTRL = (base->AS_CTRL & ~LCDIF_AS_CTRL_FORMAT_MASK) | LCDIF_AS_CTRL_FORMAT(config->pixelFormat);
-    base->AS_BUF = config->bufferAddr;
+    base->AS_CTRL     = (base->AS_CTRL & ~LCDIF_AS_CTRL_FORMAT_MASK) | LCDIF_AS_CTRL_FORMAT(config->pixelFormat);
+    base->AS_BUF      = config->bufferAddr;
     base->AS_NEXT_BUF = config->bufferAddr;
 }
 

@@ -29,9 +29,6 @@
 /*! @brief Compute the offset unit from DCHPRI3 */
 #define DMA_DCHPRI_INDEX(channel) (((channel) & ~0x03U) | (3U - ((channel)&0x03U)))
 
-/*! @brief Get the pointer of DCHPRIn */
-#define DMA_DCHPRIn(reg, channel) ((volatile uint8_t *)&(reg))[DMA_DCHPRI_INDEX(channel)]
-
 /*! @brief eDMA transfer configuration */
 typedef enum _edma_transfer_size
 {
@@ -385,22 +382,7 @@ void EDMA_SetMinorOffsetConfig(DMA_Type *base, uint32_t channel, const edma_mino
  * @param channel eDMA channel number
  * @param config A pointer to the channel preemption configuration structure.
  */
-static inline void EDMA_SetChannelPreemptionConfig(DMA_Type *base,
-                                                   uint32_t channel,
-                                                   const edma_channel_Preemption_config_t *config)
-{
-    assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
-    assert(config != NULL);
-
-    bool tmpEnablePreemptAbility    = config->enablePreemptAbility;
-    bool tmpEnableChannelPreemption = config->enableChannelPreemption;
-    uint8_t tmpChannelPriority      = config->channelPriority;
-    uint8_t tmpReg                  = base->DCHPRI3;
-
-    DMA_DCHPRIn(tmpReg, channel) =
-        (DMA_DCHPRI0_DPA((false == tmpEnablePreemptAbility ? 0U : 1U)) |
-         DMA_DCHPRI0_ECP((true == tmpEnableChannelPreemption ? 1U : 0U)) | DMA_DCHPRI0_CHPRI(tmpChannelPriority));
-}
+void EDMA_SetChannelPreemptionConfig(DMA_Type *base, uint32_t channel, const edma_channel_Preemption_config_t *config);
 
 /*!
  * @brief Sets the channel link for the eDMA transfer.

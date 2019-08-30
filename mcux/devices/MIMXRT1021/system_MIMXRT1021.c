@@ -5,15 +5,15 @@
 **                          MIMXRT1021DAF5A
 **                          MIMXRT1021DAG5A
 **
-**     Compilers:           Keil ARM C/C++ Compiler
-**                          Freescale C/C++ for Embedded ARM
+**     Compilers:           Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
+**                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1020RM Rev. 1RC, 05/2018
-**     Version:             rev. 0.1, 2017-11-06
-**     Build:               b180801
+**     Reference manual:    IMXRT1020RM Rev.1, 12/2018
+**     Version:             rev. 1.0, 2018-11-27
+**     Build:               b190329
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,8 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2019 NXP
+**     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
 **
@@ -31,14 +32,16 @@
 **     Revisions:
 **     - rev. 0.1 (2017-11-06)
 **         Initial version.
+**     - rev. 1.0 (2018-11-27)
+**         Update header files to align with IMXRT1020RM Rev.1.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1021
- * @version 0.1
- * @date 2017-11-06
+ * @version 1.0
+ * @date 2018-11-27
  * @brief Device specific configuration file for MIMXRT1021 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -161,6 +164,7 @@ void SystemCoreClockUpdate (void) {
             /* Pll2_bypass_clk ---> Periph_clk2_clk ---> Periph_clk ---> Core_clock */
             case CCM_CBCMR_PERIPH_CLK2_SEL(2U):
                 freq = CPU_XTAL_CLK_HZ;
+                break;
 
             case CCM_CBCMR_PERIPH_CLK2_SEL(3U):
             default:

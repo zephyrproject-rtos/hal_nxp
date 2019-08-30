@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FLEXSPI driver version 2.0.5. */
-#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+/*! @brief FLEXSPI driver version 2.1.1. */
+#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(0)
@@ -84,13 +84,13 @@ enum _flexspi_command
 };
 
 /*! @brief pad definition of FLEXSPI, use to form LUT instruction. */
-enum _flexspi_pad
+typedef enum _flexspi_pad
 {
     kFLEXSPI_1PAD = 0x00U, /*!< Transmit command/address and transmit/receive data only through DATA0/DATA1. */
     kFLEXSPI_2PAD = 0x01U, /*!< Transmit command/address and transmit/receive data only through DATA[1:0]. */
     kFLEXSPI_4PAD = 0x02U, /*!< Transmit command/address and transmit/receive data only through DATA[3:0]. */
     kFLEXSPI_8PAD = 0x03U, /*!< Transmit command/address and transmit/receive data only through DATA[7:0]. */
-};
+} flexspi_pad_t;
 
 /*! @brief FLEXSPI interrupt status flags.*/
 typedef enum _flexspi_flags
@@ -637,6 +637,13 @@ static inline bool FLEXSPI_GetBusIdleStatus(FLEXSPI_Type *base)
  * @name Bus Operations
  * @{
  */
+
+/*! @brief Update read sample clock source
+ *
+ * @param base FLEXSPI peripheral base address.
+ * @param clockSource clockSource of type #flexspi_read_sample_clock_t
+ */
+void FLEXSPI_UpdateRxSampleClock(FLEXSPI_Type *base, flexspi_read_sample_clock_t clockSource);
 
 /*! @brief Enables/disables the FLEXSPI IP command parallel mode.
  *

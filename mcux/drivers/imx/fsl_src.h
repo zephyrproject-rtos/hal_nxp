@@ -42,7 +42,7 @@ enum _src_reset_status_flags
     kSRC_TemperatureSensorResetFlag = SRC_SRSR_TSR_MASK, /*!< Indicates whether the reset was the
                                                               result of software reset from on-chip
                                                               Temperature Sensor. Temperature Sensor
-                                                              Interrupt need be served before this
+                                                              Interrupt needs to be served before this
                                                               bit can be cleaned.*/
 #if (defined(FSL_FEATURE_SRC_HAS_SRSR_WDOG3_RST_B) && FSL_FEATURE_SRC_HAS_SRSR_WDOG3_RST_B)
     kSRC_Wdog3ResetFlag = SRC_SRSR_WDOG3_RST_B_MASK, /*!< IC Watchdog3 Time-out reset. Indicates
@@ -50,14 +50,15 @@ enum _src_reset_status_flags
                                                           watchdog3 time-out event. */
 #endif                                               /* FSL_FEATURE_SRC_HAS_SRSR_WDOG3_RST_B */
 #if (defined(FSL_FEATURE_SRC_HAS_SRSR_SW) && FSL_FEATURE_SRC_HAS_SRSR_SW)
-    kSRC_SoftwareResetFlag = SRC_SRSR_SW_MASK,        /*!< Indicates a reset has been caused by software
-                                                           setting of SYSRESETREQ bit in Application
-                                                           Interrupt and Reset Control Register in the
-                                                           ARM core. */
-#endif                                                /* FSL_FEATURE_SRC_HAS_SRSR_SW */
+    kSRC_SoftwareResetFlag = SRC_SRSR_SW_MASK, /*!< Indicates a reset has been caused by software
+                                                    setting of SYSRESETREQ bit in Application
+                                                    Interrupt and Reset Control Register in the
+                                                    ARM core. */
+#endif                                         /* FSL_FEATURE_SRC_HAS_SRSR_SW */
 #if (defined(FSL_FEATURE_SRC_HAS_SRSR_JTAG_SW_RST) && FSL_FEATURE_SRC_HAS_SRSR_JTAG_SW_RST)
-    kSRC_JTAGSystemResetFlag = SRC_SRSR_JTAG_SW_RST_MASK, /*!< Indicates whether the reset was the result of software reset form JTAG */
-#endif                                                /* FSL_FEATURE_SRC_HAS_SRSR_JTAG_SW_RST */
+    kSRC_JTAGSystemResetFlag =
+        SRC_SRSR_JTAG_SW_RST_MASK, /*!< Indicates whether the reset was the result of software reset form JTAG */
+#endif                             /* FSL_FEATURE_SRC_HAS_SRSR_JTAG_SW_RST */
     kSRC_JTAGSoftwareResetFlag = SRC_SRSR_SJC_MASK,   /*!< Indicates whether the reset was the result of
                                                       setting SJC_GPCCR bit 31. */
     kSRC_JTAGGeneratedResetFlag = SRC_SRSR_JTAG_MASK, /*!< Indicates a reset has been caused by JTAG

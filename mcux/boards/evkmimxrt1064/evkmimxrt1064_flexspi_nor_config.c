@@ -7,11 +7,16 @@
 
 #include "evkmimxrt1064_flexspi_nor_config.h"
 
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.xip_board"
+#endif
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
 #if defined(XIP_BOOT_HEADER_ENABLE) && (XIP_BOOT_HEADER_ENABLE == 1)
-#if defined(__CC_ARM) || defined(__GNUC__)
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION) || defined(__GNUC__)
 __attribute__((section(".boot_hdr.conf")))
 #elif defined(__ICCARM__)
 #pragma location = ".boot_hdr.conf"
@@ -20,15 +25,15 @@ __attribute__((section(".boot_hdr.conf")))
 const flexspi_nor_config_t qspiflash_config = {
     .memConfig =
         {
-            .tag = FLEXSPI_CFG_BLK_TAG,
-            .version = FLEXSPI_CFG_BLK_VERSION,
+            .tag              = FLEXSPI_CFG_BLK_TAG,
+            .version          = FLEXSPI_CFG_BLK_VERSION,
             .readSampleClkSrc = kFlexSPIReadSampleClk_LoopbackFromDqsPad,
-            .csHoldTime = 3u,
-            .csSetupTime = 3u,
+            .csHoldTime       = 3u,
+            .csSetupTime      = 3u,
             // Enable DDR mode, Wordaddassable, Safe configuration, Differential clock
             .sflashPadType = kSerialFlash_4Pads,
             .serialClkFreq = kFlexSpiSerialClk_100MHz,
-            .sflashA1Size = 8u * 1024u * 1024u,
+            .sflashA1Size  = 8u * 1024u * 1024u,
             .lookupTable =
                 {
                     // Read LUTs
@@ -36,9 +41,9 @@ const flexspi_nor_config_t qspiflash_config = {
                     FLEXSPI_LUT_SEQ(DUMMY_SDR, FLEXSPI_4PAD, 0x06, READ_SDR, FLEXSPI_4PAD, 0x04),
                 },
         },
-    .pageSize = 256u,
-    .sectorSize = 4u * 1024u,
-    .blockSize = 256u * 1024u,
+    .pageSize           = 256u,
+    .sectorSize         = 4u * 1024u,
+    .blockSize          = 256u * 1024u,
     .isUniformBlockSize = false,
 };
 #endif /* XIP_BOOT_HEADER_ENABLE */

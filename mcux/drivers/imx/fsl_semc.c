@@ -98,7 +98,7 @@ static status_t SEMC_IsIPCommandDone(SEMC_Type *base);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to SEMC clocks for each instance. */
-static const clock_ip_name_t s_semcClock[FSL_FEATURE_SOC_SEMC_COUNT] = SEMC_CLOCKS;
+static const clock_ip_name_t s_semcClock[FSL_FEATURE_SOC_SEMC_COUNT]    = SEMC_CLOCKS;
 static const clock_ip_name_t s_semcExtClock[FSL_FEATURE_SOC_SEMC_COUNT] = SEMC_EXSC_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
@@ -136,7 +136,7 @@ static status_t SEMC_CovertMemorySize(SEMC_Type *base, uint32_t size_kbytes, uin
     }
 
     *sizeConverted = 0;
-    memsize = size_kbytes / 8;
+    memsize        = size_kbytes / 8;
     while (memsize)
     {
         memsize >>= 1;
@@ -240,19 +240,19 @@ void SEMC_GetDefaultConfig(semc_config_t *config)
     semc_queueb_weight_struct_t *queuebWeight = &(config->queueWeight.queuebWeight.queuebConfig);
 
     /* Get default settings. */
-    config->dqsMode = kSEMC_Loopbackinternal;
+    config->dqsMode          = kSEMC_Loopbackinternal;
     config->cmdTimeoutCycles = 0;
     config->busTimeoutCycles = 0x1F;
 
-    queueaWeight->qos = SEMC_BMCR0_TYPICAL_WQOS;
-    queueaWeight->aging = SEMC_BMCR0_TYPICAL_WAGE;
-    queueaWeight->slaveHitSwith = SEMC_BMCR0_TYPICAL_WSH;
+    queueaWeight->qos              = SEMC_BMCR0_TYPICAL_WQOS;
+    queueaWeight->aging            = SEMC_BMCR0_TYPICAL_WAGE;
+    queueaWeight->slaveHitSwith    = SEMC_BMCR0_TYPICAL_WSH;
     queueaWeight->slaveHitNoswitch = SEMC_BMCR0_TYPICAL_WRWS;
-    queuebWeight->qos = SEMC_BMCR1_TYPICAL_WQOS;
-    queuebWeight->aging = SEMC_BMCR1_TYPICAL_WAGE;
-    queuebWeight->slaveHitSwith = SEMC_BMCR1_TYPICAL_WRWS;
-    queuebWeight->weightPagehit = SEMC_BMCR1_TYPICAL_WPH;
-    queuebWeight->bankRotation = SEMC_BMCR1_TYPICAL_WBR;
+    queuebWeight->qos              = SEMC_BMCR1_TYPICAL_WQOS;
+    queuebWeight->aging            = SEMC_BMCR1_TYPICAL_WAGE;
+    queuebWeight->slaveHitSwith    = SEMC_BMCR1_TYPICAL_WRWS;
+    queuebWeight->weightPagehit    = SEMC_BMCR1_TYPICAL_WPH;
+    queuebWeight->bankRotation     = SEMC_BMCR1_TYPICAL_WBR;
 }
 
 /*!
@@ -338,7 +338,7 @@ status_t SEMC_ConfigureSDRAM(SEMC_Type *base, semc_sdram_cs_t cs, semc_sdram_con
     assert(config->refreshBurstLen);
 
     uint8_t memsize;
-    status_t result = kStatus_Success;
+    status_t result   = kStatus_Success;
     uint16_t prescale = config->tPrescalePeriod_Ns / 16 / (1000000000 / clkSrc_Hz);
     uint16_t refresh;
     uint16_t urgentRef;
@@ -360,9 +360,9 @@ status_t SEMC_ConfigureSDRAM(SEMC_Type *base, semc_sdram_cs_t cs, semc_sdram_con
         return kStatus_SEMC_InvalidTimerSetting;
     }
 
-    refresh = config->refreshPeriod_nsPerRow / config->tPrescalePeriod_Ns;
+    refresh   = config->refreshPeriod_nsPerRow / config->tPrescalePeriod_Ns;
     urgentRef = config->refreshUrgThreshold / config->tPrescalePeriod_Ns;
-    idle = config->tIdleTimeout_Ns / config->tPrescalePeriod_Ns;
+    idle      = config->tIdleTimeout_Ns / config->tPrescalePeriod_Ns;
 
     uint32_t iocReg = base->IOCR & ~(SEMC_IOCR_PINMUXBITWIDTH << config->csxPinMux);
 
@@ -373,7 +373,7 @@ status_t SEMC_ConfigureSDRAM(SEMC_Type *base, semc_sdram_cs_t cs, semc_sdram_con
         return result;
     }
 
-    base->BR[cs] = (config->address & SEMC_BR_BA_MASK) | SEMC_BR_MS(memsize) | SEMC_BR_VLD_MASK;
+    base->BR[cs]   = (config->address & SEMC_BR_BA_MASK) | SEMC_BR_MS(memsize) | SEMC_BR_VLD_MASK;
     base->SDRAMCR0 = SEMC_SDRAMCR0_PS(config->portSize) | SEMC_SDRAMCR0_BL(config->burstLen) |
                      SEMC_SDRAMCR0_COL(config->columnAddrBitNum) | SEMC_SDRAMCR0_CL(config->casLatency);
     /* IOMUX setting. */
@@ -420,7 +420,7 @@ status_t SEMC_ConfigureSDRAM(SEMC_Type *base, semc_sdram_cs_t cs, semc_sdram_con
         return result;
     }
     /* Mode setting value. */
-    mode = (uint16_t)config->burstLen | (uint16_t)(config->casLatency << SEMC_SDRAM_MODESETCAL_OFFSET);
+    mode   = (uint16_t)config->burstLen | (uint16_t)(config->casLatency << SEMC_SDRAM_MODESETCAL_OFFSET);
     result = SEMC_SendIPCommand(base, kSEMC_MemType_SDRAM, config->address, kSEMC_SDRAMCM_Modeset, mode, NULL);
     if (result != kStatus_Success)
     {
@@ -533,7 +533,7 @@ status_t SEMC_ConfigureNOR(SEMC_Type *base, semc_nor_config_t *config, uint32_t 
     }
 
     uint32_t iocReg = base->IOCR & ~(SEMC_IOCR_PINMUXBITWIDTH << config->cePinMux);
-    uint32_t muxCe = (config->cePinMux == kSEMC_MUXRDY) ?
+    uint32_t muxCe  = (config->cePinMux == kSEMC_MUXRDY) ?
                          SEMC_IOCR_NOR_CE - 1 :
                          ((config->cePinMux == kSEMC_MUXA8) ? SEMC_IOCR_NOR_CE_A8 : SEMC_IOCR_NOR_CE);
 
@@ -609,7 +609,7 @@ status_t SEMC_ConfigureNOR(SEMC_Type *base, semc_nor_config_t *config, uint32_t 
     {
         return result;
     }
-    base->BR[5] = (config->address & SEMC_BR_BA_MASK) | SEMC_BR_MS(memsize) | SEMC_BR_VLD_MASK;
+    base->BR[5]  = (config->address & SEMC_BR_BA_MASK) | SEMC_BR_MS(memsize) | SEMC_BR_VLD_MASK;
     base->NORCR0 = SEMC_NORCR0_PS(config->portSize) | SEMC_NORCR0_BL(config->burstLen) |
                    SEMC_NORCR0_AM(config->addrMode) | SEMC_NORCR0_ADVP(config->advActivePolarity) |
                    SEMC_NORCR0_COL(config->columnAddrBitNum);
@@ -658,7 +658,7 @@ status_t SEMC_ConfigureSRAM(SEMC_Type *base, semc_sram_config_t *config, uint32_
     }
 
     uint32_t iocReg = base->IOCR & ~(SEMC_IOCR_PINMUXBITWIDTH << config->cePinMux);
-    uint32_t muxCe = (config->cePinMux == kSEMC_MUXRDY) ?
+    uint32_t muxCe  = (config->cePinMux == kSEMC_MUXRDY) ?
                          SEMC_IOCR_PSRAM_CE - 1 :
                          ((config->cePinMux == kSEMC_MUXA8) ? SEMC_IOCR_PSRAM_CE_A8 : SEMC_IOCR_PSRAM_CE);
 
@@ -726,7 +726,7 @@ status_t SEMC_ConfigureSRAM(SEMC_Type *base, semc_sram_config_t *config, uint32_
     {
         return result;
     }
-    base->BR[6] = (config->address & SEMC_BR_BA_MASK) | SEMC_BR_MS(memsize) | SEMC_BR_VLD_MASK;
+    base->BR[6]   = (config->address & SEMC_BR_BA_MASK) | SEMC_BR_MS(memsize) | SEMC_BR_VLD_MASK;
     base->SRAMCR0 = SEMC_SRAMCR0_PS(config->portSize) | SEMC_SRAMCR0_BL(config->burstLen) |
                     SEMC_SRAMCR0_AM(config->addrMode) | SEMC_SRAMCR0_ADVP(config->advActivePolarity) |
                     SEMC_SRAMCR0_COL_MASK;
@@ -816,7 +816,7 @@ status_t SEMC_SendIPCommand(
     SEMC_Type *base, semc_mem_type_t type, uint32_t address, uint16_t command, uint32_t write, uint32_t *read)
 {
     uint32_t cmdMode;
-    bool readCmd = 0;
+    bool readCmd  = 0;
     bool writeCmd = 0;
     status_t result;
 
@@ -837,15 +837,15 @@ status_t SEMC_SendIPCommand(
             break;
         case kSEMC_MemType_NOR:
         case kSEMC_MemType_8080:
-            readCmd = (cmdMode == kSEMC_NORDBICM_Read);
+            readCmd  = (cmdMode == kSEMC_NORDBICM_Read);
             writeCmd = (cmdMode == kSEMC_NORDBICM_Write);
             break;
         case kSEMC_MemType_SRAM:
-            readCmd = (cmdMode == kSEMC_SRAMCM_ArrayRead) || (cmdMode == kSEMC_SRAMCM_RegRead);
+            readCmd  = (cmdMode == kSEMC_SRAMCM_ArrayRead) || (cmdMode == kSEMC_SRAMCM_RegRead);
             writeCmd = (cmdMode == kSEMC_SRAMCM_ArrayWrite) || (cmdMode == kSEMC_SRAMCM_RegWrite);
             break;
         case kSEMC_MemType_SDRAM:
-            readCmd = (cmdMode == kSEMC_SDRAMCM_Read);
+            readCmd  = (cmdMode == kSEMC_SDRAMCM_Read);
             writeCmd = (cmdMode == kSEMC_SDRAMCM_Write) || (cmdMode == kSEMC_SDRAMCM_Modeset);
             break;
         default:
@@ -985,8 +985,8 @@ status_t SEMC_IPCommandNorRead(SEMC_Type *base, uint32_t address, uint8_t *data,
     assert(data);
 
     uint32_t tempData = 0;
-    status_t result = kStatus_Success;
-    uint8_t dataSize = base->NORCR0 & SEMC_NORCR0_PS_MASK;
+    status_t result   = kStatus_Success;
+    uint8_t dataSize  = base->NORCR0 & SEMC_NORCR0_PS_MASK;
 
     /* Configure IP command data size. */
     SEMC_ConfigureIPCommand(base, SEMC_IPCOMMANDDATASIZEBYTEMAX);
@@ -1031,8 +1031,8 @@ status_t SEMC_IPCommandNorWrite(SEMC_Type *base, uint32_t address, uint8_t *data
     assert(data);
 
     uint32_t tempData = 0;
-    status_t result = kStatus_Success;
-    uint8_t dataSize = base->NORCR0 & SEMC_NORCR0_PS_MASK;
+    status_t result   = kStatus_Success;
+    uint8_t dataSize  = base->NORCR0 & SEMC_NORCR0_PS_MASK;
 
     /* Write command built */
     while (size_bytes >= SEMC_IPCOMMANDDATASIZEBYTEMAX)

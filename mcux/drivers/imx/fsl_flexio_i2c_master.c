@@ -154,7 +154,7 @@ static status_t FLEXIO_I2C_MasterTransferRunStateMachine(FLEXIO_I2C_Type *base,
             (!(((handle->state == kFLEXIO_I2C_ReceiveData) || (handle->state == kFLEXIO_I2C_ReceiveDataBegin)) &&
                (handle->transfer.dataSize == 1U))))
         {
-            FLEXIO_I2C_MasterReadByte(base);
+            (void)FLEXIO_I2C_MasterReadByte(base);
 
             FLEXIO_I2C_MasterAbortStop(base);
 
@@ -180,7 +180,7 @@ static status_t FLEXIO_I2C_MasterTransferRunStateMachine(FLEXIO_I2C_Type *base,
 
     if ((statusFlags & kFLEXIO_I2C_RxFullFlag) && (handle->state != kFLEXIO_I2C_ReceiveData))
     {
-        FLEXIO_I2C_MasterReadByte(base);
+        (void)FLEXIO_I2C_MasterReadByte(base);
     }
 
     switch (handle->state)
@@ -227,7 +227,7 @@ static status_t FLEXIO_I2C_MasterTransferRunStateMachine(FLEXIO_I2C_Type *base,
                             while (!(FLEXIO_I2C_MasterGetStatusFlags(base) & kFLEXIO_I2C_RxFullFlag))
                             {
                             }
-                            FLEXIO_I2C_MasterReadByte(base);
+                            (void)FLEXIO_I2C_MasterReadByte(base);
 
                             handle->state = kFLEXIO_I2C_Idle;
                         }
@@ -263,7 +263,7 @@ static status_t FLEXIO_I2C_MasterTransferRunStateMachine(FLEXIO_I2C_Type *base,
                     while (!(FLEXIO_I2C_MasterGetStatusFlags(base) & kFLEXIO_I2C_RxFullFlag))
                     {
                     }
-                    FLEXIO_I2C_MasterReadByte(base);
+                    (void)FLEXIO_I2C_MasterReadByte(base);
 
                     handle->state = kFLEXIO_I2C_Idle;
                 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, NXP Semiconductor, Inc.
+ * Copyright 2017, NXP
  * All rights reserved.
  *
  *
@@ -287,7 +287,7 @@ uint32_t SPDIF_GetRxSampleRate(SPDIF_Type *base, uint32_t clockSourceFreq_Hz)
 void SPDIF_WriteBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size)
 {
     assert(buffer);
-    assert(size / 6U == 0U);
+    assert(size % 6U == 0U);
 
     uint32_t i = 0, j = 0, data = 0;
 
@@ -331,7 +331,7 @@ void SPDIF_WriteBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size)
 void SPDIF_ReadBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size)
 {
     assert(buffer);
-    assert(size / 6U == 0U);
+    assert(size % 6U == 0U);
 
     uint32_t i = 0, j = 0, data = 0;
 

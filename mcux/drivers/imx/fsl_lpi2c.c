@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -690,7 +690,7 @@ status_t LPI2C_MasterStop(LPI2C_Type *base)
         result = LPI2C_MasterCheckAndClearError(base, status);
 
         /* Check if the stop was sent successfully. */
-        if (status & kLPI2C_MasterStopDetectFlag)
+        if ((status & kLPI2C_MasterStopDetectFlag) && (status & kLPI2C_MasterTxReadyFlag))
         {
             LPI2C_MasterClearStatusFlags(base, kLPI2C_MasterStopDetectFlag);
             break;
@@ -1111,6 +1111,10 @@ static status_t LPI2C_RunTransferStateMachine(LPI2C_Type *base, lpi2c_master_han
                 /* Move to stop when the transfer is done. */
                 if (--handle->remainingBytes == 0)
                 {
+                    if (xfer->direction == kLPI2C_Write)
+                    {
+                        state_complete = true;
+                    }
                     handle->state = kStopState;
                 }
                 break;
@@ -1604,6 +1608,9 @@ status_t LPI2C_SlaveSend(LPI2C_Type *base, void *txBuff, size_t txSize, size_t *
     uint32_t waitTimes = LPI2C_WAIT_TIMEOUT;
 #endif
 
+    /* Clear stop flag. */
+    LPI2C_SlaveClearStatusFlags(base, kLPI2C_SlaveStopDetectFlag | kLPI2C_SlaveRepeatedStartDetectFlag);
+
     while (remaining)
     {
         uint32_t flags;
@@ -1643,8 +1650,8 @@ status_t LPI2C_SlaveSend(LPI2C_Type *base, void *txBuff, size_t txSize, size_t *
             --remaining;
         }
 
-        /* Exit loop if we see a stop or restart */
-        if (flags & (kLPI2C_SlaveStopDetectFlag | kLPI2C_SlaveRepeatedStartDetectFlag))
+        /* Exit loop if we see a stop or restart in transfer*/
+        if ((flags & (kLPI2C_SlaveStopDetectFlag | kLPI2C_SlaveRepeatedStartDetectFlag)) && (remaining != 0U))
         {
             LPI2C_SlaveClearStatusFlags(base, kLPI2C_SlaveStopDetectFlag | kLPI2C_SlaveRepeatedStartDetectFlag);
             break;
@@ -1678,6 +1685,9 @@ status_t LPI2C_SlaveReceive(LPI2C_Type *base, void *rxBuff, size_t rxSize, size_
 #if LPI2C_WAIT_TIMEOUT
     uint32_t waitTimes = LPI2C_WAIT_TIMEOUT;
 #endif
+
+    /* Clear stop flag. */
+    LPI2C_SlaveClearStatusFlags(base, kLPI2C_SlaveStopDetectFlag | kLPI2C_SlaveRepeatedStartDetectFlag);
 
     while (remaining)
     {
@@ -1719,7 +1729,7 @@ status_t LPI2C_SlaveReceive(LPI2C_Type *base, void *rxBuff, size_t rxSize, size_
         }
 
         /* Exit loop if we see a stop or restart */
-        if (flags & (kLPI2C_SlaveStopDetectFlag | kLPI2C_SlaveRepeatedStartDetectFlag))
+        if ((flags & (kLPI2C_SlaveStopDetectFlag | kLPI2C_SlaveRepeatedStartDetectFlag)) && (remaining != 0U))
         {
             LPI2C_SlaveClearStatusFlags(base, kLPI2C_SlaveStopDetectFlag | kLPI2C_SlaveRepeatedStartDetectFlag);
             break;
@@ -1985,6 +1995,8 @@ void LPI2C_SlaveTransferHandleIRQ(LPI2C_Type *base, lpi2c_slave_handle_t *handle
         xfer->event           = kLPI2C_SlaveAddressMatchEvent;
         xfer->receivedAddress = base->SASR & LPI2C_SASR_RADDR_MASK;
 
+        /* Update handle status to busy because slave is addressed. */
+        handle->isBusy = true;
         if ((handle->eventMask & kLPI2C_SlaveAddressMatchEvent) && (handle->callback))
         {
             handle->callback(base, xfer, handle->userData);
