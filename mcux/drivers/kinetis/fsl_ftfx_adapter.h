@@ -15,7 +15,7 @@
 
 #define INVALID_REG_MASK (0)
 #define INVALID_REG_SHIFT (0)
-#define INVALID_REG_ADDRESS (0x00U)
+#define INVALID_REG_ADDRESS (NULL)
 #define INVALID_REG_VALUE (0x00U)
 
 /* @brief Flash register access type defines */

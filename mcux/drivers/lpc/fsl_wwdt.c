@@ -13,6 +13,7 @@
 #define FSL_COMPONENT_ID "platform.drivers.wwdt"
 #endif
 
+#define FREQUENCY_3MHZ (3000000U)
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -138,9 +139,7 @@ void WWDT_Init(WWDT_Type *base, const wwdt_config_t *config)
     assert(config->clockFreq_Hz);
 
     uint32_t value = 0U;
-    uint32_t timeDelay = 0U;
-
-    timeDelay = (SystemCoreClock / config->clockFreq_Hz + 1) * 3;
+    uint32_t DelayUs = 0U;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the WWDT clock */
@@ -163,17 +162,16 @@ void WWDT_Init(WWDT_Type *base, const wwdt_config_t *config)
     /* Set configuration */
     base->TC = WWDT_TC_COUNT(config->timeoutValue);
     base->MOD |= value;
-    base->WINDOW = WWDT_WINDOW_WINDOW(config->windowValue);
+    base->WINDOW  = WWDT_WINDOW_WINDOW(config->windowValue);
     base->WARNINT = WWDT_WARNINT_WARNINT(config->warningValue);
     WWDT_Refresh(base);
     /*  This WDPROTECT bit can be set once by software and is only cleared by a reset */
     if ((base->MOD & WWDT_MOD_WDPROTECT_MASK) == 0U)
     {
         /* Set the WDPROTECT bit after the Feed Sequence (0xAA, 0x55) with 3 WDCLK delay */
-        while (timeDelay--)
-        {
-            __NOP();
-        }
+        DelayUs = FREQUENCY_3MHZ / config->clockFreq_Hz + 1U;
+        SDK_DelayAtLeastUs(DelayUs);
+
         base->MOD |= WWDT_MOD_WDPROTECT(config->enableWatchdogProtect);
     }
 }
@@ -209,8 +207,8 @@ void WWDT_Refresh(WWDT_Type *base)
 
     /* Disable the global interrupt to protect refresh sequence */
     primaskValue = DisableGlobalIRQ();
-    base->FEED = WWDT_FIRST_WORD_OF_REFRESH;
-    base->FEED = WWDT_SECOND_WORD_OF_REFRESH;
+    base->FEED   = WWDT_FIRST_WORD_OF_REFRESH;
+    base->FEED   = WWDT_SECOND_WORD_OF_REFRESH;
     EnableGlobalIRQ(primaskValue);
 }
 
@@ -236,6 +234,10 @@ void WWDT_ClearStatusFlags(WWDT_Type *base, uint32_t mask)
     if (mask & kWWDT_TimeoutFlag)
     {
         reg &= ~WWDT_MOD_WDTOF_MASK;
+#if defined(FSL_FEATURE_WWDT_WDTRESET_FROM_PMC) && (FSL_FEATURE_WWDT_WDTRESET_FROM_PMC)
+        /* PMC RESETCAUSE: set bit to clear it */
+        PMC->RESETCAUSE |= PMC_RESETCAUSE_WDTRESET_MASK;
+#endif /*FSL_FEATURE_WWDT_WDTRESET_FROM_PMC*/
     }
 
     /* Clear warning interrupt flag by writing a one */

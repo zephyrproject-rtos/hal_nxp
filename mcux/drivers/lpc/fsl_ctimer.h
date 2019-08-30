@@ -351,7 +351,7 @@ static inline void CTIMER_EnableInterrupts(CTIMER_Type *base, uint32_t mask)
 #if defined(FSL_FEATURE_CTIMER_HAS_CCR_CAP3) && FSL_FEATURE_CTIMER_HAS_CCR_CAP3
                          | CTIMER_CCR_CAP3I_MASK
 #endif /* FSL_FEATURE_CTIMER_HAS_CCR_CAP3 */
-                         );
+                        );
 #endif
 }
 
@@ -399,7 +399,7 @@ static inline uint32_t CTIMER_GetEnabledInterrupts(CTIMER_Type *base)
 #if defined(FSL_FEATURE_CTIMER_HAS_CCR_CAP3) && FSL_FEATURE_CTIMER_HAS_CCR_CAP3
                                  | CTIMER_CCR_CAP3I_MASK
 #endif /* FSL_FEATURE_CTIMER_HAS_CCR_CAP3 */
-                                 );
+                                );
 #endif
 
     return enabledIntrs;

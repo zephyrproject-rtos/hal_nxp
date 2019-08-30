@@ -104,7 +104,7 @@ void CTIMER_Init(CTIMER_Type *base, const ctimer_config_t *config)
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 
 /* Setup the cimer mode and count select */
-#if !defined(FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE) && FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE
+#if !(defined(FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE) && (FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE))
     base->CTCR = CTIMER_CTCR_CTMODE(config->mode) | CTIMER_CTCR_CINSEL(config->input);
 #endif
     /* Setup the timer prescale value */
@@ -190,7 +190,7 @@ status_t CTIMER_SetupPwm(CTIMER_Type *base,
     uint32_t reg;
     uint32_t period, pulsePeriod = 0;
     uint32_t timerClock = srcClock_Hz / (base->PR + 1);
-    uint32_t index = CTIMER_GetInstance(base);
+    uint32_t index      = CTIMER_GetInstance(base);
 
     if (matchChannel == kCTIMER_Match_3)
     {
@@ -394,7 +394,7 @@ void CTIMER_SetupMatch(CTIMER_Type *base, ctimer_match_t matchChannel, const cti
     }
 }
 
-#if !defined(FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE) && FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE
+#if !(defined(FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE) && (FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE))
 /*!
  * brief Setup the capture.
  *
@@ -409,7 +409,7 @@ void CTIMER_SetupCapture(CTIMER_Type *base,
                          ctimer_capture_edge_t edge,
                          bool enableInt)
 {
-    uint32_t reg = base->CCR;
+    uint32_t reg   = base->CCR;
     uint32_t index = CTIMER_GetInstance(base);
 
     /* Set the capture edge */
@@ -436,8 +436,8 @@ void CTIMER_SetupCapture(CTIMER_Type *base,
  */
 void CTIMER_RegisterCallBack(CTIMER_Type *base, ctimer_callback_t *cb_func, ctimer_callback_type_t cb_type)
 {
-    uint32_t index = CTIMER_GetInstance(base);
-    s_ctimerCallback[index] = cb_func;
+    uint32_t index            = CTIMER_GetInstance(base);
+    s_ctimerCallback[index]   = cb_func;
     ctimerCallbackType[index] = cb_type;
 }
 

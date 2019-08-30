@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_LPIT_H_
@@ -161,14 +161,14 @@ extern "C" {
  * @param base   LPIT peripheral base address.
  * @param config Pointer to the user configuration structure.
  */
-void LPIT_Init(LPIT_Type* base, const lpit_config_t* config);
+void LPIT_Init(LPIT_Type *base, const lpit_config_t *config);
 
 /*!
  * @brief Disables the module and gates the LPIT clock.
  *
  * @param base LPIT peripheral base address.
  */
-void LPIT_Deinit(LPIT_Type* base);
+void LPIT_Deinit(LPIT_Type *base);
 
 /*!
  * @brief Fills in the LPIT configuration structure with default settings.
@@ -180,7 +180,7 @@ void LPIT_Deinit(LPIT_Type* base);
  * @endcode
  * @param config Pointer to the user configuration structure.
  */
-void LPIT_GetDefaultConfig(lpit_config_t* config);
+void LPIT_GetDefaultConfig(lpit_config_t *config);
 
 /*!
  * @brief Sets up an LPIT channel based on the user's preference.
@@ -194,7 +194,7 @@ void LPIT_GetDefaultConfig(lpit_config_t* config);
  * @param channel   Channel that is being configured.
  * @param chnlSetup Configuration parameters.
  */
-status_t LPIT_SetupChannel(LPIT_Type* base, lpit_chnl_t channel, const lpit_chnl_params_t* chnlSetup);
+status_t LPIT_SetupChannel(LPIT_Type *base, lpit_chnl_t channel, const lpit_chnl_params_t *chnlSetup);
 
 /*! @}*/
 
@@ -210,7 +210,7 @@ status_t LPIT_SetupChannel(LPIT_Type* base, lpit_chnl_t channel, const lpit_chnl
  * @param mask The interrupts to enable. This is a logical OR of members of the
  *             enumeration ::lpit_interrupt_enable_t
  */
-static inline void LPIT_EnableInterrupts(LPIT_Type* base, uint32_t mask)
+static inline void LPIT_EnableInterrupts(LPIT_Type *base, uint32_t mask)
 {
     base->MIER |= mask;
 }
@@ -222,7 +222,7 @@ static inline void LPIT_EnableInterrupts(LPIT_Type* base, uint32_t mask)
  * @param mask The interrupts to enable. This is a logical OR of members of the
  *             enumeration ::lpit_interrupt_enable_t
  */
-static inline void LPIT_DisableInterrupts(LPIT_Type* base, uint32_t mask)
+static inline void LPIT_DisableInterrupts(LPIT_Type *base, uint32_t mask)
 {
     base->MIER &= ~mask;
 }
@@ -235,7 +235,7 @@ static inline void LPIT_DisableInterrupts(LPIT_Type* base, uint32_t mask)
  * @return The enabled interrupts. This is the logical OR of members of the
  *         enumeration ::lpit_interrupt_enable_t
  */
-static inline uint32_t LPIT_GetEnabledInterrupts(LPIT_Type* base)
+static inline uint32_t LPIT_GetEnabledInterrupts(LPIT_Type *base)
 {
     return base->MIER;
 }
@@ -255,7 +255,7 @@ static inline uint32_t LPIT_GetEnabledInterrupts(LPIT_Type* base)
  * @return The status flags. This is the logical OR of members of the
  *         enumeration ::lpit_status_flags_t
  */
-static inline uint32_t LPIT_GetStatusFlags(LPIT_Type* base)
+static inline uint32_t LPIT_GetStatusFlags(LPIT_Type *base)
 {
     return base->MSR;
 }
@@ -267,7 +267,7 @@ static inline uint32_t LPIT_GetStatusFlags(LPIT_Type* base)
  * @param mask The status flags to clear. This is a logical OR of members of the
  *             enumeration ::lpit_status_flags_t
  */
-static inline void LPIT_ClearStatusFlags(LPIT_Type* base, uint32_t mask)
+static inline void LPIT_ClearStatusFlags(LPIT_Type *base, uint32_t mask)
 {
     /* Writing a 1 to the status bit will clear the flag */
     base->MSR = mask;
@@ -294,7 +294,7 @@ static inline void LPIT_ClearStatusFlags(LPIT_Type* base, uint32_t mask)
  * @param channel Timer channel number.
  * @param ticks   Timer period in units of ticks.
  */
-static inline void LPIT_SetTimerPeriod(LPIT_Type* base, lpit_chnl_t channel, uint32_t ticks)
+static inline void LPIT_SetTimerPeriod(LPIT_Type *base, lpit_chnl_t channel, uint32_t ticks)
 {
     base->CHANNEL[channel].TVAL = ticks;
 }
@@ -312,7 +312,7 @@ static inline void LPIT_SetTimerPeriod(LPIT_Type* base, lpit_chnl_t channel, uin
  *
  * @return Current timer counting value in ticks.
  */
-static inline uint32_t LPIT_GetCurrentTimerCount(LPIT_Type* base, lpit_chnl_t channel)
+static inline uint32_t LPIT_GetCurrentTimerCount(LPIT_Type *base, lpit_chnl_t channel)
 {
     return base->CHANNEL[channel].CVAL;
 }
@@ -333,7 +333,7 @@ static inline uint32_t LPIT_GetCurrentTimerCount(LPIT_Type* base, lpit_chnl_t ch
  * @param base    LPIT peripheral base address.
  * @param channel Timer channel number.
  */
-static inline void LPIT_StartTimer(LPIT_Type* base, lpit_chnl_t channel)
+static inline void LPIT_StartTimer(LPIT_Type *base, lpit_chnl_t channel)
 {
     base->SETTEN |= (LPIT_SETTEN_SET_T_EN_0_MASK << channel);
 }
@@ -344,7 +344,7 @@ static inline void LPIT_StartTimer(LPIT_Type* base, lpit_chnl_t channel)
  * @param base    LPIT peripheral base address.
  * @param channel Timer channel number.
  */
-static inline void LPIT_StopTimer(LPIT_Type* base, lpit_chnl_t channel)
+static inline void LPIT_StopTimer(LPIT_Type *base, lpit_chnl_t channel)
 {
     base->CLRTEN |= (LPIT_CLRTEN_CLR_T_EN_0_MASK << channel);
 }
@@ -358,7 +358,7 @@ static inline void LPIT_StopTimer(LPIT_Type* base, lpit_chnl_t channel)
  *
  * @param base LPIT peripheral base address.
  */
-static inline void LPIT_Reset(LPIT_Type* base)
+static inline void LPIT_Reset(LPIT_Type *base)
 {
     base->MCR |= LPIT_MCR_SW_RST_MASK;
     base->MCR &= ~LPIT_MCR_SW_RST_MASK;

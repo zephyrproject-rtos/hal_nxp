@@ -89,13 +89,16 @@ void DMIC_Init(DMIC_Type *base)
     RESET_PeripheralReset(kDMIC_RST_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 
-    /* Disable DMA request*/
-    base->CHANNEL[0].FIFO_CTRL &= ~DMIC_CHANNEL_FIFO_CTRL_DMAEN(1);
-    base->CHANNEL[1].FIFO_CTRL &= ~DMIC_CHANNEL_FIFO_CTRL_DMAEN(1);
-
-    /* Disable DMIC interrupt. */
-    base->CHANNEL[0].FIFO_CTRL &= ~DMIC_CHANNEL_FIFO_CTRL_INTEN(1);
-    base->CHANNEL[1].FIFO_CTRL &= ~DMIC_CHANNEL_FIFO_CTRL_INTEN(1);
+    /* reset FIFO configuration */
+    base->CHANNEL[0].FIFO_CTRL = 0U;
+    base->CHANNEL[1].FIFO_CTRL = 0U;
+#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM == 8U)
+    base->CHANNEL[3].FIFO_CTRL = 0U;
+    base->CHANNEL[4].FIFO_CTRL = 0U;
+    base->CHANNEL[5].FIFO_CTRL = 0U;
+    base->CHANNEL[6].FIFO_CTRL = 0U;
+    base->CHANNEL[7].FIFO_CTRL = 0U;
+#endif
 }
 
 /*!
@@ -115,6 +118,7 @@ void DMIC_DeInit(DMIC_Type *base)
 
 /*!
  * brief	Configure DMIC io
+ * @deprecated Do not use this function.  It has been superceded by @ref DMIC_SetIOCFG
  * param	base	: The base address of DMIC interface
  * param	config		: DMIC io configuration
  * return	Nothing
@@ -126,6 +130,8 @@ void DMIC_ConfigIO(DMIC_Type *base, dmic_io_t config)
 
 /*!
  * brief	Set DMIC operating mode
+ * deprecated Do not use this function.  It has been superceded by @ref
+ * DMIC_EnableChannelInterrupt/DMIC_EnableChannelDma
  * param	base	: The base address of DMIC interface
  * param	mode	: DMIC mode
  * return	Nothing
@@ -148,6 +154,7 @@ void DMIC_SetOperationMode(DMIC_Type *base, operation_mode_t mode)
 
 /*!
  * brief	Configure DMIC channel
+ *
  * param	base		: The base address of DMIC interface
  * param	channel		: DMIC channel
  * param side     : stereo_side_t, choice of left or right
@@ -159,9 +166,9 @@ void DMIC_ConfigChannel(DMIC_Type *base,
                         stereo_side_t side,
                         dmic_channel_config_t *channel_config)
 {
-    base->CHANNEL[channel].DIVHFCLK = channel_config->divhfclk;
-    base->CHANNEL[channel].OSR = channel_config->osr;
-    base->CHANNEL[channel].GAINSHIFT = channel_config->gainshft;
+    base->CHANNEL[channel].DIVHFCLK     = channel_config->divhfclk;
+    base->CHANNEL[channel].OSR          = channel_config->osr;
+    base->CHANNEL[channel].GAINSHIFT    = channel_config->gainshft;
     base->CHANNEL[channel].PREAC2FSCOEF = channel_config->preac2coef;
     base->CHANNEL[channel].PREAC4FSCOEF = channel_config->preac4coef;
     base->CHANNEL[channel].PHY_CTRL =
@@ -169,6 +176,10 @@ void DMIC_ConfigChannel(DMIC_Type *base,
     base->CHANNEL[channel].DC_CTRL = DMIC_CHANNEL_DC_CTRL_DCPOLE(channel_config->dc_cut_level) |
                                      DMIC_CHANNEL_DC_CTRL_DCGAIN(channel_config->post_dc_gain_reduce) |
                                      DMIC_CHANNEL_DC_CTRL_SATURATEAT16BIT(channel_config->saturate16bit);
+
+#if defined(FSL_FEATURE_DMIC_CHANNEL_HAS_SIGNEXTEND) && (FSL_FEATURE_DMIC_CHANNEL_HAS_SIGNEXTEND)
+    base->CHANNEL[channel].DC_CTRL |= DMIC_CHANNEL_DC_CTRL_SIGNEXTEND(channel_config->enableSignExtend);
+#endif
 }
 
 /*!
@@ -176,7 +187,7 @@ void DMIC_ConfigChannel(DMIC_Type *base,
  * param	base		: The base address of DMIC interface
  * param	channel		: DMIC channel
  * param   dc_cut_level  : dc_removal_t, Cut off Frequency
- * param	post_dc_gain_reduce	: Fine gain adjustment in the form of a number of bits to downshift.
+ * param	post_dc_gain_reduce	: Fine g!y!9
  * param   saturate16bit : If selects 16-bit saturation.
  */
 void DMIC_CfgChannelDc(DMIC_Type *base,
@@ -209,7 +220,7 @@ void DMIC_Use2fs(DMIC_Type *base, bool use2fs)
  */
 void DMIC_EnableChannnel(DMIC_Type *base, uint32_t channelmask)
 {
-    base->CHANEN = channelmask;
+    base->CHANEN |= channelmask;
 }
 
 /*!
@@ -223,10 +234,10 @@ void DMIC_EnableChannnel(DMIC_Type *base, uint32_t channelmask)
  */
 void DMIC_FifoChannel(DMIC_Type *base, uint32_t channel, uint32_t trig_level, uint32_t enable, uint32_t resetn)
 {
-    base->CHANNEL[channel].FIFO_CTRL |=
-        (base->CHANNEL[channel].FIFO_CTRL & (DMIC_CHANNEL_FIFO_CTRL_INTEN_MASK | DMIC_CHANNEL_FIFO_CTRL_DMAEN_MASK)) |
-        DMIC_CHANNEL_FIFO_CTRL_TRIGLVL(trig_level) | DMIC_CHANNEL_FIFO_CTRL_ENABLE(enable) |
-        DMIC_CHANNEL_FIFO_CTRL_RESETN(resetn);
+    base->CHANNEL[channel].FIFO_CTRL =
+        ((base->CHANNEL[channel].FIFO_CTRL & (DMIC_CHANNEL_FIFO_CTRL_INTEN_MASK | DMIC_CHANNEL_FIFO_CTRL_DMAEN_MASK)) |
+         DMIC_CHANNEL_FIFO_CTRL_TRIGLVL(trig_level) | DMIC_CHANNEL_FIFO_CTRL_ENABLE(enable) |
+         DMIC_CHANNEL_FIFO_CTRL_RESETN(resetn));
 }
 
 /*!

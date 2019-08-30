@@ -2,7 +2,7 @@
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2018 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -39,7 +39,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief common driver version 2.0.1. */
-#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /* Debug console type definition. */
@@ -123,10 +123,11 @@ enum _status_groups
     kStatusGroup_LPC_MINISPI = 76,            /*!< Group number for LPC_MINISPI status codes. */
     kStatusGroup_HASHCRYPT = 77,              /*!< Group number for Hashcrypt status codes */
     kStatusGroup_LPC_SPI_SSP = 78,            /*!< Group number for LPC_SPI_SSP status codes. */
+    kStatusGroup_I3C = 79,                    /*!< Group number for I3C status codes */
     kStatusGroup_LPC_I2C_1 = 97,              /*!< Group number for LPC_I2C_1 status codes. */
     kStatusGroup_NOTIFIER = 98,               /*!< Group number for NOTIFIER status codes. */
     kStatusGroup_DebugConsole = 99,           /*!< Group number for debug console status codes. */
-    kStatusGroup_SEMC = 100,                  /*!< Group number for SEMC status codes. */    
+    kStatusGroup_SEMC = 100,                  /*!< Group number for SEMC status codes. */
     kStatusGroup_ApplicationRangeStart = 101, /*!< Starting number for application groups. */
     kStatusGroup_IAP = 102,                   /*!< Group number for IAP status codes */
 
@@ -149,6 +150,9 @@ enum _status_groups
     kStatusGroup_OSA = 143,                   /*!< Group number for OSA status codes. */
     kStatusGroup_COMMON_TASK = 144,           /*!< Group number for Common task status codes. */
     kStatusGroup_MSG = 145,                   /*!< Group number for messaging status codes. */
+    kStatusGroup_SDK_OCOTP = 146,             /*!< Group number for OCOTP status codes. */
+    kStatusGroup_SDK_FLEXSPINOR = 147,        /*!< Group number for FLEXSPINOR status codes.*/
+    kStatusGroup_CODEC = 148,                 /*!< Group number for codec status codes. */
 };
 
 /*! @brief Generic status return codes. */
@@ -167,20 +171,6 @@ enum _generic_status
 typedef int32_t status_t;
 
 /*
- * The fsl_clock.h is included here because it needs MAKE_VERSION/MAKE_STATUS/status_t
- * defined in previous of this file.
- */
-#include "fsl_clock.h"
-
-/*
- * Chip level peripheral reset API, for MCUs that implement peripheral reset control external to a peripheral
- */
-#if ((defined(FSL_FEATURE_SOC_SYSCON_COUNT) && (FSL_FEATURE_SOC_SYSCON_COUNT > 0)) || \
-     (defined(FSL_FEATURE_SOC_ASYNC_SYSCON_COUNT) && (FSL_FEATURE_SOC_ASYNC_SYSCON_COUNT > 0)))
-#include "fsl_reset.h"
-#endif
-
-/*
  * Macro guard for whether to use default weak IRQ implementation in drivers
  */
 #ifndef FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ
@@ -190,11 +180,11 @@ typedef int32_t status_t;
 /*! @name Min/max macros */
 /* @{ */
 #if !defined(MIN)
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
 #if !defined(MAX)
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 /* @} */
 
@@ -371,7 +361,7 @@ _Pragma("diag_suppress=Pm120")
 #define AT_QUICKACCESS_SECTION_DATA(func) func
 #else
 #error Toolchain not supported.
-#endif    
+#endif
 #endif /* __FSL_SDK_DRIVER_QUICK_ACCESS_ENABLE */
 /* @} */
 
@@ -386,6 +376,21 @@ _Pragma("diag_suppress=Pm120")
 #error Toolchain not supported.
 #endif /* defined(__ICCARM__) */
 /* @} */
+
+/*
+ * The fsl_clock.h is included here because it needs MAKE_VERSION/MAKE_STATUS/status_t
+ * defined in previous of this file.
+ */
+#include "fsl_clock.h"
+
+/*
+ * Chip level peripheral reset API, for MCUs that implement peripheral reset control external to a peripheral
+ */
+#if ((defined(FSL_FEATURE_SOC_SYSCON_COUNT) && (FSL_FEATURE_SOC_SYSCON_COUNT > 0)) || \
+     (defined(FSL_FEATURE_SOC_ASYNC_SYSCON_COUNT) && (FSL_FEATURE_SOC_ASYNC_SYSCON_COUNT > 0)))
+#include "fsl_reset.h"
+#endif
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -481,6 +486,9 @@ _Pragma("diag_suppress=Pm120")
      */
     static inline uint32_t DisableGlobalIRQ(void)
     {
+#if defined (__XCC__)
+        return 0;
+#else
 #if defined(CPSR_I_Msk)
         uint32_t cpsr = __get_CPSR() & CPSR_I_Msk;
 
@@ -493,6 +501,7 @@ _Pragma("diag_suppress=Pm120")
     __disable_irq();
 
     return regPrimask;
+#endif
 #endif
     }
 
@@ -508,10 +517,13 @@ _Pragma("diag_suppress=Pm120")
      */
     static inline void EnableGlobalIRQ(uint32_t primask)
     {
+#if defined (__XCC__)
+#else
 #if defined(CPSR_I_Msk)
         __set_CPSR((__get_CPSR() & ~CPSR_I_Msk) | primask);
 #else
     __set_PRIMASK(primask);
+#endif
 #endif
     }
 
@@ -525,7 +537,7 @@ _Pragma("diag_suppress=Pm120")
      */
     uint32_t InstallIRQHandler(IRQn_Type irq, uint32_t irqHandler);
 #endif /* ENABLE_RAM_VECTOR_TABLE. */
-		
+
 #if (defined(FSL_FEATURE_SOC_SYSCON_COUNT) && (FSL_FEATURE_SOC_SYSCON_COUNT > 0))
     /*!
      * @brief Enable specific interrupt for wake-up from deep-sleep mode.
@@ -566,15 +578,15 @@ _Pragma("diag_suppress=Pm120")
      * @param size The length required to malloc.
      * @param alignbytes The alignment size.
      * @retval The allocated memory.
-     */    
+     */
     void *SDK_Malloc(size_t size, size_t alignbytes);
-    
+
     /*!
      * @brief Free memory.
      *
      * @param ptr The memory to be release.
-     */ 
-    void SDK_Free(void *ptr);    
+     */
+    void SDK_Free(void *ptr);
 
 #if defined(__cplusplus)
 }

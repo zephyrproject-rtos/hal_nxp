@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_PMC_H_
@@ -13,7 +13,6 @@
 /*! @addtogroup pmc */
 /*! @{ */
 
-
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -21,7 +20,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief PMC driver version */
-#define FSL_PMC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */
+#define FSL_PMC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
 /*@}*/
 
 #if (defined(FSL_FEATURE_PMC_HAS_LVDV) && FSL_FEATURE_PMC_HAS_LVDV)
@@ -30,8 +29,8 @@
  */
 typedef enum _pmc_low_volt_detect_volt_select
 {
-    kPMC_LowVoltDetectLowTrip = 0U, /*!< Low-trip point selected (VLVD = VLVDL )*/
-    kPMC_LowVoltDetectHighTrip = 1U /*!< High-trip point selected (VLVD = VLVDH )*/
+    kPMC_LowVoltDetectLowTrip  = 0U, /*!< Low-trip point selected (VLVD = VLVDL )*/
+    kPMC_LowVoltDetectHighTrip = 1U  /*!< High-trip point selected (VLVD = VLVDH )*/
 } pmc_low_volt_detect_volt_select_t;
 #endif
 
@@ -41,7 +40,7 @@ typedef enum _pmc_low_volt_detect_volt_select
  */
 typedef enum _pmc_low_volt_warning_volt_select
 {
-    kPMC_LowVoltWarningLowTrip = 0U,  /*!< Low-trip point selected (VLVW = VLVW1)*/
+    kPMC_LowVoltWarningLowTrip  = 0U, /*!< Low-trip point selected (VLVW = VLVW1)*/
     kPMC_LowVoltWarningMid1Trip = 1U, /*!< Mid 1 trip point selected (VLVW = VLVW2)*/
     kPMC_LowVoltWarningMid2Trip = 2U, /*!< Mid 2 trip point selected (VLVW = VLVW3)*/
     kPMC_LowVoltWarningHighTrip = 3U  /*!< High-trip point selected (VLVW = VLVW4)*/
@@ -54,8 +53,8 @@ typedef enum _pmc_low_volt_warning_volt_select
  */
 typedef enum _pmc_high_volt_detect_volt_select
 {
-    kPMC_HighVoltDetectLowTrip = 0U, /*!< Low-trip point selected (VHVD = VHVDL )*/
-    kPMC_HighVoltDetectHighTrip = 1U /*!< High-trip point selected (VHVD = VHVDH )*/
+    kPMC_HighVoltDetectLowTrip  = 0U, /*!< Low-trip point selected (VHVD = VHVDL )*/
+    kPMC_HighVoltDetectHighTrip = 1U  /*!< High-trip point selected (VHVD = VHVDH )*/
 } pmc_high_volt_detect_volt_select_t;
 #endif /* FSL_FEATURE_PMC_HAS_HVDSC1 */
 
@@ -65,8 +64,8 @@ typedef enum _pmc_high_volt_detect_volt_select
  */
 typedef enum _pmc_bandgap_buffer_drive_select
 {
-    kPMC_BandgapBufferDriveLow = 0U, /*!< Low-drive.  */
-    kPMC_BandgapBufferDriveHigh = 1U /*!< High-drive. */
+    kPMC_BandgapBufferDriveLow  = 0U, /*!< Low-drive.  */
+    kPMC_BandgapBufferDriveHigh = 1U  /*!< High-drive. */
 } pmc_bandgap_buffer_drive_select_t;
 #endif /* FSL_FEATURE_PMC_HAS_BGBDS */
 
@@ -76,8 +75,8 @@ typedef enum _pmc_bandgap_buffer_drive_select
  */
 typedef enum _pmc_vlp_freq_option
 {
-    kPMC_FreqRestrict = 0U,  /*!< Frequency is restricted in VLPx mode. */
-    kPMC_FreqUnrestrict = 1U /*!< Frequency is unrestricted in VLPx mode. */
+    kPMC_FreqRestrict   = 0U, /*!< Frequency is restricted in VLPx mode. */
+    kPMC_FreqUnrestrict = 1U  /*!< Frequency is unrestricted in VLPx mode. */
 } pmc_vlp_freq_mode_t;
 #endif /* FSL_FEATURE_PMC_HAS_VLPO */
 
@@ -219,7 +218,14 @@ void PMC_ConfigureLowVoltDetect(PMC_Type *base, const pmc_low_volt_detect_config
  */
 static inline bool PMC_GetLowVoltDetectFlag(PMC_Type *base)
 {
-    return (bool)(base->LVDSC1 & PMC_LVDSC1_LVDF_MASK);
+    if (0U != (base->LVDSC1 & PMC_LVDSC1_LVDF_MASK))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /*!
@@ -260,7 +266,14 @@ void PMC_ConfigureLowVoltWarning(PMC_Type *base, const pmc_low_volt_warning_conf
  */
 static inline bool PMC_GetLowVoltWarningFlag(PMC_Type *base)
 {
-    return (bool)(base->LVDSC2 & PMC_LVDSC2_LVWF_MASK);
+    if (0U != (base->LVDSC2 & PMC_LVDSC2_LVWF_MASK))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /*!
@@ -350,7 +363,7 @@ void PMC_ConfigureBandgapBuffer(PMC_Type *base, const pmc_bandgap_buffer_config_
  */
 static inline bool PMC_GetPeriphIOIsolationFlag(PMC_Type *base)
 {
-    return (bool)(base->REGSC & PMC_REGSC_ACKISO_MASK);
+    return (0U != (base->REGSC & PMC_REGSC_ACKISO_MASK)) ? true : false;
 }
 
 /*!
@@ -384,7 +397,14 @@ static inline void PMC_ClearPeriphIOIsolationFlag(PMC_Type *base)
  */
 static inline bool PMC_IsRegulatorInRunRegulation(PMC_Type *base)
 {
-    return (bool)(base->REGSC & PMC_REGSC_REGONS_MASK);
+    if (0U != (base->REGSC & PMC_REGSC_REGONS_MASK))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 #endif /* FSL_FEATURE_PMC_HAS_REGONS */
 

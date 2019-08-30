@@ -22,14 +22,14 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief GPIO driver version 2.3.1. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+/*! @brief GPIO driver version 2.3.2. */
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 /*! @brief GPIO direction definition */
 typedef enum _gpio_pin_direction
 {
-    kGPIO_DigitalInput = 0U,  /*!< Set current pin as digital input*/
+    kGPIO_DigitalInput  = 0U, /*!< Set current pin as digital input*/
     kGPIO_DigitalOutput = 1U, /*!< Set current pin as digital output*/
 } gpio_pin_direction_t;
 
@@ -76,20 +76,20 @@ typedef struct _gpio_pin_config
 /*! @brief Configures the interrupt generation condition. */
 typedef enum _gpio_interrupt_config
 {
-    kGPIO_InterruptStatusFlagDisabled = 0x0U,   /*!< Interrupt status flag is disabled. */
-    kGPIO_DMARisingEdge = 0x1U,                 /*!< ISF flag and DMA request on rising edge. */
-    kGPIO_DMAFallingEdge = 0x2U,                /*!< ISF flag and DMA request on falling edge. */
-    kGPIO_DMAEitherEdge = 0x3U,                 /*!< ISF flag and DMA request on either edge. */
-    kGPIO_FlagRisingEdge = 0x05U,               /*!< Flag sets on rising edge. */
-    kGPIO_FlagFallingEdge = 0x06U,              /*!< Flag sets on falling edge. */
-    kGPIO_FlagEitherEdge = 0x07U,               /*!< Flag sets on either edge. */
-    kGPIO_InterruptLogicZero = 0x8U,            /*!< Interrupt when logic zero. */
-    kGPIO_InterruptRisingEdge = 0x9U,           /*!< Interrupt on rising edge. */
-    kGPIO_InterruptFallingEdge = 0xAU,          /*!< Interrupt on falling edge. */
-    kGPIO_InterruptEitherEdge = 0xBU,           /*!< Interrupt on either edge. */
-    kGPIO_InterruptLogicOne = 0xCU,             /*!< Interrupt when logic one. */
-    kGPIO_ActiveHighTriggerOutputEnable = 0xDU, /*!< Enable active high-trigger output. */
-    kGPIO_ActiveLowTriggerOutputEnable = 0xEU,  /*!< Enable active low-trigger output. */
+    kGPIO_InterruptStatusFlagDisabled   = 0x0U,  /*!< Interrupt status flag is disabled. */
+    kGPIO_DMARisingEdge                 = 0x1U,  /*!< ISF flag and DMA request on rising edge. */
+    kGPIO_DMAFallingEdge                = 0x2U,  /*!< ISF flag and DMA request on falling edge. */
+    kGPIO_DMAEitherEdge                 = 0x3U,  /*!< ISF flag and DMA request on either edge. */
+    kGPIO_FlagRisingEdge                = 0x05U, /*!< Flag sets on rising edge. */
+    kGPIO_FlagFallingEdge               = 0x06U, /*!< Flag sets on falling edge. */
+    kGPIO_FlagEitherEdge                = 0x07U, /*!< Flag sets on either edge. */
+    kGPIO_InterruptLogicZero            = 0x8U,  /*!< Interrupt when logic zero. */
+    kGPIO_InterruptRisingEdge           = 0x9U,  /*!< Interrupt on rising edge. */
+    kGPIO_InterruptFallingEdge          = 0xAU,  /*!< Interrupt on falling edge. */
+    kGPIO_InterruptEitherEdge           = 0xBU,  /*!< Interrupt on either edge. */
+    kGPIO_InterruptLogicOne             = 0xCU,  /*!< Interrupt when logic one. */
+    kGPIO_ActiveHighTriggerOutputEnable = 0xDU,  /*!< Enable active high-trigger output. */
+    kGPIO_ActiveLowTriggerOutputEnable  = 0xEU,  /*!< Enable active low-trigger output. */
 } gpio_interrupt_config_t;
 #endif
 /*! @} */
@@ -118,13 +118,13 @@ extern "C" {
  *
  * This is an example to define an input pin or an output pin configuration.
  * @code
- * // Define a digital input pin configuration,
+ * Define a digital input pin configuration,
  * gpio_pin_config_t config =
  * {
  *   kGPIO_DigitalInput,
  *   0,
  * }
- * //Define a digital output pin configuration,
+ * Define a digital output pin configuration,
  * gpio_pin_config_t config =
  * {
  *   kGPIO_DigitalOutput,
@@ -154,13 +154,15 @@ void GPIO_PinInit(GPIO_Type *base, uint32_t pin, const gpio_pin_config_t *config
  */
 static inline void GPIO_PinWrite(GPIO_Type *base, uint32_t pin, uint8_t output)
 {
+    uint32_t u32flag = 1;
+
     if (output == 0U)
     {
-        base->PCOR = 1U << pin;
+        base->PCOR = u32flag << pin;
     }
     else
     {
-        base->PSOR = 1U << pin;
+        base->PSOR = u32flag << pin;
     }
 }
 
@@ -355,6 +357,7 @@ void GPIO_CheckAttributeBytes(GPIO_Type *base, gpio_checker_attribute_t attribut
 /*! @name FGPIO Configuration */
 /*@{*/
 
+#if defined(FSL_FEATURE_PCC_HAS_FGPIO_CLOCK_GATE_CONTROL) && FSL_FEATURE_PCC_HAS_FGPIO_CLOCK_GATE_CONTROL
 /*!
  * @brief Initializes the FGPIO peripheral.
  *
@@ -363,6 +366,7 @@ void GPIO_CheckAttributeBytes(GPIO_Type *base, gpio_checker_attribute_t attribut
  * @param base   FGPIO peripheral base pointer (FGPIOA, FGPIOB, FGPIOC, and so on.)
  */
 void FGPIO_PortInit(FGPIO_Type *base);
+#endif /* FSL_FEATURE_PCC_HAS_FGPIO_CLOCK_GATE_CONTROL */
 
 /*!
  * @brief Initializes a FGPIO pin used by the board.
@@ -372,13 +376,13 @@ void FGPIO_PortInit(FGPIO_Type *base);
  *
  * This is an example to define an input pin or an output pin configuration:
  * @code
- * // Define a digital input pin configuration,
+ * Define a digital input pin configuration,
  * gpio_pin_config_t config =
  * {
  *   kGPIO_DigitalInput,
  *   0,
  * }
- * //Define a digital output pin configuration,
+ * Define a digital output pin configuration,
  * gpio_pin_config_t config =
  * {
  *   kGPIO_DigitalOutput,
@@ -408,13 +412,15 @@ void FGPIO_PinInit(FGPIO_Type *base, uint32_t pin, const gpio_pin_config_t *conf
  */
 static inline void FGPIO_PinWrite(FGPIO_Type *base, uint32_t pin, uint8_t output)
 {
+    uint32_t u32flag = 1;
+
     if (output == 0U)
     {
-        base->PCOR = 1 << pin;
+        base->PCOR = u32flag << pin;
     }
     else
     {
-        base->PSOR = 1 << pin;
+        base->PSOR = u32flag << pin;
     }
 }
 

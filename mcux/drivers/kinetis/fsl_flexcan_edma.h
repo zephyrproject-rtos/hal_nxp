@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexCAN EDMA driver version 2.2.4. */
-#define FSL_FLEXCAN_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
+/*! @brief FlexCAN EDMA driver version 2.4.0. */
+#define FSL_FLEXCAN_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */
@@ -36,8 +36,8 @@ typedef void (*flexcan_edma_transfer_callback_t)(CAN_Type *base,
                                                  void *userData);
 
 /*!
-* @brief FlexCAN eDMA handle
-*/
+ * @brief FlexCAN eDMA handle
+ */
 struct _flexcan_edma_handle
 {
     flexcan_edma_transfer_callback_t callback; /*!< Callback function. */

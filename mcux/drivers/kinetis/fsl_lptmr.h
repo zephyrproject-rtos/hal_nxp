@@ -2,7 +2,7 @@
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_LPTMR_H_
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_LPTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
+#define FSL_LPTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
 /*@}*/
 
 /*! @brief LPTMR pin selection used in pulse counter mode.*/
@@ -37,29 +37,29 @@ typedef enum _lptmr_pin_select
 typedef enum _lptmr_pin_polarity
 {
     kLPTMR_PinPolarityActiveHigh = 0x0U, /*!< Pulse Counter input source is active-high */
-    kLPTMR_PinPolarityActiveLow = 0x1U   /*!< Pulse Counter input source is active-low */
+    kLPTMR_PinPolarityActiveLow  = 0x1U  /*!< Pulse Counter input source is active-low */
 } lptmr_pin_polarity_t;
 
 /*! @brief LPTMR timer mode selection.*/
 typedef enum _lptmr_timer_mode
 {
-    kLPTMR_TimerModeTimeCounter = 0x0U, /*!< Time Counter mode */
-    kLPTMR_TimerModePulseCounter = 0x1U /*!< Pulse Counter mode */
+    kLPTMR_TimerModeTimeCounter  = 0x0U, /*!< Time Counter mode */
+    kLPTMR_TimerModePulseCounter = 0x1U  /*!< Pulse Counter mode */
 } lptmr_timer_mode_t;
 
 /*! @brief LPTMR prescaler/glitch filter values*/
 typedef enum _lptmr_prescaler_glitch_value
 {
-    kLPTMR_Prescale_Glitch_0 = 0x0U,  /*!< Prescaler divide 2, glitch filter does not support this setting */
-    kLPTMR_Prescale_Glitch_1 = 0x1U,  /*!< Prescaler divide 4, glitch filter 2 */
-    kLPTMR_Prescale_Glitch_2 = 0x2U,  /*!< Prescaler divide 8, glitch filter 4 */
-    kLPTMR_Prescale_Glitch_3 = 0x3U,  /*!< Prescaler divide 16, glitch filter 8 */
-    kLPTMR_Prescale_Glitch_4 = 0x4U,  /*!< Prescaler divide 32, glitch filter 16 */
-    kLPTMR_Prescale_Glitch_5 = 0x5U,  /*!< Prescaler divide 64, glitch filter 32 */
-    kLPTMR_Prescale_Glitch_6 = 0x6U,  /*!< Prescaler divide 128, glitch filter 64 */
-    kLPTMR_Prescale_Glitch_7 = 0x7U,  /*!< Prescaler divide 256, glitch filter 128 */
-    kLPTMR_Prescale_Glitch_8 = 0x8U,  /*!< Prescaler divide 512, glitch filter 256 */
-    kLPTMR_Prescale_Glitch_9 = 0x9U,  /*!< Prescaler divide 1024, glitch filter 512*/
+    kLPTMR_Prescale_Glitch_0  = 0x0U, /*!< Prescaler divide 2, glitch filter does not support this setting */
+    kLPTMR_Prescale_Glitch_1  = 0x1U, /*!< Prescaler divide 4, glitch filter 2 */
+    kLPTMR_Prescale_Glitch_2  = 0x2U, /*!< Prescaler divide 8, glitch filter 4 */
+    kLPTMR_Prescale_Glitch_3  = 0x3U, /*!< Prescaler divide 16, glitch filter 8 */
+    kLPTMR_Prescale_Glitch_4  = 0x4U, /*!< Prescaler divide 32, glitch filter 16 */
+    kLPTMR_Prescale_Glitch_5  = 0x5U, /*!< Prescaler divide 64, glitch filter 32 */
+    kLPTMR_Prescale_Glitch_6  = 0x6U, /*!< Prescaler divide 128, glitch filter 64 */
+    kLPTMR_Prescale_Glitch_7  = 0x7U, /*!< Prescaler divide 256, glitch filter 128 */
+    kLPTMR_Prescale_Glitch_8  = 0x8U, /*!< Prescaler divide 512, glitch filter 256 */
+    kLPTMR_Prescale_Glitch_9  = 0x9U, /*!< Prescaler divide 1024, glitch filter 512*/
     kLPTMR_Prescale_Glitch_10 = 0xAU, /*!< Prescaler divide 2048 glitch filter 1024 */
     kLPTMR_Prescale_Glitch_11 = 0xBU, /*!< Prescaler divide 4096, glitch filter 2048 */
     kLPTMR_Prescale_Glitch_12 = 0xCU, /*!< Prescaler divide 8192, glitch filter 4096 */
@@ -225,7 +225,7 @@ static inline uint32_t LPTMR_GetEnabledInterrupts(LPTMR_Type *base)
  */
 static inline void LPTMR_EnableTimerDMA(LPTMR_Type *base, bool enable)
 {
-    if(enable)
+    if (enable)
     {
         base->CSR |= LPTMR_CSR_TDRE_MASK;
     }
@@ -288,8 +288,8 @@ static inline void LPTMR_ClearStatusFlags(LPTMR_Type *base, uint32_t mask)
  */
 static inline void LPTMR_SetTimerPeriod(LPTMR_Type *base, uint32_t ticks)
 {
-    assert(ticks > 0);
-    base->CMR = ticks - 1;
+    assert(ticks > 0U);
+    base->CMR = ticks - 1U;
 }
 
 /*!

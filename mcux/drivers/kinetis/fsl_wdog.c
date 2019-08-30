@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 /*!
- * brief Initializes the WDOG configuration sturcture.
+ * brief Initializes the WDOG configuration structure.
  *
  * This function initializes the WDOG configuration structure to default values. The default
  * values are as follows.
@@ -46,19 +46,19 @@ void WDOG_GetDefaultConfig(wdog_config_t *config)
     /* Initializes the configure structure to zero. */
     memset(config, 0, sizeof(*config));
 
-    config->enableWdog = true;
+    config->enableWdog  = true;
     config->clockSource = kWDOG_LpoClockSource;
-    config->prescaler = kWDOG_ClockPrescalerDivide1;
+    config->prescaler   = kWDOG_ClockPrescalerDivide1;
 #if defined(FSL_FEATURE_WDOG_HAS_WAITEN) && FSL_FEATURE_WDOG_HAS_WAITEN
     config->workMode.enableWait = true;
 #endif /* FSL_FEATURE_WDOG_HAS_WAITEN */
-    config->workMode.enableStop = false;
+    config->workMode.enableStop  = false;
     config->workMode.enableDebug = false;
-    config->enableUpdate = true;
-    config->enableInterrupt = false;
-    config->enableWindowMode = false;
-    config->windowValue = 0U;
-    config->timeoutValue = 0xFFFFU;
+    config->enableUpdate         = true;
+    config->enableInterrupt      = false;
+    config->enableWindowMode     = false;
+    config->windowValue          = 0U;
+    config->timeoutValue         = 0xFFFFU;
 }
 
 /*!
@@ -84,7 +84,7 @@ void WDOG_Init(WDOG_Type *base, const wdog_config_t *config)
 {
     assert(config);
 
-    uint32_t value = 0U;
+    uint32_t value        = 0U;
     uint32_t primaskValue = 0U;
 
     value = WDOG_STCTRLH_WDOGEN(config->enableWdog) | WDOG_STCTRLH_CLKSRC(config->clockSource) |
@@ -102,12 +102,12 @@ void WDOG_Init(WDOG_Type *base, const wdog_config_t *config)
     WDOG_Unlock(base);
     /* Wait one bus clock cycle */
     base->RSTCNT = 0U;
-    /* Set configruation */
-    base->PRESC = WDOG_PRESC_PRESCVAL(config->prescaler);
-    base->WINH = (uint16_t)((config->windowValue >> 16U) & 0xFFFFU);
-    base->WINL = (uint16_t)((config->windowValue) & 0xFFFFU);
-    base->TOVALH = (uint16_t)((config->timeoutValue >> 16U) & 0xFFFFU);
-    base->TOVALL = (uint16_t)((config->timeoutValue) & 0xFFFFU);
+    /* Set configuration */
+    base->PRESC   = WDOG_PRESC_PRESCVAL(config->prescaler);
+    base->WINH    = (uint16_t)((config->windowValue >> 16U) & 0xFFFFU);
+    base->WINL    = (uint16_t)((config->windowValue) & 0xFFFFU);
+    base->TOVALH  = (uint16_t)((config->timeoutValue >> 16U) & 0xFFFFU);
+    base->TOVALL  = (uint16_t)((config->timeoutValue) & 0xFFFFU);
     base->STCTRLH = value;
     EnableGlobalIRQ(primaskValue);
 }
@@ -153,7 +153,7 @@ void WDOG_SetTestModeConfig(WDOG_Type *base, wdog_test_config_t *config)
 {
     assert(config);
 
-    uint32_t value = 0U;
+    uint32_t value        = 0U;
     uint32_t primaskValue = 0U;
 
     value = WDOG_STCTRLH_DISTESTWDOG(0U) | WDOG_STCTRLH_TESTWDOG(1U) | WDOG_STCTRLH_TESTSEL(config->testMode) |
@@ -166,9 +166,9 @@ void WDOG_SetTestModeConfig(WDOG_Type *base, wdog_test_config_t *config)
     WDOG_Unlock(base);
     /* Wait one bus clock cycle */
     base->RSTCNT = 0U;
-    /* Set configruation */
-    base->TOVALH = (uint16_t)((config->timeoutValue >> 16U) & 0xFFFFU);
-    base->TOVALL = (uint16_t)((config->timeoutValue) & 0xFFFFU);
+    /* Set configuration */
+    base->TOVALH  = (uint16_t)((config->timeoutValue >> 16U) & 0xFFFFU);
+    base->TOVALL  = (uint16_t)((config->timeoutValue) & 0xFFFFU);
     base->STCTRLH = value;
     EnableGlobalIRQ(primaskValue);
 }
@@ -233,7 +233,7 @@ void WDOG_Refresh(WDOG_Type *base)
     uint32_t primaskValue = 0U;
 
     /* Disable the global interrupt to protect refresh sequence */
-    primaskValue = DisableGlobalIRQ();
+    primaskValue  = DisableGlobalIRQ();
     base->REFRESH = WDOG_FIRST_WORD_OF_REFRESH;
     base->REFRESH = WDOG_SECOND_WORD_OF_REFRESH;
     EnableGlobalIRQ(primaskValue);

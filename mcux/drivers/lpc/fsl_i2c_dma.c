@@ -74,12 +74,12 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
     struct _i2c_master_transfer *transfer;
 
     handle->transfer = *xfer;
-    transfer = &(handle->transfer);
+    transfer         = &(handle->transfer);
 
-    handle->transferCount = 0;
+    handle->transferCount     = 0;
     handle->remainingBytesDMA = 0;
-    handle->buf = (uint8_t *)transfer->data;
-    handle->remainingSubaddr = 0;
+    handle->buf               = (uint8_t *)transfer->data;
+    handle->remainingSubaddr  = 0;
 
     if (transfer->flags & kI2C_TransferNoStartFlag)
     {
@@ -228,7 +228,7 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
     {
         /* Slave NACKed last byte, issue stop and return error */
         DMA_AbortTransfer(handle->dmaHandle);
-        base->MSTCTL = I2C_MSTCTL_MSTSTOP_MASK;
+        base->MSTCTL  = I2C_MSTCTL_MSTSTOP_MASK;
         handle->state = kWaitForCompletionState;
         return kStatus_I2C_Nak;
     }
@@ -242,7 +242,7 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
 
         if (handle->remainingSubaddr)
         {
-            base->MSTDAT = (uint32_t)transfer->slaveAddress << 1;
+            base->MSTDAT  = (uint32_t)transfer->slaveAddress << 1;
             handle->state = kTransmitSubaddrState;
         }
         else if (transfer->direction == kI2C_Write)
@@ -251,7 +251,7 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
             if (transfer->dataSize == 0)
             {
                 /* No data to be transferred, initiate start and schedule stop */
-                base->MSTCTL = I2C_MSTCTL_MSTSTART_MASK;
+                base->MSTCTL  = I2C_MSTCTL_MSTSTART_MASK;
                 handle->state = kStopState;
                 return err;
             }
@@ -263,7 +263,7 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
             if (transfer->dataSize == 1)
             {
                 /* The very last byte is always received by means of SW */
-                base->MSTCTL = I2C_MSTCTL_MSTSTART_MASK;
+                base->MSTCTL  = I2C_MSTCTL_MSTSTART_MASK;
                 handle->state = kReceiveLastDataState;
                 return err;
             }
@@ -272,7 +272,7 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
         else
         {
             handle->state = kIdleState;
-            err = kStatus_I2C_UnexpectedState;
+            err           = kStatus_I2C_UnexpectedState;
             return err;
         }
     }
@@ -312,7 +312,7 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
                 return kStatus_I2C_UnexpectedState;
             }
 
-            base->MSTCTL = start_flag | I2C_MSTCTL_MSTDMA_MASK;
+            base->MSTCTL              = start_flag | I2C_MSTCTL_MSTDMA_MASK;
             handle->remainingBytesDMA = handle->transfer.dataSize;
 
             I2C_RunDMATransfer(base, handle);
@@ -327,7 +327,7 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
                 return kStatus_I2C_UnexpectedState;
             }
 
-            base->MSTCTL = start_flag | I2C_MSTCTL_MSTDMA_MASK;
+            base->MSTCTL              = start_flag | I2C_MSTCTL_MSTDMA_MASK;
             handle->remainingBytesDMA = handle->transfer.dataSize - 1;
 
             I2C_RunDMATransfer(base, handle);
@@ -346,7 +346,7 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
             handle->transferCount++;
 
             /* No more data expected, issue NACK and STOP right away */
-            base->MSTCTL = I2C_MSTCTL_MSTSTOP_MASK;
+            base->MSTCTL  = I2C_MSTCTL_MSTSTOP_MASK;
             handle->state = kWaitForCompletionState;
             break;
 
@@ -354,17 +354,17 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
             if (transfer->flags & kI2C_TransferNoStopFlag)
             {
                 /* Stop condition is omitted, we are done */
-                *isDone = true;
+                *isDone       = true;
                 handle->state = kIdleState;
                 break;
             }
             /* Send stop condition */
-            base->MSTCTL = I2C_MSTCTL_MSTSTOP_MASK;
+            base->MSTCTL  = I2C_MSTCTL_MSTSTOP_MASK;
             handle->state = kWaitForCompletionState;
             break;
 
         case kWaitForCompletionState:
-            *isDone = true;
+            *isDone       = true;
             handle->state = kIdleState;
             break;
 
@@ -421,7 +421,7 @@ static void I2C_MasterTransferCallbackDMA(dma_handle_t *handle, void *userData)
 }
 
 /*!
- * brief Init the I2C handle which is used in transcational functions
+ * brief Init the I2C handle which is used in transactional functions
  *
  * param base I2C peripheral base address
  * param handle pointer to i2c_master_dma_handle_t structure
@@ -448,7 +448,7 @@ void I2C_MasterTransferCreateHandleDMA(I2C_Type *base,
 
     /* Set the user callback and userData. */
     handle->completionCallback = callback;
-    handle->userData = userData;
+    handle->userData           = userData;
 
     FLEXCOMM_SetIRQHandler(base, (flexcomm_irq_handler_t)I2C_MasterTransferDMAHandleIRQ, handle);
 
@@ -460,7 +460,7 @@ void I2C_MasterTransferCreateHandleDMA(I2C_Type *base,
     /* Set the handle for DMA. */
     handle->dmaHandle = dmaHandle;
 
-    s_dmaPrivateHandle[instance].base = base;
+    s_dmaPrivateHandle[instance].base   = base;
     s_dmaPrivateHandle[instance].handle = handle;
 
     DMA_SetCallback(dmaHandle, (dma_callback)I2C_MasterTransferCallbackDMA, &s_dmaPrivateHandle[instance]);

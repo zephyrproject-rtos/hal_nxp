@@ -27,8 +27,8 @@
 /*!@brief USB voltage regulator enable setting. */
 enum _sim_usb_volt_reg_enable_mode
 {
-    kSIM_UsbVoltRegEnable = (int)SIM_SOPT1_USBREGEN_MASK,      /*!< Enable voltage regulator. */
-    kSIM_UsbVoltRegEnableInLowPower = SIM_SOPT1_USBVSTBY_MASK, /*!< Enable voltage regulator in VLPR/VLPW modes. */
+    kSIM_UsbVoltRegEnable           = (int)SIM_SOPT1_USBREGEN_MASK, /*!< Enable voltage regulator. */
+    kSIM_UsbVoltRegEnableInLowPower = SIM_SOPT1_USBVSTBY_MASK,      /*!< Enable voltage regulator in VLPR/VLPW modes. */
     kSIM_UsbVoltRegEnableInStop = SIM_SOPT1_USBSSTBY_MASK, /*!< Enable voltage regulator in STOP/VLPS/LLS/VLLS modes. */
     kSIM_UsbVoltRegEnableInAllModes =
         (int)(SIM_SOPT1_USBREGEN_MASK | SIM_SOPT1_USBSSTBY_MASK |
@@ -65,7 +65,7 @@ typedef struct _sim_rf_addr
 enum _sim_flash_mode
 {
     kSIM_FlashDisableInWait = SIM_FCFG1_FLASHDOZE_MASK, /*!< Disable flash in wait mode.   */
-    kSIM_FlashDisable = SIM_FCFG1_FLASHDIS_MASK         /*!< Disable flash in normal mode. */
+    kSIM_FlashDisable       = SIM_FCFG1_FLASHDIS_MASK   /*!< Disable flash in normal mode. */
 };
 
 /*******************************************************************************

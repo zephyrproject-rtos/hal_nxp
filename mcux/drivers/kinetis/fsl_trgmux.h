@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -13,7 +13,6 @@
 
 /*! @addtogroup trgmux */
 /*! @{ */
-
 
 /*******************************************************************************
  * Definitions
@@ -90,10 +89,7 @@ static inline void TRGMUX_LockRegister(TRGMUX_Type *base, uint32_t index)
  * @retval  kStatus_Success  Configured successfully.
  * @retval  kStatus_TRGMUX_Locked   Configuration failed because the register is locked.
  */
-status_t TRGMUX_SetTriggerSource(TRGMUX_Type *base,
-                                 uint32_t index,
-                                 trgmux_trigger_input_t input,
-                                 uint32_t trigger_src);
+status_t TRGMUX_SetTriggerSource(TRGMUX_Type *base, uint32_t index, trgmux_trigger_input_t input, uint32_t trigger_src);
 
 /*@}*/
 

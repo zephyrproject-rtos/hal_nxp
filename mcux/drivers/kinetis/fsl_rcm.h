@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief RCM driver version 2.0.1. */
-#define FSL_RCM_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief RCM driver version 2.0.2. */
+#define FSL_RCM_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*!
@@ -41,13 +41,13 @@ typedef enum _rcm_reset_source
     kRCM_SourceLol = RCM_SRS_LOL_MASK,   /*!< Loss of lock reset */
 #endif                                   /* FSL_FEATURE_RCM_HAS_LOL */
     kRCM_SourceWdog = RCM_SRS_WDOG_MASK, /*!< Watchdog reset */
-    kRCM_SourcePin = RCM_SRS_PIN_MASK,   /*!< External pin reset */
-    kRCM_SourcePor = RCM_SRS_POR_MASK,   /*!< Power on reset */
+    kRCM_SourcePin  = RCM_SRS_PIN_MASK,  /*!< External pin reset */
+    kRCM_SourcePor  = RCM_SRS_POR_MASK,  /*!< Power on reset */
 #if (defined(FSL_FEATURE_RCM_HAS_JTAG) && FSL_FEATURE_RCM_HAS_JTAG)
     kRCM_SourceJtag = RCM_SRS_JTAG_MASK,     /*!< JTAG generated reset */
 #endif                                       /* FSL_FEATURE_RCM_HAS_JTAG */
     kRCM_SourceLockup = RCM_SRS_LOCKUP_MASK, /*!< Core lock up reset */
-    kRCM_SourceSw = RCM_SRS_SW_MASK,         /*!< Software reset */
+    kRCM_SourceSw     = RCM_SRS_SW_MASK,     /*!< Software reset */
 #if (defined(FSL_FEATURE_RCM_HAS_MDM_AP) && FSL_FEATURE_RCM_HAS_MDM_AP)
     kRCM_SourceMdmap = RCM_SRS_MDM_AP_MASK, /*!< MDM-AP system reset */
 #endif                                      /* FSL_FEATURE_RCM_HAS_MDM_AP */
@@ -59,28 +59,28 @@ typedef enum _rcm_reset_source
 #else /* (FSL_FEATURE_RCM_REG_WIDTH == 32) */
 /* RCM register bit width is 8. */
 #if (defined(FSL_FEATURE_RCM_HAS_WAKEUP) && FSL_FEATURE_RCM_HAS_WAKEUP)
-    kRCM_SourceWakeup = RCM_SRS0_WAKEUP_MASK, /*!< Low-leakage wakeup reset */
+    kRCM_SourceWakeup  = RCM_SRS0_WAKEUP_MASK,        /*!< Low-leakage wakeup reset */
 #endif
-    kRCM_SourceLvd = RCM_SRS0_LVD_MASK, /*!< Low-voltage detect reset */
+    kRCM_SourceLvd     = RCM_SRS0_LVD_MASK,           /*!< Low-voltage detect reset */
 #if (defined(FSL_FEATURE_RCM_HAS_LOC) && FSL_FEATURE_RCM_HAS_LOC)
-    kRCM_SourceLoc = RCM_SRS0_LOC_MASK,   /*!< Loss of clock reset */
+    kRCM_SourceLoc     = RCM_SRS0_LOC_MASK,           /*!< Loss of clock reset */
 #endif /* FSL_FEATURE_RCM_HAS_LOC */
 #if (defined(FSL_FEATURE_RCM_HAS_LOL) && FSL_FEATURE_RCM_HAS_LOL)
-    kRCM_SourceLol = RCM_SRS0_LOL_MASK,   /*!< Loss of lock reset */
+    kRCM_SourceLol     = RCM_SRS0_LOL_MASK,           /*!< Loss of lock reset */
 #endif /* FSL_FEATURE_RCM_HAS_LOL */
-    kRCM_SourceWdog = RCM_SRS0_WDOG_MASK, /*!< Watchdog reset */
-    kRCM_SourcePin = RCM_SRS0_PIN_MASK,   /*!< External pin reset */
-    kRCM_SourcePor = RCM_SRS0_POR_MASK, /*!< Power on reset */
+    kRCM_SourceWdog    = RCM_SRS0_WDOG_MASK,          /*!< Watchdog reset */
+    kRCM_SourcePin     = RCM_SRS0_PIN_MASK,           /*!< External pin reset */
+    kRCM_SourcePor     = RCM_SRS0_POR_MASK,           /*!< Power on reset */
 #if (defined(FSL_FEATURE_RCM_HAS_JTAG) && FSL_FEATURE_RCM_HAS_JTAG)
-    kRCM_SourceJtag = RCM_SRS1_JTAG_MASK << 8U,     /*!< JTAG generated reset */
+    kRCM_SourceJtag    = RCM_SRS1_JTAG_MASK << 8U,    /*!< JTAG generated reset */
 #endif /* FSL_FEATURE_RCM_HAS_JTAG */
-    kRCM_SourceLockup = RCM_SRS1_LOCKUP_MASK << 8U, /*!< Core lock up reset */
-    kRCM_SourceSw = RCM_SRS1_SW_MASK << 8U, /*!< Software reset */
+    kRCM_SourceLockup  = RCM_SRS1_LOCKUP_MASK << 8U,  /*!< Core lock up reset */
+    kRCM_SourceSw      = RCM_SRS1_SW_MASK << 8U,      /*!< Software reset */
 #if (defined(FSL_FEATURE_RCM_HAS_MDM_AP) && FSL_FEATURE_RCM_HAS_MDM_AP)
-    kRCM_SourceMdmap = RCM_SRS1_MDM_AP_MASK << 8U,    /*!< MDM-AP system reset */
+    kRCM_SourceMdmap   = RCM_SRS1_MDM_AP_MASK << 8U,  /*!< MDM-AP system reset */
 #endif /* FSL_FEATURE_RCM_HAS_MDM_AP */
 #if (defined(FSL_FEATURE_RCM_HAS_EZPORT) && FSL_FEATURE_RCM_HAS_EZPORT)
-    kRCM_SourceEzpt = RCM_SRS1_EZPT_MASK << 8U,       /*!< EzPort reset */
+    kRCM_SourceEzpt    = RCM_SRS1_EZPT_MASK << 8U,    /*!< EzPort reset */
 #endif /* FSL_FEATURE_RCM_HAS_EZPORT */
     kRCM_SourceSackerr = RCM_SRS1_SACKERR_MASK << 8U, /*!< Parameter could get all reset flags */
 #endif /* (FSL_FEATURE_RCM_REG_WIDTH == 32) */
@@ -92,7 +92,7 @@ typedef enum _rcm_reset_source
  */
 typedef enum _rcm_run_wait_filter_mode
 {
-    kRCM_FilterDisable = 0U,  /*!< All filtering disabled */
+    kRCM_FilterDisable  = 0U, /*!< All filtering disabled */
     kRCM_FilterBusClock = 1U, /*!< Bus clock filter enabled */
     kRCM_FilterLpoClock = 2U  /*!< LPO clock filter enabled */
 } rcm_run_wait_filter_mode_t;
@@ -103,7 +103,7 @@ typedef enum _rcm_run_wait_filter_mode
  */
 typedef enum _rcm_boot_rom_config
 {
-    kRCM_BootFlash = 0U,   /*!< Boot from flash */
+    kRCM_BootFlash   = 0U, /*!< Boot from flash */
     kRCM_BootRomCfg0 = 1U, /*!< Boot from boot ROM due to BOOTCFG0 */
     kRCM_BootRomFopt = 2U, /*!< Boot from boot ROM due to FOPT[7] */
     kRCM_BootRomBoth = 3U  /*!< Boot from boot ROM due to both BOOTCFG0 and FOPT[7] */
@@ -116,8 +116,8 @@ typedef enum _rcm_boot_rom_config
  */
 typedef enum _rcm_reset_delay
 {
-    kRCM_ResetDelay8Lpo = 0U,   /*!< Delay 8 LPO cycles.   */
-    kRCM_ResetDelay32Lpo = 1U,  /*!< Delay 32 LPO cycles.  */
+    kRCM_ResetDelay8Lpo   = 0U, /*!< Delay 8 LPO cycles.   */
+    kRCM_ResetDelay32Lpo  = 1U, /*!< Delay 32 LPO cycles.  */
     kRCM_ResetDelay128Lpo = 2U, /*!< Delay 128 LPO cycles. */
     kRCM_ResetDelay512Lpo = 3U  /*!< Delay 512 LPO cycles. */
 } rcm_reset_delay_t;
@@ -127,25 +127,23 @@ typedef enum _rcm_reset_delay
  */
 typedef enum _rcm_interrupt_enable
 {
-    kRCM_IntNone = 0U,                              /*!< No interrupt enabled.           */
-    kRCM_IntLossOfClk = RCM_SRIE_LOC_MASK,          /*!< Loss of clock interrupt.        */
-    kRCM_IntLossOfLock = RCM_SRIE_LOL_MASK,         /*!< Loss of lock interrupt.         */
-    kRCM_IntWatchDog = RCM_SRIE_WDOG_MASK,          /*!< Watch dog interrupt.            */
-    kRCM_IntExternalPin = RCM_SRIE_PIN_MASK,        /*!< External pin interrupt.         */
-    kRCM_IntGlobal = RCM_SRIE_GIE_MASK,             /*!< Global interrupts.              */
-    kRCM_IntCoreLockup = RCM_SRIE_LOCKUP_MASK,      /*!< Core lock up interrupt           */
-    kRCM_IntSoftware = RCM_SRIE_SW_MASK,            /*!< software interrupt              */
+    kRCM_IntNone           = 0U,                    /*!< No interrupt enabled.           */
+    kRCM_IntLossOfClk      = RCM_SRIE_LOC_MASK,     /*!< Loss of clock interrupt.        */
+    kRCM_IntLossOfLock     = RCM_SRIE_LOL_MASK,     /*!< Loss of lock interrupt.         */
+    kRCM_IntWatchDog       = RCM_SRIE_WDOG_MASK,    /*!< Watch dog interrupt.            */
+    kRCM_IntExternalPin    = RCM_SRIE_PIN_MASK,     /*!< External pin interrupt.         */
+    kRCM_IntGlobal         = RCM_SRIE_GIE_MASK,     /*!< Global interrupts.              */
+    kRCM_IntCoreLockup     = RCM_SRIE_LOCKUP_MASK,  /*!< Core lock up interrupt           */
+    kRCM_IntSoftware       = RCM_SRIE_SW_MASK,      /*!< software interrupt              */
     kRCM_IntStopModeAckErr = RCM_SRIE_SACKERR_MASK, /*!< Stop mode ACK error interrupt.  */
 #if (defined(FSL_FEATURE_RCM_HAS_CORE1) && FSL_FEATURE_RCM_HAS_CORE1)
     kRCM_IntCore1 = RCM_SRIE_CORE1_MASK, /*!< Core 1 interrupt.               */
 #endif
     kRCM_IntAll = RCM_SRIE_LOC_MASK /*!< Enable all interrupts.          */
-                  |
-                  RCM_SRIE_LOL_MASK | RCM_SRIE_WDOG_MASK | RCM_SRIE_PIN_MASK | RCM_SRIE_GIE_MASK |
+                  | RCM_SRIE_LOL_MASK | RCM_SRIE_WDOG_MASK | RCM_SRIE_PIN_MASK | RCM_SRIE_GIE_MASK |
                   RCM_SRIE_LOCKUP_MASK | RCM_SRIE_SW_MASK | RCM_SRIE_SACKERR_MASK
 #if (defined(FSL_FEATURE_RCM_HAS_CORE1) && FSL_FEATURE_RCM_HAS_CORE1)
-                  |
-                  RCM_SRIE_CORE1_MASK
+                  | RCM_SRIE_CORE1_MASK
 #endif
 } rcm_interrupt_enable_t;
 #endif /* FSL_FEATURE_RCM_HAS_SRIE */
@@ -206,12 +204,12 @@ static inline void RCM_GetVersionId(RCM_Type *base, rcm_version_id_t *versionId)
  * Use source masks defined in the rcm_reset_source_t to get the desired source status.
  *
  * This is an example.
-   @code
-   uint32_t status;
-
-   // To test whether the MCU is reset using Watchdog.
-   status = RCM_GetResetSourceImplementedStatus(RCM) & (kRCM_SourceWdog | kRCM_SourcePin);
-   @endcode
+ * @code
+ * uint32_t status;
+ *
+ * To test whether the MCU is reset using Watchdog.
+ * status = RCM_GetResetSourceImplementedStatus(RCM) & (kRCM_SourceWdog | kRCM_SourcePin);
+ * @endcode
  *
  * @param base RCM peripheral base address.
  * @return All reset source implemented status bit map.
@@ -229,18 +227,18 @@ static inline uint32_t RCM_GetResetSourceImplementedStatus(RCM_Type *base)
  * defined in the rcm_reset_source_t to get the desired source status.
  *
  * This is an example.
-   @code
-   uint32_t resetStatus;
-
-   // To get all reset source statuses.
-   resetStatus = RCM_GetPreviousResetSources(RCM) & kRCM_SourceAll;
-
-   // To test whether the MCU is reset using Watchdog.
-   resetStatus = RCM_GetPreviousResetSources(RCM) & kRCM_SourceWdog;
-
-   // To test multiple reset sources.
-   resetStatus = RCM_GetPreviousResetSources(RCM) & (kRCM_SourceWdog | kRCM_SourcePin);
-   @endcode
+ * @code
+ * uint32_t resetStatus;
+ *
+ * To get all reset source statuses.
+ * resetStatus = RCM_GetPreviousResetSources(RCM) & kRCM_SourceAll;
+ *
+ * To test whether the MCU is reset using Watchdog.
+ * resetStatus = RCM_GetPreviousResetSources(RCM) & kRCM_SourceWdog;
+ *
+ * To test multiple reset sources.
+ * resetStatus = RCM_GetPreviousResetSources(RCM) & (kRCM_SourceWdog | kRCM_SourcePin);
+ * @endcode
  *
  * @param base RCM peripheral base address.
  * @return All reset source status bit map.
@@ -250,7 +248,9 @@ static inline uint32_t RCM_GetPreviousResetSources(RCM_Type *base)
 #if (defined(FSL_FEATURE_RCM_REG_WIDTH) && (FSL_FEATURE_RCM_REG_WIDTH == 32))
     return base->SRS;
 #else
-    return (uint32_t)((uint32_t)base->SRS0 | ((uint32_t)base->SRS1 << 8U));
+    uint8_t tmpSrs0 = base->SRS0;
+    uint8_t tmpSrs1 = base->SRS1;
+    return (uint32_t)((uint32_t)tmpSrs0 | ((uint32_t)tmpSrs1 << 8U));
 #endif /* (FSL_FEATURE_RCM_REG_WIDTH == 32) */
 }
 
@@ -262,18 +262,18 @@ static inline uint32_t RCM_GetPreviousResetSources(RCM_Type *base)
  * by software for a specific source.
  *
  * This is an example.
-   @code
-   uint32_t resetStatus;
-
-   // To get all reset source statuses.
-   resetStatus = RCM_GetStickyResetSources(RCM) & kRCM_SourceAll;
-
-   // To test whether the MCU is reset using Watchdog.
-   resetStatus = RCM_GetStickyResetSources(RCM) & kRCM_SourceWdog;
-
-   // To test multiple reset sources.
-   resetStatus = RCM_GetStickyResetSources(RCM) & (kRCM_SourceWdog | kRCM_SourcePin);
-   @endcode
+ * @code
+ * uint32_t resetStatus;
+ *
+ * To get all reset source statuses.
+ * resetStatus = RCM_GetStickyResetSources(RCM) & kRCM_SourceAll;
+ *
+ * To test whether the MCU is reset using Watchdog.
+ * resetStatus = RCM_GetStickyResetSources(RCM) & kRCM_SourceWdog;
+ *
+ * To test multiple reset sources.
+ * resetStatus = RCM_GetStickyResetSources(RCM) & (kRCM_SourceWdog | kRCM_SourcePin);
+ * @endcode
  *
  * @param base RCM peripheral base address.
  * @return All reset source status bit map.
@@ -293,10 +293,10 @@ static inline uint32_t RCM_GetStickyResetSources(RCM_Type *base)
  * This function clears the sticky system reset flags indicated by source masks.
  *
  * This is an example.
-   @code
-   // Clears multiple reset sources.
-   RCM_ClearStickyResetSources(kRCM_SourceWdog | kRCM_SourcePin);
-   @endcode
+ * @code
+ * Clears multiple reset sources.
+ * RCM_ClearStickyResetSources(kRCM_SourceWdog | kRCM_SourcePin);
+ * @endcode
  *
  * @param base RCM peripheral base address.
  * @param sourceMasks reset source status bit map

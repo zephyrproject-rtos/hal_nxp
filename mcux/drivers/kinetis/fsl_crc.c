@@ -43,17 +43,17 @@
 /*! @brief CRC type of transpose of read write data */
 typedef enum _crc_transpose_type
 {
-    kCrcTransposeNone = 0U,         /*! No transpose  */
-    kCrcTransposeBits = 1U,         /*! Tranpose bits in bytes  */
+    kCrcTransposeNone         = 0U, /*! No transpose  */
+    kCrcTransposeBits         = 1U, /*! Tranpose bits in bytes  */
     kCrcTransposeBitsAndBytes = 2U, /*! Transpose bytes and bits in bytes */
-    kCrcTransposeBytes = 3U,        /*! Transpose bytes */
+    kCrcTransposeBytes        = 3U, /*! Transpose bytes */
 } crc_transpose_type_t;
 
 /*!
-* @brief CRC module configuration.
-*
-* This structure holds the configuration for the CRC module.
-*/
+ * @brief CRC module configuration.
+ *
+ * This structure holds the configuration for the CRC module.
+ */
 typedef struct _crc_module_config
 {
     uint32_t polynomial;                 /*!< CRC Polynomial, MSBit first.@n
@@ -141,12 +141,12 @@ static void CRC_SetProtocolConfig(CRC_Type *base, const crc_config_t *protocolCo
 {
     crc_module_config_t moduleConfig;
     /* convert protocol to CRC peripheral module configuration, prepare for final checksum */
-    moduleConfig.polynomial = protocolConfig->polynomial;
-    moduleConfig.seed = protocolConfig->seed;
-    moduleConfig.readTranspose = CRC_GetTransposeTypeFromReflectOut(protocolConfig->reflectOut);
-    moduleConfig.writeTranspose = CRC_GetTransposeTypeFromReflectIn(protocolConfig->reflectIn);
+    moduleConfig.polynomial         = protocolConfig->polynomial;
+    moduleConfig.seed               = protocolConfig->seed;
+    moduleConfig.readTranspose      = CRC_GetTransposeTypeFromReflectOut(protocolConfig->reflectOut);
+    moduleConfig.writeTranspose     = CRC_GetTransposeTypeFromReflectIn(protocolConfig->reflectIn);
     moduleConfig.complementChecksum = protocolConfig->complementChecksum;
-    moduleConfig.crcBits = protocolConfig->crcBits;
+    moduleConfig.crcBits            = protocolConfig->crcBits;
 
     CRC_ConfigureAndStart(base, &moduleConfig);
 }
@@ -166,12 +166,12 @@ static void CRC_SetRawProtocolConfig(CRC_Type *base, const crc_config_t *protoco
     crc_module_config_t moduleConfig;
     /* convert protocol to CRC peripheral module configuration, prepare for intermediate checksum */
     moduleConfig.polynomial = protocolConfig->polynomial;
-    moduleConfig.seed = protocolConfig->seed;
+    moduleConfig.seed       = protocolConfig->seed;
     moduleConfig.readTranspose =
         kCrcTransposeNone; /* intermediate checksum does no transpose of data register read value */
-    moduleConfig.writeTranspose = CRC_GetTransposeTypeFromReflectIn(protocolConfig->reflectIn);
+    moduleConfig.writeTranspose     = CRC_GetTransposeTypeFromReflectIn(protocolConfig->reflectIn);
     moduleConfig.complementChecksum = false; /* intermediate checksum does no xor of data register read value */
-    moduleConfig.crcBits = protocolConfig->crcBits;
+    moduleConfig.crcBits            = protocolConfig->crcBits;
 
     CRC_ConfigureAndStart(base, &moduleConfig);
 }
@@ -304,7 +304,7 @@ uint16_t CRC_Get16bitResult(CRC_Type *base)
     uint32_t totr; /* type of transpose read bitfield */
 
     retval = base->DATA;
-    totr = (base->CTRL & CRC_CTRL_TOTR_MASK) >> CRC_CTRL_TOTR_SHIFT;
+    totr   = (base->CTRL & CRC_CTRL_TOTR_MASK) >> CRC_CTRL_TOTR_SHIFT;
 
     /* check transpose type to get 16-bit out of 32-bit register */
     if (totr >= 2U)

@@ -38,9 +38,9 @@ typedef enum _mrt_chnl
 /*! @brief List of MRT timer modes */
 typedef enum _mrt_timer_mode
 {
-    kMRT_RepeatMode = (0 << MRT_CHANNEL_CTRL_MODE_SHIFT),      /*!< Repeat Interrupt mode */
-    kMRT_OneShotMode = (1 << MRT_CHANNEL_CTRL_MODE_SHIFT),     /*!< One-shot Interrupt mode */
-    kMRT_OneShotStallMode = (2 << MRT_CHANNEL_CTRL_MODE_SHIFT) /*!< One-shot stall mode */
+    kMRT_RepeatMode       = (0 << MRT_CHANNEL_CTRL_MODE_SHIFT), /*!< Repeat Interrupt mode */
+    kMRT_OneShotMode      = (1 << MRT_CHANNEL_CTRL_MODE_SHIFT), /*!< One-shot Interrupt mode */
+    kMRT_OneShotStallMode = (2 << MRT_CHANNEL_CTRL_MODE_SHIFT)  /*!< One-shot stall mode */
 } mrt_timer_mode_t;
 
 /*! @brief List of MRT interrupts */
@@ -53,7 +53,7 @@ typedef enum _mrt_interrupt_enable
 typedef enum _mrt_status_flags
 {
     kMRT_TimerInterruptFlag = MRT_CHANNEL_STAT_INTFLAG_MASK, /*!< Timer interrupt flag */
-    kMRT_TimerRunFlag = MRT_CHANNEL_STAT_RUN_MASK,           /*!< Indicates state of the timer */
+    kMRT_TimerRunFlag       = MRT_CHANNEL_STAT_RUN_MASK,     /*!< Indicates state of the timer */
 } mrt_status_flags_t;
 
 /*!
@@ -290,6 +290,7 @@ static inline uint32_t MRT_GetCurrentTimerCount(MRT_Type *base, mrt_chnl_t chann
 static inline void MRT_StartTimer(MRT_Type *base, mrt_chnl_t channel, uint32_t count)
 {
     assert(channel < FSL_FEATURE_MRT_NUMBER_OF_CHANNELS);
+    assert(count < MRT_CHANNEL_INTVAL_IVALUE_MASK);
     /* Write the timer interval value */
     base->CHANNEL[channel].INTVAL = count;
 }

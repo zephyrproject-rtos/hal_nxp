@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_FLEXBUS_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
+#define FSL_FLEXBUS_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. */
                                                            /*@}*/
 
 /*!
@@ -31,7 +31,7 @@
 typedef enum _flexbus_port_size
 {
     kFLEXBUS_4Bytes = 0x00U, /*!< 32-bit port size */
-    kFLEXBUS_1Byte = 0x01U,  /*!< 8-bit port size */
+    kFLEXBUS_1Byte  = 0x01U, /*!< 8-bit port size */
     kFLEXBUS_2Bytes = 0x02U  /*!< 16-bit port size */
 } flexbus_port_size_t;
 
@@ -40,7 +40,7 @@ typedef enum _flexbus_port_size
  */
 typedef enum _flexbus_write_address_hold
 {
-    kFLEXBUS_Hold1Cycle = 0x00U,  /*!< Hold address and attributes one cycles after FB_CSn negates on writes */
+    kFLEXBUS_Hold1Cycle  = 0x00U, /*!< Hold address and attributes one cycles after FB_CSn negates on writes */
     kFLEXBUS_Hold2Cycles = 0x01U, /*!< Hold address and attributes two cycles after FB_CSn negates on writes */
     kFLEXBUS_Hold3Cycles = 0x02U, /*!< Hold address and attributes three cycles after FB_CSn negates on writes */
     kFLEXBUS_Hold4Cycles = 0x03U  /*!< Hold address and attributes four cycles after FB_CSn negates on writes */
@@ -53,8 +53,8 @@ typedef enum _flexbus_read_address_hold
 {
     kFLEXBUS_Hold1Or0Cycles = 0x00U, /*!< Hold address and attributes 1 or 0 cycles on reads */
     kFLEXBUS_Hold2Or1Cycles = 0x01U, /*!< Hold address and attributes 2 or 1 cycles on reads */
-    kFLEXBUS_Hold3Or2Cycle = 0x02U,  /*!< Hold address and attributes 3 or 2 cycles on reads */
-    kFLEXBUS_Hold4Or3Cycle = 0x03U   /*!< Hold address and attributes 4 or 3 cycles on reads */
+    kFLEXBUS_Hold3Or2Cycle  = 0x02U, /*!< Hold address and attributes 3 or 2 cycles on reads */
+    kFLEXBUS_Hold4Or3Cycle  = 0x03U  /*!< Hold address and attributes 4 or 3 cycles on reads */
 } flexbus_read_address_hold_t;
 
 /*!
@@ -62,9 +62,9 @@ typedef enum _flexbus_read_address_hold
  */
 typedef enum _flexbus_address_setup
 {
-    kFLEXBUS_FirstRisingEdge = 0x00U,  /*!< Assert FB_CSn on first rising clock edge after address is asserted */
+    kFLEXBUS_FirstRisingEdge  = 0x00U, /*!< Assert FB_CSn on first rising clock edge after address is asserted */
     kFLEXBUS_SecondRisingEdge = 0x01U, /*!< Assert FB_CSn on second rising clock edge after address is asserted */
-    kFLEXBUS_ThirdRisingEdge = 0x02U,  /*!< Assert FB_CSn on third rising clock edge after address is asserted */
+    kFLEXBUS_ThirdRisingEdge  = 0x02U, /*!< Assert FB_CSn on third rising clock edge after address is asserted */
     kFLEXBUS_FourthRisingEdge = 0x03U, /*!< Assert FB_CSn on fourth rising clock edge after address is asserted */
 } flexbus_address_setup_t;
 
@@ -74,7 +74,7 @@ typedef enum _flexbus_address_setup
 typedef enum _flexbus_bytelane_shift
 {
     kFLEXBUS_NotShifted = 0x00U, /*!< Not shifted. Data is left-justified on FB_AD */
-    kFLEXBUS_Shifted = 0x01U,    /*!< Shifted. Data is right justified on FB_AD */
+    kFLEXBUS_Shifted    = 0x01U, /*!< Shifted. Data is right justified on FB_AD */
 } flexbus_bytelane_shift_t;
 
 /*!
@@ -84,7 +84,7 @@ typedef enum _flexbus_multiplex_group1_signal
 {
     kFLEXBUS_MultiplexGroup1_FB_ALE = 0x00U, /*!< FB_ALE */
     kFLEXBUS_MultiplexGroup1_FB_CS1 = 0x01U, /*!< FB_CS1 */
-    kFLEXBUS_MultiplexGroup1_FB_TS = 0x02U,  /*!< FB_TS */
+    kFLEXBUS_MultiplexGroup1_FB_TS  = 0x02U, /*!< FB_TS */
 } flexbus_multiplex_group1_t;
 
 /*!
@@ -92,8 +92,8 @@ typedef enum _flexbus_multiplex_group1_signal
  */
 typedef enum _flexbus_multiplex_group2_signal
 {
-    kFLEXBUS_MultiplexGroup2_FB_CS4 = 0x00U,      /*!< FB_CS4 */
-    kFLEXBUS_MultiplexGroup2_FB_TSIZ0 = 0x01U,    /*!< FB_TSIZ0 */
+    kFLEXBUS_MultiplexGroup2_FB_CS4      = 0x00U, /*!< FB_CS4 */
+    kFLEXBUS_MultiplexGroup2_FB_TSIZ0    = 0x01U, /*!< FB_TSIZ0 */
     kFLEXBUS_MultiplexGroup2_FB_BE_31_24 = 0x02U, /*!< FB_BE_31_24 */
 } flexbus_multiplex_group2_t;
 
@@ -102,8 +102,8 @@ typedef enum _flexbus_multiplex_group2_signal
  */
 typedef enum _flexbus_multiplex_group3_signal
 {
-    kFLEXBUS_MultiplexGroup3_FB_CS5 = 0x00U,      /*!< FB_CS5 */
-    kFLEXBUS_MultiplexGroup3_FB_TSIZ1 = 0x01U,    /*!< FB_TSIZ1 */
+    kFLEXBUS_MultiplexGroup3_FB_CS5      = 0x00U, /*!< FB_CS5 */
+    kFLEXBUS_MultiplexGroup3_FB_TSIZ1    = 0x01U, /*!< FB_TSIZ1 */
     kFLEXBUS_MultiplexGroup3_FB_BE_23_16 = 0x02U, /*!< FB_BE_23_16 */
 } flexbus_multiplex_group3_t;
 
@@ -112,8 +112,8 @@ typedef enum _flexbus_multiplex_group3_signal
  */
 typedef enum _flexbus_multiplex_group4_signal
 {
-    kFLEXBUS_MultiplexGroup4_FB_TBST = 0x00U,    /*!< FB_TBST */
-    kFLEXBUS_MultiplexGroup4_FB_CS2 = 0x01U,     /*!< FB_CS2 */
+    kFLEXBUS_MultiplexGroup4_FB_TBST    = 0x00U, /*!< FB_TBST */
+    kFLEXBUS_MultiplexGroup4_FB_CS2     = 0x01U, /*!< FB_CS2 */
     kFLEXBUS_MultiplexGroup4_FB_BE_15_8 = 0x02U, /*!< FB_BE_15_8 */
 } flexbus_multiplex_group4_t;
 
@@ -122,8 +122,8 @@ typedef enum _flexbus_multiplex_group4_signal
  */
 typedef enum _flexbus_multiplex_group5_signal
 {
-    kFLEXBUS_MultiplexGroup5_FB_TA = 0x00U,     /*!< FB_TA */
-    kFLEXBUS_MultiplexGroup5_FB_CS3 = 0x01U,    /*!< FB_CS3 */
+    kFLEXBUS_MultiplexGroup5_FB_TA     = 0x00U, /*!< FB_TA */
+    kFLEXBUS_MultiplexGroup5_FB_CS3    = 0x01U, /*!< FB_CS3 */
     kFLEXBUS_MultiplexGroup5_FB_BE_7_0 = 0x02U, /*!< FB_BE_7_0 */
 } flexbus_multiplex_group5_t;
 
@@ -134,6 +134,7 @@ typedef struct _flexbus_config
 {
     uint8_t chip;                                      /*!< Chip FlexBus for validation */
     uint8_t waitStates;                                /*!< Value of wait states */
+    uint8_t secondaryWaitStates;                       /*!< Value of secondary wait states */
     uint32_t chipBaseAddress;                          /*!< Chip base address for using FlexBus */
     uint32_t chipBaseAddressMask;                      /*!< Chip base address mask */
     bool writeProtect;                                 /*!< Write protected */
@@ -142,7 +143,7 @@ typedef struct _flexbus_config
     bool byteEnableMode;                               /*!< Byte-enable mode support */
     bool autoAcknowledge;                              /*!< Auto acknowledge setting */
     bool extendTransferAddress;                        /*!< Extend transfer start/extend address latch enable */
-    bool secondaryWaitStates;                          /*!< Secondary wait states number */
+    bool secondaryWaitStatesEnable;                    /*!< Enable secondary wait states */
     flexbus_port_size_t portSize;                      /*!< Port size of transfer */
     flexbus_bytelane_shift_t byteLaneShift;            /*!< Byte-lane shift enable */
     flexbus_write_address_hold_t writeAddressHold;     /*!< Write address hold or deselect option */

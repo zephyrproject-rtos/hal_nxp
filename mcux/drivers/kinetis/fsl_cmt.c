@@ -88,16 +88,16 @@ static uint32_t CMT_GetInstance(CMT_Type *base)
  */
 void CMT_GetDefaultConfig(cmt_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     /* Default infrared output is enabled and set with high active, the divider is set to 1. */
     config->isInterruptEnabled = false;
-    config->isIroEnabled = true;
-    config->iroPolarity = kCMT_IROActiveHigh;
-    config->divider = kCMT_SecondClkDiv1;
+    config->isIroEnabled       = true;
+    config->iroPolarity        = kCMT_IROActiveHigh;
+    config->divider            = kCMT_SecondClkDiv1;
 }
 
 /*!
@@ -112,7 +112,7 @@ void CMT_GetDefaultConfig(cmt_config_t *config)
  */
 void CMT_Init(CMT_Type *base, const cmt_config_t *config, uint32_t busClock_Hz)
 {
-    assert(config);
+    assert(NULL != config);
     assert(busClock_Hz >= CMT_INTERMEDIATEFREQUENCY_8MHZ);
 
     uint8_t divider;
@@ -124,9 +124,9 @@ void CMT_Init(CMT_Type *base, const cmt_config_t *config, uint32_t busClock_Hz)
 
     /* Sets clock divider. The divider set in pps should be set
        to make sycClock_Hz/divder = 8MHz */
-    base->PPS = CMT_PPS_PPSDIV(busClock_Hz / CMT_INTERMEDIATEFREQUENCY_8MHZ - 1);
-    divider = base->MSC;
-    divider &= ~CMT_MSC_CMTDIV_MASK;
+    base->PPS = CMT_PPS_PPSDIV(busClock_Hz / CMT_INTERMEDIATEFREQUENCY_8MHZ - 1U);
+    divider   = base->MSC;
+    divider &= ~(uint8_t)CMT_MSC_CMTDIV_MASK;
     divider |= CMT_MSC_CMTDIV(config->divider);
     base->MSC = divider;
 
@@ -134,10 +134,10 @@ void CMT_Init(CMT_Type *base, const cmt_config_t *config, uint32_t busClock_Hz)
     base->OC = CMT_OC_CMTPOL(config->iroPolarity) | CMT_OC_IROPEN(config->isIroEnabled);
 
     /* Set interrupt. */
-    if (config->isInterruptEnabled)
+    if (true == config->isInterruptEnabled)
     {
-        CMT_EnableInterrupts(base, kCMT_EndOfCycleInterruptEnable);
-        EnableIRQ(s_cmtIrqs[CMT_GetInstance(base)]);
+        CMT_EnableInterrupts(base, (uint32_t)kCMT_EndOfCycleInterruptEnable);
+        (void)EnableIRQ(s_cmtIrqs[CMT_GetInstance(base)]);
     }
 }
 
@@ -155,8 +155,8 @@ void CMT_Deinit(CMT_Type *base)
     base->MSC = 0;
 
     /* Disable the interrupt. */
-    CMT_DisableInterrupts(base, kCMT_EndOfCycleInterruptEnable);
-    DisableIRQ(s_cmtIrqs[CMT_GetInstance(base)]);
+    CMT_DisableInterrupts(base, (uint32_t)kCMT_EndOfCycleInterruptEnable);
+    (void)DisableIRQ(s_cmtIrqs[CMT_GetInstance(base)]);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Gate the clock. */
@@ -178,7 +178,7 @@ void CMT_SetMode(CMT_Type *base, cmt_mode_t mode, cmt_modulate_config_t *modulat
     /* Judge the mode. */
     if (mode != kCMT_DirectIROCtl)
     {
-        assert(modulateConfig);
+        assert(NULL != modulateConfig);
 
         /* Set carrier generator. */
         CMT_SetCarrirGenerateCountOne(base, modulateConfig->highCount1, modulateConfig->lowCount1);
@@ -189,12 +189,12 @@ void CMT_SetMode(CMT_Type *base, cmt_mode_t mode, cmt_modulate_config_t *modulat
 
         /* Set carrier modulator. */
         CMT_SetModulateMarkSpace(base, modulateConfig->markCount, modulateConfig->spaceCount);
-        mscReg &= ~(CMT_MSC_FSK_MASK | CMT_MSC_BASE_MASK);
-        mscReg |= mode;
+        mscReg &= ~((uint8_t)CMT_MSC_FSK_MASK | (uint8_t)CMT_MSC_BASE_MASK);
+        mscReg |= (uint8_t)mode;
     }
     else
     {
-        mscReg &= ~CMT_MSC_MCGEN_MASK;
+        mscReg &= ~(uint8_t)CMT_MSC_MCGEN_MASK;
     }
     /* Set the CMT mode. */
     base->MSC = mscReg;
@@ -214,19 +214,19 @@ cmt_mode_t CMT_GetMode(CMT_Type *base)
 {
     uint8_t mode = base->MSC;
 
-    if (!(mode & CMT_MSC_MCGEN_MASK))
+    if (0U == (mode & CMT_MSC_MCGEN_MASK))
     { /* Carrier modulator disabled and the IRO signal is in direct software control. */
         return kCMT_DirectIROCtl;
     }
     else
     {
         /* Carrier modulator is enabled. */
-        if (mode & CMT_MSC_BASE_MASK)
+        if (0U != (mode & CMT_MSC_BASE_MASK))
         {
             /* Base band mode. */
             return kCMT_BasebandMode;
         }
-        else if (mode & CMT_MSC_FSK_MASK)
+        else if (0U != (mode & CMT_MSC_FSK_MASK))
         {
             /* FSK mode. */
             return kCMT_FSKMode;
@@ -252,27 +252,27 @@ uint32_t CMT_GetCMTFrequency(CMT_Type *base, uint32_t busClock_Hz)
     uint32_t divider;
 
     /* Get intermediate frequency. */
-    frequency = busClock_Hz / ((base->PPS & CMT_PPS_PPSDIV_MASK) + 1);
+    frequency = busClock_Hz / (((uint32_t)base->PPS & CMT_PPS_PPSDIV_MASK) + 1U);
 
     /* Get the second divider. */
-    divider = ((base->MSC & CMT_MSC_CMTDIV_MASK) >> CMT_MSC_CMTDIV_SHIFT);
+    divider = (((uint32_t)base->MSC & CMT_MSC_CMTDIV_MASK) >> CMT_MSC_CMTDIV_SHIFT);
     /* Get CMT frequency. */
     switch ((cmt_second_clkdiv_t)divider)
     {
         case kCMT_SecondClkDiv1:
-            frequency = frequency / CMT_CMTDIV_ONE;
+            frequency = frequency / (uint32_t)CMT_CMTDIV_ONE;
             break;
         case kCMT_SecondClkDiv2:
-            frequency = frequency / CMT_CMTDIV_TWO;
+            frequency = frequency / (uint32_t)CMT_CMTDIV_TWO;
             break;
         case kCMT_SecondClkDiv4:
-            frequency = frequency / CMT_CMTDIV_FOUR;
+            frequency = frequency / (uint32_t)CMT_CMTDIV_FOUR;
             break;
         case kCMT_SecondClkDiv8:
-            frequency = frequency / CMT_CMTDIV_EIGHT;
+            frequency = frequency / (uint32_t)CMT_CMTDIV_EIGHT;
             break;
         default:
-            frequency = frequency / CMT_CMTDIV_ONE;
+            frequency = frequency / (uint32_t)CMT_CMTDIV_ONE;
             break;
     }
 
@@ -299,11 +299,11 @@ uint32_t CMT_GetCMTFrequency(CMT_Type *base, uint32_t busClock_Hz)
 void CMT_SetModulateMarkSpace(CMT_Type *base, uint32_t markCount, uint32_t spaceCount)
 {
     /* Set modulate mark. */
-    base->CMD1 = (markCount >> CMT_MODULATE_COUNT_WIDTH) & CMT_CMD1_MB_MASK;
-    base->CMD2 = (markCount & CMT_CMD2_MB_MASK);
+    base->CMD1 = (uint8_t)((markCount >> CMT_MODULATE_COUNT_WIDTH) & CMT_CMD1_MB_MASK);
+    base->CMD2 = (uint8_t)(markCount & CMT_CMD2_MB_MASK);
     /* Set modulate space. */
-    base->CMD3 = (spaceCount >> CMT_MODULATE_COUNT_WIDTH) & CMT_CMD3_SB_MASK;
-    base->CMD4 = spaceCount & CMT_CMD4_SB_MASK;
+    base->CMD3 = (uint8_t)((spaceCount >> CMT_MODULATE_COUNT_WIDTH) & CMT_CMD3_SB_MASK);
+    base->CMD4 = (uint8_t)(spaceCount & CMT_CMD4_SB_MASK);
 }
 
 /*!
@@ -319,7 +319,7 @@ void CMT_SetIroState(CMT_Type *base, cmt_infrared_output_state_t state)
 {
     uint8_t ocReg = base->OC;
 
-    ocReg &= ~CMT_OC_IROL_MASK;
+    ocReg &= ~(uint8_t)CMT_OC_IROL_MASK;
     ocReg |= CMT_OC_IROL(state);
 
     /* Set the infrared output signal control. */

@@ -24,7 +24,7 @@
  */
 void RCM_ConfigureResetPinFilter(RCM_Type *base, const rcm_reset_pin_filter_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
 #if (defined(FSL_FEATURE_RCM_REG_WIDTH) && (FSL_FEATURE_RCM_REG_WIDTH == 32))
     uint32_t reg;
@@ -36,7 +36,7 @@ void RCM_ConfigureResetPinFilter(RCM_Type *base, const rcm_reset_pin_filter_conf
     }
     base->RPC = reg;
 #else
-    base->RPFC = ((uint8_t)(config->enableFilterInStop << RCM_RPFC_RSTFLTSS_SHIFT) | (uint8_t)config->filterInRunWait);
+    base->RPFC = (((uint8_t)config->enableFilterInStop << RCM_RPFC_RSTFLTSS_SHIFT) | (uint8_t)config->filterInRunWait);
     if (config->filterInRunWait == kRCM_FilterBusClock)
     {
         base->RPFW = config->busClockFilterCount;

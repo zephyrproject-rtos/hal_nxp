@@ -2,7 +2,7 @@
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_USART_DMA_H_
@@ -39,8 +39,8 @@ typedef void (*usart_dma_transfer_callback_t)(USART_Type *base,
                                               void *userData);
 
 /*!
-* @brief UART DMA handle
-*/
+ * @brief UART DMA handle
+ */
 struct _usart_dma_handle
 {
     USART_Type *base; /*!< UART peripheral base address. */

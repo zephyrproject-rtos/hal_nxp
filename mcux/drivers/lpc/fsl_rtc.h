@@ -2,7 +2,7 @@
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_RTC_H_
@@ -29,15 +29,15 @@
 /*! @brief List of RTC interrupts */
 typedef enum _rtc_interrupt_enable
 {
-    kRTC_AlarmInterruptEnable = RTC_CTRL_ALARMDPD_EN_MASK, /*!< Alarm interrupt.*/
-    kRTC_WakeupInterruptEnable = RTC_CTRL_WAKEDPD_EN_MASK  /*!< Wake-up interrupt.*/
+    kRTC_AlarmInterruptEnable  = RTC_CTRL_ALARMDPD_EN_MASK, /*!< Alarm interrupt.*/
+    kRTC_WakeupInterruptEnable = RTC_CTRL_WAKEDPD_EN_MASK   /*!< Wake-up interrupt.*/
 } rtc_interrupt_enable_t;
 
 /*! @brief List of RTC flags */
 typedef enum _rtc_status_flags
 {
-    kRTC_AlarmFlag = RTC_CTRL_ALARM1HZ_MASK, /*!< Alarm flag*/
-    kRTC_WakeupFlag = RTC_CTRL_WAKE1KHZ_MASK /*!< 1kHz wake-up timer flag*/
+    kRTC_AlarmFlag  = RTC_CTRL_ALARM1HZ_MASK, /*!< Alarm flag*/
+    kRTC_WakeupFlag = RTC_CTRL_WAKE1KHZ_MASK  /*!< 1kHz wake-up timer flag*/
 } rtc_status_flags_t;
 
 /*! @brief Structure is used to hold the date and time */

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -142,13 +142,17 @@ static void FTM_SetPwmSync(FTM_Type *base, uint32_t syncMethod)
 static void FTM_SetReloadPoints(FTM_Type *base, uint32_t reloadPoints)
 {
     uint32_t chnlNumber = 0;
-    uint32_t reg = 0;
+    uint32_t reg        = 0;
+    int8_t chnlCount    = FSL_FEATURE_FTM_CHANNEL_COUNTn(base);
+
+    /* The CHANNEL_COUNT macro returns -1 if it cannot match the FTM instance */
+    assert(-1 != chnlCount);
 
     /* Need CNTINC bit to be 1 for CNTIN register to update with its buffer value on reload  */
     base->SYNCONF |= FTM_SYNCONF_CNTINC_MASK;
 
     reg = base->COMBINE;
-    for (chnlNumber = 0; chnlNumber < (FSL_FEATURE_FTM_CHANNEL_COUNTn(base) / 2); chnlNumber++)
+    for (chnlNumber = 0; chnlNumber < (chnlCount / 2); chnlNumber++)
     {
         /* Need SYNCEN bit to be 1 for CnV reg to update with its buffer value on reload  */
         reg |= (1U << (FTM_COMBINE_SYNCEN0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * chnlNumber)));
@@ -159,8 +163,8 @@ static void FTM_SetReloadPoints(FTM_Type *base, uint32_t reloadPoints)
     reg = base->PWMLOAD;
 
     /* Enable the selected channel match reload points */
-    reg &= ~((1U << FSL_FEATURE_FTM_CHANNEL_COUNTn(base)) - 1);
-    reg |= (reloadPoints & ((1U << FSL_FEATURE_FTM_CHANNEL_COUNTn(base)) - 1));
+    reg &= ~((1U << chnlCount) - 1);
+    reg |= (reloadPoints & ((1U << chnlCount) - 1));
 
 #if defined(FSL_FEATURE_FTM_HAS_HALFCYCLE_RELOAD) && (FSL_FEATURE_FTM_HAS_HALFCYCLE_RELOAD)
     /* Enable half cycle match as a reload point */
@@ -479,7 +483,7 @@ status_t FTM_SetupPwm(FTM_Type *base,
             if (chnlParams->dutyCyclePercent == 0)
             {
                 /* Signal stays low */
-                cnv = 0;
+                cnv          = 0;
                 cnvFirstEdge = 0;
             }
             else
@@ -517,7 +521,7 @@ status_t FTM_SetupPwm(FTM_Type *base,
                 (1U << (FTM_COMBINE_COMBINE0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * chnlParams->chnlNumber)));
 
             /* Set the channel pair values */
-            base->CONTROLS[chnlParams->chnlNumber * 2].CnV = cnvFirstEdge;
+            base->CONTROLS[chnlParams->chnlNumber * 2].CnV       = cnvFirstEdge;
             base->CONTROLS[(chnlParams->chnlNumber * 2) + 1].CnV = cnvFirstEdge + cnv;
 
 #if defined(FSL_FEATURE_FTM_HAS_ENABLE_PWM_OUTPUT) && (FSL_FEATURE_FTM_HAS_ENABLE_PWM_OUTPUT)
@@ -569,7 +573,7 @@ void FTM_UpdatePwmDutycycle(FTM_Type *base,
             return;
         }
 
-        cnv = (mod * dutyCyclePercent) / 100;
+        cnv          = (mod * dutyCyclePercent) / 100;
         cnvFirstEdge = base->CONTROLS[chnlNumber * 2].CnV;
         /* For 100% duty cycle */
         if (cnv >= mod)
@@ -696,7 +700,7 @@ status_t FTM_SetupPwmMode(FTM_Type *base,
                 (1U << (FTM_COMBINE_COMBINE0_SHIFT + (FTM_COMBINE_COMBINE1_SHIFT * chnlParams->chnlNumber)));
 
             /* Set the channel pair values */
-            base->CONTROLS[chnlParams->chnlNumber * 2].CnV = chnlParams->firstEdgeValue;
+            base->CONTROLS[chnlParams->chnlNumber * 2].CnV       = chnlParams->firstEdgeValue;
             base->CONTROLS[(chnlParams->chnlNumber * 2) + 1].CnV = chnlParams->dutyValue;
 
 #if defined(FSL_FEATURE_FTM_HAS_ENABLE_PWM_OUTPUT) && (FSL_FEATURE_FTM_HAS_ENABLE_PWM_OUTPUT)
@@ -964,7 +968,7 @@ void FTM_SetupFault(FTM_Type *base, ftm_fault_input_t faultNumber, const ftm_fau
  */
 void FTM_EnableInterrupts(FTM_Type *base, uint32_t mask)
 {
-    uint32_t chnlInts = (mask & 0xFFU);
+    uint32_t chnlInts  = (mask & 0xFFU);
     uint8_t chnlNumber = 0;
 
     /* Enable the timer overflow interrupt */
@@ -1008,7 +1012,7 @@ void FTM_EnableInterrupts(FTM_Type *base, uint32_t mask)
  */
 void FTM_DisableInterrupts(FTM_Type *base, uint32_t mask)
 {
-    uint32_t chnlInts = (mask & 0xFF);
+    uint32_t chnlInts  = (mask & 0xFF);
     uint8_t chnlNumber = 0;
 
     /* Disable the timer overflow interrupt */
@@ -1053,7 +1057,7 @@ void FTM_DisableInterrupts(FTM_Type *base, uint32_t mask)
 uint32_t FTM_GetEnabledInterrupts(FTM_Type *base)
 {
     uint32_t enabledInterrupts = 0;
-    int8_t chnlCount = FSL_FEATURE_FTM_CHANNEL_COUNTn(base);
+    int8_t chnlCount           = FSL_FEATURE_FTM_CHANNEL_COUNTn(base);
 
     /* The CHANNEL_COUNT macro returns -1 if it cannot match the FTM instance */
     assert(chnlCount != -1);

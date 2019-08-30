@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -15,7 +15,6 @@
  * @addtogroup dac
  * @{
  */
-
 
 /*******************************************************************************
  * Definitions
@@ -35,7 +34,7 @@ enum _dac_buffer_status_flags
 #if defined(FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION) && FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION
     kDAC_BufferWatermarkFlag = DAC_SR_DACBFWMF_MASK,                  /*!< DAC Buffer Watermark Flag. */
 #endif                                                                /* FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION */
-    kDAC_BufferReadPointerTopPositionFlag = DAC_SR_DACBFRPTF_MASK,    /*!< DAC Buffer Read Pointer Top Position Flag. */
+    kDAC_BufferReadPointerTopPositionFlag    = DAC_SR_DACBFRPTF_MASK, /*!< DAC Buffer Read Pointer Top Position Flag. */
     kDAC_BufferReadPointerBottomPositionFlag = DAC_SR_DACBFRPBF_MASK, /*!< DAC Buffer Read Pointer Bottom Position
                                                                            Flag. */
 };
@@ -233,7 +232,8 @@ void DAC_SetBufferConfig(DAC_Type *base, const dac_buffer_config_t *config);
 /*!
  * @brief Initializes the DAC buffer configuration structure.
  *
- * This function initializes the DAC buffer configuration structure to default values. The default values are as follows.
+ * This function initializes the DAC buffer configuration structure to default values. The default values are as
+ * follows.
  * @code
  *   config->triggerMode = kDAC_BufferTriggerBySoftwareMode;
  *   config->watermark   = kDAC_BufferWatermark1Word;
@@ -266,7 +266,8 @@ static inline void DAC_EnableBufferDMA(DAC_Type *base, bool enable)
  * @brief Sets the value for  items in the buffer.
  *
  * @param base  DAC peripheral base address.
- * @param index Setting the index for items in the buffer. The available index should not exceed the size of the DAC buffer.
+ * @param index Setting the index for items in the buffer. The available index should not exceed the size of the DAC
+ * buffer.
  * @param value Setting the value for items in the buffer. 12-bits are available.
  */
 void DAC_SetBufferValue(DAC_Type *base, uint8_t index, uint16_t value);

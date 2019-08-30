@@ -50,7 +50,7 @@ static bool UART_TransferIsRxRingBufferFull(uart_handle_t *handle);
  * sure the RX register is full or TX FIFO has data before calling this function.
  *
  * @param base UART peripheral base address.
- * @param data Start addresss of the buffer to store the received data.
+ * @param data Start address of the buffer to store the received data.
  * @param length Size of the buffer.
  */
 static void UART_ReadNonBlocking(UART_Type *base, uint8_t *data, size_t length);
@@ -216,8 +216,8 @@ status_t UART_Init(UART_Type *base, const uart_config_t *config, uint32_t srcClo
     assert(FSL_FEATURE_UART_FIFO_SIZEn(base) >= config->rxFifoWatermark);
 #endif
 
-    uint16_t sbr = 0;
-    uint8_t temp = 0;
+    uint16_t sbr      = 0;
+    uint8_t temp      = 0;
     uint32_t baudDiff = 0;
 
     /* Calculate the baud rate modulo divisor, sbr*/
@@ -398,7 +398,7 @@ void UART_GetDefaultConfig(uart_config_t *config)
     memset(config, 0, sizeof(*config));
 
     config->baudRate_Bps = 115200U;
-    config->parityMode = kUART_ParityDisabled;
+    config->parityMode   = kUART_ParityDisabled;
 #if defined(FSL_FEATURE_UART_HAS_STOP_BIT_CONFIG_SUPPORT) && FSL_FEATURE_UART_HAS_STOP_BIT_CONFIG_SUPPORT
     config->stopBitCount = kUART_OneStopBit;
 #endif
@@ -426,7 +426,7 @@ void UART_GetDefaultConfig(uart_config_t *config)
  *
  * param base UART peripheral base address.
  * param baudRate_Bps UART baudrate to be set.
- * param srcClock_Hz UART clock source freqency in Hz.
+ * param srcClock_Hz UART clock source frequency in Hz.
  * retval kStatus_UART_BaudrateNotSupport Baudrate is not support in the current clock source.
  * retval kStatus_Success Set baudrate succeeded.
  */
@@ -434,7 +434,7 @@ status_t UART_SetBaudRate(UART_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
 {
     assert(baudRate_Bps);
 
-    uint16_t sbr = 0;
+    uint16_t sbr      = 0;
     uint32_t baudDiff = 0;
     uint8_t oldCtrl;
 
@@ -867,7 +867,7 @@ void UART_TransferStartRingBuffer(UART_Type *base, uart_handle_t *handle, uint8_
     assert(ringBuffer);
 
     /* Setup the ringbuffer address */
-    handle->rxRingBuffer = ringBuffer;
+    handle->rxRingBuffer     = ringBuffer;
     handle->rxRingBufferSize = ringBufferSize;
     handle->rxRingBufferHead = 0U;
     handle->rxRingBufferTail = 0U;
@@ -905,7 +905,7 @@ void UART_TransferStopRingBuffer(UART_Type *base, uart_handle_t *handle)
         }
     }
 
-    handle->rxRingBuffer = NULL;
+    handle->rxRingBuffer     = NULL;
     handle->rxRingBufferSize = 0U;
     handle->rxRingBufferHead = 0U;
     handle->rxRingBufferTail = 0U;
@@ -946,10 +946,10 @@ status_t UART_TransferSendNonBlocking(UART_Type *base, uart_handle_t *handle, ua
     }
     else
     {
-        handle->txData = xfer->data;
-        handle->txDataSize = xfer->dataSize;
+        handle->txData        = xfer->data;
+        handle->txDataSize    = xfer->dataSize;
         handle->txDataSizeAll = xfer->dataSize;
-        handle->txState = kUART_TxBusy;
+        handle->txState       = kUART_TxBusy;
 
         /* Enable transmitter interrupt. */
         UART_EnableInterrupts(base, kUART_TxDataRegEmptyInterruptEnable);
@@ -976,7 +976,7 @@ void UART_TransferAbortSend(UART_Type *base, uart_handle_t *handle)
     UART_DisableInterrupts(base, kUART_TxDataRegEmptyInterruptEnable | kUART_TransmissionCompleteInterruptEnable);
 
     handle->txDataSize = 0;
-    handle->txState = kUART_TxIdle;
+    handle->txState    = kUART_TxIdle;
 }
 
 /*!
@@ -1068,7 +1068,7 @@ status_t UART_TransferReceiveNonBlocking(UART_Type *base,
     }
     else
     {
-        bytesToReceive = xfer->dataSize;
+        bytesToReceive       = xfer->dataSize;
         bytesCurrentReceived = 0U;
 
         /* If RX ring buffer is used. */
@@ -1107,10 +1107,10 @@ status_t UART_TransferReceiveNonBlocking(UART_Type *base,
             if (bytesToReceive)
             {
                 /* No data in ring buffer, save the request to UART handle. */
-                handle->rxData = xfer->data + bytesCurrentReceived;
-                handle->rxDataSize = bytesToReceive;
+                handle->rxData        = xfer->data + bytesCurrentReceived;
+                handle->rxDataSize    = bytesToReceive;
                 handle->rxDataSizeAll = bytesToReceive;
-                handle->rxState = kUART_RxBusy;
+                handle->rxState       = kUART_RxBusy;
             }
 
             /* Enable UART RX IRQ if previously enabled. */
@@ -1128,10 +1128,10 @@ status_t UART_TransferReceiveNonBlocking(UART_Type *base,
         /* Ring buffer not used. */
         else
         {
-            handle->rxData = xfer->data + bytesCurrentReceived;
-            handle->rxDataSize = bytesToReceive;
+            handle->rxData        = xfer->data + bytesCurrentReceived;
+            handle->rxDataSize    = bytesToReceive;
             handle->rxDataSizeAll = bytesToReceive;
-            handle->rxState = kUART_RxBusy;
+            handle->rxState       = kUART_RxBusy;
 
             /* Enable RX/Rx overrun/framing error/idle line interrupt. */
             UART_EnableInterrupts(base, kUART_RxDataRegFullInterruptEnable | kUART_RxOverrunInterruptEnable |
@@ -1182,7 +1182,7 @@ void UART_TransferAbortReceive(UART_Type *base, uart_handle_t *handle)
     }
 
     handle->rxDataSize = 0U;
-    handle->rxState = kUART_RxIdle;
+    handle->rxState    = kUART_RxIdle;
 }
 
 /*!
@@ -1246,7 +1246,7 @@ void UART_TransferHandleIRQ(UART_Type *base, uart_handle_t *handle)
         base->CFIFO |= UART_CFIFO_RXFLUSH_MASK;
 #endif
 
-        handle->rxState = kUART_RxFramingError;
+        handle->rxState    = kUART_RxFramingError;
         handle->rxDataSize = 0U;
         /* Trigger callback. */
         if (handle->callback)
@@ -1268,7 +1268,7 @@ void UART_TransferHandleIRQ(UART_Type *base, uart_handle_t *handle)
         base->CFIFO |= UART_CFIFO_RXFLUSH_MASK;
 #endif
 
-        handle->rxState = kUART_RxParityError;
+        handle->rxState    = kUART_RxParityError;
         handle->rxDataSize = 0U;
         /* Trigger callback. */
         if (handle->callback)
@@ -1406,7 +1406,7 @@ void UART_TransferHandleIRQ(UART_Type *base, uart_handle_t *handle)
                     }
                 }
 
-                /* If ring buffer is still full after callback function, the oldest data is overrided. */
+                /* If ring buffer is still full after callback function, the oldest data is overridden. */
                 if (UART_TransferIsRxRingBufferFull(handle))
                 {
                     /* Increase handle->rxRingBufferTail to make room for new data. */
@@ -1452,7 +1452,7 @@ void UART_TransferHandleIRQ(UART_Type *base, uart_handle_t *handle)
         }
     }
 
-    /* If framing error or parity error happened, stop the RX interrupt when ues no ring buffer */
+    /* If framing error or parity error happened, stop the RX interrupt when use no ring buffer */
     if (((handle->rxState == kUART_RxFramingError) || (handle->rxState == kUART_RxParityError)) &&
         (!handle->rxRingBuffer))
     {

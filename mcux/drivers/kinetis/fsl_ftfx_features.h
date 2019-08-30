@@ -57,7 +57,7 @@
 #define FTFx_FLASH_COUNT (2)
 #else
 #define FTFx_DRIVER_HAS_FLASH1_SUPPORT (0)
-#define FTFx_FLASH_COUNT (1)
+#define FTFx_FLASH_COUNT (1U)
 #endif
 
 /*!

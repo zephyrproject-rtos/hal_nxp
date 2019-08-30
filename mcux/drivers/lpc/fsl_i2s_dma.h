@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_I2S_DMA_H_
@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief I2S DMA driver version 2.0.1. */
-#define FSL_I2S_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief I2S DMA driver version 2.1.0. */
+#define FSL_I2S_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief Members not to be accessed / modified outside of the driver. */
@@ -45,10 +45,11 @@ typedef void (*i2s_dma_transfer_callback_t)(I2S_Type *base,
                                             i2s_dma_handle_t *handle,
                                             status_t completionStatus,
                                             void *userData);
-
+/*! @brief i2s dma handle */
 struct _i2s_dma_handle
 {
     uint32_t state;                                    /*!< Internal state of I2S DMA transfer */
+    uint8_t bytesPerFrame;                             /*!< bytes per frame */
     i2s_dma_transfer_callback_t completionCallback;    /*!< Callback function pointer */
     void *userData;                                    /*!< Application data passed to callback */
     dma_handle_t *dmaHandle;                           /*!< DMA handle */

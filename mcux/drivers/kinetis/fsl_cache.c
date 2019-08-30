@@ -80,14 +80,14 @@ void L1CACHE_InvalidateCodeCache(void)
 void L1CACHE_InvalidateCodeCacheByRange(uint32_t address, uint32_t size_byte)
 {
     uint32_t endAddr = address + size_byte;
-    uint32_t pccReg = 0;
+    uint32_t pccReg  = 0;
     /* Align address to cache line size. */
     uint32_t startAddr = address & ~(L1CODEBUSCACHE_LINESIZE_BYTE - 1U);
 
     while (startAddr < endAddr)
     {
         /* Set the invalidate by line command and use the physical address. */
-        pccReg = (LMEM->PCCLCR & ~LMEM_PCCLCR_LCMD_MASK) | LMEM_PCCLCR_LCMD(1) | LMEM_PCCLCR_LADSEL_MASK;
+        pccReg       = (LMEM->PCCLCR & ~LMEM_PCCLCR_LCMD_MASK) | LMEM_PCCLCR_LCMD(1) | LMEM_PCCLCR_LADSEL_MASK;
         LMEM->PCCLCR = pccReg;
 
         /* Set the address and initiate the command. */
@@ -132,14 +132,14 @@ void L1CACHE_CleanCodeCache(void)
 void L1CACHE_CleanCodeCacheByRange(uint32_t address, uint32_t size_byte)
 {
     uint32_t endAddr = address + size_byte;
-    uint32_t pccReg = 0;
+    uint32_t pccReg  = 0;
     /* Align address to cache line size. */
     uint32_t startAddr = address & ~(L1CODEBUSCACHE_LINESIZE_BYTE - 1U);
 
     while (startAddr < endAddr)
     {
         /* Set the push by line command. */
-        pccReg = (LMEM->PCCLCR & ~LMEM_PCCLCR_LCMD_MASK) | LMEM_PCCLCR_LCMD(2) | LMEM_PCCLCR_LADSEL_MASK;
+        pccReg       = (LMEM->PCCLCR & ~LMEM_PCCLCR_LCMD_MASK) | LMEM_PCCLCR_LCMD(2) | LMEM_PCCLCR_LADSEL_MASK;
         LMEM->PCCLCR = pccReg;
 
         /* Set the address and initiate the command. */
@@ -185,14 +185,14 @@ void L1CACHE_CleanInvalidateCodeCache(void)
 void L1CACHE_CleanInvalidateCodeCacheByRange(uint32_t address, uint32_t size_byte)
 {
     uint32_t endAddr = address + size_byte;
-    uint32_t pccReg = 0;
+    uint32_t pccReg  = 0;
     /* Align address to cache line size. */
     uint32_t startAddr = address & ~(L1CODEBUSCACHE_LINESIZE_BYTE - 1U);
 
     while (startAddr < endAddr)
     {
         /* Set the push by line command. */
-        pccReg = (LMEM->PCCLCR & ~LMEM_PCCLCR_LCMD_MASK) | LMEM_PCCLCR_LCMD(3) | LMEM_PCCLCR_LADSEL_MASK;
+        pccReg       = (LMEM->PCCLCR & ~LMEM_PCCLCR_LCMD_MASK) | LMEM_PCCLCR_LCMD(3) | LMEM_PCCLCR_LADSEL_MASK;
         LMEM->PCCLCR = pccReg;
 
         /* Set the address and initiate the command. */
@@ -264,14 +264,14 @@ void L1CACHE_InvalidateSystemCache(void)
  */
 void L1CACHE_InvalidateSystemCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    uint32_t endAddr = address + size_byte;
-    uint32_t pscReg = 0;
+    uint32_t endAddr   = address + size_byte;
+    uint32_t pscReg    = 0;
     uint32_t startAddr = address & ~(L1SYSTEMBUSCACHE_LINESIZE_BYTE - 1U); /* Align address to cache line size */
 
     while (startAddr < endAddr)
     {
         /* Set the invalidate by line command and use the physical address. */
-        pscReg = (LMEM->PSCLCR & ~LMEM_PSCLCR_LCMD_MASK) | LMEM_PSCLCR_LCMD(1) | LMEM_PSCLCR_LADSEL_MASK;
+        pscReg       = (LMEM->PSCLCR & ~LMEM_PSCLCR_LCMD_MASK) | LMEM_PSCLCR_LCMD(1) | LMEM_PSCLCR_LADSEL_MASK;
         LMEM->PSCLCR = pscReg;
 
         /* Set the address and initiate the command. */
@@ -315,14 +315,14 @@ void L1CACHE_CleanSystemCache(void)
  */
 void L1CACHE_CleanSystemCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    uint32_t endAddr = address + size_byte;
-    uint32_t pscReg = 0;
+    uint32_t endAddr   = address + size_byte;
+    uint32_t pscReg    = 0;
     uint32_t startAddr = address & ~(L1SYSTEMBUSCACHE_LINESIZE_BYTE - 1U); /* Align address to cache line size. */
 
     while (startAddr < endAddr)
     {
         /* Set the push by line command. */
-        pscReg = (LMEM->PSCLCR & ~LMEM_PSCLCR_LCMD_MASK) | LMEM_PSCLCR_LCMD(2) | LMEM_PSCLCR_LADSEL_MASK;
+        pscReg       = (LMEM->PSCLCR & ~LMEM_PSCLCR_LCMD_MASK) | LMEM_PSCLCR_LCMD(2) | LMEM_PSCLCR_LADSEL_MASK;
         LMEM->PSCLCR = pscReg;
 
         /* Set the address and initiate the command. */
@@ -367,14 +367,14 @@ void L1CACHE_CleanInvalidateSystemCache(void)
  */
 void L1CACHE_CleanInvalidateSystemCacheByRange(uint32_t address, uint32_t size_byte)
 {
-    uint32_t endAddr = address + size_byte;
-    uint32_t pscReg = 0;
+    uint32_t endAddr   = address + size_byte;
+    uint32_t pscReg    = 0;
     uint32_t startAddr = address & ~(L1SYSTEMBUSCACHE_LINESIZE_BYTE - 1U); /* Align address to cache line size. */
 
     while (startAddr < endAddr)
     {
         /* Set the push by line command. */
-        pscReg = (LMEM->PSCLCR & ~LMEM_PSCLCR_LCMD_MASK) | LMEM_PSCLCR_LCMD(3) | LMEM_PSCLCR_LADSEL_MASK;
+        pscReg       = (LMEM->PSCLCR & ~LMEM_PSCLCR_LCMD_MASK) | LMEM_PSCLCR_LCMD(3) | LMEM_PSCLCR_LADSEL_MASK;
         LMEM->PSCLCR = pscReg;
 
         /* Set the address and initiate the command. */
@@ -402,7 +402,7 @@ void L1CACHE_InvalidateICacheByRange(uint32_t address, uint32_t size_byte)
 {
 #if (FSL_FEATURE_SOC_LMEM_COUNT == 1)
     uint32_t endAddr = address + size_byte;
-    uint32_t size = size_byte;
+    uint32_t size    = size_byte;
 
     if (endAddr <= L1CACHE_CODEBUSADDR_BOUNDARY)
     {
@@ -437,7 +437,7 @@ void L1CACHE_CleanDCacheByRange(uint32_t address, uint32_t size_byte)
 {
 #if (FSL_FEATURE_SOC_LMEM_COUNT == 1)
     uint32_t endAddr = address + size_byte;
-    uint32_t size = size_byte;
+    uint32_t size    = size_byte;
 
     if (endAddr <= L1CACHE_CODEBUSADDR_BOUNDARY)
     {
@@ -472,7 +472,7 @@ void L1CACHE_CleanInvalidateDCacheByRange(uint32_t address, uint32_t size_byte)
 {
 #if (FSL_FEATURE_SOC_LMEM_COUNT == 1)
     uint32_t endAddr = address + size_byte;
-    uint32_t size = size_byte;
+    uint32_t size    = size_byte;
 
     if (endAddr <= L1CACHE_CODEBUSADDR_BOUNDARY)
     {

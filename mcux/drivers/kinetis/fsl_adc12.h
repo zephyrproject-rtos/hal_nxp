@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief ADC12 driver version */
-#define FSL_ADC12_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
+#define FSL_ADC12_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3. */
 
 /*!
  * @brief Channel status flags' mask.
@@ -35,7 +35,7 @@ enum _adc12_channel_status_flags
  */
 enum _adc12_status_flags
 {
-    kADC12_ActiveFlag = ADC_SC2_ADACT_MASK,                    /*!< Converter is active. */
+    kADC12_ActiveFlag            = ADC_SC2_ADACT_MASK,         /*!< Converter is active. */
     kADC12_CalibrationFailedFlag = (ADC_SC2_ADACT_MASK << 1U), /*!< Calibration is failed. */
 };
 
@@ -55,7 +55,7 @@ typedef enum _adc12_clock_divider
  */
 typedef enum _adc12_resolution
 {
-    kADC12_Resolution8Bit = 0U,  /*!< 8 bit resolution. */
+    kADC12_Resolution8Bit  = 0U, /*!< 8 bit resolution. */
     kADC12_Resolution12Bit = 1U, /*!< 12 bit resolution. */
     kADC12_Resolution10Bit = 2U, /*!< 10 bit resolution. */
 } adc12_resolution_t;
@@ -85,10 +85,10 @@ typedef enum _adc12_reference_voltage_source
  */
 typedef enum _adc12_hardware_average_mode
 {
-    kADC12_HardwareAverageCount4 = 0U,   /*!< For hardware average with 4 samples. */
-    kADC12_HardwareAverageCount8 = 1U,   /*!< For hardware average with 8 samples. */
-    kADC12_HardwareAverageCount16 = 2U,  /*!< For hardware average with 16 samples. */
-    kADC12_HardwareAverageCount32 = 3U,  /*!< For hardware average with 32 samples. */
+    kADC12_HardwareAverageCount4   = 0U, /*!< For hardware average with 4 samples. */
+    kADC12_HardwareAverageCount8   = 1U, /*!< For hardware average with 8 samples. */
+    kADC12_HardwareAverageCount16  = 2U, /*!< For hardware average with 16 samples. */
+    kADC12_HardwareAverageCount32  = 3U, /*!< For hardware average with 32 samples. */
     kADC12_HardwareAverageDisabled = 4U, /*!< Disable the hardware average feature.*/
 } adc12_hardware_average_mode_t;
 
@@ -227,7 +227,7 @@ void ADC12_SetChannelConfig(ADC_Type *base, uint32_t channelGroup, const adc12_c
  */
 static inline uint32_t ADC12_GetChannelConversionValue(ADC_Type *base, uint32_t channelGroup)
 {
-    assert(channelGroup < ADC_R_COUNT);
+    assert(channelGroup < FSL_FEATURE_ADC12_CONVERSION_CONTROL_COUNT);
 
     return base->R[channelGroup];
 }

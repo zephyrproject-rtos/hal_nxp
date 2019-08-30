@@ -43,7 +43,7 @@ static const clock_ip_name_t s_acmpClock[] = CMP_CLOCKS;
  ******************************************************************************/
 static uint32_t ACMP_GetInstance(CMP_Type *base)
 {
-    uint32_t instance = 0U;
+    uint32_t instance       = 0U;
     uint32_t acmpArrayCount = (sizeof(s_acmpBases) / sizeof(s_acmpBases[0]));
 
     /* Find the instance index from base address mappings. */
@@ -152,10 +152,10 @@ void ACMP_GetDefaultConfig(acmp_config_t *config)
     memset(config, 0, sizeof(*config));
 
     /* Fill default configuration */
-    config->enableHighSpeed = false;
-    config->enableInvertOutput = false;
+    config->enableHighSpeed     = false;
+    config->enableInvertOutput  = false;
     config->useUnfilteredOutput = false;
-    config->enablePinOut = false;
+    config->enablePinOut        = false;
 #if defined(FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT) && (FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT == 1U)
     config->offsetMode = kACMP_OffsetLevel0;
 #endif /* FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT */
@@ -507,7 +507,7 @@ void ACMP_EnableInterrupts(CMP_Type *base, uint32_t mask)
     {
         tmp32 = base->C2;
         /* Set control bit. Avoid clearing status flags at the same time. */
-        tmp32 = ((tmp32 | CMP_C2_RRIE_MASK) & ~CMP_C2_CHnF_MASK);
+        tmp32    = ((tmp32 | CMP_C2_RRIE_MASK) & ~CMP_C2_CHnF_MASK);
         base->C2 = tmp32;
     }
 }
@@ -558,7 +558,7 @@ void ACMP_DisableInterrupts(CMP_Type *base, uint32_t mask)
 uint32_t ACMP_GetStatusFlags(CMP_Type *base)
 {
     uint32_t status = 0U;
-    uint32_t tmp32 = base->C0;
+    uint32_t tmp32  = base->C0;
 
     /* CMPx_C0
      * Check if each flag is set.
@@ -650,11 +650,11 @@ void ACMP_GetDefaultDiscreteModeConfig(acmp_discrete_mode_config_t *config)
 
     config->enablePositiveChannelDiscreteMode = false;
     config->enableNegativeChannelDiscreteMode = false;
-    config->enableResistorDivider = false;
-    config->clockSource = kACMP_DiscreteClockSlow;
-    config->sampleTime = kACMP_DiscreteSampleTimeAs1T;
-    config->phase1Time = kACMP_DiscretePhaseTimeAlt0;
-    config->phase2Time = kACMP_DiscretePhaseTimeAlt0;
+    config->enableResistorDivider             = false;
+    config->clockSource                       = kACMP_DiscreteClockSlow;
+    config->sampleTime                        = kACMP_DiscreteSampleTimeAs1T;
+    config->phase1Time                        = kACMP_DiscretePhaseTimeAlt0;
+    config->phase2Time                        = kACMP_DiscretePhaseTimeAlt0;
 }
 
 #endif /* FSL_FEATURE_ACMP_HAS_C3_REG */

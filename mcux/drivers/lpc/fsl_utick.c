@@ -100,9 +100,9 @@ void UTICK_SetTick(UTICK_Type *base, utick_mode_t mode, uint32_t count, utick_ca
 }
 
 /*!
-* brief Initializes an UTICK by turning its bus clock on
-*
-*/
+ * brief Initializes an UTICK by turning its bus clock on
+ *
+ */
 void UTICK_Init(UTICK_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)

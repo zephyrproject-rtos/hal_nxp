@@ -105,7 +105,7 @@ static void UART_SendEDMACallback(edma_handle_t *handle, void *param, bool trans
 
     /* Avoid the warning for unused variables. */
     handle = handle;
-    tcds = tcds;
+    tcds   = tcds;
 
     if (transferDone)
     {
@@ -127,7 +127,7 @@ static void UART_ReceiveEDMACallback(edma_handle_t *handle, void *param, bool tr
 
     /* Avoid warning for unused parameters. */
     handle = handle;
-    tcds = tcds;
+    tcds   = tcds;
 
     if (transferDone)
     {
@@ -162,7 +162,7 @@ void UART_TransferCreateHandleEDMA(UART_Type *base,
 
     uint32_t instance = UART_GetInstance(base);
 
-    s_edmaPrivateHandle[instance].base = base;
+    s_edmaPrivateHandle[instance].base   = base;
     s_edmaPrivateHandle[instance].handle = handle;
 
     memset(handle, 0, sizeof(*handle));
@@ -235,7 +235,7 @@ status_t UART_SendEDMA(UART_Type *base, uart_edma_handle_t *handle, uart_transfe
     }
     else
     {
-        handle->txState = kUART_TxBusy;
+        handle->txState       = kUART_TxBusy;
         handle->txDataSizeAll = xfer->dataSize;
 
         /* Prepare transfer. */
@@ -289,7 +289,7 @@ status_t UART_ReceiveEDMA(UART_Type *base, uart_edma_handle_t *handle, uart_tran
     }
     else
     {
-        handle->rxState = kUART_RxBusy;
+        handle->rxState       = kUART_RxBusy;
         handle->rxDataSizeAll = xfer->dataSize;
 
         /* Prepare transfer. */

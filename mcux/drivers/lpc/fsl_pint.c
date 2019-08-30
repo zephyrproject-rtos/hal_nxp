@@ -17,10 +17,21 @@
  * Variables
  ******************************************************************************/
 
+#if defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+/*! @brief Irq number array */
+static const IRQn_Type s_pintIRQ[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS +
+                                 FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS] = PINT_IRQS;
+
+/*! @brief Callback function array for PINT(s). */
+static pint_cb_t
+    s_pintCallback[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS + FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS];
+#else
 /*! @brief Irq number array */
 static const IRQn_Type s_pintIRQ[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS] = PINT_IRQS;
+
 /*! @brief Callback function array for PINT(s). */
 static pint_cb_t s_pintCallback[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS];
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
 
 /*******************************************************************************
  * Code
@@ -39,31 +50,27 @@ void PINT_Init(PINT_Type *base)
 {
     uint32_t i;
     uint32_t pmcfg;
-
+    uint8_t pintcount;
     assert(base);
-
     pmcfg = 0;
+
+#if defined(SECPINT)
+    pintcount = SEC_PINT_PIN_INT_COUNT;
+#else
+    pintcount = PINT_PIN_INT_COUNT;
+#endif /* SECPINT */
+
     for (i = 0; i < FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
     {
         s_pintCallback[i] = NULL;
     }
 
-    if (base == SECPINT)
+    /* Disable all bit slices for pint*/
+    for (i = 0; i < pintcount; i++)
     {
-        /* Disable all bit slices for secure pint*/
-        for (i = 0; i < SEC_PINT_PIN_INT_COUNT; i++)
-        {
-            pmcfg = pmcfg | (kPINT_PatternMatchNever << (PININT_BITSLICE_CFG_START + (i * 3U)));
-        }
+        pmcfg = pmcfg | (kPINT_PatternMatchNever << (PININT_BITSLICE_CFG_START + (i * 3U)));
     }
-    else
-    {
-        /* Disable all bit slices for pint*/
-        for (i = 0; i < PINT_PIN_INT_COUNT; i++)
-        {
-            pmcfg = pmcfg | (kPINT_PatternMatchNever << (PININT_BITSLICE_CFG_START + (i * 3U)));
-        }
-    }
+
 #if defined(FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE) && (FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE == 1)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the clock. */
@@ -86,6 +93,7 @@ void PINT_Init(PINT_Type *base)
     RESET_PeripheralReset(kGPIO0_RST_N_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 
+#if defined(SECPINT)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the clock. */
     CLOCK_EnableClock(kCLOCK_Gpio_Sec);
@@ -95,22 +103,10 @@ void PINT_Init(PINT_Type *base)
     /* Reset the module. */
     RESET_PeripheralReset(kGPIOSEC_RST_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
-
+#endif /* SECPINT */
 #else
     /* if need config SECURE PINT device,then enable secure pint interrupt clock */
-    if (base == SECPINT)
-    {
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        /* Enable the clock. */
-        CLOCK_EnableClock(kCLOCK_Gpio_sec_Int);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
-#if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
-        /* Reset the module. */
-        RESET_PeripheralReset(kGPIOSECINT_RST_SHIFT_RSTn);
-#endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
-    }
-    else
+    if (base == PINT)
     {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
         /* Enable the clock. */
@@ -122,7 +118,21 @@ void PINT_Init(PINT_Type *base)
         RESET_PeripheralReset(kPINT_RST_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
     }
-#endif /* FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE && FSL_FEATURE_CLOCK_HAS_NO_GPIOINT_CLOCK_SOURCE*/
+#if defined(SECPINT)
+    else if (base == SECPINT)
+    {
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+        /* Enable the clock. */
+        CLOCK_EnableClock(kCLOCK_Gpio_sec_Int);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
+        /* Reset the module. */
+        RESET_PeripheralReset(kGPIOSECINT_RST_SHIFT_RSTn);
+#endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
+    }
+#endif /* SECPINT */
+#endif /* FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE */
 
     /* Disable all pattern match bit slices */
     base->PMCFG = pmcfg;
@@ -149,36 +159,29 @@ void PINT_PinInterruptConfig(PINT_Type *base, pint_pin_int_t intr, pint_pin_enab
     PINT_PinInterruptClrFallFlag(base, intr);
 
     /* select level or edge sensitive */
-    base->ISEL = (base->ISEL & ~(1U << intr)) | ((enable & PINT_PIN_INT_LEVEL) ? (1U << intr) : 0U);
+    base->ISEL =
+        (base->ISEL & ~(1UL << (uint32_t)intr)) | ((enable & PINT_PIN_INT_LEVEL) ? (1UL << (uint32_t)intr) : 0U);
 
     /* enable rising or level interrupt */
     if (enable & (PINT_PIN_INT_LEVEL | PINT_PIN_INT_RISE))
     {
-        base->SIENR = 1U << intr;
+        base->SIENR = 1UL << (uint32_t)intr;
     }
     else
     {
-        base->CIENR = 1U << intr;
+        base->CIENR = 1UL << (uint32_t)intr;
     }
 
     /* Enable falling or select high level */
     if (enable & PINT_PIN_INT_FALL_OR_HIGH_LEVEL)
     {
-        base->SIENF = 1U << intr;
+        base->SIENF = 1UL << (uint32_t)intr;
     }
     else
     {
-        base->CIENF = 1U << intr;
+        base->CIENF = 1UL << (uint32_t)intr;
     }
-    /* Handle secure pint interrupt*/
-    if ((base == SECPINT) && (intr == kPINT_PinInt0))
-    {
-        intr = kPINT_SecPinInt0;
-    }
-    else if ((base == SECPINT) && (intr == kPINT_PinInt1))
-    {
-        intr = kPINT_SecPinInt1;
-    }
+
     s_pintCallback[intr] = callback;
 }
 
@@ -202,16 +205,16 @@ void PINT_PinInterruptGetConfig(PINT_Type *base, pint_pin_int_t pintr, pint_pin_
     assert(base);
 
     *enable = kPINT_PinIntEnableNone;
-    level = false;
+    level   = false;
 
-    mask = 1U << pintr;
-    if (base->ISEL & mask)
+    mask = 1UL << (uint32_t)pintr;
+    if ((base->ISEL & mask) != 0U)
     {
         /* Pin interrupt is level sensitive */
         level = true;
     }
 
-    if (base->IENR & mask)
+    if ((base->IENR & mask) != 0U)
     {
         if (level)
         {
@@ -225,7 +228,7 @@ void PINT_PinInterruptGetConfig(PINT_Type *base, pint_pin_int_t pintr, pint_pin_
         }
     }
 
-    if (base->IENF & mask)
+    if ((base->IENF & mask) != 0U)
     {
         if (level)
         {
@@ -267,42 +270,36 @@ void PINT_PatternMatchConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pint_
     uint32_t src_shift;
     uint32_t cfg_shift;
     uint32_t pmcfg;
+    uint32_t tmp_src_shift = PININT_BITSLICE_SRC_MASK;
+    uint32_t tmp_cfg_shift = PININT_BITSLICE_CFG_MASK;
 
     assert(base);
 
-    src_shift = PININT_BITSLICE_SRC_START + (bslice * 3U);
-    cfg_shift = PININT_BITSLICE_CFG_START + (bslice * 3U);
+    src_shift = PININT_BITSLICE_SRC_START + ((uint32_t)bslice * 3UL);
+    cfg_shift = PININT_BITSLICE_CFG_START + ((uint32_t)bslice * 3UL);
 
     /* Input source selection for selected bit slice */
-    base->PMSRC = (base->PMSRC & ~(PININT_BITSLICE_SRC_MASK << src_shift)) | (cfg->bs_src << src_shift);
+    base->PMSRC = (base->PMSRC & ~(tmp_src_shift << src_shift)) | (cfg->bs_src << src_shift);
 
     /* Bit slice configuration */
     pmcfg = base->PMCFG;
-    pmcfg = (pmcfg & ~(PININT_BITSLICE_CFG_MASK << cfg_shift)) | (cfg->bs_cfg << cfg_shift);
+    pmcfg = (pmcfg & ~(tmp_cfg_shift << cfg_shift)) | (cfg->bs_cfg << cfg_shift);
 
     /* If end point is true, enable the bits */
-    if (bslice != 7U)
+    if ((uint32_t)bslice != 7UL)
     {
         if (cfg->end_point)
         {
-            pmcfg |= (0x1U << bslice);
+            pmcfg |= (1UL << (uint32_t)bslice);
         }
         else
         {
-            pmcfg &= ~(0x1U << bslice);
+            pmcfg &= ~(1UL << (uint32_t)bslice);
         }
     }
 
     base->PMCFG = pmcfg;
-    /* Handle secure pint pattern match*/
-    if ((base == SECPINT) && (bslice == kPINT_PatternMatchBSlice0))
-    {
-        bslice = kSECPINT_PatternMatchBSlice0;
-    }
-    else if ((base == SECPINT) && (bslice == kPINT_PatternMatchBSlice1))
-    {
-        bslice = kSECPINT_PatternMatchBSlice1;
-    }
+
     /* Save callback pointer */
     s_pintCallback[bslice] = cfg->callback;
 }
@@ -322,22 +319,24 @@ void PINT_PatternMatchGetConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pi
 {
     uint32_t src_shift;
     uint32_t cfg_shift;
+    uint32_t tmp_src_shift = PININT_BITSLICE_SRC_MASK;
+    uint32_t tmp_cfg_shift = PININT_BITSLICE_CFG_MASK;
 
     assert(base);
 
-    src_shift = PININT_BITSLICE_SRC_START + (bslice * 3U);
-    cfg_shift = PININT_BITSLICE_CFG_START + (bslice * 3U);
+    src_shift = PININT_BITSLICE_SRC_START + ((uint32_t)bslice * 3UL);
+    cfg_shift = PININT_BITSLICE_CFG_START + ((uint32_t)bslice * 3UL);
 
-    cfg->bs_src = (pint_pmatch_input_src_t)((base->PMSRC & (PININT_BITSLICE_SRC_MASK << src_shift)) >> src_shift);
-    cfg->bs_cfg = (pint_pmatch_bslice_cfg_t)((base->PMCFG & (PININT_BITSLICE_CFG_MASK << cfg_shift)) >> cfg_shift);
+    cfg->bs_src = (pint_pmatch_input_src_t)((base->PMSRC & (tmp_src_shift << src_shift)) >> src_shift);
+    cfg->bs_cfg = (pint_pmatch_bslice_cfg_t)((base->PMCFG & (tmp_cfg_shift << cfg_shift)) >> cfg_shift);
 
-    if (bslice == 7U)
+    if ((uint32_t)bslice == 7U)
     {
         cfg->end_point = true;
     }
     else
     {
-        cfg->end_point = (base->PMCFG & (0x1U << bslice)) >> bslice;
+        cfg->end_point = ((base->PMCFG & (1UL << (uint32_t)bslice)) >> (uint32_t)bslice);
     }
     cfg->callback = s_pintCallback[bslice];
 }
@@ -358,15 +357,68 @@ uint32_t PINT_PatternMatchResetDetectLogic(PINT_Type *base)
     uint32_t pmstatus;
     uint32_t pmsrc;
 
-    pmctrl = base->PMCTRL;
+    pmctrl   = base->PMCTRL;
     pmstatus = pmctrl >> PINT_PMCTRL_PMAT_SHIFT;
-    if (pmstatus)
+    if (pmstatus != 0UL)
     {
         /* Reset Pattern match engine detection logic */
-        pmsrc = base->PMSRC;
+        pmsrc       = base->PMSRC;
         base->PMSRC = pmsrc;
     }
     return (pmstatus);
+}
+
+/*!
+ * @brief	Clear Selected pin interrupt status only when the pin was triggered by edge-sensitive.
+
+ * This function clears the selected pin interrupt status.
+ *
+ * @param base Base address of the PINT peripheral.
+ * @param pintr Pin interrupt.
+ *
+ * @retval None.
+ */
+void PINT_PinInterruptClrStatus(PINT_Type *base, pint_pin_int_t pintr)
+{
+    uint32_t pinIntMode   = base->ISEL & (1UL << (uint32_t)pintr);
+    uint32_t pinIntStatus = base->IST & (1UL << (uint32_t)pintr);
+
+    /* Edge sensitive and pin interrupt that is currently requesting an interrupt. */
+    if ((pinIntMode == 0x0UL) && (pinIntStatus != 0x0UL))
+    {
+        base->IST = (1UL << (uint32_t)pintr);
+    }
+}
+
+/*!
+ * @brief	Clear all pin interrupts status only when pins were triggered by edge-sensitive.
+
+ * This function clears the status of all pin interrupts.
+ *
+ * @param base Base address of the PINT peripheral.
+ *
+ * @retval None.
+ */
+void PINT_PinInterruptClrStatusAll(PINT_Type *base)
+{
+    uint32_t pinIntMode   = 0;
+    uint32_t pinIntStatus = 0;
+    uint32_t mask         = 0;
+    uint32_t i;
+
+    for (i = 0; i < FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+    {
+        pinIntMode   = base->ISEL & (1UL << i);
+        pinIntStatus = base->IST & (1UL << i);
+
+        /* Edge sensitive and pin interrupt that is currently requesting an interrupt. */
+        if ((pinIntMode == 0x0UL) && (pinIntStatus != 0x0UL))
+        {
+            mask |= 1UL << i;
+        }
+    }
+
+    base->IST = mask;
 }
 
 /*!
@@ -385,12 +437,11 @@ void PINT_EnableCallback(PINT_Type *base)
 
     assert(base);
 
-    PINT_PinInterruptClrStatusAll(base);
     for (i = 0; i < FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
     {
         NVIC_ClearPendingIRQ(s_pintIRQ[i]);
         PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
-        EnableIRQ(s_pintIRQ[i]);
+        (void)EnableIRQ(s_pintIRQ[i]);
     }
 }
 
@@ -408,13 +459,9 @@ void PINT_EnableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 {
     assert(base);
 
-    if (base == SECPINT)
-    {
-        pintIdx += 8;
-    }
     NVIC_ClearPendingIRQ(s_pintIRQ[pintIdx]);
     PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
-    EnableIRQ(s_pintIRQ[pintIdx]);
+    (void)EnableIRQ(s_pintIRQ[pintIdx]);
 }
 
 /*!
@@ -435,7 +482,7 @@ void PINT_DisableCallback(PINT_Type *base)
 
     for (i = 0; i < FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
     {
-        DisableIRQ(s_pintIRQ[i]);
+        (void)DisableIRQ(s_pintIRQ[i]);
         PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
         NVIC_ClearPendingIRQ(s_pintIRQ[i]);
     }
@@ -455,14 +502,11 @@ void PINT_DisableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 {
     assert(base);
 
-    if (base == SECPINT)
-    {
-        pintIdx += 8;
-    }
-    DisableIRQ(s_pintIRQ[pintIdx]);
+    (void)DisableIRQ(s_pintIRQ[pintIdx]);
     PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
     NVIC_ClearPendingIRQ(s_pintIRQ[pintIdx]);
 }
+
 /*!
  * brief	Deinitialize PINT peripheral.
 
@@ -507,6 +551,7 @@ void PINT_Deinit(PINT_Type *base)
     CLOCK_DisableClock(kCLOCK_Gpio0);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+#if defined(SECPINT)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
     /* Reset the module. */
     RESET_PeripheralReset(kGPIOSEC_RST_SHIFT_RSTn);
@@ -516,21 +561,9 @@ void PINT_Deinit(PINT_Type *base)
     /* Enable the clock. */
     CLOCK_DisableClock(kCLOCK_Gpio_Sec);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
+#endif /* SECPINT */
 #else
-    if (base == SECPINT)
-    {
-#if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
-        /* Reset the module. */
-        RESET_PeripheralReset(kGPIOSECINT_RST_SHIFT_RSTn);
-#endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
-
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        /* Disable the clock. */
-        CLOCK_DisableClock(kCLOCK_Gpio_sec_Int);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-    }
-    else
+    if (base == PINT)
     {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
         /* Reset the module. */
@@ -542,9 +575,23 @@ void PINT_Deinit(PINT_Type *base)
         CLOCK_DisableClock(kCLOCK_Pint);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     }
+#if defined(SECPINT)
+    else if (base == SECPINT)
+    {
+#if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
+        /* Reset the module. */
+        RESET_PeripheralReset(kGPIOSECINT_RST_SHIFT_RSTn);
+#endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
+
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+        /* Disable the clock. */
+        CLOCK_DisableClock(kCLOCK_Gpio_sec_Int);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+    }
+#endif /* SECPINT */
 #endif /* FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE */
 }
-
+#if defined(SECPINT)
 /* IRQ handler functions overloading weak symbols in the startup */
 void SEC_GPIO_INT0_IRQ0_DriverIRQHandler(void)
 {
@@ -568,6 +615,7 @@ void SEC_GPIO_INT0_IRQ0_DriverIRQHandler(void)
     __DSB();
 #endif
 }
+
 #if (FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS > 1U)
 /* IRQ handler functions overloading weak symbols in the startup */
 void SEC_GPIO_INT0_IRQ1_DriverIRQHandler(void)
@@ -592,7 +640,9 @@ void SEC_GPIO_INT0_IRQ1_DriverIRQHandler(void)
     __DSB();
 #endif
 }
-#endif
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+#endif /* SECPINT */
+
 /* IRQ handler functions overloading weak symbols in the startup */
 void PIN_INT0_DriverIRQHandler(void)
 {

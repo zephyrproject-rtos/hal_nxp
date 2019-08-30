@@ -26,8 +26,8 @@ static const clock_ip_name_t s_gpioClockName[] = GPIO_CLOCKS;
 static const reset_ip_name_t s_gpioResets[] = GPIO_RSTS_N;
 #endif
 /*******************************************************************************
-* Prototypes
-************ ******************************************************************/
+ * Prototypes
+ ************ ******************************************************************/
 
 /*******************************************************************************
  * Code
@@ -110,3 +110,194 @@ void GPIO_PinInit(GPIO_Type *base, uint32_t port, uint32_t pin, const gpio_pin_c
 #endif /*FSL_FEATURE_GPIO_DIRSET_AND_DIRCLR*/
     }
 }
+
+#if defined(FSL_FEATURE_GPIO_HAS_INTERRUPT) && FSL_FEATURE_GPIO_HAS_INTERRUPT
+/*!
+ * @brief Configures the gpio pin interrupt.
+ *
+ * @param base GPIO base pointer.
+ * @param port GPIO port number
+ * @param pin GPIO pin number.
+ * @param config GPIO pin interrupt configuration..
+ */
+void GPIO_SetPinInterruptConfig(GPIO_Type *base, uint32_t port, uint32_t pin, gpio_interrupt_config_t *config)
+{
+    base->INTEDG[port] = base->INTEDG[port] | (config->mode << pin);
+
+    base->INTPOL[port] = base->INTPOL[port] | (config->polarity << pin);
+}
+
+/*!
+ * @brief Enables multiple pins interrupt.
+ *
+ * @param base GPIO base pointer.
+ * @param port   GPIO port number.
+ * @param index GPIO interrupt number.
+ * @param mask GPIO pin number macro.
+ */
+void GPIO_PortEnableInterrupts(GPIO_Type *base, uint32_t port, uint32_t index, uint32_t mask)
+{
+    if (kGPIO_InterruptA == index)
+    {
+        base->INTENA[port] = base->INTENA[port] | mask;
+    }
+    else if (kGPIO_InterruptB == index)
+    {
+        base->INTENB[port] = base->INTENB[port] | mask;
+    }
+    else
+    {
+        /*Should not enter here*/
+    }
+}
+
+/*!
+ * @brief Disables multiple pins interrupt.
+ *
+ * @param base GPIO base pointer.
+ * @param port   GPIO port number.
+ * @param index GPIO interrupt number.
+ * @param mask GPIO pin number macro.
+ */
+void GPIO_PortDisableInterrupts(GPIO_Type *base, uint32_t port, uint32_t index, uint32_t mask)
+{
+    if (kGPIO_InterruptA == index)
+    {
+        base->INTENA[port] = base->INTENA[port] & ~mask;
+    }
+    else if (kGPIO_InterruptB == index)
+    {
+        base->INTENB[port] = base->INTENB[port] & ~mask;
+    }
+    else
+    {
+        /*Should not enter here*/
+    }
+}
+
+/*!
+ * @brief Clears multiple pins interrupt flag. Status flags are cleared by
+ *        writing a 1 to the corresponding bit position.
+ *
+ * @param base GPIO base pointer.
+ * @param port GPIO port number.
+ * @param index GPIO interrupt number.
+ * @param mask GPIO pin number macro.
+ */
+void GPIO_PortClearInterruptFlags(GPIO_Type *base, uint32_t port, uint32_t index, uint32_t mask)
+{
+    if (kGPIO_InterruptA == index)
+    {
+        base->INTSTATA[port] = mask;
+    }
+    else if (kGPIO_InterruptB == index)
+    {
+        base->INTSTATB[port] = mask;
+    }
+    else
+    {
+        /*Should not enter here*/
+    }
+}
+
+/*!
+ * @ Read port interrupt status.
+ *
+ * @param base GPIO base pointer.
+ * @param port GPIO port number
+ * @param index GPIO interrupt number.
+ * @retval masked GPIO status value
+ */
+uint32_t GPIO_PortGetInterruptStatus(GPIO_Type *base, uint32_t port, uint32_t index)
+{
+    uint32_t status = 0U;
+
+    if (kGPIO_InterruptA == index)
+    {
+        status = base->INTSTATA[port];
+    }
+    else if (kGPIO_InterruptB == index)
+    {
+        status = base->INTSTATB[port];
+    }
+    else
+    {
+        /*Should not enter here*/
+    }
+    return status;
+
+}
+
+/*!
+ * @brief Enables the specific pin interrupt.
+ *
+ * @param base GPIO base pointer.
+ * @param port   GPIO port number.
+ * @param pin GPIO pin number.
+ * @param index GPIO interrupt number.
+ */
+void GPIO_PinEnableInterrupt(GPIO_Type *base, uint32_t port, uint32_t pin, uint32_t index)
+{
+    if (kGPIO_InterruptA == index)
+    {
+        base->INTENA[port] = base->INTENA[port] | (1U << pin);
+    }
+    else if (kGPIO_InterruptB == index)
+    {
+        base->INTENB[port] = base->INTENB[port] | (1U << pin);
+    }
+    else
+    {
+        /*Should not enter here*/
+    }
+}
+
+/*!
+ * @brief Disables the specific pin interrupt.
+ *
+ * @param base GPIO base pointer.
+ * @param port   GPIO port number.
+ * @param pin GPIO pin number.
+ * @param index GPIO interrupt number.
+ */
+void GPIO_PinDisableInterrupt(GPIO_Type *base, uint32_t port, uint32_t pin, uint32_t index)
+{
+    if (kGPIO_InterruptA == index)
+    {
+        base->INTENA[port] = base->INTENA[port] & ~(1U << pin);
+    }
+    else if (kGPIO_InterruptB == index)
+    {
+        base->INTENB[port] = base->INTENB[port] & ~(1U << pin);
+    }
+    else
+    {
+        /*Should not enter here*/
+    }
+}
+
+/*!
+ * @brief Clears the specific pin interrupt flag. Status flags are cleared by
+ *        writing a 1 to the corresponding bit position.
+ *
+ * @param base GPIO base pointer.
+ * @param port GPIO port number.
+ * @param index GPIO interrupt number.
+ * @param mask GPIO pin number macro.
+ */
+void GPIO_PinClearInterruptFlag(GPIO_Type *base, uint32_t port, uint32_t pin, uint32_t index)
+{
+    if (kGPIO_InterruptA == index)
+    {
+        base->INTSTATA[port] = 1U << pin;
+    }
+    else if (kGPIO_InterruptB == index)
+    {
+        base->INTSTATB[port] = 1U << pin;
+    }
+    else
+    {
+        /*Should not enter here*/
+    }
+}
+#endif /* FSL_FEATURE_GPIO_HAS_INTERRUPT */

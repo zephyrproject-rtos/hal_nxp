@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -16,15 +16,14 @@
  * @{
  */
 
-
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief PDB driver version 2.0.1. */
-#define FSL_PDB_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief PDB driver version 2.0.2. */
+#define FSL_PDB_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*!
@@ -46,30 +45,30 @@ enum _pdb_adc_pretrigger_flags
     /* PDB PreTrigger channel match flags. */
     kPDB_ADCPreTriggerChannel0Flag = PDB_S_CF(1U << 0), /*!< Pre-trigger 0 flag. */
     kPDB_ADCPreTriggerChannel1Flag = PDB_S_CF(1U << 1), /*!< Pre-trigger 1 flag. */
-#if (PDB_DLY_COUNT2 > 2)
+#if (FSL_FEATURE_PDB_CHANNEL_PRE_TRIGGER_COUNT > 2)
     kPDB_ADCPreTriggerChannel2Flag = PDB_S_CF(1U << 2), /*!< Pre-trigger 2 flag. */
     kPDB_ADCPreTriggerChannel3Flag = PDB_S_CF(1U << 3), /*!< Pre-trigger 3 flag. */
-#endif                                                  /* PDB_DLY_COUNT2 > 2 */
-#if (PDB_DLY_COUNT2 > 4)
+#endif                                                  /* FSL_FEATURE_PDB_CHANNEL_PRE_TRIGGER_COUNT */
+#if (FSL_FEATURE_PDB_CHANNEL_PRE_TRIGGER_COUNT > 4)
     kPDB_ADCPreTriggerChannel4Flag = PDB_S_CF(1U << 4), /*!< Pre-trigger 4 flag. */
     kPDB_ADCPreTriggerChannel5Flag = PDB_S_CF(1U << 5), /*!< Pre-trigger 5 flag. */
     kPDB_ADCPreTriggerChannel6Flag = PDB_S_CF(1U << 6), /*!< Pre-trigger 6 flag. */
     kPDB_ADCPreTriggerChannel7Flag = PDB_S_CF(1U << 7), /*!< Pre-trigger 7 flag. */
-#endif                                                  /* PDB_DLY_COUNT2 > 4 */
+#endif                                                  /* FSL_FEATURE_PDB_CHANNEL_PRE_TRIGGER_COUNT */
 
     /* PDB PreTrigger channel error flags. */
     kPDB_ADCPreTriggerChannel0ErrorFlag = PDB_S_ERR(1U << 0), /*!< Pre-trigger 0 Error. */
     kPDB_ADCPreTriggerChannel1ErrorFlag = PDB_S_ERR(1U << 1), /*!< Pre-trigger 1 Error. */
-#if (PDB_DLY_COUNT2 > 2)
+#if (FSL_FEATURE_PDB_CHANNEL_PRE_TRIGGER_COUNT > 2)
     kPDB_ADCPreTriggerChannel2ErrorFlag = PDB_S_ERR(1U << 2), /*!< Pre-trigger 2 Error. */
     kPDB_ADCPreTriggerChannel3ErrorFlag = PDB_S_ERR(1U << 3), /*!< Pre-trigger 3 Error. */
-#endif                                                        /* PDB_DLY_COUNT2 > 2 */
-#if (PDB_DLY_COUNT2 > 4)
+#endif                                                        /* FSL_FEATURE_PDB_CHANNEL_PRE_TRIGGER_COUNT */
+#if (FSL_FEATURE_PDB_CHANNEL_PRE_TRIGGER_COUNT > 4)
     kPDB_ADCPreTriggerChannel4ErrorFlag = PDB_S_ERR(1U << 4), /*!< Pre-trigger 4 Error. */
     kPDB_ADCPreTriggerChannel5ErrorFlag = PDB_S_ERR(1U << 5), /*!< Pre-trigger 5 Error. */
     kPDB_ADCPreTriggerChannel6ErrorFlag = PDB_S_ERR(1U << 6), /*!< Pre-trigger 6 Error. */
     kPDB_ADCPreTriggerChannel7ErrorFlag = PDB_S_ERR(1U << 7), /*!< Pre-trigger 7 Error. */
-#endif                                                        /* PDB_DLY_COUNT2 > 4 */
+#endif                                                        /* FSL_FEATURE_PDB_CHANNEL_PRE_TRIGGER_COUNT */
 };
 
 /*!
@@ -78,7 +77,7 @@ enum _pdb_adc_pretrigger_flags
 enum _pdb_interrupt_enable
 {
     kPDB_SequenceErrorInterruptEnable = PDB_SC_PDBEIE_MASK, /*!< PDB sequence error interrupt enable. */
-    kPDB_DelayInterruptEnable = PDB_SC_PDBIE_MASK,          /*!< PDB delay interrupt enable. */
+    kPDB_DelayInterruptEnable         = PDB_SC_PDBIE_MASK,  /*!< PDB delay interrupt enable. */
 };
 
 /*!
@@ -93,10 +92,10 @@ enum _pdb_interrupt_enable
  */
 typedef enum _pdb_load_value_mode
 {
-    kPDB_LoadValueImmediately = 0U,                     /*!< Load immediately after 1 is written to LDOK. */
+    kPDB_LoadValueImmediately       = 0U,               /*!< Load immediately after 1 is written to LDOK. */
     kPDB_LoadValueOnCounterOverflow = 1U,               /*!< Load when the PDB counter overflows (reaches the MOD
                                                              register value). */
-    kPDB_LoadValueOnTriggerInput = 2U,                  /*!< Load a trigger input event is detected. */
+    kPDB_LoadValueOnTriggerInput                  = 2U, /*!< Load a trigger input event is detected. */
     kPDB_LoadValueOnCounterOverflowOrTriggerInput = 3U, /*!< Load either when the PDB counter overflows or a trigger
                                                              input is detected. */
 } pdb_load_value_mode_t;
@@ -108,13 +107,13 @@ typedef enum _pdb_load_value_mode
  */
 typedef enum _pdb_prescaler_divider
 {
-    kPDB_PrescalerDivider1 = 0U,   /*!< Divider x1. */
-    kPDB_PrescalerDivider2 = 1U,   /*!< Divider x2. */
-    kPDB_PrescalerDivider4 = 2U,   /*!< Divider x4. */
-    kPDB_PrescalerDivider8 = 3U,   /*!< Divider x8. */
-    kPDB_PrescalerDivider16 = 4U,  /*!< Divider x16. */
-    kPDB_PrescalerDivider32 = 5U,  /*!< Divider x32. */
-    kPDB_PrescalerDivider64 = 6U,  /*!< Divider x64. */
+    kPDB_PrescalerDivider1   = 0U, /*!< Divider x1. */
+    kPDB_PrescalerDivider2   = 1U, /*!< Divider x2. */
+    kPDB_PrescalerDivider4   = 2U, /*!< Divider x4. */
+    kPDB_PrescalerDivider8   = 3U, /*!< Divider x8. */
+    kPDB_PrescalerDivider16  = 4U, /*!< Divider x16. */
+    kPDB_PrescalerDivider32  = 5U, /*!< Divider x32. */
+    kPDB_PrescalerDivider64  = 6U, /*!< Divider x64. */
     kPDB_PrescalerDivider128 = 7U, /*!< Divider x128. */
 } pdb_prescaler_divider_t;
 
@@ -125,7 +124,7 @@ typedef enum _pdb_prescaler_divider
  */
 typedef enum _pdb_divider_multiplication_factor
 {
-    kPDB_DividerMultiplicationFactor1 = 0U,  /*!< Multiplication factor is 1. */
+    kPDB_DividerMultiplicationFactor1  = 0U, /*!< Multiplication factor is 1. */
     kPDB_DividerMultiplicationFactor10 = 1U, /*!< Multiplication factor is 10. */
     kPDB_DividerMultiplicationFactor20 = 2U, /*!< Multiplication factor is 20. */
     kPDB_DividerMultiplicationFactor40 = 3U, /*!< Multiplication factor is 40. */
@@ -139,21 +138,21 @@ typedef enum _pdb_divider_multiplication_factor
  */
 typedef enum _pdb_trigger_input_source
 {
-    kPDB_TriggerInput0 = 0U,    /*!< Trigger-In 0. */
-    kPDB_TriggerInput1 = 1U,    /*!< Trigger-In 1. */
-    kPDB_TriggerInput2 = 2U,    /*!< Trigger-In 2. */
-    kPDB_TriggerInput3 = 3U,    /*!< Trigger-In 3. */
-    kPDB_TriggerInput4 = 4U,    /*!< Trigger-In 4. */
-    kPDB_TriggerInput5 = 5U,    /*!< Trigger-In 5. */
-    kPDB_TriggerInput6 = 6U,    /*!< Trigger-In 6. */
-    kPDB_TriggerInput7 = 7U,    /*!< Trigger-In 7. */
-    kPDB_TriggerInput8 = 8U,    /*!< Trigger-In 8. */
-    kPDB_TriggerInput9 = 9U,    /*!< Trigger-In 9. */
-    kPDB_TriggerInput10 = 10U,  /*!< Trigger-In 10. */
-    kPDB_TriggerInput11 = 11U,  /*!< Trigger-In 11. */
-    kPDB_TriggerInput12 = 12U,  /*!< Trigger-In 12. */
-    kPDB_TriggerInput13 = 13U,  /*!< Trigger-In 13. */
-    kPDB_TriggerInput14 = 14U,  /*!< Trigger-In 14. */
+    kPDB_TriggerInput0   = 0U,  /*!< Trigger-In 0. */
+    kPDB_TriggerInput1   = 1U,  /*!< Trigger-In 1. */
+    kPDB_TriggerInput2   = 2U,  /*!< Trigger-In 2. */
+    kPDB_TriggerInput3   = 3U,  /*!< Trigger-In 3. */
+    kPDB_TriggerInput4   = 4U,  /*!< Trigger-In 4. */
+    kPDB_TriggerInput5   = 5U,  /*!< Trigger-In 5. */
+    kPDB_TriggerInput6   = 6U,  /*!< Trigger-In 6. */
+    kPDB_TriggerInput7   = 7U,  /*!< Trigger-In 7. */
+    kPDB_TriggerInput8   = 8U,  /*!< Trigger-In 8. */
+    kPDB_TriggerInput9   = 9U,  /*!< Trigger-In 9. */
+    kPDB_TriggerInput10  = 10U, /*!< Trigger-In 10. */
+    kPDB_TriggerInput11  = 11U, /*!< Trigger-In 11. */
+    kPDB_TriggerInput12  = 12U, /*!< Trigger-In 12. */
+    kPDB_TriggerInput13  = 13U, /*!< Trigger-In 13. */
+    kPDB_TriggerInput14  = 14U, /*!< Trigger-In 14. */
     kPDB_TriggerSoftware = 15U, /*!< Trigger-In 15, software trigger. */
 } pdb_trigger_input_source_t;
 
@@ -467,9 +466,11 @@ static inline void PDB_SetCounterDelayValue(PDB_Type *base, uint32_t value)
  * @param channel Channel index for ADC instance.
  * @param config  Pointer to the configuration structure. See "pdb_adc_pretrigger_config_t".
  */
-static inline void PDB_SetADCPreTriggerConfig(PDB_Type *base, pdb_adc_trigger_channel_t channel, pdb_adc_pretrigger_config_t *config)
+static inline void PDB_SetADCPreTriggerConfig(PDB_Type *base,
+                                              pdb_adc_trigger_channel_t channel,
+                                              pdb_adc_pretrigger_config_t *config)
 {
-    assert(channel < PDB_C1_COUNT);
+    assert(channel < FSL_FEATURE_PDB_CHANNEL_COUNT);
     assert(NULL != config);
 
     base->CH[channel].C1 = PDB_C1_BB(config->enableBackToBackOperationMask) | PDB_C1_TOS(config->enableOutputMask) |
@@ -487,10 +488,13 @@ static inline void PDB_SetADCPreTriggerConfig(PDB_Type *base, pdb_adc_trigger_ch
  * @param pretriggerNumber Channel group index for ADC instance.
  * @param value            Setting value for ADC pre-trigger delay event. 16-bit is available.
  */
-static inline void PDB_SetADCPreTriggerDelayValue(PDB_Type *base, pdb_adc_trigger_channel_t channel, pdb_adc_pretrigger_t pretriggerNumber, uint32_t value)
+static inline void PDB_SetADCPreTriggerDelayValue(PDB_Type *base,
+                                                  pdb_adc_trigger_channel_t channel,
+                                                  pdb_adc_pretrigger_t pretriggerNumber,
+                                                  uint32_t value)
 {
-    assert(channel < PDB_C1_COUNT);
-    assert(pretriggerNumber < PDB_DLY_COUNT2);
+    assert(channel < FSL_FEATURE_PDB_CHANNEL_COUNT);
+    assert(pretriggerNumber < FSL_FEATURE_PDB_CHANNEL_PRE_TRIGGER_COUNT);
     /* xx_COUNT2 is actually the count for pre-triggers in header file. xx_COUNT is used for the count of channels. */
 
     base->CH[channel].DLY[pretriggerNumber] = PDB_DLY_DLY(value);
@@ -506,7 +510,7 @@ static inline void PDB_SetADCPreTriggerDelayValue(PDB_Type *base, pdb_adc_trigge
  */
 static inline uint32_t PDB_GetADCPreTriggerStatusFlags(PDB_Type *base, pdb_adc_trigger_channel_t channel)
 {
-    assert(channel < PDB_C1_COUNT);
+    assert(channel < FSL_FEATURE_PDB_CHANNEL_COUNT);
 
     return base->CH[channel].S;
 }
@@ -520,7 +524,7 @@ static inline uint32_t PDB_GetADCPreTriggerStatusFlags(PDB_Type *base, pdb_adc_t
  */
 static inline void PDB_ClearADCPreTriggerStatusFlags(PDB_Type *base, pdb_adc_trigger_channel_t channel, uint32_t mask)
 {
-    assert(channel < PDB_C1_COUNT);
+    assert(channel < FSL_FEATURE_PDB_CHANNEL_COUNT);
 
     base->CH[channel].S &= ~mask;
 }
@@ -545,7 +549,7 @@ void PDB_SetDACTriggerConfig(PDB_Type *base, pdb_dac_trigger_channel_t channel, 
 /*!
  * @brief Sets the value for the DAC interval event.
  *
- * This fucntion sets the value for DAC interval event. DAC interval trigger triggers the DAC module to update
+ * This function sets the value for DAC interval event. DAC interval trigger triggers the DAC module to update
  * the buffer when the DAC interval counter is equal to the set value.
  *
  * @param base    PDB peripheral base address.
@@ -554,7 +558,7 @@ void PDB_SetDACTriggerConfig(PDB_Type *base, pdb_dac_trigger_channel_t channel, 
  */
 static inline void PDB_SetDACTriggerIntervalValue(PDB_Type *base, pdb_dac_trigger_channel_t channel, uint32_t value)
 {
-    assert(channel < PDB_INT_COUNT);
+    assert(channel < FSL_FEATURE_PDB_DAC_INTERVAL_TRIGGER_COUNT);
 
     base->DAC[channel].INT = PDB_INT_INT(value);
 }
@@ -576,7 +580,7 @@ static inline void PDB_SetDACTriggerIntervalValue(PDB_Type *base, pdb_dac_trigge
  */
 static inline void PDB_EnablePulseOutTrigger(PDB_Type *base, pdb_pulse_out_channel_mask_t channelMask, bool enable)
 {
-    assert(channelMask < (1 << PDB_PODLY_COUNT));
+    assert(channelMask < (1 << FSL_FEATURE_PDB_PULSE_OUT_COUNT));
 
     if (enable)
     {
@@ -601,9 +605,12 @@ static inline void PDB_EnablePulseOutTrigger(PDB_Type *base, pdb_pulse_out_chann
  * @param value1  Setting value for pulse out high.
  * @param value2  Setting value for pulse out low.
  */
-static inline void PDB_SetPulseOutTriggerDelayValue(PDB_Type *base, pdb_pulse_out_trigger_channel_t channel, uint32_t value1, uint32_t value2)
+static inline void PDB_SetPulseOutTriggerDelayValue(PDB_Type *base,
+                                                    pdb_pulse_out_trigger_channel_t channel,
+                                                    uint32_t value1,
+                                                    uint32_t value2)
 {
-    assert(channel < PDB_PODLY_COUNT);
+    assert(channel < FSL_FEATURE_PDB_PULSE_OUT_COUNT);
 
     base->PODLY[channel] = PDB_PODLY_DLY1(value1) | PDB_PODLY_DLY2(value2);
 }

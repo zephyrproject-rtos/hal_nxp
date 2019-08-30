@@ -2,7 +2,7 @@
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -59,7 +59,7 @@ void INPUTMUX_Init(INPUTMUX_Type *base);
  * @param connection Selects connection.
  *
  * @retval None.
-*/
+ */
 void INPUTMUX_AttachSignal(INPUTMUX_Type *base, uint32_t index, inputmux_connection_t connection);
 
 #if defined(FSL_FEATURE_INPUTMUX_HAS_SIGNAL_ENA)
@@ -73,7 +73,7 @@ void INPUTMUX_AttachSignal(INPUTMUX_Type *base, uint32_t index, inputmux_connect
  * @param enable Selects enable or disable.
  *
  * @retval None.
-*/
+ */
 void INPUTMUX_EnableSignal(INPUTMUX_Type *base, inputmux_signal_t signal, bool enable);
 #endif
 

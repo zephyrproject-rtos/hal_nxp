@@ -130,7 +130,7 @@ void DAC_GetDefaultConfig(dac_config_t *config)
     memset(config, 0, sizeof(*config));
 
     config->referenceVoltageSource = kDAC_ReferenceVoltageSourceVref2;
-    config->enableLowPowerMode = false;
+    config->enableLowPowerMode     = false;
 }
 
 /*!
@@ -154,12 +154,11 @@ void DAC_SetBufferConfig(DAC_Type *base, const dac_buffer_config_t *config)
     base->C0 = tmp8;
 
     /* DACx_C1. */
-    tmp8 = base->C1 &
-           ~(
+    tmp8 = base->C1 & ~(
 #if defined(FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION) && FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION
-               DAC_C1_DACBFWM_MASK |
+                          DAC_C1_DACBFWM_MASK |
 #endif /* FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION */
-               DAC_C1_DACBFMD_MASK);
+                          DAC_C1_DACBFMD_MASK);
 #if defined(FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION) && FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION
     tmp8 |= DAC_C1_DACBFWM(config->watermark);
 #endif /* FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION */
@@ -196,7 +195,7 @@ void DAC_GetDefaultBufferConfig(dac_buffer_config_t *config)
 #if defined(FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION) && FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION
     config->watermark = kDAC_BufferWatermark1Word;
 #endif /* FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION */
-    config->workMode = kDAC_BufferWorkAsNormalMode;
+    config->workMode   = kDAC_BufferWorkAsNormalMode;
     config->upperLimit = DAC_DATL_COUNT - 1U;
 }
 

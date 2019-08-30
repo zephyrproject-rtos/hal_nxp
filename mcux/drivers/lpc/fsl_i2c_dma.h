@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_I2C_DMA_H_
@@ -67,7 +67,7 @@ extern "C" {
  */
 
 /*!
- * @brief Init the I2C handle which is used in transcational functions
+ * @brief Init the I2C handle which is used in transactional functions
  *
  * @param base I2C peripheral base address
  * @param handle pointer to i2c_master_dma_handle_t structure

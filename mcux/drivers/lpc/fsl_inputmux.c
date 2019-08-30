@@ -52,7 +52,7 @@ void INPUTMUX_Init(INPUTMUX_Type *base)
  * param connection Selects connection.
  *
  * retval None.
-*/
+ */
 void INPUTMUX_AttachSignal(INPUTMUX_Type *base, uint32_t index, inputmux_connection_t connection)
 {
     uint32_t pmux_id;
@@ -77,7 +77,7 @@ void INPUTMUX_AttachSignal(INPUTMUX_Type *base, uint32_t index, inputmux_connect
  * param enable Selects enable or disable.
  *
  * retval None.
-*/
+ */
 void INPUTMUX_EnableSignal(INPUTMUX_Type *base, inputmux_signal_t signal, bool enable)
 {
     uint32_t ena_id;

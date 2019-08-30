@@ -41,8 +41,8 @@ status_t FLEXNVM_Init(flexnvm_config_t *config)
         return kStatus_FTFx_InvalidArgument;
     }
 
-    config->ftfxConfig.flashDesc.type = kFTFx_MemTypeFlexnvm;
-    config->ftfxConfig.flashDesc.index = 0;
+    config->ftfxConfig.flashDesc.type = (uint8_t)kFTFx_MemTypeFlexnvm;
+    config->ftfxConfig.flashDesc.index = 0U;
 
     /* Set Flexnvm memory operation parameters */
     config->ftfxConfig.opsConfig.addrAligment.blockWriteUnitSize = FSL_FEATURE_FLASH_FLEX_NVM_BLOCK_WRITE_UNIT_SIZE;
@@ -213,7 +213,7 @@ status_t FLEXNVM_EepromWrite(flexnvm_config_t *config, uint32_t start, uint8_t *
     returnCode = kStatus_FTFx_Success;
 
     /* Switch function of FlexRAM if needed */
-    if (!(FTFx->FCNFG & FTFx_FCNFG_EEERDY_MASK))
+    if (0U == (FTFx->FCNFG & FTFx_FCNFG_EEERDY_MASK))
     {
         needSwitchFlexRamMode = true;
 
@@ -225,36 +225,36 @@ status_t FLEXNVM_EepromWrite(flexnvm_config_t *config, uint32_t start, uint8_t *
     }
 
     /* Write data to FlexRAM when it is used as EEPROM emulator */
-    while (lengthInBytes > 0)
+    while (lengthInBytes > 0U)
     {
-        if ((!(start & 0x3U)) && (lengthInBytes >= 4))
+        if ((0U == (start & 0x3U)) && (0U == ((uint32_t)src & 0x3U)) && (lengthInBytes >= 4U))
         {
-            *(uint32_t *)start = *(uint32_t *)src;
-            start += 4;
-            src += 4;
-            lengthInBytes -= 4;
+            *(uint32_t *)start = *(uint32_t *)(uint32_t)src;
+            start += 4U;
+            src = &src[4];
+            lengthInBytes -= 4U;
         }
-        else if ((!(start & 0x1U)) && (lengthInBytes >= 2))
+        else if ((0U == (start & 0x1U)) && (0U == ((uint32_t)src & 0x1U)) && (lengthInBytes >= 2U))
         {
-            *(uint16_t *)start = *(uint16_t *)src;
-            start += 2;
-            src += 2;
-            lengthInBytes -= 2;
+            *(uint16_t *)start = *(uint16_t *)(uint32_t)src;
+            start += 2U;
+            src = &src[2];
+            lengthInBytes -= 2U;
         }
         else
         {
             *(uint8_t *)start = *src;
-            start += 1;
-            src += 1;
-            lengthInBytes -= 1;
+            start += 1U;
+            src = &src[1];
+            lengthInBytes -= 1U;
         }
         /* Wait till EEERDY bit is set */
-        while (!(FTFx->FCNFG & FTFx_FCNFG_EEERDY_MASK))
+        while (0U == (FTFx->FCNFG & FTFx_FCNFG_EEERDY_MASK))
         {
         }
 
         /* Check for protection violation error */
-        if (FTFx->FSTAT & FTFx_FSTAT_FPVIOL_MASK)
+        if (0U != (FTFx->FSTAT & FTFx_FSTAT_FPVIOL_MASK))
         {
             return kStatus_FTFx_ProtectionViolation;
         }
@@ -280,7 +280,7 @@ status_t FLEXNVM_DflashSetProtection(flexnvm_config_t *config, uint8_t protectSt
         return kStatus_FTFx_InvalidArgument;
     }
 
-    if ((config->ftfxConfig.flashDesc.totalSize == 0) || (config->ftfxConfig.flashDesc.totalSize == 0xFFFFFFFFU))
+    if ((config->ftfxConfig.flashDesc.totalSize == 0U) || (config->ftfxConfig.flashDesc.totalSize == 0xFFFFFFFFU))
     {
         return kStatus_FTFx_CommandNotSupported;
     }
@@ -302,7 +302,7 @@ status_t FLEXNVM_DflashGetProtection(flexnvm_config_t *config, uint8_t *protectS
         return kStatus_FTFx_InvalidArgument;
     }
 
-    if ((config->ftfxConfig.flashDesc.totalSize == 0) || (config->ftfxConfig.flashDesc.totalSize == 0xFFFFFFFFU))
+    if ((config->ftfxConfig.flashDesc.totalSize == 0U) || (config->ftfxConfig.flashDesc.totalSize == 0xFFFFFFFFU))
     {
         return kStatus_FTFx_CommandNotSupported;
     }
@@ -319,7 +319,7 @@ status_t FLEXNVM_EepromSetProtection(flexnvm_config_t *config, uint8_t protectSt
         return kStatus_FTFx_InvalidArgument;
     }
 
-    if ((config->ftfxConfig.eepromTotalSize == 0) || (config->ftfxConfig.eepromTotalSize == 0xFFFFU))
+    if ((config->ftfxConfig.eepromTotalSize == 0U) || (config->ftfxConfig.eepromTotalSize == 0xFFFFU))
     {
         return kStatus_FTFx_CommandNotSupported;
     }
@@ -341,7 +341,7 @@ status_t FLEXNVM_EepromGetProtection(flexnvm_config_t *config, uint8_t *protectS
         return kStatus_FTFx_InvalidArgument;
     }
 
-    if ((config->ftfxConfig.eepromTotalSize == 0) || (config->ftfxConfig.eepromTotalSize == 0xFFFFU))
+    if ((config->ftfxConfig.eepromTotalSize == 0U) || (config->ftfxConfig.eepromTotalSize == 0xFFFFU))
     {
         return kStatus_FTFx_CommandNotSupported;
     }
@@ -358,35 +358,41 @@ status_t FLEXNVM_GetProperty(flexnvm_config_t *config, flexnvm_property_tag_t wh
         return kStatus_FTFx_InvalidArgument;
     }
 
-    switch (whichProperty)
+    if (whichProperty == kFLEXNVM_PropertyDflashSectorSize)
     {
-        case kFLEXNVM_PropertyDflashSectorSize:
-            *value = config->ftfxConfig.flashDesc.sectorSize;
-            break;
-        case kFLEXNVM_PropertyDflashTotalSize:
-            *value = config->ftfxConfig.flashDesc.totalSize;
-            break;
-        case kFLEXNVM_PropertyDflashBlockSize:
-            *value = config->ftfxConfig.flashDesc.totalSize / config->ftfxConfig.flashDesc.blockCount;
-            break;
-        case kFLEXNVM_PropertyDflashBlockCount:
-            *value = config->ftfxConfig.flashDesc.blockCount;
-            break;
-        case kFLEXNVM_PropertyDflashBlockBaseAddr:
-            *value = config->ftfxConfig.flashDesc.blockBase;
-            break;
-        case kFLEXNVM_PropertyFlexRamBlockBaseAddr:
-            *value = config->ftfxConfig.flexramBlockBase;
-            break;
-        case kFLEXNVM_PropertyFlexRamTotalSize:
-            *value = config->ftfxConfig.flexramTotalSize;
-            break;
-        case kFLEXNVM_PropertyEepromTotalSize:
-            *value = config->ftfxConfig.eepromTotalSize;
-            break;
-
-        default: /* catch inputs that are not recognized */
-            return kStatus_FTFx_UnknownProperty;
+        *value = config->ftfxConfig.flashDesc.sectorSize;
+    }
+    else if (whichProperty == kFLEXNVM_PropertyDflashTotalSize)
+    {
+        *value = config->ftfxConfig.flashDesc.totalSize;
+    }
+    else if (whichProperty == kFLEXNVM_PropertyDflashBlockSize)
+    {
+        *value = config->ftfxConfig.flashDesc.totalSize / config->ftfxConfig.flashDesc.blockCount;
+    }
+    else if (whichProperty == kFLEXNVM_PropertyDflashBlockCount)
+    {
+        *value = config->ftfxConfig.flashDesc.blockCount;
+    }
+    else if (whichProperty == kFLEXNVM_PropertyDflashBlockBaseAddr)
+    {
+        *value = config->ftfxConfig.flashDesc.blockBase;
+    }
+    else if (whichProperty == kFLEXNVM_PropertyFlexRamBlockBaseAddr)
+    {
+        *value = config->ftfxConfig.flexramBlockBase;
+    }
+    else if (whichProperty == kFLEXNVM_PropertyFlexRamTotalSize)
+    {
+        *value = config->ftfxConfig.flexramTotalSize;
+    }
+    else if (whichProperty == kFLEXNVM_PropertyEepromTotalSize)
+    {
+        *value = config->ftfxConfig.eepromTotalSize;
+    }
+    else /* catch inputs that are not recognized */
+    {
+        return kStatus_FTFx_UnknownProperty;
     }
 
     return kStatus_FTFx_Success;
