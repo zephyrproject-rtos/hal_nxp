@@ -19,6 +19,14 @@
     #define USB_DEVICE_CONFIG_EHCI (1U)
 #else
     #define USB_DEVICE_CONFIG_EHCI (0U)
+
+#ifdef CONFIG_USB_DC_NXP_IP3511FS
+    #define USB_DEVICE_CONFIG_LPCIP3511FS (1U)
+#else
+    #define USB_DEVICE_CONFIG_LPCIP3511FS (0U)
+#endif
+
+#define USB_DEVICE_CONFIG_LPCIP3511HS (0U)
 #endif
 
 /* Macro to define controller handle */
@@ -41,6 +49,9 @@ typedef void *usb_device_handle;
 #define USB_OSA_SR_ALLOC() int usbOsaCurrentSr
 #define USB_OSA_ENTER_CRITICAL() usbOsaCurrentSr = irq_lock()
 #define USB_OSA_EXIT_CRITICAL() irq_unlock(usbOsaCurrentSr)
+#define OSA_SR_ALLOC() int usbOsaCurrentSr
+#define OSA_ENTER_CRITICAL() usbOsaCurrentSr = irq_lock()
+#define OSA_EXIT_CRITICAL() irq_unlock(usbOsaCurrentSr)
 
 /* Control endpoint index */
 #define USB_CONTROL_ENDPOINT (0U)
@@ -51,7 +62,6 @@ typedef void *usb_device_handle;
 /* NXP SDK USB controller driver configuration macros */
 #define USB_BDT
 #define USB_GLOBAL
-#define USB_DATA_ALIGN_SIZE 4
 #define USB_RAM_ADDRESS_ALIGNMENT(n) __aligned(n)
 
 /* EHCI */
@@ -146,6 +156,8 @@ typedef enum _usb_device_control_type {
 	kUSB_DeviceControlDcdInitModule,
 	kUSB_DeviceControlDcdDeinitModule,
 #endif
+    kUSB_DeviceControlPreSetDeviceAddress, /*!< Pre set device address */
+    kUSB_DeviceControlUpdateHwTick,        /*!< update hardware tick */
 } usb_device_control_type_t;
 
 /* Available notify types for device notification */
