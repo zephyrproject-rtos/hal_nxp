@@ -31,8 +31,8 @@
 /*@}*/
 /*! @name Driver version */
 /*@{*/
-/*! @brief RTWDOG driver version 2.0.1. */
-#define FSL_RTWDOG_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief RTWDOG driver version 2.1.0. */
+#define FSL_RTWDOG_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief Describes RTWDOG clock source. */
@@ -161,7 +161,7 @@ void RTWDOG_GetDefaultConfig(rtwdog_config_t *config);
  * @param base   RTWDOG peripheral base address.
  * @param config The configuration of the RTWDOG.
  */
-void RTWDOG_Init(RTWDOG_Type *base, const rtwdog_config_t *config);
+AT_QUICKACCESS_SECTION_CODE(void RTWDOG_Init(RTWDOG_Type *base, const rtwdog_config_t *config));
 
 /*!
  * @brief De-initializes the RTWDOG module.

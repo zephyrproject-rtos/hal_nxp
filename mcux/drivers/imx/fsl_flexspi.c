@@ -27,6 +27,18 @@ enum
     kFLEXSPI_DelayCellUnitMax = 225, /* 225ps. */
 };
 
+enum
+{
+    kFLEXSPI_FlashASampleClockSlaveDelayLocked =
+        FLEXSPI_STS2_ASLVLOCK_MASK, /* Flash A sample clock slave delay line locked. */
+    kFLEXSPI_FlashASampleClockRefDelayLocked =
+        FLEXSPI_STS2_AREFLOCK_MASK, /* Flash A sample clock reference delay line locked. */
+    kFLEXSPI_FlashBSampleClockSlaveDelayLocked =
+        FLEXSPI_STS2_BSLVLOCK_MASK, /* Flash B sample clock slave delay line locked. */
+    kFLEXSPI_FlashBSampleClockRefDelayLocked =
+        FLEXSPI_STS2_BREFLOCK_MASK, /* Flash B sample clock reference delay line locked. */
+};
+
 /*! @brief Common sets of flags used by the driver. */
 enum _flexspi_flag_constants
 {
@@ -95,6 +107,10 @@ static const clock_ip_name_t s_flexspiClock[] = FLEXSPI_CLOCKS;
 static void *s_flexspiHandle[ARRAY_SIZE(s_flexspiBases)];
 #endif
 
+#if defined(FSL_FEATURE_FLEXSPI_HAS_RESET) && FSL_FEATURE_FLEXSPI_HAS_RESET
+/*! @brief Pointers to FLEXSPI resets for each instance. */
+static const reset_ip_name_t s_flexspiResets[] = FLEXSPI_RSTS;
+#endif
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -225,8 +241,12 @@ void FLEXSPI_Init(FLEXSPI_Type *base, const flexspi_config_t *config)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the flexspi clock */
     CLOCK_EnableClock(s_flexspiClock[FLEXSPI_GetInstance(base)]);
-
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+#if defined(FSL_FEATURE_FLEXSPI_HAS_RESET) && FSL_FEATURE_FLEXSPI_HAS_RESET
+    /* Reset the FLEXSPI module */
+    RESET_PeripheralReset(s_flexspiResets[FLEXSPI_GetInstance(base)]);
+#endif
 
     /* Reset peripheral before configuring it. */
     base->MCR0 &= ~FLEXSPI_MCR0_MDIS_MASK;
@@ -325,7 +345,8 @@ void FLEXSPI_GetDefaultConfig(flexspi_config_t *config)
     memset(config->ahbConfig.buffer, 0, sizeof(config->ahbConfig.buffer));
     for (uint8_t i = 0; i < FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT; i++)
     {
-        config->ahbConfig.buffer[i].bufferSize = 256; /* Default buffer size 256 bytes*/
+        config->ahbConfig.buffer[i].enablePrefetch = true; /* Default enable AHB prefetch. */
+        config->ahbConfig.buffer[i].bufferSize     = 256;  /* Default buffer size 256 bytes*/
     }
     config->ahbConfig.enableClearAHBBufferOpt = false;
     config->ahbConfig.enableReadAddressOpt    = false;
@@ -360,6 +381,7 @@ void FLEXSPI_Deinit(FLEXSPI_Type *base)
 void FLEXSPI_SetFlashConfig(FLEXSPI_Type *base, flexspi_device_config_t *config, flexspi_port_t port)
 {
     uint32_t configValue = 0;
+    uint32_t statusValue = 0;
     uint8_t index        = port >> 1; /* PortA with index 0, PortB with index 1. */
 
     /* Wait for bus idle before change flash configuration. */
@@ -400,7 +422,8 @@ void FLEXSPI_SetFlashConfig(FLEXSPI_Type *base, flexspi_device_config_t *config,
     base->FLSHCR2[port] = configValue;
 
     /* Configure DLL. */
-    base->DLLCR[index] = FLEXSPI_ConfigureDll(base, config);
+    configValue        = FLEXSPI_ConfigureDll(base, config);
+    base->DLLCR[index] = configValue;
 
     /* Configure write mask. */
     if (config->enableWriteMask)
@@ -425,6 +448,25 @@ void FLEXSPI_SetFlashConfig(FLEXSPI_Type *base, flexspi_device_config_t *config,
 
     /* Exit stop mode. */
     base->MCR0 &= ~FLEXSPI_MCR0_MDIS_MASK;
+
+    /* According to ERR011377, need to delay at least 100 NOPs to ensure the DLL is locked. */
+    statusValue = (index == 0) ?
+                      (kFLEXSPI_FlashASampleClockSlaveDelayLocked | kFLEXSPI_FlashASampleClockRefDelayLocked) :
+                      (kFLEXSPI_FlashBSampleClockSlaveDelayLocked | kFLEXSPI_FlashBSampleClockRefDelayLocked);
+
+    if (configValue & FLEXSPI_DLLCR_DLLEN_MASK)
+    {
+        /* Wait slave delay line locked and slave reference delay line locked. */
+        while ((base->STS2 & statusValue) != statusValue)
+        {
+        }
+
+        /* Wait at least 100 NOPs*/
+        for (uint8_t delay = 100; delay > 0; delay--)
+        {
+            __NOP();
+        }
+    }
 }
 
 /*! brief Updates the LUT table.
@@ -461,6 +503,29 @@ void FLEXSPI_UpdateLUT(FLEXSPI_Type *base, uint32_t index, const uint32_t *cmd, 
     /* Lock LUT. */
     base->LUTKEY = FLEXSPI_LUT_KEY_VAL;
     base->LUTCR  = 0x01;
+}
+
+/*! brief Update read sample clock source
+ *
+ * param base FLEXSPI peripheral base address.
+ * param clockSource clockSource of type #flexspi_read_sample_clock_t
+ */
+void FLEXSPI_UpdateRxSampleClock(FLEXSPI_Type *base, flexspi_read_sample_clock_t clockSource)
+{
+    uint32_t mcr0Val;
+
+    /* Wait for bus idle before change flash configuration. */
+    while (!FLEXSPI_GetBusIdleStatus(base))
+    {
+    }
+
+    mcr0Val = base->MCR0;
+    mcr0Val &= ~FLEXSPI_MCR0_RXCLKSRC_MASK;
+    mcr0Val |= FLEXSPI_MCR0_RXCLKSRC(clockSource);
+    base->MCR0 = mcr0Val;
+
+    /* Reset peripheral. */
+    FLEXSPI_SoftwareReset(base);
 }
 
 /*!
@@ -835,13 +900,21 @@ void FLEXSPI_TransferAbort(FLEXSPI_Type *base, flexspi_handle_t *handle)
  */
 void FLEXSPI_TransferHandleIRQ(FLEXSPI_Type *base, flexspi_handle_t *handle)
 {
-    uint8_t status;
+    uint32_t status;
     status_t result;
+    uint32_t intEnableStatus;
     uint8_t txWatermark;
     uint8_t rxWatermark;
     uint8_t i = 0;
 
-    status = base->INTR;
+    status          = base->INTR;
+    intEnableStatus = base->INTEN;
+
+    /* Check if interrupt is enabled and status is alerted. */
+    if ((status & intEnableStatus) == 0U)
+    {
+        return;
+    }
 
     result = FLEXSPI_CheckAndClearError(base, status);
 

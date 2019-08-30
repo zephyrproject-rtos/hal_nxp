@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018 - 2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -456,7 +456,7 @@ void CLOCK_InitSysPll(const clock_sys_pll_config_t *config)
         CCM_ANALOG_PLL_SYS_ENABLE_MASK | CCM_ANALOG_PLL_SYS_DIV_SELECT(config->loopDivider);
 
     /* Initialize the fractional mode */
-    CCM_ANALOG->PLL_SYS_NUM = CCM_ANALOG_PLL_SYS_NUM_A(config->numerator);
+    CCM_ANALOG->PLL_SYS_NUM   = CCM_ANALOG_PLL_SYS_NUM_A(config->numerator);
     CCM_ANALOG->PLL_SYS_DENOM = CCM_ANALOG_PLL_SYS_DENOM_B(config->denominator);
 
     /* Initialize the spread spectrum mode */
@@ -529,7 +529,7 @@ void CLOCK_InitAudioPll(const clock_audio_pll_config_t *config)
     CCM_ANALOG->PLL_AUDIO = (CCM_ANALOG->PLL_AUDIO & (~CCM_ANALOG_PLL_AUDIO_BYPASS_CLK_SRC_MASK)) |
                             CCM_ANALOG_PLL_AUDIO_BYPASS_MASK | CCM_ANALOG_PLL_AUDIO_BYPASS_CLK_SRC(config->src);
 
-    CCM_ANALOG->PLL_AUDIO_NUM = CCM_ANALOG_PLL_AUDIO_NUM_A(config->numerator);
+    CCM_ANALOG->PLL_AUDIO_NUM   = CCM_ANALOG_PLL_AUDIO_NUM_A(config->numerator);
     CCM_ANALOG->PLL_AUDIO_DENOM = CCM_ANALOG_PLL_AUDIO_DENOM_B(config->denominator);
 
     /*
@@ -940,4 +940,52 @@ uint32_t CLOCK_GetUsb1PfdFreq(clock_pfd_t pfd)
     freq *= 18U;
 
     return freq;
+}
+
+/*!
+ * brief Use DWT to delay at least for some time.
+ * Please note that, this API will calculate the microsecond period with the maximum devices
+ * supported CPU frequency, so this API will only delay for at least the given microseconds, if precise
+ * delay count was needed, please implement a new timer count to achieve this function.
+ *
+ * param delay_us  Delay time in unit of microsecond.
+ */
+__attribute__((weak)) void SDK_DelayAtLeastUs(uint32_t delay_us)
+{
+    assert(0U != delay_us);
+    uint64_t count  = 0U;
+    uint32_t period = SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY / 1000000;
+
+    /* Make sure the DWT trace fucntion is enabled. */
+    if (CoreDebug_DEMCR_TRCENA_Msk != (CoreDebug_DEMCR_TRCENA_Msk & CoreDebug->DEMCR))
+    {
+        CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+    }
+
+    /* CYCCNT not supported on this device. */
+    assert(DWT_CTRL_NOCYCCNT_Msk != (DWT->CTRL & DWT_CTRL_NOCYCCNT_Msk));
+
+    /* If CYCCENT has already been enabled, read directly, otherwise, need enable it. */
+    if (DWT_CTRL_CYCCNTENA_Msk != (DWT_CTRL_CYCCNTENA_Msk & DWT->CTRL))
+    {
+        DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+    }
+
+    /* Calculate the count ticks. */
+    count = DWT->CYCCNT;
+    count += (uint64_t)period * delay_us;
+
+    if (count > 0xFFFFFFFFUL)
+    {
+        count -= 0xFFFFFFFFUL;
+        /* wait for cyccnt overflow. */
+        while (count < DWT->CYCCNT)
+        {
+        }
+    }
+
+    /* Wait for cyccnt reach count value. */
+    while (count > DWT->CYCCNT)
+    {
+    }
 }

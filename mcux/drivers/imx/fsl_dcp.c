@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 NXP
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  *
@@ -146,6 +146,10 @@ static void dcp_clear_status(DCP_Type *base)
 {
     volatile uint32_t *dcpStatClrPtr = &base->STAT + 2u;
     *dcpStatClrPtr                   = 0xFFu;
+
+    while(base->STAT & 0xffu)
+    {
+    }
 }
 
 static void dcp_clear_channel_status(DCP_Type *base, uint32_t mask)
@@ -189,6 +193,11 @@ static status_t dcp_aes_set_sram_based_key(DCP_Type *base, dcp_handle_t *handle,
     return kStatus_Success;
 }
 
+/* Disable optimizations for GCC to prevent instruction reordering */
+#if defined(__GNUC__)
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+#endif
 static status_t dcp_schedule_work(DCP_Type *base, dcp_handle_t *handle, dcp_work_packet_t *dcpPacket)
 {
     status_t status;
@@ -236,7 +245,11 @@ static status_t dcp_schedule_work(DCP_Type *base, dcp_handle_t *handle, dcp_work
                 /* set out packet to DCP CMDPTR */
                 *cmdptr = (uint32_t)dcpPacket;
 
-                /* set the channel semaphore */
+                /* Make sure that all data memory accesses are completed before starting of the job */
+                __DSB();
+                __ISB();
+
+                /* set the channel semaphore to start the job */
                 *chsema = 1u;
             }
 
@@ -258,6 +271,9 @@ static status_t dcp_schedule_work(DCP_Type *base, dcp_handle_t *handle, dcp_work
 
     return status;
 }
+#if defined(__GNUC__)
+#pragma GCC pop_options
+#endif
 
 /*!
  * brief Set AES key to dcp_handle_t struct and optionally to DCP.
@@ -810,6 +826,7 @@ status_t DCP_WaitForChannelComplete(DCP_Type *base, dcp_handle_t *handle)
         return kStatus_Fail;
     }
 
+    dcp_clear_status(base);
     return kStatus_Success;
 }
 

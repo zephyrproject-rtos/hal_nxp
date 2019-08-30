@@ -1,17 +1,19 @@
 /*
 ** ###################################################################
-**     Processors:          MIMXRT1064CVL5A
+**     Processors:          MIMXRT1064CVJ5A
+**                          MIMXRT1064CVL5A
+**                          MIMXRT1064DVJ6A
 **                          MIMXRT1064DVL6A
 **
-**     Compilers:           Keil ARM C/C++ Compiler
-**                          Freescale C/C++ for Embedded ARM
+**     Compilers:           Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
+**                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1064RM Rev.B, 08/2018
-**     Version:             rev. 0.1, 2018-06-22
-**     Build:               b180820
+**     Reference manual:    IMXRT1064RM Rev.0.1, 12/2018
+**     Version:             rev. 1.1, 2018-11-27
+**     Build:               b190329
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +21,8 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2019 NXP
+**     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
 **
@@ -29,14 +32,18 @@
 **     Revisions:
 **     - rev. 0.1 (2018-06-22)
 **         Initial version.
+**     - rev. 1.0 (2018-11-16)
+**         Update header files to align with IMXRT1064RM Rev.0.
+**     - rev. 1.1 (2018-11-27)
+**         Update header files to align with IMXRT1064RM Rev.0.1.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1064
- * @version 0.1
- * @date 2018-06-22
+ * @version 1.1
+ * @date 2018-11-27
  * @brief Device specific configuration file for MIMXRT1064 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -146,6 +153,7 @@ void SystemCoreClockUpdate (void) {
             case CCM_CBCMR_PERIPH_CLK2_SEL(2U):
                 freq = (((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_BYPASS_CLK_SRC_MASK) >> CCM_ANALOG_PLL_SYS_BYPASS_CLK_SRC_SHIFT) == 0U) ?
                    CPU_XTAL_CLK_HZ : CPU_CLK1_HZ;
+                break;
 
             case CCM_CBCMR_PERIPH_CLK2_SEL(3U):
             default:

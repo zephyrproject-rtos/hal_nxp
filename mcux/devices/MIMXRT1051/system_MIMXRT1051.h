@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          MIMXRT1051CVJ5B
 **                          MIMXRT1051CVL5B
+**                          MIMXRT1051DVJ6B
 **                          MIMXRT1051DVL6B
 **
 **     Compilers:           Freescale C/C++ for Embedded ARM
@@ -12,7 +13,7 @@
 **
 **     Reference manual:    IMXRT1050RM Rev.2.1, 12/2018
 **     Version:             rev. 1.2, 2018-11-27
-**     Build:               b181205
+**     Build:               b190312
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -20,7 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2019 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause

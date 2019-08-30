@@ -252,6 +252,30 @@ void EDMA_SetMinorOffsetConfig(DMA_Type *base, uint32_t channel, const edma_mino
 }
 
 /*!
+ * brief Configures the eDMA channel preemption feature.
+ *
+ * This function configures the channel preemption attribute and the priority of the channel.
+ *
+ * param base eDMA peripheral base address.
+ * param channel eDMA channel number
+ * param config A pointer to the channel preemption configuration structure.
+ */
+void EDMA_SetChannelPreemptionConfig(DMA_Type *base, uint32_t channel, const edma_channel_Preemption_config_t *config)
+{
+    assert(channel < (uint32_t)FSL_FEATURE_EDMA_MODULE_CHANNEL);
+    assert(config != NULL);
+
+    bool tmpEnablePreemptAbility    = config->enablePreemptAbility;
+    bool tmpEnableChannelPreemption = config->enableChannelPreemption;
+    uint8_t tmpChannelPriority      = config->channelPriority;
+    volatile uint8_t *tmpReg        = &base->DCHPRI3;
+
+    tmpReg[DMA_DCHPRI_INDEX(channel)] =
+        (DMA_DCHPRI0_DPA((true == tmpEnablePreemptAbility ? 0U : 1U)) |
+         DMA_DCHPRI0_ECP((true == tmpEnableChannelPreemption ? 1U : 0U)) | DMA_DCHPRI0_CHPRI(tmpChannelPriority));
+}
+
+/*!
  * brief Sets the channel link for the eDMA transfer.
  *
  * This function configures either the minor link or the major link mode. The minor link means that the channel link is

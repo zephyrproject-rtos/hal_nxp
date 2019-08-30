@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright (c) 2017, NXP
+ * Copyright 2017, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,9 +24,6 @@
 #define YEAR_RANGE_START (1970U)
 #define YEAR_RANGE_END (2099U)
 
-#if !(defined(SNVS_HPCOMR_SW_SV_MASK))
-#define SNVS_HPCOMR_SW_SV_MASK (0x100U)
-#endif
 #if !(defined(SNVS_HPSR_PI_MASK))
 #define SNVS_HPSR_PI_MASK (0x2U)
 #endif
@@ -287,13 +284,13 @@ void SNVS_HP_RTC_Init(SNVS_Type *base, const snvs_hp_rtc_config_t *config)
     CLOCK_EnableClock(s_snvsHpClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
-    base->HPCOMR |= SNVS_HPCOMR_NPSWA_EN_MASK | SNVS_HPCOMR_SW_SV_MASK;
+    base->HPCOMR |= SNVS_HPCOMR_NPSWA_EN_MASK;
 
     base->HPCR = SNVS_HPCR_PI_FREQ(config->periodicInterruptFreq);
 
     if (config->rtcCalEnable)
     {
-        base->HPCR = SNVS_HPCR_HPCALB_VAL_MASK & (config->rtcCalValue << SNVS_HPCR_HPCALB_VAL_SHIFT);
+        base->HPCR |= SNVS_HPCR_HPCALB_VAL_MASK & (config->rtcCalValue << SNVS_HPCR_HPCALB_VAL_SHIFT);
         base->HPCR |= SNVS_HPCR_HPCALB_EN_MASK;
     }
 }

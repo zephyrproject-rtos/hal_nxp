@@ -11,15 +11,15 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1020RM Rev.1, 12/2018
-**     Version:             rev. 1.0, 2018-11-27
-**     Build:               b181127
+**     Reference manual:    IMXRT1020RM Rev.1, 12/2018 | IMXRT1020SRM Rev.3
+**     Version:             rev. 1.1, 2019-04-29
+**     Build:               b190429
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1021
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2019 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -32,14 +32,16 @@
 **         Initial version.
 **     - rev. 1.0 (2018-11-27)
 **         Update header files to align with IMXRT1020RM Rev.1.
+**     - rev. 1.1 (2019-04-29)
+**         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1021.h
- * @version 1.0
- * @date 2018-11-27
+ * @version 1.1
+ * @date 2019-04-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT1021
  *
  * CMSIS Peripheral Access Layer for MIMXRT1021
@@ -52,7 +54,7 @@
  * compatible) */
 #define MCU_MEM_MAP_VERSION 0x0100U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
 
 
 /* ----------------------------------------------------------------------------
@@ -321,14 +323,14 @@ typedef enum _dma_request_source
     kDmaRequestMuxFlexPWM1ValueSub1 = 37|0x100U,   /**< FlexPWM1 Value sub-module1 */
     kDmaRequestMuxFlexPWM1ValueSub2 = 38|0x100U,   /**< FlexPWM1 Value sub-module2 */
     kDmaRequestMuxFlexPWM1ValueSub3 = 39|0x100U,   /**< FlexPWM1 Value sub-module3 */
-    kDmaRequestMuxQTIMER1CaptTimer0 = 48|0x100U,   /**< QTIMER1 Capture timer 0 */
-    kDmaRequestMuxQTIMER1CaptTimer1 = 49|0x100U,   /**< QTIMER1 Capture timer 1 */
-    kDmaRequestMuxQTIMER1CaptTimer2 = 50|0x100U,   /**< QTIMER1 Capture timer 2 */
-    kDmaRequestMuxQTIMER1CaptTimer3 = 51|0x100U,   /**< QTIMER1 Capture timer 3 */
-    kDmaRequestMuxQTIMER1Cmpld1Timer0Cmpld2Timer1 = 52|0x100U, /**< QTIMER1 cmpld1 in timer 0 or cmpld2 in timer 1 */
-    kDmaRequestMuxQTIMER1Cmpld1Timer1Cmpld2Timer0 = 53|0x100U, /**< QTIMER1 cmpld1 in timer 1 or cmpld2 in timer 0 */
-    kDmaRequestMuxQTIMER1Cmpld1Timer2Cmpld2Timer3 = 54|0x100U, /**< QTIMER1 cmpld1 in timer 2 or cmpld2 in timer 3 */
-    kDmaRequestMuxQTIMER1Cmpld1Timer3Cmpld2Timer2 = 55|0x100U, /**< QTIMER1 cmpld1 in timer 3 or cmpld2 in timer 2 */
+    kDmaRequestMuxQTIMER1CaptTimer0 = 48|0x100U,   /**< TMR1 Capture timer 0 */
+    kDmaRequestMuxQTIMER1CaptTimer1 = 49|0x100U,   /**< TMR1 Capture timer 1 */
+    kDmaRequestMuxQTIMER1CaptTimer2 = 50|0x100U,   /**< TMR1 Capture timer 2 */
+    kDmaRequestMuxQTIMER1CaptTimer3 = 51|0x100U,   /**< TMR1 Capture timer 3 */
+    kDmaRequestMuxQTIMER1Cmpld1Timer0Cmpld2Timer1 = 52|0x100U, /**< TMR1 cmpld1 in timer 0 or cmpld2 in timer 1 */
+    kDmaRequestMuxQTIMER1Cmpld1Timer1Cmpld2Timer0 = 53|0x100U, /**< TMR1 cmpld1 in timer 1 or cmpld2 in timer 0 */
+    kDmaRequestMuxQTIMER1Cmpld1Timer2Cmpld2Timer3 = 54|0x100U, /**< TMR1 cmpld1 in timer 2 or cmpld2 in timer 3 */
+    kDmaRequestMuxQTIMER1Cmpld1Timer3Cmpld2Timer2 = 55|0x100U, /**< TMR1 cmpld1 in timer 3 or cmpld2 in timer 2 */
     kDmaRequestMuxFlexIO1Request2Request3 = 64|0x100U, /**< FlexIO1 Request2 and Request3 */
     kDmaRequestMuxFlexIO1Request6Request7 = 65|0x100U, /**< FlexIO1 Request6 and Request7 */
     kDmaRequestMuxLPUART2Tx         = 66|0x100U,   /**< LPUART2 Transmit */
@@ -364,14 +366,14 @@ typedef enum _dma_request_source
     kDmaRequestMuxFlexPWM2ValueSub1 = 101|0x100U,  /**< FlexPWM2 Value sub-module1 */
     kDmaRequestMuxFlexPWM2ValueSub2 = 102|0x100U,  /**< FlexPWM2 Value sub-module2 */
     kDmaRequestMuxFlexPWM2ValueSub3 = 103|0x100U,  /**< FlexPWM2 Value sub-module3 */
-    kDmaRequestMuxQTIMER2CaptTimer0 = 112|0x100U,  /**< QTIMER2 Capture timer 0 */
-    kDmaRequestMuxQTIMER2CaptTimer1 = 113|0x100U,  /**< QTIMER2 Capture timer 1 */
-    kDmaRequestMuxQTIMER2CaptTimer2 = 114|0x100U,  /**< QTIMER2 Capture timer 2 */
-    kDmaRequestMuxQTIMER2CaptTimer3 = 115|0x100U,  /**< QTIMER2 Capture timer 3 */
-    kDmaRequestMuxQTIMER2Cmpld1Timer0Cmpld2Timer1 = 116|0x100U, /**< QTIMER2 cmpld1 in timer 0 or cmpld2 in timer 1 */
-    kDmaRequestMuxQTIMER2Cmpld1Timer1Cmpld2Timer0 = 117|0x100U, /**< QTIMER2 cmpld1 in timer 1 or cmpld2 in timer 0 */
-    kDmaRequestMuxQTIMER2Cmpld1Timer2Cmpld2Timer3 = 118|0x100U, /**< QTIMER2 cmpld1 in timer 2 or cmpld2 in timer 3 */
-    kDmaRequestMuxQTIMER2Cmpld1Timer3Cmpld2Timer2 = 119|0x100U, /**< QTIMER2 cmpld1 in timer 3 or cmpld2 in timer 2 */
+    kDmaRequestMuxQTIMER2CaptTimer0 = 112|0x100U,  /**< TMR2 Capture timer 0 */
+    kDmaRequestMuxQTIMER2CaptTimer1 = 113|0x100U,  /**< TMR2 Capture timer 1 */
+    kDmaRequestMuxQTIMER2CaptTimer2 = 114|0x100U,  /**< TMR2 Capture timer 2 */
+    kDmaRequestMuxQTIMER2CaptTimer3 = 115|0x100U,  /**< TMR2 Capture timer 3 */
+    kDmaRequestMuxQTIMER2Cmpld1Timer0Cmpld2Timer1 = 116|0x100U, /**< TMR2 cmpld1 in timer 0 or cmpld2 in timer 1 */
+    kDmaRequestMuxQTIMER2Cmpld1Timer1Cmpld2Timer0 = 117|0x100U, /**< TMR2 cmpld1 in timer 1 or cmpld2 in timer 0 */
+    kDmaRequestMuxQTIMER2Cmpld1Timer2Cmpld2Timer3 = 118|0x100U, /**< TMR2 cmpld1 in timer 2 or cmpld2 in timer 3 */
+    kDmaRequestMuxQTIMER2Cmpld1Timer3Cmpld2Timer2 = 119|0x100U, /**< TMR2 cmpld1 in timer 3 or cmpld2 in timer 2 */
 } dma_request_source_t;
 
 /* @} */
@@ -1255,8 +1257,10 @@ typedef struct {
 #define ADC_GC_ACFGT_MASK                        (0x8U)
 #define ADC_GC_ACFGT_SHIFT                       (3U)
 /*! ACFGT - Compare Function Greater Than Enable
- *  0b0..Configures "Less Than Threshold, Outside Range Not Inclusive and Inside Range Not Inclusive" functionality based on the values placed in the ADC_CV register.
- *  0b1..Configures "Greater Than Or Equal To Threshold, Outside Range Inclusive and Inside Range Inclusive" functionality based on the values placed in the ADC_CV registers.
+ *  0b0..Configures "Less Than Threshold, Outside Range Not Inclusive and Inside Range Not Inclusive"
+ *       functionality based on the values placed in the ADC_CV register.
+ *  0b1..Configures "Greater Than Or Equal To Threshold, Outside Range Inclusive and Inside Range Inclusive"
+ *       functionality based on the values placed in the ADC_CV registers.
  */
 #define ADC_GC_ACFGT(x)                          (((uint32_t)(((uint32_t)(x)) << ADC_GC_ACFGT_SHIFT)) & ADC_GC_ACFGT_MASK)
 #define ADC_GC_ACFE_MASK                         (0x10U)
@@ -1924,11 +1928,16 @@ typedef struct {
 #define AIPSTZ_OPACR_OPAC7_SHIFT                 (0U)
 /*! OPAC7
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR_OPAC7(x)                    (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR_OPAC7_SHIFT)) & AIPSTZ_OPACR_OPAC7_MASK)
@@ -1936,11 +1945,16 @@ typedef struct {
 #define AIPSTZ_OPACR_OPAC6_SHIFT                 (4U)
 /*! OPAC6
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR_OPAC6(x)                    (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR_OPAC6_SHIFT)) & AIPSTZ_OPACR_OPAC6_MASK)
@@ -1948,11 +1962,16 @@ typedef struct {
 #define AIPSTZ_OPACR_OPAC5_SHIFT                 (8U)
 /*! OPAC5
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR_OPAC5(x)                    (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR_OPAC5_SHIFT)) & AIPSTZ_OPACR_OPAC5_MASK)
@@ -1960,11 +1979,16 @@ typedef struct {
 #define AIPSTZ_OPACR_OPAC4_SHIFT                 (12U)
 /*! OPAC4
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR_OPAC4(x)                    (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR_OPAC4_SHIFT)) & AIPSTZ_OPACR_OPAC4_MASK)
@@ -1972,11 +1996,16 @@ typedef struct {
 #define AIPSTZ_OPACR_OPAC3_SHIFT                 (16U)
 /*! OPAC3
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR_OPAC3(x)                    (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR_OPAC3_SHIFT)) & AIPSTZ_OPACR_OPAC3_MASK)
@@ -1984,11 +2013,16 @@ typedef struct {
 #define AIPSTZ_OPACR_OPAC2_SHIFT                 (20U)
 /*! OPAC2
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR_OPAC2(x)                    (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR_OPAC2_SHIFT)) & AIPSTZ_OPACR_OPAC2_MASK)
@@ -1996,11 +2030,16 @@ typedef struct {
 #define AIPSTZ_OPACR_OPAC1_SHIFT                 (24U)
 /*! OPAC1
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR_OPAC1(x)                    (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR_OPAC1_SHIFT)) & AIPSTZ_OPACR_OPAC1_MASK)
@@ -2008,11 +2047,16 @@ typedef struct {
 #define AIPSTZ_OPACR_OPAC0_SHIFT                 (28U)
 /*! OPAC0
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR_OPAC0(x)                    (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR_OPAC0_SHIFT)) & AIPSTZ_OPACR_OPAC0_MASK)
@@ -2024,11 +2068,16 @@ typedef struct {
 #define AIPSTZ_OPACR1_OPAC15_SHIFT               (0U)
 /*! OPAC15
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR1_OPAC15(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR1_OPAC15_SHIFT)) & AIPSTZ_OPACR1_OPAC15_MASK)
@@ -2036,11 +2085,16 @@ typedef struct {
 #define AIPSTZ_OPACR1_OPAC14_SHIFT               (4U)
 /*! OPAC14
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR1_OPAC14(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR1_OPAC14_SHIFT)) & AIPSTZ_OPACR1_OPAC14_MASK)
@@ -2048,11 +2102,16 @@ typedef struct {
 #define AIPSTZ_OPACR1_OPAC13_SHIFT               (8U)
 /*! OPAC13
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR1_OPAC13(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR1_OPAC13_SHIFT)) & AIPSTZ_OPACR1_OPAC13_MASK)
@@ -2060,11 +2119,16 @@ typedef struct {
 #define AIPSTZ_OPACR1_OPAC12_SHIFT               (12U)
 /*! OPAC12
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR1_OPAC12(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR1_OPAC12_SHIFT)) & AIPSTZ_OPACR1_OPAC12_MASK)
@@ -2072,11 +2136,16 @@ typedef struct {
 #define AIPSTZ_OPACR1_OPAC11_SHIFT               (16U)
 /*! OPAC11
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR1_OPAC11(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR1_OPAC11_SHIFT)) & AIPSTZ_OPACR1_OPAC11_MASK)
@@ -2084,11 +2153,16 @@ typedef struct {
 #define AIPSTZ_OPACR1_OPAC10_SHIFT               (20U)
 /*! OPAC10
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR1_OPAC10(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR1_OPAC10_SHIFT)) & AIPSTZ_OPACR1_OPAC10_MASK)
@@ -2096,11 +2170,16 @@ typedef struct {
 #define AIPSTZ_OPACR1_OPAC9_SHIFT                (24U)
 /*! OPAC9
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR1_OPAC9(x)                   (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR1_OPAC9_SHIFT)) & AIPSTZ_OPACR1_OPAC9_MASK)
@@ -2108,11 +2187,16 @@ typedef struct {
 #define AIPSTZ_OPACR1_OPAC8_SHIFT                (28U)
 /*! OPAC8
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR1_OPAC8(x)                   (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR1_OPAC8_SHIFT)) & AIPSTZ_OPACR1_OPAC8_MASK)
@@ -2124,11 +2208,16 @@ typedef struct {
 #define AIPSTZ_OPACR2_OPAC23_SHIFT               (0U)
 /*! OPAC23
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR2_OPAC23(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR2_OPAC23_SHIFT)) & AIPSTZ_OPACR2_OPAC23_MASK)
@@ -2136,11 +2225,16 @@ typedef struct {
 #define AIPSTZ_OPACR2_OPAC22_SHIFT               (4U)
 /*! OPAC22
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR2_OPAC22(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR2_OPAC22_SHIFT)) & AIPSTZ_OPACR2_OPAC22_MASK)
@@ -2148,11 +2242,16 @@ typedef struct {
 #define AIPSTZ_OPACR2_OPAC21_SHIFT               (8U)
 /*! OPAC21
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR2_OPAC21(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR2_OPAC21_SHIFT)) & AIPSTZ_OPACR2_OPAC21_MASK)
@@ -2160,11 +2259,16 @@ typedef struct {
 #define AIPSTZ_OPACR2_OPAC20_SHIFT               (12U)
 /*! OPAC20
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR2_OPAC20(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR2_OPAC20_SHIFT)) & AIPSTZ_OPACR2_OPAC20_MASK)
@@ -2172,11 +2276,16 @@ typedef struct {
 #define AIPSTZ_OPACR2_OPAC19_SHIFT               (16U)
 /*! OPAC19
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR2_OPAC19(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR2_OPAC19_SHIFT)) & AIPSTZ_OPACR2_OPAC19_MASK)
@@ -2184,11 +2293,16 @@ typedef struct {
 #define AIPSTZ_OPACR2_OPAC18_SHIFT               (20U)
 /*! OPAC18
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR2_OPAC18(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR2_OPAC18_SHIFT)) & AIPSTZ_OPACR2_OPAC18_MASK)
@@ -2196,11 +2310,16 @@ typedef struct {
 #define AIPSTZ_OPACR2_OPAC17_SHIFT               (24U)
 /*! OPAC17
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR2_OPAC17(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR2_OPAC17_SHIFT)) & AIPSTZ_OPACR2_OPAC17_MASK)
@@ -2208,11 +2327,16 @@ typedef struct {
 #define AIPSTZ_OPACR2_OPAC16_SHIFT               (28U)
 /*! OPAC16
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR2_OPAC16(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR2_OPAC16_SHIFT)) & AIPSTZ_OPACR2_OPAC16_MASK)
@@ -2224,11 +2348,16 @@ typedef struct {
 #define AIPSTZ_OPACR3_OPAC31_SHIFT               (0U)
 /*! OPAC31
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR3_OPAC31(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR3_OPAC31_SHIFT)) & AIPSTZ_OPACR3_OPAC31_MASK)
@@ -2236,11 +2365,16 @@ typedef struct {
 #define AIPSTZ_OPACR3_OPAC30_SHIFT               (4U)
 /*! OPAC30
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR3_OPAC30(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR3_OPAC30_SHIFT)) & AIPSTZ_OPACR3_OPAC30_MASK)
@@ -2248,11 +2382,16 @@ typedef struct {
 #define AIPSTZ_OPACR3_OPAC29_SHIFT               (8U)
 /*! OPAC29
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR3_OPAC29(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR3_OPAC29_SHIFT)) & AIPSTZ_OPACR3_OPAC29_MASK)
@@ -2260,11 +2399,16 @@ typedef struct {
 #define AIPSTZ_OPACR3_OPAC28_SHIFT               (12U)
 /*! OPAC28
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR3_OPAC28(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR3_OPAC28_SHIFT)) & AIPSTZ_OPACR3_OPAC28_MASK)
@@ -2272,11 +2416,16 @@ typedef struct {
 #define AIPSTZ_OPACR3_OPAC27_SHIFT               (16U)
 /*! OPAC27
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR3_OPAC27(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR3_OPAC27_SHIFT)) & AIPSTZ_OPACR3_OPAC27_MASK)
@@ -2284,11 +2433,16 @@ typedef struct {
 #define AIPSTZ_OPACR3_OPAC26_SHIFT               (20U)
 /*! OPAC26
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR3_OPAC26(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR3_OPAC26_SHIFT)) & AIPSTZ_OPACR3_OPAC26_MASK)
@@ -2296,11 +2450,16 @@ typedef struct {
 #define AIPSTZ_OPACR3_OPAC25_SHIFT               (24U)
 /*! OPAC25
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR3_OPAC25(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR3_OPAC25_SHIFT)) & AIPSTZ_OPACR3_OPAC25_MASK)
@@ -2308,11 +2467,16 @@ typedef struct {
 #define AIPSTZ_OPACR3_OPAC24_SHIFT               (28U)
 /*! OPAC24
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR3_OPAC24(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR3_OPAC24_SHIFT)) & AIPSTZ_OPACR3_OPAC24_MASK)
@@ -2324,11 +2488,16 @@ typedef struct {
 #define AIPSTZ_OPACR4_OPAC33_SHIFT               (24U)
 /*! OPAC33
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR4_OPAC33(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR4_OPAC33_SHIFT)) & AIPSTZ_OPACR4_OPAC33_MASK)
@@ -2336,11 +2505,16 @@ typedef struct {
 #define AIPSTZ_OPACR4_OPAC32_SHIFT               (28U)
 /*! OPAC32
  *  0bxxx0..Accesses from an untrusted master are allowed.
- *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxxx1..Accesses from an untrusted master are not allowed. If an access is attempted by an untrusted master,
+ *          the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
  *  0bxx0x..This peripheral allows write accesses.
- *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bxx1x..This peripheral is write protected. If a write access is attempted, the access is terminated with an
+ *          error response and no peripheral access is initiated on the IPS bus.
  *  0bx0xx..This peripheral does not require supervisor privilege level for accesses.
- *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must be set. If not, the access is terminated with an error response and no peripheral access is initiated on the IPS bus.
+ *  0bx1xx..This peripheral requires supervisor privilege level for accesses. The master privilege level must
+ *          indicate supervisor via the hprot[1] access attribute, and the MPROTx[MPL] control bit for the master must
+ *          be set. If not, the access is terminated with an error response and no peripheral access is initiated
+ *          on the IPS bus.
  *  0b1xxx..Write accesses to this peripheral are allowed to be buffered by the AIPSTZ.
  */
 #define AIPSTZ_OPACR4_OPAC32(x)                  (((uint32_t)(((uint32_t)(x)) << AIPSTZ_OPACR4_OPAC32_SHIFT)) & AIPSTZ_OPACR4_OPAC32_MASK)
@@ -2655,7 +2829,9 @@ typedef struct {
 #define BEE_CTRL_LITTLE_ENDIAN_MASK              (0x80U)
 #define BEE_CTRL_LITTLE_ENDIAN_SHIFT             (7U)
 /*! LITTLE_ENDIAN
- *  0b0..The input and output data of the AES core is swapped as below: {B15,B14,B13,B12,B11,B10,B9,B8, B7,B6,B5,B4,B3,B2,B1,B0} swap to {B0,B1,B2,B3,B4,B5,B6,B7, B8,B9,B10,B11,B12,B13,B14,B15}, where B0~B15 refers to Byte0 to Byte15.
+ *  0b0..The input and output data of the AES core is swapped as below: {B15,B14,B13,B12,B11,B10,B9,B8,
+ *       B7,B6,B5,B4,B3,B2,B1,B0} swap to {B0,B1,B2,B3,B4,B5,B6,B7, B8,B9,B10,B11,B12,B13,B14,B15}, where B0~B15 refers to
+ *       Byte0 to Byte15.
  *  0b1..The input and output data of AES core is not swapped.
  */
 #define BEE_CTRL_LITTLE_ENDIAN(x)                (((uint32_t)(((uint32_t)(x)) << BEE_CTRL_LITTLE_ENDIAN_SHIFT)) & BEE_CTRL_LITTLE_ENDIAN_MASK)
@@ -3000,7 +3176,8 @@ typedef struct {
 #define CAN_MCR_SUPV_MASK                        (0x800000U)
 #define CAN_MCR_SUPV_SHIFT                       (23U)
 /*! SUPV
- *  0b1..FlexCAN is in Supervisor Mode. Affected registers allow only Supervisor access. Unrestricted access behaves as though the access was done to an unimplemented register location
+ *  0b1..FlexCAN is in Supervisor Mode. Affected registers allow only Supervisor access. Unrestricted access
+ *       behaves as though the access was done to an unimplemented register location
  *  0b0..FlexCAN is in User Mode. Affected registers allow both Supervisor and Unrestricted accesses
  */
 #define CAN_MCR_SUPV(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_MCR_SUPV_SHIFT)) & CAN_MCR_SUPV_MASK)
@@ -3098,7 +3275,8 @@ typedef struct {
 #define CAN_CTRL1_SMP_MASK                       (0x80U)
 #define CAN_CTRL1_SMP_SHIFT                      (7U)
 /*! SMP
- *  0b1..Three samples are used to determine the value of the received bit: the regular one (sample point) and 2 preceding samples, a majority rule is used
+ *  0b1..Three samples are used to determine the value of the received bit: the regular one (sample point) and 2
+ *       preceding samples, a majority rule is used
  *  0b0..Just one sample is used to determine the bit value
  */
 #define CAN_CTRL1_SMP(x)                         (((uint32_t)(((uint32_t)(x)) << CAN_CTRL1_SMP_SHIFT)) & CAN_CTRL1_SMP_MASK)
@@ -3409,7 +3587,8 @@ typedef struct {
 #define CAN_CTRL2_EACEN_MASK                     (0x10000U)
 #define CAN_CTRL2_EACEN_SHIFT                    (16U)
 /*! EACEN
- *  0b1..Enables the comparison of both Rx Mailbox filter's IDE and RTR bit with their corresponding bits within the incoming frame. Mask bits do apply.
+ *  0b1..Enables the comparison of both Rx Mailbox filter's IDE and RTR bit with their corresponding bits within
+ *       the incoming frame. Mask bits do apply.
  *  0b0..Rx Mailbox filter's IDE bit is always compared and RTR is never compared despite mask bits.
  */
 #define CAN_CTRL2_EACEN(x)                       (((uint32_t)(((uint32_t)(x)) << CAN_CTRL2_EACEN_SHIFT)) & CAN_CTRL2_EACEN_MASK)
@@ -3724,10 +3903,6 @@ typedef struct {
 /*! @{ */
 #define CCM_CCR_OSCNT_MASK                       (0xFFU)
 #define CCM_CCR_OSCNT_SHIFT                      (0U)
-/*! OSCNT
- *  0b00000000..count 1 ckil
- *  0b11111111..count 256 ckil's
- */
 #define CCM_CCR_OSCNT(x)                         (((uint32_t)(((uint32_t)(x)) << CCM_CCR_OSCNT_SHIFT)) & CCM_CCR_OSCNT_MASK)
 #define CCM_CCR_COSC_EN_MASK                     (0x1000U)
 #define CCM_CCR_COSC_EN_SHIFT                    (12U)
@@ -3936,15 +4111,71 @@ typedef struct {
 /*! @{ */
 #define CCM_CSCMR1_PERCLK_PODF_MASK              (0x3FU)
 #define CCM_CSCMR1_PERCLK_PODF_SHIFT             (0U)
-/*! PERCLK_PODF
- *  0b000000..divide by 1
- *  0b000001..divide by 2
- *  0b000010..divide by 3
- *  0b000011..divide by 4
- *  0b000100..divide by 5
- *  0b000101..divide by 6
- *  0b000110..divide by 7
- *  0b111111..divide by 64
+/*! PERCLK_PODF - Divider for perclk podf.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CSCMR1_PERCLK_PODF(x)                (((uint32_t)(((uint32_t)(x)) << CCM_CSCMR1_PERCLK_PODF_SHIFT)) & CCM_CSCMR1_PERCLK_PODF_MASK)
 #define CCM_CSCMR1_PERCLK_CLK_SEL_MASK           (0x40U)
@@ -4023,10 +4254,71 @@ typedef struct {
 /*! @{ */
 #define CCM_CSCMR2_CAN_CLK_PODF_MASK             (0xFCU)
 #define CCM_CSCMR2_CAN_CLK_PODF_SHIFT            (2U)
-/*! CAN_CLK_PODF
- *  0b000000..divide by 1
- *  0b000111..divide by 8
- *  0b111111..divide by 2^6
+/*! CAN_CLK_PODF - Divider for CAN clock podf.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CSCMR2_CAN_CLK_PODF(x)               (((uint32_t)(((uint32_t)(x)) << CCM_CSCMR2_CAN_CLK_PODF_SHIFT)) & CCM_CSCMR2_CAN_CLK_PODF_MASK)
 #define CCM_CSCMR2_CAN_CLK_SEL_MASK              (0x300U)
@@ -4052,9 +4344,71 @@ typedef struct {
 /*! @{ */
 #define CCM_CSCDR1_UART_CLK_PODF_MASK            (0x3FU)
 #define CCM_CSCDR1_UART_CLK_PODF_SHIFT           (0U)
-/*! UART_CLK_PODF
- *  0b000000..divide by 1
- *  0b111111..divide by 2^6
+/*! UART_CLK_PODF - Divider for uart clock podf.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CSCDR1_UART_CLK_PODF(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CSCDR1_UART_CLK_PODF_SHIFT)) & CCM_CSCDR1_UART_CLK_PODF_MASK)
 #define CCM_CSCDR1_UART_CLK_SEL_MASK             (0x40U)
@@ -4105,9 +4459,72 @@ typedef struct {
 /*! @{ */
 #define CCM_CS1CDR_SAI1_CLK_PODF_MASK            (0x3FU)
 #define CCM_CS1CDR_SAI1_CLK_PODF_SHIFT           (0U)
-/*! SAI1_CLK_PODF
- *  0b000000..divide by 1
- *  0b111111..divide by 2^6
+/*! SAI1_CLK_PODF - Divider for sai1 clock podf. The input clock to this divider should be lower
+ *    than 300Mhz, the predivider can be used to achieve this.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CS1CDR_SAI1_CLK_PODF(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CS1CDR_SAI1_CLK_PODF_SHIFT)) & CCM_CS1CDR_SAI1_CLK_PODF_MASK)
 #define CCM_CS1CDR_SAI1_CLK_PRED_MASK            (0x1C0U)
@@ -4138,9 +4555,72 @@ typedef struct {
 #define CCM_CS1CDR_FLEXIO1_CLK_PRED(x)           (((uint32_t)(((uint32_t)(x)) << CCM_CS1CDR_FLEXIO1_CLK_PRED_SHIFT)) & CCM_CS1CDR_FLEXIO1_CLK_PRED_MASK)
 #define CCM_CS1CDR_SAI3_CLK_PODF_MASK            (0x3F0000U)
 #define CCM_CS1CDR_SAI3_CLK_PODF_SHIFT           (16U)
-/*! SAI3_CLK_PODF
- *  0b000000..divide by 1
- *  0b111111..divide by 2^6
+/*! SAI3_CLK_PODF - Divider for sai3 clock podf. The input clock to this divider should be lower
+ *    than 300Mhz, the predivider can be used to achieve this.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CS1CDR_SAI3_CLK_PODF(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CS1CDR_SAI3_CLK_PODF_SHIFT)) & CCM_CS1CDR_SAI3_CLK_PODF_MASK)
 #define CCM_CS1CDR_SAI3_CLK_PRED_MASK            (0x1C00000U)
@@ -4158,15 +4638,15 @@ typedef struct {
 #define CCM_CS1CDR_SAI3_CLK_PRED(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CS1CDR_SAI3_CLK_PRED_SHIFT)) & CCM_CS1CDR_SAI3_CLK_PRED_MASK)
 #define CCM_CS1CDR_FLEXIO1_CLK_PODF_MASK         (0xE000000U)
 #define CCM_CS1CDR_FLEXIO1_CLK_PODF_SHIFT        (25U)
-/*! FLEXIO1_CLK_PODF
- *  0b000..divide by 1
- *  0b001..divide by 2
- *  0b010..divide by 3
- *  0b011..divide by 4
- *  0b100..divide by 5
- *  0b101..divide by 6
- *  0b110..divide by 7
- *  0b111..divide by 8
+/*! FLEXIO1_CLK_PODF - Divider for flexio1 clock. Divider should be updated when output clock is gated.
+ *  0b000..Divide by 1
+ *  0b001..Divide by 2
+ *  0b010..Divide by 3
+ *  0b011..Divide by 4
+ *  0b100..Divide by 5
+ *  0b101..Divide by 6
+ *  0b110..Divide by 7
+ *  0b111..Divide by 8
  */
 #define CCM_CS1CDR_FLEXIO1_CLK_PODF(x)           (((uint32_t)(((uint32_t)(x)) << CCM_CS1CDR_FLEXIO1_CLK_PODF_SHIFT)) & CCM_CS1CDR_FLEXIO1_CLK_PODF_MASK)
 /*! @} */
@@ -4175,9 +4655,72 @@ typedef struct {
 /*! @{ */
 #define CCM_CS2CDR_SAI2_CLK_PODF_MASK            (0x3FU)
 #define CCM_CS2CDR_SAI2_CLK_PODF_SHIFT           (0U)
-/*! SAI2_CLK_PODF
- *  0b000000..divide by 1
- *  0b111111..divide by 2^6
+/*! SAI2_CLK_PODF - Divider for sai2 clock podf. The input clock to this divider should be lower
+ *    than 300Mhz, the predivider can be used to achieve this.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CS2CDR_SAI2_CLK_PODF(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CS2CDR_SAI2_CLK_PODF_SHIFT)) & CCM_CS2CDR_SAI2_CLK_PODF_MASK)
 #define CCM_CS2CDR_SAI2_CLK_PRED_MASK            (0x1C0U)
@@ -4208,18 +4751,28 @@ typedef struct {
 #define CCM_CDCDR_SPDIF0_CLK_SEL(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CDCDR_SPDIF0_CLK_SEL_SHIFT)) & CCM_CDCDR_SPDIF0_CLK_SEL_MASK)
 #define CCM_CDCDR_SPDIF0_CLK_PODF_MASK           (0x1C00000U)
 #define CCM_CDCDR_SPDIF0_CLK_PODF_SHIFT          (22U)
-/*! SPDIF0_CLK_PODF
- *  0b000..divide by 1
- *  0b111..divide by 8
+/*! SPDIF0_CLK_PODF - Divider for spdif0 clock podf. Divider should be updated when output clock is gated.
+ *  0b000..Divide by 1
+ *  0b001..Divide by 2
+ *  0b010..Divide by 3
+ *  0b011..Divide by 4
+ *  0b100..Divide by 5
+ *  0b101..Divide by 6
+ *  0b110..Divide by 7
+ *  0b111..Divide by 8
  */
 #define CCM_CDCDR_SPDIF0_CLK_PODF(x)             (((uint32_t)(((uint32_t)(x)) << CCM_CDCDR_SPDIF0_CLK_PODF_SHIFT)) & CCM_CDCDR_SPDIF0_CLK_PODF_MASK)
 #define CCM_CDCDR_SPDIF0_CLK_PRED_MASK           (0xE000000U)
 #define CCM_CDCDR_SPDIF0_CLK_PRED_SHIFT          (25U)
-/*! SPDIF0_CLK_PRED
- *  0b000..divide by 1 (do not use with high input frequencies)
- *  0b001..divide by 2
- *  0b010..divide by 3
- *  0b111..divide by 8
+/*! SPDIF0_CLK_PRED - Divider for spdif0 clock pred. Divider should be updated when output clock is gated.
+ *  0b000..Divide by 1
+ *  0b001..Divide by 2
+ *  0b010..Divide by 3
+ *  0b011..Divide by 4
+ *  0b100..Divide by 5
+ *  0b101..Divide by 6
+ *  0b110..Divide by 7
+ *  0b111..Divide by 8
  */
 #define CCM_CDCDR_SPDIF0_CLK_PRED(x)             (((uint32_t)(((uint32_t)(x)) << CCM_CDCDR_SPDIF0_CLK_PRED_SHIFT)) & CCM_CDCDR_SPDIF0_CLK_PRED_MASK)
 /*! @} */
@@ -4235,9 +4788,73 @@ typedef struct {
 #define CCM_CSCDR2_LPI2C_CLK_SEL(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CSCDR2_LPI2C_CLK_SEL_SHIFT)) & CCM_CSCDR2_LPI2C_CLK_SEL_MASK)
 #define CCM_CSCDR2_LPI2C_CLK_PODF_MASK           (0x1F80000U)
 #define CCM_CSCDR2_LPI2C_CLK_PODF_SHIFT          (19U)
-/*! LPI2C_CLK_PODF
- *  0b000000..divide by 1
- *  0b111111..divide by 2^6
+/*! LPI2C_CLK_PODF - Divider for lpi2c clock podf. Divider should be updated when output clock is
+ *    gated. The input clock to this divider should be lower than 300Mhz, the predivider can be used
+ *    to achieve this.
+ *  0b000000..Divide by 1
+ *  0b000001..Divide by 2
+ *  0b000010..Divide by 3
+ *  0b000011..Divide by 4
+ *  0b000100..Divide by 5
+ *  0b000101..Divide by 6
+ *  0b000110..Divide by 7
+ *  0b000111..Divide by 8
+ *  0b001000..Divide by 9
+ *  0b001001..Divide by 10
+ *  0b001010..Divide by 11
+ *  0b001011..Divide by 12
+ *  0b001100..Divide by 13
+ *  0b001101..Divide by 14
+ *  0b001110..Divide by 15
+ *  0b001111..Divide by 16
+ *  0b010000..Divide by 17
+ *  0b010001..Divide by 18
+ *  0b010010..Divide by 19
+ *  0b010011..Divide by 20
+ *  0b010100..Divide by 21
+ *  0b010101..Divide by 22
+ *  0b010110..Divide by 23
+ *  0b010111..Divide by 24
+ *  0b011000..Divide by 25
+ *  0b011001..Divide by 26
+ *  0b011010..Divide by 27
+ *  0b011011..Divide by 28
+ *  0b011100..Divide by 29
+ *  0b011101..Divide by 30
+ *  0b011110..Divide by 31
+ *  0b011111..Divide by 32
+ *  0b100000..Divide by 33
+ *  0b100001..Divide by 34
+ *  0b100010..Divide by 35
+ *  0b100011..Divide by 36
+ *  0b100100..Divide by 37
+ *  0b100101..Divide by 38
+ *  0b100110..Divide by 39
+ *  0b100111..Divide by 40
+ *  0b101000..Divide by 41
+ *  0b101001..Divide by 42
+ *  0b101010..Divide by 43
+ *  0b101011..Divide by 44
+ *  0b101100..Divide by 45
+ *  0b101101..Divide by 46
+ *  0b101110..Divide by 47
+ *  0b101111..Divide by 48
+ *  0b110000..Divide by 49
+ *  0b110001..Divide by 50
+ *  0b110010..Divide by 51
+ *  0b110011..Divide by 52
+ *  0b110100..Divide by 53
+ *  0b110101..Divide by 54
+ *  0b110110..Divide by 55
+ *  0b110111..Divide by 56
+ *  0b111000..Divide by 57
+ *  0b111001..Divide by 58
+ *  0b111010..Divide by 59
+ *  0b111011..Divide by 60
+ *  0b111100..Divide by 61
+ *  0b111101..Divide by 62
+ *  0b111110..Divide by 63
+ *  0b111111..Divide by 64
  */
 #define CCM_CSCDR2_LPI2C_CLK_PODF(x)             (((uint32_t)(((uint32_t)(x)) << CCM_CSCDR2_LPI2C_CLK_PODF_SHIFT)) & CCM_CSCDR2_LPI2C_CLK_PODF_MASK)
 /*! @} */
@@ -4248,35 +4865,40 @@ typedef struct {
 #define CCM_CDHIPR_SEMC_PODF_BUSY_SHIFT          (0U)
 /*! SEMC_PODF_BUSY
  *  0b0..divider is not busy and its value represents the actual division.
- *  0b1..divider is busy with handshake process with module. The value read in the divider represents the previous value of the division factor, and after the handshake the written value of the semc_podf will be applied.
+ *  0b1..divider is busy with handshake process with module. The value read in the divider represents the previous
+ *       value of the division factor, and after the handshake the written value of the semc_podf will be applied.
  */
 #define CCM_CDHIPR_SEMC_PODF_BUSY(x)             (((uint32_t)(((uint32_t)(x)) << CCM_CDHIPR_SEMC_PODF_BUSY_SHIFT)) & CCM_CDHIPR_SEMC_PODF_BUSY_MASK)
 #define CCM_CDHIPR_AHB_PODF_BUSY_MASK            (0x2U)
 #define CCM_CDHIPR_AHB_PODF_BUSY_SHIFT           (1U)
 /*! AHB_PODF_BUSY
  *  0b0..divider is not busy and its value represents the actual division.
- *  0b1..divider is busy with handshake process with module. The value read in the divider represents the previous value of the division factor, and after the handshake the written value of the ahb_podf will be applied.
+ *  0b1..divider is busy with handshake process with module. The value read in the divider represents the previous
+ *       value of the division factor, and after the handshake the written value of the ahb_podf will be applied.
  */
 #define CCM_CDHIPR_AHB_PODF_BUSY(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CDHIPR_AHB_PODF_BUSY_SHIFT)) & CCM_CDHIPR_AHB_PODF_BUSY_MASK)
 #define CCM_CDHIPR_PERIPH2_CLK_SEL_BUSY_MASK     (0x8U)
 #define CCM_CDHIPR_PERIPH2_CLK_SEL_BUSY_SHIFT    (3U)
 /*! PERIPH2_CLK_SEL_BUSY
  *  0b0..mux is not busy and its value represents the actual division.
- *  0b1..mux is busy with handshake process with module. The value read in the periph2_clk_sel represents the previous value of select, and after the handshake periph2_clk_sel value will be applied.
+ *  0b1..mux is busy with handshake process with module. The value read in the periph2_clk_sel represents the
+ *       previous value of select, and after the handshake periph2_clk_sel value will be applied.
  */
 #define CCM_CDHIPR_PERIPH2_CLK_SEL_BUSY(x)       (((uint32_t)(((uint32_t)(x)) << CCM_CDHIPR_PERIPH2_CLK_SEL_BUSY_SHIFT)) & CCM_CDHIPR_PERIPH2_CLK_SEL_BUSY_MASK)
 #define CCM_CDHIPR_PERIPH_CLK_SEL_BUSY_MASK      (0x20U)
 #define CCM_CDHIPR_PERIPH_CLK_SEL_BUSY_SHIFT     (5U)
 /*! PERIPH_CLK_SEL_BUSY
  *  0b0..mux is not busy and its value represents the actual division.
- *  0b1..mux is busy with handshake process with module. The value read in the periph_clk_sel represents the previous value of select, and after the handshake periph_clk_sel value will be applied.
+ *  0b1..mux is busy with handshake process with module. The value read in the periph_clk_sel represents the
+ *       previous value of select, and after the handshake periph_clk_sel value will be applied.
  */
 #define CCM_CDHIPR_PERIPH_CLK_SEL_BUSY(x)        (((uint32_t)(((uint32_t)(x)) << CCM_CDHIPR_PERIPH_CLK_SEL_BUSY_SHIFT)) & CCM_CDHIPR_PERIPH_CLK_SEL_BUSY_MASK)
 #define CCM_CDHIPR_ARM_PODF_BUSY_MASK            (0x10000U)
 #define CCM_CDHIPR_ARM_PODF_BUSY_SHIFT           (16U)
 /*! ARM_PODF_BUSY
  *  0b0..divider is not busy and its value represents the actual division.
- *  0b1..divider is busy with handshake process with module. The value read in the divider represents the previous value of the division factor, and after the handshake the written value of the arm_podf will be applied.
+ *  0b1..divider is busy with handshake process with module. The value read in the divider represents the previous
+ *       value of the division factor, and after the handshake the written value of the arm_podf will be applied.
  */
 #define CCM_CDHIPR_ARM_PODF_BUSY(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CDHIPR_ARM_PODF_BUSY_SHIFT)) & CCM_CDHIPR_ARM_PODF_BUSY_MASK)
 /*! @} */
@@ -4302,8 +4924,12 @@ typedef struct {
 #define CCM_CLPCR_SBYOS_MASK                     (0x40U)
 #define CCM_CLPCR_SBYOS_SHIFT                    (6U)
 /*! SBYOS
- *  0b0..On-chip oscillator will not be powered down, after next entrance to STOP mode. (CCM_REF_EN_B will remain asserted - '0' and cosc_pwrdown will remain de asserted - '0')
- *  0b1..On-chip oscillator will be powered down, after next entrance to STOP mode. (CCM_REF_EN_B will be deasserted - '1' and cosc_pwrdown will be asserted - '1'). When returning from STOP mode, external oscillator will be enabled again, on-chip oscillator will return to oscillator mode, and after oscnt count, CCM will continue with the exit from the STOP mode process.
+ *  0b0..On-chip oscillator will not be powered down, after next entrance to STOP mode. (CCM_REF_EN_B will remain
+ *       asserted - '0' and cosc_pwrdown will remain de asserted - '0')
+ *  0b1..On-chip oscillator will be powered down, after next entrance to STOP mode. (CCM_REF_EN_B will be
+ *       deasserted - '1' and cosc_pwrdown will be asserted - '1'). When returning from STOP mode, external oscillator will
+ *       be enabled again, on-chip oscillator will return to oscillator mode, and after oscnt count, CCM will
+ *       continue with the exit from the STOP mode process.
  */
 #define CCM_CLPCR_SBYOS(x)                       (((uint32_t)(((uint32_t)(x)) << CCM_CLPCR_SBYOS_SHIFT)) & CCM_CLPCR_SBYOS_MASK)
 #define CCM_CLPCR_DIS_REF_OSC_MASK               (0x80U)
@@ -4594,7 +5220,8 @@ typedef struct {
 #define CCM_CGPR_INT_MEM_CLK_LPM_SHIFT           (17U)
 /*! INT_MEM_CLK_LPM
  *  0b0..Disable the clock to the ARM platform memories when entering Low Power Mode
- *  0b1..Keep the clocks to the ARM platform memories enabled only if an interrupt is pending when entering Low Power Modes (WAIT and STOP without power gating)
+ *  0b1..Keep the clocks to the ARM platform memories enabled only if an interrupt is pending when entering Low
+ *       Power Modes (WAIT and STOP without power gating)
  */
 #define CCM_CGPR_INT_MEM_CLK_LPM(x)              (((uint32_t)(((uint32_t)(x)) << CCM_CGPR_INT_MEM_CLK_LPM_SHIFT)) & CCM_CGPR_INT_MEM_CLK_LPM_MASK)
 /*! @} */
@@ -6984,7 +7611,9 @@ typedef struct {
 #define CMP_CR1_OPE_SHIFT                        (1U)
 /*! OPE - Comparator Output Pin Enable
  *  0b0..CMPO is not available on the associated CMPO output pin. If the comparator does not own the pin, this field has no effect.
- *  0b1..CMPO is available on the associated CMPO output pin. The comparator output (CMPO) is driven out on the associated CMPO output pin if the comparator owns the pin. If the comparator does not own the field, this bit has no effect.
+ *  0b1..CMPO is available on the associated CMPO output pin. The comparator output (CMPO) is driven out on the
+ *       associated CMPO output pin if the comparator owns the pin. If the comparator does not own the field, this
+ *       bit has no effect.
  */
 #define CMP_CR1_OPE(x)                           (((uint8_t)(((uint8_t)(x)) << CMP_CR1_OPE_SHIFT)) & CMP_CR1_OPE_MASK)
 #define CMP_CR1_COS_MASK                         (0x4U)
@@ -7974,73 +8603,96 @@ typedef struct {
 /** DCP - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CTRL;                              /**< DCP control register 0, offset: 0x0 */
-       uint8_t RESERVED_0[12];
+  __IO uint32_t CTRL_SET;                          /**< DCP control register 0, offset: 0x4 */
+  __IO uint32_t CTRL_CLR;                          /**< DCP control register 0, offset: 0x8 */
+  __IO uint32_t CTRL_TOG;                          /**< DCP control register 0, offset: 0xC */
   __IO uint32_t STAT;                              /**< DCP status register, offset: 0x10 */
-       uint8_t RESERVED_1[12];
+  __IO uint32_t STAT_SET;                          /**< DCP status register, offset: 0x14 */
+  __IO uint32_t STAT_CLR;                          /**< DCP status register, offset: 0x18 */
+  __IO uint32_t STAT_TOG;                          /**< DCP status register, offset: 0x1C */
   __IO uint32_t CHANNELCTRL;                       /**< DCP channel control register, offset: 0x20 */
-       uint8_t RESERVED_2[12];
+  __IO uint32_t CHANNELCTRL_SET;                   /**< DCP channel control register, offset: 0x24 */
+  __IO uint32_t CHANNELCTRL_CLR;                   /**< DCP channel control register, offset: 0x28 */
+  __IO uint32_t CHANNELCTRL_TOG;                   /**< DCP channel control register, offset: 0x2C */
   __IO uint32_t CAPABILITY0;                       /**< DCP capability 0 register, offset: 0x30 */
-       uint8_t RESERVED_3[12];
+       uint8_t RESERVED_0[12];
   __I  uint32_t CAPABILITY1;                       /**< DCP capability 1 register, offset: 0x40 */
-       uint8_t RESERVED_4[12];
+       uint8_t RESERVED_1[12];
   __IO uint32_t CONTEXT;                           /**< DCP context buffer pointer, offset: 0x50 */
-       uint8_t RESERVED_5[12];
+       uint8_t RESERVED_2[12];
   __IO uint32_t KEY;                               /**< DCP key index, offset: 0x60 */
-       uint8_t RESERVED_6[12];
+       uint8_t RESERVED_3[12];
   __IO uint32_t KEYDATA;                           /**< DCP key data, offset: 0x70 */
-       uint8_t RESERVED_7[12];
+       uint8_t RESERVED_4[12];
   __I  uint32_t PACKET0;                           /**< DCP work packet 0 status register, offset: 0x80 */
-       uint8_t RESERVED_8[12];
+       uint8_t RESERVED_5[12];
   __I  uint32_t PACKET1;                           /**< DCP work packet 1 status register, offset: 0x90 */
-       uint8_t RESERVED_9[12];
+       uint8_t RESERVED_6[12];
   __I  uint32_t PACKET2;                           /**< DCP work packet 2 status register, offset: 0xA0 */
-       uint8_t RESERVED_10[12];
+       uint8_t RESERVED_7[12];
   __I  uint32_t PACKET3;                           /**< DCP work packet 3 status register, offset: 0xB0 */
-       uint8_t RESERVED_11[12];
+       uint8_t RESERVED_8[12];
   __I  uint32_t PACKET4;                           /**< DCP work packet 4 status register, offset: 0xC0 */
-       uint8_t RESERVED_12[12];
+       uint8_t RESERVED_9[12];
   __I  uint32_t PACKET5;                           /**< DCP work packet 5 status register, offset: 0xD0 */
-       uint8_t RESERVED_13[12];
+       uint8_t RESERVED_10[12];
   __I  uint32_t PACKET6;                           /**< DCP work packet 6 status register, offset: 0xE0 */
-       uint8_t RESERVED_14[28];
+       uint8_t RESERVED_11[28];
   __IO uint32_t CH0CMDPTR;                         /**< DCP channel 0 command pointer address register, offset: 0x100 */
-       uint8_t RESERVED_15[12];
+       uint8_t RESERVED_12[12];
   __IO uint32_t CH0SEMA;                           /**< DCP channel 0 semaphore register, offset: 0x110 */
-       uint8_t RESERVED_16[12];
+       uint8_t RESERVED_13[12];
   __IO uint32_t CH0STAT;                           /**< DCP channel 0 status register, offset: 0x120 */
-       uint8_t RESERVED_17[12];
+  __IO uint32_t CH0STAT_SET;                       /**< DCP channel 0 status register, offset: 0x124 */
+  __IO uint32_t CH0STAT_CLR;                       /**< DCP channel 0 status register, offset: 0x128 */
+  __IO uint32_t CH0STAT_TOG;                       /**< DCP channel 0 status register, offset: 0x12C */
   __IO uint32_t CH0OPTS;                           /**< DCP channel 0 options register, offset: 0x130 */
-       uint8_t RESERVED_18[12];
+  __IO uint32_t CH0OPTS_SET;                       /**< DCP channel 0 options register, offset: 0x134 */
+  __IO uint32_t CH0OPTS_CLR;                       /**< DCP channel 0 options register, offset: 0x138 */
+  __IO uint32_t CH0OPTS_TOG;                       /**< DCP channel 0 options register, offset: 0x13C */
   __IO uint32_t CH1CMDPTR;                         /**< DCP channel 1 command pointer address register, offset: 0x140 */
-       uint8_t RESERVED_19[12];
+       uint8_t RESERVED_14[12];
   __IO uint32_t CH1SEMA;                           /**< DCP channel 1 semaphore register, offset: 0x150 */
-       uint8_t RESERVED_20[12];
+       uint8_t RESERVED_15[12];
   __IO uint32_t CH1STAT;                           /**< DCP channel 1 status register, offset: 0x160 */
-       uint8_t RESERVED_21[12];
+  __IO uint32_t CH1STAT_SET;                       /**< DCP channel 1 status register, offset: 0x164 */
+  __IO uint32_t CH1STAT_CLR;                       /**< DCP channel 1 status register, offset: 0x168 */
+  __IO uint32_t CH1STAT_TOG;                       /**< DCP channel 1 status register, offset: 0x16C */
   __IO uint32_t CH1OPTS;                           /**< DCP channel 1 options register, offset: 0x170 */
-       uint8_t RESERVED_22[12];
+  __IO uint32_t CH1OPTS_SET;                       /**< DCP channel 1 options register, offset: 0x174 */
+  __IO uint32_t CH1OPTS_CLR;                       /**< DCP channel 1 options register, offset: 0x178 */
+  __IO uint32_t CH1OPTS_TOG;                       /**< DCP channel 1 options register, offset: 0x17C */
   __IO uint32_t CH2CMDPTR;                         /**< DCP channel 2 command pointer address register, offset: 0x180 */
-       uint8_t RESERVED_23[12];
+       uint8_t RESERVED_16[12];
   __IO uint32_t CH2SEMA;                           /**< DCP channel 2 semaphore register, offset: 0x190 */
-       uint8_t RESERVED_24[12];
+       uint8_t RESERVED_17[12];
   __IO uint32_t CH2STAT;                           /**< DCP channel 2 status register, offset: 0x1A0 */
-       uint8_t RESERVED_25[12];
+  __IO uint32_t CH2STAT_SET;                       /**< DCP channel 2 status register, offset: 0x1A4 */
+  __IO uint32_t CH2STAT_CLR;                       /**< DCP channel 2 status register, offset: 0x1A8 */
+  __IO uint32_t CH2STAT_TOG;                       /**< DCP channel 2 status register, offset: 0x1AC */
   __IO uint32_t CH2OPTS;                           /**< DCP channel 2 options register, offset: 0x1B0 */
-       uint8_t RESERVED_26[12];
+  __IO uint32_t CH2OPTS_SET;                       /**< DCP channel 2 options register, offset: 0x1B4 */
+  __IO uint32_t CH2OPTS_CLR;                       /**< DCP channel 2 options register, offset: 0x1B8 */
+  __IO uint32_t CH2OPTS_TOG;                       /**< DCP channel 2 options register, offset: 0x1BC */
   __IO uint32_t CH3CMDPTR;                         /**< DCP channel 3 command pointer address register, offset: 0x1C0 */
-       uint8_t RESERVED_27[12];
+       uint8_t RESERVED_18[12];
   __IO uint32_t CH3SEMA;                           /**< DCP channel 3 semaphore register, offset: 0x1D0 */
-       uint8_t RESERVED_28[12];
+       uint8_t RESERVED_19[12];
   __IO uint32_t CH3STAT;                           /**< DCP channel 3 status register, offset: 0x1E0 */
-       uint8_t RESERVED_29[12];
+  __IO uint32_t CH3STAT_SET;                       /**< DCP channel 3 status register, offset: 0x1E4 */
+  __IO uint32_t CH3STAT_CLR;                       /**< DCP channel 3 status register, offset: 0x1E8 */
+  __IO uint32_t CH3STAT_TOG;                       /**< DCP channel 3 status register, offset: 0x1EC */
   __IO uint32_t CH3OPTS;                           /**< DCP channel 3 options register, offset: 0x1F0 */
-       uint8_t RESERVED_30[524];
+  __IO uint32_t CH3OPTS_SET;                       /**< DCP channel 3 options register, offset: 0x1F4 */
+  __IO uint32_t CH3OPTS_CLR;                       /**< DCP channel 3 options register, offset: 0x1F8 */
+  __IO uint32_t CH3OPTS_TOG;                       /**< DCP channel 3 options register, offset: 0x1FC */
+       uint8_t RESERVED_20[512];
   __IO uint32_t DBGSELECT;                         /**< DCP debug select register, offset: 0x400 */
-       uint8_t RESERVED_31[12];
+       uint8_t RESERVED_21[12];
   __I  uint32_t DBGDATA;                           /**< DCP debug data register, offset: 0x410 */
-       uint8_t RESERVED_32[12];
+       uint8_t RESERVED_22[12];
   __IO uint32_t PAGETABLE;                         /**< DCP page table register, offset: 0x420 */
-       uint8_t RESERVED_33[12];
+       uint8_t RESERVED_23[12];
   __I  uint32_t VERSION;                           /**< DCP version register, offset: 0x430 */
 } DCP_Type;
 
@@ -8098,6 +8750,141 @@ typedef struct {
 #define DCP_CTRL_SFTRST(x)                       (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SFTRST_SHIFT)) & DCP_CTRL_SFTRST_MASK)
 /*! @} */
 
+/*! @name CTRL_SET - DCP control register 0 */
+/*! @{ */
+#define DCP_CTRL_SET_CHANNEL_INTERRUPT_ENABLE_MASK (0xFFU)
+#define DCP_CTRL_SET_CHANNEL_INTERRUPT_ENABLE_SHIFT (0U)
+/*! CHANNEL_INTERRUPT_ENABLE
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_CTRL_SET_CHANNEL_INTERRUPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SET_CHANNEL_INTERRUPT_ENABLE_SHIFT)) & DCP_CTRL_SET_CHANNEL_INTERRUPT_ENABLE_MASK)
+#define DCP_CTRL_SET_RSVD_CSC_INTERRUPT_ENABLE_MASK (0x100U)
+#define DCP_CTRL_SET_RSVD_CSC_INTERRUPT_ENABLE_SHIFT (8U)
+#define DCP_CTRL_SET_RSVD_CSC_INTERRUPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SET_RSVD_CSC_INTERRUPT_ENABLE_SHIFT)) & DCP_CTRL_SET_RSVD_CSC_INTERRUPT_ENABLE_MASK)
+#define DCP_CTRL_SET_ENABLE_CONTEXT_SWITCHING_MASK (0x200000U)
+#define DCP_CTRL_SET_ENABLE_CONTEXT_SWITCHING_SHIFT (21U)
+#define DCP_CTRL_SET_ENABLE_CONTEXT_SWITCHING(x) (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SET_ENABLE_CONTEXT_SWITCHING_SHIFT)) & DCP_CTRL_SET_ENABLE_CONTEXT_SWITCHING_MASK)
+#define DCP_CTRL_SET_ENABLE_CONTEXT_CACHING_MASK (0x400000U)
+#define DCP_CTRL_SET_ENABLE_CONTEXT_CACHING_SHIFT (22U)
+#define DCP_CTRL_SET_ENABLE_CONTEXT_CACHING(x)   (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SET_ENABLE_CONTEXT_CACHING_SHIFT)) & DCP_CTRL_SET_ENABLE_CONTEXT_CACHING_MASK)
+#define DCP_CTRL_SET_GATHER_RESIDUAL_WRITES_MASK (0x800000U)
+#define DCP_CTRL_SET_GATHER_RESIDUAL_WRITES_SHIFT (23U)
+#define DCP_CTRL_SET_GATHER_RESIDUAL_WRITES(x)   (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SET_GATHER_RESIDUAL_WRITES_SHIFT)) & DCP_CTRL_SET_GATHER_RESIDUAL_WRITES_MASK)
+#define DCP_CTRL_SET_PRESENT_SHA_MASK            (0x10000000U)
+#define DCP_CTRL_SET_PRESENT_SHA_SHIFT           (28U)
+/*! PRESENT_SHA
+ *  0b1..Present
+ *  0b0..Absent
+ */
+#define DCP_CTRL_SET_PRESENT_SHA(x)              (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SET_PRESENT_SHA_SHIFT)) & DCP_CTRL_SET_PRESENT_SHA_MASK)
+#define DCP_CTRL_SET_PRESENT_CRYPTO_MASK         (0x20000000U)
+#define DCP_CTRL_SET_PRESENT_CRYPTO_SHIFT        (29U)
+/*! PRESENT_CRYPTO
+ *  0b1..Present
+ *  0b0..Absent
+ */
+#define DCP_CTRL_SET_PRESENT_CRYPTO(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SET_PRESENT_CRYPTO_SHIFT)) & DCP_CTRL_SET_PRESENT_CRYPTO_MASK)
+#define DCP_CTRL_SET_CLKGATE_MASK                (0x40000000U)
+#define DCP_CTRL_SET_CLKGATE_SHIFT               (30U)
+#define DCP_CTRL_SET_CLKGATE(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SET_CLKGATE_SHIFT)) & DCP_CTRL_SET_CLKGATE_MASK)
+#define DCP_CTRL_SET_SFTRST_MASK                 (0x80000000U)
+#define DCP_CTRL_SET_SFTRST_SHIFT                (31U)
+#define DCP_CTRL_SET_SFTRST(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_SET_SFTRST_SHIFT)) & DCP_CTRL_SET_SFTRST_MASK)
+/*! @} */
+
+/*! @name CTRL_CLR - DCP control register 0 */
+/*! @{ */
+#define DCP_CTRL_CLR_CHANNEL_INTERRUPT_ENABLE_MASK (0xFFU)
+#define DCP_CTRL_CLR_CHANNEL_INTERRUPT_ENABLE_SHIFT (0U)
+/*! CHANNEL_INTERRUPT_ENABLE
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_CTRL_CLR_CHANNEL_INTERRUPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_CLR_CHANNEL_INTERRUPT_ENABLE_SHIFT)) & DCP_CTRL_CLR_CHANNEL_INTERRUPT_ENABLE_MASK)
+#define DCP_CTRL_CLR_RSVD_CSC_INTERRUPT_ENABLE_MASK (0x100U)
+#define DCP_CTRL_CLR_RSVD_CSC_INTERRUPT_ENABLE_SHIFT (8U)
+#define DCP_CTRL_CLR_RSVD_CSC_INTERRUPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_CLR_RSVD_CSC_INTERRUPT_ENABLE_SHIFT)) & DCP_CTRL_CLR_RSVD_CSC_INTERRUPT_ENABLE_MASK)
+#define DCP_CTRL_CLR_ENABLE_CONTEXT_SWITCHING_MASK (0x200000U)
+#define DCP_CTRL_CLR_ENABLE_CONTEXT_SWITCHING_SHIFT (21U)
+#define DCP_CTRL_CLR_ENABLE_CONTEXT_SWITCHING(x) (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_CLR_ENABLE_CONTEXT_SWITCHING_SHIFT)) & DCP_CTRL_CLR_ENABLE_CONTEXT_SWITCHING_MASK)
+#define DCP_CTRL_CLR_ENABLE_CONTEXT_CACHING_MASK (0x400000U)
+#define DCP_CTRL_CLR_ENABLE_CONTEXT_CACHING_SHIFT (22U)
+#define DCP_CTRL_CLR_ENABLE_CONTEXT_CACHING(x)   (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_CLR_ENABLE_CONTEXT_CACHING_SHIFT)) & DCP_CTRL_CLR_ENABLE_CONTEXT_CACHING_MASK)
+#define DCP_CTRL_CLR_GATHER_RESIDUAL_WRITES_MASK (0x800000U)
+#define DCP_CTRL_CLR_GATHER_RESIDUAL_WRITES_SHIFT (23U)
+#define DCP_CTRL_CLR_GATHER_RESIDUAL_WRITES(x)   (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_CLR_GATHER_RESIDUAL_WRITES_SHIFT)) & DCP_CTRL_CLR_GATHER_RESIDUAL_WRITES_MASK)
+#define DCP_CTRL_CLR_PRESENT_SHA_MASK            (0x10000000U)
+#define DCP_CTRL_CLR_PRESENT_SHA_SHIFT           (28U)
+/*! PRESENT_SHA
+ *  0b1..Present
+ *  0b0..Absent
+ */
+#define DCP_CTRL_CLR_PRESENT_SHA(x)              (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_CLR_PRESENT_SHA_SHIFT)) & DCP_CTRL_CLR_PRESENT_SHA_MASK)
+#define DCP_CTRL_CLR_PRESENT_CRYPTO_MASK         (0x20000000U)
+#define DCP_CTRL_CLR_PRESENT_CRYPTO_SHIFT        (29U)
+/*! PRESENT_CRYPTO
+ *  0b1..Present
+ *  0b0..Absent
+ */
+#define DCP_CTRL_CLR_PRESENT_CRYPTO(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_CLR_PRESENT_CRYPTO_SHIFT)) & DCP_CTRL_CLR_PRESENT_CRYPTO_MASK)
+#define DCP_CTRL_CLR_CLKGATE_MASK                (0x40000000U)
+#define DCP_CTRL_CLR_CLKGATE_SHIFT               (30U)
+#define DCP_CTRL_CLR_CLKGATE(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_CLR_CLKGATE_SHIFT)) & DCP_CTRL_CLR_CLKGATE_MASK)
+#define DCP_CTRL_CLR_SFTRST_MASK                 (0x80000000U)
+#define DCP_CTRL_CLR_SFTRST_SHIFT                (31U)
+#define DCP_CTRL_CLR_SFTRST(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_CLR_SFTRST_SHIFT)) & DCP_CTRL_CLR_SFTRST_MASK)
+/*! @} */
+
+/*! @name CTRL_TOG - DCP control register 0 */
+/*! @{ */
+#define DCP_CTRL_TOG_CHANNEL_INTERRUPT_ENABLE_MASK (0xFFU)
+#define DCP_CTRL_TOG_CHANNEL_INTERRUPT_ENABLE_SHIFT (0U)
+/*! CHANNEL_INTERRUPT_ENABLE
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_CTRL_TOG_CHANNEL_INTERRUPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_TOG_CHANNEL_INTERRUPT_ENABLE_SHIFT)) & DCP_CTRL_TOG_CHANNEL_INTERRUPT_ENABLE_MASK)
+#define DCP_CTRL_TOG_RSVD_CSC_INTERRUPT_ENABLE_MASK (0x100U)
+#define DCP_CTRL_TOG_RSVD_CSC_INTERRUPT_ENABLE_SHIFT (8U)
+#define DCP_CTRL_TOG_RSVD_CSC_INTERRUPT_ENABLE(x) (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_TOG_RSVD_CSC_INTERRUPT_ENABLE_SHIFT)) & DCP_CTRL_TOG_RSVD_CSC_INTERRUPT_ENABLE_MASK)
+#define DCP_CTRL_TOG_ENABLE_CONTEXT_SWITCHING_MASK (0x200000U)
+#define DCP_CTRL_TOG_ENABLE_CONTEXT_SWITCHING_SHIFT (21U)
+#define DCP_CTRL_TOG_ENABLE_CONTEXT_SWITCHING(x) (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_TOG_ENABLE_CONTEXT_SWITCHING_SHIFT)) & DCP_CTRL_TOG_ENABLE_CONTEXT_SWITCHING_MASK)
+#define DCP_CTRL_TOG_ENABLE_CONTEXT_CACHING_MASK (0x400000U)
+#define DCP_CTRL_TOG_ENABLE_CONTEXT_CACHING_SHIFT (22U)
+#define DCP_CTRL_TOG_ENABLE_CONTEXT_CACHING(x)   (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_TOG_ENABLE_CONTEXT_CACHING_SHIFT)) & DCP_CTRL_TOG_ENABLE_CONTEXT_CACHING_MASK)
+#define DCP_CTRL_TOG_GATHER_RESIDUAL_WRITES_MASK (0x800000U)
+#define DCP_CTRL_TOG_GATHER_RESIDUAL_WRITES_SHIFT (23U)
+#define DCP_CTRL_TOG_GATHER_RESIDUAL_WRITES(x)   (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_TOG_GATHER_RESIDUAL_WRITES_SHIFT)) & DCP_CTRL_TOG_GATHER_RESIDUAL_WRITES_MASK)
+#define DCP_CTRL_TOG_PRESENT_SHA_MASK            (0x10000000U)
+#define DCP_CTRL_TOG_PRESENT_SHA_SHIFT           (28U)
+/*! PRESENT_SHA
+ *  0b1..Present
+ *  0b0..Absent
+ */
+#define DCP_CTRL_TOG_PRESENT_SHA(x)              (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_TOG_PRESENT_SHA_SHIFT)) & DCP_CTRL_TOG_PRESENT_SHA_MASK)
+#define DCP_CTRL_TOG_PRESENT_CRYPTO_MASK         (0x20000000U)
+#define DCP_CTRL_TOG_PRESENT_CRYPTO_SHIFT        (29U)
+/*! PRESENT_CRYPTO
+ *  0b1..Present
+ *  0b0..Absent
+ */
+#define DCP_CTRL_TOG_PRESENT_CRYPTO(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_TOG_PRESENT_CRYPTO_SHIFT)) & DCP_CTRL_TOG_PRESENT_CRYPTO_MASK)
+#define DCP_CTRL_TOG_CLKGATE_MASK                (0x40000000U)
+#define DCP_CTRL_TOG_CLKGATE_SHIFT               (30U)
+#define DCP_CTRL_TOG_CLKGATE(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_TOG_CLKGATE_SHIFT)) & DCP_CTRL_TOG_CLKGATE_MASK)
+#define DCP_CTRL_TOG_SFTRST_MASK                 (0x80000000U)
+#define DCP_CTRL_TOG_SFTRST_SHIFT                (31U)
+#define DCP_CTRL_TOG_SFTRST(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CTRL_TOG_SFTRST_SHIFT)) & DCP_CTRL_TOG_SFTRST_MASK)
+/*! @} */
+
 /*! @name STAT - DCP status register */
 /*! @{ */
 #define DCP_STAT_IRQ_MASK                        (0xFU)
@@ -8130,6 +8917,102 @@ typedef struct {
 #define DCP_STAT_OTP_KEY_READY(x)                (((uint32_t)(((uint32_t)(x)) << DCP_STAT_OTP_KEY_READY_SHIFT)) & DCP_STAT_OTP_KEY_READY_MASK)
 /*! @} */
 
+/*! @name STAT_SET - DCP status register */
+/*! @{ */
+#define DCP_STAT_SET_IRQ_MASK                    (0xFU)
+#define DCP_STAT_SET_IRQ_SHIFT                   (0U)
+#define DCP_STAT_SET_IRQ(x)                      (((uint32_t)(((uint32_t)(x)) << DCP_STAT_SET_IRQ_SHIFT)) & DCP_STAT_SET_IRQ_MASK)
+#define DCP_STAT_SET_RSVD_IRQ_MASK               (0x100U)
+#define DCP_STAT_SET_RSVD_IRQ_SHIFT              (8U)
+#define DCP_STAT_SET_RSVD_IRQ(x)                 (((uint32_t)(((uint32_t)(x)) << DCP_STAT_SET_RSVD_IRQ_SHIFT)) & DCP_STAT_SET_RSVD_IRQ_MASK)
+#define DCP_STAT_SET_READY_CHANNELS_MASK         (0xFF0000U)
+#define DCP_STAT_SET_READY_CHANNELS_SHIFT        (16U)
+/*! READY_CHANNELS
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_STAT_SET_READY_CHANNELS(x)           (((uint32_t)(((uint32_t)(x)) << DCP_STAT_SET_READY_CHANNELS_SHIFT)) & DCP_STAT_SET_READY_CHANNELS_MASK)
+#define DCP_STAT_SET_CUR_CHANNEL_MASK            (0xF000000U)
+#define DCP_STAT_SET_CUR_CHANNEL_SHIFT           (24U)
+/*! CUR_CHANNEL
+ *  0b0000..None
+ *  0b0001..CH0
+ *  0b0010..CH1
+ *  0b0011..CH2
+ *  0b0100..CH3
+ */
+#define DCP_STAT_SET_CUR_CHANNEL(x)              (((uint32_t)(((uint32_t)(x)) << DCP_STAT_SET_CUR_CHANNEL_SHIFT)) & DCP_STAT_SET_CUR_CHANNEL_MASK)
+#define DCP_STAT_SET_OTP_KEY_READY_MASK          (0x10000000U)
+#define DCP_STAT_SET_OTP_KEY_READY_SHIFT         (28U)
+#define DCP_STAT_SET_OTP_KEY_READY(x)            (((uint32_t)(((uint32_t)(x)) << DCP_STAT_SET_OTP_KEY_READY_SHIFT)) & DCP_STAT_SET_OTP_KEY_READY_MASK)
+/*! @} */
+
+/*! @name STAT_CLR - DCP status register */
+/*! @{ */
+#define DCP_STAT_CLR_IRQ_MASK                    (0xFU)
+#define DCP_STAT_CLR_IRQ_SHIFT                   (0U)
+#define DCP_STAT_CLR_IRQ(x)                      (((uint32_t)(((uint32_t)(x)) << DCP_STAT_CLR_IRQ_SHIFT)) & DCP_STAT_CLR_IRQ_MASK)
+#define DCP_STAT_CLR_RSVD_IRQ_MASK               (0x100U)
+#define DCP_STAT_CLR_RSVD_IRQ_SHIFT              (8U)
+#define DCP_STAT_CLR_RSVD_IRQ(x)                 (((uint32_t)(((uint32_t)(x)) << DCP_STAT_CLR_RSVD_IRQ_SHIFT)) & DCP_STAT_CLR_RSVD_IRQ_MASK)
+#define DCP_STAT_CLR_READY_CHANNELS_MASK         (0xFF0000U)
+#define DCP_STAT_CLR_READY_CHANNELS_SHIFT        (16U)
+/*! READY_CHANNELS
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_STAT_CLR_READY_CHANNELS(x)           (((uint32_t)(((uint32_t)(x)) << DCP_STAT_CLR_READY_CHANNELS_SHIFT)) & DCP_STAT_CLR_READY_CHANNELS_MASK)
+#define DCP_STAT_CLR_CUR_CHANNEL_MASK            (0xF000000U)
+#define DCP_STAT_CLR_CUR_CHANNEL_SHIFT           (24U)
+/*! CUR_CHANNEL
+ *  0b0000..None
+ *  0b0001..CH0
+ *  0b0010..CH1
+ *  0b0011..CH2
+ *  0b0100..CH3
+ */
+#define DCP_STAT_CLR_CUR_CHANNEL(x)              (((uint32_t)(((uint32_t)(x)) << DCP_STAT_CLR_CUR_CHANNEL_SHIFT)) & DCP_STAT_CLR_CUR_CHANNEL_MASK)
+#define DCP_STAT_CLR_OTP_KEY_READY_MASK          (0x10000000U)
+#define DCP_STAT_CLR_OTP_KEY_READY_SHIFT         (28U)
+#define DCP_STAT_CLR_OTP_KEY_READY(x)            (((uint32_t)(((uint32_t)(x)) << DCP_STAT_CLR_OTP_KEY_READY_SHIFT)) & DCP_STAT_CLR_OTP_KEY_READY_MASK)
+/*! @} */
+
+/*! @name STAT_TOG - DCP status register */
+/*! @{ */
+#define DCP_STAT_TOG_IRQ_MASK                    (0xFU)
+#define DCP_STAT_TOG_IRQ_SHIFT                   (0U)
+#define DCP_STAT_TOG_IRQ(x)                      (((uint32_t)(((uint32_t)(x)) << DCP_STAT_TOG_IRQ_SHIFT)) & DCP_STAT_TOG_IRQ_MASK)
+#define DCP_STAT_TOG_RSVD_IRQ_MASK               (0x100U)
+#define DCP_STAT_TOG_RSVD_IRQ_SHIFT              (8U)
+#define DCP_STAT_TOG_RSVD_IRQ(x)                 (((uint32_t)(((uint32_t)(x)) << DCP_STAT_TOG_RSVD_IRQ_SHIFT)) & DCP_STAT_TOG_RSVD_IRQ_MASK)
+#define DCP_STAT_TOG_READY_CHANNELS_MASK         (0xFF0000U)
+#define DCP_STAT_TOG_READY_CHANNELS_SHIFT        (16U)
+/*! READY_CHANNELS
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_STAT_TOG_READY_CHANNELS(x)           (((uint32_t)(((uint32_t)(x)) << DCP_STAT_TOG_READY_CHANNELS_SHIFT)) & DCP_STAT_TOG_READY_CHANNELS_MASK)
+#define DCP_STAT_TOG_CUR_CHANNEL_MASK            (0xF000000U)
+#define DCP_STAT_TOG_CUR_CHANNEL_SHIFT           (24U)
+/*! CUR_CHANNEL
+ *  0b0000..None
+ *  0b0001..CH0
+ *  0b0010..CH1
+ *  0b0011..CH2
+ *  0b0100..CH3
+ */
+#define DCP_STAT_TOG_CUR_CHANNEL(x)              (((uint32_t)(((uint32_t)(x)) << DCP_STAT_TOG_CUR_CHANNEL_SHIFT)) & DCP_STAT_TOG_CUR_CHANNEL_MASK)
+#define DCP_STAT_TOG_OTP_KEY_READY_MASK          (0x10000000U)
+#define DCP_STAT_TOG_OTP_KEY_READY_SHIFT         (28U)
+#define DCP_STAT_TOG_OTP_KEY_READY(x)            (((uint32_t)(((uint32_t)(x)) << DCP_STAT_TOG_OTP_KEY_READY_SHIFT)) & DCP_STAT_TOG_OTP_KEY_READY_MASK)
+/*! @} */
+
 /*! @name CHANNELCTRL - DCP channel control register */
 /*! @{ */
 #define DCP_CHANNELCTRL_ENABLE_CHANNEL_MASK      (0xFFU)
@@ -8156,6 +9039,90 @@ typedef struct {
 #define DCP_CHANNELCTRL_RSVD_MASK                (0xFFFE0000U)
 #define DCP_CHANNELCTRL_RSVD_SHIFT               (17U)
 #define DCP_CHANNELCTRL_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_RSVD_SHIFT)) & DCP_CHANNELCTRL_RSVD_MASK)
+/*! @} */
+
+/*! @name CHANNELCTRL_SET - DCP channel control register */
+/*! @{ */
+#define DCP_CHANNELCTRL_SET_ENABLE_CHANNEL_MASK  (0xFFU)
+#define DCP_CHANNELCTRL_SET_ENABLE_CHANNEL_SHIFT (0U)
+/*! ENABLE_CHANNEL
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_CHANNELCTRL_SET_ENABLE_CHANNEL(x)    (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_SET_ENABLE_CHANNEL_SHIFT)) & DCP_CHANNELCTRL_SET_ENABLE_CHANNEL_MASK)
+#define DCP_CHANNELCTRL_SET_HIGH_PRIORITY_CHANNEL_MASK (0xFF00U)
+#define DCP_CHANNELCTRL_SET_HIGH_PRIORITY_CHANNEL_SHIFT (8U)
+/*! HIGH_PRIORITY_CHANNEL
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_CHANNELCTRL_SET_HIGH_PRIORITY_CHANNEL(x) (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_SET_HIGH_PRIORITY_CHANNEL_SHIFT)) & DCP_CHANNELCTRL_SET_HIGH_PRIORITY_CHANNEL_MASK)
+#define DCP_CHANNELCTRL_SET_CH0_IRQ_MERGED_MASK  (0x10000U)
+#define DCP_CHANNELCTRL_SET_CH0_IRQ_MERGED_SHIFT (16U)
+#define DCP_CHANNELCTRL_SET_CH0_IRQ_MERGED(x)    (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_SET_CH0_IRQ_MERGED_SHIFT)) & DCP_CHANNELCTRL_SET_CH0_IRQ_MERGED_MASK)
+#define DCP_CHANNELCTRL_SET_RSVD_MASK            (0xFFFE0000U)
+#define DCP_CHANNELCTRL_SET_RSVD_SHIFT           (17U)
+#define DCP_CHANNELCTRL_SET_RSVD(x)              (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_SET_RSVD_SHIFT)) & DCP_CHANNELCTRL_SET_RSVD_MASK)
+/*! @} */
+
+/*! @name CHANNELCTRL_CLR - DCP channel control register */
+/*! @{ */
+#define DCP_CHANNELCTRL_CLR_ENABLE_CHANNEL_MASK  (0xFFU)
+#define DCP_CHANNELCTRL_CLR_ENABLE_CHANNEL_SHIFT (0U)
+/*! ENABLE_CHANNEL
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_CHANNELCTRL_CLR_ENABLE_CHANNEL(x)    (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_CLR_ENABLE_CHANNEL_SHIFT)) & DCP_CHANNELCTRL_CLR_ENABLE_CHANNEL_MASK)
+#define DCP_CHANNELCTRL_CLR_HIGH_PRIORITY_CHANNEL_MASK (0xFF00U)
+#define DCP_CHANNELCTRL_CLR_HIGH_PRIORITY_CHANNEL_SHIFT (8U)
+/*! HIGH_PRIORITY_CHANNEL
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_CHANNELCTRL_CLR_HIGH_PRIORITY_CHANNEL(x) (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_CLR_HIGH_PRIORITY_CHANNEL_SHIFT)) & DCP_CHANNELCTRL_CLR_HIGH_PRIORITY_CHANNEL_MASK)
+#define DCP_CHANNELCTRL_CLR_CH0_IRQ_MERGED_MASK  (0x10000U)
+#define DCP_CHANNELCTRL_CLR_CH0_IRQ_MERGED_SHIFT (16U)
+#define DCP_CHANNELCTRL_CLR_CH0_IRQ_MERGED(x)    (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_CLR_CH0_IRQ_MERGED_SHIFT)) & DCP_CHANNELCTRL_CLR_CH0_IRQ_MERGED_MASK)
+#define DCP_CHANNELCTRL_CLR_RSVD_MASK            (0xFFFE0000U)
+#define DCP_CHANNELCTRL_CLR_RSVD_SHIFT           (17U)
+#define DCP_CHANNELCTRL_CLR_RSVD(x)              (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_CLR_RSVD_SHIFT)) & DCP_CHANNELCTRL_CLR_RSVD_MASK)
+/*! @} */
+
+/*! @name CHANNELCTRL_TOG - DCP channel control register */
+/*! @{ */
+#define DCP_CHANNELCTRL_TOG_ENABLE_CHANNEL_MASK  (0xFFU)
+#define DCP_CHANNELCTRL_TOG_ENABLE_CHANNEL_SHIFT (0U)
+/*! ENABLE_CHANNEL
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_CHANNELCTRL_TOG_ENABLE_CHANNEL(x)    (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_TOG_ENABLE_CHANNEL_SHIFT)) & DCP_CHANNELCTRL_TOG_ENABLE_CHANNEL_MASK)
+#define DCP_CHANNELCTRL_TOG_HIGH_PRIORITY_CHANNEL_MASK (0xFF00U)
+#define DCP_CHANNELCTRL_TOG_HIGH_PRIORITY_CHANNEL_SHIFT (8U)
+/*! HIGH_PRIORITY_CHANNEL
+ *  0b00000001..CH0
+ *  0b00000010..CH1
+ *  0b00000100..CH2
+ *  0b00001000..CH3
+ */
+#define DCP_CHANNELCTRL_TOG_HIGH_PRIORITY_CHANNEL(x) (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_TOG_HIGH_PRIORITY_CHANNEL_SHIFT)) & DCP_CHANNELCTRL_TOG_HIGH_PRIORITY_CHANNEL_MASK)
+#define DCP_CHANNELCTRL_TOG_CH0_IRQ_MERGED_MASK  (0x10000U)
+#define DCP_CHANNELCTRL_TOG_CH0_IRQ_MERGED_SHIFT (16U)
+#define DCP_CHANNELCTRL_TOG_CH0_IRQ_MERGED(x)    (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_TOG_CH0_IRQ_MERGED_SHIFT)) & DCP_CHANNELCTRL_TOG_CH0_IRQ_MERGED_MASK)
+#define DCP_CHANNELCTRL_TOG_RSVD_MASK            (0xFFFE0000U)
+#define DCP_CHANNELCTRL_TOG_RSVD_SHIFT           (17U)
+#define DCP_CHANNELCTRL_TOG_RSVD(x)              (((uint32_t)(((uint32_t)(x)) << DCP_CHANNELCTRL_TOG_RSVD_SHIFT)) & DCP_CHANNELCTRL_TOG_RSVD_MASK)
 /*! @} */
 
 /*! @name CAPABILITY0 - DCP capability 0 register */
@@ -8447,6 +9414,120 @@ typedef struct {
 #define DCP_CH0STAT_TAG(x)                       (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_TAG_SHIFT)) & DCP_CH0STAT_TAG_MASK)
 /*! @} */
 
+/*! @name CH0STAT_SET - DCP channel 0 status register */
+/*! @{ */
+#define DCP_CH0STAT_SET_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH0STAT_SET_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH0STAT_SET_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_SET_RSVD_COMPLETE_SHIFT)) & DCP_CH0STAT_SET_RSVD_COMPLETE_MASK)
+#define DCP_CH0STAT_SET_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH0STAT_SET_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH0STAT_SET_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_SET_HASH_MISMATCH_SHIFT)) & DCP_CH0STAT_SET_HASH_MISMATCH_MASK)
+#define DCP_CH0STAT_SET_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH0STAT_SET_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH0STAT_SET_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_SET_ERROR_SETUP_SHIFT)) & DCP_CH0STAT_SET_ERROR_SETUP_MASK)
+#define DCP_CH0STAT_SET_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH0STAT_SET_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH0STAT_SET_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_SET_ERROR_PACKET_SHIFT)) & DCP_CH0STAT_SET_ERROR_PACKET_MASK)
+#define DCP_CH0STAT_SET_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH0STAT_SET_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH0STAT_SET_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_SET_ERROR_SRC_SHIFT)) & DCP_CH0STAT_SET_ERROR_SRC_MASK)
+#define DCP_CH0STAT_SET_ERROR_DST_MASK           (0x20U)
+#define DCP_CH0STAT_SET_ERROR_DST_SHIFT          (5U)
+#define DCP_CH0STAT_SET_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_SET_ERROR_DST_SHIFT)) & DCP_CH0STAT_SET_ERROR_DST_MASK)
+#define DCP_CH0STAT_SET_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH0STAT_SET_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH0STAT_SET_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_SET_ERROR_PAGEFAULT_SHIFT)) & DCP_CH0STAT_SET_ERROR_PAGEFAULT_MASK)
+#define DCP_CH0STAT_SET_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH0STAT_SET_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error signalled because the next pointer is 0x00000000
+ *  0b00000010..Error signalled because the semaphore is non-zero and neither chain bit is set
+ *  0b00000011..Error signalled because an error is reported reading/writing the context buffer
+ *  0b00000100..Error signalled because an error is reported reading/writing the payload
+ *  0b00000101..Error signalled because the control packet specifies an invalid mode select (for instance, blit + hash)
+ */
+#define DCP_CH0STAT_SET_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_SET_ERROR_CODE_SHIFT)) & DCP_CH0STAT_SET_ERROR_CODE_MASK)
+#define DCP_CH0STAT_SET_TAG_MASK                 (0xFF000000U)
+#define DCP_CH0STAT_SET_TAG_SHIFT                (24U)
+#define DCP_CH0STAT_SET_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_SET_TAG_SHIFT)) & DCP_CH0STAT_SET_TAG_MASK)
+/*! @} */
+
+/*! @name CH0STAT_CLR - DCP channel 0 status register */
+/*! @{ */
+#define DCP_CH0STAT_CLR_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH0STAT_CLR_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH0STAT_CLR_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_CLR_RSVD_COMPLETE_SHIFT)) & DCP_CH0STAT_CLR_RSVD_COMPLETE_MASK)
+#define DCP_CH0STAT_CLR_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH0STAT_CLR_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH0STAT_CLR_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_CLR_HASH_MISMATCH_SHIFT)) & DCP_CH0STAT_CLR_HASH_MISMATCH_MASK)
+#define DCP_CH0STAT_CLR_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH0STAT_CLR_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH0STAT_CLR_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_CLR_ERROR_SETUP_SHIFT)) & DCP_CH0STAT_CLR_ERROR_SETUP_MASK)
+#define DCP_CH0STAT_CLR_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH0STAT_CLR_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH0STAT_CLR_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_CLR_ERROR_PACKET_SHIFT)) & DCP_CH0STAT_CLR_ERROR_PACKET_MASK)
+#define DCP_CH0STAT_CLR_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH0STAT_CLR_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH0STAT_CLR_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_CLR_ERROR_SRC_SHIFT)) & DCP_CH0STAT_CLR_ERROR_SRC_MASK)
+#define DCP_CH0STAT_CLR_ERROR_DST_MASK           (0x20U)
+#define DCP_CH0STAT_CLR_ERROR_DST_SHIFT          (5U)
+#define DCP_CH0STAT_CLR_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_CLR_ERROR_DST_SHIFT)) & DCP_CH0STAT_CLR_ERROR_DST_MASK)
+#define DCP_CH0STAT_CLR_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH0STAT_CLR_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH0STAT_CLR_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_CLR_ERROR_PAGEFAULT_SHIFT)) & DCP_CH0STAT_CLR_ERROR_PAGEFAULT_MASK)
+#define DCP_CH0STAT_CLR_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH0STAT_CLR_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error signalled because the next pointer is 0x00000000
+ *  0b00000010..Error signalled because the semaphore is non-zero and neither chain bit is set
+ *  0b00000011..Error signalled because an error is reported reading/writing the context buffer
+ *  0b00000100..Error signalled because an error is reported reading/writing the payload
+ *  0b00000101..Error signalled because the control packet specifies an invalid mode select (for instance, blit + hash)
+ */
+#define DCP_CH0STAT_CLR_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_CLR_ERROR_CODE_SHIFT)) & DCP_CH0STAT_CLR_ERROR_CODE_MASK)
+#define DCP_CH0STAT_CLR_TAG_MASK                 (0xFF000000U)
+#define DCP_CH0STAT_CLR_TAG_SHIFT                (24U)
+#define DCP_CH0STAT_CLR_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_CLR_TAG_SHIFT)) & DCP_CH0STAT_CLR_TAG_MASK)
+/*! @} */
+
+/*! @name CH0STAT_TOG - DCP channel 0 status register */
+/*! @{ */
+#define DCP_CH0STAT_TOG_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH0STAT_TOG_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH0STAT_TOG_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_TOG_RSVD_COMPLETE_SHIFT)) & DCP_CH0STAT_TOG_RSVD_COMPLETE_MASK)
+#define DCP_CH0STAT_TOG_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH0STAT_TOG_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH0STAT_TOG_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_TOG_HASH_MISMATCH_SHIFT)) & DCP_CH0STAT_TOG_HASH_MISMATCH_MASK)
+#define DCP_CH0STAT_TOG_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH0STAT_TOG_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH0STAT_TOG_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_TOG_ERROR_SETUP_SHIFT)) & DCP_CH0STAT_TOG_ERROR_SETUP_MASK)
+#define DCP_CH0STAT_TOG_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH0STAT_TOG_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH0STAT_TOG_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_TOG_ERROR_PACKET_SHIFT)) & DCP_CH0STAT_TOG_ERROR_PACKET_MASK)
+#define DCP_CH0STAT_TOG_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH0STAT_TOG_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH0STAT_TOG_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_TOG_ERROR_SRC_SHIFT)) & DCP_CH0STAT_TOG_ERROR_SRC_MASK)
+#define DCP_CH0STAT_TOG_ERROR_DST_MASK           (0x20U)
+#define DCP_CH0STAT_TOG_ERROR_DST_SHIFT          (5U)
+#define DCP_CH0STAT_TOG_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_TOG_ERROR_DST_SHIFT)) & DCP_CH0STAT_TOG_ERROR_DST_MASK)
+#define DCP_CH0STAT_TOG_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH0STAT_TOG_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH0STAT_TOG_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_TOG_ERROR_PAGEFAULT_SHIFT)) & DCP_CH0STAT_TOG_ERROR_PAGEFAULT_MASK)
+#define DCP_CH0STAT_TOG_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH0STAT_TOG_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error signalled because the next pointer is 0x00000000
+ *  0b00000010..Error signalled because the semaphore is non-zero and neither chain bit is set
+ *  0b00000011..Error signalled because an error is reported reading/writing the context buffer
+ *  0b00000100..Error signalled because an error is reported reading/writing the payload
+ *  0b00000101..Error signalled because the control packet specifies an invalid mode select (for instance, blit + hash)
+ */
+#define DCP_CH0STAT_TOG_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_TOG_ERROR_CODE_SHIFT)) & DCP_CH0STAT_TOG_ERROR_CODE_MASK)
+#define DCP_CH0STAT_TOG_TAG_MASK                 (0xFF000000U)
+#define DCP_CH0STAT_TOG_TAG_SHIFT                (24U)
+#define DCP_CH0STAT_TOG_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH0STAT_TOG_TAG_SHIFT)) & DCP_CH0STAT_TOG_TAG_MASK)
+/*! @} */
+
 /*! @name CH0OPTS - DCP channel 0 options register */
 /*! @{ */
 #define DCP_CH0OPTS_RECOVERY_TIMER_MASK          (0xFFFFU)
@@ -8455,6 +9536,36 @@ typedef struct {
 #define DCP_CH0OPTS_RSVD_MASK                    (0xFFFF0000U)
 #define DCP_CH0OPTS_RSVD_SHIFT                   (16U)
 #define DCP_CH0OPTS_RSVD(x)                      (((uint32_t)(((uint32_t)(x)) << DCP_CH0OPTS_RSVD_SHIFT)) & DCP_CH0OPTS_RSVD_MASK)
+/*! @} */
+
+/*! @name CH0OPTS_SET - DCP channel 0 options register */
+/*! @{ */
+#define DCP_CH0OPTS_SET_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH0OPTS_SET_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH0OPTS_SET_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH0OPTS_SET_RECOVERY_TIMER_SHIFT)) & DCP_CH0OPTS_SET_RECOVERY_TIMER_MASK)
+#define DCP_CH0OPTS_SET_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH0OPTS_SET_RSVD_SHIFT               (16U)
+#define DCP_CH0OPTS_SET_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH0OPTS_SET_RSVD_SHIFT)) & DCP_CH0OPTS_SET_RSVD_MASK)
+/*! @} */
+
+/*! @name CH0OPTS_CLR - DCP channel 0 options register */
+/*! @{ */
+#define DCP_CH0OPTS_CLR_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH0OPTS_CLR_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH0OPTS_CLR_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH0OPTS_CLR_RECOVERY_TIMER_SHIFT)) & DCP_CH0OPTS_CLR_RECOVERY_TIMER_MASK)
+#define DCP_CH0OPTS_CLR_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH0OPTS_CLR_RSVD_SHIFT               (16U)
+#define DCP_CH0OPTS_CLR_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH0OPTS_CLR_RSVD_SHIFT)) & DCP_CH0OPTS_CLR_RSVD_MASK)
+/*! @} */
+
+/*! @name CH0OPTS_TOG - DCP channel 0 options register */
+/*! @{ */
+#define DCP_CH0OPTS_TOG_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH0OPTS_TOG_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH0OPTS_TOG_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH0OPTS_TOG_RECOVERY_TIMER_SHIFT)) & DCP_CH0OPTS_TOG_RECOVERY_TIMER_MASK)
+#define DCP_CH0OPTS_TOG_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH0OPTS_TOG_RSVD_SHIFT               (16U)
+#define DCP_CH0OPTS_TOG_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH0OPTS_TOG_RSVD_SHIFT)) & DCP_CH0OPTS_TOG_RSVD_MASK)
 /*! @} */
 
 /*! @name CH1CMDPTR - DCP channel 1 command pointer address register */
@@ -8512,6 +9623,120 @@ typedef struct {
 #define DCP_CH1STAT_TAG(x)                       (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_TAG_SHIFT)) & DCP_CH1STAT_TAG_MASK)
 /*! @} */
 
+/*! @name CH1STAT_SET - DCP channel 1 status register */
+/*! @{ */
+#define DCP_CH1STAT_SET_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH1STAT_SET_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH1STAT_SET_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_SET_RSVD_COMPLETE_SHIFT)) & DCP_CH1STAT_SET_RSVD_COMPLETE_MASK)
+#define DCP_CH1STAT_SET_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH1STAT_SET_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH1STAT_SET_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_SET_HASH_MISMATCH_SHIFT)) & DCP_CH1STAT_SET_HASH_MISMATCH_MASK)
+#define DCP_CH1STAT_SET_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH1STAT_SET_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH1STAT_SET_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_SET_ERROR_SETUP_SHIFT)) & DCP_CH1STAT_SET_ERROR_SETUP_MASK)
+#define DCP_CH1STAT_SET_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH1STAT_SET_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH1STAT_SET_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_SET_ERROR_PACKET_SHIFT)) & DCP_CH1STAT_SET_ERROR_PACKET_MASK)
+#define DCP_CH1STAT_SET_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH1STAT_SET_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH1STAT_SET_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_SET_ERROR_SRC_SHIFT)) & DCP_CH1STAT_SET_ERROR_SRC_MASK)
+#define DCP_CH1STAT_SET_ERROR_DST_MASK           (0x20U)
+#define DCP_CH1STAT_SET_ERROR_DST_SHIFT          (5U)
+#define DCP_CH1STAT_SET_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_SET_ERROR_DST_SHIFT)) & DCP_CH1STAT_SET_ERROR_DST_MASK)
+#define DCP_CH1STAT_SET_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH1STAT_SET_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH1STAT_SET_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_SET_ERROR_PAGEFAULT_SHIFT)) & DCP_CH1STAT_SET_ERROR_PAGEFAULT_MASK)
+#define DCP_CH1STAT_SET_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH1STAT_SET_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error is signalled because the next pointer is 0x00000000.
+ *  0b00000010..Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set.
+ *  0b00000011..Error is signalled because an error was reported when reading/writing the context buffer.
+ *  0b00000100..Error is signalled because an error was reported when reading/writing the payload.
+ *  0b00000101..Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash).
+ */
+#define DCP_CH1STAT_SET_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_SET_ERROR_CODE_SHIFT)) & DCP_CH1STAT_SET_ERROR_CODE_MASK)
+#define DCP_CH1STAT_SET_TAG_MASK                 (0xFF000000U)
+#define DCP_CH1STAT_SET_TAG_SHIFT                (24U)
+#define DCP_CH1STAT_SET_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_SET_TAG_SHIFT)) & DCP_CH1STAT_SET_TAG_MASK)
+/*! @} */
+
+/*! @name CH1STAT_CLR - DCP channel 1 status register */
+/*! @{ */
+#define DCP_CH1STAT_CLR_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH1STAT_CLR_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH1STAT_CLR_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_CLR_RSVD_COMPLETE_SHIFT)) & DCP_CH1STAT_CLR_RSVD_COMPLETE_MASK)
+#define DCP_CH1STAT_CLR_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH1STAT_CLR_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH1STAT_CLR_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_CLR_HASH_MISMATCH_SHIFT)) & DCP_CH1STAT_CLR_HASH_MISMATCH_MASK)
+#define DCP_CH1STAT_CLR_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH1STAT_CLR_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH1STAT_CLR_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_CLR_ERROR_SETUP_SHIFT)) & DCP_CH1STAT_CLR_ERROR_SETUP_MASK)
+#define DCP_CH1STAT_CLR_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH1STAT_CLR_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH1STAT_CLR_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_CLR_ERROR_PACKET_SHIFT)) & DCP_CH1STAT_CLR_ERROR_PACKET_MASK)
+#define DCP_CH1STAT_CLR_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH1STAT_CLR_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH1STAT_CLR_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_CLR_ERROR_SRC_SHIFT)) & DCP_CH1STAT_CLR_ERROR_SRC_MASK)
+#define DCP_CH1STAT_CLR_ERROR_DST_MASK           (0x20U)
+#define DCP_CH1STAT_CLR_ERROR_DST_SHIFT          (5U)
+#define DCP_CH1STAT_CLR_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_CLR_ERROR_DST_SHIFT)) & DCP_CH1STAT_CLR_ERROR_DST_MASK)
+#define DCP_CH1STAT_CLR_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH1STAT_CLR_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH1STAT_CLR_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_CLR_ERROR_PAGEFAULT_SHIFT)) & DCP_CH1STAT_CLR_ERROR_PAGEFAULT_MASK)
+#define DCP_CH1STAT_CLR_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH1STAT_CLR_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error is signalled because the next pointer is 0x00000000.
+ *  0b00000010..Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set.
+ *  0b00000011..Error is signalled because an error was reported when reading/writing the context buffer.
+ *  0b00000100..Error is signalled because an error was reported when reading/writing the payload.
+ *  0b00000101..Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash).
+ */
+#define DCP_CH1STAT_CLR_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_CLR_ERROR_CODE_SHIFT)) & DCP_CH1STAT_CLR_ERROR_CODE_MASK)
+#define DCP_CH1STAT_CLR_TAG_MASK                 (0xFF000000U)
+#define DCP_CH1STAT_CLR_TAG_SHIFT                (24U)
+#define DCP_CH1STAT_CLR_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_CLR_TAG_SHIFT)) & DCP_CH1STAT_CLR_TAG_MASK)
+/*! @} */
+
+/*! @name CH1STAT_TOG - DCP channel 1 status register */
+/*! @{ */
+#define DCP_CH1STAT_TOG_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH1STAT_TOG_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH1STAT_TOG_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_TOG_RSVD_COMPLETE_SHIFT)) & DCP_CH1STAT_TOG_RSVD_COMPLETE_MASK)
+#define DCP_CH1STAT_TOG_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH1STAT_TOG_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH1STAT_TOG_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_TOG_HASH_MISMATCH_SHIFT)) & DCP_CH1STAT_TOG_HASH_MISMATCH_MASK)
+#define DCP_CH1STAT_TOG_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH1STAT_TOG_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH1STAT_TOG_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_TOG_ERROR_SETUP_SHIFT)) & DCP_CH1STAT_TOG_ERROR_SETUP_MASK)
+#define DCP_CH1STAT_TOG_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH1STAT_TOG_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH1STAT_TOG_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_TOG_ERROR_PACKET_SHIFT)) & DCP_CH1STAT_TOG_ERROR_PACKET_MASK)
+#define DCP_CH1STAT_TOG_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH1STAT_TOG_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH1STAT_TOG_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_TOG_ERROR_SRC_SHIFT)) & DCP_CH1STAT_TOG_ERROR_SRC_MASK)
+#define DCP_CH1STAT_TOG_ERROR_DST_MASK           (0x20U)
+#define DCP_CH1STAT_TOG_ERROR_DST_SHIFT          (5U)
+#define DCP_CH1STAT_TOG_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_TOG_ERROR_DST_SHIFT)) & DCP_CH1STAT_TOG_ERROR_DST_MASK)
+#define DCP_CH1STAT_TOG_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH1STAT_TOG_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH1STAT_TOG_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_TOG_ERROR_PAGEFAULT_SHIFT)) & DCP_CH1STAT_TOG_ERROR_PAGEFAULT_MASK)
+#define DCP_CH1STAT_TOG_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH1STAT_TOG_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error is signalled because the next pointer is 0x00000000.
+ *  0b00000010..Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set.
+ *  0b00000011..Error is signalled because an error was reported when reading/writing the context buffer.
+ *  0b00000100..Error is signalled because an error was reported when reading/writing the payload.
+ *  0b00000101..Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash).
+ */
+#define DCP_CH1STAT_TOG_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_TOG_ERROR_CODE_SHIFT)) & DCP_CH1STAT_TOG_ERROR_CODE_MASK)
+#define DCP_CH1STAT_TOG_TAG_MASK                 (0xFF000000U)
+#define DCP_CH1STAT_TOG_TAG_SHIFT                (24U)
+#define DCP_CH1STAT_TOG_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH1STAT_TOG_TAG_SHIFT)) & DCP_CH1STAT_TOG_TAG_MASK)
+/*! @} */
+
 /*! @name CH1OPTS - DCP channel 1 options register */
 /*! @{ */
 #define DCP_CH1OPTS_RECOVERY_TIMER_MASK          (0xFFFFU)
@@ -8520,6 +9745,36 @@ typedef struct {
 #define DCP_CH1OPTS_RSVD_MASK                    (0xFFFF0000U)
 #define DCP_CH1OPTS_RSVD_SHIFT                   (16U)
 #define DCP_CH1OPTS_RSVD(x)                      (((uint32_t)(((uint32_t)(x)) << DCP_CH1OPTS_RSVD_SHIFT)) & DCP_CH1OPTS_RSVD_MASK)
+/*! @} */
+
+/*! @name CH1OPTS_SET - DCP channel 1 options register */
+/*! @{ */
+#define DCP_CH1OPTS_SET_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH1OPTS_SET_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH1OPTS_SET_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH1OPTS_SET_RECOVERY_TIMER_SHIFT)) & DCP_CH1OPTS_SET_RECOVERY_TIMER_MASK)
+#define DCP_CH1OPTS_SET_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH1OPTS_SET_RSVD_SHIFT               (16U)
+#define DCP_CH1OPTS_SET_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH1OPTS_SET_RSVD_SHIFT)) & DCP_CH1OPTS_SET_RSVD_MASK)
+/*! @} */
+
+/*! @name CH1OPTS_CLR - DCP channel 1 options register */
+/*! @{ */
+#define DCP_CH1OPTS_CLR_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH1OPTS_CLR_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH1OPTS_CLR_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH1OPTS_CLR_RECOVERY_TIMER_SHIFT)) & DCP_CH1OPTS_CLR_RECOVERY_TIMER_MASK)
+#define DCP_CH1OPTS_CLR_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH1OPTS_CLR_RSVD_SHIFT               (16U)
+#define DCP_CH1OPTS_CLR_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH1OPTS_CLR_RSVD_SHIFT)) & DCP_CH1OPTS_CLR_RSVD_MASK)
+/*! @} */
+
+/*! @name CH1OPTS_TOG - DCP channel 1 options register */
+/*! @{ */
+#define DCP_CH1OPTS_TOG_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH1OPTS_TOG_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH1OPTS_TOG_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH1OPTS_TOG_RECOVERY_TIMER_SHIFT)) & DCP_CH1OPTS_TOG_RECOVERY_TIMER_MASK)
+#define DCP_CH1OPTS_TOG_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH1OPTS_TOG_RSVD_SHIFT               (16U)
+#define DCP_CH1OPTS_TOG_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH1OPTS_TOG_RSVD_SHIFT)) & DCP_CH1OPTS_TOG_RSVD_MASK)
 /*! @} */
 
 /*! @name CH2CMDPTR - DCP channel 2 command pointer address register */
@@ -8577,6 +9832,120 @@ typedef struct {
 #define DCP_CH2STAT_TAG(x)                       (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_TAG_SHIFT)) & DCP_CH2STAT_TAG_MASK)
 /*! @} */
 
+/*! @name CH2STAT_SET - DCP channel 2 status register */
+/*! @{ */
+#define DCP_CH2STAT_SET_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH2STAT_SET_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH2STAT_SET_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_SET_RSVD_COMPLETE_SHIFT)) & DCP_CH2STAT_SET_RSVD_COMPLETE_MASK)
+#define DCP_CH2STAT_SET_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH2STAT_SET_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH2STAT_SET_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_SET_HASH_MISMATCH_SHIFT)) & DCP_CH2STAT_SET_HASH_MISMATCH_MASK)
+#define DCP_CH2STAT_SET_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH2STAT_SET_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH2STAT_SET_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_SET_ERROR_SETUP_SHIFT)) & DCP_CH2STAT_SET_ERROR_SETUP_MASK)
+#define DCP_CH2STAT_SET_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH2STAT_SET_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH2STAT_SET_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_SET_ERROR_PACKET_SHIFT)) & DCP_CH2STAT_SET_ERROR_PACKET_MASK)
+#define DCP_CH2STAT_SET_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH2STAT_SET_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH2STAT_SET_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_SET_ERROR_SRC_SHIFT)) & DCP_CH2STAT_SET_ERROR_SRC_MASK)
+#define DCP_CH2STAT_SET_ERROR_DST_MASK           (0x20U)
+#define DCP_CH2STAT_SET_ERROR_DST_SHIFT          (5U)
+#define DCP_CH2STAT_SET_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_SET_ERROR_DST_SHIFT)) & DCP_CH2STAT_SET_ERROR_DST_MASK)
+#define DCP_CH2STAT_SET_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH2STAT_SET_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH2STAT_SET_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_SET_ERROR_PAGEFAULT_SHIFT)) & DCP_CH2STAT_SET_ERROR_PAGEFAULT_MASK)
+#define DCP_CH2STAT_SET_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH2STAT_SET_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error is signalled because the next pointer is 0x00000000.
+ *  0b00000010..Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set.
+ *  0b00000011..Error is signalled because an error was reported while reading/writing the context buffer.
+ *  0b00000100..Error is signalled because an error was reported while reading/writing the payload.
+ *  0b00000101..Error is signalled because the control packet specifies an invalid mode select (for instance, blit + hash).
+ */
+#define DCP_CH2STAT_SET_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_SET_ERROR_CODE_SHIFT)) & DCP_CH2STAT_SET_ERROR_CODE_MASK)
+#define DCP_CH2STAT_SET_TAG_MASK                 (0xFF000000U)
+#define DCP_CH2STAT_SET_TAG_SHIFT                (24U)
+#define DCP_CH2STAT_SET_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_SET_TAG_SHIFT)) & DCP_CH2STAT_SET_TAG_MASK)
+/*! @} */
+
+/*! @name CH2STAT_CLR - DCP channel 2 status register */
+/*! @{ */
+#define DCP_CH2STAT_CLR_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH2STAT_CLR_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH2STAT_CLR_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_CLR_RSVD_COMPLETE_SHIFT)) & DCP_CH2STAT_CLR_RSVD_COMPLETE_MASK)
+#define DCP_CH2STAT_CLR_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH2STAT_CLR_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH2STAT_CLR_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_CLR_HASH_MISMATCH_SHIFT)) & DCP_CH2STAT_CLR_HASH_MISMATCH_MASK)
+#define DCP_CH2STAT_CLR_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH2STAT_CLR_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH2STAT_CLR_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_CLR_ERROR_SETUP_SHIFT)) & DCP_CH2STAT_CLR_ERROR_SETUP_MASK)
+#define DCP_CH2STAT_CLR_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH2STAT_CLR_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH2STAT_CLR_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_CLR_ERROR_PACKET_SHIFT)) & DCP_CH2STAT_CLR_ERROR_PACKET_MASK)
+#define DCP_CH2STAT_CLR_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH2STAT_CLR_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH2STAT_CLR_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_CLR_ERROR_SRC_SHIFT)) & DCP_CH2STAT_CLR_ERROR_SRC_MASK)
+#define DCP_CH2STAT_CLR_ERROR_DST_MASK           (0x20U)
+#define DCP_CH2STAT_CLR_ERROR_DST_SHIFT          (5U)
+#define DCP_CH2STAT_CLR_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_CLR_ERROR_DST_SHIFT)) & DCP_CH2STAT_CLR_ERROR_DST_MASK)
+#define DCP_CH2STAT_CLR_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH2STAT_CLR_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH2STAT_CLR_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_CLR_ERROR_PAGEFAULT_SHIFT)) & DCP_CH2STAT_CLR_ERROR_PAGEFAULT_MASK)
+#define DCP_CH2STAT_CLR_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH2STAT_CLR_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error is signalled because the next pointer is 0x00000000.
+ *  0b00000010..Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set.
+ *  0b00000011..Error is signalled because an error was reported while reading/writing the context buffer.
+ *  0b00000100..Error is signalled because an error was reported while reading/writing the payload.
+ *  0b00000101..Error is signalled because the control packet specifies an invalid mode select (for instance, blit + hash).
+ */
+#define DCP_CH2STAT_CLR_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_CLR_ERROR_CODE_SHIFT)) & DCP_CH2STAT_CLR_ERROR_CODE_MASK)
+#define DCP_CH2STAT_CLR_TAG_MASK                 (0xFF000000U)
+#define DCP_CH2STAT_CLR_TAG_SHIFT                (24U)
+#define DCP_CH2STAT_CLR_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_CLR_TAG_SHIFT)) & DCP_CH2STAT_CLR_TAG_MASK)
+/*! @} */
+
+/*! @name CH2STAT_TOG - DCP channel 2 status register */
+/*! @{ */
+#define DCP_CH2STAT_TOG_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH2STAT_TOG_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH2STAT_TOG_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_TOG_RSVD_COMPLETE_SHIFT)) & DCP_CH2STAT_TOG_RSVD_COMPLETE_MASK)
+#define DCP_CH2STAT_TOG_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH2STAT_TOG_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH2STAT_TOG_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_TOG_HASH_MISMATCH_SHIFT)) & DCP_CH2STAT_TOG_HASH_MISMATCH_MASK)
+#define DCP_CH2STAT_TOG_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH2STAT_TOG_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH2STAT_TOG_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_TOG_ERROR_SETUP_SHIFT)) & DCP_CH2STAT_TOG_ERROR_SETUP_MASK)
+#define DCP_CH2STAT_TOG_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH2STAT_TOG_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH2STAT_TOG_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_TOG_ERROR_PACKET_SHIFT)) & DCP_CH2STAT_TOG_ERROR_PACKET_MASK)
+#define DCP_CH2STAT_TOG_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH2STAT_TOG_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH2STAT_TOG_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_TOG_ERROR_SRC_SHIFT)) & DCP_CH2STAT_TOG_ERROR_SRC_MASK)
+#define DCP_CH2STAT_TOG_ERROR_DST_MASK           (0x20U)
+#define DCP_CH2STAT_TOG_ERROR_DST_SHIFT          (5U)
+#define DCP_CH2STAT_TOG_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_TOG_ERROR_DST_SHIFT)) & DCP_CH2STAT_TOG_ERROR_DST_MASK)
+#define DCP_CH2STAT_TOG_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH2STAT_TOG_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH2STAT_TOG_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_TOG_ERROR_PAGEFAULT_SHIFT)) & DCP_CH2STAT_TOG_ERROR_PAGEFAULT_MASK)
+#define DCP_CH2STAT_TOG_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH2STAT_TOG_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error is signalled because the next pointer is 0x00000000.
+ *  0b00000010..Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set.
+ *  0b00000011..Error is signalled because an error was reported while reading/writing the context buffer.
+ *  0b00000100..Error is signalled because an error was reported while reading/writing the payload.
+ *  0b00000101..Error is signalled because the control packet specifies an invalid mode select (for instance, blit + hash).
+ */
+#define DCP_CH2STAT_TOG_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_TOG_ERROR_CODE_SHIFT)) & DCP_CH2STAT_TOG_ERROR_CODE_MASK)
+#define DCP_CH2STAT_TOG_TAG_MASK                 (0xFF000000U)
+#define DCP_CH2STAT_TOG_TAG_SHIFT                (24U)
+#define DCP_CH2STAT_TOG_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH2STAT_TOG_TAG_SHIFT)) & DCP_CH2STAT_TOG_TAG_MASK)
+/*! @} */
+
 /*! @name CH2OPTS - DCP channel 2 options register */
 /*! @{ */
 #define DCP_CH2OPTS_RECOVERY_TIMER_MASK          (0xFFFFU)
@@ -8585,6 +9954,36 @@ typedef struct {
 #define DCP_CH2OPTS_RSVD_MASK                    (0xFFFF0000U)
 #define DCP_CH2OPTS_RSVD_SHIFT                   (16U)
 #define DCP_CH2OPTS_RSVD(x)                      (((uint32_t)(((uint32_t)(x)) << DCP_CH2OPTS_RSVD_SHIFT)) & DCP_CH2OPTS_RSVD_MASK)
+/*! @} */
+
+/*! @name CH2OPTS_SET - DCP channel 2 options register */
+/*! @{ */
+#define DCP_CH2OPTS_SET_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH2OPTS_SET_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH2OPTS_SET_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH2OPTS_SET_RECOVERY_TIMER_SHIFT)) & DCP_CH2OPTS_SET_RECOVERY_TIMER_MASK)
+#define DCP_CH2OPTS_SET_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH2OPTS_SET_RSVD_SHIFT               (16U)
+#define DCP_CH2OPTS_SET_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH2OPTS_SET_RSVD_SHIFT)) & DCP_CH2OPTS_SET_RSVD_MASK)
+/*! @} */
+
+/*! @name CH2OPTS_CLR - DCP channel 2 options register */
+/*! @{ */
+#define DCP_CH2OPTS_CLR_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH2OPTS_CLR_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH2OPTS_CLR_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH2OPTS_CLR_RECOVERY_TIMER_SHIFT)) & DCP_CH2OPTS_CLR_RECOVERY_TIMER_MASK)
+#define DCP_CH2OPTS_CLR_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH2OPTS_CLR_RSVD_SHIFT               (16U)
+#define DCP_CH2OPTS_CLR_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH2OPTS_CLR_RSVD_SHIFT)) & DCP_CH2OPTS_CLR_RSVD_MASK)
+/*! @} */
+
+/*! @name CH2OPTS_TOG - DCP channel 2 options register */
+/*! @{ */
+#define DCP_CH2OPTS_TOG_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH2OPTS_TOG_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH2OPTS_TOG_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH2OPTS_TOG_RECOVERY_TIMER_SHIFT)) & DCP_CH2OPTS_TOG_RECOVERY_TIMER_MASK)
+#define DCP_CH2OPTS_TOG_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH2OPTS_TOG_RSVD_SHIFT               (16U)
+#define DCP_CH2OPTS_TOG_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH2OPTS_TOG_RSVD_SHIFT)) & DCP_CH2OPTS_TOG_RSVD_MASK)
 /*! @} */
 
 /*! @name CH3CMDPTR - DCP channel 3 command pointer address register */
@@ -8642,6 +10041,120 @@ typedef struct {
 #define DCP_CH3STAT_TAG(x)                       (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_TAG_SHIFT)) & DCP_CH3STAT_TAG_MASK)
 /*! @} */
 
+/*! @name CH3STAT_SET - DCP channel 3 status register */
+/*! @{ */
+#define DCP_CH3STAT_SET_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH3STAT_SET_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH3STAT_SET_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_SET_RSVD_COMPLETE_SHIFT)) & DCP_CH3STAT_SET_RSVD_COMPLETE_MASK)
+#define DCP_CH3STAT_SET_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH3STAT_SET_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH3STAT_SET_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_SET_HASH_MISMATCH_SHIFT)) & DCP_CH3STAT_SET_HASH_MISMATCH_MASK)
+#define DCP_CH3STAT_SET_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH3STAT_SET_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH3STAT_SET_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_SET_ERROR_SETUP_SHIFT)) & DCP_CH3STAT_SET_ERROR_SETUP_MASK)
+#define DCP_CH3STAT_SET_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH3STAT_SET_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH3STAT_SET_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_SET_ERROR_PACKET_SHIFT)) & DCP_CH3STAT_SET_ERROR_PACKET_MASK)
+#define DCP_CH3STAT_SET_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH3STAT_SET_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH3STAT_SET_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_SET_ERROR_SRC_SHIFT)) & DCP_CH3STAT_SET_ERROR_SRC_MASK)
+#define DCP_CH3STAT_SET_ERROR_DST_MASK           (0x20U)
+#define DCP_CH3STAT_SET_ERROR_DST_SHIFT          (5U)
+#define DCP_CH3STAT_SET_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_SET_ERROR_DST_SHIFT)) & DCP_CH3STAT_SET_ERROR_DST_MASK)
+#define DCP_CH3STAT_SET_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH3STAT_SET_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH3STAT_SET_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_SET_ERROR_PAGEFAULT_SHIFT)) & DCP_CH3STAT_SET_ERROR_PAGEFAULT_MASK)
+#define DCP_CH3STAT_SET_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH3STAT_SET_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error is signalled because the next pointer is 0x00000000.
+ *  0b00000010..Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set.
+ *  0b00000011..Error is signalled because an error was reported while reading/writing the context buffer.
+ *  0b00000100..Error is signalled because an error was reported while reading/writing the payload.
+ *  0b00000101..Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash).
+ */
+#define DCP_CH3STAT_SET_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_SET_ERROR_CODE_SHIFT)) & DCP_CH3STAT_SET_ERROR_CODE_MASK)
+#define DCP_CH3STAT_SET_TAG_MASK                 (0xFF000000U)
+#define DCP_CH3STAT_SET_TAG_SHIFT                (24U)
+#define DCP_CH3STAT_SET_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_SET_TAG_SHIFT)) & DCP_CH3STAT_SET_TAG_MASK)
+/*! @} */
+
+/*! @name CH3STAT_CLR - DCP channel 3 status register */
+/*! @{ */
+#define DCP_CH3STAT_CLR_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH3STAT_CLR_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH3STAT_CLR_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_CLR_RSVD_COMPLETE_SHIFT)) & DCP_CH3STAT_CLR_RSVD_COMPLETE_MASK)
+#define DCP_CH3STAT_CLR_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH3STAT_CLR_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH3STAT_CLR_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_CLR_HASH_MISMATCH_SHIFT)) & DCP_CH3STAT_CLR_HASH_MISMATCH_MASK)
+#define DCP_CH3STAT_CLR_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH3STAT_CLR_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH3STAT_CLR_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_CLR_ERROR_SETUP_SHIFT)) & DCP_CH3STAT_CLR_ERROR_SETUP_MASK)
+#define DCP_CH3STAT_CLR_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH3STAT_CLR_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH3STAT_CLR_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_CLR_ERROR_PACKET_SHIFT)) & DCP_CH3STAT_CLR_ERROR_PACKET_MASK)
+#define DCP_CH3STAT_CLR_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH3STAT_CLR_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH3STAT_CLR_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_CLR_ERROR_SRC_SHIFT)) & DCP_CH3STAT_CLR_ERROR_SRC_MASK)
+#define DCP_CH3STAT_CLR_ERROR_DST_MASK           (0x20U)
+#define DCP_CH3STAT_CLR_ERROR_DST_SHIFT          (5U)
+#define DCP_CH3STAT_CLR_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_CLR_ERROR_DST_SHIFT)) & DCP_CH3STAT_CLR_ERROR_DST_MASK)
+#define DCP_CH3STAT_CLR_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH3STAT_CLR_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH3STAT_CLR_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_CLR_ERROR_PAGEFAULT_SHIFT)) & DCP_CH3STAT_CLR_ERROR_PAGEFAULT_MASK)
+#define DCP_CH3STAT_CLR_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH3STAT_CLR_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error is signalled because the next pointer is 0x00000000.
+ *  0b00000010..Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set.
+ *  0b00000011..Error is signalled because an error was reported while reading/writing the context buffer.
+ *  0b00000100..Error is signalled because an error was reported while reading/writing the payload.
+ *  0b00000101..Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash).
+ */
+#define DCP_CH3STAT_CLR_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_CLR_ERROR_CODE_SHIFT)) & DCP_CH3STAT_CLR_ERROR_CODE_MASK)
+#define DCP_CH3STAT_CLR_TAG_MASK                 (0xFF000000U)
+#define DCP_CH3STAT_CLR_TAG_SHIFT                (24U)
+#define DCP_CH3STAT_CLR_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_CLR_TAG_SHIFT)) & DCP_CH3STAT_CLR_TAG_MASK)
+/*! @} */
+
+/*! @name CH3STAT_TOG - DCP channel 3 status register */
+/*! @{ */
+#define DCP_CH3STAT_TOG_RSVD_COMPLETE_MASK       (0x1U)
+#define DCP_CH3STAT_TOG_RSVD_COMPLETE_SHIFT      (0U)
+#define DCP_CH3STAT_TOG_RSVD_COMPLETE(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_TOG_RSVD_COMPLETE_SHIFT)) & DCP_CH3STAT_TOG_RSVD_COMPLETE_MASK)
+#define DCP_CH3STAT_TOG_HASH_MISMATCH_MASK       (0x2U)
+#define DCP_CH3STAT_TOG_HASH_MISMATCH_SHIFT      (1U)
+#define DCP_CH3STAT_TOG_HASH_MISMATCH(x)         (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_TOG_HASH_MISMATCH_SHIFT)) & DCP_CH3STAT_TOG_HASH_MISMATCH_MASK)
+#define DCP_CH3STAT_TOG_ERROR_SETUP_MASK         (0x4U)
+#define DCP_CH3STAT_TOG_ERROR_SETUP_SHIFT        (2U)
+#define DCP_CH3STAT_TOG_ERROR_SETUP(x)           (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_TOG_ERROR_SETUP_SHIFT)) & DCP_CH3STAT_TOG_ERROR_SETUP_MASK)
+#define DCP_CH3STAT_TOG_ERROR_PACKET_MASK        (0x8U)
+#define DCP_CH3STAT_TOG_ERROR_PACKET_SHIFT       (3U)
+#define DCP_CH3STAT_TOG_ERROR_PACKET(x)          (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_TOG_ERROR_PACKET_SHIFT)) & DCP_CH3STAT_TOG_ERROR_PACKET_MASK)
+#define DCP_CH3STAT_TOG_ERROR_SRC_MASK           (0x10U)
+#define DCP_CH3STAT_TOG_ERROR_SRC_SHIFT          (4U)
+#define DCP_CH3STAT_TOG_ERROR_SRC(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_TOG_ERROR_SRC_SHIFT)) & DCP_CH3STAT_TOG_ERROR_SRC_MASK)
+#define DCP_CH3STAT_TOG_ERROR_DST_MASK           (0x20U)
+#define DCP_CH3STAT_TOG_ERROR_DST_SHIFT          (5U)
+#define DCP_CH3STAT_TOG_ERROR_DST(x)             (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_TOG_ERROR_DST_SHIFT)) & DCP_CH3STAT_TOG_ERROR_DST_MASK)
+#define DCP_CH3STAT_TOG_ERROR_PAGEFAULT_MASK     (0x40U)
+#define DCP_CH3STAT_TOG_ERROR_PAGEFAULT_SHIFT    (6U)
+#define DCP_CH3STAT_TOG_ERROR_PAGEFAULT(x)       (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_TOG_ERROR_PAGEFAULT_SHIFT)) & DCP_CH3STAT_TOG_ERROR_PAGEFAULT_MASK)
+#define DCP_CH3STAT_TOG_ERROR_CODE_MASK          (0xFF0000U)
+#define DCP_CH3STAT_TOG_ERROR_CODE_SHIFT         (16U)
+/*! ERROR_CODE
+ *  0b00000001..Error is signalled because the next pointer is 0x00000000.
+ *  0b00000010..Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set.
+ *  0b00000011..Error is signalled because an error was reported while reading/writing the context buffer.
+ *  0b00000100..Error is signalled because an error was reported while reading/writing the payload.
+ *  0b00000101..Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash).
+ */
+#define DCP_CH3STAT_TOG_ERROR_CODE(x)            (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_TOG_ERROR_CODE_SHIFT)) & DCP_CH3STAT_TOG_ERROR_CODE_MASK)
+#define DCP_CH3STAT_TOG_TAG_MASK                 (0xFF000000U)
+#define DCP_CH3STAT_TOG_TAG_SHIFT                (24U)
+#define DCP_CH3STAT_TOG_TAG(x)                   (((uint32_t)(((uint32_t)(x)) << DCP_CH3STAT_TOG_TAG_SHIFT)) & DCP_CH3STAT_TOG_TAG_MASK)
+/*! @} */
+
 /*! @name CH3OPTS - DCP channel 3 options register */
 /*! @{ */
 #define DCP_CH3OPTS_RECOVERY_TIMER_MASK          (0xFFFFU)
@@ -8650,6 +10163,36 @@ typedef struct {
 #define DCP_CH3OPTS_RSVD_MASK                    (0xFFFF0000U)
 #define DCP_CH3OPTS_RSVD_SHIFT                   (16U)
 #define DCP_CH3OPTS_RSVD(x)                      (((uint32_t)(((uint32_t)(x)) << DCP_CH3OPTS_RSVD_SHIFT)) & DCP_CH3OPTS_RSVD_MASK)
+/*! @} */
+
+/*! @name CH3OPTS_SET - DCP channel 3 options register */
+/*! @{ */
+#define DCP_CH3OPTS_SET_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH3OPTS_SET_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH3OPTS_SET_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH3OPTS_SET_RECOVERY_TIMER_SHIFT)) & DCP_CH3OPTS_SET_RECOVERY_TIMER_MASK)
+#define DCP_CH3OPTS_SET_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH3OPTS_SET_RSVD_SHIFT               (16U)
+#define DCP_CH3OPTS_SET_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH3OPTS_SET_RSVD_SHIFT)) & DCP_CH3OPTS_SET_RSVD_MASK)
+/*! @} */
+
+/*! @name CH3OPTS_CLR - DCP channel 3 options register */
+/*! @{ */
+#define DCP_CH3OPTS_CLR_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH3OPTS_CLR_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH3OPTS_CLR_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH3OPTS_CLR_RECOVERY_TIMER_SHIFT)) & DCP_CH3OPTS_CLR_RECOVERY_TIMER_MASK)
+#define DCP_CH3OPTS_CLR_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH3OPTS_CLR_RSVD_SHIFT               (16U)
+#define DCP_CH3OPTS_CLR_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH3OPTS_CLR_RSVD_SHIFT)) & DCP_CH3OPTS_CLR_RSVD_MASK)
+/*! @} */
+
+/*! @name CH3OPTS_TOG - DCP channel 3 options register */
+/*! @{ */
+#define DCP_CH3OPTS_TOG_RECOVERY_TIMER_MASK      (0xFFFFU)
+#define DCP_CH3OPTS_TOG_RECOVERY_TIMER_SHIFT     (0U)
+#define DCP_CH3OPTS_TOG_RECOVERY_TIMER(x)        (((uint32_t)(((uint32_t)(x)) << DCP_CH3OPTS_TOG_RECOVERY_TIMER_SHIFT)) & DCP_CH3OPTS_TOG_RECOVERY_TIMER_MASK)
+#define DCP_CH3OPTS_TOG_RSVD_MASK                (0xFFFF0000U)
+#define DCP_CH3OPTS_TOG_RSVD_SHIFT               (16U)
+#define DCP_CH3OPTS_TOG_RSVD(x)                  (((uint32_t)(((uint32_t)(x)) << DCP_CH3OPTS_TOG_RSVD_SHIFT)) & DCP_CH3OPTS_TOG_RSVD_MASK)
 /*! @} */
 
 /*! @name DBGSELECT - DCP debug select register */
@@ -8835,7 +10378,8 @@ typedef struct {
 #define DMA_CR_EDBG_SHIFT                        (1U)
 /*! EDBG - Enable Debug
  *  0b0..When in debug mode, the DMA continues to operate.
- *  0b1..When in debug mode, the DMA stalls the start of a new channel. Executing channels are allowed to complete. Channel execution resumes when the system exits debug mode or the EDBG bit is cleared.
+ *  0b1..When in debug mode, the DMA stalls the start of a new channel. Executing channels are allowed to
+ *       complete. Channel execution resumes when the system exits debug mode or the EDBG bit is cleared.
  */
 #define DMA_CR_EDBG(x)                           (((uint32_t)(((uint32_t)(x)) << DMA_CR_EDBG_SHIFT)) & DMA_CR_EDBG_MASK)
 #define DMA_CR_ERCA_MASK                         (0x4U)
@@ -8870,14 +10414,19 @@ typedef struct {
 #define DMA_CR_CLM_SHIFT                         (6U)
 /*! CLM - Continuous Link Mode
  *  0b0..A minor loop channel link made to itself goes through channel arbitration before being activated again.
- *  0b1..A minor loop channel link made to itself does not go through channel arbitration before being activated again. Upon minor loop completion, the channel activates again if that channel has a minor loop channel link enabled and the link channel is itself. This effectively applies the minor loop offsets and restarts the next minor loop.
+ *  0b1..A minor loop channel link made to itself does not go through channel arbitration before being activated
+ *       again. Upon minor loop completion, the channel activates again if that channel has a minor loop channel
+ *       link enabled and the link channel is itself. This effectively applies the minor loop offsets and restarts the
+ *       next minor loop.
  */
 #define DMA_CR_CLM(x)                            (((uint32_t)(((uint32_t)(x)) << DMA_CR_CLM_SHIFT)) & DMA_CR_CLM_MASK)
 #define DMA_CR_EMLM_MASK                         (0x80U)
 #define DMA_CR_EMLM_SHIFT                        (7U)
 /*! EMLM - Enable Minor Loop Mapping
  *  0b0..Disabled. TCDn.word2 is defined as a 32-bit NBYTES field.
- *  0b1..Enabled. TCDn.word2 is redefined to include individual enable fields, an offset field, and the NBYTES field. The individual enable fields allow the minor loop offset to be applied to the source address, the destination address, or both. The NBYTES field is reduced when either offset is enabled.
+ *  0b1..Enabled. TCDn.word2 is redefined to include individual enable fields, an offset field, and the NBYTES
+ *       field. The individual enable fields allow the minor loop offset to be applied to the source address, the
+ *       destination address, or both. The NBYTES field is reduced when either offset is enabled.
  */
 #define DMA_CR_EMLM(x)                           (((uint32_t)(((uint32_t)(x)) << DMA_CR_EMLM_SHIFT)) & DMA_CR_EMLM_MASK)
 #define DMA_CR_GRP0PRI_MASK                      (0x100U)
@@ -8890,14 +10439,20 @@ typedef struct {
 #define DMA_CR_ECX_SHIFT                         (16U)
 /*! ECX - Error Cancel Transfer
  *  0b0..Normal operation
- *  0b1..Cancel the remaining data transfer in the same fashion as the CX bit. Stop the executing channel and force the minor loop to finish. The cancel takes effect after the last write of the current read/write sequence. The ECX bit clears itself after the cancel is honored. In addition to cancelling the transfer, ECX treats the cancel as an error condition, thus updating the Error Status register (DMAx_ES) and generating an optional error interrupt.
+ *  0b1..Cancel the remaining data transfer in the same fashion as the CX bit. Stop the executing channel and
+ *       force the minor loop to finish. The cancel takes effect after the last write of the current read/write
+ *       sequence. The ECX bit clears itself after the cancel is honored. In addition to cancelling the transfer, ECX
+ *       treats the cancel as an error condition, thus updating the Error Status register (DMAx_ES) and generating an
+ *       optional error interrupt.
  */
 #define DMA_CR_ECX(x)                            (((uint32_t)(((uint32_t)(x)) << DMA_CR_ECX_SHIFT)) & DMA_CR_ECX_MASK)
 #define DMA_CR_CX_MASK                           (0x20000U)
 #define DMA_CR_CX_SHIFT                          (17U)
 /*! CX - Cancel Transfer
  *  0b0..Normal operation
- *  0b1..Cancel the remaining data transfer. Stop the executing channel and force the minor loop to finish. The cancel takes effect after the last write of the current read/write sequence. The CX bit clears itself after the cancel has been honored. This cancel retires the channel normally as if the minor loop was completed.
+ *  0b1..Cancel the remaining data transfer. Stop the executing channel and force the minor loop to finish. The
+ *       cancel takes effect after the last write of the current read/write sequence. The CX bit clears itself after
+ *       the cancel has been honored. This cancel retires the channel normally as if the minor loop was completed.
  */
 #define DMA_CR_CX(x)                             (((uint32_t)(((uint32_t)(x)) << DMA_CR_CX_SHIFT)) & DMA_CR_CX_MASK)
 #define DMA_CR_ACTIVE_MASK                       (0x80000000U)
@@ -8929,14 +10484,18 @@ typedef struct {
 #define DMA_ES_SGE_SHIFT                         (2U)
 /*! SGE - Scatter/Gather Configuration Error
  *  0b0..No scatter/gather configuration error
- *  0b1..The last recorded error was a configuration error detected in the TCDn_DLASTSGA field. This field is checked at the beginning of a scatter/gather operation after major loop completion if TCDn_CSR[ESG] is enabled. TCDn_DLASTSGA is not on a 32 byte boundary.
+ *  0b1..The last recorded error was a configuration error detected in the TCDn_DLASTSGA field. This field is
+ *       checked at the beginning of a scatter/gather operation after major loop completion if TCDn_CSR[ESG] is
+ *       enabled. TCDn_DLASTSGA is not on a 32 byte boundary.
  */
 #define DMA_ES_SGE(x)                            (((uint32_t)(((uint32_t)(x)) << DMA_ES_SGE_SHIFT)) & DMA_ES_SGE_MASK)
 #define DMA_ES_NCE_MASK                          (0x8U)
 #define DMA_ES_NCE_SHIFT                         (3U)
 /*! NCE - NBYTES/CITER Configuration Error
  *  0b0..No NBYTES/CITER configuration error
- *  0b1..The last recorded error was a configuration error detected in the TCDn_NBYTES or TCDn_CITER fields. TCDn_NBYTES is not a multiple of TCDn_ATTR[SSIZE] and TCDn_ATTR[DSIZE], or TCDn_CITER[CITER] is equal to zero, or TCDn_CITER[ELINK] is not equal to TCDn_BITER[ELINK]
+ *  0b1..The last recorded error was a configuration error detected in the TCDn_NBYTES or TCDn_CITER fields.
+ *       TCDn_NBYTES is not a multiple of TCDn_ATTR[SSIZE] and TCDn_ATTR[DSIZE], or TCDn_CITER[CITER] is equal to zero,
+ *       or TCDn_CITER[ELINK] is not equal to TCDn_BITER[ELINK]
  */
 #define DMA_ES_NCE(x)                            (((uint32_t)(((uint32_t)(x)) << DMA_ES_NCE_SHIFT)) & DMA_ES_NCE_MASK)
 #define DMA_ES_DOE_MASK                          (0x10U)
@@ -8974,7 +10533,8 @@ typedef struct {
 #define DMA_ES_CPE_SHIFT                         (14U)
 /*! CPE - Channel Priority Error
  *  0b0..No channel priority error
- *  0b1..The last recorded error was a configuration error in the channel priorities within a group. Channel priorities within a group are not unique.
+ *  0b1..The last recorded error was a configuration error in the channel priorities within a group. Channel
+ *       priorities within a group are not unique.
  */
 #define DMA_ES_CPE(x)                            (((uint32_t)(((uint32_t)(x)) << DMA_ES_CPE_SHIFT)) & DMA_ES_CPE_MASK)
 #define DMA_ES_GPE_MASK                          (0x8000U)
@@ -11373,7 +12933,14 @@ typedef struct {
 #define DMA_ATTR_SMOD_SHIFT                      (11U)
 /*! SMOD - Source Address Modulo
  *  0b00000..Source address modulo feature is disabled
- *  0b00001-0b11111..This value defines a specific address range specified to be the value after SADDR + SOFF calculation is performed on the original register value. Setting this field provides the ability to implement a circular data queue easily. For data queues requiring power-of-2 size bytes, the queue should start at a 0-modulo-size address and the SMOD field should be set to the appropriate value for the queue, freezing the desired number of upper address bits. The value programmed into this field specifies the number of lower address bits allowed to change. For a circular queue application, the SOFF is typically set to the transfer size to implement post-increment addressing with the SMOD function constraining the addresses to a 0-modulo-size range.
+ *  0b00001-0b11111..This value defines a specific address range specified to be the value after SADDR + SOFF
+ *                   calculation is performed on the original register value. Setting this field provides the ability
+ *                   to implement a circular data queue easily. For data queues requiring power-of-2 size bytes, the
+ *                   queue should start at a 0-modulo-size address and the SMOD field should be set to the
+ *                   appropriate value for the queue, freezing the desired number of upper address bits. The value
+ *                   programmed into this field specifies the number of lower address bits allowed to change. For a
+ *                   circular queue application, the SOFF is typically set to the transfer size to implement
+ *                   post-increment addressing with the SMOD function constraining the addresses to a 0-modulo-size range.
  */
 #define DMA_ATTR_SMOD(x)                         (((uint16_t)(((uint16_t)(x)) << DMA_ATTR_SMOD_SHIFT)) & DMA_ATTR_SMOD_MASK)
 /*! @} */
@@ -11553,7 +13120,8 @@ typedef struct {
 #define DMA_CSR_ESG_SHIFT                        (4U)
 /*! ESG - Enable Scatter/Gather Processing
  *  0b0..The current channel's TCD is normal format.
- *  0b1..The current channel's TCD specifies a scatter gather format. The DLASTSGA field provides a memory pointer to the next TCD to be loaded into this channel after the major loop completes its execution.
+ *  0b1..The current channel's TCD specifies a scatter gather format. The DLASTSGA field provides a memory pointer
+ *       to the next TCD to be loaded into this channel after the major loop completes its execution.
  */
 #define DMA_CSR_ESG(x)                           (((uint16_t)(((uint16_t)(x)) << DMA_CSR_ESG_SHIFT)) & DMA_CSR_ESG_MASK)
 #define DMA_CSR_MAJORELINK_MASK                  (0x20U)
@@ -11685,7 +13253,8 @@ typedef struct {
 #define DMAMUX_CHCFG_TRIG_MASK                   (0x40000000U)
 #define DMAMUX_CHCFG_TRIG_SHIFT                  (30U)
 /*! TRIG - DMA Channel Trigger Enable
- *  0b0..Triggering is disabled. If triggering is disabled and ENBL is set, the DMA Channel will simply route the specified source to the DMA channel. (Normal mode)
+ *  0b0..Triggering is disabled. If triggering is disabled and ENBL is set, the DMA Channel will simply route the
+ *       specified source to the DMA channel. (Normal mode)
  *  0b1..Triggering is enabled. If triggering is enabled and ENBL is set, the DMA_CH_MUX is in Periodic Trigger mode.
  */
 #define DMAMUX_CHCFG_TRIG(x)                     (((uint32_t)(((uint32_t)(x)) << DMAMUX_CHCFG_TRIG_SHIFT)) & DMAMUX_CHCFG_TRIG_MASK)
@@ -11833,7 +13402,10 @@ typedef struct {
 #define ENC_CTRL_PH1_SHIFT                       (9U)
 /*! PH1 - Enable Signal Phase Count Mode
  *  0b0..Use standard quadrature decoder where PHASEA and PHASEB represent a two phase quadrature signal.
- *  0b1..Bypass the quadrature decoder. A positive transition of the PHASEA input generates a count signal. The PHASEB input and the REV bit control the counter direction. If CTRL[REV] = 0, PHASEB = 0, then count up If CTRL[REV] = 0, PHASEB = 1, then count down If CTRL[REV] = 1, PHASEB = 0, then count down If CTRL[REV] = 1, PHASEB = 1, then count up
+ *  0b1..Bypass the quadrature decoder. A positive transition of the PHASEA input generates a count signal. The
+ *       PHASEB input and the REV bit control the counter direction. If CTRL[REV] = 0, PHASEB = 0, then count up If
+ *       CTRL[REV] = 0, PHASEB = 1, then count down If CTRL[REV] = 1, PHASEB = 0, then count down If CTRL[REV] = 1,
+ *       PHASEB = 1, then count up
  */
 #define ENC_CTRL_PH1(x)                          (((uint16_t)(((uint16_t)(x)) << ENC_CTRL_PH1_SHIFT)) & ENC_CTRL_PH1_MASK)
 #define ENC_CTRL_REV_MASK                        (0x400U)
@@ -12923,21 +14495,26 @@ typedef struct {
 #define ENET_TACC_SHIFT16_SHIFT                  (0U)
 /*! SHIFT16 - TX FIFO Shift-16
  *  0b0..Disabled.
- *  0b1..Indicates to the transmit data FIFO that the written frames contain two additional octets before the frame data. This means the actual frame begins at bit 16 of the first word written into the FIFO. This function allows putting the frame payload on a 32-bit boundary in memory, as the 14-byte Ethernet header is extended to a 16-byte header.
+ *  0b1..Indicates to the transmit data FIFO that the written frames contain two additional octets before the
+ *       frame data. This means the actual frame begins at bit 16 of the first word written into the FIFO. This
+ *       function allows putting the frame payload on a 32-bit boundary in memory, as the 14-byte Ethernet header is
+ *       extended to a 16-byte header.
  */
 #define ENET_TACC_SHIFT16(x)                     (((uint32_t)(((uint32_t)(x)) << ENET_TACC_SHIFT16_SHIFT)) & ENET_TACC_SHIFT16_MASK)
 #define ENET_TACC_IPCHK_MASK                     (0x8U)
 #define ENET_TACC_IPCHK_SHIFT                    (3U)
 /*! IPCHK
  *  0b0..Checksum is not inserted.
- *  0b1..If an IP frame is transmitted, the checksum is inserted automatically. The IP header checksum field must be cleared. If a non-IP frame is transmitted the frame is not modified.
+ *  0b1..If an IP frame is transmitted, the checksum is inserted automatically. The IP header checksum field must
+ *       be cleared. If a non-IP frame is transmitted the frame is not modified.
  */
 #define ENET_TACC_IPCHK(x)                       (((uint32_t)(((uint32_t)(x)) << ENET_TACC_IPCHK_SHIFT)) & ENET_TACC_IPCHK_MASK)
 #define ENET_TACC_PROCHK_MASK                    (0x10U)
 #define ENET_TACC_PROCHK_SHIFT                   (4U)
 /*! PROCHK
  *  0b0..Checksum not inserted.
- *  0b1..If an IP frame with a known protocol is transmitted, the checksum is inserted automatically into the frame. The checksum field must be cleared. The other frames are not modified.
+ *  0b1..If an IP frame with a known protocol is transmitted, the checksum is inserted automatically into the
+ *       frame. The checksum field must be cleared. The other frames are not modified.
  */
 #define ENET_TACC_PROCHK(x)                      (((uint32_t)(((uint32_t)(x)) << ENET_TACC_PROCHK_SHIFT)) & ENET_TACC_PROCHK_MASK)
 /*! @} */
@@ -12955,14 +14532,18 @@ typedef struct {
 #define ENET_RACC_IPDIS_SHIFT                    (1U)
 /*! IPDIS - Enable Discard Of Frames With Wrong IPv4 Header Checksum
  *  0b0..Frames with wrong IPv4 header checksum are not discarded.
- *  0b1..If an IPv4 frame is received with a mismatching header checksum, the frame is discarded. IPv6 has no header checksum and is not affected by this setting. Discarding is only available when the RX FIFO operates in store and forward mode (RSFL cleared).
+ *  0b1..If an IPv4 frame is received with a mismatching header checksum, the frame is discarded. IPv6 has no
+ *       header checksum and is not affected by this setting. Discarding is only available when the RX FIFO operates in
+ *       store and forward mode (RSFL cleared).
  */
 #define ENET_RACC_IPDIS(x)                       (((uint32_t)(((uint32_t)(x)) << ENET_RACC_IPDIS_SHIFT)) & ENET_RACC_IPDIS_MASK)
 #define ENET_RACC_PRODIS_MASK                    (0x4U)
 #define ENET_RACC_PRODIS_SHIFT                   (2U)
 /*! PRODIS - Enable Discard Of Frames With Wrong Protocol Checksum
  *  0b0..Frames with wrong checksum are not discarded.
- *  0b1..If a TCP/IP, UDP/IP, or ICMP/IP frame is received that has a wrong TCP, UDP, or ICMP checksum, the frame is discarded. Discarding is only available when the RX FIFO operates in store and forward mode (RSFL cleared).
+ *  0b1..If a TCP/IP, UDP/IP, or ICMP/IP frame is received that has a wrong TCP, UDP, or ICMP checksum, the frame
+ *       is discarded. Discarding is only available when the RX FIFO operates in store and forward mode (RSFL
+ *       cleared).
  */
 #define ENET_RACC_PRODIS(x)                      (((uint32_t)(((uint32_t)(x)) << ENET_RACC_PRODIS_SHIFT)) & ENET_RACC_PRODIS_MASK)
 #define ENET_RACC_LINEDIS_MASK                   (0x40U)
@@ -13351,7 +14932,9 @@ typedef struct {
 #define ENET_ATCR_OFFEN_SHIFT                    (2U)
 /*! OFFEN - Enable One-Shot Offset Event
  *  0b0..Disable.
- *  0b1..The timer can be reset to zero when the given offset time is reached (offset event). The field is cleared when the offset event is reached, so no further event occurs until the field is set again. The timer offset value must be set before setting this field.
+ *  0b1..The timer can be reset to zero when the given offset time is reached (offset event). The field is cleared
+ *       when the offset event is reached, so no further event occurs until the field is set again. The timer
+ *       offset value must be set before setting this field.
  */
 #define ENET_ATCR_OFFEN(x)                       (((uint32_t)(((uint32_t)(x)) << ENET_ATCR_OFFEN_SHIFT)) & ENET_ATCR_OFFEN_MASK)
 #define ENET_ATCR_OFFRST_MASK                    (0x8U)
@@ -13365,7 +14948,9 @@ typedef struct {
 #define ENET_ATCR_PEREN_SHIFT                    (4U)
 /*! PEREN - Enable Periodical Event
  *  0b0..Disable.
- *  0b1..A period event interrupt can be generated (EIR[TS_TIMER]) and the event signal output is asserted when the timer wraps around according to the periodic setting ATPER. The timer period value must be set before setting this bit. Not all devices contain the event signal output. See the chip configuration details.
+ *  0b1..A period event interrupt can be generated (EIR[TS_TIMER]) and the event signal output is asserted when
+ *       the timer wraps around according to the periodic setting ATPER. The timer period value must be set before
+ *       setting this bit. Not all devices contain the event signal output. See the chip configuration details.
  */
 #define ENET_ATCR_PEREN(x)                       (((uint32_t)(((uint32_t)(x)) << ENET_ATCR_PEREN_SHIFT)) & ENET_ATCR_PEREN_MASK)
 #define ENET_ATCR_PINPER_MASK                    (0x80U)
@@ -13389,7 +14974,8 @@ typedef struct {
 #define ENET_ATCR_SLAVE_SHIFT                    (13U)
 /*! SLAVE - Enable Timer Slave Mode
  *  0b0..The timer is active and all configuration fields in this register are relevant.
- *  0b1..The internal timer is disabled and the externally provided timer value is used. All other fields, except CAPTURE, in this register have no effect. CAPTURE can still be used to capture the current timer value.
+ *  0b1..The internal timer is disabled and the externally provided timer value is used. All other fields, except
+ *       CAPTURE, in this register have no effect. CAPTURE can still be used to capture the current timer value.
  */
 #define ENET_ATCR_SLAVE(x)                       (((uint32_t)(((uint32_t)(x)) << ENET_ATCR_SLAVE_SHIFT)) & ENET_ATCR_SLAVE_MASK)
 /*! @} */
@@ -14441,7 +16027,9 @@ typedef struct {
 #define FLEXSPI_MCR0_COMBINATIONEN(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_MCR0_COMBINATIONEN_SHIFT)) & FLEXSPI_MCR0_COMBINATIONEN_MASK)
 #define FLEXSPI_MCR0_SCKFREERUNEN_MASK           (0x4000U)
 #define FLEXSPI_MCR0_SCKFREERUNEN_SHIFT          (14U)
-/*! SCKFREERUNEN - This bit is used to force SCK output free-running. For FPGA applications, external device may use SCK clock as reference clock to its internal PLL. If SCK free-running is enabled, data sampling with loopback clock from SCK pad is not supported (MCR0[RXCLKSRC]=2).
+/*! SCKFREERUNEN - This bit is used to force SCK output free-running. For FPGA applications,
+ *    external device may use SCK clock as reference clock to its internal PLL. If SCK free-running is
+ *    enabled, data sampling with loopback clock from SCK pad is not supported (MCR0[RXCLKSRC]=2).
  *  0b0..Disable.
  *  0b1..Enable.
  */
@@ -14468,7 +16056,10 @@ typedef struct {
 /*! @{ */
 #define FLEXSPI_MCR2_CLRAHBBUFOPT_MASK           (0x800U)
 #define FLEXSPI_MCR2_CLRAHBBUFOPT_SHIFT          (11U)
-/*! CLRAHBBUFOPT - This bit determines whether AHB RX Buffer and AHB TX Buffer will be cleaned automaticaly when FlexSPI returns STOP mode ACK. Software should set this bit if AHB RX Buffer or AHB TX Buffer will be powered off in STOP mode. Otherwise AHB read access after exiting STOP mode may hit AHB RX Buffer or AHB TX Buffer but their data entries are invalid.
+/*! CLRAHBBUFOPT - This bit determines whether AHB RX Buffer and AHB TX Buffer will be cleaned
+ *    automaticaly when FlexSPI returns STOP mode ACK. Software should set this bit if AHB RX Buffer or
+ *    AHB TX Buffer will be powered off in STOP mode. Otherwise AHB read access after exiting STOP
+ *    mode may hit AHB RX Buffer or AHB TX Buffer but their data entries are invalid.
  *  0b0..AHB RX/TX Buffer will not be cleaned automatically when FlexSPI return Stop mode ACK.
  *  0b1..AHB RX/TX Buffer will be cleaned automatically when FlexSPI return Stop mode ACK.
  */
@@ -14479,13 +16070,18 @@ typedef struct {
 #define FLEXSPI_MCR2_SAMEDEVICEEN_MASK           (0x8000U)
 #define FLEXSPI_MCR2_SAMEDEVICEEN_SHIFT          (15U)
 /*! SAMEDEVICEEN - All external devices are same devices (both in types and size) for A1/A2/B1/B2.
- *  0b0..In Individual mode, FLSHA1CRx/FLSHA2CRx/FLSHB1CRx/FLSHB2CRx register setting will be applied to Flash A1/A2/B1/B2 seperately. In Parallel mode, FLSHA1CRx register setting will be applied to Flash A1 and B1, FLSHA2CRx register setting will be applied to Flash A2 and B2. FLSHB1CRx/FLSHB2CRx register settings will be ignored.
+ *  0b0..In Individual mode, FLSHA1CRx/FLSHA2CRx/FLSHB1CRx/FLSHB2CRx register setting will be applied to Flash
+ *       A1/A2/B1/B2 seperately. In Parallel mode, FLSHA1CRx register setting will be applied to Flash A1 and B1,
+ *       FLSHA2CRx register setting will be applied to Flash A2 and B2. FLSHB1CRx/FLSHB2CRx register settings will be
+ *       ignored.
  *  0b1..FLSHA1CR0/FLSHA1CR1/FLSHA1CR2 register settings will be applied to Flash A1/A2/B1/B2. FLSHA2CRx/FLSHB1CRx/FLSHB2CRx will be ignored.
  */
 #define FLEXSPI_MCR2_SAMEDEVICEEN(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_MCR2_SAMEDEVICEEN_SHIFT)) & FLEXSPI_MCR2_SAMEDEVICEEN_MASK)
 #define FLEXSPI_MCR2_SCKBDIFFOPT_MASK            (0x80000U)
 #define FLEXSPI_MCR2_SCKBDIFFOPT_SHIFT           (19U)
-/*! SCKBDIFFOPT - SCKB pad can be used as SCKA differential clock output (inverted clock to SCKA). In this case, port B flash access is not available. After change the value of this feild, MCR0[SWRESET] should be set.
+/*! SCKBDIFFOPT - SCKB pad can be used as SCKA differential clock output (inverted clock to SCKA).
+ *    In this case, port B flash access is not available. After change the value of this feild,
+ *    MCR0[SWRESET] should be set.
  *  0b1..SCKB pad is used as port A SCK inverted clock output (Differential clock to SCKA). Port B flash access is not available.
  *  0b0..SCKB pad is used as port B SCK clock output. Port B flash access is available.
  */
@@ -14513,9 +16109,12 @@ typedef struct {
 #define FLEXSPI_AHBCR_CACHABLEEN(x)              (((uint32_t)(((uint32_t)(x)) << FLEXSPI_AHBCR_CACHABLEEN_SHIFT)) & FLEXSPI_AHBCR_CACHABLEEN_MASK)
 #define FLEXSPI_AHBCR_BUFFERABLEEN_MASK          (0x10U)
 #define FLEXSPI_AHBCR_BUFFERABLEEN_SHIFT         (4U)
-/*! BUFFERABLEEN - Enable AHB bus bufferable write access support. This field affects the last beat of AHB write access, refer for more details about AHB bufferable write.
- *  0b0..Disabled. For all AHB write access (no matter bufferable or non-bufferable ), FlexSPI will return AHB Bus ready after all data is transmitted to External device and AHB command finished.
- *  0b1..Enabled. For AHB bufferable write access, FlexSPI will return AHB Bus ready when the AHB command is granted by arbitrator and will not wait for AHB command finished.
+/*! BUFFERABLEEN - Enable AHB bus bufferable write access support. This field affects the last beat
+ *    of AHB write access, refer for more details about AHB bufferable write.
+ *  0b0..Disabled. For all AHB write access (no matter bufferable or non-bufferable ), FlexSPI will return AHB Bus
+ *       ready after all data is transmitted to External device and AHB command finished.
+ *  0b1..Enabled. For AHB bufferable write access, FlexSPI will return AHB Bus ready when the AHB command is
+ *       granted by arbitrator and will not wait for AHB command finished.
  */
 #define FLEXSPI_AHBCR_BUFFERABLEEN(x)            (((uint32_t)(((uint32_t)(x)) << FLEXSPI_AHBCR_BUFFERABLEEN_SHIFT)) & FLEXSPI_AHBCR_BUFFERABLEEN_MASK)
 #define FLEXSPI_AHBCR_PREFETCHEN_MASK            (0x20U)
@@ -14525,7 +16124,8 @@ typedef struct {
 #define FLEXSPI_AHBCR_READADDROPT_SHIFT          (6U)
 /*! READADDROPT - AHB Read Address option bit. This option bit is intend to remove AHB burst start address alignment limitation.
  *  0b0..There is AHB read burst start address alignment limitation when flash is accessed in parallel mode or flash is wordaddressable.
- *  0b1..There is no AHB read burst start address alignment limitation. FlexSPI will fetch more datas than AHB burst required to meet the alignment requirement.
+ *  0b1..There is no AHB read burst start address alignment limitation. FlexSPI will fetch more datas than AHB
+ *       burst required to meet the alignment requirement.
  */
 #define FLEXSPI_AHBCR_READADDROPT(x)             (((uint32_t)(((uint32_t)(x)) << FLEXSPI_AHBCR_READADDROPT_SHIFT)) & FLEXSPI_AHBCR_READADDROPT_MASK)
 /*! @} */
@@ -14722,20 +16322,24 @@ typedef struct {
 #define FLEXSPI_FLSHCR4_WMOPT1_MASK              (0x1U)
 #define FLEXSPI_FLSHCR4_WMOPT1_SHIFT             (0U)
 /*! WMOPT1 - Write mask option bit 1. This option bit could be used to remove AHB write burst start address alignment limitation.
- *  0b0..DQS pin will be used as Write Mask when writing to external device. There is no limitation on AHB write burst start address alignment when flash is accessed in individual mode.
- *  0b1..DQS pin will not be used as Write Mask when writing to external device. There is limitation on AHB write burst start address alignment when flash is accessed in individual mode.
+ *  0b0..DQS pin will be used as Write Mask when writing to external device. There is no limitation on AHB write
+ *       burst start address alignment when flash is accessed in individual mode.
+ *  0b1..DQS pin will not be used as Write Mask when writing to external device. There is limitation on AHB write
+ *       burst start address alignment when flash is accessed in individual mode.
  */
 #define FLEXSPI_FLSHCR4_WMOPT1(x)                (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR4_WMOPT1_SHIFT)) & FLEXSPI_FLSHCR4_WMOPT1_MASK)
 #define FLEXSPI_FLSHCR4_WMENA_MASK               (0x4U)
 #define FLEXSPI_FLSHCR4_WMENA_SHIFT              (2U)
-/*! WMENA - Write mask enable bit for flash device on port A. When write mask function is needed for memory device on port A, this bit must be set.
+/*! WMENA - Write mask enable bit for flash device on port A. When write mask function is needed for
+ *    memory device on port A, this bit must be set.
  *  0b0..Write mask is disabled, DQS(RWDS) pin will be un-driven when writing to external device.
  *  0b1..Write mask is enabled, DQS(RWDS) pin will be driven by FlexSPI as write mask output when writing to external device.
  */
 #define FLEXSPI_FLSHCR4_WMENA(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXSPI_FLSHCR4_WMENA_SHIFT)) & FLEXSPI_FLSHCR4_WMENA_MASK)
 #define FLEXSPI_FLSHCR4_WMENB_MASK               (0x8U)
 #define FLEXSPI_FLSHCR4_WMENB_SHIFT              (3U)
-/*! WMENB - Write mask enable bit for flash device on port B. When write mask function is needed for memory device on port B, this bit must be set.
+/*! WMENB - Write mask enable bit for flash device on port B. When write mask function is needed for
+ *    memory device on port B, this bit must be set.
  *  0b0..Write mask is disabled, DQS(RWDS) pin will be un-driven when writing to external device.
  *  0b1..Write mask is enabled, DQS(RWDS) pin will be driven by FlexSPI as write mask output when writing to external device.
  */
@@ -14842,7 +16446,8 @@ typedef struct {
 #define FLEXSPI_STS0_ARBIDLE(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXSPI_STS0_ARBIDLE_SHIFT)) & FLEXSPI_STS0_ARBIDLE_MASK)
 #define FLEXSPI_STS0_ARBCMDSRC_MASK              (0xCU)
 #define FLEXSPI_STS0_ARBCMDSRC_SHIFT             (2U)
-/*! ARBCMDSRC - This status field indicates the trigger source of current command sequence granted by arbitrator. This field value is meaningless when ARB_CTL is not busy (STS0[ARBIDLE]=0x1).
+/*! ARBCMDSRC - This status field indicates the trigger source of current command sequence granted
+ *    by arbitrator. This field value is meaningless when ARB_CTL is not busy (STS0[ARBIDLE]=0x1).
  *  0b00..Triggered by AHB read command (triggered by AHB read).
  *  0b01..Triggered by AHB write command (triggered by AHB Write).
  *  0b10..Triggered by IP command (triggered by setting register bit IPCMD.TRG).
@@ -14858,7 +16463,8 @@ typedef struct {
 #define FLEXSPI_STS1_AHBCMDERRID(x)              (((uint32_t)(((uint32_t)(x)) << FLEXSPI_STS1_AHBCMDERRID_SHIFT)) & FLEXSPI_STS1_AHBCMDERRID_MASK)
 #define FLEXSPI_STS1_AHBCMDERRCODE_MASK          (0xF00U)
 #define FLEXSPI_STS1_AHBCMDERRCODE_SHIFT         (8U)
-/*! AHBCMDERRCODE - Indicates the Error Code when AHB command Error detected. This field will be cleared when INTR[AHBCMDERR] is write-1-clear(w1c).
+/*! AHBCMDERRCODE - Indicates the Error Code when AHB command Error detected. This field will be
+ *    cleared when INTR[AHBCMDERR] is write-1-clear(w1c).
  *  0b0000..No error.
  *  0b0010..AHB Write command with JMP_ON_CS instruction used in the sequence.
  *  0b0011..There is unknown instruction opcode in the sequence.
@@ -14872,7 +16478,8 @@ typedef struct {
 #define FLEXSPI_STS1_IPCMDERRID(x)               (((uint32_t)(((uint32_t)(x)) << FLEXSPI_STS1_IPCMDERRID_SHIFT)) & FLEXSPI_STS1_IPCMDERRID_MASK)
 #define FLEXSPI_STS1_IPCMDERRCODE_MASK           (0xF000000U)
 #define FLEXSPI_STS1_IPCMDERRCODE_SHIFT          (24U)
-/*! IPCMDERRCODE - Indicates the Error Code when IP command Error detected. This field will be cleared when INTR[IPCMDERR] is write-1-clear(w1c).
+/*! IPCMDERRCODE - Indicates the Error Code when IP command Error detected. This field will be
+ *    cleared when INTR[IPCMDERR] is write-1-clear(w1c).
  *  0b0000..No error.
  *  0b0010..IP command with JMP_ON_CS instruction used in the sequence.
  *  0b0011..There is unknown instruction opcode in the sequence.
@@ -16143,9 +17750,9 @@ typedef struct {
 #define I2S_TCR3_WDFL_MASK                       (0x1FU)
 #define I2S_TCR3_WDFL_SHIFT                      (0U)
 #define I2S_TCR3_WDFL(x)                         (((uint32_t)(((uint32_t)(x)) << I2S_TCR3_WDFL_SHIFT)) & I2S_TCR3_WDFL_MASK)
-#define I2S_TCR3_TCE_MASK                        (0xF0000U)
+#define I2S_TCR3_TCE_MASK                        (0xF0000U)  /* Merged from fields with different position or width, of widths (1, 4), largest definition used */
 #define I2S_TCR3_TCE_SHIFT                       (16U)
-#define I2S_TCR3_TCE(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCR3_TCE_SHIFT)) & I2S_TCR3_TCE_MASK)
+#define I2S_TCR3_TCE(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCR3_TCE_SHIFT)) & I2S_TCR3_TCE_MASK)  /* Merged from fields with different position or width, of widths (1, 4), largest definition used */
 #define I2S_TCR3_CFR_MASK                        (0xF000000U)
 #define I2S_TCR3_CFR_SHIFT                       (24U)
 #define I2S_TCR3_CFR(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_TCR3_CFR_SHIFT)) & I2S_TCR3_CFR_MASK)
@@ -16477,9 +18084,9 @@ typedef struct {
 #define I2S_RCR3_WDFL_MASK                       (0x1FU)
 #define I2S_RCR3_WDFL_SHIFT                      (0U)
 #define I2S_RCR3_WDFL(x)                         (((uint32_t)(((uint32_t)(x)) << I2S_RCR3_WDFL_SHIFT)) & I2S_RCR3_WDFL_MASK)
-#define I2S_RCR3_RCE_MASK                        (0xF0000U)
+#define I2S_RCR3_RCE_MASK                        (0xF0000U)  /* Merged from fields with different position or width, of widths (1, 4), largest definition used */
 #define I2S_RCR3_RCE_SHIFT                       (16U)
-#define I2S_RCR3_RCE(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCR3_RCE_SHIFT)) & I2S_RCR3_RCE_MASK)
+#define I2S_RCR3_RCE(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCR3_RCE_SHIFT)) & I2S_RCR3_RCE_MASK)  /* Merged from fields with different position or width, of widths (1, 4), largest definition used */
 #define I2S_RCR3_CFR_MASK                        (0xF000000U)
 #define I2S_RCR3_CFR_SHIFT                       (24U)
 #define I2S_RCR3_CFR(x)                          (((uint32_t)(((uint32_t)(x)) << I2S_RCR3_CFR_SHIFT)) & I2S_RCR3_CFR_MASK)
@@ -16672,20 +18279,20 @@ typedef struct {
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_MASK      (0x7U)
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_SHIFT     (0U)
 /*! MUX_MODE - MUX Mode Select Field.
- *  0b000..Select mux mode: ALT0 mux port: SEMC_CSX02 of instance: semc
- *  0b001..Select mux mode: ALT1 mux port: FLEXSPI_A_DATA02 of instance: flexspi_bus2bit
- *  0b010..Select mux mode: ALT2 mux port: LPSPI4_PCS0 of instance: lpspi4
- *  0b011..Select mux mode: ALT3 mux port: SAI1_TX_DATA00 of instance: sai1
- *  0b100..Select mux mode: ALT4 mux port: FLEXIO1_FLEXIO12 of instance: flexio1
- *  0b101..Select mux mode: ALT5 mux port: GPIO1_IO19 of instance: gpio1
- *  0b110..Select mux mode: ALT6 mux port: ENET_1588_EVENT3_IN of instance: enet
- *  0b111..Select mux mode: ALT7 mux port: KPP_ROW05 of instance: kpp
+ *  0b000..Select mux mode: ALT0 mux port: SEMC_DATA00 of instance: semc
+ *  0b001..Select mux mode: ALT1 mux port: QTIMER2_TIMER0 of instance: qtimer2
+ *  0b010..Select mux mode: ALT2 mux port: LPUART4_CTS_B of instance: lpuart4
+ *  0b011..Select mux mode: ALT3 mux port: SPDIF_SR_CLK of instance: spdif
+ *  0b100..Select mux mode: ALT4 mux port: LPSPI2_SCK of instance: lpspi2
+ *  0b101..Select mux mode: ALT5 mux port: GPIO2_IO00 of instance: gpio2
+ *  0b110..Select mux mode: ALT6 mux port: FLEXCAN1_TX of instance: flexcan1
+ *  0b111..Select mux mode: ALT7 mux port: PIT_TRIGGER02 of instance: pit
  */
 #define IOMUXC_SW_MUX_CTL_PAD_MUX_MODE(x)        (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_SHIFT)) & IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_MASK)
 #define IOMUXC_SW_MUX_CTL_PAD_SION_MASK          (0x10U)
 #define IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT         (4U)
 /*! SION - Software Input On Field.
- *  0b1..Force input path of pad GPIO_SD_B1_11
+ *  0b1..Force input path of pad GPIO_EMC_00
  *  0b0..Input Path is determined by functionality
  */
 #define IOMUXC_SW_MUX_CTL_PAD_SION(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_SW_MUX_CTL_PAD_SION_SHIFT)) & IOMUXC_SW_MUX_CTL_PAD_SION_MASK)
@@ -16772,11 +18379,9 @@ typedef struct {
 #define IOMUXC_SELECT_INPUT_DAISY_MASK           (0x7U)  /* Merged from fields with different position or width, of widths (1, 2, 3), largest definition used */
 #define IOMUXC_SELECT_INPUT_DAISY_SHIFT          (0U)
 /*! DAISY - Selecting Pads Involved in Daisy Chain.
- *  0b000..Selecting Pad: GPIO_AD_B0_03 for Mode: ALT4
- *  0b001..Selecting Pad: GPIO_AD_B0_04 for Mode: ALT2
- *  0b010..Selecting Pad: GPIO_AD_B1_05 for Mode: ALT0
- *  0b011..Selecting Pad: GPIO_AD_B1_11 for Mode: ALT3
- *  0b100..Selecting Pad: GPIO_EMC_36 for Mode: ALT7
+ *  0b00..Selecting Pad: GPIO_AD_B0_05 for Mode: ALT6
+ *  0b01..Selecting Pad: GPIO_AD_B1_11 for Mode: ALT0
+ *  0b10..Selecting Pad: GPIO_EMC_40 for Mode: ALT3
  */
 #define IOMUXC_SELECT_INPUT_DAISY(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_SELECT_INPUT_DAISY_SHIFT)) & IOMUXC_SELECT_INPUT_DAISY_MASK)  /* Merged from fields with different position or width, of widths (1, 2, 3), largest definition used */
 /*! @} */
@@ -16919,7 +18524,8 @@ typedef struct {
 #define IOMUXC_GPR_GPR1_ENET1_CLK_SEL_SHIFT      (13U)
 /*! ENET1_CLK_SEL
  *  0b0..ENET1 TX reference clock driven by ref_enetpll.
- *  0b1..Gets ENET1 TX reference clock from the ENET1_TX_CLK pin. In this use case, an external OSC provides the clock for both the external PHY and the internal controller.
+ *  0b1..Gets ENET1 TX reference clock from the ENET1_TX_CLK pin. In this use case, an external OSC provides the
+ *       clock for both the external PHY and the internal controller.
  */
 #define IOMUXC_GPR_GPR1_ENET1_CLK_SEL(x)         (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR1_ENET1_CLK_SEL_SHIFT)) & IOMUXC_GPR_GPR1_ENET1_CLK_SEL_MASK)
 #define IOMUXC_GPR_GPR1_USB_EXP_MODE_MASK        (0x8000U)
@@ -17005,10 +18611,262 @@ typedef struct {
 #define IOMUXC_GPR_GPR2_L2_MEM_DEEPSLEEP(x)      (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR2_L2_MEM_DEEPSLEEP_SHIFT)) & IOMUXC_GPR_GPR2_L2_MEM_DEEPSLEEP_MASK)
 #define IOMUXC_GPR_GPR2_MQS_CLK_DIV_MASK         (0xFF0000U)
 #define IOMUXC_GPR_GPR2_MQS_CLK_DIV_SHIFT        (16U)
-/*! MQS_CLK_DIV
- *  0b00000000..mclk frequency = hmclk frequency
+/*! MQS_CLK_DIV - Divider ratio control for mclk from hmclk. mclk frequency = 1/(n+1) * hmclk frequency.
+ *  0b00000000..mclk frequency = 1/1 * hmclk frequency
  *  0b00000001..mclk frequency = 1/2 * hmclk frequency
  *  0b00000010..mclk frequency = 1/3 * hmclk frequency
+ *  0b00000011..mclk frequency = 1/4 * hmclk frequency
+ *  0b00000100..mclk frequency = 1/5 * hmclk frequency
+ *  0b00000101..mclk frequency = 1/6 * hmclk frequency
+ *  0b00000110..mclk frequency = 1/7 * hmclk frequency
+ *  0b00000111..mclk frequency = 1/8 * hmclk frequency
+ *  0b00001000..mclk frequency = 1/9 * hmclk frequency
+ *  0b00001001..mclk frequency = 1/10 * hmclk frequency
+ *  0b00001010..mclk frequency = 1/11 * hmclk frequency
+ *  0b00001011..mclk frequency = 1/12 * hmclk frequency
+ *  0b00001100..mclk frequency = 1/13 * hmclk frequency
+ *  0b00001101..mclk frequency = 1/14 * hmclk frequency
+ *  0b00001110..mclk frequency = 1/15 * hmclk frequency
+ *  0b00001111..mclk frequency = 1/16 * hmclk frequency
+ *  0b00010000..mclk frequency = 1/17 * hmclk frequency
+ *  0b00010001..mclk frequency = 1/18 * hmclk frequency
+ *  0b00010010..mclk frequency = 1/19 * hmclk frequency
+ *  0b00010011..mclk frequency = 1/20 * hmclk frequency
+ *  0b00010100..mclk frequency = 1/21 * hmclk frequency
+ *  0b00010101..mclk frequency = 1/22 * hmclk frequency
+ *  0b00010110..mclk frequency = 1/23 * hmclk frequency
+ *  0b00010111..mclk frequency = 1/24 * hmclk frequency
+ *  0b00011000..mclk frequency = 1/25 * hmclk frequency
+ *  0b00011001..mclk frequency = 1/26 * hmclk frequency
+ *  0b00011010..mclk frequency = 1/27 * hmclk frequency
+ *  0b00011011..mclk frequency = 1/28 * hmclk frequency
+ *  0b00011100..mclk frequency = 1/29 * hmclk frequency
+ *  0b00011101..mclk frequency = 1/30 * hmclk frequency
+ *  0b00011110..mclk frequency = 1/31 * hmclk frequency
+ *  0b00011111..mclk frequency = 1/32 * hmclk frequency
+ *  0b00100000..mclk frequency = 1/33 * hmclk frequency
+ *  0b00100001..mclk frequency = 1/34 * hmclk frequency
+ *  0b00100010..mclk frequency = 1/35 * hmclk frequency
+ *  0b00100011..mclk frequency = 1/36 * hmclk frequency
+ *  0b00100100..mclk frequency = 1/37 * hmclk frequency
+ *  0b00100101..mclk frequency = 1/38 * hmclk frequency
+ *  0b00100110..mclk frequency = 1/39 * hmclk frequency
+ *  0b00100111..mclk frequency = 1/40 * hmclk frequency
+ *  0b00101000..mclk frequency = 1/41 * hmclk frequency
+ *  0b00101001..mclk frequency = 1/42 * hmclk frequency
+ *  0b00101010..mclk frequency = 1/43 * hmclk frequency
+ *  0b00101011..mclk frequency = 1/44 * hmclk frequency
+ *  0b00101100..mclk frequency = 1/45 * hmclk frequency
+ *  0b00101101..mclk frequency = 1/46 * hmclk frequency
+ *  0b00101110..mclk frequency = 1/47 * hmclk frequency
+ *  0b00101111..mclk frequency = 1/48 * hmclk frequency
+ *  0b00110000..mclk frequency = 1/49 * hmclk frequency
+ *  0b00110001..mclk frequency = 1/50 * hmclk frequency
+ *  0b00110010..mclk frequency = 1/51 * hmclk frequency
+ *  0b00110011..mclk frequency = 1/52 * hmclk frequency
+ *  0b00110100..mclk frequency = 1/53 * hmclk frequency
+ *  0b00110101..mclk frequency = 1/54 * hmclk frequency
+ *  0b00110110..mclk frequency = 1/55 * hmclk frequency
+ *  0b00110111..mclk frequency = 1/56 * hmclk frequency
+ *  0b00111000..mclk frequency = 1/57 * hmclk frequency
+ *  0b00111001..mclk frequency = 1/58 * hmclk frequency
+ *  0b00111010..mclk frequency = 1/59 * hmclk frequency
+ *  0b00111011..mclk frequency = 1/60 * hmclk frequency
+ *  0b00111100..mclk frequency = 1/61 * hmclk frequency
+ *  0b00111101..mclk frequency = 1/62 * hmclk frequency
+ *  0b00111110..mclk frequency = 1/63 * hmclk frequency
+ *  0b00111111..mclk frequency = 1/64 * hmclk frequency
+ *  0b01000000..mclk frequency = 1/65 * hmclk frequency
+ *  0b01000001..mclk frequency = 1/66 * hmclk frequency
+ *  0b01000010..mclk frequency = 1/67 * hmclk frequency
+ *  0b01000011..mclk frequency = 1/68 * hmclk frequency
+ *  0b01000100..mclk frequency = 1/69 * hmclk frequency
+ *  0b01000101..mclk frequency = 1/70 * hmclk frequency
+ *  0b01000110..mclk frequency = 1/71 * hmclk frequency
+ *  0b01000111..mclk frequency = 1/72 * hmclk frequency
+ *  0b01001000..mclk frequency = 1/73 * hmclk frequency
+ *  0b01001001..mclk frequency = 1/74 * hmclk frequency
+ *  0b01001010..mclk frequency = 1/75 * hmclk frequency
+ *  0b01001011..mclk frequency = 1/76 * hmclk frequency
+ *  0b01001100..mclk frequency = 1/77 * hmclk frequency
+ *  0b01001101..mclk frequency = 1/78 * hmclk frequency
+ *  0b01001110..mclk frequency = 1/79 * hmclk frequency
+ *  0b01001111..mclk frequency = 1/80 * hmclk frequency
+ *  0b01010000..mclk frequency = 1/81 * hmclk frequency
+ *  0b01010001..mclk frequency = 1/82 * hmclk frequency
+ *  0b01010010..mclk frequency = 1/83 * hmclk frequency
+ *  0b01010011..mclk frequency = 1/84 * hmclk frequency
+ *  0b01010100..mclk frequency = 1/85 * hmclk frequency
+ *  0b01010101..mclk frequency = 1/86 * hmclk frequency
+ *  0b01010110..mclk frequency = 1/87 * hmclk frequency
+ *  0b01010111..mclk frequency = 1/88 * hmclk frequency
+ *  0b01011000..mclk frequency = 1/89 * hmclk frequency
+ *  0b01011001..mclk frequency = 1/90 * hmclk frequency
+ *  0b01011010..mclk frequency = 1/91 * hmclk frequency
+ *  0b01011011..mclk frequency = 1/92 * hmclk frequency
+ *  0b01011100..mclk frequency = 1/93 * hmclk frequency
+ *  0b01011101..mclk frequency = 1/94 * hmclk frequency
+ *  0b01011110..mclk frequency = 1/95 * hmclk frequency
+ *  0b01011111..mclk frequency = 1/96 * hmclk frequency
+ *  0b01100000..mclk frequency = 1/97 * hmclk frequency
+ *  0b01100001..mclk frequency = 1/98 * hmclk frequency
+ *  0b01100010..mclk frequency = 1/99 * hmclk frequency
+ *  0b01100011..mclk frequency = 1/100 * hmclk frequency
+ *  0b01100100..mclk frequency = 1/101 * hmclk frequency
+ *  0b01100101..mclk frequency = 1/102 * hmclk frequency
+ *  0b01100110..mclk frequency = 1/103 * hmclk frequency
+ *  0b01100111..mclk frequency = 1/104 * hmclk frequency
+ *  0b01101000..mclk frequency = 1/105 * hmclk frequency
+ *  0b01101001..mclk frequency = 1/106 * hmclk frequency
+ *  0b01101010..mclk frequency = 1/107 * hmclk frequency
+ *  0b01101011..mclk frequency = 1/108 * hmclk frequency
+ *  0b01101100..mclk frequency = 1/109 * hmclk frequency
+ *  0b01101101..mclk frequency = 1/110 * hmclk frequency
+ *  0b01101110..mclk frequency = 1/111 * hmclk frequency
+ *  0b01101111..mclk frequency = 1/112 * hmclk frequency
+ *  0b01110000..mclk frequency = 1/113 * hmclk frequency
+ *  0b01110001..mclk frequency = 1/114 * hmclk frequency
+ *  0b01110010..mclk frequency = 1/115 * hmclk frequency
+ *  0b01110011..mclk frequency = 1/116 * hmclk frequency
+ *  0b01110100..mclk frequency = 1/117 * hmclk frequency
+ *  0b01110101..mclk frequency = 1/118 * hmclk frequency
+ *  0b01110110..mclk frequency = 1/119 * hmclk frequency
+ *  0b01110111..mclk frequency = 1/120 * hmclk frequency
+ *  0b01111000..mclk frequency = 1/121 * hmclk frequency
+ *  0b01111001..mclk frequency = 1/122 * hmclk frequency
+ *  0b01111010..mclk frequency = 1/123 * hmclk frequency
+ *  0b01111011..mclk frequency = 1/124 * hmclk frequency
+ *  0b01111100..mclk frequency = 1/125 * hmclk frequency
+ *  0b01111101..mclk frequency = 1/126 * hmclk frequency
+ *  0b01111110..mclk frequency = 1/127 * hmclk frequency
+ *  0b01111111..mclk frequency = 1/128 * hmclk frequency
+ *  0b10000000..mclk frequency = 1/129 * hmclk frequency
+ *  0b10000001..mclk frequency = 1/130 * hmclk frequency
+ *  0b10000010..mclk frequency = 1/131 * hmclk frequency
+ *  0b10000011..mclk frequency = 1/132 * hmclk frequency
+ *  0b10000100..mclk frequency = 1/133 * hmclk frequency
+ *  0b10000101..mclk frequency = 1/134 * hmclk frequency
+ *  0b10000110..mclk frequency = 1/135 * hmclk frequency
+ *  0b10000111..mclk frequency = 1/136 * hmclk frequency
+ *  0b10001000..mclk frequency = 1/137 * hmclk frequency
+ *  0b10001001..mclk frequency = 1/138 * hmclk frequency
+ *  0b10001010..mclk frequency = 1/139 * hmclk frequency
+ *  0b10001011..mclk frequency = 1/140 * hmclk frequency
+ *  0b10001100..mclk frequency = 1/141 * hmclk frequency
+ *  0b10001101..mclk frequency = 1/142 * hmclk frequency
+ *  0b10001110..mclk frequency = 1/143 * hmclk frequency
+ *  0b10001111..mclk frequency = 1/144 * hmclk frequency
+ *  0b10010000..mclk frequency = 1/145 * hmclk frequency
+ *  0b10010001..mclk frequency = 1/146 * hmclk frequency
+ *  0b10010010..mclk frequency = 1/147 * hmclk frequency
+ *  0b10010011..mclk frequency = 1/148 * hmclk frequency
+ *  0b10010100..mclk frequency = 1/149 * hmclk frequency
+ *  0b10010101..mclk frequency = 1/150 * hmclk frequency
+ *  0b10010110..mclk frequency = 1/151 * hmclk frequency
+ *  0b10010111..mclk frequency = 1/152 * hmclk frequency
+ *  0b10011000..mclk frequency = 1/153 * hmclk frequency
+ *  0b10011001..mclk frequency = 1/154 * hmclk frequency
+ *  0b10011010..mclk frequency = 1/155 * hmclk frequency
+ *  0b10011011..mclk frequency = 1/156 * hmclk frequency
+ *  0b10011100..mclk frequency = 1/157 * hmclk frequency
+ *  0b10011101..mclk frequency = 1/158 * hmclk frequency
+ *  0b10011110..mclk frequency = 1/159 * hmclk frequency
+ *  0b10011111..mclk frequency = 1/160 * hmclk frequency
+ *  0b10100000..mclk frequency = 1/161 * hmclk frequency
+ *  0b10100001..mclk frequency = 1/162 * hmclk frequency
+ *  0b10100010..mclk frequency = 1/163 * hmclk frequency
+ *  0b10100011..mclk frequency = 1/164 * hmclk frequency
+ *  0b10100100..mclk frequency = 1/165 * hmclk frequency
+ *  0b10100101..mclk frequency = 1/166 * hmclk frequency
+ *  0b10100110..mclk frequency = 1/167 * hmclk frequency
+ *  0b10100111..mclk frequency = 1/168 * hmclk frequency
+ *  0b10101000..mclk frequency = 1/169 * hmclk frequency
+ *  0b10101001..mclk frequency = 1/170 * hmclk frequency
+ *  0b10101010..mclk frequency = 1/171 * hmclk frequency
+ *  0b10101011..mclk frequency = 1/172 * hmclk frequency
+ *  0b10101100..mclk frequency = 1/173 * hmclk frequency
+ *  0b10101101..mclk frequency = 1/174 * hmclk frequency
+ *  0b10101110..mclk frequency = 1/175 * hmclk frequency
+ *  0b10101111..mclk frequency = 1/176 * hmclk frequency
+ *  0b10110000..mclk frequency = 1/177 * hmclk frequency
+ *  0b10110001..mclk frequency = 1/178 * hmclk frequency
+ *  0b10110010..mclk frequency = 1/179 * hmclk frequency
+ *  0b10110011..mclk frequency = 1/180 * hmclk frequency
+ *  0b10110100..mclk frequency = 1/181 * hmclk frequency
+ *  0b10110101..mclk frequency = 1/182 * hmclk frequency
+ *  0b10110110..mclk frequency = 1/183 * hmclk frequency
+ *  0b10110111..mclk frequency = 1/184 * hmclk frequency
+ *  0b10111000..mclk frequency = 1/185 * hmclk frequency
+ *  0b10111001..mclk frequency = 1/186 * hmclk frequency
+ *  0b10111010..mclk frequency = 1/187 * hmclk frequency
+ *  0b10111011..mclk frequency = 1/188 * hmclk frequency
+ *  0b10111100..mclk frequency = 1/189 * hmclk frequency
+ *  0b10111101..mclk frequency = 1/190 * hmclk frequency
+ *  0b10111110..mclk frequency = 1/191 * hmclk frequency
+ *  0b10111111..mclk frequency = 1/192 * hmclk frequency
+ *  0b11000000..mclk frequency = 1/193 * hmclk frequency
+ *  0b11000001..mclk frequency = 1/194 * hmclk frequency
+ *  0b11000010..mclk frequency = 1/195 * hmclk frequency
+ *  0b11000011..mclk frequency = 1/196 * hmclk frequency
+ *  0b11000100..mclk frequency = 1/197 * hmclk frequency
+ *  0b11000101..mclk frequency = 1/198 * hmclk frequency
+ *  0b11000110..mclk frequency = 1/199 * hmclk frequency
+ *  0b11000111..mclk frequency = 1/200 * hmclk frequency
+ *  0b11001000..mclk frequency = 1/201 * hmclk frequency
+ *  0b11001001..mclk frequency = 1/202 * hmclk frequency
+ *  0b11001010..mclk frequency = 1/203 * hmclk frequency
+ *  0b11001011..mclk frequency = 1/204 * hmclk frequency
+ *  0b11001100..mclk frequency = 1/205 * hmclk frequency
+ *  0b11001101..mclk frequency = 1/206 * hmclk frequency
+ *  0b11001110..mclk frequency = 1/207 * hmclk frequency
+ *  0b11001111..mclk frequency = 1/208 * hmclk frequency
+ *  0b11010000..mclk frequency = 1/209 * hmclk frequency
+ *  0b11010001..mclk frequency = 1/210 * hmclk frequency
+ *  0b11010010..mclk frequency = 1/211 * hmclk frequency
+ *  0b11010011..mclk frequency = 1/212 * hmclk frequency
+ *  0b11010100..mclk frequency = 1/213 * hmclk frequency
+ *  0b11010101..mclk frequency = 1/214 * hmclk frequency
+ *  0b11010110..mclk frequency = 1/215 * hmclk frequency
+ *  0b11010111..mclk frequency = 1/216 * hmclk frequency
+ *  0b11011000..mclk frequency = 1/217 * hmclk frequency
+ *  0b11011001..mclk frequency = 1/218 * hmclk frequency
+ *  0b11011010..mclk frequency = 1/219 * hmclk frequency
+ *  0b11011011..mclk frequency = 1/220 * hmclk frequency
+ *  0b11011100..mclk frequency = 1/221 * hmclk frequency
+ *  0b11011101..mclk frequency = 1/222 * hmclk frequency
+ *  0b11011110..mclk frequency = 1/223 * hmclk frequency
+ *  0b11011111..mclk frequency = 1/224 * hmclk frequency
+ *  0b11100000..mclk frequency = 1/225 * hmclk frequency
+ *  0b11100001..mclk frequency = 1/226 * hmclk frequency
+ *  0b11100010..mclk frequency = 1/227 * hmclk frequency
+ *  0b11100011..mclk frequency = 1/228 * hmclk frequency
+ *  0b11100100..mclk frequency = 1/229 * hmclk frequency
+ *  0b11100101..mclk frequency = 1/230 * hmclk frequency
+ *  0b11100110..mclk frequency = 1/231 * hmclk frequency
+ *  0b11100111..mclk frequency = 1/232 * hmclk frequency
+ *  0b11101000..mclk frequency = 1/233 * hmclk frequency
+ *  0b11101001..mclk frequency = 1/234 * hmclk frequency
+ *  0b11101010..mclk frequency = 1/235 * hmclk frequency
+ *  0b11101011..mclk frequency = 1/236 * hmclk frequency
+ *  0b11101100..mclk frequency = 1/237 * hmclk frequency
+ *  0b11101101..mclk frequency = 1/238 * hmclk frequency
+ *  0b11101110..mclk frequency = 1/239 * hmclk frequency
+ *  0b11101111..mclk frequency = 1/240 * hmclk frequency
+ *  0b11110000..mclk frequency = 1/241 * hmclk frequency
+ *  0b11110001..mclk frequency = 1/242 * hmclk frequency
+ *  0b11110010..mclk frequency = 1/243 * hmclk frequency
+ *  0b11110011..mclk frequency = 1/244 * hmclk frequency
+ *  0b11110100..mclk frequency = 1/245 * hmclk frequency
+ *  0b11110101..mclk frequency = 1/246 * hmclk frequency
+ *  0b11110110..mclk frequency = 1/247 * hmclk frequency
+ *  0b11110111..mclk frequency = 1/248 * hmclk frequency
+ *  0b11111000..mclk frequency = 1/249 * hmclk frequency
+ *  0b11111001..mclk frequency = 1/250 * hmclk frequency
+ *  0b11111010..mclk frequency = 1/251 * hmclk frequency
+ *  0b11111011..mclk frequency = 1/252 * hmclk frequency
+ *  0b11111100..mclk frequency = 1/253 * hmclk frequency
+ *  0b11111101..mclk frequency = 1/254 * hmclk frequency
+ *  0b11111110..mclk frequency = 1/255 * hmclk frequency
  *  0b11111111..mclk frequency = 1/256 * hmclk frequency
  */
 #define IOMUXC_GPR_GPR2_MQS_CLK_DIV(x)           (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR2_MQS_CLK_DIV_SHIFT)) & IOMUXC_GPR_GPR2_MQS_CLK_DIV_MASK)
@@ -17950,7 +19808,8 @@ typedef struct {
 #define IOMUXC_GPR_GPR10_OCRAM_TZ_EN_SHIFT       (8U)
 /*! OCRAM_TZ_EN
  *  0b0..The TrustZone feature is disabled. Entire OCRAM space is available for all access types (secure/non-secure/user/supervisor).
- *  0b1..The TrustZone feature is enabled. Access to address in the range specified by [ENDADDR:STARTADDR] follows the execution mode access policy described in CSU chapter.
+ *  0b1..The TrustZone feature is enabled. Access to address in the range specified by [ENDADDR:STARTADDR] follows
+ *       the execution mode access policy described in CSU chapter.
  */
 #define IOMUXC_GPR_GPR10_OCRAM_TZ_EN(x)          (((uint32_t)(((uint32_t)(x)) << IOMUXC_GPR_GPR10_OCRAM_TZ_EN_SHIFT)) & IOMUXC_GPR_GPR10_OCRAM_TZ_EN_MASK)
 #define IOMUXC_GPR_GPR10_OCRAM_TZ_ADDR_MASK      (0x7E00U)
@@ -19951,7 +21810,9 @@ typedef struct {
 #define LPI2C_SCFGR1_RXCFG_SHIFT                 (11U)
 /*! RXCFG - Receive Data Configuration
  *  0b0..Reading the Receive Data register will return received data and clear the Receive Data flag (MSR[RDF]).
- *  0b1..Reading the Receive Data register when the Address Valid flag (SSR[AVF])is set, will return the Address Status register and clear the Address Valid flag. Reading the Receive Data register when the Address Valid flag is clear, will return received data and clear the Receive Data flag (MSR[RDF]).
+ *  0b1..Reading the Receive Data register when the Address Valid flag (SSR[AVF])is set, will return the Address
+ *       Status register and clear the Address Valid flag. Reading the Receive Data register when the Address Valid
+ *       flag is clear, will return received data and clear the Receive Data flag (MSR[RDF]).
  */
 #define LPI2C_SCFGR1_RXCFG(x)                    (((uint32_t)(((uint32_t)(x)) << LPI2C_SCFGR1_RXCFG_SHIFT)) & LPI2C_SCFGR1_RXCFG_MASK)
 #define LPI2C_SCFGR1_IGNACK_MASK                 (0x1000U)
@@ -20444,8 +22305,10 @@ typedef struct {
  *  0b001..Reserved
  *  0b010..010b - Match is enabled, if 1st data word equals MATCH0 OR MATCH1, i.e., (1st data word = MATCH0 + MATCH1)
  *  0b011..011b - Match is enabled, if any data word equals MATCH0 OR MATCH1, i.e., (any data word = MATCH0 + MATCH1)
- *  0b100..100b - Match is enabled, if 1st data word equals MATCH0 AND 2nd data word equals MATCH1, i.e., [(1st data word = MATCH0) * (2nd data word = MATCH1)]
- *  0b101..101b - Match is enabled, if any data word equals MATCH0 AND the next data word equals MATCH1, i.e., [(any data word = MATCH0) * (next data word = MATCH1)]
+ *  0b100..100b - Match is enabled, if 1st data word equals MATCH0 AND 2nd data word equals MATCH1, i.e., [(1st
+ *         data word = MATCH0) * (2nd data word = MATCH1)]
+ *  0b101..101b - Match is enabled, if any data word equals MATCH0 AND the next data word equals MATCH1, i.e.,
+ *         [(any data word = MATCH0) * (next data word = MATCH1)]
  *  0b110..110b - Match is enabled, if (1st data word AND MATCH1) equals (MATCH0 AND MATCH1), i.e., [(1st data word * MATCH1) = (MATCH0 * MATCH1)]
  *  0b111..111b - Match is enabled, if (any data word AND MATCH1) equals (MATCH0 AND MATCH1), i.e., [(any data word * MATCH1) = (MATCH0 * MATCH1)]
  */
@@ -20990,8 +22853,10 @@ typedef struct {
 #define LPUART_STAT_RWUID_MASK                   (0x8000000U)
 #define LPUART_STAT_RWUID_SHIFT                  (27U)
 /*! RWUID - Receive Wake Up Idle Detect
- *  0b0..During receive standby state (RWU = 1), the IDLE bit does not get set upon detection of an idle character. During address match wakeup, the IDLE bit does not set when an address does not match.
- *  0b1..During receive standby state (RWU = 1), the IDLE bit gets set upon detection of an idle character. During address match wakeup, the IDLE bit does set when an address does not match.
+ *  0b0..During receive standby state (RWU = 1), the IDLE bit does not get set upon detection of an idle
+ *       character. During address match wakeup, the IDLE bit does not set when an address does not match.
+ *  0b1..During receive standby state (RWU = 1), the IDLE bit gets set upon detection of an idle character. During
+ *       address match wakeup, the IDLE bit does set when an address does not match.
  */
 #define LPUART_STAT_RWUID(x)                     (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_RWUID_SHIFT)) & LPUART_STAT_RWUID_MASK)
 #define LPUART_STAT_RXINV_MASK                   (0x10000000U)
@@ -21004,8 +22869,11 @@ typedef struct {
 #define LPUART_STAT_MSBF_MASK                    (0x20000000U)
 #define LPUART_STAT_MSBF_SHIFT                   (29U)
 /*! MSBF - MSB First
- *  0b0..LSB (bit0) is the first bit that is transmitted following the start bit. Further, the first bit received after the start bit is identified as bit0.
- *  0b1..MSB (bit9, bit8, bit7 or bit6) is the first bit that is transmitted following the start bit depending on the setting of CTRL[M], CTRL[PE] and BAUD[M10]. Further, the first bit received after the start bit is identified as bit9, bit8, bit7 or bit6 depending on the setting of CTRL[M] and CTRL[PE].
+ *  0b0..LSB (bit0) is the first bit that is transmitted following the start bit. Further, the first bit received
+ *       after the start bit is identified as bit0.
+ *  0b1..MSB (bit9, bit8, bit7 or bit6) is the first bit that is transmitted following the start bit depending on
+ *       the setting of CTRL[M], CTRL[PE] and BAUD[M10]. Further, the first bit received after the start bit is
+ *       identified as bit9, bit8, bit7 or bit6 depending on the setting of CTRL[M] and CTRL[PE].
  */
 #define LPUART_STAT_MSBF(x)                      (((uint32_t)(((uint32_t)(x)) << LPUART_STAT_MSBF_SHIFT)) & LPUART_STAT_MSBF_MASK)
 #define LPUART_STAT_RXEDGIF_MASK                 (0x40000000U)
@@ -21307,14 +23175,19 @@ typedef struct {
 #define LPUART_MODIR_TXCTSE_SHIFT                (0U)
 /*! TXCTSE - Transmitter clear-to-send enable
  *  0b0..CTS has no effect on the transmitter.
- *  0b1..Enables clear-to-send operation. The transmitter checks the state of CTS each time it is ready to send a character. If CTS is asserted, the character is sent. If CTS is deasserted, the signal TXD remains in the mark state and transmission is delayed until CTS is asserted. Changes in CTS as a character is being sent do not affect its transmission.
+ *  0b1..Enables clear-to-send operation. The transmitter checks the state of CTS each time it is ready to send a
+ *       character. If CTS is asserted, the character is sent. If CTS is deasserted, the signal TXD remains in the
+ *       mark state and transmission is delayed until CTS is asserted. Changes in CTS as a character is being sent
+ *       do not affect its transmission.
  */
 #define LPUART_MODIR_TXCTSE(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_MODIR_TXCTSE_SHIFT)) & LPUART_MODIR_TXCTSE_MASK)
 #define LPUART_MODIR_TXRTSE_MASK                 (0x2U)
 #define LPUART_MODIR_TXRTSE_SHIFT                (1U)
 /*! TXRTSE - Transmitter request-to-send enable
  *  0b0..The transmitter has no effect on RTS.
- *  0b1..When a character is placed into an empty transmitter data buffer , RTS asserts one bit time before the start bit is transmitted. RTS deasserts one bit time after all characters in the transmitter data buffer and shift register are completely sent, including the last stop bit.
+ *  0b1..When a character is placed into an empty transmitter data buffer , RTS asserts one bit time before the
+ *       start bit is transmitted. RTS deasserts one bit time after all characters in the transmitter data buffer and
+ *       shift register are completely sent, including the last stop bit.
  */
 #define LPUART_MODIR_TXRTSE(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_MODIR_TXRTSE_SHIFT)) & LPUART_MODIR_TXRTSE_MASK)
 #define LPUART_MODIR_TXRTSPOL_MASK               (0x4U)
@@ -21328,7 +23201,9 @@ typedef struct {
 #define LPUART_MODIR_RXRTSE_SHIFT                (3U)
 /*! RXRTSE - Receiver request-to-send enable
  *  0b0..The receiver has no effect on RTS.
- *  0b1..RTS is deasserted if the receiver data register is full or a start bit has been detected that would cause the receiver data register to become full. RTS is asserted if the receiver data register is not full and has not detected a start bit that would cause the receiver data register to become full.
+ *  0b1..RTS is deasserted if the receiver data register is full or a start bit has been detected that would cause
+ *       the receiver data register to become full. RTS is asserted if the receiver data register is not full and
+ *       has not detected a start bit that would cause the receiver data register to become full.
  */
 #define LPUART_MODIR_RXRTSE(x)                   (((uint32_t)(((uint32_t)(x)) << LPUART_MODIR_RXRTSE_SHIFT)) & LPUART_MODIR_RXRTSE_MASK)
 #define LPUART_MODIR_TXCTSC_MASK                 (0x10U)
@@ -23038,7 +24913,9 @@ typedef struct {
 #define PMU_REG_CORE_REG0_TARG(x)                (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_REG0_TARG_SHIFT)) & PMU_REG_CORE_REG0_TARG_MASK)
 #define PMU_REG_CORE_REG0_ADJ_MASK               (0x1E0U)
 #define PMU_REG_CORE_REG0_ADJ_SHIFT              (5U)
-/*! REG0_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg0. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG0_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg0. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -23059,7 +24936,9 @@ typedef struct {
 #define PMU_REG_CORE_REG0_ADJ(x)                 (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_REG0_ADJ_SHIFT)) & PMU_REG_CORE_REG0_ADJ_MASK)
 #define PMU_REG_CORE_REG1_TARG_MASK              (0x3E00U)
 #define PMU_REG_CORE_REG1_TARG_SHIFT             (9U)
-/*! REG1_TARG - This bit field defines the target voltage for the vpu/gpu power domain. Single bit increments reflect 25mV core voltage steps. Not all steps will make sense to use either because of input supply limitations or load operation.
+/*! REG1_TARG - This bit field defines the target voltage for the vpu/gpu power domain. Single bit
+ *    increments reflect 25mV core voltage steps. Not all steps will make sense to use either because
+ *    of input supply limitations or load operation.
  *  0b00000..Power gated off
  *  0b00001..Target core voltage = 0.725V
  *  0b00010..Target core voltage = 0.750V
@@ -23071,7 +24950,9 @@ typedef struct {
 #define PMU_REG_CORE_REG1_TARG(x)                (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_REG1_TARG_SHIFT)) & PMU_REG_CORE_REG1_TARG_MASK)
 #define PMU_REG_CORE_REG1_ADJ_MASK               (0x3C000U)
 #define PMU_REG_CORE_REG1_ADJ_SHIFT              (14U)
-/*! REG1_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg1. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG1_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg1. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -23104,7 +24985,9 @@ typedef struct {
 #define PMU_REG_CORE_REG2_TARG(x)                (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_REG2_TARG_SHIFT)) & PMU_REG_CORE_REG2_TARG_MASK)
 #define PMU_REG_CORE_REG2_ADJ_MASK               (0x7800000U)
 #define PMU_REG_CORE_REG2_ADJ_SHIFT              (23U)
-/*! REG2_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg2. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG2_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg2. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -23153,7 +25036,9 @@ typedef struct {
 #define PMU_REG_CORE_SET_REG0_TARG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_SET_REG0_TARG_SHIFT)) & PMU_REG_CORE_SET_REG0_TARG_MASK)
 #define PMU_REG_CORE_SET_REG0_ADJ_MASK           (0x1E0U)
 #define PMU_REG_CORE_SET_REG0_ADJ_SHIFT          (5U)
-/*! REG0_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg0. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG0_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg0. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -23174,7 +25059,9 @@ typedef struct {
 #define PMU_REG_CORE_SET_REG0_ADJ(x)             (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_SET_REG0_ADJ_SHIFT)) & PMU_REG_CORE_SET_REG0_ADJ_MASK)
 #define PMU_REG_CORE_SET_REG1_TARG_MASK          (0x3E00U)
 #define PMU_REG_CORE_SET_REG1_TARG_SHIFT         (9U)
-/*! REG1_TARG - This bit field defines the target voltage for the vpu/gpu power domain. Single bit increments reflect 25mV core voltage steps. Not all steps will make sense to use either because of input supply limitations or load operation.
+/*! REG1_TARG - This bit field defines the target voltage for the vpu/gpu power domain. Single bit
+ *    increments reflect 25mV core voltage steps. Not all steps will make sense to use either because
+ *    of input supply limitations or load operation.
  *  0b00000..Power gated off
  *  0b00001..Target core voltage = 0.725V
  *  0b00010..Target core voltage = 0.750V
@@ -23186,7 +25073,9 @@ typedef struct {
 #define PMU_REG_CORE_SET_REG1_TARG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_SET_REG1_TARG_SHIFT)) & PMU_REG_CORE_SET_REG1_TARG_MASK)
 #define PMU_REG_CORE_SET_REG1_ADJ_MASK           (0x3C000U)
 #define PMU_REG_CORE_SET_REG1_ADJ_SHIFT          (14U)
-/*! REG1_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg1. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG1_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg1. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -23219,7 +25108,9 @@ typedef struct {
 #define PMU_REG_CORE_SET_REG2_TARG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_SET_REG2_TARG_SHIFT)) & PMU_REG_CORE_SET_REG2_TARG_MASK)
 #define PMU_REG_CORE_SET_REG2_ADJ_MASK           (0x7800000U)
 #define PMU_REG_CORE_SET_REG2_ADJ_SHIFT          (23U)
-/*! REG2_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg2. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG2_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg2. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -23268,7 +25159,9 @@ typedef struct {
 #define PMU_REG_CORE_CLR_REG0_TARG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_CLR_REG0_TARG_SHIFT)) & PMU_REG_CORE_CLR_REG0_TARG_MASK)
 #define PMU_REG_CORE_CLR_REG0_ADJ_MASK           (0x1E0U)
 #define PMU_REG_CORE_CLR_REG0_ADJ_SHIFT          (5U)
-/*! REG0_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg0. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG0_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg0. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -23289,7 +25182,9 @@ typedef struct {
 #define PMU_REG_CORE_CLR_REG0_ADJ(x)             (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_CLR_REG0_ADJ_SHIFT)) & PMU_REG_CORE_CLR_REG0_ADJ_MASK)
 #define PMU_REG_CORE_CLR_REG1_TARG_MASK          (0x3E00U)
 #define PMU_REG_CORE_CLR_REG1_TARG_SHIFT         (9U)
-/*! REG1_TARG - This bit field defines the target voltage for the vpu/gpu power domain. Single bit increments reflect 25mV core voltage steps. Not all steps will make sense to use either because of input supply limitations or load operation.
+/*! REG1_TARG - This bit field defines the target voltage for the vpu/gpu power domain. Single bit
+ *    increments reflect 25mV core voltage steps. Not all steps will make sense to use either because
+ *    of input supply limitations or load operation.
  *  0b00000..Power gated off
  *  0b00001..Target core voltage = 0.725V
  *  0b00010..Target core voltage = 0.750V
@@ -23301,7 +25196,9 @@ typedef struct {
 #define PMU_REG_CORE_CLR_REG1_TARG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_CLR_REG1_TARG_SHIFT)) & PMU_REG_CORE_CLR_REG1_TARG_MASK)
 #define PMU_REG_CORE_CLR_REG1_ADJ_MASK           (0x3C000U)
 #define PMU_REG_CORE_CLR_REG1_ADJ_SHIFT          (14U)
-/*! REG1_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg1. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG1_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg1. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -23334,7 +25231,9 @@ typedef struct {
 #define PMU_REG_CORE_CLR_REG2_TARG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_CLR_REG2_TARG_SHIFT)) & PMU_REG_CORE_CLR_REG2_TARG_MASK)
 #define PMU_REG_CORE_CLR_REG2_ADJ_MASK           (0x7800000U)
 #define PMU_REG_CORE_CLR_REG2_ADJ_SHIFT          (23U)
-/*! REG2_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg2. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG2_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg2. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -23383,7 +25282,9 @@ typedef struct {
 #define PMU_REG_CORE_TOG_REG0_TARG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_TOG_REG0_TARG_SHIFT)) & PMU_REG_CORE_TOG_REG0_TARG_MASK)
 #define PMU_REG_CORE_TOG_REG0_ADJ_MASK           (0x1E0U)
 #define PMU_REG_CORE_TOG_REG0_ADJ_SHIFT          (5U)
-/*! REG0_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg0. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG0_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg0. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -23404,7 +25305,9 @@ typedef struct {
 #define PMU_REG_CORE_TOG_REG0_ADJ(x)             (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_TOG_REG0_ADJ_SHIFT)) & PMU_REG_CORE_TOG_REG0_ADJ_MASK)
 #define PMU_REG_CORE_TOG_REG1_TARG_MASK          (0x3E00U)
 #define PMU_REG_CORE_TOG_REG1_TARG_SHIFT         (9U)
-/*! REG1_TARG - This bit field defines the target voltage for the vpu/gpu power domain. Single bit increments reflect 25mV core voltage steps. Not all steps will make sense to use either because of input supply limitations or load operation.
+/*! REG1_TARG - This bit field defines the target voltage for the vpu/gpu power domain. Single bit
+ *    increments reflect 25mV core voltage steps. Not all steps will make sense to use either because
+ *    of input supply limitations or load operation.
  *  0b00000..Power gated off
  *  0b00001..Target core voltage = 0.725V
  *  0b00010..Target core voltage = 0.750V
@@ -23416,7 +25319,9 @@ typedef struct {
 #define PMU_REG_CORE_TOG_REG1_TARG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_TOG_REG1_TARG_SHIFT)) & PMU_REG_CORE_TOG_REG1_TARG_MASK)
 #define PMU_REG_CORE_TOG_REG1_ADJ_MASK           (0x3C000U)
 #define PMU_REG_CORE_TOG_REG1_ADJ_SHIFT          (14U)
-/*! REG1_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg1. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG1_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg1. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -23449,7 +25354,9 @@ typedef struct {
 #define PMU_REG_CORE_TOG_REG2_TARG(x)            (((uint32_t)(((uint32_t)(x)) << PMU_REG_CORE_TOG_REG2_TARG_SHIFT)) & PMU_REG_CORE_TOG_REG2_TARG_MASK)
 #define PMU_REG_CORE_TOG_REG2_ADJ_MASK           (0x7800000U)
 #define PMU_REG_CORE_TOG_REG2_ADJ_SHIFT          (23U)
-/*! REG2_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg2. The adjustment is applied on top on any adjustment applied to the global reference in the misc0 register.
+/*! REG2_ADJ - This bit field defines the adjustment bits to calibrate the target value of Reg2. The
+ *    adjustment is applied on top on any adjustment applied to the global reference in the misc0
+ *    register.
  *  0b0000..No adjustment
  *  0b0001..+ 0.25%
  *  0b0010..+ 0.50%
@@ -24493,7 +26400,8 @@ typedef struct {
 /*! CLK_SEL - Clock Source Select
  *  0b00..The IPBus clock is used as the clock for the local prescaler and counter.
  *  0b01..EXT_CLK is used as the clock for the local prescaler and counter.
- *  0b10..Submodule 0's clock (AUX_CLK) is used as the source clock for the local prescaler and counter. This setting should not be used in submodule 0 as it will force the clock to logic 0.
+ *  0b10..Submodule 0's clock (AUX_CLK) is used as the source clock for the local prescaler and counter. This
+ *        setting should not be used in submodule 0 as it will force the clock to logic 0.
  *  0b11..reserved
  */
 #define PWM_CTRL2_CLK_SEL(x)                     (((uint16_t)(((uint16_t)(x)) << PWM_CTRL2_CLK_SEL_SHIFT)) & PWM_CTRL2_CLK_SEL_MASK)
@@ -24501,18 +26409,22 @@ typedef struct {
 #define PWM_CTRL2_RELOAD_SEL_SHIFT               (2U)
 /*! RELOAD_SEL - Reload Source Select
  *  0b0..The local RELOAD signal is used to reload registers.
- *  0b1..The master RELOAD signal (from submodule 0) is used to reload registers. This setting should not be used in submodule 0 as it will force the RELOAD signal to logic 0.
+ *  0b1..The master RELOAD signal (from submodule 0) is used to reload registers. This setting should not be used
+ *       in submodule 0 as it will force the RELOAD signal to logic 0.
  */
 #define PWM_CTRL2_RELOAD_SEL(x)                  (((uint16_t)(((uint16_t)(x)) << PWM_CTRL2_RELOAD_SEL_SHIFT)) & PWM_CTRL2_RELOAD_SEL_MASK)
 #define PWM_CTRL2_FORCE_SEL_MASK                 (0x38U)
 #define PWM_CTRL2_FORCE_SEL_SHIFT                (3U)
 /*! FORCE_SEL - This read/write bit determines the source of the FORCE OUTPUT signal for this submodule.
  *  0b000..The local force signal, CTRL2[FORCE], from this submodule is used to force updates.
- *  0b001..The master force signal from submodule 0 is used to force updates. This setting should not be used in submodule 0 as it will hold the FORCE OUTPUT signal to logic 0.
+ *  0b001..The master force signal from submodule 0 is used to force updates. This setting should not be used in
+ *         submodule 0 as it will hold the FORCE OUTPUT signal to logic 0.
  *  0b010..The local reload signal from this submodule is used to force updates without regard to the state of LDOK.
- *  0b011..The master reload signal from submodule0 is used to force updates if LDOK is set. This setting should not be used in submodule0 as it will hold the FORCE OUTPUT signal to logic 0.
+ *  0b011..The master reload signal from submodule0 is used to force updates if LDOK is set. This setting should
+ *         not be used in submodule0 as it will hold the FORCE OUTPUT signal to logic 0.
  *  0b100..The local sync signal from this submodule is used to force updates.
- *  0b101..The master sync signal from submodule0 is used to force updates. This setting should not be used in submodule0 as it will hold the FORCE OUTPUT signal to logic 0.
+ *  0b101..The master sync signal from submodule0 is used to force updates. This setting should not be used in
+ *         submodule0 as it will hold the FORCE OUTPUT signal to logic 0.
  *  0b110..The external force signal, EXT_FORCE, from outside the PWM module causes updates.
  *  0b111..The external sync signal, EXT_SYNC, from outside the PWM module causes updates.
  */
@@ -24531,8 +26443,11 @@ typedef struct {
 #define PWM_CTRL2_INIT_SEL_SHIFT                 (8U)
 /*! INIT_SEL - Initialization Control Select
  *  0b00..Local sync (PWM_X) causes initialization.
- *  0b01..Master reload from submodule 0 causes initialization. This setting should not be used in submodule 0 as it will force the INIT signal to logic 0. The submodule counter will only reinitialize when a master reload occurs.
- *  0b10..Master sync from submodule 0 causes initialization. This setting should not be used in submodule 0 as it will force the INIT signal to logic 0.
+ *  0b01..Master reload from submodule 0 causes initialization. This setting should not be used in submodule 0 as
+ *        it will force the INIT signal to logic 0. The submodule counter will only reinitialize when a master
+ *        reload occurs.
+ *  0b10..Master sync from submodule 0 causes initialization. This setting should not be used in submodule 0 as it
+ *        will force the INIT signal to logic 0.
  *  0b11..EXT_SYNC causes initialization.
  */
 #define PWM_CTRL2_INIT_SEL(x)                    (((uint16_t)(((uint16_t)(x)) << PWM_CTRL2_INIT_SEL_SHIFT)) & PWM_CTRL2_INIT_SEL_MASK)
@@ -24583,7 +26498,8 @@ typedef struct {
 #define PWM_CTRL_LDMOD_SHIFT                     (2U)
 /*! LDMOD - Load Mode Select
  *  0b0..Buffered registers of this submodule are loaded and take effect at the next PWM reload if MCTRL[LDOK] is set.
- *  0b1..Buffered registers of this submodule are loaded and take effect immediately upon MCTRL[LDOK] being set. In this case it is not necessary to set CTRL[FULL] or CTRL[HALF].
+ *  0b1..Buffered registers of this submodule are loaded and take effect immediately upon MCTRL[LDOK] being set.
+ *       In this case it is not necessary to set CTRL[FULL] or CTRL[HALF].
  */
 #define PWM_CTRL_LDMOD(x)                        (((uint16_t)(((uint16_t)(x)) << PWM_CTRL_LDMOD_SHIFT)) & PWM_CTRL_LDMOD_MASK)
 #define PWM_CTRL_SPLIT_MASK                      (0x8U)
@@ -24609,8 +26525,14 @@ typedef struct {
 #define PWM_CTRL_COMPMODE_MASK                   (0x80U)
 #define PWM_CTRL_COMPMODE_SHIFT                  (7U)
 /*! COMPMODE - Compare Mode
- *  0b0..The VAL* registers and the PWM counter are compared using an "equal to" method. This means that PWM edges are only produced when the counter is equal to one of the VAL* register values. This implies that a PWMA output that is high at the end of a period will maintain this state until a match with VAL3 clears the output in the following period.
- *  0b1..The VAL* registers and the PWM counter are compared using an "equal to or greater than" method. This means that PWM edges are produced when the counter is equal to or greater than one of the VAL* register values. This implies that a PWMA output that is high at the end of a period could go low at the start of the next period if the starting counter value is greater than (but not necessarily equal to) the new VAL3 value.
+ *  0b0..The VAL* registers and the PWM counter are compared using an "equal to" method. This means that PWM edges
+ *       are only produced when the counter is equal to one of the VAL* register values. This implies that a PWMA
+ *       output that is high at the end of a period will maintain this state until a match with VAL3 clears the
+ *       output in the following period.
+ *  0b1..The VAL* registers and the PWM counter are compared using an "equal to or greater than" method. This
+ *       means that PWM edges are produced when the counter is equal to or greater than one of the VAL* register
+ *       values. This implies that a PWMA output that is high at the end of a period could go low at the start of the
+ *       next period if the starting counter value is greater than (but not necessarily equal to) the new VAL3 value.
  */
 #define PWM_CTRL_COMPMODE(x)                     (((uint16_t)(((uint16_t)(x)) << PWM_CTRL_COMPMODE_SHIFT)) & PWM_CTRL_COMPMODE_MASK)
 #define PWM_CTRL_DT_MASK                         (0x300U)
@@ -25015,7 +26937,9 @@ typedef struct {
 #define PWM_DMAEN_CAPTDE_SHIFT                   (6U)
 /*! CAPTDE - Capture DMA Enable Source Select
  *  0b00..Read DMA requests disabled.
- *  0b01..Exceeding a FIFO watermark sets the DMA read request. This requires at least one of DMAEN[CA1DE], DMAEN[CA0DE], DMAEN[CB1DE], DMAEN[CB0DE], DMAEN[CX1DE], or DMAEN[CX0DE] to also be set in order to determine to which watermark(s) the DMA request is sensitive.
+ *  0b01..Exceeding a FIFO watermark sets the DMA read request. This requires at least one of DMAEN[CA1DE],
+ *        DMAEN[CA0DE], DMAEN[CB1DE], DMAEN[CB0DE], DMAEN[CX1DE], or DMAEN[CX0DE] to also be set in order to determine to
+ *        which watermark(s) the DMA request is sensitive.
  *  0b10..A local sync (VAL1 matches counter) sets the read DMA request.
  *  0b11..A local reload (STS[RF] being set) sets the read DMA request.
  */
@@ -25052,7 +26976,8 @@ typedef struct {
 #define PWM_TCTRL_TRGFRQ_SHIFT                   (12U)
 /*! TRGFRQ - Trigger frequency
  *  0b0..Trigger outputs are generated during every PWM period even if the PWM is not reloaded every period due to CTRL[LDFQ] being non-zero.
- *  0b1..Trigger outputs are generated only during the final PWM period prior to a reload opportunity when the PWM is not reloaded every period due to CTRL[LDFQ] being non-zero.
+ *  0b1..Trigger outputs are generated only during the final PWM period prior to a reload opportunity when the PWM
+ *       is not reloaded every period due to CTRL[LDFQ] being non-zero.
  */
 #define PWM_TCTRL_TRGFRQ(x)                      (((uint16_t)(((uint16_t)(x)) << PWM_TCTRL_TRGFRQ_SHIFT)) & PWM_TCTRL_TRGFRQ_MASK)
 #define PWM_TCTRL_PWBOT1_MASK                    (0x4000U)
@@ -25134,8 +27059,16 @@ typedef struct {
 #define PWM_CAPTCTRLA_ONESHOTA_MASK              (0x2U)
 #define PWM_CAPTCTRLA_ONESHOTA_SHIFT             (1U)
 /*! ONESHOTA - One Shot Mode A
- *  0b0..Free running mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed first after CAPTCTRLA[ARMA] is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1 is armed. After capture circuit 1 performs a capture, it is disarmed and capture circuit 0 is re-armed. The process continues indefinitely.If only one of the capture circuits is enabled, then captures continue indefinitely on the enabled capture circuit.
- *  0b1..One shot mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed first after CAPTCTRLA[ARMA] is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1 is armed. After capture circuit 1 performs a capture, it is disarmed and CAPTCTRLA[ARMA] is cleared. No further captures will be performed until CAPTCTRLA[ARMA] is set again.If only one of the capture circuits is enabled, then a single capture will occur on the enabled capture circuit and CAPTCTRLA[ARMA] is then cleared.
+ *  0b0..Free running mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed
+ *       first after CAPTCTRLA[ARMA] is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1
+ *       is armed. After capture circuit 1 performs a capture, it is disarmed and capture circuit 0 is re-armed.
+ *       The process continues indefinitely.If only one of the capture circuits is enabled, then captures continue
+ *       indefinitely on the enabled capture circuit.
+ *  0b1..One shot mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed first
+ *       after CAPTCTRLA[ARMA] is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1 is
+ *       armed. After capture circuit 1 performs a capture, it is disarmed and CAPTCTRLA[ARMA] is cleared. No
+ *       further captures will be performed until CAPTCTRLA[ARMA] is set again.If only one of the capture circuits is
+ *       enabled, then a single capture will occur on the enabled capture circuit and CAPTCTRLA[ARMA] is then cleared.
  */
 #define PWM_CAPTCTRLA_ONESHOTA(x)                (((uint16_t)(((uint16_t)(x)) << PWM_CAPTCTRLA_ONESHOTA_SHIFT)) & PWM_CAPTCTRLA_ONESHOTA_MASK)
 #define PWM_CAPTCTRLA_EDGA0_MASK                 (0xCU)
@@ -25160,7 +27093,10 @@ typedef struct {
 #define PWM_CAPTCTRLA_INP_SELA_SHIFT             (6U)
 /*! INP_SELA - Input Select A
  *  0b0..Raw PWM_A input signal selected as source.
- *  0b1..Output of edge counter/compare selected as source. Note that when this bitfield is set to 1, the internal edge counter is enabled and the rising and/or falling edges specified by the CAPTCTRLA[EDGA0] and CAPTCTRLA[EDGA1] fields are ignored. The software must still place a value other than 00 in either or both of the CAPTCTLRA[EDGA0] and/or CAPTCTRLA[EDGA1] fields in order to enable one or both of the capture registers.
+ *  0b1..Output of edge counter/compare selected as source. Note that when this bitfield is set to 1, the internal
+ *       edge counter is enabled and the rising and/or falling edges specified by the CAPTCTRLA[EDGA0] and
+ *       CAPTCTRLA[EDGA1] fields are ignored. The software must still place a value other than 00 in either or both of the
+ *       CAPTCTLRA[EDGA0] and/or CAPTCTRLA[EDGA1] fields in order to enable one or both of the capture registers.
  */
 #define PWM_CAPTCTRLA_INP_SELA(x)                (((uint16_t)(((uint16_t)(x)) << PWM_CAPTCTRLA_INP_SELA_SHIFT)) & PWM_CAPTCTRLA_INP_SELA_MASK)
 #define PWM_CAPTCTRLA_EDGCNTA_EN_MASK            (0x80U)
@@ -25209,8 +27145,16 @@ typedef struct {
 #define PWM_CAPTCTRLB_ONESHOTB_MASK              (0x2U)
 #define PWM_CAPTCTRLB_ONESHOTB_SHIFT             (1U)
 /*! ONESHOTB - One Shot Mode B
- *  0b0..Free running mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed first after CAPTCTRLB[ARMB] is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1 is armed. After capture circuit 1 performs a capture, it is disarmed and capture circuit 0 is re-armed. The process continues indefinitely.If only one of the capture circuits is enabled, then captures continue indefinitely on the enabled capture circuit.
- *  0b1..One shot mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed first after CAPTCTRLB[ARMB] is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1 is armed. After capture circuit 1 performs a capture, it is disarmed and CAPTCTRLB[ARMB] is cleared. No further captures will be performed until CAPTCTRLB[ARMB] is set again.If only one of the capture circuits is enabled, then a single capture will occur on the enabled capture circuit and CAPTCTRLB[ARMB] is then cleared.
+ *  0b0..Free running mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed
+ *       first after CAPTCTRLB[ARMB] is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1
+ *       is armed. After capture circuit 1 performs a capture, it is disarmed and capture circuit 0 is re-armed.
+ *       The process continues indefinitely.If only one of the capture circuits is enabled, then captures continue
+ *       indefinitely on the enabled capture circuit.
+ *  0b1..One shot mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed first
+ *       after CAPTCTRLB[ARMB] is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1 is
+ *       armed. After capture circuit 1 performs a capture, it is disarmed and CAPTCTRLB[ARMB] is cleared. No
+ *       further captures will be performed until CAPTCTRLB[ARMB] is set again.If only one of the capture circuits is
+ *       enabled, then a single capture will occur on the enabled capture circuit and CAPTCTRLB[ARMB] is then cleared.
  */
 #define PWM_CAPTCTRLB_ONESHOTB(x)                (((uint16_t)(((uint16_t)(x)) << PWM_CAPTCTRLB_ONESHOTB_SHIFT)) & PWM_CAPTCTRLB_ONESHOTB_MASK)
 #define PWM_CAPTCTRLB_EDGB0_MASK                 (0xCU)
@@ -25235,7 +27179,10 @@ typedef struct {
 #define PWM_CAPTCTRLB_INP_SELB_SHIFT             (6U)
 /*! INP_SELB - Input Select B
  *  0b0..Raw PWM_B input signal selected as source.
- *  0b1..Output of edge counter/compare selected as source. Note that when this bitfield is set to 1, the internal edge counter is enabled and the rising and/or falling edges specified by the CAPTCTRLB[EDGB0] and CAPTCTRLB[EDGB1] fields are ignored. The software must still place a value other than 00 in either or both of the CAPTCTLRB[EDGB0] and/or CAPTCTRLB[EDGB1] fields in order to enable one or both of the capture registers.
+ *  0b1..Output of edge counter/compare selected as source. Note that when this bitfield is set to 1, the internal
+ *       edge counter is enabled and the rising and/or falling edges specified by the CAPTCTRLB[EDGB0] and
+ *       CAPTCTRLB[EDGB1] fields are ignored. The software must still place a value other than 00 in either or both of the
+ *       CAPTCTLRB[EDGB0] and/or CAPTCTRLB[EDGB1] fields in order to enable one or both of the capture registers.
  */
 #define PWM_CAPTCTRLB_INP_SELB(x)                (((uint16_t)(((uint16_t)(x)) << PWM_CAPTCTRLB_INP_SELB_SHIFT)) & PWM_CAPTCTRLB_INP_SELB_MASK)
 #define PWM_CAPTCTRLB_EDGCNTB_EN_MASK            (0x80U)
@@ -25284,8 +27231,16 @@ typedef struct {
 #define PWM_CAPTCTRLX_ONESHOTX_MASK              (0x2U)
 #define PWM_CAPTCTRLX_ONESHOTX_SHIFT             (1U)
 /*! ONESHOTX - One Shot Mode Aux
- *  0b0..Free running mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed first after the ARMX bit is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1 is armed. After capture circuit 1 performs a capture, it is disarmed and capture circuit 0 is re-armed. The process continues indefinitely.If only one of the capture circuits is enabled, then captures continue indefinitely on the enabled capture circuit.
- *  0b1..One shot mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed first after the ARMX bit is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1 is armed. After capture circuit 1 performs a capture, it is disarmed and the ARMX bit is cleared. No further captures will be performed until the ARMX bit is set again.If only one of the capture circuits is enabled, then a single capture will occur on the enabled capture circuit and the ARMX bit is then cleared.
+ *  0b0..Free running mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed
+ *       first after the ARMX bit is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1 is
+ *       armed. After capture circuit 1 performs a capture, it is disarmed and capture circuit 0 is re-armed. The
+ *       process continues indefinitely.If only one of the capture circuits is enabled, then captures continue
+ *       indefinitely on the enabled capture circuit.
+ *  0b1..One shot mode is selected. If both capture circuits are enabled, then capture circuit 0 is armed first
+ *       after the ARMX bit is set. Once a capture occurs, capture circuit 0 is disarmed and capture circuit 1 is
+ *       armed. After capture circuit 1 performs a capture, it is disarmed and the ARMX bit is cleared. No further
+ *       captures will be performed until the ARMX bit is set again.If only one of the capture circuits is enabled,
+ *       then a single capture will occur on the enabled capture circuit and the ARMX bit is then cleared.
  */
 #define PWM_CAPTCTRLX_ONESHOTX(x)                (((uint16_t)(((uint16_t)(x)) << PWM_CAPTCTRLX_ONESHOTX_SHIFT)) & PWM_CAPTCTRLX_ONESHOTX_MASK)
 #define PWM_CAPTCTRLX_EDGX0_MASK                 (0xCU)
@@ -25310,7 +27265,10 @@ typedef struct {
 #define PWM_CAPTCTRLX_INP_SELX_SHIFT             (6U)
 /*! INP_SELX - Input Select X
  *  0b0..Raw PWM_X input signal selected as source.
- *  0b1..Output of edge counter/compare selected as source. Note that when this bitfield is set to 1, the internal edge counter is enabled and the rising and/or falling edges specified by the CAPTCTRLX[EDGX0] and CAPTCTRLX[EDGX1] fields are ignored. The software must still place a value other than 00 in either or both of the CAPTCTLRX[EDGX0] and/or CAPTCTRLX[EDGX1] fields in order to enable one or both of the capture registers.
+ *  0b1..Output of edge counter/compare selected as source. Note that when this bitfield is set to 1, the internal
+ *       edge counter is enabled and the rising and/or falling edges specified by the CAPTCTRLX[EDGX0] and
+ *       CAPTCTRLX[EDGX1] fields are ignored. The software must still place a value other than 00 in either or both of the
+ *       CAPTCTLRX[EDGX0] and/or CAPTCTRLX[EDGX1] fields in order to enable one or both of the capture registers.
  */
 #define PWM_CAPTCTRLX_INP_SELX(x)                (((uint16_t)(((uint16_t)(x)) << PWM_CAPTCTRLX_INP_SELX_SHIFT)) & PWM_CAPTCTRLX_INP_SELX_MASK)
 #define PWM_CAPTCTRLX_EDGCNTX_EN_MASK            (0x80U)
@@ -25695,8 +27653,10 @@ typedef struct {
 /*! MONPLL - Monitor PLL State
  *  0b00..Not locked. Do not monitor PLL operation. Resetting of the fractional delay block in case of PLL losing lock will be controlled by software.
  *  0b01..Not locked. Monitor PLL operation to automatically disable the fractional delay block when the PLL encounters problems.
- *  0b10..Locked. Do not monitor PLL operation. Resetting of the fractional delay block in case of PLL losing lock will be controlled by software. These bits are write protected until the next reset.
- *  0b11..Locked. Monitor PLL operation to automatically disable the fractional delay block when the PLL encounters problems. These bits are write protected until the next reset.
+ *  0b10..Locked. Do not monitor PLL operation. Resetting of the fractional delay block in case of PLL losing lock
+ *        will be controlled by software. These bits are write protected until the next reset.
+ *  0b11..Locked. Monitor PLL operation to automatically disable the fractional delay block when the PLL
+ *        encounters problems. These bits are write protected until the next reset.
  */
 #define PWM_MCTRL2_MONPLL(x)                     (((uint16_t)(((uint16_t)(x)) << PWM_MCTRL2_MONPLL_SHIFT)) & PWM_MCTRL2_MONPLL_MASK)
 /*! @} */
@@ -25713,15 +27673,24 @@ typedef struct {
 #define PWM_FCTRL_FSAFE_MASK                     (0xF0U)
 #define PWM_FCTRL_FSAFE_SHIFT                    (4U)
 /*! FSAFE - Fault Safety Mode
- *  0b0000..Normal mode. PWM outputs disabled by this fault are not enabled until FSTS[FFLAGx] is clear at the start of a half cycle or full cycle depending on the state of FSTS[FFULL] without regard to the state of FSTS[FFPINx]. The PWM outputs disabled by this fault input will not be re-enabled until the actual FAULTx input signal de-asserts since the fault input will combinationally disable the PWM outputs (as programmed in DISMAPn).
- *  0b0001..Safe mode. PWM outputs disabled by this fault are not enabled until FSTS[FFLAGx] is clear and FSTS[FFPINx] is clear at the start of a half cycle or full cycle depending on the state of FSTS[FFULL].
+ *  0b0000..Normal mode. PWM outputs disabled by this fault are not enabled until FSTS[FFLAGx] is clear at the
+ *          start of a half cycle or full cycle depending on the state of FSTS[FFULL] without regard to the state of
+ *          FSTS[FFPINx]. The PWM outputs disabled by this fault input will not be re-enabled until the actual
+ *          FAULTx input signal de-asserts since the fault input will combinationally disable the PWM outputs (as
+ *          programmed in DISMAPn).
+ *  0b0001..Safe mode. PWM outputs disabled by this fault are not enabled until FSTS[FFLAGx] is clear and
+ *          FSTS[FFPINx] is clear at the start of a half cycle or full cycle depending on the state of FSTS[FFULL].
  */
 #define PWM_FCTRL_FSAFE(x)                       (((uint16_t)(((uint16_t)(x)) << PWM_FCTRL_FSAFE_SHIFT)) & PWM_FCTRL_FSAFE_MASK)
 #define PWM_FCTRL_FAUTO_MASK                     (0xF00U)
 #define PWM_FCTRL_FAUTO_SHIFT                    (8U)
 /*! FAUTO - Automatic Fault Clearing
- *  0b0000..Manual fault clearing. PWM outputs disabled by this fault are not enabled until FSTS[FFLAGx] is clear at the start of a half cycle or full cycle depending the state of FSTS[FFULL]. This is further controlled by FCTRL[FSAFE].
- *  0b0001..Automatic fault clearing. PWM outputs disabled by this fault are enabled when FSTS[FFPINx] is clear at the start of a half cycle or full cycle depending on the state of FSTS[FFULL] without regard to the state of FSTS[FFLAGx].
+ *  0b0000..Manual fault clearing. PWM outputs disabled by this fault are not enabled until FSTS[FFLAGx] is clear
+ *          at the start of a half cycle or full cycle depending the state of FSTS[FFULL]. This is further
+ *          controlled by FCTRL[FSAFE].
+ *  0b0001..Automatic fault clearing. PWM outputs disabled by this fault are enabled when FSTS[FFPINx] is clear at
+ *          the start of a half cycle or full cycle depending on the state of FSTS[FFULL] without regard to the
+ *          state of FSTS[FFLAGx].
  */
 #define PWM_FCTRL_FAUTO(x)                       (((uint16_t)(((uint16_t)(x)) << PWM_FCTRL_FAUTO_SHIFT)) & PWM_FCTRL_FAUTO_MASK)
 #define PWM_FCTRL_FLVL_MASK                      (0xF000U)
@@ -25794,8 +27763,10 @@ typedef struct {
 #define PWM_FCTRL2_NOCOMB_MASK                   (0xFU)
 #define PWM_FCTRL2_NOCOMB_SHIFT                  (0U)
 /*! NOCOMB - No Combinational Path From Fault Input To PWM Output
- *  0b0000..There is a combinational link from the fault inputs to the PWM outputs. The fault inputs are combined with the filtered and latched fault signals to disable the PWM outputs.
- *  0b0001..The direct combinational path from the fault inputs to the PWM outputs is disabled and the filtered and latched fault signals are used to disable the PWM outputs.
+ *  0b0000..There is a combinational link from the fault inputs to the PWM outputs. The fault inputs are combined
+ *          with the filtered and latched fault signals to disable the PWM outputs.
+ *  0b0001..The direct combinational path from the fault inputs to the PWM outputs is disabled and the filtered
+ *          and latched fault signals are used to disable the PWM outputs.
  */
 #define PWM_FCTRL2_NOCOMB(x)                     (((uint16_t)(((uint16_t)(x)) << PWM_FCTRL2_NOCOMB_SHIFT)) & PWM_FCTRL2_NOCOMB_MASK)
 /*! @} */
@@ -26010,7 +27981,8 @@ typedef struct {
 #define RTWDOG_CS_TST_SHIFT                      (3U)
 /*! TST - Watchdog Test
  *  0b00..Watchdog test mode disabled.
- *  0b01..Watchdog user mode enabled. (Watchdog test mode disabled.) After testing the watchdog, software should use this setting to indicate that the watchdog is functioning normally in user mode.
+ *  0b01..Watchdog user mode enabled. (Watchdog test mode disabled.) After testing the watchdog, software should
+ *        use this setting to indicate that the watchdog is functioning normally in user mode.
  *  0b10..Watchdog test mode enabled, only the low byte is used. CNT[CNTLOW] is compared with TOVAL[TOVALLOW].
  *  0b11..Watchdog test mode enabled, only the high byte is used. CNT[CNTHIGH] is compared with TOVAL[TOVALHIGH].
  */
@@ -29344,14 +31316,21 @@ typedef struct {
 #define TMR_CTRL_LENGTH_SHIFT                    (5U)
 /*! LENGTH - Count Length
  *  0b0..Count until roll over at $FFFF and continue from $0000.
- *  0b1..Count until compare, then re-initialize. If counting up, a successful compare occurs when the counter reaches a COMP1 value. If counting down, a successful compare occurs when the counter reaches a COMP2 value. When output mode $4 is used, alternating values of COMP1 and COMP2 are used to generate successful comparisons. For example, the counter counts until a COMP1 value is reached, re-initializes, counts until COMP2 value is reached, re-initializes, counts until COMP1 value is reached, and so on.
+ *  0b1..Count until compare, then re-initialize. If counting up, a successful compare occurs when the counter
+ *       reaches a COMP1 value. If counting down, a successful compare occurs when the counter reaches a COMP2 value.
+ *       When output mode $4 is used, alternating values of COMP1 and COMP2 are used to generate successful
+ *       comparisons. For example, the counter counts until a COMP1 value is reached, re-initializes, counts until COMP2
+ *       value is reached, re-initializes, counts until COMP1 value is reached, and so on.
  */
 #define TMR_CTRL_LENGTH(x)                       (((uint16_t)(((uint16_t)(x)) << TMR_CTRL_LENGTH_SHIFT)) & TMR_CTRL_LENGTH_MASK)
 #define TMR_CTRL_ONCE_MASK                       (0x40U)
 #define TMR_CTRL_ONCE_SHIFT                      (6U)
 /*! ONCE - Count Once
  *  0b0..Count repeatedly.
- *  0b1..Count until compare and then stop. If counting up, a successful compare occurs when the counter reaches a COMP1 value. If counting down, a successful compare occurs when the counter reaches a COMP2 value. When output mode $4 is used, the counter re-initializes after reaching the COMP1 value, continues to count to the COMP2 value, and then stops.
+ *  0b1..Count until compare and then stop. If counting up, a successful compare occurs when the counter reaches a
+ *       COMP1 value. If counting down, a successful compare occurs when the counter reaches a COMP2 value. When
+ *       output mode $4 is used, the counter re-initializes after reaching the COMP1 value, continues to count to
+ *       the COMP2 value, and then stops.
  */
 #define TMR_CTRL_ONCE(x)                         (((uint16_t)(((uint16_t)(x)) << TMR_CTRL_ONCE_SHIFT)) & TMR_CTRL_ONCE_MASK)
 #define TMR_CTRL_SCS_MASK                        (0x180U)
@@ -29388,11 +31367,14 @@ typedef struct {
 #define TMR_CTRL_CM_SHIFT                        (13U)
 /*! CM - Count Mode
  *  0b000..No operation
- *  0b001..Count rising edges of primary sourceRising edges are counted only when SCTRL[IPS] = 0. Falling edges are counted when SCTRL[IPS] = 1. If the primary count source is IP bus clock divide by 1, only rising edges are counted regardless of the value of SCTRL[IPS].
+ *  0b001..Count rising edges of primary sourceRising edges are counted only when SCTRL[IPS] = 0. Falling edges
+ *         are counted when SCTRL[IPS] = 1. If the primary count source is IP bus clock divide by 1, only rising
+ *         edges are counted regardless of the value of SCTRL[IPS].
  *  0b010..Count rising and falling edges of primary sourceIP bus clock divide by 1 cannot be used as a primary count source in edge count mode.
  *  0b011..Count rising edges of primary source while secondary input high active
  *  0b100..Quadrature count mode, uses primary and secondary sources
- *  0b101..Count rising edges of primary source; secondary source specifies directionRising edges are counted only when SCTRL[IPS] = 0. Falling edges are counted when SCTRL[IPS] = 1.
+ *  0b101..Count rising edges of primary source; secondary source specifies directionRising edges are counted only
+ *         when SCTRL[IPS] = 0. Falling edges are counted when SCTRL[IPS] = 1.
  *  0b110..Edge of secondary source triggers primary count until compare
  *  0b111..Cascaded counter mode (up/down)The primary count source must be set to one of the counter outputs.
  */
@@ -29408,7 +31390,8 @@ typedef struct {
 #define TMR_SCTRL_OEN_SHIFT                      (0U)
 /*! OEN - Output Enable
  *  0b0..The external pin is configured as an input.
- *  0b1..The OFLAG output signal is driven on the external pin. Other timer groups using this external pin as their input see the driven value. The polarity of the signal is determined by OPS.
+ *  0b1..The OFLAG output signal is driven on the external pin. Other timer groups using this external pin as
+ *       their input see the driven value. The polarity of the signal is determined by OPS.
  */
 #define TMR_SCTRL_OEN(x)                         (((uint16_t)(((uint16_t)(x)) << TMR_SCTRL_OEN_SHIFT)) & TMR_SCTRL_OEN_MASK)
 #define TMR_SCTRL_OPS_MASK                       (0x2U)

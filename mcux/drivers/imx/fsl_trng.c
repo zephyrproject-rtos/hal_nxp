@@ -20,7 +20,8 @@
 
 /* Default values for user configuration structure.*/
 #if (defined(KW40Z4_SERIES) || defined(KW41Z4_SERIES) || defined(KW31Z4_SERIES) || defined(KW21Z4_SERIES) || \
-     defined(MCIMX7U5_M4_SERIES) || defined(KW36Z4_SERIES))
+     defined(MCIMX7U5_M4_SERIES) || defined(KW36Z4_SERIES) || defined(KW37A4_SERIES) || defined(KW37Z4_SERIES) ||\
+     defined(KW38A4_SERIES) || defined(KW38Z4_SERIES) || defined(KW39A4_SERIES))
 #define TRNG_USER_CONFIG_DEFAULT_OSC_DIV kTRNG_RingOscDiv8
 #elif (defined(KV56F24_SERIES) || defined(KV58F24_SERIES) || defined(KL28Z7_SERIES) || defined(KL81Z7_SERIES) || \
        defined(KL82Z7_SERIES))

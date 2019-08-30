@@ -32,7 +32,8 @@ typedef void (*sai_rx_isr_t)(I2S_Type *base, sai_handle_t *saiHandle);
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-#if defined(FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER) && (FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER)
+#if ((defined(FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER) && (FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER)) || \
+     (defined(FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV) && (FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV)))
 
 /*!
  * @brief Set the master clock divider.
@@ -126,10 +127,29 @@ static sai_rx_isr_t s_saiRxIsr;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-#if defined(FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER) && (FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER)
+#if ((defined(FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER) && (FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER)) || \
+     (defined(FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV) && (FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV)))
 static void SAI_SetMasterClockDivider(I2S_Type *base, uint32_t mclk_Hz, uint32_t mclkSrcClock_Hz)
 {
-    uint32_t freq = mclkSrcClock_Hz;
+    assert(mclk_Hz <= mclkSrcClock_Hz);
+
+    uint32_t sourceFreq = mclkSrcClock_Hz / 100U; /*In order to prevent overflow */
+    uint32_t targetFreq = mclk_Hz / 100U;         /*In order to prevent overflow */
+
+#if FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV
+    uint32_t postDivider = sourceFreq / targetFreq;
+
+    /* if source equal to target, then disable divider */
+    if (postDivider == 1U)
+    {
+        base->MCR &= ~I2S_MCR_DIVEN_MASK;
+    }
+    else
+    {
+        base->MCR = (base->MCR & (~I2S_MCR_DIV_MASK)) | I2S_MCR_DIV(postDivider / 2U - 1U) | I2S_MCR_DIVEN_MASK;
+    }
+#endif
+#if FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER
     uint16_t fract, divide;
     uint32_t remaind           = 0;
     uint32_t current_remainder = 0xFFFFFFFFU;
@@ -138,12 +158,8 @@ static void SAI_SetMasterClockDivider(I2S_Type *base, uint32_t mclk_Hz, uint32_t
     uint32_t mul_freq          = 0;
     uint32_t max_fract         = 256;
 
-    /*In order to prevent overflow */
-    freq /= 100;
-    mclk_Hz /= 100;
-
     /* Compute the max fract number */
-    max_fract = mclk_Hz * 4096 / freq + 1;
+    max_fract = targetFreq * 4096 / sourceFreq + 1;
     if (max_fract > 256)
     {
         max_fract = 256;
@@ -152,22 +168,22 @@ static void SAI_SetMasterClockDivider(I2S_Type *base, uint32_t mclk_Hz, uint32_t
     /* Looking for the closet frequency */
     for (fract = 1; fract < max_fract; fract++)
     {
-        mul_freq = freq * fract;
-        remaind  = mul_freq % mclk_Hz;
-        divide   = mul_freq / mclk_Hz;
+        mul_freq = sourceFreq * fract;
+        remaind  = mul_freq % targetFreq;
+        divide   = mul_freq / targetFreq;
 
         /* Find the exactly frequency */
         if (remaind == 0)
         {
             current_fract  = fract;
-            current_divide = mul_freq / mclk_Hz;
+            current_divide = mul_freq / targetFreq;
             break;
         }
 
         /* Closer to next one, set the closest to next data */
         if (remaind > mclk_Hz / 2)
         {
-            remaind = mclk_Hz - remaind;
+            remaind = targetFreq - remaind;
             divide += 1;
         }
 
@@ -187,6 +203,7 @@ static void SAI_SetMasterClockDivider(I2S_Type *base, uint32_t mclk_Hz, uint32_t
     while (base->MCR & I2S_MCR_DUF_MASK)
     {
     }
+#endif
 }
 #endif /* FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER */
 
@@ -1130,8 +1147,8 @@ void SAI_SetMasterClockConfig(I2S_Type *base, sai_master_clock_t *config)
     assert(config != NULL);
 
 #if defined(FSL_FEATURE_SAI_HAS_MCR) && (FSL_FEATURE_SAI_HAS_MCR)
-#if !(defined(FSL_FEATURE_SAI_HAS_NO_MCR_MICS) && (FSL_FEATURE_SAI_HAS_NO_MCR_MICS))
     uint32_t val = 0;
+#if !(defined(FSL_FEATURE_SAI_HAS_NO_MCR_MICS) && (FSL_FEATURE_SAI_HAS_NO_MCR_MICS))
     /* Master clock source setting */
     val       = (base->MCR & ~I2S_MCR_MICS_MASK);
     base->MCR = (val | I2S_MCR_MICS(config->mclkSource));
@@ -1142,7 +1159,8 @@ void SAI_SetMasterClockConfig(I2S_Type *base, sai_master_clock_t *config)
     base->MCR = (val | I2S_MCR_MOE(config->mclkOutputEnable));
 #endif /* FSL_FEATURE_SAI_HAS_MCR */
 
-#if defined(FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER) && (FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER)
+#if ((defined(FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER) && (FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER)) || \
+     (defined(FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV) && (FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV)))
     /* Check if master clock divider enabled, then set master clock divider */
     if (config->mclkOutputEnable)
     {
@@ -1174,7 +1192,12 @@ void SAI_TxSetFifoConfig(I2S_Type *base, sai_fifo_t *config)
 
 #if defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_AFTER_ERROR) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_AFTER_ERROR
     tcr4 &= ~I2S_TCR4_FCONT_MASK;
-    tcr4 |= I2S_TCR4_FCONT(config->fifoContinueOneError);
+    /* ERR05144: not set FCONT = 1 when TMR > 0, the transmit shift register may not load correctly that will cause TX
+     * not work */
+    if (base->TMR == 0U)
+    {
+        tcr4 |= I2S_TCR4_FCONT(config->fifoContinueOneError);
+    }
 #endif
 
 #if defined(FSL_FEATURE_SAI_HAS_FIFO_PACKING) && FSL_FEATURE_SAI_HAS_FIFO_PACKING
@@ -1308,7 +1331,14 @@ void SAI_TxSetSerialDataConfig(I2S_Type *base, sai_serial_data_t *config)
     base->TCR5 = I2S_TCR5_WNW(config->dataWordNLength - 1U) | I2S_TCR5_W0W(config->dataWord0Length - 1U) |
                  I2S_TCR5_FBT(config->dataFirstBitShifted - 1U);
     base->TMR = config->dataMaskedWord;
-
+#if defined(FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_AFTER_ERROR) && FSL_FEATURE_SAI_HAS_FIFO_FUNCTION_AFTER_ERROR
+    /* ERR05144: not set FCONT = 1 when TMR > 0, the transmit shift register may not load correctly that will cause TX
+     * not work */
+    if (config->dataMaskedWord > 0U)
+    {
+        tcr4 &= ~I2S_TCR4_FCONT_MASK;
+    }
+#endif
     tcr4 &= ~(I2S_TCR4_FRSZ_MASK | I2S_TCR4_MF_MASK);
     tcr4 |= I2S_TCR4_FRSZ(config->dataWordNum - 1U) | I2S_TCR4_MF(config->dataOrder);
 
@@ -1339,11 +1369,6 @@ void SAI_RxSetSerialDataConfig(I2S_Type *base, sai_serial_data_t *config)
     rcr4 &= ~(I2S_RCR4_FRSZ_MASK | I2S_RCR4_MF_MASK);
     rcr4 |= I2S_RCR4_FRSZ(config->dataWordNum - 1u) | I2S_RCR4_MF(config->dataOrder);
 
-#if defined(FSL_FEATURE_SAI_HAS_CHANNEL_MODE) && FSL_FEATURE_SAI_HAS_CHANNEL_MODE
-    rcr4 &= ~I2S_RCR4_CHMOD_MASK;
-    rcr4 |= I2S_RCR4_CHMOD(config->dataMode);
-#endif
-
     base->RCR4 = rcr4;
 }
 
@@ -1356,6 +1381,7 @@ void SAI_RxSetSerialDataConfig(I2S_Type *base, sai_serial_data_t *config)
 void SAI_TxSetConfig(I2S_Type *base, sai_transceiver_t *config)
 {
     assert(config != NULL);
+    assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) != -1);
 
     uint32_t val = 0U, i = 0U;
     uint32_t channelNums = 0U;
@@ -1477,6 +1503,7 @@ void SAI_TransferTxSetConfig(I2S_Type *base, sai_handle_t *handle, sai_transceiv
 void SAI_RxSetConfig(I2S_Type *base, sai_transceiver_t *config)
 {
     assert(config != NULL);
+    assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) != -1);
 
     uint32_t val = 0U, i = 0U;
     uint32_t channelNums = 0U;
@@ -1737,6 +1764,8 @@ void SAI_TxSetFormat(I2S_Type *base,
                      uint32_t mclkSourceClockHz,
                      uint32_t bclkSourceClockHz)
 {
+    assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) != -1);
+
     uint32_t bclk    = 0;
     uint32_t val     = 0;
     uint32_t i       = 0U;
@@ -1875,6 +1904,8 @@ void SAI_RxSetFormat(I2S_Type *base,
                      uint32_t mclkSourceClockHz,
                      uint32_t bclkSourceClockHz)
 {
+    assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) != -1);
+
     uint32_t bclk    = 0;
     uint32_t val     = 0;
     uint32_t i       = 0U;
@@ -2046,6 +2077,8 @@ void SAI_WriteBlocking(I2S_Type *base, uint32_t channel, uint32_t bitWidth, uint
 void SAI_WriteMultiChannelBlocking(
     I2S_Type *base, uint32_t channel, uint32_t channelMask, uint32_t bitWidth, uint8_t *buffer, uint32_t size)
 {
+    assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) != -1);
+
     uint32_t i = 0, j = 0;
     uint8_t bytesPerWord = bitWidth / 8U;
     uint32_t channelNums = 0U, endChannel = 0U;
@@ -2099,6 +2132,8 @@ void SAI_WriteMultiChannelBlocking(
 void SAI_ReadMultiChannelBlocking(
     I2S_Type *base, uint32_t channel, uint32_t channelMask, uint32_t bitWidth, uint8_t *buffer, uint32_t size)
 {
+    assert(FSL_FEATURE_SAI_CHANNEL_COUNTn(base) != -1);
+
     uint32_t i = 0, j = 0;
     uint8_t bytesPerWord = bitWidth / 8U;
     uint32_t channelNums = 0U, endChannel = 0U;
@@ -2358,7 +2393,7 @@ status_t SAI_TransferSendNonBlocking(I2S_Type *base, sai_handle_t *handle, sai_t
     /* Set the state to busy */
     handle->state = kSAI_Busy;
 
-/* Enable interrupt */
+    /* Enable interrupt */
 #if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
     /* Use FIFO request interrupt and fifo error*/
     SAI_TxEnableInterrupts(base, kSAI_FIFOErrorInterruptEnable | kSAI_FIFORequestInterruptEnable);

@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version 2.2.0 */
+#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1)) /*!< Version 2.2.1 */
 /*@}*/
 
 /*! @brief SAI return status*/
@@ -308,7 +308,8 @@ typedef struct _sai_master_clock
 #endif
 #endif
 
-#if defined(FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER) && (FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER)
+#if (defined(FSL_FEATURE_SAI_HAS_MCR) && (FSL_FEATURE_SAI_HAS_MCR)) || \
+    (defined(FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER) && (FSL_FEATURE_SAI_HAS_MCLKDIV_REGISTER))
     uint32_t mclkHz;          /*!< target mclk frequency */
     uint32_t mclkSourceClkHz; /*!< mclk source frequency*/
 #endif

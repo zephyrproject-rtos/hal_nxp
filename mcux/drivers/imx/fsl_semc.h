@@ -27,18 +27,18 @@
 /*! @brief SEMC status. */
 enum _semc_status
 {
-    kStatus_SEMC_InvalidDeviceType = MAKE_STATUS(kStatusGroup_SEMC, 0),
-    kStatus_SEMC_IpCommandExecutionError = MAKE_STATUS(kStatusGroup_SEMC, 1),
-    kStatus_SEMC_AxiCommandExecutionError = MAKE_STATUS(kStatusGroup_SEMC, 2),
-    kStatus_SEMC_InvalidMemorySize = MAKE_STATUS(kStatusGroup_SEMC, 3),
-    kStatus_SEMC_InvalidIpcmdDataSize = MAKE_STATUS(kStatusGroup_SEMC, 4),
-    kStatus_SEMC_InvalidAddressPortWidth = MAKE_STATUS(kStatusGroup_SEMC, 5),
-    kStatus_SEMC_InvalidDataPortWidth = MAKE_STATUS(kStatusGroup_SEMC, 6),
-    kStatus_SEMC_InvalidSwPinmuxSelection = MAKE_STATUS(kStatusGroup_SEMC, 7),
-    kStatus_SEMC_InvalidBurstLength = MAKE_STATUS(kStatusGroup_SEMC, 8),
+    kStatus_SEMC_InvalidDeviceType            = MAKE_STATUS(kStatusGroup_SEMC, 0),
+    kStatus_SEMC_IpCommandExecutionError      = MAKE_STATUS(kStatusGroup_SEMC, 1),
+    kStatus_SEMC_AxiCommandExecutionError     = MAKE_STATUS(kStatusGroup_SEMC, 2),
+    kStatus_SEMC_InvalidMemorySize            = MAKE_STATUS(kStatusGroup_SEMC, 3),
+    kStatus_SEMC_InvalidIpcmdDataSize         = MAKE_STATUS(kStatusGroup_SEMC, 4),
+    kStatus_SEMC_InvalidAddressPortWidth      = MAKE_STATUS(kStatusGroup_SEMC, 5),
+    kStatus_SEMC_InvalidDataPortWidth         = MAKE_STATUS(kStatusGroup_SEMC, 6),
+    kStatus_SEMC_InvalidSwPinmuxSelection     = MAKE_STATUS(kStatusGroup_SEMC, 7),
+    kStatus_SEMC_InvalidBurstLength           = MAKE_STATUS(kStatusGroup_SEMC, 8),
     kStatus_SEMC_InvalidColumnAddressBitWidth = MAKE_STATUS(kStatusGroup_SEMC, 9),
-    kStatus_SEMC_InvalidBaseAddress = MAKE_STATUS(kStatusGroup_SEMC, 10),
-    kStatus_SEMC_InvalidTimerSetting = MAKE_STATUS(kStatusGroup_SEMC, 11),
+    kStatus_SEMC_InvalidBaseAddress           = MAKE_STATUS(kStatusGroup_SEMC, 10),
+    kStatus_SEMC_InvalidTimerSetting          = MAKE_STATUS(kStatusGroup_SEMC, 11),
 };
 
 /*! @brief SEMC memory device type. */
@@ -78,7 +78,7 @@ typedef enum _semc_nand_access_type
 typedef enum _semc_interrupt_enable
 {
     kSEMC_IPCmdDoneInterrupt = SEMC_INTEN_IPCMDDONEEN_MASK, /*!< Ip command done interrupt. */
-    kSEMC_IPCmdErrInterrupt = SEMC_INTEN_IPCMDERREN_MASK,   /*!< Ip command error interrupt. */
+    kSEMC_IPCmdErrInterrupt  = SEMC_INTEN_IPCMDERREN_MASK,  /*!< Ip command error interrupt. */
     kSEMC_AXICmdErrInterrupt = SEMC_INTEN_AXICMDERREN_MASK, /*!< AXI command error interrupt. */
     kSEMC_AXIBusErrInterrupt = SEMC_INTEN_AXIBUSERREN_MASK  /*!< AXI bus error interrupt. */
 } semc_interrupt_enable_t;
@@ -210,20 +210,20 @@ typedef enum _semc_dbi_burst_len
 /*! @brief SEMC IOMUXC. */
 typedef enum _semc_iomux_pin
 {
-    kSEMC_MUXA8 = SEMC_IOCR_MUX_A8_SHIFT,     /*!< MUX A8 pin. */
+    kSEMC_MUXA8   = SEMC_IOCR_MUX_A8_SHIFT,   /*!< MUX A8 pin. */
     kSEMC_MUXCSX0 = SEMC_IOCR_MUX_CSX0_SHIFT, /*!< MUX CSX0 pin */
     kSEMC_MUXCSX1 = SEMC_IOCR_MUX_CSX1_SHIFT, /*!< MUX CSX1 Pin.*/
     kSEMC_MUXCSX2 = SEMC_IOCR_MUX_CSX2_SHIFT, /*!< MUX CSX2 Pin. */
     kSEMC_MUXCSX3 = SEMC_IOCR_MUX_CSX3_SHIFT, /*!< MUX CSX3 Pin. */
-    kSEMC_MUXRDY = SEMC_IOCR_MUX_RDY_SHIFT    /*!< MUX RDY pin. */
+    kSEMC_MUXRDY  = SEMC_IOCR_MUX_RDY_SHIFT   /*!< MUX RDY pin. */
 } semc_iomux_pin;
 
 /*! @brief SEMC NOR/PSRAM Address bit 27 A27. */
 typedef enum _semc_iomux_nora27_pin
 {
-    kSEMC_MORA27_NONE = 0,                           /*!< No NOR/SRAM A27 pin. */
+    kSEMC_MORA27_NONE    = 0,                        /*!< No NOR/SRAM A27 pin. */
     kSEMC_NORA27_MUXCSX3 = SEMC_IOCR_MUX_CSX3_SHIFT, /*!< MUX CSX3 Pin. */
-    kSEMC_NORA27_MUXRDY = SEMC_IOCR_MUX_RDY_SHIFT    /*!< MUX RDY pin. */
+    kSEMC_NORA27_MUXRDY  = SEMC_IOCR_MUX_RDY_SHIFT   /*!< MUX RDY pin. */
 } semc_iomux_nora27_pin;
 
 /*! @brief SEMC port size. */

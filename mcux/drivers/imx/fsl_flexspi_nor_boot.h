@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -99,7 +99,11 @@ typedef struct _boot_data_ {
   uint32_t placeholder;		/* placehoder to make even 0x10 size */
 }BOOT_DATA_T;
 
+#if defined(BOARD_FLASH_SIZE)
 #define FLASH_SIZE            BOARD_FLASH_SIZE
+#else
+#error "Please define macro BOARD_FLASH_SIZE"
+#endif
 #define PLUGIN_FLAG           (uint32_t)0
 
 /* External Variables */
