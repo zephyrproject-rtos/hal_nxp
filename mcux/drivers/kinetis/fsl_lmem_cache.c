@@ -362,9 +362,9 @@ void LMEM_CodeCacheClearMultiLines(LMEM_Type *base, uint32_t address, uint32_t l
  */
 status_t LMEM_CodeCacheDemoteRegion(LMEM_Type *base, lmem_cache_region_t region, lmem_cache_mode_t cacheMode)
 {
-    uint32_t mode = base->PCCRMR;
+    uint32_t mode  = base->PCCRMR;
     uint32_t shift = LMEM_CACHEMODE_WIDTH * (uint32_t)region; /* Region shift. */
-    uint32_t mask = LMEM_CACHEMODE_MASK_UNIT << shift;        /* Region mask. */
+    uint32_t mask  = LMEM_CACHEMODE_MASK_UNIT << shift;       /* Region mask. */
 
     /* If the current cache mode is higher than the requested mode, return error. */
     if ((uint32_t)cacheMode >= ((mode & mask) >> shift))
@@ -530,7 +530,7 @@ void LMEM_SystemCacheInvalidateLine(LMEM_Type *base, uint32_t address)
 void LMEM_SystemCacheInvalidateMultiLines(LMEM_Type *base, uint32_t address, uint32_t length)
 {
     uint32_t endAddr = address + length;
-    address = address & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size */
+    address          = address & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size */
 
     /* If the length exceeds 4KB, invalidate all. */
     if (length >= LMEM_CACHE_SIZE_ONEWAY)
@@ -600,7 +600,7 @@ void LMEM_SystemCachePushLine(LMEM_Type *base, uint32_t address)
 void LMEM_SystemCachePushMultiLines(LMEM_Type *base, uint32_t address, uint32_t length)
 {
     uint32_t endAddr = address + length;
-    address = address & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size. */
+    address          = address & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size. */
 
     /* If the length exceeds 4KB, push all. */
     if (length >= LMEM_CACHE_SIZE_ONEWAY)
@@ -668,7 +668,7 @@ void LMEM_SystemCacheClearLine(LMEM_Type *base, uint32_t address)
 void LMEM_SystemCacheClearMultiLines(LMEM_Type *base, uint32_t address, uint32_t length)
 {
     uint32_t endAddr = address + length;
-    address = address & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size. */
+    address          = address & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size. */
 
     /* If the length exceeds 4KB, clear all. */
     if (length >= LMEM_CACHE_SIZE_ONEWAY)
@@ -708,9 +708,9 @@ void LMEM_SystemCacheClearMultiLines(LMEM_Type *base, uint32_t address, uint32_t
  */
 status_t LMEM_SystemCacheDemoteRegion(LMEM_Type *base, lmem_cache_region_t region, lmem_cache_mode_t cacheMode)
 {
-    uint32_t mode = base->PSCRMR;
+    uint32_t mode  = base->PSCRMR;
     uint32_t shift = LMEM_CACHEMODE_WIDTH * (uint32_t)region; /* Region shift. */
-    uint32_t mask = LMEM_CACHEMODE_MASK_UNIT << shift;        /* Region mask. */
+    uint32_t mask  = LMEM_CACHEMODE_MASK_UNIT << shift;       /* Region mask. */
 
     /* If the current cache mode is higher than the requested mode, return error. */
     if ((uint32_t)cacheMode >= ((mode & mask) >> shift))

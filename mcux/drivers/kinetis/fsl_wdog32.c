@@ -55,27 +55,27 @@ void WDOG32_GetDefaultConfig(wdog32_config_t *config)
     /* Initializes the configure structure to zero. */
     memset(config, 0, sizeof(*config));
 
-    config->enableWdog32 = true;
-    config->clockSource = kWDOG32_ClockSource1;
-    config->prescaler = kWDOG32_ClockPrescalerDivide1;
-    config->workMode.enableWait = true;
-    config->workMode.enableStop = false;
+    config->enableWdog32         = true;
+    config->clockSource          = kWDOG32_ClockSource1;
+    config->prescaler            = kWDOG32_ClockPrescalerDivide1;
+    config->workMode.enableWait  = true;
+    config->workMode.enableStop  = false;
     config->workMode.enableDebug = false;
-    config->testMode = kWDOG32_TestModeDisabled;
-    config->enableUpdate = true;
-    config->enableInterrupt = false;
-    config->enableWindowMode = false;
-    config->windowValue = 0U;
-    config->timeoutValue = 0xFFFFU;
+    config->testMode             = kWDOG32_TestModeDisabled;
+    config->enableUpdate         = true;
+    config->enableInterrupt      = false;
+    config->enableWindowMode     = false;
+    config->windowValue          = 0U;
+    config->timeoutValue         = 0xFFFFU;
 }
 
 void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config)
 {
     assert(config);
 
-    register uint32_t value = 0U;
-    uint32_t primaskValue = 0U;
-    register WDOG_Type *regBase = base;
+    register uint32_t value                   = 0U;
+    uint32_t primaskValue                     = 0U;
+    register WDOG_Type *regBase               = base;
     register const wdog32_config_t *regConfig = config;
 
     value = WDOG_CS_EN(regConfig->enableWdog32) | WDOG_CS_CLK(regConfig->clockSource) |
@@ -96,9 +96,9 @@ void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config)
         regBase->CNT = WDOG_FIRST_WORD_OF_UNLOCK;
         regBase->CNT = WDOG_SECOND_WORD_OF_UNLOCK;
     }
-    regBase->WIN = regConfig->windowValue;
+    regBase->WIN   = regConfig->windowValue;
     regBase->TOVAL = regConfig->timeoutValue;
-    regBase->CS = value;
+    regBase->CS    = value;
     EnableGlobalIRQ(primaskValue);
 }
 

@@ -25,19 +25,9 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief I2S driver version 2.0.2.
- *
- * Current version: 2.0.2
- *
- * Change log:
- * - Version 2.0.2
- *   - Add ENABLE_IRQ handle after register i2s interrupt handle
- * - Version 2.0.1
- *   - Unify component full name to FLEXCOMM I2S(DMA) Driver
- * - Version 2.0.0
- *   - initial version
- */
-#define FSL_I2S_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+
+/*! @brief I2S driver version 2.1.0. */
+#define FSL_I2S_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 #ifndef I2S_NUM_BUFFERS
@@ -73,7 +63,7 @@ typedef enum _i2s_flags
 /*! @brief Master / slave mode. */
 typedef enum _i2s_master_slave
 {
-    kI2S_MasterSlaveNormalSlave = 0x0,  /*!< Normal slave */
+    kI2S_MasterSlaveNormalSlave  = 0x0, /*!< Normal slave */
     kI2S_MasterSlaveWsSyncMaster = 0x1, /*!< WS synchronized master */
     kI2S_MasterSlaveExtSckMaster = 0x2, /*!< Master using existing SCK */
     kI2S_MasterSlaveNormalMaster = 0x3  /*!< Normal master */
@@ -83,10 +73,18 @@ typedef enum _i2s_master_slave
 typedef enum _i2s_mode
 {
     kI2S_ModeI2sClassic = 0x0, /*!< I2S classic mode */
-    kI2S_ModeDspWs50 = 0x1,    /*!< DSP mode, WS having 50% duty cycle */
+    kI2S_ModeDspWs50    = 0x1, /*!< DSP mode, WS having 50% duty cycle */
     kI2S_ModeDspWsShort = 0x2, /*!< DSP mode, WS having one clock long pulse */
-    kI2S_ModeDspWsLong = 0x3   /*!< DSP mode, WS having one data slot long pulse */
+    kI2S_ModeDspWsLong  = 0x3  /*!< DSP mode, WS having one data slot long pulse */
 } i2s_mode_t;
+
+/*! @brief I2S secondary channel. */
+enum _i2s_secondary_channel
+{
+    kI2S_SecondaryChannel1 = 0U, /*!< secondary channel 1 */
+    kI2S_SecondaryChannel2 = 1U, /*!< secondary channel 2 */
+    kI2S_SecondaryChannel3 = 2U, /*!< secondary channel 3 */
+};
 
 /*! @brief I2S configuration structure. */
 typedef struct _i2s_config
@@ -95,7 +93,7 @@ typedef struct _i2s_config
     i2s_mode_t mode;                /*!< I2S mode */
     bool rightLow;                  /*!< Right channel data in low portion of FIFO */
     bool leftJust;                  /*!< Left justify data in FIFO */
-#if defined(I2S_CFG1_PDMDATA)
+#if (defined(FSL_FEATURE_FLEXCOMM_I2S_HAS_DMIC_INTERCONNECTION) && FSL_FEATURE_FLEXCOMM_I2S_HAS_DMIC_INTERCONNECTION)
     bool pdmData; /*!< Data source is the D-Mic subsystem */
 #endif
     bool sckPol;          /*!< SCK polarity */
@@ -387,6 +385,28 @@ static inline void I2S_Enable(I2S_Type *base)
     base->CFG1 |= I2S_CFG1_MAINENABLE(1U);
 }
 
+#if (defined(FSL_FEATURE_I2S_SUPPORT_SECONDARY_CHANNEL) && FSL_FEATURE_I2S_SUPPORT_SECONDARY_CHANNEL)
+/*!
+ * @brief Enables I2S secondary channel.
+ *
+ * @param base I2S      base pointer.
+ * @param channel       seondary channel channel number, reference _i2s_secondary_channel.
+ * @param oneChannel    true is treated as single channel, functionality left channel for this pair.
+ * @param position      define the location within the frame of the data, should not bigger than 0x1FFU.
+ */
+void I2S_EnableSecondaryChannel(I2S_Type *base, uint32_t channel, bool oneChannel, uint32_t position);
+
+/*!
+ * @brief Disables I2S secondary channel.
+ *
+ * @param base I2S      base pointer.
+ * @param channel       seondary channel channel number, reference _i2s_secondary_channel.
+ */
+static inline void I2S_DisableSecondaryChannel(I2S_Type *base, uint32_t channel)
+{
+    base->SECCHANNEL[channel].PCFG1 &= ~I2S_CFG1_MAINENABLE_MASK;
+}
+#endif
 /*!
  * @brief Disables I2S operation.
  *

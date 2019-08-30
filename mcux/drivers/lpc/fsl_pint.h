@@ -24,7 +24,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 0, 4)) /*!< Version 2.0.4 */
+#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Version 2.1.3 */
 /*@}*/
 
 /* Number of interrupt line supported by PINT */
@@ -217,7 +217,7 @@ void PINT_PinInterruptConfig(PINT_Type *base, pint_pin_int_t intr, pint_pin_enab
 void PINT_PinInterruptGetConfig(PINT_Type *base, pint_pin_int_t pintr, pint_pin_enable_t *enable, pint_cb_t *callback);
 
 /*!
- * @brief	Clear Selected pin interrupt status.
+ * @brief	Clear Selected pin interrupt status only when the pin was triggered by edge-sensitive.
 
  * This function clears the selected pin interrupt status.
  *
@@ -226,10 +226,7 @@ void PINT_PinInterruptGetConfig(PINT_Type *base, pint_pin_int_t pintr, pint_pin_
  *
  * @retval None.
  */
-static inline void PINT_PinInterruptClrStatus(PINT_Type *base, pint_pin_int_t pintr)
-{
-    base->IST = (1U << pintr);
-}
+void PINT_PinInterruptClrStatus(PINT_Type *base, pint_pin_int_t pintr);
 
 /*!
  * @brief	Get Selected pin interrupt status.
@@ -243,11 +240,11 @@ static inline void PINT_PinInterruptClrStatus(PINT_Type *base, pint_pin_int_t pi
  */
 static inline uint32_t PINT_PinInterruptGetStatus(PINT_Type *base, pint_pin_int_t pintr)
 {
-    return ((base->IST & (1U << pintr)) ? 1U : 0U);
+    return ((base->IST & (1UL << (uint32_t)pintr)) != 0U ? 1U : 0U);
 }
 
 /*!
- * @brief	Clear all pin interrupts status.
+ * @brief	Clear all pin interrupts status only when pins were triggered by edge-sensitive.
 
  * This function clears the status of all pin interrupts.
  *
@@ -255,10 +252,7 @@ static inline uint32_t PINT_PinInterruptGetStatus(PINT_Type *base, pint_pin_int_
  *
  * @retval None.
  */
-static inline void PINT_PinInterruptClrStatusAll(PINT_Type *base)
-{
-    base->IST = PINT_IST_PSTAT_MASK;
-}
+void PINT_PinInterruptClrStatusAll(PINT_Type *base);
 
 /*!
  * @brief	Get all pin interrupts status.
@@ -287,7 +281,7 @@ static inline uint32_t PINT_PinInterruptGetStatusAll(PINT_Type *base)
  */
 static inline void PINT_PinInterruptClrFallFlag(PINT_Type *base, pint_pin_int_t pintr)
 {
-    base->FALL = (1U << pintr);
+    base->FALL = (1UL << (uint32_t)pintr);
 }
 
 /*!
@@ -302,7 +296,7 @@ static inline void PINT_PinInterruptClrFallFlag(PINT_Type *base, pint_pin_int_t 
  */
 static inline uint32_t PINT_PinInterruptGetFallFlag(PINT_Type *base, pint_pin_int_t pintr)
 {
-    return ((base->FALL & (1U << pintr)) ? 1U : 0U);
+    return ((base->FALL & (1UL << (uint32_t)pintr)) != 0U ? 1U : 0U);
 }
 
 /*!
@@ -346,7 +340,7 @@ static inline uint32_t PINT_PinInterruptGetFallFlagAll(PINT_Type *base)
  */
 static inline void PINT_PinInterruptClrRiseFlag(PINT_Type *base, pint_pin_int_t pintr)
 {
-    base->RISE = (1U << pintr);
+    base->RISE = (1UL << (uint32_t)pintr);
 }
 
 /*!
@@ -361,7 +355,7 @@ static inline void PINT_PinInterruptClrRiseFlag(PINT_Type *base, pint_pin_int_t 
  */
 static inline uint32_t PINT_PinInterruptGetRiseFlag(PINT_Type *base, pint_pin_int_t pintr)
 {
-    return ((base->RISE & (1U << pintr)) ? 1U : 0U);
+    return ((base->RISE & (1UL << (uint32_t)pintr)) != 0U ? 1U : 0U);
 }
 
 /*!
@@ -431,7 +425,7 @@ void PINT_PatternMatchGetConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pi
  */
 static inline uint32_t PINT_PatternMatchGetStatus(PINT_Type *base, pint_pmatch_bslice_t bslice)
 {
-    return ((base->PMCTRL >> PINT_PMCTRL_PMAT_SHIFT) & (0x1U << bslice)) >> bslice;
+    return ((base->PMCTRL >> PINT_PMCTRL_PMAT_SHIFT) & (1UL << (uint32_t)bslice)) >> (uint32_t)bslice;
 }
 
 /*!

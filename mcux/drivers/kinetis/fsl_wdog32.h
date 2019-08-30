@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_WDOG32_H_
@@ -15,20 +15,19 @@
  * @{
  */
 
-
 /*******************************************************************************
  * Definitions
  *******************************************************************************/
 /*! @name Unlock sequence */
 /*@{*/
-#define WDOG_FIRST_WORD_OF_UNLOCK (WDOG_UPDATE_KEY & 0xFFFFU)  /*!< First word of unlock sequence */
-#define WDOG_SECOND_WORD_OF_UNLOCK ((WDOG_UPDATE_KEY >> 16U)& 0xFFFFU) /*!< Second word of unlock sequence */
+#define WDOG_FIRST_WORD_OF_UNLOCK (WDOG_UPDATE_KEY & 0xFFFFU)           /*!< First word of unlock sequence */
+#define WDOG_SECOND_WORD_OF_UNLOCK ((WDOG_UPDATE_KEY >> 16U) & 0xFFFFU) /*!< Second word of unlock sequence */
 /*@}*/
 
 /*! @name Refresh sequence */
 /*@{*/
-#define WDOG_FIRST_WORD_OF_REFRESH (WDOG_REFRESH_KEY & 0xFFFFU)  /*!< First word of refresh sequence */
-#define WDOG_SECOND_WORD_OF_REFRESH ((WDOG_REFRESH_KEY >> 16U)& 0xFFFFU) /*!< Second word of refresh sequence */
+#define WDOG_FIRST_WORD_OF_REFRESH (WDOG_REFRESH_KEY & 0xFFFFU)           /*!< First word of refresh sequence */
+#define WDOG_SECOND_WORD_OF_REFRESH ((WDOG_REFRESH_KEY >> 16U) & 0xFFFFU) /*!< Second word of refresh sequence */
 /*@}*/
 /*! @name Driver version */
 /*@{*/
@@ -48,7 +47,7 @@ typedef enum _wdog32_clock_source
 /*! @brief Describes the selection of the clock prescaler. */
 typedef enum _wdog32_clock_prescaler
 {
-    kWDOG32_ClockPrescalerDivide1 = 0x0U,   /*!< Divided by 1 */
+    kWDOG32_ClockPrescalerDivide1   = 0x0U, /*!< Divided by 1 */
     kWDOG32_ClockPrescalerDivide256 = 0x1U, /*!< Divided by 256 */
 } wdog32_clock_prescaler_t;
 
@@ -64,9 +63,9 @@ typedef struct _wdog32_work_mode
 typedef enum _wdog32_test_mode
 {
     kWDOG32_TestModeDisabled = 0U, /*!< Test Mode disabled */
-    kWDOG32_UserModeEnabled = 1U,  /*!< User Mode enabled */
-    kWDOG32_LowByteTest = 2U,      /*!< Test Mode enabled, only low byte is used */
-    kWDOG32_HighByteTest = 3U,     /*!< Test Mode enabled, only high byte is used */
+    kWDOG32_UserModeEnabled  = 1U, /*!< User Mode enabled */
+    kWDOG32_LowByteTest      = 2U, /*!< Test Mode enabled, only low byte is used */
+    kWDOG32_HighByteTest     = 3U, /*!< Test Mode enabled, only high byte is used */
 } wdog32_test_mode_t;
 
 /*! @brief Describes WDOG32 configuration structure. */
@@ -101,7 +100,7 @@ enum _wdog32_interrupt_enable_t
  */
 enum _wdog32_status_flags_t
 {
-    kWDOG32_RunningFlag = WDOG_CS_EN_MASK,    /*!< Running flag, set when WDOG32 is enabled */
+    kWDOG32_RunningFlag   = WDOG_CS_EN_MASK,  /*!< Running flag, set when WDOG32 is enabled */
     kWDOG32_InterruptFlag = WDOG_CS_FLG_MASK, /*!< Interrupt flag, set when interrupt occurs */
 };
 

@@ -50,7 +50,7 @@ void SYSMPU_Init(SYSMPU_Type *base, const sysmpu_config_t *config)
         base->WORD[count][0] = 0; /* Start address. */
         base->WORD[count][1] = 0; /* End address. */
         base->WORD[count][2] = 0; /* Access rights. */
-        base->RGDAAC[count] = 0;  /* Alternate access rights. */
+        base->RGDAAC[count]  = 0; /* Alternate access rights. */
     }
 
     /* SYSMPU configure. */
@@ -92,7 +92,7 @@ void SYSMPU_GetHardwareInfo(SYSMPU_Type *base, sysmpu_hardware_info_t *hardwareI
     uint32_t cesReg = base->CESR;
 
     hardwareInform->hardwareRevisionLevel = (cesReg & SYSMPU_CESR_HRL_MASK) >> SYSMPU_CESR_HRL_SHIFT;
-    hardwareInform->slavePortsNumbers = (cesReg & SYSMPU_CESR_NSP_MASK) >> SYSMPU_CESR_NSP_SHIFT;
+    hardwareInform->slavePortsNumbers     = (cesReg & SYSMPU_CESR_NSP_MASK) >> SYSMPU_CESR_NSP_SHIFT;
     hardwareInform->regionsNumbers =
         (sysmpu_region_total_num_t)((cesReg & SYSMPU_CESR_NRGD_MASK) >> SYSMPU_CESR_NRGD_SHIFT);
 }
@@ -209,7 +209,7 @@ void SYSMPU_SetRegionRwxMasterAccessRights(SYSMPU_Type *base,
     assert(regionNum < FSL_FEATURE_SYSMPU_DESCRIPTOR_COUNT);
     assert(masterNum < SYSMPU_MASTER_RWATTRIBUTE_START_PORT);
 
-    uint32_t mask = SYSMPU_REGION_RWXRIGHTS_MASTER_MASK(masterNum);
+    uint32_t mask  = SYSMPU_REGION_RWXRIGHTS_MASTER_MASK(masterNum);
     uint32_t right = base->RGDAAC[regionNum];
 
 #if FSL_FEATURE_SYSMPU_HAS_PROCESS_IDENTIFIER
@@ -254,7 +254,7 @@ void SYSMPU_SetRegionRwMasterAccessRights(SYSMPU_Type *base,
     assert(masterNum >= SYSMPU_MASTER_RWATTRIBUTE_START_PORT);
     assert(masterNum <= (FSL_FEATURE_SYSMPU_MASTER_COUNT - 1));
 
-    uint32_t mask = SYSMPU_REGION_RWRIGHTS_MASTER_MASK(masterNum);
+    uint32_t mask  = SYSMPU_REGION_RWRIGHTS_MASTER_MASK(masterNum);
     uint32_t right = base->RGDAAC[regionNum];
 
     /* Build rights control value. */
@@ -317,8 +317,8 @@ void SYSMPU_GetDetailErrorAccessInfo(SYSMPU_Type *base, sysmpu_slave_t slaveNum,
         errInform->accessControl = kSYSMPU_OverlappRegion;
     }
 
-    value = base->SP[slaveNum].EDR;
-    errInform->master = (uint32_t)((value & SYSMPU_EDR_EMN_MASK) >> SYSMPU_EDR_EMN_SHIFT);
+    value                 = base->SP[slaveNum].EDR;
+    errInform->master     = (uint32_t)((value & SYSMPU_EDR_EMN_MASK) >> SYSMPU_EDR_EMN_SHIFT);
     errInform->attributes = (sysmpu_err_attributes_t)((value & SYSMPU_EDR_EATTR_MASK) >> SYSMPU_EDR_EATTR_SHIFT);
     errInform->accessType = (sysmpu_err_access_type_t)((value & SYSMPU_EDR_ERW_MASK) >> SYSMPU_EDR_ERW_SHIFT);
 #if FSL_FEATURE_SYSMPU_HAS_PROCESS_IDENTIFIER

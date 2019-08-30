@@ -2,7 +2,7 @@
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -46,16 +46,16 @@
 typedef enum _crc_polynomial
 {
     kCRC_Polynomial_CRC_CCITT = 0U, /*!< x^16+x^12+x^5+1 */
-    kCRC_Polynomial_CRC_16 = 1U,    /*!< x^16+x^15+x^2+1 */
-    kCRC_Polynomial_CRC_32 = 2U     /*!< x^32+x^26+x^23+x^22+x^16+x^12+x^11+x^10+x^8+x^7+x^5+x^4+x^2+x+1 */
+    kCRC_Polynomial_CRC_16    = 1U, /*!< x^16+x^15+x^2+1 */
+    kCRC_Polynomial_CRC_32    = 2U  /*!< x^32+x^26+x^23+x^22+x^16+x^12+x^11+x^10+x^8+x^7+x^5+x^4+x^2+x+1 */
 } crc_polynomial_t;
 
 /*!
-* @brief CRC protocol configuration.
-*
-* This structure holds the configuration for the CRC protocol.
-*
-*/
+ * @brief CRC protocol configuration.
+ *
+ * This structure holds the configuration for the CRC protocol.
+ *
+ */
 typedef struct _crc_config
 {
     crc_polynomial_t polynomial; /*!< CRC polynomial. */

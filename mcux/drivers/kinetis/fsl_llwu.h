@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_LLWU_H_
@@ -28,10 +28,10 @@
  */
 typedef enum _llwu_external_pin_mode
 {
-    kLLWU_ExternalPinDisable = 0U,     /*!< Pin disabled as a wakeup input.           */
-    kLLWU_ExternalPinRisingEdge = 1U,  /*!< Pin enabled with the rising edge detection. */
+    kLLWU_ExternalPinDisable     = 0U, /*!< Pin disabled as a wakeup input.           */
+    kLLWU_ExternalPinRisingEdge  = 1U, /*!< Pin enabled with the rising edge detection. */
     kLLWU_ExternalPinFallingEdge = 2U, /*!< Pin enabled with the falling edge detection.*/
-    kLLWU_ExternalPinAnyEdge = 3U      /*!< Pin enabled with any change detection.  */
+    kLLWU_ExternalPinAnyEdge     = 3U  /*!< Pin enabled with any change detection.  */
 } llwu_external_pin_mode_t;
 
 /*!
@@ -39,10 +39,10 @@ typedef enum _llwu_external_pin_mode
  */
 typedef enum _llwu_pin_filter_mode
 {
-    kLLWU_PinFilterDisable = 0U,     /*!< Filter disabled.               */
-    kLLWU_PinFilterRisingEdge = 1U,  /*!< Filter positive edge detection.*/
+    kLLWU_PinFilterDisable     = 0U, /*!< Filter disabled.               */
+    kLLWU_PinFilterRisingEdge  = 1U, /*!< Filter positive edge detection.*/
     kLLWU_PinFilterFallingEdge = 2U, /*!< Filter negative edge detection.*/
-    kLLWU_PinFilterAnyEdge = 3U      /*!< Filter any edge detection.     */
+    kLLWU_PinFilterAnyEdge     = 3U  /*!< Filter any edge detection.     */
 } llwu_pin_filter_mode_t;
 
 #if (defined(FSL_FEATURE_LLWU_HAS_VERID) && FSL_FEATURE_LLWU_HAS_VERID)
@@ -197,9 +197,9 @@ static inline void LLWU_EnableInternalModuleInterruptWakup(LLWU_Type *base, uint
 #else /* 8-bit LLUW. */
 #if (defined(FSL_FEATURE_LLWU_HAS_MF) && FSL_FEATURE_LLWU_HAS_MF)
 #define INTERNAL_WAKEUP_MODULE_FLAG_REG MF5
-#elif(defined(FSL_FEATURE_LLWU_HAS_PF) && FSL_FEATURE_LLWU_HAS_PF)
+#elif (defined(FSL_FEATURE_LLWU_HAS_PF) && FSL_FEATURE_LLWU_HAS_PF)
 #define INTERNAL_WAKEUP_MODULE_FLAG_REG PF3
-#elif(!(defined(FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN) && (FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN > 16)))
+#elif (!(defined(FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN) && (FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN > 16)))
 #define INTERNAL_WAKEUP_MODULE_FLAG_REG F3
 #else
 #error "Unsupported internal module flag register."

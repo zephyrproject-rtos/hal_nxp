@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief DSPI driver version 2.2.0. */
-#define FSL_DSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief DSPI driver version 2.2.1. */
+#define FSL_DSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 #ifndef DSPI_DUMMY_DATA
@@ -30,41 +30,38 @@
 #define DSPI_DUMMY_DATA (0x00U) /*!< Dummy data used for Tx if there is no txData. */
 #endif
 
-/*! @brief Global variable for dummy data value setting. */
-extern volatile uint8_t g_dspiDummyData[];
-
 /*! @brief Status for the DSPI driver.*/
 enum _dspi_status
 {
-    kStatus_DSPI_Busy = MAKE_STATUS(kStatusGroup_DSPI, 0),      /*!< DSPI transfer is busy.*/
-    kStatus_DSPI_Error = MAKE_STATUS(kStatusGroup_DSPI, 1),     /*!< DSPI driver error. */
-    kStatus_DSPI_Idle = MAKE_STATUS(kStatusGroup_DSPI, 2),      /*!< DSPI is idle.*/
-    kStatus_DSPI_OutOfRange = MAKE_STATUS(kStatusGroup_DSPI, 3) /*!< DSPI transfer out of range. */
+    kStatus_DSPI_Busy       = MAKE_STATUS(kStatusGroup_DSPI, 0), /*!< DSPI transfer is busy.*/
+    kStatus_DSPI_Error      = MAKE_STATUS(kStatusGroup_DSPI, 1), /*!< DSPI driver error. */
+    kStatus_DSPI_Idle       = MAKE_STATUS(kStatusGroup_DSPI, 2), /*!< DSPI is idle.*/
+    kStatus_DSPI_OutOfRange = MAKE_STATUS(kStatusGroup_DSPI, 3)  /*!< DSPI transfer out of range. */
 };
 
 /*! @brief DSPI status flags in SPIx_SR register.*/
 enum _dspi_flags
 {
-    kDSPI_TxCompleteFlag = (int)SPI_SR_TCF_MASK,     /*!< Transfer Complete Flag. */
-    kDSPI_EndOfQueueFlag = SPI_SR_EOQF_MASK,         /*!< End of Queue Flag.*/
-    kDSPI_TxFifoUnderflowFlag = SPI_SR_TFUF_MASK,    /*!< Transmit FIFO Underflow Flag.*/
-    kDSPI_TxFifoFillRequestFlag = SPI_SR_TFFF_MASK,  /*!< Transmit FIFO Fill Flag.*/
-    kDSPI_RxFifoOverflowFlag = SPI_SR_RFOF_MASK,     /*!< Receive FIFO Overflow Flag.*/
-    kDSPI_RxFifoDrainRequestFlag = SPI_SR_RFDF_MASK, /*!< Receive FIFO Drain Flag.*/
-    kDSPI_TxAndRxStatusFlag = SPI_SR_TXRXS_MASK,     /*!< The module is in Stopped/Running state.*/
-    kDSPI_AllStatusFlag = (int)(SPI_SR_TCF_MASK | SPI_SR_EOQF_MASK | SPI_SR_TFUF_MASK | SPI_SR_TFFF_MASK |
+    kDSPI_TxCompleteFlag         = (int)SPI_SR_TCF_MASK, /*!< Transfer Complete Flag. */
+    kDSPI_EndOfQueueFlag         = SPI_SR_EOQF_MASK,     /*!< End of Queue Flag.*/
+    kDSPI_TxFifoUnderflowFlag    = SPI_SR_TFUF_MASK,     /*!< Transmit FIFO Underflow Flag.*/
+    kDSPI_TxFifoFillRequestFlag  = SPI_SR_TFFF_MASK,     /*!< Transmit FIFO Fill Flag.*/
+    kDSPI_RxFifoOverflowFlag     = SPI_SR_RFOF_MASK,     /*!< Receive FIFO Overflow Flag.*/
+    kDSPI_RxFifoDrainRequestFlag = SPI_SR_RFDF_MASK,     /*!< Receive FIFO Drain Flag.*/
+    kDSPI_TxAndRxStatusFlag      = SPI_SR_TXRXS_MASK,    /*!< The module is in Stopped/Running state.*/
+    kDSPI_AllStatusFlag          = (int)(SPI_SR_TCF_MASK | SPI_SR_EOQF_MASK | SPI_SR_TFUF_MASK | SPI_SR_TFFF_MASK |
                                 SPI_SR_RFOF_MASK | SPI_SR_RFDF_MASK | SPI_SR_TXRXS_MASK) /*!< All statuses above.*/
 };
 
 /*! @brief DSPI interrupt source.*/
 enum _dspi_interrupt_enable
 {
-    kDSPI_TxCompleteInterruptEnable = (int)SPI_RSER_TCF_RE_MASK,     /*!< TCF  interrupt enable.*/
-    kDSPI_EndOfQueueInterruptEnable = SPI_RSER_EOQF_RE_MASK,         /*!< EOQF interrupt enable.*/
-    kDSPI_TxFifoUnderflowInterruptEnable = SPI_RSER_TFUF_RE_MASK,    /*!< TFUF interrupt enable.*/
-    kDSPI_TxFifoFillRequestInterruptEnable = SPI_RSER_TFFF_RE_MASK,  /*!< TFFF interrupt enable, DMA disable.*/
-    kDSPI_RxFifoOverflowInterruptEnable = SPI_RSER_RFOF_RE_MASK,     /*!< RFOF interrupt enable.*/
-    kDSPI_RxFifoDrainRequestInterruptEnable = SPI_RSER_RFDF_RE_MASK, /*!< RFDF interrupt enable, DMA disable.*/
+    kDSPI_TxCompleteInterruptEnable         = (int)SPI_RSER_TCF_RE_MASK, /*!< TCF  interrupt enable.*/
+    kDSPI_EndOfQueueInterruptEnable         = SPI_RSER_EOQF_RE_MASK,     /*!< EOQF interrupt enable.*/
+    kDSPI_TxFifoUnderflowInterruptEnable    = SPI_RSER_TFUF_RE_MASK,     /*!< TFUF interrupt enable.*/
+    kDSPI_TxFifoFillRequestInterruptEnable  = SPI_RSER_TFFF_RE_MASK,     /*!< TFFF interrupt enable, DMA disable.*/
+    kDSPI_RxFifoOverflowInterruptEnable     = SPI_RSER_RFOF_RE_MASK,     /*!< RFOF interrupt enable.*/
+    kDSPI_RxFifoDrainRequestInterruptEnable = SPI_RSER_RFDF_RE_MASK,     /*!< RFDF interrupt enable, DMA disable.*/
     kDSPI_AllInterruptEnable = (int)(SPI_RSER_TCF_RE_MASK | SPI_RSER_EOQF_RE_MASK | SPI_RSER_TFUF_RE_MASK |
                                      SPI_RSER_TFFF_RE_MASK | SPI_RSER_RFOF_RE_MASK | SPI_RSER_RFDF_RE_MASK)
     /*!< All above interrupts enable.*/
@@ -83,7 +80,7 @@ enum _dspi_dma_enable
 typedef enum _dspi_master_slave_mode
 {
     kDSPI_Master = 1U, /*!< DSPI peripheral operates in master mode.*/
-    kDSPI_Slave = 0U   /*!< DSPI peripheral operates in slave mode.*/
+    kDSPI_Slave  = 0U  /*!< DSPI peripheral operates in slave mode.*/
 } dspi_master_slave_mode_t;
 
 /*!
@@ -113,26 +110,26 @@ typedef enum _dspi_which_pcs_config
 typedef enum _dspi_pcs_polarity_config
 {
     kDSPI_PcsActiveHigh = 0U, /*!< Pcs Active High (idles low). */
-    kDSPI_PcsActiveLow = 1U   /*!< Pcs Active Low (idles high). */
+    kDSPI_PcsActiveLow  = 1U  /*!< Pcs Active Low (idles high). */
 } dspi_pcs_polarity_config_t;
 
 /*! @brief DSPI Peripheral Chip Select (Pcs) Polarity.*/
 enum _dspi_pcs_polarity
 {
-    kDSPI_Pcs0ActiveLow = 1U << 0, /*!< Pcs0 Active Low (idles high). */
-    kDSPI_Pcs1ActiveLow = 1U << 1, /*!< Pcs1 Active Low (idles high). */
-    kDSPI_Pcs2ActiveLow = 1U << 2, /*!< Pcs2 Active Low (idles high). */
-    kDSPI_Pcs3ActiveLow = 1U << 3, /*!< Pcs3 Active Low (idles high). */
-    kDSPI_Pcs4ActiveLow = 1U << 4, /*!< Pcs4 Active Low (idles high). */
-    kDSPI_Pcs5ActiveLow = 1U << 5, /*!< Pcs5 Active Low (idles high). */
-    kDSPI_PcsAllActiveLow = 0xFFU  /*!< Pcs0 to Pcs5 Active Low (idles high). */
+    kDSPI_Pcs0ActiveLow   = 1U << 0, /*!< Pcs0 Active Low (idles high). */
+    kDSPI_Pcs1ActiveLow   = 1U << 1, /*!< Pcs1 Active Low (idles high). */
+    kDSPI_Pcs2ActiveLow   = 1U << 2, /*!< Pcs2 Active Low (idles high). */
+    kDSPI_Pcs3ActiveLow   = 1U << 3, /*!< Pcs3 Active Low (idles high). */
+    kDSPI_Pcs4ActiveLow   = 1U << 4, /*!< Pcs4 Active Low (idles high). */
+    kDSPI_Pcs5ActiveLow   = 1U << 5, /*!< Pcs5 Active Low (idles high). */
+    kDSPI_PcsAllActiveLow = 0xFFU    /*!< Pcs0 to Pcs5 Active Low (idles high). */
 };
 
 /*! @brief DSPI clock polarity configuration for a given CTAR.*/
 typedef enum _dspi_clock_polarity
 {
     kDSPI_ClockPolarityActiveHigh = 0U, /*!< CPOL=0. Active-high DSPI clock (idles low).*/
-    kDSPI_ClockPolarityActiveLow = 1U   /*!< CPOL=1. Active-low DSPI clock (idles high).*/
+    kDSPI_ClockPolarityActiveLow  = 1U  /*!< CPOL=1. Active-low DSPI clock (idles high).*/
 } dspi_clock_polarity_t;
 
 /*! @brief DSPI clock phase configuration for a given CTAR.*/
@@ -296,13 +293,13 @@ typedef struct _dspi_slave_config
 } dspi_slave_config_t;
 
 /*!
-* @brief Forward declaration of the _dspi_master_handle typedefs.
-*/
+ * @brief Forward declaration of the _dspi_master_handle typedefs.
+ */
 typedef struct _dspi_master_handle dspi_master_handle_t;
 
 /*!
-* @brief Forward declaration of the _dspi_slave_handle typedefs.
-*/
+ * @brief Forward declaration of the _dspi_slave_handle typedefs.
+ */
 typedef struct _dspi_slave_handle dspi_slave_handle_t;
 
 /*!
@@ -337,10 +334,9 @@ typedef struct _dspi_transfer
     uint8_t *rxData;          /*!< Receive buffer. */
     volatile size_t dataSize; /*!< Transfer bytes. */
 
-    uint32_t
-        configFlags; /*!< Transfer transfer configuration flags; set from _dspi_transfer_config_flag_for_master if the
-                        transfer is used for master or _dspi_transfer_config_flag_for_slave enumeration if the transfer
-                        is used for slave.*/
+    uint32_t configFlags; /*!< Transfer transfer configuration flags; set from _dspi_transfer_config_flag_for_master if
+                             the transfer is used for master or _dspi_transfer_config_flag_for_slave enumeration if the
+                             transfer is used for slave.*/
 } dspi_transfer_t;
 
 /*! @brief DSPI half-duplex(master) transfer structure */
@@ -521,7 +517,7 @@ static inline void DSPI_Enable(SPI_Type *base, bool enable)
 
 /*!
  *@}
-*/
+ */
 
 /*!
  * @name Status
@@ -559,7 +555,7 @@ static inline void DSPI_ClearStatusFlags(SPI_Type *base, uint32_t statusFlags)
 
 /*!
  *@}
-*/
+ */
 
 /*!
  * @name Interrupts
@@ -599,7 +595,7 @@ static inline void DSPI_DisableInterrupts(SPI_Type *base, uint32_t mask)
 
 /*!
  *@}
-*/
+ */
 
 /*!
  * @name DMA Control
@@ -679,7 +675,7 @@ static inline uint32_t DSPI_GetRxRegisterAddress(SPI_Type *base)
 
 /*!
  *@}
-*/
+ */
 
 /*!
  * @name Bus Operations
@@ -711,7 +707,14 @@ static inline void DSPI_SetMasterSlaveMode(SPI_Type *base, dspi_master_slave_mod
  */
 static inline bool DSPI_IsMaster(SPI_Type *base)
 {
-    return (bool)((base->MCR) & SPI_MCR_MSTR_MASK);
+    if (0U != ((base->MCR) & SPI_MCR_MSTR_MASK))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 /*!
  * @brief Starts the DSPI transfers and clears HALT bit in MCR.
@@ -749,8 +752,8 @@ static inline void DSPI_StopTransfer(SPI_Type *base)
  */
 static inline void DSPI_SetFifoEnable(SPI_Type *base, bool enableTxFifo, bool enableRxFifo)
 {
-    base->MCR = (base->MCR & (~(SPI_MCR_DIS_RXF_MASK | SPI_MCR_DIS_TXF_MASK))) | SPI_MCR_DIS_TXF(!enableTxFifo) |
-                SPI_MCR_DIS_RXF(!enableRxFifo);
+    base->MCR = (base->MCR & (~(SPI_MCR_DIS_RXF_MASK | SPI_MCR_DIS_TXF_MASK))) |
+                SPI_MCR_DIS_TXF((false == enableTxFifo ? 1U : 0U)) | SPI_MCR_DIS_RXF((false == enableRxFifo ? 1U : 0U));
 }
 
 /*!
@@ -762,8 +765,8 @@ static inline void DSPI_SetFifoEnable(SPI_Type *base, bool enableTxFifo, bool en
  */
 static inline void DSPI_FlushFifo(SPI_Type *base, bool flushTxFifo, bool flushRxFifo)
 {
-    base->MCR = (base->MCR & (~(SPI_MCR_CLR_TXF_MASK | SPI_MCR_CLR_RXF_MASK))) | SPI_MCR_CLR_TXF(flushTxFifo) |
-                SPI_MCR_CLR_RXF(flushRxFifo);
+    base->MCR = (base->MCR & (~(SPI_MCR_CLR_TXF_MASK | SPI_MCR_CLR_RXF_MASK))) |
+                SPI_MCR_CLR_TXF((true == flushTxFifo ? 1U : 0U)) | SPI_MCR_CLR_RXF((true == flushRxFifo ? 1U : 0U));
 }
 
 /*!
@@ -954,11 +957,11 @@ static inline uint32_t DSPI_MasterGetFormattedCommand(dspi_command_data_config_t
  *        buffer master mode and waits till complete to return.
  *
  * In this function, the user must append the 16-bit data to the 16-bit command information and then provide the total
-* 32-bit word
+ * 32-bit word
  * as the data to send.
  * The command portion provides characteristics of the data, such as the optional continuous chip select operation
  * between transfers, the desired Clock and Transfer Attributes register to use for the associated SPI frame, the
-* desired PCS
+ * desired PCS
  * signal to use for the data transfer, whether the current transfer is the last in the queue, and whether to clear the
  * transfer count (normally needed when sending the first frame of a data packet). The user is responsible for
  * appending this command with the data to send. This is an example:
@@ -973,20 +976,20 @@ static inline uint32_t DSPI_MasterGetFormattedCommand(dspi_command_data_config_t
  *
  *  For a blocking polling transfer, see methods below.
  *  Option 1:
-*   uint32_t command_to_send = DSPI_MasterGetFormattedCommand(&command);
-*   uint32_t data0 = command_to_send | data_need_to_send_0;
-*   uint32_t data1 = command_to_send | data_need_to_send_1;
-*   uint32_t data2 = command_to_send | data_need_to_send_2;
-*
-*   DSPI_MasterWriteCommandDataBlocking(base,data0);
-*   DSPI_MasterWriteCommandDataBlocking(base,data1);
-*   DSPI_MasterWriteCommandDataBlocking(base,data2);
-*
-*  Option 2:
-*   DSPI_MasterWriteDataBlocking(base,&command,data_need_to_send_0);
-*   DSPI_MasterWriteDataBlocking(base,&command,data_need_to_send_1);
-*   DSPI_MasterWriteDataBlocking(base,&command,data_need_to_send_2);
-*
+ *   uint32_t command_to_send = DSPI_MasterGetFormattedCommand(&command);
+ *   uint32_t data0 = command_to_send | data_need_to_send_0;
+ *   uint32_t data1 = command_to_send | data_need_to_send_1;
+ *   uint32_t data2 = command_to_send | data_need_to_send_2;
+ *
+ *   DSPI_MasterWriteCommandDataBlocking(base,data0);
+ *   DSPI_MasterWriteCommandDataBlocking(base,data1);
+ *   DSPI_MasterWriteCommandDataBlocking(base,data2);
+ *
+ *  Option 2:
+ *   DSPI_MasterWriteDataBlocking(base,&command,data_need_to_send_0);
+ *   DSPI_MasterWriteDataBlocking(base,&command,data_need_to_send_1);
+ *   DSPI_MasterWriteDataBlocking(base,&command,data_need_to_send_2);
+ *
  * @param base DSPI peripheral address.
  * @param data The data word (command and data combined) to be sent.
  */
@@ -1037,7 +1040,7 @@ void DSPI_SetDummyData(SPI_Type *base, uint8_t dummyData);
 
 /*!
  *@}
-*/
+ */
 
 /*!
  * @name Transactional
@@ -1209,14 +1212,24 @@ void DSPI_SlaveTransferAbort(SPI_Type *base, dspi_slave_handle_t *handle);
 void DSPI_SlaveTransferHandleIRQ(SPI_Type *base, dspi_slave_handle_t *handle);
 
 /*!
+ * brief Dummy data for each instance.
+ *
+ * The purpose of this API is to avoid MISRA rule8.5 : Multiple declarations of
+ * externally-linked object or function g_dspiDummyData.
+ *
+ * param base DSPI peripheral base address.
+ */
+uint8_t DSPI_GetDummyDataInstance(SPI_Type *base);
+
+/*!
  *@}
-*/
+ */
 
 #if defined(__cplusplus)
 }
 #endif /*_cplusplus*/
        /*!
         *@}
-       */
+        */
 
 #endif /*_FSL_DSPI_H_*/

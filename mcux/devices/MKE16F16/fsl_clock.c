@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright (c) 2016 - 2017 , NXP
+ * Copyright 2016 - 2019 , NXP
  * All rights reserved.
  *
  *
@@ -64,7 +64,7 @@
 #define SCG_SPLLCFG_PREDIV_VAL ((SCG->SPLLCFG & SCG_SPLLCFG_PREDIV_MASK) >> SCG_SPLLCFG_PREDIV_SHIFT)
 #define SCG_SPLLCFG_MULT_VAL ((SCG->SPLLCFG & SCG_SPLLCFG_MULT_MASK) >> SCG_SPLLCFG_MULT_SHIFT)
 
-#define PCC_PCS_VAL(reg) (((reg) & PCC_CLKCFG_PCS_MASK) >> PCC_CLKCFG_PCS_SHIFT)
+#define PCC_PCS_VAL(reg) (((reg)&PCC_CLKCFG_PCS_MASK) >> PCC_CLKCFG_PCS_SHIFT)
 
 /*******************************************************************************
  * Variables
@@ -646,7 +646,7 @@ uint32_t CLOCK_GetSircFreq(void)
 uint32_t CLOCK_GetSircAsyncFreq(scg_async_clk_t type)
 {
     uint32_t sircFreq = CLOCK_GetSircFreq();
-    uint32_t divider = 0U;
+    uint32_t divider  = 0U;
 
     /* Get divider. */
     if (sircFreq)
@@ -780,7 +780,10 @@ status_t CLOCK_DeinitFirc(void)
 uint32_t CLOCK_GetFircFreq(void)
 {
     static const uint32_t fircFreq[] = {
-        SCG_FIRC_FREQ0, SCG_FIRC_FREQ1, SCG_FIRC_FREQ2, SCG_FIRC_FREQ3,
+        SCG_FIRC_FREQ0,
+        SCG_FIRC_FREQ1,
+        SCG_FIRC_FREQ2,
+        SCG_FIRC_FREQ3,
     };
 
     if (SCG->FIRCCSR & SCG_FIRCCSR_FIRCVLD_MASK) /* FIRC is valid. */
@@ -802,7 +805,7 @@ uint32_t CLOCK_GetFircFreq(void)
 uint32_t CLOCK_GetFircAsyncFreq(scg_async_clk_t type)
 {
     uint32_t fircFreq = CLOCK_GetFircFreq();
-    uint32_t divider = 0U;
+    uint32_t divider  = 0U;
 
     /* Get divider. */
     if (fircFreq)
@@ -846,15 +849,15 @@ uint32_t CLOCK_GetFircAsyncFreq(scg_async_clk_t type)
  */
 uint32_t CLOCK_GetSysPllMultDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *mult, uint8_t *prediv)
 {
-    uint8_t ret_prediv;          /* PREDIV to return */
-    uint8_t ret_mult;            /* MULT to return */
-    uint8_t prediv_min;          /* Minimal PREDIV value to make reference clock in allowed range. */
-    uint8_t prediv_max;          /* Max PREDIV value to make reference clock in allowed range. */
-    uint8_t prediv_cur;          /* PREDIV value for iteration. */
-    uint8_t mult_cur;            /* MULT value for iteration. */
-    uint32_t ret_freq = 0U;      /* Output frequency to return .*/
-    uint32_t diff = 0xFFFFFFFFU; /* Difference between desireFreq and return frequency. */
-    uint32_t ref_div;            /* Reference frequency after PREDIV. */
+    uint8_t ret_prediv;              /* PREDIV to return */
+    uint8_t ret_mult;                /* MULT to return */
+    uint8_t prediv_min;              /* Minimal PREDIV value to make reference clock in allowed range. */
+    uint8_t prediv_max;              /* Max PREDIV value to make reference clock in allowed range. */
+    uint8_t prediv_cur;              /* PREDIV value for iteration. */
+    uint8_t mult_cur;                /* MULT value for iteration. */
+    uint32_t ret_freq = 0U;          /* Output frequency to return .*/
+    uint32_t diff     = 0xFFFFFFFFU; /* Difference between desireFreq and return frequency. */
+    uint32_t ref_div;                /* Reference frequency after PREDIV. */
 
     /*
      * Steps:
@@ -909,14 +912,14 @@ uint32_t CLOCK_GetSysPllMultDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *
             if (ret_freq == desireFreq) /* If desire frequency is got. */
             {
                 *prediv = prediv_cur - SCG_SPLL_PREDIV_BASE_VALUE;
-                *mult = mult_cur - SCG_SPLL_MULT_BASE_VALUE;
+                *mult   = mult_cur - SCG_SPLL_MULT_BASE_VALUE;
                 return ret_freq / 2U;
             }
             if (diff > desireFreq - ret_freq) /* New PRDIV/VDIV is closer. */
             {
-                diff = desireFreq - ret_freq;
+                diff       = desireFreq - ret_freq;
                 ret_prediv = prediv_cur;
-                ret_mult = mult_cur;
+                ret_mult   = mult_cur;
             }
         }
         mult_cur++;
@@ -925,9 +928,9 @@ uint32_t CLOCK_GetSysPllMultDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *
             ret_freq += ref_div;
             if (diff > ret_freq - desireFreq) /* New PRDIV/VDIV is closer. */
             {
-                diff = ret_freq - desireFreq;
+                diff       = ret_freq - desireFreq;
                 ret_prediv = prediv_cur;
-                ret_mult = mult_cur;
+                ret_mult   = mult_cur;
             }
         }
     }
@@ -936,7 +939,7 @@ uint32_t CLOCK_GetSysPllMultDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *
     {
         /* PREDIV/MULT found. */
         *prediv = ret_prediv - SCG_SPLL_PREDIV_BASE_VALUE;
-        *mult = ret_mult - SCG_SPLL_MULT_BASE_VALUE;
+        *mult   = ret_mult - SCG_SPLL_MULT_BASE_VALUE;
         return ((refFreq / ret_prediv) * ret_mult) / 2;
     }
     else
@@ -1125,5 +1128,53 @@ uint32_t CLOCK_GetSysPllAsyncFreq(scg_async_clk_t type)
     else /* Output disabled. */
     {
         return 0U;
+    }
+}
+
+/*!
+ * brief Use DWT to delay at least for some time.
+ * Please note that, this API will calculate the microsecond period with the maximum devices
+ * supported CPU frequency, so this API will only delay for at least the given microseconds, if precise
+ * delay count was needed, please implement a new timer count to achieve this function.
+ *
+ * param delay_us  Delay time in unit of microsecond.
+ */
+__attribute__((weak)) void SDK_DelayAtLeastUs(uint32_t delay_us)
+{
+    assert(0U != delay_us);
+    uint64_t count  = 0U;
+    uint32_t period = SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY / 1000000;
+
+    /* Make sure the DWT trace fucntion is enabled. */
+    if (CoreDebug_DEMCR_TRCENA_Msk != (CoreDebug_DEMCR_TRCENA_Msk & CoreDebug->DEMCR))
+    {
+        CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+    }
+
+    /* CYCCNT not supported on this device. */
+    assert(DWT_CTRL_NOCYCCNT_Msk != (DWT->CTRL & DWT_CTRL_NOCYCCNT_Msk));
+
+    /* If CYCCENT has already been enabled, read directly, otherwise, need enable it. */
+    if (DWT_CTRL_CYCCNTENA_Msk != (DWT_CTRL_CYCCNTENA_Msk & DWT->CTRL))
+    {
+        DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+    }
+
+    /* Calculate the count ticks. */
+    count = DWT->CYCCNT;
+    count += (uint64_t)period * delay_us;
+
+    if (count > 0xFFFFFFFFUL)
+    {
+        count -= 0xFFFFFFFFUL;
+        /* wait for cyccnt overflow. */
+        while (count < DWT->CYCCNT)
+        {
+        }
+    }
+
+    /* Wait for cyccnt reach count value. */
+    while (count > DWT->CYCCNT)
+    {
     }
 }

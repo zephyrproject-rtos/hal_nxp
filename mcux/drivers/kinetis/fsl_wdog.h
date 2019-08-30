@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_WDOG_H_
@@ -14,7 +14,6 @@
  * @addtogroup wdog
  * @{
  */
-
 
 /*******************************************************************************
  * Definitions
@@ -41,7 +40,7 @@
 /*! @brief Describes WDOG clock source. */
 typedef enum _wdog_clock_source
 {
-    kWDOG_LpoClockSource = 0U,       /*!< WDOG clock sourced from LPO*/
+    kWDOG_LpoClockSource       = 0U, /*!< WDOG clock sourced from LPO*/
     kWDOG_AlternateClockSource = 1U, /*!< WDOG clock sourced from alternate clock source*/
 } wdog_clock_source_t;
 
@@ -86,7 +85,7 @@ typedef struct _wdog_config
 typedef enum _wdog_test_mode
 {
     kWDOG_QuickTest = 0U, /*!< Selects quick test */
-    kWDOG_ByteTest = 1U,  /*!< Selects byte test */
+    kWDOG_ByteTest  = 1U, /*!< Selects byte test */
 } wdog_test_mode_t;
 
 /*! @brief Describes WDOG tested byte selection in byte test mode. */
@@ -141,7 +140,7 @@ extern "C" {
  */
 
 /*!
- * @brief Initializes the WDOG configuration sturcture.
+ * @brief Initializes the WDOG configuration structure.
  *
  * This function initializes the WDOG configuration structure to default values. The default
  * values are as follows.
@@ -250,7 +249,8 @@ static inline void WDOG_Disable(WDOG_Type *base)
 /*!
  * @brief Enables the WDOG interrupt.
  *
- * This function writes a value into the WDOG_STCTRLH register to enable the WDOG interrupt. It is a write-once register.
+ * This function writes a value into the WDOG_STCTRLH register to enable the WDOG interrupt. It is a write-once
+ * register.
  * Ensure that the WCT window is still open and the register has not been written to in this WCT
  * while the function is called.
  *
@@ -267,7 +267,8 @@ static inline void WDOG_EnableInterrupts(WDOG_Type *base, uint32_t mask)
 /*!
  * @brief Disables the WDOG interrupt.
  *
- * This function writes a value into the WDOG_STCTRLH register to disable the WDOG interrupt. It is a write-once register.
+ * This function writes a value into the WDOG_STCTRLH register to disable the WDOG interrupt. It is a write-once
+ * register.
  * Ensure that the WCT window is still open and the register has not been written to in this WCT
  * while the function is called.
  *
@@ -354,7 +355,7 @@ static inline void WDOG_SetWindowValue(WDOG_Type *base, uint32_t windowValue)
  * @brief Unlocks the WDOG register written.
  *
  * This function unlocks the WDOG register written.
- * Before starting the unlock sequence and following congfiguration, disable the global interrupts.
+ * Before starting the unlock sequence and following configuration, disable the global interrupts.
  * Otherwise, an interrupt may invalidate the unlocking sequence and the WCT may expire.
  * After the configuration finishes, re-enable the global interrupts.
  *

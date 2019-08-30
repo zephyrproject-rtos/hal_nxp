@@ -113,11 +113,11 @@ void CRC_Reset(CRC_Type *base)
 void CRC_GetConfig(CRC_Type *base, crc_config_t *config)
 {
     /* extract CRC mode settings */
-    uint32_t mode = base->MODE;
-    config->polynomial = (crc_polynomial_t)((mode & CRC_MODE_CRC_POLY_MASK) >> CRC_MODE_CRC_POLY_SHIFT);
-    config->reverseIn = (bool)(mode & CRC_MODE_BIT_RVS_WR_MASK);
-    config->complementIn = (bool)(mode & CRC_MODE_CMPL_WR_MASK);
-    config->reverseOut = (bool)(mode & CRC_MODE_BIT_RVS_SUM_MASK);
+    uint32_t mode         = base->MODE;
+    config->polynomial    = (crc_polynomial_t)((mode & CRC_MODE_CRC_POLY_MASK) >> CRC_MODE_CRC_POLY_SHIFT);
+    config->reverseIn     = (bool)(mode & CRC_MODE_BIT_RVS_WR_MASK);
+    config->complementIn  = (bool)(mode & CRC_MODE_CMPL_WR_MASK);
+    config->reverseOut    = (bool)(mode & CRC_MODE_BIT_RVS_SUM_MASK);
     config->complementOut = (bool)(mode & CRC_MODE_CMPL_SUM_MASK);
 
     /* reset CRC sum bit reverse and 1's complement setting, so its value can be used as a seed */

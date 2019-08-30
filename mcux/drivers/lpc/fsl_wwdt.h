@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Defines WWDT driver version 2.1.1. */
-#define FSL_WWDT_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief Defines WWDT driver version 2.1.2. */
+#define FSL_WWDT_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*! @name Refresh sequence */
@@ -80,7 +80,7 @@ extern "C" {
  */
 
 /*!
- * @brief Initializes WWDT configure sturcture.
+ * @brief Initializes WWDT configure structure.
  *
  * This function initializes the WWDT configure structure to default value. The default
  * value are:
@@ -175,7 +175,18 @@ static inline void WWDT_Disable(WWDT_Type *base)
  */
 static inline uint32_t WWDT_GetStatusFlags(WWDT_Type *base)
 {
+#if defined(FSL_FEATURE_WWDT_WDTRESET_FROM_PMC) && (FSL_FEATURE_WWDT_WDTRESET_FROM_PMC)
+    uint32_t status;
+    /* WDTOF is not set in case of WD reset - get info from PMC instead */
+    status = (base->MOD & (WWDT_MOD_WDTOF_MASK | WWDT_MOD_WDINT_MASK));
+    if (PMC->RESETCAUSE & PMC_RESETCAUSE_WDTRESET_MASK)
+    {
+        status |= kWWDT_TimeoutFlag;
+    }
+    return status;
+#else
     return (base->MOD & (WWDT_MOD_WDTOF_MASK | WWDT_MOD_WDINT_MASK));
+#endif /*FSL_FEATURE_WWDT_WDTRESET_FROM_PMC*/
 }
 
 /*!

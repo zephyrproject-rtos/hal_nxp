@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2018 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,18 +21,18 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief DSPI EDMA driver version 2.2.0. */
-#define FSL_DSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief DSPI EDMA driver version 2.2.1. */
+#define FSL_DSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 /*!
-* @brief Forward declaration of the DSPI eDMA master handle typedefs.
-*/
+ * @brief Forward declaration of the DSPI eDMA master handle typedefs.
+ */
 typedef struct _dspi_master_edma_handle dspi_master_edma_handle_t;
 
 /*!
-* @brief Forward declaration of the DSPI eDMA slave handle typedefs.
-*/
+ * @brief Forward declaration of the DSPI eDMA slave handle typedefs.
+ */
 typedef struct _dspi_slave_edma_handle dspi_slave_edma_handle_t;
 
 /*!

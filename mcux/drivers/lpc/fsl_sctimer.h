@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
+#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0 */
 /*@}*/
 
 /*! @brief SCTimer PWM operation modes */
@@ -195,16 +195,16 @@ typedef void (*sctimer_event_callback_t)(void);
 /*! @brief List of SCTimer interrupts */
 typedef enum _sctimer_interrupt_enable
 {
-    kSCTIMER_Event0InterruptEnable = (1U << 0),   /*!< Event 0 interrupt */
-    kSCTIMER_Event1InterruptEnable = (1U << 1),   /*!< Event 1 interrupt */
-    kSCTIMER_Event2InterruptEnable = (1U << 2),   /*!< Event 2 interrupt */
-    kSCTIMER_Event3InterruptEnable = (1U << 3),   /*!< Event 3 interrupt */
-    kSCTIMER_Event4InterruptEnable = (1U << 4),   /*!< Event 4 interrupt */
-    kSCTIMER_Event5InterruptEnable = (1U << 5),   /*!< Event 5 interrupt */
-    kSCTIMER_Event6InterruptEnable = (1U << 6),   /*!< Event 6 interrupt */
-    kSCTIMER_Event7InterruptEnable = (1U << 7),   /*!< Event 7 interrupt */
-    kSCTIMER_Event8InterruptEnable = (1U << 8),   /*!< Event 8 interrupt */
-    kSCTIMER_Event9InterruptEnable = (1U << 9),   /*!< Event 9 interrupt */
+    kSCTIMER_Event0InterruptEnable  = (1U << 0),  /*!< Event 0 interrupt */
+    kSCTIMER_Event1InterruptEnable  = (1U << 1),  /*!< Event 1 interrupt */
+    kSCTIMER_Event2InterruptEnable  = (1U << 2),  /*!< Event 2 interrupt */
+    kSCTIMER_Event3InterruptEnable  = (1U << 3),  /*!< Event 3 interrupt */
+    kSCTIMER_Event4InterruptEnable  = (1U << 4),  /*!< Event 4 interrupt */
+    kSCTIMER_Event5InterruptEnable  = (1U << 5),  /*!< Event 5 interrupt */
+    kSCTIMER_Event6InterruptEnable  = (1U << 6),  /*!< Event 6 interrupt */
+    kSCTIMER_Event7InterruptEnable  = (1U << 7),  /*!< Event 7 interrupt */
+    kSCTIMER_Event8InterruptEnable  = (1U << 8),  /*!< Event 8 interrupt */
+    kSCTIMER_Event9InterruptEnable  = (1U << 9),  /*!< Event 9 interrupt */
     kSCTIMER_Event10InterruptEnable = (1U << 10), /*!< Event 10 interrupt */
     kSCTIMER_Event11InterruptEnable = (1U << 11), /*!< Event 11 interrupt */
     kSCTIMER_Event12InterruptEnable = (1U << 12), /*!< Event 12 interrupt */
@@ -213,16 +213,16 @@ typedef enum _sctimer_interrupt_enable
 /*! @brief List of SCTimer flags */
 typedef enum _sctimer_status_flags
 {
-    kSCTIMER_Event0Flag = (1U << 0),   /*!< Event 0 Flag */
-    kSCTIMER_Event1Flag = (1U << 1),   /*!< Event 1 Flag */
-    kSCTIMER_Event2Flag = (1U << 2),   /*!< Event 2 Flag */
-    kSCTIMER_Event3Flag = (1U << 3),   /*!< Event 3 Flag */
-    kSCTIMER_Event4Flag = (1U << 4),   /*!< Event 4 Flag */
-    kSCTIMER_Event5Flag = (1U << 5),   /*!< Event 5 Flag */
-    kSCTIMER_Event6Flag = (1U << 6),   /*!< Event 6 Flag */
-    kSCTIMER_Event7Flag = (1U << 7),   /*!< Event 7 Flag */
-    kSCTIMER_Event8Flag = (1U << 8),   /*!< Event 8 Flag */
-    kSCTIMER_Event9Flag = (1U << 9),   /*!< Event 9 Flag */
+    kSCTIMER_Event0Flag  = (1U << 0),  /*!< Event 0 Flag */
+    kSCTIMER_Event1Flag  = (1U << 1),  /*!< Event 1 Flag */
+    kSCTIMER_Event2Flag  = (1U << 2),  /*!< Event 2 Flag */
+    kSCTIMER_Event3Flag  = (1U << 3),  /*!< Event 3 Flag */
+    kSCTIMER_Event4Flag  = (1U << 4),  /*!< Event 4 Flag */
+    kSCTIMER_Event5Flag  = (1U << 5),  /*!< Event 5 Flag */
+    kSCTIMER_Event6Flag  = (1U << 6),  /*!< Event 6 Flag */
+    kSCTIMER_Event7Flag  = (1U << 7),  /*!< Event 7 Flag */
+    kSCTIMER_Event8Flag  = (1U << 8),  /*!< Event 8 Flag */
+    kSCTIMER_Event9Flag  = (1U << 9),  /*!< Event 9 Flag */
     kSCTIMER_Event10Flag = (1U << 10), /*!< Event 10 Flag */
     kSCTIMER_Event11Flag = (1U << 11), /*!< Event 11 Flag */
     kSCTIMER_Event12Flag = (1U << 12), /*!< Event 12 Flag */
@@ -258,6 +258,22 @@ typedef struct _sctimer_config
                                              This field is used only if the enableCounterUnify is set
                                              to false */
     uint8_t outInitState;               /*!< Defines the initial output value */
+    uint8_t inputsync;                  /*!< SCT INSYNC value, INSYNC field in the CONFIG register, from bit9 to bit 16.
+                                             it is used to define synchronization for input N:
+                                             bit 9  = input 0
+                                             bit 10 = input 1
+                                             bit 11 = input 2
+                                             bit 12 = input 3
+                                             All other bits are reserved (bit13 ~bit 16).
+                                             How User to set the the value for the member inputsync.
+                                             IE: delay for input0, and input 1, bypasses for input 2 and input 3
+                                             MACRO definition in user level.
+                                             #define INPUTSYNC0      (0U)
+                                             #define INPUTSYNC1      (1U)
+                                             #define INPUTSYNC2      (2U)
+                                             #define INPUTSYNC3      (3U)
+                                             User Code.
+                                             sctimerInfo.inputsync = (1 << INPUTSYNC2) | (1 << INPUTSYNC3); */
 } sctimer_config_t;
 
 /*******************************************************************************
@@ -302,9 +318,10 @@ void SCTIMER_Deinit(SCT_Type *base);
  *  config->clockSelect = kSCTIMER_Clock_On_Rise_Input_0;
  *  config->enableBidirection_l = false;
  *  config->enableBidirection_h = false;
- *  config->prescale_l = 0;
- *  config->prescale_h = 0;
- *  config->outInitState = 0;
+ *  config->prescale_l = 0U;
+ *  config->prescale_h = 0U;
+ *  config->outInitState = 0U;
+ *  config->inputsync  = 0xFU;
  * @endcode
  * @param config Pointer to the user configuration structure.
  */
@@ -444,7 +461,7 @@ static inline uint32_t SCTIMER_GetStatusFlags(SCT_Type *base)
 static inline void SCTIMER_ClearStatusFlags(SCT_Type *base, uint32_t mask)
 {
     /* Write to the flag registers */
-    base->EVFLAG = (mask & 0xFFFFU);
+    base->EVFLAG  = (mask & 0xFFFFU);
     base->CONFLAG = (mask & (SCT_CONFLAG_BUSERRL_MASK | SCT_CONFLAG_BUSERRH_MASK));
 }
 

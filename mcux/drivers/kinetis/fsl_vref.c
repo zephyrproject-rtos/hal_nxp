@@ -99,10 +99,10 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config)
 #if defined(FSL_FEATURE_VREF_HAS_LOW_REFERENCE) && FSL_FEATURE_VREF_HAS_LOW_REFERENCE
     reg = base->VREFH_SC;
 #else
-    reg = base->SC;
+    reg      = base->SC;
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */
     /* Clear old buffer mode selection bits */
-    reg &= ~VREF_SC_MODE_LV_MASK;
+    reg &= ~(uint8_t)VREF_SC_MODE_LV_MASK;
     /* Set buffer Mode selection and Regulator enable bit */
     reg |= VREF_SC_MODE_LV(config->bufferMode) | VREF_SC_REGEN(1U);
 #if defined(FSL_FEATURE_VREF_HAS_COMPENSATION) && FSL_FEATURE_VREF_HAS_COMPENSATION
@@ -139,7 +139,7 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config)
 #if defined(FSL_FEATURE_VREF_HAS_LOW_REFERENCE) && FSL_FEATURE_VREF_HAS_LOW_REFERENCE
     while ((base->VREFH_SC & VREF_SC_VREFST_MASK) == 0)
 #else
-    while ((base->SC & VREF_SC_VREFST_MASK) == 0)
+    while ((base->SC & VREF_SC_VREFST_MASK) == 0U)
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */
     {
     }
@@ -183,10 +183,10 @@ void VREF_Deinit(VREF_Type *base)
  */
 void VREF_GetDefaultConfig(vref_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
 /* Set High power buffer mode in */
 #if defined(FSL_FEATURE_VREF_MODE_LV_TYPE) && FSL_FEATURE_VREF_MODE_LV_TYPE
@@ -222,14 +222,14 @@ void VREF_SetTrimVal(VREF_Type *base, uint8_t trimValue)
     uint8_t reg = 0U;
 
     /* Set TRIM bits value in voltage reference */
-    reg = base->TRM;
-    reg = ((reg & ~VREF_TRM_TRIM_MASK) | VREF_TRM_TRIM(trimValue));
+    reg       = base->TRM;
+    reg       = (uint8_t)((reg & ~VREF_TRM_TRIM_MASK) | VREF_TRM_TRIM(trimValue));
     base->TRM = reg;
 /* Wait until internal voltage stable */
 #if defined(FSL_FEATURE_VREF_HAS_LOW_REFERENCE) && FSL_FEATURE_VREF_HAS_LOW_REFERENCE
     while ((base->VREFH_SC & VREF_SC_VREFST_MASK) == 0)
 #else
-    while ((base->SC & VREF_SC_VREFST_MASK) == 0)
+    while ((base->SC & VREF_SC_VREFST_MASK) == 0U)
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */
     {
     }
@@ -250,11 +250,11 @@ void VREF_SetTrim2V1Val(VREF_Type *base, uint8_t trimValue)
     uint8_t reg = 0U;
 
     /* Set TRIM bits value in voltage reference (2V1) */
-    reg = base->TRM4;
-    reg = ((reg & ~VREF_TRM4_TRIM2V1_MASK) | VREF_TRM4_TRIM2V1(trimValue));
+    reg        = base->TRM4;
+    reg        = ((reg & ~VREF_TRM4_TRIM2V1_MASK) | VREF_TRM4_TRIM2V1(trimValue));
     base->TRM4 = reg;
     /* Wait until internal voltage stable */
-    while ((base->SC & VREF_SC_VREFST_MASK) == 0)
+    while ((base->SC & VREF_SC_VREFST_MASK) == 0U)
     {
     }
 }
@@ -280,8 +280,8 @@ void VREF_SetLowReferenceTrimVal(VREF_Type *base, uint8_t trimValue)
     uint8_t reg = 0U;
 
     /* Set TRIM bits value in low voltage reference */
-    reg = base->VREFL_TRM;
-    reg = ((reg & ~VREF_VREFL_TRM_VREFL_TRIM_MASK) | VREF_VREFL_TRM_VREFL_TRIM(trimValue));
+    reg             = base->VREFL_TRM;
+    reg             = ((reg & ~VREF_VREFL_TRM_VREFL_TRIM_MASK) | VREF_VREFL_TRM_VREFL_TRIM(trimValue));
     base->VREFL_TRM = reg;
     /* Wait until internal voltage stable */
 

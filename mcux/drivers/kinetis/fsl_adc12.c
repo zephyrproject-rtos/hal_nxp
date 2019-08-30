@@ -91,21 +91,21 @@ static status_t ADC12_GetCalibrationStatus(ADC_Type *base)
 {
     /* Get raw calibration result. OFS, CLP9, CLPX are signed number. The highest position bit is the signal bit.
     Other calibration value registers are unsigned number. */
-    int32_t OFS = (int32_t)((base->OFS & ADC_OFS_OFS_MASK) >> ADC_OFS_OFS_SHIFT);
-    int32_t CLP9 = (int32_t)((base->CLP9 & ADC_CLP9_CLP9_MASK) >> ADC_CLP9_CLP9_SHIFT);
-    int32_t CLPX = (int32_t)((base->CLPX & ADC_CLPX_CLPX_MASK) >> ADC_CLPX_CLPX_SHIFT);
-    uint32_t CLPS = ((base->CLPS & ADC_CLPS_CLPS_MASK) >> ADC_CLPS_CLPS_SHIFT);
-    uint32_t CLP0 = ((base->CLP0 & ADC_CLP0_CLP0_MASK) >> ADC_CLP0_CLP0_SHIFT);
-    uint32_t CLP1 = ((base->CLP1 & ADC_CLP1_CLP1_MASK) >> ADC_CLP1_CLP1_SHIFT);
-    uint32_t CLP2 = ((base->CLP2 & ADC_CLP2_CLP2_MASK) >> ADC_CLP2_CLP2_SHIFT);
-    uint32_t CLP3 = ((base->CLP3 & ADC_CLP3_CLP3_MASK) >> ADC_CLP3_CLP3_SHIFT);
-    uint32_t Typ1 = (CLP0 + CLP0);
-    uint32_t Typ2 = (CLP1 + CLP1 - 26U);
-    uint32_t Typ3 = (CLP2 + CLP2);
+    int32_t OFS    = (int32_t)((base->OFS & ADC_OFS_OFS_MASK) >> ADC_OFS_OFS_SHIFT);
+    int32_t CLP9   = (int32_t)((base->CLP9 & ADC_CLP9_CLP9_MASK) >> ADC_CLP9_CLP9_SHIFT);
+    int32_t CLPX   = (int32_t)((base->CLPX & ADC_CLPX_CLPX_MASK) >> ADC_CLPX_CLPX_SHIFT);
+    uint32_t CLPS  = ((base->CLPS & ADC_CLPS_CLPS_MASK) >> ADC_CLPS_CLPS_SHIFT);
+    uint32_t CLP0  = ((base->CLP0 & ADC_CLP0_CLP0_MASK) >> ADC_CLP0_CLP0_SHIFT);
+    uint32_t CLP1  = ((base->CLP1 & ADC_CLP1_CLP1_MASK) >> ADC_CLP1_CLP1_SHIFT);
+    uint32_t CLP2  = ((base->CLP2 & ADC_CLP2_CLP2_MASK) >> ADC_CLP2_CLP2_SHIFT);
+    uint32_t CLP3  = ((base->CLP3 & ADC_CLP3_CLP3_MASK) >> ADC_CLP3_CLP3_SHIFT);
+    uint32_t Typ1  = (CLP0 + CLP0);
+    uint32_t Typ2  = (CLP1 + CLP1 - 26U);
+    uint32_t Typ3  = (CLP2 + CLP2);
     status_t error = kStatus_Success;
 
     /* Transform raw calibration result to unified type int32_t when the conversion result value is signed number. */
-    OFS = ADC12_TRANSFORM_CALIBRATION_RESULT(OFS, 16);
+    OFS  = ADC12_TRANSFORM_CALIBRATION_RESULT(OFS, 16);
     CLP9 = ADC12_TRANSFORM_CALIBRATION_RESULT(CLP9, 7);
     CLPX = ADC12_TRANSFORM_CALIBRATION_RESULT(CLPX, 7);
 
@@ -200,11 +200,11 @@ void ADC12_GetDefaultConfig(adc12_config_t *config)
     /* Initializes the configure structure to zero. */
     memset(config, 0, sizeof(*config));
 
-    config->referenceVoltageSource = kADC12_ReferenceVoltageSourceVref;
-    config->clockSource = kADC12_ClockSourceAlt0;
-    config->clockDivider = kADC12_ClockDivider1;
-    config->resolution = kADC12_Resolution8Bit;
-    config->sampleClockCount = 13U;
+    config->referenceVoltageSource     = kADC12_ReferenceVoltageSourceVref;
+    config->clockSource                = kADC12_ClockSourceAlt0;
+    config->clockDivider               = kADC12_ClockDivider1;
+    config->resolution                 = kADC12_Resolution8Bit;
+    config->sampleClockCount           = 13U;
     config->enableContinuousConversion = false;
 }
 
@@ -261,7 +261,7 @@ uint32_t ADC12_GetChannelStatusFlags(ADC_Type *base, uint32_t channelGroup)
 {
     assert(channelGroup < ADC_SC1_COUNT);
 
-    uint32_t tmp32 = base->SC1[channelGroup];
+    uint32_t tmp32  = base->SC1[channelGroup];
     uint32_t result = 0U;
 
     /* ADCx_SC1n. */
@@ -310,7 +310,7 @@ status_t ADC12_DoAutoCalibration(ADC_Type *base)
         base->SC2 = tmp32;
     }
     /* Save current average mode. Then enable hardware average and set average number to be maximum value. */
-    tmp32 = base->SC3;
+    tmp32       = base->SC3;
     averageMode = ((tmp32 & ADC_SC3_AVGS_MASK) >> ADC_SC3_AVGS_SHIFT);
     if (ADC_SC3_AVGE_MASK == (tmp32 & ADC_SC3_AVGE_MASK))
     {

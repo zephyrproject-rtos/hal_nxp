@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright (c) 2016 - 2017 , NXP
+ * Copyright 2016 - 2019 , NXP
  * All rights reserved.
  *
  *
@@ -41,9 +41,14 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.1.2. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+/*! @brief CLOCK driver version 2.2.0. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
+
+/* Definition for delay API in clock driver, users can redefine it to the real application. */
+#ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
+#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (120000000UL)
+#endif
 
 /*! @brief External XTAL0 (OSC0/SYSOSC) clock frequency.
  *
@@ -252,10 +257,10 @@ typedef enum _clock_name
  */
 typedef enum _clock_ip_src
 {
-    kCLOCK_IpSrcNoneOrExt = 0U,   /*!< Clock is off or external clock is used. */
+    kCLOCK_IpSrcNoneOrExt   = 0U, /*!< Clock is off or external clock is used. */
     kCLOCK_IpSrcSysOscAsync = 1U, /*!< System Oscillator async clock.          */
-    kCLOCK_IpSrcSircAsync = 2U,   /*!< Slow IRC async clock.                   */
-    kCLOCK_IpSrcFircAsync = 3U,   /*!< Fast IRC async clock.                   */
+    kCLOCK_IpSrcSircAsync   = 2U, /*!< Slow IRC async clock.                   */
+    kCLOCK_IpSrcFircAsync   = 3U, /*!< Fast IRC async clock.                   */
     kCLOCK_IpSrcSysPllAsync = 6U  /*!< System PLL async clock.                 */
 } clock_ip_src_t;
 
@@ -268,46 +273,46 @@ typedef enum _clock_ip_name
     kCLOCK_IpInvalid = 0U,
 
     /* PCC 0 */
-    kCLOCK_Dma0 = 0x40065020U,
-    kCLOCK_Sysmpu0 = 0x40065034U,
-    kCLOCK_Flash0 = 0x40065080U,
-    kCLOCK_Dmamux0 = 0x40065084U,
+    kCLOCK_Dma0     = 0x40065020U,
+    kCLOCK_Sysmpu0  = 0x40065034U,
+    kCLOCK_Flash0   = 0x40065080U,
+    kCLOCK_Dmamux0  = 0x40065084U,
     kCLOCK_Flexcan0 = 0x40065090U,
     kCLOCK_Flexcan1 = 0x40065094U,
-    kCLOCK_Ftm3 = 0x40065098U,
-    kCLOCK_Adc1 = 0x4006509CU,
-    kCLOCK_Lpspi0 = 0x400650B0U,
-    kCLOCK_Lpspi1 = 0x400650B4U,
-    kCLOCK_Pdb1 = 0x400650C4U,
-    kCLOCK_Crc0 = 0x400650C8U,
-    kCLOCK_Pdb2 = 0x400650CCU,
-    kCLOCK_Pdb0 = 0x400650D8U,
-    kCLOCK_Lpit0 = 0x400650DCU,
-    kCLOCK_Ftm0 = 0x400650E0U,
-    kCLOCK_Ftm1 = 0x400650E4U,
-    kCLOCK_Ftm2 = 0x400650E8U,
-    kCLOCK_Adc0 = 0x400650ECU,
-    kCLOCK_Adc2 = 0x400650F0U,
-    kCLOCK_Rtc0 = 0x400650F4U,
-    kCLOCK_Dac0 = 0x400650FCU,
-    kCLOCK_Lptmr0 = 0x40065100U,
-    kCLOCK_PortA = 0x40065124U,
-    kCLOCK_PortB = 0x40065128U,
-    kCLOCK_PortC = 0x4006512CU,
-    kCLOCK_PortD = 0x40065130U,
-    kCLOCK_PortE = 0x40065134U,
-    kCLOCK_Pwt0 = 0x40065158U,
-    kCLOCK_Flexio0 = 0x40065168U,
-    kCLOCK_RtcOsc0 = 0x40065180U,
-    kCLOCK_Ewm0 = 0x40065184U,
-    kCLOCK_Lpi2c0 = 0x40065198U,
-    kCLOCK_Lpi2c1 = 0x4006519CU,
-    kCLOCK_Lpuart0 = 0x400651A8U,
-    kCLOCK_Lpuart1 = 0x400651ACU,
-    kCLOCK_Lpuart2 = 0x400651B0U,
-    kCLOCK_Cmp0 = 0x400651CCU,
-    kCLOCK_Cmp1 = 0x400651D0U,
-    kCLOCK_Cmp2 = 0x400651D4U,
+    kCLOCK_Ftm3     = 0x40065098U,
+    kCLOCK_Adc1     = 0x4006509CU,
+    kCLOCK_Lpspi0   = 0x400650B0U,
+    kCLOCK_Lpspi1   = 0x400650B4U,
+    kCLOCK_Pdb1     = 0x400650C4U,
+    kCLOCK_Crc0     = 0x400650C8U,
+    kCLOCK_Pdb2     = 0x400650CCU,
+    kCLOCK_Pdb0     = 0x400650D8U,
+    kCLOCK_Lpit0    = 0x400650DCU,
+    kCLOCK_Ftm0     = 0x400650E0U,
+    kCLOCK_Ftm1     = 0x400650E4U,
+    kCLOCK_Ftm2     = 0x400650E8U,
+    kCLOCK_Adc0     = 0x400650ECU,
+    kCLOCK_Adc2     = 0x400650F0U,
+    kCLOCK_Rtc0     = 0x400650F4U,
+    kCLOCK_Dac0     = 0x400650FCU,
+    kCLOCK_Lptmr0   = 0x40065100U,
+    kCLOCK_PortA    = 0x40065124U,
+    kCLOCK_PortB    = 0x40065128U,
+    kCLOCK_PortC    = 0x4006512CU,
+    kCLOCK_PortD    = 0x40065130U,
+    kCLOCK_PortE    = 0x40065134U,
+    kCLOCK_Pwt0     = 0x40065158U,
+    kCLOCK_Flexio0  = 0x40065168U,
+    kCLOCK_RtcOsc0  = 0x40065180U,
+    kCLOCK_Ewm0     = 0x40065184U,
+    kCLOCK_Lpi2c0   = 0x40065198U,
+    kCLOCK_Lpi2c1   = 0x4006519CU,
+    kCLOCK_Lpuart0  = 0x400651A8U,
+    kCLOCK_Lpuart1  = 0x400651ACU,
+    kCLOCK_Lpuart2  = 0x400651B0U,
+    kCLOCK_Cmp0     = 0x400651CCU,
+    kCLOCK_Cmp1     = 0x400651D0U,
+    kCLOCK_Cmp2     = 0x400651D4U,
 } clock_ip_name_t;
 
 /*!
@@ -315,7 +320,7 @@ typedef enum _clock_ip_name
  */
 typedef enum _osc32_mode
 {
-    kOSC32_Bypass = OSC32_CR_ROSCEN_MASK, /*!< Bypass mode, use external input clock directly. */
+    kOSC32_Bypass  = OSC32_CR_ROSCEN_MASK, /*!< Bypass mode, use external input clock directly. */
     kOSC32_Crystal = OSC32_CR_ROSCEN_MASK | OSC32_CR_ROSCEREFS_MASK, /*!< Crystal mode, does not work in stop mode. */
     kOSC32_CrystalEnableInStop = OSC32_CR_ROSCEN_MASK | OSC32_CR_ROSCSTPEN_MASK |
                                  OSC32_CR_ROSCEREFS_MASK, /*!< Crystal mode, still work in stop mode. */
@@ -326,8 +331,8 @@ typedef enum _osc32_mode
  */
 enum _scg_status
 {
-    kStatus_SCG_Busy = MAKE_STATUS(kStatusGroup_SCG, 1),      /*!< Clock is busy.  */
-    kStatus_SCG_InvalidSrc = MAKE_STATUS(kStatusGroup_SCG, 2) /*!< Invalid source. */
+    kStatus_SCG_Busy       = MAKE_STATUS(kStatusGroup_SCG, 1), /*!< Clock is busy.  */
+    kStatus_SCG_InvalidSrc = MAKE_STATUS(kStatusGroup_SCG, 2)  /*!< Invalid source. */
 };
 
 /*!
@@ -346,8 +351,8 @@ typedef enum _scg_sys_clk
 typedef enum _scg_sys_clk_src
 {
     kSCG_SysClkSrcSysOsc = 1U, /*!< System OSC. */
-    kSCG_SysClkSrcSirc = 2U,   /*!< Slow IRC.   */
-    kSCG_SysClkSrcFirc = 3U,   /*!< Fast IRC.   */
+    kSCG_SysClkSrcSirc   = 2U, /*!< Slow IRC.   */
+    kSCG_SysClkSrcFirc   = 3U, /*!< Fast IRC.   */
     kSCG_SysClkSrcSysPll = 6U  /*!< System PLL. */
 } scg_sys_clk_src_t;
 
@@ -356,15 +361,15 @@ typedef enum _scg_sys_clk_src
  */
 typedef enum _scg_sys_clk_div
 {
-    kSCG_SysClkDivBy1 = 0U,   /*!< Divided by 1.  */
-    kSCG_SysClkDivBy2 = 1U,   /*!< Divided by 2.  */
-    kSCG_SysClkDivBy3 = 2U,   /*!< Divided by 3.  */
-    kSCG_SysClkDivBy4 = 3U,   /*!< Divided by 4.  */
-    kSCG_SysClkDivBy5 = 4U,   /*!< Divided by 5.  */
-    kSCG_SysClkDivBy6 = 5U,   /*!< Divided by 6.  */
-    kSCG_SysClkDivBy7 = 6U,   /*!< Divided by 7.  */
-    kSCG_SysClkDivBy8 = 7U,   /*!< Divided by 8.  */
-    kSCG_SysClkDivBy9 = 8U,   /*!< Divided by 9.  */
+    kSCG_SysClkDivBy1  = 0U,  /*!< Divided by 1.  */
+    kSCG_SysClkDivBy2  = 1U,  /*!< Divided by 2.  */
+    kSCG_SysClkDivBy3  = 2U,  /*!< Divided by 3.  */
+    kSCG_SysClkDivBy4  = 3U,  /*!< Divided by 4.  */
+    kSCG_SysClkDivBy5  = 4U,  /*!< Divided by 5.  */
+    kSCG_SysClkDivBy6  = 5U,  /*!< Divided by 6.  */
+    kSCG_SysClkDivBy7  = 6U,  /*!< Divided by 7.  */
+    kSCG_SysClkDivBy8  = 7U,  /*!< Divided by 8.  */
+    kSCG_SysClkDivBy9  = 8U,  /*!< Divided by 9.  */
     kSCG_SysClkDivBy10 = 9U,  /*!< Divided by 10. */
     kSCG_SysClkDivBy11 = 10U, /*!< Divided by 11. */
     kSCG_SysClkDivBy12 = 11U, /*!< Divided by 12. */
@@ -395,10 +400,10 @@ typedef struct _scg_sys_clk_config
 typedef enum _clock_clkout_src
 {
     kClockClkoutSelScgSlow = 0U, /*!< SCG slow clock. */
-    kClockClkoutSelSysOsc = 1U,  /*!< System OSC.     */
-    kClockClkoutSelSirc = 2U,    /*!< Slow IRC.       */
-    kClockClkoutSelFirc = 3U,    /*!< Fast IRC.       */
-    kClockClkoutSelSysPll = 6U   /*!< System PLL.     */
+    kClockClkoutSelSysOsc  = 1U, /*!< System OSC.     */
+    kClockClkoutSelSirc    = 2U, /*!< Slow IRC.       */
+    kClockClkoutSelFirc    = 3U, /*!< Fast IRC.       */
+    kClockClkoutSelSysPll  = 6U  /*!< System PLL.     */
 } clock_clkout_src_t;
 
 /*!
@@ -416,10 +421,10 @@ typedef enum _scg_async_clk
 typedef enum scg_async_clk_div
 {
     kSCG_AsyncClkDisable = 0U, /*!< Clock output is disabled.  */
-    kSCG_AsyncClkDivBy1 = 1U,  /*!< Divided by 1.              */
-    kSCG_AsyncClkDivBy2 = 2U,  /*!< Divided by 2.              */
-    kSCG_AsyncClkDivBy4 = 3U,  /*!< Divided by 4.              */
-    kSCG_AsyncClkDivBy8 = 4U,  /*!< Divided by 8.              */
+    kSCG_AsyncClkDivBy1  = 1U, /*!< Divided by 1.              */
+    kSCG_AsyncClkDivBy2  = 2U, /*!< Divided by 2.              */
+    kSCG_AsyncClkDivBy4  = 3U, /*!< Divided by 4.              */
+    kSCG_AsyncClkDivBy8  = 4U, /*!< Divided by 8.              */
     kSCG_AsyncClkDivBy16 = 5U, /*!< Divided by 16.             */
     kSCG_AsyncClkDivBy32 = 6U, /*!< Divided by 32.             */
     kSCG_AsyncClkDivBy64 = 7U  /*!< Divided by 64.             */
@@ -430,8 +435,8 @@ typedef enum scg_async_clk_div
  */
 typedef enum _scg_sosc_monitor_mode
 {
-    kSCG_SysOscMonitorDisable = 0U,                  /*!< Monitor disabled.                          */
-    kSCG_SysOscMonitorInt = SCG_SOSCCSR_SOSCCM_MASK, /*!< Interrupt when the system OSC error is detected. */
+    kSCG_SysOscMonitorDisable = 0U,                      /*!< Monitor disabled.                          */
+    kSCG_SysOscMonitorInt     = SCG_SOSCCSR_SOSCCM_MASK, /*!< Interrupt when the system OSC error is detected. */
     kSCG_SysOscMonitorReset =
         SCG_SOSCCSR_SOSCCM_MASK | SCG_SOSCCSR_SOSCCMRE_MASK /*!< Reset when the system OSC error is detected.     */
 } scg_sosc_monitor_mode_t;
@@ -439,7 +444,7 @@ typedef enum _scg_sosc_monitor_mode
 /*! @brief OSC work mode. */
 typedef enum _scg_sosc_mode
 {
-    kSCG_SysOscModeExt = 0U,                                                   /*!< Use external clock.   */
+    kSCG_SysOscModeExt         = 0U,                                           /*!< Use external clock.   */
     kSCG_SysOscModeOscLowPower = SCG_SOSCCFG_EREFS_MASK,                       /*!< Oscillator low power. */
     kSCG_SysOscModeOscHighGain = SCG_SOSCCFG_EREFS_MASK | SCG_SOSCCFG_HGO_MASK /*!< Oscillator high gain. */
 } scg_sosc_mode_t;
@@ -447,10 +452,10 @@ typedef enum _scg_sosc_mode
 /*! @brief OSC enable mode. */
 enum _scg_sosc_enable_mode
 {
-    kSCG_SysOscEnable = SCG_SOSCCSR_SOSCEN_MASK,             /*!< Enable OSC clock. */
-    kSCG_SysOscEnableInStop = SCG_SOSCCSR_SOSCSTEN_MASK,     /*!< Enable OSC in stop mode. */
-    kSCG_SysOscEnableInLowPower = SCG_SOSCCSR_SOSCLPEN_MASK, /*!< Enable OSC in low power mode. */
-    kSCG_SysOscEnableErClk = SCG_SOSCCSR_SOSCERCLKEN_MASK    /*!< Enable OSCERCLK. */
+    kSCG_SysOscEnable           = SCG_SOSCCSR_SOSCEN_MASK,     /*!< Enable OSC clock. */
+    kSCG_SysOscEnableInStop     = SCG_SOSCCSR_SOSCSTEN_MASK,   /*!< Enable OSC in stop mode. */
+    kSCG_SysOscEnableInLowPower = SCG_SOSCCSR_SOSCLPEN_MASK,   /*!< Enable OSC in low power mode. */
+    kSCG_SysOscEnableErClk      = SCG_SOSCCSR_SOSCERCLKEN_MASK /*!< Enable OSCERCLK. */
 };
 
 /*!
@@ -480,9 +485,9 @@ typedef enum _scg_sirc_range
 /*! @brief SIRC enable mode. */
 enum _scg_sirc_enable_mode
 {
-    kSCG_SircEnable = SCG_SIRCCSR_SIRCEN_MASK,            /*!< Enable SIRC clock.             */
-    kSCG_SircEnableInStop = SCG_SIRCCSR_SIRCSTEN_MASK,    /*!< Enable SIRC in stop mode.      */
-    kSCG_SircEnableInLowPower = SCG_SIRCCSR_SIRCLPEN_MASK /*!< Enable SIRC in low power mode. */
+    kSCG_SircEnable           = SCG_SIRCCSR_SIRCEN_MASK,   /*!< Enable SIRC clock.             */
+    kSCG_SircEnableInStop     = SCG_SIRCCSR_SIRCSTEN_MASK, /*!< Enable SIRC in stop mode.      */
+    kSCG_SircEnableInLowPower = SCG_SIRCCSR_SIRCLPEN_MASK  /*!< Enable SIRC in low power mode. */
 };
 
 /*!
@@ -561,8 +566,8 @@ typedef enum _scg_firc_range
 /*! @brief FIRC enable mode. */
 enum _scg_firc_enable_mode
 {
-    kSCG_FircEnable = SCG_FIRCCSR_FIRCEN_MASK,              /*!< Enable FIRC clock.             */
-    kSCG_FircEnableInStop = SCG_FIRCCSR_FIRCSTEN_MASK,      /*!< Enable FIRC in stop mode.      */
+    kSCG_FircEnable           = SCG_FIRCCSR_FIRCEN_MASK,    /*!< Enable FIRC clock.             */
+    kSCG_FircEnableInStop     = SCG_FIRCCSR_FIRCSTEN_MASK,  /*!< Enable FIRC in stop mode.      */
     kSCG_FircEnableInLowPower = SCG_FIRCCSR_FIRCLPEN_MASK,  /*!< Enable FIRC in low power mode. */
     kSCG_FircDisableRegulator = SCG_FIRCCSR_FIRCREGOFF_MASK /*!< Disable regulator.             */
 };
@@ -596,8 +601,8 @@ typedef enum _scg_spll_src
  */
 typedef enum _scg_spll_monitor_mode
 {
-    kSCG_SysPllMonitorDisable = 0U,                  /*!< Monitor disabled.                          */
-    kSCG_SysPllMonitorInt = SCG_SPLLCSR_SPLLCM_MASK, /*!< Interrupt when the system PLL error is detected. */
+    kSCG_SysPllMonitorDisable = 0U,                      /*!< Monitor disabled.                          */
+    kSCG_SysPllMonitorInt     = SCG_SPLLCSR_SPLLCM_MASK, /*!< Interrupt when the system PLL error is detected. */
     kSCG_SysPllMonitorReset =
         SCG_SPLLCSR_SPLLCM_MASK | SCG_SPLLCSR_SPLLCMRE_MASK /*!< Reset when the system PLL error is detected.     */
 } scg_spll_monitor_mode_t;
@@ -605,7 +610,7 @@ typedef enum _scg_spll_monitor_mode
 /*! @brief SPLL enable mode. */
 enum _scg_spll_enable_mode
 {
-    kSCG_SysPllEnable = SCG_SPLLCSR_SPLLEN_MASK,        /*!< Enable SPLL clock.             */
+    kSCG_SysPllEnable       = SCG_SPLLCSR_SPLLEN_MASK,  /*!< Enable SPLL clock.             */
     kSCG_SysPllEnableInStop = SCG_SPLLCSR_SPLLSTEN_MASK /*!< Enable SPLL in stop mode.      */
 };
 
@@ -1358,6 +1363,16 @@ static inline void CLOCK_SetXtal32Freq(uint32_t freq)
 {
     g_xtal32Freq = freq;
 }
+
+/*!
+ * @brief Use DWT to delay at least for some time.
+ *  Please note that, this API will calculate the microsecond period with the maximum
+ *  supported CPU frequency, so this API will only delay for at least the given microseconds, if precise
+ *  delay count was needed, please implement a new timer count to achieve this function.
+ *
+ * @param delay_us  Delay time in unit of microsecond.
+ */
+void SDK_DelayAtLeastUs(uint32_t delay_us);
 
 /* @} */
 

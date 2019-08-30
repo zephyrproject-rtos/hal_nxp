@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -87,8 +87,9 @@ void FLEXBUS_Init(FB_Type *base, const flexbus_config_t *config)
     assert(config != NULL);
     assert(config->chip < FB_CSAR_COUNT);
     assert(config->waitStates <= 0x3FU);
+    assert(config->secondaryWaitStates <= 0x3FU);
 
-    uint32_t chip = config->chip;
+    uint32_t chip      = config->chip;
     uint32_t reg_value = 0;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -106,15 +107,15 @@ void FLEXBUS_Init(FB_Type *base, const flexbus_config_t *config)
 
     /* Set FB_CSPMCR register */
     /* FlexBus signal group 1 multiplex control */
-    reg_value |= kFLEXBUS_MultiplexGroup1_FB_ALE << FB_CSPMCR_GROUP1_SHIFT;
+    reg_value |= (uint32_t)kFLEXBUS_MultiplexGroup1_FB_ALE << FB_CSPMCR_GROUP1_SHIFT;
     /* FlexBus signal group 2 multiplex control */
-    reg_value |= kFLEXBUS_MultiplexGroup2_FB_CS4 << FB_CSPMCR_GROUP2_SHIFT;
+    reg_value |= (uint32_t)kFLEXBUS_MultiplexGroup2_FB_CS4 << FB_CSPMCR_GROUP2_SHIFT;
     /* FlexBus signal group 3 multiplex control */
-    reg_value |= kFLEXBUS_MultiplexGroup3_FB_CS5 << FB_CSPMCR_GROUP3_SHIFT;
+    reg_value |= (uint32_t)kFLEXBUS_MultiplexGroup3_FB_CS5 << FB_CSPMCR_GROUP3_SHIFT;
     /* FlexBus signal group 4 multiplex control */
-    reg_value |= kFLEXBUS_MultiplexGroup4_FB_TBST << FB_CSPMCR_GROUP4_SHIFT;
+    reg_value |= (uint32_t)kFLEXBUS_MultiplexGroup4_FB_TBST << FB_CSPMCR_GROUP4_SHIFT;
     /* FlexBus signal group 5 multiplex control */
-    reg_value |= kFLEXBUS_MultiplexGroup5_FB_TA << FB_CSPMCR_GROUP5_SHIFT;
+    reg_value |= (uint32_t)kFLEXBUS_MultiplexGroup5_FB_TA << FB_CSPMCR_GROUP5_SHIFT;
     /* Write to CSPMCR register */
     base->CSPMCR = reg_value;
 
@@ -122,6 +123,7 @@ void FLEXBUS_Init(FB_Type *base, const flexbus_config_t *config)
     reg_value = config->chipBaseAddress;
     /* Write to CSAR register */
     base->CS[chip].CSAR = reg_value;
+
     /* Chip-select validation */
     reg_value = 0x1U << FB_CSMR_V_SHIFT;
     /* Write protect */
@@ -130,6 +132,7 @@ void FLEXBUS_Init(FB_Type *base, const flexbus_config_t *config)
     reg_value |= config->chipBaseAddressMask << FB_CSMR_BAM_SHIFT;
     /* Write to CSMR register */
     base->CS[chip].CSMR = reg_value;
+
     /* Burst write */
     reg_value = (uint32_t)(config->burstWrite) << FB_CSCR_BSTW_SHIFT;
     /* Burst read */
@@ -153,9 +156,14 @@ void FLEXBUS_Init(FB_Type *base, const flexbus_config_t *config)
     /* Extended transfer start/extended address latch */
     reg_value |= (uint32_t)(config->extendTransferAddress) << FB_CSCR_EXTS_SHIFT;
     /* Secondary wait state */
-    reg_value |= (uint32_t)(config->secondaryWaitStates) << FB_CSCR_SWSEN_SHIFT;
+    if(config->secondaryWaitStatesEnable)
+    {
+      reg_value |= FB_CSCR_SWSEN_MASK;
+      reg_value |= (uint32_t)(config->secondaryWaitStates) << FB_CSCR_SWS_SHIFT;
+    }
     /* Write to CSCR register */
     base->CS[chip].CSCR = reg_value;
+
     /* FlexBus signal group 1 multiplex control */
     reg_value = (uint32_t)config->group1MultiplexControl << FB_CSPMCR_GROUP1_SHIFT;
     /* FlexBus signal group 2 multiplex control */
@@ -168,8 +176,9 @@ void FLEXBUS_Init(FB_Type *base, const flexbus_config_t *config)
     reg_value |= (uint32_t)config->group5MultiplexControl << FB_CSPMCR_GROUP5_SHIFT;
     /* Write to CSPMCR register */
     base->CSPMCR = reg_value;
+
     /* Enable CSPMCR0[V] to make all chip select registers take effect. */
-    if (chip)
+    if (chip != 0UL)
     {
         base->CS[0].CSMR |= FB_CSMR_V_MASK;
     }
@@ -196,24 +205,24 @@ void FLEXBUS_Deinit(FB_Type *base)
  * This function initializes the FlexBus configuration structure to default value. The default
  * values are.
    code
-   fbConfig->chip                   = 0;
-   fbConfig->writeProtect           = 0;
-   fbConfig->burstWrite             = 0;
-   fbConfig->burstRead              = 0;
-   fbConfig->byteEnableMode         = 0;
-   fbConfig->autoAcknowledge        = true;
-   fbConfig->extendTransferAddress  = 0;
-   fbConfig->secondaryWaitStates    = 0;
-   fbConfig->byteLaneShift          = kFLEXBUS_NotShifted;
-   fbConfig->writeAddressHold       = kFLEXBUS_Hold1Cycle;
-   fbConfig->readAddressHold        = kFLEXBUS_Hold1Or0Cycles;
-   fbConfig->addressSetup           = kFLEXBUS_FirstRisingEdge;
-   fbConfig->portSize               = kFLEXBUS_1Byte;
-   fbConfig->group1MultiplexControl = kFLEXBUS_MultiplexGroup1_FB_ALE;
-   fbConfig->group2MultiplexControl = kFLEXBUS_MultiplexGroup2_FB_CS4 ;
-   fbConfig->group3MultiplexControl = kFLEXBUS_MultiplexGroup3_FB_CS5;
-   fbConfig->group4MultiplexControl = kFLEXBUS_MultiplexGroup4_FB_TBST;
-   fbConfig->group5MultiplexControl = kFLEXBUS_MultiplexGroup5_FB_TA;
+   fbConfig->chip                         = 0;
+   fbConfig->writeProtect                 = false;
+   fbConfig->burstWrite                   = false;
+   fbConfig->burstRead                    = false;
+   fbConfig->byteEnableMode               = false;
+   fbConfig->autoAcknowledge              = true;
+   fbConfig->extendTransferAddress        = false;
+   fbConfig->secondaryWaitStatesEnable    = false;
+   fbConfig->byteLaneShift                = kFLEXBUS_NotShifted;
+   fbConfig->writeAddressHold             = kFLEXBUS_Hold1Cycle;
+   fbConfig->readAddressHold              = kFLEXBUS_Hold1Or0Cycles;
+   fbConfig->addressSetup                 = kFLEXBUS_FirstRisingEdge;
+   fbConfig->portSize                     = kFLEXBUS_1Byte;
+   fbConfig->group1MultiplexControl       = kFLEXBUS_MultiplexGroup1_FB_ALE;
+   fbConfig->group2MultiplexControl       = kFLEXBUS_MultiplexGroup2_FB_CS4 ;
+   fbConfig->group3MultiplexControl       = kFLEXBUS_MultiplexGroup3_FB_CS5;
+   fbConfig->group4MultiplexControl       = kFLEXBUS_MultiplexGroup4_FB_TBST;
+   fbConfig->group5MultiplexControl       = kFLEXBUS_MultiplexGroup5_FB_TA;
    endcode
  * param config Pointer to the initialization structure.
  * see FLEXBUS_Init
@@ -223,20 +232,20 @@ void FLEXBUS_GetDefaultConfig(flexbus_config_t *config)
     /* Initializes the configure structure to zero. */
     memset(config, 0, sizeof(*config));
 
-    config->chip = 0;                                  /* Chip 0 FlexBus for validation */
-    config->writeProtect = 0;                          /* Write accesses are allowed */
-    config->burstWrite = 0;                            /* Burst-Write disable */
-    config->burstRead = 0;                             /* Burst-Read disable */
-    config->byteEnableMode = 0;                        /* Byte-Enable mode is asserted for data write only */
-    config->autoAcknowledge = true;                    /* Auto-Acknowledge enable */
-    config->extendTransferAddress = 0;                 /* Extend transfer start/extend address latch disable */
-    config->secondaryWaitStates = 0;                   /* Secondary wait state disable */
-    config->byteLaneShift = kFLEXBUS_NotShifted;       /* Byte-Lane shift disable */
-    config->writeAddressHold = kFLEXBUS_Hold1Cycle;    /* Write address hold 1 cycles */
-    config->readAddressHold = kFLEXBUS_Hold1Or0Cycles; /* Read address hold 0 cycles */
+    config->chip                  = 0;                           /* Chip 0 FlexBus for validation */
+    config->writeProtect          = false;                       /* Write accesses are allowed */
+    config->burstWrite            = false;                       /* Burst-Write disable */
+    config->burstRead             = false;                       /* Burst-Read disable */
+    config->byteEnableMode        = false;                       /* Byte-Enable mode is asserted for data write only */
+    config->autoAcknowledge       = true;                        /* Auto-Acknowledge enable */
+    config->extendTransferAddress = false;                       /* Extend transfer start/extend address latch disable */
+    config->secondaryWaitStatesEnable = false;                 /* Secondary wait state disable */
+    config->byteLaneShift         = kFLEXBUS_NotShifted;     /* Byte-Lane shift disable */
+    config->writeAddressHold      = kFLEXBUS_Hold1Cycle;     /* Write address hold 1 cycles */
+    config->readAddressHold       = kFLEXBUS_Hold1Or0Cycles; /* Read address hold 0 cycles */
     config->addressSetup =
-        kFLEXBUS_FirstRisingEdge;      /* Assert ~FB_CSn on the first rising clock edge after the address is asserted */
-    config->portSize = kFLEXBUS_1Byte; /* 1 byte port size of transfer */
+        kFLEXBUS_FirstRisingEdge; /* Assert ~FB_CSn on the first rising clock edge after the address is asserted */
+    config->portSize               = kFLEXBUS_1Byte;                   /* 1 byte port size of transfer */
     config->group1MultiplexControl = kFLEXBUS_MultiplexGroup1_FB_ALE;  /* FB_ALE */
     config->group2MultiplexControl = kFLEXBUS_MultiplexGroup2_FB_CS4;  /* FB_CS4 */
     config->group3MultiplexControl = kFLEXBUS_MultiplexGroup3_FB_CS5;  /* FB_CS5 */

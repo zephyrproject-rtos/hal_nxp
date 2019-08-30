@@ -30,7 +30,7 @@
 typedef enum _utick_mode
 {
     kUTICK_Onetime = 0x0U, /*!< Trigger once*/
-    kUTICK_Repeat = 0x1U,  /*!< Trigger repeatedly */
+    kUTICK_Repeat  = 0x1U, /*!< Trigger repeatedly */
 } utick_mode_t;
 
 /*! @brief UTICK callback function. */
@@ -50,9 +50,9 @@ extern "C" {
  */
 
 /*!
-* @brief Initializes an UTICK by turning its bus clock on
-*
-*/
+ * @brief Initializes an UTICK by turning its bus clock on
+ *
+ */
 void UTICK_Init(UTICK_Type *base);
 
 /*!

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FTM driver version 2.1.0. */
-#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief FTM driver version 2.1.1. */
+#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*!
@@ -97,23 +97,23 @@ typedef struct _ftm_chnl_pwm_config_param
 typedef enum _ftm_output_compare_mode
 {
     kFTM_NoOutputSignal = (1U << FTM_CnSC_MSA_SHIFT), /*!< No channel output when counter reaches CnV  */
-    kFTM_ToggleOnMatch = ((1U << FTM_CnSC_MSA_SHIFT) | (1U << FTM_CnSC_ELSA_SHIFT)), /*!< Toggle output */
-    kFTM_ClearOnMatch = ((1U << FTM_CnSC_MSA_SHIFT) | (2U << FTM_CnSC_ELSA_SHIFT)),  /*!< Clear output */
-    kFTM_SetOnMatch = ((1U << FTM_CnSC_MSA_SHIFT) | (3U << FTM_CnSC_ELSA_SHIFT))     /*!< Set output */
+    kFTM_ToggleOnMatch  = ((1U << FTM_CnSC_MSA_SHIFT) | (1U << FTM_CnSC_ELSA_SHIFT)), /*!< Toggle output */
+    kFTM_ClearOnMatch   = ((1U << FTM_CnSC_MSA_SHIFT) | (2U << FTM_CnSC_ELSA_SHIFT)), /*!< Clear output */
+    kFTM_SetOnMatch     = ((1U << FTM_CnSC_MSA_SHIFT) | (3U << FTM_CnSC_ELSA_SHIFT))  /*!< Set output */
 } ftm_output_compare_mode_t;
 
 /*! @brief FlexTimer input capture edge */
 typedef enum _ftm_input_capture_edge
 {
-    kFTM_RisingEdge = (1U << FTM_CnSC_ELSA_SHIFT),     /*!< Capture on rising edge only*/
-    kFTM_FallingEdge = (2U << FTM_CnSC_ELSA_SHIFT),    /*!< Capture on falling edge only*/
-    kFTM_RiseAndFallEdge = (3U << FTM_CnSC_ELSA_SHIFT) /*!< Capture on rising or falling edge */
+    kFTM_RisingEdge      = (1U << FTM_CnSC_ELSA_SHIFT), /*!< Capture on rising edge only*/
+    kFTM_FallingEdge     = (2U << FTM_CnSC_ELSA_SHIFT), /*!< Capture on falling edge only*/
+    kFTM_RiseAndFallEdge = (3U << FTM_CnSC_ELSA_SHIFT)  /*!< Capture on rising or falling edge */
 } ftm_input_capture_edge_t;
 
 /*! @brief FlexTimer dual edge capture modes */
 typedef enum _ftm_dual_edge_capture_mode
 {
-    kFTM_OneShot = 0U,                           /*!< One-shot capture mode */
+    kFTM_OneShot    = 0U,                        /*!< One-shot capture mode */
     kFTM_Continuous = (1U << FTM_CnSC_MSA_SHIFT) /*!< Continuous capture mode */
 } ftm_dual_edge_capture_mode_t;
 
@@ -241,10 +241,10 @@ typedef enum _ftm_external_trigger
 /*! @brief FlexTimer PWM sync options to update registers with buffer */
 typedef enum _ftm_pwm_sync_method
 {
-    kFTM_SoftwareTrigger = FTM_SYNC_SWSYNC_MASK,  /*!< Software triggers PWM sync */
-    kFTM_HardwareTrigger_0 = FTM_SYNC_TRIG0_MASK, /*!< Hardware trigger 0 causes PWM sync */
-    kFTM_HardwareTrigger_1 = FTM_SYNC_TRIG1_MASK, /*!< Hardware trigger 1 causes PWM sync */
-    kFTM_HardwareTrigger_2 = FTM_SYNC_TRIG2_MASK  /*!< Hardware trigger 2 causes PWM sync */
+    kFTM_SoftwareTrigger   = FTM_SYNC_SWSYNC_MASK, /*!< Software triggers PWM sync */
+    kFTM_HardwareTrigger_0 = FTM_SYNC_TRIG0_MASK,  /*!< Hardware trigger 0 causes PWM sync */
+    kFTM_HardwareTrigger_1 = FTM_SYNC_TRIG1_MASK,  /*!< Hardware trigger 1 causes PWM sync */
+    kFTM_HardwareTrigger_2 = FTM_SYNC_TRIG2_MASK   /*!< Hardware trigger 2 causes PWM sync */
 } ftm_pwm_sync_method_t;
 
 /*!
@@ -253,16 +253,16 @@ typedef enum _ftm_pwm_sync_method
  */
 typedef enum _ftm_reload_point
 {
-    kFTM_Chnl0Match = (1U << 0),   /*!< Channel 0 match included as a reload point */
-    kFTM_Chnl1Match = (1U << 1),   /*!< Channel 1 match included as a reload point */
-    kFTM_Chnl2Match = (1U << 2),   /*!< Channel 2 match included as a reload point */
-    kFTM_Chnl3Match = (1U << 3),   /*!< Channel 3 match included as a reload point */
-    kFTM_Chnl4Match = (1U << 4),   /*!< Channel 4 match included as a reload point */
-    kFTM_Chnl5Match = (1U << 5),   /*!< Channel 5 match included as a reload point */
-    kFTM_Chnl6Match = (1U << 6),   /*!< Channel 6 match included as a reload point */
-    kFTM_Chnl7Match = (1U << 7),   /*!< Channel 7 match included as a reload point */
-    kFTM_CntMax = (1U << 8),       /*!< Use in up-down count mode only, reload when counter reaches the maximum value */
-    kFTM_CntMin = (1U << 9),       /*!< Use in up-down count mode only, reload when counter reaches the minimum value */
+    kFTM_Chnl0Match   = (1U << 0), /*!< Channel 0 match included as a reload point */
+    kFTM_Chnl1Match   = (1U << 1), /*!< Channel 1 match included as a reload point */
+    kFTM_Chnl2Match   = (1U << 2), /*!< Channel 2 match included as a reload point */
+    kFTM_Chnl3Match   = (1U << 3), /*!< Channel 3 match included as a reload point */
+    kFTM_Chnl4Match   = (1U << 4), /*!< Channel 4 match included as a reload point */
+    kFTM_Chnl5Match   = (1U << 5), /*!< Channel 5 match included as a reload point */
+    kFTM_Chnl6Match   = (1U << 6), /*!< Channel 6 match included as a reload point */
+    kFTM_Chnl7Match   = (1U << 7), /*!< Channel 7 match included as a reload point */
+    kFTM_CntMax       = (1U << 8), /*!< Use in up-down count mode only, reload when counter reaches the maximum value */
+    kFTM_CntMin       = (1U << 9), /*!< Use in up-down count mode only, reload when counter reaches the minimum value */
     kFTM_HalfCycMatch = (1U << 10) /*!< Available on certain SoC's, half cycle match reload point */
 } ftm_reload_point_t;
 
@@ -272,17 +272,17 @@ typedef enum _ftm_reload_point
  */
 typedef enum _ftm_interrupt_enable
 {
-    kFTM_Chnl0InterruptEnable = (1U << 0),        /*!< Channel 0 interrupt */
-    kFTM_Chnl1InterruptEnable = (1U << 1),        /*!< Channel 1 interrupt */
-    kFTM_Chnl2InterruptEnable = (1U << 2),        /*!< Channel 2 interrupt */
-    kFTM_Chnl3InterruptEnable = (1U << 3),        /*!< Channel 3 interrupt */
-    kFTM_Chnl4InterruptEnable = (1U << 4),        /*!< Channel 4 interrupt */
-    kFTM_Chnl5InterruptEnable = (1U << 5),        /*!< Channel 5 interrupt */
-    kFTM_Chnl6InterruptEnable = (1U << 6),        /*!< Channel 6 interrupt */
-    kFTM_Chnl7InterruptEnable = (1U << 7),        /*!< Channel 7 interrupt */
-    kFTM_FaultInterruptEnable = (1U << 8),        /*!< Fault interrupt */
+    kFTM_Chnl0InterruptEnable        = (1U << 0), /*!< Channel 0 interrupt */
+    kFTM_Chnl1InterruptEnable        = (1U << 1), /*!< Channel 1 interrupt */
+    kFTM_Chnl2InterruptEnable        = (1U << 2), /*!< Channel 2 interrupt */
+    kFTM_Chnl3InterruptEnable        = (1U << 3), /*!< Channel 3 interrupt */
+    kFTM_Chnl4InterruptEnable        = (1U << 4), /*!< Channel 4 interrupt */
+    kFTM_Chnl5InterruptEnable        = (1U << 5), /*!< Channel 5 interrupt */
+    kFTM_Chnl6InterruptEnable        = (1U << 6), /*!< Channel 6 interrupt */
+    kFTM_Chnl7InterruptEnable        = (1U << 7), /*!< Channel 7 interrupt */
+    kFTM_FaultInterruptEnable        = (1U << 8), /*!< Fault interrupt */
     kFTM_TimeOverflowInterruptEnable = (1U << 9), /*!< Time overflow interrupt */
-    kFTM_ReloadInterruptEnable = (1U << 10)       /*!< Reload interrupt; Available only on certain SoC's */
+    kFTM_ReloadInterruptEnable       = (1U << 10) /*!< Reload interrupt; Available only on certain SoC's */
 } ftm_interrupt_enable_t;
 
 /*!
@@ -291,18 +291,18 @@ typedef enum _ftm_interrupt_enable
  */
 typedef enum _ftm_status_flags
 {
-    kFTM_Chnl0Flag = (1U << 0),        /*!< Channel 0 Flag */
-    kFTM_Chnl1Flag = (1U << 1),        /*!< Channel 1 Flag */
-    kFTM_Chnl2Flag = (1U << 2),        /*!< Channel 2 Flag */
-    kFTM_Chnl3Flag = (1U << 3),        /*!< Channel 3 Flag */
-    kFTM_Chnl4Flag = (1U << 4),        /*!< Channel 4 Flag */
-    kFTM_Chnl5Flag = (1U << 5),        /*!< Channel 5 Flag */
-    kFTM_Chnl6Flag = (1U << 6),        /*!< Channel 6 Flag */
-    kFTM_Chnl7Flag = (1U << 7),        /*!< Channel 7 Flag */
-    kFTM_FaultFlag = (1U << 8),        /*!< Fault Flag */
-    kFTM_TimeOverflowFlag = (1U << 9), /*!< Time overflow Flag */
-    kFTM_ChnlTriggerFlag = (1U << 10), /*!< Channel trigger Flag */
-    kFTM_ReloadFlag = (1U << 11)       /*!< Reload Flag; Available only on certain SoC's */
+    kFTM_Chnl0Flag        = (1U << 0),  /*!< Channel 0 Flag */
+    kFTM_Chnl1Flag        = (1U << 1),  /*!< Channel 1 Flag */
+    kFTM_Chnl2Flag        = (1U << 2),  /*!< Channel 2 Flag */
+    kFTM_Chnl3Flag        = (1U << 3),  /*!< Channel 3 Flag */
+    kFTM_Chnl4Flag        = (1U << 4),  /*!< Channel 4 Flag */
+    kFTM_Chnl5Flag        = (1U << 5),  /*!< Channel 5 Flag */
+    kFTM_Chnl6Flag        = (1U << 6),  /*!< Channel 6 Flag */
+    kFTM_Chnl7Flag        = (1U << 7),  /*!< Channel 7 Flag */
+    kFTM_FaultFlag        = (1U << 8),  /*!< Fault Flag */
+    kFTM_TimeOverflowFlag = (1U << 9),  /*!< Time overflow Flag */
+    kFTM_ChnlTriggerFlag  = (1U << 10), /*!< Channel trigger Flag */
+    kFTM_ReloadFlag       = (1U << 11)  /*!< Reload Flag; Available only on certain SoC's */
 } ftm_status_flags_t;
 
 #if !(defined(FSL_FEATURE_FTM_HAS_NO_QDCTRL) && FSL_FEATURE_FTM_HAS_NO_QDCTRL)
@@ -920,7 +920,7 @@ static inline uint32_t FTM_GetQuadDecoderFlags(FTM_Type *base)
 static inline void FTM_SetQuadDecoderModuloValue(FTM_Type *base, uint32_t startValue, uint32_t overValue)
 {
     base->CNTIN = startValue;
-    base->MOD = overValue;
+    base->MOD   = overValue;
 }
 
 /*!

@@ -2,7 +2,7 @@
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -57,11 +57,11 @@ typedef enum _crc_result
 } crc_result_t;
 
 /*!
-* @brief CRC protocol configuration.
-*
-* This structure holds the configuration for the CRC protocol.
-*
-*/
+ * @brief CRC protocol configuration.
+ *
+ * This structure holds the configuration for the CRC protocol.
+ *
+ */
 typedef struct _crc_config
 {
     uint32_t polynomial;     /*!< CRC Polynomial, MSBit first.

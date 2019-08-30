@@ -115,9 +115,10 @@ status_t SCTIMER_Init(SCT_Type *base, const sctimer_config_t *config)
     RESET_PeripheralReset(s_sctResets[SCTIMER_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 
-    /* Setup the counter operation */
+    /* Setup the counter operation. For Current Driver interface SCTIMER_Init don't know detail
+     * frequency of input clock, but User know it. So the INSYNC have to set by user level. */
     base->CONFIG = SCT_CONFIG_CKSEL(config->clockSelect) | SCT_CONFIG_CLKMODE(config->clockMode) |
-                   SCT_CONFIG_UNIFY(config->enableCounterUnify);
+                   SCT_CONFIG_UNIFY(config->enableCounterUnify) | SCT_CONFIG_INSYNC(config->inputsync);
 
     /* Write to the control register, clear the counter and keep the counters halted */
     base->CTRL = SCT_CTRL_BIDIR_L(config->enableBidirection_l) | SCT_CTRL_PRE_L(config->prescale_l) |
@@ -175,9 +176,10 @@ void SCTIMER_Deinit(SCT_Type *base)
  *  config->clockSelect = kSCTIMER_Clock_On_Rise_Input_0;
  *  config->enableBidirection_l = false;
  *  config->enableBidirection_h = false;
- *  config->prescale_l = 0;
- *  config->prescale_h = 0;
- *  config->outInitState = 0;
+ *  config->prescale_l = 0U;
+ *  config->prescale_h = 0U;
+ *  config->outInitState = 0U;
+ *  config->inputsync  = 0xFU;
  * endcode
  * param config Pointer to the user configuration structure.
  */
@@ -199,11 +201,22 @@ void SCTIMER_GetDefaultConfig(sctimer_config_t *config)
     /* Up count mode only for Counte_H */
     config->enableBidirection_h = false;
     /* Prescale factor of 1 */
-    config->prescale_l = 0;
+    config->prescale_l = 0U;
     /* Prescale factor of 1 for Counter_H*/
-    config->prescale_h = 0;
+    config->prescale_h = 0U;
     /* Clear outputs */
-    config->outInitState = 0;
+    config->outInitState = 0U;
+    /* Default value is 0xFU, it can be clear as 0 when speical conditions met.
+     * Condition can be clear as 0: (for all Clock Modes):
+     * (1) The corresponding input is already synchronous to the SCTimer/PWM clock.
+     * (2) The SCTimer/PWM clock frequency does not exceed 100 MHz.
+     * Note: The SCTimer/PWM clock is the bus/system clock for CKMODE 0-2 or asynchronous input
+     * clock for CKMODE3.
+     * Another condition can be clear as 0: (for CKMODE2 only)
+     * (1) The corresponding input is synchronous to the designated CKMODE2 input clock.
+     * (2) The CKMODE2 input clock frequency is less than one-third the frequency of the bus/system clock.
+     * Default value set as 0U, input0~input3 are set as bypasses. */
+    config->inputsync = 0xFU;
 }
 
 /*!
@@ -248,7 +261,7 @@ status_t SCTIMER_SetupPwm(SCT_Type *base,
     assert(pwmParams->output < FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
 
     uint32_t period, pulsePeriod = 0;
-    uint32_t sctClock = srcClock_Hz / (((base->CTRL & SCT_CTRL_PRE_L_MASK) >> SCT_CTRL_PRE_L_SHIFT) + 1);
+    uint32_t sctClock    = srcClock_Hz / (((base->CTRL & SCT_CTRL_PRE_L_MASK) >> SCT_CTRL_PRE_L_SHIFT) + 1);
     uint32_t periodEvent = 0, pulseEvent = 0;
     uint32_t reg;
 
@@ -394,7 +407,7 @@ void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t du
     SCTIMER_StopTimer(base, kSCTIMER_Counter_L);
 
     /* Update dutycycle */
-    base->SCTMATCH[pulseMatchReg] = SCT_SCTMATCH_MATCHn_L(pulsePeriod);
+    base->SCTMATCH[pulseMatchReg]    = SCT_SCTMATCH_MATCHn_L(pulsePeriod);
     base->SCTMATCHREL[pulseMatchReg] = SCT_SCTMATCHREL_RELOADn_L(pulsePeriod);
 
     /* Restart the counter */
@@ -458,14 +471,14 @@ status_t SCTIMER_CreateAndScheduleEvent(SCT_Type *base,
         /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
         if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
         {
-            base->SCTMATCH[s_currentMatch] = SCT_SCTMATCH_MATCHn_L(matchValue);
+            base->SCTMATCH[s_currentMatch]    = SCT_SCTMATCH_MATCHn_L(matchValue);
             base->SCTMATCHREL[s_currentMatch] = SCT_SCTMATCHREL_RELOADn_L(matchValue);
         }
         else
         {
             /* Select the counter, no need for this if operating in 32-bit mode */
             currentCtrlVal |= SCT_EVENT_CTRL_HEVENT(whichCounter);
-            base->SCTMATCH[s_currentMatch] = SCT_SCTMATCH_MATCHn_H(matchValue);
+            base->SCTMATCH[s_currentMatch]    = SCT_SCTMATCH_MATCHn_H(matchValue);
             base->SCTMATCHREL[s_currentMatch] = SCT_SCTMATCHREL_RELOADn_H(matchValue);
         }
         base->EVENT[s_currentEvent].CTRL = currentCtrlVal;
@@ -485,14 +498,14 @@ status_t SCTIMER_CreateAndScheduleEvent(SCT_Type *base,
         /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
         if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
         {
-            base->SCTMATCH[s_currentMatch] = SCT_SCTMATCH_MATCHn_L(matchValue);
+            base->SCTMATCH[s_currentMatch]    = SCT_SCTMATCH_MATCHn_L(matchValue);
             base->SCTMATCHREL[s_currentMatch] = SCT_SCTMATCHREL_RELOADn_L(matchValue);
         }
         else
         {
             /* Select the counter, no need for this if operating in 32-bit mode */
             currentCtrlVal |= SCT_EVENT_CTRL_HEVENT(whichCounter);
-            base->SCTMATCH[s_currentMatch] = SCT_SCTMATCH_MATCHn_H(matchValue);
+            base->SCTMATCH[s_currentMatch]    = SCT_SCTMATCH_MATCHn_H(matchValue);
             base->SCTMATCHREL[s_currentMatch] = SCT_SCTMATCHREL_RELOADn_H(matchValue);
         }
         base->EVENT[s_currentEvent].CTRL = currentCtrlVal;
@@ -671,8 +684,8 @@ void SCTIMER_EventHandleIRQ(SCT_Type *base)
     uint32_t eventFlag = SCT0->EVFLAG;
     /* Only clear the flags whose interrupt field is enabled */
     uint32_t clearFlag = (eventFlag & SCT0->EVEN);
-    uint32_t mask = eventFlag;
-    int i = 0;
+    uint32_t mask      = eventFlag;
+    int i              = 0;
 
     /* Invoke the callback for certain events */
     for (i = 0; (i < FSL_FEATURE_SCT_NUMBER_OF_EVENTS) && (mask != 0); i++)
@@ -691,7 +704,7 @@ void SCTIMER_EventHandleIRQ(SCT_Type *base)
     SCT0->EVFLAG = clearFlag;
 }
 
-void SCT0_IRQHandler(void)
+void SCT0_DriverIRQHandler(void)
 {
     s_sctimerIsr(SCT0);
 /* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping

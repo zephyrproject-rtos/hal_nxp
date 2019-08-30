@@ -17,15 +17,6 @@
 #define FSL_COMPONENT_ID "platform.drivers.dmic_dma"
 #endif
 
-#define DMIC_HANDLE_ARRAY_SIZE 1
-
-/*<! Structure definition for dmic_dma_handle_t. The structure is private. */
-typedef struct _dmic_dma_private_handle
-{
-    DMIC_Type *base;
-    dmic_dma_handle_t *handle;
-} dmic_dma_private_handle_t;
-
 /*! @brief DMIC transfer state, which is used for DMIC transactiaonl APIs' internal state. */
 enum _dmic_dma_states_t
 {
@@ -39,26 +30,48 @@ enum _dmic_dma_states_t
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/*<! Private handle only used for internally. */
-static dmic_dma_private_handle_t s_dmaPrivateHandle[DMIC_HANDLE_ARRAY_SIZE];
 
 /*******************************************************************************
  * Code
-********************************************************************************/
+ ********************************************************************************/
 
 static void DMIC_TransferReceiveDMACallback(dma_handle_t *handle, void *param, bool transferDone, uint32_t intmode)
 {
     assert(handle);
     assert(param);
 
-    dmic_dma_private_handle_t *dmicPrivateHandle = (dmic_dma_private_handle_t *)param;
-    dmicPrivateHandle->handle->state = kDMIC_Idle;
+    dmic_dma_handle_t *dmicHandle = (dmic_dma_handle_t *)param;
 
-    if (dmicPrivateHandle->handle->callback)
+    /* if no link transfer, dmic status set to IDLE. */
+    if (dmicHandle->desLink == NULL)
     {
-        dmicPrivateHandle->handle->callback(dmicPrivateHandle->base, dmicPrivateHandle->handle, kStatus_DMIC_Idle,
-                                            dmicPrivateHandle->handle->userData);
+        dmicHandle->state = kDMIC_Idle;
     }
+
+    if (dmicHandle->callback)
+    {
+        dmicHandle->callback(dmicHandle->base, dmicHandle, kStatus_DMIC_Idle, dmicHandle->userData);
+    }
+}
+
+/*!
+ * brief Install DMA descriptor memory.
+ *
+ * This function used to register DMA descriptor memory for linked transfer, a typical case is ping pong
+ * transfer which will request more than one DMA descriptor memory space.
+ * User should be take care about the address of DMA descriptor pool which required align with 512BYTE.
+ *
+ * param handle Pointer to DMA channel transfer handle.
+ * param headAddr DMA head descriptor address.
+ * param linkAddr DMA link descriptor address.
+ * param num DMA link descriptor number.
+ */
+void DMIC_InstallDMADescriptorMemory(dmic_dma_handle_t *handle, void *linkAddr, size_t linkNum)
+{
+    assert(handle != NULL);
+
+    handle->desLink = (dma_descriptor_t *)linkAddr;
+    handle->linkNum = linkNum;
 }
 
 /*!
@@ -75,45 +88,20 @@ status_t DMIC_TransferCreateHandleDMA(DMIC_Type *base,
                                       void *userData,
                                       dma_handle_t *rxDmaHandle)
 {
-    int32_t instance = 0;
-
-    /* check 'base' */
-    assert(!(NULL == base));
-    if (NULL == base)
-    {
-        return kStatus_InvalidArgument;
-    }
-    /* check 'handle' */
-    assert(!(NULL == handle));
-    if (NULL == handle)
-    {
-        return kStatus_InvalidArgument;
-    }
-    /* check DMIC instance by 'base'*/
-    instance = DMIC_GetInstance(base);
-    assert(!(instance < 0));
-    if (instance < 0)
-    {
-        return kStatus_InvalidArgument;
-    }
+    assert(NULL != base);
+    assert(NULL != handle);
+    assert(NULL != rxDmaHandle);
 
     memset(handle, 0, sizeof(*handle));
-    /* assign 'base' and 'handle' */
-    s_dmaPrivateHandle[instance].base = base;
-    s_dmaPrivateHandle[instance].handle = handle;
 
-    handle->callback = callback;
-    handle->userData = userData;
-
+    handle->callback    = callback;
+    handle->userData    = userData;
     handle->rxDmaHandle = rxDmaHandle;
 
     /* Set DMIC state to idle */
     handle->state = kDMIC_Idle;
-    /* Configure RX. */
-    if (rxDmaHandle)
-    {
-        DMA_SetCallback(rxDmaHandle, DMIC_TransferReceiveDMACallback, &s_dmaPrivateHandle[instance]);
-    }
+    /* register callback. */
+    DMA_SetCallback(rxDmaHandle, DMIC_TransferReceiveDMACallback, handle);
 
     return kStatus_Success;
 }
@@ -127,46 +115,101 @@ status_t DMIC_TransferCreateHandleDMA(DMIC_Type *base,
  * param base USART peripheral base address.
  * param handle Pointer to usart_dma_handle_t structure.
  * param xfer DMIC DMA transfer structure. See #dmic_transfer_t.
- * param dmic_channel DMIC channel
+ * param dmic_channel DMIC start channel number
  * retval kStatus_Success
  */
-status_t DMIC_TransferReceiveDMA(DMIC_Type *base,
-                                 dmic_dma_handle_t *handle,
-                                 dmic_transfer_t *xfer,
-                                 uint32_t dmic_channel)
+status_t DMIC_TransferReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle, dmic_transfer_t *xfer, uint32_t channel)
 {
     assert(handle);
     assert(handle->rxDmaHandle);
     assert(xfer);
-    assert(xfer->data);
-    assert(xfer->dataSize);
 
-    dma_transfer_config_t xferConfig;
-    status_t status;
-    uint32_t srcAddr = (uint32_t)(&base->CHANNEL[dmic_channel].FIFO_DATA);
+    dma_channel_config_t transferConfig = {0U};
+    uint32_t srcAddr                    = (uint32_t)&base->CHANNEL[channel].FIFO_DATA;
+    uint32_t desNum                     = 0U;
+    dma_descriptor_t *linkDesc          = (handle->desLink != NULL) ? &(handle->desLink[desNum + 1U]) : NULL;
+    dmic_transfer_t *currentTransfer    = xfer->linkTransfer;
+    bool loopEnd = false, intA = true;
+    if ((xfer->linkTransfer != NULL) && (handle->desLink == NULL))
+    {
+        return kStatus_InvalidArgument;
+    }
 
-    /* Check if the device is busy. If previous RX not finished.*/
     if (handle->state == kDMIC_Busy)
     {
-        status = kStatus_DMIC_Busy;
+        return kStatus_DMIC_Busy;
     }
-    else
+
+    while (currentTransfer)
     {
-        handle->state = kDMIC_Busy;
-        handle->transferSize = xfer->dataSize;
+        /* set up linked descriptor */
+        DMA_SetupDescriptor(&handle->desLink[desNum],
+                            DMA_CHANNEL_XFER(currentTransfer->linkTransfer != NULL ? true : false, false, intA, !intA,
+                                             currentTransfer->dataWidth, kDMA_AddressInterleave0xWidth,
+                                             currentTransfer->dataAddrInterleaveSize, currentTransfer->dataSize),
+                            (void *)srcAddr, currentTransfer->data, linkDesc);
 
-        /* Prepare transfer. */
-        DMA_PrepareTransfer(&xferConfig, (void *)srcAddr, xfer->data, sizeof(uint16_t), xfer->dataSize,
-                            kDMA_PeripheralToMemory, NULL);
+        intA = intA == true ? false : true;
+        /* break for wrap transfer */
+        if (loopEnd)
+        {
+            break;
+        }
 
-        /* Submit transfer. */
-        DMA_SubmitTransfer(handle->rxDmaHandle, &xferConfig);
+        if (++desNum == handle->linkNum)
+        {
+            return kStatus_Fail;
+        }
 
-        DMA_StartTransfer(handle->rxDmaHandle);
+        linkDesc = &handle->desLink[desNum + 1U];
 
-        status = kStatus_Success;
+        currentTransfer = currentTransfer->linkTransfer;
+        /* if current transfer need wrap, then create one more descriptor, since the first descriptor cannot be used
+         * anymore, this is
+         * the limitation of the DMA module
+         */
+        if (currentTransfer == xfer)
+        {
+            linkDesc = handle->desLink; /* point to the first one */
+            loopEnd  = true;
+            continue;
+        }
     }
-    return status;
+    /* transferSize make sense to non link transfer only */
+    handle->transferSize += xfer->dataSize;
+
+    /* code to keep compatibility for the case that not use link transfer */
+    if ((xfer->dataWidth != kDMA_Transfer16BitWidth) && (xfer->dataWidth != kDMA_Transfer32BitWidth))
+    {
+        xfer->dataWidth = kDMA_Transfer16BitWidth; /* use 16bit width as default value */
+    }
+    /* code to keep compatibility for the case that not use link transfer*/
+    if ((xfer->dataAddrInterleaveSize == kDMA_AddressInterleave0xWidth) ||
+        (xfer->dataAddrInterleaveSize > kDMA_AddressInterleave4xWidth))
+    {
+        xfer->dataAddrInterleaveSize = kDMA_AddressInterleave1xWidth; /* use interleave1Xwidth as default value. */
+    }
+
+    /* prepare channel tranfer */
+    DMA_PrepareChannelTransfer(
+        &transferConfig, (void *)srcAddr, xfer->data,
+        DMA_CHANNEL_XFER(xfer->linkTransfer == NULL ? false : true, false, intA, !intA, xfer->dataWidth,
+                         kDMA_AddressInterleave0xWidth, xfer->dataAddrInterleaveSize, xfer->dataSize),
+        kDMA_PeripheralToMemory, NULL, handle->desLink);
+    /* Submit transfer. */
+    DMA_SubmitChannelTransfer(handle->rxDmaHandle, &transferConfig);
+
+    /* enable channel */
+    DMIC_EnableChannnel(DMIC0, 1 << channel);
+    /* enable dmic channel dma request */
+    DMIC_EnableChannelDma(DMIC0, (dmic_channel_t)channel, true);
+
+    /* start transfer */
+    DMA_StartTransfer(handle->rxDmaHandle);
+
+    handle->state = kDMIC_Busy;
+
+    return kStatus_Success;
 }
 
 /*!
@@ -191,7 +234,7 @@ void DMIC_TransferAbortReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle)
  * brief Get the number of bytes that have been received.
  *
  * This function gets the number of bytes that have been received.
- *
+ * Note: Do not trying to use this api to get the number of received bytes, it make no sense to link transfer.
  * param base DMIC peripheral base address.
  * param handle DMIC handle pointer.
  * param count Receive bytes count.

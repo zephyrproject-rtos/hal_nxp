@@ -29,28 +29,28 @@
 
 /*! @brief Constructs the four character code for the Flash driver API key. */
 #if !defined(FOUR_CHAR_CODE)
-#define FOUR_CHAR_CODE(a, b, c, d) (((d) << 24) | ((c) << 16) | ((b) << 8) | ((a)))
+#define FOUR_CHAR_CODE(a, b, c, d) (((uint32_t)(d) << 24u) | ((uint32_t)(c) << 16u) | ((uint32_t)(b) << 8u) | ((uint32_t)(a)))
 #endif
 
 /*! @brief Alignment(down) utility. */
 #if !defined(ALIGN_DOWN)
-#define ALIGN_DOWN(x, a) ((x) & (uint32_t)(-((int32_t)(a))))
+#define ALIGN_DOWN(x, a) (((uint32_t)(x)) & ~((uint32_t)(a)-1u))
 #endif
 
 /*! @brief Alignment(up) utility. */
 #if !defined(ALIGN_UP)
-#define ALIGN_UP(x, a) (-((int32_t)((uint32_t)(-((int32_t)(x))) & (uint32_t)(-((int32_t)(a))))))
+#define ALIGN_UP(x, a) ALIGN_DOWN((uint32_t)(x) + (uint32_t)(a) - 1u, a)
 #endif
 
 /*! @brief bytes2word utility. */
-#define B1P4(b) (((uint32_t)(b)&0xFFU) << 24)
-#define B1P3(b) (((uint32_t)(b)&0xFFU) << 16)
-#define B1P2(b) (((uint32_t)(b)&0xFFU) << 8)
+#define B1P4(b) (((uint32_t)(b)&0xFFU) << 24U)
+#define B1P3(b) (((uint32_t)(b)&0xFFU) << 16U)
+#define B1P2(b) (((uint32_t)(b)&0xFFU) << 8U)
 #define B1P1(b) ((uint32_t)(b)&0xFFU)
-#define B2P3(b) (((uint32_t)(b)&0xFFFFU) << 16)
-#define B2P2(b) (((uint32_t)(b)&0xFFFFU) << 8)
+#define B2P3(b) (((uint32_t)(b)&0xFFFFU) << 16U)
+#define B2P2(b) (((uint32_t)(b)&0xFFFFU) << 8U)
 #define B2P1(b) ((uint32_t)(b)&0xFFFFU)
-#define B3P2(b) (((uint32_t)(b)&0xFFFFFFU) << 8)
+#define B3P2(b) (((uint32_t)(b)&0xFFFFFFU) << 8U)
 #define B3P1(b) ((uint32_t)(b)&0xFFFFFFU)
 
 #define BYTE2WORD_1_3(x, y) (B1P4(x) | B3P1(y))

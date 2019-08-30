@@ -27,12 +27,12 @@ typedef struct _i2c_master_edma_private_handle
 /*! @brief i2c master DMA transfer state. */
 enum _i2c_master_dma_transfer_states
 {
-    kIdleState = 0x0U,         /*!< I2C bus idle. */
+    kIdleState         = 0x0U, /*!< I2C bus idle. */
     kTransferDataState = 0x1U, /*!< 7-bit address check state. */
 };
 
 /*! @brief Common sets of flags used by the driver. */
-enum _i2c_flag_constants
+enum _i2c_edma_flag_constants
 {
 /*! All flags which are cleared by the driver upon starting a transfer. */
 #if defined(FSL_FEATURE_I2C_HAS_START_STOP_DETECT) && FSL_FEATURE_I2C_HAS_START_STOP_DETECT
@@ -92,7 +92,7 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
  ******************************************************************************/
 
 /*<! Private handle only used for internally. */
-static i2c_master_edma_private_handle_t s_edmaPrivateHandle[FSL_FEATURE_SOC_I2C_COUNT];
+static i2c_master_edma_private_handle_t s_i2cEdmaPrivateHandle[FSL_FEATURE_SOC_I2C_COUNT];
 
 /*******************************************************************************
  * Codes
@@ -101,13 +101,13 @@ static i2c_master_edma_private_handle_t s_edmaPrivateHandle[FSL_FEATURE_SOC_I2C_
 static void I2C_MasterTransferCallbackEDMA(edma_handle_t *handle, void *userData, bool transferDone, uint32_t tcds)
 {
     i2c_master_edma_private_handle_t *i2cPrivateHandle = (i2c_master_edma_private_handle_t *)userData;
-    status_t result = kStatus_Success;
+    status_t result                                    = kStatus_Success;
 
     /* Disable DMA. */
     I2C_EnableDMA(i2cPrivateHandle->base, false);
 
     /* Send stop if kI2C_TransferNoStop flag is not asserted. */
-    if (!(i2cPrivateHandle->handle->transfer.flags & kI2C_TransferNoStopFlag))
+    if (0U == (i2cPrivateHandle->handle->transfer.flags & (uint32_t)kI2C_TransferNoStopFlag))
     {
         if (i2cPrivateHandle->handle->transfer.direction == kI2C_Read)
         {
@@ -115,7 +115,7 @@ static void I2C_MasterTransferCallbackEDMA(edma_handle_t *handle, void *userData
             i2cPrivateHandle->base->C1 |= I2C_C1_TXAK_MASK;
 
             /* Wait the last data to be received. */
-            while (!(i2cPrivateHandle->base->S & kI2C_TransferCompleteFlag))
+            while (0U == (i2cPrivateHandle->base->S & (uint8_t)kI2C_TransferCompleteFlag))
             {
             }
 
@@ -129,7 +129,7 @@ static void I2C_MasterTransferCallbackEDMA(edma_handle_t *handle, void *userData
         else
         {
             /* Wait the last data to be sent. */
-            while (!(i2cPrivateHandle->base->S & kI2C_TransferCompleteFlag))
+            while (0U == (i2cPrivateHandle->base->S & (uint8_t)kI2C_TransferCompleteFlag))
             {
             }
 
@@ -145,7 +145,7 @@ static void I2C_MasterTransferCallbackEDMA(edma_handle_t *handle, void *userData
             i2cPrivateHandle->base->C1 |= I2C_C1_TXAK_MASK;
 
             /* Wait the last data to be received. */
-            while (!(i2cPrivateHandle->base->S & kI2C_TransferCompleteFlag))
+            while (0U == (i2cPrivateHandle->base->S & (uint8_t)kI2C_TransferCompleteFlag))
             {
             }
 
@@ -158,9 +158,9 @@ static void I2C_MasterTransferCallbackEDMA(edma_handle_t *handle, void *userData
         }
     }
 
-    i2cPrivateHandle->handle->state = kIdleState;
+    i2cPrivateHandle->handle->state = (uint8_t)kIdleState;
 
-    if (i2cPrivateHandle->handle->completionCallback)
+    if (NULL != i2cPrivateHandle->handle->completionCallback)
     {
         i2cPrivateHandle->handle->completionCallback(i2cPrivateHandle->base, i2cPrivateHandle->handle, result,
                                                      i2cPrivateHandle->handle->userData);
@@ -172,19 +172,20 @@ static status_t I2C_CheckAndClearError(I2C_Type *base, uint32_t status)
     status_t result = kStatus_Success;
 
     /* Check arbitration lost. */
-    if (status & kI2C_ArbitrationLostFlag)
+    if (0U != (status & (uint32_t)kI2C_ArbitrationLostFlag))
     {
         /* Clear arbitration lost flag. */
-        base->S = kI2C_ArbitrationLostFlag;
-        result = kStatus_I2C_ArbitrationLost;
+        base->S = (uint8_t)kI2C_ArbitrationLostFlag;
+        result  = kStatus_I2C_ArbitrationLost;
     }
     /* Check NAK */
-    else if (status & kI2C_ReceiveNakFlag)
+    else if (0U != (status & (uint32_t)kI2C_ReceiveNakFlag))
     {
         result = kStatus_I2C_Nak;
     }
     else
     {
+        /* Add this to fix MISRA C2012 rule15.7 issue: Empty else without comment. */
     }
 
     return result;
@@ -194,12 +195,12 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
                                                  i2c_master_edma_handle_t *handle,
                                                  i2c_master_transfer_t *xfer)
 {
-    assert(handle);
-    assert(xfer);
+    assert(NULL != handle);
+    assert(NULL != xfer);
 
     status_t result = kStatus_Success;
 
-    if (handle->state != kIdleState)
+    if (handle->state != (uint8_t)kIdleState)
     {
         return kStatus_I2C_Busy;
     }
@@ -213,19 +214,19 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
         /* Save total transfer size. */
         handle->transferSize = xfer->dataSize;
 
-        handle->state = kTransferDataState;
+        handle->state = (uint8_t)kTransferDataState;
 
         /* Clear all status before transfer. */
-        I2C_MasterClearStatusFlags(base, kClearFlags);
+        I2C_MasterClearStatusFlags(base, (uint32_t)kClearFlags);
 
         /* Change to send write address when it's a read operation with command. */
-        if ((xfer->subaddressSize > 0) && (xfer->direction == kI2C_Read))
+        if ((xfer->subaddressSize > 0U) && (0U != (uint8_t)(xfer->direction == kI2C_Read)))
         {
             direction = kI2C_Write;
         }
 
         /* If repeated start is requested, send repeated start. */
-        if (handle->transfer.flags & kI2C_TransferRepeatedStartFlag)
+        if (0U != (handle->transfer.flags & (uint32_t)kI2C_TransferRepeatedStartFlag))
         {
             result = I2C_MasterRepeatedStart(base, handle->transfer.slaveAddress, direction);
         }
@@ -234,12 +235,12 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
             result = I2C_MasterStart(base, handle->transfer.slaveAddress, direction);
         }
 
-        if (result)
+        if (0 != result)
         {
             return result;
         }
 
-        while (!(base->S & kI2C_IntPendingFlag))
+        while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
         {
         }
 
@@ -247,7 +248,7 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
         result = I2C_CheckAndClearError(base, base->S);
 
         /* Return if error. */
-        if (result)
+        if (0 != result)
         {
             if (result == kStatus_I2C_Nak)
             {
@@ -258,7 +259,7 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
                     result = kStatus_I2C_Timeout;
                 }
 
-                if (handle->completionCallback)
+                if (NULL != handle->completionCallback)
                 {
                     (handle->completionCallback)(base, handle, result, handle->userData);
                 }
@@ -268,53 +269,53 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
         }
 
         /* Send subaddress. */
-        if (handle->transfer.subaddressSize)
+        if (0U != handle->transfer.subaddressSize)
         {
             do
             {
                 /* Clear interrupt pending flag. */
-                base->S = kI2C_IntPendingFlag;
+                base->S = (uint8_t)kI2C_IntPendingFlag;
 
                 handle->transfer.subaddressSize--;
-                base->D = ((handle->transfer.subaddress) >> (8 * handle->transfer.subaddressSize));
+                base->D = (uint8_t)((handle->transfer.subaddress) >> (8U * handle->transfer.subaddressSize));
 
                 /* Wait until data transfer complete. */
-                while (!(base->S & kI2C_IntPendingFlag))
+                while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
                 {
                 }
 
                 /* Check if there's transfer error. */
                 result = I2C_CheckAndClearError(base, base->S);
 
-                if (result)
+                if (0 != result)
                 {
                     return result;
                 }
 
-            } while (handle->transfer.subaddressSize > 0);
+            } while (handle->transfer.subaddressSize > 0U);
 
             if (handle->transfer.direction == kI2C_Read)
             {
                 /* Clear pending flag. */
-                base->S = kI2C_IntPendingFlag;
+                base->S = (uint8_t)kI2C_IntPendingFlag;
 
                 /* Send repeated start and slave address. */
                 result = I2C_MasterRepeatedStart(base, handle->transfer.slaveAddress, kI2C_Read);
 
-                if (result)
+                if (0 != result)
                 {
                     return result;
                 }
 
                 /* Wait until data transfer complete. */
-                while (!(base->S & kI2C_IntPendingFlag))
+                while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
                 {
                 }
 
                 /* Check if there's transfer error. */
                 result = I2C_CheckAndClearError(base, base->S);
 
-                if (result)
+                if (0 != result)
                 {
                     return result;
                 }
@@ -322,7 +323,7 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
         }
 
         /* Clear pending flag. */
-        base->S = kI2C_IntPendingFlag;
+        base->S = (uint8_t)kI2C_IntPendingFlag;
     }
 
     return result;
@@ -334,36 +335,37 @@ static void I2C_MasterTransferEDMAConfig(I2C_Type *base, i2c_master_edma_handle_
 
     if (handle->transfer.direction == kI2C_Read)
     {
-        transfer_config.srcAddr = (uint32_t)I2C_GetDataRegAddr(base);
-        transfer_config.destAddr = (uint32_t)(handle->transfer.data);
-        transfer_config.majorLoopCounts = (handle->transfer.dataSize - 1);
-        transfer_config.srcTransferSize = kEDMA_TransferSize1Bytes;
-        transfer_config.srcOffset = 0;
+        transfer_config.srcAddr          = (uint32_t)I2C_GetDataRegAddr(base);
+        transfer_config.destAddr         = (uint32_t)(handle->transfer.data);
+        transfer_config.majorLoopCounts  = (handle->transfer.dataSize - 1U);
+        transfer_config.srcTransferSize  = kEDMA_TransferSize1Bytes;
+        transfer_config.srcOffset        = 0;
         transfer_config.destTransferSize = kEDMA_TransferSize1Bytes;
-        transfer_config.destOffset = 1;
-        transfer_config.minorLoopBytes = 1;
+        transfer_config.destOffset       = 1;
+        transfer_config.minorLoopBytes   = 1;
     }
     else
     {
-        transfer_config.srcAddr = (uint32_t)(handle->transfer.data + 1);
-        transfer_config.destAddr = (uint32_t)I2C_GetDataRegAddr(base);
-        transfer_config.majorLoopCounts = (handle->transfer.dataSize - 1);
-        transfer_config.srcTransferSize = kEDMA_TransferSize1Bytes;
-        transfer_config.srcOffset = 1;
+        transfer_config.srcAddr          = ((uint32_t)handle->transfer.data + 1U);
+        transfer_config.destAddr         = (uint32_t)I2C_GetDataRegAddr(base);
+        transfer_config.majorLoopCounts  = (handle->transfer.dataSize - 1U);
+        transfer_config.srcTransferSize  = kEDMA_TransferSize1Bytes;
+        transfer_config.srcOffset        = 1;
         transfer_config.destTransferSize = kEDMA_TransferSize1Bytes;
-        transfer_config.destOffset = 0;
-        transfer_config.minorLoopBytes = 1;
+        transfer_config.destOffset       = 0;
+        transfer_config.minorLoopBytes   = 1;
     }
 
     /* Store the initially configured eDMA minor byte transfer count into the I2C handle */
-    handle->nbytes = transfer_config.minorLoopBytes;
+    handle->nbytes = (uint8_t)(transfer_config.minorLoopBytes);
 
-    EDMA_SubmitTransfer(handle->dmaHandle, &transfer_config);
+    (void)EDMA_SubmitTransfer(handle->dmaHandle, (const edma_transfer_config_t *)(uint32_t)&transfer_config);
+
     EDMA_StartTransfer(handle->dmaHandle);
 }
 
 /*!
- * brief Initializes the I2C handle which is used in transcational functions.
+ * brief Initializes the I2C handle which is used in transactional functions.
  *
  * param base I2C peripheral base address.
  * param handle A pointer to the i2c_master_edma_handle_t structure.
@@ -377,17 +379,17 @@ void I2C_MasterCreateEDMAHandle(I2C_Type *base,
                                 void *userData,
                                 edma_handle_t *edmaHandle)
 {
-    assert(handle);
-    assert(edmaHandle);
+    assert(NULL != handle);
+    assert(NULL != edmaHandle);
 
     uint32_t instance = I2C_GetInstance(base);
 
     /* Zero handle. */
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     /* Set the user callback and userData. */
     handle->completionCallback = callback;
-    handle->userData = userData;
+    handle->userData           = userData;
 
     /* Set the base for the handle. */
     base = base;
@@ -395,10 +397,10 @@ void I2C_MasterCreateEDMAHandle(I2C_Type *base,
     /* Set the handle for EDMA. */
     handle->dmaHandle = edmaHandle;
 
-    s_edmaPrivateHandle[instance].base = base;
-    s_edmaPrivateHandle[instance].handle = handle;
+    s_i2cEdmaPrivateHandle[instance].base   = base;
+    s_i2cEdmaPrivateHandle[instance].handle = handle;
 
-    EDMA_SetCallback(edmaHandle, (edma_callback)I2C_MasterTransferCallbackEDMA, &s_edmaPrivateHandle[instance]);
+    EDMA_SetCallback(edmaHandle, (edma_callback)I2C_MasterTransferCallbackEDMA, &s_i2cEdmaPrivateHandle[instance]);
 }
 
 /*!
@@ -407,7 +409,7 @@ void I2C_MasterCreateEDMAHandle(I2C_Type *base,
  * param base I2C peripheral base address.
  * param handle A pointer to the i2c_master_edma_handle_t structure.
  * param xfer A pointer to the transfer structure of i2c_master_transfer_t.
- * retval kStatus_Success Sucessfully completed the data transmission.
+ * retval kStatus_Success Successfully completed the data transmission.
  * retval kStatus_I2C_Busy A previous transmission is still not finished.
  * retval kStatus_I2C_Timeout Transfer error, waits for a signal timeout.
  * retval kStatus_I2C_ArbitrationLost Transfer error, arbitration lost.
@@ -415,8 +417,8 @@ void I2C_MasterCreateEDMAHandle(I2C_Type *base,
  */
 status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle, i2c_master_transfer_t *xfer)
 {
-    assert(handle);
-    assert(xfer);
+    assert(NULL != handle);
+    assert(NULL != xfer);
 
     status_t result;
     uint8_t tmpReg;
@@ -431,7 +433,7 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
     /* Send address and command buffer(if there is), until senddata phase or receive data phase. */
     result = I2C_InitTransferStateMachineEDMA(base, handle, xfer);
 
-    if (result)
+    if (0 != result)
     {
         /* Send stop if received Nak. */
         if (result == kStatus_I2C_Nak)
@@ -443,7 +445,7 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
         }
 
         /* Reset the state to idle state. */
-        handle->state = kIdleState;
+        handle->state = (uint8_t)kIdleState;
 
         return result;
     }
@@ -452,13 +454,13 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
     /* For i2c send, need to send 1 byte first to trigger the dma, for i2c read,
     need to send stop before reading the last byte, so the dma transfer size should
     be (xSize - 1). */
-    if (handle->transfer.dataSize > 1)
+    if (handle->transfer.dataSize > 1U)
     {
         I2C_MasterTransferEDMAConfig(base, handle);
         if (handle->transfer.direction == kI2C_Read)
         {
             /* Change direction for receive. */
-            base->C1 &= ~(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
+            base->C1 &= ~(uint8_t)(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
 
             /* Read dummy to release the bus. */
             dummy = base->D;
@@ -482,7 +484,7 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
             tmpReg = base->C1;
 
             /* Change direction to Rx. */
-            tmpReg &= ~I2C_C1_TX_MASK;
+            tmpReg &= ~(uint8_t)I2C_C1_TX_MASK;
 
             /* Configure send NAK */
             tmpReg |= I2C_C1_TXAK_MASK;
@@ -498,15 +500,15 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
         }
 
         /* Wait until data transfer complete. */
-        while (!(base->S & kI2C_IntPendingFlag))
+        while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
         {
         }
 
         /* Clear pending flag. */
-        base->S = kI2C_IntPendingFlag;
+        base->S = (uint8_t)kI2C_IntPendingFlag;
 
         /* Send stop if kI2C_TransferNoStop flag is not asserted. */
-        if (!(handle->transfer.flags & kI2C_TransferNoStopFlag))
+        if (0U == (handle->transfer.flags & (uint32_t)kI2C_TransferNoStopFlag))
         {
             result = I2C_MasterStop(base);
         }
@@ -523,7 +525,7 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
         }
 
         /* Reset the state to idle. */
-        handle->state = kIdleState;
+        handle->state = (uint8_t)kIdleState;
     }
 
     return result;
@@ -538,14 +540,14 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
  */
 status_t I2C_MasterTransferGetCountEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle, size_t *count)
 {
-    assert(handle->dmaHandle);
+    assert(NULL != handle->dmaHandle);
 
-    if (!count)
+    if (NULL == count)
     {
         return kStatus_InvalidArgument;
     }
 
-    if (kIdleState != handle->state)
+    if ((uint8_t)kIdleState != handle->state)
     {
         *count = (handle->transferSize -
                   (uint32_t)handle->nbytes *
@@ -573,5 +575,5 @@ void I2C_MasterTransferAbortEDMA(I2C_Type *base, i2c_master_edma_handle_t *handl
     I2C_EnableDMA(base, false);
 
     /* Reset the state to idle. */
-    handle->state = kIdleState;
+    handle->state = (uint8_t)kIdleState;
 }

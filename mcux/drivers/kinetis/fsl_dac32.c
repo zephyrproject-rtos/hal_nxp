@@ -129,7 +129,7 @@ void DAC32_GetDefaultConfig(dac32_config_t *config)
     memset(config, 0, sizeof(*config));
 
     config->referenceVoltageSource = kDAC32_ReferenceVoltageSourceVref2;
-    config->enableLowPowerMode = false;
+    config->enableLowPowerMode     = false;
 }
 
 /*!
@@ -144,9 +144,8 @@ void DAC32_SetBufferConfig(DAC_Type *base, const dac32_buffer_config_t *config)
 
     uint32_t tmp32;
 
-    tmp32 = base->STATCTRL &
-            ~(DAC_STATCTRL_DACTRGSEL_MASK | DAC_STATCTRL_DACBFMD_MASK | DAC_STATCTRL_DACBFUP_MASK |
-              DAC_STATCTRL_DACBFWM_MASK);
+    tmp32 = base->STATCTRL & ~(DAC_STATCTRL_DACTRGSEL_MASK | DAC_STATCTRL_DACBFMD_MASK | DAC_STATCTRL_DACBFUP_MASK |
+                               DAC_STATCTRL_DACBFWM_MASK);
     if (kDAC32_BufferTriggerBySoftwareMode == config->triggerMode)
     {
         tmp32 |= DAC_STATCTRL_DACTRGSEL_MASK;
@@ -176,9 +175,9 @@ void DAC32_GetDefaultBufferConfig(dac32_buffer_config_t *config)
     memset(config, 0, sizeof(*config));
 
     config->triggerMode = kDAC32_BufferTriggerBySoftwareMode;
-    config->watermark = kDAC32_BufferWatermark1Word;
-    config->workMode = kDAC32_BufferWorkAsNormalMode;
-    config->upperLimit = DAC_DAT_COUNT * 2U - 1U;
+    config->watermark   = kDAC32_BufferWatermark1Word;
+    config->workMode    = kDAC32_BufferWorkAsNormalMode;
+    config->upperLimit  = DAC_DAT_COUNT * 2U - 1U;
 }
 
 /*!
@@ -195,12 +194,12 @@ void DAC32_SetBufferValue(DAC_Type *base, uint32_t index, uint32_t value)
 
     if (0U == (index % 2U))
     {
-        index = index / 2U; /* Register index. */
+        index            = index / 2U; /* Register index. */
         base->DAT[index] = (base->DAT[index] & ~(DAC_DAT_DATA0_MASK)) | DAC_DAT_DATA0(value);
     }
     else
     {
-        index = index / 2U; /* Register index. */
+        index            = index / 2U; /* Register index. */
         base->DAT[index] = (base->DAT[index] & ~(DAC_DAT_DATA1_MASK)) | DAC_DAT_DATA1(value);
     }
 }

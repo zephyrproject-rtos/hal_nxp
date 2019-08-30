@@ -47,43 +47,43 @@
  */
 enum _ftfx_status
 {
-    kStatus_FTFx_Success = MAKE_STATUS(kStatusGroupGeneric, 0),         /*!< API is executed successfully*/
-    kStatus_FTFx_InvalidArgument = MAKE_STATUS(kStatusGroupGeneric, 4), /*!< Invalid argument*/
-    kStatus_FTFx_SizeError = MAKE_STATUS(kStatusGroupFtfxDriver, 0),   /*!< Error size*/
+    kStatus_FTFx_Success = (int32_t)MAKE_STATUS(kStatusGroupGeneric, 0),         /*!< API is executed successfully*/
+    kStatus_FTFx_InvalidArgument = (int32_t)MAKE_STATUS(kStatusGroupGeneric, 4), /*!< Invalid argument*/
+    kStatus_FTFx_SizeError = (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 0),   /*!< Error size*/
     kStatus_FTFx_AlignmentError =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 1), /*!< Parameter is not aligned with the specified baseline*/
-    kStatus_FTFx_AddressError = MAKE_STATUS(kStatusGroupFtfxDriver, 2), /*!< Address is out of range */
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 1), /*!< Parameter is not aligned with the specified baseline*/
+    kStatus_FTFx_AddressError = (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 2), /*!< Address is out of range */
     kStatus_FTFx_AccessError =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 3), /*!< Invalid instruction codes and out-of bound addresses */
-    kStatus_FTFx_ProtectionViolation = MAKE_STATUS(
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 3), /*!< Invalid instruction codes and out-of bound addresses */
+    kStatus_FTFx_ProtectionViolation = (int32_t)MAKE_STATUS(
         kStatusGroupFtfxDriver, 4), /*!< The program/erase operation is requested to execute on protected areas */
     kStatus_FTFx_CommandFailure =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 5), /*!< Run-time error during command execution. */
-    kStatus_FTFx_UnknownProperty = MAKE_STATUS(kStatusGroupFtfxDriver, 6), /*!< Unknown property.*/
-    kStatus_FTFx_EraseKeyError = MAKE_STATUS(kStatusGroupFtfxDriver, 7),   /*!< API erase key is invalid.*/
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 5), /*!< Run-time error during command execution. */
+    kStatus_FTFx_UnknownProperty = (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 6), /*!< Unknown property.*/
+    kStatus_FTFx_EraseKeyError = (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 7),   /*!< API erase key is invalid.*/
     kStatus_FTFx_RegionExecuteOnly =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 8), /*!< The current region is execute-only.*/
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 8), /*!< The current region is execute-only.*/
     kStatus_FTFx_ExecuteInRamFunctionNotReady =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 9), /*!< Execute-in-RAM function is not available.*/
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 9), /*!< Execute-in-RAM function is not available.*/
     kStatus_FTFx_PartitionStatusUpdateFailure =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 10), /*!< Failed to update partition status.*/
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 10), /*!< Failed to update partition status.*/
     kStatus_FTFx_SetFlexramAsEepromError =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 11), /*!< Failed to set FlexRAM as EEPROM.*/
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 11), /*!< Failed to set FlexRAM as EEPROM.*/
     kStatus_FTFx_RecoverFlexramAsRamError =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 12), /*!< Failed to recover FlexRAM as RAM.*/
-    kStatus_FTFx_SetFlexramAsRamError = MAKE_STATUS(kStatusGroupFtfxDriver, 13), /*!< Failed to set FlexRAM as RAM.*/
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 12), /*!< Failed to recover FlexRAM as RAM.*/
+    kStatus_FTFx_SetFlexramAsRamError = (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 13), /*!< Failed to set FlexRAM as RAM.*/
     kStatus_FTFx_RecoverFlexramAsEepromError =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 14), /*!< Failed to recover FlexRAM as EEPROM.*/
-    kStatus_FTFx_CommandNotSupported = MAKE_STATUS(kStatusGroupFtfxDriver, 15), /*!< Flash API is not supported.*/
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 14), /*!< Failed to recover FlexRAM as EEPROM.*/
+    kStatus_FTFx_CommandNotSupported = (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 15), /*!< Flash API is not supported.*/
     kStatus_FTFx_SwapSystemNotInUninitialized =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 16), /*!< Swap system is not in an uninitialzed state.*/
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 16), /*!< Swap system is not in an uninitialzed state.*/
     kStatus_FTFx_SwapIndicatorAddressError =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 17), /*!< The swap indicator address is invalid.*/
-    kStatus_FTFx_ReadOnlyProperty = MAKE_STATUS(kStatusGroupFtfxDriver, 18), /*!< The flash property is read-only.*/
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 17), /*!< The swap indicator address is invalid.*/
+    kStatus_FTFx_ReadOnlyProperty = (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 18), /*!< The flash property is read-only.*/
     kStatus_FTFx_InvalidPropertyValue =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 19), /*!< The flash property value is out of range.*/
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 19), /*!< The flash property value is out of range.*/
     kStatus_FTFx_InvalidSpeculationOption =
-        MAKE_STATUS(kStatusGroupFtfxDriver, 20), /*!< The option of flash prefetch speculation is invalid.*/
+        (int32_t)MAKE_STATUS(kStatusGroupFtfxDriver, 20), /*!< The option of flash prefetch speculation is invalid.*/
 };
 /*@}*/
 
@@ -154,6 +154,7 @@ typedef enum _ftfx_flexram_function_option
     kFTFx_FlexramFuncOptAvailableForEeprom = 0x00U /*!< An option used to make FlexRAM available for EEPROM */
 } ftfx_flexram_func_opt_t;
 
+#if defined(FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD) && FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD
 /*!
  * @brief Enumeration for the possible options of Swap control commands
  */
@@ -165,6 +166,7 @@ typedef enum _ftfx_swap_control_option
     kFTFx_SwapControlOptionReportStatus = 0x08U,       /*!< An option used to report the Swap status */
     kFTFx_SwapControlOptionDisableSystem = 0x10U       /*!< An option used to disable the Swap status */
 } ftfx_swap_control_opt_t;
+#endif /* FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD */ 
 
 /*!
  * @brief Enumeration for the possible flash Swap status.
@@ -179,6 +181,7 @@ typedef enum _ftfx_swap_state
     kFTFx_SwapStateDisabled = 0x05U       /*!< Flash Swap system is in a disabled state.*/
 } ftfx_swap_state_t;
 
+#if defined(FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD) && FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD
 /*!
  * @breif Enumeration for the possible flash Swap block status
  */
@@ -199,6 +202,7 @@ typedef struct _ftfx_swap_state_config
     ftfx_swap_block_status_t currentSwapBlockStatus; /*!< The current Swap block status.*/
     ftfx_swap_block_status_t nextSwapBlockStatus;    /*!< The next Swap block status.*/
 } ftfx_swap_state_config_t;
+#endif /* FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD */
 
 /*!
  * @brief Enumeration for FTFx memory type.
@@ -461,7 +465,7 @@ status_t FTFx_CMD_EraseAllExecuteOnlySegments(ftfx_config_t *config, uint32_t ke
  */
 status_t FTFx_CMD_Program(ftfx_config_t *config,
                           uint32_t start,
-                          uint8_t *src,
+                          const uint8_t *src,
                           uint32_t lengthInBytes);
 
 /*!
@@ -484,7 +488,7 @@ status_t FTFx_CMD_Program(ftfx_config_t *config,
  * @retval #kStatus_FTFx_ProtectionViolation The program/erase operation is requested to execute on protected areas.
  * @retval #kStatus_FTFx_CommandFailure Run-time error during the command execution.
  */
-status_t FTFx_CMD_ProgramOnce(ftfx_config_t *config, uint32_t index, uint8_t *src, uint32_t lengthInBytes);
+status_t FTFx_CMD_ProgramOnce(ftfx_config_t *config, uint32_t index, const uint8_t *src, uint32_t lengthInBytes);
 
 /*!
  * @brief Programs flash with data at locations passed in through parameters via the Program Section command.
@@ -514,7 +518,7 @@ status_t FTFx_CMD_ProgramOnce(ftfx_config_t *config, uint32_t index, uint8_t *sr
 #if defined(FSL_FEATURE_FLASH_HAS_PROGRAM_SECTION_CMD) && FSL_FEATURE_FLASH_HAS_PROGRAM_SECTION_CMD
 status_t FTFx_CMD_ProgramSection(ftfx_config_t *config,
                                  uint32_t start,
-                                 uint8_t *src,
+                                 const uint8_t *src,
                                  uint32_t lengthInBytes);
 #endif
 

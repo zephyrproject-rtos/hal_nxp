@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2018 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -51,7 +51,7 @@ extern volatile uint8_t s_dummyData[];
 /*! @brief SPI transfer option.*/
 typedef enum _spi_xfer_option
 {
-    kSPI_FrameDelay = (SPI_FIFOWR_EOF_MASK),  /*!< A delay may be inserted, defined in the DLY register.*/
+    kSPI_FrameDelay  = (SPI_FIFOWR_EOF_MASK), /*!< A delay may be inserted, defined in the DLY register.*/
     kSPI_FrameAssert = (SPI_FIFOWR_EOT_MASK), /*!< SSEL will be deasserted at the end of a transfer */
 } spi_xfer_option_t;
 
@@ -73,9 +73,9 @@ typedef enum _spi_clock_polarity
 typedef enum _spi_clock_phase
 {
     kSPI_ClockPhaseFirstEdge = 0x0U, /*!< First edge on SCK occurs at the middle of the first
-                                         *   cycle of a data transfer. */
+                                      *   cycle of a data transfer. */
     kSPI_ClockPhaseSecondEdge        /*!< First edge on SCK occurs at the start of the
-                                         *   first cycle of a data transfer. */
+                                      *   first cycle of a data transfer. */
 } spi_clock_phase_t;
 
 /*! @brief txFIFO watermark values */
@@ -107,12 +107,12 @@ typedef enum _spi_rxfifo_watermark
 /*! @brief Transfer data width */
 typedef enum _spi_data_width
 {
-    kSPI_Data4Bits = 3,   /*!< 4 bits data width */
-    kSPI_Data5Bits = 4,   /*!< 5 bits data width */
-    kSPI_Data6Bits = 5,   /*!< 6 bits data width */
-    kSPI_Data7Bits = 6,   /*!< 7 bits data width */
-    kSPI_Data8Bits = 7,   /*!< 8 bits data width */
-    kSPI_Data9Bits = 8,   /*!< 9 bits data width */
+    kSPI_Data4Bits  = 3,  /*!< 4 bits data width */
+    kSPI_Data5Bits  = 4,  /*!< 5 bits data width */
+    kSPI_Data6Bits  = 5,  /*!< 6 bits data width */
+    kSPI_Data7Bits  = 6,  /*!< 7 bits data width */
+    kSPI_Data8Bits  = 7,  /*!< 8 bits data width */
+    kSPI_Data9Bits  = 8,  /*!< 9 bits data width */
     kSPI_Data10Bits = 9,  /*!< 10 bits data width */
     kSPI_Data11Bits = 10, /*!< 11 bits data width */
     kSPI_Data12Bits = 11, /*!< 12 bits data width */
@@ -191,8 +191,8 @@ typedef struct _spi_slave_config
 /*! @brief SPI transfer status.*/
 enum _spi_status
 {
-    kStatus_SPI_Busy = MAKE_STATUS(kStatusGroup_LPC_SPI, 0),  /*!< SPI bus is busy */
-    kStatus_SPI_Idle = MAKE_STATUS(kStatusGroup_LPC_SPI, 1),  /*!< SPI is idle */
+    kStatus_SPI_Busy  = MAKE_STATUS(kStatusGroup_LPC_SPI, 0), /*!< SPI bus is busy */
+    kStatus_SPI_Idle  = MAKE_STATUS(kStatusGroup_LPC_SPI, 1), /*!< SPI is idle */
     kStatus_SPI_Error = MAKE_STATUS(kStatusGroup_LPC_SPI, 2), /*!< SPI  error */
     kStatus_SPI_BaudrateNotSupport =
         MAKE_STATUS(kStatusGroup_LPC_SPI, 3) /*!< Baudrate is not support in current clock source */
@@ -208,10 +208,10 @@ enum _spi_interrupt_enable
 /*! @brief SPI status flags.*/
 enum _spi_statusflags
 {
-    kSPI_TxEmptyFlag = SPI_FIFOSTAT_TXEMPTY_MASK,       /*!< txFifo is empty */
-    kSPI_TxNotFullFlag = SPI_FIFOSTAT_TXNOTFULL_MASK,   /*!< txFifo is not full */
+    kSPI_TxEmptyFlag    = SPI_FIFOSTAT_TXEMPTY_MASK,    /*!< txFifo is empty */
+    kSPI_TxNotFullFlag  = SPI_FIFOSTAT_TXNOTFULL_MASK,  /*!< txFifo is not full */
     kSPI_RxNotEmptyFlag = SPI_FIFOSTAT_RXNOTEMPTY_MASK, /*!< rxFIFO is not empty */
-    kSPI_RxFullFlag = SPI_FIFOSTAT_RXFULL_MASK,         /*!< rxFIFO is full */
+    kSPI_RxFullFlag     = SPI_FIFOSTAT_RXFULL_MASK,     /*!< rxFIFO is full */
 };
 
 /*! @brief SPI transfer structure */

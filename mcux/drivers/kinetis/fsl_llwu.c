@@ -93,16 +93,16 @@ void LLWU_SetExternalWakeupPinMode(LLWU_Type *base, uint32_t pinIndex, llwu_exte
     }
 #endif /* FSL_FEATURE_LLWU_REG_BITWIDTH == 32 */
 
-    if (regBase)
+    if (NULL != regBase)
     {
         reg = *regBase;
 #if (defined(FSL_FEATURE_LLWU_REG_BITWIDTH) && (FSL_FEATURE_LLWU_REG_BITWIDTH == 32))
         regOffset = ((pinIndex & 0x0FU) << 1U);
 #else
-        regOffset = ((pinIndex & 0x03U) << 1U);
+        regOffset = (uint8_t)((pinIndex & 0x03U) << 1U);
 #endif
         reg &= ~(0x3U << regOffset);
-        reg |= ((uint32_t)pinMode << regOffset);
+        reg |= (uint8_t)((uint32_t)pinMode << regOffset);
         *regBase = reg;
     }
 }
@@ -170,9 +170,16 @@ bool LLWU_GetExternalWakeupPinFlag(LLWU_Type *base, uint32_t pinIndex)
             break;
     }
 
-    if (regBase)
+    if (NULL != regBase)
     {
-        return (bool)(*regBase & (1U << pinIndex % 8));
+        if (0U != (*regBase & (1U << pinIndex % 8U)))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     else
     {
@@ -240,7 +247,7 @@ void LLWU_ClearExternalWakeupPinFlag(LLWU_Type *base, uint32_t pinIndex)
             regBase = NULL;
             break;
     }
-    if (regBase)
+    if (NULL != regBase)
     {
         *regBase = (1U << pinIndex % 8U);
     }
@@ -296,9 +303,9 @@ void LLWU_SetPinFilterMode(LLWU_Type *base, uint32_t filterIndex, llwu_external_
 
     if (NULL != regBase)
     {
-        *regBase = (*regBase & ~(LLWU_FILT1_FILTSEL_MASK | LLWU_FILT1_FILTE_MASK)) |
-                   LLWU_FILT1_FILTSEL(filterMode.pinIndex) | LLWU_FILT1_FILTE(filterMode.filterMode) |
-                   LLWU_FILT1_FILTF_MASK /* W1C to clear the FILTF flag bit. */
+        *regBase = (uint8_t)((*regBase & ~(LLWU_FILT1_FILTSEL_MASK | LLWU_FILT1_FILTE_MASK)) |
+                             LLWU_FILT1_FILTSEL(filterMode.pinIndex) | LLWU_FILT1_FILTE(filterMode.filterMode) |
+                             LLWU_FILT1_FILTF_MASK) /* W1C to clear the FILTF flag bit. */
             ;
     }
 #endif /* FSL_FEATURE_LLWU_REG_BITWIDTH */
@@ -323,11 +330,11 @@ bool LLWU_GetPinFilterFlag(LLWU_Type *base, uint32_t filterIndex)
     switch (filterIndex)
     {
         case 1:
-            status = (base->FILT1 & LLWU_FILT1_FILTF_MASK);
+            status = ((base->FILT1 & LLWU_FILT1_FILTF_MASK) != 0U);
             break;
 #if (defined(FSL_FEATURE_LLWU_HAS_PIN_FILTER) && (FSL_FEATURE_LLWU_HAS_PIN_FILTER > 1))
         case 2:
-            status = (base->FILT2 & LLWU_FILT2_FILTF_MASK);
+            status = ((base->FILT2 & LLWU_FILT2_FILTF_MASK) != 0U);
             break;
 #endif /* FSL_FEATURE_LLWU_HAS_PIN_FILTER */
 #if (defined(FSL_FEATURE_LLWU_HAS_PIN_FILTER) && (FSL_FEATURE_LLWU_HAS_PIN_FILTER > 2))
@@ -415,7 +422,7 @@ void LLWU_ClearPinFilterFlag(LLWU_Type *base, uint32_t filterIndex)
             break;
     }
 
-    if (regBase)
+    if (NULL != regBase)
     {
         reg = *regBase;
         reg |= LLWU_FILT1_FILTF_MASK;

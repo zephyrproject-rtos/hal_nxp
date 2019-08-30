@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2018 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,7 +19,12 @@
 #endif
 
 /* Note:  FIFOCFG[SIZE] has always value 1 = 8 items depth */
+
+#if defined(FSL_FEATURE_SPI_FIFOSIZE_CFG) && (FSL_FEATURE_SPI_FIFOSIZE_CFG)
+#define SPI_FIFO_DEPTH(base) 4
+#else
 #define SPI_FIFO_DEPTH(base) ((((base)->FIFOCFG & SPI_FIFOCFG_SIZE_MASK) >> SPI_FIFOCFG_SIZE_SHIFT) << 3)
+#endif /*FSL_FEATURE_SPI_FIFOSIZE_CFG*/
 
 /* Convert transfer count to transfer bytes. dataWidth is a
  * range <0,15>. Range <8,15> represents 2B transfer */
@@ -71,7 +76,7 @@ uint32_t SPI_GetInstance(SPI_Type *base)
  */
 void SPI_SetDummyData(SPI_Type *base, uint8_t dummyData)
 {
-    uint32_t instance = SPI_GetInstance(base);
+    uint32_t instance     = SPI_GetInstance(base);
     s_dummyData[instance] = dummyData;
 }
 
@@ -115,20 +120,20 @@ void SPI_MasterGetDefaultConfig(spi_master_config_t *config)
     /* Initializes the configure structure to zero. */
     memset(config, 0, sizeof(*config));
 
-    config->enableLoopback = false;
-    config->enableMaster = true;
-    config->polarity = kSPI_ClockPolarityActiveHigh;
-    config->phase = kSPI_ClockPhaseFirstEdge;
-    config->direction = kSPI_MsbFirst;
-    config->baudRate_Bps = 500000U;
-    config->dataWidth = kSPI_Data8Bits;
-    config->sselNum = kSPI_Ssel0;
-    config->txWatermark = kSPI_TxFifo0;
-    config->rxWatermark = kSPI_RxFifo1;
-    config->sselPol = kSPI_SpolActiveAllLow;
-    config->delayConfig.preDelay = 0U;
-    config->delayConfig.postDelay = 0U;
-    config->delayConfig.frameDelay = 0U;
+    config->enableLoopback            = false;
+    config->enableMaster              = true;
+    config->polarity                  = kSPI_ClockPolarityActiveHigh;
+    config->phase                     = kSPI_ClockPhaseFirstEdge;
+    config->direction                 = kSPI_MsbFirst;
+    config->baudRate_Bps              = 500000U;
+    config->dataWidth                 = kSPI_Data8Bits;
+    config->sselNum                   = kSPI_Ssel0;
+    config->txWatermark               = kSPI_TxFifo0;
+    config->rxWatermark               = kSPI_RxFifo1;
+    config->sselPol                   = kSPI_SpolActiveAllLow;
+    config->delayConfig.preDelay      = 0U;
+    config->delayConfig.postDelay     = 0U;
+    config->delayConfig.frameDelay    = 0U;
     config->delayConfig.transferDelay = 0U;
 }
 
@@ -200,7 +205,7 @@ status_t SPI_MasterInit(SPI_Type *base, const spi_master_config_t *config, uint3
 
     /* store configuration */
     g_configs[instance].dataWidth = config->dataWidth;
-    g_configs[instance].sselNum = config->sselNum;
+    g_configs[instance].sselNum   = config->sselNum;
     /* enable FIFOs */
     base->FIFOCFG |= SPI_FIFOCFG_EMPTYTX_MASK | SPI_FIFOCFG_EMPTYRX_MASK;
     base->FIFOCFG |= SPI_FIFOCFG_ENABLETX_MASK | SPI_FIFOCFG_ENABLERX_MASK;
@@ -242,13 +247,13 @@ void SPI_SlaveGetDefaultConfig(spi_slave_config_t *config)
     memset(config, 0, sizeof(*config));
 
     config->enableSlave = true;
-    config->polarity = kSPI_ClockPolarityActiveHigh;
-    config->phase = kSPI_ClockPhaseFirstEdge;
-    config->direction = kSPI_MsbFirst;
-    config->dataWidth = kSPI_Data8Bits;
+    config->polarity    = kSPI_ClockPolarityActiveHigh;
+    config->phase       = kSPI_ClockPhaseFirstEdge;
+    config->direction   = kSPI_MsbFirst;
+    config->dataWidth   = kSPI_Data8Bits;
     config->txWatermark = kSPI_TxFifo0;
     config->rxWatermark = kSPI_RxFifo1;
-    config->sselPol = kSPI_SpolActiveAllLow;
+    config->sselPol     = kSPI_SpolActiveAllLow;
 }
 
 /*!
@@ -493,11 +498,11 @@ status_t SPI_MasterTransferCreateHandle(SPI_Type *base,
 
     handle->dataWidth = g_configs[instance].dataWidth;
     /* in slave mode, the sselNum is not important */
-    handle->sselNum = g_configs[instance].sselNum;
+    handle->sselNum     = g_configs[instance].sselNum;
     handle->txWatermark = (spi_txfifo_watermark_t)SPI_FIFOTRIG_TXLVL_GET(base);
     handle->rxWatermark = (spi_rxfifo_watermark_t)SPI_FIFOTRIG_RXLVL_GET(base);
-    handle->callback = callback;
-    handle->userData = userData;
+    handle->callback    = callback;
+    handle->userData    = userData;
 
     /* Enable SPI NVIC */
     EnableIRQ(s_spiIRQ[instance]);
@@ -529,9 +534,9 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
         return kStatus_InvalidArgument;
     }
 
-    fifoDepth = SPI_FIFO_DEPTH(base);
-    txData = xfer->txData;
-    rxData = xfer->rxData;
+    fifoDepth        = SPI_FIFO_DEPTH(base);
+    txData           = xfer->txData;
+    rxData           = xfer->rxData;
     txRemainingBytes = txData ? xfer->dataSize : 0;
     rxRemainingBytes = rxData ? xfer->dataSize : 0;
 
@@ -609,7 +614,7 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
                 }
             }
             /* send data */
-            tmp32 = tx_ctrl | tmp32;
+            tmp32        = tx_ctrl | tmp32;
             base->FIFOWR = tmp32;
             toReceiveCount += 1;
         }
@@ -660,10 +665,10 @@ status_t SPI_MasterTransferNonBlocking(SPI_Type *base, spi_master_handle_t *hand
     /* set count */
     handle->txRemainingBytes = xfer->txData ? xfer->dataSize : 0;
     handle->rxRemainingBytes = xfer->rxData ? xfer->dataSize : 0;
-    handle->totalByteCount = xfer->dataSize;
+    handle->totalByteCount   = xfer->dataSize;
     /* other options */
     handle->toReceiveCount = 0;
-    handle->configFlags = xfer->configFlags;
+    handle->configFlags    = xfer->configFlags;
     /* Set the SPI state to busy */
     handle->state = kStatus_SPI_Busy;
     /* clear FIFOs when transfer starts */
@@ -694,14 +699,14 @@ status_t SPI_MasterHalfDuplexTransferBlocking(SPI_Type *base, spi_half_duplex_tr
 
     if (xfer->isTransmitFirst)
     {
-        tempXfer.txData = xfer->txData;
-        tempXfer.rxData = NULL;
+        tempXfer.txData   = xfer->txData;
+        tempXfer.rxData   = NULL;
         tempXfer.dataSize = xfer->txDataSize;
     }
     else
     {
-        tempXfer.txData = NULL;
-        tempXfer.rxData = xfer->rxData;
+        tempXfer.txData   = NULL;
+        tempXfer.rxData   = xfer->rxData;
         tempXfer.dataSize = xfer->rxDataSize;
     }
     /* If the pcs pin keep assert between transmit and receive. */
@@ -723,14 +728,14 @@ status_t SPI_MasterHalfDuplexTransferBlocking(SPI_Type *base, spi_half_duplex_tr
 
     if (xfer->isTransmitFirst)
     {
-        tempXfer.txData = NULL;
-        tempXfer.rxData = xfer->rxData;
+        tempXfer.txData   = NULL;
+        tempXfer.rxData   = xfer->rxData;
         tempXfer.dataSize = xfer->rxDataSize;
     }
     else
     {
-        tempXfer.txData = xfer->txData;
-        tempXfer.rxData = NULL;
+        tempXfer.txData   = xfer->txData;
+        tempXfer.rxData   = NULL;
         tempXfer.dataSize = xfer->txDataSize;
     }
     tempXfer.configFlags = xfer->configFlags;
@@ -765,14 +770,14 @@ status_t SPI_MasterHalfDuplexTransferNonBlocking(SPI_Type *base,
 
     if (xfer->isTransmitFirst)
     {
-        tempXfer.txData = xfer->txData;
-        tempXfer.rxData = NULL;
+        tempXfer.txData   = xfer->txData;
+        tempXfer.rxData   = NULL;
         tempXfer.dataSize = xfer->txDataSize;
     }
     else
     {
-        tempXfer.txData = NULL;
-        tempXfer.rxData = xfer->rxData;
+        tempXfer.txData   = NULL;
+        tempXfer.rxData   = xfer->rxData;
         tempXfer.dataSize = xfer->rxDataSize;
     }
     /* If the PCS pin keep assert between transmit and receive. */
@@ -793,14 +798,14 @@ status_t SPI_MasterHalfDuplexTransferNonBlocking(SPI_Type *base,
 
     if (xfer->isTransmitFirst)
     {
-        tempXfer.txData = NULL;
-        tempXfer.rxData = xfer->rxData;
+        tempXfer.txData   = NULL;
+        tempXfer.rxData   = xfer->rxData;
         tempXfer.dataSize = xfer->rxDataSize;
     }
     else
     {
-        tempXfer.txData = xfer->txData;
-        tempXfer.rxData = NULL;
+        tempXfer.txData   = xfer->txData;
+        tempXfer.rxData   = NULL;
         tempXfer.dataSize = xfer->txDataSize;
     }
     tempXfer.configFlags = xfer->configFlags;
@@ -857,7 +862,7 @@ void SPI_MasterTransferAbort(SPI_Type *base, spi_master_handle_t *handle)
     /* Empty FIFOs */
     base->FIFOCFG |= SPI_FIFOCFG_EMPTYTX_MASK | SPI_FIFOCFG_EMPTYRX_MASK;
 
-    handle->state = kStatus_SPI_Idle;
+    handle->state            = kStatus_SPI_Idle;
     handle->txRemainingBytes = 0;
     handle->rxRemainingBytes = 0;
 }
@@ -944,7 +949,7 @@ static void SPI_TransferHandleIRQInternal(SPI_Type *base, spi_master_handle_t *h
                 }
             }
             /* send data */
-            tmp32 = tx_ctrl | tmp32;
+            tmp32        = tx_ctrl | tmp32;
             base->FIFOWR = tmp32;
             /* increase number of expected data to receive */
             handle->toReceiveCount += 1;
@@ -1023,7 +1028,7 @@ void SPI_MasterTransferHandleIRQ(SPI_Type *base, spi_master_handle_t *handle)
     {
         /* Empty txFIFO is confirmed. Disable IRQs and restore triggers values */
         base->FIFOINTENCLR = SPI_FIFOINTENCLR_RXLVL_MASK | SPI_FIFOINTENCLR_TXLVL_MASK;
-        base->FIFOTRIG = (base->FIFOTRIG & (~(SPI_FIFOTRIG_RXLVL_MASK | SPI_FIFOTRIG_RXLVL_MASK))) |
+        base->FIFOTRIG     = (base->FIFOTRIG & (~(SPI_FIFOTRIG_RXLVL_MASK | SPI_FIFOTRIG_RXLVL_MASK))) |
                          SPI_FIFOTRIG_RXLVL(handle->rxWatermark) | SPI_FIFOTRIG_TXLVL(handle->txWatermark);
         /* set idle state and call user callback */
         handle->state = kStatus_SPI_Idle;

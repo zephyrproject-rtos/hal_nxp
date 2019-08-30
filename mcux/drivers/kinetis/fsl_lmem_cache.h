@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_LMEM_CACHE_H_
@@ -14,7 +14,6 @@
  * @addtogroup lmem_cache
  * @{
  */
-
 
 /*******************************************************************************
  * Definitions
@@ -32,9 +31,9 @@
 /*! @brief LMEM cache mode options. */
 typedef enum _lmem_cache_mode
 {
-    kLMEM_NonCacheable = 0x0U,      /*!< Cache mode: non-cacheable. */
+    kLMEM_NonCacheable      = 0x0U, /*!< Cache mode: non-cacheable. */
     kLMEM_CacheWriteThrough = 0x2U, /*!< Cache mode: write-through. */
-    kLMEM_CacheWriteBack = 0x3U     /*!< Cache mode: write-back. */
+    kLMEM_CacheWriteBack    = 0x3U  /*!< Cache mode: write-back. */
 } lmem_cache_mode_t;
 
 /*! @brief LMEM cache regions. */
@@ -262,7 +261,7 @@ void LMEM_CodeCacheClearMultiLines(LMEM_Type *base, uint32_t address, uint32_t l
  * kStatus_Fail The cache demote operation is failure.
  */
 status_t LMEM_CodeCacheDemoteRegion(LMEM_Type *base, lmem_cache_region_t region, lmem_cache_mode_t cacheMode);
-#endif  /* FSL_FEATURE_LMEM_SUPPORT_ICACHE_DEMOTE_REMOVE */
+#endif /* FSL_FEATURE_LMEM_SUPPORT_ICACHE_DEMOTE_REMOVE */
 
 /*@}*/
 
@@ -296,11 +295,11 @@ static inline void LMEM_EnableSystemWriteBuffer(LMEM_Type *base, bool enable)
 {
     if (enable)
     {
-        base->PSCCR |= LMEM_PSCCR_ENWRBUF_MASK;       
+        base->PSCCR |= LMEM_PSCCR_ENWRBUF_MASK;
     }
     else
     {
-        base->PSCCR &= ~LMEM_PSCCR_ENWRBUF_MASK;               
+        base->PSCCR &= ~LMEM_PSCCR_ENWRBUF_MASK;
     }
 }
 

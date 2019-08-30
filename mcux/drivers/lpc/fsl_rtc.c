@@ -142,13 +142,13 @@ static void RTC_ConvertSecondsToDatetime(uint32_t seconds, rtc_datetime_t *datet
     secondsRemaining = secondsRemaining % SECONDS_IN_A_DAY;
 
     /* Calculate the datetime hour, minute and second fields */
-    datetime->hour = secondsRemaining / SECONDS_IN_A_HOUR;
+    datetime->hour   = secondsRemaining / SECONDS_IN_A_HOUR;
     secondsRemaining = secondsRemaining % SECONDS_IN_A_HOUR;
     datetime->minute = secondsRemaining / 60U;
     datetime->second = secondsRemaining % SECONDS_IN_A_MINUTE;
 
     /* Calculate year */
-    daysInYear = DAYS_IN_A_YEAR;
+    daysInYear     = DAYS_IN_A_YEAR;
     datetime->year = YEAR_RANGE_START;
     while (days > daysInYear)
     {
@@ -277,7 +277,7 @@ status_t RTC_SetAlarm(RTC_Type *base, const rtc_datetime_t *alarmTime)
     assert(alarmTime);
 
     uint32_t alarmSeconds = 0;
-    uint32_t currSeconds = 0;
+    uint32_t currSeconds  = 0;
 
     /* Return error if the alarm time provided is not valid */
     if (!(RTC_CheckDatetimeFormat(alarmTime)))

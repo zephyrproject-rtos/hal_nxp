@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -16,14 +16,13 @@
  * @{
  */
 
-
 /******************************************************************************
  * Definitions
  ******************************************************************************/
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_VREF_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. */
+#define FSL_VREF_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1. */
 /*@}*/
 
 /* Those macros below defined to support SoC family which have VREFL (0.4V) reference */
@@ -57,7 +56,7 @@ typedef enum _vref_buffer_mode
     kVREF_ModeBandgapOnly = 0U, /*!< Bandgap on only, for stabilization and startup */
 #if defined(FSL_FEATURE_VREF_MODE_LV_TYPE) && FSL_FEATURE_VREF_MODE_LV_TYPE
     kVREF_ModeHighPowerBuffer = 1U, /*!< High-power buffer mode enabled */
-    kVREF_ModeLowPowerBuffer = 2U   /*!< Low-power buffer mode enabled */
+    kVREF_ModeLowPowerBuffer  = 2U  /*!< Low-power buffer mode enabled */
 #else
     kVREF_ModeTightRegulationBuffer = 2U /*!< Tight regulation buffer enabled */
 #endif /* FSL_FEATURE_VREF_MODE_LV_TYPE */

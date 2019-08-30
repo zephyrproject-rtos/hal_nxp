@@ -32,7 +32,7 @@
  */
 enum _flashiap_status
 {
-    kStatus_FLASHIAP_Success = kStatus_Success,                               /*!< Api is executed successfully */
+    kStatus_FLASHIAP_Success        = kStatus_Success,                        /*!< Api is executed successfully */
     kStatus_FLASHIAP_InvalidCommand = MAKE_STATUS(kStatusGroup_FLASHIAP, 1U), /*!< Invalid command */
     kStatus_FLASHIAP_SrcAddrError =
         MAKE_STATUS(kStatusGroup_FLASHIAP, 2U), /*!< Source address is not on word boundary */
@@ -70,17 +70,17 @@ enum _flashiap_status
 enum _flashiap_commands
 {
     kIapCmd_FLASHIAP_PrepareSectorforWrite = 50U, /*!< Prepare Sector for write */
-    kIapCmd_FLASHIAP_CopyRamToFlash = 51U,        /*!< Copy RAM to flash */
-    kIapCmd_FLASHIAP_EraseSector = 52U,           /*!< Erase Sector */
-    kIapCmd_FLASHIAP_BlankCheckSector = 53U,      /*!< Blank check sector */
-    kIapCmd_FLASHIAP_ReadPartId = 54U,            /*!< Read part id */
-    kIapCmd_FLASHIAP_Read_BootromVersion = 55U,   /*!< Read bootrom version */
-    kIapCmd_FLASHIAP_Compare = 56U,               /*!< Compare */
-    kIapCmd_FLASHIAP_ReinvokeISP = 57U,           /*!< Reinvoke ISP */
-    kIapCmd_FLASHIAP_ReadUid = 58U,               /*!< Read Uid isp */
-    kIapCmd_FLASHIAP_ErasePage = 59U,             /*!< Erase Page */
-    kIapCmd_FLASHIAP_ReadMisr = 70U,              /*!< Read Misr */
-    kIapCmd_FLASHIAP_ReinvokeI2cSpiISP = 71U      /*!< Reinvoke I2C/SPI isp */
+    kIapCmd_FLASHIAP_CopyRamToFlash        = 51U, /*!< Copy RAM to flash */
+    kIapCmd_FLASHIAP_EraseSector           = 52U, /*!< Erase Sector */
+    kIapCmd_FLASHIAP_BlankCheckSector      = 53U, /*!< Blank check sector */
+    kIapCmd_FLASHIAP_ReadPartId            = 54U, /*!< Read part id */
+    kIapCmd_FLASHIAP_Read_BootromVersion   = 55U, /*!< Read bootrom version */
+    kIapCmd_FLASHIAP_Compare               = 56U, /*!< Compare */
+    kIapCmd_FLASHIAP_ReinvokeISP           = 57U, /*!< Reinvoke ISP */
+    kIapCmd_FLASHIAP_ReadUid               = 58U, /*!< Read Uid isp */
+    kIapCmd_FLASHIAP_ErasePage             = 59U, /*!< Erase Page */
+    kIapCmd_FLASHIAP_ReadMisr              = 70U, /*!< Read Misr */
+    kIapCmd_FLASHIAP_ReinvokeI2cSpiISP     = 71U  /*!< Reinvoke I2C/SPI isp */
 };
 
 /*! @brief IAP_ENTRY API function type */

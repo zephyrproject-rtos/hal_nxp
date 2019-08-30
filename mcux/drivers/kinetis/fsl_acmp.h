@@ -34,17 +34,17 @@
 /*! @brief Interrupt enable/disable mask. */
 enum _acmp_interrupt_enable
 {
-    kACMP_OutputRisingInterruptEnable = (1U << 0U),  /*!< Enable the interrupt when comparator outputs rising. */
+    kACMP_OutputRisingInterruptEnable  = (1U << 0U), /*!< Enable the interrupt when comparator outputs rising. */
     kACMP_OutputFallingInterruptEnable = (1U << 1U), /*!< Enable the interrupt when comparator outputs falling. */
-    kACMP_RoundRobinInterruptEnable = (1U << 2U),    /*!< Enable the Round-Robin interrupt. */
+    kACMP_RoundRobinInterruptEnable    = (1U << 2U), /*!< Enable the Round-Robin interrupt. */
 };
 
 /*! @brief Status flag mask. */
 enum _acmp_status_flags
 {
-    kACMP_OutputRisingEventFlag = CMP_C0_CFR_MASK,  /*!< Rising-edge on compare output has occurred. */
-    kACMP_OutputFallingEventFlag = CMP_C0_CFF_MASK, /*!< Falling-edge on compare output has occurred. */
-    kACMP_OutputAssertEventFlag = CMP_C0_COUT_MASK, /*!< Return the current value of the analog comparator output. */
+    kACMP_OutputRisingEventFlag  = CMP_C0_CFR_MASK,  /*!< Rising-edge on compare output has occurred. */
+    kACMP_OutputFallingEventFlag = CMP_C0_CFF_MASK,  /*!< Falling-edge on compare output has occurred. */
+    kACMP_OutputAssertEventFlag  = CMP_C0_COUT_MASK, /*!< Return the current value of the analog comparator output. */
 };
 
 #if defined(FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT) && (FSL_FEATURE_ACMP_HAS_C0_OFFSET_BIT == 1U)
@@ -95,7 +95,7 @@ typedef enum _acmp_port_input
 /*! @brief Fixed mux port. */
 typedef enum _acmp_fixed_port
 {
-    kACMP_FixedPlusPort = 0U,  /*!< Only the inputs to the Minus port are swept in each round. */
+    kACMP_FixedPlusPort  = 0U, /*!< Only the inputs to the Minus port are swept in each round. */
     kACMP_FixedMinusPort = 1U, /*!< Only the inputs to the Plus port are swept in each round. */
 } acmp_fixed_port_t;
 
@@ -103,7 +103,7 @@ typedef enum _acmp_fixed_port
 /*! @brief Internal DAC's work mode. */
 typedef enum _acmp_dac_work_mode
 {
-    kACMP_DACWorkLowSpeedMode = 0U,  /*!< DAC is selected to work in low speed and low power mode. */
+    kACMP_DACWorkLowSpeedMode  = 0U, /*!< DAC is selected to work in low speed and low power mode. */
     kACMP_DACWorkHighSpeedMode = 1U, /*!< DAC is selected to work in high speed high power mode. */
 } acmp_dac_work_mode_t;
 #endif /* FSL_FEATURE_ACMP_HAS_C1_DMODE_BIT */
@@ -189,13 +189,13 @@ typedef enum _acmp_discrete_clock_source
  */
 typedef enum _acmp_discrete_sample_time
 {
-    kACMP_DiscreteSampleTimeAs1T = 0U,   /*!< The sampling time equals to 1xT. */
-    kACMP_DiscreteSampleTimeAs2T = 1U,   /*!< The sampling time equals to 2xT. */
-    kACMP_DiscreteSampleTimeAs4T = 2U,   /*!< The sampling time equals to 4xT. */
-    kACMP_DiscreteSampleTimeAs8T = 3U,   /*!< The sampling time equals to 8xT. */
-    kACMP_DiscreteSampleTimeAs16T = 4U,  /*!< The sampling time equals to 16xT. */
-    kACMP_DiscreteSampleTimeAs32T = 5U,  /*!< The sampling time equals to 32xT. */
-    kACMP_DiscreteSampleTimeAs64T = 6U,  /*!< The sampling time equals to 64xT. */
+    kACMP_DiscreteSampleTimeAs1T   = 0U, /*!< The sampling time equals to 1xT. */
+    kACMP_DiscreteSampleTimeAs2T   = 1U, /*!< The sampling time equals to 2xT. */
+    kACMP_DiscreteSampleTimeAs4T   = 2U, /*!< The sampling time equals to 4xT. */
+    kACMP_DiscreteSampleTimeAs8T   = 3U, /*!< The sampling time equals to 8xT. */
+    kACMP_DiscreteSampleTimeAs16T  = 4U, /*!< The sampling time equals to 16xT. */
+    kACMP_DiscreteSampleTimeAs32T  = 5U, /*!< The sampling time equals to 32xT. */
+    kACMP_DiscreteSampleTimeAs64T  = 6U, /*!< The sampling time equals to 64xT. */
     kACMP_DiscreteSampleTimeAs256T = 7U, /*!< The sampling time equals to 256xT. */
 } acmp_discrete_sample_time_t;
 

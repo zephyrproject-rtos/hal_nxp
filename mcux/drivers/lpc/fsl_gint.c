@@ -127,8 +127,8 @@ void GINT_GetCtrl(GINT_Type *base, gint_comb_t *comb, gint_trig_t *trig, gint_cb
 
     instance = GINT_GetInstance(base);
 
-    *comb = (gint_comb_t)((base->CTRL & GINT_CTRL_COMB_MASK) >> GINT_CTRL_COMB_SHIFT);
-    *trig = (gint_trig_t)((base->CTRL & GINT_CTRL_TRIG_MASK) >> GINT_CTRL_TRIG_SHIFT);
+    *comb     = (gint_comb_t)((base->CTRL & GINT_CTRL_COMB_MASK) >> GINT_CTRL_COMB_SHIFT);
+    *trig     = (gint_trig_t)((base->CTRL & GINT_CTRL_TRIG_MASK) >> GINT_CTRL_TRIG_SHIFT);
     *callback = s_gintCallback[instance];
 }
 
@@ -171,7 +171,7 @@ void GINT_ConfigPins(GINT_Type *base, gint_port_t port, uint32_t polarityMask, u
 void GINT_GetConfigPins(GINT_Type *base, gint_port_t port, uint32_t *polarityMask, uint32_t *enableMask)
 {
     *polarityMask = base->PORT_POL[port];
-    *enableMask = base->PORT_ENA[port];
+    *enableMask   = base->PORT_ENA[port];
 }
 
 /*!

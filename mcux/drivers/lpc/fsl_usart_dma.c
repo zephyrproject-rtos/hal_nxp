@@ -112,7 +112,7 @@ status_t USART_TransferCreateHandleDMA(USART_Type *base,
 
     memset(handle, 0, sizeof(*handle));
     /* assign 'base' and 'handle' */
-    s_dmaPrivateHandle[instance].base = base;
+    s_dmaPrivateHandle[instance].base   = base;
     s_dmaPrivateHandle[instance].handle = handle;
 
     /* set tx/rx 'idle' state */
@@ -171,7 +171,7 @@ status_t USART_TransferSendDMA(USART_Type *base, usart_dma_handle_t *handle, usa
     }
     else
     {
-        handle->txState = kUSART_TxBusy;
+        handle->txState       = kUSART_TxBusy;
         handle->txDataSizeAll = xfer->dataSize;
 
         /* Enable DMA request from txFIFO */
@@ -222,7 +222,7 @@ status_t USART_TransferReceiveDMA(USART_Type *base, usart_dma_handle_t *handle, 
     }
     else
     {
-        handle->rxState = kUSART_RxBusy;
+        handle->rxState       = kUSART_RxBusy;
         handle->rxDataSizeAll = xfer->dataSize;
 
         /* Enable DMA request from rxFIFO */

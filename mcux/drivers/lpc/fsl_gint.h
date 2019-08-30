@@ -30,15 +30,15 @@
 /*! @brief GINT combine inputs type */
 typedef enum _gint_comb
 {
-    kGINT_CombineOr = 0U, /*!< A grouped interrupt is generated when any one of the enabled inputs is active */
-    kGINT_CombineAnd = 1U /*!< A grouped interrupt is generated when all enabled inputs are active */
+    kGINT_CombineOr  = 0U, /*!< A grouped interrupt is generated when any one of the enabled inputs is active */
+    kGINT_CombineAnd = 1U  /*!< A grouped interrupt is generated when all enabled inputs are active */
 } gint_comb_t;
 
 /*! @brief GINT trigger type */
 typedef enum _gint_trig
 {
-    kGINT_TrigEdge = 0U, /*!< Edge triggered based on polarity */
-    kGINT_TrigLevel = 1U /*!< Level triggered based on polarity */
+    kGINT_TrigEdge  = 0U, /*!< Edge triggered based on polarity */
+    kGINT_TrigLevel = 1U  /*!< Level triggered based on polarity */
 } gint_trig_t;
 
 /* @brief GINT port type */

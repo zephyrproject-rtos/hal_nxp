@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -31,9 +31,8 @@ enum _dac32_buffer_status_flags
     /*!< DAC32 Buffer Watermark Flag. */ /* FSL_FEATURE_DAC32_HAS_WATERMARK_DETECTION */
     kDAC32_BufferReadPointerTopPositionFlag =
         DAC_STATCTRL_DACBFRPTF_MASK, /*!< DAC32 Buffer Read Pointer Top Position Flag. */
-    kDAC32_BufferReadPointerBottomPositionFlag =
-        DAC_STATCTRL_DACBFRPBF_MASK, /*!< DAC32 Buffer Read Pointer Bottom Position
-                                  Flag. */
+    kDAC32_BufferReadPointerBottomPositionFlag = DAC_STATCTRL_DACBFRPBF_MASK, /*!< DAC32 Buffer Read Pointer Bottom
+                                                                           Position Flag. */
 };
 
 /*!
@@ -42,12 +41,10 @@ enum _dac32_buffer_status_flags
 enum _dac32_buffer_interrupt_enable
 {
     kDAC32_BufferWatermarkInterruptEnable = DAC_STATCTRL_DACBWIEN_MASK, /*!< DAC32 Buffer Watermark Interrupt Enable. */
-    kDAC32_BufferReadPointerTopInterruptEnable =
-        DAC_STATCTRL_DACBTIEN_MASK, /*!< DAC32 Buffer Read Pointer Top Flag Interrupt
-                                 Enable. */
-    kDAC32_BufferReadPointerBottomInterruptEnable =
-        DAC_STATCTRL_DACBBIEN_MASK, /*!< DAC32 Buffer Read Pointer Bottom Flag
-                                 Interrupt Enable */
+    kDAC32_BufferReadPointerTopInterruptEnable = DAC_STATCTRL_DACBTIEN_MASK,    /*!< DAC32 Buffer Read Pointer Top Flag
+                                                                             Interrupt    Enable. */
+    kDAC32_BufferReadPointerBottomInterruptEnable = DAC_STATCTRL_DACBBIEN_MASK, /*!< DAC32 Buffer Read Pointer Bottom
+                                                                             Flag Interrupt Enable */
 };
 
 /*!
@@ -84,10 +81,10 @@ typedef enum _dac32_buffer_watermark
  */
 typedef enum _dac32_buffer_work_mode
 {
-    kDAC32_BufferWorkAsNormalMode = 0U,      /*!< Normal mode. */
-    kDAC32_BufferWorkAsSwingMode = 1U,       /*!< Swing mode. */
+    kDAC32_BufferWorkAsNormalMode      = 0U, /*!< Normal mode. */
+    kDAC32_BufferWorkAsSwingMode       = 1U, /*!< Swing mode. */
     kDAC32_BufferWorkAsOneTimeScanMode = 2U, /*!< One-Time Scan mode. */
-    kDAC32_BufferWorkAsFIFOMode = 3U,        /*!< FIFO mode. */
+    kDAC32_BufferWorkAsFIFOMode        = 3U, /*!< FIFO mode. */
 } dac32_buffer_work_mode_t;
 
 /*!
