@@ -1,6 +1,7 @@
 # Translate the SoC name and part number into the mcux device and cpu
 # name respectively.
 string(TOUPPER ${CONFIG_SOC} MCUX_DEVICE)
+string(TOUPPER ${CONFIG_SOC_SERIES} MCUX_SERIES)
 
 if("${MCUX_DEVICE}" STREQUAL "LPC54114")
   set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm4)
@@ -35,6 +36,9 @@ zephyr_sources(devices/${MCUX_DEVICE}/fsl_clock.c)
 if (${MCUX_DEVICE} MATCHES "LPC")
   zephyr_sources(devices/${MCUX_DEVICE}/fsl_power.c)
   zephyr_sources(devices/${MCUX_DEVICE}/fsl_reset.c)
+endif()
+if (${MCUX_SERIES} MATCHES "K2X")
+  zephyr_sources(devices/${MCUX_DEVICE}/system_${MCUX_DEVICE}.c)
 endif()
 
 
