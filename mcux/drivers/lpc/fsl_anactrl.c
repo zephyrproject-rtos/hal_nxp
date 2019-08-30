@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, NXP
+ * Copyright 2018, NXP
  * All rights reserved.
  *
  *
@@ -148,13 +148,13 @@ void ANACTRL_GetDefaultFro192MConfig(anactrl_fro192M_config_t *config)
     /* Initializes the configure structure to zero. */
     memset(config, 0, sizeof(*config));
 
-    config->biasTrim = 0x1AU;
-    config->tempTrim = 0x20U;
-    config->enable12MHzClk = true;
-    config->enable48MhzClk = true;
-    config->dacTrim = 0x80U;
+    config->biasTrim            = 0x1AU;
+    config->tempTrim            = 0x20U;
+    config->enable12MHzClk      = true;
+    config->enable48MhzClk      = true;
+    config->dacTrim             = 0x80U;
     config->enableAnalogTestBus = false;
-    config->enable96MHzClk = false;
+    config->enable96MHzClk      = false;
 }
 
 /*!
@@ -218,13 +218,13 @@ void ANACTRL_GetDefaultXo32MConfig(anactrl_xo32M_config_t *config)
     memset(config, 0, sizeof(*config));
 
     config->enableACBufferBypass = false;
-    config->enablePllUsbOutput = false;
-    config->enableSysCLkOutput = false;
-    config->enableLDOBypass = false;
-    config->LDOOutputMode = kANACTRL_LDOOutputHighNormalMode;
-    config->LDOOutputLevel = kANACTRL_LDOOutputLevel4;
-    config->bias = 2U;
-    config->stability = 3U;
+    config->enablePllUsbOutput   = false;
+    config->enableSysCLkOutput   = false;
+    config->enableLDOBypass      = false;
+    config->LDOOutputMode        = kANACTRL_LDOOutputHighNormalMode;
+    config->LDOOutputLevel       = kANACTRL_LDOOutputLevel4;
+    config->bias                 = 2U;
+    config->stability            = 3U;
 }
 
 /*!
@@ -280,10 +280,10 @@ void ANACTRL_GetDefaultRingOscConfig(anactrl_ring_osc_config_t *config)
     /* Initializes the configure structure to zero. */
     memset(config, 0, sizeof(*config));
 
-    config->ringOscSel = kANACTRL_ShortRingOsc;
+    config->ringOscSel           = kANACTRL_ShortRingOsc;
     config->ringOscFreqOutputDiv = kANACTRL_HighFreqOutput;
-    config->pnRingOscMode = kANACTRL_NormalMode;
-    config->ringOscOutClkDiv = 0U;
+    config->pnRingOscMode        = kANACTRL_NormalMode;
+    config->ringOscOutClkDiv     = 0U;
 }
 
 /*!
@@ -304,7 +304,7 @@ uint32_t ANACTRL_MeasureFrequency(ANACTRL_Type *base, uint8_t scale, uint32_t re
     assert(scale >= 2U);
 
     uint32_t targetClkFreq = 0U;
-    uint32_t capval = 0U;
+    uint32_t capval        = 0U;
 
     /* Init a measurement cycle. */
     base->FREQ_ME_CTRL = ANACTRL_FREQ_ME_CTRL_PROG_MASK + ANACTRL_FREQ_ME_CTRL_CAPVAL_SCALE(scale);
@@ -313,7 +313,7 @@ uint32_t ANACTRL_MeasureFrequency(ANACTRL_Type *base, uint8_t scale, uint32_t re
     }
 
     /* Calculate the target clock frequency. */
-    capval = (base->FREQ_ME_CTRL & ANACTRL_FREQ_ME_CTRL_CAPVAL_SCALE_MASK);
+    capval        = (base->FREQ_ME_CTRL & ANACTRL_FREQ_ME_CTRL_CAPVAL_SCALE_MASK);
     targetClkFreq = (capval * refClkFreq) / ((1 << scale) - 1);
 
     return targetClkFreq;

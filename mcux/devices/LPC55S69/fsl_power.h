@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, NXP
+ * Copyright 2017, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -416,6 +416,19 @@ typedef enum _v_flashnv
 #define LOWPOWER_WAKEUPIOSRC_RISING                 1  /*!< Wake up on rising edge                  */
 #define LOWPOWER_WAKEUPIOSRC_FALLING                2  /*!< Wake up on falling edge                 */
 #define LOWPOWER_WAKEUPIOSRC_RISING_FALLING         3  /*!< Wake up on both rising or falling edges */
+
+#define LOWPOWER_WAKEUPIO_PIO0_PULLUPDOWN_INDEX     8  /*!< Wake-up I/O 0 pull-up/down configuration index */
+#define LOWPOWER_WAKEUPIO_PIO1_PULLUPDOWN_INDEX     9  /*!< Wake-up I/O 1 pull-up/down configuration index */
+#define LOWPOWER_WAKEUPIO_PIO2_PULLUPDOWN_INDEX    10  /*!< Wake-up I/O 2 pull-up/down configuration index */
+#define LOWPOWER_WAKEUPIO_PIO3_PULLUPDOWN_INDEX    11  /*!< Wake-up I/O 3 pull-up/down configuration index */
+
+#define LOWPOWER_WAKEUPIO_PIO0_PULLUPDOWN_MASK     (1UL <<  LOWPOWER_WAKEUPIO_PIO0_PULLUPDOWN_INDEX)  /*!< Wake-up I/O 0 pull-up/down mask */
+#define LOWPOWER_WAKEUPIO_PIO1_PULLUPDOWN_MASK     (1UL <<  LOWPOWER_WAKEUPIO_PIO1_PULLUPDOWN_INDEX)  /*!< Wake-up I/O 1 pull-up/down mask */
+#define LOWPOWER_WAKEUPIO_PIO2_PULLUPDOWN_MASK     (1UL <<  LOWPOWER_WAKEUPIO_PIO2_PULLUPDOWN_INDEX)  /*!< Wake-up I/O 2 pull-up/down mask */
+#define LOWPOWER_WAKEUPIO_PIO3_PULLUPDOWN_MASK     (1UL <<  LOWPOWER_WAKEUPIO_PIO3_PULLUPDOWN_INDEX)  /*!< Wake-up I/O 3 pull-up/down mask */
+
+#define LOWPOWER_WAKEUPIO_PULLDOWN                  0  /*!< Select pull-down                */
+#define LOWPOWER_WAKEUPIO_PULLUP                    1  /*!< Select pull-up                  */
 
 /**
  * @brief Wake up timers configuration in Low Power Modes

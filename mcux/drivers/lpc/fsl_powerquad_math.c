@@ -333,25 +333,23 @@ void PQ_VectorSinQ31(int32_t *pSrc, int32_t *pDst, int32_t length)
 
     uint32_t cppre;
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-    const int32_t magic = 0x30c90fdb;
-    float valFloat;
+    pq_float_t magic;
+    pq_float_t valFloat;
+
+    magic.integerX = 0x30c90fdb;
 #endif
 
-    cppre = POWERQUAD->CPPRE;
+    cppre            = POWERQUAD->CPPRE;
     POWERQUAD->CPPRE = POWERQUAD_CPPRE_CPPRE_OUT(31);
 
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#endif
     if (remainderBy8)
     {
         length -= remainderBy8;
         while (remainderBy8--)
         {
-            valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-            _pq_sin0(*(int32_t *)(&valFloat));
+            valFloat.floatX = magic.floatX * (float)(*pSrc++);
+            _pq_sin0(valFloat.integerX);
             _pq_readAdd0();
             *pDst++ = (_pq_readAdd0_fx());
         }
@@ -359,51 +357,48 @@ void PQ_VectorSinQ31(int32_t *pSrc, int32_t *pDst, int32_t length)
 
     while (length > 0)
     {
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
         length -= 8;
     }
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
 
 #else
     if (remainderBy8)
@@ -433,25 +428,23 @@ void PQ_VectorCosQ31(int32_t *pSrc, int32_t *pDst, int32_t length)
 
     uint32_t cppre;
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-    const int32_t magic = 0x30c90fdb;
-    float valFloat;
+    pq_float_t magic;
+    pq_float_t valFloat;
+
+    magic.integerX = 0x30c90fdb;
 #endif
 
-    cppre = POWERQUAD->CPPRE;
+    cppre            = POWERQUAD->CPPRE;
     POWERQUAD->CPPRE = POWERQUAD_CPPRE_CPPRE_OUT(31);
 
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#endif
     if (remainderBy8)
     {
         length -= remainderBy8;
         while (remainderBy8--)
         {
-            valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-            _pq_cos0(*(int32_t *)(&valFloat));
+            valFloat.floatX = magic.floatX * (float)(*pSrc++);
+            _pq_cos0(valFloat.integerX);
             _pq_readAdd0();
             *pDst++ = (_pq_readAdd0_fx());
         }
@@ -459,52 +452,48 @@ void PQ_VectorCosQ31(int32_t *pSrc, int32_t *pDst, int32_t length)
 
     while (length > 0)
     {
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
-        valFloat = *(const float *)(&magic) * (float)(*pSrc++);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)(*pSrc++);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx());
 
         length -= 8;
     }
-
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
 
 #else
     if (remainderBy8)
@@ -664,26 +653,24 @@ void PQ_VectorSinQ15(int16_t *pSrc, int16_t *pDst, int32_t length)
 {
     uint32_t cppre;
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-    const int32_t magic = 0x30c90fdb;
-    float valFloat;
+    pq_float_t magic;
+    pq_float_t valFloat;
+
+    magic.integerX = 0x30c90fdb;
 #endif
 
-    cppre = POWERQUAD->CPPRE;
+    cppre            = POWERQUAD->CPPRE;
     POWERQUAD->CPPRE = POWERQUAD_CPPRE_CPPRE_OUT(31);
 
     int32_t remainderBy8 = length % 8;
 
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#endif
     if (remainderBy8)
     {
         length -= remainderBy8;
         while (remainderBy8--)
         {
-            valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
+            valFloat.floatX = magic.floatX * (float)((uint32_t)(*pSrc++) << 16);
             _pq_sin0(*(int32_t *)(&valFloat));
             _pq_readAdd0();
             *pDst++ = (_pq_readAdd0_fx()) >> 16;
@@ -692,52 +679,48 @@ void PQ_VectorSinQ15(int16_t *pSrc, int16_t *pDst, int32_t length)
 
     while (length > 0)
     {
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((uint32_t)(*pSrc++) << 16);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((uint32_t)(*pSrc++) << 16);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((uint32_t)(*pSrc++) << 16);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((uint32_t)(*pSrc++) << 16);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((uint32_t)(*pSrc++) << 16);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((uint32_t)(*pSrc++) << 16);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((uint32_t)(*pSrc++) << 16);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_sin0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((uint32_t)(*pSrc++) << 16);
+        _pq_sin0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
         length -= 8;
     }
-
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
 
 #else
 
@@ -766,27 +749,25 @@ void PQ_VectorCosQ15(int16_t *pSrc, int16_t *pDst, int32_t length)
 {
     uint32_t cppre;
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-    const int32_t magic = 0x30c90fdb;
-    float valFloat;
+    pq_float_t magic;
+    pq_float_t valFloat;
+
+    magic.integerX = 0x30c90fdb;
 #endif
 
-    cppre = POWERQUAD->CPPRE;
+    cppre            = POWERQUAD->CPPRE;
     POWERQUAD->CPPRE = POWERQUAD_CPPRE_CPPRE_OUT(31);
 
     int32_t remainderBy8 = length % 8;
 
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#endif
     if (remainderBy8)
     {
         length -= remainderBy8;
         while (remainderBy8--)
         {
-            valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-            _pq_cos0(*(int32_t *)(&valFloat));
+            valFloat.floatX = magic.floatX * (float)((*pSrc++) << 16);
+            _pq_cos0(valFloat.integerX);
             _pq_readAdd0();
             *pDst++ = (_pq_readAdd0_fx()) >> 16;
         }
@@ -794,52 +775,48 @@ void PQ_VectorCosQ15(int16_t *pSrc, int16_t *pDst, int32_t length)
 
     while (length > 0)
     {
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((*pSrc++) << 16);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((*pSrc++) << 16);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((*pSrc++) << 16);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((*pSrc++) << 16);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((*pSrc++) << 16);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((*pSrc++) << 16);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((*pSrc++) << 16);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
-        valFloat = *(const float *)(&magic) * (float)((uint32_t)(*pSrc++) << 16);
-        _pq_cos0(*(int32_t *)(&valFloat));
+        valFloat.floatX = magic.floatX * (float)((*pSrc++) << 16);
+        _pq_cos0(valFloat.integerX);
         _pq_readAdd0();
         *pDst++ = (_pq_readAdd0_fx()) >> 16;
 
         length -= 8;
     }
-
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
 
 #else
 
@@ -869,7 +846,7 @@ int32_t PQ_ArctanFixed(POWERQUAD_Type *base, int32_t x, int32_t y, pq_cordic_ite
     base->CORDIC_X = x;
     base->CORDIC_Y = y;
     base->CORDIC_Z = 0;
-    base->CONTROL = (CP_CORDIC << 4) | CORDIC_ARCTAN | CORDIC_ITER(iteration);
+    base->CONTROL  = (CP_CORDIC << 4) | CORDIC_ARCTAN | CORDIC_ITER(iteration);
 
     PQ_WaitDone(base);
     return base->CORDIC_Z;
@@ -880,7 +857,7 @@ int32_t PQ_ArctanhFixed(POWERQUAD_Type *base, int32_t x, int32_t y, pq_cordic_it
     base->CORDIC_X = x;
     base->CORDIC_Y = y;
     base->CORDIC_Z = 0;
-    base->CONTROL = (CP_CORDIC << 4) | CORDIC_ARCTANH | CORDIC_ITER(iteration);
+    base->CONTROL  = (CP_CORDIC << 4) | CORDIC_ARCTANH | CORDIC_ITER(iteration);
 
     PQ_WaitDone(base);
     return base->CORDIC_Z;

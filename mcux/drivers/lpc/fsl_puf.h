@@ -36,8 +36,8 @@ typedef enum _puf_key_index_register
 
 typedef enum _puf_min_max
 {
-    kPUF_KeySizeMin = 8u,
-    kPUF_KeySizeMax = 512u,
+    kPUF_KeySizeMin  = 8u,
+    kPUF_KeySizeMax  = 512u,
     kPUF_KeyIndexMax = kPUF_KeyIndex_15,
 } puf_min_max_t;
 

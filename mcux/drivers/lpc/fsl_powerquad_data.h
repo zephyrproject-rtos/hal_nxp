@@ -43,7 +43,6 @@ extern "C" {
 
 #if defined(__cplusplus)
 }
-
 #endif /* __cplusplus */
 
 #endif /* _FSL_POWERQUAD_DATA_H_ */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief OSTIMER driver version 2.0.0. */
-#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief OSTIMER driver version 2.0.1. */
+#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*!
@@ -52,9 +52,9 @@ extern "C" {
  */
 
 /*!
-* @brief Initializes an OSTIMER by turning its bus clock on
-*
-*/
+ * @brief Initializes an OSTIMER by turning its bus clock on
+ *
+ */
 void OSTIMER_Init(OSTIMER_Type *base);
 
 /*!
@@ -76,8 +76,10 @@ void OSTIMER_Deinit(OSTIMER_Type *base);
  */
 static inline void OSTIMER_SoftwareReset(OSTIMER_Type *base)
 {
+#if !(defined(FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG) && FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG)
     PMC->OSTIMERr |= PMC_OSTIMER_SOFTRESET_MASK;
     PMC->OSTIMERr &= ~PMC_OSTIMER_SOFTRESET_MASK;
+#endif
 }
 
 /*!
@@ -204,16 +206,12 @@ uint64_t OSTIMER_GetCaptureValue(OSTIMER_Type *base);
  * @return       none
  */
 void OSTIMER_HandleIRQ(OSTIMER_Type *base, ostimer_callback_t cb);
-/*!
- * @}
- */
+/* @} */
 
 #if defined(__cplusplus)
 }
 #endif
 
-/*!
- * @}
- */
+/*! @}*/
 
 #endif /* _FSL_OSTIMER_H_ */

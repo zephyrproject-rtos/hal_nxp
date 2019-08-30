@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-08-22
-**     Build:               b190122
+**     Build:               b190418
 **
 **     Abstract:
 **         Chip specific module features.
@@ -108,6 +108,8 @@
 
 /* @brief FIFO availability on the SoC. */
 #define FSL_FEATURE_LPADC_FIFO_COUNT (2)
+/* @brief Has subsequent trigger priority (bitfield CFG[TPRICTRL]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY (1)
 /* @brief Has differential mode (bitfield CMDLn[DIFF]). */
 #define FSL_FEATURE_LPADC_HAS_CMDL_DIFF (0)
 /* @brief Has channel scale (bitfield CMDLn[CSCALE]). */
@@ -146,6 +148,15 @@
 
 /* @brief Number of channels */
 #define FSL_FEATURE_DMA_NUMBER_OF_CHANNELS (30)
+/* @brief Align size of DMA descriptor */
+#define FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE (512)
+/* @brief DMA head link descriptor table align size */
+#define FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE (16U)
+
+/* FLEXCOMM module features */
+
+/* @brief I2S has DMIC interconnection */
+#define FSL_FEATURE_FLEXCOMM_INSTANCE_I2S_HAS_DMIC_INTERCONNECTIONn(x) (0)
 
 /* HASHCRYPT module features */
 
@@ -156,6 +167,8 @@
 
 /* @brief I2S support dual channel transfer. */
 #define FSL_FEATURE_I2S_SUPPORT_SECONDARY_CHANNEL (1)
+/* @brief I2S has DMIC interconnection. */
+#define FSL_FEATURE_FLEXCOMM_I2S_HAS_DMIC_INTERCONNECTION  (0)
 
 /* IOCON module features */
 
@@ -175,12 +188,12 @@
 /* PINT module features */
 
 /* @brief Number of connected outputs */
-#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS (10)
+#define FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS (8)
 
 /* POWERLIB module features */
 
-/* @brief Niobe4's Powerlib API is different with other LPC series devices. */
-#define FSL_FEATURE_POWERLIB_NIOBE4_EXTEND (1)
+/* @brief LPC55XX's Powerlib API is different with other LPC series devices. */
+#define FSL_FEATURE_POWERLIB_LPC55XX_EXTEND (1)
 
 /* POWERQUAD module features */
 

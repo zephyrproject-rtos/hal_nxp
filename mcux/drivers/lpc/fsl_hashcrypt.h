@@ -1,10 +1,9 @@
 /*
- * Copyright 2017-2018 NXP
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-
 #ifndef _FSL_HASHCRYPT_H_
 #define _FSL_HASHCRYPT_H_
 
@@ -27,24 +26,28 @@ enum _hashcrypt_status
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief HASHCRYPT driver version. Version 2.0.0.
+/*! @brief HASHCRYPT driver version. Version 2.0.2.
  *
- * Current version: 2.0.0
+ * Current version: 2.0.2
  *
  * Change log:
  * - Version 2.0.0
  *   - Initial version
+ * - Version 2.0.1
+ *   - Support loading AES key from unaligned address
+ * - Version 2.0.2
+ *   - Support loading AES key from unaligned address for different compiler and core variants
  */
-#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*! @brief Algorithm used for Hashcrypt operation */
 typedef enum _hashcrypt_algo_t
 {
-    kHASHCRYPT_Sha1 = 1,   /*!< SHA_1 */
+    kHASHCRYPT_Sha1   = 1, /*!< SHA_1 */
     kHASHCRYPT_Sha256 = 2, /*!< SHA_256 */
     kHASHCRYPT_Sha512 = 3, /*!< SHA_512 */
-    kHASHCRYPT_Aes = 4,    /*!< AES */
+    kHASHCRYPT_Aes    = 4, /*!< AES */
     kHASHCRYPT_AesIcb = 5, /*!< AES_ICB */
 } hashcrypt_algo_t;
 
@@ -75,9 +78,9 @@ typedef enum _hashcrypt_aes_mode_t
 /*! @brief Size of AES key */
 typedef enum _hashcrypt_aes_keysize_t
 {
-    kHASHCRYPT_Aes128 = 0U,     /*!< AES 128 bit key */
-    kHASHCRYPT_Aes192 = 1U,     /*!< AES 192 bit key */
-    kHASHCRYPT_Aes256 = 2U,     /*!< AES 256 bit key */
+    kHASHCRYPT_Aes128     = 0U, /*!< AES 128 bit key */
+    kHASHCRYPT_Aes192     = 1U, /*!< AES 192 bit key */
+    kHASHCRYPT_Aes256     = 2U, /*!< AES 256 bit key */
     kHASHCRYPT_InvalidKey = 3U, /*!< AES invalid key */
 } hashcrypt_aes_keysize_t;
 
@@ -86,17 +89,19 @@ typedef enum _hashcrypt_aes_keysize_t
  */
 typedef enum _hashcrypt_key
 {
-    kHASHCRYPT_UserKey = 0xc3c3U,   /*!< HASHCRYPT user key */
+    kHASHCRYPT_UserKey   = 0xc3c3U, /*!< HASHCRYPT user key */
     kHASHCRYPT_SecretKey = 0x3c3cU, /*!< HASHCRYPT secret key (dedicated hw bus from PUF) */
 } hashcrypt_key_t;
 
 /*! @brief Specify HASHCRYPT's key resource. */
-typedef struct _hashcrypt_handle
+struct _hashcrypt_handle
 {
     uint32_t keyWord[8]; /*!< Copy of user key (set by HASHCRYPT_AES_SetKey(). */
     hashcrypt_aes_keysize_t keySize;
     hashcrypt_key_t keyType; /*!< For operations with key (such as AES encryption/decryption), specify key type. */
-} hashcrypt_handle_t;
+} __attribute__((aligned));
+
+typedef struct _hashcrypt_handle hashcrypt_handle_t;
 
 /*!
  *@}
@@ -363,9 +368,9 @@ status_t HASHCRYPT_SHA_Finish(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, u
  */ /* end of hashcrypt_driver_hash */
 
 /*!
-* @addtogroup hashcrypt_background_driver_hash
-* @{
-*/
+ * @addtogroup hashcrypt_background_driver_hash
+ * @{
+ */
 
 /*!
  * @brief Initializes the HASHCRYPT handle for background hashing.
@@ -389,22 +394,22 @@ void HASHCRYPT_SHA_SetCallback(HASHCRYPT_Type *base,
                                void *userData);
 
 /*!
-* @brief Create running hash on given data.
-*
-* Configures the HASHCRYPT to compute new running hash as AHB master
-* and returns immediately. HASHCRYPT AHB Master mode supports only aligned \p input
-* address and can be called only once per continuous block of data. Every call to this function
-* must be preceded with HASHCRYPT_SHA_Init() and finished with HASHCRYPT_SHA_Finish().
-* Once callback function is invoked by HASHCRYPT isr, it should set a flag
-* for the main application to finalize the hashing (padding) and to read out the final digest
-* by calling HASHCRYPT_SHA_Finish().
-*
-* @param base HASHCRYPT peripheral base address
-* @param ctx Specifies callback. Last incomplete 512-bit block of the input is copied into clear buffer for padding.
-* @param input 32-bit word aligned pointer to Input data.
-* @param inputSize Size of input data in bytes (must be word aligned)
-* @return Status of the hash update operation.
-*/
+ * @brief Create running hash on given data.
+ *
+ * Configures the HASHCRYPT to compute new running hash as AHB master
+ * and returns immediately. HASHCRYPT AHB Master mode supports only aligned \p input
+ * address and can be called only once per continuous block of data. Every call to this function
+ * must be preceded with HASHCRYPT_SHA_Init() and finished with HASHCRYPT_SHA_Finish().
+ * Once callback function is invoked by HASHCRYPT isr, it should set a flag
+ * for the main application to finalize the hashing (padding) and to read out the final digest
+ * by calling HASHCRYPT_SHA_Finish().
+ *
+ * @param base HASHCRYPT peripheral base address
+ * @param ctx Specifies callback. Last incomplete 512-bit block of the input is copied into clear buffer for padding.
+ * @param input 32-bit word aligned pointer to Input data.
+ * @param inputSize Size of input data in bytes (must be word aligned)
+ * @return Status of the hash update operation.
+ */
 status_t HASHCRYPT_SHA_UpdateNonBlocking(HASHCRYPT_Type *base,
                                          hashcrypt_hash_ctx_t *ctx,
                                          const uint8_t *input,

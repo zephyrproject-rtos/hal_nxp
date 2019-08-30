@@ -1,11 +1,12 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_ostimer.h"
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -43,9 +44,6 @@ static const IRQn_Type s_ostimerIRQ[] = OSTIMER_IRQS;
 /* Array of OSTIMER clock name. */
 static const clock_ip_name_t s_ostimerClock[] = OSTIMER_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
-/* Array of OSTIMER reset name. */
-static const reset_ip_name_t s_ostimerReset[] = OSTIMER_RSTS;
 
 /* OSTIMER ISR for transactional APIs. */
 static ostimer_isr_t s_ostimerIsr;
@@ -93,9 +91,9 @@ static uint64_t OSTIMER_DecimalToGray(uint64_t dec)
 }
 
 /*!
-* @brief Initializes an OSTIMER by turning it's clock on.
-*
-*/
+ * @brief Initializes an OSTIMER by turning it's clock on.
+ *
+ */
 void OSTIMER_Init(OSTIMER_Type *base)
 {
     assert(base);
@@ -103,17 +101,14 @@ void OSTIMER_Init(OSTIMER_Type *base)
     uint32_t instance = OSTIMER_GetInstance(base);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+#if !(defined(FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG) && FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG)
     /* Enable the OSTIMER 32k clock in PMC module. */
     PMC->OSTIMERr |= PMC_OSTIMER_CLOCKENABLE_MASK;
     PMC->OSTIMERr &= ~PMC_OSTIMER_OSC32KPD_MASK;
+#endif
     /* Enable clock for OSTIMER. */
     CLOCK_EnableClock(s_ostimerClock[instance]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
-#if !(defined(FSL_FEATURE_OSTIMER_HAS_NO_RESET) && FSL_FEATURE_OSTIMER_HAS_NO_RESET)
-    /* Reset the OSTIMER. */
-    RESET_PeripheralReset(s_ostimerReset[instance]);
-#endif
 }
 
 /*!
@@ -174,23 +169,22 @@ void OSTIMER_ClearStatusFlags(OSTIMER_Type *base, uint32_t mask)
  */
 void OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb)
 {
-    uint64_t tmp = count;
-    uint32_t instance = OSTIMER_GetInstance(base);
-
-    s_ostimerIsr = OSTIMER_HandleIRQ;
+    uint64_t tmp              = count;
+    uint32_t instance         = OSTIMER_GetInstance(base);
+    s_ostimerIsr              = OSTIMER_HandleIRQ;
     s_ostimerHandle[instance] = cb;
 
     /* Set the match value. */
     base->MATCHN_L = tmp;
     base->MATCHN_H = tmp >> 32U;
 
-    /*
-     * Enable deep sleep IRQ directly for some times the OS timer may run in deep sleep mode.
-     * Please note that while enabling deep sleep IRQ, the NVIC will be also enabled.
-     */
+    /* Enable IRQ for generating call back function. */
     base->OSEVENT_CTRL |= OSTIMER_OSEVENT_CTRL_OSTIMER_INTENA_MASK;
+#if !(defined(FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG) && FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG)
     PMC->OSTIMERr |= PMC_OSTIMER_DPDWAKEUPENABLE_MASK;
-    EnableDeepSleepIRQ(s_ostimerIRQ[instance]);
+#endif
+
+    EnableIRQ(s_ostimerIRQ[instance]);
 }
 
 /*!

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPADC driver version 2.0.3. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief LPADC driver version 2.1.1. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*!
@@ -136,13 +136,13 @@ typedef enum _lpadc_sample_channel_mode
  */
 typedef enum _lpadc_hardware_average_mode
 {
-    kLPADC_HardwareAverageCount1 = 0U,   /*!< Single conversion. */
-    kLPADC_HardwareAverageCount2 = 1U,   /*!< 2 conversions averaged. */
-    kLPADC_HardwareAverageCount4 = 2U,   /*!< 4 conversions averaged. */
-    kLPADC_HardwareAverageCount8 = 3U,   /*!< 8 conversions averaged. */
-    kLPADC_HardwareAverageCount16 = 4U,  /*!< 16 conversions averaged. */
-    kLPADC_HardwareAverageCount32 = 5U,  /*!< 32 conversions averaged. */
-    kLPADC_HardwareAverageCount64 = 6U,  /*!< 64 conversions averaged. */
+    kLPADC_HardwareAverageCount1   = 0U, /*!< Single conversion. */
+    kLPADC_HardwareAverageCount2   = 1U, /*!< 2 conversions averaged. */
+    kLPADC_HardwareAverageCount4   = 2U, /*!< 4 conversions averaged. */
+    kLPADC_HardwareAverageCount8   = 3U, /*!< 8 conversions averaged. */
+    kLPADC_HardwareAverageCount16  = 4U, /*!< 16 conversions averaged. */
+    kLPADC_HardwareAverageCount32  = 5U, /*!< 32 conversions averaged. */
+    kLPADC_HardwareAverageCount64  = 6U, /*!< 64 conversions averaged. */
     kLPADC_HardwareAverageCount128 = 7U, /*!< 128 conversions averaged. */
 } lpadc_hardware_average_mode_t;
 
@@ -155,13 +155,13 @@ typedef enum _lpadc_hardware_average_mode
  */
 typedef enum _lpadc_sample_time_mode
 {
-    kLPADC_SampleTimeADCK3 = 0U,   /*!< 3 ADCK cycles total sample time. */
-    kLPADC_SampleTimeADCK5 = 1U,   /*!< 5 ADCK cycles total sample time. */
-    kLPADC_SampleTimeADCK7 = 2U,   /*!< 7 ADCK cycles total sample time. */
-    kLPADC_SampleTimeADCK11 = 3U,  /*!< 11 ADCK cycles total sample time. */
-    kLPADC_SampleTimeADCK19 = 4U,  /*!< 19 ADCK cycles total sample time. */
-    kLPADC_SampleTimeADCK35 = 5U,  /*!< 35 ADCK cycles total sample time. */
-    kLPADC_SampleTimeADCK67 = 6U,  /*!< 69 ADCK cycles total sample time. */
+    kLPADC_SampleTimeADCK3   = 0U, /*!< 3 ADCK cycles total sample time. */
+    kLPADC_SampleTimeADCK5   = 1U, /*!< 5 ADCK cycles total sample time. */
+    kLPADC_SampleTimeADCK7   = 2U, /*!< 7 ADCK cycles total sample time. */
+    kLPADC_SampleTimeADCK11  = 3U, /*!< 11 ADCK cycles total sample time. */
+    kLPADC_SampleTimeADCK19  = 4U, /*!< 19 ADCK cycles total sample time. */
+    kLPADC_SampleTimeADCK35  = 5U, /*!< 35 ADCK cycles total sample time. */
+    kLPADC_SampleTimeADCK67  = 6U, /*!< 69 ADCK cycles total sample time. */
     kLPADC_SampleTimeADCK131 = 7U, /*!< 131 ADCK cycles total sample time. */
 } lpadc_sample_time_mode_t;
 
@@ -174,8 +174,8 @@ typedef enum _lpadc_sample_time_mode
  */
 typedef enum _lpadc_hardware_compare_mode
 {
-    kLPADC_HardwareCompareDisabled = 0U,        /*!< Compare disabled. */
-    kLPADC_HardwareCompareStoreOnTrue = 2U,     /*!< Compare enabled. Store on true. */
+    kLPADC_HardwareCompareDisabled        = 0U, /*!< Compare disabled. */
+    kLPADC_HardwareCompareStoreOnTrue     = 2U, /*!< Compare enabled. Store on true. */
     kLPADC_HardwareCompareRepeatUntilTrue = 3U, /*!< Compare enabled. Repeat channel acquisition until true. */
 } lpadc_hardware_compare_mode_t;
 
@@ -201,13 +201,13 @@ typedef enum _lpadc_conversion_resolution_mode
  */
 typedef enum _lpadc_conversion_average_mode
 {
-    kLPADC_ConversionAverage1 = 0U,   /*!< Single conversion. */
-    kLPADC_ConversionAverage2 = 1U,   /*!< 2 conversions averaged. */
-    kLPADC_ConversionAverage4 = 2U,   /*!< 4 conversions averaged. */
-    kLPADC_ConversionAverage8 = 3U,   /*!< 8 conversions averaged. */
-    kLPADC_ConversionAverage16 = 4U,  /*!< 16 conversions averaged. */
-    kLPADC_ConversionAverage32 = 5U,  /*!< 32 conversions averaged. */
-    kLPADC_ConversionAverage64 = 6U,  /*!< 64 conversions averaged. */
+    kLPADC_ConversionAverage1   = 0U, /*!< Single conversion. */
+    kLPADC_ConversionAverage2   = 1U, /*!< 2 conversions averaged. */
+    kLPADC_ConversionAverage4   = 2U, /*!< 4 conversions averaged. */
+    kLPADC_ConversionAverage8   = 3U, /*!< 8 conversions averaged. */
+    kLPADC_ConversionAverage16  = 4U, /*!< 16 conversions averaged. */
+    kLPADC_ConversionAverage32  = 5U, /*!< 32 conversions averaged. */
+    kLPADC_ConversionAverage64  = 6U, /*!< 64 conversions averaged. */
     kLPADC_ConversionAverage128 = 7U, /*!< 128 conversions averaged. */
 } lpadc_conversion_average_mode_t;
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS */
@@ -252,10 +252,11 @@ typedef enum _lpadc_trigger_priority_policy
                                                     the current conversion is completed (including averaging iterations
                                                     and compare function if enabled) and stored to the result FIFO
                                                     before the higher priority trigger/command is initiated. */
-    kLPADC_TriggerPriorityPreemptSubsequently =
-        2U, /*!< If a higher priority trigger is received during command processing, the current
-            command will be completed (averaging, looping, compare) before servicing the
-            higher priority trigger. */
+#if defined(FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY) && FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY
+    kLPADC_TriggerPriorityPreemptSubsequently = 2U, /*!< If a higher priority trigger is received during command
+                                                    processing, the current command will be completed (averaging,
+                                                    looping, compare) before servicing the higher priority trigger. */
+#endif                                              /* FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY */
 } lpadc_trigger_priority_policy_t;
 
 /*!
@@ -300,15 +301,13 @@ typedef struct
                                   function is enabled. The available value range is in 9-bit. */
 #if (defined(FSL_FEATURE_LPADC_FIFO_COUNT) && (FSL_FEATURE_LPADC_FIFO_COUNT == 2))
     /* for FIFO0. */
-    uint32_t
-        FIFO0Watermark; /*!< FIFO0Watermark is a programmable threshold setting. When the number of datawords stored
-                            in the ADC Result FIFO0 is greater than the value in this field, the ready flag would be
-                            asserted to indicate stored data has reached the programmable threshold. */
+    uint32_t FIFO0Watermark; /*!< FIFO0Watermark is a programmable threshold setting. When the number of datawords
+                                stored in the ADC Result FIFO0 is greater than the value in this field, the ready flag
+                                would be asserted to indicate stored data has reached the programmable threshold. */
     /* for FIFO1. */
-    uint32_t
-        FIFO1Watermark; /*!< FIFO1Watermark is a programmable threshold setting. When the number of datawords stored
-                            in the ADC Result FIFO1 is greater than the value in this field, the ready flag would be
-                            asserted to indicate stored data has reached the programmable threshold. */
+    uint32_t FIFO1Watermark; /*!< FIFO1Watermark is a programmable threshold setting. When the number of datawords
+                                stored in the ADC Result FIFO1 is greater than the value in this field, the ready flag
+                                would be asserted to indicate stored data has reached the programmable threshold. */
 #else
     /* for FIFO. */
     uint32_t FIFOWatermark; /*!< FIFOWatermark is a programmable threshold setting. When the number of datawords stored
@@ -766,17 +765,15 @@ static inline void LPADC_SetOffsetValue(ADC_Type *base, uint32_t value)
 }
 
 /*!
-* @brief Do auto calibration.
-*
-* Calibration function should be executed before using converter in application. It used the software trigger and a
-* dummy conversion, get the offset and write them into the OFSTRIM register. It called some of functional API including:
-*   -LPADC_EnableCalibration(...)
-*   -LPADC_LPADC_SetOffsetValue(...)
-*   -LPADC_SetConvCommandConfig(...)
-*   -LPADC_SetConvTriggerConfig(...)
-*
-* @param base  LPADC peripheral base address.
-*/
+ * @brief Do auto calibration.
+ *
+ * Calibration function should be executed before using converter in application. It used the software trigger and a
+ * dummy conversion, get the offset and write them into the OFSTRIM register. It called some of functional API
+ * including: -LPADC_EnableCalibration(...) -LPADC_LPADC_SetOffsetValue(...) -LPADC_SetConvCommandConfig(...)
+ *   -LPADC_SetConvTriggerConfig(...)
+ *
+ * @param base  LPADC peripheral base address.
+ */
 void LPADC_DoAutoCalibration(ADC_Type *base);
 #endif /* FSL_FEATURE_LPADC_HAS_OFSTRIM */
 #endif /* FSL_FEATURE_LPADC_HAS_CFG_CALOFS */

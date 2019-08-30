@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 NXP
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -56,7 +56,7 @@ typedef struct _hashcrypt_sha_ctx_internal
 /*!< SHA-1 and SHA-256 digest length in bytes  */
 enum _hashcrypt_sha_digest_len
 {
-    kHASHCRYPT_OutLenSha1 = 20u,
+    kHASHCRYPT_OutLenSha1   = 20u,
     kHASHCRYPT_OutLenSha256 = 32u,
 };
 
@@ -109,6 +109,87 @@ static void ctrIncrement(uint8_t *input)
 }
 
 /*!
+ * @brief Reads an unaligned word.
+ *
+ * This function creates a 32-bit word from an input array of four bytes.
+ *
+ * @param src Input array of four bytes. The array can start at any address in memory.
+ * @return 32-bit unsigned int created from the input byte array.
+ */
+
+/* Force lower optimization for Keil, otherwise it replaces inline LDR with LDM */
+#if defined(__CC_ARM)
+#pragma push
+#pragma O0
+#endif
+
+static inline uint32_t hashcrypt_get_word_from_unaligned(const uint8_t *srcAddr)
+{
+#if (!(defined(__CORTEX_M)) || (defined(__CORTEX_M) && (__CORTEX_M == 0)))
+    register const uint8_t *src = srcAddr;
+    /* Cortex M0 does not support misaligned loads */
+    if (0U != ((uint32_t)src & 0x3u))
+    {
+        union _align_bytes_t
+        {
+            uint32_t word;
+            uint8_t byte[sizeof(uint32_t)];
+        } my_bytes;
+
+        my_bytes.byte[0] = *src;
+        my_bytes.byte[1] = src[1];
+        my_bytes.byte[2] = src[2];
+        my_bytes.byte[3] = src[3];
+        return my_bytes.word;
+    }
+    else
+    {
+        /* addr aligned to 0-modulo-4 so it is safe to type cast */
+        return *((const uint32_t *)(uint32_t)src);
+    }
+#elif defined(__CC_ARM)
+    /* -O3 optimization in Keil 5.15 and 5.16a uses LDM instruction here (LDM r4!, {r0})
+     *    which is wrong, because srcAddr might be unaligned.
+     *    LDM on unaligned address causes hard-fault. in contrary,
+     *    LDR supports unaligned address on Cortex M4 */
+
+    register uint32_t retVal;
+    __asm
+    {
+        LDR retVal, [srcAddr]
+    }
+    return retVal;
+#else
+    return *((const uint32_t *)srcAddr);
+#endif
+}
+
+/* End lower optimization */
+#if defined(__CC_ARM)
+#pragma pop
+#endif
+
+static status_t hashcrypt_get_key_from_unaligned_src(uint8_t *dest, const uint8_t *src, size_t size)
+{
+    status_t retVal = kStatus_InvalidArgument;
+    uint32_t i;
+
+    /* destination is SDK driver internal workspace and it must be aligned */
+    assert(0x0 == ((uint32_t)dest & 0x1u));
+    if ((uint32_t)dest & 0x1u)
+    {
+        return retVal;
+    }
+
+    for (i = 0; i < ((uint32_t)size / 4u); i++)
+    {
+        ((uint32_t *)dest)[i] = hashcrypt_get_word_from_unaligned(&src[i * sizeof(uint32_t)]);
+    }
+
+    return kStatus_Success;
+}
+
+/*!
  * @brief LDM to SHA engine INDATA and ALIAS registers.
  *
  * This function writes 16 words starting from the src address (must be word aligned)
@@ -132,7 +213,7 @@ __STATIC_FORCEINLINE void hashcrypt_sha_ldm_stm_16_words(HASHCRYPT_Type *base, c
     *ldst = lsrc[0];
     *ldst = lsrc[1];
     */
-    base->MEMADDR = FSL_FEATURE_HASHCRYPT_ALIAS_OFFSET | HASHCRYPT_MEMADDR_BASE(src);
+    base->MEMADDR = HASHCRYPT_MEMADDR_BASE(src);
     base->MEMCTRL = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(1);
 }
 
@@ -252,7 +333,7 @@ static void hashcrypt_aes_load_userKey(HASHCRYPT_Type *base, hashcrypt_handle_t 
 static status_t hashcrypt_aes_one_block(HASHCRYPT_Type *base, const uint8_t *input, uint8_t *output, size_t size)
 {
     status_t status = kStatus_Fail;
-    int idx = 0;
+    int idx         = 0;
 
     /* we use AHB master mode as much as possible */
     /* however, it can work only with aligned input data */
@@ -264,13 +345,13 @@ static status_t hashcrypt_aes_one_block(HASHCRYPT_Type *base, const uint8_t *inp
         int cnt = 0;
         while (size)
         {
-            size_t actSz = size >= 256u ? 256u : size;
+            size_t actSz     = size >= 256u ? 256u : size;
             size_t actSzOrig = actSz;
             memcpy(temp, input + 256 * cnt, actSz);
             size -= actSz;
-            base->MEMADDR = FSL_FEATURE_HASHCRYPT_ALIAS_OFFSET | HASHCRYPT_MEMADDR_BASE(temp);
+            base->MEMADDR = HASHCRYPT_MEMADDR_BASE(temp);
             base->MEMCTRL = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(actSz / 16);
-            int outidx = 0;
+            int outidx    = 0;
             while (actSz)
             {
                 while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_MASK))
@@ -289,7 +370,7 @@ static status_t hashcrypt_aes_one_block(HASHCRYPT_Type *base, const uint8_t *inp
     }
     else
     {
-        base->MEMADDR = FSL_FEATURE_HASHCRYPT_ALIAS_OFFSET | HASHCRYPT_MEMADDR_BASE(input);
+        base->MEMADDR = HASHCRYPT_MEMADDR_BASE(input);
         base->MEMCTRL = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(size / 16);
         while (size >= HASHCRYPT_AES_BLOCK_SIZE)
         {
@@ -463,10 +544,10 @@ static status_t hashcrypt_sha_process_message_data(HASHCRYPT_Type *base,
             while (0 == (base->STATUS & HASHCRYPT_STATUS_WAITING_MASK))
             {
             }
-            uint32_t blkNum = (messageSize >> 6); /* div by 64 bytes */
-            uint32_t blkBytes = blkNum * 64u;     /* number of bytes in 64 bytes blocks */
-            base->MEMADDR = FSL_FEATURE_HASHCRYPT_ALIAS_OFFSET | HASHCRYPT_MEMADDR_BASE(message);
-            base->MEMCTRL = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(blkNum);
+            uint32_t blkNum   = (messageSize >> 6); /* div by 64 bytes */
+            uint32_t blkBytes = blkNum * 64u;       /* number of bytes in 64 bytes blocks */
+            base->MEMADDR     = HASHCRYPT_MEMADDR_BASE(message);
+            base->MEMCTRL     = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(blkNum);
             message += blkBytes;
             messageSize -= blkBytes;
             while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_MASK))
@@ -501,7 +582,7 @@ static status_t hashcrypt_sha_finalize(HASHCRYPT_Type *base, hashcrypt_sha_ctx_i
     {
         /* last data is 440 bits or less. */
         hashcrypt_memcpy(&lastBlock.b[0], &ctxInternal->blk.b[0], ctxInternal->blksz);
-        lastBlock.b[ctxInternal->blksz] = (uint8_t)0x80U;
+        lastBlock.b[ctxInternal->blksz]     = (uint8_t)0x80U;
         lastBlock.w[SHA_BLOCK_SIZE / 4 - 1] = swap_bytes(8u * ctxInternal->fullMessageSize);
         hashcrypt_sha_one_block(base, &lastBlock.b[0]);
     }
@@ -531,19 +612,6 @@ static status_t hashcrypt_sha_finalize(HASHCRYPT_Type *base, hashcrypt_sha_ctx_i
     return kStatus_Success;
 }
 
-/*!
- * brief Create HASH on given data
- *
- * Perform the full SHA in one function call. The function is blocking.
- *
- * param base HASHCRYPT peripheral base address
- * param algo Underlaying algorithm to use for hash computation.
- * param input Input data
- * param inputSize Size of input data in bytes
- * param[out] output Output hash data
- * param[out] outputSize Output parameter storing the size of the output hash in bytes
- * return Status of the one call hash operation.
- */
 status_t HASHCRYPT_SHA(HASHCRYPT_Type *base,
                        hashcrypt_algo_t algo,
                        const uint8_t *input,
@@ -571,16 +639,6 @@ status_t HASHCRYPT_SHA(HASHCRYPT_Type *base,
     return status;
 }
 
-/*!
- * brief Initialize HASH context
- *
- * This function initializes the HASH.
- *
- * param base HASHCRYPT peripheral base address
- * param[out] ctx Output hash context
- * param algo Underlaying algorithm to use for hash computation.
- * return Status of initialization
- */
 status_t HASHCRYPT_SHA_Init(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, hashcrypt_algo_t algo)
 {
     status_t status;
@@ -596,8 +654,8 @@ status_t HASHCRYPT_SHA_Init(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, has
     }
 
     /* set algorithm in context struct for later use */
-    ctxInternal = (hashcrypt_sha_ctx_internal_t *)ctx;
-    ctxInternal->algo = algo;
+    ctxInternal        = (hashcrypt_sha_ctx_internal_t *)ctx;
+    ctxInternal->algo  = algo;
     ctxInternal->blksz = 0u;
 #ifdef HASHCRYPT_SHA_DO_WIPE_CONTEXT
     for (int i = 0; i < sizeof(ctxInternal->blk.w) / sizeof(ctxInternal->blk.w[0]); i++)
@@ -605,26 +663,11 @@ status_t HASHCRYPT_SHA_Init(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, has
         ctxInternal->blk.w[i] = 0u;
     }
 #endif /* HASHCRYPT_SHA_DO_WIPE_CONTEXT */
-    ctxInternal->state = kHASHCRYPT_HashInit;
+    ctxInternal->state           = kHASHCRYPT_HashInit;
     ctxInternal->fullMessageSize = 0;
     return kStatus_Success;
 }
 
-/*!
- * brief Add data to current HASH
- *
- * Add data to current HASH. This can be called repeatedly with an arbitrary amount of data to be
- * hashed. The functions blocks. If it returns kStatus_Success, the running hash
- * has been updated (HASHCRYPT has processed the input data), so the memory at \p input pointer
- * can be released back to system. The HASHCRYPT context buffer is updated with the running hash
- * and with all necessary information to support possible context switch.
- *
- * param base HASHCRYPT peripheral base address
- * param[in,out] ctx HASH context
- * param input Input data
- * param inputSize Size of input data in bytes
- * return Status of the hash update operation
- */
 status_t HASHCRYPT_SHA_Update(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, const uint8_t *input, size_t inputSize)
 {
     bool isUpdateState;
@@ -671,18 +714,6 @@ status_t HASHCRYPT_SHA_Update(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, c
     return status;
 }
 
-/*!
- * brief Finalize hashing
- *
- * Outputs the final hash (computed by HASHCRYPT_HASH_Update()) and erases the context.
- *
- * param base HASHCRYPT peripheral base address
- * param[in,out] ctx Input hash context
- * param[out] output Output hash data
- * param[in,out] outputSize Optional parameter (can be passed as NULL). On function entry, it specifies the size of
- * output[] buffer. On function return, it stores the number of updated output bytes.
- * return Status of the hash finish operation
- */
 status_t HASHCRYPT_SHA_Finish(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, uint8_t *output, size_t *outputSize)
 {
     size_t algOutSize = 0;
@@ -755,22 +786,6 @@ status_t HASHCRYPT_SHA_Finish(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, u
     return status;
 }
 
-/*!
- * brief Initializes the HASHCRYPT handle for background hashing.
- *
- * This function initializes the hash context for background hashing
- * (Non-blocking) APIs. This is less typical interface to hash function, but can be used
- * for parallel processing, when main CPU has something else to do.
- * Example is digital signature RSASSA-PKCS1-V1_5-VERIFY((n,e),M,S) algorithm, where
- * background hashing of M can be started, then CPU can compute S^e mod n
- * (in parallel with background hashing) and once the digest becomes available,
- * CPU can proceed to comparison of EM with EM'.
- *
- * param base HASHCRYPT peripheral base address.
- * param[out] ctx Hash context.
- * param callback Callback function.
- * param userData User data (to be passed as an argument to callback function, once callback is invoked from isr).
- */
 void HASHCRYPT_SHA_SetCallback(HASHCRYPT_Type *base,
                                hashcrypt_hash_ctx_t *ctx,
                                hashcrypt_callback_t callback,
@@ -778,31 +793,14 @@ void HASHCRYPT_SHA_SetCallback(HASHCRYPT_Type *base,
 {
     hashcrypt_sha_ctx_internal_t *ctxInternal;
 
-    s_ctx = ctx;
-    ctxInternal = (hashcrypt_sha_ctx_internal_t *)ctx;
+    s_ctx                     = ctx;
+    ctxInternal               = (hashcrypt_sha_ctx_internal_t *)ctx;
     ctxInternal->hashCallback = callback;
-    ctxInternal->userData = userData;
+    ctxInternal->userData     = userData;
 
     EnableIRQ(HASHCRYPT_IRQn);
 }
 
-/*!
-* brief Create running hash on given data.
-*
-* Configures the HASHCRYPT to compute new running hash as AHB master
-* and returns immediately. HASHCRYPT AHB Master mode supports only aligned \p input
-* address and can be called only once per continuous block of data. Every call to this function
-* must be preceded with HASHCRYPT_SHA_Init() and finished with HASHCRYPT_SHA_Finish().
-* Once callback function is invoked by HASHCRYPT isr, it should set a flag
-* for the main application to finalize the hashing (padding) and to read out the final digest
-* by calling HASHCRYPT_SHA_Finish().
-*
-* param base HASHCRYPT peripheral base address
-* param ctx Specifies callback. Last incomplete 512-bit block of the input is copied into clear buffer for padding.
-* param input 32-bit word aligned pointer to Input data.
-* param inputSize Size of input data in bytes (must be word aligned)
-* return Status of the hash update operation.
-*/
 status_t HASHCRYPT_SHA_UpdateNonBlocking(HASHCRYPT_Type *base,
                                          hashcrypt_hash_ctx_t *ctx,
                                          const uint8_t *input,
@@ -823,15 +821,15 @@ status_t HASHCRYPT_SHA_UpdateNonBlocking(HASHCRYPT_Type *base,
     }
 
     ctxInternal = (hashcrypt_sha_ctx_internal_t *)ctx;
-    status = hashcrypt_sha_check_context(base, ctxInternal);
+    status      = hashcrypt_sha_check_context(base, ctxInternal);
     if (kStatus_Success != status)
     {
         return status;
     }
 
     ctxInternal->fullMessageSize = inputSize;
-    ctxInternal->remainingBlcks = inputSize / SHA_BLOCK_SIZE;
-    ctxInternal->blksz = inputSize % SHA_BLOCK_SIZE;
+    ctxInternal->remainingBlcks  = inputSize / SHA_BLOCK_SIZE;
+    ctxInternal->blksz           = inputSize % SHA_BLOCK_SIZE;
 
     /* copy last incomplete block to context */
     if ((ctxInternal->blksz > 0) && (ctxInternal->blksz <= SHA_BLOCK_SIZE))
@@ -859,8 +857,8 @@ status_t HASHCRYPT_SHA_UpdateNonBlocking(HASHCRYPT_Type *base,
 
         /* Enable digest and error interrupts and start hash */
         base->INTENSET = HASHCRYPT_INTENCLR_DIGEST_MASK | HASHCRYPT_INTENCLR_ERROR_MASK;
-        base->MEMADDR = FSL_FEATURE_HASHCRYPT_ALIAS_OFFSET | HASHCRYPT_MEMADDR_BASE(input);
-        base->MEMCTRL = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(numBlocks);
+        base->MEMADDR  = HASHCRYPT_MEMADDR_BASE(input);
+        base->MEMCTRL  = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(numBlocks);
     }
     /* no full blocks, invoke callback directly */
     else
@@ -871,21 +869,11 @@ status_t HASHCRYPT_SHA_UpdateNonBlocking(HASHCRYPT_Type *base,
     return status;
 }
 
-/*!
- * brief Set AES key to hashcrypt_handle_t struct and optionally to HASHCRYPT.
- *
- * Sets the AES key for encryption/decryption with the hashcrypt_handle_t structure.
- * The hashcrypt_handle_t input argument specifies key source.
- *
- * param   base HASHCRYPT peripheral base address.
- * param   handle Handle used for the request.
- * param   key 0-mod-4 aligned pointer to AES key.
- * param   keySize AES key size in bytes. Shall equal 16, 24 or 32.
- * return  status from set key operation
- */
-status_t HASHCRYPT_AES_SetKey(HASHCRYPT_Type *base, hashcrypt_handle_t *handle, const uint8_t *key, size_t aesKeySize)
+status_t HASHCRYPT_AES_SetKey(HASHCRYPT_Type *base, hashcrypt_handle_t *handle, const uint8_t *key, size_t keySize)
 {
-    switch (aesKeySize)
+    status_t retVal = kStatus_InvalidArgument;
+
+    switch (keySize)
     {
         case 16:
             handle->keySize = kHASHCRYPT_Aes128;
@@ -903,52 +891,26 @@ status_t HASHCRYPT_AES_SetKey(HASHCRYPT_Type *base, hashcrypt_handle_t *handle, 
 
     if (handle->keySize == kHASHCRYPT_InvalidKey)
     {
-        return kStatus_InvalidArgument;
+        return retVal;
     }
 
     if (handle->keyType == kHASHCRYPT_SecretKey)
     {
         /* for kHASHCRYPT_SecretKey just return Success */
-        return kStatus_Success;
+        retVal = kStatus_Success;
     }
     else if (handle->keyType == kHASHCRYPT_UserKey)
     {
-        /* only work with aligned key[] */
-        if (0x3U & (uintptr_t)key)
-        {
-            return kStatus_InvalidArgument;
-        }
-
-        /* move the key by 32-bit words */
-        int i = 0;
-        while (aesKeySize)
-        {
-            aesKeySize -= sizeof(uint32_t);
-            handle->keyWord[i] = ((uint32_t *)(uintptr_t)key)[i];
-            i++;
-        }
+        retVal = hashcrypt_get_key_from_unaligned_src((uint8_t *)&handle->keyWord[0], key, keySize);
     }
     else
     {
-        return kStatus_InvalidArgument;
+        retVal = kStatus_InvalidArgument;
     }
 
-    return kStatus_Success;
+    return retVal;
 }
 
-/*!
- * brief Encrypts AES on one or multiple 128-bit block(s).
- *
- * Encrypts AES.
- * The source plaintext and destination ciphertext can overlap in system memory.
- *
- * param base HASHCRYPT peripheral base address
- * param handle Handle used for this request.
- * param plaintext Input plain text to encrypt
- * param[out] ciphertext Output cipher text
- * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * return Status from encrypt operation
- */
 status_t HASHCRYPT_AES_EncryptEcb(
     HASHCRYPT_Type *base, hashcrypt_handle_t *handle, const uint8_t *plaintext, uint8_t *ciphertext, size_t size)
 {
@@ -960,7 +922,7 @@ status_t HASHCRYPT_AES_EncryptEcb(
     }
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0 : 1u;
-    base->CRYPTCFG = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesEcb) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
+    base->CRYPTCFG   = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesEcb) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
                      HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |
                      HASHCRYPT_CRYPTCFG_MSW1ST_OUT(1) | HASHCRYPT_CRYPTCFG_SWAPKEY(1) | HASHCRYPT_CRYPTCFG_SWAPDAT(1) |
                      HASHCRYPT_CRYPTCFG_MSW1ST(1);
@@ -979,19 +941,6 @@ status_t HASHCRYPT_AES_EncryptEcb(
     return status;
 }
 
-/*!
- * brief Decrypts AES on one or multiple 128-bit block(s).
- *
- * Decrypts AES.
- * The source ciphertext and destination plaintext can overlap in system memory.
- *
- * param base HASHCRYPT peripheral base address
- * param handle Handle used for this request.
- * param ciphertext Input plain text to encrypt
- * param[out] plaintext Output cipher text
- * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * return Status from decrypt operation
- */
 status_t HASHCRYPT_AES_DecryptEcb(
     HASHCRYPT_Type *base, hashcrypt_handle_t *handle, const uint8_t *ciphertext, uint8_t *plaintext, size_t size)
 {
@@ -1003,7 +952,7 @@ status_t HASHCRYPT_AES_DecryptEcb(
     }
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0 : 1u;
-    base->CRYPTCFG = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesEcb) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_DECRYPT) |
+    base->CRYPTCFG   = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesEcb) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_DECRYPT) |
                      HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |
                      HASHCRYPT_CRYPTCFG_MSW1ST_OUT(1) | HASHCRYPT_CRYPTCFG_SWAPKEY(1) | HASHCRYPT_CRYPTCFG_SWAPDAT(1) |
                      HASHCRYPT_CRYPTCFG_MSW1ST(1);
@@ -1022,17 +971,6 @@ status_t HASHCRYPT_AES_DecryptEcb(
     return status;
 }
 
-/*!
- * brief Encrypts AES using CBC block mode.
- *
- * param base HASHCRYPT peripheral base address
- * param handle Handle used for this request.
- * param plaintext Input plain text to encrypt
- * param[out] ciphertext Output cipher text
- * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * param iv Input initial vector to combine with the first input block.
- * return Status from encrypt operation
- */
 status_t HASHCRYPT_AES_EncryptCbc(HASHCRYPT_Type *base,
                                   hashcrypt_handle_t *handle,
                                   const uint8_t *plaintext,
@@ -1048,7 +986,7 @@ status_t HASHCRYPT_AES_EncryptCbc(HASHCRYPT_Type *base,
     }
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0 : 1u;
-    base->CRYPTCFG = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
+    base->CRYPTCFG   = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
                      HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |
                      HASHCRYPT_CRYPTCFG_MSW1ST_OUT(1) | HASHCRYPT_CRYPTCFG_SWAPKEY(1) | HASHCRYPT_CRYPTCFG_SWAPDAT(1) |
                      HASHCRYPT_CRYPTCFG_MSW1ST(1);
@@ -1070,17 +1008,6 @@ status_t HASHCRYPT_AES_EncryptCbc(HASHCRYPT_Type *base,
     return status;
 }
 
-/*!
- * brief Decrypts AES using CBC block mode.
- *
- * param base HASHCRYPT peripheral base address
- * param handle Handle used for this request.
- * param ciphertext Input cipher text to decrypt
- * param[out] plaintext Output plain text
- * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
- * param iv Input initial vector to combine with the first input block.
- * return Status from decrypt operation
- */
 status_t HASHCRYPT_AES_DecryptCbc(HASHCRYPT_Type *base,
                                   hashcrypt_handle_t *handle,
                                   const uint8_t *ciphertext,
@@ -1096,7 +1023,7 @@ status_t HASHCRYPT_AES_DecryptCbc(HASHCRYPT_Type *base,
     }
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0 : 1u;
-    base->CRYPTCFG = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_DECRYPT) |
+    base->CRYPTCFG   = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCbc) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_DECRYPT) |
                      HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |
                      HASHCRYPT_CRYPTCFG_MSW1ST_OUT(1) | HASHCRYPT_CRYPTCFG_SWAPKEY(1) | HASHCRYPT_CRYPTCFG_SWAPDAT(1) |
                      HASHCRYPT_CRYPTCFG_MSW1ST(1);
@@ -1118,28 +1045,6 @@ status_t HASHCRYPT_AES_DecryptCbc(HASHCRYPT_Type *base,
     return status;
 }
 
-/*!
- * brief Encrypts or decrypts AES using CTR block mode.
- *
- * Encrypts or decrypts AES using CTR block mode.
- * AES CTR mode uses only forward AES cipher and same algorithm for encryption and decryption.
- * The only difference between encryption and decryption is that, for encryption, the input argument
- * is plain text and the output argument is cipher text. For decryption, the input argument is cipher text
- * and the output argument is plain text.
- *
- * param base HASHCRYPT peripheral base address
- * param handle Handle used for this request.
- * param input Input data for CTR block mode
- * param[out] output Output data for CTR block mode
- * param size Size of input and output data in bytes
- * param[in,out] counter Input counter (updates on return)
- * param[out] counterlast Output cipher of last counter, for chained CTR calls (statefull encryption). NULL can be
- * passed if chained calls are
- * not used.
- * param[out] szLeft Output number of bytes in left unused in counterlast block. NULL can be passed if chained calls
- * are not used.
- * return Status from encrypt operation
- */
 status_t HASHCRYPT_AES_CryptCtr(HASHCRYPT_Type *base,
                                 hashcrypt_handle_t *handle,
                                 const uint8_t *input,
@@ -1160,7 +1065,7 @@ status_t HASHCRYPT_AES_CryptCtr(HASHCRYPT_Type *base,
     }
 
     uint32_t keyType = (handle->keyType == kHASHCRYPT_UserKey) ? 0 : 1u;
-    base->CRYPTCFG = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCtr) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
+    base->CRYPTCFG   = HASHCRYPT_CRYPTCFG_AESMODE(kHASHCRYPT_AesCtr) | HASHCRYPT_CRYPTCFG_AESDECRYPT(AES_ENCRYPT) |
                      HASHCRYPT_CRYPTCFG_AESSECRET(keyType) | HASHCRYPT_CRYPTCFG_AESKEYSZ(handle->keySize) |
                      HASHCRYPT_CRYPTCFG_MSW1ST_OUT(1) | HASHCRYPT_CRYPTCFG_SWAPKEY(1) | HASHCRYPT_CRYPTCFG_SWAPDAT(1) |
                      HASHCRYPT_CRYPTCFG_MSW1ST(1);
@@ -1233,7 +1138,7 @@ status_t HASHCRYPT_AES_CryptCtr(HASHCRYPT_Type *base,
     return kStatus_Success;
 }
 
-void HASH_IRQHandler(void)
+void HASHCRYPT_IRQHandler(void)
 {
     hashcrypt_sha_ctx_internal_t *ctxInternal;
     HASHCRYPT_Type *base = HASHCRYPT;
@@ -1261,8 +1166,8 @@ void HASH_IRQHandler(void)
         }
         /* no full blocks left, disable interrupts and AHB master mode */
         base->INTENCLR = HASHCRYPT_INTENCLR_DIGEST_MASK | HASHCRYPT_INTENCLR_ERROR_MASK;
-        base->MEMCTRL = HASHCRYPT_MEMCTRL_MASTER(0);
-        status = kStatus_Success;
+        base->MEMCTRL  = HASHCRYPT_MEMCTRL_MASTER(0);
+        status         = kStatus_Success;
     }
     else
     {
@@ -1276,13 +1181,6 @@ void HASH_IRQHandler(void)
     }
 }
 
-/*!
- * brief Enables clock and disables reset for HASHCRYPT peripheral.
- *
- * Enable clock and disable reset for HASHCRYPT.
- *
- * param base HASHCRYPT base address
- */
 void HASHCRYPT_Init(HASHCRYPT_Type *base)
 {
     RESET_PeripheralReset(kHASHCRYPT_RST_SHIFT_RSTn);
@@ -1291,13 +1189,6 @@ void HASHCRYPT_Init(HASHCRYPT_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
-/*!
- * brief Disables clock for HASHCRYPT peripheral.
- *
- * Disable clock and enable reset.
- *
- * param base HASHCRYPT base address
- */
 void HASHCRYPT_Deinit(HASHCRYPT_Type *base)
 {
     RESET_SetPeripheralReset(kHASHCRYPT_RST_SHIFT_RSTn);

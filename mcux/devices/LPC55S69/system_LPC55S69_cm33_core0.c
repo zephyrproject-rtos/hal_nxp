@@ -218,9 +218,9 @@ static uint32_t CLOCK_GetFroHfFreq(void)
  */
 static uint32_t CLOCK_GetOsc32KFreq(void)
 {
-    return ((~(PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_FRO32K_MASK)) && (PMC->RTCOSC32K & PMC_RTCOSC32K_SEL(0))) ?
+    return ((!(PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_FRO32K_MASK)) && (!(PMC->RTCOSC32K & PMC_RTCOSC32K_SEL_MASK))) ?
                CLK_RTC_32K_CLK :
-               ((~(PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_XTAL32K_MASK)) && (PMC->RTCOSC32K & PMC_RTCOSC32K_SEL(1))) ?
+               ((!(PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_XTAL32K_MASK)) && (PMC->RTCOSC32K & PMC_RTCOSC32K_SEL_MASK)) ?
                CLK_RTC_32K_CLK :
                0U;
 }

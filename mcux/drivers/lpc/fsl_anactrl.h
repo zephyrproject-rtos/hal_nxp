@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, NXP
+ * Copyright 2018, NXP
  * All rights reserved.
  *
  *
@@ -100,7 +100,7 @@ enum _anactrl_osc_flags
  */
 typedef enum _anactrl_ldo_output_mode
 {
-    kANACTRL_LDOOutputHighNormalMode = 0U,    /*!< Output in High normal state. */
+    kANACTRL_LDOOutputHighNormalMode    = 0U, /*!< Output in High normal state. */
     kANACTRL_LDOOutputHighImpedanceMode = 1U, /*!< Output in High Impedance state. */
 } anactrl_ldo_output_mode_t;
 
@@ -125,7 +125,7 @@ typedef enum _anactrl_ldo_output_level
 typedef enum _anactrl_ring_osc_selector
 {
     kANACTRL_ShortRingOsc = 0U, /*!< Select short ring osc (few elements). */
-    kANACTRL_LongRingOsc = 1U,  /*!< Select long ring osc (many elements). */
+    kANACTRL_LongRingOsc  = 1U, /*!< Select long ring osc (many elements). */
 } anactrl_ring_osc_selector_t;
 
 /*!
@@ -134,7 +134,7 @@ typedef enum _anactrl_ring_osc_selector
 typedef enum _anactrl_ring_osc_freq_output_divider
 {
     kANACTRL_HighFreqOutput = 0U, /*!< High frequency output (frequency lower than 100 MHz). */
-    kANACTRL_LowFreqOutput = 1U,  /*!< Low frequency output (frequency lower than 10 MHz). */
+    kANACTRL_LowFreqOutput  = 1U, /*!< Low frequency output (frequency lower than 10 MHz). */
 } anactrl_ring_osc_freq_output_divider_t;
 
 /*!
@@ -142,10 +142,10 @@ typedef enum _anactrl_ring_osc_freq_output_divider
  */
 typedef enum _anactrl_pn_ring_osc_mode
 {
-    kANACTRL_NormalMode = 0U,              /*!< Normal mode. */
+    kANACTRL_NormalMode              = 0U, /*!< Normal mode. */
     kANACTRL_PMonitorPTransistorMode = 1U, /*!< P-Monitor mode. Measure with weak P transistor. */
     kANACTRL_PMonitorNTransistorMode = 2U, /*!< P-Monitor mode. Measure with weak N transistor. */
-    kANACTRL_NotUse = 3U,                  /*!< Do not use. */
+    kANACTRL_NotUse                  = 3U, /*!< Do not use. */
 } anactrl_pn_ring_osc_mode_t;
 
 /*!

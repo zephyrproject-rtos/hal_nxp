@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -8,8 +8,8 @@
 #ifndef _FSL_POWERQUAD_H_
 #define _FSL_POWERQUAD_H_
 
-#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
-#include <arm_acle.h>
+#if defined(__CC_ARM)
+
 #elif defined(__ICCARM__)
 #include <intrinsics.h>
 #elif defined(__GNUC__)
@@ -30,7 +30,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_POWERQUAD_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */
+#define FSL_POWERQUAD_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
 /*@}*/
 
 #define PQ_FLOAT32 0U
@@ -176,49 +176,26 @@
  * r0: pSrc, r1: pDest, r2-r7: Data
  */
 
-#define _PQ_RUN_FLOAT_OPCODE_R3_R2(BATCH_OPCODE, BATCH_MACHINE)                      \
+#define PQ_RUN_OPCODE_R3_R2(BATCH_OPCODE, BATCH_MACHINE)                             \
     __asm volatile(                                                                  \
         "    MCR  p0,%[opcode],r3,c2,c0,%[machine] \n"                               \
         "    MCR  p0,%[opcode],r2,c0,c0,%[machine] \n" ::[opcode] "i"(BATCH_OPCODE), \
         [machine] "i"(BATCH_MACHINE))
 
-#define _PQ_RUN_FLOAT_OPCODE_R5_R4(BATCH_OPCODE, BATCH_MACHINE)                      \
+#define PQ_RUN_OPCODE_R5_R4(BATCH_OPCODE, BATCH_MACHINE)                             \
     __asm volatile(                                                                  \
         "    MCR  p0,%[opcode],r5,c2,c0,%[machine] \n"                               \
         "    MCR  p0,%[opcode],r4,c0,c0,%[machine] \n" ::[opcode] "i"(BATCH_OPCODE), \
         [machine] "i"(BATCH_MACHINE))
 
-#define _PQ_RUN_FLOAT_OPCODE_R7_R6(BATCH_OPCODE, BATCH_MACHINE)                      \
+#define PQ_RUN_OPCODE_R7_R6(BATCH_OPCODE, BATCH_MACHINE)                             \
     __asm volatile(                                                                  \
         "    MCR  p0,%[opcode],r7,c2,c0,%[machine] \n"                               \
         "    MCR  p0,%[opcode],r6,c0,c0,%[machine] \n" ::[opcode] "i"(BATCH_OPCODE), \
         [machine] "i"(BATCH_MACHINE))
 
-/*!
- * @brief Float data vector calculation.
- *
- * Float data vector calculation, the input data should be Float and must be 8 bytes.
- *
- * @param middle  Determine if it is the first set of data, true if not.
- * @param last    Determine if it is the last set of data, true if yes.
- *
- * The last three parameters could be PQ_LN_INF, PQ_INV_INF, PQ_SQRT_INF, PQ_ISQRT_INF, PQ_ETOX_INF, PQ_ETONX_INF.
- * For example, to calculate sqrt of a vector, use like this:
- * @code
-   #define VECTOR_LEN 16
-   Float input[VECTOR_LEN] = {1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   Float output[VECTOR_LEN];
-
-   PQ_Initiate_Vector_Func(pSrc,pDst);
-   PQ_Vector8_FP(false,false,PQ_SQRT_INF);
-   PQ_Vector8_FP(true,true,PQ_SQRT_INF);
-   PQ_End_Vector_Func();
-   @endcode
- *
- */
-
 #define PQ_Vector8_FP(middle, last, BATCH_OPCODE, DOUBLE_READ_ADDERS, BATCH_MACHINE) \
-    _PQ_RUN_FLOAT_OPCODE_R3_R2(BATCH_OPCODE, BATCH_MACHINE);                         \
+    PQ_RUN_OPCODE_R3_R2(BATCH_OPCODE, BATCH_MACHINE);                                \
     if (middle)                                                                      \
     {                                                                                \
         __asm volatile("STRD r4,r5,[r1],#8"); /* store fourth two results */         \
@@ -232,7 +209,7 @@
     {                                                                                \
         __asm volatile("MRRC p0,#0,r2,r3,c0");                                       \
     }                                                                                \
-    _PQ_RUN_FLOAT_OPCODE_R5_R4(BATCH_OPCODE, BATCH_MACHINE);                         \
+    PQ_RUN_OPCODE_R5_R4(BATCH_OPCODE, BATCH_MACHINE);                                \
     __asm volatile("STRD r2,r3,[r1],#8"); /* store first two results */              \
     __asm volatile("LDMIA  r0!,{r6-r7}"); /* load next 2 datas */                    \
     if (DOUBLE_READ_ADDERS)                                                          \
@@ -243,7 +220,7 @@
     {                                                                                \
         __asm volatile("MRRC p0,#0,r4,r5,c0");                                       \
     }                                                                                \
-    _PQ_RUN_FLOAT_OPCODE_R7_R6(BATCH_OPCODE, BATCH_MACHINE);                         \
+    PQ_RUN_OPCODE_R7_R6(BATCH_OPCODE, BATCH_MACHINE);                                \
     __asm volatile("STRD r4,r5,[r1],#8"); /* store second two results */             \
     __asm volatile("LDRD r4,r5,[r0],#8"); /* load last 2 of the 8 */                 \
     if (DOUBLE_READ_ADDERS)                                                          \
@@ -254,7 +231,7 @@
     {                                                                                \
         __asm volatile("MRRC p0,#0,r6,r7,c0");                                       \
     }                                                                                \
-    _PQ_RUN_FLOAT_OPCODE_R5_R4(BATCH_OPCODE, BATCH_MACHINE);                         \
+    PQ_RUN_OPCODE_R5_R4(BATCH_OPCODE, BATCH_MACHINE);                                \
     __asm volatile("STRD r6,r7,[r1],#8"); /* store third two results */              \
     if (!last)                                                                       \
     {                                                                                \
@@ -277,49 +254,26 @@
         __asm volatile("STRD r4,r5,[r1],#8"); /* store fourth two results */         \
     }
 
-#define _PQ_RUN_FIXED32_OPCODE_R2_R3(BATCH_OPCODE, BATCH_MACHINE)                    \
+#define PQ_RUN_OPCODE_R2_R3(BATCH_OPCODE, BATCH_MACHINE)                             \
     __asm volatile(                                                                  \
         "    MCR  p0,%[opcode],r2,c1,c0,%[machine] \n"                               \
         "    MCR  p0,%[opcode],r3,c3,c0,%[machine] \n" ::[opcode] "i"(BATCH_OPCODE), \
         [machine] "i"(BATCH_MACHINE))
 
-#define _PQ_RUN_FIXED32_OPCODE_R4_R5(BATCH_OPCODE, BATCH_MACHINE)                    \
+#define PQ_RUN_OPCODE_R4_R5(BATCH_OPCODE, BATCH_MACHINE)                             \
     __asm volatile(                                                                  \
         "    MCR  p0,%[opcode],r4,c1,c0,%[machine] \n"                               \
         "    MCR  p0,%[opcode],r5,c3,c0,%[machine] \n" ::[opcode] "i"(BATCH_OPCODE), \
         [machine] "i"(BATCH_MACHINE))
 
-#define _PQ_RUN_FIXED32_OPCODE_R6_R7(BATCH_OPCODE, BATCH_MACHINE)                    \
+#define PQ_RUN_OPCODE_R6_R7(BATCH_OPCODE, BATCH_MACHINE)                             \
     __asm volatile(                                                                  \
         "    MCR  p0,%[opcode],r6,c1,c0,%[machine] \n"                               \
         "    MCR  p0,%[opcode],r7,c3,c0,%[machine] \n" ::[opcode] "i"(BATCH_OPCODE), \
         [machine] "i"(BATCH_MACHINE))
 
-/*!
- * @brief Fixed data vector calculation.
- *
- * Fixed data vector calculation, the input data should be Fixed and must be 8 bytes.
- *
- * @param middle  Determine if it is the first set of data, true if not.
- * @param last    Determine if it is the last set of data, true if yes.
- *
- * The last three parameters could be PQ_LN_INF, PQ_INV_INF, PQ_SQRT_INF, PQ_ISQRT_INF, PQ_ETOX_INF, PQ_ETONX_INF.
- * For example, to calculate sqrt of a vector, use like this:
- * @code
-   #define VECTOR_LEN 16
-   uint32_t input[VECTOR_LEN] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   uint32_t output[VECTOR_LEN];
-
-   PQ_Initiate_Vector_Func(pSrc,pDst);
-   PQ_Vector8_FX(false,false,PQ_SQRT_INF);
-   PQ_Vector8_FX(true,true,PQ_SQRT_INF);
-   PQ_End_Vector_Func();
-   @endcode
- *
- */
-
 #define PQ_Vector8_FX(middle, last, BATCH_OPCODE, DOUBLE_READ_ADDERS, BATCH_MACHINE) \
-    _PQ_RUN_FIXED32_OPCODE_R2_R3(BATCH_OPCODE, BATCH_MACHINE);                       \
+    PQ_RUN_OPCODE_R2_R3(BATCH_OPCODE, BATCH_MACHINE);                                \
     if (middle)                                                                      \
     {                                                                                \
         __asm volatile("STRD r4,r5,[r1],#8"); /* store fourth two results */         \
@@ -335,7 +289,7 @@
         __asm volatile("MRC  p0,#0,r2,c1,c0,#0");                                    \
         __asm volatile("MRC  p0,#0,r3,c3,c0,#0");                                    \
     }                                                                                \
-    _PQ_RUN_FIXED32_OPCODE_R4_R5(BATCH_OPCODE, BATCH_MACHINE);                       \
+    PQ_RUN_OPCODE_R4_R5(BATCH_OPCODE, BATCH_MACHINE);                                \
     __asm volatile("STRD r2,r3,[r1],#8"); /* store first two results */              \
     if (DOUBLE_READ_ADDERS)                                                          \
     {                                                                                \
@@ -347,7 +301,7 @@
         __asm volatile("MRC  p0,#0,r4,c1,c0,#0");                                    \
         __asm volatile("MRC  p0,#0,r5,c3,c0,#0");                                    \
     }                                                                                \
-    _PQ_RUN_FIXED32_OPCODE_R6_R7(BATCH_OPCODE, BATCH_MACHINE);                       \
+    PQ_RUN_OPCODE_R6_R7(BATCH_OPCODE, BATCH_MACHINE);                                \
     __asm volatile("STRD r4,r5,[r1],#8"); /* store second two results */             \
     __asm volatile("LDRD r4,r5,[r0],#8"); /* load last 2 of the 8 */                 \
     if (DOUBLE_READ_ADDERS)                                                          \
@@ -360,7 +314,7 @@
         __asm volatile("MRC  p0,#0,r6,c1,c0,#0");                                    \
         __asm volatile("MRC  p0,#0,r7,c3,c0,#0");                                    \
     }                                                                                \
-    _PQ_RUN_FIXED32_OPCODE_R4_R5(BATCH_OPCODE, BATCH_MACHINE);                       \
+    PQ_RUN_OPCODE_R4_R5(BATCH_OPCODE, BATCH_MACHINE);                                \
     __asm volatile("STRD r6,r7,[r1],#8"); /* store third two results */              \
     if (!last)                                                                       \
         __asm volatile("LDRD r2,r3,[r0],#8"); /* load first two of next 8 */         \
@@ -953,7 +907,7 @@
         "    CMP  r2, #0                         \n" /* if (length == 0) */              \
         "    BNE  1b                             \n"                                     \
         "    STR r7,[r1],#4                      \n" /* store last result */             \
-        )
+    )
 
 /*!
  * @brief Fixed 32-bit data vector biquad direct form II calculation.
@@ -1017,7 +971,7 @@
         "    CMP  r2, #0                         \n" /* if (length == 0) */              \
         "    BNE  1b                             \n"                                     \
         "    STR r7,[r1],#4                      \n" /* store last result */             \
-        )
+    )
 
 /*!
  * @brief Fixed 16-bit data vector biquad direct form II calculation.
@@ -1090,7 +1044,7 @@
         "    CMP  r2, #0                         \n" /* if (length == 0) */              \
         "    BNE  1b                             \n"                                     \
         "    STRH r7,[r1],#2                     \n" /* store last result */             \
-        )
+    )
 
 /*!
  * @brief Float data vector direct form II biquad cascade filter.
@@ -1385,7 +1339,7 @@
         "    MCR  p0,#0x1,r7,c0,c0,#2            \n" /* write biquad0*/                       \
         "    MRC  p0,#0x1,r7,c0,c0,#0            \n" /* read  biquad0*/                       \
         "    STRD r6,r7,[r1],#8                  \n" /* store fourth two results */           \
-        )
+    )
 
 /*!
  * @brief Fixed 32-bit data vector direct form II biquad cascade filter.
@@ -1484,7 +1438,7 @@
         "    MCR  p0,#0x1,r7,c1,c0,#6            \n" /* write biquad0*/                       \
         "    MRC  p0,#0x1,r7,c1,c0,#0            \n" /* read  biquad0*/                       \
         "    STRD r6,r7,[r1],#8                  \n" /* store fourth two results */           \
-        )
+    )
 
 /*!
  * @brief Fixed 16-bit data vector direct form II biquad cascade filter.
@@ -1594,7 +1548,7 @@
         "    MRC  p0,#0x1,r7,c1,c0,#0            \n" /* read  biquad0*/                  \
         "    STRH r6,[r1],#2                     \n" /* store fourth two results */      \
         "    STRH r7,[r1],#2                     \n" /* store fourth two results */      \
-        )
+    )
 
 /*! @brief Make the length used for matrix functions. */
 #define POWERQUAD_MAKE_MATRIX_LEN(mat1Row, mat1Col, mat2Col) \
@@ -1609,11 +1563,11 @@
 /*! @brief powerquad computation engine */
 typedef enum
 {
-    kPQ_CP_PQ = 0,    /*!< Math engine.*/
-    kPQ_CP_MTX = 1,   /*!< Matrix engine.*/
-    kPQ_CP_FFT = 2,   /*!< FFT engine.*/
-    kPQ_CP_FIR = 3,   /*!< FIR engine.*/
-    kPQ_CP_CORDIC = 5 /*!< CORDIC engine.*/
+    kPQ_CP_PQ     = 0, /*!< Math engine.*/
+    kPQ_CP_MTX    = 1, /*!< Matrix engine.*/
+    kPQ_CP_FFT    = 2, /*!< FFT engine.*/
+    kPQ_CP_FIR    = 3, /*!< FIR engine.*/
+    kPQ_CP_CORDIC = 5  /*!< CORDIC engine.*/
 } pq_computationengine_t;
 
 /*! @brief powerquad data structure format type */
@@ -1682,6 +1636,13 @@ typedef enum
     kPQ_Iteration_16,    /*!< Iterate 16 times.*/
     kPQ_Iteration_24     /*!< Iterate 24 times.*/
 } pq_cordic_iter_t;
+
+/*! @brief Conversion between integer and float type */
+typedef union _pq_float
+{
+    float floatX;      /*!< Float type.*/
+    uint32_t integerX; /*!< Iterger type.*/
+} pq_float_t;
 
 /*******************************************************************************
  * API
@@ -1788,7 +1749,7 @@ static inline void PQ_WaitDone(POWERQUAD_Type *base)
 /*!
  * @brief Processing function for the floating-point natural log.
  *
- * @param  *pSrc      points to the block of input data
+ * @param  *pSrc      points to the block of input data. The range of the input value is (0 +INFINITY).
  * @param  *pDst      points to the block of output data
  */
 static inline void PQ_LnF32(float *pSrc, float *pDst)
@@ -1800,7 +1761,7 @@ static inline void PQ_LnF32(float *pSrc, float *pDst)
 /*!
  * @brief Processing function for the floating-point reciprocal.
  *
- * @param  *pSrc      points to the block of input data
+ * @param  *pSrc      points to the block of input data. The range of the input value is non-zero.
  * @param  *pDst      points to the block of output data
  */
 static inline void PQ_InvF32(float *pSrc, float *pDst)
@@ -1812,7 +1773,7 @@ static inline void PQ_InvF32(float *pSrc, float *pDst)
 /*!
  * @brief Processing function for the floating-point square-root.
  *
- * @param  *pSrc      points to the block of input data
+ * @param  *pSrc      points to the block of input data. The range of the input value is [0 +INFINITY).
  * @param  *pDst      points to the block of output data
  */
 static inline void PQ_SqrtF32(float *pSrc, float *pDst)
@@ -1824,7 +1785,7 @@ static inline void PQ_SqrtF32(float *pSrc, float *pDst)
 /*!
  * @brief Processing function for the floating-point inverse square-root.
  *
- * @param  *pSrc      points to the block of input data
+ * @param  *pSrc      points to the block of input data. The range of the input value is (0 +INFINITY).
  * @param  *pDst      points to the block of output data
  */
 static inline void PQ_InvSqrtF32(float *pSrc, float *pDst)
@@ -1836,7 +1797,7 @@ static inline void PQ_InvSqrtF32(float *pSrc, float *pDst)
 /*!
  * @brief Processing function for the floating-point natural exponent.
  *
- * @param  *pSrc      points to the block of input data
+ * @param  *pSrc      points to the block of input data. The range of the input value is (-INFINITY +INFINITY).
  * @param  *pDst      points to the block of output data
  */
 static inline void PQ_EtoxF32(float *pSrc, float *pDst)
@@ -1848,7 +1809,7 @@ static inline void PQ_EtoxF32(float *pSrc, float *pDst)
 /*!
  * @brief Processing function for the floating-point natural exponent with negative parameter.
  *
- * @param  *pSrc      points to the block of input data
+ * @param  *pSrc      points to the block of input data. The range of the input value is (-INFINITY +INFINITY).
  * @param  *pDst      points to the block of output data
  */
 static inline void PQ_EtonxF32(float *pSrc, float *pDst)
@@ -1860,7 +1821,8 @@ static inline void PQ_EtonxF32(float *pSrc, float *pDst)
 /*!
  * @brief Processing function for the floating-point sine.
  *
- * @param  *pSrc      points to the block of input data
+ * @param  *pSrc      points to the block of input data. The input value is in radians, the range is (-INFINITY
+ * +INFINITY).
  * @param  *pDst      points to the block of output data
  */
 static inline void PQ_SinF32(float *pSrc, float *pDst)
@@ -1872,7 +1834,8 @@ static inline void PQ_SinF32(float *pSrc, float *pDst)
 /*!
  * @brief Processing function for the floating-point cosine.
  *
- * @param  *pSrc      points to the block of input data
+ * @param  *pSrc      points to the block of input data. The input value is in radians, the range is (-INFINITY
+ * +INFINITY).
  * @param  *pDst      points to the block of output data
  */
 static inline void PQ_CosF32(float *pSrc, float *pDst)
@@ -1904,8 +1867,8 @@ static inline void PQ_BiquadF32(float *pSrc, float *pDst)
  */
 static inline void PQ_DivF32(float *x1, float *x2, float *pDst)
 {
-    uint32_t X1 = *(uint32_t *)x1;
-    uint32_t X2 = *(uint32_t *)x2;
+    uint32_t X1    = *(uint32_t *)x1;
+    uint32_t X2    = *(uint32_t *)x2;
     uint64_t input = (uint64_t)(X2) | ((uint64_t)(X1) << 32U);
 
     _pq_div0(input);
@@ -1927,7 +1890,7 @@ static inline void PQ_Biquad1F32(float *pSrc, float *pDst)
 /*!
  * @brief Processing function for the fixed natural log.
  *
- * @param val value to be calculated
+ * @param val value to be calculated. The range of the input value is (0 +INFINITY).
  * @return returns ln(val).
  */
 static inline int32_t PQ_LnFixed(int32_t val)
@@ -1939,7 +1902,7 @@ static inline int32_t PQ_LnFixed(int32_t val)
 /*!
  * @brief Processing function for the fixed reciprocal.
  *
- * @param val value to be calculated
+ * @param val value to be calculated. The range of the input value is non-zero.
  * @return returns inv(val).
  */
 static inline int32_t PQ_InvFixed(int32_t val)
@@ -1951,7 +1914,7 @@ static inline int32_t PQ_InvFixed(int32_t val)
 /*!
  * @brief Processing function for the fixed square-root.
  *
- * @param val value to be calculated
+ * @param val value to be calculated. The range of the input value is [0 +INFINITY).
  * @return returns sqrt(val).
  */
 static inline uint32_t PQ_SqrtFixed(uint32_t val)
@@ -1963,7 +1926,7 @@ static inline uint32_t PQ_SqrtFixed(uint32_t val)
 /*!
  * @brief Processing function for the fixed inverse square-root.
  *
- * @param val value to be calculated
+ * @param val value to be calculated. The range of the input value is (0 +INFINITY).
  * @return returns 1/sqrt(val).
  */
 static inline int32_t PQ_InvSqrtFixed(int32_t val)
@@ -1975,7 +1938,7 @@ static inline int32_t PQ_InvSqrtFixed(int32_t val)
 /*!
  * @brief Processing function for the Fixed natural exponent.
  *
- * @param val value to be calculated
+ * @param val value to be calculated. The range of the input value is (-INFINITY +INFINITY).
  * @return returns etox^(val).
  */
 static inline int32_t PQ_EtoxFixed(int32_t val)
@@ -1987,7 +1950,7 @@ static inline int32_t PQ_EtoxFixed(int32_t val)
 /*!
  * @brief Processing function for the fixed natural exponent with negative parameter.
  *
- * @param val value to be calculated
+ * @param val value to be calculated. The range of the input value is (-INFINITY +INFINITY).
  * @return returns etonx^(val).
  */
 static inline int32_t PQ_EtonxFixed(int32_t val)
@@ -1999,7 +1962,7 @@ static inline int32_t PQ_EtonxFixed(int32_t val)
 /*!
  * @brief Processing function for the fixed sine.
  *
- * @param val value to be calculated
+ * @param val value to be calculated. The input value is [-1, 1] in Q31 format, which means [-pi, pi].
  * @return returns sin(val).
  */
 static inline int32_t PQ_SinQ31(int32_t val)
@@ -2007,23 +1970,18 @@ static inline int32_t PQ_SinQ31(int32_t val)
     int32_t ret;
     uint32_t cppre;
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#endif
-    const int32_t magic = 0x30c90fdb;
-    float valFloat = *(const float *)(&magic) * (float)val;
-    val = *(int32_t *)(&valFloat);
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+    pq_float_t magic;
+    pq_float_t valFloat;
+
+    magic.integerX  = 0x30c90fdb;
+    valFloat.floatX = magic.floatX * (float)val;
 #endif
 
-    cppre = POWERQUAD->CPPRE;
+    cppre            = POWERQUAD->CPPRE;
     POWERQUAD->CPPRE = POWERQUAD_CPPRE_CPPRE_OUT(31);
 
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-    _pq_sin0(val);
+    _pq_sin0(valFloat.integerX);
 
     ret = _pq_readAdd0();
     ret = _pq_readAdd0_fx();
@@ -2040,7 +1998,7 @@ static inline int32_t PQ_SinQ31(int32_t val)
 /*!
  * @brief Processing function for the fixed sine.
  *
- * @param val value to be calculated
+ * @param val value to be calculated. The input value is [-1, 1] in Q15 format, which means [-pi, pi].
  * @return returns sin(val).
  */
 static inline int16_t PQ_SinQ15(int16_t val)
@@ -2048,17 +2006,11 @@ static inline int16_t PQ_SinQ15(int16_t val)
     int32_t ret;
     uint32_t cppre;
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#endif
-    int32_t val32 = val;
-    const int32_t magic = 0x30c90fdb;
-    float valFloat = *(const float *)(&magic) * (float)(val32 << 16);
-    val32 = *(int32_t *)(&valFloat);
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+    pq_float_t magic;
+    pq_float_t valFloat;
+
+    magic.integerX  = 0x30c90fdb;
+    valFloat.floatX = magic.floatX * (float)(val << 16);
 #endif
 
     cppre = POWERQUAD->CPPRE;
@@ -2066,10 +2018,11 @@ static inline int16_t PQ_SinQ15(int16_t val)
     POWERQUAD->CPPRE = POWERQUAD_CPPRE_CPPRE_OUT(31);
 
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-    _pq_sin0(val32);
+    _pq_sin0(valFloat.integerX);
 
     ret = _pq_readAdd0();
-    ret = _pq_readAdd0_fx() >> 16;
+    ret = _pq_readAdd0_fx();
+    ret >>= 16;
 #else
     _pq_sin_fx0((uint32_t)val << 16);
     ret = (_pq_readAdd0_fx()) >> 16;
@@ -2083,7 +2036,7 @@ static inline int16_t PQ_SinQ15(int16_t val)
 /*!
  * @brief Processing function for the fixed cosine.
  *
- * @param val value to be calculated
+ * @param val value to be calculated. The input value is [-1, 1] in Q31 format, which means [-pi, pi].
  * @return returns cos(val).
  */
 static inline int32_t PQ_CosQ31(int32_t val)
@@ -2091,23 +2044,18 @@ static inline int32_t PQ_CosQ31(int32_t val)
     int32_t ret;
     uint32_t cppre;
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#endif
-    const int32_t magic = 0x30c90fdb;
-    float valFloat = *(const float *)(&magic) * (float)val;
-    val = *(int32_t *)(&valFloat);
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+    pq_float_t magic;
+    pq_float_t valFloat;
+
+    magic.integerX  = 0x30c90fdb;
+    valFloat.floatX = magic.floatX * (float)val;
 #endif
 
-    cppre = POWERQUAD->CPPRE;
+    cppre            = POWERQUAD->CPPRE;
     POWERQUAD->CPPRE = POWERQUAD_CPPRE_CPPRE_OUT(31);
 
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-    _pq_cos0(val);
+    _pq_cos0(valFloat.integerX);
 
     ret = _pq_readAdd0();
     ret = _pq_readAdd0_fx();
@@ -2124,7 +2072,7 @@ static inline int32_t PQ_CosQ31(int32_t val)
 /*!
  * @brief Processing function for the fixed sine.
  *
- * @param val value to be calculated
+ * @param val value to be calculated. The input value is [-1, 1] in Q15 format, which means [-pi, pi].
  * @return returns sin(val).
  */
 static inline int16_t PQ_CosQ15(int16_t val)
@@ -2132,27 +2080,22 @@ static inline int16_t PQ_CosQ15(int16_t val)
     int32_t ret;
     uint32_t cppre;
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#endif
-    int32_t val32 = val;
-    const int32_t magic = 0x30c90fdb;
-    float valFloat = *(const float *)(&magic) * (float)(val32 << 16);
-    val32 = *(int32_t *)(&valFloat);
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+    pq_float_t magic;
+    pq_float_t valFloat;
+
+    magic.integerX  = 0x30c90fdb;
+    valFloat.floatX = magic.floatX * (float)(val << 16);
 #endif
 
-    cppre = POWERQUAD->CPPRE;
+    cppre            = POWERQUAD->CPPRE;
     POWERQUAD->CPPRE = POWERQUAD_CPPRE_CPPRE_OUT(31);
 
 #if defined(FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA) && FSL_FEATURE_POWERQUAD_SIN_COS_FIX_ERRATA
-    _pq_cos0(val32);
+    _pq_cos0(valFloat.integerX);
 
     ret = _pq_readAdd0();
-    ret = _pq_readAdd0_fx() >> 16;
+    ret = _pq_readAdd0_fx();
+    ret >>= 16;
 #else
     _pq_cos_fx0((uint32_t)val << 16);
     ret = (_pq_readAdd0_fx()) >> 16;
@@ -2756,7 +2699,6 @@ void PQ_MatrixScale(POWERQUAD_Type *base, uint32_t length, float misc, void *pDa
 
 #if defined(__cplusplus)
 }
-
 #endif /* __cplusplus */
 
 /*! @}*/
