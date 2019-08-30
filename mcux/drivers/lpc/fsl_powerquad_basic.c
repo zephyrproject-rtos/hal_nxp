@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,16 +21,16 @@
  ******************************************************************************/
 void PQ_GetDefaultConfig(pq_config_t *config)
 {
-    config->inputAFormat = kPQ_Float;
+    config->inputAFormat   = kPQ_Float;
     config->inputAPrescale = 0;
-    config->inputBFormat = kPQ_Float;
+    config->inputBFormat   = kPQ_Float;
     config->inputBPrescale = 0;
-    config->outputFormat = kPQ_Float;
+    config->outputFormat   = kPQ_Float;
     config->outputPrescale = 0;
-    config->tmpFormat = kPQ_Float;
-    config->tmpPrescale = 0;
-    config->machineFormat = kPQ_Float;
-    config->tmpBase = (void *)0xE0000000U;
+    config->tmpFormat      = kPQ_Float;
+    config->tmpPrescale    = 0;
+    config->machineFormat  = kPQ_Float;
+    config->tmpBase        = (uint32_t *)0xE0000000;
 }
 
 void PQ_SetConfig(POWERQUAD_Type *base, const pq_config_t *config)
@@ -79,38 +79,38 @@ void PQ_SetFormat(POWERQUAD_Type *base, pq_computationengine_t engine, pq_format
     /* 32-bit Float point */
     if (kPQ_Float == format)
     {
-        config.inputAFormat = kPQ_Float;
+        config.inputAFormat   = kPQ_Float;
         config.inputAPrescale = 0;
-        config.inputBFormat = kPQ_Float;
+        config.inputBFormat   = kPQ_Float;
         config.inputBPrescale = 0;
-        config.outputFormat = kPQ_Float;
+        config.outputFormat   = kPQ_Float;
         config.outputPrescale = 0;
-        config.tmpFormat = kPQ_Float;
-        config.tmpPrescale = 0;
+        config.tmpFormat      = kPQ_Float;
+        config.tmpPrescale    = 0;
     }
     /* 32-bit Fixed point */
     if (kPQ_32Bit == format)
     {
-        config.inputAFormat = kPQ_32Bit;
+        config.inputAFormat   = kPQ_32Bit;
         config.inputAPrescale = 0;
-        config.inputBFormat = kPQ_32Bit;
+        config.inputBFormat   = kPQ_32Bit;
         config.inputBPrescale = 0;
-        config.outputFormat = kPQ_32Bit;
+        config.outputFormat   = kPQ_32Bit;
         config.outputPrescale = 0;
-        config.tmpFormat = kPQ_Float;
-        config.tmpPrescale = 0;
+        config.tmpFormat      = kPQ_Float;
+        config.tmpPrescale    = 0;
     }
     /* 16-bit Fixed point */
     if (kPQ_16Bit == format)
     {
-        config.inputAFormat = kPQ_16Bit;
+        config.inputAFormat   = kPQ_16Bit;
         config.inputAPrescale = 0;
-        config.inputBFormat = kPQ_16Bit;
+        config.inputBFormat   = kPQ_16Bit;
         config.inputBPrescale = 0;
-        config.outputFormat = kPQ_16Bit;
+        config.outputFormat   = kPQ_16Bit;
         config.outputPrescale = 0;
-        config.tmpFormat = kPQ_Float;
-        config.tmpPrescale = 0;
+        config.tmpFormat      = kPQ_Float;
+        config.tmpPrescale    = 0;
     }
 
     if (CP_FFT == engine)

@@ -23,73 +23,73 @@
     POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_Float; \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_Float; \
     POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
-    POWERQUAD->TMPBASE = 0xE0000000
+    POWERQUAD->TMPBASE   = 0xE0000000
 
 #define PQ_SET_FIX16_CONFIG                                                                 \
     POWERQUAD->OUTFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_Float; \
     POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_Float; \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_Float; \
     POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
-    POWERQUAD->TMPBASE = 0xE0000000
+    POWERQUAD->TMPBASE   = 0xE0000000
 
 #define PQ_SET_Q31_CONFIG                                                                     \
     POWERQUAD->OUTFORMAT = ((uint32_t)(-31) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_Float; \
     POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_Float;   \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_Float;   \
     POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float;   \
-    POWERQUAD->TMPBASE = 0xE0000000
+    POWERQUAD->TMPBASE   = 0xE0000000
 
 #define PQ_SET_Q15_CONFIG                                                                     \
     POWERQUAD->OUTFORMAT = ((uint32_t)(-15) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_Float; \
     POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_Float;   \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_Float;   \
     POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float;   \
-    POWERQUAD->TMPBASE = 0xE0000000
+    POWERQUAD->TMPBASE   = 0xE0000000
 
 #define PQ_SET_F32_CONFIG                                                                   \
     POWERQUAD->OUTFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
     POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
     POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
-    POWERQUAD->TMPBASE = 0xE0000000
+    POWERQUAD->TMPBASE   = 0xE0000000
 
 #define PQ_SET_FFT_Q31_CONFIG                                                               \
     POWERQUAD->OUTFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_32Bit; \
     POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_32Bit; \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_32Bit; \
     POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_32Bit; \
-    POWERQUAD->TMPBASE = 0xE0000000
+    POWERQUAD->TMPBASE   = 0xE0000000
 
 #define PQ_SET_FFT_Q15_CONFIG                                                               \
     POWERQUAD->OUTFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_32Bit; \
     POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_32Bit; \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_32Bit; \
     POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_32Bit; \
-    POWERQUAD->TMPBASE = 0xE0000000
+    POWERQUAD->TMPBASE   = 0xE0000000
 
 #define PQ_SET_MAT_FIX32_WORKAROUND_SCALE_CONFIG                                            \
     POWERQUAD->OUTFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
     POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_Float; \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_Float; \
     POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
-    POWERQUAD->TMPBASE = 0xE0000000
+    POWERQUAD->TMPBASE   = 0xE0000000
 
 #define PQ_SET_MAT_FIX32_WORKAROUND_MULT_CONFIG                                             \
     POWERQUAD->OUTFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_32Bit << 4U) | kPQ_Float; \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
-    POWERQUAD->TMPBASE = 0xE0000000
+    POWERQUAD->TMPBASE   = 0xE0000000
 
 #define PQ_SET_MAT_FIX16_WORKAROUND_SCALE_CONFIG                                            \
     POWERQUAD->OUTFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
     POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_Float; \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_Float; \
     POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
-    POWERQUAD->TMPBASE = 0xE0000000
+    POWERQUAD->TMPBASE   = 0xE0000000
 
 #define PQ_SET_MAT_FIX16_WORKAROUND_MULT_CONFIG                                             \
     POWERQUAD->OUTFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_Float; \
     POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float; \
-    POWERQUAD->TMPBASE = 0xE0000000
+    POWERQUAD->TMPBASE   = 0xE0000000
 
 /*******************************************************************************
  * Code
@@ -98,9 +98,9 @@ static void _arm_fir_increment(void *pSrc, uint16_t srcLen, void *pTap, uint16_t
 {
     POWERQUAD->INABASE = (uint32_t)pSrc;
     POWERQUAD->INBBASE = (uint32_t)pTap;
-    POWERQUAD->LENGTH = ((uint32_t)tapLen << 16U) + srcLen;
+    POWERQUAD->LENGTH  = ((uint32_t)tapLen << 16U) + srcLen;
     POWERQUAD->OUTBASE = (uint32_t)pDst;
-    POWERQUAD->MISC = offset;
+    POWERQUAD->MISC    = offset;
     POWERQUAD->CONTROL = (CP_FIR << 4) | PQ_FIR_INCREMENTAL;
 }
 
@@ -159,9 +159,9 @@ arm_status arm_sqrt_q31(q31_t in, q31_t *pOut)
     /* If the input is a positive number then compute the signBits. */
     if (in > 0)
     {
-        cppre = POWERQUAD->CPPRE;
+        cppre            = POWERQUAD->CPPRE;
         POWERQUAD->CPPRE = POWERQUAD_CPPRE_CPPRE_IN(-31) | POWERQUAD_CPPRE_CPPRE_OUT(31);
-        *pOut = PQ_SqrtFixed(in);
+        *pOut            = PQ_SqrtFixed(in);
         POWERQUAD->CPPRE = cppre;
 
         return (ARM_MATH_SUCCESS);
@@ -182,9 +182,9 @@ arm_status arm_sqrt_q15(q15_t in, q15_t *pOut)
     /* If the input is a positive number then compute the signBits. */
     if (in > 0)
     {
-        cppre = POWERQUAD->CPPRE;
+        cppre            = POWERQUAD->CPPRE;
         POWERQUAD->CPPRE = POWERQUAD_CPPRE_CPPRE_IN(-15) | POWERQUAD_CPPRE_CPPRE_OUT(15);
-        *pOut = PQ_SqrtFixed(in);
+        *pOut            = PQ_SqrtFixed(in);
         POWERQUAD->CPPRE = cppre;
 
         return (ARM_MATH_SUCCESS);
@@ -202,8 +202,8 @@ void arm_cfft_q31(const arm_cfft_instance_q31 *S, q31_t *p1, uint8_t ifftFlag, u
 {
     assert(bitReverseFlag == 1);
 
-    q31_t *pIn = p1;
-    q31_t *pOut = p1;
+    q31_t *pIn      = p1;
+    q31_t *pOut     = p1;
     uint32_t length = S->fftLen;
 
     PQ_SET_FFT_Q31_CONFIG;
@@ -224,8 +224,8 @@ void arm_cfft_q15(const arm_cfft_instance_q15 *S, q15_t *p1, uint8_t ifftFlag, u
 {
     assert(bitReverseFlag == 1);
 
-    q15_t *pIn = p1;
-    q15_t *pOut = p1;
+    q15_t *pIn      = p1;
+    q15_t *pOut     = p1;
     uint32_t length = S->fftLen;
 
     PQ_SET_FFT_Q15_CONFIG;
@@ -325,32 +325,32 @@ arm_status arm_dct4_init_q31(arm_dct4_instance_q31 *S,
     {
         /* Initialize the table modifier values */
         case 512U:
-            S->pTwiddle = dct512_twiddle;
+            S->pTwiddle   = dct512_twiddle;
             S->pCosFactor = dct512_cosFactor;
             break;
 
         case 256U:
-            S->pTwiddle = dct256_twiddle;
+            S->pTwiddle   = dct256_twiddle;
             S->pCosFactor = dct256_cosFactor;
             break;
 
         case 128U:
-            S->pTwiddle = dct128_twiddle;
+            S->pTwiddle   = dct128_twiddle;
             S->pCosFactor = dct128_cosFactor;
             break;
 
         case 64U:
-            S->pTwiddle = dct64_twiddle;
+            S->pTwiddle   = dct64_twiddle;
             S->pCosFactor = dct64_cosFactor;
             break;
 
         case 32U:
-            S->pTwiddle = dct32_twiddle;
+            S->pTwiddle   = dct32_twiddle;
             S->pCosFactor = dct32_cosFactor;
             break;
 
         case 16U:
-            S->pTwiddle = dct16_twiddle;
+            S->pTwiddle   = dct16_twiddle;
             S->pCosFactor = dct16_cosFactor;
             break;
 
@@ -391,12 +391,12 @@ void arm_dct4_q31(const arm_dct4_instance_q31 *S, q31_t *pState, q31_t *pInlineB
      * Use matrix production function for preprocessing. Matrix production
      * supports 16x16 at the most, so the matrix row is set to 16.
      */
-    matRow = 16;
+    matRow        = 16;
     lenPerMatLoop = S->N >= 256 ? 256 : S->N;
-    matCol = lenPerMatLoop / 16;
-    matLoop = ((S->N - 1) >> 8) + 1;
-    cosFact = S->pCosFactor;
-    pbuff = pInlineBuffer;
+    matCol        = lenPerMatLoop / 16;
+    matLoop       = ((S->N - 1) >> 8) + 1;
+    cosFact       = S->pCosFactor;
+    pbuff         = pInlineBuffer;
 
     length = POWERQUAD_MAKE_MATRIX_LEN(matRow, matCol, matCol);
 
@@ -430,10 +430,10 @@ void arm_dct4_q31(const arm_dct4_instance_q31 *S, q31_t *pState, q31_t *pInlineB
      * Matrix production supports 16x16 at the most. The total elements are 2*N;
      */
     lenPerMatLoop = S->N >= 128 ? 128 : S->N;
-    matCol = lenPerMatLoop / 8;
-    matLoop = ((S->N - 1) >> 7) + 1;
-    weights = S->pTwiddle;
-    pOut = pState;
+    matCol        = lenPerMatLoop / 8;
+    matLoop       = ((S->N - 1) >> 7) + 1;
+    weights       = S->pTwiddle;
+    pOut          = pState;
 
     length = POWERQUAD_MAKE_MATRIX_LEN(matRow, matCol, matCol);
 
@@ -482,19 +482,19 @@ void arm_dct4_q31(const arm_dct4_instance_q31 *S, q31_t *pState, q31_t *pInlineB
     pS1 = pState;
 
     /* Calculating Y4(0) from Y2(0) using Y4(0) = Y2(0)/2. Considering the DCT II normalize, here divided by sqrt(2).*/
-    in = (q31_t)((float)*pS1 / 1.41421356237f);
+    in       = (q31_t)((float)*pS1 / 1.41421356237f);
     *pbuff++ = in;
     pS1 += 2;
 
-    in = *pS1 - in;
+    in       = *pS1 - in;
     *pbuff++ = in;
     pS1 += 2;
 
-    in = *pS1 - in;
+    in       = *pS1 - in;
     *pbuff++ = in;
     pS1 += 2;
 
-    in = *pS1 - in;
+    in       = *pS1 - in;
     *pbuff++ = in;
     pS1 += 2;
 
@@ -502,19 +502,19 @@ void arm_dct4_q31(const arm_dct4_instance_q31 *S, q31_t *pState, q31_t *pInlineB
 
     while (i > 0U)
     {
-        in = *pS1 - in;
+        in       = *pS1 - in;
         *pbuff++ = in;
         pS1 += 2;
 
-        in = *pS1 - in;
+        in       = *pS1 - in;
         *pbuff++ = in;
         pS1 += 2;
 
-        in = *pS1 - in;
+        in       = *pS1 - in;
         *pbuff++ = in;
         pS1 += 2;
 
-        in = *pS1 - in;
+        in       = *pS1 - in;
         *pbuff++ = in;
         pS1 += 2;
 
@@ -539,32 +539,32 @@ arm_status arm_dct4_init_q15(arm_dct4_instance_q15 *S,
     {
         /* Initialize the table modifier values */
         case 512U:
-            S->pTwiddle = (q15_t *)dct512_twiddle;
+            S->pTwiddle   = (q15_t *)dct512_twiddle;
             S->pCosFactor = (q15_t *)dct512_cosFactor;
             break;
 
         case 256U:
-            S->pTwiddle = (q15_t *)dct256_twiddle;
+            S->pTwiddle   = (q15_t *)dct256_twiddle;
             S->pCosFactor = (q15_t *)dct256_cosFactor;
             break;
 
         case 128U:
-            S->pTwiddle = (q15_t *)dct128_twiddle;
+            S->pTwiddle   = (q15_t *)dct128_twiddle;
             S->pCosFactor = (q15_t *)dct128_cosFactor;
             break;
 
         case 64U:
-            S->pTwiddle = (q15_t *)dct64_twiddle;
+            S->pTwiddle   = (q15_t *)dct64_twiddle;
             S->pCosFactor = (q15_t *)dct64_cosFactor;
             break;
 
         case 32U:
-            S->pTwiddle = (q15_t *)dct32_twiddle;
+            S->pTwiddle   = (q15_t *)dct32_twiddle;
             S->pCosFactor = (q15_t *)dct32_cosFactor;
             break;
 
         case 16U:
-            S->pTwiddle = (q15_t *)dct16_twiddle;
+            S->pTwiddle   = (q15_t *)dct16_twiddle;
             S->pCosFactor = (q15_t *)dct16_cosFactor;
             break;
 
@@ -606,12 +606,12 @@ void arm_dct4_q15(const arm_dct4_instance_q15 *S, q15_t *pState, q15_t *pInlineB
      * Use matrix production function for preprocessing. Matrix production
      * supports 16x16 at the most, so the matrix row is set to 16.
      */
-    matRow = 16;
+    matRow        = 16;
     lenPerMatLoop = S->N >= 256 ? 256 : S->N;
-    matCol = lenPerMatLoop / 16;
-    matLoop = ((S->N - 1) >> 8) + 1;
-    cosFact = S->pCosFactor;
-    pbuff = pInlineBuffer;
+    matCol        = lenPerMatLoop / 16;
+    matLoop       = ((S->N - 1) >> 8) + 1;
+    cosFact       = S->pCosFactor;
+    pbuff         = pInlineBuffer;
 
     length = POWERQUAD_MAKE_MATRIX_LEN(matRow, matCol, 0);
 
@@ -630,7 +630,7 @@ void arm_dct4_q15(const arm_dct4_instance_q15 *S, q15_t *pState, q15_t *pInlineB
         POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_Float;
         POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float;
         POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float;
-        POWERQUAD->TMPBASE = 0xE0000000;
+        POWERQUAD->TMPBASE   = 0xE0000000;
 
         PQ_MatrixProduct(POWERQUAD, length, pbuff, (void *)0xE0000000, pbuff);
 
@@ -649,10 +649,10 @@ void arm_dct4_q15(const arm_dct4_instance_q15 *S, q15_t *pState, q15_t *pInlineB
      * Matrix production supports 16x16 at the most. The total elements are 2*N;
      */
     lenPerMatLoop = S->N >= 128 ? 128 : S->N;
-    matCol = lenPerMatLoop / 8;
-    matLoop = ((S->N - 1) >> 7) + 1;
-    weights = S->pTwiddle;
-    pOut = pState;
+    matCol        = lenPerMatLoop / 8;
+    matLoop       = ((S->N - 1) >> 7) + 1;
+    weights       = S->pTwiddle;
+    pOut          = pState;
 
     length = POWERQUAD_MAKE_MATRIX_LEN(matRow, matCol, matCol);
 
@@ -673,7 +673,7 @@ void arm_dct4_q15(const arm_dct4_instance_q15 *S, q15_t *pState, q15_t *pInlineB
         POWERQUAD->INAFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_16Bit << 4U) | kPQ_Float;
         POWERQUAD->INBFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float;
         POWERQUAD->TMPFORMAT = ((uint32_t)(0) << 8U) | ((uint32_t)kPQ_Float << 4U) | kPQ_Float;
-        POWERQUAD->TMPBASE = 0xE0000000;
+        POWERQUAD->TMPBASE   = 0xE0000000;
 
         PQ_MatrixProduct(POWERQUAD, length, pOut, (void *)0xE0000000, pOut);
 
@@ -705,19 +705,19 @@ void arm_dct4_q15(const arm_dct4_instance_q15 *S, q15_t *pState, q15_t *pInlineB
     pS1 = pState;
 
     /* Calculating Y4(0) from Y2(0) using Y4(0) = Y2(0)/2. Considering the DCT II normalize, here divided by sqrt(2).*/
-    in = (q15_t)((float)*pS1 / 1.41421356237f);
+    in       = (q15_t)((float)*pS1 / 1.41421356237f);
     *pbuff++ = in;
     pS1 += 2;
 
-    in = *pS1 - in;
+    in       = *pS1 - in;
     *pbuff++ = in;
     pS1 += 2;
 
-    in = *pS1 - in;
+    in       = *pS1 - in;
     *pbuff++ = in;
     pS1 += 2;
 
-    in = *pS1 - in;
+    in       = *pS1 - in;
     *pbuff++ = in;
     pS1 += 2;
 
@@ -725,19 +725,19 @@ void arm_dct4_q15(const arm_dct4_instance_q15 *S, q15_t *pState, q15_t *pInlineB
 
     while (i > 0U)
     {
-        in = *pS1 - in;
+        in       = *pS1 - in;
         *pbuff++ = in;
         pS1 += 2;
 
-        in = *pS1 - in;
+        in       = *pS1 - in;
         *pbuff++ = in;
         pS1 += 2;
 
-        in = *pS1 - in;
+        in       = *pS1 - in;
         *pbuff++ = in;
         pS1 += 2;
 
-        in = *pS1 - in;
+        in       = *pS1 - in;
         *pbuff++ = in;
         pS1 += 2;
 
@@ -762,7 +762,7 @@ void arm_fir_init_f32(
 
     S->numTaps = numTaps;
     S->pCoeffs = pCoeffs;
-    S->pState = pState;
+    S->pState  = pState;
 
     for (i = 0; i < numTaps; i++)
     {
@@ -788,7 +788,7 @@ void arm_fir_init_q31(arm_fir_instance_q31 *S, uint16_t numTaps, q31_t *pCoeffs,
 
     S->numTaps = numTaps;
     S->pCoeffs = pCoeffs;
-    S->pState = pState;
+    S->pState  = pState;
 
     for (i = 0; i < numTaps; i++)
     {
@@ -815,7 +815,7 @@ arm_status arm_fir_init_q15(
 
     S->numTaps = numTaps;
     S->pCoeffs = pCoeffs;
-    S->pState = pState;
+    S->pState  = pState;
 
     for (i = 0; i < numTaps; i++)
     {
@@ -1288,13 +1288,13 @@ arm_status arm_mat_mult_q31(const arm_matrix_instance_q31 *pSrcA,
     arm_status status;
     q31_t length;
 
-/*
- * The output prescale does not supprt negative value due to hardware issue,
- * workaround:
- * 1. Downscale the matrix B and save the float output value to private memory.
- * 2. Multiply the float matrix B in private memory with matrix A, output as Q31.
- * Note: Put matrix B in private memory is faster.
- */
+    /*
+     * The output prescale does not supprt negative value due to hardware issue,
+     * workaround:
+     * 1. Downscale the matrix B and save the float output value to private memory.
+     * 2. Multiply the float matrix B in private memory with matrix A, output as Q31.
+     * Note: Put matrix B in private memory is faster.
+     */
 
 #ifdef ARM_MATH_MATRIX_CHECK
     /* Check for matrix mismatch condition */
@@ -1563,16 +1563,16 @@ arm_status arm_mat_scale_q31(const arm_matrix_instance_q31 *pSrc,
     float scaleFloat;
 
     pq_config_t config = {
-        kPQ_32Bit,          /* inputAFormat   */
-        0,                  /* inputAPrescale */
-        kPQ_32Bit,          /* inputBFormat   */
-        0,                  /* inputBPrescale */
-        kPQ_32Bit,          /* outputFormat   */
-        shift,              /* outputPrescale */
-        kPQ_Float,          /* tmpFormat      */
-        0,                  /* tmpPrescale    */
-        kPQ_Float,          /* machineFormat  */
-        (void *)0xe0000000, /* tmpBase        */
+        kPQ_32Bit,              /* inputAFormat   */
+        0,                      /* inputAPrescale */
+        kPQ_32Bit,              /* inputBFormat   */
+        0,                      /* inputBPrescale */
+        kPQ_32Bit,              /* outputFormat   */
+        (int8_t)shift,          /* outputPrescale */
+        kPQ_Float,              /* tmpFormat      */
+        0,                      /* tmpPrescale    */
+        kPQ_Float,              /* machineFormat  */
+        (uint32_t *)0xe0000000, /* tmpBase        */
     };
 
 #ifdef ARM_MATH_MATRIX_CHECK
@@ -1616,16 +1616,16 @@ arm_status arm_mat_scale_q15(const arm_matrix_instance_q15 *pSrc,
     float scaleFloat;
 
     pq_config_t config = {
-        kPQ_16Bit,          /* inputAFormat   */
-        0,                  /* inputAPrescale */
-        kPQ_16Bit,          /* inputBFormat   */
-        0,                  /* inputBPrescale */
-        kPQ_16Bit,          /* outputFormat   */
-        shift,              /* outputPrescale */
-        kPQ_Float,          /* tmpFormat      */
-        0,                  /* tmpPrescale    */
-        kPQ_Float,          /* machineFormat  */
-        (void *)0xe0000000, /* tmpBase        */
+        kPQ_16Bit,              /* inputAFormat   */
+        0,                      /* inputAPrescale */
+        kPQ_16Bit,              /* inputBFormat   */
+        0,                      /* inputBPrescale */
+        kPQ_16Bit,              /* outputFormat   */
+        (int8_t)shift,          /* outputPrescale */
+        kPQ_Float,              /* tmpFormat      */
+        0,                      /* tmpPrescale    */
+        kPQ_Float,              /* machineFormat  */
+        (uint32_t *)0xe0000000, /* tmpBase        */
     };
 
 #ifdef ARM_MATH_MATRIX_CHECK

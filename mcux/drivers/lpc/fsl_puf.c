@@ -10,7 +10,6 @@
 #include "fsl_clock.h"
 #include "fsl_reset.h"
 #include "fsl_common.h"
-
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.puf"
@@ -46,7 +45,7 @@ static status_t puf_waitForInit(PUF_Type *base)
     }
 
     /* return status */
-    if (PUF_STAT_SUCCESS_MASK == (base->STAT & (PUF_STAT_SUCCESS_MASK | PUF_STAT_ERROR_MASK)))
+    if (base->STAT & (PUF_STAT_SUCCESS_MASK | PUF_STAT_ERROR_MASK))
     {
         status = kStatus_Success;
     }
@@ -76,7 +75,15 @@ static status_t puf_powerCycle(PUF_Type *base, uint32_t dischargeTimeMsec, uint3
     /* RT6xxs */
     uint32_t coreClockFrequencyMHz = coreClockFrequencyHz / 1000000u;
 
-    /* exit ASPS mode */
+    base->PWRCTRL = 0xDu; /* disable RAM CK */
+
+    /* enter ASPS mode */
+    base->PWRCTRL = 0xCu;  /* SLEEP = 1 */
+    base->PWRCTRL = 0x8u;  /* enable RAM CK */
+    base->PWRCTRL = 0xF8u; /* SLEEP=1, PSW*=1 */
+
+    /* Wait enough time to discharge fully */
+    puf_wait_usec(dischargeTimeMsec * 1000u, coreClockFrequencyHz / 1000000u);
 
     /* write PWRCTRL=0x38. wait time > 1 us */
     base->PWRCTRL = 0x38u; /* SLEEP=1. PSWSMALL*=0. PSWLARGE*=1. */
@@ -100,10 +107,10 @@ static status_t puf_powerCycle(PUF_Type *base, uint32_t dischargeTimeMsec, uint3
     while (PUF_PWRCTRL_RAMSTAT_MASK & base->PWRCTRL)
     {
     }
-#endif
 
     /* Wait enough time to discharge fully */
     puf_wait_usec(dischargeTimeMsec * 1000u, coreClockFrequencyHz / 1000000u);
+#endif
 
     /* Reset PUF and reenable power to PUF SRAM */
     RESET_PeripheralReset(kPUF_RST_SHIFT_RSTn);
@@ -166,7 +173,7 @@ void PUF_Deinit(PUF_Type *base, uint32_t dischargeTimeMsec, uint32_t coreClockFr
     base->PWRCTRL = 0xCu;  /* SLEEP = 1 */
     base->PWRCTRL = 0x8u;  /* enable RAM CK */
     base->PWRCTRL = 0xF8u; /* SLEEP=1, PSW*=1 */
-#else /* !FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL */
+#else                      /* !FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL */
     /* Niobe4 & Aruba FL */
     base->PWRCTRL = 0x00u;
 #endif
@@ -195,9 +202,9 @@ void PUF_Deinit(PUF_Type *base, uint32_t dischargeTimeMsec, uint32_t coreClockFr
  */
 status_t PUF_Enroll(PUF_Type *base, uint8_t *activationCode, size_t activationCodeSize)
 {
-    status_t status = kStatus_Fail;
+    status_t status                 = kStatus_Fail;
     uint32_t *activationCodeAligned = NULL;
-    register uint32_t temp32 = 0;
+    register uint32_t temp32        = 0;
 
     /* check that activation code buffer size is at least 1192 bytes */
     if (activationCodeSize < PUF_ACTIVATION_CODE_SIZE)
@@ -264,9 +271,9 @@ status_t PUF_Enroll(PUF_Type *base, uint8_t *activationCode, size_t activationCo
  */
 status_t PUF_Start(PUF_Type *base, const uint8_t *activationCode, size_t activationCodeSize)
 {
-    status_t status = kStatus_Fail;
+    status_t status                       = kStatus_Fail;
     const uint32_t *activationCodeAligned = NULL;
-    register uint32_t temp32 = 0;
+    register uint32_t temp32              = 0;
 
     /* check that activation code size is at least 1192 bytes */
     if (activationCodeSize < 1192)
@@ -340,7 +347,7 @@ status_t PUF_Start(PUF_Type *base, const uint8_t *activationCode, size_t activat
 status_t PUF_SetIntrinsicKey(
     PUF_Type *base, puf_key_index_register_t keyIndex, size_t keySize, uint8_t *keyCode, size_t keyCodeSize)
 {
-    status_t status = kStatus_Fail;
+    status_t status          = kStatus_Fail;
     uint32_t *keyCodeAligned = NULL;
     register uint32_t temp32 = 0;
 
@@ -376,7 +383,7 @@ status_t PUF_SetIntrinsicKey(
     keyCodeAligned = (uint32_t *)(uintptr_t)keyCode;
 
     /* program the key size and index */
-    base->KEYSIZE = keySize >> 3;
+    base->KEYSIZE  = keySize >> 3;
     base->KEYINDEX = (uint32_t)keyIndex;
 
     /* begin */
@@ -434,10 +441,10 @@ status_t PUF_SetUserKey(PUF_Type *base,
                         uint8_t *keyCode,
                         size_t keyCodeSize)
 {
-    status_t status = kStatus_Fail;
-    uint32_t *keyCodeAligned = NULL;
+    status_t status                = kStatus_Fail;
+    uint32_t *keyCodeAligned       = NULL;
     const uint32_t *userKeyAligned = NULL;
-    register uint32_t temp32 = 0;
+    register uint32_t temp32       = 0;
 
     /* check if SET KEY is allowed */
     if (0x0u == (base->ALLOW & PUF_ALLOW_ALLOWSETKEY_MASK))
@@ -472,7 +479,7 @@ status_t PUF_SetUserKey(PUF_Type *base,
     userKeyAligned = (const uint32_t *)(uintptr_t)userKey;
 
     /* program the key size and index */
-    base->KEYSIZE = userKeySize >> 3; /* convert to 64-bit blocks */
+    base->KEYSIZE  = userKeySize >> 3; /* convert to 64-bit blocks */
     base->KEYINDEX = (uint32_t)keyIndex;
 
     /* begin */
@@ -520,7 +527,7 @@ status_t PUF_SetUserKey(PUF_Type *base,
 
 static status_t puf_getHwKey(PUF_Type *base, const uint8_t *keyCode, size_t keyCodeSize)
 {
-    status_t status = kStatus_Fail;
+    status_t status          = kStatus_Fail;
     uint32_t *keyCodeAligned = NULL;
     register uint32_t temp32 = 0;
 
@@ -609,7 +616,7 @@ status_t PUF_GetHwKey(
 
 #if defined(FSL_FEATURE_PUF_HAS_KEYSLOTS) && (FSL_FEATURE_PUF_HAS_KEYSLOTS > 0)
     volatile uint32_t *keyMask_reg = NULL;
-    uint32_t regVal = (2 << (2 * keySlot));
+    uint32_t regVal                = (2 << (2 * keySlot));
 
     switch (keySlot)
     {
@@ -638,9 +645,9 @@ status_t PUF_GetHwKey(
     if (status != kStatus_InvalidArgument)
     {
 #if defined(FSL_FEATURE_PUF_HAS_KEYSLOTS) && (FSL_FEATURE_PUF_HAS_KEYSLOTS > 0)
-        base->KEYRESET = regVal;
+        base->KEYRESET  = regVal;
         base->KEYENABLE = regVal;
-        *keyMask_reg = keyMask;
+        *keyMask_reg    = keyMask;
 #endif /* FSL_FEATURE_PUF_HAS_KEYSLOTS */
 
         status = puf_getHwKey(base, keyCode, keyCodeSize);
@@ -673,11 +680,6 @@ status_t PUF_GetHwKey(
  */
 bool PUF_IsGetKeyAllowed(PUF_Type *base)
 {
-    if (0 == (PUF_PWRCTRL_RAMSTAT_MASK & base->PWRCTRL))
-    {
-        return false;
-    }
-
     /* check if GET KEY is allowed */
     if (0x0u == (base->ALLOW & PUF_ALLOW_ALLOWGETKEY_MASK))
     {
@@ -704,9 +706,9 @@ bool PUF_IsGetKeyAllowed(PUF_Type *base)
  */
 status_t PUF_GetKey(PUF_Type *base, const uint8_t *keyCode, size_t keyCodeSize, uint8_t *key, size_t keySize)
 {
-    status_t status = kStatus_Fail;
+    status_t status          = kStatus_Fail;
     uint32_t *keyCodeAligned = NULL;
-    uint32_t *keyAligned = NULL;
+    uint32_t *keyAligned     = NULL;
     uint32_t keyIndex;
     register uint32_t temp32 = 0;
 
@@ -743,7 +745,7 @@ status_t PUF_GetKey(PUF_Type *base, const uint8_t *keyCode, size_t keyCodeSize, 
     }
 
     keyCodeAligned = (uint32_t *)(uintptr_t)keyCode;
-    keyAligned = (uint32_t *)(uintptr_t)key;
+    keyAligned     = (uint32_t *)(uintptr_t)key;
 
     /* begin */
     base->CTRL = PUF_CTRL_GETKEY_MASK;
@@ -771,7 +773,7 @@ status_t PUF_GetKey(PUF_Type *base, const uint8_t *keyCode, size_t keyCodeSize, 
         if (0 != (PUF_STAT_KEYOUTAVAIL_MASK & base->STAT))
         {
             keyIndex = base->KEYOUTINDEX;
-            temp32 = base->KEYOUTPUT;
+            temp32   = base->KEYOUTPUT;
             if (keySize >= sizeof(uint32_t))
             {
                 *keyAligned = temp32;

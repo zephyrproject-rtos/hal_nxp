@@ -12,7 +12,7 @@
 #include "fsl_iap.h"
 
 /*!
- * @addtogroup iap_ffr_driver
+ * @addtogroup flash_ifr_driver
  * @{
  */
 
@@ -45,20 +45,20 @@
 
 enum _flash_ffr_page_offset
 {
-    kFfrPageOffset_CFPA = 0,         /*!< Customer In-Field programmed area*/
+    kFfrPageOffset_CFPA         = 0, /*!< Customer In-Field programmed area*/
     kFfrPageOffset_CFPA_Scratch = 0, /*!< CFPA Scratch page */
-    kFfrPageOffset_CFPA_Cfg = 1,     /*!< CFPA Configuration area (Ping page)*/
+    kFfrPageOffset_CFPA_Cfg     = 1, /*!< CFPA Configuration area (Ping page)*/
     kFfrPageOffset_CFPA_CfgPong = 2, /*!< Same as CFPA page (Pong page)*/
 
-    kFfrPageOffset_CMPA = 3,     /*!< Customer Manufacturing programmed area*/
+    kFfrPageOffset_CMPA     = 3, /*!< Customer Manufacturing programmed area*/
     kFfrPageOffset_CMPA_Cfg = 3, /*!< CMPA Configuration area (Part of CMPA)*/
     kFfrPageOffset_CMPA_Key = 4, /*!< Key Store area (Part of CMPA)*/
 
-    kFfrPageOffset_NMPA = 7,        /*!< NXP Manufacturing programmed area*/
-    kFfrPageOffset_NMPA_Romcp = 7,  /*!< ROM patch area (Part of NMPA)*/
-    kFfrPageOffset_NMPA_Repair = 9, /*!< Repair area (Part of NMPA)*/
-    kFfrPageOffset_NMPA_Cfg = 15,   /*!< NMPA configuration area (Part of NMPA)*/
-    kFfrPageOffset_NMPA_End = 16,   /*!< Reserved (Part of NMPA)*/
+    kFfrPageOffset_NMPA        = 7,  /*!< NXP Manufacturing programmed area*/
+    kFfrPageOffset_NMPA_Romcp  = 7,  /*!< ROM patch area (Part of NMPA)*/
+    kFfrPageOffset_NMPA_Repair = 9,  /*!< Repair area (Part of NMPA)*/
+    kFfrPageOffset_NMPA_Cfg    = 15, /*!< NMPA configuration area (Part of NMPA)*/
+    kFfrPageOffset_NMPA_End    = 16, /*!< Reserved (Part of NMPA)*/
 };
 
 enum _flash_ffr_page_num
@@ -67,19 +67,25 @@ enum _flash_ffr_page_num
     kFfrPageNum_CMPA = 4,  /*!< Customer Manufacturing programmed area*/
     kFfrPageNum_NMPA = 10, /*!< NXP Manufacturing programmed area*/
 
-    kFfrPageNum_CMPA_Cfg = 1,
-    kFfrPageNum_CMPA_Key = 3,
+    kFfrPageNum_CMPA_Cfg   = 1,
+    kFfrPageNum_CMPA_Key   = 3,
     kFfrPageNum_NMPA_Romcp = 2,
 
     kFfrPageNum_SpecArea = kFfrPageNum_CFPA + kFfrPageNum_CMPA,
-    kFfrPageNum_Total = (kFfrPageNum_CFPA + kFfrPageNum_CMPA + kFfrPageNum_NMPA),
+    kFfrPageNum_Total    = (kFfrPageNum_CFPA + kFfrPageNum_CMPA + kFfrPageNum_NMPA),
 };
 
 enum _flash_ffr_block_size
 {
-    kFfrBlockSize_Key = 52u,
+    kFfrBlockSize_Key            = 52u,
     kFfrBlockSize_ActivationCode = 1192u,
 };
+
+typedef enum _cfpa_cfg_cmpa_prog_process
+{
+    kFfrCmpaProgProcess_Pre  = 0x0u,
+    kFfrCmpaProgProcess_Post = 0xFFFFFFFFu,
+} cmpa_prog_process_t;
 
 typedef struct _cfpa_cfg_iv_code
 {
@@ -197,9 +203,9 @@ typedef struct _ffr_key_store
 
 typedef enum _ffr_key_type
 {
-    kFFR_KeyTypeSbkek = 0x00U,
-    kFFR_KeyTypeUser = 0x01U,
-    kFFR_KeyTypeUds = 0x02U,
+    kFFR_KeyTypeSbkek         = 0x00U,
+    kFFR_KeyTypeUser          = 0x01U,
+    kFFR_KeyTypeUds           = 0x02U,
     kFFR_KeyTypePrinceRegion0 = 0x03U,
     kFFR_KeyTypePrinceRegion1 = 0x04U,
     kFFR_KeyTypePrinceRegion2 = 0x05U,
@@ -231,6 +237,9 @@ status_t FFR_InfieldPageWrite(flash_config_t *config, uint8_t *page_data, uint32
 status_t FFR_GetCustomerInfieldData(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
 
 /*! APIs to access CMPA pages */
+bool FFR_IsCmpaCfgPageUpdateInProgress(flash_config_t *config);
+status_t FFR_RecoverCmpaCfgPage(flash_config_t *config);
+status_t FFR_ProcessCmpaCfgPageUpdate(flash_config_t *config, cmpa_prog_process_t option);
 status_t FFR_CustFactoryPageWrite(flash_config_t *config, uint8_t *page_data, bool seal_part);
 /*! Read data stored in 'Customer Factory CFG Page'. */
 status_t FFR_GetCustomerData(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
@@ -248,6 +257,5 @@ status_t FFR_GetUUID(flash_config_t *config, uint8_t *uuid);
 #ifdef __cplusplus
 }
 #endif
-/*@}*/
 
 #endif /*! __FSL_FLASH_FFR_H_ */

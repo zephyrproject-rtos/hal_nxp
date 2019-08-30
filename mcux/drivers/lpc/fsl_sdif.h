@@ -21,42 +21,42 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.0.10. */
-#define FSL_SDIF_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 10U))
+/*! @brief Driver version 2.0.11. */
+#define FSL_SDIF_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 11U))
 /*@}*/
 
 /*! @brief  SDIOCLKCTRL setting
-* Below clock delay setting should depend on specific platform, so
-* it can be redefined when timing mismatch issue occur.
-* Such as: response error/CRC error and so on
-*/
+ * Below clock delay setting should depend on specific platform, so
+ * it can be redefined when timing mismatch issue occur.
+ * Such as: response error/CRC error and so on
+ */
 /*! @brief clock range value which need to add delay to avoid timing issue */
 #ifndef SDIF_CLOCK_RANGE_NEED_DELAY
 #define SDIF_CLOCK_RANGE_NEED_DELAY (50000000U)
 #endif
 
 /*
-* Fixed delay configuration
-* min hold time:2ns
-* min setup time: 6ns
-* delay = (x+1)*250ps
-*/
+ * Fixed delay configuration
+ * min hold time:2ns
+ * min setup time: 6ns
+ * delay = (x+1)*250ps
+ */
 /*! @brief High speed mode clk_sample fixed delay*/
 #ifndef SDIF_HIGHSPEED_SAMPLE_DELAY
-#define SDIF_HIGHSPEED_SAMPLE_DELAY (0U)
+#define SDIF_HIGHSPEED_SAMPLE_DELAY (12U) /*!< 12 * 250ps = 3ns */
 #endif
 /*! @brief High speed mode clk_drv fixed delay */
 #ifndef SDIF_HIGHSPEED_DRV_DELAY
-#define SDIF_HIGHSPEED_DRV_DELAY (0x1FU)
+#define SDIF_HIGHSPEED_DRV_DELAY (0x1FU) /*!< 31 * 250ps = 7.75ns */
 #endif
 
 /*
-* Phase shift delay configuration
-* 0 degree: no delay
-* 90 degree: 0.25/source clk value
-* 180 degree: 0.50/source clk value
-* 270 degree: 0.75/source clk value
-*/
+ * Phase shift delay configuration
+ * 0 degree: no delay
+ * 90 degree: 0.25/source clk value
+ * 180 degree: 0.50/source clk value
+ * 270 degree: 0.75/source clk value
+ */
 /*! @brief High speed mode clk_sample phase shift */
 #ifndef SDIF_HIGHSPEED_SAMPLE_PHASE_SHIFT
 #define SDIF_HIGHSPEED_SAMPLE_PHASE_SHIFT (0U)
@@ -65,17 +65,32 @@
 #ifndef SDIF_HIGHSPEED_DRV_PHASE_SHIFT
 #define SDIF_HIGHSPEED_DRV_PHASE_SHIFT (1U) /* 90 degrees clk_drv phase delay */
 #endif
+/*! @brief default mode sample fixed delay */
+#ifndef SDIF_DEFAULT_MODE_SAMPLE_DELAY
+#define SDIF_DEFAULT_MODE_SAMPLE_DELAY (31U) /*!< 31 * 250ps = 7.75ns */
+#endif
+
+#ifndef SDIF_DEFAULT_MODE_DRV_DELAY
+#define SDIF_DEFAULT_MODE_DRV_DELAY (31U) /*!< 31 * 250ps = 7.75ns */
+#endif
 
 /*! @brief SDIF internal DMA descriptor address and the data buffer address align */
 #define SDIF_INTERNAL_DMA_ADDR_ALIGN (4U)
+/*! @brief SDIF DMA descriptor flag */
+#define SDIF_DMA_DESCRIPTOR_DISABLE_COMPLETE_INT_FLAG (1U << 1U)
+#define SDIF_DMA_DESCRIPTOR_DATA_BUFFER_END_FLAG (1U << 2U)
+#define SDIF_DMA_DESCRIPTOR_DATA_BUFFER_START_FLAG (1U << 3U)
+#define SDIF_DMA_DESCRIPTOR_SECOND_ADDR_CHAIN_FLAG (1U << 4U)
+#define SDIF_DMA_DESCRIPTOR_DESCRIPTOR_END_FLAG (1U << 5U)
+#define SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG (1U << 31U)
 
 /*! @brief SDIF status */
 enum _sdif_status
 {
     kStatus_SDIF_DescriptorBufferLenError = MAKE_STATUS(kStatusGroup_SDIF, 0U), /*!< Set DMA descriptor failed */
-    kStatus_SDIF_InvalidArgument = MAKE_STATUS(kStatusGroup_SDIF, 1U),          /*!< invalid argument status */
+    kStatus_SDIF_InvalidArgument          = MAKE_STATUS(kStatusGroup_SDIF, 1U), /*!< invalid argument status */
     kStatus_SDIF_SyncCmdTimeout = MAKE_STATUS(kStatusGroup_SDIF, 2U), /*!< sync command to CIU timeout status */
-    kStatus_SDIF_SendCmdFail = MAKE_STATUS(kStatusGroup_SDIF, 3U),    /*!< send command to card fail */
+    kStatus_SDIF_SendCmdFail    = MAKE_STATUS(kStatusGroup_SDIF, 3U), /*!< send command to card fail */
     kStatus_SDIF_SendCmdErrorBufferFull =
         MAKE_STATUS(kStatusGroup_SDIF, 4U), /*!< send command to card fail, due to command buffer full
                                      user need to resend this command */
@@ -85,31 +100,30 @@ enum _sdif_status
     kStatus_SDIF_DMATransferDescriptorUnavailable =
         MAKE_STATUS(kStatusGroup_SDIF, 6U),                             /*!< DMA descriptor unavailable */
     kStatus_SDIF_DataTransferFail = MAKE_STATUS(kStatusGroup_SDIF, 6U), /*!< transfer data fail */
-    kStatus_SDIF_ResponseError = MAKE_STATUS(kStatusGroup_SDIF, 7U),    /*!< response error */
-    kStatus_SDIF_DMAAddrNotAlign = MAKE_STATUS(kStatusGroup_SDIF, 8U),  /*!< DMA address not align */
+    kStatus_SDIF_ResponseError    = MAKE_STATUS(kStatusGroup_SDIF, 7U), /*!< response error */
+    kStatus_SDIF_DMAAddrNotAlign  = MAKE_STATUS(kStatusGroup_SDIF, 8U), /*!< DMA address not align */
 };
 
 /*! @brief Host controller capabilities flag mask */
 enum _sdif_capability_flag
 {
-    kSDIF_SupportHighSpeedFlag = 0x1U,     /*!< Support high-speed */
-    kSDIF_SupportDmaFlag = 0x2U,           /*!< Support DMA */
-    kSDIF_SupportSuspendResumeFlag = 0x4U, /*!< Support suspend/resume */
-    kSDIF_SupportV330Flag = 0x8U,          /*!< Support voltage 3.3V */
-    kSDIF_Support4BitFlag = 0x10U,         /*!< Support 4 bit mode */
-    kSDIF_Support8BitFlag = 0x20U,         /*!< Support 8 bit mode */
+    kSDIF_SupportHighSpeedFlag     = 0x1U,  /*!< Support high-speed */
+    kSDIF_SupportDmaFlag           = 0x2U,  /*!< Support DMA */
+    kSDIF_SupportSuspendResumeFlag = 0x4U,  /*!< Support suspend/resume */
+    kSDIF_SupportV330Flag          = 0x8U,  /*!< Support voltage 3.3V */
+    kSDIF_Support4BitFlag          = 0x10U, /*!< Support 4 bit mode */
+    kSDIF_Support8BitFlag          = 0x20U, /*!< Support 8 bit mode */
 };
 
 /*! @brief define the reset type */
 enum _sdif_reset_type
 {
-    kSDIF_ResetController =
-        SDIF_CTRL_CONTROLLER_RESET_MASK,                /*!< reset controller,will reset: BIU/CIU interface
-                                                          CIU and state machine,ABORT_READ_DATA,SEND_IRQ_RESPONSE
-                                                          and READ_WAIT bits of control register,START_CMD bit of the
-                                                          command register*/
-    kSDIF_ResetFIFO = SDIF_CTRL_FIFO_RESET_MASK,        /*!< reset data FIFO*/
-    kSDIF_ResetDMAInterface = SDIF_CTRL_DMA_RESET_MASK, /*!< reset DMA interface */
+    kSDIF_ResetController = SDIF_CTRL_CONTROLLER_RESET_MASK, /*!< reset controller,will reset: BIU/CIU interface
+                                                               CIU and state machine,ABORT_READ_DATA,SEND_IRQ_RESPONSE
+                                                               and READ_WAIT bits of control register,START_CMD bit of
+                                                               the command register*/
+    kSDIF_ResetFIFO = SDIF_CTRL_FIFO_RESET_MASK,             /*!< reset data FIFO*/
+    kSDIF_ResetDMAInterface = SDIF_CTRL_DMA_RESET_MASK,      /*!< reset DMA interface */
 
     kSDIF_ResetAll = kSDIF_ResetController | kSDIF_ResetFIFO | /*!< reset all*/
                      kSDIF_ResetDMAInterface,
@@ -127,41 +141,40 @@ typedef enum _sdif_bus_width
 /*! @brief define the command flags */
 enum _sdif_command_flags
 {
-    kSDIF_CmdResponseExpect = SDIF_CMD_RESPONSE_EXPECT_MASK,      /*!< command request response*/
-    kSDIF_CmdResponseLengthLong = SDIF_CMD_RESPONSE_LENGTH_MASK,  /*!< command response length long */
-    kSDIF_CmdCheckResponseCRC = SDIF_CMD_CHECK_RESPONSE_CRC_MASK, /*!< request check command response CRC*/
-    kSDIF_DataExpect = SDIF_CMD_DATA_EXPECTED_MASK,               /*!< request data transfer,either read/write*/
-    kSDIF_DataWriteToCard = SDIF_CMD_READ_WRITE_MASK,             /*!< data transfer direction */
-    kSDIF_DataStreamTransfer = SDIF_CMD_TRANSFER_MODE_MASK,    /*!< data transfer mode :stream/block transfer command */
-    kSDIF_DataTransferAutoStop = SDIF_CMD_SEND_AUTO_STOP_MASK, /*!< data transfer with auto stop at the end of */
+    kSDIF_CmdResponseExpect     = SDIF_CMD_RESPONSE_EXPECT_MASK,    /*!< command request response*/
+    kSDIF_CmdResponseLengthLong = SDIF_CMD_RESPONSE_LENGTH_MASK,    /*!< command response length long */
+    kSDIF_CmdCheckResponseCRC   = SDIF_CMD_CHECK_RESPONSE_CRC_MASK, /*!< request check command response CRC*/
+    kSDIF_DataExpect            = SDIF_CMD_DATA_EXPECTED_MASK,      /*!< request data transfer,either read/write*/
+    kSDIF_DataWriteToCard       = SDIF_CMD_READ_WRITE_MASK,         /*!< data transfer direction */
+    kSDIF_DataStreamTransfer    = SDIF_CMD_TRANSFER_MODE_MASK, /*!< data transfer mode :stream/block transfer command */
+    kSDIF_DataTransferAutoStop  = SDIF_CMD_SEND_AUTO_STOP_MASK, /*!< data transfer with auto stop at the end of */
     kSDIF_WaitPreTransferComplete =
-        SDIF_CMD_WAIT_PRVDATA_COMPLETE_MASK, /*!< wait pre transfer complete before sending this cmd  */
-    kSDIF_TransferStopAbort =
-        SDIF_CMD_STOP_ABORT_CMD_MASK, /*!< when host issue stop or abort cmd to stop data transfer
-                                       ,this bit should set so that cmd/data state-machines of CIU can return
-                                       to idle correctly*/
+        SDIF_CMD_WAIT_PRVDATA_COMPLETE_MASK,                /*!< wait pre transfer complete before sending this cmd  */
+    kSDIF_TransferStopAbort = SDIF_CMD_STOP_ABORT_CMD_MASK, /*!< when host issue stop or abort cmd to stop data transfer
+                                                             ,this bit should set so that cmd/data state-machines of CIU
+                                                             can return to idle correctly*/
     kSDIF_SendInitialization =
         SDIF_CMD_SEND_INITIALIZATION_MASK, /*!< send initialization  80 clocks for SD card after power on  */
     kSDIF_CmdUpdateClockRegisterOnly =
         SDIF_CMD_UPDATE_CLOCK_REGISTERS_ONLY_MASK,                /*!< send cmd update the CIU clock register only */
     kSDIF_CmdtoReadCEATADevice = SDIF_CMD_READ_CEATA_DEVICE_MASK, /*!< host is perform read access to CE-ATA device */
-    kSDIF_CmdExpectCCS = SDIF_CMD_CCS_EXPECTED_MASK,         /*!< command expect command completion signal signal */
-    kSDIF_BootModeEnable = SDIF_CMD_ENABLE_BOOT_MASK,        /*!< this bit should only be set for mandatory boot mode */
-    kSDIF_BootModeExpectAck = SDIF_CMD_EXPECT_BOOT_ACK_MASK, /*!< boot mode expect ack */
-    kSDIF_BootModeDisable = SDIF_CMD_DISABLE_BOOT_MASK,      /*!< when software set this bit along with START_CMD, CIU
+    kSDIF_CmdExpectCCS         = SDIF_CMD_CCS_EXPECTED_MASK, /*!< command expect command completion signal signal */
+    kSDIF_BootModeEnable       = SDIF_CMD_ENABLE_BOOT_MASK,  /*!< this bit should only be set for mandatory boot mode */
+    kSDIF_BootModeExpectAck    = SDIF_CMD_EXPECT_BOOT_ACK_MASK, /*!< boot mode expect ack */
+    kSDIF_BootModeDisable      = SDIF_CMD_DISABLE_BOOT_MASK, /*!< when software set this bit along with START_CMD, CIU
                                                                 terminates the boot operation*/
     kSDIF_BootModeAlternate = SDIF_CMD_BOOT_MODE_MASK,       /*!< select boot mode ,alternate or mandatory*/
-    kSDIF_CmdVoltageSwitch = SDIF_CMD_VOLT_SWITCH_MASK,      /*!< this bit set for CMD11 only */
+    kSDIF_CmdVoltageSwitch  = SDIF_CMD_VOLT_SWITCH_MASK,     /*!< this bit set for CMD11 only */
     kSDIF_CmdDataUseHoldReg = SDIF_CMD_USE_HOLD_REG_MASK,    /*!< cmd and data send to card through the HOLD register*/
 };
 
 /*! @brief The command type */
 enum _sdif_command_type
 {
-    kCARD_CommandTypeNormal = 0U,  /*!< Normal command */
+    kCARD_CommandTypeNormal  = 0U, /*!< Normal command */
     kCARD_CommandTypeSuspend = 1U, /*!< Suspend command */
-    kCARD_CommandTypeResume = 2U,  /*!< Resume command */
-    kCARD_CommandTypeAbort = 3U,   /*!< Abort command */
+    kCARD_CommandTypeResume  = 2U, /*!< Resume command */
+    kCARD_CommandTypeAbort   = 3U, /*!< Abort command */
 };
 
 /*!
@@ -172,37 +185,37 @@ enum _sdif_command_type
 enum _sdif_response_type
 {
     kCARD_ResponseTypeNone = 0U, /*!< Response type: none */
-    kCARD_ResponseTypeR1 = 1U,   /*!< Response type: R1 */
-    kCARD_ResponseTypeR1b = 2U,  /*!< Response type: R1b */
-    kCARD_ResponseTypeR2 = 3U,   /*!< Response type: R2 */
-    kCARD_ResponseTypeR3 = 4U,   /*!< Response type: R3 */
-    kCARD_ResponseTypeR4 = 5U,   /*!< Response type: R4 */
-    kCARD_ResponseTypeR5 = 6U,   /*!< Response type: R5 */
-    kCARD_ResponseTypeR5b = 7U,  /*!< Response type: R5b */
-    kCARD_ResponseTypeR6 = 8U,   /*!< Response type: R6 */
-    kCARD_ResponseTypeR7 = 9U,   /*!< Response type: R7 */
+    kCARD_ResponseTypeR1   = 1U, /*!< Response type: R1 */
+    kCARD_ResponseTypeR1b  = 2U, /*!< Response type: R1b */
+    kCARD_ResponseTypeR2   = 3U, /*!< Response type: R2 */
+    kCARD_ResponseTypeR3   = 4U, /*!< Response type: R3 */
+    kCARD_ResponseTypeR4   = 5U, /*!< Response type: R4 */
+    kCARD_ResponseTypeR5   = 6U, /*!< Response type: R5 */
+    kCARD_ResponseTypeR5b  = 7U, /*!< Response type: R5b */
+    kCARD_ResponseTypeR6   = 8U, /*!< Response type: R6 */
+    kCARD_ResponseTypeR7   = 9U, /*!< Response type: R7 */
 };
 
 /*! @brief define the interrupt mask flags */
 enum _sdif_interrupt_mask
 {
-    kSDIF_CardDetect = SDIF_INTMASK_CDET_MASK,                 /*!< mask for card detect */
-    kSDIF_ResponseError = SDIF_INTMASK_RE_MASK,                /*!< command response error */
-    kSDIF_CommandDone = SDIF_INTMASK_CDONE_MASK,               /*!< command transfer over*/
-    kSDIF_DataTransferOver = SDIF_INTMASK_DTO_MASK,            /*!< data transfer over flag*/
-    kSDIF_WriteFIFORequest = SDIF_INTMASK_TXDR_MASK,           /*!< write FIFO request */
-    kSDIF_ReadFIFORequest = SDIF_INTMASK_RXDR_MASK,            /*!< read FIFO request */
-    kSDIF_ResponseCRCError = SDIF_INTMASK_RCRC_MASK,           /*!< response CRC error */
-    kSDIF_DataCRCError = SDIF_INTMASK_DCRC_MASK,               /*!< data CRC error */
-    kSDIF_ResponseTimeout = SDIF_INTMASK_RTO_MASK,             /*!< response timeout */
-    kSDIF_DataReadTimeout = SDIF_INTMASK_DRTO_MASK,            /*!< read data timeout */
-    kSDIF_DataStarvationByHostTimeout = SDIF_INTMASK_HTO_MASK, /*!< data starvation by host time out */
-    kSDIF_FIFOError = SDIF_INTMASK_FRUN_MASK,                  /*!< indicate the FIFO under run or overrun error */
-    kSDIF_HardwareLockError = SDIF_INTMASK_HLE_MASK,           /*!< hardware lock write error */
-    kSDIF_DataStartBitError = SDIF_INTMASK_SBE_MASK,           /*!< start bit error */
-    kSDIF_AutoCmdDone = SDIF_INTMASK_ACD_MASK,                 /*!< indicate the auto command done */
-    kSDIF_DataEndBitError = SDIF_INTMASK_EBE_MASK,             /*!< end bit error */
-    kSDIF_SDIOInterrupt = SDIF_INTMASK_SDIO_INT_MASK_MASK,     /*!< interrupt from the SDIO card */
+    kSDIF_CardDetect                  = SDIF_INTMASK_CDET_MASK,  /*!< mask for card detect */
+    kSDIF_ResponseError               = SDIF_INTMASK_RE_MASK,    /*!< command response error */
+    kSDIF_CommandDone                 = SDIF_INTMASK_CDONE_MASK, /*!< command transfer over*/
+    kSDIF_DataTransferOver            = SDIF_INTMASK_DTO_MASK,   /*!< data transfer over flag*/
+    kSDIF_WriteFIFORequest            = SDIF_INTMASK_TXDR_MASK,  /*!< write FIFO request */
+    kSDIF_ReadFIFORequest             = SDIF_INTMASK_RXDR_MASK,  /*!< read FIFO request */
+    kSDIF_ResponseCRCError            = SDIF_INTMASK_RCRC_MASK,  /*!< response CRC error */
+    kSDIF_DataCRCError                = SDIF_INTMASK_DCRC_MASK,  /*!< data CRC error */
+    kSDIF_ResponseTimeout             = SDIF_INTMASK_RTO_MASK,   /*!< response timeout */
+    kSDIF_DataReadTimeout             = SDIF_INTMASK_DRTO_MASK,  /*!< read data timeout */
+    kSDIF_DataStarvationByHostTimeout = SDIF_INTMASK_HTO_MASK,   /*!< data starvation by host time out */
+    kSDIF_FIFOError                   = SDIF_INTMASK_FRUN_MASK,  /*!< indicate the FIFO under run or overrun error */
+    kSDIF_HardwareLockError           = SDIF_INTMASK_HLE_MASK,   /*!< hardware lock write error */
+    kSDIF_DataStartBitError           = SDIF_INTMASK_SBE_MASK,   /*!< start bit error */
+    kSDIF_AutoCmdDone                 = SDIF_INTMASK_ACD_MASK,   /*!< indicate the auto command done */
+    kSDIF_DataEndBitError             = SDIF_INTMASK_EBE_MASK,   /*!< end bit error */
+    kSDIF_SDIOInterrupt               = SDIF_INTMASK_SDIO_INT_MASK_MASK, /*!< interrupt from the SDIO card */
 
     kSDIF_CommandTransferStatus = kSDIF_ResponseError | kSDIF_CommandDone | kSDIF_ResponseCRCError |
                                   kSDIF_ResponseTimeout |
@@ -220,13 +233,13 @@ enum _sdif_interrupt_mask
 /*! @brief define the internal DMA status flags */
 enum _sdif_dma_status
 {
-    kSDIF_DMATransFinishOneDescriptor = SDIF_IDSTS_TI_MASK, /*!< DMA transfer finished for one DMA descriptor */
-    kSDIF_DMARecvFinishOneDescriptor = SDIF_IDSTS_RI_MASK,  /*!< DMA receive finished for one DMA descriptor */
-    kSDIF_DMAFatalBusError = SDIF_IDSTS_FBE_MASK,           /*!< DMA fatal bus error */
-    kSDIF_DMADescriptorUnavailable = SDIF_IDSTS_DU_MASK,    /*!< DMA descriptor unavailable */
-    kSDIF_DMACardErrorSummary = SDIF_IDSTS_CES_MASK,        /*!< card error summary */
-    kSDIF_NormalInterruptSummary = SDIF_IDSTS_NIS_MASK,     /*!< normal interrupt summary */
-    kSDIF_AbnormalInterruptSummary = SDIF_IDSTS_AIS_MASK,   /*!< abnormal interrupt summary*/
+    kSDIF_DMATransFinishOneDescriptor = SDIF_IDSTS_TI_MASK,  /*!< DMA transfer finished for one DMA descriptor */
+    kSDIF_DMARecvFinishOneDescriptor  = SDIF_IDSTS_RI_MASK,  /*!< DMA receive finished for one DMA descriptor */
+    kSDIF_DMAFatalBusError            = SDIF_IDSTS_FBE_MASK, /*!< DMA fatal bus error */
+    kSDIF_DMADescriptorUnavailable    = SDIF_IDSTS_DU_MASK,  /*!< DMA descriptor unavailable */
+    kSDIF_DMACardErrorSummary         = SDIF_IDSTS_CES_MASK, /*!< card error summary */
+    kSDIF_NormalInterruptSummary      = SDIF_IDSTS_NIS_MASK, /*!< normal interrupt summary */
+    kSDIF_AbnormalInterruptSummary    = SDIF_IDSTS_AIS_MASK, /*!< abnormal interrupt summary*/
 
     kSDIF_DMAAllStatus = kSDIF_DMATransFinishOneDescriptor | kSDIF_DMARecvFinishOneDescriptor | kSDIF_DMAFatalBusError |
                          kSDIF_DMADescriptorUnavailable | kSDIF_DMACardErrorSummary | kSDIF_NormalInterruptSummary |
@@ -234,27 +247,29 @@ enum _sdif_dma_status
 
 };
 
-/*! @brief define the internal DMA descriptor flag */
+/*! @brief define the internal DMA descriptor flag
+ *  @deprecated Do not use this enum anymore, please use SDIF_DMA_DESCRIPTOR_XXX_FLAG instead.
+ */
 enum _sdif_dma_descriptor_flag
 {
-    kSDIF_DisableCompleteInterrupt = 1,     /*!< disable the complete interrupt flag for the ends
-                                                in the buffer pointed to by this descriptor*/
-    kSDIF_DMADescriptorDataBufferEnd = 2,   /*!< indicate this descriptor contain the last data buffer of data */
-    kSDIF_DMADescriptorDataBufferStart = 3, /*!< indicate this descriptor contain the first data buffer
-                                                 of data,if first buffer size is 0,next descriptor contain
-                                                 the begin of the data*/
+    kSDIF_DisableCompleteInterrupt = 0x2U,     /*!< disable the complete interrupt flag for the ends
+                                           in the buffer pointed to by this descriptor*/
+    kSDIF_DMADescriptorDataBufferEnd   = 0x4U, /*!< indicate this descriptor contain the last data buffer of data */
+    kSDIF_DMADescriptorDataBufferStart = 0x8U, /*!< indicate this descriptor contain the first data buffer
+                                            of data,if first buffer size is 0,next descriptor contain
+                                            the begin of the data*/
 
-    kSDIF_DMASecondAddrChained = 4,   /*!< indicate that the second addr in the descriptor is the
-                                          next descriptor addr not the data buffer */
-    kSDIF_DMADescriptorEnd = 5,       /*!< indicate that the descriptor list reached its final descriptor*/
-    kSDIF_DMADescriptorOwnByDMA = 31, /*!< indicate the descriptor is own by SD/MMC DMA */
+    kSDIF_DMASecondAddrChained = 0x10U,            /*!< indicate that the second addr in the descriptor is the
+                                               next descriptor addr not the data buffer */
+    kSDIF_DMADescriptorEnd      = 0x20U,           /*!< indicate that the descriptor list reached its final descriptor*/
+    kSDIF_DMADescriptorOwnByDMA = (int)0x80000000, /*!< indicate the descriptor is own by SD/MMC DMA */
 };
 
 /*! @brief define the internal DMA mode */
 typedef enum _sdif_dma_mode
 {
     kSDIF_ChainDMAMode = 0x01U, /* one descriptor with one buffer,but one descriptor point to another */
-    kSDIF_DualDMAMode = 0x02U,  /* dual mode is one descriptor with two buffer */
+    kSDIF_DualDMAMode  = 0x02U, /* dual mode is one descriptor with two buffer */
 } sdif_dma_mode_t;
 
 /*! @brief define the internal DMA descriptor */
@@ -378,9 +393,7 @@ typedef struct _sdif_handle
     sdif_command_t *volatile command; /*!< Command to send */
 
     /* Transfer status */
-    volatile uint32_t interruptFlags;    /*!< Interrupt flags of last transaction */
-    volatile uint32_t dmaInterruptFlags; /*!< DMA interrupt flags of last transaction*/
-    volatile uint32_t transferredWords;  /*!< Words transferred by polling way */
+    volatile uint32_t transferredWords; /*!< Words transferred by polling way */
 
     /* Callback functions */
     sdif_transfer_callback_t callback; /*!< Callback function */
@@ -404,7 +417,8 @@ typedef struct _sdif_host
  * API
  ************************************************************************************************/
 #if defined(__cplusplus)
-extern "C" {
+extern "C"
+{
 #endif
 
 /*!
@@ -444,7 +458,7 @@ static inline void SDIF_EnableCardClock(SDIF_Type *base, bool enable)
     }
     else
     {
-        base->CLKENA &= ~SDIF_CLKENA_CCLK0_ENABLE_MASK;
+        base->CLKENA &= SDIF_CLKENA_CCLK0_ENABLE_MASK;
     }
 }
 
@@ -715,9 +729,12 @@ static inline void SDIF_AssertHardwareReset(SDIF_Type *base)
 
 /*!
  * @brief send command to the card
+ *
+ * This api include polling the status of the bit START_COMMAND, if 0 used as timeout value, then this function
+ * will return directly without polling the START_CMD status.
  * @param base SDIF peripheral base address.
  * @param command configuration collection
- * @param timeout value
+ * @param timeout not used in this function
  * @return command excute status
  */
 status_t SDIF_SendCommand(SDIF_Type *base, sdif_command_t *cmd, uint32_t timeout);
@@ -766,6 +783,15 @@ static inline void SDIF_DisableInterrupt(SDIF_Type *base, uint32_t mask)
 static inline uint32_t SDIF_GetInterruptStatus(SDIF_Type *base)
 {
     return base->MINTSTS;
+}
+
+/*!
+ * @brief SDIF get enabled interrupt status
+ * @param base SDIF peripheral base address.
+ */
+static inline uint32_t SDIF_GetEnabledInterruptStatus(SDIF_Type *base)
+{
+    return (base->MINTSTS) & (base->INTMASK);
 }
 
 /*!
@@ -822,6 +848,15 @@ static inline uint32_t SDIF_GetInternalDMAStatus(SDIF_Type *base)
 }
 
 /*!
+ * @brief SDIF get enabled internal DMA interrupt status
+ * @param base SDIF peripheral base address.
+ * @return the internal DMA status register
+ */
+static inline uint32_t SDIF_GetEnabledDMAInterruptStatus(SDIF_Type *base)
+{
+    return (base->IDSTS) & (base->IDINTEN);
+}
+/*!
  * @brief SDIF clear internal DMA status
  * @param base SDIF peripheral base address.
  * @param status mask to clear
@@ -838,7 +873,10 @@ static inline void SDIF_ClearInternalDMAStatus(SDIF_Type *base, uint32_t mask)
  * @param data buffer pointer
  * @param data buffer size
  */
-status_t SDIF_InternalDMAConfig(SDIF_Type *base, sdif_dma_config_t *config, const uint32_t *data, uint32_t dataSize);
+status_t SDIF_InternalDMAConfig(SDIF_Type *base,
+                                sdif_dma_config_t *config,
+                                const uint32_t *data,
+                                uint32_t dataSize);
 
 /*!
  * @brief SDIF internal DMA enable
@@ -981,7 +1019,7 @@ static inline void SDIF_SendCCSD(SDIF_Type *base, bool withAutoStop)
  * time and hold time, and user need to config this parameter
  * according to your board setting
  * @param target freq work mode
- * @param clock divider which is used to decide if use phase shift for delay
+ * @param divider not used in this function anymore, use DELAY value instead of phase directly.
  */
 void SDIF_ConfigClockDelay(uint32_t target_HZ, uint32_t divider);
 

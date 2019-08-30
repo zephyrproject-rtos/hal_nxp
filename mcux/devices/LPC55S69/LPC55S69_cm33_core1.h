@@ -1,6 +1,7 @@
 /*
 ** ###################################################################
 **     Processors:          LPC55S69JBD100_cm33_core1
+**                          LPC55S69JBD64_cm33_core1
 **                          LPC55S69JET98_cm33_core1
 **
 **     Compilers:           GNU C Compiler
@@ -10,7 +11,7 @@
 **
 **     Reference manual:    LPC55xx/LPC55Sxx User manual Rev.0.4  25 Sep 2018
 **     Version:             rev. 1.0, 2018-08-22
-**     Build:               b190122
+**     Build:               b190430
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC55S69_cm33_core1
@@ -138,7 +139,7 @@ typedef enum IRQn {
   PUF_IRQn                     = 56,               /**< PUF interrupt */
   PQ_IRQn                      = 57,               /**< PQ interrupt */
   DMA1_IRQn                    = 58,               /**< DMA1 interrupt */
-  LSPI_HS_IRQn                 = 59                /**< Flexcomm Interface 8 (SPI, , FLEXCOMM) */
+  FLEXCOMM8_IRQn               = 59                /**< Flexcomm Interface 8 (SPI, , FLEXCOMM) */
 } IRQn_Type;
 
 /*!
@@ -199,7 +200,7 @@ typedef enum IRQn {
 typedef enum _dma_request_source
 {
     kDma0RequestHashCrypt           = 0U,          /**< HashCrypt */
-    kDma1RequestHashCryptInput      = 0U,          /**< HashCrypt Input */
+    kDma1RequestHashCrypt           = 0U,          /**< HashCrypt */
     kDma0RequestNoDMARequest1       = 1U,          /**< No DMA request 1 */
     kDma1RequestNoDMARequest1       = 1U,          /**< No DMA request 1 */
     kDma0RequestFlexcomm8Rx         = 2U,          /**< Flexcomm Interface 8 RX */
@@ -214,12 +215,12 @@ typedef enum _dma_request_source
     kDma1RequestFlexcomm1Rx         = 6U,          /**< Flexcomm Interface 1 RX/I2C Slave */
     kDma0RequestFlexcomm1Tx         = 7U,          /**< Flexcomm Interface 1 TX/I2C Master */
     kDma1RequestFlexcomm1Tx         = 7U,          /**< Flexcomm Interface 1 TX/I2C Master */
-    kDma0RequestFlexcomm2Rx         = 8U,          /**< Flexcomm Interface 2 RX/I2C Slave */
+    kDma0RequestFlexcomm3Rx         = 8U,          /**< Flexcomm Interface 3 RX/I2C Slave */
     kDma1RequestFlexcomm2Rx         = 8U,          /**< Flexcomm Interface 2 RX/I2C Slave */
-    kDma0RequestFlexcomm2Tx         = 9U,          /**< Flexcomm Interface 2 TX/I2C Master */
+    kDma0RequestFlexcomm3Tx         = 9U,          /**< Flexcomm Interface 3 TX/I2C Master */
     kDma1RequestFlexcomm2Tx         = 9U,          /**< Flexcomm Interface 2 TX/I2C Master */
-    kDma0RequestFlexcomm3Rx         = 10U,         /**< Flexcomm Interface 3 RX/I2C Slave */
-    kDma0RequestFlexcomm3Tx         = 11U,         /**< Flexcomm Interface 3 TX/I2C Master */
+    kDma0RequestFlexcomm2Rx         = 10U,         /**< Flexcomm Interface 2 RX/I2C Slave */
+    kDma0RequestFlexcomm2Tx         = 11U,         /**< Flexcomm Interface 2 TX/I2C Master */
     kDma0RequestFlexcomm4Rx         = 12U,         /**< Flexcomm Interface 4 RX/I2C Slave */
     kDma0RequestFlexcomm4Tx         = 13U,         /**< Flexcomm Interface 4 TX/I2C Master */
     kDma0RequestFlexcomm5Rx         = 14U,         /**< Flexcomm Interface 5 RX/I2C Slave */
@@ -643,9 +644,13 @@ typedef struct {
 #define ADC_CFG_TPRICTRL_MASK                    (0x3U)
 #define ADC_CFG_TPRICTRL_SHIFT                   (0U)
 /*! TPRICTRL - ADC trigger priority control
- *  0b00..If a higher priority trigger is detected during command processing, the current conversion is aborted and the new command specified by the trigger is started.
- *  0b01..If a higher priority trigger is received during command processing, the current command is stopped after after completing the current conversion. If averaging is enabled, the averaging loop will be completed. However, CMDHa[LOOP] will be ignored and the higher priority trigger will be serviced.
- *  0b10..If a higher priority trigger is received during command processing, the current command will be completed (averaging, looping, compare) before servicing the higher priority trigger.
+ *  0b00..If a higher priority trigger is detected during command processing, the current conversion is aborted
+ *        and the new command specified by the trigger is started.
+ *  0b01..If a higher priority trigger is received during command processing, the current command is stopped after
+ *        after completing the current conversion. If averaging is enabled, the averaging loop will be completed.
+ *        However, CMDHa[LOOP] will be ignored and the higher priority trigger will be serviced.
+ *  0b10..If a higher priority trigger is received during command processing, the current command will be
+ *        completed (averaging, looping, compare) before servicing the higher priority trigger.
  *  0b11..RESERVED
  */
 #define ADC_CFG_TPRICTRL(x)                      (((uint32_t)(((uint32_t)(x)) << ADC_CFG_TPRICTRL_SHIFT)) & ADC_CFG_TPRICTRL_MASK)
@@ -695,7 +700,11 @@ typedef struct {
 #define ADC_CFG_PWREN_SHIFT                      (28U)
 /*! PWREN - ADC Analog Pre-Enable
  *  0b0..ADC analog circuits are only enabled while conversions are active. Performance is affected due to analog startup delays.
- *  0b1..ADC analog circuits are pre-enabled and ready to execute conversions without startup delays (at the cost of higher DC current consumption). A single power up delay (CFG[PUDLY]) is executed immediately once PWREN is set, and any detected trigger does not begin ADC operation until the power up delay time has passed. After this initial delay expires the analog will remain pre-enabled, and no additional delays will be executed.
+ *  0b1..ADC analog circuits are pre-enabled and ready to execute conversions without startup delays (at the cost
+ *       of higher DC current consumption). A single power up delay (CFG[PUDLY]) is executed immediately once PWREN
+ *       is set, and any detected trigger does not begin ADC operation until the power up delay time has passed.
+ *       After this initial delay expires the analog will remain pre-enabled, and no additional delays will be
+ *       executed.
  */
 #define ADC_CFG_PWREN(x)                         (((uint32_t)(((uint32_t)(x)) << ADC_CFG_PWREN_SHIFT)) & ADC_CFG_PWREN_MASK)
 /*! @} */
@@ -1061,7 +1070,8 @@ typedef struct {
 #define ADC_CMDH_NEXT_MASK                       (0xF000000U)
 #define ADC_CMDH_NEXT_SHIFT                      (24U)
 /*! NEXT - Next Command Select
- *  0b0000..No next command defined. Terminate conversions at completion of current command. If lower priority trigger pending, begin command associated with lower priority trigger.
+ *  0b0000..No next command defined. Terminate conversions at completion of current command. If lower priority
+ *          trigger pending, begin command associated with lower priority trigger.
  *  0b0001..Select CMD1 command buffer register as next command.
  *  0b0010-0b1110..Select corresponding CMD command buffer register as next command
  *  0b1111..Select CMD15 command buffer register as next command.
@@ -1111,7 +1121,8 @@ typedef struct {
 #define ADC_RESFIFO_CMDSRC_MASK                  (0xF000000U)
 #define ADC_RESFIFO_CMDSRC_SHIFT                 (24U)
 /*! CMDSRC - Command Buffer Source
- *  0b0000..Not a valid value CMDSRC value for a dataword in RESFIFO. 0x0 is only found in initial FIFO state prior to an ADC conversion result dataword being stored to a RESFIFO buffer.
+ *  0b0000..Not a valid value CMDSRC value for a dataword in RESFIFO. 0x0 is only found in initial FIFO state
+ *          prior to an ADC conversion result dataword being stored to a RESFIFO buffer.
  *  0b0001..CMD1 buffer used as control settings for this conversion.
  *  0b0010-0b1110..Corresponding command buffer used as control settings for this conversion.
  *  0b1111..CMD15 buffer used as control settings for this conversion.
@@ -1249,7 +1260,7 @@ typedef struct {
 /** AHB_SECURE_CTRL - Register Layout Typedef */
 typedef struct {
   struct {                                         /* offset: 0x0, array step: 0x30 */
-    __IO uint32_t SLAVE_RULE;                        /**< , array offset: 0x0, array step: 0x30 */
+    __IO uint32_t SLAVE_RULE;                        /**< Security access rules for Flash and ROM slaves., array offset: 0x0, array step: 0x30 */
          uint8_t RESERVED_0[12];
     __IO uint32_t SEC_CTRL_FLASH_MEM_RULE[3];        /**< Security access rules for FLASH sector 0 to sector 20. Each Flash sector is 32 Kbytes. There are 20 FLASH sectors in total., array offset: 0x10, array step: index*0x30, index2*0x4 */
          uint8_t RESERVED_1[4];
@@ -1258,46 +1269,46 @@ typedef struct {
   struct {                                         /* offset: 0x30, array step: 0x14 */
     __IO uint32_t SLAVE_RULE;                        /**< Security access rules for RAMX slaves., array offset: 0x30, array step: 0x14 */
          uint8_t RESERVED_0[12];
-    __IO uint32_t MEM_RULE[1];                       /**< , array offset: 0x40, array step: index*0x14, index2*0x4 */
+    __IO uint32_t MEM_RULE[1];                       /**< Security access rules for RAMX slaves., array offset: 0x40, array step: index*0x14, index2*0x4 */
   } SEC_CTRL_RAMX[1];
        uint8_t RESERVED_0[12];
   struct {                                         /* offset: 0x50, array step: 0x18 */
     __IO uint32_t SLAVE_RULE;                        /**< Security access rules for RAM0 slaves., array offset: 0x50, array step: 0x18 */
          uint8_t RESERVED_0[12];
-    __IO uint32_t MEM_RULE[2];                       /**< , array offset: 0x60, array step: index*0x18, index2*0x4 */
+    __IO uint32_t MEM_RULE[2];                       /**< Security access rules for RAM0 slaves., array offset: 0x60, array step: index*0x18, index2*0x4 */
   } SEC_CTRL_RAM0[1];
        uint8_t RESERVED_1[8];
   struct {                                         /* offset: 0x70, array step: 0x18 */
     __IO uint32_t SLAVE_RULE;                        /**< Security access rules for RAM1 slaves., array offset: 0x70, array step: 0x18 */
          uint8_t RESERVED_0[12];
-    __IO uint32_t MEM_RULE[2];                       /**< , array offset: 0x80, array step: index*0x18, index2*0x4 */
+    __IO uint32_t MEM_RULE[2];                       /**< Security access rules for RAM1 slaves., array offset: 0x80, array step: index*0x18, index2*0x4 */
   } SEC_CTRL_RAM1[1];
        uint8_t RESERVED_2[8];
   struct {                                         /* offset: 0x90, array step: 0x18 */
     __IO uint32_t SLAVE_RULE;                        /**< Security access rules for RAM2 slaves., array offset: 0x90, array step: 0x18 */
          uint8_t RESERVED_0[12];
-    __IO uint32_t MEM_RULE[2];                       /**< , array offset: 0xA0, array step: index*0x18, index2*0x4 */
+    __IO uint32_t MEM_RULE[2];                       /**< Security access rules for RAM2 slaves., array offset: 0xA0, array step: index*0x18, index2*0x4 */
   } SEC_CTRL_RAM2[1];
        uint8_t RESERVED_3[8];
   struct {                                         /* offset: 0xB0, array step: 0x18 */
     __IO uint32_t SLAVE_RULE;                        /**< Security access rules for RAM3 slaves., array offset: 0xB0, array step: 0x18 */
          uint8_t RESERVED_0[12];
-    __IO uint32_t MEM_RULE[2];                       /**< , array offset: 0xC0, array step: index*0x18, index2*0x4 */
+    __IO uint32_t MEM_RULE[2];                       /**< Security access rules for RAM3 slaves., array offset: 0xC0, array step: index*0x18, index2*0x4 */
   } SEC_CTRL_RAM3[1];
        uint8_t RESERVED_4[8];
   struct {                                         /* offset: 0xD0, array step: 0x14 */
     __IO uint32_t SLAVE_RULE;                        /**< Security access rules for RAM4 slaves., array offset: 0xD0, array step: 0x14 */
          uint8_t RESERVED_0[12];
-    __IO uint32_t MEM_RULE[1];                       /**< , array offset: 0xE0, array step: index*0x14, index2*0x4 */
+    __IO uint32_t MEM_RULE[1];                       /**< Security access rules for RAM4 slaves., array offset: 0xE0, array step: index*0x14, index2*0x4 */
   } SEC_CTRL_RAM4[1];
        uint8_t RESERVED_5[12];
   struct {                                         /* offset: 0xF0, array step: 0x30 */
-    __IO uint32_t SLAVE_RULE;                        /**< , array offset: 0xF0, array step: 0x30 */
+    __IO uint32_t SLAVE_RULE;                        /**< Security access rules for both APB Bridges slaves., array offset: 0xF0, array step: 0x30 */
          uint8_t RESERVED_0[12];
     __IO uint32_t SEC_CTRL_APB_BRIDGE0_MEM_CTRL0;    /**< Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total., array offset: 0x100, array step: 0x30 */
     __IO uint32_t SEC_CTRL_APB_BRIDGE0_MEM_CTRL1;    /**< Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total., array offset: 0x104, array step: 0x30 */
     __IO uint32_t SEC_CTRL_APB_BRIDGE0_MEM_CTRL2;    /**< Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total., array offset: 0x108, array step: 0x30 */
-    __IO uint32_t SEC_CTRL_APB_BRIDGE0_MEM_CTRL3;    /**< Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total., array offset: 0x10C, array step: 0x30 */
+         uint32_t SEC_CTRL_APB_BRIDGE0_MEM_CTRL3;    /**< Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total., array offset: 0x10C, array step: 0x30 */
     __IO uint32_t SEC_CTRL_APB_BRIDGE1_MEM_CTRL0;    /**< Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total., array offset: 0x110, array step: 0x30 */
     __IO uint32_t SEC_CTRL_APB_BRIDGE1_MEM_CTRL1;    /**< Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total., array offset: 0x114, array step: 0x30 */
     __IO uint32_t SEC_CTRL_APB_BRIDGE1_MEM_CTRL2;    /**< Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total., array offset: 0x118, array step: 0x30 */
@@ -1308,41 +1319,40 @@ typedef struct {
        uint8_t RESERVED_6[8];
   __IO uint32_t SEC_CTRL_AHB1_0_SLAVE_RULE;        /**< Security access rules for AHB peripherals., offset: 0x130 */
   __IO uint32_t SEC_CTRL_AHB1_1_SLAVE_RULE;        /**< Security access rules for AHB peripherals., offset: 0x134 */
-       uint8_t RESERVED_7[12];
-  struct {                                         /* offset: 0x144, array step: 0x14 */
-    __IO uint32_t SEC_CTRL_AHB2_0_SLAVE_RULE;        /**< Security access rules for AHB peripherals., array offset: 0x144, array step: 0x14 */
-    __IO uint32_t SEC_CTRL_AHB2_1_SLAVE_RULE;        /**< Security access rules for AHB peripherals., array offset: 0x148, array step: 0x14 */
+       uint8_t RESERVED_7[8];
+  struct {                                         /* offset: 0x140, array step: 0x14 */
+    __IO uint32_t SEC_CTRL_AHB2_0_SLAVE_RULE;        /**< Security access rules for AHB peripherals., array offset: 0x140, array step: 0x14 */
+    __IO uint32_t SEC_CTRL_AHB2_1_SLAVE_RULE;        /**< Security access rules for AHB peripherals., array offset: 0x144, array step: 0x14 */
          uint8_t RESERVED_0[8];
-    __IO uint32_t SEC_CTRL_AHB2_0_MEM_RULE[1];       /**< , array offset: 0x154, array step: index*0x14, index2*0x4 */
+    __IO uint32_t SEC_CTRL_AHB2_0_MEM_RULE[1];       /**< Security access rules for AHB_SEC_CTRL_AHB., array offset: 0x150, array step: index*0x14, index2*0x4 */
   } SEC_CTRL_AHB2[1];
-       uint8_t RESERVED_8[8];
+       uint8_t RESERVED_8[12];
   struct {                                         /* offset: 0x160, array step: 0x14 */
-    __IO uint32_t SLAVE_RULE;                        /**< , array offset: 0x160, array step: 0x14 */
+    __IO uint32_t SLAVE_RULE;                        /**< Security access rules for USB High speed RAM slaves., array offset: 0x160, array step: 0x14 */
          uint8_t RESERVED_0[12];
-    __IO uint32_t MEM_RULE[1];                       /**< , array offset: 0x170, array step: index*0x14, index2*0x4 */
+    __IO uint32_t MEM_RULE[1];                       /**< Security access rules for RAM_USB_HS., array offset: 0x170, array step: index*0x14, index2*0x4 */
   } SEC_CTRL_USB_HS[1];
        uint8_t RESERVED_9[3212];
-  __I  uint32_t SEC_VIO_ADDR[18];                  /**< most recent security violation address for AHB layer n, array offset: 0xE00, array step: 0x4 */
-       uint8_t RESERVED_10[56];
-  __I  uint32_t SEC_VIO_MISC_INFO[18];             /**< most recent security violation miscellaneous information for AHB layer n, array offset: 0xE80, array step: 0x4 */
-       uint8_t RESERVED_11[56];
+  __I  uint32_t SEC_VIO_ADDR[12];                  /**< most recent security violation address for AHB layer n, array offset: 0xE00, array step: 0x4 */
+       uint8_t RESERVED_10[80];
+  __I  uint32_t SEC_VIO_MISC_INFO[12];             /**< most recent security violation miscellaneous information for AHB layer n, array offset: 0xE80, array step: 0x4 */
+       uint8_t RESERVED_11[80];
   __IO uint32_t SEC_VIO_INFO_VALID;                /**< security violation address/information registers valid flags, offset: 0xF00 */
        uint8_t RESERVED_12[124];
-  __IO uint32_t SEC_GPIO_MASK0;                    /**< Secure GPIO mask for port 0 pins. This register is used to block leakage of Secure interface (GPIOs, I2C, UART configured as secure peripherals) pin states to non-secure world., offset: 0xF80 */
+  __IO uint32_t SEC_GPIO_MASK0;                    /**< Secure GPIO mask for port 0 pins., offset: 0xF80 */
   __IO uint32_t SEC_GPIO_MASK1;                    /**< Secure GPIO mask for port 1 pins., offset: 0xF84 */
-  __IO uint32_t SEC_GPIO_MASK2;                    /**< Secure GPIO mask for port 2 pins., offset: 0xF88 */
-  __IO uint32_t SEC_GPIO_MASK3;                    /**< Secure GPIO mask for port 3 pins., offset: 0xF8C */
+       uint8_t RESERVED_13[8];
   __IO uint32_t SEC_CPU_INT_MASK0;                 /**< Secure Interrupt mask for CPU1, offset: 0xF90 */
   __IO uint32_t SEC_CPU_INT_MASK1;                 /**< Secure Interrupt mask for CPU1, offset: 0xF94 */
-       uint8_t RESERVED_13[36];
+       uint8_t RESERVED_14[36];
   __IO uint32_t SEC_MASK_LOCK;                     /**< Security General Purpose register access control., offset: 0xFBC */
-       uint8_t RESERVED_14[16];
+       uint8_t RESERVED_15[16];
   __IO uint32_t MASTER_SEC_LEVEL;                  /**< master secure level register, offset: 0xFD0 */
   __IO uint32_t MASTER_SEC_ANTI_POL_REG;           /**< master secure level anti-pole register, offset: 0xFD4 */
-       uint8_t RESERVED_15[20];
+       uint8_t RESERVED_16[20];
   __IO uint32_t CM33_LOCK_REG;                     /**< Miscalleneous control signals for in CM33 (CPU0), offset: 0xFEC */
   __IO uint32_t MCM33_LOCK_REG;                    /**< Miscalleneous control signals for in micro-CM33 (CPU1), offset: 0xFF0 */
-       uint8_t RESERVED_16[4];
+       uint8_t RESERVED_17[4];
   __IO uint32_t MISC_CTRL_DP_REG;                  /**< secure control duplicate register, offset: 0xFF8 */
   __IO uint32_t MISC_CTRL_REG;                     /**< secure control register, offset: 0xFFC */
 } AHB_SECURE_CTRL_Type;
@@ -1356,7 +1366,7 @@ typedef struct {
  * @{
  */
 
-/*! @name SEC_CTRL_FLASH_ROM_SLAVE_RULE -  */
+/*! @name SEC_CTRL_FLASH_ROM_SLAVE_RULE - Security access rules for Flash and ROM slaves. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SLAVE_RULE_FLASH_RULE_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SLAVE_RULE_FLASH_RULE_SHIFT (0U)
@@ -1561,7 +1571,7 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAMX_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE -  */
+/*! @name SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE - Security access rules for RAMX slaves. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
@@ -1659,7 +1669,7 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM0_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE -  */
+/*! @name SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE - Security access rules for RAM0 slaves. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
@@ -1757,7 +1767,7 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE -  */
+/*! @name SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE - Security access rules for RAM1 slaves. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
@@ -1855,7 +1865,7 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM2_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE -  */
+/*! @name SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE - Security access rules for RAM2 slaves. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
@@ -1953,7 +1963,7 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM3_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE -  */
+/*! @name SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE - Security access rules for RAM3 slaves. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
@@ -2051,7 +2061,7 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM4_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE -  */
+/*! @name SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE - Security access rules for RAM4 slaves. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
@@ -2097,7 +2107,7 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_COUNT2 (1U)
 
-/*! @name SEC_CTRL_APB_BRIDGE_SLAVE_RULE -  */
+/*! @name SEC_CTRL_APB_BRIDGE_SLAVE_RULE - Security access rules for both APB Bridges slaves. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SLAVE_RULE_APBBRIDGE0_RULE_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SLAVE_RULE_APBBRIDGE0_RULE_SHIFT (0U)
@@ -2269,28 +2279,6 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2 */
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_COUNT (1U)
 
-/*! @name SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3 - Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total. */
-/*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_CAPTOUCH_RULE_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_CAPTOUCH_RULE_SHIFT (8U)
-/*! CAPTOUCH_RULE - Capacitive Touch controller
- *  0b00..Non-secure and Non-priviledge user access allowed.
- *  0b01..Non-secure and Privilege access allowed.
- *  0b10..Secure and Non-priviledge user access allowed.
- *  0b11..Secure and Priviledge user access allowed.
- */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_CAPTOUCH_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_CAPTOUCH_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_CAPTOUCH_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_EZH_RULE_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_EZH_RULE_SHIFT (20U)
-/*! EZH_RULE - EZH slave interface
- *  0b00..Non-secure and Non-priviledge user access allowed.
- *  0b01..Non-secure and Privilege access allowed.
- *  0b10..Secure and Non-priviledge user access allowed.
- *  0b11..Secure and Priviledge user access allowed.
- */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_EZH_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_EZH_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_EZH_RULE_MASK)
-/*! @} */
-
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3 */
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_COUNT (1U)
 
@@ -2305,15 +2293,6 @@ typedef struct {
  *  0b11..Secure and Priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PVT_RULE_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PVT_RULE_SHIFT (8U)
-/*! PVT_RULE - Process and Voltage Monitoring controller
- *  0b00..Non-secure and Non-priviledge user access allowed.
- *  0b01..Non-secure and Privilege access allowed.
- *  0b10..Secure and Non-priviledge user access allowed.
- *  0b11..Secure and Priviledge user access allowed.
- */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PVT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PVT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PVT_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE_MASK (0x3000U)
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE_SHIFT (12U)
 /*! SYSCTRL_RULE - System Controller
@@ -2393,7 +2372,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE_MASK (0x300000U)
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE_SHIFT (20U)
-/*! PRINCE_RULE
+/*! PRINCE_RULE - Prince
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2427,7 +2406,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUFF_RULE_MASK (0x3000U)
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUFF_RULE_SHIFT (12U)
-/*! PUFF_RULE
+/*! PUFF_RULE - PUF
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2443,15 +2422,6 @@ typedef struct {
  *  0b11..Secure and Priviledge user access allowed.
  */
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_ROMPC_RULE_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_ROMPC_RULE_SHIFT (24U)
-/*! ROMPC_RULE - ROM patch controller
- *  0b00..Non-secure and Non-priviledge user access allowed.
- *  0b01..Non-secure and Privilege access allowed.
- *  0b10..Secure and Non-priviledge user access allowed.
- *  0b11..Secure and Priviledge user access allowed.
- */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_ROMPC_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_ROMPC_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_ROMPC_RULE_MASK)
 /*! @} */
 
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3 */
@@ -2461,7 +2431,7 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_DMA0_RULE_MASK (0x300U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_DMA0_RULE_SHIFT (8U)
-/*! DMA0_RULE
+/*! DMA0_RULE - DMA Controller
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2470,7 +2440,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_DMA0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_DMA0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_DMA0_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FS_USB_DEV_RULE_MASK (0x30000U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FS_USB_DEV_RULE_SHIFT (16U)
-/*! FS_USB_DEV_RULE
+/*! FS_USB_DEV_RULE - USB Full-speed device
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2479,7 +2449,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FS_USB_DEV_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FS_USB_DEV_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FS_USB_DEV_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_SCT_RULE_MASK (0x300000U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_SCT_RULE_SHIFT (20U)
-/*! SCT_RULE
+/*! SCT_RULE - SCTimer
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2488,7 +2458,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_SCT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_SCT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_SCT_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM0_RULE_MASK (0x3000000U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM0_RULE_SHIFT (24U)
-/*! FLEXCOMM0_RULE
+/*! FLEXCOMM0_RULE - Flexcomm interface 0
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2497,7 +2467,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM0_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM1_RULE_MASK (0x30000000U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM1_RULE_SHIFT (28U)
-/*! FLEXCOMM1_RULE
+/*! FLEXCOMM1_RULE - Flexcomm interface 1
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2510,7 +2480,7 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM2_RULE_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM2_RULE_SHIFT (0U)
-/*! FLEXCOMM2_RULE
+/*! FLEXCOMM2_RULE - Flexcomm interface 2
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2519,7 +2489,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM2_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM2_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM2_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM3_RULE_MASK (0x30U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM3_RULE_SHIFT (4U)
-/*! FLEXCOMM3_RULE
+/*! FLEXCOMM3_RULE - Flexcomm interface 3
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2528,7 +2498,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM3_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM3_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM3_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM4_RULE_MASK (0x300U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM4_RULE_SHIFT (8U)
-/*! FLEXCOMM4_RULE
+/*! FLEXCOMM4_RULE - Flexcomm interface 4
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2537,7 +2507,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM4_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM4_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM4_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_MAILBOX_RULE_MASK (0x3000U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_MAILBOX_RULE_SHIFT (12U)
-/*! MAILBOX_RULE
+/*! MAILBOX_RULE - Inter CPU communication Mailbox
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2577,7 +2547,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_CRC_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_CRC_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_CRC_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM5_RULE_MASK (0x3000000U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM5_RULE_SHIFT (24U)
-/*! FLEXCOMM5_RULE
+/*! FLEXCOMM5_RULE - Flexcomm interface 5
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2586,7 +2556,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM5_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM5_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM5_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM6_RULE_MASK (0x30000000U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM6_RULE_SHIFT (28U)
-/*! FLEXCOMM6_RULE
+/*! FLEXCOMM6_RULE - Flexcomm interface 6
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2599,7 +2569,7 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_FLEXCOMM7_RULE_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_FLEXCOMM7_RULE_SHIFT (0U)
-/*! FLEXCOMM7_RULE
+/*! FLEXCOMM7_RULE - Flexcomm interface 7
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2608,7 +2578,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_FLEXCOMM7_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_FLEXCOMM7_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_FLEXCOMM7_RULE_MASK)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_SDIO_RULE_MASK (0x3000U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_SDIO_RULE_SHIFT (12U)
-/*! SDIO_RULE
+/*! SDIO_RULE - SDMMC card interface
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
@@ -2730,7 +2700,7 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE -  */
+/*! @name SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE - Security access rules for AHB_SEC_CTRL_AHB. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE_SHIFT (0U)
@@ -2776,7 +2746,7 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_COUNT2 (1U)
 
-/*! @name SEC_CTRL_USB_HS_SLAVE_RULE -  */
+/*! @name SEC_CTRL_USB_HS_SLAVE_RULE - Security access rules for USB High speed RAM slaves. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SLAVE_RULE_RAM_USB_HS_RULE_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SLAVE_RULE_RAM_USB_HS_RULE_SHIFT (0U)
@@ -2792,7 +2762,7 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE -  */
+/*! @name SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE - Security access rules for RAM_USB_HS. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_0_RULE_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_0_RULE_SHIFT (0U)
@@ -2846,182 +2816,361 @@ typedef struct {
 /*! @} */
 
 /* The count of AHB_SECURE_CTRL_SEC_VIO_ADDR */
-#define AHB_SECURE_CTRL_SEC_VIO_ADDR_COUNT       (18U)
+#define AHB_SECURE_CTRL_SEC_VIO_ADDR_COUNT       (12U)
 
 /*! @name SEC_VIO_MISC_INFO - most recent security violation miscellaneous information for AHB layer n */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_WRITE_MASK (0x1U)
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_WRITE_SHIFT (0U)
+/*! SEC_VIO_INFO_WRITE - security violation access read/write indicator.
+ *  0b0..Read access.
+ *  0b1..Write access.
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_WRITE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_WRITE_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_WRITE_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_DATA_ACCESS_MASK (0x2U)
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_DATA_ACCESS_SHIFT (1U)
+/*! SEC_VIO_INFO_DATA_ACCESS - security violation access data/code indicator.
+ *  0b0..Code access.
+ *  0b1..Data access.
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_DATA_ACCESS(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_DATA_ACCESS_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_DATA_ACCESS_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER_SEC_LEVEL_MASK (0xF0U)
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER_SEC_LEVEL_SHIFT (4U)
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER_SEC_LEVEL(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER_SEC_LEVEL_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER_SEC_LEVEL_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER_MASK (0xF00U)
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER_SHIFT (8U)
+/*! SEC_VIO_INFO_MASTER - security violation master number
+ *  0b0000..CPU0 Code.
+ *  0b0001..CPU0 System.
+ *  0b0010..CPU1 Data.
+ *  0b0011..CPU1 System.
+ *  0b0100..USB-HS Device.
+ *  0b0101..SDMA0.
+ *  0b1000..SDIO.
+ *  0b1001..PowerQuad.
+ *  0b1010..HASH.
+ *  0b1011..USB-FS Host.
+ *  0b1100..SDMA1.
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_MASTER_MASK)
 /*! @} */
 
 /* The count of AHB_SECURE_CTRL_SEC_VIO_MISC_INFO */
-#define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_COUNT  (18U)
+#define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_COUNT  (12U)
 
 /*! @name SEC_VIO_INFO_VALID - security violation address/information registers valid flags */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID0_MASK (0x1U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID0_SHIFT (0U)
+/*! VIO_INFO_VALID0 - violation information valid flag for AHB layer 0. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID0_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID0_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID1_MASK (0x2U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID1_SHIFT (1U)
+/*! VIO_INFO_VALID1 - violation information valid flag for AHB layer 1. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID1_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID1_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID2_MASK (0x4U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID2_SHIFT (2U)
+/*! VIO_INFO_VALID2 - violation information valid flag for AHB layer 2. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID2_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID2_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID3_MASK (0x8U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID3_SHIFT (3U)
+/*! VIO_INFO_VALID3 - violation information valid flag for AHB layer 3. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID3_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID3_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID4_MASK (0x10U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID4_SHIFT (4U)
+/*! VIO_INFO_VALID4 - violation information valid flag for AHB layer 4. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID4_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID4_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID5_MASK (0x20U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID5_SHIFT (5U)
+/*! VIO_INFO_VALID5 - violation information valid flag for AHB layer 5. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID5_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID5_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID6_MASK (0x40U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID6_SHIFT (6U)
+/*! VIO_INFO_VALID6 - violation information valid flag for AHB layer 6. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID6_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID6_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID7_MASK (0x80U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID7_SHIFT (7U)
+/*! VIO_INFO_VALID7 - violation information valid flag for AHB layer 7. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID7_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID7_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID8_MASK (0x100U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID8_SHIFT (8U)
+/*! VIO_INFO_VALID8 - violation information valid flag for AHB layer 8. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID8(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID8_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID8_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID9_MASK (0x200U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID9_SHIFT (9U)
+/*! VIO_INFO_VALID9 - violation information valid flag for AHB layer 9. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID9(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID9_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID9_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID10_MASK (0x400U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID10_SHIFT (10U)
+/*! VIO_INFO_VALID10 - violation information valid flag for AHB layer 10. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID10(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID10_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID10_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID11_MASK (0x800U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID11_SHIFT (11U)
+/*! VIO_INFO_VALID11 - violation information valid flag for AHB layer 11. Write 1 to clear.
+ *  0b0..Not valid.
+ *  0b1..Valid (violation occurred).
+ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID11(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID11_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID11_MASK)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID12_MASK (0x1000U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID12_SHIFT (12U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID12(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID12_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID12_MASK)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID13_MASK (0x2000U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID13_SHIFT (13U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID13(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID13_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID13_MASK)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID14_MASK (0x4000U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID14_SHIFT (14U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID14(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID14_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID14_MASK)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID15_MASK (0x8000U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID15_SHIFT (15U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID15(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID15_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID15_MASK)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID16_MASK (0x10000U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID16_SHIFT (16U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID16(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID16_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID16_MASK)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID17_MASK (0x20000U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID17_SHIFT (17U)
-#define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID17(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID17_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID17_MASK)
 /*! @} */
 
-/*! @name SEC_GPIO_MASK0 - Secure GPIO mask for port 0 pins. This register is used to block leakage of Secure interface (GPIOs, I2C, UART configured as secure peripherals) pin states to non-secure world. */
+/*! @name SEC_GPIO_MASK0 - Secure GPIO mask for port 0 pins. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN0_SEC_MASK_MASK (0x1U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN0_SEC_MASK_SHIFT (0U)
+/*! PIO0_PIN0_SEC_MASK - Secure mask for pin P0_0
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN0_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN0_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN0_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN1_SEC_MASK_MASK (0x2U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN1_SEC_MASK_SHIFT (1U)
+/*! PIO0_PIN1_SEC_MASK - Secure mask for pin P0_1
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN1_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN1_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN1_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN2_SEC_MASK_MASK (0x4U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN2_SEC_MASK_SHIFT (2U)
+/*! PIO0_PIN2_SEC_MASK - Secure mask for pin P0_2
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN2_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN2_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN2_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN3_SEC_MASK_MASK (0x8U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN3_SEC_MASK_SHIFT (3U)
+/*! PIO0_PIN3_SEC_MASK - Secure mask for pin P0_3
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN3_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN3_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN3_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN4_SEC_MASK_MASK (0x10U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN4_SEC_MASK_SHIFT (4U)
+/*! PIO0_PIN4_SEC_MASK - Secure mask for pin P0_4
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN4_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN4_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN4_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN5_SEC_MASK_MASK (0x20U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN5_SEC_MASK_SHIFT (5U)
+/*! PIO0_PIN5_SEC_MASK - Secure mask for pin P0_5
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN5_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN5_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN5_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN6_SEC_MASK_MASK (0x40U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN6_SEC_MASK_SHIFT (6U)
+/*! PIO0_PIN6_SEC_MASK - Secure mask for pin P0_6
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN6_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN6_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN6_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN7_SEC_MASK_MASK (0x80U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN7_SEC_MASK_SHIFT (7U)
+/*! PIO0_PIN7_SEC_MASK - Secure mask for pin P0_7
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN7_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN7_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN7_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN8_SEC_MASK_MASK (0x100U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN8_SEC_MASK_SHIFT (8U)
+/*! PIO0_PIN8_SEC_MASK - Secure mask for pin P0_8
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN8_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN8_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN8_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN9_SEC_MASK_MASK (0x200U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN9_SEC_MASK_SHIFT (9U)
+/*! PIO0_PIN9_SEC_MASK - Secure mask for pin P0_9
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN9_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN9_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN9_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN10_SEC_MASK_MASK (0x400U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN10_SEC_MASK_SHIFT (10U)
+/*! PIO0_PIN10_SEC_MASK - Secure mask for pin P0_10
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN10_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN10_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN10_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN11_SEC_MASK_MASK (0x800U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN11_SEC_MASK_SHIFT (11U)
+/*! PIO0_PIN11_SEC_MASK - Secure mask for pin P0_11
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN11_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN11_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN11_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN12_SEC_MASK_MASK (0x1000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN12_SEC_MASK_SHIFT (12U)
+/*! PIO0_PIN12_SEC_MASK - Secure mask for pin P0_12
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN12_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN12_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN12_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN13_SEC_MASK_MASK (0x2000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN13_SEC_MASK_SHIFT (13U)
+/*! PIO0_PIN13_SEC_MASK - Secure mask for pin P0_13
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN13_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN13_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN13_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN14_SEC_MASK_MASK (0x4000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN14_SEC_MASK_SHIFT (14U)
+/*! PIO0_PIN14_SEC_MASK - Secure mask for pin P0_14
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN14_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN14_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN14_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN15_SEC_MASK_MASK (0x8000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN15_SEC_MASK_SHIFT (15U)
+/*! PIO0_PIN15_SEC_MASK - Secure mask for pin P0_15
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN15_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN15_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN15_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN16_SEC_MASK_MASK (0x10000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN16_SEC_MASK_SHIFT (16U)
+/*! PIO0_PIN16_SEC_MASK - Secure mask for pin P0_16
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN16_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN16_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN16_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN17_SEC_MASK_MASK (0x20000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN17_SEC_MASK_SHIFT (17U)
+/*! PIO0_PIN17_SEC_MASK - Secure mask for pin P0_17
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN17_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN17_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN17_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN18_SEC_MASK_MASK (0x40000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN18_SEC_MASK_SHIFT (18U)
+/*! PIO0_PIN18_SEC_MASK - Secure mask for pin P0_18
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN18_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN18_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN18_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN19_SEC_MASK_MASK (0x80000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN19_SEC_MASK_SHIFT (19U)
+/*! PIO0_PIN19_SEC_MASK - Secure mask for pin P0_19
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN19_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN19_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN19_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN20_SEC_MASK_MASK (0x100000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN20_SEC_MASK_SHIFT (20U)
+/*! PIO0_PIN20_SEC_MASK - Secure mask for pin P0_20
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN20_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN20_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN20_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN21_SEC_MASK_MASK (0x200000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN21_SEC_MASK_SHIFT (21U)
+/*! PIO0_PIN21_SEC_MASK - Secure mask for pin P0_21
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN21_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN21_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN21_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN22_SEC_MASK_MASK (0x400000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN22_SEC_MASK_SHIFT (22U)
+/*! PIO0_PIN22_SEC_MASK - Secure mask for pin P0_22
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN22_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN22_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN22_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN23_SEC_MASK_MASK (0x800000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN23_SEC_MASK_SHIFT (23U)
+/*! PIO0_PIN23_SEC_MASK - Secure mask for pin P0_23
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN23_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN23_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN23_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN24_SEC_MASK_MASK (0x1000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN24_SEC_MASK_SHIFT (24U)
+/*! PIO0_PIN24_SEC_MASK - Secure mask for pin P0_24
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN24_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN24_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN24_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN25_SEC_MASK_MASK (0x2000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN25_SEC_MASK_SHIFT (25U)
+/*! PIO0_PIN25_SEC_MASK - Secure mask for pin P0_25
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN25_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN25_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN25_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN26_SEC_MASK_MASK (0x4000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN26_SEC_MASK_SHIFT (26U)
+/*! PIO0_PIN26_SEC_MASK - Secure mask for pin P0_26
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN26_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN26_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN26_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN27_SEC_MASK_MASK (0x8000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN27_SEC_MASK_SHIFT (27U)
+/*! PIO0_PIN27_SEC_MASK - Secure mask for pin P0_27
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN27_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN27_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN27_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN28_SEC_MASK_MASK (0x10000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN28_SEC_MASK_SHIFT (28U)
+/*! PIO0_PIN28_SEC_MASK - Secure mask for pin P0_28
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN28_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN28_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN28_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN29_SEC_MASK_MASK (0x20000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN29_SEC_MASK_SHIFT (29U)
+/*! PIO0_PIN29_SEC_MASK - Secure mask for pin P0_29
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN29_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN29_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN29_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN30_SEC_MASK_MASK (0x40000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN30_SEC_MASK_SHIFT (30U)
+/*! PIO0_PIN30_SEC_MASK - Secure mask for pin P0_30
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN30_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN30_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN30_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN31_SEC_MASK_MASK (0x80000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN31_SEC_MASK_SHIFT (31U)
+/*! PIO0_PIN31_SEC_MASK - Secure mask for pin P0_31
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN31_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN31_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK0_PIO0_PIN31_SEC_MASK_MASK)
 /*! @} */
 
@@ -3029,321 +3178,455 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN0_SEC_MASK_MASK (0x1U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN0_SEC_MASK_SHIFT (0U)
+/*! PIO1_PIN0_SEC_MASK - Secure mask for pin P1_0
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN0_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN0_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN0_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN1_SEC_MASK_MASK (0x2U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN1_SEC_MASK_SHIFT (1U)
+/*! PIO1_PIN1_SEC_MASK - Secure mask for pin P1_1
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN1_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN1_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN1_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN2_SEC_MASK_MASK (0x4U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN2_SEC_MASK_SHIFT (2U)
+/*! PIO1_PIN2_SEC_MASK - Secure mask for pin P1_2
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN2_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN2_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN2_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN3_SEC_MASK_MASK (0x8U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN3_SEC_MASK_SHIFT (3U)
+/*! PIO1_PIN3_SEC_MASK - Secure mask for pin P1_3
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN3_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN3_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN3_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN4_SEC_MASK_MASK (0x10U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN4_SEC_MASK_SHIFT (4U)
+/*! PIO1_PIN4_SEC_MASK - Secure mask for pin P1_4
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN4_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN4_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN4_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN5_SEC_MASK_MASK (0x20U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN5_SEC_MASK_SHIFT (5U)
+/*! PIO1_PIN5_SEC_MASK - Secure mask for pin P1_5
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN5_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN5_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN5_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN6_SEC_MASK_MASK (0x40U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN6_SEC_MASK_SHIFT (6U)
+/*! PIO1_PIN6_SEC_MASK - Secure mask for pin P1_6
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN6_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN6_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN6_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN7_SEC_MASK_MASK (0x80U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN7_SEC_MASK_SHIFT (7U)
+/*! PIO1_PIN7_SEC_MASK - Secure mask for pin P1_7
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN7_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN7_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN7_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN8_SEC_MASK_MASK (0x100U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN8_SEC_MASK_SHIFT (8U)
+/*! PIO1_PIN8_SEC_MASK - Secure mask for pin P1_8
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN8_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN8_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN8_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN9_SEC_MASK_MASK (0x200U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN9_SEC_MASK_SHIFT (9U)
+/*! PIO1_PIN9_SEC_MASK - Secure mask for pin P1_9
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN9_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN9_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN9_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN10_SEC_MASK_MASK (0x400U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN10_SEC_MASK_SHIFT (10U)
+/*! PIO1_PIN10_SEC_MASK - Secure mask for pin P1_10
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN10_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN10_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN10_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN11_SEC_MASK_MASK (0x800U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN11_SEC_MASK_SHIFT (11U)
+/*! PIO1_PIN11_SEC_MASK - Secure mask for pin P1_11
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN11_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN11_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN11_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN12_SEC_MASK_MASK (0x1000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN12_SEC_MASK_SHIFT (12U)
+/*! PIO1_PIN12_SEC_MASK - Secure mask for pin P1_12
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN12_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN12_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN12_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN13_SEC_MASK_MASK (0x2000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN13_SEC_MASK_SHIFT (13U)
+/*! PIO1_PIN13_SEC_MASK - Secure mask for pin P1_13
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN13_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN13_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN13_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN14_SEC_MASK_MASK (0x4000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN14_SEC_MASK_SHIFT (14U)
+/*! PIO1_PIN14_SEC_MASK - Secure mask for pin P1_14
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN14_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN14_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN14_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN15_SEC_MASK_MASK (0x8000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN15_SEC_MASK_SHIFT (15U)
+/*! PIO1_PIN15_SEC_MASK - Secure mask for pin P1_15
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN15_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN15_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN15_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN16_SEC_MASK_MASK (0x10000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN16_SEC_MASK_SHIFT (16U)
+/*! PIO1_PIN16_SEC_MASK - Secure mask for pin P1_16
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN16_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN16_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN16_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN17_SEC_MASK_MASK (0x20000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN17_SEC_MASK_SHIFT (17U)
+/*! PIO1_PIN17_SEC_MASK - Secure mask for pin P1_17
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN17_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN17_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN17_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN18_SEC_MASK_MASK (0x40000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN18_SEC_MASK_SHIFT (18U)
+/*! PIO1_PIN18_SEC_MASK - Secure mask for pin P1_18
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN18_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN18_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN18_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN19_SEC_MASK_MASK (0x80000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN19_SEC_MASK_SHIFT (19U)
+/*! PIO1_PIN19_SEC_MASK - Secure mask for pin P1_19
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN19_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN19_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN19_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN20_SEC_MASK_MASK (0x100000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN20_SEC_MASK_SHIFT (20U)
+/*! PIO1_PIN20_SEC_MASK - Secure mask for pin P1_20
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN20_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN20_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN20_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN21_SEC_MASK_MASK (0x200000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN21_SEC_MASK_SHIFT (21U)
+/*! PIO1_PIN21_SEC_MASK - Secure mask for pin P1_21
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN21_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN21_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN21_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN22_SEC_MASK_MASK (0x400000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN22_SEC_MASK_SHIFT (22U)
+/*! PIO1_PIN22_SEC_MASK - Secure mask for pin P1_22
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN22_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN22_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN22_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN23_SEC_MASK_MASK (0x800000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN23_SEC_MASK_SHIFT (23U)
+/*! PIO1_PIN23_SEC_MASK - Secure mask for pin P1_23
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN23_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN23_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN23_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN24_SEC_MASK_MASK (0x1000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN24_SEC_MASK_SHIFT (24U)
+/*! PIO1_PIN24_SEC_MASK - Secure mask for pin P1_24
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN24_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN24_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN24_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN25_SEC_MASK_MASK (0x2000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN25_SEC_MASK_SHIFT (25U)
+/*! PIO1_PIN25_SEC_MASK - Secure mask for pin P1_25
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN25_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN25_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN25_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN26_SEC_MASK_MASK (0x4000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN26_SEC_MASK_SHIFT (26U)
+/*! PIO1_PIN26_SEC_MASK - Secure mask for pin P1_26
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN26_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN26_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN26_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN27_SEC_MASK_MASK (0x8000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN27_SEC_MASK_SHIFT (27U)
+/*! PIO1_PIN27_SEC_MASK - Secure mask for pin P1_27
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN27_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN27_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN27_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN28_SEC_MASK_MASK (0x10000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN28_SEC_MASK_SHIFT (28U)
+/*! PIO1_PIN28_SEC_MASK - Secure mask for pin P1_28
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN28_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN28_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN28_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN29_SEC_MASK_MASK (0x20000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN29_SEC_MASK_SHIFT (29U)
+/*! PIO1_PIN29_SEC_MASK - Secure mask for pin P1_29
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN29_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN29_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN29_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN30_SEC_MASK_MASK (0x40000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN30_SEC_MASK_SHIFT (30U)
+/*! PIO1_PIN30_SEC_MASK - Secure mask for pin P1_30
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN30_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN30_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN30_SEC_MASK_MASK)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN31_SEC_MASK_MASK (0x80000000U)
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN31_SEC_MASK_SHIFT (31U)
+/*! PIO1_PIN31_SEC_MASK - Secure mask for pin P1_31
+ *  0b1..Pin state is readable by non-secure world.
+ *  0b0..Pin state is blocked to non-secure world.
+ */
 #define AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN31_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN31_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK1_PIO1_PIN31_SEC_MASK_MASK)
-/*! @} */
-
-/*! @name SEC_GPIO_MASK2 - Secure GPIO mask for port 2 pins. */
-/*! @{ */
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN0_SEC_MASK_MASK (0x1U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN0_SEC_MASK_SHIFT (0U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN0_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN0_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN0_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN1_SEC_MASK_MASK (0x2U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN1_SEC_MASK_SHIFT (1U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN1_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN1_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN1_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN2_SEC_MASK_MASK (0x4U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN2_SEC_MASK_SHIFT (2U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN2_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN2_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN2_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN3_SEC_MASK_MASK (0x8U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN3_SEC_MASK_SHIFT (3U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN3_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN3_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN3_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN4_SEC_MASK_MASK (0x10U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN4_SEC_MASK_SHIFT (4U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN4_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN4_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN4_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN5_SEC_MASK_MASK (0x20U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN5_SEC_MASK_SHIFT (5U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN5_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN5_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN5_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN6_SEC_MASK_MASK (0x40U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN6_SEC_MASK_SHIFT (6U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN6_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN6_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN6_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN7_SEC_MASK_MASK (0x80U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN7_SEC_MASK_SHIFT (7U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN7_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN7_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN7_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN8_SEC_MASK_MASK (0x100U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN8_SEC_MASK_SHIFT (8U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN8_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN8_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN8_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN9_SEC_MASK_MASK (0x200U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN9_SEC_MASK_SHIFT (9U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN9_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN9_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN9_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN10_SEC_MASK_MASK (0x400U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN10_SEC_MASK_SHIFT (10U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN10_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN10_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN10_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN11_SEC_MASK_MASK (0x800U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN11_SEC_MASK_SHIFT (11U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN11_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN11_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN11_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN12_SEC_MASK_MASK (0x1000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN12_SEC_MASK_SHIFT (12U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN12_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN12_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN12_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN13_SEC_MASK_MASK (0x2000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN13_SEC_MASK_SHIFT (13U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN13_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN13_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN13_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN14_SEC_MASK_MASK (0x4000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN14_SEC_MASK_SHIFT (14U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN14_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN14_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN14_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN15_SEC_MASK_MASK (0x8000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN15_SEC_MASK_SHIFT (15U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN15_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN15_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN15_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN16_SEC_MASK_MASK (0x10000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN16_SEC_MASK_SHIFT (16U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN16_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN16_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN16_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN17_SEC_MASK_MASK (0x20000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN17_SEC_MASK_SHIFT (17U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN17_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN17_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN17_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN18_SEC_MASK_MASK (0x40000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN18_SEC_MASK_SHIFT (18U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN18_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN18_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN18_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN19_SEC_MASK_MASK (0x80000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN19_SEC_MASK_SHIFT (19U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN19_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN19_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN19_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN20_SEC_MASK_MASK (0x100000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN20_SEC_MASK_SHIFT (20U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN20_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN20_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN20_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN21_SEC_MASK_MASK (0x200000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN21_SEC_MASK_SHIFT (21U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN21_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN21_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN21_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN22_SEC_MASK_MASK (0x400000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN22_SEC_MASK_SHIFT (22U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN22_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN22_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN22_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN23_SEC_MASK_MASK (0x800000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN23_SEC_MASK_SHIFT (23U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN23_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN23_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN23_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN24_SEC_MASK_MASK (0x1000000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN24_SEC_MASK_SHIFT (24U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN24_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN24_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN24_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN25_SEC_MASK_MASK (0x2000000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN25_SEC_MASK_SHIFT (25U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN25_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN25_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN25_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN26_SEC_MASK_MASK (0x4000000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN26_SEC_MASK_SHIFT (26U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN26_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN26_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN26_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN27_SEC_MASK_MASK (0x8000000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN27_SEC_MASK_SHIFT (27U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN27_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN27_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN27_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN28_SEC_MASK_MASK (0x10000000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN28_SEC_MASK_SHIFT (28U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN28_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN28_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN28_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN29_SEC_MASK_MASK (0x20000000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN29_SEC_MASK_SHIFT (29U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN29_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN29_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN29_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN30_SEC_MASK_MASK (0x40000000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN30_SEC_MASK_SHIFT (30U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN30_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN30_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN30_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN31_SEC_MASK_MASK (0x80000000U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN31_SEC_MASK_SHIFT (31U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN31_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN31_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK2_PIO2_PIN31_SEC_MASK_MASK)
-/*! @} */
-
-/*! @name SEC_GPIO_MASK3 - Secure GPIO mask for port 3 pins. */
-/*! @{ */
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN0_SEC_MASK_MASK (0x1U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN0_SEC_MASK_SHIFT (0U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN0_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN0_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN0_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN1_SEC_MASK_MASK (0x2U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN1_SEC_MASK_SHIFT (1U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN1_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN1_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN1_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN2_SEC_MASK_MASK (0x4U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN2_SEC_MASK_SHIFT (2U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN2_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN2_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN2_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN3_SEC_MASK_MASK (0x8U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN3_SEC_MASK_SHIFT (3U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN3_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN3_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN3_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN4_SEC_MASK_MASK (0x10U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN4_SEC_MASK_SHIFT (4U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN4_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN4_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN4_SEC_MASK_MASK)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN5_SEC_MASK_MASK (0x20U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN5_SEC_MASK_SHIFT (5U)
-#define AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN5_SEC_MASK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN5_SEC_MASK_SHIFT)) & AHB_SECURE_CTRL_SEC_GPIO_MASK3_PIO3_PIN5_SEC_MASK_MASK)
 /*! @} */
 
 /*! @name SEC_CPU_INT_MASK0 - Secure Interrupt mask for CPU1 */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SYS_IRQ_MASK (0x1U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SYS_IRQ_SHIFT (0U)
+/*! SYS_IRQ - Watchdog Timer, Brown Out Detectors and Flash Controller interrupts
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SYS_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SYS_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SYS_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SDMA0_IRQ_MASK (0x2U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SDMA0_IRQ_SHIFT (1U)
+/*! SDMA0_IRQ - System DMA 0 (non-secure) interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SDMA0_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SDMA0_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SDMA0_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_GLOBALINT0_IRQ_MASK (0x4U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_GLOBALINT0_IRQ_SHIFT (2U)
+/*! GPIO_GLOBALINT0_IRQ - GPIO Group 0 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_GLOBALINT0_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_GLOBALINT0_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_GLOBALINT0_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_GLOBALINT1_IRQ_MASK (0x8U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_GLOBALINT1_IRQ_SHIFT (3U)
+/*! GPIO_GLOBALINT1_IRQ - GPIO Group 1 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_GLOBALINT1_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_GLOBALINT1_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_GLOBALINT1_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ0_MASK (0x10U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ0_SHIFT (4U)
+/*! GPIO_INT0_IRQ0 - Pin interrupt 0 or pattern match engine slice 0 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ0_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ0_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ1_MASK (0x20U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ1_SHIFT (5U)
+/*! GPIO_INT0_IRQ1 - Pin interrupt 1 or pattern match engine slice 1 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ1_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ1_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ2_MASK (0x40U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ2_SHIFT (6U)
+/*! GPIO_INT0_IRQ2 - Pin interrupt 2 or pattern match engine slice 2 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ2_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ2_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ3_MASK (0x80U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ3_SHIFT (7U)
+/*! GPIO_INT0_IRQ3 - Pin interrupt 3 or pattern match engine slice 3 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ3_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_GPIO_INT0_IRQ3_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_UTICK_IRQ_MASK (0x100U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_UTICK_IRQ_SHIFT (8U)
+/*! UTICK_IRQ - Micro Tick Timer interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_UTICK_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_UTICK_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_UTICK_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_MRT_IRQ_MASK (0x200U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_MRT_IRQ_SHIFT (9U)
+/*! MRT_IRQ - Multi-Rate Timer interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_MRT_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_MRT_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_MRT_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER0_IRQ_MASK (0x400U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER0_IRQ_SHIFT (10U)
+/*! CTIMER0_IRQ - Standard counter/timer 0 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER0_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER0_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER0_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER1_IRQ_MASK (0x800U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER1_IRQ_SHIFT (11U)
+/*! CTIMER1_IRQ - Standard counter/timer 1 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER1_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER1_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER1_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SCT_IRQ_MASK (0x1000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SCT_IRQ_SHIFT (12U)
+/*! SCT_IRQ - SCTimer/PWM interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SCT_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SCT_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_SCT_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER3_IRQ_MASK (0x2000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER3_IRQ_SHIFT (13U)
+/*! CTIMER3_IRQ - Standard counter/timer 3 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER3_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER3_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_CTIMER3_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM0_IRQ_MASK (0x4000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM0_IRQ_SHIFT (14U)
+/*! FLEXCOMM0_IRQ - Flexcomm 0 interrupt (USART, SPI, I2C, I2S).
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM0_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM0_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM0_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM1_IRQ_MASK (0x8000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM1_IRQ_SHIFT (15U)
+/*! FLEXCOMM1_IRQ - Flexcomm 1 interrupt (USART, SPI, I2C, I2S).
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM1_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM1_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM1_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM2_IRQ_MASK (0x10000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM2_IRQ_SHIFT (16U)
+/*! FLEXCOMM2_IRQ - Flexcomm 2 interrupt (USART, SPI, I2C, I2S).
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM2_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM2_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM2_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM3_IRQ_MASK (0x20000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM3_IRQ_SHIFT (17U)
+/*! FLEXCOMM3_IRQ - Flexcomm 3 interrupt (USART, SPI, I2C, I2S).
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM3_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM3_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM3_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM4_IRQ_MASK (0x40000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM4_IRQ_SHIFT (18U)
+/*! FLEXCOMM4_IRQ - Flexcomm 4 interrupt (USART, SPI, I2C, I2S).
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM4_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM4_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM4_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM5_IRQ_MASK (0x80000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM5_IRQ_SHIFT (19U)
+/*! FLEXCOMM5_IRQ - Flexcomm 5 interrupt (USART, SPI, I2C, I2S).
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM5_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM5_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM5_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM6_IRQ_MASK (0x100000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM6_IRQ_SHIFT (20U)
+/*! FLEXCOMM6_IRQ - Flexcomm 6 interrupt (USART, SPI, I2C, I2S).
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM6_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM6_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM6_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM7_IRQ_MASK (0x200000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM7_IRQ_SHIFT (21U)
+/*! FLEXCOMM7_IRQ - Flexcomm 7 interrupt (USART, SPI, I2C, I2S).
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM7_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM7_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_FLEXCOMM7_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ADC_IRQ_MASK (0x400000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ADC_IRQ_SHIFT (22U)
+/*! ADC_IRQ - General Purpose ADC interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ADC_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ADC_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ADC_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED0_MASK (0x800000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED0_SHIFT (23U)
+/*! RESERVED0 - Reserved. Read value is undefined, only zero should be written.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED0_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED0_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_CAPT0_IRQ_MASK (0x1000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_CAPT0_IRQ_SHIFT (24U)
+/*! ACMP_CAPT0_IRQ - Analog Comparator interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_CAPT0_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_CAPT0_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_CAPT0_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED1_MASK (0x2000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED1_SHIFT (25U)
+/*! RESERVED1 - Reserved. Read value is undefined, only zero should be written.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED1_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED1_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED2_MASK (0x4000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED2_SHIFT (26U)
+/*! RESERVED2 - Reserved. Read value is undefined, only zero should be written.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED2_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED2_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_NEEDCLK_MASK (0x8000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_NEEDCLK_SHIFT (27U)
+/*! USB0_NEEDCLK - USB Full Speed Controller Clock request interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_NEEDCLK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_NEEDCLK_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_NEEDCLK_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_IRQ_MASK (0x10000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_IRQ_SHIFT (28U)
+/*! USB0_IRQ - USB High Speed Controller interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RTC_IRQ_MASK (0x20000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RTC_IRQ_SHIFT (29U)
+/*! RTC_IRQ - RTC_LITE0_ALARM_IRQ, RTC_LITE0_WAKEUP_IRQ
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RTC_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RTC_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RTC_IRQ_MASK)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_EZH_ARCH_B_IRQ_MASK (0x40000000U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_EZH_ARCH_B_IRQ_SHIFT (30U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_EZH_ARCH_B_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_EZH_ARCH_B_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_EZH_ARCH_B_IRQ_MASK)
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED3_MASK (0x40000000U)
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED3_SHIFT (30U)
+/*! RESERVED3 - Reserved. Read value is undefined, only zero should be written.
+ *  0b0..
+ *  0b1..
+ */
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED3_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED3_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_MAILBOX_IRQ_MASK (0x80000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_MAILBOX_IRQ_SHIFT (31U)
+/*! MAILBOX_IRQ - Mailbox interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_MAILBOX_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_MAILBOX_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_MAILBOX_IRQ_MASK)
 /*! @} */
 
@@ -3351,121 +3634,231 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ4_MASK (0x1U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ4_SHIFT (0U)
+/*! GPIO_INT0_IRQ4 - Pin interrupt 4 or pattern match engine slice 4 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ4_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ4_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ5_MASK (0x2U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ5_SHIFT (1U)
+/*! GPIO_INT0_IRQ5 - Pin interrupt 5 or pattern match engine slice 5 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ5_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ5_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ6_MASK (0x4U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ6_SHIFT (2U)
+/*! GPIO_INT0_IRQ6 - Pin interrupt 6 or pattern match engine slice 6 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ6_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ6_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ7_MASK (0x8U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ7_SHIFT (3U)
+/*! GPIO_INT0_IRQ7 - Pin interrupt 7 or pattern match engine slice 7 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ7_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_GPIO_INT0_IRQ7_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CTIMER2_IRQ_MASK (0x10U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CTIMER2_IRQ_SHIFT (4U)
+/*! CTIMER2_IRQ - Standard counter/timer 2 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CTIMER2_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CTIMER2_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CTIMER2_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CTIMER4_IRQ_MASK (0x20U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CTIMER4_IRQ_SHIFT (5U)
+/*! CTIMER4_IRQ - Standard counter/timer 4 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CTIMER4_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CTIMER4_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CTIMER4_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_OS_EVENT_TIMER_IRQ_MASK (0x40U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_OS_EVENT_TIMER_IRQ_SHIFT (6U)
+/*! OS_EVENT_TIMER_IRQ - OS Event Timer and OS Event Timer Wakeup interrupts
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_OS_EVENT_TIMER_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_OS_EVENT_TIMER_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_OS_EVENT_TIMER_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED0_MASK (0x80U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED0_SHIFT (7U)
+/*! RESERVED0 - Reserved. Read value is undefined, only zero should be written.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED0_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED0_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED1_MASK (0x100U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED1_SHIFT (8U)
+/*! RESERVED1 - Reserved. Read value is undefined, only zero should be written.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED1_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED1_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED2_MASK (0x200U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED2_SHIFT (9U)
+/*! RESERVED2 - Reserved. Read value is undefined, only zero should be written.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED2_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED2_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SDIO_IRQ_MASK (0x400U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SDIO_IRQ_SHIFT (10U)
+/*! SDIO_IRQ - SDIO Controller interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SDIO_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SDIO_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SDIO_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED3_MASK (0x800U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED3_SHIFT (11U)
+/*! RESERVED3 - Reserved. Read value is undefined, only zero should be written.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED3_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED3_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED4_MASK (0x1000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED4_SHIFT (12U)
+/*! RESERVED4 - Reserved. Read value is undefined, only zero should be written.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED4_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED4_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED5_MASK (0x2000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED5_SHIFT (13U)
+/*! RESERVED5 - Reserved. Read value is undefined, only zero should be written.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED5_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED5_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_UTMI_IRQ_MASK (0x4000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_UTMI_IRQ_SHIFT (14U)
+/*! USB1_UTMI_IRQ - USB High Speed Controller UTMI interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_UTMI_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_UTMI_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_UTMI_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_IRQ_MASK (0x8000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_IRQ_SHIFT (15U)
+/*! USB1_IRQ - USB High Speed Controller interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_NEEDCLK_MASK (0x10000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_NEEDCLK_SHIFT (16U)
+/*! USB1_NEEDCLK - USB High Speed Controller Clock request interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_NEEDCLK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_NEEDCLK_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_NEEDCLK_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_HYPERVISOR_CALL_IRQ_MASK (0x20000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_HYPERVISOR_CALL_IRQ_SHIFT (17U)
+/*! SEC_HYPERVISOR_CALL_IRQ - Secure fault Hyper Visor call interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_HYPERVISOR_CALL_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_HYPERVISOR_CALL_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_HYPERVISOR_CALL_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_GPIO_INT0_IRQ0_MASK (0x40000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_GPIO_INT0_IRQ0_SHIFT (18U)
+/*! SEC_GPIO_INT0_IRQ0 - Secure Pin interrupt 0 or pattern match engine slice 0 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_GPIO_INT0_IRQ0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_GPIO_INT0_IRQ0_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_GPIO_INT0_IRQ0_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_GPIO_INT0_IRQ1_MASK (0x80000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_GPIO_INT0_IRQ1_SHIFT (19U)
+/*! SEC_GPIO_INT0_IRQ1 - Secure Pin interrupt 1 or pattern match engine slice 1 interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_GPIO_INT0_IRQ1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_GPIO_INT0_IRQ1_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_GPIO_INT0_IRQ1_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PLU_IRQ_MASK (0x100000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PLU_IRQ_SHIFT (20U)
+/*! PLU_IRQ - Programmable Look-Up Controller interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PLU_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PLU_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PLU_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_VIO_IRQ_MASK (0x200000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_VIO_IRQ_SHIFT (21U)
+/*! SEC_VIO_IRQ - Security Violation interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_VIO_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_VIO_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SEC_VIO_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SHA_IRQ_MASK (0x400000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SHA_IRQ_SHIFT (22U)
+/*! SHA_IRQ - HASH-AES interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SHA_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SHA_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SHA_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CASPER_IRQ_MASK (0x800000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CASPER_IRQ_SHIFT (23U)
+/*! CASPER_IRQ - CASPER interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CASPER_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CASPER_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CASPER_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_QDDKEY_IRQ_MASK (0x1000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_QDDKEY_IRQ_SHIFT (24U)
+/*! QDDKEY_IRQ - PUF interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_QDDKEY_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_QDDKEY_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_QDDKEY_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PQ_IRQ_MASK (0x2000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PQ_IRQ_SHIFT (25U)
+/*! PQ_IRQ - Power Quad interrupt.
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PQ_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PQ_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PQ_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SDMA1_IRQ_MASK (0x4000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SDMA1_IRQ_SHIFT (26U)
+/*! SDMA1_IRQ - System DMA 1 (Secure) interrupt
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SDMA1_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SDMA1_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_SDMA1_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_LSPI_HS_IRQ_MASK (0x8000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_LSPI_HS_IRQ_SHIFT (27U)
+/*! LSPI_HS_IRQ - High Speed SPI interrupt
+ *  0b0..
+ *  0b1..
+ */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_LSPI_HS_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_LSPI_HS_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_LSPI_HS_IRQ_MASK)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF0_AMBER_IRQ_MASK (0x10000000U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF0_AMBER_IRQ_SHIFT (28U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF0_AMBER_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF0_AMBER_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF0_AMBER_IRQ_MASK)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF0_RED_IRQ_MASK (0x20000000U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF0_RED_IRQ_SHIFT (29U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF0_RED_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF0_RED_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF0_RED_IRQ_MASK)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF1_AMBER_IRQ_MASK (0x40000000U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF1_AMBER_IRQ_SHIFT (30U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF1_AMBER_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF1_AMBER_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF1_AMBER_IRQ_MASK)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF1_RED_IRQ_MASK (0x80000000U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF1_RED_IRQ_SHIFT (31U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF1_RED_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF1_RED_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PVTVF1_RED_IRQ_MASK)
 /*! @} */
 
 /*! @name SEC_MASK_LOCK - Security General Purpose register access control. */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_MASK (0x3U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_SHIFT (0U)
+/*! SEC_GPIO_MASK0_LOCK - SEC_GPIO_MASK0 register write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK0_LOCK_MASK)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_MASK (0xCU)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_SHIFT (2U)
+/*! SEC_GPIO_MASK1_LOCK - SEC_GPIO_MASK1 register write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK1_LOCK_MASK)
-#define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK2_LOCK_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK2_LOCK_SHIFT (4U)
-#define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK2_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK2_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK2_LOCK_MASK)
-#define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK3_LOCK_MASK (0xC0U)
-#define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK3_LOCK_SHIFT (6U)
-#define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK3_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK3_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_GPIO_MASK3_LOCK_MASK)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK0_LOCK_MASK (0x300U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK0_LOCK_SHIFT (8U)
+/*! SEC_CPU1_INT_MASK0_LOCK - SEC_CPU_INT_MASK0 register write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK0_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK0_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK0_LOCK_MASK)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK1_LOCK_MASK (0xC00U)
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK1_LOCK_SHIFT (10U)
+/*! SEC_CPU1_INT_MASK1_LOCK - SEC_CPU_INT_MASK1 register write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK1_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK1_LOCK_SHIFT)) & AHB_SECURE_CTRL_SEC_MASK_LOCK_SEC_CPU1_INT_MASK1_LOCK_MASK)
 /*! @} */
 
@@ -3473,39 +3866,91 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33C_MASK (0x30U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33C_SHIFT (4U)
+/*! MCM33C - Micro-CM33 (CPU1) Code bus.
+ *  0b00..Non-secure and Non-priviledge user access allowed.
+ *  0b01..Non-secure and Privilege access allowed.
+ *  0b10..Secure and Non-priviledge user access allowed.
+ *  0b11..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33C(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33C_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33C_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33S_MASK (0xC0U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33S_SHIFT (6U)
+/*! MCM33S - Micro-CM33 (CPU1) System bus.
+ *  0b00..Non-secure and Non-priviledge user access allowed.
+ *  0b01..Non-secure and Privilege access allowed.
+ *  0b10..Secure and Non-priviledge user access allowed.
+ *  0b11..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33S(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33S_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33S_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSD_MASK (0x300U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSD_SHIFT (8U)
+/*! USBFSD - USB Full Speed Device.
+ *  0b00..Non-secure and Non-priviledge user access allowed.
+ *  0b01..Non-secure and Privilege access allowed.
+ *  0b10..Secure and Non-priviledge user access allowed.
+ *  0b11..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSD(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSD_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSD_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDMA0_MASK (0xC00U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDMA0_SHIFT (10U)
+/*! SDMA0 - System DMA 0.
+ *  0b00..Non-secure and Non-priviledge user access allowed.
+ *  0b01..Non-secure and Privilege access allowed.
+ *  0b10..Secure and Non-priviledge user access allowed.
+ *  0b11..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDMA0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDMA0_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDMA0_MASK)
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_EZH_D_MASK (0x3000U)
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_EZH_D_SHIFT (12U)
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_EZH_D(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_EZH_D_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_EZH_D_MASK)
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_EZH_I_MASK (0xC000U)
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_EZH_I_SHIFT (14U)
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_EZH_I(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_EZH_I_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_EZH_I_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDIO_MASK (0x30000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDIO_SHIFT (16U)
+/*! SDIO - SDIO.
+ *  0b00..Non-secure and Non-priviledge user access allowed.
+ *  0b01..Non-secure and Privilege access allowed.
+ *  0b10..Secure and Non-priviledge user access allowed.
+ *  0b11..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDIO(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDIO_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDIO_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_PQ_MASK (0xC0000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_PQ_SHIFT (18U)
+/*! PQ - Power Quad.
+ *  0b00..Non-secure and Non-priviledge user access allowed.
+ *  0b01..Non-secure and Privilege access allowed.
+ *  0b10..Secure and Non-priviledge user access allowed.
+ *  0b11..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_PQ(x)   (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_PQ_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_PQ_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_HASH_MASK (0x300000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_HASH_SHIFT (20U)
+/*! HASH - Hash.
+ *  0b00..Non-secure and Non-priviledge user access allowed.
+ *  0b01..Non-secure and Privilege access allowed.
+ *  0b10..Secure and Non-priviledge user access allowed.
+ *  0b11..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_HASH(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_HASH_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_HASH_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSH_MASK (0xC00000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSH_SHIFT (22U)
+/*! USBFSH - USB Full speed Host.
+ *  0b00..Non-secure and Non-priviledge user access allowed.
+ *  0b01..Non-secure and Privilege access allowed.
+ *  0b10..Secure and Non-priviledge user access allowed.
+ *  0b11..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSH(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSH_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSH_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDMA1_MASK (0x3000000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDMA1_SHIFT (24U)
+/*! SDMA1 - System DMA 1 security level.
+ *  0b00..Non-secure and Non-priviledge user access allowed.
+ *  0b01..Non-secure and Privilege access allowed.
+ *  0b10..Secure and Non-priviledge user access allowed.
+ *  0b11..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDMA1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDMA1_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_SDMA1_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_MASK (0xC0000000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_SHIFT (30U)
+/*! MASTER_SEC_LEVEL_LOCK - MASTER_SEC_LEVEL write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MASTER_SEC_LEVEL_LOCK_MASK)
 /*! @} */
 
@@ -3513,39 +3958,91 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33C_MASK (0x30U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33C_SHIFT (4U)
+/*! MCM33C - Micro-CM33 (CPU1) Code bus. Must be equal to NOT(MASTER_SEC_LEVEL.MCM33C)
+ *  0b11..Non-secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b00..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33C(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33C_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33C_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33S_MASK (0xC0U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33S_SHIFT (6U)
+/*! MCM33S - Micro-CM33 (CPU1) System bus. Must be equal to NOT(MASTER_SEC_LEVEL.MCM33S)
+ *  0b11..Non-secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b00..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33S(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33S_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33S_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD_MASK (0x300U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD_SHIFT (8U)
+/*! USBFSD - USB Full Speed Device. Must be equal to NOT(MASTER_SEC_LEVEL.USBFSD)
+ *  0b11..Non-secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b00..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA0_MASK (0xC00U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA0_SHIFT (10U)
+/*! SDMA0 - System DMA 0. Must be equal to NOT(MASTER_SEC_LEVEL.SDMA0)
+ *  0b11..Non-secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b00..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA0_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA0_MASK)
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_EZH_D_MASK (0x3000U)
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_EZH_D_SHIFT (12U)
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_EZH_D(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_EZH_D_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_EZH_D_MASK)
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_EZH_I_MASK (0xC000U)
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_EZH_I_SHIFT (14U)
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_EZH_I(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_EZH_I_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_EZH_I_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDIO_MASK (0x30000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDIO_SHIFT (16U)
+/*! SDIO - SDIO. Must be equal to NOT(MASTER_SEC_LEVEL.SDIO)
+ *  0b11..Non-secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b00..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDIO(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDIO_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDIO_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_PQ_MASK (0xC0000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_PQ_SHIFT (18U)
+/*! PQ - Power Quad. Must be equal to NOT(MASTER_SEC_LEVEL.PQ)
+ *  0b11..Non-secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b00..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_PQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_PQ_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_PQ_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_HASH_MASK (0x300000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_HASH_SHIFT (20U)
+/*! HASH - Hash. Must be equal to NOT(MASTER_SEC_LEVEL.HASH)
+ *  0b11..Non-secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b00..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_HASH(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_HASH_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_HASH_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSH_MASK (0xC00000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSH_SHIFT (22U)
+/*! USBFSH - USB Full speed Host. Must be equal to NOT(MASTER_SEC_LEVEL.USBFSH)
+ *  0b11..Non-secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b00..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSH(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSH_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSH_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA1_MASK (0x3000000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA1_SHIFT (24U)
+/*! SDMA1 - System DMA 1 security level. Must be equal to NOT(MASTER_SEC_LEVEL.SDMA1)
+ *  0b11..Non-secure and Non-priviledge user access allowed.
+ *  0b10..Non-secure and Privilege access allowed.
+ *  0b01..Secure and Non-priviledge user access allowed.
+ *  0b00..Secure and Priviledge user access allowed.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA1_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_SDMA1_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK_MASK (0xC0000000U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK_SHIFT (30U)
+/*! MASTER_SEC_LEVEL_ANTIPOL_LOCK - MASTER_SEC_ANTI_POL_REG register write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK_MASK)
 /*! @} */
 
@@ -3553,21 +4050,45 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_MASK (0x3U)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_SHIFT (0U)
+/*! LOCK_NS_VTOR - CM33 (CPU0) VTOR_NS register write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_MASK)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_MASK (0xCU)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_SHIFT (2U)
+/*! LOCK_NS_MPU - CM33 (CPU0) non-secure MPU register write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_MASK)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTAIRCR_MASK (0x30U)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTAIRCR_SHIFT (4U)
+/*! LOCK_S_VTAIRCR - CM33 (CPU0) VTOR_S, AIRCR.PRIS, IRCR.BFHFNMINS registers write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTAIRCR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTAIRCR_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTAIRCR_MASK)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_MASK (0xC0U)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_SHIFT (6U)
+/*! LOCK_S_MPU - CM33 (CPU0) Secure MPU registers write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_MASK)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_MASK (0x300U)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_SHIFT (8U)
+/*! LOCK_SAU - CM33 (CPU0) SAU registers write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_MASK)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_MASK (0xC0000000U)
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_SHIFT (30U)
+/*! CM33_LOCK_REG_LOCK - CM33_LOCK_REG write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_MASK)
 /*! @} */
 
@@ -3575,12 +4096,24 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_VTOR_MASK (0x3U)
 #define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_VTOR_SHIFT (0U)
+/*! LOCK_NS_VTOR - micro-CM33 (CPU1) VTOR_NS register write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_VTOR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_VTOR_SHIFT)) & AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_VTOR_MASK)
 #define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_MPU_MASK (0xCU)
 #define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_MPU_SHIFT (2U)
+/*! LOCK_NS_MPU - micro-CM33 (CPU1) non-secure MPU register write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_MPU_SHIFT)) & AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_MPU_MASK)
 #define AHB_SECURE_CTRL_MCM33_LOCK_REG_MCM33_LOCK_REG_LOCK_MASK (0xC0000000U)
 #define AHB_SECURE_CTRL_MCM33_LOCK_REG_MCM33_LOCK_REG_LOCK_SHIFT (30U)
+/*! MCM33_LOCK_REG_LOCK - MCM33_LOCK_REG write-lock.
+ *  0b10..Writable.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MCM33_LOCK_REG_MCM33_LOCK_REG_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MCM33_LOCK_REG_MCM33_LOCK_REG_LOCK_SHIFT)) & AHB_SECURE_CTRL_MCM33_LOCK_REG_MCM33_LOCK_REG_LOCK_MASK)
 /*! @} */
 
@@ -3588,27 +4121,59 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_MASK (0x3U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_SHIFT (0U)
+/*! WRITE_LOCK - write lock.
+ *  0b10..Secure control registers can be written.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_MASK (0xCU)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_SHIFT (2U)
+/*! ENABLE_SECURE_CHECKING - AHB bus matrix enable secure check.
+ *  0b10..Disable check.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_MASK (0x30U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_SHIFT (4U)
+/*! ENABLE_S_PRIV_CHECK - AHB bus matrix enable secure privilege check.
+ *  0b10..Disable check.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_MASK (0xC0U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_SHIFT (6U)
+/*! ENABLE_NS_PRIV_CHECK - AHB bus matrix enable non-secure privilege check.
+ *  0b10..Disable check.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_MASK (0x300U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_SHIFT (8U)
+/*! DISABLE_VIOLATION_ABORT - Disable secure violation abort.
+ *  0b10..Enable abort fort secure checker.
+ *  0b01..Disable abort fort secure checker.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_VIOLATION_ABORT_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK (0xC00U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT (10U)
+/*! DISABLE_SIMPLE_MASTER_STRICT_MODE - Disable simple master strict mode.
+ *  0b10..Simple master in strict mode.
+ *  0b01..Simple master in tier mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK (0x3000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT (12U)
+/*! DISABLE_SMART_MASTER_STRICT_MODE - Disable smart master strict mode.
+ *  0b10..Smart master in strict mode.
+ *  0b01..Smart master in tier mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_MASK (0xC000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_SHIFT (14U)
+/*! IDAU_ALL_NS - Disable IDAU.
+ *  0b10..IDAU is enabled.
+ *  0b01..IDAU is disable.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_IDAU_ALL_NS_MASK)
 /*! @} */
 
@@ -3616,27 +4181,59 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_MASK (0x3U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_SHIFT (0U)
+/*! WRITE_LOCK - write lock.
+ *  0b10..Secure control registers can be written.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_MASK (0xCU)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_SHIFT (2U)
+/*! ENABLE_SECURE_CHECKING - AHB bus matrix enable secure check.
+ *  0b10..Disable check.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_MASK (0x30U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_SHIFT (4U)
+/*! ENABLE_S_PRIV_CHECK - AHB bus matrix enable secure privilege check.
+ *  0b10..Disable check.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_MASK (0xC0U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_SHIFT (6U)
+/*! ENABLE_NS_PRIV_CHECK - AHB bus matrix enable non-secure privilege check.
+ *  0b10..Disable check.
+ *  0b01..Restricted mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_MASK (0x300U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_SHIFT (8U)
+/*! DISABLE_VIOLATION_ABORT - Disable secure violation abort.
+ *  0b10..Enable abort fort secure checker.
+ *  0b01..Disable abort fort secure checker.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_VIOLATION_ABORT_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK (0xC00U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT (10U)
+/*! DISABLE_SIMPLE_MASTER_STRICT_MODE - Disable simple master strict mode.
+ *  0b10..Simple master in strict mode.
+ *  0b01..Simple master in tier mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SIMPLE_MASTER_STRICT_MODE_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK (0x3000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT (12U)
+/*! DISABLE_SMART_MASTER_STRICT_MODE - Disable smart master strict mode.
+ *  0b10..Smart master in strict mode.
+ *  0b01..Smart master in tier mode.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_DISABLE_SMART_MASTER_STRICT_MODE_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_MASK (0xC000U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_SHIFT (14U)
+/*! IDAU_ALL_NS - Disable IDAU.
+ *  0b10..IDAU is enabled.
+ *  0b01..IDAU is disable.
+ */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_IDAU_ALL_NS_MASK)
 /*! @} */
 
@@ -3829,7 +4426,8 @@ typedef struct {
 #define ANACTRL_FRO192M_STATUS_CLK_VALID_SHIFT   (0U)
 /*! CLK_VALID - Output clock valid signal. Indicates that CCO clock has settled.
  *  0b0..No output clock present (None of 12 MHz, 48 MHz or 96 MHz clock is available).
- *  0b1..Clock is present (12 MHz, 48 MHz or 96 MHz can be output if they are enable respectively by FRO192M_CTRL.ENA_12MHZCLK/ENA_48MHZCLK/ENA_96MHZCLK).
+ *  0b1..Clock is present (12 MHz, 48 MHz or 96 MHz can be output if they are enable respectively by
+ *       FRO192M_CTRL.ENA_12MHZCLK/ENA_48MHZCLK/ENA_96MHZCLK).
  */
 #define ANACTRL_FRO192M_STATUS_CLK_VALID(x)      (((uint32_t)(((uint32_t)(x)) << ANACTRL_FRO192M_STATUS_CLK_VALID_SHIFT)) & ANACTRL_FRO192M_STATUS_CLK_VALID_MASK)
 #define ANACTRL_FRO192M_STATUS_ATB_VCTRL_MASK    (0x2U)
@@ -4532,7 +5130,8 @@ typedef struct {
 #define CASPER_CTRL1_MODE(x)                     (((uint32_t)(((uint32_t)(x)) << CASPER_CTRL1_MODE_SHIFT)) & CASPER_CTRL1_MODE_MASK)
 #define CASPER_CTRL1_RESBPAIR_MASK               (0x10000U)
 #define CASPER_CTRL1_RESBPAIR_SHIFT              (16U)
-/*! RESBPAIR - Which bank-pair the offset RESOFF is within. This must be 0 if only 2-up. Ideally this is not the same bank as ABBPAIR (when 4-up supported)
+/*! RESBPAIR - Which bank-pair the offset RESOFF is within. This must be 0 if only 2-up. Ideally
+ *    this is not the same bank as ABBPAIR (when 4-up supported)
  *  0b0..Bank-pair 0 (1st)
  *  0b1..Bank-pair 1 (2nd)
  */
@@ -4558,7 +5157,8 @@ typedef struct {
 #define CASPER_LOADER_COUNT(x)                   (((uint32_t)(((uint32_t)(x)) << CASPER_LOADER_COUNT_SHIFT)) & CASPER_LOADER_COUNT_MASK)
 #define CASPER_LOADER_CTRLBPAIR_MASK             (0x10000U)
 #define CASPER_LOADER_CTRLBPAIR_SHIFT            (16U)
-/*! CTRLBPAIR - Which bank-pair the offset CTRLOFF is within. This must be 0 if only 2-up. Does not matter which bank is used as this is loaded when not performing an operation.
+/*! CTRLBPAIR - Which bank-pair the offset CTRLOFF is within. This must be 0 if only 2-up. Does not
+ *    matter which bank is used as this is loaded when not performing an operation.
  *  0b0..Bank-pair 0 (1st)
  *  0b1..Bank-pair 1 (2nd)
  */
@@ -4938,7 +5538,8 @@ typedef struct {
 #define CTIMER_TCR_CRST_SHIFT                    (1U)
 /*! CRST - Counter reset.
  *  0b0..Disabled. Do nothing.
- *  0b1..Enabled. The Timer Counter and the Prescale Counter are synchronously reset on the next positive edge of the APB bus clock. The counters remain reset until TCR[1] is returned to zero.
+ *  0b1..Enabled. The Timer Counter and the Prescale Counter are synchronously reset on the next positive edge of
+ *       the APB bus clock. The counters remain reset until TCR[1] is returned to zero.
  */
 #define CTIMER_TCR_CRST(x)                       (((uint32_t)(((uint32_t)(x)) << CTIMER_TCR_CRST_SHIFT)) & CTIMER_TCR_CRST_MASK)
 /*! @} */
@@ -5132,7 +5733,9 @@ typedef struct {
 /*! @{ */
 #define CTIMER_CTCR_CTMODE_MASK                  (0x3U)
 #define CTIMER_CTCR_CTMODE_SHIFT                 (0U)
-/*! CTMODE - Counter/Timer Mode This field selects which rising APB bus clock edges can increment Timer's Prescale Counter (PC), or clear PC and increment Timer Counter (TC). Timer Mode: the TC is incremented when the Prescale Counter matches the Prescale Register.
+/*! CTMODE - Counter/Timer Mode This field selects which rising APB bus clock edges can increment
+ *    Timer's Prescale Counter (PC), or clear PC and increment Timer Counter (TC). Timer Mode: the TC
+ *    is incremented when the Prescale Counter matches the Prescale Register.
  *  0b00..Timer Mode. Incremented every rising APB bus clock edge.
  *  0b01..Counter Mode rising edge. TC is incremented on rising edges on the CAP input selected by bits 3:2.
  *  0b10..Counter Mode falling edge. TC is incremented on falling edges on the CAP input selected by bits 3:2.
@@ -5141,7 +5744,11 @@ typedef struct {
 #define CTIMER_CTCR_CTMODE(x)                    (((uint32_t)(((uint32_t)(x)) << CTIMER_CTCR_CTMODE_SHIFT)) & CTIMER_CTCR_CTMODE_MASK)
 #define CTIMER_CTCR_CINSEL_MASK                  (0xCU)
 #define CTIMER_CTCR_CINSEL_SHIFT                 (2U)
-/*! CINSEL - Count Input Select When bits 1:0 in this register are not 00, these bits select which CAP pin is sampled for clocking. Note: If Counter mode is selected for a particular CAPn input in the CTCR, the 3 bits for that input in the Capture Control Register (CCR) must be programmed as 000. However, capture and/or interrupt can be selected for the other 3 CAPn inputs in the same timer.
+/*! CINSEL - Count Input Select When bits 1:0 in this register are not 00, these bits select which
+ *    CAP pin is sampled for clocking. Note: If Counter mode is selected for a particular CAPn input
+ *    in the CTCR, the 3 bits for that input in the Capture Control Register (CCR) must be
+ *    programmed as 000. However, capture and/or interrupt can be selected for the other 3 CAPn inputs in the
+ *    same timer.
  *  0b00..Channel 0. CAPn.0 for CTIMERn
  *  0b01..Channel 1. CAPn.1 for CTIMERn
  *  0b10..Channel 2. CAPn.2 for CTIMERn
@@ -5153,7 +5760,9 @@ typedef struct {
 #define CTIMER_CTCR_ENCC(x)                      (((uint32_t)(((uint32_t)(x)) << CTIMER_CTCR_ENCC_SHIFT)) & CTIMER_CTCR_ENCC_MASK)
 #define CTIMER_CTCR_SELCC_MASK                   (0xE0U)
 #define CTIMER_CTCR_SELCC_SHIFT                  (5U)
-/*! SELCC - Edge select. When bit 4 is 1, these bits select which capture input edge will cause the timer and prescaler to be cleared. These bits have no effect when bit 4 is low. Values 0x2 to 0x3 and 0x6 to 0x7 are reserved.
+/*! SELCC - Edge select. When bit 4 is 1, these bits select which capture input edge will cause the
+ *    timer and prescaler to be cleared. These bits have no effect when bit 4 is low. Values 0x2 to
+ *    0x3 and 0x6 to 0x7 are reserved.
  *  0b000..Channel 0 Rising Edge. Rising edge of the signal on capture channel 0 clears the timer (if bit 4 is set).
  *  0b001..Channel 0 Falling Edge. Falling edge of the signal on capture channel 0 clears the timer (if bit 4 is set).
  *  0b010..Channel 1 Rising Edge. Rising edge of the signal on capture channel 1 clears the timer (if bit 4 is set).
@@ -5469,7 +6078,8 @@ typedef struct {
 #define DMA_CTRL_ENABLE_MASK                     (0x1U)
 #define DMA_CTRL_ENABLE_SHIFT                    (0U)
 /*! ENABLE - DMA controller master enable.
- *  0b0..Disabled. The DMA controller is disabled. This clears any triggers that were asserted at the point when disabled, but does not prevent re-triggering when the DMA controller is re-enabled.
+ *  0b0..Disabled. The DMA controller is disabled. This clears any triggers that were asserted at the point when
+ *       disabled, but does not prevent re-triggering when the DMA controller is re-enabled.
  *  0b1..Enabled. The DMA controller is enabled.
  */
 #define DMA_CTRL_ENABLE(x)                       (((uint32_t)(((uint32_t)(x)) << DMA_CTRL_ENABLE_SHIFT)) & DMA_CTRL_ENABLE_MASK)
@@ -5624,7 +6234,9 @@ typedef struct {
 /*! @{ */
 #define DMA_CHANNEL_CFG_PERIPHREQEN_MASK         (0x1U)
 #define DMA_CHANNEL_CFG_PERIPHREQEN_SHIFT        (0U)
-/*! PERIPHREQEN - Peripheral request Enable. If a DMA channel is used to perform a memory-to-memory move, any peripheral DMA request associated with that channel can be disabled to prevent any interaction between the peripheral and the DMA controller.
+/*! PERIPHREQEN - Peripheral request Enable. If a DMA channel is used to perform a memory-to-memory
+ *    move, any peripheral DMA request associated with that channel can be disabled to prevent any
+ *    interaction between the peripheral and the DMA controller.
  *  0b0..Disabled. Peripheral DMA requests are disabled.
  *  0b1..Enabled. Peripheral DMA requests are enabled.
  */
@@ -5647,14 +6259,21 @@ typedef struct {
 #define DMA_CHANNEL_CFG_TRIGTYPE_SHIFT           (5U)
 /*! TRIGTYPE - Trigger Type. Selects hardware trigger as edge triggered or level triggered.
  *  0b0..Edge. Hardware trigger is edge triggered. Transfers will be initiated and completed, as specified for a single trigger.
- *  0b1..Level. Hardware trigger is level triggered. Note that when level triggering without burst (BURSTPOWER = 0) is selected, only hardware triggers should be used on that channel. Transfers continue as long as the trigger level is asserted. Once the trigger is de-asserted, the transfer will be paused until the trigger is, again, asserted. However, the transfer will not be paused until any remaining transfers within the current BURSTPOWER length are completed.
+ *  0b1..Level. Hardware trigger is level triggered. Note that when level triggering without burst (BURSTPOWER =
+ *       0) is selected, only hardware triggers should be used on that channel. Transfers continue as long as the
+ *       trigger level is asserted. Once the trigger is de-asserted, the transfer will be paused until the trigger
+ *       is, again, asserted. However, the transfer will not be paused until any remaining transfers within the
+ *       current BURSTPOWER length are completed.
  */
 #define DMA_CHANNEL_CFG_TRIGTYPE(x)              (((uint32_t)(((uint32_t)(x)) << DMA_CHANNEL_CFG_TRIGTYPE_SHIFT)) & DMA_CHANNEL_CFG_TRIGTYPE_MASK)
 #define DMA_CHANNEL_CFG_TRIGBURST_MASK           (0x40U)
 #define DMA_CHANNEL_CFG_TRIGBURST_SHIFT          (6U)
 /*! TRIGBURST - Trigger Burst. Selects whether hardware triggers cause a single or burst transfer.
  *  0b0..Single transfer. Hardware trigger causes a single transfer.
- *  0b1..Burst transfer. When the trigger for this channel is set to edge triggered, a hardware trigger causes a burst transfer, as defined by BURSTPOWER. When the trigger for this channel is set to level triggered, a hardware trigger causes transfers to continue as long as the trigger is asserted, unless the transfer is complete.
+ *  0b1..Burst transfer. When the trigger for this channel is set to edge triggered, a hardware trigger causes a
+ *       burst transfer, as defined by BURSTPOWER. When the trigger for this channel is set to level triggered, a
+ *       hardware trigger causes transfers to continue as long as the trigger is asserted, unless the transfer is
+ *       complete.
  */
 #define DMA_CHANNEL_CFG_TRIGBURST(x)             (((uint32_t)(((uint32_t)(x)) << DMA_CHANNEL_CFG_TRIGBURST_SHIFT)) & DMA_CHANNEL_CFG_TRIGBURST_MASK)
 #define DMA_CHANNEL_CFG_BURSTPOWER_MASK          (0xF00U)
@@ -5662,14 +6281,20 @@ typedef struct {
 #define DMA_CHANNEL_CFG_BURSTPOWER(x)            (((uint32_t)(((uint32_t)(x)) << DMA_CHANNEL_CFG_BURSTPOWER_SHIFT)) & DMA_CHANNEL_CFG_BURSTPOWER_MASK)
 #define DMA_CHANNEL_CFG_SRCBURSTWRAP_MASK        (0x4000U)
 #define DMA_CHANNEL_CFG_SRCBURSTWRAP_SHIFT       (14U)
-/*! SRCBURSTWRAP - Source Burst Wrap. When enabled, the source data address for the DMA is 'wrapped', meaning that the source address range for each burst will be the same. As an example, this could be used to read several sequential registers from a peripheral for each DMA burst, reading the same registers again for each burst.
+/*! SRCBURSTWRAP - Source Burst Wrap. When enabled, the source data address for the DMA is
+ *    'wrapped', meaning that the source address range for each burst will be the same. As an example, this
+ *    could be used to read several sequential registers from a peripheral for each DMA burst,
+ *    reading the same registers again for each burst.
  *  0b0..Disabled. Source burst wrapping is not enabled for this DMA channel.
  *  0b1..Enabled. Source burst wrapping is enabled for this DMA channel.
  */
 #define DMA_CHANNEL_CFG_SRCBURSTWRAP(x)          (((uint32_t)(((uint32_t)(x)) << DMA_CHANNEL_CFG_SRCBURSTWRAP_SHIFT)) & DMA_CHANNEL_CFG_SRCBURSTWRAP_MASK)
 #define DMA_CHANNEL_CFG_DSTBURSTWRAP_MASK        (0x8000U)
 #define DMA_CHANNEL_CFG_DSTBURSTWRAP_SHIFT       (15U)
-/*! DSTBURSTWRAP - Destination Burst Wrap. When enabled, the destination data address for the DMA is 'wrapped', meaning that the destination address range for each burst will be the same. As an example, this could be used to write several sequential registers to a peripheral for each DMA burst, writing the same registers again for each burst.
+/*! DSTBURSTWRAP - Destination Burst Wrap. When enabled, the destination data address for the DMA is
+ *    'wrapped', meaning that the destination address range for each burst will be the same. As an
+ *    example, this could be used to write several sequential registers to a peripheral for each DMA
+ *    burst, writing the same registers again for each burst.
  *  0b0..Disabled. Destination burst wrapping is not enabled for this DMA channel.
  *  0b1..Enabled. Destination burst wrapping is enabled for this DMA channel.
  */
@@ -5686,14 +6311,16 @@ typedef struct {
 /*! @{ */
 #define DMA_CHANNEL_CTLSTAT_VALIDPENDING_MASK    (0x1U)
 #define DMA_CHANNEL_CTLSTAT_VALIDPENDING_SHIFT   (0U)
-/*! VALIDPENDING - Valid pending flag for this channel. This bit is set when a 1 is written to the corresponding bit in the related SETVALID register when CFGVALID = 1 for the same channel.
+/*! VALIDPENDING - Valid pending flag for this channel. This bit is set when a 1 is written to the
+ *    corresponding bit in the related SETVALID register when CFGVALID = 1 for the same channel.
  *  0b0..No effect. No effect on DMA operation.
  *  0b1..Valid pending.
  */
 #define DMA_CHANNEL_CTLSTAT_VALIDPENDING(x)      (((uint32_t)(((uint32_t)(x)) << DMA_CHANNEL_CTLSTAT_VALIDPENDING_SHIFT)) & DMA_CHANNEL_CTLSTAT_VALIDPENDING_MASK)
 #define DMA_CHANNEL_CTLSTAT_TRIG_MASK            (0x4U)
 #define DMA_CHANNEL_CTLSTAT_TRIG_SHIFT           (2U)
-/*! TRIG - Trigger flag. Indicates that the trigger for this channel is currently set. This bit is cleared at the end of an entire transfer or upon reload when CLRTRIG = 1.
+/*! TRIG - Trigger flag. Indicates that the trigger for this channel is currently set. This bit is
+ *    cleared at the end of an entire transfer or upon reload when CLRTRIG = 1.
  *  0b0..Not triggered. The trigger for this DMA channel is not set. DMA operations will not be carried out.
  *  0b1..Triggered. The trigger for this DMA channel is set. DMA operations will be carried out.
  */
@@ -5707,14 +6334,16 @@ typedef struct {
 /*! @{ */
 #define DMA_CHANNEL_XFERCFG_CFGVALID_MASK        (0x1U)
 #define DMA_CHANNEL_XFERCFG_CFGVALID_SHIFT       (0U)
-/*! CFGVALID - Configuration Valid flag. This bit indicates whether the current channel descriptor is valid and can potentially be acted upon, if all other activation criteria are fulfilled.
+/*! CFGVALID - Configuration Valid flag. This bit indicates whether the current channel descriptor
+ *    is valid and can potentially be acted upon, if all other activation criteria are fulfilled.
  *  0b0..Not valid. The channel descriptor is not considered valid until validated by an associated SETVALID0 setting.
  *  0b1..Valid. The current channel descriptor is considered valid.
  */
 #define DMA_CHANNEL_XFERCFG_CFGVALID(x)          (((uint32_t)(((uint32_t)(x)) << DMA_CHANNEL_XFERCFG_CFGVALID_SHIFT)) & DMA_CHANNEL_XFERCFG_CFGVALID_MASK)
 #define DMA_CHANNEL_XFERCFG_RELOAD_MASK          (0x2U)
 #define DMA_CHANNEL_XFERCFG_RELOAD_SHIFT         (1U)
-/*! RELOAD - Indicates whether the channel's control structure will be reloaded when the current descriptor is exhausted. Reloading allows ping-pong and linked transfers.
+/*! RELOAD - Indicates whether the channel's control structure will be reloaded when the current
+ *    descriptor is exhausted. Reloading allows ping-pong and linked transfers.
  *  0b0..Disabled. Do not reload the channels' control structure when the current descriptor is exhausted.
  *  0b1..Enabled. Reload the channels' control structure when the current descriptor is exhausted.
  */
@@ -5722,8 +6351,10 @@ typedef struct {
 #define DMA_CHANNEL_XFERCFG_SWTRIG_MASK          (0x4U)
 #define DMA_CHANNEL_XFERCFG_SWTRIG_SHIFT         (2U)
 /*! SWTRIG - Software Trigger.
- *  0b0..Not set. When written by software, the trigger for this channel is not set. A new trigger, as defined by the HWTRIGEN, TRIGPOL, and TRIGTYPE will be needed to start the channel.
- *  0b1..Set. When written by software, the trigger for this channel is set immediately. This feature should not be used with level triggering when TRIGBURST = 0.
+ *  0b0..Not set. When written by software, the trigger for this channel is not set. A new trigger, as defined by
+ *       the HWTRIGEN, TRIGPOL, and TRIGTYPE will be needed to start the channel.
+ *  0b1..Set. When written by software, the trigger for this channel is set immediately. This feature should not
+ *       be used with level triggering when TRIGBURST = 0.
  */
 #define DMA_CHANNEL_XFERCFG_SWTRIG(x)            (((uint32_t)(((uint32_t)(x)) << DMA_CHANNEL_XFERCFG_SWTRIG_SHIFT)) & DMA_CHANNEL_XFERCFG_SWTRIG_MASK)
 #define DMA_CHANNEL_XFERCFG_CLRTRIG_MASK         (0x8U)
@@ -5735,14 +6366,18 @@ typedef struct {
 #define DMA_CHANNEL_XFERCFG_CLRTRIG(x)           (((uint32_t)(((uint32_t)(x)) << DMA_CHANNEL_XFERCFG_CLRTRIG_SHIFT)) & DMA_CHANNEL_XFERCFG_CLRTRIG_MASK)
 #define DMA_CHANNEL_XFERCFG_SETINTA_MASK         (0x10U)
 #define DMA_CHANNEL_XFERCFG_SETINTA_SHIFT        (4U)
-/*! SETINTA - Set Interrupt flag A for this channel. There is no hardware distinction between interrupt A and B. They can be used by software to assist with more complex descriptor usage. By convention, interrupt A may be used when only one interrupt flag is needed.
+/*! SETINTA - Set Interrupt flag A for this channel. There is no hardware distinction between
+ *    interrupt A and B. They can be used by software to assist with more complex descriptor usage. By
+ *    convention, interrupt A may be used when only one interrupt flag is needed.
  *  0b0..No effect.
  *  0b1..Set. The INTA flag for this channel will be set when the current descriptor is exhausted.
  */
 #define DMA_CHANNEL_XFERCFG_SETINTA(x)           (((uint32_t)(((uint32_t)(x)) << DMA_CHANNEL_XFERCFG_SETINTA_SHIFT)) & DMA_CHANNEL_XFERCFG_SETINTA_MASK)
 #define DMA_CHANNEL_XFERCFG_SETINTB_MASK         (0x20U)
 #define DMA_CHANNEL_XFERCFG_SETINTB_SHIFT        (5U)
-/*! SETINTB - Set Interrupt flag B for this channel. There is no hardware distinction between interrupt A and B. They can be used by software to assist with more complex descriptor usage. By convention, interrupt A may be used when only one interrupt flag is needed.
+/*! SETINTB - Set Interrupt flag B for this channel. There is no hardware distinction between
+ *    interrupt A and B. They can be used by software to assist with more complex descriptor usage. By
+ *    convention, interrupt A may be used when only one interrupt flag is needed.
  *  0b0..No effect.
  *  0b1..Set. The INTB flag for this channel will be set when the current descriptor is exhausted.
  */
@@ -5760,7 +6395,8 @@ typedef struct {
 #define DMA_CHANNEL_XFERCFG_SRCINC_SHIFT         (12U)
 /*! SRCINC - Determines whether the source address is incremented for each DMA transfer.
  *  0b00..No increment. The source address is not incremented for each transfer. This is the usual case when the source is a peripheral device.
- *  0b01..1 x width. The source address is incremented by the amount specified by Width for each transfer. This is the usual case when the source is memory.
+ *  0b01..1 x width. The source address is incremented by the amount specified by Width for each transfer. This is
+ *        the usual case when the source is memory.
  *  0b10..2 x width. The source address is incremented by 2 times the amount specified by Width for each transfer.
  *  0b11..4 x width. The source address is incremented by 4 times the amount specified by Width for each transfer.
  */
@@ -5768,8 +6404,10 @@ typedef struct {
 #define DMA_CHANNEL_XFERCFG_DSTINC_MASK          (0xC000U)
 #define DMA_CHANNEL_XFERCFG_DSTINC_SHIFT         (14U)
 /*! DSTINC - Determines whether the destination address is incremented for each DMA transfer.
- *  0b00..No increment. The destination address is not incremented for each transfer. This is the usual case when the destination is a peripheral device.
- *  0b01..1 x width. The destination address is incremented by the amount specified by Width for each transfer. This is the usual case when the destination is memory.
+ *  0b00..No increment. The destination address is not incremented for each transfer. This is the usual case when
+ *        the destination is a peripheral device.
+ *  0b01..1 x width. The destination address is incremented by the amount specified by Width for each transfer.
+ *        This is the usual case when the destination is memory.
  *  0b10..2 x width. The destination address is incremented by 2 times the amount specified by Width for each transfer.
  *  0b11..4 x width. The destination address is incremented by 4 times the amount specified by Width for each transfer.
  */
@@ -7589,7 +8227,7 @@ typedef struct {
   #define FLEXCOMM_BASE_PTRS                       { FLEXCOMM0, FLEXCOMM1, FLEXCOMM2, FLEXCOMM3, FLEXCOMM4, FLEXCOMM5, FLEXCOMM6, FLEXCOMM7, FLEXCOMM8 }
 #endif
 /** Interrupt vectors for the FLEXCOMM peripheral type */
-#define FLEXCOMM_IRQS                            { FLEXCOMM0_IRQn, FLEXCOMM1_IRQn, FLEXCOMM2_IRQn, FLEXCOMM3_IRQn, FLEXCOMM4_IRQn, FLEXCOMM5_IRQn, FLEXCOMM6_IRQn, FLEXCOMM7_IRQn, LSPI_HS_IRQn }
+#define FLEXCOMM_IRQS                            { FLEXCOMM0_IRQn, FLEXCOMM1_IRQn, FLEXCOMM2_IRQn, FLEXCOMM3_IRQn, FLEXCOMM4_IRQn, FLEXCOMM5_IRQn, FLEXCOMM6_IRQn, FLEXCOMM7_IRQn, FLEXCOMM8_IRQn }
 
 /*!
  * @}
@@ -7987,7 +8625,8 @@ typedef struct {
 /*! @{ */
 #define HASHCRYPT_CTRL_MODE_MASK                 (0x7U)
 #define HASHCRYPT_CTRL_MODE_SHIFT                (0U)
-/*! Mode - The operational mode to use, or 0 if none. Note that the CONFIG register will indicate if specific modes beyond SHA1 and SHA2-256 are available.
+/*! Mode - The operational mode to use, or 0 if none. Note that the CONFIG register will indicate if
+ *    specific modes beyond SHA1 and SHA2-256 are available.
  *  0b000..Disabled
  *  0b001..SHA1 is enabled
  *  0b010..SHA2-256 is enabled
@@ -8000,20 +8639,27 @@ typedef struct {
 #define HASHCRYPT_CTRL_MODE(x)                   (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CTRL_MODE_SHIFT)) & HASHCRYPT_CTRL_MODE_MASK)
 #define HASHCRYPT_CTRL_NEW_HASH_MASK             (0x10U)
 #define HASHCRYPT_CTRL_NEW_HASH_SHIFT            (4U)
-/*! New_Hash - Written with 1 when starting a new Hash/Crypto. It self clears. Note that the WAITING Status bit will clear for a cycle during the initialization from New=1.
+/*! New_Hash - Written with 1 when starting a new Hash/Crypto. It self clears. Note that the WAITING
+ *    Status bit will clear for a cycle during the initialization from New=1.
  *  0b1..Starts a new Hash/Crypto and initializes the Digest/Result.
  */
 #define HASHCRYPT_CTRL_NEW_HASH(x)               (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CTRL_NEW_HASH_SHIFT)) & HASHCRYPT_CTRL_NEW_HASH_MASK)
 #define HASHCRYPT_CTRL_DMA_I_MASK                (0x100U)
 #define HASHCRYPT_CTRL_DMA_I_SHIFT               (8U)
-/*! DMA_I - Written with 1 to use DMA to fill INDATA. If Hash, will request from DMA for 16 words and then will process the Hash. If Cryptographic, it will load as many words as needed, including key if not already loaded. It will then request again. Normal model is that the DMA interrupts the processor when its length expires. Note that if the processor will write the key and optionally IV, it should not enable this until it has done so. Otherwise, the DMA will be expected to load those for the 1st block (when needed).
+/*! DMA_I - Written with 1 to use DMA to fill INDATA. If Hash, will request from DMA for 16 words
+ *    and then will process the Hash. If Cryptographic, it will load as many words as needed,
+ *    including key if not already loaded. It will then request again. Normal model is that the DMA
+ *    interrupts the processor when its length expires. Note that if the processor will write the key and
+ *    optionally IV, it should not enable this until it has done so. Otherwise, the DMA will be
+ *    expected to load those for the 1st block (when needed).
  *  0b0..DMA is not used. Processor writes the necessary words when WAITING is set (interrupts), unless AHB Master is used.
  *  0b1..DMA will push in the data.
  */
 #define HASHCRYPT_CTRL_DMA_I(x)                  (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CTRL_DMA_I_SHIFT)) & HASHCRYPT_CTRL_DMA_I_MASK)
 #define HASHCRYPT_CTRL_DMA_O_MASK                (0x200U)
 #define HASHCRYPT_CTRL_DMA_O_SHIFT               (9U)
-/*! DMA_O - Written to 1 to use DMA to drain the digest/output. If both DMA_I and DMA_O are set, the DMA has to know to switch direction and the locations. This can be used for crypto uses.
+/*! DMA_O - Written to 1 to use DMA to drain the digest/output. If both DMA_I and DMA_O are set, the
+ *    DMA has to know to switch direction and the locations. This can be used for crypto uses.
  *  0b0..DMA is not used. Processor reads the digest/output in response to DIGEST interrupt.
  */
 #define HASHCRYPT_CTRL_DMA_O(x)                  (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CTRL_DMA_O_SHIFT)) & HASHCRYPT_CTRL_DMA_O_MASK)
@@ -8027,20 +8673,27 @@ typedef struct {
 #define HASHCRYPT_STATUS_WAITING_MASK            (0x1U)
 #define HASHCRYPT_STATUS_WAITING_SHIFT           (0U)
 /*! WAITING - If 1, the block is waiting for more data to process.
- *  0b0..Not waiting for data - may be disabled or may be busy. Note that for cryptographic uses, this is not set if IsLast is set nor will it set until at least 1 word is read of the output.
+ *  0b0..Not waiting for data - may be disabled or may be busy. Note that for cryptographic uses, this is not set
+ *       if IsLast is set nor will it set until at least 1 word is read of the output.
  *  0b1..Waiting for data to be written in (16 words)
  */
 #define HASHCRYPT_STATUS_WAITING(x)              (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_STATUS_WAITING_SHIFT)) & HASHCRYPT_STATUS_WAITING_MASK)
 #define HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_MASK (0x2U)
 #define HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_SHIFT (1U)
-/*! DIGEST_aka_OUTDATA - For Hash, if 1 then a DIGEST is ready and waiting and there is no active next block already started. For Cryptographic uses, this will be set for each block processed, indicating OUTDATA (and OUTDATA2 if larger output) contains the next value to read out. This is cleared when any data is written, when New is written, for Cryptographic uses when the last word is read out, or when the block is disabled.
+/*! DIGEST_aka_OUTDATA - For Hash, if 1 then a DIGEST is ready and waiting and there is no active
+ *    next block already started. For Cryptographic uses, this will be set for each block processed,
+ *    indicating OUTDATA (and OUTDATA2 if larger output) contains the next value to read out. This is
+ *    cleared when any data is written, when New is written, for Cryptographic uses when the last
+ *    word is read out, or when the block is disabled.
  *  0b0..No Digest is ready
  *  0b1..Digest is ready. Application may read it or may write more data
  */
 #define HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA(x)   (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_SHIFT)) & HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_MASK)
 #define HASHCRYPT_STATUS_ERROR_MASK              (0x4U)
 #define HASHCRYPT_STATUS_ERROR_SHIFT             (2U)
-/*! ERROR - If 1, an error occurred. For normal uses, this is due to an attempted overrun: INDATA was written when it was not appropriate. For Master cases, this is an AHB bus error; the COUNT field will indicate which block it was on.
+/*! ERROR - If 1, an error occurred. For normal uses, this is due to an attempted overrun: INDATA
+ *    was written when it was not appropriate. For Master cases, this is an AHB bus error; the COUNT
+ *    field will indicate which block it was on.
  *  0b0..No error.
  *  0b1..An error occurred since last cleared (written 1 to clear).
  */
@@ -8192,7 +8845,8 @@ typedef struct {
 #define HASHCRYPT_CRYPTCFG_AESDECRYPT(x)         (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CRYPTCFG_AESDECRYPT_SHIFT)) & HASHCRYPT_CRYPTCFG_AESDECRYPT_MASK)
 #define HASHCRYPT_CRYPTCFG_AESSECRET_MASK        (0x80U)
 #define HASHCRYPT_CRYPTCFG_AESSECRET_SHIFT       (7U)
-/*! AESSECRET - Selects the Hidden Secret key vs. User key, if provided. If security levels are used, only the highest level is permitted to select this.
+/*! AESSECRET - Selects the Hidden Secret key vs. User key, if provided. If security levels are
+ *    used, only the highest level is permitted to select this.
  *  0b0..User key provided in normal way
  *  0b1..Secret key provided in hidden way by HW
  */
@@ -8217,7 +8871,8 @@ typedef struct {
 #define HASHCRYPT_CRYPTCFG_XSALSA(x)             (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CRYPTCFG_XSALSA_SHIFT)) & HASHCRYPT_CRYPTCFG_XSALSA_MASK)
 #define HASHCRYPT_CRYPTCFG_ICBSZ_MASK            (0x300000U)
 #define HASHCRYPT_CRYPTCFG_ICBSZ_SHIFT           (20U)
-/*! ICBSZ - This sets the ICB size between 32 and 128 bits, using the following rules. Note that the counter is assumed to occupy the low order bits of the IV.
+/*! ICBSZ - This sets the ICB size between 32 and 128 bits, using the following rules. Note that the
+ *    counter is assumed to occupy the low order bits of the IV.
  *  0b00..32 bits of the IV/ctr are used (from 127:96)
  *  0b01..64 bits of the IV/ctr are used (from 127:64)
  *  0b10..96 bits of the IV/ctr are used (from 127:32)
@@ -8226,7 +8881,8 @@ typedef struct {
 #define HASHCRYPT_CRYPTCFG_ICBSZ(x)              (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CRYPTCFG_ICBSZ_SHIFT)) & HASHCRYPT_CRYPTCFG_ICBSZ_MASK)
 #define HASHCRYPT_CRYPTCFG_ICBSTRM_MASK          (0xC00000U)
 #define HASHCRYPT_CRYPTCFG_ICBSTRM_SHIFT         (22U)
-/*! ICBSTRM - The size of the ICB-AES stream that can be pushed before needing to compute a new IV/ctr (counter start). This optimizes the performance of the stream of blocks after the 1st.
+/*! ICBSTRM - The size of the ICB-AES stream that can be pushed before needing to compute a new
+ *    IV/ctr (counter start). This optimizes the performance of the stream of blocks after the 1st.
  *  0b00..8 blocks
  *  0b01..16 blocks
  *  0b10..32 blocks
@@ -8273,7 +8929,10 @@ typedef struct {
 /*! @{ */
 #define HASHCRYPT_LOCK_SECLOCK_MASK              (0x3U)
 #define HASHCRYPT_LOCK_SECLOCK_SHIFT             (0U)
-/*! SECLOCK - Write 1 to secure-lock this block (if running in a security state). Write 0 to unlock. If locked already, may only write if at same or higher security level as lock. Reads as: 0 if unlocked, else 1, 2, 3 to indicate security level it is locked at. NOTE: this and ID are the only readable registers if locked and current state is lower than lock level.
+/*! SECLOCK - Write 1 to secure-lock this block (if running in a security state). Write 0 to unlock.
+ *    If locked already, may only write if at same or higher security level as lock. Reads as: 0 if
+ *    unlocked, else 1, 2, 3 to indicate security level it is locked at. NOTE: this and ID are the
+ *    only readable registers if locked and current state is lower than lock level.
  *  0b00..Unlocks, so block is open to all. But, AHB Master will only issue non-secure requests.
  *  0b01..Locks to the current security level. AHB Master will issue requests at this level.
  */
@@ -8380,21 +9039,24 @@ typedef struct {
 /*! @{ */
 #define I2C_CFG_MSTEN_MASK                       (0x1U)
 #define I2C_CFG_MSTEN_SHIFT                      (0U)
-/*! MSTEN - Master Enable. When disabled, configurations settings for the Master function are not changed, but the Master function is internally reset.
+/*! MSTEN - Master Enable. When disabled, configurations settings for the Master function are not
+ *    changed, but the Master function is internally reset.
  *  0b0..Disabled. The I2C Master function is disabled.
  *  0b1..Enabled. The I2C Master function is enabled.
  */
 #define I2C_CFG_MSTEN(x)                         (((uint32_t)(((uint32_t)(x)) << I2C_CFG_MSTEN_SHIFT)) & I2C_CFG_MSTEN_MASK)
 #define I2C_CFG_SLVEN_MASK                       (0x2U)
 #define I2C_CFG_SLVEN_SHIFT                      (1U)
-/*! SLVEN - Slave Enable. When disabled, configurations settings for the Slave function are not changed, but the Slave function is internally reset.
+/*! SLVEN - Slave Enable. When disabled, configurations settings for the Slave function are not
+ *    changed, but the Slave function is internally reset.
  *  0b0..Disabled. The I2C slave function is disabled.
  *  0b1..Enabled. The I2C slave function is enabled.
  */
 #define I2C_CFG_SLVEN(x)                         (((uint32_t)(((uint32_t)(x)) << I2C_CFG_SLVEN_SHIFT)) & I2C_CFG_SLVEN_MASK)
 #define I2C_CFG_MONEN_MASK                       (0x4U)
 #define I2C_CFG_MONEN_SHIFT                      (2U)
-/*! MONEN - Monitor Enable. When disabled, configurations settings for the Monitor function are not changed, but the Monitor function is internally reset.
+/*! MONEN - Monitor Enable. When disabled, configurations settings for the Monitor function are not
+ *    changed, but the Monitor function is internally reset.
  *  0b0..Disabled. The I2C Monitor function is disabled.
  *  0b1..Enabled. The I2C Monitor function is enabled.
  */
@@ -8403,21 +9065,32 @@ typedef struct {
 #define I2C_CFG_TIMEOUTEN_SHIFT                  (3U)
 /*! TIMEOUTEN - I2C bus Time-out Enable. When disabled, the time-out function is internally reset.
  *  0b0..Disabled. Time-out function is disabled.
- *  0b1..Enabled. Time-out function is enabled. Both types of time-out flags will be generated and will cause interrupts if they are enabled. Typically, only one time-out will be used in a system.
+ *  0b1..Enabled. Time-out function is enabled. Both types of time-out flags will be generated and will cause
+ *       interrupts if they are enabled. Typically, only one time-out will be used in a system.
  */
 #define I2C_CFG_TIMEOUTEN(x)                     (((uint32_t)(((uint32_t)(x)) << I2C_CFG_TIMEOUTEN_SHIFT)) & I2C_CFG_TIMEOUTEN_MASK)
 #define I2C_CFG_MONCLKSTR_MASK                   (0x10U)
 #define I2C_CFG_MONCLKSTR_SHIFT                  (4U)
 /*! MONCLKSTR - Monitor function Clock Stretching.
- *  0b0..Disabled. The Monitor function will not perform clock stretching. Software or DMA may not always be able to read data provided by the Monitor function before it is overwritten. This mode may be used when non-invasive monitoring is critical.
- *  0b1..Enabled. The Monitor function will perform clock stretching in order to ensure that software or DMA can read all incoming data supplied by the Monitor function.
+ *  0b0..Disabled. The Monitor function will not perform clock stretching. Software or DMA may not always be able
+ *       to read data provided by the Monitor function before it is overwritten. This mode may be used when
+ *       non-invasive monitoring is critical.
+ *  0b1..Enabled. The Monitor function will perform clock stretching in order to ensure that software or DMA can
+ *       read all incoming data supplied by the Monitor function.
  */
 #define I2C_CFG_MONCLKSTR(x)                     (((uint32_t)(((uint32_t)(x)) << I2C_CFG_MONCLKSTR_SHIFT)) & I2C_CFG_MONCLKSTR_MASK)
 #define I2C_CFG_HSCAPABLE_MASK                   (0x20U)
 #define I2C_CFG_HSCAPABLE_SHIFT                  (5U)
-/*! HSCAPABLE - High-speed mode Capable enable. Since High Speed mode alters the way I2C pins drive and filter, as well as the timing for certain I2C signalling, enabling High-speed mode applies to all functions: Master, Slave, and Monitor.
- *  0b0..Fast-mode plus. The I 2C interface will support Standard-mode, Fast-mode, and Fast-mode Plus, to the extent that the pin electronics support these modes. Any changes that need to be made to the pin controls, such as changing the drive strength or filtering, must be made by software via the IOCON register associated with each I2C pin,
- *  0b1..High-speed. In addition to Standard-mode, Fast-mode, and Fast-mode Plus, the I 2C interface will support High-speed mode to the extent that the pin electronics support these modes. See Section 25.7.2.2 for more information.
+/*! HSCAPABLE - High-speed mode Capable enable. Since High Speed mode alters the way I2C pins drive
+ *    and filter, as well as the timing for certain I2C signalling, enabling High-speed mode applies
+ *    to all functions: Master, Slave, and Monitor.
+ *  0b0..Fast-mode plus. The I 2C interface will support Standard-mode, Fast-mode, and Fast-mode Plus, to the
+ *       extent that the pin electronics support these modes. Any changes that need to be made to the pin controls,
+ *       such as changing the drive strength or filtering, must be made by software via the IOCON register associated
+ *       with each I2C pin,
+ *  0b1..High-speed. In addition to Standard-mode, Fast-mode, and Fast-mode Plus, the I 2C interface will support
+ *       High-speed mode to the extent that the pin electronics support these modes. See Section 25.7.2.2 for more
+ *       information.
  */
 #define I2C_CFG_HSCAPABLE(x)                     (((uint32_t)(((uint32_t)(x)) << I2C_CFG_HSCAPABLE_SHIFT)) & I2C_CFG_HSCAPABLE_MASK)
 /*! @} */
@@ -8426,14 +9099,23 @@ typedef struct {
 /*! @{ */
 #define I2C_STAT_MSTPENDING_MASK                 (0x1U)
 #define I2C_STAT_MSTPENDING_SHIFT                (0U)
-/*! MSTPENDING - Master Pending. Indicates that the Master is waiting to continue communication on the I2C-bus (pending) or is idle. When the master is pending, the MSTSTATE bits indicate what type of software service if any the master expects. This flag will cause an interrupt when set if, enabled via the INTENSET register. The MSTPENDING flag is not set when the DMA is handling an event (if the MSTDMA bit in the MSTCTL register is set). If the master is in the idle state, and no communication is needed, mask this interrupt.
+/*! MSTPENDING - Master Pending. Indicates that the Master is waiting to continue communication on
+ *    the I2C-bus (pending) or is idle. When the master is pending, the MSTSTATE bits indicate what
+ *    type of software service if any the master expects. This flag will cause an interrupt when set
+ *    if, enabled via the INTENSET register. The MSTPENDING flag is not set when the DMA is handling
+ *    an event (if the MSTDMA bit in the MSTCTL register is set). If the master is in the idle
+ *    state, and no communication is needed, mask this interrupt.
  *  0b0..In progress. Communication is in progress and the Master function is busy and cannot currently accept a command.
- *  0b1..Pending. The Master function needs software service or is in the idle state. If the master is not in the idle state, it is waiting to receive or transmit data or the NACK bit.
+ *  0b1..Pending. The Master function needs software service or is in the idle state. If the master is not in the
+ *       idle state, it is waiting to receive or transmit data or the NACK bit.
  */
 #define I2C_STAT_MSTPENDING(x)                   (((uint32_t)(((uint32_t)(x)) << I2C_STAT_MSTPENDING_SHIFT)) & I2C_STAT_MSTPENDING_MASK)
 #define I2C_STAT_MSTSTATE_MASK                   (0xEU)
 #define I2C_STAT_MSTSTATE_SHIFT                  (1U)
-/*! MSTSTATE - Master State code. The master state code reflects the master state when the MSTPENDING bit is set, that is the master is pending or in the idle state. Each value of this field indicates a specific required service for the Master function. All other values are reserved. See Table 400 for details of state values and appropriate responses.
+/*! MSTSTATE - Master State code. The master state code reflects the master state when the
+ *    MSTPENDING bit is set, that is the master is pending or in the idle state. Each value of this field
+ *    indicates a specific required service for the Master function. All other values are reserved. See
+ *    Table 400 for details of state values and appropriate responses.
  *  0b000..Idle. The Master function is available to be used for a new transaction.
  *  0b001..Receive ready. Received data available (Master Receiver mode). Address plus Read was previously sent and Acknowledged by slave.
  *  0b010..Transmit ready. Data can be transmitted (Master Transmitter mode). Address plus Write was previously sent and Acknowledged by slave.
@@ -8443,28 +9125,47 @@ typedef struct {
 #define I2C_STAT_MSTSTATE(x)                     (((uint32_t)(((uint32_t)(x)) << I2C_STAT_MSTSTATE_SHIFT)) & I2C_STAT_MSTSTATE_MASK)
 #define I2C_STAT_MSTARBLOSS_MASK                 (0x10U)
 #define I2C_STAT_MSTARBLOSS_SHIFT                (4U)
-/*! MSTARBLOSS - Master Arbitration Loss flag. This flag can be cleared by software writing a 1 to this bit. It is also cleared automatically a 1 is written to MSTCONTINUE.
+/*! MSTARBLOSS - Master Arbitration Loss flag. This flag can be cleared by software writing a 1 to
+ *    this bit. It is also cleared automatically a 1 is written to MSTCONTINUE.
  *  0b0..No Arbitration Loss has occurred.
- *  0b1..Arbitration loss. The Master function has experienced an Arbitration Loss. At this point, the Master function has already stopped driving the bus and gone to an idle state. Software can respond by doing nothing, or by sending a Start in order to attempt to gain control of the bus when it next becomes idle.
+ *  0b1..Arbitration loss. The Master function has experienced an Arbitration Loss. At this point, the Master
+ *       function has already stopped driving the bus and gone to an idle state. Software can respond by doing nothing,
+ *       or by sending a Start in order to attempt to gain control of the bus when it next becomes idle.
  */
 #define I2C_STAT_MSTARBLOSS(x)                   (((uint32_t)(((uint32_t)(x)) << I2C_STAT_MSTARBLOSS_SHIFT)) & I2C_STAT_MSTARBLOSS_MASK)
 #define I2C_STAT_MSTSTSTPERR_MASK                (0x40U)
 #define I2C_STAT_MSTSTSTPERR_SHIFT               (6U)
-/*! MSTSTSTPERR - Master Start/Stop Error flag. This flag can be cleared by software writing a 1 to this bit. It is also cleared automatically a 1 is written to MSTCONTINUE.
+/*! MSTSTSTPERR - Master Start/Stop Error flag. This flag can be cleared by software writing a 1 to
+ *    this bit. It is also cleared automatically a 1 is written to MSTCONTINUE.
  *  0b0..No Start/Stop Error has occurred.
- *  0b1..The Master function has experienced a Start/Stop Error. A Start or Stop was detected at a time when it is not allowed by the I2C specification. The Master interface has stopped driving the bus and gone to an idle state, no action is required. A request for a Start could be made, or software could attempt to insure that the bus has not stalled.
+ *  0b1..The Master function has experienced a Start/Stop Error. A Start or Stop was detected at a time when it is
+ *       not allowed by the I2C specification. The Master interface has stopped driving the bus and gone to an
+ *       idle state, no action is required. A request for a Start could be made, or software could attempt to insure
+ *       that the bus has not stalled.
  */
 #define I2C_STAT_MSTSTSTPERR(x)                  (((uint32_t)(((uint32_t)(x)) << I2C_STAT_MSTSTSTPERR_SHIFT)) & I2C_STAT_MSTSTSTPERR_MASK)
 #define I2C_STAT_SLVPENDING_MASK                 (0x100U)
 #define I2C_STAT_SLVPENDING_SHIFT                (8U)
-/*! SLVPENDING - Slave Pending. Indicates that the Slave function is waiting to continue communication on the I2C-bus and needs software service. This flag will cause an interrupt when set if enabled via INTENSET. The SLVPENDING flag is not set when the DMA is handling an event (if the SLVDMA bit in the SLVCTL register is set). The SLVPENDING flag is read-only and is automatically cleared when a 1 is written to the SLVCONTINUE bit in the SLVCTL register. The point in time when SlvPending is set depends on whether the I2C interface is in HSCAPABLE mode. See Section 25.7.2.2.2. When the I2C interface is configured to be HSCAPABLE, HS master codes are detected automatically. Due to the requirements of the HS I2C specification, slave addresses must also be detected automatically, since the address must be acknowledged before the clock can be stretched.
+/*! SLVPENDING - Slave Pending. Indicates that the Slave function is waiting to continue
+ *    communication on the I2C-bus and needs software service. This flag will cause an interrupt when set if
+ *    enabled via INTENSET. The SLVPENDING flag is not set when the DMA is handling an event (if the
+ *    SLVDMA bit in the SLVCTL register is set). The SLVPENDING flag is read-only and is
+ *    automatically cleared when a 1 is written to the SLVCONTINUE bit in the SLVCTL register. The point in time
+ *    when SlvPending is set depends on whether the I2C interface is in HSCAPABLE mode. See Section
+ *    25.7.2.2.2. When the I2C interface is configured to be HSCAPABLE, HS master codes are
+ *    detected automatically. Due to the requirements of the HS I2C specification, slave addresses must
+ *    also be detected automatically, since the address must be acknowledged before the clock can be
+ *    stretched.
  *  0b0..In progress. The Slave function does not currently need service.
  *  0b1..Pending. The Slave function needs service. Information on what is needed can be found in the adjacent SLVSTATE field.
  */
 #define I2C_STAT_SLVPENDING(x)                   (((uint32_t)(((uint32_t)(x)) << I2C_STAT_SLVPENDING_SHIFT)) & I2C_STAT_SLVPENDING_MASK)
 #define I2C_STAT_SLVSTATE_MASK                   (0x600U)
 #define I2C_STAT_SLVSTATE_SHIFT                  (9U)
-/*! SLVSTATE - Slave State code. Each value of this field indicates a specific required service for the Slave function. All other values are reserved. See Table 401 for state values and actions. note that the occurrence of some states and how they are handled are affected by DMA mode and Automatic Operation modes.
+/*! SLVSTATE - Slave State code. Each value of this field indicates a specific required service for
+ *    the Slave function. All other values are reserved. See Table 401 for state values and actions.
+ *    note that the occurrence of some states and how they are handled are affected by DMA mode and
+ *    Automatic Operation modes.
  *  0b00..Slave address. Address plus R/W received. At least one of the four slave addresses has been matched by hardware.
  *  0b01..Slave receive. Received data is available (Slave Receiver mode).
  *  0b10..Slave transmit. Data can be transmitted (Slave Transmitter mode).
@@ -8472,14 +9173,20 @@ typedef struct {
 #define I2C_STAT_SLVSTATE(x)                     (((uint32_t)(((uint32_t)(x)) << I2C_STAT_SLVSTATE_SHIFT)) & I2C_STAT_SLVSTATE_MASK)
 #define I2C_STAT_SLVNOTSTR_MASK                  (0x800U)
 #define I2C_STAT_SLVNOTSTR_SHIFT                 (11U)
-/*! SLVNOTSTR - Slave Not Stretching. Indicates when the slave function is stretching the I2C clock. This is needed in order to gracefully invoke Deep Sleep or Power-down modes during slave operation. This read-only flag reflects the slave function status in real time.
+/*! SLVNOTSTR - Slave Not Stretching. Indicates when the slave function is stretching the I2C clock.
+ *    This is needed in order to gracefully invoke Deep Sleep or Power-down modes during slave
+ *    operation. This read-only flag reflects the slave function status in real time.
  *  0b0..Stretching. The slave function is currently stretching the I2C bus clock. Deep-Sleep or Power-down mode cannot be entered at this time.
- *  0b1..Not stretching. The slave function is not currently stretching the I 2C bus clock. Deep-sleep or Power-down mode could be entered at this time.
+ *  0b1..Not stretching. The slave function is not currently stretching the I 2C bus clock. Deep-sleep or
+ *       Power-down mode could be entered at this time.
  */
 #define I2C_STAT_SLVNOTSTR(x)                    (((uint32_t)(((uint32_t)(x)) << I2C_STAT_SLVNOTSTR_SHIFT)) & I2C_STAT_SLVNOTSTR_MASK)
 #define I2C_STAT_SLVIDX_MASK                     (0x3000U)
 #define I2C_STAT_SLVIDX_SHIFT                    (12U)
-/*! SLVIDX - Slave address match Index. This field is valid when the I2C slave function has been selected by receiving an address that matches one of the slave addresses defined by any enabled slave address registers, and provides an identification of the address that was matched. It is possible that more than one address could be matched, but only one match can be reported here.
+/*! SLVIDX - Slave address match Index. This field is valid when the I2C slave function has been
+ *    selected by receiving an address that matches one of the slave addresses defined by any enabled
+ *    slave address registers, and provides an identification of the address that was matched. It is
+ *    possible that more than one address could be matched, but only one match can be reported here.
  *  0b00..Address 0. Slave address 0 was matched.
  *  0b01..Address 1. Slave address 1 was matched.
  *  0b10..Address 2. Slave address 2 was matched.
@@ -8488,16 +9195,24 @@ typedef struct {
 #define I2C_STAT_SLVIDX(x)                       (((uint32_t)(((uint32_t)(x)) << I2C_STAT_SLVIDX_SHIFT)) & I2C_STAT_SLVIDX_MASK)
 #define I2C_STAT_SLVSEL_MASK                     (0x4000U)
 #define I2C_STAT_SLVSEL_SHIFT                    (14U)
-/*! SLVSEL - Slave selected flag. SLVSEL is set after an address match when software tells the Slave function to acknowledge the address, or when the address has been automatically acknowledged. It is cleared when another address cycle presents an address that does not match an enabled address on the Slave function, when slave software decides to NACK a matched address, when there is a Stop detected on the bus, when the master NACKs slave data, and in some combinations of Automatic Operation. SLVSEL is not cleared if software NACKs data.
+/*! SLVSEL - Slave selected flag. SLVSEL is set after an address match when software tells the Slave
+ *    function to acknowledge the address, or when the address has been automatically acknowledged.
+ *    It is cleared when another address cycle presents an address that does not match an enabled
+ *    address on the Slave function, when slave software decides to NACK a matched address, when
+ *    there is a Stop detected on the bus, when the master NACKs slave data, and in some combinations of
+ *    Automatic Operation. SLVSEL is not cleared if software NACKs data.
  *  0b0..Not selected. The Slave function is not currently selected.
  *  0b1..Selected. The Slave function is currently selected.
  */
 #define I2C_STAT_SLVSEL(x)                       (((uint32_t)(((uint32_t)(x)) << I2C_STAT_SLVSEL_SHIFT)) & I2C_STAT_SLVSEL_MASK)
 #define I2C_STAT_SLVDESEL_MASK                   (0x8000U)
 #define I2C_STAT_SLVDESEL_SHIFT                  (15U)
-/*! SLVDESEL - Slave Deselected flag. This flag will cause an interrupt when set if enabled via INTENSET. This flag can be cleared by writing a 1 to this bit.
- *  0b0..Not deselected. The Slave function has not become deselected. This does not mean that it is currently selected. That information can be found in the SLVSEL flag.
- *  0b1..Deselected. The Slave function has become deselected. This is specifically caused by the SLVSEL flag changing from 1 to 0. See the description of SLVSEL for details on when that event occurs.
+/*! SLVDESEL - Slave Deselected flag. This flag will cause an interrupt when set if enabled via
+ *    INTENSET. This flag can be cleared by writing a 1 to this bit.
+ *  0b0..Not deselected. The Slave function has not become deselected. This does not mean that it is currently
+ *       selected. That information can be found in the SLVSEL flag.
+ *  0b1..Deselected. The Slave function has become deselected. This is specifically caused by the SLVSEL flag
+ *       changing from 1 to 0. See the description of SLVSEL for details on when that event occurs.
  */
 #define I2C_STAT_SLVDESEL(x)                     (((uint32_t)(((uint32_t)(x)) << I2C_STAT_SLVDESEL_SHIFT)) & I2C_STAT_SLVDESEL_MASK)
 #define I2C_STAT_MONRDY_MASK                     (0x10000U)
@@ -8511,33 +9226,43 @@ typedef struct {
 #define I2C_STAT_MONOV_SHIFT                     (17U)
 /*! MONOV - Monitor Overflow flag.
  *  0b0..No overrun. Monitor data has not overrun.
- *  0b1..Overrun. A Monitor data overrun has occurred. This can only happen when Monitor clock stretching not enabled via the MONCLKSTR bit in the CFG register. Writing 1 to this bit clears the flag.
+ *  0b1..Overrun. A Monitor data overrun has occurred. This can only happen when Monitor clock stretching not
+ *       enabled via the MONCLKSTR bit in the CFG register. Writing 1 to this bit clears the flag.
  */
 #define I2C_STAT_MONOV(x)                        (((uint32_t)(((uint32_t)(x)) << I2C_STAT_MONOV_SHIFT)) & I2C_STAT_MONOV_MASK)
 #define I2C_STAT_MONACTIVE_MASK                  (0x40000U)
 #define I2C_STAT_MONACTIVE_SHIFT                 (18U)
-/*! MONACTIVE - Monitor Active flag. Indicates when the Monitor function considers the I 2C bus to be active. Active is defined here as when some Master is on the bus: a bus Start has occurred more recently than a bus Stop.
+/*! MONACTIVE - Monitor Active flag. Indicates when the Monitor function considers the I 2C bus to
+ *    be active. Active is defined here as when some Master is on the bus: a bus Start has occurred
+ *    more recently than a bus Stop.
  *  0b0..Inactive. The Monitor function considers the I2C bus to be inactive.
  *  0b1..Active. The Monitor function considers the I2C bus to be active.
  */
 #define I2C_STAT_MONACTIVE(x)                    (((uint32_t)(((uint32_t)(x)) << I2C_STAT_MONACTIVE_SHIFT)) & I2C_STAT_MONACTIVE_MASK)
 #define I2C_STAT_MONIDLE_MASK                    (0x80000U)
 #define I2C_STAT_MONIDLE_SHIFT                   (19U)
-/*! MONIDLE - Monitor Idle flag. This flag is set when the Monitor function sees the I2C bus change from active to inactive. This can be used by software to decide when to process data accumulated by the Monitor function. This flag will cause an interrupt when set if enabled via the INTENSET register. The flag can be cleared by writing a 1 to this bit.
+/*! MONIDLE - Monitor Idle flag. This flag is set when the Monitor function sees the I2C bus change
+ *    from active to inactive. This can be used by software to decide when to process data
+ *    accumulated by the Monitor function. This flag will cause an interrupt when set if enabled via the
+ *    INTENSET register. The flag can be cleared by writing a 1 to this bit.
  *  0b0..Not idle. The I2C bus is not idle, or this flag has been cleared by software.
  *  0b1..Idle. The I2C bus has gone idle at least once since the last time this flag was cleared by software.
  */
 #define I2C_STAT_MONIDLE(x)                      (((uint32_t)(((uint32_t)(x)) << I2C_STAT_MONIDLE_SHIFT)) & I2C_STAT_MONIDLE_MASK)
 #define I2C_STAT_EVENTTIMEOUT_MASK               (0x1000000U)
 #define I2C_STAT_EVENTTIMEOUT_SHIFT              (24U)
-/*! EVENTTIMEOUT - Event Time-out Interrupt flag. Indicates when the time between events has been longer than the time specified by the TIMEOUT register. Events include Start, Stop, and clock edges. The flag is cleared by writing a 1 to this bit. No time-out is created when the I2C-bus is idle.
+/*! EVENTTIMEOUT - Event Time-out Interrupt flag. Indicates when the time between events has been
+ *    longer than the time specified by the TIMEOUT register. Events include Start, Stop, and clock
+ *    edges. The flag is cleared by writing a 1 to this bit. No time-out is created when the I2C-bus
+ *    is idle.
  *  0b0..No time-out. I2C bus events have not caused a time-out.
  *  0b1..Event time-out. The time between I2C bus events has been longer than the time specified by the TIMEOUT register.
  */
 #define I2C_STAT_EVENTTIMEOUT(x)                 (((uint32_t)(((uint32_t)(x)) << I2C_STAT_EVENTTIMEOUT_SHIFT)) & I2C_STAT_EVENTTIMEOUT_MASK)
 #define I2C_STAT_SCLTIMEOUT_MASK                 (0x2000000U)
 #define I2C_STAT_SCLTIMEOUT_SHIFT                (25U)
-/*! SCLTIMEOUT - SCL Time-out Interrupt flag. Indicates when SCL has remained low longer than the time specific by the TIMEOUT register. The flag is cleared by writing a 1 to this bit.
+/*! SCLTIMEOUT - SCL Time-out Interrupt flag. Indicates when SCL has remained low longer than the
+ *    time specific by the TIMEOUT register. The flag is cleared by writing a 1 to this bit.
  *  0b0..No time-out. SCL low time has not caused a time-out.
  *  0b1..Time-out. SCL low time has caused a time-out.
  */
@@ -8722,7 +9447,8 @@ typedef struct {
 #define I2C_MSTCTL_MSTCONTINUE_SHIFT             (0U)
 /*! MSTCONTINUE - Master Continue. This bit is write-only.
  *  0b0..No effect.
- *  0b1..Continue. Informs the Master function to continue to the next operation. This must done after writing transmit data, reading received data, or any other housekeeping related to the next bus operation.
+ *  0b1..Continue. Informs the Master function to continue to the next operation. This must done after writing
+ *       transmit data, reading received data, or any other housekeeping related to the next bus operation.
  */
 #define I2C_MSTCTL_MSTCONTINUE(x)                (((uint32_t)(((uint32_t)(x)) << I2C_MSTCTL_MSTCONTINUE_SHIFT)) & I2C_MSTCTL_MSTCONTINUE_MASK)
 #define I2C_MSTCTL_MSTSTART_MASK                 (0x2U)
@@ -8736,14 +9462,22 @@ typedef struct {
 #define I2C_MSTCTL_MSTSTOP_SHIFT                 (2U)
 /*! MSTSTOP - Master Stop control. This bit is write-only.
  *  0b0..No effect.
- *  0b1..Stop. A Stop will be generated on the I2C bus at the next allowed time, preceded by a NACK to the slave if the master is receiving data from the slave (Master Receiver mode).
+ *  0b1..Stop. A Stop will be generated on the I2C bus at the next allowed time, preceded by a NACK to the slave
+ *       if the master is receiving data from the slave (Master Receiver mode).
  */
 #define I2C_MSTCTL_MSTSTOP(x)                    (((uint32_t)(((uint32_t)(x)) << I2C_MSTCTL_MSTSTOP_SHIFT)) & I2C_MSTCTL_MSTSTOP_MASK)
 #define I2C_MSTCTL_MSTDMA_MASK                   (0x8U)
 #define I2C_MSTCTL_MSTDMA_SHIFT                  (3U)
-/*! MSTDMA - Master DMA enable. Data operations of the I2C can be performed with DMA. Protocol type operations such as Start, address, Stop, and address match must always be done with software, typically via an interrupt. Address acknowledgement must also be done by software except when the I2C is configured to be HSCAPABLE (and address acknowledgement is handled entirely by hardware) or when Automatic Operation is enabled. When a DMA data transfer is complete, MSTDMA must be cleared prior to beginning the next operation, typically a Start or Stop.This bit is read/write.
+/*! MSTDMA - Master DMA enable. Data operations of the I2C can be performed with DMA. Protocol type
+ *    operations such as Start, address, Stop, and address match must always be done with software,
+ *    typically via an interrupt. Address acknowledgement must also be done by software except when
+ *    the I2C is configured to be HSCAPABLE (and address acknowledgement is handled entirely by
+ *    hardware) or when Automatic Operation is enabled. When a DMA data transfer is complete, MSTDMA
+ *    must be cleared prior to beginning the next operation, typically a Start or Stop.This bit is
+ *    read/write.
  *  0b0..Disable. No DMA requests are generated for master operation.
- *  0b1..Enable. A DMA request is generated for I2C master data operations. When this I2C master is generating Acknowledge bits in Master Receiver mode, the acknowledge is generated automatically.
+ *  0b1..Enable. A DMA request is generated for I2C master data operations. When this I2C master is generating
+ *       Acknowledge bits in Master Receiver mode, the acknowledge is generated automatically.
  */
 #define I2C_MSTCTL_MSTDMA(x)                     (((uint32_t)(((uint32_t)(x)) << I2C_MSTCTL_MSTDMA_SHIFT)) & I2C_MSTCTL_MSTDMA_MASK)
 /*! @} */
@@ -8752,7 +9486,10 @@ typedef struct {
 /*! @{ */
 #define I2C_MSTTIME_MSTSCLLOW_MASK               (0x7U)
 #define I2C_MSTTIME_MSTSCLLOW_SHIFT              (0U)
-/*! MSTSCLLOW - Master SCL Low time. Specifies the minimum low time that will be asserted by this master on SCL. Other devices on the bus (masters or slaves) could lengthen this time. This corresponds to the parameter t LOW in the I2C bus specification. I2C bus specification parameters tBUF and tSU;STA have the same values and are also controlled by MSTSCLLOW.
+/*! MSTSCLLOW - Master SCL Low time. Specifies the minimum low time that will be asserted by this
+ *    master on SCL. Other devices on the bus (masters or slaves) could lengthen this time. This
+ *    corresponds to the parameter t LOW in the I2C bus specification. I2C bus specification parameters
+ *    tBUF and tSU;STA have the same values and are also controlled by MSTSCLLOW.
  *  0b000..2 clocks. Minimum SCL low time is 2 clocks of the I2C clock pre-divider.
  *  0b001..3 clocks. Minimum SCL low time is 3 clocks of the I2C clock pre-divider.
  *  0b010..4 clocks. Minimum SCL low time is 4 clocks of the I2C clock pre-divider.
@@ -8765,7 +9502,10 @@ typedef struct {
 #define I2C_MSTTIME_MSTSCLLOW(x)                 (((uint32_t)(((uint32_t)(x)) << I2C_MSTTIME_MSTSCLLOW_SHIFT)) & I2C_MSTTIME_MSTSCLLOW_MASK)
 #define I2C_MSTTIME_MSTSCLHIGH_MASK              (0x70U)
 #define I2C_MSTTIME_MSTSCLHIGH_SHIFT             (4U)
-/*! MSTSCLHIGH - Master SCL High time. Specifies the minimum high time that will be asserted by this master on SCL. Other masters in a multi-master system could shorten this time. This corresponds to the parameter tHIGH in the I2C bus specification. I2C bus specification parameters tSU;STO and tHD;STA have the same values and are also controlled by MSTSCLHIGH.
+/*! MSTSCLHIGH - Master SCL High time. Specifies the minimum high time that will be asserted by this
+ *    master on SCL. Other masters in a multi-master system could shorten this time. This
+ *    corresponds to the parameter tHIGH in the I2C bus specification. I2C bus specification parameters
+ *    tSU;STO and tHD;STA have the same values and are also controlled by MSTSCLHIGH.
  *  0b000..2 clocks. Minimum SCL high time is 2 clock of the I2C clock pre-divider.
  *  0b001..3 clocks. Minimum SCL high time is 3 clocks of the I2C clock pre-divider .
  *  0b010..4 clocks. Minimum SCL high time is 4 clock of the I2C clock pre-divider.
@@ -8791,7 +9531,10 @@ typedef struct {
 #define I2C_SLVCTL_SLVCONTINUE_SHIFT             (0U)
 /*! SLVCONTINUE - Slave Continue.
  *  0b0..No effect.
- *  0b1..Continue. Informs the Slave function to continue to the next operation, by clearing the SLVPENDING flag in the STAT register. This must be done after writing transmit data, reading received data, or any other housekeeping related to the next bus operation. Automatic Operation has different requirements. SLVCONTINUE should not be set unless SLVPENDING = 1.
+ *  0b1..Continue. Informs the Slave function to continue to the next operation, by clearing the SLVPENDING flag
+ *       in the STAT register. This must be done after writing transmit data, reading received data, or any other
+ *       housekeeping related to the next bus operation. Automatic Operation has different requirements. SLVCONTINUE
+ *       should not be set unless SLVPENDING = 1.
  */
 #define I2C_SLVCTL_SLVCONTINUE(x)                (((uint32_t)(((uint32_t)(x)) << I2C_SLVCTL_SLVCONTINUE_SHIFT)) & I2C_SLVCTL_SLVCONTINUE_MASK)
 #define I2C_SLVCTL_SLVNACK_MASK                  (0x2U)
@@ -8810,14 +9553,25 @@ typedef struct {
 #define I2C_SLVCTL_SLVDMA(x)                     (((uint32_t)(((uint32_t)(x)) << I2C_SLVCTL_SLVDMA_SHIFT)) & I2C_SLVCTL_SLVDMA_MASK)
 #define I2C_SLVCTL_AUTOACK_MASK                  (0x100U)
 #define I2C_SLVCTL_AUTOACK_SHIFT                 (8U)
-/*! AUTOACK - Automatic Acknowledge.When this bit is set, it will cause an I2C header which matches SLVADR0 and the direction set by AUTOMATCHREAD to be ACKed immediately; this is used with DMA to allow processing of the data without intervention. If this bit is clear and a header matches SLVADR0, the behavior is controlled by AUTONACK in the SLVADR0 register: allowing NACK or interrupt.
- *  0b0..Normal, non-automatic operation. If AUTONACK = 0, an SlvPending interrupt is generated when a matching address is received. If AUTONACK = 1, received addresses are NACKed (ignored).
- *  0b1..A header with matching SLVADR0 and matching direction as set by AUTOMATCHREAD will be ACKed immediately, allowing the master to move on to the data bytes. If the address matches SLVADR0, but the direction does not match AUTOMATCHREAD, the behavior will depend on the AUTONACK bit in the SLVADR0 register: if AUTONACK is set, then it will be Nacked; else if AUTONACK is clear, then a SlvPending interrupt is generated.
+/*! AUTOACK - Automatic Acknowledge.When this bit is set, it will cause an I2C header which matches
+ *    SLVADR0 and the direction set by AUTOMATCHREAD to be ACKed immediately; this is used with DMA
+ *    to allow processing of the data without intervention. If this bit is clear and a header
+ *    matches SLVADR0, the behavior is controlled by AUTONACK in the SLVADR0 register: allowing NACK or
+ *    interrupt.
+ *  0b0..Normal, non-automatic operation. If AUTONACK = 0, an SlvPending interrupt is generated when a matching
+ *       address is received. If AUTONACK = 1, received addresses are NACKed (ignored).
+ *  0b1..A header with matching SLVADR0 and matching direction as set by AUTOMATCHREAD will be ACKed immediately,
+ *       allowing the master to move on to the data bytes. If the address matches SLVADR0, but the direction does
+ *       not match AUTOMATCHREAD, the behavior will depend on the AUTONACK bit in the SLVADR0 register: if AUTONACK
+ *       is set, then it will be Nacked; else if AUTONACK is clear, then a SlvPending interrupt is generated.
  */
 #define I2C_SLVCTL_AUTOACK(x)                    (((uint32_t)(((uint32_t)(x)) << I2C_SLVCTL_AUTOACK_SHIFT)) & I2C_SLVCTL_AUTOACK_MASK)
 #define I2C_SLVCTL_AUTOMATCHREAD_MASK            (0x200U)
 #define I2C_SLVCTL_AUTOMATCHREAD_SHIFT           (9U)
-/*! AUTOMATCHREAD - When AUTOACK is set, this bit controls whether it matches a read or write request on the next header with an address matching SLVADR0. Since DMA needs to be configured to match the transfer direction, the direction needs to be specified. This bit allows a direction to be chosen for the next operation.
+/*! AUTOMATCHREAD - When AUTOACK is set, this bit controls whether it matches a read or write
+ *    request on the next header with an address matching SLVADR0. Since DMA needs to be configured to
+ *    match the transfer direction, the direction needs to be specified. This bit allows a direction to
+ *    be chosen for the next operation.
  *  0b0..The expected next operation in Automatic Mode is an I2C write.
  *  0b1..The expected next operation in Automatic Mode is an I2C read.
  */
@@ -8845,9 +9599,11 @@ typedef struct {
 #define I2C_SLVADR_SLVADR(x)                     (((uint32_t)(((uint32_t)(x)) << I2C_SLVADR_SLVADR_SHIFT)) & I2C_SLVADR_SLVADR_MASK)
 #define I2C_SLVADR_AUTONACK_MASK                 (0x8000U)
 #define I2C_SLVADR_AUTONACK_SHIFT                (15U)
-/*! AUTONACK - Automatic NACK operation. Used in conjunction with AUTOACK and AUTOMATCHREAD, allows software to ignore I2C traffic while handling previous I2C data or other operations.
+/*! AUTONACK - Automatic NACK operation. Used in conjunction with AUTOACK and AUTOMATCHREAD, allows
+ *    software to ignore I2C traffic while handling previous I2C data or other operations.
  *  0b0..Normal operation, matching I2C addresses are not ignored.
- *  0b1..Automatic-only mode. All incoming addresses are ignored (NACKed), unless AUTOACK is set, it matches SLVADRn, and AUTOMATCHREAD matches the direction.
+ *  0b1..Automatic-only mode. All incoming addresses are ignored (NACKed), unless AUTOACK is set, it matches
+ *       SLVADRn, and AUTOMATCHREAD matches the direction.
  */
 #define I2C_SLVADR_AUTONACK(x)                   (((uint32_t)(((uint32_t)(x)) << I2C_SLVADR_AUTONACK_SHIFT)) & I2C_SLVADR_AUTONACK_MASK)
 /*! @} */
@@ -9097,20 +9853,31 @@ typedef struct {
 #define I2S_CFG1_MAINENABLE_MASK                 (0x1U)
 #define I2S_CFG1_MAINENABLE_SHIFT                (0U)
 /*! MAINENABLE - Main enable for I 2S function in this Flexcomm
- *  0b0..All I 2S channel pairs in this Flexcomm are disabled and the internal state machines, counters, and flags are reset. No other channel pairs can be enabled.
+ *  0b0..All I 2S channel pairs in this Flexcomm are disabled and the internal state machines, counters, and flags
+ *       are reset. No other channel pairs can be enabled.
  *  0b1..This I 2S channel pair is enabled. Other channel pairs in this Flexcomm may be enabled in their individual PAIRENABLE bits.
  */
 #define I2S_CFG1_MAINENABLE(x)                   (((uint32_t)(((uint32_t)(x)) << I2S_CFG1_MAINENABLE_SHIFT)) & I2S_CFG1_MAINENABLE_MASK)
 #define I2S_CFG1_DATAPAUSE_MASK                  (0x2U)
 #define I2S_CFG1_DATAPAUSE_SHIFT                 (1U)
-/*! DATAPAUSE - Data flow Pause. Allows pausing data flow between the I2S serializer/deserializer and the FIFO. This could be done in order to change streams, or while restarting after a data underflow or overflow. When paused, FIFO operations can be done without corrupting data that is in the process of being sent or received. Once a data pause has been requested, the interface may need to complete sending data that was in progress before interrupting the flow of data. Software must check that the pause is actually in effect before taking action. This is done by monitoring the DATAPAUSED flag in the STAT register. When DATAPAUSE is cleared, data transfer will resume at the beginning of the next frame.
+/*! DATAPAUSE - Data flow Pause. Allows pausing data flow between the I2S serializer/deserializer
+ *    and the FIFO. This could be done in order to change streams, or while restarting after a data
+ *    underflow or overflow. When paused, FIFO operations can be done without corrupting data that is
+ *    in the process of being sent or received. Once a data pause has been requested, the interface
+ *    may need to complete sending data that was in progress before interrupting the flow of data.
+ *    Software must check that the pause is actually in effect before taking action. This is done by
+ *    monitoring the DATAPAUSED flag in the STAT register. When DATAPAUSE is cleared, data transfer
+ *    will resume at the beginning of the next frame.
  *  0b0..Normal operation, or resuming normal operation at the next frame if the I2S has already been paused.
  *  0b1..A pause in the data flow is being requested. It is in effect when DATAPAUSED in STAT = 1.
  */
 #define I2S_CFG1_DATAPAUSE(x)                    (((uint32_t)(((uint32_t)(x)) << I2S_CFG1_DATAPAUSE_SHIFT)) & I2S_CFG1_DATAPAUSE_MASK)
 #define I2S_CFG1_PAIRCOUNT_MASK                  (0xCU)
 #define I2S_CFG1_PAIRCOUNT_SHIFT                 (2U)
-/*! PAIRCOUNT - Provides the number of I2S channel pairs in this Flexcomm This is a read-only field whose value may be different in other Flexcomms. 00 = there is 1 I2S channel pair in this Flexcomm. 01 = there are 2 I2S channel pairs in this Flexcomm. 10 = there are 3 I2S channel pairs in this Flexcomm. 11 = there are 4 I2S channel pairs in this Flexcomm.
+/*! PAIRCOUNT - Provides the number of I2S channel pairs in this Flexcomm This is a read-only field
+ *    whose value may be different in other Flexcomms. 00 = there is 1 I2S channel pair in this
+ *    Flexcomm. 01 = there are 2 I2S channel pairs in this Flexcomm. 10 = there are 3 I2S channel pairs
+ *    in this Flexcomm. 11 = there are 4 I2S channel pairs in this Flexcomm.
  *  0b00..1 I2S channel pairs in this flexcomm
  *  0b01..2 I2S channel pairs in this flexcomm
  *  0b10..3 I2S channel pairs in this flexcomm
@@ -9121,15 +9888,21 @@ typedef struct {
 #define I2S_CFG1_MSTSLVCFG_SHIFT                 (4U)
 /*! MSTSLVCFG - Master / slave configuration selection, determining how SCK and WS are used by all channel pairs in this Flexcomm.
  *  0b00..Normal slave mode, the default mode. SCK and WS are received from a master and used to transmit or receive data.
- *  0b01..WS synchronized master. WS is received from another master and used to synchronize the generation of SCK, when divided from the Flexcomm function clock.
+ *  0b01..WS synchronized master. WS is received from another master and used to synchronize the generation of
+ *        SCK, when divided from the Flexcomm function clock.
  *  0b10..Master using an existing SCK. SCK is received and used directly to generate WS, as well as transmitting or receiving data.
  *  0b11..Normal master mode. SCK and WS are generated so they can be sent to one or more slave devices.
  */
 #define I2S_CFG1_MSTSLVCFG(x)                    (((uint32_t)(((uint32_t)(x)) << I2S_CFG1_MSTSLVCFG_SHIFT)) & I2S_CFG1_MSTSLVCFG_MASK)
 #define I2S_CFG1_MODE_MASK                       (0xC0U)
 #define I2S_CFG1_MODE_SHIFT                      (6U)
-/*! MODE - Selects the basic I2S operating mode. Other configurations modify this to obtain all supported cases. See Formats and modes for examples.
- *  0b00..I2S mode a.k.a. 'classic' mode. WS has a 50% duty cycle, with (for each enabled channel pair) one piece of left channel data occurring during the first phase, and one pieces of right channel data occurring during the second phase. In this mode, the data region begins one clock after the leading WS edge for the frame. For a 50% WS duty cycle, FRAMELEN must define an even number of I2S clocks for the frame. If FRAMELEN defines an odd number of clocks per frame, the extra clock will occur on the right.
+/*! MODE - Selects the basic I2S operating mode. Other configurations modify this to obtain all
+ *    supported cases. See Formats and modes for examples.
+ *  0b00..I2S mode a.k.a. 'classic' mode. WS has a 50% duty cycle, with (for each enabled channel pair) one piece
+ *        of left channel data occurring during the first phase, and one pieces of right channel data occurring
+ *        during the second phase. In this mode, the data region begins one clock after the leading WS edge for the
+ *        frame. For a 50% WS duty cycle, FRAMELEN must define an even number of I2S clocks for the frame. If
+ *        FRAMELEN defines an odd number of clocks per frame, the extra clock will occur on the right.
  *  0b01..DSP mode where WS has a 50% duty cycle. See remark for mode 0.
  *  0b10..DSP mode where WS has a one clock long pulse at the beginning of each data frame.
  *  0b11..DSP mode where WS has a one data slot long pulse at the beginning of each data frame.
@@ -9137,30 +9910,52 @@ typedef struct {
 #define I2S_CFG1_MODE(x)                         (((uint32_t)(((uint32_t)(x)) << I2S_CFG1_MODE_SHIFT)) & I2S_CFG1_MODE_MASK)
 #define I2S_CFG1_RIGHTLOW_MASK                   (0x100U)
 #define I2S_CFG1_RIGHTLOW_SHIFT                  (8U)
-/*! RIGHTLOW - Right channel data is in the Low portion of FIFO data. Essentially, this swaps left and right channel data as it is transferred to or from the FIFO. This bit is not used if the data width is greater than 24 bits or if PDMDATA = 1. Note that if the ONECHANNEL field (bit 10 of this register) = 1, the one channel to be used is the nominally the left channel. POSITION can still place that data in the frame where right channel data is normally located. if all enabled channel pairs have ONECHANNEL = 1, then RIGHTLOW = 1 is not allowed.
- *  0b0..The right channel is taken from the high part of the FIFO data. For example, when data is 16 bits, FIFO bits 31:16 are used for the right channel.
- *  0b1..The right channel is taken from the low part of the FIFO data. For example, when data is 16 bits, FIFO bits 15:0 are used for the right channel.
+/*! RIGHTLOW - Right channel data is in the Low portion of FIFO data. Essentially, this swaps left
+ *    and right channel data as it is transferred to or from the FIFO. This bit is not used if the
+ *    data width is greater than 24 bits or if PDMDATA = 1. Note that if the ONECHANNEL field (bit 10
+ *    of this register) = 1, the one channel to be used is the nominally the left channel. POSITION
+ *    can still place that data in the frame where right channel data is normally located. if all
+ *    enabled channel pairs have ONECHANNEL = 1, then RIGHTLOW = 1 is not allowed.
+ *  0b0..The right channel is taken from the high part of the FIFO data. For example, when data is 16 bits, FIFO
+ *       bits 31:16 are used for the right channel.
+ *  0b1..The right channel is taken from the low part of the FIFO data. For example, when data is 16 bits, FIFO
+ *       bits 15:0 are used for the right channel.
  */
 #define I2S_CFG1_RIGHTLOW(x)                     (((uint32_t)(((uint32_t)(x)) << I2S_CFG1_RIGHTLOW_SHIFT)) & I2S_CFG1_RIGHTLOW_MASK)
 #define I2S_CFG1_LEFTJUST_MASK                   (0x200U)
 #define I2S_CFG1_LEFTJUST_SHIFT                  (9U)
 /*! LEFTJUST - Left Justify data.
- *  0b0..Data is transferred between the FIFO and the I2S serializer/deserializer right justified, i.e. starting from bit 0 and continuing to the position defined by DATALEN. This would correspond to right justified data in the stream on the data bus.
- *  0b1..Data is transferred between the FIFO and the I2S serializer/deserializer left justified, i.e. starting from the MSB of the FIFO entry and continuing for the number of bits defined by DATALEN. This would correspond to left justified data in the stream on the data bus.
+ *  0b0..Data is transferred between the FIFO and the I2S serializer/deserializer right justified, i.e. starting
+ *       from bit 0 and continuing to the position defined by DATALEN. This would correspond to right justified data
+ *       in the stream on the data bus.
+ *  0b1..Data is transferred between the FIFO and the I2S serializer/deserializer left justified, i.e. starting
+ *       from the MSB of the FIFO entry and continuing for the number of bits defined by DATALEN. This would
+ *       correspond to left justified data in the stream on the data bus.
  */
 #define I2S_CFG1_LEFTJUST(x)                     (((uint32_t)(((uint32_t)(x)) << I2S_CFG1_LEFTJUST_SHIFT)) & I2S_CFG1_LEFTJUST_MASK)
 #define I2S_CFG1_ONECHANNEL_MASK                 (0x400U)
 #define I2S_CFG1_ONECHANNEL_SHIFT                (10U)
-/*! ONECHANNEL - Single channel mode. Applies to both transmit and receive. This configuration bit applies only to the first I2S channel pair. Other channel pairs may select this mode independently in their separate CFG1 registers.
+/*! ONECHANNEL - Single channel mode. Applies to both transmit and receive. This configuration bit
+ *    applies only to the first I2S channel pair. Other channel pairs may select this mode
+ *    independently in their separate CFG1 registers.
  *  0b0..I2S data for this channel pair is treated as left and right channels.
- *  0b1..I2S data for this channel pair is treated as a single channel, functionally the left channel for this pair. In mode 0 only, the right side of the frame begins at POSITION = 0x100. This is because mode 0 makes a clear distinction between the left and right sides of the frame. When ONECHANNEL = 1, the single channel of data may be placed on the right by setting POSITION to 0x100 + the data position within the right side (e.g. 0x108 would place data starting at the 8th clock after the middle of the frame). In other modes, data for the single channel of data is placed at the clock defined by POSITION.
+ *  0b1..I2S data for this channel pair is treated as a single channel, functionally the left channel for this
+ *       pair. In mode 0 only, the right side of the frame begins at POSITION = 0x100. This is because mode 0 makes a
+ *       clear distinction between the left and right sides of the frame. When ONECHANNEL = 1, the single channel
+ *       of data may be placed on the right by setting POSITION to 0x100 + the data position within the right side
+ *       (e.g. 0x108 would place data starting at the 8th clock after the middle of the frame). In other modes, data
+ *       for the single channel of data is placed at the clock defined by POSITION.
  */
 #define I2S_CFG1_ONECHANNEL(x)                   (((uint32_t)(((uint32_t)(x)) << I2S_CFG1_ONECHANNEL_SHIFT)) & I2S_CFG1_ONECHANNEL_MASK)
 #define I2S_CFG1_PDMDATA_MASK                    (0x800U)
 #define I2S_CFG1_PDMDATA_SHIFT                   (11U)
-/*! PDMDATA - PDM Data selection. This bit controls the data source for I2S transmit, and cannot be set in Rx mode. This bit only has an effect if the device the Flexcomm resides in includes a D-Mic subsystem. For the LPC55xx, this bit applies only to Flexcomm 6,7.
+/*! PDMDATA - PDM Data selection. This bit controls the data source for I2S transmit, and cannot be
+ *    set in Rx mode. This bit only has an effect if the device the Flexcomm resides in includes a
+ *    D-Mic subsystem. For the LPC55xx, this bit applies only to Flexcomm 6,7.
  *  0b0..Normal operation, data is transferred to or from the Flexcomm FIFO.
- *  0b1..The data source is the D-Mic subsystem. When PDMDATA = 1, only the primary channel pair can be used in this Flexcomm. If ONECHANNEL = 1, only the PDM left data is used. the WS rate must match the Fs (sample rate) of the D-Mic decimator. A rate mismatch will at some point cause the I2S to overrun or underrun.
+ *  0b1..The data source is the D-Mic subsystem. When PDMDATA = 1, only the primary channel pair can be used in
+ *       this Flexcomm. If ONECHANNEL = 1, only the PDM left data is used. the WS rate must match the Fs (sample
+ *       rate) of the D-Mic decimator. A rate mismatch will at some point cause the I2S to overrun or underrun.
  */
 #define I2S_CFG1_PDMDATA(x)                      (((uint32_t)(((uint32_t)(x)) << I2S_CFG1_PDMDATA_SHIFT)) & I2S_CFG1_PDMDATA_MASK)
 #define I2S_CFG1_SCK_POL_MASK                    (0x1000U)
@@ -9203,14 +9998,18 @@ typedef struct {
 #define I2S_STAT_BUSY(x)                         (((uint32_t)(((uint32_t)(x)) << I2S_STAT_BUSY_SHIFT)) & I2S_STAT_BUSY_MASK)
 #define I2S_STAT_SLVFRMERR_MASK                  (0x2U)
 #define I2S_STAT_SLVFRMERR_SHIFT                 (1U)
-/*! SLVFRMERR - Slave Frame Error flag. This applies when at least one channel pair is operating as a slave. An error indicates that the incoming WS signal did not transition as expected due to a mismatch between FRAMELEN and the actual incoming I2S stream.
+/*! SLVFRMERR - Slave Frame Error flag. This applies when at least one channel pair is operating as
+ *    a slave. An error indicates that the incoming WS signal did not transition as expected due to
+ *    a mismatch between FRAMELEN and the actual incoming I2S stream.
  *  0b0..No error has been recorded.
  *  0b1..An error has been recorded for some channel pair that is operating in slave mode. ERROR is cleared by writing a 1 to this bit position.
  */
 #define I2S_STAT_SLVFRMERR(x)                    (((uint32_t)(((uint32_t)(x)) << I2S_STAT_SLVFRMERR_SHIFT)) & I2S_STAT_SLVFRMERR_MASK)
 #define I2S_STAT_LR_MASK                         (0x4U)
 #define I2S_STAT_LR_SHIFT                        (2U)
-/*! LR - Left/Right indication. This flag is considered to be a debugging aid and is not expected to be used by an I2S driver. Valid when one channel pair is busy. Indicates left or right data being processed for the currently busy channel pair.
+/*! LR - Left/Right indication. This flag is considered to be a debugging aid and is not expected to
+ *    be used by an I2S driver. Valid when one channel pair is busy. Indicates left or right data
+ *    being processed for the currently busy channel pair.
  *  0b0..Left channel.
  *  0b1..Right channel.
  */
@@ -9218,7 +10017,8 @@ typedef struct {
 #define I2S_STAT_DATAPAUSED_MASK                 (0x8U)
 #define I2S_STAT_DATAPAUSED_SHIFT                (3U)
 /*! DATAPAUSED - Data Paused status flag. Applies to all I2S channels
- *  0b0..Data is not currently paused. A data pause may have been requested but is not yet in force, waiting for an allowed pause point. Refer to the description of the DATAPAUSE control bit in the CFG1 register.
+ *  0b0..Data is not currently paused. A data pause may have been requested but is not yet in force, waiting for
+ *       an allowed pause point. Refer to the description of the DATAPAUSE control bit in the CFG1 register.
  *  0b1..A data pause has been requested and is now in force.
  */
 #define I2S_STAT_DATAPAUSED(x)                   (((uint32_t)(((uint32_t)(x)) << I2S_STAT_DATAPAUSED_SHIFT)) & I2S_STAT_DATAPAUSED_MASK)
@@ -9291,8 +10091,11 @@ typedef struct {
 #define I2S_FIFOCFG_ENABLERX(x)                  (((uint32_t)(((uint32_t)(x)) << I2S_FIFOCFG_ENABLERX_SHIFT)) & I2S_FIFOCFG_ENABLERX_MASK)
 #define I2S_FIFOCFG_TXI2SE0_MASK                 (0x4U)
 #define I2S_FIFOCFG_TXI2SE0_SHIFT                (2U)
-/*! TXI2SE0 - Transmit I2S empty 0. Determines the value sent by the I2S in transmit mode if the TX FIFO becomes empty. This value is sent repeatedly until the I2S is paused, the error is cleared, new data is provided, and the I2S is un-paused.
- *  0b0..If the TX FIFO becomes empty, the last value is sent. This setting may be used when the data length is 24 bits or less, or when MONO = 1 for this channel pair.
+/*! TXI2SE0 - Transmit I2S empty 0. Determines the value sent by the I2S in transmit mode if the TX
+ *    FIFO becomes empty. This value is sent repeatedly until the I2S is paused, the error is
+ *    cleared, new data is provided, and the I2S is un-paused.
+ *  0b0..If the TX FIFO becomes empty, the last value is sent. This setting may be used when the data length is 24
+ *       bits or less, or when MONO = 1 for this channel pair.
  *  0b1..If the TX FIFO becomes empty, 0 is sent. Use if the data length is greater than 24 bits or if zero fill is preferred.
  */
 #define I2S_FIFOCFG_TXI2SE0(x)                   (((uint32_t)(((uint32_t)(x)) << I2S_FIFOCFG_TXI2SE0_SHIFT)) & I2S_FIFOCFG_TXI2SE0_MASK)
@@ -9322,16 +10125,26 @@ typedef struct {
 #define I2S_FIFOCFG_DMARX(x)                     (((uint32_t)(((uint32_t)(x)) << I2S_FIFOCFG_DMARX_SHIFT)) & I2S_FIFOCFG_DMARX_MASK)
 #define I2S_FIFOCFG_WAKETX_MASK                  (0x4000U)
 #define I2S_FIFOCFG_WAKETX_SHIFT                 (14U)
-/*! WAKETX - Wake-up for transmit FIFO level. This allows the device to be woken from reduced power modes (up to power-down, as long as the peripheral function works in that power mode) without enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware Wake-up control register.
+/*! WAKETX - Wake-up for transmit FIFO level. This allows the device to be woken from reduced power
+ *    modes (up to power-down, as long as the peripheral function works in that power mode) without
+ *    enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The
+ *    CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware
+ *    Wake-up control register.
  *  0b0..Only enabled interrupts will wake up the device form reduced power modes.
- *  0b1..A device wake-up for DMA will occur if the transmit FIFO level reaches the value specified by TXLVL in FIFOTRIG, even when the TXLVL interrupt is not enabled.
+ *  0b1..A device wake-up for DMA will occur if the transmit FIFO level reaches the value specified by TXLVL in
+ *       FIFOTRIG, even when the TXLVL interrupt is not enabled.
  */
 #define I2S_FIFOCFG_WAKETX(x)                    (((uint32_t)(((uint32_t)(x)) << I2S_FIFOCFG_WAKETX_SHIFT)) & I2S_FIFOCFG_WAKETX_MASK)
 #define I2S_FIFOCFG_WAKERX_MASK                  (0x8000U)
 #define I2S_FIFOCFG_WAKERX_SHIFT                 (15U)
-/*! WAKERX - Wake-up for receive FIFO level. This allows the device to be woken from reduced power modes (up to power-down, as long as the peripheral function works in that power mode) without enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware Wake-up control register.
+/*! WAKERX - Wake-up for receive FIFO level. This allows the device to be woken from reduced power
+ *    modes (up to power-down, as long as the peripheral function works in that power mode) without
+ *    enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The
+ *    CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware
+ *    Wake-up control register.
  *  0b0..Only enabled interrupts will wake up the device form reduced power modes.
- *  0b1..A device wake-up for DMA will occur if the receive FIFO level reaches the value specified by RXLVL in FIFOTRIG, even when the RXLVL interrupt is not enabled.
+ *  0b1..A device wake-up for DMA will occur if the receive FIFO level reaches the value specified by RXLVL in
+ *       FIFOTRIG, even when the RXLVL interrupt is not enabled.
  */
 #define I2S_FIFOCFG_WAKERX(x)                    (((uint32_t)(((uint32_t)(x)) << I2S_FIFOCFG_WAKERX_SHIFT)) & I2S_FIFOCFG_WAKERX_MASK)
 #define I2S_FIFOCFG_EMPTYTX_MASK                 (0x10000U)
@@ -9384,14 +10197,16 @@ typedef struct {
 /*! @{ */
 #define I2S_FIFOTRIG_TXLVLENA_MASK               (0x1U)
 #define I2S_FIFOTRIG_TXLVLENA_SHIFT              (0U)
-/*! TXLVLENA - Transmit FIFO level trigger enable. This trigger will become an interrupt if enabled in FIFOINTENSET, or a DMA trigger if DMATX in FIFOCFG is set.
+/*! TXLVLENA - Transmit FIFO level trigger enable. This trigger will become an interrupt if enabled
+ *    in FIFOINTENSET, or a DMA trigger if DMATX in FIFOCFG is set.
  *  0b0..Transmit FIFO level does not generate a FIFO level trigger.
  *  0b1..An trigger will be generated if the transmit FIFO level reaches the value specified by the TXLVL field in this register.
  */
 #define I2S_FIFOTRIG_TXLVLENA(x)                 (((uint32_t)(((uint32_t)(x)) << I2S_FIFOTRIG_TXLVLENA_SHIFT)) & I2S_FIFOTRIG_TXLVLENA_MASK)
 #define I2S_FIFOTRIG_RXLVLENA_MASK               (0x2U)
 #define I2S_FIFOTRIG_RXLVLENA_SHIFT              (1U)
-/*! RXLVLENA - Receive FIFO level trigger enable. This trigger will become an interrupt if enabled in FIFOINTENSET, or a DMA trigger if DMARX in FIFOCFG is set.
+/*! RXLVLENA - Receive FIFO level trigger enable. This trigger will become an interrupt if enabled
+ *    in FIFOINTENSET, or a DMA trigger if DMARX in FIFOCFG is set.
  *  0b0..Receive FIFO level does not generate a FIFO level trigger.
  *  0b1..An trigger will be generated if the receive FIFO level reaches the value specified by the RXLVL field in this register.
  */
@@ -9422,16 +10237,20 @@ typedef struct {
 #define I2S_FIFOINTENSET_RXERR(x)                (((uint32_t)(((uint32_t)(x)) << I2S_FIFOINTENSET_RXERR_SHIFT)) & I2S_FIFOINTENSET_RXERR_MASK)
 #define I2S_FIFOINTENSET_TXLVL_MASK              (0x4U)
 #define I2S_FIFOINTENSET_TXLVL_SHIFT             (2U)
-/*! TXLVL - Determines whether an interrupt occurs when a the transmit FIFO reaches the level specified by the TXLVL field in the FIFOTRIG register.
+/*! TXLVL - Determines whether an interrupt occurs when a the transmit FIFO reaches the level
+ *    specified by the TXLVL field in the FIFOTRIG register.
  *  0b0..No interrupt will be generated based on the TX FIFO level.
- *  0b1..If TXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the TX FIFO level decreases to the level specified by TXLVL in the FIFOTRIG register.
+ *  0b1..If TXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the TX FIFO level decreases
+ *       to the level specified by TXLVL in the FIFOTRIG register.
  */
 #define I2S_FIFOINTENSET_TXLVL(x)                (((uint32_t)(((uint32_t)(x)) << I2S_FIFOINTENSET_TXLVL_SHIFT)) & I2S_FIFOINTENSET_TXLVL_MASK)
 #define I2S_FIFOINTENSET_RXLVL_MASK              (0x8U)
 #define I2S_FIFOINTENSET_RXLVL_SHIFT             (3U)
-/*! RXLVL - Determines whether an interrupt occurs when a the receive FIFO reaches the level specified by the TXLVL field in the FIFOTRIG register.
+/*! RXLVL - Determines whether an interrupt occurs when a the receive FIFO reaches the level
+ *    specified by the TXLVL field in the FIFOTRIG register.
  *  0b0..No interrupt will be generated based on the RX FIFO level.
- *  0b1..If RXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the when the RX FIFO level increases to the level specified by RXLVL in the FIFOTRIG register.
+ *  0b1..If RXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the when the RX FIFO level
+ *       increases to the level specified by RXLVL in the FIFOTRIG register.
  */
 #define I2S_FIFOINTENSET_RXLVL(x)                (((uint32_t)(((uint32_t)(x)) << I2S_FIFOINTENSET_RXLVL_SHIFT)) & I2S_FIFOINTENSET_RXLVL_MASK)
 /*! @} */
@@ -10507,8 +11326,10 @@ typedef struct {
 #define MRT_CHANNEL_INTVAL_IVALUE(x)             (((uint32_t)(((uint32_t)(x)) << MRT_CHANNEL_INTVAL_IVALUE_SHIFT)) & MRT_CHANNEL_INTVAL_IVALUE_MASK)
 #define MRT_CHANNEL_INTVAL_LOAD_MASK             (0x80000000U)
 #define MRT_CHANNEL_INTVAL_LOAD_SHIFT            (31U)
-/*! LOAD - Determines how the timer interval value IVALUE -1 is loaded into the TIMERn register. This bit is write-only. Reading this bit always returns 0.
- *  0b0..No force load. The load from the INTVALn register to the TIMERn register is processed at the end of the time interval if the repeat mode is selected.
+/*! LOAD - Determines how the timer interval value IVALUE -1 is loaded into the TIMERn register.
+ *    This bit is write-only. Reading this bit always returns 0.
+ *  0b0..No force load. The load from the INTVALn register to the TIMERn register is processed at the end of the
+ *       time interval if the repeat mode is selected.
  *  0b1..Force load. The INTVALn interval value IVALUE -1 is immediately loaded into the TIMERn register while TIMERn is running.
  */
 #define MRT_CHANNEL_INTVAL_LOAD(x)               (((uint32_t)(((uint32_t)(x)) << MRT_CHANNEL_INTVAL_LOAD_SHIFT)) & MRT_CHANNEL_INTVAL_LOAD_MASK)
@@ -10556,7 +11377,9 @@ typedef struct {
 #define MRT_CHANNEL_STAT_INTFLAG_SHIFT           (0U)
 /*! INTFLAG - Monitors the interrupt flag.
  *  0b0..No pending interrupt. Writing a zero is equivalent to no operation.
- *  0b1..Pending interrupt. The interrupt is pending because TIMERn has reached the end of the time interval. If the INTEN bit in the CONTROLn is also set to 1, the interrupt for timer channel n and the global interrupt are raised. Writing a 1 to this bit clears the interrupt request.
+ *  0b1..Pending interrupt. The interrupt is pending because TIMERn has reached the end of the time interval. If
+ *       the INTEN bit in the CONTROLn is also set to 1, the interrupt for timer channel n and the global interrupt
+ *       are raised. Writing a 1 to this bit clears the interrupt request.
  */
 #define MRT_CHANNEL_STAT_INTFLAG(x)              (((uint32_t)(((uint32_t)(x)) << MRT_CHANNEL_STAT_INTFLAG_SHIFT)) & MRT_CHANNEL_STAT_INTFLAG_MASK)
 #define MRT_CHANNEL_STAT_RUN_MASK                (0x2U)
@@ -10568,7 +11391,9 @@ typedef struct {
 #define MRT_CHANNEL_STAT_RUN(x)                  (((uint32_t)(((uint32_t)(x)) << MRT_CHANNEL_STAT_RUN_SHIFT)) & MRT_CHANNEL_STAT_RUN_MASK)
 #define MRT_CHANNEL_STAT_INUSE_MASK              (0x4U)
 #define MRT_CHANNEL_STAT_INUSE_SHIFT             (2U)
-/*! INUSE - Channel In Use flag. Operating details depend on the MULTITASK bit in the MODCFG register, and affects the use of IDLE_CH. See Idle channel register for details of the two operating modes.
+/*! INUSE - Channel In Use flag. Operating details depend on the MULTITASK bit in the MODCFG
+ *    register, and affects the use of IDLE_CH. See Idle channel register for details of the two operating
+ *    modes.
  *  0b0..This channel is not in use.
  *  0b1..This channel is in use.
  */
@@ -10608,7 +11433,9 @@ typedef struct {
 #define MRT_IRQ_FLAG_GFLAG0_SHIFT                (0U)
 /*! GFLAG0 - Monitors the interrupt flag of TIMER0.
  *  0b0..No pending interrupt. Writing a zero is equivalent to no operation.
- *  0b1..Pending interrupt. The interrupt is pending because TIMER0 has reached the end of the time interval. If the INTEN bit in the CONTROL0 register is also set to 1, the interrupt for timer channel 0 and the global interrupt are raised. Writing a 1 to this bit clears the interrupt request.
+ *  0b1..Pending interrupt. The interrupt is pending because TIMER0 has reached the end of the time interval. If
+ *       the INTEN bit in the CONTROL0 register is also set to 1, the interrupt for timer channel 0 and the global
+ *       interrupt are raised. Writing a 1 to this bit clears the interrupt request.
  */
 #define MRT_IRQ_FLAG_GFLAG0(x)                   (((uint32_t)(((uint32_t)(x)) << MRT_IRQ_FLAG_GFLAG0_SHIFT)) & MRT_IRQ_FLAG_GFLAG0_MASK)
 #define MRT_IRQ_FLAG_GFLAG1_MASK                 (0x2U)
@@ -11077,104 +11904,168 @@ typedef struct {
 #define PINT_PMCFG_CFG0_SHIFT                    (8U)
 /*! CFG0 - Specifies the match contribution condition for bit slice 0.
  *  0b000..Constant HIGH. This bit slice always contributes to a product term match.
- *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
+ *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input
+ *         has occurred since the last time the edge detection for this bit slice was cleared. This bit is only
+ *         cleared when the PMCFG or the PMSRC registers are written to.
  *  0b100..High level. Match (for this bit slice) occurs when there is a high level on the input specified for this bit slice in the PMSRC register.
  *  0b101..Low level. Match occurs when there is a low level on the specified input.
  *  0b110..Constant 0. This bit slice never contributes to a match (should be used to disable any unused bit slices).
- *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit is cleared after one clock cycle.
+ *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or
+ *         falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit
+ *         is cleared after one clock cycle.
  */
 #define PINT_PMCFG_CFG0(x)                       (((uint32_t)(((uint32_t)(x)) << PINT_PMCFG_CFG0_SHIFT)) & PINT_PMCFG_CFG0_MASK)
 #define PINT_PMCFG_CFG1_MASK                     (0x3800U)
 #define PINT_PMCFG_CFG1_SHIFT                    (11U)
 /*! CFG1 - Specifies the match contribution condition for bit slice 1.
  *  0b000..Constant HIGH. This bit slice always contributes to a product term match.
- *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
+ *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input
+ *         has occurred since the last time the edge detection for this bit slice was cleared. This bit is only
+ *         cleared when the PMCFG or the PMSRC registers are written to.
  *  0b100..High level. Match (for this bit slice) occurs when there is a high level on the input specified for this bit slice in the PMSRC register.
  *  0b101..Low level. Match occurs when there is a low level on the specified input.
  *  0b110..Constant 0. This bit slice never contributes to a match (should be used to disable any unused bit slices).
- *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit is cleared after one clock cycle.
+ *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or
+ *         falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit
+ *         is cleared after one clock cycle.
  */
 #define PINT_PMCFG_CFG1(x)                       (((uint32_t)(((uint32_t)(x)) << PINT_PMCFG_CFG1_SHIFT)) & PINT_PMCFG_CFG1_MASK)
 #define PINT_PMCFG_CFG2_MASK                     (0x1C000U)
 #define PINT_PMCFG_CFG2_SHIFT                    (14U)
 /*! CFG2 - Specifies the match contribution condition for bit slice 2.
  *  0b000..Constant HIGH. This bit slice always contributes to a product term match.
- *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
+ *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input
+ *         has occurred since the last time the edge detection for this bit slice was cleared. This bit is only
+ *         cleared when the PMCFG or the PMSRC registers are written to.
  *  0b100..High level. Match (for this bit slice) occurs when there is a high level on the input specified for this bit slice in the PMSRC register.
  *  0b101..Low level. Match occurs when there is a low level on the specified input.
  *  0b110..Constant 0. This bit slice never contributes to a match (should be used to disable any unused bit slices).
- *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit is cleared after one clock cycle.
+ *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or
+ *         falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit
+ *         is cleared after one clock cycle.
  */
 #define PINT_PMCFG_CFG2(x)                       (((uint32_t)(((uint32_t)(x)) << PINT_PMCFG_CFG2_SHIFT)) & PINT_PMCFG_CFG2_MASK)
 #define PINT_PMCFG_CFG3_MASK                     (0xE0000U)
 #define PINT_PMCFG_CFG3_SHIFT                    (17U)
 /*! CFG3 - Specifies the match contribution condition for bit slice 3.
  *  0b000..Constant HIGH. This bit slice always contributes to a product term match.
- *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
+ *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input
+ *         has occurred since the last time the edge detection for this bit slice was cleared. This bit is only
+ *         cleared when the PMCFG or the PMSRC registers are written to.
  *  0b100..High level. Match (for this bit slice) occurs when there is a high level on the input specified for this bit slice in the PMSRC register.
  *  0b101..Low level. Match occurs when there is a low level on the specified input.
  *  0b110..Constant 0. This bit slice never contributes to a match (should be used to disable any unused bit slices).
- *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit is cleared after one clock cycle.
+ *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or
+ *         falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit
+ *         is cleared after one clock cycle.
  */
 #define PINT_PMCFG_CFG3(x)                       (((uint32_t)(((uint32_t)(x)) << PINT_PMCFG_CFG3_SHIFT)) & PINT_PMCFG_CFG3_MASK)
 #define PINT_PMCFG_CFG4_MASK                     (0x700000U)
 #define PINT_PMCFG_CFG4_SHIFT                    (20U)
 /*! CFG4 - Specifies the match contribution condition for bit slice 4.
  *  0b000..Constant HIGH. This bit slice always contributes to a product term match.
- *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
+ *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input
+ *         has occurred since the last time the edge detection for this bit slice was cleared. This bit is only
+ *         cleared when the PMCFG or the PMSRC registers are written to.
  *  0b100..High level. Match (for this bit slice) occurs when there is a high level on the input specified for this bit slice in the PMSRC register.
  *  0b101..Low level. Match occurs when there is a low level on the specified input.
  *  0b110..Constant 0. This bit slice never contributes to a match (should be used to disable any unused bit slices).
- *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit is cleared after one clock cycle.
+ *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or
+ *         falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit
+ *         is cleared after one clock cycle.
  */
 #define PINT_PMCFG_CFG4(x)                       (((uint32_t)(((uint32_t)(x)) << PINT_PMCFG_CFG4_SHIFT)) & PINT_PMCFG_CFG4_MASK)
 #define PINT_PMCFG_CFG5_MASK                     (0x3800000U)
 #define PINT_PMCFG_CFG5_SHIFT                    (23U)
 /*! CFG5 - Specifies the match contribution condition for bit slice 5.
  *  0b000..Constant HIGH. This bit slice always contributes to a product term match.
- *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
+ *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input
+ *         has occurred since the last time the edge detection for this bit slice was cleared. This bit is only
+ *         cleared when the PMCFG or the PMSRC registers are written to.
  *  0b100..High level. Match (for this bit slice) occurs when there is a high level on the input specified for this bit slice in the PMSRC register.
  *  0b101..Low level. Match occurs when there is a low level on the specified input.
  *  0b110..Constant 0. This bit slice never contributes to a match (should be used to disable any unused bit slices).
- *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit is cleared after one clock cycle.
+ *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or
+ *         falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit
+ *         is cleared after one clock cycle.
  */
 #define PINT_PMCFG_CFG5(x)                       (((uint32_t)(((uint32_t)(x)) << PINT_PMCFG_CFG5_SHIFT)) & PINT_PMCFG_CFG5_MASK)
 #define PINT_PMCFG_CFG6_MASK                     (0x1C000000U)
 #define PINT_PMCFG_CFG6_SHIFT                    (26U)
 /*! CFG6 - Specifies the match contribution condition for bit slice 6.
  *  0b000..Constant HIGH. This bit slice always contributes to a product term match.
- *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
+ *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input
+ *         has occurred since the last time the edge detection for this bit slice was cleared. This bit is only
+ *         cleared when the PMCFG or the PMSRC registers are written to.
  *  0b100..High level. Match (for this bit slice) occurs when there is a high level on the input specified for this bit slice in the PMSRC register.
  *  0b101..Low level. Match occurs when there is a low level on the specified input.
  *  0b110..Constant 0. This bit slice never contributes to a match (should be used to disable any unused bit slices).
- *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit is cleared after one clock cycle.
+ *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or
+ *         falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit
+ *         is cleared after one clock cycle.
  */
 #define PINT_PMCFG_CFG6(x)                       (((uint32_t)(((uint32_t)(x)) << PINT_PMCFG_CFG6_SHIFT)) & PINT_PMCFG_CFG6_MASK)
 #define PINT_PMCFG_CFG7_MASK                     (0xE0000000U)
 #define PINT_PMCFG_CFG7_SHIFT                    (29U)
 /*! CFG7 - Specifies the match contribution condition for bit slice 7.
  *  0b000..Constant HIGH. This bit slice always contributes to a product term match.
- *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
- *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the PMSRC registers are written to.
+ *  0b001..Sticky rising edge. Match occurs if a rising edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b010..Sticky falling edge. Match occurs if a falling edge on the specified input has occurred since the last
+ *         time the edge detection for this bit slice was cleared. This bit is only cleared when the PMCFG or the
+ *         PMSRC registers are written to.
+ *  0b011..Sticky rising or falling edge. Match occurs if either a rising or falling edge on the specified input
+ *         has occurred since the last time the edge detection for this bit slice was cleared. This bit is only
+ *         cleared when the PMCFG or the PMSRC registers are written to.
  *  0b100..High level. Match (for this bit slice) occurs when there is a high level on the input specified for this bit slice in the PMSRC register.
  *  0b101..Low level. Match occurs when there is a low level on the specified input.
  *  0b110..Constant 0. This bit slice never contributes to a match (should be used to disable any unused bit slices).
- *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit is cleared after one clock cycle.
+ *  0b111..Event. Non-sticky rising or falling edge. Match occurs on an event - i.e. when either a rising or
+ *         falling edge is first detected on the specified input (this is a non-sticky version of value 0x3) . This bit
+ *         is cleared after one clock cycle.
  */
 #define PINT_PMCFG_CFG7(x)                       (((uint32_t)(((uint32_t)(x)) << PINT_PMCFG_CFG7_SHIFT)) & PINT_PMCFG_CFG7_MASK)
 /*! @} */
@@ -11932,7 +12823,8 @@ typedef struct {
 #define PMC_PDSLEEPCFG0_PDEN_FRO1M(x)            (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_FRO1M_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_FRO1M_MASK)
 #define PMC_PDSLEEPCFG0_PDEN_FRO192M_MASK        (0x20U)
 #define PMC_PDSLEEPCFG0_PDEN_FRO192M_SHIFT       (5U)
-/*! PDEN_FRO192M - Controls 192MHz Free Running Oscillator power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
+/*! PDEN_FRO192M - Controls 192MHz Free Running Oscillator power during DEEP SLEEP (always shut down
+ *    during POWER DOWN and DEEP POWER DOWN).
  *  0b0..FRO 192 MHz is powered on during low power mode..
  *  0b1..FRO 192 MHz is powered off during low power mode..
  */
@@ -11960,14 +12852,16 @@ typedef struct {
 #define PMC_PDSLEEPCFG0_PDEN_XTAL32M(x)          (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_XTAL32M_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_XTAL32M_MASK)
 #define PMC_PDSLEEPCFG0_PDEN_PLL0_MASK           (0x200U)
 #define PMC_PDSLEEPCFG0_PDEN_PLL0_SHIFT          (9U)
-/*! PDEN_PLL0 - Controls System PLL (also refered as PLL0) power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
+/*! PDEN_PLL0 - Controls System PLL (also refered as PLL0) power during DEEP SLEEP (always shut down
+ *    during POWER DOWN and DEEP POWER DOWN).
  *  0b0..System PLL (also refered as PLL0) is powered on during low power mode..
  *  0b1..System PLL (also refered as PLL0) is powered off during low power mode..
  */
 #define PMC_PDSLEEPCFG0_PDEN_PLL0(x)             (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_PLL0_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_PLL0_MASK)
 #define PMC_PDSLEEPCFG0_PDEN_PLL1_MASK           (0x400U)
 #define PMC_PDSLEEPCFG0_PDEN_PLL1_SHIFT          (10U)
-/*! PDEN_PLL1 - Controls USB PLL (also refered as PLL1) power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
+/*! PDEN_PLL1 - Controls USB PLL (also refered as PLL1) power during DEEP SLEEP (always shut down
+ *    during POWER DOWN and DEEP POWER DOWN).
  *  0b0..USB PLL (also refered as PLL1) is powered on during low power mode..
  *  0b1..USB PLL (also refered as PLL1) is powered off during low power mode..
  */
@@ -12051,14 +12945,16 @@ typedef struct {
 #define PMC_PDSLEEPCFG0_PDEN_LDOFLASHNV(x)       (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_LDOFLASHNV_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_LDOFLASHNV_MASK)
 #define PMC_PDSLEEPCFG0_PDEN_RNG_MASK            (0x400000U)
 #define PMC_PDSLEEPCFG0_PDEN_RNG_SHIFT           (22U)
-/*! PDEN_RNG - Controls True Random Number Genetaor (TRNG) clock sources power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
+/*! PDEN_RNG - Controls True Random Number Genetaor (TRNG) clock sources power during DEEP SLEEP
+ *    (always shut down during POWER DOWN and DEEP POWER DOWN).
  *  0b0..True Random Number Genetaor (TRNG) clock sources are powered on during low power mode..
  *  0b1..True Random Number Genetaor (TRNG) clock sources are powered off during low power mode..
  */
 #define PMC_PDSLEEPCFG0_PDEN_RNG(x)              (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_RNG_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_RNG_MASK)
 #define PMC_PDSLEEPCFG0_PDEN_PLL0_SSCG_MASK      (0x800000U)
 #define PMC_PDSLEEPCFG0_PDEN_PLL0_SSCG_SHIFT     (23U)
-/*! PDEN_PLL0_SSCG - Controls PLL0 Spread Sprectrum module power during DEEP SLEEP (PLL0 Spread Spectrum is always shut down during POWER DOWN and DEEP POWER DOWN).
+/*! PDEN_PLL0_SSCG - Controls PLL0 Spread Sprectrum module power during DEEP SLEEP (PLL0 Spread
+ *    Spectrum is always shut down during POWER DOWN and DEEP POWER DOWN).
  *  0b0..PLL0 Spread Sprectrum module is powered on during low power mode..
  *  0b1..PLL0 Spread Sprectrum module is powered off during low power mode..
  */
@@ -12104,7 +13000,8 @@ typedef struct {
 #define PMC_PDRUNCFG0_PDEN_BODVBAT(x)            (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_BODVBAT_SHIFT)) & PMC_PDRUNCFG0_PDEN_BODVBAT_MASK)
 #define PMC_PDRUNCFG0_PDEN_FRO192M_MASK          (0x20U)
 #define PMC_PDRUNCFG0_PDEN_FRO192M_SHIFT         (5U)
-/*! PDEN_FRO192M - Controls power to the Free Running Oscillator (FRO) 192 MHz; The 12MHz, 48 MHz and 96 MHz clocks are derived from this FRO.
+/*! PDEN_FRO192M - Controls power to the Free Running Oscillator (FRO) 192 MHz; The 12MHz, 48 MHz
+ *    and 96 MHz clocks are derived from this FRO.
  *  0b0..FRO 192MHz is powered.
  *  0b1..FRO 192MHz is powered down.
  */
@@ -13545,21 +14442,26 @@ typedef struct {
 #define RTC_CTRL_SWRESET_SHIFT                   (0U)
 /*! SWRESET - Software reset control
  *  0b0..Not in reset. The RTC is not held in reset. This bit must be cleared prior to configuring or initiating any operation of the RTC.
- *  0b1..In reset. The RTC is held in reset. All register bits within the RTC will be forced to their reset value except the OFD bit. This bit must be cleared before writing to any register in the RTC - including writes to set any of the other bits within this register. Do not attempt to write to any bits of this register at the same time that the reset bit is being cleared.
+ *  0b1..In reset. The RTC is held in reset. All register bits within the RTC will be forced to their reset value
+ *       except the OFD bit. This bit must be cleared before writing to any register in the RTC - including writes
+ *       to set any of the other bits within this register. Do not attempt to write to any bits of this register at
+ *       the same time that the reset bit is being cleared.
  */
 #define RTC_CTRL_SWRESET(x)                      (((uint32_t)(((uint32_t)(x)) << RTC_CTRL_SWRESET_SHIFT)) & RTC_CTRL_SWRESET_MASK)
 #define RTC_CTRL_ALARM1HZ_MASK                   (0x4U)
 #define RTC_CTRL_ALARM1HZ_SHIFT                  (2U)
 /*! ALARM1HZ - RTC 1 Hz timer alarm flag status.
  *  0b0..No match. No match has occurred on the 1 Hz RTC timer. Writing a 0 has no effect.
- *  0b1..Match. A match condition has occurred on the 1 Hz RTC timer. This flag generates an RTC alarm interrupt request RTC_ALARM which can also wake up the part from any low power mode. Writing a 1 clears this bit.
+ *  0b1..Match. A match condition has occurred on the 1 Hz RTC timer. This flag generates an RTC alarm interrupt
+ *       request RTC_ALARM which can also wake up the part from any low power mode. Writing a 1 clears this bit.
  */
 #define RTC_CTRL_ALARM1HZ(x)                     (((uint32_t)(((uint32_t)(x)) << RTC_CTRL_ALARM1HZ_SHIFT)) & RTC_CTRL_ALARM1HZ_MASK)
 #define RTC_CTRL_WAKE1KHZ_MASK                   (0x8U)
 #define RTC_CTRL_WAKE1KHZ_SHIFT                  (3U)
 /*! WAKE1KHZ - RTC 1 kHz timer wake-up flag status.
  *  0b0..Run. The RTC 1 kHz timer is running. Writing a 0 has no effect.
- *  0b1..Time-out. The 1 kHz high-resolution/wake-up timer has timed out. This flag generates an RTC wake-up interrupt request RTC-WAKE which can also wake up the part from any low power mode. Writing a 1 clears this bit.
+ *  0b1..Time-out. The 1 kHz high-resolution/wake-up timer has timed out. This flag generates an RTC wake-up
+ *       interrupt request RTC-WAKE which can also wake up the part from any low power mode. Writing a 1 clears this bit.
  */
 #define RTC_CTRL_WAKE1KHZ(x)                     (((uint32_t)(((uint32_t)(x)) << RTC_CTRL_WAKE1KHZ_SHIFT)) & RTC_CTRL_WAKE1KHZ_MASK)
 #define RTC_CTRL_ALARMDPD_EN_MASK                (0x10U)
@@ -13578,7 +14480,8 @@ typedef struct {
 #define RTC_CTRL_WAKEDPD_EN(x)                   (((uint32_t)(((uint32_t)(x)) << RTC_CTRL_WAKEDPD_EN_SHIFT)) & RTC_CTRL_WAKEDPD_EN_MASK)
 #define RTC_CTRL_RTC1KHZ_EN_MASK                 (0x40U)
 #define RTC_CTRL_RTC1KHZ_EN_SHIFT                (6U)
-/*! RTC1KHZ_EN - RTC 1 kHz clock enable. This bit can be set to 0 to conserve power if the 1 kHz timer is not used. This bit has no effect when the RTC is disabled (bit 7 of this register is 0).
+/*! RTC1KHZ_EN - RTC 1 kHz clock enable. This bit can be set to 0 to conserve power if the 1 kHz
+ *    timer is not used. This bit has no effect when the RTC is disabled (bit 7 of this register is 0).
  *  0b0..Disable. A match on the 1 kHz RTC timer will not bring the part out of Deep power-down mode.
  *  0b1..Enable. The 1 kHz RTC timer is enabled.
  */
@@ -13586,8 +14489,11 @@ typedef struct {
 #define RTC_CTRL_RTC_EN_MASK                     (0x80U)
 #define RTC_CTRL_RTC_EN_SHIFT                    (7U)
 /*! RTC_EN - RTC enable.
- *  0b0..Disable. The RTC 1 Hz and 1 kHz clocks are shut down and the RTC operation is disabled. This bit should be 0 when writing to load a value in the RTC counter register.
- *  0b1..Enable. The 1 Hz RTC clock is running and RTC operation is enabled. This bit must be set to initiate operation of the RTC. The first clock to the RTC counter occurs 1 s after this bit is set. To also enable the high-resolution, 1 kHz clock, set bit 6 in this register.
+ *  0b0..Disable. The RTC 1 Hz and 1 kHz clocks are shut down and the RTC operation is disabled. This bit should
+ *       be 0 when writing to load a value in the RTC counter register.
+ *  0b1..Enable. The 1 Hz RTC clock is running and RTC operation is enabled. This bit must be set to initiate
+ *       operation of the RTC. The first clock to the RTC counter occurs 1 s after this bit is set. To also enable the
+ *       high-resolution, 1 kHz clock, set bit 6 in this register.
  */
 #define RTC_CTRL_RTC_EN(x)                       (((uint32_t)(((uint32_t)(x)) << RTC_CTRL_RTC_EN_SHIFT)) & RTC_CTRL_RTC_EN_MASK)
 #define RTC_CTRL_RTC_OSC_PD_MASK                 (0x100U)
@@ -13607,8 +14513,13 @@ typedef struct {
 #define RTC_CTRL_RTC_SUBSEC_ENA_MASK             (0x400U)
 #define RTC_CTRL_RTC_SUBSEC_ENA_SHIFT            (10U)
 /*! RTC_SUBSEC_ENA - RTC Sub-second counter control.
- *  0b0..The sub-second counter (if implemented) is disabled. This bit is cleared by a system-level POR or BOD reset as well as a by the RTC_ENA bit (bit 7 in this register). On modules not equipped with a sub-second counter, this bit will always read-back as a '0'.
- *  0b1..The 32 KHz sub-second counter is enabled (if implemented). Counting commences on the start of the first one-second interval after this bit is set. Note: This bit can only be set after the RTC_ENA bit (bit 7) is set by a previous write operation. Note: The RTC sub-second counter must be re-enabled whenever the chip exits deep power-down mode.
+ *  0b0..The sub-second counter (if implemented) is disabled. This bit is cleared by a system-level POR or BOD
+ *       reset as well as a by the RTC_ENA bit (bit 7 in this register). On modules not equipped with a sub-second
+ *       counter, this bit will always read-back as a '0'.
+ *  0b1..The 32 KHz sub-second counter is enabled (if implemented). Counting commences on the start of the first
+ *       one-second interval after this bit is set. Note: This bit can only be set after the RTC_ENA bit (bit 7) is
+ *       set by a previous write operation. Note: The RTC sub-second counter must be re-enabled whenever the chip
+ *       exits deep power-down mode.
  */
 #define RTC_CTRL_RTC_SUBSEC_ENA(x)               (((uint32_t)(((uint32_t)(x)) << RTC_CTRL_RTC_SUBSEC_ENA_SHIFT)) & RTC_CTRL_RTC_SUBSEC_ENA_MASK)
 /*! @} */
@@ -13726,20 +14637,20 @@ typedef struct {
   __IO uint32_t CONEN;                             /**< SCT conflict interrupt enable register, offset: 0xF8 */
   __IO uint32_t CONFLAG;                           /**< SCT conflict flag register, offset: 0xFC */
   union {                                          /* offset: 0x100 */
-    __IO uint32_t SCTCAP[10];                        /**< SCT capture register of capture channel, array offset: 0x100, array step: 0x4 */
-    __IO uint32_t SCTMATCH[10];                      /**< SCT match value register of match channels, array offset: 0x100, array step: 0x4 */
+    __IO uint32_t SCTCAP[16];                        /**< SCT capture register of capture channel, array offset: 0x100, array step: 0x4 */
+    __IO uint32_t SCTMATCH[16];                      /**< SCT match value register of match channels, array offset: 0x100, array step: 0x4 */
   };
-       uint8_t RESERVED_2[216];
+       uint8_t RESERVED_2[192];
   union {                                          /* offset: 0x200 */
-    __IO uint32_t SCTCAPCTRL[10];                    /**< SCT capture control register, array offset: 0x200, array step: 0x4 */
-    __IO uint32_t SCTMATCHREL[10];                   /**< SCT match reload value register, array offset: 0x200, array step: 0x4 */
+    __IO uint32_t SCTCAPCTRL[16];                    /**< SCT capture control register, array offset: 0x200, array step: 0x4 */
+    __IO uint32_t SCTMATCHREL[16];                   /**< SCT match reload value register, array offset: 0x200, array step: 0x4 */
   };
-       uint8_t RESERVED_3[216];
+       uint8_t RESERVED_3[192];
   struct {                                         /* offset: 0x300, array step: 0x8 */
     __IO uint32_t STATE;                             /**< SCT event state register 0, array offset: 0x300, array step: 0x8 */
     __IO uint32_t CTRL;                              /**< SCT event control register 0, array offset: 0x304, array step: 0x8 */
-  } EVENT[10];
-       uint8_t RESERVED_4[432];
+  } EVENT[16];
+       uint8_t RESERVED_4[384];
   struct {                                         /* offset: 0x500, array step: 0x8 */
     __IO uint32_t SET;                               /**< SCT output 0 set register, array offset: 0x500, array step: 0x8 */
     __IO uint32_t CLR;                               /**< SCT output 0 clear register, array offset: 0x504, array step: 0x8 */
@@ -13768,14 +14679,23 @@ typedef struct {
 #define SCT_CONFIG_CLKMODE_SHIFT                 (1U)
 /*! CLKMODE - SCT clock mode
  *  0b00..System Clock Mode. The system clock clocks the entire SCT module including the counter(s) and counter prescalers.
- *  0b01..Sampled System Clock Mode. The system clock clocks the SCT module, but the counter and prescalers are only enabled to count when the designated edge is detected on the input selected by the CKSEL field. The minimum pulse width on the selected clock-gate input is 1 bus clock period. This mode is the high-performance, sampled-clock mode.
- *  0b10..SCT Input Clock Mode. The input/edge selected by the CKSEL field clocks the SCT module, including the counters and prescalers, after first being synchronized to the system clock. The minimum pulse width on the clock input is 1 bus clock period. This mode is the low-power, sampled-clock mode.
- *  0b11..Asynchronous Mode. The entire SCT module is clocked directly by the input/edge selected by the CKSEL field. In this mode, the SCT outputs are switched synchronously to the SCT input clock - not the system clock. The input clock rate must be at least half the system clock rate and can be the same or faster than the system clock.
+ *  0b01..Sampled System Clock Mode. The system clock clocks the SCT module, but the counter and prescalers are
+ *        only enabled to count when the designated edge is detected on the input selected by the CKSEL field. The
+ *        minimum pulse width on the selected clock-gate input is 1 bus clock period. This mode is the
+ *        high-performance, sampled-clock mode.
+ *  0b10..SCT Input Clock Mode. The input/edge selected by the CKSEL field clocks the SCT module, including the
+ *        counters and prescalers, after first being synchronized to the system clock. The minimum pulse width on the
+ *        clock input is 1 bus clock period. This mode is the low-power, sampled-clock mode.
+ *  0b11..Asynchronous Mode. The entire SCT module is clocked directly by the input/edge selected by the CKSEL
+ *        field. In this mode, the SCT outputs are switched synchronously to the SCT input clock - not the system
+ *        clock. The input clock rate must be at least half the system clock rate and can be the same or faster than
+ *        the system clock.
  */
 #define SCT_CONFIG_CLKMODE(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_CONFIG_CLKMODE_SHIFT)) & SCT_CONFIG_CLKMODE_MASK)
 #define SCT_CONFIG_CKSEL_MASK                    (0x78U)
 #define SCT_CONFIG_CKSEL_SHIFT                   (3U)
-/*! CKSEL - SCT clock select. The specific functionality of the designated input/edge is dependent on the CLKMODE bit selection in this register.
+/*! CKSEL - SCT clock select. The specific functionality of the designated input/edge is dependent
+ *    on the CLKMODE bit selection in this register.
  *  0b0000..Rising edges on input 0.
  *  0b0001..Falling edges on input 0.
  *  0b0010..Rising edges on input 1.
@@ -14379,7 +15299,7 @@ typedef struct {
 /*! @} */
 
 /* The count of SCT_SCTCAP */
-#define SCT_SCTCAP_COUNT                         (10U)
+#define SCT_SCTCAP_COUNT                         (16U)
 
 /*! @name SCTMATCH - SCT match value register of match channels */
 /*! @{ */
@@ -14392,7 +15312,7 @@ typedef struct {
 /*! @} */
 
 /* The count of SCT_SCTMATCH */
-#define SCT_SCTMATCH_COUNT                       (10U)
+#define SCT_SCTMATCH_COUNT                       (16U)
 
 /*! @name SCTCAPCTRL - SCT capture control register */
 /*! @{ */
@@ -14405,7 +15325,7 @@ typedef struct {
 /*! @} */
 
 /* The count of SCT_SCTCAPCTRL */
-#define SCT_SCTCAPCTRL_COUNT                     (10U)
+#define SCT_SCTCAPCTRL_COUNT                     (16U)
 
 /*! @name SCTMATCHREL - SCT match reload value register */
 /*! @{ */
@@ -14418,7 +15338,7 @@ typedef struct {
 /*! @} */
 
 /* The count of SCT_SCTMATCHREL */
-#define SCT_SCTMATCHREL_COUNT                    (10U)
+#define SCT_SCTMATCHREL_COUNT                    (16U)
 
 /*! @name EVENT_STATE - SCT event state register 0 */
 /*! @{ */
@@ -14428,7 +15348,7 @@ typedef struct {
 /*! @} */
 
 /* The count of SCT_EVENT_STATE */
-#define SCT_EVENT_STATE_COUNT                    (10U)
+#define SCT_EVENT_STATE_COUNT                    (16U)
 
 /*! @name EVENT_CTRL - SCT event control register 0 */
 /*! @{ */
@@ -14454,7 +15374,9 @@ typedef struct {
 #define SCT_EVENT_CTRL_IOSEL(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_IOSEL_SHIFT)) & SCT_EVENT_CTRL_IOSEL_MASK)
 #define SCT_EVENT_CTRL_IOCOND_MASK               (0xC00U)
 #define SCT_EVENT_CTRL_IOCOND_SHIFT              (10U)
-/*! IOCOND - Selects the I/O condition for event n. (The detection of edges on outputs lag the conditions that switch the outputs by one SCT clock). In order to guarantee proper edge/state detection, an input must have a minimum pulse width of at least one SCT clock period .
+/*! IOCOND - Selects the I/O condition for event n. (The detection of edges on outputs lag the
+ *    conditions that switch the outputs by one SCT clock). In order to guarantee proper edge/state
+ *    detection, an input must have a minimum pulse width of at least one SCT clock period .
  *  0b00..LOW
  *  0b01..Rise
  *  0b10..Fall
@@ -14472,7 +15394,8 @@ typedef struct {
 #define SCT_EVENT_CTRL_COMBMODE(x)               (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_COMBMODE_SHIFT)) & SCT_EVENT_CTRL_COMBMODE_MASK)
 #define SCT_EVENT_CTRL_STATELD_MASK              (0x4000U)
 #define SCT_EVENT_CTRL_STATELD_SHIFT             (14U)
-/*! STATELD - This bit controls how the STATEV value modifies the state selected by HEVENT when this event is the highest-numbered event occurring for that state.
+/*! STATELD - This bit controls how the STATEV value modifies the state selected by HEVENT when this
+ *    event is the highest-numbered event occurring for that state.
  *  0b0..STATEV value is added into STATE (the carry-out is ignored).
  *  0b1..STATEV value is loaded into STATE.
  */
@@ -14485,7 +15408,8 @@ typedef struct {
 #define SCT_EVENT_CTRL_MATCHMEM(x)               (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_MATCHMEM_SHIFT)) & SCT_EVENT_CTRL_MATCHMEM_MASK)
 #define SCT_EVENT_CTRL_DIRECTION_MASK            (0x600000U)
 #define SCT_EVENT_CTRL_DIRECTION_SHIFT           (21U)
-/*! DIRECTION - Direction qualifier for event generation. This field only applies when the counters are operating in BIDIR mode. If BIDIR = 0, the SCT ignores this field. Value 0x3 is reserved.
+/*! DIRECTION - Direction qualifier for event generation. This field only applies when the counters
+ *    are operating in BIDIR mode. If BIDIR = 0, the SCT ignores this field. Value 0x3 is reserved.
  *  0b00..Direction independent. This event is triggered regardless of the count direction.
  *  0b01..Counting up. This event is triggered only during up-counting when BIDIR = 1.
  *  0b10..Counting down. This event is triggered only during down-counting when BIDIR = 1.
@@ -14494,7 +15418,7 @@ typedef struct {
 /*! @} */
 
 /* The count of SCT_EVENT_CTRL */
-#define SCT_EVENT_CTRL_COUNT                     (10U)
+#define SCT_EVENT_CTRL_COUNT                     (16U)
 
 /*! @name OUT_SET - SCT output 0 set register */
 /*! @{ */
@@ -15339,8 +16263,10 @@ typedef struct {
 #define SPI_CFG_CPHA_MASK                        (0x10U)
 #define SPI_CFG_CPHA_SHIFT                       (4U)
 /*! CPHA - Clock Phase select.
- *  0b0..Change. The SPI captures serial data on the first clock transition of the transfer (when the clock changes away from the rest state). Data is changed on the following edge.
- *  0b1..Capture. The SPI changes serial data on the first clock transition of the transfer (when the clock changes away from the rest state). Data is captured on the following edge.
+ *  0b0..Change. The SPI captures serial data on the first clock transition of the transfer (when the clock
+ *       changes away from the rest state). Data is changed on the following edge.
+ *  0b1..Capture. The SPI changes serial data on the first clock transition of the transfer (when the clock
+ *       changes away from the rest state). Data is captured on the following edge.
  */
 #define SPI_CFG_CPHA(x)                          (((uint32_t)(((uint32_t)(x)) << SPI_CFG_CPHA_SHIFT)) & SPI_CFG_CPHA_MASK)
 #define SPI_CFG_CPOL_MASK                        (0x20U)
@@ -15352,7 +16278,8 @@ typedef struct {
 #define SPI_CFG_CPOL(x)                          (((uint32_t)(((uint32_t)(x)) << SPI_CFG_CPOL_SHIFT)) & SPI_CFG_CPOL_MASK)
 #define SPI_CFG_LOOP_MASK                        (0x80U)
 #define SPI_CFG_LOOP_SHIFT                       (7U)
-/*! LOOP - Loopback mode enable. Loopback mode applies only to Master mode, and connects transmit and receive data connected together to allow simple software testing.
+/*! LOOP - Loopback mode enable. Loopback mode applies only to Master mode, and connects transmit
+ *    and receive data connected together to allow simple software testing.
  *  0b0..Disabled.
  *  0b1..Enabled.
  */
@@ -15515,16 +16442,26 @@ typedef struct {
 #define SPI_FIFOCFG_DMARX(x)                     (((uint32_t)(((uint32_t)(x)) << SPI_FIFOCFG_DMARX_SHIFT)) & SPI_FIFOCFG_DMARX_MASK)
 #define SPI_FIFOCFG_WAKETX_MASK                  (0x4000U)
 #define SPI_FIFOCFG_WAKETX_SHIFT                 (14U)
-/*! WAKETX - Wake-up for transmit FIFO level. This allows the device to be woken from reduced power modes (up to power-down, as long as the peripheral function works in that power mode) without enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware Wake-up control register.
+/*! WAKETX - Wake-up for transmit FIFO level. This allows the device to be woken from reduced power
+ *    modes (up to power-down, as long as the peripheral function works in that power mode) without
+ *    enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The
+ *    CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware
+ *    Wake-up control register.
  *  0b0..Only enabled interrupts will wake up the device form reduced power modes.
- *  0b1..A device wake-up for DMA will occur if the transmit FIFO level reaches the value specified by TXLVL in FIFOTRIG, even when the TXLVL interrupt is not enabled.
+ *  0b1..A device wake-up for DMA will occur if the transmit FIFO level reaches the value specified by TXLVL in
+ *       FIFOTRIG, even when the TXLVL interrupt is not enabled.
  */
 #define SPI_FIFOCFG_WAKETX(x)                    (((uint32_t)(((uint32_t)(x)) << SPI_FIFOCFG_WAKETX_SHIFT)) & SPI_FIFOCFG_WAKETX_MASK)
 #define SPI_FIFOCFG_WAKERX_MASK                  (0x8000U)
 #define SPI_FIFOCFG_WAKERX_SHIFT                 (15U)
-/*! WAKERX - Wake-up for receive FIFO level. This allows the device to be woken from reduced power modes (up to power-down, as long as the peripheral function works in that power mode) without enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware Wake-up control register.
+/*! WAKERX - Wake-up for receive FIFO level. This allows the device to be woken from reduced power
+ *    modes (up to power-down, as long as the peripheral function works in that power mode) without
+ *    enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The
+ *    CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware
+ *    Wake-up control register.
  *  0b0..Only enabled interrupts will wake up the device form reduced power modes.
- *  0b1..A device wake-up for DMA will occur if the receive FIFO level reaches the value specified by RXLVL in FIFOTRIG, even when the RXLVL interrupt is not enabled.
+ *  0b1..A device wake-up for DMA will occur if the receive FIFO level reaches the value specified by RXLVL in
+ *       FIFOTRIG, even when the RXLVL interrupt is not enabled.
  */
 #define SPI_FIFOCFG_WAKERX(x)                    (((uint32_t)(((uint32_t)(x)) << SPI_FIFOCFG_WAKERX_SHIFT)) & SPI_FIFOCFG_WAKERX_MASK)
 #define SPI_FIFOCFG_EMPTYTX_MASK                 (0x10000U)
@@ -15577,14 +16514,16 @@ typedef struct {
 /*! @{ */
 #define SPI_FIFOTRIG_TXLVLENA_MASK               (0x1U)
 #define SPI_FIFOTRIG_TXLVLENA_SHIFT              (0U)
-/*! TXLVLENA - Transmit FIFO level trigger enable. This trigger will become an interrupt if enabled in FIFOINTENSET, or a DMA trigger if DMATX in FIFOCFG is set.
+/*! TXLVLENA - Transmit FIFO level trigger enable. This trigger will become an interrupt if enabled
+ *    in FIFOINTENSET, or a DMA trigger if DMATX in FIFOCFG is set.
  *  0b0..Transmit FIFO level does not generate a FIFO level trigger.
  *  0b1..An trigger will be generated if the transmit FIFO level reaches the value specified by the TXLVL field in this register.
  */
 #define SPI_FIFOTRIG_TXLVLENA(x)                 (((uint32_t)(((uint32_t)(x)) << SPI_FIFOTRIG_TXLVLENA_SHIFT)) & SPI_FIFOTRIG_TXLVLENA_MASK)
 #define SPI_FIFOTRIG_RXLVLENA_MASK               (0x2U)
 #define SPI_FIFOTRIG_RXLVLENA_SHIFT              (1U)
-/*! RXLVLENA - Receive FIFO level trigger enable. This trigger will become an interrupt if enabled in FIFOINTENSET, or a DMA trigger if DMARX in FIFOCFG is set.
+/*! RXLVLENA - Receive FIFO level trigger enable. This trigger will become an interrupt if enabled
+ *    in FIFOINTENSET, or a DMA trigger if DMARX in FIFOCFG is set.
  *  0b0..Receive FIFO level does not generate a FIFO level trigger.
  *  0b1..An trigger will be generated if the receive FIFO level reaches the value specified by the RXLVL field in this register.
  */
@@ -15615,16 +16554,20 @@ typedef struct {
 #define SPI_FIFOINTENSET_RXERR(x)                (((uint32_t)(((uint32_t)(x)) << SPI_FIFOINTENSET_RXERR_SHIFT)) & SPI_FIFOINTENSET_RXERR_MASK)
 #define SPI_FIFOINTENSET_TXLVL_MASK              (0x4U)
 #define SPI_FIFOINTENSET_TXLVL_SHIFT             (2U)
-/*! TXLVL - Determines whether an interrupt occurs when a the transmit FIFO reaches the level specified by the TXLVL field in the FIFOTRIG register.
+/*! TXLVL - Determines whether an interrupt occurs when a the transmit FIFO reaches the level
+ *    specified by the TXLVL field in the FIFOTRIG register.
  *  0b0..No interrupt will be generated based on the TX FIFO level.
- *  0b1..If TXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the TX FIFO level decreases to the level specified by TXLVL in the FIFOTRIG register.
+ *  0b1..If TXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the TX FIFO level decreases
+ *       to the level specified by TXLVL in the FIFOTRIG register.
  */
 #define SPI_FIFOINTENSET_TXLVL(x)                (((uint32_t)(((uint32_t)(x)) << SPI_FIFOINTENSET_TXLVL_SHIFT)) & SPI_FIFOINTENSET_TXLVL_MASK)
 #define SPI_FIFOINTENSET_RXLVL_MASK              (0x8U)
 #define SPI_FIFOINTENSET_RXLVL_SHIFT             (3U)
-/*! RXLVL - Determines whether an interrupt occurs when a the receive FIFO reaches the level specified by the TXLVL field in the FIFOTRIG register.
+/*! RXLVL - Determines whether an interrupt occurs when a the receive FIFO reaches the level
+ *    specified by the TXLVL field in the FIFOTRIG register.
  *  0b0..No interrupt will be generated based on the RX FIFO level.
- *  0b1..If RXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the when the RX FIFO level increases to the level specified by RXLVL in the FIFOTRIG register.
+ *  0b1..If RXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the when the RX FIFO level
+ *       increases to the level specified by RXLVL in the FIFOTRIG register.
  */
 #define SPI_FIFOINTENSET_RXLVL(x)                (((uint32_t)(((uint32_t)(x)) << SPI_FIFOINTENSET_RXLVL_SHIFT)) & SPI_FIFOINTENSET_RXLVL_MASK)
 /*! @} */
@@ -15699,23 +16642,33 @@ typedef struct {
 #define SPI_FIFOWR_TXSSEL3_N(x)                  (((uint32_t)(((uint32_t)(x)) << SPI_FIFOWR_TXSSEL3_N_SHIFT)) & SPI_FIFOWR_TXSSEL3_N_MASK)
 #define SPI_FIFOWR_EOT_MASK                      (0x100000U)
 #define SPI_FIFOWR_EOT_SHIFT                     (20U)
-/*! EOT - End of transfer. The asserted SSEL will be deasserted at the end of a transfer and remain so far at least the time specified by the Transfer_delay value in the DLY register.
+/*! EOT - End of transfer. The asserted SSEL will be deasserted at the end of a transfer and remain
+ *    so far at least the time specified by the Transfer_delay value in the DLY register.
  *  0b0..SSEL not deasserted. This piece of data is not treated as the end of a transfer. SSEL will not be deasserted at the end of this data.
  *  0b1..SSEL deasserted. This piece of data is treated as the end of a transfer. SSEL will be deasserted at the end of this piece of data.
  */
 #define SPI_FIFOWR_EOT(x)                        (((uint32_t)(((uint32_t)(x)) << SPI_FIFOWR_EOT_SHIFT)) & SPI_FIFOWR_EOT_MASK)
 #define SPI_FIFOWR_EOF_MASK                      (0x200000U)
 #define SPI_FIFOWR_EOF_SHIFT                     (21U)
-/*! EOF - End of frame. Between frames, a delay may be inserted, as defined by the Frame_delay value in the DLY register. The end of a frame may not be particularly meaningful if the Frame_delay value = 0. This control can be used as part of the support for frame lengths greater than 16 bits.
+/*! EOF - End of frame. Between frames, a delay may be inserted, as defined by the Frame_delay value
+ *    in the DLY register. The end of a frame may not be particularly meaningful if the Frame_delay
+ *    value = 0. This control can be used as part of the support for frame lengths greater than 16
+ *    bits.
  *  0b0..Data not EOF. This piece of data transmitted is not treated as the end of a frame.
- *  0b1..Data EOF. This piece of data is treated as the end of a frame, causing the Frame_delay time to be inserted before subsequent data is transmitted.
+ *  0b1..Data EOF. This piece of data is treated as the end of a frame, causing the Frame_delay time to be
+ *       inserted before subsequent data is transmitted.
  */
 #define SPI_FIFOWR_EOF(x)                        (((uint32_t)(((uint32_t)(x)) << SPI_FIFOWR_EOF_SHIFT)) & SPI_FIFOWR_EOF_MASK)
 #define SPI_FIFOWR_RXIGNORE_MASK                 (0x400000U)
 #define SPI_FIFOWR_RXIGNORE_SHIFT                (22U)
-/*! RXIGNORE - Receive Ignore. This allows data to be transmitted using the SPI without the need to read unneeded data from the receiver. Setting this bit simplifies the transmit process and can be used with the DMA.
- *  0b0..Read received data. Received data must be read in order to allow transmission to progress. SPI transmit will halt when the receive data FIFO is full. In slave mode, an overrun error will occur if received data is not read before new data is received.
- *  0b1..Ignore received data. Received data is ignored, allowing transmission without reading unneeded received data. No receiver flags are generated.
+/*! RXIGNORE - Receive Ignore. This allows data to be transmitted using the SPI without the need to
+ *    read unneeded data from the receiver. Setting this bit simplifies the transmit process and can
+ *    be used with the DMA.
+ *  0b0..Read received data. Received data must be read in order to allow transmission to progress. SPI transmit
+ *       will halt when the receive data FIFO is full. In slave mode, an overrun error will occur if received data
+ *       is not read before new data is received.
+ *  0b1..Ignore received data. Received data is ignored, allowing transmission without reading unneeded received
+ *       data. No receiver flags are generated.
  */
 #define SPI_FIFOWR_RXIGNORE(x)                   (((uint32_t)(((uint32_t)(x)) << SPI_FIFOWR_RXIGNORE_SHIFT)) & SPI_FIFOWR_RXIGNORE_MASK)
 #define SPI_FIFOWR_LEN_MASK                      (0xF000000U)
@@ -15914,7 +16867,7 @@ typedef struct {
   #define SPI_BASE_PTRS                            { SPI0, SPI1, SPI2, SPI3, SPI4, SPI5, SPI6, SPI7, SPI8 }
 #endif
 /** Interrupt vectors for the SPI peripheral type */
-#define SPI_IRQS                                 { FLEXCOMM0_IRQn, FLEXCOMM1_IRQn, FLEXCOMM2_IRQn, FLEXCOMM3_IRQn, FLEXCOMM4_IRQn, FLEXCOMM5_IRQn, FLEXCOMM6_IRQn, FLEXCOMM7_IRQn, LSPI_HS_IRQn }
+#define SPI_IRQS                                 { FLEXCOMM0_IRQn, FLEXCOMM1_IRQn, FLEXCOMM2_IRQn, FLEXCOMM3_IRQn, FLEXCOMM4_IRQn, FLEXCOMM5_IRQn, FLEXCOMM6_IRQn, FLEXCOMM7_IRQn, FLEXCOMM8_IRQn }
 
 /*!
  * @}
@@ -18410,14 +19363,16 @@ typedef struct {
 #define SYSCON_USB1CLKCTRL_AP_HS_HOST_CLK(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1CLKCTRL_AP_HS_HOST_CLK_SHIFT)) & SYSCON_USB1CLKCTRL_AP_HS_HOST_CLK_MASK)
 #define SYSCON_USB1CLKCTRL_POL_HS_HOST_CLK_MASK  (0x8U)
 #define SYSCON_USB1CLKCTRL_POL_HS_HOST_CLK_SHIFT (3U)
-/*! POL_HS_HOST_CLK - USB1 Host need_clock polarity for triggering the USB1 wake-up interrupt: 0 Falling edge of device need_clock triggers wake-up.
+/*! POL_HS_HOST_CLK - USB1 Host need_clock polarity for triggering the USB1 wake-up interrupt: 0
+ *    Falling edge of device need_clock triggers wake-up.
  *  0b0..Falling edge of device need_clock triggers wake-up.
  *  0b1..Rising edge of device need_clock triggers wake-up.
  */
 #define SYSCON_USB1CLKCTRL_POL_HS_HOST_CLK(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1CLKCTRL_POL_HS_HOST_CLK_SHIFT)) & SYSCON_USB1CLKCTRL_POL_HS_HOST_CLK_MASK)
 #define SYSCON_USB1CLKCTRL_HS_DEV_WAKEUP_N_MASK  (0x10U)
 #define SYSCON_USB1CLKCTRL_HS_DEV_WAKEUP_N_SHIFT (4U)
-/*! HS_DEV_WAKEUP_N - External user wake-up signal for device mode; asserting this signal (active low) will result in exiting the low power mode; input to synchronous control logic:.
+/*! HS_DEV_WAKEUP_N - External user wake-up signal for device mode; asserting this signal (active
+ *    low) will result in exiting the low power mode; input to synchronous control logic:.
  *  0b0..Forces USB1 PHY to wake-up.
  *  0b1..Normal USB1 PHY behavior.
  */
@@ -19718,7 +20673,8 @@ typedef struct {
 #define SYSCON_COMP_INT_CTRL_INT_SOURCE_SHIFT    (5U)
 /*! INT_SOURCE - Select which Analog comparator output (filtered our un-filtered) is used for interrupt detection.
  *  0b0..Select Analog Comparator filtered output as input for interrupt detection.
- *  0b1..Select Analog Comparator raw output (unfiltered) as input for interrupt detection. Must be used when Analog comparator is used as wake up source in Power down mode.
+ *  0b1..Select Analog Comparator raw output (unfiltered) as input for interrupt detection. Must be used when
+ *       Analog comparator is used as wake up source in Power down mode.
  */
 #define SYSCON_COMP_INT_CTRL_INT_SOURCE(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_COMP_INT_CTRL_INT_SOURCE_SHIFT)) & SYSCON_COMP_INT_CTRL_INT_SOURCE_MASK)
 /*! @} */
@@ -19886,7 +20842,8 @@ typedef struct {
 /*! @{ */
 #define SYSCON_DEBUG_LOCK_EN_LOCK_ALL_MASK       (0xFU)
 #define SYSCON_DEBUG_LOCK_EN_LOCK_ALL_SHIFT      (0U)
-/*! LOCK_ALL - Control write access to CODESECURITYPROTTEST, CODESECURITYPROTCPU0, CODESECURITYPROTCPU1, CM33_DEBUG_FEATURES, MCM33_DEBUG_FEATURES and DBG_AUTH_SCRATCH registers.
+/*! LOCK_ALL - Control write access to CODESECURITYPROTTEST, CODESECURITYPROTCPU0,
+ *    CODESECURITYPROTCPU1, CM33_DEBUG_FEATURES, MCM33_DEBUG_FEATURES and DBG_AUTH_SCRATCH registers.
  *  0b1010..1010: Enable write access to all 6 registers.
  *  0b0000..Any other value than b1010: disable write access to all 6 registers.
  */
@@ -20461,7 +21418,10 @@ typedef struct {
 #define USART_CFG_ENABLE_MASK                    (0x1U)
 #define USART_CFG_ENABLE_SHIFT                   (0U)
 /*! ENABLE - USART Enable.
- *  0b0..Disabled. The USART is disabled and the internal state machine and counters are reset. While Enable = 0, all USART interrupts and DMA transfers are disabled. When Enable is set again, CFG and most other control bits remain unchanged. When re-enabled, the USART will immediately be ready to transmit because the transmitter has been reset and is therefore available.
+ *  0b0..Disabled. The USART is disabled and the internal state machine and counters are reset. While Enable = 0,
+ *       all USART interrupts and DMA transfers are disabled. When Enable is set again, CFG and most other control
+ *       bits remain unchanged. When re-enabled, the USART will immediately be ready to transmit because the
+ *       transmitter has been reset and is therefore available.
  *  0b1..Enabled. The USART is enabled for operation.
  */
 #define USART_CFG_ENABLE(x)                      (((uint32_t)(((uint32_t)(x)) << USART_CFG_ENABLE_SHIFT)) & USART_CFG_ENABLE_MASK)
@@ -20479,8 +21439,10 @@ typedef struct {
 /*! PARITYSEL - Selects what type of parity is used by the USART.
  *  0b00..No parity.
  *  0b01..Reserved.
- *  0b10..Even parity. Adds a bit to each character such that the number of 1s in a transmitted character is even, and the number of 1s in a received character is expected to be even.
- *  0b11..Odd parity. Adds a bit to each character such that the number of 1s in a transmitted character is odd, and the number of 1s in a received character is expected to be odd.
+ *  0b10..Even parity. Adds a bit to each character such that the number of 1s in a transmitted character is even,
+ *        and the number of 1s in a received character is expected to be even.
+ *  0b11..Odd parity. Adds a bit to each character such that the number of 1s in a transmitted character is odd,
+ *        and the number of 1s in a received character is expected to be odd.
  */
 #define USART_CFG_PARITYSEL(x)                   (((uint32_t)(((uint32_t)(x)) << USART_CFG_PARITYSEL_SHIFT)) & USART_CFG_PARITYSEL_MASK)
 #define USART_CFG_STOPLEN_MASK                   (0x40U)
@@ -20506,7 +21468,8 @@ typedef struct {
 #define USART_CFG_LINMODE(x)                     (((uint32_t)(((uint32_t)(x)) << USART_CFG_LINMODE_SHIFT)) & USART_CFG_LINMODE_MASK)
 #define USART_CFG_CTSEN_MASK                     (0x200U)
 #define USART_CFG_CTSEN_SHIFT                    (9U)
-/*! CTSEN - CTS Enable. Determines whether CTS is used for flow control. CTS can be from the input pin, or from the USART's own RTS if loopback mode is enabled.
+/*! CTSEN - CTS Enable. Determines whether CTS is used for flow control. CTS can be from the input
+ *    pin, or from the USART's own RTS if loopback mode is enabled.
  *  0b0..No flow control. The transmitter does not receive any automatic flow control signal.
  *  0b1..Flow control enabled. The transmitter uses the CTS input (or RTS output in loopback mode) for flow control purposes.
  */
@@ -20536,21 +21499,28 @@ typedef struct {
 #define USART_CFG_LOOP_SHIFT                     (15U)
 /*! LOOP - Selects data loopback mode.
  *  0b0..Normal operation.
- *  0b1..Loopback mode. This provides a mechanism to perform diagnostic loopback testing for USART data. Serial data from the transmitter (Un_TXD) is connected internally to serial input of the receive (Un_RXD). Un_TXD and Un_RTS activity will also appear on external pins if these functions are configured to appear on device pins. The receiver RTS signal is also looped back to CTS and performs flow control if enabled by CTSEN.
+ *  0b1..Loopback mode. This provides a mechanism to perform diagnostic loopback testing for USART data. Serial
+ *       data from the transmitter (Un_TXD) is connected internally to serial input of the receive (Un_RXD). Un_TXD
+ *       and Un_RTS activity will also appear on external pins if these functions are configured to appear on device
+ *       pins. The receiver RTS signal is also looped back to CTS and performs flow control if enabled by CTSEN.
  */
 #define USART_CFG_LOOP(x)                        (((uint32_t)(((uint32_t)(x)) << USART_CFG_LOOP_SHIFT)) & USART_CFG_LOOP_MASK)
 #define USART_CFG_OETA_MASK                      (0x40000U)
 #define USART_CFG_OETA_SHIFT                     (18U)
 /*! OETA - Output Enable Turnaround time enable for RS-485 operation.
  *  0b0..Disabled. If selected by OESEL, the Output Enable signal deasserted at the end of the last stop bit of a transmission.
- *  0b1..Enabled. If selected by OESEL, the Output Enable signal remains asserted for one character time after the end of the last stop bit of a transmission. OE will also remain asserted if another transmit begins before it is deasserted.
+ *  0b1..Enabled. If selected by OESEL, the Output Enable signal remains asserted for one character time after the
+ *       end of the last stop bit of a transmission. OE will also remain asserted if another transmit begins
+ *       before it is deasserted.
  */
 #define USART_CFG_OETA(x)                        (((uint32_t)(((uint32_t)(x)) << USART_CFG_OETA_SHIFT)) & USART_CFG_OETA_MASK)
 #define USART_CFG_AUTOADDR_MASK                  (0x80000U)
 #define USART_CFG_AUTOADDR_SHIFT                 (19U)
 /*! AUTOADDR - Automatic Address matching enable.
- *  0b0..Disabled. When addressing is enabled by ADDRDET, address matching is done by software. This provides the possibility of versatile addressing (e.g. respond to more than one address).
- *  0b1..Enabled. When addressing is enabled by ADDRDET, address matching is done by hardware, using the value in the ADDR register as the address to match.
+ *  0b0..Disabled. When addressing is enabled by ADDRDET, address matching is done by software. This provides the
+ *       possibility of versatile addressing (e.g. respond to more than one address).
+ *  0b1..Enabled. When addressing is enabled by ADDRDET, address matching is done by hardware, using the value in
+ *       the ADDR register as the address to match.
  */
 #define USART_CFG_AUTOADDR(x)                    (((uint32_t)(((uint32_t)(x)) << USART_CFG_AUTOADDR_SHIFT)) & USART_CFG_AUTOADDR_MASK)
 #define USART_CFG_OESEL_MASK                     (0x100000U)
@@ -20570,15 +21540,19 @@ typedef struct {
 #define USART_CFG_RXPOL_MASK                     (0x400000U)
 #define USART_CFG_RXPOL_SHIFT                    (22U)
 /*! RXPOL - Receive data polarity.
- *  0b0..Standard. The RX signal is used as it arrives from the pin. This means that the RX rest value is 1, start bit is 0, data is not inverted, and the stop bit is 1.
- *  0b1..Inverted. The RX signal is inverted before being used by the USART. This means that the RX rest value is 0, start bit is 1, data is inverted, and the stop bit is 0.
+ *  0b0..Standard. The RX signal is used as it arrives from the pin. This means that the RX rest value is 1, start
+ *       bit is 0, data is not inverted, and the stop bit is 1.
+ *  0b1..Inverted. The RX signal is inverted before being used by the USART. This means that the RX rest value is
+ *       0, start bit is 1, data is inverted, and the stop bit is 0.
  */
 #define USART_CFG_RXPOL(x)                       (((uint32_t)(((uint32_t)(x)) << USART_CFG_RXPOL_SHIFT)) & USART_CFG_RXPOL_MASK)
 #define USART_CFG_TXPOL_MASK                     (0x800000U)
 #define USART_CFG_TXPOL_SHIFT                    (23U)
 /*! TXPOL - Transmit data polarity.
- *  0b0..Standard. The TX signal is sent out without change. This means that the TX rest value is 1, start bit is 0, data is not inverted, and the stop bit is 1.
- *  0b1..Inverted. The TX signal is inverted by the USART before being sent out. This means that the TX rest value is 0, start bit is 1, data is inverted, and the stop bit is 0.
+ *  0b0..Standard. The TX signal is sent out without change. This means that the TX rest value is 1, start bit is
+ *       0, data is not inverted, and the stop bit is 1.
+ *  0b1..Inverted. The TX signal is inverted by the USART before being sent out. This means that the TX rest value
+ *       is 0, start bit is 1, data is inverted, and the stop bit is 0.
  */
 #define USART_CFG_TXPOL(x)                       (((uint32_t)(((uint32_t)(x)) << USART_CFG_TXPOL_SHIFT)) & USART_CFG_TXPOL_MASK)
 /*! @} */
@@ -20589,28 +21563,38 @@ typedef struct {
 #define USART_CTL_TXBRKEN_SHIFT                  (1U)
 /*! TXBRKEN - Break Enable.
  *  0b0..Normal operation.
- *  0b1..Continuous break. Continuous break is sent immediately when this bit is set, and remains until this bit is cleared. A break may be sent without danger of corrupting any currently transmitting character if the transmitter is first disabled (TXDIS in CTL is set) and then waiting for the transmitter to be disabled (TXDISINT in STAT = 1) before writing 1 to TXBRKEN.
+ *  0b1..Continuous break. Continuous break is sent immediately when this bit is set, and remains until this bit
+ *       is cleared. A break may be sent without danger of corrupting any currently transmitting character if the
+ *       transmitter is first disabled (TXDIS in CTL is set) and then waiting for the transmitter to be disabled
+ *       (TXDISINT in STAT = 1) before writing 1 to TXBRKEN.
  */
 #define USART_CTL_TXBRKEN(x)                     (((uint32_t)(((uint32_t)(x)) << USART_CTL_TXBRKEN_SHIFT)) & USART_CTL_TXBRKEN_MASK)
 #define USART_CTL_ADDRDET_MASK                   (0x4U)
 #define USART_CTL_ADDRDET_SHIFT                  (2U)
 /*! ADDRDET - Enable address detect mode.
  *  0b0..Disabled. The USART presents all incoming data.
- *  0b1..Enabled. The USART receiver ignores incoming data that does not have the most significant bit of the data (typically the 9th bit) = 1. When the data MSB bit = 1, the receiver treats the incoming data normally, generating a received data interrupt. Software can then check the data to see if this is an address that should be handled. If it is, the ADDRDET bit is cleared by software and further incoming data is handled normally.
+ *  0b1..Enabled. The USART receiver ignores incoming data that does not have the most significant bit of the data
+ *       (typically the 9th bit) = 1. When the data MSB bit = 1, the receiver treats the incoming data normally,
+ *       generating a received data interrupt. Software can then check the data to see if this is an address that
+ *       should be handled. If it is, the ADDRDET bit is cleared by software and further incoming data is handled
+ *       normally.
  */
 #define USART_CTL_ADDRDET(x)                     (((uint32_t)(((uint32_t)(x)) << USART_CTL_ADDRDET_SHIFT)) & USART_CTL_ADDRDET_MASK)
 #define USART_CTL_TXDIS_MASK                     (0x40U)
 #define USART_CTL_TXDIS_SHIFT                    (6U)
 /*! TXDIS - Transmit Disable.
  *  0b0..Not disabled. USART transmitter is not disabled.
- *  0b1..Disabled. USART transmitter is disabled after any character currently being transmitted is complete. This feature can be used to facilitate software flow control.
+ *  0b1..Disabled. USART transmitter is disabled after any character currently being transmitted is complete. This
+ *       feature can be used to facilitate software flow control.
  */
 #define USART_CTL_TXDIS(x)                       (((uint32_t)(((uint32_t)(x)) << USART_CTL_TXDIS_SHIFT)) & USART_CTL_TXDIS_MASK)
 #define USART_CTL_CC_MASK                        (0x100U)
 #define USART_CTL_CC_SHIFT                       (8U)
 /*! CC - Continuous Clock generation. By default, SCLK is only output while data is being transmitted in synchronous mode.
- *  0b0..Clock on character. In synchronous mode, SCLK cycles only when characters are being sent on Un_TXD or to complete a character that is being received.
- *  0b1..Continuous clock. SCLK runs continuously in synchronous mode, allowing characters to be received on Un_RxD independently from transmission on Un_TXD).
+ *  0b0..Clock on character. In synchronous mode, SCLK cycles only when characters are being sent on Un_TXD or to
+ *       complete a character that is being received.
+ *  0b1..Continuous clock. SCLK runs continuously in synchronous mode, allowing characters to be received on
+ *       Un_RxD independently from transmission on Un_TXD).
  */
 #define USART_CTL_CC(x)                          (((uint32_t)(((uint32_t)(x)) << USART_CTL_CC_SHIFT)) & USART_CTL_CC_MASK)
 #define USART_CTL_CLRCCONRX_MASK                 (0x200U)
@@ -20624,7 +21608,9 @@ typedef struct {
 #define USART_CTL_AUTOBAUD_SHIFT                 (16U)
 /*! AUTOBAUD - Autobaud enable.
  *  0b0..Disabled. USART is in normal operating mode.
- *  0b1..Enabled. USART is in autobaud mode. This bit should only be set when the USART receiver is idle. The first start bit of RX is measured and used the update the BRG register to match the received data rate. AUTOBAUD is cleared once this process is complete, or if there is an AERR.
+ *  0b1..Enabled. USART is in autobaud mode. This bit should only be set when the USART receiver is idle. The
+ *       first start bit of RX is measured and used the update the BRG register to match the received data rate.
+ *       AUTOBAUD is cleared once this process is complete, or if there is an AERR.
  */
 #define USART_CTL_AUTOBAUD(x)                    (((uint32_t)(((uint32_t)(x)) << USART_CTL_AUTOBAUD_SHIFT)) & USART_CTL_AUTOBAUD_MASK)
 /*! @} */
@@ -20818,16 +21804,26 @@ typedef struct {
 #define USART_FIFOCFG_DMARX(x)                   (((uint32_t)(((uint32_t)(x)) << USART_FIFOCFG_DMARX_SHIFT)) & USART_FIFOCFG_DMARX_MASK)
 #define USART_FIFOCFG_WAKETX_MASK                (0x4000U)
 #define USART_FIFOCFG_WAKETX_SHIFT               (14U)
-/*! WAKETX - Wake-up for transmit FIFO level. This allows the device to be woken from reduced power modes (up to power-down, as long as the peripheral function works in that power mode) without enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware Wake-up control register.
+/*! WAKETX - Wake-up for transmit FIFO level. This allows the device to be woken from reduced power
+ *    modes (up to power-down, as long as the peripheral function works in that power mode) without
+ *    enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The
+ *    CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware
+ *    Wake-up control register.
  *  0b0..Only enabled interrupts will wake up the device form reduced power modes.
- *  0b1..A device wake-up for DMA will occur if the transmit FIFO level reaches the value specified by TXLVL in FIFOTRIG, even when the TXLVL interrupt is not enabled.
+ *  0b1..A device wake-up for DMA will occur if the transmit FIFO level reaches the value specified by TXLVL in
+ *       FIFOTRIG, even when the TXLVL interrupt is not enabled.
  */
 #define USART_FIFOCFG_WAKETX(x)                  (((uint32_t)(((uint32_t)(x)) << USART_FIFOCFG_WAKETX_SHIFT)) & USART_FIFOCFG_WAKETX_MASK)
 #define USART_FIFOCFG_WAKERX_MASK                (0x8000U)
 #define USART_FIFOCFG_WAKERX_SHIFT               (15U)
-/*! WAKERX - Wake-up for receive FIFO level. This allows the device to be woken from reduced power modes (up to power-down, as long as the peripheral function works in that power mode) without enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware Wake-up control register.
+/*! WAKERX - Wake-up for receive FIFO level. This allows the device to be woken from reduced power
+ *    modes (up to power-down, as long as the peripheral function works in that power mode) without
+ *    enabling the TXLVL interrupt. Only DMA wakes up, processes data, and goes back to sleep. The
+ *    CPU will remain stopped until woken by another cause, such as DMA completion. See Hardware
+ *    Wake-up control register.
  *  0b0..Only enabled interrupts will wake up the device form reduced power modes.
- *  0b1..A device wake-up for DMA will occur if the receive FIFO level reaches the value specified by RXLVL in FIFOTRIG, even when the RXLVL interrupt is not enabled.
+ *  0b1..A device wake-up for DMA will occur if the receive FIFO level reaches the value specified by RXLVL in
+ *       FIFOTRIG, even when the RXLVL interrupt is not enabled.
  */
 #define USART_FIFOCFG_WAKERX(x)                  (((uint32_t)(((uint32_t)(x)) << USART_FIFOCFG_WAKERX_SHIFT)) & USART_FIFOCFG_WAKERX_MASK)
 #define USART_FIFOCFG_EMPTYTX_MASK               (0x10000U)
@@ -20880,14 +21876,16 @@ typedef struct {
 /*! @{ */
 #define USART_FIFOTRIG_TXLVLENA_MASK             (0x1U)
 #define USART_FIFOTRIG_TXLVLENA_SHIFT            (0U)
-/*! TXLVLENA - Transmit FIFO level trigger enable. This trigger will become an interrupt if enabled in FIFOINTENSET, or a DMA trigger if DMATX in FIFOCFG is set.
+/*! TXLVLENA - Transmit FIFO level trigger enable. This trigger will become an interrupt if enabled
+ *    in FIFOINTENSET, or a DMA trigger if DMATX in FIFOCFG is set.
  *  0b0..Transmit FIFO level does not generate a FIFO level trigger.
  *  0b1..An trigger will be generated if the transmit FIFO level reaches the value specified by the TXLVL field in this register.
  */
 #define USART_FIFOTRIG_TXLVLENA(x)               (((uint32_t)(((uint32_t)(x)) << USART_FIFOTRIG_TXLVLENA_SHIFT)) & USART_FIFOTRIG_TXLVLENA_MASK)
 #define USART_FIFOTRIG_RXLVLENA_MASK             (0x2U)
 #define USART_FIFOTRIG_RXLVLENA_SHIFT            (1U)
-/*! RXLVLENA - Receive FIFO level trigger enable. This trigger will become an interrupt if enabled in FIFOINTENSET, or a DMA trigger if DMARX in FIFOCFG is set.
+/*! RXLVLENA - Receive FIFO level trigger enable. This trigger will become an interrupt if enabled
+ *    in FIFOINTENSET, or a DMA trigger if DMARX in FIFOCFG is set.
  *  0b0..Receive FIFO level does not generate a FIFO level trigger.
  *  0b1..An trigger will be generated if the receive FIFO level reaches the value specified by the RXLVL field in this register.
  */
@@ -20918,16 +21916,20 @@ typedef struct {
 #define USART_FIFOINTENSET_RXERR(x)              (((uint32_t)(((uint32_t)(x)) << USART_FIFOINTENSET_RXERR_SHIFT)) & USART_FIFOINTENSET_RXERR_MASK)
 #define USART_FIFOINTENSET_TXLVL_MASK            (0x4U)
 #define USART_FIFOINTENSET_TXLVL_SHIFT           (2U)
-/*! TXLVL - Determines whether an interrupt occurs when a the transmit FIFO reaches the level specified by the TXLVL field in the FIFOTRIG register.
+/*! TXLVL - Determines whether an interrupt occurs when a the transmit FIFO reaches the level
+ *    specified by the TXLVL field in the FIFOTRIG register.
  *  0b0..No interrupt will be generated based on the TX FIFO level.
- *  0b1..If TXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the TX FIFO level decreases to the level specified by TXLVL in the FIFOTRIG register.
+ *  0b1..If TXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the TX FIFO level decreases
+ *       to the level specified by TXLVL in the FIFOTRIG register.
  */
 #define USART_FIFOINTENSET_TXLVL(x)              (((uint32_t)(((uint32_t)(x)) << USART_FIFOINTENSET_TXLVL_SHIFT)) & USART_FIFOINTENSET_TXLVL_MASK)
 #define USART_FIFOINTENSET_RXLVL_MASK            (0x8U)
 #define USART_FIFOINTENSET_RXLVL_SHIFT           (3U)
-/*! RXLVL - Determines whether an interrupt occurs when a the receive FIFO reaches the level specified by the TXLVL field in the FIFOTRIG register.
+/*! RXLVL - Determines whether an interrupt occurs when a the receive FIFO reaches the level
+ *    specified by the TXLVL field in the FIFOTRIG register.
  *  0b0..No interrupt will be generated based on the RX FIFO level.
- *  0b1..If RXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the when the RX FIFO level increases to the level specified by RXLVL in the FIFOTRIG register.
+ *  0b1..If RXLVLENA in the FIFOTRIG register = 1, an interrupt will be generated when the when the RX FIFO level
+ *       increases to the level specified by RXLVL in the FIFOTRIG register.
  */
 #define USART_FIFOINTENSET_RXLVL(x)              (((uint32_t)(((uint32_t)(x)) << USART_FIFOINTENSET_RXLVL_SHIFT)) & USART_FIFOINTENSET_RXLVL_MASK)
 /*! @} */
@@ -24532,7 +25534,8 @@ typedef struct {
 /*! @{ */
 #define WWDT_MOD_WDEN_MASK                       (0x1U)
 #define WWDT_MOD_WDEN_SHIFT                      (0U)
-/*! WDEN - Watchdog enable bit. Once this bit is set to one and a watchdog feed is performed, the watchdog timer will run permanently.
+/*! WDEN - Watchdog enable bit. Once this bit is set to one and a watchdog feed is performed, the
+ *    watchdog timer will run permanently.
  *  0b0..Stop. The watchdog timer is stopped.
  *  0b1..Run. The watchdog timer is running.
  */
@@ -24704,6 +25707,9 @@ typedef struct {
  * @addtogroup SDK_Compatibility_Symbols SDK Compatibility
  * @{
  */
+
+/** High Speed SPI (Flexcomm 8) interrupt name */
+#define LSPI_HS_IRQn                                FLEXCOMM8_IRQn
 
 /** EMC CS base address */
 #define EMC_CS0_BASE                                (0x80000000u)

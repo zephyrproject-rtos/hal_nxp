@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -139,7 +139,7 @@ void LPADC_Init(ADC_Type *base, const lpadc_config_t *config)
     base->FCTRL[1] = ADC_FCTRL_FWMARK(config->FIFO1Watermark);
 #else
     /* ADCx_FCTRL. */
-    base->FCTRL = ADC_FCTRL_FWMARK(config->FIFOWatermark);
+    base->FCTRL           = ADC_FCTRL_FWMARK(config->FIFOWatermark);
 #endif /* FSL_FEATURE_LPADC_FIFO_COUNT */
 
     /* Enable the module after setting configuration. */
@@ -183,12 +183,12 @@ void LPADC_GetDefaultConfig(lpadc_config_t *config)
     config->conversionAverageMode = kLPADC_ConversionAverage1;
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS */
     config->enableAnalogPreliminary = false;
-    config->powerUpDelay = 0x80;
-    config->referenceVoltageSource = kLPADC_ReferenceVoltageAlt1;
-    config->powerLevelMode = kLPADC_PowerLevelAlt1;
-    config->triggerPrioirtyPolicy = kLPADC_TriggerPriorityPreemptImmediately;
-    config->enableConvPause = false;
-    config->convPauseDelay = 0U;
+    config->powerUpDelay            = 0x80;
+    config->referenceVoltageSource  = kLPADC_ReferenceVoltageAlt1;
+    config->powerLevelMode          = kLPADC_PowerLevelAlt1;
+    config->triggerPrioirtyPolicy   = kLPADC_TriggerPriorityPreemptImmediately;
+    config->enableConvPause         = false;
+    config->convPauseDelay          = 0U;
 #if (defined(FSL_FEATURE_LPADC_FIFO_COUNT) && (FSL_FEATURE_LPADC_FIFO_COUNT == 2))
     config->FIFO0Watermark = 0U;
     config->FIFO1Watermark = 0U;
@@ -237,9 +237,9 @@ bool LPADC_GetConvResult(ADC_Type *base, lpadc_conv_result_t *result, uint8_t in
     }
 
     result->commandIdSource = (tmp32 & ADC_RESFIFO_CMDSRC_MASK) >> ADC_RESFIFO_CMDSRC_SHIFT;
-    result->loopCountIndex = (tmp32 & ADC_RESFIFO_LOOPCNT_MASK) >> ADC_RESFIFO_LOOPCNT_SHIFT;
+    result->loopCountIndex  = (tmp32 & ADC_RESFIFO_LOOPCNT_MASK) >> ADC_RESFIFO_LOOPCNT_SHIFT;
     result->triggerIdSource = (tmp32 & ADC_RESFIFO_TSRC_MASK) >> ADC_RESFIFO_TSRC_SHIFT;
-    result->convValue = (uint16_t)(tmp32 & ADC_RESFIFO_D_MASK);
+    result->convValue       = (uint16_t)(tmp32 & ADC_RESFIFO_D_MASK);
 
     return true;
 }
@@ -327,8 +327,8 @@ void LPADC_GetDefaultConvTriggerConfig(lpadc_conv_trigger_config_t *config)
     memset(config, 0, sizeof(*config));
 
     config->targetCommandId = 0U;
-    config->delayPower = 0U;
-    config->priority = 0U;
+    config->delayPower      = 0U;
+    config->priority        = 0U;
 #if defined(FSL_FEATURE_LPADC_FIFO_COUNT) && FSL_FEATURE_LPADC_FIFO_COUNT
     config->channelAFIFOSelect = 0U;
     config->channelBFIFOSelect = 0U;
@@ -402,9 +402,9 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
     base->CMD[commandId].CMDH = tmp32;
 
     /* Hardware compare settings.
-    * Not all Command Buffers have an associated Compare Value register. The compare function is only available on
-    * Command Buffers that have a corresponding Compare Value register.
-    */
+     * Not all Command Buffers have an associated Compare Value register. The compare function is only available on
+     * Command Buffers that have a corresponding Compare Value register.
+     */
     if (kLPADC_HardwareCompareDisabled != config->hardwareCompareMode)
     {
         /* Check if the hardware compare feature is available for indicated command buffer. */
@@ -448,16 +448,16 @@ void LPADC_GetDefaultConvCommandConfig(lpadc_conv_command_config_t *config)
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_CSCALE) && FSL_FEATURE_LPADC_HAS_CMDL_CSCALE
     config->sampleScaleMode = kLPADC_SampleFullScale;
 #endif /* FSL_FEATURE_LPADC_HAS_CMDL_CSCALE */
-    config->sampleChannelMode = kLPADC_SampleChannelSingleEndSideA;
-    config->channelNumber = 0U;
-    config->chainedNextCommandNumber = 0U; /* No next command defined. */
+    config->sampleChannelMode          = kLPADC_SampleChannelSingleEndSideA;
+    config->channelNumber              = 0U;
+    config->chainedNextCommandNumber   = 0U; /* No next command defined. */
     config->enableAutoChannelIncrement = false;
-    config->loopCount = 0U;
-    config->hardwareAverageMode = kLPADC_HardwareAverageCount1;
-    config->sampleTimeMode = kLPADC_SampleTimeADCK3;
-    config->hardwareCompareMode = kLPADC_HardwareCompareDisabled;
-    config->hardwareCompareValueHigh = 0U; /* No used. */
-    config->hardwareCompareValueLow = 0U;  /* No used. */
+    config->loopCount                  = 0U;
+    config->hardwareAverageMode        = kLPADC_HardwareAverageCount1;
+    config->sampleTimeMode             = kLPADC_SampleTimeADCK3;
+    config->hardwareCompareMode        = kLPADC_HardwareCompareDisabled;
+    config->hardwareCompareValueHigh   = 0U; /* No used. */
+    config->hardwareCompareValueLow    = 0U; /* No used. */
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_MODE) && FSL_FEATURE_LPADC_HAS_CMDL_MODE
     config->conversionResoultuionMode = kLPADC_ConversionResolutionStandard;
 #endif /* FSL_FEATURE_LPADC_HAS_CMDL_MODE */
@@ -495,17 +495,15 @@ void LPADC_EnableCalibration(ADC_Type *base, bool enable)
 
 #if defined(FSL_FEATURE_LPADC_HAS_OFSTRIM) && FSL_FEATURE_LPADC_HAS_OFSTRIM
 /*!
-* brief Do auto calibration.
-*
-* Calibration function should be executed before using converter in application. It used the software trigger and a
-* dummy conversion, get the offset and write them into the OFSTRIM register. It called some of functional API including:
-*   -LPADC_EnableCalibration(...)
-*   -LPADC_LPADC_SetOffsetValue(...)
-*   -LPADC_SetConvCommandConfig(...)
-*   -LPADC_SetConvTriggerConfig(...)
-*
-* param base  LPADC peripheral base address.
-*/
+ * brief Do auto calibration.
+ *
+ * Calibration function should be executed before using converter in application. It used the software trigger and a
+ * dummy conversion, get the offset and write them into the OFSTRIM register. It called some of functional API
+ * including: -LPADC_EnableCalibration(...) -LPADC_LPADC_SetOffsetValue(...) -LPADC_SetConvCommandConfig(...)
+ *   -LPADC_SetConvTriggerConfig(...)
+ *
+ * param base  LPADC peripheral base address.
+ */
 void LPADC_DoAutoCalibration(ADC_Type *base)
 {
     assert(0u == LPADC_GetConvResultCount(base));
@@ -521,9 +519,9 @@ void LPADC_DoAutoCalibration(ADC_Type *base)
     LPADC_EnableCalibration(base, true);
 
     /* Keep the CMD and TRG state here and restore it later if the calibration completes.*/
-    mLpadcCMDL = base->CMD[0].CMDL; /* CMD1L. */
-    mLpadcCMDH = base->CMD[0].CMDH; /* CMD1H. */
-    mLpadcTrigger = base->TCTRL[0]; /* Trigger0. */
+    mLpadcCMDL    = base->CMD[0].CMDL; /* CMD1L. */
+    mLpadcCMDH    = base->CMD[0].CMDH; /* CMD1H. */
+    mLpadcTrigger = base->TCTRL[0];    /* Trigger0. */
 
     /* Set trigger0 configuration - for software trigger. */
     LPADC_GetDefaultConvTriggerConfig(&mLpadcTriggerConfigStruct);
@@ -546,9 +544,9 @@ void LPADC_DoAutoCalibration(ADC_Type *base)
     LPADC_EnableCalibration(base, false);
 
     /* restore CMD and TRG registers. */
-    base->CMD[0].CMDL = mLpadcCMDL; /* CMD1L. */
-    base->CMD[0].CMDH = mLpadcCMDH; /* CMD1H. */
-    base->TCTRL[0] = mLpadcTrigger; /* Trigger0. */
+    base->CMD[0].CMDL = mLpadcCMDL;    /* CMD1L. */
+    base->CMD[0].CMDH = mLpadcCMDH;    /* CMD1H. */
+    base->TCTRL[0]    = mLpadcTrigger; /* Trigger0. */
 }
 #endif /* FSL_FEATURE_LPADC_HAS_OFSTRIM */
 #endif /* FSL_FEATURE_LPADC_HAS_CFG_CALOFS */
@@ -569,10 +567,10 @@ void LPADC_DoOffsetCalibration(ADC_Type *base)
 
 #if defined(FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ) && FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ
 /*!
-* brief Do auto calibration.
-*
-* param base  LPADC peripheral base address.
-*/
+ * brief Do auto calibration.
+ *
+ * param base  LPADC peripheral base address.
+ */
 void LPADC_DoAutoCalibration(ADC_Type *base)
 {
     assert((0u == LPADC_GetConvResultCount(base, 0)) && (0u == LPADC_GetConvResultCount(base, 1)));
@@ -590,12 +588,12 @@ void LPADC_DoAutoCalibration(ADC_Type *base)
     }
 
     /* Calculate gain offset. */
-    GCCa = (base->GCC[0] & ADC_GCC_GAIN_CAL_MASK);
-    GCCb = (base->GCC[1] & ADC_GCC_GAIN_CAL_MASK);
-    GCRa = (uint16_t)((GCCa << 16U) /
-                      (0xFFFFU - GCCa)); /* Gain_CalA = (65536 / (65536-(ADC_GCC_GAIN_CAL(ADC0->GCC[0])). */
-    GCRb = (uint16_t)((GCCb << 16U) /
-                      (0xFFFFU - GCCb)); /* Gain_CalB = (65536 / (65536-(ADC_GCC_GAIN_CAL(ADC0->GCC[1])). */
+    GCCa         = (base->GCC[0] & ADC_GCC_GAIN_CAL_MASK);
+    GCCb         = (base->GCC[1] & ADC_GCC_GAIN_CAL_MASK);
+    GCRa         = (uint16_t)((GCCa << 16U) /
+                      (0x1FFFFU - GCCa)); /* Gain_CalA = (131072 / (131072-(ADC_GCC_GAIN_CAL(ADC0->GCC[0])) - 1. */
+    GCRb         = (uint16_t)((GCCb << 16U) /
+                      (0x1FFFFU - GCCb)); /* Gain_CalB = (131072 / (131072-(ADC_GCC_GAIN_CAL(ADC0->GCC[1])) - 1. */
     base->GCR[0] = ADC_GCR_GCALR(GCRa);
     base->GCR[1] = ADC_GCR_GCALR(GCRb);
 

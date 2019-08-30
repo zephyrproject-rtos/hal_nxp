@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, NXP Semiconductors, Inc.
+ * Copyright  2018 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,16 +26,16 @@
 /*! @brief Index of LUT */
 typedef enum _plu_lut_index
 {
-    kPLU_LUT_0 = 0U,   /*!< 5-input Look-up Table 0 */
-    kPLU_LUT_1 = 1U,   /*!< 5-input Look-up Table 1 */
-    kPLU_LUT_2 = 2U,   /*!< 5-input Look-up Table 2 */
-    kPLU_LUT_3 = 3U,   /*!< 5-input Look-up Table 3 */
-    kPLU_LUT_4 = 4U,   /*!< 5-input Look-up Table 4 */
-    kPLU_LUT_5 = 5U,   /*!< 5-input Look-up Table 5 */
-    kPLU_LUT_6 = 6U,   /*!< 5-input Look-up Table 6 */
-    kPLU_LUT_7 = 7U,   /*!< 5-input Look-up Table 7 */
-    kPLU_LUT_8 = 8U,   /*!< 5-input Look-up Table 8 */
-    kPLU_LUT_9 = 9U,   /*!< 5-input Look-up Table 9 */
+    kPLU_LUT_0  = 0U,  /*!< 5-input Look-up Table 0 */
+    kPLU_LUT_1  = 1U,  /*!< 5-input Look-up Table 1 */
+    kPLU_LUT_2  = 2U,  /*!< 5-input Look-up Table 2 */
+    kPLU_LUT_3  = 3U,  /*!< 5-input Look-up Table 3 */
+    kPLU_LUT_4  = 4U,  /*!< 5-input Look-up Table 4 */
+    kPLU_LUT_5  = 5U,  /*!< 5-input Look-up Table 5 */
+    kPLU_LUT_6  = 6U,  /*!< 5-input Look-up Table 6 */
+    kPLU_LUT_7  = 7U,  /*!< 5-input Look-up Table 7 */
+    kPLU_LUT_8  = 8U,  /*!< 5-input Look-up Table 8 */
+    kPLU_LUT_9  = 9U,  /*!< 5-input Look-up Table 9 */
     kPLU_LUT_10 = 10U, /*!< 5-input Look-up Table 10 */
     kPLU_LUT_11 = 11U, /*!< 5-input Look-up Table 11 */
     kPLU_LUT_12 = 12U, /*!< 5-input Look-up Table 12 */
@@ -67,22 +67,22 @@ typedef enum _plu_lut_in_index
 /*! @brief Available sources of LUT input */
 typedef enum _plu_lut_input_source
 {
-    kPLU_LUT_IN_SRC_PLU_IN_0 = 0U,    /*!< Select PLU input 0 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_PLU_IN_1 = 1U,    /*!< Select PLU input 1 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_PLU_IN_2 = 2U,    /*!< Select PLU input 2 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_PLU_IN_3 = 3U,    /*!< Select PLU input 3 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_PLU_IN_4 = 4U,    /*!< Select PLU input 4 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_PLU_IN_5 = 5U,    /*!< Select PLU input 5 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_LUT_OUT_0 = 6U,   /*!< Select LUT output 0 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_LUT_OUT_1 = 7U,   /*!< Select LUT output 1 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_LUT_OUT_2 = 8U,   /*!< Select LUT output 2 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_LUT_OUT_3 = 9U,   /*!< Select LUT output 3 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_LUT_OUT_4 = 10U,  /*!< Select LUT output 4 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_LUT_OUT_5 = 11U,  /*!< Select LUT output 5 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_LUT_OUT_6 = 12U,  /*!< Select LUT output 6 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_LUT_OUT_7 = 13U,  /*!< Select LUT output 7 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_LUT_OUT_8 = 14U,  /*!< Select LUT output 8 to be connected to LUTn Input x */
-    kPLU_LUT_IN_SRC_LUT_OUT_9 = 15U,  /*!< Select LUT output 9 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_PLU_IN_0   = 0U,  /*!< Select PLU input 0 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_PLU_IN_1   = 1U,  /*!< Select PLU input 1 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_PLU_IN_2   = 2U,  /*!< Select PLU input 2 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_PLU_IN_3   = 3U,  /*!< Select PLU input 3 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_PLU_IN_4   = 4U,  /*!< Select PLU input 4 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_PLU_IN_5   = 5U,  /*!< Select PLU input 5 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_LUT_OUT_0  = 6U,  /*!< Select LUT output 0 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_LUT_OUT_1  = 7U,  /*!< Select LUT output 1 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_LUT_OUT_2  = 8U,  /*!< Select LUT output 2 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_LUT_OUT_3  = 9U,  /*!< Select LUT output 3 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_LUT_OUT_4  = 10U, /*!< Select LUT output 4 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_LUT_OUT_5  = 11U, /*!< Select LUT output 5 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_LUT_OUT_6  = 12U, /*!< Select LUT output 6 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_LUT_OUT_7  = 13U, /*!< Select LUT output 7 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_LUT_OUT_8  = 14U, /*!< Select LUT output 8 to be connected to LUTn Input x */
+    kPLU_LUT_IN_SRC_LUT_OUT_9  = 15U, /*!< Select LUT output 9 to be connected to LUTn Input x */
     kPLU_LUT_IN_SRC_LUT_OUT_10 = 16U, /*!< Select LUT output 10 to be connected to LUTn Input x */
     kPLU_LUT_IN_SRC_LUT_OUT_11 = 17U, /*!< Select LUT output 11 to be connected to LUTn Input x */
     kPLU_LUT_IN_SRC_LUT_OUT_12 = 18U, /*!< Select LUT output 12 to be connected to LUTn Input x */
@@ -121,32 +121,32 @@ typedef enum _plu_output_index
 /*! @brief Available sources of PLU output */
 typedef enum _plu_output_source
 {
-    kPLU_OUT_SRC_LUT_0 = 0U,       /*!< Select LUT0 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_1 = 1U,       /*!< Select LUT1 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_2 = 2U,       /*!< Select LUT2 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_3 = 3U,       /*!< Select LUT3 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_4 = 4U,       /*!< Select LUT4 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_5 = 5U,       /*!< Select LUT5 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_6 = 6U,       /*!< Select LUT6 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_7 = 7U,       /*!< Select LUT7 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_8 = 8U,       /*!< Select LUT8 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_9 = 9U,       /*!< Select LUT9 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_10 = 10U,     /*!< Select LUT10 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_11 = 11U,     /*!< Select LUT11 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_12 = 12U,     /*!< Select LUT12 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_13 = 13U,     /*!< Select LUT13 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_14 = 14U,     /*!< Select LUT14 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_15 = 15U,     /*!< Select LUT15 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_16 = 16U,     /*!< Select LUT16 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_17 = 17U,     /*!< Select LUT17 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_18 = 18U,     /*!< Select LUT18 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_19 = 19U,     /*!< Select LUT19 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_20 = 20U,     /*!< Select LUT20 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_21 = 21U,     /*!< Select LUT21 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_22 = 22U,     /*!< Select LUT22 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_23 = 23U,     /*!< Select LUT23 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_24 = 24U,     /*!< Select LUT24 output to be connected to PLU output */
-    kPLU_OUT_SRC_LUT_25 = 25U,     /*!< Select LUT25 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_0      = 0U,  /*!< Select LUT0 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_1      = 1U,  /*!< Select LUT1 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_2      = 2U,  /*!< Select LUT2 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_3      = 3U,  /*!< Select LUT3 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_4      = 4U,  /*!< Select LUT4 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_5      = 5U,  /*!< Select LUT5 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_6      = 6U,  /*!< Select LUT6 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_7      = 7U,  /*!< Select LUT7 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_8      = 8U,  /*!< Select LUT8 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_9      = 9U,  /*!< Select LUT9 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_10     = 10U, /*!< Select LUT10 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_11     = 11U, /*!< Select LUT11 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_12     = 12U, /*!< Select LUT12 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_13     = 13U, /*!< Select LUT13 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_14     = 14U, /*!< Select LUT14 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_15     = 15U, /*!< Select LUT15 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_16     = 16U, /*!< Select LUT16 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_17     = 17U, /*!< Select LUT17 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_18     = 18U, /*!< Select LUT18 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_19     = 19U, /*!< Select LUT19 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_20     = 20U, /*!< Select LUT20 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_21     = 21U, /*!< Select LUT21 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_22     = 22U, /*!< Select LUT22 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_23     = 23U, /*!< Select LUT23 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_24     = 24U, /*!< Select LUT24 output to be connected to PLU output */
+    kPLU_OUT_SRC_LUT_25     = 25U, /*!< Select LUT25 output to be connected to PLU output */
     kPLU_OUT_SRC_FLIPFLOP_0 = 26U, /*!< Select Flip-Flops state(0) to be connected to PLU output */
     kPLU_OUT_SRC_FLIPFLOP_1 = 27U, /*!< Select Flip-Flops state(1) to be connected to PLU output */
     kPLU_OUT_SRC_FLIPFLOP_2 = 28U, /*!< Select Flip-Flops state(2) to be connected to PLU output */
