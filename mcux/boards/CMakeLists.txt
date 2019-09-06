@@ -4,10 +4,20 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-add_subdirectory_ifdef(CONFIG_BOARD_MIMXRT1015_EVK evkmimxrt1015)
-add_subdirectory_ifdef(CONFIG_BOARD_MIMXRT1020_EVK evkmimxrt1020)
-add_subdirectory_ifdef(CONFIG_BOARD_MIMXRT1050_EVK evkbimxrt1050)
-add_subdirectory_ifdef(CONFIG_BOARD_MIMXRT1050_EVK_QSPI evkbimxrt1050)
-add_subdirectory_ifdef(CONFIG_BOARD_MIMXRT1060_EVK evkmimxrt1060)
-add_subdirectory_ifdef(CONFIG_BOARD_MIMXRT1060_EVK_HYPERFLASH evkmimxrt1060)
-add_subdirectory_ifdef(CONFIG_BOARD_MIMXRT1064_EVK evkmimxrt1064)
+if(CONFIG_BOARD_MIMXRT1015_EVK)
+  set(MCUX_BOARD evkmimxrt1015)
+elseif(CONFIG_BOARD_MIMXRT1020_EVK)
+  set(MCUX_BOARD evkmimxrt1020)
+elseif(CONFIG_BOARD_MIMXRT1050_EVK OR CONFIG_BOARD_MIMXRT1050_EVK_QSPI)
+  set(MCUX_BOARD evkbimxrt1050)
+elseif(CONFIG_BOARD_MIMXRT1060_EVK OR CONFIG_BOARD_MIMXRT1060_EVK_HYPERFLASH)
+  set(MCUX_BOARD evkmimxrt1060)
+elseif(CONFIG_BOARD_MIMXRT1064_EVK)
+  set(MCUX_BOARD evkmimxrt1064)
+endif()
+
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IMX_RT_BOOT_HEADER XIP_BOOT_HEADER_ENABLE=1)
+zephyr_compile_definitions_ifdef(CONFIG_DEVICE_CONFIGURATION_DATA XIP_BOOT_HEADER_DCD_ENABLE=1)
+
+zephyr_sources_ifdef(CONFIG_BOOT_FLEXSPI_NOR ${MCUX_BOARD}/${MCUX_BOARD}_flexspi_nor_config.c)
+zephyr_sources_ifdef(CONFIG_DEVICE_CONFIGURATION_DATA ${MCUX_BOARD}/${MCUX_BOARD}_sdram_ini_dcd.c)
