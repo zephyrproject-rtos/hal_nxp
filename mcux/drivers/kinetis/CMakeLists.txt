@@ -30,6 +30,8 @@ zephyr_sources_ifdef(CONFIG_RTC_MCUX          fsl_rtc.c)
 zephyr_sources_ifdef(CONFIG_WDT_MCUX_WDOG     fsl_wdog.c)
 zephyr_sources_ifdef(CONFIG_WDT_MCUX_WDOG32   fsl_wdog32.c)
 zephyr_sources_ifdef(CONFIG_CAN_MCUX_FLEXCAN  fsl_flexcan.c)
+zephyr_sources_ifdef(CONFIG_HAS_MCUX_SMC      fsl_smc.c)
+
 if(NOT CONFIG_ASSERT OR CONFIG_FORCE_NO_ASSERT)
   zephyr_compile_definitions(NDEBUG) # squelch fsl_flexcan.c warning
 endif()
