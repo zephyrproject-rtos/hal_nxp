@@ -1,40 +1,17 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2018 NXP
+ * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_LTC_EDMA_H_
 #define _FSL_LTC_EDMA_H_
 
 #include "fsl_common.h"
 
-#include "fsl_ltc.h"
-#include "fsl_dmamux.h"
 #include "fsl_edma.h"
+#include "fsl_ltc.h"
 
 /*!
  * @addtogroup ltc_edma_driver
@@ -44,6 +21,12 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+/*! @name Driver version */
+/*@{*/
+/*! @brief LTC EDMA driver version. Version 2.0.7. */
+#define FSL_LTC_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
+/*@}*/
 
 /* @brief The LTC eDMA handle type. */
 typedef struct _ltc_edma_handle ltc_edma_handle_t;
@@ -55,8 +38,8 @@ typedef void (*ltc_edma_callback_t)(LTC_Type *base, ltc_edma_handle_t *handle, s
 typedef status_t (*ltc_edma_state_machine_t)(LTC_Type *base, ltc_edma_handle_t *handle);
 
 /*!
-* @brief LTC eDMA handle. It is defined only for private usage inside LTC eDMA driver.
-*/
+ * @brief LTC eDMA handle. It is defined only for private usage inside LTC eDMA driver.
+ */
 struct _ltc_edma_handle
 {
     ltc_edma_callback_t callback; /*!< Callback function. */
@@ -72,15 +55,14 @@ struct _ltc_edma_handle
     uint32_t size;                          /*!< Size of input and output data in bytes.*/
     uint32_t modeReg;                       /*!< LTC mode register.*/
     /* Used by AES CTR*/
-    uint8_t *counter;   /*!< Input counter (updates on return)*/
-    const uint8_t *key; /*!< Input key to use for forward AES cipher*/
-    uint32_t keySize;   /*!< Size of the input key, in bytes. Must be 16, 24, or 32.*/
-    uint8_t
-        *counterlast; /*!< Output cipher of last counter, for chained CTR calls. NULL can be passed if chained calls are
-                         not used.*/
-    uint32_t *szLeft; /*!< Output number of bytes in left unused in counterlast block. NULL can be passed if chained
-                         calls are not used.*/
-    uint32_t lastSize; /*!< Last size.*/
+    uint8_t *counter;     /*!< Input counter (updates on return)*/
+    const uint8_t *key;   /*!< Input key to use for forward AES cipher*/
+    uint32_t keySize;     /*!< Size of the input key, in bytes. Must be 16, 24, or 32.*/
+    uint8_t *counterlast; /*!< Output cipher of last counter, for chained CTR calls. NULL can be passed if chained calls
+                             are not used.*/
+    uint32_t *szLeft;     /*!< Output number of bytes in left unused in counterlast block. NULL can be passed if chained
+                             calls are not used.*/
+    uint32_t lastSize;    /*!< Last size.*/
 };
 
 /*******************************************************************************
@@ -92,7 +74,7 @@ extern "C" {
 #endif
 
 /*!
- * @brief Init the LTC eDMA handle which is used in transcational functions
+ * @brief Init the LTC eDMA handle which is used in transactional functions
  * @param base      LTC module base address
  * @param handle    Pointer to ltc_edma_handle_t structure
  * @param callback  Callback function, NULL means no callback.
@@ -256,6 +238,7 @@ status_t LTC_AES_CryptCtrEDMA(LTC_Type *base,
  *@}
  */
 
+#if defined(FSL_FEATURE_LTC_HAS_DES) && FSL_FEATURE_LTC_HAS_DES
 /*******************************************************************************
  * DES API
  ******************************************************************************/
@@ -838,6 +821,7 @@ status_t LTC_DES3_DecryptOfbEDMA(LTC_Type *base,
                                  const uint8_t key1[LTC_DES_KEY_SIZE],
                                  const uint8_t key2[LTC_DES_KEY_SIZE],
                                  const uint8_t key3[LTC_DES_KEY_SIZE]);
+#endif /* FSL_FEATURE_LTC_HAS_DES */
 
 /*!
  *@}
