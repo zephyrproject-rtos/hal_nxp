@@ -1,31 +1,9 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2018 NXP
+ * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_ltc_edma.h"
@@ -33,6 +11,11 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.ltc_edma"
+#endif
 
 /*<! Structure definition for ltc_edma_private_handle_t. The structure is private. */
 typedef struct _ltc_edma_private_handle
@@ -52,91 +35,23 @@ static ltc_edma_private_handle_t s_edmaPrivateHandle[FSL_FEATURE_SOC_LTC_COUNT];
 static LTC_Type *const s_ltcBase[] = LTC_BASE_PTRS;
 
 /*******************************************************************************
- * Definitions
+ * Variables
  ******************************************************************************/
+
 /* State machine state.*/
 #define LTC_SM_STATE_START 0x0000u
 #define LTC_SM_STATE_FINISH 0xFFFFu
 
-/*! Full word representing the actual bit values for the LTC mode register. */
-typedef uint32_t ltc_mode_t;
-
 #define LTC_FIFO_SZ_MAX_DOWN_ALGN (0xff0u)
-#define LTC_MD_ALG_AES (0x10U)        /*!< Bit field value for LTC_MD_ALG: AES */
-#define LTC_MD_ALG_DES (0x20U)        /*!< Bit field value for LTC_MD_ALG: DES */
-#define LTC_MD_ALG_TRIPLE_DES (0x21U) /*!< Bit field value for LTC_MD_ALG: 3DES */
-#define LTC_MDPK_ALG_PKHA (0x80U)     /*!< Bit field value for LTC_MDPK_ALG: PKHA */
-#define LTC_MD_ENC_DECRYPT (0U)       /*!< Bit field value for LTC_MD_ENC: Decrypt. */
-#define LTC_MD_ENC_ENCRYPT (0x1U)     /*!< Bit field value for LTC_MD_ENC: Encrypt. */
-#define LTC_MD_AS_UPDATE (0U)         /*!< Bit field value for LTC_MD_AS: Update */
-#define LTC_MD_AS_INITIALIZE (0x1U)   /*!< Bit field value for LTC_MD_AS: Initialize */
-#define LTC_MD_AS_FINALIZE (0x2U)     /*!< Bit field value for LTC_MD_AS: Finalize */
-#define LTC_MD_AS_INIT_FINAL (0x3U)   /*!< Bit field value for LTC_MD_AS: Initialize/Finalize */
 
-enum _ltc_md_dk_bit_shift
+enum _ltc_edma_md_dk_bit_shift
 {
     kLTC_ModeRegBitShiftDK = 12U,
 };
 
-typedef enum _ltc_algorithm
-{
-    kLTC_AlgorithmAES = LTC_MD_ALG_AES << LTC_MD_ALG_SHIFT,
-#if defined(FSL_FEATURE_LTC_HAS_DES) && FSL_FEATURE_LTC_HAS_DES
-    kLTC_AlgorithmDES = LTC_MD_ALG_DES << LTC_MD_ALG_SHIFT,
-    kLTC_Algorithm3DES = LTC_MD_ALG_TRIPLE_DES << LTC_MD_ALG_SHIFT,
-#endif /* FSL_FEATURE_LTC_HAS_DES */
-} ltc_algorithm_t;
-
-typedef enum _ltc_mode_symmetric_alg
-{
-    kLTC_ModeCTR = 0x00U << LTC_MD_AAI_SHIFT,
-    kLTC_ModeCBC = 0x10U << LTC_MD_AAI_SHIFT,
-    kLTC_ModeECB = 0x20U << LTC_MD_AAI_SHIFT,
-    kLTC_ModeCFB = 0x30U << LTC_MD_AAI_SHIFT,
-    kLTC_ModeOFB = 0x40U << LTC_MD_AAI_SHIFT,
-    kLTC_ModeCMAC = 0x60U << LTC_MD_AAI_SHIFT,
-    kLTC_ModeXCBCMAC = 0x70U << LTC_MD_AAI_SHIFT,
-    kLTC_ModeCCM = 0x80U << LTC_MD_AAI_SHIFT,
-    kLTC_ModeGCM = 0x90U << LTC_MD_AAI_SHIFT,
-} ltc_mode_symmetric_alg_t;
-
-typedef enum _ltc_mode_encrypt
-{
-    kLTC_ModeDecrypt = LTC_MD_ENC_DECRYPT << LTC_MD_ENC_SHIFT,
-    kLTC_ModeEncrypt = LTC_MD_ENC_ENCRYPT << LTC_MD_ENC_SHIFT,
-} ltc_mode_encrypt_t;
-
-typedef enum _ltc_mode_algorithm_state
-{
-    kLTC_ModeUpdate = LTC_MD_AS_UPDATE << LTC_MD_AS_SHIFT,
-    kLTC_ModeInit = LTC_MD_AS_INITIALIZE << LTC_MD_AS_SHIFT,
-    kLTC_ModeFinalize = LTC_MD_AS_FINALIZE << LTC_MD_AS_SHIFT,
-    kLTC_ModeInitFinal = LTC_MD_AS_INIT_FINAL << LTC_MD_AS_SHIFT
-} ltc_mode_algorithm_state_t;
-
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-
-extern status_t ltc_get_context(LTC_Type *base, uint8_t *dest, uint8_t dataSize, uint8_t startIndex);
-extern status_t ltc_set_context(LTC_Type *base, const uint8_t *data, uint8_t dataSize, uint8_t startIndex);
-extern status_t ltc_symmetric_update(LTC_Type *base,
-                                     const uint8_t *key,
-                                     uint8_t keySize,
-                                     ltc_algorithm_t alg,
-                                     ltc_mode_symmetric_alg_t mode,
-                                     ltc_mode_encrypt_t enc);
-extern void ltc_memcpy(void *dst, const void *src, size_t size);
-extern bool ltc_check_key_size(const uint32_t keySize);
-extern status_t ltc_wait(LTC_Type *base);
-extern void ltc_clear_all(LTC_Type *base, bool addPKHA);
-extern status_t ltc_3des_check_input_args(ltc_mode_symmetric_alg_t modeAs,
-                                          uint32_t size,
-                                          const uint8_t *key1,
-                                          const uint8_t *key2);
-extern void ltc_symmetric_process(LTC_Type *base, uint32_t inSize, const uint8_t **inData, uint8_t **outData);
-extern status_t ltc_symmetric_process_data(LTC_Type *base, const uint8_t *inData, uint32_t inSize, uint8_t *outData);
-
 static uint32_t LTC_GetInstance(LTC_Type *base);
 static void ltc_symmetric_process_EDMA(LTC_Type *base, uint32_t inSize, const uint8_t **inData, uint8_t **outData);
 static status_t ltc_process_message_in_sessions_EDMA(LTC_Type *base, ltc_edma_handle_t *handle);
@@ -165,7 +80,7 @@ static status_t ltc_process_message_in_sessions_EDMA(LTC_Type *base, ltc_edma_ha
     handle->modeReg = base->MD;
     retval = kStatus_Success;
 
-    if ((!handle->inData) || (!handle->outData))
+    if ((NULL == handle->inData) || (NULL == handle->outData))
     {
         handle->state = LTC_SM_STATE_FINISH; /* END */
         retval = kStatus_InvalidArgument;
@@ -176,7 +91,7 @@ static status_t ltc_process_message_in_sessions_EDMA(LTC_Type *base, ltc_edma_ha
         switch (handle->state)
         {
             case LTC_SM_STATE_START:
-                if (handle->size)
+                if (0U != handle->size)
                 {
                     uint32_t sz;
 
@@ -208,10 +123,10 @@ static status_t ltc_process_message_in_sessions_EDMA(LTC_Type *base, ltc_edma_ha
                         {
                             /* Process all 16-byte data chunks. */
                             lastSize = inSize % 16u;
-                            if (lastSize == 0)
+                            if (lastSize == 0U)
                             {
                                 lastSize = 16;
-                                inSize -= 16;
+                                inSize -= 16U;
                             }
                             else
                             {
@@ -221,13 +136,13 @@ static status_t ltc_process_message_in_sessions_EDMA(LTC_Type *base, ltc_edma_ha
                             }
                         }
 
-                        if (inSize)
+                        if (0U != inSize)
                         {
                             handle->size -= inSize;
                             ltc_symmetric_process_EDMA(base, inSize, &handle->inData, &handle->outData);
                             exit_sm = true;
                         }
-                        else if (lastSize)
+                        else if (0U != lastSize)
                         {
                             ltc_symmetric_process(base, lastSize, &handle->inData, &handle->outData);
                             retval = ltc_wait(base);
@@ -249,7 +164,7 @@ static status_t ltc_process_message_in_sessions_EDMA(LTC_Type *base, ltc_edma_ha
 
                 ltc_clear_all(base, false);
 
-                if (handle->callback)
+                if (NULL != handle->callback)
                 {
                     handle->callback(base, handle, retval, handle->userData);
                 }
@@ -277,7 +192,7 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
     handle->modeReg = base->MD;
     retval = kStatus_Success;
 
-    if ((!handle->inData) || (!handle->outData))
+    if ((NULL == handle->inData) || (NULL == handle->outData))
     {
         handle->state = LTC_SM_STATE_FINISH;
         retval = kStatus_InvalidArgument;
@@ -288,7 +203,7 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
         switch (handle->state)
         {
             case LTC_SM_STATE_START:
-                if (handle->size)
+                if (0U != handle->size)
                 {
                     uint32_t sz;
 
@@ -320,10 +235,10 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
                         {
                             /* Process all 16-byte data chunks. */
                             lastSize = inSize % 16u;
-                            if (lastSize == 0)
+                            if (lastSize == 0U)
                             {
                                 lastSize = 16;
-                                inSize -= 16;
+                                inSize -= 16U;
                             }
                             else
                             {
@@ -333,13 +248,13 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
                             }
                         }
 
-                        if (inSize)
+                        if (0U != inSize)
                         {
                             handle->size -= inSize;
                             ltc_symmetric_process_EDMA(base, inSize, &handle->inData, &handle->outData);
                             exit_sm = true;
                         }
-                        else if (lastSize)
+                        else if (0U != lastSize)
                         {
                             ltc_symmetric_process(base, lastSize, &handle->inData, &handle->outData);
                             retval = ltc_wait(base);
@@ -347,6 +262,7 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
                         }
                         else
                         {
+                            /* Add this to fix MISRA C2012 rule15.7 issue: Empty else without comment. */
                         }
                     }
                 }
@@ -365,7 +281,7 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
                     const uint8_t *input = handle->inData;
                     uint8_t *output = handle->outData;
 
-                    if ((handle->counterlast != NULL) && (handle->lastSize))
+                    if ((handle->counterlast != NULL) && (0U != handle->lastSize))
                     {
                         uint8_t zeroes[16] = {0};
                         ltc_mode_t modeReg;
@@ -380,7 +296,7 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
                         retval = ltc_symmetric_process_data(base, input, handle->lastSize, output);
                         if (kStatus_Success == retval)
                         {
-                            if (handle->szLeft)
+                            if (0U != handle->szLeft)
                             {
                                 *handle->szLeft = 16U - handle->lastSize;
                             }
@@ -396,13 +312,13 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
                     }
                     if (kStatus_Success == retval)
                     {
-                        ltc_get_context(base, &handle->counter[0], 16U, 4U);
+                        retval = ltc_get_context(base, &handle->counter[0], 16U, 4U);
 
                         ltc_clear_all(base, false);
                     }
                 }
 
-                if (handle->callback)
+                if (NULL != handle->callback)
                 {
                     handle->callback(base, handle, retval, handle->userData);
                 }
@@ -419,6 +335,20 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
  * AES Code public
  ******************************************************************************/
 
+/*!
+ * brief Encrypts AES using the ECB block mode.
+ *
+ * Encrypts AES using the ECB block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plain text to encrypt
+ * param[out] ciphertext Output cipher text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * return Status from encrypt operation
+ */
 status_t LTC_AES_EncryptEcbEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *plaintext,
@@ -429,10 +359,10 @@ status_t LTC_AES_EncryptEcbEDMA(LTC_Type *base,
 {
     status_t retval;
 
-    if ((ltc_check_key_size(keySize) == 0) || (size < 16u) ||
-        (size % 16u)) /* ECB mode, size must be 16-byte multiple */
+    if (((uint32_t)(ltc_check_key_size(keySize)) == 0U) || (size < 16u) ||
+        (0U != (size % 16u))) /* ECB mode, size must be 16-byte multiple */
     {
-        if (handle->callback)
+        if (NULL != handle->callback)
         {
             handle->callback(base, handle, kStatus_InvalidArgument, handle->userData);
         }
@@ -441,18 +371,37 @@ status_t LTC_AES_EncryptEcbEDMA(LTC_Type *base,
     }
 
     /* Initialize algorithm state. */
-    ltc_symmetric_update(base, key, keySize, kLTC_AlgorithmAES, kLTC_ModeECB, kLTC_ModeEncrypt);
+    retval = ltc_symmetric_update(base, key, (uint8_t)keySize, kLTC_AlgorithmAES, kLTC_ModeECB, kLTC_ModeEncrypt);
+    if (kStatus_Success != retval)
+    {
+        return retval;
+    }
 
     /* Process data and return status. */
-    handle->inData = &plaintext[0];
-    handle->outData = &ciphertext[0];
-    handle->size = size;
-    handle->state = LTC_SM_STATE_START;
+    handle->inData        = &plaintext[0];
+    handle->outData       = &ciphertext[0];
+    handle->size          = size;
+    handle->state         = LTC_SM_STATE_START;
     handle->state_machine = ltc_process_message_in_sessions_EDMA;
-    retval = handle->state_machine(base, handle);
+    retval                = handle->state_machine(base, handle);
     return retval;
 }
 
+/*!
+ * brief Decrypts AES using ECB block mode.
+ *
+ * Decrypts AES using ECB block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param key Input key.
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param keyType Input type of the key (allows to directly load decrypt key for AES ECB decrypt operation.)
+ * return Status from decrypt operation
+ */
 status_t LTC_AES_DecryptEcbEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *ciphertext,
@@ -464,10 +413,10 @@ status_t LTC_AES_DecryptEcbEDMA(LTC_Type *base,
 {
     status_t status;
 
-    if ((ltc_check_key_size(keySize) == 0) || (size < 16u) ||
-        (size % 16u)) /* ECB mode, size must be 16-byte multiple */
+    if (((uint32_t)(ltc_check_key_size(keySize)) == 0u) || (size < 16u) ||
+        (0U != (size % 16u))) /* ECB mode, size must be 16-byte multiple */
     {
-        if (handle->callback)
+        if (NULL != handle->callback)
         {
             handle->callback(base, handle, kStatus_InvalidArgument, handle->userData);
         }
@@ -476,25 +425,43 @@ status_t LTC_AES_DecryptEcbEDMA(LTC_Type *base,
     }
 
     /* Initialize algorithm state. */
-    ltc_symmetric_update(base, key, keySize, kLTC_AlgorithmAES, kLTC_ModeECB, kLTC_ModeDecrypt);
+    status = ltc_symmetric_update(base, key, (uint8_t)keySize, kLTC_AlgorithmAES, kLTC_ModeECB, kLTC_ModeDecrypt);
+    if (kStatus_Success != status)
+    {
+        return status;
+    }
 
     /* set DK bit in the LTC Mode Register AAI field for directly loaded decrypt keys */
     if (keyType == kLTC_DecryptKey)
     {
-        base->MD |= (1U << kLTC_ModeRegBitShiftDK);
+        uint32_t u32mask = 1;
+        base->MD |= (u32mask << (uint32_t)kLTC_ModeRegBitShiftDK);
     }
 
     /* Process data and return status. */
-    handle->inData = &ciphertext[0];
-    handle->outData = &plaintext[0];
-    handle->size = size;
-    handle->state = LTC_SM_STATE_START;
+    handle->inData        = &ciphertext[0];
+    handle->outData       = &plaintext[0];
+    handle->size          = size;
+    handle->state         = LTC_SM_STATE_START;
     handle->state_machine = ltc_process_message_in_sessions_EDMA;
-    status = handle->state_machine(base, handle);
+    status                = handle->state_machine(base, handle);
 
     return status;
 }
 
+/*!
+ * brief Encrypts AES using CBC block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plain text to encrypt
+ * param[out] ciphertext Output cipher text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param iv Input initial vector to combine with the first input block.
+ * param key Input key to use for encryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * return Status from encrypt operation
+ */
 status_t LTC_AES_EncryptCbcEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *plaintext,
@@ -506,10 +473,10 @@ status_t LTC_AES_EncryptCbcEDMA(LTC_Type *base,
 {
     status_t retval;
 
-    if ((ltc_check_key_size(keySize) == 0) || (size < 16u) ||
-        (size % 16u)) /* CBC mode, size must be 16-byte multiple */
+    if (((ltc_check_key_size(keySize)) == 0u) || (size < 16u) ||
+        (0U != (size % 16u))) /* CBC mode, size must be 16-byte multiple */
     {
-        if (handle->callback)
+        if (NULL != handle->callback)
         {
             handle->callback(base, handle, kStatus_InvalidArgument, handle->userData);
         }
@@ -518,21 +485,43 @@ status_t LTC_AES_EncryptCbcEDMA(LTC_Type *base,
     }
 
     /* Initialize algorithm state. */
-    ltc_symmetric_update(base, key, keySize, kLTC_AlgorithmAES, kLTC_ModeCBC, kLTC_ModeEncrypt);
+    retval = ltc_symmetric_update(base, key, (uint8_t)keySize, kLTC_AlgorithmAES, kLTC_ModeCBC, kLTC_ModeEncrypt);
+    if (kStatus_Success != retval)
+    {
+        return retval;
+    }
 
     /* Write IV data to the context register. */
-    ltc_set_context(base, &iv[0], LTC_AES_IV_SIZE, 0);
+    retval = ltc_set_context(base, &iv[0], LTC_AES_IV_SIZE, 0);
+    if (kStatus_Success != retval)
+    {
+        return retval;
+    }
 
     /* Process data and return status. */
-    handle->inData = &plaintext[0];
-    handle->outData = &ciphertext[0];
-    handle->size = size;
-    handle->state = LTC_SM_STATE_START;
+    handle->inData        = &plaintext[0];
+    handle->outData       = &ciphertext[0];
+    handle->size          = size;
+    handle->state         = LTC_SM_STATE_START;
     handle->state_machine = ltc_process_message_in_sessions_EDMA;
-    retval = handle->state_machine(base, handle);
+    retval                = handle->state_machine(base, handle);
     return retval;
 }
 
+/*!
+ * brief Decrypts AES using CBC block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input cipher text to decrypt
+ * param[out] plaintext Output plain text
+ * param size Size of input and output data in bytes. Must be multiple of 16 bytes.
+ * param iv Input initial vector to combine with the first input block.
+ * param key Input key to use for decryption
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param keyType Input type of the key (allows to directly load decrypt key for AES CBC decrypt operation.)
+ * return Status from decrypt operation
+ */
 status_t LTC_AES_DecryptCbcEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *ciphertext,
@@ -545,10 +534,10 @@ status_t LTC_AES_DecryptCbcEDMA(LTC_Type *base,
 {
     status_t retval;
 
-    if ((ltc_check_key_size(keySize) == 0) || (size < 16u) ||
-        (size % 16u)) /* CBC mode, size must be 16-byte multiple */
+    if (((ltc_check_key_size(keySize)) == false) || (size < 16u) ||
+        (0U != (size % 16u))) /* CBC mode, size must be 16-byte multiple */
     {
-        if (handle->callback)
+        if (NULL != handle->callback)
         {
             handle->callback(base, handle, kStatus_InvalidArgument, handle->userData);
         }
@@ -559,25 +548,57 @@ status_t LTC_AES_DecryptCbcEDMA(LTC_Type *base,
     /* set DK bit in the LTC Mode Register AAI field for directly loaded decrypt keys */
     if (keyType == kLTC_DecryptKey)
     {
-        base->MD |= (1U << kLTC_ModeRegBitShiftDK);
+        uint32_t u32mask = 1;
+        base->MD |= (u32mask << (uint32_t)kLTC_ModeRegBitShiftDK);
     }
 
     /* Initialize algorithm state. */
-    ltc_symmetric_update(base, key, keySize, kLTC_AlgorithmAES, kLTC_ModeCBC, kLTC_ModeDecrypt);
+    retval = ltc_symmetric_update(base, key, (uint8_t)keySize, kLTC_AlgorithmAES, kLTC_ModeCBC, kLTC_ModeDecrypt);
+    if (kStatus_Success != retval)
+    {
+        return retval;
+    }
 
     /* Write IV data to the context register. */
-    ltc_set_context(base, &iv[0], LTC_AES_IV_SIZE, 0);
+    retval = ltc_set_context(base, &iv[0], LTC_AES_IV_SIZE, 0);
+    if (kStatus_Success != retval)
+    {
+        return retval;
+    }
 
     /* Process data and return status. */
-    handle->inData = &ciphertext[0];
-    handle->outData = &plaintext[0];
-    handle->size = size;
-    handle->state = LTC_SM_STATE_START;
+    handle->inData        = &ciphertext[0];
+    handle->outData       = &plaintext[0];
+    handle->size          = size;
+    handle->state         = LTC_SM_STATE_START;
     handle->state_machine = ltc_process_message_in_sessions_EDMA;
-    retval = handle->state_machine(base, handle);
+    retval                = handle->state_machine(base, handle);
     return retval;
 }
 
+/*!
+ * brief Encrypts or decrypts AES using CTR block mode.
+ *
+ * Encrypts or decrypts AES using CTR block mode.
+ * AES CTR mode uses only forward AES cipher and same algorithm for encryption and decryption.
+ * The only difference between encryption and decryption is that, for encryption, the input argument
+ * is plain text and the output argument is cipher text. For decryption, the input argument is cipher text
+ * and the output argument is plain text.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param input Input data for CTR block mode
+ * param[out] output Output data for CTR block mode
+ * param size Size of input and output data in bytes
+ * param[in,out] counter Input counter (updates on return)
+ * param key Input key to use for forward AES cipher
+ * param keySize Size of the input key, in bytes. Must be 16, 24, or 32.
+ * param[out] counterlast Output cipher of last counter, for chained CTR calls. NULL can be passed if chained calls are
+ * not used.
+ * param[out] szLeft Output number of bytes in left unused in counterlast block. NULL can be passed if chained calls
+ * are not used.
+ * return Status from encrypt operation
+ */
 status_t LTC_AES_CryptCtrEDMA(LTC_Type *base,
                               ltc_edma_handle_t *handle,
                               const uint8_t *input,
@@ -594,7 +615,7 @@ status_t LTC_AES_CryptCtrEDMA(LTC_Type *base,
 
     if (!ltc_check_key_size(keySize))
     {
-        if (handle->callback)
+        if (NULL != handle->callback)
         {
             handle->callback(base, handle, kStatus_InvalidArgument, handle->userData);
         }
@@ -608,7 +629,7 @@ status_t LTC_AES_CryptCtrEDMA(LTC_Type *base,
         if (size <= 16U)
         {
             lastSize = size;
-            size = 0U;
+            size     = 0U;
         }
         else
         {
@@ -627,26 +648,34 @@ status_t LTC_AES_CryptCtrEDMA(LTC_Type *base,
     }
 
     /* Initialize algorithm state. */
-    ltc_symmetric_update(base, key, keySize, kLTC_AlgorithmAES, kLTC_ModeCTR, kLTC_ModeEncrypt);
+    retval = ltc_symmetric_update(base, key, (uint8_t)keySize, kLTC_AlgorithmAES, kLTC_ModeCTR, kLTC_ModeEncrypt);
+    if (kStatus_Success != retval)
+    {
+        return retval;
+    }
 
     /* Write initial counter data to the context register.
      * NOTE the counter values start at 4-bytes offset into the context. */
-    ltc_set_context(base, &counter[0], 16U, 4U);
+    retval = ltc_set_context(base, &counter[0], 16U, 4U);
+    if (kStatus_Success != retval)
+    {
+        return retval;
+    }
 
     /* Process data and return status. */
-    handle->inData = &input[0];
-    handle->outData = &output[0];
-    handle->size = size;
-    handle->state = LTC_SM_STATE_START;
+    handle->inData        = &input[0];
+    handle->outData       = &output[0];
+    handle->size          = size;
+    handle->state         = LTC_SM_STATE_START;
     handle->state_machine = ltc_process_message_in_sessions_ctr_EDMA;
 
-    handle->counter = counter;
-    handle->key = key;
-    handle->keySize = keySize;
+    handle->counter     = counter;
+    handle->key         = key;
+    handle->keySize     = keySize;
     handle->counterlast = counterlast;
-    handle->szLeft = szLeft;
-    handle->lastSize = lastSize;
-    retval = handle->state_machine(base, handle);
+    handle->szLeft      = szLeft;
+    handle->lastSize    = lastSize;
+    retval              = handle->state_machine(base, handle);
 
     return retval;
 }
@@ -678,20 +707,28 @@ static status_t ltc_des_process_EDMA(LTC_Type *base,
     }
 
     /* Initialize algorithm state. */
-    ltc_symmetric_update(base, &key[0], LTC_DES_KEY_SIZE, kLTC_AlgorithmDES, modeAs, modeEnc);
+    retval = ltc_symmetric_update(base, &key[0], LTC_DES_KEY_SIZE, kLTC_AlgorithmDES, modeAs, modeEnc);
+    if (kStatus_Success != retval)
+    {
+        return retval;
+    }
 
     if ((modeAs != kLTC_ModeECB))
     {
-        ltc_set_context(base, iv, LTC_DES_IV_SIZE, 0);
+        retval = ltc_set_context(base, iv, LTC_DES_IV_SIZE, 0);
+        if (kStatus_Success != retval)
+        {
+            return retval;
+        }
     }
 
     /* Process data and return status. */
-    handle->inData = input;
-    handle->outData = output;
-    handle->size = size;
-    handle->state = LTC_SM_STATE_START;
+    handle->inData        = input;
+    handle->outData       = output;
+    handle->size          = size;
+    handle->state         = LTC_SM_STATE_START;
     handle->state_machine = ltc_process_message_in_sessions_EDMA;
-    retval = handle->state_machine(base, handle);
+    retval                = handle->state_machine(base, handle);
 
     return retval;
 }
@@ -731,26 +768,47 @@ static status_t ltc_3des_process_EDMA(LTC_Type *base,
     }
 
     /* Initialize algorithm state. */
-    ltc_symmetric_update(base, &key[0], keySize, kLTC_Algorithm3DES, modeAs, modeEnc);
+    retval = ltc_symmetric_update(base, &key[0], keySize, kLTC_Algorithm3DES, modeAs, modeEnc);
+    if (kStatus_Success != retval)
+    {
+        return retval;
+    }
 
     if ((modeAs != kLTC_ModeECB))
     {
-        ltc_set_context(base, iv, LTC_DES_IV_SIZE, 0);
+        retval = ltc_set_context(base, iv, LTC_DES_IV_SIZE, 0);
+        if (kStatus_Success != retval)
+        {
+            return retval;
+        }
     }
 
     /* Process data and return status. */
-    handle->inData = input;
-    handle->outData = output;
-    handle->size = size;
-    handle->state = LTC_SM_STATE_START;
+    handle->inData        = input;
+    handle->outData       = output;
+    handle->size          = size;
+    handle->state         = LTC_SM_STATE_START;
     handle->state_machine = ltc_process_message_in_sessions_EDMA;
-    retval = handle->state_machine(base, handle);
+    retval                = handle->state_machine(base, handle);
 
     return retval;
 }
 /*******************************************************************************
  * DES / 3DES Code public
  ******************************************************************************/
+/*!
+ * brief Encrypts DES using ECB block mode.
+ *
+ * Encrypts DES using ECB block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param[out] ciphertext Output ciphertext
+ * param size Size of input and output data in bytes. Must be multiple of 8 bytes.
+ * param key Input key to use for encryption
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES_EncryptEcbEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *plaintext,
@@ -761,6 +819,19 @@ status_t LTC_DES_EncryptEcbEDMA(LTC_Type *base,
     return ltc_des_process_EDMA(base, handle, plaintext, ciphertext, size, NULL, key, kLTC_ModeECB, kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Decrypts DES using ECB block mode.
+ *
+ * Decrypts DES using ECB block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input and output data in bytes. Must be multiple of 8 bytes.
+ * param key Input key to use for decryption
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES_DecryptEcbEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *ciphertext,
@@ -771,6 +842,21 @@ status_t LTC_DES_DecryptEcbEDMA(LTC_Type *base,
     return ltc_des_process_EDMA(base, handle, ciphertext, plaintext, size, NULL, key, kLTC_ModeECB, kLTC_ModeDecrypt);
 }
 
+/*!
+ * brief Encrypts DES using CBC block mode.
+ *
+ * Encrypts DES using CBC block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param[out] ciphertext Ouput ciphertext
+ * param size Size of input and output data in bytes
+ * param iv Input initial vector to combine with the first plaintext block.
+ *           The iv does not need to be secret, but it must be unpredictable.
+ * param key Input key to use for encryption
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES_EncryptCbcEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *plaintext,
@@ -782,6 +868,21 @@ status_t LTC_DES_EncryptCbcEDMA(LTC_Type *base,
     return ltc_des_process_EDMA(base, handle, plaintext, ciphertext, size, iv, key, kLTC_ModeCBC, kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Decrypts DES using CBC block mode.
+ *
+ * Decrypts DES using CBC block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input data in bytes
+ * param iv Input initial vector to combine with the first plaintext block.
+ *           The iv does not need to be secret, but it must be unpredictable.
+ * param key Input key to use for decryption
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES_DecryptCbcEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *ciphertext,
@@ -793,6 +894,20 @@ status_t LTC_DES_DecryptCbcEDMA(LTC_Type *base,
     return ltc_des_process_EDMA(base, handle, ciphertext, plaintext, size, iv, key, kLTC_ModeCBC, kLTC_ModeDecrypt);
 }
 
+/*!
+ * brief Encrypts DES using CFB block mode.
+ *
+ * Encrypts DES using CFB block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param size Size of input data in bytes
+ * param iv Input initial block.
+ * param key Input key to use for encryption
+ * param[out] ciphertext Output ciphertext
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES_EncryptCfbEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *plaintext,
@@ -804,6 +919,20 @@ status_t LTC_DES_EncryptCfbEDMA(LTC_Type *base,
     return ltc_des_process_EDMA(base, handle, plaintext, ciphertext, size, iv, key, kLTC_ModeCFB, kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Decrypts DES using CFB block mode.
+ *
+ * Decrypts DES using CFB block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input and output data in bytes
+ * param iv Input initial block.
+ * param key Input key to use for decryption
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES_DecryptCfbEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *ciphertext,
@@ -815,6 +944,21 @@ status_t LTC_DES_DecryptCfbEDMA(LTC_Type *base,
     return ltc_des_process_EDMA(base, handle, ciphertext, plaintext, size, iv, key, kLTC_ModeCFB, kLTC_ModeDecrypt);
 }
 
+/*!
+ * brief Encrypts DES using OFB block mode.
+ *
+ * Encrypts DES using OFB block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param[out] ciphertext Output ciphertext
+ * param size Size of input and output data in bytes
+ * param iv Input unique input vector. The OFB mode requires that the IV be unique
+ *           for each execution of the mode under the given key.
+ * param key Input key to use for encryption
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES_EncryptOfbEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *plaintext,
@@ -826,6 +970,21 @@ status_t LTC_DES_EncryptOfbEDMA(LTC_Type *base,
     return ltc_des_process_EDMA(base, handle, plaintext, ciphertext, size, iv, key, kLTC_ModeOFB, kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Decrypts DES using OFB block mode.
+ *
+ * Decrypts DES using OFB block mode.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input and output data in bytes. Must be multiple of 8 bytes.
+ * param iv Input unique input vector. The OFB mode requires that the IV be unique
+ *           for each execution of the mode under the given key.
+ * param key Input key to use for decryption
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES_DecryptOfbEDMA(LTC_Type *base,
                                 ltc_edma_handle_t *handle,
                                 const uint8_t *ciphertext,
@@ -837,6 +996,20 @@ status_t LTC_DES_DecryptOfbEDMA(LTC_Type *base,
     return ltc_des_process_EDMA(base, handle, ciphertext, plaintext, size, iv, key, kLTC_ModeOFB, kLTC_ModeDecrypt);
 }
 
+/*!
+ * brief Encrypts triple DES using ECB block mode with two keys.
+ *
+ * Encrypts triple DES using ECB block mode with two keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param[out] ciphertext Output ciphertext
+ * param size Size of input and output data in bytes. Must be multiple of 8 bytes.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES2_EncryptEcbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *plaintext,
@@ -849,6 +1022,21 @@ status_t LTC_DES2_EncryptEcbEDMA(LTC_Type *base,
                                  kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Encrypts triple DES using ECB block mode with three keys.
+ *
+ * Encrypts triple DES using ECB block mode with three keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param[out] ciphertext Output ciphertext
+ * param size Size of input and output data in bytes. Must be multiple of 8 bytes.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * param key3 Third input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES3_EncryptEcbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *plaintext,
@@ -862,6 +1050,20 @@ status_t LTC_DES3_EncryptEcbEDMA(LTC_Type *base,
                                  kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Decrypts triple DES using ECB block mode with two keys.
+ *
+ * Decrypts triple DES using ECB block mode with two keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input and output data in bytes. Must be multiple of 8 bytes.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES2_DecryptEcbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *ciphertext,
@@ -874,6 +1076,21 @@ status_t LTC_DES2_DecryptEcbEDMA(LTC_Type *base,
                                  kLTC_ModeDecrypt);
 }
 
+/*!
+ * brief Decrypts triple DES using ECB block mode with three keys.
+ *
+ * Decrypts triple DES using ECB block mode with three keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input and output data in bytes. Must be multiple of 8 bytes.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * param key3 Third input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES3_DecryptEcbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *ciphertext,
@@ -887,6 +1104,22 @@ status_t LTC_DES3_DecryptEcbEDMA(LTC_Type *base,
                                  kLTC_ModeDecrypt);
 }
 
+/*!
+ * brief Encrypts triple DES using CBC block mode with two keys.
+ *
+ * Encrypts triple DES using CBC block mode with two keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param[out] ciphertext Output ciphertext
+ * param size Size of input and output data in bytes
+ * param iv Input initial vector to combine with the first plaintext block.
+ *           The iv does not need to be secret, but it must be unpredictable.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES2_EncryptCbcEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *plaintext,
@@ -900,6 +1133,23 @@ status_t LTC_DES2_EncryptCbcEDMA(LTC_Type *base,
                                  kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Encrypts triple DES using CBC block mode with three keys.
+ *
+ * Encrypts triple DES using CBC block mode with three keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param[out] ciphertext Output ciphertext
+ * param size Size of input data in bytes
+ * param iv Input initial vector to combine with the first plaintext block.
+ *           The iv does not need to be secret, but it must be unpredictable.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * param key3 Third input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES3_EncryptCbcEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *plaintext,
@@ -914,6 +1164,22 @@ status_t LTC_DES3_EncryptCbcEDMA(LTC_Type *base,
                                  kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Decrypts triple DES using CBC block mode with two keys.
+ *
+ * Decrypts triple DES using CBC block mode with two keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input and output data in bytes
+ * param iv Input initial vector to combine with the first plaintext block.
+ *           The iv does not need to be secret, but it must be unpredictable.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES2_DecryptCbcEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *ciphertext,
@@ -927,6 +1193,23 @@ status_t LTC_DES2_DecryptCbcEDMA(LTC_Type *base,
                                  kLTC_ModeDecrypt);
 }
 
+/*!
+ * brief Decrypts triple DES using CBC block mode with three keys.
+ *
+ * Decrypts triple DES using CBC block mode with three keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input and output data in bytes
+ * param iv Input initial vector to combine with the first plaintext block.
+ *           The iv does not need to be secret, but it must be unpredictable.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * param key3 Third input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES3_DecryptCbcEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *ciphertext,
@@ -941,6 +1224,21 @@ status_t LTC_DES3_DecryptCbcEDMA(LTC_Type *base,
                                  kLTC_ModeDecrypt);
 }
 
+/*!
+ * brief Encrypts triple DES using CFB block mode with two keys.
+ *
+ * Encrypts triple DES using CFB block mode with two keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param[out] ciphertext Output ciphertext
+ * param size Size of input and output data in bytes
+ * param iv Input initial block.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES2_EncryptCfbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *plaintext,
@@ -954,6 +1252,22 @@ status_t LTC_DES2_EncryptCfbEDMA(LTC_Type *base,
                                  kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Encrypts triple DES using CFB block mode with three keys.
+ *
+ * Encrypts triple DES using CFB block mode with three keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param[out] ciphertext Output ciphertext
+ * param size Size of input and ouput data in bytes
+ * param iv Input initial block.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * param key3 Third input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES3_EncryptCfbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *plaintext,
@@ -968,6 +1282,21 @@ status_t LTC_DES3_EncryptCfbEDMA(LTC_Type *base,
                                  kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Decrypts triple DES using CFB block mode with two keys.
+ *
+ * Decrypts triple DES using CFB block mode with two keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input and output data in bytes
+ * param iv Input initial block.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES2_DecryptCfbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *ciphertext,
@@ -981,6 +1310,22 @@ status_t LTC_DES2_DecryptCfbEDMA(LTC_Type *base,
                                  kLTC_ModeDecrypt);
 }
 
+/*!
+ * brief Decrypts triple DES using CFB block mode with three keys.
+ *
+ * Decrypts triple DES using CFB block mode with three keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input data in bytes
+ * param iv Input initial block.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * param key3 Third input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES3_DecryptCfbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *ciphertext,
@@ -995,6 +1340,22 @@ status_t LTC_DES3_DecryptCfbEDMA(LTC_Type *base,
                                  kLTC_ModeDecrypt);
 }
 
+/*!
+ * brief Encrypts triple DES using OFB block mode with two keys.
+ *
+ * Encrypts triple DES using OFB block mode with two keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param[out] ciphertext Output ciphertext
+ * param size Size of input and output data in bytes
+ * param iv Input unique input vector. The OFB mode requires that the IV be unique
+ *           for each execution of the mode under the given key.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES2_EncryptOfbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *plaintext,
@@ -1008,6 +1369,23 @@ status_t LTC_DES2_EncryptOfbEDMA(LTC_Type *base,
                                  kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Encrypts triple DES using OFB block mode with three keys.
+ *
+ * Encrypts triple DES using OFB block mode with three keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param plaintext Input plaintext to encrypt
+ * param[out] ciphertext Output ciphertext
+ * param size Size of input and output data in bytes
+ * param iv Input unique input vector. The OFB mode requires that the IV be unique
+ *           for each execution of the mode under the given key.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * param key3 Third input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES3_EncryptOfbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *plaintext,
@@ -1022,6 +1400,22 @@ status_t LTC_DES3_EncryptOfbEDMA(LTC_Type *base,
                                  kLTC_ModeEncrypt);
 }
 
+/*!
+ * brief Decrypts triple DES using OFB block mode with two keys.
+ *
+ * Decrypts triple DES using OFB block mode with two keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input and output data in bytes
+ * param iv Input unique input vector. The OFB mode requires that the IV be unique
+ *           for each execution of the mode under the given key.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES2_DecryptOfbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *ciphertext,
@@ -1035,6 +1429,23 @@ status_t LTC_DES2_DecryptOfbEDMA(LTC_Type *base,
                                  kLTC_ModeDecrypt);
 }
 
+/*!
+ * brief Decrypts triple DES using OFB block mode with three keys.
+ *
+ * Decrypts triple DES using OFB block mode with three keys.
+ *
+ * param base LTC peripheral base address
+ * param handle pointer to ltc_edma_handle_t structure which stores the transaction state.
+ * param ciphertext Input ciphertext to decrypt
+ * param[out] plaintext Output plaintext
+ * param size Size of input and output data in bytes
+ * param iv Input unique input vector. The OFB mode requires that the IV be unique
+ *           for each execution of the mode under the given key.
+ * param key1 First input key for key bundle
+ * param key2 Second input key for key bundle
+ * param key3 Third input key for key bundle
+ * return Status from encrypt/decrypt operation
+ */
 status_t LTC_DES3_DecryptOfbEDMA(LTC_Type *base,
                                  ltc_edma_handle_t *handle,
                                  const uint8_t *ciphertext,
@@ -1057,7 +1468,7 @@ static uint32_t LTC_GetInstance(LTC_Type *base)
     uint32_t instance = 0;
     uint32_t i;
 
-    for (i = 0; i < FSL_FEATURE_SOC_LTC_COUNT; i++)
+    for (i = 0; i < (uint32_t)FSL_FEATURE_SOC_LTC_COUNT; i++)
     {
         if (s_ltcBase[instance] == base)
         {
@@ -1114,7 +1525,7 @@ static void LTC_InputFifoEDMACallback(edma_handle_t *handle, void *param, bool t
 
     /* Avoid the warning for unused variables. */
     handle = handle;
-    tcds = tcds;
+    tcds   = tcds;
 
     if (transferDone)
     {
@@ -1132,7 +1543,7 @@ static void LTC_OutputFifoEDMACallback(edma_handle_t *handle, void *param, bool 
 
     /* Avoid the warning for unused variables. */
     handle = handle;
-    tcds = tcds;
+    tcds   = tcds;
 
     if (transferDone)
     {
@@ -1142,7 +1553,7 @@ static void LTC_OutputFifoEDMACallback(edma_handle_t *handle, void *param, bool 
         /* Disable Output Fifo DMA */
         LTC_EnableOutputFifoDMA(ltcPrivateHandle->base, false);
 
-        if (ltcPrivateHandle->handle->state_machine)
+        if (NULL != ltcPrivateHandle->handle->state_machine)
         {
             ltcPrivateHandle->handle->state_machine(ltcPrivateHandle->base, ltcPrivateHandle->handle);
         }
@@ -1152,24 +1563,26 @@ static void LTC_OutputFifoEDMACallback(edma_handle_t *handle, void *param, bool 
 /* @brief Copy data to Input FIFO and reading from Ouput FIFO using eDMA. */
 static void ltc_symmetric_process_EDMA(LTC_Type *base, uint32_t inSize, const uint8_t **inData, uint8_t **outData)
 {
-    const uint8_t *in = *inData;
-    uint8_t *out = *outData;
-    uint32_t instance = LTC_GetInstance(base);
-    uint32_t entry_number = inSize / sizeof(uint32_t);
+    const uint8_t *in          = *inData;
+    uint8_t *out               = *outData;
+    uint32_t instance          = LTC_GetInstance(base);
+    uint32_t entry_number      = inSize / sizeof(uint32_t);
     const uint8_t *inputBuffer = *inData;
-    uint8_t *outputBuffer = *outData;
+    uint8_t *outputBuffer      = *outData;
     edma_transfer_config_t config;
 
-    if (entry_number)
+    if (0U != entry_number)
     {
         /* =========== Init Input FIFO DMA ======================*/
-        memset(&config, 0, sizeof(config));
+        (void)memset(&config, 0, sizeof(config));
 
         /* Prepare transfer. */
-        EDMA_PrepareTransfer(&config, (void *)inputBuffer, 1, (void *)(&((base)->IFIFO)), 4U, 4U, entry_number * 4,
+        EDMA_PrepareTransfer(&config, (void *)(uint32_t *)(uintptr_t)inputBuffer, 1U,
+                             (void *)(uint32_t *)(uintptr_t)(&base->IFIFO), 4U, 4U, entry_number * 4U,
                              kEDMA_MemoryToPeripheral);
         /* Submit transfer. */
-        EDMA_SubmitTransfer(s_edmaPrivateHandle[instance].handle->inputFifoEdmaHandle, &config);
+        (void)EDMA_SubmitTransfer(s_edmaPrivateHandle[instance].handle->inputFifoEdmaHandle,
+                                  (const edma_transfer_config_t *)(uint32_t)&config);
 
         /* Set request size.*/
         base->CTL &= ~LTC_CTL_IFR_MASK; /* 1 entry */
@@ -1180,13 +1593,14 @@ static void ltc_symmetric_process_EDMA(LTC_Type *base, uint32_t inSize, const ui
         EDMA_StartTransfer(s_edmaPrivateHandle[instance].handle->inputFifoEdmaHandle);
 
         /* =========== Init Output FIFO DMA ======================*/
-        memset(&config, 0, sizeof(config));
+        (void)memset(&config, 0, sizeof(config));
 
         /* Prepare transfer. */
-        EDMA_PrepareTransfer(&config, (void *)(&((base)->OFIFO)), 4U, (void *)outputBuffer, 1U, 4U, entry_number * 4,
-                             kEDMA_PeripheralToMemory);
+        EDMA_PrepareTransfer(&config, (void *)(uint32_t *)(uintptr_t)(&base->OFIFO), 4U, (void *)outputBuffer, 1U, 4U,
+                             entry_number * 4U, kEDMA_PeripheralToMemory);
         /* Submit transfer. */
-        EDMA_SubmitTransfer(s_edmaPrivateHandle[instance].handle->outputFifoEdmaHandle, &config);
+        (void)EDMA_SubmitTransfer(s_edmaPrivateHandle[instance].handle->outputFifoEdmaHandle,
+                                  (const edma_transfer_config_t *)(uint32_t)&config);
 
         /* Set request size.*/
         base->CTL &= ~LTC_CTL_OFR_MASK; /* 1 entry */
@@ -1205,14 +1619,23 @@ static void ltc_symmetric_process_EDMA(LTC_Type *base, uint32_t inSize, const ui
             (void)status_reg;
         }
 
-        out += entry_number * sizeof(uint32_t);
-        in += entry_number * sizeof(uint32_t);
+        out = &out[entry_number * sizeof(uint32_t)];
+        in  = &in[entry_number * sizeof(uint32_t)];
 
-        *inData = in;
+        *inData  = in;
         *outData = out;
     }
 }
 
+/*!
+ * brief Init the LTC eDMA handle which is used in transactional functions
+ * param base      LTC module base address
+ * param handle    Pointer to ltc_edma_handle_t structure
+ * param callback  Callback function, NULL means no callback.
+ * param userData  Callback function parameter.
+ * param inputFifoEdmaHandle User requested eDMA handle for Input FIFO eDMA.
+ * param outputFifoEdmaHandle User requested eDMA handle for Output FIFO eDMA.
+ */
 void LTC_CreateHandleEDMA(LTC_Type *base,
                           ltc_edma_handle_t *handle,
                           ltc_edma_callback_t callback,
@@ -1220,18 +1643,18 @@ void LTC_CreateHandleEDMA(LTC_Type *base,
                           edma_handle_t *inputFifoEdmaHandle,
                           edma_handle_t *outputFifoEdmaHandle)
 {
-    assert(handle);
-    assert(inputFifoEdmaHandle);
-    assert(outputFifoEdmaHandle);
+    assert(NULL != handle);
+    assert(NULL != inputFifoEdmaHandle);
+    assert(NULL != outputFifoEdmaHandle);
 
     uint32_t instance = LTC_GetInstance(base);
 
-    s_edmaPrivateHandle[instance].base = base;
+    s_edmaPrivateHandle[instance].base   = base;
     s_edmaPrivateHandle[instance].handle = handle;
 
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
-    handle->inputFifoEdmaHandle = inputFifoEdmaHandle;
+    handle->inputFifoEdmaHandle  = inputFifoEdmaHandle;
     handle->outputFifoEdmaHandle = outputFifoEdmaHandle;
 
     handle->callback = callback;
