@@ -256,13 +256,13 @@ static void hashcrypt_get_data(HASHCRYPT_Type *base, uint32_t *output, size_t ou
 {
     uint32_t digest[8];
 
-    while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_MASK))
+    while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
     {
     }
 
     for (int i = 0; i < 8; i++)
     {
-        digest[i] = swap_bytes(base->OUTDATA0[i]);
+        digest[i] = swap_bytes(base->DIGEST0[i]);
     }
 
     if (outputSize > sizeof(digest))
@@ -354,12 +354,12 @@ static status_t hashcrypt_aes_one_block(HASHCRYPT_Type *base, const uint8_t *inp
             int outidx    = 0;
             while (actSz)
             {
-                while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_MASK))
+                while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
                 {
                 }
                 for (int i = 0; i < 4; i++)
                 {
-                    (temp + outidx)[i] = swap_bytes(base->OUTDATA0[i]);
+                    (temp + outidx)[i] = swap_bytes(base->DIGEST0[i]);
                 }
                 outidx += HASHCRYPT_AES_BLOCK_SIZE / 4;
                 actSz -= HASHCRYPT_AES_BLOCK_SIZE;
@@ -375,13 +375,13 @@ static status_t hashcrypt_aes_one_block(HASHCRYPT_Type *base, const uint8_t *inp
         while (size >= HASHCRYPT_AES_BLOCK_SIZE)
         {
             /* Get result */
-            while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_MASK))
+            while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
             {
             }
 
             for (int i = 0; i < 4; i++)
             {
-                ((uint32_t *)output + idx)[i] = swap_bytes(base->OUTDATA0[i]);
+                ((uint32_t *)output + idx)[i] = swap_bytes(base->DIGEST0[i]);
             }
 
             idx += HASHCRYPT_AES_BLOCK_SIZE / 4;
@@ -408,11 +408,6 @@ static status_t hashcrypt_aes_one_block(HASHCRYPT_Type *base, const uint8_t *inp
 static status_t hashcrypt_sha_check_input_alg(HASHCRYPT_Type *base, hashcrypt_algo_t algo)
 {
     if ((algo == kHASHCRYPT_Sha1) || (algo == kHASHCRYPT_Sha256))
-    {
-        return kStatus_Success;
-    }
-
-    if ((algo == kHASHCRYPT_Sha512) && (base->CONFIG & HASHCRYPT_CONFIG_SHA512_MASK))
     {
         return kStatus_Success;
     }
@@ -550,7 +545,7 @@ static status_t hashcrypt_sha_process_message_data(HASHCRYPT_Type *base,
             base->MEMCTRL     = HASHCRYPT_MEMCTRL_MASTER(1) | HASHCRYPT_MEMCTRL_COUNT(blkNum);
             message += blkBytes;
             messageSize -= blkBytes;
-            while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_MASK))
+            while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
             {
             }
         }
@@ -606,7 +601,7 @@ static status_t hashcrypt_sha_finalize(HASHCRYPT_Type *base, hashcrypt_sha_ctx_i
         hashcrypt_sha_one_block(base, &lastBlock.b[0]);
     }
     /* poll wait for final digest */
-    while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_MASK))
+    while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
     {
     }
     return kStatus_Success;
@@ -1138,7 +1133,7 @@ status_t HASHCRYPT_AES_CryptCtr(HASHCRYPT_Type *base,
     return kStatus_Success;
 }
 
-void HASHCRYPT_IRQHandler(void)
+void HASHCRYPT_DriverIRQHandler(void)
 {
     hashcrypt_sha_ctx_internal_t *ctxInternal;
     HASHCRYPT_Type *base = HASHCRYPT;

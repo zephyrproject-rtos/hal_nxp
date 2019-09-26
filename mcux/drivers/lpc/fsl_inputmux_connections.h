@@ -400,8 +400,8 @@ typedef enum _inputmux_connection_t
     kINPUTMUX_Dma1Flexcomm0TxTrigoutToTriginChannels = 5U + (DMA1_OTRIG_INMUX0 << PMUX_SHIFT),
     kINPUTMUX_Dma1Flexcomm1RxTrigoutToTriginChannels = 6U + (DMA1_OTRIG_INMUX0 << PMUX_SHIFT),
     kINPUTMUX_Dma1Flexcomm1TxTrigoutToTriginChannels = 7U + (DMA1_OTRIG_INMUX0 << PMUX_SHIFT),
-    kINPUTMUX_Dma1Flexcomm2RxTrigoutToTriginChannels = 8U + (DMA1_OTRIG_INMUX0 << PMUX_SHIFT),
-    kINPUTMUX_Dma1Flexcomm2TxTrigoutToTriginChannels = 9U + (DMA1_OTRIG_INMUX0 << PMUX_SHIFT),
+    kINPUTMUX_Dma1Flexcomm3RxTrigoutToTriginChannels = 8U + (DMA1_OTRIG_INMUX0 << PMUX_SHIFT),
+    kINPUTMUX_Dma1Flexcomm3TxTrigoutToTriginChannels = 9U + (DMA1_OTRIG_INMUX0 << PMUX_SHIFT),
 } inputmux_connection_t;
 
 /*@}*/

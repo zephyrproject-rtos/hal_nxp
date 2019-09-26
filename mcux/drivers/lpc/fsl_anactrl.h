@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, NXP
+ * Copyright 2018-2019, NXP
  * All rights reserved.
  *
  *
@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief ANACTRL driver version. */
-#define FSL_ANACTRL_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */`
+#define FSL_ANACTRL_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1. */`
 
 /*!
  * @brief ANACTRL interrupt flags
@@ -72,15 +72,9 @@ enum _anactrl_interrupt
  */
 enum _anactrl_flags
 {
-    kANACTRL_PMUId = ANACTRL_ANALOG_CTRL_STATUS_PMU_ID_MASK, /*!< Power Management Unit (PMU) analog macro-bloc
-                                                                identification number. */
-    kANACTRL_OSCId =
-        ANACTRL_ANALOG_CTRL_STATUS_OSC_ID_MASK, /*!< Oscillators analog macro-bloc identification number. */
     kANACTRL_FlashPowerDownFlag = ANACTRL_ANALOG_CTRL_STATUS_FLASH_PWRDWN_MASK, /*!< Flash power-down status. */
     kANACTRL_FlashInitErrorFlag =
         ANACTRL_ANALOG_CTRL_STATUS_FLASH_INIT_ERROR_MASK, /*!< Flash initialization error status. */
-    kANACTRL_FinalTestFlag =
-        ANACTRL_ANALOG_CTRL_STATUS_FINAL_TEST_DONE_VECT_MASK, /*!< Indicates current status of final test. */
 };
 
 /*!
@@ -96,59 +90,6 @@ enum _anactrl_osc_flags
 };
 
 /*!
- * @brief LDO output mode
- */
-typedef enum _anactrl_ldo_output_mode
-{
-    kANACTRL_LDOOutputHighNormalMode    = 0U, /*!< Output in High normal state. */
-    kANACTRL_LDOOutputHighImpedanceMode = 1U, /*!< Output in High Impedance state. */
-} anactrl_ldo_output_mode_t;
-
-/*!
- * @brief LDO output level
- */
-typedef enum _anactrl_ldo_output_level
-{
-    kANACTRL_LDOOutputLevel0 = 0U, /*!< Output level 0.750 V. */
-    kANACTRL_LDOOutputLevel1,      /*!< Output level 0.775 V. */
-    kANACTRL_LDOOutputLevel2,      /*!< Output level 0.800 V. */
-    kANACTRL_LDOOutputLevel3,      /*!< Output level 0.825 V. */
-    kANACTRL_LDOOutputLevel4,      /*!< Output level 0.850 V. */
-    kANACTRL_LDOOutputLevel5,      /*!< Output level 0.875 V. */
-    kANACTRL_LDOOutputLevel6,      /*!< Output level 0.900 V. */
-    kANACTRL_LDOOutputLevel7,      /*!< Output level 0.925 V. */
-} anactrl_ldo_output_level_t;
-
-/*!
- * @brief Select short or long ring osc
- */
-typedef enum _anactrl_ring_osc_selector
-{
-    kANACTRL_ShortRingOsc = 0U, /*!< Select short ring osc (few elements). */
-    kANACTRL_LongRingOsc  = 1U, /*!< Select long ring osc (many elements). */
-} anactrl_ring_osc_selector_t;
-
-/*!
- * @brief Ring osc frequency output divider
- */
-typedef enum _anactrl_ring_osc_freq_output_divider
-{
-    kANACTRL_HighFreqOutput = 0U, /*!< High frequency output (frequency lower than 100 MHz). */
-    kANACTRL_LowFreqOutput  = 1U, /*!< Low frequency output (frequency lower than 10 MHz). */
-} anactrl_ring_osc_freq_output_divider_t;
-
-/*!
- * @brief PN-Ring osc (P-Transistor and N-Transistor processing) control.
- */
-typedef enum _anactrl_pn_ring_osc_mode
-{
-    kANACTRL_NormalMode              = 0U, /*!< Normal mode. */
-    kANACTRL_PMonitorPTransistorMode = 1U, /*!< P-Monitor mode. Measure with weak P transistor. */
-    kANACTRL_PMonitorNTransistorMode = 2U, /*!< P-Monitor mode. Measure with weak N transistor. */
-    kANACTRL_NotUse                  = 3U, /*!< Do not use. */
-} anactrl_pn_ring_osc_mode_t;
-
-/*!
  * @breif Configuration for FRO192M
  *
  * This structure holds the configuration settings for the on-chip high-speed Free Running Oscillator. To initialize
@@ -157,14 +98,8 @@ typedef enum _anactrl_pn_ring_osc_mode
  */
 typedef struct _anactrl_fro192M_config
 {
-    uint8_t biasTrim;         /*!< Set bias trimming value (course frequency trimming). */
-    uint8_t tempTrim;         /*!< Set temperature coefficient trimming value. */
-    uint8_t dacTrim;          /*!< Set curdac trimming value (fine frequency trimming) This trim is used to
-        adjust the frequency, given that the bias and temperature trim are set. */
-    bool enable12MHzClk;      /*!< Enable 12MHz clock. */
-    bool enable48MhzClk;      /*!< Enable 48MHz clock. */
-    bool enable96MHzClk;      /*!< Enable 96MHz clock. */
-    bool enableAnalogTestBus; /*!< Enable analog test bus. */
+    bool enable12MHzClk; /*!< Enable 12MHz clock. */
+    bool enable96MHzClk; /*!< Enable 96MHz clock. */
 } anactrl_fro192M_config_t;
 
 /*!
@@ -176,30 +111,11 @@ typedef struct _anactrl_fro192M_config
  */
 typedef struct _anactrl_xo32M_config
 {
-    bool enableACBufferBypass;                 /*!< Enable XO AC buffer bypass in pll and top level. */
-    bool enablePllUsbOutput;                   /*!< Enable XO 32 MHz output to USB HS PLL. */
-    bool enableSysCLkOutput;                   /*!< Enable XO 32 MHz output to CPU system, SCT, and CLKOUT */
-    bool enableLDOBypass;                      /*!< Activate LDO bypass. */
-    anactrl_ldo_output_mode_t LDOOutputMode;   /*!< Set LDO output mode. */
-    anactrl_ldo_output_level_t LDOOutputLevel; /*!< Set LDO output level. */
-    uint8_t bias;                              /*!< Adjust the biasing current. */
-    uint8_t stability;                         /*!< Stability configuration. */
+    bool enableACBufferBypass; /*!< Enable XO AC buffer bypass in pll and top level. */
+    bool enablePllUsbOutput;   /*!< Enable XO 32 MHz output to USB HS PLL. */
+    bool enableSysCLkOutput;   /*!< Enable XO 32 MHz output to CPU system, SCT, and CLKOUT */
 } anactrl_xo32M_config_t;
 
-/*!
- * @breif Configuration for ring oscillator
- *
- * This structure holds the configuration settings for the three ring oscillators. To initialize this
- * structure to reasonable defaults, call the ANACTRL_GetDefaultRingOscConfig() function and pass a
- * pointer to your config structure instance.
- */
-typedef struct _anactrl_ring_osc_config
-{
-    anactrl_ring_osc_selector_t ringOscSel;
-    anactrl_ring_osc_freq_output_divider_t ringOscFreqOutputDiv;
-    anactrl_pn_ring_osc_mode_t pnRingOscMode;
-    uint8_t ringOscOutClkDiv;
-} anactrl_ring_osc_config_t;
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -245,12 +161,7 @@ void ANACTRL_SetFro192M(ANACTRL_Type *base, anactrl_fro192M_config_t *config);
  * @brief Get the default configuration of FRO192M.
  * The default values are:
  * code
- *   config->biasTrim = 0x1AU;
- *   config->tempTrim = 0x20U;
  *   config->enable12MHzClk = true;
- *   config->enable48MhzClk = true;
- *   config->dacTrim = 0x80U;
- *   config->enableAnalogTestBus = false;
  *   config->enable96MHzClk = false;
  * encode
  * @param config Pointer to FRO192M configuration structure. Refer to "anactrl_fro192M_config_t" structure.
@@ -269,63 +180,13 @@ void ANACTRL_SetXo32M(ANACTRL_Type *base, anactrl_xo32M_config_t *config);
  * @brief Get the default configuration of XO32M.
  * The default values are:
  * code
- *   config->enableACBufferBypass = false;
  *   config->enablePllUsbOutput = false;
  *   config->enableSysCLkOutput = false;
- *   config->enableLDOBypass = false;
- *   config->LDOOutputMode = kANACTRL_LDOOutputHighNormalMode;
- *   config->LDOOutputLevel = kANACTRL_LDOOutputLevel4;
- *   config->bias = 2U;
- *   config->stability = 3U;
  * encode
  * @param config Pointer to XO32M configuration structure. Refer to "anactrl_xo32M_config_t" structure.
  */
 void ANACTRL_GetDefaultXo32MConfig(anactrl_xo32M_config_t *config);
 
-/*!
- * @brief Set the ring oscillators.
- *
- * @param base ANACTRL peripheral base address.
- * @param config Pointer to ring osc configuration structure. Refer to "anactrl_ring_osc_config_t" structure.
- */
-void ANACTRL_SetRingOsc(ANACTRL_Type *base, anactrl_ring_osc_config_t *config);
-
-/*!
- * @brief Get the default configuration of ring oscillators.
- * The default values are:
- * code
- *   config->ringOscSel = kANACTRL_ShortRingOsc;
- *   config->ringOscFreqOutputDiv = kANACTRL_HighFreqOutput;
- *   config->pnRingOscMode = kANACTRL_NormalMode;
- *   config->ringOscOutClkDiv = 0U;
- * encode
- * @param config Pointer to ring oscillator configuration structure. Refer to "anactrl_ring_osc_config_t" structure.
- */
-void ANACTRL_GetDefaultRingOscConfig(anactrl_ring_osc_config_t *config);
-/* @} */
-
-/*!
- * @name ADC control
- * @{
- */
-
-/*!
- * @brief Enable VBAT divider branch.
- *
- * @param base ANACTRL peripheral base address.
- * @param enable switcher to the function.
- */
-static inline void ANACTRL_EnableAdcVBATDivider(ANACTRL_Type *base, bool enable)
-{
-    if (enable)
-    {
-        base->ADC_CTRL |= ANACTRL_ADC_CTRL_VBATDIVENABLE_MASK;
-    }
-    else
-    {
-        base->ADC_CTRL &= ~ANACTRL_ADC_CTRL_VBATDIVENABLE_MASK;
-    }
-}
 /* @} */
 
 /*!
@@ -360,7 +221,7 @@ uint32_t ANACTRL_MeasureFrequency(ANACTRL_Type *base, uint8_t scale, uint32_t re
  * @param bas ANACTRL peripheral base address.
  * @param mask The interrupt mask. Refer to "_anactrl_interrupt" enumeration.
  */
-static inline void ANACTRL_EnableInterrupt(ANACTRL_Type *base, uint32_t mask)
+static inline void ANACTRL_EnableInterrupts(ANACTRL_Type *base, uint32_t mask)
 {
     base->BOD_DCDC_INT_CTRL |= (0x15U & mask);
 }
@@ -371,9 +232,20 @@ static inline void ANACTRL_EnableInterrupt(ANACTRL_Type *base, uint32_t mask)
  * @param bas ANACTRL peripheral base address.
  * @param mask The interrupt mask. Refer to "_anactrl_interrupt" enumeration.
  */
-static inline void ANACTRL_DisableInterrupt(ANACTRL_Type *base, uint32_t mask)
+static inline void ANACTRL_DisableInterrupts(ANACTRL_Type *base, uint32_t mask)
 {
-    base->BOD_DCDC_INT_CTRL = (base->BOD_DCDC_INT_CTRL & ~0x2AU) | (mask & 0x2AU);
+    base->BOD_DCDC_INT_CTRL &= ~(0x15U & mask);
+}
+
+/*!
+ * @brief Clear the ANACTRL interrupts.
+ *
+ * @param bas ANACTRL peripheral base address.
+ * @param mask The interrupt mask. Refer to "_anactrl_interrupt" enumeration.
+ */
+static inline void ANACTRL_ClearInterrupts(ANACTRL_Type *base, uint32_t mask)
+{
+    base->BOD_DCDC_INT_CTRL |= (0x2AU & mask);
 }
 /* @} */
 

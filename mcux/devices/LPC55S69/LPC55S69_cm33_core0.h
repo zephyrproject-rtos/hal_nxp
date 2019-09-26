@@ -2,16 +2,16 @@
 ** ###################################################################
 **     Processors:          LPC55S69JBD100_cm33_core0
 **                          LPC55S69JBD64_cm33_core0
-**                          LPC55S69JET98_cm33_core0
+**                          LPC55S69JEV98_cm33_core0
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    LPC55xx/LPC55Sxx User manual Rev.0.4  25 Sep 2018
-**     Version:             rev. 1.0, 2018-08-22
-**     Build:               b190430
+**     Reference manual:    LPC55S6x/LPC55S2x/LPC552x User manual(UM11126) Rev.1.3  16 May 2019
+**     Version:             rev. 1.1, 2019-05-16
+**     Build:               b190904
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC55S69_cm33_core0
@@ -28,14 +28,16 @@
 **     Revisions:
 **     - rev. 1.0 (2018-08-22)
 **         Initial version based on v0.2UM
+**     - rev. 1.1 (2019-05-16)
+**         Initial A1 version based on v1.3UM
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC55S69_cm33_core0.h
- * @version 1.0
- * @date 2018-08-22
+ * @version 1.1
+ * @date 2019-05-16
  * @brief CMSIS Peripheral Access Layer for LPC55S69_cm33_core0
  *
  * CMSIS Peripheral Access Layer for LPC55S69_cm33_core0
@@ -48,7 +50,7 @@
  * compatible) */
 #define MCU_MEM_MAP_VERSION 0x0100U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0000U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
 
 
 /* ----------------------------------------------------------------------------
@@ -126,7 +128,7 @@ typedef enum IRQn {
   Reserved59_IRQn              = 43,               /**< Reserved interrupt */
   Reserved60_IRQn              = 44,               /**< Reserved interrupt */
   Reserved61_IRQn              = 45,               /**< Reserved interrupt */
-  USB1_UTMI_IRQn               = 46,               /**< USB1_UTMI */
+  USB1_PHY_IRQn                = 46,               /**< USB1_PHY */
   USB1_IRQn                    = 47,               /**< USB1 interrupt */
   USB1_NEEDCLK_IRQn            = 48,               /**< USB1 activity */
   SEC_HYPERVISOR_CALL_IRQn     = 49,               /**< SEC_HYPERVISOR_CALL interrupt */
@@ -216,9 +218,9 @@ typedef enum _dma_request_source
     kDma0RequestFlexcomm1Tx         = 7U,          /**< Flexcomm Interface 1 TX/I2C Master */
     kDma1RequestFlexcomm1Tx         = 7U,          /**< Flexcomm Interface 1 TX/I2C Master */
     kDma0RequestFlexcomm3Rx         = 8U,          /**< Flexcomm Interface 3 RX/I2C Slave */
-    kDma1RequestFlexcomm2Rx         = 8U,          /**< Flexcomm Interface 2 RX/I2C Slave */
+    kDma1RequestFlexcomm3Rx         = 8U,          /**< Flexcomm Interface 3 RX/I2C Slave */
     kDma0RequestFlexcomm3Tx         = 9U,          /**< Flexcomm Interface 3 TX/I2C Master */
-    kDma1RequestFlexcomm2Tx         = 9U,          /**< Flexcomm Interface 2 TX/I2C Master */
+    kDma1RequestFlexcomm3Tx         = 9U,          /**< Flexcomm Interface 3 TX/I2C Master */
     kDma0RequestFlexcomm2Rx         = 10U,         /**< Flexcomm Interface 2 RX/I2C Slave */
     kDma0RequestFlexcomm2Tx         = 11U,         /**< Flexcomm Interface 2 TX/I2C Master */
     kDma0RequestFlexcomm4Rx         = 12U,         /**< Flexcomm Interface 4 RX/I2C Slave */
@@ -292,7 +294,7 @@ typedef struct {
   __IO uint32_t CFG;                               /**< ADC Configuration Register, offset: 0x20 */
   __IO uint32_t PAUSE;                             /**< ADC Pause Register, offset: 0x24 */
        uint8_t RESERVED_1[12];
-  __IO uint32_t SWTRIG;                            /**< Software Trigger Register, offset: 0x34 */
+  __O  uint32_t SWTRIG;                            /**< Software Trigger Register, offset: 0x34 */
   __IO uint32_t TSTAT;                             /**< Trigger Status Register, offset: 0x38 */
        uint8_t RESERVED_2[4];
   __IO uint32_t OFSTRIM;                           /**< ADC Offset Trim Register, offset: 0x40 */
@@ -1308,24 +1310,24 @@ typedef struct {
     __IO uint32_t SEC_CTRL_APB_BRIDGE0_MEM_CTRL0;    /**< Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total., array offset: 0x100, array step: 0x30 */
     __IO uint32_t SEC_CTRL_APB_BRIDGE0_MEM_CTRL1;    /**< Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total., array offset: 0x104, array step: 0x30 */
     __IO uint32_t SEC_CTRL_APB_BRIDGE0_MEM_CTRL2;    /**< Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total., array offset: 0x108, array step: 0x30 */
-         uint32_t SEC_CTRL_APB_BRIDGE0_MEM_CTRL3;    /**< Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total., array offset: 0x10C, array step: 0x30 */
+         uint8_t RESERVED_1[4];
     __IO uint32_t SEC_CTRL_APB_BRIDGE1_MEM_CTRL0;    /**< Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total., array offset: 0x110, array step: 0x30 */
     __IO uint32_t SEC_CTRL_APB_BRIDGE1_MEM_CTRL1;    /**< Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total., array offset: 0x114, array step: 0x30 */
     __IO uint32_t SEC_CTRL_APB_BRIDGE1_MEM_CTRL2;    /**< Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total., array offset: 0x118, array step: 0x30 */
     __IO uint32_t SEC_CTRL_APB_BRIDGE1_MEM_CTRL3;    /**< Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total., array offset: 0x11C, array step: 0x30 */
   } SEC_CTRL_APB_BRIDGE[1];
-  __IO uint32_t SEC_CTRL_AHB0_0_SLAVE_RULE;        /**< Security access rules for AHB peripherals., offset: 0x120 */
-  __IO uint32_t SEC_CTRL_AHB0_1_SLAVE_RULE;        /**< Security access rules for AHB peripherals., offset: 0x124 */
+  __IO uint32_t SEC_CTRL_AHB_PORT8_SLAVE0_RULE;    /**< Security access rules for AHB peripherals., offset: 0x120 */
+  __IO uint32_t SEC_CTRL_AHB_PORT8_SLAVE1_RULE;    /**< Security access rules for AHB peripherals., offset: 0x124 */
        uint8_t RESERVED_6[8];
-  __IO uint32_t SEC_CTRL_AHB1_0_SLAVE_RULE;        /**< Security access rules for AHB peripherals., offset: 0x130 */
-  __IO uint32_t SEC_CTRL_AHB1_1_SLAVE_RULE;        /**< Security access rules for AHB peripherals., offset: 0x134 */
+  __IO uint32_t SEC_CTRL_AHB_PORT9_SLAVE0_RULE;    /**< Security access rules for AHB peripherals., offset: 0x130 */
+  __IO uint32_t SEC_CTRL_AHB_PORT9_SLAVE1_RULE;    /**< Security access rules for AHB peripherals., offset: 0x134 */
        uint8_t RESERVED_7[8];
   struct {                                         /* offset: 0x140, array step: 0x14 */
-    __IO uint32_t SEC_CTRL_AHB2_0_SLAVE_RULE;        /**< Security access rules for AHB peripherals., array offset: 0x140, array step: 0x14 */
-    __IO uint32_t SEC_CTRL_AHB2_1_SLAVE_RULE;        /**< Security access rules for AHB peripherals., array offset: 0x144, array step: 0x14 */
+    __IO uint32_t SLAVE0_RULE;                       /**< Security access rules for AHB peripherals., array offset: 0x140, array step: 0x14 */
+    __IO uint32_t SLAVE1_RULE;                       /**< Security access rules for AHB peripherals., array offset: 0x144, array step: 0x14 */
          uint8_t RESERVED_0[8];
-    __IO uint32_t SEC_CTRL_AHB2_0_MEM_RULE[1];       /**< Security access rules for AHB_SEC_CTRL_AHB., array offset: 0x150, array step: index*0x14, index2*0x4 */
-  } SEC_CTRL_AHB2[1];
+    __IO uint32_t SEC_CTRL_AHB_SEC_CTRL_MEM_RULE[1];   /**< Security access rules for AHB_SEC_CTRL_AHB., array offset: 0x150, array step: index*0x14, index2*0x4 */
+  } SEC_CTRL_AHB_PORT10[1];
        uint8_t RESERVED_8[12];
   struct {                                         /* offset: 0x160, array step: 0x14 */
     __IO uint32_t SLAVE_RULE;                        /**< Security access rules for USB High speed RAM slaves., array offset: 0x160, array step: 0x14 */
@@ -1333,9 +1335,9 @@ typedef struct {
     __IO uint32_t MEM_RULE[1];                       /**< Security access rules for RAM_USB_HS., array offset: 0x170, array step: index*0x14, index2*0x4 */
   } SEC_CTRL_USB_HS[1];
        uint8_t RESERVED_9[3212];
-  __I  uint32_t SEC_VIO_ADDR[12];                  /**< most recent security violation address for AHB layer n, array offset: 0xE00, array step: 0x4 */
+  __I  uint32_t SEC_VIO_ADDR[12];                  /**< most recent security violation address for AHB port n, array offset: 0xE00, array step: 0x4 */
        uint8_t RESERVED_10[80];
-  __I  uint32_t SEC_VIO_MISC_INFO[12];             /**< most recent security violation miscellaneous information for AHB layer n, array offset: 0xE80, array step: 0x4 */
+  __I  uint32_t SEC_VIO_MISC_INFO[12];             /**< most recent security violation miscellaneous information for AHB port n, array offset: 0xE80, array step: 0x4 */
        uint8_t RESERVED_11[80];
   __IO uint32_t SEC_VIO_INFO_VALID;                /**< security violation address/information registers valid flags, offset: 0xF00 */
        uint8_t RESERVED_12[124];
@@ -1350,8 +1352,8 @@ typedef struct {
   __IO uint32_t MASTER_SEC_LEVEL;                  /**< master secure level register, offset: 0xFD0 */
   __IO uint32_t MASTER_SEC_ANTI_POL_REG;           /**< master secure level anti-pole register, offset: 0xFD4 */
        uint8_t RESERVED_16[20];
-  __IO uint32_t CM33_LOCK_REG;                     /**< Miscalleneous control signals for in CM33 (CPU0), offset: 0xFEC */
-  __IO uint32_t MCM33_LOCK_REG;                    /**< Miscalleneous control signals for in micro-CM33 (CPU1), offset: 0xFF0 */
+  __IO uint32_t CPU0_LOCK_REG;                     /**< Miscalleneous control signals for in Cortex M33 (CPU0), offset: 0xFEC */
+  __IO uint32_t CPU1_LOCK_REG;                     /**< Miscalleneous control signals for in micro-Cortex M33 (CPU1), offset: 0xFF0 */
        uint8_t RESERVED_17[4];
   __IO uint32_t MISC_CTRL_DP_REG;                  /**< secure control duplicate register, offset: 0xFF8 */
   __IO uint32_t MISC_CTRL_REG;                     /**< secure control register, offset: 0xFFC */
@@ -1391,169 +1393,169 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE - Security access rules for FLASH sector 0 to sector 20. Each Flash sector is 32 Kbytes. There are 20 FLASH sectors in total. */
+/*! @name SEC_CTRL_FLASH_MEM_RULE - Security access rules for FLASH sector 0 to sector 20. Each Flash sector is 32 Kbytes. There are 20 FLASH sectors in total. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE0_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE0_SHIFT (0U)
 /*! RULE0 - secure control rule0. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE1_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE1_SHIFT (4U)
 /*! RULE1 - secure control rule1. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE2_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE2_SHIFT (8U)
 /*! RULE2 - secure control rule2. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE3_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE3_SHIFT (12U)
 /*! RULE3 - secure control rule3. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE4_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE4_SHIFT (16U)
 /*! RULE4 - secure control rule4. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE5_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE5_SHIFT (20U)
 /*! RULE5 - secure control rule5. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE6_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE6_SHIFT (24U)
 /*! RULE6 - secure control rule6. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE7_MASK (0x30000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE7_SHIFT (28U)
 /*! RULE7 - secure control rule7. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_COUNT (1U)
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_FLASH_MEM_RULE_COUNT2 (3U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_MEM_RULE_COUNT2 (3U)
 
-/*! @name SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE - Security access rules for ROM sector 0 to sector 31. Each ROM sector is 4 Kbytes. There are 32 ROM sectors in total. */
+/*! @name SEC_CTRL_ROM_MEM_RULE - Security access rules for ROM sector 0 to sector 31. Each ROM sector is 4 Kbytes. There are 32 ROM sectors in total. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE0_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE0_SHIFT (0U)
 /*! RULE0 - secure control rule0. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE1_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE1_SHIFT (4U)
 /*! RULE1 - secure control rule1. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE2_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE2_SHIFT (8U)
 /*! RULE2 - secure control rule2. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE3_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE3_SHIFT (12U)
 /*! RULE3 - secure control rule3. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE4_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE4_SHIFT (16U)
 /*! RULE4 - secure control rule4. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE5_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE5_SHIFT (20U)
 /*! RULE5 - secure control rule5. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE6_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE6_SHIFT (24U)
 /*! RULE6 - secure control rule6. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE7_MASK (0x30000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE7_SHIFT (28U)
 /*! RULE7 - secure control rule7. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_COUNT (1U)
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_FLASH_ROM_SEC_CTRL_ROM_MEM_RULE_COUNT2 (4U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_ROM_MEM_RULE_COUNT2 (4U)
 
 /*! @name SEC_CTRL_RAMX_SLAVE_RULE - Security access rules for RAMX slaves. */
 /*! @{ */
@@ -1571,87 +1573,87 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAMX_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE - Security access rules for RAMX slaves. */
+/*! @name SEC_CTRL_RAMX_MEM_RULE - Security access rules for RAMX slaves. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE0_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE0_SHIFT (0U)
 /*! RULE0 - secure control rule0. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE1_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE1_SHIFT (4U)
 /*! RULE1 - secure control rule1. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE2_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE2_SHIFT (8U)
 /*! RULE2 - secure control rule2. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE3_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE3_SHIFT (12U)
 /*! RULE3 - secure control rule3. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE4_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE4_SHIFT (16U)
 /*! RULE4 - secure control rule4. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE5_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE5_SHIFT (20U)
 /*! RULE5 - secure control rule5. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE6_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE6_SHIFT (24U)
 /*! RULE6 - secure control rule6. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE7_MASK (0x30000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE7_SHIFT (28U)
 /*! RULE7 - secure control rule7. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_COUNT (1U)
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_SEC_CTRL_RAMX_MEM_RULE_MEM_RULE_COUNT2 (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAMX_MEM_RULE_COUNT2 (1U)
 
 /*! @name SEC_CTRL_RAM0_SLAVE_RULE - Security access rules for RAM0 slaves. */
 /*! @{ */
@@ -1669,185 +1671,185 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM0_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE - Security access rules for RAM0 slaves. */
+/*! @name SEC_CTRL_RAM0_MEM_RULE - Security access rules for RAM0 slaves. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE0_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE0_SHIFT (0U)
 /*! RULE0 - secure control rule0. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE1_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE1_SHIFT (4U)
 /*! RULE1 - secure control rule1. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE2_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE2_SHIFT (8U)
 /*! RULE2 - secure control rule2. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE3_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE3_SHIFT (12U)
 /*! RULE3 - secure control rule3. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE4_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE4_SHIFT (16U)
 /*! RULE4 - secure control rule4. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE5_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE5_SHIFT (20U)
 /*! RULE5 - secure control rule5. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE6_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE6_SHIFT (24U)
 /*! RULE6 - secure control rule6. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE7_MASK (0x30000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE7_SHIFT (28U)
 /*! RULE7 - secure control rule7. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_COUNT (1U)
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_SEC_CTRL_RAM0_MEM_RULE_MEM_RULE_COUNT2 (2U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM0_MEM_RULE_COUNT2 (2U)
 
 /*! @name SEC_CTRL_RAM1_SLAVE_RULE - Security access rules for RAM1 slaves. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_RAM0_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_RAM0_RULE_SHIFT (0U)
-/*! RAM0_RULE - Security access rules for the whole RAM1 : 0x2001_0000 - 0x2001_FFFF" name="0
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_RAM1_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_RAM1_RULE_SHIFT (0U)
+/*! RAM1_RULE - Security access rules for the whole RAM1 : 0x2001_0000 - 0x2001_FFFF" name="0
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_RAM0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_RAM0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_RAM0_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_RAM1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_RAM1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_RAM1_RULE_MASK)
 /*! @} */
 
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE - Security access rules for RAM1 slaves. */
+/*! @name SEC_CTRL_RAM1_MEM_RULE - Security access rules for RAM1 slaves. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE0_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE0_SHIFT (0U)
 /*! RULE0 - secure control rule0. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE1_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE1_SHIFT (4U)
 /*! RULE1 - secure control rule1. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE2_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE2_SHIFT (8U)
 /*! RULE2 - secure control rule2. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE3_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE3_SHIFT (12U)
 /*! RULE3 - secure control rule3. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE4_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE4_SHIFT (16U)
 /*! RULE4 - secure control rule4. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE5_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE5_SHIFT (20U)
 /*! RULE5 - secure control rule5. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE6_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE6_SHIFT (24U)
 /*! RULE6 - secure control rule6. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE7_MASK (0x30000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE7_SHIFT (28U)
 /*! RULE7 - secure control rule7. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_COUNT (1U)
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_SEC_CTRL_RAM1_MEM_RULE_MEM_RULE_COUNT2 (2U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM1_MEM_RULE_COUNT2 (2U)
 
 /*! @name SEC_CTRL_RAM2_SLAVE_RULE - Security access rules for RAM2 slaves. */
 /*! @{ */
@@ -1865,87 +1867,87 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM2_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE - Security access rules for RAM2 slaves. */
+/*! @name SEC_CTRL_RAM2_MEM_RULE - Security access rules for RAM2 slaves. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE0_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE0_SHIFT (0U)
 /*! RULE0 - secure control rule0. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE1_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE1_SHIFT (4U)
 /*! RULE1 - secure control rule1. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE2_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE2_SHIFT (8U)
 /*! RULE2 - secure control rule2. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE3_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE3_SHIFT (12U)
 /*! RULE3 - secure control rule3. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE4_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE4_SHIFT (16U)
 /*! RULE4 - secure control rule4. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE5_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE5_SHIFT (20U)
 /*! RULE5 - secure control rule5. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE6_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE6_SHIFT (24U)
 /*! RULE6 - secure control rule6. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE7_MASK (0x30000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE7_SHIFT (28U)
 /*! RULE7 - secure control rule7. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_COUNT (1U)
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_SEC_CTRL_RAM2_MEM_RULE_MEM_RULE_COUNT2 (2U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM2_MEM_RULE_COUNT2 (2U)
 
 /*! @name SEC_CTRL_RAM3_SLAVE_RULE - Security access rules for RAM3 slaves. */
 /*! @{ */
@@ -1963,87 +1965,87 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM3_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE - Security access rules for RAM3 slaves. */
+/*! @name SEC_CTRL_RAM3_MEM_RULE - Security access rules for RAM3 slaves. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE0_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE0_SHIFT (0U)
 /*! RULE0 - secure control rule0. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE1_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE1_SHIFT (4U)
 /*! RULE1 - secure control rule1. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE2_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE2_SHIFT (8U)
 /*! RULE2 - secure control rule2. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE3_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE3_SHIFT (12U)
 /*! RULE3 - secure control rule3. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE4_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE4_SHIFT (16U)
 /*! RULE4 - secure control rule4. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE5_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE5_SHIFT (20U)
 /*! RULE5 - secure control rule5. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE6_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE6_SHIFT (24U)
 /*! RULE6 - secure control rule6. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE7_MASK (0x30000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE7_SHIFT (28U)
 /*! RULE7 - secure control rule7. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_COUNT (1U)
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_SEC_CTRL_RAM3_MEM_RULE_MEM_RULE_COUNT2 (2U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM3_MEM_RULE_COUNT2 (2U)
 
 /*! @name SEC_CTRL_RAM4_SLAVE_RULE - Security access rules for RAM4 slaves. */
 /*! @{ */
@@ -2061,51 +2063,51 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM4_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE - Security access rules for RAM4 slaves. */
+/*! @name SEC_CTRL_RAM4_MEM_RULE - Security access rules for RAM4 slaves. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE0_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE0_SHIFT (0U)
 /*! RULE0 - secure control rule0. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE1_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE1_SHIFT (4U)
 /*! RULE1 - secure control rule1. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE2_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE2_SHIFT (8U)
 /*! RULE2 - secure control rule2. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE3_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE3_SHIFT (12U)
 /*! RULE3 - secure control rule3. it can be set when check_reg's write_lock is '0'
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_RULE3_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_COUNT (1U)
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_SEC_CTRL_RAM4_MEM_RULE_MEM_RULE_COUNT2 (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_RAM4_MEM_RULE_COUNT2 (1U)
 
 /*! @name SEC_CTRL_APB_BRIDGE_SLAVE_RULE - Security access rules for both APB Bridges slaves. */
 /*! @{ */
@@ -2132,619 +2134,607 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0 - Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total. */
+/*! @name SEC_CTRL_APB_BRIDGE0_MEM_CTRL0 - Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SYSCON_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SYSCON_RULE_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SYSCON_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SYSCON_RULE_SHIFT (0U)
 /*! SYSCON_RULE - System Configuration
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SYSCON_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SYSCON_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SYSCON_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_IOCON_RULE_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_IOCON_RULE_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SYSCON_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SYSCON_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SYSCON_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_IOCON_RULE_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_IOCON_RULE_SHIFT (4U)
 /*! IOCON_RULE - I/O Configuration
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_IOCON_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_IOCON_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_IOCON_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT0_RULE_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT0_RULE_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_IOCON_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_IOCON_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_IOCON_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT0_RULE_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT0_RULE_SHIFT (8U)
 /*! GINT0_RULE - GPIO input Interrupt 0
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT0_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT1_RULE_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT1_RULE_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT0_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT1_RULE_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT1_RULE_SHIFT (12U)
 /*! GINT1_RULE - GPIO input Interrupt 1
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT1_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PINT_RULE_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PINT_RULE_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_GINT1_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PINT_RULE_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PINT_RULE_SHIFT (16U)
 /*! PINT_RULE - Pin Interrupt and Pattern match
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PINT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PINT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PINT_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SEC_PINT_RULE_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SEC_PINT_RULE_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PINT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PINT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PINT_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SEC_PINT_RULE_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SEC_PINT_RULE_SHIFT (20U)
 /*! SEC_PINT_RULE - Secure Pin Interrupt and Pattern match
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SEC_PINT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SEC_PINT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SEC_PINT_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PMUX_RULE_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PMUX_RULE_SHIFT (24U)
-/*! PMUX_RULE - Peripherals mux
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SEC_PINT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SEC_PINT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_SEC_PINT_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_INPUTMUX_RULE_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_INPUTMUX_RULE_SHIFT (24U)
+/*! INPUTMUX_RULE - Peripheral input multiplexing
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PMUX_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PMUX_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_PMUX_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_INPUTMUX_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_INPUTMUX_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_INPUTMUX_RULE_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0 */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0 */
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL0_COUNT (1U)
 
-/*! @name SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1 - Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total. */
+/*! @name SEC_CTRL_APB_BRIDGE0_MEM_CTRL1 - Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER0_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER0_RULE_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER0_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER0_RULE_SHIFT (0U)
 /*! CTIMER0_RULE - Standard counter/Timer 0
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER0_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER1_RULE_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER1_RULE_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER0_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER1_RULE_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER1_RULE_SHIFT (4U)
 /*! CTIMER1_RULE - Standard counter/Timer 1
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER1_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_WWDT_RULE_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_WWDT_RULE_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_CTIMER1_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_WWDT_RULE_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_WWDT_RULE_SHIFT (16U)
 /*! WWDT_RULE - Windiwed wtachdog Timer
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_WWDT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_WWDT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_WWDT_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_MRT_RULE_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_MRT_RULE_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_WWDT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_WWDT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_WWDT_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_MRT_RULE_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_MRT_RULE_SHIFT (20U)
 /*! MRT_RULE - Multi-rate Timer
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_MRT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_MRT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_MRT_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_UTICK_RULE_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_UTICK_RULE_SHIFT (24U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_MRT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_MRT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_MRT_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_UTICK_RULE_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_UTICK_RULE_SHIFT (24U)
 /*! UTICK_RULE - Micro-Timer
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_UTICK_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_UTICK_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_UTICK_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_UTICK_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_UTICK_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_UTICK_RULE_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1 */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1 */
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL1_COUNT (1U)
 
-/*! @name SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2 - Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total. */
+/*! @name SEC_CTRL_APB_BRIDGE0_MEM_CTRL2 - Security access rules for APB Bridge 0 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 0 sectors in total. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_ANACTRL_RULE_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_ANACTRL_RULE_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_ANACTRL_RULE_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_ANACTRL_RULE_SHIFT (12U)
 /*! ANACTRL_RULE - Analog Modules controller
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_ANACTRL_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_ANACTRL_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_ANACTRL_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_EFUSE_RULE_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_EFUSE_RULE_SHIFT (20U)
-/*! EFUSE_RULE - eFUSE (One Time Programmable) memory controller
- *  0b00..Non-secure and Non-priviledge user access allowed.
- *  0b01..Non-secure and Privilege access allowed.
- *  0b10..Secure and Non-priviledge user access allowed.
- *  0b11..Secure and Priviledge user access allowed.
- */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_EFUSE_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_EFUSE_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_EFUSE_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_ANACTRL_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_ANACTRL_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_ANACTRL_RULE_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2 */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2 */
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE0_MEM_CTRL2_COUNT (1U)
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3 */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE0_MEM_CTRL3_COUNT (1U)
-
-/*! @name SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0 - Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total. */
+/*! @name SEC_CTRL_APB_BRIDGE1_MEM_CTRL0 - Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE_SHIFT (0U)
 /*! PMC_RULE - Power Management Controller
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_PMC_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE_SHIFT (12U)
 /*! SYSCTRL_RULE - System Controller
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_SYSCTRL_RULE_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0 */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0 */
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL0_COUNT (1U)
 
-/*! @name SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1 - Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total. */
+/*! @name SEC_CTRL_APB_BRIDGE1_MEM_CTRL1 - Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER2_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER2_RULE_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER2_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER2_RULE_SHIFT (0U)
 /*! CTIMER2_RULE - Standard counter/Timer 2
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER2_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER2_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER2_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER3_RULE_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER3_RULE_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER2_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER2_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER2_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER3_RULE_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER3_RULE_SHIFT (4U)
 /*! CTIMER3_RULE - Standard counter/Timer 3
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER3_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER3_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER3_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER4_RULE_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER4_RULE_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER3_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER3_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER3_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER4_RULE_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER4_RULE_SHIFT (8U)
 /*! CTIMER4_RULE - Standard counter/Timer 4
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER4_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER4_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER4_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_RTC_RULE_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_RTC_RULE_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER4_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER4_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_CTIMER4_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_RTC_RULE_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_RTC_RULE_SHIFT (16U)
 /*! RTC_RULE - Real Time Counter
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_RTC_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_RTC_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_RTC_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_OSEVENT_RULE_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_OSEVENT_RULE_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_RTC_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_RTC_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_RTC_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_OSEVENT_RULE_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_OSEVENT_RULE_SHIFT (20U)
 /*! OSEVENT_RULE - OS Event Timer
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_OSEVENT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_OSEVENT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_OSEVENT_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_OSEVENT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_OSEVENT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_OSEVENT_RULE_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1 */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1 */
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL1_COUNT (1U)
 
-/*! @name SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2 - Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total. */
+/*! @name SEC_CTRL_APB_BRIDGE1_MEM_CTRL2 - Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE_SHIFT (16U)
 /*! FLASH_CTRL_RULE - Flash Controller
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_FLASH_CTRL_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE_SHIFT (20U)
 /*! PRINCE_RULE - Prince
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_PRINCE_RULE_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2 */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2 */
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL2_COUNT (1U)
 
-/*! @name SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3 - Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total. */
+/*! @name SEC_CTRL_APB_BRIDGE1_MEM_CTRL3 - Security access rules for APB Bridge 1 peripherals. Each APB bridge sector is 4 Kbytes. There are 32 APB Bridge 1 sectors in total. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_USBHPHY_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_USBHPHY_RULE_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_USBHPHY_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_USBHPHY_RULE_SHIFT (0U)
 /*! USBHPHY_RULE - USB High Speed Phy controller
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_USBHPHY_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_USBHPHY_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_USBHPHY_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_USBHPHY_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_USBHPHY_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_USBHPHY_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE_SHIFT (8U)
 /*! RNG_RULE - True Random Number Generator
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUFF_RULE_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUFF_RULE_SHIFT (12U)
-/*! PUFF_RULE - PUF
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_RNG_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUF_RULE_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUF_RULE_SHIFT (12U)
+/*! PUF_RULE - PUF
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUFF_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUFF_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUFF_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUF_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUF_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PUF_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE_SHIFT (20U)
 /*! PLU_RULE - Programmable Look-Up logic
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_PLU_RULE_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3 */
-#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3 */
+#define AHB_SECURE_CTRL_SEC_CTRL_APB_BRIDGE1_MEM_CTRL3_COUNT (1U)
 
-/*! @name SEC_CTRL_AHB0_0_SLAVE_RULE - Security access rules for AHB peripherals. */
+/*! @name SEC_CTRL_AHB_PORT8_SLAVE0_RULE - Security access rules for AHB peripherals. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_DMA0_RULE_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_DMA0_RULE_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_DMA0_RULE_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_DMA0_RULE_SHIFT (8U)
 /*! DMA0_RULE - DMA Controller
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_DMA0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_DMA0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_DMA0_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FS_USB_DEV_RULE_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FS_USB_DEV_RULE_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_DMA0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_DMA0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_DMA0_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FS_USB_DEV_RULE_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FS_USB_DEV_RULE_SHIFT (16U)
 /*! FS_USB_DEV_RULE - USB Full-speed device
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FS_USB_DEV_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FS_USB_DEV_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FS_USB_DEV_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_SCT_RULE_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_SCT_RULE_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FS_USB_DEV_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FS_USB_DEV_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FS_USB_DEV_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_SCT_RULE_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_SCT_RULE_SHIFT (20U)
 /*! SCT_RULE - SCTimer
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_SCT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_SCT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_SCT_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM0_RULE_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM0_RULE_SHIFT (24U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_SCT_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_SCT_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_SCT_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FLEXCOMM0_RULE_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FLEXCOMM0_RULE_SHIFT (24U)
 /*! FLEXCOMM0_RULE - Flexcomm interface 0
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM0_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM1_RULE_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM1_RULE_SHIFT (28U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FLEXCOMM0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FLEXCOMM0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FLEXCOMM0_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FLEXCOMM1_RULE_MASK (0x30000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FLEXCOMM1_RULE_SHIFT (28U)
 /*! FLEXCOMM1_RULE - Flexcomm interface 1
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_0_SLAVE_RULE_FLEXCOMM1_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FLEXCOMM1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FLEXCOMM1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE0_RULE_FLEXCOMM1_RULE_MASK)
 /*! @} */
 
-/*! @name SEC_CTRL_AHB0_1_SLAVE_RULE - Security access rules for AHB peripherals. */
+/*! @name SEC_CTRL_AHB_PORT8_SLAVE1_RULE - Security access rules for AHB peripherals. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM2_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM2_RULE_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM2_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM2_RULE_SHIFT (0U)
 /*! FLEXCOMM2_RULE - Flexcomm interface 2
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM2_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM2_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM2_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM3_RULE_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM3_RULE_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM2_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM2_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM2_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM3_RULE_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM3_RULE_SHIFT (4U)
 /*! FLEXCOMM3_RULE - Flexcomm interface 3
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM3_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM3_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM3_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM4_RULE_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM4_RULE_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM3_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM3_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM3_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM4_RULE_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM4_RULE_SHIFT (8U)
 /*! FLEXCOMM4_RULE - Flexcomm interface 4
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM4_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM4_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_FLEXCOMM4_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_MAILBOX_RULE_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_MAILBOX_RULE_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM4_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM4_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_FLEXCOMM4_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_MAILBOX_RULE_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_MAILBOX_RULE_SHIFT (12U)
 /*! MAILBOX_RULE - Inter CPU communication Mailbox
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_MAILBOX_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_MAILBOX_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_MAILBOX_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_GPIO0_RULE_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_GPIO0_RULE_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_MAILBOX_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_MAILBOX_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_MAILBOX_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_GPIO0_RULE_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_GPIO0_RULE_SHIFT (16U)
 /*! GPIO0_RULE - High Speed GPIO
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_GPIO0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_GPIO0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB0_1_SLAVE_RULE_GPIO0_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_GPIO0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_GPIO0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT8_SLAVE1_RULE_GPIO0_RULE_MASK)
 /*! @} */
 
-/*! @name SEC_CTRL_AHB1_0_SLAVE_RULE - Security access rules for AHB peripherals. */
+/*! @name SEC_CTRL_AHB_PORT9_SLAVE0_RULE - Security access rules for AHB peripherals. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_USB_HS_DEV_RULE_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_USB_HS_DEV_RULE_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_USB_HS_DEV_RULE_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_USB_HS_DEV_RULE_SHIFT (16U)
 /*! USB_HS_DEV_RULE - USB high Speed device registers
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_USB_HS_DEV_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_USB_HS_DEV_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_USB_HS_DEV_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_CRC_RULE_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_CRC_RULE_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_USB_HS_DEV_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_USB_HS_DEV_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_USB_HS_DEV_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_CRC_RULE_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_CRC_RULE_SHIFT (20U)
 /*! CRC_RULE - CRC engine
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_CRC_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_CRC_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_CRC_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM5_RULE_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM5_RULE_SHIFT (24U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_CRC_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_CRC_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_CRC_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_FLEXCOMM5_RULE_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_FLEXCOMM5_RULE_SHIFT (24U)
 /*! FLEXCOMM5_RULE - Flexcomm interface 5
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM5_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM5_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM5_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM6_RULE_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM6_RULE_SHIFT (28U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_FLEXCOMM5_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_FLEXCOMM5_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_FLEXCOMM5_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_FLEXCOMM6_RULE_MASK (0x30000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_FLEXCOMM6_RULE_SHIFT (28U)
 /*! FLEXCOMM6_RULE - Flexcomm interface 6
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM6_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM6_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB1_0_SLAVE_RULE_FLEXCOMM6_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_FLEXCOMM6_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_FLEXCOMM6_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE0_RULE_FLEXCOMM6_RULE_MASK)
 /*! @} */
 
-/*! @name SEC_CTRL_AHB1_1_SLAVE_RULE - Security access rules for AHB peripherals. */
+/*! @name SEC_CTRL_AHB_PORT9_SLAVE1_RULE - Security access rules for AHB peripherals. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_FLEXCOMM7_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_FLEXCOMM7_RULE_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_FLEXCOMM7_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_FLEXCOMM7_RULE_SHIFT (0U)
 /*! FLEXCOMM7_RULE - Flexcomm interface 7
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_FLEXCOMM7_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_FLEXCOMM7_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_FLEXCOMM7_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_SDIO_RULE_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_SDIO_RULE_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_FLEXCOMM7_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_FLEXCOMM7_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_FLEXCOMM7_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_SDIO_RULE_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_SDIO_RULE_SHIFT (12U)
 /*! SDIO_RULE - SDMMC card interface
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_SDIO_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_SDIO_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_SDIO_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_DBG_MAILBOX_RULE_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_DBG_MAILBOX_RULE_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_SDIO_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_SDIO_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_SDIO_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_DBG_MAILBOX_RULE_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_DBG_MAILBOX_RULE_SHIFT (16U)
 /*! DBG_MAILBOX_RULE - Debug mailbox (aka ISP-AP)
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_DBG_MAILBOX_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_DBG_MAILBOX_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_DBG_MAILBOX_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_HS_LSPI_RULE_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_HS_LSPI_RULE_SHIFT (28U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_DBG_MAILBOX_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_DBG_MAILBOX_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_DBG_MAILBOX_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_HS_LSPI_RULE_MASK (0x30000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_HS_LSPI_RULE_SHIFT (28U)
 /*! HS_LSPI_RULE - High Speed SPI
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_HS_LSPI_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_HS_LSPI_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB1_1_SLAVE_RULE_HS_LSPI_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_HS_LSPI_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_HS_LSPI_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT9_SLAVE1_RULE_HS_LSPI_RULE_MASK)
 /*! @} */
 
-/*! @name SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE - Security access rules for AHB peripherals. */
+/*! @name SEC_CTRL_AHB_PORT10_SLAVE0_RULE - Security access rules for AHB peripherals. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_ADC_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_ADC_RULE_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_ADC_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_ADC_RULE_SHIFT (0U)
 /*! ADC_RULE - ADC
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_ADC_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_ADC_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_ADC_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_USB_FS_HOST_RULE_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_USB_FS_HOST_RULE_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_ADC_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_ADC_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_ADC_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_USB_FS_HOST_RULE_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_USB_FS_HOST_RULE_SHIFT (8U)
 /*! USB_FS_HOST_RULE - USB Full Speed Host registers.
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_USB_FS_HOST_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_USB_FS_HOST_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_USB_FS_HOST_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_USB_HS_HOST_RULE_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_USB_HS_HOST_RULE_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_USB_FS_HOST_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_USB_FS_HOST_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_USB_FS_HOST_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_USB_HS_HOST_RULE_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_USB_HS_HOST_RULE_SHIFT (12U)
 /*! USB_HS_HOST_RULE - USB High speed host registers
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_USB_HS_HOST_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_USB_HS_HOST_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_USB_HS_HOST_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_HASH_RULE_MASK (0x30000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_HASH_RULE_SHIFT (16U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_USB_HS_HOST_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_USB_HS_HOST_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_USB_HS_HOST_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_HASH_RULE_MASK (0x30000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_HASH_RULE_SHIFT (16U)
 /*! HASH_RULE - SHA-2 crypto registers
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_HASH_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_HASH_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_HASH_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_CASPER_RULE_MASK (0x300000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_CASPER_RULE_SHIFT (20U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_HASH_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_HASH_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_HASH_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_CASPER_RULE_MASK (0x300000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_CASPER_RULE_SHIFT (20U)
 /*! CASPER_RULE - RSA/ECC crypto accelerator
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_CASPER_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_CASPER_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_CASPER_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_PQ_RULE_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_PQ_RULE_SHIFT (24U)
-/*! PQ_RULE - Power Quad (CM33 processor hardware accelerator)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_CASPER_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_CASPER_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_CASPER_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_PQ_RULE_MASK (0x3000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_PQ_RULE_SHIFT (24U)
+/*! PQ_RULE - Power Quad (CPU0 processor hardware accelerator)
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_PQ_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_PQ_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_PQ_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_DMA1_RULE_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_DMA1_RULE_SHIFT (28U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_PQ_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_PQ_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_PQ_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_DMA1_RULE_MASK (0x30000000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_DMA1_RULE_SHIFT (28U)
 /*! DMA1_RULE - DMA Controller (Secure)
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_DMA1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_DMA1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_DMA1_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_DMA1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_DMA1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_DMA1_RULE_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_0_SLAVE_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE0_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE - Security access rules for AHB peripherals. */
+/*! @name SEC_CTRL_AHB_PORT10_SLAVE1_RULE - Security access rules for AHB peripherals. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_GPIO1_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_GPIO1_RULE_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE_GPIO1_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE_GPIO1_RULE_SHIFT (0U)
 /*! GPIO1_RULE - Secure High Speed GPIO
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_GPIO1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_GPIO1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_GPIO1_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_AHB_SEC_CTRL_RULE_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_AHB_SEC_CTRL_RULE_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE_GPIO1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE_GPIO1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE_GPIO1_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE_AHB_SEC_CTRL_RULE_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE_AHB_SEC_CTRL_RULE_SHIFT (4U)
 /*! AHB_SEC_CTRL_RULE - AHB Secure Controller
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_AHB_SEC_CTRL_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_AHB_SEC_CTRL_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_AHB_SEC_CTRL_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE_AHB_SEC_CTRL_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE_AHB_SEC_CTRL_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE_AHB_SEC_CTRL_RULE_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_1_SLAVE_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_PORT10_SLAVE1_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE - Security access rules for AHB_SEC_CTRL_AHB. */
+/*! @name SEC_CTRL_AHB_SEC_CTRL_MEM_RULE - Security access rules for AHB_SEC_CTRL_AHB. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE_SHIFT (0U)
 /*! AHB_SEC_CTRL_SECT_0_RULE - Address space: 0x400A_0000 - 0x400A_CFFF
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_1_RULE_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_1_RULE_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_0_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_1_RULE_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_1_RULE_SHIFT (4U)
 /*! AHB_SEC_CTRL_SECT_1_RULE - Address space: 0x400A_D000 - 0x400A_DFFF
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_1_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_2_RULE_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_2_RULE_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_1_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_2_RULE_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_2_RULE_SHIFT (8U)
 /*! AHB_SEC_CTRL_SECT_2_RULE - Address space: 0x400A_E000 - 0x400A_EFFF
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_2_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_2_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_2_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_3_RULE_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_3_RULE_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_2_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_2_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_2_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_3_RULE_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_3_RULE_SHIFT (12U)
 /*! AHB_SEC_CTRL_SECT_3_RULE - Address space: 0x400A_F000 - 0x400A_FFFF
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_3_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_3_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_AHB_SEC_CTRL_SECT_3_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_3_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_3_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_AHB_SEC_CTRL_SECT_3_RULE_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_COUNT (1U)
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_AHB2_SEC_CTRL_AHB2_MEM_RULE_SEC_CTRL_AHB2_0_MEM_RULE_COUNT2 (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_AHB_SEC_CTRL_MEM_RULE_COUNT2 (1U)
 
 /*! @name SEC_CTRL_USB_HS_SLAVE_RULE - Security access rules for USB High speed RAM slaves. */
 /*! @{ */
@@ -2762,53 +2752,53 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SLAVE_RULE */
 #define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SLAVE_RULE_COUNT (1U)
 
-/*! @name SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE - Security access rules for RAM_USB_HS. */
+/*! @name SEC_CTRL_USB_HS_MEM_RULE - Security access rules for RAM_USB_HS. */
 /*! @{ */
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_0_RULE_MASK (0x3U)
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_0_RULE_SHIFT (0U)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_0_RULE_MASK (0x3U)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_0_RULE_SHIFT (0U)
 /*! SRAM_SECT_0_RULE - Address space: 0x4010_0000 - 0x4010_0FFF
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_0_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_1_RULE_MASK (0x30U)
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_1_RULE_SHIFT (4U)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_0_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_0_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_0_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_1_RULE_MASK (0x30U)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_1_RULE_SHIFT (4U)
 /*! SRAM_SECT_1_RULE - Address space: 0x4010_1000 - 0x4010_1FFF
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_1_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_2_RULE_MASK (0x300U)
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_2_RULE_SHIFT (8U)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_1_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_1_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_1_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_2_RULE_MASK (0x300U)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_2_RULE_SHIFT (8U)
 /*! SRAM_SECT_2_RULE - Address space: 0x4010_2000 - 0x4010_2FFF
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_2_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_2_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_2_RULE_MASK)
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_3_RULE_MASK (0x3000U)
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_3_RULE_SHIFT (12U)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_2_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_2_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_2_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_3_RULE_MASK (0x3000U)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_3_RULE_SHIFT (12U)
 /*! SRAM_SECT_3_RULE - Address space: 0x4010_3000 - 0x4010_3FFF
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_3_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_3_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_SRAM_SECT_3_RULE_MASK)
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_3_RULE(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_3_RULE_SHIFT)) & AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_SRAM_SECT_3_RULE_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_COUNT (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_COUNT (1U)
 
-/* The count of AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE */
-#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_SEC_CTRL_USB_HS_MEM_RULE_MEM_RULE_COUNT2 (1U)
+/* The count of AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE */
+#define AHB_SECURE_CTRL_SEC_CTRL_USB_HS_MEM_RULE_COUNT2 (1U)
 
-/*! @name SEC_VIO_ADDR - most recent security violation address for AHB layer n */
+/*! @name SEC_VIO_ADDR - most recent security violation address for AHB port n */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_VIO_ADDR_SEC_VIO_ADDR_MASK (0xFFFFFFFFU)
 #define AHB_SECURE_CTRL_SEC_VIO_ADDR_SEC_VIO_ADDR_SHIFT (0U)
@@ -2818,7 +2808,7 @@ typedef struct {
 /* The count of AHB_SECURE_CTRL_SEC_VIO_ADDR */
 #define AHB_SECURE_CTRL_SEC_VIO_ADDR_COUNT       (12U)
 
-/*! @name SEC_VIO_MISC_INFO - most recent security violation miscellaneous information for AHB layer n */
+/*! @name SEC_VIO_MISC_INFO - most recent security violation miscellaneous information for AHB port n */
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_WRITE_MASK (0x1U)
 #define AHB_SECURE_CTRL_SEC_VIO_MISC_INFO_SEC_VIO_INFO_WRITE_SHIFT (0U)
@@ -2862,84 +2852,84 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID0_MASK (0x1U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID0_SHIFT (0U)
-/*! VIO_INFO_VALID0 - violation information valid flag for AHB layer 0. Write 1 to clear.
+/*! VIO_INFO_VALID0 - violation information valid flag for AHB port 0. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID0_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID0_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID1_MASK (0x2U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID1_SHIFT (1U)
-/*! VIO_INFO_VALID1 - violation information valid flag for AHB layer 1. Write 1 to clear.
+/*! VIO_INFO_VALID1 - violation information valid flag for AHB port 1. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID1_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID1_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID2_MASK (0x4U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID2_SHIFT (2U)
-/*! VIO_INFO_VALID2 - violation information valid flag for AHB layer 2. Write 1 to clear.
+/*! VIO_INFO_VALID2 - violation information valid flag for AHB port 2. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID2_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID2_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID3_MASK (0x8U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID3_SHIFT (3U)
-/*! VIO_INFO_VALID3 - violation information valid flag for AHB layer 3. Write 1 to clear.
+/*! VIO_INFO_VALID3 - violation information valid flag for AHB port 3. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID3_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID3_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID4_MASK (0x10U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID4_SHIFT (4U)
-/*! VIO_INFO_VALID4 - violation information valid flag for AHB layer 4. Write 1 to clear.
+/*! VIO_INFO_VALID4 - violation information valid flag for AHB port 4. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID4_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID4_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID5_MASK (0x20U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID5_SHIFT (5U)
-/*! VIO_INFO_VALID5 - violation information valid flag for AHB layer 5. Write 1 to clear.
+/*! VIO_INFO_VALID5 - violation information valid flag for AHB port 5. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID5_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID5_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID6_MASK (0x40U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID6_SHIFT (6U)
-/*! VIO_INFO_VALID6 - violation information valid flag for AHB layer 6. Write 1 to clear.
+/*! VIO_INFO_VALID6 - violation information valid flag for AHB port 6. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID6_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID6_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID7_MASK (0x80U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID7_SHIFT (7U)
-/*! VIO_INFO_VALID7 - violation information valid flag for AHB layer 7. Write 1 to clear.
+/*! VIO_INFO_VALID7 - violation information valid flag for AHB port 7. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID7_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID7_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID8_MASK (0x100U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID8_SHIFT (8U)
-/*! VIO_INFO_VALID8 - violation information valid flag for AHB layer 8. Write 1 to clear.
+/*! VIO_INFO_VALID8 - violation information valid flag for AHB port 8. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID8(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID8_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID8_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID9_MASK (0x200U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID9_SHIFT (9U)
-/*! VIO_INFO_VALID9 - violation information valid flag for AHB layer 9. Write 1 to clear.
+/*! VIO_INFO_VALID9 - violation information valid flag for AHB port 9. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID9(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID9_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID9_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID10_MASK (0x400U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID10_SHIFT (10U)
-/*! VIO_INFO_VALID10 - violation information valid flag for AHB layer 10. Write 1 to clear.
+/*! VIO_INFO_VALID10 - violation information valid flag for AHB port 10. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID10(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID10_SHIFT)) & AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID10_MASK)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID11_MASK (0x800U)
 #define AHB_SECURE_CTRL_SEC_VIO_INFO_VALID_VIO_INFO_VALID11_SHIFT (11U)
-/*! VIO_INFO_VALID11 - violation information valid flag for AHB layer 11. Write 1 to clear.
+/*! VIO_INFO_VALID11 - violation information valid flag for AHB port 11. Write 1 to clear.
  *  0b0..Not valid.
  *  0b1..Valid (violation occurred).
  */
@@ -3572,13 +3562,13 @@ typedef struct {
  *  0b1..
  */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED0_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED0_MASK)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_CAPT0_IRQ_MASK (0x1000000U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_CAPT0_IRQ_SHIFT (24U)
-/*! ACMP_CAPT0_IRQ - Analog Comparator interrupt.
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_IRQ_MASK (0x1000000U)
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_IRQ_SHIFT (24U)
+/*! ACMP_IRQ - Analog Comparator interrupt.
  *  0b0..
  *  0b1..
  */
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_CAPT0_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_CAPT0_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_CAPT0_IRQ_MASK)
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_ACMP_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED1_MASK (0x2000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_RESERVED1_SHIFT (25U)
 /*! RESERVED1 - Reserved. Read value is undefined, only zero should be written.
@@ -3602,7 +3592,7 @@ typedef struct {
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_NEEDCLK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_NEEDCLK_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_NEEDCLK_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_IRQ_MASK (0x10000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK0_USB0_IRQ_SHIFT (28U)
-/*! USB0_IRQ - USB High Speed Controller interrupt.
+/*! USB0_IRQ - USB Full Speed Controller interrupt.
  *  0b0..
  *  0b1..
  */
@@ -3730,13 +3720,13 @@ typedef struct {
  *  0b1..
  */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED5_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_RESERVED5_MASK)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_UTMI_IRQ_MASK (0x4000U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_UTMI_IRQ_SHIFT (14U)
-/*! USB1_UTMI_IRQ - USB High Speed Controller UTMI interrupt.
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_PHY_IRQ_MASK (0x4000U)
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_PHY_IRQ_SHIFT (14U)
+/*! USB1_PHY_IRQ - USB High Speed PHY Controller interrupt.
  *  0b0..
  *  0b1..
  */
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_UTMI_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_UTMI_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_UTMI_IRQ_MASK)
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_PHY_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_PHY_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_PHY_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_IRQ_MASK (0x8000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_USB1_IRQ_SHIFT (15U)
 /*! USB1_IRQ - USB High Speed Controller interrupt.
@@ -3800,13 +3790,13 @@ typedef struct {
  *  0b1..
  */
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CASPER_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CASPER_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_CASPER_IRQ_MASK)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_QDDKEY_IRQ_MASK (0x1000000U)
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_QDDKEY_IRQ_SHIFT (24U)
-/*! QDDKEY_IRQ - PUF interrupt.
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PUFKEY_IRQ_MASK (0x1000000U)
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PUFKEY_IRQ_SHIFT (24U)
+/*! PUFKEY_IRQ - PUF interrupt.
  *  0b0..
  *  0b1..
  */
-#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_QDDKEY_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_QDDKEY_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_QDDKEY_IRQ_MASK)
+#define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PUFKEY_IRQ(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PUFKEY_IRQ_SHIFT)) & AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PUFKEY_IRQ_MASK)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PQ_IRQ_MASK (0x2000000U)
 #define AHB_SECURE_CTRL_SEC_CPU_INT_MASK1_PQ_IRQ_SHIFT (25U)
 /*! PQ_IRQ - Power Quad interrupt.
@@ -3864,24 +3854,24 @@ typedef struct {
 
 /*! @name MASTER_SEC_LEVEL - master secure level register */
 /*! @{ */
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33C_MASK (0x30U)
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33C_SHIFT (4U)
-/*! MCM33C - Micro-CM33 (CPU1) Code bus.
+#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_CPU1C_MASK (0x30U)
+#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_CPU1C_SHIFT (4U)
+/*! CPU1C - Micro-Cortex M33 (CPU1) Code bus.
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33C(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33C_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33C_MASK)
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33S_MASK (0xC0U)
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33S_SHIFT (6U)
-/*! MCM33S - Micro-CM33 (CPU1) System bus.
+#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_CPU1C(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_CPU1C_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_CPU1C_MASK)
+#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_CPU1S_MASK (0xC0U)
+#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_CPU1S_SHIFT (6U)
+/*! CPU1S - Micro-Cortex M33 (CPU1) System bus.
  *  0b00..Non-secure and Non-priviledge user access allowed.
  *  0b01..Non-secure and Privilege access allowed.
  *  0b10..Secure and Non-priviledge user access allowed.
  *  0b11..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33S(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33S_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_MCM33S_MASK)
+#define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_CPU1S(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_LEVEL_CPU1S_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_LEVEL_CPU1S_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSD_MASK (0x300U)
 #define AHB_SECURE_CTRL_MASTER_SEC_LEVEL_USBFSD_SHIFT (8U)
 /*! USBFSD - USB Full Speed Device.
@@ -3956,24 +3946,24 @@ typedef struct {
 
 /*! @name MASTER_SEC_ANTI_POL_REG - master secure level anti-pole register */
 /*! @{ */
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33C_MASK (0x30U)
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33C_SHIFT (4U)
-/*! MCM33C - Micro-CM33 (CPU1) Code bus. Must be equal to NOT(MASTER_SEC_LEVEL.MCM33C)
+#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1C_MASK (0x30U)
+#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1C_SHIFT (4U)
+/*! CPU1C - Micro-Cortex M33 (CPU1) Code bus. Must be equal to NOT(MASTER_SEC_LEVEL.CPU1C)
  *  0b11..Non-secure and Non-priviledge user access allowed.
  *  0b10..Non-secure and Privilege access allowed.
  *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33C(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33C_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33C_MASK)
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33S_MASK (0xC0U)
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33S_SHIFT (6U)
-/*! MCM33S - Micro-CM33 (CPU1) System bus. Must be equal to NOT(MASTER_SEC_LEVEL.MCM33S)
+#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1C(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1C_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1C_MASK)
+#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1S_MASK (0xC0U)
+#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1S_SHIFT (6U)
+/*! CPU1S - Micro-Cortex M33 (CPU1) System bus. Must be equal to NOT(MASTER_SEC_LEVEL.CPU1S)
  *  0b11..Non-secure and Non-priviledge user access allowed.
  *  0b10..Non-secure and Privilege access allowed.
  *  0b01..Secure and Non-priviledge user access allowed.
  *  0b00..Secure and Priviledge user access allowed.
  */
-#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33S(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33S_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MCM33S_MASK)
+#define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1S(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1S_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_CPU1S_MASK)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD_MASK (0x300U)
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_USBFSD_SHIFT (8U)
 /*! USBFSD - USB Full Speed Device. Must be equal to NOT(MASTER_SEC_LEVEL.USBFSD)
@@ -4046,103 +4036,103 @@ typedef struct {
 #define AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK_SHIFT)) & AHB_SECURE_CTRL_MASTER_SEC_ANTI_POL_REG_MASTER_SEC_LEVEL_ANTIPOL_LOCK_MASK)
 /*! @} */
 
-/*! @name CM33_LOCK_REG - Miscalleneous control signals for in CM33 (CPU0) */
+/*! @name CPU0_LOCK_REG - Miscalleneous control signals for in Cortex M33 (CPU0) */
 /*! @{ */
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_MASK (0x3U)
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_SHIFT (0U)
-/*! LOCK_NS_VTOR - CM33 (CPU0) VTOR_NS register write-lock.
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_VTOR_MASK (0x3U)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_VTOR_SHIFT (0U)
+/*! LOCK_NS_VTOR - Cortex M33 (CPU0) VTOR_NS register write-lock.
  *  0b10..Writable.
  *  0b01..Restricted mode.
  */
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_VTOR_MASK)
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_MASK (0xCU)
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_SHIFT (2U)
-/*! LOCK_NS_MPU - CM33 (CPU0) non-secure MPU register write-lock.
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_VTOR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_VTOR_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_VTOR_MASK)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_MPU_MASK (0xCU)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_MPU_SHIFT (2U)
+/*! LOCK_NS_MPU - Cortex M33 (CPU0) non-secure MPU register write-lock.
  *  0b10..Writable.
  *  0b01..Restricted mode.
  */
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_NS_MPU_MASK)
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTAIRCR_MASK (0x30U)
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTAIRCR_SHIFT (4U)
-/*! LOCK_S_VTAIRCR - CM33 (CPU0) VTOR_S, AIRCR.PRIS, IRCR.BFHFNMINS registers write-lock.
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_MPU_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_NS_MPU_MASK)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_VTAIRCR_MASK (0x30U)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_VTAIRCR_SHIFT (4U)
+/*! LOCK_S_VTAIRCR - Cortex M33 (CPU0) VTOR_S, AIRCR.PRIS, IRCR.BFHFNMINS registers write-lock.
  *  0b10..Writable.
  *  0b01..Restricted mode.
  */
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTAIRCR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTAIRCR_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_VTAIRCR_MASK)
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_MASK (0xC0U)
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_SHIFT (6U)
-/*! LOCK_S_MPU - CM33 (CPU0) Secure MPU registers write-lock.
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_VTAIRCR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_VTAIRCR_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_VTAIRCR_MASK)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_MPU_MASK (0xC0U)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_MPU_SHIFT (6U)
+/*! LOCK_S_MPU - Cortex M33 (CPU0) Secure MPU registers write-lock.
  *  0b10..Writable.
  *  0b01..Restricted mode.
  */
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_S_MPU_MASK)
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_MASK (0x300U)
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_SHIFT (8U)
-/*! LOCK_SAU - CM33 (CPU0) SAU registers write-lock.
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_MPU_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_S_MPU_MASK)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_SAU_MASK (0x300U)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_SAU_SHIFT (8U)
+/*! LOCK_SAU - Cortex M33 (CPU0) SAU registers write-lock.
  *  0b10..Writable.
  *  0b01..Restricted mode.
  */
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_LOCK_SAU_MASK)
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_MASK (0xC0000000U)
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_SHIFT (30U)
-/*! CM33_LOCK_REG_LOCK - CM33_LOCK_REG write-lock.
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_SAU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_SAU_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_LOCK_SAU_MASK)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_CPU0_LOCK_REG_LOCK_MASK (0xC0000000U)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_CPU0_LOCK_REG_LOCK_SHIFT (30U)
+/*! CPU0_LOCK_REG_LOCK - CPU0_LOCK_REG write-lock.
  *  0b10..Writable.
  *  0b01..Restricted mode.
  */
-#define AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_SHIFT)) & AHB_SECURE_CTRL_CM33_LOCK_REG_CM33_LOCK_REG_LOCK_MASK)
+#define AHB_SECURE_CTRL_CPU0_LOCK_REG_CPU0_LOCK_REG_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU0_LOCK_REG_CPU0_LOCK_REG_LOCK_SHIFT)) & AHB_SECURE_CTRL_CPU0_LOCK_REG_CPU0_LOCK_REG_LOCK_MASK)
 /*! @} */
 
-/*! @name MCM33_LOCK_REG - Miscalleneous control signals for in micro-CM33 (CPU1) */
+/*! @name CPU1_LOCK_REG - Miscalleneous control signals for in micro-Cortex M33 (CPU1) */
 /*! @{ */
-#define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_VTOR_MASK (0x3U)
-#define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_VTOR_SHIFT (0U)
-/*! LOCK_NS_VTOR - micro-CM33 (CPU1) VTOR_NS register write-lock.
+#define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_VTOR_MASK (0x3U)
+#define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_VTOR_SHIFT (0U)
+/*! LOCK_NS_VTOR - micro-Cortex M33 (CPU1) VTOR_NS register write-lock.
  *  0b10..Writable.
  *  0b01..Restricted mode.
  */
-#define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_VTOR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_VTOR_SHIFT)) & AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_VTOR_MASK)
-#define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_MPU_MASK (0xCU)
-#define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_MPU_SHIFT (2U)
-/*! LOCK_NS_MPU - micro-CM33 (CPU1) non-secure MPU register write-lock.
+#define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_VTOR(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_VTOR_SHIFT)) & AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_VTOR_MASK)
+#define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_MPU_MASK (0xCU)
+#define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_MPU_SHIFT (2U)
+/*! LOCK_NS_MPU - micro-Cortex M33 (CPU1) non-secure MPU register write-lock.
  *  0b10..Writable.
  *  0b01..Restricted mode.
  */
-#define AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_MPU_SHIFT)) & AHB_SECURE_CTRL_MCM33_LOCK_REG_LOCK_NS_MPU_MASK)
-#define AHB_SECURE_CTRL_MCM33_LOCK_REG_MCM33_LOCK_REG_LOCK_MASK (0xC0000000U)
-#define AHB_SECURE_CTRL_MCM33_LOCK_REG_MCM33_LOCK_REG_LOCK_SHIFT (30U)
-/*! MCM33_LOCK_REG_LOCK - MCM33_LOCK_REG write-lock.
+#define AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_MPU(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_MPU_SHIFT)) & AHB_SECURE_CTRL_CPU1_LOCK_REG_LOCK_NS_MPU_MASK)
+#define AHB_SECURE_CTRL_CPU1_LOCK_REG_CPU1_LOCK_REG_LOCK_MASK (0xC0000000U)
+#define AHB_SECURE_CTRL_CPU1_LOCK_REG_CPU1_LOCK_REG_LOCK_SHIFT (30U)
+/*! CPU1_LOCK_REG_LOCK - CPU1_LOCK_REG write-lock.
  *  0b10..Writable.
  *  0b01..Restricted mode.
  */
-#define AHB_SECURE_CTRL_MCM33_LOCK_REG_MCM33_LOCK_REG_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MCM33_LOCK_REG_MCM33_LOCK_REG_LOCK_SHIFT)) & AHB_SECURE_CTRL_MCM33_LOCK_REG_MCM33_LOCK_REG_LOCK_MASK)
+#define AHB_SECURE_CTRL_CPU1_LOCK_REG_CPU1_LOCK_REG_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_CPU1_LOCK_REG_CPU1_LOCK_REG_LOCK_SHIFT)) & AHB_SECURE_CTRL_CPU1_LOCK_REG_CPU1_LOCK_REG_LOCK_MASK)
 /*! @} */
 
 /*! @name MISC_CTRL_DP_REG - secure control duplicate register */
 /*! @{ */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_MASK (0x3U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_SHIFT (0U)
-/*! WRITE_LOCK - write lock.
+/*! WRITE_LOCK - Write lock.
  *  0b10..Secure control registers can be written.
  *  0b01..Restricted mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_WRITE_LOCK_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_MASK (0xCU)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_SHIFT (2U)
-/*! ENABLE_SECURE_CHECKING - AHB bus matrix enable secure check.
+/*! ENABLE_SECURE_CHECKING - Enable secure check for AHB matrix.
  *  0b10..Disable check.
  *  0b01..Restricted mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_SECURE_CHECKING_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_MASK (0x30U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_SHIFT (4U)
-/*! ENABLE_S_PRIV_CHECK - AHB bus matrix enable secure privilege check.
+/*! ENABLE_S_PRIV_CHECK - Enable secure privilege check for AHB matrix.
  *  0b10..Disable check.
  *  0b01..Restricted mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_S_PRIV_CHECK_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_MASK (0xC0U)
 #define AHB_SECURE_CTRL_MISC_CTRL_DP_REG_ENABLE_NS_PRIV_CHECK_SHIFT (6U)
-/*! ENABLE_NS_PRIV_CHECK - AHB bus matrix enable non-secure privilege check.
+/*! ENABLE_NS_PRIV_CHECK - Enable non-secure privilege check for AHB matrix.
  *  0b10..Disable check.
  *  0b01..Restricted mode.
  */
@@ -4181,28 +4171,28 @@ typedef struct {
 /*! @{ */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_MASK (0x3U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_SHIFT (0U)
-/*! WRITE_LOCK - write lock.
+/*! WRITE_LOCK - Write lock.
  *  0b10..Secure control registers can be written.
  *  0b01..Restricted mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_WRITE_LOCK_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_MASK (0xCU)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_SHIFT (2U)
-/*! ENABLE_SECURE_CHECKING - AHB bus matrix enable secure check.
+/*! ENABLE_SECURE_CHECKING - Enable secure check for AHB matrix.
  *  0b10..Disable check.
  *  0b01..Restricted mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_SECURE_CHECKING_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_MASK (0x30U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_SHIFT (4U)
-/*! ENABLE_S_PRIV_CHECK - AHB bus matrix enable secure privilege check.
+/*! ENABLE_S_PRIV_CHECK - Enable secure privilege check for AHB matrix.
  *  0b10..Disable check.
  *  0b01..Restricted mode.
  */
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_SHIFT)) & AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_S_PRIV_CHECK_MASK)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_MASK (0xC0U)
 #define AHB_SECURE_CTRL_MISC_CTRL_REG_ENABLE_NS_PRIV_CHECK_SHIFT (6U)
-/*! ENABLE_NS_PRIV_CHECK - AHB bus matrix enable non-secure privilege check.
+/*! ENABLE_NS_PRIV_CHECK - Enable non-secure privilege check for AHB matrix.
  *  0b10..Disable check.
  *  0b01..Restricted mode.
  */
@@ -4288,33 +4278,24 @@ typedef struct {
 
 /** ANACTRL - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t ANALOG_CTRL_CFG;                   /**< Various Analog blocks configuration (like FRO 192MHz trimmings source ...), offset: 0x0 */
-  __I  uint32_t ANALOG_CTRL_STATUS;                /**< Analog Macroblock Identity registers, Flash Status registers, offset: 0x4 */
        uint8_t RESERVED_0[4];
+  __I  uint32_t ANALOG_CTRL_STATUS;                /**< Analog Macroblock Identity registers, Flash Status registers, offset: 0x4 */
+       uint8_t RESERVED_1[4];
   __IO uint32_t FREQ_ME_CTRL;                      /**< Frequency Measure function control register, offset: 0xC */
   __IO uint32_t FRO192M_CTRL;                      /**< 192MHz Free Running OScillator (FRO) Control register, offset: 0x10 */
   __I  uint32_t FRO192M_STATUS;                    /**< 192MHz Free Running OScillator (FRO) Status register, offset: 0x14 */
-  __IO uint32_t ADC_CTRL;                          /**< General Purpose ADC VBAT Divider branch control, offset: 0x18 */
-       uint8_t RESERVED_1[4];
-  __IO uint32_t XO32M_CTRL;                        /**< 32 MHz Crystal Oscillator Control register, offset: 0x20 */
-  __I  uint32_t XO32M_STATUS;                      /**< 32 MHz Crystal Oscillator Status register, offset: 0x24 */
        uint8_t RESERVED_2[8];
+  __IO uint32_t XO32M_CTRL;                        /**< High speed Crystal Oscillator Control register, offset: 0x20 */
+  __I  uint32_t XO32M_STATUS;                      /**< High speed Crystal Oscillator Status register, offset: 0x24 */
+       uint8_t RESERVED_3[8];
   __IO uint32_t BOD_DCDC_INT_CTRL;                 /**< Brown Out Detectors (BoDs) & DCDC interrupts generation control register, offset: 0x30 */
   __I  uint32_t BOD_DCDC_INT_STATUS;               /**< BoDs & DCDC interrupts status register, offset: 0x34 */
-       uint8_t RESERVED_3[8];
+       uint8_t RESERVED_4[8];
   __IO uint32_t RINGO0_CTRL;                       /**< First Ring Oscillator module control register., offset: 0x40 */
   __IO uint32_t RINGO1_CTRL;                       /**< Second Ring Oscillator module control register., offset: 0x44 */
   __IO uint32_t RINGO2_CTRL;                       /**< Third Ring Oscillator module control register., offset: 0x48 */
-       uint8_t RESERVED_4[100];
-  __IO uint32_t LDO_XO32M;                         /**< High Speed Crystal Oscillator (12 MHz - 32 MHz) Voltage Source Supply Control register, offset: 0xB0 */
-       uint8_t RESERVED_5[12];
-  __IO uint32_t XO_CAL_CFG;                        /**< All Crystal Oscillators (both the 32 KHz and the High speed) Capacitive Banks Calibration Configuration register, offset: 0xC0 */
-  __IO uint32_t XO_CAL_CMD;                        /**< All Crystal Oscillators (both the 32 KHz and the High Speed) Capacitive Banks Calibration Command register., offset: 0xC4 */
-  __I  uint32_t XO_CAL_STATUS;                     /**< All Crystal Oscillators (both the 32 KHz and the High speed) Capacitive Banks Calibration Status register., offset: 0xC8 */
-       uint8_t RESERVED_6[52];
+       uint8_t RESERVED_5[180];
   __IO uint32_t USBHS_PHY_CTRL;                    /**< USB High Speed Phy Control, offset: 0x100 */
-  __IO uint32_t USBHS_PHY_TRIM;                    /**< USB High Speed Phy Trim values, offset: 0x104 */
-  __I  uint32_t USBHS_PHY_STATUS;                  /**< USB High Speed Phy Status, offset: 0x108 */
 } ANACTRL_Type;
 
 /* ----------------------------------------------------------------------------
@@ -4326,25 +4307,8 @@ typedef struct {
  * @{
  */
 
-/*! @name ANALOG_CTRL_CFG - Various Analog blocks configuration (like FRO 192MHz trimmings source ...) */
-/*! @{ */
-#define ANACTRL_ANALOG_CTRL_CFG_FRO192M_TRIM_SRC_MASK (0x1U)
-#define ANACTRL_ANALOG_CTRL_CFG_FRO192M_TRIM_SRC_SHIFT (0U)
-/*! FRO192M_TRIM_SRC - FRO192M trimming and 'Enable' source.
- *  0b0..FRO192M trimming and 'Enable' comes from eFUSE.
- *  0b1..FRO192M trimming and 'Enable' comes from FRO192M_CTRL registers.
- */
-#define ANACTRL_ANALOG_CTRL_CFG_FRO192M_TRIM_SRC(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_ANALOG_CTRL_CFG_FRO192M_TRIM_SRC_SHIFT)) & ANACTRL_ANALOG_CTRL_CFG_FRO192M_TRIM_SRC_MASK)
-/*! @} */
-
 /*! @name ANALOG_CTRL_STATUS - Analog Macroblock Identity registers, Flash Status registers */
 /*! @{ */
-#define ANACTRL_ANALOG_CTRL_STATUS_PMU_ID_MASK   (0x3FU)
-#define ANACTRL_ANALOG_CTRL_STATUS_PMU_ID_SHIFT  (0U)
-#define ANACTRL_ANALOG_CTRL_STATUS_PMU_ID(x)     (((uint32_t)(((uint32_t)(x)) << ANACTRL_ANALOG_CTRL_STATUS_PMU_ID_SHIFT)) & ANACTRL_ANALOG_CTRL_STATUS_PMU_ID_MASK)
-#define ANACTRL_ANALOG_CTRL_STATUS_OSC_ID_MASK   (0xFC0U)
-#define ANACTRL_ANALOG_CTRL_STATUS_OSC_ID_SHIFT  (6U)
-#define ANACTRL_ANALOG_CTRL_STATUS_OSC_ID(x)     (((uint32_t)(((uint32_t)(x)) << ANACTRL_ANALOG_CTRL_STATUS_OSC_ID_SHIFT)) & ANACTRL_ANALOG_CTRL_STATUS_OSC_ID_MASK)
 #define ANACTRL_ANALOG_CTRL_STATUS_FLASH_PWRDWN_MASK (0x1000U)
 #define ANACTRL_ANALOG_CTRL_STATUS_FLASH_PWRDWN_SHIFT (12U)
 /*! FLASH_PWRDWN - Flash Power Down status.
@@ -4359,9 +4323,6 @@ typedef struct {
  *  0b1..At least one error occured during flash initialization..
  */
 #define ANACTRL_ANALOG_CTRL_STATUS_FLASH_INIT_ERROR(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_ANALOG_CTRL_STATUS_FLASH_INIT_ERROR_SHIFT)) & ANACTRL_ANALOG_CTRL_STATUS_FLASH_INIT_ERROR_MASK)
-#define ANACTRL_ANALOG_CTRL_STATUS_FINAL_TEST_DONE_VECT_MASK (0xF0000000U)
-#define ANACTRL_ANALOG_CTRL_STATUS_FINAL_TEST_DONE_VECT_SHIFT (28U)
-#define ANACTRL_ANALOG_CTRL_STATUS_FINAL_TEST_DONE_VECT(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_ANALOG_CTRL_STATUS_FINAL_TEST_DONE_VECT_SHIFT)) & ANACTRL_ANALOG_CTRL_STATUS_FINAL_TEST_DONE_VECT_MASK)
 /*! @} */
 
 /*! @name FREQ_ME_CTRL - Frequency Measure function control register */
@@ -4376,12 +4337,6 @@ typedef struct {
 
 /*! @name FRO192M_CTRL - 192MHz Free Running OScillator (FRO) Control register */
 /*! @{ */
-#define ANACTRL_FRO192M_CTRL_BIAS_TRIM_MASK      (0x3FU)
-#define ANACTRL_FRO192M_CTRL_BIAS_TRIM_SHIFT     (0U)
-#define ANACTRL_FRO192M_CTRL_BIAS_TRIM(x)        (((uint32_t)(((uint32_t)(x)) << ANACTRL_FRO192M_CTRL_BIAS_TRIM_SHIFT)) & ANACTRL_FRO192M_CTRL_BIAS_TRIM_MASK)
-#define ANACTRL_FRO192M_CTRL_TEMP_TRIM_MASK      (0x3F80U)
-#define ANACTRL_FRO192M_CTRL_TEMP_TRIM_SHIFT     (7U)
-#define ANACTRL_FRO192M_CTRL_TEMP_TRIM(x)        (((uint32_t)(((uint32_t)(x)) << ANACTRL_FRO192M_CTRL_TEMP_TRIM_SHIFT)) & ANACTRL_FRO192M_CTRL_TEMP_TRIM_MASK)
 #define ANACTRL_FRO192M_CTRL_ENA_12MHZCLK_MASK   (0x4000U)
 #define ANACTRL_FRO192M_CTRL_ENA_12MHZCLK_SHIFT  (14U)
 /*! ENA_12MHZCLK - 12 MHz clock control.
@@ -4392,7 +4347,7 @@ typedef struct {
 #define ANACTRL_FRO192M_CTRL_ENA_48MHZCLK_MASK   (0x8000U)
 #define ANACTRL_FRO192M_CTRL_ENA_48MHZCLK_SHIFT  (15U)
 /*! ENA_48MHZCLK - 48 MHz clock control.
- *  0b0..48 MHz clock is disabled.
+ *  0b0..Reserved.
  *  0b1..48 MHz clock is enabled.
  */
 #define ANACTRL_FRO192M_CTRL_ENA_48MHZCLK(x)     (((uint32_t)(((uint32_t)(x)) << ANACTRL_FRO192M_CTRL_ENA_48MHZCLK_SHIFT)) & ANACTRL_FRO192M_CTRL_ENA_48MHZCLK_MASK)
@@ -4405,9 +4360,6 @@ typedef struct {
 #define ANACTRL_FRO192M_CTRL_USBMODCHG_MASK      (0x2000000U)
 #define ANACTRL_FRO192M_CTRL_USBMODCHG_SHIFT     (25U)
 #define ANACTRL_FRO192M_CTRL_USBMODCHG(x)        (((uint32_t)(((uint32_t)(x)) << ANACTRL_FRO192M_CTRL_USBMODCHG_SHIFT)) & ANACTRL_FRO192M_CTRL_USBMODCHG_MASK)
-#define ANACTRL_FRO192M_CTRL_ATB_CTRL_MASK       (0x30000000U)
-#define ANACTRL_FRO192M_CTRL_ATB_CTRL_SHIFT      (28U)
-#define ANACTRL_FRO192M_CTRL_ATB_CTRL(x)         (((uint32_t)(((uint32_t)(x)) << ANACTRL_FRO192M_CTRL_ATB_CTRL_SHIFT)) & ANACTRL_FRO192M_CTRL_ATB_CTRL_MASK)
 #define ANACTRL_FRO192M_CTRL_ENA_96MHZCLK_MASK   (0x40000000U)
 #define ANACTRL_FRO192M_CTRL_ENA_96MHZCLK_SHIFT  (30U)
 /*! ENA_96MHZCLK - 96 MHz clock control.
@@ -4415,9 +4367,6 @@ typedef struct {
  *  0b1..96 MHz clock is enabled.
  */
 #define ANACTRL_FRO192M_CTRL_ENA_96MHZCLK(x)     (((uint32_t)(((uint32_t)(x)) << ANACTRL_FRO192M_CTRL_ENA_96MHZCLK_SHIFT)) & ANACTRL_FRO192M_CTRL_ENA_96MHZCLK_MASK)
-#define ANACTRL_FRO192M_CTRL_WRTRIM_MASK         (0x80000000U)
-#define ANACTRL_FRO192M_CTRL_WRTRIM_SHIFT        (31U)
-#define ANACTRL_FRO192M_CTRL_WRTRIM(x)           (((uint32_t)(((uint32_t)(x)) << ANACTRL_FRO192M_CTRL_WRTRIM_SHIFT)) & ANACTRL_FRO192M_CTRL_WRTRIM_MASK)
 /*! @} */
 
 /*! @name FRO192M_STATUS - 192MHz Free Running OScillator (FRO) Status register */
@@ -4435,34 +4384,8 @@ typedef struct {
 #define ANACTRL_FRO192M_STATUS_ATB_VCTRL(x)      (((uint32_t)(((uint32_t)(x)) << ANACTRL_FRO192M_STATUS_ATB_VCTRL_SHIFT)) & ANACTRL_FRO192M_STATUS_ATB_VCTRL_MASK)
 /*! @} */
 
-/*! @name ADC_CTRL - General Purpose ADC VBAT Divider branch control */
+/*! @name XO32M_CTRL - High speed Crystal Oscillator Control register */
 /*! @{ */
-#define ANACTRL_ADC_CTRL_VBATDIVENABLE_MASK      (0x1U)
-#define ANACTRL_ADC_CTRL_VBATDIVENABLE_SHIFT     (0U)
-/*! VBATDIVENABLE - Switch On/Off VBAT divider branch.
- *  0b0..VBAT divider branch is disabled.
- *  0b1..VBAT divider branch is enabled.
- */
-#define ANACTRL_ADC_CTRL_VBATDIVENABLE(x)        (((uint32_t)(((uint32_t)(x)) << ANACTRL_ADC_CTRL_VBATDIVENABLE_SHIFT)) & ANACTRL_ADC_CTRL_VBATDIVENABLE_MASK)
-/*! @} */
-
-/*! @name XO32M_CTRL - 32 MHz Crystal Oscillator Control register */
-/*! @{ */
-#define ANACTRL_XO32M_CTRL_GM_MASK               (0xEU)
-#define ANACTRL_XO32M_CTRL_GM_SHIFT              (1U)
-#define ANACTRL_XO32M_CTRL_GM(x)                 (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_GM_SHIFT)) & ANACTRL_XO32M_CTRL_GM_MASK)
-#define ANACTRL_XO32M_CTRL_SLAVE_MASK            (0x10U)
-#define ANACTRL_XO32M_CTRL_SLAVE_SHIFT           (4U)
-#define ANACTRL_XO32M_CTRL_SLAVE(x)              (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_SLAVE_SHIFT)) & ANACTRL_XO32M_CTRL_SLAVE_MASK)
-#define ANACTRL_XO32M_CTRL_AMP_MASK              (0xE0U)
-#define ANACTRL_XO32M_CTRL_AMP_SHIFT             (5U)
-#define ANACTRL_XO32M_CTRL_AMP(x)                (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_AMP_SHIFT)) & ANACTRL_XO32M_CTRL_AMP_MASK)
-#define ANACTRL_XO32M_CTRL_OSC_CAP_IN_MASK       (0x7F00U)
-#define ANACTRL_XO32M_CTRL_OSC_CAP_IN_SHIFT      (8U)
-#define ANACTRL_XO32M_CTRL_OSC_CAP_IN(x)         (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_OSC_CAP_IN_SHIFT)) & ANACTRL_XO32M_CTRL_OSC_CAP_IN_MASK)
-#define ANACTRL_XO32M_CTRL_OSC_CAP_OUT_MASK      (0x3F8000U)
-#define ANACTRL_XO32M_CTRL_OSC_CAP_OUT_SHIFT     (15U)
-#define ANACTRL_XO32M_CTRL_OSC_CAP_OUT(x)        (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_OSC_CAP_OUT_SHIFT)) & ANACTRL_XO32M_CTRL_OSC_CAP_OUT_MASK)
 #define ANACTRL_XO32M_CTRL_ACBUF_PASS_ENABLE_MASK (0x400000U)
 #define ANACTRL_XO32M_CTRL_ACBUF_PASS_ENABLE_SHIFT (22U)
 /*! ACBUF_PASS_ENABLE - Bypass enable of XO AC buffer enable in pll and top level.
@@ -4472,45 +4395,21 @@ typedef struct {
 #define ANACTRL_XO32M_CTRL_ACBUF_PASS_ENABLE(x)  (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_ACBUF_PASS_ENABLE_SHIFT)) & ANACTRL_XO32M_CTRL_ACBUF_PASS_ENABLE_MASK)
 #define ANACTRL_XO32M_CTRL_ENABLE_PLL_USB_OUT_MASK (0x800000U)
 #define ANACTRL_XO32M_CTRL_ENABLE_PLL_USB_OUT_SHIFT (23U)
-/*! ENABLE_PLL_USB_OUT - Enable XO 32 MHz output to USB HS PLL.
- *  0b0..XO 32 MHz output to USB HS PLL is disabled.
- *  0b1..XO 32 MHz output to USB HS PLL is enabled.
+/*! ENABLE_PLL_USB_OUT - Enable High speed Crystal oscillator output to USB HS PLL.
+ *  0b0..High speed Crystal oscillator output to USB HS PLL is disabled.
+ *  0b1..High speed Crystal oscillator output to USB HS PLL is enabled.
  */
 #define ANACTRL_XO32M_CTRL_ENABLE_PLL_USB_OUT(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_ENABLE_PLL_USB_OUT_SHIFT)) & ANACTRL_XO32M_CTRL_ENABLE_PLL_USB_OUT_MASK)
 #define ANACTRL_XO32M_CTRL_ENABLE_SYSTEM_CLK_OUT_MASK (0x1000000U)
 #define ANACTRL_XO32M_CTRL_ENABLE_SYSTEM_CLK_OUT_SHIFT (24U)
 /*! ENABLE_SYSTEM_CLK_OUT - Enable XO 32 MHz output to CPU system.
- *  0b0..XO 32 MHz output to CPU system is disabled.
- *  0b1..XO 32 MHz output to CPU system is enabled.
+ *  0b0..High speed Crystal oscillator output to CPU system is disabled.
+ *  0b1..High speed Crystal oscillator output to CPU system is enabled.
  */
 #define ANACTRL_XO32M_CTRL_ENABLE_SYSTEM_CLK_OUT(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_ENABLE_SYSTEM_CLK_OUT_SHIFT)) & ANACTRL_XO32M_CTRL_ENABLE_SYSTEM_CLK_OUT_MASK)
-#define ANACTRL_XO32M_CTRL_CAPTESTSTARTSRCSEL_MASK (0x2000000U)
-#define ANACTRL_XO32M_CTRL_CAPTESTSTARTSRCSEL_SHIFT (25U)
-/*! CAPTESTSTARTSRCSEL - Source selection for 'xo32k_captest_start' signal.
- *  0b0..Sourced from CAPTESTSTART.
- *  0b1..Sourced from calibration.
- */
-#define ANACTRL_XO32M_CTRL_CAPTESTSTARTSRCSEL(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_CAPTESTSTARTSRCSEL_SHIFT)) & ANACTRL_XO32M_CTRL_CAPTESTSTARTSRCSEL_MASK)
-#define ANACTRL_XO32M_CTRL_CAPTESTSTART_MASK     (0x4000000U)
-#define ANACTRL_XO32M_CTRL_CAPTESTSTART_SHIFT    (26U)
-#define ANACTRL_XO32M_CTRL_CAPTESTSTART(x)       (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_CAPTESTSTART_SHIFT)) & ANACTRL_XO32M_CTRL_CAPTESTSTART_MASK)
-#define ANACTRL_XO32M_CTRL_CAPTESTENABLE_MASK    (0x8000000U)
-#define ANACTRL_XO32M_CTRL_CAPTESTENABLE_SHIFT   (27U)
-/*! CAPTESTENABLE - Enable signal for captest.
- *  0b0..Captest is disabled.
- *  0b1..Captest is enabled.
- */
-#define ANACTRL_XO32M_CTRL_CAPTESTENABLE(x)      (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_CAPTESTENABLE_SHIFT)) & ANACTRL_XO32M_CTRL_CAPTESTENABLE_MASK)
-#define ANACTRL_XO32M_CTRL_CAPTESTOSCINSEL_MASK  (0x10000000U)
-#define ANACTRL_XO32M_CTRL_CAPTESTOSCINSEL_SHIFT (28U)
-/*! CAPTESTOSCINSEL - Select the input for test.
- *  0b0..osc_out (oscillator output) pin.
- *  0b1..osc_in (oscillator) pin.
- */
-#define ANACTRL_XO32M_CTRL_CAPTESTOSCINSEL(x)    (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO32M_CTRL_CAPTESTOSCINSEL_SHIFT)) & ANACTRL_XO32M_CTRL_CAPTESTOSCINSEL_MASK)
 /*! @} */
 
-/*! @name XO32M_STATUS - 32 MHz Crystal Oscillator Status register */
+/*! @name XO32M_STATUS - High speed Crystal Oscillator Status register */
 /*! @{ */
 #define ANACTRL_XO32M_STATUS_XO_READY_MASK       (0x1U)
 #define ANACTRL_XO32M_STATUS_XO_READY_SHIFT      (0U)
@@ -4864,92 +4763,6 @@ typedef struct {
 #define ANACTRL_RINGO2_CTRL_DIV_UPDATE_REQ(x)    (((uint32_t)(((uint32_t)(x)) << ANACTRL_RINGO2_CTRL_DIV_UPDATE_REQ_SHIFT)) & ANACTRL_RINGO2_CTRL_DIV_UPDATE_REQ_MASK)
 /*! @} */
 
-/*! @name LDO_XO32M - High Speed Crystal Oscillator (12 MHz - 32 MHz) Voltage Source Supply Control register */
-/*! @{ */
-#define ANACTRL_LDO_XO32M_BYPASS_MASK            (0x2U)
-#define ANACTRL_LDO_XO32M_BYPASS_SHIFT           (1U)
-/*! BYPASS - Activate LDO bypass.
- *  0b0..Disable bypass mode (for normal operations).
- *  0b1..Activate LDO bypass.
- */
-#define ANACTRL_LDO_XO32M_BYPASS(x)              (((uint32_t)(((uint32_t)(x)) << ANACTRL_LDO_XO32M_BYPASS_SHIFT)) & ANACTRL_LDO_XO32M_BYPASS_MASK)
-#define ANACTRL_LDO_XO32M_HIGHZ_MASK             (0x4U)
-#define ANACTRL_LDO_XO32M_HIGHZ_SHIFT            (2U)
-/*! HIGHZ - .
- *  0b0..Output in High normal state.
- *  0b1..Output in High Impedance state.
- */
-#define ANACTRL_LDO_XO32M_HIGHZ(x)               (((uint32_t)(((uint32_t)(x)) << ANACTRL_LDO_XO32M_HIGHZ_SHIFT)) & ANACTRL_LDO_XO32M_HIGHZ_MASK)
-#define ANACTRL_LDO_XO32M_VOUT_MASK              (0x38U)
-#define ANACTRL_LDO_XO32M_VOUT_SHIFT             (3U)
-/*! VOUT - Sets the LDO output level.
- *  0b000..0.750 V.
- *  0b001..0.775 V.
- *  0b010..0.800 V.
- *  0b011..0.825 V.
- *  0b100..0.850 V.
- *  0b101..0.875 V.
- *  0b110..0.900 V.
- *  0b111..0.925 V.
- */
-#define ANACTRL_LDO_XO32M_VOUT(x)                (((uint32_t)(((uint32_t)(x)) << ANACTRL_LDO_XO32M_VOUT_SHIFT)) & ANACTRL_LDO_XO32M_VOUT_MASK)
-#define ANACTRL_LDO_XO32M_IBIAS_MASK             (0xC0U)
-#define ANACTRL_LDO_XO32M_IBIAS_SHIFT            (6U)
-#define ANACTRL_LDO_XO32M_IBIAS(x)               (((uint32_t)(((uint32_t)(x)) << ANACTRL_LDO_XO32M_IBIAS_SHIFT)) & ANACTRL_LDO_XO32M_IBIAS_MASK)
-#define ANACTRL_LDO_XO32M_STABMODE_MASK          (0x300U)
-#define ANACTRL_LDO_XO32M_STABMODE_SHIFT         (8U)
-#define ANACTRL_LDO_XO32M_STABMODE(x)            (((uint32_t)(((uint32_t)(x)) << ANACTRL_LDO_XO32M_STABMODE_SHIFT)) & ANACTRL_LDO_XO32M_STABMODE_MASK)
-/*! @} */
-
-/*! @name XO_CAL_CFG - All Crystal Oscillators (both the 32 KHz and the High speed) Capacitive Banks Calibration Configuration register */
-/*! @{ */
-#define ANACTRL_XO_CAL_CFG_START_INV_MASK        (0x1U)
-#define ANACTRL_XO_CAL_CFG_START_INV_SHIFT       (0U)
-#define ANACTRL_XO_CAL_CFG_START_INV(x)          (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO_CAL_CFG_START_INV_SHIFT)) & ANACTRL_XO_CAL_CFG_START_INV_MASK)
-#define ANACTRL_XO_CAL_CFG_START_OVR_MASK        (0x2U)
-#define ANACTRL_XO_CAL_CFG_START_OVR_SHIFT       (1U)
-#define ANACTRL_XO_CAL_CFG_START_OVR(x)          (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO_CAL_CFG_START_OVR_SHIFT)) & ANACTRL_XO_CAL_CFG_START_OVR_MASK)
-#define ANACTRL_XO_CAL_CFG_START_MASK            (0x4U)
-#define ANACTRL_XO_CAL_CFG_START_SHIFT           (2U)
-#define ANACTRL_XO_CAL_CFG_START(x)              (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO_CAL_CFG_START_SHIFT)) & ANACTRL_XO_CAL_CFG_START_MASK)
-#define ANACTRL_XO_CAL_CFG_STOP_INV_MASK         (0x8U)
-#define ANACTRL_XO_CAL_CFG_STOP_INV_SHIFT        (3U)
-#define ANACTRL_XO_CAL_CFG_STOP_INV(x)           (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO_CAL_CFG_STOP_INV_SHIFT)) & ANACTRL_XO_CAL_CFG_STOP_INV_MASK)
-#define ANACTRL_XO_CAL_CFG_STOP_CNTR_END_MASK    (0x10U)
-#define ANACTRL_XO_CAL_CFG_STOP_CNTR_END_SHIFT   (4U)
-#define ANACTRL_XO_CAL_CFG_STOP_CNTR_END(x)      (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO_CAL_CFG_STOP_CNTR_END_SHIFT)) & ANACTRL_XO_CAL_CFG_STOP_CNTR_END_MASK)
-#define ANACTRL_XO_CAL_CFG_XO32K_MODE_MASK       (0x20U)
-#define ANACTRL_XO_CAL_CFG_XO32K_MODE_SHIFT      (5U)
-/*! XO32K_MODE - When 0 : High speed crystal oscillator calibration is used. When 1 : 32 kHz crystal oscillator calibration is used.
- *  0b0..High speed crystal oscillator (12 MHz- 32 MHz) is used
- *  0b1..32 kHz crystal oscillator calibration is used.
- */
-#define ANACTRL_XO_CAL_CFG_XO32K_MODE(x)         (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO_CAL_CFG_XO32K_MODE_SHIFT)) & ANACTRL_XO_CAL_CFG_XO32K_MODE_MASK)
-/*! @} */
-
-/*! @name XO_CAL_CMD - All Crystal Oscillators (both the 32 KHz and the High Speed) Capacitive Banks Calibration Command register. */
-/*! @{ */
-#define ANACTRL_XO_CAL_CMD_START_MASK            (0x1U)
-#define ANACTRL_XO_CAL_CMD_START_SHIFT           (0U)
-#define ANACTRL_XO_CAL_CMD_START(x)              (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO_CAL_CMD_START_SHIFT)) & ANACTRL_XO_CAL_CMD_START_MASK)
-#define ANACTRL_XO_CAL_CMD_STOP_MASK             (0x2U)
-#define ANACTRL_XO_CAL_CMD_STOP_SHIFT            (1U)
-#define ANACTRL_XO_CAL_CMD_STOP(x)               (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO_CAL_CMD_STOP_SHIFT)) & ANACTRL_XO_CAL_CMD_STOP_MASK)
-#define ANACTRL_XO_CAL_CMD_OVR_MASK              (0x4U)
-#define ANACTRL_XO_CAL_CMD_OVR_SHIFT             (2U)
-#define ANACTRL_XO_CAL_CMD_OVR(x)                (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO_CAL_CMD_OVR_SHIFT)) & ANACTRL_XO_CAL_CMD_OVR_MASK)
-/*! @} */
-
-/*! @name XO_CAL_STATUS - All Crystal Oscillators (both the 32 KHz and the High speed) Capacitive Banks Calibration Status register. */
-/*! @{ */
-#define ANACTRL_XO_CAL_STATUS_CAL_CNTR_MASK      (0xFFFFU)
-#define ANACTRL_XO_CAL_STATUS_CAL_CNTR_SHIFT     (0U)
-#define ANACTRL_XO_CAL_STATUS_CAL_CNTR(x)        (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO_CAL_STATUS_CAL_CNTR_SHIFT)) & ANACTRL_XO_CAL_STATUS_CAL_CNTR_MASK)
-#define ANACTRL_XO_CAL_STATUS_DONE_MASK          (0x10000U)
-#define ANACTRL_XO_CAL_STATUS_DONE_SHIFT         (16U)
-#define ANACTRL_XO_CAL_STATUS_DONE(x)            (((uint32_t)(((uint32_t)(x)) << ANACTRL_XO_CAL_STATUS_DONE_SHIFT)) & ANACTRL_XO_CAL_STATUS_DONE_MASK)
-/*! @} */
-
 /*! @name USBHS_PHY_CTRL - USB High Speed Phy Control */
 /*! @{ */
 #define ANACTRL_USBHS_PHY_CTRL_usb_vbusvalid_ext_MASK (0x1U)
@@ -4961,56 +4774,6 @@ typedef struct {
 #define ANACTRL_USBHS_PHY_CTRL_iso_atx_MASK      (0x8U)
 #define ANACTRL_USBHS_PHY_CTRL_iso_atx_SHIFT     (3U)
 #define ANACTRL_USBHS_PHY_CTRL_iso_atx(x)        (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_CTRL_iso_atx_SHIFT)) & ANACTRL_USBHS_PHY_CTRL_iso_atx_MASK)
-/*! @} */
-
-/*! @name USBHS_PHY_TRIM - USB High Speed Phy Trim values */
-/*! @{ */
-#define ANACTRL_USBHS_PHY_TRIM_trim_usb_reg_env_tail_adj_vd_MASK (0x3U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usb_reg_env_tail_adj_vd_SHIFT (0U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usb_reg_env_tail_adj_vd(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_TRIM_trim_usb_reg_env_tail_adj_vd_SHIFT)) & ANACTRL_USBHS_PHY_TRIM_trim_usb_reg_env_tail_adj_vd_MASK)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_d_cal_MASK (0x3CU)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_d_cal_SHIFT (2U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_d_cal(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_d_cal_SHIFT)) & ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_d_cal_MASK)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_cal45dp_MASK (0x7C0U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_cal45dp_SHIFT (6U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_cal45dp(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_cal45dp_SHIFT)) & ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_cal45dp_MASK)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_cal45dm_MASK (0xF800U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_cal45dm_SHIFT (11U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_cal45dm(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_cal45dm_SHIFT)) & ANACTRL_USBHS_PHY_TRIM_trim_usbphy_tx_cal45dm_MASK)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usb2_refbias_tst_MASK (0x30000U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usb2_refbias_tst_SHIFT (16U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usb2_refbias_tst(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_TRIM_trim_usb2_refbias_tst_SHIFT)) & ANACTRL_USBHS_PHY_TRIM_trim_usb2_refbias_tst_MASK)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usb2_refbias_vbgadj_MASK (0x1C0000U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usb2_refbias_vbgadj_SHIFT (18U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_usb2_refbias_vbgadj(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_TRIM_trim_usb2_refbias_vbgadj_SHIFT)) & ANACTRL_USBHS_PHY_TRIM_trim_usb2_refbias_vbgadj_MASK)
-#define ANACTRL_USBHS_PHY_TRIM_trim_pll_ctrl0_div_sel_MASK (0xE00000U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_pll_ctrl0_div_sel_SHIFT (21U)
-#define ANACTRL_USBHS_PHY_TRIM_trim_pll_ctrl0_div_sel(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_TRIM_trim_pll_ctrl0_div_sel_SHIFT)) & ANACTRL_USBHS_PHY_TRIM_trim_pll_ctrl0_div_sel_MASK)
-/*! @} */
-
-/*! @name USBHS_PHY_STATUS - USB High Speed Phy Status */
-/*! @{ */
-#define ANACTRL_USBHS_PHY_STATUS_pfd_stable_MASK (0x1U)
-#define ANACTRL_USBHS_PHY_STATUS_pfd_stable_SHIFT (0U)
-#define ANACTRL_USBHS_PHY_STATUS_pfd_stable(x)   (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_STATUS_pfd_stable_SHIFT)) & ANACTRL_USBHS_PHY_STATUS_pfd_stable_MASK)
-#define ANACTRL_USBHS_PHY_STATUS_vbusvalid_3vdetect_1p8v_MASK (0x2U)
-#define ANACTRL_USBHS_PHY_STATUS_vbusvalid_3vdetect_1p8v_SHIFT (1U)
-#define ANACTRL_USBHS_PHY_STATUS_vbusvalid_3vdetect_1p8v(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_STATUS_vbusvalid_3vdetect_1p8v_SHIFT)) & ANACTRL_USBHS_PHY_STATUS_vbusvalid_3vdetect_1p8v_MASK)
-#define ANACTRL_USBHS_PHY_STATUS_sess_vld_1p8v_MASK (0x4U)
-#define ANACTRL_USBHS_PHY_STATUS_sess_vld_1p8v_SHIFT (2U)
-#define ANACTRL_USBHS_PHY_STATUS_sess_vld_1p8v(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_STATUS_sess_vld_1p8v_SHIFT)) & ANACTRL_USBHS_PHY_STATUS_sess_vld_1p8v_MASK)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_rx_vpin_fs_1p8v_MASK (0x8U)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_rx_vpin_fs_1p8v_SHIFT (3U)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_rx_vpin_fs_1p8v(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_STATUS_usb2_rx_vpin_fs_1p8v_SHIFT)) & ANACTRL_USBHS_PHY_STATUS_usb2_rx_vpin_fs_1p8v_MASK)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_rx_vmin_fs_1p8v_MASK (0x10U)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_rx_vmin_fs_1p8v_SHIFT (4U)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_rx_vmin_fs_1p8v(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_STATUS_usb2_rx_vmin_fs_1p8v_SHIFT)) & ANACTRL_USBHS_PHY_STATUS_usb2_rx_vmin_fs_1p8v_MASK)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_plugged_in_1p8v_MASK (0x20U)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_plugged_in_1p8v_SHIFT (5U)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_plugged_in_1p8v(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_STATUS_usb2_plugged_in_1p8v_SHIFT)) & ANACTRL_USBHS_PHY_STATUS_usb2_plugged_in_1p8v_MASK)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_iddig_1p8v_MASK (0x40U)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_iddig_1p8v_SHIFT (6U)
-#define ANACTRL_USBHS_PHY_STATUS_usb2_iddig_1p8v(x) (((uint32_t)(((uint32_t)(x)) << ANACTRL_USBHS_PHY_STATUS_usb2_iddig_1p8v_SHIFT)) & ANACTRL_USBHS_PHY_STATUS_usb2_iddig_1p8v_MASK)
 /*! @} */
 
 
@@ -5807,9 +5570,9 @@ typedef struct {
 
 /*! @name MSR - Match Shadow Register */
 /*! @{ */
-#define CTIMER_MSR_SHADOWW_MASK                  (0xFFFFFFFFU)
-#define CTIMER_MSR_SHADOWW_SHIFT                 (0U)
-#define CTIMER_MSR_SHADOWW(x)                    (((uint32_t)(((uint32_t)(x)) << CTIMER_MSR_SHADOWW_SHIFT)) & CTIMER_MSR_SHADOWW_MASK)
+#define CTIMER_MSR_SHADOW_MASK                   (0xFFFFFFFFU)
+#define CTIMER_MSR_SHADOW_SHIFT                  (0U)
+#define CTIMER_MSR_SHADOW(x)                     (((uint32_t)(((uint32_t)(x)) << CTIMER_MSR_SHADOW_SHIFT)) & CTIMER_MSR_SHADOW_MASK)
 /*! @} */
 
 /* The count of CTIMER_MSR */
@@ -5906,113 +5669,113 @@ typedef struct {
 
 
 /* ----------------------------------------------------------------------------
-   -- DGBMAILBOX Peripheral Access Layer
+   -- DBGMAILBOX Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
 /*!
- * @addtogroup DGBMAILBOX_Peripheral_Access_Layer DGBMAILBOX Peripheral Access Layer
+ * @addtogroup DBGMAILBOX_Peripheral_Access_Layer DBGMAILBOX Peripheral Access Layer
  * @{
  */
 
-/** DGBMAILBOX - Register Layout Typedef */
+/** DBGMAILBOX - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CSW;                               /**< CRC mode register, offset: 0x0 */
   __IO uint32_t REQUEST;                           /**< CRC seed register, offset: 0x4 */
   __IO uint32_t RETURN;                            /**< Return value from ROM., offset: 0x8 */
        uint8_t RESERVED_0[240];
   __I  uint32_t ID;                                /**< Identification register, offset: 0xFC */
-} DGBMAILBOX_Type;
+} DBGMAILBOX_Type;
 
 /* ----------------------------------------------------------------------------
-   -- DGBMAILBOX Register Masks
+   -- DBGMAILBOX Register Masks
    ---------------------------------------------------------------------------- */
 
 /*!
- * @addtogroup DGBMAILBOX_Register_Masks DGBMAILBOX Register Masks
+ * @addtogroup DBGMAILBOX_Register_Masks DBGMAILBOX Register Masks
  * @{
  */
 
 /*! @name CSW - CRC mode register */
 /*! @{ */
-#define DGBMAILBOX_CSW_RESYNCH_REQ_MASK          (0x1U)
-#define DGBMAILBOX_CSW_RESYNCH_REQ_SHIFT         (0U)
-#define DGBMAILBOX_CSW_RESYNCH_REQ(x)            (((uint32_t)(((uint32_t)(x)) << DGBMAILBOX_CSW_RESYNCH_REQ_SHIFT)) & DGBMAILBOX_CSW_RESYNCH_REQ_MASK)
-#define DGBMAILBOX_CSW_REQ_PENDING_MASK          (0x2U)
-#define DGBMAILBOX_CSW_REQ_PENDING_SHIFT         (1U)
-#define DGBMAILBOX_CSW_REQ_PENDING(x)            (((uint32_t)(((uint32_t)(x)) << DGBMAILBOX_CSW_REQ_PENDING_SHIFT)) & DGBMAILBOX_CSW_REQ_PENDING_MASK)
-#define DGBMAILBOX_CSW_DBG_OR_ERR_MASK           (0x4U)
-#define DGBMAILBOX_CSW_DBG_OR_ERR_SHIFT          (2U)
-#define DGBMAILBOX_CSW_DBG_OR_ERR(x)             (((uint32_t)(((uint32_t)(x)) << DGBMAILBOX_CSW_DBG_OR_ERR_SHIFT)) & DGBMAILBOX_CSW_DBG_OR_ERR_MASK)
-#define DGBMAILBOX_CSW_AHB_OR_ERR_MASK           (0x8U)
-#define DGBMAILBOX_CSW_AHB_OR_ERR_SHIFT          (3U)
-#define DGBMAILBOX_CSW_AHB_OR_ERR(x)             (((uint32_t)(((uint32_t)(x)) << DGBMAILBOX_CSW_AHB_OR_ERR_SHIFT)) & DGBMAILBOX_CSW_AHB_OR_ERR_MASK)
-#define DGBMAILBOX_CSW_SOFT_RESET_MASK           (0x10U)
-#define DGBMAILBOX_CSW_SOFT_RESET_SHIFT          (4U)
-#define DGBMAILBOX_CSW_SOFT_RESET(x)             (((uint32_t)(((uint32_t)(x)) << DGBMAILBOX_CSW_SOFT_RESET_SHIFT)) & DGBMAILBOX_CSW_SOFT_RESET_MASK)
-#define DGBMAILBOX_CSW_CHIP_RESET_REQ_MASK       (0x20U)
-#define DGBMAILBOX_CSW_CHIP_RESET_REQ_SHIFT      (5U)
-#define DGBMAILBOX_CSW_CHIP_RESET_REQ(x)         (((uint32_t)(((uint32_t)(x)) << DGBMAILBOX_CSW_CHIP_RESET_REQ_SHIFT)) & DGBMAILBOX_CSW_CHIP_RESET_REQ_MASK)
+#define DBGMAILBOX_CSW_RESYNCH_REQ_MASK          (0x1U)
+#define DBGMAILBOX_CSW_RESYNCH_REQ_SHIFT         (0U)
+#define DBGMAILBOX_CSW_RESYNCH_REQ(x)            (((uint32_t)(((uint32_t)(x)) << DBGMAILBOX_CSW_RESYNCH_REQ_SHIFT)) & DBGMAILBOX_CSW_RESYNCH_REQ_MASK)
+#define DBGMAILBOX_CSW_REQ_PENDING_MASK          (0x2U)
+#define DBGMAILBOX_CSW_REQ_PENDING_SHIFT         (1U)
+#define DBGMAILBOX_CSW_REQ_PENDING(x)            (((uint32_t)(((uint32_t)(x)) << DBGMAILBOX_CSW_REQ_PENDING_SHIFT)) & DBGMAILBOX_CSW_REQ_PENDING_MASK)
+#define DBGMAILBOX_CSW_DBG_OR_ERR_MASK           (0x4U)
+#define DBGMAILBOX_CSW_DBG_OR_ERR_SHIFT          (2U)
+#define DBGMAILBOX_CSW_DBG_OR_ERR(x)             (((uint32_t)(((uint32_t)(x)) << DBGMAILBOX_CSW_DBG_OR_ERR_SHIFT)) & DBGMAILBOX_CSW_DBG_OR_ERR_MASK)
+#define DBGMAILBOX_CSW_AHB_OR_ERR_MASK           (0x8U)
+#define DBGMAILBOX_CSW_AHB_OR_ERR_SHIFT          (3U)
+#define DBGMAILBOX_CSW_AHB_OR_ERR(x)             (((uint32_t)(((uint32_t)(x)) << DBGMAILBOX_CSW_AHB_OR_ERR_SHIFT)) & DBGMAILBOX_CSW_AHB_OR_ERR_MASK)
+#define DBGMAILBOX_CSW_SOFT_RESET_MASK           (0x10U)
+#define DBGMAILBOX_CSW_SOFT_RESET_SHIFT          (4U)
+#define DBGMAILBOX_CSW_SOFT_RESET(x)             (((uint32_t)(((uint32_t)(x)) << DBGMAILBOX_CSW_SOFT_RESET_SHIFT)) & DBGMAILBOX_CSW_SOFT_RESET_MASK)
+#define DBGMAILBOX_CSW_CHIP_RESET_REQ_MASK       (0x20U)
+#define DBGMAILBOX_CSW_CHIP_RESET_REQ_SHIFT      (5U)
+#define DBGMAILBOX_CSW_CHIP_RESET_REQ(x)         (((uint32_t)(((uint32_t)(x)) << DBGMAILBOX_CSW_CHIP_RESET_REQ_SHIFT)) & DBGMAILBOX_CSW_CHIP_RESET_REQ_MASK)
 /*! @} */
 
 /*! @name REQUEST - CRC seed register */
 /*! @{ */
-#define DGBMAILBOX_REQUEST_REQ_MASK              (0xFFFFFFFFU)
-#define DGBMAILBOX_REQUEST_REQ_SHIFT             (0U)
-#define DGBMAILBOX_REQUEST_REQ(x)                (((uint32_t)(((uint32_t)(x)) << DGBMAILBOX_REQUEST_REQ_SHIFT)) & DGBMAILBOX_REQUEST_REQ_MASK)
+#define DBGMAILBOX_REQUEST_REQ_MASK              (0xFFFFFFFFU)
+#define DBGMAILBOX_REQUEST_REQ_SHIFT             (0U)
+#define DBGMAILBOX_REQUEST_REQ(x)                (((uint32_t)(((uint32_t)(x)) << DBGMAILBOX_REQUEST_REQ_SHIFT)) & DBGMAILBOX_REQUEST_REQ_MASK)
 /*! @} */
 
 /*! @name RETURN - Return value from ROM. */
 /*! @{ */
-#define DGBMAILBOX_RETURN_RET_MASK               (0xFFFFFFFFU)
-#define DGBMAILBOX_RETURN_RET_SHIFT              (0U)
-#define DGBMAILBOX_RETURN_RET(x)                 (((uint32_t)(((uint32_t)(x)) << DGBMAILBOX_RETURN_RET_SHIFT)) & DGBMAILBOX_RETURN_RET_MASK)
+#define DBGMAILBOX_RETURN_RET_MASK               (0xFFFFFFFFU)
+#define DBGMAILBOX_RETURN_RET_SHIFT              (0U)
+#define DBGMAILBOX_RETURN_RET(x)                 (((uint32_t)(((uint32_t)(x)) << DBGMAILBOX_RETURN_RET_SHIFT)) & DBGMAILBOX_RETURN_RET_MASK)
 /*! @} */
 
 /*! @name ID - Identification register */
 /*! @{ */
-#define DGBMAILBOX_ID_ID_MASK                    (0xFFFFFFFFU)
-#define DGBMAILBOX_ID_ID_SHIFT                   (0U)
-#define DGBMAILBOX_ID_ID(x)                      (((uint32_t)(((uint32_t)(x)) << DGBMAILBOX_ID_ID_SHIFT)) & DGBMAILBOX_ID_ID_MASK)
+#define DBGMAILBOX_ID_ID_MASK                    (0xFFFFFFFFU)
+#define DBGMAILBOX_ID_ID_SHIFT                   (0U)
+#define DBGMAILBOX_ID_ID(x)                      (((uint32_t)(((uint32_t)(x)) << DBGMAILBOX_ID_ID_SHIFT)) & DBGMAILBOX_ID_ID_MASK)
 /*! @} */
 
 
 /*!
  * @}
- */ /* end of group DGBMAILBOX_Register_Masks */
+ */ /* end of group DBGMAILBOX_Register_Masks */
 
 
-/* DGBMAILBOX - Peripheral instance base addresses */
+/* DBGMAILBOX - Peripheral instance base addresses */
 #if (__ARM_FEATURE_CMSE & 0x2)
-  /** Peripheral DGBMAILBOX base address */
-  #define DGBMAILBOX_BASE                          (0x5009C000u)
-  /** Peripheral DGBMAILBOX base address */
-  #define DGBMAILBOX_BASE_NS                       (0x4009C000u)
-  /** Peripheral DGBMAILBOX base pointer */
-  #define DGBMAILBOX                               ((DGBMAILBOX_Type *)DGBMAILBOX_BASE)
-  /** Peripheral DGBMAILBOX base pointer */
-  #define DGBMAILBOX_NS                            ((DGBMAILBOX_Type *)DGBMAILBOX_BASE_NS)
-  /** Array initializer of DGBMAILBOX peripheral base addresses */
-  #define DGBMAILBOX_BASE_ADDRS                    { DGBMAILBOX_BASE }
-  /** Array initializer of DGBMAILBOX peripheral base pointers */
-  #define DGBMAILBOX_BASE_PTRS                     { DGBMAILBOX }
-  /** Array initializer of DGBMAILBOX peripheral base addresses */
-  #define DGBMAILBOX_BASE_ADDRS_NS                 { DGBMAILBOX_BASE_NS }
-  /** Array initializer of DGBMAILBOX peripheral base pointers */
-  #define DGBMAILBOX_BASE_PTRS_NS                  { DGBMAILBOX_NS }
+  /** Peripheral DBGMAILBOX base address */
+  #define DBGMAILBOX_BASE                          (0x5009C000u)
+  /** Peripheral DBGMAILBOX base address */
+  #define DBGMAILBOX_BASE_NS                       (0x4009C000u)
+  /** Peripheral DBGMAILBOX base pointer */
+  #define DBGMAILBOX                               ((DBGMAILBOX_Type *)DBGMAILBOX_BASE)
+  /** Peripheral DBGMAILBOX base pointer */
+  #define DBGMAILBOX_NS                            ((DBGMAILBOX_Type *)DBGMAILBOX_BASE_NS)
+  /** Array initializer of DBGMAILBOX peripheral base addresses */
+  #define DBGMAILBOX_BASE_ADDRS                    { DBGMAILBOX_BASE }
+  /** Array initializer of DBGMAILBOX peripheral base pointers */
+  #define DBGMAILBOX_BASE_PTRS                     { DBGMAILBOX }
+  /** Array initializer of DBGMAILBOX peripheral base addresses */
+  #define DBGMAILBOX_BASE_ADDRS_NS                 { DBGMAILBOX_BASE_NS }
+  /** Array initializer of DBGMAILBOX peripheral base pointers */
+  #define DBGMAILBOX_BASE_PTRS_NS                  { DBGMAILBOX_NS }
 #else
-  /** Peripheral DGBMAILBOX base address */
-  #define DGBMAILBOX_BASE                          (0x4009C000u)
-  /** Peripheral DGBMAILBOX base pointer */
-  #define DGBMAILBOX                               ((DGBMAILBOX_Type *)DGBMAILBOX_BASE)
-  /** Array initializer of DGBMAILBOX peripheral base addresses */
-  #define DGBMAILBOX_BASE_ADDRS                    { DGBMAILBOX_BASE }
-  /** Array initializer of DGBMAILBOX peripheral base pointers */
-  #define DGBMAILBOX_BASE_PTRS                     { DGBMAILBOX }
+  /** Peripheral DBGMAILBOX base address */
+  #define DBGMAILBOX_BASE                          (0x4009C000u)
+  /** Peripheral DBGMAILBOX base pointer */
+  #define DBGMAILBOX                               ((DBGMAILBOX_Type *)DBGMAILBOX_BASE)
+  /** Array initializer of DBGMAILBOX peripheral base addresses */
+  #define DBGMAILBOX_BASE_ADDRS                    { DBGMAILBOX_BASE }
+  /** Array initializer of DBGMAILBOX peripheral base pointers */
+  #define DBGMAILBOX_BASE_PTRS                     { DBGMAILBOX }
 #endif
 
 /*!
  * @}
- */ /* end of group DGBMAILBOX_Peripheral_Access_Layer */
+ */ /* end of group DBGMAILBOX_Peripheral_Access_Layer */
 
 
 /* ----------------------------------------------------------------------------
@@ -6061,7 +5824,7 @@ typedef struct {
     __I  uint32_t CTLSTAT;                           /**< Control and status register for DMA channel ., array offset: 0x404, array step: 0x10 */
     __IO uint32_t XFERCFG;                           /**< Transfer configuration register for DMA channel ., array offset: 0x408, array step: 0x10 */
          uint8_t RESERVED_0[4];
-  } CHANNEL[30];
+  } CHANNEL[23];
 } DMA_Type;
 
 /* ----------------------------------------------------------------------------
@@ -6305,7 +6068,7 @@ typedef struct {
 /*! @} */
 
 /* The count of DMA_CHANNEL_CFG */
-#define DMA_CHANNEL_CFG_COUNT                    (30U)
+#define DMA_CHANNEL_CFG_COUNT                    (23U)
 
 /*! @name CHANNEL_CTLSTAT - Control and status register for DMA channel . */
 /*! @{ */
@@ -6328,7 +6091,7 @@ typedef struct {
 /*! @} */
 
 /* The count of DMA_CHANNEL_CTLSTAT */
-#define DMA_CHANNEL_CTLSTAT_COUNT                (30U)
+#define DMA_CHANNEL_CTLSTAT_COUNT                (23U)
 
 /*! @name CHANNEL_XFERCFG - Transfer configuration register for DMA channel . */
 /*! @{ */
@@ -6418,7 +6181,7 @@ typedef struct {
 /*! @} */
 
 /* The count of DMA_CHANNEL_XFERCFG */
-#define DMA_CHANNEL_XFERCFG_COUNT                (30U)
+#define DMA_CHANNEL_XFERCFG_COUNT                (23U)
 
 
 /*!
@@ -6487,13 +6250,12 @@ typedef struct {
 typedef struct {
   __O  uint32_t CMD;                               /**< command register, offset: 0x0 */
   __O  uint32_t EVENT;                             /**< event register, offset: 0x4 */
-  __IO uint32_t BURST;                             /**< read burst register, offset: 0x8 */
-       uint8_t RESERVED_0[4];
+       uint8_t RESERVED_0[8];
   __IO uint32_t STARTA;                            /**< start (or only) address for next flash command, offset: 0x10 */
   __IO uint32_t STOPA;                             /**< end address for next flash command, if command operates on address ranges, offset: 0x14 */
        uint8_t RESERVED_1[104];
-  __IO uint32_t DATAW[8];                          /**< data register, word 0-7; Memory data, or command parameter, or command result., array offset: 0x80, array step: 0x4 */
-       uint8_t RESERVED_2[3896];
+  __IO uint32_t DATAW[4];                          /**< data register, word 0-7; Memory data, or command parameter, or command result., array offset: 0x80, array step: 0x4 */
+       uint8_t RESERVED_2[3912];
   __O  uint32_t INT_CLR_ENABLE;                    /**< Clear interrupt enable bits, offset: 0xFD8 */
   __O  uint32_t INT_SET_ENABLE;                    /**< Set interrupt enable bits, offset: 0xFDC */
   __I  uint32_t INT_STATUS;                        /**< Interrupt status bits, offset: 0xFE0 */
@@ -6533,22 +6295,6 @@ typedef struct {
 #define FLASH_EVENT_ABORT(x)                     (((uint32_t)(((uint32_t)(x)) << FLASH_EVENT_ABORT_SHIFT)) & FLASH_EVENT_ABORT_MASK)
 /*! @} */
 
-/*! @name BURST - read burst register */
-/*! @{ */
-#define FLASH_BURST_XOR_MASK_MASK                (0xFFFFFU)
-#define FLASH_BURST_XOR_MASK_SHIFT               (0U)
-#define FLASH_BURST_XOR_MASK(x)                  (((uint32_t)(((uint32_t)(x)) << FLASH_BURST_XOR_MASK_SHIFT)) & FLASH_BURST_XOR_MASK_MASK)
-#define FLASH_BURST_DESCR1_MASK                  (0xF00000U)
-#define FLASH_BURST_DESCR1_SHIFT                 (20U)
-#define FLASH_BURST_DESCR1(x)                    (((uint32_t)(((uint32_t)(x)) << FLASH_BURST_DESCR1_SHIFT)) & FLASH_BURST_DESCR1_MASK)
-#define FLASH_BURST_DESCR2_MASK                  (0xF000000U)
-#define FLASH_BURST_DESCR2_SHIFT                 (24U)
-#define FLASH_BURST_DESCR2(x)                    (((uint32_t)(((uint32_t)(x)) << FLASH_BURST_DESCR2_SHIFT)) & FLASH_BURST_DESCR2_MASK)
-#define FLASH_BURST_DESCR3_MASK                  (0xF0000000U)
-#define FLASH_BURST_DESCR3_SHIFT                 (28U)
-#define FLASH_BURST_DESCR3(x)                    (((uint32_t)(((uint32_t)(x)) << FLASH_BURST_DESCR3_SHIFT)) & FLASH_BURST_DESCR3_MASK)
-/*! @} */
-
 /*! @name STARTA - start (or only) address for next flash command */
 /*! @{ */
 #define FLASH_STARTA_STARTA_MASK                 (0x3FFFFU)
@@ -6571,7 +6317,7 @@ typedef struct {
 /*! @} */
 
 /* The count of FLASH_DATAW */
-#define FLASH_DATAW_COUNT                        (8U)
+#define FLASH_DATAW_COUNT                        (4U)
 
 /*! @name INT_CLR_ENABLE - Clear interrupt enable bits */
 /*! @{ */
@@ -6881,13 +6627,13 @@ typedef struct {
  *  0b1..Fixed state
  */
 #define FLASH_CFPA_DCFG_CC_SOCU_PIN_TAPEN(x)     (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_PIN_TAPEN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_PIN_TAPEN_MASK)
-#define FLASH_CFPA_DCFG_CC_SOCU_PIN_MCM33_DBGEN_MASK (0x20U)
-#define FLASH_CFPA_DCFG_CC_SOCU_PIN_MCM33_DBGEN_SHIFT (5U)
-/*! MCM33_DBGEN - Micro CM33 invasive debug enable
+#define FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_DBGEN_MASK (0x20U)
+#define FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_DBGEN_SHIFT (5U)
+/*! CPU1_DBGEN - CPU1 (Micro cortex M33) invasive debug enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CFPA_DCFG_CC_SOCU_PIN_MCM33_DBGEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_PIN_MCM33_DBGEN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_PIN_MCM33_DBGEN_MASK)
+#define FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_DBGEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_DBGEN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_DBGEN_MASK)
 #define FLASH_CFPA_DCFG_CC_SOCU_PIN_ISP_CMD_EN_MASK (0x40U)
 #define FLASH_CFPA_DCFG_CC_SOCU_PIN_ISP_CMD_EN_SHIFT (6U)
 /*! ISP_CMD_EN - ISP Boot Command enable
@@ -6909,13 +6655,13 @@ typedef struct {
  *  0b1..Fixed state
  */
 #define FLASH_CFPA_DCFG_CC_SOCU_PIN_ME_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_PIN_ME_CMD_EN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_PIN_ME_CMD_EN_MASK)
-#define FLASH_CFPA_DCFG_CC_SOCU_PIN_MCM33_NIDEN_MASK (0x200U)
-#define FLASH_CFPA_DCFG_CC_SOCU_PIN_MCM33_NIDEN_SHIFT (9U)
-/*! MCM33_NIDEN - Micro CM33 non-invasive debug enable
+#define FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_NIDEN_MASK (0x200U)
+#define FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_NIDEN_SHIFT (9U)
+/*! CPU1_NIDEN - CPU1 (Micro cortex M33) non-invasive debug enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CFPA_DCFG_CC_SOCU_PIN_MCM33_NIDEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_PIN_MCM33_NIDEN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_PIN_MCM33_NIDEN_MASK)
+#define FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_NIDEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_NIDEN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_PIN_CPU1_NIDEN_MASK)
 #define FLASH_CFPA_DCFG_CC_SOCU_PIN_UUID_CHECK_MASK (0x8000U)
 #define FLASH_CFPA_DCFG_CC_SOCU_PIN_UUID_CHECK_SHIFT (15U)
 #define FLASH_CFPA_DCFG_CC_SOCU_PIN_UUID_CHECK(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_PIN_UUID_CHECK_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_PIN_UUID_CHECK_MASK)
@@ -6961,13 +6707,13 @@ typedef struct {
  *  0b1..Enable
  */
 #define FLASH_CFPA_DCFG_CC_SOCU_DFLT_TAPEN(x)    (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_DFLT_TAPEN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_DFLT_TAPEN_MASK)
-#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_MCM33_DBGEN_MASK (0x20U)
-#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_MCM33_DBGEN_SHIFT (5U)
-/*! MCM33_DBGEN - Micro CM33 invasive debug fixed state
+#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_DBGEN_MASK (0x20U)
+#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_DBGEN_SHIFT (5U)
+/*! CPU1_DBGEN - CPU1 (Micro cortex M33) invasive debug fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_MCM33_DBGEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_DFLT_MCM33_DBGEN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_DFLT_MCM33_DBGEN_MASK)
+#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_DBGEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_DBGEN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_DBGEN_MASK)
 #define FLASH_CFPA_DCFG_CC_SOCU_DFLT_ISP_CMD_EN_MASK (0x40U)
 #define FLASH_CFPA_DCFG_CC_SOCU_DFLT_ISP_CMD_EN_SHIFT (6U)
 /*! ISP_CMD_EN - ISP Boot Command fixed state
@@ -6989,13 +6735,13 @@ typedef struct {
  *  0b1..Enable
  */
 #define FLASH_CFPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN_MASK)
-#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_MCM33_NIDEN_MASK (0x200U)
-#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_MCM33_NIDEN_SHIFT (9U)
-/*! MCM33_NIDEN - Micro CM33 non-invasive debug fixed state
+#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_NIDEN_MASK (0x200U)
+#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_NIDEN_SHIFT (9U)
+/*! CPU1_NIDEN - CPU1 (Micro cortex M33) non-invasive debug fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_MCM33_NIDEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_DFLT_MCM33_NIDEN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_DFLT_MCM33_NIDEN_MASK)
+#define FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_NIDEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_NIDEN_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_DFLT_CPU1_NIDEN_MASK)
 #define FLASH_CFPA_DCFG_CC_SOCU_DFLT_INVERSE_VALUE_MASK (0xFFFF0000U)
 #define FLASH_CFPA_DCFG_CC_SOCU_DFLT_INVERSE_VALUE_SHIFT (16U)
 #define FLASH_CFPA_DCFG_CC_SOCU_DFLT_INVERSE_VALUE(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CFPA_DCFG_CC_SOCU_DFLT_INVERSE_VALUE_SHIFT)) & FLASH_CFPA_DCFG_CC_SOCU_DFLT_INVERSE_VALUE_MASK)
@@ -7234,15 +6980,17 @@ typedef struct {
   __IO uint32_t SPI_FLASH_CFG;                     /**< ., offset: 0x4 */
   __IO uint32_t USB_ID;                            /**< ., offset: 0x8 */
   __IO uint32_t SDIO_CFG;                          /**< ., offset: 0xC */
-  __IO uint32_t DCFG_CC_SOCU_PIN;                  /**< ., offset: 0x10 */
-  __IO uint32_t DCFG_CC_SOCU_DFLT;                 /**< ., offset: 0x14 */
-  __IO uint32_t DAP_VENDOR_USAGE_FIXED;            /**< ., offset: 0x18 */
+  __IO uint32_t CC_SOCU_PIN;                       /**< ., offset: 0x10 */
+  __IO uint32_t CC_SOCU_DFLT;                      /**< ., offset: 0x14 */
+  __IO uint32_t VENDOR_USAGE;                      /**< ., offset: 0x18 */
   __IO uint32_t SECURE_BOOT_CFG;                   /**< ., offset: 0x1C */
   __IO uint32_t PRINCE_BASE_ADDR;                  /**< ., offset: 0x20 */
   __IO uint32_t PRINCE_SR_0;                       /**< Region 0, sub-region enable, offset: 0x24 */
   __IO uint32_t PRINCE_SR_1;                       /**< Region 1, sub-region enable, offset: 0x28 */
   __IO uint32_t PRINCE_SR_2;                       /**< Region 2, sub-region enable, offset: 0x2C */
-       uint8_t RESERVED_0[32];
+  __IO uint32_t XTAL_32KHZ_CAPABANK_TRIM;          /**< Xtal 32kHz capabank triming., offset: 0x30 */
+  __IO uint32_t XTAL_16MHZ_CAPABANK_TRIM;          /**< Xtal 16MHz capabank triming., offset: 0x34 */
+       uint8_t RESERVED_0[24];
   __IO uint32_t ROTKH[8];                          /**< ROTKH0 for Root of Trust Keys Table hash[255:224] ROTKH1 for Root of Trust Keys Table hash[223:192] ROTKH2 for Root of Trust Keys Table hash[191:160] ROTKH3 for Root of Trust Keys Table hash[159:128] ROTKH4 for Root of Trust Keys Table hash[127:96] ROTKH5 for Root of Trust Keys Table hash[95:64] ROTKH6 for Root of Trust Keys Table hash[63:32] ROTKH7 for Root of Trust Keys Table hash[31:0], array offset: 0x50, array step: 0x4 */
        uint8_t RESERVED_1[144];
   __IO uint32_t CUSTOMER_DEFINED[56];              /**< Customer Defined (Programable through ROM API), array offset: 0x100, array step: 0x4 */
@@ -7285,9 +7033,9 @@ typedef struct {
 
 /*! @name SPI_FLASH_CFG - . */
 /*! @{ */
-#define FLASH_CMPA_SPI_FLASH_CFG_FIELD_MASK      (0xFFFFFFFFU)
-#define FLASH_CMPA_SPI_FLASH_CFG_FIELD_SHIFT     (0U)
-#define FLASH_CMPA_SPI_FLASH_CFG_FIELD(x)        (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_SPI_FLASH_CFG_FIELD_SHIFT)) & FLASH_CMPA_SPI_FLASH_CFG_FIELD_MASK)
+#define FLASH_CMPA_SPI_FLASH_CFG_SPI_RECOVERY_BOOT_EN_MASK (0x1FU)
+#define FLASH_CMPA_SPI_FLASH_CFG_SPI_RECOVERY_BOOT_EN_SHIFT (0U)
+#define FLASH_CMPA_SPI_FLASH_CFG_SPI_RECOVERY_BOOT_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_SPI_FLASH_CFG_SPI_RECOVERY_BOOT_EN_SHIFT)) & FLASH_CMPA_SPI_FLASH_CFG_SPI_RECOVERY_BOOT_EN_MASK)
 /*! @} */
 
 /*! @name USB_ID - . */
@@ -7307,168 +7055,168 @@ typedef struct {
 #define FLASH_CMPA_SDIO_CFG_FIELD(x)             (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_SDIO_CFG_FIELD_SHIFT)) & FLASH_CMPA_SDIO_CFG_FIELD_MASK)
 /*! @} */
 
-/*! @name DCFG_CC_SOCU_PIN - . */
+/*! @name CC_SOCU_PIN - . */
 /*! @{ */
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_NIDEN_MASK   (0x1U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_NIDEN_SHIFT  (0U)
+#define FLASH_CMPA_CC_SOCU_PIN_NIDEN_MASK        (0x1U)
+#define FLASH_CMPA_CC_SOCU_PIN_NIDEN_SHIFT       (0U)
 /*! NIDEN - Non Secure non-invasive debug enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_NIDEN(x)     (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_NIDEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_NIDEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_DBGEN_MASK   (0x2U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_DBGEN_SHIFT  (1U)
+#define FLASH_CMPA_CC_SOCU_PIN_NIDEN(x)          (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_NIDEN_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_NIDEN_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_DBGEN_MASK        (0x2U)
+#define FLASH_CMPA_CC_SOCU_PIN_DBGEN_SHIFT       (1U)
 /*! DBGEN - Non Secure debug enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_DBGEN(x)     (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_DBGEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_DBGEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_SPNIDEN_MASK (0x4U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_SPNIDEN_SHIFT (2U)
+#define FLASH_CMPA_CC_SOCU_PIN_DBGEN(x)          (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_DBGEN_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_DBGEN_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_SPNIDEN_MASK      (0x4U)
+#define FLASH_CMPA_CC_SOCU_PIN_SPNIDEN_SHIFT     (2U)
 /*! SPNIDEN - Secure non-invasive debug enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_SPNIDEN(x)   (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_SPNIDEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_SPNIDEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_SPIDEN_MASK  (0x8U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_SPIDEN_SHIFT (3U)
+#define FLASH_CMPA_CC_SOCU_PIN_SPNIDEN(x)        (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_SPNIDEN_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_SPNIDEN_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_SPIDEN_MASK       (0x8U)
+#define FLASH_CMPA_CC_SOCU_PIN_SPIDEN_SHIFT      (3U)
 /*! SPIDEN - Secure invasive debug enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_SPIDEN(x)    (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_SPIDEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_SPIDEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_TAPEN_MASK   (0x10U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_TAPEN_SHIFT  (4U)
+#define FLASH_CMPA_CC_SOCU_PIN_SPIDEN(x)         (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_SPIDEN_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_SPIDEN_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_TAPEN_MASK        (0x10U)
+#define FLASH_CMPA_CC_SOCU_PIN_TAPEN_SHIFT       (4U)
 /*! TAPEN - JTAG TAP enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_TAPEN(x)     (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_TAPEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_TAPEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_MCM33_DBGEN_MASK (0x20U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_MCM33_DBGEN_SHIFT (5U)
-/*! MCM33_DBGEN - Micro CM33 invasive debug enable
+#define FLASH_CMPA_CC_SOCU_PIN_TAPEN(x)          (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_TAPEN_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_TAPEN_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_CPU1_DBGEN_MASK   (0x20U)
+#define FLASH_CMPA_CC_SOCU_PIN_CPU1_DBGEN_SHIFT  (5U)
+/*! CPU1_DBGEN - CPU1 (Micro cortex M33) invasive debug enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_MCM33_DBGEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_MCM33_DBGEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_MCM33_DBGEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_ISP_CMD_EN_MASK (0x40U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_ISP_CMD_EN_SHIFT (6U)
+#define FLASH_CMPA_CC_SOCU_PIN_CPU1_DBGEN(x)     (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_CPU1_DBGEN_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_CPU1_DBGEN_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_ISP_CMD_EN_MASK   (0x40U)
+#define FLASH_CMPA_CC_SOCU_PIN_ISP_CMD_EN_SHIFT  (6U)
 /*! ISP_CMD_EN - ISP Boot Command enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_ISP_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_ISP_CMD_EN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_ISP_CMD_EN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_FA_CMD_EN_MASK (0x80U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_FA_CMD_EN_SHIFT (7U)
+#define FLASH_CMPA_CC_SOCU_PIN_ISP_CMD_EN(x)     (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_ISP_CMD_EN_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_ISP_CMD_EN_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_FA_CMD_EN_MASK    (0x80U)
+#define FLASH_CMPA_CC_SOCU_PIN_FA_CMD_EN_SHIFT   (7U)
 /*! FA_CMD_EN - FA Command enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_FA_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_FA_CMD_EN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_FA_CMD_EN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_ME_CMD_EN_MASK (0x100U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_ME_CMD_EN_SHIFT (8U)
+#define FLASH_CMPA_CC_SOCU_PIN_FA_CMD_EN(x)      (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_FA_CMD_EN_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_FA_CMD_EN_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_ME_CMD_EN_MASK    (0x100U)
+#define FLASH_CMPA_CC_SOCU_PIN_ME_CMD_EN_SHIFT   (8U)
 /*! ME_CMD_EN - Flash Mass Erase Command enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_ME_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_ME_CMD_EN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_ME_CMD_EN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_MCM33_NIDEN_MASK (0x200U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_MCM33_NIDEN_SHIFT (9U)
-/*! MCM33_NIDEN - Micro CM33 non-invasive debug enable
+#define FLASH_CMPA_CC_SOCU_PIN_ME_CMD_EN(x)      (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_ME_CMD_EN_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_ME_CMD_EN_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_CPU1_NIDEN_MASK   (0x200U)
+#define FLASH_CMPA_CC_SOCU_PIN_CPU1_NIDEN_SHIFT  (9U)
+/*! CPU1_NIDEN - CPU1 (Micro cortex M33) non-invasive debug enable
  *  0b0..Use DAP to enable
  *  0b1..Fixed state
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_MCM33_NIDEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_MCM33_NIDEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_MCM33_NIDEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_UUID_CHECK_MASK (0x8000U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_UUID_CHECK_SHIFT (15U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_UUID_CHECK(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_UUID_CHECK_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_UUID_CHECK_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_INVERSE_VALUE_MASK (0xFFFF0000U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_INVERSE_VALUE_SHIFT (16U)
-#define FLASH_CMPA_DCFG_CC_SOCU_PIN_INVERSE_VALUE(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_PIN_INVERSE_VALUE_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_PIN_INVERSE_VALUE_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_CPU1_NIDEN(x)     (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_CPU1_NIDEN_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_CPU1_NIDEN_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_UUID_CHECK_MASK   (0x8000U)
+#define FLASH_CMPA_CC_SOCU_PIN_UUID_CHECK_SHIFT  (15U)
+#define FLASH_CMPA_CC_SOCU_PIN_UUID_CHECK(x)     (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_UUID_CHECK_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_UUID_CHECK_MASK)
+#define FLASH_CMPA_CC_SOCU_PIN_INVERSE_VALUE_MASK (0xFFFF0000U)
+#define FLASH_CMPA_CC_SOCU_PIN_INVERSE_VALUE_SHIFT (16U)
+#define FLASH_CMPA_CC_SOCU_PIN_INVERSE_VALUE(x)  (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_PIN_INVERSE_VALUE_SHIFT)) & FLASH_CMPA_CC_SOCU_PIN_INVERSE_VALUE_MASK)
 /*! @} */
 
-/*! @name DCFG_CC_SOCU_DFLT - . */
+/*! @name CC_SOCU_DFLT - . */
 /*! @{ */
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_NIDEN_MASK  (0x1U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_NIDEN_SHIFT (0U)
+#define FLASH_CMPA_CC_SOCU_DFLT_NIDEN_MASK       (0x1U)
+#define FLASH_CMPA_CC_SOCU_DFLT_NIDEN_SHIFT      (0U)
 /*! NIDEN - Non Secure non-invasive debug fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_NIDEN(x)    (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_DFLT_NIDEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_DFLT_NIDEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_DBGEN_MASK  (0x2U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_DBGEN_SHIFT (1U)
+#define FLASH_CMPA_CC_SOCU_DFLT_NIDEN(x)         (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_DFLT_NIDEN_SHIFT)) & FLASH_CMPA_CC_SOCU_DFLT_NIDEN_MASK)
+#define FLASH_CMPA_CC_SOCU_DFLT_DBGEN_MASK       (0x2U)
+#define FLASH_CMPA_CC_SOCU_DFLT_DBGEN_SHIFT      (1U)
 /*! DBGEN - Non Secure debug fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_DBGEN(x)    (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_DFLT_DBGEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_DFLT_DBGEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_SPNIDEN_MASK (0x4U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_SPNIDEN_SHIFT (2U)
+#define FLASH_CMPA_CC_SOCU_DFLT_DBGEN(x)         (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_DFLT_DBGEN_SHIFT)) & FLASH_CMPA_CC_SOCU_DFLT_DBGEN_MASK)
+#define FLASH_CMPA_CC_SOCU_DFLT_SPNIDEN_MASK     (0x4U)
+#define FLASH_CMPA_CC_SOCU_DFLT_SPNIDEN_SHIFT    (2U)
 /*! SPNIDEN - Secure non-invasive debug fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_SPNIDEN(x)  (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_DFLT_SPNIDEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_DFLT_SPNIDEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_SPIDEN_MASK (0x8U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_SPIDEN_SHIFT (3U)
+#define FLASH_CMPA_CC_SOCU_DFLT_SPNIDEN(x)       (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_DFLT_SPNIDEN_SHIFT)) & FLASH_CMPA_CC_SOCU_DFLT_SPNIDEN_MASK)
+#define FLASH_CMPA_CC_SOCU_DFLT_SPIDEN_MASK      (0x8U)
+#define FLASH_CMPA_CC_SOCU_DFLT_SPIDEN_SHIFT     (3U)
 /*! SPIDEN - Secure invasive debug fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_SPIDEN(x)   (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_DFLT_SPIDEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_DFLT_SPIDEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_TAPEN_MASK  (0x10U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_TAPEN_SHIFT (4U)
+#define FLASH_CMPA_CC_SOCU_DFLT_SPIDEN(x)        (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_DFLT_SPIDEN_SHIFT)) & FLASH_CMPA_CC_SOCU_DFLT_SPIDEN_MASK)
+#define FLASH_CMPA_CC_SOCU_DFLT_TAPEN_MASK       (0x10U)
+#define FLASH_CMPA_CC_SOCU_DFLT_TAPEN_SHIFT      (4U)
 /*! TAPEN - JTAG TAP fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_TAPEN(x)    (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_DFLT_TAPEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_DFLT_TAPEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_MCM33_DBGEN_MASK (0x20U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_MCM33_DBGEN_SHIFT (5U)
-/*! MCM33_DBGEN - Micro CM33 invasive debug fixed state
+#define FLASH_CMPA_CC_SOCU_DFLT_TAPEN(x)         (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_DFLT_TAPEN_SHIFT)) & FLASH_CMPA_CC_SOCU_DFLT_TAPEN_MASK)
+#define FLASH_CMPA_CC_SOCU_DFLT_CPU1_DBGEN_MASK  (0x20U)
+#define FLASH_CMPA_CC_SOCU_DFLT_CPU1_DBGEN_SHIFT (5U)
+/*! CPU1_DBGEN - CPU1 (Micro cortex M33) invasive debug fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_MCM33_DBGEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_DFLT_MCM33_DBGEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_DFLT_MCM33_DBGEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_ISP_CMD_EN_MASK (0x40U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_ISP_CMD_EN_SHIFT (6U)
+#define FLASH_CMPA_CC_SOCU_DFLT_CPU1_DBGEN(x)    (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_DFLT_CPU1_DBGEN_SHIFT)) & FLASH_CMPA_CC_SOCU_DFLT_CPU1_DBGEN_MASK)
+#define FLASH_CMPA_CC_SOCU_DFLT_ISP_CMD_EN_MASK  (0x40U)
+#define FLASH_CMPA_CC_SOCU_DFLT_ISP_CMD_EN_SHIFT (6U)
 /*! ISP_CMD_EN - ISP Boot Command fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_ISP_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_DFLT_ISP_CMD_EN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_DFLT_ISP_CMD_EN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_FA_CMD_EN_MASK (0x80U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_FA_CMD_EN_SHIFT (7U)
+#define FLASH_CMPA_CC_SOCU_DFLT_ISP_CMD_EN(x)    (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_DFLT_ISP_CMD_EN_SHIFT)) & FLASH_CMPA_CC_SOCU_DFLT_ISP_CMD_EN_MASK)
+#define FLASH_CMPA_CC_SOCU_DFLT_FA_CMD_EN_MASK   (0x80U)
+#define FLASH_CMPA_CC_SOCU_DFLT_FA_CMD_EN_SHIFT  (7U)
 /*! FA_CMD_EN - FA Command fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_FA_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_DFLT_FA_CMD_EN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_DFLT_FA_CMD_EN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN_MASK (0x100U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN_SHIFT (8U)
+#define FLASH_CMPA_CC_SOCU_DFLT_FA_CMD_EN(x)     (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_DFLT_FA_CMD_EN_SHIFT)) & FLASH_CMPA_CC_SOCU_DFLT_FA_CMD_EN_MASK)
+#define FLASH_CMPA_CC_SOCU_DFLT_ME_CMD_EN_MASK   (0x100U)
+#define FLASH_CMPA_CC_SOCU_DFLT_ME_CMD_EN_SHIFT  (8U)
 /*! ME_CMD_EN - Flash Mass Erase Command fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_DFLT_ME_CMD_EN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_MCM33_NIDEN_MASK (0x200U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_MCM33_NIDEN_SHIFT (9U)
-/*! MCM33_NIDEN - Micro CM33 non-invasive debug fixed state
+#define FLASH_CMPA_CC_SOCU_DFLT_ME_CMD_EN(x)     (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_DFLT_ME_CMD_EN_SHIFT)) & FLASH_CMPA_CC_SOCU_DFLT_ME_CMD_EN_MASK)
+#define FLASH_CMPA_CC_SOCU_DFLT_CPU1_NIDEN_MASK  (0x200U)
+#define FLASH_CMPA_CC_SOCU_DFLT_CPU1_NIDEN_SHIFT (9U)
+/*! CPU1_NIDEN - CPU1 (Micro cortex M33) non-invasive debug fixed state
  *  0b0..Disable
  *  0b1..Enable
  */
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_MCM33_NIDEN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_DFLT_MCM33_NIDEN_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_DFLT_MCM33_NIDEN_MASK)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_INVERSE_VALUE_MASK (0xFFFF0000U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_INVERSE_VALUE_SHIFT (16U)
-#define FLASH_CMPA_DCFG_CC_SOCU_DFLT_INVERSE_VALUE(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DCFG_CC_SOCU_DFLT_INVERSE_VALUE_SHIFT)) & FLASH_CMPA_DCFG_CC_SOCU_DFLT_INVERSE_VALUE_MASK)
+#define FLASH_CMPA_CC_SOCU_DFLT_CPU1_NIDEN(x)    (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_DFLT_CPU1_NIDEN_SHIFT)) & FLASH_CMPA_CC_SOCU_DFLT_CPU1_NIDEN_MASK)
+#define FLASH_CMPA_CC_SOCU_DFLT_INVERSE_VALUE_MASK (0xFFFF0000U)
+#define FLASH_CMPA_CC_SOCU_DFLT_INVERSE_VALUE_SHIFT (16U)
+#define FLASH_CMPA_CC_SOCU_DFLT_INVERSE_VALUE(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_CC_SOCU_DFLT_INVERSE_VALUE_SHIFT)) & FLASH_CMPA_CC_SOCU_DFLT_INVERSE_VALUE_MASK)
 /*! @} */
 
-/*! @name DAP_VENDOR_USAGE_FIXED - . */
+/*! @name VENDOR_USAGE - . */
 /*! @{ */
-#define FLASH_CMPA_DAP_VENDOR_USAGE_FIXED_VENDOR_USAGE_MASK (0xFFFF0000U)
-#define FLASH_CMPA_DAP_VENDOR_USAGE_FIXED_VENDOR_USAGE_SHIFT (16U)
-#define FLASH_CMPA_DAP_VENDOR_USAGE_FIXED_VENDOR_USAGE(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_DAP_VENDOR_USAGE_FIXED_VENDOR_USAGE_SHIFT)) & FLASH_CMPA_DAP_VENDOR_USAGE_FIXED_VENDOR_USAGE_MASK)
+#define FLASH_CMPA_VENDOR_USAGE_VENDOR_USAGE_MASK (0xFFFF0000U)
+#define FLASH_CMPA_VENDOR_USAGE_VENDOR_USAGE_SHIFT (16U)
+#define FLASH_CMPA_VENDOR_USAGE_VENDOR_USAGE(x)  (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_VENDOR_USAGE_VENDOR_USAGE_SHIFT)) & FLASH_CMPA_VENDOR_USAGE_VENDOR_USAGE_MASK)
 /*! @} */
 
 /*! @name SECURE_BOOT_CFG - . */
@@ -7494,6 +7242,9 @@ typedef struct {
 #define FLASH_CMPA_SECURE_BOOT_CFG_BLOCK_ENROLL_MASK (0x3000U)
 #define FLASH_CMPA_SECURE_BOOT_CFG_BLOCK_ENROLL_SHIFT (12U)
 #define FLASH_CMPA_SECURE_BOOT_CFG_BLOCK_ENROLL(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_SECURE_BOOT_CFG_BLOCK_ENROLL_SHIFT)) & FLASH_CMPA_SECURE_BOOT_CFG_BLOCK_ENROLL_MASK)
+#define FLASH_CMPA_SECURE_BOOT_CFG_DICE_INC_SEC_EPOCH_MASK (0xC000U)
+#define FLASH_CMPA_SECURE_BOOT_CFG_DICE_INC_SEC_EPOCH_SHIFT (14U)
+#define FLASH_CMPA_SECURE_BOOT_CFG_DICE_INC_SEC_EPOCH(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_SECURE_BOOT_CFG_DICE_INC_SEC_EPOCH_SHIFT)) & FLASH_CMPA_SECURE_BOOT_CFG_DICE_INC_SEC_EPOCH_MASK)
 #define FLASH_CMPA_SECURE_BOOT_CFG_SEC_BOOT_EN_MASK (0xC0000000U)
 #define FLASH_CMPA_SECURE_BOOT_CFG_SEC_BOOT_EN_SHIFT (30U)
 #define FLASH_CMPA_SECURE_BOOT_CFG_SEC_BOOT_EN(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_SECURE_BOOT_CFG_SEC_BOOT_EN_SHIFT)) & FLASH_CMPA_SECURE_BOOT_CFG_SEC_BOOT_EN_MASK)
@@ -7549,6 +7300,38 @@ typedef struct {
 #define FLASH_CMPA_PRINCE_SR_2_FIELD_MASK        (0xFFFFFFFFU)
 #define FLASH_CMPA_PRINCE_SR_2_FIELD_SHIFT       (0U)
 #define FLASH_CMPA_PRINCE_SR_2_FIELD(x)          (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_PRINCE_SR_2_FIELD_SHIFT)) & FLASH_CMPA_PRINCE_SR_2_FIELD_MASK)
+/*! @} */
+
+/*! @name XTAL_32KHZ_CAPABANK_TRIM - Xtal 32kHz capabank triming. */
+/*! @{ */
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_TRIM_VALID_MASK (0x1U)
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_TRIM_VALID_SHIFT (0U)
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_TRIM_VALID(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_TRIM_VALID_SHIFT)) & FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_TRIM_VALID_MASK)
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_XTAL_LOAD_CAP_IEC_PF_X100_MASK (0x7FEU)
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_XTAL_LOAD_CAP_IEC_PF_X100_SHIFT (1U)
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_XTAL_LOAD_CAP_IEC_PF_X100(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_XTAL_LOAD_CAP_IEC_PF_X100_SHIFT)) & FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_XTAL_LOAD_CAP_IEC_PF_X100_MASK)
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_PCB_XIN_PARA_CAP_PF_X100_MASK (0x1FF800U)
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_PCB_XIN_PARA_CAP_PF_X100_SHIFT (11U)
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_PCB_XIN_PARA_CAP_PF_X100(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_PCB_XIN_PARA_CAP_PF_X100_SHIFT)) & FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_PCB_XIN_PARA_CAP_PF_X100_MASK)
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_PCB_XOUT_PARA_CAP_PF_X100_MASK (0x7FE00000U)
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_PCB_XOUT_PARA_CAP_PF_X100_SHIFT (21U)
+#define FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_PCB_XOUT_PARA_CAP_PF_X100(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_PCB_XOUT_PARA_CAP_PF_X100_SHIFT)) & FLASH_CMPA_XTAL_32KHZ_CAPABANK_TRIM_PCB_XOUT_PARA_CAP_PF_X100_MASK)
+/*! @} */
+
+/*! @name XTAL_16MHZ_CAPABANK_TRIM - Xtal 16MHz capabank triming. */
+/*! @{ */
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_TRIM_VALID_MASK (0x1U)
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_TRIM_VALID_SHIFT (0U)
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_TRIM_VALID(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_TRIM_VALID_SHIFT)) & FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_TRIM_VALID_MASK)
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_XTAL_LOAD_CAP_IEC_PF_X100_MASK (0x7FEU)
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_XTAL_LOAD_CAP_IEC_PF_X100_SHIFT (1U)
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_XTAL_LOAD_CAP_IEC_PF_X100(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_XTAL_LOAD_CAP_IEC_PF_X100_SHIFT)) & FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_XTAL_LOAD_CAP_IEC_PF_X100_MASK)
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_PCB_XIN_PARA_CAP_PF_X100_MASK (0x1FF800U)
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_PCB_XIN_PARA_CAP_PF_X100_SHIFT (11U)
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_PCB_XIN_PARA_CAP_PF_X100(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_PCB_XIN_PARA_CAP_PF_X100_SHIFT)) & FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_PCB_XIN_PARA_CAP_PF_X100_MASK)
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_PCB_XOUT_PARA_CAP_PF_X100_MASK (0x7FE00000U)
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_PCB_XOUT_PARA_CAP_PF_X100_SHIFT (21U)
+#define FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_PCB_XOUT_PARA_CAP_PF_X100(x) (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_PCB_XOUT_PARA_CAP_PF_X100_SHIFT)) & FLASH_CMPA_XTAL_16MHZ_CAPABANK_TRIM_PCB_XOUT_PARA_CAP_PF_X100_MASK)
 /*! @} */
 
 /*! @name ROTKH - ROTKH0 for Root of Trust Keys Table hash[255:224] ROTKH1 for Root of Trust Keys Table hash[223:192] ROTKH2 for Root of Trust Keys Table hash[191:160] ROTKH3 for Root of Trust Keys Table hash[159:128] ROTKH4 for Root of Trust Keys Table hash[127:96] ROTKH5 for Root of Trust Keys Table hash[95:64] ROTKH6 for Root of Trust Keys Table hash[63:32] ROTKH7 for Root of Trust Keys Table hash[31:0] */
@@ -8082,15 +7865,15 @@ typedef struct {
 
 /*! @name PID - Peripheral identification register. */
 /*! @{ */
-#define FLEXCOMM_PID_Aperture_MASK               (0xFFU)
-#define FLEXCOMM_PID_Aperture_SHIFT              (0U)
-#define FLEXCOMM_PID_Aperture(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXCOMM_PID_Aperture_SHIFT)) & FLEXCOMM_PID_Aperture_MASK)
-#define FLEXCOMM_PID_Minor_Rev_MASK              (0xF00U)
-#define FLEXCOMM_PID_Minor_Rev_SHIFT             (8U)
-#define FLEXCOMM_PID_Minor_Rev(x)                (((uint32_t)(((uint32_t)(x)) << FLEXCOMM_PID_Minor_Rev_SHIFT)) & FLEXCOMM_PID_Minor_Rev_MASK)
-#define FLEXCOMM_PID_Major_Rev_MASK              (0xF000U)
-#define FLEXCOMM_PID_Major_Rev_SHIFT             (12U)
-#define FLEXCOMM_PID_Major_Rev(x)                (((uint32_t)(((uint32_t)(x)) << FLEXCOMM_PID_Major_Rev_SHIFT)) & FLEXCOMM_PID_Major_Rev_MASK)
+#define FLEXCOMM_PID_APERTURE_MASK               (0xFFU)
+#define FLEXCOMM_PID_APERTURE_SHIFT              (0U)
+#define FLEXCOMM_PID_APERTURE(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXCOMM_PID_APERTURE_SHIFT)) & FLEXCOMM_PID_APERTURE_MASK)
+#define FLEXCOMM_PID_MINOR_REV_MASK              (0xF00U)
+#define FLEXCOMM_PID_MINOR_REV_SHIFT             (8U)
+#define FLEXCOMM_PID_MINOR_REV(x)                (((uint32_t)(((uint32_t)(x)) << FLEXCOMM_PID_MINOR_REV_SHIFT)) & FLEXCOMM_PID_MINOR_REV_MASK)
+#define FLEXCOMM_PID_MAJOR_REV_MASK              (0xF000U)
+#define FLEXCOMM_PID_MAJOR_REV_SHIFT             (12U)
+#define FLEXCOMM_PID_MAJOR_REV(x)                (((uint32_t)(((uint32_t)(x)) << FLEXCOMM_PID_MAJOR_REV_SHIFT)) & FLEXCOMM_PID_MAJOR_REV_MASK)
 #define FLEXCOMM_PID_ID_MASK                     (0xFFFF0000U)
 #define FLEXCOMM_PID_ID_SHIFT                    (16U)
 #define FLEXCOMM_PID_ID(x)                       (((uint32_t)(((uint32_t)(x)) << FLEXCOMM_PID_ID_SHIFT)) & FLEXCOMM_PID_ID_MASK)
@@ -8371,29 +8154,29 @@ typedef struct {
 
 /** GPIO - Register Layout Typedef */
 typedef struct {
-  __IO uint8_t B[4][32];                           /**< Byte pin registers for all port GPIO pins, array offset: 0x0, array step: index*0x20, index2*0x1 */
-       uint8_t RESERVED_0[3968];
-  __IO uint32_t W[4][32];                          /**< Word pin registers for all port GPIO pins, array offset: 0x1000, array step: index*0x80, index2*0x4 */
-       uint8_t RESERVED_1[3584];
-  __IO uint32_t DIR[4];                            /**< Direction registers for all port GPIO pins, array offset: 0x2000, array step: 0x4 */
-       uint8_t RESERVED_2[112];
-  __IO uint32_t MASK[4];                           /**< Mask register for all port GPIO pins, array offset: 0x2080, array step: 0x4 */
-       uint8_t RESERVED_3[112];
-  __IO uint32_t PIN[4];                            /**< Port pin register for all port GPIO pins, array offset: 0x2100, array step: 0x4 */
-       uint8_t RESERVED_4[112];
-  __IO uint32_t MPIN[4];                           /**< Masked port register for all port GPIO pins, array offset: 0x2180, array step: 0x4 */
-       uint8_t RESERVED_5[112];
-  __IO uint32_t SET[4];                            /**< Write: Set register for port. Read: output bits for port, array offset: 0x2200, array step: 0x4 */
-       uint8_t RESERVED_6[112];
-  __O  uint32_t CLR[4];                            /**< Clear port for all port GPIO pins, array offset: 0x2280, array step: 0x4 */
-       uint8_t RESERVED_7[112];
-  __O  uint32_t NOT[4];                            /**< Toggle port for all port GPIO pins, array offset: 0x2300, array step: 0x4 */
-       uint8_t RESERVED_8[112];
-  __O  uint32_t DIRSET[4];                         /**< Set pin direction bits for port, array offset: 0x2380, array step: 0x4 */
-       uint8_t RESERVED_9[112];
-  __O  uint32_t DIRCLR[4];                         /**< Clear pin direction bits for port, array offset: 0x2400, array step: 0x4 */
-       uint8_t RESERVED_10[112];
-  __O  uint32_t DIRNOT[4];                         /**< Toggle pin direction bits for port, array offset: 0x2480, array step: 0x4 */
+  __IO uint8_t B[2][32];                           /**< Byte pin registers for all port GPIO pins, array offset: 0x0, array step: index*0x20, index2*0x1 */
+       uint8_t RESERVED_0[4032];
+  __IO uint32_t W[2][32];                          /**< Word pin registers for all port GPIO pins, array offset: 0x1000, array step: index*0x80, index2*0x4 */
+       uint8_t RESERVED_1[3840];
+  __IO uint32_t DIR[2];                            /**< Direction registers for all port GPIO pins, array offset: 0x2000, array step: 0x4 */
+       uint8_t RESERVED_2[120];
+  __IO uint32_t MASK[2];                           /**< Mask register for all port GPIO pins, array offset: 0x2080, array step: 0x4 */
+       uint8_t RESERVED_3[120];
+  __IO uint32_t PIN[2];                            /**< Port pin register for all port GPIO pins, array offset: 0x2100, array step: 0x4 */
+       uint8_t RESERVED_4[120];
+  __IO uint32_t MPIN[2];                           /**< Masked port register for all port GPIO pins, array offset: 0x2180, array step: 0x4 */
+       uint8_t RESERVED_5[120];
+  __IO uint32_t SET[2];                            /**< Write: Set register for port. Read: output bits for port, array offset: 0x2200, array step: 0x4 */
+       uint8_t RESERVED_6[120];
+  __O  uint32_t CLR[2];                            /**< Clear port for all port GPIO pins, array offset: 0x2280, array step: 0x4 */
+       uint8_t RESERVED_7[120];
+  __O  uint32_t NOT[2];                            /**< Toggle port for all port GPIO pins, array offset: 0x2300, array step: 0x4 */
+       uint8_t RESERVED_8[120];
+  __O  uint32_t DIRSET[2];                         /**< Set pin direction bits for port, array offset: 0x2380, array step: 0x4 */
+       uint8_t RESERVED_9[120];
+  __O  uint32_t DIRCLR[2];                         /**< Clear pin direction bits for port, array offset: 0x2400, array step: 0x4 */
+       uint8_t RESERVED_10[120];
+  __O  uint32_t DIRNOT[2];                         /**< Toggle pin direction bits for port, array offset: 0x2480, array step: 0x4 */
 } GPIO_Type;
 
 /* ----------------------------------------------------------------------------
@@ -8413,7 +8196,7 @@ typedef struct {
 /*! @} */
 
 /* The count of GPIO_B */
-#define GPIO_B_COUNT                             (4U)
+#define GPIO_B_COUNT                             (2U)
 
 /* The count of GPIO_B */
 #define GPIO_B_COUNT2                            (32U)
@@ -8426,7 +8209,7 @@ typedef struct {
 /*! @} */
 
 /* The count of GPIO_W */
-#define GPIO_W_COUNT                             (4U)
+#define GPIO_W_COUNT                             (2U)
 
 /* The count of GPIO_W */
 #define GPIO_W_COUNT2                            (32U)
@@ -8439,7 +8222,7 @@ typedef struct {
 /*! @} */
 
 /* The count of GPIO_DIR */
-#define GPIO_DIR_COUNT                           (4U)
+#define GPIO_DIR_COUNT                           (2U)
 
 /*! @name MASK - Mask register for all port GPIO pins */
 /*! @{ */
@@ -8449,7 +8232,7 @@ typedef struct {
 /*! @} */
 
 /* The count of GPIO_MASK */
-#define GPIO_MASK_COUNT                          (4U)
+#define GPIO_MASK_COUNT                          (2U)
 
 /*! @name PIN - Port pin register for all port GPIO pins */
 /*! @{ */
@@ -8459,7 +8242,7 @@ typedef struct {
 /*! @} */
 
 /* The count of GPIO_PIN */
-#define GPIO_PIN_COUNT                           (4U)
+#define GPIO_PIN_COUNT                           (2U)
 
 /*! @name MPIN - Masked port register for all port GPIO pins */
 /*! @{ */
@@ -8469,7 +8252,7 @@ typedef struct {
 /*! @} */
 
 /* The count of GPIO_MPIN */
-#define GPIO_MPIN_COUNT                          (4U)
+#define GPIO_MPIN_COUNT                          (2U)
 
 /*! @name SET - Write: Set register for port. Read: output bits for port */
 /*! @{ */
@@ -8479,7 +8262,7 @@ typedef struct {
 /*! @} */
 
 /* The count of GPIO_SET */
-#define GPIO_SET_COUNT                           (4U)
+#define GPIO_SET_COUNT                           (2U)
 
 /*! @name CLR - Clear port for all port GPIO pins */
 /*! @{ */
@@ -8489,7 +8272,7 @@ typedef struct {
 /*! @} */
 
 /* The count of GPIO_CLR */
-#define GPIO_CLR_COUNT                           (4U)
+#define GPIO_CLR_COUNT                           (2U)
 
 /*! @name NOT - Toggle port for all port GPIO pins */
 /*! @{ */
@@ -8499,37 +8282,37 @@ typedef struct {
 /*! @} */
 
 /* The count of GPIO_NOT */
-#define GPIO_NOT_COUNT                           (4U)
+#define GPIO_NOT_COUNT                           (2U)
 
 /*! @name DIRSET - Set pin direction bits for port */
 /*! @{ */
-#define GPIO_DIRSET_DIRSETP_MASK                 (0x1FFFFFFFU)
+#define GPIO_DIRSET_DIRSETP_MASK                 (0xFFFFFFFFU)
 #define GPIO_DIRSET_DIRSETP_SHIFT                (0U)
 #define GPIO_DIRSET_DIRSETP(x)                   (((uint32_t)(((uint32_t)(x)) << GPIO_DIRSET_DIRSETP_SHIFT)) & GPIO_DIRSET_DIRSETP_MASK)
 /*! @} */
 
 /* The count of GPIO_DIRSET */
-#define GPIO_DIRSET_COUNT                        (4U)
+#define GPIO_DIRSET_COUNT                        (2U)
 
 /*! @name DIRCLR - Clear pin direction bits for port */
 /*! @{ */
-#define GPIO_DIRCLR_DIRCLRP_MASK                 (0x1FFFFFFFU)
+#define GPIO_DIRCLR_DIRCLRP_MASK                 (0xFFFFFFFFU)
 #define GPIO_DIRCLR_DIRCLRP_SHIFT                (0U)
 #define GPIO_DIRCLR_DIRCLRP(x)                   (((uint32_t)(((uint32_t)(x)) << GPIO_DIRCLR_DIRCLRP_SHIFT)) & GPIO_DIRCLR_DIRCLRP_MASK)
 /*! @} */
 
 /* The count of GPIO_DIRCLR */
-#define GPIO_DIRCLR_COUNT                        (4U)
+#define GPIO_DIRCLR_COUNT                        (2U)
 
 /*! @name DIRNOT - Toggle pin direction bits for port */
 /*! @{ */
-#define GPIO_DIRNOT_DIRNOTP_MASK                 (0x1FFFFFFFU)
+#define GPIO_DIRNOT_DIRNOTP_MASK                 (0xFFFFFFFFU)
 #define GPIO_DIRNOT_DIRNOTP_SHIFT                (0U)
 #define GPIO_DIRNOT_DIRNOTP(x)                   (((uint32_t)(((uint32_t)(x)) << GPIO_DIRNOT_DIRNOTP_SHIFT)) & GPIO_DIRNOT_DIRNOTP_MASK)
 /*! @} */
 
 /* The count of GPIO_DIRNOT */
-#define GPIO_DIRNOT_COUNT                        (4U)
+#define GPIO_DIRNOT_COUNT                        (2U)
 
 
 /*!
@@ -8594,7 +8377,7 @@ typedef struct {
 
 /** HASHCRYPT - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t CTRL;                              /**< Is control register to enable and operate Hash and Crypto, offset: 0x0 */
+  __IO uint32_t CTRL;                              /**< Control register to enable and operate Hash and Crypto, offset: 0x0 */
   __IO uint32_t STATUS;                            /**< Indicates status of Hash peripheral., offset: 0x4 */
   __IO uint32_t INTENSET;                          /**< Write 1 to enable interrupts; reads back with which are set., offset: 0x8 */
   __IO uint32_t INTENCLR;                          /**< Write 1 to clear interrupts., offset: 0xC */
@@ -8603,11 +8386,11 @@ typedef struct {
        uint8_t RESERVED_0[8];
   __O  uint32_t INDATA;                            /**< Input of 16 words at a time to load up buffer., offset: 0x20 */
   __O  uint32_t ALIAS[7];                          /**< , array offset: 0x24, array step: 0x4 */
-  __I  uint32_t OUTDATA0[8];                       /**< , array offset: 0x40, array step: 0x4 */
-  __I  uint32_t OUTDATA1[8];                       /**< , array offset: 0x60, array step: 0x4 */
+  __I  uint32_t DIGEST0[8];                        /**< , array offset: 0x40, array step: 0x4 */
+       uint8_t RESERVED_1[32];
   __IO uint32_t CRYPTCFG;                          /**< Crypto settings for AES and Salsa and ChaCha, offset: 0x80 */
   __I  uint32_t CONFIG;                            /**< Returns the configuration of this block in this chip - indicates what services are available., offset: 0x84 */
-       uint8_t RESERVED_1[4];
+       uint8_t RESERVED_2[4];
   __IO uint32_t LOCK;                              /**< Lock register allows locking to the current security level or unlocking by the lock holding level., offset: 0x8C */
   __O  uint32_t MASK[4];                           /**< , array offset: 0x90, array step: 0x4 */
 } HASHCRYPT_Type;
@@ -8621,7 +8404,7 @@ typedef struct {
  * @{
  */
 
-/*! @name CTRL - Is control register to enable and operate Hash and Crypto */
+/*! @name CTRL - Control register to enable and operate Hash and Crypto */
 /*! @{ */
 #define HASHCRYPT_CTRL_MODE_MASK                 (0x7U)
 #define HASHCRYPT_CTRL_MODE_SHIFT                (0U)
@@ -8630,11 +8413,8 @@ typedef struct {
  *  0b000..Disabled
  *  0b001..SHA1 is enabled
  *  0b010..SHA2-256 is enabled
- *  0b011..SHA2-512 is enabled (if available)
  *  0b100..AES if available (see also CRYPTCFG register for more controls)
  *  0b101..ICB-AES if available (see also CRYPTCFG register for more controls)
- *  0b110..Salsa20/20 if available (including XSalsa - see also CRYPTCFG register)
- *  0b111..ChaCha20 if available (see also CRYPTCFG register for more controls)
  */
 #define HASHCRYPT_CTRL_MODE(x)                   (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CTRL_MODE_SHIFT)) & HASHCRYPT_CTRL_MODE_MASK)
 #define HASHCRYPT_CTRL_NEW_HASH_MASK             (0x10U)
@@ -8678,17 +8458,17 @@ typedef struct {
  *  0b1..Waiting for data to be written in (16 words)
  */
 #define HASHCRYPT_STATUS_WAITING(x)              (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_STATUS_WAITING_SHIFT)) & HASHCRYPT_STATUS_WAITING_MASK)
-#define HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_MASK (0x2U)
-#define HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_SHIFT (1U)
-/*! DIGEST_aka_OUTDATA - For Hash, if 1 then a DIGEST is ready and waiting and there is no active
- *    next block already started. For Cryptographic uses, this will be set for each block processed,
- *    indicating OUTDATA (and OUTDATA2 if larger output) contains the next value to read out. This is
- *    cleared when any data is written, when New is written, for Cryptographic uses when the last
- *    word is read out, or when the block is disabled.
+#define HASHCRYPT_STATUS_DIGEST_MASK             (0x2U)
+#define HASHCRYPT_STATUS_DIGEST_SHIFT            (1U)
+/*! DIGEST - For Hash, if 1 then a DIGEST is ready and waiting and there is no active next block
+ *    already started. For Cryptographic uses, this will be set for each block processed, indicating
+ *    OUTDATA (and OUTDATA2 if larger output) contains the next value to read out. This is cleared
+ *    when any data is written, when New is written, for Cryptographic uses when the last word is read
+ *    out, or when the block is disabled.
  *  0b0..No Digest is ready
  *  0b1..Digest is ready. Application may read it or may write more data
  */
-#define HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA(x)   (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_SHIFT)) & HASHCRYPT_STATUS_DIGEST_AKA_OUTDATA_MASK)
+#define HASHCRYPT_STATUS_DIGEST(x)               (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_STATUS_DIGEST_SHIFT)) & HASHCRYPT_STATUS_DIGEST_MASK)
 #define HASHCRYPT_STATUS_ERROR_MASK              (0x4U)
 #define HASHCRYPT_STATUS_ERROR_SHIFT             (2U)
 /*! ERROR - If 1, an error occurred. For normal uses, this is due to an attempted overrun: INDATA
@@ -8759,7 +8539,7 @@ typedef struct {
 /*! @{ */
 #define HASHCRYPT_MEMCTRL_MASTER_MASK            (0x1U)
 #define HASHCRYPT_MEMCTRL_MASTER_SHIFT           (0U)
-/*! MASTER
+/*! MASTER - Enables mastering.
  *  0b0..Mastering is not used and the normal DMA or Interrupt based model is used with INDATA.
  *  0b1..Mastering is enabled and DMA and INDATA should not be used.
  */
@@ -8793,25 +8573,15 @@ typedef struct {
 /* The count of HASHCRYPT_ALIAS */
 #define HASHCRYPT_ALIAS_COUNT                    (7U)
 
-/*! @name OUTDATA0 -  */
+/*! @name DIGEST0 -  */
 /*! @{ */
-#define HASHCRYPT_OUTDATA0_DIGEST_OUTPUT_MASK    (0xFFFFFFFFU)
-#define HASHCRYPT_OUTDATA0_DIGEST_OUTPUT_SHIFT   (0U)
-#define HASHCRYPT_OUTDATA0_DIGEST_OUTPUT(x)      (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_OUTDATA0_DIGEST_OUTPUT_SHIFT)) & HASHCRYPT_OUTDATA0_DIGEST_OUTPUT_MASK)
+#define HASHCRYPT_DIGEST0_DIGEST_MASK            (0xFFFFFFFFU)
+#define HASHCRYPT_DIGEST0_DIGEST_SHIFT           (0U)
+#define HASHCRYPT_DIGEST0_DIGEST(x)              (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_DIGEST0_DIGEST_SHIFT)) & HASHCRYPT_DIGEST0_DIGEST_MASK)
 /*! @} */
 
-/* The count of HASHCRYPT_OUTDATA0 */
-#define HASHCRYPT_OUTDATA0_COUNT                 (8U)
-
-/*! @name OUTDATA1 -  */
-/*! @{ */
-#define HASHCRYPT_OUTDATA1_OUTPUT_MASK           (0xFFFFFFFFU)
-#define HASHCRYPT_OUTDATA1_OUTPUT_SHIFT          (0U)
-#define HASHCRYPT_OUTDATA1_OUTPUT(x)             (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_OUTDATA1_OUTPUT_SHIFT)) & HASHCRYPT_OUTDATA1_OUTPUT_MASK)
-/*! @} */
-
-/* The count of HASHCRYPT_OUTDATA1 */
-#define HASHCRYPT_OUTDATA1_COUNT                 (8U)
+/* The count of HASHCRYPT_DIGEST0 */
+#define HASHCRYPT_DIGEST0_COUNT                  (8U)
 
 /*! @name CRYPTCFG - Crypto settings for AES and Salsa and ChaCha */
 /*! @{ */
@@ -8866,9 +8636,6 @@ typedef struct {
 #define HASHCRYPT_CRYPTCFG_STREAMLAST_MASK       (0x10000U)
 #define HASHCRYPT_CRYPTCFG_STREAMLAST_SHIFT      (16U)
 #define HASHCRYPT_CRYPTCFG_STREAMLAST(x)         (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CRYPTCFG_STREAMLAST_SHIFT)) & HASHCRYPT_CRYPTCFG_STREAMLAST_MASK)
-#define HASHCRYPT_CRYPTCFG_XSALSA_MASK           (0x20000U)
-#define HASHCRYPT_CRYPTCFG_XSALSA_SHIFT          (17U)
-#define HASHCRYPT_CRYPTCFG_XSALSA(x)             (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CRYPTCFG_XSALSA_SHIFT)) & HASHCRYPT_CRYPTCFG_XSALSA_MASK)
 #define HASHCRYPT_CRYPTCFG_ICBSZ_MASK            (0x300000U)
 #define HASHCRYPT_CRYPTCFG_ICBSZ_SHIFT           (20U)
 /*! ICBSZ - This sets the ICB size between 32 and 128 bits, using the following rules. Note that the
@@ -8902,9 +8669,6 @@ typedef struct {
 #define HASHCRYPT_CONFIG_AHB_MASK                (0x8U)
 #define HASHCRYPT_CONFIG_AHB_SHIFT               (3U)
 #define HASHCRYPT_CONFIG_AHB(x)                  (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CONFIG_AHB_SHIFT)) & HASHCRYPT_CONFIG_AHB_MASK)
-#define HASHCRYPT_CONFIG_SHA512_MASK             (0x20U)
-#define HASHCRYPT_CONFIG_SHA512_SHIFT            (5U)
-#define HASHCRYPT_CONFIG_SHA512(x)               (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CONFIG_SHA512_SHIFT)) & HASHCRYPT_CONFIG_SHA512_MASK)
 #define HASHCRYPT_CONFIG_AES_MASK                (0x40U)
 #define HASHCRYPT_CONFIG_AES_SHIFT               (6U)
 #define HASHCRYPT_CONFIG_AES(x)                  (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CONFIG_AES_SHIFT)) & HASHCRYPT_CONFIG_AES_MASK)
@@ -8914,12 +8678,6 @@ typedef struct {
 #define HASHCRYPT_CONFIG_SECRET_MASK             (0x100U)
 #define HASHCRYPT_CONFIG_SECRET_SHIFT            (8U)
 #define HASHCRYPT_CONFIG_SECRET(x)               (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CONFIG_SECRET_SHIFT)) & HASHCRYPT_CONFIG_SECRET_MASK)
-#define HASHCRYPT_CONFIG_SALSA_MASK              (0x200U)
-#define HASHCRYPT_CONFIG_SALSA_SHIFT             (9U)
-#define HASHCRYPT_CONFIG_SALSA(x)                (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CONFIG_SALSA_SHIFT)) & HASHCRYPT_CONFIG_SALSA_MASK)
-#define HASHCRYPT_CONFIG_CHACHA_MASK             (0x400U)
-#define HASHCRYPT_CONFIG_CHACHA_SHIFT            (10U)
-#define HASHCRYPT_CONFIG_CHACHA(x)               (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CONFIG_CHACHA_SHIFT)) & HASHCRYPT_CONFIG_CHACHA_MASK)
 #define HASHCRYPT_CONFIG_ICB_MASK                (0x800U)
 #define HASHCRYPT_CONFIG_ICB_SHIFT               (11U)
 #define HASHCRYPT_CONFIG_ICB(x)                  (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CONFIG_ICB_SHIFT)) & HASHCRYPT_CONFIG_ICB_MASK)
@@ -9812,13 +9570,7 @@ typedef struct {
   __IO uint32_t STAT;                              /**< Status register for the primary channel pair., offset: 0xC08 */
        uint8_t RESERVED_1[16];
   __IO uint32_t DIV;                               /**< Clock divider, used by all channel pairs., offset: 0xC1C */
-  struct {                                         /* offset: 0xC20, array step: 0x20 */
-    __IO uint32_t PCFG1;                             /**< Configuration register 1 for channel pair, array offset: 0xC20, array step: 0x20 */
-    __IO uint32_t PCFG2;                             /**< Configuration register 2 for channel pair, array offset: 0xC24, array step: 0x20 */
-    __IO uint32_t PSTAT;                             /**< Status register for channel pair, array offset: 0xC28, array step: 0x20 */
-         uint8_t RESERVED_0[20];
-  } SECCHANNEL[3];
-       uint8_t RESERVED_2[384];
+       uint8_t RESERVED_2[480];
   __IO uint32_t FIFOCFG;                           /**< FIFO configuration and enable register., offset: 0xE00 */
   __IO uint32_t FIFOSTAT;                          /**< FIFO status register., offset: 0xE04 */
   __IO uint32_t FIFOTRIG;                          /**< FIFO trigger settings for interrupt and DMA request., offset: 0xE08 */
@@ -9947,17 +9699,6 @@ typedef struct {
  *       for the single channel of data is placed at the clock defined by POSITION.
  */
 #define I2S_CFG1_ONECHANNEL(x)                   (((uint32_t)(((uint32_t)(x)) << I2S_CFG1_ONECHANNEL_SHIFT)) & I2S_CFG1_ONECHANNEL_MASK)
-#define I2S_CFG1_PDMDATA_MASK                    (0x800U)
-#define I2S_CFG1_PDMDATA_SHIFT                   (11U)
-/*! PDMDATA - PDM Data selection. This bit controls the data source for I2S transmit, and cannot be
- *    set in Rx mode. This bit only has an effect if the device the Flexcomm resides in includes a
- *    D-Mic subsystem. For the LPC55xx, this bit applies only to Flexcomm 6,7.
- *  0b0..Normal operation, data is transferred to or from the Flexcomm FIFO.
- *  0b1..The data source is the D-Mic subsystem. When PDMDATA = 1, only the primary channel pair can be used in
- *       this Flexcomm. If ONECHANNEL = 1, only the PDM left data is used. the WS rate must match the Fs (sample
- *       rate) of the D-Mic decimator. A rate mismatch will at some point cause the I2S to overrun or underrun.
- */
-#define I2S_CFG1_PDMDATA(x)                      (((uint32_t)(((uint32_t)(x)) << I2S_CFG1_PDMDATA_SHIFT)) & I2S_CFG1_PDMDATA_MASK)
 #define I2S_CFG1_SCK_POL_MASK                    (0x1000U)
 #define I2S_CFG1_SCK_POL_SHIFT                   (12U)
 /*! SCK_POL - SCK polarity.
@@ -10030,48 +9771,6 @@ typedef struct {
 #define I2S_DIV_DIV_SHIFT                        (0U)
 #define I2S_DIV_DIV(x)                           (((uint32_t)(((uint32_t)(x)) << I2S_DIV_DIV_SHIFT)) & I2S_DIV_DIV_MASK)
 /*! @} */
-
-/*! @name SECCHANNEL_PCFG1 - Configuration register 1 for channel pair */
-/*! @{ */
-#define I2S_SECCHANNEL_PCFG1_PAIRENABLE_MASK     (0x1U)
-#define I2S_SECCHANNEL_PCFG1_PAIRENABLE_SHIFT    (0U)
-#define I2S_SECCHANNEL_PCFG1_PAIRENABLE(x)       (((uint32_t)(((uint32_t)(x)) << I2S_SECCHANNEL_PCFG1_PAIRENABLE_SHIFT)) & I2S_SECCHANNEL_PCFG1_PAIRENABLE_MASK)
-#define I2S_SECCHANNEL_PCFG1_ONECHANNEL_MASK     (0x400U)
-#define I2S_SECCHANNEL_PCFG1_ONECHANNEL_SHIFT    (10U)
-#define I2S_SECCHANNEL_PCFG1_ONECHANNEL(x)       (((uint32_t)(((uint32_t)(x)) << I2S_SECCHANNEL_PCFG1_ONECHANNEL_SHIFT)) & I2S_SECCHANNEL_PCFG1_ONECHANNEL_MASK)
-/*! @} */
-
-/* The count of I2S_SECCHANNEL_PCFG1 */
-#define I2S_SECCHANNEL_PCFG1_COUNT               (3U)
-
-/*! @name SECCHANNEL_PCFG2 - Configuration register 2 for channel pair */
-/*! @{ */
-#define I2S_SECCHANNEL_PCFG2_POSITION_MASK       (0x1FF0000U)
-#define I2S_SECCHANNEL_PCFG2_POSITION_SHIFT      (16U)
-#define I2S_SECCHANNEL_PCFG2_POSITION(x)         (((uint32_t)(((uint32_t)(x)) << I2S_SECCHANNEL_PCFG2_POSITION_SHIFT)) & I2S_SECCHANNEL_PCFG2_POSITION_MASK)
-/*! @} */
-
-/* The count of I2S_SECCHANNEL_PCFG2 */
-#define I2S_SECCHANNEL_PCFG2_COUNT               (3U)
-
-/*! @name SECCHANNEL_PSTAT - Status register for channel pair */
-/*! @{ */
-#define I2S_SECCHANNEL_PSTAT_BUSY_MASK           (0x1U)
-#define I2S_SECCHANNEL_PSTAT_BUSY_SHIFT          (0U)
-#define I2S_SECCHANNEL_PSTAT_BUSY(x)             (((uint32_t)(((uint32_t)(x)) << I2S_SECCHANNEL_PSTAT_BUSY_SHIFT)) & I2S_SECCHANNEL_PSTAT_BUSY_MASK)
-#define I2S_SECCHANNEL_PSTAT_SLVFRMERR_MASK      (0x2U)
-#define I2S_SECCHANNEL_PSTAT_SLVFRMERR_SHIFT     (1U)
-#define I2S_SECCHANNEL_PSTAT_SLVFRMERR(x)        (((uint32_t)(((uint32_t)(x)) << I2S_SECCHANNEL_PSTAT_SLVFRMERR_SHIFT)) & I2S_SECCHANNEL_PSTAT_SLVFRMERR_MASK)
-#define I2S_SECCHANNEL_PSTAT_LR_MASK             (0x4U)
-#define I2S_SECCHANNEL_PSTAT_LR_SHIFT            (2U)
-#define I2S_SECCHANNEL_PSTAT_LR(x)               (((uint32_t)(((uint32_t)(x)) << I2S_SECCHANNEL_PSTAT_LR_SHIFT)) & I2S_SECCHANNEL_PSTAT_LR_MASK)
-#define I2S_SECCHANNEL_PSTAT_DATAPAUSED_MASK     (0x8U)
-#define I2S_SECCHANNEL_PSTAT_DATAPAUSED_SHIFT    (3U)
-#define I2S_SECCHANNEL_PSTAT_DATAPAUSED(x)       (((uint32_t)(((uint32_t)(x)) << I2S_SECCHANNEL_PSTAT_DATAPAUSED_SHIFT)) & I2S_SECCHANNEL_PSTAT_DATAPAUSED_MASK)
-/*! @} */
-
-/* The count of I2S_SECCHANNEL_PSTAT */
-#define I2S_SECCHANNEL_PSTAT_COUNT               (3U)
 
 /*! @name FIFOCFG - FIFO configuration and enable register. */
 /*! @{ */
@@ -10153,13 +9852,6 @@ typedef struct {
 #define I2S_FIFOCFG_EMPTYRX_MASK                 (0x20000U)
 #define I2S_FIFOCFG_EMPTYRX_SHIFT                (17U)
 #define I2S_FIFOCFG_EMPTYRX(x)                   (((uint32_t)(((uint32_t)(x)) << I2S_FIFOCFG_EMPTYRX_SHIFT)) & I2S_FIFOCFG_EMPTYRX_MASK)
-#define I2S_FIFOCFG_POPDBG_MASK                  (0x40000U)
-#define I2S_FIFOCFG_POPDBG_SHIFT                 (18U)
-/*! POPDBG - Pop FIFO for debug reads.
- *  0b0..Debug reads of the FIFO do not pop the FIFO.
- *  0b1..A debug read will cause the FIFO to pop.
- */
-#define I2S_FIFOCFG_POPDBG(x)                    (((uint32_t)(((uint32_t)(x)) << I2S_FIFOCFG_POPDBG_SHIFT)) & I2S_FIFOCFG_POPDBG_MASK)
 /*! @} */
 
 /*! @name FIFOSTAT - FIFO status register. */
@@ -10334,15 +10026,15 @@ typedef struct {
 
 /*! @name ID - I2S Module identification */
 /*! @{ */
-#define I2S_ID_Aperture_MASK                     (0xFFU)
-#define I2S_ID_Aperture_SHIFT                    (0U)
-#define I2S_ID_Aperture(x)                       (((uint32_t)(((uint32_t)(x)) << I2S_ID_Aperture_SHIFT)) & I2S_ID_Aperture_MASK)
-#define I2S_ID_Minor_Rev_MASK                    (0xF00U)
-#define I2S_ID_Minor_Rev_SHIFT                   (8U)
-#define I2S_ID_Minor_Rev(x)                      (((uint32_t)(((uint32_t)(x)) << I2S_ID_Minor_Rev_SHIFT)) & I2S_ID_Minor_Rev_MASK)
-#define I2S_ID_Major_Rev_MASK                    (0xF000U)
-#define I2S_ID_Major_Rev_SHIFT                   (12U)
-#define I2S_ID_Major_Rev(x)                      (((uint32_t)(((uint32_t)(x)) << I2S_ID_Major_Rev_SHIFT)) & I2S_ID_Major_Rev_MASK)
+#define I2S_ID_APERTURE_MASK                     (0xFFU)
+#define I2S_ID_APERTURE_SHIFT                    (0U)
+#define I2S_ID_APERTURE(x)                       (((uint32_t)(((uint32_t)(x)) << I2S_ID_APERTURE_SHIFT)) & I2S_ID_APERTURE_MASK)
+#define I2S_ID_MINOR_REV_MASK                    (0xF00U)
+#define I2S_ID_MINOR_REV_SHIFT                   (8U)
+#define I2S_ID_MINOR_REV(x)                      (((uint32_t)(((uint32_t)(x)) << I2S_ID_MINOR_REV_SHIFT)) & I2S_ID_MINOR_REV_MASK)
+#define I2S_ID_MAJOR_REV_MASK                    (0xF000U)
+#define I2S_ID_MAJOR_REV_SHIFT                   (12U)
+#define I2S_ID_MAJOR_REV(x)                      (((uint32_t)(((uint32_t)(x)) << I2S_ID_MAJOR_REV_SHIFT)) & I2S_ID_MAJOR_REV_MASK)
 #define I2S_ID_ID_MASK                           (0xFFFF0000U)
 #define I2S_ID_ID_SHIFT                          (16U)
 #define I2S_ID_ID(x)                             (((uint32_t)(((uint32_t)(x)) << I2S_ID_ID_SHIFT)) & I2S_ID_ID_MASK)
@@ -10604,9 +10296,9 @@ typedef struct {
  *  0b01110..CT_INP14 function selected from IOCON register
  *  0b01111..CT_INP15 function selected from IOCON register
  *  0b10000..CT_INP16 function selected from IOCON register
- *  0b10001..CT_INP17 function selected from IOCON register
- *  0b10010..CT_INP18 function selected from IOCON register
- *  0b10011..CT_INP19 function selected from IOCON register
+ *  0b10001..None
+ *  0b10010..None
+ *  0b10011..None
  *  0b10100..USB0_FRAME_TOGGLE
  *  0b10101..USB1_FRAME_TOGGLE
  *  0b10110..COMP_OUTPUT output from analog comparator
@@ -10642,9 +10334,9 @@ typedef struct {
  *  0b01110..CT_INP14 function selected from IOCON register
  *  0b01111..CT_INP15 function selected from IOCON register
  *  0b10000..CT_INP16 function selected from IOCON register
- *  0b10001..CT_INP17 function selected from IOCON register
- *  0b10010..CT_INP18 function selected from IOCON register
- *  0b10011..CT_INP19 function selected from IOCON register
+ *  0b10001..None
+ *  0b10010..None
+ *  0b10011..None
  *  0b10100..USB0_FRAME_TOGGLE
  *  0b10101..USB1_FRAME_TOGGLE
  *  0b10110..COMP_OUTPUT output from analog comparator
@@ -10680,9 +10372,9 @@ typedef struct {
  *  0b01110..CT_INP14 function selected from IOCON register
  *  0b01111..CT_INP15 function selected from IOCON register
  *  0b10000..CT_INP16 function selected from IOCON register
- *  0b10001..CT_INP17 function selected from IOCON register
- *  0b10010..CT_INP18 function selected from IOCON register
- *  0b10011..CT_INP19 function selected from IOCON register
+ *  0b10001..None
+ *  0b10010..None
+ *  0b10011..None
  *  0b10100..USB0_FRAME_TOGGLE
  *  0b10101..USB1_FRAME_TOGGLE
  *  0b10110..COMP_OUTPUT output from analog comparator
@@ -11063,8 +10755,8 @@ typedef struct {
 #define IOCON_PIO_SLEW_MASK                      (0x40U)
 #define IOCON_PIO_SLEW_SHIFT                     (6U)
 /*! SLEW - Driver slew rate.
- *  0b0..Standard mode, output slew rate control is enabled. More outputs can be switched simultaneously.
- *  0b1..Fast mode, slew rate control is disabled. Refer to the appropriate specific device data sheet for details.
+ *  0b0..Standard-mode, output slew rate is slower. More outputs can be switched simultaneously.
+ *  0b1..Fast-mode, output slew rate is faster. Refer to the appropriate specific device data sheet for details.
  */
 #define IOCON_PIO_SLEW(x)                        (((uint32_t)(((uint32_t)(x)) << IOCON_PIO_SLEW_SHIFT)) & IOCON_PIO_SLEW_MASK)
 #define IOCON_PIO_INVERT_MASK                    (0x80U)
@@ -11077,22 +10769,23 @@ typedef struct {
 #define IOCON_PIO_DIGIMODE_MASK                  (0x100U)
 #define IOCON_PIO_DIGIMODE_SHIFT                 (8U)
 /*! DIGIMODE - Select Digital mode.
- *  0b0..Analog mode, digital input is disabled.
- *  0b1..Digital mode, digital input is enabled.
+ *  0b0..Disable digital mode. Digital input set to 0.
+ *  0b1..Enable Digital mode. Digital input is enabled.
  */
 #define IOCON_PIO_DIGIMODE(x)                    (((uint32_t)(((uint32_t)(x)) << IOCON_PIO_DIGIMODE_SHIFT)) & IOCON_PIO_DIGIMODE_MASK)
 #define IOCON_PIO_OD_MASK                        (0x200U)
 #define IOCON_PIO_OD_SHIFT                       (9U)
-/*! OD - Controls open-drain mode.
+/*! OD - Controls open-drain mode in standard GPIO mode (EGP = 1). This bit has no effect in I2C mode (EGP=0).
  *  0b0..Normal. Normal push-pull output
  *  0b1..Open-drain. Simulated open-drain output (high drive disabled).
  */
 #define IOCON_PIO_OD(x)                          (((uint32_t)(((uint32_t)(x)) << IOCON_PIO_OD_SHIFT)) & IOCON_PIO_OD_MASK)
 #define IOCON_PIO_ASW_MASK                       (0x400U)
 #define IOCON_PIO_ASW_SHIFT                      (10U)
-/*! ASW - Analog switch input control. Usable only if DIGIMODE = 0b0
- *  0b0..Analog switch is open.
- *  0b1..Analog switch is closed.
+/*! ASW - Analog switch input control.
+ *  0b0..For pins PIO0_9, PIO0_11, PIO0_12, PIO0_15, PIO0_18, PIO0_31, PIO1_0 and PIO1_9, analog switch is closed
+ *       (enabled). For the other pins, analog switch is open (disabled).
+ *  0b1..For all pins except PIO0_9, PIO0_11, PIO0_12, PIO0_15, PIO0_18, PIO0_31, PIO1_0 and PIO1_9 analog switch is closed (enabled)
  */
 #define IOCON_PIO_ASW(x)                         (((uint32_t)(((uint32_t)(x)) << IOCON_PIO_ASW_SHIFT)) & IOCON_PIO_ASW_MASK)
 #define IOCON_PIO_SSEL_MASK                      (0x800U)
@@ -11105,29 +10798,29 @@ typedef struct {
 #define IOCON_PIO_FILTEROFF_MASK                 (0x1000U)
 #define IOCON_PIO_FILTEROFF_SHIFT                (12U)
 /*! FILTEROFF - Controls input glitch filter.
- *  0b0..Filter enabled. Noise pulses below approximately 10 ns are filtered out.
- *  0b1..Filter disabled. No input filtering is done.
+ *  0b0..Filter enabled.
+ *  0b1..Filter disabled.
  */
 #define IOCON_PIO_FILTEROFF(x)                   (((uint32_t)(((uint32_t)(x)) << IOCON_PIO_FILTEROFF_SHIFT)) & IOCON_PIO_FILTEROFF_MASK)
 #define IOCON_PIO_ECS_MASK                       (0x2000U)
 #define IOCON_PIO_ECS_SHIFT                      (13U)
-/*! ECS - Pull-up current source enable in IIC mode.
+/*! ECS - Pull-up current source enable in I2C mode.
  *  0b1..Enabled. Pull resistor is conencted.
- *  0b0..Disabled. IO is in open drain.
+ *  0b0..Disabled. IO is in open drain cell.
  */
 #define IOCON_PIO_ECS(x)                         (((uint32_t)(((uint32_t)(x)) << IOCON_PIO_ECS_SHIFT)) & IOCON_PIO_ECS_MASK)
 #define IOCON_PIO_EGP_MASK                       (0x4000U)
 #define IOCON_PIO_EGP_SHIFT                      (14U)
-/*! EGP - Controls slew rate of I2C pad.
+/*! EGP - Switch between GPIO mode and I2C mode.
  *  0b0..I2C mode.
  *  0b1..GPIO mode.
  */
 #define IOCON_PIO_EGP(x)                         (((uint32_t)(((uint32_t)(x)) << IOCON_PIO_EGP_SHIFT)) & IOCON_PIO_EGP_MASK)
 #define IOCON_PIO_I2CFILTER_MASK                 (0x8000U)
 #define IOCON_PIO_I2CFILTER_SHIFT                (15U)
-/*! I2CFILTER - Configures I2C features for standard mode, fast mode, and Fast Mode Plus operation.
- *  0b0..I2C 50 ns glitch filter enabled. Typically used for Fast-mode and Fast-mode Plus I2C.
- *  0b1..I2C 10 ns glitch filter enabled. Typically used for Standard-mode I2C.
+/*! I2CFILTER - Configures I2C features for standard mode, fast mode, and Fast Mode Plus operation and High-Speed mode operation.
+ *  0b0..I2C 50 ns glitch filter enabled. Typically used for Standard-mode, Fast-mode and Fast-mode Plus I2C.
+ *  0b1..I2C 10 ns glitch filter enabled. Typically used for High-speed mode I2C.
  */
 #define IOCON_PIO_I2CFILTER(x)                   (((uint32_t)(((uint32_t)(x)) << IOCON_PIO_I2CFILTER_SHIFT)) & IOCON_PIO_I2CFILTER_MASK)
 /*! @} */
@@ -11530,7 +11223,7 @@ typedef struct {
 
 /*! @name EVTIMERH - EVTIMER High Register */
 /*! @{ */
-#define OSTIMER_EVTIMERH_EVTIMER_COUNT_VALUE_MASK (0xFFFFFFFFU)
+#define OSTIMER_EVTIMERH_EVTIMER_COUNT_VALUE_MASK (0x3FFU)
 #define OSTIMER_EVTIMERH_EVTIMER_COUNT_VALUE_SHIFT (0U)
 #define OSTIMER_EVTIMERH_EVTIMER_COUNT_VALUE(x)  (((uint32_t)(((uint32_t)(x)) << OSTIMER_EVTIMERH_EVTIMER_COUNT_VALUE_SHIFT)) & OSTIMER_EVTIMERH_EVTIMER_COUNT_VALUE_MASK)
 /*! @} */
@@ -11544,7 +11237,7 @@ typedef struct {
 
 /*! @name CAPTUREN_H - Local Capture High Register for CPUn */
 /*! @{ */
-#define OSTIMER_CAPTUREN_H_CAPTUREn_VALUE_MASK   (0xFFFFFFFFU)
+#define OSTIMER_CAPTUREN_H_CAPTUREn_VALUE_MASK   (0x3FFU)
 #define OSTIMER_CAPTUREN_H_CAPTUREn_VALUE_SHIFT  (0U)
 #define OSTIMER_CAPTUREN_H_CAPTUREn_VALUE(x)     (((uint32_t)(((uint32_t)(x)) << OSTIMER_CAPTUREN_H_CAPTUREn_VALUE_SHIFT)) & OSTIMER_CAPTUREN_H_CAPTUREn_VALUE_MASK)
 /*! @} */
@@ -11558,7 +11251,7 @@ typedef struct {
 
 /*! @name MATCHN_H - Match High Register for CPUn */
 /*! @{ */
-#define OSTIMER_MATCHN_H_MATCHn_VALUE_MASK       (0xFFFFFFFFU)
+#define OSTIMER_MATCHN_H_MATCHn_VALUE_MASK       (0x3FFU)
 #define OSTIMER_MATCHN_H_MATCHn_VALUE_SHIFT      (0U)
 #define OSTIMER_MATCHN_H_MATCHn_VALUE(x)         (((uint32_t)(((uint32_t)(x)) << OSTIMER_MATCHN_H_MATCHn_VALUE_SHIFT)) & OSTIMER_MATCHN_H_MATCHn_VALUE_MASK)
 /*! @} */
@@ -12136,14 +11829,14 @@ typedef struct {
 /** PLU - Register Layout Typedef */
 typedef struct {
   struct {                                         /* offset: 0x0, array step: 0x20 */
-    __IO uint32_t INP[5];                            /**< LUT0 input 0 MUX..LUT25 input 4 MUX, array offset: 0x0, array step: index*0x20, index2*0x4 */
+    __IO uint32_t INP_MUX[5];                        /**< LUTn input x MUX, array offset: 0x0, array step: index*0x20, index2*0x4 */
          uint8_t RESERVED_0[12];
   } LUT[26];
        uint8_t RESERVED_0[1216];
   __IO uint32_t LUT_TRUTH[26];                     /**< Specifies the Truth Table contents for LUT0..Specifies the Truth Table contents for LUT25, array offset: 0x800, array step: 0x4 */
        uint8_t RESERVED_1[152];
   __I  uint32_t OUTPUTS;                           /**< Provides the current state of the 8 designated PLU Outputs., offset: 0x900 */
-  __IO uint32_t WAKEINT;                           /**< Wakeup interrupt control for PLU, offset: 0x904 */
+  __IO uint32_t WAKEINT_CTRL;                      /**< Wakeup interrupt control for PLU, offset: 0x904 */
        uint8_t RESERVED_2[760];
   __IO uint32_t OUTPUT_MUX[8];                     /**< Selects the source to be connected to PLU Output 0..Selects the source to be connected to PLU Output 7, array offset: 0xC00, array step: 0x4 */
 } PLU_Type;
@@ -12157,18 +11850,19 @@ typedef struct {
  * @{
  */
 
-/*! @name LUT_INP - LUT0 input 0 MUX..LUT25 input 4 MUX */
+/*! @name LUT_INP_MUX - LUTn input x MUX */
 /*! @{ */
-#define PLU_LUT_INP_LUT_INP_MASK                 (0x3FU)
-#define PLU_LUT_INP_LUT_INP_SHIFT                (0U)
-/*! LUT_INP - Selects the input source to be connected to LUT25 input4.
+#define PLU_LUT_INP_MUX_LUTn_INPx_MASK           (0x3FU)
+#define PLU_LUT_INP_MUX_LUTn_INPx_SHIFT          (0U)
+/*! LUTn_INPx - Selects the input source to be connected to LUT25 input4. For each LUT, the slot
+ *    associated with the output from LUTn itself is tied low.
  *  0b000000..The PLU primary inputs 0.
  *  0b000001..The PLU primary inputs 1.
  *  0b000010..The PLU primary inputs 2.
  *  0b000011..The PLU primary inputs 3.
  *  0b000100..The PLU primary inputs 4.
  *  0b000101..The PLU primary inputs 5.
- *  0b000110..Tie low.
+ *  0b000110..The output of LUT0.
  *  0b000111..The output of LUT1.
  *  0b001000..The output of LUT2.
  *  0b001001..The output of LUT3.
@@ -12199,24 +11893,24 @@ typedef struct {
  *  0b100010..state(2).
  *  0b100011..state(3).
  */
-#define PLU_LUT_INP_LUT_INP(x)                   (((uint32_t)(((uint32_t)(x)) << PLU_LUT_INP_LUT_INP_SHIFT)) & PLU_LUT_INP_LUT_INP_MASK)
+#define PLU_LUT_INP_MUX_LUTn_INPx(x)             (((uint32_t)(((uint32_t)(x)) << PLU_LUT_INP_MUX_LUTn_INPx_SHIFT)) & PLU_LUT_INP_MUX_LUTn_INPx_MASK)
 /*! @} */
 
-/* The count of PLU_LUT_INP */
-#define PLU_LUT_INP_COUNT                        (26U)
+/* The count of PLU_LUT_INP_MUX */
+#define PLU_LUT_INP_MUX_COUNT                    (26U)
 
-/* The count of PLU_LUT_INP */
-#define PLU_LUT_INP_COUNT2                       (5U)
+/* The count of PLU_LUT_INP_MUX */
+#define PLU_LUT_INP_MUX_COUNT2                   (5U)
 
-/*! @name LUT_T_LUT_TRUTH - Specifies the Truth Table contents for LUT0..Specifies the Truth Table contents for LUT25 */
+/*! @name LUT_TRUTH - Specifies the Truth Table contents for LUT0..Specifies the Truth Table contents for LUT25 */
 /*! @{ */
-#define PLU_LUT_T_LUT_TRUTH_TRUTH_TABLE_MASK     (0xFFFFFFFFU)
-#define PLU_LUT_T_LUT_TRUTH_TRUTH_TABLE_SHIFT    (0U)
-#define PLU_LUT_T_LUT_TRUTH_TRUTH_TABLE(x)       (((uint32_t)(((uint32_t)(x)) << PLU_LUT_T_LUT_TRUTH_TRUTH_TABLE_SHIFT)) & PLU_LUT_T_LUT_TRUTH_TRUTH_TABLE_MASK)
+#define PLU_LUT_TRUTH_LUTn_TRUTH_MASK            (0xFFFFFFFFU)
+#define PLU_LUT_TRUTH_LUTn_TRUTH_SHIFT           (0U)
+#define PLU_LUT_TRUTH_LUTn_TRUTH(x)              (((uint32_t)(((uint32_t)(x)) << PLU_LUT_TRUTH_LUTn_TRUTH_SHIFT)) & PLU_LUT_TRUTH_LUTn_TRUTH_MASK)
 /*! @} */
 
-/* The count of PLU_LUT_T_LUT_TRUTH */
-#define PLU_LUT_T_LUT_TRUTH_COUNT                (26U)
+/* The count of PLU_LUT_TRUTH */
+#define PLU_LUT_TRUTH_COUNT                      (26U)
 
 /*! @name OUTPUTS - Provides the current state of the 8 designated PLU Outputs. */
 /*! @{ */
@@ -12225,29 +11919,35 @@ typedef struct {
 #define PLU_OUTPUTS_OUTPUT_STATE(x)              (((uint32_t)(((uint32_t)(x)) << PLU_OUTPUTS_OUTPUT_STATE_SHIFT)) & PLU_OUTPUTS_OUTPUT_STATE_MASK)
 /*! @} */
 
-/*! @name WAKEINT - Wakeup interrupt control for PLU */
+/*! @name WAKEINT_CTRL - Wakeup interrupt control for PLU */
 /*! @{ */
-#define PLU_WAKEINT_MASK_MASK                    (0xFFU)
-#define PLU_WAKEINT_MASK_SHIFT                   (0U)
-#define PLU_WAKEINT_MASK(x)                      (((uint32_t)(((uint32_t)(x)) << PLU_WAKEINT_MASK_SHIFT)) & PLU_WAKEINT_MASK_MASK)
-#define PLU_WAKEINT_FILTER_MODE_MASK             (0x300U)
-#define PLU_WAKEINT_FILTER_MODE_SHIFT            (8U)
-/*! FILTER_MODE - control input of the PLU, add filtering for glitch
+#define PLU_WAKEINT_CTRL_MASK_MASK               (0xFFU)
+#define PLU_WAKEINT_CTRL_MASK_SHIFT              (0U)
+#define PLU_WAKEINT_CTRL_MASK(x)                 (((uint32_t)(((uint32_t)(x)) << PLU_WAKEINT_CTRL_MASK_SHIFT)) & PLU_WAKEINT_CTRL_MASK_MASK)
+#define PLU_WAKEINT_CTRL_FILTER_MODE_MASK        (0x300U)
+#define PLU_WAKEINT_CTRL_FILTER_MODE_SHIFT       (8U)
+/*! FILTER_MODE - control input of the PLU, add filtering for glitch.
  *  0b00..Bypass mode.
  *  0b01..Filter 1 clock period.
  *  0b10..Filter 2 clock period.
  *  0b11..Filter 3 clock period.
  */
-#define PLU_WAKEINT_FILTER_MODE(x)               (((uint32_t)(((uint32_t)(x)) << PLU_WAKEINT_FILTER_MODE_SHIFT)) & PLU_WAKEINT_FILTER_MODE_MASK)
-#define PLU_WAKEINT_FILTER_CLKSEL_MASK           (0xC00U)
-#define PLU_WAKEINT_FILTER_CLKSEL_SHIFT          (10U)
-#define PLU_WAKEINT_FILTER_CLKSEL(x)             (((uint32_t)(((uint32_t)(x)) << PLU_WAKEINT_FILTER_CLKSEL_SHIFT)) & PLU_WAKEINT_FILTER_CLKSEL_MASK)
-#define PLU_WAKEINT_LATCH_ENABLE_MASK            (0x1000U)
-#define PLU_WAKEINT_LATCH_ENABLE_SHIFT           (12U)
-#define PLU_WAKEINT_LATCH_ENABLE(x)              (((uint32_t)(((uint32_t)(x)) << PLU_WAKEINT_LATCH_ENABLE_SHIFT)) & PLU_WAKEINT_LATCH_ENABLE_MASK)
-#define PLU_WAKEINT_INTR_CLEAR_MASK              (0x2000U)
-#define PLU_WAKEINT_INTR_CLEAR_SHIFT             (13U)
-#define PLU_WAKEINT_INTR_CLEAR(x)                (((uint32_t)(((uint32_t)(x)) << PLU_WAKEINT_INTR_CLEAR_SHIFT)) & PLU_WAKEINT_INTR_CLEAR_MASK)
+#define PLU_WAKEINT_CTRL_FILTER_MODE(x)          (((uint32_t)(((uint32_t)(x)) << PLU_WAKEINT_CTRL_FILTER_MODE_SHIFT)) & PLU_WAKEINT_CTRL_FILTER_MODE_MASK)
+#define PLU_WAKEINT_CTRL_FILTER_CLKSEL_MASK      (0xC00U)
+#define PLU_WAKEINT_CTRL_FILTER_CLKSEL_SHIFT     (10U)
+/*! FILTER_CLKSEL - hclk is divided by 2**filter_clksel.
+ *  0b00..Selects the 1 MHz low-power oscillator as the filter clock.
+ *  0b01..Selects the 12 Mhz FRO as the filter clock.
+ *  0b10..Selects a third filter clock source, if provided.
+ *  0b11..Reserved.
+ */
+#define PLU_WAKEINT_CTRL_FILTER_CLKSEL(x)        (((uint32_t)(((uint32_t)(x)) << PLU_WAKEINT_CTRL_FILTER_CLKSEL_SHIFT)) & PLU_WAKEINT_CTRL_FILTER_CLKSEL_MASK)
+#define PLU_WAKEINT_CTRL_LATCH_ENABLE_MASK       (0x1000U)
+#define PLU_WAKEINT_CTRL_LATCH_ENABLE_SHIFT      (12U)
+#define PLU_WAKEINT_CTRL_LATCH_ENABLE(x)         (((uint32_t)(((uint32_t)(x)) << PLU_WAKEINT_CTRL_LATCH_ENABLE_SHIFT)) & PLU_WAKEINT_CTRL_LATCH_ENABLE_MASK)
+#define PLU_WAKEINT_CTRL_INTR_CLEAR_MASK         (0x2000U)
+#define PLU_WAKEINT_CTRL_INTR_CLEAR_SHIFT        (13U)
+#define PLU_WAKEINT_CTRL_INTR_CLEAR(x)           (((uint32_t)(((uint32_t)(x)) << PLU_WAKEINT_CTRL_INTR_CLEAR_SHIFT)) & PLU_WAKEINT_CTRL_INTR_CLEAR_MASK)
 /*! @} */
 
 /*! @name OUTPUT_MUX - Selects the source to be connected to PLU Output 0..Selects the source to be connected to PLU Output 7 */
@@ -12345,32 +12045,24 @@ typedef struct {
 typedef struct {
        uint8_t RESERVED_0[8];
   __IO uint32_t RESETCTRL;                         /**< Reset Control [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset], offset: 0x8 */
-  __IO uint32_t RESETCAUSE;                        /**< Reset Cause register [Reset by: PoR], offset: 0xC */
-       uint8_t RESERVED_1[32];
+       uint8_t RESERVED_1[36];
   __IO uint32_t BODVBAT;                           /**< VBAT Brown Out Dectector (BoD) control register [Reset by: PoR, Pin Reset, Software Reset], offset: 0x30 */
-       uint8_t RESERVED_2[4];
-  __IO uint32_t BODCORE;                           /**< Digital Core logic Brown Out Dectector control register [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset], offset: 0x38 */
-       uint8_t RESERVED_3[8];
-  __IO uint32_t FRO1M;                             /**< 1 MHz Free Running Oscillator control register [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset], offset: 0x44 */
-  __IO uint32_t FRO32K;                            /**< 32 KHz Free Running Oscillator (FRO) control register [Reset by: PoR, Brown Out Detectors Reset], offset: 0x48 */
-  __IO uint32_t XTAL32K;                           /**< 32 KHz Crystal oscillator (XTAL) control register [Reset by: PoR, Brown Out Detectors Reset], offset: 0x4C */
+       uint8_t RESERVED_2[28];
   __IO uint32_t COMP;                              /**< Analog Comparator control register [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset], offset: 0x50 */
-       uint8_t RESERVED_4[20];
+       uint8_t RESERVED_3[20];
   __IO uint32_t WAKEIOCAUSE;                       /**< Allows to identify the Wake-up I/O source from Deep Power Down mode, offset: 0x68 */
-       uint8_t RESERVED_5[8];
+       uint8_t RESERVED_4[8];
   __IO uint32_t STATUSCLK;                         /**< FRO and XTAL status register [Reset by: PoR, Brown Out Detectors Reset], offset: 0x74 */
-       uint8_t RESERVED_6[12];
+       uint8_t RESERVED_5[12];
   __IO uint32_t AOREG1;                            /**< General purpose always on domain data storage [Reset by: PoR, Brown Out Detectors Reset], offset: 0x84 */
-       uint8_t RESERVED_7[16];
+       uint8_t RESERVED_6[16];
   __IO uint32_t RTCOSC32K;                         /**< RTC 1 KHZ and 1 Hz clocks source control register [Reset by: PoR, Brown Out Detectors Reset], offset: 0x98 */
   __IO uint32_t OSTIMERr;                          /**< OS Timer control register [Reset by: PoR, Brown Out Detectors Reset], offset: 0x9C */
-       uint8_t RESERVED_8[16];
-  __IO uint32_t PDSLEEPCFG0;                       /**< Controls the power to various modules during Low Power modes - DEEP SLEEP, POWER DOWN and DEEP POWER DOWN [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Software Reset], offset: 0xB0 */
-       uint8_t RESERVED_9[4];
+       uint8_t RESERVED_7[24];
   __IO uint32_t PDRUNCFG0;                         /**< Controls the power to various analog blocks [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset], offset: 0xB8 */
-       uint8_t RESERVED_10[4];
+       uint8_t RESERVED_8[4];
   __O  uint32_t PDRUNCFGSET0;                      /**< Controls the power to various analog blocks [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset], offset: 0xC0 */
-       uint8_t RESERVED_11[4];
+       uint8_t RESERVED_9[4];
   __O  uint32_t PDRUNCFGCLR0;                      /**< Controls the power to various analog blocks [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset], offset: 0xC8 */
 } PMC_Type;
 
@@ -12399,13 +12091,6 @@ typedef struct {
  *  0b1..BOD VBAT reset is enable.
  */
 #define PMC_RESETCTRL_BODVBATRESETENABLE(x)      (((uint32_t)(((uint32_t)(x)) << PMC_RESETCTRL_BODVBATRESETENABLE_SHIFT)) & PMC_RESETCTRL_BODVBATRESETENABLE_MASK)
-#define PMC_RESETCTRL_BODCORERESETENABLE_MASK    (0x4U)
-#define PMC_RESETCTRL_BODCORERESETENABLE_SHIFT   (2U)
-/*! BODCORERESETENABLE - BOD CORE reset enable.
- *  0b0..BOD CORE reset is disable.
- *  0b1..BOD CORE reset is enable.
- */
-#define PMC_RESETCTRL_BODCORERESETENABLE(x)      (((uint32_t)(((uint32_t)(x)) << PMC_RESETCTRL_BODCORERESETENABLE_SHIFT)) & PMC_RESETCTRL_BODCORERESETENABLE_MASK)
 #define PMC_RESETCTRL_SWRRESETENABLE_MASK        (0x8U)
 #define PMC_RESETCTRL_SWRRESETENABLE_SHIFT       (3U)
 /*! SWRRESETENABLE - Software reset enable.
@@ -12413,37 +12098,6 @@ typedef struct {
  *  0b1..Software reset is enable.
  */
 #define PMC_RESETCTRL_SWRRESETENABLE(x)          (((uint32_t)(((uint32_t)(x)) << PMC_RESETCTRL_SWRRESETENABLE_SHIFT)) & PMC_RESETCTRL_SWRRESETENABLE_MASK)
-/*! @} */
-
-/*! @name RESETCAUSE - Reset Cause register [Reset by: PoR] */
-/*! @{ */
-#define PMC_RESETCAUSE_POR_MASK                  (0x1U)
-#define PMC_RESETCAUSE_POR_SHIFT                 (0U)
-#define PMC_RESETCAUSE_POR(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_RESETCAUSE_POR_SHIFT)) & PMC_RESETCAUSE_POR_MASK)
-#define PMC_RESETCAUSE_PADRESET_MASK             (0x2U)
-#define PMC_RESETCAUSE_PADRESET_SHIFT            (1U)
-#define PMC_RESETCAUSE_PADRESET(x)               (((uint32_t)(((uint32_t)(x)) << PMC_RESETCAUSE_PADRESET_SHIFT)) & PMC_RESETCAUSE_PADRESET_MASK)
-#define PMC_RESETCAUSE_BODRESET_MASK             (0x4U)
-#define PMC_RESETCAUSE_BODRESET_SHIFT            (2U)
-#define PMC_RESETCAUSE_BODRESET(x)               (((uint32_t)(((uint32_t)(x)) << PMC_RESETCAUSE_BODRESET_SHIFT)) & PMC_RESETCAUSE_BODRESET_MASK)
-#define PMC_RESETCAUSE_SYSTEMRESET_MASK          (0x8U)
-#define PMC_RESETCAUSE_SYSTEMRESET_SHIFT         (3U)
-#define PMC_RESETCAUSE_SYSTEMRESET(x)            (((uint32_t)(((uint32_t)(x)) << PMC_RESETCAUSE_SYSTEMRESET_SHIFT)) & PMC_RESETCAUSE_SYSTEMRESET_MASK)
-#define PMC_RESETCAUSE_WDTRESET_MASK             (0x10U)
-#define PMC_RESETCAUSE_WDTRESET_SHIFT            (4U)
-#define PMC_RESETCAUSE_WDTRESET(x)               (((uint32_t)(((uint32_t)(x)) << PMC_RESETCAUSE_WDTRESET_SHIFT)) & PMC_RESETCAUSE_WDTRESET_MASK)
-#define PMC_RESETCAUSE_SWRRESET_MASK             (0x20U)
-#define PMC_RESETCAUSE_SWRRESET_SHIFT            (5U)
-#define PMC_RESETCAUSE_SWRRESET(x)               (((uint32_t)(((uint32_t)(x)) << PMC_RESETCAUSE_SWRRESET_SHIFT)) & PMC_RESETCAUSE_SWRRESET_MASK)
-#define PMC_RESETCAUSE_DPDRESET_WAKEUPIO_MASK    (0x40U)
-#define PMC_RESETCAUSE_DPDRESET_WAKEUPIO_SHIFT   (6U)
-#define PMC_RESETCAUSE_DPDRESET_WAKEUPIO(x)      (((uint32_t)(((uint32_t)(x)) << PMC_RESETCAUSE_DPDRESET_WAKEUPIO_SHIFT)) & PMC_RESETCAUSE_DPDRESET_WAKEUPIO_MASK)
-#define PMC_RESETCAUSE_DPDRESET_RTC_MASK         (0x80U)
-#define PMC_RESETCAUSE_DPDRESET_RTC_SHIFT        (7U)
-#define PMC_RESETCAUSE_DPDRESET_RTC(x)           (((uint32_t)(((uint32_t)(x)) << PMC_RESETCAUSE_DPDRESET_RTC_SHIFT)) & PMC_RESETCAUSE_DPDRESET_RTC_MASK)
-#define PMC_RESETCAUSE_DPDRESET_OSTIMER_MASK     (0x100U)
-#define PMC_RESETCAUSE_DPDRESET_OSTIMER_SHIFT    (8U)
-#define PMC_RESETCAUSE_DPDRESET_OSTIMER(x)       (((uint32_t)(((uint32_t)(x)) << PMC_RESETCAUSE_DPDRESET_OSTIMER_SHIFT)) & PMC_RESETCAUSE_DPDRESET_OSTIMER_MASK)
 /*! @} */
 
 /*! @name BODVBAT - VBAT Brown Out Dectector (BoD) control register [Reset by: PoR, Pin Reset, Software Reset] */
@@ -12494,137 +12148,6 @@ typedef struct {
  *  0b11..100 mV.
  */
 #define PMC_BODVBAT_HYST(x)                      (((uint32_t)(((uint32_t)(x)) << PMC_BODVBAT_HYST_SHIFT)) & PMC_BODVBAT_HYST_MASK)
-/*! @} */
-
-/*! @name BODCORE - Digital Core logic Brown Out Dectector control register [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset] */
-/*! @{ */
-#define PMC_BODCORE_TRIGLVL_MASK                 (0x7U)
-#define PMC_BODCORE_TRIGLVL_SHIFT                (0U)
-/*! TRIGLVL - BoD trigger level.
- *  0b000..0.60 V.
- *  0b001..0.65 V.
- *  0b010..0.70 V.
- *  0b011..0.75 V.
- *  0b100..0.80 V.
- *  0b101..0.85 V.
- *  0b110..0.90 V.
- *  0b111..0.95 V.
- */
-#define PMC_BODCORE_TRIGLVL(x)                   (((uint32_t)(((uint32_t)(x)) << PMC_BODCORE_TRIGLVL_SHIFT)) & PMC_BODCORE_TRIGLVL_MASK)
-#define PMC_BODCORE_HYST_MASK                    (0x30U)
-#define PMC_BODCORE_HYST_SHIFT                   (4U)
-/*! HYST - BoD Core Hysteresis control.
- *  0b00..25 mV.
- *  0b01..50 mV.
- *  0b10..75 mV.
- *  0b11..100 mV.
- */
-#define PMC_BODCORE_HYST(x)                      (((uint32_t)(((uint32_t)(x)) << PMC_BODCORE_HYST_SHIFT)) & PMC_BODCORE_HYST_MASK)
-/*! @} */
-
-/*! @name FRO1M - 1 MHz Free Running Oscillator control register [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset] */
-/*! @{ */
-#define PMC_FRO1M_FREQSEL_MASK                   (0x7FU)
-#define PMC_FRO1M_FREQSEL_SHIFT                  (0U)
-#define PMC_FRO1M_FREQSEL(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_FRO1M_FREQSEL_SHIFT)) & PMC_FRO1M_FREQSEL_MASK)
-#define PMC_FRO1M_ATBCTRL_MASK                   (0x180U)
-#define PMC_FRO1M_ATBCTRL_SHIFT                  (7U)
-#define PMC_FRO1M_ATBCTRL(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_FRO1M_ATBCTRL_SHIFT)) & PMC_FRO1M_ATBCTRL_MASK)
-#define PMC_FRO1M_DIVSEL_MASK                    (0x3E00U)
-#define PMC_FRO1M_DIVSEL_SHIFT                   (9U)
-/*! DIVSEL - Divider selection bits.
- *  0b00000..2.0.
- *  0b00001..4.0.
- *  0b00010..6.0.
- *  0b00011..8.0.
- *  0b00100..10.0.
- *  0b00101..12.0.
- *  0b00110..14.0.
- *  0b00111..16.0.
- *  0b01000..18.0.
- *  0b01001..20.0.
- *  0b01010..22.0.
- *  0b01011..24.0.
- *  0b01100..26.0.
- *  0b01101..28.0.
- *  0b01110..30.0.
- *  0b01111..32.0.
- *  0b10000..34.0.
- *  0b10001..36.0.
- *  0b10010..38.0.
- *  0b10011..40.0.
- *  0b10100..42.0.
- *  0b10101..44.0.
- *  0b10110..46.0.
- *  0b10111..48.0.
- *  0b11000..50.0.
- *  0b11001..52.0.
- *  0b11010..54.0.
- *  0b11011..56.0.
- *  0b11100..58.0.
- *  0b11101..60.0.
- *  0b11110..62.0.
- *  0b11111..1.0.
- */
-#define PMC_FRO1M_DIVSEL(x)                      (((uint32_t)(((uint32_t)(x)) << PMC_FRO1M_DIVSEL_SHIFT)) & PMC_FRO1M_DIVSEL_MASK)
-/*! @} */
-
-/*! @name FRO32K - 32 KHz Free Running Oscillator (FRO) control register [Reset by: PoR, Brown Out Detectors Reset] */
-/*! @{ */
-#define PMC_FRO32K_NTAT_MASK                     (0xEU)
-#define PMC_FRO32K_NTAT_SHIFT                    (1U)
-#define PMC_FRO32K_NTAT(x)                       (((uint32_t)(((uint32_t)(x)) << PMC_FRO32K_NTAT_SHIFT)) & PMC_FRO32K_NTAT_MASK)
-#define PMC_FRO32K_PTAT_MASK                     (0x70U)
-#define PMC_FRO32K_PTAT_SHIFT                    (4U)
-#define PMC_FRO32K_PTAT(x)                       (((uint32_t)(((uint32_t)(x)) << PMC_FRO32K_PTAT_SHIFT)) & PMC_FRO32K_PTAT_MASK)
-#define PMC_FRO32K_CAPCAL_MASK                   (0xFF80U)
-#define PMC_FRO32K_CAPCAL_SHIFT                  (7U)
-#define PMC_FRO32K_CAPCAL(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_FRO32K_CAPCAL_SHIFT)) & PMC_FRO32K_CAPCAL_MASK)
-#define PMC_FRO32K_ATBCTRL_MASK                  (0x30000U)
-#define PMC_FRO32K_ATBCTRL_SHIFT                 (16U)
-#define PMC_FRO32K_ATBCTRL(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_FRO32K_ATBCTRL_SHIFT)) & PMC_FRO32K_ATBCTRL_MASK)
-/*! @} */
-
-/*! @name XTAL32K - 32 KHz Crystal oscillator (XTAL) control register [Reset by: PoR, Brown Out Detectors Reset] */
-/*! @{ */
-#define PMC_XTAL32K_IREF_MASK                    (0x6U)
-#define PMC_XTAL32K_IREF_SHIFT                   (1U)
-#define PMC_XTAL32K_IREF(x)                      (((uint32_t)(((uint32_t)(x)) << PMC_XTAL32K_IREF_SHIFT)) & PMC_XTAL32K_IREF_MASK)
-#define PMC_XTAL32K_TEST_MASK                    (0x8U)
-#define PMC_XTAL32K_TEST_SHIFT                   (3U)
-#define PMC_XTAL32K_TEST(x)                      (((uint32_t)(((uint32_t)(x)) << PMC_XTAL32K_TEST_SHIFT)) & PMC_XTAL32K_TEST_MASK)
-#define PMC_XTAL32K_IBIAS_MASK                   (0x30U)
-#define PMC_XTAL32K_IBIAS_SHIFT                  (4U)
-#define PMC_XTAL32K_IBIAS(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_XTAL32K_IBIAS_SHIFT)) & PMC_XTAL32K_IBIAS_MASK)
-#define PMC_XTAL32K_AMPL_MASK                    (0xC0U)
-#define PMC_XTAL32K_AMPL_SHIFT                   (6U)
-#define PMC_XTAL32K_AMPL(x)                      (((uint32_t)(((uint32_t)(x)) << PMC_XTAL32K_AMPL_SHIFT)) & PMC_XTAL32K_AMPL_MASK)
-#define PMC_XTAL32K_CAPBANKIN_MASK               (0x7F00U)
-#define PMC_XTAL32K_CAPBANKIN_SHIFT              (8U)
-#define PMC_XTAL32K_CAPBANKIN(x)                 (((uint32_t)(((uint32_t)(x)) << PMC_XTAL32K_CAPBANKIN_SHIFT)) & PMC_XTAL32K_CAPBANKIN_MASK)
-#define PMC_XTAL32K_CAPBANKOUT_MASK              (0x3F8000U)
-#define PMC_XTAL32K_CAPBANKOUT_SHIFT             (15U)
-#define PMC_XTAL32K_CAPBANKOUT(x)                (((uint32_t)(((uint32_t)(x)) << PMC_XTAL32K_CAPBANKOUT_SHIFT)) & PMC_XTAL32K_CAPBANKOUT_MASK)
-#define PMC_XTAL32K_CAPTESTSTARTSRCSEL_MASK      (0x400000U)
-#define PMC_XTAL32K_CAPTESTSTARTSRCSEL_SHIFT     (22U)
-/*! CAPTESTSTARTSRCSEL - Source selection for xo32k_captest_start_ao_set.
- *  0b0..Sourced from CAPTESTSTART.
- *  0b1..Sourced from calibration.
- */
-#define PMC_XTAL32K_CAPTESTSTARTSRCSEL(x)        (((uint32_t)(((uint32_t)(x)) << PMC_XTAL32K_CAPTESTSTARTSRCSEL_SHIFT)) & PMC_XTAL32K_CAPTESTSTARTSRCSEL_MASK)
-#define PMC_XTAL32K_CAPTESTSTART_MASK            (0x800000U)
-#define PMC_XTAL32K_CAPTESTSTART_SHIFT           (23U)
-#define PMC_XTAL32K_CAPTESTSTART(x)              (((uint32_t)(((uint32_t)(x)) << PMC_XTAL32K_CAPTESTSTART_SHIFT)) & PMC_XTAL32K_CAPTESTSTART_MASK)
-#define PMC_XTAL32K_CAPTESTENABLE_MASK           (0x1000000U)
-#define PMC_XTAL32K_CAPTESTENABLE_SHIFT          (24U)
-#define PMC_XTAL32K_CAPTESTENABLE(x)             (((uint32_t)(((uint32_t)(x)) << PMC_XTAL32K_CAPTESTENABLE_SHIFT)) & PMC_XTAL32K_CAPTESTENABLE_MASK)
-#define PMC_XTAL32K_CAPTESTOSCINSEL_MASK         (0x2000000U)
-#define PMC_XTAL32K_CAPTESTOSCINSEL_SHIFT        (25U)
-/*! CAPTESTOSCINSEL - Select the input for test.
- *  0b0..Oscillator output pin (osc_out).
- *  0b1..Oscillator input pin (osc_in).
- */
-#define PMC_XTAL32K_CAPTESTOSCINSEL(x)           (((uint32_t)(((uint32_t)(x)) << PMC_XTAL32K_CAPTESTOSCINSEL_SHIFT)) & PMC_XTAL32K_CAPTESTOSCINSEL_MASK)
 /*! @} */
 
 /*! @name COMP - Analog Comparator control register [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset] */
@@ -12681,9 +12204,6 @@ typedef struct {
 #define PMC_COMP_FILTERCGF_CLKDIV_MASK           (0x1C0000U)
 #define PMC_COMP_FILTERCGF_CLKDIV_SHIFT          (18U)
 #define PMC_COMP_FILTERCGF_CLKDIV(x)             (((uint32_t)(((uint32_t)(x)) << PMC_COMP_FILTERCGF_CLKDIV_SHIFT)) & PMC_COMP_FILTERCGF_CLKDIV_MASK)
-#define PMC_COMP_PMUXCAPT_MASK                   (0xE00000U)
-#define PMC_COMP_PMUXCAPT_SHIFT                  (21U)
-#define PMC_COMP_PMUXCAPT(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_COMP_PMUXCAPT_SHIFT)) & PMC_COMP_PMUXCAPT_MASK)
 /*! @} */
 
 /*! @name WAKEIOCAUSE - Allows to identify the Wake-up I/O source from Deep Power Down mode */
@@ -12723,9 +12243,6 @@ typedef struct {
 #define PMC_STATUSCLK_XTAL32KOK_MASK             (0x1U)
 #define PMC_STATUSCLK_XTAL32KOK_SHIFT            (0U)
 #define PMC_STATUSCLK_XTAL32KOK(x)               (((uint32_t)(((uint32_t)(x)) << PMC_STATUSCLK_XTAL32KOK_SHIFT)) & PMC_STATUSCLK_XTAL32KOK_MASK)
-#define PMC_STATUSCLK_FRO1MCLKVALID_MASK         (0x2U)
-#define PMC_STATUSCLK_FRO1MCLKVALID_SHIFT        (1U)
-#define PMC_STATUSCLK_FRO1MCLKVALID(x)           (((uint32_t)(((uint32_t)(x)) << PMC_STATUSCLK_FRO1MCLKVALID_SHIFT)) & PMC_STATUSCLK_FRO1MCLKVALID_MASK)
 #define PMC_STATUSCLK_XTAL32KOSCFAILURE_MASK     (0x4U)
 #define PMC_STATUSCLK_XTAL32KOSCFAILURE_SHIFT    (2U)
 /*! XTAL32KOSCFAILURE - XTAL32 KHZ oscillator oscillation failure detection indicator.
@@ -12737,9 +12254,36 @@ typedef struct {
 
 /*! @name AOREG1 - General purpose always on domain data storage [Reset by: PoR, Brown Out Detectors Reset] */
 /*! @{ */
-#define PMC_AOREG1_DATA31_0_MASK                 (0xFFFFFFFFU)
-#define PMC_AOREG1_DATA31_0_SHIFT                (0U)
-#define PMC_AOREG1_DATA31_0(x)                   (((uint32_t)(((uint32_t)(x)) << PMC_AOREG1_DATA31_0_SHIFT)) & PMC_AOREG1_DATA31_0_MASK)
+#define PMC_AOREG1_POR_MASK                      (0x10U)
+#define PMC_AOREG1_POR_SHIFT                     (4U)
+#define PMC_AOREG1_POR(x)                        (((uint32_t)(((uint32_t)(x)) << PMC_AOREG1_POR_SHIFT)) & PMC_AOREG1_POR_MASK)
+#define PMC_AOREG1_PADRESET_MASK                 (0x20U)
+#define PMC_AOREG1_PADRESET_SHIFT                (5U)
+#define PMC_AOREG1_PADRESET(x)                   (((uint32_t)(((uint32_t)(x)) << PMC_AOREG1_PADRESET_SHIFT)) & PMC_AOREG1_PADRESET_MASK)
+#define PMC_AOREG1_BODRESET_MASK                 (0x40U)
+#define PMC_AOREG1_BODRESET_SHIFT                (6U)
+#define PMC_AOREG1_BODRESET(x)                   (((uint32_t)(((uint32_t)(x)) << PMC_AOREG1_BODRESET_SHIFT)) & PMC_AOREG1_BODRESET_MASK)
+#define PMC_AOREG1_SYSTEMRESET_MASK              (0x80U)
+#define PMC_AOREG1_SYSTEMRESET_SHIFT             (7U)
+#define PMC_AOREG1_SYSTEMRESET(x)                (((uint32_t)(((uint32_t)(x)) << PMC_AOREG1_SYSTEMRESET_SHIFT)) & PMC_AOREG1_SYSTEMRESET_MASK)
+#define PMC_AOREG1_WDTRESET_MASK                 (0x100U)
+#define PMC_AOREG1_WDTRESET_SHIFT                (8U)
+#define PMC_AOREG1_WDTRESET(x)                   (((uint32_t)(((uint32_t)(x)) << PMC_AOREG1_WDTRESET_SHIFT)) & PMC_AOREG1_WDTRESET_MASK)
+#define PMC_AOREG1_SWRRESET_MASK                 (0x200U)
+#define PMC_AOREG1_SWRRESET_SHIFT                (9U)
+#define PMC_AOREG1_SWRRESET(x)                   (((uint32_t)(((uint32_t)(x)) << PMC_AOREG1_SWRRESET_SHIFT)) & PMC_AOREG1_SWRRESET_MASK)
+#define PMC_AOREG1_DPDRESET_WAKEUPIO_MASK        (0x400U)
+#define PMC_AOREG1_DPDRESET_WAKEUPIO_SHIFT       (10U)
+#define PMC_AOREG1_DPDRESET_WAKEUPIO(x)          (((uint32_t)(((uint32_t)(x)) << PMC_AOREG1_DPDRESET_WAKEUPIO_SHIFT)) & PMC_AOREG1_DPDRESET_WAKEUPIO_MASK)
+#define PMC_AOREG1_DPDRESET_RTC_MASK             (0x800U)
+#define PMC_AOREG1_DPDRESET_RTC_SHIFT            (11U)
+#define PMC_AOREG1_DPDRESET_RTC(x)               (((uint32_t)(((uint32_t)(x)) << PMC_AOREG1_DPDRESET_RTC_SHIFT)) & PMC_AOREG1_DPDRESET_RTC_MASK)
+#define PMC_AOREG1_DPDRESET_OSTIMER_MASK         (0x1000U)
+#define PMC_AOREG1_DPDRESET_OSTIMER_SHIFT        (12U)
+#define PMC_AOREG1_DPDRESET_OSTIMER(x)           (((uint32_t)(((uint32_t)(x)) << PMC_AOREG1_DPDRESET_OSTIMER_SHIFT)) & PMC_AOREG1_DPDRESET_OSTIMER_MASK)
+#define PMC_AOREG1_BOOTERRORCOUNTER_MASK         (0xF0000U)
+#define PMC_AOREG1_BOOTERRORCOUNTER_SHIFT        (16U)
+#define PMC_AOREG1_BOOTERRORCOUNTER(x)           (((uint32_t)(((uint32_t)(x)) << PMC_AOREG1_BOOTERRORCOUNTER_SHIFT)) & PMC_AOREG1_BOOTERRORCOUNTER_MASK)
 /*! @} */
 
 /*! @name RTCOSC32K - RTC 1 KHZ and 1 Hz clocks source control register [Reset by: PoR, Brown Out Detectors Reset] */
@@ -12784,213 +12328,8 @@ typedef struct {
 #define PMC_OSTIMER_OSC32KPD(x)                  (((uint32_t)(((uint32_t)(x)) << PMC_OSTIMER_OSC32KPD_SHIFT)) & PMC_OSTIMER_OSC32KPD_MASK)
 /*! @} */
 
-/*! @name PDSLEEPCFG0 - Controls the power to various modules during Low Power modes - DEEP SLEEP, POWER DOWN and DEEP POWER DOWN [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Software Reset] */
-/*! @{ */
-#define PMC_PDSLEEPCFG0_PDEN_DCDC_MASK           (0x1U)
-#define PMC_PDSLEEPCFG0_PDEN_DCDC_SHIFT          (0U)
-/*! PDEN_DCDC - Controls DCDC power during DEEP SLEEP (DCDC is always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..DCDC is powered on during low power mode..
- *  0b1..DCDC is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_DCDC(x)             (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_DCDC_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_DCDC_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_BIAS_MASK           (0x2U)
-#define PMC_PDSLEEPCFG0_PDEN_BIAS_SHIFT          (1U)
-/*! PDEN_BIAS - Controls Analog Bias power during DEEP SLEEP and POWER DOWN (always shut down during DEEP POWER DOWN).
- *  0b0..Analog Bias is powered on during low power mode..
- *  0b1..Analog Bias is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_BIAS(x)             (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_BIAS_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_BIAS_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_BODCORE_MASK        (0x4U)
-#define PMC_PDSLEEPCFG0_PDEN_BODCORE_SHIFT       (2U)
-/*! PDEN_BODCORE - Controls Core Logic BoD power during DEEP SLEEP and POWER DOWN (always shut down during DEEP POWER DOWN).
- *  0b0..BOD CORE is powered on during low power mode..
- *  0b1..BOD CORE is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_BODCORE(x)          (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_BODCORE_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_BODCORE_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_BODVBAT_MASK        (0x8U)
-#define PMC_PDSLEEPCFG0_PDEN_BODVBAT_SHIFT       (3U)
-/*! PDEN_BODVBAT - Controls VBAT BoD power during DEEP SLEEP and POWER DOWN (always shut down during DEEP POWER DOWN).
- *  0b0..BOD VBAT is powered on during low power mode..
- *  0b1..BOD VBAT is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_BODVBAT(x)          (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_BODVBAT_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_BODVBAT_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_FRO1M_MASK          (0x10U)
-#define PMC_PDSLEEPCFG0_PDEN_FRO1M_SHIFT         (4U)
-/*! PDEN_FRO1M - Controls 1 MHz Free Running Oscillator power during DEEP SLEEP, POWER DOWN and DEEP POWER DOWN.
- *  0b0..FRO 1MHz is powered on during low power mode..
- *  0b1..FRO 1MHz is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_FRO1M(x)            (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_FRO1M_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_FRO1M_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_FRO192M_MASK        (0x20U)
-#define PMC_PDSLEEPCFG0_PDEN_FRO192M_SHIFT       (5U)
-/*! PDEN_FRO192M - Controls 192MHz Free Running Oscillator power during DEEP SLEEP (always shut down
- *    during POWER DOWN and DEEP POWER DOWN).
- *  0b0..FRO 192 MHz is powered on during low power mode..
- *  0b1..FRO 192 MHz is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_FRO192M(x)          (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_FRO192M_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_FRO192M_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_FRO32K_MASK         (0x40U)
-#define PMC_PDSLEEPCFG0_PDEN_FRO32K_SHIFT        (6U)
-/*! PDEN_FRO32K - Controls power during DEEP SLEEP, POWER DOWN and DEEP POWER DOWN.
- *  0b0..FRO 32 KHz is powered on during low power mode..
- *  0b1..FRO 32 KHz is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_FRO32K(x)           (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_FRO32K_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_FRO32K_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_XTAL32K_MASK        (0x80U)
-#define PMC_PDSLEEPCFG0_PDEN_XTAL32K_SHIFT       (7U)
-/*! PDEN_XTAL32K - Controls crystal 32 KHz power during DEEP SLEEP, POWER DOWN and DEEP POWER DOWN.
- *  0b0..crystal 32 KHz is powered on during low power mode..
- *  0b1..crystal 32 KHz is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_XTAL32K(x)          (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_XTAL32K_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_XTAL32K_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_XTAL32M_MASK        (0x100U)
-#define PMC_PDSLEEPCFG0_PDEN_XTAL32M_SHIFT       (8U)
-/*! PDEN_XTAL32M - Controls crystal 32 MHz power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..crystal 32 MHz is powered on during low power mode..
- *  0b1..crystal 32 MHz is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_XTAL32M(x)          (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_XTAL32M_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_XTAL32M_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_PLL0_MASK           (0x200U)
-#define PMC_PDSLEEPCFG0_PDEN_PLL0_SHIFT          (9U)
-/*! PDEN_PLL0 - Controls System PLL (also refered as PLL0) power during DEEP SLEEP (always shut down
- *    during POWER DOWN and DEEP POWER DOWN).
- *  0b0..System PLL (also refered as PLL0) is powered on during low power mode..
- *  0b1..System PLL (also refered as PLL0) is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_PLL0(x)             (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_PLL0_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_PLL0_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_PLL1_MASK           (0x400U)
-#define PMC_PDSLEEPCFG0_PDEN_PLL1_SHIFT          (10U)
-/*! PDEN_PLL1 - Controls USB PLL (also refered as PLL1) power during DEEP SLEEP (always shut down
- *    during POWER DOWN and DEEP POWER DOWN).
- *  0b0..USB PLL (also refered as PLL1) is powered on during low power mode..
- *  0b1..USB PLL (also refered as PLL1) is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_PLL1(x)             (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_PLL1_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_PLL1_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_USBFSPHY_MASK       (0x800U)
-#define PMC_PDSLEEPCFG0_PDEN_USBFSPHY_SHIFT      (11U)
-/*! PDEN_USBFSPHY - Controls USB Full Speed phy power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..USB Full Speed phy is powered on during low power mode..
- *  0b1..USB Full Speed phy is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_USBFSPHY(x)         (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_USBFSPHY_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_USBFSPHY_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_USBHSPHY_MASK       (0x1000U)
-#define PMC_PDSLEEPCFG0_PDEN_USBHSPHY_SHIFT      (12U)
-/*! PDEN_USBHSPHY - Controls USB High Speed Phy power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..USB High Speed Phy is powered on during low power mode..
- *  0b1..USB High Speed Phy is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_USBHSPHY(x)         (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_USBHSPHY_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_USBHSPHY_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_COMP_MASK           (0x2000U)
-#define PMC_PDSLEEPCFG0_PDEN_COMP_SHIFT          (13U)
-/*! PDEN_COMP - Controls Analog Comparator power during DEEP SLEEP and POWER DOWN (always shut down during DEEP POWER DOWN).
- *  0b0..Analog Comparator is powered on during low power mode..
- *  0b1..Analog Comparator is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_COMP(x)             (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_COMP_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_COMP_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_TEMPSENS_MASK       (0x4000U)
-#define PMC_PDSLEEPCFG0_PDEN_TEMPSENS_SHIFT      (14U)
-/*! PDEN_TEMPSENS - Controls Temperature Sensor power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..Temperature Sensor is powered on during low power mode..
- *  0b1..Temperature Sensor is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_TEMPSENS(x)         (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_TEMPSENS_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_TEMPSENS_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_GPADC_MASK          (0x8000U)
-#define PMC_PDSLEEPCFG0_PDEN_GPADC_SHIFT         (15U)
-/*! PDEN_GPADC - Controls General Purpose ADC (GPADC) power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..General Purpose ADC (GPADC) is powered on during low power mode..
- *  0b1..General Purpose ADC (GPADC) is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_GPADC(x)            (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_GPADC_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_GPADC_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_LDOMEM_MASK         (0x10000U)
-#define PMC_PDSLEEPCFG0_PDEN_LDOMEM_SHIFT        (16U)
-/*! PDEN_LDOMEM - Controls Memories LDO power during DEEP SLEEP, POWER DOWN and DEEP POWER DOWN.
- *  0b0..Memories LDO is powered on during low power mode..
- *  0b1..Memories LDO is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_LDOMEM(x)           (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_LDOMEM_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_LDOMEM_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_LDODEEPSLEEP_MASK   (0x20000U)
-#define PMC_PDSLEEPCFG0_PDEN_LDODEEPSLEEP_SHIFT  (17U)
-/*! PDEN_LDODEEPSLEEP - Controls Deep Sleep LDO power during DEEP SLEEP and POWER DOWN (always shut down during DEEP POWER DOWN).
- *  0b0..Deep Sleep LDO is powered on during low power mode..
- *  0b1..Deep Sleep LDO is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_LDODEEPSLEEP(x)     (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_LDODEEPSLEEP_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_LDODEEPSLEEP_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_LDOUSBHS_MASK       (0x40000U)
-#define PMC_PDSLEEPCFG0_PDEN_LDOUSBHS_SHIFT      (18U)
-/*! PDEN_LDOUSBHS - Controls USB high speed LDO power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..USB high speed LDO is powered on during low power mode..
- *  0b1..USB high speed LDO is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_LDOUSBHS(x)         (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_LDOUSBHS_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_LDOUSBHS_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_AUXBIAS_MASK        (0x80000U)
-#define PMC_PDSLEEPCFG0_PDEN_AUXBIAS_SHIFT       (19U)
-/*! PDEN_AUXBIAS - during DEEP SLEEP and POWER DOWN (always shut down during DEEP POWER DOWN).
- *  0b0..is powered on during low power mode..
- *  0b1..is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_AUXBIAS(x)          (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_AUXBIAS_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_AUXBIAS_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_LDOXO32M_MASK       (0x100000U)
-#define PMC_PDSLEEPCFG0_PDEN_LDOXO32M_SHIFT      (20U)
-/*! PDEN_LDOXO32M - Controls crystal 32 MHz LDO power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..crystal 32 MHz LDO is powered on during low power mode..
- *  0b1..crystal 32 MHz LDO is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_LDOXO32M(x)         (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_LDOXO32M_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_LDOXO32M_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_LDOFLASHNV_MASK     (0x200000U)
-#define PMC_PDSLEEPCFG0_PDEN_LDOFLASHNV_SHIFT    (21U)
-/*! PDEN_LDOFLASHNV - Controls Flash NV (high voltage) LDO power during DEEP SLEEP (always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..Flash NV (high voltage) is powered on during low power mode..
- *  0b1..Flash NV (high voltage) is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_LDOFLASHNV(x)       (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_LDOFLASHNV_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_LDOFLASHNV_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_RNG_MASK            (0x400000U)
-#define PMC_PDSLEEPCFG0_PDEN_RNG_SHIFT           (22U)
-/*! PDEN_RNG - Controls True Random Number Genetaor (TRNG) clock sources power during DEEP SLEEP
- *    (always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..True Random Number Genetaor (TRNG) clock sources are powered on during low power mode..
- *  0b1..True Random Number Genetaor (TRNG) clock sources are powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_RNG(x)              (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_RNG_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_RNG_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_PLL0_SSCG_MASK      (0x800000U)
-#define PMC_PDSLEEPCFG0_PDEN_PLL0_SSCG_SHIFT     (23U)
-/*! PDEN_PLL0_SSCG - Controls PLL0 Spread Sprectrum module power during DEEP SLEEP (PLL0 Spread
- *    Spectrum is always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..PLL0 Spread Sprectrum module is powered on during low power mode..
- *  0b1..PLL0 Spread Sprectrum module is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_PLL0_SSCG(x)        (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_PLL0_SSCG_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_PLL0_SSCG_MASK)
-#define PMC_PDSLEEPCFG0_PDEN_ROM_MASK            (0x1000000U)
-#define PMC_PDSLEEPCFG0_PDEN_ROM_SHIFT           (24U)
-/*! PDEN_ROM - Controls ROM power during DEEP SLEEP (ROM is always shut down during POWER DOWN and DEEP POWER DOWN).
- *  0b0..ROM is powered on during low power mode..
- *  0b1..ROM is powered off during low power mode..
- */
-#define PMC_PDSLEEPCFG0_PDEN_ROM(x)              (((uint32_t)(((uint32_t)(x)) << PMC_PDSLEEPCFG0_PDEN_ROM_SHIFT)) & PMC_PDSLEEPCFG0_PDEN_ROM_MASK)
-/*! @} */
-
 /*! @name PDRUNCFG0 - Controls the power to various analog blocks [Reset by: PoR, Pin Reset, Brown Out Detectors Reset, Deep Power Down Reset, Software Reset] */
 /*! @{ */
-#define PMC_PDRUNCFG0_PDEN_DCDC_MASK             (0x1U)
-#define PMC_PDRUNCFG0_PDEN_DCDC_SHIFT            (0U)
-/*! PDEN_DCDC - Controls power to Bulk DCDC Converter.
- *  0b0..DCDC is powered.
- *  0b1..DCDC is powered down.
- */
-#define PMC_PDRUNCFG0_PDEN_DCDC(x)               (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_DCDC_SHIFT)) & PMC_PDRUNCFG0_PDEN_DCDC_MASK)
-#define PMC_PDRUNCFG0_PDEN_BIAS_MASK             (0x2U)
-#define PMC_PDRUNCFG0_PDEN_BIAS_SHIFT            (1U)
-/*! PDEN_BIAS - Controls power to .
- *  0b0..Analog Bias is powered.
- *  0b1..Analog Bias is powered down.
- */
-#define PMC_PDRUNCFG0_PDEN_BIAS(x)               (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_BIAS_SHIFT)) & PMC_PDRUNCFG0_PDEN_BIAS_MASK)
-#define PMC_PDRUNCFG0_PDEN_BODCORE_MASK          (0x4U)
-#define PMC_PDRUNCFG0_PDEN_BODCORE_SHIFT         (2U)
-/*! PDEN_BODCORE - Controls power to Core Brown Out Detector (BOD).
- *  0b0..BOD CORE is powered.
- *  0b1..BOD CORE is powered down.
- */
-#define PMC_PDRUNCFG0_PDEN_BODCORE(x)            (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_BODCORE_SHIFT)) & PMC_PDRUNCFG0_PDEN_BODCORE_MASK)
 #define PMC_PDRUNCFG0_PDEN_BODVBAT_MASK          (0x8U)
 #define PMC_PDRUNCFG0_PDEN_BODVBAT_SHIFT         (3U)
 /*! PDEN_BODVBAT - Controls power to VBAT Brown Out Detector (BOD).
@@ -12998,14 +12337,6 @@ typedef struct {
  *  0b1..BOD VBAT is powered down.
  */
 #define PMC_PDRUNCFG0_PDEN_BODVBAT(x)            (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_BODVBAT_SHIFT)) & PMC_PDRUNCFG0_PDEN_BODVBAT_MASK)
-#define PMC_PDRUNCFG0_PDEN_FRO192M_MASK          (0x20U)
-#define PMC_PDRUNCFG0_PDEN_FRO192M_SHIFT         (5U)
-/*! PDEN_FRO192M - Controls power to the Free Running Oscillator (FRO) 192 MHz; The 12MHz, 48 MHz
- *    and 96 MHz clocks are derived from this FRO.
- *  0b0..FRO 192MHz is powered.
- *  0b1..FRO 192MHz is powered down.
- */
-#define PMC_PDRUNCFG0_PDEN_FRO192M(x)            (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_FRO192M_SHIFT)) & PMC_PDRUNCFG0_PDEN_FRO192M_MASK)
 #define PMC_PDRUNCFG0_PDEN_FRO32K_MASK           (0x40U)
 #define PMC_PDRUNCFG0_PDEN_FRO32K_SHIFT          (6U)
 /*! PDEN_FRO32K - Controls power to the Free Running Oscillator (FRO) 32 KHz.
@@ -13062,34 +12393,6 @@ typedef struct {
  *  0b1..Analog Comparator is powered down.
  */
 #define PMC_PDRUNCFG0_PDEN_COMP(x)               (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_COMP_SHIFT)) & PMC_PDRUNCFG0_PDEN_COMP_MASK)
-#define PMC_PDRUNCFG0_PDEN_TEMPSENS_MASK         (0x4000U)
-#define PMC_PDRUNCFG0_PDEN_TEMPSENS_SHIFT        (14U)
-/*! PDEN_TEMPSENS - Controls power to Temperature Sensor.
- *  0b0..Temperature Sensor is powered.
- *  0b1..Temperature Sensor is powered down.
- */
-#define PMC_PDRUNCFG0_PDEN_TEMPSENS(x)           (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_TEMPSENS_SHIFT)) & PMC_PDRUNCFG0_PDEN_TEMPSENS_MASK)
-#define PMC_PDRUNCFG0_PDEN_GPADC_MASK            (0x8000U)
-#define PMC_PDRUNCFG0_PDEN_GPADC_SHIFT           (15U)
-/*! PDEN_GPADC - Controls power to General Purpose ADC (GPADC).
- *  0b0..GPADC is powered.
- *  0b1..GPADC is powered down.
- */
-#define PMC_PDRUNCFG0_PDEN_GPADC(x)              (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_GPADC_SHIFT)) & PMC_PDRUNCFG0_PDEN_GPADC_MASK)
-#define PMC_PDRUNCFG0_PDEN_LDOMEM_MASK           (0x10000U)
-#define PMC_PDRUNCFG0_PDEN_LDOMEM_SHIFT          (16U)
-/*! PDEN_LDOMEM - Controls power to Memories LDO.
- *  0b0..Memories LDO is powered.
- *  0b1..Memories LDO is powered down.
- */
-#define PMC_PDRUNCFG0_PDEN_LDOMEM(x)             (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_LDOMEM_SHIFT)) & PMC_PDRUNCFG0_PDEN_LDOMEM_MASK)
-#define PMC_PDRUNCFG0_PDEN_LDODEEPSLEEP_MASK     (0x20000U)
-#define PMC_PDRUNCFG0_PDEN_LDODEEPSLEEP_SHIFT    (17U)
-/*! PDEN_LDODEEPSLEEP - Controls power to Deep Sleep LDO.
- *  0b0..Deep Sleep LDO is powered.
- *  0b1..Deep Sleep LDO is powered down.
- */
-#define PMC_PDRUNCFG0_PDEN_LDODEEPSLEEP(x)       (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_LDODEEPSLEEP_SHIFT)) & PMC_PDRUNCFG0_PDEN_LDODEEPSLEEP_MASK)
 #define PMC_PDRUNCFG0_PDEN_LDOUSBHS_MASK         (0x40000U)
 #define PMC_PDRUNCFG0_PDEN_LDOUSBHS_SHIFT        (18U)
 /*! PDEN_LDOUSBHS - Controls power to USB high speed LDO.
@@ -13111,13 +12414,6 @@ typedef struct {
  *  0b1..crystal 32 MHz LDO is powered down.
  */
 #define PMC_PDRUNCFG0_PDEN_LDOXO32M(x)           (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_LDOXO32M_SHIFT)) & PMC_PDRUNCFG0_PDEN_LDOXO32M_MASK)
-#define PMC_PDRUNCFG0_PDEN_LDOFLASHNV_MASK       (0x200000U)
-#define PMC_PDRUNCFG0_PDEN_LDOFLASHNV_SHIFT      (21U)
-/*! PDEN_LDOFLASHNV - Controls power to Flasn NV (high voltage) LDO.
- *  0b0..Flash NV LDO is powered.
- *  0b1..Flash NV LDO is powered down.
- */
-#define PMC_PDRUNCFG0_PDEN_LDOFLASHNV(x)         (((uint32_t)(((uint32_t)(x)) << PMC_PDRUNCFG0_PDEN_LDOFLASHNV_SHIFT)) & PMC_PDRUNCFG0_PDEN_LDOFLASHNV_MASK)
 #define PMC_PDRUNCFG0_PDEN_RNG_MASK              (0x400000U)
 #define PMC_PDRUNCFG0_PDEN_RNG_SHIFT             (22U)
 /*! PDEN_RNG - Controls power to all True Random Number Genetaor (TRNG) clock sources.
@@ -13559,8 +12855,8 @@ typedef struct {
 #define PRINCE_ENC_ENABLE_EN_MASK                (0x1U)
 #define PRINCE_ENC_ENABLE_EN_SHIFT               (0U)
 /*! EN - Encryption Enable.
- *  0b0..Encryption of writes to the flash controller DATAW* registers is disabled..
- *  0b1..Encryption of writes to the flash controller DATAW* registers is enabled..
+ *  0b0..Encryption of writes to the flash controller DATAW* registers is disabled.
+ *  0b1..Encryption of writes to the flash controller DATAW* registers is enabled.
  */
 #define PRINCE_ENC_ENABLE_EN(x)                  (((uint32_t)(((uint32_t)(x)) << PRINCE_ENC_ENABLE_EN_SHIFT)) & PRINCE_ENC_ENABLE_EN_MASK)
 /*! @} */
@@ -13920,9 +13216,9 @@ typedef struct {
 
 /*! @name VERSION - PUF version register. */
 /*! @{ */
-#define PUF_VERSION_KEYOUT_MASK                  (0xFFFFFFFFU)
-#define PUF_VERSION_KEYOUT_SHIFT                 (0U)
-#define PUF_VERSION_KEYOUT(x)                    (((uint32_t)(((uint32_t)(x)) << PUF_VERSION_KEYOUT_SHIFT)) & PUF_VERSION_KEYOUT_MASK)
+#define PUF_VERSION_VERSION_MASK                 (0xFFFFFFFFU)
+#define PUF_VERSION_VERSION_SHIFT                (0U)
+#define PUF_VERSION_VERSION(x)                   (((uint32_t)(((uint32_t)(x)) << PUF_VERSION_VERSION_SHIFT)) & PUF_VERSION_VERSION_MASK)
 /*! @} */
 
 /*! @name INTEN - PUF Interrupt Enable */
@@ -14045,9 +13341,6 @@ typedef struct {
 
 /*! @name IDXBLK_L -  */
 /*! @{ */
-#define PUF_IDXBLK_L_IDX0_MASK                   (0x3U)
-#define PUF_IDXBLK_L_IDX0_SHIFT                  (0U)
-#define PUF_IDXBLK_L_IDX0(x)                     (((uint32_t)(((uint32_t)(x)) << PUF_IDXBLK_L_IDX0_SHIFT)) & PUF_IDXBLK_L_IDX0_MASK)
 #define PUF_IDXBLK_L_IDX1_MASK                   (0xCU)
 #define PUF_IDXBLK_L_IDX1_SHIFT                  (2U)
 #define PUF_IDXBLK_L_IDX1(x)                     (((uint32_t)(((uint32_t)(x)) << PUF_IDXBLK_L_IDX1_SHIFT)) & PUF_IDXBLK_L_IDX1_MASK)
@@ -14145,9 +13438,6 @@ typedef struct {
 
 /*! @name IDXBLK_L_DP -  */
 /*! @{ */
-#define PUF_IDXBLK_L_DP_IDX0_MASK                (0x3U)
-#define PUF_IDXBLK_L_DP_IDX0_SHIFT               (0U)
-#define PUF_IDXBLK_L_DP_IDX0(x)                  (((uint32_t)(((uint32_t)(x)) << PUF_IDXBLK_L_DP_IDX0_SHIFT)) & PUF_IDXBLK_L_DP_IDX0_MASK)
 #define PUF_IDXBLK_L_DP_IDX1_MASK                (0xCU)
 #define PUF_IDXBLK_L_DP_IDX1_SHIFT               (2U)
 #define PUF_IDXBLK_L_DP_IDX1(x)                  (((uint32_t)(((uint32_t)(x)) << PUF_IDXBLK_L_DP_IDX1_SHIFT)) & PUF_IDXBLK_L_DP_IDX1_MASK)
@@ -14241,15 +13531,12 @@ typedef struct {
 /** RNG - Register Layout Typedef */
 typedef struct {
   __I  uint32_t RANDOM_NUMBER;                     /**< This register contains a random 32 bit number which is computed on demand, at each time it is read, offset: 0x0 */
-  __I  uint32_t ENCRYPTED_NUMBER;                  /**< This register contains a random 32 bit number which is pre-computed, offset: 0x4 */
+       uint8_t RESERVED_0[4];
   __I  uint32_t COUNTER_VAL;                       /**< , offset: 0x8 */
   __IO uint32_t COUNTER_CFG;                       /**< , offset: 0xC */
   __IO uint32_t ONLINE_TEST_CFG;                   /**< , offset: 0x10 */
   __I  uint32_t ONLINE_TEST_VAL;                   /**< , offset: 0x14 */
-  __IO uint32_t MISC_CFG;                          /**< , offset: 0x18 */
-       uint8_t RESERVED_0[4056];
-  __IO uint32_t POWERDOWN;                         /**< Powerdown mode (standard but certainly useless here), offset: 0xFF4 */
-       uint8_t RESERVED_1[4];
+       uint8_t RESERVED_1[4068];
   __I  uint32_t MODULEID;                          /**< IP identifier, offset: 0xFFC */
 } RNG_Type;
 
@@ -14267,13 +13554,6 @@ typedef struct {
 #define RNG_RANDOM_NUMBER_RANDOM_NUMBER_MASK     (0xFFFFFFFFU)
 #define RNG_RANDOM_NUMBER_RANDOM_NUMBER_SHIFT    (0U)
 #define RNG_RANDOM_NUMBER_RANDOM_NUMBER(x)       (((uint32_t)(((uint32_t)(x)) << RNG_RANDOM_NUMBER_RANDOM_NUMBER_SHIFT)) & RNG_RANDOM_NUMBER_RANDOM_NUMBER_MASK)
-/*! @} */
-
-/*! @name ENCRYPTED_NUMBER - This register contains a random 32 bit number which is pre-computed */
-/*! @{ */
-#define RNG_ENCRYPTED_NUMBER_ENCRYPTED_NUMBER_MASK (0xFFFFFFFFU)
-#define RNG_ENCRYPTED_NUMBER_ENCRYPTED_NUMBER_SHIFT (0U)
-#define RNG_ENCRYPTED_NUMBER_ENCRYPTED_NUMBER(x) (((uint32_t)(((uint32_t)(x)) << RNG_ENCRYPTED_NUMBER_ENCRYPTED_NUMBER_SHIFT)) & RNG_ENCRYPTED_NUMBER_ENCRYPTED_NUMBER_MASK)
 /*! @} */
 
 /*! @name COUNTER_VAL -  */
@@ -14297,12 +13577,6 @@ typedef struct {
 #define RNG_COUNTER_CFG_SHIFT4X_MASK             (0xE0U)
 #define RNG_COUNTER_CFG_SHIFT4X_SHIFT            (5U)
 #define RNG_COUNTER_CFG_SHIFT4X(x)               (((uint32_t)(((uint32_t)(x)) << RNG_COUNTER_CFG_SHIFT4X_SHIFT)) & RNG_COUNTER_CFG_SHIFT4X_MASK)
-#define RNG_COUNTER_CFG_DIS_ENH_ENTR_REFILL_MASK (0x100U)
-#define RNG_COUNTER_CFG_DIS_ENH_ENTR_REFILL_SHIFT (8U)
-#define RNG_COUNTER_CFG_DIS_ENH_ENTR_REFILL(x)   (((uint32_t)(((uint32_t)(x)) << RNG_COUNTER_CFG_DIS_ENH_ENTR_REFILL_SHIFT)) & RNG_COUNTER_CFG_DIS_ENH_ENTR_REFILL_MASK)
-#define RNG_COUNTER_CFG_FORCE_ENTR_SPREADING_MASK (0x200U)
-#define RNG_COUNTER_CFG_FORCE_ENTR_SPREADING_SHIFT (9U)
-#define RNG_COUNTER_CFG_FORCE_ENTR_SPREADING(x)  (((uint32_t)(((uint32_t)(x)) << RNG_COUNTER_CFG_FORCE_ENTR_SPREADING_SHIFT)) & RNG_COUNTER_CFG_FORCE_ENTR_SPREADING_MASK)
 /*! @} */
 
 /*! @name ONLINE_TEST_CFG -  */
@@ -14326,29 +13600,6 @@ typedef struct {
 #define RNG_ONLINE_TEST_VAL_MAX_CHI_SQUARED_MASK (0xF00U)
 #define RNG_ONLINE_TEST_VAL_MAX_CHI_SQUARED_SHIFT (8U)
 #define RNG_ONLINE_TEST_VAL_MAX_CHI_SQUARED(x)   (((uint32_t)(((uint32_t)(x)) << RNG_ONLINE_TEST_VAL_MAX_CHI_SQUARED_SHIFT)) & RNG_ONLINE_TEST_VAL_MAX_CHI_SQUARED_MASK)
-/*! @} */
-
-/*! @name MISC_CFG -  */
-/*! @{ */
-#define RNG_MISC_CFG_AES_RESEED_MASK             (0x1U)
-#define RNG_MISC_CFG_AES_RESEED_SHIFT            (0U)
-#define RNG_MISC_CFG_AES_RESEED(x)               (((uint32_t)(((uint32_t)(x)) << RNG_MISC_CFG_AES_RESEED_SHIFT)) & RNG_MISC_CFG_AES_RESEED_MASK)
-#define RNG_MISC_CFG_AES_DT_CFG_MASK             (0x2U)
-#define RNG_MISC_CFG_AES_DT_CFG_SHIFT            (1U)
-#define RNG_MISC_CFG_AES_DT_CFG(x)               (((uint32_t)(((uint32_t)(x)) << RNG_MISC_CFG_AES_DT_CFG_SHIFT)) & RNG_MISC_CFG_AES_DT_CFG_MASK)
-/*! @} */
-
-/*! @name POWERDOWN - Powerdown mode (standard but certainly useless here) */
-/*! @{ */
-#define RNG_POWERDOWN_SOFT_RESET_MASK            (0x1U)
-#define RNG_POWERDOWN_SOFT_RESET_SHIFT           (0U)
-#define RNG_POWERDOWN_SOFT_RESET(x)              (((uint32_t)(((uint32_t)(x)) << RNG_POWERDOWN_SOFT_RESET_SHIFT)) & RNG_POWERDOWN_SOFT_RESET_MASK)
-#define RNG_POWERDOWN_FORCE_SOFT_RESET_MASK      (0x2U)
-#define RNG_POWERDOWN_FORCE_SOFT_RESET_SHIFT     (1U)
-#define RNG_POWERDOWN_FORCE_SOFT_RESET(x)        (((uint32_t)(((uint32_t)(x)) << RNG_POWERDOWN_FORCE_SOFT_RESET_SHIFT)) & RNG_POWERDOWN_FORCE_SOFT_RESET_MASK)
-#define RNG_POWERDOWN_POWERDOWN_MASK             (0x80000000U)
-#define RNG_POWERDOWN_POWERDOWN_SHIFT            (31U)
-#define RNG_POWERDOWN_POWERDOWN(x)               (((uint32_t)(((uint32_t)(x)) << RNG_POWERDOWN_POWERDOWN_SHIFT)) & RNG_POWERDOWN_POWERDOWN_MASK)
 /*! @} */
 
 /*! @name MODULEID - IP identifier */
@@ -14422,7 +13673,7 @@ typedef struct {
   __IO uint32_t MATCH;                             /**< RTC match register, offset: 0x4 */
   __IO uint32_t COUNT;                             /**< RTC counter register, offset: 0x8 */
   __IO uint32_t WAKE;                              /**< High-resolution/wake-up timer control register, offset: 0xC */
-  __I  uint32_t SUBSEC;                            /**< RTC Sub-second Counter register, offset: 0x10 */
+  __I  uint32_t SUBSEC;                            /**< Sub-second counter register, offset: 0x10 */
        uint8_t RESERVED_0[44];
   __IO uint32_t GPREG[8];                          /**< General Purpose register, array offset: 0x40, array step: 0x4 */
 } RTC_Type;
@@ -14545,7 +13796,7 @@ typedef struct {
 #define RTC_WAKE_VAL(x)                          (((uint32_t)(((uint32_t)(x)) << RTC_WAKE_VAL_SHIFT)) & RTC_WAKE_VAL_MASK)
 /*! @} */
 
-/*! @name SUBSEC - RTC Sub-second Counter register */
+/*! @name SUBSEC - Sub-second counter register */
 /*! @{ */
 #define RTC_SUBSEC_SUBSEC_MASK                   (0x7FFFU)
 #define RTC_SUBSEC_SUBSEC_SHIFT                  (0U)
@@ -14629,27 +13880,27 @@ typedef struct {
   __IO uint32_t OUTPUT;                            /**< SCT output register, offset: 0x50 */
   __IO uint32_t OUTPUTDIRCTRL;                     /**< SCT output counter direction control register, offset: 0x54 */
   __IO uint32_t RES;                               /**< SCT conflict resolution register, offset: 0x58 */
-  __IO uint32_t DMA0REQUEST;                       /**< SCT DMA request 0 register, offset: 0x5C */
-  __IO uint32_t DMA1REQUEST;                       /**< SCT DMA request 1 register, offset: 0x60 */
+  __IO uint32_t DMAREQ0;                           /**< SCT DMA request 0 register, offset: 0x5C */
+  __IO uint32_t DMAREQ1;                           /**< SCT DMA request 1 register, offset: 0x60 */
        uint8_t RESERVED_1[140];
   __IO uint32_t EVEN;                              /**< SCT event interrupt enable register, offset: 0xF0 */
   __IO uint32_t EVFLAG;                            /**< SCT event flag register, offset: 0xF4 */
   __IO uint32_t CONEN;                             /**< SCT conflict interrupt enable register, offset: 0xF8 */
   __IO uint32_t CONFLAG;                           /**< SCT conflict flag register, offset: 0xFC */
   union {                                          /* offset: 0x100 */
-    __IO uint32_t SCTCAP[16];                        /**< SCT capture register of capture channel, array offset: 0x100, array step: 0x4 */
-    __IO uint32_t SCTMATCH[16];                      /**< SCT match value register of match channels, array offset: 0x100, array step: 0x4 */
+    __IO uint32_t CAP[16];                           /**< SCT capture register of capture channel, array offset: 0x100, array step: 0x4 */
+    __IO uint32_t MATCH[16];                         /**< SCT match value register of match channels, array offset: 0x100, array step: 0x4 */
   };
        uint8_t RESERVED_2[192];
   union {                                          /* offset: 0x200 */
-    __IO uint32_t SCTCAPCTRL[16];                    /**< SCT capture control register, array offset: 0x200, array step: 0x4 */
-    __IO uint32_t SCTMATCHREL[16];                   /**< SCT match reload value register, array offset: 0x200, array step: 0x4 */
+    __IO uint32_t CAPCTRL[16];                       /**< SCT capture control register, array offset: 0x200, array step: 0x4 */
+    __IO uint32_t MATCHREL[16];                      /**< SCT match reload value register, array offset: 0x200, array step: 0x4 */
   };
        uint8_t RESERVED_3[192];
   struct {                                         /* offset: 0x300, array step: 0x8 */
     __IO uint32_t STATE;                             /**< SCT event state register 0, array offset: 0x300, array step: 0x8 */
     __IO uint32_t CTRL;                              /**< SCT event control register 0, array offset: 0x304, array step: 0x8 */
-  } EVENT[16];
+  } EV[16];
        uint8_t RESERVED_4[384];
   struct {                                         /* offset: 0x500, array step: 0x8 */
     __IO uint32_t SET;                               /**< SCT output 0 set register, array offset: 0x500, array step: 0x8 */
@@ -14704,11 +13955,19 @@ typedef struct {
  *  0b0101..Falling edges on input 2.
  *  0b0110..Rising edges on input 3.
  *  0b0111..Falling edges on input 3.
+ *  0b1000..Rising edges on input 4.
+ *  0b1001..Falling edges on input 4.
+ *  0b1010..Rising edges on input 5.
+ *  0b1011..Falling edges on input 5.
+ *  0b1100..Rising edges on input 6.
+ *  0b1101..Falling edges on input 6.
+ *  0b1110..Rising edges on input 7.
+ *  0b1111..Falling edges on input 7.
  */
 #define SCT_CONFIG_CKSEL(x)                      (((uint32_t)(((uint32_t)(x)) << SCT_CONFIG_CKSEL_SHIFT)) & SCT_CONFIG_CKSEL_MASK)
-#define SCT_CONFIG_NORELAOD_L_MASK               (0x80U)
-#define SCT_CONFIG_NORELAOD_L_SHIFT              (7U)
-#define SCT_CONFIG_NORELAOD_L(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_CONFIG_NORELAOD_L_SHIFT)) & SCT_CONFIG_NORELAOD_L_MASK)
+#define SCT_CONFIG_NORELOAD_L_MASK               (0x80U)
+#define SCT_CONFIG_NORELOAD_L_SHIFT              (7U)
+#define SCT_CONFIG_NORELOAD_L(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_CONFIG_NORELOAD_L_SHIFT)) & SCT_CONFIG_NORELOAD_L_MASK)
 #define SCT_CONFIG_NORELOAD_H_MASK               (0x100U)
 #define SCT_CONFIG_NORELOAD_H_SHIFT              (8U)
 #define SCT_CONFIG_NORELOAD_H(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_CONFIG_NORELOAD_H_SHIFT)) & SCT_CONFIG_NORELOAD_H_MASK)
@@ -15228,30 +14487,30 @@ typedef struct {
 #define SCT_RES_O15RES(x)                        (((uint32_t)(((uint32_t)(x)) << SCT_RES_O15RES_SHIFT)) & SCT_RES_O15RES_MASK)
 /*! @} */
 
-/*! @name DMA0REQUEST - SCT DMA request 0 register */
+/*! @name DMAREQ0 - SCT DMA request 0 register */
 /*! @{ */
-#define SCT_DMA0REQUEST_DEV_0_MASK               (0xFFFFU)
-#define SCT_DMA0REQUEST_DEV_0_SHIFT              (0U)
-#define SCT_DMA0REQUEST_DEV_0(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_DMA0REQUEST_DEV_0_SHIFT)) & SCT_DMA0REQUEST_DEV_0_MASK)
-#define SCT_DMA0REQUEST_DRL0_MASK                (0x40000000U)
-#define SCT_DMA0REQUEST_DRL0_SHIFT               (30U)
-#define SCT_DMA0REQUEST_DRL0(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_DMA0REQUEST_DRL0_SHIFT)) & SCT_DMA0REQUEST_DRL0_MASK)
-#define SCT_DMA0REQUEST_DRQ0_MASK                (0x80000000U)
-#define SCT_DMA0REQUEST_DRQ0_SHIFT               (31U)
-#define SCT_DMA0REQUEST_DRQ0(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_DMA0REQUEST_DRQ0_SHIFT)) & SCT_DMA0REQUEST_DRQ0_MASK)
+#define SCT_DMAREQ0_DEV_0_MASK                   (0xFFFFU)
+#define SCT_DMAREQ0_DEV_0_SHIFT                  (0U)
+#define SCT_DMAREQ0_DEV_0(x)                     (((uint32_t)(((uint32_t)(x)) << SCT_DMAREQ0_DEV_0_SHIFT)) & SCT_DMAREQ0_DEV_0_MASK)
+#define SCT_DMAREQ0_DRL0_MASK                    (0x40000000U)
+#define SCT_DMAREQ0_DRL0_SHIFT                   (30U)
+#define SCT_DMAREQ0_DRL0(x)                      (((uint32_t)(((uint32_t)(x)) << SCT_DMAREQ0_DRL0_SHIFT)) & SCT_DMAREQ0_DRL0_MASK)
+#define SCT_DMAREQ0_DRQ0_MASK                    (0x80000000U)
+#define SCT_DMAREQ0_DRQ0_SHIFT                   (31U)
+#define SCT_DMAREQ0_DRQ0(x)                      (((uint32_t)(((uint32_t)(x)) << SCT_DMAREQ0_DRQ0_SHIFT)) & SCT_DMAREQ0_DRQ0_MASK)
 /*! @} */
 
-/*! @name DMA1REQUEST - SCT DMA request 1 register */
+/*! @name DMAREQ1 - SCT DMA request 1 register */
 /*! @{ */
-#define SCT_DMA1REQUEST_DEV_1_MASK               (0xFFFFU)
-#define SCT_DMA1REQUEST_DEV_1_SHIFT              (0U)
-#define SCT_DMA1REQUEST_DEV_1(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_DMA1REQUEST_DEV_1_SHIFT)) & SCT_DMA1REQUEST_DEV_1_MASK)
-#define SCT_DMA1REQUEST_DRL1_MASK                (0x40000000U)
-#define SCT_DMA1REQUEST_DRL1_SHIFT               (30U)
-#define SCT_DMA1REQUEST_DRL1(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_DMA1REQUEST_DRL1_SHIFT)) & SCT_DMA1REQUEST_DRL1_MASK)
-#define SCT_DMA1REQUEST_DRQ1_MASK                (0x80000000U)
-#define SCT_DMA1REQUEST_DRQ1_SHIFT               (31U)
-#define SCT_DMA1REQUEST_DRQ1(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_DMA1REQUEST_DRQ1_SHIFT)) & SCT_DMA1REQUEST_DRQ1_MASK)
+#define SCT_DMAREQ1_DEV_1_MASK                   (0xFFFFU)
+#define SCT_DMAREQ1_DEV_1_SHIFT                  (0U)
+#define SCT_DMAREQ1_DEV_1(x)                     (((uint32_t)(((uint32_t)(x)) << SCT_DMAREQ1_DEV_1_SHIFT)) & SCT_DMAREQ1_DEV_1_MASK)
+#define SCT_DMAREQ1_DRL1_MASK                    (0x40000000U)
+#define SCT_DMAREQ1_DRL1_SHIFT                   (30U)
+#define SCT_DMAREQ1_DRL1(x)                      (((uint32_t)(((uint32_t)(x)) << SCT_DMAREQ1_DRL1_SHIFT)) & SCT_DMAREQ1_DRL1_MASK)
+#define SCT_DMAREQ1_DRQ1_MASK                    (0x80000000U)
+#define SCT_DMAREQ1_DRQ1_SHIFT                   (31U)
+#define SCT_DMAREQ1_DRQ1(x)                      (((uint32_t)(((uint32_t)(x)) << SCT_DMAREQ1_DRQ1_SHIFT)) & SCT_DMAREQ1_DRQ1_MASK)
 /*! @} */
 
 /*! @name EVEN - SCT event interrupt enable register */
@@ -15288,92 +14547,92 @@ typedef struct {
 #define SCT_CONFLAG_BUSERRH(x)                   (((uint32_t)(((uint32_t)(x)) << SCT_CONFLAG_BUSERRH_SHIFT)) & SCT_CONFLAG_BUSERRH_MASK)
 /*! @} */
 
-/*! @name SCTCAP - SCT capture register of capture channel */
+/*! @name CAP - SCT capture register of capture channel */
 /*! @{ */
-#define SCT_SCTCAP_CAPn_L_MASK                   (0xFFFFU)
-#define SCT_SCTCAP_CAPn_L_SHIFT                  (0U)
-#define SCT_SCTCAP_CAPn_L(x)                     (((uint32_t)(((uint32_t)(x)) << SCT_SCTCAP_CAPn_L_SHIFT)) & SCT_SCTCAP_CAPn_L_MASK)
-#define SCT_SCTCAP_CAPn_H_MASK                   (0xFFFF0000U)
-#define SCT_SCTCAP_CAPn_H_SHIFT                  (16U)
-#define SCT_SCTCAP_CAPn_H(x)                     (((uint32_t)(((uint32_t)(x)) << SCT_SCTCAP_CAPn_H_SHIFT)) & SCT_SCTCAP_CAPn_H_MASK)
+#define SCT_CAP_CAPn_L_MASK                      (0xFFFFU)
+#define SCT_CAP_CAPn_L_SHIFT                     (0U)
+#define SCT_CAP_CAPn_L(x)                        (((uint32_t)(((uint32_t)(x)) << SCT_CAP_CAPn_L_SHIFT)) & SCT_CAP_CAPn_L_MASK)
+#define SCT_CAP_CAPn_H_MASK                      (0xFFFF0000U)
+#define SCT_CAP_CAPn_H_SHIFT                     (16U)
+#define SCT_CAP_CAPn_H(x)                        (((uint32_t)(((uint32_t)(x)) << SCT_CAP_CAPn_H_SHIFT)) & SCT_CAP_CAPn_H_MASK)
 /*! @} */
 
-/* The count of SCT_SCTCAP */
-#define SCT_SCTCAP_COUNT                         (16U)
+/* The count of SCT_CAP */
+#define SCT_CAP_COUNT                            (16U)
 
-/*! @name SCTMATCH - SCT match value register of match channels */
+/*! @name MATCH - SCT match value register of match channels */
 /*! @{ */
-#define SCT_SCTMATCH_MATCHn_L_MASK               (0xFFFFU)
-#define SCT_SCTMATCH_MATCHn_L_SHIFT              (0U)
-#define SCT_SCTMATCH_MATCHn_L(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_SCTMATCH_MATCHn_L_SHIFT)) & SCT_SCTMATCH_MATCHn_L_MASK)
-#define SCT_SCTMATCH_MATCHn_H_MASK               (0xFFFF0000U)
-#define SCT_SCTMATCH_MATCHn_H_SHIFT              (16U)
-#define SCT_SCTMATCH_MATCHn_H(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_SCTMATCH_MATCHn_H_SHIFT)) & SCT_SCTMATCH_MATCHn_H_MASK)
+#define SCT_MATCH_MATCHn_L_MASK                  (0xFFFFU)
+#define SCT_MATCH_MATCHn_L_SHIFT                 (0U)
+#define SCT_MATCH_MATCHn_L(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_MATCH_MATCHn_L_SHIFT)) & SCT_MATCH_MATCHn_L_MASK)
+#define SCT_MATCH_MATCHn_H_MASK                  (0xFFFF0000U)
+#define SCT_MATCH_MATCHn_H_SHIFT                 (16U)
+#define SCT_MATCH_MATCHn_H(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_MATCH_MATCHn_H_SHIFT)) & SCT_MATCH_MATCHn_H_MASK)
 /*! @} */
 
-/* The count of SCT_SCTMATCH */
-#define SCT_SCTMATCH_COUNT                       (16U)
+/* The count of SCT_MATCH */
+#define SCT_MATCH_COUNT                          (16U)
 
-/*! @name SCTCAPCTRL - SCT capture control register */
+/*! @name CAPCTRL - SCT capture control register */
 /*! @{ */
-#define SCT_SCTCAPCTRL_CAPCONn_L_MASK            (0xFFFFU)
-#define SCT_SCTCAPCTRL_CAPCONn_L_SHIFT           (0U)
-#define SCT_SCTCAPCTRL_CAPCONn_L(x)              (((uint32_t)(((uint32_t)(x)) << SCT_SCTCAPCTRL_CAPCONn_L_SHIFT)) & SCT_SCTCAPCTRL_CAPCONn_L_MASK)
-#define SCT_SCTCAPCTRL_CAPCONn_H_MASK            (0xFFFF0000U)
-#define SCT_SCTCAPCTRL_CAPCONn_H_SHIFT           (16U)
-#define SCT_SCTCAPCTRL_CAPCONn_H(x)              (((uint32_t)(((uint32_t)(x)) << SCT_SCTCAPCTRL_CAPCONn_H_SHIFT)) & SCT_SCTCAPCTRL_CAPCONn_H_MASK)
+#define SCT_CAPCTRL_CAPCONn_L_MASK               (0xFFFFU)
+#define SCT_CAPCTRL_CAPCONn_L_SHIFT              (0U)
+#define SCT_CAPCTRL_CAPCONn_L(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_CAPCTRL_CAPCONn_L_SHIFT)) & SCT_CAPCTRL_CAPCONn_L_MASK)
+#define SCT_CAPCTRL_CAPCONn_H_MASK               (0xFFFF0000U)
+#define SCT_CAPCTRL_CAPCONn_H_SHIFT              (16U)
+#define SCT_CAPCTRL_CAPCONn_H(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_CAPCTRL_CAPCONn_H_SHIFT)) & SCT_CAPCTRL_CAPCONn_H_MASK)
 /*! @} */
 
-/* The count of SCT_SCTCAPCTRL */
-#define SCT_SCTCAPCTRL_COUNT                     (16U)
+/* The count of SCT_CAPCTRL */
+#define SCT_CAPCTRL_COUNT                        (16U)
 
-/*! @name SCTMATCHREL - SCT match reload value register */
+/*! @name MATCHREL - SCT match reload value register */
 /*! @{ */
-#define SCT_SCTMATCHREL_RELOADn_L_MASK           (0xFFFFU)
-#define SCT_SCTMATCHREL_RELOADn_L_SHIFT          (0U)
-#define SCT_SCTMATCHREL_RELOADn_L(x)             (((uint32_t)(((uint32_t)(x)) << SCT_SCTMATCHREL_RELOADn_L_SHIFT)) & SCT_SCTMATCHREL_RELOADn_L_MASK)
-#define SCT_SCTMATCHREL_RELOADn_H_MASK           (0xFFFF0000U)
-#define SCT_SCTMATCHREL_RELOADn_H_SHIFT          (16U)
-#define SCT_SCTMATCHREL_RELOADn_H(x)             (((uint32_t)(((uint32_t)(x)) << SCT_SCTMATCHREL_RELOADn_H_SHIFT)) & SCT_SCTMATCHREL_RELOADn_H_MASK)
+#define SCT_MATCHREL_RELOADn_L_MASK              (0xFFFFU)
+#define SCT_MATCHREL_RELOADn_L_SHIFT             (0U)
+#define SCT_MATCHREL_RELOADn_L(x)                (((uint32_t)(((uint32_t)(x)) << SCT_MATCHREL_RELOADn_L_SHIFT)) & SCT_MATCHREL_RELOADn_L_MASK)
+#define SCT_MATCHREL_RELOADn_H_MASK              (0xFFFF0000U)
+#define SCT_MATCHREL_RELOADn_H_SHIFT             (16U)
+#define SCT_MATCHREL_RELOADn_H(x)                (((uint32_t)(((uint32_t)(x)) << SCT_MATCHREL_RELOADn_H_SHIFT)) & SCT_MATCHREL_RELOADn_H_MASK)
 /*! @} */
 
-/* The count of SCT_SCTMATCHREL */
-#define SCT_SCTMATCHREL_COUNT                    (16U)
+/* The count of SCT_MATCHREL */
+#define SCT_MATCHREL_COUNT                       (16U)
 
-/*! @name EVENT_STATE - SCT event state register 0 */
+/*! @name EV_STATE - SCT event state register 0 */
 /*! @{ */
-#define SCT_EVENT_STATE_STATEMSKn_MASK           (0xFFFFU)
-#define SCT_EVENT_STATE_STATEMSKn_SHIFT          (0U)
-#define SCT_EVENT_STATE_STATEMSKn(x)             (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_STATE_STATEMSKn_SHIFT)) & SCT_EVENT_STATE_STATEMSKn_MASK)
+#define SCT_EV_STATE_STATEMSKn_MASK              (0xFFFFU)
+#define SCT_EV_STATE_STATEMSKn_SHIFT             (0U)
+#define SCT_EV_STATE_STATEMSKn(x)                (((uint32_t)(((uint32_t)(x)) << SCT_EV_STATE_STATEMSKn_SHIFT)) & SCT_EV_STATE_STATEMSKn_MASK)
 /*! @} */
 
-/* The count of SCT_EVENT_STATE */
-#define SCT_EVENT_STATE_COUNT                    (16U)
+/* The count of SCT_EV_STATE */
+#define SCT_EV_STATE_COUNT                       (16U)
 
-/*! @name EVENT_CTRL - SCT event control register 0 */
+/*! @name EV_CTRL - SCT event control register 0 */
 /*! @{ */
-#define SCT_EVENT_CTRL_MATCHSEL_MASK             (0xFU)
-#define SCT_EVENT_CTRL_MATCHSEL_SHIFT            (0U)
-#define SCT_EVENT_CTRL_MATCHSEL(x)               (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_MATCHSEL_SHIFT)) & SCT_EVENT_CTRL_MATCHSEL_MASK)
-#define SCT_EVENT_CTRL_HEVENT_MASK               (0x10U)
-#define SCT_EVENT_CTRL_HEVENT_SHIFT              (4U)
+#define SCT_EV_CTRL_MATCHSEL_MASK                (0xFU)
+#define SCT_EV_CTRL_MATCHSEL_SHIFT               (0U)
+#define SCT_EV_CTRL_MATCHSEL(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_EV_CTRL_MATCHSEL_SHIFT)) & SCT_EV_CTRL_MATCHSEL_MASK)
+#define SCT_EV_CTRL_HEVENT_MASK                  (0x10U)
+#define SCT_EV_CTRL_HEVENT_SHIFT                 (4U)
 /*! HEVENT - Select L/H counter. Do not set this bit if UNIFY = 1.
  *  0b0..Selects the L state and the L match register selected by MATCHSEL.
  *  0b1..Selects the H state and the H match register selected by MATCHSEL.
  */
-#define SCT_EVENT_CTRL_HEVENT(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_HEVENT_SHIFT)) & SCT_EVENT_CTRL_HEVENT_MASK)
-#define SCT_EVENT_CTRL_OUTSEL_MASK               (0x20U)
-#define SCT_EVENT_CTRL_OUTSEL_SHIFT              (5U)
+#define SCT_EV_CTRL_HEVENT(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_EV_CTRL_HEVENT_SHIFT)) & SCT_EV_CTRL_HEVENT_MASK)
+#define SCT_EV_CTRL_OUTSEL_MASK                  (0x20U)
+#define SCT_EV_CTRL_OUTSEL_SHIFT                 (5U)
 /*! OUTSEL - Input/output select
  *  0b0..Selects the inputs selected by IOSEL.
  *  0b1..Selects the outputs selected by IOSEL.
  */
-#define SCT_EVENT_CTRL_OUTSEL(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_OUTSEL_SHIFT)) & SCT_EVENT_CTRL_OUTSEL_MASK)
-#define SCT_EVENT_CTRL_IOSEL_MASK                (0x3C0U)
-#define SCT_EVENT_CTRL_IOSEL_SHIFT               (6U)
-#define SCT_EVENT_CTRL_IOSEL(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_IOSEL_SHIFT)) & SCT_EVENT_CTRL_IOSEL_MASK)
-#define SCT_EVENT_CTRL_IOCOND_MASK               (0xC00U)
-#define SCT_EVENT_CTRL_IOCOND_SHIFT              (10U)
+#define SCT_EV_CTRL_OUTSEL(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_EV_CTRL_OUTSEL_SHIFT)) & SCT_EV_CTRL_OUTSEL_MASK)
+#define SCT_EV_CTRL_IOSEL_MASK                   (0x3C0U)
+#define SCT_EV_CTRL_IOSEL_SHIFT                  (6U)
+#define SCT_EV_CTRL_IOSEL(x)                     (((uint32_t)(((uint32_t)(x)) << SCT_EV_CTRL_IOSEL_SHIFT)) & SCT_EV_CTRL_IOSEL_MASK)
+#define SCT_EV_CTRL_IOCOND_MASK                  (0xC00U)
+#define SCT_EV_CTRL_IOCOND_SHIFT                 (10U)
 /*! IOCOND - Selects the I/O condition for event n. (The detection of edges on outputs lag the
  *    conditions that switch the outputs by one SCT clock). In order to guarantee proper edge/state
  *    detection, an input must have a minimum pulse width of at least one SCT clock period .
@@ -15382,43 +14641,43 @@ typedef struct {
  *  0b10..Fall
  *  0b11..HIGH
  */
-#define SCT_EVENT_CTRL_IOCOND(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_IOCOND_SHIFT)) & SCT_EVENT_CTRL_IOCOND_MASK)
-#define SCT_EVENT_CTRL_COMBMODE_MASK             (0x3000U)
-#define SCT_EVENT_CTRL_COMBMODE_SHIFT            (12U)
+#define SCT_EV_CTRL_IOCOND(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_EV_CTRL_IOCOND_SHIFT)) & SCT_EV_CTRL_IOCOND_MASK)
+#define SCT_EV_CTRL_COMBMODE_MASK                (0x3000U)
+#define SCT_EV_CTRL_COMBMODE_SHIFT               (12U)
 /*! COMBMODE - Selects how the specified match and I/O condition are used and combined.
  *  0b00..OR. The event occurs when either the specified match or I/O condition occurs.
  *  0b01..MATCH. Uses the specified match only.
  *  0b10..IO. Uses the specified I/O condition only.
  *  0b11..AND. The event occurs when the specified match and I/O condition occur simultaneously.
  */
-#define SCT_EVENT_CTRL_COMBMODE(x)               (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_COMBMODE_SHIFT)) & SCT_EVENT_CTRL_COMBMODE_MASK)
-#define SCT_EVENT_CTRL_STATELD_MASK              (0x4000U)
-#define SCT_EVENT_CTRL_STATELD_SHIFT             (14U)
+#define SCT_EV_CTRL_COMBMODE(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_EV_CTRL_COMBMODE_SHIFT)) & SCT_EV_CTRL_COMBMODE_MASK)
+#define SCT_EV_CTRL_STATELD_MASK                 (0x4000U)
+#define SCT_EV_CTRL_STATELD_SHIFT                (14U)
 /*! STATELD - This bit controls how the STATEV value modifies the state selected by HEVENT when this
  *    event is the highest-numbered event occurring for that state.
  *  0b0..STATEV value is added into STATE (the carry-out is ignored).
  *  0b1..STATEV value is loaded into STATE.
  */
-#define SCT_EVENT_CTRL_STATELD(x)                (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_STATELD_SHIFT)) & SCT_EVENT_CTRL_STATELD_MASK)
-#define SCT_EVENT_CTRL_STATEV_MASK               (0xF8000U)
-#define SCT_EVENT_CTRL_STATEV_SHIFT              (15U)
-#define SCT_EVENT_CTRL_STATEV(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_STATEV_SHIFT)) & SCT_EVENT_CTRL_STATEV_MASK)
-#define SCT_EVENT_CTRL_MATCHMEM_MASK             (0x100000U)
-#define SCT_EVENT_CTRL_MATCHMEM_SHIFT            (20U)
-#define SCT_EVENT_CTRL_MATCHMEM(x)               (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_MATCHMEM_SHIFT)) & SCT_EVENT_CTRL_MATCHMEM_MASK)
-#define SCT_EVENT_CTRL_DIRECTION_MASK            (0x600000U)
-#define SCT_EVENT_CTRL_DIRECTION_SHIFT           (21U)
+#define SCT_EV_CTRL_STATELD(x)                   (((uint32_t)(((uint32_t)(x)) << SCT_EV_CTRL_STATELD_SHIFT)) & SCT_EV_CTRL_STATELD_MASK)
+#define SCT_EV_CTRL_STATEV_MASK                  (0xF8000U)
+#define SCT_EV_CTRL_STATEV_SHIFT                 (15U)
+#define SCT_EV_CTRL_STATEV(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_EV_CTRL_STATEV_SHIFT)) & SCT_EV_CTRL_STATEV_MASK)
+#define SCT_EV_CTRL_MATCHMEM_MASK                (0x100000U)
+#define SCT_EV_CTRL_MATCHMEM_SHIFT               (20U)
+#define SCT_EV_CTRL_MATCHMEM(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_EV_CTRL_MATCHMEM_SHIFT)) & SCT_EV_CTRL_MATCHMEM_MASK)
+#define SCT_EV_CTRL_DIRECTION_MASK               (0x600000U)
+#define SCT_EV_CTRL_DIRECTION_SHIFT              (21U)
 /*! DIRECTION - Direction qualifier for event generation. This field only applies when the counters
  *    are operating in BIDIR mode. If BIDIR = 0, the SCT ignores this field. Value 0x3 is reserved.
  *  0b00..Direction independent. This event is triggered regardless of the count direction.
  *  0b01..Counting up. This event is triggered only during up-counting when BIDIR = 1.
  *  0b10..Counting down. This event is triggered only during down-counting when BIDIR = 1.
  */
-#define SCT_EVENT_CTRL_DIRECTION(x)              (((uint32_t)(((uint32_t)(x)) << SCT_EVENT_CTRL_DIRECTION_SHIFT)) & SCT_EVENT_CTRL_DIRECTION_MASK)
+#define SCT_EV_CTRL_DIRECTION(x)                 (((uint32_t)(((uint32_t)(x)) << SCT_EV_CTRL_DIRECTION_SHIFT)) & SCT_EV_CTRL_DIRECTION_MASK)
 /*! @} */
 
-/* The count of SCT_EVENT_CTRL */
-#define SCT_EVENT_CTRL_COUNT                     (16U)
+/* The count of SCT_EV_CTRL */
+#define SCT_EV_CTRL_COUNT                        (16U)
 
 /*! @name OUT_SET - SCT output 0 set register */
 /*! @{ */
@@ -16470,13 +15729,6 @@ typedef struct {
 #define SPI_FIFOCFG_EMPTYRX_MASK                 (0x20000U)
 #define SPI_FIFOCFG_EMPTYRX_SHIFT                (17U)
 #define SPI_FIFOCFG_EMPTYRX(x)                   (((uint32_t)(((uint32_t)(x)) << SPI_FIFOCFG_EMPTYRX_SHIFT)) & SPI_FIFOCFG_EMPTYRX_MASK)
-#define SPI_FIFOCFG_POPDBG_MASK                  (0x40000U)
-#define SPI_FIFOCFG_POPDBG_SHIFT                 (18U)
-/*! POPDBG - Pop FIFO for debug reads.
- *  0b0..Debug reads of the FIFO do not pop the FIFO.
- *  0b1..A debug read will cause the FIFO to pop.
- */
-#define SPI_FIFOCFG_POPDBG(x)                    (((uint32_t)(((uint32_t)(x)) << SPI_FIFOCFG_POPDBG_SHIFT)) & SPI_FIFOCFG_POPDBG_MASK)
 /*! @} */
 
 /*! @name FIFOSTAT - FIFO status register. */
@@ -16891,7 +16143,7 @@ typedef struct {
        uint8_t RESERVED_1[36];
   __IO uint32_t CPU0STCKCAL;                       /**< System tick calibration for secure part of CPU0, offset: 0x38 */
   __IO uint32_t CPU0NSTCKCAL;                      /**< System tick calibration for non-secure part of CPU0, offset: 0x3C */
-  __IO uint32_t CPU1TCKCAL;                        /**< System tick calibration for CPU1, offset: 0x40 */
+  __IO uint32_t CPU1STCKCAL;                       /**< System tick calibration for CPU1, offset: 0x40 */
        uint8_t RESERVED_2[4];
   __IO uint32_t NMISRC;                            /**< NMI Source Select, offset: 0x48 */
        uint8_t RESERVED_3[180];
@@ -16906,7 +16158,7 @@ typedef struct {
        uint8_t RESERVED_4[20];
   __IO uint32_t PRESETCTRLSET[3];                  /**< Peripheral reset control set register, array offset: 0x120, array step: 0x4 */
        uint8_t RESERVED_5[20];
-  __IO uint32_t PRESETCTRLCLR[3];                  /**< Peripheral reset contro clearl register, array offset: 0x140, array step: 0x4 */
+  __IO uint32_t PRESETCTRLCLR[3];                  /**< Peripheral reset control clear register, array offset: 0x140, array step: 0x4 */
        uint8_t RESERVED_6[20];
   __O  uint32_t SWR_RESET;                         /**< generate a software_reset, offset: 0x160 */
        uint8_t RESERVED_7[156];
@@ -16950,7 +16202,7 @@ typedef struct {
        uint8_t RESERVED_12[12];
   __IO uint32_t ADCCLKSEL;                         /**< ADC clock source select, offset: 0x2A4 */
   __IO uint32_t USB0CLKSEL;                        /**< FS USB clock source select, offset: 0x2A8 */
-  __IO uint32_t USB1CLKSEL;                        /**< HS USB clock source select - NOT USED, offset: 0x2AC */
+       uint8_t RESERVED_13[4];
   union {                                          /* offset: 0x2B0 */
     struct {                                         /* offset: 0x2B0 */
       __IO uint32_t FCCLKSEL0;                         /**< Flexcomm Interface 0 clock source select for Fractional Rate Divider, offset: 0x2B0 */
@@ -16965,17 +16217,17 @@ typedef struct {
     __IO uint32_t FCCLKSELX[8];                      /**< Peripheral reset control register, array offset: 0x2B0, array step: 0x4 */
   };
   __IO uint32_t HSLSPICLKSEL;                      /**< HS LSPI clock source select, offset: 0x2D0 */
-       uint8_t RESERVED_13[12];
-  __IO uint32_t MCLKCLKSEL;                        /**< MCLK clock source select, offset: 0x2E0 */
        uint8_t RESERVED_14[12];
+  __IO uint32_t MCLKCLKSEL;                        /**< MCLK clock source select, offset: 0x2E0 */
+       uint8_t RESERVED_15[12];
   __IO uint32_t SCTCLKSEL;                         /**< SCTimer/PWM clock source select, offset: 0x2F0 */
-       uint8_t RESERVED_15[4];
-  __IO uint32_t SDIOCLKSEL;                        /**< SDIO clock source select, offset: 0x2F8 */
        uint8_t RESERVED_16[4];
+  __IO uint32_t SDIOCLKSEL;                        /**< SDIO clock source select, offset: 0x2F8 */
+       uint8_t RESERVED_17[4];
   __IO uint32_t SYSTICKCLKDIV0;                    /**< System Tick Timer divider for CPU0, offset: 0x300 */
   __IO uint32_t SYSTICKCLKDIV1;                    /**< System Tick Timer divider for CPU1, offset: 0x304 */
   __IO uint32_t TRACECLKDIV;                       /**< TRACE clock divider, offset: 0x308 */
-       uint8_t RESERVED_17[20];
+       uint8_t RESERVED_18[20];
   union {                                          /* offset: 0x320 */
     struct {                                         /* offset: 0x320 */
       __IO uint32_t FLEXFRG0CTRL;                      /**< Fractional rate divider for flexcomm 0, offset: 0x320 */
@@ -16989,36 +16241,34 @@ typedef struct {
     } FLEXFRGCTRL;
     __IO uint32_t FLEXFRGXCTRL[8];                   /**< Peripheral reset control register, array offset: 0x320, array step: 0x4 */
   };
-       uint8_t RESERVED_18[64];
+       uint8_t RESERVED_19[64];
   __IO uint32_t AHBCLKDIV;                         /**< System clock divider, offset: 0x380 */
   __IO uint32_t CLKOUTDIV;                         /**< CLKOUT clock divider, offset: 0x384 */
   __IO uint32_t FROHFDIV;                          /**< FRO_HF (96MHz) clock divider, offset: 0x388 */
   __IO uint32_t WDTCLKDIV;                         /**< WDT clock divider, offset: 0x38C */
-       uint8_t RESERVED_19[4];
+       uint8_t RESERVED_20[4];
   __IO uint32_t ADCCLKDIV;                         /**< ADC clock divider, offset: 0x394 */
   __IO uint32_t USB0CLKDIV;                        /**< USB0 Clock divider, offset: 0x398 */
-       uint8_t RESERVED_20[16];
+       uint8_t RESERVED_21[16];
   __IO uint32_t MCLKDIV;                           /**< I2S MCLK clock divider, offset: 0x3AC */
-       uint8_t RESERVED_21[4];
-  __IO uint32_t SCTCLKDIV;                         /**< SCT/PWM clock divider, offset: 0x3B4 */
        uint8_t RESERVED_22[4];
-  __IO uint32_t SDIOCLKDIV;                        /**< SDIO clock divider, offset: 0x3BC */
+  __IO uint32_t SCTCLKDIV;                         /**< SCT/PWM clock divider, offset: 0x3B4 */
        uint8_t RESERVED_23[4];
+  __IO uint32_t SDIOCLKDIV;                        /**< SDIO clock divider, offset: 0x3BC */
+       uint8_t RESERVED_24[4];
   __IO uint32_t PLL0CLKDIV;                        /**< PLL0 clock divider, offset: 0x3C4 */
-       uint8_t RESERVED_24[52];
+       uint8_t RESERVED_25[52];
   __IO uint32_t CLOCKGENUPDATELOCKOUT;             /**< Control clock configuration registers access (like xxxDIV, xxxSEL), offset: 0x3FC */
-  __IO uint32_t FMCCR;                             /**< FMC configuration register - INTERNAL USE ONLY, offset: 0x400 */
-       uint8_t RESERVED_25[8];
-  __IO uint32_t USB0CLKCTRL;                       /**< USB0 clock control, offset: 0x40C */
-  __I  uint32_t USB0CLKSTAT;                       /**< USB0 clock status, offset: 0x410 */
+  __IO uint32_t FMCCR;                             /**< FMC configuration register, offset: 0x400 */
        uint8_t RESERVED_26[8];
+  __IO uint32_t USB0NEEDCLKCTRL;                   /**< USB0 need clock control, offset: 0x40C */
+  __I  uint32_t USB0NEEDCLKSTAT;                   /**< USB0 need clock status, offset: 0x410 */
+       uint8_t RESERVED_27[8];
   __O  uint32_t FMCFLUSH;                          /**< FMCflush control, offset: 0x41C */
   __IO uint32_t MCLKIO;                            /**< MCLK control, offset: 0x420 */
-  __IO uint32_t USB1CLKCTRL;                       /**< USB1 clock control, offset: 0x424 */
-  __I  uint32_t USB1CLKSTAT;                       /**< USB1 clock status, offset: 0x428 */
-       uint8_t RESERVED_27[36];
-  __IO uint32_t FLASHBANKENABLE;                   /**< Flash Banks control, offset: 0x450 */
-       uint8_t RESERVED_28[12];
+  __IO uint32_t USB1NEEDCLKCTRL;                   /**< USB1 need clock control, offset: 0x424 */
+  __I  uint32_t USB1NEEDCLKSTAT;                   /**< USB1 need clock status, offset: 0x428 */
+       uint8_t RESERVED_28[52];
   __IO uint32_t SDIOCLKCTRL;                       /**< SDIO CCLKIN phase and delay control, offset: 0x460 */
        uint8_t RESERVED_29[252];
   __IO uint32_t PLL1CTRL;                          /**< PLL1 550m control, offset: 0x560 */
@@ -17033,53 +16283,29 @@ typedef struct {
   __IO uint32_t PLL0PDEC;                          /**< PLL0 550m P divider, offset: 0x58C */
   __IO uint32_t PLL0SSCG0;                         /**< PLL0 Spread Spectrum Wrapper control register 0, offset: 0x590 */
   __IO uint32_t PLL0SSCG1;                         /**< PLL0 Spread Spectrum Wrapper control register 1, offset: 0x594 */
-       uint8_t RESERVED_31[52];
-  __IO uint32_t EFUSECLKCTRL;                      /**< eFUSE controller clock enable, offset: 0x5CC */
-       uint8_t RESERVED_32[176];
-  __IO uint32_t STARTER[2];                        /**< Start logic wake-up enable register, array offset: 0x680, array step: 0x4 */
-       uint8_t RESERVED_33[24];
-  __O  uint32_t STARTERSET[2];                     /**< Set bits in STARTER, array offset: 0x6A0, array step: 0x4 */
-       uint8_t RESERVED_34[24];
-  __O  uint32_t STARTERCLR[2];                     /**< Clear bits in STARTER, array offset: 0x6C0, array step: 0x4 */
-       uint8_t RESERVED_35[184];
-  __IO uint32_t HARDWARESLEEP;                     /**< Hardware Sleep control, offset: 0x780 */
-       uint8_t RESERVED_36[124];
+       uint8_t RESERVED_31[616];
   __IO uint32_t CPUCTRL;                           /**< CPU Control for multiple processors, offset: 0x800 */
   __IO uint32_t CPBOOT;                            /**< Coprocessor Boot Address, offset: 0x804 */
-  __IO uint32_t CPSTACK;                           /**< Coprocessor Stack Address, offset: 0x808 */
+       uint8_t RESERVED_32[4];
   __I  uint32_t CPSTAT;                            /**< CPU Status, offset: 0x80C */
-       uint8_t RESERVED_37[240];
-  __IO uint32_t DICE_REG0;                         /**< Composite Device Identifier, offset: 0x900 */
-  __IO uint32_t DICE_REG1;                         /**< Composite Device Identifier, offset: 0x904 */
-  __IO uint32_t DICE_REG2;                         /**< Composite Device Identifier, offset: 0x908 */
-  __IO uint32_t DICE_REG3;                         /**< Composite Device Identifier, offset: 0x90C */
-  __IO uint32_t DICE_REG4;                         /**< Composite Device Identifier, offset: 0x910 */
-  __IO uint32_t DICE_REG5;                         /**< Composite Device Identifier, offset: 0x914 */
-  __IO uint32_t DICE_REG6;                         /**< Composite Device Identifier, offset: 0x918 */
-  __IO uint32_t DICE_REG7;                         /**< Composite Device Identifier, offset: 0x91C */
-       uint8_t RESERVED_38[248];
+       uint8_t RESERVED_33[520];
   __IO uint32_t CLOCK_CTRL;                        /**< Various system clock controls : Flash clock (48 MHz) control, clocks to Frequency Measures, offset: 0xA18 */
-       uint8_t RESERVED_39[244];
+       uint8_t RESERVED_34[244];
   __IO uint32_t COMP_INT_CTRL;                     /**< Comparator Interrupt control, offset: 0xB10 */
   __I  uint32_t COMP_INT_STATUS;                   /**< Comparator Interrupt status, offset: 0xB14 */
-       uint8_t RESERVED_40[748];
+       uint8_t RESERVED_35[748];
   __IO uint32_t AUTOCLKGATEOVERRIDE;               /**< Control automatic clock gating, offset: 0xE04 */
   __IO uint32_t GPIOPSYNC;                         /**< Enable bypass of the first stage of synchonization inside GPIO_INT module, offset: 0xE08 */
-       uint8_t RESERVED_41[404];
-  __IO uint32_t DEBUG_LOCK_EN;                     /**< Control write access to security registers -- FOR INTERNAl USE ONLY, offset: 0xFA0 */
-  __IO uint32_t DEBUG_FEATURES;                    /**< Cortex M33 (CPU0) and micro Cortex M33 (CPU1) debug features control -- FOR INTERNAl USE ONLY, offset: 0xFA4 */
-  __IO uint32_t DEBUG_FEATURES_DP;                 /**< Cortex M33 (CPU0) and micro Cortex M33 (CPU1) debug features control DUPLICATE register -- FOR INTERNAl USE ONLY, offset: 0xFA8 */
-       uint8_t RESERVED_42[4];
-  __O  uint32_t CODESECURITYPROTTEST;              /**< Security code to allow test (Design for Testability) access -- FOR INTERNAl USE ONLY, offset: 0xFB0 */
-  __O  uint32_t CODESECURITYPROTCPU0;              /**< Security code to allow CPU0 (CM33) Debug Access Port (DAP) -- FOR INTERNAl USE ONLY, offset: 0xFB4 */
-  __O  uint32_t CODESECURITYPROTCPU1;              /**< Security code to allow CPU1 (Micro CM33) Debug Access Port (DAP) -- FOR INTERNAl USE ONLY, offset: 0xFB8 */
-  __O  uint32_t KEY_BLOCK;                         /**< block quiddikey/PUF all index. -- FOR INTERNAL USE ONLY, offset: 0xFBC */
-  __IO uint32_t DEBUG_AUTH_SCRATCH;                /**< Debug authentication scratch registers -- FOR INTERNAL USE ONLY, offset: 0xFC0 */
-       uint8_t RESERVED_43[16];
+       uint8_t RESERVED_36[404];
+  __IO uint32_t DEBUG_LOCK_EN;                     /**< Control write access to security registers., offset: 0xFA0 */
+  __IO uint32_t DEBUG_FEATURES;                    /**< Cortex M33 (CPU0) and micro Cortex M33 (CPU1) debug features control., offset: 0xFA4 */
+  __IO uint32_t DEBUG_FEATURES_DP;                 /**< Cortex M33 (CPU0) and micro Cortex M33 (CPU1) debug features control DUPLICATE register., offset: 0xFA8 */
+       uint8_t RESERVED_37[16];
+  __O  uint32_t KEY_BLOCK;                         /**< block quiddikey/PUF all index., offset: 0xFBC */
+  __IO uint32_t DEBUG_AUTH_BEACON;                 /**< Debug authentication BEACON register, offset: 0xFC0 */
+       uint8_t RESERVED_38[16];
   __IO uint32_t CPUCFG;                            /**< CPUs configuration register, offset: 0xFD4 */
-       uint8_t RESERVED_44[20];
-  __IO uint32_t PERIPHENCFG;                       /**< peripheral enable configuration -- FOR INTERNAL USE ONLY, offset: 0xFEC */
-       uint8_t RESERVED_45[8];
+       uint8_t RESERVED_39[32];
   __I  uint32_t DEVICE_ID0;                        /**< Device ID, offset: 0xFF8 */
   __I  uint32_t DIEID;                             /**< Chip revision ID and Number, offset: 0xFFC */
 } SYSCON_Type;
@@ -17108,39 +16334,33 @@ typedef struct {
 
 /*! @name AHBMATPRIO - AHB Matrix priority control register Priority values are 3 = highest, 0 = lowest */
 /*! @{ */
-#define SYSCON_AHBMATPRIO_PRI_TEAL_CBUS_MASK     (0x3U)
-#define SYSCON_AHBMATPRIO_PRI_TEAL_CBUS_SHIFT    (0U)
-#define SYSCON_AHBMATPRIO_PRI_TEAL_CBUS(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_TEAL_CBUS_SHIFT)) & SYSCON_AHBMATPRIO_PRI_TEAL_CBUS_MASK)
-#define SYSCON_AHBMATPRIO_PRI_TEAL_SBUS_MASK     (0xCU)
-#define SYSCON_AHBMATPRIO_PRI_TEAL_SBUS_SHIFT    (2U)
-#define SYSCON_AHBMATPRIO_PRI_TEAL_SBUS(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_TEAL_SBUS_SHIFT)) & SYSCON_AHBMATPRIO_PRI_TEAL_SBUS_MASK)
-#define SYSCON_AHBMATPRIO_PRI_UTEAL_CBUS_MASK    (0x30U)
-#define SYSCON_AHBMATPRIO_PRI_UTEAL_CBUS_SHIFT   (4U)
-#define SYSCON_AHBMATPRIO_PRI_UTEAL_CBUS(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_UTEAL_CBUS_SHIFT)) & SYSCON_AHBMATPRIO_PRI_UTEAL_CBUS_MASK)
-#define SYSCON_AHBMATPRIO_PRI_UTEAL_SBUS_MASK    (0xC0U)
-#define SYSCON_AHBMATPRIO_PRI_UTEAL_SBUS_SHIFT   (6U)
-#define SYSCON_AHBMATPRIO_PRI_UTEAL_SBUS(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_UTEAL_SBUS_SHIFT)) & SYSCON_AHBMATPRIO_PRI_UTEAL_SBUS_MASK)
+#define SYSCON_AHBMATPRIO_PRI_CPU0_CBUS_MASK     (0x3U)
+#define SYSCON_AHBMATPRIO_PRI_CPU0_CBUS_SHIFT    (0U)
+#define SYSCON_AHBMATPRIO_PRI_CPU0_CBUS(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_CPU0_CBUS_SHIFT)) & SYSCON_AHBMATPRIO_PRI_CPU0_CBUS_MASK)
+#define SYSCON_AHBMATPRIO_PRI_CPU0_SBUS_MASK     (0xCU)
+#define SYSCON_AHBMATPRIO_PRI_CPU0_SBUS_SHIFT    (2U)
+#define SYSCON_AHBMATPRIO_PRI_CPU0_SBUS(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_CPU0_SBUS_SHIFT)) & SYSCON_AHBMATPRIO_PRI_CPU0_SBUS_MASK)
+#define SYSCON_AHBMATPRIO_PRI_CPU1_CBUS_MASK     (0x30U)
+#define SYSCON_AHBMATPRIO_PRI_CPU1_CBUS_SHIFT    (4U)
+#define SYSCON_AHBMATPRIO_PRI_CPU1_CBUS(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_CPU1_CBUS_SHIFT)) & SYSCON_AHBMATPRIO_PRI_CPU1_CBUS_MASK)
+#define SYSCON_AHBMATPRIO_PRI_CPU1_SBUS_MASK     (0xC0U)
+#define SYSCON_AHBMATPRIO_PRI_CPU1_SBUS_SHIFT    (6U)
+#define SYSCON_AHBMATPRIO_PRI_CPU1_SBUS(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_CPU1_SBUS_SHIFT)) & SYSCON_AHBMATPRIO_PRI_CPU1_SBUS_MASK)
 #define SYSCON_AHBMATPRIO_PRI_USB_FS_MASK        (0x300U)
 #define SYSCON_AHBMATPRIO_PRI_USB_FS_SHIFT       (8U)
 #define SYSCON_AHBMATPRIO_PRI_USB_FS(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_USB_FS_SHIFT)) & SYSCON_AHBMATPRIO_PRI_USB_FS_MASK)
 #define SYSCON_AHBMATPRIO_PRI_SDMA0_MASK         (0xC00U)
 #define SYSCON_AHBMATPRIO_PRI_SDMA0_SHIFT        (10U)
 #define SYSCON_AHBMATPRIO_PRI_SDMA0(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_SDMA0_SHIFT)) & SYSCON_AHBMATPRIO_PRI_SDMA0_MASK)
-#define SYSCON_AHBMATPRIO_PRI_EZH_B_D_MASK       (0x3000U)
-#define SYSCON_AHBMATPRIO_PRI_EZH_B_D_SHIFT      (12U)
-#define SYSCON_AHBMATPRIO_PRI_EZH_B_D(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_EZH_B_D_SHIFT)) & SYSCON_AHBMATPRIO_PRI_EZH_B_D_MASK)
-#define SYSCON_AHBMATPRIO_PRI_EZH_B_I_MASK       (0xC000U)
-#define SYSCON_AHBMATPRIO_PRI_EZH_B_I_SHIFT      (14U)
-#define SYSCON_AHBMATPRIO_PRI_EZH_B_I(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_EZH_B_I_SHIFT)) & SYSCON_AHBMATPRIO_PRI_EZH_B_I_MASK)
 #define SYSCON_AHBMATPRIO_PRI_SDIO_MASK          (0x30000U)
 #define SYSCON_AHBMATPRIO_PRI_SDIO_SHIFT         (16U)
 #define SYSCON_AHBMATPRIO_PRI_SDIO(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_SDIO_SHIFT)) & SYSCON_AHBMATPRIO_PRI_SDIO_MASK)
 #define SYSCON_AHBMATPRIO_PRI_PQ_MASK            (0xC0000U)
 #define SYSCON_AHBMATPRIO_PRI_PQ_SHIFT           (18U)
 #define SYSCON_AHBMATPRIO_PRI_PQ(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_PQ_SHIFT)) & SYSCON_AHBMATPRIO_PRI_PQ_MASK)
-#define SYSCON_AHBMATPRIO_PRI_SHA2_MASK          (0x300000U)
-#define SYSCON_AHBMATPRIO_PRI_SHA2_SHIFT         (20U)
-#define SYSCON_AHBMATPRIO_PRI_SHA2(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_SHA2_SHIFT)) & SYSCON_AHBMATPRIO_PRI_SHA2_MASK)
+#define SYSCON_AHBMATPRIO_PRI_HASH_AES_MASK      (0x300000U)
+#define SYSCON_AHBMATPRIO_PRI_HASH_AES_SHIFT     (20U)
+#define SYSCON_AHBMATPRIO_PRI_HASH_AES(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_HASH_AES_SHIFT)) & SYSCON_AHBMATPRIO_PRI_HASH_AES_MASK)
 #define SYSCON_AHBMATPRIO_PRI_USB_HS_MASK        (0xC00000U)
 #define SYSCON_AHBMATPRIO_PRI_USB_HS_SHIFT       (22U)
 #define SYSCON_AHBMATPRIO_PRI_USB_HS(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBMATPRIO_PRI_USB_HS_SHIFT)) & SYSCON_AHBMATPRIO_PRI_USB_HS_MASK)
@@ -17151,9 +16371,9 @@ typedef struct {
 
 /*! @name CPU0STCKCAL - System tick calibration for secure part of CPU0 */
 /*! @{ */
-#define SYSCON_CPU0STCKCAL_CAL_MASK              (0xFFFFFFU)
-#define SYSCON_CPU0STCKCAL_CAL_SHIFT             (0U)
-#define SYSCON_CPU0STCKCAL_CAL(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU0STCKCAL_CAL_SHIFT)) & SYSCON_CPU0STCKCAL_CAL_MASK)
+#define SYSCON_CPU0STCKCAL_TENMS_MASK            (0xFFFFFFU)
+#define SYSCON_CPU0STCKCAL_TENMS_SHIFT           (0U)
+#define SYSCON_CPU0STCKCAL_TENMS(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU0STCKCAL_TENMS_SHIFT)) & SYSCON_CPU0STCKCAL_TENMS_MASK)
 #define SYSCON_CPU0STCKCAL_SKEW_MASK             (0x1000000U)
 #define SYSCON_CPU0STCKCAL_SKEW_SHIFT            (24U)
 #define SYSCON_CPU0STCKCAL_SKEW(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU0STCKCAL_SKEW_SHIFT)) & SYSCON_CPU0STCKCAL_SKEW_MASK)
@@ -17164,9 +16384,9 @@ typedef struct {
 
 /*! @name CPU0NSTCKCAL - System tick calibration for non-secure part of CPU0 */
 /*! @{ */
-#define SYSCON_CPU0NSTCKCAL_CAL_MASK             (0xFFFFFFU)
-#define SYSCON_CPU0NSTCKCAL_CAL_SHIFT            (0U)
-#define SYSCON_CPU0NSTCKCAL_CAL(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU0NSTCKCAL_CAL_SHIFT)) & SYSCON_CPU0NSTCKCAL_CAL_MASK)
+#define SYSCON_CPU0NSTCKCAL_TENMS_MASK           (0xFFFFFFU)
+#define SYSCON_CPU0NSTCKCAL_TENMS_SHIFT          (0U)
+#define SYSCON_CPU0NSTCKCAL_TENMS(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU0NSTCKCAL_TENMS_SHIFT)) & SYSCON_CPU0NSTCKCAL_TENMS_MASK)
 #define SYSCON_CPU0NSTCKCAL_SKEW_MASK            (0x1000000U)
 #define SYSCON_CPU0NSTCKCAL_SKEW_SHIFT           (24U)
 #define SYSCON_CPU0NSTCKCAL_SKEW(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU0NSTCKCAL_SKEW_SHIFT)) & SYSCON_CPU0NSTCKCAL_SKEW_MASK)
@@ -17175,17 +16395,17 @@ typedef struct {
 #define SYSCON_CPU0NSTCKCAL_NOREF(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU0NSTCKCAL_NOREF_SHIFT)) & SYSCON_CPU0NSTCKCAL_NOREF_MASK)
 /*! @} */
 
-/*! @name CPU1TCKCAL - System tick calibration for CPU1 */
+/*! @name CPU1STCKCAL - System tick calibration for CPU1 */
 /*! @{ */
-#define SYSCON_CPU1TCKCAL_CAL_MASK               (0xFFFFFFU)
-#define SYSCON_CPU1TCKCAL_CAL_SHIFT              (0U)
-#define SYSCON_CPU1TCKCAL_CAL(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU1TCKCAL_CAL_SHIFT)) & SYSCON_CPU1TCKCAL_CAL_MASK)
-#define SYSCON_CPU1TCKCAL_SKEW_MASK              (0x1000000U)
-#define SYSCON_CPU1TCKCAL_SKEW_SHIFT             (24U)
-#define SYSCON_CPU1TCKCAL_SKEW(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU1TCKCAL_SKEW_SHIFT)) & SYSCON_CPU1TCKCAL_SKEW_MASK)
-#define SYSCON_CPU1TCKCAL_NOREF_MASK             (0x2000000U)
-#define SYSCON_CPU1TCKCAL_NOREF_SHIFT            (25U)
-#define SYSCON_CPU1TCKCAL_NOREF(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU1TCKCAL_NOREF_SHIFT)) & SYSCON_CPU1TCKCAL_NOREF_MASK)
+#define SYSCON_CPU1STCKCAL_TENMS_MASK            (0xFFFFFFU)
+#define SYSCON_CPU1STCKCAL_TENMS_SHIFT           (0U)
+#define SYSCON_CPU1STCKCAL_TENMS(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU1STCKCAL_TENMS_SHIFT)) & SYSCON_CPU1STCKCAL_TENMS_MASK)
+#define SYSCON_CPU1STCKCAL_SKEW_MASK             (0x1000000U)
+#define SYSCON_CPU1STCKCAL_SKEW_SHIFT            (24U)
+#define SYSCON_CPU1STCKCAL_SKEW(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU1STCKCAL_SKEW_SHIFT)) & SYSCON_CPU1STCKCAL_SKEW_MASK)
+#define SYSCON_CPU1STCKCAL_NOREF_MASK            (0x2000000U)
+#define SYSCON_CPU1STCKCAL_NOREF_SHIFT           (25U)
+#define SYSCON_CPU1STCKCAL_NOREF(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_CPU1STCKCAL_NOREF_SHIFT)) & SYSCON_CPU1STCKCAL_NOREF_MASK)
 /*! @} */
 
 /*! @name NMISRC - NMI Source Select */
@@ -17255,13 +16475,13 @@ typedef struct {
  *  0b0..Bloc is not reset.
  */
 #define SYSCON_PRESETCTRL0_FMC_RST(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL0_FMC_RST_SHIFT)) & SYSCON_PRESETCTRL0_FMC_RST_MASK)
-#define SYSCON_PRESETCTRL0_MUX0_RST_MASK         (0x800U)
-#define SYSCON_PRESETCTRL0_MUX0_RST_SHIFT        (11U)
-/*! MUX0_RST - Input Mux 0 reset control.
+#define SYSCON_PRESETCTRL0_MUX_RST_MASK          (0x800U)
+#define SYSCON_PRESETCTRL0_MUX_RST_SHIFT         (11U)
+/*! MUX_RST - Input Mux reset control.
  *  0b1..Bloc is reset.
  *  0b0..Bloc is not reset.
  */
-#define SYSCON_PRESETCTRL0_MUX0_RST(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL0_MUX0_RST_SHIFT)) & SYSCON_PRESETCTRL0_MUX0_RST_MASK)
+#define SYSCON_PRESETCTRL0_MUX_RST(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL0_MUX_RST_SHIFT)) & SYSCON_PRESETCTRL0_MUX_RST_MASK)
 #define SYSCON_PRESETCTRL0_IOCON_RST_MASK        (0x2000U)
 #define SYSCON_PRESETCTRL0_IOCON_RST_SHIFT       (13U)
 /*! IOCON_RST - I/O controller reset control.
@@ -17364,20 +16584,20 @@ typedef struct {
  *  0b0..Bloc is not reset.
  */
 #define SYSCON_PRESETCTRL1_MRT_RST(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_MRT_RST_SHIFT)) & SYSCON_PRESETCTRL1_MRT_RST_MASK)
-#define SYSCON_PRESETCTRL1_OSTIMER0_RST_MASK     (0x2U)
-#define SYSCON_PRESETCTRL1_OSTIMER0_RST_SHIFT    (1U)
-/*! OSTIMER0_RST - OS Timer 0 reset control.
+#define SYSCON_PRESETCTRL1_OSTIMER_RST_MASK      (0x2U)
+#define SYSCON_PRESETCTRL1_OSTIMER_RST_SHIFT     (1U)
+/*! OSTIMER_RST - OS Event Timer reset control.
  *  0b1..Bloc is reset.
  *  0b0..Bloc is not reset.
  */
-#define SYSCON_PRESETCTRL1_OSTIMER0_RST(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_OSTIMER0_RST_SHIFT)) & SYSCON_PRESETCTRL1_OSTIMER0_RST_MASK)
-#define SYSCON_PRESETCTRL1_SCT0_RST_MASK         (0x4U)
-#define SYSCON_PRESETCTRL1_SCT0_RST_SHIFT        (2U)
-/*! SCT0_RST - SCT0 reset control.
+#define SYSCON_PRESETCTRL1_OSTIMER_RST(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_OSTIMER_RST_SHIFT)) & SYSCON_PRESETCTRL1_OSTIMER_RST_MASK)
+#define SYSCON_PRESETCTRL1_SCT_RST_MASK          (0x4U)
+#define SYSCON_PRESETCTRL1_SCT_RST_SHIFT         (2U)
+/*! SCT_RST - SCT reset control.
  *  0b1..Bloc is reset.
  *  0b0..Bloc is not reset.
  */
-#define SYSCON_PRESETCTRL1_SCT0_RST(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_SCT0_RST_SHIFT)) & SYSCON_PRESETCTRL1_SCT0_RST_MASK)
+#define SYSCON_PRESETCTRL1_SCT_RST(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_SCT_RST_SHIFT)) & SYSCON_PRESETCTRL1_SCT_RST_MASK)
 #define SYSCON_PRESETCTRL1_SCTIPU_RST_MASK       (0x40U)
 #define SYSCON_PRESETCTRL1_SCTIPU_RST_SHIFT      (6U)
 /*! SCTIPU_RST - SCTIPU reset control.
@@ -17385,13 +16605,13 @@ typedef struct {
  *  0b0..Bloc is not reset.
  */
 #define SYSCON_PRESETCTRL1_SCTIPU_RST(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_SCTIPU_RST_SHIFT)) & SYSCON_PRESETCTRL1_SCTIPU_RST_MASK)
-#define SYSCON_PRESETCTRL1_UTICK0_RST_MASK       (0x400U)
-#define SYSCON_PRESETCTRL1_UTICK0_RST_SHIFT      (10U)
-/*! UTICK0_RST - UTICK0 reset control.
+#define SYSCON_PRESETCTRL1_UTICK_RST_MASK        (0x400U)
+#define SYSCON_PRESETCTRL1_UTICK_RST_SHIFT       (10U)
+/*! UTICK_RST - UTICK reset control.
  *  0b1..Bloc is reset.
  *  0b0..Bloc is not reset.
  */
-#define SYSCON_PRESETCTRL1_UTICK0_RST(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_UTICK0_RST_SHIFT)) & SYSCON_PRESETCTRL1_UTICK0_RST_MASK)
+#define SYSCON_PRESETCTRL1_UTICK_RST(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_UTICK_RST_SHIFT)) & SYSCON_PRESETCTRL1_UTICK_RST_MASK)
 #define SYSCON_PRESETCTRL1_FC0_RST_MASK          (0x800U)
 #define SYSCON_PRESETCTRL1_FC0_RST_SHIFT         (11U)
 /*! FC0_RST - FC0 reset control.
@@ -17476,27 +16696,6 @@ typedef struct {
  *  0b0..Bloc is not reset.
  */
 #define SYSCON_PRESETCTRL1_TIMER1_RST(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_TIMER1_RST_SHIFT)) & SYSCON_PRESETCTRL1_TIMER1_RST_MASK)
-#define SYSCON_PRESETCTRL1_PVT_RST_MASK          (0x10000000U)
-#define SYSCON_PRESETCTRL1_PVT_RST_SHIFT         (28U)
-/*! PVT_RST - PVT reset control.
- *  0b1..Bloc is reset.
- *  0b0..Bloc is not reset.
- */
-#define SYSCON_PRESETCTRL1_PVT_RST(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_PVT_RST_SHIFT)) & SYSCON_PRESETCTRL1_PVT_RST_MASK)
-#define SYSCON_PRESETCTRL1_EZHA_RST_MASK         (0x40000000U)
-#define SYSCON_PRESETCTRL1_EZHA_RST_SHIFT        (30U)
-/*! EZHA_RST - EZH a reset control.
- *  0b1..Bloc is reset.
- *  0b0..Bloc is not reset.
- */
-#define SYSCON_PRESETCTRL1_EZHA_RST(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_EZHA_RST_SHIFT)) & SYSCON_PRESETCTRL1_EZHA_RST_MASK)
-#define SYSCON_PRESETCTRL1_EZHB_RST_MASK         (0x80000000U)
-#define SYSCON_PRESETCTRL1_EZHB_RST_SHIFT        (31U)
-/*! EZHB_RST - EZH b reset control.
- *  0b1..Bloc is reset.
- *  0b0..Bloc is not reset.
- */
-#define SYSCON_PRESETCTRL1_EZHB_RST(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL1_EZHB_RST_SHIFT)) & SYSCON_PRESETCTRL1_EZHB_RST_MASK)
 /*! @} */
 
 /*! @name PRESETCTRL2 - Peripheral reset control 2 */
@@ -17557,27 +16756,6 @@ typedef struct {
  *  0b0..Bloc is not reset.
  */
 #define SYSCON_PRESETCTRL2_FREQME_RST(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_FREQME_RST_SHIFT)) & SYSCON_PRESETCTRL2_FREQME_RST_MASK)
-#define SYSCON_PRESETCTRL2_GPIO4_RST_MASK        (0x200U)
-#define SYSCON_PRESETCTRL2_GPIO4_RST_SHIFT       (9U)
-/*! GPIO4_RST - GPIO4 reset control.
- *  0b1..Bloc is reset.
- *  0b0..Bloc is not reset.
- */
-#define SYSCON_PRESETCTRL2_GPIO4_RST(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_GPIO4_RST_SHIFT)) & SYSCON_PRESETCTRL2_GPIO4_RST_MASK)
-#define SYSCON_PRESETCTRL2_GPIO5_RST_MASK        (0x400U)
-#define SYSCON_PRESETCTRL2_GPIO5_RST_SHIFT       (10U)
-/*! GPIO5_RST - GPIO5 reset control.
- *  0b1..Bloc is reset.
- *  0b0..Bloc is not reset.
- */
-#define SYSCON_PRESETCTRL2_GPIO5_RST(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_GPIO5_RST_SHIFT)) & SYSCON_PRESETCTRL2_GPIO5_RST_MASK)
-#define SYSCON_PRESETCTRL2_OTP_RST_MASK          (0x1000U)
-#define SYSCON_PRESETCTRL2_OTP_RST_SHIFT         (12U)
-/*! OTP_RST - OTP reset control.
- *  0b1..Bloc is reset.
- *  0b0..Bloc is not reset.
- */
-#define SYSCON_PRESETCTRL2_OTP_RST(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_OTP_RST_SHIFT)) & SYSCON_PRESETCTRL2_OTP_RST_MASK)
 #define SYSCON_PRESETCTRL2_RNG_RST_MASK          (0x2000U)
 #define SYSCON_PRESETCTRL2_RNG_RST_SHIFT         (13U)
 /*! RNG_RST - RNG reset control.
@@ -17585,13 +16763,13 @@ typedef struct {
  *  0b0..Bloc is not reset.
  */
 #define SYSCON_PRESETCTRL2_RNG_RST(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_RNG_RST_SHIFT)) & SYSCON_PRESETCTRL2_RNG_RST_MASK)
-#define SYSCON_PRESETCTRL2_MUX1_RST_MASK         (0x4000U)
-#define SYSCON_PRESETCTRL2_MUX1_RST_SHIFT        (14U)
-/*! MUX1_RST - Peripheral Input Mux 1 reset control.
+#define SYSCON_PRESETCTRL2_SYSCTL_RST_MASK       (0x8000U)
+#define SYSCON_PRESETCTRL2_SYSCTL_RST_SHIFT      (15U)
+/*! SYSCTL_RST - SYSCTL Block reset.
  *  0b1..Bloc is reset.
  *  0b0..Bloc is not reset.
  */
-#define SYSCON_PRESETCTRL2_MUX1_RST(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_MUX1_RST_SHIFT)) & SYSCON_PRESETCTRL2_MUX1_RST_MASK)
+#define SYSCON_PRESETCTRL2_SYSCTL_RST(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_SYSCTL_RST_SHIFT)) & SYSCON_PRESETCTRL2_SYSCTL_RST_MASK)
 #define SYSCON_PRESETCTRL2_USB0_HOSTM_RST_MASK   (0x10000U)
 #define SYSCON_PRESETCTRL2_USB0_HOSTM_RST_SHIFT  (16U)
 /*! USB0_HOSTM_RST - USB0 Host Master reset control.
@@ -17606,13 +16784,13 @@ typedef struct {
  *  0b0..Bloc is not reset.
  */
 #define SYSCON_PRESETCTRL2_USB0_HOSTS_RST(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_USB0_HOSTS_RST_SHIFT)) & SYSCON_PRESETCTRL2_USB0_HOSTS_RST_MASK)
-#define SYSCON_PRESETCTRL2_HASH0_RST_MASK        (0x40000U)
-#define SYSCON_PRESETCTRL2_HASH0_RST_SHIFT       (18U)
-/*! HASH0_RST - HASH0 reset control.
+#define SYSCON_PRESETCTRL2_HASH_AES_RST_MASK     (0x40000U)
+#define SYSCON_PRESETCTRL2_HASH_AES_RST_SHIFT    (18U)
+/*! HASH_AES_RST - HASH_AES reset control.
  *  0b1..Bloc is reset.
  *  0b0..Bloc is not reset.
  */
-#define SYSCON_PRESETCTRL2_HASH0_RST(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_HASH0_RST_SHIFT)) & SYSCON_PRESETCTRL2_HASH0_RST_MASK)
+#define SYSCON_PRESETCTRL2_HASH_AES_RST(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_HASH_AES_RST_SHIFT)) & SYSCON_PRESETCTRL2_HASH_AES_RST_MASK)
 #define SYSCON_PRESETCTRL2_PQ_RST_MASK           (0x80000U)
 #define SYSCON_PRESETCTRL2_PQ_RST_SHIFT          (19U)
 /*! PQ_RST - Power Quad reset control.
@@ -17655,13 +16833,6 @@ typedef struct {
  *  0b0..Bloc is not reset.
  */
 #define SYSCON_PRESETCTRL2_CASPER_RST(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_CASPER_RST_SHIFT)) & SYSCON_PRESETCTRL2_CASPER_RST_MASK)
-#define SYSCON_PRESETCTRL2_CAPT0_RST_MASK        (0x2000000U)
-#define SYSCON_PRESETCTRL2_CAPT0_RST_SHIFT       (25U)
-/*! CAPT0_RST - CAPT0 reset control.
- *  0b1..Bloc is reset.
- *  0b0..Bloc is not reset.
- */
-#define SYSCON_PRESETCTRL2_CAPT0_RST(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_PRESETCTRL2_CAPT0_RST_SHIFT)) & SYSCON_PRESETCTRL2_CAPT0_RST_MASK)
 #define SYSCON_PRESETCTRL2_ANALOG_CTRL_RST_MASK  (0x8000000U)
 #define SYSCON_PRESETCTRL2_ANALOG_CTRL_RST_SHIFT (27U)
 /*! ANALOG_CTRL_RST - analog control reset control.
@@ -17712,7 +16883,7 @@ typedef struct {
 /* The count of SYSCON_PRESETCTRLSET */
 #define SYSCON_PRESETCTRLSET_COUNT               (3U)
 
-/*! @name PRESETCTRLCLR - Peripheral reset contro clearl register */
+/*! @name PRESETCTRLCLR - Peripheral reset control clear register */
 /*! @{ */
 #define SYSCON_PRESETCTRLCLR_DATA_MASK           (0xFFFFFFFFU)
 #define SYSCON_PRESETCTRLCLR_DATA_SHIFT          (0U)
@@ -17784,13 +16955,13 @@ typedef struct {
  *  0b0..Disable Clock.
  */
 #define SYSCON_AHBCLKCTRL0_FMC(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL0_FMC_SHIFT)) & SYSCON_AHBCLKCTRL0_FMC_MASK)
-#define SYSCON_AHBCLKCTRL0_MUX0_MASK             (0x800U)
-#define SYSCON_AHBCLKCTRL0_MUX0_SHIFT            (11U)
-/*! MUX0 - Enables the clock for the Input Mux 0.
+#define SYSCON_AHBCLKCTRL0_MUX_MASK              (0x800U)
+#define SYSCON_AHBCLKCTRL0_MUX_SHIFT             (11U)
+/*! MUX - Enables the clock for the Input Mux.
  *  0b1..Enable Clock.
  *  0b0..Disable Clock.
  */
-#define SYSCON_AHBCLKCTRL0_MUX0(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL0_MUX0_SHIFT)) & SYSCON_AHBCLKCTRL0_MUX0_MASK)
+#define SYSCON_AHBCLKCTRL0_MUX(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL0_MUX_SHIFT)) & SYSCON_AHBCLKCTRL0_MUX_MASK)
 #define SYSCON_AHBCLKCTRL0_IOCON_MASK            (0x2000U)
 #define SYSCON_AHBCLKCTRL0_IOCON_SHIFT           (13U)
 /*! IOCON - Enables the clock for the I/O controller.
@@ -17893,34 +17064,27 @@ typedef struct {
  *  0b0..Disable Clock.
  */
 #define SYSCON_AHBCLKCTRL1_MRT(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_MRT_SHIFT)) & SYSCON_AHBCLKCTRL1_MRT_MASK)
-#define SYSCON_AHBCLKCTRL1_OSTIMER0_MASK         (0x2U)
-#define SYSCON_AHBCLKCTRL1_OSTIMER0_SHIFT        (1U)
-/*! OSTIMER0 - Enables the clock for the OS Timer 0.
+#define SYSCON_AHBCLKCTRL1_OSTIMER_MASK          (0x2U)
+#define SYSCON_AHBCLKCTRL1_OSTIMER_SHIFT         (1U)
+/*! OSTIMER - Enables the clock for the OS Event Timer.
  *  0b1..Enable Clock.
  *  0b0..Disable Clock.
  */
-#define SYSCON_AHBCLKCTRL1_OSTIMER0(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_OSTIMER0_SHIFT)) & SYSCON_AHBCLKCTRL1_OSTIMER0_MASK)
-#define SYSCON_AHBCLKCTRL1_SCT0_MASK             (0x4U)
-#define SYSCON_AHBCLKCTRL1_SCT0_SHIFT            (2U)
-/*! SCT0 - Enables the clock for the SCT0.
+#define SYSCON_AHBCLKCTRL1_OSTIMER(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_OSTIMER_SHIFT)) & SYSCON_AHBCLKCTRL1_OSTIMER_MASK)
+#define SYSCON_AHBCLKCTRL1_SCT_MASK              (0x4U)
+#define SYSCON_AHBCLKCTRL1_SCT_SHIFT             (2U)
+/*! SCT - Enables the clock for the SCT.
  *  0b1..Enable Clock.
  *  0b0..Disable Clock.
  */
-#define SYSCON_AHBCLKCTRL1_SCT0(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_SCT0_SHIFT)) & SYSCON_AHBCLKCTRL1_SCT0_MASK)
-#define SYSCON_AHBCLKCTRL1_SCTIPU_MASK           (0x40U)
-#define SYSCON_AHBCLKCTRL1_SCTIPU_SHIFT          (6U)
-/*! SCTIPU - Enables the clock for the SCTIPU.
+#define SYSCON_AHBCLKCTRL1_SCT(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_SCT_SHIFT)) & SYSCON_AHBCLKCTRL1_SCT_MASK)
+#define SYSCON_AHBCLKCTRL1_UTICK_MASK            (0x400U)
+#define SYSCON_AHBCLKCTRL1_UTICK_SHIFT           (10U)
+/*! UTICK - Enables the clock for the UTICK.
  *  0b1..Enable Clock.
  *  0b0..Disable Clock.
  */
-#define SYSCON_AHBCLKCTRL1_SCTIPU(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_SCTIPU_SHIFT)) & SYSCON_AHBCLKCTRL1_SCTIPU_MASK)
-#define SYSCON_AHBCLKCTRL1_UTICK0_MASK           (0x400U)
-#define SYSCON_AHBCLKCTRL1_UTICK0_SHIFT          (10U)
-/*! UTICK0 - Enables the clock for the UTICK0.
- *  0b1..Enable Clock.
- *  0b0..Disable Clock.
- */
-#define SYSCON_AHBCLKCTRL1_UTICK0(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_UTICK0_SHIFT)) & SYSCON_AHBCLKCTRL1_UTICK0_MASK)
+#define SYSCON_AHBCLKCTRL1_UTICK(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_UTICK_SHIFT)) & SYSCON_AHBCLKCTRL1_UTICK_MASK)
 #define SYSCON_AHBCLKCTRL1_FC0_MASK              (0x800U)
 #define SYSCON_AHBCLKCTRL1_FC0_SHIFT             (11U)
 /*! FC0 - Enables the clock for the FC0.
@@ -18005,27 +17169,6 @@ typedef struct {
  *  0b0..Disable Clock.
  */
 #define SYSCON_AHBCLKCTRL1_TIMER1(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_TIMER1_SHIFT)) & SYSCON_AHBCLKCTRL1_TIMER1_MASK)
-#define SYSCON_AHBCLKCTRL1_PVT_MASK              (0x10000000U)
-#define SYSCON_AHBCLKCTRL1_PVT_SHIFT             (28U)
-/*! PVT - Enables the clock for the PVT.
- *  0b1..Enable Clock.
- *  0b0..Disable Clock.
- */
-#define SYSCON_AHBCLKCTRL1_PVT(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_PVT_SHIFT)) & SYSCON_AHBCLKCTRL1_PVT_MASK)
-#define SYSCON_AHBCLKCTRL1_EZHA_MASK             (0x40000000U)
-#define SYSCON_AHBCLKCTRL1_EZHA_SHIFT            (30U)
-/*! EZHA - Enables the clock for the EZH a.
- *  0b1..Enable Clock.
- *  0b0..Disable Clock.
- */
-#define SYSCON_AHBCLKCTRL1_EZHA(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_EZHA_SHIFT)) & SYSCON_AHBCLKCTRL1_EZHA_MASK)
-#define SYSCON_AHBCLKCTRL1_EZHB_MASK             (0x80000000U)
-#define SYSCON_AHBCLKCTRL1_EZHB_SHIFT            (31U)
-/*! EZHB - Enables the clock for the EZH b.
- *  0b1..Enable Clock.
- *  0b0..Disable Clock.
- */
-#define SYSCON_AHBCLKCTRL1_EZHB(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL1_EZHB_SHIFT)) & SYSCON_AHBCLKCTRL1_EZHB_MASK)
 /*! @} */
 
 /*! @name AHBCLKCTRL2 - AHB Clock control 2 */
@@ -18086,27 +17229,6 @@ typedef struct {
  *  0b0..Disable Clock.
  */
 #define SYSCON_AHBCLKCTRL2_FREQME(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_FREQME_SHIFT)) & SYSCON_AHBCLKCTRL2_FREQME_MASK)
-#define SYSCON_AHBCLKCTRL2_GPIO4_MASK            (0x200U)
-#define SYSCON_AHBCLKCTRL2_GPIO4_SHIFT           (9U)
-/*! GPIO4 - Enables the clock for the GPIO4.
- *  0b1..Enable Clock.
- *  0b0..Disable Clock.
- */
-#define SYSCON_AHBCLKCTRL2_GPIO4(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_GPIO4_SHIFT)) & SYSCON_AHBCLKCTRL2_GPIO4_MASK)
-#define SYSCON_AHBCLKCTRL2_GPIO5_MASK            (0x400U)
-#define SYSCON_AHBCLKCTRL2_GPIO5_SHIFT           (10U)
-/*! GPIO5 - Enables the clock for the GPIO5.
- *  0b1..Enable Clock.
- *  0b0..Disable Clock.
- */
-#define SYSCON_AHBCLKCTRL2_GPIO5(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_GPIO5_SHIFT)) & SYSCON_AHBCLKCTRL2_GPIO5_MASK)
-#define SYSCON_AHBCLKCTRL2_OTP_MASK              (0x1000U)
-#define SYSCON_AHBCLKCTRL2_OTP_SHIFT             (12U)
-/*! OTP - Enables the clock for the OTP.
- *  0b1..Enable Clock.
- *  0b0..Disable Clock.
- */
-#define SYSCON_AHBCLKCTRL2_OTP(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_OTP_SHIFT)) & SYSCON_AHBCLKCTRL2_OTP_MASK)
 #define SYSCON_AHBCLKCTRL2_RNG_MASK              (0x2000U)
 #define SYSCON_AHBCLKCTRL2_RNG_SHIFT             (13U)
 /*! RNG - Enables the clock for the RNG.
@@ -18114,13 +17236,13 @@ typedef struct {
  *  0b0..Disable Clock.
  */
 #define SYSCON_AHBCLKCTRL2_RNG(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_RNG_SHIFT)) & SYSCON_AHBCLKCTRL2_RNG_MASK)
-#define SYSCON_AHBCLKCTRL2_MUX1_MASK             (0x4000U)
-#define SYSCON_AHBCLKCTRL2_MUX1_SHIFT            (14U)
-/*! MUX1 - Enables the clock for the Peripheral Input Mux 1.
+#define SYSCON_AHBCLKCTRL2_SYSCTL_MASK           (0x8000U)
+#define SYSCON_AHBCLKCTRL2_SYSCTL_SHIFT          (15U)
+/*! SYSCTL - SYSCTL block clock.
  *  0b1..Enable Clock.
  *  0b0..Disable Clock.
  */
-#define SYSCON_AHBCLKCTRL2_MUX1(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_MUX1_SHIFT)) & SYSCON_AHBCLKCTRL2_MUX1_MASK)
+#define SYSCON_AHBCLKCTRL2_SYSCTL(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_SYSCTL_SHIFT)) & SYSCON_AHBCLKCTRL2_SYSCTL_MASK)
 #define SYSCON_AHBCLKCTRL2_USB0_HOSTM_MASK       (0x10000U)
 #define SYSCON_AHBCLKCTRL2_USB0_HOSTM_SHIFT      (16U)
 /*! USB0_HOSTM - Enables the clock for the USB0 Host Master.
@@ -18135,13 +17257,13 @@ typedef struct {
  *  0b0..Disable Clock.
  */
 #define SYSCON_AHBCLKCTRL2_USB0_HOSTS(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_USB0_HOSTS_SHIFT)) & SYSCON_AHBCLKCTRL2_USB0_HOSTS_MASK)
-#define SYSCON_AHBCLKCTRL2_HASH0_MASK            (0x40000U)
-#define SYSCON_AHBCLKCTRL2_HASH0_SHIFT           (18U)
-/*! HASH0 - Enables the clock for the HASH0.
+#define SYSCON_AHBCLKCTRL2_HASH_AES_MASK         (0x40000U)
+#define SYSCON_AHBCLKCTRL2_HASH_AES_SHIFT        (18U)
+/*! HASH_AES - Enables the clock for the HASH_AES.
  *  0b1..Enable Clock.
  *  0b0..Disable Clock.
  */
-#define SYSCON_AHBCLKCTRL2_HASH0(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_HASH0_SHIFT)) & SYSCON_AHBCLKCTRL2_HASH0_MASK)
+#define SYSCON_AHBCLKCTRL2_HASH_AES(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_HASH_AES_SHIFT)) & SYSCON_AHBCLKCTRL2_HASH_AES_MASK)
 #define SYSCON_AHBCLKCTRL2_PQ_MASK               (0x80000U)
 #define SYSCON_AHBCLKCTRL2_PQ_SHIFT              (19U)
 /*! PQ - Enables the clock for the Power Quad.
@@ -18184,13 +17306,6 @@ typedef struct {
  *  0b0..Disable Clock.
  */
 #define SYSCON_AHBCLKCTRL2_CASPER(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_CASPER_SHIFT)) & SYSCON_AHBCLKCTRL2_CASPER_MASK)
-#define SYSCON_AHBCLKCTRL2_CAPT0_MASK            (0x2000000U)
-#define SYSCON_AHBCLKCTRL2_CAPT0_SHIFT           (25U)
-/*! CAPT0 - Enables the clock for the CAPT0.
- *  0b1..Enable Clock.
- *  0b0..Disable Clock.
- */
-#define SYSCON_AHBCLKCTRL2_CAPT0(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_AHBCLKCTRL2_CAPT0_SHIFT)) & SYSCON_AHBCLKCTRL2_CAPT0_MASK)
 #define SYSCON_AHBCLKCTRL2_ANALOG_CTRL_MASK      (0x8000000U)
 #define SYSCON_AHBCLKCTRL2_ANALOG_CTRL_SHIFT     (27U)
 /*! ANALOG_CTRL - Enables the clock for the analog control.
@@ -18416,10 +17531,10 @@ typedef struct {
  *  0b001..CLKIN clock.
  *  0b010..FRO 1MHz clock.
  *  0b011..FRO 96 MHz clock.
- *  0b100..No clock.
- *  0b101..No clock.
- *  0b110..No clock.
- *  0b111..No clock.
+ *  0b100..Reserved.
+ *  0b101..Reserved.
+ *  0b110..Reserved.
+ *  0b111..Reserved.
  */
 #define SYSCON_MAINCLKSELA_SEL(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_MAINCLKSELA_SEL_SHIFT)) & SYSCON_MAINCLKSELA_SEL_MASK)
 /*! @} */
@@ -18433,10 +17548,10 @@ typedef struct {
  *  0b001..PLL0 clock.
  *  0b010..PLL1 clock.
  *  0b011..Oscillator 32 kHz clock.
- *  0b100..No clock.
- *  0b101..No clock.
- *  0b110..No clock.
- *  0b111..No clock.
+ *  0b100..Reserved.
+ *  0b101..Reserved.
+ *  0b110..Reserved.
+ *  0b111..Reserved.
  */
 #define SYSCON_MAINCLKSELB_SEL(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_MAINCLKSELB_SEL_SHIFT)) & SYSCON_MAINCLKSELB_SEL_MASK)
 /*! @} */
@@ -18500,7 +17615,7 @@ typedef struct {
  *  0b000..Main clock.
  *  0b001..PLL0 clock.
  *  0b010..FRO 96 MHz clock.
- *  0b011..No clock.
+ *  0b011..Reserved.
  *  0b100..No clock.
  *  0b101..No clock.
  *  0b110..No clock.
@@ -18524,23 +17639,6 @@ typedef struct {
  *  0b111..No clock.
  */
 #define SYSCON_USB0CLKSEL_SEL(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0CLKSEL_SEL_SHIFT)) & SYSCON_USB0CLKSEL_SEL_MASK)
-/*! @} */
-
-/*! @name USB1CLKSEL - HS USB clock source select - NOT USED */
-/*! @{ */
-#define SYSCON_USB1CLKSEL_SEL_MASK               (0x7U)
-#define SYSCON_USB1CLKSEL_SEL_SHIFT              (0U)
-/*! SEL - HS USB clock source select.
- *  0b000..Main clock.
- *  0b001..PLL0 clock.
- *  0b010..CLKIN clock.
- *  0b011..No clock.
- *  0b100..No clock.
- *  0b101..PLL1 clock.
- *  0b110..No clock.
- *  0b111..No clock.
- */
-#define SYSCON_USB1CLKSEL_SEL(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1CLKSEL_SEL_SHIFT)) & SYSCON_USB1CLKSEL_SEL_MASK)
 /*! @} */
 
 /*! @name FCCLKSEL0 - Flexcomm Interface 0 clock source select for Fractional Rate Divider */
@@ -18713,8 +17811,8 @@ typedef struct {
 /*! SEL - MCLK clock source select.
  *  0b000..FRO 96 MHz clock.
  *  0b001..PLL0 clock.
- *  0b010..No clock.
- *  0b011..No clock.
+ *  0b010..Reserved.
+ *  0b011..Reserved.
  *  0b100..No clock.
  *  0b101..No clock.
  *  0b110..No clock.
@@ -19222,108 +18320,82 @@ typedef struct {
 #define SYSCON_CLOCKGENUPDATELOCKOUT_CLOCKGENUPDATELOCKOUT(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_CLOCKGENUPDATELOCKOUT_CLOCKGENUPDATELOCKOUT_SHIFT)) & SYSCON_CLOCKGENUPDATELOCKOUT_CLOCKGENUPDATELOCKOUT_MASK)
 /*! @} */
 
-/*! @name FMCCR - FMC configuration register - INTERNAL USE ONLY */
+/*! @name FMCCR - FMC configuration register */
 /*! @{ */
-#define SYSCON_FMCCR_FETCHCTL_MASK               (0x3U)
-#define SYSCON_FMCCR_FETCHCTL_SHIFT              (0U)
-/*! FETCHCTL - Fetch control
- *  0b00..No buffering (bypass always used) for Fetch cycles
- *  0b01..One buffer is used for all Fetch cycles
- *  0b10..All buffers can be used for Fetch cycles
+#define SYSCON_FMCCR_FLASHTIM_MASK               (0xF000U)
+#define SYSCON_FMCCR_FLASHTIM_SHIFT              (12U)
+/*! FLASHTIM - Flash memory access time.
+ *  0b0000..1 system clock flash access time (for system clock rates up to 11 MHz).
+ *  0b0001..2 system clocks flash access time (for system clock rates up to 22 MHz).
+ *  0b0010..3 system clocks flash access time (for system clock rates up to 33 MHz).
+ *  0b0011..4 system clocks flash access time (for system clock rates up to 44 MHz).
+ *  0b0100..5 system clocks flash access time (for system clock rates up to 55 MHz).
+ *  0b0101..6 system clocks flash access time (for system clock rates up to 66 MHz).
+ *  0b0110..7 system clocks flash access time (for system clock rates up to 77 MHz).
+ *  0b0111..8 system clocks flash access time (for system clock rates up to 88 MHz).
+ *  0b1000..9 system clocks flash access time (for system clock rates up to 100 MHz).
  */
-#define SYSCON_FMCCR_FETCHCTL(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_FMCCR_FETCHCTL_SHIFT)) & SYSCON_FMCCR_FETCHCTL_MASK)
-#define SYSCON_FMCCR_DATACTL_MASK                (0xCU)
-#define SYSCON_FMCCR_DATACTL_SHIFT               (2U)
-/*! DATACTL - Data control
- *  0b00..No buffering (bypass always used) for Data cycles
- *  0b01..One buffer is used for all Data cycles
- *  0b10..All buffers can be used for Data cycles
- */
-#define SYSCON_FMCCR_DATACTL(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_FMCCR_DATACTL_SHIFT)) & SYSCON_FMCCR_DATACTL_MASK)
-#define SYSCON_FMCCR_ACCEL_MASK                  (0x10U)
-#define SYSCON_FMCCR_ACCEL_SHIFT                 (4U)
-#define SYSCON_FMCCR_ACCEL(x)                    (((uint32_t)(((uint32_t)(x)) << SYSCON_FMCCR_ACCEL_SHIFT)) & SYSCON_FMCCR_ACCEL_MASK)
-#define SYSCON_FMCCR_PREFEN_MASK                 (0x20U)
-#define SYSCON_FMCCR_PREFEN_SHIFT                (5U)
-#define SYSCON_FMCCR_PREFEN(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_FMCCR_PREFEN_SHIFT)) & SYSCON_FMCCR_PREFEN_MASK)
-#define SYSCON_FMCCR_PREFOVR_MASK                (0x40U)
-#define SYSCON_FMCCR_PREFOVR_SHIFT               (6U)
-#define SYSCON_FMCCR_PREFOVR(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_FMCCR_PREFOVR_SHIFT)) & SYSCON_FMCCR_PREFOVR_MASK)
-#define SYSCON_FMCCR_PREFCRI_MASK                (0x700U)
-#define SYSCON_FMCCR_PREFCRI_SHIFT               (8U)
-#define SYSCON_FMCCR_PREFCRI(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_FMCCR_PREFCRI_SHIFT)) & SYSCON_FMCCR_PREFCRI_MASK)
-#define SYSCON_FMCCR_FMCTIM_MASK                 (0x1F000U)
-#define SYSCON_FMCCR_FMCTIM_SHIFT                (12U)
-#define SYSCON_FMCCR_FMCTIM(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_FMCCR_FMCTIM_SHIFT)) & SYSCON_FMCCR_FMCTIM_MASK)
-#define SYSCON_FMCCR_PFISLRU_MASK                (0x20000U)
-#define SYSCON_FMCCR_PFISLRU_SHIFT               (17U)
-#define SYSCON_FMCCR_PFISLRU(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_FMCCR_PFISLRU_SHIFT)) & SYSCON_FMCCR_PFISLRU_MASK)
-#define SYSCON_FMCCR_PFADAP_MASK                 (0x40000U)
-#define SYSCON_FMCCR_PFADAP_SHIFT                (18U)
-#define SYSCON_FMCCR_PFADAP(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_FMCCR_PFADAP_SHIFT)) & SYSCON_FMCCR_PFADAP_MASK)
+#define SYSCON_FMCCR_FLASHTIM(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_FMCCR_FLASHTIM_SHIFT)) & SYSCON_FMCCR_FLASHTIM_MASK)
 /*! @} */
 
-/*! @name USB0CLKCTRL - USB0 clock control */
+/*! @name USB0NEEDCLKCTRL - USB0 need clock control */
 /*! @{ */
-#define SYSCON_USB0CLKCTRL_AP_FS_DEV_CLK_MASK    (0x1U)
-#define SYSCON_USB0CLKCTRL_AP_FS_DEV_CLK_SHIFT   (0U)
-/*! AP_FS_DEV_CLK - USB0 Device USB0_NEEDCLK signal control:.
+#define SYSCON_USB0NEEDCLKCTRL_AP_FS_DEV_NEEDCLK_MASK (0x1U)
+#define SYSCON_USB0NEEDCLKCTRL_AP_FS_DEV_NEEDCLK_SHIFT (0U)
+/*! AP_FS_DEV_NEEDCLK - USB0 Device USB0_NEEDCLK signal control:.
  *  0b0..Under hardware control.
  *  0b1..Forced high.
  */
-#define SYSCON_USB0CLKCTRL_AP_FS_DEV_CLK(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0CLKCTRL_AP_FS_DEV_CLK_SHIFT)) & SYSCON_USB0CLKCTRL_AP_FS_DEV_CLK_MASK)
-#define SYSCON_USB0CLKCTRL_POL_FS_DEV_CLK_MASK   (0x2U)
-#define SYSCON_USB0CLKCTRL_POL_FS_DEV_CLK_SHIFT  (1U)
-/*! POL_FS_DEV_CLK - USB0 Device USB0_NEEDCLK polarity for triggering the USB0 wake-up interrupt:.
+#define SYSCON_USB0NEEDCLKCTRL_AP_FS_DEV_NEEDCLK(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0NEEDCLKCTRL_AP_FS_DEV_NEEDCLK_SHIFT)) & SYSCON_USB0NEEDCLKCTRL_AP_FS_DEV_NEEDCLK_MASK)
+#define SYSCON_USB0NEEDCLKCTRL_POL_FS_DEV_NEEDCLK_MASK (0x2U)
+#define SYSCON_USB0NEEDCLKCTRL_POL_FS_DEV_NEEDCLK_SHIFT (1U)
+/*! POL_FS_DEV_NEEDCLK - USB0 Device USB0_NEEDCLK polarity for triggering the USB0 wake-up interrupt:.
  *  0b0..Falling edge of device USB0_NEEDCLK triggers wake-up.
  *  0b1..Rising edge of device USB0_NEEDCLK triggers wake-up.
  */
-#define SYSCON_USB0CLKCTRL_POL_FS_DEV_CLK(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0CLKCTRL_POL_FS_DEV_CLK_SHIFT)) & SYSCON_USB0CLKCTRL_POL_FS_DEV_CLK_MASK)
-#define SYSCON_USB0CLKCTRL_AP_FS_HOST_CLK_MASK   (0x4U)
-#define SYSCON_USB0CLKCTRL_AP_FS_HOST_CLK_SHIFT  (2U)
-/*! AP_FS_HOST_CLK - USB0 Host USB0_NEEDCLK signal control:.
+#define SYSCON_USB0NEEDCLKCTRL_POL_FS_DEV_NEEDCLK(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0NEEDCLKCTRL_POL_FS_DEV_NEEDCLK_SHIFT)) & SYSCON_USB0NEEDCLKCTRL_POL_FS_DEV_NEEDCLK_MASK)
+#define SYSCON_USB0NEEDCLKCTRL_AP_FS_HOST_NEEDCLK_MASK (0x4U)
+#define SYSCON_USB0NEEDCLKCTRL_AP_FS_HOST_NEEDCLK_SHIFT (2U)
+/*! AP_FS_HOST_NEEDCLK - USB0 Host USB0_NEEDCLK signal control:.
  *  0b0..Under hardware control.
  *  0b1..Forced high.
  */
-#define SYSCON_USB0CLKCTRL_AP_FS_HOST_CLK(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0CLKCTRL_AP_FS_HOST_CLK_SHIFT)) & SYSCON_USB0CLKCTRL_AP_FS_HOST_CLK_MASK)
-#define SYSCON_USB0CLKCTRL_POL_FS_HOST_CLK_MASK  (0x8U)
-#define SYSCON_USB0CLKCTRL_POL_FS_HOST_CLK_SHIFT (3U)
-/*! POL_FS_HOST_CLK - USB0 Host USB0_NEEDCLK polarity for triggering the USB0 wake-up interrupt:.
+#define SYSCON_USB0NEEDCLKCTRL_AP_FS_HOST_NEEDCLK(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0NEEDCLKCTRL_AP_FS_HOST_NEEDCLK_SHIFT)) & SYSCON_USB0NEEDCLKCTRL_AP_FS_HOST_NEEDCLK_MASK)
+#define SYSCON_USB0NEEDCLKCTRL_POL_FS_HOST_NEEDCLK_MASK (0x8U)
+#define SYSCON_USB0NEEDCLKCTRL_POL_FS_HOST_NEEDCLK_SHIFT (3U)
+/*! POL_FS_HOST_NEEDCLK - USB0 Host USB0_NEEDCLK polarity for triggering the USB0 wake-up interrupt:.
  *  0b0..Falling edge of device USB0_NEEDCLK triggers wake-up.
  *  0b1..Rising edge of device USB0_NEEDCLK triggers wake-up.
  */
-#define SYSCON_USB0CLKCTRL_POL_FS_HOST_CLK(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0CLKCTRL_POL_FS_HOST_CLK_SHIFT)) & SYSCON_USB0CLKCTRL_POL_FS_HOST_CLK_MASK)
-#define SYSCON_USB0CLKCTRL_PU_DISABLE_MASK       (0x10U)
-#define SYSCON_USB0CLKCTRL_PU_DISABLE_SHIFT      (4U)
-/*! PU_DISABLE - Internal pull-up disable control.
- *  0b1..Internal pull-up disable.
- *  0b0..Internal pull-up enable.
- */
-#define SYSCON_USB0CLKCTRL_PU_DISABLE(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0CLKCTRL_PU_DISABLE_SHIFT)) & SYSCON_USB0CLKCTRL_PU_DISABLE_MASK)
+#define SYSCON_USB0NEEDCLKCTRL_POL_FS_HOST_NEEDCLK(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0NEEDCLKCTRL_POL_FS_HOST_NEEDCLK_SHIFT)) & SYSCON_USB0NEEDCLKCTRL_POL_FS_HOST_NEEDCLK_MASK)
 /*! @} */
 
-/*! @name USB0CLKSTAT - USB0 clock status */
+/*! @name USB0NEEDCLKSTAT - USB0 need clock status */
 /*! @{ */
-#define SYSCON_USB0CLKSTAT_DEV_NEED_CLKST_MASK   (0x1U)
-#define SYSCON_USB0CLKSTAT_DEV_NEED_CLKST_SHIFT  (0U)
-/*! DEV_NEED_CLKST - USB0 Device USB0_NEEDCLK signal status:.
+#define SYSCON_USB0NEEDCLKSTAT_DEV_NEEDCLK_MASK  (0x1U)
+#define SYSCON_USB0NEEDCLKSTAT_DEV_NEEDCLK_SHIFT (0U)
+/*! DEV_NEEDCLK - USB0 Device USB0_NEEDCLK signal status:.
  *  0b1..USB0 Device clock is high.
  *  0b0..USB0 Device clock is low.
  */
-#define SYSCON_USB0CLKSTAT_DEV_NEED_CLKST(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0CLKSTAT_DEV_NEED_CLKST_SHIFT)) & SYSCON_USB0CLKSTAT_DEV_NEED_CLKST_MASK)
-#define SYSCON_USB0CLKSTAT_HOST_NEED_CLKST_MASK  (0x2U)
-#define SYSCON_USB0CLKSTAT_HOST_NEED_CLKST_SHIFT (1U)
-/*! HOST_NEED_CLKST - USB0 Host USB0_NEEDCLK signal status:.
+#define SYSCON_USB0NEEDCLKSTAT_DEV_NEEDCLK(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0NEEDCLKSTAT_DEV_NEEDCLK_SHIFT)) & SYSCON_USB0NEEDCLKSTAT_DEV_NEEDCLK_MASK)
+#define SYSCON_USB0NEEDCLKSTAT_HOST_NEEDCLK_MASK (0x2U)
+#define SYSCON_USB0NEEDCLKSTAT_HOST_NEEDCLK_SHIFT (1U)
+/*! HOST_NEEDCLK - USB0 Host USB0_NEEDCLK signal status:.
  *  0b1..USB0 Host clock is high.
  *  0b0..USB0 Host clock is low.
  */
-#define SYSCON_USB0CLKSTAT_HOST_NEED_CLKST(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0CLKSTAT_HOST_NEED_CLKST_SHIFT)) & SYSCON_USB0CLKSTAT_HOST_NEED_CLKST_MASK)
+#define SYSCON_USB0NEEDCLKSTAT_HOST_NEEDCLK(x)   (((uint32_t)(((uint32_t)(x)) << SYSCON_USB0NEEDCLKSTAT_HOST_NEEDCLK_SHIFT)) & SYSCON_USB0NEEDCLKSTAT_HOST_NEEDCLK_MASK)
 /*! @} */
 
 /*! @name FMCFLUSH - FMCflush control */
 /*! @{ */
 #define SYSCON_FMCFLUSH_FLUSH_MASK               (0x1U)
 #define SYSCON_FMCFLUSH_FLUSH_SHIFT              (0U)
+/*! FLUSH - Flush control
+ *  0b1..Flush the FMC buffer contents.
+ *  0b0..No action is performed.
+ */
 #define SYSCON_FMCFLUSH_FLUSH(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_FMCFLUSH_FLUSH_SHIFT)) & SYSCON_FMCFLUSH_FLUSH_MASK)
 /*! @} */
 
@@ -19338,88 +18410,61 @@ typedef struct {
 #define SYSCON_MCLKIO_MCLKIO(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_MCLKIO_MCLKIO_SHIFT)) & SYSCON_MCLKIO_MCLKIO_MASK)
 /*! @} */
 
-/*! @name USB1CLKCTRL - USB1 clock control */
+/*! @name USB1NEEDCLKCTRL - USB1 need clock control */
 /*! @{ */
-#define SYSCON_USB1CLKCTRL_AP_HS_DEV_CLK_MASK    (0x1U)
-#define SYSCON_USB1CLKCTRL_AP_HS_DEV_CLK_SHIFT   (0U)
-/*! AP_HS_DEV_CLK - USB1 Device need_clock signal control:.
- *  0b0..Under hardware control.
- *  0b1..Forced high.
+#define SYSCON_USB1NEEDCLKCTRL_AP_HS_DEV_NEEDCLK_MASK (0x1U)
+#define SYSCON_USB1NEEDCLKCTRL_AP_HS_DEV_NEEDCLK_SHIFT (0U)
+/*! AP_HS_DEV_NEEDCLK - USB1 Device need_clock signal control:
+ *  0b0..HOST_NEEDCLK is under hardware control.
+ *  0b1..HOST_NEEDCLK is forced high.
  */
-#define SYSCON_USB1CLKCTRL_AP_HS_DEV_CLK(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1CLKCTRL_AP_HS_DEV_CLK_SHIFT)) & SYSCON_USB1CLKCTRL_AP_HS_DEV_CLK_MASK)
-#define SYSCON_USB1CLKCTRL_POL_HS_DEV_CLK_MASK   (0x2U)
-#define SYSCON_USB1CLKCTRL_POL_HS_DEV_CLK_SHIFT  (1U)
-/*! POL_HS_DEV_CLK - USB1 Device need_clock polarity for triggering the USB1 wake-up interrupt:.
- *  0b0..Falling edge of device need_clock triggers wake-up.
- *  0b1..Rising edge of device need_clock triggers wake-up.
+#define SYSCON_USB1NEEDCLKCTRL_AP_HS_DEV_NEEDCLK(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1NEEDCLKCTRL_AP_HS_DEV_NEEDCLK_SHIFT)) & SYSCON_USB1NEEDCLKCTRL_AP_HS_DEV_NEEDCLK_MASK)
+#define SYSCON_USB1NEEDCLKCTRL_POL_HS_DEV_NEEDCLK_MASK (0x2U)
+#define SYSCON_USB1NEEDCLKCTRL_POL_HS_DEV_NEEDCLK_SHIFT (1U)
+/*! POL_HS_DEV_NEEDCLK - USB1 device need clock polarity for triggering the USB1_NEEDCLK wake-up interrupt:
+ *  0b0..Falling edge of DEV_NEEDCLK triggers wake-up.
+ *  0b1..Rising edge of DEV_NEEDCLK triggers wake-up.
  */
-#define SYSCON_USB1CLKCTRL_POL_HS_DEV_CLK(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1CLKCTRL_POL_HS_DEV_CLK_SHIFT)) & SYSCON_USB1CLKCTRL_POL_HS_DEV_CLK_MASK)
-#define SYSCON_USB1CLKCTRL_AP_HS_HOST_CLK_MASK   (0x4U)
-#define SYSCON_USB1CLKCTRL_AP_HS_HOST_CLK_SHIFT  (2U)
-/*! AP_HS_HOST_CLK - USB1 Host need_clock signal control:.
- *  0b0..Under hardware control.
- *  0b1..Forced high.
+#define SYSCON_USB1NEEDCLKCTRL_POL_HS_DEV_NEEDCLK(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1NEEDCLKCTRL_POL_HS_DEV_NEEDCLK_SHIFT)) & SYSCON_USB1NEEDCLKCTRL_POL_HS_DEV_NEEDCLK_MASK)
+#define SYSCON_USB1NEEDCLKCTRL_AP_HS_HOST_NEEDCLK_MASK (0x4U)
+#define SYSCON_USB1NEEDCLKCTRL_AP_HS_HOST_NEEDCLK_SHIFT (2U)
+/*! AP_HS_HOST_NEEDCLK - USB1 Host need clock signal control:
+ *  0b0..HOST_NEEDCLK is under hardware control.
+ *  0b1..HOST_NEEDCLK is forced high.
  */
-#define SYSCON_USB1CLKCTRL_AP_HS_HOST_CLK(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1CLKCTRL_AP_HS_HOST_CLK_SHIFT)) & SYSCON_USB1CLKCTRL_AP_HS_HOST_CLK_MASK)
-#define SYSCON_USB1CLKCTRL_POL_HS_HOST_CLK_MASK  (0x8U)
-#define SYSCON_USB1CLKCTRL_POL_HS_HOST_CLK_SHIFT (3U)
-/*! POL_HS_HOST_CLK - USB1 Host need_clock polarity for triggering the USB1 wake-up interrupt: 0
- *    Falling edge of device need_clock triggers wake-up.
- *  0b0..Falling edge of device need_clock triggers wake-up.
- *  0b1..Rising edge of device need_clock triggers wake-up.
+#define SYSCON_USB1NEEDCLKCTRL_AP_HS_HOST_NEEDCLK(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1NEEDCLKCTRL_AP_HS_HOST_NEEDCLK_SHIFT)) & SYSCON_USB1NEEDCLKCTRL_AP_HS_HOST_NEEDCLK_MASK)
+#define SYSCON_USB1NEEDCLKCTRL_POL_HS_HOST_NEEDCLK_MASK (0x8U)
+#define SYSCON_USB1NEEDCLKCTRL_POL_HS_HOST_NEEDCLK_SHIFT (3U)
+/*! POL_HS_HOST_NEEDCLK - USB1 host need clock polarity for triggering the USB1_NEEDCLK wake-up interrupt.
+ *  0b0..Falling edge of HOST_NEEDCLK triggers wake-up.
+ *  0b1..Rising edge of HOST_NEEDCLK triggers wake-up.
  */
-#define SYSCON_USB1CLKCTRL_POL_HS_HOST_CLK(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1CLKCTRL_POL_HS_HOST_CLK_SHIFT)) & SYSCON_USB1CLKCTRL_POL_HS_HOST_CLK_MASK)
-#define SYSCON_USB1CLKCTRL_HS_DEV_WAKEUP_N_MASK  (0x10U)
-#define SYSCON_USB1CLKCTRL_HS_DEV_WAKEUP_N_SHIFT (4U)
-/*! HS_DEV_WAKEUP_N - External user wake-up signal for device mode; asserting this signal (active
- *    low) will result in exiting the low power mode; input to synchronous control logic:.
- *  0b0..Forces USB1 PHY to wake-up.
- *  0b1..Normal USB1 PHY behavior.
+#define SYSCON_USB1NEEDCLKCTRL_POL_HS_HOST_NEEDCLK(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1NEEDCLKCTRL_POL_HS_HOST_NEEDCLK_SHIFT)) & SYSCON_USB1NEEDCLKCTRL_POL_HS_HOST_NEEDCLK_MASK)
+#define SYSCON_USB1NEEDCLKCTRL_HS_DEV_WAKEUP_N_MASK (0x10U)
+#define SYSCON_USB1NEEDCLKCTRL_HS_DEV_WAKEUP_N_SHIFT (4U)
+/*! HS_DEV_WAKEUP_N - Software override of device controller PHY wake up logic.
+ *  0b0..Forces USB1_PHY to wake-up.
+ *  0b1..Normal USB1_PHY behavior.
  */
-#define SYSCON_USB1CLKCTRL_HS_DEV_WAKEUP_N(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1CLKCTRL_HS_DEV_WAKEUP_N_SHIFT)) & SYSCON_USB1CLKCTRL_HS_DEV_WAKEUP_N_MASK)
+#define SYSCON_USB1NEEDCLKCTRL_HS_DEV_WAKEUP_N(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1NEEDCLKCTRL_HS_DEV_WAKEUP_N_SHIFT)) & SYSCON_USB1NEEDCLKCTRL_HS_DEV_WAKEUP_N_MASK)
 /*! @} */
 
-/*! @name USB1CLKSTAT - USB1 clock status */
+/*! @name USB1NEEDCLKSTAT - USB1 need clock status */
 /*! @{ */
-#define SYSCON_USB1CLKSTAT_DEV_NEED_CLKST_MASK   (0x1U)
-#define SYSCON_USB1CLKSTAT_DEV_NEED_CLKST_SHIFT  (0U)
-/*! DEV_NEED_CLKST - USB1 Device need_clock signal status:.
- *  0b1..USB1 Device clock is high.
- *  0b0..USB1 Device clock is low.
+#define SYSCON_USB1NEEDCLKSTAT_DEV_NEEDCLK_MASK  (0x1U)
+#define SYSCON_USB1NEEDCLKSTAT_DEV_NEEDCLK_SHIFT (0U)
+/*! DEV_NEEDCLK - USB1 Device need_clock signal status:.
+ *  0b1..DEV_NEEDCLK is high.
+ *  0b0..DEV_NEEDCLK is low.
  */
-#define SYSCON_USB1CLKSTAT_DEV_NEED_CLKST(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1CLKSTAT_DEV_NEED_CLKST_SHIFT)) & SYSCON_USB1CLKSTAT_DEV_NEED_CLKST_MASK)
-#define SYSCON_USB1CLKSTAT_HOST_NEED_CLKST_MASK  (0x2U)
-#define SYSCON_USB1CLKSTAT_HOST_NEED_CLKST_SHIFT (1U)
-/*! HOST_NEED_CLKST - USB1 Host need_clock signal status:.
- *  0b1..USB1 Host clock is high.
- *  0b0..USB1 Host clock is low.
+#define SYSCON_USB1NEEDCLKSTAT_DEV_NEEDCLK(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1NEEDCLKSTAT_DEV_NEEDCLK_SHIFT)) & SYSCON_USB1NEEDCLKSTAT_DEV_NEEDCLK_MASK)
+#define SYSCON_USB1NEEDCLKSTAT_HOST_NEEDCLK_MASK (0x2U)
+#define SYSCON_USB1NEEDCLKSTAT_HOST_NEEDCLK_SHIFT (1U)
+/*! HOST_NEEDCLK - USB1 Host need_clock signal status:.
+ *  0b1..HOST_NEEDCLK is high.
+ *  0b0..HOST_NEEDCLK is low.
  */
-#define SYSCON_USB1CLKSTAT_HOST_NEED_CLKST(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1CLKSTAT_HOST_NEED_CLKST_SHIFT)) & SYSCON_USB1CLKSTAT_HOST_NEED_CLKST_MASK)
-/*! @} */
-
-/*! @name FLASHBANKENABLE - Flash Banks control */
-/*! @{ */
-#define SYSCON_FLASHBANKENABLE_BANK0_MASK        (0xFU)
-#define SYSCON_FLASHBANKENABLE_BANK0_SHIFT       (0U)
-/*! BANK0 - Flash Bank0 control.
- *  0b0000..Flash BANK0 checker is enabled (all Flash pages inside this bank cannot be erased nor programmed).
- *  0b1010..1010: Flash BANK0 checker is disabled (all Flash pages inside this bank can be erased and programmed).
- */
-#define SYSCON_FLASHBANKENABLE_BANK0(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_FLASHBANKENABLE_BANK0_SHIFT)) & SYSCON_FLASHBANKENABLE_BANK0_MASK)
-#define SYSCON_FLASHBANKENABLE_BANK1_MASK        (0xF0U)
-#define SYSCON_FLASHBANKENABLE_BANK1_SHIFT       (4U)
-/*! BANK1 - Flash Bank1 control.
- *  0b0000..Flash BANK1 checker is enabled (all Flash pages inside this bank cannot be erased nor programmed).
- *  0b1010..1010: Flash BANK1 checker is disabled (all Flash pages inside this bank can be erased and programmed).
- */
-#define SYSCON_FLASHBANKENABLE_BANK1(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_FLASHBANKENABLE_BANK1_SHIFT)) & SYSCON_FLASHBANKENABLE_BANK1_MASK)
-#define SYSCON_FLASHBANKENABLE_BANK2_MASK        (0xF00U)
-#define SYSCON_FLASHBANKENABLE_BANK2_SHIFT       (8U)
-/*! BANK2 - Flash Bank2 control.
- *  0b0000..Flash BANK2 checker is enabled (all Flash pages inside this bank cannot be erased nor programmed).
- *  0b1010..1010: Flash BANK2 checker is disabled (all Flash pages inside this bank can be erased and programmed).
- */
-#define SYSCON_FLASHBANKENABLE_BANK2(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_FLASHBANKENABLE_BANK2_SHIFT)) & SYSCON_FLASHBANKENABLE_BANK2_MASK)
+#define SYSCON_USB1NEEDCLKSTAT_HOST_NEEDCLK(x)   (((uint32_t)(((uint32_t)(x)) << SYSCON_USB1NEEDCLKSTAT_HOST_NEEDCLK_SHIFT)) & SYSCON_USB1NEEDCLKSTAT_HOST_NEEDCLK_MASK)
 /*! @} */
 
 /*! @name SDIOCLKCTRL - SDIO CCLKIN phase and delay control */
@@ -19743,709 +18788,6 @@ typedef struct {
 #define SYSCON_PLL0SSCG1_SEL_EXT(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_PLL0SSCG1_SEL_EXT_SHIFT)) & SYSCON_PLL0SSCG1_SEL_EXT_MASK)
 /*! @} */
 
-/*! @name EFUSECLKCTRL - eFUSE controller clock enable */
-/*! @{ */
-#define SYSCON_EFUSECLKCTRL_EFUSECLKENA_MASK     (0x1U)
-#define SYSCON_EFUSECLKCTRL_EFUSECLKENA_SHIFT    (0U)
-#define SYSCON_EFUSECLKCTRL_EFUSECLKENA(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_EFUSECLKCTRL_EFUSECLKENA_SHIFT)) & SYSCON_EFUSECLKCTRL_EFUSECLKENA_MASK)
-/*! @} */
-
-/*! @name STARTER - Start logic wake-up enable register */
-/*! @{ */
-#define SYSCON_STARTER_GPIO_INT04_MASK           (0x1U)
-#define SYSCON_STARTER_GPIO_INT04_SHIFT          (0U)
-/*! GPIO_INT04 - GPIO_INT04 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_GPIO_INT04(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_GPIO_INT04_SHIFT)) & SYSCON_STARTER_GPIO_INT04_MASK)
-#define SYSCON_STARTER_SYS_MASK                  (0x1U)
-#define SYSCON_STARTER_SYS_SHIFT                 (0U)
-/*! SYS - SYS interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_SYS(x)                    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SYS_SHIFT)) & SYSCON_STARTER_SYS_MASK)
-#define SYSCON_STARTER_GPIO_INT05_MASK           (0x2U)
-#define SYSCON_STARTER_GPIO_INT05_SHIFT          (1U)
-/*! GPIO_INT05 - GPIO_INT05 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_GPIO_INT05(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_GPIO_INT05_SHIFT)) & SYSCON_STARTER_GPIO_INT05_MASK)
-#define SYSCON_STARTER_SDMA0_MASK                (0x2U)
-#define SYSCON_STARTER_SDMA0_SHIFT               (1U)
-/*! SDMA0 - SDMA0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_SDMA0(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SDMA0_SHIFT)) & SYSCON_STARTER_SDMA0_MASK)
-#define SYSCON_STARTER_GINT0_MASK                (0x4U)
-#define SYSCON_STARTER_GINT0_SHIFT               (2U)
-/*! GINT0 - GINT0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_GINT0(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_GINT0_SHIFT)) & SYSCON_STARTER_GINT0_MASK)
-#define SYSCON_STARTER_GPIO_INT06_MASK           (0x4U)
-#define SYSCON_STARTER_GPIO_INT06_SHIFT          (2U)
-/*! GPIO_INT06 - GPIO_INT06 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_GPIO_INT06(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_GPIO_INT06_SHIFT)) & SYSCON_STARTER_GPIO_INT06_MASK)
-#define SYSCON_STARTER_GINT1_MASK                (0x8U)
-#define SYSCON_STARTER_GINT1_SHIFT               (3U)
-/*! GINT1 - GINT1 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_GINT1(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_GINT1_SHIFT)) & SYSCON_STARTER_GINT1_MASK)
-#define SYSCON_STARTER_GPIO_INT07_MASK           (0x8U)
-#define SYSCON_STARTER_GPIO_INT07_SHIFT          (3U)
-/*! GPIO_INT07 - GPIO_INT07 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_GPIO_INT07(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_GPIO_INT07_SHIFT)) & SYSCON_STARTER_GPIO_INT07_MASK)
-#define SYSCON_STARTER_CTIMER2_MASK              (0x10U)
-#define SYSCON_STARTER_CTIMER2_SHIFT             (4U)
-/*! CTIMER2 - CTIMER2 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_CTIMER2(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CTIMER2_SHIFT)) & SYSCON_STARTER_CTIMER2_MASK)
-#define SYSCON_STARTER_PIO_INT0_MASK             (0x10U)
-#define SYSCON_STARTER_PIO_INT0_SHIFT            (4U)
-/*! PIO_INT0 - PIO_INT0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_PIO_INT0(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_PIO_INT0_SHIFT)) & SYSCON_STARTER_PIO_INT0_MASK)
-#define SYSCON_STARTER_CTIMER4_MASK              (0x20U)
-#define SYSCON_STARTER_CTIMER4_SHIFT             (5U)
-/*! CTIMER4 - CTIMER4 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_CTIMER4(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CTIMER4_SHIFT)) & SYSCON_STARTER_CTIMER4_MASK)
-#define SYSCON_STARTER_PIO_INT1_MASK             (0x20U)
-#define SYSCON_STARTER_PIO_INT1_SHIFT            (5U)
-/*! PIO_INT1 - PIO_INT1 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_PIO_INT1(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_PIO_INT1_SHIFT)) & SYSCON_STARTER_PIO_INT1_MASK)
-#define SYSCON_STARTER_OS_EVENT_MASK             (0x40U)
-#define SYSCON_STARTER_OS_EVENT_SHIFT            (6U)
-/*! OS_EVENT - OS_EVENT interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_OS_EVENT(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_OS_EVENT_SHIFT)) & SYSCON_STARTER_OS_EVENT_MASK)
-#define SYSCON_STARTER_PIO_INT2_MASK             (0x40U)
-#define SYSCON_STARTER_PIO_INT2_SHIFT            (6U)
-/*! PIO_INT2 - PIO_INT2 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_PIO_INT2(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_PIO_INT2_SHIFT)) & SYSCON_STARTER_PIO_INT2_MASK)
-#define SYSCON_STARTER_PIO_INT3_MASK             (0x80U)
-#define SYSCON_STARTER_PIO_INT3_SHIFT            (7U)
-/*! PIO_INT3 - PIO_INT3 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_PIO_INT3(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_PIO_INT3_SHIFT)) & SYSCON_STARTER_PIO_INT3_MASK)
-#define SYSCON_STARTER_UTICK0_MASK               (0x100U)
-#define SYSCON_STARTER_UTICK0_SHIFT              (8U)
-/*! UTICK0 - UTICK0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_UTICK0(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_UTICK0_SHIFT)) & SYSCON_STARTER_UTICK0_MASK)
-#define SYSCON_STARTER_MRT0_MASK                 (0x200U)
-#define SYSCON_STARTER_MRT0_SHIFT                (9U)
-/*! MRT0 - MRT0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_MRT0(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_MRT0_SHIFT)) & SYSCON_STARTER_MRT0_MASK)
-#define SYSCON_STARTER_CTIMER0_MASK              (0x400U)
-#define SYSCON_STARTER_CTIMER0_SHIFT             (10U)
-/*! CTIMER0 - CTIMER0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_CTIMER0(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CTIMER0_SHIFT)) & SYSCON_STARTER_CTIMER0_MASK)
-#define SYSCON_STARTER_SDIO_MASK                 (0x400U)
-#define SYSCON_STARTER_SDIO_SHIFT                (10U)
-/*! SDIO - SDIO interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_SDIO(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SDIO_SHIFT)) & SYSCON_STARTER_SDIO_MASK)
-#define SYSCON_STARTER_CTIMER1_MASK              (0x800U)
-#define SYSCON_STARTER_CTIMER1_SHIFT             (11U)
-/*! CTIMER1 - CTIMER1 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_CTIMER1(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CTIMER1_SHIFT)) & SYSCON_STARTER_CTIMER1_MASK)
-#define SYSCON_STARTER_SCT0_MASK                 (0x1000U)
-#define SYSCON_STARTER_SCT0_SHIFT                (12U)
-/*! SCT0 - SCT0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_SCT0(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SCT0_SHIFT)) & SYSCON_STARTER_SCT0_MASK)
-#define SYSCON_STARTER_CTIMER3_MASK              (0x2000U)
-#define SYSCON_STARTER_CTIMER3_SHIFT             (13U)
-/*! CTIMER3 - CTIMER3 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_CTIMER3(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CTIMER3_SHIFT)) & SYSCON_STARTER_CTIMER3_MASK)
-#define SYSCON_STARTER_FLEXINT0_MASK             (0x4000U)
-#define SYSCON_STARTER_FLEXINT0_SHIFT            (14U)
-/*! FLEXINT0 - FLEXINT0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_FLEXINT0(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_FLEXINT0_SHIFT)) & SYSCON_STARTER_FLEXINT0_MASK)
-#define SYSCON_STARTER_FLEXINT1_MASK             (0x8000U)
-#define SYSCON_STARTER_FLEXINT1_SHIFT            (15U)
-/*! FLEXINT1 - FLEXINT1 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_FLEXINT1(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_FLEXINT1_SHIFT)) & SYSCON_STARTER_FLEXINT1_MASK)
-#define SYSCON_STARTER_USB1_MASK                 (0x8000U)
-#define SYSCON_STARTER_USB1_SHIFT                (15U)
-/*! USB1 - USB1 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_USB1(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_USB1_SHIFT)) & SYSCON_STARTER_USB1_MASK)
-#define SYSCON_STARTER_FLEXINT2_MASK             (0x10000U)
-#define SYSCON_STARTER_FLEXINT2_SHIFT            (16U)
-/*! FLEXINT2 - FLEXINT2 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_FLEXINT2(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_FLEXINT2_SHIFT)) & SYSCON_STARTER_FLEXINT2_MASK)
-#define SYSCON_STARTER_USB1_NEEDCLK_MASK         (0x10000U)
-#define SYSCON_STARTER_USB1_NEEDCLK_SHIFT        (16U)
-/*! USB1_NEEDCLK - USB1_NEEDCLK interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_USB1_NEEDCLK(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_USB1_NEEDCLK_SHIFT)) & SYSCON_STARTER_USB1_NEEDCLK_MASK)
-#define SYSCON_STARTER_FLEXINT3_MASK             (0x20000U)
-#define SYSCON_STARTER_FLEXINT3_SHIFT            (17U)
-/*! FLEXINT3 - FLEXINT3 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_FLEXINT3(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_FLEXINT3_SHIFT)) & SYSCON_STARTER_FLEXINT3_MASK)
-#define SYSCON_STARTER_SEC_HYPERVISOR_CALL_MASK  (0x20000U)
-#define SYSCON_STARTER_SEC_HYPERVISOR_CALL_SHIFT (17U)
-/*! SEC_HYPERVISOR_CALL - SEC_HYPERVISOR_CALL interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_SEC_HYPERVISOR_CALL(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SEC_HYPERVISOR_CALL_SHIFT)) & SYSCON_STARTER_SEC_HYPERVISOR_CALL_MASK)
-#define SYSCON_STARTER_FLEXINT4_MASK             (0x40000U)
-#define SYSCON_STARTER_FLEXINT4_SHIFT            (18U)
-/*! FLEXINT4 - FLEXINT4 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_FLEXINT4(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_FLEXINT4_SHIFT)) & SYSCON_STARTER_FLEXINT4_MASK)
-#define SYSCON_STARTER_SEC_GPIO_INT00_MASK       (0x40000U)
-#define SYSCON_STARTER_SEC_GPIO_INT00_SHIFT      (18U)
-/*! SEC_GPIO_INT00 - SEC_GPIO_INT00 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_SEC_GPIO_INT00(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SEC_GPIO_INT00_SHIFT)) & SYSCON_STARTER_SEC_GPIO_INT00_MASK)
-#define SYSCON_STARTER_FLEXINT5_MASK             (0x80000U)
-#define SYSCON_STARTER_FLEXINT5_SHIFT            (19U)
-/*! FLEXINT5 - FLEXINT5 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_FLEXINT5(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_FLEXINT5_SHIFT)) & SYSCON_STARTER_FLEXINT5_MASK)
-#define SYSCON_STARTER_SEC_GPIO_INT01_MASK       (0x80000U)
-#define SYSCON_STARTER_SEC_GPIO_INT01_SHIFT      (19U)
-/*! SEC_GPIO_INT01 - SEC_GPIO_INT01 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_SEC_GPIO_INT01(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SEC_GPIO_INT01_SHIFT)) & SYSCON_STARTER_SEC_GPIO_INT01_MASK)
-#define SYSCON_STARTER_FLEXINT6_MASK             (0x100000U)
-#define SYSCON_STARTER_FLEXINT6_SHIFT            (20U)
-/*! FLEXINT6 - FLEXINT6 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_FLEXINT6(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_FLEXINT6_SHIFT)) & SYSCON_STARTER_FLEXINT6_MASK)
-#define SYSCON_STARTER_PLU_MASK                  (0x100000U)
-#define SYSCON_STARTER_PLU_SHIFT                 (20U)
-/*! PLU - PLU interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_PLU(x)                    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_PLU_SHIFT)) & SYSCON_STARTER_PLU_MASK)
-#define SYSCON_STARTER_FLEXINT7_MASK             (0x200000U)
-#define SYSCON_STARTER_FLEXINT7_SHIFT            (21U)
-/*! FLEXINT7 - FLEXINT7 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_FLEXINT7(x)               (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_FLEXINT7_SHIFT)) & SYSCON_STARTER_FLEXINT7_MASK)
-#define SYSCON_STARTER_SEC_VIO_MASK              (0x200000U)
-#define SYSCON_STARTER_SEC_VIO_SHIFT             (21U)
-/*! SEC_VIO - SEC_VIO interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_SEC_VIO(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SEC_VIO_SHIFT)) & SYSCON_STARTER_SEC_VIO_MASK)
-#define SYSCON_STARTER_ADC0_MASK                 (0x400000U)
-#define SYSCON_STARTER_ADC0_SHIFT                (22U)
-/*! ADC0 - ADC0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_ADC0(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_ADC0_SHIFT)) & SYSCON_STARTER_ADC0_MASK)
-#define SYSCON_STARTER_SHA_MASK                  (0x400000U)
-#define SYSCON_STARTER_SHA_SHIFT                 (22U)
-/*! SHA - SHA interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_SHA(x)                    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SHA_SHIFT)) & SYSCON_STARTER_SHA_MASK)
-#define SYSCON_STARTER_CASER_MASK                (0x800000U)
-#define SYSCON_STARTER_CASER_SHIFT               (23U)
-/*! CASER - CASER interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_CASER(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_CASER_SHIFT)) & SYSCON_STARTER_CASER_MASK)
-#define SYSCON_STARTER_ADC0_THCMP_OVR_MASK       (0x1000000U)
-#define SYSCON_STARTER_ADC0_THCMP_OVR_SHIFT      (24U)
-/*! ADC0_THCMP_OVR - ADC0_THCMP_OVR interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_ADC0_THCMP_OVR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_ADC0_THCMP_OVR_SHIFT)) & SYSCON_STARTER_ADC0_THCMP_OVR_MASK)
-#define SYSCON_STARTER_QDDKEY_MASK               (0x1000000U)
-#define SYSCON_STARTER_QDDKEY_SHIFT              (24U)
-/*! QDDKEY - QDDKEY interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_QDDKEY(x)                 (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_QDDKEY_SHIFT)) & SYSCON_STARTER_QDDKEY_MASK)
-#define SYSCON_STARTER_PQ_MASK                   (0x2000000U)
-#define SYSCON_STARTER_PQ_SHIFT                  (25U)
-/*! PQ - PQ interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_PQ(x)                     (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_PQ_SHIFT)) & SYSCON_STARTER_PQ_MASK)
-#define SYSCON_STARTER_SDMA1_MASK                (0x4000000U)
-#define SYSCON_STARTER_SDMA1_SHIFT               (26U)
-/*! SDMA1 - SDMA1 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_SDMA1(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_SDMA1_SHIFT)) & SYSCON_STARTER_SDMA1_MASK)
-#define SYSCON_STARTER_LSPI_HS_MASK              (0x8000000U)
-#define SYSCON_STARTER_LSPI_HS_SHIFT             (27U)
-/*! LSPI_HS - LSPI_HS interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_LSPI_HS(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_LSPI_HS_SHIFT)) & SYSCON_STARTER_LSPI_HS_MASK)
-#define SYSCON_STARTER_USB0_NEEDCLK_MASK         (0x8000000U)
-#define SYSCON_STARTER_USB0_NEEDCLK_SHIFT        (27U)
-/*! USB0_NEEDCLK - USB0_NEEDCLK interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_USB0_NEEDCLK(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_USB0_NEEDCLK_SHIFT)) & SYSCON_STARTER_USB0_NEEDCLK_MASK)
-#define SYSCON_STARTER_USB0_MASK                 (0x10000000U)
-#define SYSCON_STARTER_USB0_SHIFT                (28U)
-/*! USB0 - USB0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_USB0(x)                   (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_USB0_SHIFT)) & SYSCON_STARTER_USB0_MASK)
-#define SYSCON_STARTER_RTC_LITE0_MASK            (0x20000000U)
-#define SYSCON_STARTER_RTC_LITE0_SHIFT           (29U)
-/*! RTC_LITE0 - RTC_LITE0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_RTC_LITE0(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_RTC_LITE0_SHIFT)) & SYSCON_STARTER_RTC_LITE0_MASK)
-#define SYSCON_STARTER_EZH_ARCH_B0_MASK          (0x40000000U)
-#define SYSCON_STARTER_EZH_ARCH_B0_SHIFT         (30U)
-/*! EZH_ARCH_B0 - EZH_ARCH_B0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_EZH_ARCH_B0(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_EZH_ARCH_B0_SHIFT)) & SYSCON_STARTER_EZH_ARCH_B0_MASK)
-#define SYSCON_STARTER_WAKEUPPADS_MASK           (0x80000000U)
-#define SYSCON_STARTER_WAKEUPPADS_SHIFT          (31U)
-#define SYSCON_STARTER_WAKEUPPADS(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_WAKEUPPADS_SHIFT)) & SYSCON_STARTER_WAKEUPPADS_MASK)
-#define SYSCON_STARTER_WAKEUP_MAILBOX0_MASK      (0x80000000U)
-#define SYSCON_STARTER_WAKEUP_MAILBOX0_SHIFT     (31U)
-/*! WAKEUP_MAILBOX0 - WAKEUP_MAILBOX0 interrupt wake-up.
- *  0b0..Wake-up disabled.
- *  0b1..Wake-up enabled.
- */
-#define SYSCON_STARTER_WAKEUP_MAILBOX0(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTER_WAKEUP_MAILBOX0_SHIFT)) & SYSCON_STARTER_WAKEUP_MAILBOX0_MASK)
-/*! @} */
-
-/* The count of SYSCON_STARTER */
-#define SYSCON_STARTER_COUNT                     (2U)
-
-/*! @name STARTERSET - Set bits in STARTER */
-/*! @{ */
-#define SYSCON_STARTERSET_GPIO_INT04_SET_MASK    (0x1U)
-#define SYSCON_STARTERSET_GPIO_INT04_SET_SHIFT   (0U)
-#define SYSCON_STARTERSET_GPIO_INT04_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT04_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT04_SET_MASK)
-#define SYSCON_STARTERSET_SYS_SET_MASK           (0x1U)
-#define SYSCON_STARTERSET_SYS_SET_SHIFT          (0U)
-#define SYSCON_STARTERSET_SYS_SET(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SYS_SET_SHIFT)) & SYSCON_STARTERSET_SYS_SET_MASK)
-#define SYSCON_STARTERSET_GPIO_INT05_SET_MASK    (0x2U)
-#define SYSCON_STARTERSET_GPIO_INT05_SET_SHIFT   (1U)
-#define SYSCON_STARTERSET_GPIO_INT05_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT05_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT05_SET_MASK)
-#define SYSCON_STARTERSET_SDMA0_SET_MASK         (0x2U)
-#define SYSCON_STARTERSET_SDMA0_SET_SHIFT        (1U)
-#define SYSCON_STARTERSET_SDMA0_SET(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SDMA0_SET_SHIFT)) & SYSCON_STARTERSET_SDMA0_SET_MASK)
-#define SYSCON_STARTERSET_GPIO_GLOBALINT0_SET_MASK (0x4U)
-#define SYSCON_STARTERSET_GPIO_GLOBALINT0_SET_SHIFT (2U)
-#define SYSCON_STARTERSET_GPIO_GLOBALINT0_SET(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_GLOBALINT0_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_GLOBALINT0_SET_MASK)
-#define SYSCON_STARTERSET_GPIO_INT06_SET_MASK    (0x4U)
-#define SYSCON_STARTERSET_GPIO_INT06_SET_SHIFT   (2U)
-#define SYSCON_STARTERSET_GPIO_INT06_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT06_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT06_SET_MASK)
-#define SYSCON_STARTERSET_GPIO_GLOBALINT1_SET_MASK (0x8U)
-#define SYSCON_STARTERSET_GPIO_GLOBALINT1_SET_SHIFT (3U)
-#define SYSCON_STARTERSET_GPIO_GLOBALINT1_SET(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_GLOBALINT1_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_GLOBALINT1_SET_MASK)
-#define SYSCON_STARTERSET_GPIO_INT07_SET_MASK    (0x8U)
-#define SYSCON_STARTERSET_GPIO_INT07_SET_SHIFT   (3U)
-#define SYSCON_STARTERSET_GPIO_INT07_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT07_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT07_SET_MASK)
-#define SYSCON_STARTERSET_CTIMER2_SET_MASK       (0x10U)
-#define SYSCON_STARTERSET_CTIMER2_SET_SHIFT      (4U)
-#define SYSCON_STARTERSET_CTIMER2_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CTIMER2_SET_SHIFT)) & SYSCON_STARTERSET_CTIMER2_SET_MASK)
-#define SYSCON_STARTERSET_GPIO_INT00_SET_MASK    (0x10U)
-#define SYSCON_STARTERSET_GPIO_INT00_SET_SHIFT   (4U)
-#define SYSCON_STARTERSET_GPIO_INT00_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT00_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT00_SET_MASK)
-#define SYSCON_STARTERSET_CTIMER4_SET_MASK       (0x20U)
-#define SYSCON_STARTERSET_CTIMER4_SET_SHIFT      (5U)
-#define SYSCON_STARTERSET_CTIMER4_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CTIMER4_SET_SHIFT)) & SYSCON_STARTERSET_CTIMER4_SET_MASK)
-#define SYSCON_STARTERSET_GPIO_INT01_SET_MASK    (0x20U)
-#define SYSCON_STARTERSET_GPIO_INT01_SET_SHIFT   (5U)
-#define SYSCON_STARTERSET_GPIO_INT01_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT01_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT01_SET_MASK)
-#define SYSCON_STARTERSET_GPIO_INT02_SET_MASK    (0x40U)
-#define SYSCON_STARTERSET_GPIO_INT02_SET_SHIFT   (6U)
-#define SYSCON_STARTERSET_GPIO_INT02_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT02_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT02_SET_MASK)
-#define SYSCON_STARTERSET_OS_EVENT_SET_MASK      (0x40U)
-#define SYSCON_STARTERSET_OS_EVENT_SET_SHIFT     (6U)
-#define SYSCON_STARTERSET_OS_EVENT_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_OS_EVENT_SET_SHIFT)) & SYSCON_STARTERSET_OS_EVENT_SET_MASK)
-#define SYSCON_STARTERSET_GPIO_INT03_SET_MASK    (0x80U)
-#define SYSCON_STARTERSET_GPIO_INT03_SET_SHIFT   (7U)
-#define SYSCON_STARTERSET_GPIO_INT03_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_GPIO_INT03_SET_SHIFT)) & SYSCON_STARTERSET_GPIO_INT03_SET_MASK)
-#define SYSCON_STARTERSET_UTICK0_SET_MASK        (0x100U)
-#define SYSCON_STARTERSET_UTICK0_SET_SHIFT       (8U)
-#define SYSCON_STARTERSET_UTICK0_SET(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_UTICK0_SET_SHIFT)) & SYSCON_STARTERSET_UTICK0_SET_MASK)
-#define SYSCON_STARTERSET_MRT0_SET_MASK          (0x200U)
-#define SYSCON_STARTERSET_MRT0_SET_SHIFT         (9U)
-#define SYSCON_STARTERSET_MRT0_SET(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_MRT0_SET_SHIFT)) & SYSCON_STARTERSET_MRT0_SET_MASK)
-#define SYSCON_STARTERSET_CTIMER0_SET_MASK       (0x400U)
-#define SYSCON_STARTERSET_CTIMER0_SET_SHIFT      (10U)
-#define SYSCON_STARTERSET_CTIMER0_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CTIMER0_SET_SHIFT)) & SYSCON_STARTERSET_CTIMER0_SET_MASK)
-#define SYSCON_STARTERSET_SDIO_SET_MASK          (0x400U)
-#define SYSCON_STARTERSET_SDIO_SET_SHIFT         (10U)
-#define SYSCON_STARTERSET_SDIO_SET(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SDIO_SET_SHIFT)) & SYSCON_STARTERSET_SDIO_SET_MASK)
-#define SYSCON_STARTERSET_CTIMER1_SET_MASK       (0x800U)
-#define SYSCON_STARTERSET_CTIMER1_SET_SHIFT      (11U)
-#define SYSCON_STARTERSET_CTIMER1_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CTIMER1_SET_SHIFT)) & SYSCON_STARTERSET_CTIMER1_SET_MASK)
-#define SYSCON_STARTERSET_SCT0_SET_MASK          (0x1000U)
-#define SYSCON_STARTERSET_SCT0_SET_SHIFT         (12U)
-#define SYSCON_STARTERSET_SCT0_SET(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SCT0_SET_SHIFT)) & SYSCON_STARTERSET_SCT0_SET_MASK)
-#define SYSCON_STARTERSET_CTIMER3_SET_MASK       (0x2000U)
-#define SYSCON_STARTERSET_CTIMER3_SET_SHIFT      (13U)
-#define SYSCON_STARTERSET_CTIMER3_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CTIMER3_SET_SHIFT)) & SYSCON_STARTERSET_CTIMER3_SET_MASK)
-#define SYSCON_STARTERSET_FLEXINT0_SET_MASK      (0x4000U)
-#define SYSCON_STARTERSET_FLEXINT0_SET_SHIFT     (14U)
-#define SYSCON_STARTERSET_FLEXINT0_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_FLEXINT0_SET_SHIFT)) & SYSCON_STARTERSET_FLEXINT0_SET_MASK)
-#define SYSCON_STARTERSET_FLEXINT1_SET_MASK      (0x8000U)
-#define SYSCON_STARTERSET_FLEXINT1_SET_SHIFT     (15U)
-#define SYSCON_STARTERSET_FLEXINT1_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_FLEXINT1_SET_SHIFT)) & SYSCON_STARTERSET_FLEXINT1_SET_MASK)
-#define SYSCON_STARTERSET_USB1_SET_MASK          (0x8000U)
-#define SYSCON_STARTERSET_USB1_SET_SHIFT         (15U)
-#define SYSCON_STARTERSET_USB1_SET(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_USB1_SET_SHIFT)) & SYSCON_STARTERSET_USB1_SET_MASK)
-#define SYSCON_STARTERSET_FLEXINT2_SET_MASK      (0x10000U)
-#define SYSCON_STARTERSET_FLEXINT2_SET_SHIFT     (16U)
-#define SYSCON_STARTERSET_FLEXINT2_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_FLEXINT2_SET_SHIFT)) & SYSCON_STARTERSET_FLEXINT2_SET_MASK)
-#define SYSCON_STARTERSET_USB1_NEEDCLK_SET_MASK  (0x10000U)
-#define SYSCON_STARTERSET_USB1_NEEDCLK_SET_SHIFT (16U)
-#define SYSCON_STARTERSET_USB1_NEEDCLK_SET(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_USB1_NEEDCLK_SET_SHIFT)) & SYSCON_STARTERSET_USB1_NEEDCLK_SET_MASK)
-#define SYSCON_STARTERSET_FLEXINT3_SET_MASK      (0x20000U)
-#define SYSCON_STARTERSET_FLEXINT3_SET_SHIFT     (17U)
-#define SYSCON_STARTERSET_FLEXINT3_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_FLEXINT3_SET_SHIFT)) & SYSCON_STARTERSET_FLEXINT3_SET_MASK)
-#define SYSCON_STARTERSET_SEC_HYPERVISOR_CALL_SET_MASK (0x20000U)
-#define SYSCON_STARTERSET_SEC_HYPERVISOR_CALL_SET_SHIFT (17U)
-#define SYSCON_STARTERSET_SEC_HYPERVISOR_CALL_SET(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SEC_HYPERVISOR_CALL_SET_SHIFT)) & SYSCON_STARTERSET_SEC_HYPERVISOR_CALL_SET_MASK)
-#define SYSCON_STARTERSET_FLEXINT4_SET_MASK      (0x40000U)
-#define SYSCON_STARTERSET_FLEXINT4_SET_SHIFT     (18U)
-#define SYSCON_STARTERSET_FLEXINT4_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_FLEXINT4_SET_SHIFT)) & SYSCON_STARTERSET_FLEXINT4_SET_MASK)
-#define SYSCON_STARTERSET_SEC_GPIO_INT00_SET_MASK (0x40000U)
-#define SYSCON_STARTERSET_SEC_GPIO_INT00_SET_SHIFT (18U)
-#define SYSCON_STARTERSET_SEC_GPIO_INT00_SET(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SEC_GPIO_INT00_SET_SHIFT)) & SYSCON_STARTERSET_SEC_GPIO_INT00_SET_MASK)
-#define SYSCON_STARTERSET_FLEXINT5_SET_MASK      (0x80000U)
-#define SYSCON_STARTERSET_FLEXINT5_SET_SHIFT     (19U)
-#define SYSCON_STARTERSET_FLEXINT5_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_FLEXINT5_SET_SHIFT)) & SYSCON_STARTERSET_FLEXINT5_SET_MASK)
-#define SYSCON_STARTERSET_SEC_GPIO_INT01_SET_MASK (0x80000U)
-#define SYSCON_STARTERSET_SEC_GPIO_INT01_SET_SHIFT (19U)
-#define SYSCON_STARTERSET_SEC_GPIO_INT01_SET(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SEC_GPIO_INT01_SET_SHIFT)) & SYSCON_STARTERSET_SEC_GPIO_INT01_SET_MASK)
-#define SYSCON_STARTERSET_FLEXINT6_SET_MASK      (0x100000U)
-#define SYSCON_STARTERSET_FLEXINT6_SET_SHIFT     (20U)
-#define SYSCON_STARTERSET_FLEXINT6_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_FLEXINT6_SET_SHIFT)) & SYSCON_STARTERSET_FLEXINT6_SET_MASK)
-#define SYSCON_STARTERSET_PLU_SET_MASK           (0x100000U)
-#define SYSCON_STARTERSET_PLU_SET_SHIFT          (20U)
-#define SYSCON_STARTERSET_PLU_SET(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_PLU_SET_SHIFT)) & SYSCON_STARTERSET_PLU_SET_MASK)
-#define SYSCON_STARTERSET_FLEXINT7_SET_MASK      (0x200000U)
-#define SYSCON_STARTERSET_FLEXINT7_SET_SHIFT     (21U)
-#define SYSCON_STARTERSET_FLEXINT7_SET(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_FLEXINT7_SET_SHIFT)) & SYSCON_STARTERSET_FLEXINT7_SET_MASK)
-#define SYSCON_STARTERSET_SEC_VIO_SET_MASK       (0x200000U)
-#define SYSCON_STARTERSET_SEC_VIO_SET_SHIFT      (21U)
-#define SYSCON_STARTERSET_SEC_VIO_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SEC_VIO_SET_SHIFT)) & SYSCON_STARTERSET_SEC_VIO_SET_MASK)
-#define SYSCON_STARTERSET_ADC0_SET_MASK          (0x400000U)
-#define SYSCON_STARTERSET_ADC0_SET_SHIFT         (22U)
-#define SYSCON_STARTERSET_ADC0_SET(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_ADC0_SET_SHIFT)) & SYSCON_STARTERSET_ADC0_SET_MASK)
-#define SYSCON_STARTERSET_SHA_SET_MASK           (0x400000U)
-#define SYSCON_STARTERSET_SHA_SET_SHIFT          (22U)
-#define SYSCON_STARTERSET_SHA_SET(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SHA_SET_SHIFT)) & SYSCON_STARTERSET_SHA_SET_MASK)
-#define SYSCON_STARTERSET_CASER_SET_MASK         (0x800000U)
-#define SYSCON_STARTERSET_CASER_SET_SHIFT        (23U)
-#define SYSCON_STARTERSET_CASER_SET(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_CASER_SET_SHIFT)) & SYSCON_STARTERSET_CASER_SET_MASK)
-#define SYSCON_STARTERSET_ADC0_THCMP_OVR_SET_MASK (0x1000000U)
-#define SYSCON_STARTERSET_ADC0_THCMP_OVR_SET_SHIFT (24U)
-#define SYSCON_STARTERSET_ADC0_THCMP_OVR_SET(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_ADC0_THCMP_OVR_SET_SHIFT)) & SYSCON_STARTERSET_ADC0_THCMP_OVR_SET_MASK)
-#define SYSCON_STARTERSET_QDDKEY_SET_MASK        (0x1000000U)
-#define SYSCON_STARTERSET_QDDKEY_SET_SHIFT       (24U)
-#define SYSCON_STARTERSET_QDDKEY_SET(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_QDDKEY_SET_SHIFT)) & SYSCON_STARTERSET_QDDKEY_SET_MASK)
-#define SYSCON_STARTERSET_PQ_SET_MASK            (0x2000000U)
-#define SYSCON_STARTERSET_PQ_SET_SHIFT           (25U)
-#define SYSCON_STARTERSET_PQ_SET(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_PQ_SET_SHIFT)) & SYSCON_STARTERSET_PQ_SET_MASK)
-#define SYSCON_STARTERSET_SDMA1_SET_MASK         (0x4000000U)
-#define SYSCON_STARTERSET_SDMA1_SET_SHIFT        (26U)
-#define SYSCON_STARTERSET_SDMA1_SET(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_SDMA1_SET_SHIFT)) & SYSCON_STARTERSET_SDMA1_SET_MASK)
-#define SYSCON_STARTERSET_LSPI_HS_SET_MASK       (0x8000000U)
-#define SYSCON_STARTERSET_LSPI_HS_SET_SHIFT      (27U)
-#define SYSCON_STARTERSET_LSPI_HS_SET(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_LSPI_HS_SET_SHIFT)) & SYSCON_STARTERSET_LSPI_HS_SET_MASK)
-#define SYSCON_STARTERSET_USB0_NEEDCLK_SET_MASK  (0x8000000U)
-#define SYSCON_STARTERSET_USB0_NEEDCLK_SET_SHIFT (27U)
-#define SYSCON_STARTERSET_USB0_NEEDCLK_SET(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_USB0_NEEDCLK_SET_SHIFT)) & SYSCON_STARTERSET_USB0_NEEDCLK_SET_MASK)
-#define SYSCON_STARTERSET_USB0_SET_MASK          (0x10000000U)
-#define SYSCON_STARTERSET_USB0_SET_SHIFT         (28U)
-#define SYSCON_STARTERSET_USB0_SET(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_USB0_SET_SHIFT)) & SYSCON_STARTERSET_USB0_SET_MASK)
-#define SYSCON_STARTERSET_RTC_LITE0_SET_MASK     (0x20000000U)
-#define SYSCON_STARTERSET_RTC_LITE0_SET_SHIFT    (29U)
-#define SYSCON_STARTERSET_RTC_LITE0_SET(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_RTC_LITE0_SET_SHIFT)) & SYSCON_STARTERSET_RTC_LITE0_SET_MASK)
-#define SYSCON_STARTERSET_EZH_ARCH_B0_SET_MASK   (0x40000000U)
-#define SYSCON_STARTERSET_EZH_ARCH_B0_SET_SHIFT  (30U)
-#define SYSCON_STARTERSET_EZH_ARCH_B0_SET(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_EZH_ARCH_B0_SET_SHIFT)) & SYSCON_STARTERSET_EZH_ARCH_B0_SET_MASK)
-#define SYSCON_STARTERSET_WAKEUPPADS_SET_MASK    (0x80000000U)
-#define SYSCON_STARTERSET_WAKEUPPADS_SET_SHIFT   (31U)
-#define SYSCON_STARTERSET_WAKEUPPADS_SET(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_WAKEUPPADS_SET_SHIFT)) & SYSCON_STARTERSET_WAKEUPPADS_SET_MASK)
-#define SYSCON_STARTERSET_WAKEUP_MAILBOX0_SET_MASK (0x80000000U)
-#define SYSCON_STARTERSET_WAKEUP_MAILBOX0_SET_SHIFT (31U)
-#define SYSCON_STARTERSET_WAKEUP_MAILBOX0_SET(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERSET_WAKEUP_MAILBOX0_SET_SHIFT)) & SYSCON_STARTERSET_WAKEUP_MAILBOX0_SET_MASK)
-/*! @} */
-
-/* The count of SYSCON_STARTERSET */
-#define SYSCON_STARTERSET_COUNT                  (2U)
-
-/*! @name STARTERCLR - Clear bits in STARTER */
-/*! @{ */
-#define SYSCON_STARTERCLR_GPIO_INT04_CLR_MASK    (0x1U)
-#define SYSCON_STARTERCLR_GPIO_INT04_CLR_SHIFT   (0U)
-#define SYSCON_STARTERCLR_GPIO_INT04_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT04_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT04_CLR_MASK)
-#define SYSCON_STARTERCLR_SYS_CLR_MASK           (0x1U)
-#define SYSCON_STARTERCLR_SYS_CLR_SHIFT          (0U)
-#define SYSCON_STARTERCLR_SYS_CLR(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SYS_CLR_SHIFT)) & SYSCON_STARTERCLR_SYS_CLR_MASK)
-#define SYSCON_STARTERCLR_GPIO_INT05_CLR_MASK    (0x2U)
-#define SYSCON_STARTERCLR_GPIO_INT05_CLR_SHIFT   (1U)
-#define SYSCON_STARTERCLR_GPIO_INT05_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT05_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT05_CLR_MASK)
-#define SYSCON_STARTERCLR_SDMA0_CLR_MASK         (0x2U)
-#define SYSCON_STARTERCLR_SDMA0_CLR_SHIFT        (1U)
-#define SYSCON_STARTERCLR_SDMA0_CLR(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SDMA0_CLR_SHIFT)) & SYSCON_STARTERCLR_SDMA0_CLR_MASK)
-#define SYSCON_STARTERCLR_GPIO_GLOBALINT0_CLR_MASK (0x4U)
-#define SYSCON_STARTERCLR_GPIO_GLOBALINT0_CLR_SHIFT (2U)
-#define SYSCON_STARTERCLR_GPIO_GLOBALINT0_CLR(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_GLOBALINT0_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_GLOBALINT0_CLR_MASK)
-#define SYSCON_STARTERCLR_GPIO_INT06_CLR_MASK    (0x4U)
-#define SYSCON_STARTERCLR_GPIO_INT06_CLR_SHIFT   (2U)
-#define SYSCON_STARTERCLR_GPIO_INT06_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT06_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT06_CLR_MASK)
-#define SYSCON_STARTERCLR_GPIO_GLOBALINT1_CLR_MASK (0x8U)
-#define SYSCON_STARTERCLR_GPIO_GLOBALINT1_CLR_SHIFT (3U)
-#define SYSCON_STARTERCLR_GPIO_GLOBALINT1_CLR(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_GLOBALINT1_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_GLOBALINT1_CLR_MASK)
-#define SYSCON_STARTERCLR_GPIO_INT07_CLR_MASK    (0x8U)
-#define SYSCON_STARTERCLR_GPIO_INT07_CLR_SHIFT   (3U)
-#define SYSCON_STARTERCLR_GPIO_INT07_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT07_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT07_CLR_MASK)
-#define SYSCON_STARTERCLR_CTIMER2_CLR_MASK       (0x10U)
-#define SYSCON_STARTERCLR_CTIMER2_CLR_SHIFT      (4U)
-#define SYSCON_STARTERCLR_CTIMER2_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CTIMER2_CLR_SHIFT)) & SYSCON_STARTERCLR_CTIMER2_CLR_MASK)
-#define SYSCON_STARTERCLR_GPIO_INT00_CLR_MASK    (0x10U)
-#define SYSCON_STARTERCLR_GPIO_INT00_CLR_SHIFT   (4U)
-#define SYSCON_STARTERCLR_GPIO_INT00_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT00_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT00_CLR_MASK)
-#define SYSCON_STARTERCLR_CTIMER4_CLR_MASK       (0x20U)
-#define SYSCON_STARTERCLR_CTIMER4_CLR_SHIFT      (5U)
-#define SYSCON_STARTERCLR_CTIMER4_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CTIMER4_CLR_SHIFT)) & SYSCON_STARTERCLR_CTIMER4_CLR_MASK)
-#define SYSCON_STARTERCLR_GPIO_INT01_CLR_MASK    (0x20U)
-#define SYSCON_STARTERCLR_GPIO_INT01_CLR_SHIFT   (5U)
-#define SYSCON_STARTERCLR_GPIO_INT01_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT01_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT01_CLR_MASK)
-#define SYSCON_STARTERCLR_GPIO_INT02_CLR_MASK    (0x40U)
-#define SYSCON_STARTERCLR_GPIO_INT02_CLR_SHIFT   (6U)
-#define SYSCON_STARTERCLR_GPIO_INT02_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT02_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT02_CLR_MASK)
-#define SYSCON_STARTERCLR_OS_EVENT_CLR_MASK      (0x40U)
-#define SYSCON_STARTERCLR_OS_EVENT_CLR_SHIFT     (6U)
-#define SYSCON_STARTERCLR_OS_EVENT_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_OS_EVENT_CLR_SHIFT)) & SYSCON_STARTERCLR_OS_EVENT_CLR_MASK)
-#define SYSCON_STARTERCLR_GPIO_INT03_CLR_MASK    (0x80U)
-#define SYSCON_STARTERCLR_GPIO_INT03_CLR_SHIFT   (7U)
-#define SYSCON_STARTERCLR_GPIO_INT03_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_GPIO_INT03_CLR_SHIFT)) & SYSCON_STARTERCLR_GPIO_INT03_CLR_MASK)
-#define SYSCON_STARTERCLR_UTICK0_CLR_MASK        (0x100U)
-#define SYSCON_STARTERCLR_UTICK0_CLR_SHIFT       (8U)
-#define SYSCON_STARTERCLR_UTICK0_CLR(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_UTICK0_CLR_SHIFT)) & SYSCON_STARTERCLR_UTICK0_CLR_MASK)
-#define SYSCON_STARTERCLR_MRT0_CLR_MASK          (0x200U)
-#define SYSCON_STARTERCLR_MRT0_CLR_SHIFT         (9U)
-#define SYSCON_STARTERCLR_MRT0_CLR(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_MRT0_CLR_SHIFT)) & SYSCON_STARTERCLR_MRT0_CLR_MASK)
-#define SYSCON_STARTERCLR_CTIMER0_CLR_MASK       (0x400U)
-#define SYSCON_STARTERCLR_CTIMER0_CLR_SHIFT      (10U)
-#define SYSCON_STARTERCLR_CTIMER0_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CTIMER0_CLR_SHIFT)) & SYSCON_STARTERCLR_CTIMER0_CLR_MASK)
-#define SYSCON_STARTERCLR_SDIO_CLR_MASK          (0x400U)
-#define SYSCON_STARTERCLR_SDIO_CLR_SHIFT         (10U)
-#define SYSCON_STARTERCLR_SDIO_CLR(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SDIO_CLR_SHIFT)) & SYSCON_STARTERCLR_SDIO_CLR_MASK)
-#define SYSCON_STARTERCLR_CTIMER1_CLR_MASK       (0x800U)
-#define SYSCON_STARTERCLR_CTIMER1_CLR_SHIFT      (11U)
-#define SYSCON_STARTERCLR_CTIMER1_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CTIMER1_CLR_SHIFT)) & SYSCON_STARTERCLR_CTIMER1_CLR_MASK)
-#define SYSCON_STARTERCLR_SCT0_CLR_MASK          (0x1000U)
-#define SYSCON_STARTERCLR_SCT0_CLR_SHIFT         (12U)
-#define SYSCON_STARTERCLR_SCT0_CLR(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SCT0_CLR_SHIFT)) & SYSCON_STARTERCLR_SCT0_CLR_MASK)
-#define SYSCON_STARTERCLR_CTIMER3_CLR_MASK       (0x2000U)
-#define SYSCON_STARTERCLR_CTIMER3_CLR_SHIFT      (13U)
-#define SYSCON_STARTERCLR_CTIMER3_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CTIMER3_CLR_SHIFT)) & SYSCON_STARTERCLR_CTIMER3_CLR_MASK)
-#define SYSCON_STARTERCLR_FLEXINT0_CLR_MASK      (0x4000U)
-#define SYSCON_STARTERCLR_FLEXINT0_CLR_SHIFT     (14U)
-#define SYSCON_STARTERCLR_FLEXINT0_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_FLEXINT0_CLR_SHIFT)) & SYSCON_STARTERCLR_FLEXINT0_CLR_MASK)
-#define SYSCON_STARTERCLR_FLEXINT1_CLR_MASK      (0x8000U)
-#define SYSCON_STARTERCLR_FLEXINT1_CLR_SHIFT     (15U)
-#define SYSCON_STARTERCLR_FLEXINT1_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_FLEXINT1_CLR_SHIFT)) & SYSCON_STARTERCLR_FLEXINT1_CLR_MASK)
-#define SYSCON_STARTERCLR_USB1_CLR_MASK          (0x8000U)
-#define SYSCON_STARTERCLR_USB1_CLR_SHIFT         (15U)
-#define SYSCON_STARTERCLR_USB1_CLR(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_USB1_CLR_SHIFT)) & SYSCON_STARTERCLR_USB1_CLR_MASK)
-#define SYSCON_STARTERCLR_FLEXINT2_CLR_MASK      (0x10000U)
-#define SYSCON_STARTERCLR_FLEXINT2_CLR_SHIFT     (16U)
-#define SYSCON_STARTERCLR_FLEXINT2_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_FLEXINT2_CLR_SHIFT)) & SYSCON_STARTERCLR_FLEXINT2_CLR_MASK)
-#define SYSCON_STARTERCLR_USB1_NEEDCLK_CLR_MASK  (0x10000U)
-#define SYSCON_STARTERCLR_USB1_NEEDCLK_CLR_SHIFT (16U)
-#define SYSCON_STARTERCLR_USB1_NEEDCLK_CLR(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_USB1_NEEDCLK_CLR_SHIFT)) & SYSCON_STARTERCLR_USB1_NEEDCLK_CLR_MASK)
-#define SYSCON_STARTERCLR_FLEXINT3_CLR_MASK      (0x20000U)
-#define SYSCON_STARTERCLR_FLEXINT3_CLR_SHIFT     (17U)
-#define SYSCON_STARTERCLR_FLEXINT3_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_FLEXINT3_CLR_SHIFT)) & SYSCON_STARTERCLR_FLEXINT3_CLR_MASK)
-#define SYSCON_STARTERCLR_SEC_HYPERVISOR_CALL_CLR_MASK (0x20000U)
-#define SYSCON_STARTERCLR_SEC_HYPERVISOR_CALL_CLR_SHIFT (17U)
-#define SYSCON_STARTERCLR_SEC_HYPERVISOR_CALL_CLR(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SEC_HYPERVISOR_CALL_CLR_SHIFT)) & SYSCON_STARTERCLR_SEC_HYPERVISOR_CALL_CLR_MASK)
-#define SYSCON_STARTERCLR_FLEXINT4_CLR_MASK      (0x40000U)
-#define SYSCON_STARTERCLR_FLEXINT4_CLR_SHIFT     (18U)
-#define SYSCON_STARTERCLR_FLEXINT4_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_FLEXINT4_CLR_SHIFT)) & SYSCON_STARTERCLR_FLEXINT4_CLR_MASK)
-#define SYSCON_STARTERCLR_SEC_GPIO_INT00_CLR_MASK (0x40000U)
-#define SYSCON_STARTERCLR_SEC_GPIO_INT00_CLR_SHIFT (18U)
-#define SYSCON_STARTERCLR_SEC_GPIO_INT00_CLR(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SEC_GPIO_INT00_CLR_SHIFT)) & SYSCON_STARTERCLR_SEC_GPIO_INT00_CLR_MASK)
-#define SYSCON_STARTERCLR_FLEXINT5_CLR_MASK      (0x80000U)
-#define SYSCON_STARTERCLR_FLEXINT5_CLR_SHIFT     (19U)
-#define SYSCON_STARTERCLR_FLEXINT5_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_FLEXINT5_CLR_SHIFT)) & SYSCON_STARTERCLR_FLEXINT5_CLR_MASK)
-#define SYSCON_STARTERCLR_SEC_GPIO_INT01_CLR_MASK (0x80000U)
-#define SYSCON_STARTERCLR_SEC_GPIO_INT01_CLR_SHIFT (19U)
-#define SYSCON_STARTERCLR_SEC_GPIO_INT01_CLR(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SEC_GPIO_INT01_CLR_SHIFT)) & SYSCON_STARTERCLR_SEC_GPIO_INT01_CLR_MASK)
-#define SYSCON_STARTERCLR_FLEXINT6_CLR_MASK      (0x100000U)
-#define SYSCON_STARTERCLR_FLEXINT6_CLR_SHIFT     (20U)
-#define SYSCON_STARTERCLR_FLEXINT6_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_FLEXINT6_CLR_SHIFT)) & SYSCON_STARTERCLR_FLEXINT6_CLR_MASK)
-#define SYSCON_STARTERCLR_PLU_CLR_MASK           (0x100000U)
-#define SYSCON_STARTERCLR_PLU_CLR_SHIFT          (20U)
-#define SYSCON_STARTERCLR_PLU_CLR(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_PLU_CLR_SHIFT)) & SYSCON_STARTERCLR_PLU_CLR_MASK)
-#define SYSCON_STARTERCLR_FLEXINT7_CLR_MASK      (0x200000U)
-#define SYSCON_STARTERCLR_FLEXINT7_CLR_SHIFT     (21U)
-#define SYSCON_STARTERCLR_FLEXINT7_CLR(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_FLEXINT7_CLR_SHIFT)) & SYSCON_STARTERCLR_FLEXINT7_CLR_MASK)
-#define SYSCON_STARTERCLR_SEC_VIO_CLR_MASK       (0x200000U)
-#define SYSCON_STARTERCLR_SEC_VIO_CLR_SHIFT      (21U)
-#define SYSCON_STARTERCLR_SEC_VIO_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SEC_VIO_CLR_SHIFT)) & SYSCON_STARTERCLR_SEC_VIO_CLR_MASK)
-#define SYSCON_STARTERCLR_ADC0_CLR_MASK          (0x400000U)
-#define SYSCON_STARTERCLR_ADC0_CLR_SHIFT         (22U)
-#define SYSCON_STARTERCLR_ADC0_CLR(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_ADC0_CLR_SHIFT)) & SYSCON_STARTERCLR_ADC0_CLR_MASK)
-#define SYSCON_STARTERCLR_SHA_CLR_MASK           (0x400000U)
-#define SYSCON_STARTERCLR_SHA_CLR_SHIFT          (22U)
-#define SYSCON_STARTERCLR_SHA_CLR(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SHA_CLR_SHIFT)) & SYSCON_STARTERCLR_SHA_CLR_MASK)
-#define SYSCON_STARTERCLR_CASER_CLR_MASK         (0x800000U)
-#define SYSCON_STARTERCLR_CASER_CLR_SHIFT        (23U)
-#define SYSCON_STARTERCLR_CASER_CLR(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_CASER_CLR_SHIFT)) & SYSCON_STARTERCLR_CASER_CLR_MASK)
-#define SYSCON_STARTERCLR_ADC0_THCMP_OVR_CLR_MASK (0x1000000U)
-#define SYSCON_STARTERCLR_ADC0_THCMP_OVR_CLR_SHIFT (24U)
-#define SYSCON_STARTERCLR_ADC0_THCMP_OVR_CLR(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_ADC0_THCMP_OVR_CLR_SHIFT)) & SYSCON_STARTERCLR_ADC0_THCMP_OVR_CLR_MASK)
-#define SYSCON_STARTERCLR_QDDKEY_CLR_MASK        (0x1000000U)
-#define SYSCON_STARTERCLR_QDDKEY_CLR_SHIFT       (24U)
-#define SYSCON_STARTERCLR_QDDKEY_CLR(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_QDDKEY_CLR_SHIFT)) & SYSCON_STARTERCLR_QDDKEY_CLR_MASK)
-#define SYSCON_STARTERCLR_PQ_CLR_MASK            (0x2000000U)
-#define SYSCON_STARTERCLR_PQ_CLR_SHIFT           (25U)
-#define SYSCON_STARTERCLR_PQ_CLR(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_PQ_CLR_SHIFT)) & SYSCON_STARTERCLR_PQ_CLR_MASK)
-#define SYSCON_STARTERCLR_SDMA1_CLR_MASK         (0x4000000U)
-#define SYSCON_STARTERCLR_SDMA1_CLR_SHIFT        (26U)
-#define SYSCON_STARTERCLR_SDMA1_CLR(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_SDMA1_CLR_SHIFT)) & SYSCON_STARTERCLR_SDMA1_CLR_MASK)
-#define SYSCON_STARTERCLR_LSPI_HS_CLR_MASK       (0x8000000U)
-#define SYSCON_STARTERCLR_LSPI_HS_CLR_SHIFT      (27U)
-#define SYSCON_STARTERCLR_LSPI_HS_CLR(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_LSPI_HS_CLR_SHIFT)) & SYSCON_STARTERCLR_LSPI_HS_CLR_MASK)
-#define SYSCON_STARTERCLR_USB0_NEEDCLK_CLR_MASK  (0x8000000U)
-#define SYSCON_STARTERCLR_USB0_NEEDCLK_CLR_SHIFT (27U)
-#define SYSCON_STARTERCLR_USB0_NEEDCLK_CLR(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_USB0_NEEDCLK_CLR_SHIFT)) & SYSCON_STARTERCLR_USB0_NEEDCLK_CLR_MASK)
-#define SYSCON_STARTERCLR_USB0_CLR_MASK          (0x10000000U)
-#define SYSCON_STARTERCLR_USB0_CLR_SHIFT         (28U)
-#define SYSCON_STARTERCLR_USB0_CLR(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_USB0_CLR_SHIFT)) & SYSCON_STARTERCLR_USB0_CLR_MASK)
-#define SYSCON_STARTERCLR_RTC_LITE0_CLR_MASK     (0x20000000U)
-#define SYSCON_STARTERCLR_RTC_LITE0_CLR_SHIFT    (29U)
-#define SYSCON_STARTERCLR_RTC_LITE0_CLR(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_RTC_LITE0_CLR_SHIFT)) & SYSCON_STARTERCLR_RTC_LITE0_CLR_MASK)
-#define SYSCON_STARTERCLR_EZH_ARCH_B0_CLR_MASK   (0x40000000U)
-#define SYSCON_STARTERCLR_EZH_ARCH_B0_CLR_SHIFT  (30U)
-#define SYSCON_STARTERCLR_EZH_ARCH_B0_CLR(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_EZH_ARCH_B0_CLR_SHIFT)) & SYSCON_STARTERCLR_EZH_ARCH_B0_CLR_MASK)
-#define SYSCON_STARTERCLR_WAKEUPPADS_CLR_MASK    (0x80000000U)
-#define SYSCON_STARTERCLR_WAKEUPPADS_CLR_SHIFT   (31U)
-#define SYSCON_STARTERCLR_WAKEUPPADS_CLR(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_WAKEUPPADS_CLR_SHIFT)) & SYSCON_STARTERCLR_WAKEUPPADS_CLR_MASK)
-#define SYSCON_STARTERCLR_WAKEUP_MAILBOX0_CLR_MASK (0x80000000U)
-#define SYSCON_STARTERCLR_WAKEUP_MAILBOX0_CLR_SHIFT (31U)
-#define SYSCON_STARTERCLR_WAKEUP_MAILBOX0_CLR(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_STARTERCLR_WAKEUP_MAILBOX0_CLR_SHIFT)) & SYSCON_STARTERCLR_WAKEUP_MAILBOX0_CLR_MASK)
-/*! @} */
-
-/* The count of SYSCON_STARTERCLR */
-#define SYSCON_STARTERCLR_COUNT                  (2U)
-
-/*! @name HARDWARESLEEP - Hardware Sleep control */
-/*! @{ */
-#define SYSCON_HARDWARESLEEP_FORCED_MASK         (0x1U)
-#define SYSCON_HARDWARESLEEP_FORCED_SHIFT        (0U)
-#define SYSCON_HARDWARESLEEP_FORCED(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_HARDWARESLEEP_FORCED_SHIFT)) & SYSCON_HARDWARESLEEP_FORCED_MASK)
-#define SYSCON_HARDWARESLEEP_PERIPHERALS_MASK    (0x2U)
-#define SYSCON_HARDWARESLEEP_PERIPHERALS_SHIFT   (1U)
-#define SYSCON_HARDWARESLEEP_PERIPHERALS(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_HARDWARESLEEP_PERIPHERALS_SHIFT)) & SYSCON_HARDWARESLEEP_PERIPHERALS_MASK)
-#define SYSCON_HARDWARESLEEP_SDMA0_MASK          (0x8U)
-#define SYSCON_HARDWARESLEEP_SDMA0_SHIFT         (3U)
-#define SYSCON_HARDWARESLEEP_SDMA0(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_HARDWARESLEEP_SDMA0_SHIFT)) & SYSCON_HARDWARESLEEP_SDMA0_MASK)
-#define SYSCON_HARDWARESLEEP_SDMA1_MASK          (0x20U)
-#define SYSCON_HARDWARESLEEP_SDMA1_SHIFT         (5U)
-#define SYSCON_HARDWARESLEEP_SDMA1(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_HARDWARESLEEP_SDMA1_SHIFT)) & SYSCON_HARDWARESLEEP_SDMA1_MASK)
-/*! @} */
-
 /*! @name CPUCTRL - CPU Control for multiple processors */
 /*! @{ */
 #define SYSCON_CPUCTRL_CPU1CLKEN_MASK            (0x8U)
@@ -20469,13 +18811,6 @@ typedef struct {
 #define SYSCON_CPBOOT_CPBOOT_MASK                (0xFFFFFFFFU)
 #define SYSCON_CPBOOT_CPBOOT_SHIFT               (0U)
 #define SYSCON_CPBOOT_CPBOOT(x)                  (((uint32_t)(((uint32_t)(x)) << SYSCON_CPBOOT_CPBOOT_SHIFT)) & SYSCON_CPBOOT_CPBOOT_MASK)
-/*! @} */
-
-/*! @name CPSTACK - Coprocessor Stack Address */
-/*! @{ */
-#define SYSCON_CPSTACK_CPSTACK_MASK              (0xFFFFFFFFU)
-#define SYSCON_CPSTACK_CPSTACK_SHIFT             (0U)
-#define SYSCON_CPSTACK_CPSTACK(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_CPSTACK_CPSTACK_SHIFT)) & SYSCON_CPSTACK_CPSTACK_MASK)
 /*! @} */
 
 /*! @name CPSTAT - CPU Status */
@@ -20510,71 +18845,8 @@ typedef struct {
 #define SYSCON_CPSTAT_CPU1LOCKUP(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_CPSTAT_CPU1LOCKUP_SHIFT)) & SYSCON_CPSTAT_CPU1LOCKUP_MASK)
 /*! @} */
 
-/*! @name DICE_REG0 - Composite Device Identifier */
-/*! @{ */
-#define SYSCON_DICE_REG0_DICE_REG0_MASK          (0xFFFFFFFFU)
-#define SYSCON_DICE_REG0_DICE_REG0_SHIFT         (0U)
-#define SYSCON_DICE_REG0_DICE_REG0(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG0_DICE_REG0_SHIFT)) & SYSCON_DICE_REG0_DICE_REG0_MASK)
-/*! @} */
-
-/*! @name DICE_REG1 - Composite Device Identifier */
-/*! @{ */
-#define SYSCON_DICE_REG1_DICE_REG1_MASK          (0xFFFFFFFFU)
-#define SYSCON_DICE_REG1_DICE_REG1_SHIFT         (0U)
-#define SYSCON_DICE_REG1_DICE_REG1(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG1_DICE_REG1_SHIFT)) & SYSCON_DICE_REG1_DICE_REG1_MASK)
-/*! @} */
-
-/*! @name DICE_REG2 - Composite Device Identifier */
-/*! @{ */
-#define SYSCON_DICE_REG2_DICE_REG2_MASK          (0xFFFFFFFFU)
-#define SYSCON_DICE_REG2_DICE_REG2_SHIFT         (0U)
-#define SYSCON_DICE_REG2_DICE_REG2(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG2_DICE_REG2_SHIFT)) & SYSCON_DICE_REG2_DICE_REG2_MASK)
-/*! @} */
-
-/*! @name DICE_REG3 - Composite Device Identifier */
-/*! @{ */
-#define SYSCON_DICE_REG3_DICE_REG3_MASK          (0xFFFFFFFFU)
-#define SYSCON_DICE_REG3_DICE_REG3_SHIFT         (0U)
-#define SYSCON_DICE_REG3_DICE_REG3(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG3_DICE_REG3_SHIFT)) & SYSCON_DICE_REG3_DICE_REG3_MASK)
-/*! @} */
-
-/*! @name DICE_REG4 - Composite Device Identifier */
-/*! @{ */
-#define SYSCON_DICE_REG4_DICE_REG4_MASK          (0xFFFFFFFFU)
-#define SYSCON_DICE_REG4_DICE_REG4_SHIFT         (0U)
-#define SYSCON_DICE_REG4_DICE_REG4(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG4_DICE_REG4_SHIFT)) & SYSCON_DICE_REG4_DICE_REG4_MASK)
-/*! @} */
-
-/*! @name DICE_REG5 - Composite Device Identifier */
-/*! @{ */
-#define SYSCON_DICE_REG5_DICE_REG5_MASK          (0xFFFFFFFFU)
-#define SYSCON_DICE_REG5_DICE_REG5_SHIFT         (0U)
-#define SYSCON_DICE_REG5_DICE_REG5(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG5_DICE_REG5_SHIFT)) & SYSCON_DICE_REG5_DICE_REG5_MASK)
-/*! @} */
-
-/*! @name DICE_REG6 - Composite Device Identifier */
-/*! @{ */
-#define SYSCON_DICE_REG6_DICE_REG6_MASK          (0xFFFFFFFFU)
-#define SYSCON_DICE_REG6_DICE_REG6_SHIFT         (0U)
-#define SYSCON_DICE_REG6_DICE_REG6(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG6_DICE_REG6_SHIFT)) & SYSCON_DICE_REG6_DICE_REG6_MASK)
-/*! @} */
-
-/*! @name DICE_REG7 - Composite Device Identifier */
-/*! @{ */
-#define SYSCON_DICE_REG7_DICE_REG7_MASK          (0xFFFFFFFFU)
-#define SYSCON_DICE_REG7_DICE_REG7_SHIFT         (0U)
-#define SYSCON_DICE_REG7_DICE_REG7(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_DICE_REG7_DICE_REG7_SHIFT)) & SYSCON_DICE_REG7_DICE_REG7_MASK)
-/*! @} */
-
 /*! @name CLOCK_CTRL - Various system clock controls : Flash clock (48 MHz) control, clocks to Frequency Measures */
 /*! @{ */
-#define SYSCON_CLOCK_CTRL_FLASH48MHZ_ENA_MASK    (0x1U)
-#define SYSCON_CLOCK_CTRL_FLASH48MHZ_ENA_SHIFT   (0U)
-/*! FLASH48MHZ_ENA - Enable Flash 48 MHz clock.
- *  0b1..The clock is enabled.
- *  0b0..The clock is not enabled.
- */
-#define SYSCON_CLOCK_CTRL_FLASH48MHZ_ENA(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_CLOCK_CTRL_FLASH48MHZ_ENA_SHIFT)) & SYSCON_CLOCK_CTRL_FLASH48MHZ_ENA_MASK)
 #define SYSCON_CLOCK_CTRL_XTAL32MHZ_FREQM_ENA_MASK (0x2U)
 #define SYSCON_CLOCK_CTRL_XTAL32MHZ_FREQM_ENA_SHIFT (1U)
 /*! XTAL32MHZ_FREQM_ENA - Enable XTAL32MHz clock for Frequency Measure module.
@@ -20769,20 +19041,6 @@ typedef struct {
  *  0b0..Automatic clock gating is not overridden.
  */
 #define SYSCON_AUTOCLKGATEOVERRIDE_SYNC1_APB(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_AUTOCLKGATEOVERRIDE_SYNC1_APB_SHIFT)) & SYSCON_AUTOCLKGATEOVERRIDE_SYNC1_APB_MASK)
-#define SYSCON_AUTOCLKGATEOVERRIDE_FLASH_MASK    (0x200U)
-#define SYSCON_AUTOCLKGATEOVERRIDE_FLASH_SHIFT   (9U)
-/*! FLASH - Control automatic clock gating of FLASH controller.
- *  0b1..Automatic clock gating is overridden (Clock gating is disabled).
- *  0b0..Automatic clock gating is not overridden.
- */
-#define SYSCON_AUTOCLKGATEOVERRIDE_FLASH(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_AUTOCLKGATEOVERRIDE_FLASH_SHIFT)) & SYSCON_AUTOCLKGATEOVERRIDE_FLASH_MASK)
-#define SYSCON_AUTOCLKGATEOVERRIDE_FMC_MASK      (0x400U)
-#define SYSCON_AUTOCLKGATEOVERRIDE_FMC_SHIFT     (10U)
-/*! FMC - Control automatic clock gating of FMC controller.
- *  0b1..Automatic clock gating is overridden (Clock gating is disabled).
- *  0b0..Automatic clock gating is not overridden.
- */
-#define SYSCON_AUTOCLKGATEOVERRIDE_FMC(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_AUTOCLKGATEOVERRIDE_FMC_SHIFT)) & SYSCON_AUTOCLKGATEOVERRIDE_FMC_MASK)
 #define SYSCON_AUTOCLKGATEOVERRIDE_CRCGEN_MASK   (0x800U)
 #define SYSCON_AUTOCLKGATEOVERRIDE_CRCGEN_SHIFT  (11U)
 /*! CRCGEN - Control automatic clock gating of CRCGEN controller.
@@ -20804,13 +19062,13 @@ typedef struct {
  *  0b0..Automatic clock gating is not overridden.
  */
 #define SYSCON_AUTOCLKGATEOVERRIDE_SDMA1(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_AUTOCLKGATEOVERRIDE_SDMA1_SHIFT)) & SYSCON_AUTOCLKGATEOVERRIDE_SDMA1_MASK)
-#define SYSCON_AUTOCLKGATEOVERRIDE_USB_MASK      (0x4000U)
-#define SYSCON_AUTOCLKGATEOVERRIDE_USB_SHIFT     (14U)
-/*! USB - Control automatic clock gating of USB controller.
+#define SYSCON_AUTOCLKGATEOVERRIDE_USB0_MASK     (0x4000U)
+#define SYSCON_AUTOCLKGATEOVERRIDE_USB0_SHIFT    (14U)
+/*! USB0 - Control automatic clock gating of USB controller.
  *  0b1..Automatic clock gating is overridden (Clock gating is disabled).
  *  0b0..Automatic clock gating is not overridden.
  */
-#define SYSCON_AUTOCLKGATEOVERRIDE_USB(x)        (((uint32_t)(((uint32_t)(x)) << SYSCON_AUTOCLKGATEOVERRIDE_USB_SHIFT)) & SYSCON_AUTOCLKGATEOVERRIDE_USB_MASK)
+#define SYSCON_AUTOCLKGATEOVERRIDE_USB0(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_AUTOCLKGATEOVERRIDE_USB0_SHIFT)) & SYSCON_AUTOCLKGATEOVERRIDE_USB0_MASK)
 #define SYSCON_AUTOCLKGATEOVERRIDE_SYSCON_MASK   (0x8000U)
 #define SYSCON_AUTOCLKGATEOVERRIDE_SYSCON_SHIFT  (15U)
 /*! SYSCON - Control automatic clock gating of synchronous system controller registers bank.
@@ -20821,8 +19079,8 @@ typedef struct {
 #define SYSCON_AUTOCLKGATEOVERRIDE_ENABLEUPDATE_MASK (0xFFFF0000U)
 #define SYSCON_AUTOCLKGATEOVERRIDE_ENABLEUPDATE_SHIFT (16U)
 /*! ENABLEUPDATE - The value 0xC0DE must be written for AUTOCLKGATEOVERRIDE registers fields updates to have effect.
- *  0b1100000011011110..Automatic clock gating is overridden (Clock gating is disabled).
- *  0b0000000000000000..Automatic clock gating is not overridden.
+ *  0b1100000011011110..Bit Fields 0 - 15 of this register are updated
+ *  0b0000000000000000..Bit Fields 0 - 15 of this register are not updated
  */
 #define SYSCON_AUTOCLKGATEOVERRIDE_ENABLEUPDATE(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_AUTOCLKGATEOVERRIDE_ENABLEUPDATE_SHIFT)) & SYSCON_AUTOCLKGATEOVERRIDE_ENABLEUPDATE_MASK)
 /*! @} */
@@ -20838,155 +19096,122 @@ typedef struct {
 #define SYSCON_GPIOPSYNC_PSYNC(x)                (((uint32_t)(((uint32_t)(x)) << SYSCON_GPIOPSYNC_PSYNC_SHIFT)) & SYSCON_GPIOPSYNC_PSYNC_MASK)
 /*! @} */
 
-/*! @name DEBUG_LOCK_EN - Control write access to security registers -- FOR INTERNAl USE ONLY */
+/*! @name DEBUG_LOCK_EN - Control write access to security registers. */
 /*! @{ */
 #define SYSCON_DEBUG_LOCK_EN_LOCK_ALL_MASK       (0xFU)
 #define SYSCON_DEBUG_LOCK_EN_LOCK_ALL_SHIFT      (0U)
 /*! LOCK_ALL - Control write access to CODESECURITYPROTTEST, CODESECURITYPROTCPU0,
- *    CODESECURITYPROTCPU1, CM33_DEBUG_FEATURES, MCM33_DEBUG_FEATURES and DBG_AUTH_SCRATCH registers.
+ *    CODESECURITYPROTCPU1, CPU0_DEBUG_FEATURES, CPU1_DEBUG_FEATURES and DBG_AUTH_SCRATCH registers.
  *  0b1010..1010: Enable write access to all 6 registers.
  *  0b0000..Any other value than b1010: disable write access to all 6 registers.
  */
 #define SYSCON_DEBUG_LOCK_EN_LOCK_ALL(x)         (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_LOCK_EN_LOCK_ALL_SHIFT)) & SYSCON_DEBUG_LOCK_EN_LOCK_ALL_MASK)
 /*! @} */
 
-/*! @name DEBUG_FEATURES - Cortex M33 (CPU0) and micro Cortex M33 (CPU1) debug features control -- FOR INTERNAl USE ONLY */
+/*! @name DEBUG_FEATURES - Cortex M33 (CPU0) and micro Cortex M33 (CPU1) debug features control. */
 /*! @{ */
-#define SYSCON_DEBUG_FEATURES_CM33_DBGEN_MASK    (0x3U)
-#define SYSCON_DEBUG_FEATURES_CM33_DBGEN_SHIFT   (0U)
-/*! CM33_DBGEN - CM33 (CPU0) Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_CPU0_DBGEN_MASK    (0x3U)
+#define SYSCON_DEBUG_FEATURES_CPU0_DBGEN_SHIFT   (0U)
+/*! CPU0_DBGEN - CPU0 Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_CM33_DBGEN(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_CM33_DBGEN_SHIFT)) & SYSCON_DEBUG_FEATURES_CM33_DBGEN_MASK)
-#define SYSCON_DEBUG_FEATURES_CM33_NIDEN_MASK    (0xCU)
-#define SYSCON_DEBUG_FEATURES_CM33_NIDEN_SHIFT   (2U)
-/*! CM33_NIDEN - CM33 (CPU0) Non Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_CPU0_DBGEN(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_CPU0_DBGEN_SHIFT)) & SYSCON_DEBUG_FEATURES_CPU0_DBGEN_MASK)
+#define SYSCON_DEBUG_FEATURES_CPU0_NIDEN_MASK    (0xCU)
+#define SYSCON_DEBUG_FEATURES_CPU0_NIDEN_SHIFT   (2U)
+/*! CPU0_NIDEN - CPU0 Non Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_CM33_NIDEN(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_CM33_NIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_CM33_NIDEN_MASK)
-#define SYSCON_DEBUG_FEATURES_CM33_SPIDEN_MASK   (0x30U)
-#define SYSCON_DEBUG_FEATURES_CM33_SPIDEN_SHIFT  (4U)
-/*! CM33_SPIDEN - CM33 (CPU0) Secure Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_CPU0_NIDEN(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_CPU0_NIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_CPU0_NIDEN_MASK)
+#define SYSCON_DEBUG_FEATURES_CPU0_SPIDEN_MASK   (0x30U)
+#define SYSCON_DEBUG_FEATURES_CPU0_SPIDEN_SHIFT  (4U)
+/*! CPU0_SPIDEN - CPU0 Secure Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_CM33_SPIDEN(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_CM33_SPIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_CM33_SPIDEN_MASK)
-#define SYSCON_DEBUG_FEATURES_CM33_SPNIDEN_MASK  (0xC0U)
-#define SYSCON_DEBUG_FEATURES_CM33_SPNIDEN_SHIFT (6U)
-/*! CM33_SPNIDEN - CM33 (CPU0) Secure Non Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_CPU0_SPIDEN(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_CPU0_SPIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_CPU0_SPIDEN_MASK)
+#define SYSCON_DEBUG_FEATURES_CPU0_SPNIDEN_MASK  (0xC0U)
+#define SYSCON_DEBUG_FEATURES_CPU0_SPNIDEN_SHIFT (6U)
+/*! CPU0_SPNIDEN - CPU0 Secure Non Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_CM33_SPNIDEN(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_CM33_SPNIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_CM33_SPNIDEN_MASK)
-#define SYSCON_DEBUG_FEATURES_MCM33_DBGEN_MASK   (0x300U)
-#define SYSCON_DEBUG_FEATURES_MCM33_DBGEN_SHIFT  (8U)
-/*! MCM33_DBGEN - Micro-CM33 (CPU1) Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_CPU0_SPNIDEN(x)    (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_CPU0_SPNIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_CPU0_SPNIDEN_MASK)
+#define SYSCON_DEBUG_FEATURES_CPU1_DBGEN_MASK    (0x300U)
+#define SYSCON_DEBUG_FEATURES_CPU1_DBGEN_SHIFT   (8U)
+/*! CPU1_DBGEN - CPU1 Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_MCM33_DBGEN(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_MCM33_DBGEN_SHIFT)) & SYSCON_DEBUG_FEATURES_MCM33_DBGEN_MASK)
-#define SYSCON_DEBUG_FEATURES_MCM33_NIDEN_MASK   (0xC00U)
-#define SYSCON_DEBUG_FEATURES_MCM33_NIDEN_SHIFT  (10U)
-/*! MCM33_NIDEN - Micro-CM33 (CPU1) Non Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_CPU1_DBGEN(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_CPU1_DBGEN_SHIFT)) & SYSCON_DEBUG_FEATURES_CPU1_DBGEN_MASK)
+#define SYSCON_DEBUG_FEATURES_CPU1_NIDEN_MASK    (0xC00U)
+#define SYSCON_DEBUG_FEATURES_CPU1_NIDEN_SHIFT   (10U)
+/*! CPU1_NIDEN - CPU1 Non Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_MCM33_NIDEN(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_MCM33_NIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_MCM33_NIDEN_MASK)
+#define SYSCON_DEBUG_FEATURES_CPU1_NIDEN(x)      (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_CPU1_NIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_CPU1_NIDEN_MASK)
 /*! @} */
 
-/*! @name DEBUG_FEATURES_DP - Cortex M33 (CPU0) and micro Cortex M33 (CPU1) debug features control DUPLICATE register -- FOR INTERNAl USE ONLY */
+/*! @name DEBUG_FEATURES_DP - Cortex M33 (CPU0) and micro Cortex M33 (CPU1) debug features control DUPLICATE register. */
 /*! @{ */
-#define SYSCON_DEBUG_FEATURES_DP_CM33_DBGEN_MASK (0x3U)
-#define SYSCON_DEBUG_FEATURES_DP_CM33_DBGEN_SHIFT (0U)
-/*! CM33_DBGEN - CM33 (CPU0) Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_DBGEN_MASK (0x3U)
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_DBGEN_SHIFT (0U)
+/*! CPU0_DBGEN - CPU0 (CPU0) Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_DP_CM33_DBGEN(x)   (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_CM33_DBGEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_CM33_DBGEN_MASK)
-#define SYSCON_DEBUG_FEATURES_DP_CM33_NIDEN_MASK (0xCU)
-#define SYSCON_DEBUG_FEATURES_DP_CM33_NIDEN_SHIFT (2U)
-/*! CM33_NIDEN - CM33 (CPU0) Non Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_DBGEN(x)   (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_CPU0_DBGEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_CPU0_DBGEN_MASK)
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_NIDEN_MASK (0xCU)
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_NIDEN_SHIFT (2U)
+/*! CPU0_NIDEN - CPU0 Non Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_DP_CM33_NIDEN(x)   (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_CM33_NIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_CM33_NIDEN_MASK)
-#define SYSCON_DEBUG_FEATURES_DP_CM33_SPIDEN_MASK (0x30U)
-#define SYSCON_DEBUG_FEATURES_DP_CM33_SPIDEN_SHIFT (4U)
-/*! CM33_SPIDEN - CM33 (CPU0) Secure Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_NIDEN(x)   (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_CPU0_NIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_CPU0_NIDEN_MASK)
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_SPIDEN_MASK (0x30U)
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_SPIDEN_SHIFT (4U)
+/*! CPU0_SPIDEN - CPU0 Secure Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_DP_CM33_SPIDEN(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_CM33_SPIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_CM33_SPIDEN_MASK)
-#define SYSCON_DEBUG_FEATURES_DP_CM33_SPNIDEN_MASK (0xC0U)
-#define SYSCON_DEBUG_FEATURES_DP_CM33_SPNIDEN_SHIFT (6U)
-/*! CM33_SPNIDEN - CM33 (CPU0) Secure Non Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_SPIDEN(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_CPU0_SPIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_CPU0_SPIDEN_MASK)
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_SPNIDEN_MASK (0xC0U)
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_SPNIDEN_SHIFT (6U)
+/*! CPU0_SPNIDEN - CPU0 Secure Non Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_DP_CM33_SPNIDEN(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_CM33_SPNIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_CM33_SPNIDEN_MASK)
-#define SYSCON_DEBUG_FEATURES_DP_MCM33_DBGEN_MASK (0x300U)
-#define SYSCON_DEBUG_FEATURES_DP_MCM33_DBGEN_SHIFT (8U)
-/*! MCM33_DBGEN - Micro-CM33 (CPU1) Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_DP_CPU0_SPNIDEN(x) (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_CPU0_SPNIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_CPU0_SPNIDEN_MASK)
+#define SYSCON_DEBUG_FEATURES_DP_CPU1_DBGEN_MASK (0x300U)
+#define SYSCON_DEBUG_FEATURES_DP_CPU1_DBGEN_SHIFT (8U)
+/*! CPU1_DBGEN - CPU1 Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_DP_MCM33_DBGEN(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_MCM33_DBGEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_MCM33_DBGEN_MASK)
-#define SYSCON_DEBUG_FEATURES_DP_MCM33_NIDEN_MASK (0xC00U)
-#define SYSCON_DEBUG_FEATURES_DP_MCM33_NIDEN_SHIFT (10U)
-/*! MCM33_NIDEN - Micro-CM33 (CPU1) Non Invasive debug control:.
+#define SYSCON_DEBUG_FEATURES_DP_CPU1_DBGEN(x)   (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_CPU1_DBGEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_CPU1_DBGEN_MASK)
+#define SYSCON_DEBUG_FEATURES_DP_CPU1_NIDEN_MASK (0xC00U)
+#define SYSCON_DEBUG_FEATURES_DP_CPU1_NIDEN_SHIFT (10U)
+/*! CPU1_NIDEN - CPU1 Non Invasive debug control:.
  *  0b10..10: Invasive debug is enabled.
  *  0b01..Any other value than b10: invasive debug is disable.
  */
-#define SYSCON_DEBUG_FEATURES_DP_MCM33_NIDEN(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_MCM33_NIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_MCM33_NIDEN_MASK)
+#define SYSCON_DEBUG_FEATURES_DP_CPU1_NIDEN(x)   (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_FEATURES_DP_CPU1_NIDEN_SHIFT)) & SYSCON_DEBUG_FEATURES_DP_CPU1_NIDEN_MASK)
 /*! @} */
 
-/*! @name CODESECURITYPROTTEST - Security code to allow test (Design for Testability) access -- FOR INTERNAl USE ONLY */
-/*! @{ */
-#define SYSCON_CODESECURITYPROTTEST_SEC_CODE_MASK (0xFFFFFFFFU)
-#define SYSCON_CODESECURITYPROTTEST_SEC_CODE_SHIFT (0U)
-/*! SEC_CODE - Security code to allow test access : 0x12345678.
- *  0b00010010001101000101011001111000..Security code to allow test access.
- *  0b00000000000000000000000000000000..test access is not allowed.
- */
-#define SYSCON_CODESECURITYPROTTEST_SEC_CODE(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_CODESECURITYPROTTEST_SEC_CODE_SHIFT)) & SYSCON_CODESECURITYPROTTEST_SEC_CODE_MASK)
-/*! @} */
-
-/*! @name CODESECURITYPROTCPU0 - Security code to allow CPU0 (CM33) Debug Access Port (DAP) -- FOR INTERNAl USE ONLY */
-/*! @{ */
-#define SYSCON_CODESECURITYPROTCPU0_SEC_CODE_MASK (0xFFFFFFFFU)
-#define SYSCON_CODESECURITYPROTCPU0_SEC_CODE_SHIFT (0U)
-/*! SEC_CODE - Security code to allow CPU0 DAP: 0x12345678.
- *  0b00010010001101000101011001111000..Security code to allow CPU0 DAP.
- *  0b00000000000000000000000000000000..CPU0 DAP is not allowed.
- */
-#define SYSCON_CODESECURITYPROTCPU0_SEC_CODE(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_CODESECURITYPROTCPU0_SEC_CODE_SHIFT)) & SYSCON_CODESECURITYPROTCPU0_SEC_CODE_MASK)
-/*! @} */
-
-/*! @name CODESECURITYPROTCPU1 - Security code to allow CPU1 (Micro CM33) Debug Access Port (DAP) -- FOR INTERNAl USE ONLY */
-/*! @{ */
-#define SYSCON_CODESECURITYPROTCPU1_SEC_CODE_MASK (0xFFFFFFFFU)
-#define SYSCON_CODESECURITYPROTCPU1_SEC_CODE_SHIFT (0U)
-/*! SEC_CODE - Security code to allow CPU1 DAP: 0x12345678.
- *  0b00010010001101000101011001111000..Security code to allow CPU1 DAP.
- *  0b00000000000000000000000000000000..CPU1 DAP is not allowed.
- */
-#define SYSCON_CODESECURITYPROTCPU1_SEC_CODE(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_CODESECURITYPROTCPU1_SEC_CODE_SHIFT)) & SYSCON_CODESECURITYPROTCPU1_SEC_CODE_MASK)
-/*! @} */
-
-/*! @name KEY_BLOCK - block quiddikey/PUF all index. -- FOR INTERNAL USE ONLY */
+/*! @name KEY_BLOCK - block quiddikey/PUF all index. */
 /*! @{ */
 #define SYSCON_KEY_BLOCK_KEY_BLOCK_MASK          (0xFFFFFFFFU)
 #define SYSCON_KEY_BLOCK_KEY_BLOCK_SHIFT         (0U)
 #define SYSCON_KEY_BLOCK_KEY_BLOCK(x)            (((uint32_t)(((uint32_t)(x)) << SYSCON_KEY_BLOCK_KEY_BLOCK_SHIFT)) & SYSCON_KEY_BLOCK_KEY_BLOCK_MASK)
 /*! @} */
 
-/*! @name DEBUG_AUTH_SCRATCH - Debug authentication scratch registers -- FOR INTERNAL USE ONLY */
+/*! @name DEBUG_AUTH_BEACON - Debug authentication BEACON register */
 /*! @{ */
-#define SYSCON_DEBUG_AUTH_SCRATCH_SCRATCH_MASK   (0xFFFFFFFFU)
-#define SYSCON_DEBUG_AUTH_SCRATCH_SCRATCH_SHIFT  (0U)
-#define SYSCON_DEBUG_AUTH_SCRATCH_SCRATCH(x)     (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_AUTH_SCRATCH_SCRATCH_SHIFT)) & SYSCON_DEBUG_AUTH_SCRATCH_SCRATCH_MASK)
+#define SYSCON_DEBUG_AUTH_BEACON_BEACON_MASK     (0xFFFFFFFFU)
+#define SYSCON_DEBUG_AUTH_BEACON_BEACON_SHIFT    (0U)
+#define SYSCON_DEBUG_AUTH_BEACON_BEACON(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_DEBUG_AUTH_BEACON_BEACON_SHIFT)) & SYSCON_DEBUG_AUTH_BEACON_BEACON_MASK)
 /*! @} */
 
 /*! @name CPUCFG - CPUs configuration register */
@@ -21000,83 +19225,11 @@ typedef struct {
 #define SYSCON_CPUCFG_CPU1ENABLE(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_CPUCFG_CPU1ENABLE_SHIFT)) & SYSCON_CPUCFG_CPU1ENABLE_MASK)
 /*! @} */
 
-/*! @name PERIPHENCFG - peripheral enable configuration -- FOR INTERNAL USE ONLY */
-/*! @{ */
-#define SYSCON_PERIPHENCFG_SCTEN_MASK            (0x1U)
-#define SYSCON_PERIPHENCFG_SCTEN_SHIFT           (0U)
-/*! SCTEN - SCT enable.
- *  0b1..peripheral is enable.
- *  0b0..peripheral is disable.
- */
-#define SYSCON_PERIPHENCFG_SCTEN(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_SCTEN_SHIFT)) & SYSCON_PERIPHENCFG_SCTEN_MASK)
-#define SYSCON_PERIPHENCFG_ADCEN_MASK            (0x2U)
-#define SYSCON_PERIPHENCFG_ADCEN_SHIFT           (1U)
-/*! ADCEN - ADC enable.
- *  0b1..peripheral is enable.
- *  0b0..peripheral is disable.
- */
-#define SYSCON_PERIPHENCFG_ADCEN(x)              (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_ADCEN_SHIFT)) & SYSCON_PERIPHENCFG_ADCEN_MASK)
-#define SYSCON_PERIPHENCFG_USB0EN_MASK           (0x4U)
-#define SYSCON_PERIPHENCFG_USB0EN_SHIFT          (2U)
-/*! USB0EN - USB0 enable.
- *  0b1..peripheral is enable.
- *  0b0..peripheral is disable.
- */
-#define SYSCON_PERIPHENCFG_USB0EN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_USB0EN_SHIFT)) & SYSCON_PERIPHENCFG_USB0EN_MASK)
-#define SYSCON_PERIPHENCFG_PUFFEN_MASK           (0x40U)
-#define SYSCON_PERIPHENCFG_PUFFEN_SHIFT          (6U)
-/*! PUFFEN - Puff enable.
- *  0b1..peripheral is enable.
- *  0b0..peripheral is disable.
- */
-#define SYSCON_PERIPHENCFG_PUFFEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_PUFFEN_SHIFT)) & SYSCON_PERIPHENCFG_PUFFEN_MASK)
-#define SYSCON_PERIPHENCFG_USB1EN_MASK           (0x400U)
-#define SYSCON_PERIPHENCFG_USB1EN_SHIFT          (10U)
-/*! USB1EN - USB1 enable.
- *  0b1..peripheral is enable.
- *  0b0..peripheral is disable.
- */
-#define SYSCON_PERIPHENCFG_USB1EN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_USB1EN_SHIFT)) & SYSCON_PERIPHENCFG_USB1EN_MASK)
-#define SYSCON_PERIPHENCFG_SDIOEN_MASK           (0x800U)
-#define SYSCON_PERIPHENCFG_SDIOEN_SHIFT          (11U)
-/*! SDIOEN - SDIO enable.
- *  0b1..peripheral is enable.
- *  0b0..peripheral is disable.
- */
-#define SYSCON_PERIPHENCFG_SDIOEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_SDIOEN_SHIFT)) & SYSCON_PERIPHENCFG_SDIOEN_MASK)
-#define SYSCON_PERIPHENCFG_HASHEN_MASK           (0x1000U)
-#define SYSCON_PERIPHENCFG_HASHEN_SHIFT          (12U)
-/*! HASHEN - HASH enable.
- *  0b1..peripheral is enable.
- *  0b0..peripheral is disable.
- */
-#define SYSCON_PERIPHENCFG_HASHEN(x)             (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_HASHEN_SHIFT)) & SYSCON_PERIPHENCFG_HASHEN_MASK)
-#define SYSCON_PERIPHENCFG_PRINCEEN_MASK         (0x4000U)
-#define SYSCON_PERIPHENCFG_PRINCEEN_SHIFT        (14U)
-/*! PRINCEEN - PRINCE enable.
- *  0b1..peripheral is enable.
- *  0b0..peripheral is disable.
- */
-#define SYSCON_PERIPHENCFG_PRINCEEN(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_PERIPHENCFG_PRINCEEN_SHIFT)) & SYSCON_PERIPHENCFG_PRINCEEN_MASK)
-/*! @} */
-
 /*! @name DEVICE_ID0 - Device ID */
 /*! @{ */
-#define SYSCON_DEVICE_ID0_PARTCONFIG_MASK        (0xFFU)
-#define SYSCON_DEVICE_ID0_PARTCONFIG_SHIFT       (0U)
-#define SYSCON_DEVICE_ID0_PARTCONFIG(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_PARTCONFIG_SHIFT)) & SYSCON_DEVICE_ID0_PARTCONFIG_MASK)
-#define SYSCON_DEVICE_ID0_SRAM_SIZE_MASK         (0xF00U)
-#define SYSCON_DEVICE_ID0_SRAM_SIZE_SHIFT        (8U)
-#define SYSCON_DEVICE_ID0_SRAM_SIZE(x)           (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_SRAM_SIZE_SHIFT)) & SYSCON_DEVICE_ID0_SRAM_SIZE_MASK)
-#define SYSCON_DEVICE_ID0_FLASH_SIZE_MASK        (0x7000U)
-#define SYSCON_DEVICE_ID0_FLASH_SIZE_SHIFT       (12U)
-#define SYSCON_DEVICE_ID0_FLASH_SIZE(x)          (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_FLASH_SIZE_SHIFT)) & SYSCON_DEVICE_ID0_FLASH_SIZE_MASK)
 #define SYSCON_DEVICE_ID0_ROM_REV_MINOR_MASK     (0xF00000U)
 #define SYSCON_DEVICE_ID0_ROM_REV_MINOR_SHIFT    (20U)
 #define SYSCON_DEVICE_ID0_ROM_REV_MINOR(x)       (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_ROM_REV_MINOR_SHIFT)) & SYSCON_DEVICE_ID0_ROM_REV_MINOR_MASK)
-#define SYSCON_DEVICE_ID0_MODELNUM_EXTENTION_MASK (0x7000000U)
-#define SYSCON_DEVICE_ID0_MODELNUM_EXTENTION_SHIFT (24U)
-#define SYSCON_DEVICE_ID0_MODELNUM_EXTENTION(x)  (((uint32_t)(((uint32_t)(x)) << SYSCON_DEVICE_ID0_MODELNUM_EXTENTION_SHIFT)) & SYSCON_DEVICE_ID0_MODELNUM_EXTENTION_MASK)
 /*! @} */
 
 /*! @name DIEID - Chip revision ID and Number */
@@ -21212,10 +19365,10 @@ typedef struct {
 /* The count of SYSCTL_FCCTRLSEL */
 #define SYSCTL_FCCTRLSEL_COUNT                   (8U)
 
-/*! @name SHARECTRLSET_SHAREDCTRLSET - Selects sources and data combinations for shared signal set 0...Selects sources and data combinations for shared signal set 1. */
+/*! @name SHAREDCTRLSET - Selects sources and data combinations for shared signal set 0...Selects sources and data combinations for shared signal set 1. */
 /*! @{ */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDSCKSEL_MASK (0x7U)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDSCKSEL_SHIFT (0U)
+#define SYSCTL_SHAREDCTRLSET_SHAREDSCKSEL_MASK   (0x7U)
+#define SYSCTL_SHAREDCTRLSET_SHAREDSCKSEL_SHIFT  (0U)
 /*! SHAREDSCKSEL - Selects the source for SCK of this shared signal set.
  *  0b000..SCK for this shared signal set comes from Flexcomm 0.
  *  0b001..SCK for this shared signal set comes from Flexcomm 1.
@@ -21226,9 +19379,9 @@ typedef struct {
  *  0b110..SCK for this shared signal set comes from Flexcomm 6.
  *  0b111..SCK for this shared signal set comes from Flexcomm 7.
  */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDSCKSEL(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDSCKSEL_SHIFT)) & SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDSCKSEL_MASK)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDWSSEL_MASK (0x70U)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDWSSEL_SHIFT (4U)
+#define SYSCTL_SHAREDCTRLSET_SHAREDSCKSEL(x)     (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHAREDCTRLSET_SHAREDSCKSEL_SHIFT)) & SYSCTL_SHAREDCTRLSET_SHAREDSCKSEL_MASK)
+#define SYSCTL_SHAREDCTRLSET_SHAREDWSSEL_MASK    (0x70U)
+#define SYSCTL_SHAREDCTRLSET_SHAREDWSSEL_SHIFT   (4U)
 /*! SHAREDWSSEL - Selects the source for WS of this shared signal set.
  *  0b000..WS for this shared signal set comes from Flexcomm 0.
  *  0b001..WS for this shared signal set comes from Flexcomm 1.
@@ -21239,9 +19392,9 @@ typedef struct {
  *  0b110..WS for this shared signal set comes from Flexcomm 6.
  *  0b111..WS for this shared signal set comes from Flexcomm 7.
  */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDWSSEL(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDWSSEL_SHIFT)) & SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDWSSEL_MASK)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDDATASEL_MASK (0x700U)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDDATASEL_SHIFT (8U)
+#define SYSCTL_SHAREDCTRLSET_SHAREDWSSEL(x)      (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHAREDCTRLSET_SHAREDWSSEL_SHIFT)) & SYSCTL_SHAREDCTRLSET_SHAREDWSSEL_MASK)
+#define SYSCTL_SHAREDCTRLSET_SHAREDDATASEL_MASK  (0x700U)
+#define SYSCTL_SHAREDCTRLSET_SHAREDDATASEL_SHIFT (8U)
 /*! SHAREDDATASEL - Selects the source for DATA input for this shared signal set.
  *  0b000..DATA input for this shared signal set comes from Flexcomm 0.
  *  0b001..DATA input for this shared signal set comes from Flexcomm 1.
@@ -21252,67 +19405,60 @@ typedef struct {
  *  0b110..DATA input for this shared signal set comes from Flexcomm 6.
  *  0b111..DATA input for this shared signal set comes from Flexcomm 7.
  */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDDATASEL(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDDATASEL_SHIFT)) & SYSCTL_SHARECTRLSET_SHAREDCTRLSET_SHAREDDATASEL_MASK)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC0DATAOUTEN_MASK (0x10000U)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC0DATAOUTEN_SHIFT (16U)
+#define SYSCTL_SHAREDCTRLSET_SHAREDDATASEL(x)    (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHAREDCTRLSET_SHAREDDATASEL_SHIFT)) & SYSCTL_SHAREDCTRLSET_SHAREDDATASEL_MASK)
+#define SYSCTL_SHAREDCTRLSET_FC0DATAOUTEN_MASK   (0x10000U)
+#define SYSCTL_SHAREDCTRLSET_FC0DATAOUTEN_SHIFT  (16U)
 /*! FC0DATAOUTEN - Controls FC0 contribution to SHAREDDATAOUT for this shared set.
  *  0b0..Data output from FC0 does not contribute to this shared set.
  *  0b1..Data output from FC0 does contribute to this shared set.
  */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC0DATAOUTEN(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC0DATAOUTEN_SHIFT)) & SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC0DATAOUTEN_MASK)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC1DATAOUTEN_MASK (0x20000U)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC1DATAOUTEN_SHIFT (17U)
+#define SYSCTL_SHAREDCTRLSET_FC0DATAOUTEN(x)     (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHAREDCTRLSET_FC0DATAOUTEN_SHIFT)) & SYSCTL_SHAREDCTRLSET_FC0DATAOUTEN_MASK)
+#define SYSCTL_SHAREDCTRLSET_FC1DATAOUTEN_MASK   (0x20000U)
+#define SYSCTL_SHAREDCTRLSET_FC1DATAOUTEN_SHIFT  (17U)
 /*! FC1DATAOUTEN - Controls FC1 contribution to SHAREDDATAOUT for this shared set.
  *  0b0..Data output from FC1 does not contribute to this shared set.
  *  0b1..Data output from FC1 does contribute to this shared set.
  */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC1DATAOUTEN(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC1DATAOUTEN_SHIFT)) & SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC1DATAOUTEN_MASK)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_F20DATAOUTEN_MASK (0x40000U)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_F20DATAOUTEN_SHIFT (18U)
-/*! F20DATAOUTEN - Controls FC2 contribution to SHAREDDATAOUT for this shared set.
+#define SYSCTL_SHAREDCTRLSET_FC1DATAOUTEN(x)     (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHAREDCTRLSET_FC1DATAOUTEN_SHIFT)) & SYSCTL_SHAREDCTRLSET_FC1DATAOUTEN_MASK)
+#define SYSCTL_SHAREDCTRLSET_FC2DATAOUTEN_MASK   (0x40000U)
+#define SYSCTL_SHAREDCTRLSET_FC2DATAOUTEN_SHIFT  (18U)
+/*! FC2DATAOUTEN - Controls FC2 contribution to SHAREDDATAOUT for this shared set.
  *  0b0..Data output from FC2 does not contribute to this shared set.
  *  0b1..Data output from FC2 does contribute to this shared set.
  */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_F20DATAOUTEN(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHARECTRLSET_SHAREDCTRLSET_F20DATAOUTEN_SHIFT)) & SYSCTL_SHARECTRLSET_SHAREDCTRLSET_F20DATAOUTEN_MASK)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC3DATAOUTEN_MASK (0x80000U)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC3DATAOUTEN_SHIFT (19U)
-/*! FC3DATAOUTEN - Controls FC3 contribution to SHAREDDATAOUT for this shared set.
- *  0b0..Data output from FC3 does not contribute to this shared set.
- *  0b1..Data output from FC3 does contribute to this shared set.
- */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC3DATAOUTEN(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC3DATAOUTEN_SHIFT)) & SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC3DATAOUTEN_MASK)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC4DATAOUTEN_MASK (0x100000U)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC4DATAOUTEN_SHIFT (20U)
+#define SYSCTL_SHAREDCTRLSET_FC2DATAOUTEN(x)     (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHAREDCTRLSET_FC2DATAOUTEN_SHIFT)) & SYSCTL_SHAREDCTRLSET_FC2DATAOUTEN_MASK)
+#define SYSCTL_SHAREDCTRLSET_FC4DATAOUTEN_MASK   (0x100000U)
+#define SYSCTL_SHAREDCTRLSET_FC4DATAOUTEN_SHIFT  (20U)
 /*! FC4DATAOUTEN - Controls FC4 contribution to SHAREDDATAOUT for this shared set.
  *  0b0..Data output from FC4 does not contribute to this shared set.
  *  0b1..Data output from FC4 does contribute to this shared set.
  */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC4DATAOUTEN(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC4DATAOUTEN_SHIFT)) & SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC4DATAOUTEN_MASK)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC5DATAOUTEN_MASK (0x200000U)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC5DATAOUTEN_SHIFT (21U)
+#define SYSCTL_SHAREDCTRLSET_FC4DATAOUTEN(x)     (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHAREDCTRLSET_FC4DATAOUTEN_SHIFT)) & SYSCTL_SHAREDCTRLSET_FC4DATAOUTEN_MASK)
+#define SYSCTL_SHAREDCTRLSET_FC5DATAOUTEN_MASK   (0x200000U)
+#define SYSCTL_SHAREDCTRLSET_FC5DATAOUTEN_SHIFT  (21U)
 /*! FC5DATAOUTEN - Controls FC5 contribution to SHAREDDATAOUT for this shared set.
  *  0b0..Data output from FC5 does not contribute to this shared set.
  *  0b1..Data output from FC5 does contribute to this shared set.
  */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC5DATAOUTEN(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC5DATAOUTEN_SHIFT)) & SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC5DATAOUTEN_MASK)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC6DATAOUTEN_MASK (0x400000U)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC6DATAOUTEN_SHIFT (22U)
+#define SYSCTL_SHAREDCTRLSET_FC5DATAOUTEN(x)     (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHAREDCTRLSET_FC5DATAOUTEN_SHIFT)) & SYSCTL_SHAREDCTRLSET_FC5DATAOUTEN_MASK)
+#define SYSCTL_SHAREDCTRLSET_FC6DATAOUTEN_MASK   (0x400000U)
+#define SYSCTL_SHAREDCTRLSET_FC6DATAOUTEN_SHIFT  (22U)
 /*! FC6DATAOUTEN - Controls FC6 contribution to SHAREDDATAOUT for this shared set.
  *  0b0..Data output from FC6 does not contribute to this shared set.
  *  0b1..Data output from FC6 does contribute to this shared set.
  */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC6DATAOUTEN(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC6DATAOUTEN_SHIFT)) & SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC6DATAOUTEN_MASK)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC7DATAOUTEN_MASK (0x800000U)
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC7DATAOUTEN_SHIFT (23U)
+#define SYSCTL_SHAREDCTRLSET_FC6DATAOUTEN(x)     (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHAREDCTRLSET_FC6DATAOUTEN_SHIFT)) & SYSCTL_SHAREDCTRLSET_FC6DATAOUTEN_MASK)
+#define SYSCTL_SHAREDCTRLSET_FC7DATAOUTEN_MASK   (0x800000U)
+#define SYSCTL_SHAREDCTRLSET_FC7DATAOUTEN_SHIFT  (23U)
 /*! FC7DATAOUTEN - Controls FC7 contribution to SHAREDDATAOUT for this shared set.
  *  0b0..Data output from FC7 does not contribute to this shared set.
  *  0b1..Data output from FC7 does contribute to this shared set.
  */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC7DATAOUTEN(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC7DATAOUTEN_SHIFT)) & SYSCTL_SHARECTRLSET_SHAREDCTRLSET_FC7DATAOUTEN_MASK)
+#define SYSCTL_SHAREDCTRLSET_FC7DATAOUTEN(x)     (((uint32_t)(((uint32_t)(x)) << SYSCTL_SHAREDCTRLSET_FC7DATAOUTEN_SHIFT)) & SYSCTL_SHAREDCTRLSET_FC7DATAOUTEN_MASK)
 /*! @} */
 
-/* The count of SYSCTL_SHARECTRLSET_SHAREDCTRLSET */
-#define SYSCTL_SHARECTRLSET_SHAREDCTRLSET_COUNT  (2U)
+/* The count of SYSCTL_SHAREDCTRLSET */
+#define SYSCTL_SHAREDCTRLSET_COUNT               (2U)
 
 /*! @name USB_HS_STATUS - Status register for USB HS */
 /*! @{ */
@@ -21832,13 +19978,6 @@ typedef struct {
 #define USART_FIFOCFG_EMPTYRX_MASK               (0x20000U)
 #define USART_FIFOCFG_EMPTYRX_SHIFT              (17U)
 #define USART_FIFOCFG_EMPTYRX(x)                 (((uint32_t)(((uint32_t)(x)) << USART_FIFOCFG_EMPTYRX_SHIFT)) & USART_FIFOCFG_EMPTYRX_MASK)
-#define USART_FIFOCFG_POPDBG_MASK                (0x40000U)
-#define USART_FIFOCFG_POPDBG_SHIFT               (18U)
-/*! POPDBG - Pop FIFO for debug reads.
- *  0b0..Debug reads of the FIFO do not pop the FIFO.
- *  0b1..A debug read will cause the FIFO to pop.
- */
-#define USART_FIFOCFG_POPDBG(x)                  (((uint32_t)(((uint32_t)(x)) << USART_FIFOCFG_POPDBG_SHIFT)) & USART_FIFOCFG_POPDBG_MASK)
 /*! @} */
 
 /*! @name FIFOSTAT - FIFO status register. */
@@ -22480,15 +20619,15 @@ typedef struct {
   __IO uint32_t HCINTERRUPTENABLE;                 /**< Controls the bits in the HcInterruptStatus register and indicates which events will generate a hardware interrupt, offset: 0x10 */
   __IO uint32_t HCINTERRUPTDISABLE;                /**< The bits in this register are used to disable corresponding bits in the HCInterruptStatus register and in turn disable that event leading to hardware interrupt, offset: 0x14 */
   __IO uint32_t HCHCCA;                            /**< Contains the physical address of the host controller communication area, offset: 0x18 */
-  __IO uint32_t HCPERIODCURRENTED;                 /**< Contains the physical address of the current isochronous or interrupt endpoint descriptor, offset: 0x1C */
+  __I  uint32_t HCPERIODCURRENTED;                 /**< Contains the physical address of the current isochronous or interrupt endpoint descriptor, offset: 0x1C */
   __IO uint32_t HCCONTROLHEADED;                   /**< Contains the physical address of the first endpoint descriptor of the control list, offset: 0x20 */
   __IO uint32_t HCCONTROLCURRENTED;                /**< Contains the physical address of the current endpoint descriptor of the control list, offset: 0x24 */
   __IO uint32_t HCBULKHEADED;                      /**< Contains the physical address of the first endpoint descriptor of the bulk list, offset: 0x28 */
   __IO uint32_t HCBULKCURRENTED;                   /**< Contains the physical address of the current endpoint descriptor of the bulk list, offset: 0x2C */
-  __IO uint32_t HCDONEHEAD;                        /**< Contains the physical address of the last transfer descriptor added to the 'Done' queue, offset: 0x30 */
+  __I  uint32_t HCDONEHEAD;                        /**< Contains the physical address of the last transfer descriptor added to the 'Done' queue, offset: 0x30 */
   __IO uint32_t HCFMINTERVAL;                      /**< Defines the bit time interval in a frame and the full speed maximum packet size which would not cause an overrun, offset: 0x34 */
-  __IO uint32_t HCFMREMAINING;                     /**< A 14-bit counter showing the bit time remaining in the current frame, offset: 0x38 */
-  __IO uint32_t HCFMNUMBER;                        /**< Contains a 16-bit counter and provides the timing reference among events happening in the HC and the HCD, offset: 0x3C */
+  __I  uint32_t HCFMREMAINING;                     /**< A 14-bit counter showing the bit time remaining in the current frame, offset: 0x38 */
+  __I  uint32_t HCFMNUMBER;                        /**< Contains a 16-bit counter and provides the timing reference among events happening in the HC and the HCD, offset: 0x3C */
   __IO uint32_t HCPERIODICSTART;                   /**< Contains a programmable 14-bit value which determines the earliest time HC should start processing a periodic list, offset: 0x40 */
   __IO uint32_t HCLSTHRESHOLD;                     /**< Contains 11-bit value which is used by the HC to determine whether to commit to transfer a maximum of 8-byte LS packet before EOF, offset: 0x44 */
   __IO uint32_t HCRHDESCRIPTORA;                   /**< First of the two registers which describes the characteristics of the root hub, offset: 0x48 */
@@ -22925,8 +21064,6 @@ typedef struct {
   __IO uint32_t INTSETSTAT;                        /**< USB set interrupt status register, offset: 0x28 */
        uint8_t RESERVED_0[8];
   __I  uint32_t EPTOGGLE;                          /**< USB Endpoint toggle register, offset: 0x34 */
-       uint8_t RESERVED_1[4];
-  __IO uint32_t ULPIDEBUG;                         /**< UTMI/ULPI debug register, offset: 0x3C */
 } USBHSD_Type;
 
 /* ----------------------------------------------------------------------------
@@ -22952,9 +21089,6 @@ typedef struct {
 #define USBHSD_DEVCMDSTAT_FORCE_NEEDCLK_MASK     (0x200U)
 #define USBHSD_DEVCMDSTAT_FORCE_NEEDCLK_SHIFT    (9U)
 #define USBHSD_DEVCMDSTAT_FORCE_NEEDCLK(x)       (((uint32_t)(((uint32_t)(x)) << USBHSD_DEVCMDSTAT_FORCE_NEEDCLK_SHIFT)) & USBHSD_DEVCMDSTAT_FORCE_NEEDCLK_MASK)
-#define USBHSD_DEVCMDSTAT_FORCE_VBUS_MASK        (0x400U)
-#define USBHSD_DEVCMDSTAT_FORCE_VBUS_SHIFT       (10U)
-#define USBHSD_DEVCMDSTAT_FORCE_VBUS(x)          (((uint32_t)(((uint32_t)(x)) << USBHSD_DEVCMDSTAT_FORCE_VBUS_SHIFT)) & USBHSD_DEVCMDSTAT_FORCE_VBUS_MASK)
 #define USBHSD_DEVCMDSTAT_LPM_SUP_MASK           (0x800U)
 #define USBHSD_DEVCMDSTAT_LPM_SUP_SHIFT          (11U)
 #define USBHSD_DEVCMDSTAT_LPM_SUP(x)             (((uint32_t)(((uint32_t)(x)) << USBHSD_DEVCMDSTAT_LPM_SUP_SHIFT)) & USBHSD_DEVCMDSTAT_LPM_SUP_MASK)
@@ -23010,12 +21144,12 @@ typedef struct {
 #define USBHSD_INFO_ERR_CODE_MASK                (0x7800U)
 #define USBHSD_INFO_ERR_CODE_SHIFT               (11U)
 #define USBHSD_INFO_ERR_CODE(x)                  (((uint32_t)(((uint32_t)(x)) << USBHSD_INFO_ERR_CODE_SHIFT)) & USBHSD_INFO_ERR_CODE_MASK)
-#define USBHSD_INFO_Minrev_MASK                  (0xFF0000U)
-#define USBHSD_INFO_Minrev_SHIFT                 (16U)
-#define USBHSD_INFO_Minrev(x)                    (((uint32_t)(((uint32_t)(x)) << USBHSD_INFO_Minrev_SHIFT)) & USBHSD_INFO_Minrev_MASK)
-#define USBHSD_INFO_Majrev_MASK                  (0xFF000000U)
-#define USBHSD_INFO_Majrev_SHIFT                 (24U)
-#define USBHSD_INFO_Majrev(x)                    (((uint32_t)(((uint32_t)(x)) << USBHSD_INFO_Majrev_SHIFT)) & USBHSD_INFO_Majrev_MASK)
+#define USBHSD_INFO_MINREV_MASK                  (0xFF0000U)
+#define USBHSD_INFO_MINREV_SHIFT                 (16U)
+#define USBHSD_INFO_MINREV(x)                    (((uint32_t)(((uint32_t)(x)) << USBHSD_INFO_MINREV_SHIFT)) & USBHSD_INFO_MINREV_MASK)
+#define USBHSD_INFO_MAJREV_MASK                  (0xFF000000U)
+#define USBHSD_INFO_MAJREV_SHIFT                 (24U)
+#define USBHSD_INFO_MAJREV(x)                    (((uint32_t)(((uint32_t)(x)) << USBHSD_INFO_MAJREV_SHIFT)) & USBHSD_INFO_MAJREV_MASK)
 /*! @} */
 
 /*! @name EPLISTSTART - USB EP Command/Status List start address */
@@ -23148,28 +21282,6 @@ typedef struct {
 #define USBHSD_EPTOGGLE_TOGGLE(x)                (((uint32_t)(((uint32_t)(x)) << USBHSD_EPTOGGLE_TOGGLE_SHIFT)) & USBHSD_EPTOGGLE_TOGGLE_MASK)
 /*! @} */
 
-/*! @name ULPIDEBUG - UTMI/ULPI debug register */
-/*! @{ */
-#define USBHSD_ULPIDEBUG_PHY_ADDR_MASK           (0xFFU)
-#define USBHSD_ULPIDEBUG_PHY_ADDR_SHIFT          (0U)
-#define USBHSD_ULPIDEBUG_PHY_ADDR(x)             (((uint32_t)(((uint32_t)(x)) << USBHSD_ULPIDEBUG_PHY_ADDR_SHIFT)) & USBHSD_ULPIDEBUG_PHY_ADDR_MASK)
-#define USBHSD_ULPIDEBUG_PHY_WDATA_MASK          (0xFF00U)
-#define USBHSD_ULPIDEBUG_PHY_WDATA_SHIFT         (8U)
-#define USBHSD_ULPIDEBUG_PHY_WDATA(x)            (((uint32_t)(((uint32_t)(x)) << USBHSD_ULPIDEBUG_PHY_WDATA_SHIFT)) & USBHSD_ULPIDEBUG_PHY_WDATA_MASK)
-#define USBHSD_ULPIDEBUG_PHY_RDATA_MASK          (0xFF0000U)
-#define USBHSD_ULPIDEBUG_PHY_RDATA_SHIFT         (16U)
-#define USBHSD_ULPIDEBUG_PHY_RDATA(x)            (((uint32_t)(((uint32_t)(x)) << USBHSD_ULPIDEBUG_PHY_RDATA_SHIFT)) & USBHSD_ULPIDEBUG_PHY_RDATA_MASK)
-#define USBHSD_ULPIDEBUG_PHY_RW_MASK             (0x1000000U)
-#define USBHSD_ULPIDEBUG_PHY_RW_SHIFT            (24U)
-#define USBHSD_ULPIDEBUG_PHY_RW(x)               (((uint32_t)(((uint32_t)(x)) << USBHSD_ULPIDEBUG_PHY_RW_SHIFT)) & USBHSD_ULPIDEBUG_PHY_RW_MASK)
-#define USBHSD_ULPIDEBUG_PHY_ACCESS_MASK         (0x2000000U)
-#define USBHSD_ULPIDEBUG_PHY_ACCESS_SHIFT        (25U)
-#define USBHSD_ULPIDEBUG_PHY_ACCESS(x)           (((uint32_t)(((uint32_t)(x)) << USBHSD_ULPIDEBUG_PHY_ACCESS_SHIFT)) & USBHSD_ULPIDEBUG_PHY_ACCESS_MASK)
-#define USBHSD_ULPIDEBUG_PHY_MODE_MASK           (0x80000000U)
-#define USBHSD_ULPIDEBUG_PHY_MODE_SHIFT          (31U)
-#define USBHSD_ULPIDEBUG_PHY_MODE(x)             (((uint32_t)(((uint32_t)(x)) << USBHSD_ULPIDEBUG_PHY_MODE_SHIFT)) & USBHSD_ULPIDEBUG_PHY_MODE_MASK)
-/*! @} */
-
 
 /*!
  * @}
@@ -23226,24 +21338,24 @@ typedef struct {
 typedef struct {
   __I  uint32_t CAPLENGTH_CHIPID;                  /**< This register contains the offset value towards the start of the operational register space and the version number of the IP block, offset: 0x0 */
   __I  uint32_t HCSPARAMS;                         /**< Host Controller Structural Parameters, offset: 0x4 */
-  __I  uint32_t HCCPARAMS;                         /**< Host Controller Capability Parameters, offset: 0x8 */
+       uint8_t RESERVED_0[4];
   __IO uint32_t FLADJ_FRINDEX;                     /**< Frame Length Adjustment, offset: 0xC */
-  __IO uint32_t ATL_PTD_BASE_ADDR;                 /**< Memory base address where ATL PTD0 is stored, offset: 0x10 */
-  __IO uint32_t ISO_PTD_BASE_ADDR;                 /**< Memory base address where ISO PTD0 is stored, offset: 0x14 */
-  __IO uint32_t INT_PTD_BASE_ADDR;                 /**< Memory base address where INT PTD0 is stored, offset: 0x18 */
-  __IO uint32_t DATA_PAYLOAD_BASE_ADDR;            /**< Memory base address that indicates the start of the data payload buffers, offset: 0x1C */
+  __IO uint32_t ATLPTD;                            /**< Memory base address where ATL PTD0 is stored, offset: 0x10 */
+  __IO uint32_t ISOPTD;                            /**< Memory base address where ISO PTD0 is stored, offset: 0x14 */
+  __IO uint32_t INTPTD;                            /**< Memory base address where INT PTD0 is stored, offset: 0x18 */
+  __IO uint32_t DATAPAYLOAD;                       /**< Memory base address that indicates the start of the data payload buffers, offset: 0x1C */
   __IO uint32_t USBCMD;                            /**< USB Command register, offset: 0x20 */
   __IO uint32_t USBSTS;                            /**< USB Interrupt Status register, offset: 0x24 */
   __IO uint32_t USBINTR;                           /**< USB Interrupt Enable register, offset: 0x28 */
   __IO uint32_t PORTSC1;                           /**< Port Status and Control register, offset: 0x2C */
-  __IO uint32_t ATL_PTD_DONE_MAP;                  /**< Done map for each ATL PTD, offset: 0x30 */
-  __IO uint32_t ATL_PTD_SKIP_MAP;                  /**< Skip map for each ATL PTD, offset: 0x34 */
-  __IO uint32_t ISO_PTD_DONE_MAP;                  /**< Done map for each ISO PTD, offset: 0x38 */
-  __IO uint32_t ISO_PTD_SKIP_MAP;                  /**< Skip map for each ISO PTD, offset: 0x3C */
-  __IO uint32_t INT_PTD_DONE_MAP;                  /**< Done map for each INT PTD, offset: 0x40 */
-  __IO uint32_t INT_PTD_SKIP_MAP;                  /**< Skip map for each INT PTD, offset: 0x44 */
-  __IO uint32_t LAST_PTD_INUSE;                    /**< Marks the last PTD in the list for ISO, INT and ATL, offset: 0x48 */
-  __IO uint32_t UTMIPLUS_ULPI_DEBUG;               /**< Register to read/write registers in the attached USB PHY, offset: 0x4C */
+  __IO uint32_t ATLPTDD;                           /**< Done map for each ATL PTD, offset: 0x30 */
+  __IO uint32_t ATLPTDS;                           /**< Skip map for each ATL PTD, offset: 0x34 */
+  __IO uint32_t ISOPTDD;                           /**< Done map for each ISO PTD, offset: 0x38 */
+  __IO uint32_t ISOPTDS;                           /**< Skip map for each ISO PTD, offset: 0x3C */
+  __IO uint32_t INTPTDD;                           /**< Done map for each INT PTD, offset: 0x40 */
+  __IO uint32_t INTPTDS;                           /**< Skip map for each INT PTD, offset: 0x44 */
+  __IO uint32_t LASTPTD;                           /**< Marks the last PTD in the list for ISO, INT and ATL, offset: 0x48 */
+       uint8_t RESERVED_1[4];
   __IO uint32_t PORTMODE;                          /**< Controls the port if it is attached to the host block or the device block, offset: 0x50 */
 } USBHSH_Type;
 
@@ -23279,13 +21391,6 @@ typedef struct {
 #define USBHSH_HCSPARAMS_P_INDICATOR(x)          (((uint32_t)(((uint32_t)(x)) << USBHSH_HCSPARAMS_P_INDICATOR_SHIFT)) & USBHSH_HCSPARAMS_P_INDICATOR_MASK)
 /*! @} */
 
-/*! @name HCCPARAMS - Host Controller Capability Parameters */
-/*! @{ */
-#define USBHSH_HCCPARAMS_LPMC_MASK               (0x20000U)
-#define USBHSH_HCCPARAMS_LPMC_SHIFT              (17U)
-#define USBHSH_HCCPARAMS_LPMC(x)                 (((uint32_t)(((uint32_t)(x)) << USBHSH_HCCPARAMS_LPMC_SHIFT)) & USBHSH_HCCPARAMS_LPMC_MASK)
-/*! @} */
-
 /*! @name FLADJ_FRINDEX - Frame Length Adjustment */
 /*! @{ */
 #define USBHSH_FLADJ_FRINDEX_FLADJ_MASK          (0x3FU)
@@ -23296,41 +21401,41 @@ typedef struct {
 #define USBHSH_FLADJ_FRINDEX_FRINDEX(x)          (((uint32_t)(((uint32_t)(x)) << USBHSH_FLADJ_FRINDEX_FRINDEX_SHIFT)) & USBHSH_FLADJ_FRINDEX_FRINDEX_MASK)
 /*! @} */
 
-/*! @name ATL_PTD_BASE_ADDR - Memory base address where ATL PTD0 is stored */
+/*! @name ATLPTD - Memory base address where ATL PTD0 is stored */
 /*! @{ */
-#define USBHSH_ATL_PTD_BASE_ADDR_ATL_CUR_MASK    (0x1F0U)
-#define USBHSH_ATL_PTD_BASE_ADDR_ATL_CUR_SHIFT   (4U)
-#define USBHSH_ATL_PTD_BASE_ADDR_ATL_CUR(x)      (((uint32_t)(((uint32_t)(x)) << USBHSH_ATL_PTD_BASE_ADDR_ATL_CUR_SHIFT)) & USBHSH_ATL_PTD_BASE_ADDR_ATL_CUR_MASK)
-#define USBHSH_ATL_PTD_BASE_ADDR_ATL_BASE_MASK   (0xFFFFFE00U)
-#define USBHSH_ATL_PTD_BASE_ADDR_ATL_BASE_SHIFT  (9U)
-#define USBHSH_ATL_PTD_BASE_ADDR_ATL_BASE(x)     (((uint32_t)(((uint32_t)(x)) << USBHSH_ATL_PTD_BASE_ADDR_ATL_BASE_SHIFT)) & USBHSH_ATL_PTD_BASE_ADDR_ATL_BASE_MASK)
+#define USBHSH_ATLPTD_ATL_CUR_MASK               (0x1F0U)
+#define USBHSH_ATLPTD_ATL_CUR_SHIFT              (4U)
+#define USBHSH_ATLPTD_ATL_CUR(x)                 (((uint32_t)(((uint32_t)(x)) << USBHSH_ATLPTD_ATL_CUR_SHIFT)) & USBHSH_ATLPTD_ATL_CUR_MASK)
+#define USBHSH_ATLPTD_ATL_BASE_MASK              (0xFFFFFE00U)
+#define USBHSH_ATLPTD_ATL_BASE_SHIFT             (9U)
+#define USBHSH_ATLPTD_ATL_BASE(x)                (((uint32_t)(((uint32_t)(x)) << USBHSH_ATLPTD_ATL_BASE_SHIFT)) & USBHSH_ATLPTD_ATL_BASE_MASK)
 /*! @} */
 
-/*! @name ISO_PTD_BASE_ADDR - Memory base address where ISO PTD0 is stored */
+/*! @name ISOPTD - Memory base address where ISO PTD0 is stored */
 /*! @{ */
-#define USBHSH_ISO_PTD_BASE_ADDR_ISO_FIRST_MASK  (0x3E0U)
-#define USBHSH_ISO_PTD_BASE_ADDR_ISO_FIRST_SHIFT (5U)
-#define USBHSH_ISO_PTD_BASE_ADDR_ISO_FIRST(x)    (((uint32_t)(((uint32_t)(x)) << USBHSH_ISO_PTD_BASE_ADDR_ISO_FIRST_SHIFT)) & USBHSH_ISO_PTD_BASE_ADDR_ISO_FIRST_MASK)
-#define USBHSH_ISO_PTD_BASE_ADDR_ISO_BASE_MASK   (0xFFFFFC00U)
-#define USBHSH_ISO_PTD_BASE_ADDR_ISO_BASE_SHIFT  (10U)
-#define USBHSH_ISO_PTD_BASE_ADDR_ISO_BASE(x)     (((uint32_t)(((uint32_t)(x)) << USBHSH_ISO_PTD_BASE_ADDR_ISO_BASE_SHIFT)) & USBHSH_ISO_PTD_BASE_ADDR_ISO_BASE_MASK)
+#define USBHSH_ISOPTD_ISO_FIRST_MASK             (0x3E0U)
+#define USBHSH_ISOPTD_ISO_FIRST_SHIFT            (5U)
+#define USBHSH_ISOPTD_ISO_FIRST(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_ISOPTD_ISO_FIRST_SHIFT)) & USBHSH_ISOPTD_ISO_FIRST_MASK)
+#define USBHSH_ISOPTD_ISO_BASE_MASK              (0xFFFFFC00U)
+#define USBHSH_ISOPTD_ISO_BASE_SHIFT             (10U)
+#define USBHSH_ISOPTD_ISO_BASE(x)                (((uint32_t)(((uint32_t)(x)) << USBHSH_ISOPTD_ISO_BASE_SHIFT)) & USBHSH_ISOPTD_ISO_BASE_MASK)
 /*! @} */
 
-/*! @name INT_PTD_BASE_ADDR - Memory base address where INT PTD0 is stored */
+/*! @name INTPTD - Memory base address where INT PTD0 is stored */
 /*! @{ */
-#define USBHSH_INT_PTD_BASE_ADDR_INT_FIRST_MASK  (0x3E0U)
-#define USBHSH_INT_PTD_BASE_ADDR_INT_FIRST_SHIFT (5U)
-#define USBHSH_INT_PTD_BASE_ADDR_INT_FIRST(x)    (((uint32_t)(((uint32_t)(x)) << USBHSH_INT_PTD_BASE_ADDR_INT_FIRST_SHIFT)) & USBHSH_INT_PTD_BASE_ADDR_INT_FIRST_MASK)
-#define USBHSH_INT_PTD_BASE_ADDR_INT_BASE_MASK   (0xFFFFFC00U)
-#define USBHSH_INT_PTD_BASE_ADDR_INT_BASE_SHIFT  (10U)
-#define USBHSH_INT_PTD_BASE_ADDR_INT_BASE(x)     (((uint32_t)(((uint32_t)(x)) << USBHSH_INT_PTD_BASE_ADDR_INT_BASE_SHIFT)) & USBHSH_INT_PTD_BASE_ADDR_INT_BASE_MASK)
+#define USBHSH_INTPTD_INT_FIRST_MASK             (0x3E0U)
+#define USBHSH_INTPTD_INT_FIRST_SHIFT            (5U)
+#define USBHSH_INTPTD_INT_FIRST(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_INTPTD_INT_FIRST_SHIFT)) & USBHSH_INTPTD_INT_FIRST_MASK)
+#define USBHSH_INTPTD_INT_BASE_MASK              (0xFFFFFC00U)
+#define USBHSH_INTPTD_INT_BASE_SHIFT             (10U)
+#define USBHSH_INTPTD_INT_BASE(x)                (((uint32_t)(((uint32_t)(x)) << USBHSH_INTPTD_INT_BASE_SHIFT)) & USBHSH_INTPTD_INT_BASE_MASK)
 /*! @} */
 
-/*! @name DATA_PAYLOAD_BASE_ADDR - Memory base address that indicates the start of the data payload buffers */
+/*! @name DATAPAYLOAD - Memory base address that indicates the start of the data payload buffers */
 /*! @{ */
-#define USBHSH_DATA_PAYLOAD_BASE_ADDR_DAT_BASE_MASK (0xFFFF0000U)
-#define USBHSH_DATA_PAYLOAD_BASE_ADDR_DAT_BASE_SHIFT (16U)
-#define USBHSH_DATA_PAYLOAD_BASE_ADDR_DAT_BASE(x) (((uint32_t)(((uint32_t)(x)) << USBHSH_DATA_PAYLOAD_BASE_ADDR_DAT_BASE_SHIFT)) & USBHSH_DATA_PAYLOAD_BASE_ADDR_DAT_BASE_MASK)
+#define USBHSH_DATAPAYLOAD_DAT_BASE_MASK         (0xFFFF0000U)
+#define USBHSH_DATAPAYLOAD_DAT_BASE_SHIFT        (16U)
+#define USBHSH_DATAPAYLOAD_DAT_BASE(x)           (((uint32_t)(((uint32_t)(x)) << USBHSH_DATAPAYLOAD_DAT_BASE_SHIFT)) & USBHSH_DATAPAYLOAD_DAT_BASE_MASK)
 /*! @} */
 
 /*! @name USBCMD - USB Command register */
@@ -23356,12 +21461,6 @@ typedef struct {
 #define USBHSH_USBCMD_INT_EN_MASK                (0x400U)
 #define USBHSH_USBCMD_INT_EN_SHIFT               (10U)
 #define USBHSH_USBCMD_INT_EN(x)                  (((uint32_t)(((uint32_t)(x)) << USBHSH_USBCMD_INT_EN_SHIFT)) & USBHSH_USBCMD_INT_EN_MASK)
-#define USBHSH_USBCMD_HIRD_MASK                  (0xF000000U)
-#define USBHSH_USBCMD_HIRD_SHIFT                 (24U)
-#define USBHSH_USBCMD_HIRD(x)                    (((uint32_t)(((uint32_t)(x)) << USBHSH_USBCMD_HIRD_SHIFT)) & USBHSH_USBCMD_HIRD_MASK)
-#define USBHSH_USBCMD_LPM_RWU_MASK               (0x10000000U)
-#define USBHSH_USBCMD_LPM_RWU_SHIFT              (28U)
-#define USBHSH_USBCMD_LPM_RWU(x)                 (((uint32_t)(((uint32_t)(x)) << USBHSH_USBCMD_LPM_RWU_SHIFT)) & USBHSH_USBCMD_LPM_RWU_MASK)
 /*! @} */
 
 /*! @name USBSTS - USB Interrupt Status register */
@@ -23437,9 +21536,6 @@ typedef struct {
 #define USBHSH_PORTSC1_PR_MASK                   (0x100U)
 #define USBHSH_PORTSC1_PR_SHIFT                  (8U)
 #define USBHSH_PORTSC1_PR(x)                     (((uint32_t)(((uint32_t)(x)) << USBHSH_PORTSC1_PR_SHIFT)) & USBHSH_PORTSC1_PR_MASK)
-#define USBHSH_PORTSC1_SUS_L1_MASK               (0x200U)
-#define USBHSH_PORTSC1_SUS_L1_SHIFT              (9U)
-#define USBHSH_PORTSC1_SUS_L1(x)                 (((uint32_t)(((uint32_t)(x)) << USBHSH_PORTSC1_SUS_L1_SHIFT)) & USBHSH_PORTSC1_SUS_L1_MASK)
 #define USBHSH_PORTSC1_LS_MASK                   (0xC00U)
 #define USBHSH_PORTSC1_LS_SHIFT                  (10U)
 #define USBHSH_PORTSC1_LS(x)                     (((uint32_t)(((uint32_t)(x)) << USBHSH_PORTSC1_LS_SHIFT)) & USBHSH_PORTSC1_LS_MASK)
@@ -23458,99 +21554,65 @@ typedef struct {
 #define USBHSH_PORTSC1_WOO_MASK                  (0x400000U)
 #define USBHSH_PORTSC1_WOO_SHIFT                 (22U)
 #define USBHSH_PORTSC1_WOO(x)                    (((uint32_t)(((uint32_t)(x)) << USBHSH_PORTSC1_WOO_SHIFT)) & USBHSH_PORTSC1_WOO_MASK)
-#define USBHSH_PORTSC1_SUS_STAT_MASK             (0x1800000U)
-#define USBHSH_PORTSC1_SUS_STAT_SHIFT            (23U)
-#define USBHSH_PORTSC1_SUS_STAT(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_PORTSC1_SUS_STAT_SHIFT)) & USBHSH_PORTSC1_SUS_STAT_MASK)
-#define USBHSH_PORTSC1_DEV_ADD_MASK              (0xFE000000U)
-#define USBHSH_PORTSC1_DEV_ADD_SHIFT             (25U)
-#define USBHSH_PORTSC1_DEV_ADD(x)                (((uint32_t)(((uint32_t)(x)) << USBHSH_PORTSC1_DEV_ADD_SHIFT)) & USBHSH_PORTSC1_DEV_ADD_MASK)
 /*! @} */
 
-/*! @name ATL_PTD_DONE_MAP - Done map for each ATL PTD */
+/*! @name ATLPTDD - Done map for each ATL PTD */
 /*! @{ */
-#define USBHSH_ATL_PTD_DONE_MAP_ATL_DONE_MASK    (0xFFFFFFFFU)
-#define USBHSH_ATL_PTD_DONE_MAP_ATL_DONE_SHIFT   (0U)
-#define USBHSH_ATL_PTD_DONE_MAP_ATL_DONE(x)      (((uint32_t)(((uint32_t)(x)) << USBHSH_ATL_PTD_DONE_MAP_ATL_DONE_SHIFT)) & USBHSH_ATL_PTD_DONE_MAP_ATL_DONE_MASK)
+#define USBHSH_ATLPTDD_ATL_DONE_MASK             (0xFFFFFFFFU)
+#define USBHSH_ATLPTDD_ATL_DONE_SHIFT            (0U)
+#define USBHSH_ATLPTDD_ATL_DONE(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_ATLPTDD_ATL_DONE_SHIFT)) & USBHSH_ATLPTDD_ATL_DONE_MASK)
 /*! @} */
 
-/*! @name ATL_PTD_SKIP_MAP - Skip map for each ATL PTD */
+/*! @name ATLPTDS - Skip map for each ATL PTD */
 /*! @{ */
-#define USBHSH_ATL_PTD_SKIP_MAP_ATL_SKIP_MASK    (0xFFFFFFFFU)
-#define USBHSH_ATL_PTD_SKIP_MAP_ATL_SKIP_SHIFT   (0U)
-#define USBHSH_ATL_PTD_SKIP_MAP_ATL_SKIP(x)      (((uint32_t)(((uint32_t)(x)) << USBHSH_ATL_PTD_SKIP_MAP_ATL_SKIP_SHIFT)) & USBHSH_ATL_PTD_SKIP_MAP_ATL_SKIP_MASK)
+#define USBHSH_ATLPTDS_ATL_SKIP_MASK             (0xFFFFFFFFU)
+#define USBHSH_ATLPTDS_ATL_SKIP_SHIFT            (0U)
+#define USBHSH_ATLPTDS_ATL_SKIP(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_ATLPTDS_ATL_SKIP_SHIFT)) & USBHSH_ATLPTDS_ATL_SKIP_MASK)
 /*! @} */
 
-/*! @name ISO_PTD_DONE_MAP - Done map for each ISO PTD */
+/*! @name ISOPTDD - Done map for each ISO PTD */
 /*! @{ */
-#define USBHSH_ISO_PTD_DONE_MAP_ISO_DONE_MASK    (0xFFFFFFFFU)
-#define USBHSH_ISO_PTD_DONE_MAP_ISO_DONE_SHIFT   (0U)
-#define USBHSH_ISO_PTD_DONE_MAP_ISO_DONE(x)      (((uint32_t)(((uint32_t)(x)) << USBHSH_ISO_PTD_DONE_MAP_ISO_DONE_SHIFT)) & USBHSH_ISO_PTD_DONE_MAP_ISO_DONE_MASK)
+#define USBHSH_ISOPTDD_ISO_DONE_MASK             (0xFFFFFFFFU)
+#define USBHSH_ISOPTDD_ISO_DONE_SHIFT            (0U)
+#define USBHSH_ISOPTDD_ISO_DONE(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_ISOPTDD_ISO_DONE_SHIFT)) & USBHSH_ISOPTDD_ISO_DONE_MASK)
 /*! @} */
 
-/*! @name ISO_PTD_SKIP_MAP - Skip map for each ISO PTD */
+/*! @name ISOPTDS - Skip map for each ISO PTD */
 /*! @{ */
-#define USBHSH_ISO_PTD_SKIP_MAP_ISO_SKIP_MASK    (0xFFFFFFFFU)
-#define USBHSH_ISO_PTD_SKIP_MAP_ISO_SKIP_SHIFT   (0U)
-#define USBHSH_ISO_PTD_SKIP_MAP_ISO_SKIP(x)      (((uint32_t)(((uint32_t)(x)) << USBHSH_ISO_PTD_SKIP_MAP_ISO_SKIP_SHIFT)) & USBHSH_ISO_PTD_SKIP_MAP_ISO_SKIP_MASK)
+#define USBHSH_ISOPTDS_ISO_SKIP_MASK             (0xFFFFFFFFU)
+#define USBHSH_ISOPTDS_ISO_SKIP_SHIFT            (0U)
+#define USBHSH_ISOPTDS_ISO_SKIP(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_ISOPTDS_ISO_SKIP_SHIFT)) & USBHSH_ISOPTDS_ISO_SKIP_MASK)
 /*! @} */
 
-/*! @name INT_PTD_DONE_MAP - Done map for each INT PTD */
+/*! @name INTPTDD - Done map for each INT PTD */
 /*! @{ */
-#define USBHSH_INT_PTD_DONE_MAP_INT_DONE_MASK    (0xFFFFFFFFU)
-#define USBHSH_INT_PTD_DONE_MAP_INT_DONE_SHIFT   (0U)
-#define USBHSH_INT_PTD_DONE_MAP_INT_DONE(x)      (((uint32_t)(((uint32_t)(x)) << USBHSH_INT_PTD_DONE_MAP_INT_DONE_SHIFT)) & USBHSH_INT_PTD_DONE_MAP_INT_DONE_MASK)
+#define USBHSH_INTPTDD_INT_DONE_MASK             (0xFFFFFFFFU)
+#define USBHSH_INTPTDD_INT_DONE_SHIFT            (0U)
+#define USBHSH_INTPTDD_INT_DONE(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_INTPTDD_INT_DONE_SHIFT)) & USBHSH_INTPTDD_INT_DONE_MASK)
 /*! @} */
 
-/*! @name INT_PTD_SKIP_MAP - Skip map for each INT PTD */
+/*! @name INTPTDS - Skip map for each INT PTD */
 /*! @{ */
-#define USBHSH_INT_PTD_SKIP_MAP_INT_SKIP_MASK    (0xFFFFFFFFU)
-#define USBHSH_INT_PTD_SKIP_MAP_INT_SKIP_SHIFT   (0U)
-#define USBHSH_INT_PTD_SKIP_MAP_INT_SKIP(x)      (((uint32_t)(((uint32_t)(x)) << USBHSH_INT_PTD_SKIP_MAP_INT_SKIP_SHIFT)) & USBHSH_INT_PTD_SKIP_MAP_INT_SKIP_MASK)
+#define USBHSH_INTPTDS_INT_SKIP_MASK             (0xFFFFFFFFU)
+#define USBHSH_INTPTDS_INT_SKIP_SHIFT            (0U)
+#define USBHSH_INTPTDS_INT_SKIP(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_INTPTDS_INT_SKIP_SHIFT)) & USBHSH_INTPTDS_INT_SKIP_MASK)
 /*! @} */
 
-/*! @name LAST_PTD_INUSE - Marks the last PTD in the list for ISO, INT and ATL */
+/*! @name LASTPTD - Marks the last PTD in the list for ISO, INT and ATL */
 /*! @{ */
-#define USBHSH_LAST_PTD_INUSE_ATL_LAST_MASK      (0x1FU)
-#define USBHSH_LAST_PTD_INUSE_ATL_LAST_SHIFT     (0U)
-#define USBHSH_LAST_PTD_INUSE_ATL_LAST(x)        (((uint32_t)(((uint32_t)(x)) << USBHSH_LAST_PTD_INUSE_ATL_LAST_SHIFT)) & USBHSH_LAST_PTD_INUSE_ATL_LAST_MASK)
-#define USBHSH_LAST_PTD_INUSE_ISO_LAST_MASK      (0x1F00U)
-#define USBHSH_LAST_PTD_INUSE_ISO_LAST_SHIFT     (8U)
-#define USBHSH_LAST_PTD_INUSE_ISO_LAST(x)        (((uint32_t)(((uint32_t)(x)) << USBHSH_LAST_PTD_INUSE_ISO_LAST_SHIFT)) & USBHSH_LAST_PTD_INUSE_ISO_LAST_MASK)
-#define USBHSH_LAST_PTD_INUSE_INT_LAST_MASK      (0x1F0000U)
-#define USBHSH_LAST_PTD_INUSE_INT_LAST_SHIFT     (16U)
-#define USBHSH_LAST_PTD_INUSE_INT_LAST(x)        (((uint32_t)(((uint32_t)(x)) << USBHSH_LAST_PTD_INUSE_INT_LAST_SHIFT)) & USBHSH_LAST_PTD_INUSE_INT_LAST_MASK)
-/*! @} */
-
-/*! @name UTMIPLUS_ULPI_DEBUG - Register to read/write registers in the attached USB PHY */
-/*! @{ */
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_ADDR_MASK (0xFFU)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_ADDR_SHIFT (0U)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_ADDR(x)   (((uint32_t)(((uint32_t)(x)) << USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_ADDR_SHIFT)) & USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_ADDR_MASK)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_WDATA_MASK (0xFF00U)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_WDATA_SHIFT (8U)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_WDATA(x)  (((uint32_t)(((uint32_t)(x)) << USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_WDATA_SHIFT)) & USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_WDATA_MASK)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_RDATA_MASK (0xFF0000U)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_RDATA_SHIFT (16U)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_RDATA(x)  (((uint32_t)(((uint32_t)(x)) << USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_RDATA_SHIFT)) & USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_RDATA_MASK)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_RW_MASK   (0x1000000U)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_RW_SHIFT  (24U)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_RW(x)     (((uint32_t)(((uint32_t)(x)) << USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_RW_SHIFT)) & USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_RW_MASK)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_ACCESS_MASK (0x2000000U)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_ACCESS_SHIFT (25U)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_ACCESS(x) (((uint32_t)(((uint32_t)(x)) << USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_ACCESS_SHIFT)) & USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_ACCESS_MASK)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_MODE_MASK (0x80000000U)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_MODE_SHIFT (31U)
-#define USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_MODE(x)   (((uint32_t)(((uint32_t)(x)) << USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_MODE_SHIFT)) & USBHSH_UTMIPLUS_ULPI_DEBUG_PHY_MODE_MASK)
+#define USBHSH_LASTPTD_ATL_LAST_MASK             (0x1FU)
+#define USBHSH_LASTPTD_ATL_LAST_SHIFT            (0U)
+#define USBHSH_LASTPTD_ATL_LAST(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_LASTPTD_ATL_LAST_SHIFT)) & USBHSH_LASTPTD_ATL_LAST_MASK)
+#define USBHSH_LASTPTD_ISO_LAST_MASK             (0x1F00U)
+#define USBHSH_LASTPTD_ISO_LAST_SHIFT            (8U)
+#define USBHSH_LASTPTD_ISO_LAST(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_LASTPTD_ISO_LAST_SHIFT)) & USBHSH_LASTPTD_ISO_LAST_MASK)
+#define USBHSH_LASTPTD_INT_LAST_MASK             (0x1F0000U)
+#define USBHSH_LASTPTD_INT_LAST_SHIFT            (16U)
+#define USBHSH_LASTPTD_INT_LAST(x)               (((uint32_t)(((uint32_t)(x)) << USBHSH_LASTPTD_INT_LAST_SHIFT)) & USBHSH_LASTPTD_INT_LAST_MASK)
 /*! @} */
 
 /*! @name PORTMODE - Controls the port if it is attached to the host block or the device block */
 /*! @{ */
-#define USBHSH_PORTMODE_ID0_MASK                 (0x1U)
-#define USBHSH_PORTMODE_ID0_SHIFT                (0U)
-#define USBHSH_PORTMODE_ID0(x)                   (((uint32_t)(((uint32_t)(x)) << USBHSH_PORTMODE_ID0_SHIFT)) & USBHSH_PORTMODE_ID0_MASK)
-#define USBHSH_PORTMODE_ID0_EN_MASK              (0x100U)
-#define USBHSH_PORTMODE_ID0_EN_SHIFT             (8U)
-#define USBHSH_PORTMODE_ID0_EN(x)                (((uint32_t)(((uint32_t)(x)) << USBHSH_PORTMODE_ID0_EN_SHIFT)) & USBHSH_PORTMODE_ID0_EN_MASK)
 #define USBHSH_PORTMODE_DEV_ENABLE_MASK          (0x10000U)
 #define USBHSH_PORTMODE_DEV_ENABLE_SHIFT         (16U)
 #define USBHSH_PORTMODE_DEV_ENABLE(x)            (((uint32_t)(((uint32_t)(x)) << USBHSH_PORTMODE_DEV_ENABLE_SHIFT)) & USBHSH_PORTMODE_DEV_ENABLE_MASK)
@@ -23632,36 +21694,18 @@ typedef struct {
   __IO uint32_t CTRL_SET;                          /**< USB PHY General Control Register, offset: 0x34 */
   __IO uint32_t CTRL_CLR;                          /**< USB PHY General Control Register, offset: 0x38 */
   __IO uint32_t CTRL_TOG;                          /**< USB PHY General Control Register, offset: 0x3C */
-  __IO uint32_t STATUS;                            /**< USB PHY Status Register, offset: 0x40 */
-       uint8_t RESERVED_0[12];
-  __IO uint32_t DEBUG0;                            /**< USB PHY Debug Register 0, offset: 0x50 */
-  __IO uint32_t DEBUG0_SET;                        /**< USB PHY Debug Register 0, offset: 0x54 */
-  __IO uint32_t DEBUG0_CLR;                        /**< USB PHY Debug Register 0, offset: 0x58 */
-  __IO uint32_t DEBUG0_TOG;                        /**< USB PHY Debug Register 0, offset: 0x5C */
-       uint8_t RESERVED_1[16];
-  __IO uint32_t DEBUG1;                            /**< UTMI Debug Status Register 1, offset: 0x70 */
-  __IO uint32_t DEBUG1_SET;                        /**< UTMI Debug Status Register 1, offset: 0x74 */
-  __IO uint32_t DEBUG1_CLR;                        /**< UTMI Debug Status Register 1, offset: 0x78 */
-  __IO uint32_t DEBUG1_TOG;                        /**< UTMI Debug Status Register 1, offset: 0x7C */
-  __I  uint32_t VERSION;                           /**< UTMI RTL Version, offset: 0x80 */
-       uint8_t RESERVED_2[28];
+  __I  uint32_t STATUS;                            /**< USB PHY Status Register, offset: 0x40 */
+       uint8_t RESERVED_0[92];
   __IO uint32_t PLL_SIC;                           /**< USB PHY PLL Control/Status Register, offset: 0xA0 */
   __IO uint32_t PLL_SIC_SET;                       /**< USB PHY PLL Control/Status Register, offset: 0xA4 */
   __IO uint32_t PLL_SIC_CLR;                       /**< USB PHY PLL Control/Status Register, offset: 0xA8 */
   __IO uint32_t PLL_SIC_TOG;                       /**< USB PHY PLL Control/Status Register, offset: 0xAC */
-       uint8_t RESERVED_3[16];
+       uint8_t RESERVED_1[16];
   __IO uint32_t USB1_VBUS_DETECT;                  /**< USB PHY VBUS Detect Control Register, offset: 0xC0 */
   __IO uint32_t USB1_VBUS_DETECT_SET;              /**< USB PHY VBUS Detect Control Register, offset: 0xC4 */
   __IO uint32_t USB1_VBUS_DETECT_CLR;              /**< USB PHY VBUS Detect Control Register, offset: 0xC8 */
   __IO uint32_t USB1_VBUS_DETECT_TOG;              /**< USB PHY VBUS Detect Control Register, offset: 0xCC */
-  __I  uint32_t USB1_VBUS_DET_STAT;                /**< USB PHY VBUS Detector Status Register, offset: 0xD0 */
-       uint8_t RESERVED_4[12];
-  __IO uint32_t USB1_CHRG_DETECT;                  /**< USB PHY Charger Detect Control Register, offset: 0xE0 */
-  __IO uint32_t USB1_CHRG_DETECT_SET;              /**< USB PHY Charger Detect Control Register, offset: 0xE4 */
-  __IO uint32_t USB1_CHRG_DETECT_CLR;              /**< USB PHY Charger Detect Control Register, offset: 0xE8 */
-  __IO uint32_t USB1_CHRG_DETECT_TOG;              /**< USB PHY Charger Detect Control Register, offset: 0xEC */
-  __I  uint32_t USB1_CHRG_DET_STAT;                /**< USB PHY Charger Detect Status Register, offset: 0xF0 */
-       uint8_t RESERVED_5[12];
+       uint8_t RESERVED_2[48];
   __IO uint32_t ANACTRLr;                          /**< USB PHY Analog Control Register, offset: 0x100 */
   __IO uint32_t ANACTRL_SET;                       /**< USB PHY Analog Control Register, offset: 0x104 */
   __IO uint32_t ANACTRL_CLR;                       /**< USB PHY Analog Control Register, offset: 0x108 */
@@ -24138,6 +22182,9 @@ typedef struct {
 #define USBPHY_CTRL_ENHOSTDISCONDETECT_MASK      (0x2U)
 #define USBPHY_CTRL_ENHOSTDISCONDETECT_SHIFT     (1U)
 #define USBPHY_CTRL_ENHOSTDISCONDETECT(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENHOSTDISCONDETECT_SHIFT)) & USBPHY_CTRL_ENHOSTDISCONDETECT_MASK)
+#define USBPHY_CTRL_ENIRQHOSTDISCON_MASK         (0x4U)
+#define USBPHY_CTRL_ENIRQHOSTDISCON_SHIFT        (2U)
+#define USBPHY_CTRL_ENIRQHOSTDISCON(x)           (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENIRQHOSTDISCON_SHIFT)) & USBPHY_CTRL_ENIRQHOSTDISCON_MASK)
 #define USBPHY_CTRL_HOSTDISCONDETECT_IRQ_MASK    (0x8U)
 #define USBPHY_CTRL_HOSTDISCONDETECT_IRQ_SHIFT   (3U)
 #define USBPHY_CTRL_HOSTDISCONDETECT_IRQ(x)      (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_HOSTDISCONDETECT_IRQ_SHIFT)) & USBPHY_CTRL_HOSTDISCONDETECT_IRQ_MASK)
@@ -24148,18 +22195,33 @@ typedef struct {
  *  0b1..Enables 200kohm pullup resistors on USB_DP and USB_DM pins
  */
 #define USBPHY_CTRL_ENDEVPLUGINDET(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENDEVPLUGINDET_SHIFT)) & USBPHY_CTRL_ENDEVPLUGINDET_MASK)
+#define USBPHY_CTRL_DEVPLUGIN_POLARITY_MASK      (0x20U)
+#define USBPHY_CTRL_DEVPLUGIN_POLARITY_SHIFT     (5U)
+#define USBPHY_CTRL_DEVPLUGIN_POLARITY(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_DEVPLUGIN_POLARITY_SHIFT)) & USBPHY_CTRL_DEVPLUGIN_POLARITY_MASK)
+#define USBPHY_CTRL_RESUMEIRQSTICKY_MASK         (0x100U)
+#define USBPHY_CTRL_RESUMEIRQSTICKY_SHIFT        (8U)
+#define USBPHY_CTRL_RESUMEIRQSTICKY(x)           (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_RESUMEIRQSTICKY_SHIFT)) & USBPHY_CTRL_RESUMEIRQSTICKY_MASK)
+#define USBPHY_CTRL_ENIRQRESUMEDETECT_MASK       (0x200U)
+#define USBPHY_CTRL_ENIRQRESUMEDETECT_SHIFT      (9U)
+#define USBPHY_CTRL_ENIRQRESUMEDETECT(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENIRQRESUMEDETECT_SHIFT)) & USBPHY_CTRL_ENIRQRESUMEDETECT_MASK)
+#define USBPHY_CTRL_RESUME_IRQ_MASK              (0x400U)
+#define USBPHY_CTRL_RESUME_IRQ_SHIFT             (10U)
+#define USBPHY_CTRL_RESUME_IRQ(x)                (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_RESUME_IRQ_SHIFT)) & USBPHY_CTRL_RESUME_IRQ_MASK)
 #define USBPHY_CTRL_DEVPLUGIN_IRQ_MASK           (0x1000U)
 #define USBPHY_CTRL_DEVPLUGIN_IRQ_SHIFT          (12U)
 #define USBPHY_CTRL_DEVPLUGIN_IRQ(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_DEVPLUGIN_IRQ_SHIFT)) & USBPHY_CTRL_DEVPLUGIN_IRQ_MASK)
-#define USBPHY_CTRL_DATA_ON_LRADC_MASK           (0x2000U)
-#define USBPHY_CTRL_DATA_ON_LRADC_SHIFT          (13U)
-#define USBPHY_CTRL_DATA_ON_LRADC(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_DATA_ON_LRADC_SHIFT)) & USBPHY_CTRL_DATA_ON_LRADC_MASK)
 #define USBPHY_CTRL_ENUTMILEVEL2_MASK            (0x4000U)
 #define USBPHY_CTRL_ENUTMILEVEL2_SHIFT           (14U)
 #define USBPHY_CTRL_ENUTMILEVEL2(x)              (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENUTMILEVEL2_SHIFT)) & USBPHY_CTRL_ENUTMILEVEL2_MASK)
 #define USBPHY_CTRL_ENUTMILEVEL3_MASK            (0x8000U)
 #define USBPHY_CTRL_ENUTMILEVEL3_SHIFT           (15U)
 #define USBPHY_CTRL_ENUTMILEVEL3(x)              (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENUTMILEVEL3_SHIFT)) & USBPHY_CTRL_ENUTMILEVEL3_MASK)
+#define USBPHY_CTRL_ENIRQWAKEUP_MASK             (0x10000U)
+#define USBPHY_CTRL_ENIRQWAKEUP_SHIFT            (16U)
+#define USBPHY_CTRL_ENIRQWAKEUP(x)               (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENIRQWAKEUP_SHIFT)) & USBPHY_CTRL_ENIRQWAKEUP_MASK)
+#define USBPHY_CTRL_WAKEUP_IRQ_MASK              (0x20000U)
+#define USBPHY_CTRL_WAKEUP_IRQ_SHIFT             (17U)
+#define USBPHY_CTRL_WAKEUP_IRQ(x)                (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_WAKEUP_IRQ_SHIFT)) & USBPHY_CTRL_WAKEUP_IRQ_MASK)
 #define USBPHY_CTRL_AUTORESUME_EN_MASK           (0x40000U)
 #define USBPHY_CTRL_AUTORESUME_EN_SHIFT          (18U)
 #define USBPHY_CTRL_AUTORESUME_EN(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_AUTORESUME_EN_SHIFT)) & USBPHY_CTRL_AUTORESUME_EN_MASK)
@@ -24169,12 +22231,18 @@ typedef struct {
 #define USBPHY_CTRL_ENAUTOCLR_PHY_PWD_MASK       (0x100000U)
 #define USBPHY_CTRL_ENAUTOCLR_PHY_PWD_SHIFT      (20U)
 #define USBPHY_CTRL_ENAUTOCLR_PHY_PWD(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENAUTOCLR_PHY_PWD_SHIFT)) & USBPHY_CTRL_ENAUTOCLR_PHY_PWD_MASK)
-#define USBPHY_CTRL_FSDLL_RST_EN_MASK            (0x1000000U)
-#define USBPHY_CTRL_FSDLL_RST_EN_SHIFT           (24U)
-#define USBPHY_CTRL_FSDLL_RST_EN(x)              (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_FSDLL_RST_EN_SHIFT)) & USBPHY_CTRL_FSDLL_RST_EN_MASK)
-#define USBPHY_CTRL_OTG_ID_VALUE_MASK            (0x8000000U)
-#define USBPHY_CTRL_OTG_ID_VALUE_SHIFT           (27U)
-#define USBPHY_CTRL_OTG_ID_VALUE(x)              (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_OTG_ID_VALUE_SHIFT)) & USBPHY_CTRL_OTG_ID_VALUE_MASK)
+#define USBPHY_CTRL_ENDPDMCHG_WKUP_MASK          (0x200000U)
+#define USBPHY_CTRL_ENDPDMCHG_WKUP_SHIFT         (21U)
+#define USBPHY_CTRL_ENDPDMCHG_WKUP(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENDPDMCHG_WKUP_SHIFT)) & USBPHY_CTRL_ENDPDMCHG_WKUP_MASK)
+#define USBPHY_CTRL_ENVBUSCHG_WKUP_MASK          (0x800000U)
+#define USBPHY_CTRL_ENVBUSCHG_WKUP_SHIFT         (23U)
+#define USBPHY_CTRL_ENVBUSCHG_WKUP(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENVBUSCHG_WKUP_SHIFT)) & USBPHY_CTRL_ENVBUSCHG_WKUP_MASK)
+#define USBPHY_CTRL_ENAUTOCLR_USBCLKGATE_MASK    (0x2000000U)
+#define USBPHY_CTRL_ENAUTOCLR_USBCLKGATE_SHIFT   (25U)
+#define USBPHY_CTRL_ENAUTOCLR_USBCLKGATE(x)      (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENAUTOCLR_USBCLKGATE_SHIFT)) & USBPHY_CTRL_ENAUTOCLR_USBCLKGATE_MASK)
+#define USBPHY_CTRL_ENAUTOSET_USBCLKS_MASK       (0x4000000U)
+#define USBPHY_CTRL_ENAUTOSET_USBCLKS_SHIFT      (26U)
+#define USBPHY_CTRL_ENAUTOSET_USBCLKS(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_ENAUTOSET_USBCLKS_SHIFT)) & USBPHY_CTRL_ENAUTOSET_USBCLKS_MASK)
 #define USBPHY_CTRL_HOST_FORCE_LS_SE0_MASK       (0x10000000U)
 #define USBPHY_CTRL_HOST_FORCE_LS_SE0_SHIFT      (28U)
 #define USBPHY_CTRL_HOST_FORCE_LS_SE0(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_HOST_FORCE_LS_SE0_SHIFT)) & USBPHY_CTRL_HOST_FORCE_LS_SE0_MASK)
@@ -24194,6 +22262,9 @@ typedef struct {
 #define USBPHY_CTRL_SET_ENHOSTDISCONDETECT_MASK  (0x2U)
 #define USBPHY_CTRL_SET_ENHOSTDISCONDETECT_SHIFT (1U)
 #define USBPHY_CTRL_SET_ENHOSTDISCONDETECT(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_ENHOSTDISCONDETECT_SHIFT)) & USBPHY_CTRL_SET_ENHOSTDISCONDETECT_MASK)
+#define USBPHY_CTRL_SET_ENIRQHOSTDISCON_MASK     (0x4U)
+#define USBPHY_CTRL_SET_ENIRQHOSTDISCON_SHIFT    (2U)
+#define USBPHY_CTRL_SET_ENIRQHOSTDISCON(x)       (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_ENIRQHOSTDISCON_SHIFT)) & USBPHY_CTRL_SET_ENIRQHOSTDISCON_MASK)
 #define USBPHY_CTRL_SET_HOSTDISCONDETECT_IRQ_MASK (0x8U)
 #define USBPHY_CTRL_SET_HOSTDISCONDETECT_IRQ_SHIFT (3U)
 #define USBPHY_CTRL_SET_HOSTDISCONDETECT_IRQ(x)  (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_HOSTDISCONDETECT_IRQ_SHIFT)) & USBPHY_CTRL_SET_HOSTDISCONDETECT_IRQ_MASK)
@@ -24204,6 +22275,18 @@ typedef struct {
  *  0b1..Enables 200kohm pullup resistors on USB_DP and USB_DM pins
  */
 #define USBPHY_CTRL_SET_ENDEVPLUGINDET(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_ENDEVPLUGINDET_SHIFT)) & USBPHY_CTRL_SET_ENDEVPLUGINDET_MASK)
+#define USBPHY_CTRL_SET_DEVPLUGIN_POLARITY_MASK  (0x20U)
+#define USBPHY_CTRL_SET_DEVPLUGIN_POLARITY_SHIFT (5U)
+#define USBPHY_CTRL_SET_DEVPLUGIN_POLARITY(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_DEVPLUGIN_POLARITY_SHIFT)) & USBPHY_CTRL_SET_DEVPLUGIN_POLARITY_MASK)
+#define USBPHY_CTRL_SET_RESUMEIRQSTICKY_MASK     (0x100U)
+#define USBPHY_CTRL_SET_RESUMEIRQSTICKY_SHIFT    (8U)
+#define USBPHY_CTRL_SET_RESUMEIRQSTICKY(x)       (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_RESUMEIRQSTICKY_SHIFT)) & USBPHY_CTRL_SET_RESUMEIRQSTICKY_MASK)
+#define USBPHY_CTRL_SET_ENIRQRESUMEDETECT_MASK   (0x200U)
+#define USBPHY_CTRL_SET_ENIRQRESUMEDETECT_SHIFT  (9U)
+#define USBPHY_CTRL_SET_ENIRQRESUMEDETECT(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_ENIRQRESUMEDETECT_SHIFT)) & USBPHY_CTRL_SET_ENIRQRESUMEDETECT_MASK)
+#define USBPHY_CTRL_SET_RESUME_IRQ_MASK          (0x400U)
+#define USBPHY_CTRL_SET_RESUME_IRQ_SHIFT         (10U)
+#define USBPHY_CTRL_SET_RESUME_IRQ(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_RESUME_IRQ_SHIFT)) & USBPHY_CTRL_SET_RESUME_IRQ_MASK)
 #define USBPHY_CTRL_SET_DEVPLUGIN_IRQ_MASK       (0x1000U)
 #define USBPHY_CTRL_SET_DEVPLUGIN_IRQ_SHIFT      (12U)
 #define USBPHY_CTRL_SET_DEVPLUGIN_IRQ(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_DEVPLUGIN_IRQ_SHIFT)) & USBPHY_CTRL_SET_DEVPLUGIN_IRQ_MASK)
@@ -24213,6 +22296,12 @@ typedef struct {
 #define USBPHY_CTRL_SET_ENUTMILEVEL3_MASK        (0x8000U)
 #define USBPHY_CTRL_SET_ENUTMILEVEL3_SHIFT       (15U)
 #define USBPHY_CTRL_SET_ENUTMILEVEL3(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_ENUTMILEVEL3_SHIFT)) & USBPHY_CTRL_SET_ENUTMILEVEL3_MASK)
+#define USBPHY_CTRL_SET_ENIRQWAKEUP_MASK         (0x10000U)
+#define USBPHY_CTRL_SET_ENIRQWAKEUP_SHIFT        (16U)
+#define USBPHY_CTRL_SET_ENIRQWAKEUP(x)           (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_ENIRQWAKEUP_SHIFT)) & USBPHY_CTRL_SET_ENIRQWAKEUP_MASK)
+#define USBPHY_CTRL_SET_WAKEUP_IRQ_MASK          (0x20000U)
+#define USBPHY_CTRL_SET_WAKEUP_IRQ_SHIFT         (17U)
+#define USBPHY_CTRL_SET_WAKEUP_IRQ(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_WAKEUP_IRQ_SHIFT)) & USBPHY_CTRL_SET_WAKEUP_IRQ_MASK)
 #define USBPHY_CTRL_SET_AUTORESUME_EN_MASK       (0x40000U)
 #define USBPHY_CTRL_SET_AUTORESUME_EN_SHIFT      (18U)
 #define USBPHY_CTRL_SET_AUTORESUME_EN(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_AUTORESUME_EN_SHIFT)) & USBPHY_CTRL_SET_AUTORESUME_EN_MASK)
@@ -24222,12 +22311,18 @@ typedef struct {
 #define USBPHY_CTRL_SET_ENAUTOCLR_PHY_PWD_MASK   (0x100000U)
 #define USBPHY_CTRL_SET_ENAUTOCLR_PHY_PWD_SHIFT  (20U)
 #define USBPHY_CTRL_SET_ENAUTOCLR_PHY_PWD(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_ENAUTOCLR_PHY_PWD_SHIFT)) & USBPHY_CTRL_SET_ENAUTOCLR_PHY_PWD_MASK)
-#define USBPHY_CTRL_SET_FSDLL_RST_EN_MASK        (0x1000000U)
-#define USBPHY_CTRL_SET_FSDLL_RST_EN_SHIFT       (24U)
-#define USBPHY_CTRL_SET_FSDLL_RST_EN(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_FSDLL_RST_EN_SHIFT)) & USBPHY_CTRL_SET_FSDLL_RST_EN_MASK)
-#define USBPHY_CTRL_SET_OTG_ID_VALUE_MASK        (0x8000000U)
-#define USBPHY_CTRL_SET_OTG_ID_VALUE_SHIFT       (27U)
-#define USBPHY_CTRL_SET_OTG_ID_VALUE(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_OTG_ID_VALUE_SHIFT)) & USBPHY_CTRL_SET_OTG_ID_VALUE_MASK)
+#define USBPHY_CTRL_SET_ENDPDMCHG_WKUP_MASK      (0x200000U)
+#define USBPHY_CTRL_SET_ENDPDMCHG_WKUP_SHIFT     (21U)
+#define USBPHY_CTRL_SET_ENDPDMCHG_WKUP(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_ENDPDMCHG_WKUP_SHIFT)) & USBPHY_CTRL_SET_ENDPDMCHG_WKUP_MASK)
+#define USBPHY_CTRL_SET_ENVBUSCHG_WKUP_MASK      (0x800000U)
+#define USBPHY_CTRL_SET_ENVBUSCHG_WKUP_SHIFT     (23U)
+#define USBPHY_CTRL_SET_ENVBUSCHG_WKUP(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_ENVBUSCHG_WKUP_SHIFT)) & USBPHY_CTRL_SET_ENVBUSCHG_WKUP_MASK)
+#define USBPHY_CTRL_SET_ENAUTOCLR_USBCLKGATE_MASK (0x2000000U)
+#define USBPHY_CTRL_SET_ENAUTOCLR_USBCLKGATE_SHIFT (25U)
+#define USBPHY_CTRL_SET_ENAUTOCLR_USBCLKGATE(x)  (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_ENAUTOCLR_USBCLKGATE_SHIFT)) & USBPHY_CTRL_SET_ENAUTOCLR_USBCLKGATE_MASK)
+#define USBPHY_CTRL_SET_ENAUTOSET_USBCLKS_MASK   (0x4000000U)
+#define USBPHY_CTRL_SET_ENAUTOSET_USBCLKS_SHIFT  (26U)
+#define USBPHY_CTRL_SET_ENAUTOSET_USBCLKS(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_ENAUTOSET_USBCLKS_SHIFT)) & USBPHY_CTRL_SET_ENAUTOSET_USBCLKS_MASK)
 #define USBPHY_CTRL_SET_HOST_FORCE_LS_SE0_MASK   (0x10000000U)
 #define USBPHY_CTRL_SET_HOST_FORCE_LS_SE0_SHIFT  (28U)
 #define USBPHY_CTRL_SET_HOST_FORCE_LS_SE0(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_SET_HOST_FORCE_LS_SE0_SHIFT)) & USBPHY_CTRL_SET_HOST_FORCE_LS_SE0_MASK)
@@ -24247,6 +22342,9 @@ typedef struct {
 #define USBPHY_CTRL_CLR_ENHOSTDISCONDETECT_MASK  (0x2U)
 #define USBPHY_CTRL_CLR_ENHOSTDISCONDETECT_SHIFT (1U)
 #define USBPHY_CTRL_CLR_ENHOSTDISCONDETECT(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_ENHOSTDISCONDETECT_SHIFT)) & USBPHY_CTRL_CLR_ENHOSTDISCONDETECT_MASK)
+#define USBPHY_CTRL_CLR_ENIRQHOSTDISCON_MASK     (0x4U)
+#define USBPHY_CTRL_CLR_ENIRQHOSTDISCON_SHIFT    (2U)
+#define USBPHY_CTRL_CLR_ENIRQHOSTDISCON(x)       (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_ENIRQHOSTDISCON_SHIFT)) & USBPHY_CTRL_CLR_ENIRQHOSTDISCON_MASK)
 #define USBPHY_CTRL_CLR_HOSTDISCONDETECT_IRQ_MASK (0x8U)
 #define USBPHY_CTRL_CLR_HOSTDISCONDETECT_IRQ_SHIFT (3U)
 #define USBPHY_CTRL_CLR_HOSTDISCONDETECT_IRQ(x)  (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_HOSTDISCONDETECT_IRQ_SHIFT)) & USBPHY_CTRL_CLR_HOSTDISCONDETECT_IRQ_MASK)
@@ -24257,6 +22355,18 @@ typedef struct {
  *  0b1..Enables 200kohm pullup resistors on USB_DP and USB_DM pins
  */
 #define USBPHY_CTRL_CLR_ENDEVPLUGINDET(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_ENDEVPLUGINDET_SHIFT)) & USBPHY_CTRL_CLR_ENDEVPLUGINDET_MASK)
+#define USBPHY_CTRL_CLR_DEVPLUGIN_POLARITY_MASK  (0x20U)
+#define USBPHY_CTRL_CLR_DEVPLUGIN_POLARITY_SHIFT (5U)
+#define USBPHY_CTRL_CLR_DEVPLUGIN_POLARITY(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_DEVPLUGIN_POLARITY_SHIFT)) & USBPHY_CTRL_CLR_DEVPLUGIN_POLARITY_MASK)
+#define USBPHY_CTRL_CLR_RESUMEIRQSTICKY_MASK     (0x100U)
+#define USBPHY_CTRL_CLR_RESUMEIRQSTICKY_SHIFT    (8U)
+#define USBPHY_CTRL_CLR_RESUMEIRQSTICKY(x)       (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_RESUMEIRQSTICKY_SHIFT)) & USBPHY_CTRL_CLR_RESUMEIRQSTICKY_MASK)
+#define USBPHY_CTRL_CLR_ENIRQRESUMEDETECT_MASK   (0x200U)
+#define USBPHY_CTRL_CLR_ENIRQRESUMEDETECT_SHIFT  (9U)
+#define USBPHY_CTRL_CLR_ENIRQRESUMEDETECT(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_ENIRQRESUMEDETECT_SHIFT)) & USBPHY_CTRL_CLR_ENIRQRESUMEDETECT_MASK)
+#define USBPHY_CTRL_CLR_RESUME_IRQ_MASK          (0x400U)
+#define USBPHY_CTRL_CLR_RESUME_IRQ_SHIFT         (10U)
+#define USBPHY_CTRL_CLR_RESUME_IRQ(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_RESUME_IRQ_SHIFT)) & USBPHY_CTRL_CLR_RESUME_IRQ_MASK)
 #define USBPHY_CTRL_CLR_DEVPLUGIN_IRQ_MASK       (0x1000U)
 #define USBPHY_CTRL_CLR_DEVPLUGIN_IRQ_SHIFT      (12U)
 #define USBPHY_CTRL_CLR_DEVPLUGIN_IRQ(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_DEVPLUGIN_IRQ_SHIFT)) & USBPHY_CTRL_CLR_DEVPLUGIN_IRQ_MASK)
@@ -24266,6 +22376,12 @@ typedef struct {
 #define USBPHY_CTRL_CLR_ENUTMILEVEL3_MASK        (0x8000U)
 #define USBPHY_CTRL_CLR_ENUTMILEVEL3_SHIFT       (15U)
 #define USBPHY_CTRL_CLR_ENUTMILEVEL3(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_ENUTMILEVEL3_SHIFT)) & USBPHY_CTRL_CLR_ENUTMILEVEL3_MASK)
+#define USBPHY_CTRL_CLR_ENIRQWAKEUP_MASK         (0x10000U)
+#define USBPHY_CTRL_CLR_ENIRQWAKEUP_SHIFT        (16U)
+#define USBPHY_CTRL_CLR_ENIRQWAKEUP(x)           (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_ENIRQWAKEUP_SHIFT)) & USBPHY_CTRL_CLR_ENIRQWAKEUP_MASK)
+#define USBPHY_CTRL_CLR_WAKEUP_IRQ_MASK          (0x20000U)
+#define USBPHY_CTRL_CLR_WAKEUP_IRQ_SHIFT         (17U)
+#define USBPHY_CTRL_CLR_WAKEUP_IRQ(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_WAKEUP_IRQ_SHIFT)) & USBPHY_CTRL_CLR_WAKEUP_IRQ_MASK)
 #define USBPHY_CTRL_CLR_AUTORESUME_EN_MASK       (0x40000U)
 #define USBPHY_CTRL_CLR_AUTORESUME_EN_SHIFT      (18U)
 #define USBPHY_CTRL_CLR_AUTORESUME_EN(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_AUTORESUME_EN_SHIFT)) & USBPHY_CTRL_CLR_AUTORESUME_EN_MASK)
@@ -24275,12 +22391,18 @@ typedef struct {
 #define USBPHY_CTRL_CLR_ENAUTOCLR_PHY_PWD_MASK   (0x100000U)
 #define USBPHY_CTRL_CLR_ENAUTOCLR_PHY_PWD_SHIFT  (20U)
 #define USBPHY_CTRL_CLR_ENAUTOCLR_PHY_PWD(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_ENAUTOCLR_PHY_PWD_SHIFT)) & USBPHY_CTRL_CLR_ENAUTOCLR_PHY_PWD_MASK)
-#define USBPHY_CTRL_CLR_FSDLL_RST_EN_MASK        (0x1000000U)
-#define USBPHY_CTRL_CLR_FSDLL_RST_EN_SHIFT       (24U)
-#define USBPHY_CTRL_CLR_FSDLL_RST_EN(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_FSDLL_RST_EN_SHIFT)) & USBPHY_CTRL_CLR_FSDLL_RST_EN_MASK)
-#define USBPHY_CTRL_CLR_OTG_ID_VALUE_MASK        (0x8000000U)
-#define USBPHY_CTRL_CLR_OTG_ID_VALUE_SHIFT       (27U)
-#define USBPHY_CTRL_CLR_OTG_ID_VALUE(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_OTG_ID_VALUE_SHIFT)) & USBPHY_CTRL_CLR_OTG_ID_VALUE_MASK)
+#define USBPHY_CTRL_CLR_ENDPDMCHG_WKUP_MASK      (0x200000U)
+#define USBPHY_CTRL_CLR_ENDPDMCHG_WKUP_SHIFT     (21U)
+#define USBPHY_CTRL_CLR_ENDPDMCHG_WKUP(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_ENDPDMCHG_WKUP_SHIFT)) & USBPHY_CTRL_CLR_ENDPDMCHG_WKUP_MASK)
+#define USBPHY_CTRL_CLR_ENVBUSCHG_WKUP_MASK      (0x800000U)
+#define USBPHY_CTRL_CLR_ENVBUSCHG_WKUP_SHIFT     (23U)
+#define USBPHY_CTRL_CLR_ENVBUSCHG_WKUP(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_ENVBUSCHG_WKUP_SHIFT)) & USBPHY_CTRL_CLR_ENVBUSCHG_WKUP_MASK)
+#define USBPHY_CTRL_CLR_ENAUTOCLR_USBCLKGATE_MASK (0x2000000U)
+#define USBPHY_CTRL_CLR_ENAUTOCLR_USBCLKGATE_SHIFT (25U)
+#define USBPHY_CTRL_CLR_ENAUTOCLR_USBCLKGATE(x)  (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_ENAUTOCLR_USBCLKGATE_SHIFT)) & USBPHY_CTRL_CLR_ENAUTOCLR_USBCLKGATE_MASK)
+#define USBPHY_CTRL_CLR_ENAUTOSET_USBCLKS_MASK   (0x4000000U)
+#define USBPHY_CTRL_CLR_ENAUTOSET_USBCLKS_SHIFT  (26U)
+#define USBPHY_CTRL_CLR_ENAUTOSET_USBCLKS(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_ENAUTOSET_USBCLKS_SHIFT)) & USBPHY_CTRL_CLR_ENAUTOSET_USBCLKS_MASK)
 #define USBPHY_CTRL_CLR_HOST_FORCE_LS_SE0_MASK   (0x10000000U)
 #define USBPHY_CTRL_CLR_HOST_FORCE_LS_SE0_SHIFT  (28U)
 #define USBPHY_CTRL_CLR_HOST_FORCE_LS_SE0(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_CLR_HOST_FORCE_LS_SE0_SHIFT)) & USBPHY_CTRL_CLR_HOST_FORCE_LS_SE0_MASK)
@@ -24300,6 +22422,9 @@ typedef struct {
 #define USBPHY_CTRL_TOG_ENHOSTDISCONDETECT_MASK  (0x2U)
 #define USBPHY_CTRL_TOG_ENHOSTDISCONDETECT_SHIFT (1U)
 #define USBPHY_CTRL_TOG_ENHOSTDISCONDETECT(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_ENHOSTDISCONDETECT_SHIFT)) & USBPHY_CTRL_TOG_ENHOSTDISCONDETECT_MASK)
+#define USBPHY_CTRL_TOG_ENIRQHOSTDISCON_MASK     (0x4U)
+#define USBPHY_CTRL_TOG_ENIRQHOSTDISCON_SHIFT    (2U)
+#define USBPHY_CTRL_TOG_ENIRQHOSTDISCON(x)       (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_ENIRQHOSTDISCON_SHIFT)) & USBPHY_CTRL_TOG_ENIRQHOSTDISCON_MASK)
 #define USBPHY_CTRL_TOG_HOSTDISCONDETECT_IRQ_MASK (0x8U)
 #define USBPHY_CTRL_TOG_HOSTDISCONDETECT_IRQ_SHIFT (3U)
 #define USBPHY_CTRL_TOG_HOSTDISCONDETECT_IRQ(x)  (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_HOSTDISCONDETECT_IRQ_SHIFT)) & USBPHY_CTRL_TOG_HOSTDISCONDETECT_IRQ_MASK)
@@ -24310,6 +22435,18 @@ typedef struct {
  *  0b1..Enables 200kohm pullup resistors on USB_DP and USB_DM pins
  */
 #define USBPHY_CTRL_TOG_ENDEVPLUGINDET(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_ENDEVPLUGINDET_SHIFT)) & USBPHY_CTRL_TOG_ENDEVPLUGINDET_MASK)
+#define USBPHY_CTRL_TOG_DEVPLUGIN_POLARITY_MASK  (0x20U)
+#define USBPHY_CTRL_TOG_DEVPLUGIN_POLARITY_SHIFT (5U)
+#define USBPHY_CTRL_TOG_DEVPLUGIN_POLARITY(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_DEVPLUGIN_POLARITY_SHIFT)) & USBPHY_CTRL_TOG_DEVPLUGIN_POLARITY_MASK)
+#define USBPHY_CTRL_TOG_RESUMEIRQSTICKY_MASK     (0x100U)
+#define USBPHY_CTRL_TOG_RESUMEIRQSTICKY_SHIFT    (8U)
+#define USBPHY_CTRL_TOG_RESUMEIRQSTICKY(x)       (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_RESUMEIRQSTICKY_SHIFT)) & USBPHY_CTRL_TOG_RESUMEIRQSTICKY_MASK)
+#define USBPHY_CTRL_TOG_ENIRQRESUMEDETECT_MASK   (0x200U)
+#define USBPHY_CTRL_TOG_ENIRQRESUMEDETECT_SHIFT  (9U)
+#define USBPHY_CTRL_TOG_ENIRQRESUMEDETECT(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_ENIRQRESUMEDETECT_SHIFT)) & USBPHY_CTRL_TOG_ENIRQRESUMEDETECT_MASK)
+#define USBPHY_CTRL_TOG_RESUME_IRQ_MASK          (0x400U)
+#define USBPHY_CTRL_TOG_RESUME_IRQ_SHIFT         (10U)
+#define USBPHY_CTRL_TOG_RESUME_IRQ(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_RESUME_IRQ_SHIFT)) & USBPHY_CTRL_TOG_RESUME_IRQ_MASK)
 #define USBPHY_CTRL_TOG_DEVPLUGIN_IRQ_MASK       (0x1000U)
 #define USBPHY_CTRL_TOG_DEVPLUGIN_IRQ_SHIFT      (12U)
 #define USBPHY_CTRL_TOG_DEVPLUGIN_IRQ(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_DEVPLUGIN_IRQ_SHIFT)) & USBPHY_CTRL_TOG_DEVPLUGIN_IRQ_MASK)
@@ -24319,6 +22456,12 @@ typedef struct {
 #define USBPHY_CTRL_TOG_ENUTMILEVEL3_MASK        (0x8000U)
 #define USBPHY_CTRL_TOG_ENUTMILEVEL3_SHIFT       (15U)
 #define USBPHY_CTRL_TOG_ENUTMILEVEL3(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_ENUTMILEVEL3_SHIFT)) & USBPHY_CTRL_TOG_ENUTMILEVEL3_MASK)
+#define USBPHY_CTRL_TOG_ENIRQWAKEUP_MASK         (0x10000U)
+#define USBPHY_CTRL_TOG_ENIRQWAKEUP_SHIFT        (16U)
+#define USBPHY_CTRL_TOG_ENIRQWAKEUP(x)           (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_ENIRQWAKEUP_SHIFT)) & USBPHY_CTRL_TOG_ENIRQWAKEUP_MASK)
+#define USBPHY_CTRL_TOG_WAKEUP_IRQ_MASK          (0x20000U)
+#define USBPHY_CTRL_TOG_WAKEUP_IRQ_SHIFT         (17U)
+#define USBPHY_CTRL_TOG_WAKEUP_IRQ(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_WAKEUP_IRQ_SHIFT)) & USBPHY_CTRL_TOG_WAKEUP_IRQ_MASK)
 #define USBPHY_CTRL_TOG_AUTORESUME_EN_MASK       (0x40000U)
 #define USBPHY_CTRL_TOG_AUTORESUME_EN_SHIFT      (18U)
 #define USBPHY_CTRL_TOG_AUTORESUME_EN(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_AUTORESUME_EN_SHIFT)) & USBPHY_CTRL_TOG_AUTORESUME_EN_MASK)
@@ -24328,12 +22471,18 @@ typedef struct {
 #define USBPHY_CTRL_TOG_ENAUTOCLR_PHY_PWD_MASK   (0x100000U)
 #define USBPHY_CTRL_TOG_ENAUTOCLR_PHY_PWD_SHIFT  (20U)
 #define USBPHY_CTRL_TOG_ENAUTOCLR_PHY_PWD(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_ENAUTOCLR_PHY_PWD_SHIFT)) & USBPHY_CTRL_TOG_ENAUTOCLR_PHY_PWD_MASK)
-#define USBPHY_CTRL_TOG_FSDLL_RST_EN_MASK        (0x1000000U)
-#define USBPHY_CTRL_TOG_FSDLL_RST_EN_SHIFT       (24U)
-#define USBPHY_CTRL_TOG_FSDLL_RST_EN(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_FSDLL_RST_EN_SHIFT)) & USBPHY_CTRL_TOG_FSDLL_RST_EN_MASK)
-#define USBPHY_CTRL_TOG_OTG_ID_VALUE_MASK        (0x8000000U)
-#define USBPHY_CTRL_TOG_OTG_ID_VALUE_SHIFT       (27U)
-#define USBPHY_CTRL_TOG_OTG_ID_VALUE(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_OTG_ID_VALUE_SHIFT)) & USBPHY_CTRL_TOG_OTG_ID_VALUE_MASK)
+#define USBPHY_CTRL_TOG_ENDPDMCHG_WKUP_MASK      (0x200000U)
+#define USBPHY_CTRL_TOG_ENDPDMCHG_WKUP_SHIFT     (21U)
+#define USBPHY_CTRL_TOG_ENDPDMCHG_WKUP(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_ENDPDMCHG_WKUP_SHIFT)) & USBPHY_CTRL_TOG_ENDPDMCHG_WKUP_MASK)
+#define USBPHY_CTRL_TOG_ENVBUSCHG_WKUP_MASK      (0x800000U)
+#define USBPHY_CTRL_TOG_ENVBUSCHG_WKUP_SHIFT     (23U)
+#define USBPHY_CTRL_TOG_ENVBUSCHG_WKUP(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_ENVBUSCHG_WKUP_SHIFT)) & USBPHY_CTRL_TOG_ENVBUSCHG_WKUP_MASK)
+#define USBPHY_CTRL_TOG_ENAUTOCLR_USBCLKGATE_MASK (0x2000000U)
+#define USBPHY_CTRL_TOG_ENAUTOCLR_USBCLKGATE_SHIFT (25U)
+#define USBPHY_CTRL_TOG_ENAUTOCLR_USBCLKGATE(x)  (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_ENAUTOCLR_USBCLKGATE_SHIFT)) & USBPHY_CTRL_TOG_ENAUTOCLR_USBCLKGATE_MASK)
+#define USBPHY_CTRL_TOG_ENAUTOSET_USBCLKS_MASK   (0x4000000U)
+#define USBPHY_CTRL_TOG_ENAUTOSET_USBCLKS_SHIFT  (26U)
+#define USBPHY_CTRL_TOG_ENAUTOSET_USBCLKS(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_ENAUTOSET_USBCLKS_SHIFT)) & USBPHY_CTRL_TOG_ENAUTOSET_USBCLKS_MASK)
 #define USBPHY_CTRL_TOG_HOST_FORCE_LS_SE0_MASK   (0x10000000U)
 #define USBPHY_CTRL_TOG_HOST_FORCE_LS_SE0_SHIFT  (28U)
 #define USBPHY_CTRL_TOG_HOST_FORCE_LS_SE0(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_CTRL_TOG_HOST_FORCE_LS_SE0_SHIFT)) & USBPHY_CTRL_TOG_HOST_FORCE_LS_SE0_MASK)
@@ -24350,6 +22499,9 @@ typedef struct {
 
 /*! @name STATUS - USB PHY Status Register */
 /*! @{ */
+#define USBPHY_STATUS_OK_STATUS_3V_MASK          (0x1U)
+#define USBPHY_STATUS_OK_STATUS_3V_SHIFT         (0U)
+#define USBPHY_STATUS_OK_STATUS_3V(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_STATUS_OK_STATUS_3V_SHIFT)) & USBPHY_STATUS_OK_STATUS_3V_MASK)
 #define USBPHY_STATUS_HOSTDISCONDETECT_STATUS_MASK (0x8U)
 #define USBPHY_STATUS_HOSTDISCONDETECT_STATUS_SHIFT (3U)
 /*! HOSTDISCONDETECT_STATUS
@@ -24364,256 +22516,13 @@ typedef struct {
  *  0b1..Cable attachment to a USB host is detected
  */
 #define USBPHY_STATUS_DEVPLUGIN_STATUS(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_STATUS_DEVPLUGIN_STATUS_SHIFT)) & USBPHY_STATUS_DEVPLUGIN_STATUS_MASK)
-#define USBPHY_STATUS_OTGID_STATUS_MASK          (0x100U)
-#define USBPHY_STATUS_OTGID_STATUS_SHIFT         (8U)
-#define USBPHY_STATUS_OTGID_STATUS(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_STATUS_OTGID_STATUS_SHIFT)) & USBPHY_STATUS_OTGID_STATUS_MASK)
 #define USBPHY_STATUS_RESUME_STATUS_MASK         (0x400U)
 #define USBPHY_STATUS_RESUME_STATUS_SHIFT        (10U)
 #define USBPHY_STATUS_RESUME_STATUS(x)           (((uint32_t)(((uint32_t)(x)) << USBPHY_STATUS_RESUME_STATUS_SHIFT)) & USBPHY_STATUS_RESUME_STATUS_MASK)
 /*! @} */
 
-/*! @name DEBUG0 - USB PHY Debug Register 0 */
-/*! @{ */
-#define USBPHY_DEBUG0_OTGIDPIOLOCK_MASK          (0x1U)
-#define USBPHY_DEBUG0_OTGIDPIOLOCK_SHIFT         (0U)
-#define USBPHY_DEBUG0_OTGIDPIOLOCK(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_OTGIDPIOLOCK_SHIFT)) & USBPHY_DEBUG0_OTGIDPIOLOCK_MASK)
-#define USBPHY_DEBUG0_DEBUG_INTERFACE_HOLD_MASK  (0x2U)
-#define USBPHY_DEBUG0_DEBUG_INTERFACE_HOLD_SHIFT (1U)
-#define USBPHY_DEBUG0_DEBUG_INTERFACE_HOLD(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_DEBUG_INTERFACE_HOLD_SHIFT)) & USBPHY_DEBUG0_DEBUG_INTERFACE_HOLD_MASK)
-#define USBPHY_DEBUG0_HSTPULLDOWN_MASK           (0xCU)
-#define USBPHY_DEBUG0_HSTPULLDOWN_SHIFT          (2U)
-#define USBPHY_DEBUG0_HSTPULLDOWN(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_HSTPULLDOWN_SHIFT)) & USBPHY_DEBUG0_HSTPULLDOWN_MASK)
-#define USBPHY_DEBUG0_ENHSTPULLDOWN_MASK         (0x30U)
-#define USBPHY_DEBUG0_ENHSTPULLDOWN_SHIFT        (4U)
-#define USBPHY_DEBUG0_ENHSTPULLDOWN(x)           (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_ENHSTPULLDOWN_SHIFT)) & USBPHY_DEBUG0_ENHSTPULLDOWN_MASK)
-#define USBPHY_DEBUG0_TX2RXCOUNT_MASK            (0xF00U)
-#define USBPHY_DEBUG0_TX2RXCOUNT_SHIFT           (8U)
-#define USBPHY_DEBUG0_TX2RXCOUNT(x)              (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TX2RXCOUNT_SHIFT)) & USBPHY_DEBUG0_TX2RXCOUNT_MASK)
-#define USBPHY_DEBUG0_ENTX2RXCOUNT_MASK          (0x1000U)
-#define USBPHY_DEBUG0_ENTX2RXCOUNT_SHIFT         (12U)
-#define USBPHY_DEBUG0_ENTX2RXCOUNT(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_ENTX2RXCOUNT_SHIFT)) & USBPHY_DEBUG0_ENTX2RXCOUNT_MASK)
-#define USBPHY_DEBUG0_SQUELCHRESETCOUNT_MASK     (0x1F0000U)
-#define USBPHY_DEBUG0_SQUELCHRESETCOUNT_SHIFT    (16U)
-#define USBPHY_DEBUG0_SQUELCHRESETCOUNT(x)       (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SQUELCHRESETCOUNT_SHIFT)) & USBPHY_DEBUG0_SQUELCHRESETCOUNT_MASK)
-#define USBPHY_DEBUG0_ENSQUELCHRESET_MASK        (0x1000000U)
-#define USBPHY_DEBUG0_ENSQUELCHRESET_SHIFT       (24U)
-#define USBPHY_DEBUG0_ENSQUELCHRESET(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_ENSQUELCHRESET_SHIFT)) & USBPHY_DEBUG0_ENSQUELCHRESET_MASK)
-#define USBPHY_DEBUG0_SQUELCHRESETLENGTH_MASK    (0x1E000000U)
-#define USBPHY_DEBUG0_SQUELCHRESETLENGTH_SHIFT   (25U)
-#define USBPHY_DEBUG0_SQUELCHRESETLENGTH(x)      (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SQUELCHRESETLENGTH_SHIFT)) & USBPHY_DEBUG0_SQUELCHRESETLENGTH_MASK)
-#define USBPHY_DEBUG0_HOST_RESUME_DEBUG_MASK     (0x20000000U)
-#define USBPHY_DEBUG0_HOST_RESUME_DEBUG_SHIFT    (29U)
-#define USBPHY_DEBUG0_HOST_RESUME_DEBUG(x)       (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_HOST_RESUME_DEBUG_SHIFT)) & USBPHY_DEBUG0_HOST_RESUME_DEBUG_MASK)
-#define USBPHY_DEBUG0_CLKGATE_MASK               (0x40000000U)
-#define USBPHY_DEBUG0_CLKGATE_SHIFT              (30U)
-#define USBPHY_DEBUG0_CLKGATE(x)                 (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLKGATE_SHIFT)) & USBPHY_DEBUG0_CLKGATE_MASK)
-/*! @} */
-
-/*! @name DEBUG0_SET - USB PHY Debug Register 0 */
-/*! @{ */
-#define USBPHY_DEBUG0_SET_OTGIDPIOLOCK_MASK      (0x1U)
-#define USBPHY_DEBUG0_SET_OTGIDPIOLOCK_SHIFT     (0U)
-#define USBPHY_DEBUG0_SET_OTGIDPIOLOCK(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SET_OTGIDPIOLOCK_SHIFT)) & USBPHY_DEBUG0_SET_OTGIDPIOLOCK_MASK)
-#define USBPHY_DEBUG0_SET_DEBUG_INTERFACE_HOLD_MASK (0x2U)
-#define USBPHY_DEBUG0_SET_DEBUG_INTERFACE_HOLD_SHIFT (1U)
-#define USBPHY_DEBUG0_SET_DEBUG_INTERFACE_HOLD(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SET_DEBUG_INTERFACE_HOLD_SHIFT)) & USBPHY_DEBUG0_SET_DEBUG_INTERFACE_HOLD_MASK)
-#define USBPHY_DEBUG0_SET_HSTPULLDOWN_MASK       (0xCU)
-#define USBPHY_DEBUG0_SET_HSTPULLDOWN_SHIFT      (2U)
-#define USBPHY_DEBUG0_SET_HSTPULLDOWN(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SET_HSTPULLDOWN_SHIFT)) & USBPHY_DEBUG0_SET_HSTPULLDOWN_MASK)
-#define USBPHY_DEBUG0_SET_ENHSTPULLDOWN_MASK     (0x30U)
-#define USBPHY_DEBUG0_SET_ENHSTPULLDOWN_SHIFT    (4U)
-#define USBPHY_DEBUG0_SET_ENHSTPULLDOWN(x)       (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SET_ENHSTPULLDOWN_SHIFT)) & USBPHY_DEBUG0_SET_ENHSTPULLDOWN_MASK)
-#define USBPHY_DEBUG0_SET_TX2RXCOUNT_MASK        (0xF00U)
-#define USBPHY_DEBUG0_SET_TX2RXCOUNT_SHIFT       (8U)
-#define USBPHY_DEBUG0_SET_TX2RXCOUNT(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SET_TX2RXCOUNT_SHIFT)) & USBPHY_DEBUG0_SET_TX2RXCOUNT_MASK)
-#define USBPHY_DEBUG0_SET_ENTX2RXCOUNT_MASK      (0x1000U)
-#define USBPHY_DEBUG0_SET_ENTX2RXCOUNT_SHIFT     (12U)
-#define USBPHY_DEBUG0_SET_ENTX2RXCOUNT(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SET_ENTX2RXCOUNT_SHIFT)) & USBPHY_DEBUG0_SET_ENTX2RXCOUNT_MASK)
-#define USBPHY_DEBUG0_SET_SQUELCHRESETCOUNT_MASK (0x1F0000U)
-#define USBPHY_DEBUG0_SET_SQUELCHRESETCOUNT_SHIFT (16U)
-#define USBPHY_DEBUG0_SET_SQUELCHRESETCOUNT(x)   (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SET_SQUELCHRESETCOUNT_SHIFT)) & USBPHY_DEBUG0_SET_SQUELCHRESETCOUNT_MASK)
-#define USBPHY_DEBUG0_SET_ENSQUELCHRESET_MASK    (0x1000000U)
-#define USBPHY_DEBUG0_SET_ENSQUELCHRESET_SHIFT   (24U)
-#define USBPHY_DEBUG0_SET_ENSQUELCHRESET(x)      (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SET_ENSQUELCHRESET_SHIFT)) & USBPHY_DEBUG0_SET_ENSQUELCHRESET_MASK)
-#define USBPHY_DEBUG0_SET_SQUELCHRESETLENGTH_MASK (0x1E000000U)
-#define USBPHY_DEBUG0_SET_SQUELCHRESETLENGTH_SHIFT (25U)
-#define USBPHY_DEBUG0_SET_SQUELCHRESETLENGTH(x)  (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SET_SQUELCHRESETLENGTH_SHIFT)) & USBPHY_DEBUG0_SET_SQUELCHRESETLENGTH_MASK)
-#define USBPHY_DEBUG0_SET_HOST_RESUME_DEBUG_MASK (0x20000000U)
-#define USBPHY_DEBUG0_SET_HOST_RESUME_DEBUG_SHIFT (29U)
-#define USBPHY_DEBUG0_SET_HOST_RESUME_DEBUG(x)   (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SET_HOST_RESUME_DEBUG_SHIFT)) & USBPHY_DEBUG0_SET_HOST_RESUME_DEBUG_MASK)
-#define USBPHY_DEBUG0_SET_CLKGATE_MASK           (0x40000000U)
-#define USBPHY_DEBUG0_SET_CLKGATE_SHIFT          (30U)
-#define USBPHY_DEBUG0_SET_CLKGATE(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_SET_CLKGATE_SHIFT)) & USBPHY_DEBUG0_SET_CLKGATE_MASK)
-/*! @} */
-
-/*! @name DEBUG0_CLR - USB PHY Debug Register 0 */
-/*! @{ */
-#define USBPHY_DEBUG0_CLR_OTGIDPIOLOCK_MASK      (0x1U)
-#define USBPHY_DEBUG0_CLR_OTGIDPIOLOCK_SHIFT     (0U)
-#define USBPHY_DEBUG0_CLR_OTGIDPIOLOCK(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLR_OTGIDPIOLOCK_SHIFT)) & USBPHY_DEBUG0_CLR_OTGIDPIOLOCK_MASK)
-#define USBPHY_DEBUG0_CLR_DEBUG_INTERFACE_HOLD_MASK (0x2U)
-#define USBPHY_DEBUG0_CLR_DEBUG_INTERFACE_HOLD_SHIFT (1U)
-#define USBPHY_DEBUG0_CLR_DEBUG_INTERFACE_HOLD(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLR_DEBUG_INTERFACE_HOLD_SHIFT)) & USBPHY_DEBUG0_CLR_DEBUG_INTERFACE_HOLD_MASK)
-#define USBPHY_DEBUG0_CLR_HSTPULLDOWN_MASK       (0xCU)
-#define USBPHY_DEBUG0_CLR_HSTPULLDOWN_SHIFT      (2U)
-#define USBPHY_DEBUG0_CLR_HSTPULLDOWN(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLR_HSTPULLDOWN_SHIFT)) & USBPHY_DEBUG0_CLR_HSTPULLDOWN_MASK)
-#define USBPHY_DEBUG0_CLR_ENHSTPULLDOWN_MASK     (0x30U)
-#define USBPHY_DEBUG0_CLR_ENHSTPULLDOWN_SHIFT    (4U)
-#define USBPHY_DEBUG0_CLR_ENHSTPULLDOWN(x)       (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLR_ENHSTPULLDOWN_SHIFT)) & USBPHY_DEBUG0_CLR_ENHSTPULLDOWN_MASK)
-#define USBPHY_DEBUG0_CLR_TX2RXCOUNT_MASK        (0xF00U)
-#define USBPHY_DEBUG0_CLR_TX2RXCOUNT_SHIFT       (8U)
-#define USBPHY_DEBUG0_CLR_TX2RXCOUNT(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLR_TX2RXCOUNT_SHIFT)) & USBPHY_DEBUG0_CLR_TX2RXCOUNT_MASK)
-#define USBPHY_DEBUG0_CLR_ENTX2RXCOUNT_MASK      (0x1000U)
-#define USBPHY_DEBUG0_CLR_ENTX2RXCOUNT_SHIFT     (12U)
-#define USBPHY_DEBUG0_CLR_ENTX2RXCOUNT(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLR_ENTX2RXCOUNT_SHIFT)) & USBPHY_DEBUG0_CLR_ENTX2RXCOUNT_MASK)
-#define USBPHY_DEBUG0_CLR_SQUELCHRESETCOUNT_MASK (0x1F0000U)
-#define USBPHY_DEBUG0_CLR_SQUELCHRESETCOUNT_SHIFT (16U)
-#define USBPHY_DEBUG0_CLR_SQUELCHRESETCOUNT(x)   (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLR_SQUELCHRESETCOUNT_SHIFT)) & USBPHY_DEBUG0_CLR_SQUELCHRESETCOUNT_MASK)
-#define USBPHY_DEBUG0_CLR_ENSQUELCHRESET_MASK    (0x1000000U)
-#define USBPHY_DEBUG0_CLR_ENSQUELCHRESET_SHIFT   (24U)
-#define USBPHY_DEBUG0_CLR_ENSQUELCHRESET(x)      (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLR_ENSQUELCHRESET_SHIFT)) & USBPHY_DEBUG0_CLR_ENSQUELCHRESET_MASK)
-#define USBPHY_DEBUG0_CLR_SQUELCHRESETLENGTH_MASK (0x1E000000U)
-#define USBPHY_DEBUG0_CLR_SQUELCHRESETLENGTH_SHIFT (25U)
-#define USBPHY_DEBUG0_CLR_SQUELCHRESETLENGTH(x)  (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLR_SQUELCHRESETLENGTH_SHIFT)) & USBPHY_DEBUG0_CLR_SQUELCHRESETLENGTH_MASK)
-#define USBPHY_DEBUG0_CLR_HOST_RESUME_DEBUG_MASK (0x20000000U)
-#define USBPHY_DEBUG0_CLR_HOST_RESUME_DEBUG_SHIFT (29U)
-#define USBPHY_DEBUG0_CLR_HOST_RESUME_DEBUG(x)   (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLR_HOST_RESUME_DEBUG_SHIFT)) & USBPHY_DEBUG0_CLR_HOST_RESUME_DEBUG_MASK)
-#define USBPHY_DEBUG0_CLR_CLKGATE_MASK           (0x40000000U)
-#define USBPHY_DEBUG0_CLR_CLKGATE_SHIFT          (30U)
-#define USBPHY_DEBUG0_CLR_CLKGATE(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_CLR_CLKGATE_SHIFT)) & USBPHY_DEBUG0_CLR_CLKGATE_MASK)
-/*! @} */
-
-/*! @name DEBUG0_TOG - USB PHY Debug Register 0 */
-/*! @{ */
-#define USBPHY_DEBUG0_TOG_OTGIDPIOLOCK_MASK      (0x1U)
-#define USBPHY_DEBUG0_TOG_OTGIDPIOLOCK_SHIFT     (0U)
-#define USBPHY_DEBUG0_TOG_OTGIDPIOLOCK(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TOG_OTGIDPIOLOCK_SHIFT)) & USBPHY_DEBUG0_TOG_OTGIDPIOLOCK_MASK)
-#define USBPHY_DEBUG0_TOG_DEBUG_INTERFACE_HOLD_MASK (0x2U)
-#define USBPHY_DEBUG0_TOG_DEBUG_INTERFACE_HOLD_SHIFT (1U)
-#define USBPHY_DEBUG0_TOG_DEBUG_INTERFACE_HOLD(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TOG_DEBUG_INTERFACE_HOLD_SHIFT)) & USBPHY_DEBUG0_TOG_DEBUG_INTERFACE_HOLD_MASK)
-#define USBPHY_DEBUG0_TOG_HSTPULLDOWN_MASK       (0xCU)
-#define USBPHY_DEBUG0_TOG_HSTPULLDOWN_SHIFT      (2U)
-#define USBPHY_DEBUG0_TOG_HSTPULLDOWN(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TOG_HSTPULLDOWN_SHIFT)) & USBPHY_DEBUG0_TOG_HSTPULLDOWN_MASK)
-#define USBPHY_DEBUG0_TOG_ENHSTPULLDOWN_MASK     (0x30U)
-#define USBPHY_DEBUG0_TOG_ENHSTPULLDOWN_SHIFT    (4U)
-#define USBPHY_DEBUG0_TOG_ENHSTPULLDOWN(x)       (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TOG_ENHSTPULLDOWN_SHIFT)) & USBPHY_DEBUG0_TOG_ENHSTPULLDOWN_MASK)
-#define USBPHY_DEBUG0_TOG_TX2RXCOUNT_MASK        (0xF00U)
-#define USBPHY_DEBUG0_TOG_TX2RXCOUNT_SHIFT       (8U)
-#define USBPHY_DEBUG0_TOG_TX2RXCOUNT(x)          (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TOG_TX2RXCOUNT_SHIFT)) & USBPHY_DEBUG0_TOG_TX2RXCOUNT_MASK)
-#define USBPHY_DEBUG0_TOG_ENTX2RXCOUNT_MASK      (0x1000U)
-#define USBPHY_DEBUG0_TOG_ENTX2RXCOUNT_SHIFT     (12U)
-#define USBPHY_DEBUG0_TOG_ENTX2RXCOUNT(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TOG_ENTX2RXCOUNT_SHIFT)) & USBPHY_DEBUG0_TOG_ENTX2RXCOUNT_MASK)
-#define USBPHY_DEBUG0_TOG_SQUELCHRESETCOUNT_MASK (0x1F0000U)
-#define USBPHY_DEBUG0_TOG_SQUELCHRESETCOUNT_SHIFT (16U)
-#define USBPHY_DEBUG0_TOG_SQUELCHRESETCOUNT(x)   (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TOG_SQUELCHRESETCOUNT_SHIFT)) & USBPHY_DEBUG0_TOG_SQUELCHRESETCOUNT_MASK)
-#define USBPHY_DEBUG0_TOG_ENSQUELCHRESET_MASK    (0x1000000U)
-#define USBPHY_DEBUG0_TOG_ENSQUELCHRESET_SHIFT   (24U)
-#define USBPHY_DEBUG0_TOG_ENSQUELCHRESET(x)      (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TOG_ENSQUELCHRESET_SHIFT)) & USBPHY_DEBUG0_TOG_ENSQUELCHRESET_MASK)
-#define USBPHY_DEBUG0_TOG_SQUELCHRESETLENGTH_MASK (0x1E000000U)
-#define USBPHY_DEBUG0_TOG_SQUELCHRESETLENGTH_SHIFT (25U)
-#define USBPHY_DEBUG0_TOG_SQUELCHRESETLENGTH(x)  (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TOG_SQUELCHRESETLENGTH_SHIFT)) & USBPHY_DEBUG0_TOG_SQUELCHRESETLENGTH_MASK)
-#define USBPHY_DEBUG0_TOG_HOST_RESUME_DEBUG_MASK (0x20000000U)
-#define USBPHY_DEBUG0_TOG_HOST_RESUME_DEBUG_SHIFT (29U)
-#define USBPHY_DEBUG0_TOG_HOST_RESUME_DEBUG(x)   (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TOG_HOST_RESUME_DEBUG_SHIFT)) & USBPHY_DEBUG0_TOG_HOST_RESUME_DEBUG_MASK)
-#define USBPHY_DEBUG0_TOG_CLKGATE_MASK           (0x40000000U)
-#define USBPHY_DEBUG0_TOG_CLKGATE_SHIFT          (30U)
-#define USBPHY_DEBUG0_TOG_CLKGATE(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG0_TOG_CLKGATE_SHIFT)) & USBPHY_DEBUG0_TOG_CLKGATE_MASK)
-/*! @} */
-
-/*! @name DEBUG1 - UTMI Debug Status Register 1 */
-/*! @{ */
-#define USBPHY_DEBUG1_ENTAILADJVD_MASK           (0x6000U)
-#define USBPHY_DEBUG1_ENTAILADJVD_SHIFT          (13U)
-/*! ENTAILADJVD
- *  0b00..Delay is nominal
- *  0b01..Delay is +20%
- *  0b10..Delay is -20%
- *  0b11..Delay is -40%
- */
-#define USBPHY_DEBUG1_ENTAILADJVD(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_ENTAILADJVD_SHIFT)) & USBPHY_DEBUG1_ENTAILADJVD_MASK)
-#define USBPHY_DEBUG1_USB2_REFBIAS_VBGADJ_MASK   (0x1C0000U)
-#define USBPHY_DEBUG1_USB2_REFBIAS_VBGADJ_SHIFT  (18U)
-#define USBPHY_DEBUG1_USB2_REFBIAS_VBGADJ(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_USB2_REFBIAS_VBGADJ_SHIFT)) & USBPHY_DEBUG1_USB2_REFBIAS_VBGADJ_MASK)
-#define USBPHY_DEBUG1_USB2_REFBIAS_TST_MASK      (0x600000U)
-#define USBPHY_DEBUG1_USB2_REFBIAS_TST_SHIFT     (21U)
-#define USBPHY_DEBUG1_USB2_REFBIAS_TST(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_USB2_REFBIAS_TST_SHIFT)) & USBPHY_DEBUG1_USB2_REFBIAS_TST_MASK)
-/*! @} */
-
-/*! @name DEBUG1_SET - UTMI Debug Status Register 1 */
-/*! @{ */
-#define USBPHY_DEBUG1_SET_ENTAILADJVD_MASK       (0x6000U)
-#define USBPHY_DEBUG1_SET_ENTAILADJVD_SHIFT      (13U)
-/*! ENTAILADJVD
- *  0b00..Delay is nominal
- *  0b01..Delay is +20%
- *  0b10..Delay is -20%
- *  0b11..Delay is -40%
- */
-#define USBPHY_DEBUG1_SET_ENTAILADJVD(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_SET_ENTAILADJVD_SHIFT)) & USBPHY_DEBUG1_SET_ENTAILADJVD_MASK)
-#define USBPHY_DEBUG1_SET_USB2_REFBIAS_VBGADJ_MASK (0x1C0000U)
-#define USBPHY_DEBUG1_SET_USB2_REFBIAS_VBGADJ_SHIFT (18U)
-#define USBPHY_DEBUG1_SET_USB2_REFBIAS_VBGADJ(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_SET_USB2_REFBIAS_VBGADJ_SHIFT)) & USBPHY_DEBUG1_SET_USB2_REFBIAS_VBGADJ_MASK)
-#define USBPHY_DEBUG1_SET_USB2_REFBIAS_TST_MASK  (0x600000U)
-#define USBPHY_DEBUG1_SET_USB2_REFBIAS_TST_SHIFT (21U)
-#define USBPHY_DEBUG1_SET_USB2_REFBIAS_TST(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_SET_USB2_REFBIAS_TST_SHIFT)) & USBPHY_DEBUG1_SET_USB2_REFBIAS_TST_MASK)
-/*! @} */
-
-/*! @name DEBUG1_CLR - UTMI Debug Status Register 1 */
-/*! @{ */
-#define USBPHY_DEBUG1_CLR_ENTAILADJVD_MASK       (0x6000U)
-#define USBPHY_DEBUG1_CLR_ENTAILADJVD_SHIFT      (13U)
-/*! ENTAILADJVD
- *  0b00..Delay is nominal
- *  0b01..Delay is +20%
- *  0b10..Delay is -20%
- *  0b11..Delay is -40%
- */
-#define USBPHY_DEBUG1_CLR_ENTAILADJVD(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_CLR_ENTAILADJVD_SHIFT)) & USBPHY_DEBUG1_CLR_ENTAILADJVD_MASK)
-#define USBPHY_DEBUG1_CLR_USB2_REFBIAS_VBGADJ_MASK (0x1C0000U)
-#define USBPHY_DEBUG1_CLR_USB2_REFBIAS_VBGADJ_SHIFT (18U)
-#define USBPHY_DEBUG1_CLR_USB2_REFBIAS_VBGADJ(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_CLR_USB2_REFBIAS_VBGADJ_SHIFT)) & USBPHY_DEBUG1_CLR_USB2_REFBIAS_VBGADJ_MASK)
-#define USBPHY_DEBUG1_CLR_USB2_REFBIAS_TST_MASK  (0x600000U)
-#define USBPHY_DEBUG1_CLR_USB2_REFBIAS_TST_SHIFT (21U)
-#define USBPHY_DEBUG1_CLR_USB2_REFBIAS_TST(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_CLR_USB2_REFBIAS_TST_SHIFT)) & USBPHY_DEBUG1_CLR_USB2_REFBIAS_TST_MASK)
-/*! @} */
-
-/*! @name DEBUG1_TOG - UTMI Debug Status Register 1 */
-/*! @{ */
-#define USBPHY_DEBUG1_TOG_ENTAILADJVD_MASK       (0x6000U)
-#define USBPHY_DEBUG1_TOG_ENTAILADJVD_SHIFT      (13U)
-/*! ENTAILADJVD
- *  0b00..Delay is nominal
- *  0b01..Delay is +20%
- *  0b10..Delay is -20%
- *  0b11..Delay is -40%
- */
-#define USBPHY_DEBUG1_TOG_ENTAILADJVD(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_TOG_ENTAILADJVD_SHIFT)) & USBPHY_DEBUG1_TOG_ENTAILADJVD_MASK)
-#define USBPHY_DEBUG1_TOG_USB2_REFBIAS_VBGADJ_MASK (0x1C0000U)
-#define USBPHY_DEBUG1_TOG_USB2_REFBIAS_VBGADJ_SHIFT (18U)
-#define USBPHY_DEBUG1_TOG_USB2_REFBIAS_VBGADJ(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_TOG_USB2_REFBIAS_VBGADJ_SHIFT)) & USBPHY_DEBUG1_TOG_USB2_REFBIAS_VBGADJ_MASK)
-#define USBPHY_DEBUG1_TOG_USB2_REFBIAS_TST_MASK  (0x600000U)
-#define USBPHY_DEBUG1_TOG_USB2_REFBIAS_TST_SHIFT (21U)
-#define USBPHY_DEBUG1_TOG_USB2_REFBIAS_TST(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_DEBUG1_TOG_USB2_REFBIAS_TST_SHIFT)) & USBPHY_DEBUG1_TOG_USB2_REFBIAS_TST_MASK)
-/*! @} */
-
-/*! @name VERSION - UTMI RTL Version */
-/*! @{ */
-#define USBPHY_VERSION_STEP_MASK                 (0xFFFFU)
-#define USBPHY_VERSION_STEP_SHIFT                (0U)
-#define USBPHY_VERSION_STEP(x)                   (((uint32_t)(((uint32_t)(x)) << USBPHY_VERSION_STEP_SHIFT)) & USBPHY_VERSION_STEP_MASK)
-#define USBPHY_VERSION_MINOR_MASK                (0xFF0000U)
-#define USBPHY_VERSION_MINOR_SHIFT               (16U)
-#define USBPHY_VERSION_MINOR(x)                  (((uint32_t)(((uint32_t)(x)) << USBPHY_VERSION_MINOR_SHIFT)) & USBPHY_VERSION_MINOR_MASK)
-#define USBPHY_VERSION_MAJOR_MASK                (0xFF000000U)
-#define USBPHY_VERSION_MAJOR_SHIFT               (24U)
-#define USBPHY_VERSION_MAJOR(x)                  (((uint32_t)(((uint32_t)(x)) << USBPHY_VERSION_MAJOR_SHIFT)) & USBPHY_VERSION_MAJOR_MASK)
-/*! @} */
-
 /*! @name PLL_SIC - USB PHY PLL Control/Status Register */
 /*! @{ */
-#define USBPHY_PLL_SIC_MISC2_CONTROL0_MASK       (0x20U)
-#define USBPHY_PLL_SIC_MISC2_CONTROL0_SHIFT      (5U)
-#define USBPHY_PLL_SIC_MISC2_CONTROL0(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_MISC2_CONTROL0_SHIFT)) & USBPHY_PLL_SIC_MISC2_CONTROL0_MASK)
 #define USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK      (0x40U)
 #define USBPHY_PLL_SIC_PLL_EN_USB_CLKS_SHIFT     (6U)
 #define USBPHY_PLL_SIC_PLL_EN_USB_CLKS(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_PLL_EN_USB_CLKS_SHIFT)) & USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK)
@@ -24623,9 +22532,6 @@ typedef struct {
 #define USBPHY_PLL_SIC_PLL_ENABLE_MASK           (0x2000U)
 #define USBPHY_PLL_SIC_PLL_ENABLE_SHIFT          (13U)
 #define USBPHY_PLL_SIC_PLL_ENABLE(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_PLL_ENABLE_SHIFT)) & USBPHY_PLL_SIC_PLL_ENABLE_MASK)
-#define USBPHY_PLL_SIC_PLL_BYPASS_MASK           (0x10000U)
-#define USBPHY_PLL_SIC_PLL_BYPASS_SHIFT          (16U)
-#define USBPHY_PLL_SIC_PLL_BYPASS(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_PLL_BYPASS_SHIFT)) & USBPHY_PLL_SIC_PLL_BYPASS_MASK)
 #define USBPHY_PLL_SIC_REFBIAS_PWD_SEL_MASK      (0x80000U)
 #define USBPHY_PLL_SIC_REFBIAS_PWD_SEL_SHIFT     (19U)
 /*! REFBIAS_PWD_SEL
@@ -24652,6 +22558,9 @@ typedef struct {
  *  0b111..Divide by 240
  */
 #define USBPHY_PLL_SIC_PLL_DIV_SEL(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_PLL_DIV_SEL_SHIFT)) & USBPHY_PLL_SIC_PLL_DIV_SEL_MASK)
+#define USBPHY_PLL_SIC_PLL_PREDIV_MASK           (0x40000000U)
+#define USBPHY_PLL_SIC_PLL_PREDIV_SHIFT          (30U)
+#define USBPHY_PLL_SIC_PLL_PREDIV(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_PLL_PREDIV_SHIFT)) & USBPHY_PLL_SIC_PLL_PREDIV_MASK)
 #define USBPHY_PLL_SIC_PLL_LOCK_MASK             (0x80000000U)
 #define USBPHY_PLL_SIC_PLL_LOCK_SHIFT            (31U)
 /*! PLL_LOCK
@@ -24663,9 +22572,6 @@ typedef struct {
 
 /*! @name PLL_SIC_SET - USB PHY PLL Control/Status Register */
 /*! @{ */
-#define USBPHY_PLL_SIC_SET_MISC2_CONTROL0_MASK   (0x20U)
-#define USBPHY_PLL_SIC_SET_MISC2_CONTROL0_SHIFT  (5U)
-#define USBPHY_PLL_SIC_SET_MISC2_CONTROL0(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_SET_MISC2_CONTROL0_SHIFT)) & USBPHY_PLL_SIC_SET_MISC2_CONTROL0_MASK)
 #define USBPHY_PLL_SIC_SET_PLL_EN_USB_CLKS_MASK  (0x40U)
 #define USBPHY_PLL_SIC_SET_PLL_EN_USB_CLKS_SHIFT (6U)
 #define USBPHY_PLL_SIC_SET_PLL_EN_USB_CLKS(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_SET_PLL_EN_USB_CLKS_SHIFT)) & USBPHY_PLL_SIC_SET_PLL_EN_USB_CLKS_MASK)
@@ -24675,9 +22581,6 @@ typedef struct {
 #define USBPHY_PLL_SIC_SET_PLL_ENABLE_MASK       (0x2000U)
 #define USBPHY_PLL_SIC_SET_PLL_ENABLE_SHIFT      (13U)
 #define USBPHY_PLL_SIC_SET_PLL_ENABLE(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_SET_PLL_ENABLE_SHIFT)) & USBPHY_PLL_SIC_SET_PLL_ENABLE_MASK)
-#define USBPHY_PLL_SIC_SET_PLL_BYPASS_MASK       (0x10000U)
-#define USBPHY_PLL_SIC_SET_PLL_BYPASS_SHIFT      (16U)
-#define USBPHY_PLL_SIC_SET_PLL_BYPASS(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_SET_PLL_BYPASS_SHIFT)) & USBPHY_PLL_SIC_SET_PLL_BYPASS_MASK)
 #define USBPHY_PLL_SIC_SET_REFBIAS_PWD_SEL_MASK  (0x80000U)
 #define USBPHY_PLL_SIC_SET_REFBIAS_PWD_SEL_SHIFT (19U)
 /*! REFBIAS_PWD_SEL
@@ -24704,6 +22607,9 @@ typedef struct {
  *  0b111..Divide by 240
  */
 #define USBPHY_PLL_SIC_SET_PLL_DIV_SEL(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_SET_PLL_DIV_SEL_SHIFT)) & USBPHY_PLL_SIC_SET_PLL_DIV_SEL_MASK)
+#define USBPHY_PLL_SIC_SET_PLL_PREDIV_MASK       (0x40000000U)
+#define USBPHY_PLL_SIC_SET_PLL_PREDIV_SHIFT      (30U)
+#define USBPHY_PLL_SIC_SET_PLL_PREDIV(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_SET_PLL_PREDIV_SHIFT)) & USBPHY_PLL_SIC_SET_PLL_PREDIV_MASK)
 #define USBPHY_PLL_SIC_SET_PLL_LOCK_MASK         (0x80000000U)
 #define USBPHY_PLL_SIC_SET_PLL_LOCK_SHIFT        (31U)
 /*! PLL_LOCK
@@ -24715,9 +22621,6 @@ typedef struct {
 
 /*! @name PLL_SIC_CLR - USB PHY PLL Control/Status Register */
 /*! @{ */
-#define USBPHY_PLL_SIC_CLR_MISC2_CONTROL0_MASK   (0x20U)
-#define USBPHY_PLL_SIC_CLR_MISC2_CONTROL0_SHIFT  (5U)
-#define USBPHY_PLL_SIC_CLR_MISC2_CONTROL0(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_CLR_MISC2_CONTROL0_SHIFT)) & USBPHY_PLL_SIC_CLR_MISC2_CONTROL0_MASK)
 #define USBPHY_PLL_SIC_CLR_PLL_EN_USB_CLKS_MASK  (0x40U)
 #define USBPHY_PLL_SIC_CLR_PLL_EN_USB_CLKS_SHIFT (6U)
 #define USBPHY_PLL_SIC_CLR_PLL_EN_USB_CLKS(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_CLR_PLL_EN_USB_CLKS_SHIFT)) & USBPHY_PLL_SIC_CLR_PLL_EN_USB_CLKS_MASK)
@@ -24727,9 +22630,6 @@ typedef struct {
 #define USBPHY_PLL_SIC_CLR_PLL_ENABLE_MASK       (0x2000U)
 #define USBPHY_PLL_SIC_CLR_PLL_ENABLE_SHIFT      (13U)
 #define USBPHY_PLL_SIC_CLR_PLL_ENABLE(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_CLR_PLL_ENABLE_SHIFT)) & USBPHY_PLL_SIC_CLR_PLL_ENABLE_MASK)
-#define USBPHY_PLL_SIC_CLR_PLL_BYPASS_MASK       (0x10000U)
-#define USBPHY_PLL_SIC_CLR_PLL_BYPASS_SHIFT      (16U)
-#define USBPHY_PLL_SIC_CLR_PLL_BYPASS(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_CLR_PLL_BYPASS_SHIFT)) & USBPHY_PLL_SIC_CLR_PLL_BYPASS_MASK)
 #define USBPHY_PLL_SIC_CLR_REFBIAS_PWD_SEL_MASK  (0x80000U)
 #define USBPHY_PLL_SIC_CLR_REFBIAS_PWD_SEL_SHIFT (19U)
 /*! REFBIAS_PWD_SEL
@@ -24756,6 +22656,9 @@ typedef struct {
  *  0b111..Divide by 240
  */
 #define USBPHY_PLL_SIC_CLR_PLL_DIV_SEL(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_CLR_PLL_DIV_SEL_SHIFT)) & USBPHY_PLL_SIC_CLR_PLL_DIV_SEL_MASK)
+#define USBPHY_PLL_SIC_CLR_PLL_PREDIV_MASK       (0x40000000U)
+#define USBPHY_PLL_SIC_CLR_PLL_PREDIV_SHIFT      (30U)
+#define USBPHY_PLL_SIC_CLR_PLL_PREDIV(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_CLR_PLL_PREDIV_SHIFT)) & USBPHY_PLL_SIC_CLR_PLL_PREDIV_MASK)
 #define USBPHY_PLL_SIC_CLR_PLL_LOCK_MASK         (0x80000000U)
 #define USBPHY_PLL_SIC_CLR_PLL_LOCK_SHIFT        (31U)
 /*! PLL_LOCK
@@ -24767,9 +22670,6 @@ typedef struct {
 
 /*! @name PLL_SIC_TOG - USB PHY PLL Control/Status Register */
 /*! @{ */
-#define USBPHY_PLL_SIC_TOG_MISC2_CONTROL0_MASK   (0x20U)
-#define USBPHY_PLL_SIC_TOG_MISC2_CONTROL0_SHIFT  (5U)
-#define USBPHY_PLL_SIC_TOG_MISC2_CONTROL0(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_TOG_MISC2_CONTROL0_SHIFT)) & USBPHY_PLL_SIC_TOG_MISC2_CONTROL0_MASK)
 #define USBPHY_PLL_SIC_TOG_PLL_EN_USB_CLKS_MASK  (0x40U)
 #define USBPHY_PLL_SIC_TOG_PLL_EN_USB_CLKS_SHIFT (6U)
 #define USBPHY_PLL_SIC_TOG_PLL_EN_USB_CLKS(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_TOG_PLL_EN_USB_CLKS_SHIFT)) & USBPHY_PLL_SIC_TOG_PLL_EN_USB_CLKS_MASK)
@@ -24779,9 +22679,6 @@ typedef struct {
 #define USBPHY_PLL_SIC_TOG_PLL_ENABLE_MASK       (0x2000U)
 #define USBPHY_PLL_SIC_TOG_PLL_ENABLE_SHIFT      (13U)
 #define USBPHY_PLL_SIC_TOG_PLL_ENABLE(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_TOG_PLL_ENABLE_SHIFT)) & USBPHY_PLL_SIC_TOG_PLL_ENABLE_MASK)
-#define USBPHY_PLL_SIC_TOG_PLL_BYPASS_MASK       (0x10000U)
-#define USBPHY_PLL_SIC_TOG_PLL_BYPASS_SHIFT      (16U)
-#define USBPHY_PLL_SIC_TOG_PLL_BYPASS(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_TOG_PLL_BYPASS_SHIFT)) & USBPHY_PLL_SIC_TOG_PLL_BYPASS_MASK)
 #define USBPHY_PLL_SIC_TOG_REFBIAS_PWD_SEL_MASK  (0x80000U)
 #define USBPHY_PLL_SIC_TOG_REFBIAS_PWD_SEL_SHIFT (19U)
 /*! REFBIAS_PWD_SEL
@@ -24808,6 +22705,9 @@ typedef struct {
  *  0b111..Divide by 240
  */
 #define USBPHY_PLL_SIC_TOG_PLL_DIV_SEL(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_TOG_PLL_DIV_SEL_SHIFT)) & USBPHY_PLL_SIC_TOG_PLL_DIV_SEL_MASK)
+#define USBPHY_PLL_SIC_TOG_PLL_PREDIV_MASK       (0x40000000U)
+#define USBPHY_PLL_SIC_TOG_PLL_PREDIV_SHIFT      (30U)
+#define USBPHY_PLL_SIC_TOG_PLL_PREDIV(x)         (((uint32_t)(((uint32_t)(x)) << USBPHY_PLL_SIC_TOG_PLL_PREDIV_SHIFT)) & USBPHY_PLL_SIC_TOG_PLL_PREDIV_MASK)
 #define USBPHY_PLL_SIC_TOG_PLL_LOCK_MASK         (0x80000000U)
 #define USBPHY_PLL_SIC_TOG_PLL_LOCK_SHIFT        (31U)
 /*! PLL_LOCK
@@ -24867,6 +22767,26 @@ typedef struct {
  *  0b11..Reserved, do not use
  */
 #define USBPHY_USB1_VBUS_DETECT_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_VBUS_SOURCE_SEL_SHIFT)) & USBPHY_USB1_VBUS_DETECT_VBUS_SOURCE_SEL_MASK)
+#define USBPHY_USB1_VBUS_DETECT_ID_OVERRIDE_EN_MASK (0x800U)
+#define USBPHY_USB1_VBUS_DETECT_ID_OVERRIDE_EN_SHIFT (11U)
+#define USBPHY_USB1_VBUS_DETECT_ID_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_ID_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_ID_OVERRIDE_EN_MASK)
+#define USBPHY_USB1_VBUS_DETECT_ID_OVERRIDE_MASK (0x1000U)
+#define USBPHY_USB1_VBUS_DETECT_ID_OVERRIDE_SHIFT (12U)
+#define USBPHY_USB1_VBUS_DETECT_ID_OVERRIDE(x)   (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_ID_OVERRIDE_SHIFT)) & USBPHY_USB1_VBUS_DETECT_ID_OVERRIDE_MASK)
+#define USBPHY_USB1_VBUS_DETECT_EXT_ID_OVERRIDE_EN_MASK (0x2000U)
+#define USBPHY_USB1_VBUS_DETECT_EXT_ID_OVERRIDE_EN_SHIFT (13U)
+/*! EXT_ID_OVERRIDE_EN
+ *  0b0..Select the Muxed value chosen using ID_OVERRIDE_EN.
+ *  0b1..Select the external ID value.
+ */
+#define USBPHY_USB1_VBUS_DETECT_EXT_ID_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_EXT_ID_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_EXT_ID_OVERRIDE_EN_MASK)
+#define USBPHY_USB1_VBUS_DETECT_EXT_VBUS_OVERRIDE_EN_MASK (0x4000U)
+#define USBPHY_USB1_VBUS_DETECT_EXT_VBUS_OVERRIDE_EN_SHIFT (14U)
+/*! EXT_VBUS_OVERRIDE_EN
+ *  0b0..Select the Muxed value chosen using VBUS_OVERRIDE_EN.
+ *  0b1..Select the external VBUS VALID value.
+ */
+#define USBPHY_USB1_VBUS_DETECT_EXT_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_EXT_VBUS_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_EXT_VBUS_OVERRIDE_EN_MASK)
 #define USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_MASK (0x40000U)
 #define USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_SHIFT (18U)
 /*! VBUSVALID_TO_SESSVALID
@@ -24874,11 +22794,14 @@ typedef struct {
  *  0b1..Use the Session End comparator for VBUS_VALID results. The Session End threshold is >0.8V and <4.0V.
  */
 #define USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_SHIFT)) & USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_MASK)
-#define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_MASK  (0x100000U)
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_5VDETECT_MASK (0x80000U)
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_5VDETECT_SHIFT (19U)
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_5VDETECT(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_VBUSVALID_5VDETECT_SHIFT)) & USBPHY_USB1_VBUS_DETECT_VBUSVALID_5VDETECT_MASK)
+#define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_MASK  (0x700000U)
 #define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_SHIFT (20U)
 /*! PWRUP_CMPS
- *  0b0..Powers down the VBUS_VALID comparator
- *  0b1..Enables the VBUS_VALID comparator (default)
+ *  0b000..Powers down the VBUS_VALID comparator
+ *  0b111..Enables the VBUS_VALID comparator (default)
  */
 #define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_SHIFT)) & USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_MASK)
 #define USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS_MASK (0x4000000U)
@@ -24888,13 +22811,6 @@ typedef struct {
  *  0b1..VBUS discharge resistor is enabled
  */
 #define USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS_SHIFT)) & USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS_MASK)
-#define USBPHY_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_MASK (0x80000000U)
-#define USBPHY_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_SHIFT (31U)
-/*! EN_CHARGER_RESISTOR
- *  0b0..Disable resistive charger detection resistors on USB_DP and USB_DP
- *  0b1..Enable resistive charger detection resistors on USB_DP and USB_DP
- */
-#define USBPHY_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_SHIFT)) & USBPHY_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_MASK)
 /*! @} */
 
 /*! @name USB1_VBUS_DETECT_SET - USB PHY VBUS Detect Control Register */
@@ -24947,6 +22863,26 @@ typedef struct {
  *  0b11..Reserved, do not use
  */
 #define USBPHY_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL_SHIFT)) & USBPHY_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL_MASK)
+#define USBPHY_USB1_VBUS_DETECT_SET_ID_OVERRIDE_EN_MASK (0x800U)
+#define USBPHY_USB1_VBUS_DETECT_SET_ID_OVERRIDE_EN_SHIFT (11U)
+#define USBPHY_USB1_VBUS_DETECT_SET_ID_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_SET_ID_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_SET_ID_OVERRIDE_EN_MASK)
+#define USBPHY_USB1_VBUS_DETECT_SET_ID_OVERRIDE_MASK (0x1000U)
+#define USBPHY_USB1_VBUS_DETECT_SET_ID_OVERRIDE_SHIFT (12U)
+#define USBPHY_USB1_VBUS_DETECT_SET_ID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_SET_ID_OVERRIDE_SHIFT)) & USBPHY_USB1_VBUS_DETECT_SET_ID_OVERRIDE_MASK)
+#define USBPHY_USB1_VBUS_DETECT_SET_EXT_ID_OVERRIDE_EN_MASK (0x2000U)
+#define USBPHY_USB1_VBUS_DETECT_SET_EXT_ID_OVERRIDE_EN_SHIFT (13U)
+/*! EXT_ID_OVERRIDE_EN
+ *  0b0..Select the Muxed value chosen using ID_OVERRIDE_EN.
+ *  0b1..Select the external ID value.
+ */
+#define USBPHY_USB1_VBUS_DETECT_SET_EXT_ID_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_SET_EXT_ID_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_SET_EXT_ID_OVERRIDE_EN_MASK)
+#define USBPHY_USB1_VBUS_DETECT_SET_EXT_VBUS_OVERRIDE_EN_MASK (0x4000U)
+#define USBPHY_USB1_VBUS_DETECT_SET_EXT_VBUS_OVERRIDE_EN_SHIFT (14U)
+/*! EXT_VBUS_OVERRIDE_EN
+ *  0b0..Select the Muxed value chosen using VBUS_OVERRIDE_EN.
+ *  0b1..Select the external VBUS VALID value.
+ */
+#define USBPHY_USB1_VBUS_DETECT_SET_EXT_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_SET_EXT_VBUS_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_SET_EXT_VBUS_OVERRIDE_EN_MASK)
 #define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_MASK (0x40000U)
 #define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_SHIFT (18U)
 /*! VBUSVALID_TO_SESSVALID
@@ -24954,11 +22890,14 @@ typedef struct {
  *  0b1..Use the Session End comparator for VBUS_VALID results. The Session End threshold is >0.8V and <4.0V.
  */
 #define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_SHIFT)) & USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_MASK)
-#define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_MASK (0x100000U)
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_5VDETECT_MASK (0x80000U)
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_5VDETECT_SHIFT (19U)
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_5VDETECT(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_5VDETECT_SHIFT)) & USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_5VDETECT_MASK)
+#define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_MASK (0x700000U)
 #define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_SHIFT (20U)
 /*! PWRUP_CMPS
- *  0b0..Powers down the VBUS_VALID comparator
- *  0b1..Enables the VBUS_VALID comparator (default)
+ *  0b000..Powers down the VBUS_VALID comparator
+ *  0b111..Enables the VBUS_VALID comparator (default)
  */
 #define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_SHIFT)) & USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_MASK)
 #define USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_MASK (0x4000000U)
@@ -24968,13 +22907,6 @@ typedef struct {
  *  0b1..VBUS discharge resistor is enabled
  */
 #define USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_SHIFT)) & USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_MASK)
-#define USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_MASK (0x80000000U)
-#define USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_SHIFT (31U)
-/*! EN_CHARGER_RESISTOR
- *  0b0..Disable resistive charger detection resistors on USB_DP and USB_DP
- *  0b1..Enable resistive charger detection resistors on USB_DP and USB_DP
- */
-#define USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_SHIFT)) & USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_MASK)
 /*! @} */
 
 /*! @name USB1_VBUS_DETECT_CLR - USB PHY VBUS Detect Control Register */
@@ -25027,6 +22959,26 @@ typedef struct {
  *  0b11..Reserved, do not use
  */
 #define USBPHY_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL_SHIFT)) & USBPHY_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL_MASK)
+#define USBPHY_USB1_VBUS_DETECT_CLR_ID_OVERRIDE_EN_MASK (0x800U)
+#define USBPHY_USB1_VBUS_DETECT_CLR_ID_OVERRIDE_EN_SHIFT (11U)
+#define USBPHY_USB1_VBUS_DETECT_CLR_ID_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_CLR_ID_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_CLR_ID_OVERRIDE_EN_MASK)
+#define USBPHY_USB1_VBUS_DETECT_CLR_ID_OVERRIDE_MASK (0x1000U)
+#define USBPHY_USB1_VBUS_DETECT_CLR_ID_OVERRIDE_SHIFT (12U)
+#define USBPHY_USB1_VBUS_DETECT_CLR_ID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_CLR_ID_OVERRIDE_SHIFT)) & USBPHY_USB1_VBUS_DETECT_CLR_ID_OVERRIDE_MASK)
+#define USBPHY_USB1_VBUS_DETECT_CLR_EXT_ID_OVERRIDE_EN_MASK (0x2000U)
+#define USBPHY_USB1_VBUS_DETECT_CLR_EXT_ID_OVERRIDE_EN_SHIFT (13U)
+/*! EXT_ID_OVERRIDE_EN
+ *  0b0..Select the Muxed value chosen using ID_OVERRIDE_EN.
+ *  0b1..Select the external ID value.
+ */
+#define USBPHY_USB1_VBUS_DETECT_CLR_EXT_ID_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_CLR_EXT_ID_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_CLR_EXT_ID_OVERRIDE_EN_MASK)
+#define USBPHY_USB1_VBUS_DETECT_CLR_EXT_VBUS_OVERRIDE_EN_MASK (0x4000U)
+#define USBPHY_USB1_VBUS_DETECT_CLR_EXT_VBUS_OVERRIDE_EN_SHIFT (14U)
+/*! EXT_VBUS_OVERRIDE_EN
+ *  0b0..Select the muxed value chosen using VBUS_OVERRIDE_EN.
+ *  0b1..Select the external VBUS VALID value.
+ */
+#define USBPHY_USB1_VBUS_DETECT_CLR_EXT_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_CLR_EXT_VBUS_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_CLR_EXT_VBUS_OVERRIDE_EN_MASK)
 #define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_MASK (0x40000U)
 #define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_SHIFT (18U)
 /*! VBUSVALID_TO_SESSVALID
@@ -25034,11 +22986,14 @@ typedef struct {
  *  0b1..Use the Session End comparator for VBUS_VALID results. The Session End threshold is >0.8V and <4.0V.
  */
 #define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_SHIFT)) & USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_MASK)
-#define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_MASK (0x100000U)
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_5VDETECT_MASK (0x80000U)
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_5VDETECT_SHIFT (19U)
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_5VDETECT(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_5VDETECT_SHIFT)) & USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_5VDETECT_MASK)
+#define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_MASK (0x700000U)
 #define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_SHIFT (20U)
 /*! PWRUP_CMPS
- *  0b0..Powers down the VBUS_VALID comparator
- *  0b1..Enables the VBUS_VALID comparator (default)
+ *  0b000..Powers down the VBUS_VALID comparator
+ *  0b111..Enables the VBUS_VALID comparator (default)
  */
 #define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_SHIFT)) & USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_MASK)
 #define USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_MASK (0x4000000U)
@@ -25048,13 +23003,6 @@ typedef struct {
  *  0b1..VBUS discharge resistor is enabled
  */
 #define USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_SHIFT)) & USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_MASK)
-#define USBPHY_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_MASK (0x80000000U)
-#define USBPHY_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_SHIFT (31U)
-/*! EN_CHARGER_RESISTOR
- *  0b0..Disable resistive charger detection resistors on USB_DP and USB_DP
- *  0b1..Enable resistive charger detection resistors on USB_DP and USB_DP
- */
-#define USBPHY_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_SHIFT)) & USBPHY_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_MASK)
 /*! @} */
 
 /*! @name USB1_VBUS_DETECT_TOG - USB PHY VBUS Detect Control Register */
@@ -25107,6 +23055,26 @@ typedef struct {
  *  0b11..Reserved, do not use
  */
 #define USBPHY_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL_SHIFT)) & USBPHY_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL_MASK)
+#define USBPHY_USB1_VBUS_DETECT_TOG_ID_OVERRIDE_EN_MASK (0x800U)
+#define USBPHY_USB1_VBUS_DETECT_TOG_ID_OVERRIDE_EN_SHIFT (11U)
+#define USBPHY_USB1_VBUS_DETECT_TOG_ID_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_TOG_ID_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_TOG_ID_OVERRIDE_EN_MASK)
+#define USBPHY_USB1_VBUS_DETECT_TOG_ID_OVERRIDE_MASK (0x1000U)
+#define USBPHY_USB1_VBUS_DETECT_TOG_ID_OVERRIDE_SHIFT (12U)
+#define USBPHY_USB1_VBUS_DETECT_TOG_ID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_TOG_ID_OVERRIDE_SHIFT)) & USBPHY_USB1_VBUS_DETECT_TOG_ID_OVERRIDE_MASK)
+#define USBPHY_USB1_VBUS_DETECT_TOG_EXT_ID_OVERRIDE_EN_MASK (0x2000U)
+#define USBPHY_USB1_VBUS_DETECT_TOG_EXT_ID_OVERRIDE_EN_SHIFT (13U)
+/*! EXT_ID_OVERRIDE_EN
+ *  0b0..Select the muxed value chosen using ID_OVERRIDE_EN.
+ *  0b1..Select the external ID value.
+ */
+#define USBPHY_USB1_VBUS_DETECT_TOG_EXT_ID_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_TOG_EXT_ID_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_TOG_EXT_ID_OVERRIDE_EN_MASK)
+#define USBPHY_USB1_VBUS_DETECT_TOG_EXT_VBUS_OVERRIDE_EN_MASK (0x4000U)
+#define USBPHY_USB1_VBUS_DETECT_TOG_EXT_VBUS_OVERRIDE_EN_SHIFT (14U)
+/*! EXT_VBUS_OVERRIDE_EN
+ *  0b0..Select the Muxed value chosen using VBUS_OVERRIDE_EN.
+ *  0b1..Select the external VBUS VALID value.
+ */
+#define USBPHY_USB1_VBUS_DETECT_TOG_EXT_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_TOG_EXT_VBUS_OVERRIDE_EN_SHIFT)) & USBPHY_USB1_VBUS_DETECT_TOG_EXT_VBUS_OVERRIDE_EN_MASK)
 #define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_MASK (0x40000U)
 #define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_SHIFT (18U)
 /*! VBUSVALID_TO_SESSVALID
@@ -25114,11 +23082,14 @@ typedef struct {
  *  0b1..Use the Session End comparator for VBUS_VALID results. The Session End threshold is >0.8V and <4.0V.
  */
 #define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_SHIFT)) & USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_MASK)
-#define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_MASK (0x100000U)
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_5VDETECT_MASK (0x80000U)
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_5VDETECT_SHIFT (19U)
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_5VDETECT(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_5VDETECT_SHIFT)) & USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_5VDETECT_MASK)
+#define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_MASK (0x700000U)
 #define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_SHIFT (20U)
 /*! PWRUP_CMPS
- *  0b0..Powers down the VBUS_VALID comparator
- *  0b1..Enables the VBUS_VALID comparator (default)
+ *  0b000..Powers down the VBUS_VALID comparator
+ *  0b111..Enables the VBUS_VALID comparator (default)
  */
 #define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_SHIFT)) & USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_MASK)
 #define USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_MASK (0x4000000U)
@@ -25128,151 +23099,16 @@ typedef struct {
  *  0b1..VBUS discharge resistor is enabled
  */
 #define USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_SHIFT)) & USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_MASK)
-#define USBPHY_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_MASK (0x80000000U)
-#define USBPHY_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_SHIFT (31U)
-/*! EN_CHARGER_RESISTOR
- *  0b0..Disable resistive charger detection resistors on USB_DP and USB_DP
- *  0b1..Enable resistive charger detection resistors on USB_DP and USB_DP
- */
-#define USBPHY_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_SHIFT)) & USBPHY_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_MASK)
-/*! @} */
-
-/*! @name USB1_VBUS_DET_STAT - USB PHY VBUS Detector Status Register */
-/*! @{ */
-#define USBPHY_USB1_VBUS_DET_STAT_SESSEND_MASK   (0x1U)
-#define USBPHY_USB1_VBUS_DET_STAT_SESSEND_SHIFT  (0U)
-/*! SESSEND
- *  0b0..The VBUS voltage is above the Session Valid threshold
- *  0b1..The VBUS voltage is below the Session Valid threshold
- */
-#define USBPHY_USB1_VBUS_DET_STAT_SESSEND(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DET_STAT_SESSEND_SHIFT)) & USBPHY_USB1_VBUS_DET_STAT_SESSEND_MASK)
-#define USBPHY_USB1_VBUS_DET_STAT_BVALID_MASK    (0x2U)
-#define USBPHY_USB1_VBUS_DET_STAT_BVALID_SHIFT   (1U)
-/*! BVALID
- *  0b0..The VBUS voltage is below the Session Valid threshold
- *  0b1..The VBUS voltage is above the Session Valid threshold
- */
-#define USBPHY_USB1_VBUS_DET_STAT_BVALID(x)      (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DET_STAT_BVALID_SHIFT)) & USBPHY_USB1_VBUS_DET_STAT_BVALID_MASK)
-#define USBPHY_USB1_VBUS_DET_STAT_AVALID_MASK    (0x4U)
-#define USBPHY_USB1_VBUS_DET_STAT_AVALID_SHIFT   (2U)
-/*! AVALID
- *  0b0..The VBUS voltage is below the Session Valid threshold
- *  0b1..The VBUS voltage is above the Session Valid threshold
- */
-#define USBPHY_USB1_VBUS_DET_STAT_AVALID(x)      (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DET_STAT_AVALID_SHIFT)) & USBPHY_USB1_VBUS_DET_STAT_AVALID_MASK)
-#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_MASK (0x8U)
-#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_SHIFT (3U)
-/*! VBUS_VALID
- *  0b0..VBUS is below the comparator threshold
- *  0b1..VBUS is above the comparator threshold
- */
-#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID(x)  (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_SHIFT)) & USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_MASK)
-#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_3V_MASK (0x10U)
-#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_3V_SHIFT (4U)
-/*! VBUS_VALID_3V
- *  0b0..VBUS voltage is below VBUS_VALID_3V threshold
- *  0b1..VBUS voltage is above VBUS_VALID_3V threshold
- */
-#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_3V(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_3V_SHIFT)) & USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_3V_MASK)
-/*! @} */
-
-/*! @name USB1_CHRG_DETECT - USB PHY Charger Detect Control Register */
-/*! @{ */
-#define USBPHY_USB1_CHRG_DETECT_PULLUP_DP_MASK   (0x4U)
-#define USBPHY_USB1_CHRG_DETECT_PULLUP_DP_SHIFT  (2U)
-#define USBPHY_USB1_CHRG_DETECT_PULLUP_DP(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DETECT_PULLUP_DP_SHIFT)) & USBPHY_USB1_CHRG_DETECT_PULLUP_DP_MASK)
-#define USBPHY_USB1_CHRG_DETECT_BGR_IBIAS_MASK   (0x800000U)
-#define USBPHY_USB1_CHRG_DETECT_BGR_IBIAS_SHIFT  (23U)
-/*! BGR_IBIAS
- *  0b0..Bias current is derived from the USB PHY internal current generator.
- *  0b1..Bias current is derived from the reference generator of the bandgap.
- */
-#define USBPHY_USB1_CHRG_DETECT_BGR_IBIAS(x)     (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DETECT_BGR_IBIAS_SHIFT)) & USBPHY_USB1_CHRG_DETECT_BGR_IBIAS_MASK)
-/*! @} */
-
-/*! @name USB1_CHRG_DETECT_SET - USB PHY Charger Detect Control Register */
-/*! @{ */
-#define USBPHY_USB1_CHRG_DETECT_SET_PULLUP_DP_MASK (0x4U)
-#define USBPHY_USB1_CHRG_DETECT_SET_PULLUP_DP_SHIFT (2U)
-#define USBPHY_USB1_CHRG_DETECT_SET_PULLUP_DP(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DETECT_SET_PULLUP_DP_SHIFT)) & USBPHY_USB1_CHRG_DETECT_SET_PULLUP_DP_MASK)
-#define USBPHY_USB1_CHRG_DETECT_SET_BGR_IBIAS_MASK (0x800000U)
-#define USBPHY_USB1_CHRG_DETECT_SET_BGR_IBIAS_SHIFT (23U)
-/*! BGR_IBIAS
- *  0b0..Bias current is derived from the USB PHY internal current generator.
- *  0b1..Bias current is derived from the reference generator of the bandgap.
- */
-#define USBPHY_USB1_CHRG_DETECT_SET_BGR_IBIAS(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DETECT_SET_BGR_IBIAS_SHIFT)) & USBPHY_USB1_CHRG_DETECT_SET_BGR_IBIAS_MASK)
-/*! @} */
-
-/*! @name USB1_CHRG_DETECT_CLR - USB PHY Charger Detect Control Register */
-/*! @{ */
-#define USBPHY_USB1_CHRG_DETECT_CLR_PULLUP_DP_MASK (0x4U)
-#define USBPHY_USB1_CHRG_DETECT_CLR_PULLUP_DP_SHIFT (2U)
-#define USBPHY_USB1_CHRG_DETECT_CLR_PULLUP_DP(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DETECT_CLR_PULLUP_DP_SHIFT)) & USBPHY_USB1_CHRG_DETECT_CLR_PULLUP_DP_MASK)
-#define USBPHY_USB1_CHRG_DETECT_CLR_BGR_IBIAS_MASK (0x800000U)
-#define USBPHY_USB1_CHRG_DETECT_CLR_BGR_IBIAS_SHIFT (23U)
-/*! BGR_IBIAS
- *  0b0..Bias current is derived from the USB PHY internal current generator.
- *  0b1..Bias current is derived from the reference generator of the bandgap.
- */
-#define USBPHY_USB1_CHRG_DETECT_CLR_BGR_IBIAS(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DETECT_CLR_BGR_IBIAS_SHIFT)) & USBPHY_USB1_CHRG_DETECT_CLR_BGR_IBIAS_MASK)
-/*! @} */
-
-/*! @name USB1_CHRG_DETECT_TOG - USB PHY Charger Detect Control Register */
-/*! @{ */
-#define USBPHY_USB1_CHRG_DETECT_TOG_PULLUP_DP_MASK (0x4U)
-#define USBPHY_USB1_CHRG_DETECT_TOG_PULLUP_DP_SHIFT (2U)
-#define USBPHY_USB1_CHRG_DETECT_TOG_PULLUP_DP(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DETECT_TOG_PULLUP_DP_SHIFT)) & USBPHY_USB1_CHRG_DETECT_TOG_PULLUP_DP_MASK)
-#define USBPHY_USB1_CHRG_DETECT_TOG_BGR_IBIAS_MASK (0x800000U)
-#define USBPHY_USB1_CHRG_DETECT_TOG_BGR_IBIAS_SHIFT (23U)
-/*! BGR_IBIAS
- *  0b0..Bias current is derived from the USB PHY internal current generator.
- *  0b1..Bias current is derived from the reference generator of the bandgap.
- */
-#define USBPHY_USB1_CHRG_DETECT_TOG_BGR_IBIAS(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DETECT_TOG_BGR_IBIAS_SHIFT)) & USBPHY_USB1_CHRG_DETECT_TOG_BGR_IBIAS_MASK)
-/*! @} */
-
-/*! @name USB1_CHRG_DET_STAT - USB PHY Charger Detect Status Register */
-/*! @{ */
-#define USBPHY_USB1_CHRG_DET_STAT_PLUG_CONTACT_MASK (0x1U)
-#define USBPHY_USB1_CHRG_DET_STAT_PLUG_CONTACT_SHIFT (0U)
-/*! PLUG_CONTACT
- *  0b0..No USB cable attachment has been detected
- *  0b1..A USB cable attachment between the device and host has been detected
- */
-#define USBPHY_USB1_CHRG_DET_STAT_PLUG_CONTACT(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DET_STAT_PLUG_CONTACT_SHIFT)) & USBPHY_USB1_CHRG_DET_STAT_PLUG_CONTACT_MASK)
-#define USBPHY_USB1_CHRG_DET_STAT_CHRG_DETECTED_MASK (0x2U)
-#define USBPHY_USB1_CHRG_DET_STAT_CHRG_DETECTED_SHIFT (1U)
-/*! CHRG_DETECTED
- *  0b0..Standard Downstream Port (SDP) has been detected
- *  0b1..Charging Port has been detected
- */
-#define USBPHY_USB1_CHRG_DET_STAT_CHRG_DETECTED(x) (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DET_STAT_CHRG_DETECTED_SHIFT)) & USBPHY_USB1_CHRG_DET_STAT_CHRG_DETECTED_MASK)
-#define USBPHY_USB1_CHRG_DET_STAT_DM_STATE_MASK  (0x4U)
-#define USBPHY_USB1_CHRG_DET_STAT_DM_STATE_SHIFT (2U)
-/*! DM_STATE
- *  0b0..USB_DM pin voltage is < 0.8V
- *  0b1..USB_DM pin voltage is > 2.0V
- */
-#define USBPHY_USB1_CHRG_DET_STAT_DM_STATE(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DET_STAT_DM_STATE_SHIFT)) & USBPHY_USB1_CHRG_DET_STAT_DM_STATE_MASK)
-#define USBPHY_USB1_CHRG_DET_STAT_DP_STATE_MASK  (0x8U)
-#define USBPHY_USB1_CHRG_DET_STAT_DP_STATE_SHIFT (3U)
-/*! DP_STATE
- *  0b0..USB_DP pin voltage is < 0.8V
- *  0b1..USB_DP pin voltage is > 2.0V
- */
-#define USBPHY_USB1_CHRG_DET_STAT_DP_STATE(x)    (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DET_STAT_DP_STATE_SHIFT)) & USBPHY_USB1_CHRG_DET_STAT_DP_STATE_MASK)
-#define USBPHY_USB1_CHRG_DET_STAT_SECDET_DCP_MASK (0x10U)
-#define USBPHY_USB1_CHRG_DET_STAT_SECDET_DCP_SHIFT (4U)
-/*! SECDET_DCP
- *  0b0..Charging Downstream Port (CDP) has been detected
- *  0b1..Downstream Charging Port (DCP) has been detected
- */
-#define USBPHY_USB1_CHRG_DET_STAT_SECDET_DCP(x)  (((uint32_t)(((uint32_t)(x)) << USBPHY_USB1_CHRG_DET_STAT_SECDET_DCP_SHIFT)) & USBPHY_USB1_CHRG_DET_STAT_SECDET_DCP_MASK)
 /*! @} */
 
 /*! @name ANACTRL - USB PHY Analog Control Register */
 /*! @{ */
+#define USBPHY_ANACTRL_LVI_EN_MASK               (0x2U)
+#define USBPHY_ANACTRL_LVI_EN_SHIFT              (1U)
+#define USBPHY_ANACTRL_LVI_EN(x)                 (((uint32_t)(((uint32_t)(x)) << USBPHY_ANACTRL_LVI_EN_SHIFT)) & USBPHY_ANACTRL_LVI_EN_MASK)
+#define USBPHY_ANACTRL_PFD_CLK_SEL_MASK          (0xCU)
+#define USBPHY_ANACTRL_PFD_CLK_SEL_SHIFT         (2U)
+#define USBPHY_ANACTRL_PFD_CLK_SEL(x)            (((uint32_t)(((uint32_t)(x)) << USBPHY_ANACTRL_PFD_CLK_SEL_SHIFT)) & USBPHY_ANACTRL_PFD_CLK_SEL_MASK)
 #define USBPHY_ANACTRL_DEV_PULLDOWN_MASK         (0x400U)
 #define USBPHY_ANACTRL_DEV_PULLDOWN_SHIFT        (10U)
 /*! DEV_PULLDOWN
@@ -25284,6 +23120,12 @@ typedef struct {
 
 /*! @name ANACTRL_SET - USB PHY Analog Control Register */
 /*! @{ */
+#define USBPHY_ANACTRL_SET_LVI_EN_MASK           (0x2U)
+#define USBPHY_ANACTRL_SET_LVI_EN_SHIFT          (1U)
+#define USBPHY_ANACTRL_SET_LVI_EN(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_ANACTRL_SET_LVI_EN_SHIFT)) & USBPHY_ANACTRL_SET_LVI_EN_MASK)
+#define USBPHY_ANACTRL_SET_PFD_CLK_SEL_MASK      (0xCU)
+#define USBPHY_ANACTRL_SET_PFD_CLK_SEL_SHIFT     (2U)
+#define USBPHY_ANACTRL_SET_PFD_CLK_SEL(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_ANACTRL_SET_PFD_CLK_SEL_SHIFT)) & USBPHY_ANACTRL_SET_PFD_CLK_SEL_MASK)
 #define USBPHY_ANACTRL_SET_DEV_PULLDOWN_MASK     (0x400U)
 #define USBPHY_ANACTRL_SET_DEV_PULLDOWN_SHIFT    (10U)
 /*! DEV_PULLDOWN
@@ -25295,6 +23137,12 @@ typedef struct {
 
 /*! @name ANACTRL_CLR - USB PHY Analog Control Register */
 /*! @{ */
+#define USBPHY_ANACTRL_CLR_LVI_EN_MASK           (0x2U)
+#define USBPHY_ANACTRL_CLR_LVI_EN_SHIFT          (1U)
+#define USBPHY_ANACTRL_CLR_LVI_EN(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_ANACTRL_CLR_LVI_EN_SHIFT)) & USBPHY_ANACTRL_CLR_LVI_EN_MASK)
+#define USBPHY_ANACTRL_CLR_PFD_CLK_SEL_MASK      (0xCU)
+#define USBPHY_ANACTRL_CLR_PFD_CLK_SEL_SHIFT     (2U)
+#define USBPHY_ANACTRL_CLR_PFD_CLK_SEL(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_ANACTRL_CLR_PFD_CLK_SEL_SHIFT)) & USBPHY_ANACTRL_CLR_PFD_CLK_SEL_MASK)
 #define USBPHY_ANACTRL_CLR_DEV_PULLDOWN_MASK     (0x400U)
 #define USBPHY_ANACTRL_CLR_DEV_PULLDOWN_SHIFT    (10U)
 /*! DEV_PULLDOWN
@@ -25306,6 +23154,12 @@ typedef struct {
 
 /*! @name ANACTRL_TOG - USB PHY Analog Control Register */
 /*! @{ */
+#define USBPHY_ANACTRL_TOG_LVI_EN_MASK           (0x2U)
+#define USBPHY_ANACTRL_TOG_LVI_EN_SHIFT          (1U)
+#define USBPHY_ANACTRL_TOG_LVI_EN(x)             (((uint32_t)(((uint32_t)(x)) << USBPHY_ANACTRL_TOG_LVI_EN_SHIFT)) & USBPHY_ANACTRL_TOG_LVI_EN_MASK)
+#define USBPHY_ANACTRL_TOG_PFD_CLK_SEL_MASK      (0xCU)
+#define USBPHY_ANACTRL_TOG_PFD_CLK_SEL_SHIFT     (2U)
+#define USBPHY_ANACTRL_TOG_PFD_CLK_SEL(x)        (((uint32_t)(((uint32_t)(x)) << USBPHY_ANACTRL_TOG_PFD_CLK_SEL_SHIFT)) & USBPHY_ANACTRL_TOG_PFD_CLK_SEL_MASK)
 #define USBPHY_ANACTRL_TOG_DEV_PULLDOWN_MASK     (0x400U)
 #define USBPHY_ANACTRL_TOG_DEV_PULLDOWN_SHIFT    (10U)
 /*! DEV_PULLDOWN
@@ -25349,6 +23203,8 @@ typedef struct {
   /** Array initializer of USBPHY peripheral base pointers */
   #define USBPHY_BASE_PTRS                         { USBPHY }
 #endif
+/** Interrupt vectors for the USBPHY peripheral type */
+#define USBPHY_IRQS                              { USB1_PHY_IRQn }
 
 /*!
  * @}
@@ -25711,48 +23567,31 @@ typedef struct {
 /** High Speed SPI (Flexcomm 8) interrupt name */
 #define LSPI_HS_IRQn                                FLEXCOMM8_IRQn
 
-/** EMC CS base address */
-#define EMC_CS0_BASE                                (0x80000000u)
-#define EMC_CS1_BASE                                (0x90000000u)
-#define EMC_CS2_BASE                                (0x98000000u)
-#define EMC_CS3_BASE                                (0x9C000000u)
-#define EMC_DYCS0_BASE                              (0xA0000000u)
-#define EMC_DYCS1_BASE                              (0xB0000000u)
-#define EMC_DYCS2_BASE                              (0xC0000000u)
-#define EMC_DYCS3_BASE                              (0xD0000000u)
-#define EMC_CS_ADDRESS                              {EMC_CS0_BASE, EMC_CS1_BASE, EMC_CS2_BASE, EMC_CS3_BASE}
-#define EMC_DYCS_ADDRESS                            {EMC_DYCS0_BASE, EMC_DYCS1_BASE, EMC_DYCS2_BASE, EMC_DYCS3_BASE}
+/*!
+ * @brief Get the chip value.
+ *
+ * @return chip version, 0x0: A0 version chip, 0x1: A1 version chip, 0xFF: invalid version.
+ */
+static inline uint32_t Chip_GetVersion()
+{
+    uint32_t deviceRevision;
 
-/** OTP API */
-typedef struct {
-  uint32_t (*otpInit)(void);                                    /** Initializes OTP controller */
-  uint32_t (*otpEnableBankWriteMask)(uint32_t bankMask);        /** Unlock one or more OTP banks for write access */
-  uint32_t (*otpDisableBankWriteMask)(uint32_t bankMask);       /** Lock one or more OTP banks for write access */
-  uint32_t (*otpEnableBankWriteLock)(uint32_t bankIndex, uint32_t regEnableMask, uint32_t regDisableMask,
-                                          uint32_t lockWrite);  /** Locks or unlocks write access to a register of an OTP bank and the write lock */
-  uint32_t (*otpEnableBankReadLock)(uint32_t bankIndex, uint32_t regEnableMask, uint32_t regDisableMask,
-                                         uint32_t lockWrite);   /** Locks or unlocks read access to a register of an OTP bank and the write lock */
-  uint32_t (*otpProgramReg)(uint32_t bankIndex, uint32_t regIndex, uint32_t value);  /** Program a single register in an OTP bank */
-  uint32_t RESERVED_0[5];
-  uint32_t (*rngRead)(void);                                    /** Returns 32-bit number from hardware random number generator */
-  uint32_t (*otpGetDriverVersion)(void);                        /** Returns the version of the OTP driver in ROM */
-} OTP_API_Type;
+    deviceRevision = SYSCON->DIEID & SYSCON_DIEID_REV_ID_MASK;
 
-/** ROM API */
-typedef struct {
-  __I uint32_t usbdApiBase;                      /** USB API Base */
-      uint32_t RESERVED_0[13];
-  __I OTP_API_Type *otpApiBase;                  /** OTP API Base */
-  __I uint32_t aesApiBase;                       /** AES API Base */
-  __I uint32_t secureApiBase;                    /** Secure API Base */
-} ROM_API_Type;
+    if(0 == deviceRevision) /* A0 device revision is 0 */
+    {
+        return 0x0;
+    }
+    else if(1 == deviceRevision) /* A1 device revision is 1 */
+    {
+        return 0x1;
+    }
+    else
+    {
+        return 0xFF;
+    }
+}
 
-/** ROM API base address */
-#define ROM_API_BASE                             (0x03000200u)
-/** ROM API base pointer */
-#define ROM_API                                  (*(ROM_API_Type**) ROM_API_BASE)
-/** OTP API base pointer */
-#define OTP_API                                  (ROM_API->otpApiBase)
 
 /*!
  * @}

@@ -31,16 +31,12 @@ void RNG_Init(RNG_Type *base)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_EnableClock(kCLOCK_Rng);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-    /* Clear POWERDOWN bit to enable RNG */
-    base->POWERDOWN &= ~RNG_POWERDOWN_POWERDOWN_MASK;
 }
 
 void RNG_Deinit(RNG_Type *base)
 {
     /* Set ring oscilator disable bit*/
     PMC->PDRUNCFGSET0 = PMC_PDRUNCFG0_PDEN_RNG_MASK;
-    /* Set POWERDOWN bit to disable RNG */
-    base->POWERDOWN |= RNG_POWERDOWN_POWERDOWN_MASK;
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_DisableClock(kCLOCK_Rng);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */

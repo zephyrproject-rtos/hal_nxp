@@ -1,9 +1,9 @@
 /*
- * Copyright 2018 NXP
-* All rights reserved.
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
+ * Copyright 2018-2019 NXP
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
 
 #ifndef __FSL_CMP_H_
 #define __FSL_CMP_H_
@@ -20,37 +20,37 @@
  *****************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.0.0. */
-#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 0U))
+/*! @brief Driver version 2.0.1. */
+#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 1U))
 /*@}*/
 
 /*! @brief VREF select */
 enum _cmp_vref_select
 {
-    KCMP_VREFSelectVDDA = 1U,         /*!< Select VDDA as VREF*/
+    KCMP_VREFSelectVDDA         = 1U, /*!< Select VDDA as VREF*/
     KCMP_VREFSelectInternalVREF = 0U, /*!< select internal VREF as VREF*/
 };
 
 /*! @brief cmp interrupt type */
 typedef enum _cmp_interrupt_type
 {
-    kCMP_EdgeDisable = 0U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT,       /*!< disable edge sensitive */
-    kCMP_EdgeRising = 2U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT,        /*!< Edge sensitive, falling edge */
-    kCMP_EdgeFalling = 4U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT,       /*!< Edge sensitive, rising edge */
+    kCMP_EdgeDisable       = 0U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT, /*!< disable edge sensitive */
+    kCMP_EdgeRising        = 2U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT, /*!< Edge sensitive, falling edge */
+    kCMP_EdgeFalling       = 4U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT, /*!< Edge sensitive, rising edge */
     kCMP_EdgeRisingFalling = 6U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT, /*!< Edge sensitive, rising and falling edge */
 
-    kCMP_LevelDisable = 1U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT,  /*!< disable level sensitive */
-    kCMP_LevelHigh = 3U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT,     /*!< Level sensitive, high level */
-    kCMP_LevelLow = 5U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT,      /*!< Level sensitive, low level */
+    kCMP_LevelDisable  = 1U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT, /*!< disable level sensitive */
+    kCMP_LevelHigh     = 3U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT, /*!< Level sensitive, high level */
+    kCMP_LevelLow      = 5U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT, /*!< Level sensitive, low level */
     kCMP_LevelDisable1 = 7U << SYSCON_COMP_INT_CTRL_INT_CTRL_SHIFT, /*!< disable level sensitive */
 } cmp_interrupt_type_t;
 
 /*! @brief cmp Pmux input source */
 typedef enum _cmp_pmux_input
 {
-    kCMP_PInputVREF = 0U << PMC_COMP_PMUX_SHIFT,  /*!< Cmp Pmux input from VREF */
-    kCMP_PInputP0_0 = 1U << PMC_COMP_PMUX_SHIFT,  /*!< Cmp Pmux input from P0_0 */
-    kCMP_PInputP0_9 = 2U << PMC_COMP_PMUX_SHIFT,  /*!< Cmp Pmux input from P0_9 */
+    kCMP_PInputVREF  = 0U << PMC_COMP_PMUX_SHIFT, /*!< Cmp Pmux input from VREF */
+    kCMP_PInputP0_0  = 1U << PMC_COMP_PMUX_SHIFT, /*!< Cmp Pmux input from P0_0 */
+    kCMP_PInputP0_9  = 2U << PMC_COMP_PMUX_SHIFT, /*!< Cmp Pmux input from P0_9 */
     kCMP_PInputP0_18 = 3U << PMC_COMP_PMUX_SHIFT, /*!< Cmp Pmux input from P0_18 */
     kCMP_PInputP1_14 = 4U << PMC_COMP_PMUX_SHIFT, /*!< Cmp Pmux input from P1_14 */
     kCMP_PInputP2_23 = 5U << PMC_COMP_PMUX_SHIFT, /*!< Cmp Pmux input from P2_23 */
@@ -59,9 +59,9 @@ typedef enum _cmp_pmux_input
 /*! @brief cmp Nmux input source */
 typedef enum _cmp_nmux_input
 {
-    kCMP_NInputVREF = 0U << PMC_COMP_NMUX_SHIFT,  /*!< Cmp Nmux input from VREF */
-    kCMP_NInputP0_0 = 1U << PMC_COMP_NMUX_SHIFT,  /*!< Cmp Nmux input from P0_0 */
-    kCMP_NInputP0_9 = 2U << PMC_COMP_NMUX_SHIFT,  /*!< Cmp Nmux input from P0_9 */
+    kCMP_NInputVREF  = 0U << PMC_COMP_NMUX_SHIFT, /*!< Cmp Nmux input from VREF */
+    kCMP_NInputP0_0  = 1U << PMC_COMP_NMUX_SHIFT, /*!< Cmp Nmux input from P0_0 */
+    kCMP_NInputP0_9  = 2U << PMC_COMP_NMUX_SHIFT, /*!< Cmp Nmux input from P0_9 */
     kCMP_NInputP0_18 = 3U << PMC_COMP_NMUX_SHIFT, /*!< Cmp Nmux input from P0_18 */
     kCMP_NInputP1_14 = 4U << PMC_COMP_NMUX_SHIFT, /*!< Cmp Nmux input from P1_14 */
     kCMP_NInputP2_23 = 5U << PMC_COMP_NMUX_SHIFT, /*!< Cmp Nmux input from P2_23 */
@@ -93,7 +93,7 @@ extern "C" {
  *
  * @param config init configurations.
  */
-void CMP_Init(cmp_config_t *config);
+void CMP_Init(const cmp_config_t *config);
 
 /*!
  * @brief CMP deintialization.

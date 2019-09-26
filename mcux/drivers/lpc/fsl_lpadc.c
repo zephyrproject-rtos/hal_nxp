@@ -119,7 +119,7 @@ void LPADC_Init(ADC_Type *base, const lpadc_config_t *config)
     tmp32 |= ADC_CFG_PUDLY(config->powerUpDelay)                /* Power up delay. */
              | ADC_CFG_REFSEL(config->referenceVoltageSource)   /* Reference voltage. */
              | ADC_CFG_PWRSEL(config->powerLevelMode)           /* Power configuration. */
-             | ADC_CFG_TPRICTRL(config->triggerPrioirtyPolicy); /* Trigger priority policy. */
+             | ADC_CFG_TPRICTRL(config->triggerPriorityPolicy); /* Trigger priority policy. */
     base->CFG = tmp32;
 
     /* ADCx_PAUSE. */
@@ -157,7 +157,7 @@ void LPADC_Init(ADC_Type *base, const lpadc_config_t *config)
  *   config->powerUpDelay            = 0x80;
  *   config->referenceVoltageSource  = kLPADC_ReferenceVoltageAlt1;
  *   config->powerLevelMode          = kLPADC_PowerLevelAlt1;
- *   config->triggerPrioirtyPolicy   = kLPADC_TriggerPriorityPreemptImmediately;
+ *   config->triggerPriorityPolicy   = kLPADC_TriggerPriorityPreemptImmediately;
  *   config->enableConvPause         = false;
  *   config->convPauseDelay          = 0U;
  *   config->FIFO0Watermark          = 0U;
@@ -186,7 +186,7 @@ void LPADC_GetDefaultConfig(lpadc_config_t *config)
     config->powerUpDelay            = 0x80;
     config->referenceVoltageSource  = kLPADC_ReferenceVoltageAlt1;
     config->powerLevelMode          = kLPADC_PowerLevelAlt1;
-    config->triggerPrioirtyPolicy   = kLPADC_TriggerPriorityPreemptImmediately;
+    config->triggerPriorityPolicy   = kLPADC_TriggerPriorityPreemptImmediately;
     config->enableConvPause         = false;
     config->convPauseDelay          = 0U;
 #if (defined(FSL_FEATURE_LPADC_FIFO_COUNT) && (FSL_FEATURE_LPADC_FIFO_COUNT == 2))
@@ -329,7 +329,7 @@ void LPADC_GetDefaultConvTriggerConfig(lpadc_conv_trigger_config_t *config)
     config->targetCommandId = 0U;
     config->delayPower      = 0U;
     config->priority        = 0U;
-#if defined(FSL_FEATURE_LPADC_FIFO_COUNT) && FSL_FEATURE_LPADC_FIFO_COUNT
+#if (defined(FSL_FEATURE_LPADC_FIFO_COUNT) && (FSL_FEATURE_LPADC_FIFO_COUNT == 2))
     config->channelAFIFOSelect = 0U;
     config->channelBFIFOSelect = 0U;
 #endif /* FSL_FEATURE_LPADC_FIFO_COUNT */
@@ -378,7 +378,7 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
     }
 #endif /* FSL_FEATURE_LPADC_HAS_CMDL_CTYPE */
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_MODE) && FSL_FEATURE_LPADC_HAS_CMDL_MODE
-    tmp32 |= ADC_CMDL_MODE(config->conversionResoultuionMode);
+    tmp32 |= ADC_CMDL_MODE(config->conversionResolutionMode);
 #endif /* FSL_FEATURE_LPADC_HAS_CMDL_MODE */
     base->CMD[commandId].CMDL = tmp32;
 
@@ -433,7 +433,7 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
  *   config->hardwareCompareMode        = kLPADC_HardwareCompareDisabled;
  *   config->hardwareCompareValueHigh   = 0U;
  *   config->hardwareCompareValueLow    = 0U;
- *   config->conversionResoultuionMode  = kLPADC_ConversionResolutionStandard;
+ *   config->conversionResolutionMode  = kLPADC_ConversionResolutionStandard;
  *   config->enableWaitTrigger          = false;
  * endcode
  * param config Pointer to configuration structure.
@@ -459,7 +459,7 @@ void LPADC_GetDefaultConvCommandConfig(lpadc_conv_command_config_t *config)
     config->hardwareCompareValueHigh   = 0U; /* No used. */
     config->hardwareCompareValueLow    = 0U; /* No used. */
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_MODE) && FSL_FEATURE_LPADC_HAS_CMDL_MODE
-    config->conversionResoultuionMode = kLPADC_ConversionResolutionStandard;
+    config->conversionResolutionMode = kLPADC_ConversionResolutionStandard;
 #endif /* FSL_FEATURE_LPADC_HAS_CMDL_MODE */
 #if defined(FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG) && FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG
     config->enableWaitTrigger = false;
@@ -607,3 +607,50 @@ void LPADC_DoAutoCalibration(ADC_Type *base)
 }
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ */
 #endif /* FSL_FEATURE_LPADC_HAS_CFG_CALOFS */
+
+#if defined(FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR) && FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR
+/*!
+ * brief Measure the temperature.
+ *
+ * param base  LPADC peripheral base address.
+ * param commandId ID for command in command buffer. Typically, the available value range is 1 - 15.
+ * param index Result FIFO index.
+ *
+ * @return Temperature value.
+ */
+float LPADC_MeasureTemperature(ADC_Type *base, uint32_t commandId, uint32_t index)
+{
+    lpadc_conv_result_t convResultStruct;
+    uint16_t Vbe1            = 0U;
+    uint16_t Vbe8            = 0U;
+    uint32_t convResultShift = 0U;
+    float parameterSlope     = FSL_FEATURE_LPADC_TEMP_PARAMETER_A;
+    float parameterOffset    = FSL_FEATURE_LPADC_TEMP_PARAMETER_B;
+    float parameterAlpha     = FSL_FEATURE_LPADC_TEMP_PARAMETER_ALPHA;
+    float temperature        = -273.15; /* Absolute zero degree as the incorrect return value. */
+
+#if defined(FSL_FEATURE_LPADC_HAS_CMDL_MODE) && FSL_FEATURE_LPADC_HAS_CMDL_MODE
+    /* Get valid result data width in different resolution mode. */
+    if (kLPADC_ConversionResolutionStandard ==
+        ((base->CMD[commandId - 1].CMDL & ADC_CMDL_MODE_MASK) >> ADC_CMDL_MODE_SHIFT))
+    {
+        convResultShift = 3U;
+    }
+#endif /* FSL_FEATURE_LPADC_HAS_CMDL_MODE */
+
+    /* Read the 2 temperature sensor result. */
+    if (true == LPADC_GetConvResult(base, &convResultStruct, index))
+    {
+        Vbe1 = convResultStruct.convValue >> convResultShift;
+        if (true == LPADC_GetConvResult(base, &convResultStruct, index))
+        {
+            Vbe8 = convResultStruct.convValue >> convResultShift;
+            /* Final temperature = A*[alpha*(Vbe8-Vbe1)/(Vbe8 + alpha*(Vbe8-Vbe1))] - B. */
+            temperature = parameterSlope * (parameterAlpha * (Vbe8 - Vbe1) / (Vbe8 + parameterAlpha * (Vbe8 - Vbe1))) -
+                          parameterOffset;
+        }
+    }
+
+    return temperature;
+}
+#endif /* FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR */

@@ -539,6 +539,7 @@ _Pragma("diag_suppress=Pm120")
 #endif /* ENABLE_RAM_VECTOR_TABLE. */
 
 #if (defined(FSL_FEATURE_SOC_SYSCON_COUNT) && (FSL_FEATURE_SOC_SYSCON_COUNT > 0))
+#if !(defined(FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS) && FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS)
     /*!
      * @brief Enable specific interrupt for wake-up from deep-sleep mode.
      *
@@ -568,6 +569,7 @@ _Pragma("diag_suppress=Pm120")
      * @param interrupt The IRQ number.
      */
     void DisableDeepSleepIRQ(IRQn_Type interrupt);
+#endif /* FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS */
 #endif /* FSL_FEATURE_SOC_SYSCON_COUNT */
 
     /*!

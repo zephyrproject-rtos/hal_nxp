@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.0.11. */
-#define FSL_SDIF_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 11U))
+/*! @brief Driver version 2.0.12. */
+#define FSL_SDIF_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 12U))
 /*@}*/
 
 /*! @brief  SDIOCLKCTRL setting
@@ -47,7 +47,7 @@
 #endif
 /*! @brief High speed mode clk_drv fixed delay */
 #ifndef SDIF_HIGHSPEED_DRV_DELAY
-#define SDIF_HIGHSPEED_DRV_DELAY (0x1FU) /*!< 31 * 250ps = 7.75ns */
+#define SDIF_HIGHSPEED_DRV_DELAY (31U) /*!< 31 * 250ps = 7.75ns */
 #endif
 
 /*
@@ -67,7 +67,7 @@
 #endif
 /*! @brief default mode sample fixed delay */
 #ifndef SDIF_DEFAULT_MODE_SAMPLE_DELAY
-#define SDIF_DEFAULT_MODE_SAMPLE_DELAY (31U) /*!< 31 * 250ps = 7.75ns */
+#define SDIF_DEFAULT_MODE_SAMPLE_DELAY (12U) /*!< 12 * 250ps = 3ns */
 #endif
 
 #ifndef SDIF_DEFAULT_MODE_DRV_DELAY
@@ -122,7 +122,7 @@ enum _sdif_reset_type
                                                                CIU and state machine,ABORT_READ_DATA,SEND_IRQ_RESPONSE
                                                                and READ_WAIT bits of control register,START_CMD bit of
                                                                the command register*/
-    kSDIF_ResetFIFO = SDIF_CTRL_FIFO_RESET_MASK,             /*!< reset data FIFO*/
+    kSDIF_ResetFIFO         = SDIF_CTRL_FIFO_RESET_MASK,     /*!< reset data FIFO*/
     kSDIF_ResetDMAInterface = SDIF_CTRL_DMA_RESET_MASK,      /*!< reset DMA interface */
 
     kSDIF_ResetAll = kSDIF_ResetController | kSDIF_ResetFIFO | /*!< reset all*/
@@ -417,8 +417,7 @@ typedef struct _sdif_host
  * API
  ************************************************************************************************/
 #if defined(__cplusplus)
-extern "C"
-{
+extern "C" {
 #endif
 
 /*!
@@ -873,10 +872,7 @@ static inline void SDIF_ClearInternalDMAStatus(SDIF_Type *base, uint32_t mask)
  * @param data buffer pointer
  * @param data buffer size
  */
-status_t SDIF_InternalDMAConfig(SDIF_Type *base,
-                                sdif_dma_config_t *config,
-                                const uint32_t *data,
-                                uint32_t dataSize);
+status_t SDIF_InternalDMAConfig(SDIF_Type *base, sdif_dma_config_t *config, const uint32_t *data, uint32_t dataSize);
 
 /*!
  * @brief SDIF internal DMA enable

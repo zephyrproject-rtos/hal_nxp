@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.1.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief CLOCK driver version 2.2.2. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -52,7 +52,7 @@
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
-#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (100000000UL)
+#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (150000000UL)
 #endif
 
 /*! @brief Clock ip name array for ROM. */
@@ -76,9 +76,9 @@
         kCLOCK_Fmc \
     }
 /*! @brief Clock ip name array for INPUTMUX. */
-#define INPUTMUX_CLOCKS                    \
-    {                                      \
-        kCLOCK_InputMux0, kCLOCK_InputMux1 \
+#define INPUTMUX_CLOCKS  \
+    {                    \
+        kCLOCK_InputMux0 \
     }
 /*! @brief Clock ip name array for IOCON. */
 #define IOCON_CLOCKS \
@@ -86,9 +86,9 @@
         kCLOCK_Iocon \
     }
 /*! @brief Clock ip name array for GPIO. */
-#define GPIO_CLOCKS                                                                        \
-    {                                                                                      \
-        kCLOCK_Gpio0, kCLOCK_Gpio1, kCLOCK_Gpio2, kCLOCK_Gpio3, kCLOCK_Gpio4, kCLOCK_Gpio5 \
+#define GPIO_CLOCKS                                            \
+    {                                                          \
+        kCLOCK_Gpio0, kCLOCK_Gpio1, kCLOCK_Gpio2, kCLOCK_Gpio3 \
     }
 /*! @brief Clock ip name array for PINT. */
 #define PINT_CLOCKS \
@@ -145,11 +145,6 @@
     {               \
         kCLOCK_Sct0 \
     }
-/*! @brief Clock ip name array for SCTIPU. */
-#define SCTIPU_CLOCKS \
-    {                 \
-        kCLOCK_Sctipu \
-    }
 /*! @brief Clock ip name array for UTICK. */
 #define UTICK_CLOCKS  \
     {                 \
@@ -184,30 +179,10 @@
         kCLOCK_FlexI2s0, kCLOCK_FlexI2s1, kCLOCK_FlexI2s2, kCLOCK_FlexI2s3, kCLOCK_FlexI2s4, kCLOCK_FlexI2s5, \
             kCLOCK_FlexI2s6, kCLOCK_FlexI2s7                                                                  \
     }
-/*! @brief Clock ip name array for USBTYPC. */
-#define USBTYPC_CLOCKS \
-    {                  \
-        kCLOCK_UsbTypc \
-    }
 /*! @brief Clock ip name array for CTIMER. */
 #define CTIMER_CLOCKS                                                             \
     {                                                                             \
         kCLOCK_Timer0, kCLOCK_Timer1, kCLOCK_Timer2, kCLOCK_Timer3, kCLOCK_Timer4 \
-    }
-/*! @brief Clock ip name array for PVT */
-#define PVT_CLOCKS \
-    {              \
-        kCLOCK_Pvt \
-    }
-/*! @brief Clock ip name array for EZHA */
-#define EZHA_CLOCKS \
-    {               \
-        kCLOCK_Ezha \
-    }
-/*! @brief Clock ip name array for EZHB */
-#define EZHB_CLOCKS \
-    {               \
-        kCLOCK_Ezhb \
     }
 /*! @brief Clock ip name array for COMP */
 #define COMP_CLOCKS \
@@ -233,11 +208,6 @@
 #define USBRAM_CLOCKS  \
     {                  \
         kCLOCK_UsbRam1 \
-    }
-/*! @brief Clock ip name array for OTP. */
-#define OTP_CLOCKS \
-    {              \
-        kCLOCK_Otp \
     }
 /*! @brief Clock ip name array for RNG. */
 #define RNG_CLOCKS \
@@ -366,7 +336,6 @@ typedef enum _clock_ip_name
     kCLOCK_Mrt          = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 0),
     kCLOCK_OsTimer0     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 1),
     kCLOCK_Sct0         = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 2),
-    kCLOCK_Sctipu       = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 6),
     kCLOCK_Utick0       = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 10),
     kCLOCK_FlexComm0    = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 11),
     kCLOCK_FlexComm1    = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 12),
@@ -408,7 +377,6 @@ typedef enum _clock_ip_name
     kCLOCK_FlexI2s5     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 16),
     kCLOCK_FlexI2s6     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 17),
     kCLOCK_FlexI2s7     = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 18),
-    kCLOCK_UsbTypc      = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 20),
     kCLOCK_Timer2       = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 22),
     kCLOCK_Usbd0        = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 25),
     kCLOCK_Timer0       = CLK_GATE_DEFINE(AHB_CLK_CTRL1, 26),
@@ -424,9 +392,6 @@ typedef enum _clock_ip_name
     kCLOCK_UsbRam1      = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 6),
     kCLOCK_Usb1Clk      = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 7),
     kCLOCK_Freqme       = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 8),
-    kCLOCK_Gpio4        = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 9),
-    kCLOCK_Gpio5        = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 10),
-    kCLOCK_Otp          = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 12),
     kCLOCK_Rng          = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 13),
     kCLOCK_InputMux1    = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 14),
     kCLOCK_Sysctl       = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 15),
@@ -442,7 +407,7 @@ typedef enum _clock_ip_name
     kCLOCK_AnalogCtrl   = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 27),
     kCLOCK_Hs_Lspi      = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 28),
     kCLOCK_Gpio_Sec     = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 29),
-    kCLOCK_Gpio_sec_Int = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 30)
+    kCLOCK_Gpio_Sec_Int = CLK_GATE_DEFINE(AHB_CLK_CTRL2, 30)
 } clock_ip_name_t;
 
 /*! @brief Peripherals clock source definition. */
@@ -457,34 +422,12 @@ typedef enum _clock_name
     kCLOCK_BusClk,     /*!< Bus clock (AHB clock)                                   */
     kCLOCK_ClockOut,   /*!< CLOCKOUT                                                */
     kCLOCK_FroHf,      /*!< FRO48/96                                                */
-    kCLOCK_Adc,        /*!< ADC                                                     */
-    kCLOCK_Usb0,       /*!< USB0                                                    */
-    kCLOCK_Usb1,       /*!< USB1                                                    */
     kCLOCK_Pll1Out,    /*!< PLL1 Output                                             */
     kCLOCK_Mclk,       /*!< MCLK                                                    */
-    kCLOCK_Sct,        /*!< SCT                                                     */
-    kCLOCK_SDio,       /*!< SDIO                                                    */
     kCLOCK_Fro12M,     /*!< FRO12M                                                  */
     kCLOCK_ExtClk,     /*!< External Clock                                          */
     kCLOCK_Pll0Out,    /*!< PLL0 Output                                             */
-    kCLOCK_WdtClk,     /*!< Watchdog clock                                          */
     kCLOCK_FlexI2S,    /*!< FlexI2S clock                                           */
-    kCLOCK_Flexcomm0,  /*!< Flexcomm0Clock                                          */
-    kCLOCK_Flexcomm1,  /*!< Flexcomm1Clock                                          */
-    kCLOCK_Flexcomm2,  /*!< Flexcomm2Clock                                          */
-    kCLOCK_Flexcomm3,  /*!< Flexcomm3Clock                                          */
-    kCLOCK_Flexcomm4,  /*!< Flexcomm4Clock                                          */
-    kCLOCK_Flexcomm5,  /*!< Flexcomm5Clock                                          */
-    kCLOCK_Flexcomm6,  /*!< Flexcomm6Clock                                          */
-    kCLOCK_Flexcomm7,  /*!< Flexcomm7Clock                                          */
-    kCLOCK_HsLspi,     /*!< HS LPSPI Clock                                          */
-    kCLOCK_CTmier0,    /*!< CTmier0Clock                                            */
-    kCLOCK_CTmier1,    /*!< CTmier1Clock                                            */
-    kCLOCK_CTmier2,    /*!< CTmier2Clock                                            */
-    kCLOCK_CTmier3,    /*!< CTmier3Clock                                            */
-    kCLOCK_CTmier4,    /*!< CTmier4Clock                                            */
-    kCLOCK_Systick0,   /*!< System Tick 0 Clock                                     */
-    kCLOCK_Systick1,   /*!< System Tick 1 Clock                                     */
 
 } clock_name_t;
 
@@ -565,7 +508,6 @@ typedef enum _clock_attach_id
     kMAIN_CLK_to_ADC_CLK = MUX_A(CM_ADCASYNCCLKSEL, 0),
     kPLL0_to_ADC_CLK     = MUX_A(CM_ADCASYNCCLKSEL, 1),
     kFRO_HF_to_ADC_CLK   = MUX_A(CM_ADCASYNCCLKSEL, 2),
-    kFRO1M_to_ADC_CLK    = MUX_A(CM_ADCASYNCCLKSEL, 3), /* Need confirm */
     kNONE_to_ADC_CLK     = MUX_A(CM_ADCASYNCCLKSEL, 7),
 
     kMAIN_CLK_to_USB0_CLK = MUX_A(CM_USB0CLKSEL, 0),
@@ -654,11 +596,9 @@ typedef enum _clock_attach_id
     kOSC32K_to_HSLSPI     = MUX_A(CM_HSLSPICLKSEL, 6),
     kNONE_to_HSLSPI       = MUX_A(CM_HSLSPICLKSEL, 7),
 
-    kFRO_HF_to_MCLK   = MUX_A(CM_MCLKCLKSEL, 0),
-    kPLL0_to_MCLK     = MUX_A(CM_MCLKCLKSEL, 1),
-    kFRO1M_to_MCLK    = MUX_A(CM_MCLKCLKSEL, 2), /* Need confirm */
-    kMAIN_CLK_to_MCLK = MUX_A(CM_MCLKCLKSEL, 3), /* Need confirm */
-    kNONE_to_MCLK     = MUX_A(CM_MCLKCLKSEL, 7),
+    kFRO_HF_to_MCLK = MUX_A(CM_MCLKCLKSEL, 0),
+    kPLL0_to_MCLK   = MUX_A(CM_MCLKCLKSEL, 1),
+    kNONE_to_MCLK   = MUX_A(CM_MCLKCLKSEL, 7),
 
     kMAIN_CLK_to_SCT_CLK = MUX_A(CM_SCTCLKSEL, 0),
     kPLL0_to_SCT_CLK     = MUX_A(CM_SCTCLKSEL, 1),
@@ -820,6 +760,12 @@ status_t CLOCK_SetupExtClocking(uint32_t iFreq);
  */
 status_t CLOCK_SetupI2SMClkClocking(uint32_t iFreq);
 /**
+ * @brief   Initialize the PLU CLKIN clock to given frequency.
+ * @param   iFreq   : Desired frequency (must be equal to exact rate in Hz)
+ * @return  returns success or fail status.
+ */
+status_t CLOCK_SetupPLUClkInClocking(uint32_t iFreq);
+/**
  * @brief   Configure the clock selection muxes.
  * @param   connection  : Clock to be configured.
  * @return  Nothing
@@ -941,6 +887,18 @@ uint32_t CLOCK_GetCoreSysClkFreq(void);
  *  @return Frequency of I2S MCLK Clock
  */
 uint32_t CLOCK_GetI2SMClkFreq(void);
+/*! @brief  Return Frequency of PLU CLKIN Clock
+ *  @return Frequency of PLU CLKIN Clock
+ */
+uint32_t CLOCK_GetPLUClkInFreq(void);
+/*! @brief  Return Frequency of FlexComm Clock
+ *  @return Frequency of FlexComm Clock
+ */
+uint32_t CLOCK_GetFlexCommClkFreq(uint32_t id);
+/*! @brief  Return Frequency of High speed SPI Clock
+ *  @return Frequency of High speed SPI Clock
+ */
+uint32_t CLOCK_GetHsLspiClkFreq(void);
 /*! @brief  Return Frequency of CTimer functional Clock
  *  @return Frequency of CTimer functional Clock
  */

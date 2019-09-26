@@ -95,7 +95,12 @@ void UTICK_SetTick(UTICK_Type *base, utick_mode_t mode, uint32_t count, utick_ca
 
     /* Save the handle in global variables to support the double weak mechanism. */
     s_utickHandle[instance] = cb;
+#if ((defined(FSL_FEATURE_SOC_SYSCON_COUNT) && (FSL_FEATURE_SOC_SYSCON_COUNT > 0)) && \
+     !(defined(FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS) && FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS))
     EnableDeepSleepIRQ(s_utickIRQ[instance]);
+#else
+    EnableIRQ(s_utickIRQ[instance]);
+#endif /* FSL_FEATURE_SOC_SYSCON_COUNT && !FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS */
     base->CTRL = count | UTICK_CTRL_REPEAT(mode);
 }
 

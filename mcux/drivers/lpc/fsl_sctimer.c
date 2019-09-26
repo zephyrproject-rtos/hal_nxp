@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -387,12 +387,12 @@ void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t du
     uint32_t pulsePeriod = 0, period;
 
     /* Retrieve the match register number for the PWM period */
-    periodMatchReg = base->EVENT[event].CTRL & SCT_EVENT_CTRL_MATCHSEL_MASK;
+    periodMatchReg = base->EV[event].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
 
     /* Retrieve the match register number for the PWM pulse period */
-    pulseMatchReg = base->EVENT[event + 1].CTRL & SCT_EVENT_CTRL_MATCHSEL_MASK;
+    pulseMatchReg = base->EV[event + 1].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
 
-    period = base->SCTMATCH[periodMatchReg];
+    period = base->MATCH[periodMatchReg];
 
     /* Calculate pulse width match value */
     pulsePeriod = (period * dutyCyclePercent) / 100;
@@ -407,8 +407,8 @@ void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t du
     SCTIMER_StopTimer(base, kSCTIMER_Counter_L);
 
     /* Update dutycycle */
-    base->SCTMATCH[pulseMatchReg]    = SCT_SCTMATCH_MATCHn_L(pulsePeriod);
-    base->SCTMATCHREL[pulseMatchReg] = SCT_SCTMATCHREL_RELOADn_L(pulsePeriod);
+    base->MATCH[pulseMatchReg]    = SCT_MATCH_MATCHn_L(pulsePeriod);
+    base->MATCHREL[pulseMatchReg] = SCT_MATCHREL_RELOADn_L(pulsePeriod);
 
     /* Restart the counter */
     SCTIMER_StartTimer(base, kSCTIMER_Counter_L);
@@ -444,7 +444,7 @@ status_t SCTIMER_CreateAndScheduleEvent(SCT_Type *base,
                                         sctimer_counter_t whichCounter,
                                         uint32_t *event)
 {
-    uint32_t combMode = (((uint32_t)howToMonitor & SCT_EVENT_CTRL_COMBMODE_MASK) >> SCT_EVENT_CTRL_COMBMODE_SHIFT);
+    uint32_t combMode       = (((uint32_t)howToMonitor & SCT_EV_CTRL_COMBMODE_MASK) >> SCT_EV_CTRL_COMBMODE_SHIFT);
     uint32_t currentCtrlVal = howToMonitor;
 
     /* Return an error if we have hit the limit in terms of number of events created */
@@ -456,7 +456,7 @@ status_t SCTIMER_CreateAndScheduleEvent(SCT_Type *base,
     /* IO only mode */
     if (combMode == 0x2U)
     {
-        base->EVENT[s_currentEvent].CTRL = currentCtrlVal | SCT_EVENT_CTRL_IOSEL(whichIO);
+        base->EV[s_currentEvent].CTRL = currentCtrlVal | SCT_EV_CTRL_IOSEL(whichIO);
     }
     /* Match mode only */
     else if (combMode == 0x1U)
@@ -467,21 +467,21 @@ status_t SCTIMER_CreateAndScheduleEvent(SCT_Type *base,
             return kStatus_Fail;
         }
 
-        currentCtrlVal |= SCT_EVENT_CTRL_MATCHSEL(s_currentMatch);
+        currentCtrlVal |= SCT_EV_CTRL_MATCHSEL(s_currentMatch);
         /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
         if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
         {
-            base->SCTMATCH[s_currentMatch]    = SCT_SCTMATCH_MATCHn_L(matchValue);
-            base->SCTMATCHREL[s_currentMatch] = SCT_SCTMATCHREL_RELOADn_L(matchValue);
+            base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_L(matchValue);
+            base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_L(matchValue);
         }
         else
         {
             /* Select the counter, no need for this if operating in 32-bit mode */
-            currentCtrlVal |= SCT_EVENT_CTRL_HEVENT(whichCounter);
-            base->SCTMATCH[s_currentMatch]    = SCT_SCTMATCH_MATCHn_H(matchValue);
-            base->SCTMATCHREL[s_currentMatch] = SCT_SCTMATCHREL_RELOADn_H(matchValue);
+            currentCtrlVal |= SCT_EV_CTRL_HEVENT(whichCounter);
+            base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_H(matchValue);
+            base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_H(matchValue);
         }
-        base->EVENT[s_currentEvent].CTRL = currentCtrlVal;
+        base->EV[s_currentEvent].CTRL = currentCtrlVal;
         /* Increment the match register number */
         s_currentMatch++;
     }
@@ -494,27 +494,27 @@ status_t SCTIMER_CreateAndScheduleEvent(SCT_Type *base,
             return kStatus_Fail;
         }
 
-        currentCtrlVal |= SCT_EVENT_CTRL_MATCHSEL(s_currentMatch) | SCT_EVENT_CTRL_IOSEL(whichIO);
+        currentCtrlVal |= SCT_EV_CTRL_MATCHSEL(s_currentMatch) | SCT_EV_CTRL_IOSEL(whichIO);
         /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
         if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
         {
-            base->SCTMATCH[s_currentMatch]    = SCT_SCTMATCH_MATCHn_L(matchValue);
-            base->SCTMATCHREL[s_currentMatch] = SCT_SCTMATCHREL_RELOADn_L(matchValue);
+            base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_L(matchValue);
+            base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_L(matchValue);
         }
         else
         {
             /* Select the counter, no need for this if operating in 32-bit mode */
-            currentCtrlVal |= SCT_EVENT_CTRL_HEVENT(whichCounter);
-            base->SCTMATCH[s_currentMatch]    = SCT_SCTMATCH_MATCHn_H(matchValue);
-            base->SCTMATCHREL[s_currentMatch] = SCT_SCTMATCHREL_RELOADn_H(matchValue);
+            currentCtrlVal |= SCT_EV_CTRL_HEVENT(whichCounter);
+            base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_H(matchValue);
+            base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_H(matchValue);
         }
-        base->EVENT[s_currentEvent].CTRL = currentCtrlVal;
+        base->EV[s_currentEvent].CTRL = currentCtrlVal;
         /* Increment the match register number */
         s_currentMatch++;
     }
 
     /* Enable the event in the current state */
-    base->EVENT[s_currentEvent].STATE = (1U << s_currentState);
+    base->EV[s_currentEvent].STATE = (1U << s_currentState);
 
     /* Return the event number */
     *event = s_currentEvent;
@@ -539,7 +539,7 @@ status_t SCTIMER_CreateAndScheduleEvent(SCT_Type *base,
 void SCTIMER_ScheduleEvent(SCT_Type *base, uint32_t event)
 {
     /* Enable event in the current state */
-    base->EVENT[event].STATE |= (1U << s_currentState);
+    base->EV[event].STATE |= (1U << s_currentState);
 }
 
 /*!
@@ -635,7 +635,7 @@ status_t SCTIMER_SetupCaptureAction(SCT_Type *base,
     if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
     {
         /* Set the bit to enable event */
-        base->SCTCAPCTRL[s_currentMatch] |= SCT_SCTCAPCTRL_CAPCONn_L(1 << event);
+        base->CAPCTRL[s_currentMatch] |= SCT_CAPCTRL_CAPCONn_L(1 << event);
 
         /* Set this resource to be a capture rather than match */
         base->REGMODE |= SCT_REGMODE_REGMOD_L(1 << s_currentMatch);
@@ -643,7 +643,7 @@ status_t SCTIMER_SetupCaptureAction(SCT_Type *base,
     else
     {
         /* Set bit to enable event */
-        base->SCTCAPCTRL[s_currentMatch] |= SCT_SCTCAPCTRL_CAPCONn_H(1 << event);
+        base->CAPCTRL[s_currentMatch] |= SCT_CAPCTRL_CAPCONn_H(1 << event);
 
         /* Set this resource to be a capture rather than match */
         base->REGMODE |= SCT_REGMODE_REGMOD_H(1 << s_currentMatch);
