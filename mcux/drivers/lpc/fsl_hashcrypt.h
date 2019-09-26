@@ -26,9 +26,9 @@ enum _hashcrypt_status
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief HASHCRYPT driver version. Version 2.0.2.
+/*! @brief HASHCRYPT driver version. Version 2.1.0.
  *
- * Current version: 2.0.2
+ * Current version: 2.1.0
  *
  * Change log:
  * - Version 2.0.0
@@ -37,18 +37,25 @@ enum _hashcrypt_status
  *   - Support loading AES key from unaligned address
  * - Version 2.0.2
  *   - Support loading AES key from unaligned address for different compiler and core variants
+ * - Version 2.0.3
+ *   - Remove SHA512 and AES ICB algorithm definitions
+ * - Version 2.1.0
+ *   - Update the register name and macro to align with new header.
  */
-#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
+
+/*! @brief Algorithm definitions correspond with the values for Mode field in Control register !*/
+#define HASHCRYPT_MODE_SHA1 0x1
+#define HASHCRYPT_MODE_SHA256 0x2
+#define HASHCRYPT_MODE_AES 0x4
 
 /*! @brief Algorithm used for Hashcrypt operation */
 typedef enum _hashcrypt_algo_t
 {
-    kHASHCRYPT_Sha1   = 1, /*!< SHA_1 */
-    kHASHCRYPT_Sha256 = 2, /*!< SHA_256 */
-    kHASHCRYPT_Sha512 = 3, /*!< SHA_512 */
-    kHASHCRYPT_Aes    = 4, /*!< AES */
-    kHASHCRYPT_AesIcb = 5, /*!< AES_ICB */
+    kHASHCRYPT_Sha1   = HASHCRYPT_MODE_SHA1,   /*!< SHA_1 */
+    kHASHCRYPT_Sha256 = HASHCRYPT_MODE_SHA256, /*!< SHA_256 */
+    kHASHCRYPT_Aes    = HASHCRYPT_MODE_AES,    /*!< AES */
 } hashcrypt_algo_t;
 
 /*! @} */

@@ -723,7 +723,7 @@ status_t SDIF_SendCommand(SDIF_Type *base, sdif_command_t *cmd, uint32_t timeout
     assert(NULL != cmd);
 
     base->CMDARG = cmd->argument;
-    base->CMD = SDIF_CMD_CMD_INDEX(cmd->index) | SDIF_CMD_START_CMD_MASK | (cmd->flags & (~SDIF_CMD_CMD_INDEX_MASK));
+    base->CMD    = SDIF_CMD_CMD_INDEX(cmd->index) | SDIF_CMD_START_CMD_MASK | (cmd->flags & (~SDIF_CMD_CMD_INDEX_MASK));
 
     /* wait start_cmd bit auto clear within timeout */
     while ((base->CMD & SDIF_CMD_START_CMD_MASK) == SDIF_CMD_START_CMD_MASK)
@@ -785,6 +785,10 @@ void SDIF_ConfigClockDelay(uint32_t target_HZ, uint32_t divider)
 {
     uint32_t sdioClkCtrl = SYSCON->SDIOCLKCTRL;
 
+    sdioClkCtrl = SYSCON->SDIOCLKCTRL &
+                  (~(SYSCON_SDIOCLKCTRL_CCLK_SAMPLE_DELAY_ACTIVE_MASK | SYSCON_SDIOCLKCTRL_CCLK_DRV_DELAY_MASK |
+                     SYSCON_SDIOCLKCTRL_CCLK_DRV_DELAY_ACTIVE_MASK | SYSCON_SDIOCLKCTRL_CCLK_SAMPLE_DELAY_MASK));
+
     if (target_HZ >= SDIF_CLOCK_RANGE_NEED_DELAY)
     {
 #ifdef SDIF_HIGHSPEED_SAMPLE_DELAY
@@ -843,7 +847,21 @@ uint32_t SDIF_SetCardClock(SDIF_Type *base, uint32_t srcClock_Hz, uint32_t targe
     /*calculate the divider*/
     if (targetFreq != srcClock_Hz)
     {
-        divider = (srcClock_Hz / targetFreq + 1U) / 2U;
+        divider = srcClock_Hz / targetFreq;
+        while (srcClock_Hz / divider > targetFreq)
+        {
+            divider++;
+        }
+
+        if (divider > (SDIF_CLKDIV_CLK_DIVIDER0_MASK * 2))
+        {
+            /* Note: if assert occur here, it means that the source clock is too big, the suggestion is reconfigure the
+             * SDIF divider in SYSCON to get a properly source clock */
+            assert(divider <= (SDIF_CLKDIV_CLK_DIVIDER0_MASK * 2));
+            divider = (SDIF_CLKDIV_CLK_DIVIDER0_MASK * 2);
+        }
+
+        divider = (divider + 1) / 2U;
     }
     /* load the clock divider */
     base->CLKDIV = SDIF_CLKDIV_CLK_DIVIDER0(divider);
@@ -1198,9 +1216,6 @@ status_t SDIF_TransferBlocking(SDIF_Type *base, sdif_dma_config_t *dmaConfig, sd
     if (!enDMA)
     {
         SDIF_EnableInternalDMA(base, false);
-        /* reset FIFO and clear RAW status for host transfer */
-        SDIF_Reset(base, kSDIF_ResetFIFO, SDIF_RESET_TIMEOUT_VALUE);
-        SDIF_ClearInterruptStatus(base, kSDIF_AllInterruptStatus);
     }
 
     /* config the transfer parameter */
@@ -1287,9 +1302,6 @@ status_t SDIF_TransferNonBlocking(SDIF_Type *base,
     if (!enDMA)
     {
         SDIF_EnableInternalDMA(base, false);
-        /* reset FIFO and clear RAW status for host transfer */
-        SDIF_Reset(base, kSDIF_ResetFIFO, SDIF_RESET_TIMEOUT_VALUE);
-        SDIF_ClearInterruptStatus(base, kSDIF_AllInterruptStatus);
     }
 
     /* config the transfer parameter */

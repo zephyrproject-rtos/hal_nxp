@@ -123,7 +123,7 @@ void PINT_Init(PINT_Type *base)
     {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
         /* Enable the clock. */
-        CLOCK_EnableClock(kCLOCK_Gpio_sec_Int);
+        CLOCK_EnableClock(kCLOCK_Gpio_Sec_Int);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
@@ -585,7 +585,7 @@ void PINT_Deinit(PINT_Type *base)
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
         /* Disable the clock. */
-        CLOCK_DisableClock(kCLOCK_Gpio_sec_Int);
+        CLOCK_DisableClock(kCLOCK_Gpio_Sec_Int);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     }
 #endif /* SECPINT */

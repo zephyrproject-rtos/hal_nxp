@@ -1,9 +1,9 @@
 /*
- * Copyright 2018 NXP
-* All rights reserved.
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
+ * Copyright 2018-2019 NXP
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
 
 #include "fsl_cmp.h"
 
@@ -23,7 +23,7 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
-void CMP_Init(cmp_config_t *config)
+void CMP_Init(const cmp_config_t *config)
 {
     assert(NULL != config);
 

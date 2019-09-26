@@ -172,6 +172,14 @@
 #define PQ_COS_INF PQ_COS, 1, PQ_TRIG
 
 /*
+ * Workaround used in vector functions:
+ *
+ * 1. In floating sin/cos case, there must be at least 5 core clock cycles
+ *    between MCR and following MRRC
+ * 2. In fixed sin/cos case, there must be one NOP between two MCR
+ */
+
+/*
  * Register assignment for the vector calculation assembly.
  * r0: pSrc, r1: pDest, r2-r7: Data
  */
@@ -201,6 +209,8 @@
         __asm volatile("STRD r4,r5,[r1],#8"); /* store fourth two results */         \
     }                                                                                \
     __asm volatile("LDMIA  r0!,{r4-r5}"); /* load next 2 datas */                    \
+    __asm volatile("NOP");                                                           \
+    __asm volatile("NOP");                                                           \
     if (DOUBLE_READ_ADDERS)                                                          \
     {                                                                                \
         __asm volatile("MRRC p0,#0,r2,r3,c1");                                       \
@@ -212,6 +222,8 @@
     PQ_RUN_OPCODE_R5_R4(BATCH_OPCODE, BATCH_MACHINE);                                \
     __asm volatile("STRD r2,r3,[r1],#8"); /* store first two results */              \
     __asm volatile("LDMIA  r0!,{r6-r7}"); /* load next 2 datas */                    \
+    __asm volatile("NOP");                                                           \
+    __asm volatile("NOP");                                                           \
     if (DOUBLE_READ_ADDERS)                                                          \
     {                                                                                \
         __asm volatile("MRRC p0,#0,r4,r5,c1");                                       \
@@ -223,6 +235,8 @@
     PQ_RUN_OPCODE_R7_R6(BATCH_OPCODE, BATCH_MACHINE);                                \
     __asm volatile("STRD r4,r5,[r1],#8"); /* store second two results */             \
     __asm volatile("LDRD r4,r5,[r0],#8"); /* load last 2 of the 8 */                 \
+    __asm volatile("NOP");                                                           \
+    __asm volatile("NOP");                                                           \
     if (DOUBLE_READ_ADDERS)                                                          \
     {                                                                                \
         __asm volatile("MRRC p0,#0,r6,r7,c1");                                       \
@@ -240,7 +254,11 @@
     else                                                                             \
     {                                                                                \
         __asm volatile("NOP");                                                       \
+        __asm volatile("NOP");                                                       \
+        __asm volatile("NOP");                                                       \
     }                                                                                \
+    __asm volatile("NOP");                                                           \
+    __asm volatile("NOP");                                                           \
     if (DOUBLE_READ_ADDERS)                                                          \
     {                                                                                \
         __asm volatile("MRRC p0,#0,r4,r5,c1");                                       \
@@ -257,18 +275,21 @@
 #define PQ_RUN_OPCODE_R2_R3(BATCH_OPCODE, BATCH_MACHINE)                             \
     __asm volatile(                                                                  \
         "    MCR  p0,%[opcode],r2,c1,c0,%[machine] \n"                               \
+        "    NOP                                   \n"                               \
         "    MCR  p0,%[opcode],r3,c3,c0,%[machine] \n" ::[opcode] "i"(BATCH_OPCODE), \
         [machine] "i"(BATCH_MACHINE))
 
 #define PQ_RUN_OPCODE_R4_R5(BATCH_OPCODE, BATCH_MACHINE)                             \
     __asm volatile(                                                                  \
         "    MCR  p0,%[opcode],r4,c1,c0,%[machine] \n"                               \
+        "    NOP                                   \n"                               \
         "    MCR  p0,%[opcode],r5,c3,c0,%[machine] \n" ::[opcode] "i"(BATCH_OPCODE), \
         [machine] "i"(BATCH_MACHINE))
 
 #define PQ_RUN_OPCODE_R6_R7(BATCH_OPCODE, BATCH_MACHINE)                             \
     __asm volatile(                                                                  \
         "    MCR  p0,%[opcode],r6,c1,c0,%[machine] \n"                               \
+        "    NOP                                   \n"                               \
         "    MCR  p0,%[opcode],r7,c3,c0,%[machine] \n" ::[opcode] "i"(BATCH_OPCODE), \
         [machine] "i"(BATCH_MACHINE))
 
@@ -525,7 +546,7 @@
     __asm volatile(                                                                        \
         "1:                                        \n"                                     \
         "    MCR  p0,%[opcode],r4,c1,c0,%[machine] \n"                                     \
-        "    ISB                                   \n"                                     \
+        "    NOP                                   \n"                                     \
         "    MCR  p0,%[opcode],r5,c3,c0,%[machine] \n"                                     \
         "    CMP  r3, #0                           \n"                                     \
         "    ITE  NE                               \n"                                     \
@@ -535,20 +556,20 @@
         "    MRC  p0,%[dra],r4,c1,c0,#0            \n"                                     \
         "    MRC  p0,%[dra],r5,c3,c0,#0            \n"                                     \
         "    MCR  p0,%[opcode],r6,c1,c0,%[machine] \n"                                     \
-        "    ISB                                   \n"                                     \
+        "    NOP                                   \n"                                     \
         "    MCR  p0,%[opcode],r7,c3,c0,%[machine] \n"                                     \
         "    STRD r4,r5,[r1],#8                    \n" /* store first two results */       \
         "    MRC  p0,%[dra],r6,c1,c0,#0            \n"                                     \
         "    MRC  p0,%[dra],r7,c3,c0,#0            \n"                                     \
         "    MCR  p0,%[opcode],r8,c1,c0,%[machine] \n"                                     \
-        "    ISB                                   \n"                                     \
+        "    NOP                                   \n"                                     \
         "    MCR  p0,%[opcode],r9,c3,c0,%[machine] \n"                                     \
         "    STRD r6,r7,[r1],#8                    \n" /* store second two results */      \
         "    LDRD r6,r7,[r0],#8                    \n" /* load last 2 of the 8 */          \
         "    MRC  p0,%[dra],r8,c1,c0,#0            \n"                                     \
         "    MRC  p0,%[dra],r9,c3,c0,#0            \n"                                     \
         "    MCR  p0,%[opcode],r6,c1,c0,%[machine] \n"                                     \
-        "    ISB                                   \n"                                     \
+        "    NOP                                   \n"                                     \
         "    MCR  p0,%[opcode],r7,c3,c0,%[machine] \n"                                     \
         "    STRD r8,r9,[r1],#8                    \n" /* store third two results */       \
         "    SUBS r2, r2, #8                       \n" /* length -= 8; if (length != 0) */ \
@@ -657,7 +678,7 @@
     __asm volatile(                                                                        \
         "1:                                        \n"                                     \
         "    MCR  p0,%[opcode],r4,c1,c0,%[machine] \n"                                     \
-        "    ISB                                   \n"                                     \
+        "    NOP                                   \n"                                     \
         "    MCR  p0,%[opcode],r5,c3,c0,%[machine] \n"                                     \
         "    CMP  r3, #0                           \n"                                     \
         "    ITTTE NE                              \n"                                     \
@@ -671,7 +692,7 @@
         "    MRC  p0,%[dra],r4,c1,c0,#0            \n"                                     \
         "    MRC  p0,%[dra],r5,c3,c0,#0            \n"                                     \
         "    MCR  p0,%[opcode],r6,c1,c0,%[machine] \n"                                     \
-        "    ISB                                   \n"                                     \
+        "    NOP                                   \n"                                     \
         "    MCR  p0,%[opcode],r7,c3,c0,%[machine] \n"                                     \
         "    LSR r4,r4,#16                         \n" /* store first two results */       \
         "    BFI r5,r4,#0,#16                      \n" /* store first two results */       \
@@ -682,7 +703,7 @@
         "    MRC  p0,%[dra],r6,c1,c0,#0            \n"                                     \
         "    MRC  p0,%[dra],r7,c3,c0,#0            \n"                                     \
         "    MCR  p0,%[opcode],r8,c1,c0,%[machine] \n"                                     \
-        "    ISB                                   \n"                                     \
+        "    NOP                                   \n"                                     \
         "    MCR  p0,%[opcode],r9,c3,c0,%[machine] \n"                                     \
         "    LSR r6,r6,#16                         \n" /* store second two results */      \
         "    BFI r7,r6,#0,#16                      \n" /* store second two results */      \
@@ -693,7 +714,7 @@
         "    MRC  p0,%[dra],r8,c1,c0,#0            \n"                                     \
         "    MRC  p0,%[dra],r9,c3,c0,#0            \n"                                     \
         "    MCR  p0,%[opcode],r6,c1,c0,%[machine] \n"                                     \
-        "    ISB                                   \n"                                     \
+        "    NOP                                   \n"                                     \
         "    MCR  p0,%[opcode],r7,c3,c0,%[machine] \n"                                     \
         "    LSR r8,r8,#16                         \n" /* store third two results */       \
         "    BFI r9,r8,#0,#16                      \n" /* store third two results */       \

@@ -1,16 +1,17 @@
 /*
 ** ###################################################################
 **     Processors:          LPC55S69JBD100_cm33_core1
-**                          LPC55S69JET98_cm33_core1
+**                          LPC55S69JBD64_cm33_core1
+**                          LPC55S69JEV98_cm33_core1
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    LPC55xx/LPC55Sxx User manual Rev.0.4  25 Sep 2018
-**     Version:             rev. 1.0, 2018-08-22
-**     Build:               b181219
+**     Reference manual:    LPC55S6x/LPC55S2x/LPC552x User manual(UM11126) Rev.1.3  16 May 2019
+**     Version:             rev. 1.1, 2019-05-16
+**     Build:               b190830
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2019 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -29,14 +30,16 @@
 **     Revisions:
 **     - rev. 1.0 (2018-08-22)
 **         Initial version based on v0.2UM
+**     - rev. 1.1 (2019-05-16)
+**         Initial A1 version based on v1.3UM
 **
 ** ###################################################################
 */
 
 /*!
  * @file LPC55S69_cm33_core1
- * @version 1.0
- * @date 2018-08-22
+ * @version 1.1
+ * @date 2019-05-16
  * @brief Device specific configuration file for LPC55S69_cm33_core1
  *        (implementation file)
  *
@@ -178,9 +181,7 @@ static uint32_t findPll1MMult(void)
  */
 static uint32_t CLOCK_GetFro12MFreq(void)
 {
-    return (PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_FRO192M_MASK) ?
-               0 :
-               (ANACTRL->FRO192M_CTRL & ANACTRL_FRO192M_CTRL_ENA_12MHZCLK_MASK) ? 12000000U : 0U;
+    return (ANACTRL->FRO192M_CTRL & ANACTRL_FRO192M_CTRL_ENA_12MHZCLK_MASK) ? 12000000U : 0U;
 }
 
 /* Get FRO 1M Clk */
@@ -207,9 +208,7 @@ static uint32_t CLOCK_GetExtClkFreq(void)
  */
 static uint32_t CLOCK_GetFroHfFreq(void)
 {
-    return (PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_FRO192M_MASK) ?
-               0 :
-               (ANACTRL->FRO192M_CTRL & ANACTRL_FRO192M_CTRL_ENA_96MHZCLK_MASK) ? 96000000U : 0U;
+    return (ANACTRL->FRO192M_CTRL & ANACTRL_FRO192M_CTRL_ENA_96MHZCLK_MASK) ? 96000000U : 0U;
 }
 
 /* Get RTC OSC Clk */
@@ -237,9 +236,12 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
    -- SystemInit()
    ---------------------------------------------------------------------------- */
 
-void SystemInit (void) {
+__attribute__ ((weak)) void SystemInit (void) {
 
-  SCB->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access (enable PowerQuad) */
+  SCB->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Secure mode (enable PowerQuad) */
+#if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+  SCB_NS->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Normal mode (enable PowerQuad) */
+#endif /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 
   SCB->NSACR |= ((3UL << 0) | (3UL << 10));   /* enable CP0, CP1, CP10, CP11 Non-secure Access */
 

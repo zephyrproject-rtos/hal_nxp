@@ -87,7 +87,7 @@ typedef struct FlashDriverInterface
                                                   uint32_t *failedData);
     /*!< Flash FFR driver*/
     status_t (*ffr_init)(flash_config_t *config);
-    status_t (*ffr_deinit)(flash_config_t *config);
+    status_t (*ffr_lock_all)(flash_config_t *config);
     status_t (*ffr_cust_factory_page_write)(flash_config_t *config, uint8_t *page_data, bool seal_part);
     status_t (*ffr_get_uuid)(flash_config_t *config, uint8_t *uuid);
     status_t (*ffr_get_customer_data)(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
@@ -127,7 +127,7 @@ flash_driver_interface_t *FLASH_API_TREE;
  * Code
  ******************************************************************************/
 
-/*! See fsl_flash.h for documentation of this function. */
+/*! See fsl_iap.h for documentation of this function. */
 status_t FLASH_Init(flash_config_t *config)
 {
     assert(FLASH_API_TREE);
@@ -136,7 +136,7 @@ status_t FLASH_Init(flash_config_t *config)
     return FLASH_API_TREE->flash_init(config);
 }
 
-/*! See fsl_flash.h for documentation of this function. */
+/*! See fsl_iap.h for documentation of this function. */
 status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key)
 {
     if (S_VersionMajor == 2)
@@ -152,7 +152,7 @@ status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBy
     }
 }
 
-/*! See fsl_flash.h for documentation of this function. */
+/*! See fsl_iap.h for documentation of this function. */
 status_t FLASH_Program(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes)
 {
     if (S_VersionMajor == 2)
@@ -168,14 +168,14 @@ status_t FLASH_Program(flash_config_t *config, uint32_t start, uint8_t *src, uin
     }
 }
 
-/*! See fsl_flash.h for documentation of this function. */
+/*! See fsl_iap.h for documentation of this function. */
 status_t FLASH_VerifyErase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes)
 {
     assert(FLASH_API_TREE);
     return FLASH_API_TREE->flash_verify_erase(config, start, lengthInBytes);
 }
 
-/*! See fsl_flash.h for documentation of this function. */
+/*! See fsl_iap.h for documentation of this function. */
 status_t FLASH_VerifyProgram(flash_config_t *config,
                              uint32_t start,
                              uint32_t lengthInBytes,
@@ -198,7 +198,7 @@ status_t FLASH_VerifyProgram(flash_config_t *config,
     }
 }
 
-/*! See fsl_flash.h for documentation of this function.*/
+/*! See fsl_iap.h for documentation of this function.*/
 status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t *value)
 {
     assert(FLASH_API_TREE);
@@ -216,10 +216,10 @@ status_t FFR_Init(flash_config_t *config)
 }
 
 /*! See fsl_iap_ffr.h for documentation of this function. */
-status_t FFR_Deinit(flash_config_t *config)
+status_t FFR_Lock_All(flash_config_t *config)
 {
     assert(FLASH_API_TREE);
-    return FLASH_API_TREE->ffr_deinit(config);
+    return FLASH_API_TREE->ffr_lock_all(config);
 }
 
 /*! See fsl_iap_ffr.h for documentation of this function. */

@@ -1,6 +1,6 @@
 /*
  * Copyright 2014-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -15,7 +15,7 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_LPC55S69JBD100_cm33_core0) || defined(CPU_LPC55S69JET98_cm33_core0))
+#if (defined(CPU_LPC55S69JBD100_cm33_core0) || defined(CPU_LPC55S69JBD64_cm33_core0) || defined(CPU_LPC55S69JEV98_cm33_core0))
 
 #define LPC55S69_cm33_core0_SERIES
 
@@ -24,7 +24,7 @@
 /* CPU specific feature definitions */
 #include "LPC55S69_cm33_core0_features.h"
 
-#elif (defined(CPU_LPC55S69JBD100_cm33_core1) || defined(CPU_LPC55S69JET98_cm33_core1))
+#elif (defined(CPU_LPC55S69JBD100_cm33_core1) || defined(CPU_LPC55S69JBD64_cm33_core1) || defined(CPU_LPC55S69JEV98_cm33_core1))
 
 #define LPC55S69_cm33_core1_SERIES
 

@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPADC driver version 2.1.1. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief LPADC driver version 2.2.0. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 /*!
@@ -179,6 +179,7 @@ typedef enum _lpadc_hardware_compare_mode
     kLPADC_HardwareCompareRepeatUntilTrue = 3U, /*!< Compare enabled. Repeat channel acquisition until true. */
 } lpadc_hardware_compare_mode_t;
 
+#if defined(FSL_FEATURE_LPADC_HAS_CMDL_MODE) && FSL_FEATURE_LPADC_HAS_CMDL_MODE
 /*!
  * @brief Define enumeration of conversion resolution mode.
  *
@@ -192,6 +193,7 @@ typedef enum _lpadc_conversion_resolution_mode
     kLPADC_ConversionResolutionHigh = 1U,     /*!< High resolution. Single-ended 16-bit conversion; Differential 16-bit
                                                    conversion with 2’s complement output. */
 } lpadc_conversion_resolution_mode_t;
+#endif /* FSL_FEATURE_LPADC_HAS_CMDL_MODE */
 
 #if defined(FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS) && FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS
 /*!
@@ -291,7 +293,7 @@ typedef struct
     lpadc_reference_voltage_source_t referenceVoltageSource; /*!< Selects the voltage reference high used for
                                                                   conversions.*/
     lpadc_power_level_mode_t powerLevelMode;                 /*!< Power Configuration Selection. */
-    lpadc_trigger_priority_policy_t triggerPrioirtyPolicy; /*!< Control how higher priority triggers are handled, see to
+    lpadc_trigger_priority_policy_t triggerPriorityPolicy; /*!< Control how higher priority triggers are handled, see to
                                                                 #lpadc_trigger_priority_policy_mode_t. */
     bool enableConvPause; /*!< Enables the ADC pausing function. When enabled, a programmable delay is inserted during
                                command execution sequencing between LOOP iterations, between commands in a sequence, and
@@ -341,8 +343,8 @@ typedef struct
     uint32_t hardwareCompareValueHigh; /*!< Compare Value High. The available value range is in 16-bit. */
     uint32_t hardwareCompareValueLow;  /*!< Compare Value Low. The available value range is in 16-bit. */
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_MODE) && FSL_FEATURE_LPADC_HAS_CMDL_MODE
-    lpadc_conversion_resolution_mode_t conversionResoultuionMode; /*!< Conversion resolution mode. */
-#endif                                                            /* FSL_FEATURE_LPADC_HAS_CMDL_MODE */
+    lpadc_conversion_resolution_mode_t conversionResolutionMode; /*!< Conversion resolution mode. */
+#endif                                                           /* FSL_FEATURE_LPADC_HAS_CMDL_MODE */
 #if defined(FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG) && FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG
     bool enableWaitTrigger; /*!< Wait for trigger assertion before execution: when disabled, this command will be
                                  automatically executed; when enabled, the active trigger must be asserted again before
@@ -413,7 +415,7 @@ void LPADC_Init(ADC_Type *base, const lpadc_config_t *config);
  *   config->powerUpDelay            = 0x80;
  *   config->referenceVoltageSource  = kLPADC_ReferenceVoltageAlt1;
  *   config->powerLevelMode          = kLPADC_PowerLevelAlt1;
- *   config->triggerPrioirtyPolicy   = kLPADC_TriggerPriorityPreemptImmediately;
+ *   config->triggerPriorityPolicy   = kLPADC_TriggerPriorityPreemptImmediately;
  *   config->enableConvPause         = false;
  *   config->convPauseDelay          = 0U;
  *   config->FIFOWatermark           = 0U;
@@ -728,7 +730,7 @@ void LPADC_SetConvCommandConfig(ADC_Type *base, uint32_t commandId, const lpadc_
  *   config->hardwareCompareMode        = kLPADC_HardwareCompareDisabled;
  *   config->hardwareCompareValueHigh   = 0U;
  *   config->hardwareCompareValueLow    = 0U;
- *   config->conversionResoultuionMode  = kLPADC_ConversionResolutionStandard;
+ *   config->conversionResolutionMode  = kLPADC_ConversionResolutionStandard;
  *   config->enableWaitTrigger          = false;
  * @endcode
  * @param config Pointer to configuration structure.
@@ -830,6 +832,20 @@ void LPADC_DoOffsetCalibration(ADC_Type *base);
 void LPADC_DoAutoCalibration(ADC_Type *base);
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ */
 #endif /* FSL_FEATURE_LPADC_HAS_CTRL_CALOFS */
+
+#if defined(FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR) && FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR
+/*!
+ * brief Measure the temperature.
+ *
+ * param base  LPADC peripheral base address.
+ * param commandId ID for command in command buffer. Typically, the available value range is 1 - 15.
+ * param index Result FIFO index.
+ *
+ * @return Temperature value.
+ */
+float LPADC_MeasureTemperature(ADC_Type *base, uint32_t commandId, uint32_t index);
+#endif /* FSL_FEATURE_LPADC_HAS_INTERNAL_TEMP_SENSOR */
+
 /* @} */
 
 #if defined(__cplusplus)
