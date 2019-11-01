@@ -48,7 +48,6 @@
 #include <toolchain.h>
 #include <linker/sections.h>
 #include <arch/cpu.h>
-#include <offsets_short.h>
 
 #if defined(CONFIG_PLATFORM_SPECIFIC_INIT) && defined(CONFIG_SOC_LPC54114_M4)
 
@@ -62,7 +61,7 @@ rel_vals:
     .long   0x40000800   /* cpu_ctrl */
     .long   0x40000804   /* coproc_boot */
     .long   0x40000808   /* coproc_stack */
-    .short  0x0FFF       
+    .short  0x0FFF
     .short  0x0C24
 
 GTEXT(z_platform_init)
@@ -75,8 +74,8 @@ SECTION_FUNC(TEXT,z_platform_init)
 
 shared_boot_entry:
     ldr     r6, =rel_vals
-                
-    /* Flag for slave core (0) */                
+
+    /* Flag for slave core (0) */
     movs    r4, 0
     movs    r5, 1
 
