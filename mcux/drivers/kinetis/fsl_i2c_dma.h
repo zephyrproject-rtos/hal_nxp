@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
- *
+ * All rights reserved.
+ * 
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -31,7 +35,6 @@
 #define _FSL_I2C_DMA_H_
 
 #include "fsl_i2c.h"
-#include "fsl_dmamux.h"
 #include "fsl_dma.h"
 
 /*!
@@ -39,10 +42,15 @@
  * @{
  */
 
-
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+/*! @name Driver version */
+/*@{*/
+/*! @brief I2C DMA driver version 2.0.5. */
+#define FSL_I2C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+/*@}*/
 
 /*! @brief I2C master DMA handle typedef. */
 typedef struct _i2c_master_dma_handle i2c_master_dma_handle_t;
@@ -56,12 +64,13 @@ typedef void (*i2c_master_dma_transfer_callback_t)(I2C_Type *base,
 /*! @brief I2C master DMA transfer structure. */
 struct _i2c_master_dma_handle
 {
-    i2c_master_transfer_t transfer;                        /*!< I2C master transfer struct. */
-    size_t transferSize;                                   /*!< Total bytes to be transferred. */
-    uint8_t state;                                         /*!< I2C master transfer status. */
-    dma_handle_t *dmaHandle;                               /*!< The DMA handler used. */
-    i2c_master_dma_transfer_callback_t completionCallback; /*!< A callback function called after the DMA transfer finished. */
-    void *userData;                                        /*!< A callback parameter passed to the callback function. */
+    i2c_master_transfer_t transfer; /*!< I2C master transfer struct. */
+    size_t transferSize;            /*!< Total bytes to be transferred. */
+    uint8_t state;                  /*!< I2C master transfer status. */
+    dma_handle_t *dmaHandle;        /*!< The DMA handler used. */
+    i2c_master_dma_transfer_callback_t
+        completionCallback; /*!< A callback function called after the DMA transfer finished. */
+    void *userData;         /*!< A callback parameter passed to the callback function. */
 };
 
 /*******************************************************************************

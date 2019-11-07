@@ -1,9 +1,35 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
- * SPDX-License-Identifier: BSD-3-Clause
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "fsl_adc16.h"
@@ -12,6 +38,7 @@
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.adc16"
 #endif
+
 
 /*******************************************************************************
  * Prototypes
@@ -55,12 +82,6 @@ static uint32_t ADC16_GetInstance(ADC_Type *base)
     return instance;
 }
 
-/*!
- * brief Initializes the ADC16 module.
- *
- * param base   ADC16 peripheral base address.
- * param config Pointer to configuration structure. See "adc16_config_t".
- */
 void ADC16_Init(ADC_Type *base, const adc16_config_t *config)
 {
     assert(NULL != config);
@@ -79,7 +100,7 @@ void ADC16_Init(ADC_Type *base, const adc16_config_t *config)
         tmp32 |= ADC_CFG1_ADLSMP_MASK;
     }
     tmp32 |= ADC_CFG1_ADIV(config->clockDivider);
-    if (true == config->enableLowPower)
+    if (config->enableLowPower)
     {
         tmp32 |= ADC_CFG1_ADLPC_MASK;
     }
@@ -91,11 +112,11 @@ void ADC16_Init(ADC_Type *base, const adc16_config_t *config)
     {
         tmp32 |= ADC_CFG2_ADLSTS(config->longSampleMode);
     }
-    if (true == config->enableHighSpeed)
+    if (config->enableHighSpeed)
     {
         tmp32 |= ADC_CFG2_ADHSC_MASK;
     }
-    if (true == config->enableAsynchronousClock)
+    if (config->enableAsynchronousClock)
     {
         tmp32 |= ADC_CFG2_ADACKEN_MASK;
     }
@@ -107,7 +128,7 @@ void ADC16_Init(ADC_Type *base, const adc16_config_t *config)
     base->SC2 = tmp32;
 
     /* ADCx_SC3. */
-    if (true == config->enableContinuousConversion)
+    if (config->enableContinuousConversion)
     {
         base->SC3 |= ADC_SC3_ADCO_MASK;
     }
@@ -117,11 +138,6 @@ void ADC16_Init(ADC_Type *base, const adc16_config_t *config)
     }
 }
 
-/*!
- * brief De-initializes the ADC16 module.
- *
- * param base ADC16 peripheral base address.
- */
 void ADC16_Deinit(ADC_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -130,56 +146,22 @@ void ADC16_Deinit(ADC_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
-/*!
- * brief Gets an available pre-defined settings for the converter's configuration.
- *
- * This function initializes the converter configuration structure with available settings. The default values are as
- * follows.
- * code
- *   config->referenceVoltageSource     = kADC16_ReferenceVoltageSourceVref;
- *   config->clockSource                = kADC16_ClockSourceAsynchronousClock;
- *   config->enableAsynchronousClock    = true;
- *   config->clockDivider               = kADC16_ClockDivider8;
- *   config->resolution                 = kADC16_ResolutionSE12Bit;
- *   config->longSampleMode             = kADC16_LongSampleDisabled;
- *   config->enableHighSpeed            = false;
- *   config->enableLowPower             = false;
- *   config->enableContinuousConversion = false;
- * endcode
- * param config Pointer to the configuration structure.
- */
 void ADC16_GetDefaultConfig(adc16_config_t *config)
 {
     assert(NULL != config);
 
-    /* Initializes the configure structure to zero. */
-    (void)memset(config, 0, sizeof(*config));
-
-    config->referenceVoltageSource     = kADC16_ReferenceVoltageSourceVref;
-    config->clockSource                = kADC16_ClockSourceAsynchronousClock;
-    config->enableAsynchronousClock    = true;
-    config->clockDivider               = kADC16_ClockDivider8;
-    config->resolution                 = kADC16_ResolutionSE12Bit;
-    config->longSampleMode             = kADC16_LongSampleDisabled;
-    config->enableHighSpeed            = false;
-    config->enableLowPower             = false;
+    config->referenceVoltageSource = kADC16_ReferenceVoltageSourceVref;
+    config->clockSource = kADC16_ClockSourceAsynchronousClock;
+    config->enableAsynchronousClock = true;
+    config->clockDivider = kADC16_ClockDivider8;
+    config->resolution = kADC16_ResolutionSE12Bit;
+    config->longSampleMode = kADC16_LongSampleDisabled;
+    config->enableHighSpeed = false;
+    config->enableLowPower = false;
     config->enableContinuousConversion = false;
 }
 
 #if defined(FSL_FEATURE_ADC16_HAS_CALIBRATION) && FSL_FEATURE_ADC16_HAS_CALIBRATION
-/*!
- * brief  Automates the hardware calibration.
- *
- * This auto calibration helps to adjust the plus/minus side gain automatically.
- * Execute the calibration before using the converter. Note that the hardware trigger should be used
- * during the calibration.
- *
- * param  base ADC16 peripheral base address.
- *
- * return                 Execution status.
- * retval kStatus_Success Calibration is done successfully.
- * retval kStatus_Fail    Calibration has failed.
- */
 status_t ADC16_DoAutoCalibration(ADC_Type *base)
 {
     bool bHWTrigger = false;
@@ -196,10 +178,10 @@ status_t ADC16_DoAutoCalibration(ADC_Type *base)
 
     /* Clear the CALF and launch the calibration. */
     base->SC3 |= ADC_SC3_CAL_MASK | ADC_SC3_CALF_MASK;
-    while (0U == ((uint32_t)kADC16_ChannelConversionDoneFlag & ADC16_GetChannelStatusFlags(base, 0U)))
+    while (0U == (kADC16_ChannelConversionDoneFlag & ADC16_GetChannelStatusFlags(base, 0U)))
     {
         /* Check the CALF when the calibration is active. */
-        if (0U != ((uint32_t)kADC16_CalibrationFailedFlag & ADC16_GetStatusFlags(base)))
+        if (0U != (kADC16_CalibrationFailedFlag & ADC16_GetStatusFlags(base)))
         {
             status = kStatus_Fail;
             break;
@@ -213,7 +195,7 @@ status_t ADC16_DoAutoCalibration(ADC_Type *base)
         base->SC2 |= ADC_SC2_ADTRG_MASK;
     }
     /* Check the CALF at the end of calibration. */
-    if (0U != ((uint32_t)kADC16_CalibrationFailedFlag & ADC16_GetStatusFlags(base)))
+    if (0U != (kADC16_CalibrationFailedFlag & ADC16_GetStatusFlags(base)))
     {
         status = kStatus_Fail;
     }
@@ -223,23 +205,13 @@ status_t ADC16_DoAutoCalibration(ADC_Type *base)
     }
 
     /* Calculate the calibration values. */
-    tmp32 = base->CLP0;
-    tmp32 += base->CLP1;
-    tmp32 += base->CLP2;
-    tmp32 += base->CLP3;
-    tmp32 += base->CLP4;
-    tmp32 += base->CLPS;
-    tmp32    = 0x8000U | (tmp32 >> 1U);
+    tmp32 = base->CLP0 + base->CLP1 + base->CLP2 + base->CLP3 + base->CLP4 + base->CLPS;
+    tmp32 = 0x8000U | (tmp32 >> 1U);
     base->PG = tmp32;
 
 #if defined(FSL_FEATURE_ADC16_HAS_DIFF_MODE) && FSL_FEATURE_ADC16_HAS_DIFF_MODE
-    tmp32 = base->CLM0;
-    tmp32 += base->CLM1;
-    tmp32 += base->CLM2;
-    tmp32 += base->CLM3;
-    tmp32 += base->CLM4;
-    tmp32 += base->CLMS;
-    tmp32    = 0x8000U | (tmp32 >> 1U);
+    tmp32 = base->CLM0 + base->CLM1 + base->CLM2 + base->CLM3 + base->CLM4 + base->CLMS;
+    tmp32 = 0x8000U | (tmp32 >> 1U);
     base->MG = tmp32;
 #endif /* FSL_FEATURE_ADC16_HAS_DIFF_MODE */
 
@@ -248,15 +220,6 @@ status_t ADC16_DoAutoCalibration(ADC_Type *base)
 #endif /* FSL_FEATURE_ADC16_HAS_CALIBRATION */
 
 #if defined(FSL_FEATURE_ADC16_HAS_MUX_SELECT) && FSL_FEATURE_ADC16_HAS_MUX_SELECT
-/*!
- * brief Sets the channel mux mode.
- *
- * Some sample pins share the same channel index. The channel mux mode decides which pin is used for an
- * indicated channel.
- *
- * param base ADC16 peripheral base address.
- * param mode Setting channel mux mode. See "adc16_channel_mux_mode_t".
- */
 void ADC16_SetChannelMuxMode(ADC_Type *base, adc16_channel_mux_mode_t mode)
 {
     if (kADC16_ChannelMuxA == mode)
@@ -270,23 +233,11 @@ void ADC16_SetChannelMuxMode(ADC_Type *base, adc16_channel_mux_mode_t mode)
 }
 #endif /* FSL_FEATURE_ADC16_HAS_MUX_SELECT */
 
-/*!
- * brief Configures the hardware compare mode.
- *
- * The hardware compare mode provides a way to process the conversion result automatically by using hardware. Only the
- * result
- * in the compare range is available. To compare the range, see "adc16_hardware_compare_mode_t" or the appopriate
- * reference
- * manual for more information.
- *
- * param base     ADC16 peripheral base address.
- * param config   Pointer to the "adc16_hardware_compare_config_t" structure. Passing "NULL" disables the feature.
- */
 void ADC16_SetHardwareCompareConfig(ADC_Type *base, const adc16_hardware_compare_config_t *config)
 {
     uint32_t tmp32 = base->SC2 & ~(ADC_SC2_ACFE_MASK | ADC_SC2_ACFGT_MASK | ADC_SC2_ACREN_MASK);
 
-    if (NULL == config) /* Pass "NULL" to disable the feature. */
+    if (!config) /* Pass "NULL" to disable the feature. */
     {
         base->SC2 = tmp32;
         return;
@@ -309,7 +260,6 @@ void ADC16_SetHardwareCompareConfig(ADC_Type *base, const adc16_hardware_compare
             tmp32 |= ADC_SC2_ACFGT_MASK | ADC_SC2_ACREN_MASK;
             break;
         default:
-            assert(false);
             break;
     }
     base->SC2 = tmp32;
@@ -320,16 +270,6 @@ void ADC16_SetHardwareCompareConfig(ADC_Type *base, const adc16_hardware_compare
 }
 
 #if defined(FSL_FEATURE_ADC16_HAS_HW_AVERAGE) && FSL_FEATURE_ADC16_HAS_HW_AVERAGE
-/*!
- * brief Sets the hardware average mode.
- *
- * The hardware average mode provides a way to process the conversion result automatically by using hardware. The
- * multiple
- * conversion results are accumulated and averaged internally making them easier to read.
- *
- * param base  ADC16 peripheral base address.
- * param mode  Setting the hardware average mode. See "adc16_hardware_average_mode_t".
- */
 void ADC16_SetHardwareAverage(ADC_Type *base, adc16_hardware_average_mode_t mode)
 {
     uint32_t tmp32 = base->SC3 & ~(ADC_SC3_AVGE_MASK | ADC_SC3_AVGS_MASK);
@@ -343,12 +283,6 @@ void ADC16_SetHardwareAverage(ADC_Type *base, adc16_hardware_average_mode_t mode
 #endif /* FSL_FEATURE_ADC16_HAS_HW_AVERAGE */
 
 #if defined(FSL_FEATURE_ADC16_HAS_PGA) && FSL_FEATURE_ADC16_HAS_PGA
-/*!
- * brief Configures the PGA for the converter's front end.
- *
- * param base    ADC16 peripheral base address.
- * param config  Pointer to the "adc16_pga_config_t" structure. Passing "NULL" disables the feature.
- */
 void ADC16_SetPGAConfig(ADC_Type *base, const adc16_pga_config_t *config)
 {
     uint32_t tmp32;
@@ -383,73 +317,33 @@ void ADC16_SetPGAConfig(ADC_Type *base, const adc16_pga_config_t *config)
 }
 #endif /* FSL_FEATURE_ADC16_HAS_PGA */
 
-/*!
- * brief  Gets the status flags of the converter.
- *
- * param  base ADC16 peripheral base address.
- *
- * return      Flags' mask if indicated flags are asserted. See "_adc16_status_flags".
- */
 uint32_t ADC16_GetStatusFlags(ADC_Type *base)
 {
     uint32_t ret = 0;
 
     if (0U != (base->SC2 & ADC_SC2_ADACT_MASK))
     {
-        ret |= (uint32_t)kADC16_ActiveFlag;
+        ret |= kADC16_ActiveFlag;
     }
 #if defined(FSL_FEATURE_ADC16_HAS_CALIBRATION) && FSL_FEATURE_ADC16_HAS_CALIBRATION
     if (0U != (base->SC3 & ADC_SC3_CALF_MASK))
     {
-        ret |= (uint32_t)kADC16_CalibrationFailedFlag;
+        ret |= kADC16_CalibrationFailedFlag;
     }
 #endif /* FSL_FEATURE_ADC16_HAS_CALIBRATION */
     return ret;
 }
 
-/*!
- * brief  Clears the status flags of the converter.
- *
- * param  base ADC16 peripheral base address.
- * param  mask Mask value for the cleared flags. See "_adc16_status_flags".
- */
 void ADC16_ClearStatusFlags(ADC_Type *base, uint32_t mask)
 {
 #if defined(FSL_FEATURE_ADC16_HAS_CALIBRATION) && FSL_FEATURE_ADC16_HAS_CALIBRATION
-    if (0U != (mask & (uint32_t)kADC16_CalibrationFailedFlag))
+    if (0U != (mask & kADC16_CalibrationFailedFlag))
     {
         base->SC3 |= ADC_SC3_CALF_MASK;
     }
 #endif /* FSL_FEATURE_ADC16_HAS_CALIBRATION */
 }
 
-/*!
- * brief Configures the conversion channel.
- *
- * This operation triggers the conversion when in software trigger mode. When in hardware trigger mode, this API
- * configures the channel while the external trigger source helps to trigger the conversion.
- *
- * Note that the "Channel Group" has a detailed description.
- * To allow sequential conversions of the ADC to be triggered by internal peripherals, the ADC has more than one
- * group of status and control registers, one for each conversion. The channel group parameter indicates which group of
- * registers are used, for example, channel group 0 is for Group A registers and channel group 1 is for Group B
- * registers. The
- * channel groups are used in a "ping-pong" approach to control the ADC operation.  At any point, only one of
- * the channel groups is actively controlling ADC conversions. The channel group 0 is used for both software and
- * hardware
- * trigger modes. Channel group 1 and greater indicates multiple channel group registers for
- * use only in hardware trigger mode. See the chip configuration information in the appropriate MCU reference manual for
- * the
- * number of SC1n registers (channel groups) specific to this device.  Channel group 1 or greater are not used
- * for software trigger operation. Therefore, writing to these channel groups does not initiate a new conversion.
- * Updating the channel group 0 while a different channel group is actively controlling a conversion is allowed and
- * vice versa. Writing any of the channel group registers while that specific channel group is actively controlling a
- * conversion aborts the current conversion.
- *
- * param base          ADC16 peripheral base address.
- * param channelGroup  Channel group index.
- * param config        Pointer to the "adc16_channel_config_t" structure for the conversion channel.
- */
 void ADC16_SetChannelConfig(ADC_Type *base, uint32_t channelGroup, const adc16_channel_config_t *config)
 {
     assert(channelGroup < ADC_SC1_COUNT);
@@ -459,27 +353,19 @@ void ADC16_SetChannelConfig(ADC_Type *base, uint32_t channelGroup, const adc16_c
 
 #if defined(FSL_FEATURE_ADC16_HAS_DIFF_MODE) && FSL_FEATURE_ADC16_HAS_DIFF_MODE
     /* Enable the differential conversion. */
-    if (true == config->enableDifferentialConversion)
+    if (config->enableDifferentialConversion)
     {
         sc1 |= ADC_SC1_DIFF_MASK;
     }
 #endif /* FSL_FEATURE_ADC16_HAS_DIFF_MODE */
     /* Enable the interrupt when the conversion is done. */
-    if (true == config->enableInterruptOnConversionCompleted)
+    if (config->enableInterruptOnConversionCompleted)
     {
         sc1 |= ADC_SC1_AIEN_MASK;
     }
     base->SC1[channelGroup] = sc1;
 }
 
-/*!
- * brief  Gets the status flags of channel.
- *
- * param  base         ADC16 peripheral base address.
- * param  channelGroup Channel group index.
- *
- * return              Flags' mask if indicated flags are asserted. See "_adc16_channel_status_flags".
- */
 uint32_t ADC16_GetChannelStatusFlags(ADC_Type *base, uint32_t channelGroup)
 {
     assert(channelGroup < ADC_SC1_COUNT);
@@ -488,7 +374,7 @@ uint32_t ADC16_GetChannelStatusFlags(ADC_Type *base, uint32_t channelGroup)
 
     if (0U != (base->SC1[channelGroup] & ADC_SC1_COCO_MASK))
     {
-        ret |= (uint32_t)kADC16_ChannelConversionDoneFlag;
+        ret |= kADC16_ChannelConversionDoneFlag;
     }
     return ret;
 }

@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -43,8 +47,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPSCI driver version 2.0.3. */
-#define FSL_LPSCI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief LPSCI driver version 2.0.4. */
+#define FSL_LPSCI_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@{*/
 
 /*! @brief Error codes for the LPSCI driver. */
@@ -65,6 +69,7 @@ enum _lpsci_status
     kStatus_LPSCI_NoiseError = MAKE_STATUS(kStatusGroup_LPSCI, 9),        /*!< LPSCI noise error. */
     kStatus_LPSCI_FramingError = MAKE_STATUS(kStatusGroup_LPSCI, 10),     /*!< LPSCI framing error. */
     kStatus_LPSCI_ParityError = MAKE_STATUS(kStatusGroup_LPSCI, 11),      /*!< LPSCI parity error. */
+    kStatus_LPSCI_IdleLineDetected = MAKE_STATUS(kStatusGroup_LPSCI, 12), /*!< LPSCI idle line detected. */
 };
 
 /*! @brief LPSCI parity mode.*/
@@ -81,6 +86,13 @@ typedef enum _lpsci_stop_bit_count
     kLPSCI_OneStopBit = 0U, /*!< One stop bit */
     kLPSCI_TwoStopBit = 1U, /*!< Two stop bits */
 } lpsci_stop_bit_count_t;
+
+/*! @brief LPSCI stop bit count.*/
+typedef enum _lpsci_idle_line_type
+{
+    kLPSCI_IdleLineStartBit = 0U, /*!< IDLE line starts count after start bit. */
+    kLPSCI_IdleLineStopBit = 1U,  /*!< IDLE line starts count after stop bit. */
+} lpsci_idle_line_type_t;
 
 /*!
  * @brief LPSCI interrupt configuration structure, default settings all disabled.
@@ -158,8 +170,9 @@ typedef struct _lpsci_config
 #if defined(FSL_FEATURE_LPSCI_HAS_STOP_BIT_CONFIG_SUPPORT) && FSL_FEATURE_LPSCI_HAS_STOP_BIT_CONFIG_SUPPORT
     lpsci_stop_bit_count_t stopBitCount; /*!< Number of stop bits, 1 stop bit (default) or 2 stop bits  */
 #endif
-    bool enableTx; /*!< Enable TX */
-    bool enableRx; /*!< Enable RX */
+    lpsci_idle_line_type_t idleLineType; /*!< IDLE line type. */
+    bool enableTx;                       /*!< Enable TX */
+    bool enableRx;                       /*!< Enable RX */
 } lpsci_config_t;
 
 /*! @brief LPSCI transfer structure. */
@@ -250,6 +263,7 @@ void LPSCI_Deinit(UART0_Type *base);
  *   lpsciConfig->baudRate_Bps = 115200U;
  *   lpsciConfig->parityMode = kLPSCI_ParityDisabled;
  *   lpsciConfig->stopBitCount = kLPSCI_OneStopBit;
+ *   lpsciConfig->idleLineType = kLPSCI_IdleLineStartBit;
  *   lpsciConfig->enableTx = false;
  *   lpsciConfig->enableRx = false;
  *
@@ -451,6 +465,14 @@ static inline void LPSCI_EnableRxDMA(UART0_Type *base, bool enable)
  */
 
 /*!
+ * @brief Get the LPSCI instance from peripheral base address.
+ *
+ * @param base LPSCI peripheral base address.
+ * @return LPSCI instance.
+ */
+uint32_t LPSCI_GetInstance(UART0_Type *base);
+
+/*!
  * @brief Enables or disables the LPSCI transmitter.
  *
  * This function enables or disables the LPSCI transmitter.
@@ -612,6 +634,14 @@ void LPSCI_TransferStartRingBuffer(UART0_Type *base,
  * @param handle LPSCI handle pointer.
  */
 void LPSCI_TransferStopRingBuffer(UART0_Type *base, lpsci_handle_t *handle);
+
+/*!
+ * @brief Get the length of received data in RX ring buffer.
+ *
+ * @userData handle LPSCI handle pointer.
+ * @return Length of received data in RX ring buffer.
+ */
+size_t LPSCI_TransferGetRxRingBufferLength(lpsci_handle_t *handle);
 
 /*!
  * @brief Transmits a buffer of data using the interrupt method.

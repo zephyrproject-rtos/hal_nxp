@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -44,13 +48,16 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SPI driver version 2.0.3. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 #ifndef SPI_DUMMYDATA
 /*! @brief SPI dummy transfer data, the data is sent while txBuff is NULL. */
 #define SPI_DUMMYDATA (0xFFU)
 #endif
+
+/*! @brief Global variable for dummy data value setting. */
+extern volatile uint8_t g_spiDummyData[];
 
 /*! @brief Return status for the SPI driver.*/
 enum _spi_status
@@ -209,6 +216,7 @@ typedef struct _spi_slave_config
     spi_txfifo_watermark_t txWatermark; /*!< Tx watermark settings */
     spi_rxfifo_watermark_t rxWatermark; /*!< Rx watermark settings */
 #endif                                  /* FSL_FEATURE_SPI_HAS_FIFO */
+    spi_pin_mode_t pinMode;             /*!< SPI pin mode select */
 } spi_slave_config_t;
 
 /*! @brief SPI transfer structure */
@@ -478,6 +486,27 @@ static inline uint32_t SPI_GetDataRegisterAddress(SPI_Type *base)
  */
 
 /*!
+ * @brief Get the instance for SPI module.
+ *
+ * @param base SPI base address
+ */
+uint32_t SPI_GetInstance(SPI_Type *base);
+
+/*!
+ * @brief Sets the pin mode for transfer.
+ *
+ * @param base SPI base pointer
+ * @param pinMode pin mode for transfer AND #_spi_pin_mode could get the related configuration.
+ */
+static inline void SPI_SetPinMode(SPI_Type *base, spi_pin_mode_t pinMode)
+{
+    /* Clear SPC0 and BIDIROE bit. */
+    base->C2 &= ~(SPI_C2_BIDIROE_MASK | SPI_C2_SPC0_MASK);
+    /* Set pin mode for transfer. */
+    base->C2 |= SPI_C2_BIDIROE(pinMode >> 1U) | SPI_C2_SPC0(pinMode & 1U);
+}
+
+/*!
  * @brief Sets the baud rate for SPI transfer. This is only used in master.
  *
  * @param base SPI base pointer
@@ -543,6 +572,13 @@ void SPI_WriteData(SPI_Type *base, uint16_t data);
  */
 uint16_t SPI_ReadData(SPI_Type *base);
 
+/*!
+ * @brief Set up the dummy data.
+ *
+ * @param base SPI peripheral address.
+ * @param dummyData Data to be transferred when tx buffer is NULL.
+ */
+void SPI_SetDummyData(SPI_Type *base, uint8_t dummyData);
 /*! @} */
 
 /*!

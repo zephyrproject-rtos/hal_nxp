@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
- *
+ * All rights reserved.
+ * 
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -33,6 +37,12 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.i2c_dma"
+#endif
+
 
 /*<! @brief Structure definition for i2c_master_dma_handle_t. The structure is private. */
 typedef struct _i2c_master_dma_private_handle
@@ -103,14 +113,6 @@ static void I2C_MasterTransferDMAConfig(I2C_Type *base, i2c_master_dma_handle_t 
 static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
                                                 i2c_master_dma_handle_t *handle,
                                                 i2c_master_transfer_t *xfer);
-
-/*!
- * @brief Get the I2C instance from peripheral base address.
- *
- * @param base I2C peripheral base address.
- * @return I2C instance.
- */
-extern uint32_t I2C_GetInstance(I2C_Type *base);
 
 /*******************************************************************************
  * Variables
@@ -316,7 +318,7 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
                     return result;
                 }
 
-            } while ((handle->transfer.subaddressSize > 0) && (result == kStatus_Success));
+            } while (handle->transfer.subaddressSize > 0);
 
             if (handle->transfer.direction == kI2C_Read)
             {
@@ -521,6 +523,12 @@ status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, 
 
         /* Reset the state to idle. */
         handle->state = kIdleState;
+
+        /* Call the callback function after the function has completed. */
+        if (handle->completionCallback)
+        {
+            handle->completionCallback(base, handle, result, handle->userData);
+        }
     }
 
     return result;

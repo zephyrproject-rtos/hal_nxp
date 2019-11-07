@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -34,6 +38,11 @@
  * Definitions
  ******************************************************************************/
 
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.lpsci"
+#endif
+
 /* LPSCI transfer state. */
 enum _lpsci_tansfer_state
 {
@@ -51,22 +60,6 @@ typedef void (*lpsci_isr_t)(UART0_Type *base, lpsci_handle_t *handle);
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-
-/*!
- * @brief Get the LPSCI instance from peripheral base address.
- *
- * @param base LPSCI peripheral base address.
- * @return LPSCI instance.
- */
-uint32_t LPSCI_GetInstance(UART0_Type *base);
-
-/*!
- * @brief Get the length of received data in RX ring buffer.
- *
- * @userData handle LPSCI handle pointer.
- * @return Length of received data in RX ring buffer.
- */
-static size_t LPSCI_TransferGetRxRingBufferLength(lpsci_handle_t *handle);
 
 /*!
  * @brief Check whether the RX ring buffer is full.
@@ -146,7 +139,7 @@ uint32_t LPSCI_GetInstance(UART0_Type *base)
     return instance;
 }
 
-static size_t LPSCI_TransferGetRxRingBufferLength(lpsci_handle_t *handle)
+size_t LPSCI_TransferGetRxRingBufferLength(lpsci_handle_t *handle)
 {
     assert(handle);
 
@@ -289,8 +282,10 @@ status_t LPSCI_Init(UART0_Type *base, const lpsci_config_t *config, uint32_t src
     base->BDH = ((base->C4 & ~UART0_BDH_SBR_MASK) | (uint8_t)(sbr >> 8));
     base->BDL = (uint8_t)sbr;
 
-    /* set parity mode */
-    temp = base->C1 & ~(UART0_C1_PE_MASK | UART0_C1_PT_MASK | UART0_C1_M_MASK);
+    /* set parity mode and idle line type*/
+    temp = base->C1 & ~(UART0_C1_PE_MASK | UART0_C1_PT_MASK | UART0_C1_M_MASK | UART0_C1_ILT_MASK);
+
+    temp |= UART0_C1_ILT(config->idleLineType);
 
     if (kLPSCI_ParityDisabled != config->parityMode)
     {
@@ -343,6 +338,7 @@ void LPSCI_GetDefaultConfig(lpsci_config_t *config)
     config->baudRate_Bps = 115200U;
     config->parityMode = kLPSCI_ParityDisabled;
     config->stopBitCount = kLPSCI_OneStopBit;
+    config->idleLineType = kLPSCI_IdleLineStartBit;
     config->enableTx = false;
     config->enableRx = false;
 }
@@ -805,7 +801,7 @@ status_t LPSCI_TransferReceiveNonBlocking(UART0_Type *base,
 
             /* Enable RX interrupt. */
             LPSCI_EnableInterrupts(base, kLPSCI_RxDataRegFullInterruptEnable | kLPSCI_RxOverrunInterruptEnable |
-                                             kLPSCI_FramingErrorInterruptEnable);
+                                             kLPSCI_FramingErrorInterruptEnable | kLPSCI_IdleLineInterruptEnable);
             /* Enable parity error interrupt when parity mode is enable*/
             if (UART0_C1_PE_MASK & base->C1)
             {
@@ -834,7 +830,7 @@ void LPSCI_TransferAbortReceive(UART0_Type *base, lpsci_handle_t *handle)
     {
         /* Disable RX interrupt. */
         LPSCI_DisableInterrupts(base, kLPSCI_RxDataRegFullInterruptEnable | kLPSCI_RxOverrunInterruptEnable |
-                                          kLPSCI_FramingErrorInterruptEnable);
+                                          kLPSCI_FramingErrorInterruptEnable | kLPSCI_IdleLineInterruptEnable);
         /* Disable parity error interrupt when parity mode is enable*/
         if (UART0_C1_PE_MASK & base->C1)
         {
@@ -909,6 +905,57 @@ void LPSCI_TransferHandleIRQ(UART0_Type *base, lpsci_handle_t *handle)
         }
     }
 
+    /* If idle line detected and idle line interrupt enabled. */
+    if ((UART0_S1_IDLE_MASK & base->S1) && (UART0_C2_ILIE_MASK & base->C2))
+    {
+#if defined(FSL_FEATURE_LPSCI_HAS_FIFO) && FSL_FEATURE_LPSCI_HAS_FIFO
+        count = base->RCFIFO;
+
+        /* If handle->rxDataSize is not 0, first save data to handle->rxData. */
+        while ((count) && (handle->rxDataSize))
+        {
+            tempCount = MIN(handle->rxDataSize, count);
+
+            /* Using non block API to read the data from the registers. */
+            LPSCI_ReadNonBlocking(base, handle->rxData, tempCount);
+            handle->rxData += tempCount;
+            handle->rxDataSize -= tempCount;
+            count -= tempCount;
+
+            /* If all the data required for upper layer is ready, trigger callback. */
+            if (!handle->rxDataSize)
+            {
+                handle->rxState = kLPSCI_RxIdle;
+
+                LPSCI_DisableInterrupts(base, kLPSCI_RxDataRegFullInterruptEnable | kLPSCI_RxOverrunInterruptEnable |
+                                                  kLPSCI_FramingErrorInterruptEnable);
+
+                /* Disable parity error interrupt when parity mode is enable*/
+                if (UART0_C1_PE_MASK & base->C1)
+                {
+                    LPSCI_DisableInterrupts(base, kLPSCI_ParityErrorInterruptEnable);
+                }
+
+                if (handle->callback)
+                {
+                    handle->callback(base, handle, kStatus_LPSCI_RxIdle, handle->userData);
+                }
+            }
+        }
+#endif
+        /* Clear the idle line flag. */
+        LPSCI_ClearStatusFlags(base, kLPSCI_IdleLineFlag);
+
+        if (!handle->rxDataSize)
+        {
+            LPSCI_DisableInterrupts(base, kLPSCI_IdleLineInterruptEnable);
+        }
+        /* Trigger callback. */
+        if (handle->callback)
+        {
+            handle->callback(base, handle, kStatus_LPSCI_IdleLineDetected, handle->userData);
+        }
+    }
     /* Receive data register full */
     if ((UART0_S1_RDRF_MASK & base->S1) && (UART0_C2_RIE_MASK & base->C2))
     {
@@ -1069,6 +1116,11 @@ void LPSCI_TransferHandleErrorIRQ(UART0_Type *base, lpsci_handle_t *handle)
 void UART0_DriverIRQHandler(void)
 {
     s_lpsciIsr(UART0, s_lpsciHandle[0]);
+/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
+  exception return operation might vector to incorrect interrupt */
+#if defined __CORTEX_M && (__CORTEX_M == 4U)
+    __DSB();
+#endif
 }
 
 #endif

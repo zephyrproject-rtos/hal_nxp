@@ -1,9 +1,37 @@
 /*
+* The Clear BSD License
 * Copyright 2013-2016 Freescale Semiconductor, Inc.
 * Copyright 2016-2018 NXP
 * All rights reserved.
 *
-* SPDX-License-Identifier: BSD-3-Clause
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted (subject to the limitations in the
+* disclaimer below) provided that the following conditions are met:
+*
+* * Redistributions of source code must retain the above copyright
+*   notice, this list of conditions and the following disclaimer.
+*
+* * Redistributions in binary form must reproduce the above copyright
+*   notice, this list of conditions and the following disclaimer in the
+*   documentation and/or other materials provided with the distribution.
+*
+* * Neither the name of the copyright holder nor the names of its
+*   contributors may be used to endorse or promote products derived from
+*   this software without specific prior written permission.
+*
+* NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE
+* GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
+* HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+* WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+* BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+* WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+* OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+* IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 */
 
@@ -41,8 +69,8 @@ status_t FLEXNVM_Init(flexnvm_config_t *config)
         return kStatus_FTFx_InvalidArgument;
     }
 
-    config->ftfxConfig.flashDesc.type = (uint8_t)kFTFx_MemTypeFlexnvm;
-    config->ftfxConfig.flashDesc.index = 0U;
+    config->ftfxConfig.flashDesc.type = kFTFx_MemTypeFlexnvm;
+    config->ftfxConfig.flashDesc.index = 0;
 
     /* Set Flexnvm memory operation parameters */
     config->ftfxConfig.opsConfig.addrAligment.blockWriteUnitSize = FSL_FEATURE_FLASH_FLEX_NVM_BLOCK_WRITE_UNIT_SIZE;
@@ -213,7 +241,7 @@ status_t FLEXNVM_EepromWrite(flexnvm_config_t *config, uint32_t start, uint8_t *
     returnCode = kStatus_FTFx_Success;
 
     /* Switch function of FlexRAM if needed */
-    if (0U == (FTFx->FCNFG & FTFx_FCNFG_EEERDY_MASK))
+    if (!(FTFx->FCNFG & FTFx_FCNFG_EEERDY_MASK))
     {
         needSwitchFlexRamMode = true;
 
@@ -225,36 +253,36 @@ status_t FLEXNVM_EepromWrite(flexnvm_config_t *config, uint32_t start, uint8_t *
     }
 
     /* Write data to FlexRAM when it is used as EEPROM emulator */
-    while (lengthInBytes > 0U)
+    while (lengthInBytes > 0)
     {
-        if ((0U == (start & 0x3U)) && (0U == ((uint32_t)src & 0x3U)) && (lengthInBytes >= 4U))
+        if ((!(start & 0x3U)) && (lengthInBytes >= 4))
         {
-            *(uint32_t *)start = *(uint32_t *)(uint32_t)src;
-            start += 4U;
-            src = &src[4];
-            lengthInBytes -= 4U;
+            *(uint32_t *)start = *(uint32_t *)src;
+            start += 4;
+            src += 4;
+            lengthInBytes -= 4;
         }
-        else if ((0U == (start & 0x1U)) && (0U == ((uint32_t)src & 0x1U)) && (lengthInBytes >= 2U))
+        else if ((!(start & 0x1U)) && (lengthInBytes >= 2))
         {
-            *(uint16_t *)start = *(uint16_t *)(uint32_t)src;
-            start += 2U;
-            src = &src[2];
-            lengthInBytes -= 2U;
+            *(uint16_t *)start = *(uint16_t *)src;
+            start += 2;
+            src += 2;
+            lengthInBytes -= 2;
         }
         else
         {
             *(uint8_t *)start = *src;
-            start += 1U;
-            src = &src[1];
-            lengthInBytes -= 1U;
+            start += 1;
+            src += 1;
+            lengthInBytes -= 1;
         }
         /* Wait till EEERDY bit is set */
-        while (0U == (FTFx->FCNFG & FTFx_FCNFG_EEERDY_MASK))
+        while (!(FTFx->FCNFG & FTFx_FCNFG_EEERDY_MASK))
         {
         }
 
         /* Check for protection violation error */
-        if (0U != (FTFx->FSTAT & FTFx_FSTAT_FPVIOL_MASK))
+        if (FTFx->FSTAT & FTFx_FSTAT_FPVIOL_MASK)
         {
             return kStatus_FTFx_ProtectionViolation;
         }
@@ -280,7 +308,7 @@ status_t FLEXNVM_DflashSetProtection(flexnvm_config_t *config, uint8_t protectSt
         return kStatus_FTFx_InvalidArgument;
     }
 
-    if ((config->ftfxConfig.flashDesc.totalSize == 0U) || (config->ftfxConfig.flashDesc.totalSize == 0xFFFFFFFFU))
+    if ((config->ftfxConfig.flashDesc.totalSize == 0) || (config->ftfxConfig.flashDesc.totalSize == 0xFFFFFFFFU))
     {
         return kStatus_FTFx_CommandNotSupported;
     }
@@ -302,7 +330,7 @@ status_t FLEXNVM_DflashGetProtection(flexnvm_config_t *config, uint8_t *protectS
         return kStatus_FTFx_InvalidArgument;
     }
 
-    if ((config->ftfxConfig.flashDesc.totalSize == 0U) || (config->ftfxConfig.flashDesc.totalSize == 0xFFFFFFFFU))
+    if ((config->ftfxConfig.flashDesc.totalSize == 0) || (config->ftfxConfig.flashDesc.totalSize == 0xFFFFFFFFU))
     {
         return kStatus_FTFx_CommandNotSupported;
     }
@@ -319,7 +347,7 @@ status_t FLEXNVM_EepromSetProtection(flexnvm_config_t *config, uint8_t protectSt
         return kStatus_FTFx_InvalidArgument;
     }
 
-    if ((config->ftfxConfig.eepromTotalSize == 0U) || (config->ftfxConfig.eepromTotalSize == 0xFFFFU))
+    if ((config->ftfxConfig.eepromTotalSize == 0) || (config->ftfxConfig.eepromTotalSize == 0xFFFFU))
     {
         return kStatus_FTFx_CommandNotSupported;
     }
@@ -341,7 +369,7 @@ status_t FLEXNVM_EepromGetProtection(flexnvm_config_t *config, uint8_t *protectS
         return kStatus_FTFx_InvalidArgument;
     }
 
-    if ((config->ftfxConfig.eepromTotalSize == 0U) || (config->ftfxConfig.eepromTotalSize == 0xFFFFU))
+    if ((config->ftfxConfig.eepromTotalSize == 0) || (config->ftfxConfig.eepromTotalSize == 0xFFFFU))
     {
         return kStatus_FTFx_CommandNotSupported;
     }
@@ -358,41 +386,35 @@ status_t FLEXNVM_GetProperty(flexnvm_config_t *config, flexnvm_property_tag_t wh
         return kStatus_FTFx_InvalidArgument;
     }
 
-    if (whichProperty == kFLEXNVM_PropertyDflashSectorSize)
+    switch (whichProperty)
     {
-        *value = config->ftfxConfig.flashDesc.sectorSize;
-    }
-    else if (whichProperty == kFLEXNVM_PropertyDflashTotalSize)
-    {
-        *value = config->ftfxConfig.flashDesc.totalSize;
-    }
-    else if (whichProperty == kFLEXNVM_PropertyDflashBlockSize)
-    {
-        *value = config->ftfxConfig.flashDesc.totalSize / config->ftfxConfig.flashDesc.blockCount;
-    }
-    else if (whichProperty == kFLEXNVM_PropertyDflashBlockCount)
-    {
-        *value = config->ftfxConfig.flashDesc.blockCount;
-    }
-    else if (whichProperty == kFLEXNVM_PropertyDflashBlockBaseAddr)
-    {
-        *value = config->ftfxConfig.flashDesc.blockBase;
-    }
-    else if (whichProperty == kFLEXNVM_PropertyFlexRamBlockBaseAddr)
-    {
-        *value = config->ftfxConfig.flexramBlockBase;
-    }
-    else if (whichProperty == kFLEXNVM_PropertyFlexRamTotalSize)
-    {
-        *value = config->ftfxConfig.flexramTotalSize;
-    }
-    else if (whichProperty == kFLEXNVM_PropertyEepromTotalSize)
-    {
-        *value = config->ftfxConfig.eepromTotalSize;
-    }
-    else /* catch inputs that are not recognized */
-    {
-        return kStatus_FTFx_UnknownProperty;
+        case kFLEXNVM_PropertyDflashSectorSize:
+            *value = config->ftfxConfig.flashDesc.sectorSize;
+            break;
+        case kFLEXNVM_PropertyDflashTotalSize:
+            *value = config->ftfxConfig.flashDesc.totalSize;
+            break;
+        case kFLEXNVM_PropertyDflashBlockSize:
+            *value = config->ftfxConfig.flashDesc.totalSize / config->ftfxConfig.flashDesc.blockCount;
+            break;
+        case kFLEXNVM_PropertyDflashBlockCount:
+            *value = config->ftfxConfig.flashDesc.blockCount;
+            break;
+        case kFLEXNVM_PropertyDflashBlockBaseAddr:
+            *value = config->ftfxConfig.flashDesc.blockBase;
+            break;
+        case kFLEXNVM_PropertyFlexRamBlockBaseAddr:
+            *value = config->ftfxConfig.flexramBlockBase;
+            break;
+        case kFLEXNVM_PropertyFlexRamTotalSize:
+            *value = config->ftfxConfig.flexramTotalSize;
+            break;
+        case kFLEXNVM_PropertyEepromTotalSize:
+            *value = config->ftfxConfig.eepromTotalSize;
+            break;
+
+        default: /* catch inputs that are not recognized */
+            return kStatus_FTFx_UnknownProperty;
     }
 
     return kStatus_FTFx_Success;

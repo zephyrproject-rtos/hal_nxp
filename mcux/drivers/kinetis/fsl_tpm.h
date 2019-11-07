@@ -1,9 +1,35 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2017 NXP
  * All rights reserved.
  *
- * SPDX-License-Identifier: BSD-3-Clause
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ * that the following conditions are met:
+ *
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #ifndef _FSL_TPM_H_
 #define _FSL_TPM_H_
@@ -21,7 +47,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 0, 4)) /*!< Version 2.0.4 */
+#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
                                                        /*@}*/
 
 /*!
@@ -122,20 +148,20 @@ typedef enum _tpm_trigger_source
 /*! @brief TPM output compare modes */
 typedef enum _tpm_output_compare_mode
 {
-    kTPM_NoOutputSignal  = (1U << TPM_CnSC_MSA_SHIFT), /*!< No channel output when counter reaches CnV  */
-    kTPM_ToggleOnMatch   = ((1U << TPM_CnSC_MSA_SHIFT) | (1U << TPM_CnSC_ELSA_SHIFT)), /*!< Toggle output */
-    kTPM_ClearOnMatch    = ((1U << TPM_CnSC_MSA_SHIFT) | (2U << TPM_CnSC_ELSA_SHIFT)), /*!< Clear output */
-    kTPM_SetOnMatch      = ((1U << TPM_CnSC_MSA_SHIFT) | (3U << TPM_CnSC_ELSA_SHIFT)), /*!< Set output */
+    kTPM_NoOutputSignal = (1U << TPM_CnSC_MSA_SHIFT), /*!< No channel output when counter reaches CnV  */
+    kTPM_ToggleOnMatch = ((1U << TPM_CnSC_MSA_SHIFT) | (1U << TPM_CnSC_ELSA_SHIFT)),   /*!< Toggle output */
+    kTPM_ClearOnMatch = ((1U << TPM_CnSC_MSA_SHIFT) | (2U << TPM_CnSC_ELSA_SHIFT)),    /*!< Clear output */
+    kTPM_SetOnMatch = ((1U << TPM_CnSC_MSA_SHIFT) | (3U << TPM_CnSC_ELSA_SHIFT)),      /*!< Set output */
     kTPM_HighPulseOutput = ((3U << TPM_CnSC_MSA_SHIFT) | (1U << TPM_CnSC_ELSA_SHIFT)), /*!< Pulse output high */
-    kTPM_LowPulseOutput  = ((3U << TPM_CnSC_MSA_SHIFT) | (2U << TPM_CnSC_ELSA_SHIFT))  /*!< Pulse output low */
+    kTPM_LowPulseOutput = ((3U << TPM_CnSC_MSA_SHIFT) | (2U << TPM_CnSC_ELSA_SHIFT))   /*!< Pulse output low */
 } tpm_output_compare_mode_t;
 
 /*! @brief TPM input capture edge */
 typedef enum _tpm_input_capture_edge
 {
-    kTPM_RisingEdge      = (1U << TPM_CnSC_ELSA_SHIFT), /*!< Capture on rising edge only */
-    kTPM_FallingEdge     = (2U << TPM_CnSC_ELSA_SHIFT), /*!< Capture on falling edge only */
-    kTPM_RiseAndFallEdge = (3U << TPM_CnSC_ELSA_SHIFT)  /*!< Capture on rising or falling edge */
+    kTPM_RisingEdge = (1U << TPM_CnSC_ELSA_SHIFT),     /*!< Capture on rising edge only */
+    kTPM_FallingEdge = (2U << TPM_CnSC_ELSA_SHIFT),    /*!< Capture on falling edge only */
+    kTPM_RiseAndFallEdge = (3U << TPM_CnSC_ELSA_SHIFT) /*!< Capture on rising or falling edge */
 } tpm_input_capture_edge_t;
 
 #if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
@@ -242,29 +268,29 @@ typedef struct _tpm_config
 /*! @brief List of TPM interrupts */
 typedef enum _tpm_interrupt_enable
 {
-    kTPM_Chnl0InterruptEnable        = (1U << 0), /*!< Channel 0 interrupt.*/
-    kTPM_Chnl1InterruptEnable        = (1U << 1), /*!< Channel 1 interrupt.*/
-    kTPM_Chnl2InterruptEnable        = (1U << 2), /*!< Channel 2 interrupt.*/
-    kTPM_Chnl3InterruptEnable        = (1U << 3), /*!< Channel 3 interrupt.*/
-    kTPM_Chnl4InterruptEnable        = (1U << 4), /*!< Channel 4 interrupt.*/
-    kTPM_Chnl5InterruptEnable        = (1U << 5), /*!< Channel 5 interrupt.*/
-    kTPM_Chnl6InterruptEnable        = (1U << 6), /*!< Channel 6 interrupt.*/
-    kTPM_Chnl7InterruptEnable        = (1U << 7), /*!< Channel 7 interrupt.*/
-    kTPM_TimeOverflowInterruptEnable = (1U << 8)  /*!< Time overflow interrupt.*/
+    kTPM_Chnl0InterruptEnable = (1U << 0),       /*!< Channel 0 interrupt.*/
+    kTPM_Chnl1InterruptEnable = (1U << 1),       /*!< Channel 1 interrupt.*/
+    kTPM_Chnl2InterruptEnable = (1U << 2),       /*!< Channel 2 interrupt.*/
+    kTPM_Chnl3InterruptEnable = (1U << 3),       /*!< Channel 3 interrupt.*/
+    kTPM_Chnl4InterruptEnable = (1U << 4),       /*!< Channel 4 interrupt.*/
+    kTPM_Chnl5InterruptEnable = (1U << 5),       /*!< Channel 5 interrupt.*/
+    kTPM_Chnl6InterruptEnable = (1U << 6),       /*!< Channel 6 interrupt.*/
+    kTPM_Chnl7InterruptEnable = (1U << 7),       /*!< Channel 7 interrupt.*/
+    kTPM_TimeOverflowInterruptEnable = (1U << 8) /*!< Time overflow interrupt.*/
 } tpm_interrupt_enable_t;
 
 /*! @brief List of TPM flags */
 typedef enum _tpm_status_flags
 {
-    kTPM_Chnl0Flag        = (1U << 0), /*!< Channel 0 flag */
-    kTPM_Chnl1Flag        = (1U << 1), /*!< Channel 1 flag */
-    kTPM_Chnl2Flag        = (1U << 2), /*!< Channel 2 flag */
-    kTPM_Chnl3Flag        = (1U << 3), /*!< Channel 3 flag */
-    kTPM_Chnl4Flag        = (1U << 4), /*!< Channel 4 flag */
-    kTPM_Chnl5Flag        = (1U << 5), /*!< Channel 5 flag */
-    kTPM_Chnl6Flag        = (1U << 6), /*!< Channel 6 flag */
-    kTPM_Chnl7Flag        = (1U << 7), /*!< Channel 7 flag */
-    kTPM_TimeOverflowFlag = (1U << 8)  /*!< Time overflow flag */
+    kTPM_Chnl0Flag = (1U << 0),       /*!< Channel 0 flag */
+    kTPM_Chnl1Flag = (1U << 1),       /*!< Channel 1 flag */
+    kTPM_Chnl2Flag = (1U << 2),       /*!< Channel 2 flag */
+    kTPM_Chnl3Flag = (1U << 3),       /*!< Channel 3 flag */
+    kTPM_Chnl4Flag = (1U << 4),       /*!< Channel 4 flag */
+    kTPM_Chnl5Flag = (1U << 5),       /*!< Channel 5 flag */
+    kTPM_Chnl6Flag = (1U << 6),       /*!< Channel 6 flag */
+    kTPM_Chnl7Flag = (1U << 7),       /*!< Channel 7 flag */
+    kTPM_TimeOverflowFlag = (1U << 8) /*!< Time overflow flag */
 } tpm_status_flags_t;
 
 /*******************************************************************************
@@ -527,7 +553,7 @@ static inline void TPM_ClearStatusFlags(TPM_Type *base, uint32_t mask)
 {
 #if defined(FSL_FEATURE_TPM_HAS_NO_STATUS) && FSL_FEATURE_TPM_HAS_NO_STATUS
     uint32_t chnlStatusFlags = (mask & 0xFF);
-    uint8_t chnlNumber       = 0;
+    uint8_t chnlNumber = 0;
 
     /* Clear the timer overflow flag by writing a 0 to the bit while it is set */
     if (mask & kTPM_TimeOverflowFlag)
@@ -638,7 +664,7 @@ static inline void TPM_StopTimer(TPM_Type *base)
     base->SC &= ~(TPM_SC_CMOD_MASK);
 
     /* Wait till this reads as zero acknowledging the counter is disabled */
-    while (0U != (base->SC & TPM_SC_CMOD_MASK))
+    while (base->SC & TPM_SC_CMOD_MASK)
     {
     }
 #endif

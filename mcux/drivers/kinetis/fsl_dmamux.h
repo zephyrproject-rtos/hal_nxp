@@ -1,9 +1,35 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
- * SPDX-License-Identifier: BSD-3-Clause
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef _FSL_DMAMUX_H_
@@ -16,14 +42,15 @@
  * @{
  */
 
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief DMAMUX driver version 2.0.3. */
-#define FSL_DMAMUX_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief DMAMUX driver version 2.0.2. */
+#define FSL_DMAMUX_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*******************************************************************************
@@ -74,7 +101,7 @@ void DMAMUX_Deinit(DMAMUX_Type *base);
  */
 static inline void DMAMUX_EnableChannel(DMAMUX_Type *base, uint32_t channel)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
     base->CHCFG[channel] |= DMAMUX_CHCFG_ENBL_MASK;
 }
@@ -90,9 +117,9 @@ static inline void DMAMUX_EnableChannel(DMAMUX_Type *base, uint32_t channel)
  */
 static inline void DMAMUX_DisableChannel(DMAMUX_Type *base, uint32_t channel)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
-    base->CHCFG[channel] &= ~(uint8_t)DMAMUX_CHCFG_ENBL_MASK;
+    base->CHCFG[channel] &= ~DMAMUX_CHCFG_ENBL_MASK;
 }
 
 /*!
@@ -104,9 +131,9 @@ static inline void DMAMUX_DisableChannel(DMAMUX_Type *base, uint32_t channel)
  */
 static inline void DMAMUX_SetSource(DMAMUX_Type *base, uint32_t channel, uint32_t source)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
-    base->CHCFG[channel] = (uint8_t)((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE(source));
+    base->CHCFG[channel] = ((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE(source));
 }
 
 #if defined(FSL_FEATURE_DMAMUX_HAS_TRIG) && FSL_FEATURE_DMAMUX_HAS_TRIG > 0U
@@ -120,7 +147,7 @@ static inline void DMAMUX_SetSource(DMAMUX_Type *base, uint32_t channel, uint32_
  */
 static inline void DMAMUX_EnablePeriodTrigger(DMAMUX_Type *base, uint32_t channel)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
     base->CHCFG[channel] |= DMAMUX_CHCFG_TRIG_MASK;
 }
@@ -135,9 +162,9 @@ static inline void DMAMUX_EnablePeriodTrigger(DMAMUX_Type *base, uint32_t channe
  */
 static inline void DMAMUX_DisablePeriodTrigger(DMAMUX_Type *base, uint32_t channel)
 {
-    assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
+    assert(channel < FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
-    base->CHCFG[channel] &= ~(uint8_t)DMAMUX_CHCFG_TRIG_MASK;
+    base->CHCFG[channel] &= ~DMAMUX_CHCFG_TRIG_MASK;
 }
 #endif /* FSL_FEATURE_DMAMUX_HAS_TRIG */
 

@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -31,8 +35,14 @@
 #include "fsl_spi.h"
 
 /*******************************************************************************
- * Definitons
+ * Definitions
  ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.spi"
+#endif
+
 /*! @brief SPI transfer state, which is used for SPI transactiaonl APIs' internal state. */
 enum _spi_transfer_states_t
 {
@@ -46,12 +56,6 @@ typedef void (*spi_isr_t)(SPI_Type *base, spi_master_handle_t *spiHandle);
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-/*!
- * @brief Get the instance for SPI module.
- *
- * @param base SPI base address
- */
-uint32_t SPI_GetInstance(SPI_Type *base);
 
 /*!
  * @brief Sends a buffer of data bytes in non-blocking way.
@@ -128,6 +132,8 @@ static const clock_ip_name_t s_spiClock[] = SPI_CLOCKS;
 static spi_isr_t s_spiMasterIsr;
 static spi_isr_t s_spiSlaveIsr;
 
+/* @brief Dummy data for each instance. This data is used when user's tx buffer is NULL*/
+volatile uint8_t g_spiDummyData[ARRAY_SIZE(s_spiBases)] = {0};
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -149,10 +155,17 @@ uint32_t SPI_GetInstance(SPI_Type *base)
     return instance;
 }
 
+void SPI_SetDummyData(SPI_Type *base, uint8_t dummyData)
+{
+    uint32_t instance = SPI_GetInstance(base);
+    g_spiDummyData[instance] = dummyData;
+}
+
 static void SPI_WriteNonBlocking(SPI_Type *base, uint8_t *buffer, size_t size)
 {
     uint32_t i = 0;
     uint8_t bytesPerFrame = 1U;
+    uint32_t instance = SPI_GetInstance(base);
 
 #if defined(FSL_FEATURE_SPI_16BIT_TRANSFERS) && FSL_FEATURE_SPI_16BIT_TRANSFERS
     /* Check if 16 bits or 8 bits */
@@ -182,7 +195,7 @@ static void SPI_WriteNonBlocking(SPI_Type *base, uint8_t *buffer, size_t size)
         /* Send dummy data */
         else
         {
-            SPI_WriteData(base, SPI_DUMMYDATA);
+            SPI_WriteData(base, ((uint32_t)g_spiDummyData[instance] << 8 | g_spiDummyData[instance]));
         }
         i += bytesPerFrame;
     }
@@ -226,6 +239,7 @@ static void SPI_ReadNonBlocking(SPI_Type *base, uint8_t *buffer, size_t size)
     }
 }
 
+/* Get the watermark value of transfer. Please note that the entery width of FIFO is 16 bits. */
 static uint8_t SPI_GetWatermark(SPI_Type *base)
 {
     uint8_t ret = 0;
@@ -262,7 +276,11 @@ static void SPI_SendInitialTransfer(SPI_Type *base, spi_master_handle_t *handle)
 #if defined(FSL_FEATURE_SPI_HAS_FIFO) && (FSL_FEATURE_SPI_HAS_FIFO)
     if (handle->watermark > 1)
     {
-        bytestoTransfer = 2 * handle->watermark;
+        /* In the first time to send data to FIFO, if transfer size is not larger than
+         * the FIFO size, send all data to FIFO, or send data to make the FIFO full.
+         * Besides, The FIFO's entry width is 16 bits, need to translate it to bytes.
+         */
+        bytestoTransfer = MIN(handle->txRemainingBytes, (FSL_FEATURE_SPI_FIFO_SIZEn(base) * 2));
     }
 #endif
 
@@ -319,6 +337,7 @@ static void SPI_SendTransfer(SPI_Type *base, spi_master_handle_t *handle)
     /* If use FIFO */
     else
     {
+        /* The FIFO's entry width is 16 bits, need to translate it to bytes. */
         uint8_t bytestoTransfer = handle->watermark * 2;
 
         if (handle->txRemainingBytes < 8U)
@@ -443,6 +462,9 @@ void SPI_MasterInit(SPI_Type *base, const spi_master_config_t *config, uint32_t 
     /* Set baud rate */
     SPI_MasterSetBaudRate(base, config->baudRate_Bps, srcClock_Hz);
 
+    /* Set the dummy data, this data will usefull when tx buffer is NULL. */
+    SPI_SetDummyData(base, SPI_DUMMYDATA);
+
     /* Enable SPI */
     if (config->enableMaster)
     {
@@ -466,6 +488,7 @@ void SPI_SlaveGetDefaultConfig(spi_slave_config_t *config)
     config->txWatermark = kSPI_TxFifoOneHalfEmpty;
     config->rxWatermark = kSPI_RxFifoOneHalfFull;
 #endif /* FSL_FEATURE_SPI_HAS_FIFO */
+    config->pinMode = kSPI_PinModeNormal;
 }
 
 void SPI_SlaveInit(SPI_Type *base, const spi_slave_config_t *config)
@@ -486,9 +509,11 @@ void SPI_SlaveInit(SPI_Type *base, const spi_slave_config_t *config)
 
 /* Configure data mode if needed */
 #if defined(FSL_FEATURE_SPI_16BIT_TRANSFERS) && FSL_FEATURE_SPI_16BIT_TRANSFERS
-    base->C2 = SPI_C2_SPIMODE(config->dataMode) | SPI_C2_SPISWAI(config->enableStopInWaitMode);
+    base->C2 = SPI_C2_SPIMODE(config->dataMode) | SPI_C2_SPISWAI(config->enableStopInWaitMode) |
+               SPI_C2_BIDIROE(config->pinMode >> 1U) | SPI_C2_SPC0(config->pinMode & 1U);
 #else
-    base->C2 = SPI_C2_SPISWAI(config->enableStopInWaitMode);
+    base->C2 = SPI_C2_SPISWAI(config->enableStopInWaitMode) | SPI_C2_BIDIROE(config->pinMode >> 1U) |
+               SPI_C2_SPC0(config->pinMode & 1U);
 #endif /* FSL_FEATURE_SPI_16BIT_TRANSFERS */
 
 /* Set watermark */
@@ -499,6 +524,9 @@ void SPI_SlaveInit(SPI_Type *base, const spi_slave_config_t *config)
                    SPI_C3_INTCLR(0U) | SPI_C3_FIFOMODE(1U);
     }
 #endif /* FSL_FEATURE_SPI_HAS_FIFO */
+
+    /* Set the dummy data, this data will usefull when tx buffer is NULL. */
+    SPI_SetDummyData(base, SPI_DUMMYDATA);
 
     /* Enable SPI */
     if (config->enableSlave)
@@ -744,10 +772,6 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
     bytesPerFrame = ((base->C2 & SPI_C2_SPIMODE_MASK) >> SPI_C2_SPIMODE_SHIFT) + 1U;
 #endif
 
-    /* Disable SPI and then enable it, this is used to clear S register */
-    base->C1 &= ~SPI_C1_SPE_MASK;
-    base->C1 |= SPI_C1_SPE_MASK;
-
 #if defined(FSL_FEATURE_SPI_HAS_FIFO) && FSL_FEATURE_SPI_HAS_FIFO
 
     /* Disable FIFO, as the FIFO may cause data loss if the data size is not integer
@@ -845,10 +869,6 @@ status_t SPI_MasterTransferNonBlocking(SPI_Type *base, spi_master_handle_t *hand
     /* Set the SPI state to busy */
     handle->state = kSPI_Busy;
 
-    /* Disable SPI and then enable it, this is used to clear S register*/
-    base->C1 &= ~SPI_C1_SPE_MASK;
-    base->C1 |= SPI_C1_SPE_MASK;
-
 /* Enable Interrupt, only enable Rx interrupt, use rx interrupt to driver SPI transfer */
 #if defined(FSL_FEATURE_SPI_HAS_FIFO) && FSL_FEATURE_SPI_HAS_FIFO
 
@@ -866,7 +886,8 @@ status_t SPI_MasterTransferNonBlocking(SPI_Type *base, spi_master_handle_t *hand
         SPI_EnableFIFO(base, true);
         /* First send a piece of data to Tx Data or FIFO to start a SPI transfer */
         while ((base->S & SPI_S_TNEAREF_MASK) != SPI_S_TNEAREF_MASK)
-            ;
+        {
+        }
         SPI_SendInitialTransfer(base, handle);
         /* Enable Rx near full interrupt */
         SPI_EnableInterrupts(base, kSPI_RxFifoNearFullInterruptEnable);
@@ -875,14 +896,16 @@ status_t SPI_MasterTransferNonBlocking(SPI_Type *base, spi_master_handle_t *hand
     {
         SPI_EnableFIFO(base, false);
         while ((base->S & SPI_S_SPTEF_MASK) != SPI_S_SPTEF_MASK)
-            ;
+        {
+        }
         /* First send a piece of data to Tx Data or FIFO to start a SPI transfer */
         SPI_SendInitialTransfer(base, handle);
         SPI_EnableInterrupts(base, kSPI_RxFullAndModfInterruptEnable);
     }
 #else
     while ((base->S & SPI_S_SPTEF_MASK) != SPI_S_SPTEF_MASK)
-        ;
+    {
+    }
     /* First send a piece of data to Tx Data or FIFO to start a SPI transfer */
     SPI_SendInitialTransfer(base, handle);
     SPI_EnableInterrupts(base, kSPI_RxFullAndModfInterruptEnable);
@@ -1024,6 +1047,11 @@ static void SPI_CommonIRQHandler(SPI_Type *base, uint32_t instance)
     {
         s_spiSlaveIsr(base, s_spiHandle[instance]);
     }
+/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
+  exception return operation might vector to incorrect interrupt */
+#if defined __CORTEX_M && (__CORTEX_M == 4U)
+    __DSB();
+#endif
 }
 
 #if defined(SPI0)

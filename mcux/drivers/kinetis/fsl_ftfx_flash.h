@@ -1,9 +1,37 @@
 /*
+* The Clear BSD License
 * Copyright 2013-2016 Freescale Semiconductor, Inc.
 * Copyright 2016-2018 NXP
 * All rights reserved.
 *
-* SPDX-License-Identifier: BSD-3-Clause
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted (subject to the limitations in the
+* disclaimer below) provided that the following conditions are met:
+*
+* * Redistributions of source code must retain the above copyright
+*   notice, this list of conditions and the following disclaimer.
+*
+* * Redistributions in binary form must reproduce the above copyright
+*   notice, this list of conditions and the following disclaimer in the
+*   documentation and/or other materials provided with the distribution.
+*
+* * Neither the name of the copyright holder nor the names of its
+*   contributors may be used to endorse or promote products derived from
+*   this software without specific prior written permission.
+*
+* NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE
+* GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
+* HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+* WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+* BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+* WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+* OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+* IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 */
 
@@ -27,11 +55,16 @@
  * @{
  */
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(3U, 0U, 0U)) /*!< Version 3.0.0. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(3, 0, 0)) /*!< Version 3.0.0. */
 
 /*! @brief Flash driver version for ROM*/
-#define FSL_FLASH_DRIVER_VERSION_ROM (MAKE_VERSION(3U, 0U, 0U)) /*!< Version 3.0.0. */
-
+enum _flash_driver_version_constants
+{
+    kFLASH_DriverVersionName = 'F', /*!< Flash driver version name.*/
+    kFLASH_DriverVersionMajor = 3,  /*!< Major flash driver version.*/
+    kFLASH_DriverVersionMinor = 0,  /*!< Minor flash driver version.*/
+    kFLASH_DriverVersionBugfix = 0  /*!< Bugfix for flash driver version.*/
+};
 /*@}*/
 
 /*!
@@ -45,6 +78,16 @@ typedef enum _flash_protection_state
 } flash_prot_state_t;
 
 /*!
+ * @brief Enumeration for the three possible flash execute access levels.
+ */
+typedef enum _flash_execute_only_access_state
+{
+    kFLASH_AccessStateUnLimited,   /*!< Flash region is unlimited.*/
+    kFLASH_AccessStateExecuteOnly, /*!< Flash region is execute only.*/
+    kFLASH_AccessStateMixed        /*!< Flash is mixed with unlimited and execute only region.*/
+} flash_xacc_state_t;
+
+/*!
  * @brief PFlash protection status
  */
 typedef union _pflash_protection_status
@@ -55,18 +98,6 @@ typedef union _pflash_protection_status
     uint8_t protsh; /*!< PROTS[15:8] .*/
     uint8_t reserved[2];
 } pflash_prot_status_t;
-
-#if defined(FSL_FEATURE_FLASH_HAS_ACCESS_CONTROL) && FSL_FEATURE_FLASH_HAS_ACCESS_CONTROL
-/*!
- * @brief Enumeration for the three possible flash execute access levels.
- */
-typedef enum _flash_execute_only_access_state
-{
-    kFLASH_AccessStateUnLimited,   /*!< Flash region is unlimited.*/
-    kFLASH_AccessStateExecuteOnly, /*!< Flash region is execute only.*/
-    kFLASH_AccessStateMixed        /*!< Flash is mixed with unlimited and execute only region.*/
-} flash_xacc_state_t;
-#endif /* not define FSL_FEATURE_FLASH_HAS_ACCESS_CONTROL */
 
 /*!
  * @brief Enumeration for various flash properties.
@@ -239,27 +270,6 @@ status_t FLASH_Program(flash_config_t *config,
                        uint32_t lengthInBytes);
 
 /*!
- * @brief Reads the Program Once Field through parameters.
- *
- * This function reads the read once feild with given index and length.
- *
- * @param config A pointer to the storage for the driver runtime state.
- * @param index The index indicating the area of program once field to be read.
- * @param dst A pointer to the destination buffer of data that is used to store
- *        data to be read.
- * @param lengthInBytes The length, given in bytes (not words or long-words),
- *        to be programmed. Must be word-aligned.
- *
- * @retval #kStatus_FTFx_Success API was executed successfully.
- * @retval #kStatus_FTFx_InvalidArgument An invalid argument is provided.
- * @retval #kStatus_FTFx_ExecuteInRamFunctionNotReady Execute-in-RAM function is not available.
- * @retval #kStatus_FTFx_AccessError Invalid instruction codes and out-of bounds addresses.
- * @retval #kStatus_FTFx_ProtectionViolation The program/erase operation is requested to execute on protected areas.
- * @retval #kStatus_FTFx_CommandFailure Run-time error during the command execution.
- */
-status_t FLASH_ProgramOnce(ftfx_config_t *config, uint32_t index, uint8_t *dst, uint32_t lengthInBytes);
-
-/*!
  * @brief Programs flash with data at locations passed in through parameters via the Program Section command.
  *
  * This function programs the flash memory with the desired data for a given
@@ -329,27 +339,6 @@ status_t FLASH_ReadResource(flash_config_t *config,
                             ftfx_read_resource_opt_t option);
 #endif
 
-/*!
- * @brief Reads the Program Once Field through parameters.
- *
- * This function reads the read once feild with given index and length.
- *
- * @param config A pointer to the storage for the driver runtime state.
- * @param index The index indicating the area of program once field to be read.
- * @param dst A pointer to the destination buffer of data that is used to store
- *        data to be read.
- * @param lengthInBytes The length, given in bytes (not words or long-words),
- *        to be programmed. Must be word-aligned.
- *
- * @retval #kStatus_FTFx_Success API was executed successfully.
- * @retval #kStatus_FTFx_InvalidArgument An invalid argument is provided.
- * @retval #kStatus_FTFx_ExecuteInRamFunctionNotReady Execute-in-RAM function is not available.
- * @retval #kStatus_FTFx_AccessError Invalid instruction codes and out-of bounds addresses.
- * @retval #kStatus_FTFx_ProtectionViolation The program/erase operation is requested to execute on protected areas.
- * @retval #kStatus_FTFx_CommandFailure Run-time error during the command execution.
- */
-status_t FLASH_ReadOnce(ftfx_config_t *config, uint32_t index, uint8_t *dst, uint32_t lengthInBytes);
-
 /*@}*/
 
 /*!
@@ -406,7 +395,7 @@ status_t FLASH_VerifyEraseAll(flash_config_t *config, ftfx_margin_value_t margin
 /*!
  * @brief Verifies programming of the desired flash area at a specified margin level.
  *
- * This function verifies the data programmed in the flash memory using the
+ * This function verifies the data programed in the flash memory using the
  * Flash Program Check Command and compares it to the expected data for a given
  * flash area as determined by the start address and length.
  *
@@ -525,7 +514,7 @@ status_t FLASH_SetFlexramFunction(flash_config_t *config, ftfx_flexram_func_opt_
  * @retval #kStatus_FTFx_AccessError Invalid instruction codes and out-of bounds addresses.
  * @retval #kStatus_FTFx_ProtectionViolation The program/erase operation is requested to execute on protected areas.
  * @retval #kStatus_FTFx_CommandFailure Run-time error during command execution.
- * @retval #kStatus_FTFx_SwapSystemNotInUninitialized Swap system is not in an uninitialized state.
+ * @retval #kStatus_FTFx_SwapSystemNotInUninitialized Swap system is not in an uninitialzed state.
  */
 #if defined(FSL_FEATURE_FLASH_HAS_PFLASH_BLOCK_SWAP) && FSL_FEATURE_FLASH_HAS_PFLASH_BLOCK_SWAP
 status_t FLASH_Swap(flash_config_t *config, uint32_t address, bool isSetEnable);
@@ -579,12 +568,10 @@ status_t FLASH_IsProtected(flash_config_t *config,
  * @retval #kStatus_FTFx_AlignmentError The parameter is not aligned to the specified baseline.
  * @retval #kStatus_FTFx_AddressError The address is out of range.
  */
-#if defined(FSL_FEATURE_FLASH_HAS_ACCESS_CONTROL) && FSL_FEATURE_FLASH_HAS_ACCESS_CONTROL
 status_t FLASH_IsExecuteOnly(flash_config_t *config,
                              uint32_t start,
                              uint32_t lengthInBytes,
                              flash_xacc_state_t *access_state);
-#endif /* not define FSL_FEATURE_FLASH_HAS_ACCESS_CONTROL */
 
 /*!
  * @brief Sets the PFlash Protection to the intended protection status.

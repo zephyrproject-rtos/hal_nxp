@@ -1,9 +1,35 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
- * SPDX-License-Identifier: BSD-3-Clause
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #ifndef _FSL_LLWU_H_
 #define _FSL_LLWU_H_
@@ -19,8 +45,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LLWU driver version 2.0.2. */
-#define FSL_LLWU_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief LLWU driver version 2.0.1. */
+#define FSL_LLWU_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*!
@@ -28,10 +54,10 @@
  */
 typedef enum _llwu_external_pin_mode
 {
-    kLLWU_ExternalPinDisable     = 0U, /*!< Pin disabled as a wakeup input.           */
-    kLLWU_ExternalPinRisingEdge  = 1U, /*!< Pin enabled with the rising edge detection. */
+    kLLWU_ExternalPinDisable = 0U,     /*!< Pin disabled as a wakeup input.           */
+    kLLWU_ExternalPinRisingEdge = 1U,  /*!< Pin enabled with the rising edge detection. */
     kLLWU_ExternalPinFallingEdge = 2U, /*!< Pin enabled with the falling edge detection.*/
-    kLLWU_ExternalPinAnyEdge     = 3U  /*!< Pin enabled with any change detection.  */
+    kLLWU_ExternalPinAnyEdge = 3U      /*!< Pin enabled with any change detection.  */
 } llwu_external_pin_mode_t;
 
 /*!
@@ -39,10 +65,10 @@ typedef enum _llwu_external_pin_mode
  */
 typedef enum _llwu_pin_filter_mode
 {
-    kLLWU_PinFilterDisable     = 0U, /*!< Filter disabled.               */
-    kLLWU_PinFilterRisingEdge  = 1U, /*!< Filter positive edge detection.*/
+    kLLWU_PinFilterDisable = 0U,     /*!< Filter disabled.               */
+    kLLWU_PinFilterRisingEdge = 1U,  /*!< Filter positive edge detection.*/
     kLLWU_PinFilterFallingEdge = 2U, /*!< Filter negative edge detection.*/
-    kLLWU_PinFilterAnyEdge     = 3U  /*!< Filter any edge detection.     */
+    kLLWU_PinFilterAnyEdge = 3U      /*!< Filter any edge detection.     */
 } llwu_pin_filter_mode_t;
 
 #if (defined(FSL_FEATURE_LLWU_HAS_VERID) && FSL_FEATURE_LLWU_HAS_VERID)
@@ -197,9 +223,9 @@ static inline void LLWU_EnableInternalModuleInterruptWakup(LLWU_Type *base, uint
 #else /* 8-bit LLUW. */
 #if (defined(FSL_FEATURE_LLWU_HAS_MF) && FSL_FEATURE_LLWU_HAS_MF)
 #define INTERNAL_WAKEUP_MODULE_FLAG_REG MF5
-#elif (defined(FSL_FEATURE_LLWU_HAS_PF) && FSL_FEATURE_LLWU_HAS_PF)
+#elif(defined(FSL_FEATURE_LLWU_HAS_PF) && FSL_FEATURE_LLWU_HAS_PF)
 #define INTERNAL_WAKEUP_MODULE_FLAG_REG PF3
-#elif (!(defined(FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN) && (FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN > 16)))
+#elif(!(defined(FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN) && (FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN > 16)))
 #define INTERNAL_WAKEUP_MODULE_FLAG_REG F3
 #else
 #error "Unsupported internal module flag register."
@@ -290,7 +316,7 @@ void LLWU_ClearPinFilterFlag(LLWU_Type *base, uint32_t filterIndex);
  * @param pinEnable       Enable reset the pin filter
  * @param pinFilterEnable Specify whether the pin filter is enabled in Low-Leakage power mode.
  */
-void LLWU_SetResetPinMode(LLWU_Type *base, bool pinEnable, bool pinFilterEnable);
+void LLWU_SetResetPinMode(LLWU_Type *base, bool pinEnable, bool enableInLowLeakageMode);
 #endif /* FSL_FEATURE_LLWU_HAS_RESET_ENABLE */
 
 /*@}*/

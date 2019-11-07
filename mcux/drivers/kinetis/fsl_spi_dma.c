@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -31,8 +35,14 @@
 #include "fsl_spi_dma.h"
 
 /*******************************************************************************
- * Definitons
+ * Definitions
  ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.spi_dma"
+#endif
+
 /*<! Structure definition for spi_dma_private_handle_t. The structure is private. */
 typedef struct _spi_dma_private_handle
 {
@@ -53,13 +63,6 @@ static spi_dma_private_handle_t s_dmaPrivateHandle[FSL_FEATURE_SOC_SPI_COUNT];
  * Prototypes
  ******************************************************************************/
 /*!
- * @brief Get the instance for SPI module.
- *
- * @param base SPI base address
- */
-extern uint32_t SPI_GetInstance(SPI_Type *base);
-
-/*!
  * @brief DMA callback function for SPI send transfer.
  *
  * @param handle DMA handle pointer.
@@ -74,13 +77,6 @@ static void SPI_TxDMACallback(dma_handle_t *handle, void *userData);
  * @param userData User data for DMA callback function.
  */
 static void SPI_RxDMACallback(dma_handle_t *handle, void *userData);
-
-/*******************************************************************************
- * Variables
- ******************************************************************************/
-
-/* Dummy data used to send */
-static const uint8_t s_dummyData = SPI_DUMMYDATA;
 
 /*******************************************************************************
 * Code
@@ -228,11 +224,11 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
     {
         return kStatus_InvalidArgument;
     }
-    
+
     /* Disable SPI and then enable it, this is used to clear S register*/
     SPI_Enable(base, false);
     SPI_Enable(base, true);
-    
+
     /* Configure tx transfer DMA */
     config.destAddr = SPI_GetDataRegisterAddress(base);
     config.enableDestIncrement = false;
@@ -257,7 +253,7 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
     {
         /* Disable the source increasement and source set to dummyData */
         config.enableSrcIncrement = false;
-        config.srcAddr = (uint32_t)(&s_dummyData);
+        config.srcAddr = (uint32_t)(&g_spiDummyData[SPI_GetInstance(base)]);
     }
     DMA_SubmitTransfer(handle->txHandle, &config, true);
 
