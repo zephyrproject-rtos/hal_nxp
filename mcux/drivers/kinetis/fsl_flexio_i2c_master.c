@@ -309,6 +309,11 @@ static status_t FLEXIO_I2C_MasterTransferRunStateMachine(FLEXIO_I2C_Type *base,
                     {
                         FLEXIO_I2C_MasterDisableInterrupts(base, kFLEXIO_I2C_RxFullInterruptEnable);
                         handle->state = kFLEXIO_I2C_Idle;
+                        /* Return nak if ReceiveNakFlag is not set */
+                        if ((statusFlags & kFLEXIO_I2C_ReceiveNakFlag) == 0)
+                        {
+                            return kStatus_FLEXIO_I2C_Nak;
+                        }
                     }
 
                     /* Send nak at the last receive byte. */
@@ -352,6 +357,32 @@ static void FLEXIO_I2C_MasterTransferComplete(FLEXIO_I2C_Type *base,
         handle->completionCallback(base, handle, status, handle->userData);
     }
 }
+
+#if defined(FSL_FEATURE_FLEXIO_HAS_PIN_STATUS) && FSL_FEATURE_FLEXIO_HAS_PIN_STATUS
+/*!
+ * brief Make sure the bus isn't already pulled down.
+ *
+ * Check the FLEXIO pin status to see whether either of SDA and SCL pin is pulled down.
+ *
+ * param base Pointer to FLEXIO_I2C_Type structure..
+ * retval #kStatus_Success
+ * retval #kStatus_FLEXIO_I2C_Busy
+ */
+status_t FLEXIO_I2C_CheckForBusyBus(FLEXIO_I2C_Type *base)
+{
+    uint32_t mask;
+    /* If in 100 loops the SDA/SCL is continuously pulled down, then return bus busy status. */
+    for (uint32_t i = 0U; i < 100; ++i)
+    {
+        mask = 1U << base->SDAPinIndex | 1U << base->SCLPinIndex;
+        if ((FLEXIO_ReadPinInput(base->flexioBase) & mask) == mask)
+        {
+            return kStatus_Success;
+        }
+    }
+    return kStatus_FLEXIO_I2C_Busy;
+}
+#endif /*FSL_FEATURE_FLEXIO_HAS_PIN_STATUS*/
 
 /*!
  * brief Ungates the FlexIO clock, resets the FlexIO module, and configures the FlexIO I2C
@@ -852,6 +883,15 @@ status_t FLEXIO_I2C_MasterTransferBlocking(FLEXIO_I2C_Type *base, flexio_i2c_mas
 {
     assert(xfer);
 
+#if defined(FSL_FEATURE_FLEXIO_HAS_PIN_STATUS) && FSL_FEATURE_FLEXIO_HAS_PIN_STATUS
+    /* Return an error if the bus is already in use not by us.*/
+    status_t status = FLEXIO_I2C_CheckForBusyBus(base);
+    if (status)
+    {
+        return status;
+    }
+#endif /*FSL_FEATURE_FLEXIO_HAS_PIN_STATUS*/
+
     flexio_i2c_master_handle_t tmpHandle;
     uint32_t statusFlags;
     uint32_t result = kStatus_Success;
@@ -874,8 +914,9 @@ status_t FLEXIO_I2C_MasterTransferBlocking(FLEXIO_I2C_Type *base, flexio_i2c_mas
 
     } while ((tmpHandle.state != kFLEXIO_I2C_Idle) && (result == kStatus_Success));
 
-    /* Timer disable on timer compare, wait until bit clock TSF set, which means timer disable and stop has been sent. */
-    while(0U == (FLEXIO_GetTimerStatusFlags(base->flexioBase) & (1 << base->timerIndex[0])))
+    /* Timer disable on timer compare, wait until bit clock TSF set, which means timer disable and stop has been sent.
+     */
+    while (0U == (FLEXIO_GetTimerStatusFlags(base->flexioBase) & (1 << base->timerIndex[0])))
     {
     }
 
@@ -935,6 +976,15 @@ status_t FLEXIO_I2C_MasterTransferNonBlocking(FLEXIO_I2C_Type *base,
 {
     assert(handle);
     assert(xfer);
+
+#if defined(FSL_FEATURE_FLEXIO_HAS_PIN_STATUS) && FSL_FEATURE_FLEXIO_HAS_PIN_STATUS
+    /* Return an error if the bus is already in use not by us.*/
+    status_t status = FLEXIO_I2C_CheckForBusyBus(base);
+    if (status)
+    {
+        return status;
+    }
+#endif /*FSL_FEATURE_FLEXIO_HAS_PIN_STATUS*/
 
     if (handle->state != kFLEXIO_I2C_Idle)
     {

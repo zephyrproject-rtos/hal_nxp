@@ -1,13 +1,13 @@
 /*
-* Copyright 2017-2018 NXP
-* All rights reserved.
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*
-*/
+ * Copyright 2017-2019 NXP
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ */
 
-#ifndef _FSL_FTFX_FEATURES_H_
-#define _FSL_FTFX_FEATURES_H_
+#ifndef FSL_FTFX_FEATURES_H
+#define FSL_FTFX_FEATURES_H
 
 #if (defined(BL_TARGET_FLASH) || defined(BL_TARGET_ROM) || defined(BL_TARGET_RAM))
 #include <assert.h>
@@ -85,5 +85,4 @@
 #define FTFx_FLASH1_IS_INDEPENDENT_BLOCK (0)
 #endif
 
-#endif /* _FSL_FTFX_FEATURES_H_ */
-
+#endif /* FSL_FTFX_FEATURES_H */

@@ -1,31 +1,9 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
+ * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_dma.h"
@@ -33,6 +11,11 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.dma"
+#endif
 
 /*******************************************************************************
  * Prototypes
@@ -84,6 +67,13 @@ static uint32_t DMA_GetInstance(DMA_Type *base)
     return instance;
 }
 
+/*!
+ * brief Initializes the DMA peripheral.
+ *
+ * This function ungates the DMA clock.
+ *
+ * param base DMA peripheral base address.
+ */
 void DMA_Init(DMA_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -91,6 +81,13 @@ void DMA_Init(DMA_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
+/*!
+ * brief Deinitializes the DMA peripheral.
+ *
+ * This function gates the DMA clock.
+ *
+ * param base DMA peripheral base address.
+ */
 void DMA_Deinit(DMA_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -98,6 +95,15 @@ void DMA_Deinit(DMA_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
+/*!
+ * brief Resets the DMA channel.
+ *
+ * Sets all register values to reset values and enables
+ * the cycle steal and auto stop channel request features.
+ *
+ * param base DMA peripheral base address.
+ * param channel DMA channel number.
+ */
 void DMA_ResetChannel(DMA_Type *base, uint32_t channel)
 {
     assert(channel < FSL_FEATURE_DMA_MODULE_CHANNEL);
@@ -105,13 +111,37 @@ void DMA_ResetChannel(DMA_Type *base, uint32_t channel)
     /* clear all status bit */
     base->DMA[channel].DSR_BCR |= DMA_DSR_BCR_DONE(true);
     /* clear all registers */
-    base->DMA[channel].SAR = 0;
-    base->DMA[channel].DAR = 0;
+    base->DMA[channel].SAR     = 0;
+    base->DMA[channel].DAR     = 0;
     base->DMA[channel].DSR_BCR = 0;
     /* enable cycle steal and enable auto disable channel request */
     base->DMA[channel].DCR = DMA_DCR_D_REQ(true) | DMA_DCR_CS(true);
 }
 
+/*!
+ * brief Configures the DMA transfer attribute.
+ *
+ * This function configures the transfer attribute including the source address,
+ * destination address, transfer size, and so on.
+ * This example shows how to set up the dma_transfer_config_t
+ * parameters and how to call the DMA_ConfigBasicTransfer function.
+ * code
+ *   dma_transfer_config_t transferConfig;
+ *   memset(&transferConfig, 0, sizeof(transferConfig));
+ *   transferConfig.srcAddr = (uint32_t)srcAddr;
+ *   transferConfig.destAddr = (uint32_t)destAddr;
+ *   transferConfig.enbaleSrcIncrement = true;
+ *   transferConfig.enableDestIncrement = true;
+ *   transferConfig.srcSize = kDMA_Transfersize32bits;
+ *   transferConfig.destSize = kDMA_Transfersize32bits;
+ *   transferConfig.transferSize = sizeof(uint32_t) * BUFF_LENGTH;
+ *   DMA_SetTransferConfig(DMA0, 0, &transferConfig);
+ * endcode
+ *
+ * param base DMA peripheral base address.
+ * param channel DMA channel number.
+ * param config Pointer to the DMA transfer configuration structure.
+ */
 void DMA_SetTransferConfig(DMA_Type *base, uint32_t channel, const dma_transfer_config_t *config)
 {
     assert(channel < FSL_FEATURE_DMA_MODULE_CHANNEL);
@@ -133,6 +163,21 @@ void DMA_SetTransferConfig(DMA_Type *base, uint32_t channel, const dma_transfer_
     base->DMA[channel].DCR = tmpreg;
 }
 
+/*!
+ * brief Configures the DMA channel link feature.
+ *
+ * This function allows DMA channels to have their transfers linked. The current DMA channel
+ * triggers a DMA request to the linked channels (LCH1 or LCH2) depending on the channel link
+ * type.
+ * Perform a link to channel LCH1 after each cycle-steal transfer followed by a link to LCH2
+ * after the BCR decrements to 0 if the type is kDMA_ChannelLinkChannel1AndChannel2.
+ * Perform a link to LCH1 after each cycle-steal transfer if the type is kDMA_ChannelLinkChannel1.
+ * Perform a link to LCH1 after the BCR decrements to 0 if the type is kDMA_ChannelLinkChannel1AfterBCR0.
+ *
+ * param base DMA peripheral base address.
+ * param channel DMA channel number.
+ * param config Pointer to the channel link configuration structure.
+ */
 void DMA_SetChannelLinkConfig(DMA_Type *base, uint32_t channel, const dma_channel_link_config_t *config)
 {
     assert(channel < FSL_FEATURE_DMA_MODULE_CHANNEL);
@@ -146,6 +191,18 @@ void DMA_SetChannelLinkConfig(DMA_Type *base, uint32_t channel, const dma_channe
     base->DMA[channel].DCR = tmpreg;
 }
 
+/*!
+ * brief Sets the DMA modulo for the DMA transfer.
+ *
+ * This function defines a specific address range specified to be the value after (SAR + SSIZE)/(DAR + DSIZE)
+ * calculation is performed or the original register value. It provides the ability to implement a circular
+ * data queue easily.
+ *
+ * param base DMA peripheral base address.
+ * param channel DMA channel number.
+ * param srcModulo source address modulo.
+ * param destModulo destination address modulo.
+ */
 void DMA_SetModulo(DMA_Type *base, uint32_t channel, dma_modulo_t srcModulo, dma_modulo_t destModulo)
 {
     assert(channel < FSL_FEATURE_DMA_MODULE_CHANNEL);
@@ -158,6 +215,17 @@ void DMA_SetModulo(DMA_Type *base, uint32_t channel, dma_modulo_t srcModulo, dma
     base->DMA[channel].DCR = tmpreg;
 }
 
+/*!
+ * brief Creates the DMA handle.
+ *
+ * This function is called first if using the transactional API for the DMA. This function
+ * initializes the internal state of the DMA handle.
+ *
+ * param handle DMA handle pointer. The DMA handle stores callback function and
+ *               parameters.
+ * param base DMA peripheral base address.
+ * param channel DMA channel number.
+ */
 void DMA_CreateHandle(dma_handle_t *handle, DMA_Type *base, uint32_t channel)
 {
     assert(handle != NULL);
@@ -169,10 +237,10 @@ void DMA_CreateHandle(dma_handle_t *handle, DMA_Type *base, uint32_t channel)
     /* Zero the handle */
     memset(handle, 0, sizeof(*handle));
 
-    handle->base = base;
+    handle->base    = base;
     handle->channel = channel;
     /* Get the DMA instance number */
-    dmaInstance = DMA_GetInstance(base);
+    dmaInstance  = DMA_GetInstance(base);
     channelIndex = (dmaInstance * FSL_FEATURE_DMA_MODULE_CHANNEL) + channel;
     /* Store handle */
     s_DMAHandle[channelIndex] = handle;
@@ -180,6 +248,19 @@ void DMA_CreateHandle(dma_handle_t *handle, DMA_Type *base, uint32_t channel)
     EnableIRQ(s_dmaIRQNumber[dmaInstance][channelIndex]);
 }
 
+/*!
+ * brief Prepares the DMA transfer configuration structure.
+ *
+ * This function prepares the transfer configuration structure according to the user input.
+ *
+ * param config Pointer to the user configuration structure of type dma_transfer_config_t.
+ * param srcAddr DMA transfer source address.
+ * param srcWidth DMA transfer source address width (byte).
+ * param destAddr DMA transfer destination address.
+ * param destWidth DMA transfer destination address width (byte).
+ * param transferBytes DMA transfer bytes to be transferred.
+ * param type DMA transfer type.
+ */
 void DMA_PrepareTransfer(dma_transfer_config_t *config,
                          void *srcAddr,
                          uint32_t srcWidth,
@@ -194,8 +275,11 @@ void DMA_PrepareTransfer(dma_transfer_config_t *config,
     assert((srcWidth == 1U) || (srcWidth == 2U) || (srcWidth == 4U));
     assert((destWidth == 1U) || (destWidth == 2U) || (destWidth == 4U));
 
-    config->srcAddr = (uint32_t)srcAddr;
-    config->destAddr = (uint32_t)destAddr;
+    /* Initializes the configure structure to zero. */
+    memset(config, 0, sizeof(*config));
+
+    config->srcAddr      = (uint32_t)srcAddr;
+    config->destAddr     = (uint32_t)destAddr;
     config->transferSize = transferBytes;
     switch (srcWidth)
     {
@@ -228,15 +312,15 @@ void DMA_PrepareTransfer(dma_transfer_config_t *config,
     switch (type)
     {
         case kDMA_MemoryToMemory:
-            config->enableSrcIncrement = true;
+            config->enableSrcIncrement  = true;
             config->enableDestIncrement = true;
             break;
         case kDMA_PeripheralToMemory:
-            config->enableSrcIncrement = false;
+            config->enableSrcIncrement  = false;
             config->enableDestIncrement = true;
             break;
         case kDMA_MemoryToPeripheral:
-            config->enableSrcIncrement = true;
+            config->enableSrcIncrement  = true;
             config->enableDestIncrement = false;
             break;
         default:
@@ -244,6 +328,16 @@ void DMA_PrepareTransfer(dma_transfer_config_t *config,
     }
 }
 
+/*!
+ * brief Sets the DMA callback function.
+ *
+ * This callback is called in the DMA IRQ handler. Use the callback to do something
+ * after the current transfer complete.
+ *
+ * param handle DMA handle pointer.
+ * param callback DMA callback function pointer.
+ * param userData Parameter for callback function. If it is not needed, just set to NULL.
+ */
 void DMA_SetCallback(dma_handle_t *handle, dma_callback callback, void *userData)
 {
     assert(handle != NULL);
@@ -252,6 +346,19 @@ void DMA_SetCallback(dma_handle_t *handle, dma_callback callback, void *userData
     handle->userData = userData;
 }
 
+/*!
+ * brief Submits the DMA transfer request.
+ *
+ * This function submits the DMA transfer request according to the transfer configuration structure.
+ *
+ * param handle DMA handle pointer.
+ * param config Pointer to DMA transfer configuration structure.
+ * param options Additional configurations for transfer. Use
+ *                the defined dma_transfer_options_t type.
+ * retval kStatus_DMA_Success It indicates that the DMA submit transfer request succeeded.
+ * retval kStatus_DMA_Busy It indicates that the DMA is busy. Submit transfer request is not allowed.
+ * note This function can't process multi transfer request.
+ */
 status_t DMA_SubmitTransfer(dma_handle_t *handle, const dma_transfer_config_t *config, uint32_t options)
 {
     assert(handle != NULL);
@@ -271,6 +378,14 @@ status_t DMA_SubmitTransfer(dma_handle_t *handle, const dma_transfer_config_t *c
     return kStatus_Success;
 }
 
+/*!
+ * brief DMA aborts a transfer.
+ *
+ * This function disables the channel request and clears all status bits.
+ * Submit another transfer after calling this API.
+ *
+ * param handle DMA handle pointer.
+ */
 void DMA_AbortTransfer(dma_handle_t *handle)
 {
     assert(handle != NULL);
@@ -280,6 +395,14 @@ void DMA_AbortTransfer(dma_handle_t *handle)
     handle->base->DMA[handle->channel].DSR_BCR |= DMA_DSR_BCR_DONE(true);
 }
 
+/*!
+ * brief DMA IRQ handler for current transfer complete.
+ *
+ * This function clears the channel interrupt flag and calls
+ * the callback function if it is not NULL.
+ *
+ * param handle DMA handle pointer.
+ */
 void DMA_HandleIRQ(dma_handle_t *handle)
 {
     assert(handle != NULL);
@@ -296,20 +419,40 @@ void DMA_HandleIRQ(dma_handle_t *handle)
 void DMA0_DriverIRQHandler(void)
 {
     DMA_HandleIRQ(s_DMAHandle[0]);
+/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
+  exception return operation might vector to incorrect interrupt */
+#if defined __CORTEX_M && (__CORTEX_M == 4U)
+    __DSB();
+#endif
 }
 
 void DMA1_DriverIRQHandler(void)
 {
     DMA_HandleIRQ(s_DMAHandle[1]);
+/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
+  exception return operation might vector to incorrect interrupt */
+#if defined __CORTEX_M && (__CORTEX_M == 4U)
+    __DSB();
+#endif
 }
 
 void DMA2_DriverIRQHandler(void)
 {
     DMA_HandleIRQ(s_DMAHandle[2]);
+/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
+  exception return operation might vector to incorrect interrupt */
+#if defined __CORTEX_M && (__CORTEX_M == 4U)
+    __DSB();
+#endif
 }
 
 void DMA3_DriverIRQHandler(void)
 {
     DMA_HandleIRQ(s_DMAHandle[3]);
+/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
+  exception return operation might vector to incorrect interrupt */
+#if defined __CORTEX_M && (__CORTEX_M == 4U)
+    __DSB();
+#endif
 }
 #endif /* FSL_FEATURE_DMA_MODULE_CHANNEL */

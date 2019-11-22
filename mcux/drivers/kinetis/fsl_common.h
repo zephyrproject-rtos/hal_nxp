@@ -38,8 +38,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief common driver version 2.0.1. */
-#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief common driver version 2.1.3. */
+#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*@}*/
 
 /* Debug console type definition. */
@@ -153,10 +153,11 @@ enum _status_groups
     kStatusGroup_SDK_OCOTP = 146,             /*!< Group number for OCOTP status codes. */
     kStatusGroup_SDK_FLEXSPINOR = 147,        /*!< Group number for FLEXSPINOR status codes.*/
     kStatusGroup_CODEC = 148,                 /*!< Group number for codec status codes. */
+    kStatusGroup_ASRC = 149,                 /*!< Group number for codec status ASRC. */
 };
 
 /*! @brief Generic status return codes. */
-enum _generic_status
+enum
 {
     kStatus_Success = MAKE_STATUS(kStatusGroup_Generic, 0),
     kStatus_Fail = MAKE_STATUS(kStatusGroup_Generic, 1),
@@ -207,7 +208,7 @@ typedef int32_t status_t;
 /*! @name Timer utilities */
 /* @{ */
 /*! Macro to convert a microsecond period to raw count value */
-#define USEC_TO_COUNT(us, clockFreqInHz) (uint64_t)((uint64_t)us * clockFreqInHz / 1000000U)
+#define USEC_TO_COUNT(us, clockFreqInHz) (uint64_t)(((uint64_t)(us) * (clockFreqInHz)) / 1000000U)
 /*! Macro to convert a raw count value to microsecond */
 #define COUNT_TO_USEC(count, clockFreqInHz) (uint64_t)((uint64_t)count * 1000000U / clockFreqInHz)
 
@@ -308,6 +309,13 @@ _Pragma("diag_suppress=Pm120")
 #define AT_NONCACHEABLE_SECTION_INIT(var) var
 #define AT_NONCACHEABLE_SECTION_ALIGN_INIT(var, alignbytes) __attribute__((aligned(alignbytes))) var
 #endif
+#elif(defined(__XCC__))
+#define AT_NONCACHEABLE_SECTION_INIT(var) __attribute__((section("NonCacheable.init"))) var
+#define AT_NONCACHEABLE_SECTION_ALIGN_INIT(var, alignbytes) \
+    __attribute__((section("NonCacheable.init"))) var __attribute__((aligned(alignbytes)))
+#define AT_NONCACHEABLE_SECTION(var) __attribute__((section("NonCacheable"))) var
+#define AT_NONCACHEABLE_SECTION_ALIGN(var, alignbytes) \
+    __attribute__((section("NonCacheable"))) var __attribute__((aligned(alignbytes)))
 #elif(defined(__GNUC__))
 /* For GCC, when the non-cacheable section is required, please define "__STARTUP_INITIALIZE_NONCACHEDATA"
  * in your projects to make sure the non-cacheable section variables will be initialized in system startup.
@@ -341,10 +349,10 @@ _Pragma("diag_suppress=Pm120")
 #define AT_QUICKACCESS_SECTION_CODE(func) func @"CodeQuickAccess"
 #define AT_QUICKACCESS_SECTION_DATA(func) func @"DataQuickAccess"
 #elif(defined(__CC_ARM) || defined(__ARMCC_VERSION))
-#define AT_QUICKACCESS_SECTION_CODE(func) __attribute__((section("CodeQuickAccess"))) func
+#define AT_QUICKACCESS_SECTION_CODE(func) __attribute__((section("CodeQuickAccess"), __noinline__)) func
 #define AT_QUICKACCESS_SECTION_DATA(func) __attribute__((section("DataQuickAccess"))) func
 #elif(defined(__GNUC__))
-#define AT_QUICKACCESS_SECTION_CODE(func) __attribute__((section("CodeQuickAccess"))) func
+#define AT_QUICKACCESS_SECTION_CODE(func) __attribute__((section("CodeQuickAccess"), __noinline__)) func
 #define AT_QUICKACCESS_SECTION_DATA(func) __attribute__((section("DataQuickAccess"))) func
 #else
 #error Toolchain not supported.
@@ -375,6 +383,20 @@ _Pragma("diag_suppress=Pm120")
 #else
 #error Toolchain not supported.
 #endif /* defined(__ICCARM__) */
+/* @} */
+
+/*! @name Suppress fallthrough warning macro */
+/* For switch case code block, if case section ends without "break;" statement, there wil be
+ fallthrough warning with compiler flag -Wextra or -Wimplicit-fallthrough=n when using armgcc.
+ To suppress this warning, "SUPPRESS_FALL_THROUGH_WARNING();" need to be added at the end of each
+ case section which misses "break;"statement.
+ */
+/* @{ */
+#if (defined(__GNUC__))
+#define SUPPRESS_FALL_THROUGH_WARNING() __attribute__ ((fallthrough))
+#else
+#define SUPPRESS_FALL_THROUGH_WARNING()
+#endif /* defined(__GNUC__) */
 /* @} */
 
 /*
@@ -539,6 +561,7 @@ _Pragma("diag_suppress=Pm120")
 #endif /* ENABLE_RAM_VECTOR_TABLE. */
 
 #if (defined(FSL_FEATURE_SOC_SYSCON_COUNT) && (FSL_FEATURE_SOC_SYSCON_COUNT > 0))
+#if !(defined(FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS) && FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS)
     /*!
      * @brief Enable specific interrupt for wake-up from deep-sleep mode.
      *
@@ -568,6 +591,7 @@ _Pragma("diag_suppress=Pm120")
      * @param interrupt The IRQ number.
      */
     void DisableDeepSleepIRQ(IRQn_Type interrupt);
+#endif /* FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS */
 #endif /* FSL_FEATURE_SOC_SYSCON_COUNT */
 
     /*!

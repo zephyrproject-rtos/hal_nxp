@@ -134,7 +134,8 @@ uint32_t GPIO_PortGetInterruptFlags(GPIO_Type *base)
     portBase = s_portBases[instance];
     return portBase->ISFR;
 }
-
+#endif
+#if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
 /*!
  * brief Clears multiple GPIO pin interrupt status flags.
  *
@@ -148,6 +149,17 @@ void GPIO_PortClearInterruptFlags(GPIO_Type *base, uint32_t mask)
     instance       = (uint8_t)GPIO_GetInstance(base);
     portBase       = s_portBases[instance];
     portBase->ISFR = mask;
+}
+#else
+/*!
+ * brief Clears GPIO pin interrupt status flags.
+ *
+ * param base GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on.)
+ * param mask GPIO pin number macro
+ */
+void GPIO_GpioClearInterruptFlags(GPIO_Type *base, uint32_t mask)
+{
+    base->ISFR[0] = mask;
 }
 #endif
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -186,8 +186,13 @@ static void I2C_SetHoldTime(I2C_Type *base, uint32_t sclStopHoldTime_ns, uint32_
     /* SCL start hold time = bus period (s) * mul * SCL start hold value. */
     /* SCL stop hold time = bus period (s) * mul * SCL stop hold value. */
 
-    for (mult = 0u; (mult <= 2u) && (bestError != 0u); ++mult)
+    for (mult = 0u; mult <= 2u; ++mult)
     {
+        if (bestError == 0u)
+        {
+            break;
+        }
+
         multiplier = u32flag << mult;
 
         /* Scan table to find best match. */
@@ -301,6 +306,7 @@ static status_t I2C_CheckAndClearError(I2C_Type *base, uint32_t status)
     }
     else
     {
+        /* Add this to fix MISRA C2012 rule15.7 issue: Empty else without comment. */
     }
 
     return result;
@@ -315,6 +321,7 @@ static status_t I2C_MasterTransferRunStateMachine(I2C_Type *base, i2c_master_han
     uint32_t tmpDataSize   = handle->transfer.dataSize;
     bool ignoreNak         = ((handle->state == (uint8_t)kSendDataState) && (tmpDataSize == 0U)) ||
                      ((handle->state == (uint8_t)kReceiveDataState) && (tmpDataSize == 1U));
+    uint8_t tmpdata;
 
     /* Add this to avoid build warning. */
     dummy++;
@@ -463,7 +470,8 @@ static status_t I2C_MasterTransferRunStateMachine(I2C_Type *base, i2c_master_han
                 }
 
                 /* Read the data byte into the transfer buffer. */
-                *handle->transfer.data = base->D;
+                tmpdata                = base->D;
+                *handle->transfer.data = tmpdata;
                 handle->transfer.data++;
 
 #if defined(I2C_MASTER_FACK_CONTROL) && I2C_MASTER_FACK_CONTROL
@@ -494,6 +502,8 @@ static status_t I2C_MasterTransferRunStateMachine(I2C_Type *base, i2c_master_han
             break;
 
         default:
+            /* Add this to fix MISRA C2012 rule 16.4 issue: Empty default. */
+            assert(false);
             break;
     }
 
@@ -595,14 +605,14 @@ void I2C_MasterInit(I2C_Type *base, const i2c_master_config_t *masterConfig, uin
     /* Write the register value back to the filter register. */
     base->FLT = fltReg;
 
-/* Enable/Disable double buffering. */
+    /* Enable the I2C peripheral based on the configuration. */
+    base->C1 = I2C_C1_IICEN(masterConfig->enableMaster);
+
+    /* Enable/Disable double buffering. */
 #if defined(FSL_FEATURE_I2C_HAS_DOUBLE_BUFFER_ENABLE) && FSL_FEATURE_I2C_HAS_DOUBLE_BUFFER_ENABLE
     s2Reg    = (uint8_t)(base->S2 & (~I2C_S2_DFEN_MASK));
     base->S2 = s2Reg | I2C_S2_DFEN(masterConfig->enableDoubleBuffering);
 #endif
-
-    /* Enable the I2C peripheral based on the configuration. */
-    base->C1 = I2C_C1_IICEN(masterConfig->enableMaster);
 }
 
 /*!
@@ -764,8 +774,13 @@ void I2C_MasterSetBaudRate(I2C_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
 
     /* Search for the settings with the lowest error. Mult is the MULT field of the I2C_F register,
      * and ranges from 0-2. It selects the multiplier factor for the divider. */
-    for (mult = 0u; (mult <= 2u) && (bestError != 0u); ++mult)
+    for (mult = 0u; mult <= 2u; ++mult)
     {
+        if (bestError == 0u)
+        {
+            break;
+        }
+
         multiplier = u32flag << mult;
 
         /* Scan table to find best match. */
@@ -1729,6 +1744,8 @@ void I2C_SlaveInit(I2C_Type *base, const i2c_slave_config_t *slaveConfig, uint32
             break;
 
         default:
+            /* All the cases have been listed above, the default clause should not be reached. */
+            assert(false);
             break;
     }
 

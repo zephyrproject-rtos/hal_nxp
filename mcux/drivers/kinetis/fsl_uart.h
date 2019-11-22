@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief UART driver version 2.1.6. */
-#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
+/*! @brief UART driver version 2.1.7. */
+#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 1, 7))
 /*@}*/
 
 /*! @brief Error codes for the UART driver. */
@@ -750,6 +750,32 @@ void UART_TransferAbortReceive(UART_Type *base, uart_handle_t *handle);
  * @retval kStatus_Success Get successfully through the parameter \p count;
  */
 status_t UART_TransferGetReceiveCount(UART_Type *base, uart_handle_t *handle, uint32_t *count);
+
+#if defined(FSL_FEATURE_UART_HAS_FIFO) && FSL_FEATURE_UART_HAS_FIFO
+/*!
+ * @brief Enables or disables the UART Tx FIFO.
+ *
+ * This function enables or disables the UART Tx FIFO.
+ *
+ * param base UART peripheral base address.
+ * param enable true to enable, false to disable.
+ * retval kStatus_Success Successfully turn on or turn off Tx FIFO.
+ * retval kStatus_Fail Fail to turn on or turn off Tx FIFO.
+ */
+status_t UART_EnableTxFIFO(UART_Type *base, bool enable);
+
+/*!
+ * @brief Enables or disables the UART Rx FIFO.
+ *
+ * This function enables or disables the UART Rx FIFO.
+ *
+ * param base UART peripheral base address.
+ * param enable true to enable, false to disable.
+ * retval kStatus_Success Successfully turn on or turn off Rx FIFO.
+ * retval kStatus_Fail Fail to turn on or turn off Rx FIFO.
+ */
+status_t UART_EnableRxFIFO(UART_Type *base, bool enable);
+#endif /* FSL_FEATURE_UART_HAS_FIFO */
 
 /*!
  * @brief UART IRQ handle function.

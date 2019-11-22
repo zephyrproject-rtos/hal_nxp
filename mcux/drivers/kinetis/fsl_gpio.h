@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief GPIO driver version 2.3.2. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @brief GPIO driver version 2.4.0. */
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /*! @brief GPIO direction definition */
@@ -273,7 +273,13 @@ static inline void GPIO_SetPinInterruptConfig(GPIO_Type *base, uint32_t pin, gpi
 
     base->ICR[pin] = (base->ICR[pin] & ~GPIO_ICR_IRQC_MASK) | GPIO_ICR_IRQC(config);
 }
-
+/*!
+ * brief Clears GPIO pin interrupt status flags.
+ *
+ * param base GPIO peripheral base pointer (GPIOA, GPIOB, GPIOC, and so on.)
+ * param mask GPIO pin number macro
+ */
+void GPIO_GpioClearInterruptFlags(GPIO_Type *base, uint32_t mask);
 /*!
  * @brief Reads the GPIO DMA request flags.
  *        The corresponding flag will be cleared automatically at the completion of the requested

@@ -1,31 +1,9 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
+ * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_i2c_dma.h"
@@ -33,6 +11,11 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.i2c_dma"
+#endif
 
 /*<! @brief Structure definition for i2c_master_dma_handle_t. The structure is private. */
 typedef struct _i2c_master_dma_private_handle
@@ -44,7 +27,7 @@ typedef struct _i2c_master_dma_private_handle
 /*! @brief i2c master DMA transfer state. */
 enum _i2c_master_dma_transfer_states
 {
-    kIdleState = 0x0U,         /*!< I2C bus idle. */
+    kIdleState         = 0x0U, /*!< I2C bus idle. */
     kTransferDataState = 0x1U, /*!< 7-bit address check state. */
 };
 
@@ -104,14 +87,6 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
                                                 i2c_master_dma_handle_t *handle,
                                                 i2c_master_transfer_t *xfer);
 
-/*!
- * @brief Get the I2C instance from peripheral base address.
- *
- * @param base I2C peripheral base address.
- * @return I2C instance.
- */
-extern uint32_t I2C_GetInstance(I2C_Type *base);
-
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -126,7 +101,7 @@ static i2c_master_dma_private_handle_t s_dmaPrivateHandle[FSL_FEATURE_SOC_I2C_CO
 static void I2C_MasterTransferCallbackDMA(dma_handle_t *handle, void *userData)
 {
     i2c_master_dma_private_handle_t *i2cPrivateHandle = (i2c_master_dma_private_handle_t *)userData;
-    status_t result = kStatus_Success;
+    status_t result                                   = kStatus_Success;
 
     /* Disable DMA. */
     I2C_EnableDMA(i2cPrivateHandle->base, false);
@@ -201,7 +176,7 @@ static status_t I2C_CheckAndClearError(I2C_Type *base, uint32_t status)
     {
         /* Clear arbitration lost flag. */
         base->S = kI2C_ArbitrationLostFlag;
-        result = kStatus_I2C_ArbitrationLost;
+        result  = kStatus_I2C_ArbitrationLost;
     }
     /* Check NAK */
     else if (status & kI2C_ReceiveNakFlag)
@@ -224,7 +199,7 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
 
     /* Set up transfer first. */
     i2c_direction_t direction = xfer->direction;
-    status_t result = kStatus_Success;
+    status_t result           = kStatus_Success;
 
     if (handle->state != kIdleState)
     {
@@ -316,7 +291,7 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
                     return result;
                 }
 
-            } while ((handle->transfer.subaddressSize > 0) && (result == kStatus_Success));
+            } while (handle->transfer.subaddressSize > 0);
 
             if (handle->transfer.direction == kI2C_Read)
             {
@@ -355,27 +330,27 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
 
 static void I2C_MasterTransferDMAConfig(I2C_Type *base, i2c_master_dma_handle_t *handle)
 {
-    dma_transfer_config_t transfer_config;
+    dma_transfer_config_t transfer_config   = {0};
     dma_transfer_options_t transfer_options = kDMA_EnableInterrupt;
 
     if (handle->transfer.direction == kI2C_Read)
     {
-        transfer_config.srcAddr = (uint32_t)I2C_GetDataRegAddr(base);
-        transfer_config.destAddr = (uint32_t)(handle->transfer.data);
-        transfer_config.transferSize = (handle->transfer.dataSize - 1);
-        transfer_config.srcSize = kDMA_Transfersize8bits;
-        transfer_config.enableSrcIncrement = false;
-        transfer_config.destSize = kDMA_Transfersize8bits;
+        transfer_config.srcAddr             = (uint32_t)I2C_GetDataRegAddr(base);
+        transfer_config.destAddr            = (uint32_t)(handle->transfer.data);
+        transfer_config.transferSize        = (handle->transfer.dataSize - 1);
+        transfer_config.srcSize             = kDMA_Transfersize8bits;
+        transfer_config.enableSrcIncrement  = false;
+        transfer_config.destSize            = kDMA_Transfersize8bits;
         transfer_config.enableDestIncrement = true;
     }
     else
     {
-        transfer_config.srcAddr = (uint32_t)(handle->transfer.data + 1);
-        transfer_config.destAddr = (uint32_t)I2C_GetDataRegAddr(base);
-        transfer_config.transferSize = (handle->transfer.dataSize - 1);
-        transfer_config.srcSize = kDMA_Transfersize8bits;
-        transfer_config.enableSrcIncrement = true;
-        transfer_config.destSize = kDMA_Transfersize8bits;
+        transfer_config.srcAddr             = (uint32_t)(handle->transfer.data + 1);
+        transfer_config.destAddr            = (uint32_t)I2C_GetDataRegAddr(base);
+        transfer_config.transferSize        = (handle->transfer.dataSize - 1);
+        transfer_config.srcSize             = kDMA_Transfersize8bits;
+        transfer_config.enableSrcIncrement  = true;
+        transfer_config.destSize            = kDMA_Transfersize8bits;
         transfer_config.enableDestIncrement = false;
     }
 
@@ -383,6 +358,15 @@ static void I2C_MasterTransferDMAConfig(I2C_Type *base, i2c_master_dma_handle_t 
     DMA_StartTransfer(handle->dmaHandle);
 }
 
+/*!
+ * brief Initializes the I2C handle which is used in transactional functions.
+ *
+ * param base I2C peripheral base address
+ * param handle Pointer to the i2c_master_dma_handle_t structure
+ * param callback Pointer to the user callback function
+ * param userData A user parameter passed to the callback function
+ * param dmaHandle DMA handle pointer
+ */
 void I2C_MasterTransferCreateHandleDMA(I2C_Type *base,
                                        i2c_master_dma_handle_t *handle,
                                        i2c_master_dma_transfer_callback_t callback,
@@ -399,17 +383,29 @@ void I2C_MasterTransferCreateHandleDMA(I2C_Type *base,
 
     /* Set the user callback and userData. */
     handle->completionCallback = callback;
-    handle->userData = userData;
+    handle->userData           = userData;
 
     /* Set the handle for DMA. */
     handle->dmaHandle = dmaHandle;
 
-    s_dmaPrivateHandle[instance].base = base;
+    s_dmaPrivateHandle[instance].base   = base;
     s_dmaPrivateHandle[instance].handle = handle;
 
     DMA_SetCallback(dmaHandle, (dma_callback)I2C_MasterTransferCallbackDMA, &s_dmaPrivateHandle[instance]);
 }
 
+/*!
+ * brief Performs a master DMA non-blocking transfer on the I2C bus.
+ *
+ * param base I2C peripheral base address
+ * param handle A pointer to the i2c_master_dma_handle_t structure
+ * param xfer A pointer to the transfer structure of the i2c_master_transfer_t
+ * retval kStatus_Success Successfully completes the data transmission.
+ * retval kStatus_I2C_Busy A previous transmission is still not finished.
+ * retval kStatus_I2C_Timeout A transfer error, waits for the signal timeout.
+ * retval kStatus_I2C_ArbitrationLost A transfer error, arbitration lost.
+ * retval kStataus_I2C_Nak A transfer error, receives NAK during transfer.
+ */
 status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, i2c_master_transfer_t *xfer)
 {
     assert(handle);
@@ -521,11 +517,24 @@ status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, 
 
         /* Reset the state to idle. */
         handle->state = kIdleState;
+
+        /* Call the callback function after the function has completed. */
+        if (handle->completionCallback)
+        {
+            handle->completionCallback(base, handle, result, handle->userData);
+        }
     }
 
     return result;
 }
 
+/*!
+ * brief Gets a master transfer status during a DMA non-blocking transfer.
+ *
+ * param base I2C peripheral base address
+ * param handle A pointer to the i2c_master_dma_handle_t structure
+ * param count A number of bytes transferred so far by the non-blocking transaction.
+ */
 status_t I2C_MasterTransferGetCountDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, size_t *count)
 {
     assert(handle);
@@ -547,6 +556,12 @@ status_t I2C_MasterTransferGetCountDMA(I2C_Type *base, i2c_master_dma_handle_t *
     return kStatus_Success;
 }
 
+/*!
+ * brief Aborts a master DMA non-blocking transfer early.
+ *
+ * param base I2C peripheral base address
+ * param handle A pointer to the i2c_master_dma_handle_t structure.
+ */
 void I2C_MasterTransferAbortDMA(I2C_Type *base, i2c_master_dma_handle_t *handle)
 {
     DMA_AbortTransfer(handle->dmaHandle);

@@ -1,56 +1,78 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
+ * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_cop.h"
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.cop"
+#endif
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
 
+/*!
+ * brief Initializes the COP configuration structure.
+ *
+ * This function initializes the COP configuration structure to default values. The default
+ * values are:
+ * code
+ *   copConfig->enableWindowMode = false;
+ *   copConfig->timeoutMode = kCOP_LongTimeoutMode;
+ *   copConfig->enableStop = false;
+ *   copConfig->enableDebug = false;
+ *   copConfig->clockSource = kCOP_LpoClock;
+ *   copConfig->timeoutCycles = kCOP_2Power10CyclesOr2Power18Cycles;
+ * endcode
+ *
+ * param config Pointer to the COP configuration structure.
+ * see cop_config_t
+ */
 void COP_GetDefaultConfig(cop_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
+
+    /* Initializes the configure structure to zero. */
+    (void)memset(config, 0, sizeof(*config));
 
     config->enableWindowMode = false;
 #if defined(FSL_FEATURE_COP_HAS_LONGTIME_MODE) && FSL_FEATURE_COP_HAS_LONGTIME_MODE
     config->timeoutMode = kCOP_LongTimeoutMode;
-    config->enableStop = false;
+    config->enableStop  = false;
     config->enableDebug = false;
 #endif /* FSL_FEATURE_COP_HAS_LONGTIME_MODE */
-    config->clockSource = kCOP_LpoClock;
+    config->clockSource   = kCOP_LpoClock;
     config->timeoutCycles = kCOP_2Power10CyclesOr2Power18Cycles;
 }
 
+/*!
+ * brief Initializes the COP module.
+ *
+ * This function configures the COP. After it is called, the COP
+ * starts running according to the configuration.
+ * Because all COP control registers are write-once only, the COP_Init function
+ * and the COP_Disable function can be called only once. A second call has no effect.
+ *
+ * Example:
+ * code
+ *  cop_config_t config;
+ *  COP_GetDefaultConfig(&config);
+ *  config.timeoutCycles = kCOP_2Power8CyclesOr2Power16Cycles;
+ *  COP_Init(sim_base,&config);
+ * endcode
+ *
+ * param base   SIM peripheral base address.
+ * param config The configuration of COP.
+ */
 void COP_Init(SIM_Type *base, const cop_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     uint32_t value = 0U;
 
@@ -65,6 +87,13 @@ void COP_Init(SIM_Type *base, const cop_config_t *config)
     base->COPC = value;
 }
 
+/*!
+ * brief Refreshes the COP timer
+ *
+ * This function feeds the COP.
+ *
+ * param base  SIM peripheral base address.
+ */
 void COP_Refresh(SIM_Type *base)
 {
     uint32_t primaskValue = 0U;

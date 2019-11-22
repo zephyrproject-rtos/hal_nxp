@@ -1,14 +1,14 @@
 /*
-* Copyright 2013-2016 Freescale Semiconductor, Inc.
-* Copyright 2016-2018 NXP
-* All rights reserved.
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*
-*/
+ * Copyright 2013-2016 Freescale Semiconductor, Inc.
+ * Copyright 2016-2019 NXP
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ */
 
-#ifndef _FSL_FTFX_CACHE_H_
-#define _FSL_FTFX_CACHE_H_
+#ifndef FSL_FTFX_CACHE_H
+#define FSL_FTFX_CACHE_H
 
 #include "fsl_ftfx_controller.h"
 
@@ -52,7 +52,7 @@ enum _ftfx_cache_ram_func_constants
  */
 typedef struct _ftfx_cache_config
 {
-    uint8_t flashMemoryIndex;     /*!< 0 - primary flash; 1 - secondary flash*/
+    uint8_t flashMemoryIndex; /*!< 0 - primary flash; 1 - secondary flash*/
     uint8_t reserved[3];
     uint32_t *comBitOperFuncAddr; /*!< An buffer point to the flash execute-in-RAM function. */
 } ftfx_cache_config_t;
@@ -112,5 +112,4 @@ status_t FTFx_CACHE_PflashGetPrefetchSpeculation(ftfx_prefetch_speculation_statu
 
 /*! @}*/
 
-#endif /* _FSL_FTFX_CACHE_H_ */
-
+#endif /* FSL_FTFX_CACHE_H */

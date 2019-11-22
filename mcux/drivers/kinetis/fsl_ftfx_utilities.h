@@ -1,13 +1,13 @@
 /*
-* Copyright 2017-2018 NXP
-* All rights reserved.
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*
-*/
+ * Copyright 2017-2019 NXP
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ */
 
-#ifndef _FSL_FTFX_UTILITIES_H_
-#define _FSL_FTFX_UTILITIES_H_
+#ifndef FSL_FTFX_UTILITIES_H
+#define FSL_FTFX_UTILITIES_H
 
 /*!
  * @addtogroup ftfx_utilities
@@ -29,7 +29,8 @@
 
 /*! @brief Constructs the four character code for the Flash driver API key. */
 #if !defined(FOUR_CHAR_CODE)
-#define FOUR_CHAR_CODE(a, b, c, d) (((uint32_t)(d) << 24u) | ((uint32_t)(c) << 16u) | ((uint32_t)(b) << 8u) | ((uint32_t)(a)))
+#define FOUR_CHAR_CODE(a, b, c, d) \
+    (((uint32_t)(d) << 24u) | ((uint32_t)(c) << 16u) | ((uint32_t)(b) << 8u) | ((uint32_t)(a)))
 #endif
 
 /*! @brief Alignment(down) utility. */
@@ -39,7 +40,7 @@
 
 /*! @brief Alignment(up) utility. */
 #if !defined(ALIGN_UP)
-#define ALIGN_UP(x, a) ALIGN_DOWN((uint32_t)(x) + (uint32_t)(a) - 1u, a)
+#define ALIGN_UP(x, a) ALIGN_DOWN((uint32_t)(x) + (uint32_t)(a)-1u, a)
 #endif
 
 /*! @brief bytes2word utility. */
@@ -61,6 +62,4 @@
 #define BYTE2WORD_2_1_1(x, y, z) (B2P3(x) | B1P2(y) | B1P1(z))
 #define BYTE2WORD_1_1_1_1(x, y, z, w) (B1P4(x) | B1P3(y) | B1P2(z) | B1P1(w))
 
-
-#endif /* _FSL_FTFX_UTILITIES_H_ */
-
+#endif /* FSL_FTFX_UTILITIES_H */

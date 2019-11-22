@@ -1,11 +1,11 @@
 /*
-* Copyright 2013-2016 Freescale Semiconductor, Inc.
-* Copyright 2016-2018 NXP
-* All rights reserved.
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*
-*/
+ * Copyright 2013-2016 Freescale Semiconductor, Inc.
+ * Copyright 2016-2019 NXP
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ */
 
 #include "fsl_ftfx_flash.h"
 
@@ -19,7 +19,7 @@
 enum _ftfx_special_mem_property
 {
     kFTFx_AccessSegmentUnitSize = 256UL,
-    kFTFx_MinProtectBlockSize = 1024UL,
+    kFTFx_MinProtectBlockSize   = 1024UL,
 };
 
 #if defined(FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD) && FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD
@@ -28,8 +28,8 @@ enum _ftfx_special_mem_property
  */
 enum _k3_flash_read_once_index
 {
-    kFLASH_RecordIndexSwapAddr = 0xA1U,    /*!< Index of Swap indicator address.*/
-    kFLASH_RecordIndexSwapEnable = 0xA2U,  /*!< Index of Swap system enable.*/
+    kFLASH_RecordIndexSwapAddr    = 0xA1U, /*!< Index of Swap indicator address.*/
+    kFLASH_RecordIndexSwapEnable  = 0xA2U, /*!< Index of Swap system enable.*/
     kFLASH_RecordIndexSwapDisable = 0xA3U, /*!< Index of Swap system disable.*/
 };
 #endif /* FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD */
@@ -47,7 +47,10 @@ static uint32_t flash_calculate_mem_size(uint32_t pflashBlockCount,
 
 static uint32_t flash_calculate_prot_segment_size(uint32_t flashSize, uint32_t segmentCount);
 
-static status_t flash_check_range_to_get_index(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint8_t *flashIndex);
+static status_t flash_check_range_to_get_index(flash_config_t *config,
+                                               uint32_t start,
+                                               uint32_t lengthInBytes,
+                                               uint8_t *flashIndex);
 
 /*! @brief Convert address for flash.*/
 static status_t flash_convert_start_address(ftfx_config_t *config, uint32_t start);
@@ -62,7 +65,9 @@ static status_t flash_validate_swap_indicator_address(ftfx_config_t *config, uin
  ******************************************************************************/
 
 static volatile uint32_t *const kFPROTL = (volatile uint32_t *)(uint32_t)&FTFx_FPROT_LOW_REG;
+#if defined(FTFA_FPROTH0_PROT_MASK) || defined(FTFE_FPROTH0_PROT_MASK) || defined(FTFL_FPROTH0_PROT_MASK)
 static volatile uint32_t *const kFPROTH = (volatile uint32_t *)&FTFx_FPROT_HIGH_REG;
+#endif
 #if FTFx_DRIVER_HAS_FLASH1_SUPPORT
 volatile uint8_t *const kFPROTSL = (volatile uint8_t *)&FTFx_FPROTSL_REG;
 volatile uint8_t *const kFPROTSH = (volatile uint8_t *)&FTFx_FPROTSH_REG;
@@ -154,51 +159,52 @@ status_t FLASH_Init(flash_config_t *config)
         uint32_t facssValue;
         uint32_t facsnValue;
 
-        config->ftfxConfig[flashIndex].flashDesc.type = (uint8_t)kFTFx_MemTypePflash;
+        config->ftfxConfig[flashIndex].flashDesc.type  = (uint8_t)kFTFx_MemTypePflash;
         config->ftfxConfig[flashIndex].flashDesc.index = flashIndex;
         flash_init_features(&config->ftfxConfig[flashIndex]);
 
 #if FTFx_DRIVER_HAS_FLASH1_SUPPORT
-        if(flashIndex == 1)
+        if (flashIndex == 1)
         {
-            pflashStartAddress = FLASH1_FEATURE_PFLASH_START_ADDRESS;
-            pflashBlockSize = FLASH1_FEATURE_PFLASH_BLOCK_SIZE;
-            pflashBlockCount = FLASH1_FEATURE_PFLASH_BLOCK_COUNT;
-            pflashBlockSectorSize = FLASH1_FEATURE_PFLASH_BLOCK_SECTOR_SIZE;
+            pflashStartAddress          = FLASH1_FEATURE_PFLASH_START_ADDRESS;
+            pflashBlockSize             = FLASH1_FEATURE_PFLASH_BLOCK_SIZE;
+            pflashBlockCount            = FLASH1_FEATURE_PFLASH_BLOCK_COUNT;
+            pflashBlockSectorSize       = FLASH1_FEATURE_PFLASH_BLOCK_SECTOR_SIZE;
             pflashProtectionRegionCount = FLASH1_FEATURE_PFLASH_PROTECTION_REGION_COUNT;
-            pflashBlockWriteUnitSize = FLASH1_FEATURE_PFLASH_BLOCK_WRITE_UNIT_SIZE;
-            pflashSectorCmdAlignment = FLASH1_FEATURE_PFLASH_SECTOR_CMD_ADDRESS_ALIGMENT;
-            pflashSectionCmdAlignment = FLASH1_FEATURE_PFLASH_SECTION_CMD_ADDRESS_ALIGMENT;
-            pfsizeMask = SIM_FLASH1_PFSIZE_MASK;
-            pfsizeShift = SIM_FLASH1_PFSIZE_SHIFT;
-            facssValue = FTFx_FACSSS_REG;
-            facsnValue = FTFx_FACSNS_REG;
+            pflashBlockWriteUnitSize    = FLASH1_FEATURE_PFLASH_BLOCK_WRITE_UNIT_SIZE;
+            pflashSectorCmdAlignment    = FLASH1_FEATURE_PFLASH_SECTOR_CMD_ADDRESS_ALIGMENT;
+            pflashSectionCmdAlignment   = FLASH1_FEATURE_PFLASH_SECTION_CMD_ADDRESS_ALIGMENT;
+            pfsizeMask                  = SIM_FLASH1_PFSIZE_MASK;
+            pfsizeShift                 = SIM_FLASH1_PFSIZE_SHIFT;
+            facssValue                  = FTFx_FACSSS_REG;
+            facsnValue                  = FTFx_FACSNS_REG;
         }
         else
 #endif
         {
-            pflashStartAddress = FLASH0_FEATURE_PFLASH_START_ADDRESS;
-            pflashBlockSize = FLASH0_FEATURE_PFLASH_BLOCK_SIZE;
-            pflashBlockCount = FLASH0_FEATURE_PFLASH_BLOCK_COUNT;
-            pflashBlockSectorSize = FLASH0_FEATURE_PFLASH_BLOCK_SECTOR_SIZE;
+            pflashStartAddress          = FLASH0_FEATURE_PFLASH_START_ADDRESS;
+            pflashBlockSize             = FLASH0_FEATURE_PFLASH_BLOCK_SIZE;
+            pflashBlockCount            = FLASH0_FEATURE_PFLASH_BLOCK_COUNT;
+            pflashBlockSectorSize       = FLASH0_FEATURE_PFLASH_BLOCK_SECTOR_SIZE;
             pflashProtectionRegionCount = FLASH0_FEATURE_PFLASH_PROTECTION_REGION_COUNT;
-            pflashBlockWriteUnitSize = FLASH0_FEATURE_PFLASH_BLOCK_WRITE_UNIT_SIZE;
-            pflashSectorCmdAlignment = FLASH0_FEATURE_PFLASH_SECTOR_CMD_ADDRESS_ALIGMENT;
-            pflashSectionCmdAlignment = FLASH0_FEATURE_PFLASH_SECTION_CMD_ADDRESS_ALIGMENT;
-            pfsizeMask = SIM_FLASH0_PFSIZE_MASK;
-            pfsizeShift = SIM_FLASH0_PFSIZE_SHIFT;
-            facssValue = FTFx_FACSS_REG;
-            facsnValue = FTFx_FACSN_REG;
+            pflashBlockWriteUnitSize    = FLASH0_FEATURE_PFLASH_BLOCK_WRITE_UNIT_SIZE;
+            pflashSectorCmdAlignment    = FLASH0_FEATURE_PFLASH_SECTOR_CMD_ADDRESS_ALIGMENT;
+            pflashSectionCmdAlignment   = FLASH0_FEATURE_PFLASH_SECTION_CMD_ADDRESS_ALIGMENT;
+            pfsizeMask                  = SIM_FLASH0_PFSIZE_MASK;
+            pfsizeShift                 = SIM_FLASH0_PFSIZE_SHIFT;
+            facssValue                  = FTFx_FACSS_REG;
+            facsnValue                  = FTFx_FACSN_REG;
         }
 
-        config->ftfxConfig[flashIndex].flashDesc.blockBase = pflashStartAddress;
+        config->ftfxConfig[flashIndex].flashDesc.blockBase  = pflashStartAddress;
         config->ftfxConfig[flashIndex].flashDesc.blockCount = pflashBlockCount;
         config->ftfxConfig[flashIndex].flashDesc.sectorSize = pflashBlockSectorSize;
 
         if ((0U != config->ftfxConfig[flashIndex].flashDesc.feature.isIndBlock) &&
             (0U != config->ftfxConfig[flashIndex].flashDesc.feature.hasIndPfsizeReg))
         {
-            config->ftfxConfig[flashIndex].flashDesc.totalSize = flash_calculate_mem_size(pflashBlockCount, pflashBlockSize, pfsizeMask, pfsizeShift);
+            config->ftfxConfig[flashIndex].flashDesc.totalSize =
+                flash_calculate_mem_size(pflashBlockCount, pflashBlockSize, pfsizeMask, pfsizeShift);
         }
         else
         {
@@ -211,14 +217,14 @@ status_t FLASH_Init(flash_config_t *config)
             specMem = &config->ftfxConfig[flashIndex].flashDesc.accessSegmentMem;
             if (0U != (config->ftfxConfig[flashIndex].flashDesc.feature.hasIndXaccReg))
             {
-                specMem->base = config->ftfxConfig[flashIndex].flashDesc.blockBase;
-                specMem->size = (uint32_t)kFTFx_AccessSegmentUnitSize << facssValue;
+                specMem->base  = config->ftfxConfig[flashIndex].flashDesc.blockBase;
+                specMem->size  = (uint32_t)kFTFx_AccessSegmentUnitSize << facssValue;
                 specMem->count = facsnValue;
             }
             else
             {
-                specMem->base = config->ftfxConfig[0].flashDesc.blockBase;
-                specMem->size = (uint32_t)kFTFx_AccessSegmentUnitSize << FTFx_FACSS_REG;
+                specMem->base  = config->ftfxConfig[0].flashDesc.blockBase;
+                specMem->size  = (uint32_t)kFTFx_AccessSegmentUnitSize << FTFx_FACSS_REG;
                 specMem->count = FTFx_FACSN_REG;
             }
         }
@@ -229,15 +235,16 @@ status_t FLASH_Init(flash_config_t *config)
             specMem = &config->ftfxConfig[flashIndex].flashDesc.protectRegionMem;
             if (0U != (config->ftfxConfig[flashIndex].flashDesc.feature.hasIndProtReg))
             {
-                specMem->base = config->ftfxConfig[flashIndex].flashDesc.blockBase;
+                specMem->base  = config->ftfxConfig[flashIndex].flashDesc.blockBase;
                 specMem->count = pflashProtectionRegionCount;
-                specMem->size = flash_calculate_prot_segment_size(config->ftfxConfig[flashIndex].flashDesc.totalSize, specMem->count);
+                specMem->size  = flash_calculate_prot_segment_size(config->ftfxConfig[flashIndex].flashDesc.totalSize,
+                                                                  specMem->count);
             }
             else
             {
                 uint32_t pflashTotalSize = 0U;
-                specMem->base = config->ftfxConfig[0].flashDesc.blockBase;
-                specMem->count = FLASH0_FEATURE_PFLASH_PROTECTION_REGION_COUNT;
+                specMem->base            = config->ftfxConfig[0].flashDesc.blockBase;
+                specMem->count           = FLASH0_FEATURE_PFLASH_PROTECTION_REGION_COUNT;
 #if (FTFx_FLASH_COUNT != 1)
                 if (flashIndex == FTFx_FLASH_COUNT - 1)
 #endif
@@ -245,23 +252,26 @@ status_t FLASH_Init(flash_config_t *config)
                     uint32_t segmentSize;
                     for (uint32_t i = 0U; i < FTFx_FLASH_COUNT; i++)
                     {
-                         pflashTotalSize += config->ftfxConfig[flashIndex].flashDesc.totalSize;
+                        pflashTotalSize += config->ftfxConfig[flashIndex].flashDesc.totalSize;
                     }
                     segmentSize = flash_calculate_prot_segment_size(pflashTotalSize, specMem->count);
                     for (uint32_t i = 0U; i < FTFx_FLASH_COUNT; i++)
                     {
-                         config->ftfxConfig[i].flashDesc.protectRegionMem.size = segmentSize;
+                        config->ftfxConfig[i].flashDesc.protectRegionMem.size = segmentSize;
                     }
                 }
             }
         }
 
         config->ftfxConfig[flashIndex].opsConfig.addrAligment.blockWriteUnitSize = (uint8_t)pflashBlockWriteUnitSize;
-        config->ftfxConfig[flashIndex].opsConfig.addrAligment.sectorCmd = (uint8_t)pflashSectorCmdAlignment;
-        config->ftfxConfig[flashIndex].opsConfig.addrAligment.sectionCmd = (uint8_t)pflashSectionCmdAlignment;
-        config->ftfxConfig[flashIndex].opsConfig.addrAligment.resourceCmd = (uint8_t)FSL_FEATURE_FLASH_PFLASH_RESOURCE_CMD_ADDRESS_ALIGMENT;
-        config->ftfxConfig[flashIndex].opsConfig.addrAligment.checkCmd = (uint8_t)FSL_FEATURE_FLASH_PFLASH_CHECK_CMD_ADDRESS_ALIGMENT;
-        config->ftfxConfig[flashIndex].opsConfig.addrAligment.swapCtrlCmd = (uint8_t)FSL_FEATURE_FLASH_PFLASH_SWAP_CONTROL_CMD_ADDRESS_ALIGMENT;
+        config->ftfxConfig[flashIndex].opsConfig.addrAligment.sectorCmd          = (uint8_t)pflashSectorCmdAlignment;
+        config->ftfxConfig[flashIndex].opsConfig.addrAligment.sectionCmd         = (uint8_t)pflashSectionCmdAlignment;
+        config->ftfxConfig[flashIndex].opsConfig.addrAligment.resourceCmd =
+            (uint8_t)FSL_FEATURE_FLASH_PFLASH_RESOURCE_CMD_ADDRESS_ALIGMENT;
+        config->ftfxConfig[flashIndex].opsConfig.addrAligment.checkCmd =
+            (uint8_t)FSL_FEATURE_FLASH_PFLASH_CHECK_CMD_ADDRESS_ALIGMENT;
+        config->ftfxConfig[flashIndex].opsConfig.addrAligment.swapCtrlCmd =
+            (uint8_t)FSL_FEATURE_FLASH_PFLASH_SWAP_CONTROL_CMD_ADDRESS_ALIGMENT;
 
         /* Init FTFx Kernel */
         returnCode = FTFx_API_Init(&config->ftfxConfig[flashIndex]);
@@ -354,11 +364,8 @@ status_t FLASH_ProgramSection(flash_config_t *config, uint32_t start, uint8_t *s
 #endif
 
 #if defined(FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD) && FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD
-status_t FLASH_ReadResource(flash_config_t *config,
-                            uint32_t start,
-                            uint8_t *dst,
-                            uint32_t lengthInBytes,
-                            ftfx_read_resource_opt_t option)
+status_t FLASH_ReadResource(
+    flash_config_t *config, uint32_t start, uint8_t *dst, uint32_t lengthInBytes, ftfx_read_resource_opt_t option)
 {
     return FTFx_CMD_ReadResource(&config->ftfxConfig[0], start, dst, lengthInBytes, option);
 }
@@ -417,7 +424,8 @@ status_t FLASH_VerifyProgram(flash_config_t *config,
         return returnCode;
     }
 
-    return FTFx_CMD_VerifyProgram(&config->ftfxConfig[flashIndex], start, lengthInBytes, expectedData, margin, failedAddress, failedData);
+    return FTFx_CMD_VerifyProgram(&config->ftfxConfig[flashIndex], start, lengthInBytes, expectedData, margin,
+                                  failedAddress, failedData);
 }
 
 status_t FLASH_GetSecurityState(flash_config_t *config, ftfx_security_state_t *state)
@@ -453,7 +461,7 @@ status_t FLASH_Swap(flash_config_t *config, uint32_t address, bool isSetEnable)
 
     ftfxConfig = &config->ftfxConfig[flashIndex];
 
-    memset(&returnInfo, 0xFFU, sizeof(returnInfo));
+    (void)memset(&returnInfo, 0xFFU, sizeof(returnInfo));
 
     do
     {
@@ -473,7 +481,8 @@ status_t FLASH_Swap(flash_config_t *config, uint32_t address, bool isSetEnable)
             {
                 /* The swap system changed to the DISABLED state with Program flash block 0
                  * located at relative flash address 0x0_0000 */
-                returnCode = FTFx_CMD_SwapControl(ftfxConfig, address, kFTFx_SwapControlOptionDisableSystem, &returnInfo);
+                returnCode =
+                    FTFx_CMD_SwapControl(ftfxConfig, address, kFTFx_SwapControlOptionDisableSystem, &returnInfo);
             }
             else
             {
@@ -502,20 +511,20 @@ status_t FLASH_Swap(flash_config_t *config, uint32_t address, bool isSetEnable)
                     if (returnCode == kStatus_FTFx_Success)
                     {
                         /* If current swap mode is Initialized/Ready, Initialize Swap to UPDATE state. */
-                        returnCode =
-                            FTFx_CMD_SwapControl(ftfxConfig, address, kFTFx_SwapControlOptionSetInUpdateState, &returnInfo);
+                        returnCode = FTFx_CMD_SwapControl(ftfxConfig, address, kFTFx_SwapControlOptionSetInUpdateState,
+                                                          &returnInfo);
                     }
                     break;
                 case kFTFx_SwapStateUpdate:
                     /* If current swap mode is Update, Erase indicator sector in non active block
                      * to proceed swap system to update-erased state */
-                    returnCode = FLASH_Erase(config, address + (ftfxConfig->flashDesc.totalSize >> 1),
-                                              ftfxConfig->opsConfig.addrAligment.sectorCmd, kFTFx_ApiEraseKey);
+                    returnCode = FLASH_Erase(config, address + (ftfxConfig->flashDesc.totalSize >> 1u),
+                                             ftfxConfig->opsConfig.addrAligment.sectorCmd, (uint32_t)kFTFx_ApiEraseKey);
                     break;
                 case kFTFx_SwapStateUpdateErased:
                     /* If current swap mode is Update or Update-Erased, progress Swap to COMPLETE State */
-                    returnCode =
-                        FTFx_CMD_SwapControl(ftfxConfig, address, kFTFx_SwapControlOptionSetInCompleteState, &returnInfo);
+                    returnCode = FTFx_CMD_SwapControl(ftfxConfig, address, kFTFx_SwapControlOptionSetInCompleteState,
+                                                      &returnInfo);
                     break;
                 case kFTFx_SwapStateComplete:
                     break;
@@ -570,17 +579,19 @@ status_t FLASH_IsProtected(flash_config_t *config,
                                         * protection regions */
         uint32_t protectStatusCounter; /* increments each time a flash region was detected as protected */
         uint8_t flashRegionProtectStatus[MAX_FLASH_PROT_REGION_COUNT]; /* array of the protection
-                                                                          * status for each
-                                                                          * protection region */
-        for (uint32_t i = 0; i < (uint32_t)MAX_FLASH_PROT_REGION_COUNT; i++) /* The protection register is initialized to the */
-        {                                                          /* unprotected state by default. */
-            flashRegionProtectStatus[i] = (uint8_t) 0xFF;          /* The array is initialized to all 1 */
+                                                                        * status for each
+                                                                        * protection region */
+        for (uint32_t i = 0; i < (uint32_t)MAX_FLASH_PROT_REGION_COUNT;
+             i++)                                        /* The protection register is initialized to the */
+        {                                                /* unprotected state by default. */
+            flashRegionProtectStatus[i] = (uint8_t)0xFF; /* The array is initialized to all 1 */
         }
 
-        uint32_t flashRegionAddress[MAX_FLASH_PROT_REGION_COUNT + 1];  /* array of the start addresses for each flash
-                                                                        * protection region. Note this is REGION_COUNT+1
-                                                                        * due to requiring the next start address after
-                                                                        * the end of flash for loop-check purposes below */
+        uint32_t
+            flashRegionAddress[MAX_FLASH_PROT_REGION_COUNT + 1]; /* array of the start addresses for each flash
+                                                                  * protection region. Note this is REGION_COUNT+1
+                                                                  * due to requiring the next start address after
+                                                                  * the end of flash for loop-check purposes below */
         bool isBreakNeeded = false;
         /* calculating Flash end address */
         endAddress = start + lengthInBytes;
@@ -590,8 +601,8 @@ status_t FLASH_IsProtected(flash_config_t *config,
         /* populate up to 33rd element of array, this is the next address after end of flash array */
         while (regionCounter <= ftfxConfig->flashDesc.protectRegionMem.count)
         {
-            flashRegionAddress[regionCounter] =
-                ftfxConfig->flashDesc.protectRegionMem.base + ftfxConfig->flashDesc.protectRegionMem.size * regionCounter;
+            flashRegionAddress[regionCounter] = ftfxConfig->flashDesc.protectRegionMem.base +
+                                                ftfxConfig->flashDesc.protectRegionMem.size * regionCounter;
             regionCounter++;
         }
 
@@ -624,7 +635,7 @@ status_t FLASH_IsProtected(flash_config_t *config,
                 {
                     flashRegionProtectStatus[regionCounter] = (FTFx_FPROTL1_REG >> (regionCounter - 16u)) & (0x01u);
                 }
-#else 
+#else
                 else if (regionCounter < 24u)
                 {
                     flashRegionProtectStatus[regionCounter] = (FTFx_FPROTL1_REG >> (regionCounter - 16u)) & (0x01u);
@@ -679,8 +690,10 @@ status_t FLASH_IsProtected(flash_config_t *config,
                 regionCounter++;
             }
             else
-            {}
-            
+            {
+                return kStatus_FTFx_InvalidArgument;
+            }
+
             if (isBreakNeeded)
             {
                 break;
@@ -690,7 +703,7 @@ status_t FLASH_IsProtected(flash_config_t *config,
         /* loop through the flash regions and check
          * desired flash address range for protection status
          * loop stops when it is detected that start has exceeded the endAddress */
-        regionCounter = 0U; /* make sure regionCounter is initialized to 0 first */
+        regionCounter        = 0U; /* make sure regionCounter is initialized to 0 first */
         regionCheckedCounter = 0U;
         protectStatusCounter = 0U; /* make sure protectStatusCounter is initialized to 0 first */
         while (start < endAddress)
@@ -711,7 +724,8 @@ status_t FLASH_IsProtected(flash_config_t *config,
                     /* increment protectStatusCounter to indicate this region is protected */
                     protectStatusCounter++;
                 }
-                start += ftfxConfig->flashDesc.protectRegionMem.size; /* increment to an address within the next region */
+                start +=
+                    ftfxConfig->flashDesc.protectRegionMem.size; /* increment to an address within the next region */
             }
             regionCounter++; /* increment regionCounter to check for the next flash protection region */
         }
@@ -774,19 +788,20 @@ status_t FLASH_IsExecuteOnly(flash_config_t *config,
 
         /* Aligning start address and end address */
         uint32_t alignedStartAddress = ALIGN_DOWN(start, ftfxConfig->flashDesc.accessSegmentMem.size);
-        uint32_t alignedEndAddress = ALIGN_UP(endAddress, ftfxConfig->flashDesc.accessSegmentMem.size);
+        uint32_t alignedEndAddress   = ALIGN_UP(endAddress, ftfxConfig->flashDesc.accessSegmentMem.size);
 
-        uint32_t u32flag = 1U;
+        uint32_t u32flag      = 1U;
         uint32_t segmentIndex = 0U;
         uint32_t maxSupportedExecuteOnlySegmentCount =
             (alignedEndAddress - alignedStartAddress) / ftfxConfig->flashDesc.accessSegmentMem.size;
 
         while (start < endAddress)
         {
-            uint32_t xacc = 0U;
+            uint32_t xacc              = 0U;
             bool isInvalidSegmentIndex = false;
 
-            segmentIndex = (start - ftfxConfig->flashDesc.accessSegmentMem.base) / ftfxConfig->flashDesc.accessSegmentMem.size;
+            segmentIndex =
+                (start - ftfxConfig->flashDesc.accessSegmentMem.base) / ftfxConfig->flashDesc.accessSegmentMem.size;
 
             if ((0U == ftfxConfig->flashDesc.index) || (0U == ftfxConfig->flashDesc.feature.hasIndXaccReg))
             {
@@ -807,7 +822,7 @@ status_t FLASH_IsExecuteOnly(flash_config_t *config,
                 }
             }
 #if FTFx_DRIVER_HAS_FLASH1_SUPPORT
-            else  if ((ftfxConfig->flashDesc.index == 1U) && ftfxConfig->flashDesc.feature.hasIndXaccReg)
+            else if ((ftfxConfig->flashDesc.index == 1U) && ftfxConfig->flashDesc.feature.hasIndXaccReg)
             {
                 /* For secondary flash, The two XACCS registers allow up to 16 restricted segments of equal memory size.
                  */
@@ -827,7 +842,9 @@ status_t FLASH_IsExecuteOnly(flash_config_t *config,
             }
 #endif
             else
-            {}
+            {
+                return kStatus_FTFx_InvalidArgument;
+            }
 
             if (isInvalidSegmentIndex)
             {
@@ -865,7 +882,7 @@ status_t FLASH_IsExecuteOnly(flash_config_t *config,
     return kStatus_FTFx_Success;
 }
 #endif /* not define FSL_FEATURE_FLASH_HAS_ACCESS_CONTROL */
-                                             
+
 status_t FLASH_PflashSetProtection(flash_config_t *config, pflash_prot_status_t *protectStatus)
 {
     if (config == NULL)
@@ -883,6 +900,7 @@ status_t FLASH_PflashSetProtection(flash_config_t *config, pflash_prot_status_t 
                 return kStatus_FTFx_CommandFailure;
             }
         }
+#if defined(FTFA_FPROTH0_PROT_MASK) || defined(FTFE_FPROTH0_PROT_MASK) || defined(FTFL_FPROTH0_PROT_MASK)
         if (config->ftfxConfig[0].flashDesc.feature.ProtRegBits == 64U)
         {
             *kFPROTH = protectStatus->proth;
@@ -891,9 +909,10 @@ status_t FLASH_PflashSetProtection(flash_config_t *config, pflash_prot_status_t 
                 return kStatus_FTFx_CommandFailure;
             }
         }
+#endif
     }
 #if FTFx_DRIVER_HAS_FLASH1_SUPPORT
-    else if (config->ftfxConfig[1].flashDesc.feature.hasProtControl && \
+    else if (config->ftfxConfig[1].flashDesc.feature.hasProtControl &&
              config->ftfxConfig[1].flashDesc.feature.hasIndProtReg)
     {
         if (config->ftfxConfig[1].flashDesc.feature.ProtRegBits == 16U)
@@ -928,13 +947,15 @@ status_t FLASH_PflashGetProtection(flash_config_t *config, pflash_prot_status_t 
         {
             protectStatus->protl = *kFPROTL;
         }
+#if defined(FTFA_FPROTH0_PROT_MASK) || defined(FTFE_FPROTH0_PROT_MASK) || defined(FTFL_FPROTH0_PROT_MASK)
         if (config->ftfxConfig[0].flashDesc.feature.ProtRegBits == 64U)
         {
             protectStatus->proth = *kFPROTH;
         }
+#endif
     }
 #if FTFx_DRIVER_HAS_FLASH1_SUPPORT
-    else if (config->ftfxConfig[1].flashDesc.feature.hasProtControl && \
+    else if (config->ftfxConfig[1].flashDesc.feature.hasProtControl &&
              config->ftfxConfig[1].flashDesc.feature.hasIndProtReg)
     {
         if (config->ftfxConfig[0].flashDesc.feature.ProtRegBits == 16U)
@@ -955,103 +976,93 @@ status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichPro
         return kStatus_FTFx_InvalidArgument;
     }
 
-    if (whichProperty == kFLASH_PropertyPflash0SectorSize)
+    status_t status = kStatus_FTFx_Success;
+
+    switch (whichProperty)
     {
-        *value = config->ftfxConfig[0].flashDesc.sectorSize;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash0TotalSize)
-    {
-        *value = config->ftfxConfig[0].flashDesc.totalSize;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash0BlockSize)
-    {
-        *value = config->ftfxConfig[0].flashDesc.totalSize / config->ftfxConfig[0].flashDesc.blockCount;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash0BlockCount)
-    {
-        *value = config->ftfxConfig[0].flashDesc.blockCount;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash0BlockBaseAddr)
-    {
-        *value = config->ftfxConfig[0].flashDesc.blockBase;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash0FacSupport)
-    {
-        *value = (uint32_t)config->ftfxConfig[0].flashDesc.feature.hasXaccControl;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash0AccessSegmentSize)
-    {
-        *value = config->ftfxConfig[0].flashDesc.accessSegmentMem.size;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash0AccessSegmentCount)
-    {
-        *value = config->ftfxConfig[0].flashDesc.accessSegmentMem.count;
-    }
+        case kFLASH_PropertyPflash0SectorSize:
+            *value = config->ftfxConfig[0].flashDesc.sectorSize;
+            break;
+        case kFLASH_PropertyPflash0TotalSize:
+            *value = config->ftfxConfig[0].flashDesc.totalSize;
+            break;
+        case kFLASH_PropertyPflash0BlockSize:
+            *value = config->ftfxConfig[0].flashDesc.totalSize / config->ftfxConfig[0].flashDesc.blockCount;
+            break;
+        case kFLASH_PropertyPflash0BlockCount:
+            *value = config->ftfxConfig[0].flashDesc.blockCount;
+            break;
+        case kFLASH_PropertyPflash0BlockBaseAddr:
+            *value = config->ftfxConfig[0].flashDesc.blockBase;
+            break;
+        case kFLASH_PropertyPflash0FacSupport:
+            *value = (uint32_t)config->ftfxConfig[0].flashDesc.feature.hasXaccControl;
+            break;
+        case kFLASH_PropertyPflash0AccessSegmentSize:
+            *value = config->ftfxConfig[0].flashDesc.accessSegmentMem.size;
+            break;
+        case kFLASH_PropertyPflash0AccessSegmentCount:
+            *value = config->ftfxConfig[0].flashDesc.accessSegmentMem.count;
+            break;
+
 #if FTFx_DRIVER_HAS_FLASH1_SUPPORT
-    else if (whichProperty == kFLASH_PropertyPflash1SectorSize)
-    {
-        *value = config->ftfxConfig[1].flashDesc.sectorSize;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash1TotalSize)
-    {
-        *value = config->ftfxConfig[1].flashDesc.totalSize;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash1BlockSize)
-    {
-        *value = config->ftfxConfig[1].flashDesc.totalSize / config->ftfxConfig[1].flashDesc.blockCount;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash1BlockCount)
-    {
-        *value = config->ftfxConfig[1].flashDesc.blockCount;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash1BlockBaseAddr)
-    {
-        *value = config->ftfxConfig[1].flashDesc.blockBase;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash1FacSupport)
-    {
-        *value = (uint32_t)config->ftfxConfig[1].flashDesc.feature.hasXaccControl;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash1AccessSegmentSize)
-    {
-        *value = config->ftfxConfig[1].flashDesc.accessSegmentMem.size;
-    }
-    else if (whichProperty == kFLASH_PropertyPflash1AccessSegmentCount)
-    {
-        *value = config->ftfxConfig[1].flashDesc.accessSegmentMem.count;
-    }
+        case kFLASH_PropertyPflash1SectorSize:
+            *value = config->ftfxConfig[1].flashDesc.sectorSize;
+            break;
+        case kFLASH_PropertyPflash1TotalSize:
+            *value = config->ftfxConfig[1].flashDesc.totalSize;
+            break;
+        case kFLASH_PropertyPflash1BlockSize:
+            *value = config->ftfxConfig[1].flashDesc.totalSize / config->ftfxConfig[1].flashDesc.blockCount;
+            break;
+        case kFLASH_PropertyPflash1BlockCount:
+            *value = config->ftfxConfig[1].flashDesc.blockCount;
+            break;
+        case kFLASH_PropertyPflash1BlockBaseAddr:
+            *value = config->ftfxConfig[1].flashDesc.blockBase;
+            break;
+        case kFLASH_PropertyPflash1FacSupport:
+            *value = (uint32_t)config->ftfxConfig[1].flashDesc.feature.hasXaccControl;
+            break;
+        case kFLASH_PropertyPflash1AccessSegmentSize:
+            *value = config->ftfxConfig[1].flashDesc.accessSegmentMem.size;
+            break;
+        case kFLASH_PropertyPflash1AccessSegmentCount:
+            *value = config->ftfxConfig[1].flashDesc.accessSegmentMem.count;
+            break;
 #endif
-    else if (whichProperty == kFLASH_PropertyFlexRamBlockBaseAddr)
-    {
-        *value = config->ftfxConfig[0].flexramBlockBase;
+
+        case kFLASH_PropertyFlexRamBlockBaseAddr:
+            *value = config->ftfxConfig[0].flexramBlockBase;
+            break;
+        case kFLASH_PropertyFlexRamTotalSize:
+            *value = config->ftfxConfig[0].flexramTotalSize;
+            break;
+
+        default: /* catch inputs that are not recognized */
+            status = kStatus_FTFx_UnknownProperty;
+            break;
     }
-    else if (whichProperty == kFLASH_PropertyFlexRamTotalSize)
-    {
-        *value = config->ftfxConfig[0].flexramTotalSize;
-    }
-    else /* catch inputs that are not recognized */
-    {
-        return kStatus_FTFx_UnknownProperty;
-    }
-    return kStatus_FTFx_Success;
+
+    return status;
 }
 
 static void flash_init_features(ftfx_config_t *config)
 {
     if (config->flashDesc.index == 0U)
     {
-        config->flashDesc.feature.isIndBlock = 1U;
+        config->flashDesc.feature.isIndBlock      = 1U;
         config->flashDesc.feature.hasIndPfsizeReg = 1U;
-        config->flashDesc.feature.hasIndProtReg = 1U;
-        config->flashDesc.feature.hasIndXaccReg = 1U;
+        config->flashDesc.feature.hasIndProtReg   = 1U;
+        config->flashDesc.feature.hasIndXaccReg   = 1U;
     }
 #if FTFx_DRIVER_HAS_FLASH1_SUPPORT
     else if (config->flashDesc.index == 1U)
     {
-        config->flashDesc.feature.isIndBlock = FTFx_FLASH1_IS_INDEPENDENT_BLOCK;
+        config->flashDesc.feature.isIndBlock      = FTFx_FLASH1_IS_INDEPENDENT_BLOCK;
         config->flashDesc.feature.hasIndPfsizeReg = config->flashDesc.feature.isIndBlock;
-        config->flashDesc.feature.hasIndProtReg = FTFx_FLASH1_HAS_INT_PROT_REG;
-        config->flashDesc.feature.hasIndXaccReg = FTFx_FLASH1_HAS_INT_XACC_REG;
+        config->flashDesc.feature.hasIndProtReg   = FTFx_FLASH1_HAS_INT_PROT_REG;
+        config->flashDesc.feature.hasIndXaccReg   = FTFx_FLASH1_HAS_INT_XACC_REG;
     }
 #endif
 
@@ -1101,7 +1112,10 @@ static uint32_t flash_calculate_prot_segment_size(uint32_t flashSize, uint32_t s
     return segmentSize;
 }
 
-static status_t flash_check_range_to_get_index(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint8_t *flashIndex)
+static status_t flash_check_range_to_get_index(flash_config_t *config,
+                                               uint32_t start,
+                                               uint32_t lengthInBytes,
+                                               uint8_t *flashIndex)
 {
     if (config == NULL)
     {
@@ -1112,7 +1126,8 @@ static status_t flash_check_range_to_get_index(flash_config_t *config, uint32_t 
     for (uint8_t index = 0U; index < FTFx_FLASH_COUNT; index++)
     {
         if ((start >= config->ftfxConfig[index].flashDesc.blockBase) &&
-            ((start + lengthInBytes) <= (config->ftfxConfig[index].flashDesc.blockBase + config->ftfxConfig[index].flashDesc.totalSize)))
+            ((start + lengthInBytes) <=
+             (config->ftfxConfig[index].flashDesc.blockBase + config->ftfxConfig[index].flashDesc.totalSize)))
         {
             *flashIndex = config->ftfxConfig[index].flashDesc.index;
             return kStatus_FTFx_Success;
@@ -1162,7 +1177,7 @@ static status_t flash_validate_swap_indicator_address(ftfx_config_t *config, uin
 #if defined(FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD) && FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD
     returnCode =
         FTFx_CMD_ReadResource(config, config->ifrDesc.resRange.pflashSwapIfrStart, (uint8_t *)&flashSwapIfrFieldData,
-                               sizeof(flashSwapIfrFieldData), kFTFx_ResourceOptionFlashIfr);
+                              sizeof(flashSwapIfrFieldData), kFTFx_ResourceOptionFlashIfr);
 
     if (returnCode != kStatus_FTFx_Success)
     {
@@ -1195,8 +1210,8 @@ static status_t flash_validate_swap_indicator_address(ftfx_config_t *config, uin
 
     /* The high bits value of Swap Indicator Address is stored in Program Flash Swap IFR Field,
      * the low severval bit value of Swap Indicator Address is always 1'b0 */
-    swapIndicatorAddress = (uint32_t)flashSwapIfrFieldData.swapIndicatorAddress *
-                           config->opsConfig.addrAligment.swapCtrlCmd;
+    swapIndicatorAddress =
+        (uint32_t)flashSwapIfrFieldData.swapIndicatorAddress * config->opsConfig.addrAligment.swapCtrlCmd;
     if (address != swapIndicatorAddress)
     {
         return kStatus_FTFx_SwapIndicatorAddressError;
@@ -1205,4 +1220,3 @@ static status_t flash_validate_swap_indicator_address(ftfx_config_t *config, uin
     return returnCode;
 }
 #endif /* FSL_FEATURE_FLASH_HAS_PFLASH_BLOCK_SWAP */
-

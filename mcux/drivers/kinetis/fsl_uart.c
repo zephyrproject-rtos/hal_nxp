@@ -1217,6 +1217,97 @@ status_t UART_TransferGetReceiveCount(UART_Type *base, uart_handle_t *handle, ui
     return kStatus_Success;
 }
 
+#if defined(FSL_FEATURE_UART_HAS_FIFO) && FSL_FEATURE_UART_HAS_FIFO
+/*!
+ * @brief Enables or disables the UART Tx FIFO.
+ *
+ * This function enables or disables the UART Tx FIFO.
+ *
+ * param base UART peripheral base address.
+ * param enable true to enable, false to disable.
+ * retval kStatus_Success Successfully turn on or turn off Tx FIFO.
+ * retval kStatus_Fail Fail to turn on or turn off Tx FIFO.
+ */
+status_t UART_EnableTxFIFO(UART_Type *base, bool enable)
+{
+    uint8_t sfifo = 0;
+    uint8_t temp  = 0;
+
+    sfifo = base->SFIFO;
+    temp  = base->C2 & (UART_C2_RE_MASK | UART_C2_TE_MASK);
+    /* The Tx FIFO must be empty */
+    if ((sfifo & UART_SFIFO_TXEMPT_MASK) == UART_SFIFO_TXEMPT_MASK)
+    {
+        /* Disable UART TX RX before setting */
+        base->C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK);
+        /* Flush FIFO */
+        base->CFIFO |= (UART_CFIFO_TXFLUSH_MASK | UART_CFIFO_RXFLUSH_MASK);
+
+        if (enable)
+        {
+            base->PFIFO |= UART_PFIFO_TXFE_MASK;
+        }
+        else
+        {
+            base->PFIFO &= ~UART_PFIFO_TXFE_MASK;
+        }
+
+        /* Flush FIFO */
+        base->CFIFO |= (UART_CFIFO_TXFLUSH_MASK | UART_CFIFO_RXFLUSH_MASK);
+        base->C2 |= temp;
+        return kStatus_Success;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+}
+
+/*!
+ * @brief Enables or disables the UART Rx FIFO.
+ *
+ * This function enables or disables the UART Rx FIFO.
+ *
+ * param base UART peripheral base address.
+ * param enable true to enable, false to disable.
+ * retval kStatus_Success Successfully turn on or turn off Rx FIFO.
+ * retval kStatus_Fail Fail to turn on or turn off Rx FIFO.
+ */
+status_t UART_EnableRxFIFO(UART_Type *base, bool enable)
+{
+    uint8_t sfifo = 0;
+    uint8_t temp  = 0;
+
+    sfifo = base->SFIFO;
+    temp  = base->C2 & (UART_C2_RE_MASK | UART_C2_TE_MASK);
+    /* The Rx FIFO must be empty */
+    if ((sfifo & UART_SFIFO_RXEMPT_MASK) == UART_SFIFO_RXEMPT_MASK)
+    {
+        /* Disable UART TX RX before setting */
+        base->C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK);
+        /* Flush FIFO */
+        base->CFIFO |= (UART_CFIFO_TXFLUSH_MASK | UART_CFIFO_RXFLUSH_MASK);
+
+        if (enable)
+        {
+            base->PFIFO |= UART_PFIFO_RXFE_MASK;
+        }
+        else
+        {
+            base->PFIFO &= ~UART_PFIFO_RXFE_MASK;
+        }
+        /* Flush FIFO */
+        base->CFIFO |= (UART_CFIFO_TXFLUSH_MASK | UART_CFIFO_RXFLUSH_MASK);
+        base->C2 |= temp;
+        return kStatus_Success;
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+}
+#endif /* FSL_FEATURE_UART_HAS_FIFO */
+
 /*!
  * brief UART IRQ handle function.
  *

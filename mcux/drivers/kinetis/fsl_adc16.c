@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -183,7 +183,7 @@ void ADC16_GetDefaultConfig(adc16_config_t *config)
 status_t ADC16_DoAutoCalibration(ADC_Type *base)
 {
     bool bHWTrigger = false;
-    volatile uint32_t tmp32; /* 'volatile' here is for the dummy read of ADCx_R[0] register. */
+    uint32_t tmp32;
     status_t status = kStatus_Success;
 
     /* The calibration would be failed when in hardwar mode.
@@ -205,7 +205,7 @@ status_t ADC16_DoAutoCalibration(ADC_Type *base)
             break;
         }
     }
-    tmp32 = base->R[0]; /* Dummy read to clear COCO caused by calibration. */
+    (void)base->R[0]; /* Dummy read to clear COCO caused by calibration. */
 
     /* Restore the hardware trigger setting if it was enabled before. */
     if (bHWTrigger)

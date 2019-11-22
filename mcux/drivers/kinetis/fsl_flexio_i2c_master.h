@@ -122,6 +122,19 @@ extern "C" {
  * @{
  */
 
+#if defined(FSL_FEATURE_FLEXIO_HAS_PIN_STATUS) && FSL_FEATURE_FLEXIO_HAS_PIN_STATUS
+/*!
+ * @brief Make sure the bus isn't already pulled down.
+ *
+ * Check the FLEXIO pin status to see whether either of SDA and SCL pin is pulled down.
+ *
+ * @param base Pointer to FLEXIO_I2C_Type structure..
+ * @retval #kStatus_Success
+ * @retval #kStatus_FLEXIO_I2C_Busy
+ */
+status_t FLEXIO_I2C_CheckForBusyBus(FLEXIO_I2C_Type *base);
+#endif /*FSL_FEATURE_FLEXIO_HAS_PIN_STATUS*/
+
 /*!
  * @brief Ungates the FlexIO clock, resets the FlexIO module, and configures the FlexIO I2C
  * hardware configuration.

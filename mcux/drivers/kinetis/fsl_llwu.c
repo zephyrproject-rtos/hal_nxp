@@ -348,6 +348,7 @@ bool LLWU_GetPinFilterFlag(LLWU_Type *base, uint32_t filterIndex)
             break;
 #endif /* FSL_FEATURE_LLWU_HAS_PIN_FILTER */
         default:
+            status = false;
             break;
     }
 
@@ -390,6 +391,7 @@ void LLWU_ClearPinFilterFlag(LLWU_Type *base, uint32_t filterIndex)
             break;
 #endif /* FSL_FEATURE_LLWU_HAS_PIN_FILTER > 3 */
         default:
+            assert(false);
             break;
     }
     base->FILT = reg;
