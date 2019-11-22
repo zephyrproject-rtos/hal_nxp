@@ -23,7 +23,7 @@ import tempfile
 MCUX_HAL_BASE = os.path.join(sys.path[0], '..')
 
 def get_soc_family(device):
-    if device.startswith('MK'):
+    if device.startswith('MK') or device.startswith('K32'):
         return 'kinetis'
     elif device.startswith('LPC'):
         return 'lpc'
