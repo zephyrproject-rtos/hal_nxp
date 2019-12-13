@@ -60,6 +60,7 @@
 /*! @brief Defines the mask flag in basic control register. */
 #define PHY_BCTL_DUPLEX_MASK 0x0100U          /*!< The PHY duplex bit mask. */
 #define PHY_BCTL_RESTART_AUTONEG_MASK 0x0200U /*!< The PHY restart auto negotiation mask. */
+#define PHY_BCTL_POWER_DOWN_MASK 0x800U       /*!< The PHY power down bit mask. */
 #define PHY_BCTL_AUTONEG_MASK 0x1000U         /*!< The PHY auto negotiation bit mask. */
 #define PHY_BCTL_SPEED_MASK 0x2000U           /*!< The PHY speed bit mask. */
 #define PHY_BCTL_LOOP_MASK 0x4000U            /*!< The PHY loop bit mask. */
