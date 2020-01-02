@@ -1,8 +1,7 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2019 , NXP
+ * Copyright 2016 - 2019, NXP
  * All rights reserved.
- *
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -41,14 +40,9 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief CLOCK driver version 2.3.1. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*@}*/
-
-/* Definition for delay API in clock driver, users can redefine it to the real application. */
-#ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
-#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (48000000UL)
-#endif
 
 /*! @brief External XTAL0 (OSC0/SYSOSC) clock frequency.
  *
@@ -56,8 +50,8 @@
  * function CLOCK_SetXtal0Freq to set the value in the clock driver. For example,
  * if XTAL0 is 8 MHz:
  * @code
- * CLOCK_InitSysOsc(...); // Set up the OSC0/SYSOSC
- * CLOCK_SetXtal0Freq(80000000); // Set the XTAL0 value in the clock driver.
+ * CLOCK_InitSysOsc(...);
+ * CLOCK_SetXtal0Freq(80000000);
  * @endcode
  *
  * This is important for the multicore platforms where only one core needs to set up the
@@ -77,6 +71,10 @@ extern volatile uint32_t g_xtal0Freq;
  */
 extern volatile uint32_t g_xtal32Freq;
 
+/* Definition for delay API in clock driver, users can redefine it to the real application. */
+#ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
+#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (48000000UL)
+#endif
 /*! @brief Clock ip name array for DMAMUX. */
 #define DMAMUX_CLOCKS  \
     {                  \
@@ -329,7 +327,7 @@ typedef enum _osc32_mode
 /*!
  * @brief SCG status return codes.
  */
-enum _scg_status
+enum
 {
     kStatus_SCG_Busy       = MAKE_STATUS(kStatusGroup_SCG, 1), /*!< Clock is busy.  */
     kStatus_SCG_InvalidSrc = MAKE_STATUS(kStatusGroup_SCG, 2)  /*!< Invalid source. */
@@ -450,7 +448,7 @@ typedef enum _scg_sosc_mode
 } scg_sosc_mode_t;
 
 /*! @brief OSC enable mode. */
-enum _scg_sosc_enable_mode
+enum
 {
     kSCG_SysOscEnable           = SCG_SOSCCSR_SOSCEN_MASK,     /*!< Enable OSC clock. */
     kSCG_SysOscEnableInStop     = SCG_SOSCCSR_SOSCSTEN_MASK,   /*!< Enable OSC in stop mode. */
@@ -483,7 +481,7 @@ typedef enum _scg_sirc_range
 } scg_sirc_range_t;
 
 /*! @brief SIRC enable mode. */
-enum _scg_sirc_enable_mode
+enum
 {
     kSCG_SircEnable           = SCG_SIRCCSR_SIRCEN_MASK,   /*!< Enable SIRC clock.             */
     kSCG_SircEnableInStop     = SCG_SIRCCSR_SIRCSTEN_MASK, /*!< Enable SIRC in stop mode.      */
@@ -564,7 +562,7 @@ typedef enum _scg_firc_range
 } scg_firc_range_t;
 
 /*! @brief FIRC enable mode. */
-enum _scg_firc_enable_mode
+enum
 {
     kSCG_FircEnable           = SCG_FIRCCSR_FIRCEN_MASK,    /*!< Enable FIRC clock.             */
     kSCG_FircEnableInStop     = SCG_FIRCCSR_FIRCSTEN_MASK,  /*!< Enable FIRC in stop mode.      */
@@ -608,7 +606,7 @@ typedef enum _scg_spll_monitor_mode
 } scg_spll_monitor_mode_t;
 
 /*! @brief SPLL enable mode. */
-enum _scg_spll_enable_mode
+enum
 {
     kSCG_SysPllEnable       = SCG_SPLLCSR_SPLLEN_MASK,  /*!< Enable SPLL clock.             */
     kSCG_SysPllEnableInStop = SCG_SPLLCSR_SPLLSTEN_MASK /*!< Enable SPLL in stop mode.      */
@@ -645,9 +643,9 @@ extern "C" {
  */
 static inline void CLOCK_EnableClock(clock_ip_name_t name)
 {
-    assert((*(volatile uint32_t *)name) & PCC_CLKCFG_PR_MASK);
+    assert((*(volatile uint32_t *)((uint32_t)name)) & PCC_CLKCFG_PR_MASK);
 
-    (*(volatile uint32_t *)name) |= PCC_CLKCFG_CGC_MASK;
+    (*(volatile uint32_t *)((uint32_t)name)) |= PCC_CLKCFG_CGC_MASK;
 }
 
 /*!
@@ -657,9 +655,9 @@ static inline void CLOCK_EnableClock(clock_ip_name_t name)
  */
 static inline void CLOCK_DisableClock(clock_ip_name_t name)
 {
-    assert((*(volatile uint32_t *)name) & PCC_CLKCFG_PR_MASK);
+    assert((*(volatile uint32_t *)((uint32_t)name)) & PCC_CLKCFG_PR_MASK);
 
-    (*(volatile uint32_t *)name) &= ~PCC_CLKCFG_CGC_MASK;
+    (*(volatile uint32_t *)((uint32_t)name)) &= ~PCC_CLKCFG_CGC_MASK;
 }
 
 /*!
@@ -671,9 +669,9 @@ static inline void CLOCK_DisableClock(clock_ip_name_t name)
  */
 static inline bool CLOCK_IsEnabledByOtherCore(clock_ip_name_t name)
 {
-    assert((*(volatile uint32_t *)name) & PCC_CLKCFG_PR_MASK);
+    assert((*(volatile uint32_t *)((uint32_t)name)) & PCC_CLKCFG_PR_MASK);
 
-    return ((*(volatile uint32_t *)name) & PCC_CLKCFG_INUSE_MASK) ? true : false;
+    return (((*(volatile uint32_t *)(uint32_t)name) & PCC_CLKCFG_INUSE_MASK) != 0UL) ? true : false;
 }
 
 /*!
@@ -688,10 +686,10 @@ static inline bool CLOCK_IsEnabledByOtherCore(clock_ip_name_t name)
  */
 static inline void CLOCK_SetIpSrc(clock_ip_name_t name, clock_ip_src_t src)
 {
-    uint32_t reg = (*(volatile uint32_t *)name);
+    uint32_t reg = (*(volatile uint32_t *)((uint32_t)name));
 
     assert(reg & PCC_CLKCFG_PR_MASK);
-    assert(!(reg & PCC_CLKCFG_INUSE_MASK)); /* Should not change if clock has been enabled by other core. */
+    assert(0UL == (reg & PCC_CLKCFG_INUSE_MASK)); /* Should not change if clock has been enabled by other core. */
 
     reg = (reg & ~PCC_CLKCFG_PCS_MASK) | PCC_CLKCFG_PCS(src);
 
@@ -699,8 +697,8 @@ static inline void CLOCK_SetIpSrc(clock_ip_name_t name, clock_ip_src_t src)
      * If clock is already enabled, first disable it, then set the clock
      * source and re-enable it.
      */
-    (*(volatile uint32_t *)name) = reg & ~PCC_CLKCFG_CGC_MASK;
-    (*(volatile uint32_t *)name) = reg;
+    (*(volatile uint32_t *)((uint32_t)name)) = reg & ~PCC_CLKCFG_CGC_MASK;
+    (*(volatile uint32_t *)((uint32_t)name)) = reg;
 }
 
 /*!
@@ -786,8 +784,14 @@ uint32_t CLOCK_GetSysClkFreq(scg_sys_clk_t type);
 static inline void CLOCK_SetVlprModeSysClkConfig(const scg_sys_clk_config_t *config)
 {
     assert(config);
+    union
+    {
+        const uint32_t *configInt;
+        const scg_sys_clk_config_t *configPtr;
+    } Config;
 
-    SCG->VCCR = *(const uint32_t *)config;
+    Config.configPtr = config;
+    SCG->VCCR        = *(Config.configInt);
 }
 
 /*!
@@ -800,8 +804,14 @@ static inline void CLOCK_SetVlprModeSysClkConfig(const scg_sys_clk_config_t *con
 static inline void CLOCK_SetRunModeSysClkConfig(const scg_sys_clk_config_t *config)
 {
     assert(config);
+    union
+    {
+        const uint32_t *configInt;
+        const scg_sys_clk_config_t *configPtr;
+    } Config;
 
-    SCG->RCCR = *(const uint32_t *)config;
+    Config.configPtr = config;
+    SCG->RCCR        = *(Config.configInt);
 }
 
 /*!
@@ -814,8 +824,14 @@ static inline void CLOCK_SetRunModeSysClkConfig(const scg_sys_clk_config_t *conf
 static inline void CLOCK_SetHsrunModeSysClkConfig(const scg_sys_clk_config_t *config)
 {
     assert(config);
+    union
+    {
+        const uint32_t *configInt;
+        const scg_sys_clk_config_t *configPtr;
+    } Config;
 
-    SCG->HCCR = *(const uint32_t *)config;
+    Config.configPtr = config;
+    SCG->HCCR        = *(Config.configInt);
 }
 
 /*!
@@ -828,8 +844,14 @@ static inline void CLOCK_SetHsrunModeSysClkConfig(const scg_sys_clk_config_t *co
 static inline void CLOCK_GetCurSysClkConfig(scg_sys_clk_config_t *config)
 {
     assert(config);
+    union
+    {
+        uint32_t *configInt;
+        scg_sys_clk_config_t *configPtr;
+    } Config;
 
-    *(uint32_t *)config = SCG->CSR;
+    Config.configPtr    = config;
+    *(Config.configInt) = SCG->CSR;
 }
 
 /*!
@@ -1197,10 +1219,9 @@ uint32_t CLOCK_GetSysPllMultDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *
  *                                            .div3 = kSCG_AsyncClkDivBy2,
  *                                            .src = kSCG_SysPllSrcFirc,
  *                                            .isBypassSelected = false,
- *                                            .isPfdSelected = false, // Configure SPLL PFD as diabled
+ *                                            .isPfdSelected = false,
  *                                            .prediv = 5U,
- *                                            .pfdClkout = kSCG_AuxPllPfd0Clk, // No need to configure pfdClkout; only
- * needed for initialization
+ *                                            .pfdClkout = kSCG_AuxPllPfd0Clk,
  *                                            .mult = 20U,
  *                                            .pllPostdiv1 = kSCG_SysClkDivBy3,
  *                                            .pllPostdiv2 = kSCG_SysClkDivBy4};
@@ -1363,16 +1384,6 @@ static inline void CLOCK_SetXtal32Freq(uint32_t freq)
 {
     g_xtal32Freq = freq;
 }
-
-/*!
- * @brief Use DWT to delay at least for some time.
- *  Please note that, this API will calculate the microsecond period with the maximum
- *  supported CPU frequency, so this API will only delay for at least the given microseconds, if precise
- *  delay count was needed, please implement a new timer count to achieve this function.
- *
- * @param delay_us  Delay time in unit of microsecond.
- */
-void SDK_DelayAtLeastUs(uint32_t delay_us);
 
 /* @} */
 

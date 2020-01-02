@@ -1,11 +1,11 @@
 /*
-* Copyright 2013-2016 Freescale Semiconductor, Inc.
-* Copyright 2016-2018 NXP
-* All rights reserved.
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*
-*/
+ * Copyright 2013-2016 Freescale Semiconductor, Inc.
+ * Copyright 2016-2018 NXP
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ */
 
 #include "fsl_ftfx_flexnvm.h"
 
@@ -14,7 +14,6 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-
 
 /*******************************************************************************
  * Prototypes
@@ -26,7 +25,6 @@ static status_t flexnvm_convert_start_address(flexnvm_config_t *config, uint32_t
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-
 
 /*******************************************************************************
  * Code
@@ -41,18 +39,21 @@ status_t FLEXNVM_Init(flexnvm_config_t *config)
         return kStatus_FTFx_InvalidArgument;
     }
 
-    config->ftfxConfig.flashDesc.type = (uint8_t)kFTFx_MemTypeFlexnvm;
+    config->ftfxConfig.flashDesc.type  = (uint8_t)kFTFx_MemTypeFlexnvm;
     config->ftfxConfig.flashDesc.index = 0U;
 
     /* Set Flexnvm memory operation parameters */
     config->ftfxConfig.opsConfig.addrAligment.blockWriteUnitSize = FSL_FEATURE_FLASH_FLEX_NVM_BLOCK_WRITE_UNIT_SIZE;
-    config->ftfxConfig.opsConfig.addrAligment.sectorCmd = FSL_FEATURE_FLASH_FLEX_NVM_SECTOR_CMD_ADDRESS_ALIGMENT;
-    config->ftfxConfig.opsConfig.addrAligment.sectionCmd = FSL_FEATURE_FLASH_FLEX_NVM_SECTION_CMD_ADDRESS_ALIGMENT;
+    config->ftfxConfig.opsConfig.addrAligment.sectorCmd   = FSL_FEATURE_FLASH_FLEX_NVM_SECTOR_CMD_ADDRESS_ALIGMENT;
+    config->ftfxConfig.opsConfig.addrAligment.sectionCmd  = FSL_FEATURE_FLASH_FLEX_NVM_SECTION_CMD_ADDRESS_ALIGMENT;
     config->ftfxConfig.opsConfig.addrAligment.resourceCmd = FSL_FEATURE_FLASH_FLEX_NVM_RESOURCE_CMD_ADDRESS_ALIGMENT;
-    config->ftfxConfig.opsConfig.addrAligment.checkCmd = FSL_FEATURE_FLASH_FLEX_NVM_CHECK_CMD_ADDRESS_ALIGMENT;
+    config->ftfxConfig.opsConfig.addrAligment.checkCmd    = FSL_FEATURE_FLASH_FLEX_NVM_CHECK_CMD_ADDRESS_ALIGMENT;
 
     /* Set Flexnvm memory properties */
-    config->ftfxConfig.flashDesc.blockBase = FSL_FEATURE_FLASH_FLEX_NVM_START_ADDRESS;
+    config->ftfxConfig.flashDesc.blockBase  = FSL_FEATURE_FLASH_FLEX_NVM_START_ADDRESS;
+#if defined (FSL_FEATURE_FLASH_HAS_FLEX_NVM_ALIAS) && FSL_FEATURE_FLASH_HAS_FLEX_NVM_ALIAS
+    config->ftfxConfig.flashDesc.aliasBlockBase = FSL_FEATURE_FLASH_FLEX_NVM_ALIAS_START_ADDRESS;
+#endif
     config->ftfxConfig.flashDesc.sectorSize = FSL_FEATURE_FLASH_FLEX_NVM_BLOCK_SECTOR_SIZE;
     config->ftfxConfig.flashDesc.blockCount = FSL_FEATURE_FLASH_FLEX_NVM_BLOCK_COUNT;
 
@@ -131,17 +132,17 @@ status_t FLEXNVM_ProgramPartition(flexnvm_config_t *config,
 }
 
 #if defined(FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD) && FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD
-status_t FLEXNVM_ReadResource(flexnvm_config_t *config,
-                              uint32_t start,
-                              uint8_t *dst,
-                              uint32_t lengthInBytes,
-                              ftfx_read_resource_opt_t option)
+status_t FLEXNVM_ReadResource(
+    flexnvm_config_t *config, uint32_t start, uint8_t *dst, uint32_t lengthInBytes, ftfx_read_resource_opt_t option)
 {
     return FTFx_CMD_ReadResource(&config->ftfxConfig, start, dst, lengthInBytes, option);
 }
 #endif
 
-status_t FLEXNVM_DflashVerifyErase(flexnvm_config_t *config, uint32_t start, uint32_t lengthInBytes, ftfx_margin_value_t margin)
+status_t FLEXNVM_DflashVerifyErase(flexnvm_config_t *config,
+                                   uint32_t start,
+                                   uint32_t lengthInBytes,
+                                   ftfx_margin_value_t margin)
 {
     status_t returnCode;
     returnCode = flexnvm_convert_start_address(config, start);
@@ -173,7 +174,8 @@ status_t FLEXNVM_DflashVerifyProgram(flexnvm_config_t *config,
         return returnCode;
     }
 
-    return FTFx_CMD_VerifyProgram(&config->ftfxConfig, start, lengthInBytes, expectedData, margin, failedAddress, failedData);
+    return FTFx_CMD_VerifyProgram(&config->ftfxConfig, start, lengthInBytes, expectedData, margin, failedAddress,
+                                  failedData);
 }
 
 status_t FLEXNVM_GetSecurityState(flexnvm_config_t *config, ftfx_security_state_t *state)
@@ -378,6 +380,12 @@ status_t FLEXNVM_GetProperty(flexnvm_config_t *config, flexnvm_property_tag_t wh
     {
         *value = config->ftfxConfig.flashDesc.blockBase;
     }
+#if defined (FSL_FEATURE_FLASH_HAS_FLEX_NVM_ALIAS) && FSL_FEATURE_FLASH_HAS_FLEX_NVM_ALIAS
+    else if (whichProperty == kFLEXNVM_PropertyAliasDflashBlockBaseAddr)
+    {
+        *value = config->ftfxConfig.flashDesc.aliasBlockBase;
+    }
+#endif
     else if (whichProperty == kFLEXNVM_PropertyFlexRamBlockBaseAddr)
     {
         *value = config->ftfxConfig.flexramBlockBase;
@@ -400,6 +408,8 @@ status_t FLEXNVM_GetProperty(flexnvm_config_t *config, flexnvm_property_tag_t wh
 
 static status_t flexnvm_convert_start_address(flexnvm_config_t *config, uint32_t start)
 {
+    status_t status = kStatus_FTFx_AddressError;
+
     if (config == NULL)
     {
         return kStatus_FTFx_InvalidArgument;
@@ -407,10 +417,24 @@ static status_t flexnvm_convert_start_address(flexnvm_config_t *config, uint32_t
 
     /* From Spec: When required by the command, address bit 23 selects between program flash memory
      * (=0) and data flash memory (=1).*/
-    config->ftfxConfig.opsConfig.convertedAddress = start - config->ftfxConfig.flashDesc.blockBase + 0x800000U;
+    if (start >= config->ftfxConfig.flashDesc.blockBase)
+    {
+        config->ftfxConfig.opsConfig.convertedAddress = start - config->ftfxConfig.flashDesc.blockBase + 0x800000U;
+        status = kStatus_FTFx_Success;
+    }
+#if defined (FSL_FEATURE_FLASH_HAS_FLEX_NVM_ALIAS) && FSL_FEATURE_FLASH_HAS_FLEX_NVM_ALIAS
+    else if (start >= config->ftfxConfig.flashDesc.aliasBlockBase)
+    {
+        config->ftfxConfig.opsConfig.convertedAddress = start - config->ftfxConfig.flashDesc.aliasBlockBase + 0x800000U;
+        status = kStatus_FTFx_Success;
+    }
+    else
+    {
+         status = kStatus_FTFx_Success;
+    }
+#endif
 
-    return kStatus_FTFx_Success;
+    return status;
 }
 
 #endif /* FSL_FEATURE_FLASH_HAS_FLEX_NVM */
-

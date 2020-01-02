@@ -406,7 +406,7 @@ static inline uint32_t FLEXIO_ReadPinInput(FLEXIO_Type *base)
  */
 static inline uint8_t FLEXIO_GetShifterState(FLEXIO_Type *base)
 {
-    return ((base->SHIFTSTATE) & FLEXIO_SHIFTSTATE_STATE_MASK);
+    return ((uint8_t)(base->SHIFTSTATE) & FLEXIO_SHIFTSTATE_STATE_MASK);
 }
 #endif /*FSL_FEATURE_FLEXIO_HAS_STATE_MODE*/
 

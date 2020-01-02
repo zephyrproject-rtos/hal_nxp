@@ -1,14 +1,14 @@
 /*
-* Copyright 2013-2016 Freescale Semiconductor, Inc.
-* Copyright 2016-2018 NXP
-* All rights reserved.
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*
-*/
+ * Copyright 2013-2016 Freescale Semiconductor, Inc.
+ * Copyright 2016-2019 NXP
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ */
 
-#ifndef _FSL_FLASH_H_
-#define _FSL_FLASH_H_
+#ifndef FSL_FLASH_H
+#define FSL_FLASH_H
 
 #include "fsl_ftfx_cache.h"
 #include "fsl_ftfx_flash.h"
@@ -38,4 +38,4 @@ extern "C" {
 
 /*! @}*/
 
-#endif /* _FSL_FLASH_H_ */
+#endif /* FSL_FLASH_H */

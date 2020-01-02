@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief DAC32 driver version. */
-#define FSL_DAC32_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
+#define FSL_DAC32_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
 
 /*!
  * @brief DAC32 buffer flags.
@@ -215,7 +215,7 @@ void DAC32_SetBufferConfig(DAC_Type *base, const dac32_buffer_config_t *config);
  *   config->triggerMode = kDAC32_BufferTriggerBySoftwareMode;
  *   config->watermark   = kDAC32_BufferWatermark1Word;
  *   config->workMode    = kDAC32_BufferWorkAsNormalMode;
- *   config->upperLimit  = DAC_DAT_COUNT * 2U - 1U; // Full buffer is used.
+ *   config->upperLimit  = DAC_DAT_COUNT * 2U - 1U;
  * @endcode
  * @param config Pointer to the configuration structure. See "dac32_buffer_config_t".
  */

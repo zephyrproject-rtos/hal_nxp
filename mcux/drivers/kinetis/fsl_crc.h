@@ -29,8 +29,10 @@
  * Change log:
  * - Version 2.0.1
  *   - move DATA and DATALL macro definition from header file to source file
+ * - Version 2.0.2
+ *   - Fix MISRA issues
  */
-#define FSL_CRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_CRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 #ifndef CRC_DRIVER_CUSTOM_DEFAULTS

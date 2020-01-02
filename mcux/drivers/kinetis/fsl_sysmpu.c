@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -44,7 +44,7 @@ void SYSMPU_Init(SYSMPU_Type *base, const sysmpu_config_t *config)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* Initializes the regions. */
-    for (count = 1; count < FSL_FEATURE_SYSMPU_DESCRIPTOR_COUNT; count++)
+    for (count = 1; count < (uint32_t)FSL_FEATURE_SYSMPU_DESCRIPTOR_COUNT; count++)
     {
         base->WORD[count][3] = 0; /* VLD/VID+PID. */
         base->WORD[count][0] = 0; /* Start address. */
@@ -54,7 +54,7 @@ void SYSMPU_Init(SYSMPU_Type *base, const sysmpu_config_t *config)
     }
 
     /* SYSMPU configure. */
-    while (config)
+    while (config != NULL)
     {
         SYSMPU_SetRegionConfig(base, &(config->regionConfig));
         config = config->next;
@@ -89,12 +89,12 @@ void SYSMPU_GetHardwareInfo(SYSMPU_Type *base, sysmpu_hardware_info_t *hardwareI
 {
     assert(hardwareInform);
 
-    uint32_t cesReg = base->CESR;
+    uint32_t cesReg             = base->CESR;
+    uint32_t regionsNumber_temp = (cesReg & SYSMPU_CESR_NRGD_MASK) >> SYSMPU_CESR_NRGD_SHIFT;
 
-    hardwareInform->hardwareRevisionLevel = (cesReg & SYSMPU_CESR_HRL_MASK) >> SYSMPU_CESR_HRL_SHIFT;
-    hardwareInform->slavePortsNumbers     = (cesReg & SYSMPU_CESR_NSP_MASK) >> SYSMPU_CESR_NSP_SHIFT;
-    hardwareInform->regionsNumbers =
-        (sysmpu_region_total_num_t)((cesReg & SYSMPU_CESR_NRGD_MASK) >> SYSMPU_CESR_NRGD_SHIFT);
+    hardwareInform->hardwareRevisionLevel = (uint8_t)((cesReg & SYSMPU_CESR_HRL_MASK) >> SYSMPU_CESR_HRL_SHIFT);
+    hardwareInform->slavePortsNumbers     = (uint8_t)((cesReg & SYSMPU_CESR_NSP_MASK) >> SYSMPU_CESR_NSP_SHIFT);
+    hardwareInform->regionsNumbers        = (sysmpu_region_total_num_t)(regionsNumber_temp);
 }
 
 /*!
@@ -115,7 +115,7 @@ void SYSMPU_SetRegionConfig(SYSMPU_Type *base, const sysmpu_region_config_t *reg
 
     uint32_t wordReg = 0;
     uint8_t msPortNum;
-    uint8_t regNumber = regionConfig->regionNum;
+    uint8_t regNumber = (uint8_t)regionConfig->regionNum;
 
     /* The start and end address of the region descriptor. */
     base->WORD[regNumber][0] = regionConfig->startAddress;
@@ -136,7 +136,8 @@ void SYSMPU_SetRegionConfig(SYSMPU_Type *base, const sysmpu_region_config_t *reg
 
 #if FSL_FEATURE_SYSMPU_MASTER_COUNT > SYSMPU_MASTER_RWATTRIBUTE_START_PORT
     /* Set the normal read write rights for master 4 ~ master 7. */
-    for (msPortNum = SYSMPU_MASTER_RWATTRIBUTE_START_PORT; msPortNum < FSL_FEATURE_SYSMPU_MASTER_COUNT; msPortNum++)
+    for (msPortNum = SYSMPU_MASTER_RWATTRIBUTE_START_PORT; msPortNum < (uint32_t)FSL_FEATURE_SYSMPU_MASTER_COUNT;
+         msPortNum++)
     {
         wordReg |= SYSMPU_REGION_RWRIGHTS_MASTER(
             msPortNum,
@@ -219,7 +220,7 @@ void SYSMPU_SetRegionRwxMasterAccessRights(SYSMPU_Type *base,
     /* Build rights control value. */
     right &= ~mask;
     right |= SYSMPU_REGION_RWXRIGHTS_MASTER(
-        masterNum, ((uint32_t)(accessRights->superAccessRights << 3U) | accessRights->userAccessRights));
+        masterNum, (((uint32_t)accessRights->superAccessRights << 3U) | (uint32_t)accessRights->userAccessRights));
 #if FSL_FEATURE_SYSMPU_HAS_PROCESS_IDENTIFIER
     right |= SYSMPU_REGION_RWXRIGHTS_MASTER_PE(masterNum, accessRights->processIdentifierEnable);
 #endif /* FSL_FEATURE_SYSMPU_HAS_PROCESS_IDENTIFIER */
@@ -259,8 +260,8 @@ void SYSMPU_SetRegionRwMasterAccessRights(SYSMPU_Type *base,
 
     /* Build rights control value. */
     right &= ~mask;
-    right |= SYSMPU_REGION_RWRIGHTS_MASTER(masterNum,
-                                           (((uint32_t)accessRights->readEnable << 1U) | accessRights->writeEnable));
+    right |= SYSMPU_REGION_RWRIGHTS_MASTER(
+        masterNum, (((uint32_t)accessRights->readEnable << 1U) | (uint32_t)accessRights->writeEnable));
     /* Set low master region access rights. */
     base->RGDAAC[regionNum] = right;
 }
@@ -279,10 +280,10 @@ bool SYSMPU_GetSlavePortErrorStatus(SYSMPU_Type *base, sysmpu_slave_t slaveNum)
 {
     uint8_t sperr;
 
-    sperr = ((base->CESR & SYSMPU_CESR_SPERR_MASK) >> SYSMPU_CESR_SPERR_SHIFT) &
-            (0x1U << (FSL_FEATURE_SYSMPU_SLAVE_COUNT - slaveNum - 1));
+    sperr = (uint8_t)(((base->CESR & SYSMPU_CESR_SPERR_MASK) >> SYSMPU_CESR_SPERR_SHIFT) &
+                      (0x1U << ((uint32_t)FSL_FEATURE_SYSMPU_SLAVE_COUNT - (uint32_t)slaveNum - 1U)));
 
-    return (sperr != 0) ? true : false;
+    return (sperr != 0U) ? true : false;
 }
 
 /*!
@@ -296,19 +297,21 @@ void SYSMPU_GetDetailErrorAccessInfo(SYSMPU_Type *base, sysmpu_slave_t slaveNum,
 {
     assert(errInform);
 
-    uint16_t value;
+    uint32_t value;
     uint32_t cesReg;
+    uint32_t attributes_temp;
+    uint32_t accessType_temp;
 
     /* Error address. */
     errInform->address = base->SP[slaveNum].EAR;
 
     /* Error detail information. */
     value = (base->SP[slaveNum].EDR & SYSMPU_EDR_EACD_MASK) >> SYSMPU_EDR_EACD_SHIFT;
-    if (!value)
+    if (value == 0U)
     {
         errInform->accessControl = kSYSMPU_NoRegionHit;
     }
-    else if (!(value & (uint16_t)(value - 1)))
+    else if ((value & (uint16_t)(value - 1U)) == 0U)
     {
         errInform->accessControl = kSYSMPU_NoneOverlappRegion;
     }
@@ -317,16 +320,20 @@ void SYSMPU_GetDetailErrorAccessInfo(SYSMPU_Type *base, sysmpu_slave_t slaveNum,
         errInform->accessControl = kSYSMPU_OverlappRegion;
     }
 
-    value                 = base->SP[slaveNum].EDR;
-    errInform->master     = (uint32_t)((value & SYSMPU_EDR_EMN_MASK) >> SYSMPU_EDR_EMN_SHIFT);
-    errInform->attributes = (sysmpu_err_attributes_t)((value & SYSMPU_EDR_EATTR_MASK) >> SYSMPU_EDR_EATTR_SHIFT);
-    errInform->accessType = (sysmpu_err_access_type_t)((value & SYSMPU_EDR_ERW_MASK) >> SYSMPU_EDR_ERW_SHIFT);
+    value           = base->SP[slaveNum].EDR & (~SYSMPU_EDR_EACD_MASK);
+    attributes_temp = (value & SYSMPU_EDR_EATTR_MASK) >> SYSMPU_EDR_EATTR_SHIFT;
+    accessType_temp = (value & SYSMPU_EDR_ERW_MASK) >> SYSMPU_EDR_ERW_SHIFT;
+
+    errInform->master     = (value & SYSMPU_EDR_EMN_MASK) >> SYSMPU_EDR_EMN_SHIFT;
+    errInform->attributes = (sysmpu_err_attributes_t)attributes_temp;
+    errInform->accessType = (sysmpu_err_access_type_t)accessType_temp;
 #if FSL_FEATURE_SYSMPU_HAS_PROCESS_IDENTIFIER
     errInform->processorIdentification = (uint8_t)((value & SYSMPU_EDR_EPID_MASK) >> SYSMPU_EDR_EPID_SHIFT);
 #endif
 
     /* Clears error slave port bit. */
-    cesReg = (base->CESR & ~SYSMPU_CESR_SPERR_MASK) |
-             ((0x1U << (FSL_FEATURE_SYSMPU_SLAVE_COUNT - slaveNum - 1)) << SYSMPU_CESR_SPERR_SHIFT);
+    cesReg =
+        (base->CESR & ~SYSMPU_CESR_SPERR_MASK) |
+        ((0x1UL << ((uint32_t)FSL_FEATURE_SYSMPU_SLAVE_COUNT - (uint32_t)slaveNum - 1U)) << SYSMPU_CESR_SPERR_SHIFT);
     base->CESR = cesReg;
 }

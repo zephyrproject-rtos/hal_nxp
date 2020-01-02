@@ -51,7 +51,7 @@ uint32_t LPIT_GetInstance(LPIT_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_lpitBases); instance++)
+    for (instance = 0U; instance < ARRAY_SIZE(s_lpitBases); instance++)
     {
         if (s_lpitBases[instance] == base)
         {
@@ -77,7 +77,7 @@ uint32_t LPIT_GetInstance(LPIT_Type *base)
  */
 void LPIT_Init(LPIT_Type *base, const lpit_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 
@@ -133,10 +133,10 @@ void LPIT_Deinit(LPIT_Type *base)
  */
 void LPIT_GetDefaultConfig(lpit_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     /* Timers are stopped in debug mode */
     config->enableRunInDebug = false;
@@ -158,23 +158,27 @@ void LPIT_GetDefaultConfig(lpit_config_t *config)
  */
 status_t LPIT_SetupChannel(LPIT_Type *base, lpit_chnl_t channel, const lpit_chnl_params_t *chnlSetup)
 {
-    assert(chnlSetup);
+    assert(NULL != chnlSetup);
 
-    uint32_t reg = 0;
+    status_t status = kStatus_Success;
 
     /* Cannot assert the chain bit for channel 0 */
     if ((channel == kLPIT_Chnl_0) && (chnlSetup->chainChannel == true))
     {
-        return kStatus_Fail;
+        status = kStatus_Fail;
+    }
+    else
+    {
+        uint32_t reg = 0U;
+
+        /* Setup the channel counters operation mode, trigger operation, chain mode */
+        reg = (LPIT_TCTRL_MODE(chnlSetup->timerMode) | LPIT_TCTRL_TRG_SRC(chnlSetup->triggerSource) |
+               LPIT_TCTRL_TRG_SEL(chnlSetup->triggerSelect) | LPIT_TCTRL_TROT(chnlSetup->enableReloadOnTrigger) |
+               LPIT_TCTRL_TSOI(chnlSetup->enableStopOnTimeout) | LPIT_TCTRL_TSOT(chnlSetup->enableStartOnTrigger) |
+               LPIT_TCTRL_CHAIN(chnlSetup->chainChannel));
+
+        base->CHANNEL[channel].TCTRL = reg;
     }
 
-    /* Setup the channel counters operation mode, trigger operation, chain mode */
-    reg = (LPIT_TCTRL_MODE(chnlSetup->timerMode) | LPIT_TCTRL_TRG_SRC(chnlSetup->triggerSource) |
-           LPIT_TCTRL_TRG_SEL(chnlSetup->triggerSelect) | LPIT_TCTRL_TROT(chnlSetup->enableReloadOnTrigger) |
-           LPIT_TCTRL_TSOI(chnlSetup->enableStopOnTimeout) | LPIT_TCTRL_TSOT(chnlSetup->enableStartOnTrigger) |
-           LPIT_TCTRL_CHAIN(chnlSetup->chainChannel));
-
-    base->CHANNEL[channel].TCTRL = reg;
-
-    return kStatus_Success;
+    return status;
 }

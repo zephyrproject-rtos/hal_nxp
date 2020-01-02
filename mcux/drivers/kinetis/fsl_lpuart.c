@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,7 +18,7 @@
 #endif
 
 /* LPUART transfer state. */
-enum _lpuart_transfer_states
+enum
 {
     kLPUART_TxIdle, /*!< TX idle. */
     kLPUART_TxBusy, /*!< TX busy. */
@@ -95,7 +95,11 @@ static const clock_ip_name_t s_lpuartPeriphClocks[] = LPUART_PERIPH_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /* LPUART ISR for transactional APIs. */
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+static lpuart_isr_t s_lpuartIsr = (lpuart_isr_t)DefaultISR;
+#else
 static lpuart_isr_t s_lpuartIsr;
+#endif
 
 /*******************************************************************************
  * Code
@@ -111,7 +115,7 @@ uint32_t LPUART_GetInstance(LPUART_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_lpuartBases); instance++)
+    for (instance = 0U; instance < ARRAY_SIZE(s_lpuartBases); instance++)
     {
         if (s_lpuartBases[instance] == base)
         {
@@ -188,9 +192,9 @@ static void LPUART_ReadNonBlocking(LPUART_Type *base, uint8_t *data, size_t leng
 
     size_t i;
 #if defined(FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT) && FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT
-    uint32_t ctrl = base->CTRL;
-    bool isSevenDataBits =
-        ((ctrl & LPUART_CTRL_M7_MASK) || ((!(ctrl & LPUART_CTRL_M_MASK)) && (ctrl & LPUART_CTRL_PE_MASK)));
+    uint32_t ctrl        = base->CTRL;
+    bool isSevenDataBits = (((ctrl & LPUART_CTRL_M7_MASK) != 0U) ||
+                            (((ctrl & LPUART_CTRL_M_MASK) == 0U) && ((ctrl & LPUART_CTRL_PE_MASK) != 0U)));
 #endif
 
     /* The Non Blocking read data API assume user have ensured there is enough space in
@@ -200,11 +204,11 @@ static void LPUART_ReadNonBlocking(LPUART_Type *base, uint8_t *data, size_t leng
 #if defined(FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT) && FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT
         if (isSevenDataBits)
         {
-            data[i] = (base->DATA & 0x7F);
+            data[i] = (uint8_t)(base->DATA & 0x7FU);
         }
         else
         {
-            data[i] = base->DATA;
+            data[i] = (uint8_t)base->DATA;
         }
 #else
         data[i] = (uint8_t)(base->DATA);
@@ -245,9 +249,11 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
     assert((uint8_t)FSL_FEATURE_LPUART_FIFO_SIZEn(base) >= config->rxFifoWatermark);
 #endif
 
+    status_t status = kStatus_Success;
     uint32_t temp;
     uint16_t sbr, sbrTemp;
-    uint32_t osr, osrTemp, tempDiff, calculatedBaud, baudDiff;
+    uint8_t osr, osrTemp;
+    uint32_t tempDiff, calculatedBaud, baudDiff;
 
     /* This LPUART instantiation uses a slightly different baud rate calculation
      * The idea is to use the best OSR (over-sampling rate) possible
@@ -256,28 +262,21 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
      * iterate through the rest of the supported values of OSR */
 
     baudDiff = config->baudRate_Bps;
-    osr      = 0;
-    sbr      = 0;
+    osr      = 0U;
+    sbr      = 0U;
     for (osrTemp = 4U; osrTemp <= 32U; osrTemp++)
     {
         /* calculate the temporary sbr value   */
-        sbrTemp = (uint16_t)((srcClock_Hz / (config->baudRate_Bps * osrTemp)));
+        sbrTemp = (uint16_t)((srcClock_Hz * 10U / (config->baudRate_Bps * (uint32_t)osrTemp) + 5U) / 10U);
         /*set sbrTemp to 1 if the sourceClockInHz can not satisfy the desired baud rate*/
         if (sbrTemp == 0U)
         {
             sbrTemp = 1U;
         }
         /* Calculate the baud rate based on the temporary OSR and SBR values */
-        calculatedBaud = (srcClock_Hz / (osrTemp * sbrTemp));
-
-        tempDiff = calculatedBaud - config->baudRate_Bps;
-
-        /* Select the better value between srb and (sbr + 1) */
-        if (tempDiff > (config->baudRate_Bps - (srcClock_Hz / (osrTemp * ((uint32_t)sbrTemp + 1U)))))
-        {
-            tempDiff = config->baudRate_Bps - (srcClock_Hz / (osrTemp * ((uint32_t)sbrTemp + 1U)));
-            sbrTemp++;
-        }
+        calculatedBaud = (srcClock_Hz / ((uint32_t)osrTemp * (uint32_t)sbrTemp));
+        tempDiff       = calculatedBaud > config->baudRate_Bps ? (calculatedBaud - config->baudRate_Bps) :
+                                                           (config->baudRate_Bps - calculatedBaud);
 
         if (tempDiff <= baudDiff)
         {
@@ -292,157 +291,159 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
     if (baudDiff > ((config->baudRate_Bps / 100U) * 3U))
     {
         /* Unacceptable baud rate difference of more than 3%*/
-        return kStatus_LPUART_BaudrateNotSupport;
+        status = kStatus_LPUART_BaudrateNotSupport;
     }
-
+    else
+    {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 
-    uint32_t instance = LPUART_GetInstance(base);
+        uint32_t instance = LPUART_GetInstance(base);
 
-    /* Enable lpuart clock */
-    CLOCK_EnableClock(s_lpuartClock[instance]);
+        /* Enable lpuart clock */
+        CLOCK_EnableClock(s_lpuartClock[instance]);
 #if defined(LPUART_PERIPH_CLOCKS)
-    CLOCK_EnableClock(s_lpuartPeriphClocks[instance]);
+        CLOCK_EnableClock(s_lpuartPeriphClocks[instance]);
 #endif
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if defined(FSL_FEATURE_LPUART_HAS_GLOBAL) && FSL_FEATURE_LPUART_HAS_GLOBAL
-    /*Reset all internal logic and registers, except the Global Register */
-    LPUART_SoftwareReset(base);
+        /*Reset all internal logic and registers, except the Global Register */
+        LPUART_SoftwareReset(base);
 #else
-    /* Disable LPUART TX RX before setting. */
-    base->CTRL &= ~(LPUART_CTRL_TE_MASK | LPUART_CTRL_RE_MASK);
+        /* Disable LPUART TX RX before setting. */
+        base->CTRL &= ~(LPUART_CTRL_TE_MASK | LPUART_CTRL_RE_MASK);
 #endif
 
-    temp = base->BAUD;
+        temp = base->BAUD;
 
-    /* Acceptable baud rate, check if OSR is between 4x and 7x oversampling.
-     * If so, then "BOTHEDGE" sampling must be turned on */
-    if ((osr > 3U) && (osr < 8U))
-    {
-        temp |= LPUART_BAUD_BOTHEDGE_MASK;
-    }
+        /* Acceptable baud rate, check if OSR is between 4x and 7x oversampling.
+         * If so, then "BOTHEDGE" sampling must be turned on */
+        if ((osr > 3U) && (osr < 8U))
+        {
+            temp |= LPUART_BAUD_BOTHEDGE_MASK;
+        }
 
-    /* program the osr value (bit value is one less than actual value) */
-    temp &= ~LPUART_BAUD_OSR_MASK;
-    temp |= LPUART_BAUD_OSR(osr - 1U);
+        /* program the osr value (bit value is one less than actual value) */
+        temp &= ~LPUART_BAUD_OSR_MASK;
+        temp |= LPUART_BAUD_OSR((uint32_t)osr - 1UL);
 
-    /* write the sbr value to the BAUD registers */
-    temp &= ~LPUART_BAUD_SBR_MASK;
-    base->BAUD = temp | LPUART_BAUD_SBR(sbr);
+        /* write the sbr value to the BAUD registers */
+        temp &= ~LPUART_BAUD_SBR_MASK;
+        base->BAUD = temp | LPUART_BAUD_SBR(sbr);
 
-    /* Set bit count and parity mode. */
-    base->BAUD &= ~LPUART_BAUD_M10_MASK;
+        /* Set bit count and parity mode. */
+        base->BAUD &= ~LPUART_BAUD_M10_MASK;
 
-    temp = base->CTRL & ~(LPUART_CTRL_PE_MASK | LPUART_CTRL_PT_MASK | LPUART_CTRL_M_MASK | LPUART_CTRL_ILT_MASK |
-                          LPUART_CTRL_IDLECFG_MASK);
+        temp = base->CTRL & ~(LPUART_CTRL_PE_MASK | LPUART_CTRL_PT_MASK | LPUART_CTRL_M_MASK | LPUART_CTRL_ILT_MASK |
+                              LPUART_CTRL_IDLECFG_MASK);
 
-    temp |=
-        (uint8_t)config->parityMode | LPUART_CTRL_IDLECFG(config->rxIdleConfig) | LPUART_CTRL_ILT(config->rxIdleType);
+        temp |= (uint8_t)config->parityMode | LPUART_CTRL_IDLECFG(config->rxIdleConfig) |
+                LPUART_CTRL_ILT(config->rxIdleType);
 
 #if defined(FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT) && FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT
-    if (kLPUART_SevenDataBits == config->dataBitsCount)
-    {
-        if (kLPUART_ParityDisabled != config->parityMode)
+        if (kLPUART_SevenDataBits == config->dataBitsCount)
         {
-            temp &= ~LPUART_CTRL_M7_MASK; /* Seven data bits and one parity bit */
+            if (kLPUART_ParityDisabled != config->parityMode)
+            {
+                temp &= ~LPUART_CTRL_M7_MASK; /* Seven data bits and one parity bit */
+            }
+            else
+            {
+                temp |= LPUART_CTRL_M7_MASK;
+            }
         }
         else
-        {
-            temp |= LPUART_CTRL_M7_MASK;
-        }
-    }
-    else
 #endif
-    {
-        if (kLPUART_ParityDisabled != config->parityMode)
         {
-            temp |= LPUART_CTRL_M_MASK; /* Eight data bits and one parity bit */
+            if (kLPUART_ParityDisabled != config->parityMode)
+            {
+                temp |= LPUART_CTRL_M_MASK; /* Eight data bits and one parity bit */
+            }
         }
-    }
 
-    base->CTRL = temp;
+        base->CTRL = temp;
 
 #if defined(FSL_FEATURE_LPUART_HAS_STOP_BIT_CONFIG_SUPPORT) && FSL_FEATURE_LPUART_HAS_STOP_BIT_CONFIG_SUPPORT
-    /* set stop bit per char */
-    temp       = base->BAUD & ~LPUART_BAUD_SBNS_MASK;
-    base->BAUD = temp | LPUART_BAUD_SBNS((uint8_t)config->stopBitCount);
+        /* set stop bit per char */
+        temp       = base->BAUD & ~LPUART_BAUD_SBNS_MASK;
+        base->BAUD = temp | LPUART_BAUD_SBNS((uint8_t)config->stopBitCount);
 #endif
 
 #if defined(FSL_FEATURE_LPUART_HAS_FIFO) && FSL_FEATURE_LPUART_HAS_FIFO
-    /* Set tx/rx WATER watermark
-       Note:
-       Take care of the RX FIFO, RX interrupt request only assert when received bytes
-       equal or more than RX water mark, there is potential issue if RX water
-       mark larger than 1.
-       For example, if RX FIFO water mark is 2, upper layer needs 5 bytes and
-       5 bytes are received. the last byte will be saved in FIFO but not trigger
-       RX interrupt because the water mark is 2.
-     */
-    base->WATER = (((uint32_t)(config->rxFifoWatermark) << 16U) | config->txFifoWatermark);
+        /* Set tx/rx WATER watermark
+           Note:
+           Take care of the RX FIFO, RX interrupt request only assert when received bytes
+           equal or more than RX water mark, there is potential issue if RX water
+           mark larger than 1.
+           For example, if RX FIFO water mark is 2, upper layer needs 5 bytes and
+           5 bytes are received. the last byte will be saved in FIFO but not trigger
+           RX interrupt because the water mark is 2.
+         */
+        base->WATER = (((uint32_t)(config->rxFifoWatermark) << 16U) | config->txFifoWatermark);
 
-    /* Enable tx/rx FIFO */
-    base->FIFO |= (LPUART_FIFO_TXFE_MASK | LPUART_FIFO_RXFE_MASK);
+        /* Enable tx/rx FIFO */
+        base->FIFO |= (LPUART_FIFO_TXFE_MASK | LPUART_FIFO_RXFE_MASK);
 
-    /* Flush FIFO */
-    base->FIFO |= (LPUART_FIFO_TXFLUSH_MASK | LPUART_FIFO_RXFLUSH_MASK);
+        /* Flush FIFO */
+        base->FIFO |= (LPUART_FIFO_TXFLUSH_MASK | LPUART_FIFO_RXFLUSH_MASK);
 #endif
 
-    /* Clear all status flags */
-    temp = (LPUART_STAT_RXEDGIF_MASK | LPUART_STAT_IDLE_MASK | LPUART_STAT_OR_MASK | LPUART_STAT_NF_MASK |
-            LPUART_STAT_FE_MASK | LPUART_STAT_PF_MASK);
+        /* Clear all status flags */
+        temp = (LPUART_STAT_RXEDGIF_MASK | LPUART_STAT_IDLE_MASK | LPUART_STAT_OR_MASK | LPUART_STAT_NF_MASK |
+                LPUART_STAT_FE_MASK | LPUART_STAT_PF_MASK);
 
 #if defined(FSL_FEATURE_LPUART_HAS_LIN_BREAK_DETECT) && FSL_FEATURE_LPUART_HAS_LIN_BREAK_DETECT
-    temp |= LPUART_STAT_LBKDIF_MASK;
+        temp |= LPUART_STAT_LBKDIF_MASK;
 #endif
 
 #if defined(FSL_FEATURE_LPUART_HAS_ADDRESS_MATCHING) && FSL_FEATURE_LPUART_HAS_ADDRESS_MATCHING
-    temp |= (LPUART_STAT_MA1F_MASK | LPUART_STAT_MA2F_MASK);
+        temp |= (LPUART_STAT_MA1F_MASK | LPUART_STAT_MA2F_MASK);
 #endif
 
 #if defined(FSL_FEATURE_LPUART_HAS_MODEM_SUPPORT) && FSL_FEATURE_LPUART_HAS_MODEM_SUPPORT
-    /* Set the CTS configuration/TX CTS source. */
-    base->MODIR |= LPUART_MODIR_TXCTSC(config->txCtsConfig) | LPUART_MODIR_TXCTSSRC(config->txCtsSource);
-    if (true == config->enableRxRTS)
-    {
-        /* Enable the receiver RTS(request-to-send) function. */
-        base->MODIR |= LPUART_MODIR_RXRTSE_MASK;
-    }
-    if (true == config->enableTxCTS)
-    {
-        /* Enable the CTS(clear-to-send) function. */
-        base->MODIR |= LPUART_MODIR_TXCTSE_MASK;
-    }
+        /* Set the CTS configuration/TX CTS source. */
+        base->MODIR |= LPUART_MODIR_TXCTSC(config->txCtsConfig) | LPUART_MODIR_TXCTSSRC(config->txCtsSource);
+        if (true == config->enableRxRTS)
+        {
+            /* Enable the receiver RTS(request-to-send) function. */
+            base->MODIR |= LPUART_MODIR_RXRTSE_MASK;
+        }
+        if (true == config->enableTxCTS)
+        {
+            /* Enable the CTS(clear-to-send) function. */
+            base->MODIR |= LPUART_MODIR_TXCTSE_MASK;
+        }
 #endif
 
-    /* Set data bits order. */
-    if (true == config->isMsb)
-    {
-        temp |= LPUART_STAT_MSBF_MASK;
+        /* Set data bits order. */
+        if (true == config->isMsb)
+        {
+            temp |= LPUART_STAT_MSBF_MASK;
+        }
+        else
+        {
+            temp &= ~LPUART_STAT_MSBF_MASK;
+        }
+
+        base->STAT |= temp;
+
+        /* Enable TX/RX base on configure structure. */
+        temp = base->CTRL;
+        if (true == config->enableTx)
+        {
+            temp |= LPUART_CTRL_TE_MASK;
+        }
+
+        if (true == config->enableRx)
+        {
+            temp |= LPUART_CTRL_RE_MASK;
+        }
+
+        base->CTRL = temp;
     }
-    else
-    {
-        temp &= ~LPUART_STAT_MSBF_MASK;
-    }
 
-    base->STAT |= temp;
-
-    /* Enable TX/RX base on configure structure. */
-    temp = base->CTRL;
-    if (true == config->enableTx)
-    {
-        temp |= LPUART_CTRL_TE_MASK;
-    }
-
-    if (true == config->enableRx)
-    {
-        temp |= LPUART_CTRL_RE_MASK;
-    }
-
-    base->CTRL = temp;
-
-    return kStatus_Success;
+    return status;
 }
 /*!
  * brief Deinitializes a LPUART instance.
@@ -481,7 +482,7 @@ void LPUART_Deinit(LPUART_Type *base)
     base->STAT |= temp;
 
     /* Disable the module. */
-    base->CTRL = 0;
+    base->CTRL = 0U;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     uint32_t instance = LPUART_GetInstance(base);
@@ -530,8 +531,8 @@ void LPUART_GetDefaultConfig(lpuart_config_t *config)
     config->stopBitCount = kLPUART_OneStopBit;
 #endif
 #if defined(FSL_FEATURE_LPUART_HAS_FIFO) && FSL_FEATURE_LPUART_HAS_FIFO
-    config->txFifoWatermark = 0;
-    config->rxFifoWatermark = 0;
+    config->txFifoWatermark = 0U;
+    config->rxFifoWatermark = 0U;
 #endif
 #if defined(FSL_FEATURE_LPUART_HAS_MODEM_SUPPORT) && FSL_FEATURE_LPUART_HAS_MODEM_SUPPORT
     config->enableRxRTS = false;
@@ -564,9 +565,11 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
 {
     assert(0U < baudRate_Bps);
 
+    status_t status = kStatus_Success;
     uint32_t temp, oldCtrl;
     uint16_t sbr, sbrTemp;
-    uint32_t osr, osrTemp, tempDiff, calculatedBaud, baudDiff;
+    uint8_t osr, osrTemp;
+    uint32_t tempDiff, calculatedBaud, baudDiff;
 
     /* This LPUART instantiation uses a slightly different baud rate calculation
      * The idea is to use the best OSR (over-sampling rate) possible
@@ -575,28 +578,21 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
      * iterate through the rest of the supported values of OSR */
 
     baudDiff = baudRate_Bps;
-    osr      = 0;
-    sbr      = 0;
-    for (osrTemp = 4u; osrTemp <= 32u; osrTemp++)
+    osr      = 0U;
+    sbr      = 0U;
+    for (osrTemp = 4U; osrTemp <= 32U; osrTemp++)
     {
         /* calculate the temporary sbr value   */
-        sbrTemp = (uint16_t)(srcClock_Hz / (baudRate_Bps * osrTemp));
+        sbrTemp = (uint16_t)((srcClock_Hz * 10U / (baudRate_Bps * (uint32_t)osrTemp) + 5U) / 10U);
         /*set sbrTemp to 1 if the sourceClockInHz can not satisfy the desired baud rate*/
-        if (sbrTemp == 0u)
+        if (sbrTemp == 0U)
         {
-            sbrTemp = 1u;
+            sbrTemp = 1U;
         }
         /* Calculate the baud rate based on the temporary OSR and SBR values */
-        calculatedBaud = (uint16_t)((srcClock_Hz / (osrTemp * sbrTemp)));
+        calculatedBaud = srcClock_Hz / ((uint32_t)osrTemp * (uint32_t)sbrTemp);
 
-        tempDiff = calculatedBaud - baudRate_Bps;
-
-        /* Select the better value between srb and (sbr + 1) */
-        if (tempDiff > (baudRate_Bps - (srcClock_Hz / (osrTemp * ((uint32_t)sbrTemp + 1u)))))
-        {
-            tempDiff = baudRate_Bps - (srcClock_Hz / (osrTemp * ((uint32_t)sbrTemp + 1u)));
-            sbrTemp++;
-        }
+        tempDiff = calculatedBaud > baudRate_Bps ? (calculatedBaud - baudRate_Bps) : (baudRate_Bps - calculatedBaud);
 
         if (tempDiff <= baudDiff)
         {
@@ -608,7 +604,7 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
 
     /* Check to see if actual baud rate is within 3% of desired baud rate
      * based on the best calculate OSR value */
-    if (baudDiff < (uint32_t)((baudRate_Bps / 100u) * 3u))
+    if (baudDiff < (uint32_t)((baudRate_Bps / 100U) * 3U))
     {
         /* Store CTRL before disable Tx and Rx */
         oldCtrl = base->CTRL;
@@ -620,14 +616,14 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
 
         /* Acceptable baud rate, check if OSR is between 4x and 7x oversampling.
          * If so, then "BOTHEDGE" sampling must be turned on */
-        if ((osr > 3u) && (osr < 8u))
+        if ((osr > 3U) && (osr < 8U))
         {
             temp |= LPUART_BAUD_BOTHEDGE_MASK;
         }
 
         /* program the osr value (bit value is one less than actual value) */
         temp &= ~LPUART_BAUD_OSR_MASK;
-        temp |= LPUART_BAUD_OSR(osr - 1u);
+        temp |= LPUART_BAUD_OSR((uint32_t)osr - 1UL);
 
         /* write the sbr value to the BAUD registers */
         temp &= ~LPUART_BAUD_SBR_MASK;
@@ -635,14 +631,14 @@ status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t s
 
         /* Restore CTRL. */
         base->CTRL = oldCtrl;
-
-        return kStatus_Success;
     }
     else
     {
         /* Unacceptable baud rate difference of more than 3%*/
-        return kStatus_LPUART_BaudrateNotSupport;
+        status = kStatus_LPUART_BaudrateNotSupport;
     }
+
+    return status;
 }
 
 /*!
@@ -817,12 +813,8 @@ status_t LPUART_ClearStatusFlags(LPUART_Type *base, uint32_t mask)
 /*!
  * brief Writes to the transmitter register using a blocking method.
  *
- * This function polls the transmitter register, waits for the register to be empty or  for TX FIFO to have
- * room, and writes data to the transmitter buffer.
- *
- * note This function does not check whether all data has been sent out to the bus.
- * Before disabling the transmitter, check the kLPUART_TransmissionCompleteFlag to ensure that the transmit is
- * finished.
+ * This function polls the transmitter register, first waits for the register to be empty or TX FIFO to have room,
+ * and writes data to the transmitter buffer, then waits for the data to be sent out to bus.
  *
  * param base LPUART peripheral base address.
  * param data Start address of the data to write.
@@ -835,8 +827,6 @@ void LPUART_WriteBlocking(LPUART_Type *base, const uint8_t *data, size_t length)
     const uint8_t *dataAddress = data;
     size_t transferSize        = length;
 
-    /* This API can only ensure that the data is written into the data buffer but can't
-    ensure all data in the data buffer are sent into the transmit shift buffer. */
     while (0U != transferSize)
     {
         while (0U == (base->STAT & LPUART_STAT_TDRE_MASK))
@@ -845,6 +835,10 @@ void LPUART_WriteBlocking(LPUART_Type *base, const uint8_t *data, size_t length)
         base->DATA = *(dataAddress);
         dataAddress++;
         transferSize--;
+    }
+    /* Ensure all the data in the transmit buffer are sent out to bus. */
+    while (0U == (base->STAT & LPUART_STAT_TC_MASK))
+    {
     }
 }
 
@@ -867,13 +861,14 @@ status_t LPUART_ReadBlocking(LPUART_Type *base, uint8_t *data, size_t length)
 {
     assert(NULL != data);
 
+    status_t status = kStatus_Success;
     uint32_t statusFlag;
     uint8_t *dataAddress = data;
 
 #if defined(FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT) && FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT
-    uint32_t ctrl = base->CTRL;
-    bool isSevenDataBits =
-        ((ctrl & LPUART_CTRL_M7_MASK) || ((!(ctrl & LPUART_CTRL_M_MASK)) && (ctrl & LPUART_CTRL_PE_MASK)));
+    uint32_t ctrl        = base->CTRL;
+    bool isSevenDataBits = (((ctrl & LPUART_CTRL_M7_MASK) != 0U) ||
+                            (((ctrl & LPUART_CTRL_M_MASK) == 0U) && ((ctrl & LPUART_CTRL_PE_MASK) != 0U)));
 #endif
 
     while (0U != (length--))
@@ -886,52 +881,67 @@ status_t LPUART_ReadBlocking(LPUART_Type *base, uint8_t *data, size_t length)
         {
             statusFlag = LPUART_GetStatusFlags(base);
 
-            if ((uint32_t)kLPUART_RxOverrunFlag == (statusFlag & (uint32_t)kLPUART_RxOverrunFlag))
+            if (0U != (statusFlag & (uint32_t)kLPUART_RxOverrunFlag))
             {
-                return ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_RxOverrunFlag)) ?
-                            (kStatus_LPUART_RxHardwareOverrun) :
-                            (kStatus_LPUART_FlagCannotClearManually));
+                status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_RxOverrunFlag)) ?
+                              (kStatus_LPUART_RxHardwareOverrun) :
+                              (kStatus_LPUART_FlagCannotClearManually));
+                /* Other error flags(FE, NF, and PF) are prevented from setting once OR is set, no need to check other
+                 * error flags*/
+                break;
             }
 
-            if ((uint32_t)kLPUART_NoiseErrorFlag == (statusFlag & (uint32_t)kLPUART_NoiseErrorFlag))
+            if (0U != (statusFlag & (uint32_t)kLPUART_ParityErrorFlag))
             {
-                return ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_NoiseErrorFlag)) ?
-                            (kStatus_LPUART_NoiseError) :
-                            (kStatus_LPUART_FlagCannotClearManually));
+                status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_ParityErrorFlag)) ?
+                              (kStatus_LPUART_ParityError) :
+                              (kStatus_LPUART_FlagCannotClearManually));
             }
 
-            if ((uint32_t)kLPUART_FramingErrorFlag == (statusFlag & (uint32_t)kLPUART_FramingErrorFlag))
+            if (0U != (statusFlag & (uint32_t)kLPUART_FramingErrorFlag))
             {
-                return ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_FramingErrorFlag)) ?
-                            (kStatus_LPUART_FramingError) :
-                            (kStatus_LPUART_FlagCannotClearManually));
+                status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_FramingErrorFlag)) ?
+                              (kStatus_LPUART_FramingError) :
+                              (kStatus_LPUART_FlagCannotClearManually));
             }
 
-            if ((uint32_t)kLPUART_ParityErrorFlag == (statusFlag & (uint32_t)kLPUART_ParityErrorFlag))
+            if (0U != (statusFlag & (uint32_t)kLPUART_NoiseErrorFlag))
             {
-                return ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_ParityErrorFlag)) ?
-                            (kStatus_LPUART_ParityError) :
-                            (kStatus_LPUART_FlagCannotClearManually));
+                status = ((kStatus_Success == LPUART_ClearStatusFlags(base, (uint32_t)kLPUART_NoiseErrorFlag)) ?
+                              (kStatus_LPUART_NoiseError) :
+                              (kStatus_LPUART_FlagCannotClearManually));
+            }
+            if (kStatus_Success != status)
+            {
+                break;
             }
         }
-#if defined(FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT) && FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT
-        if (isSevenDataBits)
+
+        if (kStatus_Success == status)
         {
-            *(dataAddress) = (uint8_t)(base->DATA & 0x7F);
+#if defined(FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT) && FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT
+            if (isSevenDataBits)
+            {
+                *(dataAddress) = (uint8_t)(base->DATA & 0x7FU);
+                dataAddress++;
+            }
+            else
+            {
+                *(dataAddress) = (uint8_t)base->DATA;
+                dataAddress++;
+            }
+#else
+            *(dataAddress) = (uint8_t)base->DATA;
             dataAddress++;
+#endif
         }
         else
         {
-            *(dataAddress) = (uint8_t)base->DATA;
-            dataAddress++;
+            break;
         }
-#else
-        *(dataAddress) = (uint8_t)base->DATA;
-        dataAddress++;
-#endif
     }
 
-    return kStatus_Success;
+    return status;
 }
 
 /*!
@@ -962,9 +972,9 @@ void LPUART_TransferCreateHandle(LPUART_Type *base,
     uint32_t instance;
 
 #if defined(FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT) && FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT
-    uint32_t ctrl = base->CTRL;
-    bool isSevenDataBits =
-        ((ctrl & LPUART_CTRL_M7_MASK) || ((!(ctrl & LPUART_CTRL_M_MASK)) && (ctrl & LPUART_CTRL_PE_MASK)));
+    uint32_t ctrl        = base->CTRL;
+    bool isSevenDataBits = (((ctrl & LPUART_CTRL_M7_MASK) != 0U) ||
+                            (((ctrl & LPUART_CTRL_M_MASK) == 0U) && ((ctrl & LPUART_CTRL_PE_MASK) != 0U)));
 #endif
 
     /* Zero the handle. */
@@ -1147,14 +1157,19 @@ status_t LPUART_TransferGetSendCount(LPUART_Type *base, lpuart_handle_t *handle,
     assert(NULL != handle);
     assert(NULL != count);
 
+    status_t status      = kStatus_Success;
+    size_t tmptxDataSize = handle->txDataSize;
+
     if ((uint8_t)kLPUART_TxIdle == handle->txState)
     {
-        return kStatus_NoTransferInProgress;
+        status = kStatus_NoTransferInProgress;
+    }
+    else
+    {
+        *count = handle->txDataSizeAll - tmptxDataSize;
     }
 
-    *count = handle->txDataSizeAll - handle->txDataSize;
-
-    return kStatus_Success;
+    return status;
 }
 
 /*!
@@ -1344,14 +1359,19 @@ status_t LPUART_TransferGetReceiveCount(LPUART_Type *base, lpuart_handle_t *hand
     assert(NULL != handle);
     assert(NULL != count);
 
+    status_t status      = kStatus_Success;
+    size_t tmprxDataSize = handle->rxDataSize;
+
     if ((uint8_t)kLPUART_RxIdle == handle->rxState)
     {
-        return kStatus_NoTransferInProgress;
+        status = kStatus_NoTransferInProgress;
+    }
+    else
+    {
+        *count = handle->rxDataSizeAll - tmprxDataSize;
     }
 
-    *count = handle->rxDataSizeAll - handle->rxDataSize;
-
-    return kStatus_Success;
+    return status;
 }
 
 /*!
@@ -1370,6 +1390,8 @@ void LPUART_TransferHandleIRQ(LPUART_Type *base, lpuart_handle_t *handle)
     uint8_t tempCount;
     uint32_t status            = LPUART_GetStatusFlags(base);
     uint32_t enabledInterrupts = LPUART_GetEnabledInterrupts(base);
+    uint16_t tpmRxRingBufferHead;
+    uint32_t tpmData;
 
     /* If RX overrun. */
     if ((uint32_t)kLPUART_RxOverrunFlag == ((uint32_t)kLPUART_RxOverrunFlag & status))
@@ -1495,19 +1517,19 @@ void LPUART_TransferHandleIRQ(LPUART_Type *base, lpuart_handle_t *handle)
                     }
                 }
 
-/* Read data. */
+                /* Read data. */
+                tpmRxRingBufferHead = handle->rxRingBufferHead;
+                tpmData             = base->DATA;
 #if defined(FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT) && FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT
                 if (handle->isSevenDataBits)
                 {
-                    handle->rxRingBuffer[handle->rxRingBufferHead] = (base->DATA & 0x7F);
+                    handle->rxRingBuffer[tpmRxRingBufferHead] = (uint8_t)(tpmData & 0x7FU);
                 }
                 else
                 {
-                    handle->rxRingBuffer[handle->rxRingBufferHead] = base->DATA;
+                    handle->rxRingBuffer[tpmRxRingBufferHead] = (uint8_t)tpmData;
                 }
 #else
-                uint16_t tpmRxRingBufferHead              = handle->rxRingBufferHead;
-                uint32_t tpmData                          = base->DATA;
                 handle->rxRingBuffer[tpmRxRingBufferHead] = (uint8_t)tpmData;
 #endif
 
@@ -1566,13 +1588,24 @@ void LPUART_TransferHandleIRQ(LPUART_Type *base, lpuart_handle_t *handle)
 
                 /* Disable TX register empty interrupt. */
                 base->CTRL = (base->CTRL & ~LPUART_CTRL_TIE_MASK);
-
-                /* Trigger callback. */
-                if (NULL != handle->callback)
-                {
-                    handle->callback(base, handle, kStatus_LPUART_TxIdle, handle->userData);
-                }
+                /* Enable transmission complete interrupt. */
+                LPUART_EnableInterrupts(base, (uint32_t)kLPUART_TransmissionCompleteInterruptEnable);
             }
+        }
+    }
+
+    /* Transmission complete and the interrupt is enabled. */
+    if ((0U != ((uint32_t)kLPUART_TransmissionCompleteFlag & status)) &&
+        (0U != ((uint32_t)kLPUART_TransmissionCompleteInterruptEnable & enabledInterrupts)) &&
+        (handle->txState == (uint8_t)kLPUART_TxIdle))
+    {
+        /* Disable transmission complete interrupt. */
+        LPUART_DisableInterrupts(base, (uint32_t)kLPUART_TransmissionCompleteInterruptEnable);
+
+        /* Trigger callback. */
+        if (NULL != handle->callback)
+        {
+            handle->callback(base, handle, kStatus_LPUART_TxIdle, handle->userData);
         }
     }
 }

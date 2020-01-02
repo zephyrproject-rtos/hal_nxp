@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -17,8 +17,10 @@
 #endif
 
 /*! @brief Transform raw signed calibration result to unified type int32_t. */
-#define ADC12_TRANSFORM_CALIBRATION_RESULT(resultValue, bitWidth) \
-    (((resultValue) >= (1 << ((bitWidth)-1))) ? ((resultValue) - (1 << (bitWidth))) : (resultValue));
+#define ADC12_TRANSFORM_CALIBRATION_RESULT(resultValue, bitWidth)    \
+    (((resultValue) >= (int32_t)(uint32_t)(1UL << ((bitWidth)-1))) ? \
+         ((resultValue) - (int32_t)(uint32_t)(1UL << (bitWidth))) :  \
+         (resultValue));
 
 /*******************************************************************************
  * Prototypes
@@ -91,18 +93,18 @@ static status_t ADC12_GetCalibrationStatus(ADC_Type *base)
 {
     /* Get raw calibration result. OFS, CLP9, CLPX are signed number. The highest position bit is the signal bit.
     Other calibration value registers are unsigned number. */
-    int32_t OFS    = (int32_t)((base->OFS & ADC_OFS_OFS_MASK) >> ADC_OFS_OFS_SHIFT);
-    int32_t CLP9   = (int32_t)((base->CLP9 & ADC_CLP9_CLP9_MASK) >> ADC_CLP9_CLP9_SHIFT);
-    int32_t CLPX   = (int32_t)((base->CLPX & ADC_CLPX_CLPX_MASK) >> ADC_CLPX_CLPX_SHIFT);
-    uint32_t CLPS  = ((base->CLPS & ADC_CLPS_CLPS_MASK) >> ADC_CLPS_CLPS_SHIFT);
-    uint32_t CLP0  = ((base->CLP0 & ADC_CLP0_CLP0_MASK) >> ADC_CLP0_CLP0_SHIFT);
-    uint32_t CLP1  = ((base->CLP1 & ADC_CLP1_CLP1_MASK) >> ADC_CLP1_CLP1_SHIFT);
-    uint32_t CLP2  = ((base->CLP2 & ADC_CLP2_CLP2_MASK) >> ADC_CLP2_CLP2_SHIFT);
-    uint32_t CLP3  = ((base->CLP3 & ADC_CLP3_CLP3_MASK) >> ADC_CLP3_CLP3_SHIFT);
-    uint32_t Typ1  = (CLP0 + CLP0);
-    uint32_t Typ2  = (CLP1 + CLP1 - 26U);
-    uint32_t Typ3  = (CLP2 + CLP2);
-    status_t error = kStatus_Success;
+    int32_t OFS   = (int32_t)(uint32_t)((base->OFS & ADC_OFS_OFS_MASK) >> ADC_OFS_OFS_SHIFT);
+    int32_t CLP9  = (int32_t)(uint32_t)((base->CLP9 & ADC_CLP9_CLP9_MASK) >> ADC_CLP9_CLP9_SHIFT);
+    int32_t CLPX  = (int32_t)(uint32_t)((base->CLPX & ADC_CLPX_CLPX_MASK) >> ADC_CLPX_CLPX_SHIFT);
+    uint32_t CLPS = ((base->CLPS & ADC_CLPS_CLPS_MASK) >> ADC_CLPS_CLPS_SHIFT);
+    uint32_t CLP0 = ((base->CLP0 & ADC_CLP0_CLP0_MASK) >> ADC_CLP0_CLP0_SHIFT);
+    uint32_t CLP1 = ((base->CLP1 & ADC_CLP1_CLP1_MASK) >> ADC_CLP1_CLP1_SHIFT);
+    uint32_t CLP2 = ((base->CLP2 & ADC_CLP2_CLP2_MASK) >> ADC_CLP2_CLP2_SHIFT);
+    uint32_t CLP3 = ((base->CLP3 & ADC_CLP3_CLP3_MASK) >> ADC_CLP3_CLP3_SHIFT);
+    uint32_t Typ1 = (CLP0 + CLP0);
+    uint32_t Typ2 = (CLP1 + CLP1 - 26U);
+    uint32_t Typ3 = (CLP2 + CLP2);
+    status_t ret  = kStatus_Success;
 
     /* Transform raw calibration result to unified type int32_t when the conversion result value is signed number. */
     OFS  = ADC12_TRANSFORM_CALIBRATION_RESULT(OFS, 16);
@@ -116,10 +118,10 @@ static status_t ADC12_GetCalibrationStatus(ADC_Type *base)
         (CLP1 > (Typ1 + 16U)) || (CLP2 < (Typ2 - 20U)) || (CLP2 > (Typ2 + 20U)) || (CLP3 < (Typ3 - 36U)) ||
         (CLP3 > (Typ3 + 36U)))
     {
-        error = kStatus_Fail;
+        ret = kStatus_Fail;
     }
 
-    return error;
+    return ret;
 }
 
 /*!
@@ -198,7 +200,7 @@ void ADC12_GetDefaultConfig(adc12_config_t *config)
     assert(config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->referenceVoltageSource     = kADC12_ReferenceVoltageSourceVref;
     config->clockSource                = kADC12_ClockSourceAlt0;
@@ -267,7 +269,7 @@ uint32_t ADC12_GetChannelStatusFlags(ADC_Type *base, uint32_t channelGroup)
     /* ADCx_SC1n. */
     if (ADC_SC1_COCO_MASK == (tmp32 & ADC_SC1_COCO_MASK))
     {
-        result |= kADC12_ChannelConversionCompletedFlag;
+        result |= (uint32_t)kADC12_ChannelConversionCompletedFlag;
     }
 
     return result;
@@ -294,7 +296,7 @@ status_t ADC12_DoAutoCalibration(ADC_Type *base)
     uint32_t averageMode;
     uint32_t tmp32;
     uint32_t saveCFG1;
-    status_t error = kStatus_Success;
+    status_t ret = kStatus_Success;
 
     /* Save current clock divider. */
     saveCFG1 = base->CFG1;
@@ -317,22 +319,22 @@ status_t ADC12_DoAutoCalibration(ADC_Type *base)
         enabledHardwareAverage = true;
     }
     tmp32 &= ~ADC_SC3_AVGS_MASK;
-    tmp32 |= (ADC_SC3_AVGE_MASK | ADC_SC3_AVGS(ADC_SC3_AVGS_MASK >> ADC_SC3_AVGS_SHIFT));
+    tmp32 |= (ADC_SC3_AVGE_MASK | ADC_SC3_AVGS(((uint32_t)ADC_SC3_AVGS_MASK >> (uint32_t)ADC_SC3_AVGS_SHIFT)));
 
     /* Trigger calibration and wait until it complete. */
     tmp32 |= ADC_SC3_CAL_MASK;
     base->SC3 = tmp32;
-    while (kADC12_ChannelConversionCompletedFlag !=
-           (ADC12_GetChannelStatusFlags(base, 0U) & kADC12_ChannelConversionCompletedFlag))
+    while ((uint32_t)kADC12_ChannelConversionCompletedFlag !=
+           (ADC12_GetChannelStatusFlags(base, 0U) & (uint32_t)kADC12_ChannelConversionCompletedFlag))
     {
     }
 
-    if (kADC12_CalibrationFailedFlag == (ADC12_GetStatusFlags(base) & kADC12_CalibrationFailedFlag))
+    if ((uint32_t)kADC12_CalibrationFailedFlag == (ADC12_GetStatusFlags(base) & (uint32_t)kADC12_CalibrationFailedFlag))
     {
-        error = kStatus_Fail;
+        ret = kStatus_Fail;
     }
     /* Clear conversion done flag. */
-    ADC12_GetChannelConversionValue(base, 0U);
+    (void)ADC12_GetChannelConversionValue(base, 0U);
 
     /* Restore original trigger mode. */
     if (true == enabledHardwareTrigger)
@@ -351,7 +353,7 @@ status_t ADC12_DoAutoCalibration(ADC_Type *base)
     /* Restore adc clock divider. */
     base->CFG1 = saveCFG1;
 
-    return error;
+    return ret;
 }
 
 /*!
@@ -391,14 +393,15 @@ void ADC12_SetHardwareCompareConfig(ADC_Type *base, const adc12_hardware_compare
                 tmp32 |= (ADC_SC2_ACFGT_MASK | ADC_SC2_ACREN_MASK);
                 break;
             default:
+                assert(false);
                 break;
         }
         tmp32 |= ADC_SC2_ACFE_MASK;
         base->SC2 = tmp32;
 
         /* Set the compare value. */
-        base->CV1 = config->value1;
-        base->CV2 = config->value2;
+        base->CV1 = (uint32_t)config->value1;
+        base->CV2 = (uint32_t)config->value2;
     }
 }
 
@@ -428,6 +431,7 @@ void ADC12_SetHardwareAverage(ADC_Type *base, adc12_hardware_average_mode_t mode
         case kADC12_HardwareAverageDisabled:
             break;
         default:
+            assert(false);
             break;
     }
     base->SC3 = tmp32;
@@ -447,12 +451,12 @@ uint32_t ADC12_GetStatusFlags(ADC_Type *base)
     /* ADCx_SC2. */
     if (ADC_SC2_ADACT_MASK == (base->SC2 & ADC_SC2_ADACT_MASK))
     {
-        result |= kADC12_ActiveFlag;
+        result |= (uint32_t)kADC12_ActiveFlag;
     }
 
     if (kStatus_Fail == ADC12_GetCalibrationStatus(base))
     {
-        result |= kADC12_CalibrationFailedFlag;
+        result |= (uint32_t)kADC12_CalibrationFailedFlag;
     }
 
     return result;

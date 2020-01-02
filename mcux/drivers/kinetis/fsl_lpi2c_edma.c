@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -84,6 +84,12 @@ static uint32_t LPI2C_GenerateCommands(lpi2c_master_edma_handle_t *handle);
 static void LPI2C_MasterEDMACallback(edma_handle_t *dmaHandle, void *userData, bool isTransferDone, uint32_t tcds);
 
 /*******************************************************************************
+ * Variables
+ ******************************************************************************/
+
+static uint32_t lpi2c_edma_RecSetting = 0x02;
+
+/*******************************************************************************
  * Code
  ******************************************************************************/
 
@@ -116,7 +122,7 @@ void LPI2C_MasterCreateEDMAHandle(LPI2C_Type *base,
     assert(txDmaHandle);
 
     /* Clear out the handle. */
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     /* Set up the handle. For combined rx/tx DMA requests, the tx channel handle is set to the rx handle */
     /* in order to make the transfer API code simpler. */
@@ -124,11 +130,11 @@ void LPI2C_MasterCreateEDMAHandle(LPI2C_Type *base,
     handle->completionCallback = callback;
     handle->userData           = userData;
     handle->rx                 = rxDmaHandle;
-    handle->tx                 = FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) ? txDmaHandle : rxDmaHandle;
+    handle->tx                 = (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) > 0) ? txDmaHandle : rxDmaHandle;
 
     /* Set DMA channel completion callbacks. */
     EDMA_SetCallback(handle->rx, LPI2C_MasterEDMACallback, handle);
-    if (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base))
+    if (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) != 0)
     {
         EDMA_SetCallback(handle->tx, LPI2C_MasterEDMACallback, handle);
     }
@@ -146,12 +152,12 @@ static uint32_t LPI2C_GenerateCommands(lpi2c_master_edma_handle_t *handle)
     uint32_t cmdCount             = 0;
 
     /* Handle no start option. */
-    if (xfer->flags & kLPI2C_TransferNoStartFlag)
+    if ((xfer->flags & (uint32_t)kLPI2C_TransferNoStartFlag) != 0U)
     {
         if (xfer->direction == kLPI2C_Read)
         {
             /* Need to issue read command first. */
-            cmd[cmdCount++] = kRxDataCmd | LPI2C_MTDR_DATA(xfer->dataSize - 1);
+            cmd[cmdCount++] = (uint16_t)kRxDataCmd | (uint16_t)LPI2C_MTDR_DATA(xfer->dataSize - 1U);
         }
     }
     else
@@ -160,25 +166,25 @@ static uint32_t LPI2C_GenerateCommands(lpi2c_master_edma_handle_t *handle)
          * Initial direction depends on whether a subaddress was provided, and of course the actual
          * data transfer direction.
          */
-        lpi2c_direction_t direction = xfer->subaddressSize ? kLPI2C_Write : xfer->direction;
+        lpi2c_direction_t direction = (xfer->subaddressSize != 0U) ? kLPI2C_Write : xfer->direction;
 
         /* Start command. */
         cmd[cmdCount++] =
             (uint16_t)kStartCmd | (uint16_t)((uint16_t)((uint16_t)xfer->slaveAddress << 1U) | (uint16_t)direction);
 
         /* Subaddress, MSB first. */
-        if (xfer->subaddressSize)
+        if (xfer->subaddressSize != 0U)
         {
             uint32_t subaddressRemaining = xfer->subaddressSize;
-            while (subaddressRemaining--)
+            while (0U != subaddressRemaining--)
             {
-                uint8_t subaddressByte = (xfer->subaddress >> (8 * subaddressRemaining)) & 0xff;
+                uint8_t subaddressByte = (uint8_t)(xfer->subaddress >> (8U * subaddressRemaining)) & 0xffU;
                 cmd[cmdCount++]        = subaddressByte;
             }
         }
 
         /* Reads need special handling because we have to issue a read command and maybe a repeated start. */
-        if ((xfer->dataSize) && (xfer->direction == kLPI2C_Read))
+        if ((xfer->dataSize != 0U) && (xfer->direction == kLPI2C_Read))
         {
             /* Need to send repeated start if switching directions to read. */
             if (direction == kLPI2C_Write)
@@ -188,7 +194,7 @@ static uint32_t LPI2C_GenerateCommands(lpi2c_master_edma_handle_t *handle)
             }
 
             /* Read command. */
-            cmd[cmdCount++] = kRxDataCmd | LPI2C_MTDR_DATA(xfer->dataSize - 1);
+            cmd[cmdCount++] = (uint16_t)kRxDataCmd | (uint16_t)LPI2C_MTDR_DATA(xfer->dataSize - 1U);
         }
     }
 
@@ -226,7 +232,7 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
 
     /* Return an error if the bus is already in use not by us. */
     result = LPI2C_CheckForBusyBus(base);
-    if (result)
+    if (result != kStatus_Success)
     {
         return result;
     }
@@ -235,11 +241,11 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
     handle->isBusy = true;
 
     /* Disable LPI2C IRQ and DMA sources while we configure stuff. */
-    LPI2C_MasterDisableInterrupts(base, kMasterIrqFlags);
+    LPI2C_MasterDisableInterrupts(base, (uint32_t)kMasterIrqFlags);
     LPI2C_MasterEnableDMA(base, false, false);
 
     /* Clear all flags. */
-    LPI2C_MasterClearStatusFlags(base, kMasterClearFlags);
+    LPI2C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
 
     /* Save transfer into handle. */
     handle->transfer = *transfer;
@@ -248,9 +254,9 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
     uint32_t commandCount = LPI2C_GenerateCommands(handle);
 
     /* If the user is transmitting no data with no start or stop, then just go ahead and invoke the callback. */
-    if ((!commandCount) && (transfer->dataSize == 0))
+    if ((0U == commandCount) && (transfer->dataSize == 0U))
     {
-        if (handle->completionCallback)
+        if (handle->completionCallback != NULL)
         {
             handle->completionCallback(base, handle, kStatus_Success, handle->userData);
         }
@@ -259,7 +265,7 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
 
     /* Reset DMA channels. */
     EDMA_ResetChannel(handle->rx->base, handle->rx->channel);
-    if (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base))
+    if (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) != 0)
     {
         EDMA_ResetChannel(handle->tx->base, handle->tx->channel);
     }
@@ -267,8 +273,8 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
     /* Get a 32-byte aligned TCD pointer. */
     edma_tcd_t *tcd = (edma_tcd_t *)((uint32_t)(&handle->tcds[1]) & (~ALIGN_32_MASK));
 
-    bool hasSendData    = (transfer->direction == kLPI2C_Write) && (transfer->dataSize);
-    bool hasReceiveData = (transfer->direction == kLPI2C_Read) && (transfer->dataSize);
+    bool hasSendData    = (transfer->direction == kLPI2C_Write) && (transfer->dataSize != 0U);
+    bool hasReceiveData = (transfer->direction == kLPI2C_Read) && (transfer->dataSize != 0U);
 
     edma_transfer_config_t transferConfig;
     edma_tcd_t *linkTcd = NULL;
@@ -276,62 +282,80 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
     /* Set up data transmit. */
     if (hasSendData)
     {
-        transferConfig.srcAddr          = (uint32_t)transfer->data;
+        uint32_t *srcAddr               = (uint32_t *)transfer->data;
+        transferConfig.srcAddr          = (uint32_t)srcAddr;
         transferConfig.destAddr         = (uint32_t)LPI2C_MasterGetTxFifoAddress(base);
         transferConfig.srcTransferSize  = kEDMA_TransferSize1Bytes;
         transferConfig.destTransferSize = kEDMA_TransferSize1Bytes;
-        transferConfig.srcOffset        = sizeof(uint8_t);
+        transferConfig.srcOffset        = (int16_t)sizeof(uint8_t);
         transferConfig.destOffset       = 0;
         transferConfig.minorLoopBytes   = sizeof(uint8_t); /* TODO optimize to fill fifo */
         transferConfig.majorLoopCounts  = transfer->dataSize;
 
         /* Store the initially configured eDMA minor byte transfer count into the LPI2C handle */
-        handle->nbytes = transferConfig.minorLoopBytes;
+        handle->nbytes = (uint8_t)transferConfig.minorLoopBytes;
 
-        if (commandCount)
+        if (commandCount != 0U)
         {
             /* Create a software TCD, which will be chained after the commands. */
             EDMA_TcdReset(tcd);
             EDMA_TcdSetTransferConfig(tcd, &transferConfig, NULL);
-            EDMA_TcdEnableInterrupts(tcd, kEDMA_MajorInterruptEnable);
+            EDMA_TcdEnableInterrupts(tcd, (uint32_t)kEDMA_MajorInterruptEnable);
             linkTcd = tcd;
         }
         else
         {
             /* User is only transmitting data with no required commands, so this transfer can stand alone. */
             EDMA_SetTransferConfig(handle->tx->base, handle->tx->channel, &transferConfig, NULL);
-            EDMA_EnableChannelInterrupts(handle->tx->base, handle->tx->channel, kEDMA_MajorInterruptEnable);
+            EDMA_EnableChannelInterrupts(handle->tx->base, handle->tx->channel, (uint32_t)kEDMA_MajorInterruptEnable);
         }
     }
     else if (hasReceiveData)
     {
+        uint32_t *srcAddr = (uint32_t *)transfer->data;
         /* Set up data receive. */
         transferConfig.srcAddr          = (uint32_t)LPI2C_MasterGetRxFifoAddress(base);
-        transferConfig.destAddr         = (uint32_t)transfer->data;
+        transferConfig.destAddr         = (uint32_t)srcAddr;
         transferConfig.srcTransferSize  = kEDMA_TransferSize1Bytes;
         transferConfig.destTransferSize = kEDMA_TransferSize1Bytes;
         transferConfig.srcOffset        = 0;
-        transferConfig.destOffset       = sizeof(uint8_t);
+        transferConfig.destOffset       = (int16_t)sizeof(uint8_t);
         transferConfig.minorLoopBytes   = sizeof(uint8_t); /* TODO optimize to empty fifo */
         transferConfig.majorLoopCounts  = transfer->dataSize;
 
         /* Store the initially configured eDMA minor byte transfer count into the LPI2C handle */
-        handle->nbytes = transferConfig.minorLoopBytes;
+        handle->nbytes = (uint8_t)transferConfig.minorLoopBytes;
 
-        if (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) || (!commandCount))
+        if ((FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) != 0) || (0U == commandCount))
         {
             /* We can put this receive transfer on its own DMA channel. */
             EDMA_SetTransferConfig(handle->rx->base, handle->rx->channel, &transferConfig, NULL);
-            EDMA_EnableChannelInterrupts(handle->rx->base, handle->rx->channel, kEDMA_MajorInterruptEnable);
+            EDMA_EnableChannelInterrupts(handle->rx->base, handle->rx->channel, (uint32_t)kEDMA_MajorInterruptEnable);
         }
         else
         {
-            /* For shared rx/tx DMA requests when there are commands, create a software TCD which will be */
-            /* chained onto the commands transfer, notice that in this situation assume tx/rx uses same channel */
+            /* For shared rx/tx DMA requests, when there are commands, create a software TCD of
+               enabling rx dma and disabling tx dma, which will be chained onto the commands transfer,
+               and create another software TCD of transfering data and chain it onto the last TCD.
+               Notice that in this situation assume tx/rx uses same channel */
             EDMA_TcdReset(tcd);
             EDMA_TcdSetTransferConfig(tcd, &transferConfig, NULL);
-            EDMA_TcdEnableInterrupts(tcd, kEDMA_MajorInterruptEnable);
-            linkTcd = tcd;
+            EDMA_TcdEnableInterrupts(tcd, (uint32_t)kEDMA_MajorInterruptEnable);
+
+            transferConfig.srcAddr          = (uint32_t)&lpi2c_edma_RecSetting;
+            transferConfig.destAddr         = (uint32_t) & (base->MDER);
+            transferConfig.srcTransferSize  = kEDMA_TransferSize1Bytes;
+            transferConfig.destTransferSize = kEDMA_TransferSize1Bytes;
+            transferConfig.srcOffset        = 0;
+            transferConfig.destOffset       = (int16_t)sizeof(uint8_t);
+            transferConfig.minorLoopBytes   = sizeof(uint8_t);
+            transferConfig.majorLoopCounts  = 1;
+
+            edma_tcd_t *tcdSetRxClearTxDMA = (edma_tcd_t *)((uint32_t)(&handle->tcds[2]) & (~ALIGN_32_MASK));
+
+            EDMA_TcdReset(tcdSetRxClearTxDMA);
+            EDMA_TcdSetTransferConfig(tcdSetRxClearTxDMA, &transferConfig, tcd);
+            linkTcd = tcdSetRxClearTxDMA;
         }
     }
     else
@@ -340,13 +364,13 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
     }
 
     /* Set up commands transfer. */
-    if (commandCount)
+    if (commandCount != 0U)
     {
         transferConfig.srcAddr          = (uint32_t)handle->commandBuffer;
         transferConfig.destAddr         = (uint32_t)LPI2C_MasterGetTxFifoAddress(base);
         transferConfig.srcTransferSize  = kEDMA_TransferSize2Bytes;
         transferConfig.destTransferSize = kEDMA_TransferSize2Bytes;
-        transferConfig.srcOffset        = sizeof(uint16_t);
+        transferConfig.srcOffset        = (int16_t)sizeof(uint16_t);
         transferConfig.destOffset       = 0;
         transferConfig.minorLoopBytes   = sizeof(uint16_t); /* TODO optimize to fill fifo */
         transferConfig.majorLoopCounts  = commandCount;
@@ -355,17 +379,12 @@ status_t LPI2C_MasterTransferEDMA(LPI2C_Type *base,
     }
 
     /* Start DMA transfer. */
-    if (hasReceiveData || !FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base))
+    if (hasReceiveData || (0 == FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base)))
     {
         EDMA_StartTransfer(handle->rx);
     }
 
-    if (hasReceiveData && !FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base))
-    {
-        EDMA_EnableChannelInterrupts(handle->tx->base, handle->tx->channel, kEDMA_MajorInterruptEnable);
-    }
-
-    if ((hasSendData || commandCount) && FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base))
+    if ((hasSendData || (commandCount != 0U)) && (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) != 0))
     {
         EDMA_StartTransfer(handle->tx);
     }
@@ -389,7 +408,7 @@ status_t LPI2C_MasterTransferGetCountEDMA(LPI2C_Type *base, lpi2c_master_edma_ha
 {
     assert(handle);
 
-    if (!count)
+    if (NULL == count)
     {
         return kStatus_InvalidArgument;
     }
@@ -405,7 +424,7 @@ status_t LPI2C_MasterTransferGetCountEDMA(LPI2C_Type *base, lpi2c_master_edma_ha
 
     /* If the DMA is still on a commands transfer that chains to the actual data transfer, */
     /* we do nothing and return the number of transferred bytes as zero. */
-    if (EDMA_GetNextTCDAddress(handle->tx) == 0)
+    if (EDMA_GetNextTCDAddress(handle->tx) == 0U)
     {
         if (handle->transfer.direction == kLPI2C_Write)
         {
@@ -445,7 +464,7 @@ status_t LPI2C_MasterTransferAbortEDMA(LPI2C_Type *base, lpi2c_master_edma_handl
 
     /* Terminate DMA transfers. */
     EDMA_AbortTransfer(handle->rx);
-    if (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base))
+    if (FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base) != 0)
     {
         EDMA_AbortTransfer(handle->tx);
     }
@@ -454,7 +473,7 @@ status_t LPI2C_MasterTransferAbortEDMA(LPI2C_Type *base, lpi2c_master_edma_handl
     base->MCR |= LPI2C_MCR_RRF_MASK | LPI2C_MCR_RTF_MASK;
 
     /* Send a stop command to finalize the transfer. */
-    base->MTDR = kStopCmd;
+    base->MTDR = (uint32_t)kStopCmd;
 
     /* Reset handle. */
     handle->isBusy = false;
@@ -473,21 +492,10 @@ status_t LPI2C_MasterTransferAbortEDMA(LPI2C_Type *base, lpi2c_master_edma_handl
 static void LPI2C_MasterEDMACallback(edma_handle_t *dmaHandle, void *userData, bool isTransferDone, uint32_t tcds)
 {
     lpi2c_master_edma_handle_t *handle = (lpi2c_master_edma_handle_t *)userData;
-    bool hasReceiveData;
 
-    if (!handle)
+    if (NULL == handle)
     {
         return;
-    }
-
-    hasReceiveData = (handle->transfer.direction == kLPI2C_Read) && (handle->transfer.dataSize);
-
-    if (hasReceiveData && !FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(base))
-    {
-        if (EDMA_GetNextTCDAddress(handle->tx) != 0)
-        {
-            LPI2C_MasterEnableDMA(handle->base, false, true);
-        }
     }
 
     /* Check for errors. */
@@ -496,14 +504,14 @@ static void LPI2C_MasterEDMACallback(edma_handle_t *dmaHandle, void *userData, b
     /* Done with this transaction. */
     handle->isBusy = false;
 
-    if (!(handle->transfer.flags & kLPI2C_TransferNoStopFlag))
+    if (0U == (handle->transfer.flags & (uint32_t)kLPI2C_TransferNoStopFlag))
     {
         /* Send a stop command to finalize the transfer. */
-        handle->base->MTDR = kStopCmd;
+        handle->base->MTDR = (uint32_t)kStopCmd;
     }
 
     /* Invoke callback. */
-    if (handle->completionCallback)
+    if (handle->completionCallback != NULL)
     {
         handle->completionCallback(handle->base, handle, result, handle->userData);
     }

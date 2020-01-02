@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,12 +23,12 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexIO UART driver version 2.1.5. */
-#define FSL_FLEXIO_UART_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
+/*! @brief FlexIO UART driver version 2.1.6. */
+#define FSL_FLEXIO_UART_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
 /*@}*/
 
 /*! @brief Error codes for the UART driver. */
-enum _flexio_uart_status
+enum
 {
     kStatus_FLEXIO_UART_TxBusy = MAKE_STATUS(kStatusGroup_FLEXIO_UART, 0), /*!< Transmitter is busy. */
     kStatus_FLEXIO_UART_RxBusy = MAKE_STATUS(kStatusGroup_FLEXIO_UART, 1), /*!< Receiver is busy. */
@@ -290,7 +290,7 @@ static inline uint32_t FLEXIO_UART_GetRxDataRegisterAddress(FLEXIO_UART_Type *ba
  */
 static inline void FLEXIO_UART_EnableTxDMA(FLEXIO_UART_Type *base, bool enable)
 {
-    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1 << base->shifterIndex[0], enable);
+    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1UL << base->shifterIndex[0], enable);
 }
 
 /*!
@@ -303,7 +303,7 @@ static inline void FLEXIO_UART_EnableTxDMA(FLEXIO_UART_Type *base, bool enable)
  */
 static inline void FLEXIO_UART_EnableRxDMA(FLEXIO_UART_Type *base, bool enable)
 {
-    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1 << base->shifterIndex[1], enable);
+    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1UL << base->shifterIndex[1], enable);
 }
 
 /* @} */
@@ -353,7 +353,7 @@ static inline void FLEXIO_UART_WriteByte(FLEXIO_UART_Type *base, const uint8_t *
  */
 static inline void FLEXIO_UART_ReadByte(FLEXIO_UART_Type *base, uint8_t *buffer)
 {
-    *buffer = base->flexioBase->SHIFTBUFBYS[base->shifterIndex[1]];
+    *buffer = (uint8_t)(base->flexioBase->SHIFTBUFBYS[base->shifterIndex[1]]);
 }
 
 /*!

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -125,7 +125,7 @@ void PDB_GetDefaultConfig(pdb_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->loadValueMode               = kPDB_LoadValueImmediately;
     config->prescalerDivider            = kPDB_PrescalerDivider1;

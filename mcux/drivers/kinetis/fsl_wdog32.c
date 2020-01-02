@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,7 +19,7 @@
 
 void WDOG32_ClearStatusFlags(WDOG_Type *base, uint32_t mask)
 {
-    if (mask & kWDOG32_InterruptFlag)
+    if (0U != (mask & (uint32_t)kWDOG32_InterruptFlag))
     {
         base->CS |= WDOG_CS_FLG_MASK;
     }
@@ -50,10 +50,10 @@ void WDOG32_ClearStatusFlags(WDOG_Type *base, uint32_t mask)
  */
 void WDOG32_GetDefaultConfig(wdog32_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enableWdog32         = true;
     config->clockSource          = kWDOG32_ClockSource1;
@@ -71,23 +71,25 @@ void WDOG32_GetDefaultConfig(wdog32_config_t *config)
 
 void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     register uint32_t value                   = 0U;
     uint32_t primaskValue                     = 0U;
     register WDOG_Type *regBase               = base;
     register const wdog32_config_t *regConfig = config;
+    uint32_t tempPrescaler                    = (uint32_t)regConfig->prescaler;
 
-    value = WDOG_CS_EN(regConfig->enableWdog32) | WDOG_CS_CLK(regConfig->clockSource) |
-            WDOG_CS_INT(regConfig->enableInterrupt) | WDOG_CS_WIN(regConfig->enableWindowMode) |
-            WDOG_CS_UPDATE(regConfig->enableUpdate) | WDOG_CS_DBG(regConfig->workMode.enableDebug) |
-            WDOG_CS_STOP(regConfig->workMode.enableStop) | WDOG_CS_WAIT(regConfig->workMode.enableWait) |
-            WDOG_CS_PRES(regConfig->prescaler) | WDOG_CS_CMD32EN(true) | WDOG_CS_TST(regConfig->testMode);
+    value = WDOG_CS_EN((uint32_t)regConfig->enableWdog32) | WDOG_CS_CLK((uint32_t)regConfig->clockSource) |
+            WDOG_CS_INT((uint32_t)regConfig->enableInterrupt) | WDOG_CS_WIN((uint32_t)regConfig->enableWindowMode) |
+            WDOG_CS_UPDATE((uint32_t)regConfig->enableUpdate) | WDOG_CS_DBG((uint32_t)regConfig->workMode.enableDebug) |
+            WDOG_CS_STOP((uint32_t)regConfig->workMode.enableStop) |
+            WDOG_CS_WAIT((uint32_t)regConfig->workMode.enableWait) | WDOG_CS_PRES(tempPrescaler) |
+            WDOG_CS_CMD32EN(1UL) | WDOG_CS_TST((uint32_t)regConfig->testMode);
 
     /* Disable the global interrupts. Otherwise, an interrupt could effectively invalidate the unlock sequence
      * and the WCT may expire. After the configuration finishes, re-enable the global interrupts. */
     primaskValue = DisableGlobalIRQ();
-    if ((regBase->CS) & WDOG_CS_CMD32EN_MASK)
+    if (0U != ((regBase->CS) & WDOG_CS_CMD32EN_MASK))
     {
         regBase->CNT = WDOG_UPDATE_KEY;
     }
