@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Defines WDOG driver version 2.0.0. */
-#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief Defines WDOG driver version 2.0.1. */
+#define FSL_WDOG_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*! @name Unlock sequence */
@@ -243,7 +243,7 @@ static inline void WDOG_Enable(WDOG_Type *base)
  */
 static inline void WDOG_Disable(WDOG_Type *base)
 {
-    base->STCTRLH &= ~WDOG_STCTRLH_WDOGEN_MASK;
+    base->STCTRLH &= ~(uint16_t)WDOG_STCTRLH_WDOGEN_MASK;
 }
 
 /*!
@@ -261,7 +261,7 @@ static inline void WDOG_Disable(WDOG_Type *base)
  */
 static inline void WDOG_EnableInterrupts(WDOG_Type *base, uint32_t mask)
 {
-    base->STCTRLH |= mask;
+    base->STCTRLH |= (uint16_t)mask;
 }
 
 /*!
@@ -279,7 +279,7 @@ static inline void WDOG_EnableInterrupts(WDOG_Type *base, uint32_t mask)
  */
 static inline void WDOG_DisableInterrupts(WDOG_Type *base, uint32_t mask)
 {
-    base->STCTRLH &= ~mask;
+    base->STCTRLH &= (uint16_t)~mask;
 }
 
 /*!
@@ -398,7 +398,7 @@ static inline uint16_t WDOG_GetResetCount(WDOG_Type *base)
  */
 static inline void WDOG_ClearResetCount(WDOG_Type *base)
 {
-    base->RSTCNT |= UINT16_MAX;
+    base->RSTCNT |= (uint16_t)UINT16_MAX;
 }
 
 /*@}*/

@@ -11,9 +11,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1064RM Rev.0.1, 12/2018
-**     Version:             rev. 1.1, 2018-11-27
-**     Build:               b190226
+**     Reference manual:    IMXRT1064RM Rev.0.1, 12/2018 | IMXRT1064SRM Rev.3
+**     Version:             rev. 1.2, 2019-04-29
+**     Build:               b191113
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -36,14 +36,16 @@
 **         Update header files to align with IMXRT1064RM Rev.0.
 **     - rev. 1.1 (2018-11-27)
 **         Update header files to align with IMXRT1064RM Rev.0.1.
+**     - rev. 1.2 (2019-04-29)
+**         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1064
- * @version 1.1
- * @date 2018-11-27
+ * @version 1.2
+ * @date 2019-04-29
  * @brief Device specific configuration file for MIMXRT1064 (header file)
  *
  * Provides a system configuration function and a global variable that contains

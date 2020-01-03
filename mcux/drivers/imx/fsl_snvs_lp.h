@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017, NXP
+ * Copyright 2017-2019, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,10 +22,10 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SNVS_LP_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0 */
+#define FSL_SNVS_LP_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2 */
 /*@}*/
 
-#define SNVS_ZMK_REG_COUNT 8 /* 8 Zeroizable Master Key registers. */
+#define SNVS_ZMK_REG_COUNT 8U /* 8 Zeroizable Master Key registers. */
 
 /*! @brief List of SNVS_LP interrupts */
 typedef enum _snvs_lp_srtc_interrupts
@@ -322,7 +322,7 @@ static inline void SNVS_LP_SRTC_ClearStatusFlags(SNVS_Type *base, uint32_t mask)
 static inline void SNVS_LP_SRTC_StartTimer(SNVS_Type *base)
 {
     base->LPCR |= SNVS_LPCR_SRTC_ENV_MASK;
-    while (!(base->LPCR & SNVS_LPCR_SRTC_ENV_MASK))
+    while ((0U == (base->LPCR & SNVS_LPCR_SRTC_ENV_MASK)))
     {
     }
 }
@@ -335,7 +335,7 @@ static inline void SNVS_LP_SRTC_StartTimer(SNVS_Type *base)
 static inline void SNVS_LP_SRTC_StopTimer(SNVS_Type *base)
 {
     base->LPCR &= ~SNVS_LPCR_SRTC_ENV_MASK;
-    while (base->LPCR & SNVS_LPCR_SRTC_ENV_MASK)
+    while ((base->LPCR & SNVS_LPCR_SRTC_ENV_MASK) != 0U)
     {
     }
 }
@@ -427,7 +427,7 @@ uint64_t SNVS_LP_GetMonotonicCounter(SNVS_Type *base);
 static inline void SNVS_LP_IncreaseMonotonicCounter(SNVS_Type *base)
 {
     /* Write to the LPSMCLR or LPSMCLR, the counter increases. */
-    *((volatile uint32_t *)(&(base->LPSMCLR))) = 0xFFFFFFFFU;
+    *((volatile uint32_t *)(uint32_t)(&(base->LPSMCLR))) = 0xFFFFFFFFU;
 }
 
 /*! @}*/

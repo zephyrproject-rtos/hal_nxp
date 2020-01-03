@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief RNGA driver version 2.0.1. */
-#define FSL_RNGA_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief RNGA driver version 2.0.2. */
+#define FSL_RNGA_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*! @brief RNGA working mode */

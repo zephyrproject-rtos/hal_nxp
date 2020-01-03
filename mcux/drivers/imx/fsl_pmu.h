@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,13 +20,13 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief PMU driver version */
-#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */
+#define FSL_PMU_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1. */
                                                        /*@}*/
 
 /*!
- * @brief Status flags.
+ * @brief PMU Status flags.
  */
-enum _pmu_status_flags
+enum
 {
     kPMU_1P1RegulatorOutputOK = (1U << 0U), /*!< Status bit that signals when the 1p1 regulator output
                                                         is ok. 1 = regulator output > brownout target. */

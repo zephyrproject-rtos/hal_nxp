@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, NXP
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  *
@@ -16,7 +16,8 @@
 /*******************************************************************************
  * Definitations
  ******************************************************************************/
-enum _spdif_transfer_state
+/*! @brief spdif transfer state. */
+enum
 {
     kSPDIF_Busy = 0x0U, /*!< SPDIF is busy */
     kSPDIF_Idle,        /*!< Transfer is done. */
@@ -29,20 +30,13 @@ typedef void (*spdif_isr_t)(SPDIF_Type *base, spdif_handle_t *handle);
  * Prototypes
  ******************************************************************************/
 
-/*!
- * @brief Get the instance number for SPDIF.
- *
- * @param base SPDIF base pointer.
- */
-uint32_t SPDIF_GetInstance(SPDIF_Type *base);
-
 /*******************************************************************************
  * Variables
  ******************************************************************************/
 /* Base pointer array */
 static SPDIF_Type *const s_spdifBases[] = SPDIF_BASE_PTRS;
 /*! @brief SPDIF handle pointer */
-spdif_handle_t *s_spdifHandle[ARRAY_SIZE(s_spdifBases)][2];
+static spdif_handle_t *s_spdifHandle[ARRAY_SIZE(s_spdifBases)][2];
 /* IRQ number array */
 static const IRQn_Type s_spdifIRQ[] = SPDIF_IRQS;
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -106,7 +100,7 @@ void SPDIF_Init(SPDIF_Type *base, const spdif_config_t *config)
     base->SCR |= SPDIF_SCR_SOFT_RESET_MASK;
 
     /* Waiting for reset finish */
-    while (base->SCR & SPDIF_SCR_SOFT_RESET_MASK)
+    while ((base->SCR & SPDIF_SCR_SOFT_RESET_MASK) != 0x00U)
     {
     }
 
@@ -158,7 +152,7 @@ void SPDIF_Deinit(SPDIF_Type *base)
 void SPDIF_GetDefaultConfig(spdif_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->isTxAutoSync   = true;
     config->isRxAutoSync   = true;
@@ -210,13 +204,13 @@ void SPDIF_TxEnable(SPDIF_Type *base, bool enable)
  */
 void SPDIF_TxSetSampleRate(SPDIF_Type *base, uint32_t sampleRate_Hz, uint32_t sourceClockFreq_Hz)
 {
-    uint32_t clkDiv     = sourceClockFreq_Hz / (sampleRate_Hz * 64);
-    uint32_t mod        = sourceClockFreq_Hz % (sampleRate_Hz * 64);
+    uint32_t clkDiv     = sourceClockFreq_Hz / (sampleRate_Hz * 64U);
+    uint32_t mod        = sourceClockFreq_Hz % (sampleRate_Hz * 64U);
     uint32_t val        = 0;
-    uint8_t clockSource = (((base->STC) & SPDIF_STC_TXCLK_SOURCE_MASK) >> SPDIF_STC_TXCLK_SOURCE_SHIFT);
+    uint8_t clockSource = (uint8_t)(((base->STC) & SPDIF_STC_TXCLK_SOURCE_MASK) >> SPDIF_STC_TXCLK_SOURCE_SHIFT);
 
     /* Compute the nearest divider */
-    if (mod > ((sampleRate_Hz * 64) / 2))
+    if (mod > ((sampleRate_Hz * 64U) / 2U))
     {
         clkDiv += 1U;
     }
@@ -224,10 +218,10 @@ void SPDIF_TxSetSampleRate(SPDIF_Type *base, uint32_t sampleRate_Hz, uint32_t so
     /* If use divided systeme clock */
     if (clockSource == 5U)
     {
-        if (clkDiv > 256)
+        if (clkDiv > 256U)
         {
             val = base->STC & (~(SPDIF_STC_TXCLK_DF_MASK | SPDIF_STC_SYSCLK_DF_MASK));
-            val |= SPDIF_STC_SYSCLK_DF(clkDiv / 128U - 1U) | SPDIF_STC_TXCLK_DF(127U);
+            val |= SPDIF_STC_SYSCLK_DF((clkDiv / 128U) - 1U) | SPDIF_STC_TXCLK_DF(127U);
             base->STC = val;
         }
         else
@@ -257,9 +251,10 @@ void SPDIF_TxSetSampleRate(SPDIF_Type *base, uint32_t sampleRate_Hz, uint32_t so
  */
 uint32_t SPDIF_GetRxSampleRate(SPDIF_Type *base, uint32_t clockSourceFreq_Hz)
 {
-    uint32_t gain    = s_spdif_gain[((base->SRPC & SPDIF_SRPC_GAINSEL_MASK) >> SPDIF_SRPC_GAINSEL_SHIFT)];
-    uint32_t measure = 0, sampleRate = 0;
-    uint64_t temp = 0;
+    uint64_t gain       = s_spdif_gain[((base->SRPC & SPDIF_SRPC_GAINSEL_MASK) >> SPDIF_SRPC_GAINSEL_SHIFT)];
+    uint32_t measure    = 0;
+    uint32_t sampleRate = 0;
+    uint64_t temp       = 0;
 
     /* Wait the DPLL locked */
     while ((base->SRPC & SPDIF_SRPC_LOCK_MASK) == 0U)
@@ -269,7 +264,7 @@ uint32_t SPDIF_GetRxSampleRate(SPDIF_Type *base, uint32_t clockSourceFreq_Hz)
     /* Get the measure value */
     measure = base->SRFM;
     temp    = (uint64_t)measure * (uint64_t)clockSourceFreq_Hz;
-    temp /= (uint64_t)(1024 * 1024 * 128 * gain);
+    temp /= 1024U * 1024U * 128U * gain;
     sampleRate = (uint32_t)temp;
 
     return sampleRate;
@@ -286,15 +281,15 @@ uint32_t SPDIF_GetRxSampleRate(SPDIF_Type *base, uint32_t clockSourceFreq_Hz)
  */
 void SPDIF_WriteBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size)
 {
-    assert(buffer);
-    assert(size % 6U == 0U);
+    assert(buffer != NULL);
+    assert((size % 6U) == 0U);
 
     uint32_t i = 0, j = 0, data = 0;
 
     while (i < size)
     {
         /* Wait until it can write data */
-        while ((SPDIF_GetStatusFlag(base) & kSPDIF_TxFIFOEmpty) == 0U)
+        while ((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_TxFIFOEmpty) == 0x00U)
         {
         }
 
@@ -330,15 +325,15 @@ void SPDIF_WriteBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size)
  */
 void SPDIF_ReadBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size)
 {
-    assert(buffer);
-    assert(size % 6U == 0U);
+    assert(buffer != NULL);
+    assert((size % 6U) == 0U);
 
     uint32_t i = 0, j = 0, data = 0;
 
     while (i < size)
     {
         /* Wait until it can write data */
-        while ((SPDIF_GetStatusFlag(base) & kSPDIF_RxFIFOFull) == 0U)
+        while ((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_RxFIFOFull) == 0x00U)
         {
         }
 
@@ -346,7 +341,7 @@ void SPDIF_ReadBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size)
         data = SPDIF_ReadLeftData(base);
         for (j = 0; j < 3U; j++)
         {
-            *buffer = ((data >> (j * 8U)) & 0xFFU);
+            *buffer = ((uint8_t)(data >> (j * 8U)) & 0xFFU);
             buffer++;
         }
 
@@ -354,7 +349,7 @@ void SPDIF_ReadBlocking(SPDIF_Type *base, uint8_t *buffer, uint32_t size)
         data = SPDIF_ReadRightData(base);
         for (j = 0; j < 3U; j++)
         {
-            *buffer = ((data >> (j * 8U)) & 0xFFU);
+            *buffer = ((uint8_t)(data >> (j * 8U)) & 0xFFU);
             buffer++;
         }
 
@@ -378,10 +373,10 @@ void SPDIF_TransferTxCreateHandle(SPDIF_Type *base,
                                   spdif_transfer_callback_t callback,
                                   void *userData)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Zero the handle */
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     s_spdifHandle[SPDIF_GetInstance(base)][0] = handle;
 
@@ -394,7 +389,7 @@ void SPDIF_TransferTxCreateHandle(SPDIF_Type *base,
     s_spdifTxIsr = SPDIF_TransferTxHandleIRQ;
 
     /* Enable Tx irq */
-    EnableIRQ(s_spdifIRQ[SPDIF_GetInstance(base)]);
+    (void)EnableIRQ(s_spdifIRQ[SPDIF_GetInstance(base)]);
 }
 
 /*!
@@ -413,10 +408,10 @@ void SPDIF_TransferRxCreateHandle(SPDIF_Type *base,
                                   spdif_transfer_callback_t callback,
                                   void *userData)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Zero the handle */
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     s_spdifHandle[SPDIF_GetInstance(base)][1] = handle;
 
@@ -429,7 +424,7 @@ void SPDIF_TransferRxCreateHandle(SPDIF_Type *base,
     s_spdifRxIsr = SPDIF_TransferRxHandleIRQ;
 
     /* Enable Rx irq */
-    EnableIRQ(s_spdifIRQ[SPDIF_GetInstance(base)]);
+    (void)EnableIRQ(s_spdifIRQ[SPDIF_GetInstance(base)]);
 }
 
 /*!
@@ -449,10 +444,10 @@ void SPDIF_TransferRxCreateHandle(SPDIF_Type *base,
  */
 status_t SPDIF_TransferSendNonBlocking(SPDIF_Type *base, spdif_handle_t *handle, spdif_transfer_t *xfer)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Check if the queue is full */
-    if (handle->spdifQueue[handle->queueUser].data)
+    if (handle->spdifQueue[handle->queueUser].data != NULL)
     {
         return kStatus_SPDIF_QueueFull;
     }
@@ -461,7 +456,7 @@ status_t SPDIF_TransferSendNonBlocking(SPDIF_Type *base, spdif_handle_t *handle,
     handle->transferSize[handle->queueUser]        = xfer->dataSize;
     handle->spdifQueue[handle->queueUser].data     = xfer->data;
     handle->spdifQueue[handle->queueUser].dataSize = xfer->dataSize;
-    handle->queueUser                              = (handle->queueUser + 1) % SPDIF_XFER_QUEUE_SIZE;
+    handle->queueUser                              = (handle->queueUser + 0x01U) % SPDIF_XFER_QUEUE_SIZE;
 
     /* Set the state to busy */
     handle->state = kSPDIF_Busy;
@@ -492,10 +487,10 @@ status_t SPDIF_TransferSendNonBlocking(SPDIF_Type *base, spdif_handle_t *handle,
  */
 status_t SPDIF_TransferReceiveNonBlocking(SPDIF_Type *base, spdif_handle_t *handle, spdif_transfer_t *xfer)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Check if the queue is full */
-    if (handle->spdifQueue[handle->queueUser].data)
+    if (handle->spdifQueue[handle->queueUser].data != NULL)
     {
         return kStatus_SPDIF_QueueFull;
     }
@@ -506,14 +501,15 @@ status_t SPDIF_TransferReceiveNonBlocking(SPDIF_Type *base, spdif_handle_t *hand
     handle->spdifQueue[handle->queueUser].dataSize = xfer->dataSize;
     handle->spdifQueue[handle->queueUser].udata    = xfer->udata;
     handle->spdifQueue[handle->queueUser].qdata    = xfer->qdata;
-    handle->queueUser                              = (handle->queueUser + 1) % SPDIF_XFER_QUEUE_SIZE;
+    handle->queueUser                              = (handle->queueUser + 0x01U) % SPDIF_XFER_QUEUE_SIZE;
 
     /* Set state to busy */
     handle->state = kSPDIF_Busy;
 
     /* Enable interrupt */
-    SPDIF_EnableInterrupts(base, kSPDIF_UChannelReceiveRegisterFull | kSPDIF_QChannelReceiveRegisterFull |
-                                     kSPDIF_RxFIFOFull | kSPDIF_RxControlChannelChange);
+    SPDIF_EnableInterrupts(base, (uint32_t)kSPDIF_UChannelReceiveRegisterFull |
+                                     (uint32_t)kSPDIF_QChannelReceiveRegisterFull | (uint32_t)kSPDIF_RxFIFOFull |
+                                     (uint32_t)kSPDIF_RxControlChannelChange);
 
     /* Enable Rx transfer */
     SPDIF_RxEnable(base, true);
@@ -532,17 +528,18 @@ status_t SPDIF_TransferReceiveNonBlocking(SPDIF_Type *base, spdif_handle_t *hand
  */
 status_t SPDIF_TransferGetSendCount(SPDIF_Type *base, spdif_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
-    status_t status = kStatus_Success;
+    status_t status     = kStatus_Success;
+    uint8_t queueDriver = handle->queueDriver;
 
-    if (handle->state != kSPDIF_Busy)
+    if (handle->state != (uint32_t)kSPDIF_Busy)
     {
         status = kStatus_NoTransferInProgress;
     }
     else
     {
-        *count = (handle->transferSize[handle->queueDriver] - handle->spdifQueue[handle->queueDriver].dataSize);
+        *count = (handle->transferSize[queueDriver] - handle->spdifQueue[queueDriver].dataSize);
     }
 
     return status;
@@ -559,17 +556,18 @@ status_t SPDIF_TransferGetSendCount(SPDIF_Type *base, spdif_handle_t *handle, si
  */
 status_t SPDIF_TransferGetReceiveCount(SPDIF_Type *base, spdif_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
-    status_t status = kStatus_Success;
+    status_t status     = kStatus_Success;
+    uint8_t queueDriver = handle->queueDriver;
 
-    if (handle->state != kSPDIF_Busy)
+    if (handle->state != (uint32_t)kSPDIF_Busy)
     {
         status = kStatus_NoTransferInProgress;
     }
     else
     {
-        *count = (handle->transferSize[handle->queueDriver] - handle->spdifQueue[handle->queueDriver].dataSize);
+        *count = (handle->transferSize[queueDriver] - handle->spdifQueue[queueDriver].dataSize);
     }
 
     return status;
@@ -586,7 +584,7 @@ status_t SPDIF_TransferGetReceiveCount(SPDIF_Type *base, spdif_handle_t *handle,
  */
 void SPDIF_TransferAbortSend(SPDIF_Type *base, spdif_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Use FIFO request interrupt and fifo error */
     SPDIF_DisableInterrupts(base, kSPDIF_TxFIFOEmpty);
@@ -594,7 +592,7 @@ void SPDIF_TransferAbortSend(SPDIF_Type *base, spdif_handle_t *handle)
     handle->state = kSPDIF_Idle;
 
     /* Clear the queue */
-    memset(handle->spdifQueue, 0, sizeof(spdif_transfer_t) * SPDIF_XFER_QUEUE_SIZE);
+    (void)memset(handle->spdifQueue, 0, sizeof(spdif_transfer_t) * SPDIF_XFER_QUEUE_SIZE);
     handle->queueDriver = 0;
     handle->queueUser   = 0;
 }
@@ -610,16 +608,17 @@ void SPDIF_TransferAbortSend(SPDIF_Type *base, spdif_handle_t *handle)
  */
 void SPDIF_TransferAbortReceive(SPDIF_Type *base, spdif_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Disable interrupt */
-    SPDIF_DisableInterrupts(base, kSPDIF_UChannelReceiveRegisterFull | kSPDIF_QChannelReceiveRegisterFull |
-                                      kSPDIF_RxFIFOFull | kSPDIF_RxControlChannelChange);
+    SPDIF_DisableInterrupts(base, (uint32_t)kSPDIF_UChannelReceiveRegisterFull |
+                                      (uint32_t)kSPDIF_QChannelReceiveRegisterFull | (uint32_t)kSPDIF_RxFIFOFull |
+                                      (uint32_t)kSPDIF_RxControlChannelChange);
 
     handle->state = kSPDIF_Idle;
 
     /* Clear the queue */
-    memset(handle->spdifQueue, 0, sizeof(spdif_transfer_t) * SPDIF_XFER_QUEUE_SIZE);
+    (void)memset(handle->spdifQueue, 0, sizeof(spdif_transfer_t) * SPDIF_XFER_QUEUE_SIZE);
     handle->queueDriver = 0;
     handle->queueUser   = 0;
 }
@@ -632,14 +631,15 @@ void SPDIF_TransferAbortReceive(SPDIF_Type *base, spdif_handle_t *handle)
  */
 void SPDIF_TransferTxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint8_t *buffer  = handle->spdifQueue[handle->queueDriver].data;
     uint8_t dataSize = 0;
     uint32_t i = 0, j = 0, data = 0;
 
     /* Do Transfer */
-    if ((SPDIF_GetStatusFlag(base) & kSPDIF_TxFIFOEmpty) && (base->SIE & kSPDIF_TxFIFOEmpty))
+    if (((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_TxFIFOEmpty) != 0x00U) &&
+        ((base->SIE & (uint32_t)kSPDIF_TxFIFOEmpty) != 0x00U))
     {
         dataSize = handle->watermark;
         while (i < dataSize)
@@ -664,15 +664,15 @@ void SPDIF_TransferTxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
 
             i++;
         }
-        handle->spdifQueue[handle->queueDriver].dataSize -= dataSize * 6U;
+        handle->spdifQueue[handle->queueDriver].dataSize -= (uint32_t)dataSize * 6U;
         handle->spdifQueue[handle->queueDriver].data += dataSize * 6U;
 
         /* If finished a block, call the callback function */
         if (handle->spdifQueue[handle->queueDriver].dataSize == 0U)
         {
-            memset(&handle->spdifQueue[handle->queueDriver], 0, sizeof(spdif_transfer_t));
-            handle->queueDriver = (handle->queueDriver + 1) % SPDIF_XFER_QUEUE_SIZE;
-            if (handle->callback)
+            (void)memset(&handle->spdifQueue[handle->queueDriver], 0, sizeof(spdif_transfer_t));
+            handle->queueDriver = (handle->queueDriver + 0x01U) % SPDIF_XFER_QUEUE_SIZE;
+            if (handle->callback != NULL)
             {
                 (handle->callback)(base, handle, kStatus_SPDIF_TxIdle, handle->userData);
             }
@@ -694,77 +694,78 @@ void SPDIF_TransferTxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
  */
 void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint8_t *buffer  = NULL;
     uint8_t dataSize = 0;
     uint32_t i = 0, j = 0, data = 0;
 
     /* Handle Cnew flag */
-    if (SPDIF_GetStatusFlag(base) & kSPDIF_RxControlChannelChange)
+    if ((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_RxControlChannelChange) != 0x00U)
     {
         /* Clear the interrupt flag */
         SPDIF_ClearStatusFlags(base, SPDIF_SIE_CNEW_MASK);
-        if (handle->callback)
+        if (handle->callback != NULL)
         {
             (handle->callback)(base, handle, kStatus_SPDIF_RxCnew, handle->userData);
         }
     }
 
     /* Handle illegal symbol */
-    if (SPDIF_GetStatusFlag(base) & kSPDIF_RxIllegalSymbol)
+    if ((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_RxIllegalSymbol) != 0x00U)
     {
         SPDIF_ClearStatusFlags(base, kSPDIF_RxIllegalSymbol);
-        if (handle->callback)
+        if (handle->callback != NULL)
         {
             (handle->callback)(base, handle, kStatus_SPDIF_RxIllegalSymbol, handle->userData);
         }
     }
 
     /* Handle Parity Bit Error */
-    if (SPDIF_GetStatusFlag(base) & kSPDIF_RxParityBitError)
+    if ((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_RxParityBitError) != 0x00U)
     {
         SPDIF_ClearStatusFlags(base, kSPDIF_RxParityBitError);
-        if (handle->callback)
+        if (handle->callback != NULL)
         {
             (handle->callback)(base, handle, kStatus_SPDIF_RxParityBitError, handle->userData);
         }
     }
 
     /* Handle DPlocked */
-    if (SPDIF_GetStatusFlag(base) & kSPDIF_RxDPLLLocked)
+    if ((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_RxDPLLLocked) != 0x00U)
     {
         SPDIF_ClearStatusFlags(base, kSPDIF_RxDPLLLocked);
-        if (handle->callback)
+        if (handle->callback != NULL)
         {
             (handle->callback)(base, handle, kStatus_SPDIF_RxDPLLLocked, handle->userData);
         }
     }
 
     /* Handle Q channel full flag */
-    if ((SPDIF_GetStatusFlag(base) & kSPDIF_QChannelReceiveRegisterFull) &&
-        (base->SIE & kSPDIF_QChannelReceiveRegisterFull))
+    if (((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_QChannelReceiveRegisterFull) != 0x00U) &&
+        ((base->SIE & (uint32_t)kSPDIF_QChannelReceiveRegisterFull) != 0x00U))
     {
         buffer    = handle->spdifQueue[handle->queueDriver].qdata;
         data      = SPDIF_ReadQChannel(base);
-        buffer[0] = data & 0xFFU;
-        buffer[1] = (data >> 8U) & 0xFFU;
-        buffer[2] = (data >> 16U) & 0xFFU;
+        buffer[0] = (uint8_t)data & 0xFFU;
+        buffer[1] = (uint8_t)(data >> 8U) & 0xFFU;
+        buffer[2] = (uint8_t)(data >> 16U) & 0xFFU;
     }
 
     /* Handle U channel full flag */
-    if ((SPDIF_GetStatusFlag(base) & kSPDIF_UChannelReceiveRegisterFull) &&
-        (base->SIE & kSPDIF_UChannelReceiveRegisterFull))
+    if (((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_UChannelReceiveRegisterFull) != 0x00U) &&
+        ((base->SIE & (uint32_t)kSPDIF_UChannelReceiveRegisterFull) != 0x00U))
     {
         buffer    = handle->spdifQueue[handle->queueDriver].udata;
         data      = SPDIF_ReadUChannel(base);
-        buffer[0] = data & 0xFFU;
-        buffer[1] = (data >> 8U) & 0xFFU;
-        buffer[2] = (data >> 16U) & 0xFFU;
+        buffer[0] = (uint8_t)data & 0xFFU;
+        buffer[1] = (uint8_t)(data >> 8U) & 0xFFU;
+        buffer[2] = (uint8_t)(data >> 16U) & 0xFFU;
     }
 
     /* Handle audio data transfer */
-    if ((SPDIF_GetStatusFlag(base) & kSPDIF_RxFIFOFull) && (base->SIE & kSPDIF_RxFIFOFull))
+    if (((SPDIF_GetStatusFlag(base) & (uint32_t)kSPDIF_RxFIFOFull) != 0x00U) &&
+        ((base->SIE & (uint32_t)kSPDIF_RxFIFOFull) != 0x00U))
     {
         dataSize = handle->watermark;
         buffer   = handle->spdifQueue[handle->queueDriver].data;
@@ -774,7 +775,7 @@ void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
             data = SPDIF_ReadLeftData(base);
             for (j = 0; j < 3U; j++)
             {
-                *buffer = ((data >> (j * 8U)) & 0xFFU);
+                *buffer = (uint8_t)((data >> (j * 8U)) & 0xFFU);
                 buffer++;
             }
 
@@ -782,21 +783,21 @@ void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
             data = SPDIF_ReadRightData(base);
             for (j = 0; j < 3U; j++)
             {
-                *buffer = ((data >> (j * 8U)) & 0xFFU);
+                *buffer = (uint8_t)((data >> (j * 8U)) & 0xFFU);
                 buffer++;
             }
 
             i++;
         }
-        handle->spdifQueue[handle->queueDriver].dataSize -= dataSize * 6U;
+        handle->spdifQueue[handle->queueDriver].dataSize -= (uint32_t)dataSize * 6U;
         handle->spdifQueue[handle->queueDriver].data += dataSize * 6U;
 
         /* If finished a block, call the callback function */
-        if (handle->spdifQueue[handle->queueDriver].dataSize == 0U)
+        if (handle->spdifQueue[handle->queueDriver].dataSize == 0x00U)
         {
-            memset(&handle->spdifQueue[handle->queueDriver], 0, sizeof(spdif_transfer_t));
-            handle->queueDriver = (handle->queueDriver + 1) % SPDIF_XFER_QUEUE_SIZE;
-            if (handle->callback)
+            (void)memset(&handle->spdifQueue[handle->queueDriver], 0, sizeof(spdif_transfer_t));
+            handle->queueDriver = (handle->queueDriver + 0x01U) % SPDIF_XFER_QUEUE_SIZE;
+            if (handle->callback != NULL)
             {
                 (handle->callback)(base, handle, kStatus_SPDIF_RxIdle, handle->userData);
             }
@@ -813,12 +814,12 @@ void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
 #if defined(SPDIF)
 void SPDIF_DriverIRQHandler(void)
 {
-    if ((s_spdifHandle[0][0]) && s_spdifTxIsr)
+    if ((s_spdifHandle[0][0] != NULL) && (s_spdifTxIsr != NULL))
     {
         s_spdifTxIsr(SPDIF, s_spdifHandle[0][0]);
     }
 
-    if ((s_spdifHandle[0][1]) && s_spdifRxIsr)
+    if ((s_spdifHandle[0][1] != NULL) && (s_spdifRxIsr != NULL))
     {
         s_spdifRxIsr(SPDIF, s_spdifHandle[0][1]);
     }

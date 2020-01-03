@@ -213,10 +213,11 @@ void CMT_SetMode(CMT_Type *base, cmt_mode_t mode, cmt_modulate_config_t *modulat
 cmt_mode_t CMT_GetMode(CMT_Type *base)
 {
     uint8_t mode = base->MSC;
+    cmt_mode_t ret;
 
     if (0U == (mode & CMT_MSC_MCGEN_MASK))
     { /* Carrier modulator disabled and the IRO signal is in direct software control. */
-        return kCMT_DirectIROCtl;
+        ret = kCMT_DirectIROCtl;
     }
     else
     {
@@ -224,19 +225,21 @@ cmt_mode_t CMT_GetMode(CMT_Type *base)
         if (0U != (mode & CMT_MSC_BASE_MASK))
         {
             /* Base band mode. */
-            return kCMT_BasebandMode;
+            ret = kCMT_BasebandMode;
         }
         else if (0U != (mode & CMT_MSC_FSK_MASK))
         {
             /* FSK mode. */
-            return kCMT_FSKMode;
+            ret = kCMT_FSKMode;
         }
         else
         {
             /* Time mode. */
-            return kCMT_TimeMode;
+            ret = kCMT_TimeMode;
         }
     }
+
+    return ret;
 }
 
 /*!

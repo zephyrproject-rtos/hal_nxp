@@ -1,5 +1,5 @@
 /*
- * Copyright  2017 NXP
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  *
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief eLCDIF driver version */
-#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
+#define FSL_ELCDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /* All IRQ flags in CTRL1 register. */
@@ -55,7 +55,7 @@
 #endif
 
 /* LUT memory entery number. */
-#define ELCDIF_LUT_ENTRY_NUM 256
+#define ELCDIF_LUT_ENTRY_NUM 256U
 
 /*!
  * @brief eLCDIF signal polarity flags
@@ -470,15 +470,12 @@ static inline uint32_t ELCDIF_GetBusMasterErrorAddr(LCDIF_Type *base)
    uint32_t statusFlags;
    statusFlags = ELCDIF_GetStatus(LCDIF);
 
-   // If LFIFO is full.
    if (kELCDIF_LFifoFull & statusFlags)
    {
-       // ...;
    }
-   // If TXFIFO is empty.
+
    if (kELCDIF_TxFifoEmpty & statusFlags)
    {
-       // ...;
    }
    @endcode
  *

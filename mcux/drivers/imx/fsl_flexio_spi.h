@@ -33,7 +33,7 @@
 #endif
 
 /*! @brief Error codes for the FlexIO SPI driver. */
-enum _flexio_spi_status
+enum
 {
     kStatus_FLEXIO_SPI_Busy  = MAKE_STATUS(kStatusGroup_FLEXIO_SPI, 1), /*!< FlexIO SPI is busy. */
     kStatus_FLEXIO_SPI_Idle  = MAKE_STATUS(kStatusGroup_FLEXIO_SPI, 2), /*!< SPI is idle */
@@ -490,11 +490,11 @@ static inline uint16_t FLEXIO_SPI_ReadData(FLEXIO_SPI_Type *base, flexio_spi_shi
 {
     if (direction == kFLEXIO_SPI_MsbFirst)
     {
-        return base->flexioBase->SHIFTBUFBIS[base->shifterIndex[1]];
+        return (uint16_t)(base->flexioBase->SHIFTBUFBIS[base->shifterIndex[1]]);
     }
     else
     {
-        return base->flexioBase->SHIFTBUFBYS[base->shifterIndex[1]];
+        return (uint16_t)(base->flexioBase->SHIFTBUFBYS[base->shifterIndex[1]]);
     }
 }
 

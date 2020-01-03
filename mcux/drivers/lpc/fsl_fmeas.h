@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Defines LPC Frequency Measure driver version 2.1.0. */
-#define FSL_FMEAS_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief Defines LPC Frequency Measure driver version 2.1.1. */
+#define FSL_FMEAS_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 #if defined(FSL_FEATURE_FMEAS_INDEX_20) && (FSL_FEATURE_FMEAS_INDEX_20)
@@ -84,6 +84,11 @@ extern "C" {
  */
 static inline void FMEAS_StartMeasure(FMEAS_SYSCON_Type *base)
 {
+#if defined(FSL_FEATURE_SOC_FREQME_COUNT) && (FSL_FEATURE_SOC_FREQME_COUNT)
+    base->FREQMECTRL_W = 0;
+    /*! Set the reference clock count cycle to 2^20 times*/
+    base->FREQMECTRL_W = FREQME_FREQMECTRL_W_MEASURE_IN_PROGRESS_MASK | FREQME_FREQMECTRL_W_REF_SCALE(20);
+#else
     base->FREQMECTRL = 0;
 #if defined(SYSCON_CLOCK_CTRL_FRO1MHZ_FREQM_ENA_MASK)
     /* Un-gate FRO1M to FMEAS if used as reference or target clock */
@@ -109,11 +114,9 @@ static inline void FMEAS_StartMeasure(FMEAS_SYSCON_Type *base)
 
 #if defined(FMEAS_INDEX)
     base->FREQMECTRL = FMEAS_INDEX | FMEAS_SYSCON_FREQMECTRL_PROG_MASK;
-#elif defined(FREQME_FREQMECTRL_REF_SCALE_MASK)
-    /*! Set the reference clock count cycle to 2^20 times*/
-    base->FREQMECTRL = FREQME_FREQMECTRL_MEASURE_IN_PROG_MASK | FREQME_FREQMECTRL_REF_SCALE(20);
 #else
     base->FREQMECTRL = (1UL << 31);
+#endif
 #endif
 }
 
@@ -125,7 +128,11 @@ static inline void FMEAS_StartMeasure(FMEAS_SYSCON_Type *base)
  */
 static inline bool FMEAS_IsMeasureComplete(FMEAS_SYSCON_Type *base)
 {
-    return (bool)((base->FREQMECTRL & (1UL << 31)) == 0);
+#if defined(FSL_FEATURE_SOC_FREQME_COUNT) && (FSL_FEATURE_SOC_FREQME_COUNT)
+    return (bool)((base->FREQMECTRL_R & FREQME_FREQMECTRL_R_MEASURE_IN_PROGRESS_MASK) == 0U);
+#else
+    return (bool)((base->FREQMECTRL & (1UL << 31)) == 0U);
+#endif
 }
 
 /*!

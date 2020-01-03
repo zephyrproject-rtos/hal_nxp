@@ -26,9 +26,9 @@ enum _hashcrypt_status
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief HASHCRYPT driver version. Version 2.1.0.
+/*! @brief HASHCRYPT driver version. Version 2.1.2.
  *
- * Current version: 2.1.0
+ * Current version: 2.1.1
  *
  * Change log:
  * - Version 2.0.0
@@ -39,10 +39,16 @@ enum _hashcrypt_status
  *   - Support loading AES key from unaligned address for different compiler and core variants
  * - Version 2.0.3
  *   - Remove SHA512 and AES ICB algorithm definitions
+ * - Version 2.0.4
+ *   - Add SHA context switch support
  * - Version 2.1.0
  *   - Update the register name and macro to align with new header.
+ * - Version 2.1.1
+ *   - Fix MISRA C-2012.
+ * - Version 2.1.2
+ *   - Support loading AES input data from unaligned address.
  */
-#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*! @brief Algorithm definitions correspond with the values for Mode field in Control register !*/
@@ -70,7 +76,7 @@ typedef enum _hashcrypt_algo_t
  */
 
 /*! AES block size in bytes */
-#define HASHCRYPT_AES_BLOCK_SIZE 16
+#define HASHCRYPT_AES_BLOCK_SIZE 16U
 #define AES_ENCRYPT 0
 #define AES_DECRYPT 1
 
@@ -123,7 +129,11 @@ typedef struct _hashcrypt_handle hashcrypt_handle_t;
  */
 
 /*! @brief HASHCRYPT HASH Context size. */
+#if defined(FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE) && (FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE > 0)
+#define HASHCRYPT_HASH_CTX_SIZE 30
+#else
 #define HASHCRYPT_HASH_CTX_SIZE 22
+#endif
 
 /*! @brief Storage type used to save hash context. */
 typedef struct _hashcrypt_hash_ctx_t

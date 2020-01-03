@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -31,7 +31,8 @@
 #elif defined(FSL_FEATURE_SOC_FREQME_COUNT) && (FSL_FEATURE_SOC_FREQME_COUNT)
 /*! @brief Target clock counter value.
  * According to user manual, 2 has to be subtracted from RESULT field. */
-#define TARGET_CLOCK_COUNT(base) ((uint32_t)((((FREQME_Type *)base)->FREQMECTRL & 0x7FFFFFFFU) - 2U))
+#define TARGET_CLOCK_COUNT(base) \
+    ((uint32_t)((((FREQME_Type *)base)->FREQMECTRL_R & FREQME_FREQMECTRL_R_RESULT_MASK) - 2U))
 
 /*! @brief Reference clock counter value. */
 #define REFERENCE_CLOCK_COUNT ((uint32_t)(1U << 20))
@@ -41,10 +42,11 @@
  * According to user manual, 2 has to be subtracted from captured value (CAPVAL). */
 #define TARGET_CLOCK_COUNT(base) \
     ((uint32_t)(                 \
-        ((((SYSCON_Type *)base)->FREQMECTRL & SYSCON_FREQMECTRL_CAPVAL_MASK) >> SYSCON_FREQMECTRL_CAPVAL_SHIFT) - 2))
+        ((((SYSCON_Type *)base)->FREQMECTRL & SYSCON_FREQMECTRL_CAPVAL_MASK) >> SYSCON_FREQMECTRL_CAPVAL_SHIFT) - 2U))
 
 /*! @brief Reference clock counter value. */
-#define REFERENCE_CLOCK_COUNT ((uint32_t)((SYSCON_FREQMECTRL_CAPVAL_MASK >> SYSCON_FREQMECTRL_CAPVAL_SHIFT) + 1))
+#define REFERENCE_CLOCK_COUNT \
+    ((uint32_t)((((uint32_t)SYSCON_FREQMECTRL_CAPVAL_MASK) >> (uint32_t)SYSCON_FREQMECTRL_CAPVAL_SHIFT) + (uint32_t)1U))
 
 #endif
 

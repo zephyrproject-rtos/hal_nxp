@@ -160,7 +160,7 @@ void EWM_GetDefaultConfig(ewm_config_t *config);
  */
 static inline void EWM_EnableInterrupts(EWM_Type *base, uint32_t mask)
 {
-    base->CTRL |= mask;
+    base->CTRL |= (uint8_t)mask;
 }
 
 /*!
@@ -175,7 +175,7 @@ static inline void EWM_EnableInterrupts(EWM_Type *base, uint32_t mask)
  */
 static inline void EWM_DisableInterrupts(EWM_Type *base, uint32_t mask)
 {
-    base->CTRL &= ~mask;
+    base->CTRL &= (uint8_t)(~mask);
 }
 
 /*!
@@ -195,7 +195,7 @@ static inline void EWM_DisableInterrupts(EWM_Type *base, uint32_t mask)
  */
 static inline uint32_t EWM_GetStatusFlags(EWM_Type *base)
 {
-    return (base->CTRL & EWM_CTRL_EWMEN_MASK);
+    return ((uint32_t)base->CTRL & EWM_CTRL_EWMEN_MASK);
 }
 
 /*!

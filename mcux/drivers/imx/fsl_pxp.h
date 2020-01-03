@@ -1,5 +1,5 @@
 /*
- * Copyright  2017 NXP
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  *
@@ -48,7 +48,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
+#define FSL_PXP_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /* This macto indicates whether the rotate sub module is shared by process surface and output buffer. */
@@ -717,6 +717,7 @@ static inline void PXP_EnableAlphaSurfaceOverlayColorKey(PXP_Type *base, bool en
     {
         base->AS_CTRL |= PXP_AS_CTRL_ENABLE_COLORKEY_MASK;
     }
+    else
     {
         base->AS_CTRL &= ~PXP_AS_CTRL_ENABLE_COLORKEY_MASK;
     }
@@ -948,23 +949,19 @@ static inline void PXP_SetRotateConfig(PXP_Type *base,
    uint32_t pxp_command1[48];
    uint32_t pxp_command2[48];
 
-   // Prepare the register values.
    pxp_command1[0] = ...;
    pxp_command1[1] = ...;
-   // ...
+   ...
    pxp_command2[0] = ...;
    pxp_command2[1] = ...;
-   // ...
+   ...
 
-   // Make sure no new command pending.
    while (PXP_IsNextCommandPending(PXP))
    {
    }
 
-   // Set new operation.
    PXP_SetNextCommand(PXP, pxp_command1);
 
-   // Wait for new command loaded. Here could check @ref kPXP_CommandLoadFlag too.
    while (PXP_IsNextCommandPending(PXP))
    {
    }
@@ -975,13 +972,7 @@ static inline void PXP_SetRotateConfig(PXP_Type *base,
  * @param base PXP peripheral base address.
  * @param commandAddr Address of the new command.
  */
-static inline void PXP_SetNextCommand(PXP_Type *base, void *commandAddr)
-{
-    /* Make sure commands have been saved to memory. */
-    __DSB();
-
-    base->NEXT = (uint32_t)commandAddr & PXP_NEXT_POINTER_MASK;
-}
+void PXP_SetNextCommand(PXP_Type *base, void *commandAddr);
 
 /*!
  * @brief Check whether the next command is pending.

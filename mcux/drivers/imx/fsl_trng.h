@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,11 +23,16 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief TRNG driver version 2.0.4.
+/*! @brief TRNG driver version 2.0.6
  *
- * Current version: 2.0.4
+ * Current version: 2.0.6
  *
  * Change log:
+ * - version 2.0.6
+ *   - For KW35Z4_SERIES set TRNG_USER_CONFIG_DEFAULT_OSC_DIV to kTRNG_RingOscDiv8.
+ * - version 2.0.5
+ *   - Add possibility to define default TRNG configuration by device specific preprocessor macros
+ *     for FRQMIN, FRQMAX and OSCDIV.
  * - version 2.0.4
  *   - Fix MISRA-2012 issues.
  * - Version 2.0.3
@@ -38,7 +43,7 @@
  *   - add support for KL8x and KL28Z
  *   - update default OSCDIV for K81 to divide by 2
  */
-#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+#define FSL_TRNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*@}*/
 
 /*! @brief TRNG sample mode. Used by trng_config_t. */

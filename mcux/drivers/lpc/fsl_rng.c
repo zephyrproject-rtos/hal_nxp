@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 NXP
+ * Copyright 2017, 2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -52,20 +52,20 @@ status_t RNG_GetRandomData(RNG_Type *base, void *data, size_t dataSize)
     uint32_t i;
 
     /* Check input parameters.*/
-    if (!(base && data && dataSize))
+    if (!((base != NULL) && (data != NULL) && (dataSize != 0U)))
     {
         result = kStatus_InvalidArgument;
     }
     else
     {
         /* Check that ring oscilator is enabled */
-        if (!(PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_RNG_MASK))
+        if (0U == (PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_RNG_MASK))
         {
             do
             {
                 /* Read Entropy.*/
                 random32 = base->RANDOM_NUMBER;
-                pRandom = (uint8_t *)&random32;
+                pRandom  = (uint8_t *)&random32;
 
                 if (dataSize < sizeof(random32))
                 {
@@ -82,7 +82,7 @@ status_t RNG_GetRandomData(RNG_Type *base, void *data, size_t dataSize)
                 }
 
                 dataSize -= randomSize;
-            } while (dataSize > 0);
+            } while (dataSize > 0U);
 
             result = kStatus_Success;
         }

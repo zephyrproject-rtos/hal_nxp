@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -37,19 +37,23 @@
 status_t TRGMUX_SetTriggerSource(TRGMUX_Type *base, uint32_t index, trgmux_trigger_input_t input, uint32_t trigger_src)
 {
     uint32_t value;
+    status_t status;
 
     value = base->TRGCFG[index];
-    if (value & TRGMUX_TRGCFG_LK_MASK)
+    if (0U != (value & TRGMUX_TRGCFG_LK_MASK))
     {
-        return kStatus_TRGMUX_Locked;
+        status = kStatus_TRGMUX_Locked;
     }
     else
     {
         /* Since all SEL bitfileds in TRGCFG register have the same length, SEL0's mask is used to access other SEL
          * bitfileds. */
-        value = (value & ~((uint32_t)(TRGMUX_TRGCFG_SEL0_MASK << input))) |
-                ((uint32_t)(((uint32_t)(trigger_src & TRGMUX_TRGCFG_SEL0_MASK)) << input));
+        value = (value & ~((uint32_t)TRGMUX_TRGCFG_SEL0_MASK << (uint32_t)input)) |
+                ((trigger_src & (uint32_t)TRGMUX_TRGCFG_SEL0_MASK) << (uint32_t)input);
         base->TRGCFG[index] = value;
-        return kStatus_Success;
+
+        status = kStatus_Success;
     }
+
+    return status;
 }

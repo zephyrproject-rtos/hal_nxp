@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.0.12. */
-#define FSL_SDIF_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 12U))
+/*! @brief Driver version 2.0.13. */
+#define FSL_SDIF_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 13U))
 /*@}*/
 
 /*! @brief  SDIOCLKCTRL setting
@@ -77,15 +77,15 @@
 /*! @brief SDIF internal DMA descriptor address and the data buffer address align */
 #define SDIF_INTERNAL_DMA_ADDR_ALIGN (4U)
 /*! @brief SDIF DMA descriptor flag */
-#define SDIF_DMA_DESCRIPTOR_DISABLE_COMPLETE_INT_FLAG (1U << 1U)
-#define SDIF_DMA_DESCRIPTOR_DATA_BUFFER_END_FLAG (1U << 2U)
-#define SDIF_DMA_DESCRIPTOR_DATA_BUFFER_START_FLAG (1U << 3U)
-#define SDIF_DMA_DESCRIPTOR_SECOND_ADDR_CHAIN_FLAG (1U << 4U)
-#define SDIF_DMA_DESCRIPTOR_DESCRIPTOR_END_FLAG (1U << 5U)
-#define SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG (1U << 31U)
+#define SDIF_DMA_DESCRIPTOR_DISABLE_COMPLETE_INT_FLAG (1UL << 1U)
+#define SDIF_DMA_DESCRIPTOR_DATA_BUFFER_END_FLAG (1UL << 2U)
+#define SDIF_DMA_DESCRIPTOR_DATA_BUFFER_START_FLAG (1UL << 3U)
+#define SDIF_DMA_DESCRIPTOR_SECOND_ADDR_CHAIN_FLAG (1UL << 4U)
+#define SDIF_DMA_DESCRIPTOR_DESCRIPTOR_END_FLAG (1UL << 5U)
+#define SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG (1UL << 31U)
 
-/*! @brief SDIF status */
-enum _sdif_status
+/*! @brief _sdif_status SDIF status */
+enum
 {
     kStatus_SDIF_DescriptorBufferLenError = MAKE_STATUS(kStatusGroup_SDIF, 0U), /*!< Set DMA descriptor failed */
     kStatus_SDIF_InvalidArgument          = MAKE_STATUS(kStatusGroup_SDIF, 1U), /*!< invalid argument status */
@@ -102,10 +102,11 @@ enum _sdif_status
     kStatus_SDIF_DataTransferFail = MAKE_STATUS(kStatusGroup_SDIF, 6U), /*!< transfer data fail */
     kStatus_SDIF_ResponseError    = MAKE_STATUS(kStatusGroup_SDIF, 7U), /*!< response error */
     kStatus_SDIF_DMAAddrNotAlign  = MAKE_STATUS(kStatusGroup_SDIF, 8U), /*!< DMA address not align */
+    kStatus_SDIF_BusyTransferring = MAKE_STATUS(kStatusGroup_SDIF, 9U), /*!< SDIF transfer busy status */
 };
 
-/*! @brief Host controller capabilities flag mask */
-enum _sdif_capability_flag
+/*! @brief _sdif_capability_flag Host controller capabilities flag mask */
+enum
 {
     kSDIF_SupportHighSpeedFlag     = 0x1U,  /*!< Support high-speed */
     kSDIF_SupportDmaFlag           = 0x2U,  /*!< Support DMA */
@@ -115,8 +116,8 @@ enum _sdif_capability_flag
     kSDIF_Support8BitFlag          = 0x20U, /*!< Support 8 bit mode */
 };
 
-/*! @brief define the reset type */
-enum _sdif_reset_type
+/*! @brief _sdif_reset_type define the reset type */
+enum
 {
     kSDIF_ResetController = SDIF_CTRL_CONTROLLER_RESET_MASK, /*!< reset controller,will reset: BIU/CIU interface
                                                                CIU and state machine,ABORT_READ_DATA,SEND_IRQ_RESPONSE
@@ -138,8 +139,8 @@ typedef enum _sdif_bus_width
     kSDIF_Bus8BitWidth = 2U, /*!< support 8 bit mode */
 } sdif_bus_width_t;
 
-/*! @brief define the command flags */
-enum _sdif_command_flags
+/*! @brief _sdif_command_flags define the command flags */
+enum
 {
     kSDIF_CmdResponseExpect     = SDIF_CMD_RESPONSE_EXPECT_MASK,    /*!< command request response*/
     kSDIF_CmdResponseLengthLong = SDIF_CMD_RESPONSE_LENGTH_MASK,    /*!< command response length long */
@@ -168,8 +169,8 @@ enum _sdif_command_flags
     kSDIF_CmdDataUseHoldReg = SDIF_CMD_USE_HOLD_REG_MASK,    /*!< cmd and data send to card through the HOLD register*/
 };
 
-/*! @brief The command type */
-enum _sdif_command_type
+/*! @brief _sdif_command_type The command type */
+enum
 {
     kCARD_CommandTypeNormal  = 0U, /*!< Normal command */
     kCARD_CommandTypeSuspend = 1U, /*!< Suspend command */
@@ -178,11 +179,11 @@ enum _sdif_command_type
 };
 
 /*!
- * @brief The command response type.
+ * @brief _sdif_response_type The command response type.
  *
  * Define the command response type from card to host controller.
  */
-enum _sdif_response_type
+enum
 {
     kCARD_ResponseTypeNone = 0U, /*!< Response type: none */
     kCARD_ResponseTypeR1   = 1U, /*!< Response type: R1 */
@@ -196,8 +197,8 @@ enum _sdif_response_type
     kCARD_ResponseTypeR7   = 9U, /*!< Response type: R7 */
 };
 
-/*! @brief define the interrupt mask flags */
-enum _sdif_interrupt_mask
+/*! @brief _sdif_interrupt_mask define the interrupt mask flags */
+enum
 {
     kSDIF_CardDetect                  = SDIF_INTMASK_CDET_MASK,  /*!< mask for card detect */
     kSDIF_ResponseError               = SDIF_INTMASK_RE_MASK,    /*!< command response error */
@@ -222,16 +223,16 @@ enum _sdif_interrupt_mask
                                   kSDIF_HardwareLockError, /*!< command transfer status collection*/
     kSDIF_DataTransferStatus = kSDIF_DataTransferOver | kSDIF_WriteFIFORequest | kSDIF_ReadFIFORequest |
                                kSDIF_DataCRCError | kSDIF_DataReadTimeout | kSDIF_DataStarvationByHostTimeout |
-                               kSDIF_FIFOError | kSDIF_DataStartBitError | kSDIF_DataEndBitError |
-                               kSDIF_AutoCmdDone, /*!< data transfer status collection */
+                               kSDIF_FIFOError | kSDIF_DataStartBitError |
+                               kSDIF_DataEndBitError, /*!< data transfer status collection */
     kSDIF_DataTransferError =
         kSDIF_DataCRCError | kSDIF_FIFOError | kSDIF_DataStartBitError | kSDIF_DataEndBitError | kSDIF_DataReadTimeout,
     kSDIF_AllInterruptStatus = 0x1FFFFU, /*!< all interrupt mask */
 
 };
 
-/*! @brief define the internal DMA status flags */
-enum _sdif_dma_status
+/*! @brief _sdif_dma_status define the internal DMA status flags */
+enum
 {
     kSDIF_DMATransFinishOneDescriptor = SDIF_IDSTS_TI_MASK,  /*!< DMA transfer finished for one DMA descriptor */
     kSDIF_DMARecvFinishOneDescriptor  = SDIF_IDSTS_RI_MASK,  /*!< DMA receive finished for one DMA descriptor */
@@ -247,10 +248,10 @@ enum _sdif_dma_status
 
 };
 
-/*! @brief define the internal DMA descriptor flag
+/*! @brief _sdif_dma_descriptor_flag define the internal DMA descriptor flag
  *  @deprecated Do not use this enum anymore, please use SDIF_DMA_DESCRIPTOR_XXX_FLAG instead.
  */
-enum _sdif_dma_descriptor_flag
+enum
 {
     kSDIF_DisableCompleteInterrupt = 0x2U,     /*!< disable the complete interrupt flag for the ends
                                            in the buffer pointed to by this descriptor*/
@@ -579,11 +580,11 @@ static inline uint32_t SDIF_DetectCardInsert(SDIF_Type *base, bool data3)
 {
     if (data3)
     {
-        return (base->STATUS & SDIF_STATUS_DATA_3_STATUS_MASK) == SDIF_STATUS_DATA_3_STATUS_MASK ? 1U : 0U;
+        return (base->STATUS & SDIF_STATUS_DATA_3_STATUS_MASK) == SDIF_STATUS_DATA_3_STATUS_MASK ? 1UL : 0UL;
     }
     else
     {
-        return (base->CDETECT & SDIF_CDETECT_CARD0_DETECT_MASK) == 0U ? 1U : 0U;
+        return (base->CDETECT & SDIF_CDETECT_CARD0_DETECT_MASK) == 0UL ? 1UL : 0UL;
     }
 }
 
@@ -598,11 +599,11 @@ static inline uint32_t SDIF_DetectCard1Insert(SDIF_Type *base, bool data3)
 {
     if (data3)
     {
-        return (base->STATUS & SDIF_STATUS_DATA_3_STATUS_MASK) == SDIF_STATUS_DATA_3_STATUS_MASK ? 1U : 0U;
+        return (base->STATUS & SDIF_STATUS_DATA_3_STATUS_MASK) == SDIF_STATUS_DATA_3_STATUS_MASK ? 1UL : 0UL;
     }
     else
     {
-        return (base->CDETECT & SDIF_CDETECT_CARD1_DETECT_MASK) == 0U ? 1U : 0U;
+        return (base->CDETECT & SDIF_CDETECT_CARD1_DETECT_MASK) == 0UL ? 1UL : 0UL;
     }
 }
 #else
@@ -679,11 +680,11 @@ static inline uint32_t SDIF_DetectCardInsert(SDIF_Type *base, bool data3)
 {
     if (data3)
     {
-        return (base->STATUS & SDIF_STATUS_DATA_3_STATUS_MASK) == SDIF_STATUS_DATA_3_STATUS_MASK ? 1U : 0U;
+        return (base->STATUS & SDIF_STATUS_DATA_3_STATUS_MASK) == SDIF_STATUS_DATA_3_STATUS_MASK ? 1UL : 0UL;
     }
     else
     {
-        return (base->CDETECT & SDIF_CDETECT_CARD_DETECT_MASK) == 0U ? 1U : 0U;
+        return (base->CDETECT & SDIF_CDETECT_CARD_DETECT_MASK) == 0UL ? 1UL : 0UL;
     }
 }
 #endif
@@ -790,7 +791,9 @@ static inline uint32_t SDIF_GetInterruptStatus(SDIF_Type *base)
  */
 static inline uint32_t SDIF_GetEnabledInterruptStatus(SDIF_Type *base)
 {
-    return (base->MINTSTS) & (base->INTMASK);
+    uint32_t intStatus = base->MINTSTS;
+
+    return intStatus & base->INTMASK;
 }
 
 /*!
@@ -853,7 +856,9 @@ static inline uint32_t SDIF_GetInternalDMAStatus(SDIF_Type *base)
  */
 static inline uint32_t SDIF_GetEnabledDMAInterruptStatus(SDIF_Type *base)
 {
-    return (base->IDSTS) & (base->IDINTEN);
+    uint32_t intStatus = base->IDSTS;
+
+    return intStatus & base->IDINTEN;
 }
 /*!
  * @brief SDIF clear internal DMA status

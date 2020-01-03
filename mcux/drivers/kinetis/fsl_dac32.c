@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -126,7 +126,7 @@ void DAC32_GetDefaultConfig(dac32_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->referenceVoltageSource = kDAC32_ReferenceVoltageSourceVref2;
     config->enableLowPowerMode     = false;
@@ -163,7 +163,7 @@ void DAC32_SetBufferConfig(DAC_Type *base, const dac32_buffer_config_t *config)
  *   config->triggerMode = kDAC32_BufferTriggerBySoftwareMode;
  *   config->watermark   = kDAC32_BufferWatermark1Word;
  *   config->workMode    = kDAC32_BufferWorkAsNormalMode;
- *   config->upperLimit  = DAC_DAT_COUNT * 2U - 1U; // Full buffer is used.
+ *   config->upperLimit  = DAC_DAT_COUNT * 2U - 1U;
  * endcode
  * param config Pointer to the configuration structure. See "dac32_buffer_config_t".
  */
@@ -172,7 +172,7 @@ void DAC32_GetDefaultBufferConfig(dac32_buffer_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->triggerMode = kDAC32_BufferTriggerBySoftwareMode;
     config->watermark   = kDAC32_BufferWatermark1Word;

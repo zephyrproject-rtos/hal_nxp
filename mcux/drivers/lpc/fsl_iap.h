@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -30,7 +30,7 @@
 #endif
 
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
 
 /*! @brief Flash driver version for ROM*/
 enum _flash_driver_version_constants
@@ -38,7 +38,7 @@ enum _flash_driver_version_constants
     kFLASH_DriverVersionName   = 'F', /*!< Flash driver version name.*/
     kFLASH_DriverVersionMajor  = 2,   /*!< Major flash driver version.*/
     kFLASH_DriverVersionMinor  = 0,   /*!< Minor flash driver version.*/
-    kFLASH_DriverVersionBugfix = 0    /*!< Bugfix for flash driver version.*/
+    kFLASH_DriverVersionBugfix = 2    /*!< Bugfix for flash driver version.*/
 };
 
 /*@}*/
@@ -350,9 +350,9 @@ status_t FLASH_Init(flash_config_t *config);
  *
  * @param config The pointer to the storage for the driver runtime state.
  * @param start The start address of the desired flash memory to be erased.
- *              The start address does not need to be sector-aligned.
+ *              The start address need to be 512bytes-aligned.
  * @param lengthInBytes The length, given in bytes (not words or long-words)
- *                      to be erased. Must be word-aligned.
+ *                      to be erased. Must be 512bytes-aligned.
  * @param key The value used to validate all flash erase APIs.
  *
  * @retval #kStatus_FLASH_Success API was executed successfully.
@@ -381,11 +381,11 @@ status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBy
  *
  * @param config A pointer to the storage for the driver runtime state.
  * @param start The start address of the desired flash memory to be programmed. Must be
- *              word-aligned.
+ *              512bytes-aligned.
  * @param src A pointer to the source buffer of data that is to be programmed
  *            into the flash.
  * @param lengthInBytes The length, given in bytes (not words or long-words),
- *                      to be programmed. Must be word-aligned.
+ *                      to be programmed. Must be 512bytes-aligned.
  *
  * @retval #kStatus_FLASH_Success API was executed successfully.
  * @retval #kStatus_FLASH_InvalidArgument An invalid argument is provided.
@@ -415,9 +415,9 @@ status_t FLASH_Program(flash_config_t *config, uint32_t start, uint8_t *src, uin
  *
  * @param config A pointer to the storage for the driver runtime state.
  * @param start The start address of the desired flash memory to be verified.
- *        The start address does not need to be sector-aligned but must be word-aligned.
+ *        The start address need to be 512bytes-aligned.
  * @param lengthInBytes The length, given in bytes (not words or long-words),
- *        to be verified. Must be word-aligned.
+ *        to be verified. Must be 512bytes-aligned.
  * @param margin Read margin choice.
  *
  * @retval #kStatus_FLASH_Success API was executed successfully.
@@ -440,9 +440,9 @@ status_t FLASH_VerifyErase(flash_config_t *config, uint32_t start, uint32_t leng
  * flash area as determined by the start address and length.
  *
  * @param config A pointer to the storage for the driver runtime state.
- * @param start The start address of the desired flash memory to be verified. Must be word-aligned.
+ * @param start The start address of the desired flash memory to be verified. need be 512bytes-aligned.
  * @param lengthInBytes The length, given in bytes (not words or long-words),
- *        to be verified. Must be word-aligned.
+ *        to be verified. need be 512bytes-aligned.
  * @param expectedData A pointer to the expected data that is to be
  *        verified against.
  * @param margin Read margin choice.

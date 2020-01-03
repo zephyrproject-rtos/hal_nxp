@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 2, 4)) /*!< Version 2.2.4. */
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 2, 5)) /*!< Version 2.2.5. */
 /*@}*/
 
 /*! @name ENET DESCRIPTOR QUEUE */
@@ -123,27 +123,29 @@
 #define ENET_RX_MIN_BUFFERSIZE 256U /*!< ENET minimum buffer size. */
 #define ENET_PHY_MAXADDRESS (ENET_MMFR_PA_MASK >> ENET_MMFR_PA_SHIFT)
 #if FSL_FEATURE_ENET_QUEUE > 1
-#define ENET_TX_INTERRUPT                                                                                    \
-    (kENET_TxFrameInterrupt | kENET_TxBufferInterrupt | kENET_TxFrame1Interrupt | kENET_TxBuffer1Interrupt | \
-     kENET_TxFrame2Interrupt | kENET_TxBuffer2Interrupt)
-#define ENET_RX_INTERRUPT                                                                                    \
-    (kENET_RxFrameInterrupt | kENET_RxBufferInterrupt | kENET_RxFrame1Interrupt | kENET_RxBuffer1Interrupt | \
-     kENET_RxFrame2Interrupt | kENET_RxBuffer2Interrupt)
+#define ENET_TX_INTERRUPT                                                                                       \
+    ((uint32_t)kENET_TxFrameInterrupt | (uint32_t)kENET_TxBufferInterrupt | (uint32_t)kENET_TxFrame1Interrupt | \
+     (uint32_t)kENET_TxBuffer1Interrupt | (uint32_t)kENET_TxFrame2Interrupt | (uint32_t)kENET_TxBuffer2Interrupt)
+#define ENET_RX_INTERRUPT                                                                                       \
+    ((uint32_t)kENET_RxFrameInterrupt | (uint32_t)kENET_RxBufferInterrupt | (uint32_t)kENET_RxFrame1Interrupt | \
+     (uint32_t)kENET_RxBuffer1Interrupt | (uint32_t)kENET_RxFrame2Interrupt | (uint32_t)kENET_RxBuffer2Interrupt)
 #else
-#define ENET_TX_INTERRUPT (kENET_TxFrameInterrupt | kENET_TxBufferInterrupt)
-#define ENET_RX_INTERRUPT (kENET_RxFrameInterrupt | kENET_RxBufferInterrupt)
+#define ENET_TX_INTERRUPT ((uint32_t)kENET_TxFrameInterrupt | (uint32_t)kENET_TxBufferInterrupt)
+#define ENET_RX_INTERRUPT ((uint32_t)kENET_RxFrameInterrupt | (uint32_t)kENET_RxBufferInterrupt)
 #endif /* FSL_FEATURE_ENET_QUEUE > 1 */
-#define ENET_TS_INTERRUPT (kENET_TsTimerInterrupt | kENET_TsAvailInterrupt)
-#define ENET_ERR_INTERRUPT                                                                              \
-    (kENET_BabrInterrupt | kENET_BabtInterrupt | kENET_EBusERInterrupt | kENET_LateCollisionInterrupt | \
-     kENET_RetryLimitInterrupt | kENET_UnderrunInterrupt | kENET_PayloadRxInterrupt)
-#define ENET_ERR_INTERRUPT                                                                              \
-    (kENET_BabrInterrupt | kENET_BabtInterrupt | kENET_EBusERInterrupt | kENET_LateCollisionInterrupt | \
-     kENET_RetryLimitInterrupt | kENET_UnderrunInterrupt | kENET_PayloadRxInterrupt)
+#define ENET_TS_INTERRUPT ((uint32_t)kENET_TsTimerInterrupt | (uint32_t)kENET_TsAvailInterrupt)
+#define ENET_ERR_INTERRUPT                                                                             \
+    ((uint32_t)kENET_BabrInterrupt | (uint32_t)kENET_BabtInterrupt | (uint32_t)kENET_EBusERInterrupt | \
+     (uint32_t)kENET_LateCollisionInterrupt | (uint32_t)kENET_RetryLimitInterrupt |                    \
+     (uint32_t)kENET_UnderrunInterrupt | (uint32_t)kENET_PayloadRxInterrupt)
+#define ENET_ERR_INTERRUPT                                                                             \
+    ((uint32_t)kENET_BabrInterrupt | (uint32_t)kENET_BabtInterrupt | (uint32_t)kENET_EBusERInterrupt | \
+     (uint32_t)kENET_LateCollisionInterrupt | (uint32_t)kENET_RetryLimitInterrupt |                    \
+     (uint32_t)kENET_UnderrunInterrupt | (uint32_t)kENET_PayloadRxInterrupt)
 /*@}*/
 
 /*! @brief Defines the status return codes for transaction. */
-enum _enet_status
+enum
 {
     kStatus_ENET_RxFrameError   = MAKE_STATUS(kStatusGroup_ENET, 0U), /*!< A frame received but data error happen. */
     kStatus_ENET_RxFrameFail    = MAKE_STATUS(kStatusGroup_ENET, 1U), /*!< Failed to receive a frame. */
@@ -462,8 +464,8 @@ typedef struct _enet_buffer_config
 {
     uint16_t rxBdNumber;      /*!< Receive buffer descriptor number. */
     uint16_t txBdNumber;      /*!< Transmit buffer descriptor number. */
-    uint32_t rxBuffSizeAlign; /*!< Aligned receive data buffer size. */
-    uint32_t txBuffSizeAlign; /*!< Aligned transmit data buffer size. */
+    uint16_t rxBuffSizeAlign; /*!< Aligned receive data buffer size. */
+    uint16_t txBuffSizeAlign; /*!< Aligned transmit data buffer size. */
     volatile enet_rx_bd_struct_t
         *rxBdStartAddrAlign; /*!< Aligned receive buffer descriptor start address: should be non-cacheable. */
     volatile enet_tx_bd_struct_t
@@ -621,8 +623,8 @@ struct _enet_handle
         *txBdBase[FSL_FEATURE_ENET_QUEUE]; /*!< Transmit buffer descriptor base address pointer. */
     volatile enet_tx_bd_struct_t
         *txBdCurrent[FSL_FEATURE_ENET_QUEUE];         /*!< The current available transmit buffer descriptor pointer. */
-    uint32_t rxBuffSizeAlign[FSL_FEATURE_ENET_QUEUE]; /*!< Receive buffer size alignment. */
-    uint32_t txBuffSizeAlign[FSL_FEATURE_ENET_QUEUE]; /*!< Transmit buffer size alignment. */
+    uint16_t rxBuffSizeAlign[FSL_FEATURE_ENET_QUEUE]; /*!< Receive buffer size alignment. */
+    uint16_t txBuffSizeAlign[FSL_FEATURE_ENET_QUEUE]; /*!< Transmit buffer size alignment. */
     uint8_t ringNum;                                  /*!< Number of used rings. */
     enet_callback_t callback;                         /*!< Callback function. */
     void *userData;                                   /*!< Callback function parameter.*/
@@ -762,7 +764,7 @@ void ENET_SetSMI(ENET_Type *base, uint32_t srcClock_Hz, bool isPreambleDisabled)
  */
 static inline bool ENET_GetSMI(ENET_Type *base)
 {
-    return (0 != (base->MSCR & 0x7E));
+    return (0U != (base->MSCR & 0x7EU));
 }
 
 /*!
@@ -1000,8 +1002,8 @@ static inline void ENET_EnableSleepMode(ENET_Type *base, bool enable)
  */
 static inline void ENET_GetAccelFunction(ENET_Type *base, uint32_t *txAccelOption, uint32_t *rxAccelOption)
 {
-    assert(txAccelOption);
-    assert(txAccelOption);
+    assert(txAccelOption != NULL);
+    assert(txAccelOption != NULL);
 
     *txAccelOption = base->TACC;
     *rxAccelOption = base->RACC;
@@ -1111,9 +1113,9 @@ void ENET_SetCallback(enet_handle_t *handle, enet_callback_t callback, void *use
  *       status = ENET_GetRxFrameSize(&g_handle, &length);
  *       if (status == kStatus_ENET_RxFrameError)
  *       {
- *           // Get the error information of the received frame.
+ *           Comments: Get the error information of the received frame.
  *           ENET_GetRxErrBeforeReadFrame(&g_handle, &eErrStatic);
- *           // update the receive buffer.
+ *           Comments: update the receive buffer.
  *           ENET_ReadFrame(EXAMPLE_ENET, &g_handle, NULL, 0);
  *       }
  * @endcode
@@ -1165,26 +1167,26 @@ status_t ENET_GetRxFrameSize(enet_handle_t *handle, uint32_t *length);
  * @code
  *       uint32_t length;
  *       enet_handle_t g_handle;
- *       //Get the received frame size firstly.
+ *       Comments: Get the received frame size firstly.
  *       status = ENET_GetRxFrameSize(&g_handle, &length);
  *       if (length != 0)
  *       {
- *           //Allocate memory here with the size of "length"
+ *           Comments: Allocate memory here with the size of "length"
  *           uint8_t *data = memory allocate interface;
  *           if (!data)
  *           {
  *               ENET_ReadFrame(ENET, &g_handle, NULL, 0);
- *               //Add the console warning log.
+ *               Comments: Add the console warning log.
  *           }
  *           else
  *           {
  *              status = ENET_ReadFrame(ENET, &g_handle, data, length);
- *              //Call stack input API to deliver the data to stack
+ *              Comments: Call stack input API to deliver the data to stack
  *           }
  *       }
  *       else if (status == kStatus_ENET_RxFrameError)
  *       {
- *          //Update the received buffer when a error frame is received.
+ *          Comments: Update the received buffer when a error frame is received.
  *           ENET_ReadFrame(ENET, &g_handle, NULL, 0);
  *       }
  * @endcode

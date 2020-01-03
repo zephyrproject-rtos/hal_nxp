@@ -55,7 +55,7 @@ static uint32_t smartcard_phy_tda8035_InterfaceClockInit(void *base,
 {
     assert((NULL != config));
 #if defined(FSL_FEATURE_SOC_EMVSIM_COUNT) && (FSL_FEATURE_SOC_EMVSIM_COUNT)
-    assert(config->clockModule < FSL_FEATURE_SOC_EMVSIM_COUNT);
+    assert(config->clockModule < (uint8_t)FSL_FEATURE_SOC_EMVSIM_COUNT);
 
     uint32_t emvsimClkMhz = 0u;
     uint8_t emvsimPRSCValue;
@@ -63,7 +63,7 @@ static uint32_t smartcard_phy_tda8035_InterfaceClockInit(void *base,
     /* Retrieve EMV SIM clock */
     emvsimClkMhz = srcClock_Hz / 1000000u;
     /* Calculate MOD value */
-    emvsimPRSCValue = (emvsimClkMhz * 1000u) / (config->smartCardClock / 1000u);
+    emvsimPRSCValue = (uint8_t)((emvsimClkMhz * 1000u) / (config->smartCardClock / 1000u));
     /* Set clock prescaler */
     ((EMVSIM_Type *)base)->CLKCFG =
         (((EMVSIM_Type *)base)->CLKCFG & ~EMVSIM_CLKCFG_CLK_PRSC_MASK) | EMVSIM_CLKCFG_CLK_PRSC(emvsimPRSCValue);
@@ -138,7 +138,7 @@ static uint32_t smartcard_phy_tda8035_InterfaceClockInit(void *base,
 static void smartcard_phy_tda8035_InterfaceClockDeinit(void *base, smartcard_interface_config_t const *config)
 {
 #if defined(FSL_FEATURE_SOC_EMVSIM_COUNT) && (FSL_FEATURE_SOC_EMVSIM_COUNT)
-    assert((config->clockModule < FSL_FEATURE_SOC_EMVSIM_COUNT) && (NULL != base));
+    assert(((config->clockModule < (uint8_t)FSL_FEATURE_SOC_EMVSIM_COUNT)) && (NULL != base));
 
     /* Disable smart card clock */
     ((EMVSIM_Type *)base)->PCSR &= ~EMVSIM_PCSR_SCEN_MASK;
@@ -174,6 +174,7 @@ static void smartcard_phy_tda8035_InterfaceClockDeinit(void *base, smartcard_int
             break;
 #endif
         default:
+            assert(false);
             break;
     }
 #endif
@@ -216,7 +217,7 @@ void SMARTCARD_PHY_GetDefaultConfig(smartcard_interface_config_t *config)
     assert((NULL != config));
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->clockToResetDelay = SMARTCARD_INIT_DELAY_CLOCK_CYCLES;
     config->vcc               = kSMARTCARD_VoltageClassB3_3V;
@@ -233,11 +234,11 @@ status_t SMARTCARD_PHY_Init(void *base, smartcard_interface_config_t const *conf
     uint32_t gpio_base[] = GPIO_BASE_ADDRS;
     IRQn_Type port_irq[] = PORT_IRQS;
     /* Set VSEL pins to low level context */
-    ((GPIO_Type *)gpio_base[config->vsel0Port])->PCOR |= (1u << config->vsel0Pin);
-    ((GPIO_Type *)gpio_base[config->vsel1Port])->PCOR |= (1u << config->vsel1Pin);
+    ((GPIO_Type *)gpio_base[config->vsel0Port])->PCOR |= ((uint32_t)1u << config->vsel0Pin);
+    ((GPIO_Type *)gpio_base[config->vsel1Port])->PCOR |= ((uint32_t)1u << config->vsel1Pin);
     /* Set VSEL pins to output pins */
-    ((GPIO_Type *)gpio_base[config->vsel0Port])->PDDR |= (1u << config->vsel0Pin);
-    ((GPIO_Type *)gpio_base[config->vsel1Port])->PDDR |= (1u << config->vsel1Pin);
+    ((GPIO_Type *)gpio_base[config->vsel0Port])->PDDR |= ((uint32_t)1u << config->vsel0Pin);
+    ((GPIO_Type *)gpio_base[config->vsel1Port])->PDDR |= ((uint32_t)1u << config->vsel1Pin);
 
     /* vcc = 5v: vsel0=1,vsel1=1
      * vcc = 3.3v: vsel0=0,vsel1=1
@@ -245,20 +246,20 @@ status_t SMARTCARD_PHY_Init(void *base, smartcard_interface_config_t const *conf
     /* Setting of VSEL1 pin */
     if ((kSMARTCARD_VoltageClassA5_0V == config->vcc) || (kSMARTCARD_VoltageClassB3_3V == config->vcc))
     {
-        ((GPIO_Type *)gpio_base[config->vsel1Port])->PSOR |= (1u << config->vsel1Pin);
+        ((GPIO_Type *)gpio_base[config->vsel1Port])->PSOR |= ((uint32_t)1u << config->vsel1Pin);
     }
     else
     {
-        ((GPIO_Type *)gpio_base[config->vsel1Port])->PCOR |= (1u << config->vsel1Pin);
+        ((GPIO_Type *)gpio_base[config->vsel1Port])->PCOR |= ((uint32_t)1u << config->vsel1Pin);
     }
     /* Setting of VSEL0 pin */
     if (kSMARTCARD_VoltageClassA5_0V == config->vcc)
     {
-        ((GPIO_Type *)gpio_base[config->vsel0Port])->PSOR |= (1u << config->vsel0Pin);
+        ((GPIO_Type *)gpio_base[config->vsel0Port])->PSOR |= ((uint32_t)1u << config->vsel0Pin);
     }
     else
     {
-        ((GPIO_Type *)gpio_base[config->vsel0Port])->PCOR |= (1u << config->vsel0Pin);
+        ((GPIO_Type *)gpio_base[config->vsel0Port])->PCOR |= ((uint32_t)1u << config->vsel0Pin);
     }
 
 #if defined(FSL_FEATURE_SOC_EMVSIM_COUNT) && (FSL_FEATURE_SOC_EMVSIM_COUNT)
@@ -267,15 +268,15 @@ status_t SMARTCARD_PHY_Init(void *base, smartcard_interface_config_t const *conf
     ((EMVSIM_Type *)base)->PCSR &= ~EMVSIM_PCSR_VCCENP_MASK;
 #else
     /* Set RST pin to zero context and CMDVCC to high context */
-    ((GPIO_Type *)gpio_base[config->resetPort])->PCOR |= (1u << config->resetPin);
-    ((GPIO_Type *)gpio_base[config->controlPort])->PSOR |= (1u << config->controlPin);
+    ((GPIO_Type *)gpio_base[config->resetPort])->PCOR |= ((uint32_t)1u << config->resetPin);
+    ((GPIO_Type *)gpio_base[config->controlPort])->PSOR |= ((uint32_t)1u << config->controlPin);
     /* Set CMDVCC, RESET pins as output pins */
-    ((GPIO_Type *)gpio_base[config->resetPort])->PDDR |= (1u << config->resetPin);
-    ((GPIO_Type *)gpio_base[config->controlPort])->PDDR |= (1u << config->controlPin);
+    ((GPIO_Type *)gpio_base[config->resetPort])->PDDR |= ((uint32_t)1u << config->resetPin);
+    ((GPIO_Type *)gpio_base[config->controlPort])->PDDR |= ((uint32_t)1u << config->controlPin);
 
 #endif
     /* Initialize INT pin */
-    ((GPIO_Type *)gpio_base[config->irqPort])->PDDR &= ~(1u << config->irqPin);
+    ((GPIO_Type *)gpio_base[config->irqPort])->PDDR &= ~((uint32_t)1u << config->irqPin);
     /* Enable Port IRQ for smartcard presence detection */
     NVIC_EnableIRQ(port_irq[config->irqPort]);
     /* Smartcard clock initialization */
@@ -366,8 +367,10 @@ status_t SMARTCARD_PHY_Activate(void *base, smartcard_context_t *context, smartc
     /* Wait for sometime as specified by EMV before pulling RST High
      * As per EMV delay <= 42000 Clock cycles
      * as per PHY delay >= 1us */
-    uint32_t temp = (uint32_t)((float)(1 + (float)(((float)(1000u * context->interfaceConfig.clockToResetDelay)) /
-                                                   ((float)context->interfaceConfig.smartCardClock / 1000))));
+    uint32_t temp =
+        ((((uint32_t)10000u * context->interfaceConfig.clockToResetDelay) / context->interfaceConfig.smartCardClock) *
+         100u) +
+        1u;
     context->timeDelay(temp);
 /* Pull reset HIGH Now to mark the end of Activation sequence */
 #if defined(FSL_FEATURE_SOC_EMVSIM_COUNT) && (FSL_FEATURE_SOC_EMVSIM_COUNT)
@@ -450,6 +453,7 @@ status_t SMARTCARD_PHY_Control(void *base,
     {
         return kStatus_SMARTCARD_InvalidInput;
     }
+    status_t status = kStatus_SMARTCARD_Success;
 #if !(defined(FSL_FEATURE_SOC_EMVSIM_COUNT) && (FSL_FEATURE_SOC_EMVSIM_COUNT))
     uint32_t gpio_base[] = GPIO_BASE_ADDRS;
 #endif
@@ -468,8 +472,8 @@ status_t SMARTCARD_PHY_Control(void *base,
 #if defined(FSL_FEATURE_SOC_EMVSIM_COUNT) && (FSL_FEATURE_SOC_EMVSIM_COUNT)
             /* Expecting active low present detect */
             context->cardParams.present =
-                ((emvsim_presence_detect_status_t)((((EMVSIM_Type *)base)->PCSR & EMVSIM_PCSR_SPDP_MASK) >>
-                                                   EMVSIM_PCSR_SPDP_SHIFT) == kEMVSIM_DetectPinIsLow);
+                ((emvsim_presence_detect_status_t)(uint32_t)((((EMVSIM_Type *)base)->PCSR & EMVSIM_PCSR_SPDP_MASK) >>
+                                                             EMVSIM_PCSR_SPDP_SHIFT) == kEMVSIM_DetectPinIsLow);
 #else
             if (((GPIO_Type *)gpio_base[context->interfaceConfig.controlPort])->PDIR &
                 (1u << context->interfaceConfig.controlPin))
@@ -533,10 +537,11 @@ status_t SMARTCARD_PHY_Control(void *base,
 #endif
             break;
         default:
-            return kStatus_SMARTCARD_InvalidInput;
+            status = kStatus_SMARTCARD_InvalidInput;
+            break;
     }
 
-    return kStatus_SMARTCARD_Success;
+    return status;
 }
 
 void SMARTCARD_PHY_IRQHandler(void *base, smartcard_context_t *context)
@@ -546,7 +551,7 @@ void SMARTCARD_PHY_IRQHandler(void *base, smartcard_context_t *context)
         return;
     }
     /* Read interface/card status */
-    SMARTCARD_PHY_Control(base, context, kSMARTCARD_InterfaceReadStatus, 0u);
+    (void)SMARTCARD_PHY_Control(base, context, kSMARTCARD_InterfaceReadStatus, 0u);
     /* Invoke callback if there is one */
     if (NULL != context->interfaceCallback)
     {

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -17,8 +17,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPI2C EDMA driver version 2.1.5. */
-#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
+/*! @brief LPI2C EDMA driver version 2.1.10. */
+#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 10))
 /*@}*/
 
 /*!
@@ -60,7 +60,7 @@ struct _lpi2c_master_edma_handle
     void *userData;                                           /*!< Application data passed to callback. */
     edma_handle_t *rx;                                        /*!< Handle for receive DMA channel. */
     edma_handle_t *tx;                                        /*!< Handle for transmit DMA channel. */
-    edma_tcd_t tcds[2]; /*!< Software TCD. Two are allocated to provide enough room to align to 32-bytes. */
+    edma_tcd_t tcds[3]; /*!< Software TCD. Three are allocated to provide enough room to align to 32-bytes. */
 };
 
 /*! @} */

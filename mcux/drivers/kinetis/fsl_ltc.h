@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,9 +20,9 @@
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief LTC driver version. Version 2.0.8.
+/*! @brief LTC driver version. Version 2.0.10.
  *
- * Current version: 2.0.8
+ * Current version: 2.0.9
  *
  * Change log:
  * - Version 2.0.1
@@ -48,8 +48,15 @@
  *
  * - Version 2.0.8
  *   - Fix Coverity issues
+ *
+ * - Version 2.0.9
+ *   - Fix sign-compare warning in ltc_set_context and in ltc_get_context
+ *
+ * - Version 2.0.10
+ *   - Fix MISRA-2012 issues
+ *
  */
-#define FSL_LTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
+#define FSL_LTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 10))
 /*@}*/
 /*! @} */
 

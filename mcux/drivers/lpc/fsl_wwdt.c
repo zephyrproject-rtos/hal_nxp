@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -91,10 +91,10 @@ static uint32_t WWDT_GetInstance(WWDT_Type *base)
  */
 void WWDT_GetDefaultConfig(wwdt_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     /* Enable the watch dog */
     config->enableWwdt = true;
@@ -134,12 +134,13 @@ void WWDT_GetDefaultConfig(wwdt_config_t *config)
  */
 void WWDT_Init(WWDT_Type *base, const wwdt_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
     /* The config->clockFreq_Hz must be set in order to config the delay time. */
-    assert(config->clockFreq_Hz);
+    assert(0U != config->clockFreq_Hz);
 
-    uint32_t value = 0U;
-    uint32_t DelayUs = 0U;
+    uint32_t value        = 0U;
+    uint32_t DelayUs      = 0U;
+    uint32_t primaskValue = 0U;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the WWDT clock */
@@ -159,18 +160,27 @@ void WWDT_Init(WWDT_Type *base, const wwdt_config_t *config)
 #else
     value = WWDT_MOD_WDEN(config->enableWwdt) | WWDT_MOD_WDRESET(config->enableWatchdogReset);
 #endif
+    /* Clear legacy flag in the MOD register by software writing a "1" to this bit field.. */
+    if (0U != (base->MOD & WWDT_MOD_WDINT_MASK))
+    {
+        value |= WWDT_MOD_WDINT_MASK;
+    }
     /* Set configuration */
-    base->TC = WWDT_TC_COUNT(config->timeoutValue);
-    base->MOD |= value;
+    primaskValue  = DisableGlobalIRQ();
+    base->TC      = WWDT_TC_COUNT(config->timeoutValue);
+    base->MOD     = value;
     base->WINDOW  = WWDT_WINDOW_WINDOW(config->windowValue);
     base->WARNINT = WWDT_WARNINT_WARNINT(config->warningValue);
-    WWDT_Refresh(base);
+    /* Refreshes the WWDT timer. */
+    base->FEED = WWDT_FIRST_WORD_OF_REFRESH;
+    base->FEED = WWDT_SECOND_WORD_OF_REFRESH;
+    EnableGlobalIRQ(primaskValue);
     /*  This WDPROTECT bit can be set once by software and is only cleared by a reset */
-    if ((base->MOD & WWDT_MOD_WDPROTECT_MASK) == 0U)
+    if (0U == (base->MOD & WWDT_MOD_WDPROTECT_MASK))
     {
         /* Set the WDPROTECT bit after the Feed Sequence (0xAA, 0x55) with 3 WDCLK delay */
         DelayUs = FREQUENCY_3MHZ / config->clockFreq_Hz + 1U;
-        SDK_DelayAtLeastUs(DelayUs);
+        SDK_DelayAtLeastUs(DelayUs, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
         base->MOD |= WWDT_MOD_WDPROTECT(config->enableWatchdogProtect);
     }
@@ -231,7 +241,7 @@ void WWDT_ClearStatusFlags(WWDT_Type *base, uint32_t mask)
     uint32_t reg = (base->MOD & (~WWDT_MOD_WDINT_MASK));
 
     /* Clear timeout by writing a zero */
-    if (mask & kWWDT_TimeoutFlag)
+    if (0U != (mask & (uint32_t)kWWDT_TimeoutFlag))
     {
         reg &= ~WWDT_MOD_WDTOF_MASK;
 #if defined(FSL_FEATURE_WWDT_WDTRESET_FROM_PMC) && (FSL_FEATURE_WWDT_WDTRESET_FROM_PMC)
@@ -241,7 +251,7 @@ void WWDT_ClearStatusFlags(WWDT_Type *base, uint32_t mask)
     }
 
     /* Clear warning interrupt flag by writing a one */
-    if (mask & kWWDT_WarningFlag)
+    if (0U != (mask & (uint32_t)kWWDT_WarningFlag))
     {
         reg |= WWDT_MOD_WDINT_MASK;
     }

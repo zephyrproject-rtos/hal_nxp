@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -78,12 +78,12 @@ static status_t ltc_process_message_in_sessions_EDMA(LTC_Type *base, ltc_edma_ha
     bool exit_sm = false;
 
     handle->modeReg = base->MD;
-    retval = kStatus_Success;
+    retval          = kStatus_Success;
 
     if ((NULL == handle->inData) || (NULL == handle->outData))
     {
         handle->state = LTC_SM_STATE_FINISH; /* END */
-        retval = kStatus_InvalidArgument;
+        retval        = kStatus_InvalidArgument;
     }
 
     while (exit_sm == false)
@@ -117,7 +117,7 @@ static status_t ltc_process_message_in_sessions_EDMA(LTC_Type *base, ltc_edma_ha
                         if (inSize <= 16u)
                         {
                             lastSize = inSize;
-                            inSize = 0;
+                            inSize   = 0;
                         }
                         else
                         {
@@ -130,9 +130,8 @@ static status_t ltc_process_message_in_sessions_EDMA(LTC_Type *base, ltc_edma_ha
                             }
                             else
                             {
-                                inSize -=
-                                    lastSize; /* inSize will be rounded down to 16 byte boundary. remaining bytes in
-                                                 lastSize */
+                                inSize -= lastSize; /* inSize will be rounded down to 16 byte boundary. remaining bytes
+                                                       in lastSize */
                             }
                         }
 
@@ -150,6 +149,7 @@ static status_t ltc_process_message_in_sessions_EDMA(LTC_Type *base, ltc_edma_ha
                         }
                         else
                         {
+                            /* Intentional empty */
                         }
                     }
                 }
@@ -190,12 +190,12 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
     bool exit_sm = false;
 
     handle->modeReg = base->MD;
-    retval = kStatus_Success;
+    retval          = kStatus_Success;
 
     if ((NULL == handle->inData) || (NULL == handle->outData))
     {
         handle->state = LTC_SM_STATE_FINISH;
-        retval = kStatus_InvalidArgument;
+        retval        = kStatus_InvalidArgument;
     }
 
     while (exit_sm == false)
@@ -229,7 +229,7 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
                         if (inSize <= 16u)
                         {
                             lastSize = inSize;
-                            inSize = 0;
+                            inSize   = 0;
                         }
                         else
                         {
@@ -242,9 +242,8 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
                             }
                             else
                             {
-                                inSize -=
-                                    lastSize; /* inSize will be rounded down to 16 byte boundary. remaining bytes in
-                                                 lastSize */
+                                inSize -= lastSize; /* inSize will be rounded down to 16 byte boundary. remaining bytes
+                                                       in lastSize */
                             }
                         }
 
@@ -279,7 +278,7 @@ static status_t ltc_process_message_in_sessions_ctr_EDMA(LTC_Type *base, ltc_edm
                 if (kStatus_Success == retval)
                 {
                     const uint8_t *input = handle->inData;
-                    uint8_t *output = handle->outData;
+                    uint8_t *output      = handle->outData;
 
                     if ((handle->counterlast != NULL) && (0U != handle->lastSize))
                     {
@@ -473,7 +472,7 @@ status_t LTC_AES_EncryptCbcEDMA(LTC_Type *base,
 {
     status_t retval;
 
-    if (((ltc_check_key_size(keySize)) == 0u) || (size < 16u) ||
+    if (!(ltc_check_key_size(keySize)) || (size < 16u) ||
         (0U != (size % 16u))) /* CBC mode, size must be 16-byte multiple */
     {
         if (NULL != handle->callback)
@@ -699,7 +698,7 @@ static status_t ltc_des_process_EDMA(LTC_Type *base,
     /* all but OFB, size must be 8-byte multiple */
     if ((modeAs != kLTC_ModeOFB) && ((size < 8u) || (size % 8u)))
     {
-        if (handle->callback)
+        if (NULL != handle->callback)
         {
             handle->callback(base, handle, kStatus_InvalidArgument, handle->userData);
         }
@@ -752,7 +751,7 @@ static status_t ltc_3des_process_EDMA(LTC_Type *base,
     retval = ltc_3des_check_input_args(modeAs, size, key1, key2);
     if (kStatus_Success != retval)
     {
-        if (handle->callback)
+        if (NULL != handle->callback)
         {
             handle->callback(base, handle, kStatus_InvalidArgument, handle->userData);
         }
@@ -761,10 +760,10 @@ static status_t ltc_3des_process_EDMA(LTC_Type *base,
 
     ltc_memcpy(&key[0], &key1[0], LTC_DES_KEY_SIZE);
     ltc_memcpy(&key[LTC_DES_KEY_SIZE], &key2[0], LTC_DES_KEY_SIZE);
-    if (key3)
+    if (NULL != key3)
     {
         ltc_memcpy(&key[LTC_DES_KEY_SIZE * 2], &key3[0], LTC_DES_KEY_SIZE);
-        keySize = sizeof(key);
+        keySize = (uint8_t)sizeof(key);
     }
 
     /* Initialize algorithm state. */

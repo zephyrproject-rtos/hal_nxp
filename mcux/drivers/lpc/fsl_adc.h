@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief ADC driver version 2.3.1. */
-#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+/*! @brief ADC driver version 2.4.0. */
+#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /*!
@@ -86,8 +86,10 @@ enum _adc_interrupt_enable
 {
     kADC_ConvSeqAInterruptEnable = ADC_INTEN_SEQA_INTEN_MASK, /*!< Enable interrupt upon completion of each individual
                                                                    conversion in sequence A, or entire sequence. */
+#if !(defined(FSL_FEATURE_ADC_HAS_SINGLE_SEQ) && FSL_FEATURE_ADC_HAS_SINGLE_SEQ)
     kADC_ConvSeqBInterruptEnable = ADC_INTEN_SEQB_INTEN_MASK, /*!< Enable interrupt upon completion of each individual
                                                                    conversion in sequence B, or entire sequence. */
+#endif                                                        /* FSL_FEATURE_ADC_HAS_SINGLE_SEQ */
     kADC_OverrunInterruptEnable = ADC_INTEN_OVR_INTEN_MASK, /*!< Enable the detection of an overrun condition on any of
                                                                the channel data registers will cause an overrun
                                                                interrupt/DMA trigger. */
@@ -227,11 +229,11 @@ typedef enum _adc_inforesultshift
  */
 typedef enum _adc_tempsensor_common_mode
 {
-    kADC_HighNegativeOffsetAdded = 0x0U, /*!< Temerature sensor common mode: high negative offset added. */
+    kADC_HighNegativeOffsetAdded = 0x0U, /*!< Temperature sensor common mode: high negative offset added. */
     kADC_IntermediateNegativeOffsetAdded =
-        0x4U,                           /*!< Temerature sensor common mode: intermediate negative offset added. */
-    kADC_NoOffsetAdded          = 0x8U, /*!< Temerature sensor common mode: no offset added. */
-    kADC_LowPositiveOffsetAdded = 0xcU, /*!< Temerature sensor common mode: low positive offset added. */
+        0x4U,                           /*!< Temperature sensor common mode: intermediate negative offset added. */
+    kADC_NoOffsetAdded          = 0x8U, /*!< Temperature sensor common mode: no offset added. */
+    kADC_LowPositiveOffsetAdded = 0xcU, /*!< Temperature sensor common mode: low positive offset added. */
 } adc_tempsensor_common_mode_t;
 
 /*!
@@ -296,7 +298,7 @@ typedef struct _adc_conv_seq_config
              sequence, beginning with the lowest-order. The available range is in 12-bit. */
     uint32_t triggerMask; /*!< Selects which one or more of the available hardware trigger sources will cause this
              conversion sequence to be initiated. The available range is 6-bit.*/
-    adc_trigger_polarity_t triggerPolarity; /*!< Select the trigger to lauch conversion sequence. */
+    adc_trigger_polarity_t triggerPolarity; /*!< Select the trigger to launch conversion sequence. */
     bool enableSyncBypass; /*!< To enable this feature allows the hardware trigger input to bypass synchronization
                flip-flop stages and therefore shorten the time between the trigger input signal and the
                start of a conversion. */
@@ -365,21 +367,39 @@ void ADC_GetDefaultConfig(adc_config_t *config);
 #if !(defined(FSL_FEATURE_ADC_HAS_NO_CALIB_FUNC) && FSL_FEATURE_ADC_HAS_NO_CALIB_FUNC)
 #if defined(FSL_FEATURE_ADC_HAS_CALIB_REG) && FSL_FEATURE_ADC_HAS_CALIB_REG
 /*!
- * @brief Do the self hardware calibration.
+ * @brief Do the hardware self-calibration.
+ * @deprecated Do not use this function. It has been superceded by @ref ADC_DoOffsetCalibration.
+ *
+ * To calibrate the ADC, set the ADC clock to 500 kHz. In order to achieve the specified ADC accuracy, the A/D
+ * converter must be recalibrated, at a minimum, following every chip reset before initiating normal ADC operation.
  *
  * @param base ADC peripheral base address.
  * @retval true  Calibration succeed.
  * @retval false Calibration failed.
  */
 bool ADC_DoSelfCalibration(ADC_Type *base);
-#else
+
 /*!
- * @brief Do the self calibration. To calibrate the ADC, set the ADC clock to 500 kHz.
- *        In order to achieve the specified ADC accuracy, the A/D converter must be recalibrated, at a minimum,
- *        following every chip reset before initiating normal ADC operation.
+ * @brief Do the hardware offset-calibration.
+ *
+ * To calibrate the ADC, set the ADC clock to no more then 30 MHz. In order to achieve the specified ADC accuracy, the
+ * A/D converter must be recalibrated, at a minimum, following every chip reset before initiating normal ADC operation.
  *
  * @param base ADC peripheral base address.
- * @param frequency The ststem clock frequency to ADC.
+ * param frequency The clock frequency that ADC operates at.
+ * @retval true  Calibration succeed.
+ * @retval false Calibration failed.
+ */
+bool ADC_DoOffsetCalibration(ADC_Type *base, uint32_t frequency);
+#else
+/*!
+ * @brief Do the hardware self-calibration.
+ *
+ * To calibrate the ADC, set the ADC clock to 500 kHz. In order to achieve the specified ADC accuracy, the A/D
+ * converter must be recalibrated, at a minimum, following every chip reset before initiating normal ADC operation.
+ *
+ * @param base ADC peripheral base address.
+ * @param frequency The clock frequency that ADC operates at.
  * @retval true  Calibration succeed.
  * @retval false Calibration failed.
  */
@@ -483,6 +503,7 @@ static inline void ADC_EnableConvSeqABurstMode(ADC_Type *base, bool enable)
     }
 }
 
+#if !(defined(FSL_FEATURE_ADC_HAS_SINGLE_SEQ) && FSL_FEATURE_ADC_HAS_SINGLE_SEQ)
 /*!
  * @brief Set the high priority for conversion sequence A.
  *
@@ -492,9 +513,11 @@ static inline void ADC_SetConvSeqAHighPriority(ADC_Type *base)
 {
     base->SEQ_CTRL[0] |= ADC_SEQ_CTRL_LOWPRIO_MASK;
 }
+#endif /* FSL_FEATURE_ADC_HAS_SINGLE_SEQ */
 
 /* @} */
 
+#if !(defined(FSL_FEATURE_ADC_HAS_SINGLE_SEQ) && FSL_FEATURE_ADC_HAS_SINGLE_SEQ)
 /*!
  * @name Control conversion sequence B.
  * @{
@@ -574,6 +597,7 @@ static inline void ADC_SetConvSeqBHighPriority(ADC_Type *base)
 }
 
 /* @} */
+#endif /* FSL_FEATURE_ADC_HAS_SINGLE_SEQ */
 
 /*!
  * @name Data result.
@@ -590,6 +614,7 @@ static inline void ADC_SetConvSeqBHighPriority(ADC_Type *base)
  */
 bool ADC_GetConvSeqAGlobalConversionResult(ADC_Type *base, adc_result_info_t *info);
 
+#if !(defined(FSL_FEATURE_ADC_HAS_SINGLE_SEQ) && FSL_FEATURE_ADC_HAS_SINGLE_SEQ)
 /*!
  * @brief Get the global ADC conversion infomation of sequence B.
  *
@@ -599,6 +624,7 @@ bool ADC_GetConvSeqAGlobalConversionResult(ADC_Type *base, adc_result_info_t *in
  * @retval false The conversion result is not ready yet.
  */
 bool ADC_GetConvSeqBGlobalConversionResult(ADC_Type *base, adc_result_info_t *info);
+#endif /* FSL_FEATURE_ADC_HAS_SINGLE_SEQ */
 
 /*!
  * @brief Get the channel's ADC conversion completed under each conversion sequence.
@@ -681,7 +707,7 @@ static inline void ADC_SetChannelWithThresholdPair1(ADC_Type *base, uint32_t cha
  */
 static inline void ADC_EnableInterrupts(ADC_Type *base, uint32_t mask)
 {
-    base->INTEN |= (0x7 & mask);
+    base->INTEN |= (0x7UL & mask);
 }
 
 /*!
@@ -692,7 +718,7 @@ static inline void ADC_EnableInterrupts(ADC_Type *base, uint32_t mask)
  */
 static inline void ADC_DisableInterrupts(ADC_Type *base, uint32_t mask)
 {
-    base->INTEN &= ~(0x7 & mask);
+    base->INTEN &= ~(0x7UL & mask);
 }
 
 /*!
@@ -703,7 +729,7 @@ static inline void ADC_EnableShresholdCompareInterrupt(ADC_Type *base,
                                                        uint32_t channel,
                                                        adc_threshold_interrupt_mode_t mode)
 {
-    base->INTEN = (base->INTEN & ~(0x3U << ((channel << 1U) + 3U))) | ((uint32_t)(mode) << ((channel << 1U) + 3U));
+    base->INTEN = (base->INTEN & ~(0x3UL << ((channel << 1UL) + 3UL))) | ((uint32_t)(mode) << ((channel << 1UL) + 3UL));
 }
 
 /*!
@@ -717,7 +743,7 @@ static inline void ADC_EnableThresholdCompareInterrupt(ADC_Type *base,
                                                        uint32_t channel,
                                                        adc_threshold_interrupt_mode_t mode)
 {
-    base->INTEN = (base->INTEN & ~(0x3U << ((channel << 1U) + 3U))) | ((uint32_t)(mode) << ((channel << 1U) + 3U));
+    base->INTEN = (base->INTEN & ~(0x3UL << ((channel << 1UL) + 3UL))) | ((uint32_t)(mode) << ((channel << 1UL) + 3UL));
 }
 
 /* @} */

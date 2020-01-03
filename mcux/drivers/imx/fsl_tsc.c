@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -114,7 +114,7 @@ void TSC_Deinit(TSC_Type *base)
 void TSC_GetDefaultConfig(tsc_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enableAutoMeasure = false;
     config->measureDelayTime  = 0xFFFFU;
@@ -145,7 +145,9 @@ uint32_t TSC_GetMeasureValue(TSC_Type *base, tsc_corrdinate_value_selection_t se
     }
     else
     {
+        /* Intentional empty */
     }
+
     return tmp32;
 }
 
@@ -207,6 +209,7 @@ void TSC_DebugEnableDetection(TSC_Type *base, tsc_detection_mode_t detectionMode
     }
     else
     {
+        /* Intentional empty */
     }
 }
 
@@ -250,6 +253,7 @@ void TSC_DebugSetPortMode(TSC_Type *base, tsc_port_source_t port, tsc_port_mode_
             tmp32 |= ((uint32_t)mode << TSC_DEBUG_MODE2_XPUL_PULL_DOWN_SHIFT);
             break;
         default:
+            assert(false);
             break;
     }
     base->DEBUG_MODE2 = tmp32;

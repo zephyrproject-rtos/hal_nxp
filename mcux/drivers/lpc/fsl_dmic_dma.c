@@ -17,8 +17,8 @@
 #define FSL_COMPONENT_ID "platform.drivers.dmic_dma"
 #endif
 
-/*! @brief DMIC transfer state, which is used for DMIC transactiaonl APIs' internal state. */
-enum _dmic_dma_states_t
+/*! @brief _dmic_dma_states_t DMIC transfer state, which is used for DMIC transactiaonl APIs' internal state. */
+enum
 {
     kDMIC_Idle = 0x0, /*!< DMIC is idle state */
     kDMIC_Busy        /*!< DMIC is busy tranferring data. */
@@ -37,8 +37,8 @@ enum _dmic_dma_states_t
 
 static void DMIC_TransferReceiveDMACallback(dma_handle_t *handle, void *param, bool transferDone, uint32_t intmode)
 {
-    assert(handle);
-    assert(param);
+    assert(handle != NULL);
+    assert(param != NULL);
 
     dmic_dma_handle_t *dmicHandle = (dmic_dma_handle_t *)param;
 
@@ -48,7 +48,7 @@ static void DMIC_TransferReceiveDMACallback(dma_handle_t *handle, void *param, b
         dmicHandle->state = kDMIC_Idle;
     }
 
-    if (dmicHandle->callback)
+    if (dmicHandle->callback != NULL)
     {
         dmicHandle->callback(dmicHandle->base, dmicHandle, kStatus_DMIC_Idle, dmicHandle->userData);
     }
@@ -92,7 +92,7 @@ status_t DMIC_TransferCreateHandleDMA(DMIC_Type *base,
     assert(NULL != handle);
     assert(NULL != rxDmaHandle);
 
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     handle->callback    = callback;
     handle->userData    = userData;
@@ -120,9 +120,9 @@ status_t DMIC_TransferCreateHandleDMA(DMIC_Type *base,
  */
 status_t DMIC_TransferReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle, dmic_transfer_t *xfer, uint32_t channel)
 {
-    assert(handle);
-    assert(handle->rxDmaHandle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(handle->rxDmaHandle != NULL);
+    assert(xfer != NULL);
 
     dma_channel_config_t transferConfig = {0U};
     uint32_t srcAddr                    = (uint32_t)&base->CHANNEL[channel].FIFO_DATA;
@@ -130,24 +130,26 @@ status_t DMIC_TransferReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle, dmi
     dma_descriptor_t *linkDesc          = (handle->desLink != NULL) ? &(handle->desLink[desNum + 1U]) : NULL;
     dmic_transfer_t *currentTransfer    = xfer->linkTransfer;
     bool loopEnd = false, intA = true;
+    uint32_t interleaveWidth = kDMA_AddressInterleave0xWidth;
+
     if ((xfer->linkTransfer != NULL) && (handle->desLink == NULL))
     {
         return kStatus_InvalidArgument;
     }
 
-    if (handle->state == kDMIC_Busy)
+    if (handle->state == (uint8_t)kDMIC_Busy)
     {
         return kStatus_DMIC_Busy;
     }
 
-    while (currentTransfer)
+    while (currentTransfer != NULL)
     {
         /* set up linked descriptor */
         DMA_SetupDescriptor(&handle->desLink[desNum],
-                            DMA_CHANNEL_XFER(currentTransfer->linkTransfer != NULL ? true : false, false, intA, !intA,
-                                             currentTransfer->dataWidth, kDMA_AddressInterleave0xWidth,
+                            DMA_CHANNEL_XFER(currentTransfer->linkTransfer != NULL ? 1UL : 0UL, 0UL, intA, !intA,
+                                             currentTransfer->dataWidth, interleaveWidth,
                                              currentTransfer->dataAddrInterleaveSize, currentTransfer->dataSize),
-                            (void *)srcAddr, currentTransfer->data, linkDesc);
+                            (uint32_t *)srcAddr, currentTransfer->data, linkDesc);
 
         intA = intA == true ? false : true;
         /* break for wrap transfer */
@@ -179,28 +181,31 @@ status_t DMIC_TransferReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle, dmi
     handle->transferSize += xfer->dataSize;
 
     /* code to keep compatibility for the case that not use link transfer */
-    if ((xfer->dataWidth != kDMA_Transfer16BitWidth) && (xfer->dataWidth != kDMA_Transfer32BitWidth))
+    if ((xfer->dataWidth != (uint8_t)kDMA_Transfer16BitWidth) && (xfer->dataWidth != (uint8_t)kDMA_Transfer32BitWidth))
     {
         xfer->dataWidth = kDMA_Transfer16BitWidth; /* use 16bit width as default value */
     }
     /* code to keep compatibility for the case that not use link transfer*/
-    if ((xfer->dataAddrInterleaveSize == kDMA_AddressInterleave0xWidth) ||
-        (xfer->dataAddrInterleaveSize > kDMA_AddressInterleave4xWidth))
+    if ((xfer->dataAddrInterleaveSize == (uint8_t)kDMA_AddressInterleave0xWidth) ||
+        (xfer->dataAddrInterleaveSize > (uint8_t)kDMA_AddressInterleave4xWidth))
     {
         xfer->dataAddrInterleaveSize = kDMA_AddressInterleave1xWidth; /* use interleave1Xwidth as default value. */
     }
 
     /* prepare channel tranfer */
     DMA_PrepareChannelTransfer(
-        &transferConfig, (void *)srcAddr, xfer->data,
-        DMA_CHANNEL_XFER(xfer->linkTransfer == NULL ? false : true, false, intA, !intA, xfer->dataWidth,
-                         kDMA_AddressInterleave0xWidth, xfer->dataAddrInterleaveSize, xfer->dataSize),
+        &transferConfig, (uint32_t *)srcAddr, xfer->data,
+        DMA_CHANNEL_XFER(xfer->linkTransfer == NULL ? 0UL : 1UL, 0UL, intA, !intA, xfer->dataWidth, interleaveWidth,
+                         xfer->dataAddrInterleaveSize, xfer->dataSize),
         kDMA_PeripheralToMemory, NULL, handle->desLink);
     /* Submit transfer. */
-    DMA_SubmitChannelTransfer(handle->rxDmaHandle, &transferConfig);
+    if (DMA_SubmitChannelTransfer(handle->rxDmaHandle, &transferConfig) == kStatus_DMA_Busy)
+    {
+        return kStatus_DMIC_Busy;
+    }
 
     /* enable channel */
-    DMIC_EnableChannnel(DMIC0, 1 << channel);
+    DMIC_EnableChannnel(DMIC0, 1UL << channel);
     /* enable dmic channel dma request */
     DMIC_EnableChannelDma(DMIC0, (dmic_channel_t)channel, true);
 
@@ -244,11 +249,11 @@ void DMIC_TransferAbortReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle)
  */
 status_t DMIC_TransferGetReceiveCountDMA(DMIC_Type *base, dmic_dma_handle_t *handle, uint32_t *count)
 {
-    assert(handle);
-    assert(handle->rxDmaHandle);
-    assert(count);
+    assert(handle != NULL);
+    assert(handle->rxDmaHandle != NULL);
+    assert(count != NULL);
 
-    if (kDMIC_Idle == handle->state)
+    if ((uint8_t)kDMIC_Idle == handle->state)
     {
         return kStatus_NoTransferInProgress;
     }

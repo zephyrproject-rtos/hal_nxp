@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -29,19 +29,6 @@ enum _i2c_master_dma_transfer_states
 {
     kIdleState         = 0x0U, /*!< I2C bus idle. */
     kTransferDataState = 0x1U, /*!< 7-bit address check state. */
-};
-
-/*! @brief Common sets of flags used by the driver. */
-enum _i2c_edma_flag_constants
-{
-/*! All flags which are cleared by the driver upon starting a transfer. */
-#if defined(FSL_FEATURE_I2C_HAS_START_STOP_DETECT) && FSL_FEATURE_I2C_HAS_START_STOP_DETECT
-    kClearFlags = kI2C_ArbitrationLostFlag | kI2C_IntPendingFlag | kI2C_StartDetectFlag | kI2C_StopDetectFlag,
-#elif defined(FSL_FEATURE_I2C_HAS_STOP_DETECT) && FSL_FEATURE_I2C_HAS_STOP_DETECT
-    kClearFlags = kI2C_ArbitrationLostFlag | kI2C_IntPendingFlag | kI2C_StopDetectFlag,
-#else
-    kClearFlags = kI2C_ArbitrationLostFlag | kI2C_IntPendingFlag,
-#endif
 };
 
 /*******************************************************************************
@@ -102,6 +89,8 @@ static void I2C_MasterTransferCallbackEDMA(edma_handle_t *handle, void *userData
 {
     i2c_master_edma_private_handle_t *i2cPrivateHandle = (i2c_master_edma_private_handle_t *)userData;
     status_t result                                    = kStatus_Success;
+    uint8_t tmpReg;
+    size_t tmpdataSize;
 
     /* Disable DMA. */
     I2C_EnableDMA(i2cPrivateHandle->base, false);
@@ -123,8 +112,9 @@ static void I2C_MasterTransferCallbackEDMA(edma_handle_t *handle, void *userData
             result = I2C_MasterStop(i2cPrivateHandle->base);
 
             /* Read the last data byte. */
-            *(i2cPrivateHandle->handle->transfer.data + i2cPrivateHandle->handle->transfer.dataSize - 1) =
-                i2cPrivateHandle->base->D;
+            tmpReg                                                        = i2cPrivateHandle->base->D;
+            tmpdataSize                                                   = i2cPrivateHandle->handle->transfer.dataSize;
+            *(i2cPrivateHandle->handle->transfer.data + tmpdataSize - 1U) = tmpReg;
         }
         else
         {
@@ -153,8 +143,9 @@ static void I2C_MasterTransferCallbackEDMA(edma_handle_t *handle, void *userData
             i2cPrivateHandle->base->C1 |= I2C_C1_TX_MASK;
 
             /* Read the last data byte. */
-            *(i2cPrivateHandle->handle->transfer.data + i2cPrivateHandle->handle->transfer.dataSize - 1) =
-                i2cPrivateHandle->base->D;
+            tmpReg                                                        = i2cPrivateHandle->base->D;
+            tmpdataSize                                                   = i2cPrivateHandle->handle->transfer.dataSize;
+            *(i2cPrivateHandle->handle->transfer.data + tmpdataSize - 1U) = tmpReg;
         }
     }
 
@@ -199,6 +190,9 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
     assert(NULL != xfer);
 
     status_t result = kStatus_Success;
+#if I2C_RETRY_TIMES
+    uint32_t waitTimes = I2C_RETRY_TIMES;
+#endif
 
     if (handle->state != (uint8_t)kIdleState)
     {
@@ -235,20 +229,30 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
             result = I2C_MasterStart(base, handle->transfer.slaveAddress, direction);
         }
 
-        if (0 != result)
+        if (kStatus_Success != result)
         {
             return result;
         }
 
+#if I2C_RETRY_TIMES
+        while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != --waitTimes))
+        {
+        }
+        if (waitTimes == 0)
+        {
+            return kStatus_I2C_Timeout;
+        }
+#else
         while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
         {
         }
+#endif
 
         /* Check if there's transfer error. */
         result = I2C_CheckAndClearError(base, base->S);
 
         /* Return if error. */
-        if (0 != result)
+        if (kStatus_Success != result)
         {
             if (result == kStatus_I2C_Nak)
             {
@@ -280,9 +284,20 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
                 base->D = (uint8_t)((handle->transfer.subaddress) >> (8U * handle->transfer.subaddressSize));
 
                 /* Wait until data transfer complete. */
+#if I2C_RETRY_TIMES
+                waitTimes = I2C_RETRY_TIMES;
+                while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != --waitTimes))
+                {
+                }
+                if (waitTimes == 0)
+                {
+                    return kStatus_I2C_Timeout;
+                }
+#else
                 while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
                 {
                 }
+#endif
 
                 /* Check if there's transfer error. */
                 result = I2C_CheckAndClearError(base, base->S);
@@ -308,9 +323,20 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
                 }
 
                 /* Wait until data transfer complete. */
+#if I2C_RETRY_TIMES
+                waitTimes = I2C_RETRY_TIMES;
+                while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != --waitTimes))
+                {
+                }
+                if (waitTimes == 0)
+                {
+                    return kStatus_I2C_Timeout;
+                }
+#else
                 while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
                 {
                 }
+#endif
 
                 /* Check if there's transfer error. */
                 result = I2C_CheckAndClearError(base, base->S);
@@ -500,9 +526,20 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
         }
 
         /* Wait until data transfer complete. */
+#if I2C_RETRY_TIMES
+        uint32_t waitTimes = I2C_RETRY_TIMES;
+        while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != --waitTimes))
+        {
+        }
+        if (waitTimes == 0U)
+        {
+            return kStatus_I2C_Timeout;
+        }
+#else
         while (0U == (base->S & (uint8_t)kI2C_IntPendingFlag))
         {
         }
+#endif
 
         /* Clear pending flag. */
         base->S = (uint8_t)kI2C_IntPendingFlag;
@@ -521,7 +558,8 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
         /* Read the last byte of data. */
         if (handle->transfer.direction == kI2C_Read)
         {
-            *handle->transfer.data = base->D;
+            tmpReg                 = base->D;
+            *handle->transfer.data = tmpReg;
         }
 
         /* Reset the state to idle. */

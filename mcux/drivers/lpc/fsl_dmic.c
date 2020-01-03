@@ -77,7 +77,7 @@ uint32_t DMIC_GetInstance(DMIC_Type *base)
  */
 void DMIC_Init(DMIC_Type *base)
 {
-    assert(base);
+    assert(base != NULL);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the clock. */
@@ -108,7 +108,7 @@ void DMIC_Init(DMIC_Type *base)
  */
 void DMIC_DeInit(DMIC_Type *base)
 {
-    assert(base);
+    assert(base != NULL);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Disable the clock. */
@@ -116,6 +116,7 @@ void DMIC_DeInit(DMIC_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
+#if !(defined(FSL_FEATURE_DMIC_HAS_NO_IOCFG) && FSL_FEATURE_DMIC_HAS_NO_IOCFG)
 /*!
  * brief	Configure DMIC io
  * @deprecated Do not use this function.  It has been superceded by @ref DMIC_SetIOCFG
@@ -125,8 +126,9 @@ void DMIC_DeInit(DMIC_Type *base)
  */
 void DMIC_ConfigIO(DMIC_Type *base, dmic_io_t config)
 {
-    base->IOCFG = config;
+    base->IOCFG = (uint32_t)config;
 }
+#endif
 
 /*!
  * brief	Set DMIC operating mode
@@ -166,11 +168,11 @@ void DMIC_ConfigChannel(DMIC_Type *base,
                         stereo_side_t side,
                         dmic_channel_config_t *channel_config)
 {
-    base->CHANNEL[channel].DIVHFCLK     = channel_config->divhfclk;
+    base->CHANNEL[channel].DIVHFCLK     = (uint32_t)channel_config->divhfclk;
     base->CHANNEL[channel].OSR          = channel_config->osr;
-    base->CHANNEL[channel].GAINSHIFT    = channel_config->gainshft;
-    base->CHANNEL[channel].PREAC2FSCOEF = channel_config->preac2coef;
-    base->CHANNEL[channel].PREAC4FSCOEF = channel_config->preac4coef;
+    base->CHANNEL[channel].GAINSHIFT    = (uint32_t)channel_config->gainshft;
+    base->CHANNEL[channel].PREAC2FSCOEF = (uint32_t)channel_config->preac2coef;
+    base->CHANNEL[channel].PREAC4FSCOEF = (uint32_t)channel_config->preac4coef;
     base->CHANNEL[channel].PHY_CTRL =
         DMIC_CHANNEL_PHY_CTRL_PHY_FALL(side) | DMIC_CHANNEL_PHY_CTRL_PHY_HALF(channel_config->sample_rate);
     base->CHANNEL[channel].DC_CTRL = DMIC_CHANNEL_DC_CTRL_DCPOLE(channel_config->dc_cut_level) |
@@ -209,7 +211,7 @@ void DMIC_CfgChannelDc(DMIC_Type *base,
  */
 void DMIC_Use2fs(DMIC_Type *base, bool use2fs)
 {
-    base->USE2FS = (use2fs) ? 0x1 : 0x0;
+    base->USE2FS = (use2fs) ? 0x1UL : 0x0UL;
 }
 
 /*!
@@ -258,7 +260,7 @@ void DMIC_EnableIntCallback(DMIC_Type *base, dmic_callback_t cb)
     NVIC_ClearPendingIRQ(s_dmicIRQ[instance]);
     /* Save callback pointer */
     s_dmicCallback[instance] = cb;
-    EnableIRQ(s_dmicIRQ[instance]);
+    (void)EnableIRQ(s_dmicIRQ[instance]);
 }
 
 /*!
@@ -275,7 +277,7 @@ void DMIC_DisableIntCallback(DMIC_Type *base, dmic_callback_t cb)
     uint32_t instance;
 
     instance = DMIC_GetInstance(base);
-    DisableIRQ(s_dmicIRQ[instance]);
+    (void)DisableIRQ(s_dmicIRQ[instance]);
     s_dmicCallback[instance] = NULL;
     NVIC_ClearPendingIRQ(s_dmicIRQ[instance]);
 }
@@ -298,7 +300,7 @@ void DMIC_HwvadEnableIntCallback(DMIC_Type *base, dmic_hwvad_callback_t vadcb)
     NVIC_ClearPendingIRQ(s_dmicHwvadIRQ[instance]);
     /* Save callback pointer */
     s_dmicHwvadCallback[instance] = vadcb;
-    EnableIRQ(s_dmicHwvadIRQ[instance]);
+    (void)EnableIRQ(s_dmicHwvadIRQ[instance]);
 }
 
 /*!
@@ -315,7 +317,7 @@ void DMIC_HwvadDisableIntCallback(DMIC_Type *base, dmic_hwvad_callback_t vadcb)
     uint32_t instance;
 
     instance = DMIC_GetInstance(base);
-    DisableIRQ(s_dmicHwvadIRQ[instance]);
+    (void)DisableIRQ(s_dmicHwvadIRQ[instance]);
     s_dmicHwvadCallback[instance] = NULL;
     NVIC_ClearPendingIRQ(s_dmicHwvadIRQ[instance]);
 }

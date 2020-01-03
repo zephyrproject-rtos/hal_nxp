@@ -67,8 +67,9 @@ void LMEM_CodeCacheInvalidateAll(LMEM_Type *base)
     base->PCCCR |= LMEM_PCCCR_INVW0_MASK | LMEM_PCCCR_INVW1_MASK | LMEM_PCCCR_GO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->PCCCR & LMEM_PCCCR_GO_MASK)
+    while (0U != (base->PCCCR & LMEM_PCCCR_GO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* As a precaution clear the bits to avoid inadvertently re-running this command. */
@@ -90,8 +91,9 @@ void LMEM_CodeCachePushAll(LMEM_Type *base)
     base->PCCCR |= LMEM_PCCCR_PUSHW0_MASK | LMEM_PCCCR_PUSHW1_MASK | LMEM_PCCCR_GO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->PCCCR & LMEM_PCCCR_GO_MASK)
+    while (0U != (base->PCCCR & LMEM_PCCCR_GO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* As a precaution clear the bits to avoid inadvertently re-running this command. */
@@ -114,8 +116,9 @@ void LMEM_CodeCacheClearAll(LMEM_Type *base)
                    LMEM_PCCCR_GO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->PCCCR & LMEM_PCCCR_GO_MASK)
+    while (0U != (base->PCCCR & LMEM_PCCCR_GO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* As a precaution clear the bits to avoid inadvertently re-running this command. */
@@ -155,8 +158,9 @@ void LMEM_CodeCacheInvalidateLine(LMEM_Type *base, uint32_t address)
     base->PCCSAR = (address & LMEM_PCCSAR_PHYADDR_MASK) | LMEM_PCCSAR_LGO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->PCCSAR & LMEM_PCCSAR_LGO_MASK)
+    while (0U != (base->PCCSAR & LMEM_PCCSAR_LGO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* No need to clear this command since future line commands will overwrite
@@ -223,8 +227,9 @@ void LMEM_CodeCachePushLine(LMEM_Type *base, uint32_t address)
     base->PCCSAR = (address & LMEM_PCCSAR_PHYADDR_MASK) | LMEM_PCCSAR_LGO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->PCCSAR & LMEM_PCCSAR_LGO_MASK)
+    while (0U != (base->PCCSAR & LMEM_PCCSAR_LGO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* No need to clear this command since future line commands will overwrite
@@ -293,8 +298,9 @@ void LMEM_CodeCacheClearLine(LMEM_Type *base, uint32_t address)
     base->PCCSAR = (address & LMEM_PCCSAR_PHYADDR_MASK) | LMEM_PCCSAR_LGO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->PCCSAR & LMEM_PCCSAR_LGO_MASK)
+    while (0U != (base->PCCSAR & LMEM_PCCSAR_LGO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* No need to clear this command since future line commands will overwrite
@@ -362,21 +368,23 @@ void LMEM_CodeCacheClearMultiLines(LMEM_Type *base, uint32_t address, uint32_t l
  */
 status_t LMEM_CodeCacheDemoteRegion(LMEM_Type *base, lmem_cache_region_t region, lmem_cache_mode_t cacheMode)
 {
+    status_t ret   = (status_t)kStatus_Success;
     uint32_t mode  = base->PCCRMR;
-    uint32_t shift = LMEM_CACHEMODE_WIDTH * (uint32_t)region; /* Region shift. */
-    uint32_t mask  = LMEM_CACHEMODE_MASK_UNIT << shift;       /* Region mask. */
+    uint32_t shift = LMEM_CACHEMODE_WIDTH * (uint32_t)region;       /* Region shift. */
+    uint32_t mask  = ((uint32_t)LMEM_CACHEMODE_MASK_UNIT) << shift; /* Region mask. */
 
     /* If the current cache mode is higher than the requested mode, return error. */
     if ((uint32_t)cacheMode >= ((mode & mask) >> shift))
     {
-        return kStatus_Fail;
+        ret = (status_t)kStatus_Fail;
     }
     else
     { /* Proceed to demote the region. */
         LMEM_CodeCacheClearAll(base);
-        base->PCCRMR = (mode & ~mask) | cacheMode << shift;
-        return kStatus_Success;
+        base->PCCRMR = (mode & ~mask) | ((uint32_t)cacheMode) << shift;
     }
+
+    return ret;
 }
 #endif /* FSL_FEATURE_LMEM_SUPPORT_ICACHE_DEMOTE_REMOVE */
 
@@ -425,8 +433,9 @@ void LMEM_SystemCacheInvalidateAll(LMEM_Type *base)
     base->PSCCR |= LMEM_PSCCR_INVW0_MASK | LMEM_PSCCR_INVW1_MASK | LMEM_PSCCR_GO_MASK;
 
     /* Wait until the cache command completes */
-    while (base->PSCCR & LMEM_PSCCR_GO_MASK)
+    while (0U != (base->PSCCR & LMEM_PSCCR_GO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* As a precaution clear the bits to avoid inadvertently re-running this command. */
@@ -448,8 +457,9 @@ void LMEM_SystemCachePushAll(LMEM_Type *base)
     base->PSCCR |= LMEM_PSCCR_PUSHW0_MASK | LMEM_PSCCR_PUSHW1_MASK | LMEM_PSCCR_GO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->PSCCR & LMEM_PSCCR_GO_MASK)
+    while (0U != (base->PSCCR & LMEM_PSCCR_GO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* As a precaution clear the bits to avoid inadvertently re-running this command. */
@@ -472,8 +482,9 @@ void LMEM_SystemCacheClearAll(LMEM_Type *base)
                    LMEM_PSCCR_GO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->PSCCR & LMEM_PSCCR_GO_MASK)
+    while (0U != (base->PSCCR & LMEM_PSCCR_GO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* As a precaution clear the bits to avoid inadvertently re-running this command. */
@@ -492,7 +503,7 @@ void LMEM_SystemCacheClearAll(LMEM_Type *base)
  */
 void LMEM_SystemCacheInvalidateLine(LMEM_Type *base, uint32_t address)
 {
-    uint32_t pscReg = 0;
+    uint32_t pscReg = 0U;
 
     /* Set the invalidate by line command and use the physical address. */
     pscReg =
@@ -503,8 +514,9 @@ void LMEM_SystemCacheInvalidateLine(LMEM_Type *base, uint32_t address)
     base->PSCSAR = (address & LMEM_PSCSAR_PHYADDR_MASK) | LMEM_PSCSAR_LGO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->PSCSAR & LMEM_PSCSAR_LGO_MASK)
+    while (0U != (base->PSCSAR & LMEM_PSCSAR_LGO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* No need to clear this command since future line commands will overwrite
@@ -529,8 +541,9 @@ void LMEM_SystemCacheInvalidateLine(LMEM_Type *base, uint32_t address)
  */
 void LMEM_SystemCacheInvalidateMultiLines(LMEM_Type *base, uint32_t address, uint32_t length)
 {
-    uint32_t endAddr = address + length;
-    address          = address & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size */
+    uint32_t endAddr     = address + length;
+    uint32_t tempAddress = address;
+    tempAddress          = tempAddress & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size */
 
     /* If the length exceeds 4KB, invalidate all. */
     if (length >= LMEM_CACHE_SIZE_ONEWAY)
@@ -539,10 +552,10 @@ void LMEM_SystemCacheInvalidateMultiLines(LMEM_Type *base, uint32_t address, uin
     }
     else /* Proceed with multi-line invalidate. */
     {
-        while (address < endAddr)
+        while (tempAddress < endAddr)
         {
-            LMEM_SystemCacheInvalidateLine(base, address);
-            address = address + LMEM_CACHE_LINE_SIZE;
+            LMEM_SystemCacheInvalidateLine(base, tempAddress);
+            tempAddress = tempAddress + LMEM_CACHE_LINE_SIZE;
         }
     }
 }
@@ -561,7 +574,7 @@ void LMEM_SystemCacheInvalidateMultiLines(LMEM_Type *base, uint32_t address, uin
  */
 void LMEM_SystemCachePushLine(LMEM_Type *base, uint32_t address)
 {
-    uint32_t pscReg = 0;
+    uint32_t pscReg = 0U;
 
     /* Set the push by line command. */
     pscReg = (base->PSCLCR & ~LMEM_PSCLCR_LCMD_MASK) | LMEM_PSCLCR_LCMD(kLMEM_CacheLinePush) | LMEM_PSCLCR_LADSEL_MASK;
@@ -571,8 +584,9 @@ void LMEM_SystemCachePushLine(LMEM_Type *base, uint32_t address)
     base->PSCSAR = (address & LMEM_PSCSAR_PHYADDR_MASK) | LMEM_PSCSAR_LGO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->PSCSAR & LMEM_PSCSAR_LGO_MASK)
+    while (0U != (base->PSCSAR & LMEM_PSCSAR_LGO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* No need to clear this command since future line commands will overwrite
@@ -599,8 +613,9 @@ void LMEM_SystemCachePushLine(LMEM_Type *base, uint32_t address)
  */
 void LMEM_SystemCachePushMultiLines(LMEM_Type *base, uint32_t address, uint32_t length)
 {
-    uint32_t endAddr = address + length;
-    address          = address & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size. */
+    uint32_t endAddr     = address + length;
+    uint32_t tempAddress = address;
+    tempAddress          = tempAddress & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size. */
 
     /* If the length exceeds 4KB, push all. */
     if (length >= LMEM_CACHE_SIZE_ONEWAY)
@@ -609,10 +624,10 @@ void LMEM_SystemCachePushMultiLines(LMEM_Type *base, uint32_t address, uint32_t 
     }
     else
     { /* Proceed with multi-line push. */
-        while (address < endAddr)
+        while (tempAddress < endAddr)
         {
-            LMEM_SystemCachePushLine(base, address);
-            address = address + LMEM_CACHE_LINE_SIZE;
+            LMEM_SystemCachePushLine(base, tempAddress);
+            tempAddress = tempAddress + LMEM_CACHE_LINE_SIZE;
         }
     }
 }
@@ -630,7 +645,7 @@ void LMEM_SystemCachePushMultiLines(LMEM_Type *base, uint32_t address, uint32_t 
  */
 void LMEM_SystemCacheClearLine(LMEM_Type *base, uint32_t address)
 {
-    uint32_t pscReg = 0;
+    uint32_t pscReg = 0U;
 
     /* Set the push by line command. */
     pscReg = (base->PSCLCR & ~LMEM_PSCLCR_LCMD_MASK) | LMEM_PSCLCR_LCMD(kLMEM_CacheLineClear) | LMEM_PSCLCR_LADSEL_MASK;
@@ -640,8 +655,9 @@ void LMEM_SystemCacheClearLine(LMEM_Type *base, uint32_t address)
     base->PSCSAR = (address & LMEM_PSCSAR_PHYADDR_MASK) | LMEM_PSCSAR_LGO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->PSCSAR & LMEM_PSCSAR_LGO_MASK)
+    while (0U != (base->PSCSAR & LMEM_PSCSAR_LGO_MASK))
     {
+        ; /* Intentional empty while */
     }
 
     /* No need to clear this command since future line commands will overwrite
@@ -667,8 +683,9 @@ void LMEM_SystemCacheClearLine(LMEM_Type *base, uint32_t address)
  */
 void LMEM_SystemCacheClearMultiLines(LMEM_Type *base, uint32_t address, uint32_t length)
 {
-    uint32_t endAddr = address + length;
-    address          = address & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size. */
+    uint32_t endAddr     = address + length;
+    uint32_t tempAddress = address;
+    tempAddress          = tempAddress & ~(LMEM_CACHE_LINE_SIZE - 1U); /* Align address to cache line size. */
 
     /* If the length exceeds 4KB, clear all. */
     if (length >= LMEM_CACHE_SIZE_ONEWAY)
@@ -677,10 +694,10 @@ void LMEM_SystemCacheClearMultiLines(LMEM_Type *base, uint32_t address, uint32_t
     }
     else /* Proceed with multi-line clear. */
     {
-        while (address < endAddr)
+        while (tempAddress < endAddr)
         {
-            LMEM_SystemCacheClearLine(base, address);
-            address = address + LMEM_CACHE_LINE_SIZE;
+            LMEM_SystemCacheClearLine(base, tempAddress);
+            tempAddress = tempAddress + LMEM_CACHE_LINE_SIZE;
         }
     }
 }
@@ -708,20 +725,25 @@ void LMEM_SystemCacheClearMultiLines(LMEM_Type *base, uint32_t address, uint32_t
  */
 status_t LMEM_SystemCacheDemoteRegion(LMEM_Type *base, lmem_cache_region_t region, lmem_cache_mode_t cacheMode)
 {
+    status_t ret   = kStatus_Success;
     uint32_t mode  = base->PSCRMR;
     uint32_t shift = LMEM_CACHEMODE_WIDTH * (uint32_t)region; /* Region shift. */
-    uint32_t mask  = LMEM_CACHEMODE_MASK_UNIT << shift;       /* Region mask. */
+    uint32_t mask;                                            /* Region mask. */
+    uint32_t temp = LMEM_CACHEMODE_MASK_UNIT;
+
+    mask = temp << shift;
 
     /* If the current cache mode is higher than the requested mode, return error. */
     if ((uint32_t)cacheMode >= ((mode & mask) >> shift))
     {
-        return kStatus_Fail;
+        ret = kStatus_Fail;
     }
     else
     { /* Proceed to demote the region. */
         LMEM_SystemCacheClearAll(base);
-        base->PSCRMR = (mode & ~mask) | (cacheMode << shift);
-        return kStatus_Success;
+        base->PSCRMR = (mode & ~mask) | (((uint32_t)cacheMode) << shift);
     }
+
+    return ret;
 }
 #endif /* FSL_FEATURE_LMEM_HAS_SYSTEMBUS_CACHE */

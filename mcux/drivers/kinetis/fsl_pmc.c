@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -83,11 +83,11 @@ void PMC_ConfigureLowVoltWarning(PMC_Type *base, const pmc_low_volt_warning_conf
  */
 void PMC_ConfigureHighVoltDetect(PMC_Type *base, const pmc_high_volt_detect_config_t *config)
 {
-    base->HVDSC1 = (((uint32_t)config->voltSelect << PMC_HVDSC1_HVDV_SHIFT) |
-                    ((uint32_t)config->enableInt << PMC_HVDSC1_HVDIE_SHIFT) |
-                    ((uint32_t)config->enableReset << PMC_HVDSC1_HVDRE_SHIFT)
-                    /* Clear the High Voltage Detect Flag with previous power detect setting */
-                    | PMC_HVDSC1_HVDACK_MASK);
+    base->HVDSC1 = (uint8_t)(((uint32_t)config->voltSelect << PMC_HVDSC1_HVDV_SHIFT) |
+                             ((uint32_t)config->enableInt << PMC_HVDSC1_HVDIE_SHIFT) |
+                             ((uint32_t)config->enableReset << PMC_HVDSC1_HVDRE_SHIFT)
+                             /* Clear the High Voltage Detect Flag with previous power detect setting */
+                             | PMC_HVDSC1_HVDACK_MASK);
 }
 #endif /* FSL_FEATURE_PMC_HAS_HVDSC1 */
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -210,6 +210,7 @@ void DSPI_MasterInit(SPI_Type *base, const dspi_master_config_t *masterConfig, u
     DSPI_Enable(base, true);
     DSPI_StopTransfer(base);
 
+    DSPI_SetOnePcsPolarity(base, masterConfig->whichPcs, masterConfig->pcsActiveHighOrLow);
     DSPI_SetMasterSlaveMode(base, kDSPI_Master);
 
     temp = base->MCR & (~(SPI_MCR_CONT_SCKE_MASK | SPI_MCR_MTFE_MASK | SPI_MCR_ROOE_MASK | SPI_MCR_SMPL_PT_MASK |
@@ -219,8 +220,6 @@ void DSPI_MasterInit(SPI_Type *base, const dspi_master_config_t *masterConfig, u
                 SPI_MCR_MTFE(masterConfig->enableModifiedTimingFormat) |
                 SPI_MCR_ROOE(masterConfig->enableRxFifoOverWrite) | SPI_MCR_SMPL_PT(masterConfig->samplePoint) |
                 SPI_MCR_DIS_TXF(0U) | SPI_MCR_DIS_RXF(0U);
-
-    DSPI_SetOnePcsPolarity(base, masterConfig->whichPcs, masterConfig->pcsActiveHighOrLow);
 
     if (0U == DSPI_MasterSetBaudRate(base, masterConfig->whichCtar, masterConfig->ctarConfig.baudRate, srcClock_Hz))
     {
@@ -429,7 +428,7 @@ uint32_t DSPI_MasterSetBaudRate(SPI_Type *base,
     /* for master mode configuration, if slave mode detected, return 0*/
     if (!DSPI_IsMaster(base))
     {
-        return 0;
+        return 0U;
     }
     uint32_t temp;
     uint32_t prescaler, bestPrescaler;
@@ -447,11 +446,11 @@ uint32_t DSPI_MasterSetBaudRate(SPI_Type *base,
     bestBaudrate  = 0; /* required to avoid compilation warning */
 
     /* In all for loops, if min_diff = 0, the exit for loop*/
-    for (prescaler = 0U; (prescaler < 4U) && (0U != min_diff); prescaler++)
+    for (prescaler = 0U; prescaler < 4U; prescaler++)
     {
-        for (scaler = 0U; (scaler < 16U) && (0U != min_diff); scaler++)
+        for (scaler = 0U; scaler < 16U; scaler++)
         {
-            for (dbr = 1U; (dbr < 3U) && (0U != min_diff); dbr++)
+            for (dbr = 1U; dbr < 3U; dbr++)
             {
                 realBaudrate = ((srcClock_Hz * dbr) / (s_baudratePrescaler[prescaler] * (s_baudrateScaler[scaler])));
 
@@ -471,7 +470,20 @@ uint32_t DSPI_MasterSetBaudRate(SPI_Type *base,
                         bestDbr       = dbr;
                     }
                 }
+                if (0U == min_diff)
+                {
+                    break;
+                }
             }
+
+            if (0U == min_diff)
+            {
+                break;
+            }
+        }
+        if (0U == min_diff)
+        {
+            break;
         }
     }
 
@@ -565,7 +577,7 @@ uint32_t DSPI_MasterSetDelayTimes(SPI_Type *base,
     /* for master mode configuration, if slave mode detected, return 0 */
     if (!DSPI_IsMaster(base))
     {
-        return 0;
+        return 0U;
     }
 
     uint32_t prescaler, bestPrescaler;
@@ -597,9 +609,9 @@ uint32_t DSPI_MasterSetDelayTimes(SPI_Type *base,
     }
 
     /* In all for loops, if min_diff = 0, the exit for loop */
-    for (prescaler = 0; (prescaler < 4U) && (0U != min_diff); prescaler++)
+    for (prescaler = 0; prescaler < 4U; prescaler++)
     {
-        for (scaler = 0; (scaler < 16U) && (0U != min_diff); scaler++)
+        for (scaler = 0; scaler < 16U; scaler++)
         {
             realDelay = ((4000000000U / srcClock_Hz) * s_delayPrescaler[prescaler] * s_delayScaler[scaler]) / 4U;
 
@@ -618,6 +630,15 @@ uint32_t DSPI_MasterSetDelayTimes(SPI_Type *base,
                     bestDelay     = realDelay;
                 }
             }
+
+            if (0U == min_diff)
+            {
+                break;
+            }
+        }
+        if (0U == min_diff)
+        {
+            break;
         }
     }
 
@@ -649,8 +670,8 @@ void DSPI_GetDefaultDataCommandConfig(dspi_command_data_config_t *command)
     (void)memset(command, 0, sizeof(*command));
 
     command->isPcsContinuous    = false;
-    command->whichCtar          = kDSPI_Ctar0;
-    command->whichPcs           = kDSPI_Pcs0;
+    command->whichCtar          = (uint8_t)kDSPI_Ctar0;
+    command->whichPcs           = (uint8_t)kDSPI_Pcs0;
     command->isEndOfQueue       = false;
     command->clearTransferCount = false;
 }
@@ -895,11 +916,10 @@ status_t DSPI_MasterTransferBlocking(SPI_Type *base, dspi_transfer_t *transfer)
 
     /*Calculate the command and lastCommand*/
     commandStruct.whichPcs =
-        (dspi_which_pcs_t)(1U << ((transfer->configFlags & DSPI_MASTER_PCS_MASK) >> DSPI_MASTER_PCS_SHIFT));
+        (uint8_t)((uint32_t)1U << ((transfer->configFlags & DSPI_MASTER_PCS_MASK) >> DSPI_MASTER_PCS_SHIFT));
     commandStruct.isEndOfQueue       = false;
     commandStruct.clearTransferCount = false;
-    commandStruct.whichCtar =
-        (dspi_ctar_selection_t)((transfer->configFlags & DSPI_MASTER_CTAR_MASK) >> DSPI_MASTER_CTAR_SHIFT);
+    commandStruct.whichCtar = (uint8_t)((transfer->configFlags & DSPI_MASTER_CTAR_MASK) >> DSPI_MASTER_CTAR_SHIFT);
     commandStruct.isPcsContinuous =
         (0U != (transfer->configFlags & (uint32_t)kDSPI_MasterPcsContinuous)) ? true : false;
 
@@ -925,7 +945,7 @@ status_t DSPI_MasterTransferBlocking(SPI_Type *base, dspi_transfer_t *transfer)
     }
     else
     {
-        fifoSize = FSL_FEATURE_DSPI_FIFO_SIZEn(base);
+        fifoSize = (uint32_t)FSL_FEATURE_DSPI_FIFO_SIZEn(base);
     }
 
     DSPI_StartTransfer(base);
@@ -1135,18 +1155,17 @@ static void DSPI_MasterTransferPrepare(SPI_Type *base, dspi_master_handle_t *han
     assert(NULL != transfer);
 
     uint32_t tmpMCR                          = 0;
-    dspi_command_data_config_t commandStruct = {false, kDSPI_Ctar0, kDSPI_Pcs0, false, false};
+    dspi_command_data_config_t commandStruct = {false, (uint8_t)kDSPI_Ctar0, (uint8_t)kDSPI_Pcs0, false, false};
 
     DSPI_StopTransfer(base);
     DSPI_FlushFifo(base, true, true);
     DSPI_ClearStatusFlags(base, (uint32_t)kDSPI_AllStatusFlag);
 
     commandStruct.whichPcs =
-        (dspi_which_pcs_t)(1U << ((transfer->configFlags & DSPI_MASTER_PCS_MASK) >> DSPI_MASTER_PCS_SHIFT));
+        (uint8_t)((uint32_t)1U << ((transfer->configFlags & DSPI_MASTER_PCS_MASK) >> DSPI_MASTER_PCS_SHIFT));
     commandStruct.isEndOfQueue       = false;
     commandStruct.clearTransferCount = false;
-    commandStruct.whichCtar =
-        (dspi_ctar_selection_t)((transfer->configFlags & DSPI_MASTER_CTAR_MASK) >> DSPI_MASTER_CTAR_SHIFT);
+    commandStruct.whichCtar = (uint8_t)((transfer->configFlags & DSPI_MASTER_CTAR_MASK) >> DSPI_MASTER_CTAR_SHIFT);
     commandStruct.isPcsContinuous =
         (0U != (transfer->configFlags & (uint32_t)kDSPI_MasterPcsContinuous)) ? true : false;
     handle->command = DSPI_MasterGetFormattedCommand(&(commandStruct));
@@ -1161,11 +1180,11 @@ static void DSPI_MasterTransferPrepare(SPI_Type *base, dspi_master_handle_t *han
     tmpMCR = base->MCR;
     if ((0U != (tmpMCR & SPI_MCR_DIS_RXF_MASK)) || (0U != (tmpMCR & SPI_MCR_DIS_TXF_MASK)))
     {
-        handle->fifoSize = 1;
+        handle->fifoSize = 1U;
     }
     else
     {
-        handle->fifoSize = FSL_FEATURE_DSPI_FIFO_SIZEn(base);
+        handle->fifoSize = (uint8_t)FSL_FEATURE_DSPI_FIFO_SIZEn(base);
     }
     handle->txData                    = transfer->txData;
     handle->rxData                    = transfer->rxData;
@@ -1470,7 +1489,7 @@ static void DSPI_MasterTransferFillUpTxFifo(SPI_Type *base, dspi_master_handle_t
                 {
                     wordToSend = *(handle->txData);
                     ++handle->txData; /* increment to next data byte */
-                    wordToSend |= (unsigned)(*(handle->txData)) << 8U;
+                    wordToSend |= (uint16_t)(*(handle->txData)) << 8U;
                     ++handle->txData; /* increment to next data byte */
                 }
                 else
@@ -1928,7 +1947,7 @@ static void DSPI_SlaveTransferComplete(SPI_Type *base, dspi_slave_handle_t *hand
     handle->remainingReceiveByteCount = 0;
     handle->remainingSendByteCount    = 0;
 
-    status_t status = 0;
+    status_t status;
     if (handle->state == (uint8_t)kDSPI_Error)
     {
         status = kStatus_DSPI_Error;
@@ -2135,7 +2154,7 @@ void DSPI_SlaveTransferHandleIRQ(SPI_Type *base, dspi_slave_handle_t *handle)
             /* Change state to error and clear flag */
             if (NULL != handle->txData)
             {
-                handle->state = kDSPI_Error;
+                handle->state = (uint8_t)kDSPI_Error;
             }
             handle->errorCount++;
         }
@@ -2150,7 +2169,7 @@ void DSPI_SlaveTransferHandleIRQ(SPI_Type *base, dspi_slave_handle_t *handle)
             /* Change state to error and clear flag */
             if (NULL != handle->txData)
             {
-                handle->state = kDSPI_Error;
+                handle->state = (uint8_t)kDSPI_Error;
             }
             handle->errorCount++;
         }

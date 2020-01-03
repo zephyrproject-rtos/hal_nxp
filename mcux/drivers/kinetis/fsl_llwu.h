@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,9 +19,15 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LLWU driver version 2.0.2. */
-#define FSL_LLWU_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief LLWU driver version. */
+#define FSL_LLWU_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
+
+#if (defined(FSL_FEATURE_LLWU_REG_BITWIDTH) && (FSL_FEATURE_LLWU_REG_BITWIDTH == 32))
+#define LLWU_REG_VAL(x) ((uint32_t)(x))
+#else
+#define LLWU_REG_VAL(x) ((uint8_t)(x))
+#endif
 
 /*!
  * @brief External input pin control modes
@@ -106,7 +112,15 @@ extern "C" {
  */
 static inline void LLWU_GetVersionId(LLWU_Type *base, llwu_version_id_t *versionId)
 {
-    *((uint32_t *)versionId) = base->VERID;
+    union
+    {
+        llwu_version_id_t vid;
+        uint32_t u32;
+    } llwuVID;
+
+    llwuVID.u32 = base->VERID;
+
+    *versionId = llwuVID.vid;
 }
 #endif /* FSL_FEATURE_LLWU_HAS_VERID */
 
@@ -122,7 +136,15 @@ static inline void LLWU_GetVersionId(LLWU_Type *base, llwu_version_id_t *version
  */
 static inline void LLWU_GetParam(LLWU_Type *base, llwu_param_t *param)
 {
-    *((uint32_t *)param) = base->PARAM;
+    union
+    {
+        llwu_param_t param;
+        uint32_t u32;
+    } llwuParam;
+
+    llwuParam.u32 = base->PARAM;
+
+    *param = llwuParam.param;
 }
 #endif /* FSL_FEATURE_LLWU_HAS_PARAM */
 
@@ -177,11 +199,11 @@ static inline void LLWU_EnableInternalModuleInterruptWakup(LLWU_Type *base, uint
 {
     if (enable)
     {
-        base->ME |= 1U << moduleIndex;
+        base->ME |= LLWU_REG_VAL(1UL << moduleIndex);
     }
     else
     {
-        base->ME &= ~(1U << moduleIndex);
+        base->ME &= LLWU_REG_VAL(~(1UL << moduleIndex));
     }
 }
 
@@ -218,7 +240,7 @@ static inline void LLWU_EnableInternalModuleInterruptWakup(LLWU_Type *base, uint
  */
 static inline bool LLWU_GetInternalWakeupModuleFlag(LLWU_Type *base, uint32_t moduleIndex)
 {
-    return ((1U << moduleIndex) == (base->INTERNAL_WAKEUP_MODULE_FLAG_REG & (1U << moduleIndex)));
+    return ((1UL << moduleIndex) == ((uint32_t)base->INTERNAL_WAKEUP_MODULE_FLAG_REG & (1UL << moduleIndex)));
 }
 #endif /* FSL_FEATURE_LLWU_HAS_NO_INTERNAL_MODULE_WAKEUP_FLAG_REG */
 #endif /* FSL_FEATURE_LLWU_HAS_INTERNAL_MODULE */
@@ -237,11 +259,11 @@ static inline void LLWU_EnableInternalModuleDmaRequestWakup(LLWU_Type *base, uin
 {
     if (enable)
     {
-        base->DE |= 1U << moduleIndex;
+        base->DE |= LLWU_REG_VAL(1UL << moduleIndex);
     }
     else
     {
-        base->DE &= ~(1U << moduleIndex);
+        base->DE &= LLWU_REG_VAL(~(1UL << moduleIndex));
     }
 }
 #endif /* FSL_FEATURE_LLWU_HAS_DMA_ENABLE_REG */

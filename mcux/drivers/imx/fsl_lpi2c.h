@@ -23,17 +23,17 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPI2C driver version 2.1.9. */
-#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 1, 9))
+/*! @brief LPI2C driver version 2.1.10. */
+#define FSL_LPI2C_DRIVER_VERSION (MAKE_VERSION(2, 1, 10))
 /*@}*/
 
-/*! @brief Timeout times for waiting flag. */
-#ifndef LPI2C_WAIT_TIMEOUT
-#define LPI2C_WAIT_TIMEOUT 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
+/*! @brief Retry times for waiting flag. */
+#ifndef I2C_RETRY_TIMES
+#define I2C_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
 #endif
 
 /*! @brief LPI2C status return codes. */
-enum _lpi2c_status
+enum
 {
     kStatus_LPI2C_Busy = MAKE_STATUS(kStatusGroup_LPI2C, 0), /*!< The master is already performing a transfer. */
     kStatus_LPI2C_Idle = MAKE_STATUS(kStatusGroup_LPI2C, 1), /*!< The slave driver is idle. */
@@ -46,7 +46,7 @@ enum _lpi2c_status
     kStatus_LPI2C_NoTransferInProgress =
         MAKE_STATUS(kStatusGroup_LPI2C, 7), /*!< Attempt to abort a transfer when one is not in progress. */
     kStatus_LPI2C_DmaRequestFail = MAKE_STATUS(kStatusGroup_LPI2C, 8), /*!< DMA request failed. */
-    kStatus_LPI2C_Timeout        = MAKE_STATUS(kStatusGroup_LPI2C, 9), /*!< Timeout poling status flags. */
+    kStatus_LPI2C_Timeout        = MAKE_STATUS(kStatusGroup_LPI2C, 9), /*!< Timeout polling status flags. */
 };
 
 /*! @} */
@@ -73,7 +73,7 @@ enum _lpi2c_status
  *
  * @note These enums are meant to be OR'd together to form a bit mask.
  */
-enum _lpi2c_master_flags
+enum
 {
     kLPI2C_MasterTxReadyFlag         = LPI2C_MSR_TDF_MASK,  /*!< Transmit data flag */
     kLPI2C_MasterRxReadyFlag         = LPI2C_MSR_RDF_MASK,  /*!< Receive data flag */
@@ -670,11 +670,11 @@ static inline void LPI2C_MasterSetWatermarks(LPI2C_Type *base, size_t txWords, s
  */
 static inline void LPI2C_MasterGetFifoCounts(LPI2C_Type *base, size_t *rxCount, size_t *txCount)
 {
-    if (txCount)
+    if (NULL != txCount)
     {
         *txCount = (base->MFSR & LPI2C_MFSR_TXCOUNT_MASK) >> LPI2C_MFSR_TXCOUNT_SHIFT;
     }
-    if (rxCount)
+    if (NULL != rxCount)
     {
         *rxCount = (base->MFSR & LPI2C_MFSR_RXCOUNT_MASK) >> LPI2C_MFSR_RXCOUNT_SHIFT;
     }
@@ -712,7 +712,7 @@ void LPI2C_MasterSetBaudRate(LPI2C_Type *base, uint32_t sourceClock_Hz, uint32_t
  */
 static inline bool LPI2C_MasterGetBusIdleState(LPI2C_Type *base)
 {
-    return (base->MSR & LPI2C_MSR_BBF_MASK) >> LPI2C_MSR_BBF_SHIFT;
+    return ((base->MSR & LPI2C_MSR_BBF_MASK) >> LPI2C_MSR_BBF_SHIFT) == 1U ? true : false;
 }
 
 /*!
@@ -1114,7 +1114,7 @@ static inline void LPI2C_SlaveEnableDMA(LPI2C_Type *base, bool enableAddressVali
  */
 static inline bool LPI2C_SlaveGetBusIdleState(LPI2C_Type *base)
 {
-    return (base->SSR & LPI2C_SSR_BBF_MASK) >> LPI2C_SSR_BBF_SHIFT;
+    return ((base->SSR & LPI2C_SSR_BBF_MASK) >> LPI2C_SSR_BBF_SHIFT) == 1U ? true : false;
 }
 
 /*!

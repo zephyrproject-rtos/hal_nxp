@@ -139,7 +139,7 @@ void MRT_UpdateTimerPeriod(MRT_Type *base, mrt_chnl_t channel, uint32_t count, b
     assert(channel < FSL_FEATURE_MRT_NUMBER_OF_CHANNELS);
 
     uint32_t newValue = count;
-    if (((base->CHANNEL[channel].CTRL & MRT_CHANNEL_CTRL_MODE_MASK) == kMRT_OneShotMode) || (immediateLoad))
+    if (((base->CHANNEL[channel].CTRL & MRT_CHANNEL_CTRL_MODE_MASK) == (uint8_t)kMRT_OneShotMode) || (immediateLoad))
     {
         /* For one-shot interrupt mode, load the new value immediately even if user forgot to enable */
         newValue |= MRT_CHANNEL_INTVAL_LOAD_MASK;

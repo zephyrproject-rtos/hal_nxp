@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CMP driver version 2.0.1. */
-#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief CMP driver version 2.0.2. */
+#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*!
@@ -230,7 +230,7 @@ static inline void CMP_EnableWindowMode(CMP_Type *base, bool enable)
     }
     else
     {
-        base->CR1 &= ~CMP_CR1_WE_MASK;
+        base->CR1 &= (uint8_t)(~CMP_CR1_WE_MASK);
     }
 }
 #endif /* FSL_FEATURE_CMP_HAS_WINDOW_MODE */
@@ -250,7 +250,7 @@ static inline void CMP_EnablePassThroughMode(CMP_Type *base, bool enable)
     }
     else
     {
-        base->MUXCR &= ~CMP_MUXCR_PSTM_MASK;
+        base->MUXCR &= (uint8_t)(~CMP_MUXCR_PSTM_MASK);
     }
 }
 #endif /* FSL_FEATURE_CMP_HAS_PASS_THROUGH_MODE */

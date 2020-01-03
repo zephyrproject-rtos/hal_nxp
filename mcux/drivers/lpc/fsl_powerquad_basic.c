@@ -30,22 +30,22 @@ void PQ_GetDefaultConfig(pq_config_t *config)
     config->tmpFormat      = kPQ_Float;
     config->tmpPrescale    = 0;
     config->machineFormat  = kPQ_Float;
-    config->tmpBase        = (uint32_t *)0xE0000000;
+    config->tmpBase        = (uint32_t *)0xE0000000U;
 }
 
 void PQ_SetConfig(POWERQUAD_Type *base, const pq_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
-    base->TMPBASE = (uint32_t)config->tmpBase;
-    base->INAFORMAT =
-        ((uint32_t)config->inputAPrescale << 8U) | ((uint32_t)config->inputAFormat << 4U) | config->machineFormat;
-    base->INBFORMAT =
-        ((uint32_t)config->inputBPrescale << 8U) | ((uint32_t)config->inputBFormat << 4U) | config->machineFormat;
+    base->TMPBASE   = (uint32_t)config->tmpBase;
+    base->INAFORMAT = ((uint32_t)config->inputAPrescale << 8U) | ((uint32_t)config->inputAFormat << 4U) |
+                      (uint32_t)config->machineFormat;
+    base->INBFORMAT = ((uint32_t)config->inputBPrescale << 8U) | ((uint32_t)config->inputBFormat << 4U) |
+                      (uint32_t)config->machineFormat;
     base->TMPFORMAT =
-        ((uint32_t)config->tmpPrescale << 8U) | ((uint32_t)config->tmpFormat << 4U) | config->machineFormat;
-    base->OUTFORMAT =
-        ((uint32_t)config->outputPrescale << 8U) | ((uint32_t)config->outputFormat << 4U) | config->machineFormat;
+        ((uint32_t)config->tmpPrescale << 8U) | ((uint32_t)config->tmpFormat << 4U) | (uint32_t)config->machineFormat;
+    base->OUTFORMAT = ((uint32_t)config->outputPrescale << 8U) | ((uint32_t)config->outputFormat << 4U) |
+                      (uint32_t)config->machineFormat;
 }
 
 void PQ_Init(POWERQUAD_Type *base)
@@ -113,7 +113,7 @@ void PQ_SetFormat(POWERQUAD_Type *base, pq_computationengine_t engine, pq_format
         config.tmpPrescale    = 0;
     }
 
-    if (CP_FFT == engine)
+    if (CP_FFT == (uint8_t)engine)
     {
         config.machineFormat = kPQ_32Bit;
     }

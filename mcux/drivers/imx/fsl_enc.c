@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -77,7 +77,7 @@ void ENC_Init(ENC_Type *base, const enc_config_t *config)
 {
     assert(NULL != config);
 
-    uint32_t tmp16;
+    uint16_t tmp16;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the clock. */
@@ -208,7 +208,7 @@ void ENC_GetDefaultConfig(enc_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enableReverseDirection                = false;
     config->decoderWorkMode                       = kENC_DecoderWorkAsNormalMode;
@@ -260,15 +260,18 @@ void ENC_SetSelfTestConfig(ENC_Type *base, const enc_self_test_config_t *config)
 
     if (NULL == config) /* Pass "NULL" to disable the feature. */
     {
-        base->TST = 0U;
-        return;
+        tmp16 = 0U;
     }
-    tmp16 = ENC_TST_TEN_MASK | ENC_TST_TCE_MASK | ENC_TST_TEST_PERIOD(config->signalPeriod) |
-            ENC_TST_TEST_COUNT(config->signalCount);
-    if (kENC_SelfTestDirectionNegative == config->signalDirection)
+    else
     {
-        tmp16 |= ENC_TST_QDN_MASK;
+        tmp16 = ENC_TST_TEN_MASK | ENC_TST_TCE_MASK | ENC_TST_TEST_PERIOD(config->signalPeriod) |
+                ENC_TST_TEST_COUNT(config->signalCount);
+        if (kENC_SelfTestDirectionNegative == config->signalDirection)
+        {
+            tmp16 |= ENC_TST_QDN_MASK;
+        }
     }
+
     base->TST = tmp16;
 }
 
@@ -301,39 +304,39 @@ uint32_t ENC_GetStatusFlags(ENC_Type *base)
     uint32_t ret32 = 0U;
 
     /* ENC_CTRL. */
-    if (ENC_CTRL_HIRQ_MASK == (ENC_CTRL_HIRQ_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_HIRQ_MASK & base->CTRL))
     {
-        ret32 |= kENC_HOMETransitionFlag;
+        ret32 |= (uint32_t)kENC_HOMETransitionFlag;
     }
-    if (ENC_CTRL_XIRQ_MASK == (ENC_CTRL_XIRQ_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_XIRQ_MASK & base->CTRL))
     {
-        ret32 |= kENC_INDEXPulseFlag;
+        ret32 |= (uint32_t)kENC_INDEXPulseFlag;
     }
-    if (ENC_CTRL_DIRQ_MASK == (ENC_CTRL_DIRQ_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_DIRQ_MASK & base->CTRL))
     {
-        ret32 |= kENC_WatchdogTimeoutFlag;
+        ret32 |= (uint32_t)kENC_WatchdogTimeoutFlag;
     }
-    if (ENC_CTRL_CMPIRQ_MASK == (ENC_CTRL_CMPIRQ_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_CMPIRQ_MASK & base->CTRL))
     {
-        ret32 |= kENC_PositionCompareFlag;
+        ret32 |= (uint32_t)kENC_PositionCompareFlag;
     }
 
     /* ENC_CTRL2. */
-    if (ENC_CTRL2_SABIRQ_MASK == (ENC_CTRL2_SABIRQ_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_SABIRQ_MASK & base->CTRL2))
     {
-        ret32 |= kENC_SimultBothPhaseChangeFlag;
+        ret32 |= (uint32_t)kENC_SimultBothPhaseChangeFlag;
     }
-    if (ENC_CTRL2_ROIRQ_MASK == (ENC_CTRL2_ROIRQ_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_ROIRQ_MASK & base->CTRL2))
     {
-        ret32 |= kENC_PositionRollOverFlag;
+        ret32 |= (uint32_t)kENC_PositionRollOverFlag;
     }
-    if (ENC_CTRL2_RUIRQ_MASK == (ENC_CTRL2_RUIRQ_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_RUIRQ_MASK & base->CTRL2))
     {
-        ret32 |= kENC_PositionRollUnderFlag;
+        ret32 |= (uint32_t)kENC_PositionRollUnderFlag;
     }
-    if (ENC_CTRL2_DIR_MASK == (ENC_CTRL2_DIR_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_DIR_MASK & base->CTRL2))
     {
-        ret32 |= kENC_LastCountDirectionFlag;
+        ret32 |= (uint32_t)kENC_LastCountDirectionFlag;
     }
 
     return ret32;
@@ -350,44 +353,44 @@ void ENC_ClearStatusFlags(ENC_Type *base, uint32_t mask)
     uint32_t tmp16 = 0U;
 
     /* ENC_CTRL. */
-    if (kENC_HOMETransitionFlag == (kENC_HOMETransitionFlag & mask))
+    if (0U != ((uint32_t)kENC_HOMETransitionFlag & mask))
     {
         tmp16 |= ENC_CTRL_HIRQ_MASK;
     }
-    if (kENC_INDEXPulseFlag == (kENC_INDEXPulseFlag & mask))
+    if (0U != ((uint32_t)kENC_INDEXPulseFlag & mask))
     {
         tmp16 |= ENC_CTRL_XIRQ_MASK;
     }
-    if (kENC_WatchdogTimeoutFlag == (kENC_WatchdogTimeoutFlag & mask))
+    if (0U != ((uint32_t)kENC_WatchdogTimeoutFlag & mask))
     {
         tmp16 |= ENC_CTRL_DIRQ_MASK;
     }
-    if (kENC_PositionCompareFlag == (kENC_PositionCompareFlag & mask))
+    if (0U != ((uint32_t)kENC_PositionCompareFlag & mask))
     {
         tmp16 |= ENC_CTRL_CMPIRQ_MASK;
     }
     if (0U != tmp16)
     {
-        base->CTRL = (base->CTRL & (uint16_t)(~ENC_CTRL_W1C_FLAGS)) | tmp16;
+        base->CTRL = (uint16_t)(((uint32_t)base->CTRL & (~ENC_CTRL_W1C_FLAGS)) | tmp16);
     }
 
     /* ENC_CTRL2. */
     tmp16 = 0U;
-    if (kENC_SimultBothPhaseChangeFlag == (kENC_SimultBothPhaseChangeFlag & mask))
+    if (0U != ((uint32_t)kENC_SimultBothPhaseChangeFlag & mask))
     {
         tmp16 |= ENC_CTRL2_SABIRQ_MASK;
     }
-    if (kENC_PositionRollOverFlag == (kENC_PositionRollOverFlag & mask))
+    if (0U != ((uint32_t)kENC_PositionRollOverFlag & mask))
     {
         tmp16 |= ENC_CTRL2_ROIRQ_MASK;
     }
-    if (kENC_PositionRollUnderFlag == (kENC_PositionRollUnderFlag & mask))
+    if (0U != ((uint32_t)kENC_PositionRollUnderFlag & mask))
     {
         tmp16 |= ENC_CTRL2_RUIRQ_MASK;
     }
     if (0U != tmp16)
     {
-        base->CTRL2 = (base->CTRL2 & (uint16_t)(~ENC_CTRL2_W1C_FLAGS)) | tmp16;
+        base->CTRL2 = (uint16_t)(((uint32_t)base->CTRL2 & (~ENC_CTRL2_W1C_FLAGS)) | tmp16);
     }
 }
 
@@ -402,43 +405,43 @@ void ENC_EnableInterrupts(ENC_Type *base, uint32_t mask)
     uint32_t tmp16 = 0U;
 
     /* ENC_CTRL. */
-    if (kENC_HOMETransitionInterruptEnable == (kENC_HOMETransitionInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_HOMETransitionInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_HIE_MASK;
     }
-    if (kENC_INDEXPulseInterruptEnable == (kENC_INDEXPulseInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_INDEXPulseInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_XIE_MASK;
     }
-    if (kENC_WatchdogTimeoutInterruptEnable == (kENC_WatchdogTimeoutInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_WatchdogTimeoutInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_DIE_MASK;
     }
-    if (kENC_PositionCompareInerruptEnable == (kENC_PositionCompareInerruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionCompareInerruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_CMPIE_MASK;
     }
     if (tmp16 != 0U)
     {
-        base->CTRL = (base->CTRL & (uint16_t)(~ENC_CTRL_W1C_FLAGS)) | tmp16;
+        base->CTRL = (uint16_t)(((uint32_t)base->CTRL & (~ENC_CTRL_W1C_FLAGS)) | tmp16);
     }
     /* ENC_CTRL2. */
     tmp16 = 0U;
-    if (kENC_SimultBothPhaseChangeInterruptEnable == (kENC_SimultBothPhaseChangeInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_SimultBothPhaseChangeInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_SABIE_MASK;
     }
-    if (kENC_PositionRollOverInterruptEnable == (kENC_PositionRollOverInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionRollOverInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_ROIE_MASK;
     }
-    if (kENC_PositionRollUnderInterruptEnable == (kENC_PositionRollUnderInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionRollUnderInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_RUIE_MASK;
     }
     if (tmp16 != 0U)
     {
-        base->CTRL2 = (base->CTRL2 & (uint16_t)(~ENC_CTRL2_W1C_FLAGS)) | tmp16;
+        base->CTRL2 = (uint16_t)(((uint32_t)base->CTRL2 & (~ENC_CTRL2_W1C_FLAGS)) | tmp16);
     }
 }
 
@@ -453,19 +456,19 @@ void ENC_DisableInterrupts(ENC_Type *base, uint32_t mask)
     uint16_t tmp16 = 0U;
 
     /* ENC_CTRL. */
-    if (kENC_HOMETransitionInterruptEnable == (kENC_HOMETransitionInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_HOMETransitionInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_HIE_MASK;
     }
-    if (kENC_INDEXPulseInterruptEnable == (kENC_INDEXPulseInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_INDEXPulseInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_XIE_MASK;
     }
-    if (kENC_WatchdogTimeoutInterruptEnable == (kENC_WatchdogTimeoutInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_WatchdogTimeoutInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_DIE_MASK;
     }
-    if (kENC_PositionCompareInerruptEnable == (kENC_PositionCompareInerruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionCompareInerruptEnable & mask))
     {
         tmp16 |= ENC_CTRL_CMPIE_MASK;
     }
@@ -475,15 +478,15 @@ void ENC_DisableInterrupts(ENC_Type *base, uint32_t mask)
     }
     /* ENC_CTRL2. */
     tmp16 = 0U;
-    if (kENC_SimultBothPhaseChangeInterruptEnable == (kENC_SimultBothPhaseChangeInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_SimultBothPhaseChangeInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_SABIE_MASK;
     }
-    if (kENC_PositionRollOverInterruptEnable == (kENC_PositionRollOverInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionRollOverInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_ROIE_MASK;
     }
-    if (kENC_PositionRollUnderInterruptEnable == (kENC_PositionRollUnderInterruptEnable & mask))
+    if (0U != ((uint32_t)kENC_PositionRollUnderInterruptEnable & mask))
     {
         tmp16 |= ENC_CTRL2_RUIE_MASK;
     }
@@ -505,34 +508,34 @@ uint32_t ENC_GetEnabledInterrupts(ENC_Type *base)
     uint32_t ret32 = 0U;
 
     /* ENC_CTRL. */
-    if (ENC_CTRL_HIE_MASK == (ENC_CTRL_HIE_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_HIE_MASK & base->CTRL))
     {
-        ret32 |= kENC_HOMETransitionInterruptEnable;
+        ret32 |= (uint32_t)kENC_HOMETransitionInterruptEnable;
     }
-    if (ENC_CTRL_XIE_MASK == (ENC_CTRL_XIE_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_XIE_MASK & base->CTRL))
     {
-        ret32 |= kENC_INDEXPulseInterruptEnable;
+        ret32 |= (uint32_t)kENC_INDEXPulseInterruptEnable;
     }
-    if (ENC_CTRL_DIE_MASK == (ENC_CTRL_DIE_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_DIE_MASK & base->CTRL))
     {
-        ret32 |= kENC_WatchdogTimeoutInterruptEnable;
+        ret32 |= (uint32_t)kENC_WatchdogTimeoutInterruptEnable;
     }
-    if (ENC_CTRL_CMPIE_MASK == (ENC_CTRL_CMPIE_MASK & base->CTRL))
+    if (0U != (ENC_CTRL_CMPIE_MASK & base->CTRL))
     {
-        ret32 |= kENC_PositionCompareInerruptEnable;
+        ret32 |= (uint32_t)kENC_PositionCompareInerruptEnable;
     }
     /* ENC_CTRL2. */
-    if (ENC_CTRL2_SABIE_MASK == (ENC_CTRL2_SABIE_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_SABIE_MASK & base->CTRL2))
     {
-        ret32 |= kENC_SimultBothPhaseChangeInterruptEnable;
+        ret32 |= (uint32_t)kENC_SimultBothPhaseChangeInterruptEnable;
     }
-    if (ENC_CTRL2_ROIE_MASK == (ENC_CTRL2_ROIE_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_ROIE_MASK & base->CTRL2))
     {
-        ret32 |= kENC_PositionRollOverInterruptEnable;
+        ret32 |= (uint32_t)kENC_PositionRollOverInterruptEnable;
     }
-    if (ENC_CTRL2_RUIE_MASK == (ENC_CTRL2_RUIE_MASK & base->CTRL2))
+    if (0U != (ENC_CTRL2_RUIE_MASK & base->CTRL2))
     {
-        ret32 |= kENC_PositionRollUnderInterruptEnable;
+        ret32 |= (uint32_t)kENC_PositionRollUnderInterruptEnable;
     }
     return ret32;
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -114,7 +114,7 @@ void SDRAMC_Init(SDRAM_Type *base, sdramc_config_t *configure)
 
     /* Initialize sdram Auto refresh timing. */
     count      = refreshConfig->sdramRefreshRow * (refreshConfig->busClock_Hz / SDRAMC_ONESECOND_MILLISECONDS);
-    count      = (count / SDRAMC_ONEMILLSEC_NANOSECONDS) / 16 - 1;
+    count      = (count / SDRAMC_ONEMILLSEC_NANOSECONDS) / 16U - 1U;
     base->CTRL = SDRAM_CTRL_RC(count) | SDRAM_CTRL_RTIM(refreshConfig->refreshTime);
 
     for (index = 0; index < configure->numBlockConfig; index++)
@@ -192,9 +192,10 @@ void SDRAMC_SendCommand(SDRAM_Type *base, sdramc_block_selection_t block, sdramc
             break;
         /* Exit self-refresh command. */
         case kSDRAMC_SelfrefreshExitCommand:
-            base->CTRL &= ~SDRAM_CTRL_IS_MASK;
+            base->CTRL &= ~(uint16_t)SDRAM_CTRL_IS_MASK;
             break;
         default:
+            assert(false);
             break;
     }
 }

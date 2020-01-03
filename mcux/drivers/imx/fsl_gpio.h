@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief GPIO driver version 2.0.2. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief GPIO driver version 2.0.3. */
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*! @brief GPIO direction definition. */
@@ -173,7 +173,7 @@ static inline void GPIO_PortToggle(GPIO_Type *base, uint32_t mask)
  */
 static inline uint32_t GPIO_PinRead(GPIO_Type *base, uint32_t pin)
 {
-    assert(pin < 32);
+    assert(pin < 32U);
 
     return (((base->DR) >> pin) & 0x1U);
 }
@@ -202,7 +202,7 @@ static inline uint32_t GPIO_ReadPinInput(GPIO_Type *base, uint32_t pin)
  */
 static inline uint8_t GPIO_PinReadPadStatus(GPIO_Type *base, uint32_t pin)
 {
-    assert(pin < 32);
+    assert(pin < 32U);
 
     return (uint8_t)(((base->PSR) >> pin) & 0x1U);
 }

@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.2.2. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+/*! @brief CLOCK driver version 2.3.1. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -439,45 +439,46 @@ typedef enum _clock_name
  *
  */
 
-#define CLK_ATTACH_ID(mux, sel, pos) (((mux << 0U) | ((sel + 1) & 0xFU) << 8U) << (pos * 12U))
-#define MUX_A(mux, sel) CLK_ATTACH_ID(mux, sel, 0U)
-#define MUX_B(mux, sel, selector) (CLK_ATTACH_ID(mux, sel, 1U) | (selector << 24U))
+#define CLK_ATTACH_ID(mux, sel, pos) \
+    ((((uint32_t)(mux) << 0U) | (((uint32_t)(sel) + 1U) & 0xFU) << 8U) << ((uint32_t)(pos)*12U))
+#define MUX_A(mux, sel) CLK_ATTACH_ID((mux), (sel), 0U)
+#define MUX_B(mux, sel, selector) (CLK_ATTACH_ID((mux), (sel), 1U) | ((selector) << 24U))
 
 #define GET_ID_ITEM(connection) ((connection)&0xFFFU)
 #define GET_ID_NEXT_ITEM(connection) ((connection) >> 12U)
-#define GET_ID_ITEM_MUX(connection) ((connection)&0xFFU)
-#define GET_ID_ITEM_SEL(connection) ((((connection)&0xF00U) >> 8U) - 1U)
+#define GET_ID_ITEM_MUX(connection) (((uint8_t)connection) & 0xFFU)
+#define GET_ID_ITEM_SEL(connection) ((uint8_t)((((uint32_t)(connection)&0xF00U) >> 8U) - 1U))
 #define GET_ID_SELECTOR(connection) ((connection)&0xF000000U)
 
-#define CM_SYSTICKCLKSEL0 0
-#define CM_SYSTICKCLKSEL1 1
-#define CM_TRACECLKSEL 2
-#define CM_CTIMERCLKSEL0 3
-#define CM_CTIMERCLKSEL1 4
-#define CM_CTIMERCLKSEL2 5
-#define CM_CTIMERCLKSEL3 6
-#define CM_CTIMERCLKSEL4 7
-#define CM_MAINCLKSELA 8
-#define CM_MAINCLKSELB 9
-#define CM_CLKOUTCLKSEL 10
-#define CM_PLL0CLKSEL 12
-#define CM_PLL1CLKSEL 13
-#define CM_ADCASYNCCLKSEL 17
-#define CM_USB0CLKSEL 18
-#define CM_FXCOMCLKSEL0 20
-#define CM_FXCOMCLKSEL1 21
-#define CM_FXCOMCLKSEL2 22
-#define CM_FXCOMCLKSEL3 23
-#define CM_FXCOMCLKSEL4 24
-#define CM_FXCOMCLKSEL5 25
-#define CM_FXCOMCLKSEL6 26
-#define CM_FXCOMCLKSEL7 27
-#define CM_HSLSPICLKSEL 28
-#define CM_MCLKCLKSEL 32
-#define CM_SCTCLKSEL 36
-#define CM_SDIOCLKSEL 38
+#define CM_SYSTICKCLKSEL0 0U
+#define CM_SYSTICKCLKSEL1 1U
+#define CM_TRACECLKSEL 2U
+#define CM_CTIMERCLKSEL0 3U
+#define CM_CTIMERCLKSEL1 4U
+#define CM_CTIMERCLKSEL2 5U
+#define CM_CTIMERCLKSEL3 6U
+#define CM_CTIMERCLKSEL4 7U
+#define CM_MAINCLKSELA 8U
+#define CM_MAINCLKSELB 9U
+#define CM_CLKOUTCLKSEL 10U
+#define CM_PLL0CLKSEL 12U
+#define CM_PLL1CLKSEL 13U
+#define CM_ADCASYNCCLKSEL 17U
+#define CM_USB0CLKSEL 18U
+#define CM_FXCOMCLKSEL0 20U
+#define CM_FXCOMCLKSEL1 21U
+#define CM_FXCOMCLKSEL2 22U
+#define CM_FXCOMCLKSEL3 23U
+#define CM_FXCOMCLKSEL4 24U
+#define CM_FXCOMCLKSEL5 25U
+#define CM_FXCOMCLKSEL6 26U
+#define CM_FXCOMCLKSEL7 27U
+#define CM_HSLSPICLKSEL 28U
+#define CM_MCLKCLKSEL 32U
+#define CM_SCTCLKSEL 36U
+#define CM_SDIOCLKSEL 38U
 
-#define CM_RTCOSC32KCLKSEL 63
+#define CM_RTCOSC32KCLKSEL 63U
 
 typedef enum _clock_attach_id
 {
@@ -721,7 +722,7 @@ extern "C" {
 static inline void CLOCK_EnableClock(clock_ip_name_t clk)
 {
     uint32_t index               = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
-    SYSCON->AHBCLKCTRLSET[index] = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+    SYSCON->AHBCLKCTRLSET[index] = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
 }
 /**
  * @brief Disable the clock for specific IP.
@@ -731,7 +732,7 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
 static inline void CLOCK_DisableClock(clock_ip_name_t clk)
 {
     uint32_t index               = CLK_GATE_ABSTRACT_REG_OFFSET(clk);
-    SYSCON->AHBCLKCTRLCLR[index] = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+    SYSCON->AHBCLKCTRLCLR[index] = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
 }
 /**
  * @brief   Initialize the Core clock to given frequency (12, 48 or 96 MHz).
@@ -927,15 +928,6 @@ uint32_t CLOCK_GetPLL1InClockRate(void);
  */
 uint32_t CLOCK_GetPLL0OutClockRate(bool recompute);
 
-/*! @brief    Return  PLL1 output clock rate
- *  @param    recompute   : Forces a PLL rate recomputation if true
- *  @return    PLL1 output clock rate
- *  @note The PLL rate is cached in the driver in a variable as
- *  the rate computation function can take some time to perform. It
- *  is recommended to use 'false' with the 'recompute' parameter.
- */
-uint32_t CLOCK_GetPLL1OutClockRate(bool recompute);
-
 /*! @brief    Enables and disables PLL0 bypass mode
  *  @brief    bypass  : true to bypass PLL0 (PLL0 output = PLL0 input, false to disable bypass
  *  @return   PLL0 output clock rate
@@ -973,7 +965,7 @@ __STATIC_INLINE void CLOCK_SetBypassPLL1(bool bypass)
  */
 __STATIC_INLINE bool CLOCK_IsPLL0Locked(void)
 {
-    return (bool)((SYSCON->PLL0STAT & SYSCON_PLL0STAT_LOCK_MASK) != 0);
+    return (bool)((SYSCON->PLL0STAT & SYSCON_PLL0STAT_LOCK_MASK) != 0UL);
 }
 
 /*! @brief	Check if PLL1 is locked or not
@@ -981,7 +973,7 @@ __STATIC_INLINE bool CLOCK_IsPLL0Locked(void)
  */
 __STATIC_INLINE bool CLOCK_IsPLL1Locked(void)
 {
-    return (bool)((SYSCON->PLL1STAT & SYSCON_PLL1STAT_LOCK_MASK) != 0);
+    return (bool)((SYSCON->PLL1STAT & SYSCON_PLL1STAT_LOCK_MASK) != 0UL);
 }
 
 /*! @brief Store the current PLL0 rate
@@ -1004,8 +996,8 @@ void CLOCK_SetStoredPLL0ClockRate(uint32_t rate);
  * automatic bandwidth selection, Spread Spectrum (SS) support, and fractional M-divider
  * are not used.<br>
  */
-#define PLL_CONFIGFLAG_USEINRATE (1 << 0) /*!< Flag to use InputRate in PLL configuration structure for setup */
-#define PLL_CONFIGFLAG_FORCENOFRACT (1 << 2)
+#define PLL_CONFIGFLAG_USEINRATE (1U << 0U) /*!< Flag to use InputRate in PLL configuration structure for setup */
+#define PLL_CONFIGFLAG_FORCENOFRACT (1U << 2U)
 /*!< Force non-fractional output mode, PLL output will not use the fractional, automatic bandwidth, or SS hardware */
 
 /*! @brief PLL Spread Spectrum (SS) Programmable modulation frequency
@@ -1075,10 +1067,10 @@ typedef struct _pll_config
 /*! @brief PLL setup structure flags for 'flags' field
  * These flags control how the PLL setup function sets up the PLL
  */
-#define PLL_SETUPFLAG_POWERUP (1 << 0)         /*!< Setup will power on the PLL after setup */
-#define PLL_SETUPFLAG_WAITLOCK (1 << 1)        /*!< Setup will wait for PLL lock, implies the PLL will be pwoered on */
-#define PLL_SETUPFLAG_ADGVOLT (1 << 2)         /*!< Optimize system voltage for the new PLL rate */
-#define PLL_SETUPFLAG_USEFEEDBACKDIV2 (1 << 3) /*!< Use feedback divider by 2 in divider path */
+#define PLL_SETUPFLAG_POWERUP (1U << 0U)  /*!< Setup will power on the PLL after setup */
+#define PLL_SETUPFLAG_WAITLOCK (1U << 1U) /*!< Setup will wait for PLL lock, implies the PLL will be pwoered on */
+#define PLL_SETUPFLAG_ADGVOLT (1U << 2U)  /*!< Optimize system voltage for the new PLL rate */
+#define PLL_SETUPFLAG_USEFEEDBACKDIV2 (1U << 3U) /*!< Use feedback divider by 2 in divider path */
 
 /*! @brief PLL0 setup structure
  * This structure can be used to pre-build a PLL setup configuration
@@ -1238,16 +1230,6 @@ bool CLOCK_EnableUsbhs0DeviceClock(clock_usbhs_src_t src, uint32_t freq);
  * Enable USB HOST High Speed clock.
  */
 bool CLOCK_EnableUsbhs0HostClock(clock_usbhs_src_t src, uint32_t freq);
-
-/*!
- * @brief Use DWT to delay at least for some time.
- *  Please note that, this API will calculate the microsecond period with the maximum devices
- *  supported CPU frequency, so this API will only delay for at least the given microseconds, if precise
- *  delay count was needed, please implement a new timer count to achieve this function.
- *
- * @param delay_us  Delay time in unit of microsecond.
- */
-void SDK_DelayAtLeastUs(uint32_t delay_us);
 
 #if defined(__cplusplus)
 }

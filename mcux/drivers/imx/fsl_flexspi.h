@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,19 +24,19 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FLEXSPI driver version 2.1.1. */
-#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief FLEXSPI driver version 2.2.1. */
+#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(0)
 
-/*! @breif Formula to form FLEXSPI instructions in LUT table. */
+/*! @brief Formula to form FLEXSPI instructions in LUT table. */
 #define FLEXSPI_LUT_SEQ(cmd0, pad0, op0, cmd1, pad1, op1)                                                              \
     (FLEXSPI_LUT_OPERAND0(op0) | FLEXSPI_LUT_NUM_PADS0(pad0) | FLEXSPI_LUT_OPCODE0(cmd0) | FLEXSPI_LUT_OPERAND1(op1) | \
      FLEXSPI_LUT_NUM_PADS1(pad1) | FLEXSPI_LUT_OPCODE1(cmd1))
 
 /*! @brief Status structure of FLEXSPI.*/
-enum _flexspi_status
+enum
 {
     kStatus_FLEXSPI_Busy                     = MAKE_STATUS(kStatusGroup_FLEXSPI, 0), /*!< FLEXSPI is busy */
     kStatus_FLEXSPI_SequenceExecutionTimeout = MAKE_STATUS(kStatusGroup_FLEXSPI, 1), /*!< Sequence execution timeout
@@ -95,8 +95,12 @@ typedef enum _flexspi_pad
 /*! @brief FLEXSPI interrupt status flags.*/
 typedef enum _flexspi_flags
 {
-    kFLEXSPI_SequenceExecutionTimeoutFlag = FLEXSPI_INTEN_SEQTIMEOUTEN_MASK,    /*!< Sequence execution timeout. */
-    kFLEXSPI_AhbBusTimeoutFlag            = FLEXSPI_INTEN_AHBBUSTIMEOUTEN_MASK, /*!< AHB Bus timeout. */
+    kFLEXSPI_SequenceExecutionTimeoutFlag = FLEXSPI_INTEN_SEQTIMEOUTEN_MASK, /*!< Sequence execution timeout. */
+#if defined(FSL_FEATURE_FLEXSPI_HAS_INTEN_AHBBUSERROREN) && FSL_FEATURE_FLEXSPI_HAS_INTEN_AHBBUSERROREN
+    kFLEXSPI_AhbBusErrorFlag = FLEXSPI_INTEN_AHBBUSERROREN_MASK, /*!< AHB Bus error flag. */
+#else
+    kFLEXSPI_AhbBusTimeoutFlag = FLEXSPI_INTEN_AHBBUSTIMEOUTEN_MASK, /*!< AHB Bus timeout. */
+#endif
     kFLEXSPI_SckStoppedBecauseTxEmptyFlag =
         FLEXSPI_INTEN_SCKSTOPBYWREN_MASK, /*!< SCK is stopped during command
                                                sequence because Async TX FIFO empty. */
@@ -106,7 +110,7 @@ typedef enum _flexspi_flags
 #if !((defined(FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN)) && (FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN))
     kFLEXSPI_DataLearningFailedFlag = FLEXSPI_INTEN_DATALEARNFAILEN_MASK, /*!< Data learning failed. */
 #endif
-    kFLEXSPI_IpTxFifoWatermarkEmpltyFlag    = FLEXSPI_INTEN_IPTXWEEN_MASK, /*!< IP TX FIFO WaterMark empty. */
+    kFLEXSPI_IpTxFifoWatermarkEmptyFlag     = FLEXSPI_INTEN_IPTXWEEN_MASK, /*!< IP TX FIFO WaterMark empty. */
     kFLEXSPI_IpRxFifoWatermarkAvailableFlag = FLEXSPI_INTEN_IPRXWAEN_MASK, /*!< IP RX FIFO WaterMark available. */
     kFLEXSPI_AhbCommandSequenceErrorFlag =
         FLEXSPI_INTEN_AHBCMDERREN_MASK,                                  /*!< AHB triggered Command Sequences Error. */
@@ -115,7 +119,7 @@ typedef enum _flexspi_flags
         FLEXSPI_INTEN_AHBCMDGEEN_MASK, /*!< AHB triggered Command Sequences Grant Timeout. */
     kFLEXSPI_IpCommandGrantTimeoutFlag =
         FLEXSPI_INTEN_IPCMDGEEN_MASK, /*!< IP triggered Command Sequences Grant Timeout. */
-    kFLEXSPI_IpCommandExcutionDoneFlag =
+    kFLEXSPI_IpCommandExecutionDoneFlag =
         FLEXSPI_INTEN_IPCMDDONEEN_MASK,  /*!< IP triggered Command Sequences Execution finished. */
     kFLEXSPI_AllInterruptFlags = 0xFFFU, /*!< All flags. */
 } flexspi_flags_t;
@@ -138,7 +142,7 @@ typedef enum _flexspi_cs_interval_cycle_unit
     kFLEXSPI_CsIntervalUnit256SckCycle = 0x1U, /*!< Chip selection interval: CSINTERVAL * 256 serial clock cycle. */
 } flexspi_cs_interval_cycle_unit_t;
 
-/*! @brief FLEXSPI AHB wait interval unit for writting.*/
+/*! @brief FLEXSPI AHB wait interval unit for writing.*/
 typedef enum _flexspi_ahb_write_wait_unit
 {
     kFLEXSPI_AhbWriteWaitUnit2AhbCycle     = 0x0U, /*!< AWRWAIT unit is 2 ahb clock cycle. */
@@ -214,7 +218,7 @@ typedef struct _flexspi_ahbBuffer_config
     uint8_t masterIndex; /*!< AHB Master ID the AHB RX Buffer is assigned. */
     uint16_t bufferSize; /*!< AHB buffer size in byte. */
     bool enablePrefetch; /*!< AHB Read Prefetch Enable for current AHB RX Buffer corresponding Master, allows
-                          prefetch disable/enable seperately for each master. */
+                          prefetch disable/enable separately for each master. */
 } flexspi_ahbBuffer_config_t;
 
 /*! @brief FLEXSPI configuration structure. */
@@ -239,8 +243,12 @@ typedef struct _flexspi_config
     uint8_t rxWatermark;                       /*!< FLEXSPI receive watermark value. */
     struct
     {
-        bool enableAHBWriteIpTxFifo;  /*!< Enable AHB bus write access to IP TX FIFO. */
-        bool enableAHBWriteIpRxFifo;  /*!< Enable AHB bus write access to IP RX FIFO. */
+#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN)
+        bool enableAHBWriteIpTxFifo; /*!< Enable AHB bus write access to IP TX FIFO. */
+#endif
+#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ARDFEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ARDFEN)
+        bool enableAHBWriteIpRxFifo; /*!< Enable AHB bus write access to IP RX FIFO. */
+#endif
         uint8_t ahbGrantTimeoutCycle; /*!< Timeout wait cycle for AHB command grant,
                                        timeout after ahbGrantTimeoutCyle*1024 AHB clock cycles. */
         uint16_t ahbBusTimeoutCycle;  /*!< Timeout wait cycle for AHB read/write access,
@@ -251,11 +259,11 @@ typedef struct _flexspi_config
         bool enableClearAHBBufferOpt; /*!< Enable/disable automatically clean AHB RX Buffer and TX Buffer
                                        when FLEXSPI returns STOP mode ACK. */
         bool enableReadAddressOpt;    /*!< Enable/disable remove AHB read burst start address alignment limitation.
-                                       when eanble, there is no AHB read burst start address alignment limitation. */
+                                       when enable, there is no AHB read burst start address alignment limitation. */
         bool enableAHBPrefetch;       /*!< Enable/disable AHB read prefetch feature, when enabled, FLEXSPI
                                        will fetch more data than current AHB burst. */
         bool enableAHBBufferable;     /*!< Enable/disable AHB bufferable write access support, when enabled,
-                                       FLEXSPI return before waiting for command excution finished. */
+                                       FLEXSPI return before waiting for command execution finished. */
         bool enableAHBCachable;       /*!< Enable AHB bus cachable read access support. */
     } ahbConfig;
 } flexspi_config_t;
@@ -267,7 +275,7 @@ typedef struct _flexspi_device_config
     bool isSck2Enabled;                              /*!< FLEXSPI use SCK2. */
     uint32_t flashSize;                              /*!< Flash size in KByte. */
     flexspi_cs_interval_cycle_unit_t CSIntervalUnit; /*!< CS interval unit, 1 or 256 cycle. */
-    uint16_t CSInterval;                             /*!< CS line assert interval, mutiply CS interval unit to
+    uint16_t CSInterval;                             /*!< CS line assert interval, multiply CS interval unit to
                                                       get the CS line assert interval cycles. */
     uint8_t CSHoldTime;                              /*!< CS line hold time. */
     uint8_t CSSetupTime;                             /*!< CS line setup time. */
@@ -279,7 +287,7 @@ typedef struct _flexspi_device_config
     uint8_t ARDSeqIndex;                             /*!< Sequence ID for AHB read command. */
     uint8_t ARDSeqNumber;                            /*!< Sequence number for AHB read command. */
     flexspi_ahb_write_wait_unit_t AHBWriteWaitUnit;  /*!< AHB write wait unit. */
-    uint16_t AHBWriteWaitInterval;                   /*!< AHB write wait interval, mutiply AHB write interval
+    uint16_t AHBWriteWaitInterval;                   /*!< AHB write wait interval, multiply AHB write interval
                                                       unit to get the AHB write wait cycles. */
     bool enableWriteMask;                            /*!< Enable/Disable FLEXSPI drive DQS pin as write mask
                                                       when writing to external device. */
@@ -379,7 +387,7 @@ void FLEXSPI_SetFlashConfig(FLEXSPI_Type *base, flexspi_device_config_t *config,
 static inline void FLEXSPI_SoftwareReset(FLEXSPI_Type *base)
 {
     base->MCR0 |= FLEXSPI_MCR0_SWRESET_MASK;
-    while (base->MCR0 & FLEXSPI_MCR0_SWRESET_MASK)
+    while (0U != (base->MCR0 & FLEXSPI_MCR0_SWRESET_MASK))
     {
     }
 }
@@ -527,11 +535,11 @@ static inline void FLEXSPI_ResetFifos(FLEXSPI_Type *base, bool txFifo, bool rxFi
  */
 static inline void FLEXSPI_GetFifoCounts(FLEXSPI_Type *base, size_t *txCount, size_t *rxCount)
 {
-    if (txCount)
+    if (NULL != txCount)
     {
         *txCount = (((base->IPTXFSTS) & FLEXSPI_IPTXFSTS_FILL_MASK) >> FLEXSPI_IPTXFSTS_FILL_SHIFT) * 8U;
     }
-    if (rxCount)
+    if (NULL != rxCount)
     {
         *rxCount = (((base->IPRXFSTS) & FLEXSPI_IPRXFSTS_FILL_MASK) >> FLEXSPI_IPRXFSTS_FILL_SHIFT) * 8U;
     }
@@ -593,7 +601,8 @@ static inline void FLEXSPI_GetDataLearningPhase(FLEXSPI_Type *base, uint8_t *por
  */
 static inline flexspi_arb_command_source_t FLEXSPI_GetArbitratorCommandSource(FLEXSPI_Type *base)
 {
-    return (flexspi_arb_command_source_t)((base->STS0 & FLEXSPI_STS0_ARBCMDSRC_MASK) >> FLEXSPI_STS0_ARBCMDSRC_SHIFT);
+    return (flexspi_arb_command_source_t)(
+        (uint32_t)((base->STS0 & FLEXSPI_STS0_ARBCMDSRC_MASK) >> FLEXSPI_STS0_ARBCMDSRC_SHIFT));
 }
 
 /*! @brief Gets the error code when IP command error detected.
@@ -604,8 +613,9 @@ static inline flexspi_arb_command_source_t FLEXSPI_GetArbitratorCommandSource(FL
  */
 static inline flexspi_ip_error_code_t FLEXSPI_GetIPCommandErrorCode(FLEXSPI_Type *base, uint8_t *index)
 {
-    *index = (base->STS1 & FLEXSPI_STS1_IPCMDERRID_MASK) >> FLEXSPI_STS1_IPCMDERRID_SHIFT;
-    return (flexspi_ip_error_code_t)((base->STS1 & FLEXSPI_STS1_IPCMDERRCODE_MASK) >> FLEXSPI_STS1_IPCMDERRCODE_SHIFT);
+    *index = (uint8_t)((base->STS1 & FLEXSPI_STS1_IPCMDERRID_MASK) >> FLEXSPI_STS1_IPCMDERRID_SHIFT);
+    return (flexspi_ip_error_code_t)(
+        (uint32_t)((base->STS1 & FLEXSPI_STS1_IPCMDERRCODE_MASK) >> FLEXSPI_STS1_IPCMDERRCODE_SHIFT));
 }
 
 /*! @brief Gets the error code when AHB command error detected.
@@ -616,9 +626,9 @@ static inline flexspi_ip_error_code_t FLEXSPI_GetIPCommandErrorCode(FLEXSPI_Type
  */
 static inline flexspi_ahb_error_code_t FLEXSPI_GetAHBCommandErrorCode(FLEXSPI_Type *base, uint8_t *index)
 {
-    *index = (base->STS1 & FLEXSPI_STS1_AHBCMDERRID_MASK) >> FLEXSPI_STS1_AHBCMDERRID_SHIFT;
-    return (flexspi_ahb_error_code_t)((base->STS1 & FLEXSPI_STS1_AHBCMDERRCODE_MASK) >>
-                                      FLEXSPI_STS1_AHBCMDERRCODE_SHIFT);
+    *index = (uint8_t)(base->STS1 & FLEXSPI_STS1_AHBCMDERRID_MASK) >> FLEXSPI_STS1_AHBCMDERRID_SHIFT;
+    return (flexspi_ahb_error_code_t)(
+        (uint32_t)((base->STS1 & FLEXSPI_STS1_AHBCMDERRCODE_MASK) >> FLEXSPI_STS1_AHBCMDERRCODE_SHIFT));
 }
 
 /*! @brief Returns whether the bus is idle.
@@ -629,7 +639,7 @@ static inline flexspi_ahb_error_code_t FLEXSPI_GetAHBCommandErrorCode(FLEXSPI_Ty
  */
 static inline bool FLEXSPI_GetBusIdleStatus(FLEXSPI_Type *base)
 {
-    return (base->STS0 & FLEXSPI_STS0_ARBIDLE_MASK) && (base->STS0 & FLEXSPI_STS0_SEQIDLE_MASK);
+    return (0U != (base->STS0 & FLEXSPI_STS0_ARBIDLE_MASK)) && (0U != (base->STS0 & FLEXSPI_STS0_SEQIDLE_MASK));
 }
 /*@}*/
 
@@ -722,7 +732,7 @@ static inline uint32_t FLEXSPI_ReadData(FLEXSPI_Type *base, uint8_t fifoIndex)
  * @param size The number of data bytes to send
  * @retval kStatus_Success write success without error
  * @retval kStatus_FLEXSPI_SequenceExecutionTimeout sequence execution timeout
- * @retval kStatus_FLEXSPI_IpCommandSequenceError IP command sequencen error detected
+ * @retval kStatus_FLEXSPI_IpCommandSequenceError IP command sequence error detected
  * @retval kStatus_FLEXSPI_IpCommandGrantTimeout IP command grant timeout detected
  */
 status_t FLEXSPI_WriteBlocking(FLEXSPI_Type *base, uint32_t *buffer, size_t size);
@@ -746,7 +756,7 @@ status_t FLEXSPI_ReadBlocking(FLEXSPI_Type *base, uint32_t *buffer, size_t size)
  * @param xfer pointer to the transfer structure.
  * @retval kStatus_Success command transfer success without error
  * @retval kStatus_FLEXSPI_SequenceExecutionTimeout sequence execution timeout
- * @retval kStatus_FLEXSPI_IpCommandSequenceError IP command sequencen error detected
+ * @retval kStatus_FLEXSPI_IpCommandSequenceError IP command sequence error detected
  * @retval kStatus_FLEXSPI_IpCommandGrantTimeout IP command grant timeout detected
  */
 status_t FLEXSPI_TransferBlocking(FLEXSPI_Type *base, flexspi_transfer_t *xfer);
@@ -776,7 +786,7 @@ void FLEXSPI_TransferCreateHandle(FLEXSPI_Type *base,
  * @note Calling the API returns immediately after transfer initiates. The user needs
  * to call FLEXSPI_GetTransferCount to poll the transfer status to check whether
  * the transfer is finished. If the return status is not kStatus_FLEXSPI_Busy, the transfer
- * is finished. For FLEXSPI_Read, the dataSize should be multiple of rx watermark levle, or
+ * is finished. For FLEXSPI_Read, the dataSize should be multiple of rx watermark level, or
  * FLEXSPI could not read data properly.
  *
  * @param base FLEXSPI peripheral base address.

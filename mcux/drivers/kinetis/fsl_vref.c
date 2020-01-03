@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -129,7 +129,7 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config)
 #if defined(FSL_FEATURE_VREF_HAS_TRM4) && FSL_FEATURE_VREF_HAS_TRM4
     reg = base->TRM4;
     /* Clear old select internal voltage reference bit (2.1V) */
-    reg &= ~VREF_TRM4_VREF2V1_EN_MASK;
+    reg &= ~(uint8_t)VREF_TRM4_VREF2V1_EN_MASK;
     /* Select internal voltage reference (2.1V) */
     reg |= VREF_TRM4_VREF2V1_EN(config->enable2V1VoltRef);
     base->TRM4 = reg;
@@ -251,7 +251,7 @@ void VREF_SetTrim2V1Val(VREF_Type *base, uint8_t trimValue)
 
     /* Set TRIM bits value in voltage reference (2V1) */
     reg        = base->TRM4;
-    reg        = ((reg & ~VREF_TRM4_TRIM2V1_MASK) | VREF_TRM4_TRIM2V1(trimValue));
+    reg        = (uint8_t)((reg & ~VREF_TRM4_TRIM2V1_MASK) | VREF_TRM4_TRIM2V1(trimValue));
     base->TRM4 = reg;
     /* Wait until internal voltage stable */
     while ((base->SC & VREF_SC_VREFST_MASK) == 0U)

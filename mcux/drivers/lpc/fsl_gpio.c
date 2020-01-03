@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -62,13 +62,13 @@ void GPIO_PortInit(GPIO_Type *base, uint32_t port)
  *
  * This is an example to define an input pin or output pin configuration:
  * code
- * // Define a digital input pin configuration,
+ * Define a digital input pin configuration,
  * gpio_pin_config_t config =
  * {
  *   kGPIO_DigitalInput,
  *   0,
  * }
- * //Define a digital output pin configuration,
+ * Define a digital output pin configuration,
  * gpio_pin_config_t config =
  * {
  *   kGPIO_DigitalOutput,
@@ -86,9 +86,9 @@ void GPIO_PinInit(GPIO_Type *base, uint32_t port, uint32_t pin, const gpio_pin_c
     if (config->pinDirection == kGPIO_DigitalInput)
     {
 #if defined(FSL_FEATURE_GPIO_DIRSET_AND_DIRCLR) && (FSL_FEATURE_GPIO_DIRSET_AND_DIRCLR)
-        base->DIRCLR[port] = 1U << pin;
+        base->DIRCLR[port] = 1UL << pin;
 #else
-        base->DIR[port] &= ~(1U << pin);
+        base->DIR[port] &= ~(1UL << pin);
 #endif /*FSL_FEATURE_GPIO_DIRSET_AND_DIRCLR*/
     }
     else
@@ -96,17 +96,17 @@ void GPIO_PinInit(GPIO_Type *base, uint32_t port, uint32_t pin, const gpio_pin_c
         /* Set default output value */
         if (config->outputLogic == 0U)
         {
-            base->CLR[port] = (1U << pin);
+            base->CLR[port] = (1UL << pin);
         }
         else
         {
-            base->SET[port] = (1U << pin);
+            base->SET[port] = (1UL << pin);
         }
 /* Set pin direction */
 #if defined(FSL_FEATURE_GPIO_DIRSET_AND_DIRCLR) && (FSL_FEATURE_GPIO_DIRSET_AND_DIRCLR)
-        base->DIRSET[port] = 1U << pin;
+        base->DIRSET[port] = 1UL << pin;
 #else
-        base->DIR[port] |= 1U << pin;
+        base->DIR[port] |= 1UL << pin;
 #endif /*FSL_FEATURE_GPIO_DIRSET_AND_DIRCLR*/
     }
 }
@@ -122,9 +122,9 @@ void GPIO_PinInit(GPIO_Type *base, uint32_t port, uint32_t pin, const gpio_pin_c
  */
 void GPIO_SetPinInterruptConfig(GPIO_Type *base, uint32_t port, uint32_t pin, gpio_interrupt_config_t *config)
 {
-    base->INTEDG[port] = base->INTEDG[port] | (config->mode << pin);
+    base->INTEDG[port] = base->INTEDG[port] | ((uint32_t)config->mode << pin);
 
-    base->INTPOL[port] = base->INTPOL[port] | (config->polarity << pin);
+    base->INTPOL[port] = base->INTPOL[port] | ((uint32_t)config->polarity << pin);
 }
 
 /*!
@@ -137,11 +137,11 @@ void GPIO_SetPinInterruptConfig(GPIO_Type *base, uint32_t port, uint32_t pin, gp
  */
 void GPIO_PortEnableInterrupts(GPIO_Type *base, uint32_t port, uint32_t index, uint32_t mask)
 {
-    if (kGPIO_InterruptA == index)
+    if ((uint32_t)kGPIO_InterruptA == index)
     {
         base->INTENA[port] = base->INTENA[port] | mask;
     }
-    else if (kGPIO_InterruptB == index)
+    else if ((uint32_t)kGPIO_InterruptB == index)
     {
         base->INTENB[port] = base->INTENB[port] | mask;
     }
@@ -161,11 +161,11 @@ void GPIO_PortEnableInterrupts(GPIO_Type *base, uint32_t port, uint32_t index, u
  */
 void GPIO_PortDisableInterrupts(GPIO_Type *base, uint32_t port, uint32_t index, uint32_t mask)
 {
-    if (kGPIO_InterruptA == index)
+    if ((uint32_t)kGPIO_InterruptA == index)
     {
         base->INTENA[port] = base->INTENA[port] & ~mask;
     }
-    else if (kGPIO_InterruptB == index)
+    else if ((uint32_t)kGPIO_InterruptB == index)
     {
         base->INTENB[port] = base->INTENB[port] & ~mask;
     }
@@ -186,11 +186,11 @@ void GPIO_PortDisableInterrupts(GPIO_Type *base, uint32_t port, uint32_t index, 
  */
 void GPIO_PortClearInterruptFlags(GPIO_Type *base, uint32_t port, uint32_t index, uint32_t mask)
 {
-    if (kGPIO_InterruptA == index)
+    if ((uint32_t)kGPIO_InterruptA == index)
     {
         base->INTSTATA[port] = mask;
     }
-    else if (kGPIO_InterruptB == index)
+    else if ((uint32_t)kGPIO_InterruptB == index)
     {
         base->INTSTATB[port] = mask;
     }
@@ -212,11 +212,11 @@ uint32_t GPIO_PortGetInterruptStatus(GPIO_Type *base, uint32_t port, uint32_t in
 {
     uint32_t status = 0U;
 
-    if (kGPIO_InterruptA == index)
+    if ((uint32_t)kGPIO_InterruptA == index)
     {
         status = base->INTSTATA[port];
     }
-    else if (kGPIO_InterruptB == index)
+    else if ((uint32_t)kGPIO_InterruptB == index)
     {
         status = base->INTSTATB[port];
     }
@@ -225,7 +225,6 @@ uint32_t GPIO_PortGetInterruptStatus(GPIO_Type *base, uint32_t port, uint32_t in
         /*Should not enter here*/
     }
     return status;
-
 }
 
 /*!
@@ -238,13 +237,13 @@ uint32_t GPIO_PortGetInterruptStatus(GPIO_Type *base, uint32_t port, uint32_t in
  */
 void GPIO_PinEnableInterrupt(GPIO_Type *base, uint32_t port, uint32_t pin, uint32_t index)
 {
-    if (kGPIO_InterruptA == index)
+    if ((uint32_t)kGPIO_InterruptA == index)
     {
-        base->INTENA[port] = base->INTENA[port] | (1U << pin);
+        base->INTENA[port] = base->INTENA[port] | (1UL << pin);
     }
-    else if (kGPIO_InterruptB == index)
+    else if ((uint32_t)kGPIO_InterruptB == index)
     {
-        base->INTENB[port] = base->INTENB[port] | (1U << pin);
+        base->INTENB[port] = base->INTENB[port] | (1UL << pin);
     }
     else
     {
@@ -262,13 +261,13 @@ void GPIO_PinEnableInterrupt(GPIO_Type *base, uint32_t port, uint32_t pin, uint3
  */
 void GPIO_PinDisableInterrupt(GPIO_Type *base, uint32_t port, uint32_t pin, uint32_t index)
 {
-    if (kGPIO_InterruptA == index)
+    if ((uint32_t)kGPIO_InterruptA == index)
     {
-        base->INTENA[port] = base->INTENA[port] & ~(1U << pin);
+        base->INTENA[port] = base->INTENA[port] & ~(1UL << pin);
     }
-    else if (kGPIO_InterruptB == index)
+    else if ((uint32_t)kGPIO_InterruptB == index)
     {
-        base->INTENB[port] = base->INTENB[port] & ~(1U << pin);
+        base->INTENB[port] = base->INTENB[port] & ~(1UL << pin);
     }
     else
     {
@@ -287,13 +286,13 @@ void GPIO_PinDisableInterrupt(GPIO_Type *base, uint32_t port, uint32_t pin, uint
  */
 void GPIO_PinClearInterruptFlag(GPIO_Type *base, uint32_t port, uint32_t pin, uint32_t index)
 {
-    if (kGPIO_InterruptA == index)
+    if ((uint32_t)kGPIO_InterruptA == index)
     {
-        base->INTSTATA[port] = 1U << pin;
+        base->INTSTATA[port] = 1UL << pin;
     }
-    else if (kGPIO_InterruptB == index)
+    else if ((uint32_t)kGPIO_InterruptB == index)
     {
-        base->INTSTATB[port] = 1U << pin;
+        base->INTSTATB[port] = 1UL << pin;
     }
     else
     {

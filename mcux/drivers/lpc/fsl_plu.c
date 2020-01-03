@@ -1,5 +1,5 @@
 /*
- * Copyright  2018 NXP
+ * Copyright  2018-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -110,7 +110,7 @@ void PLU_Deinit(PLU_Type *base)
 void PLU_GetDefaultWakeIntConfig(plu_wakeint_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->filterMode  = kPLU_WAKEINT_FILTER_MODE_BYPASS;
     config->clockSource = kPLU_WAKEINT_FILTER_CLK_SRC_1MHZ_LPOSC;

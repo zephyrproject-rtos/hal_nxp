@@ -193,7 +193,7 @@ void GINT_EnableCallback(GINT_Type *base)
        Clear status and pending interrupt before enabling the irq in NVIC. */
     GINT_ClrStatus(base);
     NVIC_ClearPendingIRQ(s_gintIRQ[instance]);
-    EnableIRQ(s_gintIRQ[instance]);
+    (void)EnableIRQ(s_gintIRQ[instance]);
 }
 
 /*!
@@ -211,7 +211,7 @@ void GINT_DisableCallback(GINT_Type *base)
     uint32_t instance;
 
     instance = GINT_GetInstance(base);
-    DisableIRQ(s_gintIRQ[instance]);
+    (void)DisableIRQ(s_gintIRQ[instance]);
     GINT_ClrStatus(base);
     NVIC_ClearPendingIRQ(s_gintIRQ[instance]);
 }

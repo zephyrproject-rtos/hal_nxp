@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0 */
-                                                       /*@}*/
+#define FSL_GPT_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*@}*/
 
 /*!
  * @brief List of clock sources
@@ -205,7 +205,7 @@ static inline void GPT_SetClockSource(GPT_Type *base, gpt_clock_source_t source)
  */
 static inline gpt_clock_source_t GPT_GetClockSource(GPT_Type *base)
 {
-    return (gpt_clock_source_t)((base->CR & GPT_CR_CLKSRC_MASK) >> GPT_CR_CLKSRC_SHIFT);
+    return (gpt_clock_source_t)(uint8_t)((base->CR & GPT_CR_CLKSRC_MASK) >> GPT_CR_CLKSRC_SHIFT);
 }
 
 /*!
@@ -216,9 +216,9 @@ static inline gpt_clock_source_t GPT_GetClockSource(GPT_Type *base)
  */
 static inline void GPT_SetClockDivider(GPT_Type *base, uint32_t divider)
 {
-    assert(divider - 1 <= GPT_PR_PRESCALER_MASK);
+    assert(divider - 1U <= GPT_PR_PRESCALER_MASK);
 
-    base->PR = (base->PR & ~GPT_PR_PRESCALER_MASK) | GPT_PR_PRESCALER(divider - 1);
+    base->PR = (base->PR & ~GPT_PR_PRESCALER_MASK) | GPT_PR_PRESCALER(divider - 1U);
 }
 
 /*!
@@ -229,7 +229,7 @@ static inline void GPT_SetClockDivider(GPT_Type *base, uint32_t divider)
  */
 static inline uint32_t GPT_GetClockDivider(GPT_Type *base)
 {
-    return ((base->PR & GPT_PR_PRESCALER_MASK) >> GPT_PR_PRESCALER_SHIFT) + 1;
+    return ((base->PR & GPT_PR_PRESCALER_MASK) >> GPT_PR_PRESCALER_SHIFT) + 1U;
 }
 
 /*!
@@ -240,9 +240,9 @@ static inline uint32_t GPT_GetClockDivider(GPT_Type *base)
  */
 static inline void GPT_SetOscClockDivider(GPT_Type *base, uint32_t divider)
 {
-    assert(divider - 1 <= (GPT_PR_PRESCALER24M_MASK >> GPT_PR_PRESCALER24M_SHIFT));
+    assert(divider - 1U <= (GPT_PR_PRESCALER24M_MASK >> GPT_PR_PRESCALER24M_SHIFT));
 
-    base->PR = (base->PR & ~GPT_PR_PRESCALER24M_MASK) | GPT_PR_PRESCALER24M(divider - 1);
+    base->PR = (base->PR & ~GPT_PR_PRESCALER24M_MASK) | GPT_PR_PRESCALER24M(divider - 1U);
 }
 
 /*!
@@ -253,7 +253,7 @@ static inline void GPT_SetOscClockDivider(GPT_Type *base, uint32_t divider)
  */
 static inline uint32_t GPT_GetOscClockDivider(GPT_Type *base)
 {
-    return ((base->PR & GPT_PR_PRESCALER24M_MASK) >> GPT_PR_PRESCALER24M_SHIFT) + 1;
+    return ((base->PR & GPT_PR_PRESCALER24M_MASK) >> GPT_PR_PRESCALER24M_SHIFT) + 1U;
 }
 
 /*! @}*/
@@ -318,7 +318,8 @@ static inline void GPT_SetInputOperationMode(GPT_Type *base,
 {
     assert(channel <= kGPT_InputCapture_Channel2);
 
-    base->CR = (base->CR & ~(GPT_CR_IM1_MASK << (channel * 2))) | (GPT_CR_IM1(mode) << (channel * 2));
+    base->CR =
+        (base->CR & ~(GPT_CR_IM1_MASK << ((uint32_t)channel * 2UL))) | (GPT_CR_IM1(mode) << ((uint32_t)channel * 2UL));
 }
 
 /*!
@@ -332,8 +333,8 @@ static inline gpt_input_operation_mode_t GPT_GetInputOperationMode(GPT_Type *bas
 {
     assert(channel <= kGPT_InputCapture_Channel2);
 
-    return (gpt_input_operation_mode_t)((base->CR >> (GPT_CR_IM1_SHIFT + channel * 2)) &
-                                        (GPT_CR_IM1_MASK >> GPT_CR_IM1_SHIFT));
+    return (gpt_input_operation_mode_t)(uint8_t)((base->CR >> (GPT_CR_IM1_SHIFT + (uint32_t)channel * 2UL)) &
+                                                 (GPT_CR_IM1_MASK >> GPT_CR_IM1_SHIFT));
 }
 
 /*!
@@ -347,7 +348,7 @@ static inline uint32_t GPT_GetInputCaptureValue(GPT_Type *base, gpt_input_captur
 {
     assert(channel <= kGPT_InputCapture_Channel2);
 
-    return *(&base->ICR[0] + channel);
+    return base->ICR[(uint32_t)channel];
 }
 
 /*!
@@ -363,7 +364,8 @@ static inline void GPT_SetOutputOperationMode(GPT_Type *base,
 {
     assert(channel <= kGPT_OutputCompare_Channel3);
 
-    base->CR = (base->CR & ~(GPT_CR_OM1_MASK << (channel * 3))) | (GPT_CR_OM1(mode) << (channel * 3));
+    base->CR =
+        (base->CR & ~(GPT_CR_OM1_MASK << ((uint32_t)channel * 3UL))) | (GPT_CR_OM1(mode) << ((uint32_t)channel * 3UL));
 }
 
 /*!
@@ -378,8 +380,8 @@ static inline gpt_output_operation_mode_t GPT_GetOutputOperationMode(GPT_Type *b
 {
     assert(channel <= kGPT_OutputCompare_Channel3);
 
-    return (gpt_output_operation_mode_t)((base->CR >> (GPT_CR_OM1_SHIFT + channel * 3)) &
-                                         (GPT_CR_OM1_MASK >> GPT_CR_OM1_SHIFT));
+    return (gpt_output_operation_mode_t)(uint8_t)((base->CR >> (GPT_CR_OM1_SHIFT + (uint32_t)channel * 3UL)) &
+                                                  (GPT_CR_OM1_MASK >> GPT_CR_OM1_SHIFT));
 }
 
 /*!
@@ -393,7 +395,7 @@ static inline void GPT_SetOutputCompareValue(GPT_Type *base, gpt_output_compare_
 {
     assert(channel <= kGPT_OutputCompare_Channel3);
 
-    *(&base->OCR[0] + channel) = value;
+    base->OCR[(uint32_t)channel] = value;
 }
 
 /*!
@@ -407,7 +409,7 @@ static inline uint32_t GPT_GetOutputCompareValue(GPT_Type *base, gpt_output_comp
 {
     assert(channel <= kGPT_OutputCompare_Channel3);
 
-    return *(&base->OCR[0] + channel);
+    return base->OCR[(uint32_t)channel];
 }
 
 /*!
@@ -420,7 +422,7 @@ static inline void GPT_ForceOutput(GPT_Type *base, gpt_output_compare_channel_t 
 {
     assert(channel <= kGPT_OutputCompare_Channel3);
 
-    base->CR |= (GPT_CR_FO1_MASK << channel);
+    base->CR |= (GPT_CR_FO1_MASK << (uint32_t)channel);
 }
 
 /*@}*/
@@ -482,7 +484,7 @@ static inline uint32_t GPT_GetEnabledInterrupts(GPT_Type *base)
  */
 static inline uint32_t GPT_GetStatusFlags(GPT_Type *base, gpt_status_flag_t flags)
 {
-    return base->SR & flags;
+    return base->SR & (uint32_t)flags;
 }
 
 /*!
@@ -493,7 +495,7 @@ static inline uint32_t GPT_GetStatusFlags(GPT_Type *base, gpt_status_flag_t flag
  */
 static inline void GPT_ClearStatusFlags(GPT_Type *base, gpt_status_flag_t flags)
 {
-    base->SR = flags;
+    base->SR = (uint32_t)flags;
 }
 
 /*@}*/

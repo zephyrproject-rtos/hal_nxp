@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
  **********************************************************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPSPI EDMA driver version 2.0.2. */
-#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief LPSPI EDMA driver version 2.0.4. */
+#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /*!
@@ -74,8 +74,8 @@ struct _lpspi_master_edma_handle
     volatile uint8_t bytesEachWrite; /*!< Bytes for each write TDR. */
     volatile uint8_t bytesEachRead;  /*!< Bytes for each read RDR. */
 
-    volatile uint8_t bytesLastRead;       /*!< Bytes for last read RDR. */
-    volatile uint8_t isThereExtraRxBytes; /*!< Is there extra RX byte. */
+    volatile uint8_t bytesLastRead;    /*!< Bytes for last read RDR. */
+    volatile bool isThereExtraRxBytes; /*!< Is there extra RX byte. */
 
     uint8_t *volatile txData;             /*!< Send buffer. */
     uint8_t *volatile rxData;             /*!< Receive buffer. */
@@ -117,8 +117,8 @@ struct _lpspi_slave_edma_handle
     volatile uint8_t bytesEachWrite; /*!< Bytes for each write TDR. */
     volatile uint8_t bytesEachRead;  /*!< Bytes for each read RDR. */
 
-    volatile uint8_t bytesLastRead;       /*!< Bytes for last read RDR. */
-    volatile uint8_t isThereExtraRxBytes; /*!< Is there extra RX byte. */
+    volatile uint8_t bytesLastRead;    /*!< Bytes for last read RDR. */
+    volatile bool isThereExtraRxBytes; /*!< Is there extra RX byte. */
 
     uint8_t nbytes; /*!< eDMA minor byte transfer count initially configured. */
 
@@ -294,9 +294,8 @@ status_t LPSPI_SlaveTransferGetCountEDMA(LPSPI_Type *base, lpspi_slave_edma_hand
 
 #if defined(__cplusplus)
 }
-#endif /*_cplusplus*/
-       /*!
-        *@}
-        */
+#endif
+
+/*! @}*/
 
 #endif /*_FSL_LPSPI_EDMA_H_*/

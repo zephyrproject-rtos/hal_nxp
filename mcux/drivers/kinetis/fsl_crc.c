@@ -107,7 +107,7 @@ static void CRC_ConfigureAndStart(CRC_Type *base, const crc_module_config_t *con
     uint32_t crcControl;
 
     /* pre-compute value for CRC control registger based on user configuraton without WAS field */
-    crcControl = 0 | CRC_CTRL_TOT(config->writeTranspose) | CRC_CTRL_TOTR(config->readTranspose) |
+    crcControl = 0U | CRC_CTRL_TOT(config->writeTranspose) | CRC_CTRL_TOTR(config->readTranspose) |
                  CRC_CTRL_FXOR(config->complementChecksum) | CRC_CTRL_TCRC(config->crcBits);
 
     /* make sure the control register is clear - WAS is deasserted, and protocol is set */
@@ -221,7 +221,7 @@ void CRC_Init(CRC_Type *base, const crc_config_t *config)
 void CRC_GetDefaultConfig(crc_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     static const crc_config_t crc16ccit = {
         CRC_DRIVER_DEFAULT_POLYNOMIAL,          CRC_DRIVER_DEFAULT_SEED,
@@ -267,7 +267,7 @@ void CRC_WriteData(CRC_Type *base, const uint8_t *data, size_t dataSize)
     data = (const uint8_t *)data32;
 
     /* 8-bit reads and writes till end of data buffer */
-    while (dataSize)
+    while (dataSize != 0U)
     {
         base->ACCESS8BIT.DATALL = *data;
         data++;

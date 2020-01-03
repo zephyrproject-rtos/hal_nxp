@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 NXP
+ * Copyright 2017, 2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,15 +21,18 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief RNG driver version. Version 2.0.0.
+/*! @brief RNG driver version. Version 2.0.1.
  *
- * Current version: 2.0.0
+ * Current version: 2.0.1
  *
  * Change log:
  * - Version 2.0.0
  *   - Initial version
+ *
+ * - Version 2.0.1
+ *   - Fix MISRA C-2012 issue.
  */
-#define FSL_RNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_RNG_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /*******************************************************************************
@@ -71,7 +74,7 @@ void RNG_Deinit(RNG_Type *base);
  * @param dataSize  Size of the buffer pointed by the data parameter.
  * @return random data
  */
-status_t RNG_GetRandomData(RNG_Type *base, void *data, size_t data_size);
+status_t RNG_GetRandomData(RNG_Type *base, void *data, size_t dataSize);
 
 /*!
  * @brief Returns random 32-bit number.

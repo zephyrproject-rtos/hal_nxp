@@ -9,9 +9,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1015RM Rev.0, 12/2018
-**     Version:             rev. 1.1, 2019-02-20
-**     Build:               b190220
+**     Reference manual:    IMXRT1015RM Rev.0, 12/2018 | IMXRT1015SRM Rev.3
+**     Version:             rev. 1.2, 2019-04-29
+**     Build:               b191113
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -34,14 +34,16 @@
 **         Rev.0 Header GA
 **     - rev. 1.1 (2019-02-20)
 **         Update register SRC_SRSR's bitfield LOCKUP_SYSRESETREQ to LOCKUP.
+**     - rev. 1.2 (2019-04-29)
+**         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1015
- * @version 1.1
- * @date 2019-02-20
+ * @version 1.2
+ * @date 2019-04-29
  * @brief Device specific configuration file for MIMXRT1015 (header file)
  *
  * Provides a system configuration function and a global variable that contains

@@ -73,7 +73,11 @@ static void I2S_AddTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle);
  * Variables
  ******************************************************************************/
 /*<! @brief Allocate DMA transfer descriptors. */
+#if (defined(__XCC__))
+DMA_ALLOCATE_LINK_DESCRIPTORS_AT_NONCACHEABLE(s_DmaDescriptors, DMA_DESCRIPTORS *FSL_FEATURE_SOC_I2S_COUNT);
+#else
 DMA_ALLOCATE_LINK_DESCRIPTORS(s_DmaDescriptors, DMA_DESCRIPTORS *FSL_FEATURE_SOC_I2S_COUNT);
+#endif
 
 /*<! @brief Buffer with dummy TX data. */
 SDK_ALIGN(static uint32_t s_DummyBufferTx, 4U);
@@ -98,8 +102,8 @@ static status_t I2S_EnqueueUserBuffer(I2S_Type *base, i2s_dma_handle_t *handle, 
 
     /* Validate input data and transfer buffer */
 
-    assert(handle);
-    if (!handle)
+    assert(handle != NULL);
+    if (handle == NULL)
     {
         return kStatus_InvalidArgument;
     }
@@ -125,7 +129,7 @@ static status_t I2S_EnqueueUserBuffer(I2S_Type *base, i2s_dma_handle_t *handle, 
         return kStatus_InvalidArgument;
     }
 
-    if (handle->i2sQueue[handle->queueUser].dataSize)
+    if (handle->i2sQueue[handle->queueUser].dataSize != 0UL)
     {
         /* Previously prepared buffers not processed yet, reject request */
         return kStatus_I2S_Busy;
@@ -164,7 +168,7 @@ static inline void I2S_DisableDMAInterrupts(i2s_dma_handle_t *handle)
 
 static inline void I2S_EnableDMAInterrupts(i2s_dma_handle_t *handle)
 {
-    if (handle->state != kI2S_DmaStateIdle)
+    if (handle->state != (uint32_t)kI2S_DmaStateIdle)
     {
         DMA_EnableChannelInterrupts(handle->dmaHandle->base, handle->dmaHandle->channel);
     }
@@ -185,19 +189,19 @@ void I2S_TxTransferCreateHandleDMA(I2S_Type *base,
                                    i2s_dma_transfer_callback_t callback,
                                    void *userData)
 {
-    assert(handle);
-    assert(dmaHandle);
+    assert(handle != NULL);
+    assert(dmaHandle != NULL);
 
     uint32_t instance                       = I2S_GetInstance(base);
     i2s_dma_private_handle_t *privateHandle = &(s_DmaPrivateHandle[instance]);
 
-    memset(handle, 0U, sizeof(*handle));
-    handle->state              = kI2S_DmaStateIdle;
+    (void)memset(handle, 0, sizeof(*handle));
+    handle->state              = (uint32_t)kI2S_DmaStateIdle;
     handle->dmaHandle          = dmaHandle;
     handle->completionCallback = callback;
     handle->userData           = userData;
 
-    handle->bytesPerFrame = (((base->CFG1 & I2S_CFG1_DATALEN_MASK) >> I2S_CFG1_DATALEN_SHIFT) + 1U) / 8U;
+    handle->bytesPerFrame = (uint8_t)((((base->CFG1 & I2S_CFG1_DATALEN_MASK) >> I2S_CFG1_DATALEN_SHIFT) + 1U) / 8U);
     /* if one channel is disabled, bytesPerFrame should be 4U, user should pay attention that when data length is
      * shorter than 16, the data format: left data put in 0-15 bit and right data should put in 16-31
      */
@@ -211,7 +215,7 @@ void I2S_TxTransferCreateHandleDMA(I2S_Type *base,
         handle->bytesPerFrame = 4U;
     }
 
-    memset(privateHandle, 0U, sizeof(*privateHandle));
+    (void)memset(privateHandle, 0, sizeof(*privateHandle));
     privateHandle->base   = base;
     privateHandle->handle = handle;
 
@@ -243,9 +247,9 @@ status_t I2S_TxTransferSendDMA(I2S_Type *base, i2s_dma_handle_t *handle, i2s_tra
     }
 
     /* Initialize DMA transfer */
-    if (handle->state == kI2S_DmaStateIdle)
+    if (handle->state == (uint32_t)kI2S_DmaStateIdle)
     {
-        handle->state = kI2S_DmaStateTx;
+        handle->state = (uint32_t)kI2S_DmaStateTx;
         status        = I2S_StartTransferDMA(base, handle);
         if (status != kStatus_Success)
         {
@@ -268,8 +272,8 @@ status_t I2S_TxTransferSendDMA(I2S_Type *base, i2s_dma_handle_t *handle, i2s_tra
  */
 void I2S_TransferAbortDMA(I2S_Type *base, i2s_dma_handle_t *handle)
 {
-    assert(handle);
-    assert(handle->dmaHandle);
+    assert(handle != NULL);
+    assert(handle->dmaHandle != NULL);
 
     uint32_t instance                       = I2S_GetInstance(base);
     i2s_dma_private_handle_t *privateHandle = &(s_DmaPrivateHandle[instance]);
@@ -279,7 +283,7 @@ void I2S_TransferAbortDMA(I2S_Type *base, i2s_dma_handle_t *handle)
     /* Abort operation */
     DMA_AbortTransfer(handle->dmaHandle);
 
-    if (handle->state == kI2S_DmaStateTx)
+    if (handle->state == (uint32_t)kI2S_DmaStateTx)
     {
         /* Wait until all transmitted data get out of FIFO */
         while ((base->FIFOSTAT & I2S_FIFOSTAT_TXEMPTY_MASK) == 0U)
@@ -304,16 +308,16 @@ void I2S_TransferAbortDMA(I2S_Type *base, i2s_dma_handle_t *handle)
     I2S_Disable(base);
 
     /* Reset state */
-    handle->state = kI2S_DmaStateIdle;
+    handle->state = (uint32_t)kI2S_DmaStateIdle;
 
     /* Clear transfer queue */
-    memset((void *)&(handle->i2sQueue), 0U, sizeof(handle->i2sQueue));
+    (void)memset((void *)&(handle->i2sQueue), 0, sizeof(handle->i2sQueue));
     handle->queueDriver = 0U;
     handle->queueUser   = 0U;
 
     /* Clear internal state */
-    memset((void *)&(privateHandle->descriptorQueue), 0U, sizeof(privateHandle->descriptorQueue));
-    memset((void *)&(privateHandle->enqueuedBytes), 0U, sizeof(privateHandle->enqueuedBytes));
+    (void)memset((void *)&(privateHandle->descriptorQueue), 0, sizeof(privateHandle->descriptorQueue));
+    (void)memset((void *)&(privateHandle->enqueuedBytes), 0, sizeof(privateHandle->enqueuedBytes));
     privateHandle->enqueuedBytesStart = 0U;
     privateHandle->enqueuedBytesEnd   = 0U;
     privateHandle->dmaDescriptorsUsed = 0U;
@@ -366,9 +370,9 @@ status_t I2S_RxTransferReceiveDMA(I2S_Type *base, i2s_dma_handle_t *handle, i2s_
     }
 
     /* Initialize DMA transfer */
-    if (handle->state == kI2S_DmaStateIdle)
+    if (handle->state == (uint32_t)kI2S_DmaStateIdle)
     {
-        handle->state = kI2S_DmaStateRx;
+        handle->state = (uint32_t)kI2S_DmaStateRx;
         status        = I2S_StartTransferDMA(base, handle);
         if (status != kStatus_Success)
         {
@@ -411,17 +415,17 @@ static void I2S_RxEnableDMA(I2S_Type *base, bool enable)
 
 static uint16_t I2S_GetTransferBytes(volatile i2s_transfer_t *transfer)
 {
-    assert(transfer);
+    assert(transfer != NULL);
 
     uint16_t transferBytes;
 
-    if (transfer->dataSize >= (2 * DMA_MAX_TRANSFER_BYTES))
+    if (transfer->dataSize >= (2UL * DMA_MAX_TRANSFER_BYTES))
     {
         transferBytes = DMA_MAX_TRANSFER_BYTES;
     }
     else if (transfer->dataSize > DMA_MAX_TRANSFER_BYTES)
     {
-        transferBytes = transfer->dataSize / 2U;
+        transferBytes = (uint16_t)(transfer->dataSize / 2U);
         if ((transferBytes % 4U) != 0U)
         {
             transferBytes -= (transferBytes % 4U);
@@ -429,7 +433,7 @@ static uint16_t I2S_GetTransferBytes(volatile i2s_transfer_t *transfer)
     }
     else
     {
-        transferBytes = transfer->dataSize;
+        transferBytes = (uint16_t)transfer->dataSize;
     }
 
     return transferBytes;
@@ -441,28 +445,39 @@ static status_t I2S_StartTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle)
     i2s_dma_private_handle_t *privateHandle = &(s_DmaPrivateHandle[instance]);
     volatile i2s_transfer_t *transfer       = &(privateHandle->descriptorQueue[privateHandle->queueDescriptor]);
     uint16_t transferBytes                  = I2S_GetTransferBytes(transfer);
-    int i                                   = 0U;
+    uint32_t i                              = 0U;
     uint32_t xferConfig                     = 0U;
+    uint32_t *srcAddr = NULL, *destAddr = NULL, srcInc = 4UL, destInc = 4UL;
 
+    if (handle->state == (uint32_t)kI2S_DmaStateTx)
+    {
+        srcAddr  = (uint32_t *)(uint32_t)transfer->data;
+        destAddr = (uint32_t *)(uint32_t)(&(base->FIFOWR));
+        srcInc   = 1U;
+        destInc  = 0UL;
+    }
+    else
+    {
+        srcAddr  = (uint32_t *)(uint32_t)(&(base->FIFORD));
+        destAddr = (uint32_t *)(uint32_t)transfer->data;
+        srcInc   = 0U;
+        destInc  = 1UL;
+    }
     /* Initial descriptor is stored in another place in memory, but treat it as another descriptor for simplicity */
     privateHandle->dmaDescriptorsUsed = 1U;
     privateHandle->intA               = false;
 
     /* submit transfer parameter directly */
-    xferConfig = DMA_CHANNEL_XFER(true, false, privateHandle->intA, !privateHandle->intA, handle->bytesPerFrame,
-                                  (handle->state == kI2S_DmaStateTx) ? 1U : 0U,
-                                  (handle->state == kI2S_DmaStateTx) ? 0U : 1U, transferBytes);
-    DMA_SubmitChannelTransferParameter(
-        handle->dmaHandle, xferConfig,
-        (void *)((handle->state == kI2S_DmaStateTx) ? (uint32_t)transfer->data : (uint32_t)(&(base->FIFORD))),
-        (void *)((handle->state == kI2S_DmaStateTx) ? (uint32_t)(&(base->FIFOWR)) : (uint32_t)transfer->data),
-        (void *)&(s_DmaDescriptors[(instance * DMA_DESCRIPTORS) + 0U]));
+    xferConfig = DMA_CHANNEL_XFER(1UL, 0UL, 0UL, 1UL, handle->bytesPerFrame, srcInc, destInc, (uint32_t)transferBytes);
+
+    DMA_SubmitChannelTransferParameter(handle->dmaHandle, xferConfig, srcAddr, destAddr,
+                                       (void *)&(s_DmaDescriptors[(instance * DMA_DESCRIPTORS) + 0U]));
 
     privateHandle->enqueuedBytes[privateHandle->enqueuedBytesEnd] = transferBytes;
     privateHandle->enqueuedBytesEnd = (privateHandle->enqueuedBytesEnd + 1U) % DMA_DESCRIPTORS;
 
     transfer->dataSize -= transferBytes;
-    transfer->data += transferBytes;
+    transfer->data = (uint8_t *)((uint32_t)transfer->data + transferBytes);
 
     if (transfer->dataSize == 0U)
     {
@@ -478,17 +493,16 @@ static status_t I2S_StartTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle)
      */
     for (i = 0; i < DMA_DESCRIPTORS; i++)
     {
-        DMA_SetupDescriptor(&(s_DmaDescriptors[(instance * DMA_DESCRIPTORS) + i]),
-                            DMA_CHANNEL_XFER(true, false, false, false, sizeof(uint32_t), 0U, 0U, 8U),
-                            ((handle->state == kI2S_DmaStateTx) ? (void *)(uint32_t)&s_DummyBufferTx :
-                                                                  (void *)(uint32_t)(&(base->FIFORD))),
-                            ((handle->state == kI2S_DmaStateTx) ? (void *)(uint32_t)(&(base->FIFOWR)) :
-                                                                  (void *)(uint32_t)&s_DummyBufferRx),
-                            &(s_DmaDescriptors[(instance * DMA_DESCRIPTORS) + ((i + 1) % DMA_DESCRIPTORS)]));
+        /* DMA_CHANNEL_XFER(1UL, 0UL, 0UL, 0UL, sizeof(uint32_t), 0U, 0U, 8U) = 0x10203UL  */
+        DMA_SetupDescriptor(
+            &(s_DmaDescriptors[(instance * DMA_DESCRIPTORS) + i]), 0x10203UL,
+            ((handle->state == (uint32_t)kI2S_DmaStateTx) ? &s_DummyBufferTx : (uint32_t *)(uint32_t)(&(base->FIFORD))),
+            ((handle->state == (uint32_t)kI2S_DmaStateTx) ? (uint32_t *)(uint32_t)(&(base->FIFOWR)) : &s_DummyBufferRx),
+            &(s_DmaDescriptors[(instance * DMA_DESCRIPTORS) + ((i + 1U) % DMA_DESCRIPTORS)]));
     }
 
     /* Submit and start initial DMA transfer */
-    if (handle->state == kI2S_DmaStateTx)
+    if (handle->state == (uint32_t)kI2S_DmaStateTx)
     {
         I2S_TxEnableDMA(base, true);
     }
@@ -514,6 +528,8 @@ static void I2S_AddTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle)
     dma_descriptor_t *descriptor;
     dma_descriptor_t *nextDescriptor;
     uint32_t xferConfig = 0U;
+    bool intA           = false;
+    uint32_t *srcAddr = NULL, *destAddr = NULL, srcInc = 4UL, destInc = 4UL;
 
     instance      = I2S_GetInstance(base);
     privateHandle = &(s_DmaPrivateHandle[instance]);
@@ -521,11 +537,26 @@ static void I2S_AddTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle)
     while (privateHandle->dmaDescriptorsUsed < DMA_DESCRIPTORS)
     {
         transfer = &(privateHandle->descriptorQueue[privateHandle->queueDescriptor]);
-
+        intA     = privateHandle->intA;
         if (transfer->dataSize == 0U)
         {
             /* Nothing to be added */
             return;
+        }
+
+        if (handle->state == (uint32_t)kI2S_DmaStateTx)
+        {
+            srcAddr  = (uint32_t *)(uint32_t)transfer->data;
+            destAddr = (uint32_t *)(uint32_t)(&(base->FIFOWR));
+            srcInc   = 1U;
+            destInc  = 0UL;
+        }
+        else
+        {
+            srcAddr  = (uint32_t *)(uint32_t)(&(base->FIFORD));
+            destAddr = (uint32_t *)(uint32_t)transfer->data;
+            srcInc   = 0U;
+            destInc  = 1UL;
         }
 
         /* Determine currently configured descriptor and the other which it will link to */
@@ -537,16 +568,10 @@ static void I2S_AddTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle)
         privateHandle->enqueuedBytes[privateHandle->enqueuedBytesEnd] = transferBytes;
         privateHandle->enqueuedBytesEnd = (privateHandle->enqueuedBytesEnd + 1U) % DMA_DESCRIPTORS;
 
-        xferConfig = DMA_CHANNEL_XFER(true, false, !privateHandle->intA, privateHandle->intA, handle->bytesPerFrame,
-                                      (handle->state == kI2S_DmaStateTx) ? 1U : 0U,
-                                      (handle->state == kI2S_DmaStateTx) ? 0U : 1U, transferBytes);
+        xferConfig =
+            DMA_CHANNEL_XFER(1UL, 0UL, !intA, intA, handle->bytesPerFrame, srcInc, destInc, (uint32_t)transferBytes);
 
-        DMA_SetupDescriptor(descriptor, xferConfig,
-                            ((handle->state == kI2S_DmaStateTx) ? (void *)(uint32_t)transfer->data :
-                                                                  (void *)(uint32_t) & (base->FIFORD)),
-                            ((handle->state == kI2S_DmaStateTx) ? (void *)(uint32_t) & (base->FIFOWR) :
-                                                                  (void *)(uint32_t)transfer->data),
-                            nextDescriptor);
+        DMA_SetupDescriptor(descriptor, xferConfig, srcAddr, destAddr, nextDescriptor);
 
         /* Advance internal state */
         privateHandle->dmaDescriptorsUsed++;
@@ -575,8 +600,11 @@ void I2S_DMACallback(dma_handle_t *handle, void *userData, bool transferDone, ui
     i2s_dma_private_handle_t *privateHandle = (i2s_dma_private_handle_t *)userData;
     i2s_dma_handle_t *i2sHandle             = privateHandle->handle;
     I2S_Type *base                          = privateHandle->base;
+    uint8_t queueDriverIndex                = i2sHandle->queueDriver;
+    uint32_t enqueueBytes                   = privateHandle->enqueuedBytes[privateHandle->enqueuedBytesStart];
+    uint32_t queueDataAddr                  = (uint32_t)i2sHandle->i2sQueue[queueDriverIndex].data;
 
-    if ((!transferDone) || (i2sHandle->state == kI2S_DmaStateIdle))
+    if ((!transferDone) || (i2sHandle->state == (uint32_t)kI2S_DmaStateIdle))
     {
         return;
     }
@@ -585,22 +613,20 @@ void I2S_DMACallback(dma_handle_t *handle, void *userData, bool transferDone, ui
     {
         /* Finished descriptor, decrease amount of data to be processed */
 
-        i2sHandle->i2sQueue[i2sHandle->queueDriver].dataSize -=
-            privateHandle->enqueuedBytes[privateHandle->enqueuedBytesStart];
-        i2sHandle->i2sQueue[i2sHandle->queueDriver].data +=
-            privateHandle->enqueuedBytes[privateHandle->enqueuedBytesStart];
+        i2sHandle->i2sQueue[queueDriverIndex].dataSize -= enqueueBytes;
+        i2sHandle->i2sQueue[queueDriverIndex].data                      = (uint8_t *)(queueDataAddr + enqueueBytes);
         privateHandle->enqueuedBytes[privateHandle->enqueuedBytesStart] = 0U;
         privateHandle->enqueuedBytesStart = (privateHandle->enqueuedBytesStart + 1U) % DMA_DESCRIPTORS;
         privateHandle->dmaDescriptorsUsed--;
     }
 
-    if (i2sHandle->i2sQueue[i2sHandle->queueDriver].dataSize == 0U)
+    if (i2sHandle->i2sQueue[queueDriverIndex].dataSize == 0U)
     {
         /* Entire user buffer sent or received - advance to next one */
-        i2sHandle->i2sQueue[i2sHandle->queueDriver].data = NULL;
-        i2sHandle->queueDriver                           = (i2sHandle->queueDriver + 1U) % I2S_NUM_BUFFERS;
+        i2sHandle->i2sQueue[queueDriverIndex].data = NULL;
+        i2sHandle->queueDriver                     = (queueDriverIndex + 1U) % I2S_NUM_BUFFERS;
         /* Notify user about buffer completion */
-        if (i2sHandle->completionCallback)
+        if (i2sHandle->completionCallback != NULL)
         {
             (i2sHandle->completionCallback)(base, i2sHandle, kStatus_I2S_BufferComplete, i2sHandle->userData);
         }

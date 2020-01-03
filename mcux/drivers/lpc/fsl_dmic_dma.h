@@ -27,8 +27,8 @@
  * @{
  */
 
-/*! @brief DMIC DMA driver version 2.1.0. */
-#define FSL_DMIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief DMIC DMA driver version 2.2.1 */
+#define FSL_DMIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 /*! @brief DMIC transfer structure. */
@@ -106,10 +106,7 @@ status_t DMIC_TransferCreateHandleDMA(DMIC_Type *base,
  * @param dmic_channel DMIC start channel number.
  * @retval kStatus_Success
  */
-status_t DMIC_TransferReceiveDMA(DMIC_Type *base,
-                                 dmic_dma_handle_t *handle,
-                                 dmic_transfer_t *xfer,
-                                 uint32_t dmic_channel);
+status_t DMIC_TransferReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle, dmic_transfer_t *xfer, uint32_t channel);
 
 /*!
  * @brief Aborts the received data using DMA.

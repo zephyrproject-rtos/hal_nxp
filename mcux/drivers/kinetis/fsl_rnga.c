@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -213,7 +213,7 @@ static uint32_t rnga_ReadEntropy(RNG_Type *base)
     if (RNGA_GetMode(base) == kRNGA_ModeNormal) /* Is in normal mode.*/
     {
         /* Wait for valid random-data.*/
-        while (RNG_RD_SR_OREG_LVL(base) == 0)
+        while (RNG_RD_SR_OREG_LVL(base) == 0U)
         {
         }
         data = RNG_RD_OR(base);
@@ -242,7 +242,7 @@ status_t RNGA_GetRandomData(RNG_Type *base, void *data, size_t data_size)
     uint32_t i;
 
     /* Check input parameters.*/
-    if (base && data && data_size)
+    if ((NULL != base) && (NULL != data) && (0U != data_size))
     {
         do
         {
@@ -266,7 +266,7 @@ status_t RNGA_GetRandomData(RNG_Type *base, void *data, size_t data_size)
             }
 
             data_size -= random_size;
-        } while (data_size > 0);
+        } while (data_size > 0U);
     }
     else
     {
@@ -299,7 +299,7 @@ void RNGA_SetMode(RNG_Type *base, rnga_mode_t mode)
  */
 rnga_mode_t RNGA_GetMode(RNG_Type *base)
 {
-    return (rnga_mode_t)RNG_RD_SR_SLP(base);
+    return (rnga_mode_t)((uint32_t)(RNG_RD_SR_SLP(base)));
 }
 
 /*!

@@ -11,9 +11,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1050RM Rev.2.1, 12/2018
-**     Version:             rev. 1.2, 2018-11-27
-**     Build:               b181205
+**     Reference manual:    IMXRT1050RM Rev.2.1, 12/2018 | IMXRT1050SRM Rev.2
+**     Version:             rev. 1.3, 2019-04-29
+**     Build:               b191113
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2019 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -40,14 +40,16 @@
 **         Update header files to align with IMXRT1050RM Rev.1.
 **     - rev. 1.2 (2018-11-27)
 **         Update header files to align with IMXRT1050RM Rev.2.1.
+**     - rev. 1.3 (2019-04-29)
+**         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1052
- * @version 1.2
- * @date 2018-11-27
+ * @version 1.3
+ * @date 2019-04-29
  * @brief Device specific configuration file for MIMXRT1052 (header file)
  *
  * Provides a system configuration function and a global variable that contains

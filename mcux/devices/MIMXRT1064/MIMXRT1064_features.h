@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-11-16
-**     Build:               b190319
+**     Build:               b191008
 **
 **     Abstract:
 **         Chip specific module features.
@@ -123,6 +123,8 @@
 #define FSL_FEATURE_SOC_USBNC_COUNT (2)
 /* @brief USBPHY availability on the SoC. */
 #define FSL_FEATURE_SOC_USBPHY_COUNT (2)
+/* @brief USB_ANALOG availability on the SoC. */
+#define FSL_FEATURE_SOC_USB_ANALOG_COUNT (1)
 /* @brief USDHC availability on the SoC. */
 #define FSL_FEATURE_SOC_USDHC_COUNT (2)
 /* @brief WDOG availability on the SoC. */
@@ -206,6 +208,11 @@
     (((x) == CAN3) ? (1) : (-1))))
 /* @brief Has extra MB interrupt or common one. */
 #define FSL_FEATURE_FLEXCAN_HAS_EXTRA_MB_INT (1)
+
+/* CCM module features */
+
+/* @brief Is affected by errata with ID 50235 (Incorrect clock setting for CAN affects by LPUART clock gate). */
+#define FSL_FEATURE_CCM_HAS_ERRATA_50235 (1)
 
 /* CMP module features */
 
@@ -305,6 +312,8 @@
 #define FSL_FEATURE_FLEXRAM_INTERNAL_RAM_BANK_SIZE (32768)
 /* @brief Total Bank numbers */
 #define FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS (16)
+/* @brief Has FLEXRAM_MAGIC_ADDR. */
+#define FSL_FEATURE_FLEXRAM_HAS_MAGIC_ADDR (0)
 
 /* FLEXSPI module features */
 
@@ -312,6 +321,8 @@
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(x) (4)
 /* @brief FlexSPI has no data learn. */
 #define FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN (1)
+/* @brief There is AHBBUSERROREN bit in INTEN register. */
+#define FSL_FEATURE_FLEXSPI_HAS_INTEN_AHBBUSERROREN (0)
 
 /* GPC module features */
 
@@ -589,6 +600,8 @@
 #define FSL_FEATURE_SRC_HAS_SRSR_RESET_OUT (0)
 /* @brief There is WDOG3_RST_B bit in SRSR register. */
 #define FSL_FEATURE_SRC_HAS_SRSR_WDOG3_RST_B (1)
+/* @brief There is JTAG_SW_RST bit in SRSR register. */
+#define FSL_FEATURE_SRC_HAS_SRSR_JTAG_SW_RST (1)
 /* @brief There is SW bit in SRSR register. */
 #define FSL_FEATURE_SRC_HAS_SRSR_SW (0)
 /* @brief There is IPP_USER_RESET_B bit in SRSR register. */
@@ -637,6 +650,10 @@
 #define FSL_FEATURE_USDHC_HAS_SDR50_MODE (1)
 /* @brief Has SDR104 support (HOST_CTRL_CAP[SDR104_SUPPORT]) */
 #define FSL_FEATURE_USDHC_HAS_SDR104_MODE (1)
+/* @brief USDHC has reset control */
+#define FSL_FEATURE_USDHC_HAS_RESET (0)
+/* @brief USDHC has no bitfield WTMK_LVL[WR_BRST_LEN] and WTMK_LVL[RD_BRST_LEN] */
+#define FSL_FEATURE_USDHC_HAS_NO_RW_BURST_LEN (0)
 
 /* XBARA module features */
 

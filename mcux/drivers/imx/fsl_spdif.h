@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  *
@@ -22,11 +23,11 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
+#define FSL_SPDIF_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3 */
 /*@}*/
 
 /*! @brief SPDIF return status*/
-enum _spdif_status_t
+enum
 {
     kStatus_SPDIF_RxDPLLLocked     = MAKE_STATUS(kStatusGroup_SPDIF, 0), /*!< SPDIF Rx PLL locked. */
     kStatus_SPDIF_TxFIFOError      = MAKE_STATUS(kStatusGroup_SPDIF, 1), /*!< SPDIF Tx FIFO error. */
@@ -100,7 +101,7 @@ typedef enum _spdif_validity_config
 } spdif_validity_config_t;
 
 /*! @brief The SPDIF interrupt enable flag */
-enum _spdif_interrupt_enable_t
+enum
 {
     kSPDIF_RxDPLLLocked                   = SPDIF_SIE_LOCK_MASK,        /*!< SPDIF DPLL locked */
     kSPDIF_TxFIFOError                    = SPDIF_SIE_TXUNOV_MASK,      /*!< Tx FIFO underrun or overrun */
@@ -123,7 +124,7 @@ enum _spdif_interrupt_enable_t
 };
 
 /*! @brief The DMA request sources */
-enum _spdif_dma_enable_t
+enum
 {
     kSPDIF_RxDMAEnable = SPDIF_SCR_DMA_RX_EN_MASK, /*!< Rx FIFO full */
     kSPDIF_TxDMAEnable = SPDIF_SCR_DMA_TX_EN_MASK, /*!< Tx FIFO empty */
@@ -145,7 +146,7 @@ typedef struct _spdif_config
 } spdif_config_t;
 
 /*!@brief SPDIF transfer queue size, user can refine it according to use case. */
-#define SPDIF_XFER_QUEUE_SIZE (4)
+#define SPDIF_XFER_QUEUE_SIZE (4U)
 
 /*! @brief SPDIF transfer structure */
 typedef struct _spdif_transfer
@@ -227,6 +228,13 @@ void SPDIF_GetDefaultConfig(spdif_config_t *config);
  * @param base SPDIF base pointer
  */
 void SPDIF_Deinit(SPDIF_Type *base);
+
+/*!
+ * @brief Get the instance number for SPDIF.
+ *
+ * @param base SPDIF base pointer.
+ */
+uint32_t SPDIF_GetInstance(SPDIF_Type *base);
 
 /*!
  * @brief Resets the SPDIF Tx.

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,9 +19,9 @@
 #endif
 
 /* Default values for user configuration structure.*/
-#if (defined(KW40Z4_SERIES) || defined(KW41Z4_SERIES) || defined(KW31Z4_SERIES) || defined(KW21Z4_SERIES) || \
-     defined(MCIMX7U5_M4_SERIES) || defined(KW36Z4_SERIES) || defined(KW37A4_SERIES) || defined(KW37Z4_SERIES) ||\
-     defined(KW38A4_SERIES) || defined(KW38Z4_SERIES) || defined(KW39A4_SERIES))
+#if (defined(KW40Z4_SERIES) || defined(KW41Z4_SERIES) || defined(KW31Z4_SERIES) || defined(KW21Z4_SERIES) ||      \
+     defined(MCIMX7U5_M4_SERIES) || defined(KW36Z4_SERIES) || defined(KW37A4_SERIES) || defined(KW37Z4_SERIES) || \
+     defined(KW38A4_SERIES) || defined(KW38Z4_SERIES) || defined(KW39A4_SERIES) || defined(KW35Z4_SERIES))
 #define TRNG_USER_CONFIG_DEFAULT_OSC_DIV kTRNG_RingOscDiv8
 #elif (defined(KV56F24_SERIES) || defined(KV58F24_SERIES) || defined(KL28Z7_SERIES) || defined(KL81Z7_SERIES) || \
        defined(KL82Z7_SERIES))
@@ -29,7 +29,14 @@
 #elif defined(K81F25615_SERIES)
 #define TRNG_USER_CONFIG_DEFAULT_OSC_DIV kTRNG_RingOscDiv2
 #else
+/* Default value for the TRNG user configuration structure can be optionally
+   defined by device specific preprocessor macros. */
+#if defined(FSL_FEATURE_TRNG_FORCE_USER_CONFIG_DEFAULT_OSC_DIV) && \
+    (FSL_FEATURE_TRNG_FORCE_USER_CONFIG_DEFAULT_OSC_DIV > 0)
+#define TRNG_USER_CONFIG_DEFAULT_OSC_DIV (FSL_FEATURE_TRNG_USER_CONFIG_DEFAULT_OSC_DIV_VALUE)
+#else
 #define TRNG_USER_CONFIG_DEFAULT_OSC_DIV kTRNG_RingOscDiv0
+#endif
 #endif
 
 #define TRNG_USER_CONFIG_DEFAULT_LOCK 0
@@ -55,8 +62,20 @@
 #define TRNG_USER_CONFIG_DEFAULT_RUNBIT6PLUS_MINIMUM (TRNG_USER_CONFIG_DEFAULT_RUNBIT6PLUS_MAXIMUM - 46)
 #define TRNG_USER_CONFIG_DEFAULT_POKER_MAXIMUM 26912
 #define TRNG_USER_CONFIG_DEFAULT_POKER_MINIMUM (TRNG_USER_CONFIG_DEFAULT_POKER_MAXIMUM - 2467)
+
+#if defined(FSL_FEATURE_TRNG_FORCE_USER_CONFIG_DEFAULT_FREQUENCY_MAXIMUM) && \
+    (FSL_FEATURE_TRNG_FORCE_USER_CONFIG_DEFAULT_FREQUENCY_MAXIMUM > 0)
+#define TRNG_USER_CONFIG_DEFAULT_FREQUENCY_MAXIMUM (FSL_FEATURE_TRNG_USER_CONFIG_DEFAULT_FREQUENCY_MAXIMUM_VALUE)
+#else
 #define TRNG_USER_CONFIG_DEFAULT_FREQUENCY_MAXIMUM 25600
+#endif
+
+#if defined(FSL_FEATURE_TRNG_FORCE_USER_CONFIG_DEFAULT_FREQUENCY_MINIMUM) && \
+    (FSL_FEATURE_TRNG_FORCE_USER_CONFIG_DEFAULT_FREQUENCY_MINIMUM > 0)
+#define TRNG_USER_CONFIG_DEFAULT_FREQUENCY_MINIMUM (FSL_FEATURE_TRNG_USER_CONFIG_DEFAULT_FREQUENCY_MINIMUM_VALUE)
+#else
 #define TRNG_USER_CONFIG_DEFAULT_FREQUENCY_MINIMUM 1600
+#endif
 
 /*! @brief TRNG work mode */
 typedef enum _trng_work_mode

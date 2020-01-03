@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -16,6 +16,12 @@
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.xbarb"
 #endif
+
+typedef union
+{
+    uint8_t _u8[2];
+    uint16_t _u16;
+} xbarb_u8_u16_t;
 
 /*******************************************************************************
  * Prototypes
@@ -106,5 +112,15 @@ void XBARB_Deinit(XBARB_Type *base)
  */
 void XBARB_SetSignalsConnection(XBARB_Type *base, xbar_input_signal_t input, xbar_output_signal_t output)
 {
-    XBARB_WR_SELx_SELx(base, (((uint16_t)input) & 0xFFU), (((uint16_t)output) & 0xFFU));
+    xbarb_u8_u16_t regVal;
+    uint8_t byteInReg;
+    uint8_t outputIndex = (uint8_t)output;
+
+    byteInReg = outputIndex % 2U;
+
+    regVal._u16 = XBARB_SELx(base, outputIndex);
+
+    regVal._u8[byteInReg] = (uint8_t)input;
+
+    XBARB_SELx(base, outputIndex) = regVal._u16;
 }

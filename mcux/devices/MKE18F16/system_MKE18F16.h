@@ -5,15 +5,15 @@
 **                          MKE18F512VLH16
 **                          MKE18F512VLL16
 **
-**     Compilers:           Keil ARM C/C++ Compiler
-**                          Freescale C/C++ for Embedded ARM
+**     Compilers:           Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
+**                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    KE1xFP100M168SF0RM, Rev. 2, Aug. 2016
 **     Version:             rev. 4.0, 2016-09-20
-**     Build:               b180802
+**     Build:               b191113
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,8 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2019 NXP
+**     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
 **

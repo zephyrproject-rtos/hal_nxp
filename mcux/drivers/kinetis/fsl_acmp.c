@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -43,17 +43,18 @@ static const clock_ip_name_t s_acmpClock[] = CMP_CLOCKS;
  ******************************************************************************/
 static uint32_t ACMP_GetInstance(CMP_Type *base)
 {
-    uint32_t instance       = 0U;
-    uint32_t acmpArrayCount = (sizeof(s_acmpBases) / sizeof(s_acmpBases[0]));
+    uint32_t instance = 0U;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < acmpArrayCount; instance++)
+    for (instance = 0; instance < ARRAY_SIZE(s_acmpBases); instance++)
     {
         if (s_acmpBases[instance] == base)
         {
             break;
         }
     }
+
+    assert(instance < ARRAY_SIZE(s_acmpBases));
 
     return instance;
 }
@@ -149,7 +150,7 @@ void ACMP_GetDefaultConfig(acmp_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     /* Fill default configuration */
     config->enableHighSpeed     = false;
@@ -379,6 +380,7 @@ void ACMP_SetDACConfig(CMP_Type *base, const acmp_dac_config_t *config)
             tmp32 |= CMP_C1_DMODE_MASK;
             break;
         default:
+            assert(false);
             break;
     }
 #endif /* FSL_FEATURE_ACMP_HAS_C1_DMODE_BIT */
@@ -490,11 +492,11 @@ void ACMP_EnableInterrupts(CMP_Type *base, uint32_t mask)
      * Set CMP interrupt enable flag.
      */
     tmp32 = base->C0 & ~CMP_C0_CFx_MASK; /* To protect the W1C flags. */
-    if (kACMP_OutputRisingInterruptEnable == (mask & kACMP_OutputRisingInterruptEnable))
+    if ((uint32_t)kACMP_OutputRisingInterruptEnable == (mask & (uint32_t)kACMP_OutputRisingInterruptEnable))
     {
         tmp32 = ((tmp32 | CMP_C0_IER_MASK) & ~CMP_C0_CFx_MASK);
     }
-    if (kACMP_OutputFallingInterruptEnable == (mask & kACMP_OutputFallingInterruptEnable))
+    if ((uint32_t)kACMP_OutputFallingInterruptEnable == (mask & (uint32_t)kACMP_OutputFallingInterruptEnable))
     {
         tmp32 = ((tmp32 | CMP_C0_IEF_MASK) & ~CMP_C0_CFx_MASK);
     }
@@ -503,7 +505,7 @@ void ACMP_EnableInterrupts(CMP_Type *base, uint32_t mask)
     /* CMPx_C2
      * Set round robin interrupt enable flag.
      */
-    if (kACMP_RoundRobinInterruptEnable == (mask & kACMP_RoundRobinInterruptEnable))
+    if ((uint32_t)kACMP_RoundRobinInterruptEnable == (mask & (uint32_t)kACMP_RoundRobinInterruptEnable))
     {
         tmp32 = base->C2;
         /* Set control bit. Avoid clearing status flags at the same time. */
@@ -527,11 +529,11 @@ void ACMP_DisableInterrupts(CMP_Type *base, uint32_t mask)
      * Clear CMP interrupt enable flag.
      */
     tmp32 = base->C0;
-    if (kACMP_OutputRisingInterruptEnable == (mask & kACMP_OutputRisingInterruptEnable))
+    if ((uint32_t)kACMP_OutputRisingInterruptEnable == (mask & (uint32_t)kACMP_OutputRisingInterruptEnable))
     {
         tmp32 &= ~(CMP_C0_IER_MASK | CMP_C0_CFx_MASK);
     }
-    if (kACMP_OutputFallingInterruptEnable == (mask & kACMP_OutputFallingInterruptEnable))
+    if ((uint32_t)kACMP_OutputFallingInterruptEnable == (mask & (uint32_t)kACMP_OutputFallingInterruptEnable))
     {
         tmp32 &= ~(CMP_C0_IEF_MASK | CMP_C0_CFx_MASK);
     }
@@ -540,7 +542,7 @@ void ACMP_DisableInterrupts(CMP_Type *base, uint32_t mask)
     /* CMPx_C2
      * Clear round robin interrupt enable flag.
      */
-    if (kACMP_RoundRobinInterruptEnable == (mask & kACMP_RoundRobinInterruptEnable))
+    if ((uint32_t)kACMP_RoundRobinInterruptEnable == (mask & (uint32_t)kACMP_RoundRobinInterruptEnable))
     {
         tmp32 = base->C2;
         /* Set control bit. Avoid clearing status flags at the same time. */
@@ -565,15 +567,15 @@ uint32_t ACMP_GetStatusFlags(CMP_Type *base)
      */
     if (CMP_C0_CFR_MASK == (tmp32 & CMP_C0_CFR_MASK))
     {
-        status |= kACMP_OutputRisingEventFlag;
+        status |= (uint32_t)kACMP_OutputRisingEventFlag;
     }
     if (CMP_C0_CFF_MASK == (tmp32 & CMP_C0_CFF_MASK))
     {
-        status |= kACMP_OutputFallingEventFlag;
+        status |= (uint32_t)kACMP_OutputFallingEventFlag;
     }
     if (CMP_C0_COUT_MASK == (tmp32 & CMP_C0_COUT_MASK))
     {
-        status |= kACMP_OutputAssertEventFlag;
+        status |= (uint32_t)kACMP_OutputAssertEventFlag;
     }
 
     return status;
@@ -591,11 +593,11 @@ void ACMP_ClearStatusFlags(CMP_Type *base, uint32_t mask)
     uint32_t tmp32 = (base->C0 & (~(CMP_C0_CFR_MASK | CMP_C0_CFF_MASK)));
 
     /* Clear flag according to mask. */
-    if (kACMP_OutputRisingEventFlag == (mask & kACMP_OutputRisingEventFlag))
+    if ((uint32_t)kACMP_OutputRisingEventFlag == (mask & (uint32_t)kACMP_OutputRisingEventFlag))
     {
         tmp32 |= CMP_C0_CFR_MASK;
     }
-    if (kACMP_OutputFallingEventFlag == (mask & kACMP_OutputFallingEventFlag))
+    if ((uint32_t)kACMP_OutputFallingEventFlag == (mask & (uint32_t)kACMP_OutputFallingEventFlag))
     {
         tmp32 |= CMP_C0_CFF_MASK;
     }
@@ -646,7 +648,7 @@ void ACMP_GetDefaultDiscreteModeConfig(acmp_discrete_mode_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enablePositiveChannelDiscreteMode = false;
     config->enableNegativeChannelDiscreteMode = false;

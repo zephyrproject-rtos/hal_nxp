@@ -252,6 +252,7 @@ void SystemCoreClockUpdate(void)
 {
     uint32_t clkRate = 0;
     uint32_t prediv, postdiv;
+    uint32_t bypassccodiv2;
     uint64_t workRate;
 
     switch (SYSCON->MAINCLKSELB & SYSCON_MAINCLKSELB_SEL_MASK)
@@ -306,7 +307,7 @@ void SystemCoreClockUpdate(void)
                 /* Adjust input clock */
                 clkRate = clkRate / prediv;
                 /* If using the SS, use the multiplier */
-                if (SYSCON->SYSPLLSSCTRL1 & SYSCON_SYSPLLSSCTRL1_PD_MASK)
+                if (SYSCON->SYSPLLSSCTRL0 & SYSCON_SYSPLLSSCTRL0_SEL_EXT_MASK)
                 {
                     /* MDEC used for rate */
                     workRate = (uint64_t)clkRate * (uint64_t)findPllMMult(SYSCON->SYSPLLCTRL, SYSCON->SYSPLLSSCTRL0);
@@ -316,7 +317,8 @@ void SystemCoreClockUpdate(void)
                     /* SS multipler used for rate */
                     workRate = 0;
                     /* Adjust by fractional */
-                    workRate = workRate + ((clkRate * (uint64_t)((SYSCON->SYSPLLSSCTRL1 & 0x7FF) >> 0)) / 0x800);
+                    bypassccodiv2 = (uint32_t)((SYSCON->SYSPLLCTRL & SYSCON_SYSPLLCTRL_BYPASSCCODIV2_MASK) >> SYSCON_SYSPLLCTRL_BYPASSCCODIV2_SHIFT);
+                    workRate = (2 - bypassccodiv2) * clkRate * (uint64_t)((SYSCON->SYSPLLSSCTRL1 & 0x7FFFF) >> 11);
                 }
                 clkRate = workRate / ((uint64_t)postdiv);
             }

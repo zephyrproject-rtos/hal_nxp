@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -28,7 +28,7 @@
  * Prototypes
  ******************************************************************************/
 /*!
- * @brief Checks whether the date and time passed in is valid
+ * @brief Check whether the date and time passed in is valid
  *
  * @param datetime Pointer to structure where the date and time details are stored
  *
@@ -37,7 +37,7 @@
 static bool RTC_CheckDatetimeFormat(const rtc_datetime_t *datetime);
 
 /*!
- * @brief Converts time data from datetime to seconds
+ * @brief Convert time data from datetime to seconds
  *
  * @param datetime Pointer to datetime structure where the date and time details are stored
  *
@@ -46,7 +46,7 @@ static bool RTC_CheckDatetimeFormat(const rtc_datetime_t *datetime);
 static uint32_t RTC_ConvertDatetimeToSeconds(const rtc_datetime_t *datetime);
 
 /*!
- * @brief Converts time data from seconds to a datetime structure
+ * @brief Convert time data from seconds to a datetime structure
  *
  * @param seconds  Seconds value that needs to be converted to datetime format
  * @param datetime Pointer to the datetime structure where the result of the conversion is stored
@@ -190,7 +190,7 @@ static void RTC_ConvertSecondsToDatetime(uint32_t seconds, rtc_datetime_t *datet
 }
 
 /*!
- * brief Ungates the RTC clock and enables the RTC oscillator.
+ * brief Ungate the RTC clock and enables the RTC oscillator.
  *
  * note This API should be called at the beginning of the application using the RTC driver.
  *
@@ -216,7 +216,7 @@ void RTC_Init(RTC_Type *base)
 }
 
 /*!
- * brief Sets the RTC date and time according to the given time structure.
+ * brief Set the RTC date and time according to the given time structure.
  *
  * The RTC counter must be stopped prior to calling this function as writes to the RTC
  * seconds register will fail if the RTC counter is running.
@@ -255,12 +255,12 @@ void RTC_GetDatetime(RTC_Type *base, rtc_datetime_t *datetime)
 
     uint32_t seconds = 0;
 
-    seconds = base->COUNT;
+    seconds = RTC_GetSecondsTimerCount(base);
     RTC_ConvertSecondsToDatetime(seconds, datetime);
 }
 
 /*!
- * brief Sets the RTC alarm time
+ * brief Set the RTC alarm time
  *
  * The function checks whether the specified alarm time is greater than the present
  * time. If not, the function does not set the alarm and returns an error.
@@ -274,7 +274,7 @@ void RTC_GetDatetime(RTC_Type *base, rtc_datetime_t *datetime)
  */
 status_t RTC_SetAlarm(RTC_Type *base, const rtc_datetime_t *alarmTime)
 {
-    assert(alarmTime);
+    assert(alarmTime != NULL);
 
     uint32_t alarmSeconds = 0;
     uint32_t currSeconds  = 0;
@@ -288,7 +288,7 @@ status_t RTC_SetAlarm(RTC_Type *base, const rtc_datetime_t *alarmTime)
     alarmSeconds = RTC_ConvertDatetimeToSeconds(alarmTime);
 
     /* Get the current time */
-    currSeconds = base->COUNT;
+    currSeconds = RTC_GetSecondsTimerCount(base);
 
     /* Return error if the alarm time has passed */
     if (alarmSeconds < currSeconds)
@@ -303,7 +303,7 @@ status_t RTC_SetAlarm(RTC_Type *base, const rtc_datetime_t *alarmTime)
 }
 
 /*!
- * brief Returns the RTC alarm time.
+ * brief Return the RTC alarm time.
  *
  * param base     RTC peripheral base address
  * param datetime Pointer to structure where the alarm date and time details are stored.

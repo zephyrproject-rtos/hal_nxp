@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 NXP
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,12 +20,12 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief SEMC driver version 2.0.4. */
-#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+/*! @brief SEMC driver version 2.1.0. */
+#define FSL_SEMC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief SEMC status. */
-enum _semc_status
+enum
 {
     kStatus_SEMC_InvalidDeviceType            = MAKE_STATUS(kStatusGroup_SEMC, 0),
     kStatus_SEMC_IpCommandExecutionError      = MAKE_STATUS(kStatusGroup_SEMC, 1),
@@ -700,7 +700,7 @@ static inline void SEMC_DisableInterrupts(SEMC_Type *base, uint32_t mask)
  */
 static inline bool SEMC_GetStatusFlag(SEMC_Type *base)
 {
-    return base->INTR;
+    return (base->INTR == 0x00U) ? false : true;
 }
 
 /*!
@@ -731,7 +731,7 @@ static inline void SEMC_ClearStatusFlags(SEMC_Type *base, uint32_t mask)
  */
 static inline bool SEMC_IsInIdle(SEMC_Type *base)
 {
-    return (base->STS0 & SEMC_STS0_IDLE_MASK) ? true : false;
+    return ((base->STS0 & SEMC_STS0_IDLE_MASK) != 0x00U) ? true : false;
 }
 
 /*!
@@ -749,7 +749,7 @@ static inline bool SEMC_IsInIdle(SEMC_Type *base)
  * @param read   Data pointer for read data out.
  */
 status_t SEMC_SendIPCommand(
-    SEMC_Type *base, semc_mem_type_t type, uint32_t address, uint16_t command, uint32_t write, uint32_t *read);
+    SEMC_Type *base, semc_mem_type_t type, uint32_t address, uint32_t command, uint32_t write, uint32_t *read);
 
 /*!
  * @brief Build SEMC IP command for NAND.
@@ -765,7 +765,7 @@ static inline uint16_t SEMC_BuildNandIPCommand(uint8_t userCommand,
                                                semc_ipcmd_nand_addrmode_t addrMode,
                                                semc_ipcmd_nand_cmdmode_t cmdMode)
 {
-    return (uint16_t)((uint16_t)userCommand << 8) | (uint16_t)(addrMode << 4) | ((uint8_t)cmdMode & 0x0Fu);
+    return ((uint16_t)userCommand << 8U) | ((uint16_t)addrMode << 4U) | ((uint16_t)cmdMode & 0x000FU);
 }
 
 /*!
@@ -776,7 +776,7 @@ static inline uint16_t SEMC_BuildNandIPCommand(uint8_t userCommand,
  */
 static inline bool SEMC_IsNandReady(SEMC_Type *base)
 {
-    return (base->STS0 & SEMC_STS0_NARDY_MASK) ? true : false;
+    return ((base->STS0 & SEMC_STS0_NARDY_MASK) != 0x00U) ? true : false;
 }
 
 /*!

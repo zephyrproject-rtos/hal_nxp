@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief QSPI driver version 2.2.0. */
-#define FSL_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief QSPI driver version 2.2.1. */
+#define FSL_QSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 /*! @brief Macro functions for LUT table */
@@ -60,7 +60,7 @@
 #define QSPI_PAD_8 (0x3U)
 
 /*! @brief Status structure of QSPI.*/
-enum _status_t
+enum
 {
     kStatus_QSPI_Idle  = MAKE_STATUS(kStatusGroup_QSPI, 0), /*!< QSPI is in idle state  */
     kStatus_QSPI_Busy  = MAKE_STATUS(kStatusGroup_QSPI, 1), /*!< QSPI is busy */
@@ -538,8 +538,15 @@ static inline void QSPI_SetIPCommandAddress(QuadSPI_Type *base, uint32_t addr)
  */
 static inline void QSPI_SetIPCommandSize(QuadSPI_Type *base, uint32_t size)
 {
-    ip_command_config_t *ipCommand     = (ip_command_config_t *)(&(base->IPCR));
-    ipCommand->IPCR_REG.BITFIELD.IDATZ = QuadSPI_IPCR_IDATSZ(size);
+    union
+    {
+        volatile uint32_t *commandRegBase;
+        ip_command_config_t *commandConfigPtr;
+    } command;
+    command.commandRegBase             = &(base->IPCR);
+    ip_command_config_t *ipCommand     = command.commandConfigPtr;
+    size                               = QuadSPI_IPCR_IDATSZ(size);
+    ipCommand->IPCR_REG.BITFIELD.IDATZ = (uint16_t)size;
 }
 
 /*! @brief Executes IP commands located in LUT table.
@@ -618,7 +625,7 @@ static inline void QSPI_ClearFifo(QuadSPI_Type *base, uint32_t mask)
  */
 static inline void QSPI_ClearCommandSequence(QuadSPI_Type *base, qspi_command_seq_t seq)
 {
-    base->SPTRCLR = seq;
+    base->SPTRCLR = (uint32_t)seq;
 }
 
 /*!

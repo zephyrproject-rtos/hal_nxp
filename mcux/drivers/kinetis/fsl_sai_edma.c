@@ -14,21 +14,22 @@
 #endif
 
 /*******************************************************************************
- * Definitations
+ * Definitions
  ******************************************************************************/
 /* Used for 32byte aligned */
-#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)(address) + 32) & ~0x1FU)
+#define STCD_ADDR(address) (edma_tcd_t *)(((uint32_t)(address) + 32UL) & ~0x1FU)
 
 static I2S_Type *const s_saiBases[] = I2S_BASE_PTRS;
 
 /*<! Structure definition for uart_edma_private_handle_t. The structure is private. */
-typedef struct _sai_edma_private_handle
+typedef struct sai_edma_private_handle
 {
     I2S_Type *base;
     sai_edma_handle_t *handle;
 } sai_edma_private_handle_t;
 
-enum _sai_edma_transfer_state
+/*! @brief sai_edma_transfer_state, sai edma transfer state.*/
+enum
 {
     kSAI_Busy = 0x0U, /*!< SAI is busy */
     kSAI_Idle,        /*!< Transfer is done. */
@@ -94,9 +95,9 @@ static void SAI_TxEDMACallback(edma_handle_t *handle, void *userData, bool done,
     sai_edma_handle_t *saiHandle          = privHandle->handle;
 
     /* If finished a block, call the callback function */
-    memset(&saiHandle->saiQueue[saiHandle->queueDriver], 0, sizeof(sai_transfer_t));
-    saiHandle->queueDriver = (saiHandle->queueDriver + 1) % SAI_XFER_QUEUE_SIZE;
-    if (saiHandle->callback)
+    (void)memset(&saiHandle->saiQueue[saiHandle->queueDriver], 0, sizeof(sai_transfer_t));
+    saiHandle->queueDriver = (saiHandle->queueDriver + 1U) % SAI_XFER_QUEUE_SIZE;
+    if (saiHandle->callback != NULL)
     {
         (saiHandle->callback)(privHandle->base, saiHandle, kStatus_SAI_TxIdle, saiHandle->userData);
     }
@@ -116,9 +117,9 @@ static void SAI_RxEDMACallback(edma_handle_t *handle, void *userData, bool done,
     sai_edma_handle_t *saiHandle          = privHandle->handle;
 
     /* If finished a block, call the callback function */
-    memset(&saiHandle->saiQueue[saiHandle->queueDriver], 0, sizeof(sai_transfer_t));
-    saiHandle->queueDriver = (saiHandle->queueDriver + 1) % SAI_XFER_QUEUE_SIZE;
-    if (saiHandle->callback)
+    (void)memset(&saiHandle->saiQueue[saiHandle->queueDriver], 0, sizeof(sai_transfer_t));
+    saiHandle->queueDriver = (saiHandle->queueDriver + 1U) % SAI_XFER_QUEUE_SIZE;
+    if (saiHandle->callback != NULL)
     {
         (saiHandle->callback)(privHandle->base, saiHandle, kStatus_SAI_RxIdle, saiHandle->userData);
     }
@@ -146,31 +147,31 @@ static void SAI_RxEDMACallback(edma_handle_t *handle, void *userData, bool done,
  * param dmaHandle eDMA handle pointer, this handle shall be static allocated by users.
  */
 void SAI_TransferTxCreateHandleEDMA(
-    I2S_Type *base, sai_edma_handle_t *handle, sai_edma_callback_t callback, void *userData, edma_handle_t *dmaHandle)
+    I2S_Type *base, sai_edma_handle_t *handle, sai_edma_callback_t callback, void *userData, edma_handle_t *txDmaHandle)
 {
-    assert(handle && dmaHandle);
+    assert((handle != NULL) && (txDmaHandle != NULL));
 
     uint32_t instance = SAI_GetInstance(base);
 
     /* Zero the handle */
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     /* Set sai base to handle */
-    handle->dmaHandle = dmaHandle;
+    handle->dmaHandle = txDmaHandle;
     handle->callback  = callback;
     handle->userData  = userData;
 
     /* Set SAI state to idle */
-    handle->state = kSAI_Idle;
+    handle->state = (uint32_t)kSAI_Idle;
 
     s_edmaPrivateHandle[instance][0].base   = base;
     s_edmaPrivateHandle[instance][0].handle = handle;
 
     /* Need to use scatter gather */
-    EDMA_InstallTCDMemory(dmaHandle, (edma_tcd_t *)(STCD_ADDR(handle->tcd)), SAI_XFER_QUEUE_SIZE);
+    EDMA_InstallTCDMemory(txDmaHandle, (edma_tcd_t *)(STCD_ADDR(handle->tcd)), SAI_XFER_QUEUE_SIZE);
 
     /* Install callback for Tx dma channel */
-    EDMA_SetCallback(dmaHandle, SAI_TxEDMACallback, &s_edmaPrivateHandle[instance][0]);
+    EDMA_SetCallback(txDmaHandle, SAI_TxEDMACallback, &s_edmaPrivateHandle[instance][0]);
 }
 
 /*!
@@ -187,31 +188,31 @@ void SAI_TransferTxCreateHandleEDMA(
  * param dmaHandle eDMA handle pointer, this handle shall be static allocated by users.
  */
 void SAI_TransferRxCreateHandleEDMA(
-    I2S_Type *base, sai_edma_handle_t *handle, sai_edma_callback_t callback, void *userData, edma_handle_t *dmaHandle)
+    I2S_Type *base, sai_edma_handle_t *handle, sai_edma_callback_t callback, void *userData, edma_handle_t *rxDmaHandle)
 {
-    assert(handle && dmaHandle);
+    assert((handle != NULL) && (rxDmaHandle != NULL));
 
     uint32_t instance = SAI_GetInstance(base);
 
     /* Zero the handle */
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     /* Set sai base to handle */
-    handle->dmaHandle = dmaHandle;
+    handle->dmaHandle = rxDmaHandle;
     handle->callback  = callback;
     handle->userData  = userData;
 
     /* Set SAI state to idle */
-    handle->state = kSAI_Idle;
+    handle->state = (uint32_t)kSAI_Idle;
 
     s_edmaPrivateHandle[instance][1].base   = base;
     s_edmaPrivateHandle[instance][1].handle = handle;
 
     /* Need to use scatter gather */
-    EDMA_InstallTCDMemory(dmaHandle, STCD_ADDR(handle->tcd), SAI_XFER_QUEUE_SIZE);
+    EDMA_InstallTCDMemory(rxDmaHandle, STCD_ADDR(handle->tcd), SAI_XFER_QUEUE_SIZE);
 
     /* Install callback for Tx dma channel */
-    EDMA_SetCallback(dmaHandle, SAI_RxEDMACallback, &s_edmaPrivateHandle[instance][1]);
+    EDMA_SetCallback(rxDmaHandle, SAI_RxEDMACallback, &s_edmaPrivateHandle[instance][1]);
 }
 
 /*!
@@ -235,7 +236,7 @@ void SAI_TransferTxSetFormatEDMA(I2S_Type *base,
                                  uint32_t mclkSourceClockHz,
                                  uint32_t bclkSourceClockHz)
 {
-    assert(handle && format);
+    assert((handle != NULL) && (format != NULL));
 
     /* Configure the audio format to SAI registers */
     SAI_TxSetFormat(base, format, mclkSourceClockHz, bclkSourceClockHz);
@@ -247,7 +248,7 @@ void SAI_TransferTxSetFormatEDMA(I2S_Type *base,
     }
     else
     {
-        handle->bytesPerFrame = format->bitWidth / 8U;
+        handle->bytesPerFrame = (uint8_t)(format->bitWidth / 8U);
     }
 
     /* Update the data channel SAI used */
@@ -256,7 +257,7 @@ void SAI_TransferTxSetFormatEDMA(I2S_Type *base,
     /* Clear the channel enable bits until do a send/receive */
     base->TCR3 &= ~I2S_TCR3_TCE_MASK;
 #if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    handle->count = FSL_FEATURE_SAI_FIFO_COUNT - format->watermark;
+    handle->count = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNT - format->watermark);
 #else
     handle->count = 1U;
 #endif /* FSL_FEATURE_SAI_FIFO_COUNT */
@@ -272,7 +273,7 @@ void SAI_TransferTxSetFormatEDMA(I2S_Type *base,
  */
 void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_transceiver_t *saiConfig)
 {
-    assert(handle && saiConfig);
+    assert((handle != NULL) && (saiConfig != NULL));
 
     /* Configure the audio format to SAI registers */
     SAI_TxSetConfig(base, saiConfig);
@@ -292,7 +293,7 @@ void SAI_TransferTxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     /* Clear the channel enable bits until do a send/receive */
     base->TCR3 &= ~I2S_TCR3_TCE_MASK;
 #if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
-    handle->count = FSL_FEATURE_SAI_FIFO_COUNT - saiConfig->fifo.fifoWatermark;
+    handle->count = (uint8_t)((uint32_t)FSL_FEATURE_SAI_FIFO_COUNT - saiConfig->fifo.fifoWatermark);
 #else
     handle->count = 1U;
 #endif /* FSL_FEATURE_SAI_FIFO_COUNT */
@@ -319,7 +320,7 @@ void SAI_TransferRxSetFormatEDMA(I2S_Type *base,
                                  uint32_t mclkSourceClockHz,
                                  uint32_t bclkSourceClockHz)
 {
-    assert(handle && format);
+    assert((handle != NULL) && (format != NULL));
 
     /* Configure the audio format to SAI registers */
     SAI_RxSetFormat(base, format, mclkSourceClockHz, bclkSourceClockHz);
@@ -331,7 +332,7 @@ void SAI_TransferRxSetFormatEDMA(I2S_Type *base,
     }
     else
     {
-        handle->bytesPerFrame = format->bitWidth / 8U;
+        handle->bytesPerFrame = (uint8_t)(format->bitWidth / 8U);
     }
 
     /* Update the data channel SAI used */
@@ -356,7 +357,7 @@ void SAI_TransferRxSetFormatEDMA(I2S_Type *base,
  */
 void SAI_TransferRxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_transceiver_t *saiConfig)
 {
-    assert(handle && saiConfig);
+    assert((handle != NULL) && (saiConfig != NULL));
 
     /* Configure the audio format to SAI registers */
     SAI_RxSetConfig(base, saiConfig);
@@ -398,7 +399,7 @@ void SAI_TransferRxSetConfigEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
  */
 status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_transfer_t *xfer)
 {
-    assert(handle && xfer);
+    assert((handle != NULL) && (xfer != NULL));
 
     edma_transfer_config_t config = {0};
     uint32_t destAddr             = SAI_TxGetDataRegisterAddress(base, handle->channel);
@@ -409,28 +410,31 @@ status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_tra
         return kStatus_InvalidArgument;
     }
 
-    if (handle->saiQueue[handle->queueUser].data)
+    if (handle->saiQueue[handle->queueUser].data != NULL)
     {
         return kStatus_SAI_QueueFull;
     }
 
     /* Change the state of handle */
-    handle->state = kSAI_Busy;
+    handle->state = (uint32_t)kSAI_Busy;
 
     /* Update the queue state */
     handle->transferSize[handle->queueUser]      = xfer->dataSize;
     handle->saiQueue[handle->queueUser].data     = xfer->data;
     handle->saiQueue[handle->queueUser].dataSize = xfer->dataSize;
-    handle->queueUser                            = (handle->queueUser + 1) % SAI_XFER_QUEUE_SIZE;
+    handle->queueUser                            = (handle->queueUser + 1U) % SAI_XFER_QUEUE_SIZE;
 
     /* Prepare edma configure */
-    EDMA_PrepareTransfer(&config, xfer->data, handle->bytesPerFrame, (void *)destAddr, handle->bytesPerFrame,
-                         handle->count * handle->bytesPerFrame, xfer->dataSize, kEDMA_MemoryToPeripheral);
+    EDMA_PrepareTransfer(&config, xfer->data, handle->bytesPerFrame, (uint32_t *)destAddr, handle->bytesPerFrame,
+                         (uint32_t)handle->count * handle->bytesPerFrame, xfer->dataSize, kEDMA_MemoryToPeripheral);
 
     /* Store the initially configured eDMA minor byte transfer count into the SAI handle */
     handle->nbytes = handle->count * handle->bytesPerFrame;
 
-    EDMA_SubmitTransfer(handle->dmaHandle, &config);
+    if (EDMA_SubmitTransfer(handle->dmaHandle, &config) != kStatus_Success)
+    {
+        return kStatus_SAI_QueueFull;
+    }
 
     /* Start DMA transfer */
     EDMA_StartTransfer(handle->dmaHandle);
@@ -442,7 +446,7 @@ status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_tra
     SAI_TxEnable(base, true);
 
     /* Enable the channel FIFO */
-    base->TCR3 |= I2S_TCR3_TCE(1U << handle->channel);
+    base->TCR3 |= I2S_TCR3_TCE(1UL << handle->channel);
 
     return kStatus_Success;
 }
@@ -462,7 +466,7 @@ status_t SAI_TransferSendEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_tra
  */
 status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_transfer_t *xfer)
 {
-    assert(handle && xfer);
+    assert((handle != NULL) && (xfer != NULL));
 
     edma_transfer_config_t config = {0};
     uint32_t srcAddr              = SAI_RxGetDataRegisterAddress(base, handle->channel);
@@ -473,28 +477,31 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
         return kStatus_InvalidArgument;
     }
 
-    if (handle->saiQueue[handle->queueUser].data)
+    if (handle->saiQueue[handle->queueUser].data != NULL)
     {
         return kStatus_SAI_QueueFull;
     }
 
     /* Change the state of handle */
-    handle->state = kSAI_Busy;
+    handle->state = (uint32_t)kSAI_Busy;
 
     /* Update queue state  */
     handle->transferSize[handle->queueUser]      = xfer->dataSize;
     handle->saiQueue[handle->queueUser].data     = xfer->data;
     handle->saiQueue[handle->queueUser].dataSize = xfer->dataSize;
-    handle->queueUser                            = (handle->queueUser + 1) % SAI_XFER_QUEUE_SIZE;
+    handle->queueUser                            = (handle->queueUser + 1U) % SAI_XFER_QUEUE_SIZE;
 
     /* Prepare edma configure */
-    EDMA_PrepareTransfer(&config, (void *)srcAddr, handle->bytesPerFrame, xfer->data, handle->bytesPerFrame,
-                         handle->count * handle->bytesPerFrame, xfer->dataSize, kEDMA_PeripheralToMemory);
+    EDMA_PrepareTransfer(&config, (uint32_t *)srcAddr, handle->bytesPerFrame, xfer->data, handle->bytesPerFrame,
+                         (uint32_t)handle->count * handle->bytesPerFrame, xfer->dataSize, kEDMA_PeripheralToMemory);
 
     /* Store the initially configured eDMA minor byte transfer count into the SAI handle */
     handle->nbytes = handle->count * handle->bytesPerFrame;
 
-    EDMA_SubmitTransfer(handle->dmaHandle, &config);
+    if (EDMA_SubmitTransfer(handle->dmaHandle, &config) != kStatus_Success)
+    {
+        return kStatus_SAI_QueueFull;
+    }
 
     /* Start DMA transfer */
     EDMA_StartTransfer(handle->dmaHandle);
@@ -503,7 +510,7 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
     SAI_RxEnableDMA(base, kSAI_FIFORequestDMAEnable, true);
 
     /* Enable the channel FIFO */
-    base->RCR3 |= I2S_RCR3_RCE(1U << handle->channel);
+    base->RCR3 |= I2S_RCR3_RCE(1UL << handle->channel);
 
     /* Enable SAI Rx clock */
     SAI_RxEnable(base, true);
@@ -522,7 +529,7 @@ status_t SAI_TransferReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle, sai_
  */
 void SAI_TransferAbortSendEDMA(I2S_Type *base, sai_edma_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Disable dma */
     EDMA_AbortTransfer(handle->dmaHandle);
@@ -536,16 +543,19 @@ void SAI_TransferAbortSendEDMA(I2S_Type *base, sai_edma_handle_t *handle)
     /* Disable Tx */
     SAI_TxEnable(base, false);
 
-    /* Reset the FIFO pointer, at the same time clear all error flags if set */
-    base->TCSR |= (I2S_TCSR_FR_MASK | I2S_TCSR_SR_MASK);
-    base->TCSR &= ~I2S_TCSR_SR_MASK;
+    /* If Tx is disabled, reset the FIFO pointer and clear error flags */
+    if ((base->TCSR & I2S_TCSR_TE_MASK) == 0UL)
+    {
+        base->TCSR |= (I2S_TCSR_FR_MASK | I2S_TCSR_SR_MASK);
+        base->TCSR &= ~I2S_TCSR_SR_MASK;
+    }
 
     /* Handle the queue index */
-    memset(&handle->saiQueue[handle->queueDriver], 0, sizeof(sai_transfer_t));
-    handle->queueDriver = (handle->queueDriver + 1) % SAI_XFER_QUEUE_SIZE;
+    (void)memset(&handle->saiQueue[handle->queueDriver], 0, sizeof(sai_transfer_t));
+    handle->queueDriver = (handle->queueDriver + 1U) % SAI_XFER_QUEUE_SIZE;
 
     /* Set the handle state */
-    handle->state = kSAI_Idle;
+    handle->state = (uint32_t)kSAI_Idle;
 }
 
 /*!
@@ -554,12 +564,12 @@ void SAI_TransferAbortSendEDMA(I2S_Type *base, sai_edma_handle_t *handle)
  * This function only aborts the current transfer slots, the other transfer slots' information still kept
  * in the handler. If users want to terminate all transfer slots, just call SAI_TransferTerminateReceiveEDMA.
  *
- * param base SAI base pointer
+ * param base SAI base pointer.
  * param handle SAI eDMA handle pointer.
  */
 void SAI_TransferAbortReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Disable dma */
     EDMA_AbortTransfer(handle->dmaHandle);
@@ -573,16 +583,19 @@ void SAI_TransferAbortReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle)
     /* Disable Rx */
     SAI_RxEnable(base, false);
 
-    /* Reset the FIFO pointer, at the same time clear all error flags if set */
-    base->RCSR |= (I2S_RCSR_FR_MASK | I2S_RCSR_SR_MASK);
-    base->RCSR &= ~I2S_RCSR_SR_MASK;
+    /* If Rx is disabled, reset the FIFO pointer and clear error flags */
+    if ((base->RCSR & I2S_RCSR_RE_MASK) == 0UL)
+    {
+        base->RCSR |= (I2S_RCSR_FR_MASK | I2S_RCSR_SR_MASK);
+        base->RCSR &= ~I2S_RCSR_SR_MASK;
+    }
 
     /* Handle the queue index */
-    memset(&handle->saiQueue[handle->queueDriver], 0, sizeof(sai_transfer_t));
-    handle->queueDriver = (handle->queueDriver + 1) % SAI_XFER_QUEUE_SIZE;
+    (void)memset(&handle->saiQueue[handle->queueDriver], 0, sizeof(sai_transfer_t));
+    handle->queueDriver = (handle->queueDriver + 1U) % SAI_XFER_QUEUE_SIZE;
 
     /* Set the handle state */
-    handle->state = kSAI_Idle;
+    handle->state = (uint32_t)kSAI_Idle;
 }
 
 /*!
@@ -596,15 +609,16 @@ void SAI_TransferAbortReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle)
  */
 void SAI_TransferTerminateSendEDMA(I2S_Type *base, sai_edma_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Abort the current transfer */
     SAI_TransferAbortSendEDMA(base, handle);
 
     /* Clear all the internal information */
-    memset(handle->tcd, 0U, sizeof(handle->tcd));
-    memset(handle->saiQueue, 0U, sizeof(handle->saiQueue));
-    memset(handle->transferSize, 0U, sizeof(handle->transferSize));
+    (void)memset(handle->tcd, 0, sizeof(handle->tcd));
+    (void)memset(handle->saiQueue, 0, sizeof(handle->saiQueue));
+    (void)memset(handle->transferSize, 0, sizeof(handle->transferSize));
+
     handle->queueUser   = 0U;
     handle->queueDriver = 0U;
 }
@@ -620,15 +634,16 @@ void SAI_TransferTerminateSendEDMA(I2S_Type *base, sai_edma_handle_t *handle)
  */
 void SAI_TransferTerminateReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     /* Abort the current transfer */
     SAI_TransferAbortReceiveEDMA(base, handle);
 
     /* Clear all the internal information */
-    memset(handle->tcd, 0U, sizeof(handle->tcd));
-    memset(handle->saiQueue, 0U, sizeof(handle->saiQueue));
-    memset(handle->transferSize, 0U, sizeof(handle->transferSize));
+    (void)memset(handle->tcd, 0, sizeof(handle->tcd));
+    (void)memset(handle->saiQueue, 0, sizeof(handle->saiQueue));
+    (void)memset(handle->transferSize, 0, sizeof(handle->transferSize));
+
     handle->queueUser   = 0U;
     handle->queueDriver = 0U;
 }
@@ -644,11 +659,11 @@ void SAI_TransferTerminateReceiveEDMA(I2S_Type *base, sai_edma_handle_t *handle)
  */
 status_t SAI_TransferGetSendCountEDMA(I2S_Type *base, sai_edma_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     status_t status = kStatus_Success;
 
-    if (handle->state != kSAI_Busy)
+    if (handle->state != (uint32_t)kSAI_Busy)
     {
         status = kStatus_NoTransferInProgress;
     }
@@ -673,11 +688,11 @@ status_t SAI_TransferGetSendCountEDMA(I2S_Type *base, sai_edma_handle_t *handle,
  */
 status_t SAI_TransferGetReceiveCountEDMA(I2S_Type *base, sai_edma_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     status_t status = kStatus_Success;
 
-    if (handle->state != kSAI_Busy)
+    if (handle->state != (uint32_t)kSAI_Busy)
     {
         status = kStatus_NoTransferInProgress;
     }

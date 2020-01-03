@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,8 +27,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief I2C driver version 2.0.5. */
-#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+/*! @brief I2C driver version 2.0.6. */
+#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -49,7 +49,7 @@
 #define I2C_STAT_SLVST_TX (2)
 
 /*! @brief I2C status return codes. */
-enum _i2c_status
+enum
 {
     kStatus_I2C_Busy = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 0), /*!< The master is already performing a transfer. */
     kStatus_I2C_Idle = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 1), /*!< The slave driver is idle. */
@@ -64,7 +64,7 @@ enum _i2c_status
     kStatus_I2C_DmaRequestFail  = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 7), /*!< DMA request failed. */
     kStatus_I2C_StartStopError  = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 8),
     kStatus_I2C_UnexpectedState = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 9),
-    kStatus_I2C_Timeout         = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 10), /*!< Timeout poling status flags. */
+    kStatus_I2C_Timeout         = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 10), /*!< Timeout polling status flags. */
     kStatus_I2C_Addr_Nak        = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 11), /*!< NAK received for Address */
 };
 
@@ -154,6 +154,7 @@ enum _i2c_transfer_states
     kIdleState = 0,
     kTransmitSubaddrState,
     kTransmitDataState,
+    kReceiveDataBeginState,
     kReceiveDataState,
     kReceiveLastDataState,
     kStartState,
@@ -170,7 +171,7 @@ struct _i2c_master_transfer
 {
     uint32_t flags; /*!< Bit mask of options for the transfer. See enumeration #_i2c_master_transfer_flags for available
                        options. Set to 0 or #kI2C_TransferDefaultFlag for normal transfers. */
-    uint16_t slaveAddress;     /*!< The 7-bit slave address. */
+    uint8_t slaveAddress;      /*!< The 7-bit slave address. */
     i2c_direction_t direction; /*!< Either #kI2C_Read or #kI2C_Write. */
     uint32_t subaddress;       /*!< Sub address. Transferred MSB first. */
     size_t subaddressSize;     /*!< Length of sub address to send in bytes. Maximum size is 4 bytes. */
@@ -359,6 +360,11 @@ struct _i2c_slave_handle
     void *userData;                         /*!< Callback parameter passed to callback. */
 };
 
+/*! @brief Typedef for master interrupt handler. */
+typedef void (*flexcomm_i2c_master_irq_handler_t)(I2C_Type *base, i2c_master_handle_t *handle);
+
+/*! @brief Typedef for slave interrupt handler. */
+typedef void (*flexcomm_i2c_slave_irq_handler_t)(I2C_Type *base, i2c_slave_handle_t *handle);
 /*! @} */
 
 /*******************************************************************************
@@ -451,11 +457,11 @@ static inline void I2C_MasterEnable(I2C_Type *base, bool enable)
 {
     if (enable)
     {
-        base->CFG = (base->CFG & I2C_CFG_MASK) | I2C_CFG_MSTEN_MASK;
+        base->CFG = (base->CFG & (uint32_t)I2C_CFG_MASK) | I2C_CFG_MSTEN_MASK;
     }
     else
     {
-        base->CFG = (base->CFG & I2C_CFG_MASK) & ~I2C_CFG_MSTEN_MASK;
+        base->CFG = (base->CFG & (uint32_t)I2C_CFG_MASK) & ~I2C_CFG_MSTEN_MASK;
     }
 }
 

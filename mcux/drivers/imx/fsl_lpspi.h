@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPSPI driver version 2.0.3. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief LPSPI driver version 2.0.4. */
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 #ifndef LPSPI_DUMMY_DATA
@@ -34,7 +34,7 @@
 extern volatile uint8_t g_lpspiDummyData[];
 
 /*! @brief Status for the LPSPI driver.*/
-enum _lpspi_status
+enum
 {
     kStatus_LPSPI_Busy       = MAKE_STATUS(kStatusGroup_LPSPI, 0), /*!< LPSPI transfer is busy.*/
     kStatus_LPSPI_Error      = MAKE_STATUS(kStatusGroup_LPSPI, 1), /*!< LPSPI driver error. */
@@ -481,6 +481,14 @@ void LPSPI_Deinit(LPSPI_Type *base);
 void LPSPI_Reset(LPSPI_Type *base);
 
 /*!
+ * @brief Get the LPSPI instance from peripheral base address.
+ *
+ * @param base LPSPI peripheral base address.
+ * @return LPSPI instance.
+ */
+uint32_t LPSPI_GetInstance(LPSPI_Type *base);
+
+/*!
  * @brief Enables the LPSPI peripheral and sets the MCR MDIS to 0.
  *
  * @param base LPSPI peripheral address.
@@ -522,7 +530,7 @@ static inline uint32_t LPSPI_GetStatusFlags(LPSPI_Type *base)
  * @param base LPSPI peripheral address.
  * @return The LPSPI Tx FIFO size.
  */
-static inline uint32_t LPSPI_GetTxFifoSize(LPSPI_Type *base)
+static inline uint8_t LPSPI_GetTxFifoSize(LPSPI_Type *base)
 {
     return (1U << ((base->PARAM & LPSPI_PARAM_TXFIFO_MASK) >> LPSPI_PARAM_TXFIFO_SHIFT));
 }
@@ -532,7 +540,7 @@ static inline uint32_t LPSPI_GetTxFifoSize(LPSPI_Type *base)
  * @param base LPSPI peripheral address.
  * @return The LPSPI Rx FIFO size.
  */
-static inline uint32_t LPSPI_GetRxFifoSize(LPSPI_Type *base)
+static inline uint8_t LPSPI_GetRxFifoSize(LPSPI_Type *base)
 {
     return (1U << ((base->PARAM & LPSPI_PARAM_RXFIFO_MASK) >> LPSPI_PARAM_RXFIFO_SHIFT));
 }
@@ -799,7 +807,7 @@ static inline void LPSPI_SetAllPcsPolarity(LPSPI_Type *base, uint32_t mask)
  */
 static inline void LPSPI_SetFrameSize(LPSPI_Type *base, uint32_t frameSize)
 {
-    base->TCR = (base->TCR & ~LPSPI_TCR_FRAMESZ_MASK) | LPSPI_TCR_FRAMESZ(frameSize - 1);
+    base->TCR = (base->TCR & ~LPSPI_TCR_FRAMESZ_MASK) | LPSPI_TCR_FRAMESZ(frameSize - 1U);
 }
 
 /*!
@@ -1101,9 +1109,8 @@ void LPSPI_SlaveTransferHandleIRQ(LPSPI_Type *base, lpspi_slave_handle_t *handle
 
 #if defined(__cplusplus)
 }
-#endif /*_cplusplus*/
-       /*!
-        *@}
-        */
+#endif
+
+/*! @}*/
 
 #endif /*_FSL_LPSPI_H_*/
