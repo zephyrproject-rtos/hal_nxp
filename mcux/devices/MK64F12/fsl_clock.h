@@ -58,14 +58,9 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.3.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief CLOCK driver version 2.5.1. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 1))
 /*@}*/
-
-/* Definition for delay API in clock driver, users can redefine it to the real application. */
-#ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
-#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (120000000UL)
-#endif
 
 /*! @brief External XTAL0 (OSC0) clock frequency.
  *
@@ -101,6 +96,11 @@ extern volatile uint32_t g_xtal32Freq;
 
 #if (defined(OSC) && !(defined(OSC0)))
 #define OSC0 OSC
+#endif
+
+/* Definition for delay API in clock driver, users can redefine it to the real application. */
+#ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
+#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (120000000UL)
 #endif
 
 /*! @brief Clock ip name array for DMAMUX. */
@@ -557,21 +557,21 @@ typedef enum _mcg_monitor_mode
 } mcg_monitor_mode_t;
 
 /*! @brief MCG status. */
-enum _mcg_status
+enum
 {
-    kStatus_MCG_ModeUnreachable = MAKE_STATUS(kStatusGroup_MCG, 0),       /*!< Can't switch to target mode. */
-    kStatus_MCG_ModeInvalid     = MAKE_STATUS(kStatusGroup_MCG, 1),       /*!< Current mode invalid for the specific
+    kStatus_MCG_ModeUnreachable = MAKE_STATUS(kStatusGroup_MCG, 0U),       /*!< Can't switch to target mode. */
+    kStatus_MCG_ModeInvalid     = MAKE_STATUS(kStatusGroup_MCG, 1U),       /*!< Current mode invalid for the specific
                                                                                function. */
-    kStatus_MCG_AtmBusClockInvalid    = MAKE_STATUS(kStatusGroup_MCG, 2), /*!< Invalid bus clock for ATM. */
-    kStatus_MCG_AtmDesiredFreqInvalid = MAKE_STATUS(kStatusGroup_MCG, 3), /*!< Invalid desired frequency for ATM. */
-    kStatus_MCG_AtmIrcUsed            = MAKE_STATUS(kStatusGroup_MCG, 4), /*!< IRC is used when using ATM. */
-    kStatus_MCG_AtmHardwareFail       = MAKE_STATUS(kStatusGroup_MCG, 5), /*!< Hardware fail occurs during ATM. */
-    kStatus_MCG_SourceUsed            = MAKE_STATUS(kStatusGroup_MCG, 6)  /*!< Can't change the clock source because
+    kStatus_MCG_AtmBusClockInvalid    = MAKE_STATUS(kStatusGroup_MCG, 2U), /*!< Invalid bus clock for ATM. */
+    kStatus_MCG_AtmDesiredFreqInvalid = MAKE_STATUS(kStatusGroup_MCG, 3U), /*!< Invalid desired frequency for ATM. */
+    kStatus_MCG_AtmIrcUsed            = MAKE_STATUS(kStatusGroup_MCG, 4U), /*!< IRC is used when using ATM. */
+    kStatus_MCG_AtmHardwareFail       = MAKE_STATUS(kStatusGroup_MCG, 5U), /*!< Hardware fail occurs during ATM. */
+    kStatus_MCG_SourceUsed            = MAKE_STATUS(kStatusGroup_MCG, 6U)  /*!< Can't change the clock source because
                                                                                it is in use. */
 };
 
 /*! @brief MCG status flags. */
-enum _mcg_status_flags_t
+enum
 {
     kMCG_Osc0LostFlag   = (1U << 0U), /*!< OSC0 lost.         */
     kMCG_Osc0InitFlag   = (1U << 1U), /*!< OSC0 crystal initialized. */
@@ -581,14 +581,14 @@ enum _mcg_status_flags_t
 };
 
 /*! @brief MCG internal reference clock (MCGIRCLK) enable mode definition. */
-enum _mcg_irclk_enable_mode
+enum
 {
     kMCG_IrclkEnable       = MCG_C1_IRCLKEN_MASK, /*!< MCGIRCLK enable.              */
     kMCG_IrclkEnableInStop = MCG_C1_IREFSTEN_MASK /*!< MCGIRCLK enable in stop mode. */
 };
 
 /*! @brief MCG PLL clock enable mode definition. */
-enum _mcg_pll_enable_mode
+enum
 {
     kMCG_PllEnableIndependent = MCG_C5_PLLCLKEN0_MASK, /*!< MCGPLLCLK enable independent of the
                                                            MCG clock mode. Generally, the PLL
@@ -668,7 +668,7 @@ extern "C" {
 static inline void CLOCK_EnableClock(clock_ip_name_t name)
 {
     uint32_t regAddr = SIM_BASE + CLK_GATE_ABSTRACT_REG_OFFSET((uint32_t)name);
-    (*(volatile uint32_t *)regAddr) |= (1U << CLK_GATE_ABSTRACT_BITS_SHIFT((uint32_t)name));
+    (*(volatile uint32_t *)regAddr) |= (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT((uint32_t)name));
 }
 
 /*!
@@ -679,7 +679,7 @@ static inline void CLOCK_EnableClock(clock_ip_name_t name)
 static inline void CLOCK_DisableClock(clock_ip_name_t name)
 {
     uint32_t regAddr = SIM_BASE + CLK_GATE_ABSTRACT_REG_OFFSET((uint32_t)name);
-    (*(volatile uint32_t *)regAddr) &= ~(1U << CLK_GATE_ABSTRACT_BITS_SHIFT((uint32_t)name));
+    (*(volatile uint32_t *)regAddr) &= ~(1UL << CLK_GATE_ABSTRACT_BITS_SHIFT((uint32_t)name));
 }
 
 /*!
@@ -1038,7 +1038,7 @@ void CLOCK_EnablePll0(mcg_pll_config_t const *config);
  */
 static inline void CLOCK_DisablePll0(void)
 {
-    MCG->C5 &= ~(MCG_C5_PLLCLKEN0_MASK | MCG_C5_PLLSTEN0_MASK);
+    MCG->C5 &= (uint8_t)(~(MCG_C5_PLLCLKEN0_MASK | MCG_C5_PLLSTEN0_MASK));
 }
 
 /*!
@@ -1057,15 +1057,6 @@ static inline void CLOCK_DisablePll0(void)
  * @return Closest frequency match that the PLL was able generate.
  */
 uint32_t CLOCK_CalcPllDiv(uint32_t refFreq, uint32_t desireFreq, uint8_t *prdiv, uint8_t *vdiv);
-
-/*!
- * brief Sets the OSC0 clock monitor mode.
- *
- * This function sets the OSC0 clock monitor mode. See ref mcg_monitor_mode_t for details.
- *
- * param mode Monitor mode to set.
- */
-void CLOCK_SetOsc0MonitorMode(mcg_monitor_mode_t mode);
 
 /*@}*/
 
@@ -1176,7 +1167,7 @@ static inline void OSC_SetExtRefClkConfig(OSC_Type *base, oscer_config_t const *
 {
     uint8_t reg = base->CR;
 
-    reg &= ~(OSC_CR_ERCLKEN_MASK | OSC_CR_EREFSTEN_MASK);
+    reg &= (uint8_t)(~(OSC_CR_ERCLKEN_MASK | OSC_CR_EREFSTEN_MASK));
     reg |= config->enableMode;
 
     base->CR = reg;
@@ -1202,7 +1193,7 @@ static inline void OSC_SetCapLoad(OSC_Type *base, uint8_t capLoad)
 {
     uint8_t reg = base->CR;
 
-    reg &= ~(OSC_CR_SC2P_MASK | OSC_CR_SC4P_MASK | OSC_CR_SC8P_MASK | OSC_CR_SC16P_MASK);
+    reg &= (uint8_t)(~(OSC_CR_SC2P_MASK | OSC_CR_SC4P_MASK | OSC_CR_SC8P_MASK | OSC_CR_SC16P_MASK));
     reg |= capLoad;
 
     base->CR = reg;
@@ -1250,6 +1241,26 @@ static inline void CLOCK_SetXtal32Freq(uint32_t freq)
 {
     g_xtal32Freq = freq;
 }
+/* @} */
+
+/*!
+ * @name IRCs frequency
+ * @{
+ */
+
+/*!
+ * @brief Set the Slow IRC frequency based on the trimmed value
+ *
+ * @param freq The Slow IRC frequency input clock frequency in Hz.
+ */
+void CLOCK_SetSlowIrcFreq(uint32_t freq);
+
+/*!
+ * @brief Set the Fast IRC frequency based on the trimmed value
+ *
+ * @param freq The Fast IRC frequency input clock frequency in Hz.
+ */
+void CLOCK_SetFastIrcFreq(uint32_t freq);
 /* @} */
 
 /*!
@@ -1545,16 +1556,6 @@ status_t CLOCK_BootToPeeMode(mcg_oscsel_t oscsel, mcg_pll_clk_select_t pllcs, mc
  * function.
  */
 status_t CLOCK_SetMcgConfig(mcg_config_t const *config);
-
-/*!
- * @brief Use DWT to delay at least for some time.
- *  Please note that, this API will calculate the microsecond period with the maximum
- *  supported CPU frequency, so this API will only delay for at least the given microseconds, if precise
- *  delay count was needed, please implement a new timer count to achieve this function.
- *
- * @param delay_us  Delay time in unit of microsecond.
- */
-void SDK_DelayAtLeastUs(uint32_t delay_us);
 
 /*@}*/
 

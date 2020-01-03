@@ -22,9 +22,9 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Smart card driver version 2.2.0.
+/*! @brief Smart card driver version 2.2.1.
  */
-#define FSL_SMARTCARD_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_SMARTCARD_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 /*! @brief Smart card global define which specify number of clock cycles until initial 'TS' character has to be received
@@ -41,7 +41,7 @@
 #define SMARTCARD_TS_INVERSE_CONVENTION (0x3Fu)
 
 /*! @brief Smart card Error codes. */
-typedef enum _smartcard_status
+enum
 {
     kStatus_SMARTCARD_Success              = MAKE_STATUS(kStatusGroup_SMARTCARD, 0), /*!< Transfer ends successfully */
     kStatus_SMARTCARD_TxBusy               = MAKE_STATUS(kStatusGroup_SMARTCARD, 1), /*!< Transmit in progress */
@@ -56,7 +56,7 @@ typedef enum _smartcard_status
     kStatus_SMARTCARD_InvalidInput =
         MAKE_STATUS(kStatusGroup_SMARTCARD, 8), /*!< Function called with invalid input arguments */
     kStatus_SMARTCARD_OtherError = MAKE_STATUS(kStatusGroup_SMARTCARD, 9) /*!< Some other error occur */
-} smartcard_status_t;
+};
 
 /*! @brief Control codes for the Smart card protocol timers and misc. */
 typedef enum _smartcard_control

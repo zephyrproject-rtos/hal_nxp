@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -113,22 +113,55 @@ void FLEXCAN_TransferCreateHandleEDMA(CAN_Type *base,
 }
 
 /*!
- * brief Receives the CAN Message from the Rx FIFO using eDMA.
+ * brief Prepares the eDMA transfer configuration for FLEXCAN Legacy RX FIFO.
  *
- * This function receives the CAN Message using eDMA. This is a non-blocking function, which returns
- * right away. After the CAN Message is received, the receive callback function is called.
+ * This function prepares the eDMA transfer configuration structure according to FLEXCAN Legacy RX FIFO.
+ *
+ * param base FlexCAN peripheral base address.
+ * param pFifoXfer FlexCAN Rx FIFO EDMA transfer structure, see #flexcan_fifo_transfer_t.
+ * param pEdmaConfig The user configuration structure of type edma_transfer_t.
+ *
+ */
+void FLEXCAN_PrepareTransfConfiguration(CAN_Type *base,
+                                        flexcan_fifo_transfer_t *pFifoXfer,
+                                        edma_transfer_config_t *pEdmaConfig)
+{
+    assert(NULL != pFifoXfer);
+    assert(NULL != pFifoXfer->frame);
+    assert(NULL != pEdmaConfig);
+
+    flexcan_frame_t *fifoAddr = (flexcan_frame_t *)FLEXCAN_GetRxFifoHeadAddr(base);
+
+#if (defined(FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER) && FSL_FEATURE_EDMA_SUPPORT_16_BYTES_TRANSFER)
+    EDMA_PrepareTransfer(pEdmaConfig, (void *)fifoAddr, sizeof(flexcan_frame_t), (void *)pFifoXfer->frame,
+                         sizeof(uint32_t), sizeof(flexcan_frame_t), sizeof(flexcan_frame_t), kEDMA_PeripheralToMemory);
+#else
+    /* The Data Size of FLEXCAN Legacy RX FIFO output port is 16 Bytes, but lots of chips not support 16Bytes width DMA
+     * transfer. These chips always support 4Byte width memory transfer, so we need prepare Memory to Memory mode by 4
+     * Bytes width mode.
+     */
+    EDMA_PrepareTransfer(pEdmaConfig, (void *)fifoAddr, 4U, (void *)pFifoXfer->frame, sizeof(uint32_t),
+                         sizeof(flexcan_frame_t), sizeof(flexcan_frame_t), kEDMA_MemoryToMemory);
+#endif
+}
+
+/*!
+ * brief Start Transfer Data from the FLEXCAN Legacy Rx FIFO using eDMA.
+ *
+ * This function to Update edma transfer confiugration and Start eDMA transfer
  *
  * param base FlexCAN peripheral base address.
  * param handle Pointer to flexcan_edma_handle_t structure.
- * param xfer FlexCAN Rx FIFO EDMA transfer structure, see #flexcan_fifo_transfer_t.
+ * param pEdmaConfig The user configuration structure of type edma_transfer_t.
  * retval kStatus_Success if succeed, others failed.
  * retval kStatus_FLEXCAN_RxFifoBusy Previous transfer ongoing.
  */
-status_t FLEXCAN_TransferReceiveFifoEDMA(CAN_Type *base, flexcan_edma_handle_t *handle, flexcan_fifo_transfer_t *xfer)
+status_t FLEXCAN_StartTransferDatafromRxFIFO(CAN_Type *base,
+                                             flexcan_edma_handle_t *handle,
+                                             edma_transfer_config_t *pEdmaConfig)
 {
     assert(NULL != handle->rxFifoEdmaHandle);
-
-    edma_transfer_config_t dmaXferConfig;
+    assert(NULL != pEdmaConfig);
     status_t status;
 
     /* If previous Rx FIFO receive not finished. */
@@ -140,19 +173,46 @@ status_t FLEXCAN_TransferReceiveFifoEDMA(CAN_Type *base, flexcan_edma_handle_t *
     {
         handle->rxFifoState = (uint8_t)KFLEXCAN_RxFifoBusy;
 
-        /* Prepare transfer. */
-        EDMA_PrepareTransfer(&dmaXferConfig, (void *)(uint32_t *)FLEXCAN_GetRxFifoHeadAddr(base),
-                             sizeof(flexcan_frame_t), (void *)xfer->frame, sizeof(uint32_t), sizeof(flexcan_frame_t),
-                             sizeof(flexcan_frame_t), kEDMA_PeripheralToMemory);
-        /* Submit transfer. */
-        (void)EDMA_SubmitTransfer(handle->rxFifoEdmaHandle, (const edma_transfer_config_t *)(uint32_t)&dmaXferConfig);
-        EDMA_StartTransfer(handle->rxFifoEdmaHandle);
-
         /* Enable FlexCAN Rx FIFO EDMA. */
         FLEXCAN_EnableRxFifoDMA(base, true);
 
+        /* Submit configuration. */
+        (void)EDMA_SubmitTransfer(handle->rxFifoEdmaHandle, (const edma_transfer_config_t *)pEdmaConfig);
+        /* Start transfer. */
+        EDMA_StartTransfer(handle->rxFifoEdmaHandle);
+
         status = kStatus_Success;
     }
+
+    return status;
+}
+
+/*!
+ * brief Receives the CAN Message from the Rx FIFO using eDMA.
+ *
+ * This function receives the CAN Message using eDMA. This is a non-blocking function, which returns
+ * right away. After the CAN Message is received, the receive callback function is called.
+ *
+ * param base FlexCAN peripheral base address.
+ * param handle Pointer to flexcan_edma_handle_t structure.
+ * param pFifoXfer FlexCAN Rx FIFO EDMA transfer structure, see #flexcan_fifo_transfer_t.
+ * retval kStatus_Success if succeed, others failed.
+ * retval kStatus_FLEXCAN_RxFifoBusy Previous transfer ongoing.
+ */
+status_t FLEXCAN_TransferReceiveFifoEDMA(CAN_Type *base,
+                                         flexcan_edma_handle_t *handle,
+                                         flexcan_fifo_transfer_t *pFifoXfer)
+{
+    assert(NULL != handle->rxFifoEdmaHandle);
+
+    edma_transfer_config_t dmaXferConfig;
+    status_t status;
+
+    /* Prepare transfer. */
+    FLEXCAN_PrepareTransfConfiguration(base, pFifoXfer, &dmaXferConfig);
+
+    /* Submit configuration and start edma transfer. */
+    status = FLEXCAN_StartTransferDatafromRxFIFO(base, handle, &dmaXferConfig);
 
     return status;
 }
@@ -169,11 +229,11 @@ void FLEXCAN_TransferAbortReceiveFifoEDMA(CAN_Type *base, flexcan_edma_handle_t 
 {
     assert(NULL != handle->rxFifoEdmaHandle);
 
-    /* Disable FlexCAN Rx FIFO EDMA. */
-    FLEXCAN_EnableRxFifoDMA(base, false);
-
     /* Stop transfer. */
     EDMA_AbortTransfer(handle->rxFifoEdmaHandle);
 
     handle->rxFifoState = (uint8_t)KFLEXCAN_RxFifoIdle;
+
+    /* Disable FlexCAN Rx FIFO EDMA. */
+    FLEXCAN_EnableRxFifoDMA(base, false);
 }

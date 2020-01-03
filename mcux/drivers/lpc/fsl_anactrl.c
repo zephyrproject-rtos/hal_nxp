@@ -127,7 +127,7 @@ void ANACTRL_GetDefaultFro192MConfig(anactrl_fro192M_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enable12MHzClk = true;
     config->enable96MHzClk = false;
@@ -171,7 +171,7 @@ void ANACTRL_GetDefaultXo32MConfig(anactrl_xo32M_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enablePllUsbOutput = false;
     config->enableSysCLkOutput = false;
@@ -205,7 +205,7 @@ uint32_t ANACTRL_MeasureFrequency(ANACTRL_Type *base, uint8_t scale, uint32_t re
 
     /* Calculate the target clock frequency. */
     capval        = (base->FREQ_ME_CTRL & ANACTRL_FREQ_ME_CTRL_CAPVAL_SCALE_MASK);
-    targetClkFreq = (capval * refClkFreq) / ((1 << scale) - 1);
+    targetClkFreq = (capval * refClkFreq) / ((1UL << scale) - 1UL);
 
     return targetClkFreq;
 }

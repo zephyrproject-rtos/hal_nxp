@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,14 +24,14 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPC GPIO driver version 2.1.3. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+/*! @brief LPC GPIO driver version. */
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 1, 5))
 /*@}*/
 
 /*! @brief LPC GPIO direction definition */
 typedef enum _gpio_pin_direction
 {
-    kGPIO_DigitalInput = 0U,  /*!< Set current pin as digital input*/
+    kGPIO_DigitalInput  = 0U, /*!< Set current pin as digital input*/
     kGPIO_DigitalOutput = 1U, /*!< Set current pin as digital output*/
 } gpio_pin_direction_t;
 
@@ -59,7 +59,7 @@ typedef struct _gpio_pin_config
 typedef enum _gpio_pin_enable_mode
 {
     kGPIO_PinIntEnableLevel = GPIO_PIN_INT_LEVEL, /*!< Generate Pin Interrupt on level mode */
-    kGPIO_PinIntEnableEdge = GPIO_PIN_INT_EDGE    /*!< Generate Pin Interrupt on edge mode */
+    kGPIO_PinIntEnableEdge  = GPIO_PIN_INT_EDGE   /*!< Generate Pin Interrupt on edge mode */
 } gpio_pin_enable_mode_t;
 
 /*! @brief GPIO Pin Interrupt enable polarity */
@@ -81,8 +81,8 @@ typedef enum _gpio_interrupt_index
 /*! @brief Configures the interrupt generation condition. */
 typedef struct _gpio_interrupt_config
 {
-    uint8_t mode;         /* The trigger mode of GPIO interrupts */
-    uint8_t polarity;     /* The polarity of GPIO interrupts */
+    uint8_t mode;     /* The trigger mode of GPIO interrupts */
+    uint8_t polarity; /* The polarity of GPIO interrupts */
 } gpio_interrupt_config_t;
 #endif
 
@@ -90,8 +90,7 @@ typedef struct _gpio_interrupt_config
  * API
  ******************************************************************************/
 #if defined(__cplusplus)
-extern "C"
-{
+extern "C" {
 #endif
 
 /*! @name GPIO Configuration */
@@ -115,13 +114,13 @@ void GPIO_PortInit(GPIO_Type *base, uint32_t port);
  *
  * This is an example to define an input pin or output pin configuration:
  * @code
- * // Define a digital input pin configuration,
+ * Define a digital input pin configuration,
  * gpio_pin_config_t config =
  * {
  *   kGPIO_DigitalInput,
  *   0,
  * }
- * //Define a digital output pin configuration,
+ * Define a digital output pin configuration,
  * gpio_pin_config_t config =
  * {
  *   kGPIO_DigitalOutput,

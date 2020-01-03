@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief ACMP driver version 2.0.4. */
-#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 4U))
+/*! @brief ACMP driver version 2.0.5. */
+#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 5U))
 /*@}*/
 
 /*! @brief The mask of status flags cleared by writing 1. */

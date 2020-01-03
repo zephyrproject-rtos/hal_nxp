@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,15 +20,12 @@
  * Definitions
  ******************************************************************************/
 
-#define FSL_XBARB_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
+#define FSL_XBARB_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 
 /* Macros for entire XBARB_SELx register. */
-#define XBARB_SELx(base, output) (*(volatile uint16_t *)((uintptr_t) & (base->SEL0) + ((output) / 2U) * 2U))
+#define XBARB_SELx(base, output) (((volatile uint16_t *)(&((base)->SEL0)))[(uint32_t)(output) / 2UL])
 /* Set the SELx field to a new value. */
-#define XBARB_WR_SELx_SELx(base, input, output)                                                    \
-    (XBARB_SELx((base), (output)) =                                                                \
-         ((XBARB_SELx((base), (output)) & ~(0xFFU << (XBARB_SEL0_SEL1_SHIFT * ((output) % 2U)))) | \
-          ((input) << (XBARB_SEL0_SEL1_SHIFT * ((output) % 2U)))))
+#define XBARB_WR_SELx_SELx(base, input, output) XBARB_SetSignalsConnection((base), (input), (output))
 
 /*******************************************************************************
  * API

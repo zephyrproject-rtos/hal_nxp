@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LMEM controller driver version 2.1.0. */
-#define FSL_LMEM_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief LMEM controller driver version 2.1.1. */
+#define FSL_LMEM_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 #define LMEM_CACHE_LINE_SIZE (0x10U)   /*!< Cache line is 16-bytes. */

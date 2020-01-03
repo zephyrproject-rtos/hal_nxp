@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -57,7 +57,7 @@ void CRC_Init(CRC_Type *base, const crc_config_t *config)
 #endif
 
     /* configure CRC module and write the seed */
-    base->MODE = 0 | CRC_MODE_CRC_POLY(config->polynomial) | CRC_MODE_BIT_RVS_WR(config->reverseIn) |
+    base->MODE = CRC_MODE_CRC_POLY(config->polynomial) | CRC_MODE_BIT_RVS_WR(config->reverseIn) |
                  CRC_MODE_CMPL_WR(config->complementIn) | CRC_MODE_BIT_RVS_SUM(config->reverseOut) |
                  CRC_MODE_CMPL_SUM(config->complementOut);
     base->SEED = config->seed;
@@ -81,7 +81,7 @@ void CRC_Init(CRC_Type *base, const crc_config_t *config)
 void CRC_GetDefaultConfig(crc_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     static const crc_config_t default_config = {CRC_DRIVER_DEFAULT_POLYNOMIAL,     CRC_DRIVER_DEFAULT_REVERSE_IN,
                                                 CRC_DRIVER_DEFAULT_COMPLEMENT_IN,  CRC_DRIVER_DEFAULT_REVERSE_OUT,
@@ -113,8 +113,9 @@ void CRC_Reset(CRC_Type *base)
 void CRC_GetConfig(CRC_Type *base, crc_config_t *config)
 {
     /* extract CRC mode settings */
-    uint32_t mode         = base->MODE;
-    config->polynomial    = (crc_polynomial_t)((mode & CRC_MODE_CRC_POLY_MASK) >> CRC_MODE_CRC_POLY_SHIFT);
+    uint32_t mode = base->MODE;
+    config->polynomial =
+        (crc_polynomial_t)(uint32_t)(((uint32_t)(mode & CRC_MODE_CRC_POLY_MASK)) >> CRC_MODE_CRC_POLY_SHIFT);
     config->reverseIn     = (bool)(mode & CRC_MODE_BIT_RVS_WR_MASK);
     config->complementIn  = (bool)(mode & CRC_MODE_CMPL_WR_MASK);
     config->reverseOut    = (bool)(mode & CRC_MODE_BIT_RVS_SUM_MASK);
@@ -144,7 +145,7 @@ void CRC_WriteData(CRC_Type *base, const uint8_t *data, size_t dataSize)
     const uint32_t *data32;
 
     /* 8-bit reads and writes till source address is aligned 4 bytes */
-    while ((dataSize) && ((uint32_t)data & 3U))
+    while ((0U != dataSize) && (0U != ((uint32_t)data & 3U)))
     {
         *((__O uint8_t *)&(base->WR_DATA)) = *data;
         data++;
@@ -163,7 +164,7 @@ void CRC_WriteData(CRC_Type *base, const uint8_t *data, size_t dataSize)
     data = (const uint8_t *)data32;
 
     /* 8-bit reads and writes till end of data buffer */
-    while (dataSize)
+    while (0U != dataSize)
     {
         *((__O uint8_t *)&(base->WR_DATA)) = *data;
         data++;

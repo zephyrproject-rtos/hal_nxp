@@ -27,12 +27,12 @@
  * @{
  */
 
-/*! @brief DMIC driver version 2.1.0. */
-#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief DMIC driver version 2.2.1. */
+#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
-/*! @brief DMIC transfer status.*/
-enum _dmic_status
+/*! @brief _dmic_status DMIC transfer status.*/
+enum
 {
     kStatus_DMIC_Busy          = MAKE_STATUS(kStatusGroup_DMIC, 0), /*!< DMIC is busy */
     kStatus_DMIC_Idle          = MAKE_STATUS(kStatusGroup_DMIC, 1), /*!< DMIC is idle */
@@ -91,13 +91,14 @@ typedef enum _dc_removal
     kDMIC_DcCut39    = 3U, /*!< Cut off Frequency is 39 Hz  */
 } dc_removal_t;
 
+#if !(defined(FSL_FEATURE_DMIC_HAS_NO_IOCFG) && FSL_FEATURE_DMIC_HAS_NO_IOCFG)
 /*! @brief DMIC IO configiration. */
 typedef enum _dmic_io
 {
     kDMIC_PdmDual   = 0, /*!< Two separate pairs of PDM wires */
     kDMIC_PdmStereo = 4, /*!< Stereo data0 */
 
-#if !defined(FSL_FEATURE_DMIC_IO_HAS_NO_BYPASS) && (FSL_FEATURE_DMIC_IO_HAS_NO_BYPASS)
+#if !(defined(FSL_FEATURE_DMIC_IO_HAS_NO_BYPASS) && (FSL_FEATURE_DMIC_IO_HAS_NO_BYPASS))
     kDMIC_PdmBypass     = 3, /*!< Clk Bypass clocks both channels */
     kDMIC_PdmBypassClk0 = 1, /*!< Clk Bypass clocks only channel0 */
     kDMIC_PdmBypassClk1 = 2, /*!< Clk Bypas clocks only channel1 */
@@ -109,6 +110,7 @@ typedef enum _dmic_io
     kDMIC_PdmStereo6 = 32, /*!< Stereo data6 */
 #endif
 } dmic_io_t;
+#endif
 
 /*! @brief DMIC Channel number. */
 typedef enum _dmic_channel
@@ -125,8 +127,8 @@ typedef enum _dmic_channel
 #endif
 } dmic_channel_t;
 
-/*! @brief DMIC Channel mask. */
-enum _dmic_channel_mask
+/*! @brief _dmic_channel_mask DMIC Channel mask. */
+enum
 {
     kDMIC_EnableChannel0 = 1 << 0U, /*!< DMIC channel 0 mask */
     kDMIC_EnableChannel1 = 1 << 1U, /*!< DMIC channel 1 mask */
@@ -206,6 +208,7 @@ void DMIC_Init(DMIC_Type *base);
  */
 void DMIC_DeInit(DMIC_Type *base);
 
+#if !(defined(FSL_FEATURE_DMIC_HAS_NO_IOCFG) && FSL_FEATURE_DMIC_HAS_NO_IOCFG)
 /*!
  * @brief	Configure DMIC io
  * @deprecated Do not use this function.  It has been superceded by @ref DMIC_SetIOCFG
@@ -225,6 +228,7 @@ static inline void DMIC_SetIOCFG(DMIC_Type *base, uint32_t sel)
 {
     base->IOCFG = sel;
 }
+#endif
 
 /*!
  * @brief	Set DMIC operating mode
@@ -475,7 +479,7 @@ void DMIC_DisableIntCallback(DMIC_Type *base, dmic_callback_t cb);
 static inline void DMIC_SetGainNoiseEstHwvad(DMIC_Type *base, uint32_t value)
 {
     assert(NULL != base);
-    base->HWVADTHGN = value & 0xFu;
+    base->HWVADTHGN = value & 0xFUL;
 }
 
 /*!
@@ -488,7 +492,7 @@ static inline void DMIC_SetGainNoiseEstHwvad(DMIC_Type *base, uint32_t value)
 static inline void DMIC_SetGainSignalEstHwvad(DMIC_Type *base, uint32_t value)
 {
     assert(NULL != base);
-    base->HWVADTHGS = value & 0xFu;
+    base->HWVADTHGS = value & 0xFUL;
 }
 
 /*!
@@ -501,7 +505,7 @@ static inline void DMIC_SetGainSignalEstHwvad(DMIC_Type *base, uint32_t value)
 static inline void DMIC_SetFilterCtrlHwvad(DMIC_Type *base, uint32_t value)
 {
     assert(NULL != base);
-    base->HWVADHPFS = value & 0x3u;
+    base->HWVADHPFS = value & 0x3UL;
 }
 
 /*!
@@ -514,7 +518,7 @@ static inline void DMIC_SetFilterCtrlHwvad(DMIC_Type *base, uint32_t value)
 static inline void DMIC_SetInputGainHwvad(DMIC_Type *base, uint32_t value)
 {
     assert(NULL != base);
-    base->HWVADGAIN = value & 0xFu;
+    base->HWVADGAIN = value & 0xFUL;
 }
 
 /*!
@@ -527,7 +531,7 @@ static inline void DMIC_SetInputGainHwvad(DMIC_Type *base, uint32_t value)
 static inline void DMIC_CtrlClrIntrHwvad(DMIC_Type *base, bool st10)
 {
     assert(NULL != base);
-    base->HWVADST10 = (st10) ? 0x1 : 0x0;
+    base->HWVADST10 = (st10) ? 0x1UL : 0x0UL;
 }
 
 /*!
@@ -540,7 +544,7 @@ static inline void DMIC_CtrlClrIntrHwvad(DMIC_Type *base, bool st10)
 static inline void DMIC_FilterResetHwvad(DMIC_Type *base, bool rstt)
 {
     assert(NULL != base);
-    base->HWVADRSTT = (rstt) ? 0x1 : 0x0;
+    base->HWVADRSTT = (rstt) ? 0x1UL : 0x0UL;
 }
 
 /*!
@@ -552,7 +556,7 @@ static inline void DMIC_FilterResetHwvad(DMIC_Type *base, bool rstt)
 static inline uint16_t DMIC_GetNoiseEnvlpEst(DMIC_Type *base)
 {
     assert(NULL != base);
-    return (base->HWVADLOWZ & 0xFFFFu);
+    return (uint16_t)(base->HWVADLOWZ & 0xFFFFU);
 }
 
 /*!

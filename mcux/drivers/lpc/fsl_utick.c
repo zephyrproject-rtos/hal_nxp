@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -52,7 +52,11 @@ static const reset_ip_name_t s_utickResets[] = UTICK_RSTS;
 #endif
 
 /* UTICK ISR for transactional APIs. */
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+static utick_isr_t s_utickIsr = (utick_isr_t)DefaultISR;
+#else
 static utick_isr_t s_utickIsr;
+#endif
 
 /*******************************************************************************
  * Code
@@ -99,7 +103,7 @@ void UTICK_SetTick(UTICK_Type *base, utick_mode_t mode, uint32_t count, utick_ca
      !(defined(FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS) && FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS))
     EnableDeepSleepIRQ(s_utickIRQ[instance]);
 #else
-    EnableIRQ(s_utickIRQ[instance]);
+    (void)EnableIRQ(s_utickIRQ[instance]);
 #endif /* FSL_FEATURE_SOC_SYSCON_COUNT && !FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS */
     base->CTRL = count | UTICK_CTRL_REPEAT(mode);
 }
@@ -184,7 +188,7 @@ void UTICK_ClearStatusFlags(UTICK_Type *base)
 void UTICK_HandleIRQ(UTICK_Type *base, utick_callback_t cb)
 {
     UTICK_ClearStatusFlags(base);
-    if (cb)
+    if (cb != NULL)
     {
         cb();
     }

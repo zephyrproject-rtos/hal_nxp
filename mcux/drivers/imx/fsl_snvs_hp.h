@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2018, NXP
+ * Copyright 2017-2019, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SNVS_HP_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2 */
+#define FSL_SNVS_HP_DRIVER_VERSION (MAKE_VERSION(2, 1, 4)) /*!< Version 2.1.4 */
 /*@}*/
 
 /*! @brief List of SNVS interrupts */
@@ -311,7 +311,7 @@ static inline void SNVS_HP_RTC_ClearStatusFlags(SNVS_Type *base, uint32_t mask)
 static inline void SNVS_HP_RTC_StartTimer(SNVS_Type *base)
 {
     base->HPCR |= SNVS_HPCR_RTC_EN_MASK;
-    while (!(base->HPCR & SNVS_HPCR_RTC_EN_MASK))
+    while (0U == (base->HPCR & SNVS_HPCR_RTC_EN_MASK))
     {
     }
 }
@@ -324,7 +324,7 @@ static inline void SNVS_HP_RTC_StartTimer(SNVS_Type *base)
 static inline void SNVS_HP_RTC_StopTimer(SNVS_Type *base)
 {
     base->HPCR &= ~SNVS_HPCR_RTC_EN_MASK;
-    while (base->HPCR & SNVS_HPCR_RTC_EN_MASK)
+    while ((base->HPCR & SNVS_HPCR_RTC_EN_MASK) != 0U)
     {
     }
 }
@@ -417,7 +417,7 @@ static inline void SNVS_HP_SetSoftwareSecurityViolation(SNVS_Type *base)
  */
 static inline snvs_hp_ssm_state_t SNVS_HP_GetSSMState(SNVS_Type *base)
 {
-    return (snvs_hp_ssm_state_t)((base->HPSR & SNVS_HPSR_SSM_STATE_MASK) >> SNVS_HPSR_SSM_STATE_SHIFT);
+    return (snvs_hp_ssm_state_t)((uint32_t)((base->HPSR & SNVS_HPSR_SSM_STATE_MASK) >> SNVS_HPSR_SSM_STATE_SHIFT));
 }
 
 /*!

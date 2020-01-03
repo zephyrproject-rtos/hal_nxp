@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -13,7 +13,7 @@
 #define FSL_COMPONENT_ID "platform.drivers.flashiap"
 #endif
 
-#define HZ_TO_KHZ_DIV 1000
+#define HZ_TO_KHZ_DIV 1000UL
 
 /*******************************************************************************
  * Code
@@ -56,7 +56,7 @@ status_t FLASHIAP_PrepareSectorForWrite(uint32_t startSector, uint32_t endSector
 {
     uint32_t command[5], result[4];
 
-    command[0] = kIapCmd_FLASHIAP_PrepareSectorforWrite;
+    command[0] = (uint32_t)kIapCmd_FLASHIAP_PrepareSectorforWrite;
     command[1] = startSector;
     command[2] = endSector;
     iap_entry(command, result);
@@ -94,7 +94,7 @@ status_t FLASHIAP_CopyRamToFlash(uint32_t dstAddr, uint32_t *srcAddr, uint32_t n
 {
     uint32_t command[5], result[4];
 
-    command[0] = kIapCmd_FLASHIAP_CopyRamToFlash;
+    command[0] = (uint32_t)kIapCmd_FLASHIAP_CopyRamToFlash;
     command[1] = dstAddr;
     command[2] = (uint32_t)srcAddr;
     command[3] = numOfBytes;
@@ -130,7 +130,7 @@ status_t FLASHIAP_EraseSector(uint32_t startSector, uint32_t endSector, uint32_t
 {
     uint32_t command[5], result[4];
 
-    command[0] = kIapCmd_FLASHIAP_EraseSector;
+    command[0] = (uint32_t)kIapCmd_FLASHIAP_EraseSector;
     command[1] = startSector;
     command[2] = endSector;
     command[3] = systemCoreClock / HZ_TO_KHZ_DIV;
@@ -164,7 +164,7 @@ status_t FLASHIAP_ErasePage(uint32_t startPage, uint32_t endPage, uint32_t syste
 {
     uint32_t command[5], result[4];
 
-    command[0] = kIapCmd_FLASHIAP_ErasePage;
+    command[0] = (uint32_t)kIapCmd_FLASHIAP_ErasePage;
     command[1] = startPage;
     command[2] = endPage;
     command[3] = systemCoreClock / HZ_TO_KHZ_DIV;
@@ -192,7 +192,7 @@ status_t FLASHIAP_BlankCheckSector(uint32_t startSector, uint32_t endSector)
 {
     uint32_t command[5], result[4];
 
-    command[0] = kIapCmd_FLASHIAP_BlankCheckSector;
+    command[0] = (uint32_t)kIapCmd_FLASHIAP_BlankCheckSector;
     command[1] = startSector;
     command[2] = endSector;
     iap_entry(command, result);
@@ -224,7 +224,7 @@ status_t FLASHIAP_Compare(uint32_t dstAddr, uint32_t *srcAddr, uint32_t numOfByt
 {
     uint32_t command[5], result[4];
 
-    command[0] = kIapCmd_FLASHIAP_Compare;
+    command[0] = (uint32_t)kIapCmd_FLASHIAP_Compare;
     command[1] = dstAddr;
     command[2] = (uint32_t)srcAddr;
     command[3] = numOfBytes;

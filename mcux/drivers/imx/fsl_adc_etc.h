@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief ADC_ETC driver version */
-#define FSL_ADC_ETC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
+#define FSL_ADC_ETC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. */
 /*! @brief The mask of status flags cleared by writing 1. */
 #define ADC_ETC_DMA_CTRL_TRGn_REQ_MASK 0xFF0000U
 
@@ -29,10 +29,15 @@
  */
 enum _adc_etc_status_flag_mask
 {
-    kADC_ETC_Done0StatusFlagMask = 1U,
-    kADC_ETC_Done1StatusFlagMask = 2U,
-    kADC_ETC_Done2StatusFlagMask = 4U,
-    kADC_ETC_ErrorStatusFlagMask = 8U,
+    kADC_ETC_Done0StatusFlagMask = 1U << 0U,
+    kADC_ETC_Done1StatusFlagMask = 1U << 1U,
+    kADC_ETC_Done2StatusFlagMask = 1U << 2U,
+#if defined(FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN) && FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN
+    kADC_ETC_Done3StatusFlagMask = 1U << 3U,
+    kADC_ETC_ErrorStatusFlagMask = 1U << 4U,
+#else
+    kADC_ETC_ErrorStatusFlagMask  = 1U << 3U,
+#endif /* FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN */
 };
 
 /*!
@@ -59,10 +64,17 @@ typedef enum _adc_etc_external_trigger_source
  */
 typedef enum _adc_etc_interrupt_enable
 {
+#if defined(FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN) && FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN
+    kADC_ETC_Done0InterruptEnable = 0U, /* Enable the DONE0 interrupt when ADC conversions complete. */
+    kADC_ETC_Done1InterruptEnable = 1U, /* Enable the DONE1 interrupt when ADC conversions complete. */
+    kADC_ETC_Done2InterruptEnable = 2U, /* Enable the DONE2 interrupt when ADC conversions complete. */
+    kADC_ETC_Done3InterruptEnable = 3U, /* Enable the DONE3 interrupt when ADC conversions complete. */
+#else
     kADC_ETC_InterruptDisable     = 0U, /* Disable the ADC_ETC interrupt. */
     kADC_ETC_Done0InterruptEnable = 1U, /* Enable the DONE0 interrupt when ADC conversions complete. */
     kADC_ETC_Done1InterruptEnable = 2U, /* Enable the DONE1 interrupt when ADC conversions complete. */
     kADC_ETC_Done2InterruptEnable = 3U, /* Enable the DONE2 interrupt when ADC conversions complete. */
+#endif /* FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN */
 } adc_etc_interrupt_enable_t;
 
 #if defined(FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL) && FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL
@@ -109,6 +121,9 @@ typedef struct _adc_etc_trigger_chain_config
     uint32_t ADCHCRegisterSelect; /* Select relevant ADC_HCx register to trigger. 1U : HC0, 2U: HC1, 4U: HC2 ... */
     uint32_t ADCChannelSelect;    /* Select ADC sample channel. */
     adc_etc_interrupt_enable_t InterruptEnable; /* Enable/disable Interrupt. */
+#if defined(FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN) && FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN
+    bool enableIrq; /* Enable IRQ for selected interrupt enable choice in "InterruptEnable" */
+#endif              /* FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN */
 } adc_etc_trigger_chain_config_t;
 
 /*!
@@ -223,8 +238,8 @@ void ADC_ETC_ClearInterruptStatusFlags(ADC_ETC_Type *base,
 static inline void ADC_ETC_EnableDMA(ADC_ETC_Type *base, uint32_t triggerGroup)
 {
     /* Avoid clearing status flags at the same time. */
-    base->DMA_CTRL =
-        (base->DMA_CTRL | (ADC_ETC_DMA_CTRL_TRIG0_ENABLE_MASK << triggerGroup)) & ~ADC_ETC_DMA_CTRL_TRGn_REQ_MASK;
+    base->DMA_CTRL = (base->DMA_CTRL | ((uint32_t)ADC_ETC_DMA_CTRL_TRIG0_ENABLE_MASK << (uint32_t)triggerGroup)) &
+                     ~ADC_ETC_DMA_CTRL_TRGn_REQ_MASK;
 }
 
 /*!
@@ -236,8 +251,8 @@ static inline void ADC_ETC_EnableDMA(ADC_ETC_Type *base, uint32_t triggerGroup)
 static inline void ADC_ETC_DisableDMA(ADC_ETC_Type *base, uint32_t triggerGroup)
 {
     /* Avoid clearing status flags at the same time. */
-    base->DMA_CTRL =
-        (base->DMA_CTRL & ~(ADC_ETC_DMA_CTRL_TRIG0_ENABLE_MASK << triggerGroup)) & ~ADC_ETC_DMA_CTRL_TRGn_REQ_MASK;
+    base->DMA_CTRL = (base->DMA_CTRL & ~((uint32_t)ADC_ETC_DMA_CTRL_TRIG0_ENABLE_MASK << (uint32_t)triggerGroup)) &
+                     ~ADC_ETC_DMA_CTRL_TRGn_REQ_MASK;
 }
 
 /*!

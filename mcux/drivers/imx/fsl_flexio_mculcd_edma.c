@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,7 +19,7 @@
 
 #define EDMA_MAX_MAJOR_COUNT (DMA_CITER_ELINKNO_CITER_MASK >> DMA_CITER_ELINKNO_CITER_SHIFT)
 
-enum _MCULCD_transfer_state
+enum
 {
     kFLEXIO_MCULCD_StateIdle,           /*!< No transfer in progress. */
     kFLEXIO_MCULCD_StateReadArray,      /*!< Reading array in progress. */
@@ -97,9 +97,9 @@ static void FLEXIO_MCULCD_TxEDMACallback(edma_handle_t *DmaHandle, void *param, 
             FLEXIO_MCULCD_ClearMultiBeatsWriteConfig(flexioLcdMcuBase);
 
             /* Send the remaining data. */
-            if (flexioLcdMcuHandle->remainingCount)
+            if (0U != flexioLcdMcuHandle->remainingCount)
             {
-                if (kFLEXIO_MCULCD_StateWriteSameValue == flexioLcdMcuHandle->state)
+                if ((uint32_t)kFLEXIO_MCULCD_StateWriteSameValue == flexioLcdMcuHandle->state)
                 {
                     FLEXIO_MCULCD_WriteSameValueBlocking(flexioLcdMcuBase, flexioLcdMcuHandle->dataAddrOrSameValue,
                                                          flexioLcdMcuHandle->remainingCount);
@@ -107,7 +107,7 @@ static void FLEXIO_MCULCD_TxEDMACallback(edma_handle_t *DmaHandle, void *param, 
                 else
                 {
                     FLEXIO_MCULCD_WriteDataArrayBlocking(flexioLcdMcuBase,
-                                                         (void *)flexioLcdMcuHandle->dataAddrOrSameValue,
+                                                         (uint8_t *)flexioLcdMcuHandle->dataAddrOrSameValue,
                                                          flexioLcdMcuHandle->remainingCount);
                 }
             }
@@ -116,12 +116,12 @@ static void FLEXIO_MCULCD_TxEDMACallback(edma_handle_t *DmaHandle, void *param, 
             FLEXIO_MCULCD_StopTransfer(flexioLcdMcuBase);
 
             /* Change the state. */
-            flexioLcdMcuHandle->state          = kFLEXIO_MCULCD_StateIdle;
+            flexioLcdMcuHandle->state          = (uint32_t)kFLEXIO_MCULCD_StateIdle;
             flexioLcdMcuHandle->dataCount      = 0;
             flexioLcdMcuHandle->remainingCount = 0;
 
             /* Callback to inform upper layer. */
-            if (flexioLcdMcuHandle->completionCallback)
+            if (NULL != flexioLcdMcuHandle->completionCallback)
             {
                 flexioLcdMcuHandle->completionCallback(flexioLcdMcuBase, flexioLcdMcuHandle, kStatus_FLEXIO_MCULCD_Idle,
                                                        flexioLcdMcuHandle->userData);
@@ -141,7 +141,7 @@ static void FLEXIO_MCULCD_RxEDMACallback(edma_handle_t *DmaHandle, void *param, 
 
     if (transferDone)
     {
-        if (flexioLcdMcuHandle->remainingCount >= (2 * flexioLcdMcuHandle->minorLoopBytes))
+        if (flexioLcdMcuHandle->remainingCount >= (2U * flexioLcdMcuHandle->minorLoopBytes))
         {
             FLEXIO_MCULCD_EDMAConfig(flexioLcdMcuBase, flexioLcdMcuHandle);
             EDMA_StartTransfer(flexioLcdMcuHandle->rxDmaHandle);
@@ -151,7 +151,7 @@ static void FLEXIO_MCULCD_RxEDMACallback(edma_handle_t *DmaHandle, void *param, 
             FLEXIO_MCULCD_EnableRxDMA(flexioLcdMcuBase, false);
 
             /* Wait the data saved to the shifter buffer. */
-            while (!((1U << flexioLcdMcuBase->rxShifterEndIndex) & FLEXIO_GetShifterStatusFlags(flexioBase)))
+            while (0U == ((1UL << flexioLcdMcuBase->rxShifterEndIndex) & FLEXIO_GetShifterStatusFlags(flexioBase)))
             {
             }
 
@@ -175,11 +175,11 @@ static void FLEXIO_MCULCD_RxEDMACallback(edma_handle_t *DmaHandle, void *param, 
 #endif
             flexioLcdMcuHandle->remainingCount -= flexioLcdMcuHandle->minorLoopBytes;
 
-            if (flexioLcdMcuHandle->remainingCount)
+            if (0U != flexioLcdMcuHandle->remainingCount)
             {
                 FLEXIO_MCULCD_ReadDataArrayBlocking(
                     flexioLcdMcuBase,
-                    (void *)(flexioLcdMcuHandle->dataAddrOrSameValue + flexioLcdMcuHandle->minorLoopBytes),
+                    (uint8_t *)(flexioLcdMcuHandle->dataAddrOrSameValue + flexioLcdMcuHandle->minorLoopBytes),
                     flexioLcdMcuHandle->remainingCount);
             }
 
@@ -187,12 +187,12 @@ static void FLEXIO_MCULCD_RxEDMACallback(edma_handle_t *DmaHandle, void *param, 
             FLEXIO_MCULCD_StopTransfer(flexioLcdMcuBase);
 
             /* Change the state. */
-            flexioLcdMcuHandle->state          = kFLEXIO_MCULCD_StateIdle;
+            flexioLcdMcuHandle->state          = (uint32_t)kFLEXIO_MCULCD_StateIdle;
             flexioLcdMcuHandle->dataCount      = 0;
             flexioLcdMcuHandle->remainingCount = 0;
 
             /* Callback to inform upper layer. */
-            if (flexioLcdMcuHandle->completionCallback)
+            if (NULL != flexioLcdMcuHandle->completionCallback)
             {
                 flexioLcdMcuHandle->completionCallback(flexioLcdMcuBase, flexioLcdMcuHandle, kStatus_FLEXIO_MCULCD_Idle,
                                                        flexioLcdMcuHandle->userData);
@@ -220,7 +220,7 @@ static void FLEXIO_MCULCD_EDMAConfig(FLEXIO_MCULCD_Type *base, flexio_mculcd_edm
     majorLoopCounts = handle->remainingCount / handle->minorLoopBytes;
 
     /* For reading, the last minor loop data is not tranfered by DMA. */
-    if (kFLEXIO_MCULCD_StateReadArray == handle->state)
+    if ((uint32_t)kFLEXIO_MCULCD_StateReadArray == handle->state)
     {
         majorLoopCounts--;
     }
@@ -232,7 +232,7 @@ static void FLEXIO_MCULCD_EDMAConfig(FLEXIO_MCULCD_Type *base, flexio_mculcd_edm
 
     transferCount = majorLoopCounts * handle->minorLoopBytes;
 
-    if (kFLEXIO_MCULCD_StateReadArray == handle->state)
+    if ((uint32_t)kFLEXIO_MCULCD_StateReadArray == handle->state)
     {
         xferConfig.srcAddr          = FLEXIO_MCULCD_GetRxDataRegisterAddress(base);
         xferConfig.destAddr         = handle->dataAddrOrSameValue;
@@ -244,13 +244,13 @@ static void FLEXIO_MCULCD_EDMAConfig(FLEXIO_MCULCD_Type *base, flexio_mculcd_edm
         xferConfig.majorLoopCounts  = majorLoopCounts;
         handle->remainingCount -= transferCount;
         handle->dataAddrOrSameValue += transferCount;
-        EDMA_SubmitTransfer(handle->rxDmaHandle, &xferConfig);
+        (void)EDMA_SubmitTransfer(handle->rxDmaHandle, &xferConfig);
         EDMA_SetModulo(handle->rxDmaHandle->base, handle->rxDmaHandle->channel, handle->rxEdmaModulo,
                        kEDMA_ModuloDisable);
     }
     else
     {
-        if (kFLEXIO_MCULCD_StateWriteArray == handle->state)
+        if ((uint32_t)kFLEXIO_MCULCD_StateWriteArray == handle->state)
         {
             xferConfig.srcAddr   = handle->dataAddrOrSameValue;
             xferConfig.srcOffset = offset;
@@ -268,7 +268,7 @@ static void FLEXIO_MCULCD_EDMAConfig(FLEXIO_MCULCD_Type *base, flexio_mculcd_edm
         xferConfig.minorLoopBytes   = handle->minorLoopBytes;
         xferConfig.majorLoopCounts  = majorLoopCounts;
         handle->remainingCount -= transferCount;
-        EDMA_SubmitTransfer(handle->txDmaHandle, &xferConfig);
+        (void)EDMA_SubmitTransfer(handle->txDmaHandle, &xferConfig);
         EDMA_SetModulo(handle->txDmaHandle->base, handle->txDmaHandle->channel, kEDMA_ModuloDisable,
                        handle->txEdmaModulo);
     }
@@ -325,13 +325,13 @@ status_t FLEXIO_MCULCD_TransferCreateHandleEDMA(FLEXIO_MCULCD_Type *base,
                                                 edma_handle_t *txDmaHandle,
                                                 edma_handle_t *rxDmaHandle)
 {
-    assert(handle);
+    assert(NULL != handle);
 
     /* Zero the handle. */
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     /* Initialize the state. */
-    handle->state = kFLEXIO_MCULCD_StateIdle;
+    handle->state = (uint32_t)kFLEXIO_MCULCD_StateIdle;
 
     /* Register callback and userData. */
     handle->completionCallback = callback;
@@ -341,7 +341,7 @@ status_t FLEXIO_MCULCD_TransferCreateHandleEDMA(FLEXIO_MCULCD_Type *base,
     handle->txShifterNum = base->txShifterEndIndex - base->txShifterStartIndex + 1U;
     handle->rxShifterNum = base->rxShifterEndIndex - base->rxShifterStartIndex + 1U;
 
-    if (rxDmaHandle)
+    if (NULL != rxDmaHandle)
     {
         if (!FLEXIO_MCULCD_GetEDMAModulo(handle->rxShifterNum, &handle->rxEdmaModulo))
         {
@@ -352,7 +352,7 @@ status_t FLEXIO_MCULCD_TransferCreateHandleEDMA(FLEXIO_MCULCD_Type *base,
         EDMA_SetCallback(rxDmaHandle, FLEXIO_MCULCD_RxEDMACallback, handle);
     }
 
-    if (txDmaHandle)
+    if (NULL != txDmaHandle)
     {
         if (!FLEXIO_MCULCD_GetEDMAModulo(handle->txShifterNum, &handle->txEdmaModulo))
         {
@@ -387,8 +387,8 @@ status_t FLEXIO_MCULCD_TransferEDMA(FLEXIO_MCULCD_Type *base,
                                     flexio_mculcd_edma_handle_t *handle,
                                     flexio_mculcd_transfer_t *xfer)
 {
-    assert(handle);
-    assert(xfer);
+    assert(NULL != handle);
+    assert(NULL != xfer);
 
     /*
      * The data transfer mechanism:
@@ -409,7 +409,7 @@ status_t FLEXIO_MCULCD_TransferEDMA(FLEXIO_MCULCD_Type *base,
      */
 
     /* Check if the device is busy. */
-    if (kFLEXIO_MCULCD_StateIdle != handle->state)
+    if ((uint32_t)kFLEXIO_MCULCD_StateIdle != handle->state)
     {
         return kStatus_FLEXIO_MCULCD_Busy;
     }
@@ -417,20 +417,20 @@ status_t FLEXIO_MCULCD_TransferEDMA(FLEXIO_MCULCD_Type *base,
     /* Set the state in handle. */
     if (kFLEXIO_MCULCD_ReadArray == xfer->mode)
     {
-        handle->state          = kFLEXIO_MCULCD_StateReadArray;
-        handle->minorLoopBytes = handle->rxShifterNum * 4U;
+        handle->state          = (uint32_t)kFLEXIO_MCULCD_StateReadArray;
+        handle->minorLoopBytes = handle->rxShifterNum * 4UL;
     }
     else
     {
-        handle->minorLoopBytes = handle->txShifterNum * 4U;
+        handle->minorLoopBytes = handle->txShifterNum * 4UL;
 
         if (kFLEXIO_MCULCD_WriteArray == xfer->mode)
         {
-            handle->state = kFLEXIO_MCULCD_StateWriteArray;
+            handle->state = (uint32_t)kFLEXIO_MCULCD_StateWriteArray;
         }
         else
         {
-            handle->state = kFLEXIO_MCULCD_StateWriteSameValue;
+            handle->state = (uint32_t)kFLEXIO_MCULCD_StateWriteSameValue;
         }
     }
 
@@ -439,14 +439,14 @@ status_t FLEXIO_MCULCD_TransferEDMA(FLEXIO_MCULCD_Type *base,
      * For RX, if data is less than two minor loop, then use polling method.
      */
     if ((xfer->dataSize < handle->minorLoopBytes) ||
-        ((kFLEXIO_MCULCD_ReadArray == xfer->mode) && (xfer->dataSize < 2 * (handle->minorLoopBytes))))
+        ((kFLEXIO_MCULCD_ReadArray == xfer->mode) && (xfer->dataSize < 2U * (handle->minorLoopBytes))))
     {
         FLEXIO_MCULCD_TransferBlocking(base, xfer);
 
-        handle->state = kFLEXIO_MCULCD_StateIdle;
+        handle->state = (uint32_t)kFLEXIO_MCULCD_StateIdle;
 
         /* Callback to inform upper layer. */
-        if (handle->completionCallback)
+        if (NULL != handle->completionCallback)
         {
             handle->completionCallback(base, handle, kStatus_FLEXIO_MCULCD_Idle, handle->userData);
         }
@@ -502,14 +502,14 @@ status_t FLEXIO_MCULCD_TransferEDMA(FLEXIO_MCULCD_Type *base,
  */
 void FLEXIO_MCULCD_TransferAbortEDMA(FLEXIO_MCULCD_Type *base, flexio_mculcd_edma_handle_t *handle)
 {
-    assert(handle);
+    assert(NULL != handle);
 
     /* Disable dma. */
-    if (handle->txDmaHandle)
+    if (NULL != handle->txDmaHandle)
     {
         EDMA_AbortTransfer(handle->txDmaHandle);
     }
-    if (handle->rxDmaHandle)
+    if (NULL != handle->rxDmaHandle)
     {
         EDMA_AbortTransfer(handle->rxDmaHandle);
     }
@@ -519,7 +519,7 @@ void FLEXIO_MCULCD_TransferAbortEDMA(FLEXIO_MCULCD_Type *base, flexio_mculcd_edm
     FLEXIO_MCULCD_EnableRxDMA(handle->base, false);
 
     /* Set the handle state. */
-    handle->state     = kFLEXIO_MCULCD_StateIdle;
+    handle->state     = (uint32_t)kFLEXIO_MCULCD_StateIdle;
     handle->dataCount = 0;
 }
 
@@ -536,11 +536,11 @@ status_t FLEXIO_MCULCD_TransferGetCountEDMA(FLEXIO_MCULCD_Type *base,
                                             flexio_mculcd_edma_handle_t *handle,
                                             size_t *count)
 {
-    assert(handle);
-    assert(count);
+    assert(NULL != handle);
+    assert(NULL != count);
     uint32_t state = handle->state;
 
-    if (kFLEXIO_MCULCD_StateIdle == state)
+    if ((uint32_t)kFLEXIO_MCULCD_StateIdle == state)
     {
         return kStatus_NoTransferInProgress;
     }
@@ -548,7 +548,7 @@ status_t FLEXIO_MCULCD_TransferGetCountEDMA(FLEXIO_MCULCD_Type *base,
     {
         *count = handle->dataCount - handle->remainingCount;
 
-        if (kFLEXIO_MCULCD_StateReadArray == state)
+        if ((uint32_t)kFLEXIO_MCULCD_StateReadArray == state)
         {
             *count -= handle->minorLoopBytes *
                       EDMA_GetRemainingMajorLoopCount(handle->rxDmaHandle->base, handle->rxDmaHandle->channel);

@@ -40,7 +40,7 @@ void EWM_Init(EWM_Type *base, const ewm_config_t *config)
 {
     assert(config);
 
-    uint32_t value = 0U;
+    uint8_t value = 0U;
 
 #if !((defined(FSL_FEATURE_SOC_PCC_COUNT) && FSL_FEATURE_SOC_PCC_COUNT) && \
       (defined(FSL_FEATURE_PCC_SUPPORT_EWM_CLOCK_REMOVE) && FSL_FEATURE_PCC_SUPPORT_EWM_CLOCK_REMOVE))
@@ -72,7 +72,7 @@ void EWM_Init(EWM_Type *base, const ewm_config_t *config)
  */
 void EWM_Deinit(EWM_Type *base)
 {
-    EWM_DisableInterrupts(base, kEWM_InterruptEnable);
+    EWM_DisableInterrupts(base, (uint32_t)kEWM_InterruptEnable);
 #if !((defined(FSL_FEATURE_SOC_PCC_COUNT) && FSL_FEATURE_SOC_PCC_COUNT) && \
       (defined(FSL_FEATURE_PCC_SUPPORT_EWM_CLOCK_REMOVE) && FSL_FEATURE_PCC_SUPPORT_EWM_CLOCK_REMOVE))
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -105,7 +105,7 @@ void EWM_GetDefaultConfig(ewm_config_t *config)
     assert(config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enableEwm           = true;
     config->enableEwmInput      = false;

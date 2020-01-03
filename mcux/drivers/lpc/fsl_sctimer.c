@@ -102,7 +102,8 @@ static uint32_t SCTIMER_GetInstance(SCT_Type *base)
  */
 status_t SCTIMER_Init(SCT_Type *base, const sctimer_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
+
     uint32_t i;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -139,7 +140,7 @@ status_t SCTIMER_Init(SCT_Type *base, const sctimer_config_t *config)
     s_currentMatch = 0;
 
     /* Clear the callback array */
-    for (i = 0; i < FSL_FEATURE_SCT_NUMBER_OF_EVENTS; i++)
+    for (i = 0; i < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS; i++)
     {
         s_eventCallback[i] = NULL;
     }
@@ -185,10 +186,10 @@ void SCTIMER_Deinit(SCT_Type *base)
  */
 void SCTIMER_GetDefaultConfig(sctimer_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     /* SCT operates as a unified 32-bit counter */
     config->enableCounterUnify = true;
@@ -255,117 +256,121 @@ status_t SCTIMER_SetupPwm(SCT_Type *base,
                           uint32_t srcClock_Hz,
                           uint32_t *event)
 {
-    assert(pwmParams);
-    assert(srcClock_Hz);
-    assert(pwmFreq_Hz);
-    assert(pwmParams->output < FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
+    assert(NULL != pwmParams);
+    assert(0U != srcClock_Hz);
+    assert(0U != pwmFreq_Hz);
+    assert((uint32_t)pwmParams->output < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
 
+    status_t status;
     uint32_t period, pulsePeriod = 0;
-    uint32_t sctClock    = srcClock_Hz / (((base->CTRL & SCT_CTRL_PRE_L_MASK) >> SCT_CTRL_PRE_L_SHIFT) + 1);
+    uint32_t sctClock    = srcClock_Hz / (((base->CTRL & SCT_CTRL_PRE_L_MASK) >> SCT_CTRL_PRE_L_SHIFT) + 1U);
     uint32_t periodEvent = 0, pulseEvent = 0;
     uint32_t reg;
 
-    /* This function will create 2 events, return an error if we do not have enough events available */
-    if ((s_currentEvent + 2) > FSL_FEATURE_SCT_NUMBER_OF_EVENTS)
+    if ((0U != pwmParams->dutyCyclePercent) && ((s_currentEvent + 2U) <= (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS))
     {
-        return kStatus_Fail;
-    }
+        /* Set unify bit to operate in 32-bit counter mode */
+        base->CONFIG |= SCT_CONFIG_UNIFY_MASK;
 
-    if (pwmParams->dutyCyclePercent == 0)
-    {
-        return kStatus_Fail;
-    }
+        /* Use bi-directional mode for center-aligned PWM */
+        if (mode == kSCTIMER_CenterAlignedPwm)
+        {
+            base->CTRL |= SCT_CTRL_BIDIR_L_MASK;
+        }
 
-    /* Set unify bit to operate in 32-bit counter mode */
-    base->CONFIG |= SCT_CONFIG_UNIFY_MASK;
-
-    /* Use bi-directional mode for center-aligned PWM */
-    if (mode == kSCTIMER_CenterAlignedPwm)
-    {
-        base->CTRL |= SCT_CTRL_BIDIR_L_MASK;
-    }
-
-    /* Calculate PWM period match value */
-    if (mode == kSCTIMER_EdgeAlignedPwm)
-    {
-        period = (sctClock / pwmFreq_Hz) - 1;
-    }
-    else
-    {
-        period = sctClock / (pwmFreq_Hz * 2);
-    }
-
-    /* Calculate pulse width match value */
-    pulsePeriod = (period * pwmParams->dutyCyclePercent) / 100;
-
-    /* For 100% dutycyle, make pulse period greater than period so the event will never occur */
-    if (pwmParams->dutyCyclePercent >= 100)
-    {
-        pulsePeriod = period + 2;
-    }
-
-    /* Schedule an event when we reach the PWM period */
-    SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, period, 0, kSCTIMER_Counter_L, &periodEvent);
-
-    /* Schedule an event when we reach the pulse width */
-    SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, pulsePeriod, 0, kSCTIMER_Counter_L, &pulseEvent);
-
-    /* Reset the counter when we reach the PWM period */
-    SCTIMER_SetupCounterLimitAction(base, kSCTIMER_Counter_L, periodEvent);
-
-    /* Return the period event to the user */
-    *event = periodEvent;
-
-    /* For high-true level */
-    if (pwmParams->level == kSCTIMER_HighTrue)
-    {
-        /* Set the initial output level to low which is the inactive state */
-        base->OUTPUT &= ~(1U << pwmParams->output);
-
+        /* Calculate PWM period match value */
         if (mode == kSCTIMER_EdgeAlignedPwm)
         {
-            /* Set the output when we reach the PWM period */
-            SCTIMER_SetupOutputSetAction(base, pwmParams->output, periodEvent);
-            /* Clear the output when we reach the PWM pulse value */
-            SCTIMER_SetupOutputClearAction(base, pwmParams->output, pulseEvent);
+            period = (sctClock / pwmFreq_Hz) - 1U;
         }
         else
         {
-            /* Clear the output when we reach the PWM pulse event */
-            SCTIMER_SetupOutputClearAction(base, pwmParams->output, pulseEvent);
-            /* Reverse output when down counting */
-            reg = base->OUTPUTDIRCTRL;
-            reg &= ~(SCT_OUTPUTDIRCTRL_SETCLR0_MASK << (2 * pwmParams->output));
-            reg |= (1U << (2 * pwmParams->output));
-            base->OUTPUTDIRCTRL = reg;
+            period = sctClock / (pwmFreq_Hz * 2U);
         }
-    }
-    /* For low-true level */
-    else
-    {
-        /* Set the initial output level to high which is the inactive state */
-        base->OUTPUT |= (1U << pwmParams->output);
 
-        if (mode == kSCTIMER_EdgeAlignedPwm)
+        /* Calculate pulse width match value */
+        pulsePeriod = (period * pwmParams->dutyCyclePercent) / 100U;
+
+        /* For 100% dutycyle, make pulse period greater than period so the event will never occur */
+        if (pwmParams->dutyCyclePercent >= 100U)
         {
-            /* Clear the output when we reach the PWM period */
-            SCTIMER_SetupOutputClearAction(base, pwmParams->output, periodEvent);
-            /* Set the output when we reach the PWM pulse value */
-            SCTIMER_SetupOutputSetAction(base, pwmParams->output, pulseEvent);
+            pulsePeriod = period + 2U;
         }
+
+        /* Schedule an event when we reach the PWM period */
+        (void)SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, period, 0, kSCTIMER_Counter_L,
+                                             &periodEvent);
+
+        /* Schedule an event when we reach the pulse width */
+        (void)SCTIMER_CreateAndScheduleEvent(base, kSCTIMER_MatchEventOnly, pulsePeriod, 0, kSCTIMER_Counter_L,
+                                             &pulseEvent);
+
+        /* Reset the counter when we reach the PWM period */
+        SCTIMER_SetupCounterLimitAction(base, kSCTIMER_Counter_L, periodEvent);
+
+        /* Return the period event to the user */
+        *event = periodEvent;
+
+        /* For high-true level */
+        if ((uint32_t)pwmParams->level == (uint32_t)kSCTIMER_HighTrue)
+        {
+            /* Set the initial output level to low which is the inactive state */
+            base->OUTPUT &= ~(1UL << (uint32_t)pwmParams->output);
+
+            if (mode == kSCTIMER_EdgeAlignedPwm)
+            {
+                /* Set the output when we reach the PWM period */
+                SCTIMER_SetupOutputSetAction(base, (uint32_t)pwmParams->output, periodEvent);
+                /* Clear the output when we reach the PWM pulse value */
+                SCTIMER_SetupOutputClearAction(base, (uint32_t)pwmParams->output, pulseEvent);
+            }
+            else
+            {
+                /* Clear the output when we reach the PWM pulse event */
+                SCTIMER_SetupOutputClearAction(base, (uint32_t)pwmParams->output, pulseEvent);
+                /* Reverse output when down counting */
+                reg = base->OUTPUTDIRCTRL;
+                reg &= ~((uint32_t)SCT_OUTPUTDIRCTRL_SETCLR0_MASK << (2U * (uint32_t)pwmParams->output));
+                reg |= (1UL << (2U * (uint32_t)pwmParams->output));
+                base->OUTPUTDIRCTRL = reg;
+            }
+        }
+        /* For low-true level */
         else
         {
-            /* Set the output when we reach the PWM pulse event */
-            SCTIMER_SetupOutputSetAction(base, pwmParams->output, pulseEvent);
-            /* Reverse output when down counting */
-            reg = base->OUTPUTDIRCTRL;
-            reg &= ~(SCT_OUTPUTDIRCTRL_SETCLR0_MASK << (2 * pwmParams->output));
-            reg |= (1U << (2 * pwmParams->output));
-            base->OUTPUTDIRCTRL = reg;
+            /* Set the initial output level to high which is the inactive state */
+            base->OUTPUT |= (1UL << (uint32_t)pwmParams->output);
+
+            if (mode == kSCTIMER_EdgeAlignedPwm)
+            {
+                /* Clear the output when we reach the PWM period */
+                SCTIMER_SetupOutputClearAction(base, (uint32_t)pwmParams->output, periodEvent);
+                /* Set the output when we reach the PWM pulse value */
+                SCTIMER_SetupOutputSetAction(base, (uint32_t)pwmParams->output, pulseEvent);
+            }
+            else
+            {
+                /* Set the output when we reach the PWM pulse event */
+                SCTIMER_SetupOutputSetAction(base, (uint32_t)pwmParams->output, pulseEvent);
+                /* Reverse output when down counting */
+                reg = base->OUTPUTDIRCTRL;
+                reg &= ~((uint32_t)SCT_OUTPUTDIRCTRL_SETCLR0_MASK << (2U * (uint32_t)pwmParams->output));
+                reg |= (1UL << (2U * (uint32_t)pwmParams->output));
+                base->OUTPUTDIRCTRL = reg;
+            }
         }
+
+        status = kStatus_Success;
+    }
+    else
+    {
+        /* if we do not have enough events available (this function will create two events)
+         * or the value of dutyCyclePercent is zero, the function will return fail.
+         */
+        status = kStatus_Fail;
     }
 
-    return kStatus_Success;
+    return status;
 }
 
 /*!
@@ -380,8 +385,8 @@ status_t SCTIMER_SetupPwm(SCT_Type *base,
 void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t dutyCyclePercent, uint32_t event)
 
 {
-    assert(dutyCyclePercent > 0);
-    assert(output < FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
+    assert(dutyCyclePercent > 0U);
+    assert((uint32_t)output < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
 
     uint32_t periodMatchReg, pulseMatchReg;
     uint32_t pulsePeriod = 0, period;
@@ -390,17 +395,17 @@ void SCTIMER_UpdatePwmDutycycle(SCT_Type *base, sctimer_out_t output, uint8_t du
     periodMatchReg = base->EV[event].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
 
     /* Retrieve the match register number for the PWM pulse period */
-    pulseMatchReg = base->EV[event + 1].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
+    pulseMatchReg = base->EV[event + 1U].CTRL & SCT_EV_CTRL_MATCHSEL_MASK;
 
     period = base->MATCH[periodMatchReg];
 
     /* Calculate pulse width match value */
-    pulsePeriod = (period * dutyCyclePercent) / 100;
+    pulsePeriod = (period * dutyCyclePercent) / 100U;
 
     /* For 100% dutycyle, make pulse period greater than period so the event will never occur */
-    if (dutyCyclePercent >= 100)
+    if (dutyCyclePercent >= 100U)
     {
-        pulsePeriod = period + 2;
+        pulsePeriod = period + 2U;
     }
 
     /* Stop the counter before updating match register */
@@ -445,84 +450,94 @@ status_t SCTIMER_CreateAndScheduleEvent(SCT_Type *base,
                                         uint32_t *event)
 {
     uint32_t combMode       = (((uint32_t)howToMonitor & SCT_EV_CTRL_COMBMODE_MASK) >> SCT_EV_CTRL_COMBMODE_SHIFT);
-    uint32_t currentCtrlVal = howToMonitor;
+    uint32_t currentCtrlVal = (uint32_t)howToMonitor;
+    status_t status         = kStatus_Success;
 
-    /* Return an error if we have hit the limit in terms of number of events created */
-    if (s_currentEvent >= FSL_FEATURE_SCT_NUMBER_OF_EVENTS)
+    if (s_currentEvent < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS)
     {
-        return kStatus_Fail;
-    }
-
-    /* IO only mode */
-    if (combMode == 0x2U)
-    {
-        base->EV[s_currentEvent].CTRL = currentCtrlVal | SCT_EV_CTRL_IOSEL(whichIO);
-    }
-    /* Match mode only */
-    else if (combMode == 0x1U)
-    {
-        /* Return an error if we have hit the limit in terms of number of number of match registers */
-        if (s_currentMatch >= FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE)
+        /* IO only mode */
+        if (combMode == 0x2U)
         {
-            return kStatus_Fail;
+            base->EV[s_currentEvent].CTRL = currentCtrlVal | SCT_EV_CTRL_IOSEL(whichIO);
         }
-
-        currentCtrlVal |= SCT_EV_CTRL_MATCHSEL(s_currentMatch);
-        /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
-        if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
+        /* Match mode only */
+        else if (combMode == 0x1U)
         {
-            base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_L(matchValue);
-            base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_L(matchValue);
+            if (s_currentMatch < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE)
+            {
+                currentCtrlVal |= SCT_EV_CTRL_MATCHSEL(s_currentMatch);
+                /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
+                if (((base->CONFIG & SCT_CONFIG_UNIFY_MASK) != 0U) || (whichCounter == kSCTIMER_Counter_L))
+                {
+                    base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_L(matchValue);
+                    base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_L(matchValue);
+                }
+                else
+                {
+                    /* Select the counter, no need for this if operating in 32-bit mode */
+                    currentCtrlVal |= SCT_EV_CTRL_HEVENT(whichCounter);
+                    base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_H(matchValue);
+                    base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_H(matchValue);
+                }
+                base->EV[s_currentEvent].CTRL = currentCtrlVal;
+                /* Increment the match register number */
+                s_currentMatch++;
+            }
+            else
+            {
+                /* An error would occur if we have hit the limit in terms of number of match registers */
+                status = kStatus_Fail;
+            }
         }
+        /* Use both Match & IO */
         else
         {
-            /* Select the counter, no need for this if operating in 32-bit mode */
-            currentCtrlVal |= SCT_EV_CTRL_HEVENT(whichCounter);
-            base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_H(matchValue);
-            base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_H(matchValue);
+            if (s_currentMatch < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE)
+            {
+                currentCtrlVal |= SCT_EV_CTRL_MATCHSEL(s_currentMatch) | SCT_EV_CTRL_IOSEL(whichIO);
+                /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
+                if (((base->CONFIG & SCT_CONFIG_UNIFY_MASK) != 0U) || (whichCounter == kSCTIMER_Counter_L))
+                {
+                    base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_L(matchValue);
+                    base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_L(matchValue);
+                }
+                else
+                {
+                    /* Select the counter, no need for this if operating in 32-bit mode */
+                    currentCtrlVal |= SCT_EV_CTRL_HEVENT(whichCounter);
+                    base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_H(matchValue);
+                    base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_H(matchValue);
+                }
+                base->EV[s_currentEvent].CTRL = currentCtrlVal;
+                /* Increment the match register number */
+                s_currentMatch++;
+            }
+            else
+            {
+                /* An error would occur if we have hit the limit in terms of number of match registers */
+                status = kStatus_Fail;
+            }
         }
-        base->EV[s_currentEvent].CTRL = currentCtrlVal;
-        /* Increment the match register number */
-        s_currentMatch++;
+
+        if (kStatus_Success == status)
+        {
+            /* Enable the event in the current state */
+            base->EV[s_currentEvent].STATE = (1UL << s_currentState);
+
+            /* Return the event number */
+            *event = s_currentEvent;
+
+            /* Increment the event number */
+            s_currentEvent++;
+        }
     }
-    /* Use both Match & IO */
     else
     {
-        /* Return an error if we have hit the limit in terms of number of number of match registers */
-        if (s_currentMatch >= FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE)
-        {
-            return kStatus_Fail;
-        }
-
-        currentCtrlVal |= SCT_EV_CTRL_MATCHSEL(s_currentMatch) | SCT_EV_CTRL_IOSEL(whichIO);
-        /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
-        if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
-        {
-            base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_L(matchValue);
-            base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_L(matchValue);
-        }
-        else
-        {
-            /* Select the counter, no need for this if operating in 32-bit mode */
-            currentCtrlVal |= SCT_EV_CTRL_HEVENT(whichCounter);
-            base->MATCH[s_currentMatch]    = SCT_MATCH_MATCHn_H(matchValue);
-            base->MATCHREL[s_currentMatch] = SCT_MATCHREL_RELOADn_H(matchValue);
-        }
-        base->EV[s_currentEvent].CTRL = currentCtrlVal;
-        /* Increment the match register number */
-        s_currentMatch++;
+        /* An error would occur if we have hit the limit in terms of number of events created */
+        status = kStatus_Fail;
     }
 
-    /* Enable the event in the current state */
-    base->EV[s_currentEvent].STATE = (1U << s_currentState);
-
-    /* Return the event number */
-    *event = s_currentEvent;
-
-    /* Increment the event number */
-    s_currentEvent++;
-
-    return kStatus_Success;
+    return status;
 }
 
 /*!
@@ -539,7 +554,7 @@ status_t SCTIMER_CreateAndScheduleEvent(SCT_Type *base,
 void SCTIMER_ScheduleEvent(SCT_Type *base, uint32_t event)
 {
     /* Enable event in the current state */
-    base->EV[event].STATE |= (1U << s_currentState);
+    base->EV[event].STATE |= (1UL << s_currentState);
 }
 
 /*!
@@ -556,15 +571,19 @@ void SCTIMER_ScheduleEvent(SCT_Type *base, uint32_t event)
  */
 status_t SCTIMER_IncreaseState(SCT_Type *base)
 {
+    status_t status = kStatus_Success;
+
     /* Return an error if we have hit the limit in terms of states used */
-    if (s_currentState >= FSL_FEATURE_SCT_NUMBER_OF_STATES)
+    if (s_currentState >= (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_STATES)
     {
-        return kStatus_Fail;
+        status = kStatus_Fail;
+    }
+    else
+    {
+        s_currentState++;
     }
 
-    s_currentState++;
-
-    return kStatus_Success;
+    return status;
 }
 
 /*!
@@ -592,18 +611,18 @@ uint32_t SCTIMER_GetCurrentState(SCT_Type *base)
  */
 void SCTIMER_SetupOutputToggleAction(SCT_Type *base, uint32_t whichIO, uint32_t event)
 {
-    assert(whichIO < FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
+    assert(whichIO < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
 
     uint32_t reg;
 
     /* Set the same event to set and clear the output */
-    base->OUT[whichIO].CLR |= (1U << event);
-    base->OUT[whichIO].SET |= (1U << event);
+    base->OUT[whichIO].CLR |= (1UL << event);
+    base->OUT[whichIO].SET |= (1UL << event);
 
     /* Set the conflict resolution to toggle output */
     reg = base->RES;
-    reg &= ~(SCT_RES_O0RES_MASK << (2 * whichIO));
-    reg |= (uint32_t)(kSCTIMER_ResolveToggle << (2 * whichIO));
+    reg &= ~(((uint32_t)SCT_RES_O0RES_MASK) << (2U * whichIO));
+    reg |= ((uint32_t)(kSCTIMER_ResolveToggle)) << (2U * whichIO);
     base->RES = reg;
 }
 
@@ -625,37 +644,43 @@ status_t SCTIMER_SetupCaptureAction(SCT_Type *base,
                                     uint32_t *captureRegister,
                                     uint32_t event)
 {
-    /* Return an error if we have hit the limit in terms of number of capture/match registers used */
-    if (s_currentMatch >= FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE)
-    {
-        return kStatus_Fail;
-    }
+    status_t status;
 
-    /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
-    if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
+    if (s_currentMatch < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_MATCH_CAPTURE)
     {
-        /* Set the bit to enable event */
-        base->CAPCTRL[s_currentMatch] |= SCT_CAPCTRL_CAPCONn_L(1 << event);
+        /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
+        if (((base->CONFIG & SCT_CONFIG_UNIFY_MASK) != 0U) || (whichCounter == kSCTIMER_Counter_L))
+        {
+            /* Set the bit to enable event */
+            base->CAPCTRL[s_currentMatch] |= SCT_CAPCTRL_CAPCONn_L(1UL << event);
 
-        /* Set this resource to be a capture rather than match */
-        base->REGMODE |= SCT_REGMODE_REGMOD_L(1 << s_currentMatch);
+            /* Set this resource to be a capture rather than match */
+            base->REGMODE |= SCT_REGMODE_REGMOD_L(1UL << s_currentMatch);
+        }
+        else
+        {
+            /* Set bit to enable event */
+            base->CAPCTRL[s_currentMatch] |= SCT_CAPCTRL_CAPCONn_H(1UL << event);
+
+            /* Set this resource to be a capture rather than match */
+            base->REGMODE |= SCT_REGMODE_REGMOD_H(1UL << s_currentMatch);
+        }
+
+        /* Return the match register number */
+        *captureRegister = s_currentMatch;
+
+        /* Increase the match register number */
+        s_currentMatch++;
+
+        status = kStatus_Success;
     }
     else
     {
-        /* Set bit to enable event */
-        base->CAPCTRL[s_currentMatch] |= SCT_CAPCTRL_CAPCONn_H(1 << event);
-
-        /* Set this resource to be a capture rather than match */
-        base->REGMODE |= SCT_REGMODE_REGMOD_H(1 << s_currentMatch);
+        /* Return an error if we have hit the limit in terms of number of capture/match registers used */
+        status = kStatus_Fail;
     }
 
-    /* Return the match register number */
-    *captureRegister = s_currentMatch;
-
-    /* Increase the match register number */
-    s_currentMatch++;
-
-    return kStatus_Success;
+    return status;
 }
 
 /*!
@@ -685,19 +710,25 @@ void SCTIMER_EventHandleIRQ(SCT_Type *base)
     /* Only clear the flags whose interrupt field is enabled */
     uint32_t clearFlag = (eventFlag & SCT0->EVEN);
     uint32_t mask      = eventFlag;
-    int i              = 0;
+    uint32_t i;
 
     /* Invoke the callback for certain events */
-    for (i = 0; (i < FSL_FEATURE_SCT_NUMBER_OF_EVENTS) && (mask != 0); i++)
+    for (i = 0; i < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS; i++)
     {
-        if (mask & 0x1)
+        if ((mask & 0x1U) != 0U)
         {
             if (s_eventCallback[i] != NULL)
             {
                 s_eventCallback[i]();
             }
         }
-        mask >>= 1;
+        mask >>= 1UL;
+
+        if (0U == mask)
+        {
+            /* All events have been handled. */
+            break;
+        }
     }
 
     /* Clear event interrupt flag */

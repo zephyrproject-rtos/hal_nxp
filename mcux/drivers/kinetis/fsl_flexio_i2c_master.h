@@ -22,16 +22,22 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexIO I2C master driver version 2.1.7. */
-#define FSL_FLEXIO_I2C_MASTER_DRIVER_VERSION (MAKE_VERSION(2, 1, 7))
+/*! @brief FlexIO I2C master driver version 2.2.0. */
+#define FSL_FLEXIO_I2C_MASTER_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
+/*! @brief Retry times for waiting flag. */
+#ifndef I2C_RETRY_TIMES
+#define I2C_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
+#endif
+
 /*! @brief  FlexIO I2C transfer status*/
-enum _flexio_i2c_status
+enum
 {
-    kStatus_FLEXIO_I2C_Busy = MAKE_STATUS(kStatusGroup_FLEXIO_I2C, 0), /*!< I2C is busy doing transfer. */
-    kStatus_FLEXIO_I2C_Idle = MAKE_STATUS(kStatusGroup_FLEXIO_I2C, 1), /*!< I2C is busy doing transfer. */
-    kStatus_FLEXIO_I2C_Nak  = MAKE_STATUS(kStatusGroup_FLEXIO_I2C, 2), /*!< NAK received during transfer. */
+    kStatus_FLEXIO_I2C_Busy    = MAKE_STATUS(kStatusGroup_FLEXIO_I2C, 0), /*!< I2C is busy doing transfer. */
+    kStatus_FLEXIO_I2C_Idle    = MAKE_STATUS(kStatusGroup_FLEXIO_I2C, 1), /*!< I2C is busy doing transfer. */
+    kStatus_FLEXIO_I2C_Nak     = MAKE_STATUS(kStatusGroup_FLEXIO_I2C, 2), /*!< NAK received during transfer. */
+    kStatus_FLEXIO_I2C_Timeout = MAKE_STATUS(kStatusGroup_FLEXIO_I2C, 3), /*!< Timeout polling status flags. */
 };
 
 /*! @brief Define FlexIO I2C master interrupt mask. */
@@ -107,6 +113,7 @@ struct _flexio_i2c_master_handle
     flexio_i2c_master_transfer_callback_t completionCallback; /*!< Callback function called at transfer event. */
                                                               /*!< Callback function called at transfer event. */
     void *userData;                                           /*!< Callback parameter passed to callback function. */
+    bool needRestart;                                         /*!< Whether master needs to send re-start signal. */
 };
 
 /*******************************************************************************
@@ -121,6 +128,19 @@ extern "C" {
  * @name Initialization and deinitialization
  * @{
  */
+
+#if defined(FSL_FEATURE_FLEXIO_HAS_PIN_STATUS) && FSL_FEATURE_FLEXIO_HAS_PIN_STATUS
+/*!
+ * @brief Make sure the bus isn't already pulled down.
+ *
+ * Check the FLEXIO pin status to see whether either of SDA and SCL pin is pulled down.
+ *
+ * @param base Pointer to FLEXIO_I2C_Type structure..
+ * @retval #kStatus_Success
+ * @retval #kStatus_FLEXIO_I2C_Busy
+ */
+status_t FLEXIO_I2C_CheckForBusyBus(FLEXIO_I2C_Type *base);
+#endif /*FSL_FEATURE_FLEXIO_HAS_PIN_STATUS*/
 
 /*!
  * @brief Ungates the FlexIO clock, resets the FlexIO module, and configures the FlexIO I2C
@@ -341,7 +361,7 @@ static inline void FLEXIO_I2C_MasterWriteByte(FLEXIO_I2C_Type *base, uint32_t da
  */
 static inline uint8_t FLEXIO_I2C_MasterReadByte(FLEXIO_I2C_Type *base)
 {
-    return base->flexioBase->SHIFTBUFBIS[base->shifterIndex[1]];
+    return (uint8_t)(base->flexioBase->SHIFTBUFBIS[base->shifterIndex[1]]);
 }
 
 /*!
@@ -354,6 +374,7 @@ static inline uint8_t FLEXIO_I2C_MasterReadByte(FLEXIO_I2C_Type *base)
  * @param txSize The number of data bytes to send.
  * @retval kStatus_Success Successfully write data.
  * @retval kStatus_FLEXIO_I2C_Nak Receive NAK during writing data.
+ * @retval kStatus_FLEXIO_I2C_Timeout Timeout polling status flags.
  */
 status_t FLEXIO_I2C_MasterWriteBlocking(FLEXIO_I2C_Type *base, const uint8_t *txBuff, uint8_t txSize);
 
@@ -365,8 +386,10 @@ status_t FLEXIO_I2C_MasterWriteBlocking(FLEXIO_I2C_Type *base, const uint8_t *tx
  * @param base Pointer to FLEXIO_I2C_Type structure.
  * @param rxBuff The buffer to store the received bytes.
  * @param rxSize The number of data bytes to be received.
+ * @retval kStatus_Success Successfully read data.
+ * @retval kStatus_FLEXIO_I2C_Timeout Timeout polling status flags.
  */
-void FLEXIO_I2C_MasterReadBlocking(FLEXIO_I2C_Type *base, uint8_t *rxBuff, uint8_t rxSize);
+status_t FLEXIO_I2C_MasterReadBlocking(FLEXIO_I2C_Type *base, uint8_t *rxBuff, uint8_t rxSize);
 
 /*!
  * @brief Performs a master polling transfer on the I2C bus.

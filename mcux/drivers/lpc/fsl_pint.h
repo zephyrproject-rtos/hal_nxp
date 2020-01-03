@@ -24,7 +24,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Version 2.1.3 */
+#define FSL_PINT_DRIVER_VERSION (MAKE_VERSION(2, 1, 6)) /*!< Version 2.1.6 */
 /*@}*/
 
 /* Number of interrupt line supported by PINT */
@@ -58,11 +58,11 @@
 /*! @brief PINT Pin Interrupt enable type */
 typedef enum _pint_pin_enable
 {
-    kPINT_PinIntEnableNone = 0U,                      /*!< Do not generate Pin Interrupt */
-    kPINT_PinIntEnableRiseEdge = PINT_PIN_RISE_EDGE,  /*!< Generate Pin Interrupt on rising edge */
-    kPINT_PinIntEnableFallEdge = PINT_PIN_FALL_EDGE,  /*!< Generate Pin Interrupt on falling edge */
+    kPINT_PinIntEnableNone      = 0U,                 /*!< Do not generate Pin Interrupt */
+    kPINT_PinIntEnableRiseEdge  = PINT_PIN_RISE_EDGE, /*!< Generate Pin Interrupt on rising edge */
+    kPINT_PinIntEnableFallEdge  = PINT_PIN_FALL_EDGE, /*!< Generate Pin Interrupt on falling edge */
     kPINT_PinIntEnableBothEdges = PINT_PIN_BOTH_EDGE, /*!< Generate Pin Interrupt on both edges */
-    kPINT_PinIntEnableLowLevel = PINT_PIN_LOW_LEVEL,  /*!< Generate Pin Interrupt on low level */
+    kPINT_PinIntEnableLowLevel  = PINT_PIN_LOW_LEVEL, /*!< Generate Pin Interrupt on low level */
     kPINT_PinIntEnableHighLevel = PINT_PIN_HIGH_LEVEL /*!< Generate Pin Interrupt on high level */
 } pint_pin_enable_t;
 
@@ -148,14 +148,14 @@ typedef enum _pint_pmatch_bslice
 /*! @brief PINT Pattern Match configuration type */
 typedef enum _pint_pmatch_bslice_cfg
 {
-    kPINT_PatternMatchAlways = 0U,          /*!< Always Contributes to product term match */
-    kPINT_PatternMatchStickyRise = 1U,      /*!< Sticky Rising edge */
-    kPINT_PatternMatchStickyFall = 2U,      /*!< Sticky Falling edge */
+    kPINT_PatternMatchAlways          = 0U, /*!< Always Contributes to product term match */
+    kPINT_PatternMatchStickyRise      = 1U, /*!< Sticky Rising edge */
+    kPINT_PatternMatchStickyFall      = 2U, /*!< Sticky Falling edge */
     kPINT_PatternMatchStickyBothEdges = 3U, /*!< Sticky Rising or Falling edge */
-    kPINT_PatternMatchHigh = 4U,            /*!< High level */
-    kPINT_PatternMatchLow = 5U,             /*!< Low level */
-    kPINT_PatternMatchNever = 6U,           /*!< Never contributes to product term match */
-    kPINT_PatternMatchBothEdges = 7U,       /*!< Either rising or falling edge */
+    kPINT_PatternMatchHigh            = 4U, /*!< High level */
+    kPINT_PatternMatchLow             = 5U, /*!< Low level */
+    kPINT_PatternMatchNever           = 6U, /*!< Never contributes to product term match */
+    kPINT_PatternMatchBothEdges       = 7U, /*!< Either rising or falling edge */
 } pint_pmatch_bslice_cfg_t;
 
 /*! @brief PINT Callback function. */

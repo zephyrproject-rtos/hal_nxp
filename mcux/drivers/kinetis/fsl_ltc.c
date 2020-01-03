@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -250,7 +250,7 @@ void ltc_clear_all(LTC_Type *base, bool addPKHA)
 #if defined(FSL_FEATURE_LTC_HAS_PKHA) && FSL_FEATURE_LTC_HAS_PKHA
     if (addPKHA)
     {
-        ltc_pkha_clear_regabne(base, true, true, true, true);
+        (void)ltc_pkha_clear_regabne(base, true, true, true, true);
     }
 #endif /* FSL_FEATURE_LTC_HAS_PKHA */
 }
@@ -325,7 +325,7 @@ static inline uint32_t ltc_get_word_from_unaligned(const uint8_t *srcAddr)
     }
     return retVal;
 #else
-    return *((const uint32_t *)srcAddr);
+    return *((const uint32_t *)(uint32_t)srcAddr);
 #endif
 }
 
@@ -365,7 +365,7 @@ static inline void ltc_set_unaligned_from_word(uint32_t srcWord, uint8_t *dstAdd
     }
     return;
 #else
-    *((uint32_t *)dstAddr) = srcWord;
+    *((uint32_t *)(uint32_t)dstAddr) = srcWord;
 #endif
 }
 
@@ -426,7 +426,7 @@ static void ltc_get_key(LTC_Type *base, uint8_t *key, uint8_t keySize)
  */
 status_t ltc_set_context(LTC_Type *base, const uint8_t *data, uint8_t dataSize, uint8_t startIndex)
 {
-    int32_t i;
+    uint32_t i;
     uint8_t j;
     uint8_t szLeft;
 
@@ -439,7 +439,7 @@ status_t ltc_set_context(LTC_Type *base, const uint8_t *data, uint8_t dataSize, 
 
     j      = 0;
     szLeft = dataSize % 4u;
-    for (i = (int32_t)startIndex; i < ((uint32_t)startIndex + (uint32_t)dataSize / 4u); i++)
+    for (i = (uint32_t)startIndex; i < ((uint32_t)startIndex + (uint32_t)dataSize / 4u); i++)
     {
         base->CTX[i] = ltc_get_word_from_unaligned(&data[j]);
         j += (uint8_t)sizeof(uint32_t);
@@ -471,7 +471,7 @@ status_t ltc_set_context(LTC_Type *base, const uint8_t *data, uint8_t dataSize, 
  */
 status_t ltc_get_context(LTC_Type *base, uint8_t *dest, uint8_t dataSize, uint8_t startIndex)
 {
-    int32_t i;
+    uint32_t i;
     int32_t j;
     uint8_t szLeft;
     uint32_t rdCtx;
@@ -485,15 +485,14 @@ status_t ltc_get_context(LTC_Type *base, uint8_t *dest, uint8_t dataSize, uint8_
 
     j      = 0;
     szLeft = dataSize % 4u;
-    for (i = (int32_t)startIndex; i < ((uint32_t)startIndex + (uint32_t)dataSize / 4u); i++)
+    for (i = (uint32_t)startIndex; i < ((uint32_t)startIndex + (uint32_t)dataSize / 4u); i++)
     {
         ltc_set_unaligned_from_word(base->CTX[i], &dest[j]);
-        j += sizeof(uint32_t);
+        j += (int32_t)sizeof(uint32_t);
     }
 
     if (0U != szLeft)
     {
-        rdCtx = 0;
         rdCtx = base->CTX[i];
         ltc_memcpy(&dest[j], &rdCtx, (uint32_t)szLeft);
     }
@@ -1517,13 +1516,14 @@ static status_t ltc_aes_gcm_check_input_args(LTC_Type *base,
                                              uint32_t keySize,
                                              uint32_t tagSize)
 {
-    if (!base)
+    if (NULL == base)
     {
         return kStatus_InvalidArgument;
     }
 
     /* tag can be NULL to skip tag processing */
-    if ((!key) || (ivSize && (!iv)) || (aadSize && (!aad)) || (inputSize && ((!src) || (!dst))))
+    if ((NULL == key) || ((0U != ivSize) && (NULL == iv)) || ((0U != aadSize) && (NULL == aad)) ||
+        ((0U != inputSize) && ((NULL == src) || (NULL == dst))))
     {
         return kStatus_InvalidArgument;
     }
@@ -1541,7 +1541,7 @@ static status_t ltc_aes_gcm_check_input_args(LTC_Type *base,
     }
 
     /* no IV AAD DATA makes no sense */
-    if (0 == (inputSize + ivSize + aadSize))
+    if (0U == (inputSize + ivSize + aadSize))
     {
         return kStatus_InvalidArgument;
     }
@@ -1582,7 +1582,7 @@ static status_t ltc_aes_gcm_process_iv_aad(
     status_t retval;
     void (*next_size_func)(LTC_Type * ltcBase, uint32_t nextSize, bool authOnly);
 
-    if ((NULL == iv) || (ivSize == 0))
+    if ((NULL == iv) || (ivSize == 0U))
     {
         return kStatus_InvalidArgument;
     }
@@ -1590,7 +1590,7 @@ static status_t ltc_aes_gcm_process_iv_aad(
     sz             = LTC_FIFO_SZ_MAX_DOWN_ALGN;
     next_size_func = type == LTC_AES_GCM_TYPE_AAD ? aadsize_next : ivsize_next;
 
-    while (ivSize)
+    while (0U != ivSize)
     {
         if (ivSize < sz)
         {
@@ -1668,11 +1668,11 @@ static status_t ltc_aes_gcm_process(LTC_Type *base,
     /* setup key, algorithm and set the alg.state */
     if (single_ses_proc_all)
     {
-        ltc_symmetric_final(base, key, keySize, kLTC_AlgorithmAES, kLTC_ModeGCM, encryptMode);
+        (void)ltc_symmetric_final(base, key, (uint8_t)keySize, kLTC_AlgorithmAES, kLTC_ModeGCM, encryptMode);
         modeReg = base->MD;
 
-        iv_only  = (aadSize == 0) && (inputSize == 0);
-        aad_only = (inputSize == 0);
+        iv_only  = (aadSize == 0U) && (inputSize == 0U);
+        aad_only = (inputSize == 0U);
 
         /* DS_MASK here is not a bug. IV size field can be written with more than 4-bits,
          * as the IVSZ write value, aligned to next 16 bytes boundary, is written also to the Data Size.
@@ -1681,7 +1681,7 @@ static status_t ltc_aes_gcm_process(LTC_Type *base,
          */
         base->IVSZ = LTC_IVSZ_IL(iv_only) | ((ivSize)&LTC_DS_DS_MASK);
         ltc_move_to_ififo(base, iv, ivSize);
-        if (iv_only && ivSize)
+        if (iv_only && ivSize != 0U)
         {
             retval = ltc_wait(base);
             if (kStatus_Success != retval)
@@ -1691,7 +1691,7 @@ static status_t ltc_aes_gcm_process(LTC_Type *base,
         }
         base->AADSZ = LTC_AADSZ_AL(aad_only) | ((aadSize)&LTC_DS_DS_MASK);
         ltc_move_to_ififo(base, aad, aadSize);
-        if (aad_only && aadSize)
+        if (aad_only && (0U != aadSize))
         {
             retval = ltc_wait(base);
             if (kStatus_Success != retval)
@@ -1700,19 +1700,19 @@ static status_t ltc_aes_gcm_process(LTC_Type *base,
             }
         }
 
-        if (inputSize)
+        if (0U != inputSize)
         {
             /* Workaround for the LTC Data Size register update errata TKT261180 */
             while (16U < base->DS)
             {
             }
 
-            ltc_symmetric_process_data(base, &src[0], inputSize, &dst[0]);
+            (void)ltc_symmetric_process_data(base, &src[0], inputSize, &dst[0]);
         }
     }
     else
     {
-        retval = ltc_symmetric_init(base, key, keySize, kLTC_AlgorithmAES, kLTC_ModeGCM, encryptMode);
+        retval = ltc_symmetric_init(base, key, (uint8_t)keySize, kLTC_AlgorithmAES, kLTC_ModeGCM, encryptMode);
         if (kStatus_Success != retval)
         {
             return retval;
@@ -1720,10 +1720,11 @@ static status_t ltc_aes_gcm_process(LTC_Type *base,
         modeReg = base->MD;
 
         /* process IV */
-        if (ivSize)
+        if (0U != ivSize)
         {
             /* last chunk of IV is always INITIALIZE (for GHASH to occur) */
-            retval = ltc_aes_gcm_process_iv_aad(base, iv, ivSize, modeReg, true, LTC_AES_GCM_TYPE_IV, kLTC_ModeInit);
+            retval = ltc_aes_gcm_process_iv_aad(base, iv, ivSize, modeReg, true, LTC_AES_GCM_TYPE_IV,
+                                                (uint32_t)kLTC_ModeInit);
             if (kStatus_Success != retval)
             {
                 return retval;
@@ -1731,19 +1732,19 @@ static status_t ltc_aes_gcm_process(LTC_Type *base,
         }
 
         /* process AAD */
-        if (aadSize)
+        if (0U != aadSize)
         {
             /* AS mode to process last chunk of AAD. it differs if we are in GMAC or GCM */
             ltc_mode_t lastModeReg;
-            if (0 == inputSize)
+            if (0U == inputSize)
             {
                 /* if there is no DATA, set mode to compute final MAC. this is GMAC mode */
-                lastModeReg = kLTC_ModeInitFinal;
+                lastModeReg = (uint32_t)kLTC_ModeInitFinal;
             }
             else
             {
                 /* there are confidential DATA. so process last chunk of AAD in UPDATE mode */
-                lastModeReg = kLTC_ModeUpdate;
+                lastModeReg = (uint32_t)kLTC_ModeUpdate;
             }
             retval = ltc_aes_gcm_process_iv_aad(base, aad, aadSize, modeReg, true, LTC_AES_GCM_TYPE_AAD, lastModeReg);
             if (kStatus_Success != retval)
@@ -1753,7 +1754,7 @@ static status_t ltc_aes_gcm_process(LTC_Type *base,
         }
 
         /* there are DATA. */
-        if (inputSize)
+        if (0U != inputSize)
         {
             /* set algorithm state to UPDATE */
             modeReg &= ~LTC_MD_AS_MASK;
@@ -1854,7 +1855,7 @@ status_t LTC_AES_DecryptTagGcm(LTC_Type *base,
     status_t status;
 
     tag_ptr = NULL;
-    if (tag)
+    if (NULL != tag)
     {
         ltc_memcpy(temp_tag, tag, tagSize);
         tag_ptr = &temp_tag[0];
@@ -2319,10 +2320,10 @@ static status_t ltc_3des_process(LTC_Type *base,
 
     ltc_memcpy(&key[0], &key1[0], LTC_DES_KEY_SIZE);
     ltc_memcpy(&key[LTC_DES_KEY_SIZE], &key2[0], LTC_DES_KEY_SIZE);
-    if (key3)
+    if (NULL != key3)
     {
         ltc_memcpy(&key[LTC_DES_KEY_SIZE * 2], &key3[0], LTC_DES_KEY_SIZE);
-        keySize = sizeof(key);
+        keySize = (uint8_t)sizeof(key);
     }
 
     /* Initialize algorithm state. */
@@ -3571,7 +3572,9 @@ status_t LTC_HASH_Init(LTC_Type *base, ltc_hash_ctx_t *ctx, ltc_hash_algo_t algo
         ltc_memcpy(&ctxInternal->word[kLTC_HashCtxKeyStartIdx], key, keySize);
     }
     ctxInternal->blksz = 0u;
-    for (i = 0; i < sizeof(ctxInternal->blk.w) / sizeof(ctxInternal->blk.w[0]); i++)
+    uint32_t j;
+    j = sizeof(ctxInternal->blk.w) / sizeof(ctxInternal->blk.w[0]);
+    for (i = 0; i < j; i++)
     {
         ctxInternal->blk.w[0] = 0u;
     }
@@ -3828,19 +3831,19 @@ static status_t ltc_pkha_clear_regabne(LTC_Type *base, bool A, bool B, bool N, b
     /* Set ram area to clear. Clear all. */
     if (A)
     {
-        mode |= 1U << 19U;
+        mode |= ((uint32_t)1U << 19U);
     }
     if (B)
     {
-        mode |= 1U << 18U;
+        mode |= ((uint32_t)1U << 18U);
     }
     if (N)
     {
-        mode |= 1U << 16U;
+        mode |= ((uint32_t)1U << 16U);
     }
     if (E)
     {
-        mode |= 1U << 17U;
+        mode |= ((uint32_t)1U << 17U);
     }
 
     /* Write the mode register to the hardware.
@@ -3926,7 +3929,7 @@ static status_t ltc_pkha_write_reg(
     uint8_t startIndex = (quad * 16u);
     uint32_t outWord;
 
-    while (dataSize > 0)
+    while (dataSize > 0U)
     {
         if (dataSize >= sizeof(uint32_t))
         {
@@ -3953,7 +3956,7 @@ static void ltc_pkha_read_reg(LTC_Type *base, ltc_pkha_reg_area_t reg, uint8_t q
     uint16_t calcSize;
     uint32_t word;
 
-    while (dataSize > 0)
+    while (dataSize > 0U)
     {
         word = ltc_pkha_read_word(base, reg, startIndex++);
 
@@ -3975,65 +3978,65 @@ static void ltc_pkha_init_data(LTC_Type *base,
                                const uint8_t *E,
                                uint16_t sizeE)
 {
-    uint32_t clearMask = kLTC_ClearMode; /* clear Mode Register */
+    uint32_t clearMask = (uint32_t)kLTC_ClearMode; /* clear Mode Register */
 
     /* Clear internal register states. */
-    if (sizeA)
+    if (0U != sizeA)
     {
-        clearMask |= kLTC_ClearPkhaSizeA;
+        clearMask |= (uint32_t)kLTC_ClearPkhaSizeA;
     }
     if (sizeB)
     {
-        clearMask |= kLTC_ClearPkhaSizeB;
+        clearMask |= (uint32_t)kLTC_ClearPkhaSizeB;
     }
-    if (sizeN)
+    if (0U != sizeN)
     {
-        clearMask |= kLTC_ClearPkhaSizeN;
+        clearMask |= (uint32_t)kLTC_ClearPkhaSizeN;
     }
-    if (sizeE)
+    if (0U != sizeE)
     {
-        clearMask |= kLTC_ClearPkhaSizeE;
+        clearMask |= (uint32_t)kLTC_ClearPkhaSizeE;
     }
 
     base->CW  = clearMask;
-    base->STA = kLTC_StatusDoneIsr;
-    ltc_pkha_clear_regabne(base, A, B, N, E);
+    base->STA = (uint32_t)kLTC_StatusDoneIsr;
+    (void)ltc_pkha_clear_regabne(base, (bool)(uintptr_t)A, (bool)(uintptr_t)B, (bool)(uintptr_t)N, (bool)(uintptr_t)E);
 
     /* Write register sizes. */
     /* Write modulus (N) and A and B register arguments. */
-    if (sizeN)
+    if (0U != sizeN)
     {
         base->PKNSZ = sizeN;
-        if (N)
+        if (NULL != N)
         {
-            ltc_pkha_write_reg(base, kLTC_PKHA_RegN, 0, N, sizeN);
+            (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegN, 0, N, sizeN);
         }
     }
 
-    if (sizeA)
+    if (0U != sizeA)
     {
         base->PKASZ = sizeA;
-        if (A)
+        if (NULL != A)
         {
-            ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 0, A, sizeA);
+            (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 0, A, sizeA);
         }
     }
 
     if (sizeB)
     {
         base->PKBSZ = sizeB;
-        if (B)
+        if (NULL != B)
         {
-            ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 0, B, sizeB);
+            (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 0, B, sizeB);
         }
     }
 
-    if (sizeE)
+    if (0U != sizeE)
     {
         base->PKESZ = sizeE;
-        if (E)
+        if (NULL != E)
         {
-            ltc_pkha_write_reg(base, kLTC_PKHA_RegE, 0, E, sizeE);
+            (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegE, 0, E, sizeE);
         }
     }
 }
@@ -4044,7 +4047,7 @@ static void ltc_pkha_mode_set_src_reg_copy(ltc_mode_t *outMode, ltc_pkha_reg_are
 
     do
     {
-        reg = (ltc_pkha_reg_area_t)(((uint32_t)reg) >> 1u);
+        reg = (ltc_pkha_reg_area_t)(uint32_t)(((uint32_t)reg) >> 1u);
         i++;
     } while (reg);
 
@@ -4062,9 +4065,9 @@ static void ltc_pkha_mode_set_dst_reg_copy(ltc_mode_t *outMode, ltc_pkha_reg_are
 
     do
     {
-        reg = (ltc_pkha_reg_area_t)(((uint32_t)reg) >> 1u);
+        reg = (ltc_pkha_reg_area_t)(uint32_t)(((uint32_t)reg) >> 1u);
         i++;
-    } while (reg);
+    } while (0U != (uint32_t)reg);
 
     i = 4 - i;
     *outMode |= ((uint32_t)i << 10u);
@@ -4094,7 +4097,7 @@ static status_t ltc_pkha_init_mode(LTC_Type *base, const ltc_pkha_mode_params_t 
     status_t retval;
 
     /* Set the PKHA algorithm and the appropriate function. */
-    modeReg = kLTC_AlgorithmPKHA;
+    modeReg = (uint32_t)kLTC_AlgorithmPKHA;
     modeReg |= (uint32_t)params->func;
 
     if ((params->func == kLTC_PKHA_CopyMemSizeN) || (params->func == kLTC_PKHA_CopyMemSizeSrc))
@@ -4144,9 +4147,9 @@ static status_t ltc_pkha_modR2(
     if (status == kStatus_Success)
     {
         /* Read the result and size from register B0. */
-        if (resultSize && result)
+        if ((NULL != resultSize) && (NULL != result))
         {
-            *resultSize = base->PKBSZ;
+            *resultSize = (uint16_t)base->PKBSZ;
             /* Read the data from the result register into place. */
             ltc_pkha_read_reg(base, kLTC_PKHA_RegB, 0, result, *resultSize);
         }
@@ -4198,9 +4201,9 @@ static status_t ltc_pkha_modmul(LTC_Type *base,
     if (status == kStatus_Success)
     {
         /* Read the result and size from register B0. */
-        if (resultSize && result)
+        if ((NULL != resultSize) && (NULL != result))
         {
-            *resultSize = base->PKBSZ;
+            *resultSize = (uint16_t)base->PKBSZ;
             /* Read the data from the result register into place. */
             ltc_pkha_read_reg(base, kLTC_PKHA_RegB, 0, result, *resultSize);
         }
@@ -4231,13 +4234,13 @@ int LTC_PKHA_CompareBigNum(const uint8_t *a, size_t sizeA, const uint8_t *b, siz
     int retval = 0;
 
     /* skip zero msbytes - integer a */
-    while ((sizeA) && (0u == a[sizeA - 1]))
+    while ((0U != sizeA) && (0u == a[sizeA - 1U]))
     {
         sizeA--;
     }
 
     /* skip zero msbytes - integer b */
-    while ((sizeB) && (0u == b[sizeB - 1]))
+    while ((sizeB) && (0u == b[sizeB - 1U]))
     {
         sizeB--;
     }
@@ -4250,7 +4253,7 @@ int LTC_PKHA_CompareBigNum(const uint8_t *a, size_t sizeA, const uint8_t *b, siz
     {
         retval = -1;
     } /* int b has more non-zero bytes, thus it is bigger than a */
-    else if (sizeA == 0)
+    else if (sizeA == 0U)
     {
         retval = 0;
     } /* sizeA = sizeB = 0 */
@@ -4261,16 +4264,16 @@ int LTC_PKHA_CompareBigNum(const uint8_t *a, size_t sizeA, const uint8_t *b, siz
         int val;
         uint32_t equal;
 
-        n     = sizeA - 1;
+        n     = sizeA - 1U;
         i     = 0;
         equal = 0;
 
         while (n >= 0)
         {
-            uint32_t chXor = a[i] ^ b[i];
+            uint32_t chXor = ((uint32_t)a[i] ^ (uint32_t)b[i]);
 
             equal |= chXor;
-            val = (int)chXor * (a[i] - b[i]);
+            val = (int)chXor * ((int)a[i] - (int)b[i]);
 
             if (val < 0)
             {
@@ -4291,7 +4294,7 @@ int LTC_PKHA_CompareBigNum(const uint8_t *a, size_t sizeA, const uint8_t *b, siz
             n--;
         }
 
-        if (0 == equal)
+        if (0U == equal)
         {
             retval = 0;
         }
@@ -4334,7 +4337,7 @@ status_t LTC_PKHA_NormalToMontgomery(LTC_Type *base,
     status_t status;
 
     /* need to convert our Integer inputs into Montgomery format */
-    if (N && sizeN && R2 && sizeR2)
+    if ((NULL != N) && (0U != sizeN) && (NULL != R2) && (NULL != sizeR2))
     {
         /* 1. R2 = MOD_R2(N) */
         status = ltc_pkha_modR2(base, N, sizeN, R2, sizeR2, arithType);
@@ -4344,7 +4347,7 @@ status_t LTC_PKHA_NormalToMontgomery(LTC_Type *base,
         }
 
         /* 2. A(Montgomery) = MOD_MUL_IM_OM(A, R2, N) */
-        if (A && sizeA)
+        if ((NULL != A) && (NULL != sizeA))
         {
             status = ltc_pkha_modmul(base, A, *sizeA, R2, *sizeR2, N, sizeN, A, sizeA, arithType,
                                      kLTC_PKHA_MontgomeryFormat, kLTC_PKHA_MontgomeryFormat, equalTime);
@@ -4355,7 +4358,7 @@ status_t LTC_PKHA_NormalToMontgomery(LTC_Type *base,
         }
 
         /* 2. B(Montgomery) = MOD_MUL_IM_OM(B, R2, N) */
-        if (B && sizeB)
+        if ((NULL != B) && (NULL != sizeB))
         {
             status = ltc_pkha_modmul(base, B, *sizeB, R2, *sizeR2, N, sizeN, B, sizeB, arithType,
                                      kLTC_PKHA_MontgomeryFormat, kLTC_PKHA_MontgomeryFormat, equalTime);
@@ -4407,9 +4410,9 @@ status_t LTC_PKHA_MontgomeryToNormal(LTC_Type *base,
     status_t status = kStatus_InvalidArgument;
 
     /* A = MOD_MUL_IM_OM(A(Montgomery), 1, N) */
-    if (A && sizeA)
+    if ((NULL != A) && (NULL != sizeA))
     {
-        status = ltc_pkha_modmul(base, A, *sizeA, &one, sizeof(one), N, sizeN, A, sizeA, arithType,
+        status = ltc_pkha_modmul(base, A, *sizeA, &one, (uint16_t)sizeof(one), N, sizeN, A, sizeA, arithType,
                                  kLTC_PKHA_MontgomeryFormat, kLTC_PKHA_MontgomeryFormat, equalTime);
         if (kStatus_Success != status)
         {
@@ -4418,9 +4421,9 @@ status_t LTC_PKHA_MontgomeryToNormal(LTC_Type *base,
     }
 
     /* B = MOD_MUL_IM_OM(B(Montgomery), 1, N) */
-    if (B && sizeB)
+    if ((NULL != B) && (NULL != sizeB))
     {
-        status = ltc_pkha_modmul(base, B, *sizeB, &one, sizeof(one), N, sizeN, B, sizeB, arithType,
+        status = ltc_pkha_modmul(base, B, *sizeB, &one, (uint16_t)sizeof(one), N, sizeN, B, sizeB, arithType,
                                  kLTC_PKHA_MontgomeryFormat, kLTC_PKHA_MontgomeryFormat, equalTime);
         if (kStatus_Success != status)
         {
@@ -4488,9 +4491,9 @@ status_t LTC_PKHA_ModAdd(LTC_Type *base,
     if (status == kStatus_Success)
     {
         /* Read the result and size from register B0. */
-        if (resultSize && result)
+        if ((NULL != resultSize) && (NULL != result))
         {
-            *resultSize = base->PKBSZ;
+            *resultSize = (uint16_t)base->PKBSZ;
             /* Read the data from the result register into place. */
             ltc_pkha_read_reg(base, kLTC_PKHA_RegB, 0, result, *resultSize);
         }
@@ -4549,9 +4552,9 @@ status_t LTC_PKHA_ModSub1(LTC_Type *base,
     if (status == kStatus_Success)
     {
         /* Read the result and size from register B0. */
-        if (resultSize && result)
+        if ((NULL != resultSize) && (NULL != result))
         {
-            *resultSize = base->PKBSZ;
+            *resultSize = (uint16_t)base->PKBSZ;
             /* Read the data from the result register into place. */
             ltc_pkha_read_reg(base, kLTC_PKHA_RegB, 0, result, *resultSize);
         }
@@ -4600,9 +4603,9 @@ status_t LTC_PKHA_ModSub2(LTC_Type *base,
     if (status == kStatus_Success)
     {
         /* Read the result and size from register B0. */
-        if (resultSize && result)
+        if ((NULL != resultSize) && (NULL != result))
         {
-            *resultSize = base->PKBSZ;
+            *resultSize = (uint16_t)base->PKBSZ;
             /* Read the data from the result register into place. */
             ltc_pkha_read_reg(base, kLTC_PKHA_RegB, 0, result, *resultSize);
         }
@@ -4714,9 +4717,9 @@ status_t LTC_PKHA_ModExp(LTC_Type *base,
     if (status == kStatus_Success)
     {
         /* Read the result and size from register B0. */
-        if (resultSize && result)
+        if ((NULL != resultSize) && (NULL != result))
         {
-            *resultSize = base->PKBSZ;
+            *resultSize = (uint16_t)base->PKBSZ;
             /* Read the data from the result register into place. */
             ltc_pkha_read_reg(base, kLTC_PKHA_RegB, 0, result, *resultSize);
         }
@@ -4764,9 +4767,9 @@ status_t LTC_PKHA_ModRed(LTC_Type *base,
     if (status == kStatus_Success)
     {
         /* Read the result and size from register B0. */
-        if (resultSize && result)
+        if ((NULL != resultSize) && (NULL != result))
         {
-            *resultSize = base->PKBSZ;
+            *resultSize = (uint16_t)base->PKBSZ;
             /* Read the data from the result register into place. */
             ltc_pkha_read_reg(base, kLTC_PKHA_RegB, 0, result, *resultSize);
         }
@@ -4823,9 +4826,9 @@ status_t LTC_PKHA_ModInv(LTC_Type *base,
     if (status == kStatus_Success)
     {
         /* Read the result and size from register B0. */
-        if (resultSize && result)
+        if ((NULL != resultSize) && (NULL != result))
         {
-            *resultSize = base->PKBSZ;
+            *resultSize = (uint16_t)base->PKBSZ;
             /* Read the data from the result register into place. */
             ltc_pkha_read_reg(base, kLTC_PKHA_RegB, 0, result, *resultSize);
         }
@@ -4896,9 +4899,9 @@ status_t LTC_PKHA_GCD(LTC_Type *base,
     if (status == kStatus_Success)
     {
         /* Read the result and size from register B0. */
-        if (resultSize && result)
+        if ((NULL != resultSize) && (NULL != result))
         {
-            *resultSize = base->PKBSZ;
+            *resultSize = (uint16_t)base->PKBSZ;
             /* Read the data from the result register into place. */
             ltc_pkha_read_reg(base, kLTC_PKHA_RegB, 0, result, *resultSize);
         }
@@ -4991,36 +4994,36 @@ status_t LTC_PKHA_ECC_PointAdd(LTC_Type *base,
     ltc_pkha_default_parms(&params);
     params.func      = kLTC_PKHA_ArithEccAdd;
     params.arithType = arithType;
-    params.r2modn    = R2modN ? kLTC_PKHA_InputR2 : kLTC_PKHA_CalcR2;
+    params.r2modn    = (R2modN != NULL) ? kLTC_PKHA_InputR2 : kLTC_PKHA_CalcR2;
 
-    clearMask = kLTC_ClearMode;
+    clearMask = (uint32_t)kLTC_ClearMode;
 
     /* Clear internal register states. */
-    clearMask |= kLTC_ClearPkhaSizeA;
-    clearMask |= kLTC_ClearPkhaSizeB;
-    clearMask |= kLTC_ClearPkhaSizeN;
-    clearMask |= kLTC_ClearPkhaSizeE;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeA;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeB;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeN;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeE;
 
     base->CW  = clearMask;
-    base->STA = kLTC_StatusDoneIsr;
-    ltc_pkha_clear_regabne(base, true, true, true, false);
+    base->STA = (uint32_t)kLTC_StatusDoneIsr;
+    (void)ltc_pkha_clear_regabne(base, true, true, true, false);
 
     /* sizeN should be less than 64 bytes. */
     base->PKNSZ = size;
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegN, 0, N, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegN, 0, N, size);
 
     base->PKASZ = size;
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 0, A->X, size);
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 1, A->Y, size);
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 3, aCurveParam, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 0, A->X, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 1, A->Y, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 3, aCurveParam, size);
 
     base->PKBSZ = size;
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 0, bCurveParam, size);
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 1, B->X, size);
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 2, B->Y, size);
-    if (R2modN)
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 0, bCurveParam, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 1, B->X, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 2, B->Y, size);
+    if (NULL != R2modN)
     {
-        ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 3, R2modN, size);
+        (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 3, R2modN, size);
     }
 
     status = ltc_pkha_init_mode(base, &params);
@@ -5069,29 +5072,29 @@ status_t LTC_PKHA_ECC_PointDouble(LTC_Type *base,
     params.func      = kLTC_PKHA_ArithEccDouble;
     params.arithType = arithType;
 
-    clearMask = kLTC_ClearMode;
+    clearMask = (uint32_t)kLTC_ClearMode;
 
     /* Clear internal register states. */
-    clearMask |= kLTC_ClearPkhaSizeA;
-    clearMask |= kLTC_ClearPkhaSizeB;
-    clearMask |= kLTC_ClearPkhaSizeN;
-    clearMask |= kLTC_ClearPkhaSizeE;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeA;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeB;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeN;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeE;
 
     base->CW  = clearMask;
-    base->STA = kLTC_StatusDoneIsr;
-    ltc_pkha_clear_regabne(base, true, true, true, false);
+    base->STA = (uint32_t)kLTC_StatusDoneIsr;
+    (void)ltc_pkha_clear_regabne(base, true, true, true, false);
 
     /* sizeN should be less than 64 bytes. */
     base->PKNSZ = size;
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegN, 0, N, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegN, 0, N, size);
 
     base->PKASZ = size;
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 3, aCurveParam, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 3, aCurveParam, size);
 
     base->PKBSZ = size;
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 0, bCurveParam, size);
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 1, B->X, size);
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 2, B->Y, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 0, bCurveParam, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 1, B->X, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 2, B->Y, size);
     status = ltc_pkha_init_mode(base, &params);
 
     if (status == kStatus_Success)
@@ -5150,37 +5153,37 @@ status_t LTC_PKHA_ECC_PointMul(LTC_Type *base,
     params.func      = kLTC_PKHA_ArithEccMul;
     params.equalTime = equalTime;
     params.arithType = arithType;
-    params.r2modn    = R2modN ? kLTC_PKHA_InputR2 : kLTC_PKHA_CalcR2;
+    params.r2modn    = (R2modN != NULL) ? kLTC_PKHA_InputR2 : kLTC_PKHA_CalcR2;
 
-    clearMask = kLTC_ClearMode;
+    clearMask = (uint32_t)kLTC_ClearMode;
 
     /* Clear internal register states. */
-    clearMask |= kLTC_ClearPkhaSizeA;
-    clearMask |= kLTC_ClearPkhaSizeB;
-    clearMask |= kLTC_ClearPkhaSizeN;
-    clearMask |= kLTC_ClearPkhaSizeE;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeA;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeB;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeN;
+    clearMask |= (uint32_t)kLTC_ClearPkhaSizeE;
 
     base->CW  = clearMask;
-    base->STA = kLTC_StatusDoneIsr;
-    ltc_pkha_clear_regabne(base, true, true, true, true);
+    base->STA = (uint32_t)kLTC_StatusDoneIsr;
+    (void)ltc_pkha_clear_regabne(base, true, true, true, true);
 
     /* sizeN should be less than 64 bytes. */
     base->PKNSZ = size;
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegN, 0, N, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegN, 0, N, size);
 
     base->PKESZ = sizeE;
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegE, 0, E, sizeE);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegE, 0, E, sizeE);
 
     base->PKASZ = size;
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 0, A->X, size);
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 1, A->Y, size);
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 3, aCurveParam, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 0, A->X, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 1, A->Y, size);
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegA, 3, aCurveParam, size);
 
     base->PKBSZ = size;
-    ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 0, bCurveParam, size);
-    if (R2modN)
+    (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 0, bCurveParam, size);
+    if (NULL != R2modN)
     {
-        ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 1, R2modN, size);
+        (void)ltc_pkha_write_reg(base, kLTC_PKHA_RegB, 1, R2modN, size);
     }
 
     status = ltc_pkha_init_mode(base, &params);
@@ -5191,9 +5194,9 @@ status_t LTC_PKHA_ECC_PointMul(LTC_Type *base,
         ltc_pkha_read_reg(base, kLTC_PKHA_RegB, 1, result->X, size);
         ltc_pkha_read_reg(base, kLTC_PKHA_RegB, 2, result->Y, size);
 
-        if (infinity)
+        if (NULL != infinity)
         {
-            *infinity = (bool)(base->STA & kLTC_StatusPublicKeyOpZero);
+            *infinity = (bool)(base->STA & (uint32_t)kLTC_StatusPublicKeyOpZero);
         }
     }
 

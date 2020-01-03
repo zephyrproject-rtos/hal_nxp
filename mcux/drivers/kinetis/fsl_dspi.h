@@ -21,14 +21,17 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief DSPI driver version 2.2.1. */
-#define FSL_DSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief DSPI driver version 2.2.2. */
+#define FSL_DSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 #ifndef DSPI_DUMMY_DATA
 /*! @brief DSPI dummy data if there is no Tx data.*/
 #define DSPI_DUMMY_DATA (0x00U) /*!< Dummy data used for Tx if there is no txData. */
 #endif
+
+/*! @brief Global variable for dummy data value setting. */
+extern volatile uint8_t g_dspiDummyData[];
 
 /*! @brief Status for the DSPI driver.*/
 enum _dspi_status
@@ -219,12 +222,12 @@ enum _dspi_transfer_state
 /*! @brief DSPI master command date configuration used for the SPIx_PUSHR.*/
 typedef struct _dspi_command_data_config
 {
-    bool isPcsContinuous; /*!< Option to enable the continuous assertion of the chip select between transfers.*/
-    dspi_ctar_selection_t whichCtar; /*!< The desired Clock and Transfer Attributes
-                                          Register (CTAR) to use for CTAS.*/
-    dspi_which_pcs_t whichPcs;       /*!< The desired PCS signal to use for the data transfer.*/
-    bool isEndOfQueue;               /*!< Signals that the current transfer is the last in the queue.*/
-    bool clearTransferCount;         /*!< Clears the SPI Transfer Counter (SPI_TCNT) before transmission starts.*/
+    bool isPcsContinuous;    /*!< Option to enable the continuous assertion of the chip select between transfers.*/
+    uint8_t whichCtar;       /*!< The desired Clock and Transfer Attributes
+                                                Register (CTAR) to use for CTAS.*/
+    uint8_t whichPcs;        /*!< The desired PCS signal to use for the data transfer.*/
+    bool isEndOfQueue;       /*!< Signals that the current transfer is the last in the queue.*/
+    bool clearTransferCount; /*!< Clears the SPI Transfer Counter (SPI_TCNT) before transmission starts.*/
 } dspi_command_data_config_t;
 
 /*! @brief DSPI master ctar configuration structure.*/
@@ -707,14 +710,12 @@ static inline void DSPI_SetMasterSlaveMode(SPI_Type *base, dspi_master_slave_mod
  */
 static inline bool DSPI_IsMaster(SPI_Type *base)
 {
+    bool ismaster = false;
     if (0U != ((base->MCR) & SPI_MCR_MSTR_MASK))
     {
-        return true;
+        ismaster = true;
     }
-    else
-    {
-        return false;
-    }
+    return ismaster;
 }
 /*!
  * @brief Starts the DSPI transfers and clears HALT bit in MCR.

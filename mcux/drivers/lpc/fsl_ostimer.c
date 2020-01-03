@@ -46,7 +46,11 @@ static const clock_ip_name_t s_ostimerClock[] = OSTIMER_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /* OSTIMER ISR for transactional APIs. */
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+static ostimer_isr_t s_ostimerIsr = (ostimer_isr_t)DefaultISR;
+#else
 static ostimer_isr_t s_ostimerIsr;
+#endif
 
 /*******************************************************************************
  * Code
@@ -75,7 +79,7 @@ static uint32_t OSTIMER_GetInstance(OSTIMER_Type *base)
 static uint64_t OSTIMER_GrayToDecimal(uint64_t gray)
 {
     uint64_t temp = gray;
-    while (temp)
+    while (temp != 0U)
     {
         temp >>= 1U;
         gray ^= temp;
@@ -175,8 +179,8 @@ void OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_callba
     s_ostimerHandle[instance] = cb;
 
     /* Set the match value. */
-    base->MATCHN_L = tmp;
-    base->MATCHN_H = tmp >> 32U;
+    base->MATCHN_L = (uint32_t)tmp;
+    base->MATCHN_H = (uint32_t)(tmp >> 32U);
 
     /* Enable IRQ for generating call back function. */
     base->OSEVENT_CTRL |= OSTIMER_OSEVENT_CTRL_OSTIMER_INTENA_MASK;
@@ -184,7 +188,7 @@ void OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_callba
     PMC->OSTIMERr |= PMC_OSTIMER_DPDWAKEUPENABLE_MASK;
 #endif
 
-    EnableIRQ(s_ostimerIRQ[instance]);
+    (void)EnableIRQ(s_ostimerIRQ[instance]);
 }
 
 /*!
@@ -245,13 +249,25 @@ uint64_t OSTIMER_GetCaptureValue(OSTIMER_Type *base)
 void OSTIMER_HandleIRQ(OSTIMER_Type *base, ostimer_callback_t cb)
 {
     /* Clear the match interrupt flag. */
-    OSTIMER_ClearStatusFlags(base, kOSTIMER_MatchInterruptFlag);
+    OSTIMER_ClearStatusFlags(base, (uint32_t)kOSTIMER_MatchInterruptFlag);
 
-    if (cb)
+    if (cb != NULL)
     {
         cb();
     }
 }
+
+#if defined(OSTIMER0)
+void OS_EVENT_DriverIRQHandler(void)
+{
+    s_ostimerIsr(OSTIMER0, s_ostimerHandle[0]);
+/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
+  exception return operation might vector to incorrect interrupt */
+#if defined __CORTEX_M && (__CORTEX_M == 4U)
+    __DSB();
+#endif
+}
+#endif
 
 #if defined(OSTIMER)
 void OS_EVENT_DriverIRQHandler(void)

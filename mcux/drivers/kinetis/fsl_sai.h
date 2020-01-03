@@ -22,11 +22,11 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1)) /*!< Version 2.2.1 */
+#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 2, 2)) /*!< Version 2.2.2 */
 /*@}*/
 
-/*! @brief SAI return status*/
-enum _sai_status_t
+/*! @brief _sai_status_t, SAI return status.*/
+enum
 {
     kStatus_SAI_TxBusy    = MAKE_STATUS(kStatusGroup_SAI, 0), /*!< SAI Tx is busy. */
     kStatus_SAI_RxBusy    = MAKE_STATUS(kStatusGroup_SAI, 1), /*!< SAI Rx is busy. */
@@ -37,8 +37,8 @@ enum _sai_status_t
     kStatus_SAI_RxIdle    = MAKE_STATUS(kStatusGroup_SAI, 6)  /*!< SAI Rx is idle */
 };
 
-/*< sai channel mask value, actual channel numbers is depend soc specific */
-enum _sai_channel_mask
+/*! @brief _sai_channel_mask,.sai channel mask value, actual channel numbers is depend soc specific */
+enum
 {
     kSAI_Channel0Mask = 1 << 0U, /*!< channel 0 mask value */
     kSAI_Channel1Mask = 1 << 1U, /*!< channel 1 mask value */
@@ -87,10 +87,10 @@ typedef enum _sai_data_order
 /*! @brief SAI clock polarity, active high or low */
 typedef enum _sai_clock_polarity
 {
-    kSAI_PolarityActiveHigh = 0x0U,  /*!< Drive outputs on rising edge */
-    kSAI_PolarityActiveLow,          /*!< Drive outputs on falling edge */
+    kSAI_PolarityActiveHigh  = 0x0U, /*!< Drive outputs on rising edge */
+    kSAI_PolarityActiveLow   = 0x1U, /*!< Drive outputs on falling edge */
     kSAI_SampleOnFallingEdge = 0x0U, /*!< Sample inputs on falling edge */
-    kSAI_SampleOnRisingEdge          /*!< Sample inputs on rising edge */
+    kSAI_SampleOnRisingEdge  = 0x1U, /*!< Sample inputs on rising edge */
 } sai_clock_polarity_t;
 
 /*! @brief Synchronous or asynchronous mode */
@@ -129,8 +129,8 @@ typedef enum _sai_bclk_source
     kSAI_BclkSourceOtherSai1 = 0x3U  /*!< Bit clock from other SAI device */
 } sai_bclk_source_t;
 
-/*! @brief The SAI interrupt enable flag */
-enum _sai_interrupt_enable_t
+/*! @brief _sai_interrupt_enable_t, The SAI interrupt enable flag */
+enum
 {
     kSAI_WordStartInterruptEnable =
         I2S_TCSR_WSIE_MASK, /*!< Word start flag, means the first word in a frame detected */
@@ -142,8 +142,8 @@ enum _sai_interrupt_enable_t
 #endif                                                    /* FSL_FEATURE_SAI_FIFO_COUNT */
 };
 
-/*! @brief The DMA request sources */
-enum _sai_dma_enable_t
+/*! @brief _sai_dma_enable_t, The DMA request sources */
+enum
 {
     kSAI_FIFOWarningDMAEnable = I2S_TCSR_FWDE_MASK, /*!< FIFO warning caused by the DMA request */
 #if defined(FSL_FEATURE_SAI_FIFO_COUNT) && (FSL_FEATURE_SAI_FIFO_COUNT > 1)
@@ -151,8 +151,8 @@ enum _sai_dma_enable_t
 #endif                                              /* FSL_FEATURE_SAI_FIFO_COUNT */
 };
 
-/*! @brief The SAI status flag */
-enum _sai_flags
+/*! @brief _sai_flags, The SAI status flag */
+enum
 {
     kSAI_WordStartFlag = I2S_TCSR_WSF_MASK, /*!< Word start flag, means the first word in a frame detected */
     kSAI_SyncErrorFlag = I2S_TCSR_SEF_MASK, /*!< Sync error flag, means the sync error is detected */
@@ -201,7 +201,7 @@ typedef struct _sai_config
 
 #ifndef SAI_XFER_QUEUE_SIZE
 /*!@brief SAI transfer queue size, user can refine it according to use case. */
-#define SAI_XFER_QUEUE_SIZE (4)
+#define SAI_XFER_QUEUE_SIZE (4U)
 #endif
 
 /*! @brief Audio sample rate */

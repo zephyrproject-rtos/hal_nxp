@@ -23,17 +23,20 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief PRINCE driver version 2.1.0.
+/*! @brief PRINCE driver version 2.2.0.
  *
- * Current version: 2.1.0
+ * Current version: 2.2.0
  *
  * Change log:
  * - Version 2.0.0
  *   - Initial version.
  * - Version 2.1.0
  *   - Update for the A1 rev. of LPC55Sxx serie.
+ * - Version 2.2.0
+ *   - Add runtime checking of the A0 and A1 rev. of LPC55Sxx serie to support
+ *     both silicone revisions.
  */
-#define FSL_PRINCE_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_PRINCE_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 #define FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB (8)

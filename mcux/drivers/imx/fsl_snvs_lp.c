@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017, NXP
+ * Copyright 2017-2019, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -92,7 +92,7 @@ const clock_ip_name_t s_snvsLpClock[] = SNVS_LP_CLOCKS;
  ******************************************************************************/
 static bool SNVS_LP_CheckDatetimeFormat(const snvs_lp_srtc_datetime_t *datetime)
 {
-    assert(datetime);
+    assert(datetime != NULL);
 
     /* Table of days in a month for a non leap year. First entry in the table is not used,
      * valid months start from 1
@@ -108,7 +108,7 @@ static bool SNVS_LP_CheckDatetimeFormat(const snvs_lp_srtc_datetime_t *datetime)
     }
 
     /* Adjust the days in February for a leap year */
-    if ((((datetime->year & 3U) == 0) && (datetime->year % 100 != 0)) || (datetime->year % 400 == 0))
+    if ((((datetime->year & 3U) == 0U) && (datetime->year % 100U != 0U)) || (datetime->year % 400U == 0U))
     {
         daysPerMonth[2] = 29U;
     }
@@ -124,7 +124,7 @@ static bool SNVS_LP_CheckDatetimeFormat(const snvs_lp_srtc_datetime_t *datetime)
 
 static uint32_t SNVS_LP_ConvertDatetimeToSeconds(const snvs_lp_srtc_datetime_t *datetime)
 {
-    assert(datetime);
+    assert(datetime != NULL);
 
     /* Number of days from begin of the non Leap-year*/
     /* Number of days from begin of the non Leap-year*/
@@ -132,16 +132,16 @@ static uint32_t SNVS_LP_ConvertDatetimeToSeconds(const snvs_lp_srtc_datetime_t *
     uint32_t seconds;
 
     /* Compute number of days from 1970 till given year*/
-    seconds = (datetime->year - 1970U) * DAYS_IN_A_YEAR;
+    seconds = ((uint32_t)datetime->year - 1970U) * DAYS_IN_A_YEAR;
     /* Add leap year days */
-    seconds += ((datetime->year / 4) - (1970U / 4));
+    seconds += (((uint32_t)datetime->year / 4U) - (1970U / 4U));
     /* Add number of days till given month*/
     seconds += monthDays[datetime->month];
     /* Add days in given month. We subtract the current day as it is
      * represented in the hours, minutes and seconds field*/
-    seconds += (datetime->day - 1);
+    seconds += ((uint32_t)datetime->day - 1U);
     /* For leap year if month less than or equal to Febraury, decrement day counter*/
-    if ((!(datetime->year & 3U)) && (datetime->month <= 2U))
+    if ((0U == (datetime->year & 3U)) && (datetime->month <= 2U))
     {
         seconds--;
     }
@@ -154,7 +154,7 @@ static uint32_t SNVS_LP_ConvertDatetimeToSeconds(const snvs_lp_srtc_datetime_t *
 
 static void SNVS_LP_ConvertSecondsToDatetime(uint32_t seconds, snvs_lp_srtc_datetime_t *datetime)
 {
-    assert(datetime);
+    assert(datetime != NULL);
 
     uint32_t x;
     uint32_t secondsRemaining, days;
@@ -170,16 +170,16 @@ static void SNVS_LP_ConvertSecondsToDatetime(uint32_t seconds, snvs_lp_srtc_date
     /* Calcuate the number of days, we add 1 for the current day which is represented in the
      * hours and seconds field
      */
-    days = secondsRemaining / SECONDS_IN_A_DAY + 1;
+    days = secondsRemaining / SECONDS_IN_A_DAY + 1U;
 
     /* Update seconds left*/
     secondsRemaining = secondsRemaining % SECONDS_IN_A_DAY;
 
     /* Calculate the datetime hour, minute and second fields */
-    datetime->hour   = secondsRemaining / SECONDS_IN_A_HOUR;
+    datetime->hour   = (uint8_t)(secondsRemaining / SECONDS_IN_A_HOUR);
     secondsRemaining = secondsRemaining % SECONDS_IN_A_HOUR;
-    datetime->minute = secondsRemaining / 60U;
-    datetime->second = secondsRemaining % SECONDS_IN_A_MINUTE;
+    datetime->minute = (uint8_t)(secondsRemaining / 60U);
+    datetime->second = (uint8_t)(secondsRemaining % SECONDS_IN_A_MINUTE);
 
     /* Calculate year */
     daysInYear     = DAYS_IN_A_YEAR;
@@ -191,18 +191,18 @@ static void SNVS_LP_ConvertSecondsToDatetime(uint32_t seconds, snvs_lp_srtc_date
         datetime->year++;
 
         /* Adjust the number of days for a leap year */
-        if (datetime->year & 3U)
+        if ((datetime->year & 3U) != 0U)
         {
             daysInYear = DAYS_IN_A_YEAR;
         }
         else
         {
-            daysInYear = DAYS_IN_A_YEAR + 1;
+            daysInYear = DAYS_IN_A_YEAR + 1U;
         }
     }
 
     /* Adjust the days in February for a leap year */
-    if (!(datetime->year & 3U))
+    if (0U == (datetime->year & 3U))
     {
         daysPerMonth[2] = 29U;
     }
@@ -211,7 +211,7 @@ static void SNVS_LP_ConvertSecondsToDatetime(uint32_t seconds, snvs_lp_srtc_date
     {
         if (days <= daysPerMonth[x])
         {
-            datetime->month = x;
+            datetime->month = (uint8_t)x;
             break;
         }
         else
@@ -220,7 +220,7 @@ static void SNVS_LP_ConvertSecondsToDatetime(uint32_t seconds, snvs_lp_srtc_date
         }
     }
 
-    datetime->day = days;
+    datetime->day = (uint8_t)days;
 }
 
 #if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && \
@@ -276,7 +276,7 @@ void SNVS_LP_Deinit(SNVS_Type *base)
  */
 void SNVS_LP_SRTC_Init(SNVS_Type *base, const snvs_lp_srtc_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 
 #if (!(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && \
      defined(SNVS_LP_CLOCKS))
@@ -292,7 +292,7 @@ void SNVS_LP_SRTC_Init(SNVS_Type *base, const snvs_lp_srtc_config_t *config)
         base->LPCR |= SNVS_LPCR_LPCALB_EN_MASK;
     }
 
-    for (pin = kSNVS_ExternalTamper1; pin <= SNVS_LP_MAX_TAMPER; pin++)
+    for (pin = (int32_t)kSNVS_ExternalTamper1; pin <= (int32_t)SNVS_LP_MAX_TAMPER; pin++)
     {
         SNVS_LP_DisableExternalTamper(SNVS, (snvs_lp_external_tamper_t)pin);
         SNVS_LP_ClearExternalTamperStatus(SNVS, (snvs_lp_external_tamper_t)pin);
@@ -327,10 +327,10 @@ void SNVS_LP_SRTC_Deinit(SNVS_Type *base)
  */
 void SNVS_LP_SRTC_GetDefaultConfig(snvs_lp_srtc_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->srtcCalEnable = false;
     config->srtcCalValue  = 0U;
@@ -345,7 +345,8 @@ static uint32_t SNVS_LP_SRTC_GetSeconds(SNVS_Type *base)
     do
     {
         seconds = tmp;
-        tmp     = (base->LPSRTCMR << 17U) | (base->LPSRTCLR >> 15U);
+        tmp     = (base->LPSRTCMR << 17U);
+        tmp |= (base->LPSRTCLR >> 15U);
     } while (tmp != seconds);
 
     return seconds;
@@ -362,7 +363,7 @@ static uint32_t SNVS_LP_SRTC_GetSeconds(SNVS_Type *base)
  */
 status_t SNVS_LP_SRTC_SetDatetime(SNVS_Type *base, const snvs_lp_srtc_datetime_t *datetime)
 {
-    assert(datetime);
+    assert(datetime != NULL);
 
     uint32_t seconds = 0U;
     uint32_t tmp     = base->LPCR;
@@ -383,7 +384,7 @@ status_t SNVS_LP_SRTC_SetDatetime(SNVS_Type *base, const snvs_lp_srtc_datetime_t
     base->LPSRTCLR = (uint32_t)(seconds << 15U);
 
     /* reenable SRTC in case that it was enabled before */
-    if (tmp & SNVS_LPCR_SRTC_ENV_MASK)
+    if ((tmp & SNVS_LPCR_SRTC_ENV_MASK) != 0U)
     {
         SNVS_LP_SRTC_StartTimer(base);
     }
@@ -399,7 +400,7 @@ status_t SNVS_LP_SRTC_SetDatetime(SNVS_Type *base, const snvs_lp_srtc_datetime_t
  */
 void SNVS_LP_SRTC_GetDatetime(SNVS_Type *base, snvs_lp_srtc_datetime_t *datetime)
 {
-    assert(datetime);
+    assert(datetime != NULL);
 
     SNVS_LP_ConvertSecondsToDatetime(SNVS_LP_SRTC_GetSeconds(base), datetime);
 }
@@ -424,7 +425,7 @@ void SNVS_LP_SRTC_GetDatetime(SNVS_Type *base, snvs_lp_srtc_datetime_t *datetime
  */
 status_t SNVS_LP_SRTC_SetAlarm(SNVS_Type *base, const snvs_lp_srtc_datetime_t *alarmTime)
 {
-    assert(alarmTime);
+    assert(alarmTime != NULL);
 
     uint32_t alarmSeconds = 0U;
     uint32_t currSeconds  = 0U;
@@ -447,7 +448,7 @@ status_t SNVS_LP_SRTC_SetAlarm(SNVS_Type *base, const snvs_lp_srtc_datetime_t *a
 
     /* disable SRTC alarm interrupt */
     base->LPCR &= ~SNVS_LPCR_LPTA_EN_MASK;
-    while (base->LPCR & SNVS_LPCR_LPTA_EN_MASK)
+    while ((base->LPCR & SNVS_LPCR_LPTA_EN_MASK) != 0U)
     {
     }
 
@@ -468,7 +469,7 @@ status_t SNVS_LP_SRTC_SetAlarm(SNVS_Type *base, const snvs_lp_srtc_datetime_t *a
  */
 void SNVS_LP_SRTC_GetAlarm(SNVS_Type *base, snvs_lp_srtc_datetime_t *datetime)
 {
-    assert(datetime);
+    assert(datetime != NULL);
 
     uint32_t alarmSeconds = 0U;
 
@@ -490,9 +491,9 @@ uint32_t SNVS_LP_SRTC_GetStatusFlags(SNVS_Type *base)
 {
     uint32_t flags = 0U;
 
-    if (base->LPSR & SNVS_LPSR_LPTA_MASK)
+    if ((base->LPSR & SNVS_LPSR_LPTA_MASK) != 0U)
     {
-        flags |= kSNVS_SRTC_AlarmInterruptFlag;
+        flags |= (uint32_t)kSNVS_SRTC_AlarmInterruptFlag;
     }
 
     return flags;
@@ -510,9 +511,9 @@ uint32_t SNVS_LP_SRTC_GetEnabledInterrupts(SNVS_Type *base)
 {
     uint32_t val = 0U;
 
-    if (base->LPCR & SNVS_LPCR_LPTA_EN_MASK)
+    if ((base->LPCR & SNVS_LPCR_LPTA_EN_MASK) != 0U)
     {
-        val |= kSNVS_SRTC_AlarmInterrupt;
+        val |= (uint32_t)kSNVS_SRTC_AlarmInterrupt;
     }
 
     return val;
@@ -532,7 +533,8 @@ void SNVS_LP_EnableExternalTamper(SNVS_Type *base,
     switch (pin)
     {
         case (kSNVS_ExternalTamper1):
-            base->LPTDCR = (base->LPTDCR & ~(1U << SNVS_LPTDCR_ET1P_SHIFT)) | (polarity << SNVS_LPTDCR_ET1P_SHIFT);
+            base->LPTDCR =
+                (base->LPTDCR & ~(1UL << SNVS_LPTDCR_ET1P_SHIFT)) | ((uint32_t)polarity << SNVS_LPTDCR_ET1P_SHIFT);
             base->LPTDCR |= SNVS_LPTDCR_ET1_EN_MASK;
             break;
 #if defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 1)
@@ -575,6 +577,7 @@ void SNVS_LP_EnableExternalTamper(SNVS_Type *base,
             break;
 #endif
         default:
+            /* All the cases have been listed above, the default clause should not be reached. */
             break;
     }
 }
@@ -622,6 +625,7 @@ void SNVS_LP_DisableExternalTamper(SNVS_Type *base, snvs_lp_external_tamper_t pi
             break;
 #endif
         default:
+            /* All the cases have been listed above, the default clause should not be reached. */
             break;
     }
 }
@@ -641,7 +645,7 @@ snvs_lp_external_tamper_status_t SNVS_LP_GetExternalTamperStatus(SNVS_Type *base
     switch (pin)
     {
         case (kSNVS_ExternalTamper1):
-            status = (base->LPSR & SNVS_LPSR_ET1D_MASK) ? kSNVS_TamperDetected : kSNVS_TamperNotDetected;
+            status = (bool)(base->LPSR & SNVS_LPSR_ET1D_MASK) ? kSNVS_TamperDetected : kSNVS_TamperNotDetected;
             break;
 #if defined(FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER) && (FSL_FEATURE_SNVS_HAS_MULTIPLE_TAMPER > 1)
         case (kSNVS_ExternalTamper2):
@@ -673,6 +677,7 @@ snvs_lp_external_tamper_status_t SNVS_LP_GetExternalTamperStatus(SNVS_Type *base
             break;
 #endif
         default:
+            /* All the cases have been listed above, the default clause should not be reached. */
             break;
     }
     return status;
@@ -723,6 +728,7 @@ void SNVS_LP_ClearExternalTamperStatus(SNVS_Type *base, snvs_lp_external_tamper_
             break;
 #endif
         default:
+            /* All the cases have been listed above, the default clause should not be reached. */
             break;
     }
 }

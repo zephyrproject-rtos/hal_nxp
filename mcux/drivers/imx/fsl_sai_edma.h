@@ -25,13 +25,13 @@
 #define FSL_SAI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version 2.2.0 */
 /*@}*/
 
-typedef struct _sai_edma_handle sai_edma_handle_t;
+typedef struct sai_edma_handle sai_edma_handle_t;
 
 /*! @brief SAI eDMA transfer callback function for finish and error */
 typedef void (*sai_edma_callback_t)(I2S_Type *base, sai_edma_handle_t *handle, status_t status, void *userData);
 
 /*! @brief SAI DMA transfer handle, users should not touch the content of the handle.*/
-struct _sai_edma_handle
+struct sai_edma_handle
 {
     edma_handle_t *dmaHandle;     /*!< DMA handler for SAI send */
     uint8_t nbytes;               /*!< eDMA minor byte transfer count initially configured. */
@@ -71,10 +71,13 @@ extern "C" {
  * @param base SAI peripheral base address.
  * @param callback Pointer to user callback function.
  * @param userData User parameter passed to the callback function.
- * @param dmaHandle eDMA handle pointer, this handle shall be static allocated by users.
+ * @param txDmaHandle eDMA handle pointer, this handle shall be static allocated by users.
  */
-void SAI_TransferTxCreateHandleEDMA(
-    I2S_Type *base, sai_edma_handle_t *handle, sai_edma_callback_t callback, void *userData, edma_handle_t *dmaHandle);
+void SAI_TransferTxCreateHandleEDMA(I2S_Type *base,
+                                    sai_edma_handle_t *handle,
+                                    sai_edma_callback_t callback,
+                                    void *userData,
+                                    edma_handle_t *txDmaHandle);
 
 /*!
  * @brief Initializes the SAI Rx eDMA handle.
@@ -87,10 +90,13 @@ void SAI_TransferTxCreateHandleEDMA(
  * @param base SAI peripheral base address.
  * @param callback Pointer to user callback function.
  * @param userData User parameter passed to the callback function.
- * @param dmaHandle eDMA handle pointer, this handle shall be static allocated by users.
+ * @param rxDmaHandle eDMA handle pointer, this handle shall be static allocated by users.
  */
-void SAI_TransferRxCreateHandleEDMA(
-    I2S_Type *base, sai_edma_handle_t *handle, sai_edma_callback_t callback, void *userData, edma_handle_t *dmaHandle);
+void SAI_TransferRxCreateHandleEDMA(I2S_Type *base,
+                                    sai_edma_handle_t *handle,
+                                    sai_edma_callback_t callback,
+                                    void *userData,
+                                    edma_handle_t *rxDmaHandle);
 
 /*!
  * @brief Configures the SAI Tx audio format.

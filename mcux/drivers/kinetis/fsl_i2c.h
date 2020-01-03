@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,13 +21,13 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief I2C driver version 2.0.7. */
-#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
+/*! @brief I2C driver version 2.0.8. */
+#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
 /*@}*/
 
-/*! @brief Timeout times for waiting flag. */
-#ifndef I2C_WAIT_TIMEOUT
-#define I2C_WAIT_TIMEOUT 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
+/*! @brief Retry times for waiting flag. */
+#ifndef I2C_RETRY_TIMES
+#define I2C_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
 #endif
 
 /*! @brief Mater Fast ack control, control if master needs to manually write ack, this is used to
@@ -42,13 +42,13 @@ low the speed of transfer for SoCs with feature FSL_FEATURE_I2C_HAS_DOUBLE_BUFFE
 #endif /* FSL_FEATURE_I2C_HAS_START_STOP_DETECT / FSL_FEATURE_I2C_HAS_STOP_DETECT */
 
 /*! @brief  I2C status return codes. */
-enum _i2c_status
+enum
 {
     kStatus_I2C_Busy            = MAKE_STATUS(kStatusGroup_I2C, 0), /*!< I2C is busy with current transfer. */
     kStatus_I2C_Idle            = MAKE_STATUS(kStatusGroup_I2C, 1), /*!< Bus is Idle. */
     kStatus_I2C_Nak             = MAKE_STATUS(kStatusGroup_I2C, 2), /*!< NAK received during transfer. */
     kStatus_I2C_ArbitrationLost = MAKE_STATUS(kStatusGroup_I2C, 3), /*!< Arbitration lost during transfer. */
-    kStatus_I2C_Timeout         = MAKE_STATUS(kStatusGroup_I2C, 4), /*!< Timeout poling status flags. */
+    kStatus_I2C_Timeout         = MAKE_STATUS(kStatusGroup_I2C, 4), /*!< Timeout polling status flags. */
     kStatus_I2C_Addr_Nak        = MAKE_STATUS(kStatusGroup_I2C, 5), /*!< NAK received during the address probe. */
 };
 
@@ -152,6 +152,22 @@ typedef enum _i2c_slave_transfer_event
 #endif
                           kI2C_SlaveCompletionEvent | kI2C_SlaveGenaralcallEvent,
 } i2c_slave_transfer_event_t;
+
+/*! @brief Common sets of flags used by the driver. */
+enum
+{
+/*! All flags which are cleared by the driver upon starting a transfer. */
+#if defined(FSL_FEATURE_I2C_HAS_START_STOP_DETECT) && FSL_FEATURE_I2C_HAS_START_STOP_DETECT
+    kClearFlags = kI2C_ArbitrationLostFlag | kI2C_IntPendingFlag | kI2C_StartDetectFlag | kI2C_StopDetectFlag,
+    kIrqFlags   = kI2C_GlobalInterruptEnable | kI2C_StartStopDetectInterruptEnable,
+#elif defined(FSL_FEATURE_I2C_HAS_STOP_DETECT) && FSL_FEATURE_I2C_HAS_STOP_DETECT
+    kClearFlags = kI2C_ArbitrationLostFlag | kI2C_IntPendingFlag | kI2C_StopDetectFlag,
+    kIrqFlags   = kI2C_GlobalInterruptEnable | kI2C_StopDetectInterruptEnable,
+#else
+    kClearFlags = kI2C_ArbitrationLostFlag | kI2C_IntPendingFlag,
+    kIrqFlags   = kI2C_GlobalInterruptEnable,
+#endif
+};
 
 /*! @brief I2C master user configuration. */
 typedef struct _i2c_master_config

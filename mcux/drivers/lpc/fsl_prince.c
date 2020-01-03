@@ -174,19 +174,84 @@ static secure_bool_t PRINCE_CheckerAlgorithm(uint32_t address,
  */
 status_t PRINCE_GenNewIV(prince_region_t region, uint8_t *iv_code, bool store, flash_config_t *flash_context)
 {
-    status_t status            = kStatus_Fail;
-    s_busCryptoEngineInterface = (const bus_crypto_engine_interface_t *)(*(uint32_t **)0x13000020)[9];
-
-    status = s_busCryptoEngineInterface->bus_crypto_engine_gen_new_iv(
-        (uint32_t)region, &iv_code[0], (store == true) ? kSECURE_TRUE : kSECURE_FALSE, flash_context);
-
-    if (kStatus_SKBOOT_Success == status)
+    status_t status = kStatus_Fail;
+    /* Check the silicone version */
+    if (0x1 == Chip_GetVersion())
     {
-        return kStatus_Success;
+        /* Implementation for the A1 version chip */
+        s_busCryptoEngineInterface = (const bus_crypto_engine_interface_t *)(*(uint32_t **)0x13000020)[9];
+
+        status = s_busCryptoEngineInterface->bus_crypto_engine_gen_new_iv(
+            (uint32_t)region, &iv_code[0], (store == true) ? kSECURE_TRUE : kSECURE_FALSE, flash_context);
+
+        if (kStatus_SKBOOT_Success == status)
+        {
+            return kStatus_Success;
+        }
+        else
+        {
+            return kStatus_Fail;
+        }
+    }
+    else if (0x0 == Chip_GetVersion())
+    {
+        /* Implementation for the A0 version chip */
+        uint8_t prince_iv_code[FLASH_FFR_IV_CODE_SIZE] = {0};
+        uint8_t tempBuffer[FLASH_FFR_MAX_PAGE_SIZE]    = {0};
+
+        /* Make sure PUF is started to allow key and IV code decryption and generation */
+        if (true != PUF_IsGetKeyAllowed(PUF))
+        {
+            return status;
+        }
+
+        /* Generate new IV code for the PRINCE region */
+        status =
+            PUF_SetIntrinsicKey(PUF, (puf_key_index_register_t)(kPUF_KeyIndex_02 + (puf_key_index_register_t)region), 8,
+                                &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
+        if ((kStatus_Success == status) && (true == store))
+        {
+            /* Store the new IV code for the PRINCE region into the respective FFRs. */
+            /* Create a new version of "Customer Field Programmable" (CFP) page. */
+            if (kStatus_FLASH_Success ==
+                FFR_GetCustomerInfieldData(flash_context, (uint8_t *)tempBuffer, 0, FLASH_FFR_MAX_PAGE_SIZE))
+            {
+                /* Set the IV code in the page */
+                memcpy(&tempBuffer[offsetof(cfpa_cfg_info_t, ivCodePrinceRegion) +
+                                   ((region * sizeof(cfpa_cfg_iv_code_t))) + 4],
+                       &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
+
+                uint32_t *p32    = (uint32_t *)tempBuffer;
+                uint32_t version = p32[1];
+                if (version == 0xFFFFFFFFu)
+                {
+                    return kStatus_Fail;
+                }
+                version++;
+                p32[1] = version;
+
+                /* Program the page and enable firewall for "Customer field area" */
+                if (kStatus_FLASH_Success ==
+                    FFR_InfieldPageWrite(flash_context, (uint8_t *)tempBuffer, FLASH_FFR_MAX_PAGE_SIZE))
+                {
+                    status = kStatus_Success;
+                }
+                else
+                {
+                    status = kStatus_Fail;
+                }
+            }
+        }
+        if (status == kStatus_Success)
+        {
+            /* Pass the new IV code */
+            memcpy(iv_code, &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
+        }
+        return status;
     }
     else
     {
-        return kStatus_Fail;
+        return status;
     }
 }
 
@@ -204,18 +269,52 @@ status_t PRINCE_GenNewIV(prince_region_t region, uint8_t *iv_code, bool store, f
  */
 status_t PRINCE_LoadIV(prince_region_t region, uint8_t *iv_code)
 {
-    status_t status            = kStatus_Fail;
-    s_busCryptoEngineInterface = (const bus_crypto_engine_interface_t *)(*(uint32_t **)0x13000020)[9];
-
-    status = s_busCryptoEngineInterface->bus_crypto_engine_load_iv((uint32_t)region, &iv_code[0]);
-
-    if (kStatus_SKBOOT_Success == status)
+    status_t status = kStatus_Fail;
+    /* Check the silicone version */
+    if (0x1 == Chip_GetVersion())
     {
-        return kStatus_Success;
+        /* Implementation for the A1 version chip */
+        s_busCryptoEngineInterface = (const bus_crypto_engine_interface_t *)(*(uint32_t **)0x13000020)[9];
+
+        status = s_busCryptoEngineInterface->bus_crypto_engine_load_iv((uint32_t)region, &iv_code[0]);
+
+        if (kStatus_SKBOOT_Success == status)
+        {
+            return kStatus_Success;
+        }
+        else
+        {
+            return kStatus_Fail;
+        }
+    }
+    else if (0x0 == Chip_GetVersion())
+    {
+        /* Implementation for the A0 version chip */
+        uint32_t keyIndex    = 0x0Fu & iv_code[1];
+        uint8_t prince_iv[8] = {0};
+
+        /* Make sure PUF is started to allow key and IV code decryption and generation */
+        if (true != PUF_IsGetKeyAllowed(PUF))
+        {
+            return status;
+        }
+
+        /* Check if region number matches the PUF index value */
+        if ((kPUF_KeyIndex_02 + (puf_key_index_register_t)region) == (puf_key_index_register_t)keyIndex)
+        {
+            /* Decrypt the IV */
+            if (kStatus_Success == PUF_GetKey(PUF, iv_code, FLASH_FFR_IV_CODE_SIZE, &prince_iv[0], 8))
+            {
+                /* Store the new IV for the PRINCE region into PRINCE registers. */
+                PRINCE_SetRegionIV(PRINCE, (prince_region_t)region, prince_iv);
+                status = kStatus_Success;
+            }
+        }
+        return status;
     }
     else
     {
-        return kStatus_Fail;
+        return status;
     }
 }
 
@@ -239,19 +338,132 @@ status_t PRINCE_SetEncryptForAddressRange(prince_region_t region,
                                           uint32_t length,
                                           flash_config_t *flash_context)
 {
-    status_t status            = kStatus_Fail;
-    s_busCryptoEngineInterface = (const bus_crypto_engine_interface_t *)(*(uint32_t **)0x13000020)[9];
-
-    status = s_busCryptoEngineInterface->bus_crypto_engine_set_encrypt_for_address_range((uint8_t)region, start_address,
-                                                                                         length, flash_context);
-
-    if (kStatus_SKBOOT_Success == status)
+    status_t status = kStatus_Fail;
+    /* Check the silicone version */
+    if (0x1 == Chip_GetVersion())
     {
-        return kStatus_Success;
+        /* Implementation for the A1 version chip */
+        s_busCryptoEngineInterface = (const bus_crypto_engine_interface_t *)(*(uint32_t **)0x13000020)[9];
+
+        status = s_busCryptoEngineInterface->bus_crypto_engine_set_encrypt_for_address_range(
+            (uint8_t)region, start_address, length, flash_context);
+
+        if (kStatus_SKBOOT_Success == status)
+        {
+            return kStatus_Success;
+        }
+        else
+        {
+            return kStatus_Fail;
+        }
+    }
+    else if (0x0 == Chip_GetVersion())
+    {
+        /* Implementation for the A0 version chip */
+        uint32_t srEnableRegister = 0;
+        uint32_t alignedStartAddress;
+        uint32_t end_address                = start_address + length;
+        uint32_t prince_region_base_address = 0;
+        uint8_t my_prince_iv_code[52]       = {0};
+        uint8_t tempBuffer[512]             = {0};
+        uint32_t prince_base_addr_ffr_word  = 0;
+
+        /* Check the address range, regions overlaping. */
+        if ((start_address > 0xA0000) || ((start_address < 0x40000) && (end_address > 0x40000)) ||
+            ((start_address < 0x80000) && (end_address > 0x80000)) ||
+            ((start_address < 0xA0000) && (end_address > 0xA0000)))
+        {
+            return kStatus_Fail;
+        }
+
+        /* Generate new IV code for the PRINCE region and store the new IV into the respective FFRs */
+        status = PRINCE_GenNewIV((prince_region_t)region, &my_prince_iv_code[0], true, flash_context);
+        if (kStatus_Success != status)
+        {
+            return kStatus_Fail;
+        }
+
+        /* Store the new IV for the PRINCE region into PRINCE registers. */
+        status = PRINCE_LoadIV((prince_region_t)region, &my_prince_iv_code[0]);
+        if (kStatus_Success != status)
+        {
+            return kStatus_Fail;
+        }
+
+        alignedStartAddress = ALIGN_DOWN(start_address, FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
+
+        uint32_t subregion = alignedStartAddress / (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
+        if (subregion < (32))
+        {
+            /* PRINCE_Region0 */
+            prince_region_base_address = 0;
+        }
+        else if (subregion < (64))
+        {
+            /* PRINCE_Region1 */
+            subregion                  = subregion - 32;
+            prince_region_base_address = 0x40000;
+        }
+        else
+        {
+            /* PRINCE_Region2 */
+            subregion                  = subregion - 64;
+            prince_region_base_address = 0x80000;
+        }
+
+        srEnableRegister = (1 << subregion);
+        alignedStartAddress += (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
+
+        while (alignedStartAddress < (start_address + length))
+        {
+            subregion++;
+            srEnableRegister |= (1 << subregion);
+            alignedStartAddress += (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
+        }
+
+        /* Store BASE_ADDR into PRINCE register before storing the SR to avoid en/decryption triggering
+           from addresses being defined by current BASE_ADDR register content (could be 0 and the decryption
+           of actually executed code can be started causing the hardfault then). */
+        status = PRINCE_SetRegionBaseAddress(PRINCE, (prince_region_t)region, prince_region_base_address);
+        if (kStatus_Success != status)
+        {
+            return status;
+        }
+
+        /* Store SR into PRINCE register */
+        status = PRINCE_SetRegionSREnable(PRINCE, (prince_region_t)region, srEnableRegister);
+        if (kStatus_Success != status)
+        {
+            return status;
+        }
+
+        /* Store SR and BASE_ADDR into CMPA FFR */
+        if (kStatus_Success == FFR_GetCustomerData(flash_context, (uint8_t *)&tempBuffer, 0, FLASH_FFR_MAX_PAGE_SIZE))
+        {
+            /* Set the PRINCE_SR_X in the page */
+            memcpy(&tempBuffer[offsetof(cmpa_cfg_info_t, princeSr) + (region * sizeof(uint32_t))], &srEnableRegister,
+                   sizeof(uint32_t));
+
+            /* Set the ADDRX_PRG in the page */
+            memcpy(&prince_base_addr_ffr_word, &tempBuffer[offsetof(cmpa_cfg_info_t, princeBaseAddr)],
+                   sizeof(uint32_t));
+            prince_base_addr_ffr_word &= ~((FLASH_CMPA_PRINCE_BASE_ADDR_ADDR0_PRG_MASK) << (region * 4));
+            prince_base_addr_ffr_word |=
+                (((prince_region_base_address >> 18) & FLASH_CMPA_PRINCE_BASE_ADDR_ADDR0_PRG_MASK) << (region * 4));
+            memcpy(&tempBuffer[offsetof(cmpa_cfg_info_t, princeBaseAddr)], &prince_base_addr_ffr_word,
+                   sizeof(uint32_t));
+
+            /* Program the CMPA page, set seal_part parameter to false (used during development to avoid sealing the
+             * part)
+             */
+            status = FFR_CustFactoryPageWrite(flash_context, (uint8_t *)tempBuffer, false);
+        }
+
+        return status;
     }
     else
     {
-        return kStatus_Fail;
+        return status;
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, NXP
+ * Copyright 2017-2019, NXP
  * All rights reserved.
  *
  *
@@ -108,6 +108,7 @@ void DCDC_SetClockSource(DCDC_Type *base, dcdc_clock_source_t clockSource)
             tmp32 |= DCDC_REG0_XTAL_24M_OK_MASK;
             break;
         default:
+            assert(false);
             break;
     }
     base->REG0 = tmp32;
@@ -136,7 +137,7 @@ void DCDC_GetDefaultDetectionConfig(dcdc_detection_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enableXtalokDetection         = false;
     config->powerDownOverVoltageDetection = true;
@@ -213,7 +214,7 @@ void DCDC_GetDefaultLowPowerConfig(dcdc_low_power_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enableOverloadDetection     = true;
     config->enableAdjustHystereticValue = false;
@@ -260,7 +261,7 @@ uint32_t DCDC_GetstatusFlags(DCDC_Type *base)
 
     if (DCDC_REG0_STS_DC_OK_MASK == (DCDC_REG0_STS_DC_OK_MASK & base->REG0))
     {
-        tmp32 |= kDCDC_LockedOKStatus;
+        tmp32 |= (uint32_t)kDCDC_LockedOKStatus;
     }
 
     return tmp32;
@@ -307,7 +308,7 @@ void DCDC_GetDefaultLoopControlConfig(dcdc_loop_control_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enableCommonHysteresis         = false;
     config->enableCommonThresholdDetection = false;
@@ -384,6 +385,8 @@ void DCDC_SetMinPowerConfig(DCDC_Type *base, const dcdc_min_power_config_t *conf
 
 /*!
  * brief Adjust the target voltage of VDD_SOC in run mode and low power mode.
+ * @deprecated Do not use this function. It has been superceded by @ref DCDC_AdjustRunTargetVoltage
+ * and @ref DCDC_AdjustLowPowerTargetVoltage
  *
  * This function is to adjust the target voltage of DCDC output. Change them and finally wait until the output is
  * stabled.
@@ -405,6 +408,68 @@ void DCDC_AdjustTargetVoltage(DCDC_Type *base, uint32_t VDDRun, uint32_t VDDStan
     tmp32 = base->REG3 & ~(DCDC_REG3_TARGET_LP_MASK | DCDC_REG3_TRG_MASK);
 
     tmp32 |= DCDC_REG3_TARGET_LP(VDDStandby) | DCDC_REG3_TRG(VDDRun);
+    base->REG3 = tmp32;
+
+    /* DCDC_STS_DC_OK bit will be de-asserted after target register changes. After output voltage settling to new
+     * target value, DCDC_STS_DC_OK will be asserted. */
+    while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & base->REG0))
+    {
+    }
+}
+
+/*!
+ * brief Adjust the target voltage of VDD_SOC in run mode.
+ *
+ * This function is to adjust the target voltage of DCDC output. Change them and finally wait until the output is
+ * stabled.
+ * Set the target value of run mode the same as low power mode before entering power save mode, because DCDC will switch
+ * back to run mode if it detects the current loading is larger than about 50 mA(typical value).
+ *
+ * param base DCDC peripheral base address.
+ * param VDDRun Target value in run mode. 25 mV each step from 0x00 to 0x1F. 00 is for 0.8V, 0x1F is for 1.575V.
+ */
+void DCDC_AdjustRunTargetVoltage(DCDC_Type *base, uint32_t VDDRun)
+{
+    uint32_t tmp32;
+
+    /* Unlock the step for the output. */
+    base->REG3 &= ~DCDC_REG3_DISABLE_STEP_MASK;
+
+    /* Configure the DCDC_REG3 register. */
+    tmp32 = base->REG3 & ~DCDC_REG3_TRG_MASK;
+
+    tmp32 |= DCDC_REG3_TRG(VDDRun);
+    base->REG3 = tmp32;
+
+    /* DCDC_STS_DC_OK bit will be de-asserted after target register changes. After output voltage settling to new
+     * target value, DCDC_STS_DC_OK will be asserted. */
+    while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & base->REG0))
+    {
+    }
+}
+
+/*!
+ * brief Adjust the target voltage of VDD_SOC in low power mode.
+ *
+ * This function is to adjust the target voltage of DCDC output. Change them and finally wait until the output is
+ * stabled.
+ * Set the target value of run mode the same as low power mode before entering power save mode, because DCDC will switch
+ * back to run mode if it detects the current loading is larger than about 50 mA(typical value).
+ *
+ * param base DCDC peripheral base address.
+ * param VDDStandby Target value in low power mode. 25 mV each step from 0x00 to 0x4. 00 is for 0.9V, 0x4 is for 1.0V.
+ */
+void DCDC_AdjustLowPowerTargetVoltage(DCDC_Type *base, uint32_t VDDStandby)
+{
+    uint32_t tmp32;
+
+    /* Unlock the step for the output. */
+    base->REG3 &= ~DCDC_REG3_DISABLE_STEP_MASK;
+
+    /* Configure the DCDC_REG3 register. */
+    tmp32 = base->REG3 & ~DCDC_REG3_TARGET_LP_MASK;
+
+    tmp32 |= DCDC_REG3_TARGET_LP(VDDStandby);
     base->REG3 = tmp32;
 
     /* DCDC_STS_DC_OK bit will be de-asserted after target register changes. After output voltage settling to new

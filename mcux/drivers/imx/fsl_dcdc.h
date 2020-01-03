@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, NXP
+ * Copyright 2017-2019, NXP
  * All rights reserved.
  *
  *
@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief DCDC driver version. */
-#define FSL_DCDC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */
+#define FSL_DCDC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. */
                                                         /*!
                                                          * @brief DCDC status flags.
                                                          */
@@ -370,6 +370,8 @@ static inline void DCDC_LockTargetVoltage(DCDC_Type *base)
 
 /*!
  * @brief Adjust the target voltage of VDD_SOC in run mode and low power mode.
+ * @deprecated Do not use this function. It has been superceded by @ref DCDC_AdjustRunTargetVoltage
+ * and @ref DCDC_AdjustLowPowerTargetVoltage
  *
  * This function is to adjust the target voltage of DCDC output. Change them and finally wait until the output is
  * stabled.
@@ -381,6 +383,32 @@ static inline void DCDC_LockTargetVoltage(DCDC_Type *base)
  * @param VDDStandby Target value in low power mode. 25 mV each step from 0x00 to 0x4. 00 is for 0.9V, 0x4 is for 1.0V.
  */
 void DCDC_AdjustTargetVoltage(DCDC_Type *base, uint32_t VDDRun, uint32_t VDDStandby);
+
+/*!
+ * @brief Adjust the target voltage of VDD_SOC in run mode.
+ *
+ * This function is to adjust the target voltage of DCDC output. Change them and finally wait until the output is
+ * stabled.
+ * Set the target value of run mode the same as low power mode before entering power save mode, because DCDC will switch
+ * back to run mode if it detects the current loading is larger than about 50 mA(typical value).
+ *
+ * @param base DCDC peripheral base address.
+ * @param VDDRun Target value in run mode. 25 mV each step from 0x00 to 0x1F. 00 is for 0.8V, 0x1F is for 1.575V.
+ */
+void DCDC_AdjustRunTargetVoltage(DCDC_Type *base, uint32_t VDDRun);
+
+/*!
+ * @brief Adjust the target voltage of VDD_SOC in low power mode.
+ *
+ * This function is to adjust the target voltage of DCDC output. Change them and finally wait until the output is
+ * stabled.
+ * Set the target value of run mode the same as low power mode before entering power save mode, because DCDC will switch
+ * back to run mode if it detects the current loading is larger than about 50 mA(typical value).
+ *
+ * @param base DCDC peripheral base address.
+ * @param VDDStandby Target value in low power mode. 25 mV each step from 0x00 to 0x4. 00 is for 0.9V, 0x4 is for 1.0V.
+ */
+void DCDC_AdjustLowPowerTargetVoltage(DCDC_Type *base, uint32_t VDDStandby);
 
 /*!
  * @brief Configure the DCDC internal regulator.

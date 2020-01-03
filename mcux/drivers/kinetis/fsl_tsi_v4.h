@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief TSI driver version */
-#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
+#define FSL_TSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 3)) /*!< Version 2.1.3 */
 /*@}*/
 
 /*! @brief TSI status flags macro collection */
@@ -36,11 +36,11 @@
 
 /*! @brief macro of clearing the resistor bit in EXTCHRG bit-field */
 #define TSI_V4_EXTCHRG_RESISTOR_BIT_CLEAR \
-    ((uint32_t)((~(ALL_FLAGS_MASK | TSI_GENCS_EXTCHRG_MASK)) | (3U << TSI_V4_EXTCHRG_FILTER_BITS_SHIFT)))
+    ((uint32_t)((~(ALL_FLAGS_MASK | TSI_GENCS_EXTCHRG_MASK)) | (3UL << TSI_V4_EXTCHRG_FILTER_BITS_SHIFT)))
 
 /*! @brief macro of clearing the filter bits in EXTCHRG bit-field */
 #define TSI_V4_EXTCHRG_FILTER_BITS_CLEAR \
-    ((uint32_t)((~(ALL_FLAGS_MASK | TSI_GENCS_EXTCHRG_MASK)) | (1U << TSI_V4_EXTCHRG_RESISTOR_BIT_SHIFT)))
+    ((uint32_t)((~(ALL_FLAGS_MASK | TSI_GENCS_EXTCHRG_MASK)) | (1UL << TSI_V4_EXTCHRG_RESISTOR_BIT_SHIFT)))
 
 /*!
  * @brief TSI number of scan intervals for each electrode.
@@ -346,7 +346,7 @@ void TSI_DisableInterrupts(TSI_Type *base, uint32_t mask);
  */
 static inline uint32_t TSI_GetStatusFlags(TSI_Type *base)
 {
-    return (base->GENCS & (kTSI_EndOfScanFlag | kTSI_OutOfRangeFlag));
+    return (base->GENCS & ((uint32_t)kTSI_EndOfScanFlag | (uint32_t)kTSI_OutOfRangeFlag));
 }
 
 /*!
@@ -380,7 +380,7 @@ static inline uint32_t TSI_GetScanTriggerMode(TSI_Type *base)
  */
 static inline bool TSI_IsScanInProgress(TSI_Type *base)
 {
-    return (base->GENCS & TSI_GENCS_SCNIP_MASK);
+    return (bool)(base->GENCS & TSI_GENCS_SCNIP_MASK);
 }
 
 /*!
@@ -493,7 +493,7 @@ static inline void TSI_StartSoftwareTrigger(TSI_Type *base)
  */
 static inline void TSI_SetMeasuredChannelNumber(TSI_Type *base, uint8_t channel)
 {
-    assert(channel < FSL_FEATURE_TSI_CHANNEL_COUNT);
+    assert(channel < (uint8_t)FSL_FEATURE_TSI_CHANNEL_COUNT);
 
     base->DATA = ((base->DATA) & ~TSI_DATA_TSICH_MASK) | (TSI_DATA_TSICH(channel));
 }
@@ -615,7 +615,7 @@ static inline void TSI_SetAnalogMode(TSI_Type *base, tsi_analog_mode_t mode)
  */
 static inline uint8_t TSI_GetNoiseModeResult(TSI_Type *base)
 {
-    return (base->GENCS & TSI_GENCS_MODE_MASK) >> TSI_GENCS_MODE_SHIFT;
+    return (uint8_t)((base->GENCS & TSI_GENCS_MODE_MASK) >> TSI_GENCS_MODE_SHIFT);
 }
 
 /*!
@@ -663,7 +663,7 @@ static inline void TSI_SetOscVoltageRails(TSI_Type *base, tsi_osc_voltage_rails_
  */
 static inline void TSI_SetElectrodeSeriesResistor(TSI_Type *base, tsi_series_resistor_t resistor)
 {
-    base->GENCS = (base->GENCS & TSI_V4_EXTCHRG_RESISTOR_BIT_CLEAR) | TSI_GENCS_EXTCHRG(resistor);
+    base->GENCS = (base->GENCS & TSI_V4_EXTCHRG_RESISTOR_BIT_CLEAR) | (TSI_GENCS_EXTCHRG(resistor));
 }
 
 /*!
@@ -675,7 +675,8 @@ static inline void TSI_SetElectrodeSeriesResistor(TSI_Type *base, tsi_series_res
  */
 static inline void TSI_SetFilterBits(TSI_Type *base, tsi_filter_bits_t filter)
 {
-    base->GENCS = (base->GENCS & TSI_V4_EXTCHRG_FILTER_BITS_CLEAR) | (filter << TSI_V4_EXTCHRG_FILTER_BITS_SHIFT);
+    base->GENCS =
+        ((base->GENCS & TSI_V4_EXTCHRG_FILTER_BITS_CLEAR) | (((uint32_t)filter) << TSI_V4_EXTCHRG_FILTER_BITS_SHIFT));
 }
 
 #ifdef __cplusplus

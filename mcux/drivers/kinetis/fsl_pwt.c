@@ -95,7 +95,7 @@ void PWT_Init(PWT_Type *base, const pwt_config_t *config)
 void PWT_Deinit(PWT_Type *base)
 {
     /* Disable the counter */
-    base->CS &= ~PWT_CS_PWTEN_MASK;
+    base->CS &= (uint8_t)(~PWT_CS_PWTEN_MASK);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Gate the PWT clock */
@@ -120,7 +120,7 @@ void PWT_GetDefaultConfig(pwt_config_t *config)
     assert(config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     /* Use the IP Bus clock as source clock for the PWT submodule */
     config->clockSource = kPWT_BusClock;

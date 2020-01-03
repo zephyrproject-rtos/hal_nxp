@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
  ******************************************************************************/
 
 /*@{*/
-/*! @brief FlexIO MCULCD EDMA driver version 2.0.2. */
-#define FSL_FLEXIO_MCULCD_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief FlexIO MCULCD EDMA driver version. */
+#define FSL_FLEXIO_MCULCD_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*! @brief  typedef for flexio_mculcd_edma_handle_t in advance. */

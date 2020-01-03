@@ -149,7 +149,7 @@ static inline void FLEXIO_SPI_SlaveTransferCreateHandleEDMA(FLEXIO_SPI_Type *bas
                                                             edma_handle_t *txHandle,
                                                             edma_handle_t *rxHandle)
 {
-    FLEXIO_SPI_MasterTransferCreateHandleEDMA(base, handle, callback, userData, txHandle, rxHandle);
+    (void)FLEXIO_SPI_MasterTransferCreateHandleEDMA(base, handle, callback, userData, txHandle, rxHandle);
 }
 
 /*!

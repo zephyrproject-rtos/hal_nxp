@@ -93,7 +93,7 @@ extern "C" {
 static inline void POWER_EnablePD(pd_bit_t en)
 {
     /* PDRUNCFGSET */
-    SYSCON->PDRUNCFGSET[(en >> 8UL)] = (1UL << (en & 0xffU));
+    SYSCON->PDRUNCFGSET[((uint32_t)en >> 8UL)] = (1UL << ((uint32_t)en & 0xffU));
 }
 
 /*!
@@ -105,7 +105,7 @@ static inline void POWER_EnablePD(pd_bit_t en)
 static inline void POWER_DisablePD(pd_bit_t en)
 {
     /* PDRUNCFGCLR */
-    SYSCON->PDRUNCFGCLR[(en >> 8UL)] = (1UL << (en & 0xffU));
+    SYSCON->PDRUNCFGCLR[((uint32_t)en >> 8UL)] = (1UL << ((uint32_t)en & 0xffU));
 }
 
 /*!

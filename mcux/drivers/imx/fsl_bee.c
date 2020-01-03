@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 NXP
+ * Copyright 2017, 2019 NXP
  * All rights reserved.
  *
  *
@@ -27,8 +27,8 @@
 
 static void aligned_memcpy(void *dst, const void *src, size_t size)
 {
-    register uint32_t *to32         = (uint32_t *)(uintptr_t)dst;
-    register const uint32_t *from32 = (const uint32_t *)(uintptr_t)src;
+    register uint32_t *to32         = (uint32_t *)(uint32_t *)dst;
+    register const uint32_t *from32 = (const uint32_t *)(const uint32_t *)src;
 
     while (size >= sizeof(uint32_t))
     {
@@ -97,7 +97,7 @@ void BEE_GetDefaultConfig(bee_region_config_t *config)
     assert(config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->region0Mode       = kBEE_AesCtrMode;
     config->region1Mode       = kBEE_AesCtrMode;
@@ -125,19 +125,19 @@ void BEE_SetConfig(BEE_Type *base, const bee_region_config_t *config)
     bool reenable = false;
 
     /* Wait until BEE is in idle state */
-    while (!(BEE_GetStatusFlags(base) & kBEE_IdleFlag))
+    while (0U == (BEE_GetStatusFlags(base) & (uint32_t)kBEE_IdleFlag))
     {
     }
 
     /* Disable BEE before region configuration in case it is enabled. */
-    if (base->CTRL & BEE_CTRL_BEE_ENABLE_MASK)
+    if ((base->CTRL & BEE_CTRL_BEE_ENABLE_MASK) != 0U)
     {
         BEE_Disable(base);
         reenable = true;
     }
 
     /* Preserve CTRL bit values that are not set by this function */
-    beeCtrlVal = base->CTRL & 0xFFFF0037;
+    beeCtrlVal = base->CTRL & 0xFFFF0037U;
 
     /* Set variable according to configuration */
     beeCtrlVal |= BEE_CTRL_AC_PROT_EN(config->accessPermission) | BEE_CTRL_LITTLE_ENDIAN(config->endianSwapEn) |
@@ -177,13 +177,13 @@ status_t BEE_SetRegionKey(BEE_Type *base, bee_region_t region, const uint8_t *ke
     bool redisable = false;
 
     /* Key must be 32-bit aligned */
-    if (((uintptr_t)key & 0x3u) || (keySize != 16))
+    if ((0U != ((uintptr_t)key & 0x3u)) || (keySize != 16U))
     {
         return kStatus_InvalidArgument;
     }
 
     /* Wait until BEE is in idle state */
-    while (!(BEE_GetStatusFlags(base) & kBEE_IdleFlag))
+    while (0U == (BEE_GetStatusFlags(base) & (uint32_t)kBEE_IdleFlag))
     {
     }
 
@@ -191,10 +191,10 @@ status_t BEE_SetRegionKey(BEE_Type *base, bee_region_t region, const uint8_t *ke
     base->CTRL &= ~BEE_CTRL_KEY_VALID_MASK;
 
     /* Write key registers, key is stored in little-endian format in memory */
-    aligned_memcpy((uint32_t *)&base->AES_KEY0_W0, key, keySize);
+    aligned_memcpy((uint32_t *)(uint32_t)&base->AES_KEY0_W0, key, keySize);
 
     /* Enable BEE before key configuration. */
-    if (!(base->CTRL & BEE_CTRL_BEE_ENABLE_MASK))
+    if (0U == (base->CTRL & BEE_CTRL_BEE_ENABLE_MASK))
     {
         BEE_Enable(base);
         redisable = true;
@@ -218,7 +218,7 @@ status_t BEE_SetRegionKey(BEE_Type *base, bee_region_t region, const uint8_t *ke
     /* Set KEY_VALID bit to trigger key loading */
     base->CTRL |= BEE_CTRL_KEY_VALID_MASK;
     /* Wait until key is ready */
-    while (!(base->CTRL & BEE_CTRL_KEY_VALID_MASK))
+    while (0U == (base->CTRL & BEE_CTRL_KEY_VALID_MASK))
     {
     }
 
@@ -245,25 +245,25 @@ status_t BEE_SetRegionKey(BEE_Type *base, bee_region_t region, const uint8_t *ke
 status_t BEE_SetRegionNonce(BEE_Type *base, bee_region_t region, const uint8_t *nonce, size_t nonceSize)
 {
     /* Nonce must be 32-bit aligned */
-    if (((uintptr_t)nonce & 0x3u) || (nonceSize != 16))
+    if ((0U != ((uintptr_t)nonce & 0x3u)) || (nonceSize != 16U))
     {
         return kStatus_InvalidArgument;
     }
 
     /* Wait until BEE is in idle state */
-    while (!(BEE_GetStatusFlags(base) & kBEE_IdleFlag))
+    while (0U == (BEE_GetStatusFlags(base) & (uint32_t)kBEE_IdleFlag))
     {
     }
 
     /* Write nonce registers, nonce is stored in little-endian format in memory */
     if (region == kBEE_Region0)
     {
-        aligned_memcpy((uint32_t *)&base->CTR_NONCE0_W0, nonce, nonceSize);
+        aligned_memcpy((uint32_t *)(uint32_t)&base->CTR_NONCE0_W0, nonce, nonceSize);
     }
 
     else if (region == kBEE_Region1)
     {
-        aligned_memcpy((uint32_t *)&base->CTR_NONCE1_W0, nonce, nonceSize);
+        aligned_memcpy((uint32_t *)(uint32_t)&base->CTR_NONCE1_W0, nonce, nonceSize);
     }
 
     else

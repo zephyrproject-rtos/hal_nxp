@@ -20,15 +20,13 @@
  * Definitions
  ******************************************************************************/
 
-#define FSL_XBARA_DRIVER_VERSION (MAKE_VERSION(2, 0, 4)) /*!< Version 2.0.4. */
+#define FSL_XBARA_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
 
 /* Macros for entire XBARA_SELx register.  */
-#define XBARA_SELx(base, output) (*(volatile uint16_t *)((uintptr_t) & (base->SEL0) + ((output) / 2U) * 2U))
+#define XBARA_SELx(base, output) (((volatile uint16_t *)(&((base)->SEL0)))[(uint32_t)(output) / 2UL])
+
 /* Set the XBARA_SELx_SELx field to a new value. */
-#define XBARA_WR_SELx_SELx(base, input, output)                                                    \
-    (XBARA_SELx((base), (output)) =                                                                \
-         ((XBARA_SELx((base), (output)) & ~(0xFFU << (XBARA_SEL0_SEL1_SHIFT * ((output) % 2U)))) | \
-          ((input) << (XBARA_SEL0_SEL1_SHIFT * ((output) % 2U)))))
+#define XBARA_WR_SELx_SELx(base, input, output) XBARA_SetSignalsConnection((base), (input), (output))
 
 /*!
  * @brief XBARA active edge for detection

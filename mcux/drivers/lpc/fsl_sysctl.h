@@ -29,7 +29,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Group sysctl driver version for SDK */
-#define FSL_SYSCTL_DRIVER_VERSION (MAKE_VERSION(2, 0, 4)) /*!< Version 2.0.4. */
+#define FSL_SYSCTL_DRIVER_VERSION (MAKE_VERSION(2, 0, 5)) /*!< Version 2.0.5. */
 /*@}*/
 
 /*! @brief SYSCTL share set*/

@@ -110,9 +110,10 @@ static float findPll0MMult(void)
     }
     else
     {
-        mMult_int = ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_MD_MBS_MASK) << 7U) | ((SYSCON->PLL0SSCG0) >> PLL_SSCG_MD_INT_P);
-        mMult_fract = ((float)((SYSCON->PLL0SSCG0) & PLL_SSCG_MD_FRACT_M)/(1 << PLL_SSCG_MD_INT_P));
-        mMult = (float)mMult_int + mMult_fract;
+        mMult_int =
+            ((SYSCON->PLL0SSCG1 & SYSCON_PLL0SSCG1_MD_MBS_MASK) << 7U) | ((SYSCON->PLL0SSCG0) >> PLL_SSCG_MD_INT_P);
+        mMult_fract = ((float)((SYSCON->PLL0SSCG0) & PLL_SSCG_MD_FRACT_M) / (1 << PLL_SSCG_MD_INT_P));
+        mMult       = (float)mMult_int + mMult_fract;
     }
     if (mMult == 0)
     {
@@ -224,8 +225,6 @@ static uint32_t CLOCK_GetOsc32KFreq(void)
                0U;
 }
 
-
-
 /* ----------------------------------------------------------------------------
    -- Core clock
    ---------------------------------------------------------------------------- */
@@ -236,36 +235,37 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
    -- SystemInit()
    ---------------------------------------------------------------------------- */
 
-__attribute__ ((weak)) void SystemInit (void) {
+__attribute__((weak)) void SystemInit(void)
+{
+    SCB->CPACR |= ((3UL << 0 * 2) | (3UL << 1 * 2)); /* set CP0, CP1 Full Access in Secure mode (enable PowerQuad) */
+#if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+    SCB_NS->CPACR |= ((3UL << 0 * 2) | (3UL << 1 * 2)); /* set CP0, CP1 Full Access in Normal mode (enable PowerQuad) */
+#endif                                                  /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 
-  SCB->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Secure mode (enable PowerQuad) */
-#if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
-  SCB_NS->CPACR |= ((3UL << 0*2) | (3UL << 1*2));    /* set CP0, CP1 Full Access in Normal mode (enable PowerQuad) */
-#endif /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
-
-  SCB->NSACR |= ((3UL << 0) | (3UL << 10));   /* enable CP0, CP1, CP10, CP11 Non-secure Access */
+    SCB->NSACR |= ((3UL << 0) | (3UL << 10)); /* enable CP0, CP1, CP10, CP11 Non-secure Access */
 
 #if defined(__MCUXPRESSO)
-    extern void(*const g_pfnVectors[]) (void);
-    SCB->VTOR = (uint32_t) &g_pfnVectors;
+    extern void (*const g_pfnVectors[])(void);
+    SCB->VTOR = (uint32_t)&g_pfnVectors;
 #else
     extern void *__Vectors;
-    SCB->VTOR = (uint32_t) &__Vectors;
+    SCB->VTOR = (uint32_t)&__Vectors;
 #endif
     SYSCON->TRACECLKDIV = 0;
 /* Optionally enable RAM banks that may be off by default at reset */
 #if !defined(DONT_ENABLE_DISABLED_RAMBANKS)
-    SYSCON->AHBCLKCTRLSET[0] = SYSCON_AHBCLKCTRL0_SRAM_CTRL1_MASK | SYSCON_AHBCLKCTRL0_SRAM_CTRL2_MASK
-                          | SYSCON_AHBCLKCTRL0_SRAM_CTRL3_MASK | SYSCON_AHBCLKCTRL0_SRAM_CTRL4_MASK;
+    SYSCON->AHBCLKCTRLSET[0] = SYSCON_AHBCLKCTRL0_SRAM_CTRL1_MASK | SYSCON_AHBCLKCTRL0_SRAM_CTRL2_MASK |
+                               SYSCON_AHBCLKCTRL0_SRAM_CTRL3_MASK | SYSCON_AHBCLKCTRL0_SRAM_CTRL4_MASK;
 #endif
-  SystemInitHook();
+    SystemInitHook();
 }
 
 /* ----------------------------------------------------------------------------
    -- SystemCoreClockUpdate()
    ---------------------------------------------------------------------------- */
 
-void SystemCoreClockUpdate (void) {
+void SystemCoreClockUpdate(void)
+{
     uint32_t clkRate = 0;
     uint32_t prediv, postdiv;
     float workRate;
@@ -308,15 +308,18 @@ void SystemCoreClockUpdate (void) {
                 default:
                     break;
             }
-            if (((SYSCON->PLL0CTRL & SYSCON_PLL0CTRL_BYPASSPLL_MASK) == 0) && (SYSCON->PLL0CTRL & SYSCON_PLL0CTRL_CLKEN_MASK) && ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL0_MASK) == 0) && ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL0_SSCG_MASK) == 0))
+            if (((SYSCON->PLL0CTRL & SYSCON_PLL0CTRL_BYPASSPLL_MASK) == 0) &&
+                (SYSCON->PLL0CTRL & SYSCON_PLL0CTRL_CLKEN_MASK) &&
+                ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL0_MASK) == 0) &&
+                ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL0_SSCG_MASK) == 0))
             {
-                prediv = findPll0PreDiv();
+                prediv  = findPll0PreDiv();
                 postdiv = findPll0PostDiv();
                 /* Adjust input clock */
                 clkRate = clkRate / prediv;
                 /* MDEC used for rate */
                 workRate = (float)clkRate * (float)findPll0MMult();
-                clkRate = (uint32_t)(workRate / ((float)postdiv));
+                clkRate  = (uint32_t)(workRate / ((float)postdiv));
             }
             break;
         case 0x02: /* PLL1 clock (pll1_clk)*/
@@ -337,17 +340,19 @@ void SystemCoreClockUpdate (void) {
                 default:
                     break;
             }
-            if (((SYSCON->PLL1CTRL & SYSCON_PLL1CTRL_BYPASSPLL_MASK) == 0) && (SYSCON->PLL1CTRL & SYSCON_PLL1CTRL_CLKEN_MASK) && ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL1_MASK) == 0))
+            if (((SYSCON->PLL1CTRL & SYSCON_PLL1CTRL_BYPASSPLL_MASK) == 0) &&
+                (SYSCON->PLL1CTRL & SYSCON_PLL1CTRL_CLKEN_MASK) &&
+                ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL1_MASK) == 0))
             {
                 /* PLL is not in bypass mode, get pre-divider, post-divider, and M divider */
-                prediv = findPll1PreDiv();
+                prediv  = findPll1PreDiv();
                 postdiv = findPll1PostDiv();
                 /* Adjust input clock */
                 clkRate = clkRate / prediv;
 
                 /* MDEC used for rate */
                 workRate1 = (uint64_t)clkRate * (uint64_t)findPll1MMult();
-                clkRate = workRate1 / ((uint64_t)postdiv);
+                clkRate   = workRate1 / ((uint64_t)postdiv);
             }
             break;
         case 0x03: /* RTC oscillator 32 kHz output (32k_clk) */
@@ -363,6 +368,7 @@ void SystemCoreClockUpdate (void) {
    -- SystemInitHook()
    ---------------------------------------------------------------------------- */
 
-__attribute__ ((weak)) void SystemInitHook (void) {
-  /* Void implementation of the weak function. */
+__attribute__((weak)) void SystemInitHook(void)
+{
+    /* Void implementation of the weak function. */
 }

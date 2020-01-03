@@ -186,9 +186,7 @@ typedef enum _power_bod_core_level
 #define WAKEUP_FLEXCOMM6 (1ULL << 20)      /*!< [SLEEP, DEEP SLEEP                             ] */
 #define WAKEUP_FLEXCOMM7 (1ULL << 21)      /*!< [SLEEP, DEEP SLEEP                             ] */
 #define WAKEUP_ADC (1ULL << 22)            /*!< [SLEEP,                                        ] */
-// reserved                                         (1ULL << 23) /*!< [SLEEP, DEEP SLEEP                             ]
-// */
-#define WAKEUP_ACMP_CAPT (1ULL << 24) /*!< [SLEEP, DEEP SLEEP, POWER DOWN                 ] */
+#define WAKEUP_ACMP_CAPT (1ULL << 24)      /*!< [SLEEP, DEEP SLEEP, POWER DOWN                 ] */
 // reserved                                         (1ULL << 25)
 // reserved                                         (1ULL << 26)
 #define WAKEUP_USB0_NEEDCLK (1ULL << 27)          /*!< [SLEEP, DEEP SLEEP                             ] */
@@ -311,7 +309,7 @@ extern "C" {
 static inline void POWER_EnablePD(pd_bit_t en)
 {
     /* PDRUNCFGSET */
-    PMC->PDRUNCFGSET0 = en;
+    PMC->PDRUNCFGSET0 = (uint32_t)en;
 }
 
 /*!
@@ -323,7 +321,7 @@ static inline void POWER_EnablePD(pd_bit_t en)
 static inline void POWER_DisablePD(pd_bit_t en)
 {
     /* PDRUNCFGCLR */
-    PMC->PDRUNCFGCLR0 = en;
+    PMC->PDRUNCFGCLR0 = (uint32_t)en;
 }
 
 /*!

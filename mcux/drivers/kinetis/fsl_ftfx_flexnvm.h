@@ -1,14 +1,14 @@
 /*
-* Copyright 2013-2016 Freescale Semiconductor, Inc.
-* Copyright 2016-2018 NXP
-* All rights reserved.
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*
-*/
+ * Copyright 2013-2016 Freescale Semiconductor, Inc.
+ * Copyright 2016-2019 NXP
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ */
 
-#ifndef _FSL_FTFX_FLEXNVM_H_
-#define _FSL_FTFX_FLEXNVM_H_
+#ifndef FSL_FTFX_FLEXNVM_H
+#define FSL_FTFX_FLEXNVM_H
 
 #include "fsl_ftfx_controller.h"
 
@@ -25,7 +25,7 @@
  * @{
  */
 /*! @brief Flexnvm driver version for SDK*/
-#define FSL_FLEXNVM_DRIVER_VERSION (MAKE_VERSION(3, 0, 0)) /*!< Version 1.0.0. */
+#define FSL_FLEXNVM_DRIVER_VERSION (MAKE_VERSION(3, 0, 2)) /*!< Version 3.0.2. */
 /*@}*/
 
 /*!
@@ -33,14 +33,15 @@
  */
 typedef enum _flexnvm_property_tag
 {
-    kFLEXNVM_PropertyDflashSectorSize = 0x00U,         /*!< Dflash sector size property.*/
-    kFLEXNVM_PropertyDflashTotalSize = 0x01U,          /*!< Dflash total size property.*/
-    kFLEXNVM_PropertyDflashBlockSize = 0x02U,          /*!< Dflash block size property.*/
-    kFLEXNVM_PropertyDflashBlockCount = 0x03U,         /*!< Dflash block count property.*/
-    kFLEXNVM_PropertyDflashBlockBaseAddr = 0x04U,      /*!< Dflash block base address property.*/
-    kFLEXNVM_PropertyFlexRamBlockBaseAddr = 0x05U,     /*!< FlexRam block base address property.*/
-    kFLEXNVM_PropertyFlexRamTotalSize = 0x06U,         /*!< FlexRam total size property.*/
-    kFLEXNVM_PropertyEepromTotalSize = 0x07U,          /*!< EEPROM total size property.*/
+    kFLEXNVM_PropertyDflashSectorSize          = 0x00U, /*!< Dflash sector size property.*/
+    kFLEXNVM_PropertyDflashTotalSize           = 0x01U, /*!< Dflash total size property.*/
+    kFLEXNVM_PropertyDflashBlockSize           = 0x02U, /*!< Dflash block size property.*/
+    kFLEXNVM_PropertyDflashBlockCount          = 0x03U, /*!< Dflash block count property.*/
+    kFLEXNVM_PropertyDflashBlockBaseAddr       = 0x04U, /*!< Dflash block base address property.*/
+    kFLEXNVM_PropertyAliasDflashBlockBaseAddr  = 0x05U, /*!< Dflash block base address Alias property.*/
+    kFLEXNVM_PropertyFlexRamBlockBaseAddr      = 0x06U, /*!< FlexRam block base address property.*/
+    kFLEXNVM_PropertyFlexRamTotalSize          = 0x07U, /*!< FlexRam total size property.*/
+    kFLEXNVM_PropertyEepromTotalSize           = 0x08U, /*!< EEPROM total size property.*/
 } flexnvm_property_tag_t;
 
 /*! @brief Flexnvm driver state information.
@@ -110,10 +111,7 @@ status_t FLEXNVM_Init(flexnvm_config_t *config);
  * @retval #kStatus_FTFx_ProtectionViolation The program/erase operation is requested to execute on protected areas.
  * @retval #kStatus_FTFx_CommandFailure Run-time error during the command execution.
  */
-status_t FLEXNVM_DflashErase(flexnvm_config_t *config,
-                             uint32_t start,
-                             uint32_t lengthInBytes,
-                             uint32_t key);
+status_t FLEXNVM_DflashErase(flexnvm_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
 
 /*!
  * @brief Erases entire flexnvm
@@ -181,10 +179,7 @@ status_t FLEXNVM_EraseAllUnsecure(flexnvm_config_t *config, uint32_t key);
  * @retval #kStatus_FTFx_ProtectionViolation The program/erase operation is requested to execute on protected areas.
  * @retval #kStatus_FTFx_CommandFailure Run-time error during the command execution.
  */
-status_t FLEXNVM_DflashProgram(flexnvm_config_t *config,
-                               uint32_t start,
-                               uint8_t *src,
-                               uint32_t lengthInBytes);
+status_t FLEXNVM_DflashProgram(flexnvm_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
 
 /*!
  * @brief Programs flash with data at locations passed in through parameters via the Program Section command.
@@ -212,10 +207,7 @@ status_t FLEXNVM_DflashProgram(flexnvm_config_t *config,
  * @retval #kStatus_FTFx_RecoverFlexramAsEepromError Failed to recover FlexRAM as EEPROM.
  */
 #if defined(FSL_FEATURE_FLASH_HAS_PROGRAM_SECTION_CMD) && FSL_FEATURE_FLASH_HAS_PROGRAM_SECTION_CMD
-status_t FLEXNVM_DflashProgramSection(flexnvm_config_t *config,
-                                      uint32_t start,
-                                      uint8_t *src,
-                                      uint32_t lengthInBytes);
+status_t FLEXNVM_DflashProgramSection(flexnvm_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
 #endif
 
 /*!
@@ -271,11 +263,8 @@ status_t FLEXNVM_ProgramPartition(flexnvm_config_t *config,
  * @retval #kStatus_FTFx_CommandFailure Run-time error during the command execution.
  */
 #if defined(FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD) && FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD
-status_t FLEXNVM_ReadResource(flexnvm_config_t *config,
-                              uint32_t start,
-                              uint8_t *dst,
-                              uint32_t lengthInBytes,
-                              ftfx_read_resource_opt_t option);
+status_t FLEXNVM_ReadResource(
+    flexnvm_config_t *config, uint32_t start, uint8_t *dst, uint32_t lengthInBytes, ftfx_read_resource_opt_t option);
 #endif
 
 /*@}*/
@@ -457,9 +446,9 @@ status_t FLEXNVM_SetFlexramFunction(flexnvm_config_t *config, ftfx_flexram_func_
 status_t FLEXNVM_EepromWrite(flexnvm_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
 
 /*!
-* @name Flash Protection Utilities
-* @{
-*/
+ * @name Flash Protection Utilities
+ * @{
+ */
 
 /*!
  * @brief Sets the DFlash protection to the intended protection status.
@@ -554,11 +543,10 @@ status_t FLEXNVM_EepromGetProtection(flexnvm_config_t *config, uint8_t *protectS
  */
 status_t FLEXNVM_GetProperty(flexnvm_config_t *config, flexnvm_property_tag_t whichProperty, uint32_t *value);
 
-
 #if defined(__cplusplus)
 }
 #endif
 
 /*! @}*/
 
-#endif /* _FSL_FTFX_FLEXNVM_H_ */
+#endif /* FSL_FTFX_FLEXNVM_H */

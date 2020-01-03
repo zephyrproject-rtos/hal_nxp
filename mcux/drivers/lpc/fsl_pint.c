@@ -17,7 +17,7 @@
  * Variables
  ******************************************************************************/
 
-#if defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
 /*! @brief Irq number array */
 static const IRQn_Type s_pintIRQ[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS +
                                  FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS] = PINT_IRQS;
@@ -50,88 +50,105 @@ void PINT_Init(PINT_Type *base)
 {
     uint32_t i;
     uint32_t pmcfg;
-    uint8_t pintcount;
-    assert(base);
+    uint8_t pintcount = 0;
+    assert(base != NULL);
     pmcfg = 0;
 
-#if defined(SECPINT)
-    pintcount = SEC_PINT_PIN_INT_COUNT;
-#else
-    pintcount = PINT_PIN_INT_COUNT;
-#endif /* SECPINT */
-
-    for (i = 0; i < FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+    if (base == PINT)
     {
-        s_pintCallback[i] = NULL;
+        pintcount = PINT_PIN_INT_COUNT;
+        /* clear PINT callback array*/
+        for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+        {
+            s_pintCallback[i] = NULL;
+        }
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        pintcount = SEC_PINT_PIN_INT_COUNT;
+        /* clear PINT and SECPINT callback array*/
+        for (i = (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS;
+             i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS +
+                     (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS;
+             i++)
+        {
+            s_pintCallback[i] = NULL;
+        }
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
     }
 
     /* Disable all bit slices for pint*/
     for (i = 0; i < pintcount; i++)
     {
-        pmcfg = pmcfg | (kPINT_PatternMatchNever << (PININT_BITSLICE_CFG_START + (i * 3U)));
+        pmcfg = pmcfg | ((uint32_t)kPINT_PatternMatchNever << (PININT_BITSLICE_CFG_START + (i * 3U)));
     }
 
 #if defined(FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE) && (FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE == 1)
+
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the clock. */
     CLOCK_EnableClock(kCLOCK_GpioInt);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
     /* Reset the module. */
     RESET_PeripheralReset(kGPIOINT_RST_N_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 
 #elif defined(FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE) && (FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE == 0)
+
+    if (base == PINT)
+    {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    /* Enable the clock. */
-    CLOCK_EnableClock(kCLOCK_Gpio0);
+        /* Enable the clock. */
+        CLOCK_EnableClock(kCLOCK_Gpio0);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
-    /* Reset the module. */
-    RESET_PeripheralReset(kGPIO0_RST_N_SHIFT_RSTn);
+        /* Reset the module. */
+        RESET_PeripheralReset(kGPIO0_RST_N_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
-
-#if defined(SECPINT)
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    /* Enable the clock. */
-    CLOCK_EnableClock(kCLOCK_Gpio_Sec);
+        /* Enable the clock. */
+        CLOCK_EnableClock(kCLOCK_Gpio_Sec);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
-    /* Reset the module. */
-    RESET_PeripheralReset(kGPIOSEC_RST_SHIFT_RSTn);
+        /* Reset the module. */
+        RESET_PeripheralReset(kGPIOSEC_RST_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
-#endif /* SECPINT */
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+    }
+
 #else
-    /* if need config SECURE PINT device,then enable secure pint interrupt clock */
+
     if (base == PINT)
     {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
         /* Enable the clock. */
         CLOCK_EnableClock(kCLOCK_Pint);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
         /* Reset the module. */
         RESET_PeripheralReset(kPINT_RST_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
     }
-#if defined(SECPINT)
-    else if (base == SECPINT)
+    else
     {
+        /* if need config SECURE PINT device,then enable secure pint interrupt clock */
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
         /* Enable the clock. */
         CLOCK_EnableClock(kCLOCK_Gpio_Sec_Int);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
         /* Reset the module. */
         RESET_PeripheralReset(kGPIOSECINT_RST_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
     }
-#endif /* SECPINT */
 #endif /* FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE */
 
     /* Disable all pattern match bit slices */
@@ -152,18 +169,20 @@ void PINT_Init(PINT_Type *base)
  */
 void PINT_PinInterruptConfig(PINT_Type *base, pint_pin_int_t intr, pint_pin_enable_t enable, pint_cb_t callback)
 {
-    assert(base);
+    assert(base != NULL);
 
     /* Clear Rise and Fall flags first */
     PINT_PinInterruptClrRiseFlag(base, intr);
     PINT_PinInterruptClrFallFlag(base, intr);
 
+    s_pintCallback[intr] = callback;
+
     /* select level or edge sensitive */
-    base->ISEL =
-        (base->ISEL & ~(1UL << (uint32_t)intr)) | ((enable & PINT_PIN_INT_LEVEL) ? (1UL << (uint32_t)intr) : 0U);
+    base->ISEL = (base->ISEL & ~(1UL << (uint32_t)intr)) |
+                 ((((uint32_t)enable & PINT_PIN_INT_LEVEL) != 0U) ? (1UL << (uint32_t)intr) : 0U);
 
     /* enable rising or level interrupt */
-    if (enable & (PINT_PIN_INT_LEVEL | PINT_PIN_INT_RISE))
+    if (((unsigned)enable & (PINT_PIN_INT_LEVEL | PINT_PIN_INT_RISE)) != 0U)
     {
         base->SIENR = 1UL << (uint32_t)intr;
     }
@@ -173,7 +192,7 @@ void PINT_PinInterruptConfig(PINT_Type *base, pint_pin_int_t intr, pint_pin_enab
     }
 
     /* Enable falling or select high level */
-    if (enable & PINT_PIN_INT_FALL_OR_HIGH_LEVEL)
+    if (((unsigned)enable & PINT_PIN_INT_FALL_OR_HIGH_LEVEL) != 0U)
     {
         base->SIENF = 1UL << (uint32_t)intr;
     }
@@ -181,8 +200,6 @@ void PINT_PinInterruptConfig(PINT_Type *base, pint_pin_int_t intr, pint_pin_enab
     {
         base->CIENF = 1UL << (uint32_t)intr;
     }
-
-    s_pintCallback[intr] = callback;
 }
 
 /*!
@@ -202,7 +219,7 @@ void PINT_PinInterruptGetConfig(PINT_Type *base, pint_pin_int_t pintr, pint_pin_
     uint32_t mask;
     bool level;
 
-    assert(base);
+    assert(base != NULL);
 
     *enable = kPINT_PinIntEnableNone;
     level   = false;
@@ -273,17 +290,17 @@ void PINT_PatternMatchConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pint_
     uint32_t tmp_src_shift = PININT_BITSLICE_SRC_MASK;
     uint32_t tmp_cfg_shift = PININT_BITSLICE_CFG_MASK;
 
-    assert(base);
+    assert(base != NULL);
 
     src_shift = PININT_BITSLICE_SRC_START + ((uint32_t)bslice * 3UL);
     cfg_shift = PININT_BITSLICE_CFG_START + ((uint32_t)bslice * 3UL);
 
     /* Input source selection for selected bit slice */
-    base->PMSRC = (base->PMSRC & ~(tmp_src_shift << src_shift)) | (cfg->bs_src << src_shift);
+    base->PMSRC = (base->PMSRC & ~(tmp_src_shift << src_shift)) | ((uint32_t)(cfg->bs_src) << src_shift);
 
     /* Bit slice configuration */
     pmcfg = base->PMCFG;
-    pmcfg = (pmcfg & ~(tmp_cfg_shift << cfg_shift)) | (cfg->bs_cfg << cfg_shift);
+    pmcfg = (pmcfg & ~(tmp_cfg_shift << cfg_shift)) | ((uint32_t)(cfg->bs_cfg) << cfg_shift);
 
     /* If end point is true, enable the bits */
     if ((uint32_t)bslice != 7UL)
@@ -322,7 +339,7 @@ void PINT_PatternMatchGetConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pi
     uint32_t tmp_src_shift = PININT_BITSLICE_SRC_MASK;
     uint32_t tmp_cfg_shift = PININT_BITSLICE_CFG_MASK;
 
-    assert(base);
+    assert(base != NULL);
 
     src_shift = PININT_BITSLICE_SRC_START + ((uint32_t)bslice * 3UL);
     cfg_shift = PININT_BITSLICE_CFG_START + ((uint32_t)bslice * 3UL);
@@ -336,7 +353,7 @@ void PINT_PatternMatchGetConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pi
     }
     else
     {
-        cfg->end_point = ((base->PMCFG & (1UL << (uint32_t)bslice)) >> (uint32_t)bslice);
+        cfg->end_point = (((base->PMCFG & (1UL << (uint32_t)bslice)) >> (uint32_t)bslice) != 0U) ? true : false;
     }
     cfg->callback = s_pintCallback[bslice];
 }
@@ -406,7 +423,7 @@ void PINT_PinInterruptClrStatusAll(PINT_Type *base)
     uint32_t mask         = 0;
     uint32_t i;
 
-    for (i = 0; i < FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+    for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
     {
         pinIntMode   = base->ISEL & (1UL << i);
         pinIntStatus = base->IST & (1UL << i);
@@ -435,12 +452,12 @@ void PINT_EnableCallback(PINT_Type *base)
 {
     uint32_t i;
 
-    assert(base);
+    assert(base != NULL);
 
-    for (i = 0; i < FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+    for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
     {
-        NVIC_ClearPendingIRQ(s_pintIRQ[i]);
         PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
+        NVIC_ClearPendingIRQ(s_pintIRQ[i]);
         (void)EnableIRQ(s_pintIRQ[i]);
     }
 }
@@ -457,10 +474,10 @@ void PINT_EnableCallback(PINT_Type *base)
  */
 void PINT_EnableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 {
-    assert(base);
+    assert(base != NULL);
 
-    NVIC_ClearPendingIRQ(s_pintIRQ[pintIdx]);
     PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
+    NVIC_ClearPendingIRQ(s_pintIRQ[pintIdx]);
     (void)EnableIRQ(s_pintIRQ[pintIdx]);
 }
 
@@ -478,9 +495,9 @@ void PINT_DisableCallback(PINT_Type *base)
 {
     uint32_t i;
 
-    assert(base);
+    assert(base != NULL);
 
-    for (i = 0; i < FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+    for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
     {
         (void)DisableIRQ(s_pintIRQ[i]);
         PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
@@ -500,7 +517,7 @@ void PINT_DisableCallback(PINT_Type *base)
  */
 void PINT_DisableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 {
-    assert(base);
+    assert(base != NULL);
 
     (void)DisableIRQ(s_pintIRQ[pintIdx]);
     PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
@@ -520,78 +537,98 @@ void PINT_Deinit(PINT_Type *base)
 {
     uint32_t i;
 
-    assert(base);
+    assert(base != NULL);
 
     /* Cleanup */
     PINT_DisableCallback(base);
-    for (i = 0; i < FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+    if (base == PINT)
     {
-        s_pintCallback[i] = NULL;
+        /* clear PINT callback array*/
+        for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+        {
+            s_pintCallback[i] = NULL;
+        }
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        /* clear SECPINT callback array */
+        for (i = FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS;
+             i < (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS + FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS); i++)
+        {
+            s_pintCallback[i] = NULL;
+        }
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
     }
 
 #if defined(FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE) && (FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE == 1)
+
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+    /* Enable the clock. */
+    CLOCK_DisableClock(kCLOCK_GpioInt);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
     /* Reset the module. */
     RESET_PeripheralReset(kGPIOINT_RST_N_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    /* Disable the clock. */
-    CLOCK_DisableClock(kCLOCK_GpioInt);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
 #elif defined(FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE) && (FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE == 0)
-#if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
-    /* Reset the module. */
-    RESET_PeripheralReset(kGPIO0_RST_N_SHIFT_RSTn);
-#endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    /* Disable the clock. */
-    CLOCK_DisableClock(kCLOCK_Gpio0);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-
-#if defined(SECPINT)
-#if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
-    /* Reset the module. */
-    RESET_PeripheralReset(kGPIOSEC_RST_SHIFT_RSTn);
-#endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
-
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    /* Enable the clock. */
-    CLOCK_DisableClock(kCLOCK_Gpio_Sec);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-#endif /* SECPINT */
-#else
     if (base == PINT)
     {
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+        /* Enable the clock. */
+        CLOCK_DisableClock(kCLOCK_Gpio0);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+#if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
+        /* Reset the module. */
+        RESET_PeripheralReset(kGPIO0_RST_N_SHIFT_RSTn);
+#endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+        /* Enable the clock. */
+        CLOCK_DisableClock(kCLOCK_Gpio_Sec);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+#if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
+        /* Reset the module. */
+        RESET_PeripheralReset(kGPIOSEC_RST_SHIFT_RSTn);
+#endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+    }
+
+#else
+
+    if (base == PINT)
+    {
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+        /* Enable the clock. */
+        CLOCK_DisableClock(kCLOCK_Pint);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
         /* Reset the module. */
         RESET_PeripheralReset(kPINT_RST_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
-
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        /* Disable the clock. */
-        CLOCK_DisableClock(kCLOCK_Pint);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     }
-#if defined(SECPINT)
-    else if (base == SECPINT)
+    else
     {
+        /* if need config SECURE PINT device,then enable secure pint interrupt clock */
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+        /* Enable the clock. */
+        CLOCK_DisableClock(kCLOCK_Gpio_Sec_Int);
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 #if !(defined(FSL_SDK_DISABLE_DRIVER_RESET_CONTROL) && FSL_SDK_DISABLE_DRIVER_RESET_CONTROL)
         /* Reset the module. */
         RESET_PeripheralReset(kGPIOSECINT_RST_SHIFT_RSTn);
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
-
-#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-        /* Disable the clock. */
-        CLOCK_DisableClock(kCLOCK_Gpio_Sec_Int);
-#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
     }
-#endif /* SECPINT */
 #endif /* FSL_FEATURE_CLOCK_HAS_GPIOINT_CLOCK_SOURCE */
 }
-#if defined(SECPINT)
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
 /* IRQ handler functions overloading weak symbols in the startup */
 void SEC_GPIO_INT0_IRQ0_DriverIRQHandler(void)
 {
@@ -641,7 +678,7 @@ void SEC_GPIO_INT0_IRQ1_DriverIRQHandler(void)
 #endif
 }
 #endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
-#endif /* SECPINT */
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
 
 /* IRQ handler functions overloading weak symbols in the startup */
 void PIN_INT0_DriverIRQHandler(void)

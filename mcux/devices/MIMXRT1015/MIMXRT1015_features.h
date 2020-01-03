@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2019-02-20
-**     Build:               b190221
+**     Build:               b191008
 **
 **     Abstract:
 **         Chip specific module features.
@@ -109,6 +109,8 @@
 #define FSL_FEATURE_SOC_USBNC_COUNT (1)
 /* @brief USBPHY availability on the SoC. */
 #define FSL_FEATURE_SOC_USBPHY_COUNT (1)
+/* @brief USB_ANALOG availability on the SoC. */
+#define FSL_FEATURE_SOC_USB_ANALOG_COUNT (1)
 /* @brief WDOG availability on the SoC. */
 #define FSL_FEATURE_SOC_WDOG_COUNT (2)
 /* @brief XBARA availability on the SoC. */
@@ -138,6 +140,11 @@
 #define FSL_FEATURE_AOI_MODULE_INPUTS (4)
 /* @brief Number of events related to number of registers AOIx_BFCRT01n/AOIx_BFCRT23n. */
 #define FSL_FEATURE_AOI_EVENT_COUNT (4)
+
+/* CCM module features */
+
+/* @brief Is affected by errata with ID 50235 (Incorrect clock setting for CAN affects by LPUART clock gate). */
+#define FSL_FEATURE_CCM_HAS_ERRATA_50235 (0)
 
 /* EDMA module features */
 
@@ -207,6 +214,8 @@
 #define FSL_FEATURE_FLEXRAM_INTERNAL_RAM_BANK_SIZE (32768)
 /* @brief Total Bank numbers */
 #define FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS (4)
+/* @brief Has FLEXRAM_MAGIC_ADDR. */
+#define FSL_FEATURE_FLEXRAM_HAS_MAGIC_ADDR (0)
 
 /* FLEXSPI module features */
 
@@ -214,6 +223,8 @@
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(x) (4)
 /* @brief FlexSPI has no data learn. */
 #define FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN (1)
+/* @brief There is AHBBUSERROREN bit in INTEN register. */
+#define FSL_FEATURE_FLEXSPI_HAS_INTEN_AHBBUSERROREN (0)
 
 /* GPC module features */
 
@@ -413,6 +424,10 @@
 #define FSL_FEATURE_SAI_HAS_MDR (0)
 /* @brief Has support the BCLK bypass mode when BCLK = MCLK. */
 #define FSL_FEATURE_SAI_HAS_BCLK_BYPASS (0)
+/* @brief Has DIV bit fields of MCR register (register bit fields MCR[DIV]. */
+#define FSL_FEATURE_SAI_HAS_MCR_MCLK_POST_DIV (0)
+/* @brief Support Channel Mode (register bit fields TCR4[CHMOD]). */
+#define FSL_FEATURE_SAI_HAS_CHANNEL_MODE (1)
 
 /* SNVS module features */
 

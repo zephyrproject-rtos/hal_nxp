@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -56,7 +56,7 @@ enum _mculcd_transfer_state
  */
 status_t FLEXIO_MCULCD_Init(FLEXIO_MCULCD_Type *base, flexio_mculcd_config_t *config, uint32_t srcClock_Hz)
 {
-    assert(config);
+    assert(NULL != config);
 
     flexio_config_t flexioConfig = {config->enable, config->enableInDoze, config->enableInDebug,
                                     config->enableFastAccess};
@@ -100,10 +100,10 @@ void FLEXIO_MCULCD_Deinit(FLEXIO_MCULCD_Type *base)
  */
 void FLEXIO_MCULCD_GetDefaultConfig(flexio_mculcd_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enable           = true;
     config->enableInDoze     = false;
@@ -126,25 +126,30 @@ status_t FLEXIO_MCULCD_SetBaudRate(FLEXIO_MCULCD_Type *base, uint32_t baudRate_B
     uint32_t baudRateDiv;
     uint32_t baudRatePerDataLine;
     uint32_t timerCompare;
+    status_t status;
 
     baudRatePerDataLine = baudRate_Bps / FLEXIO_MCULCD_DATA_BUS_WIDTH;
 
-    baudRateDiv = (srcClock_Hz + baudRatePerDataLine) / (baudRatePerDataLine * 2);
+    baudRateDiv = (srcClock_Hz + baudRatePerDataLine) / (baudRatePerDataLine * 2U);
 
-    if ((0 == baudRateDiv) || (baudRateDiv > (FLEXIO_BAUDRATE_DIV_MASK + 1U)))
+    if ((0U == baudRateDiv) || (baudRateDiv > (FLEXIO_BAUDRATE_DIV_MASK + 1U)))
     {
-        return kStatus_InvalidArgument;
+        status = kStatus_InvalidArgument;
+    }
+    else
+    {
+        baudRateDiv--;
+
+        timerCompare = base->flexioBase->TIMCMP[base->timerIndex];
+
+        timerCompare = (timerCompare & ~FLEXIO_BAUDRATE_DIV_MASK) | baudRateDiv;
+
+        base->flexioBase->TIMCMP[base->timerIndex] = timerCompare;
+
+        status = kStatus_Success;
     }
 
-    baudRateDiv--;
-
-    timerCompare = base->flexioBase->TIMCMP[base->timerIndex];
-
-    timerCompare = (timerCompare & ~FLEXIO_BAUDRATE_DIV_MASK) | baudRateDiv;
-
-    base->flexioBase->TIMCMP[base->timerIndex] = timerCompare;
-
-    return kStatus_Success;
+    return status;
 }
 
 /*!
@@ -163,14 +168,14 @@ uint32_t FLEXIO_MCULCD_GetStatusFlags(FLEXIO_MCULCD_Type *base)
     /* Get shifter status. */
     flags = FLEXIO_GetShifterStatusFlags(base->flexioBase);
 
-    if (flags & (1U << base->rxShifterEndIndex))
+    if (0U != (flags & (1UL << base->rxShifterEndIndex)))
     {
-        ret |= kFLEXIO_MCULCD_RxFullFlag;
+        ret |= (uint32_t)kFLEXIO_MCULCD_RxFullFlag;
     }
 
-    if (flags & (1U << base->txShifterStartIndex))
+    if (0U != (flags & (1UL << base->txShifterStartIndex)))
     {
-        ret |= kFLEXIO_MCULCD_TxEmptyFlag;
+        ret |= (uint32_t)kFLEXIO_MCULCD_TxEmptyFlag;
     }
 
     return ret;
@@ -190,14 +195,14 @@ void FLEXIO_MCULCD_ClearStatusFlags(FLEXIO_MCULCD_Type *base, uint32_t mask)
     uint32_t flags = 0U;
 
     /* Clear the shifter flags. */
-    if (mask & kFLEXIO_MCULCD_RxFullFlag)
+    if (0U != (mask & (uint32_t)kFLEXIO_MCULCD_RxFullFlag))
     {
-        flags |= (1U << base->rxShifterEndIndex);
+        flags |= (1UL << base->rxShifterEndIndex);
     }
 
-    if (mask & kFLEXIO_MCULCD_TxEmptyFlag)
+    if (0U != (mask & (uint32_t)kFLEXIO_MCULCD_TxEmptyFlag))
     {
-        flags |= (1U << base->txShifterStartIndex);
+        flags |= (1UL << base->txShifterStartIndex);
     }
 
     FLEXIO_ClearShifterStatusFlags(base->flexioBase, flags);
@@ -217,14 +222,14 @@ void FLEXIO_MCULCD_EnableInterrupts(FLEXIO_MCULCD_Type *base, uint32_t mask)
     uint32_t interrupts = 0U;
 
     /* Enable shifter interrupts. */
-    if (mask & kFLEXIO_MCULCD_RxFullFlag)
+    if (0U != (mask & (uint32_t)kFLEXIO_MCULCD_RxFullFlag))
     {
-        interrupts |= (1U << base->rxShifterEndIndex);
+        interrupts |= (1UL << base->rxShifterEndIndex);
     }
 
-    if (mask & kFLEXIO_MCULCD_TxEmptyFlag)
+    if (0U != (mask & (uint32_t)kFLEXIO_MCULCD_TxEmptyFlag))
     {
-        interrupts |= (1U << base->txShifterStartIndex);
+        interrupts |= (1UL << base->txShifterStartIndex);
     }
 
     FLEXIO_EnableShifterStatusInterrupts(base->flexioBase, interrupts);
@@ -244,14 +249,14 @@ void FLEXIO_MCULCD_DisableInterrupts(FLEXIO_MCULCD_Type *base, uint32_t mask)
     uint32_t interrupts = 0U;
 
     /* Disable shifter interrupts. */
-    if (mask & kFLEXIO_MCULCD_RxFullFlag)
+    if (0U != (mask & (uint32_t)kFLEXIO_MCULCD_RxFullFlag))
     {
-        interrupts |= (1U << base->rxShifterEndIndex);
+        interrupts |= (1UL << base->rxShifterEndIndex);
     }
 
-    if (mask & kFLEXIO_MCULCD_TxEmptyFlag)
+    if (0U != (mask & (uint32_t)kFLEXIO_MCULCD_TxEmptyFlag))
     {
-        interrupts |= (1U << base->txShifterStartIndex);
+        interrupts |= (1UL << base->txShifterStartIndex);
     }
 
     FLEXIO_DisableShifterStatusInterrupts(base->flexioBase, interrupts);
@@ -329,7 +334,7 @@ void FLEXIO_MCULCD_SetSingleBeatWriteConfig(FLEXIO_MCULCD_Type *base)
      * TIMCMP[15:8] = (number of beats x 2) - 1. Because the number of beat is 1,
      * so the TIMCMP[15:8] is 1.
      */
-    base->flexioBase->TIMCMP[base->timerIndex] = (1U << 8U) | timerCompare;
+    base->flexioBase->TIMCMP[base->timerIndex] = (1UL << 8U) | timerCompare;
 
     /* Use TX shifter flag as the inverted timer trigger. Timer output to WR/EN pin. */
     base->flexioBase->TIMCFG[base->timerIndex] =
@@ -362,12 +367,12 @@ void FLEXIO_MCULCD_ClearSingleBeatWriteConfig(FLEXIO_MCULCD_Type *base)
     base->flexioBase->TIMCTL[base->timerIndex] = 0U;
     base->flexioBase->TIMCFG[base->timerIndex] = 0U;
     /* Clear the timer flag. */
-    base->flexioBase->TIMSTAT = (1U << base->timerIndex);
+    base->flexioBase->TIMSTAT = (1UL << base->timerIndex);
     /* Stop the TX shifter. */
     base->flexioBase->SHIFTCTL[base->txShifterStartIndex] = 0U;
     base->flexioBase->SHIFTCFG[base->txShifterStartIndex] = 0U;
     /* Clear the shifter flag. */
-    base->flexioBase->SHIFTSTAT = (1U << base->txShifterStartIndex);
+    base->flexioBase->SHIFTSTAT = (1UL << base->txShifterStartIndex);
 }
 
 /*!
@@ -428,7 +433,7 @@ void FLEXIO_MCULCD_SetSingleBeatReadConfig(FLEXIO_MCULCD_Type *base)
      * TIMCMP[15:8] = (number of beats x 2) - 1. Because the number of beat is 1,
      * so the TIMCMP[15:8] is 1.
      */
-    base->flexioBase->TIMCMP[base->timerIndex] = (1U << 8U) | timerCompare;
+    base->flexioBase->TIMCMP[base->timerIndex] = (1UL << 8U) | timerCompare;
 
     base->flexioBase->TIMCTL[base->timerIndex] |=
         FLEXIO_TIMCTL_TRGSEL(FLEXIO_TIMER_TRIGGER_SEL_SHIFTnSTAT(base->rxShifterEndIndex)) |
@@ -453,12 +458,12 @@ void FLEXIO_MCULCD_ClearSingleBeatReadConfig(FLEXIO_MCULCD_Type *base)
     base->flexioBase->TIMCTL[base->timerIndex] = 0U;
     base->flexioBase->TIMCFG[base->timerIndex] = 0U;
     /* Clear the timer flag. */
-    base->flexioBase->TIMSTAT = (1U << base->timerIndex);
+    base->flexioBase->TIMSTAT = (1UL << base->timerIndex);
     /* Stop the RX shifter. */
     base->flexioBase->SHIFTCTL[base->rxShifterEndIndex] = 0U;
     base->flexioBase->SHIFTCFG[base->rxShifterEndIndex] = 0U;
     /* Clear the shifter flag. */
-    base->flexioBase->SHIFTSTAT = (1U << base->rxShifterEndIndex);
+    base->flexioBase->SHIFTSTAT = (1UL << base->rxShifterEndIndex);
 }
 
 /*!
@@ -516,7 +521,7 @@ void FLEXIO_MCULCD_SetMultiBeatsWriteConfig(FLEXIO_MCULCD_Type *base)
     /*
      * TIMCMP[15:8] = (number of beats x 2) - 1.
      */
-    base->flexioBase->TIMCMP[base->timerIndex] = ((beats * 2U - 1U) << 8U) | timerCompare;
+    base->flexioBase->TIMCMP[base->timerIndex] = ((beats * 2UL - 1UL) << 8U) | timerCompare;
 
     /* Use TX shifter flag as the inverted timer trigger. Timer output to WR/EN pin. */
     base->flexioBase->TIMCFG[base->timerIndex] =
@@ -552,14 +557,14 @@ void FLEXIO_MCULCD_ClearMultiBeatsWriteConfig(FLEXIO_MCULCD_Type *base)
     base->flexioBase->TIMCTL[base->timerIndex] = 0U;
     base->flexioBase->TIMCFG[base->timerIndex] = 0U;
     /* Clear the timer flag. */
-    base->flexioBase->TIMSTAT = (1U << base->timerIndex);
+    base->flexioBase->TIMSTAT = (1UL << base->timerIndex);
 
     /* Stop the TX shifter. */
     for (i = base->txShifterStartIndex; i <= base->txShifterEndIndex; i++)
     {
         base->flexioBase->SHIFTCFG[i] = 0U;
         base->flexioBase->SHIFTCTL[i] = 0U;
-        statusFlags |= (1U << i);
+        statusFlags |= (1UL << i);
     }
     /* Clear the shifter flag. */
     base->flexioBase->SHIFTSTAT = statusFlags;
@@ -631,7 +636,7 @@ void FLEXIO_MCULCD_SetMultiBeatsReadConfig(FLEXIO_MCULCD_Type *base)
     /*
      * TIMCMP[15:8] = (number of beats x 2) - 1.
      */
-    base->flexioBase->TIMCMP[base->timerIndex] = ((beats * 2U - 1U) << 8U) | timerCompare;
+    base->flexioBase->TIMCMP[base->timerIndex] = ((beats * 2UL - 1UL) << 8U) | timerCompare;
 
     /* Use RX shifter flag as the inverted timer trigger. */
     base->flexioBase->TIMCFG[base->timerIndex] =
@@ -668,13 +673,13 @@ void FLEXIO_MCULCD_ClearMultiBeatsReadConfig(FLEXIO_MCULCD_Type *base)
     base->flexioBase->TIMCTL[base->timerIndex] = 0U;
     base->flexioBase->TIMCFG[base->timerIndex] = 0U;
     /* Clear the timer flag. */
-    base->flexioBase->TIMSTAT = (1U << base->timerIndex);
+    base->flexioBase->TIMSTAT = (1UL << base->timerIndex);
     /* Stop the RX shifter. */
     for (i = base->rxShifterStartIndex; i <= base->rxShifterEndIndex; i++)
     {
         base->flexioBase->SHIFTCTL[i] = 0U;
         base->flexioBase->SHIFTCFG[i] = 0U;
-        statusFlags |= (1U << i);
+        statusFlags |= (1UL << i);
     }
     /* Clear the shifter flag. */
     base->flexioBase->SHIFTSTAT = statusFlags;
@@ -692,7 +697,7 @@ void FLEXIO_MCULCD_WaitTransmitComplete(void)
 {
     uint32_t i = FLEXIO_MCULCD_WAIT_COMPLETE_TIME;
 
-    while (i--)
+    while (0U != (i--))
     {
         __NOP();
     }
@@ -727,7 +732,7 @@ void FLEXIO_MCULCD_WriteCommandBlocking(FLEXIO_MCULCD_Type *base, uint32_t comma
     flexioBase->SHIFTBUF[base->txShifterStartIndex] = command;
 
     /* Wait for command send out. */
-    while (!((1U << base->timerIndex) & FLEXIO_GetTimerStatusFlags(flexioBase)))
+    while (0U == ((1UL << base->timerIndex) & FLEXIO_GetTimerStatusFlags(flexioBase)))
     {
     }
 
@@ -754,7 +759,7 @@ void FLEXIO_MCULCD_WriteCommandBlocking(FLEXIO_MCULCD_Type *base, uint32_t comma
  */
 void FLEXIO_MCULCD_WriteDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, size_t size)
 {
-    assert(size);
+    assert(size > 0U);
 
     uint32_t i;
 #if (8 == FLEXIO_MCULCD_DATA_BUS_WIDTH)
@@ -784,28 +789,28 @@ void FLEXIO_MCULCD_WriteDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, 
         flexioBase->SHIFTBUF[base->txShifterStartIndex] = data8Bit[i];
 
         /* Wait for the data send out. */
-        while (!((1U << base->timerIndex) & flexioBase->TIMSTAT))
+        while (0U == ((1UL << base->timerIndex) & flexioBase->TIMSTAT))
         {
         }
 
         /* Clear the timer stat. */
-        flexioBase->TIMSTAT = 1U << base->timerIndex;
+        flexioBase->TIMSTAT = 1UL << base->timerIndex;
     }
 #else
     data16Bit = (uint16_t *)data;
-    size /= 2;
+    size /= 2U;
 
     for (i = 0; i < size; i++)
     {
         flexioBase->SHIFTBUF[base->txShifterStartIndex] = data16Bit[i];
 
         /* Wait for the data send out. */
-        while (!((1U << base->timerIndex) & flexioBase->TIMSTAT))
+        while (0U == ((1UL << base->timerIndex) & flexioBase->TIMSTAT))
         {
         }
 
         /* Clear the timer stat. */
-        flexioBase->TIMSTAT = 1U << base->timerIndex;
+        flexioBase->TIMSTAT = 1UL << base->timerIndex;
     }
 #endif
 
@@ -825,7 +830,7 @@ void FLEXIO_MCULCD_WriteDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, 
  */
 void FLEXIO_MCULCD_ReadDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, size_t size)
 {
-    assert(size);
+    assert(size > 0U);
 
     uint32_t i;
 
@@ -849,10 +854,10 @@ void FLEXIO_MCULCD_ReadDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, s
 
 /* If data bus width is 8. */
 #if (8 == FLEXIO_MCULCD_DATA_BUS_WIDTH)
-    for (i = 0; i < (size - 1); i++)
+    for (i = 0; i < (size - 1U); i++)
     {
         /* Wait for shifter buffer full. */
-        while (!((1U << base->rxShifterEndIndex) & FLEXIO_GetShifterStatusFlags(flexioBase)))
+        while (0U == ((1UL << base->rxShifterEndIndex) & FLEXIO_GetShifterStatusFlags(flexioBase)))
         {
         }
 
@@ -860,12 +865,12 @@ void FLEXIO_MCULCD_ReadDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, s
     }
 #else
     /* Data bus width is 16. */
-    size /= 2;
+    size /= 2U;
 
-    for (i = 0; i < (size - 1); i++)
+    for (i = 0; i < (size - 1U); i++)
     {
         /* Wait for shifter buffer full. */
-        while (!((1U << base->rxShifterEndIndex) & FLEXIO_GetShifterStatusFlags(flexioBase)))
+        while (0U == ((1UL << base->rxShifterEndIndex) & FLEXIO_GetShifterStatusFlags(flexioBase)))
         {
         }
 
@@ -874,7 +879,7 @@ void FLEXIO_MCULCD_ReadDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, s
 #endif
 
     /* Wait for shifter buffer full. */
-    while (!((1U << base->rxShifterEndIndex) & FLEXIO_GetShifterStatusFlags(flexioBase)))
+    while (0U == ((1UL << base->rxShifterEndIndex) & FLEXIO_GetShifterStatusFlags(flexioBase)))
     {
     }
 
@@ -903,13 +908,13 @@ void FLEXIO_MCULCD_ReadDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, s
  */
 void FLEXIO_MCULCD_WriteSameValueBlocking(FLEXIO_MCULCD_Type *base, uint32_t sameValue, size_t size)
 {
-    assert(size);
+    assert(size > 0U);
 
     uint32_t i;
     FLEXIO_Type *flexioBase = base->flexioBase;
 
 #if (16 == FLEXIO_MCULCD_DATA_BUS_WIDTH)
-    size /= 2;
+    size /= 2U;
 #endif
 
     /* Assert the RS pin. */
@@ -928,12 +933,12 @@ void FLEXIO_MCULCD_WriteSameValueBlocking(FLEXIO_MCULCD_Type *base, uint32_t sam
         flexioBase->SHIFTBUF[base->txShifterStartIndex] = sameValue;
 
         /* Wait for the data send out. */
-        while (!((1U << base->timerIndex) & flexioBase->TIMSTAT))
+        while (0U == ((1UL << base->timerIndex) & flexioBase->TIMSTAT))
         {
         }
 
         /* Clear the timer stat. */
-        flexioBase->TIMSTAT = 1U << base->timerIndex;
+        flexioBase->TIMSTAT = 1UL << base->timerIndex;
     }
 
     /* Stop the timer and TX shifter. */
@@ -954,15 +959,15 @@ void FLEXIO_MCULCD_TransferBlocking(FLEXIO_MCULCD_Type *base, flexio_mculcd_tran
 
     FLEXIO_MCULCD_WriteCommandBlocking(base, xfer->command);
 
-    if (xfer->dataSize > 0)
+    if (xfer->dataSize > 0U)
     {
         if (kFLEXIO_MCULCD_ReadArray == xfer->mode)
         {
-            FLEXIO_MCULCD_ReadDataArrayBlocking(base, (void *)(xfer->dataAddrOrSameValue), xfer->dataSize);
+            FLEXIO_MCULCD_ReadDataArrayBlocking(base, (uint8_t *)(xfer->dataAddrOrSameValue), xfer->dataSize);
         }
         else if (kFLEXIO_MCULCD_WriteArray == xfer->mode)
         {
-            FLEXIO_MCULCD_WriteDataArrayBlocking(base, (void *)(xfer->dataAddrOrSameValue), xfer->dataSize);
+            FLEXIO_MCULCD_WriteDataArrayBlocking(base, (uint8_t *)(xfer->dataAddrOrSameValue), xfer->dataSize);
         }
         else
         {
@@ -990,21 +995,21 @@ status_t FLEXIO_MCULCD_TransferCreateHandle(FLEXIO_MCULCD_Type *base,
                                             flexio_mculcd_transfer_callback_t callback,
                                             void *userData)
 {
-    assert(handle);
+    assert(NULL != handle);
 
     IRQn_Type flexio_irqs[] = FLEXIO_IRQS;
 
     /* Zero the handle. */
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
-    handle->state = kFLEXIO_MCULCD_StateIdle;
+    handle->state = (uint32_t)kFLEXIO_MCULCD_StateIdle;
 
     /* Register callback and userData. */
     handle->completionCallback = callback;
     handle->userData           = userData;
 
     /* Enable interrupt in NVIC. */
-    EnableIRQ(flexio_irqs[FLEXIO_GetInstance(base->flexioBase)]);
+    (void)EnableIRQ(flexio_irqs[FLEXIO_GetInstance(base->flexioBase)]);
 
     /* Save the context in global variables to support the double weak mechanism.
      */
@@ -1031,7 +1036,7 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
                                            flexio_mculcd_transfer_t *xfer)
 {
     /* If previous transfer is in progress. */
-    if (kFLEXIO_MCULCD_StateIdle != handle->state)
+    if ((uint32_t)kFLEXIO_MCULCD_StateIdle != handle->state)
     {
         return kStatus_FLEXIO_MCULCD_Busy;
     }
@@ -1039,15 +1044,15 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
     /* Set the state in handle. */
     if (kFLEXIO_MCULCD_ReadArray == xfer->mode)
     {
-        handle->state = kFLEXIO_MCULCD_StateReadArray;
+        handle->state = (uint32_t)kFLEXIO_MCULCD_StateReadArray;
     }
     else if (kFLEXIO_MCULCD_WriteArray == xfer->mode)
     {
-        handle->state = kFLEXIO_MCULCD_StateWriteArray;
+        handle->state = (uint32_t)kFLEXIO_MCULCD_StateWriteArray;
     }
     else
     {
-        handle->state = kFLEXIO_MCULCD_StateWriteSameValue;
+        handle->state = (uint32_t)kFLEXIO_MCULCD_StateWriteSameValue;
     }
 
     /* Assert the nCS. */
@@ -1059,12 +1064,12 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
     /* If transfer count is 0 (only to send command), return directly. */
     if (0U == xfer->dataSize)
     {
-        handle->state = kFLEXIO_MCULCD_StateIdle;
+        handle->state = (uint32_t)kFLEXIO_MCULCD_StateIdle;
 
         /* De-assert the nCS. */
         FLEXIO_MCULCD_StopTransfer(base);
 
-        if (handle->completionCallback)
+        if (NULL != handle->completionCallback)
         {
             handle->completionCallback(base, handle, kStatus_FLEXIO_MCULCD_Idle, handle->userData);
         }
@@ -1074,7 +1079,7 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
 #if (8 == FLEXIO_MCULCD_DATA_BUS_WIDTH)
         handle->dataCount = xfer->dataSize;
 #else
-        handle->dataCount = xfer->dataSize / 2;
+        handle->dataCount = xfer->dataSize / 2U;
 #endif
 
         handle->remainingCount = handle->dataCount;
@@ -1090,7 +1095,7 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
                 base->setRDWRPin(true);
             }
             FLEXIO_MCULCD_SetSingleBeatReadConfig(base);
-            FLEXIO_MCULCD_EnableInterrupts(base, kFLEXIO_MCULCD_RxFullInterruptEnable);
+            FLEXIO_MCULCD_EnableInterrupts(base, (uint32_t)kFLEXIO_MCULCD_RxFullInterruptEnable);
         }
         else
         {
@@ -1100,7 +1105,7 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
                 base->setRDWRPin(false);
             }
             FLEXIO_MCULCD_SetSingleBeatWriteConfig(base);
-            FLEXIO_MCULCD_EnableInterrupts(base, kFLEXIO_MCULCD_TxEmptyInterruptEnable);
+            FLEXIO_MCULCD_EnableInterrupts(base, (uint32_t)kFLEXIO_MCULCD_TxEmptyInterruptEnable);
         }
     }
 
@@ -1117,15 +1122,16 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
 void FLEXIO_MCULCD_TransferAbort(FLEXIO_MCULCD_Type *base, flexio_mculcd_handle_t *handle)
 {
     /* If no transfer in process, return directly. */
-    if (kFLEXIO_MCULCD_StateIdle == handle->state)
+    if ((uint32_t)kFLEXIO_MCULCD_StateIdle == handle->state)
     {
         return;
     }
 
     /* Disable the interrupt. */
-    FLEXIO_MCULCD_DisableInterrupts(base, kFLEXIO_MCULCD_RxFullInterruptEnable | kFLEXIO_MCULCD_TxEmptyInterruptEnable);
+    FLEXIO_MCULCD_DisableInterrupts(
+        base, (uint32_t)kFLEXIO_MCULCD_RxFullInterruptEnable | (uint32_t)kFLEXIO_MCULCD_TxEmptyInterruptEnable);
 
-    if (kFLEXIO_MCULCD_ReadArray == handle->state)
+    if ((uint32_t)kFLEXIO_MCULCD_StateReadArray == handle->state)
     {
         /* Stop the timer and disable the RX shifter. */
         FLEXIO_MCULCD_ClearSingleBeatReadConfig(base);
@@ -1137,14 +1143,14 @@ void FLEXIO_MCULCD_TransferAbort(FLEXIO_MCULCD_Type *base, flexio_mculcd_handle_
     }
 
     /* Clean the flags. */
-    FLEXIO_MCULCD_ClearStatusFlags(base, kFLEXIO_MCULCD_TxEmptyFlag | kFLEXIO_MCULCD_RxFullFlag);
+    FLEXIO_MCULCD_ClearStatusFlags(base, (uint32_t)kFLEXIO_MCULCD_TxEmptyFlag | (uint32_t)kFLEXIO_MCULCD_RxFullFlag);
 
     /* De-assert the nCS. */
     FLEXIO_MCULCD_StopTransfer(base);
 
     handle->dataCount      = 0;
     handle->remainingCount = 0;
-    handle->state          = kFLEXIO_MCULCD_StateIdle;
+    handle->state          = (uint32_t)kFLEXIO_MCULCD_StateIdle;
 }
 
 /*!
@@ -1159,9 +1165,9 @@ void FLEXIO_MCULCD_TransferAbort(FLEXIO_MCULCD_Type *base, flexio_mculcd_handle_
  */
 status_t FLEXIO_MCULCD_TransferGetCount(FLEXIO_MCULCD_Type *base, flexio_mculcd_handle_t *handle, size_t *count)
 {
-    assert(count);
+    assert(NULL != count);
 
-    if (kFLEXIO_MCULCD_StateIdle == handle->state)
+    if ((uint32_t)kFLEXIO_MCULCD_StateIdle == handle->state)
     {
         return kStatus_NoTransferInProgress;
     }
@@ -1189,15 +1195,15 @@ void FLEXIO_MCULCD_TransferHandleIRQ(void *base, void *handle)
     uint32_t statusFlags                       = FLEXIO_MCULCD_GetStatusFlags(flexioLcdMcuBase);
     uint32_t data;
 
-    if (kFLEXIO_MCULCD_StateReadArray == flexioLcdMcuHandle->state)
+    if ((uint32_t)kFLEXIO_MCULCD_StateReadArray == flexioLcdMcuHandle->state)
     {
         /* Handle the reading process. */
-        while ((kFLEXIO_MCULCD_RxFullFlag & statusFlags) && (flexioLcdMcuHandle->remainingCount > 0))
+        while ((0U != ((uint32_t)kFLEXIO_MCULCD_RxFullFlag & statusFlags)) && (flexioLcdMcuHandle->remainingCount > 0U))
         {
-            if (1 == flexioLcdMcuHandle->remainingCount)
+            if (1U == flexioLcdMcuHandle->remainingCount)
             {
                 /* If this is the last data, stop the RX shifter and timer. */
-                FLEXIO_MCULCD_DisableInterrupts(flexioLcdMcuBase, kFLEXIO_MCULCD_RxFullInterruptEnable);
+                FLEXIO_MCULCD_DisableInterrupts(flexioLcdMcuBase, (uint32_t)kFLEXIO_MCULCD_RxFullInterruptEnable);
                 FLEXIO_MCULCD_ClearSingleBeatReadConfig(flexioLcdMcuBase);
                 FLEXIO_MCULCD_StopTransfer(flexioLcdMcuBase);
             }
@@ -1216,11 +1222,11 @@ void FLEXIO_MCULCD_TransferHandleIRQ(void *base, void *handle)
             flexioLcdMcuHandle->remainingCount--;
 
             /* Transfer finished, call the callback. */
-            if (0 == flexioLcdMcuHandle->remainingCount)
+            if (0U == flexioLcdMcuHandle->remainingCount)
             {
-                flexioLcdMcuHandle->state = kFLEXIO_MCULCD_StateIdle;
+                flexioLcdMcuHandle->state = (uint32_t)kFLEXIO_MCULCD_StateIdle;
 
-                if (flexioLcdMcuHandle->completionCallback)
+                if (NULL != flexioLcdMcuHandle->completionCallback)
                 {
                     flexioLcdMcuHandle->completionCallback(flexioLcdMcuBase, flexioLcdMcuHandle,
                                                            kStatus_FLEXIO_MCULCD_Idle, flexioLcdMcuHandle->userData);
@@ -1234,10 +1240,11 @@ void FLEXIO_MCULCD_TransferHandleIRQ(void *base, void *handle)
     else
     {
         /* Handle the writing process. */
-        while ((kFLEXIO_MCULCD_TxEmptyFlag & statusFlags) && (flexioLcdMcuHandle->remainingCount > 0))
+        while ((0U != ((uint32_t)kFLEXIO_MCULCD_TxEmptyFlag & statusFlags)) &&
+               (flexioLcdMcuHandle->remainingCount > 0U))
         {
             /* Send the data. */
-            if (kFLEXIO_MCULCD_StateWriteSameValue == flexioLcdMcuHandle->state)
+            if ((uint32_t)kFLEXIO_MCULCD_StateWriteSameValue == flexioLcdMcuHandle->state)
             {
                 data = flexioLcdMcuHandle->dataAddrOrSameValue;
             }
@@ -1253,9 +1260,9 @@ void FLEXIO_MCULCD_TransferHandleIRQ(void *base, void *handle)
             }
 
             /* If this is the last data to send, delay to wait for the data shift out.  */
-            if (1 == flexioLcdMcuHandle->remainingCount)
+            if (1U == flexioLcdMcuHandle->remainingCount)
             {
-                FLEXIO_MCULCD_DisableInterrupts(flexioLcdMcuBase, kFLEXIO_MCULCD_TxEmptyInterruptEnable);
+                FLEXIO_MCULCD_DisableInterrupts(flexioLcdMcuBase, (uint32_t)kFLEXIO_MCULCD_TxEmptyInterruptEnable);
 
                 /* Write the last data. */
                 FLEXIO_MCULCD_WriteData(flexioLcdMcuBase, data);
@@ -1266,9 +1273,9 @@ void FLEXIO_MCULCD_TransferHandleIRQ(void *base, void *handle)
 
                 FLEXIO_MCULCD_ClearSingleBeatWriteConfig(flexioLcdMcuBase);
                 FLEXIO_MCULCD_StopTransfer(flexioLcdMcuBase);
-                flexioLcdMcuHandle->state = kFLEXIO_MCULCD_StateIdle;
+                flexioLcdMcuHandle->state = (uint32_t)kFLEXIO_MCULCD_StateIdle;
 
-                if (flexioLcdMcuHandle->completionCallback)
+                if (NULL != flexioLcdMcuHandle->completionCallback)
                 {
                     flexioLcdMcuHandle->completionCallback(flexioLcdMcuBase, flexioLcdMcuHandle,
                                                            kStatus_FLEXIO_MCULCD_Idle, flexioLcdMcuHandle->userData);

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,15 +21,15 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.1.9. */
-#define FSL_SDHC_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 9U))
+/*! @brief Driver version 2.1.10. */
+#define FSL_SDHC_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 10U))
 /*@}*/
 
 /*! @brief Maximum block count can be set one time */
 #define SDHC_MAX_BLOCK_COUNT (SDHC_BLKATTR_BLKCNT_MASK >> SDHC_BLKATTR_BLKCNT_SHIFT)
 
-/*! @brief SDHC status */
-enum _sdhc_status
+/*! @brief _sdhc_status SDHC status */
+enum
 {
     kStatus_SDHC_BusyTransferring            = MAKE_STATUS(kStatusGroup_SDHC, 0U), /*!< Transfer is on-going */
     kStatus_SDHC_PrepareAdmaDescriptorFailed = MAKE_STATUS(kStatusGroup_SDHC, 1U), /*!< Set DMA descriptor failed */
@@ -39,8 +39,8 @@ enum _sdhc_status
         MAKE_STATUS(kStatusGroup_SDHC, 4U), /*!< data buffer addr not align in DMA mode */
 };
 
-/*! @brief Host controller capabilities flag mask */
-enum _sdhc_capability_flag
+/*! @brief _sdhc_capability_flag Host controller capabilities flag mask */
+enum
 {
     kSDHC_SupportAdmaFlag          = SDHC_HTCAPBLT_ADMAS_MASK, /*!< Support ADMA */
     kSDHC_SupportHighSpeedFlag     = SDHC_HTCAPBLT_HSS_MASK,   /*!< Support high-speed */
@@ -58,8 +58,8 @@ enum _sdhc_capability_flag
     kSDHC_Support8BitFlag = (SDHC_HTCAPBLT_MBL_SHIFT << 1U), /*!< Support 8 bit mode */
 };
 
-/*! @brief Wakeup event mask */
-enum _sdhc_wakeup_event
+/*! @brief _sdhc_wakeup_event Wakeup event mask */
+enum
 {
     kSDHC_WakeupEventOnCardInt    = SDHC_PROCTL_WECINT_MASK, /*!< Wakeup on card interrupt */
     kSDHC_WakeupEventOnCardInsert = SDHC_PROCTL_WECINS_MASK, /*!< Wakeup on card insertion */
@@ -69,8 +69,8 @@ enum _sdhc_wakeup_event
                              kSDHC_WakeupEventOnCardRemove), /*!< All wakeup events */
 };
 
-/*! @brief Reset type mask */
-enum _sdhc_reset
+/*! @brief _sdhc_reset Reset type mask */
+enum
 {
     kSDHC_ResetAll     = SDHC_SYSCTL_RSTA_MASK, /*!< Reset all except card detection */
     kSDHC_ResetCommand = SDHC_SYSCTL_RSTC_MASK, /*!< Reset command line */
@@ -79,8 +79,8 @@ enum _sdhc_reset
     kSDHC_ResetsAll = (kSDHC_ResetAll | kSDHC_ResetCommand | kSDHC_ResetData), /*!< All reset types */
 };
 
-/*! @brief Transfer flag mask */
-enum _sdhc_transfer_flag
+/*! @brief _sdhc_transfer_flag Transfer flag mask */
+enum
 {
     kSDHC_EnableDmaFlag = SDHC_XFERTYP_DMAEN_MASK, /*!< Enable DMA */
 
@@ -102,8 +102,8 @@ enum _sdhc_transfer_flag
     kSDHC_DataPresentFlag      = SDHC_XFERTYP_DPSEL_MASK, /*!< Data present flag */
 };
 
-/*! @brief Present status flag mask */
-enum _sdhc_present_status_flag
+/*! @brief _sdhc_present_status_flag Present status flag mask */
+enum
 {
     kSDHC_CommandInhibitFlag      = SDHC_PRSSTAT_CIHB_MASK,  /*!< Command inhibit */
     kSDHC_DataInhibitFlag         = SDHC_PRSSTAT_CDIHB_MASK, /*!< Data inhibit */
@@ -126,8 +126,8 @@ enum _sdhc_present_status_flag
     kSDHC_Data7LineLevelFlag = (int)(1U << 31U), /*!< Data7 line signal level */
 };
 
-/*! @brief Interrupt status flag mask */
-enum _sdhc_interrupt_status_flag
+/*! @brief _sdhc_interrupt_status_flag Interrupt status flag mask */
+enum
 {
     kSDHC_CommandCompleteFlag    = SDHC_IRQSTAT_CC_MASK,    /*!< Command complete */
     kSDHC_DataCompleteFlag       = SDHC_IRQSTAT_TC_MASK,    /*!< Data complete */
@@ -153,17 +153,18 @@ enum _sdhc_interrupt_status_flag
     kSDHC_DataErrorFlag    = (kSDHC_DataTimeoutFlag | kSDHC_DataCrcErrorFlag | kSDHC_DataEndBitErrorFlag |
                            kSDHC_AutoCommand12ErrorFlag),                                      /*!< Data error */
     kSDHC_ErrorFlag        = (kSDHC_CommandErrorFlag | kSDHC_DataErrorFlag | kSDHC_DmaErrorFlag), /*!< All error */
-    kSDHC_DataFlag         = (kSDHC_DataCompleteFlag | kSDHC_DmaCompleteFlag | kSDHC_BufferWriteReadyFlag |
-                      kSDHC_BufferReadReadyFlag | kSDHC_DataErrorFlag | kSDHC_DmaErrorFlag), /*!< Data interrupts */
-    kSDHC_CommandFlag      = (kSDHC_CommandErrorFlag | kSDHC_CommandCompleteFlag), /*!< Command interrupts */
-    kSDHC_CardDetectFlag   = (kSDHC_CardInsertionFlag | kSDHC_CardRemovalFlag),    /*!< Card detection interrupts */
+    kSDHC_DataFlag         = (kSDHC_DataCompleteFlag | kSDHC_BufferWriteReadyFlag | kSDHC_BufferReadReadyFlag |
+                      kSDHC_DataErrorFlag),                                             /*!< Data interrupts */
+    kSDHC_DataDMAFlag    = (kSDHC_DataCompleteFlag | kSDHC_DataErrorFlag | kSDHC_DmaErrorFlag), /*!< Data interrupts */
+    kSDHC_CommandFlag    = (kSDHC_CommandErrorFlag | kSDHC_CommandCompleteFlag), /*!< Command interrupts */
+    kSDHC_CardDetectFlag = (kSDHC_CardInsertionFlag | kSDHC_CardRemovalFlag),    /*!< Card detection interrupts */
 
     kSDHC_AllInterruptFlags = (kSDHC_BlockGapEventFlag | kSDHC_CardInterruptFlag | kSDHC_CommandFlag | kSDHC_DataFlag |
                                kSDHC_ErrorFlag), /*!< All flags mask */
 };
 
-/*! @brief Auto CMD12 error status flag mask */
-enum _sdhc_auto_command12_error_status_flag
+/*! @brief _sdhc_auto_command12_error_status_flag Auto CMD12 error status flag mask */
+enum
 {
     kSDHC_AutoCommand12NotExecutedFlag = SDHC_AC12ERR_AC12NE_MASK,    /*!< Not executed error */
     kSDHC_AutoCommand12TimeoutFlag     = SDHC_AC12ERR_AC12TOE_MASK,   /*!< Timeout error */
@@ -173,8 +174,8 @@ enum _sdhc_auto_command12_error_status_flag
     kSDHC_AutoCommand12NotIssuedFlag   = SDHC_AC12ERR_CNIBAC12E_MASK, /*!< Not issued error */
 };
 
-/*! @brief ADMA error status flag mask */
-enum _sdhc_adma_error_status_flag
+/*! @brief _sdhc_adma_error_status_flag ADMA error status flag mask */
+enum
 {
     kSDHC_AdmaLenghMismatchFlag   = SDHC_ADMAES_ADMALME_MASK, /*!< Length mismatch error */
     kSDHC_AdmaDescriptorErrorFlag = SDHC_ADMAES_ADMADCE_MASK, /*!< Descriptor error */
@@ -193,8 +194,8 @@ typedef enum _sdhc_adma_error_state
     kSDHC_AdmaErrorStateTransferData    = 0x03U, /*!< Transfer data */
 } sdhc_adma_error_state_t;
 
-/*! @brief Force event bit position */
-enum _sdhc_force_event
+/*! @brief _sdhc_force_event Force event bit position */
+enum
 {
     kSDHC_ForceEventAutoCommand12NotExecuted = SDHC_FEVT_AC12NE_MASK,    /*!< Auto CMD12 not executed error */
     kSDHC_ForceEventAutoCommand12Timeout     = SDHC_FEVT_AC12TOE_MASK,   /*!< Auto CMD12 timeout error */
@@ -244,8 +245,8 @@ typedef enum _sdhc_dma_mode
     kSDHC_DmaModeAdma2 = 2U, /*!< ADMA2 is selected */
 } sdhc_dma_mode_t;
 
-/*! @brief SDIO control flag mask */
-enum _sdhc_sdio_control_flag
+/*! @brief _sdhc_sdio_control_flag SDIO control flag mask */
+enum
 {
     kSDHC_StopAtBlockGapFlag       = 0x01, /*!< Stop at block gap */
     kSDHC_ReadWaitControlFlag      = 0x02, /*!< Read wait control */
@@ -330,8 +331,8 @@ typedef enum _sdhc_card_response_type
 /*! @brief The maximum value of LENGTH filed in ADMA1's descriptor */
 #define SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY (SDHC_ADMA1_DESCRIPTOR_LENGTH_MASK + 1U)
 
-/*! @brief The mask for the control/status field in ADMA1 descriptor */
-enum _sdhc_adma1_descriptor_flag
+/*! @brief _sdhc_adma1_descriptor_flag The mask for the control/status field in ADMA1 descriptor */
+enum
 {
     kSDHC_Adma1DescriptorValidFlag     = (1U << 0U),                       /*!< Valid flag */
     kSDHC_Adma1DescriptorEndFlag       = (1U << 1U),                       /*!< End flag */
@@ -371,12 +372,12 @@ enum _sdhc_adma1_descriptor_flag
 /*! @brief The bit shift for LENGTH field in ADMA2's descriptor */
 #define SDHC_ADMA2_DESCRIPTOR_LENGTH_SHIFT (16U)
 /*! @brief The bit mask for LENGTH field in ADMA2's descriptor */
-#define SDHC_ADMA2_DESCRIPTOR_LENGTH_MASK (0xFFFFU)
+#define SDHC_ADMA2_DESCRIPTOR_LENGTH_MASK (0xFFFFUL)
 /*! @brief The maximum value of LENGTH field in ADMA2's descriptor */
 #define SDHC_ADMA2_DESCRIPTOR_MAX_LENGTH_PER_ENTRY (SDHC_ADMA2_DESCRIPTOR_LENGTH_MASK)
 
-/*! @brief ADMA1 descriptor control and status mask */
-enum _sdhc_adma2_descriptor_flag
+/*! @brief _sdhc_adma2_descriptor_flag ADMA1 descriptor control and status mask */
+enum
 {
     kSDHC_Adma2DescriptorValidFlag     = (1U << 0U), /*!< Valid flag */
     kSDHC_Adma2DescriptorEndFlag       = (1U << 1U), /*!< End flag */
@@ -690,7 +691,9 @@ static inline void SDHC_DisableInterruptSignal(SDHC_Type *base, uint32_t mask)
  */
 static inline uint32_t SDHC_GetEnabledInterruptStatusFlags(SDHC_Type *base)
 {
-    return (base->IRQSTAT) & (base->IRQSIGEN);
+    uint32_t intStatus = base->IRQSTAT;
+
+    return intStatus & base->IRQSIGEN;
 }
 
 /*!
@@ -868,7 +871,7 @@ void SDHC_SetTransferConfig(SDHC_Type *base, const sdhc_transfer_config_t *confi
  */
 static inline uint32_t SDHC_GetCommandResponse(SDHC_Type *base, uint32_t index)
 {
-    assert(index < 4U);
+    assert(index < 4UL);
 
     return base->CMDRSP[index];
 }
@@ -1073,11 +1076,8 @@ void SDHC_TransferCreateHandle(SDHC_Type *base,
  * @retval kStatus_SDHC_PrepareAdmaDescriptorFailed Prepare ADMA descriptor failed.
  * @retval kStatus_Success Operate successfully.
  */
-status_t SDHC_TransferNonBlocking(SDHC_Type *base,
-                                  sdhc_handle_t *handle,
-                                  uint32_t *admaTable,
-                                  uint32_t admaTableWords,
-                                  sdhc_transfer_t *transfer);
+status_t SDHC_TransferNonBlocking(
+    SDHC_Type *base, sdhc_handle_t *handle, uint32_t *admaTable, uint32_t admaTableWords, sdhc_transfer_t *transfer);
 
 /*!
  * @brief IRQ handler for the SDHC.

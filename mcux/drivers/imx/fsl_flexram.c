@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 NXP
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  *
@@ -28,14 +28,6 @@
  * @return The FLEXRAM instance
  */
 static uint32_t FLEXRAM_GetInstance(FLEXRAM_Type *base);
-
-/*!
- * @brief FLEXRAM map TCM size to register value
- *
- * @param tcmBankNum tcm banknumber
- * @retval register value correspond to the tcm size
- */
-static uint8_t FLEXRAM_MapTcmSizeToRegister(uint8_t tcmBankNum);
 
 /*******************************************************************************
  * Variables
@@ -82,9 +74,9 @@ void FLEXRAM_Init(FLEXRAM_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* enable all the interrupt status */
-    base->INT_STAT_EN |= kFLEXRAM_InterruptStatusAll;
+    base->INT_STAT_EN |= (uint32_t)kFLEXRAM_InterruptStatusAll;
     /* clear all the interrupt status */
-    base->INT_STATUS |= kFLEXRAM_InterruptStatusAll;
+    base->INT_STATUS |= (uint32_t)kFLEXRAM_InterruptStatusAll;
     /* disable all the interrpt */
     base->INT_SIG_EN = 0U;
 }
@@ -99,118 +91,4 @@ void FLEXRAN_Deinit(FLEXRAM_Type *base)
     /* Ungate ENET clock. */
     CLOCK_DisableClock(s_flexramClocks[FLEXRAM_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
-}
-
-static uint8_t FLEXRAM_MapTcmSizeToRegister(uint8_t tcmBankNum)
-{
-    uint8_t tcmSizeConfig = 0U;
-    uint32_t totalTcmSize = 0U;
-
-    /* if bank number is a odd value, use a new bank number which bigger than target */
-    do
-    {
-        if ((tcmBankNum & (tcmBankNum - 1U)) == 0U)
-        {
-            break;
-        }
-    } while (++tcmBankNum < FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS);
-
-    totalTcmSize = tcmBankNum * (FSL_FEATURE_FLEXRAM_INTERNAL_RAM_BANK_SIZE >> 10U);
-    /* get bit '1' position */
-    while (totalTcmSize)
-    {
-        if ((totalTcmSize & 1U) == 0U)
-        {
-            tcmSizeConfig++;
-        }
-        else
-        {
-            break;
-        }
-        totalTcmSize >>= 1U;
-    }
-
-    return tcmSizeConfig + 1U;
-}
-
-void FLEXRAM_SetTCMSize(uint8_t itcmBankNum, uint8_t dtcmBankNum)
-{
-    assert(itcmBankNum <= FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS);
-    assert(dtcmBankNum <= FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS);
-
-    /* dtcm configuration */
-    if (dtcmBankNum != 0U)
-    {
-        IOMUXC_GPR->GPR14 &= ~IOMUXC_GPR_GPR14_CM7_CFGDTCMSZ_MASK;
-        IOMUXC_GPR->GPR14 |= IOMUXC_GPR_GPR14_CM7_CFGDTCMSZ(FLEXRAM_MapTcmSizeToRegister(dtcmBankNum));
-        IOMUXC_GPR->GPR16 |= IOMUXC_GPR_GPR16_INIT_DTCM_EN_MASK;
-    }
-    else
-    {
-        IOMUXC_GPR->GPR16 &= ~IOMUXC_GPR_GPR16_INIT_DTCM_EN_MASK;
-    }
-
-    /* itcm configuration */
-    if (itcmBankNum != 0U)
-    {
-        IOMUXC_GPR->GPR14 &= ~IOMUXC_GPR_GPR14_CM7_CFGITCMSZ_MASK;
-        IOMUXC_GPR->GPR14 |= IOMUXC_GPR_GPR14_CM7_CFGITCMSZ(FLEXRAM_MapTcmSizeToRegister(itcmBankNum));
-        IOMUXC_GPR->GPR16 |= IOMUXC_GPR_GPR16_INIT_ITCM_EN_MASK;
-    }
-    else
-    {
-        IOMUXC_GPR->GPR16 &= ~IOMUXC_GPR_GPR16_INIT_ITCM_EN_MASK;
-    }
-}
-
-/*!
- * brief FLEXRAM allocate on-chip ram for OCRAM,ITCM,DTCM
- * This function is independent of FLEXRAM_Init, it can be called directly if ram re-allocate
- * is needed.
- * param config allocate configuration.
- * retval kStatus_InvalidArgument the argument is invalid
- * 		   kStatus_Success allocate success
- */
-status_t FLEXRAM_AllocateRam(flexram_allocate_ram_t *config)
-{
-    assert(config != NULL);
-
-    uint8_t dtcmBankNum  = config->dtcmBankNum;
-    uint8_t itcmBankNum  = config->itcmBankNum;
-    uint8_t ocramBankNum = config->ocramBankNum;
-    uint32_t bankCfg = 0U, i = 0U;
-
-    /* check the arguments */
-    if (FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS < (dtcmBankNum + itcmBankNum + ocramBankNum))
-    {
-        return kStatus_InvalidArgument;
-    }
-    /* flexram bank config value */
-    for (i = 0U; i < FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS; i++)
-    {
-        if (i < ocramBankNum)
-        {
-            bankCfg |= ((uint32_t)kFLEXRAM_BankOCRAM) << (i * 2);
-            continue;
-        }
-
-        if (i < (dtcmBankNum + ocramBankNum))
-        {
-            bankCfg |= ((uint32_t)kFLEXRAM_BankDTCM) << (i * 2);
-            continue;
-        }
-
-        if (i < (dtcmBankNum + ocramBankNum + itcmBankNum))
-        {
-            bankCfg |= ((uint32_t)kFLEXRAM_BankITCM) << (i * 2);
-            continue;
-        }
-    }
-    IOMUXC_GPR->GPR17 = bankCfg;
-    /* set TCM size */
-    FLEXRAM_SetTCMSize(itcmBankNum, dtcmBankNum);
-    /* select ram allocate source from FLEXRAM_BANK_CFG */
-    FLEXRAM_SetAllocateRamSrc(kFLEXRAM_BankAllocateThroughBankCfg);
-
-    return kStatus_Success;
 }

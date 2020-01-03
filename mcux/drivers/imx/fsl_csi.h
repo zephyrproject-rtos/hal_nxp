@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+#define FSL_CSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*! @brief Size of the frame buffer queue used in CSI transactional function. */
@@ -41,6 +41,13 @@
  * equals tail + 1, the queue is full.
  */
 #define CSI_DRIVER_ACTUAL_QUEUE_SIZE (CSI_DRIVER_QUEUE_SIZE + 1U)
+
+/*
+ * The queue max size is 254, so that the queue element index could use `uint8_t`.
+ */
+#if (CSI_DRIVER_ACTUAL_QUEUE_SIZE > 254)
+#error Required queue size is too large
+#endif
 
 /*
  * The interrupt enable bits are in registers CSICR1[16:31], CSICR3[0:7],
@@ -70,7 +77,7 @@
 #endif
 
 /*! @brief Error codes for the CSI driver. */
-enum _csi_status
+enum
 {
     kStatus_CSI_NoEmptyBuffer = MAKE_STATUS(kStatusGroup_CSI, 0), /*!< No empty frame buffer in queue to load to CSI. */
     kStatus_CSI_NoFullBuffer  = MAKE_STATUS(kStatusGroup_CSI, 1), /*!< No full frame buffer in queue to read out. */
@@ -92,12 +99,12 @@ typedef enum _csi_work_mode
 
 /*!
  * @brief CSI data bus witdh.
- *
- * Currently only support 8-bit width.
  */
 typedef enum _csi_data_bus
 {
-    kCSI_DataBus8Bit, /*!< 8-bit data bus. */
+    kCSI_DataBus8Bit,  /*!< 8-bit data bus. */
+    kCSI_DataBus16Bit, /*!< 16-bit data bus. */
+    kCSI_DataBus24Bit, /*!< 24-bit data bus. */
 } csi_data_bus_t;
 
 /*! @brief CSI signal polarity. */
@@ -119,7 +126,6 @@ typedef struct _csi_config
     uint32_t polarityFlags;   /*!< Timing signal polarity flags, OR'ed value of @ref _csi_polarity_flags. */
     uint8_t bytesPerPixel;    /*!< Bytes per pixel, valid values are:
                                 - 2: Used for RGB565, YUV422, and so on.
-                                - 3: Used for packed RGB888, packed YUV444, and so on.
                                 - 4: Used for XRGB8888, XYUV444, and so on.
                                 */
     uint16_t linePitch_Bytes; /*!< Frame buffer line pitch, must be 8-byte aligned. */
@@ -225,16 +231,14 @@ struct _csi_handle
 {
     uint32_t frameBufferQueue[CSI_DRIVER_ACTUAL_QUEUE_SIZE]; /*!< Frame buffer queue. */
 
-    volatile uint8_t queueUserReadIdx;  /*!< Application gets full-filled frame buffer from this index. */
-    volatile uint8_t queueUserWriteIdx; /*!< Application puts empty frame buffer to this index. */
-    volatile uint8_t queueDrvReadIdx;   /*!< Driver gets empty frame buffer from this index. */
-    volatile uint8_t queueDrvWriteIdx;  /*!< Driver puts the full-filled frame buffer to this index. */
+    volatile uint8_t queueWriteIdx;  /*!< Pointer to save incoming item. */
+    volatile uint8_t queueReadIdx;   /*!< Pointer to read out the item. */
+    void *volatile emptyBuffer;      /*!< Pointer to maintain the empty frame buffers. */
+    volatile uint8_t emptyBufferCnt; /*!< Empty frame buffers count. */
 
     volatile uint8_t activeBufferNum; /*!< How many frame buffers are in progres currently. */
-    volatile uint8_t nextBufferIdx;   /*!< The CSI frame buffer index to use for next frame. */
 
     volatile bool transferStarted; /*!< User has called @ref CSI_TransferStart to start frame receiving. */
-    volatile bool transferOnGoing; /*!< CSI is working and receiving incoming frames. */
 
     csi_transfer_callback_t callback; /*!< Callback function. */
     void *userData;                   /*!< CSI callback function parameter.*/

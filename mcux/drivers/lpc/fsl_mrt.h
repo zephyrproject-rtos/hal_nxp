@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_MRT_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
+#define FSL_MRT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
 /*@}*/
 
 /*! @brief List of MRT channels */
@@ -135,7 +135,7 @@ static inline void MRT_SetupChannelMode(MRT_Type *base, mrt_chnl_t channel, cons
     /* Clear old value */
     reg &= ~MRT_CHANNEL_CTRL_MODE_MASK;
     /* Add the new mode */
-    reg |= mode;
+    reg |= (uint32_t)mode;
 
     base->CHANNEL[channel].CTRL = reg;
 }

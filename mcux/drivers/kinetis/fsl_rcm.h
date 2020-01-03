@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief RCM driver version 2.0.2. */
-#define FSL_RCM_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief RCM driver version 2.0.3. */
+#define FSL_RCM_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*!
@@ -192,7 +192,11 @@ extern "C" {
  */
 static inline void RCM_GetVersionId(RCM_Type *base, rcm_version_id_t *versionId)
 {
-    *((uint32_t *)versionId) = base->VERID;
+    uint32_t tmp = base->VERID;
+
+    versionId->feature = (uint16_t)(tmp & 0x0000FFFFUL);
+    versionId->minor   = (uint8_t)((tmp & 0x00FF0000UL) >> 16U);
+    versionId->major   = (uint8_t)((tmp & 0x000000FFUL) >> 24U);
 }
 #endif
 
@@ -349,7 +353,7 @@ static inline bool RCM_GetEasyPortModePinStatus(RCM_Type *base)
  */
 static inline rcm_boot_rom_config_t RCM_GetBootRomSource(RCM_Type *base)
 {
-    return (rcm_boot_rom_config_t)((base->MR & RCM_MR_BOOTROM_MASK) >> RCM_MR_BOOTROM_SHIFT);
+    return (rcm_boot_rom_config_t)(uint8_t)((base->MR & RCM_MR_BOOTROM_MASK) >> RCM_MR_BOOTROM_SHIFT);
 }
 
 /*!
@@ -394,7 +398,7 @@ void RCM_SetForceBootRomSource(RCM_Type *base, rcm_boot_rom_config_t config);
  */
 static inline void RCM_SetSystemResetInterruptConfig(RCM_Type *base, uint32_t intMask, rcm_reset_delay_t delay)
 {
-    base->SRIE = (intMask | delay);
+    base->SRIE = (intMask | (uint32_t)delay);
 }
 #endif /* FSL_FEATURE_RCM_HAS_SRIE */
 /*@}*/

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief I2C DMA driver version 2.0.3. */
-#define FSL_I2C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief I2C DMA driver version 2.0.6. */
+#define FSL_I2C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*@}*/
 
 /*! @brief Maximum lenght of single DMA transfer (determined by capability of the DMA engine) */
@@ -37,6 +37,9 @@ typedef void (*i2c_master_dma_transfer_callback_t)(I2C_Type *base,
                                                    i2c_master_dma_handle_t *handle,
                                                    status_t status,
                                                    void *userData);
+
+/*! @brief Typedef for master dma handler. */
+typedef void (*flexcomm_i2c_dma_master_irq_handler_t)(I2C_Type *base, i2c_master_dma_handle_t *handle);
 
 /*! @brief I2C master dma transfer structure. */
 struct _i2c_master_dma_handle

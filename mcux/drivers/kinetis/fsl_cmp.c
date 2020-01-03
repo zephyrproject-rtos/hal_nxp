@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -243,7 +243,7 @@ void CMP_SetFilterConfig(CMP_Type *base, const cmp_filter_config_t *config)
     }
     else
     {
-        base->CR1 &= ~CMP_CR1_SE_MASK; /* Choose the internal divided bus clock. */
+        base->CR1 &= (uint8_t)(~CMP_CR1_SE_MASK); /* Choose the internal divided bus clock. */
     }
 #endif /* FSL_FEATURE_CMP_HAS_EXTERNAL_SAMPLE_SUPPORT */
     /* Set the filter count. */

@@ -139,7 +139,7 @@ void FLEXIO_GetDefaultConfig(flexio_config_t *userConfig)
     assert(userConfig);
 
     /* Initializes the configure structure to zero. */
-    memset(userConfig, 0, sizeof(*userConfig));
+    (void)memset(userConfig, 0, sizeof(*userConfig));
 
     userConfig->enableFlexio     = true;
     userConfig->enableInDoze     = false;
@@ -210,6 +210,7 @@ uint32_t FLEXIO_GetShifterBufferAddress(FLEXIO_Type *base, flexio_shifter_buffer
 
 #endif
         default:
+            address = (uint32_t) & (base->SHIFTBUF[index]);
             break;
     }
     return address;
@@ -317,10 +318,10 @@ status_t FLEXIO_RegisterHandleIRQ(void *base, void *handle, flexio_isr_t isr)
     assert(handle);
     assert(isr);
 
-    uint8_t index = 0;
+    uint8_t index;
 
     /* Find the an empty handle pointer to store the handle. */
-    for (index = 0; index < FLEXIO_HANDLE_COUNT; index++)
+    for (index = 0U; index < (uint8_t)FLEXIO_HANDLE_COUNT; index++)
     {
         if (s_flexioHandle[index] == NULL)
         {
@@ -332,7 +333,7 @@ status_t FLEXIO_RegisterHandleIRQ(void *base, void *handle, flexio_isr_t isr)
         }
     }
 
-    if (index == FLEXIO_HANDLE_COUNT)
+    if (index == (uint8_t)FLEXIO_HANDLE_COUNT)
     {
         return kStatus_OutOfRange;
     }
@@ -353,10 +354,10 @@ status_t FLEXIO_UnregisterHandleIRQ(void *base)
 {
     assert(base);
 
-    uint8_t index = 0;
+    uint8_t index;
 
     /* Find the index from base address mappings. */
-    for (index = 0; index < FLEXIO_HANDLE_COUNT; index++)
+    for (index = 0U; index < (uint8_t)FLEXIO_HANDLE_COUNT; index++)
     {
         if (s_flexioType[index] == base)
         {
@@ -368,7 +369,7 @@ status_t FLEXIO_UnregisterHandleIRQ(void *base)
         }
     }
 
-    if (index == FLEXIO_HANDLE_COUNT)
+    if (index == (uint8_t)FLEXIO_HANDLE_COUNT)
     {
         return kStatus_OutOfRange;
     }
@@ -382,9 +383,9 @@ void FLEXIO_CommonIRQHandler(void)
 {
     uint8_t index;
 
-    for (index = 0; index < FLEXIO_HANDLE_COUNT; index++)
+    for (index = 0U; index < (uint8_t)FLEXIO_HANDLE_COUNT; index++)
     {
-        if (s_flexioHandle[index])
+        if (s_flexioHandle[index] != NULL)
         {
             s_flexioIsr[index](s_flexioType[index], s_flexioHandle[index]);
         }

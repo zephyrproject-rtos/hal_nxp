@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  *
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief GPC driver version 2.1.0. */
-#define FSL_GPC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief GPC driver version 2.1.1. */
+#define FSL_GPC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 #if defined(__cplusplus)
@@ -61,7 +61,7 @@ static inline void GPC_DisallowIRQs(GPC_Type *base)
  * @brief Enable the IRQ.
  *
  * @param base GPC peripheral base address.
- * @param irqId ID number of IRQ to be enabled, available range is 32-159.
+ * @param irqId ID number of IRQ to be enabled, available range is 32-159. 0-31 is available in some platforms.
  */
 void GPC_EnableIRQ(GPC_Type *base, uint32_t irqId);
 
@@ -69,7 +69,7 @@ void GPC_EnableIRQ(GPC_Type *base, uint32_t irqId);
  * @brief Disable the IRQ.
  *
  * @param base GPC peripheral base address.
- * @param irqId ID number of IRQ to be disabled, available range is 32-159.
+ * @param irqId ID number of IRQ to be disabled, available range is 32-159. 0-31 is available in some platforms.
  */
 void GPC_DisableIRQ(GPC_Type *base, uint32_t irqId);
 
@@ -77,7 +77,7 @@ void GPC_DisableIRQ(GPC_Type *base, uint32_t irqId);
  * @brief Get the IRQ/Event flag.
  *
  * @param base GPC peripheral base address.
- * @param irqId ID number of IRQ to be enabled, available range is 32-159.
+ * @param irqId ID number of IRQ to be enabled, available range is 32-159. 0-31 is available in some platforms.
  * @return Indicated IRQ/Event is asserted or not.
  */
 bool GPC_GetIRQStatusFlag(GPC_Type *base, uint32_t irqId);

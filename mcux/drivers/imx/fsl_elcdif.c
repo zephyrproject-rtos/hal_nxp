@@ -1,5 +1,5 @@
 /*
- * Copyright  2017 NXP
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  *
@@ -41,7 +41,7 @@ static const clock_ip_name_t s_elcdifPixClocks[] = LCDIF_PERIPH_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*! @brief The control register value to select different pixel format. */
-elcdif_pixel_format_reg_t s_pixelFormatReg[] = {
+static const elcdif_pixel_format_reg_t s_pixelFormatReg[] = {
     /* kELCDIF_PixelFormatRAW8 */
     {/* Register CTRL. */
      LCDIF_CTRL_WORD_LENGTH(1U),
@@ -101,8 +101,8 @@ static uint32_t ELCDIF_GetInstance(LCDIF_Type *base)
  */
 void ELCDIF_RgbModeInit(LCDIF_Type *base, const elcdif_rgb_mode_config_t *config)
 {
-    assert(config);
-    assert(config->pixelFormat < ARRAY_SIZE(s_pixelFormatReg));
+    assert(NULL != config);
+    assert((uint32_t)config->pixelFormat < ARRAY_SIZE(s_pixelFormatReg));
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     uint32_t instance = ELCDIF_GetInstance(base);
@@ -131,10 +131,12 @@ void ELCDIF_RgbModeInit(LCDIF_Type *base, const elcdif_rgb_mode_config_t *config
                     LCDIF_VDCTRL0_VSYNC_PULSE_WIDTH_UNIT_MASK | /* VSYNC pulse width in the unit of display clock. */
                     (uint32_t)config->polarityFlags | (uint32_t)config->vsw;
 
-    base->VDCTRL1 = config->vsw + config->panelHeight + config->vfp + config->vbp;
-    base->VDCTRL2 = ((uint32_t)config->hsw << LCDIF_VDCTRL2_HSYNC_PULSE_WIDTH_SHIFT) |
-                    ((uint32_t)(config->hfp + config->hbp + config->panelWidth + config->hsw))
-                        << LCDIF_VDCTRL2_HSYNC_PERIOD_SHIFT;
+    base->VDCTRL1 =
+        (uint32_t)config->vsw + (uint32_t)config->panelHeight + (uint32_t)config->vfp + (uint32_t)config->vbp;
+    base->VDCTRL2 =
+        ((uint32_t)config->hsw << LCDIF_VDCTRL2_HSYNC_PULSE_WIDTH_SHIFT) |
+        (((uint32_t)config->hfp + (uint32_t)config->hbp + (uint32_t)config->panelWidth + (uint32_t)config->hsw))
+            << LCDIF_VDCTRL2_HSYNC_PERIOD_SHIFT;
 
     base->VDCTRL3 = (((uint32_t)config->hbp + config->hsw) << LCDIF_VDCTRL3_HORIZONTAL_WAIT_CNT_SHIFT) |
                     (((uint32_t)config->vbp + config->vsw) << LCDIF_VDCTRL3_VERTICAL_WAIT_CNT_SHIFT);
@@ -173,10 +175,10 @@ void ELCDIF_RgbModeInit(LCDIF_Type *base, const elcdif_rgb_mode_config_t *config
  */
 void ELCDIF_RgbModeGetDefaultConfig(elcdif_rgb_mode_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->panelWidth    = 480U;
     config->panelHeight   = 272U;
@@ -186,8 +188,8 @@ void ELCDIF_RgbModeGetDefaultConfig(elcdif_rgb_mode_config_t *config)
     config->vsw           = 10;
     config->vfp           = 4;
     config->vbp           = 2;
-    config->polarityFlags = kELCDIF_VsyncActiveLow | kELCDIF_HsyncActiveLow | kELCDIF_DataEnableActiveLow |
-                            kELCDIF_DriveDataOnFallingClkEdge;
+    config->polarityFlags = (uint32_t)kELCDIF_VsyncActiveLow | (uint32_t)kELCDIF_HsyncActiveLow |
+                            (uint32_t)kELCDIF_DataEnableActiveLow | (uint32_t)kELCDIF_DriveDataOnFallingClkEdge;
     config->bufferAddr  = 0U;
     config->pixelFormat = kELCDIF_PixelFormatRGB888;
     config->dataBus     = kELCDIF_DataBus24Bit;
@@ -201,7 +203,7 @@ void ELCDIF_RgbModeGetDefaultConfig(elcdif_rgb_mode_config_t *config)
  */
 void ELCDIF_RgbModeSetPixelFormat(LCDIF_Type *base, elcdif_pixel_format_t pixelFormat)
 {
-    assert(pixelFormat < ARRAY_SIZE(s_pixelFormatReg));
+    assert((uint32_t)pixelFormat < ARRAY_SIZE(s_pixelFormatReg));
 
     base->CTRL = (base->CTRL & ~(LCDIF_CTRL_WORD_LENGTH_MASK | LCDIF_CTRL_DATA_FORMAT_24_BIT_MASK |
                                  LCDIF_CTRL_DATA_FORMAT_18_BIT_MASK | LCDIF_CTRL_DATA_FORMAT_16_BIT_MASK)) |
@@ -239,7 +241,7 @@ void ELCDIF_RgbModeStop(LCDIF_Type *base)
     base->CTRL_CLR = LCDIF_CTRL_DOTCLK_MODE_MASK;
 
     /* Wait for data transfer finished. */
-    while (base->CTRL & LCDIF_CTRL_DOTCLK_MODE_MASK)
+    while (0U != (base->CTRL & LCDIF_CTRL_DOTCLK_MODE_MASK))
     {
     }
 }
@@ -251,31 +253,39 @@ void ELCDIF_RgbModeStop(LCDIF_Type *base)
  */
 void ELCDIF_Reset(LCDIF_Type *base)
 {
-    volatile uint32_t i = 0x100;
+    /*
+     * ELCDIF reset workflow:
+     *
+     * 1. Ungate clock.
+     * 2. Trigger the software reset.
+     * 3. The software reset finished when clk_gate bit is set.
+     * 4. Ungate the clock.
+     * 5. Release the reset.
+     */
 
-    /* Disable the clock gate. */
+    /* Ungate clock. */
     base->CTRL_CLR = LCDIF_CTRL_CLKGATE_MASK;
-    /* Confirm the clock gate is disabled. */
-    while (base->CTRL & LCDIF_CTRL_CLKGATE_MASK)
+
+    /*
+     * If already in reset state, release the reset.
+     * If not, trigger reset.
+     */
+    if (0U == (base->CTRL & LCDIF_CTRL_SFTRST_MASK))
     {
+        /* Trigger reset. */
+        base->CTRL_SET = LCDIF_CTRL_SFTRST_MASK;
+
+        /* Reset is not finished until CLK_GATE is set. */
+        while (0U == (base->CTRL & LCDIF_CTRL_CLKGATE_MASK))
+        {
+        }
+
+        /* Ungate the clock. */
+        base->CTRL_CLR = LCDIF_CTRL_CLKGATE_MASK;
     }
 
-    /* Reset the block. */
-    base->CTRL_SET = LCDIF_CTRL_SFTRST_MASK;
-    /* Confirm the reset bit is set. */
-    while (!(base->CTRL & LCDIF_CTRL_SFTRST_MASK))
-    {
-    }
-
-    /* Delay for the reset. */
-    while (i--)
-    {
-    }
-
-    /* Bring the module out of reset. */
+    /* Release the reset. */
     base->CTRL_CLR = LCDIF_CTRL_SFTRST_MASK;
-    /* Disable the clock gate. */
-    base->CTRL_CLR = LCDIF_CTRL_CLKGATE_MASK;
 }
 
 #if !(defined(FSL_FEATURE_LCDIF_HAS_NO_AS) && FSL_FEATURE_LCDIF_HAS_NO_AS)
@@ -287,7 +297,7 @@ void ELCDIF_Reset(LCDIF_Type *base)
  */
 void ELCDIF_SetAlphaSurfaceBufferConfig(LCDIF_Type *base, const elcdif_as_buffer_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     base->AS_CTRL     = (base->AS_CTRL & ~LCDIF_AS_CTRL_FORMAT_MASK) | LCDIF_AS_CTRL_FORMAT(config->pixelFormat);
     base->AS_BUF      = config->bufferAddr;
@@ -302,7 +312,7 @@ void ELCDIF_SetAlphaSurfaceBufferConfig(LCDIF_Type *base, const elcdif_as_buffer
  */
 void ELCDIF_SetAlphaSurfaceBlendConfig(LCDIF_Type *base, const elcdif_as_blend_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
     uint32_t reg;
 
     reg = base->AS_CTRL;
@@ -341,31 +351,36 @@ status_t ELCDIF_UpdateLut(
     volatile uint32_t *regLutAddr;
     volatile uint32_t *regLutData;
     uint32_t i;
+    status_t status;
 
     /* Only has 256 entries. */
     if (startIndex + count > ELCDIF_LUT_ENTRY_NUM)
     {
-        return kStatus_InvalidArgument;
-    }
-
-    if (kELCDIF_Lut0 == lut)
-    {
-        regLutAddr = &(base->LUT0_ADDR);
-        regLutData = &(base->LUT0_DATA);
+        status = kStatus_InvalidArgument;
     }
     else
     {
-        regLutAddr = &(base->LUT1_ADDR);
-        regLutData = &(base->LUT1_DATA);
+        if (kELCDIF_Lut0 == lut)
+        {
+            regLutAddr = &(base->LUT0_ADDR);
+            regLutData = &(base->LUT0_DATA);
+        }
+        else
+        {
+            regLutAddr = &(base->LUT1_ADDR);
+            regLutData = &(base->LUT1_DATA);
+        }
+
+        *regLutAddr = startIndex;
+
+        for (i = 0; i < count; i++)
+        {
+            *regLutData = lutData[i];
+        }
+
+        status = kStatus_Success;
     }
 
-    *regLutAddr = startIndex;
-
-    for (i = 0; i < count; i++)
-    {
-        *regLutData = lutData[i];
-    }
-
-    return kStatus_Success;
+    return status;
 }
 #endif /* FSL_FEATURE_LCDIF_HAS_LUT */

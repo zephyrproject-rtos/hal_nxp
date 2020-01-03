@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -65,7 +65,7 @@ void ADC_ETC_Init(ADC_ETC_Type *base, const adc_etc_config_t *config)
 {
     assert(NULL != config);
 
-    uint32_t tmp32;
+    uint32_t tmp32 = 0U;
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 #if defined(ADC_ETC_CLOCKS)
@@ -136,7 +136,7 @@ void ADC_ETC_Deinit(ADC_ETC_Type *base)
 void ADC_ETC_GetDefaultConfig(adc_etc_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enableTSCBypass   = true;
     config->enableTSC0Trigger = false;
@@ -162,7 +162,7 @@ void ADC_ETC_SetTriggerConfig(ADC_ETC_Type *base, uint32_t triggerGroup, const a
     assert(triggerGroup < ADC_ETC_TRIGn_CTRL_COUNT);
     assert(ADC_ETC_TRIGn_COUNTER_COUNT > triggerGroup);
 
-    uint32_t tmp32;
+    uint32_t tmp32 = 0U;
 
     /* Set ADC_ETC_TRGn_CTRL register. */
     tmp32 = ADC_ETC_TRIGn_CTRL_TRIG_CHAIN(config->triggerChainLength) |
@@ -200,85 +200,92 @@ void ADC_ETC_SetTriggerChainConfig(ADC_ETC_Type *base,
 {
     assert(triggerGroup < ADC_ETC_TRIGn_CTRL_COUNT);
 
-    uint32_t tmp;
-    uint32_t tmp32;
-    uint8_t mRemainder = chainGroup % 2U;
+    uint32_t tmp32     = 0U;
+    uint32_t tmpReg    = 0U;
+    uint8_t mRemainder = (uint8_t)(chainGroup % 2U);
 
     /*  Set ADC_ETC_TRIGn_CHAINm register. */
-    tmp = ADC_ETC_TRIGn_CHAIN_1_0_HWTS0(config->ADCHCRegisterSelect) |
-          ADC_ETC_TRIGn_CHAIN_1_0_CSEL0(config->ADCChannelSelect) |
-          ADC_ETC_TRIGn_CHAIN_1_0_IE0(config->InterruptEnable);
-    if (config->enableB2BMode)
+    tmp32 = ADC_ETC_TRIGn_CHAIN_1_0_HWTS0(config->ADCHCRegisterSelect) |
+            ADC_ETC_TRIGn_CHAIN_1_0_CSEL0(config->ADCChannelSelect) |
+            ADC_ETC_TRIGn_CHAIN_1_0_IE0(config->InterruptEnable);
+    if (true == config->enableB2BMode)
     {
-        tmp |= ADC_ETC_TRIGn_CHAIN_1_0_B2B0_MASK;
+        tmp32 |= ADC_ETC_TRIGn_CHAIN_1_0_B2B0_MASK;
     }
+#if defined(FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN) && FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN
+    if (true == config->enableIrq)
+    {
+        tmp32 |= ADC_ETC_TRIGn_CHAIN_1_0_IE0_EN_MASK;
+    }
+#endif /* FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN */
     switch (chainGroup / 2U)
     {
         case 0U: /* Configurate trigger chain0 and chain 1. */
-            tmp32 = base->TRIG[triggerGroup].TRIGn_CHAIN_1_0;
+            tmpReg = base->TRIG[triggerGroup].TRIGn_CHAIN_1_0;
             if (mRemainder == 0U) /* Chain 0. */
             {
-                tmp32 &= ~(ADC_ETC_TRIGn_CHAIN_1_0_CSEL0_MASK | ADC_ETC_TRIGn_CHAIN_1_0_HWTS0_MASK |
-                           ADC_ETC_TRIGn_CHAIN_1_0_B2B0_MASK | ADC_ETC_TRIGn_CHAIN_1_0_IE0_MASK);
-                tmp32 |= tmp;
+                tmpReg &= ~(ADC_ETC_TRIGn_CHAIN_1_0_CSEL0_MASK | ADC_ETC_TRIGn_CHAIN_1_0_HWTS0_MASK |
+                            ADC_ETC_TRIGn_CHAIN_1_0_B2B0_MASK | ADC_ETC_TRIGn_CHAIN_1_0_IE0_MASK);
+                tmpReg |= tmp32;
             }
             else /* Chain 1. */
             {
-                tmp32 &= ~(ADC_ETC_TRIGn_CHAIN_1_0_CSEL1_MASK | ADC_ETC_TRIGn_CHAIN_1_0_HWTS1_MASK |
-                           ADC_ETC_TRIGn_CHAIN_1_0_B2B1_MASK | ADC_ETC_TRIGn_CHAIN_1_0_IE1_MASK);
-                tmp32 |= (tmp << ADC_ETC_TRIGn_CHAIN_1_0_CSEL1_SHIFT);
+                tmpReg &= ~(ADC_ETC_TRIGn_CHAIN_1_0_CSEL1_MASK | ADC_ETC_TRIGn_CHAIN_1_0_HWTS1_MASK |
+                            ADC_ETC_TRIGn_CHAIN_1_0_B2B1_MASK | ADC_ETC_TRIGn_CHAIN_1_0_IE1_MASK);
+                tmpReg |= (tmp32 << ADC_ETC_TRIGn_CHAIN_1_0_CSEL1_SHIFT);
             }
-            base->TRIG[triggerGroup].TRIGn_CHAIN_1_0 = tmp32;
+            base->TRIG[triggerGroup].TRIGn_CHAIN_1_0 = tmpReg;
             break;
         case 1U: /* Configurate trigger chain2 and chain 3. */
-            tmp32 = base->TRIG[triggerGroup].TRIGn_CHAIN_3_2;
+            tmpReg = base->TRIG[triggerGroup].TRIGn_CHAIN_3_2;
             if (mRemainder == 0U) /* Chain 2. */
             {
-                tmp32 &= ~(ADC_ETC_TRIGn_CHAIN_3_2_CSEL2_MASK | ADC_ETC_TRIGn_CHAIN_3_2_HWTS2_MASK |
-                           ADC_ETC_TRIGn_CHAIN_3_2_B2B2_MASK | ADC_ETC_TRIGn_CHAIN_3_2_IE2_MASK);
-                tmp32 |= tmp;
+                tmpReg &= ~(ADC_ETC_TRIGn_CHAIN_3_2_CSEL2_MASK | ADC_ETC_TRIGn_CHAIN_3_2_HWTS2_MASK |
+                            ADC_ETC_TRIGn_CHAIN_3_2_B2B2_MASK | ADC_ETC_TRIGn_CHAIN_3_2_IE2_MASK);
+                tmpReg |= tmp32;
             }
             else /* Chain 3. */
             {
-                tmp32 &= ~(ADC_ETC_TRIGn_CHAIN_3_2_CSEL3_MASK | ADC_ETC_TRIGn_CHAIN_3_2_HWTS3_MASK |
-                           ADC_ETC_TRIGn_CHAIN_3_2_B2B3_MASK | ADC_ETC_TRIGn_CHAIN_3_2_IE3_MASK);
-                tmp32 |= (tmp << ADC_ETC_TRIGn_CHAIN_3_2_CSEL3_SHIFT);
+                tmpReg &= ~(ADC_ETC_TRIGn_CHAIN_3_2_CSEL3_MASK | ADC_ETC_TRIGn_CHAIN_3_2_HWTS3_MASK |
+                            ADC_ETC_TRIGn_CHAIN_3_2_B2B3_MASK | ADC_ETC_TRIGn_CHAIN_3_2_IE3_MASK);
+                tmpReg |= (tmp32 << ADC_ETC_TRIGn_CHAIN_3_2_CSEL3_SHIFT);
             }
-            base->TRIG[triggerGroup].TRIGn_CHAIN_3_2 = tmp32;
+            base->TRIG[triggerGroup].TRIGn_CHAIN_3_2 = tmpReg;
             break;
         case 2U: /* Configurate trigger chain4 and chain 5. */
-            tmp32 = base->TRIG[triggerGroup].TRIGn_CHAIN_5_4;
+            tmpReg = base->TRIG[triggerGroup].TRIGn_CHAIN_5_4;
             if (mRemainder == 0U) /* Chain 4. */
             {
-                tmp32 &= ~(ADC_ETC_TRIGn_CHAIN_5_4_CSEL4_MASK | ADC_ETC_TRIGn_CHAIN_5_4_HWTS4_MASK |
-                           ADC_ETC_TRIGn_CHAIN_5_4_B2B4_MASK | ADC_ETC_TRIGn_CHAIN_5_4_IE4_MASK);
-                tmp32 |= tmp;
+                tmpReg &= ~(ADC_ETC_TRIGn_CHAIN_5_4_CSEL4_MASK | ADC_ETC_TRIGn_CHAIN_5_4_HWTS4_MASK |
+                            ADC_ETC_TRIGn_CHAIN_5_4_B2B4_MASK | ADC_ETC_TRIGn_CHAIN_5_4_IE4_MASK);
+                tmpReg |= tmp32;
             }
             else /* Chain 5. */
             {
-                tmp32 &= ~(ADC_ETC_TRIGn_CHAIN_5_4_CSEL5_MASK | ADC_ETC_TRIGn_CHAIN_5_4_HWTS5_MASK |
-                           ADC_ETC_TRIGn_CHAIN_5_4_B2B5_MASK | ADC_ETC_TRIGn_CHAIN_5_4_IE5_MASK);
-                tmp32 |= (tmp << ADC_ETC_TRIGn_CHAIN_5_4_CSEL5_SHIFT);
+                tmpReg &= ~(ADC_ETC_TRIGn_CHAIN_5_4_CSEL5_MASK | ADC_ETC_TRIGn_CHAIN_5_4_HWTS5_MASK |
+                            ADC_ETC_TRIGn_CHAIN_5_4_B2B5_MASK | ADC_ETC_TRIGn_CHAIN_5_4_IE5_MASK);
+                tmpReg |= (tmp32 << ADC_ETC_TRIGn_CHAIN_5_4_CSEL5_SHIFT);
             }
-            base->TRIG[triggerGroup].TRIGn_CHAIN_5_4 = tmp32;
+            base->TRIG[triggerGroup].TRIGn_CHAIN_5_4 = tmpReg;
             break;
         case 3U: /* Configurate trigger chain6 and chain 7. */
-            tmp32 = base->TRIG[triggerGroup].TRIGn_CHAIN_7_6;
+            tmpReg = base->TRIG[triggerGroup].TRIGn_CHAIN_7_6;
             if (mRemainder == 0U) /* Chain 6. */
             {
-                tmp32 &= ~(ADC_ETC_TRIGn_CHAIN_7_6_CSEL6_MASK | ADC_ETC_TRIGn_CHAIN_7_6_HWTS6_MASK |
-                           ADC_ETC_TRIGn_CHAIN_7_6_B2B6_MASK | ADC_ETC_TRIGn_CHAIN_7_6_IE6_MASK);
-                tmp32 |= tmp;
+                tmpReg &= ~(ADC_ETC_TRIGn_CHAIN_7_6_CSEL6_MASK | ADC_ETC_TRIGn_CHAIN_7_6_HWTS6_MASK |
+                            ADC_ETC_TRIGn_CHAIN_7_6_B2B6_MASK | ADC_ETC_TRIGn_CHAIN_7_6_IE6_MASK);
+                tmpReg |= tmp32;
             }
             else /* Chain 7. */
             {
-                tmp32 &= ~(ADC_ETC_TRIGn_CHAIN_7_6_CSEL7_MASK | ADC_ETC_TRIGn_CHAIN_7_6_HWTS7_MASK |
-                           ADC_ETC_TRIGn_CHAIN_7_6_B2B7_MASK | ADC_ETC_TRIGn_CHAIN_7_6_IE7_MASK);
-                tmp32 |= (tmp << ADC_ETC_TRIGn_CHAIN_7_6_CSEL7_SHIFT);
+                tmpReg &= ~(ADC_ETC_TRIGn_CHAIN_7_6_CSEL7_MASK | ADC_ETC_TRIGn_CHAIN_7_6_HWTS7_MASK |
+                            ADC_ETC_TRIGn_CHAIN_7_6_B2B7_MASK | ADC_ETC_TRIGn_CHAIN_7_6_IE7_MASK);
+                tmpReg |= (tmp32 << ADC_ETC_TRIGn_CHAIN_7_6_CSEL7_SHIFT);
             }
-            base->TRIG[triggerGroup].TRIGn_CHAIN_7_6 = tmp32;
+            base->TRIG[triggerGroup].TRIGn_CHAIN_7_6 = tmpReg;
             break;
         default:
+            assert(false);
             break;
     }
 }
@@ -295,25 +302,32 @@ uint32_t ADC_ETC_GetInterruptStatusFlags(ADC_ETC_Type *base, adc_etc_external_tr
 {
     uint32_t tmp32 = 0U;
 
-    if (((base->DONE0_1_IRQ) & (ADC_ETC_DONE0_1_IRQ_TRIG0_DONE0_MASK << sourceIndex)) != 0U)
+    if (((base->DONE0_1_IRQ) & ((uint32_t)ADC_ETC_DONE0_1_IRQ_TRIG0_DONE0_MASK << (uint32_t)sourceIndex)) != 0U)
     {
-        tmp32 |= kADC_ETC_Done0StatusFlagMask; /* Customized DONE0 status flags mask, which is defined in fsl_adc_etc.h
-                                                  file. */
+        tmp32 |= (uint32_t)kADC_ETC_Done0StatusFlagMask; /* Customized DONE0 status flags mask, which is defined in
+                                                  fsl_adc_etc.h file. */
     }
-    if (((base->DONE0_1_IRQ) & (ADC_ETC_DONE0_1_IRQ_TRIG0_DONE1_MASK << sourceIndex)) != 0U)
+    if (((base->DONE0_1_IRQ) & ((uint32_t)ADC_ETC_DONE0_1_IRQ_TRIG0_DONE1_MASK << (uint32_t)sourceIndex)) != 0U)
     {
-        tmp32 |= kADC_ETC_Done1StatusFlagMask; /* Customized DONE1 status flags mask, which is defined in fsl_adc_etc.h
-                                                  file. */
+        tmp32 |= (uint32_t)kADC_ETC_Done1StatusFlagMask; /* Customized DONE1 status flags mask, which is defined in
+                                                  fsl_adc_etc.h file. */
     }
-    if (((base->DONE2_ERR_IRQ) & (ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE2_MASK << sourceIndex)) != 0U)
+    if (((base->DONE2_ERR_IRQ) & ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE2_MASK << (uint32_t)sourceIndex)) != 0U)
     {
-        tmp32 |= kADC_ETC_Done2StatusFlagMask; /* Customized DONE2 status flags mask, which is defined in fsl_adc_etc.h
-                                                  file. */
+        tmp32 |= (uint32_t)kADC_ETC_Done2StatusFlagMask; /* Customized DONE2 status flags mask, which is defined in
+                                                  fsl_adc_etc.h file. */
     }
-    if (((base->DONE2_ERR_IRQ) & (ADC_ETC_DONE2_ERR_IRQ_TRIG0_ERR_MASK << sourceIndex)) != 0U)
+#if defined(FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN) && FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN
+    if (((base->DONE2_ERR_IRQ) & ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE3_MASK << (uint32_t)sourceIndex)) != 0U)
     {
-        tmp32 |= kADC_ETC_ErrorStatusFlagMask; /* Customized ERROR status flags mask, which is defined in fsl_adc_etc.h
-                                                  file. */
+        tmp32 |= (uint32_t)kADC_ETC_Done3StatusFlagMask; /* Customized DONE3 status flags mask, which is defined in
+                                                  fsl_adc_etc.h file. */
+    }
+#endif /* FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN */
+    if (((base->DONE2_ERR_IRQ) & ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_ERR_MASK << (uint32_t)sourceIndex)) != 0U)
+    {
+        tmp32 |= (uint32_t)kADC_ETC_ErrorStatusFlagMask; /* Customized ERROR status flags mask, which is defined in
+                                                  fsl_adc_etc.h file. */
     }
     return tmp32;
 }
@@ -327,21 +341,27 @@ uint32_t ADC_ETC_GetInterruptStatusFlags(ADC_ETC_Type *base, adc_etc_external_tr
  */
 void ADC_ETC_ClearInterruptStatusFlags(ADC_ETC_Type *base, adc_etc_external_trigger_source_t sourceIndex, uint32_t mask)
 {
-    if (0U != (mask & kADC_ETC_Done0StatusFlagMask)) /* Write 1 to clear DONE0 status flags. */
+    if (0U != (mask & (uint32_t)kADC_ETC_Done0StatusFlagMask)) /* Write 1 to clear DONE0 status flags. */
     {
-        base->DONE0_1_IRQ = (ADC_ETC_DONE0_1_IRQ_TRIG0_DONE0_MASK << sourceIndex);
+        base->DONE0_1_IRQ = ((uint32_t)ADC_ETC_DONE0_1_IRQ_TRIG0_DONE0_MASK << (uint32_t)sourceIndex);
     }
-    if (0U != (mask & kADC_ETC_Done1StatusFlagMask)) /* Write 1 to clear DONE1 status flags. */
+    if (0U != (mask & (uint32_t)kADC_ETC_Done1StatusFlagMask)) /* Write 1 to clear DONE1 status flags. */
     {
-        base->DONE0_1_IRQ = (ADC_ETC_DONE0_1_IRQ_TRIG0_DONE1_MASK << sourceIndex);
+        base->DONE0_1_IRQ = ((uint32_t)ADC_ETC_DONE0_1_IRQ_TRIG0_DONE1_MASK << (uint32_t)sourceIndex);
     }
-    if (0U != (mask & kADC_ETC_Done2StatusFlagMask)) /* Write 1 to clear DONE2 status flags. */
+    if (0U != (mask & (uint32_t)kADC_ETC_Done2StatusFlagMask)) /* Write 1 to clear DONE2 status flags. */
     {
-        base->DONE2_ERR_IRQ = (ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE2_MASK << sourceIndex);
+        base->DONE2_ERR_IRQ = ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE2_MASK << (uint32_t)sourceIndex);
     }
-    if (0U != (mask & kADC_ETC_ErrorStatusFlagMask)) /* Write 1 to clear ERROR status flags. */
+#if defined(FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN) && FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN
+    if (0U != (mask & (uint32_t)kADC_ETC_Done3StatusFlagMask)) /* Write 1 to clear DONE3 status flags. */
     {
-        base->DONE2_ERR_IRQ = (ADC_ETC_DONE2_ERR_IRQ_TRIG0_ERR_MASK << sourceIndex);
+        base->DONE2_ERR_IRQ = ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_DONE3_MASK << (uint32_t)sourceIndex);
+    }
+#endif                                                         /* FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN */
+    if (0U != (mask & (uint32_t)kADC_ETC_ErrorStatusFlagMask)) /* Write 1 to clear ERROR status flags. */
+    {
+        base->DONE2_ERR_IRQ = ((uint32_t)ADC_ETC_DONE2_ERR_IRQ_TRIG0_ERR_MASK << (uint32_t)sourceIndex);
     }
 }
 
@@ -360,7 +380,7 @@ uint32_t ADC_ETC_GetADCConversionValue(ADC_ETC_Type *base, uint32_t triggerGroup
     assert(triggerGroup < ADC_ETC_TRIGn_RESULT_1_0_COUNT);
 
     uint32_t mADCResult;
-    uint8_t mRemainder = chainGroup % 2U;
+    uint8_t mRemainder = (uint8_t)(chainGroup % 2U);
 
     switch (chainGroup / 2U)
     {
@@ -405,7 +425,9 @@ uint32_t ADC_ETC_GetADCConversionValue(ADC_ETC_Type *base, uint32_t triggerGroup
             }
             break;
         default:
-            return 0U;
+            mADCResult = 0U;
+            assert(false);
+            break;
     }
     return mADCResult;
 }

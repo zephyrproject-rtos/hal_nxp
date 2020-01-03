@@ -11,9 +11,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1060RM Rev.1, 12/2018
-**     Version:             rev. 1.1, 2018-11-27
-**     Build:               b190329
+**     Reference manual:    IMXRT1060RM Rev.1, 12/2018 | IMXRT1060SRM Rev.3
+**     Version:             rev. 1.2, 2019-04-29
+**     Build:               b191113
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -36,14 +36,16 @@
 **         Update header files to align with IMXRT1060RM Rev.0.
 **     - rev. 1.1 (2018-11-27)
 **         Update header files to align with IMXRT1060RM Rev.1.
+**     - rev. 1.2 (2019-04-29)
+**         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1062
- * @version 1.1
- * @date 2018-11-27
+ * @version 1.2
+ * @date 2019-04-29
  * @brief Device specific configuration file for MIMXRT1062 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -83,21 +85,29 @@ WDOG2->WMCR &= ~WDOG_WMCR_PDE_MASK;
 /* Watchdog disable */
 
 #if (DISABLE_WDOG)
-    if (WDOG1->WCR & WDOG_WCR_WDE_MASK)
+    if ((WDOG1->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
         WDOG1->WCR &= ~WDOG_WCR_WDE_MASK;
     }
-    if (WDOG2->WCR & WDOG_WCR_WDE_MASK)
+    if ((WDOG2->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
         WDOG2->WCR &= ~WDOG_WCR_WDE_MASK;
     }
-    RTWDOG->CNT = 0xD928C520U; /* 0xD928C520U is the update key */
+    if ((RTWDOG->CS & RTWDOG_CS_CMD32EN_MASK) != 0U)
+    {
+        RTWDOG->CNT = 0xD928C520U; /* 0xD928C520U is the update key */
+    }
+    else
+    {
+        RTWDOG->CNT = 0xC520U;
+        RTWDOG->CNT = 0xD928U;
+    }
     RTWDOG->TOVAL = 0xFFFF;
     RTWDOG->CS = (uint32_t) ((RTWDOG->CS) & ~RTWDOG_CS_EN_MASK) | RTWDOG_CS_UPDATE_MASK;
 #endif /* (DISABLE_WDOG) */
 
     /* Disable Systick which might be enabled by bootrom */
-    if (SysTick->CTRL & SysTick_CTRL_ENABLE_Msk)
+    if ((SysTick->CTRL & SysTick_CTRL_ENABLE_Msk) != 0U)
     {
         SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
     }
@@ -128,20 +138,20 @@ void SystemCoreClockUpdate (void) {
     uint32_t PLL2MainClock;
 
     /* Periph_clk2_clk ---> Periph_clk */
-    if (CCM->CBCDR & CCM_CBCDR_PERIPH_CLK_SEL_MASK)
+    if ((CCM->CBCDR & CCM_CBCDR_PERIPH_CLK_SEL_MASK) != 0U)
     {
         switch (CCM->CBCMR & CCM_CBCMR_PERIPH_CLK2_SEL_MASK)
         {
             /* Pll3_sw_clk ---> Periph_clk2_clk ---> Periph_clk */
             case CCM_CBCMR_PERIPH_CLK2_SEL(0U):
-                if(CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_BYPASS_MASK)
+                if((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_BYPASS_MASK) != 0U)
                 {
                     freq = (((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_BYPASS_CLK_SRC_MASK) >> CCM_ANALOG_PLL_USB1_BYPASS_CLK_SRC_SHIFT) == 0U) ?
                            CPU_XTAL_CLK_HZ : CPU_CLK1_HZ;
                 }
                 else
                 {
-                    freq = (CPU_XTAL_CLK_HZ * ((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_DIV_SELECT_MASK) ? 22U : 20U));
+                    freq = (CPU_XTAL_CLK_HZ * (((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_DIV_SELECT_MASK) != 0U) ? 22U : 20U));
                 }
                 break;
 
@@ -167,7 +177,7 @@ void SystemCoreClockUpdate (void) {
     else
     {
         /* check if pll is bypassed */
-        if(CCM_ANALOG->PLL_ARM & CCM_ANALOG_PLL_ARM_BYPASS_MASK)
+        if((CCM_ANALOG->PLL_ARM & CCM_ANALOG_PLL_ARM_BYPASS_MASK) != 0U)
         {
             PLL1MainClock = (((CCM_ANALOG->PLL_ARM & CCM_ANALOG_PLL_ARM_BYPASS_CLK_SRC_MASK) >> CCM_ANALOG_PLL_ARM_BYPASS_CLK_SRC_SHIFT) == 0U) ?
                    CPU_XTAL_CLK_HZ : CPU_CLK1_HZ;
@@ -179,16 +189,16 @@ void SystemCoreClockUpdate (void) {
         }
 
         /* check if pll is bypassed */
-        if(CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_BYPASS_MASK)
+        if((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_BYPASS_MASK) != 0U)
         {
             PLL2MainClock = (((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_BYPASS_CLK_SRC_MASK) >> CCM_ANALOG_PLL_SYS_BYPASS_CLK_SRC_SHIFT) == 0U) ?
                    CPU_XTAL_CLK_HZ : CPU_CLK1_HZ;
         }
         else
         {
-            PLL2MainClock = (CPU_XTAL_CLK_HZ * ((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_DIV_SELECT_MASK) ? 22U : 20U));
+            PLL2MainClock = (CPU_XTAL_CLK_HZ * (((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_DIV_SELECT_MASK) != 0U) ? 22U : 20U));
         }
-        PLL2MainClock += ((uint64_t)CPU_XTAL_CLK_HZ * ((uint64_t)(CCM_ANALOG->PLL_SYS_NUM))) / ((uint64_t)(CCM_ANALOG->PLL_SYS_DENOM));
+        PLL2MainClock += (uint32_t)(((uint64_t)CPU_XTAL_CLK_HZ * ((uint64_t)(CCM_ANALOG->PLL_SYS_NUM))) / ((uint64_t)(CCM_ANALOG->PLL_SYS_DENOM)));
 
 
         switch (CCM->CBCMR & CCM_CBCMR_PRE_PERIPH_CLK_SEL_MASK)

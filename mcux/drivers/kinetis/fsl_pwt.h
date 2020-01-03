@@ -18,7 +18,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define FSL_PWT_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0 */
+#define FSL_PWT_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
 
 /*! @brief PWT clock source selection */
 typedef enum _pwt_clock_source
@@ -145,7 +145,7 @@ void PWT_GetDefaultConfig(pwt_config_t *config);
  */
 static inline void PWT_EnableInterrupts(PWT_Type *base, uint32_t mask)
 {
-    base->CS |= mask;
+    base->CS |= (uint8_t)mask;
 }
 
 /*!
@@ -157,7 +157,7 @@ static inline void PWT_EnableInterrupts(PWT_Type *base, uint32_t mask)
  */
 static inline void PWT_DisableInterrupts(PWT_Type *base, uint32_t mask)
 {
-    base->CS &= ~mask;
+    base->CS &= (uint8_t)(~mask);
 }
 
 /*!
@@ -170,7 +170,7 @@ static inline void PWT_DisableInterrupts(PWT_Type *base, uint32_t mask)
  */
 static inline uint32_t PWT_GetEnabledInterrupts(PWT_Type *base)
 {
-    return (base->CS & (PWT_CS_PRDYIE_MASK | PWT_CS_POVIE_MASK));
+    return ((uint32_t)base->CS & (PWT_CS_PRDYIE_MASK | PWT_CS_POVIE_MASK));
 }
 
 /*! @}*/
@@ -190,7 +190,7 @@ static inline uint32_t PWT_GetEnabledInterrupts(PWT_Type *base)
  */
 static inline uint32_t PWT_GetStatusFlags(PWT_Type *base)
 {
-    return (base->CS & (PWT_CS_PWTRDY_MASK | PWT_CS_PWTOV_MASK));
+    return ((uint32_t)base->CS & (PWT_CS_PWTRDY_MASK | PWT_CS_PWTOV_MASK));
 }
 
 /*!
@@ -202,7 +202,7 @@ static inline uint32_t PWT_GetStatusFlags(PWT_Type *base)
  */
 static inline void PWT_ClearStatusFlags(PWT_Type *base, uint32_t mask)
 {
-    base->CS &= ~mask;
+    base->CS &= (uint8_t)(~mask);
 }
 
 /*! @}*/
@@ -229,7 +229,7 @@ static inline void PWT_StartTimer(PWT_Type *base)
  */
 static inline void PWT_StopTimer(PWT_Type *base)
 {
-    base->CS &= ~PWT_CS_PWTEN_MASK;
+    base->CS &= (uint8_t)(~PWT_CS_PWTEN_MASK);
 }
 
 /*! @}*/

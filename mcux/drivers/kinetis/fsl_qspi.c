@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -121,7 +121,7 @@ void QSPI_Init(QuadSPI_Type *base, qspi_config_t *config, uint32_t srcClock_Hz)
     QSPI_SoftwareReset(base);
 
     /* Clear the FIFO region */
-    QSPI_ClearFifo(base, kQSPI_AllFifo);
+    QSPI_ClearFifo(base, (uint32_t)kQSPI_AllFifo);
 
     /* Configure QSPI */
     QSPI_Enable(base, false);
@@ -137,12 +137,12 @@ void QSPI_Init(QuadSPI_Type *base, qspi_config_t *config, uint32_t srcClock_Hz)
     /* To avoid the configured baudrate exceeds the expected baudrate value, which may possibly put the
     QSPI work under unsupported frequency, set the divider higher when there is reminder, use ceiling
     operation, ceiling(a/b) = (a-1)/b + 1. */
-    val |= QuadSPI_MCR_SCLKCFG((srcClock_Hz - 1) / config->baudRate);
+    val |= QuadSPI_MCR_SCLKCFG((srcClock_Hz - 1U) / config->baudRate);
     base->MCR = val;
 #endif /* FSL_FEATURE_QSPI_CLOCK_CONTROL_EXTERNAL */
 
     /* Set AHB buffer size and buffer master */
-    for (i = 0; i < FSL_FEATURE_QSPI_AHB_BUFFER_COUNT; i++)
+    for (i = 0; i < (uint32_t)FSL_FEATURE_QSPI_AHB_BUFFER_COUNT; i++)
     {
         val = QuadSPI_BUF0CR_MSTRID(config->AHBbufferMaster[i]) | QuadSPI_BUF0CR_ADATSZ(config->AHBbufferSize[i] / 8U);
         QSPI_AHB_BUFFER_REG(base, i) = val;
@@ -158,11 +158,11 @@ void QSPI_Init(QuadSPI_Type *base, qspi_config_t *config, uint32_t srcClock_Hz)
 
     /* Set watermark */
     base->RBCT &= ~QuadSPI_RBCT_WMRK_MASK;
-    base->RBCT |= QuadSPI_RBCT_WMRK(config->rxWatermark - 1);
+    base->RBCT |= QuadSPI_RBCT_WMRK((uint32_t)config->rxWatermark - 1U);
 
 #if !defined(FSL_FEATURE_QSPI_HAS_NO_TXDMA) || (!FSL_FEATURE_QSPI_HAS_NO_TXDMA)
     base->TBCT &= ~QuadSPI_TBCT_WMRK_MASK;
-    base->TBCT |= QuadSPI_TBCT_WMRK(config->txWatermark - 1);
+    base->TBCT |= QuadSPI_TBCT_WMRK((uint32_t)config->txWatermark - 1U);
 #endif /* FSL_FEATURE_QSPI_HAS_NO_TXDMA */
 
     /* Enable QSPI module */
@@ -180,7 +180,7 @@ void QSPI_Init(QuadSPI_Type *base, qspi_config_t *config, uint32_t srcClock_Hz)
 void QSPI_GetDefaultQspiConfig(qspi_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->clockSource               = 2U;
     config->baudRate                  = 24000000U;
@@ -188,8 +188,8 @@ void QSPI_GetDefaultQspiConfig(qspi_config_t *config)
     config->AHBbufferMaster[1]        = 0xE;
     config->AHBbufferMaster[2]        = 0xE;
     config->enableAHBbuffer3AllMaster = true;
-    config->txWatermark               = 8;
-    config->rxWatermark               = 8;
+    config->txWatermark               = 8U;
+    config->rxWatermark               = 8U;
     config->enableQspi                = true;
 }
 
@@ -246,7 +246,7 @@ void QSPI_SetFlashConfig(QuadSPI_Type *base, qspi_flash_config_t *config)
     /* Config look up table */
     base->LUTKEY = 0x5AF05AF0U;
     base->LCKCR  = 0x2U;
-    for (i = 0; i < FSL_FEATURE_QSPI_LUT_DEPTH; i++)
+    for (i = 0; i < (uint32_t)FSL_FEATURE_QSPI_LUT_DEPTH; i++)
     {
         base->LUT[i] = config->lookuptable[i];
     }
@@ -316,6 +316,9 @@ void QSPI_SetDqsConfig(QuadSPI_Type *base, qspi_dqs_config_t *config)
         case kQSPI_ReadSampleClkLoopbackFromDqsPad:
             soccrVal |= QuadSPI_SOCCR_DQS_LOOPBACK_FROM_PAD_MASK;
             break;
+        default:
+            assert(false);
+            break;
     }
 
     soccrVal |= (QuadSPI_SOCCR_DQS_INV_EN(config->enableDQSClkInverse) |
@@ -349,7 +352,7 @@ void QSPI_SoftwareReset(QuadSPI_Type *base)
     base->MCR |= (QuadSPI_MCR_SWRSTHD_MASK | QuadSPI_MCR_SWRSTSD_MASK);
 
     /* Wait several time for the reset to finish, this method came from IC team */
-    for (i = 0; i < 100; i++)
+    for (i = 0; i < 100U; i++)
     {
         __NOP();
     }
@@ -376,7 +379,7 @@ void QSPI_SoftwareReset(QuadSPI_Type *base)
 uint32_t QSPI_GetRxDataRegisterAddress(QuadSPI_Type *base)
 {
     /* From RDBR */
-    if (base->RBCT & QuadSPI_RBCT_RXBRD_MASK)
+    if (0U != (base->RBCT & QuadSPI_RBCT_RXBRD_MASK))
     {
         return (uint32_t)(&(base->RBDR[0]));
     }
@@ -394,7 +397,7 @@ uint32_t QSPI_GetRxDataRegisterAddress(QuadSPI_Type *base)
  */
 void QSPI_ExecuteIPCommand(QuadSPI_Type *base, uint32_t index)
 {
-    while (QSPI_GetStatusFlags(base) & (kQSPI_Busy | kQSPI_IPAccess))
+    while (0U != (QSPI_GetStatusFlags(base) & ((uint32_t)kQSPI_Busy | (uint32_t)kQSPI_IPAccess)))
     {
     }
     QSPI_ClearCommandSequence(base, kQSPI_IPSeq);
@@ -410,7 +413,7 @@ void QSPI_ExecuteIPCommand(QuadSPI_Type *base, uint32_t index)
  */
 void QSPI_ExecuteAHBCommand(QuadSPI_Type *base, uint32_t index)
 {
-    while (QSPI_GetStatusFlags(base) & (kQSPI_Busy | kQSPI_AHBAccess))
+    while (0U != (QSPI_GetStatusFlags(base) & ((uint32_t)kQSPI_Busy | (uint32_t)kQSPI_AHBAccess)))
     {
     }
     QSPI_ClearCommandSequence(base, kQSPI_BufferSeq);
@@ -432,7 +435,7 @@ void QSPI_UpdateLUT(QuadSPI_Type *base, uint32_t index, uint32_t *cmd)
     base->LCKCR  = 0x2U;
 
     /* Write data into LUT */
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < 4U; i++)
     {
         base->LUT[index + i] = *cmd;
         cmd++;
@@ -482,7 +485,7 @@ void QSPI_SetReadDataArea(QuadSPI_Type *base, qspi_read_area_t area)
  */
 uint32_t QSPI_ReadData(QuadSPI_Type *base)
 {
-    if (base->RBCT & QuadSPI_RBCT_RXBRD_MASK)
+    if (0U != (base->RBCT & QuadSPI_RBCT_RXBRD_MASK))
     {
         return base->RBDR[0];
     }
@@ -509,7 +512,7 @@ void QSPI_WriteBlocking(QuadSPI_Type *base, uint32_t *buffer, size_t size)
     for (i = 0; i < size / 4U; i++)
     {
         /* Check if the buffer is full */
-        while (QSPI_GetStatusFlags(base) & kQSPI_TxBufferFull)
+        while (0U != (QSPI_GetStatusFlags(base) & (uint32_t)kQSPI_TxBufferFull))
         {
         }
         base->TBDR = *buffer++;
@@ -533,27 +536,27 @@ void QSPI_ReadBlocking(QuadSPI_Type *base, uint32_t *buffer, size_t size)
     uint32_t temp  = 0;
     uint32_t level = (base->RBCT & QuadSPI_RBCT_WMRK_MASK) + 1U;
 
-    while (i < size / 4)
+    while (i < size / 4U)
     {
         /* Check if there is data */
-        if ((size / 4 - i) < level)
+        if ((size / 4U - i) < level)
         {
             do
             {
                 temp = (base->RBSR & QuadSPI_RBSR_RDBFL_MASK) >> QuadSPI_RBSR_RDBFL_SHIFT;
-            } while (!temp);
+            } while (0U == temp);
         }
         else
         {
-            while ((QSPI_GetStatusFlags(base) & kQSPI_RxWatermark) == 0U)
+            while ((QSPI_GetStatusFlags(base) & (uint32_t)kQSPI_RxWatermark) == 0U)
             {
             }
         }
 
-        level = (level < (size / 4 - i)) ? level : (size / 4 - i);
+        level = (level < (size / 4U - i)) ? level : (size / 4U - i);
 
         /* Data from RBDR */
-        if (base->RBCT & QuadSPI_RBCT_RXBRD_MASK)
+        if (0U != (base->RBCT & QuadSPI_RBCT_RXBRD_MASK))
         {
             for (j = 0; j < level; j++)
             {
@@ -571,6 +574,6 @@ void QSPI_ReadBlocking(QuadSPI_Type *base, uint32_t *buffer, size_t size)
         i += level;
 
         /* Clear the Buffer */
-        QSPI_ClearErrorFlag(base, kQSPI_RxBufferDrain);
+        QSPI_ClearErrorFlag(base, (uint32_t)kQSPI_RxBufferDrain);
     }
 }

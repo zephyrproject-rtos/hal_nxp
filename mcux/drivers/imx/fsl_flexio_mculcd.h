@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexIO MCULCD driver version 2.0.2. */
-#define FSL_FLEXIO_MCULCD_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief FlexIO MCULCD driver version 2.0.3. */
+#define FSL_FLEXIO_MCULCD_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 #ifndef FLEXIO_MCULCD_WAIT_COMPLETE_TIME
@@ -45,15 +45,15 @@
 /*!
  * @brief The data bus width, must be 8 or 16.
  */
-#define FLEXIO_MCULCD_DATA_BUS_WIDTH 16
+#define FLEXIO_MCULCD_DATA_BUS_WIDTH 16UL
 #endif
 
-#if (16 != FLEXIO_MCULCD_DATA_BUS_WIDTH) && (8 != FLEXIO_MCULCD_DATA_BUS_WIDTH)
+#if (16UL != FLEXIO_MCULCD_DATA_BUS_WIDTH) && (8UL != FLEXIO_MCULCD_DATA_BUS_WIDTH)
 #error Only support data bus 8-bit or 16-bit
 #endif
 
 /*! @brief FlexIO LCD transfer status */
-enum _flexio_mculcd_status
+enum
 {
     kStatus_FLEXIO_MCULCD_Idle  = MAKE_STATUS(kStatusGroup_FLEXIO_MCULCD, 0), /*!< FlexIO LCD is idle. */
     kStatus_FLEXIO_MCULCD_Busy  = MAKE_STATUS(kStatusGroup_FLEXIO_MCULCD, 1), /*!< FlexIO LCD is busy */
@@ -302,7 +302,7 @@ void FLEXIO_MCULCD_DisableInterrupts(FLEXIO_MCULCD_Type *base, uint32_t mask);
  */
 static inline void FLEXIO_MCULCD_EnableTxDMA(FLEXIO_MCULCD_Type *base, bool enable)
 {
-    FLEXIO_EnableShifterStatusDMA(base->flexioBase, (1U << base->txShifterStartIndex), enable);
+    FLEXIO_EnableShifterStatusDMA(base->flexioBase, (1UL << base->txShifterStartIndex), enable);
 }
 
 /*!
@@ -314,7 +314,7 @@ static inline void FLEXIO_MCULCD_EnableTxDMA(FLEXIO_MCULCD_Type *base, bool enab
  */
 static inline void FLEXIO_MCULCD_EnableRxDMA(FLEXIO_MCULCD_Type *base, bool enable)
 {
-    FLEXIO_EnableShifterStatusDMA(base->flexioBase, (1U << base->rxShifterEndIndex), enable);
+    FLEXIO_EnableShifterStatusDMA(base->flexioBase, (1UL << base->rxShifterEndIndex), enable);
 }
 
 /*!

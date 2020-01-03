@@ -169,7 +169,7 @@ void LPADC_Init(ADC_Type *base, const lpadc_config_t *config)
 void LPADC_GetDefaultConfig(lpadc_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
 #if defined(FSL_FEATURE_LPADC_HAS_CFG_ADCKEN) && FSL_FEATURE_LPADC_HAS_CFG_ADCKEN
     config->enableInternalClock = false;
@@ -294,7 +294,10 @@ void LPADC_SetConvTriggerConfig(ADC_Type *base, uint32_t triggerId, const lpadc_
             | ADC_TCTRL_TDLY(config->delayPower)    /* Trigger delay select. */
             | ADC_TCTRL_TPRI(config->priority)      /* Trigger priority setting. */
 #if (defined(FSL_FEATURE_LPADC_FIFO_COUNT) && (FSL_FEATURE_LPADC_FIFO_COUNT == 2))
-            | ADC_TCTRL_FIFO_SEL_A(config->channelAFIFOSelect) | ADC_TCTRL_FIFO_SEL_B(config->channelBFIFOSelect)
+            | ADC_TCTRL_FIFO_SEL_A(config->channelAFIFOSelect)
+#if !(defined(FSL_FEATURE_LPADC_HAS_NO_TCTRL_FIFO_SEL_B) && FSL_FEATURE_LPADC_HAS_NO_TCTRL_FIFO_SEL_B)
+            | ADC_TCTRL_FIFO_SEL_B(config->channelBFIFOSelect)
+#endif /* FSL_FEATURE_LPADC_HAS_NO_TCTRL_FIFO_SEL_B  */
 #endif /* FSL_FEATURE_LPADC_FIFO_COUNT */
         ;
     if (config->enableHardwareTrigger)
@@ -324,7 +327,7 @@ void LPADC_GetDefaultConvTriggerConfig(lpadc_conv_trigger_config_t *config)
     assert(config != NULL); /* Check if the input pointer is available. */
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->targetCommandId = 0U;
     config->delayPower      = 0U;
@@ -443,7 +446,7 @@ void LPADC_GetDefaultConvCommandConfig(lpadc_conv_command_config_t *config)
     assert(config != NULL); /* Check if the input pointer is available. */
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_CSCALE) && FSL_FEATURE_LPADC_HAS_CMDL_CSCALE
     config->sampleScaleMode = kLPADC_SampleFullScale;
@@ -539,7 +542,7 @@ void LPADC_DoAutoCalibration(ADC_Type *base)
     {
     }
     /* The valid bits of data are bits 14:3 in the RESFIFO register. */
-    LPADC_SetOffsetValue(base, (mLpadcResultConfigStruct.convValue) >> 3U);
+    LPADC_SetOffsetValue(base, (uint32_t)(mLpadcResultConfigStruct.convValue) >> 3UL);
     /* Disable the calibration function. */
     LPADC_EnableCalibration(base, false);
 
@@ -627,26 +630,27 @@ float LPADC_MeasureTemperature(ADC_Type *base, uint32_t commandId, uint32_t inde
     float parameterSlope     = FSL_FEATURE_LPADC_TEMP_PARAMETER_A;
     float parameterOffset    = FSL_FEATURE_LPADC_TEMP_PARAMETER_B;
     float parameterAlpha     = FSL_FEATURE_LPADC_TEMP_PARAMETER_ALPHA;
-    float temperature        = -273.15; /* Absolute zero degree as the incorrect return value. */
+    float temperature        = -273.15f; /* Absolute zero degree as the incorrect return value. */
 
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_MODE) && FSL_FEATURE_LPADC_HAS_CMDL_MODE
     /* Get valid result data width in different resolution mode. */
-    if (kLPADC_ConversionResolutionStandard ==
-        ((base->CMD[commandId - 1].CMDL & ADC_CMDL_MODE_MASK) >> ADC_CMDL_MODE_SHIFT))
+    if ((uint32_t)kLPADC_ConversionResolutionStandard ==
+        ((base->CMD[commandId - 1U].CMDL & ADC_CMDL_MODE_MASK) >> ADC_CMDL_MODE_SHIFT))
     {
         convResultShift = 3U;
     }
 #endif /* FSL_FEATURE_LPADC_HAS_CMDL_MODE */
 
     /* Read the 2 temperature sensor result. */
-    if (true == LPADC_GetConvResult(base, &convResultStruct, index))
+    if (true == LPADC_GetConvResult(base, &convResultStruct, (uint8_t)index))
     {
         Vbe1 = convResultStruct.convValue >> convResultShift;
-        if (true == LPADC_GetConvResult(base, &convResultStruct, index))
+        if (true == LPADC_GetConvResult(base, &convResultStruct, (uint8_t)index))
         {
             Vbe8 = convResultStruct.convValue >> convResultShift;
             /* Final temperature = A*[alpha*(Vbe8-Vbe1)/(Vbe8 + alpha*(Vbe8-Vbe1))] - B. */
-            temperature = parameterSlope * (parameterAlpha * (Vbe8 - Vbe1) / (Vbe8 + parameterAlpha * (Vbe8 - Vbe1))) -
+            temperature = parameterSlope * (parameterAlpha * ((float)Vbe8 - (float)Vbe1) /
+                                            ((float)Vbe8 + parameterAlpha * ((float)Vbe8 - (float)Vbe1))) -
                           parameterOffset;
         }
     }

@@ -21,12 +21,12 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPUART driver version 2.2.7. */
-#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 2, 7))
+/*! @brief LPUART driver version 2.2.8. */
+#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 2, 8))
 /*@}*/
 
 /*! @brief Error codes for the LPUART driver. */
-enum _lpuart_status
+enum
 {
     kStatus_LPUART_TxBusy                  = MAKE_STATUS(kStatusGroup_LPUART, 0), /*!< TX busy */
     kStatus_LPUART_RxBusy                  = MAKE_STATUS(kStatusGroup_LPUART, 1), /*!< RX busy */
@@ -601,18 +601,21 @@ static inline uint8_t LPUART_ReadByte(LPUART_Type *base)
 {
 #if defined(FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT) && FSL_FEATURE_LPUART_HAS_7BIT_DATA_SUPPORT
     uint32_t ctrl = base->CTRL;
-    bool isSevenDataBits =
-        ((ctrl & LPUART_CTRL_M7_MASK) ||
-         ((!(ctrl & LPUART_CTRL_M7_MASK)) && (!(ctrl & LPUART_CTRL_M_MASK)) && (ctrl & LPUART_CTRL_PE_MASK)));
+    uint8_t result;
+    bool isSevenDataBits = (((ctrl & LPUART_CTRL_M7_MASK) != 0U) ||
+                            (((ctrl & LPUART_CTRL_M7_MASK) == 0U) && ((ctrl & LPUART_CTRL_M_MASK) == 0U) &&
+                             ((ctrl & LPUART_CTRL_PE_MASK) != 0U)));
 
     if (isSevenDataBits)
     {
-        return (base->DATA & 0x7F);
+        result = (uint8_t)(base->DATA & 0x7FU);
     }
     else
     {
-        return base->DATA;
+        result = (uint8_t)base->DATA;
     }
+
+    return result;
 #else
     return (uint8_t)(base->DATA);
 #endif
@@ -621,12 +624,8 @@ static inline uint8_t LPUART_ReadByte(LPUART_Type *base)
 /*!
  * @brief Writes to the transmitter register using a blocking method.
  *
- * This function polls the transmitter register, waits for the register to be empty or  for TX FIFO to have
- * room, and writes data to the transmitter buffer.
- *
- * @note This function does not check whether all data has been sent out to the bus.
- * Before disabling the transmitter, check the kLPUART_TransmissionCompleteFlag to ensure that the transmit is
- * finished.
+ * This function polls the transmitter register, first waits for the register to be empty or TX FIFO to have room,
+ * and writes data to the transmitter buffer, then waits for the dat to be sent out to the bus.
  *
  * @param base LPUART peripheral base address.
  * @param data Start address of the data to write.

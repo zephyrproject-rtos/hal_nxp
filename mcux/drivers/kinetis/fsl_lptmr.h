@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_LPTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2 */
+#define FSL_LPTMR_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1 */
 /*@}*/
 
 /*! @brief LPTMR pin selection used in pulse counter mode.*/
@@ -75,9 +75,15 @@ typedef enum _lptmr_prescaler_glitch_value
 typedef enum _lptmr_prescaler_clock_select
 {
     kLPTMR_PrescalerClock_0 = 0x0U, /*!< Prescaler/glitch filter clock 0 selected. */
+#if !(defined(FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT) && \
+      FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT)
     kLPTMR_PrescalerClock_1 = 0x1U, /*!< Prescaler/glitch filter clock 1 selected. */
+#endif                              /* FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_1_SUPPORT */
     kLPTMR_PrescalerClock_2 = 0x2U, /*!< Prescaler/glitch filter clock 2 selected. */
+#if !(defined(FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT) && \
+      FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT)
     kLPTMR_PrescalerClock_3 = 0x3U, /*!< Prescaler/glitch filter clock 3 selected. */
+#endif                              /* FSL_FEATURE_LPTMR_HAS_NO_PRESCALER_CLOCK_SOURCE_3_SUPPORT */
 } lptmr_prescaler_clock_select_t;
 
 /*! @brief List of the LPTMR interrupts */
@@ -289,7 +295,7 @@ static inline void LPTMR_ClearStatusFlags(LPTMR_Type *base, uint32_t mask)
 static inline void LPTMR_SetTimerPeriod(LPTMR_Type *base, uint32_t ticks)
 {
     assert(ticks > 0U);
-    base->CMR = ticks - 1U;
+    base->CMR = LPTMR_CMR_COMPARE(ticks - 1U);
 }
 
 /*!

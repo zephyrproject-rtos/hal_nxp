@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -33,7 +33,8 @@ typedef struct _sdhc_adma_table_config
     uint32_t *admaTable;     /*!< ADMA table address, can't be null if transfer way is ADMA1/ADMA2 */
     uint32_t admaTableWords; /*!< ADMA table length united as words, can't be 0 if transfer way is ADMA1/ADMA2 */
 } sdhc_adma_table_config_t;
-
+/*! @brief check flag avalibility */
+#define IS_SDHC_FLAG_SET(reg, flag) (((reg) & ((uint32_t)flag)) != 0UL)
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -44,14 +45,6 @@ typedef struct _sdhc_adma_table_config
  * @return Instance number.
  */
 static uint32_t SDHC_GetInstance(SDHC_Type *base);
-
-/*!
- * @brief Set transfer interrupt.
- *
- * @param base SDHC peripheral base address.
- * @param usingInterruptSignal True to use IRQ signal.
- */
-static void SDHC_SetTransferInterrupt(SDHC_Type *base, bool usingInterruptSignal);
 
 /*!
  * @brief Start transfer according to current transfer state
@@ -214,7 +207,11 @@ static const clock_ip_name_t s_sdhcClock[] = SDHC_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /* SDHC ISR for transactional APIs. */
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+static sdhc_isr_t s_sdhcIsr = (sdhc_isr_t)DefaultISR;
+#else
 static sdhc_isr_t s_sdhcIsr;
+#endif
 
 /*******************************************************************************
  * Code
@@ -233,105 +230,84 @@ static uint32_t SDHC_GetInstance(SDHC_Type *base)
     return instance;
 }
 
-static void SDHC_SetTransferInterrupt(SDHC_Type *base, bool usingInterruptSignal)
-{
-    uint32_t interruptEnabled; /* The Interrupt status flags to be enabled */
-    bool cardDetectDat3 = (bool)(base->PROCTL & SDHC_PROCTL_D3CD_MASK);
-
-    /* Disable all interrupts */
-    SDHC_DisableInterruptStatus(base, (uint32_t)kSDHC_AllInterruptFlags);
-    SDHC_DisableInterruptSignal(base, (uint32_t)kSDHC_AllInterruptFlags);
-    DisableIRQ(s_sdhcIRQ[SDHC_GetInstance(base)]);
-
-    interruptEnabled =
-        (kSDHC_CommandIndexErrorFlag | kSDHC_CommandCrcErrorFlag | kSDHC_CommandEndBitErrorFlag |
-         kSDHC_CommandTimeoutFlag | kSDHC_CommandCompleteFlag | kSDHC_DataTimeoutFlag | kSDHC_DataCrcErrorFlag |
-         kSDHC_DataEndBitErrorFlag | kSDHC_DataCompleteFlag | kSDHC_AutoCommand12ErrorFlag | kSDHC_BufferReadReadyFlag |
-         kSDHC_BufferWriteReadyFlag | kSDHC_DmaErrorFlag | kSDHC_DmaCompleteFlag);
-    if (cardDetectDat3)
-    {
-        interruptEnabled |= (kSDHC_CardInsertionFlag | kSDHC_CardRemovalFlag);
-    }
-
-    SDHC_EnableInterruptStatus(base, interruptEnabled);
-    if (usingInterruptSignal)
-    {
-        SDHC_EnableInterruptSignal(base, interruptEnabled);
-    }
-}
-
 static void SDHC_StartTransfer(SDHC_Type *base, sdhc_command_t *command, sdhc_data_t *data, sdhc_dma_mode_t dmaMode)
 {
     uint32_t flags                            = 0U;
     sdhc_transfer_config_t sdhcTransferConfig = {0};
 
     /* Define the flag corresponding to each response type. */
-    switch (command->responseType)
+    if (command->responseType == kCARD_ResponseTypeR1) /* Response 1 */
     {
-        case kCARD_ResponseTypeNone:
-            break;
-        case kCARD_ResponseTypeR1: /* Response 1 */
-            flags |= (kSDHC_ResponseLength48Flag | kSDHC_EnableCrcCheckFlag | kSDHC_EnableIndexCheckFlag);
-            break;
-        case kCARD_ResponseTypeR1b: /* Response 1 with busy */
-            flags |= (kSDHC_ResponseLength48BusyFlag | kSDHC_EnableCrcCheckFlag | kSDHC_EnableIndexCheckFlag);
-            break;
-        case kCARD_ResponseTypeR2: /* Response 2 */
-            flags |= (kSDHC_ResponseLength136Flag | kSDHC_EnableCrcCheckFlag);
-            break;
-        case kCARD_ResponseTypeR3: /* Response 3 */
-            flags |= (kSDHC_ResponseLength48Flag);
-            break;
-        case kCARD_ResponseTypeR4: /* Response 4 */
-            flags |= (kSDHC_ResponseLength48Flag);
-            break;
-        case kCARD_ResponseTypeR5: /* Response 5 */
-            flags |= (kSDHC_ResponseLength48Flag | kSDHC_EnableCrcCheckFlag | kSDHC_EnableIndexCheckFlag);
-            break;
-        case kCARD_ResponseTypeR5b: /* Response 5 with busy */
-            flags |= (kSDHC_ResponseLength48BusyFlag | kSDHC_EnableCrcCheckFlag | kSDHC_EnableIndexCheckFlag);
-            break;
-        case kCARD_ResponseTypeR6: /* Response 6 */
-            flags |= (kSDHC_ResponseLength48Flag | kSDHC_EnableCrcCheckFlag | kSDHC_EnableIndexCheckFlag);
-            break;
-        case kCARD_ResponseTypeR7: /* Response 7 */
-            flags |= (kSDHC_ResponseLength48Flag | kSDHC_EnableCrcCheckFlag | kSDHC_EnableIndexCheckFlag);
-            break;
-        default:
-            break;
+        flags |= ((uint32_t)kSDHC_ResponseLength48Flag | (uint32_t)kSDHC_EnableCrcCheckFlag |
+                  (uint32_t)kSDHC_EnableIndexCheckFlag);
     }
-    if (command->type == kCARD_CommandTypeAbort)
+    else if (command->responseType == kCARD_ResponseTypeR1b) /* Response 1 with busy */
     {
-        flags |= kSDHC_CommandTypeAbortFlag;
+        flags |= ((uint32_t)kSDHC_ResponseLength48BusyFlag | (uint32_t)kSDHC_EnableCrcCheckFlag |
+                  (uint32_t)kSDHC_EnableIndexCheckFlag);
+    }
+    else if (command->responseType == kCARD_ResponseTypeR2) /* Response 2 */
+    {
+        flags |= ((uint32_t)kSDHC_ResponseLength136Flag | (uint32_t)kSDHC_EnableCrcCheckFlag);
+    }
+    else if (command->responseType == kCARD_ResponseTypeR3) /* Response 3 */
+    {
+        flags |= ((uint32_t)kSDHC_ResponseLength48Flag);
+    }
+    else if (command->responseType == kCARD_ResponseTypeR4) /* Response 4 */
+    {
+        flags |= ((uint32_t)kSDHC_ResponseLength48Flag);
+    }
+    else if (command->responseType == kCARD_ResponseTypeR5) /* Response 5 */
+    {
+        flags |= ((uint32_t)kSDHC_ResponseLength48Flag | (uint32_t)kSDHC_EnableCrcCheckFlag |
+                  (uint32_t)kSDHC_EnableIndexCheckFlag);
+    }
+    else if (command->responseType == kCARD_ResponseTypeR5b) /* Response 5 with busy */
+    {
+        flags |= ((uint32_t)kSDHC_ResponseLength48BusyFlag | (uint32_t)kSDHC_EnableCrcCheckFlag |
+                  (uint32_t)kSDHC_EnableIndexCheckFlag);
+    }
+    else if (command->responseType == kCARD_ResponseTypeR6) /* Response 6 */
+    {
+        flags |= ((uint32_t)kSDHC_ResponseLength48Flag | (uint32_t)kSDHC_EnableCrcCheckFlag |
+                  (uint32_t)kSDHC_EnableIndexCheckFlag);
+    }
+    else if (command->responseType == kCARD_ResponseTypeR7) /* Response 7 */
+    {
+        flags |= ((uint32_t)kSDHC_ResponseLength48Flag | (uint32_t)kSDHC_EnableCrcCheckFlag |
+                  (uint32_t)kSDHC_EnableIndexCheckFlag);
+    }
+    else
+    {
+        /* Intentional empty for kCARD_ResponseTypeNone */
     }
 
-    if (data)
+    if (command->type == kCARD_CommandTypeAbort)
     {
-        flags |= kSDHC_DataPresentFlag;
+        flags |= (uint32_t)kSDHC_CommandTypeAbortFlag;
+    }
+
+    if (data != NULL)
+    {
+        flags |= (uint32_t)kSDHC_DataPresentFlag;
 
         if (dmaMode != kSDHC_DmaModeNo)
         {
-            flags |= kSDHC_EnableDmaFlag;
-            base->IRQSIGEN &= ~(kSDHC_BufferWriteReadyFlag | kSDHC_BufferReadReadyFlag | kSDHC_DmaCompleteFlag);
-            base->IRQSTATEN &= ~(kSDHC_BufferWriteReadyFlag | kSDHC_BufferReadReadyFlag | kSDHC_DmaCompleteFlag);
-        }
-        else
-        {
-            base->IRQSIGEN |= kSDHC_BufferWriteReadyFlag | kSDHC_BufferReadReadyFlag;
-            base->IRQSTATEN |= kSDHC_BufferWriteReadyFlag | kSDHC_BufferReadReadyFlag;
+            flags |= (uint32_t)kSDHC_EnableDmaFlag;
         }
 
-        if (data->rxData)
+        if (data->rxData != NULL)
         {
-            flags |= kSDHC_DataReadFlag;
+            flags |= (uint32_t)kSDHC_DataReadFlag;
         }
         if (data->blockCount > 1U)
         {
-            flags |= (kSDHC_MultipleBlockFlag | kSDHC_EnableBlockCountFlag);
+            flags |= ((uint32_t)kSDHC_MultipleBlockFlag | (uint32_t)kSDHC_EnableBlockCountFlag);
             if (data->enableAutoCommand12)
             {
                 /* Enable Auto command 12. */
-                flags |= kSDHC_EnableAutoCommand12Flag;
+                flags |= (uint32_t)kSDHC_EnableAutoCommand12Flag;
             }
         }
 
@@ -354,17 +330,21 @@ static status_t SDHC_ReceiveCommandResponse(SDHC_Type *base, sdhc_command_t *com
 {
     assert(command != NULL);
 
+    uint32_t response0 = base->CMDRSP[0];
+    uint32_t response1 = base->CMDRSP[1];
+    uint32_t response2 = base->CMDRSP[2];
+
     if (command->responseType != kCARD_ResponseTypeNone)
     {
-        command->response[0U] = base->CMDRSP[0];
+        command->response[0U] = response0;
         if (command->responseType == kCARD_ResponseTypeR2)
         {
             /* R3-R2-R1-R0(lowest 8 bit is invalid bit) has the same format as R2 format in SD specification document
             after removed internal CRC7 and end bit. */
             command->response[0U] <<= 8U;
-            command->response[1U] = (base->CMDRSP[1] << 8U) | ((base->CMDRSP[0] & 0xFF000000U) >> 24U);
-            command->response[2U] = (base->CMDRSP[2] << 8U) | ((base->CMDRSP[1] & 0xFF000000U) >> 24U);
-            command->response[3U] = (base->CMDRSP[3] << 8U) | ((base->CMDRSP[2] & 0xFF000000U) >> 24U);
+            command->response[1U] = (response1 << 8U) | ((response0 & 0xFF000000U) >> 24U);
+            command->response[2U] = (response2 << 8U) | ((response1 & 0xFF000000U) >> 24U);
+            command->response[3U] = (base->CMDRSP[3] << 8U) | ((response2 & 0xFF000000U) >> 24U);
         }
     }
 
@@ -451,11 +431,12 @@ static status_t SDHC_ReadByDataPortBlocking(SDHC_Type *base, sdhc_data_t *data)
 
     while ((error == kStatus_Success) && (transferredWords < totalWords))
     {
-        while (!(SDHC_GetInterruptStatusFlags(base) & (kSDHC_BufferReadReadyFlag | kSDHC_DataErrorFlag)))
+        while (!(IS_SDHC_FLAG_SET(SDHC_GetInterruptStatusFlags(base),
+                                  ((uint32_t)kSDHC_BufferReadReadyFlag | (uint32_t)kSDHC_DataErrorFlag))))
         {
         }
 
-        if (SDHC_GetInterruptStatusFlags(base) & kSDHC_DataErrorFlag)
+        if (IS_SDHC_FLAG_SET(SDHC_GetInterruptStatusFlags(base), kSDHC_DataErrorFlag))
         {
             if (!(data->enableIgnoreError))
             {
@@ -467,11 +448,11 @@ static status_t SDHC_ReadByDataPortBlocking(SDHC_Type *base, sdhc_data_t *data)
             transferredWords = SDHC_ReadDataPort(base, data, transferredWords);
         }
         /* clear buffer ready and error */
-        SDHC_ClearInterruptStatusFlags(base, kSDHC_BufferReadReadyFlag | kSDHC_DataErrorFlag);
+        SDHC_ClearInterruptStatusFlags(base, (uint32_t)kSDHC_BufferReadReadyFlag | (uint32_t)kSDHC_DataErrorFlag);
     }
 
     /* Clear data complete flag after the last read operation. */
-    SDHC_ClearInterruptStatusFlags(base, kSDHC_DataCompleteFlag | kSDHC_DataErrorFlag);
+    SDHC_ClearInterruptStatusFlags(base, (uint32_t)kSDHC_DataCompleteFlag | (uint32_t)kSDHC_DataErrorFlag);
 
     return error;
 }
@@ -545,11 +526,12 @@ static status_t SDHC_WriteByDataPortBlocking(SDHC_Type *base, sdhc_data_t *data)
 
     while ((error == kStatus_Success) && (transferredWords < totalWords))
     {
-        while (!(SDHC_GetInterruptStatusFlags(base) & (kSDHC_BufferWriteReadyFlag | kSDHC_DataErrorFlag)))
+        while (!(IS_SDHC_FLAG_SET(SDHC_GetInterruptStatusFlags(base),
+                                  ((uint32_t)kSDHC_BufferWriteReadyFlag | (uint32_t)kSDHC_DataErrorFlag))))
         {
         }
 
-        if (SDHC_GetInterruptStatusFlags(base) & kSDHC_DataErrorFlag)
+        if (IS_SDHC_FLAG_SET(SDHC_GetInterruptStatusFlags(base), kSDHC_DataErrorFlag))
         {
             if (!(data->enableIgnoreError))
             {
@@ -562,14 +544,15 @@ static status_t SDHC_WriteByDataPortBlocking(SDHC_Type *base, sdhc_data_t *data)
         }
 
         /* Clear buffer enable flag to trigger transfer. Clear error flag when SDHC encounter error. */
-        SDHC_ClearInterruptStatusFlags(base, (kSDHC_BufferWriteReadyFlag | kSDHC_DataErrorFlag));
+        SDHC_ClearInterruptStatusFlags(base, ((uint32_t)kSDHC_BufferWriteReadyFlag | (uint32_t)kSDHC_DataErrorFlag));
     }
 
     /* Wait write data complete or data transfer error after the last writing operation. */
-    while (!(SDHC_GetInterruptStatusFlags(base) & (kSDHC_DataCompleteFlag | kSDHC_DataErrorFlag)))
+    while (!(IS_SDHC_FLAG_SET(SDHC_GetInterruptStatusFlags(base),
+                              ((uint32_t)kSDHC_DataCompleteFlag | (uint32_t)kSDHC_DataErrorFlag))))
     {
     }
-    if (SDHC_GetInterruptStatusFlags(base) & kSDHC_DataErrorFlag)
+    if (IS_SDHC_FLAG_SET(SDHC_GetInterruptStatusFlags(base), kSDHC_DataErrorFlag))
     {
         if (!(data->enableIgnoreError))
         {
@@ -577,7 +560,7 @@ static status_t SDHC_WriteByDataPortBlocking(SDHC_Type *base, sdhc_data_t *data)
         }
     }
 
-    SDHC_ClearInterruptStatusFlags(base, (kSDHC_DataCompleteFlag | kSDHC_DataErrorFlag));
+    SDHC_ClearInterruptStatusFlags(base, ((uint32_t)kSDHC_DataCompleteFlag | (uint32_t)kSDHC_DataErrorFlag));
 
     return error;
 }
@@ -587,11 +570,12 @@ static status_t SDHC_SendCommandBlocking(SDHC_Type *base, sdhc_command_t *comman
     status_t error = kStatus_Success;
 
     /* Wait command complete or SDHC encounters error. */
-    while (!(SDHC_GetInterruptStatusFlags(base) & (kSDHC_CommandCompleteFlag | kSDHC_CommandErrorFlag)))
+    while (!(IS_SDHC_FLAG_SET(SDHC_GetInterruptStatusFlags(base),
+                              ((uint32_t)kSDHC_CommandCompleteFlag | (uint32_t)kSDHC_CommandErrorFlag))))
     {
     }
 
-    if (SDHC_GetInterruptStatusFlags(base) & kSDHC_CommandErrorFlag)
+    if (IS_SDHC_FLAG_SET(SDHC_GetInterruptStatusFlags(base), kSDHC_CommandErrorFlag))
     {
         error = kStatus_Fail;
     }
@@ -601,7 +585,7 @@ static status_t SDHC_SendCommandBlocking(SDHC_Type *base, sdhc_command_t *comman
         error = SDHC_ReceiveCommandResponse(base, command);
     }
 
-    SDHC_ClearInterruptStatusFlags(base, (kSDHC_CommandCompleteFlag | kSDHC_CommandErrorFlag));
+    SDHC_ClearInterruptStatusFlags(base, ((uint32_t)kSDHC_CommandCompleteFlag | (uint32_t)kSDHC_CommandErrorFlag));
 
     return error;
 }
@@ -610,16 +594,24 @@ static status_t SDHC_TransferByDataPortBlocking(SDHC_Type *base, sdhc_data_t *da
 {
     status_t error = kStatus_Success;
 
-    if (data->rxData)
+    if (data->rxData != NULL)
     {
         error = SDHC_ReadByDataPortBlocking(base, data);
+        if (error != kStatus_Success)
+        {
+            return error;
+        }
     }
     else
     {
         error = SDHC_WriteByDataPortBlocking(base, data);
+        if (error != kStatus_Success)
+        {
+            return error;
+        }
     }
 
-    return error;
+    return kStatus_Success;
 }
 
 static status_t SDHC_TransferByAdma2Blocking(SDHC_Type *base, sdhc_data_t *data)
@@ -627,18 +619,22 @@ static status_t SDHC_TransferByAdma2Blocking(SDHC_Type *base, sdhc_data_t *data)
     status_t error = kStatus_Success;
 
     /* Wait data complete or SDHC encounters error. */
-    while (!(SDHC_GetInterruptStatusFlags(base) & (kSDHC_DataCompleteFlag | kSDHC_DataErrorFlag | kSDHC_DmaErrorFlag)))
+    while (!(IS_SDHC_FLAG_SET(
+        SDHC_GetInterruptStatusFlags(base),
+        ((uint32_t)kSDHC_DataCompleteFlag | (uint32_t)kSDHC_DataErrorFlag | (uint32_t)kSDHC_DmaErrorFlag))))
     {
     }
-    if (SDHC_GetInterruptStatusFlags(base) & (kSDHC_DataErrorFlag | kSDHC_DmaErrorFlag))
+    if (IS_SDHC_FLAG_SET(SDHC_GetInterruptStatusFlags(base),
+                         ((uint32_t)kSDHC_DataErrorFlag | (uint32_t)kSDHC_DmaErrorFlag)))
     {
         if (!(data->enableIgnoreError))
         {
             error = kStatus_Fail;
         }
     }
-    SDHC_ClearInterruptStatusFlags(
-        base, (kSDHC_DataCompleteFlag | kSDHC_DmaCompleteFlag | kSDHC_DataErrorFlag | kSDHC_DmaErrorFlag));
+    SDHC_ClearInterruptStatusFlags(base, ((uint32_t)kSDHC_DataCompleteFlag | (uint32_t)kSDHC_DmaCompleteFlag |
+                                          (uint32_t)kSDHC_DataErrorFlag | (uint32_t)kSDHC_DmaErrorFlag));
+
     return error;
 }
 
@@ -650,39 +646,50 @@ static status_t SDHC_TransferDataBlocking(sdhc_dma_mode_t dmaMode, SDHC_Type *ba
 {
     status_t error = kStatus_Success;
 
-    switch (dmaMode)
+    if (dmaMode == kSDHC_DmaModeNo)
     {
-        case kSDHC_DmaModeNo:
-            error = SDHC_TransferByDataPortBlocking(base, data);
-            break;
+        error = SDHC_TransferByDataPortBlocking(base, data);
+        if (error != kStatus_Success)
+        {
+            return error;
+        }
+    }
 #if defined FSL_SDHC_ENABLE_ADMA1
-        case kSDHC_DmaModeAdma1:
-            error = SDHC_TransferByAdma1Blocking(base, data);
-            break;
+    else if (dmaMode == kSDHC_DmaModeAdma1)
+    {
+        error = SDHC_TransferByAdma1Blocking(base, data);
+        if (error != kStatus_Success)
+        {
+            return error;
+        }
+    }
 #endif /* FSL_SDHC_ENABLE_ADMA1 */
-        case kSDHC_DmaModeAdma2:
-            error = SDHC_TransferByAdma2Blocking(base, data);
-            break;
-        default:
-            error = kStatus_InvalidArgument;
-            break;
+
+    /*kSDHC_DmaModeAdma2*/
+    else
+    {
+        error = SDHC_TransferByAdma2Blocking(base, data);
+        if (error != kStatus_Success)
+        {
+            return error;
+        }
     }
 
-    return error;
+    return kStatus_Success;
 }
 
 static void SDHC_TransferHandleCardDetect(SDHC_Type *base, sdhc_handle_t *handle, uint32_t interruptFlags)
 {
-    if (interruptFlags & kSDHC_CardInsertionFlag)
+    if (IS_SDHC_FLAG_SET(interruptFlags, kSDHC_CardInsertionFlag))
     {
-        if (handle->callback.CardInserted)
+        if (handle->callback.CardInserted != NULL)
         {
             handle->callback.CardInserted(base, handle->userData);
         }
     }
     else
     {
-        if (handle->callback.CardRemoved)
+        if (handle->callback.CardRemoved != NULL)
         {
             handle->callback.CardRemoved(base, handle->userData);
         }
@@ -691,60 +698,80 @@ static void SDHC_TransferHandleCardDetect(SDHC_Type *base, sdhc_handle_t *handle
 
 static void SDHC_TransferHandleCommand(SDHC_Type *base, sdhc_handle_t *handle, uint32_t interruptFlags)
 {
-    assert(handle->command);
+    assert(handle->command != NULL);
 
-    if ((interruptFlags & kSDHC_CommandErrorFlag) && (!(handle->data)) && (handle->callback.TransferComplete))
+    if ((IS_SDHC_FLAG_SET(interruptFlags, kSDHC_CommandErrorFlag)) && (handle->data == NULL) &&
+        (handle->callback.TransferComplete != NULL))
     {
         handle->callback.TransferComplete(base, handle, kStatus_SDHC_SendCommandFailed, handle->userData);
     }
     else
     {
         /* Receive response */
-        SDHC_ReceiveCommandResponse(base, handle->command);
-        if ((!(handle->data)) && (handle->callback.TransferComplete))
+        if (kStatus_Success != SDHC_ReceiveCommandResponse(base, handle->command))
         {
-            handle->callback.TransferComplete(base, handle, kStatus_Success, handle->userData);
+            if (handle->callback.TransferComplete != NULL)
+            {
+                handle->callback.TransferComplete(base, handle, kStatus_SDHC_SendCommandFailed, handle->userData);
+            }
+        }
+        else
+        {
+            if ((handle->data == NULL) && (handle->callback.TransferComplete != NULL))
+            {
+                handle->callback.TransferComplete(base, handle, kStatus_Success, handle->userData);
+            }
         }
     }
+
+    SDHC_DisableInterruptSignal(base, kSDHC_CommandFlag);
+    handle->command = NULL;
 }
 
 static void SDHC_TransferHandleData(SDHC_Type *base, sdhc_handle_t *handle, uint32_t interruptFlags)
 {
-    assert(handle->data);
+    assert(handle->data != NULL);
 
-    if ((!(handle->data->enableIgnoreError)) && (interruptFlags & (kSDHC_DataErrorFlag | kSDHC_DmaErrorFlag)) &&
-        (handle->callback.TransferComplete))
+    status_t transferStatus   = kStatus_SDHC_BusyTransferring;
+    uint32_t transferredWords = handle->transferredWords;
+
+    if ((!(handle->data->enableIgnoreError)) &&
+        (IS_SDHC_FLAG_SET(interruptFlags, ((uint32_t)kSDHC_DataErrorFlag | (uint32_t)kSDHC_DmaErrorFlag))))
     {
-        handle->callback.TransferComplete(base, handle, kStatus_SDHC_TransferDataFailed, handle->userData);
+        transferStatus = kStatus_SDHC_TransferDataFailed;
     }
     else
     {
-        if (interruptFlags & kSDHC_BufferReadReadyFlag)
+        if (IS_SDHC_FLAG_SET(interruptFlags, kSDHC_BufferReadReadyFlag))
         {
-            handle->transferredWords = SDHC_ReadDataPort(base, handle->data, handle->transferredWords);
+            handle->transferredWords = SDHC_ReadDataPort(base, handle->data, transferredWords);
         }
-        else if (interruptFlags & kSDHC_BufferWriteReadyFlag)
+        else if (IS_SDHC_FLAG_SET(interruptFlags, kSDHC_BufferWriteReadyFlag))
         {
-            handle->transferredWords = SDHC_WriteDataPort(base, handle->data, handle->transferredWords);
+            handle->transferredWords = SDHC_WriteDataPort(base, handle->data, transferredWords);
         }
         else
         {
+            /* Intentional empty */
         }
 
-        if ((interruptFlags & kSDHC_DataCompleteFlag) && (handle->callback.TransferComplete))
+        if (IS_SDHC_FLAG_SET(interruptFlags, kSDHC_DataCompleteFlag))
         {
-            handle->callback.TransferComplete(base, handle, kStatus_Success, handle->userData);
+            transferStatus = kStatus_Success;
         }
-        else
-        {
-            /* Do nothing when DMA complete flag is set. Wait until data complete flag is set. */
-        }
+    }
+
+    if ((transferStatus != kStatus_SDHC_BusyTransferring) && (handle->callback.TransferComplete != NULL))
+    {
+        handle->callback.TransferComplete(base, handle, transferStatus, handle->userData);
+        SDHC_DisableInterruptSignal(base, (uint32_t)kSDHC_DataFlag | (uint32_t)kSDHC_DataDMAFlag);
+        handle->data = NULL;
     }
 }
 
 static void SDHC_TransferHandleSdioInterrupt(SDHC_Type *base, sdhc_handle_t *handle)
 {
-    if (handle->callback.SdioInterrupt)
+    if (handle->callback.SdioInterrupt != NULL)
     {
         handle->callback.SdioInterrupt(base, handle->userData);
     }
@@ -752,7 +779,7 @@ static void SDHC_TransferHandleSdioInterrupt(SDHC_Type *base, sdhc_handle_t *han
 
 static void SDHC_TransferHandleSdioBlockGap(SDHC_Type *base, sdhc_handle_t *handle)
 {
-    if (handle->callback.SdioBlockGap)
+    if (handle->callback.SdioBlockGap != NULL)
     {
         handle->callback.SdioBlockGap(base, handle->userData);
     }
@@ -780,12 +807,12 @@ static void SDHC_TransferHandleSdioBlockGap(SDHC_Type *base, sdhc_handle_t *hand
  */
 void SDHC_Init(SDHC_Type *base, const sdhc_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 #if !defined FSL_SDHC_ENABLE_ADMA1
     assert(config->dmaMode != kSDHC_DmaModeAdma1);
 #endif /* FSL_SDHC_ENABLE_ADMA1 */
-    assert((config->writeWatermarkLevel >= 1U) && (config->writeWatermarkLevel <= 128U));
-    assert((config->readWatermarkLevel >= 1U) && (config->readWatermarkLevel <= 128U));
+    assert((config->writeWatermarkLevel >= 1UL) && (config->writeWatermarkLevel <= 128UL));
+    assert((config->readWatermarkLevel >= 1UL) && (config->readWatermarkLevel <= 128UL));
 
     uint32_t proctl;
     uint32_t wml;
@@ -796,7 +823,7 @@ void SDHC_Init(SDHC_Type *base, const sdhc_config_t *config)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* Reset SDHC. */
-    SDHC_Reset(base, kSDHC_ResetAll, 100);
+    base->SYSCTL |= SDHC_SYSCTL_RSTA_MASK | SDHC_SYSCTL_RSTC_MASK | SDHC_SYSCTL_RSTD_MASK;
 
     proctl = base->PROCTL;
     wml    = base->WML;
@@ -821,8 +848,10 @@ void SDHC_Init(SDHC_Type *base, const sdhc_config_t *config)
     correctly when clock auto gated off is enabled. */
     base->SYSCTL |= (SDHC_SYSCTL_PEREN_MASK | SDHC_SYSCTL_HCKEN_MASK | SDHC_SYSCTL_IPGEN_MASK);
 
-    /* Enable interrupt status but doesn't enable interrupt signal. */
-    SDHC_SetTransferInterrupt(base, false);
+    /* Enable interrupt status but doesn't enable interrupt signal, clear all the interrupt status */
+    base->IRQSTATEN = kSDHC_AllInterruptFlags;
+    base->IRQSIGEN  = 0U;
+    base->IRQSTAT   = kSDHC_AllInterruptFlags;
 }
 
 /*!
@@ -851,16 +880,16 @@ bool SDHC_Reset(SDHC_Type *base, uint32_t mask, uint32_t timeout)
 {
     base->SYSCTL |= (mask & (SDHC_SYSCTL_RSTA_MASK | SDHC_SYSCTL_RSTC_MASK | SDHC_SYSCTL_RSTD_MASK));
     /* Delay some time to wait reset success. */
-    while ((base->SYSCTL & mask))
+    while (IS_SDHC_FLAG_SET(base->SYSCTL, mask))
     {
-        if (!timeout)
+        if (timeout == 0UL)
         {
             break;
         }
         timeout--;
     }
 
-    return ((!timeout) ? false : true);
+    return (timeout == 0UL ? false : true);
 }
 
 /*!
@@ -871,7 +900,7 @@ bool SDHC_Reset(SDHC_Type *base, uint32_t mask, uint32_t timeout)
  */
 void SDHC_GetCapability(SDHC_Type *base, sdhc_capability_t *capability)
 {
-    assert(capability);
+    assert(capability != NULL);
 
     uint32_t htCapability;
     uint32_t hostVer;
@@ -884,19 +913,20 @@ void SDHC_GetCapability(SDHC_Type *base, sdhc_capability_t *capability)
     capability->specVersion    = ((hostVer & SDHC_HOSTVER_SVN_MASK) >> SDHC_HOSTVER_SVN_SHIFT);
     capability->vendorVersion  = ((hostVer & SDHC_HOSTVER_VVN_MASK) >> SDHC_HOSTVER_VVN_SHIFT);
     maxBlockLength             = ((htCapability & SDHC_HTCAPBLT_MBL_MASK) >> SDHC_HTCAPBLT_MBL_SHIFT);
-    capability->maxBlockLength = (512U << maxBlockLength);
+    capability->maxBlockLength = (512UL << maxBlockLength);
     /* Other attributes not in HTCAPBLT register. */
     capability->maxBlockCount = SDHC_MAX_BLOCK_COUNT;
-    capability->flags = (htCapability & (kSDHC_SupportAdmaFlag | kSDHC_SupportHighSpeedFlag | kSDHC_SupportDmaFlag |
-                                         kSDHC_SupportSuspendResumeFlag | kSDHC_SupportV330Flag));
+    capability->flags = (htCapability & ((uint32_t)kSDHC_SupportAdmaFlag | (uint32_t)kSDHC_SupportHighSpeedFlag |
+                                         (uint32_t)kSDHC_SupportDmaFlag | (uint32_t)kSDHC_SupportSuspendResumeFlag |
+                                         (uint32_t)kSDHC_SupportV330Flag));
 #if defined FSL_FEATURE_SDHC_HAS_V300_SUPPORT && FSL_FEATURE_SDHC_HAS_V300_SUPPORT
-    capability->flags |= (htCapability & kSDHC_SupportV300Flag);
+    capability->flags |= (htCapability & (uint32_t)kSDHC_SupportV300Flag);
 #endif
 #if defined FSL_FEATURE_SDHC_HAS_V180_SUPPORT && FSL_FEATURE_SDHC_HAS_V180_SUPPORT
-    capability->flags |= (htCapability & kSDHC_SupportV180Flag);
+    capability->flags |= (htCapability & (uint32_t)kSDHC_SupportV180Flag);
 #endif
     /* eSDHC on all kinetis boards will support 4/8 bit data bus width. */
-    capability->flags |= (kSDHC_Support4BitFlag | kSDHC_Support8BitFlag);
+    capability->flags |= ((uint32_t)kSDHC_Support4BitFlag | (uint32_t)kSDHC_Support8BitFlag);
 }
 
 /*!
@@ -920,9 +950,11 @@ uint32_t SDHC_SetSdClock(SDHC_Type *base, uint32_t srcClock_Hz, uint32_t busCloc
     uint32_t nearestFrequency = 0U;
 
     /* calucate total divisor first */
-    if ((totalDiv = srcClock_Hz / busClock_Hz) > (SDHC_MAX_CLKFS * SDHC_MAX_DVS))
+    totalDiv = srcClock_Hz / busClock_Hz;
+
+    if (totalDiv > (SDHC_MAX_CLKFS * SDHC_MAX_DVS))
     {
-        return 0U;
+        return 0UL;
     }
 
     if (totalDiv != 0U)
@@ -989,7 +1021,7 @@ uint32_t SDHC_SetSdClock(SDHC_Type *base, uint32_t srcClock_Hz, uint32_t busCloc
     base->SYSCTL = sysctl;
 
     /* Wait until the SD clock is stable. */
-    while (!(base->PRSSTAT & SDHC_PRSSTAT_SDSTB_MASK))
+    while (!(IS_SDHC_FLAG_SET(base->PRSSTAT, SDHC_PRSSTAT_SDSTB_MASK)))
     {
     }
     /* Enable the SD clock. */
@@ -1013,16 +1045,16 @@ bool SDHC_SetCardActive(SDHC_Type *base, uint32_t timeout)
 {
     base->SYSCTL |= SDHC_SYSCTL_INITA_MASK;
     /* Delay some time to wait card become active state. */
-    while (base->SYSCTL & SDHC_SYSCTL_INITA_MASK)
+    while (IS_SDHC_FLAG_SET(base->SYSCTL, SDHC_SYSCTL_INITA_MASK))
     {
-        if (!timeout)
+        if (timeout == 0UL)
         {
             break;
         }
         timeout--;
     }
 
-    return ((!timeout) ? false : true);
+    return (timeout == 0UL ? false : true);
 }
 
 /*!
@@ -1048,7 +1080,7 @@ bool SDHC_SetCardActive(SDHC_Type *base, uint32_t timeout)
  */
 void SDHC_SetTransferConfig(SDHC_Type *base, const sdhc_transfer_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
     assert(config->dataBlockSize <= (SDHC_BLKATTR_BLKSIZE_MASK >> SDHC_BLKATTR_BLKSIZE_SHIFT));
     assert(config->dataBlockCount <= (SDHC_BLKATTR_BLKCNT_MASK >> SDHC_BLKATTR_BLKCNT_SHIFT));
 
@@ -1076,38 +1108,38 @@ void SDHC_EnableSdioControl(SDHC_Type *base, uint32_t mask, bool enable)
 
     if (enable)
     {
-        if (mask & kSDHC_StopAtBlockGapFlag)
+        if (IS_SDHC_FLAG_SET(mask, kSDHC_StopAtBlockGapFlag))
         {
             proctl |= SDHC_PROCTL_SABGREQ_MASK;
         }
-        if (mask & kSDHC_ReadWaitControlFlag)
+        if (IS_SDHC_FLAG_SET(mask, kSDHC_ReadWaitControlFlag))
         {
             proctl |= SDHC_PROCTL_RWCTL_MASK;
         }
-        if (mask & kSDHC_InterruptAtBlockGapFlag)
+        if (IS_SDHC_FLAG_SET(mask, kSDHC_InterruptAtBlockGapFlag))
         {
             proctl |= SDHC_PROCTL_IABG_MASK;
         }
-        if (mask & kSDHC_ExactBlockNumberReadFlag)
+        if (IS_SDHC_FLAG_SET(mask, kSDHC_ExactBlockNumberReadFlag))
         {
             vendor |= SDHC_VENDOR_EXBLKNU_MASK;
         }
     }
     else
     {
-        if (mask & kSDHC_StopAtBlockGapFlag)
+        if (IS_SDHC_FLAG_SET(mask, kSDHC_StopAtBlockGapFlag))
         {
             proctl &= ~SDHC_PROCTL_SABGREQ_MASK;
         }
-        if (mask & kSDHC_ReadWaitControlFlag)
+        if (IS_SDHC_FLAG_SET(mask, kSDHC_ReadWaitControlFlag))
         {
             proctl &= ~SDHC_PROCTL_RWCTL_MASK;
         }
-        if (mask & kSDHC_InterruptAtBlockGapFlag)
+        if (IS_SDHC_FLAG_SET(mask, kSDHC_InterruptAtBlockGapFlag))
         {
             proctl &= ~SDHC_PROCTL_IABG_MASK;
         }
-        if (mask & kSDHC_ExactBlockNumberReadFlag)
+        if (IS_SDHC_FLAG_SET(mask, kSDHC_ExactBlockNumberReadFlag))
         {
             vendor &= ~SDHC_VENDOR_EXBLKNU_MASK;
         }
@@ -1137,7 +1169,7 @@ void SDHC_EnableSdioControl(SDHC_Type *base, uint32_t mask, bool enable)
  */
 void SDHC_SetMmcBootConfig(SDHC_Type *base, const sdhc_boot_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
     assert(config->ackTimeoutCount <= (SDHC_MMCBOOT_DTOCVACK_MASK >> SDHC_MMCBOOT_DTOCVACK_SHIFT));
     assert(config->blockCount <= (SDHC_MMCBOOT_BOOTBLKCNT_MASK >> SDHC_MMCBOOT_BOOTBLKCNT_SHIFT));
 
@@ -1188,8 +1220,9 @@ status_t SDHC_SetAdmaTableConfig(SDHC_Type *base,
 #endif
     sdhc_adma2_descriptor_t *adma2EntryAddress;
 
-    if ((((!table) || (!tableWords)) && ((dmaMode == kSDHC_DmaModeAdma1) || (dmaMode == kSDHC_DmaModeAdma2))) ||
-        (!data) || (!dataBytes)
+    if ((((table == NULL) || (tableWords == 0UL)) &&
+         ((dmaMode == kSDHC_DmaModeAdma1) || (dmaMode == kSDHC_DmaModeAdma2))) ||
+        (data == NULL) || (dataBytes == 0UL)
 #if !defined FSL_SDHC_ENABLE_ADMA1
         || (dmaMode == kSDHC_DmaModeAdma1)
 #endif
@@ -1197,9 +1230,9 @@ status_t SDHC_SetAdmaTableConfig(SDHC_Type *base,
     {
         error = kStatus_InvalidArgument;
     }
-    else if (((dmaMode == kSDHC_DmaModeAdma2) && (((uint32_t)startAddress % SDHC_ADMA2_LENGTH_ALIGN) != 0U))
+    else if (((dmaMode == kSDHC_DmaModeAdma2) && (((uint32_t)startAddress % SDHC_ADMA2_LENGTH_ALIGN) != 0UL))
 #if defined FSL_SDHC_ENABLE_ADMA1
-             || ((dmaMode == kSDHC_DmaModeAdma1) && (((uint32_t)startAddress % SDHC_ADMA1_LENGTH_ALIGN) != 0U))
+             || ((dmaMode == kSDHC_DmaModeAdma1) && (((uint32_t)startAddress % SDHC_ADMA1_LENGTH_ALIGN) != 0UL))
 #endif
     )
     {
@@ -1207,118 +1240,119 @@ status_t SDHC_SetAdmaTableConfig(SDHC_Type *base,
     }
     else
     {
-        switch (dmaMode)
-        {
-            case kSDHC_DmaModeNo:
-                break;
 #if defined FSL_SDHC_ENABLE_ADMA1
-            case kSDHC_DmaModeAdma1:
-                /*
-                 * Add non aligned access support ,user need make sure your buffer size is big
-                 * enough to hold the data,in other words,user need make sure the buffer size
-                 * is 4 byte aligned
-                 */
-                if (dataBytes % sizeof(uint32_t) != 0U)
-                {
-                    dataBytes +=
-                        sizeof(uint32_t) - (dataBytes % sizeof(uint32_t)); /* make the data length as word-aligned */
-                }
+        if (dmaMode == kSDHC_DmaModeAdma1)
+        {
+            /*
+             * Add non aligned access support ,user need make sure your buffer size is big
+             * enough to hold the data,in other words,user need make sure the buffer size
+             * is 4 byte aligned
+             */
+            if (dataBytes % sizeof(uint32_t) != 0U)
+            {
+                dataBytes +=
+                    sizeof(uint32_t) - (dataBytes % sizeof(uint32_t)); /* make the data length as word-aligned */
+            }
 
-                /* Check if ADMA descriptor's number is enough. */
-                entries = ((dataBytes / SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY) + 1U);
-                /* ADMA1 needs two descriptors to finish a transfer */
-                entries <<= 1U;
-                if (entries > ((tableWords * sizeof(uint32_t)) / sizeof(sdhc_adma1_descriptor_t)))
+            /* Check if ADMA descriptor's number is enough. */
+            entries = ((dataBytes / SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY) + 1U);
+            /* ADMA1 needs two descriptors to finish a transfer */
+            entries <<= 1U;
+            if (entries > ((tableWords * sizeof(uint32_t)) / sizeof(sdhc_adma1_descriptor_t)))
+            {
+                error = kStatus_OutOfRange;
+            }
+            else
+            {
+                adma1EntryAddress = (sdhc_adma1_descriptor_t *)(uint32_t)(table);
+                for (i = 0U; i < entries; i += 2U)
                 {
-                    error = kStatus_OutOfRange;
-                }
-                else
-                {
-                    adma1EntryAddress = (sdhc_adma1_descriptor_t *)(table);
-                    for (i = 0U; i < entries; i += 2U)
+                    /* Each descriptor for ADMA1 is 32-bit in length */
+                    if ((dataBytes - sizeof(uint32_t) * ((uint32_t)startAddress - (uint32_t)data)) <=
+                        SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY)
                     {
-                        /* Each descriptor for ADMA1 is 32-bit in length */
-                        if ((dataBytes - sizeof(uint32_t) * (startAddress - data)) <=
-                            SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY)
-                        {
-                            /* The last piece of data, setting end flag in descriptor */
-                            adma1EntryAddress[i] = ((uint32_t)(dataBytes - sizeof(uint32_t) * (startAddress - data))
-                                                    << SDHC_ADMA1_DESCRIPTOR_LENGTH_SHIFT);
-                            adma1EntryAddress[i] |= kSDHC_Adma1DescriptorTypeSetLength;
-                            adma1EntryAddress[i + 1U] = (uint32_t)(startAddress);
-                            adma1EntryAddress[i + 1U] |=
-                                (kSDHC_Adma1DescriptorTypeTransfer | kSDHC_Adma1DescriptorEndFlag);
-                        }
-                        else
-                        {
-                            adma1EntryAddress[i] = ((uint32_t)SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY
-                                                    << SDHC_ADMA1_DESCRIPTOR_LENGTH_SHIFT);
-                            adma1EntryAddress[i] |= kSDHC_Adma1DescriptorTypeSetLength;
-                            adma1EntryAddress[i + 1U] =
-                                ((uint32_t)(startAddress) << SDHC_ADMA1_DESCRIPTOR_ADDRESS_SHIFT);
-                            adma1EntryAddress[i + 1U] |= kSDHC_Adma1DescriptorTypeTransfer;
-                            startAddress += SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY / sizeof(uint32_t);
-                        }
+                        /* The last piece of data, setting end flag in descriptor */
+                        adma1EntryAddress[i] =
+                            ((uint32_t)(dataBytes - sizeof(uint32_t) * ((uint32_t)startAddress - (uint32_t)data))
+                             << SDHC_ADMA1_DESCRIPTOR_LENGTH_SHIFT);
+                        adma1EntryAddress[i] |= (uint32_t)kSDHC_Adma1DescriptorTypeSetLength;
+                        adma1EntryAddress[i + 1U] = (uint32_t)(startAddress);
+                        adma1EntryAddress[i + 1U] |=
+                            ((uint32_t)kSDHC_Adma1DescriptorTypeTransfer | (uint32_t)kSDHC_Adma1DescriptorEndFlag);
                     }
-
-                    /* When use ADMA, disable simple DMA */
-                    base->DSADDR  = 0U;
-                    base->ADSADDR = (uint32_t)table;
+                    else
+                    {
+                        adma1EntryAddress[i] = ((uint32_t)SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY
+                                                << SDHC_ADMA1_DESCRIPTOR_LENGTH_SHIFT);
+                        adma1EntryAddress[i] |= (uint32_t)kSDHC_Adma1DescriptorTypeSetLength;
+                        adma1EntryAddress[i + 1U] = ((uint32_t)(startAddress) << SDHC_ADMA1_DESCRIPTOR_ADDRESS_SHIFT);
+                        adma1EntryAddress[i + 1U] |= (uint32_t)kSDHC_Adma1DescriptorTypeTransfer;
+                        startAddress += SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY / sizeof(uint32_t);
+                    }
                 }
-                break;
+
+                /* When use ADMA, disable simple DMA */
+                base->DSADDR  = 0U;
+                base->ADSADDR = (uint32_t)table;
+            }
+        }
+        else
 #endif /* FSL_SDHC_ENABLE_ADMA1 */
-            case kSDHC_DmaModeAdma2:
-                /*
-                 * Add non aligned access support ,user need make sure your buffer size is big
-                 * enough to hold the data,in other words,user need make sure the buffer size
-                 * is 4 byte aligned
-                 */
-                if (dataBytes % sizeof(uint32_t) != 0U)
-                {
-                    dataBytes +=
-                        sizeof(uint32_t) - (dataBytes % sizeof(uint32_t)); /* make the data length as word-aligned */
-                }
+            if (dmaMode == kSDHC_DmaModeAdma2)
+        {
+            /*
+             * Add non aligned access support ,user need make sure your buffer size is big
+             * enough to hold the data,in other words,user need make sure the buffer size
+             * is 4 byte aligned
+             */
+            if (dataBytes % sizeof(uint32_t) != 0U)
+            {
+                dataBytes +=
+                    sizeof(uint32_t) - (dataBytes % sizeof(uint32_t)); /* make the data length as word-aligned */
+            }
 
-                /* Check if ADMA descriptor's number is enough. */
-                entries = ((dataBytes / SDHC_ADMA2_DESCRIPTOR_MAX_LENGTH_PER_ENTRY) + 1U);
-                if (entries > ((tableWords * sizeof(uint32_t)) / sizeof(sdhc_adma2_descriptor_t)))
+            /* Check if ADMA descriptor's number is enough. */
+            entries = ((dataBytes / SDHC_ADMA2_DESCRIPTOR_MAX_LENGTH_PER_ENTRY) + 1U);
+            if (entries > ((tableWords * sizeof(uint32_t)) / sizeof(sdhc_adma2_descriptor_t)))
+            {
+                error = kStatus_OutOfRange;
+            }
+            else
+            {
+                adma2EntryAddress = (sdhc_adma2_descriptor_t *)(uint32_t)(table);
+                for (i = 0U; i < entries; i++)
                 {
-                    error = kStatus_OutOfRange;
-                }
-                else
-                {
-                    adma2EntryAddress = (sdhc_adma2_descriptor_t *)(table);
-                    for (i = 0U; i < entries; i++)
+                    /* Each descriptor for ADMA2 is 64-bit in length */
+                    if ((dataBytes - sizeof(uint32_t) * ((uint32_t)startAddress - (uint32_t)data)) <=
+                        SDHC_ADMA2_DESCRIPTOR_MAX_LENGTH_PER_ENTRY)
                     {
-                        /* Each descriptor for ADMA2 is 64-bit in length */
-                        if ((dataBytes - sizeof(uint32_t) * (startAddress - data)) <=
-                            SDHC_ADMA2_DESCRIPTOR_MAX_LENGTH_PER_ENTRY)
-                        {
-                            /* The last piece of data, setting end flag in descriptor */
-                            adma2EntryAddress[i].address   = startAddress;
-                            adma2EntryAddress[i].attribute = ((dataBytes - sizeof(uint32_t) * (startAddress - data))
-                                                              << SDHC_ADMA2_DESCRIPTOR_LENGTH_SHIFT);
-                            adma2EntryAddress[i].attribute |=
-                                (kSDHC_Adma2DescriptorTypeTransfer | kSDHC_Adma2DescriptorEndFlag);
-                        }
-                        else
-                        {
-                            adma2EntryAddress[i].address = startAddress;
-                            adma2EntryAddress[i].attribute =
-                                (((SDHC_ADMA2_DESCRIPTOR_MAX_LENGTH_PER_ENTRY / sizeof(uint32_t)) * sizeof(uint32_t))
-                                 << SDHC_ADMA2_DESCRIPTOR_LENGTH_SHIFT);
-                            adma2EntryAddress[i].attribute |= kSDHC_Adma2DescriptorTypeTransfer;
-                            startAddress += (SDHC_ADMA2_DESCRIPTOR_MAX_LENGTH_PER_ENTRY / sizeof(uint32_t));
-                        }
+                        /* The last piece of data, setting end flag in descriptor */
+                        adma2EntryAddress[i].address = startAddress;
+                        adma2EntryAddress[i].attribute =
+                            ((dataBytes - sizeof(uint32_t) * ((uint32_t)startAddress - (uint32_t)data))
+                             << SDHC_ADMA2_DESCRIPTOR_LENGTH_SHIFT);
+                        adma2EntryAddress[i].attribute |=
+                            ((uint32_t)kSDHC_Adma2DescriptorTypeTransfer | (uint32_t)kSDHC_Adma2DescriptorEndFlag);
                     }
-
-                    /* When use ADMA, disable simple DMA */
-                    base->DSADDR  = 0U;
-                    base->ADSADDR = (uint32_t)table;
+                    else
+                    {
+                        adma2EntryAddress[i].address = startAddress;
+                        adma2EntryAddress[i].attribute =
+                            (((SDHC_ADMA2_DESCRIPTOR_MAX_LENGTH_PER_ENTRY / sizeof(uint32_t)) * sizeof(uint32_t))
+                             << SDHC_ADMA2_DESCRIPTOR_LENGTH_SHIFT);
+                        adma2EntryAddress[i].attribute |= (uint32_t)kSDHC_Adma2DescriptorTypeTransfer;
+                        startAddress += (SDHC_ADMA2_DESCRIPTOR_MAX_LENGTH_PER_ENTRY / sizeof(uint32_t));
+                    }
                 }
-                break;
-            default:
-                break;
+
+                /* When use ADMA, disable simple DMA */
+                base->DSADDR  = 0U;
+                base->ADSADDR = (uint32_t)table;
+            }
+        }
+        else
+        {
+            /* Intentional empty */
         }
     }
 
@@ -1349,51 +1383,57 @@ status_t SDHC_SetAdmaTableConfig(SDHC_Type *base,
  */
 status_t SDHC_TransferBlocking(SDHC_Type *base, uint32_t *admaTable, uint32_t admaTableWords, sdhc_transfer_t *transfer)
 {
-    assert(transfer);
+    assert(transfer != NULL);
 
-    status_t error          = kStatus_Success;
-    sdhc_dma_mode_t dmaMode = (sdhc_dma_mode_t)((base->PROCTL & SDHC_PROCTL_DMAS_MASK) >> SDHC_PROCTL_DMAS_SHIFT);
+    status_t error = kStatus_Success;
+    sdhc_dma_mode_t dmaMode =
+        (sdhc_dma_mode_t)(uint8_t)((base->PROCTL & SDHC_PROCTL_DMAS_MASK) >> SDHC_PROCTL_DMAS_SHIFT);
     sdhc_command_t *command = transfer->command;
     sdhc_data_t *data       = transfer->data;
 
     /* make sure the cmd/block count is valid */
-    if ((!command) || (data && (data->blockCount > SDHC_MAX_BLOCK_COUNT)))
+    if ((command == NULL) || ((data != NULL) && (data->blockCount > SDHC_MAX_BLOCK_COUNT)))
     {
         return kStatus_InvalidArgument;
     }
 
     /* Wait until command/data bus out of busy status. */
-    while (SDHC_GetPresentStatusFlags(base) & kSDHC_CommandInhibitFlag)
+    while (IS_SDHC_FLAG_SET(SDHC_GetPresentStatusFlags(base), kSDHC_CommandInhibitFlag))
     {
     }
-    while (data && (SDHC_GetPresentStatusFlags(base) & kSDHC_DataInhibitFlag))
+    while ((data != NULL) && (IS_SDHC_FLAG_SET(SDHC_GetPresentStatusFlags(base), kSDHC_DataInhibitFlag)))
     {
     }
 
     /* Update ADMA descriptor table according to different DMA mode(no DMA, ADMA1, ADMA2).*/
-    if (data && (NULL != admaTable))
+    if ((data != NULL) && (NULL != admaTable))
     {
-        error =
-            SDHC_SetAdmaTableConfig(base, dmaMode, admaTable, admaTableWords,
-                                    (data->rxData ? data->rxData : data->txData), (data->blockCount * data->blockSize));
+        error = SDHC_SetAdmaTableConfig(base, (sdhc_dma_mode_t)dmaMode, admaTable, admaTableWords,
+                                        (data->rxData != NULL ? data->rxData : data->txData),
+                                        (data->blockCount * data->blockSize));
         /* in this situation , we disable the DMA instead of polling transfer mode */
         if (error != kStatus_Success)
         {
-            dmaMode = kSDHC_DmaModeNo;
+            dmaMode = (sdhc_dma_mode_t)kSDHC_DmaModeNo;
         }
     }
 
     /* Send command and receive data. */
-    SDHC_StartTransfer(base, command, data, dmaMode);
+    SDHC_StartTransfer(base, command, data, (sdhc_dma_mode_t)dmaMode);
 
-    if (kStatus_Success != SDHC_SendCommandBlocking(base, command))
+    error = SDHC_SendCommandBlocking(base, command);
+    if (kStatus_Success != error)
     {
-        return kStatus_SDHC_SendCommandFailed;
+        return error;
     }
 
-    if (data && (kStatus_Success != SDHC_TransferDataBlocking(dmaMode, base, data)))
+    if (data != NULL)
     {
-        return kStatus_SDHC_TransferDataFailed;
+        error = SDHC_TransferDataBlocking((sdhc_dma_mode_t)dmaMode, base, data);
+        if (kStatus_Success != error)
+        {
+            return error;
+        }
     }
 
     return kStatus_Success;
@@ -1412,11 +1452,11 @@ void SDHC_TransferCreateHandle(SDHC_Type *base,
                                const sdhc_transfer_callback_t *callback,
                                void *userData)
 {
-    assert(handle);
-    assert(callback);
+    assert(handle != NULL);
+    assert(callback != NULL);
 
     /* Zero the handle. */
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     /* Set the callback. */
     handle->callback.CardInserted     = callback->CardInserted;
@@ -1429,13 +1469,10 @@ void SDHC_TransferCreateHandle(SDHC_Type *base,
     /* Save the handle in global variables to support the double weak mechanism. */
     s_sdhcHandle[SDHC_GetInstance(base)] = handle;
 
-    /* Enable interrupt in NVIC. */
-    SDHC_SetTransferInterrupt(base, true);
-
     /* save IRQ handler */
     s_sdhcIsr = SDHC_TransferHandleIRQ;
 
-    EnableIRQ(s_sdhcIRQ[SDHC_GetInstance(base)]);
+    (void)EnableIRQ(s_sdhcIRQ[SDHC_GetInstance(base)]);
 }
 
 /*!
@@ -1463,32 +1500,33 @@ void SDHC_TransferCreateHandle(SDHC_Type *base,
 status_t SDHC_TransferNonBlocking(
     SDHC_Type *base, sdhc_handle_t *handle, uint32_t *admaTable, uint32_t admaTableWords, sdhc_transfer_t *transfer)
 {
-    assert(transfer);
+    assert(transfer != NULL);
 
-    sdhc_dma_mode_t dmaMode = (sdhc_dma_mode_t)((base->PROCTL & SDHC_PROCTL_DMAS_MASK) >> SDHC_PROCTL_DMAS_SHIFT);
+    sdhc_dma_mode_t dmaMode =
+        (sdhc_dma_mode_t)(uint8_t)((base->PROCTL & SDHC_PROCTL_DMAS_MASK) >> SDHC_PROCTL_DMAS_SHIFT);
     status_t error          = kStatus_Success;
     sdhc_command_t *command = transfer->command;
     sdhc_data_t *data       = transfer->data;
 
     /* make sure cmd/block count is valid */
-    if ((!command) || (data && (data->blockCount > SDHC_MAX_BLOCK_COUNT)))
+    if ((command == NULL) || ((data != NULL) && (data->blockCount > SDHC_MAX_BLOCK_COUNT)))
     {
         return kStatus_InvalidArgument;
     }
 
     /* Wait until command/data bus out of busy status. */
-    if ((SDHC_GetPresentStatusFlags(base) & kSDHC_CommandInhibitFlag) ||
-        (data && (SDHC_GetPresentStatusFlags(base) & kSDHC_DataInhibitFlag)))
+    if ((IS_SDHC_FLAG_SET(SDHC_GetPresentStatusFlags(base), kSDHC_CommandInhibitFlag)) ||
+        ((data != NULL) && (IS_SDHC_FLAG_SET(SDHC_GetPresentStatusFlags(base), kSDHC_DataInhibitFlag))))
     {
         return kStatus_SDHC_BusyTransferring;
     }
 
     /* Update ADMA descriptor table according to different DMA mode(no DMA, ADMA1, ADMA2).*/
-    if (data && (NULL != admaTable))
+    if ((data != NULL) && (NULL != admaTable))
     {
-        error =
-            SDHC_SetAdmaTableConfig(base, dmaMode, admaTable, admaTableWords,
-                                    (data->rxData ? data->rxData : data->txData), (data->blockCount * data->blockSize));
+        error = SDHC_SetAdmaTableConfig(base, dmaMode, admaTable, admaTableWords,
+                                        (data->rxData != NULL ? data->rxData : data->txData),
+                                        (data->blockCount * data->blockSize));
         /* in this situation , we disable the DMA instead of polling transfer mode */
         if (error != kStatus_Success)
         {
@@ -1502,6 +1540,21 @@ status_t SDHC_TransferNonBlocking(
     handle->data    = data;
     /* transferredWords will only be updated in ISR when transfer way is DATAPORT. */
     handle->transferredWords = 0U;
+
+    /* enable interrupt per transfer request */
+    if (handle->data != NULL)
+    {
+        SDHC_ClearInterruptStatusFlags(
+            base,
+            (uint32_t)(dmaMode == kSDHC_DmaModeNo ? kSDHC_DataFlag : kSDHC_DataDMAFlag) | (uint32_t)kSDHC_CommandFlag);
+        SDHC_EnableInterruptSignal(base, (uint32_t)(dmaMode == kSDHC_DmaModeNo ? kSDHC_DataFlag : kSDHC_DataDMAFlag) |
+                                             (uint32_t)kSDHC_CommandFlag);
+    }
+    else
+    {
+        SDHC_ClearInterruptStatusFlags(base, kSDHC_CommandFlag);
+        SDHC_EnableInterruptSignal(base, kSDHC_CommandFlag);
+    }
 
     SDHC_StartTransfer(base, command, data, dmaMode);
 
@@ -1518,29 +1571,29 @@ status_t SDHC_TransferNonBlocking(
  */
 void SDHC_TransferHandleIRQ(SDHC_Type *base, sdhc_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint32_t interruptFlags;
 
     interruptFlags = SDHC_GetEnabledInterruptStatusFlags(base);
 
-    if (interruptFlags & kSDHC_CardDetectFlag)
+    if (IS_SDHC_FLAG_SET(interruptFlags, kSDHC_CardDetectFlag))
     {
-        SDHC_TransferHandleCardDetect(base, handle, (interruptFlags & kSDHC_CardDetectFlag));
+        SDHC_TransferHandleCardDetect(base, handle, interruptFlags);
     }
-    if (interruptFlags & kSDHC_CommandFlag)
+    if (IS_SDHC_FLAG_SET(interruptFlags, kSDHC_CommandFlag))
     {
-        SDHC_TransferHandleCommand(base, handle, (interruptFlags & kSDHC_CommandFlag));
+        SDHC_TransferHandleCommand(base, handle, interruptFlags);
     }
-    if (interruptFlags & kSDHC_DataFlag)
+    if (IS_SDHC_FLAG_SET(interruptFlags, kSDHC_DataFlag))
     {
-        SDHC_TransferHandleData(base, handle, (interruptFlags & kSDHC_DataFlag));
+        SDHC_TransferHandleData(base, handle, interruptFlags);
     }
-    if (interruptFlags & kSDHC_CardInterruptFlag)
+    if (IS_SDHC_FLAG_SET(interruptFlags, kSDHC_CardInterruptFlag))
     {
         SDHC_TransferHandleSdioInterrupt(base, handle);
     }
-    if (interruptFlags & kSDHC_BlockGapEventFlag)
+    if (IS_SDHC_FLAG_SET(interruptFlags, kSDHC_BlockGapEventFlag))
     {
         SDHC_TransferHandleSdioBlockGap(base, handle);
     }
@@ -1551,7 +1604,7 @@ void SDHC_TransferHandleIRQ(SDHC_Type *base, sdhc_handle_t *handle)
 #if defined(SDHC)
 void SDHC_DriverIRQHandler(void)
 {
-    assert(s_sdhcHandle[0]);
+    assert(s_sdhcHandle[0] != NULL);
 
     s_sdhcIsr(SDHC, s_sdhcHandle[0]);
 /* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping

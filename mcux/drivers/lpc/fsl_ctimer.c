@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -89,7 +89,7 @@ static uint32_t CTIMER_GetInstance(CTIMER_Type *base)
  */
 void CTIMER_Init(CTIMER_Type *base, const ctimer_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the timer clock*/
@@ -128,7 +128,7 @@ void CTIMER_Deinit(CTIMER_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* Disable IRQ at NVIC Level */
-    DisableIRQ(s_ctimerIRQ[index]);
+    (void)DisableIRQ(s_ctimerIRQ[index]);
 }
 
 /*!
@@ -144,10 +144,10 @@ void CTIMER_Deinit(CTIMER_Type *base)
  */
 void CTIMER_GetDefaultConfig(ctimer_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     /* Run as a timer */
     config->mode = kCTIMER_TimerMode;
@@ -185,11 +185,11 @@ status_t CTIMER_SetupPwm(CTIMER_Type *base,
                          uint32_t srcClock_Hz,
                          bool enableInt)
 {
-    assert(pwmFreq_Hz > 0);
+    assert(pwmFreq_Hz > 0U);
 
     uint32_t reg;
     uint32_t period, pulsePeriod = 0;
-    uint32_t timerClock = srcClock_Hz / (base->PR + 1);
+    uint32_t timerClock = srcClock_Hz / (base->PR + 1U);
     uint32_t index      = CTIMER_GetInstance(base);
 
     if (matchChannel == kCTIMER_Match_3)
@@ -198,16 +198,18 @@ status_t CTIMER_SetupPwm(CTIMER_Type *base,
     }
 
     /* Enable PWM mode on the channel */
-    base->PWMC |= (1U << matchChannel);
+    base->PWMC |= (1UL << (uint32_t)matchChannel);
 
     /* Clear the stop, reset and interrupt bits for this channel */
     reg = base->MCR;
-    reg &= ~((CTIMER_MCR_MR0R_MASK | CTIMER_MCR_MR0S_MASK | CTIMER_MCR_MR0I_MASK) << (matchChannel * 3));
+    reg &=
+        ~(((uint32_t)((uint32_t)CTIMER_MCR_MR0R_MASK | (uint32_t)CTIMER_MCR_MR0S_MASK | (uint32_t)CTIMER_MCR_MR0I_MASK))
+          << ((uint32_t)matchChannel * 3U));
 
     /* If call back function is valid then enable match interrupt for the channel */
     if (enableInt)
     {
-        reg |= (CTIMER_MCR_MR0I_MASK << (CTIMER_MCR_MR0I_SHIFT + (matchChannel * 3)));
+        reg |= (((uint32_t)CTIMER_MCR_MR0I_MASK) << (CTIMER_MCR_MR0I_SHIFT + ((uint32_t)matchChannel * 3U)));
     }
 
     /* Reset the counter when match on channel 3 */
@@ -216,16 +218,16 @@ status_t CTIMER_SetupPwm(CTIMER_Type *base,
     base->MCR = reg;
 
     /* Calculate PWM period match value */
-    period = (timerClock / pwmFreq_Hz) - 1;
+    period = (timerClock / pwmFreq_Hz) - 1U;
 
     /* Calculate pulse width match value */
-    if (dutyCyclePercent == 0)
+    if (dutyCyclePercent == 0U)
     {
-        pulsePeriod = period + 1;
+        pulsePeriod = period + 1U;
     }
     else
     {
-        pulsePeriod = (period * (100 - dutyCyclePercent)) / 100;
+        pulsePeriod = (period * (100U - (uint32_t)dutyCyclePercent)) / 100U;
     }
 
     /* Match on channel 3 will define the PWM period */
@@ -234,11 +236,11 @@ status_t CTIMER_SetupPwm(CTIMER_Type *base,
     /* This will define the PWM pulse period */
     base->MR[matchChannel] = pulsePeriod;
     /* Clear status flags */
-    CTIMER_ClearStatusFlags(base, CTIMER_IR_MR0INT_MASK << matchChannel);
+    CTIMER_ClearStatusFlags(base, ((uint32_t)CTIMER_IR_MR0INT_MASK) << (uint32_t)matchChannel);
     /* If call back function is valid then enable interrupt and update the call back function */
     if (enableInt)
     {
-        EnableIRQ(s_ctimerIRQ[index]);
+        (void)EnableIRQ(s_ctimerIRQ[index]);
     }
 
     return kStatus_Success;
@@ -281,16 +283,18 @@ status_t CTIMER_SetupPwmPeriod(
     }
 
     /* Enable PWM mode on the channel */
-    base->PWMC |= (1U << matchChannel);
+    base->PWMC |= (1UL << (uint32_t)matchChannel);
 
     /* Clear the stop, reset and interrupt bits for this channel */
     reg = base->MCR;
-    reg &= ~((CTIMER_MCR_MR0R_MASK | CTIMER_MCR_MR0S_MASK | CTIMER_MCR_MR0I_MASK) << (matchChannel * 3));
+    reg &=
+        ~((uint32_t)((uint32_t)CTIMER_MCR_MR0R_MASK | (uint32_t)CTIMER_MCR_MR0S_MASK | (uint32_t)CTIMER_MCR_MR0I_MASK)
+          << ((uint32_t)matchChannel * 3U));
 
     /* If call back function is valid then enable match interrupt for the channel */
     if (enableInt)
     {
-        reg |= (CTIMER_MCR_MR0I_MASK << (CTIMER_MCR_MR0I_SHIFT + (matchChannel * 3)));
+        reg |= (((uint32_t)CTIMER_MCR_MR0I_MASK) << (CTIMER_MCR_MR0I_SHIFT + ((uint32_t)matchChannel * 3U)));
     }
 
     /* Reset the counter when match on channel 3 */
@@ -304,11 +308,11 @@ status_t CTIMER_SetupPwmPeriod(
     /* This will define the PWM pulse period */
     base->MR[matchChannel] = pulsePeriod;
     /* Clear status flags */
-    CTIMER_ClearStatusFlags(base, CTIMER_IR_MR0INT_MASK << matchChannel);
+    CTIMER_ClearStatusFlags(base, ((uint32_t)CTIMER_IR_MR0INT_MASK) << (uint32_t)matchChannel);
     /* If call back function is valid then enable interrupt and update the call back function */
     if (enableInt)
     {
-        EnableIRQ(s_ctimerIRQ[index]);
+        (void)EnableIRQ(s_ctimerIRQ[index]);
     }
 
     return kStatus_Success;
@@ -330,17 +334,14 @@ void CTIMER_UpdatePwmDutycycle(CTIMER_Type *base, ctimer_match_t matchChannel, u
     /* Match channel 3 defines the PWM period */
     period = base->MR[kCTIMER_Match_3];
 
-    /* Calculate pulse width match value */
-    pulsePeriod = (period * dutyCyclePercent) / 100;
-
     /* For 0% dutycyle, make pulse period greater than period so the event will never occur */
-    if (dutyCyclePercent == 0)
+    if (dutyCyclePercent == 0U)
     {
-        pulsePeriod = period + 1;
+        pulsePeriod = period + 1U;
     }
     else
     {
-        pulsePeriod = (period * (100 - dutyCyclePercent)) / 100;
+        pulsePeriod = (period * (100U - (uint32_t)dutyCyclePercent)) / 100U;
     }
 
     /* Update dutycycle */
@@ -367,30 +368,32 @@ void CTIMER_SetupMatch(CTIMER_Type *base, ctimer_match_t matchChannel, const cti
 
     /* Set the counter operation when a match on this channel occurs */
     reg = base->MCR;
-    reg &= ~((CTIMER_MCR_MR0R_MASK | CTIMER_MCR_MR0S_MASK | CTIMER_MCR_MR0I_MASK) << (matchChannel * 3));
-    reg |= (uint32_t)((uint32_t)(config->enableCounterReset) << (CTIMER_MCR_MR0R_SHIFT + (matchChannel * 3)));
-    reg |= (uint32_t)((uint32_t)(config->enableCounterStop) << (CTIMER_MCR_MR0S_SHIFT + (matchChannel * 3)));
-    reg |= (uint32_t)((uint32_t)(config->enableInterrupt) << (CTIMER_MCR_MR0I_SHIFT + (matchChannel * 3)));
+    reg &=
+        ~((uint32_t)((uint32_t)CTIMER_MCR_MR0R_MASK | (uint32_t)CTIMER_MCR_MR0S_MASK | (uint32_t)CTIMER_MCR_MR0I_MASK)
+          << ((uint32_t)matchChannel * 3U));
+    reg |= ((uint32_t)(config->enableCounterReset) << (CTIMER_MCR_MR0R_SHIFT + ((uint32_t)matchChannel * 3U)));
+    reg |= ((uint32_t)(config->enableCounterStop) << (CTIMER_MCR_MR0S_SHIFT + ((uint32_t)matchChannel * 3U)));
+    reg |= ((uint32_t)(config->enableInterrupt) << (CTIMER_MCR_MR0I_SHIFT + ((uint32_t)matchChannel * 3U)));
     base->MCR = reg;
 
     reg = base->EMR;
     /* Set the match output operation when a match on this channel occurs */
-    reg &= ~(CTIMER_EMR_EMC0_MASK << (matchChannel * 2));
-    reg |= (uint32_t)config->outControl << (CTIMER_EMR_EMC0_SHIFT + (matchChannel * 2));
+    reg &= ~(((uint32_t)CTIMER_EMR_EMC0_MASK) << ((uint32_t)matchChannel * 2U));
+    reg |= ((uint32_t)config->outControl) << (CTIMER_EMR_EMC0_SHIFT + ((uint32_t)matchChannel * 2U));
 
     /* Set the initial state of the EM bit/output */
-    reg &= ~(CTIMER_EMR_EM0_MASK << matchChannel);
-    reg |= (uint32_t)config->outPinInitState << matchChannel;
+    reg &= ~(((uint32_t)CTIMER_EMR_EM0_MASK) << (uint32_t)matchChannel);
+    reg |= ((uint32_t)config->outPinInitState) << (uint32_t)matchChannel;
     base->EMR = reg;
 
     /* Set the match value */
     base->MR[matchChannel] = config->matchValue;
     /* Clear status flags */
-    CTIMER_ClearStatusFlags(base, CTIMER_IR_MR0INT_MASK << matchChannel);
+    CTIMER_ClearStatusFlags(base, ((uint32_t)CTIMER_IR_MR0INT_MASK) << (uint32_t)matchChannel);
     /* If interrupt is enabled then enable interrupt and update the call back function */
     if (config->enableInterrupt)
     {
-        EnableIRQ(s_ctimerIRQ[index]);
+        (void)EnableIRQ(s_ctimerIRQ[index]);
     }
 }
 
@@ -413,15 +416,17 @@ void CTIMER_SetupCapture(CTIMER_Type *base,
     uint32_t index = CTIMER_GetInstance(base);
 
     /* Set the capture edge */
-    reg &= ~((CTIMER_CCR_CAP0RE_MASK | CTIMER_CCR_CAP0FE_MASK | CTIMER_CCR_CAP0I_MASK) << (capture * 3));
-    reg |= (uint32_t)edge << (CTIMER_CCR_CAP0RE_SHIFT + (capture * 3));
+    reg &= ~((uint32_t)((uint32_t)CTIMER_CCR_CAP0RE_MASK | (uint32_t)CTIMER_CCR_CAP0FE_MASK |
+                        (uint32_t)CTIMER_CCR_CAP0I_MASK)
+             << ((uint32_t)capture * 3U));
+    reg |= ((uint32_t)edge) << (CTIMER_CCR_CAP0RE_SHIFT + ((uint32_t)capture * 3U));
     /* Clear status flags */
-    CTIMER_ClearStatusFlags(base, (kCTIMER_Capture0Flag << capture));
+    CTIMER_ClearStatusFlags(base, (((uint32_t)kCTIMER_Capture0Flag) << (uint32_t)capture));
     /* If call back function is valid then enable capture interrupt for the channel and update the call back function */
     if (enableInt)
     {
-        reg |= CTIMER_CCR_CAP0I_MASK << (capture * 3);
-        EnableIRQ(s_ctimerIRQ[index]);
+        reg |= ((uint32_t)CTIMER_CCR_CAP0I_MASK) << ((uint32_t)capture * 3U);
+        (void)EnableIRQ(s_ctimerIRQ[index]);
     }
     base->CCR = reg;
 }
@@ -450,7 +455,7 @@ void CTIMER_GenericIRQHandler(uint32_t index)
     CTIMER_ClearStatusFlags(s_ctimerBases[index], int_stat);
     if (ctimerCallbackType[index] == kCTIMER_SingleCallback)
     {
-        if (s_ctimerCallback[index][0])
+        if (s_ctimerCallback[index][0] != NULL)
         {
             s_ctimerCallback[index][0](int_stat);
         }
@@ -467,9 +472,9 @@ void CTIMER_GenericIRQHandler(uint32_t index)
 #endif /* FSL_FEATURE_CTIMER_HAS_IR_CR3INT */
 #endif
         {
-            mask = 0x01 << i;
+            mask = 0x01UL << i;
             /* For each status flag bit that was set call the callback function if it is valid */
-            if ((int_stat & mask) && (s_ctimerCallback[index][i]))
+            if (((int_stat & mask) != 0U) && (s_ctimerCallback[index][i] != NULL))
             {
                 s_ctimerCallback[index][i](int_stat);
             }

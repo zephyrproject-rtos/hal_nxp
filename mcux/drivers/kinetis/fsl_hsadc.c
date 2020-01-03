@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,10 +20,10 @@
  * Define the MACROs to help calculating the position of register field for specific sample index.
  */
 /* ZXCTRL1 & ZXCTRL2. */
-#define HSADC_ZXCTRL_ZCE_MASK(index) (uint16_t)(3U << (2U * ((uint16_t)(index))))
+#define HSADC_ZXCTRL_ZCE_MASK(index) ((uint16_t)3U << (2U * ((uint16_t)(index))))
 #define HSADC_ZXCTRL_ZCE(index, value) (uint16_t)(((uint16_t)(value)) << (2U * ((uint16_t)(index))))
 /* CLIST1 & CLIST2 & CLIST3 & CLIST4 */
-#define HSADC_CLIST_SAMPLE_MASK(index) (uint16_t)(0xFU << (4U * ((uint16_t)(index))))
+#define HSADC_CLIST_SAMPLE_MASK(index) ((uint16_t)0xFU << (4U * ((uint16_t)(index))))
 #define HSADC_CLIST_SAMPLE(index, value) (uint16_t)(((uint16_t)(value)) << (4U * ((uint16_t)(index))))
 
 /*******************************************************************************
@@ -109,12 +109,12 @@ void HSADC_Init(HSADC_Type *base, const hsadc_config_t *config)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* CTRL1 */
-    tmp16 = (base->CTRL1 & ~HSADC_CTRL1_SMODE_MASK);
+    tmp16 = (uint16_t)(base->CTRL1 & ~HSADC_CTRL1_SMODE_MASK);
     tmp16 |= HSADC_CTRL1_SMODE(config->dualConverterScanMode);
     base->CTRL1 = tmp16;
 
     /* CTRL2 */
-    tmp16 = (base->CTRL2 & ~HSADC_CTRL2_SIMULT_MASK);
+    tmp16 = (uint16_t)(base->CTRL2 & ~HSADC_CTRL2_SIMULT_MASK);
     if (config->enableSimultaneousMode)
     {
         tmp16 |= HSADC_CTRL2_SIMULT_MASK;
@@ -122,12 +122,12 @@ void HSADC_Init(HSADC_Type *base, const hsadc_config_t *config)
     base->CTRL2 = tmp16;
 
     /* CTRL3 */
-    tmp16 = (base->CTRL3 & ~(HSADC_CTRL3_ADCRES_MASK | HSADC_CTRL3_DMASRC_MASK));
+    tmp16 = (uint16_t)(base->CTRL3 & ~(HSADC_CTRL3_ADCRES_MASK | HSADC_CTRL3_DMASRC_MASK));
     tmp16 |= (HSADC_CTRL3_ADCRES(config->resolution) | HSADC_CTRL3_DMASRC(config->DMATriggerSoruce));
     base->CTRL3 = tmp16;
 
     /* PWR */
-    tmp16 = (base->PWR & ~(HSADC_PWR_ASB_MASK | HSADC_PWR_APD_MASK | HSADC_PWR_PUDELAY_MASK));
+    tmp16 = (uint16_t)(base->PWR & ~(HSADC_PWR_ASB_MASK | HSADC_PWR_APD_MASK | HSADC_PWR_PUDELAY_MASK));
     switch (config->idleWorkMode)
     {
         case kHSADC_IdleKeepNormal:
@@ -139,6 +139,7 @@ void HSADC_Init(HSADC_Type *base, const hsadc_config_t *config)
             tmp16 |= HSADC_PWR_APD_MASK;
             break;
         default:
+            assert(false);
             break;
     }
     tmp16 |= HSADC_PWR_PUDELAY(config->powerUpDelayCount);
@@ -165,7 +166,7 @@ void HSADC_GetDefaultConfig(hsadc_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->dualConverterScanMode  = kHSADC_DualConverterWorkAsTriggeredParallel;
     config->enableSimultaneousMode = true;
@@ -188,7 +189,7 @@ void HSADC_GetDefaultConfig(hsadc_config_t *config)
 void HSADC_Deinit(HSADC_Type *base)
 {
     /* Power down both converter. */
-    base->PWR &= ~(HSADC_PWR_PDA_MASK | HSADC_PWR_PDB_MASK);
+    base->PWR &= (uint16_t)(~(HSADC_PWR_PDA_MASK | HSADC_PWR_PDB_MASK));
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Disable module clock. */
@@ -212,54 +213,58 @@ void HSADC_SetConverterConfig(HSADC_Type *base, uint16_t converterMask, const hs
 
     uint16_t tmp16;
 
-    if (kHSADC_ConverterA == (kHSADC_ConverterA & converterMask))
+    if ((uint16_t)kHSADC_ConverterA == ((uint16_t)kHSADC_ConverterA & converterMask))
     {
         assert(config->samplingTimeCount <= (HSADC_SAMPTIM_SAMPT_A_MASK >> HSADC_SAMPTIM_SAMPT_A_SHIFT));
 
         /* CTRL2 */
-        tmp16 = (base->CTRL2 & ~HSADC_CTRL2_DIVA_MASK);
+        tmp16 = (uint16_t)(base->CTRL2 & ~HSADC_CTRL2_DIVA_MASK);
         tmp16 |= HSADC_CTRL2_DIVA(config->clockDivisor - 1U);
         base->CTRL2 = tmp16;
 
         /* SAMPTIM */
-        tmp16 = (base->SAMPTIM & ~HSADC_SAMPTIM_SAMPT_A_MASK);
+        tmp16 = (uint16_t)(base->SAMPTIM & ~HSADC_SAMPTIM_SAMPT_A_MASK);
         tmp16 |= HSADC_SAMPTIM_SAMPT_A(config->samplingTimeCount);
         base->SAMPTIM = tmp16;
 
         /* CALIB */
-        tmp16 = (base->CALIB & ~(HSADC_CALIB_REQSINGA_MASK | HSADC_CALIB_REQDIFA_MASK));
-        if (kHSADC_CalibrationModeSingleEnded & config->powerUpCalibrationModeMask)
+        tmp16 = (uint16_t)(base->CALIB & ~(HSADC_CALIB_REQSINGA_MASK | HSADC_CALIB_REQDIFA_MASK));
+        if ((uint16_t)kHSADC_CalibrationModeSingleEnded ==
+            ((uint16_t)kHSADC_CalibrationModeSingleEnded & config->powerUpCalibrationModeMask))
         {
             tmp16 |= HSADC_CALIB_REQSINGA_MASK;
         }
-        if (kHSADC_CalibrationModeDifferential & config->powerUpCalibrationModeMask)
+        if ((uint16_t)kHSADC_CalibrationModeDifferential ==
+            ((uint16_t)kHSADC_CalibrationModeDifferential & config->powerUpCalibrationModeMask))
         {
             tmp16 |= HSADC_CALIB_REQDIFA_MASK;
         }
         base->CALIB = tmp16;
     }
 
-    if (kHSADC_ConverterB == (kHSADC_ConverterB & converterMask))
+    if ((uint16_t)kHSADC_ConverterB == ((uint16_t)kHSADC_ConverterB & converterMask))
     {
         assert(config->samplingTimeCount <= (HSADC_SAMPTIM_SAMPT_B_MASK >> HSADC_SAMPTIM_SAMPT_B_SHIFT));
 
         /* PWR2 */
-        tmp16 = (base->PWR2 & ~HSADC_PWR2_DIVB_MASK);
+        tmp16 = (uint16_t)(base->PWR2 & ~HSADC_PWR2_DIVB_MASK);
         tmp16 |= HSADC_PWR2_DIVB(config->clockDivisor - 1U);
         base->PWR2 = tmp16;
 
         /* SAMPTIM */
-        tmp16 = (base->SAMPTIM & ~HSADC_SAMPTIM_SAMPT_B_MASK);
+        tmp16 = (uint16_t)(base->SAMPTIM & ~HSADC_SAMPTIM_SAMPT_B_MASK);
         tmp16 |= HSADC_SAMPTIM_SAMPT_B(config->samplingTimeCount);
         base->SAMPTIM = tmp16;
 
         /* CALIB */
-        tmp16 = (base->CALIB & ~(HSADC_CALIB_REQSINGB_MASK | HSADC_CALIB_REQDIFB_MASK));
-        if (kHSADC_CalibrationModeSingleEnded & config->powerUpCalibrationModeMask)
+        tmp16 = (uint16_t)(base->CALIB & ~(HSADC_CALIB_REQSINGB_MASK | HSADC_CALIB_REQDIFB_MASK));
+        if ((uint16_t)kHSADC_CalibrationModeSingleEnded ==
+            ((uint16_t)kHSADC_CalibrationModeSingleEnded & config->powerUpCalibrationModeMask))
         {
             tmp16 |= HSADC_CALIB_REQSINGB_MASK;
         }
-        if (kHSADC_CalibrationModeDifferential & config->powerUpCalibrationModeMask)
+        if ((uint16_t)kHSADC_CalibrationModeDifferential ==
+            ((uint16_t)kHSADC_CalibrationModeDifferential & config->powerUpCalibrationModeMask))
         {
             tmp16 |= HSADC_CALIB_REQDIFB_MASK;
         }
@@ -303,11 +308,11 @@ void HSADC_GetDefaultConverterConfig(hsadc_converter_config_t *config)
 void HSADC_EnableConverter(HSADC_Type *base, uint16_t converterMask, bool enable)
 {
     /* CTRL1 */
-    if (kHSADC_ConverterA == (kHSADC_ConverterA & converterMask))
+    if ((uint16_t)kHSADC_ConverterA == ((uint16_t)kHSADC_ConverterA & converterMask))
     {
         if (true == enable)
         {
-            base->CTRL1 &= ~HSADC_CTRL1_STOPA_MASK;
+            base->CTRL1 &= ~(uint16_t)HSADC_CTRL1_STOPA_MASK;
         }
         else
         {
@@ -315,11 +320,11 @@ void HSADC_EnableConverter(HSADC_Type *base, uint16_t converterMask, bool enable
         }
     }
     /* CTRL2 */
-    if (kHSADC_ConverterB == (kHSADC_ConverterB & converterMask))
+    if ((uint16_t)kHSADC_ConverterB == ((uint16_t)kHSADC_ConverterB & converterMask))
     {
         if (true == enable)
         {
-            base->CTRL2 &= ~HSADC_CTRL2_STOPB_MASK;
+            base->CTRL2 &= ~(uint16_t)HSADC_CTRL2_STOPB_MASK;
         }
         else
         {
@@ -343,7 +348,7 @@ void HSADC_EnableConverter(HSADC_Type *base, uint16_t converterMask, bool enable
 void HSADC_EnableConverterSyncInput(HSADC_Type *base, uint16_t converterMask, bool enable)
 {
     /* CTRL1 */
-    if (kHSADC_ConverterA == (kHSADC_ConverterA & converterMask))
+    if ((uint16_t)kHSADC_ConverterA == ((uint16_t)kHSADC_ConverterA & converterMask))
     {
         if (true == enable)
         {
@@ -351,11 +356,11 @@ void HSADC_EnableConverterSyncInput(HSADC_Type *base, uint16_t converterMask, bo
         }
         else
         {
-            base->CTRL1 &= ~HSADC_CTRL1_SYNCA_MASK;
+            base->CTRL1 &= ~(uint16_t)HSADC_CTRL1_SYNCA_MASK;
         }
     }
     /* CTRL2 */
-    if (kHSADC_ConverterB == (kHSADC_ConverterB & converterMask))
+    if ((uint16_t)kHSADC_ConverterB == ((uint16_t)kHSADC_ConverterB & converterMask))
     {
         if (true == enable)
         {
@@ -363,7 +368,7 @@ void HSADC_EnableConverterSyncInput(HSADC_Type *base, uint16_t converterMask, bo
         }
         else
         {
-            base->CTRL2 &= ~HSADC_CTRL2_SYNCB_MASK;
+            base->CTRL2 &= ~(uint16_t)HSADC_CTRL2_SYNCB_MASK;
         }
     }
 }
@@ -382,22 +387,22 @@ void HSADC_EnableConverterSyncInput(HSADC_Type *base, uint16_t converterMask, bo
 void HSADC_EnableConverterPower(HSADC_Type *base, uint16_t converterMask, bool enable)
 {
     /* PWR */
-    if (kHSADC_ConverterA == (kHSADC_ConverterA & converterMask))
+    if ((uint16_t)kHSADC_ConverterA == ((uint16_t)kHSADC_ConverterA & converterMask))
     {
         if (true == enable)
         {
-            base->PWR &= ~HSADC_PWR_PDA_MASK;
+            base->PWR &= ~(uint16_t)HSADC_PWR_PDA_MASK;
         }
         else
         {
             base->PWR |= HSADC_PWR_PDA_MASK;
         }
     }
-    if (kHSADC_ConverterB == (kHSADC_ConverterB & converterMask))
+    if ((uint16_t)kHSADC_ConverterB == ((uint16_t)kHSADC_ConverterB & converterMask))
     {
         if (true == enable)
         {
-            base->PWR &= ~HSADC_PWR_PDB_MASK;
+            base->PWR &= ~(uint16_t)HSADC_PWR_PDB_MASK;
         }
         else
         {
@@ -419,12 +424,12 @@ void HSADC_EnableConverterPower(HSADC_Type *base, uint16_t converterMask, bool e
 void HSADC_DoSoftwareTriggerConverter(HSADC_Type *base, uint16_t converterMask)
 {
     /* CTRL1 */
-    if (kHSADC_ConverterA == (kHSADC_ConverterA & converterMask))
+    if ((uint16_t)kHSADC_ConverterA == ((uint16_t)kHSADC_ConverterA & converterMask))
     {
         base->CTRL1 |= HSADC_CTRL1_STARTA_MASK;
     }
     /* CTRL2 */
-    if (kHSADC_ConverterB == (kHSADC_ConverterB & converterMask))
+    if ((uint16_t)kHSADC_ConverterB == ((uint16_t)kHSADC_ConverterB & converterMask))
     {
         base->CTRL2 |= HSADC_CTRL2_STARTB_MASK;
     }
@@ -440,7 +445,7 @@ void HSADC_DoSoftwareTriggerConverter(HSADC_Type *base, uint16_t converterMask)
 void HSADC_EnableConverterDMA(HSADC_Type *base, uint16_t converterMask, bool enable)
 {
     /* CTRL1 */
-    if (kHSADC_ConverterA == (kHSADC_ConverterA & converterMask))
+    if ((uint16_t)kHSADC_ConverterA == ((uint16_t)kHSADC_ConverterA & converterMask))
     {
         if (true == enable)
         {
@@ -448,11 +453,11 @@ void HSADC_EnableConverterDMA(HSADC_Type *base, uint16_t converterMask, bool ena
         }
         else
         {
-            base->CTRL1 &= ~HSADC_CTRL1_DMAENA_MASK;
+            base->CTRL1 &= (uint16_t)(~HSADC_CTRL1_DMAENA_MASK);
         }
     }
     /* CTRL2 */
-    if (kHSADC_ConverterB == (kHSADC_ConverterB & converterMask))
+    if ((uint16_t)kHSADC_ConverterB == ((uint16_t)kHSADC_ConverterB & converterMask))
     {
         if (true == enable)
         {
@@ -460,7 +465,7 @@ void HSADC_EnableConverterDMA(HSADC_Type *base, uint16_t converterMask, bool ena
         }
         else
         {
-            base->CTRL2 &= ~HSADC_CTRL2_DMAENB_MASK;
+            base->CTRL2 &= (uint16_t)(~HSADC_CTRL2_DMAENB_MASK);
         }
     }
 }
@@ -477,37 +482,41 @@ void HSADC_EnableInterrupts(HSADC_Type *base, uint16_t mask)
 
     /* CTRL1 */
     tmp16 = base->CTRL1;
-    if (kHSADC_ZeroCrossingInterruptEnable == (kHSADC_ZeroCrossingInterruptEnable & mask))
+    if ((uint16_t)kHSADC_ZeroCrossingInterruptEnable == ((uint16_t)kHSADC_ZeroCrossingInterruptEnable & mask))
     {
         tmp16 |= HSADC_CTRL1_ZCIE_MASK;
     }
-    if (kHSADC_HighLimitInterruptEnable == (kHSADC_HighLimitInterruptEnable & mask))
+    if ((uint16_t)kHSADC_HighLimitInterruptEnable == ((uint16_t)kHSADC_HighLimitInterruptEnable & mask))
     {
         tmp16 |= HSADC_CTRL1_HLMTIE_MASK;
     }
-    if (kHSADC_LowLimitInterruptEnable == (kHSADC_LowLimitInterruptEnable & mask))
+    if ((uint16_t)kHSADC_LowLimitInterruptEnable == ((uint16_t)kHSADC_LowLimitInterruptEnable & mask))
     {
         tmp16 |= HSADC_CTRL1_LLMTIE_MASK;
     }
-    if (kHSADC_ConverterAEndOfScanInterruptEnable == (kHSADC_ConverterAEndOfScanInterruptEnable & mask))
+    if ((uint16_t)kHSADC_ConverterAEndOfScanInterruptEnable ==
+        ((uint16_t)kHSADC_ConverterAEndOfScanInterruptEnable & mask))
     {
         tmp16 |= HSADC_CTRL1_EOSIEA_MASK;
     }
     base->CTRL1 = tmp16;
 
     /* CTRL2 */
-    if (kHSADC_ConverterBEndOfScanInterruptEnable == (kHSADC_ConverterBEndOfScanInterruptEnable & mask))
+    if ((uint16_t)kHSADC_ConverterBEndOfScanInterruptEnable ==
+        ((uint16_t)kHSADC_ConverterBEndOfScanInterruptEnable & mask))
     {
         base->CTRL2 |= HSADC_CTRL2_EOSIEB_MASK;
     }
 
     /* CALIB */
     tmp16 = base->CALIB;
-    if (kHSADC_ConverterAEndOfCalibrationInterruptEnable == (kHSADC_ConverterAEndOfCalibrationInterruptEnable & mask))
+    if ((uint16_t)kHSADC_ConverterAEndOfCalibrationInterruptEnable ==
+        ((uint16_t)kHSADC_ConverterAEndOfCalibrationInterruptEnable & mask))
     {
         tmp16 |= HSADC_CALIB_EOCALIEA_MASK;
     }
-    if (kHSADC_ConverterBEndOfCalibrationInterruptEnable == (kHSADC_ConverterBEndOfCalibrationInterruptEnable & mask))
+    if ((uint16_t)kHSADC_ConverterBEndOfCalibrationInterruptEnable ==
+        ((uint16_t)kHSADC_ConverterBEndOfCalibrationInterruptEnable & mask))
     {
         tmp16 |= HSADC_CALIB_EOCALIEB_MASK;
     }
@@ -526,37 +535,41 @@ void HSADC_DisableInterrupts(HSADC_Type *base, uint16_t mask)
 
     /* CTRL1 */
     tmp16 = base->CTRL1;
-    if (kHSADC_ZeroCrossingInterruptEnable == (kHSADC_ZeroCrossingInterruptEnable & mask))
+    if ((uint16_t)kHSADC_ZeroCrossingInterruptEnable == ((uint16_t)kHSADC_ZeroCrossingInterruptEnable & mask))
     {
         tmp16 &= HSADC_CTRL1_ZCIE_MASK;
     }
-    if (kHSADC_HighLimitInterruptEnable == (kHSADC_HighLimitInterruptEnable & mask))
+    if ((uint16_t)kHSADC_HighLimitInterruptEnable == ((uint16_t)kHSADC_HighLimitInterruptEnable & mask))
     {
         tmp16 &= HSADC_CTRL1_HLMTIE_MASK;
     }
-    if (kHSADC_LowLimitInterruptEnable == (kHSADC_LowLimitInterruptEnable & mask))
+    if ((uint16_t)kHSADC_LowLimitInterruptEnable == ((uint16_t)kHSADC_LowLimitInterruptEnable & mask))
     {
         tmp16 &= HSADC_CTRL1_LLMTIE_MASK;
     }
-    if (kHSADC_ConverterAEndOfScanInterruptEnable == (kHSADC_ConverterAEndOfScanInterruptEnable & mask))
+    if ((uint16_t)kHSADC_ConverterAEndOfScanInterruptEnable ==
+        ((uint16_t)kHSADC_ConverterAEndOfScanInterruptEnable & mask))
     {
         tmp16 &= HSADC_CTRL1_EOSIEA_MASK;
     }
     base->CTRL1 = tmp16;
 
     /* CTRL2 */
-    if (kHSADC_ConverterBEndOfScanInterruptEnable == (kHSADC_ConverterBEndOfScanInterruptEnable & mask))
+    if ((uint16_t)kHSADC_ConverterBEndOfScanInterruptEnable ==
+        ((uint16_t)kHSADC_ConverterBEndOfScanInterruptEnable & mask))
     {
-        base->CTRL2 &= ~HSADC_CTRL2_EOSIEB_MASK;
+        base->CTRL2 &= (uint16_t)(~HSADC_CTRL2_EOSIEB_MASK);
     }
 
     /* CALIB */
     tmp16 = base->CALIB;
-    if (kHSADC_ConverterAEndOfCalibrationInterruptEnable == (kHSADC_ConverterAEndOfCalibrationInterruptEnable & mask))
+    if ((uint16_t)kHSADC_ConverterAEndOfCalibrationInterruptEnable ==
+        ((uint16_t)kHSADC_ConverterAEndOfCalibrationInterruptEnable & mask))
     {
         tmp16 &= HSADC_CALIB_EOCALIEA_MASK;
     }
-    if (kHSADC_ConverterBEndOfCalibrationInterruptEnable == (kHSADC_ConverterBEndOfCalibrationInterruptEnable & mask))
+    if ((uint16_t)kHSADC_ConverterBEndOfCalibrationInterruptEnable ==
+        ((uint16_t)kHSADC_ConverterBEndOfCalibrationInterruptEnable & mask))
     {
         tmp16 &= HSADC_CALIB_EOCALIEB_MASK;
     }
@@ -579,66 +592,66 @@ uint16_t HSADC_GetStatusFlags(HSADC_Type *base)
     tmp16 = base->STAT;
     if (HSADC_STAT_ZCI_MASK == (tmp16 & HSADC_STAT_ZCI_MASK))
     {
-        status |= kHSADC_ZeroCrossingFlag;
+        status |= (uint16_t)kHSADC_ZeroCrossingFlag;
     }
     if (HSADC_STAT_HLMTI_MASK == (tmp16 & HSADC_STAT_HLMTI_MASK))
     {
-        status |= kHSADC_HighLimitFlag;
+        status |= (uint16_t)kHSADC_HighLimitFlag;
     }
     if (HSADC_STAT_LLMTI_MASK == (tmp16 & HSADC_STAT_LLMTI_MASK))
     {
-        status |= kHSADC_LowLimitFlag;
+        status |= (uint16_t)kHSADC_LowLimitFlag;
     }
     if (HSADC_STAT_EOSIA_MASK == (tmp16 & HSADC_STAT_EOSIA_MASK))
     {
-        status |= kHSADC_ConverterAEndOfScanFlag;
+        status |= (uint16_t)kHSADC_ConverterAEndOfScanFlag;
     }
     if (HSADC_STAT_EOSIB_MASK == (tmp16 & HSADC_STAT_EOSIB_MASK))
     {
-        status |= kHSADC_ConverterBEndOfScanFlag;
+        status |= (uint16_t)kHSADC_ConverterBEndOfScanFlag;
     }
     if (HSADC_STAT_EOCALIA_MASK == (tmp16 & HSADC_STAT_EOCALIA_MASK))
     {
-        status |= kHSADC_ConverterAEndOfCalibrationFlag;
+        status |= (uint16_t)kHSADC_ConverterAEndOfCalibrationFlag;
     }
     if (HSADC_STAT_EOCALIB_MASK == (tmp16 & HSADC_STAT_EOCALIB_MASK))
     {
-        status |= kHSADC_ConverterBEndOfCalibrationFlag;
+        status |= (uint16_t)kHSADC_ConverterBEndOfCalibrationFlag;
     }
     if (HSADC_STAT_CIPA_MASK == (tmp16 & HSADC_STAT_CIPA_MASK))
     {
-        status |= kHSADC_ConverterAConvertingFlag;
+        status |= (uint16_t)kHSADC_ConverterAConvertingFlag;
     }
     if (HSADC_STAT_CIPB_MASK == (tmp16 & HSADC_STAT_CIPB_MASK))
     {
-        status |= kHSADC_ConverterBConvertingFlag;
+        status |= (uint16_t)kHSADC_ConverterBConvertingFlag;
     }
     if (HSADC_STAT_DUMMYA_MASK == (tmp16 & HSADC_STAT_DUMMYA_MASK))
     {
-        status |= kHSADC_ConverterADummyConvertingFlag;
+        status |= (uint16_t)kHSADC_ConverterADummyConvertingFlag;
     }
     if (HSADC_STAT_DUMMYB_MASK == (tmp16 & HSADC_STAT_DUMMYB_MASK))
     {
-        status |= kHSADC_ConverterBDummyConvertingFlag;
+        status |= (uint16_t)kHSADC_ConverterBDummyConvertingFlag;
     }
     if (HSADC_STAT_CALONA_MASK == (tmp16 & HSADC_STAT_CALONA_MASK))
     {
-        status |= kHSADC_ConverterACalibratingFlag;
+        status |= (uint16_t)kHSADC_ConverterACalibratingFlag;
     }
     if (HSADC_STAT_CALONB_MASK == (tmp16 & HSADC_STAT_CALONB_MASK))
     {
-        status |= kHSADC_ConverterBCalibratingFlag;
+        status |= (uint16_t)kHSADC_ConverterBCalibratingFlag;
     }
 
     /* PWR */
     tmp16 = base->PWR;
     if (HSADC_PWR_PSTSA_MASK == (tmp16 & HSADC_PWR_PSTSA_MASK))
     {
-        status |= kHSADC_ConverterAPowerDownFlag;
+        status |= (uint16_t)kHSADC_ConverterAPowerDownFlag;
     }
     if (HSADC_PWR_PSTSB_MASK == (tmp16 & HSADC_PWR_PSTSB_MASK))
     {
-        status |= kHSADC_ConverterBPowerDownFlag;
+        status |= (uint16_t)kHSADC_ConverterBPowerDownFlag;
     }
 
     return status;
@@ -654,33 +667,33 @@ void HSADC_ClearStatusFlags(HSADC_Type *base, uint16_t mask)
 {
     uint16_t tmp16;
 
-    if (kHSADC_ZeroCrossingFlag == (mask & kHSADC_ZeroCrossingFlag))
+    if ((uint16_t)kHSADC_ZeroCrossingFlag == (mask & (uint16_t)kHSADC_ZeroCrossingFlag))
     {
         base->ZXSTAT = 0xFFFFU;
     }
-    if (kHSADC_HighLimitFlag == (mask & kHSADC_HighLimitFlag))
+    if ((uint16_t)kHSADC_HighLimitFlag == (mask & (uint16_t)kHSADC_HighLimitFlag))
     {
         base->HILIMSTAT = 0xFFFFU;
     }
-    if (kHSADC_LowLimitFlag == (mask & kHSADC_LowLimitFlag))
+    if ((uint16_t)kHSADC_LowLimitFlag == (mask & (uint16_t)kHSADC_LowLimitFlag))
     {
         base->LOLIMSTAT = 0xFFFFU;
     }
     /* STAT */
     tmp16 = base->STAT;
-    if (kHSADC_ConverterAEndOfScanFlag == (mask & kHSADC_ConverterAEndOfScanFlag))
+    if ((uint16_t)kHSADC_ConverterAEndOfScanFlag == (mask & (uint16_t)kHSADC_ConverterAEndOfScanFlag))
     {
         tmp16 |= HSADC_STAT_EOSIA_MASK;
     }
-    if (kHSADC_ConverterBEndOfScanFlag == (mask & kHSADC_ConverterBEndOfScanFlag))
+    if ((uint16_t)kHSADC_ConverterBEndOfScanFlag == (mask & (uint16_t)kHSADC_ConverterBEndOfScanFlag))
     {
         tmp16 |= HSADC_STAT_EOSIB_MASK;
     }
-    if (kHSADC_ConverterAEndOfCalibrationFlag == (mask & kHSADC_ConverterAEndOfCalibrationFlag))
+    if ((uint16_t)kHSADC_ConverterAEndOfCalibrationFlag == (mask & (uint16_t)kHSADC_ConverterAEndOfCalibrationFlag))
     {
         tmp16 |= HSADC_STAT_EOCALIA_MASK;
     }
-    if (kHSADC_ConverterBEndOfCalibrationFlag == (mask & kHSADC_ConverterBEndOfCalibrationFlag))
+    if ((uint16_t)kHSADC_ConverterBEndOfCalibrationFlag == (mask & (uint16_t)kHSADC_ConverterBEndOfCalibrationFlag))
     {
         tmp16 |= HSADC_STAT_EOCALIB_MASK;
     }
@@ -705,15 +718,16 @@ static void HSADC_SetChannel67Mux(HSADC_Type *base,
         {
             case 6U:
             case 7U:
-                tmp16 &= ~(HSADC_MUX67_SEL_CH6_SELA_MASK | HSADC_MUX67_SEL_CH7_SELA_MASK);
+                tmp16 &= ~((uint16_t)HSADC_MUX67_SEL_CH6_SELA_MASK | (uint16_t)HSADC_MUX67_SEL_CH7_SELA_MASK);
                 tmp16 |= (HSADC_MUX67_SEL_CH6_SELA(muxNumber) | HSADC_MUX67_SEL_CH7_SELA(muxNumber));
                 break;
             case 14U:
             case 15U:
-                tmp16 &= ~(HSADC_MUX67_SEL_CH6_SELB_MASK | HSADC_MUX67_SEL_CH7_SELB_MASK);
+                tmp16 &= ~((uint16_t)HSADC_MUX67_SEL_CH6_SELB_MASK | (uint16_t)HSADC_MUX67_SEL_CH7_SELB_MASK);
                 tmp16 |= (HSADC_MUX67_SEL_CH6_SELB(muxNumber) | HSADC_MUX67_SEL_CH7_SELB(muxNumber));
                 break;
             default:
+                tmp16 = base->MUX67_SEL;
                 break;
         }
     }
@@ -722,22 +736,23 @@ static void HSADC_SetChannel67Mux(HSADC_Type *base,
         switch (channelNumber)
         {
             case 6U:
-                tmp16 &= ~HSADC_MUX67_SEL_CH6_SELA_MASK;
+                tmp16 &= ~(uint16_t)HSADC_MUX67_SEL_CH6_SELA_MASK;
                 tmp16 |= HSADC_MUX67_SEL_CH6_SELA(muxNumber);
                 break;
             case 7U:
-                tmp16 &= ~HSADC_MUX67_SEL_CH7_SELA_MASK;
+                tmp16 &= ~(uint16_t)HSADC_MUX67_SEL_CH7_SELA_MASK;
                 tmp16 |= HSADC_MUX67_SEL_CH7_SELA(muxNumber);
                 break;
             case 14U:
-                tmp16 &= ~HSADC_MUX67_SEL_CH6_SELB_MASK;
+                tmp16 &= ~(uint16_t)HSADC_MUX67_SEL_CH6_SELB_MASK;
                 tmp16 |= HSADC_MUX67_SEL_CH6_SELB(muxNumber);
                 break;
             case 15U:
-                tmp16 &= ~HSADC_MUX67_SEL_CH7_SELB_MASK;
+                tmp16 &= ~(uint16_t)HSADC_MUX67_SEL_CH7_SELB_MASK;
                 tmp16 |= HSADC_MUX67_SEL_CH7_SELB(muxNumber);
                 break;
             default:
+                tmp16 = base->MUX67_SEL;
                 break;
         }
     }
@@ -808,14 +823,14 @@ void HSADC_SetSampleConfig(HSADC_Type *base, uint16_t sampleIndex, const hsadc_s
     /* Configure the zero crossing mode. */
     if (sampleIndex < 8U)
     {
-        tmp16 = base->ZXCTRL1 & (uint16_t)(~HSADC_ZXCTRL_ZCE_MASK(sampleIndex));
+        tmp16 = base->ZXCTRL1 & ~HSADC_ZXCTRL_ZCE_MASK(sampleIndex);
         tmp16 |= HSADC_ZXCTRL_ZCE(sampleIndex, config->zeroCrossingMode);
         base->ZXCTRL1 = tmp16;
     }
     else if (sampleIndex < 16U)
     {
         sampleIndex -= 8U;
-        tmp16 = base->ZXCTRL2 & (uint16_t)(~HSADC_ZXCTRL_ZCE_MASK(sampleIndex));
+        tmp16 = base->ZXCTRL2 & ~HSADC_ZXCTRL_ZCE_MASK(sampleIndex);
         tmp16 |= HSADC_ZXCTRL_ZCE(sampleIndex, config->zeroCrossingMode);
         base->ZXCTRL2 = tmp16;
         sampleIndex += 8U;
@@ -828,14 +843,14 @@ void HSADC_SetSampleConfig(HSADC_Type *base, uint16_t sampleIndex, const hsadc_s
     /* Fill the conversion channel into sample slot. */
     if (sampleIndex < 4U)
     {
-        tmp16 = base->CLIST1 & (uint16_t)(~HSADC_CLIST_SAMPLE_MASK(sampleIndex));
+        tmp16 = base->CLIST1 & ~HSADC_CLIST_SAMPLE_MASK(sampleIndex);
         tmp16 |= HSADC_CLIST_SAMPLE(sampleIndex, config->channelNumber);
         base->CLIST1 = tmp16;
     }
     else if (sampleIndex < 8U)
     {
         sampleIndex -= 4U;
-        tmp16 = base->CLIST2 & (uint16_t)(~HSADC_CLIST_SAMPLE_MASK(sampleIndex));
+        tmp16 = base->CLIST2 & ~HSADC_CLIST_SAMPLE_MASK(sampleIndex);
         tmp16 |= HSADC_CLIST_SAMPLE(sampleIndex, config->channelNumber);
         base->CLIST2 = tmp16;
         sampleIndex += 4U;
@@ -843,7 +858,7 @@ void HSADC_SetSampleConfig(HSADC_Type *base, uint16_t sampleIndex, const hsadc_s
     else if (sampleIndex < 12U)
     {
         sampleIndex -= 8U;
-        tmp16 = base->CLIST3 & (uint16_t)(~HSADC_CLIST_SAMPLE_MASK(sampleIndex));
+        tmp16 = base->CLIST3 & ~HSADC_CLIST_SAMPLE_MASK(sampleIndex);
         tmp16 |= HSADC_CLIST_SAMPLE(sampleIndex, config->channelNumber);
         base->CLIST3 = tmp16;
         sampleIndex += 8U;
@@ -851,7 +866,7 @@ void HSADC_SetSampleConfig(HSADC_Type *base, uint16_t sampleIndex, const hsadc_s
     else if (sampleIndex < 16U)
     {
         sampleIndex -= 12U;
-        tmp16 = base->CLIST4 & (uint16_t)(~HSADC_CLIST_SAMPLE_MASK(sampleIndex));
+        tmp16 = base->CLIST4 & ~HSADC_CLIST_SAMPLE_MASK(sampleIndex);
         tmp16 |= HSADC_CLIST_SAMPLE(sampleIndex, config->channelNumber);
         base->CLIST4 = tmp16;
         sampleIndex += 12U;
@@ -870,11 +885,11 @@ void HSADC_SetSampleConfig(HSADC_Type *base, uint16_t sampleIndex, const hsadc_s
     /* SCTRL. */
     if (config->enableWaitSync)
     {
-        base->SCTRL |= (1U << sampleIndex);
+        base->SCTRL |= ((uint16_t)1U << sampleIndex);
     }
     else
     {
-        base->SCTRL &= ~(1U << sampleIndex);
+        base->SCTRL &= ~((uint16_t)1U << sampleIndex);
     }
 
     /* Configure the channel 6/7's additional multiplex selector. */
@@ -930,32 +945,36 @@ void HSADC_GetDefaultSampleConfig(hsadc_sample_config_t *config)
  */
 void HSADC_DoAutoCalibration(HSADC_Type *base, uint16_t converterMask, uint16_t calibrationModeMask)
 {
-    assert(calibrationModeMask);
+    assert(0U != calibrationModeMask);
 
     /* CALIB */
     /* Set the calibration mode.
      * Hardware requires that the bit REQSINGA, REQDIFA, REQA, REQSINGB, REQDIFB, REQB in CALIB register can't be set
      * at the same time. They must be set as the sequency description in the reference manual.
      */
-    if (kHSADC_ConverterA == (kHSADC_ConverterA & converterMask))
+    if ((uint16_t)kHSADC_ConverterA == ((uint16_t)kHSADC_ConverterA & converterMask))
     {
-        if (kHSADC_CalibrationModeSingleEnded == (kHSADC_CalibrationModeSingleEnded & calibrationModeMask))
+        if ((uint16_t)kHSADC_CalibrationModeSingleEnded ==
+            ((uint16_t)kHSADC_CalibrationModeSingleEnded & calibrationModeMask))
         {
             base->CALIB |= HSADC_CALIB_REQSINGA_MASK;
         }
-        if (kHSADC_CalibrationModeDifferential == (kHSADC_CalibrationModeDifferential & calibrationModeMask))
+        if ((uint16_t)kHSADC_CalibrationModeDifferential ==
+            ((uint16_t)kHSADC_CalibrationModeDifferential & calibrationModeMask))
         {
             base->CALIB |= HSADC_CALIB_REQDIFA_MASK;
         }
         base->CALIB |= HSADC_CALIB_CAL_REQA_MASK;
     }
-    if (kHSADC_ConverterB == (kHSADC_ConverterB & converterMask))
+    if ((uint16_t)kHSADC_ConverterB == ((uint16_t)kHSADC_ConverterB & converterMask))
     {
-        if (kHSADC_CalibrationModeSingleEnded == (kHSADC_CalibrationModeSingleEnded & calibrationModeMask))
+        if ((uint16_t)kHSADC_CalibrationModeSingleEnded ==
+            ((uint16_t)kHSADC_CalibrationModeSingleEnded & calibrationModeMask))
         {
             base->CALIB |= HSADC_CALIB_REQSINGB_MASK;
         }
-        if (kHSADC_CalibrationModeDifferential == (kHSADC_CalibrationModeDifferential & calibrationModeMask))
+        if ((uint16_t)kHSADC_CalibrationModeDifferential ==
+            ((uint16_t)kHSADC_CalibrationModeDifferential & calibrationModeMask))
         {
             base->CALIB |= HSADC_CALIB_REQDIFB_MASK;
         }
@@ -979,7 +998,8 @@ void HSADC_DoAutoCalibration(HSADC_Type *base, uint16_t converterMask, uint16_t 
  */
 uint32_t HSADC_GetCalibrationResultValue(HSADC_Type *base)
 {
-    return (((uint32_t)(base->CALVAL_A) << 16U) + base->CALVAL_B);
+    uint32_t calValA = ((uint32_t)(base->CALVAL_A) << 16U);
+    return (calValA + base->CALVAL_B);
 }
 
 /*!
@@ -996,22 +1016,22 @@ void HSADC_EnableCalibrationResultValue(HSADC_Type *base, uint16_t converterMask
 {
     /* CALIB */
     /* Enable means not to bypass the calibration operation. */
-    if (kHSADC_ConverterA == (kHSADC_ConverterA & converterMask))
+    if ((uint16_t)kHSADC_ConverterA == ((uint16_t)kHSADC_ConverterA & converterMask))
     {
         if (true == enable)
         {
-            base->CALIB &= ~HSADC_CALIB_BYPA_MASK;
+            base->CALIB &= ~(uint16_t)HSADC_CALIB_BYPA_MASK;
         }
         else
         {
             base->CALIB |= HSADC_CALIB_BYPA_MASK;
         }
     }
-    if (kHSADC_ConverterB == (kHSADC_ConverterB & converterMask))
+    if ((uint16_t)kHSADC_ConverterB == ((uint16_t)kHSADC_ConverterB & converterMask))
     {
         if (true == enable)
         {
-            base->CALIB &= ~HSADC_CALIB_BYPB_MASK;
+            base->CALIB &= ~(uint16_t)HSADC_CALIB_BYPB_MASK;
         }
         else
         {

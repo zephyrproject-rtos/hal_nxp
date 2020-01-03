@@ -179,11 +179,10 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
     DSPI_ClearStatusFlags(base, (uint32_t)kDSPI_AllStatusFlag);
 
     commandStruct.whichPcs =
-        (dspi_which_pcs_t)(1U << ((transfer->configFlags & DSPI_MASTER_PCS_MASK) >> DSPI_MASTER_PCS_SHIFT));
+        (uint8_t)((uint32_t)1U << ((transfer->configFlags & DSPI_MASTER_PCS_MASK) >> DSPI_MASTER_PCS_SHIFT));
     commandStruct.isEndOfQueue       = false;
     commandStruct.clearTransferCount = false;
-    commandStruct.whichCtar =
-        (dspi_ctar_selection_t)((transfer->configFlags & DSPI_MASTER_CTAR_MASK) >> DSPI_MASTER_CTAR_SHIFT);
+    commandStruct.whichCtar = (uint8_t)((transfer->configFlags & DSPI_MASTER_CTAR_MASK) >> DSPI_MASTER_CTAR_SHIFT);
     commandStruct.isPcsContinuous =
         (0U != (transfer->configFlags & (uint32_t)kDSPI_MasterPcsContinuous)) ? true : false;
     handle->command = DSPI_MasterGetFormattedCommand(&(commandStruct));
@@ -198,11 +197,11 @@ status_t DSPI_MasterTransferEDMA(SPI_Type *base, dspi_master_edma_handle_t *hand
     tmpMCR = base->MCR;
     if ((0U != (tmpMCR & SPI_MCR_DIS_RXF_MASK)) || (0U != (tmpMCR & SPI_MCR_DIS_TXF_MASK)))
     {
-        handle->fifoSize = 1;
+        handle->fifoSize = 1U;
     }
     else
     {
-        handle->fifoSize = FSL_FEATURE_DSPI_FIFO_SIZEn(base);
+        handle->fifoSize = (uint8_t)FSL_FEATURE_DSPI_FIFO_SIZEn(base);
     }
     handle->txData                    = transfer->txData;
     handle->rxData                    = transfer->rxData;

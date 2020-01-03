@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,7 +26,7 @@
  * @{
  */
 /*! @brief Flash IFR driver version for SDK*/
-#define FSL_FLASH_IFR_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */
+#define FSL_FLASH_IFR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
 /*@}*/
 
 /*! @brief Alignment(down) utility. */
@@ -236,10 +236,9 @@ status_t FFR_Init(flash_config_t *config);
 
 /*!
  * @brief Enable firewall for all flash banks.
- * CFPA, CMPA, and NMPA flash areas region will be locked, After this function executed;
- * Unless the board is reset again.
+ * FFR region will be locked, After this function executed.
  */
-status_t FFR_Lock_All(flash_config_t *config);
+status_t FFR_Deinit(flash_config_t *config);
 
 /*! APIs to access CFPA pages */
 status_t FFR_InfieldPageWrite(flash_config_t *config, uint8_t *page_data, uint32_t valid_len);
@@ -257,22 +256,7 @@ status_t FFR_GetCustomerInfieldData(flash_config_t *config, uint8_t *pData, uint
  */
 status_t FFR_CustFactoryPageWrite(flash_config_t *config, uint8_t *page_data, bool seal_part);
 /*! Read data stored in 'Customer Factory CFG Page'. */
-
-/*!
- * @brief Read data stored in 'Customer Factory CFG Page'.
- *
- * @param config A pointer to the storage for the driver runtime state.
- * @param pData A pointer to the dest buffer of data that is to be read
- *            from the CMPA area.
- * @param offset Address offset relative to the CMPA area.
- * @param len The length, given in bytes to be read.
- */
 status_t FFR_GetCustomerData(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
-
-/*!
- * @brief This routine writes the 3 pages allocated for Key store data,
- * Used during manufacturing. Should write pages when 'customer factory page' is not in sealed state.
- */
 status_t FFR_KeystoreWrite(flash_config_t *config, ffr_key_store_t *pKeyStore);
 status_t FFR_KeystoreGetAC(flash_config_t *config, uint8_t *pActivationCode);
 status_t FFR_KeystoreGetKC(flash_config_t *config, uint8_t *pKeyCode, ffr_key_type_t keyIndex);

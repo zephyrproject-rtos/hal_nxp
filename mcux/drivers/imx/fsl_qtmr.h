@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 NXP
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0 */
+#define FSL_QTMR_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1 */
 /*@}*/
 
 /*! @brief Quad Timer primary clock source selection*/
@@ -106,6 +106,7 @@ typedef enum _qtmr_debug_action
 } qtmr_debug_action_t;
 
 /*! @brief List of Quad Timer interrupts */
+// typedef enum _qtmr_interrupt_enable
 typedef enum _qtmr_interrupt_enable
 {
     kQTMR_CompareInterruptEnable  = (1U << 0), /*!< Compare interrupt.*/
@@ -384,7 +385,7 @@ static inline void QTMR_StartTimer(TMR_Type *base, qtmr_channel_selection_t chan
 {
     uint16_t reg = base->CHANNEL[channel].CTRL;
 
-    reg &= ~(TMR_CTRL_CM_MASK);
+    reg &= (uint16_t)(~(TMR_CTRL_CM_MASK));
     reg |= TMR_CTRL_CM(clockSource);
     base->CHANNEL[channel].CTRL = reg;
 }
@@ -397,7 +398,7 @@ static inline void QTMR_StartTimer(TMR_Type *base, qtmr_channel_selection_t chan
  */
 static inline void QTMR_StopTimer(TMR_Type *base, qtmr_channel_selection_t channel)
 {
-    base->CHANNEL[channel].CTRL &= ~TMR_CTRL_CM_MASK;
+    base->CHANNEL[channel].CTRL &= (uint16_t)(~TMR_CTRL_CM_MASK);
 }
 
 /*! @}*/

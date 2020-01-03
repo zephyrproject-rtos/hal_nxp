@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -78,7 +78,7 @@ void DAC_Init(DAC_Type *base, const dac_config_t *config)
 
     /* Configure. */
     /* DACx_C0. */
-    tmp8 = base->C0 & ~(DAC_C0_DACRFS_MASK | DAC_C0_LPEN_MASK);
+    tmp8 = base->C0 & (uint8_t)(~(DAC_C0_DACRFS_MASK | DAC_C0_LPEN_MASK));
     if (kDAC_ReferenceVoltageSourceVref2 == config->referenceVoltageSource)
     {
         tmp8 |= DAC_C0_DACRFS_MASK;
@@ -127,7 +127,7 @@ void DAC_GetDefaultConfig(dac_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->referenceVoltageSource = kDAC_ReferenceVoltageSourceVref2;
     config->enableLowPowerMode     = false;
@@ -146,7 +146,7 @@ void DAC_SetBufferConfig(DAC_Type *base, const dac_buffer_config_t *config)
     uint8_t tmp8;
 
     /* DACx_C0. */
-    tmp8 = base->C0 & ~(DAC_C0_DACTRGSEL_MASK);
+    tmp8 = base->C0 & (uint8_t)(~DAC_C0_DACTRGSEL_MASK);
     if (kDAC_BufferTriggerBySoftwareMode == config->triggerMode)
     {
         tmp8 |= DAC_C0_DACTRGSEL_MASK;
@@ -154,11 +154,11 @@ void DAC_SetBufferConfig(DAC_Type *base, const dac_buffer_config_t *config)
     base->C0 = tmp8;
 
     /* DACx_C1. */
-    tmp8 = base->C1 & ~(
+    tmp8 = base->C1 & (uint8_t)(~(
 #if defined(FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION) && FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION
                           DAC_C1_DACBFWM_MASK |
 #endif /* FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION */
-                          DAC_C1_DACBFMD_MASK);
+                          DAC_C1_DACBFMD_MASK));
 #if defined(FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION) && FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION
     tmp8 |= DAC_C1_DACBFWM(config->watermark);
 #endif /* FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION */
@@ -166,7 +166,7 @@ void DAC_SetBufferConfig(DAC_Type *base, const dac_buffer_config_t *config)
     base->C1 = tmp8;
 
     /* DACx_C2. */
-    tmp8 = base->C2 & ~DAC_C2_DACBFUP_MASK;
+    tmp8 = base->C2 & (uint8_t)(~DAC_C2_DACBFUP_MASK);
     tmp8 |= DAC_C2_DACBFUP(config->upperLimit);
     base->C2 = tmp8;
 }
@@ -189,7 +189,7 @@ void DAC_GetDefaultBufferConfig(dac_buffer_config_t *config)
     assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->triggerMode = kDAC_BufferTriggerBySoftwareMode;
 #if defined(FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION) && FSL_FEATURE_DAC_HAS_WATERMARK_SELECTION
@@ -229,7 +229,7 @@ void DAC_SetBufferReadPointer(DAC_Type *base, uint8_t index)
 {
     assert(index < DAC_DATL_COUNT);
 
-    uint8_t tmp8 = base->C2 & ~DAC_C2_DACBFRP_MASK;
+    uint8_t tmp8 = base->C2 & (uint8_t)(~DAC_C2_DACBFRP_MASK);
 
     tmp8 |= DAC_C2_DACBFRP(index);
     base->C2 = tmp8;
@@ -274,13 +274,13 @@ void DAC_DisableBufferInterrupts(DAC_Type *base, uint32_t mask)
  *
  * return      Mask value for the asserted flags. See  "_dac_buffer_status_flags".
  */
-uint32_t DAC_GetBufferStatusFlags(DAC_Type *base)
+uint8_t DAC_GetBufferStatusFlags(DAC_Type *base)
 {
-    return (uint32_t)(base->SR & (
+    return base->SR & (
 #if defined(FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION) && FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION
-                                     DAC_SR_DACBFWMF_MASK |
+                          DAC_SR_DACBFWMF_MASK |
 #endif /* FSL_FEATURE_DAC_HAS_WATERMARK_DETECTION */
-                                     DAC_SR_DACBFRPTF_MASK | DAC_SR_DACBFRPBF_MASK));
+                          DAC_SR_DACBFRPTF_MASK | DAC_SR_DACBFRPBF_MASK);
 }
 
 /*!

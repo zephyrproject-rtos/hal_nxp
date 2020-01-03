@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexCAN EDMA driver version 2.4.0. */
-#define FSL_FLEXCAN_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief FlexCAN EDMA driver version 2.5.0. */
+#define FSL_FLEXCAN_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */
@@ -75,6 +75,35 @@ void FLEXCAN_TransferCreateHandleEDMA(CAN_Type *base,
                                       edma_handle_t *rxFifoEdmaHandle);
 
 /*!
+ * @brief Prepares the eDMA transfer configuration for FLEXCAN Legacy RX FIFO.
+ *
+ * This function prepares the eDMA transfer configuration structure according to FLEXCAN Legacy RX FIFO.
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param pFifoXfer FlexCAN Rx FIFO EDMA transfer structure, see #flexcan_fifo_transfer_t.
+ * @param pEdmaConfig The user configuration structure of type edma_transfer_t.
+ *
+ */
+void FLEXCAN_PrepareTransfConfiguration(CAN_Type *base,
+                                        flexcan_fifo_transfer_t *pFifoXfer,
+                                        edma_transfer_config_t *pEdmaConfig);
+
+/*!
+ * @brief Start Transfer Data from the FLEXCAN Legacy Rx FIFO using eDMA.
+ *
+ * This function to Update edma transfer confiugration and Start eDMA transfer
+ *
+ * @param base FlexCAN peripheral base address.
+ * @param handle Pointer to flexcan_edma_handle_t structure.
+ * @param pEdmaConfig The user configuration structure of type edma_transfer_t.
+ * @retval kStatus_Success if succeed, others failed.
+ * @retval kStatus_FLEXCAN_RxFifoBusy Previous transfer ongoing.
+ */
+status_t FLEXCAN_StartTransferDatafromRxFIFO(CAN_Type *base,
+                                             flexcan_edma_handle_t *handle,
+                                             edma_transfer_config_t *pEdmaConfig);
+
+/*!
  * @brief Receives the CAN Message from the Rx FIFO using eDMA.
  *
  * This function receives the CAN Message using eDMA. This is a non-blocking function, which returns
@@ -82,11 +111,13 @@ void FLEXCAN_TransferCreateHandleEDMA(CAN_Type *base,
  *
  * @param base FlexCAN peripheral base address.
  * @param handle Pointer to flexcan_edma_handle_t structure.
- * @param xfer FlexCAN Rx FIFO EDMA transfer structure, see #flexcan_fifo_transfer_t.
+ * @param pFifoXfer FlexCAN Rx FIFO EDMA transfer structure, see #flexcan_fifo_transfer_t.
  * @retval kStatus_Success if succeed, others failed.
  * @retval kStatus_FLEXCAN_RxFifoBusy Previous transfer ongoing.
  */
-status_t FLEXCAN_TransferReceiveFifoEDMA(CAN_Type *base, flexcan_edma_handle_t *handle, flexcan_fifo_transfer_t *xfer);
+status_t FLEXCAN_TransferReceiveFifoEDMA(CAN_Type *base,
+                                         flexcan_edma_handle_t *handle,
+                                         flexcan_fifo_transfer_t *pFifoXfer);
 
 /*!
  * @brief Aborts the receive process which used eDMA.

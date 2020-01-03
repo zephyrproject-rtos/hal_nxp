@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief OSTIMER driver version 2.0.1. */
-#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief OSTIMER driver version 2.0.3. */
+#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*!

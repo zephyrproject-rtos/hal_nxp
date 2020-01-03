@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief PDB driver version 2.0.2. */
-#define FSL_PDB_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief PDB driver version 2.0.3. */
+#define FSL_PDB_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*!

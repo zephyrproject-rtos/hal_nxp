@@ -12962,7 +12962,7 @@ SPDX-License-Identifier: BSD-3-Clause
               <name>MCLKIO</name>
               <description>MCLK control.</description>
               <bitOffset>0</bitOffset>
-              <bitWidth>32</bitWidth>
+              <bitWidth>1</bitWidth>
               <access>read-write</access>
               <enumeratedValues>
                 <enumeratedValue>
@@ -32194,13 +32194,6 @@ SPDX-License-Identifier: BSD-3-Clause
               <bitWidth>1</bitWidth>
               <access>read-write</access>
             </field>
-            <field>
-              <name>iso_atx</name>
-              <description>.</description>
-              <bitOffset>3</bitOffset>
-              <bitWidth>1</bitWidth>
-              <access>read-write</access>
-            </field>
           </fields>
         </register>
       </registers>
@@ -32646,17 +32639,81 @@ SPDX-License-Identifier: BSD-3-Clause
             </field>
             <field>
               <name>FILTERCGF_SAMPLEMODE</name>
-              <description>Filter Sample mode.</description>
+              <description>Control the filtering of the Analog Comparator output.</description>
               <bitOffset>16</bitOffset>
               <bitWidth>2</bitWidth>
               <access>read-write</access>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>BYPASS</name>
+                  <description>Bypass mode.</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FILTER1CLK</name>
+                  <description>Filter 1 clock period.</description>
+                  <value>0x1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FILTER2CLK</name>
+                  <description>Filter 2 clock period.</description>
+                  <value>0x2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FILTER3CLK</name>
+                  <description>Filter 3 clock period.</description>
+                  <value>0x3</value>
+                </enumeratedValue>
+              </enumeratedValues>
             </field>
             <field>
               <name>FILTERCGF_CLKDIV</name>
-              <description>Filter Clock div .</description>
+              <description>Filter Clock divider.</description>
               <bitOffset>18</bitOffset>
               <bitWidth>3</bitWidth>
               <access>read-write</access>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>FILTER_1CLK_PERIOD</name>
+                  <description>Filter clock period duration equals 1 Analog Comparator clock period.</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FILTER_2CLK_PERIOD</name>
+                  <description>Filter clock period duration equals 2 Analog Comparator clock period.</description>
+                  <value>0x1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FILTER_4CLK_PERIOD</name>
+                  <description>Filter clock period duration equals 4 Analog Comparator clock period.</description>
+                  <value>0x2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FILTER_8CLK_PERIOD</name>
+                  <description>Filter clock period duration equals 8 Analog Comparator clock period.</description>
+                  <value>0x3</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FILTER_16CLK_PERIOD</name>
+                  <description>Filter clock period duration equals 16 Analog Comparator clock period.</description>
+                  <value>0x4</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FILTER_32CLK_PERIOD</name>
+                  <description>Filter clock period duration equals 32 Analog Comparator clock period.</description>
+                  <value>0x5</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FILTER_64CLK_PERIOD</name>
+                  <description>Filter clock period duration equals 64 Analog Comparator clock period.</description>
+                  <value>0x6</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FILTER_128CLK_PERIOD</name>
+                  <description>Filter clock period duration equals 128 Analog Comparator clock period.</description>
+                  <value>0x7</value>
+                </enumeratedValue>
+              </enumeratedValues>
             </field>
           </fields>
         </register>

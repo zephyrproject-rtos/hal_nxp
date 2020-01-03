@@ -30,7 +30,7 @@
 #define FLEXIO_CAMERA_PARALLEL_DATA_WIDTH (8U)
 
 /*! @brief Error codes for the Camera driver. */
-enum _flexio_camera_status
+enum
 {
     kStatus_FLEXIO_CAMERA_RxBusy = MAKE_STATUS(kStatusGroup_FLEXIO_CAMERA, 0), /*!< Receiver is busy. */
     kStatus_FLEXIO_CAMERA_RxIdle = MAKE_STATUS(kStatusGroup_FLEXIO_CAMERA, 1), /*!< Camera receiver is idle. */
@@ -205,7 +205,7 @@ void FLEXIO_CAMERA_DisableInterrupt(FLEXIO_CAMERA_Type *base);
  */
 static inline void FLEXIO_CAMERA_EnableRxDMA(FLEXIO_CAMERA_Type *base, bool enable)
 {
-    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1 << base->shifterStartIdx, enable);
+    FLEXIO_EnableShifterStatusDMA(base->flexioBase, 1UL << base->shifterStartIdx, enable);
 }
 
 /*!
@@ -216,7 +216,7 @@ static inline void FLEXIO_CAMERA_EnableRxDMA(FLEXIO_CAMERA_Type *base, bool enab
  */
 static inline uint32_t FLEXIO_CAMERA_GetRxBufferAddress(FLEXIO_CAMERA_Type *base)
 {
-    return FLEXIO_GetShifterBufferAddress(base->flexioBase, kFLEXIO_ShifterBuffer, base->shifterStartIdx);
+    return FLEXIO_GetShifterBufferAddress(base->flexioBase, kFLEXIO_ShifterBuffer, (uint8_t)base->shifterStartIdx);
 }
 
 /*! @} */

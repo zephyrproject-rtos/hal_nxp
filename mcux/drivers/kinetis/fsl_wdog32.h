@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -31,8 +31,8 @@
 /*@}*/
 /*! @name Driver version */
 /*@{*/
-/*! @brief WDOG32 driver version 2.0.1. */
-#define FSL_WDOG32_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief WDOG32 driver version 2.0.2. */
+#define FSL_WDOG32_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*! @brief Describes WDOG32 clock source. */
@@ -321,7 +321,7 @@ static inline void WDOG32_SetWindowValue(WDOG_Type *base, uint16_t windowValue)
  */
 static inline void WDOG32_Unlock(WDOG_Type *base)
 {
-    if ((base->CS) & WDOG_CS_CMD32EN_MASK)
+    if (0U != ((base->CS) & WDOG_CS_CMD32EN_MASK))
     {
         base->CNT = WDOG_UPDATE_KEY;
     }
@@ -342,7 +342,11 @@ static inline void WDOG32_Unlock(WDOG_Type *base)
  */
 static inline void WDOG32_Refresh(WDOG_Type *base)
 {
-    if ((base->CS) & WDOG_CS_CMD32EN_MASK)
+    uint32_t primaskValue = 0U;
+
+    /* Disable the global interrupt to protect refresh sequence */
+    primaskValue = DisableGlobalIRQ();
+    if (0U != ((base->CS) & WDOG_CS_CMD32EN_MASK))
     {
         base->CNT = WDOG_REFRESH_KEY;
     }
@@ -351,6 +355,7 @@ static inline void WDOG32_Refresh(WDOG_Type *base)
         base->CNT = WDOG_FIRST_WORD_OF_REFRESH;
         base->CNT = WDOG_SECOND_WORD_OF_REFRESH;
     }
+    EnableGlobalIRQ(primaskValue);
 }
 
 /*!
@@ -363,7 +368,7 @@ static inline void WDOG32_Refresh(WDOG_Type *base)
  */
 static inline uint16_t WDOG32_GetCounterValue(WDOG_Type *base)
 {
-    return base->CNT;
+    return (uint16_t)base->CNT;
 }
 
 /*@}*/

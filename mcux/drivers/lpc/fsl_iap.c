@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,19 +19,23 @@
  * @{
  */
 
-#define ROM_API_TREE ((uint32_t *)0x130010f0)
-#define BOOTLOADER_API_TREE_POINTER ((bootloader_tree_t *)ROM_API_TREE)
+#define BOOTLOADER_API_TREE_POINTER ((bootloader_tree_t *)0x130010f0U)
 
-static uint32_t S_VersionMajor = 0;
+static uint32_t versionMajor = 0U;
 
-typedef status_t (*EraseCommend_t)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
-typedef status_t (*ProgramCommend_t)(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
-typedef status_t (*VerifyProgramCommend_t)(flash_config_t *config,
-                                           uint32_t start,
-                                           uint32_t lengthInBytes,
-                                           const uint8_t *expectedData,
-                                           uint32_t *failedAddress,
-                                           uint32_t *failedData);
+typedef union functionCommandOption
+{
+    uint32_t commandAddr;
+    status_t (*eraseCommend)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
+    status_t (*programCommend)(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
+    status_t (*verifyProgramCommend)(flash_config_t *config,
+                                     uint32_t start,
+                                     uint32_t lengthInBytes,
+                                     const uint8_t *expectedData,
+                                     uint32_t *failedAddress,
+                                     uint32_t *failedData);
+} function_command_option_t;
+
 /*
  *!@brief Structure of version property.
  *
@@ -58,7 +62,7 @@ typedef union StandardVersion
 } standard_version_t;
 
 /*! @brief Interface for the flash driver.*/
-typedef struct FlashDriverInterface
+typedef struct version1FlashDriverInterface
 {
     standard_version_t version; /*!< flash driver API version number.*/
 
@@ -74,20 +78,10 @@ typedef struct FlashDriverInterface
                                      uint32_t *failedAddress,
                                      uint32_t *failedData);
     status_t (*flash_get_property)(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t *value);
-    status_t (*flash_erase_with_checker)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
-    status_t (*flash_program_with_checker)(flash_config_t *config,
-                                           uint32_t start,
-                                           uint8_t *src,
-                                           uint32_t lengthInBytes);
-    status_t (*flash_verify_program_with_checker)(flash_config_t *config,
-                                                  uint32_t start,
-                                                  uint32_t lengthInBytes,
-                                                  const uint8_t *expectedData,
-                                                  uint32_t *failedAddress,
-                                                  uint32_t *failedData);
+    uint32_t reserved[3]; /*! Reserved for future use */
     /*!< Flash FFR driver*/
     status_t (*ffr_init)(flash_config_t *config);
-    status_t (*ffr_lock_all)(flash_config_t *config);
+    status_t (*ffr_deinit)(flash_config_t *config);
     status_t (*ffr_cust_factory_page_write)(flash_config_t *config, uint8_t *page_data, bool seal_part);
     status_t (*ffr_get_uuid)(flash_config_t *config, uint8_t *uuid);
     status_t (*ffr_get_customer_data)(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
@@ -96,6 +90,43 @@ typedef struct FlashDriverInterface
     status_t (*ffr_keystore_get_kc)(flash_config_t *config, uint8_t *pKeyCode, ffr_key_type_t keyIndex);
     status_t (*ffr_infield_page_write)(flash_config_t *config, uint8_t *page_data, uint32_t valid_len);
     status_t (*ffr_get_customer_infield_data)(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
+} version1_flash_driver_interface_t;
+
+/*! @brief Interface for the flash driver.*/
+typedef struct version0FlashDriverInterface
+{
+    standard_version_t version; /*!< flash driver API version number.*/
+
+    /*!< Flash driver.*/
+    status_t (*flash_init)(flash_config_t *config);
+    status_t (*flash_erase)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
+    status_t (*flash_program)(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
+    status_t (*flash_verify_erase)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes);
+    status_t (*flash_verify_program)(flash_config_t *config,
+                                     uint32_t start,
+                                     uint32_t lengthInBytes,
+                                     const uint8_t *expectedData,
+                                     uint32_t *failedAddress,
+                                     uint32_t *failedData);
+    status_t (*flash_get_property)(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t *value);
+
+    /*!< Flash FFR driver*/
+    status_t (*ffr_init)(flash_config_t *config);
+    status_t (*ffr_deinit)(flash_config_t *config);
+    status_t (*ffr_cust_factory_page_write)(flash_config_t *config, uint8_t *page_data, bool seal_part);
+    status_t (*ffr_get_uuid)(flash_config_t *config, uint8_t *uuid);
+    status_t (*ffr_get_customer_data)(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
+    status_t (*ffr_keystore_write)(flash_config_t *config, ffr_key_store_t *pKeyStore);
+    status_t (*ffr_keystore_get_ac)(flash_config_t *config, uint8_t *pActivationCode);
+    status_t (*ffr_keystore_get_kc)(flash_config_t *config, uint8_t *pKeyCode, ffr_key_type_t keyIndex);
+    status_t (*ffr_infield_page_write)(flash_config_t *config, uint8_t *page_data, uint32_t valid_len);
+    status_t (*ffr_get_customer_infield_data)(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
+} version0_flash_driver_interface_t;
+
+typedef union flashDriverInterface
+{
+    const version1_flash_driver_interface_t *version1FlashDriver;
+    const version0_flash_driver_interface_t *version0FlashDriver;
 } flash_driver_interface_t;
 
 /*!
@@ -108,21 +139,22 @@ typedef struct FlashDriverInterface
  */
 typedef struct BootloaderTree
 {
-    void (*runBootloader)(void *arg);            /*!< Function to start the bootloader executing. */
-    standard_version_t bootloader_version;       /*!< Bootloader version number. */
-    const char *copyright;                       /*!< Copyright string. */
-    const uint32_t *reserved;                    /*!< Do NOT use. */
-    const flash_driver_interface_t *flashDriver; /*!< Flash driver API. */
+    void (*runBootloader)(void *arg);      /*!< Function to start the bootloader executing. */
+    standard_version_t bootloader_version; /*!< Bootloader version number. */
+    const char *copyright;                 /*!< Copyright string. */
+    const uint32_t *reserved;              /*!< Do NOT use. */
+    flash_driver_interface_t flashDriver;
+    function_command_option_t runCmdFuncOption;
 } bootloader_tree_t;
 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
 
-/*! @brief Global pointer to the flash driver API table in ROM. */
-flash_driver_interface_t *FLASH_API_TREE;
 /*! Get pointer to flash driver API table in ROM. */
-#define FLASH_API_TREE BOOTLOADER_API_TREE_POINTER->flashDriver
+#define VERSION1_FLASH_API_TREE BOOTLOADER_API_TREE_POINTER->flashDriver.version1FlashDriver
+#define VERSION0_FLASH_API_TREE BOOTLOADER_API_TREE_POINTER->flashDriver.version0FlashDriver
+#define RUN_COMMAND_FUNC_OPTION BOOTLOADER_API_TREE_POINTER->runCmdFuncOption
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -130,49 +162,47 @@ flash_driver_interface_t *FLASH_API_TREE;
 /*! See fsl_iap.h for documentation of this function. */
 status_t FLASH_Init(flash_config_t *config)
 {
-    assert(FLASH_API_TREE);
-    config->modeConfig.sysFreqInMHz = kSysToFlashFreq_defaultInMHz;
-    S_VersionMajor                  = BOOTLOADER_API_TREE_POINTER->bootloader_version.major;
-    return FLASH_API_TREE->flash_init(config);
+    assert(VERSION1_FLASH_API_TREE);
+    config->modeConfig.sysFreqInMHz = (uint32_t)kSysToFlashFreq_defaultInMHz;
+    versionMajor                    = BOOTLOADER_API_TREE_POINTER->bootloader_version.major;
+    return VERSION0_FLASH_API_TREE->flash_init(config);
 }
 
 /*! See fsl_iap.h for documentation of this function. */
 status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key)
 {
-    if (S_VersionMajor == 2)
+    if (versionMajor == 2U)
     {
-        EraseCommend_t EraseCommand =
-            (EraseCommend_t)(0x1300413b); /*!< get the flash erase api location adress int rom */
-        return EraseCommand(config, start, lengthInBytes, key);
+        RUN_COMMAND_FUNC_OPTION.commandAddr = 0x1300413bU; /*!< get the flash erase api location adress in rom */
+        return RUN_COMMAND_FUNC_OPTION.eraseCommend(config, start, lengthInBytes, key);
     }
     else
     {
-        assert(FLASH_API_TREE);
-        return FLASH_API_TREE->flash_erase(config, start, lengthInBytes, key);
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->flash_erase(config, start, lengthInBytes, key);
     }
 }
 
 /*! See fsl_iap.h for documentation of this function. */
 status_t FLASH_Program(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes)
 {
-    if (S_VersionMajor == 2)
+    if (versionMajor == 2U)
     {
-        ProgramCommend_t ProgramCommend =
-            (ProgramCommend_t)(0x1300419d); /*!< get the flash program api location adress in rom*/
-        return ProgramCommend(config, start, src, lengthInBytes);
+        RUN_COMMAND_FUNC_OPTION.commandAddr = 0x1300419dU; /*!< get the flash program api location adress in rom*/
+        return RUN_COMMAND_FUNC_OPTION.programCommend(config, start, src, lengthInBytes);
     }
     else
     {
-        assert(FLASH_API_TREE);
-        return FLASH_API_TREE->flash_program(config, start, src, lengthInBytes);
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->flash_program(config, start, src, lengthInBytes);
     }
 }
 
 /*! See fsl_iap.h for documentation of this function. */
 status_t FLASH_VerifyErase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->flash_verify_erase(config, start, lengthInBytes);
+    assert(VERSION1_FLASH_API_TREE);
+    return VERSION1_FLASH_API_TREE->flash_verify_erase(config, start, lengthInBytes);
 }
 
 /*! See fsl_iap.h for documentation of this function. */
@@ -183,26 +213,25 @@ status_t FLASH_VerifyProgram(flash_config_t *config,
                              uint32_t *failedAddress,
                              uint32_t *failedData)
 {
-    if (S_VersionMajor == 2)
+    if (versionMajor == 2U)
     {
-        VerifyProgramCommend_t VerifyProgramCommend =
-            (VerifyProgramCommend_t)(0x1300427d); /*!< get the flash verify program api location adress in
-                                                     rom*/
-        return VerifyProgramCommend(config, start, lengthInBytes, expectedData, failedAddress, failedData);
+        RUN_COMMAND_FUNC_OPTION.commandAddr = 0x1300427dU; /*!< get the flash verify program api location adress in rom*/
+        return RUN_COMMAND_FUNC_OPTION.verifyProgramCommend(config, start, lengthInBytes, expectedData, failedAddress,
+                                                            failedData);
     }
     else
     {
-        assert(FLASH_API_TREE);
-        return FLASH_API_TREE->flash_verify_program(config, start, lengthInBytes, expectedData, failedAddress,
-                                                    failedData);
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->flash_verify_program(config, start, lengthInBytes, expectedData, failedAddress,
+                                                             failedData);
     }
 }
 
 /*! See fsl_iap.h for documentation of this function.*/
 status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t *value)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->flash_get_property(config, whichProperty, value);
+    assert(VERSION1_FLASH_API_TREE);
+    return VERSION1_FLASH_API_TREE->flash_get_property(config, whichProperty, value);
 }
 /********************************************************************************
  * fsl iap ffr CODE
@@ -211,71 +240,151 @@ status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichPro
 /*! See fsl_iap_ffr.h for documentation of this function. */
 status_t FFR_Init(flash_config_t *config)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->ffr_init(config);
+    if (versionMajor == 2U)
+    {
+        assert(VERSION0_FLASH_API_TREE);
+        return VERSION0_FLASH_API_TREE->ffr_init(config);
+    }
+    else
+    {
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->ffr_init(config);
+    }
 }
 
 /*! See fsl_iap_ffr.h for documentation of this function. */
-status_t FFR_Lock_All(flash_config_t *config)
+status_t FFR_Deinit(flash_config_t *config)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->ffr_lock_all(config);
+    if (versionMajor == 2U)
+    {
+        assert(VERSION0_FLASH_API_TREE);
+        return VERSION0_FLASH_API_TREE->ffr_deinit(config);
+    }
+    else
+    {
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->ffr_deinit(config);
+    }
 }
 
 /*! See fsl_iap_ffr.h for documentation of this function. */
 status_t FFR_CustFactoryPageWrite(flash_config_t *config, uint8_t *page_data, bool seal_part)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->ffr_cust_factory_page_write(config, page_data, seal_part);
+    if (versionMajor == 2U)
+    {
+        assert(VERSION0_FLASH_API_TREE);
+        return VERSION0_FLASH_API_TREE->ffr_cust_factory_page_write(config, page_data, seal_part);
+    }
+    else
+    {
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->ffr_cust_factory_page_write(config, page_data, seal_part);
+    }
 }
 
 /*! See fsl_iap_ffr.h for documentation of this function. */
 status_t FFR_GetUUID(flash_config_t *config, uint8_t *uuid)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->ffr_get_uuid(config, uuid);
+    if (versionMajor == 2U)
+    {
+        assert(VERSION0_FLASH_API_TREE);
+        return VERSION0_FLASH_API_TREE->ffr_get_uuid(config, uuid);
+    }
+    else
+    {
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->ffr_get_uuid(config, uuid);
+    }
 }
 
 /*! See fsl_iap_ffr.h for documentation of this function. */
 status_t FFR_GetCustomerData(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->ffr_get_customer_data(config, pData, offset, len);
+    if (versionMajor == 2U)
+    {
+        assert(VERSION0_FLASH_API_TREE);
+        return VERSION0_FLASH_API_TREE->ffr_get_customer_data(config, pData, offset, len);
+    }
+    else
+    {
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->ffr_get_customer_data(config, pData, offset, len);
+    }
 }
 
 /*! See fsl_iap_ffr.h for documentation of this function. */
 status_t FFR_KeystoreWrite(flash_config_t *config, ffr_key_store_t *pKeyStore)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->ffr_keystore_write(config, pKeyStore);
+    if (versionMajor == 2U)
+    {
+        assert(VERSION0_FLASH_API_TREE);
+        return VERSION0_FLASH_API_TREE->ffr_keystore_write(config, pKeyStore);
+    }
+    else
+    {
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->ffr_keystore_write(config, pKeyStore);
+    }
 }
 
 /*! See fsl_iap_ffr.h for documentation of this function. */
 status_t FFR_KeystoreGetAC(flash_config_t *config, uint8_t *pActivationCode)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->ffr_keystore_get_ac(config, pActivationCode);
+    if (versionMajor == 2U)
+    {
+        assert(VERSION0_FLASH_API_TREE);
+        return VERSION0_FLASH_API_TREE->ffr_keystore_get_ac(config, pActivationCode);
+    }
+    else
+    {
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->ffr_keystore_get_ac(config, pActivationCode);
+    }
 }
 
 /*! See fsl_iap_ffr.h for documentation of this function. */
 status_t FFR_KeystoreGetKC(flash_config_t *config, uint8_t *pKeyCode, ffr_key_type_t keyIndex)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->ffr_keystore_get_kc(config, pKeyCode, keyIndex);
+    if (versionMajor == 2U)
+    {
+        assert(VERSION0_FLASH_API_TREE);
+        return VERSION0_FLASH_API_TREE->ffr_keystore_get_kc(config, pKeyCode, keyIndex);
+    }
+    else
+    {
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->ffr_keystore_get_kc(config, pKeyCode, keyIndex);
+    }
 }
 
 /*! See fsl_iap_ffr.h for documentation of this function. */
 status_t FFR_InfieldPageWrite(flash_config_t *config, uint8_t *page_data, uint32_t valid_len)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->ffr_infield_page_write(config, page_data, valid_len);
+    if (versionMajor == 2U)
+    {
+        assert(VERSION0_FLASH_API_TREE);
+        return VERSION0_FLASH_API_TREE->ffr_infield_page_write(config, page_data, valid_len);
+    }
+    else
+    {
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->ffr_infield_page_write(config, page_data, valid_len);
+    }
 }
 
 /*! See fsl_iap_ffr.h for documentation of this function. */
 status_t FFR_GetCustomerInfieldData(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len)
 {
-    assert(FLASH_API_TREE);
-    return FLASH_API_TREE->ffr_get_customer_infield_data(config, pData, offset, len);
+    if (versionMajor == 2U)
+    {
+        assert(VERSION0_FLASH_API_TREE);
+        return VERSION0_FLASH_API_TREE->ffr_get_customer_infield_data(config, pData, offset, len);
+    }
+    else
+    {
+        assert(VERSION1_FLASH_API_TREE);
+        return VERSION1_FLASH_API_TREE->ffr_get_customer_infield_data(config, pData, offset, len);
+    }
 }
 
 /*! @}*/

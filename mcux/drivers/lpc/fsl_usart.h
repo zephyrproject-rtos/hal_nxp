@@ -21,15 +21,15 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief USART driver version 2.1.0. */
-#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief USART driver version 2.1.1. */
+#define FSL_USART_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 #define USART_FIFOTRIG_TXLVL_GET(base) (((base)->FIFOTRIG & USART_FIFOTRIG_TXLVL_MASK) >> USART_FIFOTRIG_TXLVL_SHIFT)
 #define USART_FIFOTRIG_RXLVL_GET(base) (((base)->FIFOTRIG & USART_FIFOTRIG_RXLVL_MASK) >> USART_FIFOTRIG_RXLVL_SHIFT)
 
 /*! @brief Error codes for the USART driver. */
-enum _usart_status
+enum
 {
     kStatus_USART_TxBusy              = MAKE_STATUS(kStatusGroup_LPC_USART, 0),  /*!< Transmitter is busy. */
     kStatus_USART_RxBusy              = MAKE_STATUS(kStatusGroup_LPC_USART, 1),  /*!< Receiver is busy. */
@@ -185,9 +185,12 @@ struct _usart_handle
     volatile uint8_t txState; /*!< TX transfer state. */
     volatile uint8_t rxState; /*!< RX transfer state */
 
-    usart_txfifo_watermark_t txWatermark; /*!< txFIFO watermark */
-    usart_rxfifo_watermark_t rxWatermark; /*!< rxFIFO watermark */
+    uint8_t txWatermark; /*!< txFIFO watermark */
+    uint8_t rxWatermark; /*!< rxFIFO watermark */
 };
+
+/*! @brief Typedef for usart interrupt handler. */
+typedef void (*flexcomm_usart_irq_handler_t)(USART_Type *base, usart_handle_t *handle);
 
 /*******************************************************************************
  * API
@@ -344,7 +347,7 @@ static inline void USART_ClearStatusFlags(USART_Type *base, uint32_t mask)
  */
 static inline void USART_EnableInterrupts(USART_Type *base, uint32_t mask)
 {
-    base->FIFOINTENSET = mask & 0xF;
+    base->FIFOINTENSET = mask & 0xFUL;
 }
 
 /*!
@@ -362,7 +365,7 @@ static inline void USART_EnableInterrupts(USART_Type *base, uint32_t mask)
  */
 static inline void USART_DisableInterrupts(USART_Type *base, uint32_t mask)
 {
-    base->FIFOINTENCLR = mask & 0xF;
+    base->FIFOINTENCLR = mask & 0xFUL;
 }
 
 /*!
@@ -498,7 +501,7 @@ static inline void USART_WriteByte(USART_Type *base, uint8_t data)
  */
 static inline uint8_t USART_ReadByte(USART_Type *base)
 {
-    return base->FIFORD;
+    return (uint8_t)base->FIFORD;
 }
 
 /*!

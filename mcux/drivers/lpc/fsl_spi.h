@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief SPI driver version 2.0.3. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief SPI driver version 2.1.0. */
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*! @brief Global variable for dummy data value setting. */
@@ -36,12 +36,12 @@ extern volatile uint8_t s_dummyData[];
 #define SPI_DUMMYDATA (0xFFU)
 #endif
 
-#define SPI_DATA(n) (((uint32_t)(n)) & 0xFFFF)
-#define SPI_CTRLMASK (0xFFFF0000)
+#define SPI_DATA(n) (((uint32_t)(n)) & 0xFFFFUL)
+#define SPI_CTRLMASK (0xFFFF0000U)
 
-#define SPI_ASSERTNUM_SSEL(n) ((~(1U << ((n) + 16))) & 0xF0000)
-#define SPI_DEASSERTNUM_SSEL(n) (1U << ((n) + 16))
-#define SPI_DEASSERT_ALL (0xF0000)
+#define SPI_ASSERTNUM_SSEL(n) ((~(1UL << ((n) + 16UL))) & 0xF0000UL)
+#define SPI_DEASSERTNUM_SSEL(n) (1UL << ((n) + 16UL))
+#define SPI_DEASSERT_ALL (0xF0000UL)
 
 #define SPI_FIFOWR_FLAGS_MASK (~(SPI_DEASSERT_ALL | SPI_FIFOWR_TXDATA_MASK | SPI_FIFOWR_LEN_MASK))
 
@@ -137,9 +137,13 @@ typedef enum _spi_spol
     kSPI_Spol0ActiveHigh = SPI_CFG_SPOL0(1),
     kSPI_Spol1ActiveHigh = SPI_CFG_SPOL1(1),
     kSPI_Spol2ActiveHigh = SPI_CFG_SPOL2(1),
+#if defined(FSL_FEATURE_SPI_IS_SSEL_PIN_COUNT_EQUAL_TO_THREE) && (FSL_FEATURE_SPI_IS_SSEL_PIN_COUNT_EQUAL_TO_THREE)
+    kSPI_SpolActiveAllHigh = (kSPI_Spol0ActiveHigh | kSPI_Spol1ActiveHigh | kSPI_Spol2ActiveHigh),
+#else
     kSPI_Spol3ActiveHigh = SPI_CFG_SPOL3(1),
     kSPI_SpolActiveAllHigh =
         (kSPI_Spol0ActiveHigh | kSPI_Spol1ActiveHigh | kSPI_Spol2ActiveHigh | kSPI_Spol3ActiveHigh),
+#endif
     kSPI_SpolActiveAllLow = 0,
 } spi_spol_t;
 
@@ -161,35 +165,35 @@ typedef struct _spi_delay_config
 /*! @brief SPI master user configure structure.*/
 typedef struct _spi_master_config
 {
-    bool enableLoopback;                /*!< Enable loopback for test purpose */
-    bool enableMaster;                  /*!< Enable SPI at initialization time */
-    spi_clock_polarity_t polarity;      /*!< Clock polarity */
-    spi_clock_phase_t phase;            /*!< Clock phase */
-    spi_shift_direction_t direction;    /*!< MSB or LSB */
-    uint32_t baudRate_Bps;              /*!< Baud Rate for SPI in Hz */
-    spi_data_width_t dataWidth;         /*!< Width of the data */
-    spi_ssel_t sselNum;                 /*!< Slave select number */
-    spi_spol_t sselPol;                 /*!< Configure active CS polarity */
-    spi_txfifo_watermark_t txWatermark; /*!< txFIFO watermark */
-    spi_rxfifo_watermark_t rxWatermark; /*!< rxFIFO watermark */
-    spi_delay_config_t delayConfig;     /*!< Delay configuration. */
+    bool enableLoopback;             /*!< Enable loopback for test purpose */
+    bool enableMaster;               /*!< Enable SPI at initialization time */
+    spi_clock_polarity_t polarity;   /*!< Clock polarity */
+    spi_clock_phase_t phase;         /*!< Clock phase */
+    spi_shift_direction_t direction; /*!< MSB or LSB */
+    uint32_t baudRate_Bps;           /*!< Baud Rate for SPI in Hz */
+    spi_data_width_t dataWidth;      /*!< Width of the data */
+    spi_ssel_t sselNum;              /*!< Slave select number */
+    spi_spol_t sselPol;              /*!< Configure active CS polarity */
+    uint8_t txWatermark;             /*!< txFIFO watermark */
+    uint8_t rxWatermark;             /*!< rxFIFO watermark */
+    spi_delay_config_t delayConfig;  /*!< Delay configuration. */
 } spi_master_config_t;
 
 /*! @brief SPI slave user configure structure.*/
 typedef struct _spi_slave_config
 {
-    bool enableSlave;                   /*!< Enable SPI at initialization time */
-    spi_clock_polarity_t polarity;      /*!< Clock polarity */
-    spi_clock_phase_t phase;            /*!< Clock phase */
-    spi_shift_direction_t direction;    /*!< MSB or LSB */
-    spi_data_width_t dataWidth;         /*!< Width of the data */
-    spi_spol_t sselPol;                 /*!< Configure active CS polarity */
-    spi_txfifo_watermark_t txWatermark; /*!< txFIFO watermark */
-    spi_rxfifo_watermark_t rxWatermark; /*!< rxFIFO watermark */
+    bool enableSlave;                /*!< Enable SPI at initialization time */
+    spi_clock_polarity_t polarity;   /*!< Clock polarity */
+    spi_clock_phase_t phase;         /*!< Clock phase */
+    spi_shift_direction_t direction; /*!< MSB or LSB */
+    spi_data_width_t dataWidth;      /*!< Width of the data */
+    spi_spol_t sselPol;              /*!< Configure active CS polarity */
+    uint8_t txWatermark;             /*!< txFIFO watermark */
+    uint8_t rxWatermark;             /*!< rxFIFO watermark */
 } spi_slave_config_t;
 
 /*! @brief SPI transfer status.*/
-enum _spi_status
+enum
 {
     kStatus_SPI_Busy  = MAKE_STATUS(kStatusGroup_LPC_SPI, 0), /*!< SPI bus is busy */
     kStatus_SPI_Idle  = MAKE_STATUS(kStatusGroup_LPC_SPI, 1), /*!< SPI is idle */
@@ -270,16 +274,24 @@ struct _spi_master_handle
     uint8_t dataWidth;                /*!< Width of the data [Valid values: 1 to 16] */
     uint8_t sselNum;      /*!< Slave select number to be asserted when transferring data [Valid values: 0 to 3] */
     uint32_t configFlags; /*!< Additional option to control transfer */
-    spi_txfifo_watermark_t txWatermark; /*!< txFIFO watermark */
-    spi_rxfifo_watermark_t rxWatermark; /*!< rxFIFO watermark */
+    uint8_t txWatermark;  /*!< txFIFO watermark */
+    uint8_t rxWatermark;  /*!< rxFIFO watermark */
 };
+
+/*! @brief Typedef for master interrupt handler. */
+typedef void (*flexcomm_spi_master_irq_handler_t)(SPI_Type *base, spi_master_handle_t *handle);
+
+/*! @brief Typedef for slave interrupt handler. */
+typedef void (*flexcomm_spi_slave_irq_handler_t)(SPI_Type *base, spi_slave_handle_t *handle);
+/*! @} */
+
+/*******************************************************************************
+ * API
+ ******************************************************************************/
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
-/*******************************************************************************
- * API
- ******************************************************************************/
 
 /*! @brief Returns instance number for SPI peripheral base address. */
 uint32_t SPI_GetInstance(SPI_Type *base);

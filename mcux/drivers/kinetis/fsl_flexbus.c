@@ -127,22 +127,22 @@ void FLEXBUS_Init(FB_Type *base, const flexbus_config_t *config)
     /* Chip-select validation */
     reg_value = 0x1U << FB_CSMR_V_SHIFT;
     /* Write protect */
-    reg_value |= (uint32_t)(config->writeProtect) << FB_CSMR_WP_SHIFT;
+    reg_value |= ((uint32_t)config->writeProtect) << FB_CSMR_WP_SHIFT;
     /* Base address mask */
     reg_value |= config->chipBaseAddressMask << FB_CSMR_BAM_SHIFT;
     /* Write to CSMR register */
     base->CS[chip].CSMR = reg_value;
 
     /* Burst write */
-    reg_value = (uint32_t)(config->burstWrite) << FB_CSCR_BSTW_SHIFT;
+    reg_value = ((uint32_t)config->burstWrite) << FB_CSCR_BSTW_SHIFT;
     /* Burst read */
-    reg_value |= (uint32_t)(config->burstRead) << FB_CSCR_BSTR_SHIFT;
+    reg_value |= ((uint32_t)config->burstRead) << FB_CSCR_BSTR_SHIFT;
     /* Byte-enable mode */
-    reg_value |= (uint32_t)(config->byteEnableMode) << FB_CSCR_BEM_SHIFT;
+    reg_value |= ((uint32_t)config->byteEnableMode) << FB_CSCR_BEM_SHIFT;
     /* Port size */
     reg_value |= (uint32_t)config->portSize << FB_CSCR_PS_SHIFT;
     /* The internal transfer acknowledge for accesses */
-    reg_value |= (uint32_t)(config->autoAcknowledge) << FB_CSCR_AA_SHIFT;
+    reg_value |= ((uint32_t)config->autoAcknowledge) << FB_CSCR_AA_SHIFT;
     /* Byte-Lane shift */
     reg_value |= (uint32_t)config->byteLaneShift << FB_CSCR_BLS_SHIFT;
     /* The number of wait states */
@@ -154,12 +154,12 @@ void FLEXBUS_Init(FB_Type *base, const flexbus_config_t *config)
     /* Address setup */
     reg_value |= (uint32_t)config->addressSetup << FB_CSCR_ASET_SHIFT;
     /* Extended transfer start/extended address latch */
-    reg_value |= (uint32_t)(config->extendTransferAddress) << FB_CSCR_EXTS_SHIFT;
+    reg_value |= ((uint32_t)config->extendTransferAddress) << FB_CSCR_EXTS_SHIFT;
     /* Secondary wait state */
-    if(config->secondaryWaitStatesEnable)
+    if (config->secondaryWaitStatesEnable)
     {
-      reg_value |= FB_CSCR_SWSEN_MASK;
-      reg_value |= (uint32_t)(config->secondaryWaitStates) << FB_CSCR_SWS_SHIFT;
+        reg_value |= FB_CSCR_SWSEN_MASK;
+        reg_value |= (uint32_t)(config->secondaryWaitStates) << FB_CSCR_SWS_SHIFT;
     }
     /* Write to CSCR register */
     base->CS[chip].CSCR = reg_value;
@@ -230,19 +230,19 @@ void FLEXBUS_Deinit(FB_Type *base)
 void FLEXBUS_GetDefaultConfig(flexbus_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
-    config->chip                  = 0;                           /* Chip 0 FlexBus for validation */
-    config->writeProtect          = false;                       /* Write accesses are allowed */
-    config->burstWrite            = false;                       /* Burst-Write disable */
-    config->burstRead             = false;                       /* Burst-Read disable */
-    config->byteEnableMode        = false;                       /* Byte-Enable mode is asserted for data write only */
-    config->autoAcknowledge       = true;                        /* Auto-Acknowledge enable */
-    config->extendTransferAddress = false;                       /* Extend transfer start/extend address latch disable */
-    config->secondaryWaitStatesEnable = false;                 /* Secondary wait state disable */
-    config->byteLaneShift         = kFLEXBUS_NotShifted;     /* Byte-Lane shift disable */
-    config->writeAddressHold      = kFLEXBUS_Hold1Cycle;     /* Write address hold 1 cycles */
-    config->readAddressHold       = kFLEXBUS_Hold1Or0Cycles; /* Read address hold 0 cycles */
+    config->chip                      = 0;                   /* Chip 0 FlexBus for validation */
+    config->writeProtect              = false;               /* Write accesses are allowed */
+    config->burstWrite                = false;               /* Burst-Write disable */
+    config->burstRead                 = false;               /* Burst-Read disable */
+    config->byteEnableMode            = false;               /* Byte-Enable mode is asserted for data write only */
+    config->autoAcknowledge           = true;                /* Auto-Acknowledge enable */
+    config->extendTransferAddress     = false;               /* Extend transfer start/extend address latch disable */
+    config->secondaryWaitStatesEnable = false;               /* Secondary wait state disable */
+    config->byteLaneShift             = kFLEXBUS_NotShifted; /* Byte-Lane shift disable */
+    config->writeAddressHold          = kFLEXBUS_Hold1Cycle; /* Write address hold 1 cycles */
+    config->readAddressHold           = kFLEXBUS_Hold1Or0Cycles; /* Read address hold 0 cycles */
     config->addressSetup =
         kFLEXBUS_FirstRisingEdge; /* Assert ~FB_CSn on the first rising clock edge after the address is asserted */
     config->portSize               = kFLEXBUS_1Byte;                   /* 1 byte port size of transfer */

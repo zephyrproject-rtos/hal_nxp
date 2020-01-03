@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief DSPI EDMA driver version 2.2.1. */
-#define FSL_DSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief DSPI EDMA driver version 2.2.2. */
+#define FSL_DSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /*!

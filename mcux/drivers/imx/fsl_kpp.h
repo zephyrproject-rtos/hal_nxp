@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 NXP
+ * Copyright 2017, 2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -101,7 +101,7 @@ void KPP_Deinit(KPP_Type *base);
  */
 static inline void KPP_EnableInterrupts(KPP_Type *base, uint16_t mask)
 {
-    uint16_t data = base->KPSR & ~(KPP_KPSR_KPKR_MASK | KPP_KPSR_KPKD_MASK);
+    uint16_t data = (uint16_t)(base->KPSR & ~(KPP_KPSR_KPKR_MASK | KPP_KPSR_KPKD_MASK));
     base->KPSR    = data | mask;
 }
 

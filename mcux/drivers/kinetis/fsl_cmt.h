@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CMT driver version 2.0.2. */
-#define FSL_CMT_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief CMT driver version 2.0.3. */
+#define FSL_CMT_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*!

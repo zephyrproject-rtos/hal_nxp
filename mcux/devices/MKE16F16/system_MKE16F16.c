@@ -5,15 +5,15 @@
 **                          MKE16F512VLH16
 **                          MKE16F512VLL16
 **
-**     Compilers:           Keil ARM C/C++ Compiler
-**                          Freescale C/C++ for Embedded ARM
+**     Compilers:           Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
+**                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    KE1xFP100M168SF0RM, Rev. 2, Aug. 2016
 **     Version:             rev. 4.0, 2016-09-20
-**     Build:               b180802
+**     Build:               b191113
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,8 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2019 NXP
+**     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
 **
@@ -73,7 +74,15 @@ void SystemInit (void) {
 #endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
 #if (DISABLE_WDOG)
-  WDOG->CNT = WDOG_UPDATE_KEY;
+  if ((WDOG->CS & WDOG_CS_CMD32EN_MASK) != 0U)
+  {
+      WDOG->CNT = WDOG_UPDATE_KEY;
+  }
+  else
+  {
+      WDOG->CNT = WDOG_UPDATE_KEY & 0xFFFF;
+      WDOG->CNT = (WDOG_UPDATE_KEY >> 16) & 0xFFFF;
+  }
   WDOG->TOVAL = 0xFFFF;
   WDOG->CS = (uint32_t) ((WDOG->CS) & ~WDOG_CS_EN_MASK) | WDOG_CS_UPDATE_MASK;
 #endif /* (DISABLE_WDOG) */
@@ -102,7 +111,7 @@ void SystemCoreClockUpdate (void) {
 
   uint32_t SCGOUTClock;                                 /* Variable to store output clock frequency of the SCG module */
   uint16_t Divider, prediv, multi;
-  Divider = ((SCG->CSR & SCG_CSR_DIVCORE_MASK) >> SCG_CSR_DIVCORE_SHIFT) + 1;
+  Divider = (uint16_t)(((SCG->CSR & SCG_CSR_DIVCORE_MASK) >> SCG_CSR_DIVCORE_SHIFT) + 1U);
 
   switch ((SCG->CSR & SCG_CSR_SCS_MASK) >> SCG_CSR_SCS_SHIFT) {
     case 0x1:
@@ -111,23 +120,23 @@ void SystemCoreClockUpdate (void) {
       break;
     case 0x2:
       /* Slow IRC */
-      SCGOUTClock = (((SCG->SIRCCFG & SCG_SIRCCFG_RANGE_MASK) >> SCG_SIRCCFG_RANGE_SHIFT) ? 8000000 : 2000000);
+      SCGOUTClock = ((((SCG->SIRCCFG & SCG_SIRCCFG_RANGE_MASK) >> SCG_SIRCCFG_RANGE_SHIFT) != 0U) ? 8000000U : 2000000U);
       break;
     case 0x3:
       /* Fast IRC */
-      SCGOUTClock = 48000000 + ((SCG->FIRCCFG & SCG_FIRCCFG_RANGE_MASK) >> SCG_FIRCCFG_RANGE_SHIFT) * 4000000;
+      SCGOUTClock = 48000000U + ((SCG->FIRCCFG & SCG_FIRCCFG_RANGE_MASK) >> SCG_FIRCCFG_RANGE_SHIFT) * 4000000U;
       break;
     case 0x6:
       /* System PLL */
-      if ((SCG->SPLLCFG & SCG_SPLLCFG_SOURCE_MASK) >> SCG_SPLLCFG_SOURCE_SHIFT) {
-        SCGOUTClock = 48000000 + ((SCG->FIRCCFG & SCG_FIRCCFG_RANGE_MASK) >> SCG_FIRCCFG_RANGE_SHIFT) * 4000000;
+      if (((SCG->SPLLCFG & SCG_SPLLCFG_SOURCE_MASK) >> SCG_SPLLCFG_SOURCE_SHIFT) != 0U) {
+        SCGOUTClock = 48000000U + ((SCG->FIRCCFG & SCG_FIRCCFG_RANGE_MASK) >> SCG_FIRCCFG_RANGE_SHIFT) * 4000000U;
       }
       else {
         SCGOUTClock = CPU_XTAL_CLK_HZ;
       }
-      prediv = ((SCG->SPLLCFG & SCG_SPLLCFG_PREDIV_MASK) >> SCG_SPLLCFG_PREDIV_SHIFT) + 1;
-      multi = ((SCG->SPLLCFG & SCG_SPLLCFG_MULT_MASK) >> SCG_SPLLCFG_MULT_SHIFT) + 16;
-      SCGOUTClock = SCGOUTClock * multi / (prediv * 2);
+      prediv = (uint16_t)(((SCG->SPLLCFG & SCG_SPLLCFG_PREDIV_MASK) >> SCG_SPLLCFG_PREDIV_SHIFT) + 1U);
+      multi = (uint16_t)(((SCG->SPLLCFG & SCG_SPLLCFG_MULT_MASK) >> SCG_SPLLCFG_MULT_SHIFT) + 16U);
+      SCGOUTClock = SCGOUTClock * multi / (prediv * 2U);
       break;
     default:
       return;

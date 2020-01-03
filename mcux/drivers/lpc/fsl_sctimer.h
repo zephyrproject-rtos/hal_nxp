@@ -23,7 +23,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1 */
+#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2 */
 /*@}*/
 
 /*! @brief SCTimer PWM operation modes */
@@ -482,7 +482,7 @@ static inline void SCTIMER_ClearStatusFlags(SCT_Type *base, uint32_t mask)
 static inline void SCTIMER_StartTimer(SCT_Type *base, sctimer_counter_t countertoStart)
 {
     /* Clear HALT_L bit if counter is operating in 32-bit mode or user wants to start L counter */
-    if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (countertoStart == kSCTIMER_Counter_L))
+    if (((base->CONFIG & SCT_CONFIG_UNIFY_MASK) != 0U) || (countertoStart == kSCTIMER_Counter_L))
     {
         base->CTRL &= ~(SCT_CTRL_HALT_L_MASK);
     }
@@ -503,7 +503,7 @@ static inline void SCTIMER_StartTimer(SCT_Type *base, sctimer_counter_t countert
 static inline void SCTIMER_StopTimer(SCT_Type *base, sctimer_counter_t countertoStop)
 {
     /* Set HALT_L bit if counter is operating in 32-bit mode or user wants to stop L counter */
-    if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (countertoStop == kSCTIMER_Counter_L))
+    if (((base->CONFIG & SCT_CONFIG_UNIFY_MASK) != 0U) || (countertoStop == kSCTIMER_Counter_L))
     {
         base->CTRL |= (SCT_CTRL_HALT_L_MASK);
     }
@@ -658,9 +658,9 @@ static inline void SCTIMER_SetupNextStateAction(SCT_Type *base, uint32_t nextSta
  */
 static inline void SCTIMER_SetupOutputSetAction(SCT_Type *base, uint32_t whichIO, uint32_t event)
 {
-    assert(whichIO < FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
+    assert(whichIO < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
 
-    base->OUT[whichIO].SET |= (1U << event);
+    base->OUT[whichIO].SET |= (1UL << event);
 }
 
 /*!
@@ -674,9 +674,9 @@ static inline void SCTIMER_SetupOutputSetAction(SCT_Type *base, uint32_t whichIO
  */
 static inline void SCTIMER_SetupOutputClearAction(SCT_Type *base, uint32_t whichIO, uint32_t event)
 {
-    assert(whichIO < FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
+    assert(whichIO < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_OUTPUTS);
 
-    base->OUT[whichIO].CLR |= (1U << event);
+    base->OUT[whichIO].CLR |= (1UL << event);
 }
 
 /*!
@@ -703,13 +703,13 @@ void SCTIMER_SetupOutputToggleAction(SCT_Type *base, uint32_t whichIO, uint32_t 
 static inline void SCTIMER_SetupCounterLimitAction(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t event)
 {
     /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
-    if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
+    if (((base->CONFIG & SCT_CONFIG_UNIFY_MASK) != 0U) || (whichCounter == kSCTIMER_Counter_L))
     {
-        base->LIMIT |= SCT_LIMIT_LIMMSK_L(1U << event);
+        base->LIMIT |= SCT_LIMIT_LIMMSK_L(1UL << event);
     }
     else
     {
-        base->LIMIT |= SCT_LIMIT_LIMMSK_H(1U << event);
+        base->LIMIT |= SCT_LIMIT_LIMMSK_H(1UL << event);
     }
 }
 
@@ -726,13 +726,13 @@ static inline void SCTIMER_SetupCounterLimitAction(SCT_Type *base, sctimer_count
 static inline void SCTIMER_SetupCounterStopAction(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t event)
 {
     /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
-    if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
+    if (((base->CONFIG & SCT_CONFIG_UNIFY_MASK) != 0U) || (whichCounter == kSCTIMER_Counter_L))
     {
-        base->STOP |= SCT_STOP_STOPMSK_L(1U << event);
+        base->STOP |= SCT_STOP_STOPMSK_L(1UL << event);
     }
     else
     {
-        base->STOP |= SCT_STOP_STOPMSK_H(1U << event);
+        base->STOP |= SCT_STOP_STOPMSK_H(1UL << event);
     }
 }
 
@@ -749,13 +749,13 @@ static inline void SCTIMER_SetupCounterStopAction(SCT_Type *base, sctimer_counte
 static inline void SCTIMER_SetupCounterStartAction(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t event)
 {
     /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
-    if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
+    if (((base->CONFIG & SCT_CONFIG_UNIFY_MASK) != 0U) || (whichCounter == kSCTIMER_Counter_L))
     {
-        base->START |= SCT_START_STARTMSK_L(1U << event);
+        base->START |= SCT_START_STARTMSK_L(1UL << event);
     }
     else
     {
-        base->START |= SCT_START_STARTMSK_H(1U << event);
+        base->START |= SCT_START_STARTMSK_H(1UL << event);
     }
 }
 
@@ -774,13 +774,13 @@ static inline void SCTIMER_SetupCounterStartAction(SCT_Type *base, sctimer_count
 static inline void SCTIMER_SetupCounterHaltAction(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t event)
 {
     /* Use Counter_L bits if counter is operating in 32-bit mode or user wants to setup the L counter */
-    if ((base->CONFIG & SCT_CONFIG_UNIFY_MASK) || (whichCounter == kSCTIMER_Counter_L))
+    if (((base->CONFIG & SCT_CONFIG_UNIFY_MASK) != 0U) || (whichCounter == kSCTIMER_Counter_L))
     {
-        base->HALT |= SCT_HALT_HALTMSK_L(1U << event);
+        base->HALT |= SCT_HALT_HALTMSK_L(1UL << event);
     }
     else
     {
-        base->HALT |= SCT_HALT_HALTMSK_H(1U << event);
+        base->HALT |= SCT_HALT_HALTMSK_H(1UL << event);
     }
 }
 
@@ -796,13 +796,13 @@ static inline void SCTIMER_SetupCounterHaltAction(SCT_Type *base, sctimer_counte
  */
 static inline void SCTIMER_SetupDmaTriggerAction(SCT_Type *base, uint32_t dmaNumber, uint32_t event)
 {
-    if (dmaNumber == 0)
+    if (dmaNumber == 0U)
     {
-        base->DMAREQ0 |= (1U << event);
+        base->DMAREQ0 |= (1UL << event);
     }
     else
     {
-        base->DMAREQ1 |= (1U << event);
+        base->DMAREQ1 |= (1UL << event);
     }
 }
 #endif /* FSL_FEATURE_SCT_HAS_NO_DMA_REQUEST */

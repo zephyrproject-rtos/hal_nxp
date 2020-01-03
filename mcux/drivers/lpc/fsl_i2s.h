@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,19 +26,19 @@
 /*! @name Driver version */
 /*@{*/
 
-/*! @brief I2S driver version 2.1.0. */
-#define FSL_I2S_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief I2S driver version 2.2.0. */
+#define FSL_I2S_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 #ifndef I2S_NUM_BUFFERS
 
 /*! @brief Number of buffers . */
-#define I2S_NUM_BUFFERS (4)
+#define I2S_NUM_BUFFERS (4U)
 
 #endif
 
-/*! @brief I2S status codes. */
-enum _i2s_status
+/*! @brief _i2s_status I2S status codes. */
+enum
 {
     kStatus_I2S_BufferComplete =
         MAKE_STATUS(kStatusGroup_I2S, 0),                /*!< Transfer from/into a single buffer has completed */
@@ -78,8 +78,8 @@ typedef enum _i2s_mode
     kI2S_ModeDspWsLong  = 0x3  /*!< DSP mode, WS having one data slot long pulse */
 } i2s_mode_t;
 
-/*! @brief I2S secondary channel. */
-enum _i2s_secondary_channel
+/*! @brief _i2s_secondary_channel I2S secondary channel. */
+enum
 {
     kI2S_SecondaryChannel1 = 0U, /*!< secondary channel 1 */
     kI2S_SecondaryChannel2 = 1U, /*!< secondary channel 2 */
@@ -112,8 +112,8 @@ typedef struct _i2s_config
 /*! @brief Buffer to transfer from or receive audio data into. */
 typedef struct _i2s_transfer
 {
-    volatile uint8_t *data;   /*!< Pointer to data buffer. */
-    volatile size_t dataSize; /*!< Buffer size in bytes. */
+    uint8_t *data;   /*!< Pointer to data buffer. */
+    size_t dataSize; /*!< Buffer size in bytes. */
 } i2s_transfer_t;
 
 /*! @brief Transactional state of the intialized transfer or receive I2S operation. */
@@ -141,15 +141,16 @@ struct _i2s_handle
     void *userData;                             /*!< Application data passed to callback */
     bool oneChannel;                            /*!< true mono, false stereo */
     uint8_t dataLength;                         /*!< Data length (4 - 32) */
-    bool pack48;     /*!< Packing format for 48-bit data (false - 24 bit values, true - alternating 32-bit and 16-bit
-                        values) */
-    bool useFifo48H; /*!< When dataLength 17-24: true use FIFOWR48H, false use FIFOWR */
+    bool pack48;       /*!< Packing format for 48-bit data (false - 24 bit values, true - alternating 32-bit and 16-bit
+                          values) */
+    uint8_t watermark; /*!< FIFO trigger level */
+    bool useFifo48H;   /*!< When dataLength 17-24: true use FIFOWR48H, false use FIFOWR */
+
     volatile i2s_transfer_t i2sQueue[I2S_NUM_BUFFERS]; /*!< Transfer queue storing transfer buffers */
     volatile uint8_t queueUser;                        /*!< Queue index where user's next transfer will be stored */
     volatile uint8_t queueDriver;                      /*!< Queue index of buffer actually used by the driver */
     volatile uint32_t errorCount;                      /*!< Number of buffer underruns/overruns */
     volatile uint32_t transferCount;                   /*!< Number of bytes transferred */
-    volatile uint8_t watermark;                        /*!< FIFO trigger level */
 };
 
 /*******************************************************************************
@@ -276,6 +277,18 @@ void I2S_RxGetDefaultConfig(i2s_config_t *config);
  * @param base I2S base pointer.
  */
 void I2S_Deinit(I2S_Type *base);
+
+/*!
+ * @brief Transmitter/Receiver bit clock rate configurations.
+ *
+ * @param base SAI base pointer.
+ * @param sourceClockHz, bit clock source frequency.
+ * @param sampleRate audio data sample rate.
+ * @param bitWidth, audio data bitWidth.
+ * @param channelNumbers, audio channel numbers.
+ */
+void I2S_SetBitClockRate(
+    I2S_Type *base, uint32_t sourceClockHz, uint32_t sampleRate, uint32_t bitWidth, uint32_t channelNumbers);
 
 /*! @} */
 

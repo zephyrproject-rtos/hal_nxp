@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief ANACTRL driver version. */
-#define FSL_ANACTRL_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1. */`
+#define FSL_ANACTRL_DRIVER_VERSION (MAKE_VERSION(2, 1, 2)) /*!< Version 2.1.2. */`
 
 /*!
  * @brief ANACTRL interrupt flags

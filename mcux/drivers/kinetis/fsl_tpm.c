@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -361,7 +361,7 @@ status_t TPM_SetupPwm(TPM_Type *base,
             {
             }
             /* Set the channel pair values */
-            base->CONTROLS[((uint16_t)chnlParams->chnlNumber * 2u) + 1u].CnV = cnvFirstEdge + cnv;
+            base->CONTROLS[((uint16_t)chnlParams->chnlNumber * 2u) + 1u].CnV = (uint32_t)cnvFirstEdge + (uint32_t)cnv;
         }
         else
         {
@@ -383,8 +383,8 @@ status_t TPM_SetupPwm(TPM_Type *base,
             /* Fix ERROR050050  When TPM is configured in EPWM mode as PS = 0, the compare event is missed on
             the first reload/overflow after writing 1 to the CnV register and causes an incorrect duty output.*/
 #if (defined(FSL_FEATURE_TPM_HAS_ERRATA_050050) && FSL_FEATURE_TPM_HAS_ERRATA_050050)
-            assert(!(mode == kTPM_EdgeAlignedPwm && cnv == 1U &&
-                     (base->SC & TPM_SC_PS_MASK) == kTPM_Prescale_Divide_1));
+            assert(
+                !(mode == kTPM_EdgeAlignedPwm && cnv == 1U && (base->SC & TPM_SC_PS_MASK) == kTPM_Prescale_Divide_1));
 #endif
             /* When switching mode, disable channel first */
             base->CONTROLS[chnlParams->chnlNumber].CnSC &=
@@ -433,6 +433,8 @@ void TPM_UpdatePwmDutycycle(TPM_Type *base,
                             uint8_t dutyCyclePercent)
 {
     assert(chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
+    assert(chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
+
 #if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
     if (currentPwmMode == kTPM_CombinedPwm)
     {
@@ -460,7 +462,7 @@ void TPM_UpdatePwmDutycycle(TPM_Type *base,
         {
             cnv = mod + 1u;
         }
-        base->CONTROLS[(((uint8_t)chnlNumber * 2u) + 1u) & 0x3U].CnV = cnvFirstEdge + cnv;
+        base->CONTROLS[(((uint8_t)chnlNumber * 2u) + 1u) & 0x3U].CnV = (uint32_t)cnvFirstEdge + (uint32_t)cnv;
     }
     else
     {
@@ -499,6 +501,7 @@ void TPM_UpdatePwmDutycycle(TPM_Type *base,
 void TPM_UpdateChnlEdgeLevelSelect(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_t level)
 {
     assert(chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
+    assert(chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
 
     uint32_t reg = base->CONTROLS[chnlNumber].CnSC
 #if !(defined(FSL_FEATURE_TPM_CnSC_CHF_WRITE_0_CLEAR) && FSL_FEATURE_TPM_CnSC_CHF_WRITE_0_CLEAR)
@@ -543,6 +546,7 @@ void TPM_UpdateChnlEdgeLevelSelect(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_
 void TPM_SetupInputCapture(TPM_Type *base, tpm_chnl_t chnlNumber, tpm_input_capture_edge_t captureMode)
 {
     assert(chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
+    assert(chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
 
 #if defined(FSL_FEATURE_TPM_HAS_QDCTRL) && FSL_FEATURE_TPM_HAS_QDCTRL
     /* The TPM's QDCTRL register required to be effective */
@@ -561,7 +565,7 @@ void TPM_SetupInputCapture(TPM_Type *base, tpm_chnl_t chnlNumber, tpm_input_capt
     if (0 != FSL_FEATURE_TPM_COMBINE_HAS_EFFECTn(base))
     {
         /* Clear the combine bit for chnlNumber */
-        base->COMBINE &= ~(1U << (TPM_COMBINE_SHIFT * ((uint32_t)chnlNumber / 2U)));
+        base->COMBINE &= ~((uint32_t)1U << (((uint32_t)chnlNumber / 2U) * TPM_COMBINE_SHIFT));
     }
 #endif
 
@@ -602,6 +606,7 @@ void TPM_SetupOutputCompare(TPM_Type *base,
                             uint32_t compareValue)
 {
     assert(chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
+    assert(chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
 
 #if defined(FSL_FEATURE_TPM_HAS_QDCTRL) && FSL_FEATURE_TPM_HAS_QDCTRL
     /* The TPM's QDCTRL register required to be effective */
@@ -710,7 +715,7 @@ void TPM_SetupDualEdgeCapture(TPM_Type *base,
     {
         reg = base->COMBINE;
         /* Clear the swap bit for the channel pair */
-        reg &= ~(TPM_COMBINE_COMSWAP0_MASK << (TPM_COMBINE_COMSWAP0_SHIFT * (uint32_t)chnlPairNumber));
+        reg &= ~((uint32_t)TPM_COMBINE_COMSWAP0_MASK << ((uint32_t)chnlPairNumber * TPM_COMBINE_COMSWAP0_SHIFT));
         u32flag = TPM_COMBINE_COMBINE0_MASK;
 
         /* Set the combine bit for the channel pair */
@@ -719,7 +724,7 @@ void TPM_SetupDualEdgeCapture(TPM_Type *base,
 
         /* Input filter setup for channel n input */
         reg = base->FILTER;
-        reg &= ~(TPM_FILTER_CH0FVAL_MASK << (TPM_FILTER_CH1FVAL_SHIFT * (uint32_t)chnlPairNumber));
+        reg &= ~((uint32_t)TPM_FILTER_CH0FVAL_MASK << (TPM_FILTER_CH1FVAL_SHIFT * (uint32_t)chnlPairNumber));
         reg |= (filterValue << (TPM_FILTER_CH1FVAL_SHIFT * (uint32_t)chnlPairNumber));
         base->FILTER = reg;
     }

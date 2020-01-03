@@ -20,7 +20,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PLU_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version 2.2.0 */
+#define FSL_PLU_DRIVER_VERSION (MAKE_VERSION(2, 2, 1)) /*!< Version 2.2.1 */
                                                        /*@}*/
 
 /*! @brief Index of LUT */
@@ -186,8 +186,8 @@ typedef enum _plu_wakeint_filter_clock_source
 
 typedef struct _plu_wakeint_config
 {
-    plu_wakeint_filter_mode_t filterMode;          /*!< Control the filter mode */
-    plu_wakeint_filter_clock_source_t clockSource; /*!< Control clock source for filter mode */
+    plu_wakeint_filter_mode_t filterMode;
+    plu_wakeint_filter_clock_source_t clockSource;
 } plu_wakeint_config_t;
 #endif /* FSL_FEATURE_PLU_HAS_WAKEINT_CTRL_REG */
 
@@ -243,7 +243,7 @@ static inline void PLU_SetLutInputSource(PLU_Type *base,
                                          plu_lut_in_index_t lutInIndex,
                                          plu_lut_input_source_t inputSrc)
 {
-    PLU->LUT[lutIndex].INP_MUX[lutInIndex] = inputSrc;
+    PLU->LUT[lutIndex].INP_MUX[lutInIndex] = (uint32_t)inputSrc;
 }
 
 /*!
@@ -257,7 +257,7 @@ static inline void PLU_SetLutInputSource(PLU_Type *base,
  */
 static inline void PLU_SetOutputSource(PLU_Type *base, plu_output_index_t outputIndex, plu_output_source_t outputSrc)
 {
-    base->OUTPUT_MUX[outputIndex] = outputSrc;
+    base->OUTPUT_MUX[outputIndex] = (uint32_t)outputSrc;
 }
 
 /*!

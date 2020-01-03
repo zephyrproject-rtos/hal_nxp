@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -41,10 +41,10 @@
  */
 void WDOG_GetDefaultConfig(wdog_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->enableWdog  = true;
     config->clockSource = kWDOG_LpoClockSource;
@@ -82,9 +82,9 @@ void WDOG_GetDefaultConfig(wdog_config_t *config)
  */
 void WDOG_Init(WDOG_Type *base, const wdog_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
-    uint32_t value        = 0U;
+    uint16_t value        = 0U;
     uint32_t primaskValue = 0U;
 
     value = WDOG_STCTRLH_WDOGEN(config->enableWdog) | WDOG_STCTRLH_CLKSRC(config->clockSource) |
@@ -151,9 +151,9 @@ void WDOG_Deinit(WDOG_Type *base)
  */
 void WDOG_SetTestModeConfig(WDOG_Type *base, wdog_test_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
-    uint32_t value        = 0U;
+    uint16_t value        = 0U;
     uint32_t primaskValue = 0U;
 
     value = WDOG_STCTRLH_DISTESTWDOG(0U) | WDOG_STCTRLH_TESTWDOG(1U) | WDOG_STCTRLH_TESTSEL(config->testMode) |
@@ -192,8 +192,8 @@ uint32_t WDOG_GetStatusFlags(WDOG_Type *base)
 {
     uint32_t status_flag = 0U;
 
-    status_flag |= (base->STCTRLH & WDOG_STCTRLH_WDOGEN_MASK);
-    status_flag |= (base->STCTRLL & WDOG_STCTRLL_INTFLG_MASK);
+    status_flag |= ((uint32_t)base->STCTRLH & (uint32_t)WDOG_STCTRLH_WDOGEN_MASK);
+    status_flag |= ((uint32_t)base->STCTRLL & (uint32_t)WDOG_STCTRLL_INTFLG_MASK);
 
     return status_flag;
 }
@@ -214,7 +214,7 @@ uint32_t WDOG_GetStatusFlags(WDOG_Type *base)
  */
 void WDOG_ClearStatusFlags(WDOG_Type *base, uint32_t mask)
 {
-    if (mask & kWDOG_TimeoutFlag)
+    if (0U != (mask & (uint32_t)kWDOG_TimeoutFlag))
     {
         base->STCTRLL |= WDOG_STCTRLL_INTFLG_MASK;
     }

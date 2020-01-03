@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief ADC driver version */
-#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
+#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3. */
 
 /*!
  * @brief Converter's status flags.
@@ -302,7 +302,7 @@ static inline uint32_t ADC_GetChannelStatusFlags(ADC_Type *base, uint32_t channe
     assert(channelGroup < FSL_FEATURE_ADC_CONVERSION_CONTROL_COUNT);
 
     /* If flag is set,return 1,otherwise, return 0. */
-    return (((base->HS) & (1U << channelGroup)) >> channelGroup);
+    return (((base->HS) & (1UL << channelGroup)) >> channelGroup);
 }
 
 /*!

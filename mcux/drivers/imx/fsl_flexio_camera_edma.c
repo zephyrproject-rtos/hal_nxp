@@ -78,7 +78,7 @@ static void FLEXIO_CAMERA_TransferReceiveEDMACallback(edma_handle_t *handle,
     {
         FLEXIO_CAMERA_TransferAbortReceiveEDMA(cameraPrivateHandle->base, cameraPrivateHandle->handle);
 
-        if (cameraPrivateHandle->handle->callback)
+        if (cameraPrivateHandle->handle->callback != NULL)
         {
             cameraPrivateHandle->handle->callback(cameraPrivateHandle->base, cameraPrivateHandle->handle,
                                                   kStatus_FLEXIO_CAMERA_RxIdle, cameraPrivateHandle->handle->userData);
@@ -104,10 +104,10 @@ status_t FLEXIO_CAMERA_TransferCreateHandleEDMA(FLEXIO_CAMERA_Type *base,
 {
     assert(handle);
 
-    uint8_t index = 0;
+    uint8_t index;
 
     /* Find the an empty handle pointer to store the handle. */
-    for (index = 0; index < FLEXIO_CAMERA_HANDLE_COUNT; index++)
+    for (index = 0U; index < (uint8_t)FLEXIO_CAMERA_HANDLE_COUNT; index++)
     {
         if (s_edmaPrivateHandle[index].base == NULL)
         {
@@ -117,7 +117,7 @@ status_t FLEXIO_CAMERA_TransferCreateHandleEDMA(FLEXIO_CAMERA_Type *base,
         }
     }
 
-    if (index == FLEXIO_CAMERA_HANDLE_COUNT)
+    if (index == (uint8_t)FLEXIO_CAMERA_HANDLE_COUNT)
     {
         return kStatus_OutOfRange;
     }
@@ -125,16 +125,16 @@ status_t FLEXIO_CAMERA_TransferCreateHandleEDMA(FLEXIO_CAMERA_Type *base,
     s_edmaPrivateHandle[index].base   = base;
     s_edmaPrivateHandle[index].handle = handle;
 
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
-    handle->rxState      = kFLEXIO_CAMERA_RxIdle;
+    handle->rxState      = (uint8_t)kFLEXIO_CAMERA_RxIdle;
     handle->rxEdmaHandle = rxEdmaHandle;
 
     handle->callback = callback;
     handle->userData = userData;
 
     /* Configure RX. */
-    if (rxEdmaHandle)
+    if (rxEdmaHandle != NULL)
     {
         EDMA_SetCallback(handle->rxEdmaHandle, FLEXIO_CAMERA_TransferReceiveEDMACallback, &s_edmaPrivateHandle);
     }
@@ -164,23 +164,23 @@ status_t FLEXIO_CAMERA_TransferReceiveEDMA(FLEXIO_CAMERA_Type *base,
     status_t status;
 
     /* If previous RX not finished. */
-    if (kFLEXIO_CAMERA_RxBusy == handle->rxState)
+    if ((uint8_t)kFLEXIO_CAMERA_RxBusy == handle->rxState)
     {
         status = kStatus_FLEXIO_CAMERA_RxBusy;
     }
     else
     {
-        handle->rxState = kFLEXIO_CAMERA_RxBusy;
+        handle->rxState = (uint8_t)kFLEXIO_CAMERA_RxBusy;
 
         /* Prepare transfer. */
-        EDMA_PrepareTransfer(&xferConfig, (void *)FLEXIO_CAMERA_GetRxBufferAddress(base), 32, (void *)xfer->dataAddress,
-                             32, 32, xfer->dataNum, kEDMA_PeripheralToMemory);
+        EDMA_PrepareTransfer(&xferConfig, (uint32_t *)FLEXIO_CAMERA_GetRxBufferAddress(base), 32,
+                             (uint32_t *)xfer->dataAddress, 32, 32, xfer->dataNum, kEDMA_PeripheralToMemory);
 
         /* Store the initially configured eDMA minor byte transfer count into the FLEXIO CAMERA handle */
         handle->nbytes = 32;
 
         /* Submit transfer. */
-        EDMA_SubmitTransfer(handle->rxEdmaHandle, &xferConfig);
+        (void)EDMA_SubmitTransfer(handle->rxEdmaHandle, &xferConfig);
         EDMA_StartTransfer(handle->rxEdmaHandle);
         /* Enable CAMERA RX EDMA. */
         FLEXIO_CAMERA_EnableRxDMA(base, true);
@@ -208,7 +208,7 @@ void FLEXIO_CAMERA_TransferAbortReceiveEDMA(FLEXIO_CAMERA_Type *base, flexio_cam
     /* Stop transfer. */
     EDMA_StopTransfer(handle->rxEdmaHandle);
 
-    handle->rxState = kFLEXIO_CAMERA_RxIdle;
+    handle->rxState = (uint8_t)kFLEXIO_CAMERA_RxIdle;
 }
 
 /*!
@@ -228,12 +228,12 @@ status_t FLEXIO_CAMERA_TransferGetReceiveCountEDMA(FLEXIO_CAMERA_Type *base,
 {
     assert(handle->rxEdmaHandle);
 
-    if (!count)
+    if (NULL == count)
     {
         return kStatus_InvalidArgument;
     }
 
-    if (kFLEXIO_CAMERA_RxBusy == handle->rxState)
+    if ((uint8_t)kFLEXIO_CAMERA_RxBusy == handle->rxState)
     {
         *count = (handle->rxSize -
                   (uint32_t)handle->nbytes *
