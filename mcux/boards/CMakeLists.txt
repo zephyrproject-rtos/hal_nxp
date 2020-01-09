@@ -4,7 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-if(CONFIG_BOARD_MIMXRT1015_EVK)
+if(CONFIG_BOARD_MIMXRT1010_EVK)
+  set(MCUX_BOARD evkmimxrt1010)
+elseif(CONFIG_BOARD_MIMXRT1015_EVK)
   set(MCUX_BOARD evkmimxrt1015)
 elseif(CONFIG_BOARD_MIMXRT1020_EVK)
   set(MCUX_BOARD evkmimxrt1020)
