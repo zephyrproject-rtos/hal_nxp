@@ -32,6 +32,10 @@ zephyr_compile_definitions(${MCUX_CPU})
 # practice, drilling down like this avoids the need for repetitive
 # build scripts for every mcux device.
 zephyr_sources(devices/${MCUX_DEVICE}/fsl_clock.c)
+# fsl_clock use the functions in fsl_common.
+if (${MCUX_DEVICE} MATCHES "LPC55S69")
+  zephyr_sources(drivers/lpc/fsl_common.c)
+endif()
 if (${MCUX_DEVICE} MATCHES "LPC")
   zephyr_sources(devices/${MCUX_DEVICE}/fsl_power.c)
   zephyr_sources(devices/${MCUX_DEVICE}/fsl_reset.c)
