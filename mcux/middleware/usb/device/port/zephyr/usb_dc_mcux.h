@@ -8,7 +8,7 @@
 #ifndef __USB_DC_MCUX_H__
 #define __USB_DC_MCUX_H__
 
-#include <usb/usb_dc.h>
+#include <drivers/usb/usb_dc.h>
 #include "usb_spec.h"
 
 /******************************************************************************
