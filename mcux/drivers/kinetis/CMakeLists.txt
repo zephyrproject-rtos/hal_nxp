@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2018, NXP
+# Copyright 2018, 2020 NXP
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -35,6 +35,7 @@ zephyr_sources_ifdef(CONFIG_HAS_MCUX_SMC       fsl_smc.c)
 zephyr_sources_ifdef(CONFIG_COUNTER_MCUX_LPTMR fsl_lptmr.c)
 zephyr_sources_ifdef(CONFIG_DAC_MCUX_DAC       fsl_dac.c)
 zephyr_sources_ifdef(CONFIG_DAC_MCUX_DAC32     fsl_dac32.c)
+zephyr_sources_ifdef(CONFIG_PWM_MCUX_TPM       fsl_tpm.c)
 
 if(NOT CONFIG_ASSERT OR CONFIG_FORCE_NO_ASSERT)
   zephyr_compile_definitions(NDEBUG) # squelch fsl_flexcan.c warning
