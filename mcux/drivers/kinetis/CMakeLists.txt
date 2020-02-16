@@ -33,6 +33,8 @@ zephyr_sources_ifdef(CONFIG_WDT_MCUX_WDOG32    fsl_wdog32.c)
 zephyr_sources_ifdef(CONFIG_CAN_MCUX_FLEXCAN   fsl_flexcan.c)
 zephyr_sources_ifdef(CONFIG_HAS_MCUX_SMC       fsl_smc.c)
 zephyr_sources_ifdef(CONFIG_COUNTER_MCUX_LPTMR fsl_lptmr.c)
+zephyr_sources_ifdef(CONFIG_DAC_MCUX_DAC       fsl_dac.c)
+zephyr_sources_ifdef(CONFIG_DAC_MCUX_DAC32     fsl_dac32.c)
 
 if(NOT CONFIG_ASSERT OR CONFIG_FORCE_NO_ASSERT)
   zephyr_compile_definitions(NDEBUG) # squelch fsl_flexcan.c warning
