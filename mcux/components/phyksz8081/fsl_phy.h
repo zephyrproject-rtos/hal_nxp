@@ -87,7 +87,8 @@
 #define PHY_10BASETX_HALFDUPLEX_MASK 0x020U  /*!< The PHY has the 10M full duplex ability.*/
 
 /*! @brief Defines the mask flag in PHY Operation Mode Strap Override/Status register. */
-#define PHY_OMS_NANDTREE_MASK 0x0020U /*!< The PHY NAND Tree Strap-In Override/Status mask. */
+#define PHY_OMS_NANDTREE_MASK 0x0020U     /*!< The PHY NAND Tree Strap-In Override/Status mask. */
+#define PHY_OMS_FACTORY_MODE_MASK 0x8000U /*!< The factory mode Override/Status mask. */
 
 /*! @brief Defines the PHY status. */
 enum _phy_status
