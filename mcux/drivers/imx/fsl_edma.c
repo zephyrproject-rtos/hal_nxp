@@ -1058,7 +1058,7 @@ status_t EDMA_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t
             this check mechanism, EDMA_CreatHandle will clear CSR register.
         */
         tmpCSR = tcdRegs->CSR;
-        if ((tmpCSR != 0UL) && ((tmpCSR & DMA_CSR_DONE_MASK) == 0UL))
+        if ((tmpCSR & DMA_CSR_ACTIVE_MASK) == DMA_CSR_ACTIVE_MASK)
         {
             return kStatus_EDMA_Busy;
         }
