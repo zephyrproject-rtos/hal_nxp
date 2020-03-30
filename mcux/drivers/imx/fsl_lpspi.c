@@ -577,7 +577,7 @@ uint32_t LPSPI_MasterSetDelayTimes(LPSPI_Type *base,
                                    lpspi_delay_type_t whichDelay,
                                    uint32_t srcClock_Hz)
 {
-    uint32_t realDelay, bestDelay;
+    uint64_t realDelay, bestDelay;
     uint32_t scaler, bestScaler;
     uint32_t diff, min_diff;
     uint64_t initialDelayNanoSec;
