@@ -6,6 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#define DT_DRV_COMPAT nxp_kinetis_usbd
+
 #include "usb_dc_mcux.h"
 
 #if ((defined(USB_DEVICE_CONFIG_EHCI)) && (USB_DEVICE_CONFIG_EHCI > 0U))
@@ -1189,12 +1191,12 @@ usb_status_t USB_DeviceEhciInit(uint8_t controllerId,
     }
 #endif
 
-#ifdef DT_USBD_MCUX_EHCI_MAXIMUM_SPEED
-    if (!strncmp(DT_USBD_MCUX_EHCI_MAXIMUM_SPEED, "full-speed", 10))
+#if DT_INST_NODE_HAS_PROP(0, maximum_speed)
+    if (!strncmp(DT_INST_PROP(0, maximum_speed), "full-speed", 10))
     {
         ehciState->registerBase->PORTSC1 |= USB_PORTSC1_PFSC_MASK;
     }
-#endif /* DT_USBD_MCUX_EHCI_MAXIMUM_SPEED */
+#endif
 
     return kStatus_USB_Success;
 }
