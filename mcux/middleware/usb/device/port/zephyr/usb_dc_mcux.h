@@ -227,24 +227,24 @@ typedef enum _usb_status {
 
 /* Device notification message structure */
 typedef struct _usb_device_callback_message_struct {
-	u8_t *buffer;   /* Transferred buffer */
-	u32_t length;   /* Transferred data length */
-	u8_t code;      /* Notification code */
-	u8_t isSetup;   /* Is in a setup phase */
+	uint8_t *buffer;   /* Transferred buffer */
+	uint32_t length;   /* Transferred data length */
+	uint8_t code;      /* Notification code */
+	uint8_t isSetup;   /* Is in a setup phase */
 } usb_device_callback_message_struct_t;
 
 typedef struct usb_ep_ctrl_data {
 	usb_device_callback_message_struct_t transfer_message;
 	struct k_mem_block block;
 	usb_dc_ep_callback callback;
-	u16_t ep_mps;
-	u8_t ep_type;
-	u8_t ep_enabled : 1;
-	u8_t ep_occupied : 1;
+	uint16_t ep_mps;
+	uint8_t ep_type;
+	uint8_t ep_enabled : 1;
+	uint8_t ep_occupied : 1;
 } usb_ep_ctrl_data_t;
 
 /* USB device controller initialization function typedef */
-typedef usb_status_t (*usb_device_controller_init_t)(u8_t controllerId,
+typedef usb_status_t (*usb_device_controller_init_t)(uint8_t controllerId,
 						     usb_device_handle handle,
 						     usb_device_controller_handle *controllerHandle);
 
@@ -253,21 +253,21 @@ typedef usb_status_t (*usb_device_controller_deinit_t)(usb_device_controller_han
 
 /* USB device controller send data function typedef */
 typedef usb_status_t (*usb_device_controller_send_t)(usb_device_controller_handle controllerHandle,
-						     u8_t endpointAddress,
-						     u8_t *buffer,
-						     u32_t length);
+						     uint8_t endpointAddress,
+						     uint8_t *buffer,
+						     uint32_t length);
 
 /* USB device controller receive data function typedef */
 typedef usb_status_t (*usb_device_controller_recv_t)(usb_device_controller_handle controllerHandle,
-						     u8_t endpointAddress,
-						     u8_t *buffer,
-						     u32_t length);
+						     uint8_t endpointAddress,
+						     uint8_t *buffer,
+						     uint32_t length);
 
 /* USB device controller cancel transfer function
  * in a specified endpoint typedef
  */
 typedef usb_status_t (*usb_device_controller_cancel_t)(usb_device_controller_handle controllerHandle,
-						       u8_t endpointAddress);
+						       uint8_t endpointAddress);
 
 /* USB device controller control function typedef */
 typedef usb_status_t (*usb_device_controller_control_t)(usb_device_controller_handle controllerHandle,
@@ -299,22 +299,22 @@ typedef struct _usb_device_struct {
 	usb_ep_ctrl_data_t *eps;
 	bool attached;
 	/* Current device address */
-	u8_t address;
+	uint8_t address;
 	/* Controller ID */
-	u8_t controllerId;
+	uint8_t controllerId;
 	/* Current device state */
-	u8_t state;
+	uint8_t state;
 	/* Is doing device reset or not */
-	u8_t isResetting;
-	u8_t setupDataStage;
+	uint8_t isResetting;
+	uint8_t setupDataStage;
 } usb_device_struct_t;
 
 /* Endpoint status structure */
 typedef struct _usb_device_endpoint_status_struct {
 	/* Endpoint address */
-	u8_t endpointAddress;
+	uint8_t endpointAddress;
 	/* Endpoint status : idle or stalled */
-	u16_t endpointStatus;
+	uint16_t endpointStatus;
 } usb_device_endpoint_status_struct_t;
 
 /* Defines endpoint state */
@@ -328,13 +328,13 @@ typedef enum _usb_endpoint_status {
 /* Endpoint initialization structure */
 typedef struct _usb_device_endpoint_init_struct {
 	/* Endpoint maximum packet size */
-	u16_t maxPacketSize;
+	uint16_t maxPacketSize;
 	/* Endpoint address*/
-	u8_t endpointAddress;
+	uint8_t endpointAddress;
 	/* Endpoint transfer type*/
-	u8_t transferType;
+	uint8_t transferType;
 	/* ZLT flag*/
-	u8_t zlt;
+	uint8_t zlt;
 } usb_device_endpoint_init_struct_t;
 
 #endif /* __USB_DC_MCUX_H__ */
