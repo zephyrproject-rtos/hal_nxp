@@ -1198,6 +1198,8 @@ static void LPSPI_MasterTransferComplete(LPSPI_Type *base, lpspi_master_handle_t
 {
     assert(handle);
 
+    LPSPI_ClearStatusFlags(base, kLPSPI_TransferCompleteFlag);
+
     /* Disable interrupt requests*/
     LPSPI_DisableInterrupts(base, (uint32_t)kLPSPI_AllInterruptEnable);
 
