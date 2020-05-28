@@ -95,3 +95,5 @@ Patch List:
    * Add USB device controller drivers, the drivers are based on MCUXpresso SDK release tag REL_2.5.0_REL9_RFP_RC3_7_1.
 
    * Add EDMA bug fix for EDMA_SubmitTransfer busy state judgement, this fix applys to 2.7.0
+
+   * Add spi bug fix in fsl_lpspi.c for other interrupts treated as transfer completion.
