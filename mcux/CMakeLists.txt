@@ -34,10 +34,10 @@ zephyr_compile_definitions(${MCUX_CPU})
 # Build mcux device-specific objects. Although it is not normal
 # practice, drilling down like this avoids the need for repetitive
 # build scripts for every mcux device.
-zephyr_sources(devices/${MCUX_DEVICE}/fsl_clock.c)
+zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_clock.c)
 if (${MCUX_DEVICE} MATCHES "LPC")
-  zephyr_sources(devices/${MCUX_DEVICE}/fsl_power.c)
-  zephyr_sources(devices/${MCUX_DEVICE}/fsl_reset.c)
+  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_power.c)
+  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_reset.c)
 endif()
 
 
@@ -58,4 +58,4 @@ add_subdirectory_ifdef(
 
 enable_language(C ASM)
 
-zephyr_sources_ifdef(CONFIG_SOC_LPC54114_M4 devices/${MCUX_DEVICE}/gcc/startup_LPC54114_cm4.S)
+zephyr_library_sources_ifdef(CONFIG_SOC_LPC54114_M4 devices/${MCUX_DEVICE}/gcc/startup_LPC54114_cm4.S)

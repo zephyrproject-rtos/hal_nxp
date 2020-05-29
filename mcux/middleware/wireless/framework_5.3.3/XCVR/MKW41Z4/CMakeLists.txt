@@ -1,4 +1,4 @@
-zephyr_sources(
+zephyr_library_sources(
   cfgs_kw4x_3x_2x/fsl_xcvr_ant_config.c
   cfgs_kw4x_3x_2x/fsl_xcvr_ble_config.c
   cfgs_kw4x_3x_2x/fsl_xcvr_common_config.c

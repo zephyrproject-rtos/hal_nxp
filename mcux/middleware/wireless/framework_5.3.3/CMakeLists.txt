@@ -4,4 +4,4 @@ zephyr_include_directories(XCVR/${MCUX_DEVICE})
 
 add_subdirectory(XCVR/${MCUX_DEVICE})
 
-zephyr_sources(OSAbstraction/Source/fsl_os_abstraction_zephyr.c)
+zephyr_library_sources(OSAbstraction/Source/fsl_os_abstraction_zephyr.c)
