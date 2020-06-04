@@ -1863,6 +1863,7 @@ status_t ENET_SendFrame(ENET_Type *base,
         else if ((handle->txReclaimEnable[ringId]) && !ENET_TxDirtyRingAvailable(txDirtyRing))
         {
             result = kStatus_ENET_TxFrameBusy;
+            ENET_ReclaimTxDescriptor(base, handle, ringId);
         }
         else
         {
@@ -3227,14 +3228,16 @@ void ENET_Ptp1588Configure(ENET_Type *base, enet_handle_t *handle, enet_ptp_conf
  */
 void ENET_Ptp1588StartTimer(ENET_Type *base, uint32_t ptpClkSrc)
 {
-    /* Restart PTP 1588 timer, master clock. */
-    base->ATCR = ENET_ATCR_RESTART_MASK;
-
     /* Initializes PTP 1588 timer. */
     base->ATINC = ENET_ATINC_INC(ENET_NANOSECOND_ONE_SECOND / ptpClkSrc);
     base->ATPER = ENET_NANOSECOND_ONE_SECOND;
     /* Sets periodical event and the event signal output assertion and Actives PTP 1588 timer.  */
     base->ATCR = ENET_ATCR_PEREN_MASK | ENET_ATCR_PINPER_MASK | ENET_ATCR_EN_MASK;
+    /* Restart PTP 1588 timer, master clock. */
+    base->ATCR |= ENET_ATCR_RESTART_MASK;
+    while ((base->ATCR & ENET_ATCR_RESTART_MASK) == ENET_ATCR_RESTART_MASK) {
+	;
+    }
 }
 
 /*!
