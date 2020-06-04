@@ -15,6 +15,7 @@ zephyr_library_compile_definitions_ifdef(
 )
 
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_GPT	fsl_gpt.c)
+zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_PIT	fsl_pit.c)
 zephyr_library_sources_ifdef(CONFIG_DISPLAY_MCUX_ELCDIF	fsl_elcdif.c)
 zephyr_library_sources_ifdef(CONFIG_DMA_MCUX_EDMA	fsl_edma.c)
 zephyr_library_sources_ifdef(CONFIG_DMA_MCUX_EDMA	fsl_dmamux.c)
