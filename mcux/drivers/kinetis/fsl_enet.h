@@ -118,7 +118,7 @@
 
 /*! @name Defines some Ethernet parameters. */
 /*@{*/
-#define ENET_FRAME_MAX_FRAMELEN 1518U /*!< Default maximum Ethernet frame size. */
+#define ENET_FRAME_MAX_FRAMELEN 1519U /*!< Default maximum Ethernet frame size. */
 
 #define ENET_FIFO_MIN_RX_FULL  5U                                        /*!< ENET minimum receive FIFO full. */
 #define ENET_RX_MIN_BUFFERSIZE 256U                                      /*!< ENET minimum buffer size. */
