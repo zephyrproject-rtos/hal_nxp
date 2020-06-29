@@ -97,3 +97,6 @@ Patch List:
    * Add EDMA bug fix for EDMA_SubmitTransfer busy state judgement, this fix applys to 2.7.0
 
    * Add spi bug fix in fsl_lpspi.c for other interrupts treated as transfer completion.
+
+   * Add support for LPC's Flexcomm spi driver to discard Rx by providing NULL Rx buffer.
+ 
