@@ -77,7 +77,7 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
  */
 uint32_t CLOCK_GetCoreM4Freq(void)
 {
-    uint32_t freq;
+    uint32_t freq = 0U;
     uint32_t pre  = CLOCK_GetRootPreDivider(kCLOCK_RootM4);
     uint32_t post = CLOCK_GetRootPostDivider(kCLOCK_RootM4);
 
@@ -122,7 +122,7 @@ uint32_t CLOCK_GetCoreM4Freq(void)
  */
 uint32_t CLOCK_GetAxiFreq(void)
 {
-    uint32_t freq;
+    uint32_t freq = 0U;
     uint32_t pre  = CLOCK_GetRootPreDivider(kCLOCK_RootAxi);
     uint32_t post = CLOCK_GetRootPostDivider(kCLOCK_RootAxi);
 
@@ -167,7 +167,7 @@ uint32_t CLOCK_GetAxiFreq(void)
  */
 uint32_t CLOCK_GetAhbFreq(void)
 {
-    uint32_t freq;
+    uint32_t freq = 0U;
     uint32_t pre  = CLOCK_GetRootPreDivider(kCLOCK_RootAhb);
     uint32_t post = CLOCK_GetRootPostDivider(kCLOCK_RootAhb);
 
