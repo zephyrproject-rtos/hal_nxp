@@ -11,7 +11,7 @@
 **
 **     Reference manual:    IMXRT1010RM Rev.0, 09/2019
 **     Version:             rev. 1.1, 2019-08-06
-**     Build:               b190916
+**     Build:               b191119
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -66,7 +66,10 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
 
 void SystemInit (void) {
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-  SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access */
+  SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access in Secure mode */
+  #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+  SCB_NS->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access in Non-secure mode */
+  #endif /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 #endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
 #if defined(__MCUXPRESSO)
@@ -81,11 +84,11 @@ WDOG2->WMCR &= ~WDOG_WMCR_PDE_MASK;
 /* Watchdog disable */
 
 #if (DISABLE_WDOG)
-    if (WDOG1->WCR & WDOG_WCR_WDE_MASK)
+    if ((WDOG1->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
         WDOG1->WCR &= ~WDOG_WCR_WDE_MASK;
     }
-    if (WDOG2->WCR & WDOG_WCR_WDE_MASK)
+    if ((WDOG2->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
         WDOG2->WCR &= ~WDOG_WCR_WDE_MASK;
     }
@@ -95,7 +98,7 @@ WDOG2->WMCR &= ~WDOG_WMCR_PDE_MASK;
 #endif /* (DISABLE_WDOG) */
 
     /* Disable Systick which might be enabled by bootrom */
-    if (SysTick->CTRL & SysTick_CTRL_ENABLE_Msk)
+    if ((SysTick->CTRL & SysTick_CTRL_ENABLE_Msk) != 0U)
     {
         SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
     }
@@ -126,18 +129,18 @@ void SystemCoreClockUpdate (void) {
     uint32_t PLL3MainClock;
 
     /* Check if system pll is bypassed */
-    if(CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_BYPASS_MASK)
+    if((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_BYPASS_MASK) != 0U)
     {
         PLL2MainClock = CPU_XTAL_CLK_HZ;
     }
     else
     {
-        PLL2MainClock = (CPU_XTAL_CLK_HZ * ((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_DIV_SELECT_MASK) ? 22U : 20U));
+        PLL2MainClock = (CPU_XTAL_CLK_HZ * (((CCM_ANALOG->PLL_SYS & CCM_ANALOG_PLL_SYS_DIV_SELECT_MASK) != 0U) ? 22U : 20U));
     }
-    PLL2MainClock += ((uint64_t)CPU_XTAL_CLK_HZ * ((uint64_t)(CCM_ANALOG->PLL_SYS_NUM))) / ((uint64_t)(CCM_ANALOG->PLL_SYS_DENOM));
+    PLL2MainClock += (uint32_t)(((uint64_t)CPU_XTAL_CLK_HZ * ((uint64_t)(CCM_ANALOG->PLL_SYS_NUM))) / ((uint64_t)(CCM_ANALOG->PLL_SYS_DENOM)));
 
     /* Check if usb1 pll is bypassed */
-    if(CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_BYPASS_MASK)
+    if((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_BYPASS_MASK) != 0U)
     {
         PLL3MainClock = CPU_XTAL_CLK_HZ;
     }
@@ -147,7 +150,7 @@ void SystemCoreClockUpdate (void) {
     }
 
     /* Periph_clk2_clk ---> Periph_clk */
-    if (CCM->CBCDR & CCM_CBCDR_PERIPH_CLK_SEL_MASK)
+    if ((CCM->CBCDR & CCM_CBCDR_PERIPH_CLK_SEL_MASK) != 0U)
     {
         switch (CCM->CBCMR & CCM_CBCMR_PERIPH_CLK2_SEL_MASK)
         {
