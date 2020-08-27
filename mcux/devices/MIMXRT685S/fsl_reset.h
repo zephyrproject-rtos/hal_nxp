@@ -16,7 +16,7 @@
 #include "fsl_device_registers.h"
 
 /*!
- * @addtogroup ksdk_common
+ * @addtogroup reset
  * @{
  */
 
@@ -26,14 +26,12 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.1.0. */
-#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief reset driver version 2.1.1. */
+#define FSL_RESET_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*!
- * @brief Enumeration for peripheral reset control bits
- *
- * Defines the enumeration for peripheral reset control bits in RSTCLTx registers
+ * @brief Reset control registers index
  */
 #define RST_CTL0_PSCCTL0 0
 #define RST_CTL0_PSCCTL1 1
@@ -41,6 +39,11 @@
 #define RST_CTL1_PSCCTL0 3
 #define RST_CTL1_PSCCTL1 4
 #define RST_CTL1_PSCCTL2 5
+/*!
+ * @brief Enumeration for peripheral reset control bits
+ *
+ * Defines the enumeration for peripheral reset control bits in RSTCLTx registers
+ */
 typedef enum _RSTCTL_RSTn
 {
     kDSP_RST_SHIFT_RSTn          = (RST_CTL0_PSCCTL0 << 8) | 1U,  /**< DSP reset control */
@@ -178,6 +181,9 @@ typedef enum _RSTCTL_RSTn
         kOSEVENT_TIMER_RST_SHIFT_RSTn \
     } /* Reset bits for OSTIMER peripheral */
 
+/*!
+ * @brief IP reset handle
+ */
 typedef RSTCTL_RSTn_t reset_ip_name_t;
 
 /*******************************************************************************

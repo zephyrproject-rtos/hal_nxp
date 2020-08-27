@@ -19,36 +19,39 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.2.0. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief power driver version 2.2.1. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
-#define MAKE_PD_BITS(reg, slot) (((reg) << 8) | (slot))
+#define MAKE_PD_BITS(reg, slot)  (((reg) << 8) | (slot))
 #define SYSCTL0_PDRCFGSET_REG(x) (*((volatile uint32_t *)((uint32_t)(&(SYSCTL0->PDRUNCFG0_SET)) + ((x) << 2U))))
 #define SYSCTL0_PDRCFGCLR_REG(x) (*((volatile uint32_t *)((uint32_t)(&(SYSCTL0->PDRUNCFG0_CLR)) + ((x) << 2U))))
-#define PDRCFG0 0x0U
-#define PDRCFG1 0x1U
-#define PDRCFG2 0x2U
-#define PDRCFG3 0x3U
+#define PDRCFG0                  0x0U
+#define PDRCFG1                  0x1U
+#define PDRCFG2                  0x2U
+#define PDRCFG3                  0x3U
 
-/* PMC FLAGS register bitfield MASK. */
-#define PMC_FLAGS_PORCOREF_MASK (0x10000U)
-#define PMC_FLAGS_POR1V8F_MASK (0x20000U)
-#define PMC_FLAGS_PORAO18F_MASK (0x40000U)
-#define PMC_FLAGS_LVDCOREF_MASK (0x100000U)
-#define PMC_FLAGS_HVDCOREF_MASK (0x400000U)
-#define PMC_FLAGS_HVD1V8F_MASK (0x1000000U)
-#define PMC_FLAGS_RTCF_MASK (0x8000000U)
-#define PMC_FLAGS_AUTOWKF_MASK (0x10000000U)
-#define PMC_FLAGS_INTNPADF_MASK (0x20000000U)
+/*! PMC FLAGS register bitfield MASK. */
+#define PMC_FLAGS_PORCOREF_MASK   (0x10000U)
+#define PMC_FLAGS_POR1V8F_MASK    (0x20000U)
+#define PMC_FLAGS_PORAO18F_MASK   (0x40000U)
+#define PMC_FLAGS_LVDCOREF_MASK   (0x100000U)
+#define PMC_FLAGS_HVDCOREF_MASK   (0x400000U)
+#define PMC_FLAGS_HVD1V8F_MASK    (0x1000000U)
+#define PMC_FLAGS_RTCF_MASK       (0x8000000U)
+#define PMC_FLAGS_AUTOWKF_MASK    (0x10000000U)
+#define PMC_FLAGS_INTNPADF_MASK   (0x20000000U)
 #define PMC_FLAGS_RESETNPADF_MASK (0x40000000U)
-#define PMC_FLAGS_DEEPPDF_MASK (0x80000000U)
+#define PMC_FLAGS_DEEPPDF_MASK    (0x80000000U)
 
 #define PMC_CTRL_LVDCOREIE_MASK (0x100000U)
 #define PMC_CTRL_HVDCOREIE_MASK (0x400000U)
-#define PMC_CTRL_HVD1V8IE_MASK (0x1000000U)
-#define PMC_CTRL_AUTOWKEN_MASK (0x10000000U)
+#define PMC_CTRL_HVD1V8IE_MASK  (0x1000000U)
+#define PMC_CTRL_AUTOWKEN_MASK  (0x10000000U)
 #define PMC_CTRL_INTRPADEN_MASK (0x20000000U)
+
+/*! PMIC is used but vddcore supply is always above LVD threshold. */
+#define PMIC_VDDCORE_RECOVERY_TIME_IGNORE (0xFFFFFFFFU)
 
 /**
  * @brief PMC event flags.
@@ -301,7 +304,7 @@ extern "C" {
 static inline void POWER_EnablePD(pd_bit_t en)
 {
     /* PDRUNCFGSET */
-    SYSCTL0_PDRCFGSET_REG(en >> 8UL) = (1UL << (en & 0xFFU));
+    SYSCTL0_PDRCFGSET_REG(((uint32_t)en) >> 8UL) = (1UL << (((uint32_t)en) & 0xFFU));
 }
 
 /*!
@@ -312,7 +315,7 @@ static inline void POWER_EnablePD(pd_bit_t en)
 static inline void POWER_DisablePD(pd_bit_t en)
 {
     /* PDRUNCFGCLR */
-    SYSCTL0_PDRCFGCLR_REG(en >> 8UL) = (1UL << (en & 0xFFU));
+    SYSCTL0_PDRCFGCLR_REG(((uint32_t)en) >> 8UL) = (1UL << (((uint32_t)en) & 0xFFU));
 }
 
 /*!
@@ -339,7 +342,12 @@ void POWER_UpdateOscSettlingTime(uint32_t osc_delay);
 
 /**
  * @brief  API to update on-board PMIC vddcore recovery time.
- * @param  pmic_delay : PMIC stabilization time in unit of microsecond
+ *
+ * NOTE: If LDO is used instead of PMIC, don't call it. Otherwise it must be called to allow power library to well
+ * handle the deep sleep process.
+ *
+ * @param  pmic_delay : PMIC stabilization time in unit of microsecond, or PMIC_VDDCORE_RECOVERY_TIME_IGNORE if not
+ * care.
  */
 void POWER_UpdatePmicRecoveryTime(uint32_t pmic_delay);
 
@@ -385,7 +393,9 @@ void POWER_SetAnalogBuffer(bool enable);
  */
 static inline uint32_t POWER_GetPmicMode(pmic_mode_reg_t reg)
 {
-    return ((SYSCTL0_TUPLE_REG(reg) & (SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_MASK | SYSCTL0_PDSLEEPCFG0_PMIC_MODE1_MASK)) >>
+    uint32_t mode = (uint32_t)reg;
+
+    return ((SYSCTL0_TUPLE_REG(mode) & (SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_MASK | SYSCTL0_PDSLEEPCFG0_PMIC_MODE1_MASK)) >>
             SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_SHIFT);
 }
 
@@ -396,9 +406,11 @@ static inline uint32_t POWER_GetPmicMode(pmic_mode_reg_t reg)
  */
 static inline body_bias_mode_t POWER_GetBodyBiasMode(pmic_mode_reg_t reg)
 {
-    return (body_bias_mode_t)(
-        (SYSCTL0_TUPLE_REG(reg) & (SYSCTL0_PDSLEEPCFG0_RBB_PD_MASK | SYSCTL0_PDSLEEPCFG0_FBB_PD_MASK)) >>
-        SYSCTL0_PDSLEEPCFG0_RBB_PD_SHIFT);
+    uint32_t mode   = (uint32_t)reg;
+    uint32_t bbMode = (SYSCTL0_TUPLE_REG(mode) & (SYSCTL0_PDSLEEPCFG0_RBB_PD_MASK | SYSCTL0_PDSLEEPCFG0_FBB_PD_MASK)) >>
+                      SYSCTL0_PDSLEEPCFG0_RBB_PD_SHIFT;
+
+    return (body_bias_mode_t)bbMode;
 }
 
 /*!
@@ -442,6 +454,19 @@ void POWER_SetLvdFallingTripVoltage(power_lvd_falling_trip_vol_val_t volt);
  * @return  Current LVD voltage.
  */
 power_lvd_falling_trip_vol_val_t POWER_GetLvdFallingTripVoltage(void);
+
+/**
+ * @brief   Disable low voltage detection, no reset or interrupt is triggered when vddcore voltage drops below
+ * threshold.
+ * NOTE: This API is for internal use only. Application should not touch it.
+ */
+void POWER_DisableLVD(void);
+
+/**
+ * @brief   Restore low voltage detection setting.
+ * NOTE: This API is for internal use only. Application should not touch it.
+ */
+void POWER_RestoreLVD(void);
 
 /**
  * @brief   Set PMIC_MODE pins configure value.

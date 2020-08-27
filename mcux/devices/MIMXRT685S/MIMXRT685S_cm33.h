@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
 **     Version:             rev. 2.0, 2019-11-12
-**     Build:               b200102
+**     Build:               b200413
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT685S_cm33
@@ -804,6 +804,8 @@ typedef struct {
   /** Array initializer of ADC peripheral base pointers */
   #define ADC_BASE_PTRS                            { ADC0 }
 #endif
+/** Interrupt vectors for the ADC peripheral type */
+#define ADC_IRQS                                 { ADC0_IRQn }
 
 /*!
  * @}
@@ -1250,2375 +1252,2375 @@ typedef struct {
 #define AHB_SECURE_CTRL_FLEXSPI0_REGION4_RULE0_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_FLEXSPI0_REGION4_RULE0_RULE3_SHIFT)) & AHB_SECURE_CTRL_FLEXSPI0_REGION4_RULE0_RULE3_MASK)
 /*! @} */
 
-/*! @name RAM00_RULEN_RAM00_RULE - SRAM Partition 00 Rule(n) Register */
+/*! @name RAM00_RULE - SRAM Partition 00 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM00_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM00_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM00_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE */
-#define AHB_SECURE_CTRL_RAM00_RULEN_RAM00_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM00_RULE */
+#define AHB_SECURE_CTRL_RAM00_RULE_COUNT         (4U)
 
-/*! @name RAM01_RULEN_RAM01_RULE - SRAM Partition 01 Rule(n) Register */
+/*! @name RAM01_RULE - SRAM Partition 01 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM01_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM01_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM01_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE */
-#define AHB_SECURE_CTRL_RAM01_RULEN_RAM01_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM01_RULE */
+#define AHB_SECURE_CTRL_RAM01_RULE_COUNT         (4U)
 
-/*! @name RAM02_RULEN_RAM02_RULE - SRAM Partition 02 Rule(n) Register */
+/*! @name RAM02_RULE - SRAM Partition 02 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM02_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM02_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM02_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE */
-#define AHB_SECURE_CTRL_RAM02_RULEN_RAM02_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM02_RULE */
+#define AHB_SECURE_CTRL_RAM02_RULE_COUNT         (4U)
 
-/*! @name RAM03_RULEN_RAM03_RULE - SRAM Partition 03 Rule(n) Register */
+/*! @name RAM03_RULE - SRAM Partition 03 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM03_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM03_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM03_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE */
-#define AHB_SECURE_CTRL_RAM03_RULEN_RAM03_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM03_RULE */
+#define AHB_SECURE_CTRL_RAM03_RULE_COUNT         (4U)
 
-/*! @name RAM04_RULEN_RAM04_RULE - SRAM Partition 04 Rule(n) Register */
+/*! @name RAM04_RULE - SRAM Partition 04 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM04_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM04_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM04_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE */
-#define AHB_SECURE_CTRL_RAM04_RULEN_RAM04_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM04_RULE */
+#define AHB_SECURE_CTRL_RAM04_RULE_COUNT         (4U)
 
-/*! @name RAM05_RULEN_RAM05_RULE - SRAM Partition 05 Rule(n) Register */
+/*! @name RAM05_RULE - SRAM Partition 05 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM05_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM05_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM05_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE */
-#define AHB_SECURE_CTRL_RAM05_RULEN_RAM05_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM05_RULE */
+#define AHB_SECURE_CTRL_RAM05_RULE_COUNT         (4U)
 
-/*! @name RAM06_RULEN_RAM06_RULE - SRAM Partition 06 Rule(n) Register */
+/*! @name RAM06_RULE - SRAM Partition 06 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM06_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM06_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM06_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE */
-#define AHB_SECURE_CTRL_RAM06_RULEN_RAM06_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM06_RULE */
+#define AHB_SECURE_CTRL_RAM06_RULE_COUNT         (4U)
 
-/*! @name RAM07_RULEN_RAM07_RULE - SRAM Partition 07 Rule(n) Register */
+/*! @name RAM07_RULE - SRAM Partition 07 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM07_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM07_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM07_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE */
-#define AHB_SECURE_CTRL_RAM07_RULEN_RAM07_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM07_RULE */
+#define AHB_SECURE_CTRL_RAM07_RULE_COUNT         (4U)
 
-/*! @name RAM08_RULEN_RAM08_RULE - SRAM Partition 08 Rule(n) Register */
+/*! @name RAM08_RULE - SRAM Partition 08 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM08_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM08_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM08_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE */
-#define AHB_SECURE_CTRL_RAM08_RULEN_RAM08_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM08_RULE */
+#define AHB_SECURE_CTRL_RAM08_RULE_COUNT         (4U)
 
-/*! @name RAM09_RULEN_RAM09_RULE - SRAM Partition 09 Rule(n) Register */
+/*! @name RAM09_RULE - SRAM Partition 09 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM09_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM09_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM09_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE */
-#define AHB_SECURE_CTRL_RAM09_RULEN_RAM09_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM09_RULE */
+#define AHB_SECURE_CTRL_RAM09_RULE_COUNT         (4U)
 
-/*! @name RAM10_RULEN_RAM10_RULE - SRAM Partition 10 Rule(n) Register */
+/*! @name RAM10_RULE - SRAM Partition 10 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM10_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM10_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM10_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE */
-#define AHB_SECURE_CTRL_RAM10_RULEN_RAM10_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM10_RULE */
+#define AHB_SECURE_CTRL_RAM10_RULE_COUNT         (4U)
 
-/*! @name RAM11_RULEN_RAM11_RULE - SRAM Partition 11 Rule(n) Register */
+/*! @name RAM11_RULE - SRAM Partition 11 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM11_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM11_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM11_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE */
-#define AHB_SECURE_CTRL_RAM11_RULEN_RAM11_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM11_RULE */
+#define AHB_SECURE_CTRL_RAM11_RULE_COUNT         (4U)
 
-/*! @name RAM12_RULEN_RAM12_RULE - SRAM Partition 12 Rule(n) Register */
+/*! @name RAM12_RULE - SRAM Partition 12 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM12_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM12_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM12_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE */
-#define AHB_SECURE_CTRL_RAM12_RULEN_RAM12_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM12_RULE */
+#define AHB_SECURE_CTRL_RAM12_RULE_COUNT         (4U)
 
-/*! @name RAM13_RULEN_RAM13_RULE - SRAM Partition 13 Rule(n) Register */
+/*! @name RAM13_RULE - SRAM Partition 13 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM13_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM13_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM13_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE */
-#define AHB_SECURE_CTRL_RAM13_RULEN_RAM13_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM13_RULE */
+#define AHB_SECURE_CTRL_RAM13_RULE_COUNT         (4U)
 
-/*! @name RAM14_RULEN_RAM14_RULE - SRAM Partition 14 Rule(n) Register */
+/*! @name RAM14_RULE - SRAM Partition 14 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM14_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM14_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM14_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE */
-#define AHB_SECURE_CTRL_RAM14_RULEN_RAM14_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM14_RULE */
+#define AHB_SECURE_CTRL_RAM14_RULE_COUNT         (4U)
 
-/*! @name RAM15_RULEN_RAM15_RULE - SRAM Partition 15 Rule(n) Register */
+/*! @name RAM15_RULE - SRAM Partition 15 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM15_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM15_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM15_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE */
-#define AHB_SECURE_CTRL_RAM15_RULEN_RAM15_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM15_RULE */
+#define AHB_SECURE_CTRL_RAM15_RULE_COUNT         (4U)
 
-/*! @name RAM16_RULEN_RAM16_RULE - SRAM Partition 16 Rule(n) Register */
+/*! @name RAM16_RULE - SRAM Partition 16 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM16_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM16_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM16_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE */
-#define AHB_SECURE_CTRL_RAM16_RULEN_RAM16_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM16_RULE */
+#define AHB_SECURE_CTRL_RAM16_RULE_COUNT         (4U)
 
-/*! @name RAM17_RULEN_RAM17_RULE - SRAM Partition 17 Rule(n) Register */
+/*! @name RAM17_RULE - SRAM Partition 17 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM17_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM17_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM17_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE */
-#define AHB_SECURE_CTRL_RAM17_RULEN_RAM17_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM17_RULE */
+#define AHB_SECURE_CTRL_RAM17_RULE_COUNT         (4U)
 
-/*! @name RAM18_RULEN_RAM18_RULE - SRAM Partition 18 Rule(n) Register */
+/*! @name RAM18_RULE - SRAM Partition 18 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM18_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM18_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM18_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE */
-#define AHB_SECURE_CTRL_RAM18_RULEN_RAM18_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM18_RULE */
+#define AHB_SECURE_CTRL_RAM18_RULE_COUNT         (4U)
 
-/*! @name RAM19_RULEN_RAM19_RULE - SRAM Partition 19 Rule(n) Register */
+/*! @name RAM19_RULE - SRAM Partition 19 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM19_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM19_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM19_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE */
-#define AHB_SECURE_CTRL_RAM19_RULEN_RAM19_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM19_RULE */
+#define AHB_SECURE_CTRL_RAM19_RULE_COUNT         (4U)
 
-/*! @name RAM20_RULEN_RAM20_RULE - SRAM Partition 20 Rule(n) Register */
+/*! @name RAM20_RULE - SRAM Partition 20 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM20_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM20_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM20_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE */
-#define AHB_SECURE_CTRL_RAM20_RULEN_RAM20_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM20_RULE */
+#define AHB_SECURE_CTRL_RAM20_RULE_COUNT         (4U)
 
-/*! @name RAM21_RULEN_RAM21_RULE - SRAM Partition 21 Rule(n) Register */
+/*! @name RAM21_RULE - SRAM Partition 21 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM21_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM21_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM21_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE */
-#define AHB_SECURE_CTRL_RAM21_RULEN_RAM21_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM21_RULE */
+#define AHB_SECURE_CTRL_RAM21_RULE_COUNT         (4U)
 
-/*! @name RAM22_RULEN_RAM22_RULE - SRAM Partition 22 Rule(n) Register */
+/*! @name RAM22_RULE - SRAM Partition 22 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM22_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM22_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM22_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE */
-#define AHB_SECURE_CTRL_RAM22_RULEN_RAM22_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM22_RULE */
+#define AHB_SECURE_CTRL_RAM22_RULE_COUNT         (4U)
 
-/*! @name RAM23_RULEN_RAM23_RULE - SRAM Partition 23 Rule(n) Register */
+/*! @name RAM23_RULE - SRAM Partition 23 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM23_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM23_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM23_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE */
-#define AHB_SECURE_CTRL_RAM23_RULEN_RAM23_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM23_RULE */
+#define AHB_SECURE_CTRL_RAM23_RULE_COUNT         (4U)
 
-/*! @name RAM24_RULEN_RAM24_RULE - SRAM Partition 24 Rule(n) Register */
+/*! @name RAM24_RULE - SRAM Partition 24 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM24_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM24_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM24_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE */
-#define AHB_SECURE_CTRL_RAM24_RULEN_RAM24_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM24_RULE */
+#define AHB_SECURE_CTRL_RAM24_RULE_COUNT         (4U)
 
-/*! @name RAM25_RULEN_RAM25_RULE - SRAM Partition 25 Rule(n) Register */
+/*! @name RAM25_RULE - SRAM Partition 25 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM25_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM25_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM25_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE */
-#define AHB_SECURE_CTRL_RAM25_RULEN_RAM25_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM25_RULE */
+#define AHB_SECURE_CTRL_RAM25_RULE_COUNT         (4U)
 
-/*! @name RAM26_RULEN_RAM26_RULE - SRAM Partition 26 Rule(n) Register */
+/*! @name RAM26_RULE - SRAM Partition 26 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM26_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM26_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM26_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE */
-#define AHB_SECURE_CTRL_RAM26_RULEN_RAM26_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM26_RULE */
+#define AHB_SECURE_CTRL_RAM26_RULE_COUNT         (4U)
 
-/*! @name RAM27_RULEN_RAM27_RULE - SRAM Partition 27 Rule(n) Register */
+/*! @name RAM27_RULE - SRAM Partition 27 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM27_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM27_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM27_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE */
-#define AHB_SECURE_CTRL_RAM27_RULEN_RAM27_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM27_RULE */
+#define AHB_SECURE_CTRL_RAM27_RULE_COUNT         (4U)
 
-/*! @name RAM28_RULEN_RAM28_RULE - SRAM Partition 28 Rule(n) Register */
+/*! @name RAM28_RULE - SRAM Partition 28 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM28_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM28_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM28_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE */
-#define AHB_SECURE_CTRL_RAM28_RULEN_RAM28_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM28_RULE */
+#define AHB_SECURE_CTRL_RAM28_RULE_COUNT         (4U)
 
-/*! @name RAM29_RULEN_RAM29_RULE - SRAM Partition 29 Rule(n) Register */
+/*! @name RAM29_RULE - SRAM Partition 29 Rule(n) Register */
 /*! @{ */
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE0_MASK (0x3U)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE0_SHIFT (0U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE0_MASK    (0x3U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE0_SHIFT   (0U)
 /*! RULE0 - Rule 0
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE0(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE0_MASK)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE1_MASK (0x30U)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE1_SHIFT (4U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE0(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULE_RULE0_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULE_RULE0_MASK)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE1_MASK    (0x30U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE1_SHIFT   (4U)
 /*! RULE1 - Rule 1
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE1(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE1_MASK)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE2_MASK (0x300U)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE2_SHIFT (8U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE1(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULE_RULE1_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULE_RULE1_MASK)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE2_MASK    (0x300U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE2_SHIFT   (8U)
 /*! RULE2 - Rule 2
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE2(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE2_MASK)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE3_MASK (0x3000U)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE3_SHIFT (12U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE2(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULE_RULE2_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULE_RULE2_MASK)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE3_MASK    (0x3000U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE3_SHIFT   (12U)
 /*! RULE3 - Rule 3
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE3(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE3_MASK)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE4_MASK (0x30000U)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE4_SHIFT (16U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE3(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULE_RULE3_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULE_RULE3_MASK)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE4_MASK    (0x30000U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE4_SHIFT   (16U)
 /*! RULE4 - Rule 4
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE4(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE4_MASK)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE5_MASK (0x300000U)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE5_SHIFT (20U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE4(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULE_RULE4_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULE_RULE4_MASK)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE5_MASK    (0x300000U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE5_SHIFT   (20U)
 /*! RULE5 - Rule 5
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE5(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE5_MASK)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE6_MASK (0x3000000U)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE6_SHIFT (24U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE5(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULE_RULE5_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULE_RULE5_MASK)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE6_MASK    (0x3000000U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE6_SHIFT   (24U)
 /*! RULE6 - Rule 6
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE6(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE6_MASK)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE7_MASK (0x30000000U)
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE7_SHIFT (28U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE6(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULE_RULE6_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULE_RULE6_MASK)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE7_MASK    (0x30000000U)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE7_SHIFT   (28U)
 /*! RULE7 - Rule 7
  *  0b00..Non-secure and non-privilege user access allowed
  *  0b01..Non-secure and privilege access allowed
  *  0b10..Secure and non-privilege user access allowed
  *  0b11..Secure and privilege user access allowed
  */
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE7(x) (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_RULE7_MASK)
+#define AHB_SECURE_CTRL_RAM29_RULE_RULE7(x)      (((uint32_t)(((uint32_t)(x)) << AHB_SECURE_CTRL_RAM29_RULE_RULE7_SHIFT)) & AHB_SECURE_CTRL_RAM29_RULE_RULE7_MASK)
 /*! @} */
 
-/* The count of AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE */
-#define AHB_SECURE_CTRL_RAM29_RULEN_RAM29_RULE_COUNT (4U)
+/* The count of AHB_SECURE_CTRL_RAM29_RULE */
+#define AHB_SECURE_CTRL_RAM29_RULE_COUNT         (4U)
 
 /*! @name PIF_HIFI4_X_MEM_RULE0 - Security access rules for HiFi 4 memory sectors (0x24000000--0x240FFFFF). Each sector is 32 Kbytes, there're 4 sectors in total. */
 /*! @{ */
@@ -21585,12 +21587,12 @@ typedef struct {
 typedef struct {
   __I  uint32_t EVTIMERL;                          /**< EVTIMER Low Register, offset: 0x0 */
   __I  uint32_t EVTIMERH;                          /**< EVTIMER High Register, offset: 0x4 */
-  __I  uint32_t CAPTUREN_L;                        /**< Local Capture Low Register for CPUn, offset: 0x8 */
-  __I  uint32_t CAPTUREN_H;                        /**< Local Capture High Register for CPUn, offset: 0xC */
-  __IO uint32_t MATCHN_L;                          /**< Local Match Low Register for CPUn, offset: 0x10 */
-  __IO uint32_t MATCHN_H;                          /**< Match High Register for CPUn, offset: 0x14 */
+  __I  uint32_t CAPTURE_L;                         /**< Local Capture Low Register, offset: 0x8 */
+  __I  uint32_t CAPTURE_H;                         /**< Local Capture High Register, offset: 0xC */
+  __IO uint32_t MATCH_L;                           /**< Local Match Low Register, offset: 0x10 */
+  __IO uint32_t MATCH_H;                           /**< Match High Register, offset: 0x14 */
        uint8_t RESERVED_0[4];
-  __IO uint32_t OSEVENT_CTRL;                      /**< OS_EVENT TIMER Control Register for CPUn, offset: 0x1C */
+  __IO uint32_t OSEVENT_CTRL;                      /**< OS_EVENT TIMER Control Register, offset: 0x1C */
 } OSTIMER_Type;
 
 /* ----------------------------------------------------------------------------
@@ -21622,53 +21624,53 @@ typedef struct {
 #define OSTIMER_EVTIMERH_EVTIMER_COUNT_VALUE(x)  (((uint32_t)(((uint32_t)(x)) << OSTIMER_EVTIMERH_EVTIMER_COUNT_VALUE_SHIFT)) & OSTIMER_EVTIMERH_EVTIMER_COUNT_VALUE_MASK)
 /*! @} */
 
-/*! @name CAPTUREN_L - Local Capture Low Register for CPUn */
+/*! @name CAPTURE_L - Local Capture Low Register */
 /*! @{ */
-#define OSTIMER_CAPTUREN_L_CAPTUREn_VALUE_MASK   (0xFFFFFFFFU)
-#define OSTIMER_CAPTUREN_L_CAPTUREn_VALUE_SHIFT  (0U)
-/*! CAPTUREn_VALUE - A read reflects the value of the lower 32 bits of the central EVTIMER at the
+#define OSTIMER_CAPTURE_L_CAPTURE_VALUE_MASK     (0xFFFFFFFFU)
+#define OSTIMER_CAPTURE_L_CAPTURE_VALUE_SHIFT    (0U)
+/*! CAPTURE_VALUE - A read reflects the value of the lower 32 bits of the central EVTIMER at the
  *    time the last capture signal was generated by the CPU. A separate pair of CAPTURE registers are
  *    implemented for each CPU. Each CPU reads its own capture value at the same pair of addresses.
  */
-#define OSTIMER_CAPTUREN_L_CAPTUREn_VALUE(x)     (((uint32_t)(((uint32_t)(x)) << OSTIMER_CAPTUREN_L_CAPTUREn_VALUE_SHIFT)) & OSTIMER_CAPTUREN_L_CAPTUREn_VALUE_MASK)
+#define OSTIMER_CAPTURE_L_CAPTURE_VALUE(x)       (((uint32_t)(((uint32_t)(x)) << OSTIMER_CAPTURE_L_CAPTURE_VALUE_SHIFT)) & OSTIMER_CAPTURE_L_CAPTURE_VALUE_MASK)
 /*! @} */
 
-/*! @name CAPTUREN_H - Local Capture High Register for CPUn */
+/*! @name CAPTURE_H - Local Capture High Register */
 /*! @{ */
-#define OSTIMER_CAPTUREN_H_CAPTUREn_VALUE_MASK   (0xFFFFFFFFU)
-#define OSTIMER_CAPTUREN_H_CAPTUREn_VALUE_SHIFT  (0U)
-/*! CAPTUREn_VALUE - A read reflects the value of the upper 32 bits of the central EVTIMER at the
+#define OSTIMER_CAPTURE_H_CAPTURE_VALUE_MASK     (0xFFFFFFFFU)
+#define OSTIMER_CAPTURE_H_CAPTURE_VALUE_SHIFT    (0U)
+/*! CAPTURE_VALUE - A read reflects the value of the upper 32 bits of the central EVTIMER at the
  *    time the last capture signal was generated by the CPU. A separate pair of CAPTURE registers are
  *    implemented for each CPU. Each CPU reads its own capture value at the same pair of addresses.
  */
-#define OSTIMER_CAPTUREN_H_CAPTUREn_VALUE(x)     (((uint32_t)(((uint32_t)(x)) << OSTIMER_CAPTUREN_H_CAPTUREn_VALUE_SHIFT)) & OSTIMER_CAPTUREN_H_CAPTUREn_VALUE_MASK)
+#define OSTIMER_CAPTURE_H_CAPTURE_VALUE(x)       (((uint32_t)(((uint32_t)(x)) << OSTIMER_CAPTURE_H_CAPTURE_VALUE_SHIFT)) & OSTIMER_CAPTURE_H_CAPTURE_VALUE_MASK)
 /*! @} */
 
-/*! @name MATCHN_L - Local Match Low Register for CPUn */
+/*! @name MATCH_L - Local Match Low Register */
 /*! @{ */
-#define OSTIMER_MATCHN_L_MATCHn_VALUE_MASK       (0xFFFFFFFFU)
-#define OSTIMER_MATCHN_L_MATCHn_VALUE_SHIFT      (0U)
-/*! MATCHn_VALUE - The value written to the MATCH (L/H) register pair is compared against the
- *    central EVTIMER. When a match occurs, an interrupt request is generated if enabled. A separate pair
- *    of MATCH registers are implemented for each CPU. Each CPU reads its own local value at the
- *    same pair of addresses.
+#define OSTIMER_MATCH_L_MATCH_VALUE_MASK         (0xFFFFFFFFU)
+#define OSTIMER_MATCH_L_MATCH_VALUE_SHIFT        (0U)
+/*! MATCH_VALUE - The value written to the MATCH (L/H) register pair is compared against the central
+ *    EVTIMER. When a match occurs, an interrupt request is generated if enabled. A separate pair
+ *    of MATCH registers are implemented for each CPU. Each CPU reads its own local value at the same
+ *    pair of addresses.
  */
-#define OSTIMER_MATCHN_L_MATCHn_VALUE(x)         (((uint32_t)(((uint32_t)(x)) << OSTIMER_MATCHN_L_MATCHn_VALUE_SHIFT)) & OSTIMER_MATCHN_L_MATCHn_VALUE_MASK)
+#define OSTIMER_MATCH_L_MATCH_VALUE(x)           (((uint32_t)(((uint32_t)(x)) << OSTIMER_MATCH_L_MATCH_VALUE_SHIFT)) & OSTIMER_MATCH_L_MATCH_VALUE_MASK)
 /*! @} */
 
-/*! @name MATCHN_H - Match High Register for CPUn */
+/*! @name MATCH_H - Match High Register */
 /*! @{ */
-#define OSTIMER_MATCHN_H_MATCHn_VALUE_MASK       (0xFFFFFFFFU)
-#define OSTIMER_MATCHN_H_MATCHn_VALUE_SHIFT      (0U)
-/*! MATCHn_VALUE - The value written to the MATCH (L/H) register pair is compared against the
- *    central EVTIMER. When a match occurs, an interrupt request is generated if enabled. A separate pair
- *    of MATCH registers are implemented for each CPU. Each CPU reads its own local value at the
- *    same pair of addresses.
+#define OSTIMER_MATCH_H_MATCH_VALUE_MASK         (0xFFFFFFFFU)
+#define OSTIMER_MATCH_H_MATCH_VALUE_SHIFT        (0U)
+/*! MATCH_VALUE - The value written to the MATCH (L/H) register pair is compared against the central
+ *    EVTIMER. When a match occurs, an interrupt request is generated if enabled. A separate pair
+ *    of MATCH registers are implemented for each CPU. Each CPU reads its own local value at the same
+ *    pair of addresses.
  */
-#define OSTIMER_MATCHN_H_MATCHn_VALUE(x)         (((uint32_t)(((uint32_t)(x)) << OSTIMER_MATCHN_H_MATCHn_VALUE_SHIFT)) & OSTIMER_MATCHN_H_MATCHn_VALUE_MASK)
+#define OSTIMER_MATCH_H_MATCH_VALUE(x)           (((uint32_t)(((uint32_t)(x)) << OSTIMER_MATCH_H_MATCH_VALUE_SHIFT)) & OSTIMER_MATCH_H_MATCH_VALUE_MASK)
 /*! @} */
 
-/*! @name OSEVENT_CTRL - OS_EVENT TIMER Control Register for CPUn */
+/*! @name OSEVENT_CTRL - OS_EVENT TIMER Control Register */
 /*! @{ */
 #define OSTIMER_OSEVENT_CTRL_OSTIMER_INTRFLAG_MASK (0x1U)
 #define OSTIMER_OSEVENT_CTRL_OSTIMER_INTRFLAG_SHIFT (0U)
@@ -21686,12 +21688,12 @@ typedef struct {
  *    each CPU. Each CPU reads its own local value at the same address.
  */
 #define OSTIMER_OSEVENT_CTRL_OSTIMER_INTENA(x)   (((uint32_t)(((uint32_t)(x)) << OSTIMER_OSEVENT_CTRL_OSTIMER_INTENA_SHIFT)) & OSTIMER_OSEVENT_CTRL_OSTIMER_INTENA_MASK)
-#define OSTIMER_OSEVENT_CTRL_MATCH_WR_RDYn_MASK  (0x4U)
-#define OSTIMER_OSEVENT_CTRL_MATCH_WR_RDYn_SHIFT (2U)
-/*! MATCH_WR_RDYn - This bit will be low when it is safe to write to reload the Match Registers. In
+#define OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY_MASK   (0x4U)
+#define OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY_SHIFT  (2U)
+/*! MATCH_WR_RDY - This bit will be low when it is safe to write to reload the Match Registers. In
  *    typical applications it should not be necessary to test this bit.
  */
-#define OSTIMER_OSEVENT_CTRL_MATCH_WR_RDYn(x)    (((uint32_t)(((uint32_t)(x)) << OSTIMER_OSEVENT_CTRL_MATCH_WR_RDYn_SHIFT)) & OSTIMER_OSEVENT_CTRL_MATCH_WR_RDYn_MASK)
+#define OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY(x)     (((uint32_t)(((uint32_t)(x)) << OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY_SHIFT)) & OSTIMER_OSEVENT_CTRL_MATCH_WR_RDY_MASK)
 /*! @} */
 
 
@@ -25268,16 +25270,64 @@ typedef struct {
 /** SCT - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CONFIG;                            /**< SCT configuration register, offset: 0x0 */
-  __IO uint32_t CTRL;                              /**< SCT control register, offset: 0x4 */
-  __IO uint32_t LIMIT;                             /**< SCT limit event select register, offset: 0x8 */
-  __IO uint32_t HALT;                              /**< SCT halt event select register, offset: 0xC */
-  __IO uint32_t STOP;                              /**< SCT stop event select register, offset: 0x10 */
-  __IO uint32_t START;                             /**< SCT start event select register, offset: 0x14 */
+  union {                                          /* offset: 0x4 */
+    struct {                                         /* offset: 0x4 */
+      __IO uint16_t CTRLL;                             /**< SCT_CTRLL register, offset: 0x4 */
+      __IO uint16_t CTRLH;                             /**< SCT_CTRLH register, offset: 0x6 */
+    } CTRL_ACCESS16BIT;
+    __IO uint32_t CTRL;                              /**< SCT control register, offset: 0x4 */
+  };
+  union {                                          /* offset: 0x8 */
+    struct {                                         /* offset: 0x8 */
+      __IO uint16_t LIMITL;                            /**< SCT_LIMITL register, offset: 0x8 */
+      __IO uint16_t LIMITH;                            /**< SCT_LIMITH register, offset: 0xA */
+    } LIMIT_ACCESS16BIT;
+    __IO uint32_t LIMIT;                             /**< SCT limit event select register, offset: 0x8 */
+  };
+  union {                                          /* offset: 0xC */
+    struct {                                         /* offset: 0xC */
+      __IO uint16_t HALTL;                             /**< SCT_HALTL register, offset: 0xC */
+      __IO uint16_t HALTH;                             /**< SCT_HALTH register, offset: 0xE */
+    } HALT_ACCESS16BIT;
+    __IO uint32_t HALT;                              /**< SCT halt event select register, offset: 0xC */
+  };
+  union {                                          /* offset: 0x10 */
+    struct {                                         /* offset: 0x10 */
+      __IO uint16_t STOPL;                             /**< SCT_STOPL register, offset: 0x10 */
+      __IO uint16_t STOPH;                             /**< SCT_STOPH register, offset: 0x12 */
+    } STOP_ACCESS16BIT;
+    __IO uint32_t STOP;                              /**< SCT stop event select register, offset: 0x10 */
+  };
+  union {                                          /* offset: 0x14 */
+    struct {                                         /* offset: 0x14 */
+      __IO uint16_t STARTL;                            /**< SCT_STARTL register, offset: 0x14 */
+      __IO uint16_t STARTH;                            /**< SCT_STARTH register, offset: 0x16 */
+    } START_ACCESS16BIT;
+    __IO uint32_t START;                             /**< SCT start event select register, offset: 0x14 */
+  };
        uint8_t RESERVED_0[40];
-  __IO uint32_t COUNT;                             /**< SCT counter register, offset: 0x40 */
-  __IO uint32_t STATE;                             /**< SCT state register, offset: 0x44 */
+  union {                                          /* offset: 0x40 */
+    struct {                                         /* offset: 0x40 */
+      __IO uint16_t COUNTL;                            /**< SCT_COUNTL register, offset: 0x40 */
+      __IO uint16_t COUNTH;                            /**< SCT_COUNTH register, offset: 0x42 */
+    } COUNT_ACCESS16BIT;
+    __IO uint32_t COUNT;                             /**< SCT counter register, offset: 0x40 */
+  };
+  union {                                          /* offset: 0x44 */
+    struct {                                         /* offset: 0x44 */
+      __IO uint16_t STATEL;                            /**< SCT_STATEL register, offset: 0x44 */
+      __IO uint16_t STATEH;                            /**< SCT_STATEH register, offset: 0x46 */
+    } STATE_ACCESS16BIT;
+    __IO uint32_t STATE;                             /**< SCT state register, offset: 0x44 */
+  };
   __I  uint32_t INPUT;                             /**< SCT input register, offset: 0x48 */
-  __IO uint32_t REGMODE;                           /**< SCT match/capture mode register, offset: 0x4C */
+  union {                                          /* offset: 0x4C */
+    struct {                                         /* offset: 0x4C */
+      __IO uint16_t REGMODEL;                          /**< SCT_REGMODEL register, offset: 0x4C */
+      __IO uint16_t REGMODEH;                          /**< SCT_REGMODEH register, offset: 0x4E */
+    } REGMODE_ACCESS16BIT;
+    __IO uint32_t REGMODE;                           /**< SCT match/capture mode register, offset: 0x4C */
+  };
   __IO uint32_t OUTPUT;                            /**< SCT output register, offset: 0x50 */
   __IO uint32_t OUTPUTDIRCTRL;                     /**< SCT output counter direction control register, offset: 0x54 */
   __IO uint32_t RES;                               /**< SCT conflict resolution register, offset: 0x58 */
@@ -25289,13 +25339,37 @@ typedef struct {
   __IO uint32_t CONEN;                             /**< SCT conflict interrupt enable register, offset: 0xF8 */
   __IO uint32_t CONFLAG;                           /**< SCT conflict flag register, offset: 0xFC */
   union {                                          /* offset: 0x100 */
-    __IO uint32_t CAP[16];                           /**< SCT capture register of capture channel, array offset: 0x100, array step: 0x4 */
-    __IO uint32_t MATCH[16];                         /**< SCT match value register of match channels, array offset: 0x100, array step: 0x4 */
+    union {                                          /* offset: 0x100, array step: 0x4 */
+      struct {                                         /* offset: 0x100, array step: 0x4 */
+        __IO uint16_t CAPL;                              /**< SCT_CAPL register, array offset: 0x100, array step: 0x4 */
+        __IO uint16_t CAPH;                              /**< SCT_CAPH register, array offset: 0x102, array step: 0x4 */
+      } CAP_ACCESS16BIT[16];
+      __IO uint32_t CAP[16];                           /**< SCT capture register of capture channel, array offset: 0x100, array step: 0x4 */
+    };
+    union {                                          /* offset: 0x100, array step: 0x4 */
+      struct {                                         /* offset: 0x100, array step: 0x4 */
+        __IO uint16_t MATCHL;                            /**< SCT_MATCHL register, array offset: 0x100, array step: 0x4 */
+        __IO uint16_t MATCHH;                            /**< SCT_MATCHH register, array offset: 0x102, array step: 0x4 */
+      } MATCH_ACCESS16BIT[16];
+      __IO uint32_t MATCH[16];                         /**< SCT match value register of match channels, array offset: 0x100, array step: 0x4 */
+    };
   };
        uint8_t RESERVED_2[192];
   union {                                          /* offset: 0x200 */
-    __IO uint32_t CAPCTRL[16];                       /**< SCT capture control register, array offset: 0x200, array step: 0x4 */
-    __IO uint32_t MATCHREL[16];                      /**< SCT match reload value register, array offset: 0x200, array step: 0x4 */
+    union {                                          /* offset: 0x200, array step: 0x4 */
+      struct {                                         /* offset: 0x200, array step: 0x4 */
+        __IO uint16_t CAPCTRLL;                          /**< SCT_CAPCTRLL register, array offset: 0x200, array step: 0x4 */
+        __IO uint16_t CAPCTRLH;                          /**< SCT_CAPCTRLH register, array offset: 0x202, array step: 0x4 */
+      } CAPCTRL_ACCESS16BIT[16];
+      __IO uint32_t CAPCTRL[16];                       /**< SCT capture control register, array offset: 0x200, array step: 0x4 */
+    };
+    union {                                          /* offset: 0x200, array step: 0x4 */
+      struct {                                         /* offset: 0x200, array step: 0x4 */
+        __IO uint16_t MATCHRELL;                         /**< SCT_MATCHRELL register, array offset: 0x200, array step: 0x4 */
+        __IO uint16_t MATCHRELH;                         /**< SCT_MATCHRELH register, array offset: 0x202, array step: 0x4 */
+      } MATCHREL_ACCESS16BIT[16];
+      __IO uint32_t MATCHREL[16];                      /**< SCT match reload value register, array offset: 0x200, array step: 0x4 */
+    };
   };
        uint8_t RESERVED_3[192];
   struct {                                         /* offset: 0x300, array step: 0x8 */
@@ -25413,6 +25487,98 @@ typedef struct {
 #define SCT_CONFIG_AUTOLIMIT_H(x)                (((uint32_t)(((uint32_t)(x)) << SCT_CONFIG_AUTOLIMIT_H_SHIFT)) & SCT_CONFIG_AUTOLIMIT_H_MASK)
 /*! @} */
 
+/*! @name CTRLL - SCT_CTRLL register */
+/*! @{ */
+#define SCT_CTRLL_DOWN_L_MASK                    (0x1U)
+#define SCT_CTRLL_DOWN_L_SHIFT                   (0U)
+/*! DOWN_L - This bit is 1 when the L or unified counter is counting down. Hardware sets this bit
+ *    when the counter is counting up, counter limit occurs, and BIDIR = 1.Hardware clears this bit
+ *    when the counter is counting down and a limit condition occurs or when the counter reaches 0.
+ */
+#define SCT_CTRLL_DOWN_L(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_DOWN_L_SHIFT)) & SCT_CTRLL_DOWN_L_MASK)
+#define SCT_CTRLL_STOP_L_MASK                    (0x2U)
+#define SCT_CTRLL_STOP_L_SHIFT                   (1U)
+/*! STOP_L - When this bit is 1 and HALT is 0, the L or unified counter does not run, but I/O events
+ *    related to the counter can occur. If a designated start event occurs, this bit is cleared and
+ *    counting resumes.
+ */
+#define SCT_CTRLL_STOP_L(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_STOP_L_SHIFT)) & SCT_CTRLL_STOP_L_MASK)
+#define SCT_CTRLL_HALT_L_MASK                    (0x4U)
+#define SCT_CTRLL_HALT_L_SHIFT                   (2U)
+/*! HALT_L - When this bit is 1, the L or unified counter does not run and no events can occur. A
+ *    reset sets this bit. When the HALT_L bit is one, the STOP_L bit is cleared. It is possible to
+ *    remove the halt condition while keeping the SCT in the stop condition (not running) with a
+ *    single write to this register to simultaneously clear the HALT bit and set the STOP bit. Once set,
+ *    only software can clear this bit to restore counter operation. This bit is set on reset.
+ */
+#define SCT_CTRLL_HALT_L(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_HALT_L_SHIFT)) & SCT_CTRLL_HALT_L_MASK)
+#define SCT_CTRLL_CLRCTR_L_MASK                  (0x8U)
+#define SCT_CTRLL_CLRCTR_L_SHIFT                 (3U)
+/*! CLRCTR_L - Writing a 1 to this bit clears the L or unified counter. This bit always reads as 0.
+ */
+#define SCT_CTRLL_CLRCTR_L(x)                    (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_CLRCTR_L_SHIFT)) & SCT_CTRLL_CLRCTR_L_MASK)
+#define SCT_CTRLL_BIDIR_L_MASK                   (0x10U)
+#define SCT_CTRLL_BIDIR_L_SHIFT                  (4U)
+/*! BIDIR_L - L or unified counter direction select
+ *  0b0..Up. The counter counts up to a limit condition, then is cleared to zero.
+ *  0b1..Up-down. The counter counts up to a limit, then counts down to a limit condition or to 0.
+ */
+#define SCT_CTRLL_BIDIR_L(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_BIDIR_L_SHIFT)) & SCT_CTRLL_BIDIR_L_MASK)
+#define SCT_CTRLL_PRE_L_MASK                     (0x1FE0U)
+#define SCT_CTRLL_PRE_L_SHIFT                    (5U)
+/*! PRE_L - Specifies the factor by which the SCT clock is prescaled to produce the L or unified
+ *    counter clock. The counter clock is clocked at the rate of the SCT clock divided by PRE_L+1.
+ *    Clear the counter (by writing a 1 to the CLRCTR bit) whenever changing the PRE value.
+ */
+#define SCT_CTRLL_PRE_L(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_PRE_L_SHIFT)) & SCT_CTRLL_PRE_L_MASK)
+/*! @} */
+
+/*! @name CTRLH - SCT_CTRLH register */
+/*! @{ */
+#define SCT_CTRLH_DOWN_H_MASK                    (0x1U)
+#define SCT_CTRLH_DOWN_H_SHIFT                   (0U)
+/*! DOWN_H - This bit is 1 when the H counter is counting down. Hardware sets this bit when the
+ *    counter is counting, a counter limit condition occurs, and BIDIR is 1. Hardware clears this bit
+ *    when the counter is counting down and a limit condition occurs or when the counter reaches 0.
+ */
+#define SCT_CTRLH_DOWN_H(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_DOWN_H_SHIFT)) & SCT_CTRLH_DOWN_H_MASK)
+#define SCT_CTRLH_STOP_H_MASK                    (0x2U)
+#define SCT_CTRLH_STOP_H_SHIFT                   (1U)
+/*! STOP_H - When this bit is 1 and HALT is 0, the H counter does not, run but I/O events related to
+ *    the counter can occur. If such an event matches the mask in the Start register, this bit is
+ *    cleared and counting resumes.
+ */
+#define SCT_CTRLH_STOP_H(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_STOP_H_SHIFT)) & SCT_CTRLH_STOP_H_MASK)
+#define SCT_CTRLH_HALT_H_MASK                    (0x4U)
+#define SCT_CTRLH_HALT_H_SHIFT                   (2U)
+/*! HALT_H - When this bit is 1, the H counter does not run and no events can occur. A reset sets
+ *    this bit. When the HALT_H bit is one, the STOP_H bit is cleared. It is possible to remove the
+ *    halt condition while keeping the SCT in the stop condition (not running) with a single write to
+ *    this register to simultaneously clear the HALT bit and set the STOP bit. Once set, this bit
+ *    can only be cleared by software to restore counter operation. This bit is set on reset.
+ */
+#define SCT_CTRLH_HALT_H(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_HALT_H_SHIFT)) & SCT_CTRLH_HALT_H_MASK)
+#define SCT_CTRLH_CLRCTR_H_MASK                  (0x8U)
+#define SCT_CTRLH_CLRCTR_H_SHIFT                 (3U)
+/*! CLRCTR_H - Writing a 1 to this bit clears the H counter. This bit always reads as 0.
+ */
+#define SCT_CTRLH_CLRCTR_H(x)                    (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_CLRCTR_H_SHIFT)) & SCT_CTRLH_CLRCTR_H_MASK)
+#define SCT_CTRLH_BIDIR_H_MASK                   (0x10U)
+#define SCT_CTRLH_BIDIR_H_SHIFT                  (4U)
+/*! BIDIR_H - Direction select
+ *  0b0..The H counter counts up to its limit condition, then is cleared to zero.
+ *  0b1..The H counter counts up to its limit, then counts down to a limit condition or to 0.
+ */
+#define SCT_CTRLH_BIDIR_H(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_BIDIR_H_SHIFT)) & SCT_CTRLH_BIDIR_H_MASK)
+#define SCT_CTRLH_PRE_H_MASK                     (0x1FE0U)
+#define SCT_CTRLH_PRE_H_SHIFT                    (5U)
+/*! PRE_H - Specifies the factor by which the SCT clock is prescaled to produce the H counter clock.
+ *    The counter clock is clocked at the rate of the SCT clock divided by PRELH+1. Clear the
+ *    counter (by writing a 1 to the CLRCTR bit) whenever changing the PRE value.
+ */
+#define SCT_CTRLH_PRE_H(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_PRE_H_SHIFT)) & SCT_CTRLH_PRE_H_MASK)
+/*! @} */
+
 /*! @name CTRL - SCT control register */
 /*! @{ */
 #define SCT_CTRL_DOWN_L_MASK                     (0x1U)
@@ -25501,6 +25667,20 @@ typedef struct {
 #define SCT_CTRL_PRE_H(x)                        (((uint32_t)(((uint32_t)(x)) << SCT_CTRL_PRE_H_SHIFT)) & SCT_CTRL_PRE_H_MASK)
 /*! @} */
 
+/*! @name LIMITL - SCT_LIMITL register */
+/*! @{ */
+#define SCT_LIMITL_LIMITL_MASK                   (0xFFFFU)
+#define SCT_LIMITL_LIMITL_SHIFT                  (0U)
+#define SCT_LIMITL_LIMITL(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_LIMITL_LIMITL_SHIFT)) & SCT_LIMITL_LIMITL_MASK)
+/*! @} */
+
+/*! @name LIMITH - SCT_LIMITH register */
+/*! @{ */
+#define SCT_LIMITH_LIMITH_MASK                   (0xFFFFU)
+#define SCT_LIMITH_LIMITH_SHIFT                  (0U)
+#define SCT_LIMITH_LIMITH(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_LIMITH_LIMITH_SHIFT)) & SCT_LIMITH_LIMITH_MASK)
+/*! @} */
+
 /*! @name LIMIT - SCT limit event select register */
 /*! @{ */
 #define SCT_LIMIT_LIMMSK_L_MASK                  (0xFFFFU)
@@ -25515,6 +25695,20 @@ typedef struct {
  *    16, event 1 = bit 17, etc.). The number of bits = number of events in this SCT.
  */
 #define SCT_LIMIT_LIMMSK_H(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_LIMIT_LIMMSK_H_SHIFT)) & SCT_LIMIT_LIMMSK_H_MASK)
+/*! @} */
+
+/*! @name HALTL - SCT_HALTL register */
+/*! @{ */
+#define SCT_HALTL_HALTL_MASK                     (0xFFFFU)
+#define SCT_HALTL_HALTL_SHIFT                    (0U)
+#define SCT_HALTL_HALTL(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_HALTL_HALTL_SHIFT)) & SCT_HALTL_HALTL_MASK)
+/*! @} */
+
+/*! @name HALTH - SCT_HALTH register */
+/*! @{ */
+#define SCT_HALTH_HALTH_MASK                     (0xFFFFU)
+#define SCT_HALTH_HALTH_SHIFT                    (0U)
+#define SCT_HALTH_HALTH(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_HALTH_HALTH_SHIFT)) & SCT_HALTH_HALTH_MASK)
 /*! @} */
 
 /*! @name HALT - SCT halt event select register */
@@ -25533,6 +25727,20 @@ typedef struct {
 #define SCT_HALT_HALTMSK_H(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_HALT_HALTMSK_H_SHIFT)) & SCT_HALT_HALTMSK_H_MASK)
 /*! @} */
 
+/*! @name STOPL - SCT_STOPL register */
+/*! @{ */
+#define SCT_STOPL_STOPL_MASK                     (0xFFFFU)
+#define SCT_STOPL_STOPL_SHIFT                    (0U)
+#define SCT_STOPL_STOPL(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_STOPL_STOPL_SHIFT)) & SCT_STOPL_STOPL_MASK)
+/*! @} */
+
+/*! @name STOPH - SCT_STOPH register */
+/*! @{ */
+#define SCT_STOPH_STOPH_MASK                     (0xFFFFU)
+#define SCT_STOPH_STOPH_SHIFT                    (0U)
+#define SCT_STOPH_STOPH(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_STOPH_STOPH_SHIFT)) & SCT_STOPH_STOPH_MASK)
+/*! @} */
+
 /*! @name STOP - SCT stop event select register */
 /*! @{ */
 #define SCT_STOP_STOPMSK_L_MASK                  (0xFFFFU)
@@ -25547,6 +25755,20 @@ typedef struct {
  *    event 1 = bit 17, etc.). The number of bits = number of events in this SCT.
  */
 #define SCT_STOP_STOPMSK_H(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_STOP_STOPMSK_H_SHIFT)) & SCT_STOP_STOPMSK_H_MASK)
+/*! @} */
+
+/*! @name STARTL - SCT_STARTL register */
+/*! @{ */
+#define SCT_STARTL_STARTL_MASK                   (0xFFFFU)
+#define SCT_STARTL_STARTL_SHIFT                  (0U)
+#define SCT_STARTL_STARTL(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_STARTL_STARTL_SHIFT)) & SCT_STARTL_STARTL_MASK)
+/*! @} */
+
+/*! @name STARTH - SCT_STARTH register */
+/*! @{ */
+#define SCT_STARTH_STARTH_MASK                   (0xFFFFU)
+#define SCT_STARTH_STARTH_SHIFT                  (0U)
+#define SCT_STARTH_STARTH(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_STARTH_STARTH_SHIFT)) & SCT_STARTH_STARTH_MASK)
 /*! @} */
 
 /*! @name START - SCT start event select register */
@@ -25565,6 +25787,20 @@ typedef struct {
 #define SCT_START_STARTMSK_H(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_START_STARTMSK_H_SHIFT)) & SCT_START_STARTMSK_H_MASK)
 /*! @} */
 
+/*! @name COUNTL - SCT_COUNTL register */
+/*! @{ */
+#define SCT_COUNTL_COUNTL_MASK                   (0xFFFFU)
+#define SCT_COUNTL_COUNTL_SHIFT                  (0U)
+#define SCT_COUNTL_COUNTL(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_COUNTL_COUNTL_SHIFT)) & SCT_COUNTL_COUNTL_MASK)
+/*! @} */
+
+/*! @name COUNTH - SCT_COUNTH register */
+/*! @{ */
+#define SCT_COUNTH_COUNTH_MASK                   (0xFFFFU)
+#define SCT_COUNTH_COUNTH_SHIFT                  (0U)
+#define SCT_COUNTH_COUNTH(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_COUNTH_COUNTH_SHIFT)) & SCT_COUNTH_COUNTH_MASK)
+/*! @} */
+
 /*! @name COUNT - SCT counter register */
 /*! @{ */
 #define SCT_COUNT_CTR_L_MASK                     (0xFFFFU)
@@ -25579,6 +25815,20 @@ typedef struct {
  *    the upper 16 bits of the 32-bit unified counter.
  */
 #define SCT_COUNT_CTR_H(x)                       (((uint32_t)(((uint32_t)(x)) << SCT_COUNT_CTR_H_SHIFT)) & SCT_COUNT_CTR_H_MASK)
+/*! @} */
+
+/*! @name STATEL - SCT_STATEL register */
+/*! @{ */
+#define SCT_STATEL_STATEL_MASK                   (0xFFFFU)
+#define SCT_STATEL_STATEL_SHIFT                  (0U)
+#define SCT_STATEL_STATEL(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_STATEL_STATEL_SHIFT)) & SCT_STATEL_STATEL_MASK)
+/*! @} */
+
+/*! @name STATEH - SCT_STATEH register */
+/*! @{ */
+#define SCT_STATEH_STATEH_MASK                   (0xFFFFU)
+#define SCT_STATEH_STATEH_SHIFT                  (0U)
+#define SCT_STATEH_STATEH(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_STATEH_STATEH_SHIFT)) & SCT_STATEH_STATEH_MASK)
 /*! @} */
 
 /*! @name STATE - SCT state register */
@@ -25757,6 +26007,20 @@ typedef struct {
 /*! SIN15 - Input 15 state. Input 15 state following the synchronization specified by INSYNC.
  */
 #define SCT_INPUT_SIN15(x)                       (((uint32_t)(((uint32_t)(x)) << SCT_INPUT_SIN15_SHIFT)) & SCT_INPUT_SIN15_MASK)
+/*! @} */
+
+/*! @name REGMODEL - SCT_REGMODEL register */
+/*! @{ */
+#define SCT_REGMODEL_REGMODEL_MASK               (0xFFFFU)
+#define SCT_REGMODEL_REGMODEL_SHIFT              (0U)
+#define SCT_REGMODEL_REGMODEL(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_REGMODEL_REGMODEL_SHIFT)) & SCT_REGMODEL_REGMODEL_MASK)
+/*! @} */
+
+/*! @name REGMODEH - SCT_REGMODEH register */
+/*! @{ */
+#define SCT_REGMODEH_REGMODEH_MASK               (0xFFFFU)
+#define SCT_REGMODEH_REGMODEH_SHIFT              (0U)
+#define SCT_REGMODEH_REGMODEH(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_REGMODEH_REGMODEH_SHIFT)) & SCT_REGMODEH_REGMODEH_MASK)
 /*! @} */
 
 /*! @name REGMODE - SCT match/capture mode register */
@@ -26170,6 +26434,26 @@ typedef struct {
 #define SCT_CONFLAG_BUSERRH(x)                   (((uint32_t)(((uint32_t)(x)) << SCT_CONFLAG_BUSERRH_SHIFT)) & SCT_CONFLAG_BUSERRH_MASK)
 /*! @} */
 
+/*! @name CAPL - SCT_CAPL register */
+/*! @{ */
+#define SCT_CAPL_CAPL_MASK                       (0xFFFFU)
+#define SCT_CAPL_CAPL_SHIFT                      (0U)
+#define SCT_CAPL_CAPL(x)                         (((uint16_t)(((uint16_t)(x)) << SCT_CAPL_CAPL_SHIFT)) & SCT_CAPL_CAPL_MASK)
+/*! @} */
+
+/* The count of SCT_CAPL */
+#define SCT_CAPL_COUNT                           (16U)
+
+/*! @name CAPH - SCT_CAPH register */
+/*! @{ */
+#define SCT_CAPH_CAPH_MASK                       (0xFFFFU)
+#define SCT_CAPH_CAPH_SHIFT                      (0U)
+#define SCT_CAPH_CAPH(x)                         (((uint16_t)(((uint16_t)(x)) << SCT_CAPH_CAPH_SHIFT)) & SCT_CAPH_CAPH_MASK)
+/*! @} */
+
+/* The count of SCT_CAPH */
+#define SCT_CAPH_COUNT                           (16U)
+
 /*! @name CAP - SCT capture register of capture channel */
 /*! @{ */
 #define SCT_CAP_CAPn_L_MASK                      (0xFFFFU)
@@ -26190,6 +26474,26 @@ typedef struct {
 
 /* The count of SCT_CAP */
 #define SCT_CAP_COUNT                            (16U)
+
+/*! @name MATCHL - SCT_MATCHL register */
+/*! @{ */
+#define SCT_MATCHL_MATCHL_MASK                   (0xFFFFU)
+#define SCT_MATCHL_MATCHL_SHIFT                  (0U)
+#define SCT_MATCHL_MATCHL(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_MATCHL_MATCHL_SHIFT)) & SCT_MATCHL_MATCHL_MASK)
+/*! @} */
+
+/* The count of SCT_MATCHL */
+#define SCT_MATCHL_COUNT                         (16U)
+
+/*! @name MATCHH - SCT_MATCHH register */
+/*! @{ */
+#define SCT_MATCHH_MATCHH_MASK                   (0xFFFFU)
+#define SCT_MATCHH_MATCHH_SHIFT                  (0U)
+#define SCT_MATCHH_MATCHH(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_MATCHH_MATCHH_SHIFT)) & SCT_MATCHH_MATCHH_MASK)
+/*! @} */
+
+/* The count of SCT_MATCHH */
+#define SCT_MATCHH_COUNT                         (16U)
 
 /*! @name MATCH - SCT match value register of match channels */
 /*! @{ */
@@ -26212,6 +26516,26 @@ typedef struct {
 /* The count of SCT_MATCH */
 #define SCT_MATCH_COUNT                          (16U)
 
+/*! @name CAPCTRLL - SCT_CAPCTRLL register */
+/*! @{ */
+#define SCT_CAPCTRLL_CAPCTRLL_MASK               (0xFFFFU)
+#define SCT_CAPCTRLL_CAPCTRLL_SHIFT              (0U)
+#define SCT_CAPCTRLL_CAPCTRLL(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_CAPCTRLL_CAPCTRLL_SHIFT)) & SCT_CAPCTRLL_CAPCTRLL_MASK)
+/*! @} */
+
+/* The count of SCT_CAPCTRLL */
+#define SCT_CAPCTRLL_COUNT                       (16U)
+
+/*! @name CAPCTRLH - SCT_CAPCTRLH register */
+/*! @{ */
+#define SCT_CAPCTRLH_CAPCTRLH_MASK               (0xFFFFU)
+#define SCT_CAPCTRLH_CAPCTRLH_SHIFT              (0U)
+#define SCT_CAPCTRLH_CAPCTRLH(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_CAPCTRLH_CAPCTRLH_SHIFT)) & SCT_CAPCTRLH_CAPCTRLH_MASK)
+/*! @} */
+
+/* The count of SCT_CAPCTRLH */
+#define SCT_CAPCTRLH_COUNT                       (16U)
+
 /*! @name CAPCTRL - SCT capture control register */
 /*! @{ */
 #define SCT_CAPCTRL_CAPCONn_L_MASK               (0xFFFFU)
@@ -26231,6 +26555,26 @@ typedef struct {
 
 /* The count of SCT_CAPCTRL */
 #define SCT_CAPCTRL_COUNT                        (16U)
+
+/*! @name MATCHRELL - SCT_MATCHRELL register */
+/*! @{ */
+#define SCT_MATCHRELL_MATCHRELL_MASK             (0xFFFFU)
+#define SCT_MATCHRELL_MATCHRELL_SHIFT            (0U)
+#define SCT_MATCHRELL_MATCHRELL(x)               (((uint16_t)(((uint16_t)(x)) << SCT_MATCHRELL_MATCHRELL_SHIFT)) & SCT_MATCHRELL_MATCHRELL_MASK)
+/*! @} */
+
+/* The count of SCT_MATCHRELL */
+#define SCT_MATCHRELL_COUNT                      (16U)
+
+/*! @name MATCHRELH - SCT_MATCHRELH register */
+/*! @{ */
+#define SCT_MATCHRELH_MATCHRELH_MASK             (0xFFFFU)
+#define SCT_MATCHRELH_MATCHRELH_SHIFT            (0U)
+#define SCT_MATCHRELH_MATCHRELH(x)               (((uint16_t)(((uint16_t)(x)) << SCT_MATCHRELH_MATCHRELH_SHIFT)) & SCT_MATCHRELH_MATCHRELH_MASK)
+/*! @} */
+
+/* The count of SCT_MATCHRELH */
+#define SCT_MATCHRELH_COUNT                      (16U)
 
 /*! @name MATCHREL - SCT match reload value register */
 /*! @{ */
