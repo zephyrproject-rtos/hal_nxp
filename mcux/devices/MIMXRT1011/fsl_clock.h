@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.3.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief CLOCK driver version 2.3.1. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
 
 /* analog pll definition */
 #define CCM_ANALOG_PLL_BYPASS_SHIFT (16U)
@@ -76,21 +76,22 @@
 #define PLL_ENET_OFFSET 0xE0
 
 #define CCM_TUPLE(reg, shift, mask, busyShift) \
-    (int)((reg & 0xFFU) | ((shift) << 8U) | ((((mask) >> (shift)) & 0x1FFFU) << 13U) | ((busyShift) << 26U))
-#define CCM_TUPLE_REG(base, tuple) (*((volatile uint32_t *)(((uint32_t)(base)) + ((tuple)&0xFFU))))
-#define CCM_TUPLE_SHIFT(tuple) (((tuple) >> 8U) & 0x1FU)
-#define CCM_TUPLE_MASK(tuple) ((uint32_t)((((tuple) >> 13U) & 0x1FFFU) << ((((tuple) >> 8U) & 0x1FU))))
-#define CCM_TUPLE_BUSY_SHIFT(tuple) (((tuple) >> 26U) & 0x3FU)
+    (int)(((reg)&0xFFU) | ((shift) << 8U) | ((((mask) >> (shift)) & 0x1FFFU) << 13U) | ((busyShift) << 26U))
+#define CCM_TUPLE_REG(base, tuple) (*((volatile uint32_t *)(((uint32_t)(base)) + (((uint32_t)tuple) & 0xFFU))))
+#define CCM_TUPLE_SHIFT(tuple) ((((uint32_t)tuple) >> 8U) & 0x1FU)
+#define CCM_TUPLE_MASK(tuple) \
+    ((uint32_t)(((((uint32_t)tuple) >> 13U) & 0x1FFFU) << (((((uint32_t)tuple) >> 8U) & 0x1FU))))
+#define CCM_TUPLE_BUSY_SHIFT(tuple) ((((uint32_t)tuple) >> 26U) & 0x3FU)
 
 #define CCM_NO_BUSY_WAIT (0x20U)
 
 /*!
  * @brief CCM ANALOG tuple macros to map corresponding registers and bit fields.
  */
-#define CCM_ANALOG_TUPLE(reg, shift) (((reg & 0xFFFU) << 16U) | (shift))
-#define CCM_ANALOG_TUPLE_SHIFT(tuple) (((uint32_t)tuple) & 0x1FU)
+#define CCM_ANALOG_TUPLE(reg, shift) ((((reg)&0xFFFU) << 16U) | (shift))
+#define CCM_ANALOG_TUPLE_SHIFT(tuple) (((uint32_t)(tuple)) & 0x1FU)
 #define CCM_ANALOG_TUPLE_REG_OFF(base, tuple, off) \
-    (*((volatile uint32_t *)((uint32_t)base + (((uint32_t)tuple >> 16U) & 0xFFFU) + off)))
+    (*((volatile uint32_t *)((uint32_t)(base) + (((uint32_t)(tuple) >> 16U) & 0xFFFU) + (off))))
 #define CCM_ANALOG_TUPLE_REG(base, tuple) CCM_ANALOG_TUPLE_REG_OFF(base, tuple, 0U)
 
 #define CCM_ANALOG_PLL_BYPASS_SHIFT (16U)
@@ -108,8 +109,8 @@
  * function CLOCK_SetXtalFreq to set the value in to clock driver. For example,
  * if XTAL is 24MHz,
  * @code
- * CLOCK_InitExternalClk(false); // Setup the 24M OSC/SYSOSC
- * CLOCK_SetXtalFreq(240000000); // Set the XTAL value to clock driver.
+ * CLOCK_InitExternalClk(false);
+ * CLOCK_SetXtalFreq(240000000);
  * @endcode
  */
 extern volatile uint32_t g_xtalFreq;
@@ -719,7 +720,7 @@ static inline void CLOCK_SetMux(clock_mux_t mux, uint32_t value)
     if (CCM_NO_BUSY_WAIT != busyShift)
     {
         /* Wait until CCM internal handshake finish. */
-        while (CCM->CDHIPR & (1U << busyShift))
+        while ((CCM->CDHIPR & (1UL << busyShift)) != 0UL)
         {
         }
     }
@@ -746,7 +747,7 @@ static inline void CLOCK_SetDiv(clock_div_t divider, uint32_t value)
 {
     uint32_t busyShift;
 
-    busyShift                   = CCM_TUPLE_BUSY_SHIFT(divider);
+    busyShift                   = CCM_TUPLE_BUSY_SHIFT((uint32_t)divider);
     CCM_TUPLE_REG(CCM, divider) = (CCM_TUPLE_REG(CCM, divider) & (~CCM_TUPLE_MASK(divider))) |
                                   (((uint32_t)((value) << CCM_TUPLE_SHIFT(divider))) & CCM_TUPLE_MASK(divider));
 
@@ -756,7 +757,7 @@ static inline void CLOCK_SetDiv(clock_div_t divider, uint32_t value)
     if (CCM_NO_BUSY_WAIT != busyShift)
     {
         /* Wait until CCM internal handshake finish. */
-        while (CCM->CDHIPR & (1U << busyShift))
+        while ((CCM->CDHIPR & (1UL << busyShift)) != 0UL)
         {
         }
     }
@@ -784,10 +785,10 @@ static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t va
     uint32_t shift = ((uint32_t)name) & 0x1FU;
     volatile uint32_t *reg;
 
-    assert(index <= 6);
+    assert(index <= 6UL);
 
-    reg  = ((volatile uint32_t *)&CCM->CCGR0) + index;
-    *reg = ((*reg) & ~(3U << shift)) | (((uint32_t)value) << shift);
+    reg  = (volatile uint32_t *)(&(((volatile uint32_t *)&CCM->CCGR0)[index]));
+    *reg = ((*reg) & ~(3UL << shift)) | (((uint32_t)value) << shift);
 }
 
 /*!
@@ -826,13 +827,11 @@ static inline void CLOCK_SetMode(clock_mode_t mode)
  * This function will return the external XTAL OSC frequency if it is selected as the source of OSC,
  * otherwise internal 24MHz RC OSC frequency will be returned.
  *
- * @param osc   OSC type to get frequency.
- *
  * @return  Clock frequency; If the clock is invalid, returns 0.
  */
 static inline uint32_t CLOCK_GetOscFreq(void)
 {
-    return (XTALOSC24M->LOWPWR_CTRL & XTALOSC24M_LOWPWR_CTRL_OSC_SEL_MASK) ? 24000000UL : g_xtalFreq;
+    return ((XTALOSC24M->LOWPWR_CTRL & (uint32_t)XTALOSC24M_LOWPWR_CTRL_OSC_SEL_MASK) != 0UL) ? 24000000UL : g_xtalFreq;
 }
 
 /*!
@@ -862,7 +861,7 @@ uint32_t CLOCK_GetPerClkFreq(void);
  * This function checks the current clock configurations and then calculates
  * the clock frequency for a specific clock name defined in clock_name_t.
  *
- * @param clockName Clock names defined in clock_name_t
+ * @param name Clock names defined in clock_name_t
  * @return Clock frequency value in hertz
  */
 uint32_t CLOCK_GetFreq(clock_name_t name);
@@ -889,7 +888,7 @@ static inline uint32_t CLOCK_GetCpuClkFreq(void)
  * 1. Use external crystal oscillator.
  * 2. Bypass the external crystal oscillator, using input source clock directly.
  *
- * After this function, please call @ref CLOCK_SetXtal0Freq to inform clock driver
+ * After this function, please call CLOCK_SetXtal0Freq to inform clock driver
  * the external clock frequency.
  *
  * @param bypassXtalOsc Pass in true to bypass the external crystal oscillator.
@@ -903,7 +902,7 @@ void CLOCK_InitExternalClk(bool bypassXtalOsc);
  *
  * This function disables the external 24MHz clock.
  *
- * After this function, please call @ref CLOCK_SetXtal0Freq to set external clock
+ * After this function, please call CLOCK_SetXtal0Freq to set external clock
  * frequency to 0.
  */
 void CLOCK_DeinitExternalClk(void);
@@ -961,7 +960,7 @@ void CLOCK_DeinitRcOsc24M(void);
 /*! @brief Enable USB HS clock.
  *
  * This function only enables the access to USB HS prepheral, upper layer
- * should first call the @ref CLOCK_EnableUsbhs0PhyPllClock to enable the PHY
+ * should first call the CLOCK_EnableUsbhs0PhyPllClock to enable the PHY
  * clock to use USB HS.
  *
  * @param src  USB HS does not care about the clock source, here must be @ref kCLOCK_UsbSrcUnused.
@@ -990,11 +989,11 @@ static inline void CLOCK_SetPllBypass(CCM_ANALOG_Type *base, clock_pll_t pll, bo
 {
     if (bypass)
     {
-        CCM_ANALOG_TUPLE_REG_OFF(base, pll, 4U) = 1U << CCM_ANALOG_PLL_BYPASS_SHIFT;
+        CCM_ANALOG_TUPLE_REG_OFF(base, pll, 4U) = 1UL << CCM_ANALOG_PLL_BYPASS_SHIFT;
     }
     else
     {
-        CCM_ANALOG_TUPLE_REG_OFF(base, pll, 8U) = 1U << CCM_ANALOG_PLL_BYPASS_SHIFT;
+        CCM_ANALOG_TUPLE_REG_OFF(base, pll, 8U) = 1UL << CCM_ANALOG_PLL_BYPASS_SHIFT;
     }
 }
 
@@ -1009,7 +1008,7 @@ static inline void CLOCK_SetPllBypass(CCM_ANALOG_Type *base, clock_pll_t pll, bo
  */
 static inline bool CLOCK_IsPllBypassed(CCM_ANALOG_Type *base, clock_pll_t pll)
 {
-    return (bool)(CCM_ANALOG_TUPLE_REG(base, pll) & (1U << CCM_ANALOG_PLL_BYPASS_SHIFT));
+    return (bool)(CCM_ANALOG_TUPLE_REG(base, pll) & (1UL << CCM_ANALOG_PLL_BYPASS_SHIFT));
 }
 
 /*!
@@ -1023,7 +1022,7 @@ static inline bool CLOCK_IsPllBypassed(CCM_ANALOG_Type *base, clock_pll_t pll)
  */
 static inline bool CLOCK_IsPllEnabled(CCM_ANALOG_Type *base, clock_pll_t pll)
 {
-    return (bool)(CCM_ANALOG_TUPLE_REG(base, pll) & (1U << CCM_ANALOG_TUPLE_SHIFT(pll)));
+    return (bool)(CCM_ANALOG_TUPLE_REG(base, pll) & (1UL << CCM_ANALOG_TUPLE_SHIFT(pll)));
 }
 
 /*!
@@ -1049,8 +1048,8 @@ static inline void CLOCK_SetPllBypassRefClkSrc(CCM_ANALOG_Type *base, clock_pll_
  */
 static inline uint32_t CLOCK_GetPllBypassRefClk(CCM_ANALOG_Type *base, clock_pll_t pll)
 {
-    return (((CCM_ANALOG_TUPLE_REG(base, pll) & CCM_ANALOG_PLL_BYPASS_CLK_SRC_MASK) >>
-             CCM_ANALOG_PLL_BYPASS_CLK_SRC_SHIFT) == kCLOCK_PllClkSrc24M) ?
+    return ((((uint32_t)(CCM_ANALOG_TUPLE_REG(base, pll) & CCM_ANALOG_PLL_BYPASS_CLK_SRC_MASK)) >>
+             CCM_ANALOG_PLL_BYPASS_CLK_SRC_SHIFT) == (uint32_t)kCLOCK_PllClkSrc24M) ?
                CLOCK_GetOscFreq() :
                CLKPN_FREQ;
 }
@@ -1201,23 +1200,6 @@ bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq);
  * This function disables USB HS PHY PLL clock.
  */
 void CLOCK_DisableUsbhs0PhyPllClock(void);
-
-/*! @brief Enable USB HS PHY PLL clock.
- *
- * This function enables the internal 480MHz USB PHY PLL clock.
- *
- * @param src  USB HS PHY PLL clock source.
- * @param freq The frequency specified by src.
- * @retval true The clock is set successfully.
- * @retval false The clock source is invalid to get proper USB HS clock.
- */
-bool CLOCK_EnableUsbhs1PhyPllClock(clock_usb_phy_src_t src, uint32_t freq);
-
-/*! @brief Disable USB HS PHY PLL clock.
- *
- * This function disables USB HS PHY PLL clock.
- */
-void CLOCK_DisableUsbhs1PhyPllClock(void);
 
 /* @} */
 
