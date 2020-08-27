@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-06-19
-**     Build:               b191128
+**     Build:               b200508
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2020 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -118,8 +118,6 @@
 #define FSL_FEATURE_LPADC_HAS_CMDL_CTYPE (0)
 /* @brief Has conversion resolution select  (bitfield CMDLn[MODE]). */
 #define FSL_FEATURE_LPADC_HAS_CMDL_MODE (0)
-/* @brief Has compare function enable (bitfield CMDHn[CMPEN]). */
-#define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has Wait for trigger assertion before execution (bitfield CMDHn[WAIT_TRIG]). */
 #define FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG (0)
 /* @brief Has offset calibration (bitfield CTRL[CALOFS]). */
@@ -195,6 +193,10 @@
 #define FSL_FEATURE_DMIC_CHANNEL_HAS_SIGNEXTEND (1)
 /* @brief DMIC has no IOCFG register */
 #define FSL_FEATURE_DMIC_HAS_NO_IOCFG (1)
+/* @brief DMIC has decimator reset function */
+#define FSL_FEATURE_DMIC_HAS_DECIMATOR_RESET_FUNC (1)
+/* @brief DMIC has global channel synchronization function */
+#define FSL_FEATURE_DMIC_HAS_GLOBAL_SYNC_FUNC (1)
 
 /* FLEXCOMM module features */
 
@@ -341,6 +343,12 @@
 
 /* @brief OTFAD has Security Violation Mode (SVM) */
 #define FSL_FEATURE_OTFAD_HAS_SVM_MODE (0)
+/* @brief OTFAD has Key Blob Processing */
+#define FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING (0)
+/* @brief OTFAD has interrupt request enable */
+#define FSL_FEATURE_OTFAD_HAS_HAS_IRQ_ENABLE (0)
+/* @brief OTFAD has Force Error */
+#define FSL_FEATURE_OTFAD_HAS_FORCE_ERR (0)
 
 /* PINT module features */
 
@@ -374,6 +382,8 @@
 
 /* @brief USBPHY contain DCD analog module */
 #define FSL_FEATURE_USBPHY_HAS_DCD_ANALOG (1)
+/* @brief USBPHY has register TRIM_OVERRIDE_EN */
+#define FSL_FEATURE_USBPHY_HAS_TRIM_OVERRIDE_EN (1)
 
 /* USDHC module features */
 

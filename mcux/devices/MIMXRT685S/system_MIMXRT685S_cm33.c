@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
 **     Version:             rev. 2.0, 2019-11-12
-**     Build:               b191128
+**     Build:               b200414
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,7 +19,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2020 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -194,6 +194,7 @@ void SystemCoreClockUpdate (void) {
         freq = (uint64_t)freq * 18 /
                ((CLKCTL0->SYSPLL0PFD & CLKCTL0_SYSPLL0PFD_PFD0_MASK) >> CLKCTL0_SYSPLL0PFD_PFD0_SHIFT);
       }
+      freq = freq / ((CLKCTL0->MAINPLLCLKDIV & CLKCTL0_MAINPLLCLKDIV_DIV_MASK) + 1U);
       break;
 
     case CLKCTL0_MAINCLKSELB_SEL(3): /* RTC 32KHz clock */

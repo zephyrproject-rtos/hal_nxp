@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2019 , NXP
+ * Copyright 2016 - 2020 , NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -42,7 +42,7 @@
  * function CLOCK_SetXtalFreq to set the value in to clock driver. For example,
  * if XTAL is 16MHz,
  * @code
- * CLOCK_SetXtalFreq(160000000); // Set the XTALIN value to clock driver.
+ * CLOCK_SetXtalFreq(160000000);
  * @endcode
  */
 extern volatile uint32_t g_xtalFreq;
@@ -52,7 +52,7 @@ extern volatile uint32_t g_xtalFreq;
  * function CLOCK_SetClkinFreq to set the value in to clock driver. For example,
  * if CLK_IN is 16MHz,
  * @code
- * CLOCK_SetClkinFreq(160000000); // Set the CLK_IN value to clock driver.
+ * CLOCK_SetClkinFreq(160000000);
  * @endcode
  */
 extern volatile uint32_t g_clkinFreq;
@@ -62,7 +62,7 @@ extern volatile uint32_t g_clkinFreq;
  * function CLOCK_SetMclkInFreq to set the value in to clock driver. For example,
  * if mclk_In is 16MHz,
  * @code
- * CLOCK_SetMclkInFreq(160000000); // Set the MCLK_IN value to clock driver.
+ * CLOCK_SetMclkInFreq(160000000);
  * @endcode
  */
 extern volatile uint32_t g_mclkFreq;
@@ -460,12 +460,12 @@ typedef enum _clock_pfd
 #define I3C0FCLKDIV_OFFSET 0x790
 #define ACMP0FCLKDIV_OFFSET 0x7C4
 
-#define CLKCTL0_TUPLE_MUXA(reg, choice) ((reg & 0xFFFU) | ((choice) << 12U))
-#define CLKCTL0_TUPLE_MUXB(reg, choice) (((reg & 0xFFFU) << 16) | ((choice) << 28U))
-#define CLKCTL1_TUPLE_MUXA(reg, choice) (0x80000000U | ((reg & 0xFFFU) | ((choice) << 12U)))
-#define CLKCTL1_TUPLE_MUXB(reg, choice) (0x80000000U | (((reg & 0xFFFU) << 16) | ((choice) << 28U)))
-#define CLKCTL_TUPLE_REG(base, tuple) ((volatile uint32_t *)(((uint32_t)(base)) + ((tuple)&0xFFFU)))
-#define CLKCTL_TUPLE_SEL(tuple) (((tuple) >> 12U) & 0x7U)
+#define CLKCTL0_TUPLE_MUXA(reg, choice) (((reg)&0xFFFU) | ((choice) << 12U))
+#define CLKCTL0_TUPLE_MUXB(reg, choice) ((((reg)&0xFFFU) << 16) | ((choice) << 28U))
+#define CLKCTL1_TUPLE_MUXA(reg, choice) (0x80000000U | (((reg)&0xFFFU) | ((choice) << 12U)))
+#define CLKCTL1_TUPLE_MUXB(reg, choice) (0x80000000U | ((((reg)&0xFFFU) << 16) | ((choice) << 28U)))
+#define CLKCTL_TUPLE_REG(base, tuple) ((volatile uint32_t *)(((uint32_t)(base)) + ((uint32_t)(tuple)&0xFFFU)))
+#define CLKCTL_TUPLE_SEL(tuple) (((uint32_t)(tuple) >> 12U) & 0x7U)
 
 typedef enum _clock_attach_id
 {
@@ -837,24 +837,25 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
     switch (index)
     {
         case CLK_CTL0_PSCCTL0:
-            CLKCTL0->PSCCTL0_SET = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL0->PSCCTL0_SET = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         case CLK_CTL0_PSCCTL1:
-            CLKCTL0->PSCCTL1_SET = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL0->PSCCTL1_SET = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         case CLK_CTL0_PSCCTL2:
-            CLKCTL0->PSCCTL2_SET = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL0->PSCCTL2_SET = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         case CLK_CTL1_PSCCTL0:
-            CLKCTL1->PSCCTL0_SET = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL1->PSCCTL0_SET = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         case CLK_CTL1_PSCCTL1:
-            CLKCTL1->PSCCTL1_SET = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL1->PSCCTL1_SET = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         case CLK_CTL1_PSCCTL2:
-            CLKCTL1->PSCCTL2_SET = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL1->PSCCTL2_SET = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         default:
+            assert(false);
             break;
     }
 }
@@ -865,24 +866,25 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
     switch (index)
     {
         case CLK_CTL0_PSCCTL0:
-            CLKCTL0->PSCCTL0_CLR = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL0->PSCCTL0_CLR = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         case CLK_CTL0_PSCCTL1:
-            CLKCTL0->PSCCTL1_CLR = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL0->PSCCTL1_CLR = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         case CLK_CTL0_PSCCTL2:
-            CLKCTL0->PSCCTL2_CLR = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL0->PSCCTL2_CLR = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         case CLK_CTL1_PSCCTL0:
-            CLKCTL1->PSCCTL0_CLR = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL1->PSCCTL0_CLR = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         case CLK_CTL1_PSCCTL1:
-            CLKCTL1->PSCCTL1_CLR = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL1->PSCCTL1_CLR = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         case CLK_CTL1_PSCCTL2:
-            CLKCTL1->PSCCTL2_CLR = (1U << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
+            CLKCTL1->PSCCTL2_CLR = (1UL << CLK_GATE_ABSTRACT_BITS_SHIFT(clk));
             break;
         default:
+            assert(false);
             break;
     }
 }
@@ -1023,7 +1025,7 @@ static inline uint32_t CLOCK_GetLpOscFreq(void)
  */
 static inline uint32_t CLOCK_GetOsc32KFreq(void)
 {
-    return (CLKCTL0->OSC32KHZCTL0 & CLKCTL0_OSC32KHZCTL0_ENA32KHZ_MASK) ? CLK_RTC_32K_CLK : 0U;
+    return ((CLKCTL0->OSC32KHZCTL0 & CLKCTL0_OSC32KHZCTL0_ENA32KHZ_MASK) != 0UL) ? CLK_RTC_32K_CLK : 0U;
 }
 /*! @brief  Enables and disables 32kHz osc
  *  @param  enable : true to enable 32k osc clock, false to disable clock
@@ -1045,7 +1047,7 @@ static inline void CLOCK_EnableOsc32K(bool enable)
  */
 static inline uint32_t CLOCK_GetWakeClk32KFreq(void)
 {
-    return (CLKCTL0->WAKECLK32KHZSEL & CLKCTL0_WAKECLK32KHZSEL_SEL_MASK) ?
+    return ((CLKCTL0->WAKECLK32KHZSEL & CLKCTL0_WAKECLK32KHZSEL_SEL_MASK) != 0UL) ?
                CLOCK_GetLpOscFreq() / ((CLKCTL0->WAKECLK32KHZDIV & 0xffU) + 1U) :
                CLOCK_GetOsc32KFreq();
 }
@@ -1137,7 +1139,7 @@ void CLOCK_InitSysPfd(clock_pfd_t pfd, uint8_t divider);
  */
 static inline void CLOCK_DeinitSysPfd(clock_pfd_t pfd)
 {
-    CLKCTL0->SYSPLL0PFD |= (CLKCTL1_AUDIOPLL0PFD_PFD0_CLKGATE_MASK << (8 * pfd));
+    CLKCTL0->SYSPLL0PFD |= ((uint32_t)CLKCTL1_AUDIOPLL0PFD_PFD0_CLKGATE_MASK << (8UL * (uint32_t)pfd));
 }
 /*! @brief  Initialize the audio PLL.
  *  @param  config    : Configuration to set to PLL.
@@ -1164,7 +1166,7 @@ void CLOCK_InitAudioPfd(clock_pfd_t pfd, uint8_t divider);
  */
 static inline void CLOCK_DeinitAudioPfd(uint32_t pfd)
 {
-    CLKCTL1->AUDIOPLL0PFD |= (CLKCTL1_AUDIOPLL0PFD_PFD0_CLKGATE_MASK << (8 * pfd));
+    CLKCTL1->AUDIOPLL0PFD |= ((uint32_t)CLKCTL1_AUDIOPLL0PFD_PFD0_CLKGATE_MASK << (8UL * (uint32_t)pfd));
 }
 /*! @brief Enable USB HS device PLL clock.
  *
