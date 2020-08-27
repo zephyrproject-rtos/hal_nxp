@@ -149,7 +149,7 @@ void SystemInit (void) {
   LMEM->PCCCR |= LMEM_PCCCR_INVW1_MASK | LMEM_PCCCR_INVW0_MASK;
   LMEM->PCCCR |= LMEM_PCCCR_GO_MASK;
   /* Wait until the command completes */
-  while (LMEM->PCCCR & LMEM_PCCCR_GO_MASK) {
+  while ((LMEM->PCCCR & LMEM_PCCCR_GO_MASK) != 0U) {
   }
   /* Enable cache, enable write buffer */
   LMEM->PCCCR |= (LMEM_PCCCR_ENWRBUF_MASK | LMEM_PCCCR_ENCACHE_MASK);
@@ -159,7 +159,7 @@ void SystemInit (void) {
   LMEM->PSCCR |= LMEM_PSCCR_INVW1_MASK | LMEM_PSCCR_INVW0_MASK;
   LMEM->PSCCR |= LMEM_PSCCR_GO_MASK;
   /* Wait until the command completes */
-  while (LMEM->PSCCR & LMEM_PSCCR_GO_MASK) {
+  while ((LMEM->PSCCR & LMEM_PSCCR_GO_MASK) != 0U) {
   }
   /* Enable cache, enable write buffer */
   LMEM->PSCCR |= (LMEM_PSCCR_ENWRBUF_MASK | LMEM_PSCCR_ENCACHE_MASK);
