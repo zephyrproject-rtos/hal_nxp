@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2019-02-20
-**     Build:               b191008
+**     Build:               b200211
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2020 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -133,6 +133,8 @@
 
 /* @brief Has DMA model control(bit field CTRL[DMA_MODE_SEL]). */
 #define FSL_FEATURE_ADC_ETC_HAS_CTRL_DMA_MODE_SEL (1)
+/* @brief Has TRIGm_CHAIN_a_b IEn_EN. */
+#define FSL_FEATURE_ADC_ETC_HAS_TRIGm_CHAIN_a_b_IEn_EN (0)
 
 /* AOI module features */
 
@@ -145,6 +147,23 @@
 
 /* @brief Is affected by errata with ID 50235 (Incorrect clock setting for CAN affects by LPUART clock gate). */
 #define FSL_FEATURE_CCM_HAS_ERRATA_50235 (0)
+
+/* DCDC module features */
+
+/* @brief Has CTRL register (register CTRL0/1). */
+#define FSL_FEATURE_DCDC_HAS_CTRL_REG (0)
+/* @brief DCDC VDD output count. */
+#define FSL_FEATURE_DCDC_VDD_OUTPUT_COUNT (1)
+/* @brief Has no current alert function (register bit field REG0[CURRENT_ALERT_RESET]). */
+#define FSL_FEATURE_DCDC_HAS_NO_CURRENT_ALERT_FUNC (0)
+/* @brief Has switching converter differential mode (register bit field REG1[LOOPCTRL_EN_DF_HYST]). */
+#define FSL_FEATURE_DCDC_HAS_SWITCHING_CONVERTER_DIFFERENTIAL_MODE (0)
+/* @brief Has register bit field REG0[REG_DCDC_IN_DET]. */
+#define FSL_FEATURE_DCDC_HAS_REG0_DCDC_IN_DET (0)
+/* @brief Has no register bit field REG0[EN_LP_OVERLOAD_SNS]. */
+#define FSL_FEATURE_DCDC_HAS_NO_REG0_EN_LP_OVERLOAD_SNS (0)
+/* @brief Has register bit field REG3[REG_FBK_SEL]). */
+#define FSL_FEATURE_DCDC_HAS_REG3_FBK_SEL (0)
 
 /* EDMA module features */
 
@@ -225,6 +244,8 @@
 #define FSL_FEATURE_FLEXSPI_HAS_NO_DATA_LEARN (1)
 /* @brief There is AHBBUSERROREN bit in INTEN register. */
 #define FSL_FEATURE_FLEXSPI_HAS_INTEN_AHBBUSERROREN (0)
+/* @brief There is CLRAHBTX_RXBUF bit in AHBCR register. */
+#define FSL_FEATURE_FLEXSPI_HAS_AHBCR_CLRAHBTX_RXBUF (0)
 
 /* GPC module features */
 
@@ -346,7 +367,12 @@
 
 /* OCOTP module features */
 
-/* No feature definitions */
+/* @brief Has timing control, (register TIMING). */
+#define FSL_FEATURE_OCOTP_HAS_TIMING_CTRL (1)
+/* @brief Support lock eFuse word write lock, (CTRL[WORDLOCK]). */
+#define FSL_FEATURE_OCOTP_HAS_WORDLOCK (0)
+/* @brief Has status register. (Register HW_OCOTP_OUT_STATUS0). */
+#define FSL_FEATURE_OCOTP_HAS_STATUS (0)
 
 /* PIT module features */
 
@@ -363,24 +389,12 @@
 
 /* PWM module features */
 
-/* @brief Number of each EflexPWM module channels (outputs). */
-#define FSL_FEATURE_PWM_CHANNEL_COUNT (12U)
-/* @brief Number of EflexPWM module A channels (outputs). */
-#define FSL_FEATURE_PWM_CHANNELA_COUNT (4U)
-/* @brief Number of EflexPWM module B channels (outputs). */
-#define FSL_FEATURE_PWM_CHANNELB_COUNT (4U)
-/* @brief Number of EflexPWM module X channels (outputs). */
-#define FSL_FEATURE_PWM_CHANNELX_COUNT (4U)
-/* @brief Number of each EflexPWM module compare channels interrupts. */
-#define FSL_FEATURE_PWM_CMP_INT_HANDLER_COUNT (4U)
-/* @brief Number of each EflexPWM module reload channels interrupts. */
-#define FSL_FEATURE_PWM_RELOAD_INT_HANDLER_COUNT (4U)
-/* @brief Number of each EflexPWM module capture channels interrupts. */
-#define FSL_FEATURE_PWM_CAP_INT_HANDLER_COUNT (1U)
-/* @brief Number of each EflexPWM module reload error channels interrupts. */
-#define FSL_FEATURE_PWM_RERR_INT_HANDLER_COUNT (1U)
-/* @brief Number of each EflexPWM module fault channels interrupts. */
-#define FSL_FEATURE_PWM_FAULT_INT_HANDLER_COUNT (1U)
+/* @brief If EflexPWM has module A channels (outputs). */
+#define FSL_FEATURE_PWM_HAS_CHANNELA (1)
+/* @brief If EflexPWM has module B channels (outputs). */
+#define FSL_FEATURE_PWM_HAS_CHANNELB (1)
+/* @brief If EflexPWM has module X channels (outputs). */
+#define FSL_FEATURE_PWM_HAS_CHANNELX (1)
 /* @brief Number of submodules in each EflexPWM module. */
 #define FSL_FEATURE_PWM_SUBMODULE_COUNT (4U)
 
@@ -509,6 +523,13 @@
 #define FSL_FEATURE_USBHS_EHCI_COUNT (1)
 /* @brief Number of endpoints supported */
 #define FSL_FEATURE_USBHS_ENDPT_COUNT (8)
+
+/* USBPHY module features */
+
+/* @brief USBPHY contain DCD analog module */
+#define FSL_FEATURE_USBPHY_HAS_DCD_ANALOG (0)
+/* @brief USBPHY has register TRIM_OVERRIDE_EN */
+#define FSL_FEATURE_USBPHY_HAS_TRIM_OVERRIDE_EN (0)
 
 /* XBARA module features */
 
