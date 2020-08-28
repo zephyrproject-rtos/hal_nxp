@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FLEXSPI DMA driver version 2.1.0. */
-#define FSL_FLEXSPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief FLEXSPI DMA driver version 2.2.0. */
+#define FSL_FLEXSPI_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 typedef struct _flexspi_dma_handle flexspi_dma_handle_t;
@@ -131,7 +131,7 @@ void FLEXSPI_TransferAbortDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle);
  * @retval kStatus_Success Succeed get the transfer count.
  * @retval kStatus_NoTransferInProgress There is not a non-blocking transaction currently in progress.
  */
-status_t FLEXSPI_TransferGetCountDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle, size_t *count);
+status_t FLEXSPI_TransferGetTransferCountDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle, size_t *count);
 
 /* @} */
 

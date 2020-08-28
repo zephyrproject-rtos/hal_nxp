@@ -17,8 +17,8 @@
 
 /* RT6xx POWER CONTROL bit masks */
 #if defined(FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL) && (FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL > 0)
-#define PUF_PWRCTRL_CKDIS_MASK (0x4U)
-#define PUF_PWRCTRL_RAMINIT_MASK (0x8U)
+#define PUF_PWRCTRL_CKDIS_MASK         (0x4U)
+#define PUF_PWRCTRL_RAMINIT_MASK       (0x8U)
 #define PUF_PWRCTRL_RAMPSWLARGEMA_MASK (0x10U)
 #define PUF_PWRCTRL_RAMPSWLARGEMP_MASK (0x20U)
 #define PUF_PWRCTRL_RAMPSWSMALLMA_MASK (0x40U)
@@ -27,11 +27,10 @@
 
 #if defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && (FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0)
 #define DEFAULT_CKGATING 0x0u
-#define PUF_ENABLE_MASK 0xFFFFFFFEu
-#define PUF_ENABLE_CTRL 0x1u
-#endif /* FSL_FEATURE_PUF_HAS_SRAM_CTRL */
+#define PUF_ENABLE_MASK  0xFFFFFFFEu
+#define PUF_ENABLE_CTRL  0x1u
 
-#if !defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && !(FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0)
+#else
 static void puf_wait_usec(volatile uint32_t usec, uint32_t coreClockFrequencyMHz)
 {
     while (usec > 0U)
@@ -46,7 +45,7 @@ static void puf_wait_usec(volatile uint32_t usec, uint32_t coreClockFrequencyMHz
         }
     }
 }
-#endif /* !defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && !(FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0) */
+#endif /* defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && (FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0) */
 
 static status_t puf_waitForInit(PUF_Type *base)
 {
@@ -81,12 +80,8 @@ static void puf_powerOn(PUF_Type *base, puf_config_t *conf)
 #elif defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && (FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0)
     /* LPCXpresso55s16 */
     conf->puf_sram_base->CFG |= PUF_ENABLE_CTRL;
-    while (0 == (PUF_SRAM_CTRL_STATUS_READY_MASK & conf->puf_sram_base->STATUS))
+    while (0U == (PUF_SRAM_CTRL_STATUS_READY_MASK & conf->puf_sram_base->STATUS))
     {
-    }
-    else
-    {
-        conf->puf_sram_base->CFG |= PUF_ENABLE_CTRL;
     }
 #else  /* !FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL */
     /* LPCXpresso55s69 & LPCXpresso54S018 */
@@ -215,7 +210,7 @@ status_t PUF_Init(PUF_Type *base, puf_config_t *conf)
     status = puf_waitForInit(base);
 
     /* In case of error or enroll & start not allowed, do power-cycle */
-    if ((status != kStatus_Success) || (base->ALLOW & ((PUF_ALLOW_ALLOWENROLL_MASK | PUF_ALLOW_ALLOWSTART_MASK) == 0U)))
+    if ((status != kStatus_Success) || (0U != (base->ALLOW & (PUF_ALLOW_ALLOWENROLL_MASK | PUF_ALLOW_ALLOWSTART_MASK))))
     {
         (void)PUF_PowerCycle(base, conf);
         status = puf_waitForInit(base);
@@ -556,13 +551,11 @@ status_t PUF_SetUserKey(PUF_Type *base,
     base->KEYSIZE  = userKeySize >> 3; /* convert to 64-bit blocks */
     base->KEYINDEX = (uint32_t)keyIndex;
 
-    /* On LPCXpresso54S018 we have to store the user key on index 0 word swaped for HW bus */
-#if defined(LPC54S018_SERIES)
+    /* We have to store the user key on index 0 swaped for HW bus */
     if (keyIndex == kPUF_KeyIndex_00)
     {
         userKeyAligned = userKeyAligned + (userKeySize / sizeof(uint32_t));
     }
-#endif /*LPC54S018_SERIES*/
 
     /* begin */
     base->CTRL = PUF_CTRL_SETKEY_MASK;
@@ -586,17 +579,24 @@ status_t PUF_SetUserKey(PUF_Type *base,
                     temp32 = *userKeyAligned;
                     userKeySize -= sizeof(uint32_t);
                 }
-                else
+#else
+                if (keyIndex == kPUF_KeyIndex_00)
+                {
+                    userKeyAligned--;
+                    temp32 = __REV(*userKeyAligned);
+                    userKeySize--;
+                }
+#endif /* defined(LPC54S018_SERIES) */
+                else if (keyIndex != kPUF_KeyIndex_00)
                 {
                     temp32 = *userKeyAligned;
                     userKeyAligned++;
                     userKeySize -= sizeof(uint32_t);
                 }
-#else
-                temp32 = *userKeyAligned;
-                userKeyAligned++;
-                userKeySize -= sizeof(uint32_t);
-#endif /* LPC54S018_SERIES */
+                else
+                {
+                    /* Intentional empty */
+                }
             }
             base->KEYINPUT = temp32;
         }

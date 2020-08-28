@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief I2C DMA driver version 2.0.7. */
-#define FSL_I2C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
+/*! @brief I2C DMA driver version 2.0.8. */
+#define FSL_I2C_DMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
 /*@}*/
 
 /*! @brief Maximum lenght of single DMA transfer (determined by capability of the DMA engine) */

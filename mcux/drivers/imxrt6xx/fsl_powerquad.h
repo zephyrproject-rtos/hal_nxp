@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -36,27 +36,27 @@
 #define PQ_FLOAT32 0U
 #define PQ_FIXEDPT 1U
 
-#define CP_PQ 0U
-#define CP_MTX 1U
-#define CP_FFT 2U
-#define CP_FIR 3U
+#define CP_PQ     0U
+#define CP_MTX    1U
+#define CP_FFT    2U
+#define CP_FIR    3U
 #define CP_CORDIC 5U
 
-#define PQ_TRANS 0U
-#define PQ_TRIG 1U
+#define PQ_TRANS  0U
+#define PQ_TRIG   1U
 #define PQ_BIQUAD 2U
 
-#define PQ_TRANS_FIXED 4U
-#define PQ_TRIG_FIXED 5U
+#define PQ_TRANS_FIXED  4U
+#define PQ_TRIG_FIXED   5U
 #define PQ_BIQUAD_FIXED 6U
 
-#define PQ_INV 0U
-#define PQ_LN 1U
-#define PQ_SQRT 2U
+#define PQ_INV     0U
+#define PQ_LN      1U
+#define PQ_SQRT    2U
 #define PQ_INVSQRT 3U
-#define PQ_ETOX 4U
-#define PQ_ETONX 5U
-#define PQ_DIV 6U
+#define PQ_ETOX    4U
+#define PQ_ETONX   5U
+#define PQ_DIV     6U
 
 #define PQ_SIN 0U
 #define PQ_COS 1U
@@ -68,17 +68,17 @@
 #define PQ_COMP1_ONLY (1U << 1U)
 
 #define CORDIC_ITER(x) ((uint32_t)(x) << 2U)
-#define CORDIC_MIU(x) ((uint32_t)(x) << 1U)
-#define CORDIC_T(x) ((uint32_t)(x) << 0U)
-#define CORDIC_ARCTAN CORDIC_T(1U) | CORDIC_MIU(0U)
+#define CORDIC_MIU(x)  ((uint32_t)(x) << 1U)
+#define CORDIC_T(x)    ((uint32_t)(x) << 0U)
+#define CORDIC_ARCTAN  CORDIC_T(1U) | CORDIC_MIU(0U)
 #define CORDIC_ARCTANH CORDIC_T(1U) | CORDIC_MIU(1U)
 
 #define INST_BUSY 0x80000000U
 
-#define PQ_ERRSTAT_OVERFLOW 0U
-#define PQ_ERRSTAT_NAN 1U
+#define PQ_ERRSTAT_OVERFLOW      0U
+#define PQ_ERRSTAT_NAN           1U
 #define PQ_ERRSTAT_FIXEDOVERFLOW 2U
-#define PQ_ERRSTAT_UNDERFLOW 3U
+#define PQ_ERRSTAT_UNDERFLOW     3U
 
 #define PQ_TRANS_CFFT 0U
 #define PQ_TRANS_IFFT 1U
@@ -88,71 +88,71 @@
 #define PQ_TRANS_RDCT 6U
 
 #define PQ_MTX_SCALE 1U
-#define PQ_MTX_MULT 2U
-#define PQ_MTX_ADD 3U
-#define PQ_MTX_INV 4U
-#define PQ_MTX_PROD 5U
-#define PQ_MTX_SUB 7U
-#define PQ_VEC_DOTP 9U
-#define PQ_MTX_TRAN 10U
+#define PQ_MTX_MULT  2U
+#define PQ_MTX_ADD   3U
+#define PQ_MTX_INV   4U
+#define PQ_MTX_PROD  5U
+#define PQ_MTX_SUB   7U
+#define PQ_VEC_DOTP  9U
+#define PQ_MTX_TRAN  10U
 
 /* FIR engine operation type */
-#define PQ_FIR_FIR 0U
+#define PQ_FIR_FIR         0U
 #define PQ_FIR_CONVOLUTION 1U
 #define PQ_FIR_CORRELATION 2U
 #define PQ_FIR_INCREMENTAL 4U
 
-#define _pq_ln0(x) __arm_mcr(CP_PQ, PQ_LN, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRANS)
-#define _pq_inv0(x) __arm_mcr(CP_PQ, PQ_INV, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRANS)
-#define _pq_sqrt0(x) __arm_mcr(CP_PQ, PQ_SQRT, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRANS)
+#define _pq_ln0(x)      __arm_mcr(CP_PQ, PQ_LN, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRANS)
+#define _pq_inv0(x)     __arm_mcr(CP_PQ, PQ_INV, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRANS)
+#define _pq_sqrt0(x)    __arm_mcr(CP_PQ, PQ_SQRT, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRANS)
 #define _pq_invsqrt0(x) __arm_mcr(CP_PQ, PQ_INVSQRT, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRANS)
-#define _pq_etox0(x) __arm_mcr(CP_PQ, PQ_ETOX, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRANS)
-#define _pq_etonx0(x) __arm_mcr(CP_PQ, PQ_ETONX, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRANS)
-#define _pq_sin0(x) __arm_mcr(CP_PQ, PQ_SIN, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRIG)
-#define _pq_cos0(x) __arm_mcr(CP_PQ, PQ_COS, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRIG)
-#define _pq_biquad0(x) __arm_mcr(CP_PQ, PQ_BIQ0_CALC, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_BIQUAD)
+#define _pq_etox0(x)    __arm_mcr(CP_PQ, PQ_ETOX, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRANS)
+#define _pq_etonx0(x)   __arm_mcr(CP_PQ, PQ_ETONX, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRANS)
+#define _pq_sin0(x)     __arm_mcr(CP_PQ, PQ_SIN, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRIG)
+#define _pq_cos0(x)     __arm_mcr(CP_PQ, PQ_COS, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_TRIG)
+#define _pq_biquad0(x)  __arm_mcr(CP_PQ, PQ_BIQ0_CALC, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP0_ONLY, 0, PQ_BIQUAD)
 
-#define _pq_ln_fx0(x) __arm_mcr(CP_PQ, PQ_LN, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRANS_FIXED)
-#define _pq_inv_fx0(x) __arm_mcr(CP_PQ, PQ_INV, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRANS_FIXED)
-#define _pq_sqrt_fx0(x) __arm_mcr(CP_PQ, PQ_SQRT, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRANS_FIXED)
+#define _pq_ln_fx0(x)      __arm_mcr(CP_PQ, PQ_LN, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRANS_FIXED)
+#define _pq_inv_fx0(x)     __arm_mcr(CP_PQ, PQ_INV, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRANS_FIXED)
+#define _pq_sqrt_fx0(x)    __arm_mcr(CP_PQ, PQ_SQRT, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRANS_FIXED)
 #define _pq_invsqrt_fx0(x) __arm_mcr(CP_PQ, PQ_INVSQRT, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRANS_FIXED)
-#define _pq_etox_fx0(x) __arm_mcr(CP_PQ, PQ_ETOX, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRANS_FIXED)
-#define _pq_etonx_fx0(x) __arm_mcr(CP_PQ, PQ_ETONX, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRANS_FIXED)
-#define _pq_sin_fx0(x) __arm_mcr(CP_PQ, PQ_SIN, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRIG_FIXED)
-#define _pq_cos_fx0(x) __arm_mcr(CP_PQ, PQ_COS, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRIG_FIXED)
-#define _pq_biquad0_fx(x) __arm_mcr(CP_PQ, PQ_BIQ0_CALC, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_BIQUAD_FIXED)
+#define _pq_etox_fx0(x)    __arm_mcr(CP_PQ, PQ_ETOX, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRANS_FIXED)
+#define _pq_etonx_fx0(x)   __arm_mcr(CP_PQ, PQ_ETONX, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRANS_FIXED)
+#define _pq_sin_fx0(x)     __arm_mcr(CP_PQ, PQ_SIN, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRIG_FIXED)
+#define _pq_cos_fx0(x)     __arm_mcr(CP_PQ, PQ_COS, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_TRIG_FIXED)
+#define _pq_biquad0_fx(x)  __arm_mcr(CP_PQ, PQ_BIQ0_CALC, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP0_ONLY, 0, PQ_BIQUAD_FIXED)
 
 #define _pq_div0(x) __arm_mcrr(CP_PQ, PQ_FLOAT32 | PQ_COMP0_ONLY, (uint64_t)(x), PQ_DIV)
 #define _pq_div1(x) __arm_mcrr(CP_PQ, PQ_FLOAT32 | PQ_COMP1_ONLY, (uint64_t)(x), PQ_DIV)
 
-#define _pq_ln1(x) __arm_mcr(CP_PQ, PQ_LN, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRANS)
-#define _pq_inv1(x) __arm_mcr(CP_PQ, PQ_INV, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRANS)
-#define _pq_sqrt1(x) __arm_mcr(CP_PQ, PQ_SQRT, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRANS)
+#define _pq_ln1(x)      __arm_mcr(CP_PQ, PQ_LN, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRANS)
+#define _pq_inv1(x)     __arm_mcr(CP_PQ, PQ_INV, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRANS)
+#define _pq_sqrt1(x)    __arm_mcr(CP_PQ, PQ_SQRT, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRANS)
 #define _pq_invsqrt1(x) __arm_mcr(CP_PQ, PQ_INVSQRT, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRANS)
-#define _pq_etox1(x) __arm_mcr(CP_PQ, PQ_ETOX, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRANS)
-#define _pq_etonx1(x) __arm_mcr(CP_PQ, PQ_ETONX, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRANS)
-#define _pq_sin1(x) __arm_mcr(CP_PQ, PQ_SIN, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRIG)
-#define _pq_cos1(x) __arm_mcr(CP_PQ, PQ_COS, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRIG)
-#define _pq_biquad1(x) __arm_mcr(CP_PQ, PQ_BIQ1_CALC, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_BIQUAD)
+#define _pq_etox1(x)    __arm_mcr(CP_PQ, PQ_ETOX, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRANS)
+#define _pq_etonx1(x)   __arm_mcr(CP_PQ, PQ_ETONX, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRANS)
+#define _pq_sin1(x)     __arm_mcr(CP_PQ, PQ_SIN, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRIG)
+#define _pq_cos1(x)     __arm_mcr(CP_PQ, PQ_COS, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_TRIG)
+#define _pq_biquad1(x)  __arm_mcr(CP_PQ, PQ_BIQ1_CALC, (uint32_t)(x), PQ_FLOAT32 | PQ_COMP1_ONLY, 0, PQ_BIQUAD)
 
-#define _pq_ln_fx1(x) __arm_mcr(CP_PQ, PQ_LN, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRANS_FIXED)
-#define _pq_inv_fx1(x) __arm_mcr(CP_PQ, PQ_INV, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRANS_FIXED)
-#define _pq_sqrt_fx1(x) __arm_mcr(CP_PQ, PQ_SQRT, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRANS_FIXED)
+#define _pq_ln_fx1(x)      __arm_mcr(CP_PQ, PQ_LN, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRANS_FIXED)
+#define _pq_inv_fx1(x)     __arm_mcr(CP_PQ, PQ_INV, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRANS_FIXED)
+#define _pq_sqrt_fx1(x)    __arm_mcr(CP_PQ, PQ_SQRT, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRANS_FIXED)
 #define _pq_invsqrt_fx1(x) __arm_mcr(CP_PQ, PQ_INVSQRT, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRANS_FIXED)
-#define _pq_etox_fx1(x) __arm_mcr(CP_PQ, PQ_ETOX, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRANS_FIXED)
-#define _pq_etonx_fx1(x) __arm_mcr(CP_PQ, PQ_ETONX, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRANS_FIXED)
-#define _pq_sin_fx1(x) __arm_mcr(CP_PQ, PQ_SIN, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRIG_FIXED)
-#define _pq_cos_fx1(x) __arm_mcr(CP_PQ, PQ_COS, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRIG_FIXED)
-#define _pq_biquad1_fx(x) __arm_mcr(CP_PQ, PQ_BIQ1_CALC, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_BIQUAD_FIXED)
+#define _pq_etox_fx1(x)    __arm_mcr(CP_PQ, PQ_ETOX, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRANS_FIXED)
+#define _pq_etonx_fx1(x)   __arm_mcr(CP_PQ, PQ_ETONX, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRANS_FIXED)
+#define _pq_sin_fx1(x)     __arm_mcr(CP_PQ, PQ_SIN, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRIG_FIXED)
+#define _pq_cos_fx1(x)     __arm_mcr(CP_PQ, PQ_COS, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_TRIG_FIXED)
+#define _pq_biquad1_fx(x)  __arm_mcr(CP_PQ, PQ_BIQ1_CALC, (uint32_t)(x), PQ_FIXEDPT | PQ_COMP1_ONLY, 0, PQ_BIQUAD_FIXED)
 
-#define _pq_readMult0() __arm_mrc(CP_PQ, 0, PQ_FLOAT32 | PQ_COMP0_ONLY, 0, 0)
-#define _pq_readAdd0() __arm_mrc(CP_PQ, 1, PQ_FLOAT32 | PQ_COMP0_ONLY, 0, 0)
-#define _pq_readMult1() __arm_mrc(CP_PQ, 0, PQ_FLOAT32 | PQ_COMP1_ONLY, 0, 0)
-#define _pq_readAdd1() __arm_mrc(CP_PQ, 1, PQ_FLOAT32 | PQ_COMP1_ONLY, 0, 0)
+#define _pq_readMult0()    __arm_mrc(CP_PQ, 0, PQ_FLOAT32 | PQ_COMP0_ONLY, 0, 0)
+#define _pq_readAdd0()     __arm_mrc(CP_PQ, 1, PQ_FLOAT32 | PQ_COMP0_ONLY, 0, 0)
+#define _pq_readMult1()    __arm_mrc(CP_PQ, 0, PQ_FLOAT32 | PQ_COMP1_ONLY, 0, 0)
+#define _pq_readAdd1()     __arm_mrc(CP_PQ, 1, PQ_FLOAT32 | PQ_COMP1_ONLY, 0, 0)
 #define _pq_readMult0_fx() __arm_mrc(CP_PQ, 0, PQ_FIXEDPT | PQ_COMP0_ONLY, 0, 0)
-#define _pq_readAdd0_fx() __arm_mrc(CP_PQ, 1, PQ_FIXEDPT | PQ_COMP0_ONLY, 0, 0)
+#define _pq_readAdd0_fx()  __arm_mrc(CP_PQ, 1, PQ_FIXEDPT | PQ_COMP0_ONLY, 0, 0)
 #define _pq_readMult1_fx() __arm_mrc(CP_PQ, 0, PQ_FIXEDPT | PQ_COMP1_ONLY, 0, 0)
-#define _pq_readAdd1_fx() __arm_mrc(CP_PQ, 1, PQ_FIXEDPT | PQ_COMP1_ONLY, 0, 0)
+#define _pq_readAdd1_fx()  __arm_mrc(CP_PQ, 1, PQ_FIXEDPT | PQ_COMP1_ONLY, 0, 0)
 
 /*! Parameter used for vector ln(x) */
 #define PQ_LN_INF PQ_LN, 1, PQ_TRANS
@@ -359,8 +359,8 @@
  *
  * Start the vector calculation, the input data could be float, int32_t or Q31.
  *
- * @param PSRC  Pointer to the source data.
- * @param PDST  Pointer to the destination data.
+ * @param pSrc  Pointer to the source data.
+ * @param pDst  Pointer to the destination data.
  */
 #define PQ_Initiate_Vector_Func(pSrc, pDst)              \
     __asm volatile(                                      \
@@ -1780,7 +1780,7 @@ static inline void PQ_LnF32(float *pSrc, float *pDst)
     val.floatX = *pSrc;
     _pq_ln0(val.integerX);
     val.integerX = _pq_readAdd0();
-    *pDst = val.floatX;
+    *pDst        = val.floatX;
 }
 
 /*!
@@ -1796,7 +1796,7 @@ static inline void PQ_InvF32(float *pSrc, float *pDst)
     val.floatX = *pSrc;
     _pq_inv0(val.integerX);
     val.integerX = _pq_readMult0();
-    *pDst = val.floatX;
+    *pDst        = val.floatX;
 }
 
 /*!
@@ -1812,7 +1812,7 @@ static inline void PQ_SqrtF32(float *pSrc, float *pDst)
     val.floatX = *pSrc;
     _pq_sqrt0(val.integerX);
     val.integerX = _pq_readMult0();
-    *pDst = val.floatX;
+    *pDst        = val.floatX;
 }
 
 /*!
@@ -1828,7 +1828,7 @@ static inline void PQ_InvSqrtF32(float *pSrc, float *pDst)
     val.floatX = *pSrc;
     _pq_invsqrt0(val.integerX);
     val.integerX = _pq_readMult0();
-    *pDst = val.floatX;
+    *pDst        = val.floatX;
 }
 
 /*!
@@ -1844,7 +1844,7 @@ static inline void PQ_EtoxF32(float *pSrc, float *pDst)
     val.floatX = *pSrc;
     _pq_etox0(val.integerX);
     val.integerX = _pq_readMult0();
-    *pDst = val.floatX;
+    *pDst        = val.floatX;
 }
 
 /*!
@@ -1860,7 +1860,7 @@ static inline void PQ_EtonxF32(float *pSrc, float *pDst)
     val.floatX = *pSrc;
     _pq_etonx0(val.integerX);
     val.integerX = _pq_readMult0();
-    *pDst = val.floatX;
+    *pDst        = val.floatX;
 }
 
 /*!
@@ -1877,7 +1877,7 @@ static inline void PQ_SinF32(float *pSrc, float *pDst)
     val.floatX = *pSrc;
     _pq_sin0(val.integerX);
     val.integerX = _pq_readAdd0();
-    *pDst = val.floatX;
+    *pDst        = val.floatX;
 }
 
 /*!
@@ -1894,7 +1894,7 @@ static inline void PQ_CosF32(float *pSrc, float *pDst)
     val.floatX = *pSrc;
     _pq_cos0(val.integerX);
     val.integerX = _pq_readAdd0();
-    *pDst = val.floatX;
+    *pDst        = val.floatX;
 }
 
 /*!
@@ -1910,7 +1910,7 @@ static inline void PQ_BiquadF32(float *pSrc, float *pDst)
     val.floatX = *pSrc;
     _pq_biquad0(val.integerX);
     val.integerX = _pq_readAdd0();
-    *pDst = val.floatX;
+    *pDst        = val.floatX;
 }
 
 /*!
@@ -1927,13 +1927,13 @@ static inline void PQ_DivF32(float *x1, float *x2, float *pDst)
     pq_float_t X1;
     pq_float_t X2;
 
-    X1.floatX = *x1;
-    X2.floatX = *x2;
+    X1.floatX      = *x1;
+    X2.floatX      = *x2;
     uint64_t input = (uint64_t)(X2.integerX) | ((uint64_t)(X1.integerX) << 32U);
 
     _pq_div0(input);
     X1.integerX = _pq_readMult0();
-    *pDst = X1.floatX;
+    *pDst       = X1.floatX;
 }
 
 /*!
@@ -1949,7 +1949,7 @@ static inline void PQ_Biquad1F32(float *pSrc, float *pDst)
     val.floatX = *pSrc;
     _pq_biquad1(val.integerX);
     val.integerX = _pq_readAdd1();
-    *pDst = val.floatX;
+    *pDst        = val.floatX;
 }
 
 /*!
@@ -2411,7 +2411,7 @@ void PQ_VectorBiqaudDf2F32(float *pSrc, float *pDst, int32_t length);
  *
  * @param  *pSrc      points to the block of input data
  * @param  *pDst      points to the block of output data
- * @param  blocksSize the block size of input data
+ * @param  length the block size of input data
  */
 void PQ_VectorBiqaudDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length);
 
@@ -2420,7 +2420,7 @@ void PQ_VectorBiqaudDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length);
  *
  * @param  *pSrc      points to the block of input data
  * @param  *pDst      points to the block of output data
- * @param  blocksSize the block size of input data
+ * @param  length the block size of input data
  */
 void PQ_VectorBiqaudDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length);
 
@@ -2429,7 +2429,7 @@ void PQ_VectorBiqaudDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length);
  *
  * @param  *pSrc      points to the block of input data
  * @param  *pDst      points to the block of output data
- * @param  blocksSize the block size of input data
+ * @param  length the block size of input data
  */
 void PQ_VectorBiqaudCascadeDf2F32(float *pSrc, float *pDst, int32_t length);
 
@@ -2438,7 +2438,7 @@ void PQ_VectorBiqaudCascadeDf2F32(float *pSrc, float *pDst, int32_t length);
  *
  * @param  *pSrc      points to the block of input data
  * @param  *pDst      points to the block of output data
- * @param  blocksSize the block size of input data
+ * @param  length the block size of input data
  */
 void PQ_VectorBiqaudCascadeDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t length);
 
@@ -2447,7 +2447,7 @@ void PQ_VectorBiqaudCascadeDf2Fixed32(int32_t *pSrc, int32_t *pDst, int32_t leng
  *
  * @param  *pSrc      points to the block of input data
  * @param  *pDst      points to the block of output data
- * @param  blocksSize the block size of input data
+ * @param  length the block size of input data
  */
 void PQ_VectorBiqaudCascadeDf2Fixed16(int16_t *pSrc, int16_t *pDst, int32_t length);
 
@@ -2643,7 +2643,7 @@ void PQ_FIR(POWERQUAD_Type *base,
  * @param base  POWERQUAD peripheral base address
  * @param ALength number of input samples
  * @param BLength number of taps
- * @param xoffset offset for number of input samples
+ * @param xOffset offset for number of input samples
  */
 void PQ_FIRIncrement(POWERQUAD_Type *base, int32_t ALength, int32_t BLength, int32_t xOffset);
 

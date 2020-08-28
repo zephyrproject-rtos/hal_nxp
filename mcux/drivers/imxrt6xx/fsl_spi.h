@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief SPI driver version 2.1.0. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief SPI driver version 2.1.1. */
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*! @brief Global variable for dummy data value setting. */
@@ -36,12 +36,17 @@ extern volatile uint8_t s_dummyData[];
 #define SPI_DUMMYDATA (0xFFU)
 #endif
 
-#define SPI_DATA(n) (((uint32_t)(n)) & 0xFFFFUL)
+/*! @brief Retry times for waiting flag. */
+#ifndef SPI_RETRY_TIMES
+#define SPI_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
+#endif
+
+#define SPI_DATA(n)  (((uint32_t)(n)) & 0xFFFFUL)
 #define SPI_CTRLMASK (0xFFFF0000U)
 
-#define SPI_ASSERTNUM_SSEL(n) ((~(1UL << ((n) + 16UL))) & 0xF0000UL)
+#define SPI_ASSERTNUM_SSEL(n)   ((~(1UL << ((n) + 16UL))) & 0xF0000UL)
 #define SPI_DEASSERTNUM_SSEL(n) (1UL << ((n) + 16UL))
-#define SPI_DEASSERT_ALL (0xF0000UL)
+#define SPI_DEASSERT_ALL        (0xF0000UL)
 
 #define SPI_FIFOWR_FLAGS_MASK (~(SPI_DEASSERT_ALL | SPI_FIFOWR_TXDATA_MASK | SPI_FIFOWR_LEN_MASK))
 
@@ -199,7 +204,8 @@ enum
     kStatus_SPI_Idle  = MAKE_STATUS(kStatusGroup_LPC_SPI, 1), /*!< SPI is idle */
     kStatus_SPI_Error = MAKE_STATUS(kStatusGroup_LPC_SPI, 2), /*!< SPI  error */
     kStatus_SPI_BaudrateNotSupport =
-        MAKE_STATUS(kStatusGroup_LPC_SPI, 3) /*!< Baudrate is not support in current clock source */
+        MAKE_STATUS(kStatusGroup_LPC_SPI, 3),                  /*!< Baudrate is not support in current clock source */
+    kStatus_SPI_Timeout = MAKE_STATUS(kStatusGroup_LPC_SPI, 4) /*!< SPI timeout polling status flags. */
 };
 
 /*! @brief SPI interrupt sources.*/
@@ -576,6 +582,7 @@ status_t SPI_MasterTransferCreateHandle(SPI_Type *base,
  * @param xfer pointer to spi_xfer_config_t structure
  * @retval kStatus_Success Successfully start a transfer.
  * @retval kStatus_InvalidArgument Input argument is invalid.
+ * @retval kStatus_SPI_Timeout The transfer timed out and was aborted.
  */
 status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer);
 

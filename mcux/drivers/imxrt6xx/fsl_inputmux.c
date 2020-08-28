@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -81,7 +81,7 @@ void INPUTMUX_AttachSignal(INPUTMUX_Type *base, uint32_t index, inputmux_connect
 void INPUTMUX_EnableSignal(INPUTMUX_Type *base, inputmux_signal_t signal, bool enable)
 {
     uint32_t ena_id;
-    uint32_t ena_id_mask = (1U << (32 - ENA_SHIFT)) - 1;
+    uint32_t ena_id_mask = (1UL << (32U - ENA_SHIFT)) - 1U;
     uint32_t bit_offset;
 
 #if defined(FSL_FEATURE_INPUTMUX_HAS_CHANNEL_MUX) && FSL_FEATURE_INPUTMUX_HAS_CHANNEL_MUX
@@ -89,26 +89,26 @@ void INPUTMUX_EnableSignal(INPUTMUX_Type *base, inputmux_signal_t signal, bool e
     uint32_t chmux_value;
 
     /* Only enable need to update channel mux */
-    if (enable && ((((uint32_t)signal) & (1U << CHMUX_AVL_SHIFT)) != 0U))
+    if (enable && ((((uint32_t)signal) & (1UL << CHMUX_AVL_SHIFT)) != 0U))
     {
         chmux_offset = (((uint32_t)signal) >> CHMUX_OFF_SHIFT) & ((1U << (CHMUX_AVL_SHIFT - CHMUX_OFF_SHIFT)) - 1);
         chmux_value  = (((uint32_t)signal) >> CHMUX_VAL_SHIFT) & ((1U << (CHMUX_OFF_SHIFT - CHMUX_VAL_SHIFT)) - 1);
         *(volatile uint32_t *)(((uint32_t)base) + chmux_offset) = chmux_value;
     }
-    ena_id_mask = (1U << (CHMUX_VAL_SHIFT - ENA_SHIFT)) - 1;
+    ena_id_mask = (1UL << (CHMUX_VAL_SHIFT - ENA_SHIFT)) - 1U;
 #endif
     /* extract enable register to be used */
     ena_id = (((uint32_t)signal) >> ENA_SHIFT) & ena_id_mask;
     /* extract enable bit offset */
-    bit_offset = ((uint32_t)signal) & ((1U << ENA_SHIFT) - 1);
+    bit_offset = ((uint32_t)signal) & ((1UL << ENA_SHIFT) - 1U);
     /* set signal */
     if (enable)
     {
-        *(volatile uint32_t *)(((uint32_t)base) + ena_id) |= (1U << bit_offset);
+        *(volatile uint32_t *)(((uint32_t)base) + ena_id) |= (1UL << bit_offset);
     }
     else
     {
-        *(volatile uint32_t *)(((uint32_t)base) + ena_id) &= ~(1U << bit_offset);
+        *(volatile uint32_t *)(((uint32_t)base) + ena_id) &= ~(1UL << bit_offset);
     }
 }
 #endif

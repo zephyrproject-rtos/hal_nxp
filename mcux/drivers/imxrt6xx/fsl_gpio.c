@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -113,7 +113,7 @@ void GPIO_PinInit(GPIO_Type *base, uint32_t port, uint32_t pin, const gpio_pin_c
 
 #if defined(FSL_FEATURE_GPIO_HAS_INTERRUPT) && FSL_FEATURE_GPIO_HAS_INTERRUPT
 /*!
- * @brief Configures the gpio pin interrupt.
+ * @brief Set the configuration of pin interrupt.
  *
  * @param base GPIO base pointer.
  * @param port GPIO port number
@@ -122,9 +122,9 @@ void GPIO_PinInit(GPIO_Type *base, uint32_t port, uint32_t pin, const gpio_pin_c
  */
 void GPIO_SetPinInterruptConfig(GPIO_Type *base, uint32_t port, uint32_t pin, gpio_interrupt_config_t *config)
 {
-    base->INTEDG[port] = base->INTEDG[port] | ((uint32_t)config->mode << pin);
+    base->INTEDG[port] = (base->INTEDG[port] & ~(1UL << pin)) | ((uint32_t)config->mode << pin);
 
-    base->INTPOL[port] = base->INTPOL[port] | ((uint32_t)config->polarity << pin);
+    base->INTPOL[port] = (base->INTPOL[port] & ~(1UL << pin)) | ((uint32_t)config->polarity << pin);
 }
 
 /*!

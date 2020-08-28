@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,21 +21,24 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief IAP driver version 2.0.0. */
-#define FSL_IAP_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0. */
+/*! @brief IAP driver version 2.1.0. */
+#define FSL_IAP_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
-/*******************************************************************************
- * FlexSPI NOR driver
- ******************************************************************************/
-#define NOR_CMD_INDEX_READ CMD_INDEX_READ               /*!< 0 */
-#define NOR_CMD_INDEX_READSTATUS CMD_INDEX_READSTATUS   /*!< 1 */
+/*!
+ * @addtogroup iap_flexspi_driver
+ * @{
+ */
+
+/*! @brief FlexSPI LUT command */
+#define NOR_CMD_INDEX_READ        CMD_INDEX_READ        /*!< 0 */
+#define NOR_CMD_INDEX_READSTATUS  CMD_INDEX_READSTATUS  /*!< 1 */
 #define NOR_CMD_INDEX_WRITEENABLE CMD_INDEX_WRITEENABLE /*!< 2 */
 #define NOR_CMD_INDEX_ERASESECTOR 3                     /*!< 3 */
 #define NOR_CMD_INDEX_PAGEPROGRAM CMD_INDEX_WRITE       /*!< 4 */
-#define NOR_CMD_INDEX_CHIPERASE 5                       /*!< 5 */
-#define NOR_CMD_INDEX_DUMMY 6                           /*!< 6 */
-#define NOR_CMD_INDEX_ERASEBLOCK 7                      /*!< 7 */
+#define NOR_CMD_INDEX_CHIPERASE   5                     /*!< 5 */
+#define NOR_CMD_INDEX_DUMMY       6                     /*!< 6 */
+#define NOR_CMD_INDEX_ERASEBLOCK  7                     /*!< 7 */
 
 #define NOR_CMD_LUT_SEQ_IDX_READ \
     CMD_LUT_SEQ_IDX_READ /*!< 0  READ LUT sequence id in lookupTable stored in config block */
@@ -48,7 +51,7 @@
 #define NOR_CMD_LUT_SEQ_IDX_WRITEENABLE_XPI \
     4 /*!< 4  Write Enable DPI/QPI/OPI sequence id in lookupTable stored in config block */
 #define NOR_CMD_LUT_SEQ_IDX_ERASESECTOR 5 /*!< 5  Erase Sector sequence id in lookupTable stored in config block */
-#define NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK 8  /*!< 8 Erase Block sequence id in lookupTable stored in config block */
+#define NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK  8 /*!< 8 Erase Block sequence id in lookupTable stored in config block */
 #define NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM \
     CMD_LUT_SEQ_IDX_WRITE                /*!< 9  Program sequence id in lookupTable stored in config block */
 #define NOR_CMD_LUT_SEQ_IDX_CHIPERASE 11 /*!< 11 Chip Erase sequence in lookupTable id stored in config block */
@@ -58,34 +61,49 @@
 #define NOR_CMD_LUT_SEQ_IDX_EXIT_NOCMD \
     15 /*!< 15 Exit 0-4-4/0-8-8 mode sequence id in lookupTable stored in config blobk */
 
+/*!
+ * @name FlexSPI status.
+ * @{
+ */
+/*! @brief FlexSPI Driver status group. */
 enum
 {
-    kStatusGroup_FLEXSPINOR = 201,
+    kStatusGroup_FlexSPI    = 60,
+    kStatusGroup_FlexSPINOR = 201,
 };
 
-/* FlexSPI NOR status */
-enum _flexspi_nor_status
+/*! @brief FlexSPI Driver status. */
+enum _flexspi_status
 {
+    kStatus_FLEXSPI_Success         = MAKE_STATUS(kStatusGroup_Generic, 0), /*!< API is executed successfully*/
+    kStatus_FLEXSPI_Fail            = MAKE_STATUS(kStatusGroup_Generic, 1), /*!< API is executed fails*/
+    kStatus_FLEXSPI_InvalidArgument = MAKE_STATUS(kStatusGroup_Generic, 4), /*!< Invalid argument*/
+    kStatus_FLEXSPI_SequenceExecutionTimeout =
+        MAKE_STATUS(kStatusGroup_FlexSPI, 0), /*!< The FlexSPI Sequence Execution timeout*/
+    kStatus_FLEXSPI_InvalidSequence = MAKE_STATUS(kStatusGroup_FlexSPI, 1), /*!< The FlexSPI LUT sequence invalid*/
+    kStatus_FLEXSPI_DeviceTimeout   = MAKE_STATUS(kStatusGroup_FlexSPI, 2), /*!< The FlexSPI device timeout*/
     kStatus_FLEXSPINOR_ProgramFail =
-        MAKE_STATUS(kStatusGroup_FLEXSPINOR, 0), /*!< Status for Page programming failure */
+        MAKE_STATUS(kStatusGroup_FlexSPINOR, 0), /*!< Status for Page programming failure */
     kStatus_FLEXSPINOR_EraseSectorFail =
-        MAKE_STATUS(kStatusGroup_FLEXSPINOR, 1),                               /*!< Status for Sector Erase failure */
-    kStatus_FLEXSPINOR_EraseAllFail = MAKE_STATUS(kStatusGroup_FLEXSPINOR, 2), /*!< Status for Chip Erase failure */
-    kStatus_FLEXSPINOR_WaitTimeout  = MAKE_STATUS(kStatusGroup_FLEXSPINOR, 3), /*!< Status for timeout */
-    kStatus_FlexSPINOR_NotSupported = MAKE_STATUS(kStatusGroup_FLEXSPINOR, 4), /*  Status for PageSize overflow */
-    kStatus_FlexSPINOR_WriteAlignmentError =
-        MAKE_STATUS(kStatusGroup_FLEXSPINOR, 5), /*!< Status for Alignement error */
-    kStatus_FlexSPINOR_CommandFailure =
-        MAKE_STATUS(kStatusGroup_FLEXSPINOR, 6), /*!< Status for Erase/Program Verify Error */
-    kStatus_FlexSPINOR_SFDP_NotFound = MAKE_STATUS(kStatusGroup_FLEXSPINOR, 7), /*!< Status for SFDP read failure */
+        MAKE_STATUS(kStatusGroup_FlexSPINOR, 1),                               /*!< Status for Sector Erase failure */
+    kStatus_FLEXSPINOR_EraseAllFail = MAKE_STATUS(kStatusGroup_FlexSPINOR, 2), /*!< Status for Chip Erase failure */
+    kStatus_FLEXSPINOR_WaitTimeout  = MAKE_STATUS(kStatusGroup_FlexSPINOR, 3), /*!< Status for timeout */
+    kStatus_FLEXSPINOR_NotSupported = MAKE_STATUS(kStatusGroup_FlexSPINOR, 4), /*  Status for PageSize overflow */
+    kStatus_FLEXSPINOR_WriteAlignmentError =
+        MAKE_STATUS(kStatusGroup_FlexSPINOR, 5), /*!< Status for Alignement error */
+    kStatus_FLEXSPINOR_CommandFailure =
+        MAKE_STATUS(kStatusGroup_FlexSPINOR, 6), /*!< Status for Erase/Program Verify Error */
+    kStatus_FLEXSPINOR_SFDP_NotFound = MAKE_STATUS(kStatusGroup_FlexSPINOR, 7), /*!< Status for SFDP read failure */
     kStatus_FLEXSPINOR_Unsupported_SFDP_Version =
-        MAKE_STATUS(kStatusGroup_FLEXSPINOR, 8), /*!< Status for Unrecognized SFDP version */
+        MAKE_STATUS(kStatusGroup_FlexSPINOR, 8), /*!< Status for Unrecognized SFDP version */
     kStatus_FLEXSPINOR_Flash_NotFound =
-        MAKE_STATUS(kStatusGroup_FLEXSPINOR, 9), /*!< Status for Flash detection failure */
+        MAKE_STATUS(kStatusGroup_FlexSPINOR, 9), /*!< Status for Flash detection failure */
     kStatus_FLEXSPINOR_DTRRead_DummyProbeFailed =
-        MAKE_STATUS(kStatusGroup_FLEXSPINOR, 10), /*!< Status for DDR Read dummy probe failure */
+        MAKE_STATUS(kStatusGroup_FlexSPINOR, 10), /*!< Status for DDR Read dummy probe failure */
 };
+/*! @} */
 
+/*! @brief Flash Configuration Option0 device_type. */
 enum
 {
     kSerialNorCfgOption_Tag                         = 0x0c,
@@ -101,6 +119,7 @@ enum
     kSerialNorCfgOption_DeviceType_AdestoOctalSDR   = 9,
 };
 
+/*! @brief Flash Configuration Option0 quad_mode_setting. */
 enum
 {
     kSerialNorQuadMode_NotConfig            = 0,
@@ -110,6 +129,7 @@ enum
     kSerialNorQuadMode_StatusReg2_Bit1_0x31 = 4,
 };
 
+/*! @brief Flash Configuration Option0 misc_mode. */
 enum
 {
     kSerialNorEnhanceMode_Disabled         = 0,
@@ -119,6 +139,7 @@ enum
     kSerialNorEnhanceMode_2ndPinMux        = 4,
 };
 
+/*! @brief FLEXSPI_RESET_PIN boot configurations in OTP */
 enum
 {
     kFlashResetLogic_Disabled     = 0,
@@ -126,6 +147,7 @@ enum
     kFlashResetLogic_JedecHwReset = 2,
 };
 
+/*! @brief Flash Configuration Option1 flash_connection. */
 enum
 {
     kSerialNorConnection_SinglePortA,
@@ -134,9 +156,7 @@ enum
     kSerialNorConnection_BothPorts
 };
 
-/*
- * Serial NOR Configuration Option
- */
+/*! @brief Serial NOR Configuration Option */
 typedef struct _serial_nor_config_option
 {
     union
@@ -172,6 +192,7 @@ typedef struct _serial_nor_config_option
 
 } serial_nor_config_option_t;
 
+/*! @brief Flash Run Context */
 typedef union
 {
     struct
@@ -184,6 +205,7 @@ typedef union
     uint32_t U;
 } flash_run_context_t;
 
+/*!@brief Flash Device Mode Configuration Sequence */
 enum
 {
     kRestoreSequence_None           = 0,
@@ -194,9 +216,10 @@ enum
     kRestoreSequence_Send_F0        = 5,
     kRestoreSequence_Send_66_99     = 6,
     kRestoreSequence_Send_6699_9966 = 7,
-    kRestoreSequence_Send_06_FF, /*  Adesto EcoXIP */
+    kRestoreSequence_Send_06_FF     = 8, /*  Adesto EcoXIP */
 };
 
+/*!@brief Flash Config Mode Definition */
 enum
 {
     kFlashInstMode_ExtendedSpi = 0x00,
@@ -208,7 +231,7 @@ enum
     kFlashInstMode_OPI_DDR     = 0x82,
 };
 
-/*!@brief Flash Type Definition */
+/*!@brief Flash Device Type Definition */
 enum
 {
     kFlexSpiDeviceType_SerialNOR    = 1,    /*!< Flash devices are Serial NOR */
@@ -246,6 +269,7 @@ enum
     kDeviceConfigCmdType_Reset,      /*!< Reset device command */
 };
 
+/*!@brief FlexSPI Dll Time Block */
 typedef struct
 {
     uint8_t time_100ps;  /* Data valid time, in terms of 100ps */
@@ -311,15 +335,16 @@ typedef struct _FlexSPIConfig
     uint32_t reserved4[4];              /*!< [0x1b0-0x1bf] Reserved for future use */
 } flexspi_mem_config_t;
 
+/*!@brief FlexSPI Operation Type */
 typedef enum _FlexSPIOperationType
 {
-    kFlexSpiOperation_Command, /*!< FlexSPI operation: Only command, both TX and */
+    kFlexSpiOperation_Command = 0, /*!< FlexSPI operation: Only command, both TX and */
     /*! RX buffer are ignored. */
-    kFlexSpiOperation_Config, /*!< FlexSPI operation: Configure device mode, the */
+    kFlexSpiOperation_Config = 1, /*!< FlexSPI operation: Configure device mode, the */
     /*! TX FIFO size is fixed in LUT. */
-    kFlexSpiOperation_Write, /*!< FlexSPI operation: Write,  only TX buffer is */
+    kFlexSpiOperation_Write = 2, /*!< FlexSPI operation: Write,  only TX buffer is */
     /*! effective */
-    kFlexSpiOperation_Read, /*!< FlexSPI operation: Read, only Rx Buffer is */
+    kFlexSpiOperation_Read = 3, /*!< FlexSPI operation: Read, only Rx Buffer is */
     /*! effective. */
     kFlexSpiOperation_End = kFlexSpiOperation_Read,
 } flexspi_operation_t;
@@ -338,9 +363,7 @@ typedef struct _FlexSpiXfer
     uint32_t rxSize;               /*!< Rx size in bytes */
 } flexspi_xfer_t;
 
-/*
- *  Serial NOR configuration block
- */
+/*!@brief Serial NOR configuration block */
 typedef struct _flexspi_nor_config
 {
     flexspi_mem_config_t memConfig; /*!< Common memory configuration info via FlexSPI */
@@ -358,10 +381,13 @@ typedef struct _flexspi_nor_config
     uint32_t flashStateCtx;         /*!< Flash State Context */
     uint32_t reserve2[10];          /*!< Reserved for future use */
 } flexspi_nor_config_t;
+/*! @} */
 
-/*******************************************************************************
- * OTP driver
- ******************************************************************************/
+/*!
+ * @addtogroup iap_otp_driver
+ * @{
+ */
+
 /*! @brief OTP Status Group */
 enum
 {
@@ -380,6 +406,39 @@ enum
     kStatus_OTP_Timeout        = MAKE_STATUS(kStatusGroup_OtpGroup, 7), /*!< OTP operation time out */
     kStatus_OTP_CrcCheckPass   = MAKE_STATUS(kStatusGroup_OtpGroup, 8), /*!< OTP CRC Check Pass */
 };
+/*! @} */
+
+/*!
+ * @addtogroup iap_boot_driver
+ * @{
+ */
+
+/*! @brief IAP boot option. */
+typedef struct _iap_boot_option
+{
+    union
+    {
+        struct
+        {
+            uint32_t reserved : 8; /*! reserved field. */
+            uint32_t bootImageIndex : 4; /*! FlexSPI boot image index for FlexSPI NOR flash. */
+            uint32_t instance : 4; /*! Only used when boot interface is FlexSPI/SD/MMC. */
+            uint32_t bootInterface : 4; /*! RT500: 0: USART 2: SPI 3: USB HID 4:FlexSPI 6:SD 7:MMC.
+                                            RT600: 0: USART 1: I2C 2: SPI 3: USB HID 4:FlexSPI 7:SD 8:MMC*/
+            uint32_t mode : 4; /* boot mode, 0: Master boot mode; 1: ISP boot */
+            uint32_t tag : 8; /*! tag, should always be "0xEB". */
+        } B;
+        uint32_t U;
+    } option;
+} iap_boot_option_t;
+
+/*! IAP boot option tag */
+#define IAP_BOOT_OPTION_TAG (0xEBU)
+/*! IAP boot option mode */
+#define IAP_BOOT_OPTION_MODE_MASTER (0U)
+#define IAP_BOOT_OPTION_MODE_ISP (1U)
+
+/*! @} */
 
 /*******************************************************************************
  * API
@@ -388,58 +447,188 @@ enum
 extern "C" {
 #endif
 
-/*******************************************************************************
- * FlexSPI NOR driver
- ******************************************************************************/
-/*!@brief Initialize Serial NOR devices via FlexSPI */
+/*!
+ * @addtogroup iap_boot_driver
+ * @{
+ */
+
+/*!
+ * @brief Invoke into ROM with specified boot parameters.
+ *
+ * @param option Boot parameters. Refer to #iap_boot_option_t.
+ */
+void IAP_RunBootLoader(iap_boot_option_t *option);
+/*! @} */
+
+/*!
+ * @addtogroup iap_flexspi_driver
+ * @{
+ */
+
+/*!
+ * @brief Initialize Serial NOR devices via FlexSPI.
+ *
+ * This function configures the FlexSPI controller with the arguments pointed by param config.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param config The Flash configuration block. Refer to #flexspi_nor_config_t.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 status_t IAP_FlexspiNorInit(uint32_t instance, flexspi_nor_config_t *config);
 
-/*!@brief Program data to Serial NOR via FlexSPI */
+/*!
+ * @brief Program data to Serial NOR via FlexSPI.
+ *
+ * This function Program data to specified destination address.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param config The Flash configuration block. Refer to #flexspi_nor_config_t.
+ * @param dstAddr The destination address to be programmed.
+ * @param src Points to the buffer which hold the data to be programmed.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 status_t IAP_FlexspiNorPageProgram(uint32_t instance,
                                    flexspi_nor_config_t *config,
                                    uint32_t dstAddr,
                                    const uint32_t *src);
 
-/*!@brief Erase all the Serial NOR devices connected on FlexSPI */
+/*!
+ * @brief Erase all the Serial NOR devices connected on FlexSPI.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param config The Flash configuration block. Refer to #flexspi_nor_config_t.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 status_t IAP_FlexspiNorEraseAll(uint32_t instance, flexspi_nor_config_t *config);
 
-/*!@brief Erase Flash Region specified by address and length */
+/*!
+ * @brief Erase Flash Region specified by address and length.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param config The Flash configuration block. Refer to #flexspi_nor_config_t.
+ * @param start The start address to be erased.
+ * @param length The length to be erased.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 status_t IAP_FlexspiNorErase(uint32_t instance, flexspi_nor_config_t *config, uint32_t start, uint32_t length);
 
-/*!@brief Erase one sector specified by address */
+/*!
+ * @brief Erase one sector specified by address.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param config The Flash configuration block. Refer to #flexspi_nor_config_t.
+ * @param address The address of the sector to be erased.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 status_t IAP_FlexspiNorEraseSector(uint32_t instance, flexspi_nor_config_t *config, uint32_t address);
 
-/*!@brief Erase one block specified by address */
+/*!
+ * @brief Erase one block specified by address.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param config The Flash configuration block. Refer to #flexspi_nor_config_t.
+ * @param address The address of the block to be erased.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 status_t IAP_FlexspiNorEraseBlock(uint32_t instance, flexspi_nor_config_t *config, uint32_t address);
 
-/*!@brief Get FlexSPI NOR Configuration Block based on specified option */
+/*!
+ * @brief Get FlexSPI NOR Configuration Block based on specified option.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param config The Flash configuration block. Refer to #flexspi_nor_config_t.
+ * @param option The Flash Configuration Option block. Refer to #serial_nor_config_option_t.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 status_t IAP_FlexspiNorGetConfig(uint32_t instance, flexspi_nor_config_t *config, serial_nor_config_option_t *option);
 
-/*!@brief Read data from Serial NOR */
+/*!
+ * @brief Read data from Flexspi NOR Flash.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param config The Flash configuration block. Refer to #flexspi_nor_config_t.
+ * @param dst Buffer address used to store the read data.
+ * @param start The Read address.
+ * @param bytes The Read size
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 status_t IAP_FlexspiNorRead(
     uint32_t instance, flexspi_nor_config_t *config, uint32_t *dst, uint32_t start, uint32_t bytes);
 
-/*!@brief Xfer data */
+/*!
+ * @brief Get FlexSPI Xfer data.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param xfer The FlexSPI Transfer Context block. Refer to #flexspi_xfer_t.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 status_t IAP_FlexspiXfer(uint32_t instance, flexspi_xfer_t *xfer);
 
-/*!@brief Update LUT */
+/*!
+ * @brief Update FlexSPI Lookup table.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param seqIndex The index of FlexSPI LUT to be updated.
+ * @param lutBase Points to the buffer which hold the LUT data to be programmed.
+ * @param numberOfSeq The number of LUT seq that need to be updated.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 status_t IAP_FlexspiUpdateLut(uint32_t instance, uint32_t seqIndex, const uint32_t *lutBase, uint32_t numberOfSeq);
 
-/*!@brief Set the clock source for FlexSPI */
+/*!
+ * @brief Set the clock source for FlexSPI.
+ *
+ * @param clockSrc Clock source for flexspi interface.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 status_t IAP_FlexspiSetClockSource(uint32_t clockSrc);
 
-/*!@brief Configure flexspi clock */
+/*!
+ * @brief Configure the flexspi interface clock frequency and data sample mode.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param freqOption FlexSPI interface clock frequency selection.
+ * @param sampleClkMode FlexSPI controller data sample mode.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
 void IAP_FlexspiConfigClock(uint32_t instance, uint32_t freqOption, uint32_t sampleClkMode);
 
-/*!@brief Configure flexspi nor automatically */
+/*!
+ * @brief Configure flexspi nor automatically.
+ *
+ * @param instance FlexSPI controller instance, only support 0.
+ * @param config The Flash configuration block. Refer to #flexspi_nor_config_t.
+ * @param option The Flash Configuration Option block. Refer to #serial_nor_config_option_t.
+ * @return The status flags. This is a member of the
+ *         enumeration ::_flexspi_status
+ */
+#if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
+status_t IAP_FlexspiNorAutoConfig(uint32_t instance, flexspi_nor_config_t *config, serial_nor_config_option_t *option);
+#else
 AT_QUICKACCESS_SECTION_CODE(status_t IAP_FlexspiNorAutoConfig(uint32_t instance,
                                                               flexspi_nor_config_t *config,
                                                               serial_nor_config_option_t *option));
+#endif
+/*! @} */
 
-/*******************************************************************************
- * OTP driver
- ******************************************************************************/
-/*
+/*!
+ * @addtogroup iap_otp_driver
+ * @{
+ */
+
+/*!
  * @brief Initialize OTP controller
  *
  * This function enables OTP Controller clock.
@@ -449,7 +638,7 @@ AT_QUICKACCESS_SECTION_CODE(status_t IAP_FlexspiNorAutoConfig(uint32_t instance,
  */
 status_t IAP_OtpInit(uint32_t src_clk_freq);
 
-/*
+/*!
  * @brief De-Initialize OTP controller
  *
  * This functin disables OTP Controller Clock.
@@ -457,7 +646,7 @@ status_t IAP_OtpInit(uint32_t src_clk_freq);
  */
 status_t IAP_OtpDeinit(void);
 
-/*
+/*!
  * @brief Read Fuse value from OTP Fuse Block
  *
  * This function read fuse data from OTP Fuse block to specified data buffer.
@@ -471,7 +660,7 @@ status_t IAP_OtpDeinit(void);
  */
 status_t IAP_OtpFuseRead(uint32_t addr, uint32_t *data);
 
-/*
+/*!
  * @brief Program value to OTP Fuse block
  *
  * This function program data to specified OTP Fuse address.
@@ -486,7 +675,7 @@ status_t IAP_OtpFuseRead(uint32_t addr, uint32_t *data);
  */
 status_t IAP_OtpFuseProgram(uint32_t addr, uint32_t data, bool lock);
 
-/*
+/*!
  * @brief Reload all shadow registers from OTP fuse block
  *
  * This function reloads all the shadow registers from OTP Fuse block
@@ -497,7 +686,7 @@ status_t IAP_OtpFuseProgram(uint32_t addr, uint32_t data, bool lock);
  */
 status_t IAP_OtpShadowRegisterReload(void);
 
-/*
+/*!
  * @brief Do CRC Check via OTP controller
  *
  * This function checks whether data in specified fuse address ranges match the crc value in the specified CRC address
@@ -514,7 +703,7 @@ status_t IAP_OtpShadowRegisterReload(void);
  */
 status_t IAP_OtpCrcCheck(uint32_t start_addr, uint32_t end_addr, uint32_t crc_addr);
 
-/*
+/*!
  * @brief Calculate the CRC checksum for specified data for OTP
  *
  * This function calculates the CRC checksum for specified data for OTP
@@ -527,9 +716,11 @@ status_t IAP_OtpCrcCheck(uint32_t start_addr, uint32_t end_addr, uint32_t crc_ad
  *         kStatus_InvalidArgument - Invalid Argument
  */
 status_t IAP_OtpCrcCalc(uint32_t *src, uint32_t numberOfWords, uint32_t *crcChecksum);
-
+/*! @} */
 #if defined(__cplusplus)
 }
 #endif
+
+/*! @}*/
 
 #endif /* __FSL_IAP_H_ */

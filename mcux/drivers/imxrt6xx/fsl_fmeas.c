@@ -35,7 +35,7 @@
     ((uint32_t)((((FREQME_Type *)base)->FREQMECTRL_R & FREQME_FREQMECTRL_R_RESULT_MASK) - 2U))
 
 /*! @brief Reference clock counter value. */
-#define REFERENCE_CLOCK_COUNT ((uint32_t)(1U << 20))
+#define REFERENCE_CLOCK_COUNT ((uint32_t)(((uint32_t)1U) << 20U))
 
 #else
 /*! @brief Target clock counter value.

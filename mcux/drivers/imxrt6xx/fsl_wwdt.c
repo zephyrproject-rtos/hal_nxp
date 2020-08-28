@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -135,8 +135,6 @@ void WWDT_GetDefaultConfig(wwdt_config_t *config)
 void WWDT_Init(WWDT_Type *base, const wwdt_config_t *config)
 {
     assert(NULL != config);
-    /* The config->clockFreq_Hz must be set in order to config the delay time. */
-    assert(0U != config->clockFreq_Hz);
 
     uint32_t value        = 0U;
     uint32_t DelayUs      = 0U;
@@ -152,6 +150,14 @@ void WWDT_Init(WWDT_Type *base, const wwdt_config_t *config)
     /* Reset the module. */
     RESET_PeripheralReset(s_wwdtResets[WWDT_GetInstance(base)]);
 #endif
+
+#if defined(FSL_FEATURE_WWDT_WDTRESET_FROM_PMC) && (FSL_FEATURE_WWDT_WDTRESET_FROM_PMC)
+    /* PMC RESETCAUSE: set bit to clear it by write 1. */
+    PMC->RESETCAUSE = PMC_RESETCAUSE_WDTRESET_MASK;
+    /* Enable the watchdog reset event to affect the system in the Power Management Controller */
+    PMC->CTRL |= PMC_CTRL_WDTRESETENABLE_MASK;
+#endif /*FSL_FEATURE_WWDT_WDTRESET_FROM_PMC*/
+
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 
 #if !(defined(FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK) && FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK)
@@ -176,13 +182,16 @@ void WWDT_Init(WWDT_Type *base, const wwdt_config_t *config)
     base->FEED = WWDT_SECOND_WORD_OF_REFRESH;
     EnableGlobalIRQ(primaskValue);
     /*  This WDPROTECT bit can be set once by software and is only cleared by a reset */
-    if (0U == (base->MOD & WWDT_MOD_WDPROTECT_MASK))
+    if (config->enableWatchdogProtect && (0U == (base->MOD & WWDT_MOD_WDPROTECT_MASK)))
     {
+        /* The config->clockFreq_Hz must be set in order to config the delay time. */
+        assert(0U != config->clockFreq_Hz);
+
         /* Set the WDPROTECT bit after the Feed Sequence (0xAA, 0x55) with 3 WDCLK delay */
         DelayUs = FREQUENCY_3MHZ / config->clockFreq_Hz + 1U;
         SDK_DelayAtLeastUs(DelayUs, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
-        base->MOD |= WWDT_MOD_WDPROTECT(config->enableWatchdogProtect);
+        base->MOD |= WWDT_MOD_WDPROTECT(1U);
     }
 }
 
@@ -195,8 +204,6 @@ void WWDT_Init(WWDT_Type *base, const wwdt_config_t *config)
  */
 void WWDT_Deinit(WWDT_Type *base)
 {
-    WWDT_Disable(base);
-
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Disable the WWDT clock */
     CLOCK_DisableClock(s_wwdtClocks[WWDT_GetInstance(base)]);
@@ -246,7 +253,7 @@ void WWDT_ClearStatusFlags(WWDT_Type *base, uint32_t mask)
         reg &= ~WWDT_MOD_WDTOF_MASK;
 #if defined(FSL_FEATURE_WWDT_WDTRESET_FROM_PMC) && (FSL_FEATURE_WWDT_WDTRESET_FROM_PMC)
         /* PMC RESETCAUSE: set bit to clear it */
-        PMC->RESETCAUSE |= PMC_RESETCAUSE_WDTRESET_MASK;
+        PMC->RESETCAUSE = PMC_RESETCAUSE_WDTRESET_MASK;
 #endif /*FSL_FEATURE_WWDT_WDTRESET_FROM_PMC*/
     }
 

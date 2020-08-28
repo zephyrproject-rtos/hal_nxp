@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,8 +27,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief I2C driver version 2.0.7. */
-#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
+/*! @brief I2C driver version 2.0.8. */
+#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -37,7 +37,7 @@
 #endif
 
 /* definitions for MSTCODE bits in I2C Status register STAT */
-#define I2C_STAT_MSTCODE_IDLE (0)    /*!< Master Idle State Code */
+#define I2C_STAT_MSTCODE_IDLE    (0) /*!< Master Idle State Code */
 #define I2C_STAT_MSTCODE_RXREADY (1) /*!< Master Receive Ready State Code */
 #define I2C_STAT_MSTCODE_TXREADY (2) /*!< Master Transmit Ready State Code */
 #define I2C_STAT_MSTCODE_NACKADR (3) /*!< Master NACK by slave on address State Code */
@@ -45,8 +45,8 @@
 
 /* definitions for SLVSTATE bits in I2C Status register STAT */
 #define I2C_STAT_SLVST_ADDR (0)
-#define I2C_STAT_SLVST_RX (1)
-#define I2C_STAT_SLVST_TX (2)
+#define I2C_STAT_SLVST_RX   (1)
+#define I2C_STAT_SLVST_TX   (2)
 
 /*! @brief I2C status return codes. */
 enum
@@ -61,9 +61,9 @@ enum
     kStatus_I2C_ArbitrationLost = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 5), /*!< Arbitration lost error. */
     kStatus_I2C_NoTransferInProgress =
         MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 6), /*!< Attempt to abort a transfer when one is not in progress. */
-    kStatus_I2C_DmaRequestFail  = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 7), /*!< DMA request failed. */
-    kStatus_I2C_StartStopError  = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 8),
-    kStatus_I2C_UnexpectedState = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 9),
+    kStatus_I2C_DmaRequestFail  = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 7),  /*!< DMA request failed. */
+    kStatus_I2C_StartStopError  = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 8),  /*!< Start and stop error. */
+    kStatus_I2C_UnexpectedState = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 9),  /*!< Unexpected state. */
     kStatus_I2C_Timeout         = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 10), /*!< Timeout polling status flags. */
     kStatus_I2C_Addr_Nak        = MAKE_STATUS(kStatusGroup_FLEXCOMM_I2C, 11), /*!< NAK received for Address */
 };

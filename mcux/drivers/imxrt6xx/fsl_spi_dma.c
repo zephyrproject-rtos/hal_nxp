@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -227,7 +227,6 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
     }
 
     /* Byte size is zero. */
-    assert(!(xfer->dataSize == 0));
     if (xfer->dataSize == 0U)
     {
         return kStatus_InvalidArgument;
@@ -242,7 +241,6 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
     }
     else
     {
-        uint32_t tmp;
         dma_transfer_config_t xferConfig = {0};
         spi_config_p                     = (spi_config_t *)SPI_GetConfig(base);
 
@@ -372,9 +370,9 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
         }
 
         handle->txInProgress = true;
-        tmp                  = 0;
-        XferToFifoWR(xfer, &tmp);
-        SpiConfigToFifoWR(spi_config_p, &tmp);
+        uint32_t tmpData     = 0U;
+        XferToFifoWR(xfer, &tmpData);
+        SpiConfigToFifoWR(spi_config_p, &tmpData);
 
         /* Setup the control info.
          * Halfword writes to just the control bits (offset 0xE22) doesn't push anything into the FIFO.
@@ -384,13 +382,13 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
         if (((xfer->configFlags & (uint32_t)kSPI_FrameAssert) != 0U) &&
             ((spi_config_p->dataWidth > kSPI_Data8Bits) ? (xfer->dataSize == 2U) : (xfer->dataSize == 1U)))
         {
-            *((uint16_t *)((uint32_t)&base->FIFOWR) + 1) = (uint16_t)(tmp >> 16U);
+            *((uint16_t *)((uint32_t)&base->FIFOWR) + 1) = (uint16_t)(tmpData >> 16U);
         }
         else
         {
             /* Clear the SPI_FIFOWR_EOT_MASK bit when data is not the last. */
-            tmp &= (~(uint32_t)kSPI_FrameAssert);
-            *((uint16_t *)((uint32_t)&base->FIFOWR) + 1) = (uint16_t)(tmp >> 16U);
+            tmpData &= (~(uint32_t)kSPI_FrameAssert);
+            *((uint16_t *)((uint32_t)&base->FIFOWR) + 1) = (uint16_t)(tmpData >> 16U);
         }
 
         DMA_StartTransfer(handle->txHandle);
@@ -414,8 +412,7 @@ status_t SPI_MasterTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_tra
  */
 status_t SPI_MasterHalfDuplexTransferDMA(SPI_Type *base, spi_dma_handle_t *handle, spi_half_duplex_transfer_t *xfer)
 {
-    assert(xfer);
-    assert(handle);
+    assert((xfer != NULL) && (handle != NULL));
     spi_transfer_t tempXfer = {0};
     status_t status;
 
@@ -539,7 +536,7 @@ void SPI_MasterTransferAbortDMA(SPI_Type *base, spi_dma_handle_t *handle)
  */
 status_t SPI_MasterTransferGetCountDMA(SPI_Type *base, spi_dma_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -635,7 +635,7 @@ static inline void MU_MaskHardwareReset(MU_Type *base, bool mask)
  * @brief Hardware reset the other core.
  *
  * This function resets the other core, the other core could mask the
- * hardware reset by calling @ref MU_MaskHardwareReset. The hardware reset
+ * hardware reset by calling MU_MaskHardwareReset. The hardware reset
  * mask feature is only available for some platforms.
  * This function could be used together with MU_BootOtherCore to control the
  * other core reset workflow.

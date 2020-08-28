@@ -21,7 +21,7 @@
 #endif
 
 #define DMA_MAX_TRANSFER_BYTES (DMA_MAX_TRANSFER_COUNT * sizeof(uint32_t))
-#define DMA_DESCRIPTORS (2U)
+#define DMA_DESCRIPTORS        (2U)
 
 /*<! @brief Structure for statically allocated private data. */
 typedef struct _i2s_dma_private_handle

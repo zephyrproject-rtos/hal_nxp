@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -80,7 +80,7 @@ uint32_t SEMA42_GetInstance(SEMA42_Type *base)
 void SEMA42_Init(SEMA42_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    CLOCK_EnableClock(s_sema42Clocks[SEMA42_GetInstance(base)]);
+    (void)CLOCK_EnableClock(s_sema42Clocks[SEMA42_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -94,7 +94,7 @@ void SEMA42_Init(SEMA42_Type *base)
 void SEMA42_Deinit(SEMA42_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    CLOCK_DisableClock(s_sema42Clocks[SEMA42_GetInstance(base)]);
+    (void)CLOCK_DisableClock(s_sema42Clocks[SEMA42_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 

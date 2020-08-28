@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -61,7 +61,7 @@ typedef struct
  */
 typedef struct BootloaderTree
 {
-    void (*runBootloader)(void *arg); /*!< Function to start the bootloader executing. */
+    void (*runBootloader)(iap_boot_option_t *arg); /*!< Function to start the bootloader executing. */
     uint32_t version;                 /*!< Bootloader version number. */
     const char *copyright;            /*!< Copyright string. */
     const uint32_t reserved0;
@@ -76,16 +76,24 @@ typedef struct BootloaderTree
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define ROM_API_TREE ((uint32_t *)FSL_ROM_API_BASE_ADDR)
+#define ROM_API_TREE                ((uint32_t *)FSL_ROM_API_BASE_ADDR)
 #define BOOTLOADER_API_TREE_POINTER ((bootloader_tree_t *)ROM_API_TREE)
 
 /*! Get pointer to flexspi/otp driver API table in ROM. */
 #define FLEXSPI_API_TREE BOOTLOADER_API_TREE_POINTER->flexspiNorDriver
-#define OTP_API_TREE BOOTLOADER_API_TREE_POINTER->otpDriver
+#define OTP_API_TREE     BOOTLOADER_API_TREE_POINTER->otpDriver
 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
+
+/*******************************************************************************
+ * runBootloader API
+ ******************************************************************************/
+void IAP_RunBootLoader(iap_boot_option_t *option)
+{
+    BOOTLOADER_API_TREE_POINTER->runBootloader(option);
+}
 
 /*******************************************************************************
  * FlexSPI NOR driver

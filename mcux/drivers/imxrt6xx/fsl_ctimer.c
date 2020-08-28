@@ -480,11 +480,7 @@ void CTIMER_GenericIRQHandler(uint32_t index)
             }
         }
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 
 /* IRQ handler functions overloading weak symbols in the startup */
@@ -492,11 +488,7 @@ void CTIMER_GenericIRQHandler(uint32_t index)
 void CTIMER0_DriverIRQHandler(void)
 {
     CTIMER_GenericIRQHandler(0);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -504,11 +496,7 @@ void CTIMER0_DriverIRQHandler(void)
 void CTIMER1_DriverIRQHandler(void)
 {
     CTIMER_GenericIRQHandler(1);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -516,11 +504,7 @@ void CTIMER1_DriverIRQHandler(void)
 void CTIMER2_DriverIRQHandler(void)
 {
     CTIMER_GenericIRQHandler(2);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -528,11 +512,7 @@ void CTIMER2_DriverIRQHandler(void)
 void CTIMER3_DriverIRQHandler(void)
 {
     CTIMER_GenericIRQHandler(3);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -540,10 +520,6 @@ void CTIMER3_DriverIRQHandler(void)
 void CTIMER4_DriverIRQHandler(void)
 {
     CTIMER_GenericIRQHandler(4);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
