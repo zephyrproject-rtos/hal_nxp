@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,7 +18,7 @@
 /******************************************************************************
  * Definitions
  *****************************************************************************/
-#define FSL_RDC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_RDC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 
 #define RDC_ACCESS_POLICY(domainID, policy) (uint16_t)((uint16_t)(policy) << ((domainID)*2U))
 
@@ -97,8 +97,8 @@ typedef struct _rdc_mem_access_config
     rdc_mem_t mem; /*!< Memory region descriptor name. */
 
     bool lock;            /*!< Lock the configuration. */
-    uint32_t baseAddress; /*!< Start address of the memory region. */
-    uint32_t endAddress;  /*!< End address of the memory region.   */
+    uint64_t baseAddress; /*!< Start address of the memory region. */
+    uint64_t endAddress;  /*!< End address of the memory region.   */
     uint16_t policy;      /*!< Access policy.                      */
 } rdc_mem_access_config_t;
 
@@ -109,7 +109,7 @@ typedef struct _rdc_mem_status
 {
     bool hasViolation; /*!< Violating happens or not. */
     uint8_t domainID;  /*!< Violating Domain ID. */
-    uint32_t address;  /*!< Violating Address. */
+    uint64_t address;  /*!< Violating Address. */
 } rdc_mem_status_t;
 
 /*******************************************************************************

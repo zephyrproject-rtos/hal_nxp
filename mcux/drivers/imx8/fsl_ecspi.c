@@ -517,17 +517,35 @@ void ECSPI_SetChannelConfig(ECSPI_Type *base, ecspi_channel_source_t channel, co
  * param base ECSPI base pointer
  * param buffer The data bytes to send
  * param size The number of data bytes to send
+ * retval kStatus_Success Successfully start a transfer.
+ * retval kStatus_ECSPI_Timeout The transfer timed out and was aborted.
  */
-void ECSPI_WriteBlocking(ECSPI_Type *base, uint32_t *buffer, size_t size)
+status_t ECSPI_WriteBlocking(ECSPI_Type *base, uint32_t *buffer, size_t size)
 {
     size_t i = 0U;
+#if SPI_RETRY_TIMES
+    uint32_t waitTimes;
+#endif
 
     while (i < size)
     {
         /* Wait for TX fifo buffer empty */
+#if SPI_RETRY_TIMES
+        waitTimes = SPI_RETRY_TIMES;
+        while (((base->STATREG & ECSPI_STATREG_TE_MASK) == 0UL) && (--waitTimes != 0U))
+#else
         while ((base->STATREG & ECSPI_STATREG_TE_MASK) == 0UL)
+#endif
         {
         }
+
+#if SPI_RETRY_TIMES
+        if (waitTimes == 0U)
+        {
+            return kStatus_ECSPI_Timeout;
+        }
+#endif
+
         /* Write data to tx register */
         if (NULL != buffer)
         {
@@ -539,6 +557,7 @@ void ECSPI_WriteBlocking(ECSPI_Type *base, uint32_t *buffer, size_t size)
         }
         i++;
     }
+    return kStatus_Success;
 }
 
 static status_t ECSPI_ReadBlocking(ECSPI_Type *base, uint32_t *buffer, size_t size)
@@ -547,11 +566,19 @@ static status_t ECSPI_ReadBlocking(ECSPI_Type *base, uint32_t *buffer, size_t si
 
     uint32_t state = 0U;
     size_t i       = 0U;
+#if SPI_RETRY_TIMES
+    uint32_t waitTimes;
+#endif
 
     while (i < size)
     {
         /* Wait for RX FIFO buffer ready */
+#if SPI_RETRY_TIMES
+        waitTimes = SPI_RETRY_TIMES;
+        while (((base->STATREG & ECSPI_STATREG_RR_MASK) == 0UL) && (--waitTimes != 0U))
+#else
         while ((base->STATREG & ECSPI_STATREG_RR_MASK) == 0UL)
+#endif
         {
             /* Get status flags of ECSPI */
             state = ECSPI_GetStatusFlags(base);
@@ -563,6 +590,14 @@ static status_t ECSPI_ReadBlocking(ECSPI_Type *base, uint32_t *buffer, size_t si
                 return kStatus_ECSPI_HardwareOverFlow;
             }
         }
+
+#if SPI_RETRY_TIMES
+        if (waitTimes == 0U)
+        {
+            return kStatus_ECSPI_Timeout;
+        }
+#endif
+
         /* Read data from rx register */
         if (NULL != buffer)
         {
@@ -616,6 +651,7 @@ void ECSPI_MasterTransferCreateHandle(ECSPI_Type *base,
  * param xfer pointer to spi_xfer_config_t structure
  * retval kStatus_Success Successfully start a transfer.
  * retval kStatus_InvalidArgument Input argument is invalid.
+ * retval kStatus_ECSPI_Timeout The transfer timed out and was aborted.
  */
 status_t ECSPI_MasterTransferBlocking(ECSPI_Type *base, ecspi_transfer_t *xfer)
 {
@@ -648,19 +684,23 @@ status_t ECSPI_MasterTransferBlocking(ECSPI_Type *base, ecspi_transfer_t *xfer)
          * data will be ignored by driver.
          * Note that, txData and rxData can not be both NULL.
          */
-        ECSPI_WriteBlocking(base, xfer->txData, dataCounts);
+        state = ECSPI_WriteBlocking(base, xfer->txData, dataCounts);
+        if (kStatus_Success != state)
+        {
+            return state;
+        }
         if (NULL != xfer->txData)
         {
             xfer->txData += dataCounts;
         }
         state = ECSPI_ReadBlocking(base, xfer->rxData, dataCounts);
-        if ((kStatus_Success == state) && (NULL != xfer->rxData))
+        if (kStatus_Success != state)
+        {
+            return state;
+        }
+        if (NULL != xfer->rxData)
         {
             xfer->rxData += dataCounts;
-        }
-        if (kStatus_ECSPI_HardwareOverFlow == state)
-        {
-            return kStatus_ECSPI_HardwareOverFlow;
         }
 
         xfer->dataSize -= dataCounts;
@@ -926,11 +966,7 @@ static void ECSPI_CommonIRQHandler(ECSPI_Type *base, ecspi_master_handle_t *hand
     {
         s_ecspiSlaveIsr(base, handle);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(ECSPI1)

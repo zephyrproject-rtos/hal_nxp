@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,16 +22,31 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SEMA4 driver version */
-#define FSL_SEMA4_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_SEMA4_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*! @brief The number to reset all SEMA4 gates. */
 #define SEMA4_GATE_NUM_RESET_ALL (64U)
 
+#if defined(SEMA4_GATE_COUNT)
+
+/*!
+ * @brief SEMA4 gate n register address.
+ */
+#define SEMA4_GATEn(base, n) ((base)->GATE[(n)])
+
+#ifndef FSL_FEATURE_SEMA4_GATE_COUNT
+#define FSL_FEATURE_SEMA4_GATE_COUNT SEMA4_GATE_COUNT
+#endif
+
+#else
+
 /*!
  * @brief SEMA4 gate n register address.
  */
 #define SEMA4_GATEn(base, n) (((volatile uint8_t *)(&((base)->Gate00)))[(n)])
+
+#endif
 
 /*******************************************************************************
  * API

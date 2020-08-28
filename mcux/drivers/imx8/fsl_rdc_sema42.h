@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,17 +22,32 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief RDC_SEMA42 driver version */
-#define FSL_RDC_SEMA42_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_RDC_SEMA42_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*! @brief The number to reset all RDC_SEMA42 gates. */
 #define RDC_SEMA42_GATE_NUM_RESET_ALL (64U)
 
+#if defined(RDC_SEMAPHORE_GATE_COUNT)
+
 /*! @brief RDC_SEMA42 gate n register address. */
-#define RDC_SEMA42_GATEn(base, n) (((volatile uint8_t *)(&((base)->GATE0)))[(n)])
+#define RDC_SEMA42_GATEn(base, n) ((base)->GATE[(n)])
 
 /*! @brief RDC_SEMA42 gate count. */
-#define RDC_SEMA42_GATE_COUNT (64U)
+#define RDC_SEMA42_GATE_COUNT (RDC_SEMAPHORE_GATE_COUNT)
+
+#else /* RDC_SEMAPHORE_GATE_COUNT */
+
+/*! @brief RDC_SEMA42 gate n register address. */
+#define RDC_SEMA42_GATEn(base, n)     (((volatile uint8_t *)(&((base)->GATE0)))[(n)])
+
+/*! @brief RDC_SEMA42 gate count. */
+#define RDC_SEMA42_GATE_COUNT         (64U)
+
+/* Compatible remap. */
+#define RDC_SEMAPHORE_GATE_GTFSM_MASK RDC_SEMAPHORE_GATE0_GTFSM_MASK
+
+#endif /* RDC_SEMAPHORE_GATE_COUNT */
 
 /*******************************************************************************
  * API
@@ -126,7 +141,7 @@ static inline int32_t RDC_SEMA42_GetLockMasterIndex(RDC_SEMAPHORE_Type *base, ui
 
     uint8_t regGate = RDC_SEMA42_GATEn(base, gateNum);
 
-    return (int32_t)((uint8_t)(regGate & RDC_SEMAPHORE_GATE0_GTFSM_MASK)) - 1;
+    return (int32_t)((uint8_t)(regGate & RDC_SEMAPHORE_GATE_GTFSM_MASK)) - 1;
 }
 
 /*!

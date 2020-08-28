@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief I2C driver version 2.0.5. */
-#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
+/*! @brief I2C driver version 2.0.6. */
+#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -261,7 +261,6 @@ void I2C_MasterGetDefaultConfig(i2c_master_config_t *masterConfig);
  *
  * @param base I2C base pointer
  * @param slaveConfig A pointer to the slave configuration structure
- * @param srcClock_Hz I2C peripheral clock frequency in Hz
  */
 void I2C_SlaveInit(I2C_Type *base, const i2c_slave_config_t *slaveConfig);
 
@@ -331,11 +330,11 @@ static inline uint32_t I2C_MasterGetStatusFlags(I2C_Type *base)
  * @param statusMask The status flag mask, defined in type i2c_status_flag_t.
  *      The parameter can be any combination of the following values:
  *          @arg kI2C_ArbitrationLostFlag
- *          @arg kI2C_IntPendingFlagFlag
+ *          @arg kI2C_IntPendingFlag
  */
 static inline void I2C_MasterClearStatusFlags(I2C_Type *base, uint32_t statusMask)
 {
-    base->I2SR = (uint8_t)statusMask;
+    base->I2SR &= (~(uint16_t)statusMask);
 }
 
 /*!
@@ -603,18 +602,18 @@ void I2C_SlaveTransferCreateHandle(I2C_Type *base,
  *
  * The set of events received by the callback is customizable. To do so, set the @a eventMask parameter to
  * the OR'd combination of #i2c_slave_transfer_event_t enumerators for the events you wish to receive.
- * The #kI2C_SlaveTransmitEvent and #kLPI2C_SlaveReceiveEvent events are always enabled and do not need
+ * The #kI2C_SlaveTransmitEvent and kLPI2C_SlaveReceiveEvent events are always enabled and do not need
  * to be included in the mask. Alternatively, pass 0 to get a default set of only the transmit and
  * receive events that are always enabled. In addition, the #kI2C_SlaveAllEvents constant is provided as
  * a convenient way to enable all events.
  *
  * @param base The I2C peripheral base address.
- * @param handle Pointer to #i2c_slave_handle_t structure which stores the transfer state.
+ * @param handle Pointer to i2c_slave_handle_t structure which stores the transfer state.
  * @param eventMask Bit mask formed by OR'ing together #i2c_slave_transfer_event_t enumerators to specify
  *      which events to send to the callback. Other accepted values are 0 to get a default set of
  *      only the transmit and receive events, and #kI2C_SlaveAllEvents to enable all events.
  *
- * @retval #kStatus_Success Slave transfers were successfully started.
+ * @retval kStatus_Success Slave transfers were successfully started.
  * @retval #kStatus_I2C_Busy Slave transfers have already been started on this handle.
  */
 status_t I2C_SlaveTransferNonBlocking(I2C_Type *base, i2c_slave_handle_t *handle, uint32_t eventMask);

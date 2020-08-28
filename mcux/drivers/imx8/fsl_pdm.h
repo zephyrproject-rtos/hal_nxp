@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018, Freescale Semiconductor, Inc.
- * Copyright 2019 NXP
+ * Copyright 2019-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PDM_DRIVER_VERSION (MAKE_VERSION(2, 2, 1)) /*!< Version 2.2.1 */
+#define FSL_PDM_DRIVER_VERSION (MAKE_VERSION(2, 4, 1)) /*!< Version 2.4.1 */
 /*@}*/
 
 /*! @brief PDM XFER QUEUE SIZE */
@@ -31,11 +31,13 @@
 /*! @brief PDM return status*/
 enum
 {
-    kStatus_PDM_Busy       = MAKE_STATUS(kStatusGroup_PDM, 0), /*!< PDM is busy. */
-    kStatus_PDM_CLK_LOW    = MAKE_STATUS(kStatusGroup_PDM, 1), /*!< PDM clock frequency low */
-    kStatus_PDM_FIFO_ERROR = MAKE_STATUS(kStatusGroup_PDM, 2), /*!< PDM FIFO underrun or overflow */
-    kStatus_PDM_QueueFull  = MAKE_STATUS(kStatusGroup_PDM, 3), /*!< PDM FIFO underrun or overflow */
-    kStatus_PDM_Idle       = MAKE_STATUS(kStatusGroup_PDM, 4)  /*!< PDM is idle */
+    kStatus_PDM_Busy                 = MAKE_STATUS(kStatusGroup_PDM, 0), /*!< PDM is busy. */
+    kStatus_PDM_CLK_LOW              = MAKE_STATUS(kStatusGroup_PDM, 1), /*!< PDM clock frequency low */
+    kStatus_PDM_FIFO_ERROR           = MAKE_STATUS(kStatusGroup_PDM, 2), /*!< PDM FIFO underrun or overflow */
+    kStatus_PDM_QueueFull            = MAKE_STATUS(kStatusGroup_PDM, 3), /*!< PDM FIFO underrun or overflow */
+    kStatus_PDM_Idle                 = MAKE_STATUS(kStatusGroup_PDM, 4), /*!< PDM is idle */
+    kStatus_PDM_Output_ERROR         = MAKE_STATUS(kStatusGroup_PDM, 5), /*!< PDM is output error */
+    kStatus_PDM_ChannelConfig_Failed = MAKE_STATUS(kStatusGroup_PDM, 6)  /*!< PDM channel config failed */
 };
 
 /*! @brief The PDM interrupt enable flag */
@@ -48,18 +50,20 @@ enum _pdm_interrupt_enable
 /*! @brief The PDM status */
 enum _pdm_internal_status
 {
-    kPDM_StatusDfBusyFlag     = PDM_STAT_BSY_FIL_MASK,  /*!< Decimation filter is busy processing data */
-    kPDM_StatusFIRFilterReady = PDM_STAT_FIR_RDY_MASK,  /*!< FIR filter data is ready */
-    kPDM_StatusFrequencyLow   = PDM_STAT_LOWFREQF_MASK, /*!< Mic app clock frequency not high enough */
+    kPDM_StatusDfBusyFlag     = (int)PDM_STAT_BSY_FIL_MASK, /*!< Decimation filter is busy processing data */
+    kPDM_StatusFIRFilterReady = PDM_STAT_FIR_RDY_MASK,      /*!< FIR filter data is ready */
+    kPDM_StatusFrequencyLow   = PDM_STAT_LOWFREQF_MASK,     /*!< Mic app clock frequency not high enough */
 
     kPDM_StatusCh0FifoDataAvaliable = PDM_STAT_CH0F_MASK, /*!< channel 0 fifo data reached watermark level */
     kPDM_StatusCh1FifoDataAvaliable = PDM_STAT_CH1F_MASK, /*!< channel 1 fifo data reached watermark level */
     kPDM_StatusCh2FifoDataAvaliable = PDM_STAT_CH2F_MASK, /*!< channel 2 fifo data reached watermark level */
     kPDM_StatusCh3FifoDataAvaliable = PDM_STAT_CH3F_MASK, /*!< channel 3 fifo data reached watermark level */
+#if !defined(FSL_FEATURE_PDM_CHANNEL_NUM) || (FSL_FEATURE_PDM_CHANNEL_NUM == 8U)
     kPDM_StatusCh4FifoDataAvaliable = PDM_STAT_CH4F_MASK, /*!< channel 4 fifo data reached watermark level */
     kPDM_StatusCh5FifoDataAvaliable = PDM_STAT_CH5F_MASK, /*!< channel 5 fifo data reached watermark level */
     kPDM_StatusCh6FifoDataAvaliable = PDM_STAT_CH6F_MASK, /*!< channel 6 fifo data reached watermark level */
     kPDM_StatusCh7FifoDataAvaliable = PDM_STAT_CH7F_MASK, /*!< channel 7 fifo data reached watermark level */
+#endif
 };
 
 /*! @brief PDM channel enable mask */
@@ -69,6 +73,7 @@ enum _pdm_channel_enable_mask
     kPDM_EnableChannel1 = PDM_STAT_CH1F_MASK, /*!< channgel 1 enable mask */
     kPDM_EnableChannel2 = PDM_STAT_CH2F_MASK, /*!< channgel 2 enable mask */
     kPDM_EnableChannel3 = PDM_STAT_CH3F_MASK, /*!< channgel 3 enable mask */
+#if !defined(FSL_FEATURE_PDM_CHANNEL_NUM) || (FSL_FEATURE_PDM_CHANNEL_NUM == 8U)
     kPDM_EnableChannel4 = PDM_STAT_CH4F_MASK, /*!< channgel 4 enable mask */
     kPDM_EnableChannel5 = PDM_STAT_CH5F_MASK, /*!< channgel 5 enable mask */
     kPDM_EnableChannel6 = PDM_STAT_CH6F_MASK, /*!< channgel 6 enable mask */
@@ -76,6 +81,9 @@ enum _pdm_channel_enable_mask
 
     kPDM_EnableChannelAll = kPDM_EnableChannel0 | kPDM_EnableChannel1 | kPDM_EnableChannel2 | kPDM_EnableChannel3 |
                             kPDM_EnableChannel4 | kPDM_EnableChannel5 | kPDM_EnableChannel6 | kPDM_EnableChannel7,
+#else
+    kPDM_EnableChannelAll = kPDM_EnableChannel0 | kPDM_EnableChannel1 | kPDM_EnableChannel2 | kPDM_EnableChannel3,
+#endif
 };
 
 /*! @brief The PDM fifo status */
@@ -85,21 +93,51 @@ enum _pdm_fifo_status
     kPDM_FifoStatusUnderflowCh1 = PDM_FIFO_STAT_FIFOUND1_MASK, /*!< channel1 fifo status underflow */
     kPDM_FifoStatusUnderflowCh2 = PDM_FIFO_STAT_FIFOUND2_MASK, /*!< channel2 fifo status underflow */
     kPDM_FifoStatusUnderflowCh3 = PDM_FIFO_STAT_FIFOUND3_MASK, /*!< channel3 fifo status underflow */
+#if !defined(FSL_FEATURE_PDM_CHANNEL_NUM) || (FSL_FEATURE_PDM_CHANNEL_NUM == 8U)
     kPDM_FifoStatusUnderflowCh4 = PDM_FIFO_STAT_FIFOUND4_MASK, /*!< channel4 fifo status underflow */
     kPDM_FifoStatusUnderflowCh5 = PDM_FIFO_STAT_FIFOUND5_MASK, /*!< channel5 fifo status underflow */
     kPDM_FifoStatusUnderflowCh6 = PDM_FIFO_STAT_FIFOUND6_MASK, /*!< channel6 fifo status underflow */
     kPDM_FifoStatusUnderflowCh7 = PDM_FIFO_STAT_FIFOUND6_MASK, /*!< channel7 fifo status underflow */
+#endif
 
     kPDM_FifoStatusOverflowCh0 = PDM_FIFO_STAT_FIFOOVF0_MASK, /*!< channel0 fifo status overflow */
     kPDM_FifoStatusOverflowCh1 = PDM_FIFO_STAT_FIFOOVF1_MASK, /*!< channel1 fifo status overflow */
     kPDM_FifoStatusOverflowCh2 = PDM_FIFO_STAT_FIFOOVF2_MASK, /*!< channel2 fifo status overflow */
     kPDM_FifoStatusOverflowCh3 = PDM_FIFO_STAT_FIFOOVF3_MASK, /*!< channel3 fifo status overflow */
+#if !defined(FSL_FEATURE_PDM_CHANNEL_NUM) || (FSL_FEATURE_PDM_CHANNEL_NUM == 8U)
     kPDM_FifoStatusOverflowCh4 = PDM_FIFO_STAT_FIFOOVF4_MASK, /*!< channel4 fifo status overflow */
     kPDM_FifoStatusOverflowCh5 = PDM_FIFO_STAT_FIFOOVF5_MASK, /*!< channel5 fifo status overflow */
     kPDM_FifoStatusOverflowCh6 = PDM_FIFO_STAT_FIFOOVF6_MASK, /*!< channel6 fifo status overflow */
     kPDM_FifoStatusOverflowCh7 = PDM_FIFO_STAT_FIFOOVF7_MASK, /*!< channel7 fifo status overflow */
+#endif
 };
 
+#if defined(FSL_FEATURE_PDM_HAS_RANGE_CTRL) && FSL_FEATURE_PDM_HAS_RANGE_CTRL
+/*! @brief The PDM output status */
+enum _pdm_range_status
+{
+    kPDM_RangeStatusUnderFlowCh0 = PDM_RANGE_STAT_RANGEUNF0_MASK, /*!< channel0 range status underflow */
+    kPDM_RangeStatusUnderFlowCh1 = PDM_RANGE_STAT_RANGEUNF1_MASK, /*!< channel1 range status underflow */
+    kPDM_RangeStatusUnderFlowCh2 = PDM_RANGE_STAT_RANGEUNF2_MASK, /*!< channel2 range status underflow */
+    kPDM_RangeStatusUnderFlowCh3 = PDM_RANGE_STAT_RANGEUNF3_MASK, /*!< channel3 range status underflow */
+#if !defined(FSL_FEATURE_PDM_CHANNEL_NUM) || (FSL_FEATURE_PDM_CHANNEL_NUM == 8U)
+    kPDM_RangeStatusUnderFlowCh4 = PDM_RANGE_STAT_RANGEUNF4_MASK, /*!< channel4 range status underflow */
+    kPDM_RangeStatusUnderFlowCh5 = PDM_RANGE_STAT_RANGEUNF5_MASK, /*!< channel5 range status underflow */
+    kPDM_RangeStatusUnderFlowCh6 = PDM_RANGE_STAT_RANGEUNF6_MASK, /*!< channel6 range status underflow */
+    kPDM_RangeStatusUnderFlowCh7 = PDM_RANGE_STAT_RANGEUNF7_MASK, /*!< channel7 range status underflow */
+#endif
+    kPDM_RangeStatusOverFlowCh0 = PDM_RANGE_STAT_RANGEOVF0_MASK, /*!< channel0 range status overflow */
+    kPDM_RangeStatusOverFlowCh1 = PDM_RANGE_STAT_RANGEOVF1_MASK, /*!< channel1 range status overflow */
+    kPDM_RangeStatusOverFlowCh2 = PDM_RANGE_STAT_RANGEOVF2_MASK, /*!< channel2 range status overflow */
+    kPDM_RangeStatusOverFlowCh3 = PDM_RANGE_STAT_RANGEOVF3_MASK, /*!< channel3 range status overflow */
+#if !defined(FSL_FEATURE_PDM_CHANNEL_NUM) || (FSL_FEATURE_PDM_CHANNEL_NUM == 8U)
+    kPDM_RangeStatusOverFlowCh4 = PDM_RANGE_STAT_RANGEOVF4_MASK, /*!< channel4 range status overflow */
+    kPDM_RangeStatusOverFlowCh5 = PDM_RANGE_STAT_RANGEOVF5_MASK, /*!< channel5 range status overflow */
+    kPDM_RangeStatusOverFlowCh6 = PDM_RANGE_STAT_RANGEOVF6_MASK, /*!< channel6 range status overflow */
+    kPDM_RangeStatusOverFlowCh7 = PDM_RANGE_STAT_RANGEOVF7_MASK, /*!< channel7 range status overflow */
+#endif
+};
+#else
 /*! @brief The PDM output status */
 enum _pdm_output_status
 {
@@ -107,20 +145,24 @@ enum _pdm_output_status
     kPDM_OutputStatusUnderFlowCh1 = PDM_OUT_STAT_OUTUNF1_MASK, /*!< channel1 output status underflow */
     kPDM_OutputStatusUnderFlowCh2 = PDM_OUT_STAT_OUTUNF2_MASK, /*!< channel2 output status underflow */
     kPDM_OutputStatusUnderFlowCh3 = PDM_OUT_STAT_OUTUNF3_MASK, /*!< channel3 output status underflow */
+#if !defined(FSL_FEATURE_PDM_CHANNEL_NUM) || (FSL_FEATURE_PDM_CHANNEL_NUM == 8U)
     kPDM_OutputStatusUnderFlowCh4 = PDM_OUT_STAT_OUTUNF4_MASK, /*!< channel4 output status underflow */
     kPDM_OutputStatusUnderFlowCh5 = PDM_OUT_STAT_OUTUNF5_MASK, /*!< channel5 output status underflow */
     kPDM_OutputStatusUnderFlowCh6 = PDM_OUT_STAT_OUTUNF6_MASK, /*!< channel6 output status underflow */
     kPDM_OutputStatusUnderFlowCh7 = PDM_OUT_STAT_OUTUNF7_MASK, /*!< channel7 output status underflow */
-
-    kPDM_OutputStatusOverFlowCh0 = PDM_OUT_STAT_OUTOVF0_MASK, /*!< channel0 output status overflow */
-    kPDM_OutputStatusOverFlowCh1 = PDM_OUT_STAT_OUTOVF1_MASK, /*!< channel1 output status overflow */
-    kPDM_OutputStatusOverFlowCh2 = PDM_OUT_STAT_OUTOVF2_MASK, /*!< channel2 output status overflow */
-    kPDM_OutputStatusOverFlowCh3 = PDM_OUT_STAT_OUTOVF3_MASK, /*!< channel3 output status overflow */
-    kPDM_OutputStatusOverFlowCh4 = PDM_OUT_STAT_OUTOVF4_MASK, /*!< channel4 output status overflow */
-    kPDM_OutputStatusOverFlowCh5 = PDM_OUT_STAT_OUTOVF5_MASK, /*!< channel5 output status overflow */
-    kPDM_OutputStatusOverFlowCh6 = PDM_OUT_STAT_OUTOVF6_MASK, /*!< channel6 output status overflow */
-    kPDM_OutputStatusOverFlowCh7 = PDM_OUT_STAT_OUTOVF7_MASK, /*!< channel7 output status overflow */
+#endif
+    kPDM_OutputStatusOverFlowCh0 = PDM_OUT_STAT_OUTOVF0_MASK,  /*!< channel0 output status overflow */
+    kPDM_OutputStatusOverFlowCh1 = PDM_OUT_STAT_OUTOVF1_MASK,  /*!< channel1 output status overflow */
+    kPDM_OutputStatusOverFlowCh2 = PDM_OUT_STAT_OUTOVF2_MASK,  /*!< channel2 output status overflow */
+    kPDM_OutputStatusOverFlowCh3 = PDM_OUT_STAT_OUTOVF3_MASK,  /*!< channel3 output status overflow */
+#if !defined(FSL_FEATURE_PDM_CHANNEL_NUM) || (FSL_FEATURE_PDM_CHANNEL_NUM == 8U)
+    kPDM_OutputStatusOverFlowCh4 = PDM_OUT_STAT_OUTOVF4_MASK,  /*!< channel4 output status overflow */
+    kPDM_OutputStatusOverFlowCh5 = PDM_OUT_STAT_OUTOVF5_MASK,  /*!< channel5 output status overflow */
+    kPDM_OutputStatusOverFlowCh6 = PDM_OUT_STAT_OUTOVF6_MASK,  /*!< channel6 output status overflow */
+    kPDM_OutputStatusOverFlowCh7 = PDM_OUT_STAT_OUTOVF7_MASK,  /*!< channel7 output status overflow */
+#endif
 };
+#endif
 
 /*! @brief PDM DC remover configurations */
 typedef enum _pdm_dc_remover
@@ -172,6 +214,17 @@ typedef enum _pdm_df_output_gain
     kPDM_DfOutputGain15 = 0xFU, /*!< Decimation filter output gain 15 */
 } pdm_df_output_gain_t;
 
+/*! @brief PDM data width */
+enum _pdm_data_width
+{
+#if defined(FSL_FEATURE_PDM_FIFO_WIDTH) && (FSL_FEATURE_PDM_FIFO_WIDTH != 2U)
+    kPDM_DataWwidth24 = 3U, /*!< PDM data width 24bit */
+    kPDM_DataWwidth32 = 4U, /*!< PDM data width 32bit */
+#else
+    kPDM_DataWdith16 = 2U, /*!< PDM data width 16bit */
+#endif
+};
+
 /*! @brief PDM channel configurations */
 typedef struct _pdm_channel_config
 {
@@ -209,6 +262,7 @@ typedef enum _pdm_hwvad_hpf_config
     kPDM_HwvadHpfBypassed         = 0x0U, /*!< High-pass filter bypass */
     kPDM_HwvadHpfCutOffFreq1750Hz = 0x1U, /*!< High-pass filter cut off frequency 1750HZ */
     kPDM_HwvadHpfCutOffFreq215Hz  = 0x2U, /*!< High-pass filter cut off frequency 215HZ */
+    kPDM_HwvadHpfCutOffFreq102Hz  = 0x3U, /*!< High-pass filter cut off frequency 102HZ */
 } pdm_hwvad_hpf_config_t;
 
 /*! @brief HWVAD internal filter status */
@@ -286,6 +340,7 @@ struct _pdm_handle
     volatile uint8_t queueUser;                   /*!< Index for user to queue transfer */
     volatile uint8_t queueDriver;                 /*!< Index for driver to get the transfer data and size */
 
+    uint32_t format;      /*!< data format */
     uint8_t watermark;    /*!< Watermark value */
     uint8_t startChannel; /*!< end channel */
     uint8_t channelNums;  /*!< Enabled channel number */
@@ -518,6 +573,18 @@ static inline uint32_t PDM_GetFifoStatus(PDM_Type *base)
     return base->FIFO_STAT;
 }
 
+#if defined(FSL_FEATURE_PDM_HAS_RANGE_CTRL) && FSL_FEATURE_PDM_HAS_RANGE_CTRL
+/*!
+ * @brief Gets the PDM Range status flag.
+ * Use the Status Mask in _pdm_range_status to get the status value needed
+ * @param base PDM base pointer
+ * @return output status.
+ */
+static inline uint32_t PDM_GetRangeStatus(PDM_Type *base)
+{
+    return base->RANGE_STAT;
+}
+#else
 /*!
  * @brief Gets the PDM output status flag.
  * Use the Status Mask in _pdm_output_status to get the status value needed
@@ -528,6 +595,7 @@ static inline uint32_t PDM_GetOutputStatus(PDM_Type *base)
 {
     return base->OUT_STAT;
 }
+#endif
 
 /*!
  * @brief Clears the PDM Tx status.
@@ -552,6 +620,18 @@ static inline void PDM_ClearFIFOStatus(PDM_Type *base, uint32_t mask)
     base->FIFO_STAT = mask;
 }
 
+#if defined(FSL_FEATURE_PDM_HAS_RANGE_CTRL) && FSL_FEATURE_PDM_HAS_RANGE_CTRL
+/*!
+ * @brief Clears the PDM range status.
+ *
+ * @param base PDM base pointer
+ * @param mask State mask. It can be a combination of the status in _pdm_range_status.
+ */
+static inline void PDM_ClearRangeStatus(PDM_Type *base, uint32_t mask)
+{
+    base->RANGE_STAT = mask;
+}
+#else
 /*!
  * @brief Clears the PDM output status.
  *
@@ -562,6 +642,7 @@ static inline void PDM_ClearOutputStatus(PDM_Type *base, uint32_t mask)
 {
     base->OUT_STAT = mask;
 }
+#endif
 
 /*! @} */
 
@@ -640,7 +721,7 @@ static inline uint32_t PDM_GetDataRegisterAddress(PDM_Type *base, uint32_t chann
  * @name Bus Operations
  * @{
  */
-
+#if defined(FSL_FEATURE_PDM_FIFO_WIDTH) && (FSL_FEATURE_PDM_FIFO_WIDTH == 2U)
 /*!
  * @brief Reads data from the PDM FIFO.
  *
@@ -653,6 +734,45 @@ static inline int16_t PDM_ReadData(PDM_Type *base, uint32_t channel)
     return (int16_t)(base->DATACH[channel]);
 }
 
+/*!
+ * @brief PDM read data non blocking.
+ * So the actually read data byte size in this function is (size * 2 * channelNums).
+ * @param base PDM base pointer.
+ * @param startChannel start channel number.
+ * @param channelNums total enabled channelnums.
+ * @param buffer received buffer address.
+ * @param size number of 16bit data to read.
+ */
+void PDM_ReadNonBlocking(PDM_Type *base, uint32_t startChannel, uint32_t channelNums, int16_t *buffer, size_t size);
+#endif
+
+/*!
+ * @brief PDM read fifo.
+ * @note: This function support 16 bit only for IP version that only supports 16bit.
+ *
+ * @param base PDM base pointer.
+ * @param startChannel start channel number.
+ * @param channelNums total enabled channelnums.
+ * @param buffer received buffer address.
+ * @param size number of samples to read.
+ * @param dataWidth sample width.
+ */
+void PDM_ReadFifo(
+    PDM_Type *base, uint32_t startChannel, uint32_t channelNums, void *buffer, size_t size, uint32_t dataWidth);
+
+#if defined(FSL_FEATURE_PDM_FIFO_WIDTH) && (FSL_FEATURE_PDM_FIFO_WIDTH == 4U)
+/*!
+ * @brief Reads data from the PDM FIFO.
+ *
+ * @param base PDM base pointer.
+ * @param channel Data channel used.
+ * @return Data in PDM FIFO.
+ */
+static inline uint32_t PDM_ReadData(PDM_Type *base, uint32_t channel)
+{
+    return base->DATACH[channel];
+}
+#endif
 /*! @} */
 
 /*!
@@ -672,7 +792,7 @@ void PDM_SetHwvadConfig(PDM_Type *base, const pdm_hwvad_config_t *config);
  * @brief PDM hwvad force output disable.
  *
  * @param base PDM base pointer
- * @param enable, true is output force disable, false is output not force.
+ * @param enable true is output force disable, false is output not force.
  */
 static inline void PDM_ForceHwvadOutputDisable(PDM_Type *base, bool enable)
 {
@@ -869,6 +989,78 @@ static inline void PDM_SetHwvadInternalFilterStatus(PDM_Type *base, pdm_hwvad_fi
     base->VAD0_CTRL_1 = (base->VAD0_CTRL_1 & (~PDM_VAD0_CTRL_1_VADST10_MASK)) | (uint32_t)status;
 }
 
+/*!
+ * @brief set HWVAD in envelope based mode .
+ * Recommand configurations,
+ * @code
+ * static const pdm_hwvad_config_t hwvadConfig = {
+ *   .channel           = 0,
+ *   .initializeTime    = 10U,
+ *   .cicOverSampleRate = 0U,
+ *   .inputGain         = 0U,
+ *   .frameTime         = 10U,
+ *   .cutOffFreq        = kPDM_HwvadHpfBypassed,
+ *   .enableFrameEnergy = false,
+ *   .enablePreFilter   = true,
+};
+
+ * static const pdm_hwvad_noise_filter_t noiseFilterConfig = {
+ *   .enableAutoNoiseFilter = false,
+ *   .enableNoiseMin        = true,
+ *   .enableNoiseDecimation = true,
+ *   .noiseFilterAdjustment = 0U,
+ *   .noiseGain             = 7U,
+ *   .enableNoiseDetectOR   = true,
+ * };
+ * @endcode
+ * @param base PDM base pointer.
+ * @param hwvadConfig internal filter status.
+ * @param noiseConfig Voice activity detector noise filter configure structure pointer.
+ * @param zcdConfig Voice activity detector zero cross detector configure structure pointer .
+ * @param signalGain signal gain value.
+ */
+void PDM_SetHwvadInEnvelopeBasedMode(PDM_Type *base,
+                                     const pdm_hwvad_config_t *hwvadConfig,
+                                     const pdm_hwvad_noise_filter_t *noiseConfig,
+                                     const pdm_hwvad_zero_cross_detector_t *zcdConfig,
+                                     uint32_t signalGain);
+
+/*!
+ * brief set HWVAD in energy based mode .
+ * Recommand configurations,
+ * code
+ * static const pdm_hwvad_config_t hwvadConfig = {
+ *   .channel           = 0,
+ *   .initializeTime    = 10U,
+ *   .cicOverSampleRate = 0U,
+ *   .inputGain         = 0U,
+ *   .frameTime         = 10U,
+ *   .cutOffFreq        = kPDM_HwvadHpfBypassed,
+ *   .enableFrameEnergy = true,
+ *   .enablePreFilter   = true,
+};
+
+ * static const pdm_hwvad_noise_filter_t noiseFilterConfig = {
+ *   .enableAutoNoiseFilter = true,
+ *   .enableNoiseMin        = false,
+ *   .enableNoiseDecimation = false,
+ *   .noiseFilterAdjustment = 0U,
+ *   .noiseGain             = 7U,
+ *   .enableNoiseDetectOR   = false,
+ * };
+ * code
+ * param base PDM base pointer.
+ * param hwvadConfig internal filter status.
+ * param noiseConfig Voice activity detector noise filter configure structure pointer.
+ * param zcdConfig Voice activity detector zero cross detector configure structure pointer .
+ * param signalGain signal gain value, signal gain value should be properly according to application.
+ */
+void PDM_SetHwvadInEnergyBasedMode(PDM_Type *base,
+                                   const pdm_hwvad_config_t *hwvadConfig,
+                                   const pdm_hwvad_noise_filter_t *noiseConfig,
+                                   const pdm_hwvad_zero_cross_detector_t *zcdConfig,
+                                   uint32_t signalGain);
+
 /*! @} */
 
 /*!
@@ -890,15 +1082,17 @@ static inline void PDM_SetHwvadInternalFilterStatus(PDM_Type *base, pdm_hwvad_fi
 void PDM_TransferCreateHandle(PDM_Type *base, pdm_handle_t *handle, pdm_transfer_callback_t callback, void *userData);
 
 /*!
- * @brief PDM read data non blocking.
- * So the actually read data byte size in this function is (size * 2 * channelNums).
+ * @brief PDM set channel transfer config.
+ *
  * @param base PDM base pointer.
- * @param startChannel start channel number.
- * @param channelNums total enabled channelnums.
- * @param buffer received buffer address.
- * @param size number of 16bit data to read.
+ * @param handle PDM handle pointer.
+ * @param channel PDM channel.
+ * @param config channel config.
+ * @param format data format, support data width configurations,_pdm_data_width.
+ * @retval kStatus_PDM_ChannelConfig_Failed or kStatus_Success.
  */
-void PDM_ReadNonBlocking(PDM_Type *base, uint32_t startChannel, uint32_t channelNums, int16_t *buffer, size_t size);
+status_t PDM_TransferSetChannelConfig(
+    PDM_Type *base, pdm_handle_t *handle, uint32_t channel, const pdm_channel_config_t *config, uint32_t format);
 
 /*!
  * @brief Performs an interrupt non-blocking receive transfer on PDM.

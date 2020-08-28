@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 NXP
+ * Copyright 2017 - 2020 NXP
  * All rights reserved.
  *
  *
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SAI_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version 2.2.0 */
+#define FSL_SAI_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 1)) /*!< Version 2.3.1 */
 /*@}*/
 
 typedef struct _sai_sdma_handle sai_sdma_handle_t;
@@ -74,6 +74,7 @@ extern "C" {
  * @param callback Pointer to user callback function.
  * @param userData User parameter passed to the callback function.
  * @param dmaHandle SDMA handle pointer, this handle shall be static allocated by users.
+ * @param eventSource SAI event source number.
  */
 void SAI_TransferTxCreateHandleSDMA(I2S_Type *base,
                                     sai_sdma_handle_t *handle,
@@ -94,6 +95,7 @@ void SAI_TransferTxCreateHandleSDMA(I2S_Type *base,
  * @param callback Pointer to user callback function.
  * @param userData User parameter passed to the callback function.
  * @param dmaHandle SDMA handle pointer, this handle shall be static allocated by users.
+ * @param eventSource SAI event source number.
  */
 void SAI_TransferRxCreateHandleSDMA(I2S_Type *base,
                                     sai_sdma_handle_t *handle,
