@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2019 , NXP
+ * Copyright 2017 - 2020 , NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1478,8 +1478,8 @@ uint32_t CLOCK_GetPLL0OutFromSetup(pll_setup_t *pSetup)
     /* Get the input clock frequency of PLL. */
     clkRate = CLOCK_GetPLL0InClockRate();
 
-    if (((SYSCON->PLL0CTRL & SYSCON_PLL0CTRL_BYPASSPLL_MASK) == 0UL) &&
-        ((SYSCON->PLL0CTRL & SYSCON_PLL0CTRL_CLKEN_MASK) != 0UL) &&
+    if (((pSetup->pllctrl & SYSCON_PLL0CTRL_BYPASSPLL_MASK) == 0UL) &&
+        ((pSetup->pllctrl & SYSCON_PLL0CTRL_CLKEN_MASK) != 0UL) &&
         ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL0_MASK) == 0UL) &&
         ((PMC->PDRUNCFG0 & PMC_PDRUNCFG0_PDEN_PLL0_SSCG_MASK) == 0UL))
     {
