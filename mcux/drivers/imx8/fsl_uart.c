@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -684,22 +684,50 @@ void UART_EnableDMA(UART_Type *base, uint32_t dmaSource, bool enable)
  * param base UART peripheral base address.
  * param data Start address of the data to write.
  * param length Size of the data to write.
+ * retval kStatus_UART_Timeout Transmission timed out and was aborted.
+ * retval kStatus_Success Successfully wrote all data.
  */
-void UART_WriteBlocking(UART_Type *base, const uint8_t *data, size_t length)
+status_t UART_WriteBlocking(UART_Type *base, const uint8_t *data, size_t length)
 {
     assert(data != NULL);
+#if UART_RETRY_TIMES
+    uint32_t waitTimes;
+#endif
 
     while (length-- != 0U)
     {
         /* Wait for TX fifo valid. */
+#if UART_RETRY_TIMES
+        waitTimes = UART_RETRY_TIMES;
+        while ((0U == (base->USR1 & UART_USR1_TRDY_MASK)) && (0U != --waitTimes))
+#else
         while (0U == (base->USR1 & UART_USR1_TRDY_MASK))
+#endif
         {
         }
+#if UART_RETRY_TIMES
+        if (0U == waitTimes)
+        {
+            return kStatus_UART_Timeout;
+        }
+#endif
         UART_WriteByte(base, *(data++));
     }
+#if UART_RETRY_TIMES
+    waitTimes = UART_RETRY_TIMES;
+    while ((0U == (base->USR2 & UART_USR2_TXDC_MASK)) && (0U != --waitTimes))
+#else
     while (0U == (base->USR2 & UART_USR2_TXDC_MASK))
+#endif
     {
     }
+#if UART_RETRY_TIMES
+    if (0U == waitTimes)
+    {
+        return kStatus_UART_Timeout;
+    }
+#endif
+    return kStatus_Success;
 }
 
 /*!
@@ -715,18 +743,32 @@ void UART_WriteBlocking(UART_Type *base, const uint8_t *data, size_t length)
  * retval kStatus_UART_NoiseError A noise error occurred while receiving data.
  * retval kStatus_UART_FramingError A framing error occurred while receiving data.
  * retval kStatus_UART_ParityError A parity error occurred while receiving data.
+ * retval kStatus_UART_Timeout Transmission timed out and was aborted.
  * retval kStatus_Success Successfully received all data.
  */
 status_t UART_ReadBlocking(UART_Type *base, uint8_t *data, size_t length)
 {
     assert(data != NULL);
     status_t status = kStatus_Success;
+#if UART_RETRY_TIMES
+    uint32_t waitTimes;
+#endif
 
     while (length-- != 0U)
     {
+#if UART_RETRY_TIMES
+        waitTimes = UART_RETRY_TIMES;
+#endif
         /* Wait for receive data in URXD register is ready */
         while ((base->USR2 & UART_USR2_RDR_MASK) == 0U)
         {
+#if UART_RETRY_TIMES
+            if (--waitTimes == 0U)
+            {
+                status = kStatus_UART_Timeout;
+                break;
+            }
+#endif
             /* Over run check for receiving character */
             if ((base->USR2 & UART_USR2_ORE_MASK) != 0U)
             {
@@ -1497,11 +1539,7 @@ void UART_TransferHandleIRQ(UART_Type *base, uart_handle_t *handle)
 void UART1_DriverIRQHandler(void)
 {
     s_uartIsr(UART1, s_uartHandle[1]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -1509,11 +1547,7 @@ void UART1_DriverIRQHandler(void)
 void UART2_DriverIRQHandler(void)
 {
     s_uartIsr(UART2, s_uartHandle[2]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -1521,11 +1555,7 @@ void UART2_DriverIRQHandler(void)
 void UART3_DriverIRQHandler(void)
 {
     s_uartIsr(UART3, s_uartHandle[3]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -1533,11 +1563,7 @@ void UART3_DriverIRQHandler(void)
 void UART4_DriverIRQHandler(void)
 {
     s_uartIsr(UART4, s_uartHandle[4]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -1545,11 +1571,7 @@ void UART4_DriverIRQHandler(void)
 void UART5_DriverIRQHandler(void)
 {
     s_uartIsr(UART5, s_uartHandle[5]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -1557,11 +1579,7 @@ void UART5_DriverIRQHandler(void)
 void UART6_DriverIRQHandler(void)
 {
     s_uartIsr(UART6, s_uartHandle[6]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -1569,11 +1587,7 @@ void UART6_DriverIRQHandler(void)
 void UART7_DriverIRQHandler(void)
 {
     s_uartIsr(UART7, s_uartHandle[7]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -1581,10 +1595,6 @@ void UART7_DriverIRQHandler(void)
 void UART8_DriverIRQHandler(void)
 {
     s_uartIsr(UART8, s_uartHandle[8]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif

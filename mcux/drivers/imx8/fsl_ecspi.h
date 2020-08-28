@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief ECSPI driver version 2.0.2. */
-#define FSL_ECSPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief ECSPI driver version 2.1.0. */
+#define FSL_ECSPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 #ifndef ECSPI_DUMMYDATA
@@ -30,13 +30,19 @@
 #define ECSPI_DUMMYDATA (0xFFFFFFFFU)
 #endif
 
+/*! @brief Retry times for waiting flag. */
+#ifndef SPI_RETRY_TIMES
+#define SPI_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
+#endif
+
 /*! @brief Return status for the ECSPI driver. */
 enum
 {
     kStatus_ECSPI_Busy             = MAKE_STATUS(kStatusGroup_ECSPI, 0), /*!< ECSPI bus is busy */
     kStatus_ECSPI_Idle             = MAKE_STATUS(kStatusGroup_ECSPI, 1), /*!< ECSPI is idle */
-    kStatus_ECSPI_Error            = MAKE_STATUS(kStatusGroup_ECSPI, 2), /*!< ECSPI  error */
-    kStatus_ECSPI_HardwareOverFlow = MAKE_STATUS(kStatusGroup_ECSPI, 3), /*!< ECSPI  hardware overflow */
+    kStatus_ECSPI_Error            = MAKE_STATUS(kStatusGroup_ECSPI, 2), /*!< ECSPI error */
+    kStatus_ECSPI_HardwareOverFlow = MAKE_STATUS(kStatusGroup_ECSPI, 3), /*!< ECSPI hardware overflow */
+    kStatus_ECSPI_Timeout          = MAKE_STATUS(kStatusGroup_ECSPI, 4), /*!< ECSPI timeout polling status flags. */
 };
 
 /*! @brief ECSPI clock polarity configuration. */
@@ -352,7 +358,7 @@ static inline void ECSPI_Enable(ECSPI_Type *base, bool enable)
  * @brief Gets the status flag.
  *
  * @param base ECSPI base pointer
- * @return ECSPI Status, use status flag to AND #_ecspi_flags could get the related status.
+ * @return ECSPI Status, use status flag to AND _ecspi_flags could get the related status.
  */
 static inline uint32_t ECSPI_GetStatusFlags(ECSPI_Type *base)
 {
@@ -363,7 +369,7 @@ static inline uint32_t ECSPI_GetStatusFlags(ECSPI_Type *base)
  * @brief Clear the status flag.
  *
  * @param base ECSPI base pointer
- * @param mask ECSPI Status, use status flag to AND #_ecspi_flags could get the related status.
+ * @param mask ECSPI Status, use status flag to AND _ecspi_flags could get the related status.
  */
 static inline void ECSPI_ClearStatusFlags(ECSPI_Type *base, uint32_t mask)
 {
@@ -465,7 +471,10 @@ static inline bool ECSPI_IsMaster(ECSPI_Type *base, ecspi_channel_source_t chann
  * @brief Enables the DMA source for ECSPI.
  *
  * @param base ECSPI base pointer
- * @param source ECSPI DMA source.
+ * @param mask ECSPI DMA source. The parameter can be any of the following values:
+ *        @arg kECSPI_TxDmaEnable
+ *        @arg kECSPI_RxDmaEnable
+ *        @arg kECSPI_DmaAllEnable
  * @param enable True means enable DMA, false means disable DMA
  */
 static inline void ECSPI_EnableDMA(ECSPI_Type *base, uint32_t mask, bool enable)
@@ -532,7 +541,7 @@ static inline void ECSPI_SetChannelSelect(ECSPI_Type *base, ecspi_channel_source
  *
  * The purpose of this API is to set the channel will be use to transfer.
  * User may use this API after instance has been initialized or before transfer start.
- * The configuration structure #_ecspi_channel_config_ can be filled by user from scratch.
+ * The configuration structure _ecspi_channel_config_ can be filled by user from scratch.
  * After calling this API, user can select this channel as transfer channel.
  *
  * @param base ECSPI base pointer
@@ -558,8 +567,10 @@ void ECSPI_SetBaudRate(ECSPI_Type *base, uint32_t baudRate_Bps, uint32_t srcCloc
  * @param base ECSPI base pointer
  * @param buffer The data bytes to send
  * @param size The number of data bytes to send
+ * @retval kStatus_Success Successfully start a transfer.
+ * @retval kStatus_ECSPI_Timeout The transfer timed out and was aborted.
  */
-void ECSPI_WriteBlocking(ECSPI_Type *base, uint32_t *buffer, size_t size);
+status_t ECSPI_WriteBlocking(ECSPI_Type *base, uint32_t *buffer, size_t size);
 
 /*!
  * @brief Writes a data into the ECSPI data register.
@@ -612,6 +623,7 @@ void ECSPI_MasterTransferCreateHandle(ECSPI_Type *base,
  * @param xfer pointer to spi_xfer_config_t structure
  * @retval kStatus_Success Successfully start a transfer.
  * @retval kStatus_InvalidArgument Input argument is invalid.
+ * @retval kStatus_ECSPI_Timeout The transfer timed out and was aborted.
  */
 status_t ECSPI_MasterTransferBlocking(ECSPI_Type *base, ecspi_transfer_t *xfer);
 

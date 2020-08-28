@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -332,7 +332,7 @@ static inline uint32_t PWM_GetFIFOAvailable(PWM_Type *base)
  * @brief Sets the PWM sample value.
  *
  * @param base PWM peripheral base address
- * @param mask The sample value. This is the input to the 4x16 FIFO. The value in this register denotes
+ * @param value The sample value. This is the input to the 4x16 FIFO. The value in this register denotes
  *             the value of the sample being currently used.
  */
 static inline void PWM_SetSampleValue(PWM_Type *base, uint32_t value)
@@ -358,7 +358,7 @@ static inline uint32_t PWM_GetSampleValue(PWM_Type *base)
  * @brief Sets the PWM period value.
  *
  * @param base PWM peripheral base address
- * @param mask The period value. The PWM period register (PWM_PWMPR) determines the period of
+ * @param value The period value. The PWM period register (PWM_PWMPR) determines the period of
  *             the PWM output signal.
  *             Writing 0xFFFF to this register will achieve the same result as writing 0xFFFE.
  *             PWMO (Hz) = PCLK(Hz) / (period +2)

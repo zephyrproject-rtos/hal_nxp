@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018, Freescale Semiconductor, Inc.
- * Copyright 2019 NXP
+ * Copyright 2019 - 2020, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -71,11 +71,10 @@ extern "C" {
  *
  * @param base PDM base pointer.
  * @param handle PDM eDMA handle pointer.
- * @param base PDM peripheral base address.
  * @param callback Pointer to user callback function.
  * @param userData User parameter passed to the callback function.
  * @param dmaHandle eDMA handle pointer, this handle shall be static allocated by users.
- * @param dma request source.
+ * @param eventSource PDM event source number.
  */
 void PDM_TransferCreateHandleSDMA(PDM_Type *base,
                                   pdm_sdma_handle_t *handle,

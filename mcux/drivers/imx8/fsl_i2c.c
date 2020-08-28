@@ -691,7 +691,23 @@ status_t I2C_MasterStop(I2C_Type *base)
     /* Issue the STOP command on the bus. */
     base->I2CR &= ~((uint16_t)I2C_I2CR_MSTA_MASK | (uint16_t)I2C_I2CR_MTX_MASK | (uint16_t)I2C_I2CR_TXAK_MASK);
 
-    return I2C_WaitForStatusReady(base, (uint8_t)kI2C_BusBusyFlag);
+#if I2C_RETRY_TIMES
+    uint32_t waitTimes = I2C_RETRY_TIMES;
+    /* Wait for IBB bit is cleared. */
+    while ((0U != (base->I2SR & (uint8_t)kI2C_BusBusyFlag)) && (0U != --waitTimes))
+    {
+    }
+    if (0U == waitTimes)
+    {
+        return kStatus_I2C_Timeout;
+    }
+#else
+    /* Wait for IBB bit is cleared. */
+    while (0U != (base->I2SR & (uint8_t)kI2C_BusBusyFlag))
+    {
+    }
+#endif
+    return kStatus_Success;
 }
 
 /*!
@@ -1747,5 +1763,19 @@ void I2C3_DriverIRQHandler(void)
 void I2C4_DriverIRQHandler(void)
 {
     I2C_TransferCommonIRQHandler(I2C4, s_i2cHandle[4]);
+}
+#endif
+
+#if defined(I2C5)
+void I2C5_DriverIRQHandler(void)
+{
+    I2C_TransferCommonIRQHandler(I2C5, s_i2cHandle[5]);
+}
+#endif
+
+#if defined(I2C6)
+void I2C6_DriverIRQHandler(void)
+{
+    I2C_TransferCommonIRQHandler(I2C6, s_i2cHandle[6]);
 }
 #endif

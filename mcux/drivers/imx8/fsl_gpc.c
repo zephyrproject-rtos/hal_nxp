@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019, NXP
+ * Copyright 2017-2020, NXP
  * All rights reserved.
  *
  *
@@ -41,13 +41,23 @@ void GPC_Init(GPC_Type *base, uint32_t powerUpSlot, uint32_t powerDownSlot)
     base->GPC_IMR[1U] = GPC_IMR_IMR2_MASK;
     base->GPC_IMR[2U] = GPC_IMR_IMR3_MASK;
     base->GPC_IMR[3U] = GPC_IMR_IMR4_MASK;
+#if (defined(GPC_IMR_M7_COUNT) && (GPC_IMR_M7_COUNT == 5U))
+    base->GPC_IMR[4U] = GPC_IMR_IMR5_MASK;
+#endif /* GPC_IMR_M7_COUNT */
+
     /* Not mask power down request */
     base->MISC |= GPC_MISC_PDN_REQ_MASK_MASK;
     /* Select virtual PGC ack */
     base->GPC_PGC_ACK_SEL |= kGPC_VirtualPGCPowerUpAck | kGPC_VirtualPGCPowerDownAck;
     /* Slot configurations */
+#if !(defined(GPC_SLT_CFG_PU1_COUNT) && GPC_SLT_CFG_PU1_COUNT)
     base->SLT_CFG_PU[powerDownSlot] |= GPC_SLT_CFG_PU_PDN_SLOT_CONTROL_MASK;
     base->SLT_CFG_PU[powerUpSlot] |= GPC_SLT_CFG_PU_PUP_SLOT_CONTROL_MASK;
+#else
+    base->SLTn_CFG_PU[powerDownSlot].SLT_CFG_PU1 |= GPC_SLT_CFG_PU_PDN_SLOT_CONTROL_MASK;
+    base->SLTn_CFG_PU[powerUpSlot].SLT_CFG_PU1 |= GPC_SLT_CFG_PU_PUP_SLOT_CONTROL_MASK;
+#endif /* GPC_SLT_CFG_PU1_COUNT */
+
 #if defined(FSL_FEATURE_GPC_HAS_PGC_MF) && FSL_FEATURE_GPC_HAS_PGC_MF
     base->SLT_CFG_PU[powerDownSlot] |= GPC_SLT_CFG_PU_MF_PDN_SLOT_CONTROL_MASK;
     base->SLT_CFG_PU[powerUpSlot] |= GPC_SLT_CFG_PU_MF_PUP_SLOT_CONTROL_MASK;

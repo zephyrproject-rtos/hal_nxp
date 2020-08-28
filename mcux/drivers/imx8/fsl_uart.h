@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,9 +21,14 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief UART driver version 2.0.2. */
-#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief UART driver version 2.1.0. */
+#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
+
+/*! @brief Retry times for waiting flag. */
+#ifndef UART_RETRY_TIMES
+#define UART_RETRY_TIMES 0U /* Defining to zero means to keep waiting for the flag until it is assert/deassert. */
+#endif
 
 /*! @brief Error codes for the UART driver. */
 enum
@@ -45,6 +50,7 @@ enum
     kStatus_UART_BaudrateNotSupport =
         MAKE_STATUS(kStatusGroup_IUART, 13), /*!< Baudrate is not support in current clock source */
     kStatus_UART_BreakDetect = MAKE_STATUS(kStatusGroup_IUART, 14), /*!< Receiver detect BREAK signal */
+    kStatus_UART_Timeout     = MAKE_STATUS(kStatusGroup_IUART, 15), /*!< UART times out. */
 };
 
 /*! @brief UART data bits count. */
@@ -338,7 +344,7 @@ static inline void UART_Enable(UART_Type *base)
  * @brief This function is used to configure the IDLE line condition.
  *
  * @param base UART base pointer.
- * @param condition IDLE line detect condition of the enumerators in @ref _uart_idle_condition.
+ * @param condition IDLE line detect condition of the enumerators in @ref uart_idle_condition_t.
  */
 static inline void UART_SetIdleCondition(UART_Type *base, uart_idle_condition_t condition)
 {
@@ -365,7 +371,7 @@ static inline void UART_Disable(UART_Type *base)
 /*!
  * @brief This function is used to get the current status of specific
  *        UART status flag(including interrupt flag). The available
- *        status flag can be select from @ref uart_status_flag_t enumeration.
+ *        status flag can be select from uart_status_flag_t enumeration.
  *
  * @param base UART base pointer.
  * @param flag Status flag to check.
@@ -376,7 +382,7 @@ bool UART_GetStatusFlag(UART_Type *base, uint32_t flag);
 /*!
  * @brief This function is used to clear the current status
  *        of specific UART status flag. The available status
- *        flag can be select from @ref uart_status_flag_t enumeration.
+ *        flag can be select from uart_status_flag_t enumeration.
  *
  * @param base UART base pointer.
  * @param flag Status flag to clear.
@@ -528,8 +534,10 @@ static inline uint8_t UART_ReadByte(UART_Type *base)
  * @param base UART peripheral base address.
  * @param data Start address of the data to write.
  * @param length Size of the data to write.
+ * @retval kStatus_UART_Timeout Transmission timed out and was aborted.
+ * @retval kStatus_Success Successfully wrote all data.
  */
-void UART_WriteBlocking(UART_Type *base, const uint8_t *data, size_t length);
+status_t UART_WriteBlocking(UART_Type *base, const uint8_t *data, size_t length);
 
 /*!
  * @brief Read RX data register using a blocking method.
@@ -544,6 +552,7 @@ void UART_WriteBlocking(UART_Type *base, const uint8_t *data, size_t length);
  * @retval kStatus_UART_NoiseError A noise error occurred while receiving data.
  * @retval kStatus_UART_FramingError A framing error occurred while receiving data.
  * @retval kStatus_UART_ParityError A parity error occurred while receiving data.
+ * @retval kStatus_UART_Timeout Transmission timed out and was aborted.
  * @retval kStatus_Success Successfully received all data.
  */
 status_t UART_ReadBlocking(UART_Type *base, uint8_t *data, size_t length);
@@ -869,6 +878,7 @@ static inline bool UART_IsAutoBaudRateComplete(UART_Type *base)
 }
 #endif
 
+/*@}*/
 /*! @}*/
 
 #endif /* _FSL_UART_H_ */

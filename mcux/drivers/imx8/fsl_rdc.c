@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -238,9 +238,14 @@ void RDC_SetMemAccessConfig(RDC_Type *base, const rdc_mem_access_config_t *confi
         regMRC |= RDC_MRC_LCK_MASK;
     }
 
-    base->MR[mem].MRSA = config->baseAddress;
-    base->MR[mem].MREA = config->endAddress;
-    base->MR[mem].MRC  = regMRC;
+#if (defined(FSL_FEATURE_RDC_MEM_REGION_ADDR_SHIFT) && FSL_FEATURE_RDC_MEM_REGION_ADDR_SHIFT)
+    base->MR[mem].MRSA = (uint32_t)(config->baseAddress >> (uint32_t)FSL_FEATURE_RDC_MEM_REGION_ADDR_SHIFT);
+    base->MR[mem].MREA = (uint32_t)(config->endAddress >> (uint32_t)FSL_FEATURE_RDC_MEM_REGION_ADDR_SHIFT);
+#else
+    base->MR[mem].MRSA = (uint32_t)config->baseAddress;
+    base->MR[mem].MREA = (uint32_t)config->endAddress;
+#endif
+    base->MR[mem].MRC = regMRC;
 
     __DSB();
 }
@@ -295,5 +300,11 @@ void RDC_GetMemViolationStatus(RDC_Type *base, rdc_mem_t mem, rdc_mem_status_t *
 
     status->hasViolation = ((regMRVS & RDC_MRVS_AD_MASK) != 0U);
     status->domainID     = (uint8_t)((regMRVS & RDC_MRVS_VDID_MASK) >> RDC_MRVS_VDID_SHIFT);
-    status->address      = (regMRVS & RDC_MRVS_VADR_MASK);
+#if (defined(FSL_FEATURE_RDC_MEM_REGION_ADDR_SHIFT) && FSL_FEATURE_RDC_MEM_REGION_ADDR_SHIFT)
+    regMRVS &= RDC_MRVS_VADR_MASK;
+    status->address = ((uint64_t)regMRVS) << (uint32_t)FSL_FEATURE_RDC_MEM_REGION_ADDR_SHIFT;
+#else
+    regMRVS &= RDC_MRVS_VADR_MASK;
+    status->address = (uint64_t)regMRVS;
+#endif
 }

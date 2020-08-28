@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019, NXP
+ * Copyright 2018-2020, NXP
  * All rights reserved.
  *
  *
@@ -20,7 +20,7 @@
  * Definitions
  ******************************************************************************/
 /*! @brief TMU driver version. */
-#define FSL_TMU_DRIVER_VERSION (MAKE_VERSION(2, 0, 1)) /*!< Version 2.0.1. */
+#define FSL_TMU_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0. */
 
 /*!
  * @brief TMU interrupt enable.
@@ -158,8 +158,6 @@ typedef struct _tmu_config
     tmu_average_low_pass_filter_t
         averageLPF; /*!< The average temperature is calculated as: ALPF x Current_Temp + (1 - ALPF) x Average_Temp.
                          For proper operation, this field should only change when monitoring is disabled. */
-    tmu_amplifier_gain_t amplifierGain;              /*!< Amplifier gain setting. */
-    tmu_amplifier_reference_voltage_t amplifierVref; /*!< Amplifier reference voltage setting. */
 } tmu_config_t;
 
 #if defined(__cplusplus)
@@ -191,8 +189,6 @@ void TMU_Deinit(TMU_Type *base);
  *
  * Example:
    @code
-   config->amplifierGain = 12U;
-   config->amplifierRef = 19U;
    config->averageLPF = kTMU_AverageLowPassFilter0_5;
    @endcode
  *
@@ -221,7 +217,7 @@ static inline void TMU_Enable(TMU_Type *base, bool enable)
 /*!
  * @brief Enable the TMU interrupts.
  *
- * @param bas TMU peripheral base address.
+ * @param base TMU peripheral base address.
  * @param mask The interrupt mask. Refer to "_tmu_interrupt_enable" enumeration.
  */
 static inline void TMU_EnableInterrupts(TMU_Type *base, uint32_t mask)
@@ -232,7 +228,7 @@ static inline void TMU_EnableInterrupts(TMU_Type *base, uint32_t mask)
 /*!
  * @brief Disable the TMU interrupts.
  *
- * @param bas TMU peripheral base address.
+ * @param base TMU peripheral base address.
  * @param mask The interrupt mask. Refer to "_tmu_interrupt_enable" enumeration.
  */
 static inline void TMU_DisableInterrupts(TMU_Type *base, uint32_t mask)
@@ -253,7 +249,7 @@ void TMU_GetInterruptStatusFlags(TMU_Type *base, tmu_interrupt_status_t *status)
  * @brief Clear interrupt status flags.
  *
  * @param base TMU peripheral base address.
- * @param The mask of interrupt status flags. Refer to "_tmu_interrupt_status_flags" enumeration.
+ * @param mask The mask of interrupt status flags. Refer to "_tmu_interrupt_status_flags" enumeration.
  */
 void TMU_ClearInterruptStatusFlags(TMU_Type *base, uint32_t mask);
 
@@ -294,5 +290,7 @@ void TMU_SetHighTemperatureThresold(TMU_Type *base, const tmu_thresold_config_t 
 #if defined(__cplusplus)
 }
 #endif
+
+/*@}*/
 
 #endif /* __FSL_TMU_H__ */

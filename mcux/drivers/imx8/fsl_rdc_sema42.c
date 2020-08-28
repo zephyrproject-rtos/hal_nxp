@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,6 +20,14 @@
 #define RDC_SEMA42_GATE_RESET_PATTERN_1 (0xE2U)
 /* The second number write to RSTGDP when reset RDC_SEMA42 gate. */
 #define RDC_SEMA42_GATE_RESET_PATTERN_2 (0x1DU)
+
+#if !defined(RDC_SEMAPHORE_GATE_COUNT)
+/* Compatible remap. */
+#define RDC_SEMAPHORE_GATE_LDOM(x)    RDC_SEMAPHORE_GATE0_LDOM(x)
+#define RDC_SEMAPHORE_GATE_GTFSM(x)   RDC_SEMAPHORE_GATE0_GTFSM(x)
+#define RDC_SEMAPHORE_GATE_LDOM_MASK  RDC_SEMAPHORE_GATE0_LDOM_MASK
+#define RDC_SEMAPHORE_GATE_LDOM_SHIFT RDC_SEMAPHORE_GATE0_LDOM_SHIFT
+#endif
 
 /*******************************************************************************
  * Prototypes
@@ -126,7 +134,7 @@ status_t RDC_SEMA42_TryLock(RDC_SEMAPHORE_Type *base, uint8_t gateNum, uint8_t m
 
     ++masterIndex;
 
-    regGate = (uint8_t)(RDC_SEMAPHORE_GATE0_LDOM(domainId) | RDC_SEMAPHORE_GATE0_GTFSM(masterIndex));
+    regGate = (uint8_t)(RDC_SEMAPHORE_GATE_LDOM(domainId) | RDC_SEMAPHORE_GATE_GTFSM(masterIndex));
 
     /* Try to lock. */
     RDC_SEMA42_GATEn(base, gateNum) = masterIndex;
@@ -160,12 +168,12 @@ void RDC_SEMA42_Lock(RDC_SEMAPHORE_Type *base, uint8_t gateNum, uint8_t masterIn
 
     ++masterIndex;
 
-    regGate = (uint8_t)(RDC_SEMAPHORE_GATE0_LDOM(domainId) | RDC_SEMAPHORE_GATE0_GTFSM(masterIndex));
+    regGate = (uint8_t)(RDC_SEMAPHORE_GATE_LDOM(domainId) | RDC_SEMAPHORE_GATE_GTFSM(masterIndex));
 
     while (regGate != RDC_SEMA42_GATEn(base, gateNum))
     {
         /* Wait for unlocked status. */
-        while (0U != (RDC_SEMA42_GATEn(base, gateNum) & RDC_SEMAPHORE_GATE0_GTFSM_MASK))
+        while (0U != (RDC_SEMA42_GATEn(base, gateNum) & RDC_SEMAPHORE_GATE_GTFSM_MASK))
         {
         }
 
@@ -191,13 +199,13 @@ int32_t RDC_SEMA42_GetLockDomainID(RDC_SEMAPHORE_Type *base, uint8_t gateNum)
     uint8_t regGate = RDC_SEMA42_GATEn(base, gateNum);
 
     /* Current gate is not locked. */
-    if (0U == (regGate & RDC_SEMAPHORE_GATE0_GTFSM_MASK))
+    if (0U == (regGate & RDC_SEMAPHORE_GATE_GTFSM_MASK))
     {
         ret = -1;
     }
     else
     {
-        ret = (int32_t)((uint8_t)((regGate & RDC_SEMAPHORE_GATE0_LDOM_MASK) >> RDC_SEMAPHORE_GATE0_LDOM_SHIFT));
+        ret = (int32_t)((uint8_t)((regGate & RDC_SEMAPHORE_GATE_LDOM_MASK) >> RDC_SEMAPHORE_GATE_LDOM_SHIFT));
     }
 
     return ret;

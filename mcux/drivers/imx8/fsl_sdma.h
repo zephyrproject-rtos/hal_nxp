@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief SDMA driver version */
-#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version 2.3.0. */
+#define FSL_SDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 2)) /*!< Version 2.3.2. */
 /*@}*/
 
 /*! @brief SDMA transfer configuration */
@@ -691,7 +691,7 @@ void SDMA_SetMultiFifoConfig(sdma_transfer_config_t *config, uint32_t fifoNums, 
 /*!
  * @brief enable sdma sw done feature.
  *
- * @deprecated Do not use this function. It has been superceded by @ref SAI_SetDoneConfig.
+ * @deprecated Do not use this function. It has been superceded by @ref SDMA_SetDoneConfig.
  *
  * @param base SDMA base.
  * @param config transfer configurations.
@@ -854,7 +854,7 @@ uint32_t SDMA_GetTransferredBytes(sdma_handle_t *handle);
  * @brief Judge if address located in SPBA.
  *
  * @param addr Address which need to judge.
- * @param return True means located in SPBA, false means not.
+ * @retval True means located in SPBA, false means not.
  */
 bool SDMA_IsPeripheralInSPBA(uint32_t addr);
 #endif /* FSL_FEATURE_SOC_SPBA_COUNT */
