@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2019-05-16
-**     Build:               b190719
+**     Build:               b200401
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2020 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -75,7 +75,7 @@
 #define FSL_FEATURE_SOC_POWERQUAD_COUNT (1)
 /* @brief PUF availability on the SoC. */
 #define FSL_FEATURE_SOC_PUF_COUNT (1)
-/* @brief RNG1 availability on the SoC. */
+/* @brief LPC_RNG1 availability on the SoC. */
 #define FSL_FEATURE_SOC_LPC_RNG1_COUNT (1)
 /* @brief RTC availability on the SoC. */
 #define FSL_FEATURE_SOC_RTC_COUNT (1)
@@ -146,6 +146,8 @@
 #define FSL_FEATURE_LPADC_TEMP_PARAMETER_B (313.7f)
 /* @brief Temperature sensor parameter Alpha. */
 #define FSL_FEATURE_LPADC_TEMP_PARAMETER_ALPHA (11.5f)
+/* @brief the buffer size of temperature sensor. */
+#define FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE (4U)
 
 /* CASPER module features */
 
@@ -319,8 +321,6 @@
 
 /* SYSCON module features */
 
-/* @brief Pointer to ROM IAP entry functions */
-#define FSL_FEATURE_SYSCON_IAP_ENTRY_LOCATION (0x03000205)
 /* @brief Flash page size in bytes */
 #define FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES (512)
 /* @brief Flash sector size in bytes */
