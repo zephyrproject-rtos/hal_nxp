@@ -71,7 +71,9 @@ typedef enum pd_bits
     kPDRUNCFG_ForceUnsigned = 0x80000000U,
 } pd_bit_t;
 
-/*@brief BOD VBAT level */
+/**
+ * @brief BOD VBAT level
+ */
 typedef enum _power_bod_vbat_level
 {
     kPOWER_BodVbatLevel1000mv = 0,  /*!< Brown out detector VBAT level 1V */
@@ -102,7 +104,9 @@ typedef enum _power_bod_vbat_level
     kPOWER_BodVbatLevel3300mv = 25, /*!< Brown out detector VBAT level 3.3V */
 } power_bod_vbat_level_t;
 
-/*@brief BOD Hysteresis control */
+/**
+ * @brief BOD Hysteresis control
+ */
 typedef enum _power_bod_hyst
 {
     kPOWER_BodHystLevel25mv  = 0U, /*!< BOD Hysteresis control level 25mv */
@@ -110,8 +114,9 @@ typedef enum _power_bod_hyst
     kPOWER_BodHystLevel75mv  = 2U, /*!< BOD Hysteresis control level 75mv */
     kPOWER_BodHystLevel100mv = 3U, /*!< BOD Hysteresis control level 100mv */
 } power_bod_hyst_t;
-
-/*@brief BOD core level */
+/**
+ * @brief BOD core level
+ */
 typedef enum _power_bod_core_level
 {
     kPOWER_BodCoreLevel600mv = 0, /*!< Brown out detector core level 600mV */
@@ -285,6 +290,27 @@ typedef enum _power_bod_core_level
 #define LOWPOWER_WAKEUPIO_PIO3_DISABLEPULLUPDOWN_MASK \
     (1UL << LOWPOWER_WAKEUPIO_PIO3_DISABLEPULLUPDOWN_INDEX) /*!< Wake-up I/O 3 pull-up/down disable/enable mask */
 
+#define LOWPOWER_WAKEUPIO_PIO0_USEEXTERNALPULLUPDOWN_INDEX \
+    (16) /*!< Wake-up I/O 0 use external pull-up/down disable/enable control index*/
+#define LOWPOWER_WAKEUPIO_PIO1_USEEXTERNALPULLUPDOWN_INDEX \
+    (17) /*!< Wake-up I/O 1 use external pull-up/down disable/enable control index */
+#define LOWPOWER_WAKEUPIO_PIO2_USEEXTERNALPULLUPDOWN_INDEX \
+    (18) /*!< Wake-up I/O 2 use external pull-up/down disable/enable control index */
+#define LOWPOWER_WAKEUPIO_PIO3_USEEXTERNALPULLUPDOWN_INDEX \
+    (19) /*!< Wake-up I/O 3 use external pull-up/down disable/enable control index */
+#define LOWPOWER_WAKEUPIO_PIO0_USEEXTERNALPULLUPDOWN_MASK                                                    \
+    (1UL << LOWPOWER_WAKEUPIO_PIO0_USEEXTERNALPULLUPDOWN_INDEX) /*!< Wake-up I/O 0 use external pull-up/down \
+                                                                   disable/enable mask, 0: disable, 1: enable */
+#define LOWPOWER_WAKEUPIO_PIO1_USEEXTERNALPULLUPDOWN_MASK                                                    \
+    (1UL << LOWPOWER_WAKEUPIO_PIO1_USEEXTERNALPULLUPDOWN_INDEX) /*!< Wake-up I/O 1 use external pull-up/down \
+                                                                   disable/enable mask, 0: disable, 1: enable */
+#define LOWPOWER_WAKEUPIO_PIO2_USEEXTERNALPULLUPDOWN_MASK                                                    \
+    (1UL << LOWPOWER_WAKEUPIO_PIO2_USEEXTERNALPULLUPDOWN_INDEX) /*!< Wake-up I/O 2 use external pull-up/down \
+                                                                   disable/enable mask, 0: disable, 1: enable */
+#define LOWPOWER_WAKEUPIO_PIO3_USEEXTERNALPULLUPDOWN_MASK                                                    \
+    (1UL << LOWPOWER_WAKEUPIO_PIO3_USEEXTERNALPULLUPDOWN_INDEX) /*!< Wake-up I/O 3 use external pull-up/down \
+                                                                   disable/enable mask, 0: disable, 1: enable */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -301,7 +327,7 @@ extern "C" {
 static inline void POWER_EnablePD(pd_bit_t en)
 {
     /* PDRUNCFGSET */
-    PMC->PDRUNCFGSET0 = en;
+    PMC->PDRUNCFGSET0 = (uint32_t)en;
 }
 
 /*!
@@ -313,7 +339,7 @@ static inline void POWER_EnablePD(pd_bit_t en)
 static inline void POWER_DisablePD(pd_bit_t en)
 {
     /* PDRUNCFGCLR */
-    PMC->PDRUNCFGCLR0 = en;
+    PMC->PDRUNCFGCLR0 = (uint32_t)en;
 }
 
 /*!
@@ -339,7 +365,6 @@ void POWER_SetBodCoreLevel(power_bod_core_level_t level, power_bod_hyst_t hyst, 
 /*!
  * @brief API to enable deep sleep bit in the ARM Core.
  *
- * @param none
  * @return none
  */
 static inline void POWER_EnableDeepSleep(void)
@@ -350,7 +375,6 @@ static inline void POWER_EnableDeepSleep(void)
 /*!
  * @brief API to disable deep sleep bit in the ARM Core.
  *
- * @param none
  * @return none
  */
 static inline void POWER_DisableDeepSleep(void)
@@ -363,7 +387,7 @@ static inline void POWER_DisableDeepSleep(void)
  *  This MUST BE EXECUTED outside the Flash:
  *  either from ROM or from SRAM. The rest could stay in Flash. But, for consistency, it is
  *  preferable to have all functions defined in this file implemented in ROM.
- * @param   None
+ *
  * @return  Nothing
  */
 void POWER_CycleCpuAndFlash(void);
@@ -444,7 +468,7 @@ void POWER_EnterDeepPowerDown(uint32_t exclude_from_pd,
 
 /**
  * @brief   Configures and enters in SLEEP low power mode
- * @param   :
+ *
  * @return  Nothing
  */
 void POWER_EnterSleep(void);
@@ -461,17 +485,16 @@ void POWER_SetVoltageForFreq(uint32_t system_freq_hz);
 /*!
  * @brief Power Library API to return the library version.
  *
- * @param none
  * @return version number of the power library
  */
 uint32_t POWER_GetLibVersion(void);
 
 /**
  * @brief   Sets board-specific trim values for 16MHz XTAL
- * @param   pi32_32MfXtalIecLoadpF_x100 Load capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF becomes 120
- * @param   pi32_32MfXtalPPcbParCappF_x100 PCB +ve parasitic capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF
+ * @param   pi32_16MfXtalIecLoadpF_x100 Load capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF becomes 120
+ * @param   pi32_16MfXtalPPcbParCappF_x100 PCB +ve parasitic capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF
  * becomes 120
- * @param   pi32_32MfXtalNPcbParCappF_x100 PCB -ve parasitic capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF
+ * @param   pi32_16MfXtalNPcbParCappF_x100 PCB -ve parasitic capacitance, pF x 100. For example, 6pF becomes 600, 1.2pF
  * becomes 120
  * @return  none
  * @note    Following default Values can be used:
@@ -501,7 +524,6 @@ extern void POWER_Xtal32khzCapabankTrim(int32_t pi32_32kfXtalIecLoadpF_x100,
                                         int32_t pi32_32kfXtalNPcbParCappF_x100);
 /**
  * @brief   Enables and sets LDO for 16MHz XTAL
- * @param       none
  * @return  none
  */
 extern void POWER_SetXtal16mhzLdo(void);

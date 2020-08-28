@@ -2410,13 +2410,8 @@ SPDX-License-Identifier: BSD-3-Clause
                   <value>0</value>
                 </enumeratedValue>
                 <enumeratedValue>
-                  <name>VALUE_1</name>
-                  <description>48MHz FRO</description>
-                  <value>0x1</value>
-                </enumeratedValue>
-                <enumeratedValue>
                   <name>VALUE_2</name>
-                  <description>96MHz FRO</description>
+                  <description>48MHz FRO</description>
                   <value>0x2</value>
                 </enumeratedValue>
               </enumeratedValues>
@@ -13331,24 +13326,6 @@ SPDX-License-Identifier: BSD-3-Clause
           <description>Peripheral reset control register</description>
           <alternateGroup>SYSTICKCLKSEL</alternateGroup>
           <addressOffset>0x260</addressOffset>
-          <size>32</size>
-          <access>read-write</access>
-          <resetValue>0</resetValue>
-          <resetMask>0xFFFFFFFF</resetMask>
-          <fields>
-            <field>
-              <name>DATA</name>
-              <description>Data array value</description>
-              <bitOffset>0</bitOffset>
-              <bitWidth>32</bitWidth>
-              <access>read-write</access>
-            </field>
-          </fields>
-        </register>
-        <register>
-          <name>SYSTICKCLKSELX1</name>
-          <description>Peripheral reset control register</description>
-          <addressOffset>0x264</addressOffset>
           <size>32</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -36819,7 +36796,7 @@ SPDX-License-Identifier: BSD-3-Clause
           <dimIncrement>0x4</dimIncrement>
           <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
           <name>FCCTRLSEL%s</name>
-          <description>Selects the source for SCK going into Flexcomm 0</description>
+          <description>Selects the source for SCK going into Flexcomm index</description>
           <addressOffset>0x40</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -36929,7 +36906,7 @@ SPDX-License-Identifier: BSD-3-Clause
           <dimIncrement>0x4</dimIncrement>
           <dimIndex>0,1</dimIndex>
           <name>SHAREDCTRLSET%s</name>
-          <description>Selects sources and data combinations for shared signal set 0.</description>
+          <description>Selects sources and data combinations for shared signal set index.</description>
           <addressOffset>0x80</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -44232,7 +44209,7 @@ SPDX-License-Identifier: BSD-3-Clause
           <dim>26</dim>
           <dimIncrement>0x4</dimIncrement>
           <name>LUT_TRUTH[%s]</name>
-          <description>Specifies the Truth Table contents for LUT0</description>
+          <description>Specifies the Truth Table contents for LUTLUTn</description>
           <addressOffset>0x800</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -44356,7 +44333,7 @@ SPDX-License-Identifier: BSD-3-Clause
           <dim>8</dim>
           <dimIncrement>0x4</dimIncrement>
           <name>OUTPUT_MUX[%s]</name>
-          <description>Selects the source to be connected to PLU Output 0</description>
+          <description>Selects the source to be connected to PLU Output OUTPUT_n</description>
           <addressOffset>0xC00</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -45513,7 +45490,7 @@ SPDX-License-Identifier: BSD-3-Clause
               <access>read-write</access>
             </field>
             <field>
-              <name>VBUS_DEBOUNCED</name>
+              <name>VBUSDEBOUNCED</name>
               <description>This bit indicates if Vbus is detected or not. The bit raises immediately when Vbus becomes high. It drops to zero if Vbus is low for at least 3 ms. If this bit is high and the DCon bit is set, the HW will enable the pull-up resistor to signal a connect.</description>
               <bitOffset>28</bitOffset>
               <bitWidth>1</bitWidth>

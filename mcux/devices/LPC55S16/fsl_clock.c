@@ -313,13 +313,8 @@ typedef struct
 static const WaitStateInterval_t IntervalList[] = {
     {0, 11000000},  {1, 22000000},   {2, 33000000},
     {3, 44000000},  {4, 55000000},   {5, 66000000},
-#if defined(CPU_LPC55S69JBD100_cm33_core0) // Code for Niobe4
-    {6, 77000000},  {7, 88000000},   {8, 100000000},
-    {9, 115000000}, {10, 130000000}, {11, 150000000} /* Maximum allowed frequency (150 MHz) */
-#elif defined(CPU_LPC55S16JBD100)                    // Code for Niobe4Mini
     {6, 84000000},  {7, 104000000},  {8, 119000000},
     {9, 129000000}, {10, 144000000}, {11, 150000000} /* Maximum allowed frequency (150 MHz) */
-#endif
 };
 
 void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz)
@@ -338,7 +333,8 @@ void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz)
 
     FLASH->INT_CLR_STATUS = 0x1F; /* Clear all status flags */
 
-    FLASH->DATAW[0] = (FLASH->DATAW[0] & 0xFFFFFFF0UL) | (num_wait_states & 0xFUL);
+    FLASH->DATAW[0] = (FLASH->DATAW[0] & 0xFFFFFFF0UL) |
+                      (num_wait_states & (SYSCON_FMCCR_FLASHTIM_MASK >> SYSCON_FMCCR_FLASHTIM_SHIFT));
 
     FLASH->CMD = 0x2; /* CMD_SET_READ_MODE */
 
@@ -348,11 +344,8 @@ void CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz)
     }
 
     /* Adjust FMC waiting time cycles (num_wait_states) */
-    SYSCON->FMCCR = (SYSCON->FMCCR & 0xFFFF0FFFUL) | ((num_wait_states & 0xFUL) << 12UL);
-
-#if (defined(NIOBE_DEBUG_LEVEL) && (NIOBE_DEBUG_LEVEL >= 2))
-    PRINTF("\nFlash/FMC Number of Wait States (for frequency %d Hz): %d\n", system_freq_hz, num_wait_states + 1);
-#endif
+    SYSCON->FMCCR = (SYSCON->FMCCR & ~SYSCON_FMCCR_FLASHTIM_MASK) |
+                    ((num_wait_states << SYSCON_FMCCR_FLASHTIM_SHIFT) & SYSCON_FMCCR_FLASHTIM_MASK);
 }
 
 /* Set EXT OSC Clk */

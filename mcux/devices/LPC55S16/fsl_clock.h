@@ -22,7 +22,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version 2.3.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -715,7 +715,7 @@ extern "C" {
 
 /**
  * @brief Enable the clock for specific IP.
- * @param name : Clock to be enabled.
+ * @param clk : Clock to be enabled.
  * @return  Nothing
  */
 static inline void CLOCK_EnableClock(clock_ip_name_t clk)
@@ -725,7 +725,7 @@ static inline void CLOCK_EnableClock(clock_ip_name_t clk)
 }
 /**
  * @brief Disable the clock for specific IP.
- * @param name : Clock to be Disabled.
+ * @param clk : Clock to be Disabled.
  * @return  Nothing
  */
 static inline void CLOCK_DisableClock(clock_ip_name_t clk)
@@ -737,7 +737,7 @@ static inline void CLOCK_DisableClock(clock_ip_name_t clk)
  * @brief   Initialize the Core clock to given frequency (12, 48 or 96 MHz).
  * Turns on FRO and uses default CCO, if freq is 12000000, then high speed output is off, else high speed output is
  * enabled.
- * @param   iFreq   : Desired frequency (must be one of #CLK_FRO_12MHZ or #CLK_FRO_48MHZ or #CLK_FRO_96MHZ)
+ * @param   iFreq   : Desired frequency (must be one of CLK_FRO_12MHZ or CLK_FRO_48MHZ or CLK_FRO_96MHZ)
  * @return  returns success or fail status.
  */
 status_t CLOCK_SetupFROClocking(uint32_t iFreq);
@@ -803,7 +803,7 @@ void CLOCK_SetRtc1hzClkDiv(uint32_t divided_by_value);
 /**
  * @brief   Set the flexcomm output frequency.
  * @param   id      : flexcomm instance id
- *          freq    : output frequency
+ * @param   freq    : output frequency
  * @return  0   : the frequency range is out of range.
  *          1   : switch successfully.
  */
