@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.15, 2016-03-21
-**     Build:               b190822
+**     Build:               b200409
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2020 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -390,6 +390,8 @@
 #define FSL_FEATURE_ENET_INTERRUPT_COUNT (4)
 /* @brief Has threshold for the number of frames in the receive FIFO (register bit field RSEM[STAT_SECTION_EMPTY]). */
 #define FSL_FEATURE_ENET_HAS_RECEIVE_STATUS_THRESHOLD (1)
+/* @brief Has Extend MDIO Support. */
+#define FSL_FEATURE_ENET_HAS_EXTEND_MDIO (0)
 
 /* EWM module features */
 
@@ -822,6 +824,8 @@
 #define FSL_FEATURE_FTM_HAS_CHANNEL7_TRIGGER (0)
 /* @brief Has no QDCTRL. */
 #define FSL_FEATURE_FTM_HAS_NO_QDCTRL (0)
+/* @brief If instance has only TPM function. */
+#define FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCEn(x) (0)
 
 /* GPIO module features */
 
@@ -1730,6 +1734,8 @@
 #define FSL_FEATURE_SMC_HAS_SRS_TAMPER (0)
 /* @brief Has security violation reset (register bit SRS[SECVIO]). */
 #define FSL_FEATURE_SMC_HAS_SRS_SECVIO (0)
+/* @brief Width of SMC registers. */
+#define FSL_FEATURE_SMC_REG_WIDTH (8)
 
 /* DSPI module features */
 
