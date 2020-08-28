@@ -169,6 +169,7 @@ static inline void POWER_PowerUpFlash(void)
 /*!
  * @brief Power Library API to enter different power mode.
  *
+ * @param mode Power mode.
  * @param exclude_from_pd  Bit mask of the PDRUNCFG bits that needs to be powered on during deep sleep
  * @return none
  */
