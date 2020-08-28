@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2019, NXP
+ * Copyright 2016 - 2020, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -707,7 +707,7 @@ bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
      * 2. External reference clock enable on XTAL by setting ERCLKEN bit in OSC_CR register.
      */
     assert(MCG->C1 & MCG_C1_IRCLKEN_MASK);
-    assert(!(MCG->C2 & MCG_C2_IRCS_MASK));
+    assert((MCG->C2 & MCG_C2_IRCS_MASK) == 0U);
     assert(OSC0->CR & OSC_CR_ERCLKEN_MASK);
 
     if (24000000U == freq)
