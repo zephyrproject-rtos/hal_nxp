@@ -11,7 +11,7 @@
 **
 **     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b200302
+**     Build:               b200311
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for LPC55S16
@@ -8085,8 +8085,7 @@ typedef struct {
 #define FLASH_CMPA_BOOT_CFG_BOOT_SPEED_SHIFT     (7U)
 /*! BOOT_SPEED - Core clock:
  *  0b00..Defined by NMPA.SYSTEM_SPEED_CODE
- *  0b01..48MHz FRO
- *  0b10..96MHz FRO
+ *  0b10..48MHz FRO
  */
 #define FLASH_CMPA_BOOT_CFG_BOOT_SPEED(x)        (((uint32_t)(((uint32_t)(x)) << FLASH_CMPA_BOOT_CFG_BOOT_SPEED_SHIFT)) & FLASH_CMPA_BOOT_CFG_BOOT_SPEED_MASK)
 #define FLASH_CMPA_BOOT_CFG_BOOT_FAILURE_PIN_MASK (0xFF000000U)
@@ -18001,16 +18000,64 @@ typedef struct {
 /** SCT - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CONFIG;                            /**< SCT configuration register, offset: 0x0 */
-  __IO uint32_t CTRL;                              /**< SCT control register, offset: 0x4 */
-  __IO uint32_t LIMIT;                             /**< SCT limit event select register, offset: 0x8 */
-  __IO uint32_t HALT;                              /**< SCT halt event select register, offset: 0xC */
-  __IO uint32_t STOP;                              /**< SCT stop event select register, offset: 0x10 */
-  __IO uint32_t START;                             /**< SCT start event select register, offset: 0x14 */
+  union {                                          /* offset: 0x4 */
+    struct {                                         /* offset: 0x4 */
+      __IO uint16_t CTRLL;                             /**< SCT_CTRLL register, offset: 0x4 */
+      __IO uint16_t CTRLH;                             /**< SCT_CTRLH register, offset: 0x6 */
+    } CTRL_ACCESS16BIT;
+    __IO uint32_t CTRL;                              /**< SCT control register, offset: 0x4 */
+  };
+  union {                                          /* offset: 0x8 */
+    struct {                                         /* offset: 0x8 */
+      __IO uint16_t LIMITL;                            /**< SCT_LIMITL register, offset: 0x8 */
+      __IO uint16_t LIMITH;                            /**< SCT_LIMITH register, offset: 0xA */
+    } LIMIT_ACCESS16BIT;
+    __IO uint32_t LIMIT;                             /**< SCT limit event select register, offset: 0x8 */
+  };
+  union {                                          /* offset: 0xC */
+    struct {                                         /* offset: 0xC */
+      __IO uint16_t HALTL;                             /**< SCT_HALTL register, offset: 0xC */
+      __IO uint16_t HALTH;                             /**< SCT_HALTH register, offset: 0xE */
+    } HALT_ACCESS16BIT;
+    __IO uint32_t HALT;                              /**< SCT halt event select register, offset: 0xC */
+  };
+  union {                                          /* offset: 0x10 */
+    struct {                                         /* offset: 0x10 */
+      __IO uint16_t STOPL;                             /**< SCT_STOPL register, offset: 0x10 */
+      __IO uint16_t STOPH;                             /**< SCT_STOPH register, offset: 0x12 */
+    } STOP_ACCESS16BIT;
+    __IO uint32_t STOP;                              /**< SCT stop event select register, offset: 0x10 */
+  };
+  union {                                          /* offset: 0x14 */
+    struct {                                         /* offset: 0x14 */
+      __IO uint16_t STARTL;                            /**< SCT_STARTL register, offset: 0x14 */
+      __IO uint16_t STARTH;                            /**< SCT_STARTH register, offset: 0x16 */
+    } START_ACCESS16BIT;
+    __IO uint32_t START;                             /**< SCT start event select register, offset: 0x14 */
+  };
        uint8_t RESERVED_0[40];
-  __IO uint32_t COUNT;                             /**< SCT counter register, offset: 0x40 */
-  __IO uint32_t STATE;                             /**< SCT state register, offset: 0x44 */
+  union {                                          /* offset: 0x40 */
+    struct {                                         /* offset: 0x40 */
+      __IO uint16_t COUNTL;                            /**< SCT_COUNTL register, offset: 0x40 */
+      __IO uint16_t COUNTH;                            /**< SCT_COUNTH register, offset: 0x42 */
+    } COUNT_ACCESS16BIT;
+    __IO uint32_t COUNT;                             /**< SCT counter register, offset: 0x40 */
+  };
+  union {                                          /* offset: 0x44 */
+    struct {                                         /* offset: 0x44 */
+      __IO uint16_t STATEL;                            /**< SCT_STATEL register, offset: 0x44 */
+      __IO uint16_t STATEH;                            /**< SCT_STATEH register, offset: 0x46 */
+    } STATE_ACCESS16BIT;
+    __IO uint32_t STATE;                             /**< SCT state register, offset: 0x44 */
+  };
   __I  uint32_t INPUT;                             /**< SCT input register, offset: 0x48 */
-  __IO uint32_t REGMODE;                           /**< SCT match/capture mode register, offset: 0x4C */
+  union {                                          /* offset: 0x4C */
+    struct {                                         /* offset: 0x4C */
+      __IO uint16_t REGMODEL;                          /**< SCT_REGMODEL register, offset: 0x4C */
+      __IO uint16_t REGMODEH;                          /**< SCT_REGMODEH register, offset: 0x4E */
+    } REGMODE_ACCESS16BIT;
+    __IO uint32_t REGMODE;                           /**< SCT match/capture mode register, offset: 0x4C */
+  };
   __IO uint32_t OUTPUT;                            /**< SCT output register, offset: 0x50 */
   __IO uint32_t OUTPUTDIRCTRL;                     /**< SCT output counter direction control register, offset: 0x54 */
   __IO uint32_t RES;                               /**< SCT conflict resolution register, offset: 0x58 */
@@ -18022,13 +18069,37 @@ typedef struct {
   __IO uint32_t CONEN;                             /**< SCT conflict interrupt enable register, offset: 0xF8 */
   __IO uint32_t CONFLAG;                           /**< SCT conflict flag register, offset: 0xFC */
   union {                                          /* offset: 0x100 */
-    __IO uint32_t CAP[16];                           /**< SCT capture register of capture channel, array offset: 0x100, array step: 0x4 */
-    __IO uint32_t MATCH[16];                         /**< SCT match value register of match channels, array offset: 0x100, array step: 0x4 */
+    union {                                          /* offset: 0x100, array step: 0x4 */
+      struct {                                         /* offset: 0x100, array step: 0x4 */
+        __IO uint16_t CAPL;                              /**< SCT_CAPL register, array offset: 0x100, array step: 0x4 */
+        __IO uint16_t CAPH;                              /**< SCT_CAPH register, array offset: 0x102, array step: 0x4 */
+      } CAP_ACCESS16BIT[16];
+      __IO uint32_t CAP[16];                           /**< SCT capture register of capture channel, array offset: 0x100, array step: 0x4 */
+    };
+    union {                                          /* offset: 0x100, array step: 0x4 */
+      struct {                                         /* offset: 0x100, array step: 0x4 */
+        __IO uint16_t MATCHL;                            /**< SCT_MATCHL register, array offset: 0x100, array step: 0x4 */
+        __IO uint16_t MATCHH;                            /**< SCT_MATCHH register, array offset: 0x102, array step: 0x4 */
+      } MATCH_ACCESS16BIT[16];
+      __IO uint32_t MATCH[16];                         /**< SCT match value register of match channels, array offset: 0x100, array step: 0x4 */
+    };
   };
        uint8_t RESERVED_2[192];
   union {                                          /* offset: 0x200 */
-    __IO uint32_t CAPCTRL[16];                       /**< SCT capture control register, array offset: 0x200, array step: 0x4 */
-    __IO uint32_t MATCHREL[16];                      /**< SCT match reload value register, array offset: 0x200, array step: 0x4 */
+    union {                                          /* offset: 0x200, array step: 0x4 */
+      struct {                                         /* offset: 0x200, array step: 0x4 */
+        __IO uint16_t CAPCTRLL;                          /**< SCT_CAPCTRLL register, array offset: 0x200, array step: 0x4 */
+        __IO uint16_t CAPCTRLH;                          /**< SCT_CAPCTRLH register, array offset: 0x202, array step: 0x4 */
+      } CAPCTRL_ACCESS16BIT[16];
+      __IO uint32_t CAPCTRL[16];                       /**< SCT capture control register, array offset: 0x200, array step: 0x4 */
+    };
+    union {                                          /* offset: 0x200, array step: 0x4 */
+      struct {                                         /* offset: 0x200, array step: 0x4 */
+        __IO uint16_t MATCHRELL;                         /**< SCT_MATCHRELL register, array offset: 0x200, array step: 0x4 */
+        __IO uint16_t MATCHRELH;                         /**< SCT_MATCHRELH register, array offset: 0x202, array step: 0x4 */
+      } MATCHREL_ACCESS16BIT[16];
+      __IO uint32_t MATCHREL[16];                      /**< SCT match reload value register, array offset: 0x200, array step: 0x4 */
+    };
   };
        uint8_t RESERVED_3[192];
   struct {                                         /* offset: 0x300, array step: 0x8 */
@@ -18146,6 +18217,98 @@ typedef struct {
 #define SCT_CONFIG_AUTOLIMIT_H(x)                (((uint32_t)(((uint32_t)(x)) << SCT_CONFIG_AUTOLIMIT_H_SHIFT)) & SCT_CONFIG_AUTOLIMIT_H_MASK)
 /*! @} */
 
+/*! @name CTRLL - SCT_CTRLL register */
+/*! @{ */
+#define SCT_CTRLL_DOWN_L_MASK                    (0x1U)
+#define SCT_CTRLL_DOWN_L_SHIFT                   (0U)
+/*! DOWN_L - This bit is 1 when the L or unified counter is counting down. Hardware sets this bit
+ *    when the counter is counting up, counter limit occurs, and BIDIR = 1.Hardware clears this bit
+ *    when the counter is counting down and a limit condition occurs or when the counter reaches 0.
+ */
+#define SCT_CTRLL_DOWN_L(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_DOWN_L_SHIFT)) & SCT_CTRLL_DOWN_L_MASK)
+#define SCT_CTRLL_STOP_L_MASK                    (0x2U)
+#define SCT_CTRLL_STOP_L_SHIFT                   (1U)
+/*! STOP_L - When this bit is 1 and HALT is 0, the L or unified counter does not run, but I/O events
+ *    related to the counter can occur. If a designated start event occurs, this bit is cleared and
+ *    counting resumes.
+ */
+#define SCT_CTRLL_STOP_L(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_STOP_L_SHIFT)) & SCT_CTRLL_STOP_L_MASK)
+#define SCT_CTRLL_HALT_L_MASK                    (0x4U)
+#define SCT_CTRLL_HALT_L_SHIFT                   (2U)
+/*! HALT_L - When this bit is 1, the L or unified counter does not run and no events can occur. A
+ *    reset sets this bit. When the HALT_L bit is one, the STOP_L bit is cleared. It is possible to
+ *    remove the halt condition while keeping the SCT in the stop condition (not running) with a
+ *    single write to this register to simultaneously clear the HALT bit and set the STOP bit. Once set,
+ *    only software can clear this bit to restore counter operation. This bit is set on reset.
+ */
+#define SCT_CTRLL_HALT_L(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_HALT_L_SHIFT)) & SCT_CTRLL_HALT_L_MASK)
+#define SCT_CTRLL_CLRCTR_L_MASK                  (0x8U)
+#define SCT_CTRLL_CLRCTR_L_SHIFT                 (3U)
+/*! CLRCTR_L - Writing a 1 to this bit clears the L or unified counter. This bit always reads as 0.
+ */
+#define SCT_CTRLL_CLRCTR_L(x)                    (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_CLRCTR_L_SHIFT)) & SCT_CTRLL_CLRCTR_L_MASK)
+#define SCT_CTRLL_BIDIR_L_MASK                   (0x10U)
+#define SCT_CTRLL_BIDIR_L_SHIFT                  (4U)
+/*! BIDIR_L - L or unified counter direction select
+ *  0b0..Up. The counter counts up to a limit condition, then is cleared to zero.
+ *  0b1..Up-down. The counter counts up to a limit, then counts down to a limit condition or to 0.
+ */
+#define SCT_CTRLL_BIDIR_L(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_BIDIR_L_SHIFT)) & SCT_CTRLL_BIDIR_L_MASK)
+#define SCT_CTRLL_PRE_L_MASK                     (0x1FE0U)
+#define SCT_CTRLL_PRE_L_SHIFT                    (5U)
+/*! PRE_L - Specifies the factor by which the SCT clock is prescaled to produce the L or unified
+ *    counter clock. The counter clock is clocked at the rate of the SCT clock divided by PRE_L+1.
+ *    Clear the counter (by writing a 1 to the CLRCTR bit) whenever changing the PRE value.
+ */
+#define SCT_CTRLL_PRE_L(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_CTRLL_PRE_L_SHIFT)) & SCT_CTRLL_PRE_L_MASK)
+/*! @} */
+
+/*! @name CTRLH - SCT_CTRLH register */
+/*! @{ */
+#define SCT_CTRLH_DOWN_H_MASK                    (0x1U)
+#define SCT_CTRLH_DOWN_H_SHIFT                   (0U)
+/*! DOWN_H - This bit is 1 when the H counter is counting down. Hardware sets this bit when the
+ *    counter is counting, a counter limit condition occurs, and BIDIR is 1. Hardware clears this bit
+ *    when the counter is counting down and a limit condition occurs or when the counter reaches 0.
+ */
+#define SCT_CTRLH_DOWN_H(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_DOWN_H_SHIFT)) & SCT_CTRLH_DOWN_H_MASK)
+#define SCT_CTRLH_STOP_H_MASK                    (0x2U)
+#define SCT_CTRLH_STOP_H_SHIFT                   (1U)
+/*! STOP_H - When this bit is 1 and HALT is 0, the H counter does not, run but I/O events related to
+ *    the counter can occur. If such an event matches the mask in the Start register, this bit is
+ *    cleared and counting resumes.
+ */
+#define SCT_CTRLH_STOP_H(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_STOP_H_SHIFT)) & SCT_CTRLH_STOP_H_MASK)
+#define SCT_CTRLH_HALT_H_MASK                    (0x4U)
+#define SCT_CTRLH_HALT_H_SHIFT                   (2U)
+/*! HALT_H - When this bit is 1, the H counter does not run and no events can occur. A reset sets
+ *    this bit. When the HALT_H bit is one, the STOP_H bit is cleared. It is possible to remove the
+ *    halt condition while keeping the SCT in the stop condition (not running) with a single write to
+ *    this register to simultaneously clear the HALT bit and set the STOP bit. Once set, this bit
+ *    can only be cleared by software to restore counter operation. This bit is set on reset.
+ */
+#define SCT_CTRLH_HALT_H(x)                      (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_HALT_H_SHIFT)) & SCT_CTRLH_HALT_H_MASK)
+#define SCT_CTRLH_CLRCTR_H_MASK                  (0x8U)
+#define SCT_CTRLH_CLRCTR_H_SHIFT                 (3U)
+/*! CLRCTR_H - Writing a 1 to this bit clears the H counter. This bit always reads as 0.
+ */
+#define SCT_CTRLH_CLRCTR_H(x)                    (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_CLRCTR_H_SHIFT)) & SCT_CTRLH_CLRCTR_H_MASK)
+#define SCT_CTRLH_BIDIR_H_MASK                   (0x10U)
+#define SCT_CTRLH_BIDIR_H_SHIFT                  (4U)
+/*! BIDIR_H - Direction select
+ *  0b0..The H counter counts up to its limit condition, then is cleared to zero.
+ *  0b1..The H counter counts up to its limit, then counts down to a limit condition or to 0.
+ */
+#define SCT_CTRLH_BIDIR_H(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_BIDIR_H_SHIFT)) & SCT_CTRLH_BIDIR_H_MASK)
+#define SCT_CTRLH_PRE_H_MASK                     (0x1FE0U)
+#define SCT_CTRLH_PRE_H_SHIFT                    (5U)
+/*! PRE_H - Specifies the factor by which the SCT clock is prescaled to produce the H counter clock.
+ *    The counter clock is clocked at the rate of the SCT clock divided by PRELH+1. Clear the
+ *    counter (by writing a 1 to the CLRCTR bit) whenever changing the PRE value.
+ */
+#define SCT_CTRLH_PRE_H(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_CTRLH_PRE_H_SHIFT)) & SCT_CTRLH_PRE_H_MASK)
+/*! @} */
+
 /*! @name CTRL - SCT control register */
 /*! @{ */
 #define SCT_CTRL_DOWN_L_MASK                     (0x1U)
@@ -18234,6 +18397,20 @@ typedef struct {
 #define SCT_CTRL_PRE_H(x)                        (((uint32_t)(((uint32_t)(x)) << SCT_CTRL_PRE_H_SHIFT)) & SCT_CTRL_PRE_H_MASK)
 /*! @} */
 
+/*! @name LIMITL - SCT_LIMITL register */
+/*! @{ */
+#define SCT_LIMITL_LIMITL_MASK                   (0xFFFFU)
+#define SCT_LIMITL_LIMITL_SHIFT                  (0U)
+#define SCT_LIMITL_LIMITL(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_LIMITL_LIMITL_SHIFT)) & SCT_LIMITL_LIMITL_MASK)
+/*! @} */
+
+/*! @name LIMITH - SCT_LIMITH register */
+/*! @{ */
+#define SCT_LIMITH_LIMITH_MASK                   (0xFFFFU)
+#define SCT_LIMITH_LIMITH_SHIFT                  (0U)
+#define SCT_LIMITH_LIMITH(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_LIMITH_LIMITH_SHIFT)) & SCT_LIMITH_LIMITH_MASK)
+/*! @} */
+
 /*! @name LIMIT - SCT limit event select register */
 /*! @{ */
 #define SCT_LIMIT_LIMMSK_L_MASK                  (0xFFFFU)
@@ -18248,6 +18425,20 @@ typedef struct {
  *    16, event 1 = bit 17, etc.). The number of bits = number of events in this SCT.
  */
 #define SCT_LIMIT_LIMMSK_H(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_LIMIT_LIMMSK_H_SHIFT)) & SCT_LIMIT_LIMMSK_H_MASK)
+/*! @} */
+
+/*! @name HALTL - SCT_HALTL register */
+/*! @{ */
+#define SCT_HALTL_HALTL_MASK                     (0xFFFFU)
+#define SCT_HALTL_HALTL_SHIFT                    (0U)
+#define SCT_HALTL_HALTL(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_HALTL_HALTL_SHIFT)) & SCT_HALTL_HALTL_MASK)
+/*! @} */
+
+/*! @name HALTH - SCT_HALTH register */
+/*! @{ */
+#define SCT_HALTH_HALTH_MASK                     (0xFFFFU)
+#define SCT_HALTH_HALTH_SHIFT                    (0U)
+#define SCT_HALTH_HALTH(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_HALTH_HALTH_SHIFT)) & SCT_HALTH_HALTH_MASK)
 /*! @} */
 
 /*! @name HALT - SCT halt event select register */
@@ -18266,6 +18457,20 @@ typedef struct {
 #define SCT_HALT_HALTMSK_H(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_HALT_HALTMSK_H_SHIFT)) & SCT_HALT_HALTMSK_H_MASK)
 /*! @} */
 
+/*! @name STOPL - SCT_STOPL register */
+/*! @{ */
+#define SCT_STOPL_STOPL_MASK                     (0xFFFFU)
+#define SCT_STOPL_STOPL_SHIFT                    (0U)
+#define SCT_STOPL_STOPL(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_STOPL_STOPL_SHIFT)) & SCT_STOPL_STOPL_MASK)
+/*! @} */
+
+/*! @name STOPH - SCT_STOPH register */
+/*! @{ */
+#define SCT_STOPH_STOPH_MASK                     (0xFFFFU)
+#define SCT_STOPH_STOPH_SHIFT                    (0U)
+#define SCT_STOPH_STOPH(x)                       (((uint16_t)(((uint16_t)(x)) << SCT_STOPH_STOPH_SHIFT)) & SCT_STOPH_STOPH_MASK)
+/*! @} */
+
 /*! @name STOP - SCT stop event select register */
 /*! @{ */
 #define SCT_STOP_STOPMSK_L_MASK                  (0xFFFFU)
@@ -18280,6 +18485,20 @@ typedef struct {
  *    event 1 = bit 17, etc.). The number of bits = number of events in this SCT.
  */
 #define SCT_STOP_STOPMSK_H(x)                    (((uint32_t)(((uint32_t)(x)) << SCT_STOP_STOPMSK_H_SHIFT)) & SCT_STOP_STOPMSK_H_MASK)
+/*! @} */
+
+/*! @name STARTL - SCT_STARTL register */
+/*! @{ */
+#define SCT_STARTL_STARTL_MASK                   (0xFFFFU)
+#define SCT_STARTL_STARTL_SHIFT                  (0U)
+#define SCT_STARTL_STARTL(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_STARTL_STARTL_SHIFT)) & SCT_STARTL_STARTL_MASK)
+/*! @} */
+
+/*! @name STARTH - SCT_STARTH register */
+/*! @{ */
+#define SCT_STARTH_STARTH_MASK                   (0xFFFFU)
+#define SCT_STARTH_STARTH_SHIFT                  (0U)
+#define SCT_STARTH_STARTH(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_STARTH_STARTH_SHIFT)) & SCT_STARTH_STARTH_MASK)
 /*! @} */
 
 /*! @name START - SCT start event select register */
@@ -18298,6 +18517,20 @@ typedef struct {
 #define SCT_START_STARTMSK_H(x)                  (((uint32_t)(((uint32_t)(x)) << SCT_START_STARTMSK_H_SHIFT)) & SCT_START_STARTMSK_H_MASK)
 /*! @} */
 
+/*! @name COUNTL - SCT_COUNTL register */
+/*! @{ */
+#define SCT_COUNTL_COUNTL_MASK                   (0xFFFFU)
+#define SCT_COUNTL_COUNTL_SHIFT                  (0U)
+#define SCT_COUNTL_COUNTL(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_COUNTL_COUNTL_SHIFT)) & SCT_COUNTL_COUNTL_MASK)
+/*! @} */
+
+/*! @name COUNTH - SCT_COUNTH register */
+/*! @{ */
+#define SCT_COUNTH_COUNTH_MASK                   (0xFFFFU)
+#define SCT_COUNTH_COUNTH_SHIFT                  (0U)
+#define SCT_COUNTH_COUNTH(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_COUNTH_COUNTH_SHIFT)) & SCT_COUNTH_COUNTH_MASK)
+/*! @} */
+
 /*! @name COUNT - SCT counter register */
 /*! @{ */
 #define SCT_COUNT_CTR_L_MASK                     (0xFFFFU)
@@ -18312,6 +18545,20 @@ typedef struct {
  *    the upper 16 bits of the 32-bit unified counter.
  */
 #define SCT_COUNT_CTR_H(x)                       (((uint32_t)(((uint32_t)(x)) << SCT_COUNT_CTR_H_SHIFT)) & SCT_COUNT_CTR_H_MASK)
+/*! @} */
+
+/*! @name STATEL - SCT_STATEL register */
+/*! @{ */
+#define SCT_STATEL_STATEL_MASK                   (0xFFFFU)
+#define SCT_STATEL_STATEL_SHIFT                  (0U)
+#define SCT_STATEL_STATEL(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_STATEL_STATEL_SHIFT)) & SCT_STATEL_STATEL_MASK)
+/*! @} */
+
+/*! @name STATEH - SCT_STATEH register */
+/*! @{ */
+#define SCT_STATEH_STATEH_MASK                   (0xFFFFU)
+#define SCT_STATEH_STATEH_SHIFT                  (0U)
+#define SCT_STATEH_STATEH(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_STATEH_STATEH_SHIFT)) & SCT_STATEH_STATEH_MASK)
 /*! @} */
 
 /*! @name STATE - SCT state register */
@@ -18490,6 +18737,20 @@ typedef struct {
 /*! SIN15 - Input 15 state. Input 15 state following the synchronization specified by INSYNC.
  */
 #define SCT_INPUT_SIN15(x)                       (((uint32_t)(((uint32_t)(x)) << SCT_INPUT_SIN15_SHIFT)) & SCT_INPUT_SIN15_MASK)
+/*! @} */
+
+/*! @name REGMODEL - SCT_REGMODEL register */
+/*! @{ */
+#define SCT_REGMODEL_REGMODEL_MASK               (0xFFFFU)
+#define SCT_REGMODEL_REGMODEL_SHIFT              (0U)
+#define SCT_REGMODEL_REGMODEL(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_REGMODEL_REGMODEL_SHIFT)) & SCT_REGMODEL_REGMODEL_MASK)
+/*! @} */
+
+/*! @name REGMODEH - SCT_REGMODEH register */
+/*! @{ */
+#define SCT_REGMODEH_REGMODEH_MASK               (0xFFFFU)
+#define SCT_REGMODEH_REGMODEH_SHIFT              (0U)
+#define SCT_REGMODEH_REGMODEH(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_REGMODEH_REGMODEH_SHIFT)) & SCT_REGMODEH_REGMODEH_MASK)
 /*! @} */
 
 /*! @name REGMODE - SCT match/capture mode register */
@@ -18903,6 +19164,26 @@ typedef struct {
 #define SCT_CONFLAG_BUSERRH(x)                   (((uint32_t)(((uint32_t)(x)) << SCT_CONFLAG_BUSERRH_SHIFT)) & SCT_CONFLAG_BUSERRH_MASK)
 /*! @} */
 
+/*! @name CAPL - SCT_CAPL register */
+/*! @{ */
+#define SCT_CAPL_CAPL_MASK                       (0xFFFFU)
+#define SCT_CAPL_CAPL_SHIFT                      (0U)
+#define SCT_CAPL_CAPL(x)                         (((uint16_t)(((uint16_t)(x)) << SCT_CAPL_CAPL_SHIFT)) & SCT_CAPL_CAPL_MASK)
+/*! @} */
+
+/* The count of SCT_CAPL */
+#define SCT_CAPL_COUNT                           (16U)
+
+/*! @name CAPH - SCT_CAPH register */
+/*! @{ */
+#define SCT_CAPH_CAPH_MASK                       (0xFFFFU)
+#define SCT_CAPH_CAPH_SHIFT                      (0U)
+#define SCT_CAPH_CAPH(x)                         (((uint16_t)(((uint16_t)(x)) << SCT_CAPH_CAPH_SHIFT)) & SCT_CAPH_CAPH_MASK)
+/*! @} */
+
+/* The count of SCT_CAPH */
+#define SCT_CAPH_COUNT                           (16U)
+
 /*! @name CAP - SCT capture register of capture channel */
 /*! @{ */
 #define SCT_CAP_CAPn_L_MASK                      (0xFFFFU)
@@ -18923,6 +19204,26 @@ typedef struct {
 
 /* The count of SCT_CAP */
 #define SCT_CAP_COUNT                            (16U)
+
+/*! @name MATCHL - SCT_MATCHL register */
+/*! @{ */
+#define SCT_MATCHL_MATCHL_MASK                   (0xFFFFU)
+#define SCT_MATCHL_MATCHL_SHIFT                  (0U)
+#define SCT_MATCHL_MATCHL(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_MATCHL_MATCHL_SHIFT)) & SCT_MATCHL_MATCHL_MASK)
+/*! @} */
+
+/* The count of SCT_MATCHL */
+#define SCT_MATCHL_COUNT                         (16U)
+
+/*! @name MATCHH - SCT_MATCHH register */
+/*! @{ */
+#define SCT_MATCHH_MATCHH_MASK                   (0xFFFFU)
+#define SCT_MATCHH_MATCHH_SHIFT                  (0U)
+#define SCT_MATCHH_MATCHH(x)                     (((uint16_t)(((uint16_t)(x)) << SCT_MATCHH_MATCHH_SHIFT)) & SCT_MATCHH_MATCHH_MASK)
+/*! @} */
+
+/* The count of SCT_MATCHH */
+#define SCT_MATCHH_COUNT                         (16U)
 
 /*! @name MATCH - SCT match value register of match channels */
 /*! @{ */
@@ -18945,6 +19246,26 @@ typedef struct {
 /* The count of SCT_MATCH */
 #define SCT_MATCH_COUNT                          (16U)
 
+/*! @name CAPCTRLL - SCT_CAPCTRLL register */
+/*! @{ */
+#define SCT_CAPCTRLL_CAPCTRLL_MASK               (0xFFFFU)
+#define SCT_CAPCTRLL_CAPCTRLL_SHIFT              (0U)
+#define SCT_CAPCTRLL_CAPCTRLL(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_CAPCTRLL_CAPCTRLL_SHIFT)) & SCT_CAPCTRLL_CAPCTRLL_MASK)
+/*! @} */
+
+/* The count of SCT_CAPCTRLL */
+#define SCT_CAPCTRLL_COUNT                       (16U)
+
+/*! @name CAPCTRLH - SCT_CAPCTRLH register */
+/*! @{ */
+#define SCT_CAPCTRLH_CAPCTRLH_MASK               (0xFFFFU)
+#define SCT_CAPCTRLH_CAPCTRLH_SHIFT              (0U)
+#define SCT_CAPCTRLH_CAPCTRLH(x)                 (((uint16_t)(((uint16_t)(x)) << SCT_CAPCTRLH_CAPCTRLH_SHIFT)) & SCT_CAPCTRLH_CAPCTRLH_MASK)
+/*! @} */
+
+/* The count of SCT_CAPCTRLH */
+#define SCT_CAPCTRLH_COUNT                       (16U)
+
 /*! @name CAPCTRL - SCT capture control register */
 /*! @{ */
 #define SCT_CAPCTRL_CAPCONn_L_MASK               (0xFFFFU)
@@ -18964,6 +19285,26 @@ typedef struct {
 
 /* The count of SCT_CAPCTRL */
 #define SCT_CAPCTRL_COUNT                        (16U)
+
+/*! @name MATCHRELL - SCT_MATCHRELL register */
+/*! @{ */
+#define SCT_MATCHRELL_MATCHRELL_MASK             (0xFFFFU)
+#define SCT_MATCHRELL_MATCHRELL_SHIFT            (0U)
+#define SCT_MATCHRELL_MATCHRELL(x)               (((uint16_t)(((uint16_t)(x)) << SCT_MATCHRELL_MATCHRELL_SHIFT)) & SCT_MATCHRELL_MATCHRELL_MASK)
+/*! @} */
+
+/* The count of SCT_MATCHRELL */
+#define SCT_MATCHRELL_COUNT                      (16U)
+
+/*! @name MATCHRELH - SCT_MATCHRELH register */
+/*! @{ */
+#define SCT_MATCHRELH_MATCHRELH_MASK             (0xFFFFU)
+#define SCT_MATCHRELH_MATCHRELH_SHIFT            (0U)
+#define SCT_MATCHRELH_MATCHRELH(x)               (((uint16_t)(((uint16_t)(x)) << SCT_MATCHRELH_MATCHRELH_SHIFT)) & SCT_MATCHRELH_MATCHRELH_MASK)
+/*! @} */
+
+/* The count of SCT_MATCHRELH */
+#define SCT_MATCHRELH_COUNT                      (16U)
 
 /*! @name MATCHREL - SCT match reload value register */
 /*! @{ */
@@ -20092,8 +20433,9 @@ typedef struct {
        uint8_t RESERVED_10[20];
   union {                                          /* offset: 0x260 */
     __IO uint32_t SYSTICKCLKSEL0;                    /**< System Tick Timer for CPU0 source select, offset: 0x260 */
-    __IO uint32_t SYSTICKCLKSELX[2];                 /**< Peripheral reset control register, array offset: 0x260, array step: 0x4 */
+    __IO uint32_t SYSTICKCLKSELX[1];                 /**< Peripheral reset control register, array offset: 0x260, array step: 0x4 */
   };
+       uint8_t RESERVED_11[4];
   __IO uint32_t TRACECLKSEL;                       /**< Trace clock source select, offset: 0x268 */
   union {                                          /* offset: 0x26C */
     struct {                                         /* offset: 0x26C */
@@ -20108,10 +20450,10 @@ typedef struct {
   __IO uint32_t MAINCLKSELA;                       /**< Main clock A source select, offset: 0x280 */
   __IO uint32_t MAINCLKSELB;                       /**< Main clock source select, offset: 0x284 */
   __IO uint32_t CLKOUTSEL;                         /**< CLKOUT clock source select, offset: 0x288 */
-       uint8_t RESERVED_11[4];
+       uint8_t RESERVED_12[4];
   __IO uint32_t PLL0CLKSEL;                        /**< PLL0 clock source select, offset: 0x290 */
   __IO uint32_t PLL1CLKSEL;                        /**< PLL1 clock source select, offset: 0x294 */
-       uint8_t RESERVED_12[8];
+       uint8_t RESERVED_13[8];
   __IO uint32_t CANCLKSEL;                         /**< CAN clock source select, offset: 0x2A0 */
   __IO uint32_t ADCCLKSEL;                         /**< ADC clock source select, offset: 0x2A4 */
   __IO uint32_t USB0CLKSEL;                        /**< FS USB clock source select, offset: 0x2A8 */
@@ -20130,16 +20472,16 @@ typedef struct {
     __IO uint32_t FCCLKSELX[8];                      /**< Peripheral reset control register, array offset: 0x2B0, array step: 0x4 */
   };
   __IO uint32_t HSLSPICLKSEL;                      /**< HS LSPI clock source select, offset: 0x2D0 */
-       uint8_t RESERVED_13[12];
-  __IO uint32_t MCLKCLKSEL;                        /**< MCLK clock source select, offset: 0x2E0 */
        uint8_t RESERVED_14[12];
-  __IO uint32_t SCTCLKSEL;                         /**< SCTimer/PWM clock source select, offset: 0x2F0 */
+  __IO uint32_t MCLKCLKSEL;                        /**< MCLK clock source select, offset: 0x2E0 */
        uint8_t RESERVED_15[12];
+  __IO uint32_t SCTCLKSEL;                         /**< SCTimer/PWM clock source select, offset: 0x2F0 */
+       uint8_t RESERVED_16[12];
   __IO uint32_t SYSTICKCLKDIV0;                    /**< System Tick Timer divider for CPU0, offset: 0x300 */
-       uint8_t RESERVED_16[4];
+       uint8_t RESERVED_17[4];
   __IO uint32_t TRACECLKDIV;                       /**< TRACE clock divider, offset: 0x308 */
   __IO uint32_t CANCLKDIV;                         /**< CAN clock divider, offset: 0x30C */
-       uint8_t RESERVED_17[16];
+       uint8_t RESERVED_18[16];
   union {                                          /* offset: 0x320 */
     struct {                                         /* offset: 0x320 */
       __IO uint32_t FLEXFRG0CTRL;                      /**< Fractional rate divider for flexcomm 0, offset: 0x320 */
@@ -20153,58 +20495,58 @@ typedef struct {
     } FLEXFRGCTRL;
     __IO uint32_t FLEXFRGXCTRL[8];                   /**< Peripheral reset control register, array offset: 0x320, array step: 0x4 */
   };
-       uint8_t RESERVED_18[64];
+       uint8_t RESERVED_19[64];
   __IO uint32_t AHBCLKDIV;                         /**< System clock divider, offset: 0x380 */
   __IO uint32_t CLKOUTDIV;                         /**< CLKOUT clock divider, offset: 0x384 */
   __IO uint32_t FROHFDIV;                          /**< FRO_HF (96MHz) clock divider, offset: 0x388 */
   __IO uint32_t WDTCLKDIV;                         /**< WDT clock divider, offset: 0x38C */
-       uint8_t RESERVED_19[4];
+       uint8_t RESERVED_20[4];
   __IO uint32_t ADCCLKDIV;                         /**< ADC clock divider, offset: 0x394 */
   __IO uint32_t USB0CLKDIV;                        /**< USB0-FS Clock divider, offset: 0x398 */
-       uint8_t RESERVED_20[4];
+       uint8_t RESERVED_21[4];
   __IO uint32_t FRO1MCLKDIV;                       /**< FRO1MHz Clock divider (FRO1M_divided), offset: 0x3A0 */
-       uint8_t RESERVED_21[8];
+       uint8_t RESERVED_22[8];
   __IO uint32_t MCLKDIV;                           /**< I2S MCLK clock divider, offset: 0x3AC */
-       uint8_t RESERVED_22[4];
+       uint8_t RESERVED_23[4];
   __IO uint32_t SCTCLKDIV;                         /**< SCT/PWM clock divider, offset: 0x3B4 */
-       uint8_t RESERVED_23[12];
+       uint8_t RESERVED_24[12];
   __IO uint32_t PLL0CLKDIV;                        /**< PLL0 clock divider, offset: 0x3C4 */
-       uint8_t RESERVED_24[52];
+       uint8_t RESERVED_25[52];
   __IO uint32_t CLOCKGENUPDATELOCKOUT;             /**< Control clock configuration registers access (like xxxDIV, xxxSEL), offset: 0x3FC */
   __IO uint32_t FMCCR;                             /**< FMC configuration register, offset: 0x400 */
-       uint8_t RESERVED_25[8];
+       uint8_t RESERVED_26[8];
   __IO uint32_t USB0NEEDCLKCTRL;                   /**< USB0-FS need clock control, offset: 0x40C */
   __I  uint32_t USB0NEEDCLKSTAT;                   /**< USB0-FS need clock status, offset: 0x410 */
-       uint8_t RESERVED_26[8];
+       uint8_t RESERVED_27[8];
   __O  uint32_t FMCFLUSH;                          /**< FMCflush control, offset: 0x41C */
   __IO uint32_t MCLKIO;                            /**< MCLK control, offset: 0x420 */
   __IO uint32_t USB1NEEDCLKCTRL;                   /**< USB1-HS need clock control, offset: 0x424 */
   __I  uint32_t USB1NEEDCLKSTAT;                   /**< USB1-HS need clock status, offset: 0x428 */
-       uint8_t RESERVED_27[20];
+       uint8_t RESERVED_28[20];
   __IO uint32_t FLASHREMAP_SIZE;                   /**< This 32-bit register contains the size of the image to remap, in bytes. The 12 LSBs are ignored, so the size granularity is 4KB., offset: 0x440 */
   __IO uint32_t FLASHREMAP_SIZE_DP;                /**< This 32-bit register is a duplicate of FLASHREMAPSIZE for increased security., offset: 0x444 */
   __IO uint32_t FLASHREMAP_OFFSET;                 /**< This 32-bit register contains the offset by which the image is to be remapped. The 12 LSBs are ignored, so the remap granularity is 4KB., offset: 0x448 */
   __IO uint32_t FLASHREMAP_OFFSET_DP;              /**< This 32-bit register is a duplicate of FLASHREMAPOFFSET for increased security., offset: 0x44C */
-       uint8_t RESERVED_28[12];
+       uint8_t RESERVED_29[12];
   __IO uint32_t FLASHREMAP_LOCK;                   /**< Control write access to FLASHREMAP_SIZE and FLASHREMAP_OFFSET registers., offset: 0x45C */
-       uint8_t RESERVED_29[16];
+       uint8_t RESERVED_30[16];
   __IO uint32_t CASPER_CTRL;                       /**< Control CASPER integration., offset: 0x470 */
-       uint8_t RESERVED_30[236];
+       uint8_t RESERVED_31[236];
   __IO uint32_t PLL1CTRL;                          /**< PLL1 550m control, offset: 0x560 */
   __I  uint32_t PLL1STAT;                          /**< PLL1 550m status, offset: 0x564 */
   __IO uint32_t PLL1NDEC;                          /**< PLL1 550m N divider, offset: 0x568 */
   __IO uint32_t PLL1MDEC;                          /**< PLL1 550m M divider, offset: 0x56C */
   __IO uint32_t PLL1PDEC;                          /**< PLL1 550m P divider, offset: 0x570 */
-       uint8_t RESERVED_31[12];
+       uint8_t RESERVED_32[12];
   __IO uint32_t PLL0CTRL;                          /**< PLL0 550m control, offset: 0x580 */
   __I  uint32_t PLL0STAT;                          /**< PLL0 550m status, offset: 0x584 */
   __IO uint32_t PLL0NDEC;                          /**< PLL0 550m N divider, offset: 0x588 */
   __IO uint32_t PLL0PDEC;                          /**< PLL0 550m P divider, offset: 0x58C */
   __IO uint32_t PLL0SSCG0;                         /**< PLL0 Spread Spectrum Wrapper control register 0, offset: 0x590 */
   __IO uint32_t PLL0SSCG1;                         /**< PLL0 Spread Spectrum Wrapper control register 1, offset: 0x594 */
-       uint8_t RESERVED_32[628];
+       uint8_t RESERVED_33[628];
   __I  uint32_t CPSTAT;                            /**< CPU Status, offset: 0x80C */
-       uint8_t RESERVED_33[272];
+       uint8_t RESERVED_34[272];
   __IO uint32_t BOOT_SEED_REG0;                    /**< boot seed (256-bit random value), offset: 0x920 */
   __IO uint32_t BOOT_SEED_REG1;                    /**< boot seed (256-bit random value), offset: 0x924 */
   __IO uint32_t BOOT_SEED_REG2;                    /**< boot seed (256-bit random value), offset: 0x928 */
@@ -20222,26 +20564,26 @@ typedef struct {
   __IO uint32_t HMAC_REG6;                         /**< HMAC, offset: 0x958 */
   __IO uint32_t HMAC_REG7;                         /**< HMAC, offset: 0x95C */
   __IO uint32_t BOOT_LOCK;                         /**< Control write access to boot seed security registers., offset: 0x960 */
-       uint8_t RESERVED_34[180];
+       uint8_t RESERVED_35[180];
   __IO uint32_t CLOCK_CTRL;                        /**< Various system clock controls : Flash clock (48 MHz) control, clocks to Frequency Measures, offset: 0xA18 */
-       uint8_t RESERVED_35[244];
+       uint8_t RESERVED_36[244];
   __IO uint32_t COMP_INT_CTRL;                     /**< Comparator Interrupt control, offset: 0xB10 */
   __I  uint32_t COMP_INT_STATUS;                   /**< Comparator Interrupt status, offset: 0xB14 */
-       uint8_t RESERVED_36[748];
+       uint8_t RESERVED_37[748];
   __IO uint32_t AUTOCLKGATEOVERRIDE;               /**< Control automatic clock gating, offset: 0xE04 */
   __IO uint32_t GPIOPSYNC;                         /**< Enable bypass of the first stage of synchonization inside GPIO_INT module, offset: 0xE08 */
-       uint8_t RESERVED_37[380];
+       uint8_t RESERVED_38[380];
   __IO uint32_t HASHRESTHWKEY;                     /**< Controls whether the HASH AES hardware secret key is restricted to use by secure code, offset: 0xF88 */
-       uint8_t RESERVED_38[20];
+       uint8_t RESERVED_39[20];
   __IO uint32_t DEBUG_LOCK_EN;                     /**< Control write access to security registers., offset: 0xFA0 */
   __IO uint32_t DEBUG_FEATURES;                    /**< Cortex debug features control., offset: 0xFA4 */
   __IO uint32_t DEBUG_FEATURES_DP;                 /**< Cortex debug features control. (duplicate), offset: 0xFA8 */
-       uint8_t RESERVED_39[8];
+       uint8_t RESERVED_40[8];
   __IO uint32_t SWD_ACCESS_CPU0;                   /**< This register is used by ROM during DEBUG authentication mechanism to enable debug access port for CPU0., offset: 0xFB4 */
-       uint8_t RESERVED_40[4];
+       uint8_t RESERVED_41[4];
   __O  uint32_t KEY_BLOCK;                         /**< block quiddikey/PUF all index., offset: 0xFBC */
   __IO uint32_t DEBUG_AUTH_BEACON;                 /**< Debug authentication BEACON register, offset: 0xFC0 */
-       uint8_t RESERVED_41[52];
+       uint8_t RESERVED_42[52];
   __I  uint32_t DEVICE_ID0;                        /**< Device ID, offset: 0xFF8 */
   __I  uint32_t DIEID;                             /**< Chip revision ID and Number, offset: 0xFFC */
 } SYSCON_Type;
@@ -21285,7 +21627,7 @@ typedef struct {
 /*! @} */
 
 /* The count of SYSCON_SYSTICKCLKSELX */
-#define SYSCON_SYSTICKCLKSELX_COUNT              (2U)
+#define SYSCON_SYSTICKCLKSELX_COUNT              (1U)
 
 /*! @name TRACECLKSEL - Trace clock source select */
 /*! @{ */
@@ -24872,13 +25214,13 @@ typedef struct {
  *    to address 0). The bit is reset by writing a one to it.
  */
 #define USB_DEVCMDSTAT_DRES_C(x)                 (((uint32_t)(((uint32_t)(x)) << USB_DEVCMDSTAT_DRES_C_SHIFT)) & USB_DEVCMDSTAT_DRES_C_MASK)
-#define USB_DEVCMDSTAT_VBUS_DEBOUNCED_MASK       (0x10000000U)
-#define USB_DEVCMDSTAT_VBUS_DEBOUNCED_SHIFT      (28U)
-/*! VBUS_DEBOUNCED - This bit indicates if Vbus is detected or not. The bit raises immediately when
+#define USB_DEVCMDSTAT_VBUSDEBOUNCED_MASK        (0x10000000U)
+#define USB_DEVCMDSTAT_VBUSDEBOUNCED_SHIFT       (28U)
+/*! VBUSDEBOUNCED - This bit indicates if Vbus is detected or not. The bit raises immediately when
  *    Vbus becomes high. It drops to zero if Vbus is low for at least 3 ms. If this bit is high and
  *    the DCon bit is set, the HW will enable the pull-up resistor to signal a connect.
  */
-#define USB_DEVCMDSTAT_VBUS_DEBOUNCED(x)         (((uint32_t)(((uint32_t)(x)) << USB_DEVCMDSTAT_VBUS_DEBOUNCED_SHIFT)) & USB_DEVCMDSTAT_VBUS_DEBOUNCED_MASK)
+#define USB_DEVCMDSTAT_VBUSDEBOUNCED(x)          (((uint32_t)(((uint32_t)(x)) << USB_DEVCMDSTAT_VBUSDEBOUNCED_SHIFT)) & USB_DEVCMDSTAT_VBUSDEBOUNCED_MASK)
 /*! @} */
 
 /*! @name INFO - USB Info register */

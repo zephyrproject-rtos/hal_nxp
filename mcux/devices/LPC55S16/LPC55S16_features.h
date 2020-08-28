@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b200225
+**     Build:               b200318
 **
 **     Abstract:
 **         Chip specific module features.
@@ -29,7 +29,7 @@
 
 /* SOC module features */
 
-/* @brief CAN availability on the SoC. */
+/* @brief LPC_CAN availability on the SoC. */
 #define FSL_FEATURE_SOC_LPC_CAN_COUNT (1)
 /* @brief CASPER availability on the SoC. */
 #define FSL_FEATURE_SOC_CASPER_COUNT (1)
@@ -77,7 +77,7 @@
 #define FSL_FEATURE_SOC_PUF_COUNT (1)
 /* @brief PUF_SRAM_CTRL availability on the SoC. */
 #define FSL_FEATURE_SOC_PUF_SRAM_CTRL_COUNT (1)
-/* @brief RNG1 availability on the SoC. */
+/* @brief LPC_RNG1 availability on the SoC. */
 #define FSL_FEATURE_SOC_LPC_RNG1_COUNT (1)
 /* @brief RTC availability on the SoC. */
 #define FSL_FEATURE_SOC_RTC_COUNT (1)
@@ -326,8 +326,6 @@
 
 /* SYSCON module features */
 
-/* @brief Pointer to ROM IAP entry functions */
-#define FSL_FEATURE_SYSCON_IAP_ENTRY_LOCATION (0x03000205)
 /* @brief Flash page size in bytes */
 #define FSL_FEATURE_SYSCON_FLASH_PAGE_SIZE_BYTES (512)
 /* @brief Flash sector size in bytes */
@@ -340,6 +338,11 @@
 #define FSL_FEATURE_SOC_CCM_ANALOG_COUNT (1)
 /* @brief Starter register discontinuous. */
 #define FSL_FEATURE_SYSCON_STARTER_DISCONTINUOUS (1)
+
+/* SYSCTL1 module features */
+
+/* @brief SYSCTRL has Code Gray feature. */
+#define FSL_FEATURE_SYSCTRL_HAS_CODE_GRAY (1)
 
 /* USB module features */
 
