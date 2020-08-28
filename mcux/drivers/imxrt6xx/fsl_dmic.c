@@ -374,11 +374,7 @@ void DMIC0_DriverIRQHandler(void)
     {
         s_dmicCallback[0]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 /*DMIC0 HWVAD IRQ handler */
 void HWVAD0_DriverIRQHandler(void)
@@ -387,10 +383,6 @@ void HWVAD0_DriverIRQHandler(void)
     {
         s_dmicHwvadCallback[0]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif

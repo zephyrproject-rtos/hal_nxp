@@ -418,6 +418,7 @@ typedef enum _i3c_slave_event
     kI3C_SlaveEventHotJoinReq = 3U, /*!< Hot-join event. */
 } i3c_slave_event_t;
 
+/*! @brief I3C slave.activity state */
 typedef enum _i3c_slave_activity_state
 {
     kI3C_SlaveNoLatency    = 0U, /*!< Normal bus operation */
@@ -445,7 +446,7 @@ typedef struct _i3c_slave_config
     uint32_t partNumber;   /*!< Device part number info */
     uint8_t dcr;           /*!< Device characteristics register information. */
     uint8_t bcr;           /*!< Bus characteristics register information. */
-    uint8_t hdrMode;       /*!< Support hdr mode, could be OR logic in #i3c_hdr_mode. */
+    uint8_t hdrMode;       /*!< Support hdr mode, could be OR logic in enumeration:i3c_hdr_mode_t. */
     bool nakAllRequest;    /*!< Whether to reply NAK to all requests except broadcast CCC. */
     bool ignoreS0S1Error;  /*!< Whether to ignore S0/S1 error in SDR mode. */
     bool offline; /*!< Whether to wait 60 us of bus quiet or HDR request to ensure slave track SDR mode safely. */
@@ -921,10 +922,12 @@ status_t I3C_MasterRepeatedStart(
  * @param flags Bit mask of options for the transfer. See enumeration #_i3c_master_transfer_flags for available options.
  * @retval #kStatus_Success Data was sent successfully.
  * @retval #kStatus_I3C_Busy Another master is currently utilizing the bus.
- * @retval #kStatus_I3C_Nak The slave device sent a NAK in response to a byte.
- * @retval #kStatus_I3C_FifoError FIFO under run or over run.
- * @retval #kStatus_I3C_ArbitrationLost Arbitration lost error.
- * @retval #kStatus_I3C_PinLowTimeout SCL or SDA were held low longer than the timeout.
+ * @retval #kStatus_I3C_Timeout The module has stalled too long in a frame.
+ * @retval #kStatus_I3C_Nak The slave device sent a NAK in response to an address.
+ * @retval #kStatus_I3C_WriteAbort The slave device sent a NAK in response to a write.
+ * @retval #kStatus_I3C_MsgError Message SDR/DDR mismatch or read/write message in wrong state.
+ * @retval #kStatus_I3C_WriteFifoError Write to M/SWDATAB register when FIFO full.
+ * @retval #kStatus_I3C_InvalidReq Invalid use of request.
  */
 status_t I3C_MasterSend(I3C_Type *base, const void *txBuff, size_t txSize, uint32_t flags);
 
@@ -937,10 +940,13 @@ status_t I3C_MasterSend(I3C_Type *base, const void *txBuff, size_t txSize, uint3
  * @param flags Bit mask of options for the transfer. See enumeration #_i3c_master_transfer_flags for available options.
  * @retval #kStatus_Success Data was received successfully.
  * @retval #kStatus_I3C_Busy Another master is currently utilizing the bus.
- * @retval #kStatus_I3C_Nak The slave device sent a NAK in response to a byte.
- * @retval #kStatus_I3C_FifoError FIFO under run or overrun.
- * @retval #kStatus_I3C_ArbitrationLost Arbitration lost error.
- * @retval #kStatus_I3C_PinLowTimeout SCL or SDA were held low longer than the timeout.
+ * @retval #kStatus_I3C_Timeout The module has stalled too long in a frame.
+ * @retval #kStatus_I3C_Term The master terminates slave read.
+ * @retval #kStatus_I3C_HdrParityError Parity error from DDR read.
+ * @retval #kStatus_I3C_CrcError CRC error from DDR read.
+ * @retval #kStatus_I3C_MsgError Message SDR/DDR mismatch or read/write message in wrong state.
+ * @retval #kStatus_I3C_ReadFifoError Read from M/SRDATAB register when FIFO empty.
+ * @retval #kStatus_I3C_InvalidReq Invalid use of request.
  */
 status_t I3C_MasterReceive(I3C_Type *base, void *rxBuff, size_t rxSize, uint32_t flags);
 
@@ -952,10 +958,8 @@ status_t I3C_MasterReceive(I3C_Type *base, void *rxBuff, size_t rxSize, uint32_t
  * @param base The I3C peripheral base address.
  * @retval #kStatus_Success The STOP signal was successfully sent on the bus and the transaction terminated.
  * @retval #kStatus_I3C_Busy Another master is currently utilizing the bus.
- * @retval #kStatus_I3C_Nak The slave device sent a NAK in response to a byte.
- * @retval #kStatus_I3C_FifoError FIFO under run or overrun.
- * @retval #kStatus_I3C_ArbitrationLost Arbitration lost error.
- * @retval #kStatus_I3C_PinLowTimeout SCL or SDA were held low longer than the timeout.
+ * @retval #kStatus_I3C_Timeout The module has stalled too long in a frame.
+ * @retval #kStatus_I3C_InvalidReq Invalid use of request.
  */
 status_t I3C_MasterStop(I3C_Type *base);
 
@@ -984,6 +988,7 @@ void I3C_MasterRegisterIBI(I3C_Type *base, i3c_register_ibi_addr_t *ibiRule);
  * @retval #kStatus_Success The transaction was started successfully.
  * @retval #kStatus_I3C_Busy Either another master is currently utilizing the bus, or a non-blocking
  *      transaction is already in progress.
+ * @retval #kStatus_I3C_SlaveCountExceed The I3C slave count has exceed the definition in I3C_MAX_DEVCNT.
  */
 status_t I3C_MasterProcessDAA(I3C_Type *base, uint8_t *addressList, uint32_t count);
 
@@ -997,10 +1002,17 @@ status_t I3C_MasterProcessDAA(I3C_Type *base, uint8_t *addressList, uint32_t cou
  * @param transfer Pointer to the transfer structure.
  * @retval #kStatus_Success Data was received successfully.
  * @retval #kStatus_I3C_Busy Another master is currently utilizing the bus.
- * @retval #kStatus_I3C_Nak The slave device sent a NAK in response to a byte.
- * @retval #kStatus_I3C_FifoError FIFO under run or overrun.
- * @retval #kStatus_I3C_ArbitrationLost Arbitration lost error.
- * @retval #kStatus_I3C_PinLowTimeout SCL or SDA were held low longer than the timeout.
+ * @retval #kStatus_I3C_IBIWon The I3C slave event IBI or MR or HJ won the arbitration on a header address.
+ * @retval #kStatus_I3C_Timeout The module has stalled too long in a frame.
+ * @retval #kStatus_I3C_Nak The slave device sent a NAK in response to an address.
+ * @retval #kStatus_I3C_WriteAbort The slave device sent a NAK in response to a write.
+ * @retval #kStatus_I3C_Term The master terminates slave read.
+ * @retval #kStatus_I3C_HdrParityError Parity error from DDR read.
+ * @retval #kStatus_I3C_CrcError CRC error from DDR read.
+ * @retval #kStatus_I3C_MsgError Message SDR/DDR mismatch or read/write message in wrong state.
+ * @retval #kStatus_I3C_ReadFifoError Read from M/SRDATAB register when FIFO empty.
+ * @retval #kStatus_I3C_WriteFifoError Write to M/SWDATAB register when FIFO full.
+ * @retval #kStatus_I3C_InvalidReq Invalid use of request.
  */
 status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *transfer);
 
@@ -1455,7 +1467,7 @@ void I3C_SlaveTransferCreateHandle(I3C_Type *base,
  * a convenient way to enable all events.
  *
  * @param base The I3C peripheral base address.
- * @param handle Pointer to #i3c_slave_handle_t structure which stores the transfer state.
+ * @param handle Pointer to struct: _i3c_slave_handle structure which stores the transfer state.
  * @param eventMask Bit mask formed by OR'ing together #i3c_slave_transfer_event_t enumerators to specify
  *      which events to send to the callback. Other accepted values are 0 to get a default set of
  *      only the transmit and receive events, and #kI3C_SlaveAllEvents to enable all events.
@@ -1480,7 +1492,7 @@ status_t I3C_SlaveTransferGetCount(I3C_Type *base, i3c_slave_handle_t *handle, s
  * @brief Aborts the slave non-blocking transfers.
  * @note This API could be called at any time to stop slave for handling the bus events.
  * @param base The I3C peripheral base address.
- * @param handle Pointer to #i3c_slave_handle_t structure which stores the transfer state.
+ * @param handle Pointer to struct: _i3c_slave_handle structure which stores the transfer state.
  * @retval #kStatus_Success
  * @retval #kStatus_I3C_Idle
  */
@@ -1496,7 +1508,7 @@ void I3C_SlaveTransferAbort(I3C_Type *base, i3c_slave_handle_t *handle);
  * @note This function does not need to be called unless you are reimplementing the
  *  non blocking API's interrupt handler routines to add special functionality.
  * @param base The I3C peripheral base address.
- * @param handle Pointer to #i3c_slave_handle_t structure which stores the transfer state.
+ * @param handle Pointer to struct: _i3c_slave_handle structure which stores the transfer state.
  */
 void I3C_SlaveTransferHandleIRQ(I3C_Type *base, i3c_slave_handle_t *handle);
 

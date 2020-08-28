@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -237,7 +237,7 @@ void I2C_MasterSetBaudRate(I2C_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
     }
     else
     {
-        base->MSTTIME = I2C_MSTTIME_MSTSCLLOW(best_scl / 2U - 2U) | I2C_MSTTIME_MSTSCLHIGH(best_scl / 2U - 1U);
+        base->MSTTIME = I2C_MSTTIME_MSTSCLLOW(best_scl / 2U - 1U) | I2C_MSTTIME_MSTSCLHIGH(best_scl / 2U - 2U);
     }
 }
 
@@ -346,7 +346,7 @@ status_t I2C_MasterWriteBlocking(I2C_Type *base, const void *txBuff, size_t txSi
 
     const uint8_t *buf = (const uint8_t *)txBuff;
 
-    assert(txBuff);
+    assert(txBuff != NULL);
 
     err = kStatus_Success;
     while (txSize != 0U)
@@ -455,7 +455,7 @@ status_t I2C_MasterReadBlocking(I2C_Type *base, void *rxBuff, size_t rxSize, uin
 
     uint8_t *buf = (uint8_t *)(rxBuff);
 
-    assert(rxBuff);
+    assert(rxBuff != NULL);
 
     err = kStatus_Success;
     while (rxSize != 0U)
@@ -554,7 +554,7 @@ status_t I2C_MasterTransferBlocking(I2C_Type *base, i2c_master_transfer_t *xfer)
     uint8_t subaddrBuf[4];
     int i;
 
-    assert(xfer);
+    assert(xfer != NULL);
 
     /* If repeated start is requested, send repeated start. */
     if (0U == (xfer->flags & (uint32_t)kI2C_TransferNoStartFlag))
@@ -632,7 +632,7 @@ void I2C_MasterTransferCreateHandle(I2C_Type *base,
                                     i2c_master_transfer_callback_t callback,
                                     void *userData)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint32_t instance;
     i2c_to_flexcomm_t handler;
@@ -669,8 +669,8 @@ status_t I2C_MasterTransferNonBlocking(I2C_Type *base, i2c_master_handle_t *hand
 {
     status_t result;
 
-    assert(handle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
     assert(xfer->subaddressSize <= sizeof(xfer->subaddress));
 
     /* Return busy if another transaction is in progress. */
@@ -704,7 +704,7 @@ status_t I2C_MasterTransferNonBlocking(I2C_Type *base, i2c_master_handle_t *hand
  */
 status_t I2C_MasterTransferGetCount(I2C_Type *base, i2c_master_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {
@@ -1288,7 +1288,7 @@ static status_t I2C_SlaveTransferNonBlockingInternal(I2C_Type *base,
                                                      size_t rxSize,
                                                      uint32_t eventMask)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     status_t status;
     status = kStatus_Success;
@@ -1425,7 +1425,7 @@ void I2C_SlaveSetAddress(I2C_Type *base,
  */
 void I2C_SlaveGetDefaultConfig(i2c_slave_config_t *slaveConfig)
 {
-    assert(slaveConfig);
+    assert(slaveConfig != NULL);
 
     i2c_slave_config_t mySlaveConfig = {0};
 
@@ -1691,7 +1691,7 @@ void I2C_SlaveTransferCreateHandle(I2C_Type *base,
                                    i2c_slave_transfer_callback_t callback,
                                    void *userData)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint32_t instance;
     i2c_to_flexcomm_t handler;
@@ -1763,7 +1763,7 @@ status_t I2C_SlaveTransferNonBlocking(I2C_Type *base, i2c_slave_handle_t *handle
  */
 status_t I2C_SlaveTransferGetCount(I2C_Type *base, i2c_slave_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {

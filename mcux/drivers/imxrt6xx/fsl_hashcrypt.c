@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -57,8 +57,8 @@ typedef struct _hashcrypt_sha_ctx_internal
 } hashcrypt_sha_ctx_internal_t;
 
 #if defined(FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE) && (FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE > 0)
-#define SHA1_LEN 5u
-#define SHA256_LEN 8u
+#define SHA1_LEN      5u
+#define SHA256_LEN    8u
 #define ALG_MODE_MASK 0xFFFFFFF8u /*!< Algorithm mode mask */
 #endif
 
@@ -229,26 +229,41 @@ __STATIC_FORCEINLINE void hashcrypt_sha_ldm_stm_16_words(HASHCRYPT_Type *base, c
 /*!
  * @brief Loads data to Hashcrypt engine INDATA register.
  *
- * This function writes desired number of bytes starting from the src address (must be word aligned)
+ * This function writes desired number of bytes starting from the src address
  * to the dst address. Dst address does not increment (destination is peripheral module register INDATA).
  * Src address increments to load consecutive words.
  *
- * @param dst peripheral register address (word aligned)
- * @param src address of the input block (word aligned)
- * @param size number of bytes to write (word aligned)
+ * @param src address of the input block
+ * @param size number of bytes to write
  *
  */
-__STATIC_INLINE void hashcrypt_load_data(HASHCRYPT_Type *base, const uint32_t *src, size_t size)
+__STATIC_INLINE void hashcrypt_load_data(HASHCRYPT_Type *base, uint32_t *src, size_t size)
 {
+    /* 16 bytes aligned input block */
+    uint32_t __attribute__((aligned(4))) inAlign[HASHCRYPT_AES_BLOCK_SIZE / sizeof(uint32_t)];
+    uint32_t *in;
+    uint8_t i;
+
+    in = src;
+    /* Check if address of src data is aligned */
+    if ((0U != ((uint32_t)in & 3U)))
+    {
+        for (i = 0; i < ((uint32_t)size / 4U); i++)
+        {
+            inAlign[i] = hashcrypt_get_word_from_unaligned((uint8_t *)&src[i]);
+        }
+        in = &inAlign[0];
+    }
+
     if (size >= sizeof(uint32_t))
     {
-        base->INDATA = src[0];
+        base->INDATA = in[0];
         size -= sizeof(uint32_t);
     }
 
-    for (uint32_t i = 0; i < size / 4U; i++)
+    for (uint32_t j = 0; j < size / 4U; j++)
     {
-        base->ALIAS[i] = src[i + 1U];
+        base->ALIAS[j] = in[j + 1U];
     }
 }
 
@@ -659,12 +674,12 @@ static void hashcrypt_save_running_hash(HASHCRYPT_Type *base, hashcrypt_sha_ctx_
     size_t len = (ctxInternal->algo == kHASHCRYPT_Sha1) ? SHA1_LEN : SHA256_LEN;
 
     /* Wait until digest is ready */
-    while (0 == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
+    while (0U == (base->STATUS & HASHCRYPT_STATUS_DIGEST_MASK))
     {
     }
 
     /* Store partial digest to context */
-    for (int i = 0; i < len; i++)
+    for (uint32_t i = 0; i < len; i++)
     {
         ctxInternal->runningHash[i] = base->DIGEST0[i];
     }
@@ -682,7 +697,7 @@ static void hashcrypt_restore_running_hash(HASHCRYPT_Type *base, hashcrypt_sha_c
     base->CTRL |= HASHCRYPT_CTRL_RELOAD_MASK;
 
     /* Reload partial hash digest */
-    for (int i = 0; i < len; i++)
+    for (uint32_t i = 0; i < len; i++)
     {
         base->RELOAD[i] = ctxInternal->runningHash[i];
     }

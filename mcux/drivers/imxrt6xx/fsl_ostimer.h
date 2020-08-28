@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief OSTIMER driver version 2.0.3. */
-#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief OSTIMER driver version. */
+#define FSL_OSTIMER_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*!
@@ -100,6 +100,7 @@ uint32_t OSTIMER_GetStatusFlags(OSTIMER_Type *base);
  * Currently, only match interrupt flag can be cleared.
  *
  * @param base OSTIMER peripheral base address.
+ * @param mask Clear bit mask.
  * @return none
  */
 void OSTIMER_ClearStatusFlags(OSTIMER_Type *base, uint32_t mask);
@@ -115,9 +116,10 @@ void OSTIMER_ClearStatusFlags(OSTIMER_Type *base, uint32_t mask);
  * @param count  OSTIMER timer match value.(Value is gray-code format)
  *
  * @param cb     OSTIMER callback (can be left as NULL if none, otherwise should be a void func(void)).
- * @return       none
+ * @retval kStatus_Success - Set match raw value and enable interrupt Successfully.
+ * @retval kStatus_Fail    - Set match raw value fail.
  */
-void OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb);
+status_t OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb);
 
 /*!
  * @brief Set the match value for OSTIMER.
@@ -130,9 +132,10 @@ void OSTIMER_SetMatchRawValue(OSTIMER_Type *base, uint64_t count, ostimer_callba
  * internally.)
  *
  * @param cb     OSTIMER callback (can be left as NULL if none, otherwise should be a void func(void)).
- * @return       none
+ * @retval kStatus_Success - Set match value and enable interrupt Successfully.
+ * @retval kStatus_Fail    - Set match value fail.
  */
-void OSTIMER_SetMatchValue(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb);
+status_t OSTIMER_SetMatchValue(OSTIMER_Type *base, uint64_t count, ostimer_callback_t cb);
 
 /*!
  * @brief Get current timer raw count value from OSTIMER.
@@ -177,8 +180,8 @@ static inline uint64_t OSTIMER_GetCaptureRawValue(OSTIMER_Type *base)
 {
     uint64_t tmp = 0U;
 
-    tmp = base->CAPTUREN_L;
-    tmp |= (uint64_t)(base->CAPTUREN_H) << 32U;
+    tmp = base->CAPTURE_L;
+    tmp |= (uint64_t)(base->CAPTURE_H) << 32U;
 
     return tmp;
 }

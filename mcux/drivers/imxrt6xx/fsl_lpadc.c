@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -69,7 +69,7 @@ void LPADC_Init(ADC_Type *base, const lpadc_config_t *config)
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the clock for LPADC instance. */
-    CLOCK_EnableClock(s_lpadcClocks[LPADC_GetInstance(base)]);
+    (void)CLOCK_EnableClock(s_lpadcClocks[LPADC_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* Reset the module. */
@@ -209,7 +209,7 @@ void LPADC_Deinit(ADC_Type *base)
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Gate the clock. */
-    CLOCK_DisableClock(s_lpadcClocks[LPADC_GetInstance(base)]);
+    (void)CLOCK_DisableClock(s_lpadcClocks[LPADC_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -480,7 +480,7 @@ void LPADC_GetDefaultConvCommandConfig(lpadc_conv_command_config_t *config)
  * OFSTRIM field. The OFSTRIM field is used in normal operation for offset correction.
  *
  * param base LPADC peripheral base address.
- * bool enable switcher to the calibration function.
+ * param enable switcher to the calibration function.
  */
 void LPADC_EnableCalibration(ADC_Type *base, bool enable)
 {
@@ -631,6 +631,10 @@ float LPADC_MeasureTemperature(ADC_Type *base, uint32_t commandId, uint32_t inde
     float parameterOffset    = FSL_FEATURE_LPADC_TEMP_PARAMETER_B;
     float parameterAlpha     = FSL_FEATURE_LPADC_TEMP_PARAMETER_ALPHA;
     float temperature        = -273.15f; /* Absolute zero degree as the incorrect return value. */
+#if defined(FSL_FEATURE_LPADC_TEMP_NEED_CALIBRATION) && FSL_FEATURE_LPADC_TEMP_NEED_CALIBRATION
+    uint32_t temperatureSlopeSolidifyValue  = (*((volatile uint32_t *)(FSL_FEATURE_FLASH_NMPA_TEMP_SLOPE_ADDRS)));
+    uint32_t temperatureOffsetSolidifyValue = (*((volatile uint32_t *)(FSL_FEATURE_FLASH_NMPA_TEMP_OFFSET_ADDRS)));
+#endif /* FSL_FEATURE_LPADC_TEMP_NEED_CALIBRATION */
 
 #if defined(FSL_FEATURE_LPADC_HAS_CMDL_MODE) && FSL_FEATURE_LPADC_HAS_CMDL_MODE
     /* Get valid result data width in different resolution mode. */
@@ -641,6 +645,22 @@ float LPADC_MeasureTemperature(ADC_Type *base, uint32_t commandId, uint32_t inde
     }
 #endif /* FSL_FEATURE_LPADC_HAS_CMDL_MODE */
 
+#if defined(FSL_FEATURE_LPADC_TEMP_NEED_CALIBRATION) && FSL_FEATURE_LPADC_TEMP_NEED_CALIBRATION
+    if (((temperatureSlopeSolidifyValue & 0x1UL) != 0UL) && ((temperatureOffsetSolidifyValue & 0x1UL) != 0UL))
+    {
+        parameterSlope  = ((float)(uint32_t)(temperatureSlopeSolidifyValue >> 1UL) / 1024.0f);
+        parameterOffset = ((float)(uint32_t)(temperatureOffsetSolidifyValue >> 1UL) / 1024.0f);
+    }
+
+#endif /* FSL_FEATURE_LPADC_TEMP_NEED_CALIBRATION */
+
+#if defined(FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE) && (FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE == 4U)
+    /* For best temperature measure performance, the recommended LOOP Count should be 4, but the first two results is
+     * useless. */
+    /* Drop the useless result. */
+    (void)LPADC_GetConvResult(base, &convResultStruct, (uint8_t)index);
+    (void)LPADC_GetConvResult(base, &convResultStruct, (uint8_t)index);
+#endif /* FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE */
     /* Read the 2 temperature sensor result. */
     if (true == LPADC_GetConvResult(base, &convResultStruct, (uint8_t)index))
     {

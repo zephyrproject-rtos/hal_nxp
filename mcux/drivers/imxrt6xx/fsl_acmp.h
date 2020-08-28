@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,12 +22,12 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief ACMP driver version 2.0.5. */
-#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 5U))
+/*! @brief ACMP driver version 2.0.6. */
+#define FSL_ACMP_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 6U))
 /*@}*/
 
 /*! @brief The mask of status flags cleared by writing 1. */
-#define CMP_C0_CFx_MASK (CMP_C0_CFR_MASK | CMP_C0_CFF_MASK)
+#define CMP_C0_CFx_MASK  (CMP_C0_CFR_MASK | CMP_C0_CFF_MASK)
 #define CMP_C1_CHNn_MASK 0xFF0000U /* C1_CHN0 - C1_CHN7. */
 #define CMP_C2_CHnF_MASK 0xFF0000U /* C2_CH0F - C2_CH7F. */
 
@@ -151,7 +151,7 @@ typedef struct _acmp_filter_config
 typedef struct _acmp_dac_config
 {
     acmp_reference_voltage_source_t referenceVoltageSource; /*!< Supply voltage reference source. */
-    uint32_t DACValue; /*!< Value for DAC Output Voltage. Available range is 0-63. */
+    uint32_t DACValue; /*!< Value for DAC Output Voltage. Available range is 0-255. */
 
 #if defined(FSL_FEATURE_ACMP_HAS_C1_DACOE_BIT) && (FSL_FEATURE_ACMP_HAS_C1_DACOE_BIT == 1U)
     bool enableOutput; /*!< Enable the DAC output. */

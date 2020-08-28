@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,14 +21,14 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief cache driver version 2.0.1. */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief cache driver version 2.0.2. */
+#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*! @brief cache line size. */
 #define CACHE64_LINESIZE_BYTE (FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE)
 /*! @brief cache region number. */
-#define CACHE64_REGION_NUM (3)
+#define CACHE64_REGION_NUM (3U)
 /*! @brief cache region alignment. */
 #define CACHE64_REGION_ALIGNMENT (0x400U)
 

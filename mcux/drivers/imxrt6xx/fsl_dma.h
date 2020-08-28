@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2018 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief DMA driver version */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0)) /*!< Version 2.4.0. */
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 1)) /*!< Version 2.4.1. */
 /*@}*/
 
 /*! @brief DMA max transfer size */
@@ -32,8 +32,8 @@
 /*! @brief DMA channel numbers */
 #if defined FSL_FEATURE_DMA_NUMBER_OF_CHANNELS
 #define FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(x) FSL_FEATURE_DMA_NUMBER_OF_CHANNELS
-#define FSL_FEATURE_DMA_MAX_CHANNELS FSL_FEATURE_DMA_NUMBER_OF_CHANNELS
-#define FSL_FEATURE_DMA_ALL_CHANNELS (FSL_FEATURE_DMA_NUMBER_OF_CHANNELS * FSL_FEATURE_SOC_DMA_COUNT)
+#define FSL_FEATURE_DMA_MAX_CHANNELS           FSL_FEATURE_DMA_NUMBER_OF_CHANNELS
+#define FSL_FEATURE_DMA_ALL_CHANNELS           (FSL_FEATURE_DMA_NUMBER_OF_CHANNELS * FSL_FEATURE_SOC_DMA_COUNT)
 #endif
 /*! @brief DMA head link descriptor table align size */
 #define FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE (16U)
@@ -41,8 +41,8 @@
  * To simplify user interface, this macro will help allocate descriptor memory,
  * user just need to provide the name and the number for the allocate descriptor.
  *
- * @param name, allocate decriptor name.
- * @param number, number of descriptor to be allocated.
+ * @param name Allocate decriptor name.
+ * @param number Number of descriptor to be allocated.
  */
 #define DMA_ALLOCATE_HEAD_DESCRIPTORS(name, number) \
     SDK_ALIGN(dma_descriptor_t name[number], FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE)
@@ -50,8 +50,8 @@
  * To simplify user interface, this macro will help allocate descriptor memory at noncacheable section,
  * user just need to provide the name and the number for the allocate descriptor.
  *
- * @param name, allocate decriptor name.
- * @param number, number of descriptor to be allocated.
+ * @param name Allocate decriptor name.
+ * @param number Number of descriptor to be allocated.
  */
 #define DMA_ALLOCATE_HEAD_DESCRIPTORS_AT_NONCACHEABLE(name, number) \
     AT_NONCACHEABLE_SECTION_ALIGN(dma_descriptor_t name[number], FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE)
@@ -59,8 +59,8 @@
  * To simplify user interface, this macro will help allocate descriptor memory,
  * user just need to provide the name and the number for the allocate descriptor.
  *
- * @param name, allocate decriptor name.
- * @param number, number of descriptor to be allocated.
+ * @param name Allocate decriptor name.
+ * @param number Number of descriptor to be allocated.
  */
 #define DMA_ALLOCATE_LINK_DESCRIPTORS(name, number) \
     SDK_ALIGN(dma_descriptor_t name[number], FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE)
@@ -68,8 +68,8 @@
  * To simplify user interface, this macro will help allocate descriptor memory at noncacheable section,
  * user just need to provide the name and the number for the allocate descriptor.
  *
- * @param name, allocate decriptor name.
- * @param number, number of descriptor to be allocated.
+ * @param name Allocate decriptor name.
+ * @param number Number of descriptor to be allocated.
  */
 #define DMA_ALLOCATE_LINK_DESCRIPTORS_AT_NONCACHEABLE(name, number) \
     AT_NONCACHEABLE_SECTION_ALIGN(dma_descriptor_t name[number], FSL_FEATURE_DMA_LINK_DESCRIPTOR_ALIGN_SIZE)
@@ -88,23 +88,23 @@
     (((volatile uint32_t *)(&((base)->COMMON[0].reg)))[DMA_CHANNEL_GROUP(channel)] = (value))
 
 /*! @brief DMA descriptor end address calculate
- * @param start, start address
- * @param inc, address interleave size
- * @param bytes, transfer bytes
- * @param width, transfer width
+ * @param start start address
+ * @param inc address interleave size
+ * @param bytes transfer bytes
+ * @param width transfer width
  */
 #define DMA_DESCRIPTOR_END_ADDRESS(start, inc, bytes, width) \
     ((uint32_t *)((uint32_t)(start) + (inc) * (bytes) - (inc) * (width)))
 
 /*! @brief DMA channel transfer configurations macro
- * @param reload, true is reload link descriptor after current exhaust, false is not
- * @param clrTrig, true is clear trigger status, wait software trigger, false is not
- * @param intA, enable interruptA
- * @param intB, enable interruptB
- * @param width,transfer width
- * @param srcInc, source address interleave size
- * @param dstInc, destination address interleave size
- * @param bytes, transfer bytes
+ * @param reload true is reload link descriptor after current exhaust, false is not
+ * @param clrTrig true is clear trigger status, wait software trigger, false is not
+ * @param intA enable interruptA
+ * @param intB enable interruptB
+ * @param width transfer width
+ * @param srcInc source address interleave size
+ * @param dstInc destination address interleave size
+ * @param bytes transfer bytes
  */
 #define DMA_CHANNEL_XFER(reload, clrTrig, intA, intB, width, srcInc, dstInc, bytes)                                 \
     DMA_CHANNEL_XFERCFG_CFGVALID_MASK | DMA_CHANNEL_XFERCFG_RELOAD(reload) | DMA_CHANNEL_XFERCFG_CLRTRIG(clrTrig) | \
@@ -349,6 +349,7 @@ void DMA_Deinit(DMA_Type *base);
 void DMA_InstallDescriptorMemory(DMA_Type *base, void *addr);
 
 /* @} */
+
 /*!
  * @name DMA Channel Operation
  * @{
@@ -513,7 +514,7 @@ static inline dma_priority_t DMA_GetChannelPriority(DMA_Type *base, uint32_t cha
 }
 
 /*!
- * @brief Set channel configuration valid..
+ * @brief Set channel configuration valid.
  *
  * @param base DMA peripheral base address.
  * @param channel DMA channel number.
@@ -760,7 +761,7 @@ status_t DMA_SubmitTransfer(dma_handle_t *handle, dma_transfer_config_t *config)
  * @param nextDesc address of next descriptor.
  */
 void DMA_SubmitChannelTransferParameter(
-    dma_handle_t *handle, uint32_t xfercfg, void *srcStartAddr, void *dstStartAddr, void *nextDesc);
+    dma_handle_t *handle, uint32_t xferCfg, void *srcStartAddr, void *dstStartAddr, void *nextDesc);
 
 /*!
  * @brief Submit channel descriptor.

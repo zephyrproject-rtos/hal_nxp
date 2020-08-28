@@ -20,9 +20,9 @@
 
 #define I3C_BROADCASE_ADDR (0x7EU)
 
-#define FSL_I3C_ERROR_RATE_MAX (10U)
-#define FSL_I3C_PPBAUD_DIV_MAX ((I3C_MCONFIG_PPBAUD_MASK >> I3C_MCONFIG_PPBAUD_SHIFT) + 1U)
-#define FSL_I3C_ODBAUD_DIV_MAX ((I3C_MCONFIG_ODBAUD_MASK >> I3C_MCONFIG_ODBAUD_SHIFT) + 1U)
+#define FSL_I3C_ERROR_RATE_MAX  (10U)
+#define FSL_I3C_PPBAUD_DIV_MAX  ((I3C_MCONFIG_PPBAUD_MASK >> I3C_MCONFIG_PPBAUD_SHIFT) + 1U)
+#define FSL_I3C_ODBAUD_DIV_MAX  ((I3C_MCONFIG_ODBAUD_MASK >> I3C_MCONFIG_ODBAUD_SHIFT) + 1U)
 #define FSL_I3C_I2CBAUD_DIV_MAX (((I3C_MCONFIG_I2CBAUD_MASK >> I3C_MCONFIG_I2CBAUD_SHIFT) + 1U) / 2U)
 
 /*! @brief Common sets of flags used by the driver. */
@@ -2386,11 +2386,7 @@ static void I3C_CommonIRQHandler(I3C_Type *base, uint32_t instance)
         /* Slave mode. */
         s_i3cSlaveIsr(base, s_i3cSlaveHandle[instance]);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(I3C)

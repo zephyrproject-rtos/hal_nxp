@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,8 +26,8 @@
 /*! @name Driver version */
 /*@{*/
 
-/*! @brief I2S driver version 2.2.0. */
-#define FSL_I2S_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief I2S driver version 2.2.1. */
+#define FSL_I2S_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 #ifndef I2S_NUM_BUFFERS
@@ -136,7 +136,7 @@ typedef void (*i2s_transfer_callback_t)(I2S_Type *base,
 /*! @brief Members not to be accessed / modified outside of the driver. */
 struct _i2s_handle
 {
-    uint32_t state;                             /*!< State of transfer */
+    volatile uint32_t state;                    /*!< State of transfer */
     i2s_transfer_callback_t completionCallback; /*!< Callback function pointer */
     void *userData;                             /*!< Application data passed to callback */
     bool oneChannel;                            /*!< true mono, false stereo */
@@ -282,10 +282,10 @@ void I2S_Deinit(I2S_Type *base);
  * @brief Transmitter/Receiver bit clock rate configurations.
  *
  * @param base SAI base pointer.
- * @param sourceClockHz, bit clock source frequency.
+ * @param sourceClockHz bit clock source frequency.
  * @param sampleRate audio data sample rate.
- * @param bitWidth, audio data bitWidth.
- * @param channelNumbers, audio channel numbers.
+ * @param bitWidth audio data bitWidth.
+ * @param channelNumbers audio channel numbers.
  */
 void I2S_SetBitClockRate(
     I2S_Type *base, uint32_t sourceClockHz, uint32_t sampleRate, uint32_t bitWidth, uint32_t channelNumbers);
@@ -417,6 +417,10 @@ void I2S_EnableSecondaryChannel(I2S_Type *base, uint32_t channel, bool oneChanne
  */
 static inline void I2S_DisableSecondaryChannel(I2S_Type *base, uint32_t channel)
 {
+#if defined FSL_FEATURE_FLEXCOMM_INSTANCE_I2S_SUPPORT_SECONDARY_CHANNELn
+    assert(FSL_FEATURE_FLEXCOMM_INSTANCE_I2S_SUPPORT_SECONDARY_CHANNELn((FLEXCOMM_Type *)(uint32_t)base) == 1);
+#endif
+
     base->SECCHANNEL[channel].PCFG1 &= ~I2S_CFG1_MAINENABLE_MASK;
 }
 #endif

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -170,7 +170,7 @@ status_t SPI_MasterInit(SPI_Type *base, const spi_master_config_t *config, uint3
 {
     status_t result = kStatus_Success;
     uint32_t instance;
-    uint32_t tmp;
+    uint32_t tmpConfig;
 
     /* assert params */
     assert(!((NULL == base) || (NULL == config) || (0U == srcClock_Hz)));
@@ -197,22 +197,22 @@ status_t SPI_MasterInit(SPI_Type *base, const spi_master_config_t *config, uint3
     instance = SPI_GetInstance(base);
 
     /* configure SPI mode */
-    tmp = base->CFG;
-    tmp &= ~(SPI_CFG_MASTER_MASK | SPI_CFG_LSBF_MASK | SPI_CFG_CPHA_MASK | SPI_CFG_CPOL_MASK | SPI_CFG_LOOP_MASK |
-             SPI_CFG_ENABLE_MASK | SPI_SSELPOL_MASK);
+    tmpConfig = base->CFG;
+    tmpConfig &= ~(SPI_CFG_MASTER_MASK | SPI_CFG_LSBF_MASK | SPI_CFG_CPHA_MASK | SPI_CFG_CPOL_MASK | SPI_CFG_LOOP_MASK |
+                   SPI_CFG_ENABLE_MASK | SPI_SSELPOL_MASK);
     /* phase */
-    tmp |= SPI_CFG_CPHA(config->phase);
+    tmpConfig |= SPI_CFG_CPHA(config->phase);
     /* polarity */
-    tmp |= SPI_CFG_CPOL(config->polarity);
+    tmpConfig |= SPI_CFG_CPOL(config->polarity);
     /* direction */
-    tmp |= SPI_CFG_LSBF(config->direction);
+    tmpConfig |= SPI_CFG_LSBF(config->direction);
     /* master mode */
-    tmp |= SPI_CFG_MASTER(1);
+    tmpConfig |= SPI_CFG_MASTER(1);
     /* loopback */
-    tmp |= SPI_CFG_LOOP(config->enableLoopback);
+    tmpConfig |= SPI_CFG_LOOP(config->enableLoopback);
     /* configure active level for all CS */
-    tmp |= ((uint32_t)config->sselPol & (SPI_SSELPOL_MASK));
-    base->CFG = tmp;
+    tmpConfig |= ((uint32_t)config->sselPol & (SPI_SSELPOL_MASK));
+    base->CFG = tmpConfig;
 
     /* store configuration */
     g_configs[instance].dataWidth = config->dataWidth;
@@ -221,12 +221,12 @@ status_t SPI_MasterInit(SPI_Type *base, const spi_master_config_t *config, uint3
     base->FIFOCFG |= SPI_FIFOCFG_EMPTYTX_MASK | SPI_FIFOCFG_EMPTYRX_MASK;
     base->FIFOCFG |= SPI_FIFOCFG_ENABLETX_MASK | SPI_FIFOCFG_ENABLERX_MASK;
     /* trigger level - empty txFIFO, one item in rxFIFO */
-    tmp = base->FIFOTRIG & (~(SPI_FIFOTRIG_RXLVL_MASK | SPI_FIFOTRIG_TXLVL_MASK));
-    tmp |= SPI_FIFOTRIG_TXLVL(config->txWatermark) | SPI_FIFOTRIG_RXLVL(config->rxWatermark);
+    tmpConfig = base->FIFOTRIG & (~(SPI_FIFOTRIG_RXLVL_MASK | SPI_FIFOTRIG_TXLVL_MASK));
+    tmpConfig |= SPI_FIFOTRIG_TXLVL(config->txWatermark) | SPI_FIFOTRIG_RXLVL(config->rxWatermark);
     /* enable generating interrupts for FIFOTRIG levels */
-    tmp |= SPI_FIFOTRIG_TXLVLENA_MASK | SPI_FIFOTRIG_RXLVLENA_MASK;
+    tmpConfig |= SPI_FIFOTRIG_TXLVLENA_MASK | SPI_FIFOTRIG_RXLVLENA_MASK;
     /* set FIFOTRIG */
-    base->FIFOTRIG = tmp;
+    base->FIFOTRIG = tmpConfig;
 
     /* Set the delay configuration. */
     SPI_SetTransferDelay(base, &config->delayConfig);
@@ -291,7 +291,7 @@ status_t SPI_SlaveInit(SPI_Type *base, const spi_slave_config_t *config)
 {
     status_t result = kStatus_Success;
     uint32_t instance;
-    uint32_t tmp;
+    uint32_t tmpConfig;
 
     /* assert params */
     assert(!((NULL == base) || (NULL == config)));
@@ -309,18 +309,18 @@ status_t SPI_SlaveInit(SPI_Type *base, const spi_slave_config_t *config)
     instance = SPI_GetInstance(base);
 
     /* configure SPI mode */
-    tmp = base->CFG;
-    tmp &= ~(SPI_CFG_MASTER_MASK | SPI_CFG_LSBF_MASK | SPI_CFG_CPHA_MASK | SPI_CFG_CPOL_MASK | SPI_CFG_ENABLE_MASK |
-             SPI_SSELPOL_MASK);
+    tmpConfig = base->CFG;
+    tmpConfig &= ~(SPI_CFG_MASTER_MASK | SPI_CFG_LSBF_MASK | SPI_CFG_CPHA_MASK | SPI_CFG_CPOL_MASK |
+                   SPI_CFG_ENABLE_MASK | SPI_SSELPOL_MASK);
     /* phase */
-    tmp |= SPI_CFG_CPHA(config->phase);
+    tmpConfig |= SPI_CFG_CPHA(config->phase);
     /* polarity */
-    tmp |= SPI_CFG_CPOL(config->polarity);
+    tmpConfig |= SPI_CFG_CPOL(config->polarity);
     /* direction */
-    tmp |= SPI_CFG_LSBF(config->direction);
+    tmpConfig |= SPI_CFG_LSBF(config->direction);
     /* configure active level for all CS */
-    tmp |= ((uint32_t)config->sselPol & (SPI_SSELPOL_MASK));
-    base->CFG = tmp;
+    tmpConfig |= ((uint32_t)config->sselPol & (SPI_SSELPOL_MASK));
+    base->CFG = tmpConfig;
 
     /* store configuration */
     g_configs[instance].dataWidth = config->dataWidth;
@@ -328,12 +328,12 @@ status_t SPI_SlaveInit(SPI_Type *base, const spi_slave_config_t *config)
     base->FIFOCFG |= SPI_FIFOCFG_EMPTYTX_MASK | SPI_FIFOCFG_EMPTYRX_MASK;
     base->FIFOCFG |= SPI_FIFOCFG_ENABLETX_MASK | SPI_FIFOCFG_ENABLERX_MASK;
     /* trigger level - empty txFIFO, one item in rxFIFO */
-    tmp = base->FIFOTRIG & (~(SPI_FIFOTRIG_RXLVL_MASK | SPI_FIFOTRIG_TXLVL_MASK));
-    tmp |= SPI_FIFOTRIG_TXLVL(config->txWatermark) | SPI_FIFOTRIG_RXLVL(config->rxWatermark);
+    tmpConfig = base->FIFOTRIG & (~(SPI_FIFOTRIG_RXLVL_MASK | SPI_FIFOTRIG_TXLVL_MASK));
+    tmpConfig |= SPI_FIFOTRIG_TXLVL(config->txWatermark) | SPI_FIFOTRIG_RXLVL(config->rxWatermark);
     /* enable generating interrupts for FIFOTRIG levels */
-    tmp |= SPI_FIFOTRIG_TXLVLENA_MASK | SPI_FIFOTRIG_RXLVLENA_MASK;
+    tmpConfig |= SPI_FIFOTRIG_TXLVLENA_MASK | SPI_FIFOTRIG_RXLVLENA_MASK;
     /* set FIFOTRIG */
-    base->FIFOTRIG = tmp;
+    base->FIFOTRIG = tmpConfig;
 
     SPI_SetDummyData(base, (uint8_t)SPI_DUMMYDATA);
 
@@ -405,7 +405,7 @@ void SPI_EnableRxDMA(SPI_Type *base, bool enable)
  */
 status_t SPI_MasterSetBaud(SPI_Type *base, uint32_t baudrate_Bps, uint32_t srcClock_Hz)
 {
-    uint32_t tmp;
+    uint32_t tmpDiv;
 
     /* assert params */
     assert(!((NULL == base) || (0U == baudrate_Bps) || (0U == srcClock_Hz)));
@@ -415,13 +415,13 @@ status_t SPI_MasterSetBaud(SPI_Type *base, uint32_t baudrate_Bps, uint32_t srcCl
     }
 
     /* calculate baudrate, round up the result */
-    tmp = ((srcClock_Hz * 10U) / baudrate_Bps + 5U) / 10U - 1U;
-    if (tmp > 0xFFFFU)
+    tmpDiv = ((srcClock_Hz * 10U) / baudrate_Bps + 5U) / 10U - 1U;
+    if (tmpDiv > 0xFFFFU)
     {
         return kStatus_SPI_BaudrateNotSupport;
     }
     base->DIV &= ~SPI_DIV_DIVVAL_MASK;
-    base->DIV |= SPI_DIV_DIVVAL(tmp);
+    base->DIV |= SPI_DIV_DIVVAL(tmpDiv);
     return kStatus_Success;
 }
 
@@ -514,6 +514,7 @@ status_t SPI_MasterTransferCreateHandle(SPI_Type *base,
  * param xfer pointer to spi_xfer_config_t structure
  * retval kStatus_Success Successfully start a transfer.
  * retval kStatus_InvalidArgument Input argument is invalid.
+ * retval kStatus_SPI_Timeout The transfer timed out and was aborted.
  */
 status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
 {
@@ -523,6 +524,9 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
     uint32_t toReceiveCount = 0;
     uint8_t *txData, *rxData;
     uint32_t fifoDepth;
+#if SPI_RETRY_TIMES
+    uint32_t waitTimes = SPI_RETRY_TIMES;
+#endif
 
     /* check params */
     assert(!((NULL == base) || (NULL == xfer) || ((NULL == xfer->txData) && (NULL == xfer->rxData))));
@@ -561,6 +565,12 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
     /* last index of loop */
     while ((txRemainingBytes != 0U) || (rxRemainingBytes != 0U) || (toReceiveCount != 0U))
     {
+#if SPI_RETRY_TIMES
+        if (--waitTimes == 0U)
+        {
+            return kStatus_SPI_Timeout;
+        }
+#endif
         /* if rxFIFO is not empty */
         if ((base->FIFOSTAT & SPI_FIFOSTAT_RXNOTEMPTY_MASK) != 0U)
         {
@@ -617,9 +627,20 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
         }
     }
     /* wait if TX FIFO of previous transfer is not empty */
+#if SPI_RETRY_TIMES
+    waitTimes = SPI_RETRY_TIMES;
+    while ((0U == (base->FIFOSTAT & SPI_FIFOSTAT_TXEMPTY_MASK)) && (0U != --waitTimes))
+#else
     while (0U == (base->FIFOSTAT & SPI_FIFOSTAT_TXEMPTY_MASK))
+#endif
     {
     }
+#if SPI_RETRY_TIMES
+    if (waitTimes == 0U)
+    {
+        return kStatus_SPI_Timeout;
+    }
+#endif
     return kStatus_Success;
 }
 

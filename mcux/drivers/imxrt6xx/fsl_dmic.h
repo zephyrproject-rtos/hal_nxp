@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -232,8 +232,8 @@ static inline void DMIC_SetIOCFG(DMIC_Type *base, uint32_t sel)
 
 /*!
  * @brief	Set DMIC operating mode
- * @deprecated Do not use this function.  It has been superceded by @ref
- * DMIC_EnbleChannelInterrupt/DMIC_EnbleChannelDma.
+ * @deprecated Do not use this function.  It has been superceded by
+ * @ref DMIC_EnableChannelInterrupt, @ref DMIC_EnableChannelDma.
  * @param	base	: The base address of DMIC interface
  * @param	mode	: DMIC mode
  * @return	Nothing
@@ -306,7 +306,7 @@ void DMIC_ConfigChannel(DMIC_Type *base,
 /*!
  * @brief   Enable a particualr channel
  * @param   base        : The base address of DMIC interface
- * @param   channelmask, reference _dmic_channel_mask
+ * @param   channelmask reference _dmic_channel_mask
  * @return  Nothing
  */
 void DMIC_EnableChannnel(DMIC_Type *base, uint32_t channelmask);
@@ -326,6 +326,7 @@ void DMIC_FifoChannel(DMIC_Type *base, uint32_t channel, uint32_t trig_level, ui
  * @brief   Enable a particualr channel interrupt request.
  * @param   base        : The base address of DMIC interface
  * @param   channel : Channel selection
+ * @param   enable : true is enable, false is disable
  */
 static inline void DMIC_EnableChannelInterrupt(DMIC_Type *base, dmic_channel_t channel, bool enable)
 {

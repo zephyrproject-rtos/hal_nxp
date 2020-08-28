@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -71,7 +71,7 @@ uint32_t CACHE64_GetInstanceByAddr(uint32_t address)
 
     for (i = 0; i < ARRAY_SIZE(s_cache64ctrlBases); i++)
     {
-        if (address >= s_cache64PhymemBases[i] && address < s_cache64PhymemBases[i] + s_cache64PhymemSizes[i])
+        if ((address >= s_cache64PhymemBases[i]) && (address < s_cache64PhymemBases[i] + s_cache64PhymemSizes[i]))
         {
             break;
         }
@@ -103,17 +103,17 @@ status_t CACHE64_Init(CACHE64_POLSEL_Type *base, const cache64_config_t *config)
     CLOCK_EnableClock(s_cache64Clocks[instance]);
 #endif
 
-    for (i = 0; i < CACHE64_REGION_NUM - 1; i++)
+    for (i = 0; i < CACHE64_REGION_NUM - 1U; i++)
     {
-        assert((config->boundaryAddr[i] & (CACHE64_REGION_ALIGNMENT - 1)) == 0);
-        *(topReg + i) = config->boundaryAddr[i] >= CACHE64_REGION_ALIGNMENT ?
-                            config->boundaryAddr[i] - CACHE64_REGION_ALIGNMENT :
-                            0U;
+        assert((config->boundaryAddr[i] & (CACHE64_REGION_ALIGNMENT - 1U)) == 0U);
+        ((volatile uint32_t *)topReg)[i] = config->boundaryAddr[i] >= CACHE64_REGION_ALIGNMENT ?
+                                               config->boundaryAddr[i] - CACHE64_REGION_ALIGNMENT :
+                                               0U;
     }
 
     for (i = 0; i < CACHE64_REGION_NUM; i++)
     {
-        polsel |= (((uint32_t)config->policy[i]) << (2 * i));
+        polsel |= (((uint32_t)config->policy[i]) << (2U * i));
     }
     base->POLSEL = polsel;
 
@@ -130,7 +130,7 @@ status_t CACHE64_Init(CACHE64_POLSEL_Type *base, const cache64_config_t *config)
  */
 void CACHE64_GetDefaultConfig(cache64_config_t *config)
 {
-    memset(config, 0, sizeof(cache64_config_t));
+    (void)memset(config, 0, sizeof(cache64_config_t));
 
     config->boundaryAddr[0] = s_cache64PhymemSizes[0];
     config->policy[0]       = kCACHE64_PolicyWriteBack;
@@ -172,7 +172,7 @@ void CACHE64_InvalidateCache(CACHE64_CTRL_Type *base)
     base->CCR |= CACHE64_CTRL_CCR_INVW0_MASK | CACHE64_CTRL_CCR_INVW1_MASK | CACHE64_CTRL_CCR_GO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->CCR & CACHE64_CTRL_CCR_GO_MASK)
+    while ((base->CCR & CACHE64_CTRL_CCR_GO_MASK) != 0x00U)
     {
     }
 
@@ -195,7 +195,7 @@ void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
     uint32_t endAddr = address + size_byte;
     uint32_t pccReg  = 0;
     /* Align address to cache line size. */
-    uint32_t startAddr = address & ~(CACHE64_LINESIZE_BYTE - 1U);
+    uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
     uint32_t instance  = CACHE64_GetInstanceByAddr(address);
     uint32_t endLim;
     CACHE64_CTRL_Type *base;
@@ -218,10 +218,10 @@ void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
         base->CSAR = (startAddr & CACHE64_CTRL_CSAR_PHYADDR_MASK) | CACHE64_CTRL_CSAR_LGO_MASK;
 
         /* Wait until the cache command completes. */
-        while (base->CSAR & CACHE64_CTRL_CSAR_LGO_MASK)
+        while ((base->CSAR & CACHE64_CTRL_CSAR_LGO_MASK) != 0x00U)
         {
         }
-        startAddr += CACHE64_LINESIZE_BYTE;
+        startAddr += (uint32_t)CACHE64_LINESIZE_BYTE;
     }
 }
 
@@ -235,7 +235,7 @@ void CACHE64_CleanCache(CACHE64_CTRL_Type *base)
     base->CCR |= CACHE64_CTRL_CCR_PUSHW0_MASK | CACHE64_CTRL_CCR_PUSHW1_MASK | CACHE64_CTRL_CCR_GO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->CCR & CACHE64_CTRL_CCR_GO_MASK)
+    while ((base->CCR & CACHE64_CTRL_CCR_GO_MASK) != 0x00U)
     {
     }
 
@@ -258,7 +258,7 @@ void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
     uint32_t endAddr = address + size_byte;
     uint32_t pccReg  = 0;
     /* Align address to cache line size. */
-    uint32_t startAddr = address & ~(CACHE64_LINESIZE_BYTE - 1U);
+    uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
     uint32_t instance  = CACHE64_GetInstanceByAddr(address);
     uint32_t endLim;
     CACHE64_CTRL_Type *base;
@@ -281,10 +281,10 @@ void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
         base->CSAR = (startAddr & CACHE64_CTRL_CSAR_PHYADDR_MASK) | CACHE64_CTRL_CSAR_LGO_MASK;
 
         /* Wait until the cache command completes. */
-        while (base->CSAR & CACHE64_CTRL_CSAR_LGO_MASK)
+        while ((base->CSAR & CACHE64_CTRL_CSAR_LGO_MASK) != 0x00U)
         {
         }
-        startAddr += CACHE64_LINESIZE_BYTE;
+        startAddr += (uint32_t)CACHE64_LINESIZE_BYTE;
     }
 }
 
@@ -299,7 +299,7 @@ void CACHE64_CleanInvalidateCache(CACHE64_CTRL_Type *base)
                  CACHE64_CTRL_CCR_INVW1_MASK | CACHE64_CTRL_CCR_GO_MASK;
 
     /* Wait until the cache command completes. */
-    while (base->CCR & CACHE64_CTRL_CCR_GO_MASK)
+    while ((base->CCR & CACHE64_CTRL_CCR_GO_MASK) != 0x00U)
     {
     }
 
@@ -323,7 +323,7 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
     uint32_t endAddr = address + size_byte;
     uint32_t pccReg  = 0;
     /* Align address to cache line size. */
-    uint32_t startAddr = address & ~(CACHE64_LINESIZE_BYTE - 1U);
+    uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
     uint32_t instance  = CACHE64_GetInstanceByAddr(address);
     uint32_t endLim;
     CACHE64_CTRL_Type *base;
@@ -346,10 +346,10 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
         base->CSAR = (startAddr & CACHE64_CTRL_CSAR_PHYADDR_MASK) | CACHE64_CTRL_CSAR_LGO_MASK;
 
         /* Wait until the cache command completes. */
-        while (base->CSAR & CACHE64_CTRL_CSAR_LGO_MASK)
+        while ((base->CSAR & CACHE64_CTRL_CSAR_LGO_MASK) != 0x00U)
         {
         }
-        startAddr += CACHE64_LINESIZE_BYTE;
+        startAddr += (uint32_t)CACHE64_LINESIZE_BYTE;
     }
 }
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -79,7 +79,7 @@ static uint32_t MRT_GetInstance(MRT_Type *base)
  */
 void MRT_Init(MRT_Type *base, const mrt_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the MRT clock */
@@ -136,7 +136,7 @@ void MRT_Deinit(MRT_Type *base)
  */
 void MRT_UpdateTimerPeriod(MRT_Type *base, mrt_chnl_t channel, uint32_t count, bool immediateLoad)
 {
-    assert(channel < FSL_FEATURE_MRT_NUMBER_OF_CHANNELS);
+    assert((uint8_t)channel < (uint8_t)FSL_FEATURE_MRT_NUMBER_OF_CHANNELS);
 
     uint32_t newValue = count;
     if (((base->CHANNEL[channel].CTRL & MRT_CHANNEL_CTRL_MODE_MASK) == (uint8_t)kMRT_OneShotMode) || (immediateLoad))

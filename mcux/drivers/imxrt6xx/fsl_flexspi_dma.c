@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,8 @@ typedef struct _flexspi_dma_private_handle
     flexspi_dma_handle_t *handle;
 } flexspi_dma_private_handle_t;
 
-/* FLEXSPI DMA transfer handle. */
-enum _flexspi_dma_tansfer_states
+/* FLEXSPI DMA transfer handle, _flexspi_dma_tansfer_states. */
+enum
 {
     kFLEXSPI_Idle, /* FLEXSPI Bus idle. */
     kFLEXSPI_Busy  /* FLEXSPI Bus busy. */
@@ -40,15 +40,27 @@ static FLEXSPI_Type *const s_flexspiBases[] = FLEXSPI_BASE_PTRS;
 /*<! Private handle only used for internally. */
 static flexspi_dma_private_handle_t s_dmaPrivateHandle[ARRAY_SIZE(s_flexspiBases)];
 
+#if defined(FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES) && FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES
+/*<! Private DMA descriptor array used for internally to fix FLEXSPI+DMA ERRATA.
+FLEXSPI.1: Using FLEXSPI register interface, TX buffer fill / RX buffer drain by DMA
+with a single DMA descriptor cannot be performed. The link array consumes about
+2K RAM consumption support FLEXSPI TX watermark starting from 8 bytes.*/
+#define FLEXSPI_DMA_DES_COUNT 128U
+#else
 /*<! Private DMA descriptor array to support transfer size not multiple of watermark level byts.
-The link array consumes 64 bytes consumption.*/
+The link array consumes 16 bytes consumption.*/
+#define FLEXSPI_DMA_DES_COUNT 1U
+#endif
+
 #if defined(__ICCARM__)
 #pragma data_alignment = FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE
-static dma_descriptor_t s_flexspiDes[1];
+static dma_descriptor_t s_flexspiDes[FLEXSPI_DMA_DES_COUNT];
 #elif defined(__CC_ARM) || defined(__ARMCC_VERSION)
-__attribute__((aligned(FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE))) static dma_descriptor_t s_flexspiDes[1];
+__attribute__((
+    aligned(FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE))) static dma_descriptor_t s_flexspiDes[FLEXSPI_DMA_DES_COUNT];
 #elif defined(__GNUC__)
-__attribute__((aligned(FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE))) static dma_descriptor_t s_flexspiDes[1];
+__attribute__((
+    aligned(FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE))) static dma_descriptor_t s_flexspiDes[FLEXSPI_DMA_DES_COUNT];
 #endif
 /*******************************************************************************
  * Prototypes
@@ -64,6 +76,30 @@ __attribute__((aligned(FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE))) static dma_descr
  * @param param Callback function parameter.
  */
 static void FLEXSPI_TransferDMACallback(dma_handle_t *handle, void *param, bool transferDone, uint32_t tcds);
+
+/*!
+ * @brief FLEXSPI Write DMA data.
+ *
+ * This function is called in FLEXSPI DMA transfer. It configures Write DMA and prepare DMA data transfer.
+ *
+ * @param base FLEXSPI peripheral base address.
+ * @param handle The DMA handle.
+ * @param data pointer to data buffer which stores the transmit data
+ * @param dataSize size for transmit data buffer .
+ */
+static status_t FLEXSPI_WriteDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle, uint32_t *data, size_t dataSize);
+
+/*!
+ * @brief FLEXSPI Read DMA data.
+ *
+ * This function is called in FLEXSPI DMA transfer. It configures Read DMA and prepare DMA data transfer.
+ *
+ * @param base FLEXSPI peripheral base address.
+ * @param handle The DMA handle.
+ * @param data pointer to data buffer which stores the receive data
+ * @param dataSize size for receive data buffer .
+ */
+static status_t FLEXSPI_ReadDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle, uint32_t *data, size_t dataSize);
 
 /*!
  * @brief Get the FLEXSPI instance from peripheral base address.
@@ -83,10 +119,11 @@ extern status_t FLEXSPI_CheckAndClearError(FLEXSPI_Type *base, uint32_t status);
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static uint8_t FLEXSPI_CalculatePower(uint32_t value)
+#if !(defined(FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES) && FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES)
+static uint8_t FLEXSPI_CalculatePower(uint8_t value)
 {
     uint8_t power = 0;
-    while (value >> 1 != 0)
+    while (value >> 1 != 0U)
     {
         power++;
         value = value >> 1;
@@ -94,6 +131,7 @@ static uint8_t FLEXSPI_CalculatePower(uint32_t value)
 
     return power;
 }
+#endif
 
 static void FLEXSPI_TransferDMACallback(dma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
@@ -112,12 +150,318 @@ static void FLEXSPI_TransferDMACallback(dma_handle_t *handle, void *param, bool 
         /* Disable transfer. */
         FLEXSPI_TransferAbortDMA(flexspiPrivateHandle->base, flexspiPrivateHandle->handle);
 
-        if (flexspiPrivateHandle->handle->completionCallback)
+        if (flexspiPrivateHandle->handle->completionCallback != NULL)
         {
             flexspiPrivateHandle->handle->completionCallback(flexspiPrivateHandle->base, flexspiPrivateHandle->handle,
                                                              kStatus_Success, flexspiPrivateHandle->handle->userData);
         }
     }
+}
+
+static status_t FLEXSPI_WriteDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle, uint32_t *data, size_t dataSize)
+{
+    void *txFifoBase = (void *)(uint32_t *)FLEXSPI_GetTxFifoAddress(base);
+    void *nextDesc   = NULL;
+    dma_channel_trigger_t dmaTxTriggerConfig;
+    dma_channel_config_t txChannelConfig;
+    uint32_t bytesPerDes;
+    uint32_t dmaTriggerBurst;
+    uint8_t desCount;
+    uint8_t remains;
+    uint32_t srcInc;
+    uint32_t dstInc;
+
+    /* Source address interleave size */
+    srcInc = kDMA_AddressInterleave1xWidth;
+    /* Destination address interleave size */
+    dstInc = kDMA_AddressInterleave1xWidth;
+
+    /* Check the xfer->data start address follows the alignment */
+    if (((uint32_t)data & ((uint32_t)handle->nsize - 1U)) != 0U)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    handle->count =
+        8U * ((uint8_t)(((base->IPTXFCR & FLEXSPI_IPTXFCR_TXWMRK_MASK) >> FLEXSPI_IPTXFCR_TXWMRK_SHIFT) + 1U));
+
+    /* Check the handle->count is power of 2 */
+    if (((handle->count) & (handle->count - 1U)) != 0U)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+#if defined(FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES) && FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES
+    if (dataSize < handle->count)
+    {
+        handle->nsize  = kFLEXPSI_DMAnSize1Bytes;
+        handle->nbytes = dataSize;
+    }
+    else
+    {
+        /* Store the initially configured dma minor byte transfer count into the FLEXSPI handle */
+        handle->nbytes = handle->count;
+    }
+
+    handle->transferSize     = dataSize;
+    dmaTxTriggerConfig.burst = kDMA_SingleTransfer;
+    dmaTxTriggerConfig.type  = kDMA_HighLevelTrigger;
+    dmaTxTriggerConfig.wrap  = kDMA_NoWrap;
+
+    /* Configure linked descriptors to start FLEXSPI Tx DMA transfer to provide software workaround for
+    ERRATA FLEXSPI.1: Using FLEXSPI register interface, TX buffer fill / RX buffer drain by DMA with a
+    single DMA descriptor cannot be performed. */
+    desCount    = dataSize / handle->nbytes;
+    bytesPerDes = handle->nbytes;
+    remains     = dataSize - desCount * handle->nbytes;
+    if (remains > 0U)
+    {
+        DMA_SetupDescriptor(
+            &s_flexspiDes[desCount - 1U],
+            DMA_CHANNEL_XFER(false, true, true, false, kFLEXPSI_DMAnSize1Bytes, srcInc, dstInc, remains),
+            (void *)(uint64_t *)((uint32_t)data + desCount * bytesPerDes), txFifoBase, NULL);
+        nextDesc = &s_flexspiDes[desCount - 1U];
+    }
+
+    remains = bytesPerDes;
+#else
+
+    dmaTxTriggerConfig.type = kDMA_RisingEdgeTrigger;
+    bytesPerDes             = dataSize;
+
+    if (dataSize < handle->count)
+    {
+        handle->nsize           = kFLEXPSI_DMAnSize1Bytes;
+        handle->nbytes          = (uint8_t)(dataSize / (uint32_t)handle->nsize);
+        dmaTxTriggerConfig.wrap = kDMA_NoWrap;
+
+        /* Check the handle->nbytes is power of 2 */
+        if (((handle->nbytes) & (handle->nbytes - 1U)) != 0U)
+        {
+            handle->nbytes = 2U * ((handle->nbytes) & (handle->nbytes - 1U));
+        }
+
+        desCount = 1U;
+    }
+    else
+    {
+        dmaTxTriggerConfig.wrap = kDMA_DstWrap;
+        remains                 = (uint8_t)(dataSize % (uint32_t)handle->count);
+        if (remains == 0U)
+        {
+            desCount = 1U;
+        }
+        else
+        {
+            desCount    = 2U;
+            bytesPerDes = dataSize - remains;
+            if ((remains & 3U) == 0U)
+            {
+                handle->nsize = kFLEXPSI_DMAnSize4Bytes;
+            }
+            else if ((remains & 1U) == 0U)
+            {
+                handle->nsize = kFLEXPSI_DMAnSize2Bytes;
+            }
+            else
+            {
+                handle->nsize = kFLEXPSI_DMAnSize1Bytes;
+            }
+        }
+        /* Store the initially configured dma minor byte transfer count into the FLEXSPI handle */
+        handle->nbytes = handle->count / (uint8_t)handle->nsize;
+
+        /* Check if dataSize exceeds the maximum transfer count supported by the driver. */
+        if ((dataSize - handle->count + 1U) / ((uint32_t)handle->nsize) > 1024U)
+        {
+            return kStatus_InvalidArgument;
+        }
+    }
+
+    /* xfer->dataSize needs to be larger than 1 due to hardware limitation */
+    if (dataSize / (uint8_t)handle->nsize == 1U)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    dmaTriggerBurst = DMA_CHANNEL_CFG_TRIGBURST(1) | DMA_CHANNEL_CFG_BURSTPOWER(FLEXSPI_CalculatePower(handle->nbytes));
+    dmaTxTriggerConfig.burst = (dma_trigger_burst_t)dmaTriggerBurst;
+    handle->transferSize     = dataSize;
+#endif
+
+    for (uint8_t i = desCount - 1U; i > 0U; i--)
+    {
+        DMA_SetupDescriptor(&s_flexspiDes[i - 1U],
+                            DMA_CHANNEL_XFER((nextDesc == NULL) ? false : true, true, (nextDesc == NULL) ? true : false,
+                                             false, (uint32_t)handle->nsize, srcInc, dstInc, remains),
+                            (void *)(uint64_t *)((uint32_t)data + i * bytesPerDes), txFifoBase, nextDesc);
+        nextDesc = &s_flexspiDes[i - 1U];
+    }
+
+    DMA_PrepareChannelTransfer(
+        &txChannelConfig, (void *)data, txFifoBase,
+        DMA_CHANNEL_XFER((nextDesc == NULL) ? false : true, true, (nextDesc == NULL) ? true : false, false,
+                         (uint32_t)handle->nsize, srcInc, dstInc, bytesPerDes),
+        kDMA_MemoryToMemory, &dmaTxTriggerConfig, nextDesc);
+
+    (void)DMA_SubmitChannelTransfer(handle->txDmaHandle, &txChannelConfig);
+
+    DMA_SetCallback(handle->txDmaHandle, FLEXSPI_TransferDMACallback, &s_dmaPrivateHandle[FLEXSPI_GetInstance(base)]);
+    DMA_StartTransfer(handle->txDmaHandle);
+
+    /* Enable FLEXSPI TX DMA. */
+    FLEXSPI_EnableTxDMA(base, true);
+
+    /* Start Transfer. */
+    base->IPCMD |= FLEXSPI_IPCMD_TRG_MASK;
+
+    return kStatus_Success;
+}
+
+static status_t FLEXSPI_ReadDataDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle, uint32_t *data, size_t dataSize)
+{
+    dma_channel_trigger_t dmaRxTriggerConfig;
+    void *rxFifoBase = (void *)(uint32_t *)FLEXSPI_GetRxFifoAddress(base);
+    void *nextDesc   = NULL;
+    dma_channel_config_t rxChannelConfig;
+    uint32_t bytesPerDes;
+    uint32_t dmaTriggerBurst;
+    uint8_t remains;
+    uint8_t desCount;
+    uint32_t srcInc;
+    uint32_t dstInc;
+
+    /* Source address interleave size */
+    srcInc = kDMA_AddressInterleave1xWidth;
+    /* Destination address interleave size */
+    dstInc = kDMA_AddressInterleave1xWidth;
+
+    handle->count =
+        8U * (uint8_t)(((base->IPRXFCR & FLEXSPI_IPRXFCR_RXWMRK_MASK) >> FLEXSPI_IPRXFCR_RXWMRK_SHIFT) + 1U);
+
+    /* Check the watermark is power of 2U */
+    if ((handle->count & (handle->count - 1U)) != 0U)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+#if defined(FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES) && FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES
+    if (dataSize < handle->count)
+    {
+        handle->nsize  = kFLEXPSI_DMAnSize1Bytes;
+        handle->nbytes = dataSize;
+    }
+    else
+    {
+        /* Store the initially configured dma minor byte transfer count into the FLEXSPI handle */
+        handle->nbytes = handle->count;
+    }
+
+    dmaRxTriggerConfig.burst = kDMA_SingleTransfer;
+    dmaRxTriggerConfig.type  = kDMA_HighLevelTrigger;
+    dmaRxTriggerConfig.wrap  = kDMA_NoWrap;
+
+    /* Configure linked descriptors to start FLEXSPI Tx DMA transfer to provide software workaround for
+    ERRATA FLEXSPI.1: Using FLEXSPI register interface, TX buffer fill / RX buffer drain by DMA with a
+    single DMA descriptor cannot be performed. */
+    desCount    = (uint8_t)(dataSize / (uint32_t)handle->nbytes);
+    bytesPerDes = handle->nbytes;
+    remains     = dataSize - desCount * handle->nbytes;
+
+    if (remains > 0U)
+    {
+        DMA_SetupDescriptor(
+            &s_flexspiDes[desCount - 1U],
+            DMA_CHANNEL_XFER(false, true, true, false, kFLEXPSI_DMAnSize1Bytes, srcInc, dstInc, remains), rxFifoBase,
+            (void *)(uint64_t *)((uint32_t)data + desCount * bytesPerDes), NULL);
+        nextDesc = &s_flexspiDes[desCount - 1U];
+    }
+    remains = bytesPerDes;
+
+#else
+
+    dmaRxTriggerConfig.type = kDMA_RisingEdgeTrigger;
+    bytesPerDes             = dataSize;
+
+    if (dataSize < handle->count)
+    {
+        handle->nsize           = kFLEXPSI_DMAnSize1Bytes;
+        handle->nbytes          = (uint8_t)(dataSize / (uint32_t)handle->nsize);
+        dmaRxTriggerConfig.wrap = kDMA_NoWrap;
+        /* Check the handle->nbytes is power of 2 */
+        if (((handle->nbytes) & (handle->nbytes - 1U)) != 0U)
+        {
+            handle->nbytes = 2U * ((handle->nbytes) & (handle->nbytes - 1U));
+        }
+        desCount = 1U;
+    }
+    else
+    {
+        dmaRxTriggerConfig.wrap = kDMA_SrcWrap;
+        remains                 = (uint8_t)(dataSize % (uint32_t)handle->count);
+        if (remains == 0U)
+        {
+            desCount = 1U;
+        }
+        else
+        {
+            desCount    = 2U;
+            bytesPerDes = dataSize - remains;
+            if ((remains & 3U) == 0U)
+            {
+                handle->nsize = kFLEXPSI_DMAnSize4Bytes;
+            }
+            else if ((remains & 1U) == 0U)
+            {
+                handle->nsize = kFLEXPSI_DMAnSize2Bytes;
+            }
+            else
+            {
+                handle->nsize = kFLEXPSI_DMAnSize1Bytes;
+            }
+        }
+        /* Store the initially configured dma minor byte transfer count into the FLEXSPI handle */
+        handle->nbytes = handle->count / (uint8_t)handle->nsize;
+
+        /* Check dataSize exceeds the maximum transfer count supported by the driver. */
+        if ((dataSize - handle->count + 1U) / ((uint32_t)handle->nsize) > 1024U)
+        {
+            return kStatus_InvalidArgument;
+        }
+    }
+
+    dmaTriggerBurst =
+        DMA_CHANNEL_CFG_TRIGBURST(1U) | DMA_CHANNEL_CFG_BURSTPOWER(FLEXSPI_CalculatePower(handle->nbytes));
+    dmaRxTriggerConfig.burst = (dma_trigger_burst_t)(dmaTriggerBurst);
+#endif
+
+    for (uint8_t i = desCount - 1U; i > 0U; i--)
+    {
+        DMA_SetupDescriptor(&s_flexspiDes[i - 1U],
+                            DMA_CHANNEL_XFER((nextDesc == NULL) ? false : true, true, (nextDesc == NULL) ? true : false,
+                                             false, (uint32_t)handle->nsize, srcInc, dstInc, remains),
+                            rxFifoBase, (void *)(uint64_t *)((uint32_t)data + i * bytesPerDes), nextDesc);
+        nextDesc = &s_flexspiDes[i - 1U];
+    }
+
+    DMA_PrepareChannelTransfer(
+        &rxChannelConfig, rxFifoBase, (void *)data,
+        DMA_CHANNEL_XFER((nextDesc == NULL) ? false : true, true, (nextDesc == NULL) ? true : false, false,
+                         (uint32_t)handle->nsize, srcInc, dstInc, bytesPerDes),
+        kDMA_MemoryToMemory, &dmaRxTriggerConfig, nextDesc);
+
+    (void)DMA_SubmitChannelTransfer(handle->rxDmaHandle, &rxChannelConfig);
+
+    DMA_SetCallback(handle->rxDmaHandle, FLEXSPI_TransferDMACallback, &s_dmaPrivateHandle[FLEXSPI_GetInstance(base)]);
+    DMA_StartTransfer(handle->rxDmaHandle);
+
+    /* Enable FLEXSPI RX DMA. */
+    FLEXSPI_EnableRxDMA(base, true);
+
+    /* Start Transfer. */
+    base->IPCMD |= FLEXSPI_IPCMD_TRG_MASK;
+
+    return kStatus_Success;
 }
 
 /*!
@@ -144,7 +488,7 @@ void FLEXSPI_TransferCreateHandleDMA(FLEXSPI_Type *base,
     s_dmaPrivateHandle[instance].base   = base;
     s_dmaPrivateHandle[instance].handle = handle;
 
-    memset(handle, 0, sizeof(*handle));
+    (void)memset(handle, 0, sizeof(*handle));
 
     handle->state       = kFLEXSPI_Idle;
     handle->txDmaHandle = txDmaHandle;
@@ -185,13 +529,12 @@ status_t FLEXSPI_TransferDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle, f
 {
     uint32_t configValue = 0;
     status_t result      = kStatus_Success;
-    uint32_t instance    = FLEXSPI_GetInstance(base);
 
     assert(handle);
     assert(xfer);
 
     /* Check if the FLEXSPI bus is idle - if not return busy status. */
-    if (handle->state != kFLEXSPI_Idle)
+    if (handle->state != (uint32_t)kFLEXSPI_Idle)
     {
         result = kStatus_FLEXSPI_Busy;
     }
@@ -221,233 +564,33 @@ status_t FLEXSPI_TransferDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle, f
         }
 
         /* Configure sequence ID. */
-        configValue |= FLEXSPI_IPCR1_ISEQID(xfer->seqIndex) | FLEXSPI_IPCR1_ISEQNUM(xfer->SeqNumber - 1);
+        configValue |= FLEXSPI_IPCR1_ISEQID(xfer->seqIndex) | FLEXSPI_IPCR1_ISEQNUM((uint32_t)xfer->SeqNumber - 1U);
         base->IPCR1 = configValue;
-    }
 
-    if ((xfer->cmdType == kFLEXSPI_Write) || (xfer->cmdType == kFLEXSPI_Config))
-    {
-        handle->count = 8U * (((base->IPTXFCR & FLEXSPI_IPTXFCR_TXWMRK_MASK) >> FLEXSPI_IPTXFCR_TXWMRK_SHIFT) + 1U);
-
-        /* Check the watermark is power of 2 */
-        if ((handle->count & (handle->count - 1)) != 0U)
+        if ((xfer->cmdType == kFLEXSPI_Write) || (xfer->cmdType == kFLEXSPI_Config))
         {
-            return kStatus_InvalidArgument;
+            result = FLEXSPI_WriteDataDMA(base, handle, xfer->data, xfer->dataSize);
         }
-
-        dma_channel_trigger_t dmaTxTriggerConfig;
-        dmaTxTriggerConfig.type = kDMA_RisingEdgeTrigger;
-        uint8_t desCount;
-        uint32_t bytesPerDes = xfer->dataSize;
-        uint8_t remains      = 0;
-
-        if (xfer->dataSize < handle->count)
+        else if (xfer->cmdType == kFLEXSPI_Read)
         {
-            handle->nsize           = kFLEXPSI_DMAnSize1Bytes;
-            handle->nbytes          = xfer->dataSize / handle->nsize;
-            dmaTxTriggerConfig.wrap = kDMA_NoWrap;
-            /* Check the handle->nbytes is power of 2 */
-            if (((handle->nbytes) & (handle->nbytes - 1U)) != 0U)
-            {
-                handle->nbytes = 2U * ((handle->nbytes) & (handle->nbytes - 1U));
-            }
-            desCount = 1U;
+            result = FLEXSPI_ReadDataDMA(base, handle, xfer->data, xfer->dataSize);
         }
         else
         {
-            dmaTxTriggerConfig.wrap = kDMA_DstWrap;
-            remains                 = xfer->dataSize % handle->count;
-            if (remains == 0U)
+            /* Start Transfer. */
+            base->IPCMD |= FLEXSPI_IPCMD_TRG_MASK;
+            /* Wait for bus idle. */
+            while (!FLEXSPI_GetBusIdleStatus(base))
             {
-                desCount = 1U;
             }
-            else
+            result = FLEXSPI_CheckAndClearError(base, base->INTR);
+
+            handle->state = kFLEXSPI_Idle;
+
+            if (handle->completionCallback != NULL)
             {
-                desCount    = 2U;
-                bytesPerDes = xfer->dataSize - remains;
-                if ((remains & 3U) == 0U)
-                {
-                    handle->nsize = kFLEXPSI_DMAnSize4Bytes;
-                }
-                else if ((remains & 1U) == 0U)
-                {
-                    handle->nsize = kFLEXPSI_DMAnSize2Bytes;
-                }
-                else
-                {
-                    handle->nsize = kFLEXPSI_DMAnSize1Bytes;
-                }
+                handle->completionCallback(base, handle, result, handle->userData);
             }
-            /* Store the initially configured dma minor byte transfer count into the FLEXSPI handle */
-            handle->nbytes = handle->count / handle->nsize;
-        }
-
-        /* Check xfer->dataSize exceeds the maximum transfer count supported by the driver. */
-        if ((xfer->dataSize - handle->count + 1U) / ((uint32_t)handle->nsize) > 1024U)
-        {
-            return kStatus_InvalidArgument;
-        }
-
-        /* Check the xfer->data start address follows the alignment and xfer->dataSize needs to be larger than 1 due to
-         * hardware limitation */
-        if ((((uint32_t)xfer->data & (handle->nsize - 1U)) != 0U) || (xfer->dataSize / handle->nsize == 1U))
-        {
-            return kStatus_InvalidArgument;
-        }
-
-        void *txFifoBase = (void *)FLEXSPI_GetTxFifoAddress(base);
-        void *nextDesc   = NULL;
-
-        dmaTxTriggerConfig.burst = (dma_trigger_burst_t)(
-            DMA_CHANNEL_CFG_TRIGBURST(1) | DMA_CHANNEL_CFG_BURSTPOWER(FLEXSPI_CalculatePower(handle->nbytes)));
-        handle->transferSize = xfer->dataSize;
-        dma_channel_config_t txChannelConfig;
-
-        for (uint8_t i = desCount - 1U; i > 0; i--)
-        {
-            DMA_SetupDescriptor(
-                &s_flexspiDes[i - 1U],
-                DMA_CHANNEL_XFER((nextDesc == NULL) ? false : true, true, (nextDesc == NULL) ? true : false, false,
-                                 handle->nsize, kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave1xWidth, remains),
-                (void *)((uint32_t)xfer->data + bytesPerDes), txFifoBase, nextDesc);
-            nextDesc = &s_flexspiDes[i - 1U];
-        }
-
-        DMA_PrepareChannelTransfer(
-            &txChannelConfig, (void *)xfer->data, txFifoBase,
-            DMA_CHANNEL_XFER((nextDesc == NULL) ? false : true, true, (nextDesc == NULL) ? true : false, false,
-                             handle->nsize, kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave1xWidth, bytesPerDes),
-            kDMA_MemoryToMemory, &dmaTxTriggerConfig, nextDesc);
-
-        DMA_SubmitChannelTransfer(handle->txDmaHandle, &txChannelConfig);
-
-        DMA_SetCallback(handle->txDmaHandle, FLEXSPI_TransferDMACallback,
-                        &s_dmaPrivateHandle[FLEXSPI_GetInstance(base)]);
-        DMA_StartTransfer(handle->txDmaHandle);
-
-        /* Enable FLEXSPI TX DMA. */
-        FLEXSPI_EnableTxDMA(base, true);
-
-        /* Start Transfer. */
-        base->IPCMD |= FLEXSPI_IPCMD_TRG_MASK;
-    }
-    else if (xfer->cmdType == kFLEXSPI_Read)
-    {
-        handle->count = 8U * (((base->IPRXFCR & FLEXSPI_IPRXFCR_RXWMRK_MASK) >> FLEXSPI_IPRXFCR_RXWMRK_SHIFT) + 1U);
-
-        /* Check the watermark is power of 2U */
-        if ((handle->count & (handle->count - 1U)) != 0U)
-        {
-            return kStatus_InvalidArgument;
-        }
-
-        dma_channel_trigger_t dmaRxTriggerConfig;
-        dmaRxTriggerConfig.type = kDMA_RisingEdgeTrigger;
-        uint8_t desCount;
-        uint32_t bytesPerDes = xfer->dataSize;
-        uint8_t remains      = 0;
-
-        if (xfer->dataSize < handle->count)
-        {
-            handle->nsize           = kFLEXPSI_DMAnSize1Bytes;
-            handle->nbytes          = xfer->dataSize / handle->nsize;
-            dmaRxTriggerConfig.wrap = kDMA_NoWrap;
-            /* Check the handle->nbytes is power of 2 */
-            if (((handle->nbytes) & (handle->nbytes - 1)) != 0U)
-            {
-                handle->nbytes = 2U * ((handle->nbytes) & (handle->nbytes - 1U));
-            }
-            desCount = 1U;
-        }
-        else
-        {
-            dmaRxTriggerConfig.wrap = kDMA_SrcWrap;
-            remains                 = xfer->dataSize % handle->count;
-            if (remains == 0U)
-            {
-                desCount = 1U;
-            }
-            else
-            {
-                desCount    = 2U;
-                bytesPerDes = xfer->dataSize - remains;
-                if ((remains & 3U) == 0U)
-                {
-                    handle->nsize = kFLEXPSI_DMAnSize4Bytes;
-                }
-                else if ((remains & 1U) == 0U)
-                {
-                    handle->nsize = kFLEXPSI_DMAnSize2Bytes;
-                }
-                else
-                {
-                    handle->nsize = kFLEXPSI_DMAnSize1Bytes;
-                }
-            }
-            /* Store the initially configured dma minor byte transfer count into the FLEXSPI handle */
-            handle->nbytes = handle->count / handle->nsize;
-        }
-
-        /* Check xfer->dataSize exceeds the maximum transfer count supported by the driver. */
-        if ((xfer->dataSize - handle->count + 1U) / ((uint32_t)handle->nsize) > 1024U)
-        {
-            return kStatus_InvalidArgument;
-        }
-
-        /* Check the xfer->data start address follows the alignment */
-        if (((uint32_t)xfer->data & (handle->nsize - 1U)) != 0U)
-        {
-            return kStatus_InvalidArgument;
-        }
-
-        void *rxFifoBase         = (void *)FLEXSPI_GetRxFifoAddress(base);
-        void *nextDesc           = NULL;
-        dmaRxTriggerConfig.burst = (dma_trigger_burst_t)(
-            DMA_CHANNEL_CFG_TRIGBURST(1U) | DMA_CHANNEL_CFG_BURSTPOWER(FLEXSPI_CalculatePower(handle->nbytes)));
-        dma_channel_config_t rxChannelConfig;
-
-        for (uint8_t i = desCount - 1U; i > 0; i--)
-        {
-            DMA_SetupDescriptor(
-                &s_flexspiDes[i - 1U],
-                DMA_CHANNEL_XFER((nextDesc == NULL) ? false : true, true, (nextDesc == NULL) ? true : false, false,
-                                 handle->nsize, kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave1xWidth, remains),
-                rxFifoBase, (void *)((uint32_t)xfer->data + bytesPerDes), nextDesc);
-            nextDesc = &s_flexspiDes[i - 1U];
-        }
-
-        DMA_PrepareChannelTransfer(
-            &rxChannelConfig, rxFifoBase, (void *)xfer->data,
-            DMA_CHANNEL_XFER((nextDesc == NULL) ? false : true, true, (nextDesc == NULL) ? true : false, false,
-                             handle->nsize, kDMA_AddressInterleave1xWidth, kDMA_AddressInterleave1xWidth, bytesPerDes),
-            kDMA_MemoryToMemory, &dmaRxTriggerConfig, nextDesc);
-
-        DMA_SubmitChannelTransfer(handle->rxDmaHandle, &rxChannelConfig);
-
-        DMA_SetCallback(handle->rxDmaHandle, FLEXSPI_TransferDMACallback, &s_dmaPrivateHandle[instance]);
-        DMA_StartTransfer(handle->rxDmaHandle);
-
-        /* Enable FLEXSPI RX DMA. */
-        FLEXSPI_EnableRxDMA(base, true);
-
-        /* Start Transfer. */
-        base->IPCMD |= FLEXSPI_IPCMD_TRG_MASK;
-    }
-    else
-    {
-        /* Start Transfer. */
-        base->IPCMD |= FLEXSPI_IPCMD_TRG_MASK;
-        /* Wait for bus idle. */
-        while (!FLEXSPI_GetBusIdleStatus(base))
-        {
-        }
-        result = FLEXSPI_CheckAndClearError(base, base->INTR);
-
-        handle->state = kFLEXSPI_Idle;
-
-        if (handle->completionCallback)
-        {
-            handle->completionCallback(base, handle, result, handle->userData);
         }
     }
 
@@ -464,15 +607,15 @@ status_t FLEXSPI_TransferDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle, f
  */
 void FLEXSPI_TransferAbortDMA(FLEXSPI_Type *base, flexspi_dma_handle_t *handle)
 {
-    assert(handle);
+    assert(handle != NULL);
 
-    if (base->IPTXFCR & FLEXSPI_IPTXFCR_TXDMAEN_MASK)
+    if ((base->IPTXFCR & FLEXSPI_IPTXFCR_TXDMAEN_MASK) != 0x00U)
     {
         FLEXSPI_EnableTxDMA(base, false);
         DMA_AbortTransfer(handle->txDmaHandle);
     }
 
-    if (base->IPRXFCR & FLEXSPI_IPRXFCR_RXDMAEN_MASK)
+    if ((base->IPRXFCR & FLEXSPI_IPRXFCR_RXDMAEN_MASK) != 0x00U)
     {
         FLEXSPI_EnableRxDMA(base, false);
         DMA_AbortTransfer(handle->rxDmaHandle);
@@ -488,24 +631,25 @@ status_t FLEXSPI_TransferGetTransferCountDMA(FLEXSPI_Type *base, flexspi_dma_han
 
     status_t result = kStatus_Success;
 
-    if (handle->state != kFLEXSPI_Busy)
+    if (handle->state != (uint32_t)kFLEXSPI_Busy)
     {
         result = kStatus_NoTransferInProgress;
     }
     else
     {
-        if (base->IPRXFCR & FLEXSPI_IPRXFCR_RXDMAEN_MASK)
+        if ((base->IPRXFCR & FLEXSPI_IPRXFCR_RXDMAEN_MASK) != 0x00U)
         {
             *count =
                 (handle->transferSize - DMA_GetRemainingBytes(handle->rxDmaHandle->base, handle->rxDmaHandle->channel));
         }
-        else if (base->IPTXFCR & FLEXSPI_IPTXFCR_TXDMAEN_MASK)
+        else if ((base->IPTXFCR & FLEXSPI_IPTXFCR_TXDMAEN_MASK) != 0x00U)
         {
             *count =
                 (handle->transferSize - DMA_GetRemainingBytes(handle->txDmaHandle->base, handle->txDmaHandle->channel));
         }
         else
         {
+            ; /* Intentional empty for MISRA C-2012 rule 15.7. */
         }
     }
 
