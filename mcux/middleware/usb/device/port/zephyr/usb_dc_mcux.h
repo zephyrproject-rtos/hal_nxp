@@ -97,6 +97,26 @@ typedef enum _usb_controller_index {
 	 * IP3511 IPs, this is reserved to be used in the future.
 	 */
 	kUSB_ControllerLpcIp3511Hs1     = 7U,
+
+	/* OHCI 0U */
+	kUSB_ControllerOhci0 = 8U,
+	/* OHCI 1U, Currently, there are no platforms which have two OHCI IPs,
+	 * this is reserved to be used in the future.
+	 */
+	kUSB_ControllerOhci1 = 9U,
+
+	/*!< IP3516HS 0U */
+	kUSB_ControllerIp3516Hs0 = 10U,
+	/* IP3516HS 1U, Currently, there are no platforms which have two
+	 * IP3516HS IPs, this is reserved to be used in the future.
+	 */
+	kUSB_ControllerIp3516Hs1 = 11U,
+
+	/* DWC3 0U */
+	kUSB_ControllerDwc30 = 12U,
+	/* DWC3 1U, Currently, there are no platforms which have two Dwc IPs,
+	 *this is reserved to be used in the future.*/
+	kUSB_ControllerDwc31 = 13U,
 } usb_controller_index_t;
 
 /* Control type for controller */
@@ -141,11 +161,17 @@ typedef enum _usb_device_control_type {
 	kUSB_DeviceControlSetTestMode,
 	/* Get flag of LPM Remote Wake-up Enabled by USB host. */
 	kUSB_DeviceControlGetRemoteWakeUp,
-#if (defined(USB_DEVICE_CHARGER_DETECT_ENABLE) && \
-	(USB_DEVICE_CHARGER_DETECT_ENABLE > 0U))
-	kUSB_DeviceControlDcdInitModule,
-	kUSB_DeviceControlDcdDeinitModule,
+#if (defined(USB_DEVICE_CONFIG_CHARGER_DETECT) && \
+		(USB_DEVICE_CONFIG_CHARGER_DETECT > 0U))
+	/* Disable dcd module function. */
+	kUSB_DeviceControlDcdDisable,
+	/* Enable dcd module function. */
+	kUSB_DeviceControlDcdEnable,
 #endif
+	/* Pre set device address */
+	kUSB_DeviceControlPreSetDeviceAddress,
+	/* Update hardware tick */
+	kUSB_DeviceControlUpdateHwTick,
 } usb_device_control_type_t;
 
 /* Available notify types for device notification */
@@ -166,21 +192,12 @@ typedef enum _usb_device_notification {
 	kUSB_DeviceNotifyDetach,
 	/* Device connected to a host */
 	kUSB_DeviceNotifyAttach,
-#if (defined(USB_DEVICE_CHARGER_DETECT_ENABLE) && \
-	(USB_DEVICE_CHARGER_DETECT_ENABLE > 0U))
-	/* Device charger detection timeout */
-	kUSB_DeviceNotifyDcdTimeOut,
-	/* Device charger detection unknown port type */
-	kUSB_DeviceNotifyDcdUnknownPortType,
-	/* The SDP facility is detected */
-	kUSB_DeviceNotifySDPDetected,
-	/* The charging port is detected */
-	kUSB_DeviceNotifyChargingPortDetected,
-	/* The CDP facility is detected */
-	kUSB_DeviceNotifyChargingHostDetected,
-	/* The DCP facility is detected */
-	kUSB_DeviceNotifyDedicatedChargerDetected,
+#if (defined(USB_DEVICE_CONFIG_CHARGER_DETECT) && \
+		(USB_DEVICE_CONFIG_CHARGER_DETECT > 0U))
+	/* Device charger detection finished */
+	kUSB_DeviceNotifyDcdDetectFinished,
 #endif
+
 } usb_device_notification_t;
 
 /* USB error code */
@@ -223,6 +240,11 @@ typedef enum _usb_status {
 	kStatus_USB_MSDStatusFail,
 	kStatus_USB_EHCIAttached,
 	kStatus_USB_EHCIDetached,
+	/* The amount of data returned by the endpoint exceeded either the size
+	 * of the maximum data packet allowed from the endpoint or the
+	 * remaining buffer size.
+	 */
+	kStatus_USB_DataOverRun,
 } usb_status_t;
 
 /* Device notification message structure */
@@ -291,22 +313,46 @@ typedef struct _usb_device_controller_interface_struct {
 } usb_device_controller_interface_struct_t;
 
 typedef struct _usb_device_struct {
+#if ((defined(USB_DEVICE_CONFIG_REMOTE_WAKEUP)) && \
+		(USB_DEVICE_CONFIG_REMOTE_WAKEUP > 0U)) || \
+	(defined(FSL_FEATURE_SOC_USB_ANALOG_COUNT) && \
+		(FSL_FEATURE_SOC_USB_ANALOG_COUNT > 0U))
+	/* Current hw tick(ms)*/
+	volatile uint64_t hwTick;
+#endif
 	/* Controller handle */
 	usb_device_controller_handle controllerHandle;
 	/* Controller interface handle */
-	const usb_device_controller_interface_struct_t *interface;
-	usb_dc_status_callback status_callback;
-	usb_ep_ctrl_data_t *eps;
-	bool attached;
+	const usb_device_controller_interface_struct_t *controllerInterface;
+#if USB_DEVICE_CONFIG_USE_TASK
+	/*!< Message queue buffer*/
+	OSA_MSGQ_HANDLE_DEFINE(notificationQueueBuffer,
+						   USB_DEVICE_CONFIG_MAX_MESSAGES,
+						   USB_DEVICE_MESSAGES_SIZE);
+	/*!< Message queue*/
+	osa_msgq_handle_t notificationQueue;
+#endif
+	/* Device callback function pointer */
+	usb_device_callback_t deviceCallback;
+	/* Endpoint callback function structure */
+	usb_device_endpoint_callback_struct_t
+		epCallback[USB_DEVICE_CONFIG_ENDPOINTS << 1U];
 	/* Current device address */
-	uint8_t address;
+	uint8_t deviceAddress;
 	/* Controller ID */
 	uint8_t controllerId;
 	/* Current device state */
 	uint8_t state;
+#if ((defined(USB_DEVICE_CONFIG_REMOTE_WAKEUP)) && (USB_DEVICE_CONFIG_REMOTE_WAKEUP > 0U))
+	/* Remote wakeup is enabled or not */
+	uint8_t remotewakeup;
+#endif
 	/* Is doing device reset or not */
 	uint8_t isResetting;
-	uint8_t setupDataStage;
+#if (defined(USB_DEVICE_CONFIG_USE_TASK) && (USB_DEVICE_CONFIG_USE_TASK > 0U))
+	/* Whether call ep callback directly when the task is enabled */
+	uint8_t epCallbackDirectly;
+#endif
 } usb_device_struct_t;
 
 /* Endpoint status structure */
@@ -335,6 +381,8 @@ typedef struct _usb_device_endpoint_init_struct {
 	uint8_t transferType;
 	/* ZLT flag*/
 	uint8_t zlt;
+	/* Endpoint interval*/
+	uint8_t interval;
 } usb_device_endpoint_init_struct_t;
 
 #endif /* __USB_DC_MCUX_H__ */
