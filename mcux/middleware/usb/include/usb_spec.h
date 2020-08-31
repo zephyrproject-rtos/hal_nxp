@@ -175,7 +175,6 @@ typedef struct _usb_setup_struct
 #define USB_DESCRIPTOR_DEVICE_CAPABILITY_USB20_EXTENSION_BESL_MASK (0x04U)
 #define USB_DESCRIPTOR_DEVICE_CAPABILITY_USB20_EXTENSION_BESL_SHIFT (2U)
 
-
 /* Language structure */
 typedef struct _usb_language
 {
