@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2020 NXP
  * All rights reserved.
  *
  *
@@ -33,9 +33,9 @@
     (((((((addr) >> 2U) & 0x00000001U) << CASPER_RAM_OFFSET) + (((addr) >> 3U) << 2U) + ((addr)&0x00000003U)) & \
       0xFFFFU) |                                                                                                \
      s_casperRamBase)
-#define DEINTERLEAVE(addr) INTERLEAVE(addr)
-#define GET_WORD(addr) (*((uint32_t *)DEINTERLEAVE((uint32_t)(addr))))
-#define GET_DWORD(addr) (((uint64_t)GET_WORD(addr)) | (((uint64_t)GET_WORD(((uint32_t)(addr)) + 4U)) << 32U))
+#define DEINTERLEAVE(addr)    INTERLEAVE(addr)
+#define GET_WORD(addr)        (*((uint32_t *)DEINTERLEAVE((uint32_t)(addr))))
+#define GET_DWORD(addr)       (((uint64_t)GET_WORD(addr)) | (((uint64_t)GET_WORD(((uint32_t)(addr)) + 4U)) << 32U))
 #define SET_WORD(addr, value) *((uint32_t *)INTERLEAVE((uint32_t)(addr))) = ((uint32_t)(value))
 #define SET_DWORD(addr, value)                                                               \
     do                                                                                       \
@@ -90,9 +90,9 @@
         }                                                                     \
     }
 #else
-#define GET_WORD(addr) (*((uint32_t *)(addr)))
-#define GET_DWORD(addr) (*((uint64_t *)(addr)))
-#define SET_WORD(addr, value) *((uint32_t *)(addr)) = ((uint32_t)(value))
+#define GET_WORD(addr)         (*((uint32_t *)(addr)))
+#define GET_DWORD(addr)        (*((uint64_t *)(addr)))
+#define SET_WORD(addr, value)  *((uint32_t *)(addr)) = ((uint32_t)(value))
 #define SET_DWORD(addr, value) *((uint64_t *)(addr)) = ((uint64_t)(value))
 
 #define CASPER_MEMCPY_I2I(dst, src, siz) memcpy(dst, src, siz)
@@ -101,8 +101,8 @@
 #endif
 
 #define WORK_BUFF_MUL4 (N_wordlen_max * 4 + 2) /* ! working buffer is 4xN_wordlen to allow in place math */
-#define N_bytelen (N_wordlen * 4U)             /*  for memory copy and the like */
-#define N_dwordlen (unsigned)(N_wordlen / 2U)
+#define N_bytelen      (N_wordlen * 4U)        /*  for memory copy and the like */
+#define N_dwordlen     (unsigned)(N_wordlen / 2U)
 
 #define PreZeroW(i, w_out)                     \
     for ((i) = 0U; (i) < N_wordlen; (i) += 4U) \
@@ -126,20 +126,20 @@
 /* CASPER memory layout for ECC */
 #define CASPER_NUM_LIMBS (NUM_LIMBS + 4U) // number of limbs needed by CASPER is 2 double words longer
 
-#define CASPER_MEM ((uint32_t *)msg_ret)
+#define CASPER_MEM    ((uint32_t *)msg_ret)
 #define CASPER_OFFSET CASPER_NUM_LIMBS // offset in the CASPER memory where we can start writing
 
 #define MOD_SCRATCH_START (CASPER_OFFSET)
-#define MOD_SCRATCH_SIZE (1U * CASPER_NUM_LIMBS)
+#define MOD_SCRATCH_SIZE  (1U * CASPER_NUM_LIMBS)
 
 #define INOUT_SCRATCH_START (MOD_SCRATCH_START + MOD_SCRATCH_SIZE)
-#define INOUT_SCRATCH_SIZE ((3U * 3U) * CASPER_NUM_LIMBS)
+#define INOUT_SCRATCH_SIZE  ((3U * 3U) * CASPER_NUM_LIMBS)
 
 #define ECC_SCRATCH_START (INOUT_SCRATCH_START + INOUT_SCRATCH_SIZE)
-#define ECC_SCRATCH_SIZE (9U * CASPER_NUM_LIMBS)
+#define ECC_SCRATCH_SIZE  (9U * CASPER_NUM_LIMBS)
 
 #define LUT_SCRATCH_START (ECC_SCRATCH_START + ECC_SCRATCH_SIZE)
-#define LUT_SCRATCH_SIZE (48 * NUM_LIMBS + 3 * CASPER_NUM_LIMBS)
+#define LUT_SCRATCH_SIZE  (48 * NUM_LIMBS + 3 * CASPER_NUM_LIMBS)
 
 /* Currently these macros work on 32-bit platforms  */
 
@@ -248,8 +248,8 @@
  *  Use n=256 and w=4 --> compute ciel(384/3) = 86 + 1 digits
  */
 #define CASPER_RECODE_LENGTH 87
-#define invert(c, a) invert_mod_p256(c, a)
-#define ONE NISTr256
+#define invert(c, a)         invert_mod_p256(c, a)
+#define ONE                  NISTr256
 
 /* Shift right by 1 <= c <= 31. z[] and x[] in system RAM, no interleaving macros used. */
 #define shiftrightSysram(z, x, c)                    \
@@ -271,8 +271,8 @@
  *  Use n=384 and w=4 --> compute ciel(384/3) = 128 + 1 digits
  */
 #define CASPER_RECODE_LENGTH 129
-#define invert(c, a) invert_mod_p384(c, a)
-#define ONE NISTr384
+#define invert(c, a)         invert_mod_p384(c, a)
+#define ONE                  NISTr384
 
 /* Shift right by 1 <= c <= 31.  z[] and x[] in system RAM, no interleaving macros used. */
 #define shiftrightSysram(z, x, c)                       \
@@ -297,12 +297,12 @@
 #endif
 
 #define multiply_casper(c, a, b) MultprecCiosMul_ct(c, a, b, &CASPER_MEM[MOD_SCRATCH_START], Np)
-#define square_casper(c, a) multiply_casper(c, a, a)
-#define sub_casper(c, a, b) CASPER_montsub(c, a, b, &CASPER_MEM[MOD_SCRATCH_START])
-#define add_casper(c, a, b) CASPER_montadd(c, a, b, &CASPER_MEM[MOD_SCRATCH_START])
-#define mul2_casper(c, a) add_casper(c, a, a)
-#define half(c, a, b) CASPER_half(c, a, b)
-#define copy(c, a) CASPER_MEMCPY(c, a, NUM_LIMBS * sizeof(uint32_t))
+#define square_casper(c, a)      multiply_casper(c, a, a)
+#define sub_casper(c, a, b)      CASPER_montsub(c, a, b, &CASPER_MEM[MOD_SCRATCH_START])
+#define add_casper(c, a, b)      CASPER_montadd(c, a, b, &CASPER_MEM[MOD_SCRATCH_START])
+#define mul2_casper(c, a)        add_casper(c, a, a)
+#define half(c, a, b)            CASPER_half(c, a, b)
+#define copy(c, a)               CASPER_MEMCPY(c, a, NUM_LIMBS * sizeof(uint32_t))
 
 /*******************************************************************************
  * Variables
@@ -360,12 +360,6 @@ static uint32_t Np[2] = {1, 1};
  */
 void Jac_toAffine(uint32_t *X3, uint32_t *Y3, uint32_t *X1, uint32_t *Y1, uint32_t *Z1);
 
-/* Return 1 if (X1: Y1: Z1) is on the curve
- *      Y^2 = X^3 -3XZ^4 + bZ^6
- * and return 0 otherwise.
- */
-int Jac_oncurve(uint32_t *X1, uint32_t *Y1, uint32_t *Z1, uint32_t *b);
-
 /* Compute (X3 : Y3: Z3) = (X1: Y1: Z1) + (X2 : Y2 : Z2)
  *  where (X1: Y1: Z1) != (X2 : Y2 : Z2)
  * (X3 : Y3: Z3) may be the same as one of the inputs.
@@ -383,12 +377,12 @@ void Jac_addition(uint32_t *X3,
 /* Compute (X3 : Y3: Z3) = (X1: Y1: Z1) + (X2, Y2)
  * where (X1: Y1: Z1) != (X2, Y2)
  * (X3 : Y3: Z3) may not overlap with (X1: Y1: Z1).
- * Source: 2004 Hankerson–Menezes–Vanstone, page 91.
+ * Source: 2004 Hankersonâ€“Menezesâ€“Vanstone, page 91.
  */
 void Jac_add_affine(
     uint32_t *X3, uint32_t *Y3, uint32_t *Z3, uint32_t *X1, uint32_t *Y1, uint32_t *Z1, uint32_t *X2, uint32_t *Y2);
 
-/* Point doubling from: 2004 Hankerson–Menezes–Vanstone, page 91.
+/* Point doubling from: 2004 Hankersonâ€“Menezesâ€“Vanstone, page 91.
  * Compute (X3 : Y3: Z3) = (X1: Y1: Z1) + (X1 : Y1 : Z1)
  * (X3 : Y3: Z3) may be the same as the input.
  */
@@ -469,6 +463,16 @@ static uint32_t sub_n(uint32_t *c, uint32_t *a, uint32_t *b, int n);
 static void MultprecCiosMul_ct(
     uint32_t w_out[], const uint32_t a[], const uint32_t b[], const uint32_t Nmod[], const uint32_t *Np);
 
+void MultprecMontPrepareX(uint32_t Xmont_out[], const unsigned x[], const uint32_t Rp[], const uint32_t Nmod[]);
+void MultprecGenNp64(const uint32_t *Nmod, unsigned *np64_ret);
+void MultprecMontCalcRp(uint32_t Rp[], const unsigned exp_pubkey, const uint32_t Nmod[]);
+void MultprecModulo(uint32_t r_out[], const uint32_t v[], int top);
+void MultprecMultiply(uint32_t w_out[], const unsigned u[], const uint32_t v[]);
+int RSA_MontSignatureToPlaintextFast(const uint32_t mont_signature[N_wordlen_max],
+                                     const unsigned exp_pubkey,
+                                     const uint32_t pubkey[N_wordlen_max],
+                                     uint32_t MsgRet[WORK_BUFF_MUL4]);
+
 static void shiftright(uint32_t *z, uint32_t *x, uint32_t c);
 static void shiftleft(uint32_t *z, uint32_t *x, uint32_t c);
 
@@ -521,7 +525,7 @@ __STATIC_FORCEINLINE void Accel_done(void)
 }
 #endif
 #define Accel_SetABCD_Addr(ab, cd) CASPER_Wr32b((uint32_t)ab | ((uint32_t)cd << 16), CASPER_CP_CTRL0);
-#define Accel_crypto_mul(ctrl1) CASPER_Wr32b((uint32_t)ctrl1, CASPER_CP_CTRL1);
+#define Accel_crypto_mul(ctrl1)    CASPER_Wr32b((uint32_t)ctrl1, CASPER_CP_CTRL1);
 #endif
 
 __STATIC_FORCEINLINE uint32_t Accel_IterOpcodeResaddr(uint32_t iter, uint32_t opcode, uint32_t resAddr)
@@ -577,7 +581,7 @@ static void casper_select(uint32_t *c, uint32_t *a, uint32_t *b, int m, int n)
 /*  Compute R`, which is R mod N. This is done using subtraction */
 /*  R has 1 in N_wordlen, but we do not fill it in since borrowed. */
 /*  Exp-pubkey only used to optimize for exp=3 */
-void MultprecMontCalcRp(unsigned Rp[], const unsigned exp_pubkey, const unsigned Nmod[])
+void MultprecMontCalcRp(uint32_t Rp[], const unsigned exp_pubkey, const uint32_t Nmod[])
 {
     uint32_t i;
 
@@ -593,7 +597,7 @@ void MultprecMontCalcRp(unsigned Rp[], const unsigned exp_pubkey, const unsigned
 
 /*  MultprecMultiply - multiple w=u*v (per Knuth) */
 /*  w_out is 2x the size of u and v */
-void MultprecMultiply(unsigned w_out[], const unsigned u[], const unsigned v[])
+void MultprecMultiply(uint32_t w_out[], const unsigned u[], const uint32_t v[])
 {
     uint32_t i, j;
 
@@ -616,7 +620,7 @@ void MultprecMultiply(unsigned w_out[], const unsigned u[], const unsigned v[])
     {
         /*  Step 2b. Check for 0 on v word - skip if so since we 0ed already */
         /*  Step 3. Iterate over N words of u using i - perform Multiply-accumulate */
-        if (0U != (GET_WORD(&v[j])) || 0U != (GET_WORD(&v[j + 1U])))
+        if (0U != (GET_WORD((uintptr_t)&v[j])) || 0U != (GET_WORD((uintptr_t)&v[j + 1U])))
         {
             Accel_SetABCD_Addr(CA_MK_OFF(&v[j]), CA_MK_OFF(u));
             Accel_crypto_mul(
@@ -631,11 +635,12 @@ void MultprecMultiply(unsigned w_out[], const unsigned u[], const unsigned v[])
 /*  r_out is module (remainder) and is 2*N */
 /*  u is in r_out (1st N) at start (passed in) */
 /*  v is N long */
-void MultprecModulo(unsigned r_out[], const unsigned v[], int top)
+void MultprecModulo(uint32_t r_out[], const uint32_t v[], int top)
 {
-    uint64_t u64;                      /*  use 64 bit math mixed with 32 bit */
-    unsigned u32;                      /*  allows us to work on U in 32 bit */
-    unsigned u_n, ul16, uh16, *u_shft; /*  u_shft is because r_out is u initially */
+    uint64_t u64; /*  use 64 bit math mixed with 32 bit */
+    unsigned u32; /*  allows us to work on U in 32 bit */
+    unsigned u_n, ul16, uh16;
+    uint32_t *u_shft; /*  u_shft is because r_out is u initially */
     unsigned vl16, vh16, v_Nm1;
     unsigned q_hat, r_hat, q_over;
     unsigned borrow, carry;
@@ -658,9 +663,9 @@ void MultprecModulo(unsigned r_out[], const unsigned v[], int top)
     u_n    = 0;
     u_shft = r_out; /*  u (shifted) is in r_out */
 
-    v_Nm1 = GET_WORD(&v[N_wordlen - 1U]); /*  MSw of public key */
-    vl16  = v_Nm1 & 0xFFFFU;              /*  lower 16 */
-    vh16  = v_Nm1 >> 16;                  /*  upper 16 */
+    v_Nm1 = GET_WORD((uintptr_t)&v[N_wordlen - 1U]); /*  MSw of public key */
+    vl16  = v_Nm1 & 0xFFFFU;                         /*  lower 16 */
+    vh16  = v_Nm1 >> 16;                             /*  upper 16 */
     /*  Step 2. Iterate j from m-n down to 0 (M selected per Knuth as 2*N) */
     for (j = top; j >= 0; j--)
     {
@@ -742,7 +747,7 @@ void MultprecModulo(unsigned r_out[], const unsigned v[], int top)
             r_hat = (unsigned)u64;
         }
         q_hat |= (unsigned)tmp; /*  other half of the quotient */
-        while ((q_over != 0U) || ((uint64_t)q_hat * GET_WORD(&v[N_wordlen - 2U])) >
+        while ((q_over != 0U) || ((uint64_t)q_hat * GET_WORD((uintptr_t)&v[N_wordlen - 2U])) >
                                      ((1ULL << 32) * r_hat) + (uint64_t)GET_WORD(&u_shft[(uint32_t)j + N_wordlen - 2U]))
         { /*  if Qhat>b, then reduce to b-1, then adjust up Rhat */
             q_hat--;
@@ -762,7 +767,7 @@ void MultprecModulo(unsigned r_out[], const unsigned v[], int top)
             borrow = 0;
             for (i = 0; i < N_wordlen; i++)
             {
-                u64    = (uint64_t)q_hat * GET_WORD(&v[i]) + borrow;
+                u64    = (uint64_t)q_hat * GET_WORD((uintptr_t)&v[i]) + borrow;
                 borrow = (unsigned)(u64 >> 32);
                 if (GET_WORD(&u_shft[i + (unsigned)j]) < (unsigned)u64)
                 {
@@ -783,8 +788,8 @@ void MultprecModulo(unsigned r_out[], const unsigned v[], int top)
             {
                 SET_WORD(&u_shft[i + (unsigned)j], GET_WORD(&u_shft[i + (unsigned)j]) + carry);
                 carry = (GET_WORD(&u_shft[i + (unsigned)j]) < carry) ? 1U : 0U;
-                SET_WORD(&u_shft[i + (unsigned)j], GET_WORD(&u_shft[i + (unsigned)j]) + GET_WORD(&v[i]));
-                if (GET_WORD(&u_shft[i + (unsigned)j]) < GET_WORD(&v[i]))
+                SET_WORD(&u_shft[i + (unsigned)j], GET_WORD(&u_shft[i + (unsigned)j]) + GET_WORD((uintptr_t)&v[i]));
+                if (GET_WORD(&u_shft[i + (unsigned)j]) < GET_WORD((uintptr_t)&v[i]))
                 {
                     carry++;
                 }
@@ -800,16 +805,16 @@ void MultprecModulo(unsigned r_out[], const unsigned v[], int top)
 /*  x is N_wordlen, Nmod is N_wordlen */
 /*  Rp is N_wordlen (it is R` which is R mod N) */
 /*  Xmont_out is N_wordlen*2+1 */
-void MultprecMontPrepareX(unsigned Xmont_out[], const unsigned x[], const unsigned Rp[], const unsigned Nmod[])
+void MultprecMontPrepareX(uint32_t Xmont_out[], const unsigned x[], const uint32_t Rp[], const uint32_t Nmod[])
 {
     MultprecMultiply(Xmont_out, x, Rp);
     MultprecModulo(Xmont_out, Nmod, (int32_t)N_wordlen);
 }
 
-void MultprecGenNp64(const unsigned *Nmod, unsigned *np64_ret) /*  only pass the low order double word */
+void MultprecGenNp64(const uint32_t *Nmod, unsigned *np64_ret) /*  only pass the low order double word */
 {
     uint64_t nprime, Nmod_0;
-    Nmod_0 = GET_WORD(&Nmod[0]) | ((uint64_t)GET_WORD(&Nmod[1]) << 32);
+    Nmod_0 = GET_WORD((uintptr_t)&Nmod[0]) | ((uint64_t)GET_WORD((uintptr_t)&Nmod[1]) << 32);
 
 #define COMP_NPN_1 ((2U - Nmod_0 * nprime) * nprime) /*  computes N`*N0=1 mod 2^P where P is the partial built up */
     nprime = (((2U + Nmod_0) & 4U) << 1) + Nmod_0;   /*  mod 2^4 */
@@ -826,7 +831,7 @@ void MultprecGenNp64(const unsigned *Nmod, unsigned *np64_ret) /*  only pass the
 /*  is faster as a result. Note that this is used to square as well as mul, */
 /*  so not as fast as pure squaring could be. */
 void MultprecCiosMul(
-    unsigned w_out[], const unsigned a[], const unsigned b[], const unsigned Nmod[], const unsigned *Np)
+    uint32_t w_out[], const uint32_t a[], const uint32_t b[], const uint32_t Nmod[], const unsigned *Np)
 {
     int j;
     uint32_t i;
@@ -898,9 +903,9 @@ void MultprecCiosMul(
         j = 0;
         for (i = N_wordlen - 1U; i > 0U; i--)
         {
-            if (GET_WORD(&w_out[i]) != GET_WORD(&Nmod[i]))
+            if (GET_WORD(&w_out[i]) != GET_WORD((uintptr_t)&Nmod[i]))
             {
-                j = (int32_t)(GET_WORD(&w_out[i]) > GET_WORD(&Nmod[i])); /*  if larger sub */
+                j = (int32_t)(GET_WORD(&w_out[i]) > GET_WORD((uintptr_t)&Nmod[i])); /*  if larger sub */
                 break; /*  we would remove the break if worrying about side channel */
             }
         }
@@ -925,10 +930,10 @@ void MultprecCiosMul(
 /*  Algo: compute M = signaturen^e mod public_key */
 /*        where M is original plaintext, signature is signed value */
 /*        note: e is usually either 0x3 or 0x10001 */
-int RSA_MontSignatureToPlaintextFast(const unsigned mont_signature[N_wordlen_max],
+int RSA_MontSignatureToPlaintextFast(const uint32_t mont_signature[N_wordlen_max],
                                      const unsigned exp_pubkey,
-                                     const unsigned pubkey[N_wordlen_max],
-                                     unsigned MsgRet[WORK_BUFF_MUL4])
+                                     const uint32_t pubkey[N_wordlen_max],
+                                     uint32_t MsgRet[WORK_BUFF_MUL4])
 {
     int bidx = 0;
     int bitpos;
@@ -1006,8 +1011,8 @@ int RSA_MontSignatureToPlaintextFast(const unsigned mont_signature[N_wordlen_max
 /*        note: e is usually either 0x3 or 0x10001 */
 int RSA_SignatureToPlaintextFast(const unsigned signature[N_wordlen_max],
                                  const unsigned exp_pubkey,
-                                 const unsigned pubkey[N_wordlen_max],
-                                 unsigned MsgRet[WORK_BUFF_MUL4])
+                                 const uint32_t pubkey[N_wordlen_max],
+                                 uint32_t MsgRet[WORK_BUFF_MUL4])
 {
     /*  MsgRet working area: */
     /*  0..N = RESULT, starting with S`; it is used for R` just during creation of S` */
@@ -1035,14 +1040,13 @@ int RSA_SignatureToPlaintextFast(const unsigned signature[N_wordlen_max],
 void CASPER_ModExp(
     CASPER_Type *base, const uint8_t *signature, const uint8_t *pubN, size_t wordLen, uint32_t pubE, uint8_t *plaintext)
 {
-#define PK_LOC &msg_ret[kCASPER_RamOffset_Modulus]
+#define PK_LOC  &msg_ret[kCASPER_RamOffset_Modulus]
 #define SIG_LOC &msg_ret[(unsigned)kCASPER_RamOffset_Modulus + N_wordlen_max]
 
     N_wordlen = wordLen; /* set global variable for key length - used by RSA_SignatureToPlaintextFast()  */
     CASPER_MEMCPY_N2I(PK_LOC, (const uint32_t *)(uintptr_t)pubN, N_bytelen);
     CASPER_MEMCPY_N2I(SIG_LOC, (const uint32_t *)(uintptr_t)signature, N_bytelen);
-    (void)RSA_SignatureToPlaintextFast((const unsigned *)(uintptr_t)(SIG_LOC), pubE,
-                                       (const unsigned *)(uintptr_t)(PK_LOC), (unsigned int *)(uintptr_t)msg_ret);
+    (void)RSA_SignatureToPlaintextFast((const unsigned *)(uintptr_t)(SIG_LOC), pubE, (PK_LOC), msg_ret);
 
     CASPER_MEMCPY_I2N((uint32_t *)(uintptr_t)plaintext, msg_ret, N_bytelen);
 }
@@ -1550,7 +1554,7 @@ static void shiftleft(uint32_t *z, uint32_t *x, uint32_t c)
 }
 #else
 /* Shift right by 1 <= c <= 31. */
-static void shiftright(uint32_t *z, uint32_t *x, int c)
+static void shiftright(uint32_t *z, uint32_t *x, uint32_t c)
 {
     do
     {
@@ -1570,7 +1574,7 @@ static void shiftright(uint32_t *z, uint32_t *x, int c)
 }
 
 /* Shift left by 1 <= c <= 31. */
-static void shiftleft(uint32_t *z, uint32_t *x, int c)
+static void shiftleft(uint32_t *z, uint32_t *x, uint32_t c)
 {
     do
     {
@@ -1610,47 +1614,6 @@ void Jac_toAffine(uint32_t *X3, uint32_t *Y3, uint32_t *X1, uint32_t *Y1, uint32
     multiply_casper(Y3, Y1, T1); // Y3 = Y/Z^3
     multiply_casper(T2, T1, Z1); // Z^-2
     multiply_casper(X3, X1, T2); // X3 = X/Z^2
-}
-
-/* Return 1 if (X1: Y1: Z1) is on the curve
- *      Y^2 = X^3 -3XZ^4 + bZ^6
- * and return 0 otherwise.
- */
-int Jac_oncurve(uint32_t *X1, uint32_t *Y1, uint32_t *Z1, uint32_t *b)
-{
-    uint32_t *T1, *T2, *T3, *T4, *T5, *T6;
-    int m;
-
-    T1 = &CASPER_MEM[ECC_SCRATCH_START + 0U * CASPER_NUM_LIMBS];
-    T2 = &CASPER_MEM[ECC_SCRATCH_START + 1U * CASPER_NUM_LIMBS];
-    T3 = &CASPER_MEM[ECC_SCRATCH_START + 2U * CASPER_NUM_LIMBS];
-    T4 = &CASPER_MEM[ECC_SCRATCH_START + 3U * CASPER_NUM_LIMBS];
-    T5 = &CASPER_MEM[ECC_SCRATCH_START + 4U * CASPER_NUM_LIMBS];
-    T6 = &CASPER_MEM[ECC_SCRATCH_START + 5U * CASPER_NUM_LIMBS];
-
-    square_casper(T1, Y1);       // Y^2
-    square_casper(T6, X1);       // X^2
-    multiply_casper(T2, T6, X1); // X^3
-
-    square_casper(T3, Z1);       // Z^2
-    square_casper(T4, T3);       // Z^4
-    multiply_casper(T6, T4, T3); // Z^6
-    multiply_casper(T3, b, T6);  // bZ^6
-
-    multiply_casper(T6, T4, X1); // XZ^4
-
-    mul2_casper(T5, T6);
-    add_casper(T4, T5, T6); // 3XZ^4
-
-    sub_casper(T2, T2, T4); // X^3-3XZ^4
-    add_casper(T2, T2, T3); // X^3-3XZ^4+bZ^6
-
-    CASPER_ECC_equal(&m, T1, T2);
-    if (m != 0)
-    {
-        return 0;
-    }
-    return 1;
 }
 
 /* Compute (X3 : Y3: Z3) = (X1: Y1: Z1) + (X2 : Y2 : Z2)
@@ -1747,7 +1710,7 @@ void Jac_addition(uint32_t *X3,
 /* Compute (X3 : Y3: Z3) = (X1: Y1: Z1) + (X2, Y2)
  * where (X1: Y1: Z1) != (X2, Y2)
  * (X3 : Y3: Z3) may not overlap with (X1: Y1: Z1).
- * Source: 2004 Hankerson–Menezes–Vanstone, page 91.
+ * Source: 2004 Hankersonâ€“Menezesâ€“Vanstone, page 91.
  */
 void Jac_add_affine(
     uint32_t *X3, uint32_t *Y3, uint32_t *Z3, uint32_t *X1, uint32_t *Y1, uint32_t *Z1, uint32_t *X2, uint32_t *Y2)
@@ -1809,7 +1772,7 @@ void Jac_add_affine(
 
 static uint32_t casper_get_word(uint32_t *addr);
 
-/* Point doubling from: 2004 Hankerson–Menezes–Vanstone, page 91.
+/* Point doubling from: 2004 Hankersonâ€“Menezesâ€“Vanstone, page 91.
  * Compute (X3 : Y3: Z3) = (X1: Y1: Z1) + (X1 : Y1 : Z1)
  * (X3 : Y3: Z3) may be the same as the input.
  */

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -59,13 +59,13 @@ static const IRQn_Type s_dmaIRQNumber[] = DMA_IRQS;
 /*! @brief Pointers to transfer handle for each DMA channel. */
 static dma_handle_t *s_DMAHandle[FSL_FEATURE_DMA_ALL_CHANNELS];
 /*! @brief DMA driver internal descriptor table */
-#if (defined(__XCC__))
+#if (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
 DMA_ALLOCATE_HEAD_DESCRIPTORS_AT_NONCACHEABLE(s_dma_descriptor_table0, FSL_FEATURE_DMA_MAX_CHANNELS);
 #else
 DMA_ALLOCATE_HEAD_DESCRIPTORS(s_dma_descriptor_table0, FSL_FEATURE_DMA_MAX_CHANNELS);
 #endif
 #if defined(DMA1)
-#if (defined(__XCC__))
+#if (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
 DMA_ALLOCATE_HEAD_DESCRIPTORS_AT_NONCACHEABLE(s_dma_descriptor_table1, FSL_FEATURE_DMA_MAX_CHANNELS);
 #else
 DMA_ALLOCATE_HEAD_DESCRIPTORS(s_dma_descriptor_table1, FSL_FEATURE_DMA_MAX_CHANNELS);
@@ -169,12 +169,12 @@ void DMA_ConfigureChannelTrigger(DMA_Type *base, uint32_t channel, dma_channel_t
 {
     assert((channel < (uint32_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(base)) && (NULL != trigger));
 
-    uint32_t tmp = (DMA_CHANNEL_CFG_HWTRIGEN_MASK | DMA_CHANNEL_CFG_TRIGPOL_MASK | DMA_CHANNEL_CFG_TRIGTYPE_MASK |
-                    DMA_CHANNEL_CFG_TRIGBURST_MASK | DMA_CHANNEL_CFG_BURSTPOWER_MASK |
-                    DMA_CHANNEL_CFG_SRCBURSTWRAP_MASK | DMA_CHANNEL_CFG_DSTBURSTWRAP_MASK);
-    tmp          = base->CHANNEL[channel].CFG & (~tmp);
-    tmp |= (uint32_t)(trigger->type) | (uint32_t)(trigger->burst) | (uint32_t)(trigger->wrap);
-    base->CHANNEL[channel].CFG = tmp;
+    uint32_t tmpReg = (DMA_CHANNEL_CFG_HWTRIGEN_MASK | DMA_CHANNEL_CFG_TRIGPOL_MASK | DMA_CHANNEL_CFG_TRIGTYPE_MASK |
+                       DMA_CHANNEL_CFG_TRIGBURST_MASK | DMA_CHANNEL_CFG_BURSTPOWER_MASK |
+                       DMA_CHANNEL_CFG_SRCBURSTWRAP_MASK | DMA_CHANNEL_CFG_DSTBURSTWRAP_MASK);
+    tmpReg          = base->CHANNEL[channel].CFG & (~tmpReg);
+    tmpReg |= (uint32_t)(trigger->type) | (uint32_t)(trigger->burst) | (uint32_t)(trigger->wrap);
+    base->CHANNEL[channel].CFG = tmpReg;
 }
 
 /*!
@@ -604,25 +604,25 @@ void DMA_SetChannelConfig(DMA_Type *base, uint32_t channel, dma_channel_trigger_
 {
     assert(channel < (uint32_t)FSL_FEATURE_DMA_MAX_CHANNELS);
 
-    uint32_t tmp = DMA_CHANNEL_CFG_PERIPHREQEN_MASK;
+    uint32_t tmpReg = DMA_CHANNEL_CFG_PERIPHREQEN_MASK;
 
     if (trigger != NULL)
     {
-        tmp |= DMA_CHANNEL_CFG_HWTRIGEN_MASK | DMA_CHANNEL_CFG_TRIGPOL_MASK | DMA_CHANNEL_CFG_TRIGTYPE_MASK |
-               DMA_CHANNEL_CFG_TRIGBURST_MASK | DMA_CHANNEL_CFG_BURSTPOWER_MASK | DMA_CHANNEL_CFG_SRCBURSTWRAP_MASK |
-               DMA_CHANNEL_CFG_DSTBURSTWRAP_MASK;
+        tmpReg |= DMA_CHANNEL_CFG_HWTRIGEN_MASK | DMA_CHANNEL_CFG_TRIGPOL_MASK | DMA_CHANNEL_CFG_TRIGTYPE_MASK |
+                  DMA_CHANNEL_CFG_TRIGBURST_MASK | DMA_CHANNEL_CFG_BURSTPOWER_MASK | DMA_CHANNEL_CFG_SRCBURSTWRAP_MASK |
+                  DMA_CHANNEL_CFG_DSTBURSTWRAP_MASK;
     }
 
-    tmp = base->CHANNEL[channel].CFG & (~tmp);
+    tmpReg = base->CHANNEL[channel].CFG & (~tmpReg);
 
     if (trigger != NULL)
     {
-        tmp |= (uint32_t)(trigger->type) | (uint32_t)(trigger->burst) | (uint32_t)(trigger->wrap);
+        tmpReg |= (uint32_t)(trigger->type) | (uint32_t)(trigger->burst) | (uint32_t)(trigger->wrap);
     }
 
-    tmp |= DMA_CHANNEL_CFG_PERIPHREQEN(isPeriph);
+    tmpReg |= DMA_CHANNEL_CFG_PERIPHREQEN(isPeriph);
 
-    base->CHANNEL[channel].CFG = tmp;
+    base->CHANNEL[channel].CFG = tmpReg;
 }
 
 /*!
@@ -776,7 +776,7 @@ void DMA_InstallDescriptorMemory(DMA_Type *base, void *addr)
  * param nextDesc address of next descriptor.
  */
 void DMA_SubmitChannelTransferParameter(
-    dma_handle_t *handle, uint32_t xfercfg, void *srcStartAddr, void *dstStartAddr, void *nextDesc)
+    dma_handle_t *handle, uint32_t xferCfg, void *srcStartAddr, void *dstStartAddr, void *nextDesc)
 {
     assert((NULL != srcStartAddr) && (NULL != dstStartAddr));
     assert(handle->channel < (uint8_t)FSL_FEATURE_DMA_NUMBER_OF_CHANNELSn(handle->base));
@@ -784,10 +784,10 @@ void DMA_SubmitChannelTransferParameter(
     uint32_t instance            = DMA_GetInstance(handle->base);
     dma_descriptor_t *descriptor = (dma_descriptor_t *)(&s_dma_descriptor_table[instance][handle->channel]);
 
-    DMA_SetupDescriptor(descriptor, xfercfg, srcStartAddr, dstStartAddr, nextDesc);
+    DMA_SetupDescriptor(descriptor, xferCfg, srcStartAddr, dstStartAddr, nextDesc);
 
     /* Set channel XFERCFG register according first channel descriptor. */
-    handle->base->CHANNEL[handle->channel].XFERCFG = xfercfg;
+    handle->base->CHANNEL[handle->channel].XFERCFG = xferCfg;
 }
 
 /*!
@@ -1032,21 +1032,13 @@ void DMA_IRQHandle(DMA_Type *base)
 void DMA0_DriverIRQHandler(void)
 {
     DMA_IRQHandle(DMA0);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if defined(DMA1)
 void DMA1_DriverIRQHandler(void)
 {
     DMA_IRQHandle(DMA1);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,8 +27,8 @@
  * @{
  */
 
-/*! @brief DMIC driver version 2.2.1. */
-#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief DMIC driver version 2.3.0. */
+#define FSL_DMIC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /*! @brief _dmic_status DMIC transfer status.*/
@@ -232,8 +232,8 @@ static inline void DMIC_SetIOCFG(DMIC_Type *base, uint32_t sel)
 
 /*!
  * @brief	Set DMIC operating mode
- * @deprecated Do not use this function.  It has been superceded by @ref
- * DMIC_EnbleChannelInterrupt/DMIC_EnbleChannelDma.
+ * @deprecated Do not use this function.  It has been superceded by
+ * @ref DMIC_EnableChannelInterrupt, @ref DMIC_EnableChannelDma.
  * @param	base	: The base address of DMIC interface
  * @param	mode	: DMIC mode
  * @return	Nothing
@@ -306,7 +306,7 @@ void DMIC_ConfigChannel(DMIC_Type *base,
 /*!
  * @brief   Enable a particualr channel
  * @param   base        : The base address of DMIC interface
- * @param   channelmask, reference _dmic_channel_mask
+ * @param   channelmask reference _dmic_channel_mask
  * @return  Nothing
  */
 void DMIC_EnableChannnel(DMIC_Type *base, uint32_t channelmask);
@@ -326,6 +326,7 @@ void DMIC_FifoChannel(DMIC_Type *base, uint32_t channel, uint32_t trig_level, ui
  * @brief   Enable a particualr channel interrupt request.
  * @param   base        : The base address of DMIC interface
  * @param   channel : Channel selection
+ * @param   enable : true is enable, false is disable
  */
 static inline void DMIC_EnableChannelInterrupt(DMIC_Type *base, dmic_channel_t channel, bool enable)
 {
@@ -432,6 +433,41 @@ static inline uint32_t DMIC_FifoGetAddress(DMIC_Type *base, uint32_t channel)
 {
     return (uint32_t)(&(base->CHANNEL[channel].FIFO_DATA));
 }
+
+#if defined(FSL_FEATURE_DMIC_HAS_DECIMATOR_RESET_FUNC) && FSL_FEATURE_DMIC_HAS_DECIMATOR_RESET_FUNC
+/*!
+ * @brief   DMIC channel Decimator reset
+ * @param   base        : The base address of DMIC interface
+ * @param   channelMask     : DMIC channel mask, reference _dmic_channel_mask
+ * @param   reset           : true is reset decimator, false is release decimator.
+ */
+void DMIC_ResetChannelDecimator(DMIC_Type *base, uint32_t channelMask, bool reset);
+#endif
+
+#if defined(FSL_FEATURE_DMIC_HAS_GLOBAL_SYNC_FUNC) && FSL_FEATURE_DMIC_HAS_GLOBAL_SYNC_FUNC
+/*!
+ * @brief   Enable DMIC channel global sync function.
+ * @param   base        : The base address of DMIC interface
+ * @param   channelMask     : DMIC channel mask, reference _dmic_channel_mask
+ * @param   syncCounter :sync counter will trigger a pulse whenever count reaches CCOUNTVAL. If CCOUNTVAL is set to 0,
+ * there will be a pulse on every cycle
+ */
+static inline void DMIC_EnableChannelGlobalSync(DMIC_Type *base, uint32_t channelMask, uint32_t syncCounter)
+{
+    base->GLOBAL_COUNT_VAL = syncCounter;
+    base->GLOBAL_SYNC_EN   = channelMask;
+}
+
+/*!
+ * @brief   Disbale DMIC channel global sync function.
+ * @param   base        : The base address of DMIC interface
+ * @param   channelMask     : DMIC channel mask, reference _dmic_channel_mask
+ */
+static inline void DMIC_DisableChannelGlobalSync(DMIC_Type *base, uint32_t channelMask)
+{
+    base->GLOBAL_SYNC_EN &= ~channelMask;
+}
+#endif
 
 /*! @} */
 

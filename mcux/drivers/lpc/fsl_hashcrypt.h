@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,9 +26,9 @@ enum _hashcrypt_status
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief HASHCRYPT driver version. Version 2.1.2.
+/*! @brief HASHCRYPT driver version. Version 2.1.3.
  *
- * Current version: 2.1.1
+ * Current version: 2.1.3
  *
  * Change log:
  * - Version 2.0.0
@@ -47,14 +47,16 @@ enum _hashcrypt_status
  *   - Fix MISRA C-2012.
  * - Version 2.1.2
  *   - Support loading AES input data from unaligned address.
+ * - Version 2.1.3
+ *   - Fix MISRA C-2012.
  */
-#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_HASHCRYPT_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*@}*/
 
 /*! @brief Algorithm definitions correspond with the values for Mode field in Control register !*/
-#define HASHCRYPT_MODE_SHA1 0x1
+#define HASHCRYPT_MODE_SHA1   0x1
 #define HASHCRYPT_MODE_SHA256 0x2
-#define HASHCRYPT_MODE_AES 0x4
+#define HASHCRYPT_MODE_AES    0x4
 
 /*! @brief Algorithm used for Hashcrypt operation */
 typedef enum _hashcrypt_algo_t
@@ -77,8 +79,8 @@ typedef enum _hashcrypt_algo_t
 
 /*! AES block size in bytes */
 #define HASHCRYPT_AES_BLOCK_SIZE 16U
-#define AES_ENCRYPT 0
-#define AES_DECRYPT 1
+#define AES_ENCRYPT              0
+#define AES_DECRYPT              1
 
 /*! @brief AES mode */
 typedef enum _hashcrypt_aes_mode_t

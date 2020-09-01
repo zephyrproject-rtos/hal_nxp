@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief MCAN driver version 2.1.1. */
-#define FSL_MCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief MCAN driver version. */
+#define FSL_MCAN_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*@}*/
 
 #ifndef MCAN_RETRY_TIMES
@@ -61,7 +61,7 @@ enum
  * This provides constants for the MCAN status flags for use in the MCAN functions.
  * Note: The CPU read action clears MCAN_ErrorFlag, therefore user need to
  * read MCAN_ErrorFlag and distinguish which error is occur using
- * @ref _mcan_error_flags enumerations.
+ * _mcan_error_flags enumerations.
  */
 enum _mcan_flags
 {
@@ -624,13 +624,12 @@ void MCAN_SetTxBufferConfig(CAN_Type *base, const mcan_tx_buffer_config_t *confi
 void MCAN_SetFilterConfig(CAN_Type *base, const mcan_frame_filter_config_t *config);
 
 /*!
- * @brief Set filter configuration.
- *
- * This function sets remote and non masking frames in global filter configuration,
- * also the start address, list size in standard/extended ID filter configuration.
+ * @brief Set standard message ID filter element configuration.
  *
  * @param base MCAN peripheral base address.
  * @param config The MCAN filter configuration.
+ * @param filter The MCAN standard message ID filter element configuration.
+ * @param idx The standard message ID filter element index.
  */
 void MCAN_SetSTDFilterElement(CAN_Type *base,
                               const mcan_frame_filter_config_t *config,
@@ -638,13 +637,12 @@ void MCAN_SetSTDFilterElement(CAN_Type *base,
                               uint8_t idx);
 
 /*!
- * @brief Set filter configuration.
- *
- * This function sets remote and non masking frames in global filter configuration,
- * also the start address, list size in standard/extended ID filter configuration.
+ * @brief Set extended message ID filter element configuration.
  *
  * @param base MCAN peripheral base address.
  * @param config The MCAN filter configuration.
+ * @param filter The MCAN extended message ID filter element configuration.
+ * @param idx The extended message ID filter element index.
  */
 void MCAN_SetEXTFilterElement(CAN_Type *base,
                               const mcan_frame_filter_config_t *config,

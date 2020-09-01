@@ -50,7 +50,6 @@ extern "C" {
  * When called, the RNG module and ring oscillator is enabled.
  *
  * @param base  RNG base address
- * @param userConfig    Pointer to the initialization configuration structure.
  * @return If successful, returns the kStatus_RNG_Success. Otherwise, it returns an error.
  */
 void RNG_Init(RNG_Type *base);

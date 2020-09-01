@@ -464,8 +464,8 @@ void I2C_MasterTransferCreateHandleDMA(I2C_Type *base,
                                        void *userData,
                                        dma_handle_t *dmaHandle)
 {
-    assert(handle);
-    assert(dmaHandle);
+    assert(handle != NULL);
+    assert(dmaHandle != NULL);
 
     uint32_t instance;
     i2c_dma_to_flexcomm_t handler;
@@ -513,8 +513,8 @@ status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, 
 {
     status_t result;
 
-    assert(handle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
     assert(xfer->subaddressSize <= sizeof(xfer->subaddress));
 
     /* Return busy if another transaction is in progress. */
@@ -545,7 +545,7 @@ status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, 
  */
 status_t I2C_MasterTransferGetCountDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {

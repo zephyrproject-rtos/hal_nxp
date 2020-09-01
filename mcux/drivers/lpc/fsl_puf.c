@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2020 NXP
  * All rights reserved.
  *
  *
@@ -17,8 +17,8 @@
 
 /* RT6xx POWER CONTROL bit masks */
 #if defined(FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL) && (FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL > 0)
-#define PUF_PWRCTRL_CKDIS_MASK (0x4U)
-#define PUF_PWRCTRL_RAMINIT_MASK (0x8U)
+#define PUF_PWRCTRL_CKDIS_MASK         (0x4U)
+#define PUF_PWRCTRL_RAMINIT_MASK       (0x8U)
 #define PUF_PWRCTRL_RAMPSWLARGEMA_MASK (0x10U)
 #define PUF_PWRCTRL_RAMPSWLARGEMP_MASK (0x20U)
 #define PUF_PWRCTRL_RAMPSWSMALLMA_MASK (0x40U)
@@ -26,21 +26,11 @@
 #endif
 
 #if defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && (FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0)
-#define DEFAULT_MODE 0x0u
 #define DEFAULT_CKGATING 0x0u
-#define DEFAULT_SMB 0x0u
-#define DEFAULT_RM 0x3u
-#define DEFAULT_WM 0x2u
-#define DEFAULT_RAM 0x1u
-#define DEFAULT_WAM 0x1u
-#define DEFAULT_WRME 0x0u
-#define DEFAULT_RAEN 0x0u
-#define DEFAULT_WAEN 0x0u
-#define DEFAULT_STBP 0x0u
-#define PUF_ENABLE_MASK 0xFFFFFFFEu
-#define PUF_ENABLE_CTRL 0x1u
-#endif /* FSL_FEATURE_PUF_HAS_SRAM_CTRL */
+#define PUF_ENABLE_MASK  0xFFFFFFFEu
+#define PUF_ENABLE_CTRL  0x1u
 
+#else
 static void puf_wait_usec(volatile uint32_t usec, uint32_t coreClockFrequencyMHz)
 {
     while (usec > 0U)
@@ -55,6 +45,7 @@ static void puf_wait_usec(volatile uint32_t usec, uint32_t coreClockFrequencyMHz
         }
     }
 }
+#endif /* defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && (FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0) */
 
 static status_t puf_waitForInit(PUF_Type *base)
 {
@@ -83,21 +74,14 @@ static void puf_powerOn(PUF_Type *base, puf_config_t *conf)
 {
 #if defined(FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL) && (FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL > 0)
     /* RT6xxs */
-    base->PWRCTRL = (PUF_PWRCTRL_RAMON_MASK | PUF_PWRCTRL_CKDIS_MASK);
-    base->PWRCTRL = (PUF_PWRCTRL_RAMON_MASK | PUF_PWRCTRL_CKDIS_MASK | PUF_PWRCTRL_RAMINIT_MASK);
-    base->PWRCTRL = (PUF_PWRCTRL_RAMON_MASK | PUF_PWRCTRL_RAMINIT_MASK);
+    base->PWRCTRL = (PUF_PWRCTRL_RAM_ON_MASK | PUF_PWRCTRL_CK_DIS_MASK);
+    base->PWRCTRL = (PUF_PWRCTRL_RAM_ON_MASK | PUF_PWRCTRL_CK_DIS_MASK | PUF_PWRCTRL_RAMINIT_MASK);
+    base->PWRCTRL = (PUF_PWRCTRL_RAM_ON_MASK | PUF_PWRCTRL_RAMINIT_MASK);
 #elif defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && (FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0)
     /* LPCXpresso55s16 */
-    if (0 == (PUF_SRAM_CTRL_CFG_MODE_MASK & conf->puf_sram_base->CFG))
+    conf->puf_sram_base->CFG |= PUF_ENABLE_CTRL;
+    while (0U == (PUF_SRAM_CTRL_STATUS_READY_MASK & conf->puf_sram_base->STATUS))
     {
-        conf->puf_sram_base->CFG |= PUF_ENABLE_CTRL;
-        while (0 == (PUF_SRAM_CTRL_STATUS_READY_MASK & conf->puf_sram_base->STATUS))
-        {
-        }
-    }
-    else
-    {
-        conf->puf_sram_base->CFG |= PUF_ENABLE_CTRL;
     }
 #else  /* !FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL */
     /* LPCXpresso55s69 & LPCXpresso54S018 */
@@ -107,18 +91,26 @@ static void puf_powerOn(PUF_Type *base, puf_config_t *conf)
     }
 #endif /* FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL */
 }
-
-static status_t puf_powerCycle(PUF_Type *base, puf_config_t *conf)
+/*!
+ * brief Powercycle PUF
+ *
+ * This function make powercycle of PUF.
+ *
+ * param base PUF peripheral base address
+ * param conf PUF configuration structure
+ * return Status of the powercycle operation.
+ */
+status_t PUF_PowerCycle(PUF_Type *base, puf_config_t *conf)
 {
 #if defined(FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL) && (FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL > 0)
     /* RT6xxs */
     uint32_t coreClockFrequencyMHz = conf->coreClockFrequencyHz / 1000000u;
 
-    base->PWRCTRL = (PUF_PWRCTRL_RAMON_MASK | PUF_PWRCTRL_CKDIS_MASK | PUF_PWRCTRL_RAMINIT_MASK); /* disable RAM CK */
+    base->PWRCTRL = (PUF_PWRCTRL_RAM_ON_MASK | PUF_PWRCTRL_CK_DIS_MASK | PUF_PWRCTRL_RAMINIT_MASK); /* disable RAM CK */
 
     /* enter ASPS mode */
-    base->PWRCTRL = (PUF_PWRCTRL_CKDIS_MASK | PUF_PWRCTRL_RAMINIT_MASK); /* SLEEP = 1 */
-    base->PWRCTRL = (PUF_PWRCTRL_RAMINIT_MASK);                          /* enable RAM CK */
+    base->PWRCTRL = (PUF_PWRCTRL_CK_DIS_MASK | PUF_PWRCTRL_RAMINIT_MASK); /* SLEEP = 1 */
+    base->PWRCTRL = (PUF_PWRCTRL_RAMINIT_MASK);                           /* enable RAM CK */
     base->PWRCTRL = (PUF_PWRCTRL_RAMINIT_MASK | PUF_PWRCTRL_RAMPSWLARGEMA_MASK | PUF_PWRCTRL_RAMPSWLARGEMP_MASK |
                      PUF_PWRCTRL_RAMPSWSMALLMA_MASK | PUF_PWRCTRL_RAMPSWSMALLMP_MASK); /* SLEEP=1, PSW*=1 */
 
@@ -134,25 +126,17 @@ static status_t puf_powerCycle(PUF_Type *base, puf_config_t *conf)
     base->PWRCTRL = PUF_PWRCTRL_RAMINIT_MASK; /* SLEEP=1. PSWSMALL*=0. PSWLARGE*=0 */
     puf_wait_usec(1, coreClockFrequencyMHz);
 
-    base->PWRCTRL = (PUF_PWRCTRL_CKDIS_MASK | PUF_PWRCTRL_RAMINIT_MASK);
-    base->PWRCTRL = (PUF_PWRCTRL_RAMON_MASK | PUF_PWRCTRL_CKDIS_MASK | PUF_PWRCTRL_RAMINIT_MASK);
-    base->PWRCTRL = (PUF_PWRCTRL_RAMON_MASK | PUF_PWRCTRL_RAMINIT_MASK);
+    base->PWRCTRL = (PUF_PWRCTRL_CK_DIS_MASK | PUF_PWRCTRL_RAMINIT_MASK);
+    base->PWRCTRL = (PUF_PWRCTRL_RAM_ON_MASK | PUF_PWRCTRL_CK_DIS_MASK | PUF_PWRCTRL_RAMINIT_MASK);
+    base->PWRCTRL = (PUF_PWRCTRL_RAM_ON_MASK | PUF_PWRCTRL_RAMINIT_MASK);
 
     /* Generate INITN low pulse */
-    base->PWRCTRL = (PUF_PWRCTRL_RAMON_MASK | PUF_PWRCTRL_CKDIS_MASK | PUF_PWRCTRL_RAMINIT_MASK);
-    base->PWRCTRL = (PUF_PWRCTRL_RAMON_MASK | PUF_PWRCTRL_CKDIS_MASK);
-    base->PWRCTRL = PUF_PWRCTRL_RAMON_MASK;
+    base->PWRCTRL = (PUF_PWRCTRL_RAM_ON_MASK | PUF_PWRCTRL_CK_DIS_MASK | PUF_PWRCTRL_RAMINIT_MASK);
+    base->PWRCTRL = (PUF_PWRCTRL_RAM_ON_MASK | PUF_PWRCTRL_CK_DIS_MASK);
+    base->PWRCTRL = PUF_PWRCTRL_RAM_ON_MASK;
 #elif defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && (FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0)
     /* LPCXpresso55s16 */
-    if (0 == (PUF_SRAM_CTRL_CFG_MODE_MASK & conf->puf_sram_base->CFG))
-    {
-        conf->puf_sram_base->CFG &= PUF_ENABLE_MASK;
-    }
-    else
-    {
-        conf->puf_sram_base->CFG &= PUF_ENABLE_MASK;
-        puf_wait_usec(conf->dischargeTimeMsec * 1000u, conf->coreClockFrequencyHz / 1000000u);
-    }
+    conf->puf_sram_base->CFG &= PUF_ENABLE_MASK;
 #else
     /* LPCXpresso55s69 & LPCXpresso54S018 */
     base->PWRCTRL = 0x0u;
@@ -185,17 +169,7 @@ void PUF_GetDefaultConfig(puf_config_t *conf)
     conf->puf_sram_base = PUF_SRAM_CTRL;
 
     /* Default configuration after reset */
-    conf->MODE     = DEFAULT_MODE;     /* PUF SRAM Controller operating mode */
     conf->CKGATING = DEFAULT_CKGATING; /* PUF SRAM Clock Gating */
-    conf->SMB      = DEFAULT_SMB;      /* Source Biasing voltage */
-    conf->RM       = DEFAULT_RM;       /* Read Margin */
-    conf->WM       = DEFAULT_WM;       /* Write Margin */
-    conf->WRME     = DEFAULT_WRME;     /* Write Read Margin */
-    conf->RAEN     = DEFAULT_RAEN;     /* Read Assist Enable */
-    conf->RAM      = DEFAULT_RAM;      /* Read Assist settings */
-    conf->WAEN     = DEFAULT_WAEN;     /* Write Assist Enable */
-    conf->WAM      = DEFAULT_WAM;      /* Write Assist settings */
-    conf->STBP     = DEFAULT_STBP;     /* STBP */
 #endif                                 /* FSL_FEATURE_PUF_HAS_SRAM_CTRL */
 
     conf->dischargeTimeMsec    = KEYSTORE_PUF_DISCHARGE_TIME_MAX_MS;
@@ -224,22 +198,8 @@ status_t PUF_Init(PUF_Type *base, puf_config_t *conf)
     RESET_PeripheralReset(kPUF_RST_SHIFT_RSTn);
 
 #if defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && (FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0)
-    /* Clear configuration after reset */
-    conf->puf_sram_base->CFG      = 0U;
-    conf->puf_sram_base->SRAM_CFG = 0U;
-
-    /* Set configuration from SRAM */
-    conf->puf_sram_base->CFG |= PUF_SRAM_CTRL_CFG_MODE(conf->MODE);
+    /* Set configuration for SRAM */
     conf->puf_sram_base->CFG |= PUF_SRAM_CTRL_CFG_CKGATING(conf->CKGATING);
-    conf->puf_sram_base->SRAM_CFG |= PUF_SRAM_CTRL_SRAM_CFG_SMB(conf->SMB);
-    conf->puf_sram_base->SRAM_CFG |= PUF_SRAM_CTRL_SRAM_CFG_RM(conf->RM);
-    conf->puf_sram_base->SRAM_CFG |= PUF_SRAM_CTRL_SRAM_CFG_WM(conf->WM);
-    conf->puf_sram_base->SRAM_CFG |= PUF_SRAM_CTRL_SRAM_CFG_WRME(conf->WRME);
-    conf->puf_sram_base->SRAM_CFG |= PUF_SRAM_CTRL_SRAM_CFG_RAEN(conf->RAEN);
-    conf->puf_sram_base->SRAM_CFG |= PUF_SRAM_CTRL_SRAM_CFG_RAM(conf->RAM);
-    conf->puf_sram_base->SRAM_CFG |= PUF_SRAM_CTRL_SRAM_CFG_WAEN(conf->WAEN);
-    conf->puf_sram_base->SRAM_CFG |= PUF_SRAM_CTRL_SRAM_CFG_WAM(conf->WAM);
-    conf->puf_sram_base->SRAM_CFG |= PUF_SRAM_CTRL_SRAM_CFG_STBP(conf->STBP);
 
 #endif /* FSL_FEATURE_PUF_HAS_SRAM_CTRL */
 
@@ -250,10 +210,9 @@ status_t PUF_Init(PUF_Type *base, puf_config_t *conf)
     status = puf_waitForInit(base);
 
     /* In case of error or enroll & start not allowed, do power-cycle */
-    if ((status != kStatus_Success) || ((PUF_ALLOW_ALLOWENROLL_MASK | PUF_ALLOW_ALLOWSTART_MASK) !=
-                                        (base->ALLOW & (PUF_ALLOW_ALLOWENROLL_MASK | PUF_ALLOW_ALLOWSTART_MASK))))
+    if ((status != kStatus_Success) || (0U != (base->ALLOW & (PUF_ALLOW_ALLOWENROLL_MASK | PUF_ALLOW_ALLOWSTART_MASK))))
     {
-        (void)puf_powerCycle(base, conf);
+        (void)PUF_PowerCycle(base, conf);
         status = puf_waitForInit(base);
     }
 
@@ -272,11 +231,11 @@ void PUF_Deinit(PUF_Type *base, puf_config_t *conf)
 {
 #if defined(FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL) && (FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL > 0)
     /* RT6xxs */
-    base->PWRCTRL = (PUF_PWRCTRL_RAMON_MASK | PUF_PWRCTRL_CKDIS_MASK | PUF_PWRCTRL_RAMINIT_MASK); /* disable RAM CK */
+    base->PWRCTRL = (PUF_PWRCTRL_RAM_ON_MASK | PUF_PWRCTRL_CK_DIS_MASK | PUF_PWRCTRL_RAMINIT_MASK); /* disable RAM CK */
 
     /* enter ASPS mode */
-    base->PWRCTRL = (PUF_PWRCTRL_CKDIS_MASK | PUF_PWRCTRL_RAMINIT_MASK); /* SLEEP = 1 */
-    base->PWRCTRL = PUF_PWRCTRL_RAMINIT_MASK;                            /* enable RAM CK */
+    base->PWRCTRL = (PUF_PWRCTRL_CK_DIS_MASK | PUF_PWRCTRL_RAMINIT_MASK); /* SLEEP = 1 */
+    base->PWRCTRL = PUF_PWRCTRL_RAMINIT_MASK;                             /* enable RAM CK */
     base->PWRCTRL = (PUF_PWRCTRL_RAMINIT_MASK | PUF_PWRCTRL_RAMPSWLARGEMA_MASK | PUF_PWRCTRL_RAMPSWLARGEMP_MASK |
                      PUF_PWRCTRL_RAMPSWSMALLMA_MASK | PUF_PWRCTRL_RAMPSWSMALLMP_MASK); /* SLEEP=1, PSW*=1 */
     puf_wait_usec(conf->dischargeTimeMsec * 1000u, conf->coreClockFrequencyHz / 1000000u);
@@ -284,17 +243,11 @@ void PUF_Deinit(PUF_Type *base, puf_config_t *conf)
     /* LPCXpresso55s16 */
     conf->puf_sram_base = PUF_SRAM_CTRL;
     conf->puf_sram_base->CFG &= PUF_ENABLE_MASK;
-    if (PUF_SRAM_CTRL_CFG_MODE_MASK & conf->puf_sram_base->CFG)
-    {
-        puf_wait_usec(conf->dischargeTimeMsec * 1000u, conf->coreClockFrequencyHz / 1000000u);
-    }
 #else /* !FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL */
     /* LPCXpresso55s69 & LPCXpresso54S018 */
     base->PWRCTRL = 0x00u;
     puf_wait_usec(conf->dischargeTimeMsec * 1000u, conf->coreClockFrequencyHz / 1000000u);
 #endif
-
-    /* Wait enough time to discharge fully */
 
     RESET_SetPeripheralReset(kPUF_RST_SHIFT_RSTn);
 
@@ -338,7 +291,7 @@ status_t PUF_Enroll(PUF_Type *base, uint8_t *activationCode, size_t activationCo
     /* check if ENROLL is allowed */
     if (0x0u == (base->ALLOW & PUF_ALLOW_ALLOWENROLL_MASK))
     {
-        return kStatus_Fail;
+        return kStatus_EnrollNotAllowed;
     }
 
     /* begin */
@@ -407,7 +360,7 @@ status_t PUF_Start(PUF_Type *base, const uint8_t *activationCode, size_t activat
     /* check if START is allowed */
     if (0x0u == (base->ALLOW & PUF_ALLOW_ALLOWSTART_MASK))
     {
-        return kStatus_Fail;
+        return kStatus_StartNotAllowed;
     }
 
     /* begin */
@@ -598,13 +551,11 @@ status_t PUF_SetUserKey(PUF_Type *base,
     base->KEYSIZE  = userKeySize >> 3; /* convert to 64-bit blocks */
     base->KEYINDEX = (uint32_t)keyIndex;
 
-    /* On LPCXpresso54S018 we have to store the user key on index 0 word swaped for HW bus */
-#if defined(LPC54S018_SERIES)
+    /* We have to store the user key on index 0 swaped for HW bus */
     if (keyIndex == kPUF_KeyIndex_00)
     {
         userKeyAligned = userKeyAligned + (userKeySize / sizeof(uint32_t));
     }
-#endif /*LPC54S018_SERIES*/
 
     /* begin */
     base->CTRL = PUF_CTRL_SETKEY_MASK;
@@ -628,17 +579,24 @@ status_t PUF_SetUserKey(PUF_Type *base,
                     temp32 = *userKeyAligned;
                     userKeySize -= sizeof(uint32_t);
                 }
-                else
+#else
+                if (keyIndex == kPUF_KeyIndex_00)
+                {
+                    userKeyAligned--;
+                    temp32 = __REV(*userKeyAligned);
+                    userKeySize--;
+                }
+#endif /* defined(LPC54S018_SERIES) */
+                else if (keyIndex != kPUF_KeyIndex_00)
                 {
                     temp32 = *userKeyAligned;
                     userKeyAligned++;
                     userKeySize -= sizeof(uint32_t);
                 }
-#else
-                temp32 = *userKeyAligned;
-                userKeyAligned++;
-                userKeySize -= sizeof(uint32_t);
-#endif /* LPC54S018_SERIES */
+                else
+                {
+                    /* Intentional empty */
+                }
             }
             base->KEYINPUT = temp32;
         }

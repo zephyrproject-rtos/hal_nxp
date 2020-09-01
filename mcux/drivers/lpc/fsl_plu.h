@@ -155,6 +155,7 @@ typedef enum _plu_output_source
 
 #if defined(FSL_FEATURE_PLU_HAS_WAKEINT_CTRL_REG) && FSL_FEATURE_PLU_HAS_WAKEINT_CTRL_REG
 
+/*! @brief The enumerator of PLU Interrupt. */
 enum _plu_interrupt_mask
 {
     kPLU_OUTPUT_0_INTERRUPT_MASK = 1 << 0, /*!< Select PLU output 0 contribute to interrupt/wake-up generation */
@@ -184,10 +185,11 @@ typedef enum _plu_wakeint_filter_clock_source
     kPLU_WAKEINT_FILTER_CLK_SRC_ALT        = 2U  /*!< Select a third clock source */
 } plu_wakeint_filter_clock_source_t;
 
+/*! @brief Wake configuration. */
 typedef struct _plu_wakeint_config
 {
-    plu_wakeint_filter_mode_t filterMode;
-    plu_wakeint_filter_clock_source_t clockSource;
+    plu_wakeint_filter_mode_t filterMode;          /*!< Filter Mode. */
+    plu_wakeint_filter_clock_source_t clockSource; /*!< The clock source for filter mode. */
 } plu_wakeint_config_t;
 #endif /* FSL_FEATURE_PLU_HAS_WAKEINT_CTRL_REG */
 

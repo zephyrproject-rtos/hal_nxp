@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,20 +19,20 @@
 
 #define MCAN_TIME_QUANTA_NUM (16U)
 
-#define IDEAL_SP_LOW (750U)
-#define IDEAL_SP_MID (800U)
-#define IDEAL_SP_HIGH (875U)
+#define IDEAL_SP_LOW    (750U)
+#define IDEAL_SP_MID    (800U)
+#define IDEAL_SP_HIGH   (875U)
 #define IDEAL_SP_FACTOR (1000U)
 
-#define MAX_DSJW (CAN_DBTP_DSJW_MASK >> CAN_DBTP_DSJW_SHIFT)
+#define MAX_DSJW   (CAN_DBTP_DSJW_MASK >> CAN_DBTP_DSJW_SHIFT)
 #define MAX_DTSEG2 (CAN_DBTP_DTSEG2_MASK >> CAN_DBTP_DTSEG2_SHIFT)
 #define MAX_DTSEG1 (CAN_DBTP_DTSEG1_MASK >> CAN_DBTP_DTSEG1_SHIFT)
-#define MAX_DBRP (CAN_DBTP_DBRP_MASK >> CAN_DBTP_DBRP_SHIFT)
+#define MAX_DBRP   (CAN_DBTP_DBRP_MASK >> CAN_DBTP_DBRP_SHIFT)
 
-#define MAX_NSJW (CAN_NBTP_NSJW_MASK >> CAN_NBTP_NBRP_SHIFT)
+#define MAX_NSJW   (CAN_NBTP_NSJW_MASK >> CAN_NBTP_NBRP_SHIFT)
 #define MAX_NTSEG2 (CAN_NBTP_NTSEG2_MASK >> CAN_NBTP_NTSEG2_SHIFT)
 #define MAX_NTSEG1 (CAN_NBTP_NTSEG1_MASK >> CAN_NBTP_NTSEG1_SHIFT)
-#define MAX_NBRP (CAN_NBTP_NBRP_MASK >> CAN_NBTP_NBRP_SHIFT)
+#define MAX_NBRP   (CAN_NBTP_NBRP_MASK >> CAN_NBTP_NBRP_SHIFT)
 
 #define DBTP_MAX_TIME_QUANTA (1U + MAX_DTSEG2 + 1U + MAX_DTSEG1 + 1U)
 #define DBTP_MIN_TIME_QUANTA (3U)
@@ -40,7 +40,7 @@
 #define NBTP_MIN_TIME_QUANTA (3U)
 
 #define MAX_CANFD_BAUDRATE (8000000U)
-#define MAX_CAN_BAUDRATE (1000000U)
+#define MAX_CAN_BAUDRATE   (1000000U)
 
 /*! @brief MCAN Internal State. */
 enum _mcan_state
@@ -81,8 +81,10 @@ static void MCAN_Reset(CAN_Type *base);
  * @param baudRate The data speed in bps
  * @param tqNum Number of time quantas per bit
  * @param pconfig Pointer to the MCAN timing configuration structure.
+ *
+ * @return TRUE if Calculates the segment success, FALSE if Calculates the segment success
  */
-static void MCAN_GetSegments(uint32_t baudRate, uint32_t tqNum, mcan_timing_config_t *pconfig);
+static bool MCAN_GetSegments(uint32_t baudRate, uint32_t tqNum, mcan_timing_config_t *pconfig);
 
 /*!
  * @brief Set Baud Rate of MCAN.
@@ -107,8 +109,9 @@ static void MCAN_SetBaudRate(CAN_Type *base,
  * @param tqNum Number of time quanta per bit
  * @param pconfig Pointer to the MCAN timing configuration structure.
  *
+ * @return TRUE if Calculates the segment success, FALSE if Calculates the segment success
  */
-static void MCAN_FDGetSegments(uint32_t baudRateFD, uint32_t tqNum, mcan_timing_config_t *pconfig);
+static bool MCAN_FDGetSegments(uint32_t baudRateFD, uint32_t tqNum, mcan_timing_config_t *pconfig);
 
 /*!
  * @brief Set Baud Rate of MCAN FD.
@@ -184,7 +187,11 @@ static const reset_ip_name_t s_mcanResets[] = MCAN_RSTS;
 #endif
 
 /* MCAN ISR for transactional APIs. */
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+static mcan_isr_t s_mcanIsr = (mcan_isr_t)DefaultISR;
+#else
 static mcan_isr_t s_mcanIsr;
+#endif
 
 /*******************************************************************************
  * Code
@@ -443,11 +450,13 @@ void MCAN_GetDefaultConfig(mcan_config_t *config)
  * @param tqNum Number of time quanta per bit
  * @param pconfig Pointer to the MCAN timing configuration structure.
  *
+ * @return TRUE if Calculates the segment success, FALSE if Calculates the segment success
  */
-static void MCAN_FDGetSegments(uint32_t baudRateFD, uint32_t tqNum, mcan_timing_config_t *pconfig)
+static bool MCAN_FDGetSegments(uint32_t baudRateFD, uint32_t tqNum, mcan_timing_config_t *pconfig)
 {
     uint32_t ideal_sp;
     uint32_t p1;
+    bool fgRet = false;
 
     /* get ideal sample point. */
     if (baudRateFD >= 1000000U)
@@ -465,23 +474,28 @@ static void MCAN_FDGetSegments(uint32_t baudRateFD, uint32_t tqNum, mcan_timing_
     /* distribute time quanta. */
     p1                = tqNum * (uint32_t)ideal_sp;
     pconfig->dataseg1 = (uint8_t)(p1 / (uint32_t)IDEAL_SP_FACTOR - 1U);
-    if (pconfig->dataseg1 > MAX_DTSEG1)
+    if (pconfig->dataseg1 <= MAX_DTSEG1)
     {
-        pconfig->dataseg1 = MAX_DTSEG1;
+        if (pconfig->dataseg1 <= ((uint8_t)tqNum - 3U))
+        {
+            pconfig->dataseg2 = (uint8_t)tqNum - (pconfig->dataseg1 + 3U);
+
+            if (pconfig->dataseg2 <= MAX_DTSEG2)
+            {
+                /* subtract one TQ for sync seg. */
+                /* sjw is 20% of total TQ, rounded to nearest int. */
+                pconfig->datarJumpwidth = ((uint8_t)tqNum + (5U - 1U)) / 5U - 1U;
+
+                if (pconfig->datarJumpwidth > MAX_DSJW)
+                {
+                    pconfig->datarJumpwidth = MAX_DSJW;
+                }
+
+                fgRet = true;
+            }
+        }
     }
-
-    pconfig->dataseg2 = (uint8_t)tqNum - (1U + pconfig->dataseg1 + 1U + 1U);
-
-    assert(pconfig->dataseg2 <= MAX_DTSEG2);
-
-    /* subtract one TQ for sync seg. */
-    /* sjw is 20% of total TQ, rounded to nearest int. */
-    pconfig->datarJumpwidth = ((uint8_t)tqNum + (5U - 1U)) / 5U - 1U;
-
-    if (pconfig->datarJumpwidth > MAX_DSJW)
-    {
-        pconfig->datarJumpwidth = MAX_DSJW;
-    }
+    return fgRet;
 }
 
 /*!
@@ -500,7 +514,6 @@ bool MCAN_FDCalculateImprovedTimingValues(uint32_t baudRate,
                                           mcan_timing_config_t *pconfig)
 {
     uint32_t clk;
-    uint32_t clk2;
     uint32_t tqNum; /* Numbers of TQ. */
     bool fgRet = false;
 
@@ -511,7 +524,7 @@ bool MCAN_FDCalculateImprovedTimingValues(uint32_t baudRate,
     /*  Auto Improved Protocal timing for Nominal register. */
     if (MCAN_CalculateImprovedTimingValues(baudRate, sourceClock_Hz, pconfig))
     {
-        /* After calculate for Nominal timing, continue to calculate Data timing configuration. */
+        /* After calculating for Nominal timing, continue to calculate Data timing configuration. */
         for (tqNum = DBTP_MAX_TIME_QUANTA; tqNum >= DBTP_MIN_TIME_QUANTA; tqNum--)
         {
             clk = baudRateFD * tqNum;
@@ -519,27 +532,24 @@ bool MCAN_FDCalculateImprovedTimingValues(uint32_t baudRate,
             {
                 continue; /* tqNumbrs too large, clkbrs x tqNumbrs has been exceed sourceClock_Hz. */
             }
-            for (pconfig->datapreDivider = 0U; pconfig->datapreDivider <= MAX_DBRP; (pconfig->datapreDivider)++)
-            {
-                /* Consider some proessor not contain FPU, the parameter need to be exact division. */
-                if ((clk / ((uint32_t)(pconfig->datapreDivider) + 1U) * ((uint32_t)(pconfig->datapreDivider) + 1U)) !=
-                    clk)
-                {
-                    continue; /* clk need to be exact division by preDivider + 1. */
-                }
-                clk2 = clk / ((uint32_t)(pconfig->datapreDivider) + 1U);
-                if ((sourceClock_Hz / clk2 * clk2) != sourceClock_Hz)
-                {
-                    continue; /* sourceClock_Hz need to be exact division by preDivider. */
-                }
 
-                /* Get the best timing configuration. */
-                MCAN_FDGetSegments(baudRateFD, tqNum, pconfig);
-                fgRet = true;
-                break;
-            }
-            if (fgRet)
+            if ((sourceClock_Hz / clk * clk) != sourceClock_Hz)
             {
+                continue; /* Non-supporting: the frequency of clock source is not divisible by target baud rate, the
+                          user should change a divisible baud rate. */
+            }
+
+            pconfig->datapreDivider = (uint16_t)(sourceClock_Hz / clk - 1U);
+            if (pconfig->datapreDivider > MAX_DBRP)
+            {
+                break; /* The frequency of source clock is too large or the baud rate is too small, the pre-divider
+                          could not handle it. */
+            }
+
+            /* Get the best timing configuration. */
+            if (MCAN_FDGetSegments(baudRateFD, tqNum, pconfig))
+            {
+                fgRet = true;
                 break;
             }
         }
@@ -582,11 +592,14 @@ void MCAN_SetDataTimingConfig(CAN_Type *base, const mcan_timing_config_t *config
  * @param baudRate The data speed in bps
  * @param tqNum Number of time quantas per bit
  * @param pconfig Pointer to the MCAN timing configuration structure.
+ *
+ * @return TRUE if Calculates the segment success, FALSE if Calculates the segment success
  */
-static void MCAN_GetSegments(uint32_t baudRate, uint32_t tqNum, mcan_timing_config_t *pconfig)
+static bool MCAN_GetSegments(uint32_t baudRate, uint32_t tqNum, mcan_timing_config_t *pconfig)
 {
     uint32_t ideal_sp;
     uint32_t p1;
+    bool fgRet = false;
 
     /* get ideal sample point. */
     if (baudRate >= 1000000U)
@@ -603,15 +616,23 @@ static void MCAN_GetSegments(uint32_t baudRate, uint32_t tqNum, mcan_timing_conf
     }
 
     /* distribute time quanta. */
-    p1            = tqNum * (uint32_t)ideal_sp;
+    p1            = tqNum * ideal_sp;
     pconfig->seg1 = (uint8_t)(p1 / (uint32_t)IDEAL_SP_FACTOR - 1U);
 
-    pconfig->seg2 = (uint8_t)tqNum - (1U + pconfig->seg1 + 1U + 1U);
-    assert(pconfig->seg2 <= MAX_NTSEG2);
+    /* The value of seg1 should be not larger than tqNum -3U. */
+    if (pconfig->seg1 <= ((uint8_t)tqNum - 3U))
+    {
+        pconfig->seg2 = (uint8_t)tqNum - (pconfig->seg1 + 3U);
+        if (pconfig->seg2 <= MAX_NTSEG2)
+        {
+            /* subtract one TQ for sync seg. */
+            /* sjw is 20% of total TQ, rounded to nearest int. */
+            pconfig->rJumpwidth = ((uint8_t)tqNum + (5U - 1U)) / 5U - 1U;
+            fgRet               = true;
+        }
+    }
 
-    /* subtract one TQ for sync seg. */
-    /* sjw is 20% of total TQ, rounded to nearest int. */
-    pconfig->rJumpwidth = ((uint8_t)tqNum + (5U - 1U)) / 5U - 1U;
+    return fgRet;
 }
 
 /*!
@@ -626,7 +647,6 @@ static void MCAN_GetSegments(uint32_t baudRate, uint32_t tqNum, mcan_timing_conf
 bool MCAN_CalculateImprovedTimingValues(uint32_t baudRate, uint32_t sourceClock_Hz, mcan_timing_config_t *pconfig)
 {
     uint32_t clk;   /* the clock is tqNumb x baudRateFD. */
-    uint32_t clk2;  /* the clock2 is clk2 / Pre-scaler Division Factor. */
     uint32_t tqNum; /* Numbers of TQ. */
     bool fgRet = false;
 
@@ -642,25 +662,23 @@ bool MCAN_CalculateImprovedTimingValues(uint32_t baudRate, uint32_t sourceClock_
             continue; /* tqNum too large, clk has been exceed sourceClock_Hz. */
         }
 
-        for (pconfig->preDivider = 0x0U; pconfig->preDivider <= MAX_NBRP; (pconfig->preDivider)++)
+        if ((sourceClock_Hz / clk * clk) != sourceClock_Hz)
         {
-            /* Consider some proessor not contain FPU, the parameter need to be exact division. */
-            if ((clk / ((uint32_t)(pconfig->preDivider) + 1U) * ((uint32_t)(pconfig->preDivider) + 1U)) != clk)
-            {
-                continue; /* clk need to be exact division by preDivider + 1. */
-            }
-            clk2 = clk / ((uint32_t)(pconfig->preDivider) + 1U);
-            if (((sourceClock_Hz / clk2) * clk2) != sourceClock_Hz)
-            {
-                continue; /* sourceClock_Hz need to be exact division by preDivider. */
-            }
-            /* Get the best timing configuration. */
-            MCAN_GetSegments(baudRate, tqNum, pconfig);
-            fgRet = true;
-            break;
+            continue; /*  Non-supporting: the frequency of clock source is not divisible by target baud rate, the user
+                      should change a divisible baud rate. */
         }
-        if (fgRet)
+
+        pconfig->preDivider = (uint16_t)(sourceClock_Hz / clk - 1U);
+        if (pconfig->preDivider > MAX_NBRP)
         {
+            break; /* The frequency of source clock is too large or the baud rate is too small, the pre-divider could
+                      not handle it. */
+        }
+
+        /* Get the best timing configuration. */
+        if (MCAN_GetSegments(baudRate, tqNum, pconfig))
+        {
+            fgRet = true;
             break;
         }
     }
@@ -806,13 +824,12 @@ void MCAN_SetTxBufferConfig(CAN_Type *base, const mcan_tx_buffer_config_t *confi
 }
 
 /*!
- * brief Set filter configuration.
- *
- * This function sets remote and non masking frames in global filter configuration,
- * also the start address, list size in standard/extended ID filter configuration.
+ * brief Set standard message ID filter element configuration.
  *
  * param base MCAN peripheral base address.
  * param config The MCAN filter configuration.
+ * param filter The MCAN standard message ID filter element configuration.
+ * param idx The standard message ID filter element index.
  */
 void MCAN_SetSTDFilterElement(CAN_Type *base,
                               const mcan_frame_filter_config_t *config,
@@ -825,13 +842,12 @@ void MCAN_SetSTDFilterElement(CAN_Type *base,
 }
 
 /*!
- * brief Set filter configuration.
- *
- * This function sets remote and non masking frames in global filter configuration,
- * also the start address, list size in standard/extended ID filter configuration.
+ * brief Set extended message ID filter element configuration.
  *
  * param base MCAN peripheral base address.
  * param config The MCAN filter configuration.
+ * param filter The MCAN extended message ID filter element configuration.
+ * param idx The extended message ID filter element index.
  */
 void MCAN_SetEXTFilterElement(CAN_Type *base,
                               const mcan_frame_filter_config_t *config,
@@ -1400,45 +1416,67 @@ void MCAN_TransferHandleIRQ(CAN_Type *base, mcan_handle_t *handle)
     assert(NULL != handle);
 
     status_t status = kStatus_MCAN_UnHandled;
+    uint32_t valueIR;
     uint32_t result;
 
     /* Store Current MCAN Module Error and Status. */
-    result = base->IR;
+    valueIR = base->IR;
 
     do
     {
-        /* Solve Rx FIFO, Tx interrupt. */
-        if (0U != (result & (uint32_t)kMCAN_TxTransmitCompleteFlag))
+        if (0U != (valueIR & ((uint32_t)kMCAN_ErrorWarningIntFlag | (uint32_t)kMCAN_ErrorPassiveIntFlag |
+                              (uint32_t)kMCAN_BusOffIntFlag)))
         {
+            /* Solve error. */
+            result = (uint32_t)kMCAN_ErrorWarningIntFlag | (uint32_t)kMCAN_ErrorPassiveIntFlag |
+                     (uint32_t)kMCAN_BusOffIntFlag;
+            status = kStatus_MCAN_ErrorStatus;
+        }
+        else if (0U != (valueIR & (uint32_t)kMCAN_TxTransmitCompleteFlag))
+        {
+            /* Solve Tx interrupt. */
+            result = (uint32_t)kMCAN_TxTransmitCompleteFlag;
             status = kStatus_MCAN_TxIdle;
             MCAN_TransferAbortSend(base, handle, handle->txbufferIdx);
         }
-        else if (0U != (result & (uint32_t)kMCAN_RxFifo0NewFlag))
+        else if (0U != (valueIR & (uint32_t)kMCAN_RxFifo0NewFlag))
         {
             (void)MCAN_ReadRxFifo(base, 0U, handle->rxFifoFrameBuf);
+            result = (uint32_t)kMCAN_RxFifo0NewFlag;
             status = kStatus_MCAN_RxFifo0Idle;
             MCAN_TransferAbortReceiveFifo(base, 0U, handle);
         }
-        else if (0U != (result & (uint32_t)kMCAN_RxFifo0LostFlag))
+        else if (0U != (valueIR & (uint32_t)kMCAN_RxFifo0LostFlag))
         {
+            result = (uint32_t)kMCAN_RxFifo0LostFlag;
             status = kStatus_MCAN_RxFifo0Lost;
         }
-        else if (0U != (result & (uint32_t)kMCAN_RxFifo1NewFlag))
+        else if (0U != (valueIR & (uint32_t)kMCAN_RxFifo1NewFlag))
         {
             (void)MCAN_ReadRxFifo(base, 1U, handle->rxFifoFrameBuf);
+            result = (uint32_t)kMCAN_RxFifo1NewFlag;
             status = kStatus_MCAN_RxFifo1Idle;
             MCAN_TransferAbortReceiveFifo(base, 1U, handle);
         }
-        else if (0U != (result & (uint32_t)kMCAN_RxFifo1LostFlag))
+        else if (0U != (valueIR & (uint32_t)kMCAN_RxFifo1LostFlag))
         {
+            result = (uint32_t)kMCAN_RxFifo1LostFlag;
             status = kStatus_MCAN_RxFifo0Lost;
         }
         else
         {
-            /* To avoid MISRA-C 2012 Rule 15.7 issue. */
+            /* Handle the interrupt flag unsupported in current version of MCAN driver.
+             * User can get these unsupported interrupt flags by callback function,
+             * we can clear directly in the handler to prevent endless loop.
+             */
+            result = valueIR;
+            result &= ~((uint32_t)kMCAN_ErrorWarningIntFlag | (uint32_t)kMCAN_ErrorPassiveIntFlag |
+                        (uint32_t)kMCAN_BusOffIntFlag | (uint32_t)kMCAN_TxTransmitCompleteFlag |
+                        (uint32_t)kMCAN_RxFifo0NewFlag | (uint32_t)kMCAN_RxFifo0LostFlag |
+                        (uint32_t)kMCAN_RxFifo1NewFlag | (uint32_t)kMCAN_RxFifo1LostFlag);
         }
 
-        /* Clear resolved Rx FIFO, Tx Buffer IRQ. */
+        /* Clear Error interrupt, resolved Rx FIFO, Tx Buffer IRQ and other unsupported interrupt flags. */
         MCAN_ClearStatusFlag(base, result);
 
         /* Calling Callback Function if has one. */
@@ -1451,10 +1489,8 @@ void MCAN_TransferHandleIRQ(CAN_Type *base, mcan_handle_t *handle)
         status = kStatus_MCAN_UnHandled;
 
         /* Store Current MCAN Module Error and Status. */
-        result = base->IR;
-    } while ((0U != MCAN_GetStatusFlag(base, 0xFFFFFFFFU)) ||
-             (0U != (result & ((uint32_t)kMCAN_ErrorWarningIntFlag | (uint32_t)kMCAN_BusOffIntFlag |
-                               (uint32_t)kMCAN_ErrorPassiveIntFlag))));
+        valueIR = base->IR;
+    } while (0U != valueIR);
 }
 
 #if defined(CAN0)
@@ -1463,11 +1499,7 @@ void CAN0_IRQ0_DriverIRQHandler(void)
     assert(NULL != s_mcanHandle[0]);
 
     s_mcanIsr(CAN0, s_mcanHandle[0]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 
 void CAN0_IRQ1_DriverIRQHandler(void)
@@ -1475,11 +1507,7 @@ void CAN0_IRQ1_DriverIRQHandler(void)
     assert(NULL != s_mcanHandle[0]);
 
     s_mcanIsr(CAN0, s_mcanHandle[0]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -1489,11 +1517,7 @@ void CAN1_IRQ0_DriverIRQHandler(void)
     assert(NULL != s_mcanHandle[1]);
 
     s_mcanIsr(CAN1, s_mcanHandle[1]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 
 void CAN1_IRQ1_DriverIRQHandler(void)
@@ -1501,10 +1525,6 @@ void CAN1_IRQ1_DriverIRQHandler(void)
     assert(NULL != s_mcanHandle[1]);
 
     s_mcanIsr(CAN1, s_mcanHandle[1]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -27,8 +27,8 @@
  * @{
  */
 
-/*! @brief DMIC DMA driver version 2.2.1 */
-#define FSL_DMIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief DMIC DMA driver version 2.3.0 */
+#define FSL_DMIC_DMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /*! @brief DMIC transfer structure. */
@@ -103,7 +103,7 @@ status_t DMIC_TransferCreateHandleDMA(DMIC_Type *base,
  * @param base USART peripheral base address.
  * @param handle Pointer to usart_dma_handle_t structure.
  * @param xfer DMIC DMA transfer structure. See #dmic_transfer_t.
- * @param dmic_channel DMIC start channel number.
+ * @param channel DMIC start channel number.
  * @retval kStatus_Success
  */
 status_t DMIC_TransferReceiveDMA(DMIC_Type *base, dmic_dma_handle_t *handle, dmic_transfer_t *xfer, uint32_t channel);
@@ -142,7 +142,7 @@ status_t DMIC_TransferGetReceiveCountDMA(DMIC_Type *base, dmic_dma_handle_t *han
  *
  * @param handle Pointer to DMA channel transfer handle.
  * @param linkAddr DMA link descriptor address.
- * @param num DMA link descriptor number.
+ * @param linkNum DMA link descriptor number.
  */
 void DMIC_InstallDMADescriptorMemory(dmic_dma_handle_t *handle, void *linkAddr, size_t linkNum);
 

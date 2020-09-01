@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -8,32 +8,47 @@
 
 #include "fsl_iap.h"
 #include "fsl_iap_ffr.h"
+#include "fsl_iap_kbp.h"
+#include "fsl_iap_skboot_authenticate.h"
 #include "fsl_device_registers.h"
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.iap1"
 #endif
 
-/*!
- * @addtogroup flash_driver_api
- * @{
- */
+#if (defined(LPC5512_SERIES) || defined(LPC5514_SERIES) || defined(LPC55S14_SERIES) || defined(LPC5516_SERIES) || \
+     defined(LPC55S16_SERIES) || defined(LPC5524_SERIES))
+
+#define BOOTLOADER_API_TREE_POINTER ((bootloader_tree_t *)0x1301fe00U)
+
+#elif (defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES) || defined(LPC5526_SERIES) || \
+       defined(LPC55S26_SERIES) || defined(LPC5528_SERIES) || defined(LPC55S28_SERIES) ||                       \
+       defined(LPC55S66_cm33_core0_SERIES) || defined(LPC55S66_cm33_core1_SERIES))
 
 #define BOOTLOADER_API_TREE_POINTER ((bootloader_tree_t *)0x130010f0U)
 
-static uint32_t versionMajor = 0U;
+#else
+#error "No valid CPU defined!"
+
+#endif
+
+/*!
+ * @name flash and ffr Structure
+ * @{
+ */
 
 typedef union functionCommandOption
 {
     uint32_t commandAddr;
-    status_t (*eraseCommend)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
-    status_t (*programCommend)(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
-    status_t (*verifyProgramCommend)(flash_config_t *config,
+    status_t (*eraseCommand)(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
+    status_t (*programCommand)(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes);
+    status_t (*verifyProgramCommand)(flash_config_t *config,
                                      uint32_t start,
                                      uint32_t lengthInBytes,
                                      const uint8_t *expectedData,
                                      uint32_t *failedAddress,
                                      uint32_t *failedData);
+    status_t (*flashReadCommand)(flash_config_t *config, uint32_t start, uint8_t *dest, uint32_t lengthInBytes);
 } function_command_option_t;
 
 /*
@@ -81,7 +96,7 @@ typedef struct version1FlashDriverInterface
     uint32_t reserved[3]; /*! Reserved for future use */
     /*!< Flash FFR driver*/
     status_t (*ffr_init)(flash_config_t *config);
-    status_t (*ffr_deinit)(flash_config_t *config);
+    status_t (*ffr_lock_all)(flash_config_t *config);
     status_t (*ffr_cust_factory_page_write)(flash_config_t *config, uint8_t *page_data, bool seal_part);
     status_t (*ffr_get_uuid)(flash_config_t *config, uint8_t *uuid);
     status_t (*ffr_get_customer_data)(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
@@ -112,7 +127,7 @@ typedef struct version0FlashDriverInterface
 
     /*!< Flash FFR driver*/
     status_t (*ffr_init)(flash_config_t *config);
-    status_t (*ffr_deinit)(flash_config_t *config);
+    status_t (*ffr_lock_all)(flash_config_t *config);
     status_t (*ffr_cust_factory_page_write)(flash_config_t *config, uint8_t *page_data, bool seal_part);
     status_t (*ffr_get_uuid)(flash_config_t *config, uint8_t *uuid);
     status_t (*ffr_get_customer_data)(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
@@ -129,6 +144,30 @@ typedef union flashDriverInterface
     const version0_flash_driver_interface_t *version0FlashDriver;
 } flash_driver_interface_t;
 
+/*! @}*/
+
+/*!
+ * @name Bootloader API and image authentication Structure
+ * @{
+ */
+
+/*! @brief Interface for Bootloader API functions. */
+typedef struct _kb_interface
+{
+    /*!< Initialize the API. */
+    status_t (*kb_init_function)(kb_session_ref_t **session, const kb_options_t *options);
+    status_t (*kb_deinit_function)(kb_session_ref_t *session);
+    status_t (*kb_execute_function)(kb_session_ref_t *session, const uint8_t *data, uint32_t dataLength);
+} kb_interface_t;
+
+//! @brief Interface for image authentication API
+typedef struct _skboot_authenticate_interface
+{
+    skboot_status_t (*skboot_authenticate_function)(const uint8_t *imageStartAddr, secure_bool_t *isSignVerified);
+    void (*skboot_hashcrypt_irq_handler)(void);
+} skboot_authenticate_interface_t;
+/*! @}*/
+
 /*!
  * @brief Root of the bootloader API tree.
  *
@@ -142,43 +181,80 @@ typedef struct BootloaderTree
     void (*runBootloader)(void *arg);      /*!< Function to start the bootloader executing. */
     standard_version_t bootloader_version; /*!< Bootloader version number. */
     const char *copyright;                 /*!< Copyright string. */
-    const uint32_t *reserved;              /*!< Do NOT use. */
+    const uint32_t reserved0;              /*!< Do NOT use. */
     flash_driver_interface_t flashDriver;
-    function_command_option_t runCmdFuncOption;
+    const kb_interface_t *kbApi;                               /*!< Bootloader API. */
+    const uint32_t reserved1[4];                               /*!< Do NOT use. */
+    const skboot_authenticate_interface_t *skbootAuthenticate; /*!< Image authentication API. */
 } bootloader_tree_t;
+
+/*******************************************************************************
+ * Prototype
+ ******************************************************************************/
+static uint32_t get_rom_api_version(void);
 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
 
 /*! Get pointer to flash driver API table in ROM. */
-#define VERSION1_FLASH_API_TREE BOOTLOADER_API_TREE_POINTER->flashDriver.version1FlashDriver
-#define VERSION0_FLASH_API_TREE BOOTLOADER_API_TREE_POINTER->flashDriver.version0FlashDriver
-#define RUN_COMMAND_FUNC_OPTION BOOTLOADER_API_TREE_POINTER->runCmdFuncOption
+#define VERSION1_FLASH_API_TREE       BOOTLOADER_API_TREE_POINTER->flashDriver.version1FlashDriver
+#define VERSION0_FLASH_API_TREE       BOOTLOADER_API_TREE_POINTER->flashDriver.version0FlashDriver
+#define LPC55S69_REV0_FLASH_READ_ADDR (0x130043a3U)
+#define LPC55S69_REV1_FLASH_READ_ADDR (0x13007539U)
+#define LPC55S16_REV0_FLASH_READ_ADDR (0x1300ade5U)
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
 
-/*! See fsl_iap.h for documentation of this function. */
-status_t FLASH_Init(flash_config_t *config)
+static uint32_t get_rom_api_version(void)
 {
-    assert(VERSION1_FLASH_API_TREE);
-    config->modeConfig.sysFreqInMHz = (uint32_t)kSysToFlashFreq_defaultInMHz;
-    versionMajor                    = BOOTLOADER_API_TREE_POINTER->bootloader_version.major;
-    return VERSION0_FLASH_API_TREE->flash_init(config);
-}
-
-/*! See fsl_iap.h for documentation of this function. */
-status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key)
-{
-    if (versionMajor == 2U)
+    if (BOOTLOADER_API_TREE_POINTER->bootloader_version.major == 3u)
     {
-        RUN_COMMAND_FUNC_OPTION.commandAddr = 0x1300413bU; /*!< get the flash erase api location adress in rom */
-        return RUN_COMMAND_FUNC_OPTION.eraseCommend(config, start, lengthInBytes, key);
+        return 1u;
     }
     else
     {
-        assert(VERSION1_FLASH_API_TREE);
+        return 0u;
+    }
+}
+
+/*!
+ * @brief Initializes the global flash properties structure members.
+ *
+ * This function checks and initializes the Flash module for the other Flash APIs.
+ */
+status_t FLASH_Init(flash_config_t *config)
+{
+    /* Initialize the clock to 96MHz */
+    config->modeConfig.sysFreqInMHz = (uint32_t)kSysToFlashFreq_defaultInMHz;
+    if (get_rom_api_version() == 1u)
+    {
+        return VERSION1_FLASH_API_TREE->flash_init(config);
+    }
+    else
+    {
+        return VERSION0_FLASH_API_TREE->flash_init(config);
+    }
+}
+
+/*!
+ * @brief Erases the flash sectors encompassed by parameters passed into function.
+ *
+ * This function erases the appropriate number of flash sectors based on the
+ * desired start address and length.
+ */
+status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key)
+{
+    if (get_rom_api_version() == 0u)
+    {
+        function_command_option_t runCmdFuncOption;
+        runCmdFuncOption.commandAddr = 0x1300413bU; /*!< get the flash erase api location adress in rom */
+        return runCmdFuncOption.eraseCommand(config, start, lengthInBytes, key);
+    }
+    else
+    {
         return VERSION1_FLASH_API_TREE->flash_erase(config, start, lengthInBytes, key);
     }
 }
@@ -186,15 +262,42 @@ status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBy
 /*! See fsl_iap.h for documentation of this function. */
 status_t FLASH_Program(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
-        RUN_COMMAND_FUNC_OPTION.commandAddr = 0x1300419dU; /*!< get the flash program api location adress in rom*/
-        return RUN_COMMAND_FUNC_OPTION.programCommend(config, start, src, lengthInBytes);
+        function_command_option_t runCmdFuncOption;
+        runCmdFuncOption.commandAddr = 0x1300419dU; /*!< get the flash program api location adress in rom*/
+        return runCmdFuncOption.programCommand(config, start, src, lengthInBytes);
     }
     else
     {
         assert(VERSION1_FLASH_API_TREE);
         return VERSION1_FLASH_API_TREE->flash_program(config, start, src, lengthInBytes);
+    }
+}
+
+/*! See fsl_iap.h for documentation of this function. */
+status_t FLASH_Read(flash_config_t *config, uint32_t start, uint8_t *dest, uint32_t lengthInBytes)
+{
+    if (get_rom_api_version() == 0u)
+    {
+        /*!< get the flash read api location adress in rom*/
+        function_command_option_t runCmdFuncOption;
+        runCmdFuncOption.commandAddr = LPC55S69_REV0_FLASH_READ_ADDR;
+        return runCmdFuncOption.flashReadCommand(config, start, dest, lengthInBytes);
+    }
+    else
+    {
+        /*!< get the flash read api location adress in rom*/
+        function_command_option_t runCmdFuncOption;
+        if ((SYSCON->DIEID & SYSCON_DIEID_REV_ID_MASK) != 0u)
+        {
+            runCmdFuncOption.commandAddr = LPC55S69_REV1_FLASH_READ_ADDR;
+        }
+        else
+        {
+            runCmdFuncOption.commandAddr = LPC55S16_REV0_FLASH_READ_ADDR;
+        }
+        return runCmdFuncOption.flashReadCommand(config, start, dest, lengthInBytes);
     }
 }
 
@@ -205,7 +308,13 @@ status_t FLASH_VerifyErase(flash_config_t *config, uint32_t start, uint32_t leng
     return VERSION1_FLASH_API_TREE->flash_verify_erase(config, start, lengthInBytes);
 }
 
-/*! See fsl_iap.h for documentation of this function. */
+/*!
+ * @brief Verifies programming of the desired flash area at a specified margin level.
+ *
+ * This function verifies the data programed in the flash memory using the
+ * Flash Program Check Command and compares it to the expected data for a given
+ * flash area as determined by the start address and length.
+ */
 status_t FLASH_VerifyProgram(flash_config_t *config,
                              uint32_t start,
                              uint32_t lengthInBytes,
@@ -213,11 +322,12 @@ status_t FLASH_VerifyProgram(flash_config_t *config,
                              uint32_t *failedAddress,
                              uint32_t *failedData)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
-        RUN_COMMAND_FUNC_OPTION.commandAddr = 0x1300427dU; /*!< get the flash verify program api location adress in rom*/
-        return RUN_COMMAND_FUNC_OPTION.verifyProgramCommend(config, start, lengthInBytes, expectedData, failedAddress,
-                                                            failedData);
+        function_command_option_t runCmdFuncOption;
+        runCmdFuncOption.commandAddr = 0x1300427dU; /*!< get the flash verify program api location adress in rom*/
+        return runCmdFuncOption.verifyProgramCommand(config, start, lengthInBytes, expectedData, failedAddress,
+                                                     failedData);
     }
     else
     {
@@ -227,7 +337,9 @@ status_t FLASH_VerifyProgram(flash_config_t *config,
     }
 }
 
-/*! See fsl_iap.h for documentation of this function.*/
+/*!
+ * @brief Returns the desired flash property.
+ */
 status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t *value)
 {
     assert(VERSION1_FLASH_API_TREE);
@@ -237,10 +349,12 @@ status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichPro
  * fsl iap ffr CODE
  *******************************************************************************/
 
-/*! See fsl_iap_ffr.h for documentation of this function. */
+/*!
+ * Initializes the global FFR properties structure members.
+ */
 status_t FFR_Init(flash_config_t *config)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
         assert(VERSION0_FLASH_API_TREE);
         return VERSION0_FLASH_API_TREE->ffr_init(config);
@@ -252,25 +366,30 @@ status_t FFR_Init(flash_config_t *config)
     }
 }
 
-/*! See fsl_iap_ffr.h for documentation of this function. */
-status_t FFR_Deinit(flash_config_t *config)
+/*!
+ * Enable firewall for all flash banks.
+ */
+status_t FFR_Lock_All(flash_config_t *config)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
         assert(VERSION0_FLASH_API_TREE);
-        return VERSION0_FLASH_API_TREE->ffr_deinit(config);
+        return VERSION0_FLASH_API_TREE->ffr_lock_all(config);
     }
     else
     {
         assert(VERSION1_FLASH_API_TREE);
-        return VERSION1_FLASH_API_TREE->ffr_deinit(config);
+        return VERSION1_FLASH_API_TREE->ffr_lock_all(config);
     }
 }
 
-/*! See fsl_iap_ffr.h for documentation of this function. */
+/*!
+ * APIs to access CMPA pages;
+ * This routine will erase "customer factory page" and program the page with passed data.
+ */
 status_t FFR_CustFactoryPageWrite(flash_config_t *config, uint8_t *page_data, bool seal_part)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
         assert(VERSION0_FLASH_API_TREE);
         return VERSION0_FLASH_API_TREE->ffr_cust_factory_page_write(config, page_data, seal_part);
@@ -282,10 +401,12 @@ status_t FFR_CustFactoryPageWrite(flash_config_t *config, uint8_t *page_data, bo
     }
 }
 
-/*! See fsl_iap_ffr.h for documentation of this function. */
+/*!
+ * See fsl_iap_ffr.h for documentation of this function.
+ */
 status_t FFR_GetUUID(flash_config_t *config, uint8_t *uuid)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
         assert(VERSION0_FLASH_API_TREE);
         return VERSION0_FLASH_API_TREE->ffr_get_uuid(config, uuid);
@@ -297,10 +418,13 @@ status_t FFR_GetUUID(flash_config_t *config, uint8_t *uuid)
     }
 }
 
-/*! See fsl_iap_ffr.h for documentation of this function. */
+/*!
+ * APIs to access CMPA pages
+ * Read data stored in 'Customer Factory CFG Page'.
+ */
 status_t FFR_GetCustomerData(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
         assert(VERSION0_FLASH_API_TREE);
         return VERSION0_FLASH_API_TREE->ffr_get_customer_data(config, pData, offset, len);
@@ -312,10 +436,13 @@ status_t FFR_GetCustomerData(flash_config_t *config, uint8_t *pData, uint32_t of
     }
 }
 
-/*! See fsl_iap_ffr.h for documentation of this function. */
+/*!
+ * This routine writes the 3 pages allocated for Key store data,
+ * Used during manufacturing. Should write pages when 'customer factory page' is not in sealed state.
+ */
 status_t FFR_KeystoreWrite(flash_config_t *config, ffr_key_store_t *pKeyStore)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
         assert(VERSION0_FLASH_API_TREE);
         return VERSION0_FLASH_API_TREE->ffr_keystore_write(config, pKeyStore);
@@ -330,7 +457,7 @@ status_t FFR_KeystoreWrite(flash_config_t *config, ffr_key_store_t *pKeyStore)
 /*! See fsl_iap_ffr.h for documentation of this function. */
 status_t FFR_KeystoreGetAC(flash_config_t *config, uint8_t *pActivationCode)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
         assert(VERSION0_FLASH_API_TREE);
         return VERSION0_FLASH_API_TREE->ffr_keystore_get_ac(config, pActivationCode);
@@ -345,7 +472,7 @@ status_t FFR_KeystoreGetAC(flash_config_t *config, uint8_t *pActivationCode)
 /*! See fsl_iap_ffr.h for documentation of this function. */
 status_t FFR_KeystoreGetKC(flash_config_t *config, uint8_t *pKeyCode, ffr_key_type_t keyIndex)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
         assert(VERSION0_FLASH_API_TREE);
         return VERSION0_FLASH_API_TREE->ffr_keystore_get_kc(config, pKeyCode, keyIndex);
@@ -357,10 +484,13 @@ status_t FFR_KeystoreGetKC(flash_config_t *config, uint8_t *pKeyCode, ffr_key_ty
     }
 }
 
-/*! See fsl_iap_ffr.h for documentation of this function. */
+/*!
+ * APIs to access CFPA pages
+ * This routine will erase CFPA and program the CFPA page with passed data.
+ */
 status_t FFR_InfieldPageWrite(flash_config_t *config, uint8_t *page_data, uint32_t valid_len)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
         assert(VERSION0_FLASH_API_TREE);
         return VERSION0_FLASH_API_TREE->ffr_infield_page_write(config, page_data, valid_len);
@@ -372,10 +502,13 @@ status_t FFR_InfieldPageWrite(flash_config_t *config, uint8_t *page_data, uint32
     }
 }
 
-/*! See fsl_iap_ffr.h for documentation of this function. */
+/*!
+ * APIs to access CFPA pages
+ * Generic read function, used by customer to read data stored in 'Customer In-field Page'.
+ */
 status_t FFR_GetCustomerInfieldData(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len)
 {
-    if (versionMajor == 2U)
+    if (get_rom_api_version() == 0u)
     {
         assert(VERSION0_FLASH_API_TREE);
         return VERSION0_FLASH_API_TREE->ffr_get_customer_infield_data(config, pData, offset, len);
@@ -387,8 +520,81 @@ status_t FFR_GetCustomerInfieldData(flash_config_t *config, uint8_t *pData, uint
     }
 }
 
-/*! @}*/
+/********************************************************************************
+ * Bootloader API
+ *******************************************************************************/
+/*!
+ * @brief Initialize ROM API for a given operation.
+ *
+ * Inits the ROM API based on the options provided by the application in the second
+ * argument. Every call to rom_init() should be paired with a call to rom_deinit().
+ */
+status_t kb_init(kb_session_ref_t **session, const kb_options_t *options)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->kbApi->kb_init_function(session, options);
+}
 
+/*!
+ * @brief Cleans up the ROM API context.
+ *
+ * After this call, the @a context parameter can be reused for another operation
+ * by calling rom_init() again.
+ */
+status_t kb_deinit(kb_session_ref_t *session)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->kbApi->kb_deinit_function(session);
+}
+
+/*!
+ * Perform the operation configured during init.
+ *
+ * This application must call this API repeatedly, passing in sequential chunks of
+ * data from the boot image (SB file) that is to be processed. The ROM will perform
+ * the selected operation on this data and return. The application may call this
+ * function with as much or as little data as it wishes, which can be used to select
+ * the granularity of time given to the application in between executing the operation.
+ *
+ * @param context Current ROM context pointer.
+ * @param data Buffer of boot image data provided to the ROM by the application.
+ * @param dataLength Length in bytes of the data in the buffer provided to the ROM.
+ *
+ * @retval #kStatus_Success The operation has completed successfully.
+ * @retval #kStatus_Fail An error occurred while executing the operation.
+ * @retval #kStatus_RomApiNeedMoreData No error occurred, but the ROM needs more data to
+ *     continue processing the boot image.
+ */
+status_t kb_execute(kb_session_ref_t *session, const uint8_t *data, uint32_t dataLength)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->kbApi->kb_execute_function(session, data, dataLength);
+}
+
+/********************************************************************************
+ * Image authentication API
+ *******************************************************************************/
+
+/*!
+ * @brief Authenticate entry function with ARENA allocator init
+ *
+ * This is called by ROM boot or by ROM API g_skbootAuthenticateInterface
+ */
+skboot_status_t skboot_authenticate(const uint8_t *imageStartAddr, secure_bool_t *isSignVerified)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->skbootAuthenticate->skboot_authenticate_function(imageStartAddr,
+                                                                                         isSignVerified);
+}
+
+/*!
+ * @brief Interface for image authentication API
+ */
+void HASH_IRQHandler(void)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    BOOTLOADER_API_TREE_POINTER->skbootAuthenticate->skboot_hashcrypt_irq_handler();
+}
 /********************************************************************************
  * EOF
  *******************************************************************************/

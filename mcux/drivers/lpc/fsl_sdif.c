@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -300,6 +300,7 @@ static status_t SDIF_TransferConfig(SDIF_Type *base, sdif_transfer_t *transfer, 
         {
             SDIF_ClearInternalDMAStatus(base, kSDIF_DMAAllStatus);
             SDIF_EnableDmaInterrupt(base, kSDIF_DMAAllStatus);
+            SDIF_EnableInterrupt(base, (uint32_t)kSDIF_CommandTransferStatus);
         }
         else
         {
@@ -1035,10 +1036,15 @@ status_t SDIF_InternalDMAConfig(SDIF_Type *base, sdif_dma_config_t *config, cons
             descriptorPoniter = (sdif_dma_descriptor_t *)(uint32_t)tempDMADesBuffer;
             if (i == 0UL)
             {
-                descriptorPoniter->dmaDesAttribute = SDIF_DMA_DESCRIPTOR_DATA_BUFFER_START_FLAG;
+                descriptorPoniter->dmaDesAttribute = SDIF_DMA_DESCRIPTOR_DATA_BUFFER_START_FLAG |
+                                                     SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG |
+                                                     SDIF_DMA_DESCRIPTOR_DISABLE_COMPLETE_INT_FLAG;
             }
-            descriptorPoniter->dmaDesAttribute |=
-                SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG | SDIF_DMA_DESCRIPTOR_DISABLE_COMPLETE_INT_FLAG;
+            else
+            {
+                descriptorPoniter->dmaDesAttribute =
+                    SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG | SDIF_DMA_DESCRIPTOR_DISABLE_COMPLETE_INT_FLAG;
+            }
             descriptorPoniter->dmaDataBufferSize =
                 SDIF_DMA_DESCRIPTOR_BUFFER1_SIZE(dmaBufferSize) | SDIF_DMA_DESCRIPTOR_BUFFER2_SIZE(dmaBuffer1Size);
 
@@ -1071,11 +1077,16 @@ status_t SDIF_InternalDMAConfig(SDIF_Type *base, sdif_dma_config_t *config, cons
             descriptorPoniter = (sdif_dma_descriptor_t *)(uint32_t)tempDMADesBuffer;
             if (i == 0UL)
             {
-                descriptorPoniter->dmaDesAttribute = SDIF_DMA_DESCRIPTOR_DATA_BUFFER_START_FLAG;
+                descriptorPoniter->dmaDesAttribute =
+                    SDIF_DMA_DESCRIPTOR_DATA_BUFFER_START_FLAG | SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG |
+                    SDIF_DMA_DESCRIPTOR_SECOND_ADDR_CHAIN_FLAG | SDIF_DMA_DESCRIPTOR_DISABLE_COMPLETE_INT_FLAG;
             }
-            descriptorPoniter->dmaDesAttribute |= SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG |
-                                                  SDIF_DMA_DESCRIPTOR_SECOND_ADDR_CHAIN_FLAG |
-                                                  SDIF_DMA_DESCRIPTOR_DISABLE_COMPLETE_INT_FLAG;
+            else
+            {
+                descriptorPoniter->dmaDesAttribute = SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG |
+                                                     SDIF_DMA_DESCRIPTOR_SECOND_ADDR_CHAIN_FLAG |
+                                                     SDIF_DMA_DESCRIPTOR_DISABLE_COMPLETE_INT_FLAG;
+            }
             descriptorPoniter->dmaDataBufferSize =
                 SDIF_DMA_DESCRIPTOR_BUFFER1_SIZE(dmaBufferSize); /* use only buffer 1 for data buffer*/
             descriptorPoniter->dmaDataBufferAddr0 = dataBuffer;
@@ -1373,6 +1384,7 @@ void SDIF_TransferCreateHandle(SDIF_Type *base,
     handle->callback.CommandReload     = callback->CommandReload;
     handle->callback.TransferComplete  = callback->TransferComplete;
     handle->callback.cardInserted      = callback->cardInserted;
+    handle->callback.cardRemoved       = callback->cardRemoved;
     handle->userData                   = userData;
 
     /* Save the handle in global variables to support the double weak mechanism. */
@@ -1438,9 +1450,9 @@ static void SDIF_TransferHandleCommand(SDIF_Type *base, sdif_handle_t *handle, u
             }
             else
             {
-                if (((handle->data) == NULL) && (handle->callback.TransferComplete != NULL))
+                if (handle->callback.TransferComplete != NULL)
                 {
-                    handle->callback.TransferComplete(base, handle, kStatus_Success, handle->userData);
+                    handle->callback.TransferComplete(base, handle, kStatus_SDIF_SendCmdSuccess, handle->userData);
                 }
             }
         }
@@ -1480,6 +1492,10 @@ static void SDIF_TransferHandleData(SDIF_Type *base, sdif_handle_t *handle, uint
         {
             transferStatus = kStatus_SDIF_DataTransferFail;
         }
+        else
+        {
+            transferStatus = kStatus_SDIF_DataTransferSuccess;
+        }
     }
     /* need fill data to FIFO */
     else if (IS_SDIF_FLAG_SET(interruptFlags, kSDIF_WriteFIFORequest))
@@ -1503,7 +1519,7 @@ static void SDIF_TransferHandleData(SDIF_Type *base, sdif_handle_t *handle, uint
         {
             handle->transferredWords = SDIF_ReadDataPort(base, handle->data, transferredWords);
         }
-        transferStatus = kStatus_Success;
+        transferStatus = kStatus_SDIF_DataTransferSuccess;
     }
 
     if ((handle->callback.TransferComplete != NULL) && (transferStatus != kStatus_SDIF_BusyTransferring))
@@ -1537,7 +1553,7 @@ static void SDIF_TransferHandleDMA(SDIF_Type *base, sdif_handle_t *handle, uint3
     /* card normal summary */
     else
     {
-        transferStatus = kStatus_Success;
+        transferStatus = kStatus_SDIF_DataTransferSuccess;
     }
 
     if (handle->callback.TransferComplete != NULL)
@@ -1636,10 +1652,6 @@ void SDIF_DriverIRQHandler(void)
     assert(s_sdifHandle[0] != NULL);
 
     s_sdifIsr(SDIF, s_sdifHandle[0]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -242,6 +242,49 @@ void DMIC_FifoChannel(DMIC_Type *base, uint32_t channel, uint32_t trig_level, ui
          DMIC_CHANNEL_FIFO_CTRL_RESETN(resetn));
 }
 
+#if defined(FSL_FEATURE_DMIC_HAS_DECIMATOR_RESET_FUNC) && FSL_FEATURE_DMIC_HAS_DECIMATOR_RESET_FUNC
+/*!
+ * brief   DMIC channel Decimator reset
+ * param   base        : The base address of DMIC interface
+ * param   channelMask     : DMIC channel mask, reference _dmic_channel_mask
+ * param   reset           : true is reset decimator, false is release decimator.
+ */
+void DMIC_ResetChannelDecimator(DMIC_Type *base, uint32_t channelMask, bool reset)
+{
+    uint32_t decReset = 0U;
+
+    if ((channelMask & ((uint32_t)kDMIC_EnableChannel1 | (uint32_t)kDMIC_EnableChannel0)) != 0U)
+    {
+        decReset |= 1U;
+    }
+#if defined(FSL_FEATURE_DMIC_CHANNEL_NUM) && (FSL_FEATURE_DMIC_CHANNEL_NUM == 8U)
+    if ((channelMask & ((uint32_t)kDMIC_EnableChannel3 | (uint32_t)kDMIC_EnableChannel2)) != 0U)
+    {
+        decReset |= 2U;
+    }
+
+    if ((channelMask & ((uint32_t)kDMIC_EnableChannel5 | (uint32_t)kDMIC_EnableChannel4)) != 0U)
+    {
+        decReset |= 4U;
+    }
+
+    if ((channelMask & ((uint32_t)kDMIC_EnableChannel7 | (uint32_t)kDMIC_EnableChannel6)) != 0U)
+    {
+        decReset |= 8U;
+    }
+#endif
+
+    if (reset)
+    {
+        base->DECRESET |= decReset;
+    }
+    else
+    {
+        base->DECRESET &= ~decReset;
+    }
+}
+#endif
+
 /*!
  * brief	Enable callback.
 
@@ -331,11 +374,7 @@ void DMIC0_DriverIRQHandler(void)
     {
         s_dmicCallback[0]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 /*DMIC0 HWVAD IRQ handler */
 void HWVAD0_DriverIRQHandler(void)
@@ -344,10 +383,6 @@ void HWVAD0_DriverIRQHandler(void)
     {
         s_dmicHwvadCallback[0]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif

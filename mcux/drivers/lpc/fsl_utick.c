@@ -7,7 +7,9 @@
  */
 
 #include "fsl_utick.h"
+#if !(defined(FSL_FEATURE_UTICK_HAS_NO_PDCFG) && FSL_FEATURE_UTICK_HAS_NO_PDCFG)
 #include "fsl_power.h"
+#endif
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -198,32 +200,20 @@ void UTICK_HandleIRQ(UTICK_Type *base, utick_callback_t cb)
 void UTICK0_DriverIRQHandler(void)
 {
     s_utickIsr(UTICK0, s_utickHandle[0]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 #if defined(UTICK1)
 void UTICK1_DriverIRQHandler(void)
 {
     s_utickIsr(UTICK1, s_utickHandle[1]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 #if defined(UTICK2)
 void UTICK2_DriverIRQHandler(void)
 {
     s_utickIsr(UTICK2, s_utickHandle[2]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif

@@ -20,12 +20,12 @@
 #endif
 
 /* TODO - absent in device header files, should be there */
-#define I2S_FIFOCFG_TXI2SE0_MASK (0x4U)
+#define I2S_FIFOCFG_TXI2SE0_MASK  (0x4U)
 #define I2S_FIFOCFG_TXI2SE0_SHIFT (2U)
-#define I2S_FIFOCFG_TXI2SE0(x) (((uint32_t)(((uint32_t)(x)) << I2S_FIFOCFG_TXI2SE0_SHIFT)) & I2S_FIFOCFG_TXI2SE0_MASK)
-#define I2S_FIFOCFG_PACK48_MASK (0x8U)
-#define I2S_FIFOCFG_PACK48_SHIFT (3U)
-#define I2S_FIFOCFG_PACK48(x) (((uint32_t)(((uint32_t)(x)) << I2S_FIFOCFG_PACK48_SHIFT)) & I2S_FIFOCFG_PACK48_MASK)
+#define I2S_FIFOCFG_TXI2SE0(x)    (((uint32_t)(((uint32_t)(x)) << I2S_FIFOCFG_TXI2SE0_SHIFT)) & I2S_FIFOCFG_TXI2SE0_MASK)
+#define I2S_FIFOCFG_PACK48_MASK   (0x8U)
+#define I2S_FIFOCFG_PACK48_SHIFT  (3U)
+#define I2S_FIFOCFG_PACK48(x)     (((uint32_t)(((uint32_t)(x)) << I2S_FIFOCFG_PACK48_SHIFT)) & I2S_FIFOCFG_PACK48_MASK)
 
 /*! @brief _i2s_state I2S states. */
 enum
@@ -347,8 +347,8 @@ static void I2S_TxEnable(I2S_Type *base, bool enable)
 {
     if (enable)
     {
-        I2S_EnableInterrupts(base, (uint32_t)kI2S_TxErrorFlag | (uint32_t)kI2S_TxLevelFlag);
         I2S_Enable(base);
+        I2S_EnableInterrupts(base, (uint32_t)kI2S_TxErrorFlag | (uint32_t)kI2S_TxLevelFlag);
     }
     else
     {
@@ -362,8 +362,8 @@ static void I2S_RxEnable(I2S_Type *base, bool enable)
 {
     if (enable)
     {
-        I2S_EnableInterrupts(base, (uint32_t)kI2S_RxErrorFlag | (uint32_t)kI2S_RxLevelFlag);
         I2S_Enable(base);
+        I2S_EnableInterrupts(base, (uint32_t)kI2S_RxErrorFlag | (uint32_t)kI2S_RxLevelFlag);
     }
     else
     {
@@ -484,6 +484,9 @@ static status_t I2S_ValidateBuffer(i2s_handle_t *handle, i2s_transfer_t *transfe
 void I2S_EnableSecondaryChannel(I2S_Type *base, uint32_t channel, bool oneChannel, uint32_t position)
 {
     assert(channel <= (uint32_t)kI2S_SecondaryChannel3);
+#if defined FSL_FEATURE_FLEXCOMM_INSTANCE_I2S_SUPPORT_SECONDARY_CHANNELn
+    assert(FSL_FEATURE_FLEXCOMM_INSTANCE_I2S_SUPPORT_SECONDARY_CHANNELn((FLEXCOMM_Type *)(uint32_t)base) == 1);
+#endif
 
     uint32_t pcfg1 = base->SECCHANNEL[channel].PCFG1;
     uint32_t pcfg2 = base->SECCHANNEL[channel].PCFG2;

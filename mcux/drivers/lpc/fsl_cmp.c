@@ -47,7 +47,8 @@ void CMP_Init(const cmp_config_t *config)
     RESET_PeripheralReset(kCMP_RST_SHIFT_RSTn);
 #endif /* FSL_FEATURE_CMP_HAS_NO_RESET */
 
-    tmpReg = (PMC->COMP & ~(PMC_COMP_LOWPOWER_MASK | PMC_COMP_HYST_MASK | PMC_COMP_FILTERCGF_CLKDIV_MASK));
+    tmpReg = (PMC->COMP & ~(PMC_COMP_LOWPOWER_MASK | PMC_COMP_HYST_MASK | PMC_COMP_FILTERCGF_CLKDIV_MASK |
+                            PMC_COMP_FILTERCGF_SAMPLEMODE_MASK));
 
     if (true == config->enableLowPower)
     {
@@ -67,7 +68,8 @@ void CMP_Init(const cmp_config_t *config)
         tmpReg &= ~PMC_COMP_HYST_MASK;
     }
 
-    tmpReg |= (PMC_COMP_FILTERCGF_CLKDIV(config->filterClockDivider));
+    tmpReg |= (PMC_COMP_FILTERCGF_CLKDIV(config->filterClockDivider) |
+               PMC_COMP_FILTERCGF_SAMPLEMODE(config->filterSampleMode));
 
     PMC->COMP = tmpReg;
 }
@@ -92,7 +94,8 @@ void CMP_Deinit(void)
  * @code
  *   config->enableHysteresis    = true;
  *   config->enableLowPower      = true;
- *   config->filterClockDivider  = 0;
+ *   config->filterClockDivider  = kCMP_FilterClockDivide1;
+ *   config->filterSampleMode    = kCMP_FilterSampleMode0;
  * @endcode
  * @param config Pointer to the configuration structure.
  */
@@ -103,7 +106,8 @@ void CMP_GetDefaultConfig(cmp_config_t *config)
 
     config->enableHysteresis   = true;
     config->enableLowPower     = true;
-    config->filterClockDivider = 0U;
+    config->filterClockDivider = kCMP_FilterClockDivide1;
+    config->filterSampleMode   = kCMP_FilterSampleMode0;
 }
 
 /*!

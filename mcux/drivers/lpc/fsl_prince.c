@@ -19,21 +19,20 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-const bus_crypto_engine_interface_t *s_busCryptoEngineInterface;
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
 static secure_bool_t PRINCE_CheckerAlgorithm(uint32_t address,
                                              uint32_t length,
-                                             uint32_t flag,
+                                             prince_flags_t flag,
                                              flash_config_t *flash_context)
 {
     uint32_t temp_base = 0, temp_sr = 0, region_index = 0, contiguous_start_index = 0, contiguous_end_index = 32;
     secure_bool_t is_prince_region_contiguous      = kSECURE_TRUE;
     uint8_t prince_iv_code[FLASH_FFR_IV_CODE_SIZE] = {0};
 
-    if (address > 0xA0000u)
+    if (address >= flash_context->ffrConfig.ffrBlockBase)
     {
         /* If it is not in flash region, return true to allow erase/write operation. */
         return kSECURE_TRUE;
@@ -160,13 +159,12 @@ static secure_bool_t PRINCE_CheckerAlgorithm(uint32_t address,
  * @brief Generate new IV code.
  *
  * This function generates new IV code and stores it into the persistent memory.
- * This function is implemented as a wrapper of the exported ROM bootloader API.
  * Ensure about 800 bytes free space on the stack when calling this routine with the store parameter set to true!
  *
  * @param region PRINCE region index.
  * @param iv_code IV code pointer used for storing the newly generated 52 bytes long IV code.
  * @param store flag to allow storing the newly generated IV code into the persistent memory (FFR).
- * param flash_context pointer to the flash driver context structure.
+ * @param flash_context pointer to the flash driver context structure.
  *
  * @return kStatus_Success upon success
  * @return kStatus_Fail    otherwise, kStatus_Fail is also returned if the key code for the particular
@@ -174,92 +172,64 @@ static secure_bool_t PRINCE_CheckerAlgorithm(uint32_t address,
  */
 status_t PRINCE_GenNewIV(prince_region_t region, uint8_t *iv_code, bool store, flash_config_t *flash_context)
 {
-    status_t status = kStatus_Fail;
-    /* Check the silicone version */
-    if (0x1 == Chip_GetVersion())
+    status_t status                                = kStatus_Fail;
+    uint8_t prince_iv_code[FLASH_FFR_IV_CODE_SIZE] = {0};
+    uint8_t tempBuffer[FLASH_FFR_MAX_PAGE_SIZE]    = {0};
+
+    /* Make sure PUF is started to allow key and IV code decryption and generation */
+    if (true != PUF_IsGetKeyAllowed(PUF))
     {
-        /* Implementation for the A1 version chip */
-        s_busCryptoEngineInterface = (const bus_crypto_engine_interface_t *)(*(uint32_t **)0x13000020)[9];
-
-        status = s_busCryptoEngineInterface->bus_crypto_engine_gen_new_iv(
-            (uint32_t)region, &iv_code[0], (store == true) ? kSECURE_TRUE : kSECURE_FALSE, flash_context);
-
-        if (kStatus_SKBOOT_Success == status)
-        {
-            return kStatus_Success;
-        }
-        else
-        {
-            return kStatus_Fail;
-        }
+        return status;
     }
-    else if (0x0 == Chip_GetVersion())
+
+    /* Generate new IV code for the PRINCE region */
+    status = PUF_SetIntrinsicKey(PUF, (puf_key_index_register_t)(kPUF_KeyIndex_02 + (puf_key_index_register_t)region),
+                                 8, &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
+    if ((kStatus_Success == status) && (true == store))
     {
-        /* Implementation for the A0 version chip */
-        uint8_t prince_iv_code[FLASH_FFR_IV_CODE_SIZE] = {0};
-        uint8_t tempBuffer[FLASH_FFR_MAX_PAGE_SIZE]    = {0};
-
-        /* Make sure PUF is started to allow key and IV code decryption and generation */
-        if (true != PUF_IsGetKeyAllowed(PUF))
+        /* Store the new IV code for the PRINCE region into the respective FFRs. */
+        /* Create a new version of "Customer Field Programmable" (CFP) page. */
+        if (kStatus_FLASH_Success ==
+            FFR_GetCustomerInfieldData(flash_context, (uint8_t *)tempBuffer, 0, FLASH_FFR_MAX_PAGE_SIZE))
         {
-            return status;
-        }
+            /* Set the IV code in the page */
+            memcpy(&tempBuffer[offsetof(cfpa_cfg_info_t, ivCodePrinceRegion) + ((region * sizeof(cfpa_cfg_iv_code_t))) +
+                               4],
+                   &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
 
-        /* Generate new IV code for the PRINCE region */
-        status =
-            PUF_SetIntrinsicKey(PUF, (puf_key_index_register_t)(kPUF_KeyIndex_02 + (puf_key_index_register_t)region), 8,
-                                &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
-        if ((kStatus_Success == status) && (true == store))
-        {
-            /* Store the new IV code for the PRINCE region into the respective FFRs. */
-            /* Create a new version of "Customer Field Programmable" (CFP) page. */
-            if (kStatus_FLASH_Success ==
-                FFR_GetCustomerInfieldData(flash_context, (uint8_t *)tempBuffer, 0, FLASH_FFR_MAX_PAGE_SIZE))
+            uint32_t *p32    = (uint32_t *)tempBuffer;
+            uint32_t version = p32[1];
+            if (version == 0xFFFFFFFFu)
             {
-                /* Set the IV code in the page */
-                memcpy(&tempBuffer[offsetof(cfpa_cfg_info_t, ivCodePrinceRegion) +
-                                   ((region * sizeof(cfpa_cfg_iv_code_t))) + 4],
-                       &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
+                return kStatus_Fail;
+            }
+            version++;
+            p32[1] = version;
 
-                uint32_t *p32    = (uint32_t *)tempBuffer;
-                uint32_t version = p32[1];
-                if (version == 0xFFFFFFFFu)
-                {
-                    return kStatus_Fail;
-                }
-                version++;
-                p32[1] = version;
-
-                /* Program the page and enable firewall for "Customer field area" */
-                if (kStatus_FLASH_Success ==
-                    FFR_InfieldPageWrite(flash_context, (uint8_t *)tempBuffer, FLASH_FFR_MAX_PAGE_SIZE))
-                {
-                    status = kStatus_Success;
-                }
-                else
-                {
-                    status = kStatus_Fail;
-                }
+            /* Program the page and enable firewall for "Customer field area" */
+            if (kStatus_FLASH_Success ==
+                FFR_InfieldPageWrite(flash_context, (uint8_t *)tempBuffer, FLASH_FFR_MAX_PAGE_SIZE))
+            {
+                status = kStatus_Success;
+            }
+            else
+            {
+                status = kStatus_Fail;
             }
         }
-        if (status == kStatus_Success)
-        {
-            /* Pass the new IV code */
-            memcpy(iv_code, &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
-        }
-        return status;
     }
-    else
+    if (status == kStatus_Success)
     {
-        return status;
+        /* Pass the new IV code */
+        memcpy(iv_code, &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
     }
+    return status;
 }
 
 /*!
  * @brief Load IV code.
  *
  * This function enables IV code loading into the PRINCE bus encryption engine.
- * This function is implemented as a wrapper of the exported ROM bootloader API.
  *
  * @param region PRINCE region index.
  * @param iv_code IV code pointer used for passing the IV code.
@@ -269,148 +239,132 @@ status_t PRINCE_GenNewIV(prince_region_t region, uint8_t *iv_code, bool store, f
  */
 status_t PRINCE_LoadIV(prince_region_t region, uint8_t *iv_code)
 {
-    status_t status = kStatus_Fail;
-    /* Check the silicone version */
-    if (0x1 == Chip_GetVersion())
+    status_t status      = kStatus_Fail;
+    uint32_t keyIndex    = 0x0Fu & iv_code[1];
+    uint8_t prince_iv[8] = {0};
+
+    /* Make sure PUF is started to allow key and IV code decryption and generation */
+    if (true != PUF_IsGetKeyAllowed(PUF))
     {
-        /* Implementation for the A1 version chip */
-        s_busCryptoEngineInterface = (const bus_crypto_engine_interface_t *)(*(uint32_t **)0x13000020)[9];
+        return kStatus_Fail;
+    }
 
-        status = s_busCryptoEngineInterface->bus_crypto_engine_load_iv((uint32_t)region, &iv_code[0]);
-
-        if (kStatus_SKBOOT_Success == status)
+    /* Check if region number matches the PUF index value */
+    if ((kPUF_KeyIndex_02 + (puf_key_index_register_t)region) == (puf_key_index_register_t)keyIndex)
+    {
+        /* Decrypt the IV */
+        if (kStatus_Success == PUF_GetKey(PUF, iv_code, FLASH_FFR_IV_CODE_SIZE, &prince_iv[0], 8))
         {
-            return kStatus_Success;
-        }
-        else
-        {
-            return kStatus_Fail;
+            /* Store the new IV for the PRINCE region into PRINCE registers. */
+            PRINCE_SetRegionIV(PRINCE, (prince_region_t)region, prince_iv);
+            status = kStatus_Success;
         }
     }
-    else if (0x0 == Chip_GetVersion())
-    {
-        /* Implementation for the A0 version chip */
-        uint32_t keyIndex    = 0x0Fu & iv_code[1];
-        uint8_t prince_iv[8] = {0};
-
-        /* Make sure PUF is started to allow key and IV code decryption and generation */
-        if (true != PUF_IsGetKeyAllowed(PUF))
-        {
-            return status;
-        }
-
-        /* Check if region number matches the PUF index value */
-        if ((kPUF_KeyIndex_02 + (puf_key_index_register_t)region) == (puf_key_index_register_t)keyIndex)
-        {
-            /* Decrypt the IV */
-            if (kStatus_Success == PUF_GetKey(PUF, iv_code, FLASH_FFR_IV_CODE_SIZE, &prince_iv[0], 8))
-            {
-                /* Store the new IV for the PRINCE region into PRINCE registers. */
-                PRINCE_SetRegionIV(PRINCE, (prince_region_t)region, prince_iv);
-                status = kStatus_Success;
-            }
-        }
-        return status;
-    }
-    else
-    {
-        return status;
-    }
+    return status;
 }
 
 /*!
  * @brief Allow encryption/decryption for specified address range.
  *
  * This function sets the encryption/decryption for specified address range.
- * This function is implemented as a wrapper of the exported ROM bootloader API.
+ * The SR mask value for the selected Prince region is calculated from provided
+ * start_address and length parameters. This calculated value is OR'ed with the
+ * actual SR mask value and stored into the PRINCE SR_ENABLE register and also
+ * into the persistent memory (FFR) to be used after the device reset. It is
+ * possible to define several nonadjacent encrypted areas within one Prince
+ * region when calling this function repeatedly. If the length parameter is set
+ * to 0, the SR mask value is set to 0 and thus the encryption/decryption for
+ * the whole selected Prince region is disabled.
  * Ensure about 800 bytes free space on the stack when calling this routine!
  *
  * @param region PRINCE region index.
  * @param start_address start address of the area to be encrypted/decrypted.
  * @param length length of the area to be encrypted/decrypted.
- * param flash_context pointer to the flash driver context structure.
+ * @param flash_context pointer to the flash driver context structure.
+ * @param regenerate_iv flag to allow IV code regenerating, storing into
+ *        the persistent memory (FFR) and loading into the PRINCE engine
  *
  * @return kStatus_Success upon success
  * @return kStatus_Fail    otherwise
  */
-status_t PRINCE_SetEncryptForAddressRange(prince_region_t region,
-                                          uint32_t start_address,
-                                          uint32_t length,
-                                          flash_config_t *flash_context)
+status_t PRINCE_SetEncryptForAddressRange(
+    prince_region_t region, uint32_t start_address, uint32_t length, flash_config_t *flash_context, bool regenerate_iv)
 {
-    status_t status = kStatus_Fail;
-    /* Check the silicone version */
-    if (0x1 == Chip_GetVersion())
+    status_t status           = kStatus_Fail;
+    uint32_t srEnableRegister = 0;
+    uint32_t alignedStartAddress;
+    uint32_t end_address                        = start_address + length;
+    uint32_t prince_region_base_address         = 0;
+    uint8_t tempBuffer[FLASH_FFR_MAX_PAGE_SIZE] = {0};
+    uint32_t prince_base_addr_ffr_word          = 0;
+
+    /* Check input parameters. */
+    if (NULL == flash_context)
     {
-        /* Implementation for the A1 version chip */
-        s_busCryptoEngineInterface = (const bus_crypto_engine_interface_t *)(*(uint32_t **)0x13000020)[9];
-
-        status = s_busCryptoEngineInterface->bus_crypto_engine_set_encrypt_for_address_range(
-            (uint8_t)region, start_address, length, flash_context);
-
-        if (kStatus_SKBOOT_Success == status)
-        {
-            return kStatus_Success;
-        }
-        else
-        {
-            return kStatus_Fail;
-        }
+        return kStatus_Fail;
     }
-    else if (0x0 == Chip_GetVersion())
-    {
-        /* Implementation for the A0 version chip */
-        uint32_t srEnableRegister = 0;
-        uint32_t alignedStartAddress;
-        uint32_t end_address                = start_address + length;
-        uint32_t prince_region_base_address = 0;
-        uint8_t my_prince_iv_code[52]       = {0};
-        uint8_t tempBuffer[512]             = {0};
-        uint32_t prince_base_addr_ffr_word  = 0;
 
-        /* Check the address range, regions overlaping. */
-        if ((start_address > 0xA0000) || ((start_address < 0x40000) && (end_address > 0x40000)) ||
-            ((start_address < 0x80000) && (end_address > 0x80000)) ||
-            ((start_address < 0xA0000) && (end_address > 0xA0000)))
-        {
-            return kStatus_Fail;
-        }
+    /* Check the address range, region borders crossing. */
+#if (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || (defined(FSL_PRINCE_DRIVER_LPC55S2x))
+    if ((start_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) ||
+        ((start_address < FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) && (end_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR)))
+    {
+        return kStatus_Fail;
+    }
+#endif
+#if (defined(FSL_PRINCE_DRIVER_LPC55S6x))
+    if ((start_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) || ((start_address < 0x40000) && (end_address > 0x40000)) ||
+        ((start_address < 0x80000) && (end_address > 0x80000)) ||
+        ((start_address < FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) && (end_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR)))
+    {
+        return kStatus_Fail;
+    }
+#endif
+
+    if (true == regenerate_iv)
+    {
+        uint8_t prince_iv_code[FLASH_FFR_IV_CODE_SIZE] = {0};
 
         /* Generate new IV code for the PRINCE region and store the new IV into the respective FFRs */
-        status = PRINCE_GenNewIV((prince_region_t)region, &my_prince_iv_code[0], true, flash_context);
+        status = PRINCE_GenNewIV((prince_region_t)region, &prince_iv_code[0], true, flash_context);
         if (kStatus_Success != status)
         {
             return kStatus_Fail;
         }
 
         /* Store the new IV for the PRINCE region into PRINCE registers. */
-        status = PRINCE_LoadIV((prince_region_t)region, &my_prince_iv_code[0]);
+        status = PRINCE_LoadIV((prince_region_t)region, &prince_iv_code[0]);
         if (kStatus_Success != status)
         {
             return kStatus_Fail;
         }
+    }
 
-        alignedStartAddress = ALIGN_DOWN(start_address, FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
+    alignedStartAddress = ALIGN_DOWN(start_address, FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
 
-        uint32_t subregion = alignedStartAddress / (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
-        if (subregion < (32))
-        {
-            /* PRINCE_Region0 */
-            prince_region_base_address = 0;
-        }
-        else if (subregion < (64))
-        {
-            /* PRINCE_Region1 */
-            subregion                  = subregion - 32;
-            prince_region_base_address = 0x40000;
-        }
-        else
-        {
-            /* PRINCE_Region2 */
-            subregion                  = subregion - 64;
-            prince_region_base_address = 0x80000;
-        }
+    uint32_t subregion = alignedStartAddress / (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
+    if (subregion < (32))
+    {
+        /* PRINCE_Region0 */
+        prince_region_base_address = 0;
+    }
+    else if (subregion < (64))
+    {
+        /* PRINCE_Region1 */
+        subregion                  = subregion - 32;
+        prince_region_base_address = 0x40000;
+    }
+    else
+    {
+        /* PRINCE_Region2 */
+        subregion                  = subregion - 64;
+        prince_region_base_address = 0x80000;
+    }
 
+    /* If length > 0 then srEnableRegister mask is set based on the alignedStartAddress and the length.
+       If the length is 0, srEnableRegister should be kept 0 (no subregion enabled). */
+    if (length != 0U)
+    {
         srEnableRegister = (1 << subregion);
         alignedStartAddress += (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
 
@@ -421,50 +375,49 @@ status_t PRINCE_SetEncryptForAddressRange(prince_region_t region,
             alignedStartAddress += (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
         }
 
-        /* Store BASE_ADDR into PRINCE register before storing the SR to avoid en/decryption triggering
-           from addresses being defined by current BASE_ADDR register content (could be 0 and the decryption
-           of actually executed code can be started causing the hardfault then). */
-        status = PRINCE_SetRegionBaseAddress(PRINCE, (prince_region_t)region, prince_region_base_address);
-        if (kStatus_Success != status)
-        {
-            return status;
-        }
-
-        /* Store SR into PRINCE register */
-        status = PRINCE_SetRegionSREnable(PRINCE, (prince_region_t)region, srEnableRegister);
-        if (kStatus_Success != status)
-        {
-            return status;
-        }
-
-        /* Store SR and BASE_ADDR into CMPA FFR */
-        if (kStatus_Success == FFR_GetCustomerData(flash_context, (uint8_t *)&tempBuffer, 0, FLASH_FFR_MAX_PAGE_SIZE))
-        {
-            /* Set the PRINCE_SR_X in the page */
-            memcpy(&tempBuffer[offsetof(cmpa_cfg_info_t, princeSr) + (region * sizeof(uint32_t))], &srEnableRegister,
-                   sizeof(uint32_t));
-
-            /* Set the ADDRX_PRG in the page */
-            memcpy(&prince_base_addr_ffr_word, &tempBuffer[offsetof(cmpa_cfg_info_t, princeBaseAddr)],
-                   sizeof(uint32_t));
-            prince_base_addr_ffr_word &= ~((FLASH_CMPA_PRINCE_BASE_ADDR_ADDR0_PRG_MASK) << (region * 4));
-            prince_base_addr_ffr_word |=
-                (((prince_region_base_address >> 18) & FLASH_CMPA_PRINCE_BASE_ADDR_ADDR0_PRG_MASK) << (region * 4));
-            memcpy(&tempBuffer[offsetof(cmpa_cfg_info_t, princeBaseAddr)], &prince_base_addr_ffr_word,
-                   sizeof(uint32_t));
-
-            /* Program the CMPA page, set seal_part parameter to false (used during development to avoid sealing the
-             * part)
-             */
-            status = FFR_CustFactoryPageWrite(flash_context, (uint8_t *)tempBuffer, false);
-        }
-
-        return status;
+        uint32_t srEnableRegisterActual = 0;
+        PRINCE_GetRegionSREnable(PRINCE, (prince_region_t)region, &srEnableRegisterActual);
+        srEnableRegister |= srEnableRegisterActual;
     }
-    else
+
+    /* Store BASE_ADDR into PRINCE register before storing the SR to avoid en/decryption triggering
+       from addresses being defined by current BASE_ADDR register content (could be 0 and the decryption
+       of actually executed code can be started causing the hardfault then). */
+    status = PRINCE_SetRegionBaseAddress(PRINCE, (prince_region_t)region, prince_region_base_address);
+    if (kStatus_Success != status)
     {
         return status;
     }
+
+    /* Store SR into PRINCE register */
+    status = PRINCE_SetRegionSREnable(PRINCE, (prince_region_t)region, srEnableRegister);
+    if (kStatus_Success != status)
+    {
+        return status;
+    }
+
+    /* Store SR and BASE_ADDR into CMPA FFR */
+    if (kStatus_Success == FFR_GetCustomerData(flash_context, (uint8_t *)&tempBuffer, 0, FLASH_FFR_MAX_PAGE_SIZE))
+    {
+        /* Set the PRINCE_SR_X in the page */
+        memcpy(&tempBuffer[offsetof(cmpa_cfg_info_t, princeSr) + (region * sizeof(uint32_t))], &srEnableRegister,
+               sizeof(uint32_t));
+
+        /* Set the ADDRX_PRG in the page */
+        memcpy(&prince_base_addr_ffr_word, &tempBuffer[offsetof(cmpa_cfg_info_t, princeBaseAddr)], sizeof(uint32_t));
+        prince_base_addr_ffr_word &= ~((FLASH_CMPA_PRINCE_BASE_ADDR_ADDR0_PRG_MASK) << (region * 4));
+        prince_base_addr_ffr_word |= (((prince_region_base_address >> PRINCE_BASE_ADDR0_ADDR_PRG_SHIFT) &
+                                       FLASH_CMPA_PRINCE_BASE_ADDR_ADDR0_PRG_MASK)
+                                      << (region * 4));
+        memcpy(&tempBuffer[offsetof(cmpa_cfg_info_t, princeBaseAddr)], &prince_base_addr_ffr_word, sizeof(uint32_t));
+
+        /* Program the CMPA page, set seal_part parameter to false (used during development to avoid sealing the
+         * part)
+         */
+        status = FFR_CustFactoryPageWrite(flash_context, (uint8_t *)tempBuffer, false);
+    }
+
+    return status;
 }
 
 /*!
@@ -551,6 +504,9 @@ status_t PRINCE_GetRegionBaseAddress(PRINCE_Type *base, prince_region_t region, 
  * @param base PRINCE peripheral address.
  * @param region Selection of the PRINCE region to be configured.
  * @param iv 64-bit AES IV in little-endian byte order.
+ *
+ * @return kStatus_Success upon success
+ * @return kStatus_InvalidArgument
  */
 status_t PRINCE_SetRegionIV(PRINCE_Type *base, prince_region_t region, const uint8_t iv[8])
 {
@@ -598,10 +554,27 @@ status_t PRINCE_SetRegionIV(PRINCE_Type *base, prince_region_t region, const uin
  * @param base PRINCE peripheral address.
  * @param region Selection of the PRINCE region to be configured.
  * @param region_base_addr Base Address for region.
+ *
+ * @return kStatus_Success upon success
+ * @return kStatus_InvalidArgument
  */
 status_t PRINCE_SetRegionBaseAddress(PRINCE_Type *base, prince_region_t region, uint32_t region_base_addr)
 {
     status_t status = kStatus_Success;
+
+    /* Check input parameters. */
+#if (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || (defined(FSL_PRINCE_DRIVER_LPC55S2x))
+    if (region_base_addr > 0U)
+    {
+        return kStatus_InvalidArgument;
+    }
+#endif
+#if (defined(FSL_PRINCE_DRIVER_LPC55S6x))
+    if (region_base_addr > 0x80000U)
+    {
+        return kStatus_InvalidArgument;
+    }
+#endif
 
     switch (region)
     {
@@ -633,6 +606,9 @@ status_t PRINCE_SetRegionBaseAddress(PRINCE_Type *base, prince_region_t region, 
  * @param base PRINCE peripheral address.
  * @param region Selection of the PRINCE region to be configured.
  * @param sr_enable Sub-Region Enable register value.
+ *
+ * @return kStatus_Success upon success
+ * @return kStatus_InvalidArgument
  */
 status_t PRINCE_SetRegionSREnable(PRINCE_Type *base, prince_region_t region, uint32_t sr_enable)
 {
@@ -667,13 +643,14 @@ status_t PRINCE_SetRegionSREnable(PRINCE_Type *base, prince_region_t region, uin
  * desired start address and length. It deals with the flash erase function
  * complenentary to the standard erase API of the IAP1 driver. This implementation
  * additionally checks if the whole encrypted PRINCE subregions are erased at once
- * to avoid secrets revealing.
+ * to avoid secrets revealing. The checker implementation is limited to one contiguous
+ * PRINCE-controlled memory area.
  *
- * @param config The pointer to the storage for the driver runtime state.
+ * @param config The pointer to the flash driver context structure.
  * @param start The start address of the desired flash memory to be erased.
- *              The start address does not need to be sector-aligned.
+ *              The start address needs to be prince-sburegion-aligned.
  * @param lengthInBytes The length, given in bytes (not words or long-words)
- *                      to be erased. Must be word-aligned.
+ *                      to be erased. Must be prince-sburegion-size-aligned.
  * @param key The value used to validate all flash erase APIs.
  *
  * @return #kStatus_FLASH_Success API was executed successfully.
@@ -688,6 +665,11 @@ status_t PRINCE_SetRegionSREnable(PRINCE_Type *base, prince_region_t region, uin
  */
 status_t PRINCE_FlashEraseWithChecker(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key)
 {
+    /* Check input parameters. */
+    if (NULL == config)
+    {
+        return kStatus_Fail;
+    }
     /* Check that the whole encrypted region is erased at once. */
     if (kSECURE_TRUE != PRINCE_CheckerAlgorithm(start, lengthInBytes, kPRINCE_Flag_EraseCheck, config))
     {
@@ -703,15 +685,16 @@ status_t PRINCE_FlashEraseWithChecker(flash_config_t *config, uint32_t start, ui
  * flash area as determined by the start address and the length. It deals with the
  * flash program function complenentary to the standard program API of the IAP1 driver.
  * This implementation additionally checks if the whole PRINCE subregions are
- * programmed at once to avoid secrets revealing.
+ * programmed at once to avoid secrets revealing. The checker implementation is limited
+ * to one contiguous PRINCE-controlled memory area.
  *
- * @param config A pointer to the storage for the driver runtime state.
+ * @param config The pointer to the flash driver context structure.
  * @param start The start address of the desired flash memory to be programmed. Must be
- *              word-aligned.
+ *              prince-sburegion-aligned.
  * @param src A pointer to the source buffer of data that is to be programmed
  *            into the flash.
  * @param lengthInBytes The length, given in bytes (not words or long-words),
- *                      to be programmed. Must be word-aligned.
+ *                      to be programmed. Must be prince-sburegion-size-aligned.
  *
  * @return #kStatus_FLASH_Success API was executed successfully.
  * @return #kStatus_FLASH_InvalidArgument An invalid argument is provided.
@@ -726,6 +709,11 @@ status_t PRINCE_FlashEraseWithChecker(flash_config_t *config, uint32_t start, ui
  */
 status_t PRINCE_FlashProgramWithChecker(flash_config_t *config, uint32_t start, uint8_t *src, uint32_t lengthInBytes)
 {
+    /* Check input parameters. */
+    if (NULL == config)
+    {
+        return kStatus_Fail;
+    }
     /* Check that the whole encrypted subregions will be writen at once. */
     if (kSECURE_TRUE != PRINCE_CheckerAlgorithm(start, lengthInBytes, kPRINCE_Flag_WriteCheck, config))
     {

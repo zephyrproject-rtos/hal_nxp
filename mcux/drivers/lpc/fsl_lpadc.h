@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPADC driver version 2.2.0. */
-#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief LPADC driver version 2.2.2. */
+#define FSL_LPADC_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /*!
@@ -184,7 +184,7 @@ typedef enum _lpadc_hardware_compare_mode
  * @brief Define enumeration of conversion resolution mode.
  *
  * Configure the resolution bit in specific conversion type. For detailed resolution accuracy, see to
- * #_lpadc_sample_channel_mode
+ * #lpadc_sample_channel_mode_t
  */
 typedef enum _lpadc_conversion_resolution_mode
 {
@@ -262,7 +262,7 @@ typedef enum _lpadc_trigger_priority_policy
 } lpadc_trigger_priority_policy_t;
 
 /*!
- * @beief LPADC global configuration.
+ * @brief LPADC global configuration.
  *
  * This structure would used to keep the settings for initialization.
  */
@@ -294,7 +294,7 @@ typedef struct
                                                                   conversions.*/
     lpadc_power_level_mode_t powerLevelMode;                 /*!< Power Configuration Selection. */
     lpadc_trigger_priority_policy_t triggerPriorityPolicy; /*!< Control how higher priority triggers are handled, see to
-                                                                #lpadc_trigger_priority_policy_mode_t. */
+                                                                lpadc_trigger_priority_policy_mode_t. */
     bool enableConvPause; /*!< Enables the ADC pausing function. When enabled, a programmable delay is inserted during
                                command execution sequencing between LOOP iterations, between commands in a sequence, and
                                between conversions when command is executing in "Compare Until True" configuration. */
@@ -536,7 +536,7 @@ static inline void LPADC_ClearStatusFlags(ADC_Type *base, uint32_t mask)
  * @brief Enable interrupts.
  *
  * @param base LPADC peripheral base address.
- * @mask Mask value for interrupt events. See to #_lpadc_interrupt_enable.
+ * @param mask Mask value for interrupt events. See to #_lpadc_interrupt_enable.
  */
 static inline void LPADC_EnableInterrupts(ADC_Type *base, uint32_t mask)
 {
@@ -748,7 +748,7 @@ void LPADC_GetDefaultConvCommandConfig(lpadc_conv_command_config_t *config);
  * OFSTRIM field. The OFSTRIM field is used in normal operation for offset correction.
  *
  * @param base LPADC peripheral base address.
- * @bool enable switcher to the calibration function.
+ * @param enable switcher to the calibration function.
  */
 void LPADC_EnableCalibration(ADC_Type *base, bool enable);
 #if defined(FSL_FEATURE_LPADC_HAS_OFSTRIM) && FSL_FEATURE_LPADC_HAS_OFSTRIM
@@ -802,7 +802,7 @@ static inline void LPADC_SetOffsetValue(ADC_Type *base, uint32_t valueA, uint32_
  * @brief Enable the offset calibration function.
  *
  * @param base LPADC peripheral base address.
- * @bool enable switcher to the calibration function.
+ * @param enable switcher to the calibration function.
  */
 static inline void LPADC_EnableOffsetCalibration(ADC_Type *base, bool enable)
 {
