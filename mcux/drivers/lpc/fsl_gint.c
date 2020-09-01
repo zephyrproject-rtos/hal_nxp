@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -124,11 +124,15 @@ void GINT_SetCtrl(GINT_Type *base, gint_comb_t comb, gint_trig_t trig, gint_cb_t
 void GINT_GetCtrl(GINT_Type *base, gint_comb_t *comb, gint_trig_t *trig, gint_cb_t *callback)
 {
     uint32_t instance;
+    uint32_t combValue;
+    uint32_t trigValue;
 
     instance = GINT_GetInstance(base);
 
-    *comb     = (gint_comb_t)((base->CTRL & GINT_CTRL_COMB_MASK) >> GINT_CTRL_COMB_SHIFT);
-    *trig     = (gint_trig_t)((base->CTRL & GINT_CTRL_TRIG_MASK) >> GINT_CTRL_TRIG_SHIFT);
+    combValue = (base->CTRL & GINT_CTRL_COMB_MASK) >> GINT_CTRL_COMB_SHIFT;
+    *comb     = (gint_comb_t)combValue;
+    trigValue = (base->CTRL & GINT_CTRL_TRIG_MASK) >> GINT_CTRL_TRIG_SHIFT;
+    *trig     = (gint_trig_t)trigValue;
     *callback = s_gintCallback[instance];
 }
 
@@ -257,11 +261,7 @@ void GINT0_DriverIRQHandler(void)
     {
         s_gintCallback[0]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -275,11 +275,7 @@ void GINT1_DriverIRQHandler(void)
     {
         s_gintCallback[1]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -293,11 +289,7 @@ void GINT2_DriverIRQHandler(void)
     {
         s_gintCallback[2]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -311,11 +303,7 @@ void GINT3_DriverIRQHandler(void)
     {
         s_gintCallback[3]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -329,11 +317,7 @@ void GINT4_DriverIRQHandler(void)
     {
         s_gintCallback[4]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -347,11 +331,7 @@ void GINT5_DriverIRQHandler(void)
     {
         s_gintCallback[5]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -365,11 +345,7 @@ void GINT6_DriverIRQHandler(void)
     {
         s_gintCallback[6]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -383,10 +359,6 @@ void GINT7_DriverIRQHandler(void)
     {
         s_gintCallback[7]();
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif

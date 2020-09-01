@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2020 NXP
  * All rights reserved.
  *
  *
@@ -23,9 +23,9 @@
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief CASPER driver version. Version 2.0.8.
+/*! @brief CASPER driver version. Version 2.0.10.
  *
- * Current version: 2.0.8
+ * Current version: 2.0.10
  *
  * Change log:
  * - Version 2.0.0
@@ -48,8 +48,13 @@
  *   - Fix MISRA-C 2012 issue.
  * - Version 2.0.8
  *   - Add feature macro for CASPER_RAM_OFFSET.
+ * - Version 2.0.9
+ *   - Remove unused function Jac_oncurve().
+ *   - Fix ECC384 build.
+ * - Version 2.0.10
+ *   - Fix MISRA-C 2012 issue.
  */
-#define FSL_CASPER_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
+#define FSL_CASPER_DRIVER_VERSION (MAKE_VERSION(2, 0, 10))
 /*@}*/
 
 /*! @brief CASPER operation
@@ -82,26 +87,26 @@ typedef enum _casper_operation
     kCASPER_OpCompareFast = 0x19,  /*! Compare two arrays, stopping on 1st !=*/
 } casper_operation_t;
 
-#define CASPER_CP 1
-#define CASPER_CP_CTRL0 (0x0 >> 2)
-#define CASPER_CP_CTRL1 (0x4 >> 2)
-#define CASPER_CP_LOADER (0x8 >> 2)
-#define CASPER_CP_STATUS (0xC >> 2)
+#define CASPER_CP          1
+#define CASPER_CP_CTRL0    (0x0 >> 2)
+#define CASPER_CP_CTRL1    (0x4 >> 2)
+#define CASPER_CP_LOADER   (0x8 >> 2)
+#define CASPER_CP_STATUS   (0xC >> 2)
 #define CASPER_CP_INTENSET (0x10 >> 2)
 #define CASPER_CP_INTENCLR (0x14 >> 2)
-#define CASPER_CP_INTSTAT (0x18 >> 2)
-#define CASPER_CP_AREG (0x20 >> 2)
-#define CASPER_CP_BREG (0x24 >> 2)
-#define CASPER_CP_CREG (0x28 >> 2)
-#define CASPER_CP_DREG (0x2C >> 2)
-#define CASPER_CP_RES0 (0x30 >> 2)
-#define CASPER_CP_RES1 (0x34 >> 2)
-#define CASPER_CP_RES2 (0x38 >> 2)
-#define CASPER_CP_RES3 (0x3C >> 2)
-#define CASPER_CP_MASK (0x60 >> 2)
-#define CASPER_CP_REMASK (0x64 >> 2)
-#define CASPER_CP_LOCK (0x80 >> 2)
-#define CASPER_CP_ID (0xFFC >> 2)
+#define CASPER_CP_INTSTAT  (0x18 >> 2)
+#define CASPER_CP_AREG     (0x20 >> 2)
+#define CASPER_CP_BREG     (0x24 >> 2)
+#define CASPER_CP_CREG     (0x28 >> 2)
+#define CASPER_CP_DREG     (0x2C >> 2)
+#define CASPER_CP_RES0     (0x30 >> 2)
+#define CASPER_CP_RES1     (0x34 >> 2)
+#define CASPER_CP_RES2     (0x38 >> 2)
+#define CASPER_CP_RES3     (0x3C >> 2)
+#define CASPER_CP_MASK     (0x60 >> 2)
+#define CASPER_CP_REMASK   (0x64 >> 2)
+#define CASPER_CP_LOCK     (0x80 >> 2)
+#define CASPER_CP_ID       (0xFFC >> 2)
 /* mcr (cp,  opc1, value, CRn, CRm, opc2) */
 #define CASPER_Wr32b(value, off) __arm_mcr(CASPER_CP, 0, value, ((off >> 4)), (off), 0)
 /* mcrr(coproc, opc1, value, CRm) */
@@ -116,6 +121,7 @@ typedef enum _casper_operation
 /*  #define N_bitlen 2048 */
 #define N_wordlen_max (4096U / 32U)
 
+/* CASPER driver allows usage of 256 or 384 ECC, not both at once */
 #define CASPER_ECC_P256 1
 #define CASPER_ECC_P384 0
 

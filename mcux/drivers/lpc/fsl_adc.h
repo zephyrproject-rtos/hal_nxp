@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief ADC driver version 2.4.0. */
-#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
+/*! @brief ADC driver version 2.5.0. */
+#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 5, 0))
 /*@}*/
 
 /*!
@@ -386,7 +386,7 @@ bool ADC_DoSelfCalibration(ADC_Type *base);
  * A/D converter must be recalibrated, at a minimum, following every chip reset before initiating normal ADC operation.
  *
  * @param base ADC peripheral base address.
- * param frequency The clock frequency that ADC operates at.
+ * @param frequency The clock frequency that ADC operates at.
  * @retval true  Calibration succeed.
  * @retval false Calibration failed.
  */
@@ -719,17 +719,6 @@ static inline void ADC_EnableInterrupts(ADC_Type *base, uint32_t mask)
 static inline void ADC_DisableInterrupts(ADC_Type *base, uint32_t mask)
 {
     base->INTEN &= ~(0x7UL & mask);
-}
-
-/*!
- * @brief Enable the interrupt of threshold compare event for each channel.
- * @deprecated Do not use this function.  It has been superceded by @ADC_EnableThresholdCompareInterrupt
- */
-static inline void ADC_EnableShresholdCompareInterrupt(ADC_Type *base,
-                                                       uint32_t channel,
-                                                       adc_threshold_interrupt_mode_t mode)
-{
-    base->INTEN = (base->INTEN & ~(0x3UL << ((channel << 1UL) + 3UL))) | ((uint32_t)(mode) << ((channel << 1UL) + 3UL));
 }
 
 /*!

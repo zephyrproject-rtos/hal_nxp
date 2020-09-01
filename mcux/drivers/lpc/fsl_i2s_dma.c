@@ -21,7 +21,7 @@
 #endif
 
 #define DMA_MAX_TRANSFER_BYTES (DMA_MAX_TRANSFER_COUNT * sizeof(uint32_t))
-#define DMA_DESCRIPTORS (2U)
+#define DMA_DESCRIPTORS        (2U)
 
 /*<! @brief Structure for statically allocated private data. */
 typedef struct _i2s_dma_private_handle
@@ -73,7 +73,7 @@ static void I2S_AddTransferDMA(I2S_Type *base, i2s_dma_handle_t *handle);
  * Variables
  ******************************************************************************/
 /*<! @brief Allocate DMA transfer descriptors. */
-#if (defined(__XCC__))
+#if (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
 DMA_ALLOCATE_LINK_DESCRIPTORS_AT_NONCACHEABLE(s_DmaDescriptors, DMA_DESCRIPTORS *FSL_FEATURE_SOC_I2S_COUNT);
 #else
 DMA_ALLOCATE_LINK_DESCRIPTORS(s_DmaDescriptors, DMA_DESCRIPTORS *FSL_FEATURE_SOC_I2S_COUNT);

@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief UTICK driver version 2.0.3. */
-#define FSL_UTICK_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief UTICK driver version 2.0.4. */
+#define FSL_UTICK_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /*! @brief UTICK timer operational mode. */

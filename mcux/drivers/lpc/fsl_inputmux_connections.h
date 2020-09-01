@@ -407,4 +407,6 @@ typedef enum _inputmux_connection_t
 
 /*@}*/
 
+/*@}*/
+
 #endif /* _FSL_INPUTMUX_CONNECTIONS_ */

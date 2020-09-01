@@ -190,21 +190,21 @@ void ADC_Deinit(ADC_Type *base)
 #if !(defined(FSL_FEATURE_ADC_HAS_NO_CALIB_FUNC) && FSL_FEATURE_ADC_HAS_NO_CALIB_FUNC)
 #if defined(FSL_FEATURE_ADC_HAS_CALIB_REG) && FSL_FEATURE_ADC_HAS_CALIB_REG
 /*!
- * @brief Do the hardware self-calibration.
- * @deprecated Do not use this function. It has been superceded by @ref ADC_DoOffsetCalibration.
+ * brief Do the hardware self-calibration.
+ * deprecated Do not use this function. It has been superceded by @ref ADC_DoOffsetCalibration.
  *
  * To calibrate the ADC, set the ADC clock to 500 kHz. In order to achieve the specified ADC accuracy, the A/D
  * converter must be recalibrated, at a minimum, following every chip reset before initiating normal ADC operation.
  *
- * @param base ADC peripheral base address.
- * @retval true  Calibration succeed.
- * @retval false Calibration failed.
+ * param base ADC peripheral base address.
+ * retval true  Calibration succeed.
+ * retval false Calibration failed.
  */
 bool ADC_DoSelfCalibration(ADC_Type *base)
 {
     uint32_t frequency = 0U;
     uint32_t delayUs   = 0U;
-    bool ret = true;
+    bool ret           = true;
 
     /* Enable the converter. */
     /* This bit can only be set 1 by software. It is cleared automatically whenever the ADC is powered down.
@@ -255,15 +255,15 @@ bool ADC_DoSelfCalibration(ADC_Type *base)
 }
 
 /*!
- * @brief Do the hardware offset-calibration.
+ * brief Do the hardware offset-calibration.
  *
  * To calibrate the ADC, set the ADC clock to 500 kHz. In order to achieve the specified ADC accuracy, the A/D
  * converter must be recalibrated, at a minimum, following every chip reset before initiating normal ADC operation.
  *
- * @param base ADC peripheral base address.
+ * param base ADC peripheral base address.
  * param frequency The clock frequency that ADC operates at.
- * @retval true  Calibration succeed.
- * @retval false Calibration failed.
+ * retval true  Calibration succeed.
+ * retval false Calibration failed.
  */
 bool ADC_DoOffsetCalibration(ADC_Type *base, uint32_t frequency)
 {
@@ -273,7 +273,7 @@ bool ADC_DoOffsetCalibration(ADC_Type *base, uint32_t frequency)
     uint32_t tmp32   = base->CTRL;
     /* The maximum ADC clock frequency during calibration is 30 MHz. */
     const uint32_t maxCalibrationFrequency = 30000000UL;
-    bool ret = true;
+    bool ret                               = true;
 
     /* Enable the converter. */
     /* This bit should be set after at least 10 us after the ADC is powered on. */
@@ -310,7 +310,7 @@ bool ADC_DoOffsetCalibration(ADC_Type *base, uint32_t frequency)
         if (ADC_CALIB_CALIB_MASK == (base->CALIB & ADC_CALIB_CALIB_MASK))
         {
             base->CTRL = tmp32;
-            ret = false; /* Calibration timeout. */
+            ret        = false; /* Calibration timeout. */
         }
     }
     else
@@ -324,7 +324,7 @@ bool ADC_DoOffsetCalibration(ADC_Type *base, uint32_t frequency)
         if (ADC_STARTUP_ADC_INIT_MASK == (base->STARTUP & ADC_STARTUP_ADC_INIT_MASK))
         {
             base->CTRL = tmp32;
-            ret = false; /* Initialization timeout. */
+            ret        = false; /* Initialization timeout. */
         }
     }
 
@@ -333,15 +333,15 @@ bool ADC_DoOffsetCalibration(ADC_Type *base, uint32_t frequency)
 }
 #else
 /*!
- * @brief Do the hardware self-calibration.
+ * brief Do the hardware self-calibration.
  *
  * To calibrate the ADC, set the ADC clock to 500 kHz. In order to achieve the specified ADC accuracy, the A/D
  * converter must be recalibrated, at a minimum, following every chip reset before initiating normal ADC operation.
  *
- * @param base ADC peripheral base address.
- * @param frequency The clock frequency that ADC operates at.
- * @retval true  Calibration succeed.
- * @retval false Calibration failed.
+ * param base ADC peripheral base address.
+ * param frequency The clock frequency that ADC operates at.
+ * retval true  Calibration succeed.
+ * retval false Calibration failed.
  */
 bool ADC_DoSelfCalibration(ADC_Type *base, uint32_t frequency)
 {
@@ -352,15 +352,15 @@ bool ADC_DoSelfCalibration(ADC_Type *base, uint32_t frequency)
     /* Store the current contents of the ADC CTRL register. */
     tmp32 = base->CTRL;
 
-    /* Start ADC self-calibration. */
-    base->CTRL |= ADC_CTRL_CALMODE_MASK;
-
     /* Divide the system clock to yield an ADC clock of about 500 kHz. */
     base->CTRL &= ~ADC_CTRL_CLKDIV_MASK;
     base->CTRL |= ADC_CTRL_CLKDIV((frequency / 500000U) - 1U);
 
     /* Clear the LPWR bit. */
     base->CTRL &= ~ADC_CTRL_LPWRMODE_MASK;
+
+    /* Start ADC self-calibration. */
+    base->CTRL |= ADC_CTRL_CALMODE_MASK;
     /* Delay for 300 uSec @ 500KHz ADC clock */
     SDK_DelayAtLeastUs(300U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 
@@ -494,18 +494,18 @@ bool ADC_GetConvSeqAGlobalConversionResult(ADC_Type *base, adc_result_info_t *in
     assert(info != NULL);
 
     uint32_t tmp32 = base->SEQ_GDAT[0]; /* Read to clear the status. */
-    bool ret = true;
+    bool ret       = true;
 
     if (0U == (ADC_SEQ_GDAT_DATAVALID_MASK & tmp32))
     {
         ret = false;
     }
 
-    info->result = (tmp32 & ADC_SEQ_GDAT_RESULT_MASK) >> ADC_SEQ_GDAT_RESULT_SHIFT;
-    info->thresholdCompareStatus =
-        (adc_threshold_compare_status_t)(uint32_t)((tmp32 & ADC_SEQ_GDAT_THCMPRANGE_MASK) >> ADC_SEQ_GDAT_THCMPRANGE_SHIFT);
-    info->thresholdCorssingStatus =
-        (adc_threshold_crossing_status_t)(uint32_t)((tmp32 & ADC_SEQ_GDAT_THCMPCROSS_MASK) >> ADC_SEQ_GDAT_THCMPCROSS_SHIFT);
+    info->result                  = (tmp32 & ADC_SEQ_GDAT_RESULT_MASK) >> ADC_SEQ_GDAT_RESULT_SHIFT;
+    info->thresholdCompareStatus  = (adc_threshold_compare_status_t)(uint32_t)((tmp32 & ADC_SEQ_GDAT_THCMPRANGE_MASK) >>
+                                                                              ADC_SEQ_GDAT_THCMPRANGE_SHIFT);
+    info->thresholdCorssingStatus = (adc_threshold_crossing_status_t)(uint32_t)(
+        (tmp32 & ADC_SEQ_GDAT_THCMPCROSS_MASK) >> ADC_SEQ_GDAT_THCMPCROSS_SHIFT);
     info->channelNumber = (tmp32 & ADC_SEQ_GDAT_CHN_MASK) >> ADC_SEQ_GDAT_CHN_SHIFT;
     info->overrunFlag   = ((tmp32 & ADC_SEQ_GDAT_OVERRUN_MASK) == ADC_SEQ_GDAT_OVERRUN_MASK);
 
@@ -526,18 +526,18 @@ bool ADC_GetConvSeqBGlobalConversionResult(ADC_Type *base, adc_result_info_t *in
     assert(info != NULL);
 
     uint32_t tmp32 = base->SEQ_GDAT[1]; /* Read to clear the status. */
-    bool ret = true;
+    bool ret       = true;
 
     if (0U == (ADC_SEQ_GDAT_DATAVALID_MASK & tmp32))
     {
         ret = false;
     }
 
-    info->result = (tmp32 & ADC_SEQ_GDAT_RESULT_MASK) >> ADC_SEQ_GDAT_RESULT_SHIFT;
-    info->thresholdCompareStatus =
-        (adc_threshold_compare_status_t)(uint32_t)((tmp32 & ADC_SEQ_GDAT_THCMPRANGE_MASK) >> ADC_SEQ_GDAT_THCMPRANGE_SHIFT);
-    info->thresholdCorssingStatus =
-        (adc_threshold_crossing_status_t)(uint32_t)((tmp32 & ADC_SEQ_GDAT_THCMPCROSS_MASK) >> ADC_SEQ_GDAT_THCMPCROSS_SHIFT);
+    info->result                  = (tmp32 & ADC_SEQ_GDAT_RESULT_MASK) >> ADC_SEQ_GDAT_RESULT_SHIFT;
+    info->thresholdCompareStatus  = (adc_threshold_compare_status_t)(uint32_t)((tmp32 & ADC_SEQ_GDAT_THCMPRANGE_MASK) >>
+                                                                              ADC_SEQ_GDAT_THCMPRANGE_SHIFT);
+    info->thresholdCorssingStatus = (adc_threshold_crossing_status_t)(uint32_t)(
+        (tmp32 & ADC_SEQ_GDAT_THCMPCROSS_MASK) >> ADC_SEQ_GDAT_THCMPCROSS_SHIFT);
     info->channelNumber = (tmp32 & ADC_SEQ_GDAT_CHN_MASK) >> ADC_SEQ_GDAT_CHN_SHIFT;
     info->overrunFlag   = ((tmp32 & ADC_SEQ_GDAT_OVERRUN_MASK) == ADC_SEQ_GDAT_OVERRUN_MASK);
 
@@ -560,7 +560,7 @@ bool ADC_GetChannelConversionResult(ADC_Type *base, uint32_t channel, adc_result
     assert(channel < ADC_DAT_COUNT);
 
     uint32_t tmp32 = base->DAT[channel]; /* Read to clear the status. */
-    bool ret = true;
+    bool ret       = true;
 
     if (0U == (ADC_DAT_DATAVALID_MASK & tmp32))
     {

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -164,6 +164,7 @@ void I2C_MasterDeinit(I2C_Type *base)
 void I2C_MasterSetBaudRate(I2C_Type *base, uint32_t baudRate_Bps, uint32_t srcClock_Hz)
 {
     uint32_t scl, divider;
+    uint32_t mindivider;
     uint32_t err, best_err;
     uint32_t best_scl = 0U;
     uint32_t best_div = 0U;
@@ -183,25 +184,35 @@ void I2C_MasterSetBaudRate(I2C_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
     }
 
     /*
-     * If master SCL frequency does not fit in workaround range, fallback to
-     * usual baudrate computation method
+     * Fallback to usual baudrate computation method, when:
+     * 1.Master SCL frequency does not fit in workaround range,
+     * 2.User's setting of baudRate_Bps is 400kHz while the clock frequency after divval is larger than 2MHz
      */
-    if ((best_scl > 9U) || ((best_scl < 2U)))
+    if ((best_scl > 9U) || ((best_scl < 2U)) || ((baudRate_Bps == 400000U) && (srcClock_Hz / best_scl > 2000000U)))
     {
 #endif /*FSL_FEATURE_I2C_PREPCLKFRG_8MHZ*/
 
-        best_err = 0U;
-
-        for (scl = 9U; scl >= 2U; scl--)
+        /* Calculate the minimal divider value to make sure the clock frequency after divval is not larger than 2MHz */
+        /* This is required in RM in order to generate 400kHz baudrate */
+        mindivider = ((srcClock_Hz * 10U) / 2000000U + 5U) / 10U;
+        /* If the scl value with current mindivider is smaller than 4, which is the minimal value register can achieve,
+           update mindivider */
+        if ((srcClock_Hz / mindivider / baudRate_Bps) < 4U)
         {
-            /* calculated ideal divider value for given scl, round up the result */
-            divider = ((srcClock_Hz * 10U) / (baudRate_Bps * scl * 2U) + 5U) / 10U;
+            mindivider = srcClock_Hz / 4U / baudRate_Bps;
+        }
+        /* Calculate the ideal div and scl value*/
+        best_err = 0U;
+        for (divider = mindivider; divider <= 0x10000U; divider++)
+        {
+            /* Calculte ideal scl value, round up the value */
+            scl = ((srcClock_Hz * 10U) / (divider * baudRate_Bps) + 5U) / 10U;
 
             /* adjust it if it is out of range */
-            divider = (divider > 0x10000U) ? 0x10000U : divider;
+            scl = (scl > 18U) ? 18U : scl;
 
             /* calculate error */
-            err = srcClock_Hz - (baudRate_Bps * scl * 2U * divider);
+            err = srcClock_Hz - (baudRate_Bps * scl * divider);
             if ((err < best_err) || (best_err == 0U))
             {
                 best_div = divider;
@@ -209,18 +220,25 @@ void I2C_MasterSetBaudRate(I2C_Type *base, uint32_t baudRate_Bps, uint32_t srcCl
                 best_err = err;
             }
 
-            if ((err == 0U) || (divider >= 0x10000U))
+            if ((err == 0U) || (scl <= 4U))
             {
                 /* either exact value was found
-                   or divider is at its max (it would even greater in the next iteration for sure) */
+                   or scl is at its min (it would be even smaller in the next iteration for sure) */
                 break;
             }
         }
 #if defined(FSL_FEATURE_I2C_PREPCLKFRG_8MHZ) && (FSL_FEATURE_I2C_PREPCLKFRG_8MHZ)
     }
 #endif /*FSL_FEATURE_I2C_PREPCLKFRG_8MHZ*/
-    base->CLKDIV  = I2C_CLKDIV_DIVVAL(best_div - 1U);
-    base->MSTTIME = I2C_MSTTIME_MSTSCLLOW(best_scl - 2U) | I2C_MSTTIME_MSTSCLHIGH(best_scl - 2U);
+    base->CLKDIV = I2C_CLKDIV_DIVVAL(best_div - 1U);
+    if (best_scl % 2U == 0U)
+    {
+        base->MSTTIME = I2C_MSTTIME_MSTSCLLOW(best_scl / 2U - 2U) | I2C_MSTTIME_MSTSCLHIGH(best_scl / 2U - 2U);
+    }
+    else
+    {
+        base->MSTTIME = I2C_MSTTIME_MSTSCLLOW(best_scl / 2U - 1U) | I2C_MSTTIME_MSTSCLHIGH(best_scl / 2U - 2U);
+    }
 }
 
 static uint32_t I2C_PendingStatusWait(I2C_Type *base)
@@ -328,7 +346,7 @@ status_t I2C_MasterWriteBlocking(I2C_Type *base, const void *txBuff, size_t txSi
 
     const uint8_t *buf = (const uint8_t *)txBuff;
 
-    assert(txBuff);
+    assert(txBuff != NULL);
 
     err = kStatus_Success;
     while (txSize != 0U)
@@ -437,7 +455,7 @@ status_t I2C_MasterReadBlocking(I2C_Type *base, void *rxBuff, size_t rxSize, uin
 
     uint8_t *buf = (uint8_t *)(rxBuff);
 
-    assert(rxBuff);
+    assert(rxBuff != NULL);
 
     err = kStatus_Success;
     while (rxSize != 0U)
@@ -536,7 +554,7 @@ status_t I2C_MasterTransferBlocking(I2C_Type *base, i2c_master_transfer_t *xfer)
     uint8_t subaddrBuf[4];
     int i;
 
-    assert(xfer);
+    assert(xfer != NULL);
 
     /* If repeated start is requested, send repeated start. */
     if (0U == (xfer->flags & (uint32_t)kI2C_TransferNoStartFlag))
@@ -614,7 +632,7 @@ void I2C_MasterTransferCreateHandle(I2C_Type *base,
                                     i2c_master_transfer_callback_t callback,
                                     void *userData)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint32_t instance;
     i2c_to_flexcomm_t handler;
@@ -651,8 +669,8 @@ status_t I2C_MasterTransferNonBlocking(I2C_Type *base, i2c_master_handle_t *hand
 {
     status_t result;
 
-    assert(handle);
-    assert(xfer);
+    assert(handle != NULL);
+    assert(xfer != NULL);
     assert(xfer->subaddressSize <= sizeof(xfer->subaddress));
 
     /* Return busy if another transaction is in progress. */
@@ -686,7 +704,7 @@ status_t I2C_MasterTransferNonBlocking(I2C_Type *base, i2c_master_handle_t *hand
  */
 status_t I2C_MasterTransferGetCount(I2C_Type *base, i2c_master_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {
@@ -1270,7 +1288,7 @@ static status_t I2C_SlaveTransferNonBlockingInternal(I2C_Type *base,
                                                      size_t rxSize,
                                                      uint32_t eventMask)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     status_t status;
     status = kStatus_Success;
@@ -1407,7 +1425,7 @@ void I2C_SlaveSetAddress(I2C_Type *base,
  */
 void I2C_SlaveGetDefaultConfig(i2c_slave_config_t *slaveConfig)
 {
-    assert(slaveConfig);
+    assert(slaveConfig != NULL);
 
     i2c_slave_config_t mySlaveConfig = {0};
 
@@ -1673,7 +1691,7 @@ void I2C_SlaveTransferCreateHandle(I2C_Type *base,
                                    i2c_slave_transfer_callback_t callback,
                                    void *userData)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     uint32_t instance;
     i2c_to_flexcomm_t handler;
@@ -1745,7 +1763,7 @@ status_t I2C_SlaveTransferNonBlocking(I2C_Type *base, i2c_slave_handle_t *handle
  */
 status_t I2C_SlaveTransferGetCount(I2C_Type *base, i2c_slave_handle_t *handle, size_t *count)
 {
-    assert(handle);
+    assert(handle != NULL);
 
     if (NULL == count)
     {

@@ -22,13 +22,15 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Defines CWT driver version 2.0.0.
+/*! @brief Defines CWT driver version 2.0.1.
  *
  * Change log:
+ * - Version 2.0.1
+ *   - Fix doxygen issues
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_CWT_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_CWT_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 typedef struct
@@ -155,10 +157,9 @@ status_t CWT_Init(CDOG_Type *base, cwt_config_t *conf);
 /*!
  * @brief Deinitialize CWT
  *
- * This function stops CWT secure counter.
+ * This function deinitializes CWT secure counter.
  *
  * @param base CWT peripheral base address
- * @param stop expected value which will be compared with secure counter
  */
 void CWT_Deinit(CDOG_Type *base);
 
@@ -307,6 +308,8 @@ void CWT_WritePersistent(CDOG_Type *base, uint32_t value);
  * @return The persistent word.
  */
 uint32_t CWT_ReadPersistent(CDOG_Type *base);
+
+/*! @}*/
 
 #if defined(__cplusplus)
 }

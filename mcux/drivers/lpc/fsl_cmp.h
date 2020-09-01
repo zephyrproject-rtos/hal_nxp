@@ -20,8 +20,8 @@
  *****************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.1.0. */
-#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 0U))
+/*! @brief Driver version 2.2.0. */
+#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2U, 2U, 0U))
 /*@}*/
 
 /*! @brief CMP input mux for positive and negative sides. */
@@ -61,13 +61,36 @@ typedef struct _cmp_vref_config
     uint8_t vrefValue; /*!< Reference voltage step. Available range is 0-31. Per step equals to VREFINPUT/31. */
 } cmp_vref_config_t;
 
+/*! @brief CMP Filter sample mode. */
+typedef enum _cmp_filtercgf_samplemode
+{
+    kCMP_FilterSampleMode0 = 0U, /*!< Bypass mode. Filtering is disabled. */
+    kCMP_FilterSampleMode1 = 1U, /*!< Filter 1 clock period. */
+    kCMP_FilterSampleMode2 = 2U, /*!< Filter 2 clock period. */
+    kCMP_FilterSampleMode3 = 3U  /*!< Filter 3 clock period. */
+} cmp_filtercgf_samplemode_t;
+
+/*! @brief CMP Filter clock divider. */
+typedef enum _cmp_filtercgf_clkdiv
+{
+    kCMP_FilterClockDivide1  = 0U, /*!< Filter clock period duration equals 1 analog comparator clock period. */
+    kCMP_FilterClockDivide2  = 1U, /*!< Filter clock period duration equals 2 analog comparator clock period. */
+    kCMP_FilterClockDivide4  = 2U, /*!< Filter clock period duration equals 4 analog comparator clock period. */
+    kCMP_FilterClockDivide8  = 3U, /*!< Filter clock period duration equals 8 analog comparator clock period. */
+    kCMP_FilterClockDivide16 = 4U, /*!< Filter clock period duration equals 16 analog comparator clock period. */
+    kCMP_FilterClockDivide32 = 5U, /*!< Filter clock period duration equals 32 analog comparator clock period. */
+    kCMP_FilterClockDivide64 = 6U  /*!< Filter clock period duration equals 64 analog comparator clock period. */
+} cmp_filtercgf_clkdiv_t;
+
 /*! @brief CMP configuration structure. */
 typedef struct _cmp_config
 {
-    bool enableHysteresis; /*!< Enable hysteresis. */
-    bool enableLowPower;   /*!< Enable low power mode. */
-    uint8_t
-        filterClockDivider; /* Filter clock divider. The module clock source will be divided by this value plus one. */
+    bool enableHysteresis;                     /*!< Enable hysteresis. */
+    bool enableLowPower;                       /*!< Enable low power mode. */
+    cmp_filtercgf_clkdiv_t filterClockDivider; /* Filter clock divider. Filter clock equals the Analog Comparator clock
+                                                  divided by 2^FILTERCGF_CLKDIV. */
+    cmp_filtercgf_samplemode_t
+        filterSampleMode; /* Filter sample mode. Control the filtering of the Analog Comparator output. */
 } cmp_config_t;
 
 /*************************************************************************************************
@@ -105,7 +128,8 @@ void CMP_Deinit(void);
  * @code
  *   config->enableHysteresis    = true;
  *   config->enableLowPower      = true;
- *   config->filterClockDivider  = 0;
+ *   config->filterClockDivider  = kCMP_FilterClockDivide1;
+ *   config->filterSampleMode    = kCMP_FilterSampleMode0;
  * @endcode
  * @param config Pointer to the configuration structure.
  */
@@ -230,6 +254,32 @@ static inline bool CMP_GetPreviousInterruptStatus(void)
 static inline bool CMP_GetInterruptStatus(void)
 {
     return SYSCON_COMP_INT_STATUS_INT_STATUS_MASK == (SYSCON->COMP_INT_STATUS & SYSCON_COMP_INT_STATUS_INT_STATUS_MASK);
+}
+/* @} */
+
+/*!
+ * @name Filter Interface
+ * @{
+ */
+
+/*!
+ * @brief CMP Filter Sample Config.
+ *
+ * This function allows the users to configure the sampling mode and clock divider of the CMP Filter.
+ *
+ * @param filterSampleMode   CMP Select filter sample mode
+ * @param filterClockDivider CMP Set fileter clock divider
+ */
+static inline void CMP_FilterSampleConfig(cmp_filtercgf_samplemode_t filterSampleMode,
+                                          cmp_filtercgf_clkdiv_t filterClockDivider)
+{
+    uint32_t comp = PMC->COMP;
+
+    comp &= ~(PMC_COMP_FILTERCGF_CLKDIV_MASK | PMC_COMP_FILTERCGF_SAMPLEMODE_MASK);
+    comp |= ((filterClockDivider << PMC_COMP_FILTERCGF_CLKDIV_SHIFT) |
+             (filterSampleMode << PMC_COMP_FILTERCGF_SAMPLEMODE_SHIFT));
+
+    PMC->COMP = comp;
 }
 /* @} */
 

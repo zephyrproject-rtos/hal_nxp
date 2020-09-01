@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019, NXP
+ * Copyright 2018-2020, NXP
  * All rights reserved.
  *
  *
@@ -90,7 +90,7 @@ enum _anactrl_osc_flags
 };
 
 /*!
- * @breif Configuration for FRO192M
+ * @brief Configuration for FRO192M
  *
  * This structure holds the configuration settings for the on-chip high-speed Free Running Oscillator. To initialize
  * this structure to reasonable defaults, call the ANACTRL_GetDefaultFro192MConfig() function and pass a
@@ -103,7 +103,7 @@ typedef struct _anactrl_fro192M_config
 } anactrl_fro192M_config_t;
 
 /*!
- * @breif Configuration for XO32M
+ * @brief Configuration for XO32M
  *
  * This structure holds the configuration settings for the 32 MHz crystal oscillator. To initialize this
  * structure to reasonable defaults, call the ANACTRL_GetDefaultXo32MConfig() function and pass a
@@ -201,11 +201,11 @@ void ANACTRL_GetDefaultXo32MConfig(anactrl_xo32M_config_t *config);
  * Ftarget = (CAPVAL * Freference) / ((1<<SCALE)-1)
  *
  * @param base ANACTRL peripheral base address.
- * @scale Define the power of 2 count that ref counter counts to during measurement.
- * @refClkFreq frequency of the reference clock.
+ * @param scale Define the power of 2 count that ref counter counts to during measurement.
+ * @param refClkFreq frequency of the reference clock.
  * @return frequency of the target clock.
  *
- * @Note the minimum count (scale) is 2.
+ * @note the minimum count (scale) is 2.
  */
 uint32_t ANACTRL_MeasureFrequency(ANACTRL_Type *base, uint8_t scale, uint32_t refClkFreq);
 /* @} */
@@ -218,7 +218,7 @@ uint32_t ANACTRL_MeasureFrequency(ANACTRL_Type *base, uint8_t scale, uint32_t re
 /*!
  * @brief Enable the ANACTRL interrupts.
  *
- * @param bas ANACTRL peripheral base address.
+ * @param base ANACTRL peripheral base address.
  * @param mask The interrupt mask. Refer to "_anactrl_interrupt" enumeration.
  */
 static inline void ANACTRL_EnableInterrupts(ANACTRL_Type *base, uint32_t mask)
@@ -229,7 +229,7 @@ static inline void ANACTRL_EnableInterrupts(ANACTRL_Type *base, uint32_t mask)
 /*!
  * @brief Disable the ANACTRL interrupts.
  *
- * @param bas ANACTRL peripheral base address.
+ * @param base ANACTRL peripheral base address.
  * @param mask The interrupt mask. Refer to "_anactrl_interrupt" enumeration.
  */
 static inline void ANACTRL_DisableInterrupts(ANACTRL_Type *base, uint32_t mask)
@@ -240,7 +240,7 @@ static inline void ANACTRL_DisableInterrupts(ANACTRL_Type *base, uint32_t mask)
 /*!
  * @brief Clear the ANACTRL interrupts.
  *
- * @param bas ANACTRL peripheral base address.
+ * @param base ANACTRL peripheral base address.
  * @param mask The interrupt mask. Refer to "_anactrl_interrupt" enumeration.
  */
 static inline void ANACTRL_ClearInterrupts(ANACTRL_Type *base, uint32_t mask)

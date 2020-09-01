@@ -41,8 +41,8 @@ static usart_dma_private_handle_t s_dmaPrivateHandle[FSL_FEATURE_SOC_USART_COUNT
 
 static void USART_TransferSendDMACallback(dma_handle_t *handle, void *param, bool transferDone, uint32_t intmode)
 {
-    assert(handle);
-    assert(param);
+    assert(handle != NULL);
+    assert(param != NULL);
 
     usart_dma_private_handle_t *usartPrivateHandle = (usart_dma_private_handle_t *)param;
 
@@ -65,8 +65,8 @@ static void USART_TransferSendDMACallback(dma_handle_t *handle, void *param, boo
 
 static void USART_TransferReceiveDMACallback(dma_handle_t *handle, void *param, bool transferDone, uint32_t intmode)
 {
-    assert(handle);
-    assert(param);
+    assert(handle != NULL);
+    assert(param != NULL);
 
     usart_dma_private_handle_t *usartPrivateHandle = (usart_dma_private_handle_t *)param;
 
@@ -160,11 +160,11 @@ status_t USART_TransferCreateHandleDMA(USART_Type *base,
  */
 status_t USART_TransferSendDMA(USART_Type *base, usart_dma_handle_t *handle, usart_transfer_t *xfer)
 {
-    assert(handle);
-    assert(handle->txDmaHandle);
-    assert(xfer);
-    assert(xfer->data);
-    assert(xfer->dataSize);
+    assert(handle != NULL);
+    assert(handle->txDmaHandle != NULL);
+    assert(xfer != NULL);
+    assert(xfer->data != NULL);
+    assert(xfer->dataSize != 0U);
 
     dma_transfer_config_t xferConfig;
     status_t status;
@@ -212,11 +212,11 @@ status_t USART_TransferSendDMA(USART_Type *base, usart_dma_handle_t *handle, usa
  */
 status_t USART_TransferReceiveDMA(USART_Type *base, usart_dma_handle_t *handle, usart_transfer_t *xfer)
 {
-    assert(handle);
-    assert(handle->rxDmaHandle);
-    assert(xfer);
-    assert(xfer->data);
-    assert(xfer->dataSize);
+    assert(handle != NULL);
+    assert(handle->rxDmaHandle != NULL);
+    assert(xfer != NULL);
+    assert(xfer->data != NULL);
+    assert(xfer->dataSize != 0U);
 
     dma_transfer_config_t xferConfig;
     status_t status;
@@ -299,9 +299,9 @@ void USART_TransferAbortReceiveDMA(USART_Type *base, usart_dma_handle_t *handle)
  */
 status_t USART_TransferGetReceiveCountDMA(USART_Type *base, usart_dma_handle_t *handle, uint32_t *count)
 {
-    assert(handle);
-    assert(handle->rxDmaHandle);
-    assert(count);
+    assert(NULL != handle);
+    assert(NULL != handle->rxDmaHandle);
+    assert(NULL != count);
 
     if ((uint8_t)kUSART_RxIdle == handle->rxState)
     {

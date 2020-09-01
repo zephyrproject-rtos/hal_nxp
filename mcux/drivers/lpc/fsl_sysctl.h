@@ -138,7 +138,7 @@ void SYSCTL_SetFlexcommShareSet(SYSCTL_Type *base,
  * @param base Base address of the SYSCTL peripheral
  * @param flexCommIndex index of flexcomm,reference _sysctl_share_src
  * @param signal FCCTRLSEL signal shift
- * @param setIndex share set for sck, reference _sysctl_share_set_index
+ * @param set share set for sck, reference _sysctl_share_set_index
  *
  */
 void SYSCTL_SetShareSet(SYSCTL_Type *base, uint32_t flexCommIndex, sysctl_fcctrlsel_signal_t signal, uint32_t set);
@@ -166,7 +166,8 @@ void SYSCTL_SetShareSetSrc(SYSCTL_Type *base,
  *
  * @param base Base address of the SYSCTL peripheral
  * @param setIndex index of share set, reference _sysctl_share_set_index
- * @param sckShareSrc sck source fro this share set,reference _sysctl_share_src
+ * @param signal FCCTRLSEL signal shift
+ * @param shareSrc sck source fro this share set,reference _sysctl_share_src
  *
  */
 void SYSCTL_SetShareSignalSrc(SYSCTL_Type *base,

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,16 +22,15 @@
 static const IRQn_Type s_pintIRQ[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS +
                                  FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS] = PINT_IRQS;
 
-/*! @brief Callback function array for PINT(s). */
-static pint_cb_t
-    s_pintCallback[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS + FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS];
+/*! @brief Callback function array for SECPINT(s). */
+static pint_cb_t s_secpintCallback[FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS];
 #else
 /*! @brief Irq number array */
 static const IRQn_Type s_pintIRQ[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS] = PINT_IRQS;
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
 
 /*! @brief Callback function array for PINT(s). */
 static pint_cb_t s_pintCallback[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS];
-#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
 
 /*******************************************************************************
  * Code
@@ -49,14 +48,13 @@ static pint_cb_t s_pintCallback[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS];
 void PINT_Init(PINT_Type *base)
 {
     uint32_t i;
-    uint32_t pmcfg;
+    uint32_t pmcfg    = 0;
     uint8_t pintcount = 0;
     assert(base != NULL);
-    pmcfg = 0;
 
     if (base == PINT)
     {
-        pintcount = PINT_PIN_INT_COUNT;
+        pintcount = FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS;
         /* clear PINT callback array*/
         for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
         {
@@ -66,14 +64,11 @@ void PINT_Init(PINT_Type *base)
     else
     {
 #if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-        pintcount = SEC_PINT_PIN_INT_COUNT;
-        /* clear PINT and SECPINT callback array*/
-        for (i = (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS;
-             i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS +
-                     (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS;
-             i++)
+        pintcount = FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS;
+        /* clear SECPINT callback array*/
+        for (i = 0; i < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
         {
-            s_pintCallback[i] = NULL;
+            s_secpintCallback[i] = NULL;
         }
 #endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
     }
@@ -175,7 +170,17 @@ void PINT_PinInterruptConfig(PINT_Type *base, pint_pin_int_t intr, pint_pin_enab
     PINT_PinInterruptClrRiseFlag(base, intr);
     PINT_PinInterruptClrFallFlag(base, intr);
 
-    s_pintCallback[intr] = callback;
+    /* Security PINT uses additional callback array */
+    if (base == PINT)
+    {
+        s_pintCallback[intr] = callback;
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        s_secpintCallback[intr] = callback;
+#endif
+    }
 
     /* select level or edge sensitive */
     base->ISEL = (base->ISEL & ~(1UL << (uint32_t)intr)) |
@@ -268,7 +273,17 @@ void PINT_PinInterruptGetConfig(PINT_Type *base, pint_pin_int_t pintr, pint_pin_
         }
     }
 
-    *callback = s_pintCallback[pintr];
+    /* Security PINT uses additional callback array */
+    if (base == PINT)
+    {
+        *callback = s_pintCallback[pintr];
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        *callback = s_secpintCallback[pintr];
+#endif
+    }
 }
 
 /*!
@@ -318,7 +333,22 @@ void PINT_PatternMatchConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pint_
     base->PMCFG = pmcfg;
 
     /* Save callback pointer */
-    s_pintCallback[bslice] = cfg->callback;
+    if (base == PINT)
+    {
+        if ((uint32_t)bslice < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        {
+            s_pintCallback[bslice] = cfg->callback;
+        }
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        if ((uint32_t)bslice < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        {
+            s_secpintCallback[bslice] = cfg->callback;
+        }
+#endif
+    }
 }
 
 /*!
@@ -344,8 +374,8 @@ void PINT_PatternMatchGetConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pi
     src_shift = PININT_BITSLICE_SRC_START + ((uint32_t)bslice * 3UL);
     cfg_shift = PININT_BITSLICE_CFG_START + ((uint32_t)bslice * 3UL);
 
-    cfg->bs_src = (pint_pmatch_input_src_t)((base->PMSRC & (tmp_src_shift << src_shift)) >> src_shift);
-    cfg->bs_cfg = (pint_pmatch_bslice_cfg_t)((base->PMCFG & (tmp_cfg_shift << cfg_shift)) >> cfg_shift);
+    cfg->bs_src = (pint_pmatch_input_src_t)(uint32_t)((base->PMSRC & (tmp_src_shift << src_shift)) >> src_shift);
+    cfg->bs_cfg = (pint_pmatch_bslice_cfg_t)(uint32_t)((base->PMCFG & (tmp_cfg_shift << cfg_shift)) >> cfg_shift);
 
     if ((uint32_t)bslice == 7U)
     {
@@ -355,7 +385,23 @@ void PINT_PatternMatchGetConfig(PINT_Type *base, pint_pmatch_bslice_t bslice, pi
     {
         cfg->end_point = (((base->PMCFG & (1UL << (uint32_t)bslice)) >> (uint32_t)bslice) != 0U) ? true : false;
     }
-    cfg->callback = s_pintCallback[bslice];
+
+    if (base == PINT)
+    {
+        if ((uint32_t)bslice < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        {
+            cfg->callback = s_pintCallback[bslice];
+        }
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        if ((uint32_t)bslice < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        {
+            cfg->callback = s_secpintCallback[bslice];
+        }
+#endif
+    }
 }
 
 /*!
@@ -420,10 +466,22 @@ void PINT_PinInterruptClrStatusAll(PINT_Type *base)
 {
     uint32_t pinIntMode   = 0;
     uint32_t pinIntStatus = 0;
+    uint32_t pinIntCount  = 0;
     uint32_t mask         = 0;
     uint32_t i;
 
-    for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+    if (base == PINT)
+    {
+        pinIntCount = (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS;
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        pinIntCount = (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS;
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+    }
+
+    for (i = 0; i < pinIntCount; i++)
     {
         pinIntMode   = base->ISEL & (1UL << i);
         pinIntStatus = base->IST & (1UL << i);
@@ -454,11 +512,25 @@ void PINT_EnableCallback(PINT_Type *base)
 
     assert(base != NULL);
 
-    for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+    if (base == PINT)
     {
-        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
-        NVIC_ClearPendingIRQ(s_pintIRQ[i]);
-        (void)EnableIRQ(s_pintIRQ[i]);
+        for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+        {
+            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
+            NVIC_ClearPendingIRQ(s_pintIRQ[i]);
+            (void)EnableIRQ(s_pintIRQ[i]);
+        }
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        for (i = 0; i < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+        {
+            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
+            NVIC_ClearPendingIRQ(s_pintIRQ[i + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
+            (void)EnableIRQ(s_pintIRQ[i + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
+        }
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
     }
 }
 
@@ -477,6 +549,16 @@ void PINT_EnableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
     assert(base != NULL);
 
     PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
+
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+    /* Get the right security pint irq index in array */
+    if (base == SECPINT)
+    {
+        pintIdx =
+            (pint_pin_int_t)(uint32_t)((uint32_t)pintIdx + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS);
+    }
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+
     NVIC_ClearPendingIRQ(s_pintIRQ[pintIdx]);
     (void)EnableIRQ(s_pintIRQ[pintIdx]);
 }
@@ -497,11 +579,25 @@ void PINT_DisableCallback(PINT_Type *base)
 
     assert(base != NULL);
 
-    for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+    if (base == PINT)
     {
-        (void)DisableIRQ(s_pintIRQ[i]);
-        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
-        NVIC_ClearPendingIRQ(s_pintIRQ[i]);
+        for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+        {
+            (void)DisableIRQ(s_pintIRQ[i]);
+            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
+            NVIC_ClearPendingIRQ(s_pintIRQ[i]);
+        }
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        for (i = 0; i < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+        {
+            (void)DisableIRQ(s_pintIRQ[i + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
+            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
+            NVIC_ClearPendingIRQ(s_pintIRQ[i + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
+        }
+#endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
     }
 }
 
@@ -519,9 +615,20 @@ void PINT_DisableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 {
     assert(base != NULL);
 
-    (void)DisableIRQ(s_pintIRQ[pintIdx]);
-    PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
-    NVIC_ClearPendingIRQ(s_pintIRQ[pintIdx]);
+    if (base == PINT)
+    {
+        (void)DisableIRQ(s_pintIRQ[pintIdx]);
+        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
+        NVIC_ClearPendingIRQ(s_pintIRQ[pintIdx]);
+    }
+    else
+    {
+#if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
+        (void)DisableIRQ(s_pintIRQ[(uint32_t)pintIdx + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
+        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
+        NVIC_ClearPendingIRQ(s_pintIRQ[(uint32_t)pintIdx + (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS]);
+#endif
+    }
 }
 
 /*!
@@ -553,10 +660,9 @@ void PINT_Deinit(PINT_Type *base)
     {
 #if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
         /* clear SECPINT callback array */
-        for (i = FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS;
-             i < (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS + FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS); i++)
+        for (i = 0; i < (uint32_t)FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
         {
-            s_pintCallback[i] = NULL;
+            s_secpintCallback[i] = NULL;
         }
 #endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
     }
@@ -637,20 +743,16 @@ void SEC_GPIO_INT0_IRQ0_DriverIRQHandler(void)
     /* Reset pattern match detection */
     pmstatus = PINT_PatternMatchResetDetectLogic(SECPINT);
     /* Call user function */
-    if (s_pintCallback[kPINT_SecPinInt0] != NULL)
+    if (s_secpintCallback[kPINT_SecPinInt0] != NULL)
     {
-        s_pintCallback[kPINT_SecPinInt0](kPINT_SecPinInt0, pmstatus);
+        s_secpintCallback[kPINT_SecPinInt0](kPINT_SecPinInt0, pmstatus);
     }
     if ((SECPINT->ISEL & 0x1U) == 0x0U)
     {
         /* Edge sensitive: clear Pin interrupt after callback */
         PINT_PinInterruptClrStatus(SECPINT, kPINT_PinInt0);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if (FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS > 1U)
@@ -662,20 +764,16 @@ void SEC_GPIO_INT0_IRQ1_DriverIRQHandler(void)
     /* Reset pattern match detection */
     pmstatus = PINT_PatternMatchResetDetectLogic(SECPINT);
     /* Call user function */
-    if (s_pintCallback[kPINT_SecPinInt1] != NULL)
+    if (s_secpintCallback[kPINT_SecPinInt1] != NULL)
     {
-        s_pintCallback[kPINT_SecPinInt1](kPINT_SecPinInt1, pmstatus);
+        s_secpintCallback[kPINT_SecPinInt1](kPINT_SecPinInt1, pmstatus);
     }
     if ((SECPINT->ISEL & 0x1U) == 0x0U)
     {
         /* Edge sensitive: clear Pin interrupt after callback */
         PINT_PinInterruptClrStatus(SECPINT, kPINT_PinInt1);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
 #endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
@@ -697,11 +795,7 @@ void PIN_INT0_DriverIRQHandler(void)
         /* Edge sensitive: clear Pin interrupt after callback */
         PINT_PinInterruptClrStatus(PINT, kPINT_PinInt0);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 
 #if (FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS > 1U)
@@ -721,11 +815,7 @@ void PIN_INT1_DriverIRQHandler(void)
         /* Edge sensitive: clear Pin interrupt after callback */
         PINT_PinInterruptClrStatus(PINT, kPINT_PinInt1);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -746,11 +836,7 @@ void PIN_INT2_DriverIRQHandler(void)
         /* Edge sensitive: clear Pin interrupt after callback */
         PINT_PinInterruptClrStatus(PINT, kPINT_PinInt2);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -771,11 +857,7 @@ void PIN_INT3_DriverIRQHandler(void)
         /* Edge sensitive: clear Pin interrupt after callback */
         PINT_PinInterruptClrStatus(PINT, kPINT_PinInt3);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -796,11 +878,7 @@ void PIN_INT4_DriverIRQHandler(void)
         /* Edge sensitive: clear Pin interrupt after callback */
         PINT_PinInterruptClrStatus(PINT, kPINT_PinInt4);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -825,11 +903,7 @@ void PIN_INT5_DriverIRQHandler(void)
         /* Edge sensitive: clear Pin interrupt after callback */
         PINT_PinInterruptClrStatus(PINT, kPINT_PinInt5);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -854,11 +928,7 @@ void PIN_INT6_DriverIRQHandler(void)
         /* Edge sensitive: clear Pin interrupt after callback */
         PINT_PinInterruptClrStatus(PINT, kPINT_PinInt6);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
 
@@ -883,10 +953,6 @@ void PIN_INT7_DriverIRQHandler(void)
         /* Edge sensitive: clear Pin interrupt after callback */
         PINT_PinInterruptClrStatus(PINT, kPINT_PinInt7);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif
