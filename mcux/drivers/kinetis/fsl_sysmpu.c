@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -111,7 +111,7 @@ void SYSMPU_GetHardwareInfo(SYSMPU_Type *base, sysmpu_hardware_info_t *hardwareI
 void SYSMPU_SetRegionConfig(SYSMPU_Type *base, const sysmpu_region_config_t *regionConfig)
 {
     assert(regionConfig);
-    assert(regionConfig->regionNum < FSL_FEATURE_SYSMPU_DESCRIPTOR_COUNT);
+    assert(regionConfig->regionNum < (uint32_t)FSL_FEATURE_SYSMPU_DESCRIPTOR_COUNT);
 
     uint32_t wordReg = 0;
     uint8_t msPortNum;
@@ -175,7 +175,7 @@ void SYSMPU_SetRegionConfig(SYSMPU_Type *base, const sysmpu_region_config_t *reg
  */
 void SYSMPU_SetRegionAddr(SYSMPU_Type *base, uint32_t regionNum, uint32_t startAddr, uint32_t endAddr)
 {
-    assert(regionNum < FSL_FEATURE_SYSMPU_DESCRIPTOR_COUNT);
+    assert(regionNum < (uint32_t)FSL_FEATURE_SYSMPU_DESCRIPTOR_COUNT);
 
     base->WORD[regionNum][0] = startAddr;
     base->WORD[regionNum][1] = endAddr;
@@ -207,7 +207,7 @@ void SYSMPU_SetRegionRwxMasterAccessRights(SYSMPU_Type *base,
                                            const sysmpu_rwxrights_master_access_control_t *accessRights)
 {
     assert(accessRights);
-    assert(regionNum < FSL_FEATURE_SYSMPU_DESCRIPTOR_COUNT);
+    assert(regionNum < (uint32_t)FSL_FEATURE_SYSMPU_DESCRIPTOR_COUNT);
     assert(masterNum < SYSMPU_MASTER_RWATTRIBUTE_START_PORT);
 
     uint32_t mask  = SYSMPU_REGION_RWXRIGHTS_MASTER_MASK(masterNum);
@@ -251,9 +251,9 @@ void SYSMPU_SetRegionRwMasterAccessRights(SYSMPU_Type *base,
                                           const sysmpu_rwrights_master_access_control_t *accessRights)
 {
     assert(accessRights);
-    assert(regionNum < FSL_FEATURE_SYSMPU_DESCRIPTOR_COUNT);
+    assert(regionNum < (uint32_t)FSL_FEATURE_SYSMPU_DESCRIPTOR_COUNT);
     assert(masterNum >= SYSMPU_MASTER_RWATTRIBUTE_START_PORT);
-    assert(masterNum <= (FSL_FEATURE_SYSMPU_MASTER_COUNT - 1));
+    assert(masterNum <= ((uint32_t)FSL_FEATURE_SYSMPU_MASTER_COUNT - 1U));
 
     uint32_t mask  = SYSMPU_REGION_RWRIGHTS_MASTER_MASK(masterNum);
     uint32_t right = base->RGDAAC[regionNum];

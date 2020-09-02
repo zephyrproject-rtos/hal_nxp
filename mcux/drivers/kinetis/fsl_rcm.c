@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -60,6 +60,10 @@ void RCM_SetForceBootRomSource(RCM_Type *base, rcm_boot_rom_config_t config)
     reg = base->FM;
     reg &= ~RCM_FM_FORCEROM_MASK;
     reg |= ((uint32_t)config << RCM_FM_FORCEROM_SHIFT);
+#if (defined(FSL_FEATURE_RCM_REG_WIDTH) && (FSL_FEATURE_RCM_REG_WIDTH == 32))
     base->FM = reg;
+#else
+    base->FM = (uint8_t)reg;
+#endif /* FSL_FEATURE_RCM_REG_WIDTH == 32 */
 }
 #endif /* #if FSL_FEATURE_RCM_HAS_BOOTROM */

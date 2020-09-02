@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,9 +20,9 @@
  */
 /*! @name Driver version */
 /*@{*/
-/*! @brief LTC driver version. Version 2.0.10.
+/*! @brief LTC driver version. Version 2.0.12.
  *
- * Current version: 2.0.9
+ * Current version: 2.0.12
  *
  * Change log:
  * - Version 2.0.1
@@ -55,8 +55,14 @@
  * - Version 2.0.10
  *   - Fix MISRA-2012 issues
  *
+ * - Version 2.0.11
+ *   - Fix MISRA-2012 issues
+ *
+ * - Version 2.0.12
+ *   - Fix AES Decrypt in CBC modes fail when used kLTC_DecryptKey.
+ *
  */
-#define FSL_LTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 10))
+#define FSL_LTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 12))
 /*@}*/
 /*! @} */
 
@@ -1585,19 +1591,19 @@ status_t LTC_PKHA_ECC_PointMul(LTC_Type *base,
  * @{
  */
 
-#define LTC_MD_ALG_AES (0x10U)        /*!< Bit field value for LTC_MD_ALG: AES */
-#define LTC_MD_ALG_DES (0x20U)        /*!< Bit field value for LTC_MD_ALG: DES */
+#define LTC_MD_ALG_AES        (0x10U) /*!< Bit field value for LTC_MD_ALG: AES */
+#define LTC_MD_ALG_DES        (0x20U) /*!< Bit field value for LTC_MD_ALG: DES */
 #define LTC_MD_ALG_TRIPLE_DES (0x21U) /*!< Bit field value for LTC_MD_ALG: 3DES */
-#define LTC_MD_ALG_SHA1 (0x41U)       /*!< Bit field value for LTC_MD_ALG: SHA-1 */
-#define LTC_MD_ALG_SHA224 (0x42U)     /*!< Bit field value for LTC_MD_ALG: SHA-224 */
-#define LTC_MD_ALG_SHA256 (0x43U)     /*!< Bit field value for LTC_MD_ALG: SHA-256 */
-#define LTC_MDPK_ALG_PKHA (0x80U)     /*!< Bit field value for LTC_MDPK_ALG: PKHA */
-#define LTC_MD_ENC_DECRYPT (0U)       /*!< Bit field value for LTC_MD_ENC: Decrypt. */
-#define LTC_MD_ENC_ENCRYPT (0x1U)     /*!< Bit field value for LTC_MD_ENC: Encrypt. */
-#define LTC_MD_AS_UPDATE (0U)         /*!< Bit field value for LTC_MD_AS: Update */
-#define LTC_MD_AS_INITIALIZE (0x1U)   /*!< Bit field value for LTC_MD_AS: Initialize */
-#define LTC_MD_AS_FINALIZE (0x2U)     /*!< Bit field value for LTC_MD_AS: Finalize */
-#define LTC_MD_AS_INIT_FINAL (0x3U)   /*!< Bit field value for LTC_MD_AS: Initialize/Finalize */
+#define LTC_MD_ALG_SHA1       (0x41U) /*!< Bit field value for LTC_MD_ALG: SHA-1 */
+#define LTC_MD_ALG_SHA224     (0x42U) /*!< Bit field value for LTC_MD_ALG: SHA-224 */
+#define LTC_MD_ALG_SHA256     (0x43U) /*!< Bit field value for LTC_MD_ALG: SHA-256 */
+#define LTC_MDPK_ALG_PKHA     (0x80U) /*!< Bit field value for LTC_MDPK_ALG: PKHA */
+#define LTC_MD_ENC_DECRYPT    (0U)    /*!< Bit field value for LTC_MD_ENC: Decrypt. */
+#define LTC_MD_ENC_ENCRYPT    (0x1U)  /*!< Bit field value for LTC_MD_ENC: Encrypt. */
+#define LTC_MD_AS_UPDATE      (0U)    /*!< Bit field value for LTC_MD_AS: Update */
+#define LTC_MD_AS_INITIALIZE  (0x1U)  /*!< Bit field value for LTC_MD_AS: Initialize */
+#define LTC_MD_AS_FINALIZE    (0x2U)  /*!< Bit field value for LTC_MD_AS: Finalize */
+#define LTC_MD_AS_INIT_FINAL  (0x3U)  /*!< Bit field value for LTC_MD_AS: Initialize/Finalize */
 
 /*! Full word representing the actual bit values for the LTC mode register. */
 typedef uint32_t ltc_mode_t;

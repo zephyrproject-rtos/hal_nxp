@@ -141,7 +141,7 @@ void PWT_GetDefaultConfig(pwt_config_t *config);
  *
  * @param base PWT peripheral base address
  * @param mask The interrupts to enable. This is a logical OR of members of the
- *             enumeration ::pwt_interrupt_enable_t
+ *             enumeration pwt_interrupt_enable_t
  */
 static inline void PWT_EnableInterrupts(PWT_Type *base, uint32_t mask)
 {
@@ -153,7 +153,7 @@ static inline void PWT_EnableInterrupts(PWT_Type *base, uint32_t mask)
  *
  * @param base PWT peripheral base address
  * @param mask The interrupts to enable. This is a logical OR of members of the
- *             enumeration ::pwt_interrupt_enable_t
+ *             enumeration pwt_interrupt_enable_t
  */
 static inline void PWT_DisableInterrupts(PWT_Type *base, uint32_t mask)
 {
@@ -166,7 +166,7 @@ static inline void PWT_DisableInterrupts(PWT_Type *base, uint32_t mask)
  * @param base PWT peripheral base address
  *
  * @return The enabled interrupts. This is the logical OR of members of the
- *         enumeration ::pwt_interrupt_enable_t
+ *         enumeration pwt_interrupt_enable_t
  */
 static inline uint32_t PWT_GetEnabledInterrupts(PWT_Type *base)
 {
@@ -186,7 +186,7 @@ static inline uint32_t PWT_GetEnabledInterrupts(PWT_Type *base)
  * @param base PWT peripheral base address
  *
  * @return The status flags. This is the logical OR of members of the
- *         enumeration ::pwt_status_flags_t
+ *         enumeration pwt_status_flags_t
  */
 static inline uint32_t PWT_GetStatusFlags(PWT_Type *base)
 {
@@ -198,7 +198,7 @@ static inline uint32_t PWT_GetStatusFlags(PWT_Type *base)
  *
  * @param base PWT peripheral base address
  * @param mask The status flags to clear. This is a logical OR of members of the
- *             enumeration ::pwt_status_flags_t
+ *             enumeration pwt_status_flags_t
  */
 static inline void PWT_ClearStatusFlags(PWT_Type *base, uint32_t mask)
 {

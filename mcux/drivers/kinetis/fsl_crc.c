@@ -18,7 +18,7 @@
 
 /*! @internal @brief Has data register with name CRC. */
 #if defined(FSL_FEATURE_CRC_HAS_CRC_REG) && FSL_FEATURE_CRC_HAS_CRC_REG
-#define DATA CRC
+#define DATA   CRC
 #define DATALL CRCLL
 #endif
 

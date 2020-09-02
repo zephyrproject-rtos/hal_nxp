@@ -23,10 +23,10 @@
 #endif
 
 /*! @brief Masks for TDA8035 status register */
-#define SMARTCARD_TDA8035_STATUS_PRES (0x01u)             /*!< Smart card PHY TDA8035 Smart card present status */
-#define SMARTCARD_TDA8035_STATUS_ACTIVE (0x02u)           /*!< Smart card PHY TDA8035 Smart card active status */
-#define SMARTCARD_TDA8035_STATUS_FAULTY (0x04u)           /*!< Smart card PHY TDA8035 Smart card faulty status */
-#define SMARTCARD_TDA8035_STATUS_CARD_REMOVED (0x08u)     /*!< Smart card PHY TDA8035 Smart card removed status */
+#define SMARTCARD_TDA8035_STATUS_PRES             (0x01u) /*!< Smart card PHY TDA8035 Smart card present status */
+#define SMARTCARD_TDA8035_STATUS_ACTIVE           (0x02u) /*!< Smart card PHY TDA8035 Smart card active status */
+#define SMARTCARD_TDA8035_STATUS_FAULTY           (0x04u) /*!< Smart card PHY TDA8035 Smart card faulty status */
+#define SMARTCARD_TDA8035_STATUS_CARD_REMOVED     (0x08u) /*!< Smart card PHY TDA8035 Smart card removed status */
 #define SMARTCARD_TDA8035_STATUS_CARD_DEACTIVATED (0x10u) /*!< Smart card PHY TDA8035 Smart card deactivated status */
 
 /*******************************************************************************
@@ -557,9 +557,5 @@ void SMARTCARD_PHY_IRQHandler(void *base, smartcard_context_t *context)
     {
         context->interfaceCallback(context, context->interfaceCallbackParam);
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }

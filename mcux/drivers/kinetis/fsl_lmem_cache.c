@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -16,7 +16,7 @@
 #define FSL_COMPONENT_ID "platform.drivers.lmem"
 #endif
 
-#define LMEM_CACHEMODE_WIDTH (2U)
+#define LMEM_CACHEMODE_WIDTH     (2U)
 #define LMEM_CACHEMODE_MASK_UNIT (0x3U)
 
 /*******************************************************************************

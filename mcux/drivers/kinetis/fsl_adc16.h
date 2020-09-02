@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief ADC16 driver version 2.0.3. */
-#define FSL_ADC16_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief ADC16 driver version 2.1.0. */
+#define FSL_ADC16_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 /*!
@@ -133,6 +133,9 @@ typedef enum _adc16_reference_voltage_source
 {
     kADC16_ReferenceVoltageSourceVref = 0U, /*!< For external pins pair of VrefH and VrefL. */
     kADC16_ReferenceVoltageSourceValt = 1U, /*!< For alternate reference pair of ValtH and ValtL. */
+#if defined(FSL_FEATURE_ADC16_HAS_VREF_BANDGAP) && FSL_FEATURE_ADC16_HAS_VREF_BANDGAP
+    kADC16_ReferenceVoltageSourceBandgap = 2U, /*!< For bandgap voltage from PMC. */
+#endif                                         /* FSL_FEATURE_ADC16_HAS_VREF_BANDGAP */
 } adc16_reference_voltage_source_t;
 
 #if defined(FSL_FEATURE_ADC16_HAS_HW_AVERAGE) && FSL_FEATURE_ADC16_HAS_HW_AVERAGE

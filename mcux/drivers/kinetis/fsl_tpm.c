@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -78,7 +78,7 @@ void TPM_Init(TPM_Type *base, const tpm_config_t *config)
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Enable the module clock */
-    CLOCK_EnableClock(s_tpmClocks[TPM_GetInstance(base)]);
+    (void)CLOCK_EnableClock(s_tpmClocks[TPM_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 #if defined(FSL_FEATURE_TPM_HAS_GLOBAL) && FSL_FEATURE_TPM_HAS_GLOBAL
@@ -127,7 +127,7 @@ void TPM_Deinit(TPM_Type *base)
 #endif
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Gate the TPM clock */
-    CLOCK_DisableClock(s_tpmClocks[TPM_GetInstance(base)]);
+    (void)CLOCK_DisableClock(s_tpmClocks[TPM_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -432,8 +432,8 @@ void TPM_UpdatePwmDutycycle(TPM_Type *base,
                             tpm_pwm_mode_t currentPwmMode,
                             uint8_t dutyCyclePercent)
 {
-    assert(chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
-    assert(chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
+    assert((int8_t)chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
+    assert((uint8_t)chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
 
 #if defined(FSL_FEATURE_TPM_HAS_COMBINE) && FSL_FEATURE_TPM_HAS_COMBINE
     if (currentPwmMode == kTPM_CombinedPwm)
@@ -500,8 +500,8 @@ void TPM_UpdatePwmDutycycle(TPM_Type *base,
  */
 void TPM_UpdateChnlEdgeLevelSelect(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_t level)
 {
-    assert(chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
-    assert(chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
+    assert((int8_t)chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
+    assert((uint8_t)chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
 
     uint32_t reg = base->CONTROLS[chnlNumber].CnSC
 #if !(defined(FSL_FEATURE_TPM_CnSC_CHF_WRITE_0_CLEAR) && FSL_FEATURE_TPM_CnSC_CHF_WRITE_0_CLEAR)
@@ -545,8 +545,8 @@ void TPM_UpdateChnlEdgeLevelSelect(TPM_Type *base, tpm_chnl_t chnlNumber, uint8_
  */
 void TPM_SetupInputCapture(TPM_Type *base, tpm_chnl_t chnlNumber, tpm_input_capture_edge_t captureMode)
 {
-    assert(chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
-    assert(chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
+    assert((int8_t)chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
+    assert((uint8_t)chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
 
 #if defined(FSL_FEATURE_TPM_HAS_QDCTRL) && FSL_FEATURE_TPM_HAS_QDCTRL
     /* The TPM's QDCTRL register required to be effective */
@@ -605,8 +605,8 @@ void TPM_SetupOutputCompare(TPM_Type *base,
                             tpm_output_compare_mode_t compareMode,
                             uint32_t compareValue)
 {
-    assert(chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
-    assert(chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
+    assert((int8_t)chnlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base));
+    assert((uint8_t)chnlNumber < sizeof(base->CONTROLS) / sizeof(base->CONTROLS[0]));
 
 #if defined(FSL_FEATURE_TPM_HAS_QDCTRL) && FSL_FEATURE_TPM_HAS_QDCTRL
     /* The TPM's QDCTRL register required to be effective */

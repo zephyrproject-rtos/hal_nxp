@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.1.10. */
-#define FSL_SDHC_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 10U))
+/*! @brief Driver version 2.1.11. */
+#define FSL_SDHC_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 11U))
 /*@}*/
 
 /*! @brief Maximum block count can be set one time */
@@ -37,6 +37,8 @@ enum
     kStatus_SDHC_TransferDataFailed          = MAKE_STATUS(kStatusGroup_SDHC, 3U), /*!< Transfer data failed */
     kStatus_SDHC_DMADataBufferAddrNotAlign =
         MAKE_STATUS(kStatusGroup_SDHC, 4U), /*!< data buffer addr not align in DMA mode */
+    kStatus_SDHC_TransferCommandComplete = MAKE_STATUS(kStatusGroup_SDHC, 5U), /*!< command transfer complete */
+    kStatus_SDHC_TransferDataComplete    = MAKE_STATUS(kStatusGroup_SDHC, 6U), /*!< data transfer complete */
 };
 
 /*! @brief _sdhc_capability_flag Host controller capabilities flag mask */
@@ -825,7 +827,7 @@ static inline void SDHC_SetDataBusWidth(SDHC_Type *base, sdhc_data_bus_width_t w
  * @brief detect card insert status.
  *
  * @param base SDHC peripheral base address.
- * @param enable/disable flag
+ * @param enable Enable/disable flag.
  */
 static inline void SDHC_CardDetectByData3(SDHC_Type *base, bool enable)
 {

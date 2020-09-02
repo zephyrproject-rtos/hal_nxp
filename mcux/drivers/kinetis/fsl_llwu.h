@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LLWU driver version. */
-#define FSL_LLWU_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
+#define FSL_LLWU_DRIVER_VERSION (MAKE_VERSION(2, 0, 5))
 /*@}*/
 
 #if (defined(FSL_FEATURE_LLWU_REG_BITWIDTH) && (FSL_FEATURE_LLWU_REG_BITWIDTH == 32))
@@ -309,6 +309,7 @@ void LLWU_ClearPinFilterFlag(LLWU_Type *base, uint32_t filterIndex);
  *
  * This function determines how the reset pin is used as a low leakage mode exit source.
  *
+ * @param base            LLWU peripheral base address.
  * @param pinEnable       Enable reset the pin filter
  * @param pinFilterEnable Specify whether the pin filter is enabled in Low-Leakage power mode.
  */

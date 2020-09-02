@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017 NXP
+ * Copyright 2017, 2020 NXP
  * All rights reserved.
  *
  *
@@ -19,11 +19,16 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.ltc_dpa"
 #endif
+
+/*! @name Driver version */
+/*@{*/
+/*! @brief LTC DPA driver version. Version 2.0.8. */
+#define FSL_LTC_DPA_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
+/*@}*/
 
 /*! AES block size in bytes */
 #define LTC_DPA_AES_BLOCK_SIZE 16
@@ -119,7 +124,8 @@ status_t LTC_CreateHandleDPA(LTC_Type *base, ltc_dpa_handle_t *handle, uint8_t s
  *
  * @param base      LTC module base address
  * @param[in,out] handle    Pointer to ltc_dpa_handle_t structure
- * @param probability  Probability that a dummy operation runs to completion.
+ * @param key Input key
+ * @param keySize Size of input key in bytes
  * @return Status.
  */
 status_t LTC_AES_SetKeyDPA(LTC_Type *base, ltc_dpa_handle_t *handle, const uint8_t *key, size_t keySize);
@@ -242,7 +248,6 @@ status_t LTC_AES_EncryptCbcDPA(LTC_Type *base,
  * @param[out] plaintext Output plain text
  * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
  * @param iv Input initial vector to combine with the first input block.
- * @param key Input key to use for decryption
  * @return Status from decrypt operation
  */
 status_t LTC_AES_DecryptCbcDPA(LTC_Type *base,
@@ -933,6 +938,7 @@ status_t LTC_CMAC_InitDPA(
  * Add data to current CMAC. This can be called repeatedly with an arbitrary amount of data to be
  * hashed.
  *
+ * @param base LTC peripheral base address
  * @param handle pointer to ltc_dpa_handle_t structure which stores the transaction state.
  * @param message Input data
  * @param messageSize Size of input data in bytes
@@ -945,6 +951,7 @@ status_t LTC_CMAC_UpdateDPA(LTC_Type *base, ltc_dpa_handle_t *handle, const uint
  *
  * Outputs the final hash and erases the context.
  *
+ * @param base LTC peripheral base address
  * @param handle pointer to ltc_dpa_handle_t structure which stores the transaction state.
  * @param[out] output Output hash data
  * @param[out] outputSize Output parameter storing the size of the output hash in bytes

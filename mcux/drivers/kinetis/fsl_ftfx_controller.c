@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -78,7 +78,7 @@ enum _ftfx_pflash_config_area_range
  ******************************************************************************/
 
 /*! @brief Init IFR memory related info */
-static status_t ftfx_init_ifr(ftfx_config_t *config);
+static void ftfx_init_ifr(ftfx_config_t *config);
 
 #if FTFx_DRIVER_IS_FLASH_RESIDENT
 /*! @brief Copy flash_run_command() to RAM*/
@@ -157,7 +157,7 @@ static uint32_t s_ftfxRunCommand[kFTFx_RamFuncMaxSizeInWords];
 /*! @brief Access to FTFx Registers */
 static volatile uint32_t *const kFCCOBx = (volatile uint32_t *)(uint32_t)&FTFx_FCCOB3_REG;
 
-#if FSL_FEATURE_FLASH_HAS_FLEX_NVM
+#if defined(FSL_FEATURE_FLASH_HAS_FLEX_NVM) && FSL_FEATURE_FLASH_HAS_FLEX_NVM
 /*! @brief Table of eeprom sizes. */
 static const uint16_t kEepromDensities[16] = {
     FSL_FEATURE_FLASH_FLEX_NVM_EEPROM_SIZE_FOR_EEESIZE_0000, FSL_FEATURE_FLASH_FLEX_NVM_EEPROM_SIZE_FOR_EEESIZE_0001,
@@ -184,40 +184,32 @@ static const uint32_t kDflashDensities[16] = {
  * Code
  ******************************************************************************/
 
-status_t FTFx_API_Init(ftfx_config_t *config)
+/*!
+ * @brief Initializes the global flash properties structure members.
+ */
+void FTFx_API_Init(ftfx_config_t *config)
 {
-    status_t returnCode;
     if (config == NULL)
     {
-        return kStatus_FTFx_InvalidArgument;
+        return;
     }
     config->runCmdFuncAddr.callFlashCommand = NULL;
-    config->flexramBlockBase = FSL_FEATURE_FLASH_FLEX_RAM_START_ADDRESS;
-    config->flexramTotalSize = FSL_FEATURE_FLASH_FLEX_RAM_SIZE;
+    config->flexramBlockBase                = FSL_FEATURE_FLASH_FLEX_RAM_START_ADDRESS;
+    config->flexramTotalSize                = FSL_FEATURE_FLASH_FLEX_RAM_SIZE;
 
     /* copy required flash command to RAM */
 #if FTFx_DRIVER_IS_FLASH_RESIDENT
-    if (NULL == config->runCmdFuncAddr.callFlashCommand)
-    {
-#if FTFx_DRIVER_IS_EXPORTED
-        return kStatus_FTFx_ExecuteInRamFunctionNotReady;
-#else
-        config->runCmdFuncAddr.commadAddr = (uint32_t)s_ftfxRunCommand;
-#endif /* FTFx_DRIVER_IS_EXPORTED */
-    }
+    config->runCmdFuncAddr.commadAddr = (uint32_t)s_ftfxRunCommand;
     ftfx_copy_run_command_to_ram((uint32_t *)config->runCmdFuncAddr.commadAddr);
 #endif /* FTFx_DRIVER_IS_FLASH_RESIDENT */
 
-    returnCode = ftfx_init_ifr(config);
-    if (returnCode != kStatus_FTFx_Success)
-    {
-        return returnCode;
-    }
-
-    return kStatus_FTFx_Success;
+    ftfx_init_ifr(config);
 }
 
-#if FSL_FEATURE_FLASH_HAS_FLEX_NVM
+#if defined(FSL_FEATURE_FLASH_HAS_FLEX_NVM) && FSL_FEATURE_FLASH_HAS_FLEX_NVM
+/*!
+ * @brief Updates FlexNVM memory partition status according to data flash 0 IFR.
+ */
 status_t FTFx_API_UpdateFlexnvmPartitionStatus(ftfx_config_t *config)
 {
     struct _dflash_ifr_field_config
@@ -248,7 +240,7 @@ status_t FTFx_API_UpdateFlexnvmPartitionStatus(ftfx_config_t *config)
     }
 #else
 #error "Cannot get FlexNVM memory partition info"
-#endif
+#endif /* FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD */
 
     /* Fill out partitioned EEPROM size */
     dataIFRReadOut.EEPROMDataSetSize &= 0x0FU;
@@ -262,6 +254,9 @@ status_t FTFx_API_UpdateFlexnvmPartitionStatus(ftfx_config_t *config)
 }
 #endif /* FSL_FEATURE_FLASH_HAS_FLEX_NVM */
 
+/*!
+ * @brief Erases the flash sectors encompassed by parameters passed into function.
+ */
 status_t FTFx_CMD_Erase(ftfx_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key)
 {
     uint32_t sectorSize;
@@ -287,7 +282,7 @@ status_t FTFx_CMD_Erase(ftfx_config_t *config, uint32_t start, uint32_t lengthIn
     eraseStart = config->opsConfig.convertedAddress;
     sectorSize = config->flashDesc.sectorSize;
 
-    /* calculating Flash end address */
+    /* Calculate Flash end address */
     endAddress = eraseStart + lengthInBytes - 1U;
 
     /* re-calculate the endAddress and align it to the start of the next sector
@@ -323,6 +318,9 @@ status_t FTFx_CMD_Erase(ftfx_config_t *config, uint32_t start, uint32_t lengthIn
     return returnCode;
 }
 
+/*!
+ * @brief Erases entire flash
+ */
 status_t FTFx_CMD_EraseAll(ftfx_config_t *config, uint32_t key)
 {
     status_t returnCode;
@@ -345,19 +343,25 @@ status_t FTFx_CMD_EraseAll(ftfx_config_t *config, uint32_t key)
     /* calling flash command sequence function to execute the command */
     returnCode = ftfx_command_sequence(config);
 
-#if FSL_FEATURE_FLASH_HAS_FLEX_NVM
+#if defined(FSL_FEATURE_FLASH_HAS_FLEX_NVM) && FSL_FEATURE_FLASH_HAS_FLEX_NVM
     /* Data flash IFR will be erased by erase all command, so we need to
      *  update FlexNVM memory partition status synchronously */
     if (returnCode == kStatus_FTFx_Success)
     {
-        returnCode = FTFx_API_UpdateFlexnvmPartitionStatus(config);
+        if (config->ifrDesc.resRange.dflashIfrStart != config->ifrDesc.resRange.pflashIfrStart)
+        {
+            returnCode = FTFx_API_UpdateFlexnvmPartitionStatus(config);
+        }
     }
-#endif
+#endif /* FSL_FEATURE_FLASH_HAS_FLEX_NVM */
 
     return returnCode;
 }
 
 #if defined(FSL_FEATURE_FLASH_HAS_ERASE_ALL_BLOCKS_UNSECURE_CMD) && FSL_FEATURE_FLASH_HAS_ERASE_ALL_BLOCKS_UNSECURE_CMD
+/*!
+ * @brief Erases the entire flash, including protected sectors.
+ */
 status_t FTFx_CMD_EraseAllUnsecure(ftfx_config_t *config, uint32_t key)
 {
     status_t returnCode;
@@ -380,19 +384,25 @@ status_t FTFx_CMD_EraseAllUnsecure(ftfx_config_t *config, uint32_t key)
     /* calling flash command sequence function to execute the command */
     returnCode = ftfx_command_sequence(config);
 
-#if FSL_FEATURE_FLASH_HAS_FLEX_NVM
+#if defined(FSL_FEATURE_FLASH_HAS_FLEX_NVM) && FSL_FEATURE_FLASH_HAS_FLEX_NVM
     /* Data flash IFR will be erased by erase all unsecure command, so we need to
      *  update FlexNVM memory partition status synchronously */
     if (returnCode == kStatus_FTFx_Success)
     {
-        returnCode = FTFx_API_UpdateFlexnvmPartitionStatus(config);
+        if (config->ifrDesc.resRange.dflashIfrStart != config->ifrDesc.resRange.pflashIfrStart)
+        {
+            returnCode = FTFx_API_UpdateFlexnvmPartitionStatus(config);
+        }
     }
-#endif
+#endif /* FSL_FEATURE_FLASH_HAS_FLEX_NVM */
 
     return returnCode;
 }
 #endif /* FSL_FEATURE_FLASH_HAS_ERASE_ALL_BLOCKS_UNSECURE_CMD */
 
+/*!
+ * @brief Erases all program flash execute-only segments defined by the FXACC registers.
+ */
 status_t FTFx_CMD_EraseAllExecuteOnlySegments(ftfx_config_t *config, uint32_t key)
 {
     status_t returnCode;
@@ -419,6 +429,9 @@ status_t FTFx_CMD_EraseAllExecuteOnlySegments(ftfx_config_t *config, uint32_t ke
     return returnCode;
 }
 
+/*!
+ * @brief Programs flash with data at locations passed in through parameters.
+ */
 status_t FTFx_CMD_Program(ftfx_config_t *config, uint32_t start, const uint8_t *src, uint32_t lengthInBytes)
 {
     status_t returnCode;
@@ -482,6 +495,9 @@ status_t FTFx_CMD_Program(ftfx_config_t *config, uint32_t start, const uint8_t *
     return returnCode;
 }
 
+/*!
+ * @brief Programs Program Once Field through parameters.
+ */
 status_t FTFx_CMD_ProgramOnce(ftfx_config_t *config, uint32_t index, const uint8_t *src, uint32_t lengthInBytes)
 {
     status_t returnCode;
@@ -523,6 +539,9 @@ status_t FTFx_CMD_ProgramOnce(ftfx_config_t *config, uint32_t index, const uint8
 }
 
 #if defined(FSL_FEATURE_FLASH_HAS_PROGRAM_SECTION_CMD) && FSL_FEATURE_FLASH_HAS_PROGRAM_SECTION_CMD
+/*!
+ * @brief Programs flash with data at locations passed in through parameters via the Program Section command.
+ */
 status_t FTFx_CMD_ProgramSection(ftfx_config_t *config, uint32_t start, const uint8_t *src, uint32_t lengthInBytes)
 {
     status_t returnCode;
@@ -601,8 +620,7 @@ status_t FTFx_CMD_ProgramSection(ftfx_config_t *config, uint32_t start, const ui
             }
 
             /* Copy data to FlexRAM */
-            (void)memcpy((uint8_t *)config->flexramBlockBase, &srcaddress[currentOffset],
-                         programSizeOfCurrentPass);
+            (void)memcpy((uint8_t *)config->flexramBlockBase, &srcaddress[currentOffset], programSizeOfCurrentPass);
             /* Set programaddress address of the data to be programmed */
             kFCCOBx[0] = BYTE2WORD_1_3(FTFx_PROGRAM_SECTION, programaddress + currentOffset);
             /* Set program size in terms of FEATURE_FLASH_SECTION_CMD_ADDRESS_ALIGMENT */
@@ -644,6 +662,10 @@ status_t FTFx_CMD_ProgramSection(ftfx_config_t *config, uint32_t start, const ui
 #endif /* FSL_FEATURE_FLASH_HAS_PROGRAM_SECTION_CMD */
 
 #if defined(FSL_FEATURE_FLASH_HAS_PROGRAM_PARTITION_CMD) && FSL_FEATURE_FLASH_HAS_PROGRAM_PARTITION_CMD
+/*!
+ * @brief Prepares the FlexNVM block for use as data flash, EEPROM backup, or a combination of both and initializes the
+ * FlexRAM.
+ */
 status_t FTFx_CMD_ProgramPartition(ftfx_config_t *config,
                                    ftfx_partition_flexram_load_opt_t option,
                                    uint32_t eepromDataSizeCode,
@@ -668,17 +690,20 @@ status_t FTFx_CMD_ProgramPartition(ftfx_config_t *config,
     /* calling flash command sequence function to execute the command */
     returnCode = ftfx_command_sequence(config);
 
-#if FSL_FEATURE_FLASH_HAS_FLEX_NVM
+#if defined(FSL_FEATURE_FLASH_HAS_FLEX_NVM) && FSL_FEATURE_FLASH_HAS_FLEX_NVM
     /* Data flash IFR will be updated by program partition command during reset sequence,
      * so we just set reserved values for partitioned FlexNVM size here */
     config->eepromTotalSize     = 0xFFFFU;
     config->flashDesc.totalSize = 0xFFFFFFFFU;
-#endif
+#endif /* FSL_FEATURE_FLASH_HAS_FLEX_NVM */
 
     return (returnCode);
 }
 #endif /* FSL_FEATURE_FLASH_HAS_PROGRAM_PARTITION_CMD */
 
+/*!
+ * @brief Reads the Program Once Field through parameters.
+ */
 status_t FTFx_CMD_ReadOnce(ftfx_config_t *config, uint32_t index, uint8_t *dst, uint32_t lengthInBytes)
 {
     status_t returnCode;
@@ -722,6 +747,12 @@ status_t FTFx_CMD_ReadOnce(ftfx_config_t *config, uint32_t index, uint8_t *dst, 
 }
 
 #if defined(FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD) && FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD
+/*!
+ * @brief Reads the resource with data at locations passed in through parameters.
+ *
+ * this function can read  date from  program flash IFR, data flash IFR space, 
+ * and the Version ID field.
+ */
 status_t FTFx_CMD_ReadResource(
     ftfx_config_t *config, uint32_t start, uint8_t *dst, uint32_t lengthInBytes, ftfx_read_resource_opt_t option)
 {
@@ -789,6 +820,13 @@ status_t FTFx_CMD_ReadResource(
 }
 #endif /* FSL_FEATURE_FLASH_HAS_READ_RESOURCE_CMD */
 
+/*!
+ * @brief Verifies an erasure of the desired flash area at a specified margin level.
+ *
+ * This function checks the appropriate number of flash sectors based on
+ * the desired start address and length to check whether the flash is erased
+ * to the specified read margin level.
+ */
 status_t FTFx_CMD_VerifyErase(ftfx_config_t *config, uint32_t start, uint32_t lengthInBytes, ftfx_margin_value_t margin)
 {
     /* Check arguments. */
@@ -799,6 +837,7 @@ status_t FTFx_CMD_VerifyErase(ftfx_config_t *config, uint32_t start, uint32_t le
     status_t returnCode;
     uint32_t erasestart;
 
+    /* Validates the range and alignment of the given address range.*/
     returnCode = ftfx_check_mem_range(config, start, lengthInBytes, aligmentInBytes);
     if (kStatus_FTFx_Success != returnCode)
     {
@@ -808,7 +847,9 @@ status_t FTFx_CMD_VerifyErase(ftfx_config_t *config, uint32_t start, uint32_t le
     erasestart = config->opsConfig.convertedAddress;
     blockSize  = config->flashDesc.totalSize / config->flashDesc.blockCount;
 
+    /* Calculate the next block start address */
     nextBlockStartAddress = ALIGN_UP(erasestart, blockSize);
+
     if (nextBlockStartAddress == erasestart)
     {
         nextBlockStartAddress += blockSize;
@@ -819,12 +860,15 @@ status_t FTFx_CMD_VerifyErase(ftfx_config_t *config, uint32_t start, uint32_t le
     while (0U != remainingBytes)
     {
         uint32_t numberOfPhrases;
+
         uint32_t verifyLength = nextBlockStartAddress - erasestart;
+        /* Calculate the size to be verified, this flash does not support erase and program across block. */
         if (verifyLength > remainingBytes)
         {
             verifyLength = remainingBytes;
         }
 
+        /* Calculate the number of phrases to be verified */
         numberOfPhrases = verifyLength / aligmentInBytes;
 
         /* Fill in verify section command parameters. */
@@ -846,6 +890,9 @@ status_t FTFx_CMD_VerifyErase(ftfx_config_t *config, uint32_t start, uint32_t le
     return kStatus_FTFx_Success;
 }
 
+/*!
+ * @brief Verifies erasure of the entire flash at a specified margin level.
+ */
 status_t FTFx_CMD_VerifyEraseAll(ftfx_config_t *config, ftfx_margin_value_t margin)
 {
     if (config == NULL)
@@ -860,6 +907,10 @@ status_t FTFx_CMD_VerifyEraseAll(ftfx_config_t *config, ftfx_margin_value_t marg
     return ftfx_command_sequence(config);
 }
 
+/*!
+ * @brief Verifies whether the program flash execute-only segments have been erased to
+ *  the specified read margin level.
+ */
 status_t FTFx_CMD_VerifyEraseAllExecuteOnlySegments(ftfx_config_t *config, ftfx_margin_value_t margin)
 {
     if (config == NULL)
@@ -874,6 +925,13 @@ status_t FTFx_CMD_VerifyEraseAllExecuteOnlySegments(ftfx_config_t *config, ftfx_
     return ftfx_command_sequence(config);
 }
 
+/*!
+ * @brief Verifies programming of the desired flash area at a specified margin level.
+ *
+ * This function verifies the data programed in the flash memory using the
+ * Flash Program Check Command and compares it to the expected data for a given
+ * flash area as determined by the start address and length.
+ */
 status_t FTFx_CMD_VerifyProgram(ftfx_config_t *config,
                                 uint32_t start,
                                 uint32_t lengthInBytes,
@@ -892,6 +950,7 @@ status_t FTFx_CMD_VerifyProgram(ftfx_config_t *config,
         return kStatus_FTFx_InvalidArgument;
     }
 
+    /* Validates the range and alignment of the given address range */
     returnCode = ftfx_check_mem_range(config, start, lengthInBytes, aligmentInBytes);
     if (kStatus_FTFx_Success != returnCode)
     {
@@ -932,6 +991,9 @@ status_t FTFx_CMD_VerifyProgram(ftfx_config_t *config,
     return (returnCode);
 }
 
+/*!
+ * @brief Allows users to bypass security with a backdoor key.
+ */
 status_t FTFx_CMD_SecurityBypass(ftfx_config_t *config, const uint8_t *backdoorKey)
 {
     uint8_t registerValue; /* registerValue */
@@ -964,6 +1026,9 @@ status_t FTFx_CMD_SecurityBypass(ftfx_config_t *config, const uint8_t *backdoorK
     return (returnCode);
 }
 
+/*!
+ * @brief Returns the security state via the pointer passed into the function.
+ */
 status_t FTFx_REG_GetSecurityState(ftfx_config_t *config, ftfx_security_state_t *state)
 {
     /* store data read from flash register */
@@ -1002,6 +1067,9 @@ status_t FTFx_REG_GetSecurityState(ftfx_config_t *config, ftfx_security_state_t 
 }
 
 #if defined(FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD) && FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD
+/*!
+ * @brief Sets the FlexRAM function command.
+ */
 status_t FTFx_CMD_SetFlexramFunction(ftfx_config_t *config, ftfx_flexram_func_opt_t option)
 {
     status_t status;
@@ -1025,6 +1093,9 @@ status_t FTFx_CMD_SetFlexramFunction(ftfx_config_t *config, ftfx_flexram_func_op
 #endif /* FSL_FEATURE_FLASH_HAS_SET_FLEXRAM_FUNCTION_CMD */
 
 #if defined(FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD) && FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD
+/*!
+ * @brief Configures the Swap function or checks the swap state of the Flash module.
+ */
 status_t FTFx_CMD_SwapControl(ftfx_config_t *config,
                               uint32_t address,
                               ftfx_swap_control_opt_t option,
@@ -1049,7 +1120,7 @@ status_t FTFx_CMD_SwapControl(ftfx_config_t *config,
         return kStatus_FTFx_SwapIndicatorAddressError;
     }
 
-    /* Check the option. */
+    /* Checking the option. */
     returnCode = ftfx_check_swap_control_option(option);
     if (returnCode != kStatus_FTFx_Success)
     {
@@ -1069,13 +1140,8 @@ status_t FTFx_CMD_SwapControl(ftfx_config_t *config,
 }
 #endif /* FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD */
 
-static status_t ftfx_init_ifr(ftfx_config_t *config)
+static void ftfx_init_ifr(ftfx_config_t *config)
 {
-    if (config == NULL)
-    {
-        return kStatus_FTFx_InvalidArgument;
-    }
-
 #if FSL_FEATURE_FLASH_IS_FTFA
     /* FTFA parts(eg. K80, KL80, L5K) support both 4-bytes and 8-bytes unit size */
     config->ifrDesc.feature.has4ByteIdxSupport = 1U;
@@ -1113,8 +1179,6 @@ static status_t ftfx_init_ifr(ftfx_config_t *config)
     config->ifrDesc.resRange.pflashSwapIfrStart = config->flashDesc.totalSize / 4;
 #endif
 #endif /* FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD */
-
-    return kStatus_FTFx_Success;
 }
 
 #if FTFx_DRIVER_IS_FLASH_RESIDENT
@@ -1204,11 +1268,6 @@ static status_t ftfx_check_mem_range(ftfx_config_t *config,
 {
     status_t status = kStatus_FTFx_AddressError;
 
-    if (config == NULL)
-    {
-        return kStatus_FTFx_InvalidArgument;
-    }
-
     /* Verify the start and length are alignmentBaseline aligned. */
     if ((0U != (startAddress & (uint8_t)(alignmentBaseline - 1U))) ||
         (0U != (lengthInBytes & (uint8_t)(alignmentBaseline - 1U))))
@@ -1222,9 +1281,9 @@ static status_t ftfx_check_mem_range(ftfx_config_t *config,
     {
         status = kStatus_FTFx_Success;
     }
-#if defined (FSL_FEATURE_FLASH_HAS_FLEX_NVM_ALIAS) && FSL_FEATURE_FLASH_HAS_FLEX_NVM_ALIAS
+#if defined(FSL_FEATURE_FLASH_HAS_FLEX_NVM_ALIAS) && FSL_FEATURE_FLASH_HAS_FLEX_NVM_ALIAS
     else if ((startAddress >= config->flashDesc.aliasBlockBase) &&
-        ((startAddress + lengthInBytes) <= (config->flashDesc.aliasBlockBase + config->flashDesc.totalSize)))
+             ((startAddress + lengthInBytes) <= (config->flashDesc.aliasBlockBase + config->flashDesc.totalSize)))
     {
         status = kStatus_FTFx_Success;
     }
@@ -1254,11 +1313,12 @@ static uint32_t ftfx_read_word_from_byte_address(const uint8_t *src)
 {
     uint32_t word          = 0U;
     const uint8_t *readsrc = src;
-
+    /* If the source address is aligned with 4 bytes */
     if (0U == ((uint32_t)readsrc % 4U))
     {
         word = *(const uint32_t *)(uint32_t)readsrc;
     }
+    /* Read 4 bytes from a non-4-byte aligned address, 1 byte one time */
     else
     {
         for (uint32_t i = 0U; i < 4U; i++)
@@ -1275,13 +1335,14 @@ static uint32_t ftfx_read_word_from_byte_address(const uint8_t *src)
 static void ftfx_write_word_to_byte_address(uint8_t *dst, uint32_t word)
 {
     uint8_t *writedst = dst;
-
+    /* If the source address is aligned with 4 bytes */
     if (0U == ((uint32_t)writedst % 4U))
     {
         *(uint32_t *)(uint32_t)writedst = word;
     }
     else
     {
+        /* Write 4 bytes into a non-4-byte aligned address memory, 1 byte one time */
         for (uint32_t i = 0U; i < 4U; i++)
         {
             *writedst = (uint8_t)((word >> (i * 8U)) & 0xFFU);
@@ -1309,6 +1370,7 @@ static status_t ftfx_check_resource_range(ftfx_config_t *config,
     status = kStatus_FTFx_Success;
 
     maxReadbleAddress = start + lengthInBytes - 1u;
+    /* read resource code from the version ID field */
     if (option == kFTFx_ResourceOptionVersionId)
     {
         if ((start != config->ifrDesc.resRange.versionIdStart) ||
@@ -1319,23 +1381,26 @@ static status_t ftfx_check_resource_range(ftfx_config_t *config,
     }
     else if (option == kFTFx_ResourceOptionFlashIfr)
     {
+        /* read resource code from the  program flash IFR space */
         if ((start >= config->ifrDesc.resRange.pflashIfrStart) &&
             (maxReadbleAddress < (config->ifrDesc.resRange.pflashIfrStart + config->ifrDesc.resRange.ifrMemSize)))
         {
         }
-#if FSL_FEATURE_FLASH_HAS_FLEX_NVM
+#if defined(FSL_FEATURE_FLASH_HAS_FLEX_NVM) && FSL_FEATURE_FLASH_HAS_FLEX_NVM
+        /* read resource code from the  date flash IFR space */
         else if ((start >= config->ifrDesc.resRange.dflashIfrStart) &&
                  (maxReadbleAddress < (config->ifrDesc.resRange.dflashIfrStart + config->ifrDesc.resRange.ifrMemSize)))
         {
         }
-#endif
-#if FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD
+#endif /* FSL_FEATURE_FLASH_HAS_FLEX_NVM */
+#if defined(FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD) && FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD
+        /* read resource code from the  Program Flash Swap IFR space */
         else if ((start >= config->ifrDesc.resRange.pflashSwapIfrStart) &&
                  (maxReadbleAddress <
                   (config->ifrDesc.resRange.pflashSwapIfrStart + config->ifrDesc.resRange.ifrMemSize)))
         {
         }
-#endif
+#endif /* FSL_FEATURE_FLASH_HAS_SWAP_CONTROL_CMD */
         else
         {
             status = kStatus_FTFx_InvalidArgument;

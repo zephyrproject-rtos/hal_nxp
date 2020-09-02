@@ -2381,6 +2381,18 @@ void I2C_SlaveTransferHandleIRQ(I2C_Type *base, void *i2cHandle)
     }
 }
 
+#if defined(FSL_FEATURE_I2C_HAS_SHARED_IRQ0_IRQ1) && FSL_FEATURE_I2C_HAS_SHARED_IRQ0_IRQ1
+void I2C0_I2C1_DriverIRQHandler(void)
+{
+    for (uint32_t instance = 0U; instance < 2U; instance++)
+    {
+        if (s_i2cHandle[instance] != NULL)
+        {
+            I2C_TransferCommonIRQHandler(s_i2cBases[instance], s_i2cHandle[instance]);
+        }
+    }
+}
+#else
 #if defined(I2C0)
 void I2C0_DriverIRQHandler(void)
 {
@@ -2393,6 +2405,7 @@ void I2C1_DriverIRQHandler(void)
 {
     I2C_TransferCommonIRQHandler(I2C1, s_i2cHandle[1]);
 }
+#endif
 #endif
 
 #if defined(I2C2)

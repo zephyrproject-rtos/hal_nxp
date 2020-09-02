@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief SYSMPU driver version 2.2.2. */
-#define FSL_SYSMPU_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+/*! @brief SYSMPU driver version 2.2.3. */
+#define FSL_SYSMPU_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*@}*/
 
 /*! @brief define the start master port with read and write attributes. */

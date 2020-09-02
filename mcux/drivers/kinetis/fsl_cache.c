@@ -15,7 +15,7 @@
 #define FSL_COMPONENT_ID "platform.drivers.cache_lmem"
 #endif
 
-#define L1CACHE_ONEWAYSIZE_BYTE (4096U)            /*!< Cache size is 4K-bytes one way. */
+#define L1CACHE_ONEWAYSIZE_BYTE      (4096U)       /*!< Cache size is 4K-bytes one way. */
 #define L1CACHE_CODEBUSADDR_BOUNDARY (0x1FFFFFFFU) /*!< The processor code bus address boundary. */
 
 /*******************************************************************************

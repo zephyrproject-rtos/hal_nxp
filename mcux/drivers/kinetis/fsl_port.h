@@ -113,12 +113,12 @@ typedef enum _port_mux
 typedef enum _port_interrupt
 {
     kPORT_InterruptOrDMADisabled = 0x0U, /*!< Interrupt/DMA request is disabled. */
-#if defined(FSL_FEATURE_PORT_HAS_DMA_REQUEST) && FSL_FEATURE_PORT_HAS_DMA_REQUEST
+#if defined(FSL_FEATURE_PORT_HAS_DMA_REQUEST) && FSL_FEATURE_PORT_HAS_DMA_REQUEST || defined(DOXYGEN_OUTPUT)
     kPORT_DMARisingEdge  = 0x1U, /*!< DMA request on rising edge. */
     kPORT_DMAFallingEdge = 0x2U, /*!< DMA request on falling edge. */
     kPORT_DMAEitherEdge  = 0x3U, /*!< DMA request on either edge. */
 #endif
-#if defined(FSL_FEATURE_PORT_HAS_IRQC_FLAG) && FSL_FEATURE_PORT_HAS_IRQC_FLAG
+#if defined(FSL_FEATURE_PORT_HAS_IRQC_FLAG) && FSL_FEATURE_PORT_HAS_IRQC_FLAG || defined(DOXYGEN_OUTPUT)
     kPORT_FlagRisingEdge  = 0x05U, /*!< Flag sets on rising edge. */
     kPORT_FlagFallingEdge = 0x06U, /*!< Flag sets on falling edge. */
     kPORT_FlagEitherEdge  = 0x07U, /*!< Flag sets on either edge. */
@@ -128,7 +128,7 @@ typedef enum _port_interrupt
     kPORT_InterruptFallingEdge = 0xAU, /*!< Interrupt on falling edge. */
     kPORT_InterruptEitherEdge  = 0xBU, /*!< Interrupt on either edge. */
     kPORT_InterruptLogicOne    = 0xCU, /*!< Interrupt when logic one. */
-#if defined(FSL_FEATURE_PORT_HAS_IRQC_TRIGGER) && FSL_FEATURE_PORT_HAS_IRQC_TRIGGER
+#if defined(FSL_FEATURE_PORT_HAS_IRQC_TRIGGER) && FSL_FEATURE_PORT_HAS_IRQC_TRIGGER || defined(DOXYGEN_OUTPUT)
     kPORT_ActiveHighTriggerOutputEnable = 0xDU, /*!< Enable active high-trigger output. */
     kPORT_ActiveLowTriggerOutputEnable  = 0xEU, /*!< Enable active low-trigger output. */
 #endif
@@ -337,7 +337,7 @@ static inline void PORT_SetMultipleInterruptPinsConfig(PORT_Type *base, uint32_t
  *        - #kPORT_MuxAlt5            : chip-specific.
  *        - #kPORT_MuxAlt6            : chip-specific.
  *        - #kPORT_MuxAlt7            : chip-specific.
- * @Note : This function is NOT recommended to use together with the PORT_SetPinsConfig, because
+ * @note : This function is NOT recommended to use together with the PORT_SetPinsConfig, because
  *         the PORT_SetPinsConfig need to configure the pin mux anyway (Otherwise the pin mux is
  *         reset to zero : kPORT_PinDisabledOrAnalog).
  *        This function is recommended to use to reset the pin mux
@@ -354,8 +354,9 @@ static inline void PORT_SetPinMux(PORT_Type *base, uint32_t pin, port_mux_t mux)
 /*!
  * @brief Enables the digital filter in one port, each bit of the 32-bit register represents one pin.
  *
- * @param base  PORT peripheral base pointer.
- * @param mask  PORT pin number macro.
+ * @param base    PORT peripheral base pointer.
+ * @param mask    PORT pin number macro.
+ * @param enable  PORT digital filter configuration.
  */
 static inline void PORT_EnablePinsDigitalFilter(PORT_Type *base, uint32_t mask, bool enable)
 {
@@ -422,9 +423,9 @@ static inline void PORT_SetPinInterruptConfig(PORT_Type *base, uint32_t pin, por
 /*!
  * @brief Configures the port pin drive strength.
  *
- * @param base    PORT peripheral base pointer.
- * @param pin     PORT pin number.
- * @param config  PORT pin drive strength
+ * @param base      PORT peripheral base pointer.
+ * @param pin       PORT pin number.
+ * @param strength  PORT pin drive strength
  *        - #kPORT_LowDriveStrength = 0U - Low-drive strength is configured.
  *        - #kPORT_HighDriveStrength = 1U - High-drive strength is configured.
  */

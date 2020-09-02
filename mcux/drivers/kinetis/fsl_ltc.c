@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,7 +20,7 @@
 #define LTC_FIFO_SZ_MAX_DOWN_ALGN (0xff0u)
 
 #define LTC_AES_GCM_TYPE_AAD 55
-#define LTC_AES_GCM_TYPE_IV 0
+#define LTC_AES_GCM_TYPE_IV  0
 
 #define LTC_CCM_TAG_IDX 8 /*! For CCM encryption, the encrypted final MAC is written to the context word 8-11 */
 #define LTC_GCM_TAG_IDX 0 /*! For GCM encryption, the encrypted final MAC is written to the context word 0-3 */
@@ -1348,13 +1348,6 @@ status_t LTC_AES_DecryptCbc(LTC_Type *base,
         return kStatus_InvalidArgument;
     }
 
-    /* set DK bit in the LTC Mode Register AAI field for directly loaded decrypt keys */
-    if (keyType == kLTC_DecryptKey)
-    {
-        uint32_t u32mask = 1;
-        base->MD |= (u32mask << (uint8_t)kLTC_ModeRegBitShiftDK);
-    }
-
     /* Initialize algorithm state. */
     retval = ltc_symmetric_update(base, key, (uint8_t)keySize, kLTC_AlgorithmAES, kLTC_ModeCBC, kLTC_ModeDecrypt);
     if (kStatus_Success != retval)
@@ -1367,6 +1360,13 @@ status_t LTC_AES_DecryptCbc(LTC_Type *base,
     if (kStatus_Success != retval)
     {
         return retval;
+    }
+
+    /* set DK bit in the LTC Mode Register AAI field for directly loaded decrypt keys */
+    if (keyType == kLTC_DecryptKey)
+    {
+        uint32_t u32mask = 1;
+        base->MD |= (u32mask << (uint8_t)kLTC_ModeRegBitShiftDK);
     }
 
     /* Process data and return status. */
@@ -2253,7 +2253,7 @@ static status_t ltc_des_process(LTC_Type *base,
     status_t retval;
 
     /* all but OFB, size must be 8-byte multiple */
-    if ((modeAs != kLTC_ModeOFB) && ((size < 8u) || (size % 8u)))
+    if ((modeAs != kLTC_ModeOFB) && ((size < 8u) || (0U != (size % 8u))))
     {
         return kStatus_InvalidArgument;
     }
@@ -2285,7 +2285,7 @@ status_t ltc_3des_check_input_args(ltc_mode_symmetric_alg_t modeAs,
                                    const uint8_t *key2)
 {
     /* all but OFB, size must be 8-byte multiple */
-    if ((modeAs != kLTC_ModeOFB) && ((size < 8u) || (size % 8u)))
+    if ((modeAs != kLTC_ModeOFB) && ((size < 8u) || (0U != (size % 8u))))
     {
         return kStatus_InvalidArgument;
     }
@@ -2949,7 +2949,7 @@ status_t LTC_DES3_DecryptOfb(LTC_Type *base,
  * HASH Definitions
  ******************************************************************************/
 #if defined(FSL_FEATURE_LTC_HAS_SHA) && FSL_FEATURE_LTC_HAS_SHA
-#define LTC_SHA_BLOCK_SIZE 64                  /*!< SHA-1, SHA-224 & SHA-256 block size  */
+#define LTC_SHA_BLOCK_SIZE  64                 /*!< SHA-1, SHA-224 & SHA-256 block size  */
 #define LTC_HASH_BLOCK_SIZE LTC_SHA_BLOCK_SIZE /*!< LTC hash block size  */
 
 enum _ltc_sha_digest_len
@@ -3985,7 +3985,7 @@ static void ltc_pkha_init_data(LTC_Type *base,
     {
         clearMask |= (uint32_t)kLTC_ClearPkhaSizeA;
     }
-    if (sizeB)
+    if (0U != sizeB)
     {
         clearMask |= (uint32_t)kLTC_ClearPkhaSizeB;
     }
@@ -4022,7 +4022,7 @@ static void ltc_pkha_init_data(LTC_Type *base,
         }
     }
 
-    if (sizeB)
+    if (0U != sizeB)
     {
         base->PKBSZ = sizeB;
         if (NULL != B)
@@ -4049,7 +4049,7 @@ static void ltc_pkha_mode_set_src_reg_copy(ltc_mode_t *outMode, ltc_pkha_reg_are
     {
         reg = (ltc_pkha_reg_area_t)(uint32_t)(((uint32_t)reg) >> 1u);
         i++;
-    } while (reg);
+    } while (0U != (uint32_t)reg);
 
     i = 4 - i;
     /* Source register must not be E. */
@@ -4240,7 +4240,7 @@ int LTC_PKHA_CompareBigNum(const uint8_t *a, size_t sizeA, const uint8_t *b, siz
     }
 
     /* skip zero msbytes - integer b */
-    while ((sizeB) && (0u == b[sizeB - 1U]))
+    while ((0U != sizeB) && (0u == b[sizeB - 1U]))
     {
         sizeB--;
     }
@@ -4264,7 +4264,7 @@ int LTC_PKHA_CompareBigNum(const uint8_t *a, size_t sizeA, const uint8_t *b, siz
         int val;
         uint32_t equal;
 
-        n     = sizeA - 1U;
+        n     = (int)sizeA - 1;
         i     = 0;
         equal = 0;
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief QSPI EDMA driver version 2.0.2. */
-#define FSL_QSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief QSPI EDMA driver version 2.2.1. */
+#define FSL_QSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 typedef struct _qspi_edma_handle qspi_edma_handle_t;
@@ -63,7 +63,7 @@ extern "C" {
  * @param handle Pointer to qspi_edma_handle_t structure
  * @param callback QSPI callback, NULL means no callback.
  * @param userData User callback function data.
- * @param rxDmaHandle User requested eDMA handle for eDMA transfer
+ * @param dmaHandle User requested eDMA handle for eDMA transfer
  */
 void QSPI_TransferTxCreateHandleEDMA(QuadSPI_Type *base,
                                      qspi_edma_handle_t *handle,
@@ -78,7 +78,7 @@ void QSPI_TransferTxCreateHandleEDMA(QuadSPI_Type *base,
  * @param handle Pointer to qspi_edma_handle_t structure
  * @param callback QSPI callback, NULL means no callback.
  * @param userData User callback function data.
- * @param rxDmaHandle User requested eDMA handle for eDMA transfer
+ * @param dmaHandle User requested eDMA handle for eDMA transfer
  */
 void QSPI_TransferRxCreateHandleEDMA(QuadSPI_Type *base,
                                      qspi_edma_handle_t *handle,

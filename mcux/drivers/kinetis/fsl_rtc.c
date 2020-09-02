@@ -17,12 +17,12 @@
 #define FSL_COMPONENT_ID "platform.drivers.rtc"
 #endif
 
-#define SECONDS_IN_A_DAY (86400U)
-#define SECONDS_IN_A_HOUR (3600U)
+#define SECONDS_IN_A_DAY    (86400U)
+#define SECONDS_IN_A_HOUR   (3600U)
 #define SECONDS_IN_A_MINUTE (60U)
-#define DAYS_IN_A_YEAR (365U)
-#define YEAR_RANGE_START (1970U)
-#define YEAR_RANGE_END (2099U)
+#define DAYS_IN_A_YEAR      (365U)
+#define YEAR_RANGE_START    (1970U)
+#define YEAR_RANGE_END      (2099U)
 
 /*******************************************************************************
  * Prototypes
