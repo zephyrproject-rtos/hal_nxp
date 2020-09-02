@@ -42,7 +42,7 @@ const flexspi_nor_config_t qspiflash_config = {
         },
     .pageSize           = 256u,
     .sectorSize         = 4u * 1024u,
-    .blockSize          = 256u * 1024u,
+    .blockSize          = 64u * 1024u,
     .isUniformBlockSize = false,
 };
 #endif /* XIP_BOOT_HEADER_ENABLE */

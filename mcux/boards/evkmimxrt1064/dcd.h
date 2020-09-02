@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -10,8 +10,8 @@
  * will be overwritten if the respective MCUXpresso Config Tools is used to update this file.
  **********************************************************************************************************************/
 
-#ifndef __EVKMIMXRT1060_SDRAM_INI_DCD__
-#define __EVKMIMXRT1060_SDRAM_INI_DCD__
+#ifndef __DCD__
+#define __DCD__
 
 #include <stdint.h>
 
@@ -29,4 +29,4 @@
 #define DCD_TAG_HEADER_SHIFT (24)
 #define DCD_ARRAY_SIZE 1
 
-#endif /* __EVKMIMXRT1060_SDRAM_INI_DCD__ */
+#endif /* __DCD__ */
