@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -82,6 +82,9 @@ typedef enum _hsadc_dual_converter_scan_mode
     kHSADC_DualConverterWorkAsTriggeredParallel   = 5U, /*!< Triggered parallel. */
 } hsadc_dual_converter_scan_mode_t;
 
+/*!
+ * @brief Defines the enumeration for the hsadc resolution.
+ */
 typedef enum _hsadc_resolution
 {
     kHSADC_Resolution6Bit  = 0U, /*!< 6 bit resolution mode. */
@@ -392,7 +395,7 @@ uint16_t HSADC_GetStatusFlags(HSADC_Type *base);
  * @brief Clears the status flags.
  *
  * @param base  HSADC peripheral base address.
- * @param flags Mask value for the event flags to be cleared. See the "_hsadc_status_flags".
+ * @param mask Mask value for the event flags to be cleared. See the "_hsadc_status_flags".
  */
 void HSADC_ClearStatusFlags(HSADC_Type *base, uint16_t mask);
 

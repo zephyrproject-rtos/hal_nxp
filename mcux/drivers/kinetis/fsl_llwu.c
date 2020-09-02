@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,10 +40,19 @@ void LLWU_SetExternalWakeupPinMode(LLWU_Type *base, uint32_t pinIndex, llwu_exte
         case 1U:
             regBase = &base->PE2;
             break;
-#endif
+#endif /* FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN */
         default:
             regBase = NULL;
             break;
+    }
+
+    if (NULL != regBase)
+    {
+        reg       = *regBase;
+        regOffset = ((pinIndex & 0x0FU) << 1U);
+        reg &= LLWU_REG_VAL(~(3UL << regOffset));
+        reg |= ((uint32_t)pinMode << regOffset);
+        *regBase = reg;
     }
 #else
     volatile uint8_t *regBase;
@@ -61,50 +70,46 @@ void LLWU_SetExternalWakeupPinMode(LLWU_Type *base, uint32_t pinIndex, llwu_exte
         case 2U:
             regBase = &base->PE3;
             break;
-#endif
+#endif /* FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN */
 #if (defined(FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN) && (FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN > 12))
         case 3U:
             regBase = &base->PE4;
             break;
-#endif
+#endif /* FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN */
 #if (defined(FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN) && (FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN > 16))
         case 4U:
             regBase = &base->PE5;
             break;
-#endif
+#endif /* FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN */
 #if (defined(FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN) && (FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN > 20))
         case 5U:
             regBase = &base->PE6;
             break;
-#endif
+#endif /* FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN */
 #if (defined(FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN) && (FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN > 24))
         case 6U:
             regBase = &base->PE7;
             break;
-#endif
+#endif /* FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN */
 #if (defined(FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN) && (FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN > 28))
         case 7U:
             regBase = &base->PE8;
             break;
-#endif
+#endif /* FSL_FEATURE_LLWU_HAS_EXTERNAL_PIN */
         default:
             regBase = NULL;
             break;
     }
-#endif /* FSL_FEATURE_LLWU_REG_BITWIDTH == 32 */
 
     if (NULL != regBase)
     {
-        reg = *regBase;
-#if (defined(FSL_FEATURE_LLWU_REG_BITWIDTH) && (FSL_FEATURE_LLWU_REG_BITWIDTH == 32))
-        regOffset = ((pinIndex & 0x0FU) << 1U);
-#else
+        reg       = *regBase;
         regOffset = (uint8_t)((pinIndex & 0x03U) << 1U);
-#endif
         reg &= LLWU_REG_VAL(~(3UL << regOffset));
         reg |= (uint8_t)((uint32_t)pinMode << regOffset);
         *regBase = reg;
     }
+#endif /* FSL_FEATURE_LLWU_REG_BITWIDTH == 32 */
 }
 
 /*!
@@ -357,12 +362,12 @@ bool LLWU_GetPinFilterFlag(LLWU_Type *base, uint32_t filterIndex)
 #endif /* FSL_FEATURE_LLWU_HAS_PIN_FILTER */
 #if (defined(FSL_FEATURE_LLWU_HAS_PIN_FILTER) && (FSL_FEATURE_LLWU_HAS_PIN_FILTER > 2))
         case 3:
-            status = (base->FILT3 & LLWU_FILT3_FILTF_MASK);
+            status = ((base->FILT3 & LLWU_FILT3_FILTF_MASK) != 0U);
             break;
 #endif /* FSL_FEATURE_LLWU_HAS_PIN_FILTER */
 #if (defined(FSL_FEATURE_LLWU_HAS_PIN_FILTER) && (FSL_FEATURE_LLWU_HAS_PIN_FILTER > 3))
         case 4:
-            status = (base->FILT4 & LLWU_FILT4_FILTF_MASK);
+            status = ((base->FILT4 & LLWU_FILT4_FILTF_MASK) != 0U);
             break;
 #endif /* FSL_FEATURE_LLWU_HAS_PIN_FILTER */
         default:

@@ -35,21 +35,21 @@ enum _qspi_transfer_state
 #endif
 
 #ifndef QuadSPI_SOCCR_DQS_PHASE_SEL_MASK
-#define QuadSPI_SOCCR_DQS_PHASE_SEL_MASK (0xC00U)
+#define QuadSPI_SOCCR_DQS_PHASE_SEL_MASK  (0xC00U)
 #define QuadSPI_SOCCR_DQS_PHASE_SEL_SHIFT (10U)
 #define QuadSPI_SOCCR_DQS_PHASE_SEL(x) \
     (((uint32_t)(((uint32_t)(x)) << QuadSPI_SOCCR_DQS_PHASE_SEL_SHIFT)) & QuadSPI_SOCCR_DQS_PHASE_SEL_MASK)
 #endif
 
 #ifndef QuadSPI_SOCCR_DQS_INV_EN_MASK
-#define QuadSPI_SOCCR_DQS_INV_EN_MASK (0x1000U)
+#define QuadSPI_SOCCR_DQS_INV_EN_MASK  (0x1000U)
 #define QuadSPI_SOCCR_DQS_INV_EN_SHIFT (12U)
 #define QuadSPI_SOCCR_DQS_INV_EN(x) \
     (((uint32_t)(((uint32_t)(x)) << QuadSPI_SOCCR_DQS_INV_EN_SHIFT)) & QuadSPI_SOCCR_DQS_INV_EN_MASK)
 #endif
 
 #ifndef QuadSPI_SOCCR_DQS_IFA_DELAY_CHAIN_SEL_MASK
-#define QuadSPI_SOCCR_DQS_IFA_DELAY_CHAIN_SEL_MASK (0x7F0000U)
+#define QuadSPI_SOCCR_DQS_IFA_DELAY_CHAIN_SEL_MASK  (0x7F0000U)
 #define QuadSPI_SOCCR_DQS_IFA_DELAY_CHAIN_SEL_SHIFT (16U)
 #define QuadSPI_SOCCR_DQS_IFA_DELAY_CHAIN_SEL(x)                                    \
     (((uint32_t)(((uint32_t)(x)) << QuadSPI_SOCCR_DQS_IFA_DELAY_CHAIN_SEL_SHIFT)) & \

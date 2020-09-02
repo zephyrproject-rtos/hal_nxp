@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,7 +39,7 @@ static LTC_Type *const s_ltcBase[] = LTC_BASE_PTRS;
  ******************************************************************************/
 
 /* State machine state.*/
-#define LTC_SM_STATE_START 0x0000u
+#define LTC_SM_STATE_START  0x0000u
 #define LTC_SM_STATE_FINISH 0xFFFFu
 
 #define LTC_FIFO_SZ_MAX_DOWN_ALGN (0xff0u)
@@ -696,7 +696,7 @@ static status_t ltc_des_process_EDMA(LTC_Type *base,
     status_t retval;
 
     /* all but OFB, size must be 8-byte multiple */
-    if ((modeAs != kLTC_ModeOFB) && ((size < 8u) || (size % 8u)))
+    if ((modeAs != kLTC_ModeOFB) && ((size < 8u) || (0U != (size % 8u))))
     {
         if (NULL != handle->callback)
         {

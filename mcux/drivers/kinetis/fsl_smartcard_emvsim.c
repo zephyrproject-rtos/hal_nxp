@@ -458,7 +458,7 @@ status_t SMARTCARD_EMVSIM_Init(EMVSIM_Type *base, smartcard_context_t *context, 
     }
 /* Enable EMVSIM interrupt on NVIC level. */
 #if defined(FSL_FEATURE_SOC_INTMUX_COUNT) && FSL_FEATURE_SOC_INTMUX_COUNT
-    if (s_emvsimIRQ[instance] < FSL_FEATURE_INTMUX_IRQ_START_INDEX)
+    if ((uint32_t)s_emvsimIRQ[instance] < (uint32_t)FSL_FEATURE_INTMUX_IRQ_START_INDEX)
     {
         NVIC_EnableIRQ(s_emvsimIRQ[instance]);
     }
@@ -498,7 +498,7 @@ void SMARTCARD_EMVSIM_Deinit(EMVSIM_Type *base)
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 /* Disable emvsim interrupt in NVIC */
 #if defined(FSL_FEATURE_SOC_INTMUX_COUNT) && FSL_FEATURE_SOC_INTMUX_COUNT
-    if (s_emvsimIRQ[instance] < FSL_FEATURE_INTMUX_IRQ_START_INDEX)
+    if ((uint32_t)s_emvsimIRQ[instance] < (uint32_t)FSL_FEATURE_INTMUX_IRQ_START_INDEX)
     {
         NVIC_DisableIRQ(s_emvsimIRQ[instance]);
     }
@@ -964,11 +964,7 @@ void SMARTCARD_EMVSIM_IRQHandler(EMVSIM_Type *base, smartcard_context_t *context
             }
         }
     }
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 
 /*!

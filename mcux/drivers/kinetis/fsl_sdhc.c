@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,9 +19,9 @@
 
 /*! @brief Clock setting */
 /* Max SD clock divisor from base clock */
-#define SDHC_MAX_DVS ((SDHC_SYSCTL_DVS_MASK >> SDHC_SYSCTL_DVS_SHIFT) + 1U)
-#define SDHC_PREV_DVS(x) ((x) -= 1U)
-#define SDHC_MAX_CLKFS ((SDHC_SYSCTL_SDCLKFS_MASK >> SDHC_SYSCTL_SDCLKFS_SHIFT) + 1U)
+#define SDHC_MAX_DVS       ((SDHC_SYSCTL_DVS_MASK >> SDHC_SYSCTL_DVS_SHIFT) + 1U)
+#define SDHC_PREV_DVS(x)   ((x) -= 1U)
+#define SDHC_MAX_CLKFS     ((SDHC_SYSCTL_SDCLKFS_MASK >> SDHC_SYSCTL_SDCLKFS_SHIFT) + 1U)
 #define SDHC_PREV_CLKFS(x) ((x) >>= 1U)
 
 /* Typedef for interrupt handler. */
@@ -717,9 +717,9 @@ static void SDHC_TransferHandleCommand(SDHC_Type *base, sdhc_handle_t *handle, u
         }
         else
         {
-            if ((handle->data == NULL) && (handle->callback.TransferComplete != NULL))
+            if (handle->callback.TransferComplete != NULL)
             {
-                handle->callback.TransferComplete(base, handle, kStatus_Success, handle->userData);
+                handle->callback.TransferComplete(base, handle, kStatus_SDHC_TransferCommandComplete, handle->userData);
             }
         }
     }
@@ -757,7 +757,7 @@ static void SDHC_TransferHandleData(SDHC_Type *base, sdhc_handle_t *handle, uint
 
         if (IS_SDHC_FLAG_SET(interruptFlags, kSDHC_DataCompleteFlag))
         {
-            transferStatus = kStatus_Success;
+            transferStatus = kStatus_SDHC_TransferDataComplete;
         }
     }
 
@@ -1607,10 +1607,6 @@ void SDHC_DriverIRQHandler(void)
     assert(s_sdhcHandle[0] != NULL);
 
     s_sdhcIsr(SDHC, s_sdhcHandle[0]);
-/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
-  exception return operation might vector to incorrect interrupt */
-#if defined __CORTEX_M && (__CORTEX_M == 4U)
-    __DSB();
-#endif
+    SDK_ISR_EXIT_BARRIER;
 }
 #endif

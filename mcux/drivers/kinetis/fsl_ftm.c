@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -211,6 +211,7 @@ static void FTM_SetReloadPoints(FTM_Type *base, uint32_t reloadPoints)
  * brief Ungates the FTM clock and configures the peripheral for basic operation.
  *
  * note This API should be called at the beginning of the application which is using the FTM driver.
+ *      If the FTM instance has only TPM features, please use the TPM driver.
  *
  * param base   FTM peripheral base address
  * param config Pointer to the user configuration structure.
@@ -220,6 +221,10 @@ static void FTM_SetReloadPoints(FTM_Type *base, uint32_t reloadPoints)
 status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
 {
     assert(config);
+#if defined(FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCE)
+    /* This function does not support the current instance, please use the TPM driver. */
+    assert((FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCE(base) == 0U));
+#endif /* FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCE */
 
     uint32_t reg;
 
@@ -232,7 +237,7 @@ status_t FTM_Init(FTM_Type *base, const ftm_config_t *config)
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Ungate the FTM clock*/
-    CLOCK_EnableClock(s_ftmClocks[FTM_GetInstance(base)]);
+    (void)CLOCK_EnableClock(s_ftmClocks[FTM_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
     /* Configure the fault mode, enable FTM mode and disable write protection */
@@ -298,7 +303,7 @@ void FTM_Deinit(FTM_Type *base)
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     /* Gate the FTM clock */
-    CLOCK_DisableClock(s_ftmClocks[FTM_GetInstance(base)]);
+    (void)CLOCK_DisableClock(s_ftmClocks[FTM_GetInstance(base)]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 }
 
@@ -1113,7 +1118,7 @@ uint32_t FTM_GetEnabledInterrupts(FTM_Type *base)
     while (chnlCount > 0)
     {
         chnlCount--;
-        if (base->CONTROLS[chnlCount].CnSC & FTM_CnSC_CHIE_MASK)
+        if ((base->CONTROLS[chnlCount].CnSC & FTM_CnSC_CHIE_MASK) != 0x00U)
         {
             enabledInterrupts |= (1UL << (uint32_t)chnlCount);
         }

@@ -33,9 +33,9 @@
  * @name Constants and macros for entire RNG_CR register
  */
 /*@{*/
-#define RNG_CR_REG(base) ((base)->CR)
-#define RNG_RD_CR(base) (RNG_CR_REG(base))
-#define RNG_WR_CR(base, value) (RNG_CR_REG(base) = (value))
+#define RNG_CR_REG(base)              ((base)->CR)
+#define RNG_RD_CR(base)               (RNG_CR_REG(base))
+#define RNG_WR_CR(base, value)        (RNG_CR_REG(base) = (value))
 #define RNG_RMW_CR(base, mask, value) (RNG_WR_CR(base, (RNG_RD_CR(base) & ~(mask)) | (value)))
 /*@}*/
 
@@ -128,7 +128,7 @@
  */
 /*@{*/
 #define RNG_OR_REG(base) ((base)->OR)
-#define RNG_RD_OR(base) (RNG_OR_REG(base))
+#define RNG_RD_OR(base)  (RNG_OR_REG(base))
 /*@}*/
 
 /*******************************************************************************
@@ -147,8 +147,8 @@
  * @name Constants and macros for entire RNG_ER register
  */
 /*@{*/
-#define RNG_ER_REG(base) ((base)->ER)
-#define RNG_RD_ER(base) (RNG_ER_REG(base))
+#define RNG_ER_REG(base)       ((base)->ER)
+#define RNG_RD_ER(base)        (RNG_ER_REG(base))
 #define RNG_WR_ER(base, value) (RNG_ER_REG(base) = (value))
 /*@}*/
 

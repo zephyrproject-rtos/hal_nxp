@@ -20,10 +20,10 @@
  * Define the MACROs to help calculating the position of register field for specific sample index.
  */
 /* ZXCTRL1 & ZXCTRL2. */
-#define HSADC_ZXCTRL_ZCE_MASK(index) ((uint16_t)3U << (2U * ((uint16_t)(index))))
+#define HSADC_ZXCTRL_ZCE_MASK(index)   ((uint16_t)3U << (2U * ((uint16_t)(index))))
 #define HSADC_ZXCTRL_ZCE(index, value) (uint16_t)(((uint16_t)(value)) << (2U * ((uint16_t)(index))))
 /* CLIST1 & CLIST2 & CLIST3 & CLIST4 */
-#define HSADC_CLIST_SAMPLE_MASK(index) ((uint16_t)0xFU << (4U * ((uint16_t)(index))))
+#define HSADC_CLIST_SAMPLE_MASK(index)   ((uint16_t)0xFU << (4U * ((uint16_t)(index))))
 #define HSADC_CLIST_SAMPLE(index, value) (uint16_t)(((uint16_t)(value)) << (4U * ((uint16_t)(index))))
 
 /*******************************************************************************

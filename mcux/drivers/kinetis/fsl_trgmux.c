@@ -27,10 +27,10 @@
    endcode
  * param base        TRGMUX peripheral base address.
  * param index       The index of the TRGMUX register, see the enum trgmux_device_t
- *                    defined in <SOC>.h.
+ *                    defined in \<SOC\>.h.
  * param input       The MUX select for peripheral trigger input
  * param trigger_src The trigger inputs for various peripherals. See the enum trgmux_source_t
- *                    defined in <SOC>.h.
+ *                    defined in \<SOC\>.h.
  * retval  kStatus_Success  Configured successfully.
  * retval  kStatus_TRGMUX_Locked   Configuration failed because the register is locked.
  */

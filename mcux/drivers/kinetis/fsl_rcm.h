@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2019 NXP
+ * Copyright 2016-2017, 2019-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief RCM driver version 2.0.3. */
-#define FSL_RCM_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief RCM driver version 2.0.4. */
+#define FSL_RCM_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /*!
@@ -310,8 +310,8 @@ static inline void RCM_ClearStickyResetSources(RCM_Type *base, uint32_t sourceMa
 #if (defined(FSL_FEATURE_RCM_REG_WIDTH) && (FSL_FEATURE_RCM_REG_WIDTH == 32))
     base->SSRS = sourceMasks;
 #else
-    base->SSRS0 = (sourceMasks & 0xffU);
-    base->SSRS1 = ((sourceMasks >> 8U) & 0xffU);
+    base->SSRS0 = (uint8_t)(sourceMasks & 0xffU);
+    base->SSRS1 = (uint8_t)((sourceMasks >> 8U) & 0xffU);
 #endif /* (FSL_FEATURE_RCM_REG_WIDTH == 32) */
 }
 #endif /* FSL_FEATURE_RCM_HAS_SSRS */
@@ -394,7 +394,7 @@ void RCM_SetForceBootRomSource(RCM_Type *base, rcm_boot_rom_config_t config);
  * @param base RCM peripheral base address.
  * @param intMask   Bit mask of the system reset interrupts to enable. See
  *                  rcm_interrupt_enable_t for details.
- * @param Delay     Bit mask of the system reset interrupts to enable.
+ * @param delay     Bit mask of the system reset interrupts to enable.
  */
 static inline void RCM_SetSystemResetInterruptConfig(RCM_Type *base, uint32_t intMask, rcm_reset_delay_t delay)
 {

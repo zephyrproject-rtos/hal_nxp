@@ -20,7 +20,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief PMC driver version */
-#define FSL_PMC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2)) /*!< Version 2.0.2. */
+#define FSL_PMC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3)) /*!< Version 2.0.3. */
 /*@}*/
 
 #if (defined(FSL_FEATURE_PMC_HAS_LVDV) && FSL_FEATURE_PMC_HAS_LVDV)
@@ -179,7 +179,14 @@ extern "C" {
  */
 static inline void PMC_GetVersionId(PMC_Type *base, pmc_version_id_t *versionId)
 {
-    *((uint32_t *)versionId) = base->VERID;
+    union
+    {
+        pmc_version_id_t vid;
+        uint32_t u32;
+    } pmcVID;
+
+    pmcVID.u32 = base->VERID;
+    *versionId = pmcVID.vid;
 }
 #endif /* FSL_FEATURE_PMC_HAS_VERID */
 

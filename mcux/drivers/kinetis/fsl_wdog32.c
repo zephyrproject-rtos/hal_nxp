@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -101,6 +101,23 @@ void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config)
     regBase->WIN   = regConfig->windowValue;
     regBase->TOVAL = regConfig->timeoutValue;
     regBase->CS    = value;
+#ifdef WDOG_CS_RCS_MASK
+    /* Waits until for new configuration to take effect. */
+    while (0U == ((base->CS) & WDOG_CS_RCS_MASK))
+    {
+        ;
+    }
+#else
+    /* When switches clock sources during reconfiguration, the watchdog hardware holds the counter at
+       zero for 2.5 periods of the previous clock source and 2.5 periods of the new clock source
+       after the configuration time period (128 bus clocks) ends.
+       This delay ensures a smooth transition before restarting the counter with the new configuration. */
+    for(uint8_t timeDelay = 0U; timeDelay < 128U; timeDelay++)
+    {
+        (void)base->CNT;
+    }
+#endif /* WDOG_CS_RCS_MASK */
+
     EnableGlobalIRQ(primaskValue);
 }
 

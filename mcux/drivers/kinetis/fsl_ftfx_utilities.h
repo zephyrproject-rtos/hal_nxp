@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -61,5 +61,7 @@
 #define BYTE2WORD_1_2_1(x, y, z) (B1P4(x) | B2P2(y) | B1P1(z))
 #define BYTE2WORD_2_1_1(x, y, z) (B2P3(x) | B1P2(y) | B1P1(z))
 #define BYTE2WORD_1_1_1_1(x, y, z, w) (B1P4(x) | B1P3(y) | B1P2(z) | B1P1(w))
+
+/*! @}*/
 
 #endif /* FSL_FTFX_UTILITIES_H */

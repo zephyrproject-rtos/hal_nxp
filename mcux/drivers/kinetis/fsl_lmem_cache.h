@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,11 +21,11 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LMEM controller driver version 2.1.1. */
-#define FSL_LMEM_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief LMEM controller driver version 2.1.2. */
+#define FSL_LMEM_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
-#define LMEM_CACHE_LINE_SIZE (0x10U)   /*!< Cache line is 16-bytes. */
+#define LMEM_CACHE_LINE_SIZE   (0x10U) /*!< Cache line is 16-bytes. */
 #define LMEM_CACHE_SIZE_ONEWAY (4096U) /*!< Cache size is 4K-bytes one way. */
 
 /*! @brief LMEM cache mode options. */
@@ -277,7 +277,7 @@ status_t LMEM_CodeCacheDemoteRegion(LMEM_Type *base, lmem_cache_region_t region,
  * then enables /disable both the cache and write buffer.
  *
  * @param base LMEM peripheral base address.
- * @param The enable or disable flag.
+ * @param enable The enable or disable flag.
  *       true  - enable the system cache.
  *       false - disable the system cache.
  */

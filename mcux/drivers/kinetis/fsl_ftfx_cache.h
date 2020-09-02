@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -91,7 +91,7 @@ status_t FTFx_CACHE_Init(ftfx_cache_config_t *config);
  * @brief Process the cache/prefetch/speculation to the flash.
  *
  * @param config A pointer to the storage for the driver runtime state.
- * @param process The possible option used to control flash cache/prefetch/speculation
+ * @param isPreProcess The possible option used to control flash cache/prefetch/speculation
  * @retval #kStatus_FTFx_Success API was executed successfully.
  * @retval #kStatus_FTFx_InvalidArgument Invalid argument is provided.
  * @retval #kStatus_FTFx_ExecuteInRamFunctionNotReady Execute-in-RAM function is not available.

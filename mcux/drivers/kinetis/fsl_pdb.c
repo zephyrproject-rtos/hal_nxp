@@ -144,7 +144,7 @@ void PDB_GetDefaultConfig(pdb_config_t *config)
  */
 void PDB_SetDACTriggerConfig(PDB_Type *base, pdb_dac_trigger_channel_t channel, pdb_dac_trigger_config_t *config)
 {
-    assert(channel < FSL_FEATURE_PDB_DAC_INTERVAL_TRIGGER_COUNT);
+    assert((uint8_t)channel < (uint8_t)FSL_FEATURE_PDB_DAC_INTERVAL_TRIGGER_COUNT);
     assert(NULL != config);
 
     uint32_t tmp32 = 0U;

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,9 +21,14 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief UART driver version 2.2.0. */
-#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief UART driver version 2.3.0. */
+#define FSL_UART_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
+
+/*! @brief Retry times for waiting flag. */
+#ifndef UART_RETRY_TIMES
+#define UART_RETRY_TIMES 0U /* Defining to zero means to keep waiting for the flag until it is assert/deassert. */
+#endif
 
 /*! @brief Error codes for the UART driver. */
 enum
@@ -45,6 +50,7 @@ enum
     kStatus_UART_BaudrateNotSupport =
         MAKE_STATUS(kStatusGroup_UART, 13), /*!< Baudrate is not support in current clock source */
     kStatus_UART_IdleLineDetected = MAKE_STATUS(kStatusGroup_UART, 14), /*!< UART IDLE line detected. */
+    kStatus_UART_Timeout          = MAKE_STATUS(kStatusGroup_UART, 15), /*!< UART times out. */
 };
 
 /*! @brief UART parity mode. */
@@ -563,8 +569,10 @@ static inline uint8_t UART_ReadByte(UART_Type *base)
  * @param base UART peripheral base address.
  * @param data Start address of the data to write.
  * @param length Size of the data to write.
+ * @retval kStatus_UART_Timeout Transmission timed out and was aborted.
+ * @retval kStatus_Success Successfully wrote all data.
  */
-void UART_WriteBlocking(UART_Type *base, const uint8_t *data, size_t length);
+status_t UART_WriteBlocking(UART_Type *base, const uint8_t *data, size_t length);
 
 /*!
  * @brief Read RX data register using a blocking method.
@@ -579,6 +587,7 @@ void UART_WriteBlocking(UART_Type *base, const uint8_t *data, size_t length);
  * @retval kStatus_UART_NoiseError A noise error occurred while receiving data.
  * @retval kStatus_UART_FramingError A framing error occurred while receiving data.
  * @retval kStatus_UART_ParityError A parity error occurred while receiving data.
+ * @retval kStatus_UART_Timeout Transmission timed out and was aborted.
  * @retval kStatus_Success Successfully received all data.
  */
 status_t UART_ReadBlocking(UART_Type *base, uint8_t *data, size_t length);
@@ -677,10 +686,9 @@ status_t UART_TransferSendNonBlocking(UART_Type *base, uart_handle_t *handle, ua
 void UART_TransferAbortSend(UART_Type *base, uart_handle_t *handle);
 
 /*!
- * @brief Gets the number of bytes written to the UART TX register.
+ * @brief Gets the number of bytes sent out to bus.
  *
- * This function gets the number of bytes written to the UART TX
- * register by using the interrupt method.
+ * This function gets the number of bytes sent out to bus by using the interrupt method.
  *
  * @param base UART peripheral base address.
  * @param handle UART handle pointer.

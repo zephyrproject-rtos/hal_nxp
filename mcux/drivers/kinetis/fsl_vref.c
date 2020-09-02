@@ -120,7 +120,7 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config)
 #if defined(FSL_FEATURE_VREF_HAS_LOW_REFERENCE) && FSL_FEATURE_VREF_HAS_LOW_REFERENCE
     reg = base->VREFL_TRM;
     /* Clear old select external voltage reference and VREFL (0.4 V) reference buffer enable bits */
-    reg &= ~(VREF_VREFL_TRM_VREFL_EN_MASK | VREF_VREFL_TRM_VREFL_SEL_MASK);
+    reg &= (uint8_t)(~(VREF_VREFL_TRM_VREFL_EN_MASK | VREF_VREFL_TRM_VREFL_SEL_MASK));
     /* Select external voltage reference and set VREFL (0.4 V) reference buffer enable */
     reg |= VREF_VREFL_TRM_VREFL_SEL(config->enableExternalVoltRef) | VREF_VREFL_TRM_VREFL_EN(config->enableLowRef);
     base->VREFL_TRM = reg;
@@ -137,7 +137,7 @@ void VREF_Init(VREF_Type *base, const vref_config_t *config)
 
 /* Wait until internal voltage stable */
 #if defined(FSL_FEATURE_VREF_HAS_LOW_REFERENCE) && FSL_FEATURE_VREF_HAS_LOW_REFERENCE
-    while ((base->VREFH_SC & VREF_SC_VREFST_MASK) == 0)
+    while ((base->VREFH_SC & VREF_SC_VREFST_MASK) == 0U)
 #else
     while ((base->SC & VREF_SC_VREFST_MASK) == 0U)
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */
@@ -227,7 +227,7 @@ void VREF_SetTrimVal(VREF_Type *base, uint8_t trimValue)
     base->TRM = reg;
 /* Wait until internal voltage stable */
 #if defined(FSL_FEATURE_VREF_HAS_LOW_REFERENCE) && FSL_FEATURE_VREF_HAS_LOW_REFERENCE
-    while ((base->VREFH_SC & VREF_SC_VREFST_MASK) == 0)
+    while ((base->VREFH_SC & VREF_SC_VREFST_MASK) == 0U)
 #else
     while ((base->SC & VREF_SC_VREFST_MASK) == 0U)
 #endif /* FSL_FEATURE_VREF_HAS_LOW_REFERENCE */
@@ -281,11 +281,11 @@ void VREF_SetLowReferenceTrimVal(VREF_Type *base, uint8_t trimValue)
 
     /* Set TRIM bits value in low voltage reference */
     reg             = base->VREFL_TRM;
-    reg             = ((reg & ~VREF_VREFL_TRM_VREFL_TRIM_MASK) | VREF_VREFL_TRM_VREFL_TRIM(trimValue));
+    reg             = ((reg & (uint8_t)(~VREF_VREFL_TRM_VREFL_TRIM_MASK)) | VREF_VREFL_TRM_VREFL_TRIM(trimValue));
     base->VREFL_TRM = reg;
     /* Wait until internal voltage stable */
 
-    while ((base->VREFH_SC & VREF_SC_VREFST_MASK) == 0)
+    while ((base->VREFH_SC & VREF_SC_VREFST_MASK) == 0U)
     {
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -32,26 +32,26 @@
      QuadSPI_LUT_PAD1(pad1) | QuadSPI_LUT_OPRND1(op1))
 
 /*! @brief Macro for QSPI LUT command */
-#define QSPI_CMD (0x1U)
-#define QSPI_ADDR (0x2U)
-#define QSPI_DUMMY (0x3U)
-#define QSPI_MODE (0x4U)
-#define QSPI_MODE2 (0x5U)
-#define QSPI_MODE4 (0x6U)
-#define QSPI_READ (0x7U)
-#define QSPI_WRITE (0x8U)
-#define QSPI_JMP_ON_CS (0x9U)
-#define QSPI_ADDR_DDR (0xAU)
-#define QSPI_MODE_DDR (0xBU)
-#define QSPI_MODE2_DDR (0xCU)
-#define QSPI_MODE4_DDR (0xDU)
-#define QSPI_READ_DDR (0xEU)
-#define QSPI_WRITE_DDR (0xFU)
+#define QSPI_CMD        (0x1U)
+#define QSPI_ADDR       (0x2U)
+#define QSPI_DUMMY      (0x3U)
+#define QSPI_MODE       (0x4U)
+#define QSPI_MODE2      (0x5U)
+#define QSPI_MODE4      (0x6U)
+#define QSPI_READ       (0x7U)
+#define QSPI_WRITE      (0x8U)
+#define QSPI_JMP_ON_CS  (0x9U)
+#define QSPI_ADDR_DDR   (0xAU)
+#define QSPI_MODE_DDR   (0xBU)
+#define QSPI_MODE2_DDR  (0xCU)
+#define QSPI_MODE4_DDR  (0xDU)
+#define QSPI_READ_DDR   (0xEU)
+#define QSPI_WRITE_DDR  (0xFU)
 #define QSPI_DATA_LEARN (0x10U)
-#define QSPI_CMD_DDR (0x11U)
-#define QSPI_CADDR (0x12U)
-#define QSPI_CADDR_DDR (0x13U)
-#define QSPI_STOP (0x0U)
+#define QSPI_CMD_DDR    (0x11U)
+#define QSPI_CADDR      (0x12U)
+#define QSPI_CADDR_DDR  (0x13U)
+#define QSPI_STOP       (0x0U)
 
 /*! @brief Macro for QSPI PAD */
 #define QSPI_PAD_1 (0x0U)
@@ -632,7 +632,7 @@ static inline void QSPI_ClearCommandSequence(QuadSPI_Type *base, qspi_command_se
  * @brief Enable or disable DDR mode.
  *
  * @param base QSPI base pointer
- * @param eanble True means enable DDR mode, false means disable DDR mode.
+ * @param enable True means enable DDR mode, false means disable DDR mode.
  */
 static inline void QSPI_EnableDDRMode(QuadSPI_Type *base, bool enable)
 {

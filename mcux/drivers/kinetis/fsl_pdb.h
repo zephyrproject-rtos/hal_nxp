@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief PDB driver version 2.0.3. */
-#define FSL_PDB_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
+/*! @brief PDB driver version 2.0.4. */
+#define FSL_PDB_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /*!
@@ -470,7 +470,7 @@ static inline void PDB_SetADCPreTriggerConfig(PDB_Type *base,
                                               pdb_adc_trigger_channel_t channel,
                                               pdb_adc_pretrigger_config_t *config)
 {
-    assert(channel < FSL_FEATURE_PDB_CHANNEL_COUNT);
+    assert((uint8_t)channel < (uint8_t)FSL_FEATURE_PDB_CHANNEL_COUNT);
     assert(NULL != config);
 
     base->CH[channel].C1 = PDB_C1_BB(config->enableBackToBackOperationMask) | PDB_C1_TOS(config->enableOutputMask) |
@@ -493,8 +493,8 @@ static inline void PDB_SetADCPreTriggerDelayValue(PDB_Type *base,
                                                   pdb_adc_pretrigger_t pretriggerNumber,
                                                   uint32_t value)
 {
-    assert(channel < FSL_FEATURE_PDB_CHANNEL_COUNT);
-    assert(pretriggerNumber < FSL_FEATURE_PDB_CHANNEL_PRE_TRIGGER_COUNT);
+    assert((uint8_t)channel < (uint8_t)FSL_FEATURE_PDB_CHANNEL_COUNT);
+    assert((uint8_t)pretriggerNumber < (uint8_t)FSL_FEATURE_PDB_CHANNEL_PRE_TRIGGER_COUNT);
     /* xx_COUNT2 is actually the count for pre-triggers in header file. xx_COUNT is used for the count of channels. */
 
     base->CH[channel].DLY[pretriggerNumber] = PDB_DLY_DLY(value);
@@ -510,7 +510,7 @@ static inline void PDB_SetADCPreTriggerDelayValue(PDB_Type *base,
  */
 static inline uint32_t PDB_GetADCPreTriggerStatusFlags(PDB_Type *base, pdb_adc_trigger_channel_t channel)
 {
-    assert(channel < FSL_FEATURE_PDB_CHANNEL_COUNT);
+    assert((uint8_t)channel < (uint8_t)FSL_FEATURE_PDB_CHANNEL_COUNT);
 
     return base->CH[channel].S;
 }
@@ -524,7 +524,7 @@ static inline uint32_t PDB_GetADCPreTriggerStatusFlags(PDB_Type *base, pdb_adc_t
  */
 static inline void PDB_ClearADCPreTriggerStatusFlags(PDB_Type *base, pdb_adc_trigger_channel_t channel, uint32_t mask)
 {
-    assert(channel < FSL_FEATURE_PDB_CHANNEL_COUNT);
+    assert((uint8_t)channel < (uint8_t)FSL_FEATURE_PDB_CHANNEL_COUNT);
 
     base->CH[channel].S &= ~mask;
 }
@@ -558,7 +558,7 @@ void PDB_SetDACTriggerConfig(PDB_Type *base, pdb_dac_trigger_channel_t channel, 
  */
 static inline void PDB_SetDACTriggerIntervalValue(PDB_Type *base, pdb_dac_trigger_channel_t channel, uint32_t value)
 {
-    assert(channel < FSL_FEATURE_PDB_DAC_INTERVAL_TRIGGER_COUNT);
+    assert((uint8_t)channel < (uint8_t)FSL_FEATURE_PDB_DAC_INTERVAL_TRIGGER_COUNT);
 
     base->DAC[channel].INT = PDB_INT_INT(value);
 }
@@ -580,7 +580,7 @@ static inline void PDB_SetDACTriggerIntervalValue(PDB_Type *base, pdb_dac_trigge
  */
 static inline void PDB_EnablePulseOutTrigger(PDB_Type *base, pdb_pulse_out_channel_mask_t channelMask, bool enable)
 {
-    assert(channelMask < (1 << FSL_FEATURE_PDB_PULSE_OUT_COUNT));
+    assert((uint8_t)channelMask < (1U << FSL_FEATURE_PDB_PULSE_OUT_COUNT));
 
     if (enable)
     {
@@ -610,7 +610,7 @@ static inline void PDB_SetPulseOutTriggerDelayValue(PDB_Type *base,
                                                     uint32_t value1,
                                                     uint32_t value2)
 {
-    assert(channel < FSL_FEATURE_PDB_PULSE_OUT_COUNT);
+    assert((uint8_t)channel < (uint8_t)FSL_FEATURE_PDB_PULSE_OUT_COUNT);
 
     base->PODLY[channel] = PDB_PODLY_DLY1(value1) | PDB_PODLY_DLY2(value2);
 }

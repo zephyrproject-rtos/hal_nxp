@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,19 +20,19 @@
  *******************************************************************************/
 /*! @name Unlock sequence */
 /*@{*/
-#define WDOG_FIRST_WORD_OF_UNLOCK (WDOG_UPDATE_KEY & 0xFFFFU)           /*!< First word of unlock sequence */
+#define WDOG_FIRST_WORD_OF_UNLOCK  (WDOG_UPDATE_KEY & 0xFFFFU)          /*!< First word of unlock sequence */
 #define WDOG_SECOND_WORD_OF_UNLOCK ((WDOG_UPDATE_KEY >> 16U) & 0xFFFFU) /*!< Second word of unlock sequence */
 /*@}*/
 
 /*! @name Refresh sequence */
 /*@{*/
-#define WDOG_FIRST_WORD_OF_REFRESH (WDOG_REFRESH_KEY & 0xFFFFU)           /*!< First word of refresh sequence */
+#define WDOG_FIRST_WORD_OF_REFRESH  (WDOG_REFRESH_KEY & 0xFFFFU)          /*!< First word of refresh sequence */
 #define WDOG_SECOND_WORD_OF_REFRESH ((WDOG_REFRESH_KEY >> 16U) & 0xFFFFU) /*!< Second word of refresh sequence */
 /*@}*/
 /*! @name Driver version */
 /*@{*/
-/*! @brief WDOG32 driver version 2.0.2. */
-#define FSL_WDOG32_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief WDOG32 driver version. */
+#define FSL_WDOG32_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*! @brief Describes WDOG32 clock source. */
@@ -161,7 +161,11 @@ void WDOG32_GetDefaultConfig(wdog32_config_t *config);
  * @param base   WDOG32 peripheral base address.
  * @param config The configuration of the WDOG32.
  */
+#if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
+void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config);
+#else
 AT_QUICKACCESS_SECTION_CODE(void WDOG32_Init(WDOG_Type *base, const wdog32_config_t *config));
+#endif
 
 /*!
  * @brief De-initializes the WDOG32 module.
@@ -276,7 +280,12 @@ static inline uint32_t WDOG32_GetStatusFlags(WDOG_Type *base)
  *                    The parameter can be any combination of the following values:
  *                    @arg kWDOG32_InterruptFlag
  */
+
+#if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
+void WDOG32_ClearStatusFlags(WDOG_Type *base, uint32_t mask);
+#else
 AT_QUICKACCESS_SECTION_CODE(void WDOG32_ClearStatusFlags(WDOG_Type *base, uint32_t mask));
+#endif
 
 /*!
  * @brief Sets the WDOG32 timeout value.
@@ -330,6 +339,13 @@ static inline void WDOG32_Unlock(WDOG_Type *base)
         base->CNT = WDOG_FIRST_WORD_OF_UNLOCK;
         base->CNT = WDOG_SECOND_WORD_OF_UNLOCK;
     }
+#ifdef WDOG_CS_ULK_MASK
+    /* Waited until for registers to be unlocked. */
+    while (0U == ((base->CS) & WDOG_CS_ULK_MASK))
+    {
+        ;
+    }
+#endif /* WDOG_CS_ULK_MASK */
 }
 
 /*!

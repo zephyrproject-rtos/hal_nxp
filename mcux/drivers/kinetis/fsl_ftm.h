@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FTM driver version 2.2.1. */
-#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief FTM driver version 2.2.3. */
+#define FSL_FTM_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*@}*/
 
 /*!
@@ -373,6 +373,7 @@ extern "C" {
  * @brief Ungates the FTM clock and configures the peripheral for basic operation.
  *
  * @note This API should be called at the beginning of the application which is using the FTM driver.
+ *       If the FTM instance has only TPM features, please use the TPM driver.
  *
  * @param base   FTM peripheral base address
  * @param config Pointer to the user configuration structure.
@@ -904,7 +905,7 @@ void FTM_SetupQuadDecode(FTM_Type *base,
  * @brief Gets the FTM Quad Decoder flags.
  *
  * @param base FTM peripheral base address.
- * @return Flag mask of FTM Quad Decoder, see #_ftm_quad_decoder_flags.
+ * @return Flag mask of FTM Quad Decoder, see _ftm_quad_decoder_flags.
  */
 static inline uint32_t FTM_GetQuadDecoderFlags(FTM_Type *base)
 {
