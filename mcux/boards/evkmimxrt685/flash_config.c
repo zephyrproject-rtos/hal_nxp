@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -29,7 +29,7 @@ const flexspi_nor_config_t flexspi_config = {
             .csHoldTime          = 3,
             .csSetupTime         = 3,
             .deviceModeCfgEnable = 1,
-            .deviceModeType      = 0,
+            .deviceModeType      = kDeviceConfigCmdType_Generic,
             .waitTimeCfgCommands = 1,
             .deviceModeSeq =
                 {
@@ -39,7 +39,8 @@ const flexspi_nor_config_t flexspi_config = {
                 },
             .deviceModeArg   = 0,
             .configCmdEnable = 1,
-            .configModeType  = {0, 2, 0},
+            .configModeType  = {kDeviceConfigCmdType_Generic, kDeviceConfigCmdType_Spi2Xpi,
+                               kDeviceConfigCmdType_Generic},
             .configCmdSeqs   = {{
                                   .seqNum   = 1,
                                   .seqId    = 7,
@@ -55,7 +56,7 @@ const flexspi_nor_config_t flexspi_config = {
                 (1u << kFlexSpiMiscOffset_SafeConfigFreqEnable) | (1u << kFlexSpiMiscOffset_DdrModeEnable),
             .deviceType    = 0x1,
             .sflashPadType = kSerialFlash_8Pads,
-            .serialClkFreq = kFlexSpiSerialClk_96MHz,
+            .serialClkFreq = kFlexSpiSerialClk_DDR_48MHz,
             .sflashA1Size  = 0,
             .sflashA2Size  = 0,
             .sflashB1Size  = BOARD_FLASH_SIZE,
