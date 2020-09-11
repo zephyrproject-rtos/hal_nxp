@@ -23,7 +23,7 @@ endif()
 zephyr_compile_definitions_ifdef(CONFIG_NXP_IMX_RT_BOOT_HEADER XIP_BOOT_HEADER_ENABLE=1)
 zephyr_compile_definitions_ifdef(CONFIG_NXP_IMX_RT6XX_BOOT_HEADER BOOT_HEADER_ENABLE=1)
 zephyr_compile_definitions_ifdef(CONFIG_DEVICE_CONFIGURATION_DATA XIP_BOOT_HEADER_DCD_ENABLE=1)
-zephyr_compile_definitions(BOARD_FLASH_SIZE=CONFIG_FLASH_SIZE)
+zephyr_compile_definitions(BOARD_FLASH_SIZE=CONFIG_FLASH_SIZE*1024)
 
 if (${MCUX_BOARD} MATCHES "evk[bm]imxrt1[0-9][0-9][0-9]")
 zephyr_library_sources_ifdef(CONFIG_BOOT_FLEXSPI_NOR ${MCUX_BOARD}/${MCUX_BOARD}_flexspi_nor_config.c)
