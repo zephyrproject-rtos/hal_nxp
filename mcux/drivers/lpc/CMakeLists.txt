@@ -16,3 +16,4 @@ zephyr_library_sources_ifdef(CONFIG_UART_MCUX_FLEXCOMM	fsl_usart.c fsl_flexcomm.
 zephyr_library_sources_ifdef(CONFIG_WDT_MCUX_WWDT	fsl_wwdt.c)
 zephyr_library_sources_ifdef(CONFIG_ADC_MCUX_LPADC	fsl_lpadc.c)
 zephyr_library_sources_ifdef(CONFIG_DMA_MCUX_LPC        fsl_dma.c)
+zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_LPC_RTC	fsl_rtc.c)
