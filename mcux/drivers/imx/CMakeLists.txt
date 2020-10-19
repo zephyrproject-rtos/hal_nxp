@@ -15,6 +15,7 @@ zephyr_library_compile_definitions_ifdef(
   CONFIG_HAS_MCUX_CACHE FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
 )
 
+zephyr_library_sources_ifdef(CONFIG_CAN_MCUX_FLEXCAN	fsl_flexcan.c)
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_GPT	fsl_gpt.c)
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_PIT	fsl_pit.c)
 zephyr_library_sources_ifdef(CONFIG_DISPLAY_MCUX_ELCDIF	fsl_elcdif.c)
