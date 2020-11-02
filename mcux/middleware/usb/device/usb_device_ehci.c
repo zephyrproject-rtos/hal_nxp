@@ -58,6 +58,8 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
                                            uint8_t *buffer,
                                            uint32_t length);
 
+extern usb_status_t USB_DeviceNotificationTrigger(void *handle, void *msg);
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -913,7 +915,6 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
     uint8_t qhIdle = 0U;
     uint8_t waitingSafelyAccess = 1U;
     uint32_t primeTimesCount = 0U;
-    void *temp;
     USB_OSA_SR_ALLOC();
 
     if (NULL == ehciState)
@@ -1662,17 +1663,13 @@ usb_status_t USB_DeviceEhciControl(usb_device_controller_handle ehciHandle, usb_
                 }
             }
             break;
-        case kUSB_DeviceControlPreSetDeviceAddress:
-            if (NULL != param)
+        case kUSB_DeviceControlSetDeviceAddress:
+            if (param)
             {
                 temp8 = (uint8_t *)param;
-                ehciState->registerBase->DEVICEADDR =
-                    ((((uint32_t)(*temp8)) << USBHS_DEVICEADDR_USBADR_SHIFT) | USBHS_DEVICEADDR_USBADRA_MASK);
+                ehciState->registerBase->DEVICEADDR = (((uint32_t)(*temp8)) << USBHS_DEVICEADDR_USBADR_SHIFT);
                 error = kStatus_USB_Success;
             }
-            break;
-        case kUSB_DeviceControlSetDeviceAddress:
-            error = kStatus_USB_Success;
             break;
         case kUSB_DeviceControlGetSynchFrame:
             break;

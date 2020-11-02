@@ -323,22 +323,12 @@ typedef struct _usb_device_struct {
 	/* Controller handle */
 	usb_device_controller_handle controllerHandle;
 	/* Controller interface handle */
-	const usb_device_controller_interface_struct_t *controllerInterface;
-#if USB_DEVICE_CONFIG_USE_TASK
-	/*!< Message queue buffer*/
-	OSA_MSGQ_HANDLE_DEFINE(notificationQueueBuffer,
-						   USB_DEVICE_CONFIG_MAX_MESSAGES,
-						   USB_DEVICE_MESSAGES_SIZE);
-	/*!< Message queue*/
-	osa_msgq_handle_t notificationQueue;
-#endif
-	/* Device callback function pointer */
-	usb_device_callback_t deviceCallback;
-	/* Endpoint callback function structure */
-	usb_device_endpoint_callback_struct_t
-		epCallback[USB_DEVICE_CONFIG_ENDPOINTS << 1U];
+	const usb_device_controller_interface_struct_t *interface;
+	usb_dc_status_callback status_callback;
+	usb_ep_ctrl_data_t *eps;
+	bool attached;
 	/* Current device address */
-	uint8_t deviceAddress;
+	uint8_t address;
 	/* Controller ID */
 	uint8_t controllerId;
 	/* Current device state */
@@ -349,10 +339,7 @@ typedef struct _usb_device_struct {
 #endif
 	/* Is doing device reset or not */
 	uint8_t isResetting;
-#if (defined(USB_DEVICE_CONFIG_USE_TASK) && (USB_DEVICE_CONFIG_USE_TASK > 0U))
-	/* Whether call ep callback directly when the task is enabled */
-	uint8_t epCallbackDirectly;
-#endif
+	uint8_t setupDataStage;
 } usb_device_struct_t;
 
 /* Endpoint status structure */
