@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief reset driver version 2.1.0. */
-#define FSL_DSP_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief reset driver version 2.1.1. */
+#define FSL_DSP_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*!

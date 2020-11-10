@@ -7,10 +7,10 @@
 **     Compiler:            XCC Compiler
 **     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
 **     Version:             rev. 2.0, 2019-11-12
-**     Build:               b200413
+**     Build:               b201019
 **
 **     Abstract:
-**         CMSIS Peripheral Access Layer for MIMXRT685S_dsp
+**         Peripheral Access Layer for MIMXRT685S_dsp
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
 **     Copyright 2016-2020 NXP
@@ -34,9 +34,9 @@
  * @file MIMXRT685S_dsp.h
  * @version 2.0
  * @date 2019-11-12
- * @brief CMSIS Peripheral Access Layer for MIMXRT685S_dsp
+ * @brief Peripheral Access Layer for MIMXRT685S_dsp
  *
- * CMSIS Peripheral Access Layer for MIMXRT685S_dsp
+ * Peripheral Access Layer for MIMXRT685S_dsp
  */
 
 #ifndef _MIMXRT685S_DSP_H_
@@ -14928,6 +14928,8 @@ typedef struct {
 #define MU_BASE_ADDRS                            { MUB_BASE }
 /** Array initializer of MU peripheral base pointers */
 #define MU_BASE_PTRS                             { MUB }
+/** Interrupt vectors for the MU peripheral type */
+#define MU_IRQS                                  { MU_B_IRQn }
 
 /*!
  * @}
@@ -19477,7 +19479,8 @@ typedef struct {
   __IO uint32_t M33NMISRCSEL;                      /**< M33 nmi source selection, offset: 0x30 */
   __IO uint32_t SYSTEM_STICK_CALIB;                /**< system stick calibration, offset: 0x34 */
   __IO uint32_t SYSTEM_NSTICK_CALIB;               /**< system nstick calibration, offset: 0x38 */
-       uint8_t RESERVED_2[40];
+       uint8_t RESERVED_2[36];
+  __I  uint32_t PRODUCT_ID;                        /**< product ID, offset: 0x60 */
   __I  uint32_t SILICONREV_ID;                     /**< SILICONREV ID, offset: 0x64 */
   __I  uint32_t JTAG_ID;                           /**< jtag ID, offset: 0x68 */
        uint8_t RESERVED_3[20];
@@ -19514,41 +19517,47 @@ typedef struct {
   __O  uint32_t PDRUNCFG1_CLR;                     /**< Run configuration 1 clear, offset: 0x634 */
   __O  uint32_t PDRUNCFG2_CLR;                     /**< Run configuration 2 clear, offset: 0x638 */
   __O  uint32_t PDRUNCFG3_CLR;                     /**< Run configuration 3 clear, offset: 0x63C */
-       uint8_t RESERVED_10[64];
+       uint8_t RESERVED_10[32];
+  __IO uint32_t PDWAKECFG;                         /**< PD Wake Configuration, offset: 0x660 */
+       uint8_t RESERVED_11[28];
   __IO uint32_t STARTEN0;                          /**< Start enable 0, offset: 0x680 */
   __IO uint32_t STARTEN1;                          /**< Start enable 1, offset: 0x684 */
-       uint8_t RESERVED_11[24];
+       uint8_t RESERVED_12[24];
   __O  uint32_t STARTEN0_SET;                      /**< Start enable 0 set, offset: 0x6A0 */
   __O  uint32_t STARTEN1_SET;                      /**< Start enable 1 set, offset: 0x6A4 */
-       uint8_t RESERVED_12[24];
+       uint8_t RESERVED_13[24];
   __O  uint32_t STARTEN0_CLR;                      /**< Start enable 0 clear, offset: 0x6C0 */
   __O  uint32_t STARTEN1_CLR;                      /**< Start enable 1 clear, offset: 0x6C4 */
-       uint8_t RESERVED_13[184];
+       uint8_t RESERVED_14[72];
+  __IO uint32_t MAINCLKSAFETY;                     /**< Main Clock Safety, offset: 0x710 */
+       uint8_t RESERVED_15[108];
   __IO uint32_t HWWAKE;                            /**< Hardware Wake-up control, offset: 0x780 */
-       uint8_t RESERVED_14[1740];
+       uint8_t RESERVED_16[1672];
+  __IO uint32_t TEMPSENSORCTL;                     /**< tempsensor ctrl, offset: 0xE0C */
+       uint8_t RESERVED_17[64];
   __IO uint32_t BOOTSTATESEED[8];                  /**< boot state seed register, array offset: 0xE50, array step: 0x4 */
   __IO uint32_t BOOTSTATEHMAC[8];                  /**< boot state hmac register, array offset: 0xE70, array step: 0x4 */
-       uint8_t RESERVED_15[104];
+       uint8_t RESERVED_18[104];
   __IO uint32_t FLEXSPIPADCTRL;                    /**< FLEXSPI IO pads ctrl register, offset: 0xEF8 */
   __IO uint32_t SDIOPADCTL;                        /**< sdio pad ctrl, offset: 0xEFC */
   __IO uint32_t DICEHWREG[8];                      /**< DICE General Purpose 32-Bit Data Register, array offset: 0xF00, array step: 0x4 */
-       uint8_t RESERVED_16[48];
+       uint8_t RESERVED_19[48];
   __I  uint32_t UUID[4];                           /**< UUIDn 32-Bit Data Register, array offset: 0xF50, array step: 0x4 */
-       uint8_t RESERVED_17[32];
+       uint8_t RESERVED_20[32];
   __IO uint32_t AESKEY_SRCSEL;                     /**< AES key source selection, offset: 0xF80 */
-  __IO uint32_t OTFADKEY_SRCSEL;                   /**< OTFAD key source selection, offset: 0xF84 */
+       uint8_t RESERVED_21[4];
   __IO uint32_t HASHHWKEYDISABLE;                  /**< Hash hardware key disable, offset: 0xF88 */
-       uint8_t RESERVED_18[20];
+       uint8_t RESERVED_22[20];
   __IO uint32_t DBG_LOCKEN;                        /**< Debug Write Lock registers, offset: 0xFA0 */
   __IO uint32_t DBG_FEATURES;                      /**< Debug features control for the CM33, offset: 0xFA4 */
   __IO uint32_t DBG_FEATURES_DP;                   /**< Debug features duplicate, offset: 0xFA8 */
   __IO uint32_t HWUNLOCK_DISABLE;                  /**< HW unlock disable, offset: 0xFAC */
-       uint8_t RESERVED_19[4];
+       uint8_t RESERVED_23[4];
   __IO uint32_t CS_PROTCPU0;                       /**< Code Security for CPU0, offset: 0xFB4 */
   __IO uint32_t CS_PROTCPU1;                       /**< Code Security for CPU1, offset: 0xFB8 */
-       uint8_t RESERVED_20[4];
+       uint8_t RESERVED_24[4];
   __IO uint32_t DBG_AUTH_SCRATCH;                  /**< Debug authorization scratch, offset: 0xFC0 */
-       uint8_t RESERVED_21[12];
+       uint8_t RESERVED_25[12];
   __IO uint32_t KEY_BLOCK;                         /**< Key block, offset: 0xFD0 */
 } SYSCTL0_Type;
 
@@ -19637,13 +19646,6 @@ typedef struct {
  *  0b1..enabled
  */
 #define SYSCTL0_PACKERENABLE_RDPENABLE(x)        (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PACKERENABLE_RDPENABLE_SHIFT)) & SYSCTL0_PACKERENABLE_RDPENABLE_MASK)
-#define SYSCTL0_PACKERENABLE_CPRENABLE_MASK      (0x4U)
-#define SYSCTL0_PACKERENABLE_CPRENABLE_SHIFT     (2U)
-/*! CPRENABLE - Cache Power Reduction Enable
- *  0b0..disabled
- *  0b1..enabled
- */
-#define SYSCTL0_PACKERENABLE_CPRENABLE(x)        (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PACKERENABLE_CPRENABLE_SHIFT)) & SYSCTL0_PACKERENABLE_CPRENABLE_MASK)
 /*! @} */
 
 /*! @name M33NMISRCSEL - M33 nmi source selection */
@@ -19678,6 +19680,15 @@ typedef struct {
 /*! SYSTEM_NSTICK_CALIB - Selects the system non-secure tick calibration value of the M33.
  */
 #define SYSCTL0_SYSTEM_NSTICK_CALIB_SYSTEM_NSTICK_CALIB(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_SYSTEM_NSTICK_CALIB_SYSTEM_NSTICK_CALIB_SHIFT)) & SYSCTL0_SYSTEM_NSTICK_CALIB_SYSTEM_NSTICK_CALIB_MASK)
+/*! @} */
+
+/*! @name PRODUCT_ID - product ID */
+/*! @{ */
+#define SYSCTL0_PRODUCT_ID_PRODUCT_ID_MASK       (0xFFFFU)
+#define SYSCTL0_PRODUCT_ID_PRODUCT_ID_SHIFT      (0U)
+/*! PRODUCT_ID - This register contains the product ID which is unique for each part number.
+ */
+#define SYSCTL0_PRODUCT_ID_PRODUCT_ID(x)         (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PRODUCT_ID_PRODUCT_ID_SHIFT)) & SYSCTL0_PRODUCT_ID_PRODUCT_ID_MASK)
 /*! @} */
 
 /*! @name SILICONREV_ID - SILICONREV ID */
@@ -23529,6 +23540,24 @@ typedef struct {
 #define SYSCTL0_PDRUNCFG3_CLR_SRAM_IF29_PPD(x)   (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG3_CLR_SRAM_IF29_PPD_SHIFT)) & SYSCTL0_PDRUNCFG3_CLR_SRAM_IF29_PPD_MASK)
 /*! @} */
 
+/*! @name PDWAKECFG - PD Wake Configuration */
+/*! @{ */
+#define SYSCTL0_PDWAKECFG_RBBKEEPST_MASK         (0x1U)
+#define SYSCTL0_PDWAKECFG_RBBKEEPST_SHIFT        (0U)
+/*! RBBKEEPST - RBB mode on wakeup
+ *  0b0..Use value of RBB_PD in PDRUNCFG on wakeup.
+ *  0b1..Copy PDSLEEPCFG RBB_PD value to PDRUNCFG RBB_PD on wakeup to keep RBB state.
+ */
+#define SYSCTL0_PDWAKECFG_RBBKEEPST(x)           (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDWAKECFG_RBBKEEPST_SHIFT)) & SYSCTL0_PDWAKECFG_RBBKEEPST_MASK)
+#define SYSCTL0_PDWAKECFG_FBBKEEPST_MASK         (0x2U)
+#define SYSCTL0_PDWAKECFG_FBBKEEPST_SHIFT        (1U)
+/*! FBBKEEPST - FBB mode on wakeup
+ *  0b0..Use value of FBB_PD in PDRUNCFG on wakeup
+ *  0b1..Copy PDSLEEPCFG FBB_PD value to PDRUNCFG FBB_PD on wakeup to keep FBB state
+ */
+#define SYSCTL0_PDWAKECFG_FBBKEEPST(x)           (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDWAKECFG_FBBKEEPST_SHIFT)) & SYSCTL0_PDWAKECFG_FBBKEEPST_MASK)
+/*! @} */
+
 /*! @name STARTEN0 - Start enable 0 */
 /*! @{ */
 #define SYSCTL0_STARTEN0_WDT0_MASK               (0x1U)
@@ -24687,6 +24716,15 @@ typedef struct {
 #define SYSCTL0_STARTEN1_CLR_SHA(x)              (((uint32_t)(((uint32_t)(x)) << SYSCTL0_STARTEN1_CLR_SHA_SHIFT)) & SYSCTL0_STARTEN1_CLR_SHA_MASK)
 /*! @} */
 
+/*! @name MAINCLKSAFETY - Main Clock Safety */
+/*! @{ */
+#define SYSCTL0_MAINCLKSAFETY_DELAY_MASK         (0xFFFFU)
+#define SYSCTL0_MAINCLKSAFETY_DELAY_SHIFT        (0U)
+/*! DELAY - Main Clock turn on delay for Deep Sleep wake up
+ */
+#define SYSCTL0_MAINCLKSAFETY_DELAY(x)           (((uint32_t)(((uint32_t)(x)) << SYSCTL0_MAINCLKSAFETY_DELAY_SHIFT)) & SYSCTL0_MAINCLKSAFETY_DELAY_MASK)
+/*! @} */
+
 /*! @name HWWAKE - Hardware Wake-up control */
 /*! @{ */
 #define SYSCTL0_HWWAKE_FORCEWAKE_MASK            (0x1U)
@@ -24726,6 +24764,17 @@ typedef struct {
  *    cleared, but before DMAC1 has completed its related activity.
  */
 #define SYSCTL0_HWWAKE_DMAC1WAKE(x)              (((uint32_t)(((uint32_t)(x)) << SYSCTL0_HWWAKE_DMAC1WAKE_SHIFT)) & SYSCTL0_HWWAKE_DMAC1WAKE_MASK)
+/*! @} */
+
+/*! @name TEMPSENSORCTL - tempsensor ctrl */
+/*! @{ */
+#define SYSCTL0_TEMPSENSORCTL_TSSRC_MASK         (0x1U)
+#define SYSCTL0_TEMPSENSORCTL_TSSRC_SHIFT        (0U)
+/*! TSSRC - Temperature Sensor Source. . .
+ *  0b0..ADC Built-in Temperature Sensor.
+ *  0b1..Reserved.
+ */
+#define SYSCTL0_TEMPSENSORCTL_TSSRC(x)           (((uint32_t)(((uint32_t)(x)) << SYSCTL0_TEMPSENSORCTL_TSSRC_SHIFT)) & SYSCTL0_TEMPSENSORCTL_TSSRC_MASK)
 /*! @} */
 
 /*! @name BOOTSTATESEED - boot state seed register */
@@ -24875,15 +24924,6 @@ typedef struct {
 /*! AESKEY_SRCSEL - AES Key Source Select:
  */
 #define SYSCTL0_AESKEY_SRCSEL_AESKEY_SRCSEL(x)   (((uint32_t)(((uint32_t)(x)) << SYSCTL0_AESKEY_SRCSEL_AESKEY_SRCSEL_SHIFT)) & SYSCTL0_AESKEY_SRCSEL_AESKEY_SRCSEL_MASK)
-/*! @} */
-
-/*! @name OTFADKEY_SRCSEL - OTFAD key source selection */
-/*! @{ */
-#define SYSCTL0_OTFADKEY_SRCSEL_OTFADKEY_SRCSEL_MASK (0x3U)
-#define SYSCTL0_OTFADKEY_SRCSEL_OTFADKEY_SRCSEL_SHIFT (0U)
-/*! OTFADKEY_SRCSEL - OTFAD Key Source Select:
- */
-#define SYSCTL0_OTFADKEY_SRCSEL_OTFADKEY_SRCSEL(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_OTFADKEY_SRCSEL_OTFADKEY_SRCSEL_SHIFT)) & SYSCTL0_OTFADKEY_SRCSEL_OTFADKEY_SRCSEL_MASK)
 /*! @} */
 
 /*! @name HASHHWKEYDISABLE - Hash hardware key disable */

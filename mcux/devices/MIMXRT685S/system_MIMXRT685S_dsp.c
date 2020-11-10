@@ -7,7 +7,7 @@
 **     Compiler:            XCC Compiler
 **     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
 **     Version:             rev. 2.0, 2019-11-12
-**     Build:               b200414
+**     Build:               b201016
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -35,7 +35,7 @@
 /*!
  * @file MIMXRT685S
  * @version 1.0
- * @date 140420
+ * @date 161020
  * @brief Device specific configuration file for MIMXRT685S (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -66,6 +66,7 @@ static uint32_t getFFroFreq(void)
       freq = CLK_FRO_60MHZ;
       break;
     default:
+      freq = 0U;
       break;
   }
   return freq;
@@ -88,6 +89,7 @@ static uint32_t getSpllFreq(void)
       freq = getFFroFreq() / 2U;
       break;
     default:
+      freq = 0U;
       break;
   }
 
@@ -143,15 +145,16 @@ void SystemCoreClockUpdate (void) {
           freq = CLK_FRO_16MHZ;
           break;
         default:
-            break;
+          freq = 0U;
+          break;
       }
       break;
     case CLKCTL1_DSPCPUCLKSELB_SEL(1): /* Main System PLL clock */
       freq = getSpllFreq();
       if (((CLKCTL0->SYSPLL0CTL0) & CLKCTL0_SYSPLL0CTL0_BYPASS_MASK) == 0U)
       {
-        freq = (uint64_t)freq * 18 / ((CLKCTL0->SYSPLL0PFD & CLKCTL0_SYSPLL0PFD_PFD0_MASK) >>
-                                      CLKCTL0_SYSPLL0PFD_PFD0_SHIFT);
+        freq = (uint32_t)((uint64_t)freq * 18U / ((CLKCTL0->SYSPLL0PFD & CLKCTL0_SYSPLL0PFD_PFD0_MASK) >>
+                                      CLKCTL0_SYSPLL0PFD_PFD0_SHIFT));
       }
       freq = freq / ((CLKCTL0->MAINPLLCLKDIV & CLKCTL0_MAINPLLCLKDIV_DIV_MASK) + 1U);
       break;
@@ -159,8 +162,8 @@ void SystemCoreClockUpdate (void) {
       freq = getSpllFreq();
       if (((CLKCTL0->SYSPLL0CTL0) & CLKCTL0_SYSPLL0CTL0_BYPASS_MASK) == 0U)
       {
-        freq = (uint64_t)freq * 18 / ((CLKCTL0->SYSPLL0PFD & CLKCTL0_SYSPLL0PFD_PFD1_MASK) >>
-                                      CLKCTL0_SYSPLL0PFD_PFD1_SHIFT);
+        freq = (uint32_t)((uint64_t)freq * 18U / ((CLKCTL0->SYSPLL0PFD & CLKCTL0_SYSPLL0PFD_PFD1_MASK) >>
+                                      CLKCTL0_SYSPLL0PFD_PFD1_SHIFT));
       }
       freq = freq / ((CLKCTL0->DSPPLLCLKDIV & CLKCTL0_DSPPLLCLKDIV_DIV_MASK) + 1U);
       break;
@@ -168,6 +171,7 @@ void SystemCoreClockUpdate (void) {
         freq = CLK_RTC_32K_CLK;
         break;
     default:
+        freq = 0U;
         break;
   }
 

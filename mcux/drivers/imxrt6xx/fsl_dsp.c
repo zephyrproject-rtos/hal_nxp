@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, NXP
+ * Copyright 2019-2020, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -41,7 +41,7 @@
 void DSP_Init(void)
 {
     if ((SYSCTL0->PDRUNCFG1 & (SYSCTL0_PDRUNCFG1_DSPCACHE_REGF_APD_MASK | SYSCTL0_PDRUNCFG1_DSPCACHE_REGF_PPD_MASK |
-                               SYSCTL0_PDRUNCFG1_DSPTCM_REGF_APD_MASK | SYSCTL0_PDRUNCFG1_DSPTCM_REGF_PPD_MASK)) != 0)
+                               SYSCTL0_PDRUNCFG1_DSPTCM_REGF_APD_MASK | SYSCTL0_PDRUNCFG1_DSPTCM_REGF_PPD_MASK)) != 0U)
     {
         /* Not powered on. */
         POWER_DisablePD(kPDRUNCFG_APD_DSP_TCM_REGF);
@@ -52,7 +52,7 @@ void DSP_Init(void)
 
         RESET_PeripheralReset(kDSP_RST_SHIFT_RSTn);
     }
-    else if ((RSTCTL0->PRSTCTL0 & RSTCTL0_PRSTCTL0_HIFI_DSP_MASK) != 0)
+    else if ((RSTCTL0->PRSTCTL0 & RSTCTL0_PRSTCTL0_HIFI_DSP_MASK) != 0U)
     {
         /* Powered on but not reset. */
         RESET_ClearPeripheralReset(kDSP_RST_SHIFT_RSTn);
@@ -97,9 +97,11 @@ void DSP_CopyImage(dsp_copy_image_t *dspCopyImage)
     uint32_t *destAddr = dspCopyImage->destAddr;
     uint32_t size      = dspCopyImage->size;
 
-    while (size > 0)
+    assert((size & 3U) == 0U);
+
+    while (size > 0U)
     {
         *destAddr++ = *srcAddr++;
-        size -= 4;
+        size -= 4U;
     }
 }

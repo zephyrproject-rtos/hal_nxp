@@ -27,8 +27,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.6.1. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 6, 1))
+/*! @brief CLOCK driver version 2.6.2. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 6, 2))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -217,9 +217,9 @@ extern volatile uint32_t g_mclkFreq;
 ------------------------------------------------------------------------------*/
 
 #define CLK_GATE_REG_OFFSET_SHIFT 8U
-#define CLK_GATE_REG_OFFSET_MASK 0xFF00U
-#define CLK_GATE_BIT_SHIFT_SHIFT 0U
-#define CLK_GATE_BIT_SHIFT_MASK 0x000000FFU
+#define CLK_GATE_REG_OFFSET_MASK  0xFF00U
+#define CLK_GATE_BIT_SHIFT_SHIFT  0U
+#define CLK_GATE_BIT_SHIFT_MASK   0x000000FFU
 
 #define CLK_GATE_DEFINE(reg_offset, bit_shift)                                  \
     ((((reg_offset) << CLK_GATE_REG_OFFSET_SHIFT) & CLK_GATE_REG_OFFSET_MASK) | \
@@ -388,84 +388,84 @@ typedef enum _clock_pfd
  *
  */
 /* CLKCTL0 SEL */
-#define SYSPLL0CLKSEL_OFFSET 0x200
-#define MAINCLKSELA_OFFSET 0x430
-#define MAINCLKSELB_OFFSET 0x434
-#define FLEXSPIFCLKSEL_OFFSET 0x620
-#define SCTFCLKSEL_OFFSET 0x640
-#define USBHSFCLKSEL_OFFSET 0x660
-#define SDIO0FCLKSEL_OFFSET 0x680
-#define SDIO1FCLKSEL_OFFSET 0x690
-#define ADC0FCLKSEL0_OFFSET 0x6D0
-#define ADC0FCLKSEL1_OFFSET 0x6D4
-#define UTICKFCLKSEL_OFFSET 0x700
-#define WDT0FCLKSEL_OFFSET 0x720
+#define SYSPLL0CLKSEL_OFFSET   0x200
+#define MAINCLKSELA_OFFSET     0x430
+#define MAINCLKSELB_OFFSET     0x434
+#define FLEXSPIFCLKSEL_OFFSET  0x620
+#define SCTFCLKSEL_OFFSET      0x640
+#define USBHSFCLKSEL_OFFSET    0x660
+#define SDIO0FCLKSEL_OFFSET    0x680
+#define SDIO1FCLKSEL_OFFSET    0x690
+#define ADC0FCLKSEL0_OFFSET    0x6D0
+#define ADC0FCLKSEL1_OFFSET    0x6D4
+#define UTICKFCLKSEL_OFFSET    0x700
+#define WDT0FCLKSEL_OFFSET     0x720
 #define WAKECLK32KHZSEL_OFFSET 0x730
-#define SYSTICKFCLKSEL_OFFSET 0x760
+#define SYSTICKFCLKSEL_OFFSET  0x760
 /* CLKCTL1 SEL */
 #define AUDIOPLL0CLKSEL_OFFSET 0x200
-#define DSPCPUCLKSELA_OFFSET 0x430
-#define DSPCPUCLKSELB_OFFSET 0x434
-#define OSEVENTFCLKSEL_OFFSET 0x480
-#define FC0FCLKSEL_OFFSET 0x508
-#define FC1FCLKSEL_OFFSET 0x528
-#define FC2FCLKSEL_OFFSET 0x548
-#define FC3FCLKSEL_OFFSET 0x568
-#define FC4FCLKSEL_OFFSET 0x588
-#define FC5FCLKSEL_OFFSET 0x5A8
-#define FC6FCLKSEL_OFFSET 0x5C8
-#define FC7FCLKSEL_OFFSET 0x5E8
-#define FC14FCLKSEL_OFFSET 0x6C8
-#define FC15FCLKSEL_OFFSET 0x6E8
-#define DMIC0FCLKSEL_OFFSET 0x700
+#define DSPCPUCLKSELA_OFFSET   0x430
+#define DSPCPUCLKSELB_OFFSET   0x434
+#define OSEVENTFCLKSEL_OFFSET  0x480
+#define FC0FCLKSEL_OFFSET      0x508
+#define FC1FCLKSEL_OFFSET      0x528
+#define FC2FCLKSEL_OFFSET      0x548
+#define FC3FCLKSEL_OFFSET      0x568
+#define FC4FCLKSEL_OFFSET      0x588
+#define FC5FCLKSEL_OFFSET      0x5A8
+#define FC6FCLKSEL_OFFSET      0x5C8
+#define FC7FCLKSEL_OFFSET      0x5E8
+#define FC14FCLKSEL_OFFSET     0x6C8
+#define FC15FCLKSEL_OFFSET     0x6E8
+#define DMIC0FCLKSEL_OFFSET    0x700
 #define CT32BIT0FCLKSEL_OFFSET 0x720
 #define CT32BIT1FCLKSEL_OFFSET 0x724
 #define CT32BIT2FCLKSEL_OFFSET 0x728
 #define CT32BIT3FCLKSEL_OFFSET 0x72C
 #define CT32BIT4FCLKSEL_OFFSET 0x730
-#define AUDIOMCLKSEL_OFFSET 0x740
-#define CLKOUTSEL0_OFFSET 0x760
-#define CLKOUTSEL1_OFFSET 0x764
-#define I3C0FCLKSEL_OFFSET 0x780
-#define I3C0FCLKSTCSEL_OFFSET 0x784
-#define WDT1FCLKSEL_OFFSET 0x7A0
-#define ACMP0FCLKSEL_OFFSET 0x7C0
+#define AUDIOMCLKSEL_OFFSET    0x740
+#define CLKOUTSEL0_OFFSET      0x760
+#define CLKOUTSEL1_OFFSET      0x764
+#define I3C0FCLKSEL_OFFSET     0x780
+#define I3C0FCLKSTCSEL_OFFSET  0x784
+#define WDT1FCLKSEL_OFFSET     0x7A0
+#define ACMP0FCLKSEL_OFFSET    0x7C0
 /* CLKCTL0 DIV */
-#define MAINPLLCLKDIV_OFFSET 0x240
-#define DSPPLLCLKDIV_OFFSET 0x244
-#define AUX0PLLCLKDIV_OFFSET 0x248
-#define AUX1PLLCLKDIV_OFFSET 0x24C
+#define MAINPLLCLKDIV_OFFSET   0x240
+#define DSPPLLCLKDIV_OFFSET    0x244
+#define AUX0PLLCLKDIV_OFFSET   0x248
+#define AUX1PLLCLKDIV_OFFSET   0x24C
 #define SYSCPUAHBCLKDIV_OFFSET 0x400
-#define PFC0CLKDIV_OFFSET 0x500
-#define PFC1CLKDIV_OFFSET 0x504
-#define FLEXSPIFCLKDIV_OFFSET 0x624
-#define SCTFCLKDIV_OFFSET 0x644
-#define USBHSFCLKDIV_OFFSET 0x664
-#define SDIO0FCLKDIV_OFFSET 0x684
-#define SDIO1FCLKDIV_OFFSET 0x694
-#define ADC0FCLKDIV_OFFSET 0x6D8
+#define PFC0CLKDIV_OFFSET      0x500
+#define PFC1CLKDIV_OFFSET      0x504
+#define FLEXSPIFCLKDIV_OFFSET  0x624
+#define SCTFCLKDIV_OFFSET      0x644
+#define USBHSFCLKDIV_OFFSET    0x664
+#define SDIO0FCLKDIV_OFFSET    0x684
+#define SDIO1FCLKDIV_OFFSET    0x694
+#define ADC0FCLKDIV_OFFSET     0x6D8
 #define WAKECLK32KHZDIV_OFFSET 0x734
-#define SYSTICKFCLKDIV_OFFSET 0x764
+#define SYSTICKFCLKDIV_OFFSET  0x764
 
 /* CLKCTL1 DIV */
-#define AUDIOPLLCLKDIV_OFFSET 0x240
-#define DSPCPUCLKDIV_OFFSET 0x400
+#define AUDIOPLLCLKDIV_OFFSET   0x240
+#define DSPCPUCLKDIV_OFFSET     0x400
 #define DSPMAINRAMCLKDIV_OFFSET 0x404
-#define FRGPLLCLKDIV_OFFSET 0x6FC
-#define DMIC0FCLKDIV_OFFSET 0x704
-#define AUDIOMCLKDIV_OFFSET 0x744
-#define CLKOUTDIV_OFFSET 0x768
-#define I3C0FCLKSTCDIV_OFFSET 0x788
-#define I3C0FCLKSDIV_OFFSET 0x78C
-#define I3C0FCLKDIV_OFFSET 0x790
-#define ACMP0FCLKDIV_OFFSET 0x7C4
+#define FRGPLLCLKDIV_OFFSET     0x6FC
+#define DMIC0FCLKDIV_OFFSET     0x704
+#define AUDIOMCLKDIV_OFFSET     0x744
+#define CLKOUTDIV_OFFSET        0x768
+#define I3C0FCLKSTCDIV_OFFSET   0x788
+#define I3C0FCLKSDIV_OFFSET     0x78C
+#define I3C0FCLKDIV_OFFSET      0x790
+#define ACMP0FCLKDIV_OFFSET     0x7C4
 
 #define CLKCTL0_TUPLE_MUXA(reg, choice) (((reg)&0xFFFU) | ((choice) << 12U))
 #define CLKCTL0_TUPLE_MUXB(reg, choice) ((((reg)&0xFFFU) << 16) | ((choice) << 28U))
 #define CLKCTL1_TUPLE_MUXA(reg, choice) (0x80000000U | (((reg)&0xFFFU) | ((choice) << 12U)))
 #define CLKCTL1_TUPLE_MUXB(reg, choice) (0x80000000U | ((((reg)&0xFFFU) << 16) | ((choice) << 28U)))
-#define CLKCTL_TUPLE_REG(base, tuple) ((volatile uint32_t *)(((uint32_t)(base)) + ((uint32_t)(tuple)&0xFFFU)))
-#define CLKCTL_TUPLE_SEL(tuple) (((uint32_t)(tuple) >> 12U) & 0x7U)
+#define CLKCTL_TUPLE_REG(base, tuple)   ((volatile uint32_t *)(((uint32_t)(base)) + ((uint32_t)(tuple)&0xFFFU)))
+#define CLKCTL_TUPLE_SEL(tuple)         (((uint32_t)(tuple) >> 12U) & 0x7U)
 
 typedef enum _clock_attach_id
 {
@@ -764,10 +764,11 @@ typedef enum _sys_pll_mult
 {
     kCLOCK_SysPllMult16 = 0, /*!< Divide by 16 */
     kCLOCK_SysPllMult17,     /*!< Divide by 17 */
+    kCLOCK_SysPllMult18,     /*!< Divide by 18 */
+    kCLOCK_SysPllMult19,     /*!< Divide by 19 */
     kCLOCK_SysPllMult20,     /*!< Divide by 20 */
+    kCLOCK_SysPllMult21,     /*!< Divide by 21 */
     kCLOCK_SysPllMult22,     /*!< Divide by 22 */
-    kCLOCK_SysPllMult27,     /*!< Divide by 27 */
-    kCLOCK_SysPllMult33,     /*!< Divide by 33 */
 } sys_pll_mult_t;
 
 /*! @brief PLL configuration for SYSPLL */
@@ -793,10 +794,11 @@ typedef enum _audio_pll_mult
 {
     kCLOCK_AudioPllMult16 = 0, /*!< Divide by 16 */
     kCLOCK_AudioPllMult17,     /*!< Divide by 17 */
+    kCLOCK_AudioPllMult18,     /*!< Divide by 18 */
+    kCLOCK_AudioPllMult19,     /*!< Divide by 19 */
     kCLOCK_AudioPllMult20,     /*!< Divide by 20 */
+    kCLOCK_AudioPllMult21,     /*!< Divide by 21 */
     kCLOCK_AudioPllMult22,     /*!< Divide by 22 */
-    kCLOCK_AudioPllMult27,     /*!< Divide by 27 */
-    kCLOCK_AudioPllMult33,     /*!< Divide by 33 */
 } audio_pll_mult_t;
 
 /*! @brief PLL configuration for SYSPLL */

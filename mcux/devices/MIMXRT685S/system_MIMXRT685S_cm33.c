@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
 **     Version:             rev. 2.0, 2019-11-12
-**     Build:               b200414
+**     Build:               b201016
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -76,6 +76,7 @@ static uint32_t getFFroFreq(void)
       freq = CLK_FRO_60MHZ;
       break;
     default:
+      freq = 0U;
       break;
   }
   return freq;
@@ -111,13 +112,13 @@ __attribute__ ((weak)) void SystemInit (void) {
 
   SYSCTL0->DSPSTALL = SYSCTL0_DSPSTALL_DSPSTALL_MASK;
 
-  if (SYSTEM_IS_XIP_FLEXSPI() && (CACHE64_POLSEL->POLSEL == 0)) /* Enable cache to accelerate boot. */
+  if (SYSTEM_IS_XIP_FLEXSPI() && (CACHE64_POLSEL->POLSEL == 0U)) /* Enable cache to accelerate boot. */
   {
     /* set command to invalidate all ways and write GO bit to initiate command */
     CACHE64->CCR = CACHE64_CTRL_CCR_INVW1_MASK | CACHE64_CTRL_CCR_INVW0_MASK;
     CACHE64->CCR |= CACHE64_CTRL_CCR_GO_MASK;
     /* Wait until the command completes */
-    while (CACHE64->CCR & CACHE64_CTRL_CCR_GO_MASK)
+    while ((CACHE64->CCR & CACHE64_CTRL_CCR_GO_MASK) != 0U)
     {
     }
     /* Enable cache, enable write buffer */
@@ -151,7 +152,7 @@ void SystemCoreClockUpdate (void) {
       switch ((CLKCTL0->MAINCLKSELA) & CLKCTL0_MAINCLKSELA_SEL_MASK)
       {
         case CLKCTL0_MAINCLKSELA_SEL(0): /* FFRO clock (48/60m_irc) divider by 4 */
-          freq = getFFroFreq() / 4;
+          freq = getFFroFreq() / 4U;
           break;
         case CLKCTL0_MAINCLKSELA_SEL(1): /* OSC clock (clk_in) */
           freq = getOscClk();
@@ -163,7 +164,8 @@ void SystemCoreClockUpdate (void) {
           freq = getFFroFreq();
           break;
         default:
-            break;
+          freq = 0U;
+          break;
       }
       break;
     case CLKCTL0_MAINCLKSELB_SEL(1): /* SFRO clock */
@@ -179,9 +181,10 @@ void SystemCoreClockUpdate (void) {
           freq = getOscClk();
           break;
         case CLKCTL0_SYSPLL0CLKSEL_SEL(2): /* FFRO clock (48/60m_irc) divider by 2 */
-          freq = getFFroFreq() / 2;
+          freq = getFFroFreq() / 2U;
           break;
         default:
+          freq = 0U;
           break;
       }
 
@@ -191,8 +194,8 @@ void SystemCoreClockUpdate (void) {
         freqTmp = ((uint64_t)freq * ((uint64_t)(CLKCTL0->SYSPLL0NUM))) / ((uint64_t)(CLKCTL0->SYSPLL0DENOM));
         freq *= ((CLKCTL0->SYSPLL0CTL0) & CLKCTL0_SYSPLL0CTL0_MULT_MASK) >> CLKCTL0_SYSPLL0CTL0_MULT_SHIFT;
         freq += (uint32_t)freqTmp;
-        freq = (uint64_t)freq * 18 /
-               ((CLKCTL0->SYSPLL0PFD & CLKCTL0_SYSPLL0PFD_PFD0_MASK) >> CLKCTL0_SYSPLL0PFD_PFD0_SHIFT);
+        freq = (uint32_t)((uint64_t)freq * 18U /
+               ((CLKCTL0->SYSPLL0PFD & CLKCTL0_SYSPLL0PFD_PFD0_MASK) >> CLKCTL0_SYSPLL0PFD_PFD0_SHIFT));
       }
       freq = freq / ((CLKCTL0->MAINPLLCLKDIV & CLKCTL0_MAINPLLCLKDIV_DIV_MASK) + 1U);
       break;
@@ -202,6 +205,7 @@ void SystemCoreClockUpdate (void) {
         break;
 
     default:
+        freq = 0U;
         break;
   }
 
