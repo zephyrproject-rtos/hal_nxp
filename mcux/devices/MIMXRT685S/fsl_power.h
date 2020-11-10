@@ -19,8 +19,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief power driver version 2.2.1. */
-#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief power driver version 2.3.0. */
+#define FSL_POWER_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 #define MAKE_PD_BITS(reg, slot)  (((reg) << 8) | (slot))
@@ -31,28 +31,11 @@
 #define PDRCFG2                  0x2U
 #define PDRCFG3                  0x3U
 
-/*! PMC FLAGS register bitfield MASK. */
-#define PMC_FLAGS_PORCOREF_MASK   (0x10000U)
-#define PMC_FLAGS_POR1V8F_MASK    (0x20000U)
-#define PMC_FLAGS_PORAO18F_MASK   (0x40000U)
-#define PMC_FLAGS_LVDCOREF_MASK   (0x100000U)
-#define PMC_FLAGS_HVDCOREF_MASK   (0x400000U)
-#define PMC_FLAGS_HVD1V8F_MASK    (0x1000000U)
-#define PMC_FLAGS_RTCF_MASK       (0x8000000U)
-#define PMC_FLAGS_AUTOWKF_MASK    (0x10000000U)
-#define PMC_FLAGS_INTNPADF_MASK   (0x20000000U)
-#define PMC_FLAGS_RESETNPADF_MASK (0x40000000U)
-#define PMC_FLAGS_DEEPPDF_MASK    (0x80000000U)
-
-#define PMC_CTRL_LVDCOREIE_MASK (0x100000U)
-#define PMC_CTRL_HVDCOREIE_MASK (0x400000U)
-#define PMC_CTRL_HVD1V8IE_MASK  (0x1000000U)
-#define PMC_CTRL_AUTOWKEN_MASK  (0x10000000U)
-#define PMC_CTRL_INTRPADEN_MASK (0x20000000U)
-
 /*! PMIC is used but vddcore supply is always above LVD threshold. */
 #define PMIC_VDDCORE_RECOVERY_TIME_IGNORE (0xFFFFFFFFU)
 
+/*! Invalid voltage level. */
+#define POWER_INVALID_VOLT_LEVEL (0xFFFFFFFFU)
 /**
  * @brief PMC event flags.
  *
@@ -228,7 +211,7 @@ typedef enum _body_bias_mode
 } body_bias_mode_t;
 
 /*! @brief PMIC mode pin configuration API parameter */
-#define SYSCTL0_TUPLE_REG(reg) (*((volatile uint32_t *)(((uint32_t)(SYSCTL0)) + ((reg)&0xFFFU))))
+#define SYSCTL0_TUPLE_REG(reg) (*((volatile uint32_t *)(((uint32_t)(SYSCTL0)) + (((uint32_t)(reg)) & 0xFFFU))))
 typedef enum _pmic_mode_reg
 {
     kCfg_Run   = 0x610,
@@ -284,9 +267,27 @@ typedef enum _power_lvd_falling_trip_vol_val
  */
 typedef enum _power_part_temp_range
 {
-    kPartTemp_0C_P70C   = 0U, /*!< Part temp range 0C - 70C. */
-    kPartTemp_N20C_P70C = 1U, /*!< Part temp range -20C - 70C. */
-} power_part_temp_range;
+    kPartTemp_0C_P85C   = 0U, /*!< Part temp range 0C - 85C. */
+    kPartTemp_N20C_P85C = 1U, /*!< Part temp range -20C - 85C. */
+} power_part_temp_range_t;
+
+/*!
+ * @brief Voltage operation range.
+ */
+typedef enum _power_volt_op_range
+{
+    kVoltOpLowRange = 0U,  /*!< Voltage operation range is (0.7V, 0.8V, 0.9V).
+        Maximum supported CM33 frequency is 220MHz for 0C-85C part and 215MHz for -20C-85C part.
+        Maximum supported DSP frequency is 375MHz for 0C-85C part and 355MHz for -20C-85C part. */
+    kVoltOpFullRange = 1U, /*!< Voltage operation range is (0.7V, 0.8V, 0.9V, 1.0V, 1.13V). This range can support full
+                              CM33/DSP speed clarified in Data Sheet. */
+} power_volt_op_range_t;
+
+/*! Frequency levels defined in power library. */
+extern const uint32_t powerLowCm33FreqLevel[2][3];
+extern const uint32_t powerLowDspFreqLevel[2][3];
+extern const uint32_t powerFullCm33FreqLevel[2][5];
+extern const uint32_t powerFullDspFreqLevel[2][5];
 
 /*******************************************************************************
  * API
@@ -421,27 +422,49 @@ static inline body_bias_mode_t POWER_GetBodyBiasMode(pmic_mode_reg_t reg)
  * @param config pad voltage range configuration.
  */
 void POWER_SetPadVolRange(const power_pad_vrange_t *config);
+
 /**
  * @brief   PMC Enter Rbb mode function call
  */
+#if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
 void POWER_EnterRbb(void);
+#else
+AT_QUICKACCESS_SECTION_CODE(void POWER_EnterRbb(void));
+#endif
+
 /**
  * @brief   PMC Enter Fbb mode function call
  */
+#if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
 void POWER_EnterFbb(void);
+#else
+AT_QUICKACCESS_SECTION_CODE(void POWER_EnterFbb(void));
+#endif
+
 /**
  * @brief   PMC exit Rbb & Fbb mode function call
  */
+#if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
 void POWER_EnterNbb(void);
+#else
+AT_QUICKACCESS_SECTION_CODE(void POWER_EnterNbb(void));
+#endif
+
 /**
  * @brief   PMC Set Ldo volatage for particular frequency.
- * NOTE: If LVD falling trip voltage is higher than the required core voltage for particular frequency,
+ * NOTE: The API is only valid when MAINPLLCLKDIV[7:0] and DSPPLLCLKDIV[7:0] are 0.
+ *       If LVD falling trip voltage is higher than the required core voltage for particular frequency,
  *       LVD voltage will be decreased to safe level to avoid unexpected LVD reset or interrupt event.
- * @param   temp_range : part temperature range
- * @param   main_clk_freq : main clock frequency value
- * @param   dsp_main_clk_freq : dsp main clock frequency value
+ * @param   tempRange : part temperature range
+ * @param   voltOpRange : voltage operation range.
+ * @param   cm33Freq : CM33 CPU clock frequency value
+ * @param   dspFreq : DSP CPU clock frequency value
+ * @return  true for success and false for CPU frequency out of specified voltOpRange.
  */
-void POWER_SetLdoVoltageForFreq(power_part_temp_range temp_range, uint32_t main_clk_freq, uint32_t dsp_main_clk_freq);
+bool POWER_SetLdoVoltageForFreq(power_part_temp_range_t tempRange,
+                                power_volt_op_range_t voltOpRange,
+                                uint32_t cm33Freq,
+                                uint32_t dspFreq);
 
 /*!
  * @brief Set vddcore low voltage detection falling trip voltage.
@@ -486,7 +509,11 @@ void POWER_EnterSleep(void);
  * @param   exclude_from_pd  Bit mask of the PDRUNCFG0 ~ PDRUNCFG3 that needs to be powered on during Deep Sleep mode
  * selected.
  */
+#if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
 void POWER_EnterDeepSleep(const uint32_t exclude_from_pd[4]);
+#else
+AT_QUICKACCESS_SECTION_CODE(void POWER_EnterDeepSleep(const uint32_t exclude_from_pd[4]));
+#endif
 
 /**
  * @brief   PMC Deep Power Down function call

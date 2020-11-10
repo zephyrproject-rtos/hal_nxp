@@ -11,7 +11,7 @@
 **
 **     Reference manual:    MIMXRT685 User manual Rev. 0.95 11 November 2019
 **     Version:             rev. 2.0, 2019-11-12
-**     Build:               b200413
+**     Build:               b201019
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT685S_cm33
@@ -5878,12 +5878,12 @@ typedef struct {
 typedef struct {
   __IO uint32_t CTRL0;                             /**< Contains the offsets of AB and CD in the RAM., offset: 0x0 */
   __IO uint32_t CTRL1;                             /**< Contains the opcode mode, iteration count, and result offset (in RAM) and also launches the accelerator. Note: with CP version: CTRL0 and CRTL1 can be written in one go with MCRR., offset: 0x4 */
-  __IO uint32_t LOADER;                            /**< Contains an optional loader to load into CTRL0/1 in steps to perform a set of operations., offset: 0x8 */
+       uint8_t RESERVED_0[4];
   __IO uint32_t STATUS;                            /**< Indicates operational status and would contain the carry bit if used., offset: 0xC */
   __IO uint32_t INTENSET;                          /**< Sets interrupts, offset: 0x10 */
   __IO uint32_t INTENCLR;                          /**< Clears interrupts, offset: 0x14 */
   __I  uint32_t INTSTAT;                           /**< Interrupt status bits (mask of INTENSET and STATUS), offset: 0x18 */
-       uint8_t RESERVED_0[4];
+       uint8_t RESERVED_1[4];
   __IO uint32_t AREG;                              /**< A register, offset: 0x20 */
   __IO uint32_t BREG;                              /**< B register, offset: 0x24 */
   __IO uint32_t CREG;                              /**< C register, offset: 0x28 */
@@ -5892,10 +5892,10 @@ typedef struct {
   __IO uint32_t RES1;                              /**< Result register 1, offset: 0x34 */
   __IO uint32_t RES2;                              /**< Result register 2, offset: 0x38 */
   __IO uint32_t RES3;                              /**< Result register 3, offset: 0x3C */
-       uint8_t RESERVED_1[32];
+       uint8_t RESERVED_2[32];
   __IO uint32_t MASK;                              /**< Optional mask register, offset: 0x60 */
   __IO uint32_t REMASK;                            /**< Optional re-mask register, offset: 0x64 */
-       uint8_t RESERVED_2[24];
+       uint8_t RESERVED_3[24];
   __IO uint32_t LOCK;                              /**< Security lock register, offset: 0x80 */
 } CASPER_Type;
 
@@ -5975,29 +5975,6 @@ typedef struct {
  *  0b11..Set CTRLOFF to CDOFF and Skip
  */
 #define CASPER_CTRL1_CSKIP(x)                    (((uint32_t)(((uint32_t)(x)) << CASPER_CTRL1_CSKIP_SHIFT)) & CASPER_CTRL1_CSKIP_MASK)
-/*! @} */
-
-/*! @name LOADER - Contains an optional loader to load into CTRL0/1 in steps to perform a set of operations. */
-/*! @{ */
-#define CASPER_LOADER_COUNT_MASK                 (0xFFU)
-#define CASPER_LOADER_COUNT_SHIFT                (0U)
-/*! COUNT - Number of control pairs to load 0 relative (so 1 means load 1). write 1 means Does one
- *    op - does not iterate, write N means N control pairs to load
- */
-#define CASPER_LOADER_COUNT(x)                   (((uint32_t)(((uint32_t)(x)) << CASPER_LOADER_COUNT_SHIFT)) & CASPER_LOADER_COUNT_MASK)
-#define CASPER_LOADER_CTRLBPAIR_MASK             (0x10000U)
-#define CASPER_LOADER_CTRLBPAIR_SHIFT            (16U)
-/*! CTRLBPAIR - Which bank-pair the offset CTRLOFF is within. This must be 0 if only 2-up. Does not
- *    matter which bank is used as this is loaded when not performing an operation.
- *  0b0..Bank-pair 0 (1st)
- *  0b1..Bank-pair 1 (2nd)
- */
-#define CASPER_LOADER_CTRLBPAIR(x)               (((uint32_t)(((uint32_t)(x)) << CASPER_LOADER_CTRLBPAIR_SHIFT)) & CASPER_LOADER_CTRLBPAIR_MASK)
-#define CASPER_LOADER_CTRLOFF_MASK               (0x1FFC0000U)
-#define CASPER_LOADER_CTRLOFF_SHIFT              (18U)
-/*! CTRLOFF - DWord Offset of CTRL pair to load next.
- */
-#define CASPER_LOADER_CTRLOFF(x)                 (((uint32_t)(((uint32_t)(x)) << CASPER_LOADER_CTRLOFF_SHIFT)) & CASPER_LOADER_CTRLOFF_MASK)
 /*! @} */
 
 /*! @name STATUS - Indicates operational status and would contain the carry bit if used. */
@@ -13483,6 +13460,13 @@ typedef struct {
  *  0b1..Starts a new Hash/Crypto and initializes the Digest/Result.
  */
 #define HASHCRYPT_CTRL_NEW_HASH(x)               (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CTRL_NEW_HASH_SHIFT)) & HASHCRYPT_CTRL_NEW_HASH_MASK)
+#define HASHCRYPT_CTRL_RELOAD_MASK               (0x20U)
+#define HASHCRYPT_CTRL_RELOAD_SHIFT              (5U)
+/*! RELOAD - If 1, allows the SHA RELOAD registers to be used. This is used to save a partial Hash
+ *    Digest (e.g. when need to run AES) and then reload it later for continuation.
+ *  0b1..Allow RELOAD registers to be used.
+ */
+#define HASHCRYPT_CTRL_RELOAD(x)                 (((uint32_t)(((uint32_t)(x)) << HASHCRYPT_CTRL_RELOAD_SHIFT)) & HASHCRYPT_CTRL_RELOAD_MASK)
 #define HASHCRYPT_CTRL_DMA_I_MASK                (0x100U)
 #define HASHCRYPT_CTRL_DMA_I_SHIFT               (8U)
 /*! DMA_I - Written with 1 to use DMA to fill INDATA. If Hash, will request from DMA for 16 words
@@ -22499,6 +22483,380 @@ typedef struct {
 
 
 /* ----------------------------------------------------------------------------
+   -- PMC Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup PMC_Peripheral_Access_Layer PMC Peripheral Access Layer
+ * @{
+ */
+
+/** PMC - Register Layout Typedef */
+typedef struct {
+       uint8_t RESERVED_0[4];
+  __I  uint32_t STATUS;                            /**< PMC status, offset: 0x4 */
+  __IO uint32_t FLAGS;                             /**< Wakeup, interrupt, and reset flags, offset: 0x8 */
+  __IO uint32_t CTRL;                              /**< PMC control register, offset: 0xC */
+  __IO uint32_t RUNCTRL;                           /**< PMC controls used during run mode, offset: 0x10 */
+  __IO uint32_t SLEEPCTRL;                         /**< PMC controls used during deep sleep mode, offset: 0x14 */
+  __IO uint32_t LVDCORECTRL;                       /**< Active vddcore LVD monitor trip adjust, offset: 0x18 */
+       uint8_t RESERVED_1[8];
+  __IO uint32_t AUTOWKUP;                          /**< Automatic wakeup from deepsleep / deep powerdown modes, offset: 0x24 */
+  __IO uint32_t PMICCFG;                           /**< PMIC power mode select control configuration to let PMC know when vddcore or vdd1v8 will power off/on, offset: 0x28 */
+  __IO uint32_t PADVRANGE;                         /**< GPIO vdde range selection control, offset: 0x2C */
+  __IO uint32_t MEMSEQCTRL;                        /**< Memory Sequencer Control Register, offset: 0x30 */
+} PMC_Type;
+
+/* ----------------------------------------------------------------------------
+   -- PMC Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup PMC_Register_Masks PMC Register Masks
+ * @{
+ */
+
+/*! @name STATUS - PMC status */
+/*! @{ */
+#define PMC_STATUS_ACTIVEFSM_MASK                (0x1U)
+#define PMC_STATUS_ACTIVEFSM_SHIFT               (0U)
+/*! ACTIVEFSM - General sequencer and finite state machine status
+ *  0b0..All PMC finite state machines are idle. OK to set APPLYCFG to trigger the PMC state machines.
+ *  0b1..One or more PMC finite state machines are active, do not set APPLYCFG or write to any PDRUNCFG or CTRL
+ *       register values that are used by the PMC state machines.
+ */
+#define PMC_STATUS_ACTIVEFSM(x)                  (((uint32_t)(((uint32_t)(x)) << PMC_STATUS_ACTIVEFSM_SHIFT)) & PMC_STATUS_ACTIVEFSM_MASK)
+/*! @} */
+
+/*! @name FLAGS - Wakeup, interrupt, and reset flags */
+/*! @{ */
+#define PMC_FLAGS_PORCOREF_MASK                  (0x10000U)
+#define PMC_FLAGS_PORCOREF_SHIFT                 (16U)
+/*! PORCOREF
+ *  0b0..vddcore POR was not tripped since the last cleared.
+ *  0b1..POR triggered by the vddcore POR monitor. Write 1 to clear
+ */
+#define PMC_FLAGS_PORCOREF(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_FLAGS_PORCOREF_SHIFT)) & PMC_FLAGS_PORCOREF_MASK)
+#define PMC_FLAGS_POR1V8F_MASK                   (0x20000U)
+#define PMC_FLAGS_POR1V8F_SHIFT                  (17U)
+/*! POR1V8F
+ *  0b0..No vdd1v8 power on event detected since last cleared.
+ *  0b1..vdd1v8 power on detect caused a reset or deep pd wakeup. Write 1 to clear.
+ */
+#define PMC_FLAGS_POR1V8F(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_FLAGS_POR1V8F_SHIFT)) & PMC_FLAGS_POR1V8F_MASK)
+#define PMC_FLAGS_PORAO18F_MASK                  (0x40000U)
+#define PMC_FLAGS_PORAO18F_SHIFT                 (18U)
+/*! PORAO18F
+ *  0b0..No vdd_ao18 power on event detected since last cleared.
+ *  0b1..vdd_ao18 power on detect caused a reset. Write 1 to clear.
+ */
+#define PMC_FLAGS_PORAO18F(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_FLAGS_PORAO18F_SHIFT)) & PMC_FLAGS_PORAO18F_MASK)
+#define PMC_FLAGS_LVDCOREF_MASK                  (0x100000U)
+#define PMC_FLAGS_LVDCOREF_SHIFT                 (20U)
+/*! LVDCOREF
+ *  0b0..vddcore LVD has not triggered an interrupt or reset since last clear
+ *  0b1..vddcore LVD triggered an interrupt or reset since last time this bit was cleared. Write 1 to clear
+ */
+#define PMC_FLAGS_LVDCOREF(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_FLAGS_LVDCOREF_SHIFT)) & PMC_FLAGS_LVDCOREF_MASK)
+#define PMC_FLAGS_HVDCOREF_MASK                  (0x400000U)
+#define PMC_FLAGS_HVDCOREF_SHIFT                 (22U)
+/*! HVDCOREF
+ *  0b0..vddcore HVD has not triggered an interrupt or reset since last clear
+ *  0b1..vddcore HVD triggered an interrupt or reset since last time this bit was cleared. Write 1 to clear
+ */
+#define PMC_FLAGS_HVDCOREF(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_FLAGS_HVDCOREF_SHIFT)) & PMC_FLAGS_HVDCOREF_MASK)
+#define PMC_FLAGS_HVD1V8F_MASK                   (0x1000000U)
+#define PMC_FLAGS_HVD1V8F_SHIFT                  (24U)
+/*! HVD1V8F
+ *  0b0..vdd1v8 HVD has not triggered an interrupt or reset since last clear
+ *  0b1..vdd1v8 HVD triggered an interrupt or reset since last time this bit was cleared. Write 1 to clear
+ */
+#define PMC_FLAGS_HVD1V8F(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_FLAGS_HVD1V8F_SHIFT)) & PMC_FLAGS_HVD1V8F_MASK)
+#define PMC_FLAGS_RTCF_MASK                      (0x8000000U)
+#define PMC_FLAGS_RTCF_SHIFT                     (27U)
+/*! RTCF
+ *  0b0..No RTC wakeup detected since last time flag was cleared.
+ *  0b1..RTC wakeup caused a deep powerdown wakeup. Write 1 to clear.
+ */
+#define PMC_FLAGS_RTCF(x)                        (((uint32_t)(((uint32_t)(x)) << PMC_FLAGS_RTCF_SHIFT)) & PMC_FLAGS_RTCF_MASK)
+#define PMC_FLAGS_AUTOWKF_MASK                   (0x10000000U)
+#define PMC_FLAGS_AUTOWKF_SHIFT                  (28U)
+/*! AUTOWKF
+ *  0b0..No PMC Auto Wakeup Interrupt detected since last time cleared.
+ *  0b1..PMC Auto wakeup caused a deep sleep wakeup and interrupt. Write 1 to clear.
+ */
+#define PMC_FLAGS_AUTOWKF(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_FLAGS_AUTOWKF_SHIFT)) & PMC_FLAGS_AUTOWKF_MASK)
+#define PMC_FLAGS_INTNPADF_MASK                  (0x20000000U)
+#define PMC_FLAGS_INTNPADF_SHIFT                 (29U)
+/*! INTNPADF
+ *  0b0..No interrupt detected since flag last cleared.
+ *  0b1..Pad interrupt caused a wakeup or interrupt event since the last time this flag was cleared. Write 1 to clear.
+ */
+#define PMC_FLAGS_INTNPADF(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_FLAGS_INTNPADF_SHIFT)) & PMC_FLAGS_INTNPADF_MASK)
+#define PMC_FLAGS_RESETNPADF_MASK                (0x40000000U)
+#define PMC_FLAGS_RESETNPADF_SHIFT               (30U)
+/*! RESETNPADF
+ *  0b0..No reset detected since last time this flag was cleared.
+ *  0b1..Reset pad wakeup caused a wakeup or reset event since the last time this bit was cleared. Write 1 to clear.
+ */
+#define PMC_FLAGS_RESETNPADF(x)                  (((uint32_t)(((uint32_t)(x)) << PMC_FLAGS_RESETNPADF_SHIFT)) & PMC_FLAGS_RESETNPADF_MASK)
+#define PMC_FLAGS_DEEPPDF_MASK                   (0x80000000U)
+#define PMC_FLAGS_DEEPPDF_SHIFT                  (31U)
+/*! DEEPPDF
+ *  0b0..No deep powerdown wakeup since last time flag was cleared.
+ *  0b1..Deep powerdown was entered since the last time this flag was cleared. Write 1 to clear
+ */
+#define PMC_FLAGS_DEEPPDF(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_FLAGS_DEEPPDF_SHIFT)) & PMC_FLAGS_DEEPPDF_MASK)
+/*! @} */
+
+/*! @name CTRL - PMC control register */
+/*! @{ */
+#define PMC_CTRL_APPLYCFG_MASK                   (0x1U)
+#define PMC_CTRL_APPLYCFG_SHIFT                  (0U)
+/*! APPLYCFG
+ *  0b0..Always reads 0. Write 0 has no effect
+ *  0b1..Write 1 = initiate update sequencing of PMC state machines
+ */
+#define PMC_CTRL_APPLYCFG(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_CTRL_APPLYCFG_SHIFT)) & PMC_CTRL_APPLYCFG_MASK)
+#define PMC_CTRL_BUFEN_MASK                      (0x10U)
+#define PMC_CTRL_BUFEN_SHIFT                     (4U)
+/*! BUFEN
+ *  0b0..disabled
+ *  0b1..enabled
+ */
+#define PMC_CTRL_BUFEN(x)                        (((uint32_t)(((uint32_t)(x)) << PMC_CTRL_BUFEN_SHIFT)) & PMC_CTRL_BUFEN_MASK)
+#define PMC_CTRL_LVDCOREIE_MASK                  (0x100000U)
+#define PMC_CTRL_LVDCOREIE_SHIFT                 (20U)
+/*! LVDCOREIE
+ *  0b0..vddcore LVD interrupt disabled
+ *  0b1..vddcore LVD causes interrupt and wakeup from deep sleep.
+ */
+#define PMC_CTRL_LVDCOREIE(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_CTRL_LVDCOREIE_SHIFT)) & PMC_CTRL_LVDCOREIE_MASK)
+#define PMC_CTRL_LVDCORERE_MASK                  (0x200000U)
+#define PMC_CTRL_LVDCORERE_SHIFT                 (21U)
+/*! LVDCORERE
+ *  0b0..vddcore LVD reset disabled
+ *  0b1..vddcore LVD causes reset
+ */
+#define PMC_CTRL_LVDCORERE(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_CTRL_LVDCORERE_SHIFT)) & PMC_CTRL_LVDCORERE_MASK)
+#define PMC_CTRL_HVDCOREIE_MASK                  (0x400000U)
+#define PMC_CTRL_HVDCOREIE_SHIFT                 (22U)
+/*! HVDCOREIE
+ *  0b0..vddcore HVD interrupt disabled
+ *  0b1..vddcore HVD causes interrupt and wakeup from deep sleep.
+ */
+#define PMC_CTRL_HVDCOREIE(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_CTRL_HVDCOREIE_SHIFT)) & PMC_CTRL_HVDCOREIE_MASK)
+#define PMC_CTRL_HVDCORERE_MASK                  (0x800000U)
+#define PMC_CTRL_HVDCORERE_SHIFT                 (23U)
+/*! HVDCORERE
+ *  0b0..vddcore HVD reset disabled
+ *  0b1..vddcore HVD causes reset
+ */
+#define PMC_CTRL_HVDCORERE(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_CTRL_HVDCORERE_SHIFT)) & PMC_CTRL_HVDCORERE_MASK)
+#define PMC_CTRL_HVD1V8IE_MASK                   (0x1000000U)
+#define PMC_CTRL_HVD1V8IE_SHIFT                  (24U)
+/*! HVD1V8IE
+ *  0b0..vdd1v8 HVD interrupt disabled
+ *  0b1..vdd1v8 HVD causes interrupt and wakeup from deep sleep or deep power down mode
+ */
+#define PMC_CTRL_HVD1V8IE(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_CTRL_HVD1V8IE_SHIFT)) & PMC_CTRL_HVD1V8IE_MASK)
+#define PMC_CTRL_HVD1V8RE_MASK                   (0x2000000U)
+#define PMC_CTRL_HVD1V8RE_SHIFT                  (25U)
+/*! HVD1V8RE
+ *  0b0..vdd1v8 HVD reset disabled
+ *  0b1..vdd1v8 HVD causes reset
+ */
+#define PMC_CTRL_HVD1V8RE(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_CTRL_HVD1V8RE_SHIFT)) & PMC_CTRL_HVD1V8RE_MASK)
+#define PMC_CTRL_AUTOWKEN_MASK                   (0x10000000U)
+#define PMC_CTRL_AUTOWKEN_SHIFT                  (28U)
+/*! AUTOWKEN
+ *  0b0..Auto wakeup interrupt and counter disabled
+ *  0b1..Auto wakeup interrupt generated when PMC sequencer finishes and AUTOWAKE counter = 0 after entering deep
+ *       sleep mode (but not deep powerdown mode). Interrupt will wake up the M33.
+ */
+#define PMC_CTRL_AUTOWKEN(x)                     (((uint32_t)(((uint32_t)(x)) << PMC_CTRL_AUTOWKEN_SHIFT)) & PMC_CTRL_AUTOWKEN_MASK)
+#define PMC_CTRL_INTRPADEN_MASK                  (0x20000000U)
+#define PMC_CTRL_INTRPADEN_SHIFT                 (29U)
+/*! INTRPADEN
+ *  0b0..Interrupt pad low has no effect
+ *  0b1..Interrupt pad low triggers an interrupt and deep sleep wakeup or deep powerdown wakeup event.
+ */
+#define PMC_CTRL_INTRPADEN(x)                    (((uint32_t)(((uint32_t)(x)) << PMC_CTRL_INTRPADEN_SHIFT)) & PMC_CTRL_INTRPADEN_MASK)
+/*! @} */
+
+/*! @name RUNCTRL - PMC controls used during run mode */
+/*! @{ */
+#define PMC_RUNCTRL_CORELVL_MASK                 (0x3FU)
+#define PMC_RUNCTRL_CORELVL_SHIFT                (0U)
+#define PMC_RUNCTRL_CORELVL(x)                   (((uint32_t)(((uint32_t)(x)) << PMC_RUNCTRL_CORELVL_SHIFT)) & PMC_RUNCTRL_CORELVL_MASK)
+/*! @} */
+
+/*! @name SLEEPCTRL - PMC controls used during deep sleep mode */
+/*! @{ */
+#define PMC_SLEEPCTRL_CORELVL_MASK               (0x3FU)
+#define PMC_SLEEPCTRL_CORELVL_SHIFT              (0U)
+#define PMC_SLEEPCTRL_CORELVL(x)                 (((uint32_t)(((uint32_t)(x)) << PMC_SLEEPCTRL_CORELVL_SHIFT)) & PMC_SLEEPCTRL_CORELVL_MASK)
+/*! @} */
+
+/*! @name LVDCORECTRL - Active vddcore LVD monitor trip adjust */
+/*! @{ */
+#define PMC_LVDCORECTRL_LVDCORELVL_MASK          (0xFU)
+#define PMC_LVDCORECTRL_LVDCORELVL_SHIFT         (0U)
+/*! LVDCORELVL - Vddcore LVD falling trip voltage
+ */
+#define PMC_LVDCORECTRL_LVDCORELVL(x)            (((uint32_t)(((uint32_t)(x)) << PMC_LVDCORECTRL_LVDCORELVL_SHIFT)) & PMC_LVDCORECTRL_LVDCORELVL_MASK)
+/*! @} */
+
+/*! @name AUTOWKUP - Automatic wakeup from deepsleep / deep powerdown modes */
+/*! @{ */
+#define PMC_AUTOWKUP_AUTOWKTIME_MASK             (0xFFFFU)
+#define PMC_AUTOWKUP_AUTOWKTIME_SHIFT            (0U)
+#define PMC_AUTOWKUP_AUTOWKTIME(x)               (((uint32_t)(((uint32_t)(x)) << PMC_AUTOWKUP_AUTOWKTIME_SHIFT)) & PMC_AUTOWKUP_AUTOWKTIME_MASK)
+/*! @} */
+
+/*! @name PMICCFG - PMIC power mode select control configuration to let PMC know when vddcore or vdd1v8 will power off/on */
+/*! @{ */
+#define PMC_PMICCFG_VDDCOREM0_MASK               (0x1U)
+#define PMC_PMICCFG_VDDCOREM0_SHIFT              (0U)
+/*! VDDCOREM0 - vddcore state in PMIC mode 0
+ *  0b0..off
+ *  0b1..powered
+ */
+#define PMC_PMICCFG_VDDCOREM0(x)                 (((uint32_t)(((uint32_t)(x)) << PMC_PMICCFG_VDDCOREM0_SHIFT)) & PMC_PMICCFG_VDDCOREM0_MASK)
+#define PMC_PMICCFG_VDDCOREM1_MASK               (0x2U)
+#define PMC_PMICCFG_VDDCOREM1_SHIFT              (1U)
+/*! VDDCOREM1 - vddcore state in PMIC mode 1
+ *  0b0..off
+ *  0b1..powered
+ */
+#define PMC_PMICCFG_VDDCOREM1(x)                 (((uint32_t)(((uint32_t)(x)) << PMC_PMICCFG_VDDCOREM1_SHIFT)) & PMC_PMICCFG_VDDCOREM1_MASK)
+#define PMC_PMICCFG_VDDCOREM2_MASK               (0x4U)
+#define PMC_PMICCFG_VDDCOREM2_SHIFT              (2U)
+/*! VDDCOREM2 - vddcore state in PMIC mode 2
+ *  0b0..off
+ *  0b1..powered
+ */
+#define PMC_PMICCFG_VDDCOREM2(x)                 (((uint32_t)(((uint32_t)(x)) << PMC_PMICCFG_VDDCOREM2_SHIFT)) & PMC_PMICCFG_VDDCOREM2_MASK)
+#define PMC_PMICCFG_VDDCOREM3_MASK               (0x8U)
+#define PMC_PMICCFG_VDDCOREM3_SHIFT              (3U)
+/*! VDDCOREM3 - vddcore state in PMIC mode 3
+ *  0b0..off
+ *  0b1..powered
+ */
+#define PMC_PMICCFG_VDDCOREM3(x)                 (((uint32_t)(((uint32_t)(x)) << PMC_PMICCFG_VDDCOREM3_SHIFT)) & PMC_PMICCFG_VDDCOREM3_MASK)
+#define PMC_PMICCFG_VDD1V8M0_MASK                (0x10U)
+#define PMC_PMICCFG_VDD1V8M0_SHIFT               (4U)
+/*! VDD1V8M0 - vdd1v8 state in PMIC mode 0
+ *  0b0..off
+ *  0b1..powered
+ */
+#define PMC_PMICCFG_VDD1V8M0(x)                  (((uint32_t)(((uint32_t)(x)) << PMC_PMICCFG_VDD1V8M0_SHIFT)) & PMC_PMICCFG_VDD1V8M0_MASK)
+#define PMC_PMICCFG_VDD1V8M1_MASK                (0x20U)
+#define PMC_PMICCFG_VDD1V8M1_SHIFT               (5U)
+/*! VDD1V8M1 - vdd1v8 state in PMIC mode 1
+ *  0b0..off
+ *  0b1..powered
+ */
+#define PMC_PMICCFG_VDD1V8M1(x)                  (((uint32_t)(((uint32_t)(x)) << PMC_PMICCFG_VDD1V8M1_SHIFT)) & PMC_PMICCFG_VDD1V8M1_MASK)
+#define PMC_PMICCFG_VDD1V8M2_MASK                (0x40U)
+#define PMC_PMICCFG_VDD1V8M2_SHIFT               (6U)
+/*! VDD1V8M2 - vdd1v8 state in PMIC mode 2
+ *  0b0..off
+ *  0b1..powered
+ */
+#define PMC_PMICCFG_VDD1V8M2(x)                  (((uint32_t)(((uint32_t)(x)) << PMC_PMICCFG_VDD1V8M2_SHIFT)) & PMC_PMICCFG_VDD1V8M2_MASK)
+#define PMC_PMICCFG_VDD1V8M3_MASK                (0x80U)
+#define PMC_PMICCFG_VDD1V8M3_SHIFT               (7U)
+/*! VDD1V8M3 - vdd1v8 state in PMIC mode 3
+ *  0b0..off
+ *  0b1..powered
+ */
+#define PMC_PMICCFG_VDD1V8M3(x)                  (((uint32_t)(((uint32_t)(x)) << PMC_PMICCFG_VDD1V8M3_SHIFT)) & PMC_PMICCFG_VDD1V8M3_MASK)
+/*! @} */
+
+/*! @name PADVRANGE - GPIO vdde range selection control */
+/*! @{ */
+#define PMC_PADVRANGE_VDDIO_0RANGE_MASK          (0x3U)
+#define PMC_PADVRANGE_VDDIO_0RANGE_SHIFT         (0U)
+/*! VDDIO_0RANGE
+ *  0b00..1.71 - 3.6V. Consumes static current to detect VDDE0 level
+ *  0b01..1.71 - 1.98V, vdde detector off
+ *  0b10..3.00 - 3.6V, vdde detector off
+ *  0b11..Not allowed (hardware should translate to 10)
+ */
+#define PMC_PADVRANGE_VDDIO_0RANGE(x)            (((uint32_t)(((uint32_t)(x)) << PMC_PADVRANGE_VDDIO_0RANGE_SHIFT)) & PMC_PADVRANGE_VDDIO_0RANGE_MASK)
+#define PMC_PADVRANGE_VDDIO_1RANGE_MASK          (0xCU)
+#define PMC_PADVRANGE_VDDIO_1RANGE_SHIFT         (2U)
+/*! VDDIO_1RANGE
+ *  0b00..1.71-3.6V. Consumes static current to detect VDDE1 level
+ *  0b01..1.71 - 1.98V, vdde detector off
+ *  0b10..3.00 - 3.6V, vdde detector off
+ *  0b11..Not allowed (hardware should translate to 10)
+ */
+#define PMC_PADVRANGE_VDDIO_1RANGE(x)            (((uint32_t)(((uint32_t)(x)) << PMC_PADVRANGE_VDDIO_1RANGE_SHIFT)) & PMC_PADVRANGE_VDDIO_1RANGE_MASK)
+#define PMC_PADVRANGE_VDDIO_2RANGE_MASK          (0x30U)
+#define PMC_PADVRANGE_VDDIO_2RANGE_SHIFT         (4U)
+/*! VDDIO_2RANGE
+ *  0b00..1.71 - 3.6V. Consumes static current to detect VDDE2 level
+ *  0b01..1.71 - 1.98V, vdde detector off
+ *  0b10..3.00 - 3.6V, vdde detector off
+ *  0b11..Not allowed (hardware should translate to 10)
+ */
+#define PMC_PADVRANGE_VDDIO_2RANGE(x)            (((uint32_t)(((uint32_t)(x)) << PMC_PADVRANGE_VDDIO_2RANGE_SHIFT)) & PMC_PADVRANGE_VDDIO_2RANGE_MASK)
+/*! @} */
+
+/*! @name MEMSEQCTRL - Memory Sequencer Control Register */
+/*! @{ */
+#define PMC_MEMSEQCTRL_MEMSEQNUM_MASK            (0x3FU)
+#define PMC_MEMSEQCTRL_MEMSEQNUM_SHIFT           (0U)
+/*! MEMSEQNUM - Number of memories to turn on/off at a time.
+ */
+#define PMC_MEMSEQCTRL_MEMSEQNUM(x)              (((uint32_t)(((uint32_t)(x)) << PMC_MEMSEQCTRL_MEMSEQNUM_SHIFT)) & PMC_MEMSEQCTRL_MEMSEQNUM_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group PMC_Register_Masks */
+
+
+/* PMC - Peripheral instance base addresses */
+#if (__ARM_FEATURE_CMSE & 0x2)
+  /** Peripheral PMC base address */
+  #define PMC_BASE                                 (0x50135000u)
+  /** Peripheral PMC base address */
+  #define PMC_BASE_NS                              (0x40135000u)
+  /** Peripheral PMC base pointer */
+  #define PMC                                      ((PMC_Type *)PMC_BASE)
+  /** Peripheral PMC base pointer */
+  #define PMC_NS                                   ((PMC_Type *)PMC_BASE_NS)
+  /** Array initializer of PMC peripheral base addresses */
+  #define PMC_BASE_ADDRS                           { PMC_BASE }
+  /** Array initializer of PMC peripheral base pointers */
+  #define PMC_BASE_PTRS                            { PMC }
+  /** Array initializer of PMC peripheral base addresses */
+  #define PMC_BASE_ADDRS_NS                        { PMC_BASE_NS }
+  /** Array initializer of PMC peripheral base pointers */
+  #define PMC_BASE_PTRS_NS                         { PMC_NS }
+#else
+  /** Peripheral PMC base address */
+  #define PMC_BASE                                 (0x40135000u)
+  /** Peripheral PMC base pointer */
+  #define PMC                                      ((PMC_Type *)PMC_BASE)
+  /** Array initializer of PMC peripheral base addresses */
+  #define PMC_BASE_ADDRS                           { PMC_BASE }
+  /** Array initializer of PMC peripheral base pointers */
+  #define PMC_BASE_PTRS                            { PMC }
+#endif
+/** Interrupt vectors for the PMC peripheral type */
+#define PMC_IRQS                                 { PMC_PMIC_IRQn }
+
+/*!
+ * @}
+ */ /* end of group PMC_Peripheral_Access_Layer */
+
+
+/* ----------------------------------------------------------------------------
    -- POWERQUAD Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
@@ -27988,7 +28346,8 @@ typedef struct {
   __IO uint32_t M33NMISRCSEL;                      /**< M33 nmi source selection, offset: 0x30 */
   __IO uint32_t SYSTEM_STICK_CALIB;                /**< system stick calibration, offset: 0x34 */
   __IO uint32_t SYSTEM_NSTICK_CALIB;               /**< system nstick calibration, offset: 0x38 */
-       uint8_t RESERVED_2[40];
+       uint8_t RESERVED_2[36];
+  __I  uint32_t PRODUCT_ID;                        /**< product ID, offset: 0x60 */
   __I  uint32_t SILICONREV_ID;                     /**< SILICONREV ID, offset: 0x64 */
   __I  uint32_t JTAG_ID;                           /**< jtag ID, offset: 0x68 */
        uint8_t RESERVED_3[20];
@@ -28025,41 +28384,47 @@ typedef struct {
   __O  uint32_t PDRUNCFG1_CLR;                     /**< Run configuration 1 clear, offset: 0x634 */
   __O  uint32_t PDRUNCFG2_CLR;                     /**< Run configuration 2 clear, offset: 0x638 */
   __O  uint32_t PDRUNCFG3_CLR;                     /**< Run configuration 3 clear, offset: 0x63C */
-       uint8_t RESERVED_10[64];
+       uint8_t RESERVED_10[32];
+  __IO uint32_t PDWAKECFG;                         /**< PD Wake Configuration, offset: 0x660 */
+       uint8_t RESERVED_11[28];
   __IO uint32_t STARTEN0;                          /**< Start enable 0, offset: 0x680 */
   __IO uint32_t STARTEN1;                          /**< Start enable 1, offset: 0x684 */
-       uint8_t RESERVED_11[24];
+       uint8_t RESERVED_12[24];
   __O  uint32_t STARTEN0_SET;                      /**< Start enable 0 set, offset: 0x6A0 */
   __O  uint32_t STARTEN1_SET;                      /**< Start enable 1 set, offset: 0x6A4 */
-       uint8_t RESERVED_12[24];
+       uint8_t RESERVED_13[24];
   __O  uint32_t STARTEN0_CLR;                      /**< Start enable 0 clear, offset: 0x6C0 */
   __O  uint32_t STARTEN1_CLR;                      /**< Start enable 1 clear, offset: 0x6C4 */
-       uint8_t RESERVED_13[184];
+       uint8_t RESERVED_14[72];
+  __IO uint32_t MAINCLKSAFETY;                     /**< Main Clock Safety, offset: 0x710 */
+       uint8_t RESERVED_15[108];
   __IO uint32_t HWWAKE;                            /**< Hardware Wake-up control, offset: 0x780 */
-       uint8_t RESERVED_14[1740];
+       uint8_t RESERVED_16[1672];
+  __IO uint32_t TEMPSENSORCTL;                     /**< tempsensor ctrl, offset: 0xE0C */
+       uint8_t RESERVED_17[64];
   __IO uint32_t BOOTSTATESEED[8];                  /**< boot state seed register, array offset: 0xE50, array step: 0x4 */
   __IO uint32_t BOOTSTATEHMAC[8];                  /**< boot state hmac register, array offset: 0xE70, array step: 0x4 */
-       uint8_t RESERVED_15[104];
+       uint8_t RESERVED_18[104];
   __IO uint32_t FLEXSPIPADCTRL;                    /**< FLEXSPI IO pads ctrl register, offset: 0xEF8 */
   __IO uint32_t SDIOPADCTL;                        /**< sdio pad ctrl, offset: 0xEFC */
   __IO uint32_t DICEHWREG[8];                      /**< DICE General Purpose 32-Bit Data Register, array offset: 0xF00, array step: 0x4 */
-       uint8_t RESERVED_16[48];
+       uint8_t RESERVED_19[48];
   __I  uint32_t UUID[4];                           /**< UUIDn 32-Bit Data Register, array offset: 0xF50, array step: 0x4 */
-       uint8_t RESERVED_17[32];
+       uint8_t RESERVED_20[32];
   __IO uint32_t AESKEY_SRCSEL;                     /**< AES key source selection, offset: 0xF80 */
-  __IO uint32_t OTFADKEY_SRCSEL;                   /**< OTFAD key source selection, offset: 0xF84 */
+       uint8_t RESERVED_21[4];
   __IO uint32_t HASHHWKEYDISABLE;                  /**< Hash hardware key disable, offset: 0xF88 */
-       uint8_t RESERVED_18[20];
+       uint8_t RESERVED_22[20];
   __IO uint32_t DBG_LOCKEN;                        /**< Debug Write Lock registers, offset: 0xFA0 */
   __IO uint32_t DBG_FEATURES;                      /**< Debug features control for the CM33, offset: 0xFA4 */
   __IO uint32_t DBG_FEATURES_DP;                   /**< Debug features duplicate, offset: 0xFA8 */
   __IO uint32_t HWUNLOCK_DISABLE;                  /**< HW unlock disable, offset: 0xFAC */
-       uint8_t RESERVED_19[4];
+       uint8_t RESERVED_23[4];
   __IO uint32_t CS_PROTCPU0;                       /**< Code Security for CPU0, offset: 0xFB4 */
   __IO uint32_t CS_PROTCPU1;                       /**< Code Security for CPU1, offset: 0xFB8 */
-       uint8_t RESERVED_20[4];
+       uint8_t RESERVED_24[4];
   __IO uint32_t DBG_AUTH_SCRATCH;                  /**< Debug authorization scratch, offset: 0xFC0 */
-       uint8_t RESERVED_21[12];
+       uint8_t RESERVED_25[12];
   __IO uint32_t KEY_BLOCK;                         /**< Key block, offset: 0xFD0 */
 } SYSCTL0_Type;
 
@@ -28148,13 +28513,6 @@ typedef struct {
  *  0b1..enabled
  */
 #define SYSCTL0_PACKERENABLE_RDPENABLE(x)        (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PACKERENABLE_RDPENABLE_SHIFT)) & SYSCTL0_PACKERENABLE_RDPENABLE_MASK)
-#define SYSCTL0_PACKERENABLE_CPRENABLE_MASK      (0x4U)
-#define SYSCTL0_PACKERENABLE_CPRENABLE_SHIFT     (2U)
-/*! CPRENABLE - Cache Power Reduction Enable
- *  0b0..disabled
- *  0b1..enabled
- */
-#define SYSCTL0_PACKERENABLE_CPRENABLE(x)        (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PACKERENABLE_CPRENABLE_SHIFT)) & SYSCTL0_PACKERENABLE_CPRENABLE_MASK)
 /*! @} */
 
 /*! @name M33NMISRCSEL - M33 nmi source selection */
@@ -28189,6 +28547,15 @@ typedef struct {
 /*! SYSTEM_NSTICK_CALIB - Selects the system non-secure tick calibration value of the M33.
  */
 #define SYSCTL0_SYSTEM_NSTICK_CALIB_SYSTEM_NSTICK_CALIB(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_SYSTEM_NSTICK_CALIB_SYSTEM_NSTICK_CALIB_SHIFT)) & SYSCTL0_SYSTEM_NSTICK_CALIB_SYSTEM_NSTICK_CALIB_MASK)
+/*! @} */
+
+/*! @name PRODUCT_ID - product ID */
+/*! @{ */
+#define SYSCTL0_PRODUCT_ID_PRODUCT_ID_MASK       (0xFFFFU)
+#define SYSCTL0_PRODUCT_ID_PRODUCT_ID_SHIFT      (0U)
+/*! PRODUCT_ID - This register contains the product ID which is unique for each part number.
+ */
+#define SYSCTL0_PRODUCT_ID_PRODUCT_ID(x)         (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PRODUCT_ID_PRODUCT_ID_SHIFT)) & SYSCTL0_PRODUCT_ID_PRODUCT_ID_MASK)
 /*! @} */
 
 /*! @name SILICONREV_ID - SILICONREV ID */
@@ -32040,6 +32407,24 @@ typedef struct {
 #define SYSCTL0_PDRUNCFG3_CLR_SRAM_IF29_PPD(x)   (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDRUNCFG3_CLR_SRAM_IF29_PPD_SHIFT)) & SYSCTL0_PDRUNCFG3_CLR_SRAM_IF29_PPD_MASK)
 /*! @} */
 
+/*! @name PDWAKECFG - PD Wake Configuration */
+/*! @{ */
+#define SYSCTL0_PDWAKECFG_RBBKEEPST_MASK         (0x1U)
+#define SYSCTL0_PDWAKECFG_RBBKEEPST_SHIFT        (0U)
+/*! RBBKEEPST - RBB mode on wakeup
+ *  0b0..Use value of RBB_PD in PDRUNCFG on wakeup.
+ *  0b1..Copy PDSLEEPCFG RBB_PD value to PDRUNCFG RBB_PD on wakeup to keep RBB state.
+ */
+#define SYSCTL0_PDWAKECFG_RBBKEEPST(x)           (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDWAKECFG_RBBKEEPST_SHIFT)) & SYSCTL0_PDWAKECFG_RBBKEEPST_MASK)
+#define SYSCTL0_PDWAKECFG_FBBKEEPST_MASK         (0x2U)
+#define SYSCTL0_PDWAKECFG_FBBKEEPST_SHIFT        (1U)
+/*! FBBKEEPST - FBB mode on wakeup
+ *  0b0..Use value of FBB_PD in PDRUNCFG on wakeup
+ *  0b1..Copy PDSLEEPCFG FBB_PD value to PDRUNCFG FBB_PD on wakeup to keep FBB state
+ */
+#define SYSCTL0_PDWAKECFG_FBBKEEPST(x)           (((uint32_t)(((uint32_t)(x)) << SYSCTL0_PDWAKECFG_FBBKEEPST_SHIFT)) & SYSCTL0_PDWAKECFG_FBBKEEPST_MASK)
+/*! @} */
+
 /*! @name STARTEN0 - Start enable 0 */
 /*! @{ */
 #define SYSCTL0_STARTEN0_WDT0_MASK               (0x1U)
@@ -33198,6 +33583,15 @@ typedef struct {
 #define SYSCTL0_STARTEN1_CLR_SHA(x)              (((uint32_t)(((uint32_t)(x)) << SYSCTL0_STARTEN1_CLR_SHA_SHIFT)) & SYSCTL0_STARTEN1_CLR_SHA_MASK)
 /*! @} */
 
+/*! @name MAINCLKSAFETY - Main Clock Safety */
+/*! @{ */
+#define SYSCTL0_MAINCLKSAFETY_DELAY_MASK         (0xFFFFU)
+#define SYSCTL0_MAINCLKSAFETY_DELAY_SHIFT        (0U)
+/*! DELAY - Main Clock turn on delay for Deep Sleep wake up
+ */
+#define SYSCTL0_MAINCLKSAFETY_DELAY(x)           (((uint32_t)(((uint32_t)(x)) << SYSCTL0_MAINCLKSAFETY_DELAY_SHIFT)) & SYSCTL0_MAINCLKSAFETY_DELAY_MASK)
+/*! @} */
+
 /*! @name HWWAKE - Hardware Wake-up control */
 /*! @{ */
 #define SYSCTL0_HWWAKE_FORCEWAKE_MASK            (0x1U)
@@ -33237,6 +33631,17 @@ typedef struct {
  *    cleared, but before DMAC1 has completed its related activity.
  */
 #define SYSCTL0_HWWAKE_DMAC1WAKE(x)              (((uint32_t)(((uint32_t)(x)) << SYSCTL0_HWWAKE_DMAC1WAKE_SHIFT)) & SYSCTL0_HWWAKE_DMAC1WAKE_MASK)
+/*! @} */
+
+/*! @name TEMPSENSORCTL - tempsensor ctrl */
+/*! @{ */
+#define SYSCTL0_TEMPSENSORCTL_TSSRC_MASK         (0x1U)
+#define SYSCTL0_TEMPSENSORCTL_TSSRC_SHIFT        (0U)
+/*! TSSRC - Temperature Sensor Source. . .
+ *  0b0..ADC Built-in Temperature Sensor.
+ *  0b1..Reserved.
+ */
+#define SYSCTL0_TEMPSENSORCTL_TSSRC(x)           (((uint32_t)(((uint32_t)(x)) << SYSCTL0_TEMPSENSORCTL_TSSRC_SHIFT)) & SYSCTL0_TEMPSENSORCTL_TSSRC_MASK)
 /*! @} */
 
 /*! @name BOOTSTATESEED - boot state seed register */
@@ -33386,15 +33791,6 @@ typedef struct {
 /*! AESKEY_SRCSEL - AES Key Source Select:
  */
 #define SYSCTL0_AESKEY_SRCSEL_AESKEY_SRCSEL(x)   (((uint32_t)(((uint32_t)(x)) << SYSCTL0_AESKEY_SRCSEL_AESKEY_SRCSEL_SHIFT)) & SYSCTL0_AESKEY_SRCSEL_AESKEY_SRCSEL_MASK)
-/*! @} */
-
-/*! @name OTFADKEY_SRCSEL - OTFAD key source selection */
-/*! @{ */
-#define SYSCTL0_OTFADKEY_SRCSEL_OTFADKEY_SRCSEL_MASK (0x3U)
-#define SYSCTL0_OTFADKEY_SRCSEL_OTFADKEY_SRCSEL_SHIFT (0U)
-/*! OTFADKEY_SRCSEL - OTFAD Key Source Select:
- */
-#define SYSCTL0_OTFADKEY_SRCSEL_OTFADKEY_SRCSEL(x) (((uint32_t)(((uint32_t)(x)) << SYSCTL0_OTFADKEY_SRCSEL_OTFADKEY_SRCSEL_SHIFT)) & SYSCTL0_OTFADKEY_SRCSEL_OTFADKEY_SRCSEL_MASK)
 /*! @} */
 
 /*! @name HASHHWKEYDISABLE - Hash hardware key disable */

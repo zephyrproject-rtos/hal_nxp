@@ -16,18 +16,18 @@
 #define FSL_COMPONENT_ID "platform.drivers.clock"
 #endif
 
-#define OTP_INIT_API ((void (*)(uint32_t src_clk_freq))FSL_ROM_OTP_INIT_ADDR)
-#define OTP_DEINIT_API ((void (*)(void))FSL_ROM_OTP_DEINIT_ADDR)
+#define OTP_INIT_API      ((void (*)(uint32_t src_clk_freq))FSL_ROM_OTP_INIT_ADDR)
+#define OTP_DEINIT_API    ((void (*)(void))FSL_ROM_OTP_DEINIT_ADDR)
 #define OTP_FUSE_READ_API ((void (*)(uint32_t addr, uint32_t * data)) FSL_ROM_OTP_FUSE_READ_ADDR)
 /* OTP fuse index. */
-#define FFRO_STABLE_TIME 12
-#define SFRO_STABLE_TIME 13
+#define FFRO_STABLE_TIME       12
+#define SFRO_STABLE_TIME       13
 #define FIRC_48MHZ_TRIM_TEMPCO 48
 #define FIRC_48MHZ_TRIM_COARSE 49
-#define FIRC_48MHZ_TRIM_FINE 50
+#define FIRC_48MHZ_TRIM_FINE   50
 #define FIRC_60MHZ_TRIM_TEMPCO 51
 #define FIRC_60MHZ_TRIM_COARSE 52
-#define FIRC_60MHZ_TRIM_FINE 53
+#define FIRC_60MHZ_TRIM_FINE   53
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -1261,21 +1261,25 @@ void CLOCK_InitSysPll(const clock_sys_pll_config_t *config)
             CLKCTL0->SYSPLL0CTL0 =
                 (CLKCTL0->SYSPLL0CTL0 & ~CLKCTL0_SYSPLL0CTL0_MULT_MASK) | CLKCTL0_SYSPLL0CTL0_MULT(17);
             break;
+        case kCLOCK_SysPllMult18:
+            CLKCTL0->SYSPLL0CTL0 =
+                (CLKCTL0->SYSPLL0CTL0 & ~CLKCTL0_SYSPLL0CTL0_MULT_MASK) | CLKCTL0_SYSPLL0CTL0_MULT(18);
+            break;
+        case kCLOCK_SysPllMult19:
+            CLKCTL0->SYSPLL0CTL0 =
+                (CLKCTL0->SYSPLL0CTL0 & ~CLKCTL0_SYSPLL0CTL0_MULT_MASK) | CLKCTL0_SYSPLL0CTL0_MULT(19);
+            break;
         case kCLOCK_SysPllMult20:
             CLKCTL0->SYSPLL0CTL0 =
                 (CLKCTL0->SYSPLL0CTL0 & ~CLKCTL0_SYSPLL0CTL0_MULT_MASK) | CLKCTL0_SYSPLL0CTL0_MULT(20);
             break;
+        case kCLOCK_SysPllMult21:
+            CLKCTL0->SYSPLL0CTL0 =
+                (CLKCTL0->SYSPLL0CTL0 & ~CLKCTL0_SYSPLL0CTL0_MULT_MASK) | CLKCTL0_SYSPLL0CTL0_MULT(21);
+            break;
         case kCLOCK_SysPllMult22:
             CLKCTL0->SYSPLL0CTL0 =
                 (CLKCTL0->SYSPLL0CTL0 & ~CLKCTL0_SYSPLL0CTL0_MULT_MASK) | CLKCTL0_SYSPLL0CTL0_MULT(22);
-            break;
-        case kCLOCK_SysPllMult27:
-            CLKCTL0->SYSPLL0CTL0 =
-                (CLKCTL0->SYSPLL0CTL0 & ~CLKCTL0_SYSPLL0CTL0_MULT_MASK) | CLKCTL0_SYSPLL0CTL0_MULT(27);
-            break;
-        case kCLOCK_SysPllMult33:
-            CLKCTL0->SYSPLL0CTL0 =
-                (CLKCTL0->SYSPLL0CTL0 & ~CLKCTL0_SYSPLL0CTL0_MULT_MASK) | CLKCTL0_SYSPLL0CTL0_MULT(33);
             break;
         default:
             /* Added comments to prevent the violation of MISRA rule. */
@@ -1345,21 +1349,25 @@ void CLOCK_InitAudioPll(const clock_audio_pll_config_t *config)
             CLKCTL1->AUDIOPLL0CTL0 =
                 (CLKCTL1->AUDIOPLL0CTL0 & ~CLKCTL1_AUDIOPLL0CTL0_MULT_MASK) | CLKCTL1_AUDIOPLL0CTL0_MULT(17);
             break;
+        case kCLOCK_AudioPllMult18:
+            CLKCTL1->AUDIOPLL0CTL0 =
+                (CLKCTL1->AUDIOPLL0CTL0 & ~CLKCTL1_AUDIOPLL0CTL0_MULT_MASK) | CLKCTL1_AUDIOPLL0CTL0_MULT(18);
+            break;
+        case kCLOCK_AudioPllMult19:
+            CLKCTL1->AUDIOPLL0CTL0 =
+                (CLKCTL1->AUDIOPLL0CTL0 & ~CLKCTL1_AUDIOPLL0CTL0_MULT_MASK) | CLKCTL1_AUDIOPLL0CTL0_MULT(19);
+            break;
         case kCLOCK_AudioPllMult20:
             CLKCTL1->AUDIOPLL0CTL0 =
                 (CLKCTL1->AUDIOPLL0CTL0 & ~CLKCTL1_AUDIOPLL0CTL0_MULT_MASK) | CLKCTL1_AUDIOPLL0CTL0_MULT(20);
             break;
+        case kCLOCK_AudioPllMult21:
+            CLKCTL1->AUDIOPLL0CTL0 =
+                (CLKCTL1->AUDIOPLL0CTL0 & ~CLKCTL1_AUDIOPLL0CTL0_MULT_MASK) | CLKCTL1_AUDIOPLL0CTL0_MULT(21);
+            break;
         case kCLOCK_AudioPllMult22:
             CLKCTL1->AUDIOPLL0CTL0 =
                 (CLKCTL1->AUDIOPLL0CTL0 & ~CLKCTL1_AUDIOPLL0CTL0_MULT_MASK) | CLKCTL1_AUDIOPLL0CTL0_MULT(22);
-            break;
-        case kCLOCK_AudioPllMult27:
-            CLKCTL1->AUDIOPLL0CTL0 =
-                (CLKCTL1->AUDIOPLL0CTL0 & ~CLKCTL1_AUDIOPLL0CTL0_MULT_MASK) | CLKCTL1_AUDIOPLL0CTL0_MULT(27);
-            break;
-        case kCLOCK_AudioPllMult33:
-            CLKCTL1->AUDIOPLL0CTL0 =
-                (CLKCTL1->AUDIOPLL0CTL0 & ~CLKCTL1_AUDIOPLL0CTL0_MULT_MASK) | CLKCTL1_AUDIOPLL0CTL0_MULT(33);
             break;
         default:
             /* Added comments to prevent the violation of MISRA C-2012 rule */

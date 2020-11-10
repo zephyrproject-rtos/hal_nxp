@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2018-06-19
-**     Build:               b200508
+**     Build:               b200922
 **
 **     Abstract:
 **         Chip specific module features.
@@ -320,8 +320,8 @@
 
 /* HASHCRYPT module features */
 
-/* @brief the address of alias offset */
-#define FSL_FEATURE_HASHCRYPT_ALIAS_OFFSET (0x20000000)
+/* @brief hashcrypt has reload feature */
+#define FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE (1)
 
 /* I2S module features */
 
@@ -384,16 +384,16 @@
 /* PMC module features */
 
 /* @brief Has no OS Timer control register in PMC. */
-#define FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG  (1)
+#define FSL_FEATURE_PMC_HAS_NO_OSTIMER_REG (1)
 
 /* PUF module features */
 
-/* @brief Number of PUF key slots available on device. */
-#define FSL_FEATURE_PUF_HAS_KEYSLOTS (2)
-/* @brief  */
+/* @brief PUF need to setup SRAM manually */
 #define FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL (1)
 /* @brief PUF has SHIFT_STATUS register. */
 #define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (0)
+/* @brief PUF has IDXBLK_SHIFT register. */
+#define FSL_FEATURE_PUF_HAS_IDXBLK_SHIFT (0)
 
 /* RTC module features */
 
@@ -448,6 +448,8 @@
 #define FSL_FEATURE_USBPHY_HAS_DCD_ANALOG (1)
 /* @brief USBPHY has register TRIM_OVERRIDE_EN */
 #define FSL_FEATURE_USBPHY_HAS_TRIM_OVERRIDE_EN (1)
+/* @brief USBPHY is 28FDSOI */
+#define FSL_FEATURE_USBPHY_28FDSOI (0)
 
 /* USDHC module features */
 
@@ -463,6 +465,14 @@
 #define FSL_FEATURE_USDHC_HAS_RESET (1)
 /* @brief USDHC has no bitfield WTMK_LVL[WR_BRST_LEN] and WTMK_LVL[RD_BRST_LEN] */
 #define FSL_FEATURE_USDHC_HAS_NO_RW_BURST_LEN (0)
+/* @brief If USDHC instance support 8 bit width */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_8_BIT_WIDTHn(x) (1)
+/* @brief If USDHC instance support HS400 mode */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_HS400_MODEn(x) \
+    (((x) == USDHC0) ? (1) : \
+    (((x) == USDHC1) ? (0) : (-1)))
+/* @brief If USDHC instance support 1v8 signal */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_1V8_SIGNALn(x) (1)
 
 /* UTICK module features */
 
