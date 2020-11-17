@@ -33,7 +33,7 @@ def get_soc_family(device):
 def get_files(src, pattern):
     matches = []
     nonmatches = []
-    always_exclude = "freertos"
+    always_exclude = "freertos|\.cmake"
     if os.path.exists(src):
         for filename in os.listdir(src):
             path = os.path.join(src, filename)
@@ -41,17 +41,25 @@ def get_files(src, pattern):
                 matches.append(path)
             elif not re.search(always_exclude, filename):
                 nonmatches.append(path)
+                print(filename)
 
     return [matches, nonmatches]
 
 def copy_files(files, dst):
     if not files:
         return
+    always_exclude = "\.cmake"
     os.makedirs(dst, exist_ok=True)
     for f in files:
-        shutil.copy2(f, dst)
+        if re.search(always_exclude, f):
+            continue
+        if os.path.isfile(f):
+            shutil.copy2(f, dst)
+        else:
+            t = os.path.join(dst, os.path.basename(f))
+            shutil.copytree(f, t, dirs_exist_ok=True, ignore = shutil.ignore_patterns("*.cmake"))
 
-def import_sdk(directory):
+def import_sdk(directory, device_drivers_pattern = ""):
     devices = os.listdir(os.path.join(directory, 'devices'))
     boards = os.listdir(os.path.join(directory, 'boards'))
 
@@ -65,7 +73,9 @@ def import_sdk(directory):
         device_headers, _ = get_files(device_src, device_pattern)
 
         drivers_src = os.path.join(directory, 'devices', device, 'drivers')
-        drivers_pattern = "fsl_clock|fsl_iomuxc|fsl_power\.|fsl_reset"
+        drivers_pattern = "fsl_clock|fsl_iomuxc|fsl_power\.|fsl_reset\."
+        if device_drivers_pattern != "":
+            drivers_pattern = drivers_pattern + "|" + device_drivers_pattern
         #pattern fsl_power. has a full stop so other such as powerquad is not copied
         [device_drivers, shared_drivers] = get_files(drivers_src, drivers_pattern)
 
@@ -102,12 +112,15 @@ def parse_args():
     parser.add_argument("-f", "--file", required=True,
                         help="MCUXpresso SDK archive file to import from")
 
+    parser.add_argument("-d", "--device_driver", required=False,
+                        help="specify device specific driver file name pattern")
+
     args = parser.parse_args()
 
     with tempfile.TemporaryDirectory() as d:
         print('Extracting MCUXpresso SDK into temporary directory {}'.format(d))
         shutil.unpack_archive(args.file, d)
-        import_sdk(d)
+        import_sdk(d, args.device_driver)
 
 def main():
     parse_args()
