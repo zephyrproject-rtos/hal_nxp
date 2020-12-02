@@ -17,8 +17,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPI2C EDMA driver version 2.1.11. */
-#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 1, 11))
+/*! @brief LPI2C EDMA driver version. */
+#define FSL_LPI2C_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 /*!

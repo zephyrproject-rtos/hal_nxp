@@ -23,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FlexIO UART driver version 2.2.0. */
-#define FSL_FLEXIO_UART_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief FlexIO UART driver version 2.3.0. */
+#define FSL_FLEXIO_UART_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -42,8 +42,9 @@ enum
     kStatus_FLEXIO_UART_ERROR  = MAKE_STATUS(kStatusGroup_FLEXIO_UART, 4), /*!< ERROR happens on UART. */
     kStatus_FLEXIO_UART_RxRingBufferOverrun =
         MAKE_STATUS(kStatusGroup_FLEXIO_UART, 5), /*!< UART RX software ring buffer overrun. */
-    kStatus_FLEXIO_UART_RxHardwareOverrun = MAKE_STATUS(kStatusGroup_FLEXIO_UART, 6), /*!< UART RX receiver overrun. */
-    kStatus_FLEXIO_UART_Timeout           = MAKE_STATUS(kStatusGroup_FLEXIO_UART, 7)  /*!< UART times out. */
+    kStatus_FLEXIO_UART_RxHardwareOverrun  = MAKE_STATUS(kStatusGroup_FLEXIO_UART, 6), /*!< UART RX receiver overrun. */
+    kStatus_FLEXIO_UART_Timeout            = MAKE_STATUS(kStatusGroup_FLEXIO_UART, 7), /*!< UART times out. */
+    kStatus_FLEXIO_UART_BaudrateNotSupport = MAKE_STATUS(kStatusGroup_FLEXIO_UART, 8)  /*!< Baudrate is not supported in current clock source */
 };
 
 /*! @brief FlexIO UART bit count per char. */
@@ -171,8 +172,8 @@ extern "C" {
  * @param base Pointer to the FLEXIO_UART_Type structure.
  * @param userConfig Pointer to the flexio_uart_config_t structure.
  * @param srcClock_Hz FlexIO source clock in Hz.
- * @retval kStatus_Success Configuration success
- * @retval kStatus_InvalidArgument Buadrate configuration out of range
+ * @retval kStatus_Success Configuration success.
+ * @retval kStatus_FLEXIO_UART_BaudrateNotSupport Baudrate is not supported for current clock source frequency.
 */
 status_t FLEXIO_UART_Init(FLEXIO_UART_Type *base, const flexio_uart_config_t *userConfig, uint32_t srcClock_Hz);
 

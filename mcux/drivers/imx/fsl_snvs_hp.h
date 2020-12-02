@@ -41,6 +41,27 @@ typedef enum _snvs_hp_status_flags
     kSNVS_OTPMK_ZeroFlag            = SNVS_HPSR_OTPMK_ZERO_MASK,    /*!< The OTPMK is zero */
 } snvs_hp_status_flags_t;
 
+/* Re-map Security Violation */
+#ifndef SNVS_HPSVSR_SV0_MASK
+#define SNVS_HPSVSR_SV0_MASK SNVS_HPSVSR_CAAM_MASK
+#endif
+
+#ifndef SNVS_HPSVSR_SV1_MASK
+#define SNVS_HPSVSR_SV1_MASK SNVS_HPSVSR_JTAGC_MASK
+#endif
+
+#ifndef SNVS_HPSVSR_SV2_MASK
+#define SNVS_HPSVSR_SV2_MASK SNVS_HPSVSR_WDOG2_MASK
+#endif
+
+#ifndef SNVS_HPSVSR_SV4_MASK
+#define SNVS_HPSVSR_SV4_MASK SNVS_HPSVSR_SRC_MASK
+#endif
+
+#ifndef SNVS_HPSVSR_SV5_MASK
+#define SNVS_HPSVSR_SV5_MASK SNVS_HPSVSR_OCOTP_MASK
+#endif
+
 /*! @brief List of SNVS security violation flags */
 typedef enum _snvs_hp_sv_status_flags
 {
@@ -53,9 +74,11 @@ typedef enum _snvs_hp_sv_status_flags
     kSNVS_Violation0Flag             = SNVS_HPSVSR_SV0_MASK,     /*!< Security Violation 0 */
     kSNVS_Violation1Flag             = SNVS_HPSVSR_SV1_MASK,     /*!< Security Violation 1 */
     kSNVS_Violation2Flag             = SNVS_HPSVSR_SV2_MASK,     /*!< Security Violation 2 */
-    kSNVS_Violation3Flag             = SNVS_HPSVSR_SV3_MASK,     /*!< Security Violation 3 */
-    kSNVS_Violation4Flag             = SNVS_HPSVSR_SV4_MASK,     /*!< Security Violation 4 */
-    kSNVS_Violation5Flag             = SNVS_HPSVSR_SV5_MASK,     /*!< Security Violation 5 */
+#if defined(FLS_FEATURE_SNVS_HAS_NO_SV3) && (FLS_FEATURE_SNVS_HAS_NO_SV3 > 1)
+    kSNVS_Violation3Flag = SNVS_HPSVSR_SV3_MASK, /*!< Security Violation 3 */
+#endif                                           /* FLS_FEATURE_SNVS_HAS_NO_SV3 */
+    kSNVS_Violation4Flag = SNVS_HPSVSR_SV4_MASK, /*!< Security Violation 4 */
+    kSNVS_Violation5Flag = SNVS_HPSVSR_SV5_MASK, /*!< Security Violation 5 */
 } snvs_hp_sv_status_flags_t;
 
 /*!

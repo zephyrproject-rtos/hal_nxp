@@ -806,86 +806,62 @@ status_t PXP_GetPorterDuffConfig(pxp_porter_duff_blend_mode_t mode, pxp_porter_d
 
     static const uint32_t pdCtrl[] = {
         /* kPXP_PorterDuffSrc */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorOne) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
 
         /* kPXP_PorterDuffAtop */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorStraight) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
 
         /* kPXP_PorterDuffOver */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorOne) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
 
         /* kPXP_PorterDuffIn */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorStraight) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
 
         /* kPXP_PorterDuffOut */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
 
         /* kPXP_PorterDuffDst */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorOne),
 
         /* kPXP_PorterDuffDstAtop */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorStraight),
 
         /* kPXP_PorterDuffDstOver */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorOne),
 
         /* kPXP_PorterDuffDstIn */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorStraight),
 
         /* kPXP_PorterDuffDstOut */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
 
         /* kPXP_PorterDuffXor */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorInversed) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorInversed),
 
         /* kPXP_PorterDuffClear */
-        PXP_PORTER_DUFF_CTRL_POTER_DUFF_ENABLE_MASK |
-            PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
-            PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+        PXP_PORTER_DUFF_CTRL_PORTER_DUFF_ENABLE_MASK |
             PXP_PORTER_DUFF_CTRL_S0_S1_FACTOR_MODE(kPXP_PorterDuffFactorZero) |
             PXP_PORTER_DUFF_CTRL_S1_S0_FACTOR_MODE(kPXP_PorterDuffFactorZero),
     };
@@ -896,7 +872,12 @@ status_t PXP_GetPorterDuffConfig(pxp_porter_duff_blend_mode_t mode, pxp_porter_d
     }
     else
     {
-        pdConfig.u32 = pdCtrl[(uint32_t)mode];
+        pdConfig.u32 = pdCtrl[(uint32_t)mode] | PXP_PORTER_DUFF_CTRL_S0_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+                       PXP_PORTER_DUFF_CTRL_S1_GLOBAL_ALPHA_MODE(kPXP_PorterDuffLocalAlpha) |
+                       PXP_PORTER_DUFF_CTRL_S0_COLOR_MODE(kPXP_PorterDuffColorWithAlpha) |
+                       PXP_PORTER_DUFF_CTRL_S1_COLOR_MODE(kPXP_PorterDuffColorWithAlpha) |
+                       PXP_PORTER_DUFF_CTRL_S0_ALPHA_MODE(kPXP_PorterDuffAlphaStraight) |
+                       PXP_PORTER_DUFF_CTRL_S1_ALPHA_MODE(kPXP_PorterDuffAlphaStraight);
 
         *config = pdConfig.pdConfigStruct;
 

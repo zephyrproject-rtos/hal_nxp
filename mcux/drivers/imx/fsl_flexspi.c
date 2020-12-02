@@ -39,8 +39,8 @@ enum
         FLEXSPI_STS2_BREFLOCK_MASK, /* Flash B sample clock reference delay line locked. */
 };
 
-/*! @brief Common sets of flags used by the driver. */
-enum _flexspi_flag_constants
+/*! @brief Common sets of flags used by the driver, _flexspi_flag_constants. */
+enum
 {
     /*! IRQ sources enabled by the non-blocking transactional API. */
     kIrqFlags = kFLEXSPI_IpTxFifoWatermarkEmptyFlag | kFLEXSPI_IpRxFifoWatermarkAvailableFlag |
@@ -52,7 +52,8 @@ enum _flexspi_flag_constants
                   kFLEXSPI_IpCommandGrantTimeoutFlag,
 };
 
-enum _flexspi_transfer_state
+/* FLEXSPI transfer state, _flexspi_transfer_state. */
+enum
 {
     kFLEXSPI_Idle      = 0x0U, /*!< Transfer is done. */
     kFLEXSPI_BusyWrite = 0x1U, /*!< FLEXSPI is busy write transfer. */
@@ -65,28 +66,15 @@ typedef void (*flexspi_isr_t)(FLEXSPI_Type *base, flexspi_handle_t *handle);
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
-/*!
- * @brief Get the instance number for FLEXSPI.
- *
- * @param base FLEXSPI base pointer.
- */
-uint32_t FLEXSPI_GetInstance(FLEXSPI_Type *base);
+static void FLEXSPI_Memset(void *src, uint8_t value, size_t length);
 
 /*!
- * @brief Configure flash A/B sample clock DLL.
+ * @brief Calculate flash A/B sample clock DLL.
  *
  * @param base FLEXSPI base pointer.
  * @param config Flash configuration parameters.
  */
-static uint32_t FLEXSPI_ConfigureDll(FLEXSPI_Type *base, flexspi_device_config_t *config);
-
-/*!
- * @brief Check and clear IP command execution errors.
- *
- * @param base FLEXSPI base pointer.
- * @param status interrupt status.
- */
-status_t FLEXSPI_CheckAndClearError(FLEXSPI_Type *base, uint32_t status);
+static uint32_t FLEXSPI_CalculateDll(FLEXSPI_Type *base, flexspi_device_config_t *config);
 
 /*******************************************************************************
  * Variables
@@ -119,6 +107,18 @@ static flexspi_isr_t s_flexspiIsr;
 /*******************************************************************************
  * Code
  ******************************************************************************/
+static void FLEXSPI_Memset(void *src, uint8_t value, size_t length)
+{
+    assert(src != NULL);
+    uint8_t *p = src;
+
+    /* Keyword volatile is to avoid compiler opitimizing this API into memset() in library. */
+    for (volatile uint32_t i = 0U; i < length; i++)
+    {
+        *p = value;
+        p++;
+    }
+}
 
 uint32_t FLEXSPI_GetInstance(FLEXSPI_Type *base)
 {
@@ -138,13 +138,15 @@ uint32_t FLEXSPI_GetInstance(FLEXSPI_Type *base)
     return instance;
 }
 
-static uint32_t FLEXSPI_ConfigureDll(FLEXSPI_Type *base, flexspi_device_config_t *config)
+static uint32_t FLEXSPI_CalculateDll(FLEXSPI_Type *base, flexspi_device_config_t *config)
 {
     bool isUnifiedConfig = true;
     uint32_t flexspiDllValue;
     uint32_t dllValue;
     uint32_t temp;
-
+#if defined(FSL_FEATURE_FLEXSPI_DQS_DELAY_PS) && FSL_FEATURE_FLEXSPI_DQS_DELAY_PS
+    uint32_t internalDqsDelayPs = FSL_FEATURE_FLEXSPI_DQS_DELAY_PS;
+#endif
     uint32_t rxSampleClock = (base->MCR0 & FLEXSPI_MCR0_RXCLKSRC_MASK) >> FLEXSPI_MCR0_RXCLKSRC_SHIFT;
     switch (rxSampleClock)
     {
@@ -176,12 +178,37 @@ static uint32_t FLEXSPI_ConfigureDll(FLEXSPI_Type *base, flexspi_device_config_t
     {
         if (config->flexspiRootClk >= 100U * FREQ_1MHz)
         {
+#if defined(FSL_FEATURE_FLEXSPI_DQS_DELAY_PS) && FSL_FEATURE_FLEXSPI_DQS_DELAY_PS
+            uint32_t expectedDelayPs = 500U * FREQ_1MHz / (config->flexspiRootClk / 1000U);
+            if (expectedDelayPs > internalDqsDelayPs)
+            {
+                expectedDelayPs = expectedDelayPs - internalDqsDelayPs;
+            }
+            else
+            {
+                expectedDelayPs = 0U;
+            }
+            /* DLLEN = 1, SLVDLYTARGET = expectedDelayPs * 16U / internalDqsDelayPs, */
+            flexspiDllValue =
+                FLEXSPI_DLLCR_DLLEN(1) | FLEXSPI_DLLCR_SLVDLYTARGET(expectedDelayPs * 16U / internalDqsDelayPs);
+#else
             /* DLLEN = 1, SLVDLYTARGET = 0xF, */
             flexspiDllValue = FLEXSPI_DLLCR_DLLEN(1) | FLEXSPI_DLLCR_SLVDLYTARGET(0x0F);
+#endif
         }
         else
         {
-            temp     = (uint32_t)config->dataValidTime * 1000U; /* Convert data valid time in ns to ps. */
+            temp = (uint32_t)config->dataValidTime * 1000U; /* Convert data valid time in ns to ps. */
+#if defined(FSL_FEATURE_FLEXSPI_DQS_DELAY_PS) && FSL_FEATURE_FLEXSPI_DQS_DELAY_PS
+            if (temp > internalDqsDelayPs)
+            {
+                temp = temp - internalDqsDelayPs;
+            }
+            else
+            {
+                temp = 0U;
+            }
+#endif
             dllValue = temp / (uint32_t)kFLEXSPI_DelayCellUnitMin;
             if (dllValue * (uint32_t)kFLEXSPI_DelayCellUnitMin < temp)
             {
@@ -335,7 +362,7 @@ void FLEXSPI_Init(FLEXSPI_Type *base, const flexspi_config_t *config)
 void FLEXSPI_GetDefaultConfig(flexspi_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    (void)memset(config, 0, sizeof(*config));
+    FLEXSPI_Memset(config, 0, sizeof(*config));
 
     config->rxSampleClock          = kFLEXSPI_ReadSampleClkLoopbackInternally;
     config->enableSckFreeRunning   = false;
@@ -357,7 +384,7 @@ void FLEXSPI_GetDefaultConfig(flexspi_config_t *config)
     config->ahbConfig.ahbGrantTimeoutCycle = 0xFFU;
     config->ahbConfig.ahbBusTimeoutCycle   = 0xFFFFU;
     config->ahbConfig.resumeWaitCycle      = 0x20U;
-    (void)memset(config->ahbConfig.buffer, 0, sizeof(config->ahbConfig.buffer));
+    FLEXSPI_Memset(config->ahbConfig.buffer, 0, sizeof(config->ahbConfig.buffer));
     /* Use invalid master ID 0xF and buffer size 0 for the first several buffers. */
     for (uint8_t i = 0; i < ((uint8_t)FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT - 2U); i++)
     {
@@ -393,6 +420,53 @@ void FLEXSPI_Deinit(FLEXSPI_Type *base)
 }
 
 /*!
+ * brief Update FLEXSPI DLL value depending on currently flexspi root clock.
+ *
+ * param base FLEXSPI peripheral base address.
+ * param config Flash configuration parameters.
+ * param port FLEXSPI Operation port.
+ */
+void FLEXSPI_UpdateDllValue(FLEXSPI_Type *base, flexspi_device_config_t *config, flexspi_port_t port)
+{
+    uint32_t configValue = 0;
+    uint32_t statusValue = 0;
+    uint8_t index        = (uint8_t)port >> 1U; /* PortA with index 0, PortB with index 1. */
+
+    /* Wait for bus to be idle before changing flash configuration. */
+    while (!FLEXSPI_GetBusIdleStatus(base))
+    {
+    }
+
+    /* Configure DLL. */
+    configValue        = FLEXSPI_CalculateDll(base, config);
+    base->DLLCR[index] = configValue;
+
+    /* Exit stop mode. */
+    base->MCR0 &= ~FLEXSPI_MCR0_MDIS_MASK;
+
+    /* According to ERR011377, need to delay at least 100 NOPs to ensure the DLL is locked. */
+    statusValue =
+        (index == 0U) ?
+            ((uint32_t)kFLEXSPI_FlashASampleClockSlaveDelayLocked |
+             (uint32_t)kFLEXSPI_FlashASampleClockRefDelayLocked) :
+            ((uint32_t)kFLEXSPI_FlashBSampleClockSlaveDelayLocked | (uint32_t)kFLEXSPI_FlashBSampleClockRefDelayLocked);
+
+    if (0U != (configValue & FLEXSPI_DLLCR_DLLEN_MASK))
+    {
+        /* Wait slave delay line locked and slave reference delay line locked. */
+        while ((base->STS2 & statusValue) != statusValue)
+        {
+        }
+
+        /* Wait at least 100 NOPs*/
+        for (uint8_t delay = 100U; delay > 0U; delay--)
+        {
+            __NOP();
+        }
+    }
+}
+
+/*!
  * brief Configures the connected device parameter.
  *
  * This function configures the connected device relevant parameters, such as the size, command, and so on.
@@ -406,10 +480,9 @@ void FLEXSPI_Deinit(FLEXSPI_Type *base)
 void FLEXSPI_SetFlashConfig(FLEXSPI_Type *base, flexspi_device_config_t *config, flexspi_port_t port)
 {
     uint32_t configValue = 0;
-    uint32_t statusValue = 0;
     uint8_t index        = (uint8_t)port >> 1U; /* PortA with index 0, PortB with index 1. */
 
-    /* Wait for bus idle before change flash configuration. */
+    /* Wait for bus to be idle before changing flash configuration. */
     while (!FLEXSPI_GetBusIdleStatus(base))
     {
     }
@@ -447,8 +520,10 @@ void FLEXSPI_SetFlashConfig(FLEXSPI_Type *base, flexspi_device_config_t *config,
     base->FLSHCR2[port] = configValue;
 
     /* Configure DLL. */
-    configValue        = FLEXSPI_ConfigureDll(base, config);
-    base->DLLCR[index] = configValue;
+    FLEXSPI_UpdateDllValue(base, config, port);
+
+    /* Step into stop mode. */
+    base->MCR0 |= FLEXSPI_MCR0_MDIS_MASK;
 
     /* Configure write mask. */
     if (config->enableWriteMask)
@@ -474,25 +549,9 @@ void FLEXSPI_SetFlashConfig(FLEXSPI_Type *base, flexspi_device_config_t *config,
     /* Exit stop mode. */
     base->MCR0 &= ~FLEXSPI_MCR0_MDIS_MASK;
 
-    /* According to ERR011377, need to delay at least 100 NOPs to ensure the DLL is locked. */
-    statusValue =
-        (index == 0U) ?
-            ((uint32_t)kFLEXSPI_FlashASampleClockSlaveDelayLocked |
-             (uint32_t)kFLEXSPI_FlashASampleClockRefDelayLocked) :
-            ((uint32_t)kFLEXSPI_FlashBSampleClockSlaveDelayLocked | (uint32_t)kFLEXSPI_FlashBSampleClockRefDelayLocked);
-
-    if (0U != (configValue & FLEXSPI_DLLCR_DLLEN_MASK))
+    /* Wait for bus to be idle before use it access to external flash. */
+    while (!FLEXSPI_GetBusIdleStatus(base))
     {
-        /* Wait slave delay line locked and slave reference delay line locked. */
-        while ((base->STS2 & statusValue) != statusValue)
-        {
-        }
-
-        /* Wait at least 100 NOPs*/
-        for (uint8_t delay = 100U; delay > 0U; delay--)
-        {
-            __NOP();
-        }
     }
 }
 
@@ -512,7 +571,7 @@ void FLEXSPI_UpdateLUT(FLEXSPI_Type *base, uint32_t index, const uint32_t *cmd, 
     uint32_t i = 0;
     volatile uint32_t *lutBase;
 
-    /* Wait for bus idle before change flash configuration. */
+    /* Wait for bus to be idle before changing flash configuration. */
     while (!FLEXSPI_GetBusIdleStatus(base))
     {
     }
@@ -541,7 +600,7 @@ void FLEXSPI_UpdateRxSampleClock(FLEXSPI_Type *base, flexspi_read_sample_clock_t
 {
     uint32_t mcr0Val;
 
-    /* Wait for bus idle before change flash configuration. */
+    /* Wait for bus to be idle before changing flash configuration. */
     while (!FLEXSPI_GetBusIdleStatus(base))
     {
     }
@@ -600,7 +659,7 @@ status_t FLEXSPI_WriteBlocking(FLEXSPI_Type *base, uint32_t *buffer, size_t size
         }
         else
         {
-            for (i = 0U; i < (size / 4U + 1U); i++)
+            for (i = 0U; i < ((size + 3U) / 4U); i++)
             {
                 base->TFDR[i] = *buffer++;
             }
@@ -758,7 +817,7 @@ status_t FLEXSPI_TransferBlocking(FLEXSPI_Type *base, flexspi_transfer_t *xfer)
         /* Empty else. */
     }
 
-    /* Wait for bus idle. */
+    /* Wait for bus to be idle before changing flash configuration. */
     while (!FLEXSPI_GetBusIdleStatus(base))
     {
     }
@@ -1024,7 +1083,7 @@ void FLEXSPI_TransferHandleIRQ(FLEXSPI_Type *base, flexspi_handle_t *handle)
                     }
                     else
                     {
-                        for (i = 0; i < (handle->dataSize / 4U + 1U); i++)
+                        for (i = 0; i < (handle->dataSize + 3U) / 4U; i++)
                         {
                             base->TFDR[i] = *handle->data++;
                         }
@@ -1049,6 +1108,7 @@ void FLEXSPI_TransferHandleIRQ(FLEXSPI_Type *base, flexspi_handle_t *handle)
 
 #if defined(FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ) && FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ
 #if defined(FLEXSPI)
+void FLEXSPI_DriverIRQHandler(void);
 void FLEXSPI_DriverIRQHandler(void)
 {
     s_flexspiIsr(FLEXSPI, s_flexspiHandle[0]);
@@ -1057,6 +1117,7 @@ void FLEXSPI_DriverIRQHandler(void)
 #endif
 
 #if defined(FLEXSPI0)
+void FLEXSPI0_DriverIRQHandler(void);
 void FLEXSPI0_DriverIRQHandler(void)
 {
     s_flexspiIsr(FLEXSPI0, s_flexspiHandle[0]);
@@ -1064,6 +1125,7 @@ void FLEXSPI0_DriverIRQHandler(void)
 }
 #endif
 #if defined(FLEXSPI1)
+void FLEXSPI1_DriverIRQHandler(void);
 void FLEXSPI1_DriverIRQHandler(void)
 {
     s_flexspiIsr(FLEXSPI1, s_flexspiHandle[1]);
@@ -1072,6 +1134,7 @@ void FLEXSPI1_DriverIRQHandler(void)
 #endif
 
 #if defined(LSIO__FLEXSPI0)
+void LSIO_OCTASPI0_INT_DriverIRQHandler(void);
 void LSIO_OCTASPI0_INT_DriverIRQHandler(void)
 {
     s_flexspiIsr(LSIO__FLEXSPI0, s_flexspiHandle[0]);
@@ -1079,6 +1142,7 @@ void LSIO_OCTASPI0_INT_DriverIRQHandler(void)
 }
 #endif
 #if defined(LSIO__FLEXSPI1)
+void LSIO_OCTASPI1_INT_DriverIRQHandler(void);
 void LSIO_OCTASPI1_INT_DriverIRQHandler(void)
 {
     s_flexspiIsr(LSIO__FLEXSPI1, s_flexspiHandle[1]);
@@ -1088,6 +1152,7 @@ void LSIO_OCTASPI1_INT_DriverIRQHandler(void)
 
 #if defined(FSL_FEATURE_FLEXSPI_HAS_SHARED_IRQ0_IRQ1) && FSL_FEATURE_FLEXSPI_HAS_SHARED_IRQ0_IRQ1
 
+void FLEXSPI0_FLEXSPI1_DriverIRQHandler(void);
 void FLEXSPI0_FLEXSPI1_DriverIRQHandler(void)
 {
     /* If handle is registered, treat the transfer function is enabled. */
