@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FLEXSPI driver version 2.2.2. */
-#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+/*! @brief FLEXSPI driver version 2.3.3. */
+#define FSL_FLEXSPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 3))
 /*@}*/
 
 #define FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNTn(0)
@@ -338,6 +338,22 @@ extern "C" {
  * @name Initialization and deinitialization
  * @{
  */
+
+/*!
+ * @brief Get the instance number for FLEXSPI.
+ *
+ * @param base FLEXSPI base pointer.
+ */
+uint32_t FLEXSPI_GetInstance(FLEXSPI_Type *base);
+
+/*!
+ * @brief Check and clear IP command execution errors.
+ *
+ * @param base FLEXSPI base pointer.
+ * @param status interrupt status.
+ */
+status_t FLEXSPI_CheckAndClearError(FLEXSPI_Type *base, uint32_t status);
+
 /*!
  * @brief Initializes the FLEXSPI module and internal state.
  *
@@ -363,6 +379,15 @@ void FLEXSPI_GetDefaultConfig(flexspi_config_t *config);
  * @param base FLEXSPI peripheral base address.
  */
 void FLEXSPI_Deinit(FLEXSPI_Type *base);
+
+/*!
+ * @brief Update FLEXSPI DLL value depending on currently flexspi root clock.
+ *
+ * @param base FLEXSPI peripheral base address.
+ * @param config Flash configuration parameters.
+ * @param port FLEXSPI Operation port.
+ */
+void FLEXSPI_UpdateDllValue(FLEXSPI_Type *base, flexspi_device_config_t *config, flexspi_port_t port);
 
 /*!
  * @brief Configures the connected device parameter.

@@ -69,14 +69,14 @@ static uint8_t FLEXRAM_MapTcmSizeToRegister(uint8_t tcmBankNum)
 
 void FLEXRAM_SetTCMSize(uint8_t itcmBankNum, uint8_t dtcmBankNum)
 {
-    assert(itcmBankNum <= FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS);
-    assert(dtcmBankNum <= FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS);
+    assert(itcmBankNum <= (uint8_t)FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS);
+    assert(dtcmBankNum <= (uint8_t)FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS);
 
     /* dtcm configuration */
     if (dtcmBankNum != 0U)
     {
-        IOMUXC_GPR->GPR14 &= ~IOMUXC_GPR_GPR14_CM7_CFGDTCMSZ_MASK;
-        IOMUXC_GPR->GPR14 |= IOMUXC_GPR_GPR14_CM7_CFGDTCMSZ(FLEXRAM_MapTcmSizeToRegister(dtcmBankNum));
+        IOMUXC_GPR->GPR16 &= ~IOMUXC_GPR_GPR16_CM7_CFGDTCMSZ_MASK;
+        IOMUXC_GPR->GPR16 |= IOMUXC_GPR_GPR16_CM7_CFGDTCMSZ(FLEXRAM_MapTcmSizeToRegister(dtcmBankNum));
         IOMUXC_GPR->GPR16 |= IOMUXC_GPR_GPR16_INIT_DTCM_EN_MASK;
     }
     else
@@ -87,8 +87,8 @@ void FLEXRAM_SetTCMSize(uint8_t itcmBankNum, uint8_t dtcmBankNum)
     /* itcm configuration */
     if (itcmBankNum != 0U)
     {
-        IOMUXC_GPR->GPR14 &= ~IOMUXC_GPR_GPR14_CM7_CFGITCMSZ_MASK;
-        IOMUXC_GPR->GPR14 |= IOMUXC_GPR_GPR14_CM7_CFGITCMSZ(FLEXRAM_MapTcmSizeToRegister(itcmBankNum));
+        IOMUXC_GPR->GPR16 &= ~IOMUXC_GPR_GPR16_CM7_CFGITCMSZ_MASK;
+        IOMUXC_GPR->GPR16 |= IOMUXC_GPR_GPR16_CM7_CFGITCMSZ(FLEXRAM_MapTcmSizeToRegister(itcmBankNum));
         IOMUXC_GPR->GPR16 |= IOMUXC_GPR_GPR16_INIT_ITCM_EN_MASK;
     }
     else
@@ -115,6 +115,8 @@ status_t FLEXRAM_AllocateRam(flexram_allocate_ram_t *config)
     uint8_t i            = 0U;
     uint32_t bankCfg     = 0U;
     status_t status      = kStatus_Success;
+    uint32_t tempGPR17   = 0U;
+    uint32_t tempGPR18   = 0U;
 
     /* check the arguments */
     if ((uint8_t)FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS < (dtcmBankNum + itcmBankNum + ocramBankNum))
@@ -145,7 +147,11 @@ status_t FLEXRAM_AllocateRam(flexram_allocate_ram_t *config)
             }
         }
 
-        IOMUXC_GPR->GPR17 = bankCfg;
+        tempGPR17 = IOMUXC_GPR->GPR17;
+        tempGPR18 = IOMUXC_GPR->GPR18;
+
+        IOMUXC_GPR->GPR17 = (tempGPR17 & ~IOMUXC_GPR_GPR17_FLEXRAM_BANK_CFG_LOW_MASK) | (bankCfg & 0xFFFFU);
+        IOMUXC_GPR->GPR18 = (tempGPR18 & ~IOMUXC_GPR_GPR18_FLEXRAM_BANK_CFG_HIGH_MASK) | ((bankCfg >> 16) & 0xFFFFU);
 
         /* set TCM size */
         FLEXRAM_SetTCMSize(itcmBankNum, dtcmBankNum);

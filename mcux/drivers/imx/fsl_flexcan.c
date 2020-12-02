@@ -54,11 +54,21 @@
 #define FDCBT_MAX_TIME_QUANTA (1U + MAX_FPROPSEG + 0U + MAX_FPSEG1 + 1U + MAX_FPSEG2 + 1U)
 #define FDCBT_MIN_TIME_QUANTA (5U)
 
+#define MAX_TDCOFF ((uint32_t)CAN_FDCTRL_TDCOFF_MASK >> CAN_FDCTRL_TDCOFF_SHIFT)
+
 #define MAX_CANFD_BAUDRATE (8000000U)
 #define MAX_CAN_BAUDRATE   (1000000U)
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ERRATA_9595) && FSL_FEATURE_FLEXCAN_HAS_ERRATA_9595)
 #define CAN_ESR1_FLTCONF_BUSOFF CAN_ESR1_FLTCONF(2U)
+#endif
+
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+#define CAN_INIT_RXFIR         ((uint32_t)base + 0x4Cu)
+#define CAN_INIT_MEMORY_BASE_1 ((uint32_t)base + FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_1)
+#define CAN_INIT_MEMORY_SIZE_1 FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_1
+#define CAN_INIT_MEMORY_BASE_2 ((uint32_t)base + FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2)
+#define CAN_INIT_MEMORY_SIZE_2 FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2
 #endif
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -307,7 +317,6 @@ static flexcan_isr_t s_flexcanIsr;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-
 /*!
  * brief Get the FlexCAN instance from peripheral base address.
  *
@@ -477,9 +486,9 @@ void FLEXCAN_EnterFreezeMode(CAN_Type *base)
 void FLEXCAN_ExitFreezeMode(CAN_Type *base)
 {
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
-    /* Enable to update in MCER. */
-    base->CTRL2 |= CAN_CTRL2_ECRWRE_MASK;
-    base->MECR &= ~CAN_MECR_ECRWRDIS_MASK;
+    /* Clean FlexCAN Access With Non-Correctable Error Interrupt Flag to avoid be put in freeze mode. */
+    FLEXCAN_ClearMemoryErrorStatusFlags(base, (uint32_t)kFLEXCAN_FlexCanAccessNonCorrectableErrorFlag |
+                                                  (uint32_t)kFLEXCAN_FlexCanAccessNonCorrectableErrorOverrunFlag);
 #endif
 
     /* Clear Freeze, Halt bits. */
@@ -628,6 +637,24 @@ static void FLEXCAN_Reset(CAN_Type *base)
 #endif
     base->CTRL2 = CAN_CTRL2_TASD(0x16) | CAN_CTRL2_RRS_MASK | CAN_CTRL2_EACEN_MASK;
 
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+    /* Enable unrestricted write access to FlexCAN memory. */
+    base->CTRL2 |= CAN_CTRL2_WRMFRZ_MASK;
+    /* Do memory initialization for all FlexCAN RAM in order to have the parity bits in memory properly
+       updated. */
+    *(volatile uint32_t *)CAN_INIT_RXFIR = 0x0U;
+    (void)memset((void *)CAN_INIT_MEMORY_BASE_1, 0, CAN_INIT_MEMORY_SIZE_1);
+    (void)memset((void *)CAN_INIT_MEMORY_BASE_2, 0, CAN_INIT_MEMORY_SIZE_2);
+    /* Disable unrestricted write access to FlexCAN memory. */
+    base->CTRL2 &= ~CAN_CTRL2_WRMFRZ_MASK;
+
+    /* Clean all memory error flags. */
+    FLEXCAN_ClearMemoryErrorStatusFlags(base, (uint32_t)kFLEXCAN_AllMemoryErrorFlag);
+#else
+    /* Only need clean all Message Buffer memory. */
+    (void)memset((void *)&base->MB[0], 0, sizeof(base->MB));
+#endif
+
     /* Clean all individual Rx Mask of Message Buffers. */
     for (i = 0; i < (uint32_t)FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base); i++)
     {
@@ -642,12 +669,6 @@ static void FLEXCAN_Reset(CAN_Type *base)
     base->RX15MASK = 0x3FFFFFFF;
     /* Clean Global Mask of Rx FIFO. */
     base->RXFGMASK = 0x3FFFFFFF;
-
-    /* Clean all Message Buffer CS fields. */
-    for (i = 0; i < (uint32_t)FSL_FEATURE_FLEXCAN_HAS_MESSAGE_BUFFER_MAX_NUMBERn(base); i++)
-    {
-        base->MB[i].CS = 0x0;
-    }
 }
 
 static void FLEXCAN_SetBaudRate(CAN_Type *base,
@@ -801,6 +822,22 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
     /* Reset to known status. */
     FLEXCAN_Reset(base);
 
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+    /* Enable to update in MCER. */
+    base->CTRL2 |= CAN_CTRL2_ECRWRE_MASK;
+    base->MECR &= ~CAN_MECR_ECRWRDIS_MASK;
+
+    /* Enable/Disable Memory Error Detection and Correction.*/
+    base->MECR = (pConfig->enableMemoryErrorControl) ? (base->MECR & ~CAN_MECR_ECCDIS_MASK) :
+                                                       (base->MECR | CAN_MECR_ECCDIS_MASK);
+
+    /* Enable/Disable Non-Correctable Errors In FlexCAN Access Put Device In Freeze Mode. */
+    base->MECR = (pConfig->enableNonCorrectableErrorEnterFreeze) ? (base->MECR | CAN_MECR_NCEFAFRZ_MASK) :
+                                                                   (base->MECR & ~CAN_MECR_NCEFAFRZ_MASK);
+    /* Lock MCER register. */
+    base->CTRL2 &= ~CAN_CTRL2_ECRWRE_MASK;
+#endif
+
     /* Save current CTRL1 value and enable to enter Freeze mode(enabled by default). */
     ctrl1Temp = base->CTRL1;
 
@@ -840,12 +877,6 @@ void FLEXCAN_Init(CAN_Type *base, const flexcan_config_t *pConfig, uint32_t sour
 
     /* Write back CTRL1 Configuration to register. */
     base->CTRL1 = ctrl1Temp;
-
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
-    /* Enable to update in MCER. */
-    base->CTRL2 |= CAN_CTRL2_ECRWRE_MASK;
-    base->MECR &= ~CAN_MECR_ECRWRDIS_MASK;
-#endif
 
     /* Write back MCR Configuration to register. */
     base->MCR = mcrTemp;
@@ -911,8 +942,18 @@ void FLEXCAN_FDInit(
 
     if (brs && !(pConfig->enableLoopBack))
     {
-        /* Before use "|=" operation for multi-bits field, CPU should Clean previous Setting. */
-        fdctrl = (fdctrl & ~CAN_FDCTRL_TDCOFF_MASK) | CAN_FDCTRL_TDCOFF(0x2U);
+        /* The TDC offset should be configured as shown in this equation : offset = PSEG1 + PROPSEG + 2 */
+        if (((uint32_t)pConfig->timingConfig.fphaseSeg1 + pConfig->timingConfig.fpropSeg + 2U) < MAX_TDCOFF)
+        {
+            fdctrl = (fdctrl & ~CAN_FDCTRL_TDCOFF_MASK) | CAN_FDCTRL_TDCOFF((uint32_t)pConfig->timingConfig.fphaseSeg1 +
+                                                                            pConfig->timingConfig.fpropSeg + 2U);
+        }
+        else
+        {
+            fdctrl = (fdctrl & ~CAN_FDCTRL_TDCOFF_MASK) | CAN_FDCTRL_TDCOFF(MAX_TDCOFF);
+        }
+        /* Enable the Transceiver Delay Compensation */
+        fdctrl = (fdctrl & ~CAN_FDCTRL_TDCEN_MASK) | CAN_FDCTRL_TDCEN(1);
     }
 
     /* Before use "|=" operation for multi-bits field, CPU should clean previous Setting. */
@@ -934,6 +975,9 @@ void FLEXCAN_FDInit(
 
     /* update the FDCTL register. */
     base->FDCTRL = fdctrl;
+
+    /* Enable CAN FD ISO mode by default. */
+    base->CTRL2 |= CAN_CTRL2_ISOCANFDEN_MASK;
 
     /* Exit Freeze Mode. */
     FLEXCAN_ExitFreezeMode(base);
@@ -975,17 +1019,19 @@ void FLEXCAN_Deinit(CAN_Type *base)
  *
  * This function initializes the FlexCAN configuration structure to default values. The default
  * values are as follows.
- *   flexcanConfig->clkSrc                  = kFLEXCAN_ClkSrc0;
- *   flexcanConfig->baudRate                = 1000000U;
- *   flexcanConfig->baudRateFD              = 2000000U;
- *   flexcanConfig->maxMbNum                = 16;
- *   flexcanConfig->enableLoopBack          = false;
- *   flexcanConfig->enableSelfWakeup        = false;
- *   flexcanConfig->enableIndividMask       = false;
- *   flexcanConfig->disableSelfReception    = false;
- *   flexcanConfig->enableListenOnlyMode    = false;
- *   flexcanConfig->enableDoze              = false;
- *   flexcanConfig.timingConfig             = timingConfig;
+ *   flexcanConfig->clkSrc                               = kFLEXCAN_ClkSrc0;
+ *   flexcanConfig->baudRate                             = 1000000U;
+ *   flexcanConfig->baudRateFD                           = 2000000U;
+ *   flexcanConfig->maxMbNum                             = 16;
+ *   flexcanConfig->enableLoopBack                       = false;
+ *   flexcanConfig->enableSelfWakeup                     = false;
+ *   flexcanConfig->enableIndividMask                    = false;
+ *   flexcanConfig->disableSelfReception                 = false;
+ *   flexcanConfig->enableListenOnlyMode                 = false;
+ *   flexcanConfig->enableDoze                           = false;
+ *   flexcanConfig->enableMemoryErrorControl             = true;
+ *   flexcanConfig->enableNonCorrectableErrorEnterFreeze = true;
+ *   flexcanConfig.timingConfig                          = timingConfig;
  *
  * param pConfig Pointer to the FlexCAN configuration structure.
  */
@@ -1013,6 +1059,10 @@ void FLEXCAN_GetDefaultConfig(flexcan_config_t *pConfig)
     pConfig->enableListenOnlyMode = false;
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_DOZE_MODE_SUPPORT) && FSL_FEATURE_FLEXCAN_HAS_DOZE_MODE_SUPPORT)
     pConfig->enableDoze = false;
+#endif
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+    pConfig->enableMemoryErrorControl             = true;
+    pConfig->enableNonCorrectableErrorEnterFreeze = true;
 #endif
     /* Default protocol timing configuration, time quantum is 10. */
     pConfig->timingConfig.phaseSeg1  = 3;
@@ -1086,6 +1136,76 @@ void FLEXCAN_SetTimingConfig(CAN_Type *base, const flexcan_timing_config_t *pCon
     /* Exit Freeze Mode. */
     FLEXCAN_ExitFreezeMode(base);
 }
+
+#if (defined(FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL) && FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL)
+/*!
+ * brief Gets the FlexCAN Memory Error Report registers status.
+ *
+ * This function gets the FlexCAN Memory Error Report registers status.
+ *
+ * param base FlexCAN peripheral base address.
+ * param errorStatus Pointer to FlexCAN Memory Error Report registers status structure.
+ */
+void FLEXCAN_GetMemoryErrorReportStatus(CAN_Type *base, flexcan_memory_error_report_status_t *errorStatus)
+{
+    uint32_t temp;
+    /*  Disable updates of the error report registers. */
+    base->MECR |= CAN_MECR_RERRDIS_MASK;
+
+    errorStatus->accessAddress = (uint16_t)(base->RERRAR & CAN_RERRAR_ERRADDR_MASK);
+    errorStatus->errorData     = base->RERRDR;
+    errorStatus->errorType =
+        (base->RERRAR & CAN_RERRAR_NCE_MASK) == 0U ? kFLEXCAN_CorrectableError : kFLEXCAN_NonCorrectableError;
+
+    temp = (base->RERRAR & CAN_RERRAR_SAID_MASK) >> CAN_RERRAR_SAID_SHIFT;
+    switch (temp)
+    {
+        case (uint32_t)kFLEXCAN_MoveOutFlexCanAccess:
+        case (uint32_t)kFLEXCAN_MoveInAccess:
+        case (uint32_t)kFLEXCAN_TxArbitrationAccess:
+        case (uint32_t)kFLEXCAN_RxMatchingAccess:
+        case (uint32_t)kFLEXCAN_MoveOutHostAccess:
+            errorStatus->accessType = (flexcan_memory_access_type_t)temp;
+            break;
+        default:
+            assert(false);
+            break;
+    }
+
+    for (uint32_t i = 0; i < 4U; i++)
+    {
+        temp = (base->RERRSYNR & ((uint32_t)CAN_RERRSYNR_SYND0_MASK << (i * 8U))) >> (i * 8U);
+        errorStatus->byteStatus[i].byteIsRead = (base->RERRSYNR & ((uint32_t)CAN_RERRSYNR_BE0_MASK << (i * 8U))) != 0U;
+        switch (temp)
+        {
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_NoError):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_ParityBits0Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_ParityBits1Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_ParityBits2Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_ParityBits3Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_ParityBits4Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits0Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits1Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits2Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits3Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits4Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits5Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits6Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_DataBits7Error):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_AllZeroError):
+            case CAN_RERRSYNR_SYND0(kFLEXCAN_AllOneError):
+                errorStatus->byteStatus[i].bitAffected = (flexcan_byte_error_syndrome_t)temp;
+                break;
+            default:
+                errorStatus->byteStatus[i].bitAffected = kFLEXCAN_NonCorrectableErrors;
+                break;
+        }
+    }
+
+    /*  Re-enable updates of the error report registers. */
+    base->MECR &= CAN_MECR_RERRDIS_MASK;
+}
+#endif
 
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE) && FSL_FEATURE_FLEXCAN_HAS_FLEXIBLE_DATA_RATE)
 /*!
@@ -1314,7 +1434,7 @@ bool FLEXCAN_CalculateImprovedTimingValues(uint32_t baudRate,
     /* observe baud rate maximums. */
     assert(baudRate <= MAX_CAN_BAUDRATE);
 
-    uint32_t clk;   /* the clock is tqNumb x baudRateFD. */
+    uint32_t clk;   /* the clock is tqNum x baudRate. */
     uint32_t tqNum; /* Numbers of TQ. */
     bool fgRet = false;
 
@@ -1564,7 +1684,16 @@ static bool FLEXCAN_CalculateImprovedTimingValuesByCBT(uint32_t baudRate,
                       should change a divisible baud rate. */
         }
 
-        pTimingConfig->preDivider = (uint16_t)(sourceClock_Hz / clk) - 1U;
+        /* Make sure the new calculated divider value is greater than the previous one. */
+        if (pTimingConfig->preDivider > ((uint16_t)(sourceClock_Hz / clk) - 1U))
+        {
+            continue;
+        }
+        else
+        {
+            pTimingConfig->preDivider = (uint16_t)(sourceClock_Hz / clk) - 1U;
+        }
+
         if (pTimingConfig->preDivider > MAX_EPRESDIV)
         {
             break; /* The frequency of source clock is too large or the baud rate is too small, the pre-divider could
@@ -1605,7 +1734,11 @@ bool FLEXCAN_FDCalculateImprovedTimingValues(uint32_t baudRate,
     uint32_t tqNum; /* Numbers of TQ. */
     bool fgRet = false;
 
-    if (FLEXCAN_CalculateImprovedTimingValuesByCBT(baudRate, sourceClock_Hz, pTimingConfig))
+    pTimingConfig->preDivider = 0U;
+
+    /* To minimize errors when processing FD frames, try to calculate the same value for FPRESDIV and
+       PRESDIV (in CBT). */
+    while (FLEXCAN_CalculateImprovedTimingValuesByCBT(baudRate, sourceClock_Hz, pTimingConfig))
     {
         if (0U != baudRateFD)
         {
@@ -1626,6 +1759,12 @@ bool FLEXCAN_FDCalculateImprovedTimingValues(uint32_t baudRate,
                 }
 
                 pTimingConfig->fpreDivider = (uint16_t)(sourceClock_Hz / clk - 1U);
+
+                if (pTimingConfig->fpreDivider != pTimingConfig->preDivider)
+                {
+                    continue;
+                }
+
                 if (pTimingConfig->fpreDivider > MAX_FPRESDIV)
                 {
                     break; /* The frequency of source clock is too large or the baud rate is too small, the pre-divider
@@ -1639,6 +1778,15 @@ bool FLEXCAN_FDCalculateImprovedTimingValues(uint32_t baudRate,
                     break;
                 }
             } while (--tqNum >= FDCBT_MIN_TIME_QUANTA);
+
+            if (!fgRet)
+            {
+                pTimingConfig->preDivider++;
+            }
+            else
+            {
+                break;
+            }
         }
         else
         {
@@ -3454,6 +3602,7 @@ void FLEXCAN_TransferHandleIRQ(CAN_Type *base, flexcan_handle_t *handle)
 }
 
 #if defined(CAN0)
+void CAN0_DriverIRQHandler(void);
 void CAN0_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[0]);
@@ -3464,6 +3613,7 @@ void CAN0_DriverIRQHandler(void)
 #endif
 
 #if defined(CAN1)
+void CAN1_DriverIRQHandler(void);
 void CAN1_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[1]);
@@ -3474,6 +3624,7 @@ void CAN1_DriverIRQHandler(void)
 #endif
 
 #if defined(CAN2)
+void CAN2_DriverIRQHandler(void);
 void CAN2_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[2]);
@@ -3484,6 +3635,7 @@ void CAN2_DriverIRQHandler(void)
 #endif
 
 #if defined(CAN3)
+void CAN3_DriverIRQHandler(void);
 void CAN3_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[3]);
@@ -3494,6 +3646,7 @@ void CAN3_DriverIRQHandler(void)
 #endif
 
 #if defined(CAN4)
+void CAN4_DriverIRQHandler(void);
 void CAN4_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[4]);
@@ -3504,6 +3657,7 @@ void CAN4_DriverIRQHandler(void)
 #endif
 
 #if defined(DMA__CAN0)
+void DMA_FLEXCAN0_INT_DriverIRQHandler(void);
 void DMA_FLEXCAN0_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(DMA__CAN0)]);
@@ -3514,6 +3668,7 @@ void DMA_FLEXCAN0_INT_DriverIRQHandler(void)
 #endif
 
 #if defined(DMA__CAN1)
+void DMA_FLEXCAN1_INT_DriverIRQHandler(void);
 void DMA_FLEXCAN1_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(DMA__CAN1)]);
@@ -3524,6 +3679,7 @@ void DMA_FLEXCAN1_INT_DriverIRQHandler(void)
 #endif
 
 #if defined(DMA__CAN2)
+void DMA_FLEXCAN2_INT_DriverIRQHandler(void);
 void DMA_FLEXCAN2_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(DMA__CAN2)]);
@@ -3534,6 +3690,7 @@ void DMA_FLEXCAN2_INT_DriverIRQHandler(void)
 #endif
 
 #if defined(ADMA__CAN0)
+void ADMA_FLEXCAN0_INT_DriverIRQHandler(void);
 void ADMA_FLEXCAN0_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(ADMA__CAN0)]);
@@ -3544,6 +3701,7 @@ void ADMA_FLEXCAN0_INT_DriverIRQHandler(void)
 #endif
 
 #if defined(ADMA__CAN1)
+void ADMA_FLEXCAN1_INT_DriverIRQHandler(void);
 void ADMA_FLEXCAN1_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(ADMA__CAN1)]);
@@ -3554,6 +3712,7 @@ void ADMA_FLEXCAN1_INT_DriverIRQHandler(void)
 #endif
 
 #if defined(ADMA__CAN2)
+void ADMA_FLEXCAN2_INT_DriverIRQHandler(void);
 void ADMA_FLEXCAN2_INT_DriverIRQHandler(void)
 {
     assert(NULL != s_flexcanHandle[FLEXCAN_GetInstance(ADMA__CAN2)]);

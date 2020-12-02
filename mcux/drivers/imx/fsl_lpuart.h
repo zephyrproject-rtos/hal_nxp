@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPUART driver version 2.3.0. */
-#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief LPUART driver version. */
+#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
@@ -364,6 +364,69 @@ void LPUART_GetDefaultConfig(lpuart_config_t *config);
  */
 status_t LPUART_SetBaudRate(LPUART_Type *base, uint32_t baudRate_Bps, uint32_t srcClock_Hz);
 
+/*!
+ * @brief Enable 9-bit data mode for LPUART.
+ *
+ * This function set the 9-bit mode for LPUART module. The 9th bit is not used for parity thus can be modified by user.
+ *
+ * @param base LPUART peripheral base address.
+ * @param enable true to enable, flase to disable.
+ */
+void LPUART_Enable9bitMode(LPUART_Type *base, bool enable);
+
+/*!
+ * @brief Set the LPUART address.
+ *
+ * This function configures the address for LPUART module that works as slave in 9-bit data mode. One or two address
+ * fields can be configured. When the address field's match enable bit is set, the frame it receices with MSB being
+ * 1 is considered as an address frame, otherwise it is considered as data frame. Once the address frame matches one
+ * of slave's own addresses, this slave is addressed. This address frame and its following data frames are stored in
+ * the receive buffer, otherwise the frames will be discarded. To un-address a slave, just send an address frame with
+ * unmatched address.
+ *
+ * @note Any LPUART instance joined in the multi-slave system can work as slave. The position of the address mark is the
+ * same as the parity bit when parity is enabled for 8 bit and 9 bit data formats.
+ *
+ * @param base LPUART peripheral base address.
+ * @param address1 LPUART slave address1.
+ * @param address2 LPUART slave address2.
+ */
+static inline void LPUART_SetMatchAddress(LPUART_Type *base, uint16_t address1, uint16_t address2)
+{
+    /* Configure match address. */
+    uint32_t address = ((uint32_t)address2 << 16U) | (uint32_t)address1 | 0x1000100UL;
+    base->MATCH      = address;
+}
+
+/*!
+ * @brief Enable the LPUART match address feature.
+ *
+ * @param base LPUART peripheral base address.
+ * @param match1 true to enable match address1, false to disable.
+ * @param match2 true to enable match address2, false to disable.
+ */
+static inline void LPUART_EnableMatchAddress(LPUART_Type *base, bool match1, bool match2)
+{
+    /* Configure match address1 enable bit. */
+    if (match1)
+    {
+        base->BAUD |= (uint32_t)LPUART_BAUD_MAEN1_MASK;
+    }
+    else
+    {
+        base->BAUD &= ~(uint32_t)LPUART_BAUD_MAEN1_MASK;
+    }
+    /* Configure match address2 enable bit. */
+    if (match2)
+    {
+        base->BAUD |= (uint32_t)LPUART_BAUD_MAEN2_MASK;
+    }
+    else
+    {
+        base->BAUD &= ~(uint32_t)LPUART_BAUD_MAEN2_MASK;
+    }
+}
+
 /* @} */
 
 /*!
@@ -626,6 +689,14 @@ static inline uint8_t LPUART_ReadByte(LPUART_Type *base)
     return (uint8_t)(base->DATA);
 #endif
 }
+
+/*!
+ * @brief Transmit an address frame in 9-bit data mode.
+ *
+ * @param base LPUART peripheral base address.
+ * @param address LPUART slave address.
+ */
+void LPUART_SendAddress(LPUART_Type *base, uint8_t address);
 
 /*!
  * @brief Writes to the transmitter register using a blocking method.

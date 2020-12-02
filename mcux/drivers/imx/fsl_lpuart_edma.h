@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief LPUART EDMA driver version 2.3.0. */
-#define FSL_LPUART_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+/*! @brief LPUART EDMA driver version 2.4.0. */
+#define FSL_LPUART_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /* Forward declaration of the handle typedef. */
