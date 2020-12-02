@@ -24,6 +24,12 @@ elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT1052")
 elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT685S_CM33")
   set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm33)
   set(MCUX_DEVICE MIMXRT685S)
+elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT1176_CM4")
+  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm4)
+  set(MCUX_DEVICE MIMXRT1176)
+elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT1176_CM7")
+  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm7)
+  set(MCUX_DEVICE MIMXRT1176)
 else()
   set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER})
 endif()
@@ -47,6 +53,20 @@ if (${MCUX_DEVICE} MATCHES "LPC|MIMXRT6")
 
   if ((${MCUX_DEVICE} MATCHES "MIMXRT6") AND (CONFIG_PM))
     zephyr_code_relocate(devices/${MCUX_DEVICE}/fsl_power.c SRAM)
+  endif()
+endif()
+
+if (${MCUX_DEVICE} MATCHES "MIMXRT117")
+  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_romapi.c)
+  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_pmu.c)
+  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_dcdc.c)
+  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_anatop_ai.c)
+  if ("${MCUX_DEVICE}" STREQUAL "MIMXRT1176_CM4")
+    zephyr_include_directories(devices/${MCUX_DEVICE}/cm4/)
+    zephyr_library_sources_ifdef(
+      CONFIG_HAS_MCUX_CACHE
+      devices/${MCUX_DEVICE}/cm4/fsl_cache.c
+    )
   endif()
 endif()
 
