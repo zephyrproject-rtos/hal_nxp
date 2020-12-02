@@ -30,18 +30,19 @@ def get_soc_family(device):
     elif device.startswith('MIMX'):
         return 'imx'
 
-def get_files(src, pattern):
+def get_files(src, pattern, skip_dirs = False):
     matches = []
     nonmatches = []
     always_exclude = "freertos|\.cmake"
     if os.path.exists(src):
         for filename in os.listdir(src):
             path = os.path.join(src, filename)
+            if os.path.isdir(path) and skip_dirs:
+                continue
             if re.search(pattern, filename):
                 matches.append(path)
             elif not re.search(always_exclude, filename):
                 nonmatches.append(path)
-                print(filename)
 
     return [matches, nonmatches]
 
@@ -99,12 +100,24 @@ def import_sdk(directory, device_drivers_pattern = ""):
         board_src = os.path.join(directory, 'boards', board)
         board_dst = os.path.join(MCUX_HAL_BASE, 'boards', board)
 
+        board_drivers_pattern = ".[ch]" 
+        board_drivers, _ = get_files(board_src, board_drivers_pattern, True)
+        print('Importing {} board drivers to {}'.format(board, board_dst))
+        copy_files(board_drivers, board_dst)
+
         xip_config_src = os.path.join(board_src, 'xip')
         xip_config_pattern = ".*"
         xip_config, _ = get_files(xip_config_src, xip_config_pattern)
 
         print('Importing {} xip config to {}'.format(board, board_dst))
         copy_files(xip_config, board_dst)
+
+        dcd_src = os.path.join(board_src, 'demo_apps', 'hello_world')
+        dcd_pattern = "dcd\.[ch]"
+        dcd_files, _ = get_files(dcd_src, dcd_pattern)
+
+        print('Importing {} dcd to {}'.format(board, board_dst))
+        copy_files(dcd_files, board_dst)
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
