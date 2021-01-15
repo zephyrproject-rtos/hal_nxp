@@ -97,6 +97,3 @@ Patch List:
      support is enabled.
 
    * Add USB device controller drivers, the drivers are based on MCUXpresso SDK release tag REL_2.5.0_REL9_RFP_RC3_7_1.
-
-   * Add support for LPC's Flexcomm spi driver to discard Rx by providing NULL Rx buffer.
-

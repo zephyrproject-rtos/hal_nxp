@@ -529,8 +529,8 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
 #endif
 
     /* check params */
-    assert(!((NULL == base) || (NULL == xfer) || ((NULL == xfer->txData) && (NULL == xfer->rxData) && (0 == xfer->dataSize))));
-    if ((NULL == base) || (NULL == xfer) || ((NULL == xfer->txData) && (NULL == xfer->rxData) && (0 == xfer->dataSize)))
+    assert(!((NULL == base) || (NULL == xfer) || ((NULL == xfer->txData) && (NULL == xfer->rxData))));
+    if ((NULL == base) || (NULL == xfer) || ((NULL == xfer->txData) && (NULL == xfer->rxData)))
     {
         return kStatus_InvalidArgument;
     }
@@ -539,7 +539,7 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
     txData           = xfer->txData;
     rxData           = xfer->rxData;
     txRemainingBytes = (txData != NULL) ? xfer->dataSize : 0U;
-    rxRemainingBytes = xfer->dataSize;
+    rxRemainingBytes = (rxData != NULL) ? xfer->dataSize : 0U;
 
     instance  = SPI_GetInstance(base);
     dataWidth = (uint32_t)(g_configs[instance].dataWidth);
@@ -578,16 +578,12 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
             /* rxBuffer is not empty */
             if (rxRemainingBytes != 0U)
             {
-                if (rxData) {
-                    *(rxData++) = (uint8_t)tmp32;
-                }
+                *(rxData++) = (uint8_t)tmp32;
                 rxRemainingBytes--;
                 /* read 16 bits at once */
                 if (dataWidth > 8U)
                 {
-                    if (rxData) {
-                        *(rxData++) = (uint8_t)(tmp32 >> 8);
-                    }
+                    *(rxData++) = (uint8_t)(tmp32 >> 8);
                     rxRemainingBytes--;
                 }
             }
@@ -662,8 +658,8 @@ status_t SPI_MasterTransferNonBlocking(SPI_Type *base, spi_master_handle_t *hand
 {
     /* check params */
     assert(
-        !((NULL == base) || (NULL == handle) || (NULL == xfer) || ((NULL == xfer->txData) && (NULL == xfer->rxData) && (0 == xfer->dataSize))));
-    if ((NULL == base) || (NULL == handle) || (NULL == xfer) || ((NULL == xfer->txData) && (NULL == xfer->rxData) && (0 == xfer->dataSize)))
+        !((NULL == base) || (NULL == handle) || (NULL == xfer) || ((NULL == xfer->txData) && (NULL == xfer->rxData))));
+    if ((NULL == base) || (NULL == handle) || (NULL == xfer) || ((NULL == xfer->txData) && (NULL == xfer->rxData)))
     {
         return kStatus_InvalidArgument;
     }
@@ -686,7 +682,7 @@ status_t SPI_MasterTransferNonBlocking(SPI_Type *base, spi_master_handle_t *hand
     handle->rxData = xfer->rxData;
     /* set count */
     handle->txRemainingBytes = (xfer->txData != NULL) ? xfer->dataSize : 0U;
-    handle->rxRemainingBytes = xfer->dataSize;
+    handle->rxRemainingBytes = (xfer->rxData != NULL) ? xfer->dataSize : 0U;
     handle->totalByteCount   = xfer->dataSize;
     /* other options */
     handle->toReceiveCount = 0U;
@@ -924,16 +920,12 @@ static void SPI_TransferHandleIRQInternal(SPI_Type *base, spi_master_handle_t *h
             if (handle->rxRemainingBytes != 0U)
             {
                 /* low byte must go first */
-                if (handle->rxData) {
-                    *(handle->rxData++) = (uint8_t)tmp32;
-                }
+                *(handle->rxData++) = (uint8_t)tmp32;
                 handle->rxRemainingBytes--;
                 /* read 16 bits at once */
                 if (handle->dataWidth > (uint8_t)kSPI_Data8Bits)
                 {
-                    if (handle->rxData) {
-                        *(handle->rxData++) = (uint8_t)(tmp32 >> 8);
-                    }
+                    *(handle->rxData++) = (uint8_t)(tmp32 >> 8);
                     handle->rxRemainingBytes--;
                 }
             }
