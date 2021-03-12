@@ -20,3 +20,4 @@ zephyr_sources_ifdef(CONFIG_GPIO_MCUX_LPC     fsl_gpio.c fsl_pint.c fsl_inputmux
 zephyr_sources_ifdef(CONFIG_DMA_MCUX_LPC      fsl_dma.c)
 zephyr_sources_ifdef(CONFIG_MCUX_ACMP         fsl_acmp.c)
 zephyr_sources_ifdef(CONFIG_MEMC_MCUX_FLEXSPI	fsl_flexspi.c)
+zephyr_sources_ifdef(CONFIG_MCUX_OS_TIMER	fsl_ostimer.c)
