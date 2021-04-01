@@ -1,0 +1,183 @@
+#!/usr/bin/env python3
+#
+# Copyright (c) 2021, Linaro Limited.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+import xml.etree.ElementTree as ET
+import re
+import os
+import sys
+import collections
+import logging
+
+# layout/index of pins tuple
+PIN = collections.namedtuple('PIN', ['PERIPH', 'NAME_PART', 'SIGNAL', 'PORT',
+                                     'PIN', 'CH', 'MUX_FUNC'])
+
+
+def parse_signal_xml(signal_fn):
+    signal_tree = ET.parse(signal_fn)
+    signal_root = signal_tree.getroot()
+
+    pins = []
+
+    partNum = signal_root.find("./part_information/part_number").get('id')
+
+    print(f"################## {partNum} ###########")
+
+    periphs_node = signal_root.find("peripherals")
+    periphs = []
+    for p in periphs_node:
+        id = p.attrib.get("id")
+        name = p.attrib.get("name")
+
+        if id != name:
+            logging.warn("id and name don't match")
+
+        periphs.append(id)
+
+    pins_node = signal_root.find("pins")
+    for p in pins_node:
+        name = p.attrib.get("name")
+
+        # Kinetis family uses PT[A-Z][0-31]
+        if "PT" in name:
+            logging.debug(name)
+
+            num_conns = 0
+
+            for conns in p.findall("connections"):
+                num_conns += 1
+                logging.debug(f"\t{num_conns} - {conns.tag} {conns.attrib}")
+                name_part = conns.attrib.get("name_part")
+                # func = conns.attrib.get("package_function")
+
+                conns_tree = ET.ElementTree(conns)
+                periph = None
+
+                num_periph_sig = 0
+
+                for c in conns_tree.iter('peripheral_signal_ref'):
+                    num_periph_sig += 1
+                    logging.debug(f"\t\t{num_periph_sig} - {c.tag} {c.attrib}")
+                    signal = c.attrib.get("signal")
+                    periph = c.attrib.get("peripheral")
+                    ch = c.attrib.get("channel")
+
+                if num_periph_sig > 1:
+                    logging.error(num_periph_sig)
+
+                # handle unrouted_pin_function_ref case (disabled pin)
+                if periph is None:
+                    continue
+
+                pin = None
+
+                for c in conns_tree.iter('assign'):
+                    logging.debug(f"\t\t\t[ASSIGN] {c.tag} {c.attrib}")
+                    reg = c.attrib.get("register")
+                    reg_match = re.search(r"PORT([A-Z])_PCR(\d+)", reg)
+
+                    # Only process PCR registers
+                    if reg_match:
+                        port = reg_match.group(1).lower()
+                        if len(reg_match.groups()) == 2:
+                            pin = reg_match.group(2).lower()
+                        else:
+                            pin = None
+                    else:
+                        continue
+
+                    logging.debug(c.attrib)
+
+                    val = c.attrib.get("bit_field_value")
+
+                    pin_data = PIN(PERIPH=periph,
+                                   NAME_PART=name_part,
+                                   SIGNAL=signal,
+                                   PORT=port,
+                                   PIN=int(pin),
+                                   CH=ch,
+                                   MUX_FUNC=int(val, 16))
+                    logging.debug(pin_data)
+                    pins.append(pin_data)
+
+    return (partNum, pins)
+
+
+def write_pins(whichPort, pins, f):
+    port_pins = list(filter(lambda p: (p.PORT.lower() == whichPort), pins))
+
+    if (len(port_pins)) == 0:
+        return
+
+    port_pins.sort(key=lambda p: (p.PIN, p.MUX_FUNC))
+
+    seen_nodes = []
+
+    f.write(f"&port{whichPort} {{\n")
+    for pin_data in port_pins:
+        port_name = f"PT{pin_data.PORT.upper()}{pin_data.PIN}"
+        # Special case handle GPIO so that it will be of the form:
+        # PT[A-E][0-31]: GPIO[A-E]_PT[A-E][0-31]: ...
+        #
+        # eg:
+        # PTA3: GPIOA_PTA3: gpioa_pta3 { .... };
+        if pin_data.PERIPH.startswith("GPIO"):
+            node = f"{pin_data.PERIPH.lower()}_{port_name.lower()}"
+            label = f"{port_name}: {node.upper()}"
+        else:
+            label = f"{pin_data.NAME_PART}_{port_name}"
+            node = label.lower()
+        k_port_pins_prop = f"< {pin_data.PIN} {pin_data.MUX_FUNC} >"
+
+        if node in seen_nodes:
+            continue
+        else:
+            seen_nodes.append(node)
+
+        f.write(f"\t{label}: {node} {{\n")
+        f.write("\t\t/* < PIN PCR[MUX] > */\n")
+        f.write(f"\t\tnxp,kinetis-port-pins = {k_port_pins_prop};\n")
+        f.write("\t};\n")
+
+    f.write("};\n")
+    f.write("\n")
+
+
+def process_signal_xml(filename):
+    (partNum, pins) = parse_signal_xml(filename)
+
+    pcr_pins = list(filter(lambda p: (p.PERIPH not in ["FB", "EZPORT"]), pins))
+
+    with open(partNum + "-pinctrl.dtsi", "w", encoding="utf-8") as f:
+        f.write("/*\n")
+        f.write(" * NOTE: Autogenerated file by kinetis_signal2dts.py\n")
+        f.write(f" *       for {partNum}/signal_configuration.xml\n")
+        f.write(" *\n")
+        f.write(" * SPDX-License-Identifier: Apache-2.0\n")
+        f.write(" */\n")
+        f.write("\n")
+
+        write_pins('a', pcr_pins, f)
+        write_pins('b', pcr_pins, f)
+        write_pins('c', pcr_pins, f)
+        write_pins('d', pcr_pins, f)
+        write_pins('e', pcr_pins, f)
+
+
+logger = logging.getLogger('')
+
+processor = None
+if len(sys.argv) > 1:
+    processor = sys.argv[1]
+
+signal_xml_fn = "signal_configuration.xml"
+
+for root, dirs, files in os.walk("."):
+    if signal_xml_fn in files:
+        if processor and processor not in root:
+            continue
+        print(os.path.join(root, signal_xml_fn))
+        process_signal_xml(os.path.join(root, signal_xml_fn))
