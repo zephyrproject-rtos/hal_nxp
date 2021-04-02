@@ -44,6 +44,10 @@ zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_clock.c)
 if (${MCUX_DEVICE} MATCHES "LPC|MIMXRT6")
   zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_power.c)
   zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_reset.c)
+
+  if ((${MCUX_DEVICE} MATCHES "MIMXRT6") AND (CONFIG_PM))
+    zephyr_code_relocate(devices/${MCUX_DEVICE}/fsl_power.c SRAM)
+  endif()
 endif()
 
 # Build mcux drivers that can be used for multiple SoC's.
