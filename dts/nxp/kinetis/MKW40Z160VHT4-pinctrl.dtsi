@@ -1,0 +1,9 @@
+/*
+ * Copyright (c) 2021, Linaro
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/* placeholder for now, we don't have signal_configuration.xml for the MKW40Z
+ * we'll hand create this for the needs of the hexiwear KW40Z board
+ */
