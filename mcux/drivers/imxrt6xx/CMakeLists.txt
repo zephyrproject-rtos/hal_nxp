@@ -21,3 +21,7 @@ zephyr_sources_ifdef(CONFIG_DMA_MCUX_LPC      fsl_dma.c)
 zephyr_sources_ifdef(CONFIG_MCUX_ACMP         fsl_acmp.c)
 zephyr_sources_ifdef(CONFIG_MEMC_MCUX_FLEXSPI	fsl_flexspi.c)
 zephyr_sources_ifdef(CONFIG_MCUX_OS_TIMER	fsl_ostimer.c)
+
+if(CONFIG_FLASH_MCUX_FLEXSPI_XIP)
+  zephyr_code_relocate(fsl_flexspi.c ${CONFIG_FLASH_MCUX_FLEXSPI_XIP_MEM}_TEXT)
+endif()
