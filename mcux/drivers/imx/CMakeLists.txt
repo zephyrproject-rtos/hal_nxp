@@ -36,6 +36,10 @@ zephyr_library_sources_ifdef(CONFIG_VIDEO_MCUX_CSI	fsl_csi.c)
 zephyr_library_sources_ifdef(CONFIG_WDT_MCUX_IMX_WDOG    fsl_wdog.c)
 zephyr_library_sources_ifdef(CONFIG_CAN_MCUX_FLEXCAN	fsl_flexcan.c)
 
+if(CONFIG_FLASH_MCUX_FLEXSPI_XIP)
+  zephyr_code_relocate(fsl_flexspi.c ${CONFIG_FLASH_MCUX_FLEXSPI_XIP_MEM}_TEXT)
+endif()
+
 if(NOT CONFIG_ASSERT OR CONFIG_FORCE_NO_ASSERT)
   zephyr_compile_definitions(NDEBUG) # squelch fsl_flexcan.c warning
 endif()
