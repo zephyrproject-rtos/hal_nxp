@@ -14,6 +14,7 @@ zephyr_compile_definitions_ifdef(
 zephyr_library_compile_definitions_ifdef(
   CONFIG_HAS_MCUX_CACHE FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
 )
+zephyr_library_sources(fsl_common.c)
 
 zephyr_library_sources_ifdef(CONFIG_CAN_MCUX_FLEXCAN	fsl_flexcan.c)
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_GPT	fsl_gpt.c)
@@ -25,7 +26,9 @@ zephyr_library_sources_ifdef(CONFIG_ENTROPY_MCUX_TRNG	fsl_trng.c)
 zephyr_library_sources_ifdef(CONFIG_ETH_MCUX		fsl_enet.c)
 zephyr_library_sources_ifdef(CONFIG_MEMC_MCUX_FLEXSPI	fsl_flexspi.c)
 zephyr_library_sources_ifdef(CONFIG_GPIO_MCUX_IGPIO	fsl_gpio.c)
+if(NOT CONFIG_SOC_MIMXRT1176_CM4)
 zephyr_library_sources_ifdef(CONFIG_HAS_MCUX_CACHE	fsl_cache.c)
+endif()
 zephyr_library_sources_ifdef(CONFIG_I2C_MCUX_LPI2C	fsl_lpi2c.c)
 zephyr_library_sources_ifdef(CONFIG_I2S_MCUX_SAI	fsl_sai.c)
 zephyr_library_sources_ifdef(CONFIG_I2S_MCUX_SAI	fsl_sai_edma.c)
