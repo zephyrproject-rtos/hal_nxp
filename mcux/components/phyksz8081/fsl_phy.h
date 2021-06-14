@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -73,7 +73,7 @@
 #define PHY_OMS_FACTORY_MODE_MASK 0x8000U /*!< The factory mode Override/Status mask. */
 
 /*! @brief Defines the PHY status. */
-enum _phy_status
+enum
 {
     kStatus_PHY_SMIVisitTimeout = MAKE_STATUS(kStatusGroup_PHY, 1),  /*!< ENET PHY SMI visit timeout. */
     kStatus_PHY_AutoNegotiateFail = MAKE_STATUS(kStatusGroup_PHY, 2) /*!< ENET PHY AutoNegotiate Fail. */
