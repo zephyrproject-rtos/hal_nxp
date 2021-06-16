@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 3, 0)) /*!< Version 2.3.0. */
+#define FSL_ENET_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
 /*@}*/
 
 /*! @name ENET DESCRIPTOR QUEUE */
@@ -664,6 +664,7 @@ struct _enet_handle
         *txBdDirtyStatic[FSL_FEATURE_ENET_QUEUE]; /*!< The dirty transmit buffer descriptor for error static update. */
     uint64_t msTimerSecond;                       /*!< The second for Master PTP timer .*/
 #endif                                            /* ENET_ENHANCEDBUFFERDESCRIPTOR_MODE */
+    uint8_t multicastCount[64];                   /*!< Multicast collisions counter */
 };
 
 /*! @brief Define interrupt IRQ handler. */
@@ -671,6 +672,11 @@ struct _enet_handle
 typedef void (*enet_isr_ring_t)(ENET_Type *base, enet_handle_t *handle, uint32_t ringId);
 #endif /* FSL_FEATURE_ENET_QUEUE > 1 */
 typedef void (*enet_isr_t)(ENET_Type *base, enet_handle_t *handle);
+
+/*! @brief Pointers to enet clocks for each instance. */
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+extern const clock_ip_name_t s_enetClock[];
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*******************************************************************************
  * API
@@ -982,7 +988,8 @@ void ENET_StartExtC45SMIWriteData(ENET_Type *base, uint32_t phyAddr, uint32_t ph
 void ENET_StartExtC45SMIReadData(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg);
 #endif /* FSL_FEATURE_ENET_HAS_EXTEND_MDIO */
 
-#if defined(FSL_FEATURE_ENET_HAS_AVB) && FSL_FEATURE_ENET_HAS_AVB
+#if ((defined(FSL_FEATURE_ENET_HAS_RGMII_TXC_DELAY) && FSL_FEATURE_ENET_HAS_RGMII_TXC_DELAY) || \
+     (defined(FSL_FEATURE_ENET_HAS_RGMII_RXC_DELAY) && FSL_FEATURE_ENET_HAS_RGMII_RXC_DELAY))
 /*!
  * @brief Control the usage of the delayed tx/rx RGMII clock.
  *
@@ -990,11 +997,11 @@ void ENET_StartExtC45SMIReadData(ENET_Type *base, uint32_t phyAddr, uint32_t phy
  * @param txEnabled  Enable or disable to generate the delayed version of RGMII_TXC.
  * @param rxEnabled  Enable or disable to use the delayed version of RGMII_RXC.
  */
-
 static inline void ENET_SetRGMIIClockDelay(ENET_Type *base, bool txEnabled, bool rxEnabled)
 {
     uint32_t ecrReg = base->ECR;
 
+#if defined(FSL_FEATURE_ENET_HAS_RGMII_TXC_DELAY) && FSL_FEATURE_ENET_HAS_RGMII_TXC_DELAY
     /* Set for transmit clock delay. */
     if (txEnabled)
     {
@@ -1004,7 +1011,9 @@ static inline void ENET_SetRGMIIClockDelay(ENET_Type *base, bool txEnabled, bool
     {
         ecrReg &= ~ENET_ECR_TXC_DLY_MASK;
     }
+#endif /* FSL_FEATURE_ENET_HAS_RGMII_TXC_DELAY */
 
+#if defined(FSL_FEATURE_ENET_HAS_RGMII_RXC_DELAY) && FSL_FEATURE_ENET_HAS_RGMII_RXC_DELAY
     /* Set for receive clock delay. */
     if (rxEnabled)
     {
@@ -1014,9 +1023,10 @@ static inline void ENET_SetRGMIIClockDelay(ENET_Type *base, bool txEnabled, bool
     {
         ecrReg &= ~ENET_ECR_RXC_DLY_MASK;
     }
+#endif /* FSL_FEATURE_ENET_HAS_RGMII_RXC_DELAY */
     base->ECR = ecrReg;
 }
-#endif /* FSL_FEATURE_ENET_HAS_AVB */
+#endif
 
 /* @} */
 
@@ -1101,8 +1111,11 @@ static inline void ENET_ActiveRead(ENET_Type *base)
 {
     base->RDAR = ENET_RDAR_RDAR_MASK;
 #if FSL_FEATURE_ENET_QUEUE > 1
-    base->RDAR1 = ENET_RDAR1_RDAR_MASK;
-    base->RDAR2 = ENET_RDAR2_RDAR_MASK;
+    if (FSL_FEATURE_ENET_INSTANCE_QUEUEn(base) > 1)
+    {
+        base->RDAR1 = ENET_RDAR1_RDAR_MASK;
+        base->RDAR2 = ENET_RDAR2_RDAR_MASK;
+    }
 #endif /* FSL_FEATURE_ENET_QUEUE > 1 */
 }
 
@@ -1176,7 +1189,7 @@ static inline void ENET_EnableInterrupts(ENET_Type *base, uint32_t mask)
  * @brief Disables the ENET interrupt.
  *
  * This function disables the ENET interrupts according to the provided mask. The mask
- * is a logical OR of enumeration members. See :enet_interrupt_enable_t.
+ * is a logical OR of enumeration members. See ::enet_interrupt_enable_t.
  * For example, to disable the TX frame interrupt and RX frame interrupt, do the following.
  * @code
  *     ENET_DisableInterrupts(ENET, kENET_TxFrameInterrupt | kENET_RxFrameInterrupt);
@@ -1273,14 +1286,12 @@ void ENET_SetErrISRHandler(ENET_Type *base, enet_isr_t ISRHandler);
  */
 void ENET_SetTsISRHandler(ENET_Type *base, enet_isr_t ISRHandler);
 
-#if (FSL_FEATURE_ENET_QUEUE > 1) && defined(ENET_1G)
 /*!
  * @brief Set the second level 1588 Timer IRQ handler
  *
  * @param ISRHandler  The handler to install.
  */
 void ENET_Set1588TimerISRHandler(ENET_Type *base, enet_isr_t ISRHandler);
-#endif
 #endif /* ENET_ENHANCEDBUFFERDESCRIPTOR_MODE */
 
 /* @} */
@@ -1446,6 +1457,19 @@ status_t ENET_SendFrame(ENET_Type *base,
 status_t ENET_SetTxReclaim(enet_handle_t *handle, bool isEnable, uint8_t ringId);
 
 /*!
+ * @brief Reclaim tx descriptors.
+ * This function is used to update the tx descriptor status and
+ * store the tx timestamp when the 1588 feature is enabled.
+ * This is called by the transmit interupt IRQ handler after the
+ * complete of a frame transmission.
+ *
+ * @param base   ENET peripheral base address.
+ * @param handle The ENET handler pointer. This is the same handler pointer used in the ENET_Init.
+ * @param ringId The ring index or ring number.
+ */
+void ENET_ReclaimTxDescriptor(ENET_Type *base, enet_handle_t *handle, uint8_t ringId);
+
+/*!
  * @brief Get a receive buffer pointer of the ENET device for specified ring.
  *
  * This function can get the data address which stores frame. Then can analyze these data directly without doing any
@@ -1596,6 +1620,15 @@ void ENET_CommonFrame1IRQHandler(ENET_Type *base);
  * @param base  ENET peripheral base address.
  */
 void ENET_CommonFrame2IRQHandler(ENET_Type *base);
+
+/*!
+ * @brief the common IRQ handler for the 1588 irq handler.
+ *
+ * This is used for the 1588 timer interrupt.
+ *
+ * @param base  ENET peripheral base address.
+ */
+void ENET_Ptp1588IRQHandler(ENET_Type *base);
 #else
 /*!
  * @brief The transmit IRQ handler.
