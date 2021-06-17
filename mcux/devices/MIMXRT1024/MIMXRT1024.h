@@ -15927,6 +15927,7 @@ typedef struct {
 #define ENET_Receive_IRQS                        { ENET_IRQn }
 #define ENET_Error_IRQS                          { ENET_IRQn }
 #define ENET_1588_Timer_IRQS                     { ENET_1588_Timer_IRQn }
+#define ENET_Ts_IRQS                             { ENET_1588_Timer_IRQn }
 /* ENET Buffer Descriptor and Buffer Address Alignment. */
 #define ENET_BUFF_ALIGNMENT                      (64U)
 
