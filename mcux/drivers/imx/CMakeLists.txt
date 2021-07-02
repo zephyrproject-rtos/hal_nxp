@@ -16,6 +16,7 @@ zephyr_library_compile_definitions_ifdef(
 )
 zephyr_library_sources(fsl_common.c)
 
+zephyr_library_sources_ifdef(CONFIG_ADC_MCUX_LPADC	fsl_lpadc.c)
 zephyr_library_sources_ifdef(CONFIG_CAN_MCUX_FLEXCAN	fsl_flexcan.c)
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_GPT	fsl_gpt.c)
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_PIT	fsl_pit.c)
