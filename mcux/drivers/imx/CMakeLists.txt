@@ -36,6 +36,7 @@ zephyr_library_sources_ifdef(CONFIG_PWM_MCUX		fsl_pwm.c)
 zephyr_library_sources_ifdef(CONFIG_SPI_MCUX_LPSPI	fsl_lpspi.c)
 zephyr_library_sources_ifdef(CONFIG_UART_MCUX_LPUART	fsl_lpuart.c)
 zephyr_library_sources_ifdef(CONFIG_VIDEO_MCUX_CSI	fsl_csi.c)
+zephyr_library_sources_ifdef(CONFIG_PXP_MCUX_PXP    fsl_pxp.c)
 zephyr_library_sources_ifdef(CONFIG_WDT_MCUX_IMX_WDOG    fsl_wdog.c)
 zephyr_library_sources_ifdef(CONFIG_CAN_MCUX_FLEXCAN	fsl_flexcan.c)
 
