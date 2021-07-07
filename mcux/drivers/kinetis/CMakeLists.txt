@@ -14,7 +14,6 @@ zephyr_compile_definitions_ifdef(
 zephyr_library_sources_ifdef(CONFIG_ADC_MCUX_ADC12	fsl_adc12.c)
 zephyr_library_sources_ifdef(CONFIG_ADC_MCUX_ADC16	fsl_adc16.c)
 zephyr_library_sources_ifdef(CONFIG_CAN_MCUX_FLEXCAN	fsl_flexcan.c)
-zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_LPTMR	fsl_lptmr.c)
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_PIT	fsl_pit.c)
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_RTC	fsl_rtc.c)
 zephyr_library_sources_ifdef(CONFIG_DAC_MCUX_DAC	fsl_dac.c)
@@ -42,6 +41,9 @@ zephyr_library_sources_ifdef(CONFIG_UART_MCUX_LPUART	fsl_lpuart.c)
 zephyr_library_sources_ifdef(CONFIG_WDT_MCUX_WDOG	fsl_wdog.c)
 zephyr_library_sources_ifdef(CONFIG_WDT_MCUX_WDOG32	fsl_wdog32.c)
 
+if(CONFIG_COUNTER_MCUX_LPTMR OR CONFIG_MCUX_LPTMR_TIMER)
+  zephyr_library_sources(fsl_lptmr.c)
+endif()
 
 if(NOT CONFIG_ASSERT OR CONFIG_FORCE_NO_ASSERT)
   zephyr_compile_definitions(NDEBUG) # squelch fsl_flexcan.c warning
