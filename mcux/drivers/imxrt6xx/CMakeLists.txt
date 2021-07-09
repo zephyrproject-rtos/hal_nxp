@@ -26,3 +26,5 @@ zephyr_sources_ifdef(CONFIG_PWM_MCUX_SCTIMER	fsl_sctimer.c)
 if(CONFIG_FLASH_MCUX_FLEXSPI_XIP)
   zephyr_code_relocate(fsl_flexspi.c ${CONFIG_FLASH_MCUX_FLEXSPI_XIP_MEM}_TEXT)
 endif()
+zephyr_sources_ifdef(CONFIG_ENTROPY_MCUX_TRNG	fsl_trng.c)
+
