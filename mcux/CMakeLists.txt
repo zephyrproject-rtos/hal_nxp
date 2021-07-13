@@ -76,7 +76,7 @@ add_subdirectory(components)
 add_subdirectory(drivers)
 
 add_subdirectory_ifdef(
-  CONFIG_USB
+  CONFIG_USB_DEVICE_DRIVER
   middleware/usb
   )
 
