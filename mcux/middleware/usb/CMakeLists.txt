@@ -6,10 +6,10 @@
 
 zephyr_include_directories(./include)
 add_subdirectory_ifdef(
-  CONFIG_USB
+  CONFIG_USB_DEVICE_DRIVER
   device
   )
 add_subdirectory_ifdef(
-  CONFIG_USB
+  CONFIG_USB_DEVICE_DRIVER
   phy
   )
