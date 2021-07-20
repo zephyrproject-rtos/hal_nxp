@@ -7,7 +7,7 @@
 if("${CONFIG_SOC_SERIES}" STREQUAL "rt6xx")
   add_subdirectory(imxrt6xx)
 # using a different directory for i.MX8 to avoid conflict with i.MX RT
-elseif("${CONFIG_SOC}" STREQUAL "mimx8mm6")
+elseif("${CONFIG_SOC}" STREQUAL "mimx8mm6" OR "${CONFIG_SOC}" STREQUAL "mimx8mq6")
   add_subdirectory(imx8)
 elseif("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_imx")
   add_subdirectory(imx)
