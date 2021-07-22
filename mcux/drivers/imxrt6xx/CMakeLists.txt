@@ -24,6 +24,7 @@ zephyr_library_sources_ifdef(CONFIG_MEMC_MCUX_FLEXSPI		fsl_flexspi.c)
 zephyr_library_sources_ifdef(CONFIG_PWM_MCUX_SCTIMER		fsl_sctimer.c)
 zephyr_library_sources_ifdef(CONFIG_SPI_MCUX_FLEXCOMM		fsl_spi.c fsl_flexcomm.c)
 zephyr_library_sources_ifdef(CONFIG_UART_MCUX_FLEXCOMM		fsl_usart.c fsl_flexcomm.c)
+zephyr_library_sources_ifdef(CONFIG_WDT_MCUX_WWDT		fsl_wwdt.c)
 
 if(CONFIG_FLASH_MCUX_FLEXSPI_XIP)
   zephyr_code_relocate(fsl_flexspi.c ${CONFIG_FLASH_MCUX_FLEXSPI_XIP_MEM}_TEXT)
