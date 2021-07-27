@@ -1,5 +1,6 @@
+name: hal_nxp
 build:
-  cmake: .
+  cmake-ext: True
+  kconfig-ext: True
   settings:
     dts_root: .
-
