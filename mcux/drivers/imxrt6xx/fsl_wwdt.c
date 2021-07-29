@@ -181,6 +181,14 @@ void WWDT_Init(WWDT_Type *base, const wwdt_config_t *config)
     base->FEED = WWDT_FIRST_WORD_OF_REFRESH;
     base->FEED = WWDT_SECOND_WORD_OF_REFRESH;
     EnableGlobalIRQ(primaskValue);
+    /* Read counter value to wait wwdt timer start*/
+    if (config->enableWwdt)
+    {
+        while (base->TV == 0xFFUL)
+        {
+        }
+    }
+
     /*  This WDPROTECT bit can be set once by software and is only cleared by a reset */
     if (config->enableWatchdogProtect && (0U == (base->MOD & WWDT_MOD_WDPROTECT_MASK)))
     {

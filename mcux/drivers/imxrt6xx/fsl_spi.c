@@ -79,7 +79,7 @@ uint32_t SPI_GetInstance(SPI_Type *base)
         }
     }
 
-    assert(i < FSL_FEATURE_SOC_SPI_COUNT);
+    assert(i < (uint32_t)FSL_FEATURE_SOC_SPI_COUNT);
     return i;
 }
 
@@ -545,7 +545,6 @@ status_t SPI_MasterTransferBlocking(SPI_Type *base, spi_transfer_t *xfer)
     dataWidth = (uint32_t)(g_configs[instance].dataWidth);
 
     /* dataSize (in bytes) is not aligned to 16bit (2B) transfer */
-    assert(!((dataWidth > kSPI_Data8Bits) && ((xfer->dataSize & 0x1U) != 0U)));
     if ((dataWidth > (uint32_t)kSPI_Data8Bits) && ((xfer->dataSize & 0x1U) != 0U))
     {
         return kStatus_InvalidArgument;
@@ -685,7 +684,7 @@ status_t SPI_MasterTransferNonBlocking(SPI_Type *base, spi_master_handle_t *hand
     handle->rxRemainingBytes = (xfer->rxData != NULL) ? xfer->dataSize : 0U;
     handle->totalByteCount   = xfer->dataSize;
     /* other options */
-    handle->toReceiveCount = 0U;
+    handle->toReceiveCount = 0;
     handle->configFlags    = xfer->configFlags;
     /* Set the SPI state to busy */
     handle->state = (uint32_t)kStatus_SPI_Busy;
@@ -710,7 +709,7 @@ status_t SPI_MasterTransferNonBlocking(SPI_Type *base, spi_master_handle_t *hand
  */
 status_t SPI_MasterHalfDuplexTransferBlocking(SPI_Type *base, spi_half_duplex_transfer_t *xfer)
 {
-    assert(xfer);
+    assert(xfer != NULL);
 
     spi_transfer_t tempXfer = {0};
     status_t status;
@@ -781,8 +780,8 @@ status_t SPI_MasterHalfDuplexTransferNonBlocking(SPI_Type *base,
                                                  spi_master_handle_t *handle,
                                                  spi_half_duplex_transfer_t *xfer)
 {
-    assert(xfer);
-    assert(handle);
+    assert(xfer != NULL);
+    assert(handle != NULL);
     spi_transfer_t tempXfer = {0};
     status_t status;
 
@@ -894,7 +893,7 @@ static void SPI_TransferHandleIRQInternal(SPI_Type *base, spi_master_handle_t *h
     uint32_t instance = SPI_GetInstance(base);
     size_t txRemainingBytes;
     size_t rxRemainingBytes;
-    size_t toReceiveCount;
+    uint8_t toReceiveCount;
 
     /* check params */
     assert((NULL != base) && (NULL != handle) && ((NULL != handle->txData) || (NULL != handle->rxData)));
@@ -929,8 +928,9 @@ static void SPI_TransferHandleIRQInternal(SPI_Type *base, spi_master_handle_t *h
                     handle->rxRemainingBytes--;
                 }
             }
+
             /* decrease number of data expected to receive */
-            handle->toReceiveCount -= 1U;
+            handle->toReceiveCount -= 1;
             loopContinue = true;
         }
 
@@ -940,10 +940,10 @@ static void SPI_TransferHandleIRQInternal(SPI_Type *base, spi_master_handle_t *h
          */
         txRemainingBytes = handle->txRemainingBytes;
         rxRemainingBytes = handle->rxRemainingBytes;
-        toReceiveCount   = handle->toReceiveCount;
+        toReceiveCount   = (handle->toReceiveCount > 0) ? (uint8_t)handle->toReceiveCount : 0U;
         if (((base->FIFOSTAT & SPI_FIFOSTAT_TXNOTFULL_MASK) != 0U) && ((uint32_t)toReceiveCount < fifoDepth) &&
             ((txRemainingBytes != 0U) ||
-             (rxRemainingBytes >= SPI_COUNT_TO_BYTES(handle->dataWidth, toReceiveCount + 1U))))
+             (rxRemainingBytes >= SPI_COUNT_TO_BYTES(handle->dataWidth, (uint32_t)toReceiveCount + 1U))))
         {
             /* txBuffer is not empty */
             if ((txRemainingBytes != 0U) && (handle->txData != NULL))
@@ -970,7 +970,7 @@ static void SPI_TransferHandleIRQInternal(SPI_Type *base, spi_master_handle_t *h
                 tmp32 = (uint32_t)s_dummyData[instance];
                 tmp32 |= (uint32_t)s_dummyData[instance] << 8U;
                 /* last transfer */
-                if (rxRemainingBytes == SPI_COUNT_TO_BYTES(handle->dataWidth, toReceiveCount + 1U))
+                if (rxRemainingBytes == SPI_COUNT_TO_BYTES(handle->dataWidth, (uint32_t)toReceiveCount + 1U))
                 {
                     tx_ctrl |= last_ctrl;
                 }
@@ -979,8 +979,8 @@ static void SPI_TransferHandleIRQInternal(SPI_Type *base, spi_master_handle_t *h
             tmp32        = tx_ctrl | tmp32;
             base->FIFOWR = tmp32;
             /* increase number of expected data to receive */
-            handle->toReceiveCount += 1U;
-            toReceiveCount = handle->toReceiveCount;
+            handle->toReceiveCount += 1;
+            toReceiveCount = (handle->toReceiveCount > 0) ? (uint8_t)handle->toReceiveCount : 0U;
             loopContinue   = true;
         }
     } while (loopContinue);
@@ -996,7 +996,7 @@ void SPI_MasterTransferHandleIRQ(SPI_Type *base, spi_master_handle_t *handle)
 {
     assert((NULL != base) && (NULL != handle));
     size_t txRemainingBytes;
-    size_t toReceiveCount;
+    uint8_t toReceiveCount;
 
     /* IRQ behaviour:
      * - first interrupt is triggered by empty txFIFO. The transfer function
@@ -1012,13 +1012,13 @@ void SPI_MasterTransferHandleIRQ(SPI_Type *base, spi_master_handle_t *handle)
      */
 
     /* Data to send or read or expected to receive */
-    if ((handle->txRemainingBytes != 0U) || (handle->rxRemainingBytes != 0U) || (handle->toReceiveCount != 0U))
+    if ((handle->txRemainingBytes != 0U) || (handle->rxRemainingBytes != 0U) || (handle->toReceiveCount != 0))
     {
         /* Transmit or receive data */
         SPI_TransferHandleIRQInternal(base, handle);
         /* No data to send or read or receive. Transfer ends. Set txTrigger to 0 level and
          * enable txIRQ to confirm when txFIFO becomes empty */
-        if ((0U == handle->txRemainingBytes) && (0U == handle->rxRemainingBytes) && (0U == handle->toReceiveCount))
+        if ((0U == handle->txRemainingBytes) && (0U == handle->rxRemainingBytes) && (0 == handle->toReceiveCount))
         {
             base->FIFOTRIG = base->FIFOTRIG & (~SPI_FIFOTRIG_TXLVL_MASK);
             base->FIFOINTENSET |= SPI_FIFOINTENSET_TXLVL_MASK;
@@ -1028,7 +1028,8 @@ void SPI_MasterTransferHandleIRQ(SPI_Type *base, spi_master_handle_t *handle)
             uint32_t rxRemainingCount = SPI_BYTES_TO_COUNT(handle->dataWidth, handle->rxRemainingBytes);
             /* If, there are no data to send or rxFIFO is already filled with necessary number of dummy data,
              * disable txIRQ. From this point only rxIRQ is used to receive data without any transmission */
-            if ((0U == handle->txRemainingBytes) && (rxRemainingCount <= handle->toReceiveCount))
+            toReceiveCount = (handle->toReceiveCount > 0) ? (uint8_t)handle->toReceiveCount : 0U;
+            if ((0U == handle->txRemainingBytes) && (rxRemainingCount <= toReceiveCount))
             {
                 base->FIFOINTENCLR = SPI_FIFOINTENCLR_TXLVL_MASK;
             }
@@ -1037,17 +1038,16 @@ void SPI_MasterTransferHandleIRQ(SPI_Type *base, spi_master_handle_t *handle)
             if (rxRemainingCount == 0U)
             {
                 txRemainingBytes = handle->txRemainingBytes;
-                toReceiveCount   = handle->toReceiveCount;
                 if ((txRemainingBytes == 0U) && (toReceiveCount != 0U) &&
                     (toReceiveCount < SPI_FIFOTRIG_RXLVL_GET(base) + 1U))
                 {
-                    base->FIFOTRIG =
-                        (base->FIFOTRIG & (~SPI_FIFOTRIG_RXLVL_MASK)) | SPI_FIFOTRIG_RXLVL(toReceiveCount - 1U);
+                    base->FIFOTRIG = (base->FIFOTRIG & (~SPI_FIFOTRIG_RXLVL_MASK)) |
+                                     SPI_FIFOTRIG_RXLVL((uint32_t)toReceiveCount - 1U);
                 }
             }
-            /* Expected to receive less data than rxLevel value, we have to update rxLevel */
             else
             {
+                /* Expected to receive less data than rxLevel value, we have to update rxLevel */
                 if (rxRemainingCount < (SPI_FIFOTRIG_RXLVL_GET(base) + 1U))
                 {
                     base->FIFOTRIG =

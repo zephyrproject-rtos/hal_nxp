@@ -62,8 +62,8 @@ typedef struct
 typedef struct BootloaderTree
 {
     void (*runBootloader)(iap_boot_option_t *arg); /*!< Function to start the bootloader executing. */
-    uint32_t version;                 /*!< Bootloader version number. */
-    const char *copyright;            /*!< Copyright string. */
+    uint32_t version;                              /*!< Bootloader version number. */
+    const char *copyright;                         /*!< Copyright string. */
     const uint32_t reserved0;
     const uint32_t reserved1;
     const uint32_t reserved2;
@@ -98,7 +98,7 @@ void IAP_RunBootLoader(iap_boot_option_t *option)
 /*******************************************************************************
  * FlexSPI NOR driver
  ******************************************************************************/
-status_t IAP_FlexspiNorInit(uint32_t instance, flexspi_nor_config_t *config)
+AT_QUICKACCESS_SECTION_CODE(status_t IAP_FlexspiNorInit(uint32_t instance, flexspi_nor_config_t *config))
 {
     return FLEXSPI_API_TREE->init(instance, config);
 }
@@ -168,16 +168,19 @@ AT_QUICKACCESS_SECTION_CODE(status_t IAP_FlexspiNorAutoConfig(uint32_t instance,
 {
     /* Wait until the FLEXSPI is idle */
     register uint32_t delaycnt = 10000u;
-    while (delaycnt--)
+    status_t status;
+
+    while ((delaycnt--) != 0U)
     {
-    }
-    status_t status = FLEXSPI_API_TREE->get_config(instance, config, option);
-    if (status != kStatus_Success)
-    {
-        return status;
     }
 
-    return FLEXSPI_API_TREE->init(instance, config);
+    status = FLEXSPI_API_TREE->get_config(instance, config, option);
+    if (status == kStatus_Success)
+    {
+        status = FLEXSPI_API_TREE->init(instance, config);
+    }
+
+    return status;
 }
 
 /*******************************************************************************
