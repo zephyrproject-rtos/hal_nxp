@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -107,13 +107,16 @@ static flexspi_isr_t s_flexspiIsr;
 /*******************************************************************************
  * Code
  ******************************************************************************/
+/* To avoid compiler opitimizing this API into memset() in library. */
+#if defined(__ICCARM__)
+#pragma optimize = none
+#endif /* defined(__ICCARM__) */
 static void FLEXSPI_Memset(void *src, uint8_t value, size_t length)
 {
     assert(src != NULL);
     uint8_t *p = src;
 
-    /* Keyword volatile is to avoid compiler opitimizing this API into memset() in library. */
-    for (volatile uint32_t i = 0U; i < length; i++)
+    for (uint32_t i = 0U; i < length; i++)
     {
         *p = value;
         p++;
@@ -178,19 +181,9 @@ static uint32_t FLEXSPI_CalculateDll(FLEXSPI_Type *base, flexspi_device_config_t
     {
         if (config->flexspiRootClk >= 100U * FREQ_1MHz)
         {
-#if defined(FSL_FEATURE_FLEXSPI_DQS_DELAY_PS) && FSL_FEATURE_FLEXSPI_DQS_DELAY_PS
-            uint32_t expectedDelayPs = 500U * FREQ_1MHz / (config->flexspiRootClk / 1000U);
-            if (expectedDelayPs > internalDqsDelayPs)
-            {
-                expectedDelayPs = expectedDelayPs - internalDqsDelayPs;
-            }
-            else
-            {
-                expectedDelayPs = 0U;
-            }
-            /* DLLEN = 1, SLVDLYTARGET = expectedDelayPs * 16U / internalDqsDelayPs, */
-            flexspiDllValue =
-                FLEXSPI_DLLCR_DLLEN(1) | FLEXSPI_DLLCR_SLVDLYTARGET(expectedDelayPs * 16U / internalDqsDelayPs);
+#if defined(FSL_FEATURE_FLEXSPI_DQS_DELAY_MIN) && FSL_FEATURE_FLEXSPI_DQS_DELAY_MIN
+            /* DLLEN = 1, SLVDLYTARGET = 0x0, */
+            flexspiDllValue = FLEXSPI_DLLCR_DLLEN(1) | FLEXSPI_DLLCR_SLVDLYTARGET(0x00);
 #else
             /* DLLEN = 1, SLVDLYTARGET = 0xF, */
             flexspiDllValue = FLEXSPI_DLLCR_DLLEN(1) | FLEXSPI_DLLCR_SLVDLYTARGET(0x0F);
@@ -198,17 +191,7 @@ static uint32_t FLEXSPI_CalculateDll(FLEXSPI_Type *base, flexspi_device_config_t
         }
         else
         {
-            temp = (uint32_t)config->dataValidTime * 1000U; /* Convert data valid time in ns to ps. */
-#if defined(FSL_FEATURE_FLEXSPI_DQS_DELAY_PS) && FSL_FEATURE_FLEXSPI_DQS_DELAY_PS
-            if (temp > internalDqsDelayPs)
-            {
-                temp = temp - internalDqsDelayPs;
-            }
-            else
-            {
-                temp = 0U;
-            }
-#endif
+            temp     = (uint32_t)config->dataValidTime * 1000U; /* Convert data valid time in ns to ps. */
             dllValue = temp / (uint32_t)kFLEXSPI_DelayCellUnitMin;
             if (dllValue * (uint32_t)kFLEXSPI_DelayCellUnitMin < temp)
             {
@@ -291,7 +274,9 @@ void FLEXSPI_Init(FLEXSPI_Type *base, const flexspi_config_t *config)
                   FLEXSPI_MCR0_AHBGRANTWAIT(config->ahbConfig.ahbGrantTimeoutCycle) |
                   FLEXSPI_MCR0_SCKFREERUNEN(config->enableSckFreeRunning) |
                   FLEXSPI_MCR0_HSEN(config->enableHalfSpeedAccess) |
+#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
                   FLEXSPI_MCR0_COMBINATIONEN(config->enableCombination) |
+#endif
 #if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN)
                   FLEXSPI_MCR0_ATDFEN(config->ahbConfig.enableAHBWriteIpTxFifo) |
 #endif
@@ -364,9 +349,11 @@ void FLEXSPI_GetDefaultConfig(flexspi_config_t *config)
     /* Initializes the configure structure to zero. */
     FLEXSPI_Memset(config, 0, sizeof(*config));
 
-    config->rxSampleClock          = kFLEXSPI_ReadSampleClkLoopbackInternally;
-    config->enableSckFreeRunning   = false;
-    config->enableCombination      = false;
+    config->rxSampleClock        = kFLEXSPI_ReadSampleClkLoopbackInternally;
+    config->enableSckFreeRunning = false;
+#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
+    config->enableCombination = false;
+#endif
     config->enableDoze             = true;
     config->enableHalfSpeedAccess  = false;
     config->enableSckBDiffOpt      = false;

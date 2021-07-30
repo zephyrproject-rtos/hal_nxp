@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -9,11 +9,13 @@
 #define __FLEXSPI_NOR_BOOT_H__
 
 #include <stdint.h>
+#include "board.h"
+#include "fsl_common.h"
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief XIP_DEVICE driver version 2.0.1. */
-#define FSL_XIP_DEVICE_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief XIP_DEVICE driver version 2.0.2. */
+#define FSL_XIP_DEVICE_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*************************************
@@ -64,33 +66,25 @@ typedef struct _ivt_
 
 /* Set resume entry */
 #if defined(__CC_ARM) || defined(__ARMCC_VERSION)
-extern uint32_t Reset_Handler[];
-extern uint32_t Image$$RW_m_config_text$$Base[];
-#define IMAGE_ENTRY_ADDRESS ((uint32_t)Reset_Handler)
-#define FLASH_BASE          ((uint32_t)Image$$RW_m_config_text$$Base - 0x400)
+extern uint32_t __Vectors[];
+#define IMAGE_ENTRY_ADDRESS ((uint32_t)__Vectors)
 #elif defined(__MCUXPRESSO)
-extern uint32_t ResetISR[];
-extern uint32_t __boot_hdr_start__[];
-#define IMAGE_ENTRY_ADDRESS ((uint32_t)ResetISR)
-#define FLASH_BASE          ((uint32_t)__boot_hdr_start__ - 0x400)
+extern uint32_t __Vectors[];
+#define IMAGE_ENTRY_ADDRESS ((uint32_t)__Vectors)
 #elif defined(__ICCARM__)
-extern uint32_t Reset_Handler[];
-extern uint32_t m_boot_hdr_conf_start[];
-#define IMAGE_ENTRY_ADDRESS ((uint32_t)Reset_Handler)
-#define FLASH_BASE          ((uint32_t)m_boot_hdr_conf_start - 0x400)
+extern uint32_t __VECTOR_TABLE[];
+#define IMAGE_ENTRY_ADDRESS ((uint32_t)__VECTOR_TABLE)
 #elif defined(__GNUC__)
-extern uint32_t Reset_Handler[];
-extern uint32_t __FLASH_BASE[];
-#define IMAGE_ENTRY_ADDRESS ((uint32_t)Reset_Handler)
-#define FLASH_BASE          ((uint32_t)__FLASH_BASE - 0x400)
+extern uint32_t __VECTOR_TABLE[];
+#define IMAGE_ENTRY_ADDRESS ((uint32_t)__VECTOR_TABLE)
 #endif
-#if defined(XIP_BOOT_HEADER_ENABLE) && (XIP_BOOT_HEADER_ENABLE == 1)
-#if defined(XIP_BOOT_HEADER_DCD_ENABLE) && (XIP_BOOT_HEADER_DCD_ENABLE == 1)
+
+#if defined(XIP_BOOT_HEADER_DCD_ENABLE) && (1 == XIP_BOOT_HEADER_DCD_ENABLE)
 #define DCD_ADDRESS dcd_data
 #else
 #define DCD_ADDRESS 0
 #endif
-#endif
+
 #define BOOT_DATA_ADDRESS &boot_data
 #define CSF_ADDRESS       0
 #define IVT_RSVD          (uint32_t)(0x00000000)
@@ -106,7 +100,12 @@ typedef struct _boot_data_
     uint32_t placeholder; /* placehoder to make even 0x10 size */
 } BOOT_DATA_T;
 
-#define FLASH_SIZE  BOARD_FLASH_SIZE
+#define FLASH_BASE FlexSPI_AMBA_BASE
+#if defined(BOARD_FLASH_SIZE)
+#define FLASH_SIZE BOARD_FLASH_SIZE
+#else
+#error "Please define macro BOARD_FLASH_SIZE"
+#endif
 #define PLUGIN_FLAG (uint32_t)0
 
 /* External Variables */

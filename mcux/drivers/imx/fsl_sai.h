@@ -12,7 +12,7 @@
 #include "fsl_common.h"
 
 /*!
- * @addtogroup sai_driver
+ * @addtogroup sai_driver SAI Driver
  * @{
  */
 
@@ -22,7 +22,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 3, 2)) /*!< Version 2.3.2 */
+#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 3, 3)) /*!< Version 2.3.3 */
 /*@}*/
 
 /*! @brief _sai_status_t, SAI return status.*/
