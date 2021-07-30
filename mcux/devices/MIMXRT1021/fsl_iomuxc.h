@@ -28,8 +28,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief IOMUXC driver version 2.0.1. */
-#define FSL_IOMUXC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief IOMUXC driver version 2.0.2. */
+#define FSL_IOMUXC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*!
@@ -38,21 +38,6 @@
  *
  * @{
  */
-#define IOMUXC_SNVS_WAKEUP_GPIO5_IO00 0x400A8000U, 0x5U, 0, 0, 0x400A8018U
-#define IOMUXC_SNVS_WAKEUP_NMI_GLUE_NMI 0x400A8000U, 0x7U, 0x401F840CU, 0x1U, 0x400A8018U
-
-#define IOMUXC_SNVS_PMIC_ON_REQ_SNVS_LP_PMIC_ON_REQ 0x400A8004U, 0x0U, 0, 0, 0x400A801CU
-#define IOMUXC_SNVS_PMIC_ON_REQ_GPIO5_IO01 0x400A8004U, 0x5U, 0, 0, 0x400A801CU
-
-#define IOMUXC_SNVS_PMIC_STBY_REQ_CCM_PMIC_VSTBY_REQ 0x400A8008U, 0x0U, 0, 0, 0x400A8020U
-#define IOMUXC_SNVS_PMIC_STBY_REQ_GPIO5_IO02 0x400A8008U, 0x5U, 0, 0, 0x400A8020U
-
-#define IOMUXC_SNVS_TEST_MODE 0, 0, 0, 0, 0x400A800CU
-
-#define IOMUXC_SNVS_POR_B 0, 0, 0, 0, 0x400A8010U
-
-#define IOMUXC_SNVS_ONOFF 0, 0, 0, 0, 0x400A8014U
-
 #define IOMUXC_GPIO_EMC_00_SEMC_DATA00 0x401F8014U, 0x0U, 0, 0, 0x401F8188U
 #define IOMUXC_GPIO_EMC_00_QTIMER2_TIMER0 0x401F8014U, 0x1U, 0x401F8420U, 0x0U, 0x401F8188U
 #define IOMUXC_GPIO_EMC_00_LPUART4_CTS_B 0x401F8014U, 0x2U, 0x401F83E0U, 0x0U, 0x401F8188U
@@ -796,6 +781,21 @@
 #define IOMUXC_GPIO_SD_B1_11_LPSPI2_PCS3 0x401F8184U, 0x4U, 0, 0, 0x401F82F8U
 #define IOMUXC_GPIO_SD_B1_11_GPIO3_IO31 0x401F8184U, 0x5U, 0, 0, 0x401F82F8U
 
+#define IOMUXC_SNVS_WAKEUP_GPIO5_IO00 0x400A8000U, 0x5U, 0, 0, 0x400A8018U
+#define IOMUXC_SNVS_WAKEUP_NMI_GLUE_NMI 0x400A8000U, 0x7U, 0x401F840CU, 0x1U, 0x400A8018U
+
+#define IOMUXC_SNVS_PMIC_ON_REQ_SNVS_LP_PMIC_ON_REQ 0x400A8004U, 0x0U, 0, 0, 0x400A801CU
+#define IOMUXC_SNVS_PMIC_ON_REQ_GPIO5_IO01 0x400A8004U, 0x5U, 0, 0, 0x400A801CU
+
+#define IOMUXC_SNVS_PMIC_STBY_REQ_CCM_PMIC_VSTBY_REQ 0x400A8008U, 0x0U, 0, 0, 0x400A8020U
+#define IOMUXC_SNVS_PMIC_STBY_REQ_GPIO5_IO02 0x400A8008U, 0x5U, 0, 0, 0x400A8020U
+
+#define IOMUXC_SNVS_TEST_MODE 0, 0, 0, 0, 0x400A800CU
+
+#define IOMUXC_SNVS_POR_B 0, 0, 0, 0, 0x400A8010U
+
+#define IOMUXC_SNVS_ONOFF 0, 0, 0, 0, 0x400A8014U
+
 /*@}*/
 
 #define IOMUXC_GPR_SAIMCLK_LOWBITMASK (0x7U)
@@ -804,14 +804,12 @@
 typedef enum _iomuxc_gpr_mode
 {
     kIOMUXC_GPR_GlobalInterruptRequest    = IOMUXC_GPR_GPR1_GINT_MASK,
-    kIOMUXC_GPR_ENET1RefClkMode           = IOMUXC_GPR_GPR1_ENET1_CLK_SEL_MASK,
-    kIOMUXC_GPR_USBExposureMode           = IOMUXC_GPR_GPR1_USB_EXP_MODE_MASK,
-    kIOMUXC_GPR_ENET1TxClkOutputDir       = IOMUXC_GPR_GPR1_ENET1_TX_CLK_DIR_MASK,
+    kIOMUXC_GPR_ENET1RefClkMode           = IOMUXC_GPR_GPR1_ENET_TX_CLK_SEL_MASK,
+    kIOMUXC_GPR_ENET1TxClkOutputDir       = IOMUXC_GPR_GPR1_ENET_REF_CLK_DIR_MASK,
     kIOMUXC_GPR_SAI1MClkOutputDir         = IOMUXC_GPR_GPR1_SAI1_MCLK_DIR_MASK,
     kIOMUXC_GPR_SAI2MClkOutputDir         = IOMUXC_GPR_GPR1_SAI2_MCLK_DIR_MASK,
     kIOMUXC_GPR_SAI3MClkOutputDir         = IOMUXC_GPR_GPR1_SAI3_MCLK_DIR_MASK,
     kIOMUXC_GPR_ExcMonitorSlavErrResponse = IOMUXC_GPR_GPR1_EXC_MON_MASK,
-    kIOMUXC_GPR_ENETIpgClkOn              = IOMUXC_GPR_GPR1_ENET_IPG_CLK_S_EN_MASK,
     kIOMUXC_GPR_AHBClockEnable            = (int)IOMUXC_GPR_GPR1_CM7_FORCE_HCLK_EN_MASK,
 } iomuxc_gpr_mode_t;
 
@@ -868,7 +866,7 @@ static inline void IOMUXC_SetPinMux(uint32_t muxRegister,
     *((volatile uint32_t *)muxRegister) =
         IOMUXC_SW_MUX_CTL_PAD_MUX_MODE(muxMode) | IOMUXC_SW_MUX_CTL_PAD_SION(inputOnfield);
 
-    if (inputRegister)
+    if (inputRegister != 0UL)
     {
         *((volatile uint32_t *)inputRegister) = inputDaisy;
     }
@@ -897,7 +895,7 @@ static inline void IOMUXC_SetPinConfig(uint32_t muxRegister,
                                        uint32_t configRegister,
                                        uint32_t configValue)
 {
-    if (configRegister)
+    if (configRegister != 0UL)
     {
         *((volatile uint32_t *)configRegister) = configValue;
     }
@@ -939,13 +937,13 @@ static inline void IOMUXC_SetSaiMClkClockSource(IOMUXC_GPR_Type *base, iomuxc_gp
 
     if (mclk > kIOMUXC_GPR_SAI1MClk2Sel)
     {
-        gpr = base->GPR1 & ~(IOMUXC_GPR_SAIMCLK_HIGHBITMASK << mclk);
-        base->GPR1 = ((clkSrc & IOMUXC_GPR_SAIMCLK_HIGHBITMASK) << mclk) | gpr;
+        gpr = base->GPR1 & ~((uint32_t)IOMUXC_GPR_SAIMCLK_HIGHBITMASK << (uint32_t)mclk);
+        base->GPR1 = (((uint32_t)clkSrc & IOMUXC_GPR_SAIMCLK_HIGHBITMASK) << (uint32_t)mclk) | gpr;
     }
     else
     {
-        gpr = base->GPR1 & ~(IOMUXC_GPR_SAIMCLK_LOWBITMASK << mclk);
-        base->GPR1 = ((clkSrc & IOMUXC_GPR_SAIMCLK_LOWBITMASK) << mclk) | gpr;
+        gpr = base->GPR1 & ~((uint32_t)IOMUXC_GPR_SAIMCLK_LOWBITMASK << (uint32_t)mclk);
+        base->GPR1 = (((uint32_t)clkSrc & IOMUXC_GPR_SAIMCLK_LOWBITMASK) << (uint32_t)mclk) | gpr;
     }
 }
 
