@@ -1140,7 +1140,7 @@ static usb_hsdcd_status_t USB_DeviceEhciIsrHSDCDCallback(void *handle, uint32_t 
 
 void USB_DeviceEhciIsrHSDCDFunction(void *deviceHandle)
 {
-    usb_device_struct_t *handle = (usb_device_struct_t *)deviceHandle;
+    struct usb_device_struct *handle = (struct usb_device_struct *)deviceHandle;
     usb_device_ehci_state_struct_t *ehciState;
     if (NULL == deviceHandle)
     {
@@ -1254,7 +1254,7 @@ usb_status_t USB_DeviceEhciInit(uint8_t controllerId,
     {
         return kStatus_USB_Error;
     }
-    ehciState->deviceHandle = (usb_device_struct_t *)handle;
+    ehciState->deviceHandle = (struct usb_device_struct *)handle;
 
     /* Clear the controller mode field and set to device mode. */
     ehciState->registerBase->USBMODE &= ~USBHS_USBMODE_CM_MASK;
@@ -1568,7 +1568,7 @@ usb_status_t USB_DeviceEhciControl(usb_device_controller_handle ehciHandle, usb_
     uint8_t *temp8;
 
 #if ((defined(USB_DEVICE_CONFIG_REMOTE_WAKEUP)) && (USB_DEVICE_CONFIG_REMOTE_WAKEUP > 0U))
-    usb_device_struct_t *deviceHandle;
+    struct usb_device_struct *deviceHandle;
     uint64_t startTick;
 #endif
 
@@ -1578,7 +1578,7 @@ usb_status_t USB_DeviceEhciControl(usb_device_controller_handle ehciHandle, usb_
     }
 
 #if ((defined(USB_DEVICE_CONFIG_REMOTE_WAKEUP)) && (USB_DEVICE_CONFIG_REMOTE_WAKEUP > 0U))
-    deviceHandle = (usb_device_struct_t *)ehciState->deviceHandle;
+    deviceHandle = (struct usb_device_struct *)ehciState->deviceHandle;
 #endif
 
     switch (type)
@@ -1813,7 +1813,7 @@ usb_status_t USB_DeviceEhciControl(usb_device_controller_handle ehciHandle, usb_
  */
 void USB_DeviceEhciIsrFunction(void *deviceHandle)
 {
-    usb_device_struct_t *handle = (usb_device_struct_t *)deviceHandle;
+    struct usb_device_struct *handle = (struct usb_device_struct *)deviceHandle;
     usb_device_ehci_state_struct_t *ehciState;
     uint32_t status;
 

@@ -141,7 +141,7 @@ typedef struct _usb_device_ehci_dtd_struct
 /*! @brief EHCI state structure */
 typedef struct _usb_device_ehci_state_struct
 {
-    usb_device_struct_t *deviceHandle; /*!< Device handle used to identify the device object is belonged to */
+    struct usb_device_struct *deviceHandle; /*!< Device handle used to identify the device object is belonged to */
     USBHS_Type *registerBase;          /*!< The base address of the register */
 #if (defined(USB_DEVICE_CONFIG_LOW_POWER_MODE) && (USB_DEVICE_CONFIG_LOW_POWER_MODE > 0U))
     USBPHY_Type *registerPhyBase; /*!< The base address of the PHY register */
