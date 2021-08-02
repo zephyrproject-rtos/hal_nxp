@@ -58,8 +58,6 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
                                            uint8_t *buffer,
                                            uint32_t length);
 
-extern usb_status_t USB_DeviceNotificationTrigger(void *handle, void *msg);
-
 /*******************************************************************************
  * Variables
  ******************************************************************************/
