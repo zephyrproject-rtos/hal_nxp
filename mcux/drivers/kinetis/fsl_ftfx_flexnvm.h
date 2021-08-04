@@ -21,14 +21,6 @@
  ******************************************************************************/
 
 /*!
- * @name Flexnvm version
- * @{
- */
-/*! @brief Flexnvm driver version for SDK*/
-#define FSL_FLEXNVM_DRIVER_VERSION (MAKE_VERSION(3, 0, 2)) /*!< Version 3.0.2. */
-/*@}*/
-
-/*!
  * @brief Enumeration for various flexnvm properties.
  */
 typedef enum _flexnvm_property_tag

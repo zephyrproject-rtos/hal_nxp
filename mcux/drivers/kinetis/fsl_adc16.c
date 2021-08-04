@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -115,6 +115,10 @@ void ADC16_Init(ADC_Type *base, const adc16_config_t *config)
     {
         base->SC3 &= ~ADC_SC3_ADCO_MASK;
     }
+
+#if defined(FSL_FEATURE_ADC16_HAS_HW_AVERAGE) && FSL_FEATURE_ADC16_HAS_HW_AVERAGE
+    ADC16_SetHardwareAverage(base, config->hardwareAverageMode);
+#endif /* FSL_FEATURE_ADC16_HAS_HW_AVERAGE */
 }
 
 /*!
@@ -164,6 +168,9 @@ void ADC16_GetDefaultConfig(adc16_config_t *config)
     config->enableHighSpeed            = false;
     config->enableLowPower             = false;
     config->enableContinuousConversion = false;
+#if defined(FSL_FEATURE_ADC16_HAS_HW_AVERAGE) && FSL_FEATURE_ADC16_HAS_HW_AVERAGE
+    config->hardwareAverageMode = kADC16_HardwareAverageDisabled;
+#endif /* FSL_FEATURE_ADC16_HAS_HW_AVERAGE */
 }
 
 #if defined(FSL_FEATURE_ADC16_HAS_CALIBRATION) && FSL_FEATURE_ADC16_HAS_CALIBRATION

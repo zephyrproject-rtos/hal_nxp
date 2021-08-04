@@ -13,6 +13,11 @@
  * Definitions
  ******************************************************************************/
 
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.flash"
+#endif
+
 /*!
  * @brief Enumeration for special memory property.
  */
@@ -249,6 +254,31 @@ status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBy
 }
 
 /*!
+ * @brief Erases the Dflash sectors encompassed by parameters passed into function.
+ *
+ * This function erases one flash sector size based on the start address, and it is
+ * executed asynchronously.
+ */
+status_t FLASH_EraseSectorNonBlocking(flash_config_t *config, uint32_t start, uint32_t key)
+{
+    status_t returnCode;
+    uint8_t flashIndex;
+    uint32_t lengthInBytes = FSL_FEATURE_FLASH_PFLASH_BLOCK_SECTOR_SIZE;
+
+    /* check the supplied address range to get flash index  */
+    returnCode = flash_check_range_to_get_index(config, start, lengthInBytes, &flashIndex);
+    if (returnCode != kStatus_FTFx_Success)
+    {
+        return returnCode;
+    }
+
+    /* Decide whether to convert the start address from primary flash to secondary flash based on the current address */
+    flash_convert_start_address(&config->ftfxConfig[flashIndex], start);
+
+    return FTFx_CMD_EraseSectorNonBlocking(&config->ftfxConfig[flashIndex], start, key);
+}
+
+/*!
  * @brief Erases entire flexnvm
  */
 status_t FLASH_EraseAll(flash_config_t *config, uint32_t key)
@@ -454,7 +484,7 @@ status_t FLASH_Swap(flash_config_t *config, uint32_t address, bool isSetEnable)
 
     ftfxConfig = &config->ftfxConfig[flashIndex];
 
-    (void)memset(&returnInfo, 0xFFU, sizeof(returnInfo));
+    (void)memset(&returnInfo, 0xFF, sizeof(returnInfo));
 
     do
     {
@@ -1473,3 +1503,42 @@ static status_t flash_validate_swap_indicator_address(ftfx_config_t *config, uin
     return returnCode;
 }
 #endif /* FSL_FEATURE_FLASH_HAS_PFLASH_BLOCK_SWAP */
+
+status_t FLASH_GetCommandState(void)
+{
+    uint8_t registerValue;
+    uint32_t idleFlag;
+
+    /* Get flash status register value */
+    registerValue = FTFx->FSTAT;
+
+    /* Check DONE bit of the flash status register */
+    idleFlag = ((uint32_t)registerValue & FTFx_FSTAT_CCIF_MASK) >> FTFx_FSTAT_CCIF_SHIFT;
+    if (idleFlag == 0U)
+    {
+        return kStatus_FTFx_CommandOperationInProgress;
+    }
+    else
+    {
+        /* Check error bits */
+        /* checking access error */
+        if (0U != (registerValue & FTFx_FSTAT_ACCERR_MASK))
+        {
+            return kStatus_FTFx_AccessError;
+        }
+        /* checking protection error */
+        else if (0U != (registerValue & FTFx_FSTAT_FPVIOL_MASK))
+        {
+            return kStatus_FTFx_ProtectionViolation;
+        }
+        /* checking MGSTAT0 non-correctable error */
+        else if (0U != (registerValue & FTFx_FSTAT_MGSTAT0_MASK))
+        {
+            return kStatus_FTFx_CommandFailure;
+        }
+        else
+        {
+            return kStatus_FTFx_Success;
+        }
+    }
+}

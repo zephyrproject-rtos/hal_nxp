@@ -20,14 +20,14 @@
  * Definitions
  ******************************************************************************/
 #define kStatus_FLASH_Success kStatus_FTFx_Success
-#define kFLASH_ApiEraseKey kFTFx_ApiEraseKey
+#define kFLASH_ApiEraseKey    kFTFx_ApiEraseKey
 
 /*!
  * @name Flash version
  * @{
  */
 /*! @brief Flash driver version for SDK*/
-#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(3U, 0U, 2U)) /*!< Version 3.0.2. */
+#define FSL_FLASH_DRIVER_VERSION (MAKE_VERSION(3U, 1U, 2U)) /*!< Version 3.1.2. */
 
 /*! @brief Flash driver version for ROM*/
 #define FSL_FLASH_DRIVER_VERSION_ROM (MAKE_VERSION(3U, 0U, 0U)) /*!< Version 3.0.0. */
@@ -165,6 +165,28 @@ status_t FLASH_Init(flash_config_t *config);
  * @retval #kStatus_FTFx_CommandFailure Run-time error during the command execution.
  */
 status_t FLASH_Erase(flash_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
+
+/*!
+ * @brief Erases the Dflash sectors encompassed by parameters passed into function.
+ *
+ * This function erases one flash sector size based on the start address, and it is
+ * executed asynchronously.
+ *
+ * NOTE: This function can only erase one flash sector at a time, and the other commands
+ *       can be executed after the previous command has been completed.
+ *
+ * @param config The pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be erased.
+ *              The start address does not need to be sector-aligned but must be word-aligned.
+ * @param key The value used to validate all flash erase APIs.
+ *
+ * @retval #kStatus_FTFx_Success API was executed successfully.
+ * @retval #kStatus_FTFx_InvalidArgument An invalid argument is provided.
+ * @retval #kStatus_FTFx_AlignmentError The parameter is not aligned with the specified baseline.
+ * @retval #kStatus_FTFx_AddressError The address is out of range.
+ * @retval #kStatus_FTFx_EraseKeyError The API erase key is invalid.
+ */
+status_t FLASH_EraseSectorNonBlocking(flash_config_t *config, uint32_t start, uint32_t key);
 
 /*!
  * @brief Erases entire flexnvm
@@ -651,6 +673,26 @@ status_t FLASH_PflashGetProtection(flash_config_t *config, pflash_prot_status_t 
  * @retval #kStatus_FTFx_UnknownProperty An unknown property tag.
  */
 status_t FLASH_GetProperty(flash_config_t *config, flash_property_tag_t whichProperty, uint32_t *value);
+
+/*@}*/
+
+/*!
+ * @name commantStatus
+ * @{
+ */
+
+/*!
+ * @brief Get previous command status.
+ *
+ * This function is used to obtain the execution status of the previous command.
+ *
+ * @retval #kStatus_FTFx_Success The previous command is executed successfully.
+ * @retval #kStatus_FTFx_ExecuteInRamFunctionNotReady Execute-in-RAM function is not available.
+ * @retval #kStatus_FTFx_AccessError Invalid instruction codes and out-of bounds addresses.
+ * @retval #kStatus_FTFx_ProtectionViolation The program/erase operation is requested to execute on protected areas.
+ * @retval #kStatus_FTFx_CommandFailure Run-time error during the command execution.
+ */
+status_t FLASH_GetCommandState(void);
 
 /*@}*/
 
