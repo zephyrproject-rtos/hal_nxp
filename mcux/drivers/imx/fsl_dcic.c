@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -136,8 +136,8 @@ void DCIC_GetDefaultConfig(dcic_config_t *config)
 {
     assert(NULL != config);
 
-    config->polarityFlags =
-        kDCIC_VsyncActiveLow | kDCIC_HsyncActiveLow | kDCIC_DataEnableActiveLow | kDCIC_DriveDataOnFallingClkEdge;
+    config->polarityFlags = (uint8_t)kDCIC_VsyncActiveLow | (uint8_t)kDCIC_HsyncActiveLow |
+                            (uint8_t)kDCIC_DataEnableActiveLow | (uint8_t)kDCIC_DriveDataOnFallingClkEdge;
     config->enableExternalSignal = false;
     config->enableInterrupts     = 0;
 }

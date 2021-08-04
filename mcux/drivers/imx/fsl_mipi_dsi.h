@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_MIPI_DSI_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 /* The max APB transfer size. */
@@ -347,16 +347,16 @@ typedef struct _dsi_handle dsi_handle_t;
  *        @ref DSI_GetAndClearHostStatus to check the error report status.
  * - @ref kStatus_Fail Transfer failed for other reasons.
  */
-typedef void (*dsi_callback_t)(MIPI_DSI_Type *base, dsi_handle_t *handle, status_t status, void *userData);
+typedef void (*dsi_callback_t)(const MIPI_DSI_Type *base, dsi_handle_t *handle, status_t status, void *userData);
 
 /*! @brief MIPI DSI transfer handle structure */
 struct _dsi_handle
 {
-    volatile bool isBusy;    /*!< MIPI DSI is busy with APB data transfer. */
-    dsi_transfer_t xfer;     /*!< Transfer information. */
-    dsi_callback_t callback; /*!< DSI callback */
-    void *userData;          /*!< Callback parameter */
-    MIPI_DSI_Type *dsi;      /*!< Pointer to MIPI DSI peripheral. */
+    volatile bool isBusy;     /*!< MIPI DSI is busy with APB data transfer. */
+    dsi_transfer_t xfer;      /*!< Transfer information. */
+    dsi_callback_t callback;  /*!< DSI callback */
+    void *userData;           /*!< Callback parameter */
+    const MIPI_DSI_Type *dsi; /*!< Pointer to MIPI DSI peripheral. */
 };
 
 /*******************************************************************************
@@ -381,7 +381,7 @@ extern "C" {
  * @param base MIPI DSI host peripheral base address.
  * @param config Pointer to a user-defined configuration structure.
  */
-void DSI_Init(MIPI_DSI_Type *base, const dsi_config_t *config);
+void DSI_Init(const MIPI_DSI_Type *base, const dsi_config_t *config);
 
 /*!
  * @brief Deinitializes an MIPI DSI host.
@@ -390,7 +390,7 @@ void DSI_Init(MIPI_DSI_Type *base, const dsi_config_t *config);
  *
  * @param base MIPI DSI host peripheral base address.
  */
-void DSI_Deinit(MIPI_DSI_Type *base);
+void DSI_Deinit(const MIPI_DSI_Type *base);
 
 /*!
  * @brief Get the default configuration to initialize the MIPI DSI host.
@@ -431,7 +431,7 @@ void DSI_GetDefaultConfig(dsi_config_t *config);
  * @param dsiHsBitClkFreq_Hz The DSI high speed bit clock frequency in Hz. It is
  * the same with DPHY PLL output.
  */
-void DSI_SetDpiConfig(MIPI_DSI_Type *base,
+void DSI_SetDpiConfig(const MIPI_DSI_Type *base,
                       const dsi_dpi_config_t *config,
                       uint8_t numLanes,
                       uint32_t dpiPixelClkFreq_Hz,
@@ -461,7 +461,7 @@ void DSI_SetDpiConfig(MIPI_DSI_Type *base,
  * @return The actual D-PHY PLL output frequency. If could not configure the
  * PLL to the target frequency, the return value is 0.
  */
-uint32_t DSI_InitDphy(MIPI_DSI_Type *base, const dsi_dphy_config_t *config, uint32_t refClkFreq_Hz);
+uint32_t DSI_InitDphy(const MIPI_DSI_Type *base, const dsi_dphy_config_t *config, uint32_t refClkFreq_Hz);
 
 /*!
  * @brief Deinitializes the D-PHY
@@ -470,7 +470,7 @@ uint32_t DSI_InitDphy(MIPI_DSI_Type *base, const dsi_dphy_config_t *config, uint
  *
  * @param base MIPI DSI host peripheral base address.
  */
-void DSI_DeinitDphy(MIPI_DSI_Type *base);
+void DSI_DeinitDphy(const MIPI_DSI_Type *base);
 
 /*!
  * @brief Get the default D-PHY configuration.
@@ -501,7 +501,7 @@ void DSI_GetDphyDefaultConfig(dsi_dphy_config_t *config, uint32_t txHsBitClk_Hz,
  * @param intGroup1 Interrupts to enable in group 1.
  * @param intGroup2 Interrupts to enable in group 2.
  */
-static inline void DSI_EnableInterrupts(MIPI_DSI_Type *base, uint32_t intGroup1, uint32_t intGroup2)
+static inline void DSI_EnableInterrupts(const MIPI_DSI_Type *base, uint32_t intGroup1, uint32_t intGroup2)
 {
     base->apb->IRQ_MASK &= ~intGroup1;
     base->apb->IRQ_MASK2 &= ~intGroup2;
@@ -516,7 +516,7 @@ static inline void DSI_EnableInterrupts(MIPI_DSI_Type *base, uint32_t intGroup1,
  * @param intGroup1 Interrupts to disable in group 1.
  * @param intGroup2 Interrupts to disable in group 2.
  */
-static inline void DSI_DisableInterrupts(MIPI_DSI_Type *base, uint32_t intGroup1, uint32_t intGroup2)
+static inline void DSI_DisableInterrupts(const MIPI_DSI_Type *base, uint32_t intGroup1, uint32_t intGroup2)
 {
     base->apb->IRQ_MASK |= intGroup1;
     base->apb->IRQ_MASK2 |= intGroup2;
@@ -529,7 +529,7 @@ static inline void DSI_DisableInterrupts(MIPI_DSI_Type *base, uint32_t intGroup1
  * @param intGroup1 Group 1 interrupt status.
  * @param intGroup2 Group 2 interrupt status.
  */
-static inline void DSI_GetAndClearInterruptStatus(MIPI_DSI_Type *base, uint32_t *intGroup1, uint32_t *intGroup2)
+static inline void DSI_GetAndClearInterruptStatus(const MIPI_DSI_Type *base, uint32_t *intGroup1, uint32_t *intGroup2)
 {
     *intGroup2 = base->apb->IRQ_STATUS2;
     *intGroup1 = base->apb->IRQ_STATUS;
@@ -558,7 +558,7 @@ static inline void DSI_GetAndClearInterruptStatus(MIPI_DSI_Type *base, uint32_t 
  * @param flags The transfer control flags, see _dsi_transfer_flags.
  */
 void DSI_SetApbPacketControl(
-    MIPI_DSI_Type *base, uint16_t wordCount, uint8_t virtualChannel, dsi_tx_data_type_t dataType, uint8_t flags);
+    const MIPI_DSI_Type *base, uint16_t wordCount, uint8_t virtualChannel, dsi_tx_data_type_t dataType, uint8_t flags);
 
 /*!
  * @brief Fill the long APB packet payload.
@@ -569,7 +569,7 @@ void DSI_SetApbPacketControl(
  * @param payload Pointer to the payload.
  * @param payloadSize Payload size in byte.
  */
-void DSI_WriteApbTxPayload(MIPI_DSI_Type *base, const uint8_t *payload, uint16_t payloadSize);
+void DSI_WriteApbTxPayload(const MIPI_DSI_Type *base, const uint8_t *payload, uint16_t payloadSize);
 
 /*!
  * @brief Extended function to fill the payload to TX FIFO.
@@ -593,7 +593,7 @@ void DSI_WriteApbTxPayload(MIPI_DSI_Type *base, const uint8_t *payload, uint16_t
  * @param dscCmd The DSC command to send, only used when @p sendDscCmd is true.
  */
 void DSI_WriteApbTxPayloadExt(
-    MIPI_DSI_Type *base, const uint8_t *payload, uint16_t payloadSize, bool sendDscCmd, uint8_t dscCmd);
+    const MIPI_DSI_Type *base, const uint8_t *payload, uint16_t payloadSize, bool sendDscCmd, uint8_t dscCmd);
 
 /*!
  * @brief Read the long APB packet payload.
@@ -606,7 +606,7 @@ void DSI_WriteApbTxPayloadExt(
  * @param payload Pointer to the payload.
  * @param payloadSize Payload size in byte.
  */
-void DSI_ReadApbRxPayload(MIPI_DSI_Type *base, uint8_t *payload, uint16_t payloadSize);
+void DSI_ReadApbRxPayload(const MIPI_DSI_Type *base, uint8_t *payload, uint16_t payloadSize);
 
 /*!
  * @brief Trigger the controller to send out APB packet.
@@ -615,7 +615,7 @@ void DSI_ReadApbRxPayload(MIPI_DSI_Type *base, uint8_t *payload, uint16_t payloa
  *
  * @param base MIPI DSI host peripheral base address.
  */
-static inline void DSI_SendApbPacket(MIPI_DSI_Type *base)
+static inline void DSI_SendApbPacket(const MIPI_DSI_Type *base)
 {
     base->apb->SEND_PACKET = 0x1U;
 }
@@ -628,7 +628,7 @@ static inline void DSI_SendApbPacket(MIPI_DSI_Type *base)
  * @param base MIPI DSI host peripheral base address.
  * @return The APB status.
  */
-static inline uint32_t DSI_GetApbStatus(MIPI_DSI_Type *base)
+static inline uint32_t DSI_GetApbStatus(const MIPI_DSI_Type *base)
 {
     return base->apb->PKT_STATUS;
 }
@@ -641,7 +641,7 @@ static inline uint32_t DSI_GetApbStatus(MIPI_DSI_Type *base)
  * @param base MIPI DSI host peripheral base address.
  * @return The error status.
  */
-static inline uint32_t DSI_GetRxErrorStatus(MIPI_DSI_Type *base)
+static inline uint32_t DSI_GetRxErrorStatus(const MIPI_DSI_Type *base)
 {
     return base->host->RX_ERROR_STATUS;
 }
@@ -677,7 +677,7 @@ static inline uint8_t DSI_GetEccRxErrorPosition(uint32_t rxErrorStatus)
  * @param base MIPI DSI host peripheral base address.
  * @return The DSI host status.
  */
-static inline uint32_t DSI_GetAndClearHostStatus(MIPI_DSI_Type *base)
+static inline uint32_t DSI_GetAndClearHostStatus(const MIPI_DSI_Type *base)
 {
     return base->host->CFG_STATUS_OUT;
 }
@@ -688,7 +688,7 @@ static inline uint32_t DSI_GetAndClearHostStatus(MIPI_DSI_Type *base)
  * @param base MIPI DSI host peripheral base address.
  * @return The RX packet header.
  */
-static inline uint32_t DSI_GetRxPacketHeader(MIPI_DSI_Type *base)
+static inline uint32_t DSI_GetRxPacketHeader(const MIPI_DSI_Type *base)
 {
     return base->apb->PKT_RX_PKT_HEADER;
 }
@@ -750,7 +750,7 @@ static inline uint8_t DSI_GetRxPacketVirtualChannel(uint32_t rxPktHeader)
  * @retval kStatus_DSI_NotSupported Transfer format not supported.
  * @retval kStatus_DSI_Fail Transfer failed for other reasons.
  */
-status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer);
+status_t DSI_TransferBlocking(const MIPI_DSI_Type *base, dsi_transfer_t *xfer);
 
 /*! @} */
 
@@ -769,7 +769,10 @@ status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer);
  * @param callback Callback function.
  * @param userData User data.
  */
-status_t DSI_TransferCreateHandle(MIPI_DSI_Type *base, dsi_handle_t *handle, dsi_callback_t callback, void *userData);
+status_t DSI_TransferCreateHandle(const MIPI_DSI_Type *base,
+                                  dsi_handle_t *handle,
+                                  dsi_callback_t callback,
+                                  void *userData);
 
 /*!
  * @brief APB data transfer using interrupt method.
@@ -785,7 +788,7 @@ status_t DSI_TransferCreateHandle(MIPI_DSI_Type *base, dsi_handle_t *handle, dsi
  * @retval kStatus_DSI_Busy Failed to start transfer because DSI is busy with pervious transfer.
  * @retval kStatus_DSI_NotSupported Transfer format not supported.
  */
-status_t DSI_TransferNonBlocking(MIPI_DSI_Type *base, dsi_handle_t *handle, dsi_transfer_t *xfer);
+status_t DSI_TransferNonBlocking(const MIPI_DSI_Type *base, dsi_handle_t *handle, dsi_transfer_t *xfer);
 
 /*!
  * @brief Abort current APB data transfer.
@@ -793,7 +796,7 @@ status_t DSI_TransferNonBlocking(MIPI_DSI_Type *base, dsi_handle_t *handle, dsi_
  * @param base MIPI DSI host peripheral base address.
  * @param handle pointer to dsi_handle_t structure which stores the transfer state.
  */
-void DSI_TransferAbort(MIPI_DSI_Type *base, dsi_handle_t *handle);
+void DSI_TransferAbort(const MIPI_DSI_Type *base, dsi_handle_t *handle);
 
 /*!
  * @brief Interrupt handler for the DSI.
@@ -801,7 +804,7 @@ void DSI_TransferAbort(MIPI_DSI_Type *base, dsi_handle_t *handle);
  * @param base MIPI DSI host peripheral base address.
  * @param handle pointer to dsi_handle_t structure which stores the transfer state.
  */
-void DSI_TransferHandleIRQ(MIPI_DSI_Type *base, dsi_handle_t *handle);
+void DSI_TransferHandleIRQ(const MIPI_DSI_Type *base, dsi_handle_t *handle);
 
 /*! @} */
 

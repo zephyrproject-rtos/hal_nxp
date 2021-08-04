@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020, NXP
+ * Copyright 2019-2021, NXP
  * All rights reserved.
  *
  *
@@ -129,7 +129,7 @@ void PGMC_BPC_ControlPowerDomainBySetPointMode(PGMC_BPC_Type *base,
  * note The function is used to control power domain when the CPU is in RUN mode.
  *
  * param base PGMC basic power controller base address.
- * param powerOff. Power On/Off power domain in software mode.
+ * param powerOff Power On/Off power domain in software mode.
  *                  - \b true Power off the power domain in software mode.
  *                  - \b false Power on the power domain in software mode.
  */
@@ -387,7 +387,7 @@ void PGMC_CPC_LMEM_TriggerMLPLSoftwareChange(PGMC_CPC_Type *base)
  * param base PGMC MIF peripheral base address.
  * param memoryLevel The selected memory low power level. For details please refer to @ref
  * pgmc_memory_low_power_level_t.
- * param mask. The mask of MIF signal behaviour. Should be the OR'ed value of @ref _pgmc_mif_signal_behaviour
+ * param mask The mask of MIF signal behaviour. Should be the OR'ed value of @ref _pgmc_mif_signal_behaviour
  */
 void PGMC_MIF_SetSignalBehaviour(PGMC_MIF_Type *base, pgmc_memory_low_power_level_t memoryLevel, uint32_t mask)
 {

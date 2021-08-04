@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  *
@@ -22,9 +22,9 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief GPC driver version 2.1.0. */
-#define FSL_GPC_RIVER_VERSION (MAKE_VERSION(2, 1, 0))
-/*@}*/
+/*! @brief GPC driver version 2.2.0. */
+#define FSL_GPC_RIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @}*/
 
 #define GPC_RESERVED_USE_MACRO 0xFFFFFFFFU
 
@@ -260,7 +260,7 @@ typedef struct _gpc_tran_step_config
     bool enableStep;                      /*!< Enable the step. */
 } gpc_tran_step_config_t;
 
-/* @brief CPU wakeup sequence setpoint options. */
+/*! @brief CPU wakeup sequence setpoint options. */
 typedef enum _gpc_cm_wakeup_sp_sel
 {
     kGPC_CM_WakeupSetpoint =
@@ -345,8 +345,8 @@ static inline void GPC_CM_SetNextCpuMode(GPC_CPU_MODE_CTRL_Type *base, gpc_cpu_m
  */
 static inline gpc_cpu_mode_t GPC_CM_GetCurrentCpuMode(GPC_CPU_MODE_CTRL_Type *base)
 {
-    return (gpc_cpu_mode_t)((base->CM_MODE_STAT & GPC_CPU_MODE_CTRL_CM_MODE_STAT_CPU_MODE_CURRENT_MASK) >>
-                            GPC_CPU_MODE_CTRL_CM_MODE_STAT_CPU_MODE_CURRENT_SHIFT);
+    return (gpc_cpu_mode_t)(uint32_t)((base->CM_MODE_STAT & GPC_CPU_MODE_CTRL_CM_MODE_STAT_CPU_MODE_CURRENT_MASK) >>
+                                      GPC_CPU_MODE_CTRL_CM_MODE_STAT_CPU_MODE_CURRENT_SHIFT);
 }
 
 /*!
@@ -357,8 +357,8 @@ static inline gpc_cpu_mode_t GPC_CM_GetCurrentCpuMode(GPC_CPU_MODE_CTRL_Type *ba
  */
 static inline gpc_cpu_mode_t GPC_CM_GetPreviousCpuMode(GPC_CPU_MODE_CTRL_Type *base)
 {
-    return (gpc_cpu_mode_t)((base->CM_MODE_STAT & GPC_CPU_MODE_CTRL_CM_MODE_STAT_CPU_MODE_PREVIOUS_MASK) >>
-                            GPC_CPU_MODE_CTRL_CM_MODE_STAT_CPU_MODE_PREVIOUS_SHIFT);
+    return (gpc_cpu_mode_t)(uint32_t)((base->CM_MODE_STAT & GPC_CPU_MODE_CTRL_CM_MODE_STAT_CPU_MODE_PREVIOUS_MASK) >>
+                                      GPC_CPU_MODE_CTRL_CM_MODE_STAT_CPU_MODE_PREVIOUS_SHIFT);
 }
 
 /*!
@@ -463,7 +463,7 @@ void GPC_CM_RequestRunModeSetPointTransition(GPC_CPU_MODE_CTRL_Type *base, uint8
  * This function configures which set point is allowed after current set point. If there are multiple setpoints, use:
  * @code
  *    map = kkGPC_SetPoint0 | kGPC_SetPoint1 | ... | kGPC_SetPoint15;
- * @encode
+ * @endcode
  *
  * @param base GPC CPU module base address.
  * @param setPoint Set point index, available range is 0-15.
@@ -483,7 +483,7 @@ static inline void GPC_CM_SetSetPointMapping(GPC_CPU_MODE_CTRL_Type *base, uint3
  * setpoints, use:
  * @code
  *    map = kkGPC_SetPoint0 | kGPC_SetPoint1 | ... | kGPC_SetPoint15;
- * @encode
+ * @endcode
  *
  * @param base GPC CPU module base address.
  * @param mode CPU mode. Refer to "gpc_cpu_mode_t".
@@ -582,15 +582,6 @@ static inline void GPC_SP_SetSetpointPriority(GPC_SET_POINT_CTRL_Type *base, uin
 void GPC_SP_ConfigSetPointTransitionStep(GPC_SET_POINT_CTRL_Type *base,
                                          gpc_sp_tran_step_t step,
                                          const gpc_tran_step_config_t *config);
-
-/*!
- * @brief Gets the response count of the selected setpoint transition step.
- *
- * @param base GPC Setpoint controller base address.
- * @param step step type, refer to "gpc_sp_tran_step_t".
- * @return The value of response delay count.
- */
-uint32_t GPC_SP_GetResponseCount(GPC_SET_POINT_CTRL_Type *base, gpc_sp_tran_step_t step);
 
 /*!
  * @brief Get system current setpoint, only valid when setpoint trans not busy.

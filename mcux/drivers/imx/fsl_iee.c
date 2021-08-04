@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -58,7 +58,7 @@ void IEE_Init(IEE_Type *base)
 void IEE_GetDefaultConfig(iee_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    memset(config, 0, sizeof(*config));
+    (void)memset(config, 0, sizeof(*config));
 
     config->bypass     = kIEE_AesUseMdField;
     config->mode       = kIEE_ModeNone;
@@ -137,5 +137,5 @@ status_t IEE_SetRegionKey(
  */
 void IEE_LockRegionConfig(IEE_Type *base, iee_region_t region)
 {
-    base->GCFG |= 0x1 << region;
+    base->GCFG |= 0x1U << (uint32_t)region;
 }

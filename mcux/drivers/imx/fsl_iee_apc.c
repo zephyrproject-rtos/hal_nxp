@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, NXP
+ * Copyright 2020-2021, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -71,8 +71,8 @@ status_t IEE_APC_SetRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, ui
      * Note: from design's aspect, 'top' means the top of the space, the higher address which is the end
      * address.
      */
-    if ((startAddr & (~IOMUXC_LPSR_GPR_GPR3_APC_AC_R0_TOP_MASK)) != 0 ||
-        (endAddr & (~IOMUXC_LPSR_GPR_GPR2_APC_AC_R0_BOT_MASK)) != 0)
+    if ((startAddr & (~IOMUXC_LPSR_GPR_GPR3_APC_AC_R0_TOP_MASK)) != 0U ||
+        (endAddr & (~IOMUXC_LPSR_GPR_GPR2_APC_AC_R0_BOT_MASK)) != 0U)
     {
         return kStatus_InvalidArgument;
     }
@@ -167,6 +167,10 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
             IEE_APC->REGION0_RDC_D1 |= IEE_APC_REGION0_RDC_D1_RDC_D1_WRITE_DIS_MASK;
             IEE_APC->REGION0_RDC_D1 |= IEE_APC_REGION0_RDC_D1_RDC_D1_LOCK_MASK;
         }
+        else
+        {
+            /* Intentional empty */
+        }
     }
     if (region == kIEE_APC_Region1)
     {
@@ -186,6 +190,10 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
         {
             IEE_APC->REGION1_RDC_D1 |= IEE_APC_REGION1_RDC_D1_RDC_D1_WRITE_DIS_MASK;
             IEE_APC->REGION1_RDC_D1 |= IEE_APC_REGION1_RDC_D1_RDC_D1_LOCK_MASK;
+        }
+        else
+        {
+            /* Intentional empty */
         }
     }
     if (region == kIEE_APC_Region2)
@@ -207,6 +215,10 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
             IEE_APC->REGION2_RDC_D1 |= IEE_APC_REGION2_RDC_D1_RDC_D1_WRITE_DIS_MASK;
             IEE_APC->REGION2_RDC_D1 |= IEE_APC_REGION2_RDC_D1_RDC_D1_LOCK_MASK;
         }
+        else
+        {
+            /* Intentional empty */
+        }
     }
     if (region == kIEE_APC_Region3)
     {
@@ -226,6 +238,10 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
         {
             IEE_APC->REGION3_RDC_D1 |= IEE_APC_REGION3_RDC_D1_RDC_D1_WRITE_DIS_MASK;
             IEE_APC->REGION3_RDC_D1 |= IEE_APC_REGION3_RDC_D1_RDC_D1_LOCK_MASK;
+        }
+        else
+        {
+            /* Intentional empty */
         }
     }
     if (region == kIEE_APC_Region4)
@@ -247,6 +263,10 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
             IEE_APC->REGION4_RDC_D1 |= IEE_APC_REGION4_RDC_D1_RDC_D1_WRITE_DIS_MASK;
             IEE_APC->REGION4_RDC_D1 |= IEE_APC_REGION4_RDC_D1_RDC_D1_LOCK_MASK;
         }
+        else
+        {
+            /* Intentional empty */
+        }
     }
     if (region == kIEE_APC_Region5)
     {
@@ -266,6 +286,10 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
         {
             IEE_APC->REGION5_RDC_D1 |= IEE_APC_REGION5_RDC_D1_RDC_D1_WRITE_DIS_MASK;
             IEE_APC->REGION5_RDC_D1 |= IEE_APC_REGION5_RDC_D1_RDC_D1_LOCK_MASK;
+        }
+        else
+        {
+            /* Intentional empty */
         }
     }
     if (region == kIEE_APC_Region6)
@@ -287,6 +311,10 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
             IEE_APC->REGION6_RDC_D1 |= IEE_APC_REGION6_RDC_D1_RDC_D1_WRITE_DIS_MASK;
             IEE_APC->REGION6_RDC_D1 |= IEE_APC_REGION6_RDC_D1_RDC_D1_LOCK_MASK;
         }
+        else
+        {
+            /* Intentional empty */
+        }
     }
     if (region == kIEE_APC_Region7)
     {
@@ -306,6 +334,10 @@ status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, i
         {
             IEE_APC->REGION7_RDC_D1 |= IEE_APC_REGION7_RDC_D1_RDC_D1_WRITE_DIS_MASK;
             IEE_APC->REGION7_RDC_D1 |= IEE_APC_REGION7_RDC_D1_RDC_D1_LOCK_MASK;
+        }
+        else
+        {
+            /* Intentional empty */
         }
     }
 

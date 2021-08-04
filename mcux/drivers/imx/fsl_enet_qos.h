@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines the driver version. */
-#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_ENET_QOS_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /*! @name Control and status region bit masks of the receive buffer descriptor. */
@@ -48,6 +48,9 @@
 #define ENET_QOS_RXDESCRIP_WR_DE_MASK         (1UL << 19U)
 #define ENET_QOS_RXDESCRIP_WR_RE_MASK         (1UL << 20U)
 #define ENET_QOS_RXDESCRIP_WR_OE_MASK         (1UL << 21U)
+#define ENET_QOS_RXDESCRIP_WR_RWT_MASK        (1UL << 22U)
+#define ENET_QOS_RXDESCRIP_WR_GP_MASK         (1UL << 22U)
+#define ENET_QOS_RXDESCRIP_WR_CRC_MASK        (1UL << 23U)
 #define ENET_QOS_RXDESCRIP_WR_RS0V_MASK       (1UL << 25U)
 #define ENET_QOS_RXDESCRIP_WR_RS1V_MASK       (1UL << 26U)
 #define ENET_QOS_RXDESCRIP_WR_RS2V_MASK       (1UL << 27U)
@@ -55,6 +58,9 @@
 #define ENET_QOS_RXDESCRIP_WR_FD_MASK         (1UL << 29U)
 #define ENET_QOS_RXDESCRIP_WR_CTXT_MASK       (1UL << 30U)
 #define ENET_QOS_RXDESCRIP_WR_OWN_MASK        (1UL << 31U)
+
+#define ENET_QOS_RXDESCRIP_WR_SA_FAILURE_MASK (1UL << 16U)
+#define ENET_QOS_RXDESCRIP_WR_DA_FAILURE_MASK (1UL << 17U)
 /*@}*/
 
 /*! @name Control and status bit masks of the transmit buffer descriptor. */
@@ -115,23 +121,27 @@
 /*! @brief Defines the status return codes for transaction. */
 enum
 {
+    kStatus_ENET_QOS_InitMemoryFail =
+        MAKE_STATUS(kStatusGroup_ENET_QOS, 0U), /*!< Init fails since buffer memory is not enough. */
     kStatus_ENET_QOS_RxFrameError =
-        MAKE_STATUS(kStatusGroup_ENET_QOS, 0U), /*!< A frame received but data error happen. */
-    kStatus_ENET_QOS_RxFrameFail  = MAKE_STATUS(kStatusGroup_ENET_QOS, 1U), /*!< Failed to receive a frame. */
-    kStatus_ENET_QOS_RxFrameEmpty = MAKE_STATUS(kStatusGroup_ENET_QOS, 2U), /*!< No frame arrive. */
+        MAKE_STATUS(kStatusGroup_ENET_QOS, 1U), /*!< A frame received but data error happen. */
+    kStatus_ENET_QOS_RxFrameFail  = MAKE_STATUS(kStatusGroup_ENET_QOS, 2U), /*!< Failed to receive a frame. */
+    kStatus_ENET_QOS_RxFrameEmpty = MAKE_STATUS(kStatusGroup_ENET_QOS, 3U), /*!< No frame arrive. */
+    kStatus_ENET_QOS_RxFrameDrop =
+        MAKE_STATUS(kStatusGroup_ENET_QOS, 4U), /*!< Rx frame is dropped since no buffer memory. */
     kStatus_ENET_QOS_TxFrameBusy =
-        MAKE_STATUS(kStatusGroup_ENET_QOS, 3U), /*!< Transmit descriptors are under process. */
-    kStatus_ENET_QOS_TxFrameFail    = MAKE_STATUS(kStatusGroup_ENET_QOS, 4U), /*!< Transmit frame fail. */
-    kStatus_ENET_QOS_TxFrameOverLen = MAKE_STATUS(kStatusGroup_ENET_QOS, 5U), /*!< Transmit oversize. */
+        MAKE_STATUS(kStatusGroup_ENET_QOS, 5U), /*!< Transmit descriptors are under process. */
+    kStatus_ENET_QOS_TxFrameFail    = MAKE_STATUS(kStatusGroup_ENET_QOS, 6U), /*!< Transmit frame fail. */
+    kStatus_ENET_QOS_TxFrameOverLen = MAKE_STATUS(kStatusGroup_ENET_QOS, 7U), /*!< Transmit oversize. */
     kStatus_ENET_QOS_Est_SwListBusy =
-        MAKE_STATUS(kStatusGroup_ENET_QOS, 6U), /*!< SW Gcl List not yet processed by HW. */
-    kStatus_ENET_QOS_Est_SwListWriteAbort = MAKE_STATUS(kStatusGroup_ENET_QOS, 7U), /*!< SW Gcl List write aborted .*/
+        MAKE_STATUS(kStatusGroup_ENET_QOS, 8U), /*!< SW Gcl List not yet processed by HW. */
+    kStatus_ENET_QOS_Est_SwListWriteAbort = MAKE_STATUS(kStatusGroup_ENET_QOS, 9U), /*!< SW Gcl List write aborted .*/
     kStatus_ENET_QOS_Est_InvalidParameter =
-        MAKE_STATUS(kStatusGroup_ENET_QOS, 8U),                              /*!< Invalid parameter in Gcl List .*/
-    kStatus_ENET_QOS_Est_BtrError = MAKE_STATUS(kStatusGroup_ENET_QOS, 9U),  /*!< Base Time Error when loading list.*/
-    kStatus_ENET_QOS_TrgtBusy     = MAKE_STATUS(kStatusGroup_ENET_QOS, 10U), /*!< Target time register busy.*/
-    kStatus_ENET_QOS_Timeout      = MAKE_STATUS(kStatusGroup_ENET_QOS, 11U), /*!< Target time register busy.*/
-    kStatus_ENET_QOS_PpsBusy      = MAKE_STATUS(kStatusGroup_ENET_QOS, 12U)  /*!< Pps command busy.*/
+        MAKE_STATUS(kStatusGroup_ENET_QOS, 10U),                             /*!< Invalid parameter in Gcl List .*/
+    kStatus_ENET_QOS_Est_BtrError = MAKE_STATUS(kStatusGroup_ENET_QOS, 11U), /*!< Base Time Error when loading list.*/
+    kStatus_ENET_QOS_TrgtBusy     = MAKE_STATUS(kStatusGroup_ENET_QOS, 12U), /*!< Target time register busy.*/
+    kStatus_ENET_QOS_Timeout      = MAKE_STATUS(kStatusGroup_ENET_QOS, 13U), /*!< Target time register busy.*/
+    kStatus_ENET_QOS_PpsBusy      = MAKE_STATUS(kStatusGroup_ENET_QOS, 14U)  /*!< Pps command busy.*/
 };
 
 /*! @brief Defines the MII/RGMII mode for data interface between the MAC and the PHY. */
@@ -390,7 +400,7 @@ typedef enum _enet_qos_rxp_dma_chn
 /*! @brief Defines the receive descriptor structure
  *  has the read-format and write-back format structure. They both
  *  has the same size with different region definition. so
- *  we define the read-format region as the recive descriptor structure
+ *  we define the read-format region as the receive descriptor structure
  *  Use the read-format region mask bits in the descriptor initialization
  *  Use the write-back format region mask bits in the receive data process.
  */
@@ -491,7 +501,7 @@ typedef struct _enet_qos_rxp_config
 
 /*! @brief Defines the buffer descriptor configure structure.
  *
- * Notes:
+ * @note
  * 1. The receive and transmit descriptor start address pointer and tail pointer must be word-aligned.
  * 2. The recommended minimum tx/rx ring length is 4.
  * 3. The tx/rx descriptor tail address shall be the address pointer to the address just after the end
@@ -559,10 +569,15 @@ typedef struct enet_qos_multiqueue_config
     enet_qos_queue_rx_config_t rxQueueConfig[ENET_QOS_RING_NUM_MAX]; /*!< Rx Queue configuration. */
 } enet_qos_multiqueue_config_t;
 
+/*! @brief Defines the Rx memory buffer alloc function pointer. */
+typedef void *(*enet_qos_rx_alloc_callback_t)(ENET_QOS_Type *base, void *userData, uint8_t channel);
+
+/*! @brief Defines the Rx memory buffer free function pointer. */
+typedef void (*enet_qos_rx_free_callback_t)(ENET_QOS_Type *base, void *buffer, void *userData, uint8_t channel);
+
 /*! @brief Defines the basic configuration structure for the ENET device.
  *
- * Note:
- *  1. Default the signal queue is used so the "*multiqueueCfg" is set default
+ *  @note Default the signal queue is used so the "*multiqueueCfg" is set default
  *  with NULL. Set the pointer with a valid configuration pointer if the multiple
  *  queues are required. If multiple queue is enabled, please make sure the
  *  buffer configuration for all are prepared also.
@@ -578,8 +593,10 @@ typedef struct _enet_qos_config
     uint16_t
         pauseDuration; /*!< Used in the tx flow control frame, only valid when kENET_QOS_FlowControlEnable is set. */
                        /* -----------------Timestamp -------------------------------*/
-    enet_qos_ptp_config_t *ptpConfig; /*!< PTP 1588 feature configuration */
-    uint32_t csrClock_Hz;             /*!< CSR clock frequency in HZ. */
+    enet_qos_ptp_config_t *ptpConfig;         /*!< PTP 1588 feature configuration */
+    uint32_t csrClock_Hz;                     /*!< CSR clock frequency in HZ. */
+    enet_qos_rx_alloc_callback_t rxBuffAlloc; /*!< Callback to alloc memory, must be provided for zero-copy Rx. */
+    enet_qos_rx_free_callback_t rxBuffFree;   /*!< Callback to free memory, must be provided for zero-copy Rx. */
 } enet_qos_config_t;
 
 /* Forward declaration of the handle typedef. */
@@ -623,10 +640,74 @@ struct _enet_qos_handle
     enet_qos_callback_t callback;                                /*!< Callback function. */
     void *userData;                                              /*!< Callback function parameter.*/
     uint8_t multicastCount[64];                                  /*!< Multicast collisions counter */
+    enet_qos_rx_alloc_callback_t rxBuffAlloc; /*!< Callback to alloc memory, must be provided for zero-copy Rx. */
+    enet_qos_rx_free_callback_t rxBuffFree;   /*!< Callback to free memory, must be provided for zero-copy Rx. */
 };
+
+/*! @brief Defines the frame buffer structure. */
+typedef struct _enet_qos_buffer_struct
+{
+    void *buffer;    /*!< The buffer store the whole or partial frame. */
+    uint16_t length; /*!< The byte length of this buffer. */
+} enet_qos_buffer_struct_t;
+
+/*! @brief Defines the Rx frame error structure. */
+typedef struct _enet_qos_rx_frame_error
+{
+    bool rxDstAddrFilterErr : 1; /*!< Destination Address Filter Fail. */
+    bool rxSrcAddrFilterErr : 1; /*!< SA Address Filter Fail. */
+    bool rxDribbleErr : 1;       /*!< Dribble error. */
+    bool rxReceiveErr : 1;       /*!< Receive error. */
+    bool rxOverFlowErr : 1;      /*!< Receive over flow. */
+    bool rxWatchDogErr : 1;      /*!< Watch dog timeout. */
+    bool rxGaintPacketErr : 1;   /*!< Receive gaint packet. */
+    bool rxCrcErr : 1;           /*!< Receive CRC error. */
+} enet_qos_rx_frame_error_t;
+
+typedef struct _enet_qos_rx_frame_attribute_struct
+{
+    bool isTsAvail;                /*!< Rx frame timestamp is available or not. */
+    enet_qos_ptp_time_t timestamp; /*!< The nanosecond part timestamp of this Rx frame. */
+} enet_qos_rx_frame_attribute_t;
+
+/*! @brief Defines the Rx frame data structure. */
+typedef struct _enet_qos_rx_frame_struct
+{
+    enet_qos_buffer_struct_t *rxBuffArray;     /*!< Rx frame buffer structure. */
+    uint16_t totLen;                           /*!< Rx frame total length. */
+    enet_qos_rx_frame_attribute_t rxAttribute; /*!< Rx frame attribute structure. */
+    enet_qos_rx_frame_error_t rxFrameError;    /*!< Rx frame error. */
+} enet_qos_rx_frame_struct_t;
+
+/*! @brief Defines the ENET QOS transfer statistics structure. */
+typedef struct _enet_qos_transfer_stats
+{
+    uint32_t statsRxFrameCount;      /*!< Rx frame number. */
+    uint32_t statsRxCrcErr;          /*!< Rx frame number with CRC error. */
+    uint32_t statsRxAlignErr;        /*!< Rx frame number with alignment error. */
+    uint32_t statsRxLengthErr;       /*!< Rx frame length field doesn't equal to packet size. */
+    uint32_t statsRxFifoOverflowErr; /*!< Rx FIFO overflow count. */
+    uint32_t statsTxFrameCount;      /*!< Tx frame number. */
+    uint32_t statsTxFifoUnderRunErr; /*!< Tx FIFO underrun count. */
+} enet_qos_transfer_stats_t;
 
 /* Typedef for interrupt handler. */
 typedef void (*enet_qos_isr_t)(ENET_QOS_Type *base, enet_qos_handle_t *handle);
+
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+/*! @brief Pointers to enet clocks for each instance. */
+extern const clock_ip_name_t s_enetqosClock[];
+#endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
+
+/*!
+ * @brief Set ENET system configuration.
+ * @note User needs to provide the implementation because the implementation is SoC specific.
+ *  This function set the phy selection and enable clock.
+ *  It should be called before any other ethernet operation.
+ *
+ * @param miiMode  The MII/RGMII/RMII mode for interface between the phy and Ethernet.
+ */
+extern void ENET_QOS_SetSYSControl(enet_qos_mii_mode_t miiMode);
 
 /*******************************************************************************
  * API
@@ -694,11 +775,11 @@ status_t ENET_QOS_Init(
     ENET_QOS_Type *base, const enet_qos_config_t *config, uint8_t *macAddr, uint8_t macCount, uint32_t refclkSrc_Hz);
 
 /*!
- * brief Stops the ENET module.
+ * @brief Stops the ENET module.
 
  * This function disables the ENET module.
  *
- * param base  ENET peripheral base address.
+ * @param base  ENET peripheral base address.
  */
 void ENET_QOS_Down(ENET_QOS_Type *base);
 
@@ -735,6 +816,31 @@ uint32_t ENET_QOS_GetInstance(ENET_QOS_Type *base);
 status_t ENET_QOS_DescriptorInit(ENET_QOS_Type *base,
                                  enet_qos_config_t *config,
                                  enet_qos_buffer_config_t *bufferConfig);
+
+/*!
+ * @brief Allocates Rx buffers for all BDs.
+ * It's used for zero copy Rx. In zero copy Rx case, Rx buffers are dynamic. This function
+ * will populate initial buffers in all BDs for receiving. Then ENET_QOS_GetRxFrame() is used
+ * to get Rx frame with zero copy, it will allocate new buffer to replace the buffer in BD taken
+ * by application application should free those buffers after they're used.
+ *
+ * @note This function should be called after ENET_QOS_CreateHandler() and buffer allocating callback
+ * function should be ready.
+ *
+ * @param base  ENET_QOS peripheral base address.
+ * @param handle The ENET_QOS handler structure. This is the same handler pointer used in the ENET_QOS_Init.
+ */
+status_t ENET_QOS_RxBufferAllocAll(ENET_QOS_Type *base, enet_qos_handle_t *handle);
+
+/*!
+ * @brief Frees Rx buffers in all BDs.
+ * It's used for zero copy Rx. In zero copy Rx case, Rx buffers are dynamic. This function
+ * will free left buffers in all BDs.
+ *
+ * @param base  ENET_QOS peripheral base address.
+ * @param handle The ENET_QOS handler structure. This is the same handler pointer used in the ENET_QOS_Init.
+ */
+void ENET_QOS_RxBufferFreeAll(ENET_QOS_Type *base, enet_qos_handle_t *handle);
 
 /*!
  * @brief Starts the ENET rx/tx.
@@ -812,7 +918,9 @@ static inline uint16_t ENET_QOS_ReadSMIData(ENET_QOS_Type *base)
 
 /*!
  * @brief Starts an SMI read command.
- * support both MDIO IEEE802.3 Clause 22 and clause 45.
+ * It supports MDIO IEEE802.3 Clause 22.
+ * After send command, user needs to check whether the transmission is over
+ * with ENET_QOS_IsSMIBusy().
  *
  * @param base  ENET peripheral base address.
  * @param phyAddr The PHY address.
@@ -822,7 +930,9 @@ void ENET_QOS_StartSMIRead(ENET_QOS_Type *base, uint32_t phyAddr, uint32_t phyRe
 
 /*!
  * @brief Starts a SMI write command.
- * support both MDIO IEEE802.3 Clause 22 and clause 45.
+ * It supports MDIO IEEE802.3 Clause 22.
+ * After send command, user needs to check whether the transmission is over
+ * with ENET_QOS_IsSMIBusy().
  *
  * @param base  ENET peripheral base address.
  * @param phyAddr The PHY address.
@@ -830,6 +940,34 @@ void ENET_QOS_StartSMIRead(ENET_QOS_Type *base, uint32_t phyAddr, uint32_t phyRe
  * @param data The data written to PHY.
  */
 void ENET_QOS_StartSMIWrite(ENET_QOS_Type *base, uint32_t phyAddr, uint32_t phyReg, uint32_t data);
+
+/*!
+ * @brief Starts a SMI write command.
+ * It supports MDIO IEEE802.3 Clause 45.
+ * After send command, user needs to check whether the transmission is over
+ * with ENET_QOS_IsSMIBusy().
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr The PHY address.
+ * @param device The PHY device type.
+ * @param phyReg The PHY register address.
+ * @param data The data written to PHY.
+ */
+void ENET_QOS_StartExtC45SMIWrite(
+    ENET_QOS_Type *base, uint32_t phyAddr, uint32_t device, uint32_t phyReg, uint32_t data);
+
+/*!
+ * @brief Starts a SMI read command.
+ * It supports MDIO IEEE802.3 Clause 45.
+ * After send command, user needs to check whether the transmission is over
+ * with ENET_QOS_IsSMIBusy().
+ *
+ * @param base  ENET peripheral base address.
+ * @param phyAddr The PHY address.
+ * @param device The PHY device type.
+ * @param phyReg The PHY register address.
+ */
+void ENET_QOS_StartExtC45SMIRead(ENET_QOS_Type *base, uint32_t phyAddr, uint32_t device, uint32_t phyReg);
 /* @} */
 
 /*!
@@ -881,10 +1019,10 @@ void ENET_QOS_GetMacAddr(ENET_QOS_Type *base, uint8_t *macAddr, uint8_t index);
 void ENET_QOS_AddMulticastGroup(ENET_QOS_Type *base, uint8_t *address);
 
 /*!
- * brief Moves the ENET_QOS device from a multicast group.
+ * @brief Moves the ENET_QOS device from a multicast group.
  *
- * param base  ENET_QOS peripheral base address.
- * param address The six-byte multicast group address which is provided by application.
+ * @param base  ENET_QOS peripheral base address.
+ * @param address The six-byte multicast group address which is provided by application.
  */
 void ENET_QOS_LeaveMulticastGroup(ENET_QOS_Type *base, uint8_t *address);
 
@@ -1272,6 +1410,14 @@ static inline void ENET_QOS_FpeConfigPreemptable(ENET_QOS_Type *base, uint8_t qu
  */
 void ENET_QOS_AVBConfigure(ENET_QOS_Type *base, const enet_qos_cbs_config_t *config, uint8_t queueIndex);
 
+/*!
+ * @brief Gets statistical data in transfer.
+ *
+ * @param base  ENET_QOS peripheral base address.
+ * @param statistics The statistics structure pointer.
+ */
+void ENET_QOS_GetStatistics(ENET_QOS_Type *base, enet_qos_transfer_stats_t *statistics);
+
 /* @} */
 
 /*!
@@ -1528,9 +1674,9 @@ status_t ENET_QOS_Ptp1588PpsSetTrgtTime(ENET_QOS_Type *base,
 /*!
  * @brief Sets the ENET OQS PTP 1588 PPS output signal interval
  *
- * param base  ENET QOS peripheral base address.
- * param instance The ENET QOS PTP PPS instance.
- * param width Signal Width. It is stored in terms of number of
+ * @param base  ENET QOS peripheral base address.
+ * @param instance The ENET QOS PTP PPS instance.
+ * @param width Signal Width. It is stored in terms of number of
  * units of sub-second increment value. The width value must be
  * lesser than interval value.
  */
@@ -1548,9 +1694,9 @@ static inline void ENET_QOS_Ptp1588PpsSetWidth(ENET_QOS_Type *base,
 /*!
  * @brief Sets the ENET OQS PTP 1588 PPS output signal width
  *
- * param base  ENET QOS peripheral base address.
- * param instance The ENET QOS PTP PPS instance.
- * param interval Signal Interval. It is stored in terms of number of
+ * @param base  ENET QOS peripheral base address.
+ * @param instance The ENET QOS PTP PPS instance.
+ * @param interval Signal Interval. It is stored in terms of number of
  * units of sub-second increment value.
  */
 static inline void ENET_QOS_Ptp1588PpsSetInterval(ENET_QOS_Type *base,
@@ -1586,6 +1732,31 @@ void ENET_QOS_Ptp1588GetTimer(ENET_QOS_Type *base, uint64_t *second, uint32_t *n
  */
 void ENET_QOS_GetTxFrame(enet_qos_handle_t *handle, enet_qos_frame_info_t *txFrame, uint8_t channel);
 
+/*!
+ * @brief Receives one frame in specified BD ring with zero copy.
+ *
+ * This function will use the user-defined allocate and free callback. Every time application gets one frame through
+ * this function, driver will allocate new buffers for the BDs whose buffers have been taken by application.
+ * @note This function will drop current frame and update related BDs as available for DMA if new buffers allocating
+ * fails. Application must provide a memory pool including at least BD number + 1 buffers(+2 if enable double buffer)
+ * to make this function work normally. If user calls this function in Rx interrupt handler, be careful that this
+ * function makes Rx BD ready with allocating new buffer(normal) or updating current BD(out of memory). If there's
+ * always new Rx frame input, Rx interrupt will be triggered forever. Application need to disable Rx interrupt according
+ * to specific design in this case.
+ *
+ * @param base   ENET peripheral base address.
+ * @param handle The ENET handler pointer. This is the same handler pointer used in the ENET_Init.
+ * @param rxFrame The received frame information structure provided by user.
+ * @param channel Channel for searching the rx frame.
+ * @retval kStatus_Success  Succeed to get one frame and allocate new memory for Rx buffer.
+ * @retval kStatus_ENET_QOS_RxFrameEmpty  There's no Rx frame in the BD.
+ * @retval kStatus_ENET_QOS_RxFrameError  There's issue in this receiving.
+ * @retval kStatus_ENET_QOS_RxFrameDrop  There's no new buffer memory for BD, drop this frame.
+ */
+status_t ENET_QOS_GetRxFrame(ENET_QOS_Type *base,
+                             enet_qos_handle_t *handle,
+                             enet_qos_rx_frame_struct_t *rxFrame,
+                             uint8_t channel);
 /* @} */
 
 #if defined(__cplusplus)

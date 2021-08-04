@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief SSARC driver version 2.0.1. */
-#define FSL_SSARC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief SSARC driver version 2.1.0. */
+#define FSL_SSARC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*@}*/
 
 #define SSARC_INT_STATUS_ALL                                                                                       \

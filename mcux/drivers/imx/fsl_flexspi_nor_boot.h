@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -14,8 +14,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief XIP_DEVICE driver version 2.0.2. */
-#define FSL_XIP_DEVICE_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief XIP_DEVICE driver version 2.0.4. */
+#define FSL_XIP_DEVICE_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /*************************************
@@ -66,26 +66,51 @@ typedef struct _ivt_
 
 /* Set resume entry */
 #if defined(__CC_ARM) || defined(__ARMCC_VERSION)
-extern uint32_t __Vectors[];
-#define IMAGE_ENTRY_ADDRESS ((uint32_t)__Vectors)
+extern uint32_t Reset_Handler[];
+#define IMAGE_ENTRY_ADDRESS ((uint32_t)Reset_Handler)
+#define BOOT_IMAGE_BASE     ((uint32_t)FLASH_BASE)
+#define BOOT_IMAGE_SIZE     ((uint32_t)FLASH_SIZE)
+#define BOOT_DATA_ADDRESS   &boot_data
+#define IVT_ADDRESS         &image_vector_table
+#define DCD_DATA_ADDRESS    dcd_data
 #elif defined(__MCUXPRESSO)
-extern uint32_t __Vectors[];
-#define IMAGE_ENTRY_ADDRESS ((uint32_t)__Vectors)
+extern uint32_t ResetISR[];
+extern uint32_t __boot_hdr_start__[];
+extern uint32_t __boot_hdr_ivt_loadaddr__[];
+extern uint32_t __boot_hdr_boot_data_loadaddr__[];
+extern uint32_t __boot_hdr_dcd_loadaddr__[];
+extern uint32_t _boot_loadaddr[];
+extern uint32_t _boot_size[];
+#define IMAGE_ENTRY_ADDRESS ((uint32_t)ResetISR)
+#define BOOT_IMAGE_BASE     ((uint32_t)_boot_loadaddr)
+#define BOOT_IMAGE_SIZE     ((uint32_t)_boot_size)
+#define BOOT_DATA_ADDRESS   ((uint32_t)__boot_hdr_boot_data_loadaddr__)
+#define IVT_ADDRESS         ((uint32_t)__boot_hdr_ivt_loadaddr__)
+#define DCD_DATA_ADDRESS    ((uint32_t)__boot_hdr_dcd_loadaddr__)
 #elif defined(__ICCARM__)
-extern uint32_t __VECTOR_TABLE[];
-#define IMAGE_ENTRY_ADDRESS ((uint32_t)__VECTOR_TABLE)
+extern uint32_t Reset_Handler[];
+#define IMAGE_ENTRY_ADDRESS ((uint32_t)Reset_Handler)
+#define BOOT_IMAGE_BASE     ((uint32_t)FLASH_BASE)
+#define BOOT_IMAGE_SIZE     ((uint32_t)FLASH_SIZE)
+#define BOOT_DATA_ADDRESS   &boot_data
+#define IVT_ADDRESS         &image_vector_table
+#define DCD_DATA_ADDRESS    dcd_data
 #elif defined(__GNUC__)
-extern uint32_t __VECTOR_TABLE[];
-#define IMAGE_ENTRY_ADDRESS ((uint32_t)__VECTOR_TABLE)
+extern uint32_t Reset_Handler[];
+#define IMAGE_ENTRY_ADDRESS ((uint32_t)Reset_Handler)
+#define BOOT_IMAGE_BASE     ((uint32_t)FLASH_BASE)
+#define BOOT_IMAGE_SIZE     ((uint32_t)FLASH_SIZE)
+#define BOOT_DATA_ADDRESS   &boot_data
+#define IVT_ADDRESS         &image_vector_table
+#define DCD_DATA_ADDRESS    dcd_data
 #endif
-
+#if defined(XIP_BOOT_HEADER_ENABLE) && (XIP_BOOT_HEADER_ENABLE == 1)
 #if defined(XIP_BOOT_HEADER_DCD_ENABLE) && (1 == XIP_BOOT_HEADER_DCD_ENABLE)
-#define DCD_ADDRESS dcd_data
+#define DCD_ADDRESS DCD_DATA_ADDRESS
 #else
 #define DCD_ADDRESS 0
 #endif
-
-#define BOOT_DATA_ADDRESS &boot_data
+#endif
 #define CSF_ADDRESS       0
 #define IVT_RSVD          (uint32_t)(0x00000000)
 
@@ -100,7 +125,12 @@ typedef struct _boot_data_
     uint32_t placeholder; /* placehoder to make even 0x10 size */
 } BOOT_DATA_T;
 
-#define FLASH_BASE FlexSPI_AMBA_BASE
+#if __CORTEX_M == 7
+#define FLASH_BASE FlexSPI1_AMBA_BASE
+#elif __CORTEX_M == 4
+#define FLASH_BASE FlexSPI1_ALIAS_BASE
+#endif
+
 #if defined(BOARD_FLASH_SIZE)
 #define FLASH_SIZE BOARD_FLASH_SIZE
 #else

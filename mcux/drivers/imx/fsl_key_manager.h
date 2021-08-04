@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, NXP
+ * Copyright 2020-2021, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,11 +21,14 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Key Manager driver version. Version 2.0.1.
+/*! @brief Key Manager driver version. Version 2.0.2.
  *
- * Current version: 2.0.1
+ * Current version: 2.0.2
  *
  * Change log:
+ *
+ * - Version 2.0.2
+ *   - Fix MISRA-2012 issues
  *
  * - Version 2.0.1
  *   - Fix MISRA-2012 issues
@@ -33,7 +36,7 @@
  * - Version 2.0.0
  *   - Initial version
  */
-#define FSL_KEYMGR_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+#define FSL_KEYMGR_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 typedef enum _keymgr_lock
@@ -133,6 +136,7 @@ void KEYMGR_IEEKeyReload(KEY_MANAGER_Type *base);
  * This function locks selection of key for PUF.
  *
  * @param base Key Manager peripheral address.
+ * @param lock Setting for selection of key for PUF.
  */
 void KEYMGR_PUFKeyLock(KEY_MANAGER_Type *base, keymgr_lock_t lock);
 

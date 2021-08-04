@@ -14,7 +14,7 @@
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "driver.soc_flexram_allocate"
+#define FSL_COMPONENT_ID "platform.drivers.soc_flexram_allocate"
 #endif
 
 /*******************************************************************************
@@ -46,6 +46,8 @@ status_t FLEXRAM_AllocateRam(flexram_allocate_ram_t *config)
     uint8_t i            = 0U;
     uint32_t bankCfg     = 0U;
     status_t status      = kStatus_Success;
+    uint32_t tempGPR17   = 0U;
+    uint32_t tempGPR18   = 0U;
 
     /* check the arguments */
     if ((uint8_t)FSL_FEATURE_FLEXRAM_INTERNAL_RAM_TOTAL_BANK_NUMBERS < (dtcmBankNum + itcmBankNum + ocramBankNum))
@@ -76,7 +78,11 @@ status_t FLEXRAM_AllocateRam(flexram_allocate_ram_t *config)
             }
         }
 
-        IOMUXC_GPR->GPR17 = bankCfg;
+        tempGPR17 = IOMUXC_GPR->GPR17;
+        tempGPR18 = IOMUXC_GPR->GPR18;
+
+        IOMUXC_GPR->GPR17 = (tempGPR17 & ~IOMUXC_GPR_GPR17_FLEXRAM_BANK_CFG_LOW_MASK) | (bankCfg & 0xFFFFU);
+        IOMUXC_GPR->GPR18 = (tempGPR18 & ~IOMUXC_GPR_GPR18_FLEXRAM_BANK_CFG_HIGH_MASK) | ((bankCfg >> 16) & 0xFFFFU);
 
         /* select ram allocate source from FLEXRAM_BANK_CFG */
         FLEXRAM_SetAllocateRamSrc(kFLEXRAM_BankAllocateThroughBankCfg);

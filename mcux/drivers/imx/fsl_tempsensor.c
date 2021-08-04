@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2021 NXP
  * All rights reserved.
  *
  *
@@ -27,10 +27,10 @@ static uint32_t TMPSNS_AIReadAccess(uint32_t address);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-const static float s_Ts20   = 133.6;
-const static float s_Ts21   = -5.39;
-const static float s_Ts21_2 = 29.0521; /*!< It means (s_Ts21* s_Ts21) */
-const static float s_Ts22   = 0.002;
+const static float s_Ts20   = 133.6f;
+const static float s_Ts21   = -5.39f;
+const static float s_Ts21_2 = 29.0521f; /*!< It means (s_Ts21* s_Ts21) */
+const static float s_Ts22   = 0.002f;
 static float s_Ts25c;
 
 /*******************************************************************************
@@ -47,19 +47,21 @@ void TMPSNS_Init(TMPSNS_Type *base, const tmpsns_config_t *config)
 {
     assert(NULL != config);
     uint32_t ControlVal;
+    uint32_t temp;
 
-    s_Ts25c =
+    temp =
         (ANADIG_TEMPSENSOR_TEMPSNS_OTP_TRIM_VALUE_TEMPSNS_TEMP_VAL_MASK & ANADIG_TEMPSENSOR->TEMPSNS_OTP_TRIM_VALUE) >>
         10;
+    s_Ts25c = (float)temp;
 
     /* Power up the temperature sensor */
     ControlVal = TMPSNS_CTRL1_PWD(0x00U);
 
-    if (config->measureMode == (uint8_t)kTEMPSENSOR_SingleMode)
+    if (config->measureMode == kTEMPSENSOR_SingleMode)
     {
         ControlVal |= TMPSNS_CTRL1_FREQ(0x00U);
     }
-    else if (config->measureMode == (uint8_t)kTEMPSENSOR_ContinuousMode)
+    else if (config->measureMode == kTEMPSENSOR_ContinuousMode)
     {
         ControlVal |= TMPSNS_CTRL1_FREQ(config->frequency);
     }
@@ -214,13 +216,14 @@ float TMPSNS_GetCurrentTemperature(TMPSNS_Type *base)
                      TMPSNS_STATUS0_TEMP_VAL_SHIFT;
 
     /* Calculate actual temperature */
-    actualTempVal = (-s_Ts21 - sqrt(s_Ts21_2 - 4 * s_Ts22 * (s_Ts20 + s_Ts25c - measureTempVal))) / (2 * s_Ts22);
+    actualTempVal =
+        (-s_Ts21 - sqrtf(s_Ts21_2 - 4.0f * s_Ts22 * (s_Ts20 + s_Ts25c - (float)measureTempVal))) / (2.0f * s_Ts22);
 
     /* Read STATUS0 value */
     statusVal = TMPSNS_AIReadAccess((uint32_t) & (base->STATUS0));
 
     /* Clear the FINISH flag */
-    TMPSNS_AIWriteAccess((uint32_t) & (base->STATUS0), statusVal & (~TMPSNS_STATUS0_FINISH_MASK));
+    TMPSNS_AIWriteAccess((uint32_t) & (base->STATUS0), statusVal | TMPSNS_STATUS0_FINISH_MASK);
 
     return actualTempVal;
 }
@@ -239,8 +242,9 @@ void TMPSNS_SetTempAlarm(TMPSNS_Type *base, int32_t tempVal, tmpsns_alarm_mode_t
     uint32_t tempRegVal;
 
     /* Calculate alarm temperature code value */;
-    temp        = (-2 * s_Ts22 * tempVal - s_Ts21) * (-2 * s_Ts22 * tempVal - s_Ts21);
-    tempCodeVal = (int32_t)((temp - (s_Ts21_2 - 4 * s_Ts22 * (s_Ts20 + s_Ts25c))) / (4 * s_Ts22));
+    temp        = (-2.0f * s_Ts22 * (float)tempVal - s_Ts21) * (-2.0f * s_Ts22 * (float)tempVal - s_Ts21);
+    temp        = (temp - (s_Ts21_2 - 4.0f * s_Ts22 * (s_Ts20 + s_Ts25c))) / (4.0f * s_Ts22);
+    tempCodeVal = (int32_t)temp;
 
     switch (alarmMode)
     {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -11,7 +11,7 @@
 #include "fsl_common.h"
 
 /*!
- * @addtogroup pmu PMU: Power Management Unit
+ * @addtogroup pmu
  * @{
  */
 
@@ -29,6 +29,12 @@
 /*!
  * @}
  */
+
+#if defined(ANADIG_PMU_PMU_BIAS_CTRL2_FBB_M7_CONTROL_MODE_MASK)
+#define PMU_HAS_FBB (1U)
+#else
+#define PMU_HAS_FBB (0U)
+#endif /* ANADIG_PMU_PMU_BIAS_CTRL2_FBB_M7_CONTROL_MODE_MASK */
 
 /*!
  * @brief System setpoints enumeration.
@@ -69,9 +75,14 @@ typedef enum _pmu_ldo_name
  */
 typedef enum _pmu_body_bias_name
 {
+#if (defined(PMU_HAS_FBB) && PMU_HAS_FBB)
     kPMU_FBB_CM7  = 0x0U, /*!< The FBB implemented in Cortex-M7 Platform. */
     kPMU_RBB_SOC  = 0x1U, /*!< The RBB implemented in SOC. */
     kPMU_RBB_LPSR = 0x2U, /*!< The RBB implemented in LPSRMIX. */
+#else
+    kPMU_RBB_SOC  = 0x0U, /*!< The RBB implemented in SOC. */
+    kPMU_RBB_LPSR = 0x1U, /*!< The RBB implemented in LPSRMIX. */
+#endif /* PMU_HAS_FBB */
 } pmu_body_bias_name_t;
 
 /*!
@@ -320,7 +331,7 @@ typedef struct _pmu_static_lpsr_ana_ldo_config
                                       - \b true Enables 20uA loading to prevent overshoot;
                                       - \b false Disables 20uA load. */
     bool enableStandbyMode;      /*!< Enable/Disable Standby Mode.
-                                      - \b true Enables Standby mode;
+                                      - \b true Enables Standby mode, if the STBY assert, the LPSR ANA LDO enter LP mode
                                       - \b false Disables Standby mode. */
 } pmu_static_lpsr_ana_ldo_config_t;
 
@@ -399,6 +410,9 @@ typedef union _pmu_well_bias_option
     } wellBiasStruct;
 } pmu_well_bias_option_t;
 
+/*!
+ * @brief The structure of well bias configuration.
+ */
 typedef struct _pmu_well_bias_config
 {
     pmu_well_bias_option_t wellBiasOption;     /*!< Well bias basic function, please
@@ -454,8 +468,6 @@ void PMU_StaticEnablePllLdo(ANADIG_PMU_Type *base);
 
 /*!
  * @brief Disables PLL LDO via AI interface in Static/Software mode.
- *
- * @param base PMU peripheral base address.
  */
 void PMU_StaticDisablePllLdo(void);
 
@@ -609,7 +621,7 @@ void PMU_GPCSetLpsrDigLdoTargetVoltage(uint32_t setpointMap, pmu_lpsr_dig_target
  *      config->enableLdoStable        = false;
  *  @endcode
  *
- * @param config Pointer to @ref structure pmu_snvs_dig_config_t.
+ * @param config Pointer to @ref pmu_snvs_dig_config_t.
  */
 void PMU_GetSnvsDigLdoDefaultConfig(pmu_snvs_dig_config_t *config);
 
@@ -669,11 +681,11 @@ void PMU_GPCEnableLdoTrackingMode(pmu_ldo_name_t name, uint32_t setpointMap);
 void PMU_GPCEnableLdoBypassMode(pmu_ldo_name_t name, uint32_t setpointMap);
 
 /*!
- * @brief Controls the ON/OFF of the selected LDOs' Standby mode in certain setpoints with GPC mode.
+ * @brief When STBY assert, enable/disable the selected LDO enter it's Low power mode.
  *
  * @param name The name of the selected ldo. Please see enumeration @ref pmu_ldo_name_t for details.
- * @param setpointMap The map of setpoints that the LDO Standby mode will be enabled in those setpoints, this value
- * should be the OR'ed Value of @ref _pmu_setpoint_map.
+ * @param setpointMap The map of setpoints that the LDO low power mode will be enabled in those setpoints if STBY
+ * assert, this value should be the OR'ed Value of @ref _pmu_setpoint_map.
  */
 void PMU_GPCEnableLdoStandbyMode(pmu_ldo_name_t name, uint32_t setpointMap);
 
@@ -806,11 +818,11 @@ void PMU_EnableBodyBias(ANADIG_PMU_Type *base, pmu_body_bias_name_t name, bool e
 void PMU_GPCEnableBodyBias(pmu_body_bias_name_t name, uint32_t setpointMap);
 
 /*!
- * @brief Controls the ON/OFF of the selected Body Bias' Standby mode in certain setpoints with GPC mode.
+ * @brief Controls the ON/OFF of the selected Body Bias' Wbias power switch in certain setpoints with GPC mode.
  *
  * @param name The name of the selected body bias. Please see the enumeration @ref pmu_body_bias_name_t for details.
- * @param setpointMap The map of setpoints that the specific body bias will be enabled in those setpoints, this value
- * should be the OR'ed Value of @ref _pmu_setpoint_map.
+ * @param setpointMap The map of setpoints that the specific body bias's wbias power switch will be turn on in those
+ * setpoints, this value should be the OR'ed Value of @ref _pmu_setpoint_map.
  */
 void PMU_GPCEnableBodyBiasStandbyMode(pmu_body_bias_name_t name, uint32_t setpointMap);
 

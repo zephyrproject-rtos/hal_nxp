@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  *
@@ -198,8 +198,9 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
     switch (banknumber)
     {
         case kMECC_OcramBank0:
-            info->singleErrorEccCode = (base->SINGLE_ERR_ADDR_ECC0 & MECC_SINGLE_ERR_ADDR_ECC0_SINGLE_ERR_ECC_MASK) >>
-                                       MECC_SINGLE_ERR_ADDR_ECC0_SINGLE_ERR_ECC_SHIFT;
+            info->singleErrorEccCode =
+                (uint8_t)((base->SINGLE_ERR_ADDR_ECC0 & MECC_SINGLE_ERR_ADDR_ECC0_SINGLE_ERR_ECC_MASK) >>
+                          MECC_SINGLE_ERR_ADDR_ECC0_SINGLE_ERR_ECC_SHIFT);
             info->singleErrorAddress = (base->SINGLE_ERR_ADDR_ECC0 & MECC_SINGLE_ERR_ADDR_ECC0_SINGLE_ERR_ADDR_MASK) >>
                                        MECC_SINGLE_ERR_ADDR_ECC0_SINGLE_ERR_ADDR_SHIFT;
             info->singleErrorDataLow  = base->SINGLE_ERR_DATA_LOW0;
@@ -209,19 +210,21 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
             break;
 
         case kMECC_OcramBank1:
-            info->singleErrorEccCode = (base->SINGLE_ERR_ADDR_ECC1 & MECC_SINGLE_ERR_ADDR_ECC1_SINGLE_ERR_ECC_MASK) >>
-                                       MECC_SINGLE_ERR_ADDR_ECC1_SINGLE_ERR_ECC_SHIFT;
+            info->singleErrorEccCode =
+                (uint8_t)((base->SINGLE_ERR_ADDR_ECC1 & MECC_SINGLE_ERR_ADDR_ECC1_SINGLE_ERR_ECC_MASK) >>
+                          MECC_SINGLE_ERR_ADDR_ECC1_SINGLE_ERR_ECC_SHIFT);
             info->singleErrorAddress = (base->SINGLE_ERR_ADDR_ECC1 & MECC_SINGLE_ERR_ADDR_ECC1_SINGLE_ERR_ADDR_MASK) >>
                                        MECC_SINGLE_ERR_ADDR_ECC1_SINGLE_ERR_ADDR_SHIFT;
             info->singleErrorDataLow  = base->SINGLE_ERR_DATA_LOW1;
             info->singleErrorDataHigh = base->SINGLE_ERR_DATA_HIGH1;
-            tempPosLow                = base->SINGLE_ERR_POS_LOW1;
-            tempPosHigh               = base->SINGLE_ERR_POS_HIGH1;
+            tempPosLow                = (uint8_t)base->SINGLE_ERR_POS_LOW1;
+            tempPosHigh               = (uint8_t)base->SINGLE_ERR_POS_HIGH1;
             break;
 
         case kMECC_OcramBank2:
-            info->singleErrorEccCode = (base->SINGLE_ERR_ADDR_ECC2 & MECC_SINGLE_ERR_ADDR_ECC2_SINGLE_ERR_ECC_MASK) >>
-                                       MECC_SINGLE_ERR_ADDR_ECC2_SINGLE_ERR_ECC_SHIFT;
+            info->singleErrorEccCode =
+                (uint8_t)((base->SINGLE_ERR_ADDR_ECC2 & MECC_SINGLE_ERR_ADDR_ECC2_SINGLE_ERR_ECC_MASK) >>
+                          MECC_SINGLE_ERR_ADDR_ECC2_SINGLE_ERR_ECC_SHIFT);
             info->singleErrorAddress = (base->SINGLE_ERR_ADDR_ECC2 & MECC_SINGLE_ERR_ADDR_ECC2_SINGLE_ERR_ADDR_MASK) >>
                                        MECC_SINGLE_ERR_ADDR_ECC2_SINGLE_ERR_ADDR_SHIFT;
             info->singleErrorDataLow  = base->SINGLE_ERR_DATA_LOW2;
@@ -231,8 +234,9 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
             break;
 
         case kMECC_OcramBank3:
-            info->singleErrorEccCode = (base->SINGLE_ERR_ADDR_ECC3 & MECC_SINGLE_ERR_ADDR_ECC3_SINGLE_ERR_ECC_MASK) >>
-                                       MECC_SINGLE_ERR_ADDR_ECC3_SINGLE_ERR_ECC_SHIFT;
+            info->singleErrorEccCode =
+                (uint8_t)((base->SINGLE_ERR_ADDR_ECC3 & MECC_SINGLE_ERR_ADDR_ECC3_SINGLE_ERR_ECC_MASK) >>
+                          MECC_SINGLE_ERR_ADDR_ECC3_SINGLE_ERR_ECC_SHIFT);
             info->singleErrorAddress = (base->SINGLE_ERR_ADDR_ECC3 & MECC_SINGLE_ERR_ADDR_ECC3_SINGLE_ERR_ADDR_MASK) >>
                                        MECC_SINGLE_ERR_ADDR_ECC3_SINGLE_ERR_ADDR_SHIFT;
             info->singleErrorDataLow  = base->SINGLE_ERR_DATA_LOW3;
@@ -246,7 +250,7 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
             break;
     }
 
-    while (tempPosLow > 0)
+    while (tempPosLow > 0U)
     {
         tempPosLow = tempPosLow >> 1;
         counter++;
@@ -288,8 +292,9 @@ status_t MECC_GetMultiErrorInfo(MECC_Type *base, mecc_multi_error_info_t *info, 
     switch (banknumber)
     {
         case kMECC_OcramBank0:
-            info->multiErrorEccCode = (base->MULTI_ERR_ADDR_ECC0 & MECC_MULTI_ERR_ADDR_ECC0_MULTI_ERR_ECC_MASK) >>
-                                      MECC_MULTI_ERR_ADDR_ECC0_MULTI_ERR_ECC_SHIFT;
+            info->multiErrorEccCode =
+                (uint8_t)((base->MULTI_ERR_ADDR_ECC0 & MECC_MULTI_ERR_ADDR_ECC0_MULTI_ERR_ECC_MASK) >>
+                          MECC_MULTI_ERR_ADDR_ECC0_MULTI_ERR_ECC_SHIFT);
             info->multiErrorAddress = (base->MULTI_ERR_ADDR_ECC0 & MECC_MULTI_ERR_ADDR_ECC0_MULTI_ERR_ADDR_MASK) >>
                                       MECC_MULTI_ERR_ADDR_ECC0_MULTI_ERR_ADDR_SHIFT;
             info->multiErrorDataLow  = base->MULTI_ERR_DATA_LOW0;
@@ -297,8 +302,9 @@ status_t MECC_GetMultiErrorInfo(MECC_Type *base, mecc_multi_error_info_t *info, 
             break;
 
         case kMECC_OcramBank1:
-            info->multiErrorEccCode = (base->MULTI_ERR_ADDR_ECC1 & MECC_MULTI_ERR_ADDR_ECC1_MULTI_ERR_ECC_MASK) >>
-                                      MECC_MULTI_ERR_ADDR_ECC1_MULTI_ERR_ECC_SHIFT;
+            info->multiErrorEccCode =
+                (uint8_t)((base->MULTI_ERR_ADDR_ECC1 & MECC_MULTI_ERR_ADDR_ECC1_MULTI_ERR_ECC_MASK) >>
+                          MECC_MULTI_ERR_ADDR_ECC1_MULTI_ERR_ECC_SHIFT);
             info->multiErrorAddress = (base->MULTI_ERR_ADDR_ECC1 & MECC_MULTI_ERR_ADDR_ECC1_MULTI_ERR_ADDR_MASK) >>
                                       MECC_MULTI_ERR_ADDR_ECC1_MULTI_ERR_ADDR_SHIFT;
             info->multiErrorDataLow  = base->MULTI_ERR_DATA_LOW1;
@@ -306,8 +312,9 @@ status_t MECC_GetMultiErrorInfo(MECC_Type *base, mecc_multi_error_info_t *info, 
             break;
 
         case kMECC_OcramBank2:
-            info->multiErrorEccCode = (base->MULTI_ERR_ADDR_ECC2 & MECC_MULTI_ERR_ADDR_ECC2_MULTI_ERR_ECC_MASK) >>
-                                      MECC_MULTI_ERR_ADDR_ECC2_MULTI_ERR_ECC_SHIFT;
+            info->multiErrorEccCode =
+                (uint8_t)((base->MULTI_ERR_ADDR_ECC2 & MECC_MULTI_ERR_ADDR_ECC2_MULTI_ERR_ECC_MASK) >>
+                          MECC_MULTI_ERR_ADDR_ECC2_MULTI_ERR_ECC_SHIFT);
             info->multiErrorAddress = (base->MULTI_ERR_ADDR_ECC2 & MECC_MULTI_ERR_ADDR_ECC2_MULTI_ERR_ADDR_MASK) >>
                                       MECC_MULTI_ERR_ADDR_ECC2_MULTI_ERR_ADDR_SHIFT;
             info->multiErrorDataLow  = base->MULTI_ERR_DATA_LOW2;
@@ -315,8 +322,9 @@ status_t MECC_GetMultiErrorInfo(MECC_Type *base, mecc_multi_error_info_t *info, 
             break;
 
         case kMECC_OcramBank3:
-            info->multiErrorEccCode = (base->MULTI_ERR_ADDR_ECC3 & MECC_MULTI_ERR_ADDR_ECC3_MULTI_ERR_ECC_MASK) >>
-                                      MECC_MULTI_ERR_ADDR_ECC3_MULTI_ERR_ECC_SHIFT;
+            info->multiErrorEccCode =
+                (uint8_t)((base->MULTI_ERR_ADDR_ECC3 & MECC_MULTI_ERR_ADDR_ECC3_MULTI_ERR_ECC_MASK) >>
+                          MECC_MULTI_ERR_ADDR_ECC3_MULTI_ERR_ECC_SHIFT);
             info->multiErrorAddress = (base->MULTI_ERR_ADDR_ECC3 & MECC_MULTI_ERR_ADDR_ECC3_MULTI_ERR_ADDR_MASK) >>
                                       MECC_MULTI_ERR_ADDR_ECC3_MULTI_ERR_ADDR_SHIFT;
             info->multiErrorDataLow  = base->MULTI_ERR_DATA_LOW3;
