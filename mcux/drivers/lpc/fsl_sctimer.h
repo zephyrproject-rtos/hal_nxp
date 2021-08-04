@@ -23,8 +23,12 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 2, 0)) /*!< Version */
+#define FSL_SCTIMER_DRIVER_VERSION (MAKE_VERSION(2, 4, 0)) /*!< Version */
 /*@}*/
+
+#ifndef SCT_EV_STATE_STATEMSKn
+#define SCT_EV_STATE_STATEMSKn(x) (((uint32_t)(x) & (1UL << FSL_FEATURE_SCT_NUMBER_OF_STATES) - 1UL))
+#endif
 
 /*! @brief SCTimer PWM operation modes */
 typedef enum _sctimer_pwm_mode
@@ -36,9 +40,9 @@ typedef enum _sctimer_pwm_mode
 /*! @brief SCTimer counters type. */
 typedef enum _sctimer_counter
 {
-    kSCTIMER_Counter_L = 0U, /*!< 16-bit Low counter. */
-    kSCTIMER_Counter_H = 1U, /*!< 16-bit High counter. */
-    kSCTIMER_Counter_U = 2U, /*!< 32-bit Unified counter. */
+    kSCTIMER_Counter_L = (1U << 0), /*!< 16-bit Low counter. */
+    kSCTIMER_Counter_H = (1U << 1), /*!< 16-bit High counter. */
+    kSCTIMER_Counter_U = (1U << 2), /*!< 32-bit Unified counter. */
 } sctimer_counter_t;
 
 /*! @brief List of SCTimer input pins */
@@ -81,7 +85,8 @@ typedef struct _sctimer_pwm_signal_param
 {
     sctimer_out_t output;             /*!< The output pin to use to generate the PWM signal */
     sctimer_pwm_level_select_t level; /*!< PWM output active level select. */
-    uint8_t dutyCyclePercent;         /*!< PWM pulse width, value should be between 1 to 100
+    uint8_t dutyCyclePercent;         /*!< PWM pulse width, value should be between 0 to 100
+                                           0 = always inactive signal (0% duty cycle)
                                            100 = always active signal (100% duty cycle).*/
 } sctimer_pwm_signal_param_t;
 
@@ -128,6 +133,14 @@ typedef enum _sctimer_conflict_resolution
     kSCTIMER_ResolveClear,     /*!< Clear output */
     kSCTIMER_ResolveToggle     /*!< Toggle output */
 } sctimer_conflict_resolution_t;
+
+/*! @brief List of SCTimer event generation active direction when the counters are operating in BIDIR mode. */
+typedef enum _sctimer_event_active_direction
+{
+    kSCTIMER_ActiveIndependent = 0U, /*!< This event is triggered regardless of the count direction. */
+    kSCTIMER_ActiveInCountUp,        /*!< This event is triggered only during up-counting when BIDIR = 1. */
+    kSCTIMER_ActiveInCountDown       /*!<  This event is triggered only during down-counting when BIDIR = 1. */
+} sctimer_event_active_direction_t;
 
 /*! @brief List of SCTimer event types */
 typedef enum _sctimer_event
@@ -481,34 +494,43 @@ static inline void SCTIMER_ClearStatusFlags(SCT_Type *base, uint32_t mask)
 /*!
  * @brief Starts the SCTimer counter.
  *
- * @param base           SCTimer peripheral base address
- * @param countertoStart SCTimer counter to use. In 16-bit mode, we can select Counter_L and Counter_H,
- *                       In 32-bit mode, we can select Counter_U.
+ * @note In 16-bit mode, we can enable both Counter_L and Counter_H, In 32-bit mode, we only can select Counter_U.
+ *
+ * @param base            SCTimer peripheral base address
+ * @param countertoStart  The SCTimer counters to enable. This is a logical OR of members of the
+ *                        enumeration ::sctimer_counter_t.
  */
-static inline void SCTIMER_StartTimer(SCT_Type *base, sctimer_counter_t countertoStart)
+static inline void SCTIMER_StartTimer(SCT_Type *base, uint32_t countertoStart)
 {
     switch (countertoStart)
     {
-        case kSCTIMER_Counter_L:
+        case (uint32_t)kSCTIMER_Counter_L:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Clear HALT_L bit when user wants to start the Low counter */
             base->CTRL_ACCESS16BIT.CTRLL &= ~((uint16_t)SCT_CTRLL_HALT_L_MASK);
             break;
 
-        case kSCTIMER_Counter_H:
+        case (uint32_t)kSCTIMER_Counter_H:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Clear HALT_H bit when user wants to start the High counter */
             base->CTRL_ACCESS16BIT.CTRLH &= ~((uint16_t)SCT_CTRLH_HALT_H_MASK);
             break;
 
-        case kSCTIMER_Counter_U:
+        case (uint32_t)kSCTIMER_Counter_L | (uint32_t)kSCTIMER_Counter_H:
+            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
+            /* Clear HALT_L/HALT_H bit when user wants to H counter and L counter at same time */
+            base->CTRL &= ~(SCT_CTRL_HALT_L_MASK | SCT_CTRL_HALT_H_MASK);
+            break;
+
+        case (uint32_t)kSCTIMER_Counter_U:
             assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Clear HALT_L bit when the counter is operating in 32-bit mode (unify counter). */
             base->CTRL &= ~(SCT_CTRL_HALT_L_MASK);
             break;
 
         default:
-            /* Fix the MISRA C-2012 issue rule 16.4. */
+            /* Counter_L/Counter_H can't work together with Counter_U. */
+            assert(false);
             break;
     }
 }
@@ -517,33 +539,40 @@ static inline void SCTIMER_StartTimer(SCT_Type *base, sctimer_counter_t countert
  * @brief Halts the SCTimer counter.
  *
  * @param base          SCTimer peripheral base address
- * @param countertoStop SCTimer counter to use. In 16-bit mode, we can select Counter_L and Counter_H,
- *                      In 32-bit mode, we can select Counter_U.
+ * @param countertoStop The SCTimer counters to stop. This is a logical OR of members of the
+ *                      enumeration ::sctimer_counter_t.
  */
-static inline void SCTIMER_StopTimer(SCT_Type *base, sctimer_counter_t countertoStop)
+static inline void SCTIMER_StopTimer(SCT_Type *base, uint32_t countertoStop)
 {
     switch (countertoStop)
     {
-        case kSCTIMER_Counter_L:
+        case (uint32_t)kSCTIMER_Counter_L:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Set HALT_L bit when user wants to start the Low counter */
             base->CTRL_ACCESS16BIT.CTRLL |= (SCT_CTRLL_HALT_L_MASK);
             break;
 
-        case kSCTIMER_Counter_H:
+        case (uint32_t)kSCTIMER_Counter_H:
             assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Set HALT_H bit when user wants to start the High counter */
             base->CTRL_ACCESS16BIT.CTRLH |= (SCT_CTRLH_HALT_H_MASK);
             break;
 
-        case kSCTIMER_Counter_U:
+        case (uint32_t)kSCTIMER_Counter_L | (uint32_t)kSCTIMER_Counter_H:
+            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
+            /* Clear HALT_L/HALT_H bit when user wants to H counter and L counter at same time */
+            base->CTRL |= (SCT_CTRL_HALT_L_MASK | SCT_CTRL_HALT_H_MASK);
+            break;
+
+        case (uint32_t)kSCTIMER_Counter_U:
             assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
             /* Set HALT_L bit when the counter is operating in 32-bit mode (unify counter). */
             base->CTRL |= (SCT_CTRL_HALT_L_MASK);
             break;
 
         default:
-            /* Fix the MISRA C-2012 issue rule 16.4. */
+            /* Counter_L/Counter_H can't work together with Counter_U. */
+            assert(false);
             break;
     }
 }
@@ -622,6 +651,94 @@ status_t SCTIMER_IncreaseState(SCT_Type *base);
  * @return The current state
  */
 uint32_t SCTIMER_GetCurrentState(SCT_Type *base);
+
+/*!
+ * @brief Set the counter current state.
+ *
+ * The function is to set the state variable bit field of STATE register. Writing to the STATE_L, STATE_H, or unified
+ * register is only allowed when the corresponding counter is halted (HALT bits are set to 1 in the CTRL register).
+ *
+ * @param base         SCTimer peripheral base address
+ * @param whichCounter SCTimer counter to use. In 16-bit mode, we can select Counter_L and Counter_H,
+ *                     In 32-bit mode, we can select Counter_U.
+ * @param state        The counter current state number (only support range from 0~31).
+ */
+static inline void SCTIMER_SetCounterState(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t state)
+{
+    /* SCT only support 0 ~ FSL_FEATURE_SCT_NUMBER_OF_STATES state value. */
+    assert(state < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_STATES);
+
+    SCTIMER_StopTimer(base, (uint32_t)whichCounter);
+
+    switch (whichCounter)
+    {
+        case kSCTIMER_Counter_L:
+            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
+            /* Use STATE_L bits when user wants to setup the Low counter */
+            base->STATE_ACCESS16BIT.STATEL = SCT_STATEL_STATEL(state);
+            break;
+
+        case kSCTIMER_Counter_H:
+            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
+            /* Use STATE_H bits when user wants to start the High counter */
+            base->STATE_ACCESS16BIT.STATEH = SCT_STATEH_STATEH(state);
+            break;
+
+        case kSCTIMER_Counter_U:
+            assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
+            /* Use STATE_L bits when counter is operating in 32-bit mode (unify counter). */
+            base->STATE = SCT_STATE_STATE_L(state);
+            break;
+
+        default:
+            /* Fix the MISRA C-2012 issue rule 16.4. */
+            break;
+    }
+
+    SCTIMER_StartTimer(base, (uint32_t)whichCounter);
+}
+
+/*!
+ * @brief Get the counter current state value.
+ *
+ * The function is to get the state variable bit field of STATE register.
+ *
+ * @param base         SCTimer peripheral base address
+ * @param whichCounter SCTimer counter to use. In 16-bit mode, we can select Counter_L and Counter_H,
+ *                     In 32-bit mode, we can select Counter_U.
+ * @return The the counter current state value.
+ */
+static inline uint16_t SCTIMER_GetCounterState(SCT_Type *base, sctimer_counter_t whichCounter)
+{
+    uint16_t regs;
+
+    switch (whichCounter)
+    {
+        case kSCTIMER_Counter_L:
+            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
+            /* Use STATE_L bits when user wants to setup the Low counter */
+            regs = base->STATE_ACCESS16BIT.STATEL & SCT_STATEL_STATEL_MASK;
+            break;
+
+        case kSCTIMER_Counter_H:
+            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
+            /* Use STATE_H bits when user wants to start the High counter */
+            regs = base->STATE_ACCESS16BIT.STATEH & SCT_STATEH_STATEH_MASK;
+            break;
+
+        case kSCTIMER_Counter_U:
+            assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
+            /* Use STATE_L bits when counter is operating in 32-bit mode (unify counter). */
+            regs = (uint16_t)(base->STATE & SCT_STATE_STATE_L_MASK);
+            break;
+
+        default:
+            /* Fix the MISRA C-2012 issue rule 16.4. */
+            break;
+    }
+
+    return regs;
+}
 
 /*! @}*/
 
@@ -740,6 +857,26 @@ static inline void SCTIMER_SetupNextStateAction(SCT_Type *base, uint32_t nextSta
     reg &= ~(SCT_EV_CTRL_STATEV_MASK);
     /* Load the STATEV value when the event occurs to be the next state */
     reg |= SCT_EV_CTRL_STATEV(nextState) | SCT_EV_CTRL_STATELD_MASK;
+
+    base->EV[event].CTRL = reg;
+}
+
+/*!
+ * @brief Setup event active direction when the counters are operating in BIDIR mode.
+ *
+ * @param base              SCTimer peripheral base address
+ * @param activeDirection   Event generation active direction, see @ref sctimer_event_active_direction_t.
+ * @param event             Event number that need setup the active direction.
+ */
+static inline void SCTIMER_SetupEventActiveDirection(SCT_Type *base,
+                                                     sctimer_event_active_direction_t activeDirection,
+                                                     uint32_t event)
+{
+    uint32_t reg = base->EV[event].CTRL;
+
+    reg &= ~(SCT_EV_CTRL_DIRECTION_MASK);
+
+    reg |= SCT_EV_CTRL_DIRECTION(activeDirection);
 
     base->EV[event].CTRL = reg;
 }
@@ -977,7 +1114,7 @@ static inline void SCTIMER_SetupDmaTriggerAction(SCT_Type *base, uint32_t dmaNum
  */
 static inline void SCTIMER_SetCOUNTValue(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t value)
 {
-    SCTIMER_StopTimer(base, whichCounter);
+    SCTIMER_StopTimer(base, (uint32_t)whichCounter);
 
     switch (whichCounter)
     {
@@ -1007,7 +1144,7 @@ static inline void SCTIMER_SetCOUNTValue(SCT_Type *base, sctimer_counter_t which
             break;
     }
 
-    SCTIMER_StartTimer(base, whichCounter);
+    SCTIMER_StartTimer(base, (uint32_t)whichCounter);
 }
 
 /*!
@@ -1053,144 +1190,54 @@ static inline uint32_t SCTIMER_GetCOUNTValue(SCT_Type *base, sctimer_counter_t w
 }
 
 /*!
- * @brief Set the event bit field of STATE register.
- *
- * The function is to set the event bit field of STATE register. Writing to the STATE_L, STATE_H, or unified register
- * is only allowed when the corresponding counter is halted (HALT bits are set to 1 in the CTRL register).
+ * @brief Set the state mask bit field of EV_STATE register.
  *
  * @param base         SCTimer peripheral base address
- * @param whichCounter SCTimer counter to use. In 16-bit mode, we can select Counter_L and Counter_H,
- *                      In 32-bit mode, we can select Counter_U.
- * @param event        the event bit field of STATE register need to be set (only support from bit 0 to bit 4).
+ * @param event        The EV_STATE register be set.
+ * @param state        The state value in which the event is enabled to occur.
  */
-static inline void SCTIMER_SetEventInState(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t event)
+static inline void SCTIMER_SetEventInState(SCT_Type *base, uint32_t event, uint32_t state)
 {
-    /* SCT only support 5 events set to variable or not. */
-    assert(event < 5U);
+    assert(state < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_STATES);
+    assert(event < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS);
 
-    SCTIMER_StopTimer(base, whichCounter);
-
-    switch (whichCounter)
-    {
-        case kSCTIMER_Counter_L:
-            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
-            /* Use STATE_L bits when user wants to setup the Low counter */
-            base->STATE_ACCESS16BIT.STATEL |= SCT_STATEL_STATEL((uint16_t)1U << event);
-            break;
-
-        case kSCTIMER_Counter_H:
-            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
-            /* Use STATE_H bits when user wants to start the High counter */
-            base->STATE_ACCESS16BIT.STATEH |= SCT_STATEH_STATEH((uint16_t)1U << event);
-            break;
-
-        case kSCTIMER_Counter_U:
-            assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
-            /* Use STATE_L bits when counter is operating in 32-bit mode (unify counter). */
-            base->STATE |= SCT_STATE_STATE_L((uint32_t)1U << event);
-            break;
-
-        default:
-            /* Fix the MISRA C-2012 issue rule 16.4. */
-            break;
-    }
-
-    SCTIMER_StartTimer(base, whichCounter);
+    base->EV[event].STATE |= SCT_EV_STATE_STATEMSKn((uint32_t)1U << state);
 }
 
 /*!
- * @brief Clear the event bit field of STATE register.
- *
- * The function is to clear the event bit field of STATE register. Writing to the STATE_L, STATE_H, or unified
- * register is only allowed when the corresponding counter is halted (HALT bits are set to 1 in the CTRL register).
+ * @brief Clear the state mask bit field of EV_STATE register.
  *
  * @param base         SCTimer peripheral base address
- * @param whichCounter SCTimer counter to use. In 16-bit mode, we can select Counter_L and Counter_H,
- *                      In 32-bit mode, we can select Counter_U.
- * @param event        the event bit field of STATE register need to be set (only support from bit 0 to bit 4).
+ * @param event        The EV_STATE register be clear.
+ * @param state        The state value in which the event is disabled to occur.
  */
-static inline void SCTIMER_ClearEventInState(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t event)
+static inline void SCTIMER_ClearEventInState(SCT_Type *base, uint32_t event, uint32_t state)
 {
-    /* SCT only support 5 events set to variable or not. */
-    assert(event < 5U);
+    assert(state < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_STATES);
+    assert(event < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS);
 
-    SCTIMER_StopTimer(base, whichCounter);
-
-    switch (whichCounter)
-    {
-        case kSCTIMER_Counter_L:
-            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
-            /* Use STATE_L bits when user wants to setup the Low counter */
-            base->STATE_ACCESS16BIT.STATEL &= ~(SCT_STATEL_STATEL((uint16_t)1U << event));
-            break;
-
-        case kSCTIMER_Counter_H:
-            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
-            /* Use STATE_H bits when user wants to start the High counter */
-            base->STATE_ACCESS16BIT.STATEH &= ~(SCT_STATEH_STATEH((uint16_t)1U << event));
-            break;
-
-        case kSCTIMER_Counter_U:
-            assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
-            /* Use STATE_L bits when counter is operating in 32-bit mode (unify counter). */
-            base->STATE &= ~(SCT_STATE_STATE_L((uint32_t)1U << event));
-            break;
-
-        default:
-            /* Fix the MISRA C-2012 issue rule 16.4. */
-            break;
-    }
-
-    SCTIMER_StartTimer(base, whichCounter);
+    base->EV[event].STATE &= ~SCT_EV_STATE_STATEMSKn((uint32_t)1U << state);
 }
 
 /*!
- * @brief Get the event bit field of STATE register.
+ * @brief Get the state mask bit field of EV_STATE register.
  *
- * The function is to get the event bit field of STATE register. Writing to the STATE_L, STATE_H, or unified register
- * is only allowed when the corresponding counter is halted (HALT bits are set to 1 in the CTRL register).
+ * @note This function is to check whether the event is enabled in a specific state.
  *
  * @param base         SCTimer peripheral base address
- * @param whichCounter SCTimer counter to use. In 16-bit mode, we can select Counter_L and Counter_H,
- *                      In 32-bit mode, we can select Counter_U.
- * @param event        the event bit field of STATE register need to be set (only support from bit 0 to bit 4).
- * @return The the event bit field of STATE register.
- *                      - true: The event bit field of STATE register set.
- *                      - false: The event bit field of STATE register cleared.
+ * @param event        The EV_STATE register be read.
+ * @param state        The state value.
+ *
+ * @return The the state mask bit field of EV_STATE register.
+ *                      - true: The event is enable in state.
+ *                      - false: The event is disable in state.
  */
-static inline bool SCTIMER_GetEventInState(SCT_Type *base, sctimer_counter_t whichCounter, uint32_t event)
+static inline bool SCTIMER_GetEventInState(SCT_Type *base, uint32_t event, uint32_t state)
 {
-    /* SCT only support 5 events set to variable or not. */
-    assert(event < 5U);
+    assert(state < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_STATES);
+    assert(event < (uint32_t)FSL_FEATURE_SCT_NUMBER_OF_EVENTS);
 
-    bool fgEnable;
-
-    switch (whichCounter)
-    {
-        case kSCTIMER_Counter_L:
-            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
-            /* Use STATE_L bits when user wants to setup the Low counter */
-            fgEnable = (0U == (base->STATE_ACCESS16BIT.STATEL & SCT_STATEL_STATEL((uint16_t)1U << event)));
-            break;
-
-        case kSCTIMER_Counter_H:
-            assert(0U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
-            /* Use STATE_H bits when user wants to start the High counter */
-            fgEnable = (0U == (base->STATE_ACCESS16BIT.STATEH & SCT_STATEH_STATEH((uint16_t)1U << event)));
-            break;
-
-        case kSCTIMER_Counter_U:
-            assert(1U == (base->CONFIG & SCT_CONFIG_UNIFY_MASK));
-            /* Use STATE_L bits when counter is operating in 32-bit mode (unify counter). */
-            fgEnable = (0U == (base->STATE & SCT_STATE_STATE_L((uint32_t)1U << event)));
-            break;
-
-        default:
-            /* Fix the MISRA C-2012 issue rule 16.4. */
-            break;
-    }
-
-    return fgEnable;
+    return (0U != (base->EV[event].STATE & SCT_EV_STATE_STATEMSKn((uint32_t)1U << state)));
 }
 
 /*!

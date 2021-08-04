@@ -1494,6 +1494,7 @@ void MCAN_TransferHandleIRQ(CAN_Type *base, mcan_handle_t *handle)
 }
 
 #if defined(CAN0)
+void CAN0_IRQ0_DriverIRQHandler(void);
 void CAN0_IRQ0_DriverIRQHandler(void)
 {
     assert(NULL != s_mcanHandle[0]);
@@ -1502,6 +1503,7 @@ void CAN0_IRQ0_DriverIRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 
+void CAN0_IRQ1_DriverIRQHandler(void);
 void CAN0_IRQ1_DriverIRQHandler(void)
 {
     assert(NULL != s_mcanHandle[0]);
@@ -1512,6 +1514,7 @@ void CAN0_IRQ1_DriverIRQHandler(void)
 #endif
 
 #if defined(CAN1)
+void CAN1_IRQ0_DriverIRQHandler(void);
 void CAN1_IRQ0_DriverIRQHandler(void)
 {
     assert(NULL != s_mcanHandle[1]);
@@ -1520,6 +1523,7 @@ void CAN1_IRQ0_DriverIRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 
+void CAN1_IRQ1_DriverIRQHandler(void);
 void CAN1_IRQ1_DriverIRQHandler(void)
 {
     assert(NULL != s_mcanHandle[1]);

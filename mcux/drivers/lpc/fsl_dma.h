@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief DMA driver version */
-#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 1)) /*!< Version 2.4.1. */
+#define FSL_DMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 2)) /*!< Version 2.4.2. */
 /*@}*/
 
 /*! @brief DMA max transfer size */

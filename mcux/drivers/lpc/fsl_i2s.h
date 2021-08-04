@@ -26,8 +26,8 @@
 /*! @name Driver version */
 /*@{*/
 
-/*! @brief I2S driver version 2.2.1. */
-#define FSL_I2S_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
+/*! @brief I2S driver version 2.2.2. */
+#define FSL_I2S_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 #ifndef I2S_NUM_BUFFERS

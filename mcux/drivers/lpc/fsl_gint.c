@@ -252,6 +252,7 @@ void GINT_Deinit(GINT_Type *base)
 
 /* IRQ handler functions overloading weak symbols in the startup */
 #if defined(GINT0)
+void GINT0_DriverIRQHandler(void);
 void GINT0_DriverIRQHandler(void)
 {
     /* Clear interrupt before callback */
@@ -266,6 +267,7 @@ void GINT0_DriverIRQHandler(void)
 #endif
 
 #if defined(GINT1)
+void GINT1_DriverIRQHandler(void);
 void GINT1_DriverIRQHandler(void)
 {
     /* Clear interrupt before callback */
@@ -280,6 +282,7 @@ void GINT1_DriverIRQHandler(void)
 #endif
 
 #if defined(GINT2)
+void GINT2_DriverIRQHandler(void);
 void GINT2_DriverIRQHandler(void)
 {
     /* Clear interrupt before callback */
@@ -294,6 +297,7 @@ void GINT2_DriverIRQHandler(void)
 #endif
 
 #if defined(GINT3)
+void GINT3_DriverIRQHandler(void);
 void GINT3_DriverIRQHandler(void)
 {
     /* Clear interrupt before callback */
@@ -308,6 +312,7 @@ void GINT3_DriverIRQHandler(void)
 #endif
 
 #if defined(GINT4)
+void GINT4_DriverIRQHandler(void);
 void GINT4_DriverIRQHandler(void)
 {
     /* Clear interrupt before callback */
@@ -322,6 +327,7 @@ void GINT4_DriverIRQHandler(void)
 #endif
 
 #if defined(GINT5)
+void GINT5_DriverIRQHandler(void);
 void GINT5_DriverIRQHandler(void)
 {
     /* Clear interrupt before callback */
@@ -336,6 +342,7 @@ void GINT5_DriverIRQHandler(void)
 #endif
 
 #if defined(GINT6)
+void GINT6_DriverIRQHandler(void);
 void GINT6_DriverIRQHandler(void)
 {
     /* Clear interrupt before callback */
@@ -350,6 +357,7 @@ void GINT6_DriverIRQHandler(void)
 #endif
 
 #if defined(GINT7)
+void GINT7_DriverIRQHandler(void);
 void GINT7_DriverIRQHandler(void)
 {
     /* Clear interrupt before callback */

@@ -384,6 +384,7 @@ void OSTIMER_HandleIRQ(OSTIMER_Type *base, ostimer_callback_t cb)
 }
 
 #if defined(OSTIMER0)
+void OS_EVENT_DriverIRQHandler(void);
 void OS_EVENT_DriverIRQHandler(void)
 {
     s_ostimerIsr(OSTIMER0, s_ostimerHandle[0]);
@@ -392,6 +393,7 @@ void OS_EVENT_DriverIRQHandler(void)
 #endif
 
 #if defined(OSTIMER)
+void OS_EVENT_DriverIRQHandler(void);
 void OS_EVENT_DriverIRQHandler(void)
 {
     s_ostimerIsr(OSTIMER, s_ostimerHandle[0]);
