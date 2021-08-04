@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 2.9, 2015-06-08
-**     Build:               b200409
+**     Build:               b210427
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -265,7 +265,7 @@
 /* @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn], ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE], SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]). (Valid only for eDMA modules.) */
 #define FSL_FEATURE_EDMA_MODULE_CHANNEL (32)
 /* @brief Total number of DMA channels on all modules. */
-#define FSL_FEATURE_EDMA_DMAMUX_CHANNELS (FSL_FEATURE_SOC_EDMA_COUNT * 32)
+#define FSL_FEATURE_EDMA_DMAMUX_CHANNELS (32)
 /* @brief Number of DMA channel groups (register bit fields CR[ERGA], CR[GRPnPRI], ES[GPE], DCHPRIn[GRPPRI]). (Valid only for eDMA modules.) */
 #define FSL_FEATURE_EDMA_CHANNEL_GROUP_COUNT (2)
 /* @brief Has DMA_Error interrupt vector. */
@@ -284,24 +284,46 @@
 /* @brief Number of DMA channels (related to number of register CHCFGn). */
 #define FSL_FEATURE_DMAMUX_MODULE_CHANNEL (32)
 /* @brief Total number of DMA channels on all modules. */
-#define FSL_FEATURE_DMAMUX_DMAMUX_CHANNELS (FSL_FEATURE_SOC_DMAMUX_COUNT * 32)
+#define FSL_FEATURE_DMAMUX_DMAMUX_CHANNELS (32)
 /* @brief Has the periodic trigger capability for the triggered DMA channel (register bit CHCFG0[TRIG]). */
 #define FSL_FEATURE_DMAMUX_HAS_TRIG (1)
+/* @brief Register CHCFGn width. */
+#define FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH (8)
 
 /* ENET module features */
 
-/* @brief Has buffer descriptor byte swapping (register bit field ECR[DBSWP]). */
-#define FSL_FEATURE_ENET_DMA_BIG_ENDIAN_ONLY (0)
-/* @brief Has precision time protocol (IEEE 1588) support (register bit field ECR[EN1588], registers ATCR, ATVR, ATOFF, ATPER, ATCOR, ATINC, ATSTMP). */
-#define FSL_FEATURE_ENET_SUPPORT_PTP (1)
-/* @brief Number of associated interrupt vectors. */
-#define FSL_FEATURE_ENET_INTERRUPT_COUNT (4)
-/* @brief Has threshold for the number of frames in the receive FIFO (register bit field RSEM[STAT_SECTION_EMPTY]). */
-#define FSL_FEATURE_ENET_HAS_RECEIVE_STATUS_THRESHOLD (1)
+/* @brief Support Interrupt Coalesce */
+#define FSL_FEATURE_ENET_HAS_INTERRUPT_COALESCE (0)
+/* @brief Queue Size. */
+#define FSL_FEATURE_ENET_QUEUE (1)
+/* @brief Has AVB Support. */
+#define FSL_FEATURE_ENET_HAS_AVB (0)
+/* @brief Has Timer Pulse Width control. */
+#define FSL_FEATURE_ENET_HAS_TIMER_PWCONTROL (0)
 /* @brief Has Extend MDIO Support. */
 #define FSL_FEATURE_ENET_HAS_EXTEND_MDIO (1)
+/* @brief Has Additional 1588 Timer Channel Interrupt. */
+#define FSL_FEATURE_ENET_HAS_ADD_1588_TIMER_CHN_INT (1)
+/* @brief Support Interrupt Coalesce for each instance */
+#define FSL_FEATURE_ENET_INSTANCE_HAS_INTERRUPT_COALESCEn(x) (0)
 /* @brief Queue Size for each instance. */
 #define FSL_FEATURE_ENET_INSTANCE_QUEUEn(x) (1)
+/* @brief Has AVB Support for each instance. */
+#define FSL_FEATURE_ENET_INSTANCE_HAS_AVBn(x) (0)
+/* @brief Has Timer Pulse Width control for each instance. */
+#define FSL_FEATURE_ENET_INSTANCE_HAS_TIMER_PWCONTROLn(x) (0)
+/* @brief Has Extend MDIO Support for each instance. */
+#define FSL_FEATURE_ENET_INSTANCE_HAS_EXTEND_MDIOn(x) (1)
+/* @brief Has Additional 1588 Timer Channel Interrupt for each instance. */
+#define FSL_FEATURE_ENET_INSTANCE_HAS_ADD_1588_TIMER_CHN_INTn(x) (1)
+/* @brief Has threshold for the number of frames in the receive FIFO (register bit field RSEM[STAT_SECTION_EMPTY]). */
+#define FSL_FEATURE_ENET_HAS_RECEIVE_STATUS_THRESHOLD (1)
+/* @brief Has trasfer clock delay (register bit field ECR[TXC_DLY]). */
+#define FSL_FEATURE_ENET_HAS_RGMII_TXC_DELAY (0)
+/* @brief Has receive clock delay (register bit field ECR[RXC_DLY]). */
+#define FSL_FEATURE_ENET_HAS_RGMII_RXC_DELAY (0)
+/* @brief PTP Timestamp CAPTURE bit always returns 0 when the capture is not over. */
+#define FSL_FEATURE_ENET_TIMESTAMP_CAPTURE_BIT_INVALID (1)
 
 /* EWM module features */
 
@@ -1087,10 +1109,6 @@
 #define FSL_FEATURE_LPUART_IS_SCI (1)
 /* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
 #define FSL_FEATURE_LPUART_FIFO_SIZEn(x) (0)
-/* @brief Maximal data width without parity bit. */
-#define FSL_FEATURE_LPUART_MAX_DATA_WIDTH_WITH_NO_PARITY (10)
-/* @brief Maximal data width with parity bit. */
-#define FSL_FEATURE_LPUART_MAX_DATA_WIDTH_WITH_PARITY (9)
 /* @brief Supports two match addresses to filter incoming frames. */
 #define FSL_FEATURE_LPUART_HAS_ADDRESS_MATCHING (1)
 /* @brief Has transmitter/receiver DMA enable bits C5[TDMAE]/C5[RDMAE] (or BAUD[TDMAE]/BAUD[RDMAE] if the registers are 32-bit wide). */
@@ -1636,6 +1654,10 @@
 #define FSL_FEATURE_SIM_HAS_COP_STOP (0)
 /* @brief Has LLWU clock gate bit (e.g SIM_SCGC4). */
 #define FSL_FEATURE_SIM_HAS_SCGC_LLWU (0)
+/* @brief Has UIDH registers. */
+#define FSL_FEATURE_SIM_HAS_UIDH (1)
+/* @brief Has UIDM registers. */
+#define FSL_FEATURE_SIM_HAS_UIDM (0)
 
 /* SMC module features */
 
@@ -1805,10 +1827,6 @@
     (((x) == UART2) ? (1) : \
     (((x) == UART3) ? (1) : \
     (((x) == UART4) ? (1) : (-1))))))
-/* @brief Maximal data width without parity bit. */
-#define FSL_FEATURE_UART_MAX_DATA_WIDTH_WITH_NO_PARITY (9)
-/* @brief Maximal data width with parity bit. */
-#define FSL_FEATURE_UART_MAX_DATA_WIDTH_WITH_PARITY (10)
 /* @brief Supports two match addresses to filter incoming frames. */
 #define FSL_FEATURE_UART_HAS_ADDRESS_MATCHING (1)
 /* @brief Has transmitter/receiver DMA enable bits C5[TDMAE]/C5[RDMAE] (or BAUD[TDMAE]/BAUD[RDMAE] if the registers are 32-bit wide). */

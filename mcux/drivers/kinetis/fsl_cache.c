@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -28,11 +28,14 @@
  */
 void L1CACHE_EnableCodeCache(void)
 {
-    /* First, invalidate the entire cache. */
-    L1CACHE_InvalidateCodeCache();
+    if (0U == (LMEM->PCCCR & LMEM_PCCCR_ENCACHE_MASK))
+    {
+        /* First, invalidate the entire cache. */
+        L1CACHE_InvalidateCodeCache();
 
-    /* Now enable the cache. */
-    LMEM->PCCCR |= LMEM_PCCCR_ENCACHE_MASK;
+        /* Now enable the cache. */
+        LMEM->PCCCR |= LMEM_PCCCR_ENCACHE_MASK;
+    }
 }
 
 /*!
@@ -213,11 +216,15 @@ void L1CACHE_CleanInvalidateCodeCacheByRange(uint32_t address, uint32_t size_byt
  */
 void L1CACHE_EnableSystemCache(void)
 {
-    /* First, invalidate the entire cache. */
-    L1CACHE_InvalidateSystemCache();
+    /* Only enable when not enabled. */
+    if (0U == (LMEM->PSCCR & LMEM_PSCCR_ENCACHE_MASK))
+    {
+        /* First, invalidate the entire cache. */
+        L1CACHE_InvalidateSystemCache();
 
-    /* Now enable the cache. */
-    LMEM->PSCCR |= LMEM_PSCCR_ENCACHE_MASK;
+        /* Now enable the cache. */
+        LMEM->PSCCR |= LMEM_PSCCR_ENCACHE_MASK;
+    }
 }
 
 /*!

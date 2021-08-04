@@ -13,7 +13,7 @@
 **
 **     Reference manual:    K66P144M180SF5RMV2, Rev. 1, Mar 2015
 **     Version:             rev. 3.0, 2015-03-25
-**     Build:               b181105
+**     Build:               b201013
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2020 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -108,7 +108,7 @@ void SystemInit (void) {
 void SystemCoreClockUpdate (void) {
   uint32_t MCGOUTClock;                                                        /* Variable to store output clock frequency of the MCG module */
   uint16_t Divider;
-  uint8_t tmpC7 = 0;
+  uint8_t  tmpC7 = 0;
 
   if ((MCG->C1 & MCG_C1_CLKS_MASK) == 0x00U) {
     /* Output of FLL or PLL is selected */
@@ -200,7 +200,7 @@ void SystemCoreClockUpdate (void) {
             Divider *= 0x01U;
           }
           MCGOUTClock = (uint32_t)(480000000U / Divider);
-          MCGOUTClock *= 18;
+          MCGOUTClock *= 18U;
         }
       }
     } /* (!((MCG->C6 & MCG_C6_PLLS_MASK) == 0x00U)) */

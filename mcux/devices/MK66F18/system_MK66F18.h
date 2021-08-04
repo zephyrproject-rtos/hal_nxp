@@ -13,7 +13,7 @@
 **
 **     Reference manual:    K66P144M180SF5RMV2, Rev. 1, Mar 2015
 **     Version:             rev. 3.0, 2015-03-25
-**     Build:               b181105
+**     Build:               b201013
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +21,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2018 NXP
+**     Copyright 2016-2020 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause

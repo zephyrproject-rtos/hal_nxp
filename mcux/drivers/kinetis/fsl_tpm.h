@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 0, 7)) /*!< Version 2.0.7 */
+#define FSL_TPM_DRIVER_VERSION (MAKE_VERSION(2, 0, 8)) /*!< Version 2.0.8 */
                                                        /*@}*/
 
 /*!
@@ -496,17 +496,17 @@ static inline uint32_t TPM_GetStatusFlags(TPM_Type *base)
     uint8_t chanlNumber = 0;
 
     /* Check the timer flag */
-    if (base->SC & TPM_SC_TOF_MASK)
+    if (0U != (base->SC & TPM_SC_TOF_MASK))
     {
-        statusFlags |= kTPM_TimeOverflowFlag;
+        statusFlags |= (uint32_t)kTPM_TimeOverflowFlag;
     }
 
     for (chanlNumber = 0; chanlNumber < FSL_FEATURE_TPM_CHANNEL_COUNTn(base); chanlNumber++)
     {
         /* Check the channel flag */
-        if (base->CONTROLS[chanlNumber].CnSC & TPM_CnSC_CHF_MASK)
+        if (0U != (base->CONTROLS[chanlNumber].CnSC & TPM_CnSC_CHF_MASK))
         {
-            statusFlags |= (1U << chanlNumber);
+            statusFlags |= (1UL << chanlNumber);
         }
     }
 #else
@@ -526,18 +526,18 @@ static inline uint32_t TPM_GetStatusFlags(TPM_Type *base)
 static inline void TPM_ClearStatusFlags(TPM_Type *base, uint32_t mask)
 {
 #if defined(FSL_FEATURE_TPM_HAS_NO_STATUS) && FSL_FEATURE_TPM_HAS_NO_STATUS
-    uint32_t chnlStatusFlags = (mask & 0xFF);
+    uint32_t chnlStatusFlags = (mask & 0xFFU);
     uint8_t chnlNumber       = 0;
 
     /* Clear the timer overflow flag by writing a 0 to the bit while it is set */
-    if (mask & kTPM_TimeOverflowFlag)
+    if (0U != (mask & (uint32_t)kTPM_TimeOverflowFlag))
     {
         base->SC &= ~TPM_SC_TOF_MASK;
     }
     /* Clear the channel flag */
-    while (chnlStatusFlags)
+    while (0U != chnlStatusFlags)
     {
-        if (chnlStatusFlags & 0x1)
+        if (0U != (chnlStatusFlags & 0x1U))
         {
             base->CONTROLS[chnlNumber].CnSC &= ~TPM_CnSC_CHF_MASK;
         }
@@ -630,7 +630,7 @@ static inline void TPM_StopTimer(TPM_Type *base)
     base->SC &= ~(TPM_SC_CLKS_MASK);
 
     /* Wait till this reads as zero acknowledging the counter is disabled */
-    while (base->SC & TPM_SC_CLKS_MASK)
+    while (0U != (base->SC & TPM_SC_CLKS_MASK))
     {
     }
 #else
