@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  *
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief SOC_FLEXRAM_ALLOCATE driver version 2.0.1. */
-#define FSL_SOC_FLEXRAM_ALLOCATE_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief SOC_FLEXRAM_ALLOCATE driver version 2.0.2. */
+#define FSL_SOC_FLEXRAM_ALLOCATE_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
 /*@}*/
 
 /*! @brief FLEXRAM bank type */
@@ -42,12 +42,12 @@ typedef enum _flexram_bank_allocate_src
     kFLEXRAM_BankAllocateThroughBankCfg      = 1U, /*!< allocate ram through FLEXRAM_BANK_CFG */
 } flexram_bank_allocate_src_t;
 
-/*! @brief FLEXRAM allocates OCRAM, ITCM, DTCM size. */
+/*! @brief FLEXRAM allocate ocram, itcm, dtcm size */
 typedef struct _flexram_allocate_ram
 {
-    const uint8_t ocramBankNum; /*!< OCRAM banknumber which the SOC support. */
-    const uint8_t dtcmBankNum;  /*!< DTCM bank number to allocate, the number should be power of 2. */
-    const uint8_t itcmBankNum;  /*!< ITCM bank number to allocate, the number should be power of 2. */
+    const uint8_t ocramBankNum; /*!< ocram banknumber which the SOC support */
+    const uint8_t dtcmBankNum;  /*!< dtcm bank number to allocate, the number should be power of 2 */
+    const uint8_t itcmBankNum;  /*!< itcm bank number to allocate, the number should be power of 2 */
 } flexram_allocate_ram_t;
 
 /*******************************************************************************
@@ -59,36 +59,24 @@ extern "C" {
 #endif
 
 /*!
- * @brief FLEXRAM allocates an on-chip ram for OCRAM, ITCM and DTCM.
- * This function is independent from FLEXRAM_Init, and can be called directly if ram re-allocate
+ * @brief FLEXRAM allocate on-chip ram for OCRAM,ITCM,DTCM
+ * This function is independent of FLEXRAM_Init, it can be called directly if ram re-allocate
  * is needed.
- * @param config Allocate configuration.
- * @retval #kStatus_InvalidArgument When the argument is invalid.
- * @retval #kStatus_Success Upon allocate success.
+ * @param config allocate configuration.
+ * @retval kStatus_InvalidArgument the argument is invalid
+ * 		   kStatus_Success allocate success
  */
 status_t FLEXRAM_AllocateRam(flexram_allocate_ram_t *config);
 
 /*!
- * @brief FLEXRAM set allocate on-chip ram source.
- * @param src Bank config source select value.
+ * @brief FLEXRAM set allocate on-chip ram source
+ * @param src bank config source select value.
  */
 static inline void FLEXRAM_SetAllocateRamSrc(flexram_bank_allocate_src_t src)
 {
     IOMUXC_GPR->GPR16 &= ~IOMUXC_GPR_GPR16_FLEXRAM_BANK_CFG_SEL_MASK;
     IOMUXC_GPR->GPR16 |= IOMUXC_GPR_GPR16_FLEXRAM_BANK_CFG_SEL(src);
 }
-
-/*!
- * @brief FLEXRAM configure TCM size.
- * This function is used to set the TCM to the target size. If an odd bank number is used,
- * a new banknumber will be used which is bigger than target value, application can set TCM
- * size to the biggest bank number always, then boundary access error can be captured by flexram only.
- * When access to the TCM memory boundary, hardfault will be raised by core.
- * @param itcmBankNum ITCM bank number to be allocated.
- * @param dtcmBankNum DTCM bank number to be allocated.
- *
- */
-void FLEXRAM_SetTCMSize(uint8_t itcmBankNum, uint8_t dtcmBankNum);
 
 #if defined(__cplusplus)
 }
