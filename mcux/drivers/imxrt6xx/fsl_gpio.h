@@ -25,7 +25,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LPC GPIO driver version. */
-#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 1, 6))
+#define FSL_GPIO_DRIVER_VERSION (MAKE_VERSION(2, 1, 7))
 /*@}*/
 
 /*! @brief LPC GPIO direction definition */

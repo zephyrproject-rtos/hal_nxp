@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -11,7 +11,7 @@
 #include "fsl_common.h"
 
 /*!
- * @addtogroup cache
+ * @addtogroup cache64
  * @{
  */
 
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief cache driver version 2.0.2. */
-#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief cache driver version 2.0.4. */
+#define FSL_CACHE_DRIVER_VERSION (MAKE_VERSION(2, 0, 4))
 /*@}*/
 
 /*! @brief cache line size. */
@@ -64,6 +64,22 @@ extern "C" {
  * @name cache control for cache64
  *@{
  */
+
+/*!
+ * @brief Returns an instance number given periphearl base address.
+ *
+ * @param base The peripheral base address.
+ * @return CACHE64_POLSEL instance number starting from 0.
+ */
+uint32_t CACHE64_GetInstance(CACHE64_POLSEL_Type *base);
+
+/*!
+ * brief Returns an instance number given physical memory address.
+ *
+ * param address The physical memory address.
+ * @return CACHE64_CTRL instance number starting from 0.
+ */
+uint32_t CACHE64_GetInstanceByAddr(uint32_t address);
 
 /*!
  * @brief Initializes an CACHE64 instance with the user configuration structure.

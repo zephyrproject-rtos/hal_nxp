@@ -24,7 +24,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief Defines WWDT driver version. */
-#define FSL_WWDT_DRIVER_VERSION (MAKE_VERSION(2, 1, 7))
+#define FSL_WWDT_DRIVER_VERSION (MAKE_VERSION(2, 1, 9))
 /*@}*/
 
 /*! @name Refresh sequence */

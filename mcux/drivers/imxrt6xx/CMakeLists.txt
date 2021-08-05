@@ -11,6 +11,7 @@ zephyr_library_compile_definitions_ifdef(
 )
 
 zephyr_library_sources(fsl_common.c)
+zephyr_library_sources(fsl_common_arm.c)
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_LPC_RTC	fsl_rtc.c)
 zephyr_library_sources_ifdef(CONFIG_DMA_MCUX_LPC		fsl_dma.c)
 zephyr_library_sources_ifdef(CONFIG_ENTROPY_MCUX_TRNG		fsl_trng.c)

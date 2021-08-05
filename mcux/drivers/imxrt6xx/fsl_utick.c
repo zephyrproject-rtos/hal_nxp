@@ -197,6 +197,7 @@ void UTICK_HandleIRQ(UTICK_Type *base, utick_callback_t cb)
 }
 
 #if defined(UTICK0)
+void UTICK0_DriverIRQHandler(void);
 void UTICK0_DriverIRQHandler(void)
 {
     s_utickIsr(UTICK0, s_utickHandle[0]);
@@ -204,6 +205,7 @@ void UTICK0_DriverIRQHandler(void)
 }
 #endif
 #if defined(UTICK1)
+void UTICK1_DriverIRQHandler(void);
 void UTICK1_DriverIRQHandler(void)
 {
     s_utickIsr(UTICK1, s_utickHandle[1]);
@@ -211,6 +213,7 @@ void UTICK1_DriverIRQHandler(void)
 }
 #endif
 #if defined(UTICK2)
+void UTICK2_DriverIRQHandler(void);
 void UTICK2_DriverIRQHandler(void)
 {
     s_utickIsr(UTICK2, s_utickHandle[2]);

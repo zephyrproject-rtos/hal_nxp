@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief IAP driver version 2.1.0. */
-#define FSL_IAP_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief IAP driver version 2.1.2. */
+#define FSL_IAP_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*!
@@ -31,31 +31,28 @@
  */
 
 /*! @brief FlexSPI LUT command */
-#define NOR_CMD_INDEX_READ        CMD_INDEX_READ        /*!< 0 */
-#define NOR_CMD_INDEX_READSTATUS  CMD_INDEX_READSTATUS  /*!< 1 */
-#define NOR_CMD_INDEX_WRITEENABLE CMD_INDEX_WRITEENABLE /*!< 2 */
-#define NOR_CMD_INDEX_ERASESECTOR 3                     /*!< 3 */
-#define NOR_CMD_INDEX_PAGEPROGRAM CMD_INDEX_WRITE       /*!< 4 */
-#define NOR_CMD_INDEX_CHIPERASE   5                     /*!< 5 */
-#define NOR_CMD_INDEX_DUMMY       6                     /*!< 6 */
-#define NOR_CMD_INDEX_ERASEBLOCK  7                     /*!< 7 */
 
-#define NOR_CMD_LUT_SEQ_IDX_READ \
-    CMD_LUT_SEQ_IDX_READ /*!< 0  READ LUT sequence id in lookupTable stored in config block */
-#define NOR_CMD_LUT_SEQ_IDX_READSTATUS \
-    CMD_LUT_SEQ_IDX_READSTATUS /*!< 1  Read Status LUT sequence id in lookupTable stored in config block */
+#define NOR_CMD_INDEX_READ        0 /*!< 0 */
+#define NOR_CMD_INDEX_READSTATUS  1 /*!< 1 */
+#define NOR_CMD_INDEX_WRITEENABLE 2 /*!< 2 */
+#define NOR_CMD_INDEX_ERASESECTOR 3 /*!< 3 */
+#define NOR_CMD_INDEX_PAGEPROGRAM 4 /*!< 4 */
+#define NOR_CMD_INDEX_CHIPERASE   5 /*!< 5 */
+#define NOR_CMD_INDEX_DUMMY       6 /*!< 6 */
+#define NOR_CMD_INDEX_ERASEBLOCK  7 /*!< 7 */
+
+#define NOR_CMD_LUT_SEQ_IDX_READ       0 /*!< 0  READ LUT sequence id in lookupTable stored in config block */
+#define NOR_CMD_LUT_SEQ_IDX_READSTATUS 1 /*!< 1  Read Status LUT sequence id in lookupTable stored in config block */
 #define NOR_CMD_LUT_SEQ_IDX_READSTATUS_XPI \
     2 /*!< 2  Read status DPI/QPI/OPI sequence id in lookupTable stored in config block */
-#define NOR_CMD_LUT_SEQ_IDX_WRITEENABLE \
-    CMD_LUT_SEQ_IDX_WRITEENABLE /*!< 3  Write Enable sequence id in lookupTable stored in config block */
+#define NOR_CMD_LUT_SEQ_IDX_WRITEENABLE 3 /*!< 3  Write Enable sequence id in lookupTable stored in config block */
 #define NOR_CMD_LUT_SEQ_IDX_WRITEENABLE_XPI \
     4 /*!< 4  Write Enable DPI/QPI/OPI sequence id in lookupTable stored in config block */
-#define NOR_CMD_LUT_SEQ_IDX_ERASESECTOR 5 /*!< 5  Erase Sector sequence id in lookupTable stored in config block */
-#define NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK  8 /*!< 8 Erase Block sequence id in lookupTable stored in config block */
-#define NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM \
-    CMD_LUT_SEQ_IDX_WRITE                /*!< 9  Program sequence id in lookupTable stored in config block */
-#define NOR_CMD_LUT_SEQ_IDX_CHIPERASE 11 /*!< 11 Chip Erase sequence in lookupTable id stored in config block */
-#define NOR_CMD_LUT_SEQ_IDX_READ_SFDP 13 /*!< 13 Read SFDP sequence in lookupTable id stored in config block */
+#define NOR_CMD_LUT_SEQ_IDX_ERASESECTOR 5  /*!< 5  Erase Sector sequence id in lookupTable stored in config block */
+#define NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK  8  /*!< 8 Erase Block sequence id in lookupTable stored in config block */
+#define NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM 9  /*!< 9  Program sequence id in lookupTable stored in config block */
+#define NOR_CMD_LUT_SEQ_IDX_CHIPERASE   11 /*!< 11 Chip Erase sequence in lookupTable id stored in config block */
+#define NOR_CMD_LUT_SEQ_IDX_READ_SFDP   13 /*!< 13 Read SFDP sequence in lookupTable id stored in config block */
 #define NOR_CMD_LUT_SEQ_IDX_RESTORE_NOCMD \
     14 /*!< 14 Restore 0-4-4/0-8-8 mode sequence id in lookupTable stored in config block */
 #define NOR_CMD_LUT_SEQ_IDX_EXIT_NOCMD \
@@ -112,11 +109,11 @@ enum
     kSerialNorCfgOption_DeviceType_HyperFLASH1V8    = 2,
     kSerialNorCfgOption_DeviceType_HyperFLASH3V0    = 3,
     kSerialNorCfgOption_DeviceType_MacronixOctalDDR = 4,
-    kSerialNorCfgOption_DeviceType_MacronixOctalSDR = 5,
+    kSerialNorCfgOption_DeviceType_MacronixOctalSDR = 5, /* For RT600 devcies only. */
     kSerialNorCfgOption_DeviceType_MicronOctalDDR   = 6,
-    kSerialNorCfgOption_DeviceType_MicronOctalSDR   = 7,
+    kSerialNorCfgOption_DeviceType_MicronOctalSDR   = 7, /* For RT600 devcies only. */
     kSerialNorCfgOption_DeviceType_AdestoOctalDDR   = 8,
-    kSerialNorCfgOption_DeviceType_AdestoOctalSDR   = 9,
+    kSerialNorCfgOption_DeviceType_AdestoOctalSDR   = 9, /* For RT600 devcies only. */
 };
 
 /*! @brief Flash Configuration Option0 quad_mode_setting. */
@@ -227,7 +224,7 @@ enum
     kFlashInstMode_0_4_4_DDR   = 0x02,
     kFlashInstMode_QPI_SDR     = 0x41,
     kFlashInstMode_QPI_DDR     = 0x42,
-    kFlashInstMode_OPI_SDR     = 0x81,
+    kFlashInstMode_OPI_SDR     = 0x81, /* For RT600 devices only. */
     kFlashInstMode_OPI_DDR     = 0x82,
 };
 
@@ -333,7 +330,7 @@ typedef struct _FlexSPIConfig
     uint32_t lookupTable[64];           /*!< [0x080-0x17f] Lookup table holds Flash command sequences */
     flexspi_lut_seq_t lutCustomSeq[12]; /*!< [0x180-0x1af] Customizable LUT Sequences */
     uint32_t reserved4[4];              /*!< [0x1b0-0x1bf] Reserved for future use */
-} flexspi_mem_config_t;
+} flexspi_mem_config_block_t;
 
 /*!@brief FlexSPI Operation Type */
 typedef enum _FlexSPIOperationType
@@ -366,20 +363,20 @@ typedef struct _FlexSpiXfer
 /*!@brief Serial NOR configuration block */
 typedef struct _flexspi_nor_config
 {
-    flexspi_mem_config_t memConfig; /*!< Common memory configuration info via FlexSPI */
-    uint32_t pageSize;              /*!< Page size of Serial NOR */
-    uint32_t sectorSize;            /*!< Sector size of Serial NOR */
-    uint8_t ipcmdSerialClkFreq;     /*!< Clock frequency for IP command */
-    uint8_t isUniformBlockSize;     /*!< Sector/Block size is the same */
-    uint8_t isDataOrderSwapped;     /*!< Data order (D0, D1, D2, D3) is swapped (D1,D0, D3, D2) */
-    uint8_t reserved0[1];           /*!< Reserved for future use */
-    uint8_t serialNorType;          /*!< Serial NOR Flash type: 0/1/2/3 */
-    uint8_t needExitNoCmdMode;      /*!< Need to exit NoCmd mode before other IP command */
-    uint8_t halfClkForNonReadCmd;   /*!< Half the Serial Clock for non-read command: true/false */
-    uint8_t needRestoreNoCmdMode;   /*!< Need to Restore NoCmd mode after IP commmand execution */
-    uint32_t blockSize;             /*!< Block size */
-    uint32_t flashStateCtx;         /*!< Flash State Context */
-    uint32_t reserve2[10];          /*!< Reserved for future use */
+    flexspi_mem_config_block_t memConfig; /*!< Common memory configuration info via FlexSPI */
+    uint32_t pageSize;                    /*!< Page size of Serial NOR */
+    uint32_t sectorSize;                  /*!< Sector size of Serial NOR */
+    uint8_t ipcmdSerialClkFreq;           /*!< Clock frequency for IP command */
+    uint8_t isUniformBlockSize;           /*!< Sector/Block size is the same */
+    uint8_t isDataOrderSwapped;           /*!< Data order (D0, D1, D2, D3) is swapped (D1,D0, D3, D2) */
+    uint8_t reserved0[1];                 /*!< Reserved for future use */
+    uint8_t serialNorType;                /*!< Serial NOR Flash type: 0/1/2/3 */
+    uint8_t needExitNoCmdMode;            /*!< Need to exit NoCmd mode before other IP command */
+    uint8_t halfClkForNonReadCmd;         /*!< Half the Serial Clock for non-read command: true/false */
+    uint8_t needRestoreNoCmdMode;         /*!< Need to Restore NoCmd mode after IP commmand execution */
+    uint32_t blockSize;                   /*!< Block size */
+    uint32_t flashStateCtx;               /*!< Flash State Context */
+    uint32_t reserve2[10];                /*!< Reserved for future use */
 } flexspi_nor_config_t;
 /*! @} */
 
@@ -420,13 +417,13 @@ typedef struct _iap_boot_option
     {
         struct
         {
-            uint32_t reserved : 8; /*! reserved field. */
+            uint32_t reserved : 8;       /*! reserved field. */
             uint32_t bootImageIndex : 4; /*! FlexSPI boot image index for FlexSPI NOR flash. */
-            uint32_t instance : 4; /*! Only used when boot interface is FlexSPI/SD/MMC. */
-            uint32_t bootInterface : 4; /*! RT500: 0: USART 2: SPI 3: USB HID 4:FlexSPI 6:SD 7:MMC.
-                                            RT600: 0: USART 1: I2C 2: SPI 3: USB HID 4:FlexSPI 7:SD 8:MMC*/
-            uint32_t mode : 4; /* boot mode, 0: Master boot mode; 1: ISP boot */
-            uint32_t tag : 8; /*! tag, should always be "0xEB". */
+            uint32_t instance : 4;       /*! Only used when boot interface is FlexSPI/SD/MMC. */
+            uint32_t bootInterface : 4;  /*! RT500: 0: USART 2: SPI 3: USB HID 4:FlexSPI 6:SD 7:MMC.
+                                             RT600: 0: USART 1: I2C 2: SPI 3: USB HID 4:FlexSPI 7:SD 8:MMC*/
+            uint32_t mode : 4;           /* boot mode, 0: Master boot mode; 1: ISP boot */
+            uint32_t tag : 8;            /*! tag, should always be "0xEB". */
         } B;
         uint32_t U;
     } option;
@@ -436,7 +433,7 @@ typedef struct _iap_boot_option
 #define IAP_BOOT_OPTION_TAG (0xEBU)
 /*! IAP boot option mode */
 #define IAP_BOOT_OPTION_MODE_MASTER (0U)
-#define IAP_BOOT_OPTION_MODE_ISP (1U)
+#define IAP_BOOT_OPTION_MODE_ISP    (1U)
 
 /*! @} */
 
@@ -475,7 +472,11 @@ void IAP_RunBootLoader(iap_boot_option_t *option);
  * @return The status flags. This is a member of the
  *         enumeration ::_flexspi_status
  */
+#if defined(DOXYGEN_OUTPUT) && DOXYGEN_OUTPUT
 status_t IAP_FlexspiNorInit(uint32_t instance, flexspi_nor_config_t *config);
+#else
+AT_QUICKACCESS_SECTION_CODE(status_t IAP_FlexspiNorInit(uint32_t instance, flexspi_nor_config_t *config));
+#endif
 
 /*!
  * @brief Program data to Serial NOR via FlexSPI.

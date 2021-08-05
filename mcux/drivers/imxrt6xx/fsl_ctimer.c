@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -24,6 +24,13 @@
  * @return The Timer instance
  */
 static uint32_t CTIMER_GetInstance(CTIMER_Type *base);
+
+/*!
+ * @brief CTIMER generic IRQ handle function.
+ *
+ * @param index FlexCAN peripheral instance index.
+ */
+static void CTIMER_GenericIRQHandler(uint32_t index);
 
 /*******************************************************************************
  * Variables
@@ -49,10 +56,11 @@ static const reset_ip_name_t s_ctimerResets[] = CTIMER_RSTS;
 #endif /* FSL_SDK_DISABLE_DRIVER_RESET_CONTROL */
 
 /*! @brief Pointers real ISRs installed by drivers for each instance. */
-static ctimer_callback_t *s_ctimerCallback[FSL_FEATURE_SOC_CTIMER_COUNT] = {0};
+static ctimer_callback_t *s_ctimerCallback[sizeof(s_ctimerBases) / sizeof(s_ctimerBases[0])] = {0};
 
 /*! @brief Callback type installed by drivers for each instance. */
-static ctimer_callback_type_t ctimerCallbackType[FSL_FEATURE_SOC_CTIMER_COUNT] = {kCTIMER_SingleCallback};
+static ctimer_callback_type_t ctimerCallbackType[sizeof(s_ctimerBases) / sizeof(s_ctimerBases[0])] = {
+    kCTIMER_SingleCallback};
 
 /*! @brief Array to map timer instance to IRQ number. */
 static const IRQn_Type s_ctimerIRQ[] = CTIMER_IRQS;
@@ -162,23 +170,25 @@ void CTIMER_GetDefaultConfig(ctimer_config_t *config)
  *
  * Enables PWM mode on the match channel passed in and will then setup the match value
  * and other match parameters to generate a PWM signal.
- * This function will assign match channel 3 to set the PWM cycle.
+ * This function can manually assign the specified channel to set the PWM cycle.
  *
  * note When setting PWM output from multiple output pins, all should use the same PWM
  * frequency. Please use CTIMER_SetupPwmPeriod to set up the PWM with high resolution.
  *
  * param base             Ctimer peripheral base address
+ * param pwmPeriodChannel Specify the channel to control the PWM period
  * param matchChannel     Match pin to be used to output the PWM signal
  * param dutyCyclePercent PWM pulse width; the value should be between 0 to 100
  * param pwmFreq_Hz       PWM signal frequency in Hz
  * param srcClock_Hz      Timer counter clock in Hz
  * param enableInt        Enable interrupt when the timer value reaches the match value of the PWM pulse,
- *                         if it is 0 then no interrupt is generated
+ *                         if it is 0 then no interrupt will be generated.
  *
  * return kStatus_Success on success
- *         kStatus_Fail If matchChannel passed in is 3; this channel is reserved to set the PWM cycle
+ *         kStatus_Fail If matchChannel is equal to pwmPeriodChannel; this channel is reserved to set the PWM cycle
  */
 status_t CTIMER_SetupPwm(CTIMER_Type *base,
+                         const ctimer_match_t pwmPeriodChannel,
                          ctimer_match_t matchChannel,
                          uint8_t dutyCyclePercent,
                          uint32_t pwmFreq_Hz,
@@ -192,7 +202,7 @@ status_t CTIMER_SetupPwm(CTIMER_Type *base,
     uint32_t timerClock = srcClock_Hz / (base->PR + 1U);
     uint32_t index      = CTIMER_GetInstance(base);
 
-    if (matchChannel == kCTIMER_Match_3)
+    if (matchChannel == pwmPeriodChannel)
     {
         return kStatus_Fail;
     }
@@ -230,8 +240,8 @@ status_t CTIMER_SetupPwm(CTIMER_Type *base,
         pulsePeriod = (period * (100U - (uint32_t)dutyCyclePercent)) / 100U;
     }
 
-    /* Match on channel 3 will define the PWM period */
-    base->MR[kCTIMER_Match_3] = period;
+    /* Specified channel pwmPeriodChannel will define the PWM period */
+    base->MR[pwmPeriodChannel] = period;
 
     /* This will define the PWM pulse period */
     base->MR[matchChannel] = pulsePeriod;
@@ -251,23 +261,28 @@ status_t CTIMER_SetupPwm(CTIMER_Type *base,
  *
  * Enables PWM mode on the match channel passed in and will then setup the match value
  * and other match parameters to generate a PWM signal.
- * This function will assign match channel 3 to set the PWM cycle.
+ * This function can manually assign the specified channel to set the PWM cycle.
  *
  * note When setting PWM output from multiple output pins, all should use the same PWM
  * period
  *
  * param base             Ctimer peripheral base address
+ * param pwmPeriodChannel Specify the channel to control the PWM period
  * param matchChannel     Match pin to be used to output the PWM signal
  * param pwmPeriod        PWM period match value
  * param pulsePeriod      Pulse width match value
  * param enableInt        Enable interrupt when the timer value reaches the match value of the PWM pulse,
- *                         if it is 0 then no interrupt is generated
+ *                         if it is 0 then no interrupt will be generated.
  *
  * return kStatus_Success on success
- *         kStatus_Fail If matchChannel passed in is 3; this channel is reserved to set the PWM period
+ *         kStatus_Fail If matchChannel is equal to pwmPeriodChannel; this channel is reserved to set the PWM period
  */
-status_t CTIMER_SetupPwmPeriod(
-    CTIMER_Type *base, ctimer_match_t matchChannel, uint32_t pwmPeriod, uint32_t pulsePeriod, bool enableInt)
+status_t CTIMER_SetupPwmPeriod(CTIMER_Type *base,
+                               const ctimer_match_t pwmPeriodChannel,
+                               ctimer_match_t matchChannel,
+                               uint32_t pwmPeriod,
+                               uint32_t pulsePeriod,
+                               bool enableInt)
 {
 /* Some CTimers only have 16bits , so the value is limited*/
 #if defined(FSL_FEATURE_SOC_CTIMER16B) && FSL_FEATURE_SOC_CTIMER16B
@@ -277,33 +292,33 @@ status_t CTIMER_SetupPwmPeriod(
     uint32_t reg;
     uint32_t index = CTIMER_GetInstance(base);
 
-    if (matchChannel == kCTIMER_Match_3)
+    if (matchChannel == pwmPeriodChannel)
     {
         return kStatus_Fail;
     }
 
-    /* Enable PWM mode on the channel */
+    /* Enable PWM mode on PWM pulse channel */
     base->PWMC |= (1UL << (uint32_t)matchChannel);
 
-    /* Clear the stop, reset and interrupt bits for this channel */
+    /* Clear the stop, reset and interrupt bits for PWM pulse channel */
     reg = base->MCR;
     reg &=
         ~((uint32_t)((uint32_t)CTIMER_MCR_MR0R_MASK | (uint32_t)CTIMER_MCR_MR0S_MASK | (uint32_t)CTIMER_MCR_MR0I_MASK)
           << ((uint32_t)matchChannel * 3U));
 
-    /* If call back function is valid then enable match interrupt for the channel */
+    /* If call back function is valid then enable match interrupt for PWM pulse channel */
     if (enableInt)
     {
         reg |= (((uint32_t)CTIMER_MCR_MR0I_MASK) << (CTIMER_MCR_MR0I_SHIFT + ((uint32_t)matchChannel * 3U)));
     }
 
-    /* Reset the counter when match on channel 3 */
-    reg |= CTIMER_MCR_MR3R_MASK;
+    /* Reset the counter when match on PWM period channel (pwmPeriodChannel)  */
+    reg |= ((uint32_t)((uint32_t)CTIMER_MCR_MR0R_MASK) << ((uint32_t)pwmPeriodChannel * 3U));
 
     base->MCR = reg;
 
-    /* Match on channel 3 will define the PWM period */
-    base->MR[kCTIMER_Match_3] = pwmPeriod;
+    /* Specified channel pwmPeriodChannel will define the PWM period */
+    base->MR[pwmPeriodChannel] = pwmPeriod;
 
     /* This will define the PWM pulse period */
     base->MR[matchChannel] = pulsePeriod;
@@ -321,18 +336,23 @@ status_t CTIMER_SetupPwmPeriod(
 /*!
  * brief Updates the duty cycle of an active PWM signal.
  *
- * note Please use CTIMER_UpdatePwmPulsePeriod to update the PWM with high resolution.
+ * note Please use CTIMER_SetupPwmPeriod to update the PWM with high resolution.
+ * This function can manually assign the specified channel to set the PWM cycle.
  *
  * param base             Ctimer peripheral base address
+ * param pwmPeriodChannel Specify the channel to control the PWM period
  * param matchChannel     Match pin to be used to output the PWM signal
  * param dutyCyclePercent New PWM pulse width; the value should be between 0 to 100
  */
-void CTIMER_UpdatePwmDutycycle(CTIMER_Type *base, ctimer_match_t matchChannel, uint8_t dutyCyclePercent)
+void CTIMER_UpdatePwmDutycycle(CTIMER_Type *base,
+                               const ctimer_match_t pwmPeriodChannel,
+                               ctimer_match_t matchChannel,
+                               uint8_t dutyCyclePercent)
 {
     uint32_t pulsePeriod = 0, period;
 
-    /* Match channel 3 defines the PWM period */
-    period = base->MR[kCTIMER_Match_3];
+    /* Specified channel pwmPeriodChannel  defines the PWM period */
+    period = base->MR[pwmPeriodChannel];
 
     /* For 0% dutycyle, make pulse period greater than period so the event will never occur */
     if (dutyCyclePercent == 0U)
@@ -397,6 +417,24 @@ void CTIMER_SetupMatch(CTIMER_Type *base, ctimer_match_t matchChannel, const cti
     }
 }
 
+/*!
+ * brief Get the status of output match.
+ *
+ * This function gets the status of output MAT, whether or not this output is connected to a pin.
+ * This status is driven to the MAT pins if the match function is selected via IOCON. 0 = LOW. 1 = HIGH.
+ *
+ * param base         Ctimer peripheral base address
+ * param matchChannel External match channel, user can obtain the status of multiple match channels
+ *                    at the same time by using the logic of "|"
+ *                    enumeration ::ctimer_external_match_t
+ * return The mask of external match channel status flags. Users need to use the
+ *        _ctimer_external_match type to decode the return variables.
+ */
+uint32_t CTIMER_GetOutputMatchStatus(CTIMER_Type *base, uint32_t matchChannel)
+{
+    return (base->EMR & matchChannel);
+}
+
 #if !(defined(FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE) && (FSL_FEATURE_CTIMER_HAS_NO_INPUT_CAPTURE))
 /*!
  * brief Setup the capture.
@@ -446,7 +484,12 @@ void CTIMER_RegisterCallBack(CTIMER_Type *base, ctimer_callback_t *cb_func, ctim
     ctimerCallbackType[index] = cb_type;
 }
 
-void CTIMER_GenericIRQHandler(uint32_t index)
+/*!
+ * brief CTIMER generic IRQ handle function.
+ *
+ * param index FlexCAN peripheral instance index.
+ */
+static void CTIMER_GenericIRQHandler(uint32_t index)
 {
     uint32_t int_stat, i, mask;
     /* Get Interrupt status flags */
@@ -468,7 +511,11 @@ void CTIMER_GenericIRQHandler(uint32_t index)
 #if defined(FSL_FEATURE_CTIMER_HAS_IR_CR3INT) && FSL_FEATURE_CTIMER_HAS_IR_CR3INT
         for (i = 0; i <= CTIMER_IR_CR3INT_SHIFT; i++)
 #else
+#if !(defined(FSL_FEATURE_CTIMER_HAS_NO_IR_CR2INT) && FSL_FEATURE_CTIMER_HAS_NO_IR_CR2INT)
         for (i = 0; i <= CTIMER_IR_CR2INT_SHIFT; i++)
+#else
+        for (i = 0; i <= CTIMER_IR_CR1INT_SHIFT; i++)
+#endif /* FSL_FEATURE_CTIMER_HAS_NO_IR_CR2INT */
 #endif /* FSL_FEATURE_CTIMER_HAS_IR_CR3INT */
 #endif
         {
@@ -485,6 +532,7 @@ void CTIMER_GenericIRQHandler(uint32_t index)
 
 /* IRQ handler functions overloading weak symbols in the startup */
 #if defined(CTIMER0)
+void CTIMER0_DriverIRQHandler(void);
 void CTIMER0_DriverIRQHandler(void)
 {
     CTIMER_GenericIRQHandler(0);
@@ -493,6 +541,7 @@ void CTIMER0_DriverIRQHandler(void)
 #endif
 
 #if defined(CTIMER1)
+void CTIMER1_DriverIRQHandler(void);
 void CTIMER1_DriverIRQHandler(void)
 {
     CTIMER_GenericIRQHandler(1);
@@ -501,6 +550,7 @@ void CTIMER1_DriverIRQHandler(void)
 #endif
 
 #if defined(CTIMER2)
+void CTIMER2_DriverIRQHandler(void);
 void CTIMER2_DriverIRQHandler(void)
 {
     CTIMER_GenericIRQHandler(2);
@@ -509,6 +559,7 @@ void CTIMER2_DriverIRQHandler(void)
 #endif
 
 #if defined(CTIMER3)
+void CTIMER3_DriverIRQHandler(void);
 void CTIMER3_DriverIRQHandler(void)
 {
     CTIMER_GenericIRQHandler(3);
@@ -517,6 +568,7 @@ void CTIMER3_DriverIRQHandler(void)
 #endif
 
 #if defined(CTIMER4)
+void CTIMER4_DriverIRQHandler(void);
 void CTIMER4_DriverIRQHandler(void)
 {
     CTIMER_GenericIRQHandler(4);

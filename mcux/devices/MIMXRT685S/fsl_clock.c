@@ -84,7 +84,7 @@ void CLOCK_AttachClk(clock_attach_id_t connection)
 /**
  * brief   Setup peripheral clock dividers.
  * param   div_name    : Clock divider name
- * param   divider     : Value to be divided.
+ * param   divider     : Value to be divided. Divided clock frequency = Undivided clock frequency / divider.
  * return  Nothing
  */
 void CLOCK_SetClkDiv(clock_div_name_t div_name, uint32_t divider)
@@ -1238,6 +1238,7 @@ void CLOCK_EnableSfroClk(void)
     /* No SFRO enable/disable control in CLKCTL. Just wait SFRO stable in case SFRO just get powered on. */
     SDK_DelayAtLeastUs(sfro_delay, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 }
+#endif /* __XCC__ */
 
 /* Initialize the SYSTEM PLL Clk */
 /*! brief  Initialize the System PLL.
@@ -1460,12 +1461,19 @@ void CLOCK_EnableUsbhsHostClock(void)
     CLOCK_EnableClock(kCLOCK_UsbhsSram);
 }
 
-/*! @brief Enable USB HS PHY PLL clock.
+/*! brief Enable USB hs0PhyPll clock.
  *
- * This function enables USB HS PHY PLL clock.
+ * param src  USB HS clock source.
+ * param freq The frequency specified by src.
+ * retval true The clock is set successfully.
+ * retval false The clock source is invalid to get proper USB HS clock.
  */
-void CLOCK_EnableUsbhsPhyClock(void)
+bool CLOCK_EnableUsbHs0PhyPllClock(clock_attach_id_t src, uint32_t freq)
 {
+    uint32_t phyPllDiv  = 0U;
+    uint32_t multiplier = 0U;
+    bool retVal         = true;
+
     USBPHY->CTRL_CLR = USBPHY_CTRL_SFTRST_MASK;
 
     uint32_t delay = 100000;
@@ -1474,16 +1482,71 @@ void CLOCK_EnableUsbhsPhyClock(void)
         __NOP();
     }
 
-    USBPHY->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_POWER(1) | USBPHY_PLL_SIC_PLL_REG_ENABLE_MASK);
-    USBPHY->PLL_SIC     = (USBPHY->PLL_SIC & ~(USBPHY_PLL_SIC_PLL_DIV_SEL_MASK)) | USBPHY_PLL_SIC_PLL_DIV_SEL(3);
-    USBPHY->PLL_SIC_CLR = USBPHY_PLL_SIC_PLL_BYPASS_MASK;
-    USBPHY->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
+    multiplier = 480000000UL / freq;
 
-    USBPHY->CTRL_CLR = USBPHY_CTRL_CLR_CLKGATE_MASK;
-    USBPHY->PWD_SET  = 0x0;
-
-    while (0UL == (USBPHY->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
+    switch (multiplier)
     {
+        case 13:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(0U);
+            break;
+        }
+        case 15:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(1U);
+            break;
+        }
+        case 16:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(2U);
+            break;
+        }
+        case 20:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(3U);
+            break;
+        }
+        case 22:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(4U);
+            break;
+        }
+        case 25:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(5U);
+            break;
+        }
+        case 30:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(6U);
+            break;
+        }
+        case 240:
+        {
+            phyPllDiv = USBPHY_PLL_SIC_PLL_DIV_SEL(7U);
+            break;
+        }
+        default:
+        {
+            retVal = false;
+            break;
+        }
     }
+
+    if (retVal)
+    {
+        USBPHY->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_POWER(1) | USBPHY_PLL_SIC_PLL_REG_ENABLE_MASK);
+        USBPHY->PLL_SIC     = (USBPHY->PLL_SIC & ~(USBPHY_PLL_SIC_PLL_DIV_SEL_MASK)) | phyPllDiv;
+        USBPHY->PLL_SIC_CLR = USBPHY_PLL_SIC_PLL_BYPASS_MASK;
+        USBPHY->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
+
+        USBPHY->CTRL_CLR = USBPHY_CTRL_CLR_CLKGATE_MASK;
+        USBPHY->PWD_SET  = 0x0;
+
+        while (0UL == (USBPHY->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
+        {
+        }
+    }
+
+    return retVal;
 }
-#endif
