@@ -13,31 +13,36 @@
  * Definitions
  ******************************************************************************/
 
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.flash"
+#endif
+
 /*!
  * @name Flash controller command numbers
  * @{
  */
-#define FTFx_VERIFY_BLOCK 0x00U                    /*!< RD1BLK*/
-#define FTFx_VERIFY_SECTION 0x01U                  /*!< RD1SEC*/
-#define FTFx_PROGRAM_CHECK 0x02U                   /*!< PGMCHK*/
-#define FTFx_READ_RESOURCE 0x03U                   /*!< RDRSRC*/
-#define FTFx_PROGRAM_LONGWORD 0x06U                /*!< PGM4*/
-#define FTFx_PROGRAM_PHRASE 0x07U                  /*!< PGM8*/
-#define FTFx_ERASE_BLOCK 0x08U                     /*!< ERSBLK*/
-#define FTFx_ERASE_SECTOR 0x09U                    /*!< ERSSCR*/
-#define FTFx_PROGRAM_SECTION 0x0BU                 /*!< PGMSEC*/
-#define FTFx_GENERATE_CRC 0x0CU                    /*!< CRCGEN*/
-#define FTFx_VERIFY_ALL_BLOCK 0x40U                /*!< RD1ALL*/
-#define FTFx_READ_ONCE 0x41U                       /*!< RDONCE or RDINDEX*/
-#define FTFx_PROGRAM_ONCE 0x43U                    /*!< PGMONCE or PGMINDEX*/
-#define FTFx_ERASE_ALL_BLOCK 0x44U                 /*!< ERSALL*/
-#define FTFx_SECURITY_BY_PASS 0x45U                /*!< VFYKEY*/
-#define FTFx_SWAP_CONTROL 0x46U                    /*!< SWAP*/
-#define FTFx_ERASE_ALL_BLOCK_UNSECURE 0x49U        /*!< ERSALLU*/
+#define FTFx_VERIFY_BLOCK                    0x00U /*!< RD1BLK*/
+#define FTFx_VERIFY_SECTION                  0x01U /*!< RD1SEC*/
+#define FTFx_PROGRAM_CHECK                   0x02U /*!< PGMCHK*/
+#define FTFx_READ_RESOURCE                   0x03U /*!< RDRSRC*/
+#define FTFx_PROGRAM_LONGWORD                0x06U /*!< PGM4*/
+#define FTFx_PROGRAM_PHRASE                  0x07U /*!< PGM8*/
+#define FTFx_ERASE_BLOCK                     0x08U /*!< ERSBLK*/
+#define FTFx_ERASE_SECTOR                    0x09U /*!< ERSSCR*/
+#define FTFx_PROGRAM_SECTION                 0x0BU /*!< PGMSEC*/
+#define FTFx_GENERATE_CRC                    0x0CU /*!< CRCGEN*/
+#define FTFx_VERIFY_ALL_BLOCK                0x40U /*!< RD1ALL*/
+#define FTFx_READ_ONCE                       0x41U /*!< RDONCE or RDINDEX*/
+#define FTFx_PROGRAM_ONCE                    0x43U /*!< PGMONCE or PGMINDEX*/
+#define FTFx_ERASE_ALL_BLOCK                 0x44U /*!< ERSALL*/
+#define FTFx_SECURITY_BY_PASS                0x45U /*!< VFYKEY*/
+#define FTFx_SWAP_CONTROL                    0x46U /*!< SWAP*/
+#define FTFx_ERASE_ALL_BLOCK_UNSECURE        0x49U /*!< ERSALLU*/
 #define FTFx_VERIFY_ALL_EXECUTE_ONLY_SEGMENT 0x4AU /*!< RD1XA*/
-#define FTFx_ERASE_ALL_EXECUTE_ONLY_SEGMENT 0x4BU  /*!< ERSXA*/
-#define FTFx_PROGRAM_PARTITION 0x80U               /*!< PGMPART*/
-#define FTFx_SET_FLEXRAM_FUNCTION 0x81U            /*!< SETRAM*/
+#define FTFx_ERASE_ALL_EXECUTE_ONLY_SEGMENT  0x4BU /*!< ERSXA*/
+#define FTFx_PROGRAM_PARTITION               0x80U /*!< PGMPART*/
+#define FTFx_SET_FLEXRAM_FUNCTION            0x81U /*!< SETRAM*/
 /*@}*/
 
 /*!
@@ -87,6 +92,9 @@ static void ftfx_copy_run_command_to_ram(uint32_t *ftfxRunCommand);
 
 /*! @brief Internal function Flash command sequence. Called by driver APIs only*/
 static status_t ftfx_command_sequence(ftfx_config_t *config);
+
+/*! @brief Internal function Flash asynchronous command sequence. Called by driver APIs only*/
+static void ftfx_command_sequence_non_blocking(ftfx_config_t *config);
 
 /*! @brief Validates the range and alignment of the given address range.*/
 static status_t ftfx_check_mem_range(ftfx_config_t *config,
@@ -314,6 +322,39 @@ status_t FTFx_CMD_Erase(ftfx_config_t *config, uint32_t start, uint32_t lengthIn
             eraseStart += sectorSize;
         }
     }
+
+    return returnCode;
+}
+
+/*!
+ * @brief erases one flash sector size based on the start address.
+ */
+status_t FTFx_CMD_EraseSectorNonBlocking(ftfx_config_t *config, uint32_t start, uint32_t key)
+{
+    uint32_t eraseStart;
+    uint8_t aligmentInBytes;
+    status_t returnCode    = kStatus_FTFx_AddressError;
+    aligmentInBytes        = config->opsConfig.addrAligment.sectorCmd;
+    uint32_t lengthInBytes = config->flashDesc.sectorSize;
+
+    returnCode = ftfx_check_mem_range(config, start, lengthInBytes, aligmentInBytes);
+    if (returnCode != kStatus_FTFx_Success)
+    {
+        return returnCode;
+    }
+    /* Validate the user key */
+    returnCode = ftfx_check_user_key(key);
+    if (returnCode != kStatus_FTFx_Success)
+    {
+        return returnCode;
+    }
+
+    eraseStart = config->opsConfig.convertedAddress;
+
+    /* preparing passing parameter to erase a flash block */
+    kFCCOBx[0] = BYTE2WORD_1_3(FTFx_ERASE_SECTOR, eraseStart);
+    /* calling flash command sequence function to execute the command */
+    ftfx_command_sequence_non_blocking(config);
 
     return returnCode;
 }
@@ -750,7 +791,7 @@ status_t FTFx_CMD_ReadOnce(ftfx_config_t *config, uint32_t index, uint8_t *dst, 
 /*!
  * @brief Reads the resource with data at locations passed in through parameters.
  *
- * this function can read  date from  program flash IFR, data flash IFR space, 
+ * this function can read  date from  program flash IFR, data flash IFR space,
  * and the Version ID field.
  */
 status_t FTFx_CMD_ReadResource(
@@ -1258,6 +1299,31 @@ static status_t ftfx_command_sequence(ftfx_config_t *config)
     {
         return kStatus_FTFx_Success;
     }
+}
+
+static void ftfx_command_sequence_non_blocking(ftfx_config_t *config)
+{
+#if FTFx_DRIVER_IS_FLASH_RESIDENT
+    /* clear RDCOLERR & ACCERR & FPVIOL flag in flash status register */
+    FTFx->FSTAT = FTFx_FSTAT_RDCOLERR_MASK | FTFx_FSTAT_ACCERR_MASK | FTFx_FSTAT_FPVIOL_MASK;
+
+    /* Since the value of ARM function pointer is always odd, but the real start address
+     * of function memory should be even, that's why +1 operation exist. */
+    config->runCmdFuncAddr.commadAddr += 1UL;
+    callFtfxRunCommand_t callFtfxRunCommand = config->runCmdFuncAddr.callFlashCommand;
+
+    /* We pass the ftfx_fstat address as a parameter to flash_run_comamnd() instead of using
+     * pre-processed MICRO sentences or operating global variable in flash_run_comamnd()
+     * to make sure that flash_run_command() will be compiled into position-independent code (PIC). */
+    callFtfxRunCommand((FTFx_REG8_ACCESS_TYPE)(&FTFx->FSTAT));
+    config->runCmdFuncAddr.commadAddr -= 1UL;
+#else
+    /* clear RDCOLERR & ACCERR & FPVIOL flag in flash status register */
+    FTFx->FSTAT = FTFx_FSTAT_RDCOLERR_MASK | FTFx_FSTAT_ACCERR_MASK | FTFx_FSTAT_FPVIOL_MASK;
+
+    /* clear CCIF bit */
+    FTFx->FSTAT = FTFx_FSTAT_CCIF_MASK;
+#endif
 }
 
 /*! @brief Validates the range and alignment of the given address range.*/

@@ -1268,13 +1268,12 @@ status_t SDHC_SetAdmaTableConfig(SDHC_Type *base,
                 for (i = 0U; i < entries; i += 2U)
                 {
                     /* Each descriptor for ADMA1 is 32-bit in length */
-                    if ((dataBytes - sizeof(uint32_t) * ((uint32_t)startAddress - (uint32_t)data)) <=
+                    if ((dataBytes - ((uint32_t)startAddress - (uint32_t)data)) <=
                         SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY)
                     {
                         /* The last piece of data, setting end flag in descriptor */
-                        adma1EntryAddress[i] =
-                            ((uint32_t)(dataBytes - sizeof(uint32_t) * ((uint32_t)startAddress - (uint32_t)data))
-                             << SDHC_ADMA1_DESCRIPTOR_LENGTH_SHIFT);
+                        adma1EntryAddress[i] = ((uint32_t)(dataBytes - ((uint32_t)startAddress - (uint32_t)data))
+                                                << SDHC_ADMA1_DESCRIPTOR_LENGTH_SHIFT);
                         adma1EntryAddress[i] |= (uint32_t)kSDHC_Adma1DescriptorTypeSetLength;
                         adma1EntryAddress[i + 1U] = (uint32_t)(startAddress);
                         adma1EntryAddress[i + 1U] |=
@@ -1285,7 +1284,7 @@ status_t SDHC_SetAdmaTableConfig(SDHC_Type *base,
                         adma1EntryAddress[i] = ((uint32_t)SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY
                                                 << SDHC_ADMA1_DESCRIPTOR_LENGTH_SHIFT);
                         adma1EntryAddress[i] |= (uint32_t)kSDHC_Adma1DescriptorTypeSetLength;
-                        adma1EntryAddress[i + 1U] = ((uint32_t)(startAddress) << SDHC_ADMA1_DESCRIPTOR_ADDRESS_SHIFT);
+                        adma1EntryAddress[i + 1U] = ((uint32_t)(startAddress));
                         adma1EntryAddress[i + 1U] |= (uint32_t)kSDHC_Adma1DescriptorTypeTransfer;
                         startAddress += SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY / sizeof(uint32_t);
                     }
@@ -1323,14 +1322,13 @@ status_t SDHC_SetAdmaTableConfig(SDHC_Type *base,
                 for (i = 0U; i < entries; i++)
                 {
                     /* Each descriptor for ADMA2 is 64-bit in length */
-                    if ((dataBytes - sizeof(uint32_t) * ((uint32_t)startAddress - (uint32_t)data)) <=
+                    if ((dataBytes - ((uint32_t)startAddress - (uint32_t)data)) <=
                         SDHC_ADMA2_DESCRIPTOR_MAX_LENGTH_PER_ENTRY)
                     {
                         /* The last piece of data, setting end flag in descriptor */
-                        adma2EntryAddress[i].address = startAddress;
-                        adma2EntryAddress[i].attribute =
-                            ((dataBytes - sizeof(uint32_t) * ((uint32_t)startAddress - (uint32_t)data))
-                             << SDHC_ADMA2_DESCRIPTOR_LENGTH_SHIFT);
+                        adma2EntryAddress[i].address   = startAddress;
+                        adma2EntryAddress[i].attribute = ((dataBytes - ((uint32_t)startAddress - (uint32_t)data))
+                                                          << SDHC_ADMA2_DESCRIPTOR_LENGTH_SHIFT);
                         adma2EntryAddress[i].attribute |=
                             ((uint32_t)kSDHC_Adma2DescriptorTypeTransfer | (uint32_t)kSDHC_Adma2DescriptorEndFlag);
                     }
@@ -1416,6 +1414,17 @@ status_t SDHC_TransferBlocking(SDHC_Type *base, uint32_t *admaTable, uint32_t ad
         {
             dmaMode = (sdhc_dma_mode_t)kSDHC_DmaModeNo;
         }
+    }
+
+    if (data != NULL)
+    {
+        SDHC_ClearInterruptStatusFlags(
+            base,
+            (uint32_t)(dmaMode == kSDHC_DmaModeNo ? kSDHC_DataFlag : kSDHC_DataDMAFlag) | (uint32_t)kSDHC_CommandFlag);
+    }
+    else
+    {
+        SDHC_ClearInterruptStatusFlags(base, kSDHC_CommandFlag);
     }
 
     /* Send command and receive data. */
@@ -1602,6 +1611,7 @@ void SDHC_TransferHandleIRQ(SDHC_Type *base, sdhc_handle_t *handle)
 }
 
 #if defined(SDHC)
+void SDHC_DriverIRQHandler(void);
 void SDHC_DriverIRQHandler(void)
 {
     assert(s_sdhcHandle[0] != NULL);
