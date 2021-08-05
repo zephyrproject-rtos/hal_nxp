@@ -181,6 +181,17 @@ static void SDIF_TransferHandleCardDetect(SDIF_Type *base, sdif_handle_t *handle
  */
 static status_t SDIF_SetCommandRegister(SDIF_Type *base, uint32_t cmdIndex, uint32_t argument, uint32_t timeout);
 
+/*
+ * @brief SDIF sync clock command function.
+ *
+ * This function will try to recovery the host while sending clock command failed.
+ *
+ * @param base SDIF base addres
+ *
+ * @return kStatus_Success, kStatus_SDIF_SyncCmdTimeout
+ */
+static status_t SDIF_SyncClockCommand(SDIF_Type *base);
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -296,6 +307,7 @@ static status_t SDIF_TransferConfig(SDIF_Type *base, sdif_transfer_t *transfer, 
     /* handle interrupt and status mask */
     if (data != NULL)
     {
+        SDIF_ClearInterruptStatus(base, (uint32_t)kSDIF_AllInterruptStatus);
         if (enDMA)
         {
             SDIF_ClearInternalDMAStatus(base, kSDIF_DMAAllStatus);
@@ -306,7 +318,6 @@ static status_t SDIF_TransferConfig(SDIF_Type *base, sdif_transfer_t *transfer, 
         {
             SDIF_EnableInterrupt(base, (uint32_t)kSDIF_CommandTransferStatus | (uint32_t)kSDIF_DataTransferStatus);
         }
-        SDIF_ClearInterruptStatus(base, (uint32_t)kSDIF_AllInterruptStatus);
     }
     else
     {
@@ -348,16 +359,18 @@ static status_t SDIF_ReadCommandResponse(SDIF_Type *base, sdif_command_t *comman
 
 static status_t SDIF_WaitCommandDone(SDIF_Type *base, sdif_command_t *command)
 {
-    uint32_t status = 0U;
+    uint32_t status      = 0U;
+    uint32_t errorStatus = (uint32_t)kSDIF_ResponseError | (uint32_t)kSDIF_ResponseTimeout |
+                           (uint32_t)kSDIF_DataStartBitError | (uint32_t)kSDIF_HardwareLockError |
+                           (uint32_t)kSDIF_ResponseCRCError;
 
     do
     {
         status = SDIF_GetInterruptStatus(base);
-    } while ((status & (uint32_t)kSDIF_CommandDone) != (uint32_t)kSDIF_CommandDone);
+    } while ((status & (errorStatus | (uint32_t)kSDIF_CommandDone)) == 0UL);
     /* clear interrupt status flag first */
     SDIF_ClearInterruptStatus(base, status & (uint32_t)kSDIF_CommandTransferStatus);
-    if ((status & ((uint32_t)kSDIF_ResponseError | (uint32_t)kSDIF_ResponseCRCError | (uint32_t)kSDIF_ResponseTimeout |
-                   (uint32_t)kSDIF_HardwareLockError)) != 0UL)
+    if ((status & errorStatus) != 0UL)
     {
         return kStatus_SDIF_SendCmdFail;
     }
@@ -376,12 +389,17 @@ static status_t SDIF_SetCommandRegister(SDIF_Type *base, uint32_t cmdIndex, uint
 
     while ((base->CMD & SDIF_CMD_START_CMD_MASK) == SDIF_CMD_START_CMD_MASK)
     {
-        --syncTimeout;
+        if (timeout == 0U)
+        {
+            break;
+        }
 
         if (0UL == syncTimeout)
         {
             return kStatus_SDIF_SyncCmdTimeout;
         }
+
+        --syncTimeout;
     }
 
     return kStatus_Success;
@@ -407,8 +425,8 @@ status_t SDIF_ReleaseDMADescriptor(SDIF_Type *base, sdif_dma_config_t *dmaConfig
     /* chain descriptor mode */
     if (dmaConfig->mode == kSDIF_ChainDMAMode)
     {
-        while (((dmaDesAddr->dmaDesAttribute & SDIF_DMA_DESCRIPTOR_DATA_BUFFER_END_FLAG) !=
-                SDIF_DMA_DESCRIPTOR_DATA_BUFFER_END_FLAG) &&
+        while (((dmaDesAddr->dmaDesAttribute & SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG) !=
+                SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG) &&
                (dmaDesBufferSize < dmaConfig->dmaDesBufferLen * sizeof(uint32_t)))
         {
             /* set the OWN bit */
@@ -426,8 +444,8 @@ status_t SDIF_ReleaseDMADescriptor(SDIF_Type *base, sdif_dma_config_t *dmaConfig
     /* dual descriptor mode */
     else
     {
-        while (((dmaDesAddr->dmaDesAttribute & SDIF_DMA_DESCRIPTOR_DESCRIPTOR_END_FLAG) !=
-                SDIF_DMA_DESCRIPTOR_DESCRIPTOR_END_FLAG) &&
+        while (((dmaDesAddr->dmaDesAttribute & SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG) !=
+                SDIF_DMA_DESCRIPTOR_OWN_BY_DMA_FLAG) &&
                (dmaDesBufferSize < dmaConfig->dmaDesBufferLen * sizeof(uint32_t)))
         {
             dmaDesAddr = (sdif_dma_descriptor_t *)(uint32_t)tempDMADesBuffer;
@@ -571,7 +589,7 @@ static status_t SDIF_ReadDataPortBlocking(SDIF_Type *base, sdif_data_t *data)
                     break;
                 }
             }
-        } while (IS_SDIF_FLAG_SET(status, ((uint32_t)kSDIF_DataTransferOver | (uint32_t)kSDIF_ReadFIFORequest)) &&
+        } while (!IS_SDIF_FLAG_SET(status, ((uint32_t)kSDIF_DataTransferOver | (uint32_t)kSDIF_ReadFIFORequest)) &&
                  (!transferOver));
 
         if (IS_SDIF_FLAG_SET(status, kSDIF_DataTransferOver))
@@ -753,23 +771,16 @@ static status_t SDIF_TransferDataBlocking(SDIF_Type *base, sdif_data_t *data, bo
  * This api include polling the status of the bit START_COMMAND, if 0 used as timeout value, then this function
  * will return directly without polling the START_CMD status.
  * param base SDIF peripheral base address.
- * param command configuration collection
- * param timeout not used in this function
+ * param command configuration collection.
+ * param timeout the timeout value of polling START_CMD auto clear status.
  * return command excute status
  */
 status_t SDIF_SendCommand(SDIF_Type *base, sdif_command_t *cmd, uint32_t timeout)
 {
     assert(NULL != cmd);
 
-    base->CMDARG = cmd->argument;
-    base->CMD    = SDIF_CMD_CMD_INDEX(cmd->index) | SDIF_CMD_START_CMD_MASK | (cmd->flags & (~SDIF_CMD_CMD_INDEX_MASK));
-
-    /* wait start_cmd bit auto clear within timeout */
-    while ((base->CMD & SDIF_CMD_START_CMD_MASK) == SDIF_CMD_START_CMD_MASK)
-    {
-    }
-
-    return kStatus_Success;
+    return SDIF_SetCommandRegister(base, SDIF_CMD_CMD_INDEX(cmd->index) | (cmd->flags & (~SDIF_CMD_CMD_INDEX_MASK)),
+                                   cmd->argument, timeout);
 }
 
 /*!
@@ -857,6 +868,35 @@ void SDIF_ConfigClockDelay(uint32_t target_HZ, uint32_t divider)
     SYSCON->SDIOCLKCTRL = sdioClkCtrl;
 }
 
+static status_t SDIF_SyncClockCommand(SDIF_Type *base)
+{
+    uint32_t syncTimeout      = 10000U;
+    uint32_t sendCommandRetry = 3U;
+
+    do
+    {
+        /* update the clock register and wait the pre-transfer complete */
+        if (SDIF_SetCommandRegister(
+                base, (uint32_t)kSDIF_CmdUpdateClockRegisterOnly | (uint32_t)kSDIF_WaitPreTransferComplete, 0UL,
+                syncTimeout) == kStatus_Success)
+        {
+            break;
+        }
+        /* if send clock command timeout, it means that polling START_CMD cleared failed, CIU cannot take command at
+         * this comment, so reset the host controller to recover the CIU interface and state machine.
+         */
+        (void)SDIF_Reset(base, kSDIF_ResetController, syncTimeout);
+        sendCommandRetry--;
+    } while (sendCommandRetry != 0U);
+
+    if (sendCommandRetry == 0U)
+    {
+        return kStatus_Fail;
+    }
+
+    return kStatus_Success;
+}
+
 /*!
  * brief Sets the card bus clock frequency.
  *
@@ -868,7 +908,6 @@ void SDIF_ConfigClockDelay(uint32_t target_HZ, uint32_t divider)
 uint32_t SDIF_SetCardClock(SDIF_Type *base, uint32_t srcClock_Hz, uint32_t target_HZ)
 {
     uint32_t divider = 0UL, targetFreq = target_HZ;
-    uint32_t syncTimeout = SDIF_TIMEOUT_VALUE;
 
     /* if target freq bigger than the source clk, set the target_HZ to
      src clk, this interface can run up to 52MHZ with card */
@@ -879,12 +918,10 @@ uint32_t SDIF_SetCardClock(SDIF_Type *base, uint32_t srcClock_Hz, uint32_t targe
 
     /* disable the clock first,need sync to CIU*/
     SDIF_EnableCardClock(base, false);
-    /* update the clock register and wait the pre-transfer complete */
-    if (SDIF_SetCommandRegister(base,
-                                (uint32_t)kSDIF_CmdUpdateClockRegisterOnly | (uint32_t)kSDIF_WaitPreTransferComplete,
-                                0UL, syncTimeout) != kStatus_Success)
+
+    if (SDIF_SyncClockCommand(base) != kStatus_Success)
     {
-        return 0UL;
+        return 0U;
     }
 
     /*calculate the divider*/
@@ -909,21 +946,14 @@ uint32_t SDIF_SetCardClock(SDIF_Type *base, uint32_t srcClock_Hz, uint32_t targe
     /* load the clock divider */
     base->CLKDIV = SDIF_CLKDIV_CLK_DIVIDER0(divider);
     /* update the divider to CIU */
-    if (SDIF_SetCommandRegister(base,
-                                (uint32_t)kSDIF_CmdUpdateClockRegisterOnly | (uint32_t)kSDIF_WaitPreTransferComplete,
-                                0UL, syncTimeout) != kStatus_Success)
+    if (SDIF_SyncClockCommand(base) != kStatus_Success)
     {
-        return 0UL;
+        return 0U;
     }
 
     /* enable the card clock and sync to CIU */
     SDIF_EnableCardClock(base, true);
-    if (SDIF_SetCommandRegister(base,
-                                (uint32_t)kSDIF_CmdUpdateClockRegisterOnly | (uint32_t)kSDIF_WaitPreTransferComplete,
-                                0UL, syncTimeout) != kStatus_Success)
-    {
-        return 0UL;
-    }
+    (void)SDIF_SyncClockCommand(base);
 
     /* config the clock delay to meet the hold time and setup time */
     SDIF_ConfigClockDelay(target_HZ, divider);
@@ -1517,7 +1547,7 @@ static void SDIF_TransferHandleData(SDIF_Type *base, sdif_handle_t *handle, uint
     {
         while ((handle->data->rxData != NULL) && ((base->STATUS & SDIF_STATUS_FIFO_COUNT_MASK) != 0UL))
         {
-            handle->transferredWords = SDIF_ReadDataPort(base, handle->data, transferredWords);
+            handle->transferredWords = SDIF_ReadDataPort(base, handle->data, handle->transferredWords);
         }
         transferStatus = kStatus_SDIF_DataTransferSuccess;
     }
@@ -1647,6 +1677,7 @@ void SDIF_Deinit(SDIF_Type *base)
 }
 
 #if defined(SDIF)
+void SDIF_DriverIRQHandler(void);
 void SDIF_DriverIRQHandler(void)
 {
     assert(s_sdifHandle[0] != NULL);
