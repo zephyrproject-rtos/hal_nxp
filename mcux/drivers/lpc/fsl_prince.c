@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 - 2019 NXP
+ * Copyright 2018 - 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,38 +39,42 @@ static secure_bool_t PRINCE_CheckerAlgorithm(uint32_t address,
     }
 
     /* Iterate for all PRINCE regions */
-    for (region_index = kPRINCE_Region0; region_index <= kPRINCE_Region2; region_index++)
+    for (region_index = (uint32_t)kPRINCE_Region0; region_index <= (uint32_t)kPRINCE_Region2; region_index++)
     {
         contiguous_start_index = 0;
         contiguous_end_index   = 32;
         switch (region_index)
         {
-            case kPRINCE_Region0:
+            case (uint32_t)kPRINCE_Region0:
                 temp_base = PRINCE->BASE_ADDR0;
                 temp_sr   = PRINCE->SR_ENABLE0;
                 break;
 
-            case kPRINCE_Region1:
+            case (uint32_t)kPRINCE_Region1:
                 temp_base = PRINCE->BASE_ADDR1;
                 temp_sr   = PRINCE->SR_ENABLE1;
                 break;
 
-            case kPRINCE_Region2:
+            case (uint32_t)kPRINCE_Region2:
                 temp_base = PRINCE->BASE_ADDR2;
                 temp_sr   = PRINCE->SR_ENABLE2;
+                break;
+
+            default:
+                /* All the cases have been listed above, the default clause should not be reached. */
                 break;
         }
 
         if (((address >= temp_base) &&
-             ((address + length) < (temp_base + (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 32 * 1024)))) &&
-            (temp_sr != 0))
+             ((address + length) < (temp_base + (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 32U * 1024U)))) &&
+            (temp_sr != 0U))
         {
             /* Check if the mask is contiguous */
             secure_bool_t first_set_bit_found  = kSECURE_FALSE;
             secure_bool_t contiguous_end_found = kSECURE_FALSE;
-            for (int i = 0; i < 32; i++)
+            for (uint32_t i = 0; i < 32U; i++)
             {
-                if (temp_sr & (1 << i))
+                if (0U != (temp_sr & (1UL << i)))
                 {
                     if (kSECURE_FALSE == first_set_bit_found)
                     {
@@ -100,9 +104,9 @@ static secure_bool_t PRINCE_CheckerAlgorithm(uint32_t address,
 
         /* Check if the provided memory range covers all addresses defined in the SR mask */
         if ((kSECURE_TRUE == is_prince_region_contiguous) &&
-            ((address <= (temp_base + (contiguous_start_index * FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024)))) &&
+            ((address <= (temp_base + (contiguous_start_index * FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024U)))) &&
             (((address + length) >=
-              (temp_base + (contiguous_end_index * FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024)))))
+              (temp_base + (contiguous_end_index * FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024U)))))
         {
             /* In case of erase operation, invalidate the old PRINCE IV by regenerating the new one */
             if (kPRINCE_Flag_EraseCheck == flag)
@@ -136,8 +140,8 @@ static secure_bool_t PRINCE_CheckerAlgorithm(uint32_t address,
             /* Is the provided memory range outside the addresses defined by the SR mask? */
             if ((kSECURE_TRUE == is_prince_region_contiguous) &&
                 ((((address + length) <=
-                   (temp_base + (contiguous_start_index * FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024)))) ||
-                 ((address >= (temp_base + (contiguous_end_index * FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024))))))
+                   (temp_base + (contiguous_start_index * FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024U)))) ||
+                 ((address >= (temp_base + (contiguous_end_index * FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024U))))))
             {
                 /* No encryption enabled for the provided memory range, true could be returned to allow erase/write
                    operation, but due to the same base address for all three prince regions on Niobe4Mini we should
@@ -183,21 +187,22 @@ status_t PRINCE_GenNewIV(prince_region_t region, uint8_t *iv_code, bool store, f
     }
 
     /* Generate new IV code for the PRINCE region */
-    status = PUF_SetIntrinsicKey(PUF, (puf_key_index_register_t)(kPUF_KeyIndex_02 + (puf_key_index_register_t)region),
-                                 8, &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
+    status =
+        PUF_SetIntrinsicKey(PUF, (puf_key_index_register_t)(uint32_t)((uint32_t)kPUF_KeyIndex_02 + (uint32_t)region), 8,
+                            &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
     if ((kStatus_Success == status) && (true == store))
     {
         /* Store the new IV code for the PRINCE region into the respective FFRs. */
         /* Create a new version of "Customer Field Programmable" (CFP) page. */
-        if (kStatus_FLASH_Success ==
+        if ((int32_t)kStatus_FLASH_Success ==
             FFR_GetCustomerInfieldData(flash_context, (uint8_t *)tempBuffer, 0, FLASH_FFR_MAX_PAGE_SIZE))
         {
             /* Set the IV code in the page */
-            memcpy(&tempBuffer[offsetof(cfpa_cfg_info_t, ivCodePrinceRegion) + ((region * sizeof(cfpa_cfg_iv_code_t))) +
-                               4],
-                   &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
+            (void)memcpy(&tempBuffer[offsetof(cfpa_cfg_info_t, ivCodePrinceRegion) +
+                                     (((uint32_t)region * sizeof(cfpa_cfg_iv_code_t))) + 4U],
+                         &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
 
-            uint32_t *p32    = (uint32_t *)tempBuffer;
+            uint32_t *p32    = (uint32_t *)(uint32_t)tempBuffer;
             uint32_t version = p32[1];
             if (version == 0xFFFFFFFFu)
             {
@@ -207,7 +212,7 @@ status_t PRINCE_GenNewIV(prince_region_t region, uint8_t *iv_code, bool store, f
             p32[1] = version;
 
             /* Program the page and enable firewall for "Customer field area" */
-            if (kStatus_FLASH_Success ==
+            if ((int32_t)kStatus_FLASH_Success ==
                 FFR_InfieldPageWrite(flash_context, (uint8_t *)tempBuffer, FLASH_FFR_MAX_PAGE_SIZE))
             {
                 status = kStatus_Success;
@@ -221,7 +226,7 @@ status_t PRINCE_GenNewIV(prince_region_t region, uint8_t *iv_code, bool store, f
     if (status == kStatus_Success)
     {
         /* Pass the new IV code */
-        memcpy(iv_code, &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
+        (void)memcpy(iv_code, &prince_iv_code[0], FLASH_FFR_IV_CODE_SIZE);
     }
     return status;
 }
@@ -240,7 +245,7 @@ status_t PRINCE_GenNewIV(prince_region_t region, uint8_t *iv_code, bool store, f
 status_t PRINCE_LoadIV(prince_region_t region, uint8_t *iv_code)
 {
     status_t status      = kStatus_Fail;
-    uint32_t keyIndex    = 0x0Fu & iv_code[1];
+    uint32_t keyIndex    = (0x0Fu & (uint32_t)iv_code[1]);
     uint8_t prince_iv[8] = {0};
 
     /* Make sure PUF is started to allow key and IV code decryption and generation */
@@ -250,13 +255,13 @@ status_t PRINCE_LoadIV(prince_region_t region, uint8_t *iv_code)
     }
 
     /* Check if region number matches the PUF index value */
-    if ((kPUF_KeyIndex_02 + (puf_key_index_register_t)region) == (puf_key_index_register_t)keyIndex)
+    if (((uint32_t)kPUF_KeyIndex_02 + (uint32_t)region) == (uint32_t)keyIndex)
     {
         /* Decrypt the IV */
         if (kStatus_Success == PUF_GetKey(PUF, iv_code, FLASH_FFR_IV_CODE_SIZE, &prince_iv[0], 8))
         {
             /* Store the new IV for the PRINCE region into PRINCE registers. */
-            PRINCE_SetRegionIV(PRINCE, (prince_region_t)region, prince_iv);
+            (void)PRINCE_SetRegionIV(PRINCE, (prince_region_t)region, prince_iv);
             status = kStatus_Success;
         }
     }
@@ -305,7 +310,8 @@ status_t PRINCE_SetEncryptForAddressRange(
     }
 
     /* Check the address range, region borders crossing. */
-#if (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || (defined(FSL_PRINCE_DRIVER_LPC55S2x))
+#if (defined(FSL_PRINCE_DRIVER_LPC55S0x)) || (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || \
+    (defined(FSL_PRINCE_DRIVER_LPC55S2x))
     if ((start_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) ||
         ((start_address < FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) && (end_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR)))
     {
@@ -313,8 +319,9 @@ status_t PRINCE_SetEncryptForAddressRange(
     }
 #endif
 #if (defined(FSL_PRINCE_DRIVER_LPC55S6x))
-    if ((start_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) || ((start_address < 0x40000) && (end_address > 0x40000)) ||
-        ((start_address < 0x80000) && (end_address > 0x80000)) ||
+    if ((start_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) ||
+        ((start_address < 0x40000U) && (end_address > 0x40000U)) ||
+        ((start_address < 0x80000U) && (end_address > 0x80000U)) ||
         ((start_address < FSL_PRINCE_DRIVER_MAX_FLASH_ADDR) && (end_address > FSL_PRINCE_DRIVER_MAX_FLASH_ADDR)))
     {
         return kStatus_Fail;
@@ -340,24 +347,24 @@ status_t PRINCE_SetEncryptForAddressRange(
         }
     }
 
-    alignedStartAddress = ALIGN_DOWN(start_address, FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
+    alignedStartAddress = ALIGN_DOWN(start_address, (int32_t)FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
 
-    uint32_t subregion = alignedStartAddress / (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
-    if (subregion < (32))
+    uint32_t subregion = alignedStartAddress / (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024U);
+    if (subregion < (32U))
     {
         /* PRINCE_Region0 */
         prince_region_base_address = 0;
     }
-    else if (subregion < (64))
+    else if (subregion < (64U))
     {
         /* PRINCE_Region1 */
-        subregion                  = subregion - 32;
+        subregion                  = subregion - 32U;
         prince_region_base_address = 0x40000;
     }
     else
     {
         /* PRINCE_Region2 */
-        subregion                  = subregion - 64;
+        subregion                  = subregion - 64U;
         prince_region_base_address = 0x80000;
     }
 
@@ -365,18 +372,18 @@ status_t PRINCE_SetEncryptForAddressRange(
        If the length is 0, srEnableRegister should be kept 0 (no subregion enabled). */
     if (length != 0U)
     {
-        srEnableRegister = (1 << subregion);
-        alignedStartAddress += (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
+        srEnableRegister = (1UL << subregion);
+        alignedStartAddress += (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024U);
 
         while (alignedStartAddress < (start_address + length))
         {
             subregion++;
-            srEnableRegister |= (1 << subregion);
-            alignedStartAddress += (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024);
+            srEnableRegister |= (1UL << subregion);
+            alignedStartAddress += (FSL_PRINCE_DRIVER_SUBREGION_SIZE_IN_KB * 1024U);
         }
 
         uint32_t srEnableRegisterActual = 0;
-        PRINCE_GetRegionSREnable(PRINCE, (prince_region_t)region, &srEnableRegisterActual);
+        (void)PRINCE_GetRegionSREnable(PRINCE, (prince_region_t)region, &srEnableRegisterActual);
         srEnableRegister |= srEnableRegisterActual;
     }
 
@@ -400,16 +407,21 @@ status_t PRINCE_SetEncryptForAddressRange(
     if (kStatus_Success == FFR_GetCustomerData(flash_context, (uint8_t *)&tempBuffer, 0, FLASH_FFR_MAX_PAGE_SIZE))
     {
         /* Set the PRINCE_SR_X in the page */
-        memcpy(&tempBuffer[offsetof(cmpa_cfg_info_t, princeSr) + (region * sizeof(uint32_t))], &srEnableRegister,
-               sizeof(uint32_t));
+        (void)memcpy((uint32_t *)(uintptr_t)&tempBuffer[offsetof(cmpa_cfg_info_t, princeSr) +
+                                                        ((uint32_t)region * sizeof(uint32_t))],
+                     &srEnableRegister, sizeof(uint32_t));
 
         /* Set the ADDRX_PRG in the page */
-        memcpy(&prince_base_addr_ffr_word, &tempBuffer[offsetof(cmpa_cfg_info_t, princeBaseAddr)], sizeof(uint32_t));
-        prince_base_addr_ffr_word &= ~((FLASH_CMPA_PRINCE_BASE_ADDR_ADDR0_PRG_MASK) << (region * 4));
+        (void)memcpy(&prince_base_addr_ffr_word,
+                     (const uint32_t *)(uintptr_t)&tempBuffer[offsetof(cmpa_cfg_info_t, princeBaseAddr)],
+                     sizeof(uint32_t));
+        prince_base_addr_ffr_word &=
+            ~(((uint32_t)FLASH_CMPA_PRINCE_BASE_ADDR_ADDR0_PRG_MASK) << ((uint32_t)region * 4U));
         prince_base_addr_ffr_word |= (((prince_region_base_address >> PRINCE_BASE_ADDR0_ADDR_PRG_SHIFT) &
                                        FLASH_CMPA_PRINCE_BASE_ADDR_ADDR0_PRG_MASK)
-                                      << (region * 4));
-        memcpy(&tempBuffer[offsetof(cmpa_cfg_info_t, princeBaseAddr)], &prince_base_addr_ffr_word, sizeof(uint32_t));
+                                      << ((uint32_t)region * 4U));
+        (void)memcpy((uint32_t *)(uintptr_t)&tempBuffer[offsetof(cmpa_cfg_info_t, princeBaseAddr)],
+                     &prince_base_addr_ffr_word, sizeof(uint32_t));
 
         /* Program the CMPA page, set seal_part parameter to false (used during development to avoid sealing the
          * part)
@@ -563,7 +575,8 @@ status_t PRINCE_SetRegionBaseAddress(PRINCE_Type *base, prince_region_t region, 
     status_t status = kStatus_Success;
 
     /* Check input parameters. */
-#if (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || (defined(FSL_PRINCE_DRIVER_LPC55S2x))
+#if (defined(FSL_PRINCE_DRIVER_LPC55S0x)) || (defined(FSL_PRINCE_DRIVER_LPC55S1x)) || \
+    (defined(FSL_PRINCE_DRIVER_LPC55S2x))
     if (region_base_addr > 0U)
     {
         return kStatus_InvalidArgument;
@@ -673,7 +686,7 @@ status_t PRINCE_FlashEraseWithChecker(flash_config_t *config, uint32_t start, ui
     /* Check that the whole encrypted region is erased at once. */
     if (kSECURE_TRUE != PRINCE_CheckerAlgorithm(start, lengthInBytes, kPRINCE_Flag_EraseCheck, config))
     {
-        return kStatus_FLASH_EncryptedRegionsEraseNotDoneAtOnce;
+        return (int32_t)kStatus_FLASH_EncryptedRegionsEraseNotDoneAtOnce;
     }
     return FLASH_Erase(config, start, lengthInBytes, key);
 }
@@ -717,7 +730,7 @@ status_t PRINCE_FlashProgramWithChecker(flash_config_t *config, uint32_t start, 
     /* Check that the whole encrypted subregions will be writen at once. */
     if (kSECURE_TRUE != PRINCE_CheckerAlgorithm(start, lengthInBytes, kPRINCE_Flag_WriteCheck, config))
     {
-        return kStatus_FLASH_SizeError;
+        return (int32_t)kStatus_FLASH_SizeError;
     }
     return FLASH_Program(config, start, src, lengthInBytes);
 }

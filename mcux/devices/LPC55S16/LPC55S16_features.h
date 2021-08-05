@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b200318
+**     Build:               b210318
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2020 NXP
+**     Copyright 2016-2021 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -37,8 +37,8 @@
 #define FSL_FEATURE_SOC_CRC_COUNT (1)
 /* @brief CTIMER availability on the SoC. */
 #define FSL_FEATURE_SOC_CTIMER_COUNT (5)
-/* @brief CWT availability on the SoC. */
-#define FSL_FEATURE_SOC_CWT_COUNT (1)
+/* @brief CDOG availability on the SoC. */
+#define FSL_FEATURE_SOC_CDOG_COUNT (1)
 /* @brief DMA availability on the SoC. */
 #define FSL_FEATURE_SOC_DMA_COUNT (2)
 /* @brief FLASH availability on the SoC. */
@@ -164,10 +164,12 @@
 
 /* @brief Base address of the CASPER dedicated RAM */
 #define FSL_FEATURE_CASPER_RAM_BASE_ADDRESS (0x04000000)
-/* @brief Interleaving of the CASPER dedicated RAM */
-#define FSL_FEATURE_CASPER_RAM_IS_INTERLEAVED (1)
-/* @brief CASPER dedicated RAM offset */
-#define FSL_FEATURE_CASPER_RAM_OFFSET (0xC)
+/* @brief HW interleaving of the CASPER dedicated RAM */
+#define FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE (1)
+
+/* CTIMER module features */
+
+/* No feature definitions */
 
 /* DMA module features */
 
@@ -271,8 +273,8 @@
 
 /* @brief I2S6 and I2S7 support dual channel transfer. */
 #define FSL_FEATURE_I2S_SUPPORT_SECONDARY_CHANNEL (1)
-/* @brief I2S has DMIC interconnection. */
-#define FSL_FEATURE_FLEXCOMM_I2S_HAS_DMIC_INTERCONNECTION  (0)
+/* @brief I2S has DMIC interconnection */
+#define FSL_FEATURE_FLEXCOMM_I2S_HAS_DMIC_INTERCONNECTION (0)
 
 /* IOCON module features */
 
@@ -294,6 +296,13 @@
 /* @brief Has WAKEINT_CTRL register. */
 #define FSL_FEATURE_PLU_HAS_WAKEINT_CTRL_REG (1)
 
+/* PMC module features */
+
+/* @brief UTICK does not support PD configure. */
+#define FSL_FEATURE_UTICK_HAS_NO_PDCFG (1)
+/* @brief WDT OSC does not support PD configure. */
+#define FSL_FEATURE_WWDT_HAS_NO_PDCFG (1)
+
 /* POWERLIB module features */
 
 /* @brief Powerlib API is different with other LPC series devices. */
@@ -307,6 +316,10 @@
 #define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (1)
 /* @brief PUF has dedicated SRAM control */
 #define FSL_FEATURE_PUF_HAS_SRAM_CTRL (1)
+
+/* RTC module features */
+
+/* No feature definitions */
 
 /* SCT module features */
 
@@ -395,17 +408,12 @@
 /* @brief Number of the endpoint in USB HS */
 #define FSL_FEATURE_USBPHY_EP_NUM (6)
 
-/* UTICK module features */
-
-/* @brief UTICK does not support PD configure. */
-#define FSL_FEATURE_UTICK_HAS_NO_PDCFG (1)
-
 /* WWDT module features */
 
+/* @brief Has no RESET register. */
+#define FSL_FEATURE_WWDT_HAS_NO_RESET (1)
 /* @brief WWDT does not support oscillator lock. */
 #define FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK (1)
-/* @brief WWDT does not support power down configure */
-#define FSL_FEATURE_WWDT_HAS_NO_PDCFG (1)
 
 #endif /* _LPC55S16_FEATURES_H_ */
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  *
@@ -18,12 +18,50 @@
 #define FSL_COMPONENT_ID "platform.drivers.casper"
 #endif
 
+/* Recoding length for the secure scalar multiplication:
+ *  Use n=256 and w=4 --> compute ciel(384/3) = 86 + 1 digits
+ *  Use n=384 and w=4 --> compute ciel(384/3) = 128 + 1 digits
+ *  Use n=521 and w=4 --> compute ciel(521/3) = 174 + 1 digits
+ */
+
+/*!<  Recoding length for the secure scalar multiplication */
+enum _casper_ecc_recode_len
+{
+    kCASPER_ECC_P256_recode_len = 87u,
+    kCASPER_ECC_P384_recode_len = 129u,
+    kCASPER_ECC_P521_recode_len = 175u,
+};
+
+enum _casper_ecc_N_bitlen
+{
+    kCASPER_ECC_P256_N_bitlen = 256u,
+    kCASPER_ECC_P384_N_bitlen = 384u,
+    kCASPER_ECC_P521_N_bitlen = 576u,
+};
+
+enum _casper_ecc_N_wordlen
+{
+    kCASPER_ECC_P256_wordlen = 256U / 32U,
+    kCASPER_ECC_P384_wordlen = 384u / 32U,
+    kCASPER_ECC_P521_wordlen = 576u / 32U,
+};
+
 #if defined(__GNUC__)
 /* Enforce O1 optimize level, specifically to remove strict-aliasing option.
   (-fno-strict-aliasing is required for this driver). */
 #pragma GCC push_options
 #pragma GCC optimize("-O1")
 #endif
+
+#if (defined(__CC_ARM) || defined(__ARMCC_VERSION))
+/* Enforce optimization off for clang, specifically to remove strict-aliasing option.
+(-fno-strict-aliasing is required for this driver). */
+#pragma clang optimize off
+#endif
+
+/* CASPER driver allows usage of 256, 384 and 521 ECC */
+#define CASPER_MAX_ECC_SIZE_WORDLEN (576u / 32U)
+#define CASPER_RECODE_LENGTH_MAX    175
 
 #define CASPER_RAM_BASE_NS (FSL_FEATURE_CASPER_RAM_BASE_ADDRESS)
 
@@ -90,14 +128,14 @@
         }                                                                     \
     }
 #else
-#define GET_WORD(addr)         (*((uint32_t *)(addr)))
+#define GET_WORD(addr)         (*((uint32_t *)(uint32_t)(addr)))
 #define GET_DWORD(addr)        (*((uint64_t *)(addr)))
-#define SET_WORD(addr, value)  *((uint32_t *)(addr)) = ((uint32_t)(value))
+#define SET_WORD(addr, value)  *((uint32_t *)(uint32_t)(addr)) = ((uint32_t)(value))
 #define SET_DWORD(addr, value) *((uint64_t *)(addr)) = ((uint64_t)(value))
 
-#define CASPER_MEMCPY_I2I(dst, src, siz) memcpy(dst, src, siz)
-#define CASPER_MEMCPY_I2N(dst, src, siz) memcpy(dst, src, siz)
-#define CASPER_MEMCPY_N2I(dst, src, siz) memcpy(dst, src, siz)
+#define CASPER_MEMCPY_I2I(dst, src, siz) (void)memcpy(dst, src, siz)
+#define CASPER_MEMCPY_I2N(dst, src, siz) (void)memcpy(dst, src, siz)
+#define CASPER_MEMCPY_N2I(dst, src, siz) (void)memcpy(dst, src, siz)
 #endif
 
 #define WORK_BUFF_MUL4 (N_wordlen_max * 4 + 2) /* ! working buffer is 4xN_wordlen to allow in place math */
@@ -124,22 +162,8 @@
 /* Macros for the ECC component in Casper */
 
 /* CASPER memory layout for ECC */
-#define CASPER_NUM_LIMBS (NUM_LIMBS + 4U) // number of limbs needed by CASPER is 2 double words longer
 
-#define CASPER_MEM    ((uint32_t *)msg_ret)
-#define CASPER_OFFSET CASPER_NUM_LIMBS // offset in the CASPER memory where we can start writing
-
-#define MOD_SCRATCH_START (CASPER_OFFSET)
-#define MOD_SCRATCH_SIZE  (1U * CASPER_NUM_LIMBS)
-
-#define INOUT_SCRATCH_START (MOD_SCRATCH_START + MOD_SCRATCH_SIZE)
-#define INOUT_SCRATCH_SIZE  ((3U * 3U) * CASPER_NUM_LIMBS)
-
-#define ECC_SCRATCH_START (INOUT_SCRATCH_START + INOUT_SCRATCH_SIZE)
-#define ECC_SCRATCH_SIZE  (9U * CASPER_NUM_LIMBS)
-
-#define LUT_SCRATCH_START (ECC_SCRATCH_START + ECC_SCRATCH_SIZE)
-#define LUT_SCRATCH_SIZE  (48 * NUM_LIMBS + 3 * CASPER_NUM_LIMBS)
+#define CASPER_MEM ((uint32_t *)msg_ret)
 
 /* Currently these macros work on 32-bit platforms  */
 
@@ -242,68 +266,11 @@
                                            \
     } while (0)
 
-#if CASPER_ECC_P256
-
-/* Recoding length for the secure scalar multiplication:
- *  Use n=256 and w=4 --> compute ciel(384/3) = 86 + 1 digits
- */
-#define CASPER_RECODE_LENGTH 87
-#define invert(c, a)         invert_mod_p256(c, a)
-#define ONE                  NISTr256
-
-/* Shift right by 1 <= c <= 31. z[] and x[] in system RAM, no interleaving macros used. */
-#define shiftrightSysram(z, x, c)                    \
-    do                                               \
-    {                                                \
-        z[0] = (x[1] << (32 - (c))) | (x[0] >> (c)); \
-        z[1] = (x[2] << (32 - (c))) | (x[1] >> (c)); \
-        z[2] = (x[3] << (32 - (c))) | (x[2] >> (c)); \
-        z[3] = (x[4] << (32 - (c))) | (x[3] >> (c)); \
-        z[4] = (x[5] << (32 - (c))) | (x[4] >> (c)); \
-        z[5] = (x[6] << (32 - (c))) | (x[5] >> (c)); \
-        z[6] = (x[7] << (32 - (c))) | (x[6] >> (c)); \
-        z[7] = (x[7] >> (c));                        \
-    } while (false)
-
-#elif CASPER_ECC_P384
-
-/* Recoding length for the secure scalar multiplication:
- *  Use n=384 and w=4 --> compute ciel(384/3) = 128 + 1 digits
- */
-#define CASPER_RECODE_LENGTH 129
-#define invert(c, a)         invert_mod_p384(c, a)
-#define ONE                  NISTr384
-
-/* Shift right by 1 <= c <= 31.  z[] and x[] in system RAM, no interleaving macros used. */
-#define shiftrightSysram(z, x, c)                       \
-    do                                                  \
-    {                                                   \
-        z[0]  = (x[1] << (32 - (c))) | (x[0] >> (c));   \
-        z[1]  = (x[2] << (32 - (c))) | (x[1] >> (c));   \
-        z[2]  = (x[3] << (32 - (c))) | (x[2] >> (c));   \
-        z[3]  = (x[4] << (32 - (c))) | (x[3] >> (c));   \
-        z[4]  = (x[5] << (32 - (c))) | (x[4] >> (c));   \
-        z[5]  = (x[6] << (32 - (c))) | (x[5] >> (c));   \
-        z[6]  = (x[7] << (32 - (c))) | (x[6] >> (c));   \
-        z[7]  = (x[8] << (32 - (c))) | (x[7] >> (c));   \
-        z[8]  = (x[9] << (32 - (c))) | (x[8] >> (c));   \
-        z[9]  = (x[10] << (32 - (c))) | (x[9] >> (c));  \
-        z[10] = (x[11] << (32 - (c))) | (x[10] >> (c)); \
-        z[11] = (x[11] >> (c));                         \
-    } while (false)
-
-#else
-#error "Define proper NIST curve"
-#endif
-
-#define multiply_casper(c, a, b) MultprecCiosMul_ct(c, a, b, &CASPER_MEM[MOD_SCRATCH_START], Np)
-#define square_casper(c, a)      multiply_casper(c, a, a)
-#define sub_casper(c, a, b)      CASPER_montsub(c, a, b, &CASPER_MEM[MOD_SCRATCH_START])
-#define add_casper(c, a, b)      CASPER_montadd(c, a, b, &CASPER_MEM[MOD_SCRATCH_START])
-#define mul2_casper(c, a)        add_casper(c, a, a)
-#define half(c, a, b)            CASPER_half(c, a, b)
-#define copy(c, a)               CASPER_MEMCPY(c, a, NUM_LIMBS * sizeof(uint32_t))
-
+#define square_casper(c, a) multiply_casper(c, a, a)
+#define sub_casper(c, a, b) CASPER_montsub(c, a, b, &CASPER_MEM[(N_wordlen + 4U)])
+#define add_casper(c, a, b) CASPER_montadd(c, a, b, &CASPER_MEM[(N_wordlen + 4U)])
+#define mul2_casper(c, a)   add_casper(c, a, a)
+#define half(c, a, b)       CASPER_half(c, a, b)
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -318,37 +285,49 @@ static size_t N_wordlen = 0U; /* ! number of words (e.g. 4096/32 is 128 words) *
 static uint32_t s_casperRamBase = CASPER_RAM_BASE_NS;
 static uint32_t *msg_ret        = (uint32_t *)CASPER_RAM_BASE_NS;
 
-#if CASPER_ECC_P256
 /* NISTp-256 = 2^256-2^224+2^192+2^96-1 */
-static uint32_t NISTp256[NUM_LIMBS] = {0xffffffffU, 0xffffffffU, 0xffffffffU, 0x00000000,
+static uint32_t NISTp256[256 / 32u] = {0xffffffffU, 0xffffffffU, 0xffffffffU, 0x00000000,
                                        0x00000000,  0x00000000,  0x00000001,  0xffffffffU};
 
 /* The cardinality of the curve E(F_p) */
-static uint32_t NISTp256_q[NUM_LIMBS] = {0xfc632551U, 0xf3b9cac2U, 0xa7179e84U, 0xbce6faadU,
+static uint32_t NISTp256_q[256 / 32u] = {0xfc632551U, 0xf3b9cac2U, 0xa7179e84U, 0xbce6faadU,
                                          0xffffffffU, 0xffffffffU, 0x00000000,  0xffffffffU};
 
 /* R = 2^256 mod p, the value "1" in Montgomery form. */
-static uint32_t NISTr256[NUM_LIMBS] = {0x00000001,  0x00000000,  0x00000000,  0xffffffffU,
+static uint32_t NISTr256[256 / 32u] = {0x00000001,  0x00000000,  0x00000000,  0xffffffffU,
                                        0xffffffffU, 0xffffffffU, 0xfffffffeU, 0x00000000};
 
-static uint32_t Np[2] = {1, 0};
-#endif /* CASPER_ECC_P256 */
+static uint32_t Np256[2] = {1, 0};
 
-#if CASPER_ECC_P384
 /* NISTp-384 =  2^384 - 2^128 - 2^96 + 2^32 - 1 */
-static uint32_t NISTp384[NUM_LIMBS] = {0xffffffffU, 0x00000000,  0x00000000,  0xffffffffU, 0xfffffffeU, 0xffffffffU,
+static uint32_t NISTp384[384 / 32u] = {0xffffffffU, 0x00000000,  0x00000000,  0xffffffffU, 0xfffffffeU, 0xffffffffU,
                                        0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU};
 
 /* The cardinality of the curve E(F_p) */
-static uint32_t NISTp384_q[NUM_LIMBS] = {0xccc52973, 0xecec196a, 0x48b0a77a, 0x581a0db2, 0xf4372ddf, 0xc7634d81,
-                                         0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff};
+static uint32_t NISTp384_q[384 / 32u] = {0xccc52973U, 0xecec196aU, 0x48b0a77aU, 0x581a0db2U, 0xf4372ddfU, 0xc7634d81U,
+                                         0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU};
 
 /* R = 2^256 mod p, the value "1" in Montgomery form. */
-static uint32_t NISTr384[NUM_LIMBS] = {0x00000001, 0xffffffff, 0xffffffff, 0x00000000, 0x1, 0, 0, 0, 0, 0, 0, 0};
+static uint32_t NISTr384[384 / 32u] = {0x00000001, 0xffffffffU, 0xffffffffU, 0x00000000, 0x1, 0, 0, 0, 0, 0, 0, 0};
 
 // -p^-1 mod 2^64 = 0x100000001
-static uint32_t Np[2] = {1, 1};
-#endif /* CASPER_ECC_P384 */
+static uint32_t Np384[2] = {1, 1};
+
+/* NISTp-521 =  2^521 - 1 */
+static uint32_t NISTp521[576 / 32U] = {0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU,
+                                       0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU,
+                                       0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU, 0x1ffU,      0};
+
+/* The cardinality of the curve E(F_p) */
+static uint32_t NISTp521_q[576 / 32U] = {0x91386409U, 0xbb6fb71eU, 0x899c47aeU, 0x3bb5c9b8U, 0xf709a5d0U, 0x7fcc0148U,
+                                         0xbf2f966bU, 0x51868783U, 0xfffffffaU, 0xffffffffU, 0xffffffffU, 0xffffffffU,
+                                         0xffffffffU, 0xffffffffU, 0xffffffffU, 0xffffffffU, 0x1ffU,      0};
+
+/* R = 2^576 mod p, the value "1" in Montgomery form. */
+static uint32_t NISTr521[576 / 32U] = {0, 0x800000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+/* -p^-1 mod 2^64 = 1 */
+static uint32_t Np521[2] = {1, 0};
 
 /*******************************************************************************
  * Prototypes
@@ -377,12 +356,12 @@ void Jac_addition(uint32_t *X3,
 /* Compute (X3 : Y3: Z3) = (X1: Y1: Z1) + (X2, Y2)
  * where (X1: Y1: Z1) != (X2, Y2)
  * (X3 : Y3: Z3) may not overlap with (X1: Y1: Z1).
- * Source: 2004 Hankerson–Menezes–Vanstone, page 91.
+ * Source: 2004 Hankerson?Menezes?Vanstone, page 91.
  */
 void Jac_add_affine(
     uint32_t *X3, uint32_t *Y3, uint32_t *Z3, uint32_t *X1, uint32_t *Y1, uint32_t *Z1, uint32_t *X2, uint32_t *Y2);
 
-/* Point doubling from: 2004 Hankerson–Menezes–Vanstone, page 91.
+/* Point doubling from: 2004 Hankerson?Menezes?Vanstone, page 91.
  * Compute (X3 : Y3: Z3) = (X1: Y1: Z1) + (X1 : Y1 : Z1)
  * (X3 : Y3: Z3) may be the same as the input.
  */
@@ -414,7 +393,6 @@ void double_scalar_multiplication(uint32_t *X3,
                                   uint32_t *Y2,
                                   uint32_t *k2);
 
-#if CASPER_ECC_P384
 /* Compute inversion modulo NIST-p384 using Fermats little theorem.
  * Using c = a^(p-2) = a^(-1) mod p.
  * This computes the modular inversion if all arithmetic is "regular"
@@ -422,21 +400,27 @@ void double_scalar_multiplication(uint32_t *X3,
  * if all arithmetic is Montgomery arithmetic.
  */
 static void invert_mod_p384(uint32_t *c, uint32_t *a);
-#endif /* CASPER_ECC_P384 */
 
-#if CASPER_ECC_P256
 /* Modular inversion for NIST-P256 */
 static void invert_mod_p256(uint32_t *c, uint32_t *a);
-#endif /* CASPER_ECC_P256 */
+
+/* Modular inversion for NIST-P521 */
+static void invert_mod_p521(uint32_t *c, uint32_t *a);
 
 // A and C do not need to be in Casper memory
-static void toMontgomery(uint32_t *C, uint32_t *A);
+static void toMontgomery_ECC_P256(uint32_t *C, uint32_t *A);
+static void toMontgomery_ECC_P384(uint32_t *C, uint32_t *A);
+static void toMontgomery_ECC_P521(uint32_t *C, uint32_t *A);
 
 static void CASPER_montsub(uint32_t *C, uint32_t *A, uint32_t *B, uint32_t *mod);
 static void CASPER_montadd(uint32_t *C, uint32_t *A, uint32_t *B, uint32_t *mod);
 
 /* Compute c = a/2 mod p where b is scratch space. */
 static void CASPER_half(uint32_t *c, uint32_t *a, uint32_t *b);
+
+void CASPER_MEMCPY(void *dst, const void *src, size_t siz);
+
+static void multiply_casper(uint32_t w_out[], const uint32_t a[], const uint32_t b[]);
 
 static uint8_t int8abs(int8_t v);
 
@@ -460,19 +444,32 @@ static uint32_t sub_n_1(uint32_t *c, uint32_t *a, uint32_t b, int n);
 /* Dumb n-limb subtraction of c=a-b, return borrow. */
 static uint32_t sub_n(uint32_t *c, uint32_t *a, uint32_t *b, int n);
 
+int RSA_SignatureToPlaintextFast(const unsigned signature[N_wordlen_max],
+                                 const unsigned exp_pubkey,
+                                 const unsigned pubkey[N_wordlen_max],
+                                 unsigned MsgRet[WORK_BUFF_MUL4]);
+
+int RSA_MontSignatureToPlaintextFast(const unsigned mont_signature[N_wordlen_max],
+                                     const unsigned exp_pubkey,
+                                     const unsigned pubkey[N_wordlen_max],
+                                     unsigned MsgRet[WORK_BUFF_MUL4]);
+
+void MultprecMultiply(unsigned w_out[], const unsigned u[], const unsigned v[]);
+
+void MultprecGenNp64(const unsigned *Nmod, unsigned *np64_ret);
+void MultprecMontPrepareX(unsigned Xmont_out[], const unsigned x[], const unsigned Rp[], const unsigned Nmod[]);
+void MultprecModulo(unsigned r_out[], const unsigned v[], int top);
+void MultprecCiosMul(
+    unsigned w_out[], const unsigned a[], const unsigned b[], const unsigned Nmod[], const unsigned *Np);
+void MultprecMontCalcRp(unsigned Rp[], const unsigned exp_pubkey, const unsigned Nmod[]);
+
 static void MultprecCiosMul_ct(
     uint32_t w_out[], const uint32_t a[], const uint32_t b[], const uint32_t Nmod[], const uint32_t *Np);
 
-void MultprecMontPrepareX(uint32_t Xmont_out[], const unsigned x[], const uint32_t Rp[], const uint32_t Nmod[]);
-void MultprecGenNp64(const uint32_t *Nmod, unsigned *np64_ret);
-void MultprecMontCalcRp(uint32_t Rp[], const unsigned exp_pubkey, const uint32_t Nmod[]);
-void MultprecModulo(uint32_t r_out[], const uint32_t v[], int top);
-void MultprecMultiply(uint32_t w_out[], const unsigned u[], const uint32_t v[]);
-int RSA_MontSignatureToPlaintextFast(const uint32_t mont_signature[N_wordlen_max],
-                                     const unsigned exp_pubkey,
-                                     const uint32_t pubkey[N_wordlen_max],
-                                     uint32_t MsgRet[WORK_BUFF_MUL4]);
+static void MultprecCiosMul521_ct(
+    uint32_t w_out[], const uint32_t a[], const uint32_t b[], const uint32_t Nmod[], const uint32_t *Np);
 
+static void shiftrightSysram(uint32_t *z, uint32_t *x, uint32_t c);
 static void shiftright(uint32_t *z, uint32_t *x, uint32_t c);
 static void shiftleft(uint32_t *z, uint32_t *x, uint32_t c);
 
@@ -581,7 +578,7 @@ static void casper_select(uint32_t *c, uint32_t *a, uint32_t *b, int m, int n)
 /*  Compute R`, which is R mod N. This is done using subtraction */
 /*  R has 1 in N_wordlen, but we do not fill it in since borrowed. */
 /*  Exp-pubkey only used to optimize for exp=3 */
-void MultprecMontCalcRp(uint32_t Rp[], const unsigned exp_pubkey, const uint32_t Nmod[])
+void MultprecMontCalcRp(unsigned Rp[], const unsigned exp_pubkey, const unsigned Nmod[])
 {
     uint32_t i;
 
@@ -597,7 +594,7 @@ void MultprecMontCalcRp(uint32_t Rp[], const unsigned exp_pubkey, const uint32_t
 
 /*  MultprecMultiply - multiple w=u*v (per Knuth) */
 /*  w_out is 2x the size of u and v */
-void MultprecMultiply(uint32_t w_out[], const unsigned u[], const uint32_t v[])
+void MultprecMultiply(unsigned w_out[], const unsigned u[], const unsigned v[])
 {
     uint32_t i, j;
 
@@ -620,7 +617,7 @@ void MultprecMultiply(uint32_t w_out[], const unsigned u[], const uint32_t v[])
     {
         /*  Step 2b. Check for 0 on v word - skip if so since we 0ed already */
         /*  Step 3. Iterate over N words of u using i - perform Multiply-accumulate */
-        if (0U != (GET_WORD((uintptr_t)&v[j])) || 0U != (GET_WORD((uintptr_t)&v[j + 1U])))
+        if (0U != (GET_WORD(&v[j])) || 0U != (GET_WORD(&v[j + 1U])))
         {
             Accel_SetABCD_Addr(CA_MK_OFF(&v[j]), CA_MK_OFF(u));
             Accel_crypto_mul(
@@ -635,12 +632,11 @@ void MultprecMultiply(uint32_t w_out[], const unsigned u[], const uint32_t v[])
 /*  r_out is module (remainder) and is 2*N */
 /*  u is in r_out (1st N) at start (passed in) */
 /*  v is N long */
-void MultprecModulo(uint32_t r_out[], const uint32_t v[], int top)
+void MultprecModulo(unsigned r_out[], const unsigned v[], int top)
 {
-    uint64_t u64; /*  use 64 bit math mixed with 32 bit */
-    unsigned u32; /*  allows us to work on U in 32 bit */
-    unsigned u_n, ul16, uh16;
-    uint32_t *u_shft; /*  u_shft is because r_out is u initially */
+    uint64_t u64;                      /*  use 64 bit math mixed with 32 bit */
+    unsigned u32;                      /*  allows us to work on U in 32 bit */
+    unsigned u_n, ul16, uh16, *u_shft; /*  u_shft is because r_out is u initially */
     unsigned vl16, vh16, v_Nm1;
     unsigned q_hat, r_hat, q_over;
     unsigned borrow, carry;
@@ -663,9 +659,9 @@ void MultprecModulo(uint32_t r_out[], const uint32_t v[], int top)
     u_n    = 0;
     u_shft = r_out; /*  u (shifted) is in r_out */
 
-    v_Nm1 = GET_WORD((uintptr_t)&v[N_wordlen - 1U]); /*  MSw of public key */
-    vl16  = v_Nm1 & 0xFFFFU;                         /*  lower 16 */
-    vh16  = v_Nm1 >> 16;                             /*  upper 16 */
+    v_Nm1 = GET_WORD(&v[N_wordlen - 1U]); /*  MSw of public key */
+    vl16  = v_Nm1 & 0xFFFFU;              /*  lower 16 */
+    vh16  = v_Nm1 >> 16;                  /*  upper 16 */
     /*  Step 2. Iterate j from m-n down to 0 (M selected per Knuth as 2*N) */
     for (j = top; j >= 0; j--)
     {
@@ -747,7 +743,7 @@ void MultprecModulo(uint32_t r_out[], const uint32_t v[], int top)
             r_hat = (unsigned)u64;
         }
         q_hat |= (unsigned)tmp; /*  other half of the quotient */
-        while ((q_over != 0U) || ((uint64_t)q_hat * GET_WORD((uintptr_t)&v[N_wordlen - 2U])) >
+        while ((q_over != 0U) || ((uint64_t)q_hat * GET_WORD(&v[N_wordlen - 2U])) >
                                      ((1ULL << 32) * r_hat) + (uint64_t)GET_WORD(&u_shft[(uint32_t)j + N_wordlen - 2U]))
         { /*  if Qhat>b, then reduce to b-1, then adjust up Rhat */
             q_hat--;
@@ -767,7 +763,7 @@ void MultprecModulo(uint32_t r_out[], const uint32_t v[], int top)
             borrow = 0;
             for (i = 0; i < N_wordlen; i++)
             {
-                u64    = (uint64_t)q_hat * GET_WORD((uintptr_t)&v[i]) + borrow;
+                u64    = (uint64_t)q_hat * GET_WORD(&v[i]) + borrow;
                 borrow = (unsigned)(u64 >> 32);
                 if (GET_WORD(&u_shft[i + (unsigned)j]) < (unsigned)u64)
                 {
@@ -788,8 +784,8 @@ void MultprecModulo(uint32_t r_out[], const uint32_t v[], int top)
             {
                 SET_WORD(&u_shft[i + (unsigned)j], GET_WORD(&u_shft[i + (unsigned)j]) + carry);
                 carry = (GET_WORD(&u_shft[i + (unsigned)j]) < carry) ? 1U : 0U;
-                SET_WORD(&u_shft[i + (unsigned)j], GET_WORD(&u_shft[i + (unsigned)j]) + GET_WORD((uintptr_t)&v[i]));
-                if (GET_WORD(&u_shft[i + (unsigned)j]) < GET_WORD((uintptr_t)&v[i]))
+                SET_WORD(&u_shft[i + (unsigned)j], GET_WORD(&u_shft[i + (unsigned)j]) + GET_WORD(&v[i]));
+                if (GET_WORD(&u_shft[i + (unsigned)j]) < GET_WORD(&v[i]))
                 {
                     carry++;
                 }
@@ -805,16 +801,16 @@ void MultprecModulo(uint32_t r_out[], const uint32_t v[], int top)
 /*  x is N_wordlen, Nmod is N_wordlen */
 /*  Rp is N_wordlen (it is R` which is R mod N) */
 /*  Xmont_out is N_wordlen*2+1 */
-void MultprecMontPrepareX(uint32_t Xmont_out[], const unsigned x[], const uint32_t Rp[], const uint32_t Nmod[])
+void MultprecMontPrepareX(unsigned Xmont_out[], const unsigned x[], const unsigned Rp[], const unsigned Nmod[])
 {
     MultprecMultiply(Xmont_out, x, Rp);
     MultprecModulo(Xmont_out, Nmod, (int32_t)N_wordlen);
 }
 
-void MultprecGenNp64(const uint32_t *Nmod, unsigned *np64_ret) /*  only pass the low order double word */
+void MultprecGenNp64(const unsigned *Nmod, unsigned *np64_ret) /*  only pass the low order double word */
 {
     uint64_t nprime, Nmod_0;
-    Nmod_0 = GET_WORD((uintptr_t)&Nmod[0]) | ((uint64_t)GET_WORD((uintptr_t)&Nmod[1]) << 32);
+    Nmod_0 = GET_WORD(&Nmod[0]) | ((uint64_t)GET_WORD(&Nmod[1]) << 32);
 
 #define COMP_NPN_1 ((2U - Nmod_0 * nprime) * nprime) /*  computes N`*N0=1 mod 2^P where P is the partial built up */
     nprime = (((2U + Nmod_0) & 4U) << 1) + Nmod_0;   /*  mod 2^4 */
@@ -831,7 +827,7 @@ void MultprecGenNp64(const uint32_t *Nmod, unsigned *np64_ret) /*  only pass the
 /*  is faster as a result. Note that this is used to square as well as mul, */
 /*  so not as fast as pure squaring could be. */
 void MultprecCiosMul(
-    uint32_t w_out[], const uint32_t a[], const uint32_t b[], const uint32_t Nmod[], const unsigned *Np)
+    unsigned w_out[], const unsigned a[], const unsigned b[], const unsigned Nmod[], const unsigned *Np)
 {
     int j;
     uint32_t i;
@@ -903,9 +899,9 @@ void MultprecCiosMul(
         j = 0;
         for (i = N_wordlen - 1U; i > 0U; i--)
         {
-            if (GET_WORD(&w_out[i]) != GET_WORD((uintptr_t)&Nmod[i]))
+            if (GET_WORD(&w_out[i]) != GET_WORD(&Nmod[i]))
             {
-                j = (int32_t)(GET_WORD(&w_out[i]) > GET_WORD((uintptr_t)&Nmod[i])); /*  if larger sub */
+                j = (int32_t)(GET_WORD(&w_out[i]) > GET_WORD(&Nmod[i])); /*  if larger sub */
                 break; /*  we would remove the break if worrying about side channel */
             }
         }
@@ -930,10 +926,10 @@ void MultprecCiosMul(
 /*  Algo: compute M = signaturen^e mod public_key */
 /*        where M is original plaintext, signature is signed value */
 /*        note: e is usually either 0x3 or 0x10001 */
-int RSA_MontSignatureToPlaintextFast(const uint32_t mont_signature[N_wordlen_max],
+int RSA_MontSignatureToPlaintextFast(const unsigned mont_signature[N_wordlen_max],
                                      const unsigned exp_pubkey,
-                                     const uint32_t pubkey[N_wordlen_max],
-                                     uint32_t MsgRet[WORK_BUFF_MUL4])
+                                     const unsigned pubkey[N_wordlen_max],
+                                     unsigned MsgRet[WORK_BUFF_MUL4])
 {
     int bidx = 0;
     int bitpos;
@@ -1011,8 +1007,8 @@ int RSA_MontSignatureToPlaintextFast(const uint32_t mont_signature[N_wordlen_max
 /*        note: e is usually either 0x3 or 0x10001 */
 int RSA_SignatureToPlaintextFast(const unsigned signature[N_wordlen_max],
                                  const unsigned exp_pubkey,
-                                 const uint32_t pubkey[N_wordlen_max],
-                                 uint32_t MsgRet[WORK_BUFF_MUL4])
+                                 const unsigned pubkey[N_wordlen_max],
+                                 unsigned MsgRet[WORK_BUFF_MUL4])
 {
     /*  MsgRet working area: */
     /*  0..N = RESULT, starting with S`; it is used for R` just during creation of S` */
@@ -1046,7 +1042,8 @@ void CASPER_ModExp(
     N_wordlen = wordLen; /* set global variable for key length - used by RSA_SignatureToPlaintextFast()  */
     CASPER_MEMCPY_N2I(PK_LOC, (const uint32_t *)(uintptr_t)pubN, N_bytelen);
     CASPER_MEMCPY_N2I(SIG_LOC, (const uint32_t *)(uintptr_t)signature, N_bytelen);
-    (void)RSA_SignatureToPlaintextFast((const unsigned *)(uintptr_t)(SIG_LOC), pubE, (PK_LOC), msg_ret);
+    (void)RSA_SignatureToPlaintextFast((const unsigned *)(uintptr_t)(SIG_LOC), pubE,
+                                       (const unsigned *)(uintptr_t)(PK_LOC), (unsigned int *)(uintptr_t)msg_ret);
 
     CASPER_MEMCPY_I2N((uint32_t *)(uintptr_t)plaintext, msg_ret, N_bytelen);
 }
@@ -1064,6 +1061,10 @@ void CASPER_Init(CASPER_Type *base)
     CLOCK_EnableClock(kCLOCK_Casper);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
     RESET_PeripheralReset(kCASPER_RST_SHIFT_RSTn);
+#if defined(FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE) && (FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE > 0)
+    /* Enable hardware interleaving to RAMX0 and RAMX1 for CASPER */
+    SYSCON->CASPER_CTRL = SYSCON_CASPER_CTRL_INTERLEAVE(1);
+#endif /* FSL_FEATURE_CASPER_RAM_HW_INTERLEAVE */
     /* If Casper init is called with secure address, use secure addres also for accessing Casper RAM. */
     s_casperRamBase = (unsigned)CASPER_RAM_BASE_NS | ((uint32_t)base & 0x10000000u);
     msg_ret         = (uint32_t *)s_casperRamBase;
@@ -1088,33 +1089,46 @@ void CASPER_Deinit(CASPER_Type *base)
 
 /* Set the prime modulus mod in Casper memory.
  */
-void CASPER_ecc_init(void)
+void CASPER_ecc_init(casper_algo_t curve)
 {
-#if CASPER_ECC_P256
-    N_wordlen     = 256U / 32U;
-    uint32_t *mod = NISTp256;
-#elif CASPER_ECC_P384
-    N_wordlen     = 384U / 32U;
-    uint32_t *mod = NISTp384;
-#endif
-    CASPER_MEMCPY(&CASPER_MEM[MOD_SCRATCH_START], mod, NUM_LIMBS * sizeof(uint32_t));
-    uint8_t a[(CASPER_NUM_LIMBS - NUM_LIMBS) * sizeof(uint32_t)] = {0};
-    CASPER_MEMCPY(&CASPER_MEM[MOD_SCRATCH_START + NUM_LIMBS], a, (CASPER_NUM_LIMBS - NUM_LIMBS) * sizeof(uint32_t));
+    uint32_t *mod;
+
+    if (curve == kCASPER_ECC_P256)
+    {
+        N_wordlen = 256U / 32U;
+        mod       = NISTp256;
+    }
+
+    if (curve == kCASPER_ECC_P384)
+    {
+        N_wordlen = 384U / 32U;
+        mod       = NISTp384;
+    }
+
+    if (curve == kCASPER_ECC_P521)
+    {
+        N_wordlen = 576U / 32U;
+        mod       = NISTp521;
+    }
+
+    CASPER_MEMCPY(&CASPER_MEM[(N_wordlen + 4U)], mod, N_wordlen * sizeof(uint32_t));
+    uint8_t a[((CASPER_MAX_ECC_SIZE_WORDLEN + 4U) - CASPER_MAX_ECC_SIZE_WORDLEN) * sizeof(uint32_t)] = {0};
+    CASPER_MEMCPY(&CASPER_MEM[(N_wordlen + 4U) + N_wordlen], a, ((N_wordlen + 4U) - N_wordlen) * sizeof(uint32_t));
 }
 
 void CASPER_ECC_equal(int *res, uint32_t *op1, uint32_t *op2)
 {
-    uint32_t a[NUM_LIMBS];
-    uint32_t b[NUM_LIMBS];
+    uint32_t a[CASPER_MAX_ECC_SIZE_WORDLEN];
+    uint32_t b[CASPER_MAX_ECC_SIZE_WORDLEN];
     uint32_t c = 0;
-    CASPER_MEMCPY(a, op1, NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(b, op2, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(a, op1, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(b, op2, N_wordlen * sizeof(uint32_t));
 
     do
     {
         uint32_t _i;
         c = (a[0] ^ b[0]);
-        for (_i = 1; _i < NUM_LIMBS; _i++)
+        for (_i = 1; _i < N_wordlen; _i++)
         {
             c |= (a[_i] ^ b[_i]);
         }
@@ -1125,15 +1139,15 @@ void CASPER_ECC_equal(int *res, uint32_t *op1, uint32_t *op2)
 
 void CASPER_ECC_equal_to_zero(int *res, uint32_t *op1)
 {
-    uint32_t a[NUM_LIMBS];
+    uint32_t a[CASPER_MAX_ECC_SIZE_WORDLEN];
     uint32_t c = 0;
-    CASPER_MEMCPY(a, op1, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(a, op1, N_wordlen * sizeof(uint32_t));
 
     do
     {
         uint32_t _i;
         c = a[0];
-        for (_i = 1; _i < NUM_LIMBS; _i++)
+        for (_i = 1; _i < N_wordlen; _i++)
         {
             c |= a[_i];
         }
@@ -1142,45 +1156,61 @@ void CASPER_ECC_equal_to_zero(int *res, uint32_t *op1)
     *res = (int32_t)c;
 }
 
-#if CASPER_ECC_P256
 void CASPER_ECC_SECP256R1_Mul(
     CASPER_Type *base, uint32_t resX[8], uint32_t resY[8], uint32_t X[8], uint32_t Y[8], uint32_t scalar[8])
 {
     uint32_t X1[8] = {0};
     uint32_t Y1[8] = {0};
-    toMontgomery(X1, X);
-    toMontgomery(Y1, Y);
+    toMontgomery_ECC_P256(X1, X);
+    toMontgomery_ECC_P256(Y1, Y);
 
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS], X1, NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS], Y1, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        X1, (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        Y1, (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
 
-    Jac_scalar_multiplication(&CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS],
-                              &CASPER_MEM[INOUT_SCRATCH_START + 7U * CASPER_NUM_LIMBS],
-                              &CASPER_MEM[INOUT_SCRATCH_START + 8U * CASPER_NUM_LIMBS],
-                              &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS],
-                              &CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS], scalar, NISTp256, NISTp256_q);
+    Jac_scalar_multiplication(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 7U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 8U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        scalar, NISTp256, NISTp256_q);
 
-    Jac_toAffine(&CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 4U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 7U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 8U * CASPER_NUM_LIMBS]);
+    Jac_toAffine(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 4U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 7U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 8U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]);
 
     /* Montgomery to Normal */
     /* X_normal = 1 * X_montgomery; Y_normal = 1 * Y_montgomery */
-    uint32_t one[CASPER_NUM_LIMBS] = {0x0};
-    one[0]                         = 0x1u;
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS], one, CASPER_NUM_LIMBS * sizeof(uint32_t));
-    multiply_casper(&CASPER_MEM[INOUT_SCRATCH_START + 5U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS]);
-    multiply_casper(&CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 4U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS]);
+    uint32_t one[(kCASPER_ECC_P256_wordlen + 4U)] = {0x0};
+    one[0]                                        = 0x1u;
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        one, ((uint32_t)kCASPER_ECC_P256_wordlen + 4U) * sizeof(uint32_t));
+    multiply_casper(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 5U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]);
+    multiply_casper(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 4U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]);
 
     /* copy out to result */
-    CASPER_MEMCPY(resX, &CASPER_MEM[INOUT_SCRATCH_START + 5U * CASPER_NUM_LIMBS], NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(resY, &CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS], NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        resX,
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 5U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        resY,
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
 }
 
 void CASPER_ECC_SECP256R1_MulAdd(CASPER_Type *base,
@@ -1193,96 +1223,140 @@ void CASPER_ECC_SECP256R1_MulAdd(CASPER_Type *base,
                                  uint32_t Y2[8],
                                  uint32_t scalar2[8])
 {
-    uint32_t zeroes[CASPER_NUM_LIMBS] = {0};
+    uint32_t zeroes[(kCASPER_ECC_P256_wordlen + 4U)] = {0};
 
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS], X1, NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS], Y1, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        X1, (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        Y1, (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
 
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS], X2, NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS], Y2, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        X2, (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        Y2, (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
 
-    toMontgomery(&CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS]);
-    toMontgomery(&CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS]);
-    toMontgomery(&CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS]);
-    toMontgomery(&CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS]);
+    toMontgomery_ECC_P256(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]);
+    toMontgomery_ECC_P256(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]);
+    toMontgomery_ECC_P256(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]);
+    toMontgomery_ECC_P256(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]);
 
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 4U * CASPER_NUM_LIMBS], zeroes,
-                  CASPER_NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 5U * CASPER_NUM_LIMBS], zeroes,
-                  CASPER_NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS], zeroes,
-                  CASPER_NUM_LIMBS * sizeof(uint32_t));
-    double_scalar_multiplication(&CASPER_MEM[INOUT_SCRATCH_START + 4U * CASPER_NUM_LIMBS],
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 5U * CASPER_NUM_LIMBS],
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS],
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS],
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS], scalar1,
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS],
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS], scalar2);
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 4U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        zeroes, ((uint32_t)kCASPER_ECC_P256_wordlen + 4U) * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 5U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        zeroes, ((uint32_t)kCASPER_ECC_P256_wordlen + 4U) * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        zeroes, ((uint32_t)kCASPER_ECC_P256_wordlen + 4U) * sizeof(uint32_t));
+    double_scalar_multiplication(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 4U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 5U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        scalar1,
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        scalar2);
 
-    Jac_toAffine(&CASPER_MEM[LUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[LUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 4U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 5U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS]);
+    Jac_toAffine(
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P256_wordlen + 80U) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P256_wordlen + 80U) + 1U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 4U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 5U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]);
 
-    uint32_t one[CASPER_NUM_LIMBS] = {0x0};
-    one[0]                         = 0x1u;
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS], one, CASPER_NUM_LIMBS * sizeof(uint32_t));
-    multiply_casper(&CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[LUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS]);
-    multiply_casper(&CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[LUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS]);
+    uint32_t one[(kCASPER_ECC_P256_wordlen + 4U)] = {0x0};
+    one[0]                                        = 0x1u;
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        one, ((uint32_t)kCASPER_ECC_P256_wordlen + 4U) * sizeof(uint32_t));
+    multiply_casper(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P256_wordlen + 80U) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]);
+    multiply_casper(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P256_wordlen + 80U) + 1U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]);
 
-    CASPER_MEMCPY(resX, (&CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS]), NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(resY, (&CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS]), NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(resX,
+                  (&CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                               1U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]),
+                  (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(resY,
+                  (&CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                               2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)]),
+                  (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
 }
-#endif /* CASPER_ECC_P256 */
 
-#if CASPER_ECC_P384
 void CASPER_ECC_SECP384R1_Mul(
     CASPER_Type *base, uint32_t resX[12], uint32_t resY[12], uint32_t X[12], uint32_t Y[12], uint32_t scalar[12])
 {
     uint32_t X1[12] = {0};
     uint32_t Y1[12] = {0};
-    toMontgomery(X1, X);
-    toMontgomery(Y1, Y);
+    toMontgomery_ECC_P384(X1, X);
+    toMontgomery_ECC_P384(Y1, Y);
 
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS], X1, NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS], Y1, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        X1, (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        Y1, (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
 
-    Jac_scalar_multiplication(&CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS],
-                              &CASPER_MEM[INOUT_SCRATCH_START + 7U * CASPER_NUM_LIMBS],
-                              &CASPER_MEM[INOUT_SCRATCH_START + 8U * CASPER_NUM_LIMBS],
-                              &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS],
-                              &CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS], scalar, NISTp384, NISTp384_q);
+    Jac_scalar_multiplication(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 7U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 8U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        scalar, NISTp384, NISTp384_q);
 
-    Jac_toAffine(&CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 4U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 7U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 8U * CASPER_NUM_LIMBS]);
+    Jac_toAffine(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 4U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 7U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 8U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]);
 
     /* Montgomery to Normal */
     /* X_normal = 1 * X_montgomery; Y_normal = 1 * Y_montgomery */
     uint32_t one[12] = {0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS], one, NUM_LIMBS * sizeof(uint32_t));
-    multiply_casper(&CASPER_MEM[INOUT_SCRATCH_START + 5U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS]);
-    multiply_casper(&CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 4U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS]);
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        one, (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
+    multiply_casper(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 5U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]);
+    multiply_casper(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 4U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]);
 
     /* copy out to result */
-    CASPER_MEMCPY(resX, &CASPER_MEM[INOUT_SCRATCH_START + 5U * CASPER_NUM_LIMBS], NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(resY, &CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS], NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        resX,
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 5U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        resY,
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
 }
 
 void CASPER_ECC_SECP384R1_MulAdd(CASPER_Type *base,
@@ -1295,48 +1369,241 @@ void CASPER_ECC_SECP384R1_MulAdd(CASPER_Type *base,
                                  uint32_t Y2[12],
                                  uint32_t scalar2[12])
 {
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS], X1, NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS], Y1, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        X1, (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        Y1, (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
 
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS], X2, NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS], Y2, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        X2, (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        Y2, (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
 
-    toMontgomery(&CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS]);
-    toMontgomery(&CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS]);
-    toMontgomery(&CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS]);
-    toMontgomery(&CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS]);
+    toMontgomery_ECC_P384(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]);
+    toMontgomery_ECC_P384(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]);
+    toMontgomery_ECC_P384(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]);
+    toMontgomery_ECC_P384(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]);
 
-    double_scalar_multiplication(&CASPER_MEM[INOUT_SCRATCH_START + 4U * CASPER_NUM_LIMBS],
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 5U * CASPER_NUM_LIMBS],
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS],
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS],
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS], scalar1,
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS],
-                                 &CASPER_MEM[INOUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS], scalar2);
+    double_scalar_multiplication(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 4U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 5U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        scalar1,
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 3U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        scalar2);
 
-    Jac_toAffine(&CASPER_MEM[LUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[LUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 4U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 5U * CASPER_NUM_LIMBS],
-                 &CASPER_MEM[INOUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS]);
+    Jac_toAffine(
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 4U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 5U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 6U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]);
 
     uint32_t one[12] = {0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
-    CASPER_MEMCPY(&CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS], one, NUM_LIMBS * sizeof(uint32_t));
-    multiply_casper(&CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[LUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS]);
-    multiply_casper(&CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[LUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS],
-                    &CASPER_MEM[INOUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS]);
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        one, (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
+    multiply_casper(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]);
+    multiply_casper(
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)],
+        &CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]);
 
-    CASPER_MEMCPY(resX, (&CASPER_MEM[INOUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS]), NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(resY, (&CASPER_MEM[INOUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS]), NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(resX,
+                  (&CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) +
+                               1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]),
+                  (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(resY,
+                  (&CASPER_MEM[(2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) +
+                               2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)]),
+                  (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
 }
-#endif /* CASPER_ECC_P384 */
+
+void CASPER_ECC_SECP521R1_Mul(
+    CASPER_Type *base, uint32_t resX[18], uint32_t resY[18], uint32_t X[18], uint32_t Y[18], uint32_t scalar[18])
+{
+    uint32_t X1[18] = {0};
+    uint32_t Y1[18] = {0};
+    toMontgomery_ECC_P521(X1, X);
+    toMontgomery_ECC_P521(Y1, Y);
+
+    CASPER_MEMCPY(
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        X1, (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        Y1, (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+
+    Jac_scalar_multiplication(
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    6U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    7U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    8U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        scalar, NISTp521, NISTp521_q);
+
+    Jac_toAffine(
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    3U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    4U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    6U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    7U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    8U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]);
+
+    /* Montgomery to Normal */
+    /* X_normal = 1 * X_montgomery; Y_normal = 1 * Y_montgomery */
+    uint32_t one[18] = {0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+    CASPER_MEMCPY(
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        one, (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+    multiply_casper(
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    5U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    3U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]);
+    multiply_casper(
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    6U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    4U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]);
+
+    /* copy out to result */
+    CASPER_MEMCPY(
+        resX,
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    5U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        resY,
+        &CASPER_MEM[(((uint32_t)kCASPER_ECC_P521_wordlen + 4U) + (1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U))) +
+                    6U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+}
+
+void CASPER_ECC_SECP521R1_MulAdd(CASPER_Type *base,
+                                 uint32_t resX[18],
+                                 uint32_t resY[18],
+                                 uint32_t X1[18],
+                                 uint32_t Y1[18],
+                                 uint32_t scalar1[18],
+                                 uint32_t X2[18],
+                                 uint32_t Y2[18],
+                                 uint32_t scalar2[18])
+{
+    uint32_t zeroes[(kCASPER_ECC_P521_wordlen + 4U)] = {0};
+
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        X1, (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        Y1, (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 2U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        X2, (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 3U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        Y2, (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+
+    toMontgomery_ECC_P521(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]);
+    toMontgomery_ECC_P521(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]);
+    toMontgomery_ECC_P521(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 2U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 2U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]);
+    toMontgomery_ECC_P521(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 3U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 3U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]);
+
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 4U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        zeroes, ((uint32_t)kCASPER_ECC_P521_wordlen + 4U) * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 5U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        zeroes, ((uint32_t)kCASPER_ECC_P521_wordlen + 4U) * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 6U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        zeroes, ((uint32_t)kCASPER_ECC_P521_wordlen + 4U) * sizeof(uint32_t));
+    double_scalar_multiplication(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 4U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 5U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 6U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        scalar1,
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 2U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 3U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        scalar2);
+
+    Jac_toAffine(
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 4U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 5U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 6U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]);
+
+    uint32_t one[(kCASPER_ECC_P521_wordlen + 4U)] = {0x0};
+    one[0]                                        = 0x1u;
+    CASPER_MEMCPY(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        one, ((uint32_t)kCASPER_ECC_P521_wordlen + 4U) * sizeof(uint32_t));
+    multiply_casper(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]);
+    multiply_casper(
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) +
+                    2U * ((uint32_t)(uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)],
+        &CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]);
+
+    CASPER_MEMCPY(
+        resX,
+        (&CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]),
+        (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(
+        resY,
+        (&CASPER_MEM[(2U * (uint32_t)kCASPER_ECC_P521_wordlen + 8U) + 2U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)]),
+        (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+}
 
 // CIOS Multiply. This is the Coarse Integrated form where the values are
 // multiplied and reduced for each step of "i". This uses less memory and
@@ -1345,7 +1612,7 @@ void CASPER_ECC_SECP384R1_MulAdd(CASPER_Type *base,
 static void MultprecCiosMul_ct(
     uint32_t w_out[], const uint32_t a[], const uint32_t b[], const uint32_t Nmod[], const uint32_t *Np)
 {
-    uint32_t i;
+    uint32_t j;
     uint64_t *m64 = (uint64_t *)(uintptr_t)&msg_ret[kCASPER_RamOffset_M64];
     uint64_t Np64;
     uint64_t carry;
@@ -1361,21 +1628,21 @@ static void MultprecCiosMul_ct(
 
     if (a != NULL)
     { /*  if !a, we are reducing only */
-        PreZeroW(i, w_out);
+        PreZeroW(j, w_out);
     }
     SET_DWORD(&w64[N_dwordlen], 0ULL);
     SET_DWORD(&w64[N_dwordlen + 1U], 0ULL);
     /*  with accelerator */
 
-    /*  loop i and then reduce after each j round */
-    for (i = 0; i < N_dwordlen; i++)
+    /*  loop j and then reduce after each j round */
+    for (j = 0; j < N_dwordlen; j++)
     {
-        /*  Step 3. Iterate over N words of u using i - perform Multiply-accumulate */
+        /*  Step 3. Iterate over N words of u using j - perform Multiply-accumulate */
         /*  push-pull: we do a*b and then separately m*n (reduce) */
         if (a != NULL)
         { /*  if mul&reduce vs. reduce only */
             carry = GET_DWORD(&w64[N_dwordlen]);
-            Accel_SetABCD_Addr(CA_MK_OFF(&b64[i]), CA_MK_OFF(a64));
+            Accel_SetABCD_Addr(CA_MK_OFF(&b64[j]), CA_MK_OFF(a64));
             Accel_crypto_mul(
                 Accel_IterOpcodeResaddr(N_dwordlen - 1U, (uint32_t)kCASPER_OpMul6464FullSum, CA_MK_OFF(w64)));
             Accel_done();
@@ -1406,7 +1673,7 @@ static void MultprecCiosMul_ct(
     }
 
     /*  now check if need to subtract Nmod */
-    CASPER_MEMCPY_I2I(T1, w_out, (NUM_LIMBS + 1U) * sizeof(uint32_t));
+    CASPER_MEMCPY_I2I(T1, w_out, (N_wordlen + 1U) * sizeof(uint32_t));
 
     /* Compute w = w - N */
     Accel_SetABCD_Addr(CA_MK_OFF(Nmod), 0);
@@ -1414,11 +1681,11 @@ static void MultprecCiosMul_ct(
     Accel_done();
 
     // if w_out > T1 then there was a borrow
-    borrow = (uint32_t)(GET_WORD(&((uint32_t *)w_out)[NUM_LIMBS]) > GET_WORD(&T1[NUM_LIMBS]));
+    borrow = (uint32_t)(GET_WORD(&((uint32_t *)w_out)[N_wordlen]) > GET_WORD(&T1[N_wordlen]));
 
-    SET_WORD(&w_out[NUM_LIMBS + 1U], 0);
-    SET_WORD(&w_out[NUM_LIMBS], 0);
-    casper_select(w_out, w_out, T1, (int32_t)borrow, (int16_t)(uint16_t)NUM_LIMBS);
+    SET_WORD(&w_out[N_wordlen + 1U], 0);
+    SET_WORD(&w_out[N_wordlen], 0);
+    casper_select(w_out, w_out, T1, (int32_t)borrow, (int16_t)(uint16_t)N_wordlen);
 }
 
 /* Compute C = A - B % mod
@@ -1435,25 +1702,23 @@ static void CASPER_montsub(uint32_t *C, uint32_t *A, uint32_t *B, uint32_t *mod)
 
     tmp = (uint64_t *)(uintptr_t)&CASPER_MEM[0];
 
-    CASPER_MEMCPY(tmp, A, NUM_LIMBS * sizeof(uint32_t));
-    // uint32_t temp32 = GET_WORD(&tmp[NUM_LIMBS - 1]);
+    CASPER_MEMCPY(tmp, A, N_wordlen * sizeof(uint32_t));
 
     /* Compute tmp = A - B. */
     Accel_SetABCD_Addr(CA_MK_OFF(b64), 0);
 
-    Accel_crypto_mul(Accel_IterOpcodeResaddr(NUM_LIMBS / 2U - 1U, (uint32_t)kCASPER_OpSub64, CA_MK_OFF(tmp)));
+    Accel_crypto_mul(Accel_IterOpcodeResaddr(N_wordlen / 2U - 1U, (uint32_t)kCASPER_OpSub64, CA_MK_OFF(tmp)));
     Accel_done();
 
-    // borrow = (GET_WORD(&((uint32_t*)tmp)[NUM_LIMBS - 1]) > temp32);
-    borrow = (int32_t)((GET_WORD(&((uint32_t *)(uintptr_t)tmp)[NUM_LIMBS - 1U])) > GET_WORD(&A[NUM_LIMBS - 1U]));
-    CASPER_MEMCPY(c64, tmp, NUM_LIMBS * sizeof(uint32_t));
+    borrow = (int32_t)((GET_WORD(&((uint32_t *)(uintptr_t)tmp)[N_wordlen - 1U])) > GET_WORD(&A[N_wordlen - 1U]));
+    CASPER_MEMCPY(c64, tmp, N_wordlen * sizeof(uint32_t));
 
     /* Compute C = Mod + tmp */
     Accel_SetABCD_Addr(CA_MK_OFF(m64), 0);
-    Accel_crypto_mul(Accel_IterOpcodeResaddr(NUM_LIMBS / 2U - 1U, (uint32_t)kCASPER_OpAdd64, CA_MK_OFF(c64)));
+    Accel_crypto_mul(Accel_IterOpcodeResaddr(N_wordlen / 2U - 1U, (uint32_t)kCASPER_OpAdd64, CA_MK_OFF(c64)));
     Accel_done();
 
-    casper_select(C, (uint32_t *)(uintptr_t)tmp, C, borrow, (int16_t)(uint16_t)NUM_LIMBS);
+    casper_select(C, (uint32_t *)(uintptr_t)tmp, C, borrow, (int16_t)(uint16_t)N_wordlen);
 }
 
 /* Compute C = A + B % mod
@@ -1470,27 +1735,27 @@ static void CASPER_montadd(uint32_t *C, uint32_t *A, uint32_t *B, uint32_t *mod)
 
     tmp = (uint64_t *)(uintptr_t)&CASPER_MEM[0];
 
-    CASPER_MEMCPY(tmp, A, NUM_LIMBS * sizeof(uint32_t));
-    SET_DWORD(&tmp[NUM_LIMBS / 2U], 0ULL);
-    SET_DWORD(&b64[NUM_LIMBS / 2U], 0ULL);
-    SET_DWORD(&m64[NUM_LIMBS / 2U], 0ULL);
+    CASPER_MEMCPY(tmp, A, N_wordlen * sizeof(uint32_t));
+    SET_DWORD(&tmp[N_wordlen / 2U], 0ULL);
+    SET_DWORD(&b64[N_wordlen / 2U], 0ULL);
+    SET_DWORD(&m64[N_wordlen / 2U], 0ULL);
 
     /* Compute tmp = A + B using one additonal double-length limb. */
     Accel_SetABCD_Addr(CA_MK_OFF(b64), 0);
 
-    Accel_crypto_mul(Accel_IterOpcodeResaddr(NUM_LIMBS / 2U, (uint32_t)kCASPER_OpAdd64, CA_MK_OFF(tmp)));
+    Accel_crypto_mul(Accel_IterOpcodeResaddr(N_wordlen / 2U, (uint32_t)kCASPER_OpAdd64, CA_MK_OFF(tmp)));
     Accel_done();
 
-    CASPER_MEMCPY(c64, tmp, (NUM_LIMBS + 2U) * sizeof(uint32_t));
+    CASPER_MEMCPY(c64, tmp, (N_wordlen + 2U) * sizeof(uint32_t));
 
     /* Compute C = Mod - tmp */
     Accel_SetABCD_Addr(CA_MK_OFF(m64), 0);
-    Accel_crypto_mul(Accel_IterOpcodeResaddr(NUM_LIMBS / 2U, (uint32_t)kCASPER_OpSub64, CA_MK_OFF(c64)));
+    Accel_crypto_mul(Accel_IterOpcodeResaddr(N_wordlen / 2U, (uint32_t)kCASPER_OpSub64, CA_MK_OFF(c64)));
     Accel_done();
 
     // borrow = g_carry;
-    borrow = (int32_t)(GET_WORD(&C[NUM_LIMBS]) > GET_WORD(&(((uint32_t *)(uintptr_t)tmp)[NUM_LIMBS])));
-    casper_select(C, C, (uint32_t *)(uintptr_t)tmp, borrow, (int16_t)(uint16_t)NUM_LIMBS);
+    borrow = (int32_t)(GET_WORD(&C[N_wordlen]) > GET_WORD(&(((uint32_t *)(uintptr_t)tmp)[N_wordlen])));
+    casper_select(C, C, (uint32_t *)(uintptr_t)tmp, borrow, (int16_t)(uint16_t)N_wordlen);
 }
 
 /* Compute c = a/2 mod p where b is scratch space. */
@@ -1499,19 +1764,19 @@ static void CASPER_half(uint32_t *c, uint32_t *a, uint32_t *b)
     shiftright(b, a, 1U); /* Compute a/2 and (a+p)/2       */
 
     /* Compute tmp = a + p using one additonal double-length limb. */
-    CASPER_MEMCPY(c, a, NUM_LIMBS * sizeof(uint32_t));
-    SET_WORD(&c[NUM_LIMBS], 0);
-    SET_WORD(&c[NUM_LIMBS + 1U], 0U);
+    CASPER_MEMCPY(c, a, N_wordlen * sizeof(uint32_t));
+    SET_WORD(&c[N_wordlen], 0);
+    SET_WORD(&c[N_wordlen + 1U], 0U);
 
-    Accel_SetABCD_Addr(CA_MK_OFF(((uint64_t *)(uintptr_t)&CASPER_MEM[MOD_SCRATCH_START])), 0);
+    Accel_SetABCD_Addr(CA_MK_OFF(((uint64_t *)(uintptr_t)&CASPER_MEM[(N_wordlen + 4U)])), 0);
     Accel_crypto_mul(
-        Accel_IterOpcodeResaddr(NUM_LIMBS / 2U, (uint32_t)kCASPER_OpAdd64, CA_MK_OFF(((uint64_t *)(uintptr_t)c))));
+        Accel_IterOpcodeResaddr(N_wordlen / 2U, (uint32_t)kCASPER_OpAdd64, CA_MK_OFF(((uint64_t *)(uintptr_t)c))));
     Accel_done();
 
     shiftright(c, c, 1U);
-    SET_WORD(&c[NUM_LIMBS - 1U], GET_WORD(&c[NUM_LIMBS - 1U]) | (GET_WORD(&c[NUM_LIMBS]) << 31));
-    SET_WORD(&c[NUM_LIMBS], 0U);
-    casper_select(c, b, c, (int32_t)(uint32_t)(GET_WORD(&a[0]) & 1U), (int16_t)(uint16_t)(NUM_LIMBS));
+    SET_WORD(&c[N_wordlen - 1U], GET_WORD(&c[N_wordlen - 1U]) | (GET_WORD(&c[N_wordlen]) << 31));
+    SET_WORD(&c[N_wordlen], 0U);
+    casper_select(c, b, c, (int32_t)(uint32_t)(GET_WORD(&a[0]) & 1U), (int16_t)(uint16_t)(N_wordlen));
 }
 
 static uint32_t casper_get_word(uint32_t *addr)
@@ -1519,81 +1784,137 @@ static uint32_t casper_get_word(uint32_t *addr)
     return GET_WORD(addr);
 }
 
-#if CASPER_ECC_P256
+/* Shift right by 1 <= c <= 31. z[] and x[] in system RAM, no interleaving macros used. */
+static void shiftrightSysram(uint32_t *z, uint32_t *x, uint32_t c)
+{
+    z[0] = (x[1] << (32U - (c))) | (x[0] >> (c));
+    z[1] = (x[2] << (32U - (c))) | (x[1] >> (c));
+    z[2] = (x[3] << (32U - (c))) | (x[2] >> (c));
+    z[3] = (x[4] << (32U - (c))) | (x[3] >> (c));
+    z[4] = (x[5] << (32U - (c))) | (x[4] >> (c));
+    z[5] = (x[6] << (32U - (c))) | (x[5] >> (c));
+    z[6] = (x[7] << (32U - (c))) | (x[6] >> (c));
+
+    if (N_wordlen == 18U)
+    {
+        z[7]  = (x[8] << (32U - (c))) | (x[7] >> (c));
+        z[8]  = (x[9] << (32U - (c))) | (x[8] >> (c));
+        z[9]  = (x[10] << (32U - (c))) | (x[9] >> (c));
+        z[10] = (x[11] << (32U - (c))) | (x[10] >> (c));
+        z[11] = (x[12] << (32U - (c))) | (x[11] >> (c));
+        z[12] = (x[13] << (32U - (c))) | (x[12] >> (c));
+        z[13] = (x[14] << (32U - (c))) | (x[13] >> (c));
+        z[14] = (x[15] << (32U - (c))) | (x[14] >> (c));
+        z[15] = (x[16] << (32U - (c))) | (x[15] >> (c));
+        z[16] = (x[17] << (32U - (c))) | (x[16] >> (c));
+        z[17] = (x[17] >> (c));
+    }
+
+    if (N_wordlen == 12U)
+    {
+        z[7]  = (x[8] << (32U - (c))) | (x[7] >> (c));
+        z[8]  = (x[9] << (32U - (c))) | (x[8] >> (c));
+        z[9]  = (x[10] << (32U - (c))) | (x[9] >> (c));
+        z[10] = (x[11] << (32U - (c))) | (x[10] >> (c));
+        z[11] = (x[11] >> (c));
+    }
+    if (N_wordlen == 8U)
+    {
+        z[7] = (x[7] >> (c));
+    }
+}
 /* Shift right by 1 <= c <= 31. */
 static void shiftright(uint32_t *z, uint32_t *x, uint32_t c)
 {
-    do
-    {
-        SET_WORD((&z[0]), (GET_WORD(&x[1]) << (32U - (c))) | (GET_WORD(&x[0]) >> (c)));
-        SET_WORD((&z[1]), (GET_WORD(&x[2]) << (32U - (c))) | (GET_WORD(&x[1]) >> (c)));
-        SET_WORD((&z[2]), (GET_WORD(&x[3]) << (32U - (c))) | (GET_WORD(&x[2]) >> (c)));
-        SET_WORD((&z[3]), (GET_WORD(&x[4]) << (32U - (c))) | (GET_WORD(&x[3]) >> (c)));
-        SET_WORD((&z[4]), (GET_WORD(&x[5]) << (32U - (c))) | (GET_WORD(&x[4]) >> (c)));
-        SET_WORD((&z[5]), (GET_WORD(&x[6]) << (32U - (c))) | (GET_WORD(&x[5]) >> (c)));
-        SET_WORD((&z[6]), (GET_WORD(&x[7]) << (32U - (c))) | (GET_WORD(&x[6]) >> (c)));
-        SET_WORD((&z[7]), (GET_WORD(&x[7]) >> (c)));
+    SET_WORD(&z[0], (GET_WORD(&x[1]) << (32U - (c))) | (GET_WORD(&x[0]) >> (c)));
+    SET_WORD(&z[1], (GET_WORD(&x[2]) << (32U - (c))) | (GET_WORD(&x[1]) >> (c)));
+    SET_WORD(&z[2], (GET_WORD(&x[3]) << (32U - (c))) | (GET_WORD(&x[2]) >> (c)));
+    SET_WORD(&z[3], (GET_WORD(&x[4]) << (32U - (c))) | (GET_WORD(&x[3]) >> (c)));
+    SET_WORD(&z[4], (GET_WORD(&x[5]) << (32U - (c))) | (GET_WORD(&x[4]) >> (c)));
+    SET_WORD(&z[5], (GET_WORD(&x[6]) << (32U - (c))) | (GET_WORD(&x[5]) >> (c)));
+    SET_WORD(&z[6], (GET_WORD(&x[7]) << (32U - (c))) | (GET_WORD(&x[6]) >> (c)));
 
-    } while (false);
-}
-
-/* Shift left by 1 <= c <= 31. */
-static void shiftleft(uint32_t *z, uint32_t *x, uint32_t c)
-{
-    do
+    if (N_wordlen == 18U)
     {
-        SET_WORD(&z[7], (GET_WORD(&x[7]) << (c)) | GET_WORD(&z[6]) >> (32U - (c)));
-        SET_WORD(&z[6], (GET_WORD(&x[6]) << (c)) | GET_WORD(&z[5]) >> (32U - (c)));
-        SET_WORD(&z[5], (GET_WORD(&x[5]) << (c)) | GET_WORD(&z[4]) >> (32U - (c)));
-        SET_WORD(&z[4], (GET_WORD(&x[4]) << (c)) | GET_WORD(&z[3]) >> (32U - (c)));
-        SET_WORD(&z[3], (GET_WORD(&x[3]) << (c)) | GET_WORD(&z[2]) >> (32U - (c)));
-        SET_WORD(&z[2], (GET_WORD(&x[2]) << (c)) | GET_WORD(&z[1]) >> (32U - (c)));
-        SET_WORD(&z[1], (GET_WORD(&x[1]) << (c)) | GET_WORD(&z[0]) >> (32U - (c)));
-        SET_WORD(&z[0], (GET_WORD(&x[0]) << (c)));
-    } while (false);
-}
-#else
-/* Shift right by 1 <= c <= 31. */
-static void shiftright(uint32_t *z, uint32_t *x, uint32_t c)
-{
-    do
+        SET_WORD(&z[7], (GET_WORD(&x[8]) << (32U - (c))) | (GET_WORD(&x[7]) >> (c)));
+        SET_WORD(&z[8], (GET_WORD(&x[9]) << (32U - (c))) | (GET_WORD(&x[8]) >> (c)));
+        SET_WORD(&z[9], (GET_WORD(&x[10]) << (32U - (c))) | (GET_WORD(&x[9]) >> (c)));
+        SET_WORD(&z[10], (GET_WORD(&x[11]) << (32U - (c))) | (GET_WORD(&x[10]) >> (c)));
+        SET_WORD(&z[11], (GET_WORD(&x[12]) << (32U - (c))) | (GET_WORD(&x[11]) >> (c)));
+        SET_WORD(&z[12], (GET_WORD(&x[13]) << (32U - (c))) | (GET_WORD(&x[12]) >> (c)));
+        SET_WORD(&z[13], (GET_WORD(&x[14]) << (32U - (c))) | (GET_WORD(&x[13]) >> (c)));
+        SET_WORD(&z[14], (GET_WORD(&x[15]) << (32U - (c))) | (GET_WORD(&x[14]) >> (c)));
+        SET_WORD(&z[15], (GET_WORD(&x[16]) << (32U - (c))) | (GET_WORD(&x[15]) >> (c)));
+        SET_WORD(&z[16], (GET_WORD(&x[17]) << (32U - (c))) | (GET_WORD(&x[16]) >> (c)));
+        SET_WORD(&z[17], (GET_WORD(&x[17]) >> (c)));
+    }
+    if (N_wordlen == 12U)
     {
-        SET_WORD(&z[0], (GET_WORD(&x[1]) << (32U - (c))) | (GET_WORD(&x[0]) >> (c)));
-        SET_WORD(&z[1], (GET_WORD(&x[2]) << (32U - (c))) | (GET_WORD(&x[1]) >> (c)));
-        SET_WORD(&z[2], (GET_WORD(&x[3]) << (32U - (c))) | (GET_WORD(&x[2]) >> (c)));
-        SET_WORD(&z[3], (GET_WORD(&x[4]) << (32U - (c))) | (GET_WORD(&x[3]) >> (c)));
-        SET_WORD(&z[4], (GET_WORD(&x[5]) << (32U - (c))) | (GET_WORD(&x[4]) >> (c)));
-        SET_WORD(&z[5], (GET_WORD(&x[6]) << (32U - (c))) | (GET_WORD(&x[5]) >> (c)));
-        SET_WORD(&z[6], (GET_WORD(&x[7]) << (32U - (c))) | (GET_WORD(&x[6]) >> (c)));
         SET_WORD(&z[7], (GET_WORD(&x[8]) << (32U - (c))) | (GET_WORD(&x[7]) >> (c)));
         SET_WORD(&z[8], (GET_WORD(&x[9]) << (32U - (c))) | (GET_WORD(&x[8]) >> (c)));
         SET_WORD(&z[9], (GET_WORD(&x[10]) << (32U - (c))) | (GET_WORD(&x[9]) >> (c)));
         SET_WORD(&z[10], (GET_WORD(&x[11]) << (32U - (c))) | (GET_WORD(&x[10]) >> (c)));
         SET_WORD(&z[11], (GET_WORD(&x[11]) >> (c)));
-    } while (false);
+    }
+    if (N_wordlen == 8U)
+    {
+        SET_WORD((&z[7]), (GET_WORD(&x[7]) >> (c)));
+    }
 }
-
 /* Shift left by 1 <= c <= 31. */
 static void shiftleft(uint32_t *z, uint32_t *x, uint32_t c)
 {
-    do
+    if (N_wordlen == 18U)
+    {
+        SET_WORD(&z[17], (GET_WORD(&x[17]) << (c)) | GET_WORD(&z[16]) >> (32U - (c)));
+        SET_WORD(&z[16], (GET_WORD(&x[16]) << (c)) | GET_WORD(&z[15]) >> (32U - (c)));
+        SET_WORD(&z[15], (GET_WORD(&x[15]) << (c)) | GET_WORD(&z[14]) >> (32U - (c)));
+        SET_WORD(&z[14], (GET_WORD(&x[14]) << (c)) | GET_WORD(&z[13]) >> (32U - (c)));
+        SET_WORD(&z[13], (GET_WORD(&x[13]) << (c)) | GET_WORD(&z[12]) >> (32U - (c)));
+        SET_WORD(&z[12], (GET_WORD(&x[12]) << (c)) | GET_WORD(&z[11]) >> (32U - (c)));
+        SET_WORD(&z[11], (GET_WORD(&x[11]) << (c)) | GET_WORD(&z[10]) >> (32U - (c)));
+        SET_WORD(&z[10], (GET_WORD(&x[10]) << (c)) | GET_WORD(&z[9]) >> (32U - (c)));
+        SET_WORD(&z[9], (GET_WORD(&x[9]) << (c)) | GET_WORD(&z[8]) >> (32U - (c)));
+        SET_WORD(&z[8], (GET_WORD(&x[8]) << (c)) | GET_WORD(&z[7]) >> (32U - (c)));
+    }
+    if (N_wordlen == 12U)
     {
         SET_WORD(&z[11], (GET_WORD(&x[11]) << (c)) | GET_WORD(&z[10]) >> (32U - (c)));
         SET_WORD(&z[10], (GET_WORD(&x[10]) << (c)) | GET_WORD(&z[9]) >> (32U - (c)));
         SET_WORD(&z[9], (GET_WORD(&x[9]) << (c)) | GET_WORD(&z[8]) >> (32U - (c)));
         SET_WORD(&z[8], (GET_WORD(&x[8]) << (c)) | GET_WORD(&z[7]) >> (32U - (c)));
-        SET_WORD(&z[7], (GET_WORD(&x[7]) << (c)) | GET_WORD(&z[6]) >> (32U - (c)));
-        SET_WORD(&z[6], (GET_WORD(&x[6]) << (c)) | GET_WORD(&z[5]) >> (32U - (c)));
-        SET_WORD(&z[5], (GET_WORD(&x[5]) << (c)) | GET_WORD(&z[4]) >> (32U - (c)));
-        SET_WORD(&z[4], (GET_WORD(&x[4]) << (c)) | GET_WORD(&z[3]) >> (32U - (c)));
-        SET_WORD(&z[3], (GET_WORD(&x[3]) << (c)) | GET_WORD(&z[2]) >> (32U - (c)));
-        SET_WORD(&z[2], (GET_WORD(&x[2]) << (c)) | GET_WORD(&z[1]) >> (32U - (c)));
-        SET_WORD(&z[1], (GET_WORD(&x[1]) << (c)) | GET_WORD(&z[0]) >> (32U - (c)));
-        SET_WORD(&z[0], (GET_WORD(&x[0]) << (c)));
-    } while (false);
+    }
+    SET_WORD(&z[7], (GET_WORD(&x[7]) << (c)) | GET_WORD(&z[6]) >> (32U - (c)));
+    SET_WORD(&z[6], (GET_WORD(&x[6]) << (c)) | GET_WORD(&z[5]) >> (32U - (c)));
+    SET_WORD(&z[5], (GET_WORD(&x[5]) << (c)) | GET_WORD(&z[4]) >> (32U - (c)));
+    SET_WORD(&z[4], (GET_WORD(&x[4]) << (c)) | GET_WORD(&z[3]) >> (32U - (c)));
+    SET_WORD(&z[3], (GET_WORD(&x[3]) << (c)) | GET_WORD(&z[2]) >> (32U - (c)));
+    SET_WORD(&z[2], (GET_WORD(&x[2]) << (c)) | GET_WORD(&z[1]) >> (32U - (c)));
+    SET_WORD(&z[1], (GET_WORD(&x[1]) << (c)) | GET_WORD(&z[0]) >> (32U - (c)));
+    SET_WORD(&z[0], (GET_WORD(&x[0]) << (c)));
 }
-#endif
 
+static void multiply_casper(uint32_t w_out[], const uint32_t a[], const uint32_t b[])
+{
+    uint32_t *Np;
+
+    if (N_wordlen == 8U)
+    {
+        Np = Np256;
+        MultprecCiosMul_ct(w_out, a, b, &CASPER_MEM[(N_wordlen + 4U)], Np);
+    }
+    if (N_wordlen == 12U)
+    {
+        Np = Np384;
+        MultprecCiosMul_ct(w_out, a, b, &CASPER_MEM[(N_wordlen + 4U)], Np);
+    }
+
+    if (N_wordlen == 18U)
+    {
+        Np = Np521;
+        MultprecCiosMul521_ct(w_out, a, b, &CASPER_MEM[(N_wordlen + 4U)], Np);
+    }
+}
 /* Convert a projective point (X1 : Y1 : Z1)
  * to the affine point (X3, Y3) = (X1/Z1^2,Y1/Z1^3)
  * The memory of (X3, Y3) and (X1 : Y1 : Z1) should not overlap
@@ -1602,14 +1923,27 @@ void Jac_toAffine(uint32_t *X3, uint32_t *Y3, uint32_t *X1, uint32_t *Y1, uint32
 {
     uint32_t *T1, *T2;
 
-    T1 = &CASPER_MEM[ECC_SCRATCH_START + 0U * CASPER_NUM_LIMBS];
-    T2 = &CASPER_MEM[ECC_SCRATCH_START + 1U * CASPER_NUM_LIMBS];
+    T1 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 0U * (N_wordlen + 4U)];
+    T2 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 1U * (N_wordlen + 4U)];
 
     square_casper(T1, Z1);       // Z^2
     multiply_casper(T2, T1, Z1); // Z^3
 
     // Montgomery inverse
-    invert(T1, T2); // Z^-3
+    if (N_wordlen == 8U)
+    {
+        invert_mod_p256(T1, T2);
+    }
+
+    if (N_wordlen == 12U)
+    {
+        invert_mod_p384(T1, T2);
+    }
+
+    if (N_wordlen == 18U)
+    {
+        invert_mod_p521(T1, T2);
+    }
 
     multiply_casper(Y3, Y1, T1); // Y3 = Y/Z^3
     multiply_casper(T2, T1, Z1); // Z^-2
@@ -1633,30 +1967,30 @@ void Jac_addition(uint32_t *X3,
     uint32_t *Z1Z1, *Z2Z2, *U1, *S1, *J, *H, *V, *t0, *t1;
     int m1, m2;
 
-    Z1Z1 = &CASPER_MEM[ECC_SCRATCH_START + 0U * CASPER_NUM_LIMBS];
-    Z2Z2 = &CASPER_MEM[ECC_SCRATCH_START + 1U * CASPER_NUM_LIMBS];
-    U1   = &CASPER_MEM[ECC_SCRATCH_START + 2U * CASPER_NUM_LIMBS];
-    S1   = &CASPER_MEM[ECC_SCRATCH_START + 3U * CASPER_NUM_LIMBS];
-    J    = &CASPER_MEM[ECC_SCRATCH_START + 4U * CASPER_NUM_LIMBS];
-    H    = &CASPER_MEM[ECC_SCRATCH_START + 5U * CASPER_NUM_LIMBS];
-    V    = &CASPER_MEM[ECC_SCRATCH_START + 6U * CASPER_NUM_LIMBS];
-    t0   = &CASPER_MEM[ECC_SCRATCH_START + 7U * CASPER_NUM_LIMBS];
-    t1   = &CASPER_MEM[ECC_SCRATCH_START + 8U * CASPER_NUM_LIMBS];
+    Z1Z1 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 0U * (N_wordlen + 4U)];
+    Z2Z2 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 1U * (N_wordlen + 4U)];
+    U1   = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 2U * (N_wordlen + 4U)];
+    S1   = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 3U * (N_wordlen + 4U)];
+    J    = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 4U * (N_wordlen + 4U)];
+    H    = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 5U * (N_wordlen + 4U)];
+    V    = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 6U * (N_wordlen + 4U)];
+    t0   = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 7U * (N_wordlen + 4U)];
+    t1   = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 8U * (N_wordlen + 4U)];
 
     CASPER_ECC_equal_to_zero(&m1, Z1);
     CASPER_ECC_equal_to_zero(&m2, Z2);
     if (m1 == 0)
     {
-        CASPER_MEMCPY(X3, X2, NUM_LIMBS * 4U);
-        CASPER_MEMCPY(Y3, Y2, NUM_LIMBS * 4U);
-        CASPER_MEMCPY(Z3, Z2, NUM_LIMBS * 4U);
+        CASPER_MEMCPY(X3, X2, N_wordlen * 4U);
+        CASPER_MEMCPY(Y3, Y2, N_wordlen * 4U);
+        CASPER_MEMCPY(Z3, Z2, N_wordlen * 4U);
         return;
     }
     if (m2 == 0)
     {
-        CASPER_MEMCPY(X3, X1, NUM_LIMBS * 4U);
-        CASPER_MEMCPY(Y3, Y1, NUM_LIMBS * 4U);
-        CASPER_MEMCPY(Z3, Z1, NUM_LIMBS * 4U);
+        CASPER_MEMCPY(X3, X1, N_wordlen * 4U);
+        CASPER_MEMCPY(Y3, Y1, N_wordlen * 4U);
+        CASPER_MEMCPY(Z3, Z1, N_wordlen * 4U);
         return;
     }
 
@@ -1710,30 +2044,44 @@ void Jac_addition(uint32_t *X3,
 /* Compute (X3 : Y3: Z3) = (X1: Y1: Z1) + (X2, Y2)
  * where (X1: Y1: Z1) != (X2, Y2)
  * (X3 : Y3: Z3) may not overlap with (X1: Y1: Z1).
- * Source: 2004 Hankerson–Menezes–Vanstone, page 91.
+ * Source: 2004 Hankerson?Menezes?Vanstone, page 91.
  */
 void Jac_add_affine(
     uint32_t *X3, uint32_t *Y3, uint32_t *Z3, uint32_t *X1, uint32_t *Y1, uint32_t *Z1, uint32_t *X2, uint32_t *Y2)
 {
     uint32_t *T1, *T2, *T3, *T4, *T5;
+    uint32_t *ONE = NULL;
     int m1, m2;
 
-    T1 = &CASPER_MEM[ECC_SCRATCH_START + 0U * CASPER_NUM_LIMBS];
-    T2 = &CASPER_MEM[ECC_SCRATCH_START + 1U * CASPER_NUM_LIMBS];
-    T3 = &CASPER_MEM[ECC_SCRATCH_START + 2U * CASPER_NUM_LIMBS];
-    T4 = &CASPER_MEM[ECC_SCRATCH_START + 3U * CASPER_NUM_LIMBS];
-    T5 = &CASPER_MEM[ECC_SCRATCH_START + 4U * CASPER_NUM_LIMBS];
+    if (N_wordlen == 8U)
+    {
+        ONE = NISTr256;
+    }
+    if (N_wordlen == 12U)
+    {
+        ONE = NISTr384;
+    }
+    if (N_wordlen == 18U)
+    {
+        ONE = NISTr521;
+    }
+
+    T1 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 0U * (N_wordlen + 4U)];
+    T2 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 1U * (N_wordlen + 4U)];
+    T3 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 2U * (N_wordlen + 4U)];
+    T4 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 3U * (N_wordlen + 4U)];
+    T5 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 4U * (N_wordlen + 4U)];
 
     CASPER_ECC_equal_to_zero(&m1, Z1);
     if (m1 == 0)
     {
-        CASPER_MEMCPY(X3, X2, NUM_LIMBS * 4U);
-        CASPER_MEMCPY(Y3, Y2, NUM_LIMBS * 4U);
-        CASPER_MEMCPY(Z3, ONE, NUM_LIMBS * 4U);
+        CASPER_MEMCPY(X3, X2, N_wordlen * 4U);
+        CASPER_MEMCPY(Y3, Y2, N_wordlen * 4U);
+        CASPER_MEMCPY(Z3, ONE, N_wordlen * 4U);
         return;
     }
 
-    copy(T5, Z1);
+    CASPER_MEMCPY(T5, Z1, N_wordlen * sizeof(uint32_t));
     square_casper(T3, Z1);
     multiply_casper(T2, T3, Z1);
     multiply_casper(T4, T3, X2);
@@ -1772,7 +2120,7 @@ void Jac_add_affine(
 
 static uint32_t casper_get_word(uint32_t *addr);
 
-/* Point doubling from: 2004 Hankerson–Menezes–Vanstone, page 91.
+/* Point doubling from: 2004 Hankerson?Menezes?Vanstone, page 91.
  * Compute (X3 : Y3: Z3) = (X1: Y1: Z1) + (X1 : Y1 : Z1)
  * (X3 : Y3: Z3) may be the same as the input.
  */
@@ -1780,11 +2128,11 @@ void Jac_double(uint32_t *X3, uint32_t *Y3, uint32_t *Z3, uint32_t *X1, uint32_t
 {
     uint32_t *T1, *T2, *T3, *T4, *T5;
 
-    T1 = &CASPER_MEM[ECC_SCRATCH_START + 0U * CASPER_NUM_LIMBS];
-    T2 = &CASPER_MEM[ECC_SCRATCH_START + 1U * CASPER_NUM_LIMBS];
-    T3 = &CASPER_MEM[ECC_SCRATCH_START + 2U * CASPER_NUM_LIMBS];
-    T4 = &CASPER_MEM[ECC_SCRATCH_START + 3U * CASPER_NUM_LIMBS];
-    T5 = &CASPER_MEM[ECC_SCRATCH_START + 4U * CASPER_NUM_LIMBS];
+    T1 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 0U * (N_wordlen + 4U)];
+    T2 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 1U * (N_wordlen + 4U)];
+    T3 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 2U * (N_wordlen + 4U)];
+    T4 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 3U * (N_wordlen + 4U)];
+    T5 = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 4U * (N_wordlen + 4U)];
 
     square_casper(T1, Z1);
     sub_casper(T3, X1, T1);
@@ -1797,7 +2145,7 @@ void Jac_double(uint32_t *X3, uint32_t *Y3, uint32_t *Z3, uint32_t *X1, uint32_t
 
     mul2_casper(Y3, Y1);
 
-    copy(T5, Z1);
+    CASPER_MEMCPY(T5, Z1, N_wordlen * sizeof(uint32_t));
     multiply_casper(Z3, Y3, T5);
 
     square_casper(T5, Y3);
@@ -1831,15 +2179,15 @@ void Jac_double(uint32_t *X3, uint32_t *Y3, uint32_t *Z3, uint32_t *X1, uint32_t
 static void recode(int8_t *c, uint32_t *k, int n, int w)
 {
     int i, t;
-    uint32_t K[NUM_LIMBS] = {0};
+    uint32_t K[CASPER_MAX_ECC_SIZE_WORDLEN] = {0};
     (void)memcpy(K, k, (size_t)ceil(((float)n / 8.)));
     t = (n + (w - 2)) / (w - 1);
     for (i = 0; i < t; i++)
     {
         c[i] = (int8_t)(uint8_t)((K[0] & ((uint32_t)(uint32_t)(1UL << (uint32_t)w) - 1UL)) -
                                  (uint32_t)(uint32_t)(1UL << ((uint32_t)w - 1UL)));
-        shiftrightSysram(K, K, (unsigned)w - 1);
-        (void)add_n_1(K, K, (uint32_t)c[i] >> 31, (int16_t)(uint16_t)NUM_LIMBS);
+        shiftrightSysram(K, K, (unsigned)w - 1U);
+        (void)add_n_1(K, K, (uint32_t)c[i] >> 31, (int16_t)(uint16_t)N_wordlen);
     }
     c[t] = (int8_t)K[0];
 }
@@ -1909,35 +2257,55 @@ void Jac_scalar_multiplication(
     uint32_t *X3, uint32_t *Y3, uint32_t *Z3, uint32_t *X1, uint32_t *Y1, uint32_t *k, uint32_t *p, uint32_t *q)
 {
     uint32_t *scalar, *M, *X, *Y, *Z, *mem;
+    uint32_t *ONE = NULL;
     int i, sign, odd;
-    // int8_t *rec;
     uint8_t index;
+    size_t recodeLength                  = 175u;
+    size_t bitlen                        = 0u;
+    int8_t rec[CASPER_RECODE_LENGTH_MAX] = {0};
+
+    if (N_wordlen == 8U)
+    {
+        recodeLength = (size_t)kCASPER_ECC_P256_recode_len;
+        bitlen       = (size_t)kCASPER_ECC_P256_N_bitlen;
+        ONE          = NISTr256;
+    }
+
+    if (N_wordlen == 12U)
+    {
+        recodeLength = (size_t)kCASPER_ECC_P384_recode_len;
+        bitlen       = (size_t)kCASPER_ECC_P384_N_bitlen;
+        ONE          = NISTr384;
+    }
+
+    if (N_wordlen == 18U)
+    {
+        recodeLength = (size_t)kCASPER_ECC_P521_recode_len;
+        bitlen       = (size_t)521U;
+        ONE          = NISTr521;
+    }
 
     /* Point to the start of the LUT table space. */
-    mem = &CASPER_MEM[LUT_SCRATCH_START];
+    mem = &CASPER_MEM[(20U * N_wordlen + 80U)];
 
-    scalar = &CASPER_MEM[LUT_SCRATCH_START + 12U * CASPER_NUM_LIMBS];
-    X      = &CASPER_MEM[LUT_SCRATCH_START + 13U * CASPER_NUM_LIMBS];
-    Y      = &CASPER_MEM[LUT_SCRATCH_START + 14U * CASPER_NUM_LIMBS];
-    Z      = &CASPER_MEM[LUT_SCRATCH_START + 15U * CASPER_NUM_LIMBS];
-    M      = &CASPER_MEM[LUT_SCRATCH_START + 16U * CASPER_NUM_LIMBS];
+    scalar = &CASPER_MEM[(20U * N_wordlen + 80U) + 12U * (N_wordlen + 4U)];
+    X      = &CASPER_MEM[(20U * N_wordlen + 80U) + 13U * (N_wordlen + 4U)];
+    Y      = &CASPER_MEM[(20U * N_wordlen + 80U) + 14U * (N_wordlen + 4U)];
+    Z      = &CASPER_MEM[(20U * N_wordlen + 80U) + 15U * (N_wordlen + 4U)];
+    M      = &CASPER_MEM[(20U * N_wordlen + 80U) + 16U * (N_wordlen + 4U)];
 
     /* Point to memory the recoded scalar.
-     * CASPER_RECODE_LENGTH bytes is needed.
      */
-    // rec = (int8_t*)&CASPER_MEM[LUT_SCRATCH_START + 17 * CASPER_NUM_LIMBS];
-    int8_t rec[CASPER_RECODE_LENGTH] = {0};
-
-    CASPER_MEMCPY(scalar, k, sizeof(uint32_t) * NUM_LIMBS);
+    CASPER_MEMCPY(scalar, k, sizeof(uint32_t) * N_wordlen);
 
 /* Precomputation: compute 1*P, 3*P, 5*P, and 7*P */
-#define FSL_CASPER_LUT(P, x) (mem + (3U * ((P)-1U) / 2U + (x)) * CASPER_NUM_LIMBS)
+#define FSL_CASPER_LUT(P, x) (mem + (3U * ((P)-1U) / 2U + (x)) * (N_wordlen + 4U))
 
     /* Set 1*P */
-    copy(Z3, ONE);
-    copy(FSL_CASPER_LUT(1U, 0U), X1);
-    copy(FSL_CASPER_LUT(1U, 1U), Y1);
-    copy(FSL_CASPER_LUT(1U, 2U), Z3);
+    CASPER_MEMCPY(Z3, ONE, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(FSL_CASPER_LUT(1U, 0U), X1, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(FSL_CASPER_LUT(1U, 1U), Y1, N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(FSL_CASPER_LUT(1U, 2U), Z3, N_wordlen * sizeof(uint32_t));
 
     /* Compute 2*P */
     Jac_double(X3, Y3, Z3, X1, Y1, Z3);
@@ -1955,20 +2323,21 @@ void Jac_scalar_multiplication(
 
     /* Recode the scalar */
     odd = (int32_t)((uint32_t)(casper_get_word(&scalar[0]) & 1U));
-    (void)sub_n(M, q, scalar, (int16_t)(uint16_t)NUM_LIMBS); // todo!!!
-    casper_select(scalar, M, scalar, odd, (int16_t)(uint16_t)NUM_LIMBS);
+    (void)sub_n(M, q, scalar, (int16_t)(uint16_t)N_wordlen); // todo!!!
+    casper_select(scalar, M, scalar, odd, (int16_t)(uint16_t)N_wordlen);
 
     /* Use n=384 and w=4 --> compute ciel(384/3) = 128 + 1 digits */
-    uint32_t scalarSysram[/*CASPER_*/ NUM_LIMBS];
-    CASPER_MEMCPY(scalarSysram, scalar, /*CASPER_*/ NUM_LIMBS * sizeof(uint32_t));
-    recode(rec, scalarSysram, (int32_t)N_bitlen, 4);
+    uint32_t scalarSysram[CASPER_MAX_ECC_SIZE_WORDLEN];
+    CASPER_MEMCPY(scalarSysram, scalar, /*CASPER_*/ N_wordlen * sizeof(uint32_t));
+    recode(rec, scalarSysram, (int32_t)bitlen, 4);
 
     /* Set the first value. */
-    index = int8abs(rec[CASPER_RECODE_LENGTH - 1]);
-    sign  = (int32_t)(uint32_t)(uint8_t)(((uint8_t)rec[CASPER_RECODE_LENGTH - 1]) >> 7);
-    copy(X3, FSL_CASPER_LUT(index, 0U));
-    copy(Y3, FSL_CASPER_LUT(index, 1U));
-    copy(Z3, FSL_CASPER_LUT(index, 2U));
+    index = int8abs(rec[recodeLength - 1U]);
+    sign  = (int32_t)(uint32_t)(uint8_t)(((uint8_t)rec[recodeLength - 1U]) >> 7);
+
+    CASPER_MEMCPY(X3, FSL_CASPER_LUT((uint32_t)index, 0U), N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(Y3, FSL_CASPER_LUT((uint32_t)index, 1U), N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(Z3, FSL_CASPER_LUT((uint32_t)index, 2U), N_wordlen * sizeof(uint32_t));
 
     /* Get the correct LUT element in constant time by touching
      * all elements and masking out the correct one.
@@ -1978,30 +2347,30 @@ void Jac_scalar_multiplication(
     do                                                                                    \
     {                                                                                     \
         int m;                                                                            \
-        copy((x), FSL_CASPER_LUT(1U, 0U));                                                \
-        copy((y), FSL_CASPER_LUT(1U, 1U));                                                \
-        copy((z), FSL_CASPER_LUT(1U, 2U));                                                \
+        CASPER_MEMCPY((x), FSL_CASPER_LUT(1U, 0U), N_wordlen * sizeof(uint32_t));         \
+        CASPER_MEMCPY((y), FSL_CASPER_LUT(1U, 1U), N_wordlen * sizeof(uint32_t));         \
+        CASPER_MEMCPY((z), FSL_CASPER_LUT(1U, 2U), N_wordlen * sizeof(uint32_t));         \
         m = (int32_t)((index) == 3U);                                                     \
-        casper_select((x), (x), FSL_CASPER_LUT(3U, 0U), m, (int16_t)(uint16_t)NUM_LIMBS); \
-        casper_select((y), (y), FSL_CASPER_LUT(3U, 1U), m, (int16_t)(uint16_t)NUM_LIMBS); \
-        casper_select((z), (z), FSL_CASPER_LUT(3U, 2U), m, (int16_t)(uint16_t)NUM_LIMBS); \
+        casper_select((x), (x), FSL_CASPER_LUT(3U, 0U), m, (int16_t)(uint16_t)N_wordlen); \
+        casper_select((y), (y), FSL_CASPER_LUT(3U, 1U), m, (int16_t)(uint16_t)N_wordlen); \
+        casper_select((z), (z), FSL_CASPER_LUT(3U, 2U), m, (int16_t)(uint16_t)N_wordlen); \
         m = (int32_t)((index) == 5U);                                                     \
-        casper_select((x), (x), FSL_CASPER_LUT(5U, 0U), m, (int16_t)(uint16_t)NUM_LIMBS); \
-        casper_select((y), (y), FSL_CASPER_LUT(5U, 1U), m, (int16_t)(uint16_t)NUM_LIMBS); \
-        casper_select((z), (z), FSL_CASPER_LUT(5U, 2U), m, (int16_t)(uint16_t)NUM_LIMBS); \
+        casper_select((x), (x), FSL_CASPER_LUT(5U, 0U), m, (int16_t)(uint16_t)N_wordlen); \
+        casper_select((y), (y), FSL_CASPER_LUT(5U, 1U), m, (int16_t)(uint16_t)N_wordlen); \
+        casper_select((z), (z), FSL_CASPER_LUT(5U, 2U), m, (int16_t)(uint16_t)N_wordlen); \
         m = (int32_t)((index) == 7U);                                                     \
-        casper_select((x), (x), FSL_CASPER_LUT(7U, 0U), m, (int16_t)(uint16_t)NUM_LIMBS); \
-        casper_select((y), (y), FSL_CASPER_LUT(7U, 1U), m, (int16_t)(uint16_t)NUM_LIMBS); \
-        casper_select((z), (z), FSL_CASPER_LUT(7U, 2U), m, (int16_t)(uint16_t)NUM_LIMBS); \
+        casper_select((x), (x), FSL_CASPER_LUT(7U, 0U), m, (int16_t)(uint16_t)N_wordlen); \
+        casper_select((y), (y), FSL_CASPER_LUT(7U, 1U), m, (int16_t)(uint16_t)N_wordlen); \
+        casper_select((z), (z), FSL_CASPER_LUT(7U, 2U), m, (int16_t)(uint16_t)N_wordlen); \
     } while (false)
 
     GET_LUT(X3, Y3, Z3, index);
 
     /* Compute -y and select the positive or negative point. */
-    (void)sub_n(M, p, Y3, (int16_t)(uint16_t)NUM_LIMBS); // todo!!!
-    casper_select(Y3, Y3, M, sign, (int16_t)(uint16_t)NUM_LIMBS);
+    (void)sub_n(M, p, Y3, (int16_t)(uint16_t)N_wordlen); // todo!!!
+    casper_select(Y3, Y3, M, sign, (int16_t)(uint16_t)N_wordlen);
 
-    for (i = CASPER_RECODE_LENGTH - 2; i >= 0; i--)
+    for (i = (int)(uint32_t)(recodeLength - 2U); i >= 0; i--)
     {
         Jac_double(X3, Y3, Z3, X3, Y3, Z3);
         Jac_double(X3, Y3, Z3, X3, Y3, Z3);
@@ -2013,15 +2382,15 @@ void Jac_scalar_multiplication(
         GET_LUT(X, Y, Z, index);
 
         /* Compute -y and select the positive or negative point. */
-        (void)sub_n(scalar, p, Y, (int16_t)(uint16_t)NUM_LIMBS); // todo!!!
-        casper_select(scalar, Y, scalar, sign, (int16_t)(uint16_t)NUM_LIMBS);
+        (void)sub_n(scalar, p, Y, (int16_t)(uint16_t)N_wordlen); // todo!!!
+        casper_select(scalar, Y, scalar, sign, (int16_t)(uint16_t)N_wordlen);
 
         Jac_addition(X3, Y3, Z3, X3, Y3, Z3, X, scalar, Z);
     }
 
-    (void)sub_n(M, p, Y3, (int16_t)(uint16_t)NUM_LIMBS); // todo!!!
+    (void)sub_n(M, p, Y3, (int16_t)(uint16_t)N_wordlen); // todo!!!
 
-    casper_select(Y3, M, Y3, odd, (int16_t)(uint16_t)NUM_LIMBS);
+    casper_select(Y3, M, Y3, odd, (int16_t)(uint16_t)N_wordlen);
 }
 
 #undef FSL_CASPER_LUT
@@ -2056,140 +2425,198 @@ void Jac_scalar_multiplication(
  * Output: mem, memory location for the LUT.
  */
 
-#define LUT_LIMBS NUM_LIMBS
-
-static void precompute_double_scalar_LUT(uint32_t *Px, uint32_t *Py, uint32_t *Qx, uint32_t *Qy)
+static void precompute_double_scalar_LUT16(uint32_t *Px, uint32_t *Py, uint32_t *Qx, uint32_t *Qy)
 {
     uint32_t *Q2x, *Q2y, *Q2z, *P2x, *P2y, *P2z, *Z, *mem;
-    uint16_t index = 0;
+    uint32_t *ONE  = NULL;
+    uint32_t index = 0;
 
-    Q2x = &CASPER_MEM[LUT_SCRATCH_START + 48U * LUT_LIMBS + 0U * CASPER_NUM_LIMBS];
-    Q2y = &CASPER_MEM[LUT_SCRATCH_START + 48U * LUT_LIMBS + 1U * CASPER_NUM_LIMBS];
-    Q2z = &CASPER_MEM[LUT_SCRATCH_START + 48U * LUT_LIMBS + 2U * CASPER_NUM_LIMBS];
+    if (N_wordlen == 8U)
+    {
+        ONE = NISTr256;
+    }
+
+    if (N_wordlen == 12U)
+    {
+        ONE = NISTr384;
+    }
+
+    Q2x = &CASPER_MEM[(20U * N_wordlen + 80U) + 48U * N_wordlen + 0U * (N_wordlen + 4U)];
+    Q2y = &CASPER_MEM[(20U * N_wordlen + 80U) + 48U * N_wordlen + 1U * (N_wordlen + 4U)];
+    Q2z = &CASPER_MEM[(20U * N_wordlen + 80U) + 48U * N_wordlen + 2U * (N_wordlen + 4U)];
 
     /* Re-use memory from different scratch space since no
      * projective point addition is used below. */
-    P2x = &CASPER_MEM[ECC_SCRATCH_START + 5U * CASPER_NUM_LIMBS];
-    P2z = &CASPER_MEM[ECC_SCRATCH_START + 6U * CASPER_NUM_LIMBS];
-    P2y = &CASPER_MEM[ECC_SCRATCH_START + 7U * CASPER_NUM_LIMBS];
-    Z   = &CASPER_MEM[ECC_SCRATCH_START + 8U * CASPER_NUM_LIMBS];
+    P2x = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 5U * (N_wordlen + 4U)];
+    P2z = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 6U * (N_wordlen + 4U)];
+    P2y = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 7U * (N_wordlen + 4U)];
+    Z   = &CASPER_MEM[((2U * (N_wordlen + 4U)) + (9U * (N_wordlen + 4U))) + 8U * (N_wordlen + 4U)];
 
-    mem = &CASPER_MEM[LUT_SCRATCH_START];
+    mem = &CASPER_MEM[(20U * N_wordlen + 80U)];
 
-    copy(Z, ONE);
+    CASPER_MEMCPY(Z, ONE, N_wordlen * sizeof(uint32_t));
 
     // 00 10 = 0*P + 2*Q
     Jac_double(Q2x, Q2y, Q2z, Qx, Qy, Z);
-    copy(&mem[index], Q2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 
     // 00 11 = 0*P + 3*Q
     Jac_add_affine(P2x, P2y, P2z, Q2x, Q2y, Q2z, Qx, Qy);
-    copy(&mem[index], P2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], P2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], P2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], P2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], P2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], P2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 
     // 01 10 = 1*P + 2*Q
     Jac_add_affine(P2x, P2y, P2z, Q2x, Q2y, Q2z, Px, Py);
-    copy(&mem[index], P2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], P2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], P2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], P2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], P2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], P2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 
     // 01 11 = 1*P + 3*Q
     Jac_add_affine(P2x, P2y, P2z, P2x, P2y, P2z, Qx, Qy);
-    copy(&mem[index], P2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], P2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], P2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], P2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], P2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], P2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 
     // 10 00 = 2*P + 0*Q
     Jac_double(P2x, P2y, P2z, Px, Py, Z);
-    copy(&mem[index], P2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], P2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], P2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], P2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], P2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], P2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 
     // 10 01 = 2*P + 1*Q
     Jac_add_affine(Q2x, Q2y, Q2z, P2x, P2y, P2z, Qx, Qy);
-    copy(&mem[index], Q2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 
     // 10 10 = 2*P + 2*Q
     Jac_add_affine(Q2x, Q2y, Q2z, Q2x, Q2y, Q2z, Qx, Qy);
-    copy(&mem[index], Q2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 
     // 10 11 = 2*P + 3*Q
     Jac_add_affine(Q2x, Q2y, Q2z, Q2x, Q2y, Q2z, Qx, Qy);
-    copy(&mem[index], Q2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 
     // 11 00 = 3*P + 0*Q
     Jac_add_affine(P2x, P2y, P2z, P2x, P2y, P2z, Px, Py);
-    copy(&mem[index], P2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], P2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], P2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], P2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], P2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], P2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 
     // 11 01 = 3*P + 1*Q
     Jac_add_affine(Q2x, Q2y, Q2z, P2x, P2y, P2z, Qx, Qy);
-    copy(&mem[index], Q2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 
     // 11 10 = 3*P + 2*Q
     Jac_add_affine(Q2x, Q2y, Q2z, Q2x, Q2y, Q2z, Qx, Qy);
-    copy(&mem[index], Q2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 
     // 11 11 = 3*P + 3*Q
     Jac_add_affine(Q2x, Q2y, Q2z, Q2x, Q2y, Q2z, Qx, Qy);
-    copy(&mem[index], Q2x);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2y);
-    index += LUT_LIMBS;
-    copy(&mem[index], Q2z);
-    index += LUT_LIMBS;
+    CASPER_MEMCPY(&mem[index], Q2x, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2y, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Q2z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
 }
 
-#define GETLUTX(x) (3U * (x)*LUT_LIMBS)
-#define GETLUTY(x) (3U * (x)*LUT_LIMBS + 1U * LUT_LIMBS)
-#define GETLUTZ(x) (3U * (x)*LUT_LIMBS + 2U * LUT_LIMBS)
+/*
+ * Pre-compute the following 4 points:
+ * 0 0 = 0*P + 0*Q  <-- Not needed when using sliding windows
+ * 0 1 = 0*P + 1*Q
+ *
+ * 1 0 = 1*P + 0*Q
+ * 1 1 = 1*P + 1*Q
+ *
+ * index = (bitsj+1) & (0-bitsi)
+ *
+ * Input:   P = (X1 : Y1 : Z1) and
+ *          Q = (X2 : Y2 : Z2)
+ * Output: mem, memory location for the LUT.
+ */
+
+static void precompute_double_scalar_LUT4(uint32_t *Px, uint32_t *Py, uint32_t *Qx, uint32_t *Qy)
+{
+    uint32_t *Z, *mem, *ONE;
+    uint32_t index = 0;
+
+    ONE = NISTr521;
+
+    /* Re-use memory from different scratch space since no
+     * projective point addition is used below. */
+    Z   = &CASPER_MEM[(11U * N_wordlen + 4U) + 5U * (N_wordlen + 4U)];
+    mem = &CASPER_MEM[(20U * N_wordlen + 80U)];
+
+    CASPER_MEMCPY(Z, ONE, N_wordlen * sizeof(uint32_t));
+
+    // 0*P + 1*Q
+    CASPER_MEMCPY(&mem[index], Qx, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Qy, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+
+    // 1*P + 0*Q
+    CASPER_MEMCPY(&mem[index], Px, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Py, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+    CASPER_MEMCPY(&mem[index], Z, N_wordlen * sizeof(uint32_t));
+    index += N_wordlen;
+
+    // 1*P + 1*Q
+    Jac_add_affine(&mem[index], &mem[index + N_wordlen], &mem[index + 2U * N_wordlen], Px, Py, Z, Qx, Qy);
+}
+
+#define GETLUTX(x) (3U * (x)*N_wordlen)
+#define GETLUTY(x) (3U * (x)*N_wordlen + 1U * N_wordlen)
+#define GETLUTZ(x) (3U * (x)*N_wordlen + 2U * N_wordlen)
 
 /* Compute the double scalar multiplication
  * (X3 : Y3 : Z3) = k1 * (X1, Y1) + k2 * (X2, Y2)
@@ -2207,24 +2634,61 @@ void double_scalar_multiplication(uint32_t *X3,
                                   uint32_t *Y2,
                                   uint32_t *k2)
 {
-    uint32_t index, c = 0;
-    uint32_t *p1, *p2, x1, x2, *lut, *Tx, *Ty, *Tz;
+    uint32_t index = 0, c = 0;
+    uint32_t *p1 = NULL, *p2 = NULL, x1, x2, *lut, *Tx = NULL, *Ty = NULL, *Tz = NULL;
+    size_t bitlen, shiftr, shiftl = 0u;
 
-    precompute_double_scalar_LUT(X1, Y1, X2, Y2);
+    if (N_wordlen == 8U)
+    {
+        bitlen = (size_t)kCASPER_ECC_P256_N_bitlen;
+        precompute_double_scalar_LUT16(X1, Y1, X2, Y2);
+        shiftr = 30U;
+        shiftl = 2U;
+    }
 
-    lut = &CASPER_MEM[LUT_SCRATCH_START];
-    p1  = &CASPER_MEM[LUT_SCRATCH_START + 48U * LUT_LIMBS];
-    p2  = &CASPER_MEM[LUT_SCRATCH_START + 48U * LUT_LIMBS + 1U * CASPER_NUM_LIMBS];
+    if (N_wordlen == 12U)
+    {
+        bitlen = (size_t)kCASPER_ECC_P384_N_bitlen;
+        precompute_double_scalar_LUT16(X1, Y1, X2, Y2);
+        shiftr = 30U;
+        shiftl = 2U;
+    }
 
-    Tx = &CASPER_MEM[LUT_SCRATCH_START + 48U * LUT_LIMBS + 2U * CASPER_NUM_LIMBS];
-    Ty = &CASPER_MEM[LUT_SCRATCH_START + 48U * LUT_LIMBS + 3U * CASPER_NUM_LIMBS];
-    Tz = &CASPER_MEM[LUT_SCRATCH_START + 48U * LUT_LIMBS + 4U * CASPER_NUM_LIMBS];
+    if (N_wordlen == 18U)
+    {
+        bitlen = (size_t)kCASPER_ECC_P521_N_bitlen;
+        precompute_double_scalar_LUT4(X1, Y1, X2, Y2);
+        shiftr = 31U;
+        shiftl = 1U;
+    }
 
-    CASPER_MEMCPY(p1, k1, sizeof(uint32_t) * NUM_LIMBS);
-    CASPER_MEMCPY(p2, k2, sizeof(uint32_t) * NUM_LIMBS);
+    lut = &CASPER_MEM[(20U * N_wordlen + 80U)];
+
+    if (N_wordlen == 8U || N_wordlen == 12U)
+    {
+        p1 = &CASPER_MEM[(20U * N_wordlen + 80U) + 48U * N_wordlen];
+        p2 = &CASPER_MEM[(20U * N_wordlen + 80U) + 48U * N_wordlen + 1U * (N_wordlen + 4U)];
+
+        Tx = &CASPER_MEM[(20U * N_wordlen + 80U) + 48U * N_wordlen + 2U * (N_wordlen + 4U)];
+        Ty = &CASPER_MEM[(20U * N_wordlen + 80U) + 48U * N_wordlen + 3U * (N_wordlen + 4U)];
+        Tz = &CASPER_MEM[(20U * N_wordlen + 80U) + 48U * N_wordlen + 4U * (N_wordlen + 4U)];
+    }
+
+    if (N_wordlen == 18U)
+    {
+        p1 = &CASPER_MEM[(20U * N_wordlen + 80U) + 12U * N_wordlen];
+        p2 = &CASPER_MEM[(20U * N_wordlen + 80U) + 12U * N_wordlen + 1U * (N_wordlen + 4U)];
+
+        Tx = &CASPER_MEM[(20U * N_wordlen + 80U) + 12U * N_wordlen + 2U * (N_wordlen + 4U)];
+        Ty = &CASPER_MEM[(20U * N_wordlen + 80U) + 12U * N_wordlen + 3U * (N_wordlen + 4U)];
+        Tz = &CASPER_MEM[(20U * N_wordlen + 80U) + 12U * N_wordlen + 4U * (N_wordlen + 4U)];
+    }
+
+    CASPER_MEMCPY(p1, k1, sizeof(uint32_t) * N_wordlen);
+    CASPER_MEMCPY(p2, k2, sizeof(uint32_t) * N_wordlen);
 
     /* Check if we can slide. */
-    while (((casper_get_word(&p1[NUM_LIMBS - 1U]) | casper_get_word(&p2[NUM_LIMBS - 1U])) >> 31) == 0U && c < 256U)
+    while (((casper_get_word(&p1[N_wordlen - 1U]) | casper_get_word(&p2[N_wordlen - 1U])) >> 31) == 0U && c < bitlen)
     {
         shiftleft(p1, p1, 1U);
         shiftleft(p2, p2, 1U);
@@ -2233,38 +2697,41 @@ void double_scalar_multiplication(uint32_t *X3,
     }
 
     /* Set the first value. */
-    x1    = casper_get_word(&p1[NUM_LIMBS - 1U]) >> 30;
-    x2    = casper_get_word(&p2[NUM_LIMBS - 1U]) >> 30;
-    index = (x2 | (x1 << 2)) - 2U - (uint32_t)(x1 != 0U) * 2U;
-    shiftleft(p1, p1, 2U);
-    shiftleft(p2, p2, 2U);
-
-    copy(X3, &lut[GETLUTX(index)]);
-    copy(Y3, &lut[GETLUTY(index)]);
-    copy(Z3, &lut[GETLUTZ(index)]);
-    c += 2U;
-
-// todo: create an is_zero function
-#if CASPER_ECC_P256
-    while ((casper_get_word(&p1[0]) | casper_get_word(&p1[1]) | casper_get_word(&p1[2]) | casper_get_word(&p1[3]) |
-            casper_get_word(&p1[4]) | casper_get_word(&p1[5]) | casper_get_word(&p1[6]) | casper_get_word(&p1[7]) |
-            casper_get_word(&p2[0]) | casper_get_word(&p2[1]) | casper_get_word(&p2[2]) | casper_get_word(&p2[3]) |
-            casper_get_word(&p2[4]) | casper_get_word(&p2[5]) | casper_get_word(&p2[6]) | casper_get_word(&p2[7])) !=
-           0U)
+    x1 = casper_get_word(&p1[N_wordlen - 1U]) >> shiftr;
+    x2 = casper_get_word(&p2[N_wordlen - 1U]) >> shiftr;
+    if (N_wordlen == 8U || N_wordlen == 12U)
     {
-#elif CASPER_ECC_P384
+        index = (x2 | (x1 << 2)) - 2U - (uint32_t)(x1 != 0U) * 2U;
+    }
+
+    if (N_wordlen == 18U)
+    {
+        index = (((x2) + 1U) & (0U - (x1)));
+    }
+    shiftleft(p1, p1, shiftl);
+    shiftleft(p2, p2, shiftl);
+
+    CASPER_MEMCPY(X3, &lut[GETLUTX(index)], N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(Y3, &lut[GETLUTY(index)], N_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(Z3, &lut[GETLUTZ(index)], N_wordlen * sizeof(uint32_t));
+    c += shiftl;
+
+    // todo: create an is_zero function
+
     while ((casper_get_word(&p1[0]) | casper_get_word(&p1[1]) | casper_get_word(&p1[2]) | casper_get_word(&p1[3]) |
             casper_get_word(&p1[4]) | casper_get_word(&p1[5]) | casper_get_word(&p1[6]) | casper_get_word(&p1[7]) |
             casper_get_word(&p1[8]) | casper_get_word(&p1[9]) | casper_get_word(&p1[10]) | casper_get_word(&p1[11]) |
-            casper_get_word(&p2[0]) | casper_get_word(&p2[1]) | casper_get_word(&p2[2]) | casper_get_word(&p2[3]) |
-            casper_get_word(&p2[4]) | casper_get_word(&p2[5]) | casper_get_word(&p2[6]) | casper_get_word(&p2[7]) |
-            casper_get_word(&p2[8]) | casper_get_word(&p2[9]) | casper_get_word(&p2[10]) | casper_get_word(&p2[11])) !=
-           0U)
+            casper_get_word(&p1[12]) | casper_get_word(&p1[13]) | casper_get_word(&p1[14]) | casper_get_word(&p1[15]) |
+            casper_get_word(&p1[16]) | casper_get_word(&p1[17]) | casper_get_word(&p2[0]) | casper_get_word(&p2[1]) |
+            casper_get_word(&p2[2]) | casper_get_word(&p2[3]) | casper_get_word(&p2[4]) | casper_get_word(&p2[5]) |
+            casper_get_word(&p2[6]) | casper_get_word(&p2[7]) | casper_get_word(&p2[8]) | casper_get_word(&p2[9]) |
+            casper_get_word(&p2[10]) | casper_get_word(&p2[11]) | casper_get_word(&p2[12]) | casper_get_word(&p2[13]) |
+            casper_get_word(&p2[14]) | casper_get_word(&p2[15]) | casper_get_word(&p2[16]) |
+            casper_get_word(&p2[17])) != 0U)
     {
-#endif
         /* Check if we can slide. */
-        while (((casper_get_word(&p1[NUM_LIMBS - 1U]) | casper_get_word(&p2[NUM_LIMBS - 1U])) >> 31) == 0U &&
-               c < N_bitlen)
+        while (((casper_get_word(&p1[N_wordlen - 1U]) | casper_get_word(&p2[N_wordlen - 1U])) >> 31) == 0U &&
+               c < bitlen)
         {
             shiftleft(p1, p1, 1U);
             shiftleft(p2, p2, 1U);
@@ -2272,38 +2739,47 @@ void double_scalar_multiplication(uint32_t *X3,
             c++;
         }
 
-        if (c >= (N_bitlen - 1U))
+        if (c >= (bitlen - 1U))
         {
             break;
         }
 
-        /* Double twice. */
-        Jac_double(X3, Y3, Z3, X3, Y3, Z3);
-        Jac_double(X3, Y3, Z3, X3, Y3, Z3);
+        for (uint32_t i = 0; i < shiftl; i++)
+        {
+            Jac_double(X3, Y3, Z3, X3, Y3, Z3);
+        }
 
-        /* Add in the correct value. */
-        x1    = casper_get_word(&p1[NUM_LIMBS - 1U]) >> 30;
-        x2    = casper_get_word(&p2[NUM_LIMBS - 1U]) >> 30;
-        index = (x2 | (x1 << 2)) - 2U - (uint32_t)(x1 != 0U) * 2U;
+        x1 = casper_get_word(&p1[N_wordlen - 1U]) >> shiftr;
+        x2 = casper_get_word(&p2[N_wordlen - 1U]) >> shiftr;
 
-        shiftleft(p1, p1, 2U);
-        shiftleft(p2, p2, 2U);
+        if (N_wordlen == 8U || N_wordlen == 12U)
+        {
+            index = (x2 | (x1 << 2)) - 2U - (uint32_t)(x1 != 0U) * 2U;
+        }
 
-        copy(Tx, &lut[GETLUTX(index)]);
-        copy(Ty, &lut[GETLUTY(index)]);
-        copy(Tz, &lut[GETLUTZ(index)]);
+        if (N_wordlen == 18U)
+        {
+            index = (((x2) + 1U) & (0U - (x1)));
+        }
+
+        shiftleft(p1, p1, shiftl);
+        shiftleft(p2, p2, shiftl);
+
+        CASPER_MEMCPY(Tx, &lut[GETLUTX(index)], N_wordlen * sizeof(uint32_t));
+        CASPER_MEMCPY(Ty, &lut[GETLUTY(index)], N_wordlen * sizeof(uint32_t));
+        CASPER_MEMCPY(Tz, &lut[GETLUTZ(index)], N_wordlen * sizeof(uint32_t));
 
         Jac_addition(X3, Y3, Z3, X3, Y3, Z3, Tx, Ty,
                      Tz); //&lut[GETLUTX(index)], &lut[GETLUTY(index)], &lut[GETLUTZ(index)]);
-        c += 2U;
+        c += shiftl;
     }
 
     /* Special case in the end. */
-    if (c == (N_bitlen - 1U))
+    if (c == (bitlen - 1U))
     {
         Jac_double(X3, Y3, Z3, X3, Y3, Z3);
-        x1 = casper_get_word(&p1[NUM_LIMBS - 1U]) >> 31;
-        x2 = casper_get_word(&p2[NUM_LIMBS - 1U]) >> 31;
+        x1 = casper_get_word(&p1[N_wordlen - 1U]) >> 31;
+        x2 = casper_get_word(&p2[N_wordlen - 1U]) >> 31;
         if (0U != x1)
         {
             Jac_add_affine(X3, Y3, Z3, X3, Y3, Z3, X1, Y1);
@@ -2315,27 +2791,40 @@ void double_scalar_multiplication(uint32_t *X3,
         c++;
     }
 
-    while (c < N_bitlen)
+    while (c < bitlen)
     {
         Jac_double(X3, Y3, Z3, X3, Y3, Z3);
         c++;
     }
 }
 
-#if CASPER_ECC_P256
 static void invert_mod_p256(uint32_t *c, uint32_t *a)
 {
     int i;
     uint32_t *t, *t2, *s1, *s2, *s4, *s8, *tmp;
 
     /* Assuming it is safe to use the ECC scratch size. */
-    t   = &CASPER_MEM[ECC_SCRATCH_START + 2U * CASPER_NUM_LIMBS];
-    t2  = &CASPER_MEM[ECC_SCRATCH_START + 3U * CASPER_NUM_LIMBS];
-    s1  = &CASPER_MEM[ECC_SCRATCH_START + 4U * CASPER_NUM_LIMBS];
-    s2  = &CASPER_MEM[ECC_SCRATCH_START + 5U * CASPER_NUM_LIMBS];
-    s4  = &CASPER_MEM[ECC_SCRATCH_START + 6U * CASPER_NUM_LIMBS];
-    s8  = &CASPER_MEM[ECC_SCRATCH_START + 7U * CASPER_NUM_LIMBS];
-    tmp = &CASPER_MEM[ECC_SCRATCH_START + 8U * CASPER_NUM_LIMBS];
+    t   = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                     (9U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U))) +
+                    2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)];
+    t2  = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                      (9U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U))) +
+                     3U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)];
+    s1  = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                      (9U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U))) +
+                     4U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)];
+    s2  = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                      (9U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U))) +
+                     5U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)];
+    s4  = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                      (9U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U))) +
+                     6U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)];
+    s8  = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                      (9U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U))) +
+                     7U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)];
+    tmp = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                       (9U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U))) +
+                      8U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)];
 
     // t2 = n^(2^1)*n  # 11
     square_casper(tmp, a);
@@ -2436,23 +2925,28 @@ static void invert_mod_p256(uint32_t *c, uint32_t *a)
 }
 
 // A and C do not need to be in Casper memory
-static void toMontgomery(uint32_t *C, uint32_t *A)
+static void toMontgomery_ECC_P256(uint32_t *C, uint32_t *A)
 {
     /* R^2 = 2^512 mod p, used to convert values to Montgomery form. */
-    uint32_t R2[NUM_LIMBS] = {0x00000003,  0x00000000,  0xffffffffU, 0xfffffffbU,
-                              0xfffffffeU, 0xffffffffU, 0xfffffffdU, 0x4};
+    uint32_t R2[kCASPER_ECC_P256_wordlen] = {0x00000003,  0x00000000,  0xffffffffU, 0xfffffffbU,
+                                             0xfffffffeU, 0xffffffffU, 0xfffffffdU, 0x4};
     uint32_t *T1, *T2, *T3;
-    T1 = &CASPER_MEM[ECC_SCRATCH_START + 0U * CASPER_NUM_LIMBS];
-    T2 = &CASPER_MEM[ECC_SCRATCH_START + 1U * CASPER_NUM_LIMBS];
-    T3 = &CASPER_MEM[ECC_SCRATCH_START + 2U * CASPER_NUM_LIMBS];
+    T1 = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                      (9U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U))) +
+                     0U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)];
+    T2 = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                      (9U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U))) +
+                     1U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)];
+    T3 = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)) +
+                      (9U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U))) +
+                     2U * ((uint32_t)kCASPER_ECC_P256_wordlen + 4U)];
 
-    CASPER_MEMCPY(T1, R2, NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(T2, A, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(T1, R2, (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(T2, A, (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
 
     multiply_casper(T3, T2, T1);
-    CASPER_MEMCPY(C, T3, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(C, T3, (uint32_t)kCASPER_ECC_P256_wordlen * sizeof(uint32_t));
 }
-#endif /* CASPER_ECC_P256 */
 
 /* Compute inversion modulo NIST-p384 using Fermats little theorem.
  * Using c = a^(p-2) = a^(-1) mod p.
@@ -2460,7 +2954,7 @@ static void toMontgomery(uint32_t *C, uint32_t *A)
  * modular arithmetic or computes automatically the Montgomery inverse
  * if all arithmetic is Montgomery arithmetic.
  */
-#if CASPER_ECC_P384
+
 static void invert_mod_p384(uint32_t *c, uint32_t *a)
 {
     int i;
@@ -2469,16 +2963,17 @@ static void invert_mod_p384(uint32_t *c, uint32_t *a)
     /* Assuming it is safe to use the LUT scratch size.
      * Hence, do not invert while elements in the LUT are needed.
      */
-    e   = &CASPER_MEM[LUT_SCRATCH_START + 0U * CASPER_NUM_LIMBS];
-    d   = &CASPER_MEM[LUT_SCRATCH_START + 1U * CASPER_NUM_LIMBS];
-    tmp = &CASPER_MEM[LUT_SCRATCH_START + 2U * CASPER_NUM_LIMBS];
-    t0  = &CASPER_MEM[LUT_SCRATCH_START + 3U * CASPER_NUM_LIMBS];
-    t1  = &CASPER_MEM[LUT_SCRATCH_START + 4U * CASPER_NUM_LIMBS];
-    t2  = &CASPER_MEM[LUT_SCRATCH_START + 5U * CASPER_NUM_LIMBS];
-    t3  = &CASPER_MEM[LUT_SCRATCH_START + 6U * CASPER_NUM_LIMBS];
-    t4  = &CASPER_MEM[LUT_SCRATCH_START + 7U * CASPER_NUM_LIMBS];
-    t5  = &CASPER_MEM[LUT_SCRATCH_START + 8U * CASPER_NUM_LIMBS];
-    t6  = &CASPER_MEM[LUT_SCRATCH_START + 9U * CASPER_NUM_LIMBS];
+    e = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
+    d = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
+    tmp =
+        &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
+    t0 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 3U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
+    t1 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 4U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
+    t2 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 5U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
+    t3 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 6U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
+    t4 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 7U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
+    t5 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 8U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
+    t6 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P384_wordlen + 80U) + 9U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
 
     square_casper(tmp, a);        // 2
     square_casper(t1, tmp);       // 4
@@ -2656,25 +3151,275 @@ static void invert_mod_p384(uint32_t *c, uint32_t *a)
 }
 
 // A and C do not need to be in Casper memory
-static void toMontgomery(uint32_t *C, uint32_t *A)
+static void toMontgomery_ECC_P384(uint32_t *C, uint32_t *A)
 {
     /* R^2 = 2^768 mod p, used to convert values to Montgomery form. */
-    uint32_t R2[NUM_LIMBS] = {0x00000001, 0xfffffffe, 0x00000000, 0x00000002, 0x00000000, 0xfffffffe,
-                              0x00000000, 0x00000002, 0x1,        0x0,        0x0,        0x0};
+    uint32_t R2[kCASPER_ECC_P384_wordlen] = {0x00000001, 0xfffffffeU, 0x00000000, 0x00000002, 0x00000000, 0xfffffffeU,
+                                             0x00000000, 0x00000002,  0x1,        0x0,        0x0,        0x0};
     uint32_t *T1, *T2, *T3;
-    T1 = &CASPER_MEM[ECC_SCRATCH_START + 0U * CASPER_NUM_LIMBS];
-    T2 = &CASPER_MEM[ECC_SCRATCH_START + 1U * CASPER_NUM_LIMBS];
-    T3 = &CASPER_MEM[ECC_SCRATCH_START + 2U * CASPER_NUM_LIMBS];
+    T1 = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) +
+                      (9U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U))) +
+                     0U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
+    T2 = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) +
+                      (9U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U))) +
+                     1U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
+    T3 = &CASPER_MEM[((2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)) +
+                      (9U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U))) +
+                     2U * ((uint32_t)kCASPER_ECC_P384_wordlen + 4U)];
 
-    CASPER_MEMCPY(T1, R2, NUM_LIMBS * sizeof(uint32_t));
-    CASPER_MEMCPY(T2, A, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(T1, R2, (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(T2, A, (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
 
     multiply_casper(T3, T2, T1);
-    CASPER_MEMCPY(C, T3, NUM_LIMBS * sizeof(uint32_t));
+    CASPER_MEMCPY(C, T3, (uint32_t)kCASPER_ECC_P384_wordlen * sizeof(uint32_t));
 }
-#endif /* CASPER_ECC_P384 */
+
+static void invert_mod_p521(uint32_t *c, uint32_t *a)
+{
+    int i;
+    uint32_t *e3, *d2, *d3, *d4, *T2, *T4; // 6 residues needed
+
+    /* Assuming it is safe to use the LUT scratch size.
+     * Hence, do not invert while elements in the LUT are needed.
+     */
+    e3 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)];
+    d2 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)];
+    d3 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 2U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)];
+    d4 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 3U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)];
+    T2 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 4U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)];
+    T4 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 5U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)];
+
+    square_casper(d2, a);
+    multiply_casper(T2, d2, a);
+
+    // d3 = 2^2 * T2
+    square_casper(d3, T2);
+    square_casper(e3, d3);
+    multiply_casper(T4, e3, T2);
+
+    // d3 = 2^4 * T4
+    square_casper(d3, T4);
+    square_casper(e3, d3);
+    square_casper(d3, e3);
+    square_casper(e3, d3);
+    multiply_casper(d2, e3, T4);
+
+    // d3 = 2^8 * d2
+    square_casper(d3, d2);
+    square_casper(e3, d3);
+    for (i = 0; i < 3; i++)
+    {
+        square_casper(d3, e3);
+        square_casper(e3, d3);
+    }
+    multiply_casper(d4, e3, d2);
+
+    // d3 = 2^16 * d2
+    square_casper(d3, d4);
+    square_casper(e3, d3);
+    for (i = 0; i < 7; i++)
+    {
+        square_casper(d3, e3);
+        square_casper(e3, d3);
+    }
+    multiply_casper(d2, e3, d4);
+
+    // d3 = 2^32 * d2
+    square_casper(d3, d2);
+    square_casper(e3, d3);
+    for (i = 0; i < 15; i++)
+    {
+        square_casper(d3, e3);
+        square_casper(e3, d3);
+    }
+    multiply_casper(d4, e3, d2);
+
+    // d3 = 2^64 * d2
+    square_casper(d3, d4);
+    square_casper(e3, d3);
+    for (i = 0; i < 31; i++)
+    {
+        square_casper(d3, e3);
+        square_casper(e3, d3);
+    }
+    multiply_casper(d2, e3, d4);
+
+    // d3 = 2^128 * d2
+    square_casper(d3, d2);
+    square_casper(e3, d3);
+    for (i = 0; i < 63; i++)
+    {
+        square_casper(d3, e3);
+        square_casper(e3, d3);
+    }
+    multiply_casper(d4, e3, d2);
+
+    // d3 = 2^256 * d2
+    square_casper(d3, d4);
+    square_casper(e3, d3);
+    for (i = 0; i < 127; i++)
+    {
+        square_casper(d3, e3);
+        square_casper(e3, d3);
+    }
+    multiply_casper(d2, e3, d4);
+
+    // d3 = 2^2 * d2
+    square_casper(d3, d2);
+    square_casper(e3, d3);
+    multiply_casper(d2, e3, T2);
+
+    // d3 = 2^4 * d2
+    square_casper(d3, d2);
+    square_casper(e3, d3);
+    square_casper(d3, e3);
+    square_casper(e3, d3);
+    multiply_casper(d2, e3, T4);
+
+    square_casper(d3, d2);
+    multiply_casper(d2, d3, a);
+
+    // d3 = 2 ^ 2 * d2
+    square_casper(d3, d2);
+    square_casper(e3, d3);
+    multiply_casper(c, e3, a);
+}
+
+static void toMontgomery_ECC_P521(uint32_t *C, uint32_t *A)
+{
+    /* R^2 = 2^1088 mod p, used to convert values to Montgomery form. */
+    // uint32_t R2[NUM_LIMBS] = { 0x00000000, 0x4000, 0, 0,
+    //                           0, 0, 0, 0,
+    //                          0, 0, 0, 0,
+    //                          0 };
+    /* R^2 = 2^1152 mod p, used to convert values to Montgomery form. */
+    uint32_t R2[kCASPER_ECC_P521_wordlen] = {0, 0, 0, 0x4000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    uint32_t *T1, *T2, *T3;
+    T1 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 0U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)];
+    T2 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 1U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)];
+    T3 = &CASPER_MEM[(20U * (uint32_t)kCASPER_ECC_P521_wordlen + 80U) + 2U * ((uint32_t)kCASPER_ECC_P521_wordlen + 4U)];
+
+    CASPER_MEMCPY(T1, R2, (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+    CASPER_MEMCPY(T2, A, (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+
+    multiply_casper(T3, T2, T1);
+    CASPER_MEMCPY(C, T3, (uint32_t)kCASPER_ECC_P521_wordlen * sizeof(uint32_t));
+}
+
+static void MultprecCiosMul521_ct(
+    uint32_t w_out[], const uint32_t a[], const uint32_t b[], const uint32_t Nmod[], const uint32_t *Np)
+{
+    uint32_t j;
+    uint64_t carry;
+    uint64_t *a64, *b64, *w64;
+
+    uint32_t *T1 = &CASPER_MEM[0], borrow;
+
+    a64 = (uint64_t *)(uintptr_t)a;
+    b64 = (uint64_t *)(uintptr_t)b;
+    w64 = (uint64_t *)(uintptr_t)w_out;
+
+    if (a != NULL)
+    { /*  if !a, we are reducing only */
+        PreZeroW(j, w_out);
+    }
+    SET_DWORD(&w64[N_dwordlen], 0ULL);
+    SET_DWORD(&w64[N_dwordlen + 1U], 0ULL);
+    /*  with accelerator */
+
+    /*  loop j and then reduce after each j round */
+    for (j = 0; j < N_dwordlen; j++)
+    {
+        /*  Step 3. Iterate over N words of u using j - perform Multiply-accumulate */
+        /*  push-pull: we do a*b and then separately m*n (reduce) */
+        if (a != NULL)
+        { /*  if mul&reduce vs. reduce only */
+            carry = GET_DWORD(&w64[N_dwordlen]);
+            Accel_SetABCD_Addr(CA_MK_OFF(&b64[j]), CA_MK_OFF(a64));
+            Accel_crypto_mul(
+                Accel_IterOpcodeResaddr(N_dwordlen - 1U, (uint32_t)kCASPER_OpMul6464FullSum, CA_MK_OFF(w64)));
+            Accel_done();
+            /*  max carry is contained since ~0*~0=0xFFFE0001+0xFFFF=0xFFFF0000, */
+            /*  so max carry is 0xFFFF and 0xFFFF0000+0xFFFF=0xFFFFFFFF */
+            /*  accel took care of w_out[N_wordlen] & +1, so we just take care of the next double word if carry=1 */
+            /*  w64[N_dwordlen+1] = g_carry; */
+            carry = (uint64_t)(GET_DWORD(&w64[N_dwordlen]) < carry);
+            SET_DWORD(&w64[N_dwordlen + 1U], carry);
+        }
+
+        /* Fast reduction using only shifts for this special shape:
+         * (c - (-p^-1*c mod 2^64) * p)/2^64 =
+         * (c - c_0 * p)/2^64 =
+         * (\sum_{j=0}^9 c_i*2^64 - c_0 * p)/2^64 =
+         * (\sum_{j=0}^9 c_i*2^64 - c_0 * (2^521-1))/2^64 =
+         * (\sum_{j=0}^9 c_i*2^64 - c_0 * 2^521 - c_0)/2^64 =
+         * c_1 + c_2*2^64 + c_3*2^128 + c_4*2^192 + c_5*2^256 + c_6*2^320 + c_7*2^384 + c_8*2^448 + c_9*2^512 + c_0 *
+         * 2^{448 + 9} so one only needs to compute this 128-bit addition: [c_8, c_9] + c_0 * 2^9
+         */
+
+        uint64_t *p64 = (uint64_t *)(uintptr_t)T1;
+
+        /* p64[0] = w64[0] << 9;*/
+        SET_DWORD(&p64[0], GET_DWORD(&w64[0]) << 9U);
+        /* p64[1] = w64[0] >> (64 - 9); */
+        SET_DWORD(&p64[1], GET_DWORD(&w64[0]) >> (64 - 9));
+        /* w64[0] = w64[1]; */
+        SET_DWORD(&w64[0], GET_DWORD(&w64[1]));
+        /* w64[1] = w64[2]; */
+        SET_DWORD(&w64[1], GET_DWORD(&w64[2]));
+        /* w64[2] = w64[3]; */
+        SET_DWORD(&w64[2], GET_DWORD(&w64[3]));
+        /* w64[3] = w64[4]; */
+        SET_DWORD(&w64[3], GET_DWORD(&w64[4]));
+        /* w64[4] = w64[5]; */
+        SET_DWORD(&w64[4], GET_DWORD(&w64[5]));
+        /* w64[5] = w64[6]; */
+        SET_DWORD(&w64[5], GET_DWORD(&w64[6]));
+        /* w64[6] = w64[7]; */
+        SET_DWORD(&w64[6], GET_DWORD(&w64[7]));
+
+        /* Compute p64 = p64 + {w64[8], w64[9]} using one additonal double-length limb,
+         * where p64 = w64[0] * 2^9.
+         */
+        Accel_SetABCD_Addr(CA_MK_OFF(&w64[8]), 0);
+        Accel_crypto_mul(Accel_IterOpcodeResaddr(2, (uint32_t)kCASPER_OpAdd64, /* kCASPER_OpAdd64, */
+                                                 CA_MK_OFF(p64)));
+        Accel_done();
+
+        /* w64[7] = p64[0]; */
+        SET_DWORD(&w64[7], GET_DWORD(&p64[0]));
+        /* w64[8] = p64[1]; */
+        SET_DWORD(&w64[8], GET_DWORD(&p64[1]));
+        /* w64[9] = 0; */
+        SET_DWORD(&w64[9], (uint64_t)0U);
+    }
+
+    /* memcpy(T1, w_out, (NUM_LIMBS + 1) * sizeof(uint32_t)); */
+    /*  now check if need to subtract Nmod */
+    CASPER_MEMCPY_I2I(T1, w_out, (N_wordlen + 1U) * sizeof(uint32_t));
+
+    /* Compute w = w - N */
+    Accel_SetABCD_Addr(CA_MK_OFF(Nmod), 0);
+    Accel_crypto_mul(Accel_IterOpcodeResaddr(N_dwordlen, (uint32_t)kCASPER_OpSub64, CA_MK_OFF(w_out)));
+    Accel_done();
+
+    /* if w_out > T1 then there was a borrow */
+    /* borrow = (((uint32_t*)w_out)[NUM_LIMBS] > T1[NUM_LIMBS]); */
+    borrow = (uint32_t)(GET_WORD(&((uint32_t *)w_out)[N_wordlen]) > GET_WORD(&T1[N_wordlen]));
+    SET_WORD(&w_out[N_wordlen + 1U], 0);
+    SET_WORD(&w_out[N_wordlen], 0);
+    /*  w_out[NUM_LIMBS + 1] = 0; */
+    /*  w_out[NUM_LIMBS] = 0; */
+    casper_select(w_out, w_out, T1, (int32_t)borrow, (int32_t)N_wordlen);
+}
 
 #if defined(__GNUC__)
-/* End of enforcing O1 optimize level */
+/* End of enforcing O1 optimize level for gcc*/
 #pragma GCC pop_options
+#endif
+
+#if (defined(__CC_ARM) || defined(__ARMCC_VERSION))
+// End of enforcing optimize off for clang
+#pragma clang optimize on
 #endif

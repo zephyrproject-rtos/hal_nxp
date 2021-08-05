@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2021 NXP
  * All rights reserved.
  *
  *
@@ -8,8 +8,12 @@
 
 #include "fsl_puf.h"
 #include "fsl_clock.h"
-#include "fsl_reset.h"
 #include "fsl_common.h"
+
+#if !(defined(FSL_FEATURE_PUF_HAS_NO_RESET) && (FSL_FEATURE_PUF_HAS_NO_RESET > 0))
+#include "fsl_reset.h"
+#endif /* FSL_FEATURE_PUF_HAS_NO_RESET */
+
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.puf"
@@ -33,17 +37,20 @@
 #else
 static void puf_wait_usec(volatile uint32_t usec, uint32_t coreClockFrequencyMHz)
 {
-    while (usec > 0U)
-    {
-        usec--;
+    SDK_DelayAtLeastUs(usec, coreClockFrequencyMHz * 1000000U);
 
-        /* number of MHz is directly number of core clocks to wait 1 usec. */
-        /* the while loop below is actually 4 clocks so divide by 4 for ~1 usec */
-        register uint32_t ticksCount = coreClockFrequencyMHz / 4u + 1u;
-        while (0U != ticksCount--)
-        {
-        }
-    }
+    /* Instead of calling SDK_DelayAtLeastUs() implement delay loop here */
+    // while (usec > 0U)
+    // {
+    //     usec--;
+
+    //     /* number of MHz is directly number of core clocks to wait 1 usec. */
+    //     /* the while loop below is actually 4 clocks so divide by 4 for ~1 usec */
+    //     volatile uint32_t ticksCount = coreClockFrequencyMHz / 4u + 1u;
+    //     while (0U != ticksCount--)
+    //     {
+    //     }
+    // }
 }
 #endif /* defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && (FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0) */
 
@@ -148,8 +155,10 @@ status_t PUF_PowerCycle(PUF_Type *base, puf_config_t *conf)
     puf_wait_usec(conf->dischargeTimeMsec * 1000u, conf->coreClockFrequencyHz / 1000000u);
 #endif
 
+#if !(defined(FSL_FEATURE_PUF_HAS_NO_RESET) && (FSL_FEATURE_PUF_HAS_NO_RESET > 0))
     /* Reset PUF and reenable power to PUF SRAM */
     RESET_PeripheralReset(kPUF_RST_SHIFT_RSTn);
+#endif /* FSL_TEATURE_PUF_HAS_NO_RESET */
     puf_powerOn(base, conf);
 
     return kStatus_Success;
@@ -194,8 +203,10 @@ status_t PUF_Init(PUF_Type *base, puf_config_t *conf)
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_EnableClock(kCLOCK_Puf);
 #endif
+#if !(defined(FSL_FEATURE_PUF_HAS_NO_RESET) && (FSL_FEATURE_PUF_HAS_NO_RESET > 0))
     /* Reset PUF */
     RESET_PeripheralReset(kPUF_RST_SHIFT_RSTn);
+#endif /* FSL_FEATURE_PUF_HAS_NO_RESET */
 
 #if defined(FSL_FEATURE_PUF_HAS_SRAM_CTRL) && (FSL_FEATURE_PUF_HAS_SRAM_CTRL > 0)
     /* Set configuration for SRAM */
@@ -210,7 +221,7 @@ status_t PUF_Init(PUF_Type *base, puf_config_t *conf)
     status = puf_waitForInit(base);
 
     /* In case of error or enroll & start not allowed, do power-cycle */
-    if ((status != kStatus_Success) || (0U != (base->ALLOW & (PUF_ALLOW_ALLOWENROLL_MASK | PUF_ALLOW_ALLOWSTART_MASK))))
+    if ((status != kStatus_Success) || (0U == (base->ALLOW & (PUF_ALLOW_ALLOWENROLL_MASK | PUF_ALLOW_ALLOWSTART_MASK))))
     {
         (void)PUF_PowerCycle(base, conf);
         status = puf_waitForInit(base);
@@ -249,7 +260,9 @@ void PUF_Deinit(PUF_Type *base, puf_config_t *conf)
     puf_wait_usec(conf->dischargeTimeMsec * 1000u, conf->coreClockFrequencyHz / 1000000u);
 #endif
 
+#if !(defined(FSL_FEATURE_PUF_HAS_NO_RESET) && (FSL_FEATURE_PUF_HAS_NO_RESET > 0))
     RESET_SetPeripheralReset(kPUF_RST_SHIFT_RSTn);
+#endif /* FSL_FEATURE_PUF_HAS_NO_RESET */
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     CLOCK_DisableClock(kCLOCK_Puf);
@@ -711,7 +724,7 @@ status_t PUF_GetHwKey(
         return kStatus_Fail;
     }
 
-#if defined(FSL_FEATURE_PUF_HAS_KEYSLOTS) && (FSL_FEATURE_PUF_HAS_KEYSLOTS > 0)
+#if defined(PUF_KEYMASK_COUNT) && (PUF_KEYMASK_COUNT > 0)
     volatile uint32_t *keyMask_reg = NULL;
     uint32_t regVal                = ((uint32_t)2U << ((uint32_t)2U * (uint32_t)keySlot));
 
@@ -724,7 +737,7 @@ status_t PUF_GetHwKey(
         case kPUF_KeySlot1:
             keyMask_reg = &base->KEYMASK[1];
             break;
-#if (FSL_FEATURE_PUF_HAS_KEYSLOTS > 2)
+#if (PUF_KEYMASK_COUNT > 2)
         case kPUF_KeySlot2:
             keyMask_reg = &base->KEYMASK[2];
             break;
@@ -732,16 +745,16 @@ status_t PUF_GetHwKey(
         case kPUF_KeySlot3:
             keyMask_reg = &base->KEYMASK[3];
             break;
-#endif /* FSL_FEATURE_PUF_HAS_KEYSLOTS > 2 */
+#endif /* PUF_KEYMASK_COUNT > 2 */
         default:
             status = kStatus_InvalidArgument;
             break;
     }
-#endif /* FSL_FEATURE_PUF_HAS_KEYSLOTS */
+#endif /* PUF_KEYMASK_COUNT */
 
     if (status != kStatus_InvalidArgument)
     {
-#if defined(FSL_FEATURE_PUF_HAS_KEYSLOTS) && (FSL_FEATURE_PUF_HAS_KEYSLOTS > 0)
+#if defined(PUF_KEYMASK_COUNT) && (PUF_KEYMASK_COUNT > 0)
         base->KEYRESET  = regVal;
         base->KEYENABLE = regVal;
         *keyMask_reg    = keyMask;
@@ -761,7 +774,19 @@ status_t PUF_GetHwKey(
                 status = kStatus_Fail;
             }
         }
-#endif /* FSL_FEATURE_PUF_HAS_SHIFT_STATUS */
+#elif defined(PUF_IDXBLK_SHIFT_IND_KEY0_MASK) && PUF_IDXBLK_SHIFT_IND_KEY0_MASK
+        size_t keyWords = 0;
+
+        if (status == kStatus_Success)
+        {
+            /* if the corresponding shift count does not match, return fail anyway */
+            keyWords = ((((size_t)keyCode[3]) * 2U) - 1u) << ((size_t)keySlot << 2U);
+            if (keyWords != ((0x0FUL << ((uint32_t)keySlot << 2U)) & base->IDXBLK_SHIFT))
+            {
+                status = kStatus_Fail;
+            }
+        }
+#endif /* FSL_FEATURE_PUF_HAS_SHIFT_STATUS || PUF_IDXBLK_SHIFT_IND_KEY0_MASK */
     }
 
     return status;

@@ -155,6 +155,13 @@ SPDX-License-Identifier: BSD-3-Clause
               <bitWidth>2</bitWidth>
               <access>read-write</access>
             </field>
+            <field>
+              <name>RoTK3_EN</name>
+              <description>RoT Key 3 enable. 00 - Invalid 01 - Enabled 10, 11 - Key revoked</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>2</bitWidth>
+              <access>read-write</access>
+            </field>
           </fields>
         </register>
         <register>
@@ -11688,7 +11695,7 @@ SPDX-License-Identifier: BSD-3-Clause
               </enumeratedValues>
             </field>
             <field>
-              <name>CWT_RST</name>
+              <name>CDOG_RST</name>
               <description>Code Watchdog reset control.</description>
               <bitOffset>11</bitOffset>
               <bitWidth>1</bitWidth>
@@ -12915,7 +12922,7 @@ SPDX-License-Identifier: BSD-3-Clause
               </enumeratedValues>
             </field>
             <field>
-              <name>CWT</name>
+              <name>CDOG</name>
               <description>Enables the clock for the code watchdog.</description>
               <bitOffset>11</bitOffset>
               <bitWidth>1</bitWidth>
@@ -31613,12 +31620,20 @@ SPDX-License-Identifier: BSD-3-Clause
         <usage>registers</usage>
       </addressBlock>
       <interrupt>
+        <name>SEC_HYPERVISOR_CALL</name>
+        <value>49</value>
+      </interrupt>
+      <interrupt>
         <name>SEC_GPIO_INT0_IRQ0</name>
         <value>50</value>
       </interrupt>
       <interrupt>
         <name>SEC_GPIO_INT0_IRQ1</name>
         <value>51</value>
+      </interrupt>
+      <interrupt>
+        <name>SEC_VIO</name>
+        <value>53</value>
       </interrupt>
     </peripheral>
     <peripheral>
@@ -35531,6 +35546,10 @@ SPDX-License-Identifier: BSD-3-Clause
         <size>0xCC</size>
         <usage>registers</usage>
       </addressBlock>
+      <interrupt>
+        <name>ACMP</name>
+        <value>24</value>
+      </interrupt>
       <registers>
         <register>
           <name>RESETCTRL</name>
@@ -36385,7 +36404,7 @@ SPDX-License-Identifier: BSD-3-Clause
             </field>
             <field>
               <name>CLOCKENABLE</name>
-              <description>Enable OSTIMER 32 KHz clock.</description>
+              <description>Enable OS event timer clock.</description>
               <bitOffset>1</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -53829,7 +53848,7 @@ SPDX-License-Identifier: BSD-3-Clause
           <description>FIFO write data.</description>
           <addressOffset>0xE20</addressOffset>
           <size>32</size>
-          <access>read-write</access>
+          <access>write-only</access>
           <resetValue>0</resetValue>
           <resetMask>0</resetMask>
           <fields>
@@ -55611,7 +55630,7 @@ SPDX-License-Identifier: BSD-3-Clause
           <description>FIFO write data.</description>
           <addressOffset>0xE20</addressOffset>
           <size>32</size>
-          <access>read-write</access>
+          <access>write-only</access>
           <resetValue>0</resetValue>
           <resetMask>0</resetMask>
           <fields>
@@ -67378,6 +67397,10 @@ SPDX-License-Identifier: BSD-3-Clause
         <size>0x4C</size>
         <usage>registers</usage>
       </addressBlock>
+      <interrupt>
+        <name>CDOG</name>
+        <value>60</value>
+      </interrupt>
       <registers>
         <register>
           <name>CONTROL</name>
@@ -70301,6 +70324,10 @@ SPDX-License-Identifier: BSD-3-Clause
         <size>0x84</size>
         <usage>registers</usage>
       </addressBlock>
+      <interrupt>
+        <name>CASER</name>
+        <value>55</value>
+      </interrupt>
       <registers>
         <register>
           <name>CTRL0</name>
@@ -82951,7 +82978,7 @@ SPDX-License-Identifier: BSD-3-Clause
           <description>Software Trigger Interrupt Register</description>
           <addressOffset>0xE00</addressOffset>
           <size>32</size>
-          <access>read-write</access>
+          <access>write-only</access>
           <resetValue>0</resetValue>
           <resetMask>0xFFFFFFFF</resetMask>
           <fields>

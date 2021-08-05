@@ -40,16 +40,12 @@ typedef enum _SYSCON_RSTn
     kROM_RST_SHIFT_RSTn     = 0 | 1U,  /**< ROM reset control */
     kSRAM1_RST_SHIFT_RSTn   = 0 | 3U,  /**< SRAM1 reset control */
     kSRAM2_RST_SHIFT_RSTn   = 0 | 4U,  /**< SRAM2 reset control */
-    kSRAM3_RST_SHIFT_RSTn   = 0 | 5U,  /**< SRAM3 reset control */
-    kSRAM4_RST_SHIFT_RSTn   = 0 | 6U,  /**< SRAM4 reset control */
     kFLASH_RST_SHIFT_RSTn   = 0 | 7U,  /**< Flash controller reset control */
     kFMC_RST_SHIFT_RSTn     = 0 | 8U,  /**< Flash accelerator reset control */
     kMUX0_RST_SHIFT_RSTn    = 0 | 11U, /**< Input mux0 reset control */
     kIOCON_RST_SHIFT_RSTn   = 0 | 13U, /**< IOCON reset control */
     kGPIO0_RST_SHIFT_RSTn   = 0 | 14U, /**< GPIO0 reset control */
     kGPIO1_RST_SHIFT_RSTn   = 0 | 15U, /**< GPIO1 reset control */
-    kGPIO2_RST_SHIFT_RSTn   = 0 | 16U, /**< GPIO2 reset control */
-    kGPIO3_RST_SHIFT_RSTn   = 0 | 17U, /**< GPIO3 reset control */
     kPINT_RST_SHIFT_RSTn    = 0 | 18U, /**< Pin interrupt (PINT) reset control */
     kGINT_RST_SHIFT_RSTn    = 0 | 19U, /**< Grouped interrupt (PINT) reset control. */
     kDMA0_RST_SHIFT_RSTn    = 0 | 20U, /**< DMA reset control */
@@ -62,7 +58,6 @@ typedef enum _SYSCON_RSTn
     kMRT_RST_SHIFT_RSTn      = 65536 | 0U,  /**< Multi-rate timer (MRT) reset control */
     kOSTIMER0_RST_SHIFT_RSTn = 65536 | 1U,  /**< OSTimer0 reset control */
     kSCT0_RST_SHIFT_RSTn     = 65536 | 2U,  /**< SCTimer/PWM 0 (SCT0) reset control */
-    kSCTIPU_RST_SHIFT_RSTn   = 65536 | 6U,  /**< SCTIPU reset control */
     kMCAN_RST_SHIFT_RSTn     = 65536 | 7U,  /**< MCAN reset control */
     kUTICK_RST_SHIFT_RSTn    = 65536 | 10U, /**< Micro-tick timer reset control */
     kFC0_RST_SHIFT_RSTn      = 65536 | 11U, /**< Flexcomm Interface 0 reset control */
@@ -77,6 +72,8 @@ typedef enum _SYSCON_RSTn
     kUSB0D_RST_SHIFT_RSTn    = 65536 | 25U, /**< USB0 Device reset control */
     kCTIMER0_RST_SHIFT_RSTn  = 65536 | 26U, /**< CTimer 0 reset control */
     kCTIMER1_RST_SHIFT_RSTn  = 65536 | 27U, /**< CTimer 1 reset control */
+    kEZHA_RST_SHIFT_RSTn     = 65536 | 30U, /**< EZHA reset control */
+    kEZHB_RST_SHIFT_RSTn     = 65536 | 31U, /**< EZHB reset control */
 
     kDMA1_RST_SHIFT_RSTn       = 131072 | 1U,  /**< DMA1 reset control */
     kCMP_RST_SHIFT_RSTn        = 131072 | 2U,  /**< CMP reset control */
@@ -85,7 +82,7 @@ typedef enum _SYSCON_RSTn
     kUSB1RAM_RST_SHIFT_RSTn    = 131072 | 6U,  /**< USB RAM reset control */
     kUSB1_RST_SHIFT_RSTn       = 131072 | 7U,  /**< USBHS reset control */
     kFREQME_RST_SHIFT_RSTn     = 131072 | 8U,  /**< FREQME reset control */
-    kCWT_RST_SHIFT_RSTn        = 131072 | 11U, /**< Code Watchdog reset control */
+    kCDOG_RST_SHIFT_RSTn       = 131072 | 11U, /**< Code Watchdog reset control */
     kRNG_RST_SHIFT_RSTn        = 131072 | 13U, /**< RNG  reset control */
     kSYSCTL_RST_SHIFT_RSTn     = 131072 | 15U, /**< SYSCTL reset control */
     kUSB0HMR_RST_SHIFT_RSTn    = 131072 | 16U, /**< USB0HMR reset control */
@@ -134,9 +131,9 @@ typedef enum _SYSCON_RSTn
     {                                              \
         kGINT_RST_SHIFT_RSTn, kGINT_RST_SHIFT_RSTn \
     } /* Reset bits for GINT peripheral. GINT0 & GINT1 share same slot */
-#define GPIO_RSTS_N                                                                                \
-    {                                                                                              \
-        kGPIO0_RST_SHIFT_RSTn, kGPIO1_RST_SHIFT_RSTn, kGPIO2_RST_SHIFT_RSTn, kGPIO3_RST_SHIFT_RSTn \
+#define GPIO_RSTS_N                                  \
+    {                                                \
+        kGPIO0_RST_SHIFT_RSTn, kGPIO1_RST_SHIFT_RSTn \
     } /* Reset bits for GPIO peripheral */
 #define INPUTMUX_RSTS        \
     {                        \
@@ -158,10 +155,10 @@ typedef enum _SYSCON_RSTn
     {                        \
         kPINT_RST_SHIFT_RSTn \
     } /* Reset bits for PINT peripheral */
-#define CWT_RSTS            \
-    {                       \
-        kCWT_RST_SHIFT_RSTn \
-    } /* Reset bits for CWT peripheral */
+#define CDOG_RSTS            \
+    {                        \
+        kCDOG_RST_SHIFT_RSTn \
+    } /* Reset bits for CDOG peripheral */
 #define RNG_RSTS            \
     {                       \
         kRNG_RST_SHIFT_RSTn \
