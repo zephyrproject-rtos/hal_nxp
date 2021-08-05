@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -11,8 +11,13 @@
 
 #include "fsl_common.h"
 
+/*!
+ * @addtogroup caam_driver
+ * @{
+ */
+
 /*! @brief CAAM status return codes. */
-enum _caam_status
+enum
 {
     kStatus_CAAM_Again = MAKE_STATUS(kStatusGroup_CAAM, 0), /*!< Non-blocking function shall be called again. */
 };
@@ -21,15 +26,11 @@ enum _caam_status
  * Definitions
  *******************************************************************************/
 
-/*!
- * @addtogroup caam_driver
- * @{
- */
 /*! @name Driver version */
 /*@{*/
-/*! @brief CAAM driver version. Version 2.0.3.
+/*! @brief CAAM driver version. Version 2.1.3.
  *
- * Current version: 2.0.3
+ * Current version: 2.1.3
  *
  * Change log:
  * - Version 2.0.0
@@ -44,8 +45,14 @@ enum _caam_status
  *   - Correct descriptor size mask.
  * - Version 2.1.0
  *   - Add return codes check and handling.
+ * - Version 2.1.1
+ *   - Add DCACHE support.
+ * - Version 2.1.2
+ *   - Add data offset feature to provide support for mirrored (high-speed) memory.
+ * - Version 2.1.3
+ *   - Fix MISRA-2012 issues.
  */
-#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_CAAM_DRIVER_VERSION (MAKE_VERSION(2, 1, 3))
 /*@}*/
 
 /*! @brief CAAM callback function. */
@@ -195,7 +202,7 @@ typedef enum _caam_ext_key_xfr_source
  */
 
 /*! @brief CAAM DES key size - 64 bits. */
-#define CAAM_DES_KEY_SIZE 8
+#define CAAM_DES_KEY_SIZE 8U
 
 /*! @brief CAAM DES IV size - 8 bytes */
 #define CAAM_DES_IV_SIZE 8
@@ -225,7 +232,7 @@ typedef enum _caam_hash_algo_t
 } caam_hash_algo_t;
 
 /*! @brief CAAM HASH Context size. */
-#define CAAM_SHA_BLOCK_SIZE  128                 /*!< up to SHA-512 block size  */
+#define CAAM_SHA_BLOCK_SIZE  128U                /*!< up to SHA-512 block size  */
 #define CAAM_HASH_BLOCK_SIZE CAAM_SHA_BLOCK_SIZE /*!< CAAM hash block size  */
 
 /*! @brief CAAM HASH Context size. */
@@ -431,6 +438,7 @@ status_t CAAM_ExternalKeyTransfer(CAAM_Type *base,
  * Encrypts AES using the ECB block mode.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param plaintext Input plain text to encrypt
  * @param[out] ciphertext Output cipher text
  * @param size Size of input and output data in bytes. Must be multiple of 16 bytes.
@@ -698,6 +706,7 @@ status_t CAAM_AES_DecryptTagGcm(CAAM_Type *base,
  * Puts AES ECB encrypt descriptor to CAAM input job ring.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param plaintext Input plain text to encrypt
  * @param[out] descriptor Memory for the CAAM descriptor.
  * @param[out] ciphertext Output cipher text
@@ -1818,6 +1827,7 @@ status_t CAAM_DES3_DecryptCbc(CAAM_Type *base,
  * Encrypts triple DES using CFB block mode with three keys.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param plaintext Input plaintext to encrypt
  * @param[out] ciphertext Output ciphertext
  * @param size Size of input and ouput data in bytes
@@ -1869,6 +1879,7 @@ status_t CAAM_DES3_DecryptCfb(CAAM_Type *base,
  * Encrypts triple DES using OFB block mode with three keys.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param plaintext Input plaintext to encrypt
  * @param[out] ciphertext Output ciphertext
  * @param size Size of input and output data in bytes
@@ -2566,6 +2577,7 @@ int CAAM_PKHA_CompareBigNum(const uint8_t *a, size_t sizeA, const uint8_t *b, si
  * This function computes R2 mod N and optionally converts A or B into Montgomery format of A or B.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param N modulus
  * @param sizeN size of N in bytes
  * @param[in,out] A The first input in non-Montgomery format. Output Montgomery format of the first input.
@@ -2599,6 +2611,7 @@ status_t CAAM_PKHA_NormalToMontgomery(CAAM_Type *base,
  * This function converts Montgomery format of A or B into int A or B.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param N modulus.
  * @param sizeN size of N modulus in bytes.
  * @param[in,out] A Input first number in Montgomery format. Output is non-Montgomery format.
@@ -2630,6 +2643,7 @@ status_t CAAM_PKHA_MontgomeryToNormal(CAAM_Type *base,
  * equivalent to a bitwise XOR and it is functionally the same as subtraction.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param A first addend (integer or binary polynomial)
  * @param sizeA Size of A in bytes
  * @param B second addend (integer or binary polynomial)
@@ -2660,6 +2674,7 @@ status_t CAAM_PKHA_ModAdd(CAAM_Type *base,
  * integer inputs.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param A first addend (integer or binary polynomial)
  * @param sizeA Size of A in bytes
  * @param B second addend (integer or binary polynomial)
@@ -2688,6 +2703,7 @@ status_t CAAM_PKHA_ModSub1(CAAM_Type *base,
  * with integer inputs.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param A first addend (integer or binary polynomial)
  * @param sizeA Size of A in bytes
  * @param B second addend (integer or binary polynomial)
@@ -2717,6 +2733,7 @@ status_t CAAM_PKHA_ModSub2(CAAM_Type *base,
  * and/or outputs will be in Montgomery form or not.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param A first addend (integer or binary polynomial)
  * @param sizeA Size of A in bytes
  * @param B second addend (integer or binary polynomial)
@@ -2754,6 +2771,7 @@ status_t CAAM_PKHA_ModMul(CAAM_Type *base,
  * binary polynomial (F2m) inputs.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param A first addend (integer or binary polynomial)
  * @param sizeA Size of A in bytes
  * @param N modulus
@@ -2788,6 +2806,7 @@ status_t CAAM_PKHA_ModExp(CAAM_Type *base,
  * binary polynomial (F2m) inputs.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param A first addend (integer or binary polynomial)
  * @param sizeA Size of A in bytes
  * @param N modulus
@@ -2814,6 +2833,7 @@ status_t CAAM_PKHA_ModRed(CAAM_Type *base,
  * binary polynomial (F2m) inputs.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param A first addend (integer or binary polynomial)
  * @param sizeA Size of A in bytes
  * @param N modulus
@@ -2840,6 +2860,7 @@ status_t CAAM_PKHA_ModInv(CAAM_Type *base,
  * into the Montgomery residue system representation.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param N modulus
  * @param sizeN Size of N in bytes
  * @param[out] result Output array to store result of operation
@@ -2862,6 +2883,7 @@ status_t CAAM_PKHA_ModR2(CAAM_Type *base,
  * either integer or binary polynomial (F2m) inputs.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param A first value (must be smaller than or equal to N)
  * @param sizeA Size of A in bytes
  * @param N second value (must be non-zero)
@@ -2888,6 +2910,7 @@ status_t CAAM_PKHA_ModGcd(CAAM_Type *base,
  * to be a prime.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param A initial random seed
  * @param sizeA Size of A in bytes
  * @param B number of trial runs
@@ -2914,6 +2937,7 @@ status_t CAAM_PKHA_PrimalityTest(CAAM_Type *base,
  * affine coordinates.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param A Left-hand point
  * @param B Right-hand point
  * @param N Prime modulus of the field
@@ -2945,6 +2969,7 @@ status_t CAAM_PKHA_ECC_PointAdd(CAAM_Type *base,
  * affine coordinates.
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param B Point to double
  * @param N Prime modulus of the field
  * @param aCurveParam A parameter from curve equation
@@ -2971,6 +2996,7 @@ status_t CAAM_PKHA_ECC_PointDouble(CAAM_Type *base,
  * a scalar integer multiplier over a prime field (Fp) or a binary field (F2m).
  *
  * @param base CAAM peripheral base address
+ * @param handle Handle used for this request. Specifies jobRing.
  * @param A Point as multiplicand
  * @param E Scalar multiple
  * @param sizeE The size of E, in bytes

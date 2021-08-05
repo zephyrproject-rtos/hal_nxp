@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020, NXP
+ * Copyright 2019-2021, NXP
  * All rights reserved.
  *
  *
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief PGMC driver version 2.1.0. */
-#define FSL_PGMC_RIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief PGMC driver version 2.1.1. */
+#define FSL_PGMC_RIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 /*! @brief The enumeration of setpoint.
@@ -98,18 +98,18 @@ typedef enum _pgmc_control_mode
  */
 typedef enum _pgmc_memory_low_power_level
 {
-    kPGMC_MLPLHighSpeed    = 1U,
-    kPGMC_MLPLNormal       = 3U,
-    kPGMC_MLPLLowSpeed     = 4U,
-    kPGMC_MLPLInputGating  = 5U,
-    kPGMC_MLPLStandby      = 6U,
-    kPGMC_MLPLSleep        = 8U,
-    kPGMC_MLPLArrOnPerOff  = 9U,
-    kPGMC_MLPLArrOffPerOn  = 10U,
-    kPGMC_MLPLArrOffPerOff = 11U,
-    kPGMC_MLPLSw2          = 13U,
-    kPGMC_MLPLSw2PerOff    = 14U,
-    kPGMC_MLPLSw1PerOff    = 15U,
+    kPGMC_MLPLHighSpeed    = 1U,  /*!< Memory low power level: High speed. */
+    kPGMC_MLPLNormal       = 3U,  /*!< Memory low power level: Normal. */
+    kPGMC_MLPLLowSpeed     = 4U,  /*!< Memory low power level: Low Speed. */
+    kPGMC_MLPLInputGating  = 5U,  /*!< Memory low power level: Input Gating. */
+    kPGMC_MLPLStandby      = 6U,  /*!< Memory low power level: Standby. */
+    kPGMC_MLPLSleep        = 8U,  /*!< Memory low power level: Sleep. */
+    kPGMC_MLPLArrOnPerOff  = 9U,  /*!< Memory low power level: Arr on per off. */
+    kPGMC_MLPLArrOffPerOn  = 10U, /*!< Memory low power level: Arr off per on. */
+    kPGMC_MLPLArrOffPerOff = 11U, /*!< Memory low power level: Arr off per off. */
+    kPGMC_MLPLSw2          = 13U, /*!< Memory low power level: SW2. */
+    kPGMC_MLPLSw2PerOff    = 14U, /*!< Memory low power level: SW2 Per off. */
+    kPGMC_MLPLSw1PerOff    = 15U, /*!< Memory low power level: SW1 Per off. */
 } pgmc_memory_low_power_level_t;
 
 /*!
@@ -205,7 +205,7 @@ void PGMC_BPC_ControlPowerDomainBySetPointMode(PGMC_BPC_Type *base,
  * @note The function is used to control power domain when the CPU is in RUN mode.
  *
  * @param base PGMC basic power controller base address.
- * @param powerOff. Power On/Off power domain in software mode.
+ * @param powerOff Power On/Off power domain in software mode.
  *                  - \b true Power off the power domain in software mode.
  *                  - \b false Power on the power domain in software mode.
  */
@@ -600,7 +600,7 @@ static inline void PGMC_CPC_LockLowPowerConfigurationFields(PGMC_CPC_Type *base)
  * @param base PGMC MIF peripheral base address.
  * @param memoryLevel The selected memory low power level. For details please refer to @ref
  * pgmc_memory_low_power_level_t.
- * @param mask. The mask of MIF signal behaviour. Should be the OR'ed value of @ref _pgmc_mif_signal_behaviour
+ * @param mask The mask of MIF signal behaviour. Should be the OR'ed value of @ref _pgmc_mif_signal_behaviour
  */
 void PGMC_MIF_SetSignalBehaviour(PGMC_MIF_Type *base, pgmc_memory_low_power_level_t memoryLevel, uint32_t mask);
 
@@ -622,6 +622,26 @@ static inline void PGMC_MIF_LockLowPowerConfigurationFields(PGMC_MIF_Type *base)
  * @name PMIC Power Related Interfaces
  * @{
  */
+
+/*!
+ * @brief Trigger PMIC standby ON/OFF.
+ *
+ * @param base PMIC module base address.
+ * @param enable Trigger on/off PMIC standby.
+ *          - \b true Trigger PMIC standby ON.
+ *          - \b false Trigger PMIC standby OFF.
+ */
+static inline void PGMC_PPC_TriggerPMICStandbySoftMode(PGMC_PPC_Type *base, bool enable)
+{
+    if (enable)
+    {
+        PGMC_PPC0->PPC_STBY_CM_CTRL |= PGMC_PPC_PPC_STBY_CM_CTRL_STBY_ON_SOFT_MASK;
+    }
+    else
+    {
+        PGMC_PPC0->PPC_STBY_CM_CTRL |= PGMC_PPC_PPC_STBY_CM_CTRL_STBY_OFF_SOFT_MASK;
+    }
+}
 
 /*!
  * @brief Makes the PMIC module controlled by the target CPU power mode, such as Wait mode.

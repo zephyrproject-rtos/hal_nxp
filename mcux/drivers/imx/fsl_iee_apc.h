@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, NXP
+ * Copyright 2020-2021, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,17 +21,20 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief IEE_APC driver version. Version 2.0.0.
+/*! @brief IEE_APC driver version. Version 2.0.1.
  *
- * Current version: 2.0.0
+ * Current version: 2.0.1
  *
  * Change log:
  * - Version 2.0.0
  *   - Initial version
+ * - Version 2.0.1
+ *   - Fixed MISRA issues.
  */
-#define FSL_IEE_APC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_IEE_APC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
+/*! @brief APC IEE regions. */
 typedef enum _iee_apc_region
 {
     kIEE_APC_Region0 = 0U, /*!< APC IEE region 0 */
@@ -44,6 +47,7 @@ typedef enum _iee_apc_region
     kIEE_APC_Region7 = 7U  /*!< APC IEE region 7 */
 } iee_apc_region_t;
 
+/*! @brief APC IEE domains. */
 typedef enum _apc_iee_domain
 {
     kIEE_APC_Domain0 = 0U, /*!< APC IEE region 0 */
@@ -58,20 +62,20 @@ extern "C" {
 #endif
 
 /*!
- * brief Enable the APC IEE Region setting.
+ * @brief Enable the APC IEE Region setting.
  *
  * This function enables IOMUXC LPSR GPR and APC IEE for setting the region.
  *
- * param base APC IEE peripheral address.
+ * @param base APC IEE peripheral address.
  */
 void IEE_APC_GlobalEnable(IEE_APC_Type *base);
 
 /*!
- * brief Disables the APC IEE Region setting.
+ * @brief Disables the APC IEE Region setting.
  *
  * This function disables IOMUXC LPSR GPR and APC IEE for setting the region.
  *
- * param base APC IEE peripheral address.
+ * @param base APC IEE peripheral address.
  */
 void IEE_APC_GlobalDisable(IEE_APC_Type *base);
 
@@ -95,6 +99,7 @@ status_t IEE_APC_SetRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, ui
  *
  * @param base APC IEE peripheral address.
  * @param region Selection of the APC IEE region to be locked.
+ * @param domain
  */
 status_t IEE_APC_LockRegionConfig(IEE_APC_Type *base, iee_apc_region_t region, iee_apc_domain_t domain);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, NXP
+ * Copyright 2020-2021, NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -36,7 +36,7 @@
  */
 status_t KEYMGR_MasterKeyControll(KEY_MANAGER_Type *base, keymgr_select_t select, keymgr_lock_t lock)
 {
-    if (select != (uint8_t)(KEYMGR_SEL_UDF || KEYMGR_SEL_PUF))
+    if ((select != (uint8_t)(KEYMGR_SEL_UDF)) && (select != (uint8_t)(KEYMGR_SEL_PUF)))
     {
         return kStatus_InvalidArgument;
     }
@@ -62,7 +62,7 @@ status_t KEYMGR_MasterKeyControll(KEY_MANAGER_Type *base, keymgr_select_t select
  */
 status_t KEYMGR_OTFAD1KeyControll(KEY_MANAGER_Type *base, keymgr_select_t select, keymgr_lock_t lock)
 {
-    if (select != (uint8_t)(KEYMGR_SEL_OCOTP || KEYMGR_SEL_PUF))
+    if ((select != (uint8_t)(KEYMGR_SEL_OCOTP)) && (select != (uint8_t)(KEYMGR_SEL_PUF)))
     {
         return kStatus_InvalidArgument;
     }
@@ -88,7 +88,7 @@ status_t KEYMGR_OTFAD1KeyControll(KEY_MANAGER_Type *base, keymgr_select_t select
  */
 status_t KEYMGR_OTFAD2KeyControll(KEY_MANAGER_Type *base, keymgr_select_t select, keymgr_lock_t lock)
 {
-    if (select != (uint8_t)(KEYMGR_SEL_OCOTP || KEYMGR_SEL_PUF))
+    if ((select != (uint8_t)(KEYMGR_SEL_OCOTP)) && (select != (uint8_t)(KEYMGR_SEL_PUF)))
     {
         return kStatus_InvalidArgument;
     }

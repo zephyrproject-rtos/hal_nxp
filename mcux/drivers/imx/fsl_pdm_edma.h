@@ -11,7 +11,8 @@
 #include "fsl_pdm.h"
 
 /*!
- * @addtogroup pdm_edma
+ * @addtogroup pdm_edma PDM EDMA Driver
+ * @ingroup pdm
  * @{
  */
 

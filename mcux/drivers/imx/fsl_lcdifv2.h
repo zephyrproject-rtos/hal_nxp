@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  *
@@ -10,6 +10,10 @@
 #define _FSL_LCDIFV2_H_
 
 #include "fsl_common.h"
+
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#include "fsl_memory.h"
+#endif
 
 /*!
  * @addtogroup lcdifv2
@@ -23,7 +27,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief LCDIF v2 driver version */
-#define FSL_LCDIFV2_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
+#define FSL_LCDIFV2_DRIVER_VERSION (MAKE_VERSION(2, 2, 3))
 /*@}*/
 
 #if defined(FSL_FEATURE_LCDIFV2_LAYER_COUNT) && (!defined(LCDIFV2_LAYER_COUNT))
@@ -33,6 +37,12 @@
 #if defined(FSL_FEATURE_LCDIFV2_LAYER_CSC_COUNT) && (!defined(LCDIFV2_LAYER_CSC_COUNT))
 #define LCDIFV2_LAYER_CSC_COUNT FSL_FEATURE_LCDIFV2_LAYER_CSC_COUNT
 #endif
+
+#if defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#define LCDIFV2_ADDR_CPU_2_IP(addr) (MEMORY_ConvertMemoryMapAddress((uint32_t)(addr), kMEMORY_Local2DMA))
+#else
+#define LCDIFV2_ADDR_CPU_2_IP(addr) (addr)
+#endif /* FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET */
 
 /*! @brief LCDIF v2 FIFO empty interrupt. */
 #define LCDIFV2_MAKE_FIFO_EMPTY_INTERRUPT(layer) (1U << ((uint32_t)(layer) + 24U))
@@ -133,6 +143,7 @@ typedef enum _lcdifv2_csc_mode
     kLCDIFV2_CscYCbCr2RGB,    /*!< YCbCr to RGB. */
 } lcdifv2_csc_mode_t;
 
+/*! @brief LCDIF v2 pixel format. */
 typedef enum _lcdifv2_pixel_format
 {
     kLCDIFV2_PixelFormatIndex1BPP = LCDIFV2_CTRLDESCL5_BPP(0U), /*!< LUT index 1 bit. */
@@ -317,7 +328,7 @@ void LCDIFV2_Reset(LCDIFV2_Type *base);
     config->polarityFlags = kLCDIFV2_VsyncActiveHigh | kLCDIFV2_HsyncActiveHigh | kLCDIFV2_DataEnableActiveHigh |
                             kLCDIFV2_DriveDataOnRisingClkEdge | kLCDIFV2_DataActiveHigh;
     config->lineOrder       = kLCDIFV2_LineOrderRGB;
-    @code
+    @endcode
  *
  * @param config Pointer to the LCDIF configuration structure.
  */
@@ -423,6 +434,7 @@ static inline void LCDIFV2_ClearInterruptStatus(LCDIFV2_Type *base, uint8_t doma
  * @param layerIndex Which layer to set.
  * @param lutData The LUT data to load.
  * @param count Count of @p lutData.
+ * @param useShadowLoad Use shadow load.
  * @retval kStatus_Success Set success.
  * @retval kStatus_Fail Previous LUT data is not loaded to hardware yet.
  */
@@ -486,7 +498,7 @@ void LCDIFV2_SetLayerBufferConfig(LCDIFV2_Type *base, uint8_t layerIndex, const 
  */
 static inline void LCDIFV2_SetLayerBufferAddr(LCDIFV2_Type *base, uint8_t layerIndex, uint32_t addr)
 {
-    base->LAYER[layerIndex].CTRLDESCL4 = addr;
+    base->LAYER[layerIndex].CTRLDESCL4 = LCDIFV2_ADDR_CPU_2_IP(addr);
 }
 
 /*!

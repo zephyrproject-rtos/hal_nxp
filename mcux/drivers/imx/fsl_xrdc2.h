@@ -199,7 +199,7 @@ static inline uint8_t XRDC2_GetCurrentMasterDomainId(XRDC2_Type *base)
  * Once change the lock mode, it could not be changed until next reset.
  *
  * @param base XRDC2 peripheral base address.
- * @param lock The lock mode.
+ * @param mode The lock mode.
  */
 static inline void XRDC2_SetGlobalConfigLock(XRDC2_Type *base, xrdc2_global_config_lock_t mode)
 {

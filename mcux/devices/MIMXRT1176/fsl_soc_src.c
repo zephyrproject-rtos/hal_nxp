@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -140,8 +140,8 @@ void SRC_SetSliceSetPointConfig(SRC_Type *base, src_reset_slice_name_t sliceName
  * brief Sets domain mode configuration for the selected reset slice.
  *
  * param base SRC peripheral base address.
- * param sliceName The selected reset slice. See @ref src_reset_slice_name_t for more details.
- * param setPointConfig The logic OR'ed value of @ref _src_domain_mode_selection.
+ * param sliceName The selected reset slice. See src_reset_slice_name_t for more details.
+ * param domainConfig The logic OR'ed value of _src_domain_mode_selection.
  */
 void SRC_SetSliceDomainModeConfig(SRC_Type *base, src_reset_slice_name_t sliceName, uint32_t domainConfig)
 {

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2017-2020 NXP
+ * Copyright 2017-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,19 +22,22 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief IEE driver version. Version 2.1.0.
+/*! @brief IEE driver version. Version 2.1.1.
  *
- * Current version: 2.1.0
+ * Current version: 2.1.1
  *
  * Change log:
  * - Version 2.0.0
  *   - Initial version
  * - Version 2.1.0
  *   - Add region lock function IEE_LockRegionConfig() and driver clock control
+ * - Version 2.1.1
+ *   - Fixed MISRA issues.
  */
-#define FSL_IEE_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+#define FSL_IEE_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
+/*! @brief IEE region. */
 typedef enum _iee_region
 {
     kIEE_Region0 = 0U, /*!< IEE region 0 */
@@ -47,12 +50,14 @@ typedef enum _iee_region
     kIEE_Region7 = 7U  /*!< IEE region 7 */
 } iee_region_t;
 
+/*! @brief IEE AES enablement/bypass. */
 typedef enum _iee_aes_bypass
 {
     kIEE_AesUseMdField = 0U, /*!< AES encryption/decryption enabled */
     kIEE_AesBypass     = 1U  /*!< AES encryption/decryption bypass */
 } iee_aes_bypass_t;
 
+/*! @brief IEE AES mode. */
 typedef enum _iee_aes_mode
 {
     kIEE_ModeNone            = 0U, /*!< AES NONE mode */
@@ -62,12 +67,14 @@ typedef enum _iee_aes_mode
     kIEE_ModeAesCTRkeystream = 4U  /*!< AES CTR keystream only */
 } iee_aes_mode_t;
 
+/*! @brief IEE AES key size. */
 typedef enum _iee_aes_key_size
 {
     kIEE_AesCTR128XTS256 = 0U, /*!< AES 128 bits (CTR), 256 bits (XTS) */
     kIEE_AesCTR256XTS512 = 1U  /*!< AES 256 bits (CTR), 512 bits (XTS) */
 } iee_aes_key_size_t;
 
+/*! @brief IEE AES ke number. */
 typedef enum _iee_aes_key_num
 {
     kIEE_AesKey1 = 1U, /*!< AES Key 1 */

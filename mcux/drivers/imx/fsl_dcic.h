@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 #endif
 
 /*! @brief DCIC driver version. */
-#define FSL_DCIC_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_DCIC_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 
 /*! @brief CRC32 calculation polynomial. */
 #define DCIC_CRC32_POLYNOMIAL 0x04C11DB7UL

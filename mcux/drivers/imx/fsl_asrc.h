@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,7 +21,7 @@
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0 */
+#define FSL_ASRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1)) /*!< Version 2.1.1 */
 /*@}*/
 
 #ifndef ASRC_XFER_QUEUE_SIZE
@@ -80,7 +80,7 @@
                                ((uint32_t)(prescaler) << 6U)) &                                               \
      ASRC_ASRCDR_OUTPUT_PRESCALER_MASK(index))
 #define ASRC_ASRCDR_OUTPUT_DIVIDER_MASK(index) \
-    ((uint32_t)(index) < 2U ? ((uint32_t)7U << (ASRC_ASRCDR1_AOCDA_SHIFT + (uint32_t)(index)*6U)) : (7U << 9U))
+    ((uint32_t)(index) < 2U ? ((uint32_t)7U << (ASRC_ASRCDR1_AOCDA_SHIFT + (uint32_t)(index)*6U)) : (7UL << 9U))
 #define ASRC_ASRCDR_OUTPUT_DIVIDER(divider, index)                                                          \
     (((uint32_t)(index) < 2U ? ((uint32_t)(divider) << (ASRC_ASRCDR1_AOCDA_SHIFT + (uint32_t)(index)*6U)) : \
                                ((uint32_t)(divider) << 9U)) &                                               \
@@ -115,7 +115,7 @@ enum
     kStatus_ASRCInQueueIdle                = MAKE_STATUS(kStatusGroup_ASRC, 11), /*!< ASRC in queue is idle */
 };
 
-/*! @asrc channel pair mask */
+/*! @brief ASRC channel pair mask */
 typedef enum _asrc_channel_pair
 {
     kASRC_ChannelPairA = 0, /*!< channel pair A value */
@@ -437,7 +437,7 @@ status_t ASRC_SetChannelPairConfig(ASRC_Type *base,
  * @param channelPair ASRC channel pair number.
  * @param inSampleRate input sample rate.
  * @param outSampleRate output sample rate.
- * @param inSamples input sampleS size.
+ * @param inSamplesize input sampleS size.
  * @retval output buffer size in byte.
  */
 uint32_t ASRC_GetOutSamplesSize(ASRC_Type *base,
@@ -496,18 +496,18 @@ static inline void ASRC_ModuleEnable(ASRC_Type *base, bool enable)
  * @brief ASRC enable channel pair.
  *
  * @param base ASRC base pointer.
- * @param channelPairMask channel pair mask value, reference _asrc_channel_pair_mask.
+ * @param channelPair channel pair mask value, reference _asrc_channel_pair_mask.
  * @param enable true is enable, false is disable.
  */
 static inline void ASRC_ChannelPairEnable(ASRC_Type *base, asrc_channel_pair_t channelPair, bool enable)
 {
     if (enable)
     {
-        base->ASRCTR |= (channelPair + 1U) << ASRC_ASRCTR_ASREA_SHIFT;
+        base->ASRCTR |= ((uint32_t)channelPair + 1U) << ASRC_ASRCTR_ASREA_SHIFT;
     }
     else
     {
-        base->ASRCTR &= ~((channelPair + 1U) << ASRC_ASRCTR_ASREA_SHIFT);
+        base->ASRCTR &= ~(((uint32_t)channelPair + 1U) << ASRC_ASRCTR_ASREA_SHIFT);
     }
 }
 /*! @} */
@@ -563,22 +563,24 @@ static inline uint32_t ASRC_GetStatus(ASRC_Type *base)
  * @brief Gets the ASRC channel pair initialization state.
  *
  * @param base ASRC base pointer
+ * @param channel ASRC channel pair.
  * @return ASRC Tx status flag value. Use the Status Mask to get the status value needed.
  */
 static inline bool ASRC_GetChannelPairInitialStatus(ASRC_Type *base, asrc_channel_pair_t channel)
 {
-    return ((base->ASRCFG >> ASRC_ASRCFG_INIRQA_SHIFT) & (1 << channel)) == 0U ? false : true;
+    return ((base->ASRCFG >> ASRC_ASRCFG_INIRQA_SHIFT) & (1U << (uint32_t)channel)) == 0U ? false : true;
 }
 
 /*!
  * @brief Gets the ASRC channel A fifo a status flag state.
  *
  * @param base ASRC base pointer
+ * @param channelPair ASRC channel pair.
  * @return ASRC channel pair a fifo status flag value. Use the Status Mask to get the status value needed.
  */
 static inline uint32_t ASRC_GetChannelPairFifoStatus(ASRC_Type *base, asrc_channel_pair_t channelPair)
 {
-    return ASRC_ASRMCR(base, channelPair) & (kASRC_OutputFifoNearFull | kASRC_InputFifoNearEmpty);
+    return ASRC_ASRMCR(base, channelPair) & ((uint32_t)kASRC_OutputFifoNearFull | (uint32_t)kASRC_InputFifoNearEmpty);
 }
 
 /*! @} */
@@ -681,6 +683,7 @@ status_t ASRC_TransferSetChannelPairConfig(ASRC_Type *base,
  *
  * @param base ASRC base pointer
  * @param handle ASRC handle pointer.
+ * @param channelPair ASRC channel pair.
  * @param inCallback Pointer to the user callback function.
  * @param outCallback Pointer to the user callback function.
  * @param userData User parameter passed to the callback function
