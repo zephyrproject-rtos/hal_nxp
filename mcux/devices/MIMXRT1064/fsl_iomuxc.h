@@ -28,8 +28,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief IOMUXC driver version 2.0.2. */
-#define FSL_IOMUXC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+/*! @brief IOMUXC driver version 2.0.3. */
+#define FSL_IOMUXC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 /*!
@@ -1261,7 +1261,7 @@ static inline void IOMUXC_SetPinMux(uint32_t muxRegister,
     *((volatile uint32_t *)muxRegister) =
         IOMUXC_SW_MUX_CTL_PAD_MUX_MODE(muxMode) | IOMUXC_SW_MUX_CTL_PAD_SION(inputOnfield);
 
-    if (inputRegister)
+    if (inputRegister != 0UL)
     {
         *((volatile uint32_t *)inputRegister) = inputDaisy;
     }
@@ -1290,7 +1290,7 @@ static inline void IOMUXC_SetPinConfig(uint32_t muxRegister,
                                        uint32_t configRegister,
                                        uint32_t configValue)
 {
-    if (configRegister)
+    if (configRegister != 0UL)
     {
         *((volatile uint32_t *)configRegister) = configValue;
     }
@@ -1332,13 +1332,13 @@ static inline void IOMUXC_SetSaiMClkClockSource(IOMUXC_GPR_Type *base, iomuxc_gp
 
     if (mclk > kIOMUXC_GPR_SAI1MClk2Sel)
     {
-        gpr = base->GPR1 & ~(IOMUXC_GPR_SAIMCLK_HIGHBITMASK << mclk);
-        base->GPR1 = ((clkSrc & IOMUXC_GPR_SAIMCLK_HIGHBITMASK) << mclk) | gpr;
+        gpr = base->GPR1 & ~((uint32_t)IOMUXC_GPR_SAIMCLK_HIGHBITMASK << (uint32_t)mclk);
+        base->GPR1 = (((uint32_t)clkSrc & IOMUXC_GPR_SAIMCLK_HIGHBITMASK) << (uint32_t)mclk) | gpr;
     }
     else
     {
-        gpr = base->GPR1 & ~(IOMUXC_GPR_SAIMCLK_LOWBITMASK << mclk);
-        base->GPR1 = ((clkSrc & IOMUXC_GPR_SAIMCLK_LOWBITMASK) << mclk) | gpr;
+        gpr = base->GPR1 & ~((uint32_t)IOMUXC_GPR_SAIMCLK_LOWBITMASK << (uint32_t)mclk);
+        base->GPR1 = (((uint32_t)clkSrc & IOMUXC_GPR_SAIMCLK_LOWBITMASK) << (uint32_t)mclk) | gpr;
     }
 }
 
