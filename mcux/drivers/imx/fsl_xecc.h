@@ -311,6 +311,8 @@ void XECC_GetSingleErrorInfo(XECC_Type *base, xecc_single_error_info_t *info);
  */
 void XECC_GetMultiErrorInfo(XECC_Type *base, xecc_multi_error_info_t *info);
 
+/*! @}*/
+
 #if defined(__cplusplus)
 }
 #endif

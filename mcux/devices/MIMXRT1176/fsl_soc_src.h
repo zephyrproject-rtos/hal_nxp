@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,8 +18,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief SRC driver version 2.1.0. */
-#define FSL_SRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! @brief SRC driver version 2.1.1. */
+#define FSL_SRC_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
 /*@}*/
 
 #define SRC_SLICE_ADDRESS_OFFSET (0x200U)
@@ -637,7 +637,7 @@ static inline void SRC_EnableDomainModeTransferReset(SRC_Type *base, src_reset_s
  *
  * @param base SRC peripheral base address.
  * @param sliceName The selected reset slice. See @ref src_reset_slice_name_t for more details.
- * @param setPointConfig The logic OR'ed value of @ref _src_setpoint_selection enumeration. When the system in the
+ * @param setpointConfig The logic OR'ed value of _src_setpoint_selection enumeration, when the system in the
  * selected setpoint slice reset will be asserted.
  */
 void SRC_SetSliceSetPointConfig(SRC_Type *base, src_reset_slice_name_t sliceName, uint32_t setpointConfig);
@@ -647,7 +647,7 @@ void SRC_SetSliceSetPointConfig(SRC_Type *base, src_reset_slice_name_t sliceName
  *
  * @param base SRC peripheral base address.
  * @param sliceName The selected reset slice. See @ref src_reset_slice_name_t for more details.
- * @param setPointConfig The logic OR'ed value of @ref _src_domain_mode_selection enumerations.
+ * @param domainConfig The logic OR'ed value of _src_domain_mode_selection enumerations.
  */
 void SRC_SetSliceDomainModeConfig(SRC_Type *base, src_reset_slice_name_t sliceName, uint32_t domainConfig);
 

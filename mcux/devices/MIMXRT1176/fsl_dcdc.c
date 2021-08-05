@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, NXP
+ * Copyright 2020-2021 NXP
  * All rights reserved.
  *
  *
@@ -495,6 +495,7 @@ void DCDC_SetPointInit(DCDC_Type *base, const dcdc_setpoint_config_t *config)
 void DCDC_BootIntoDCM(DCDC_Type *base)
 {
     base->REG0 &= ~(DCDC_REG0_PWD_ZCD_MASK | DCDC_REG0_PWD_CMP_OFFSET_MASK);
+    base->REG1 &= ~DCDC_REG1_RLOAD_REG_EN_LPSR_MASK;
     base->REG1 |= DCDC_REG1_DM_CTRL_MASK;
     base->REG2 = (~DCDC_REG2_LOOPCTRL_EN_RCSCALE_MASK & base->REG2) | DCDC_REG2_LOOPCTRL_EN_RCSCALE(0x5U);
     base->REG3 &= ~(DCDC_REG3_DISABLE_IDLE_SKIP_MASK | DCDC_REG3_DISABLE_PULSE_SKIP_MASK);

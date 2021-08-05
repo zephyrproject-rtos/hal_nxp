@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NXP
+ * Copyright 2020-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -87,7 +87,7 @@ typedef MIPI_DSI_LVDS_COMBO_CSR_Type MIPI_DSI_CSR_Type;
 #endif
 
 /*! @brief Typedef for MIPI DSI interrupt handler. */
-typedef void (*dsi_isr_t)(MIPI_DSI_Type *base, dsi_handle_t *handle);
+typedef void (*dsi_isr_t)(const MIPI_DSI_Type *base, dsi_handle_t *handle);
 
 /*******************************************************************************
  * Variables
@@ -117,7 +117,7 @@ static const clock_ip_name_t s_dsiClocks[] = MIPI_DSI_HOST_CLOCKS;
  * @param base MIPI DSI peripheral base address.
  * @return MIPI DSI instance.
  */
-uint32_t DSI_GetInstance(MIPI_DSI_Type *base);
+uint32_t DSI_GetInstance(const MIPI_DSI_Type *base);
 
 #if !((defined(FSL_FEATURE_MIPI_NO_DPHY_PLL) && (FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL)))
 /*!
@@ -163,7 +163,7 @@ static uint32_t DSI_DphyGetPllDivider(
  *
  * @param base MIPI DSI host peripheral base address.
  */
-static void DSI_ApbClearRxFifo(MIPI_DSI_Type *base);
+static void DSI_ApbClearRxFifo(const MIPI_DSI_Type *base);
 
 /*!
  * @brief Handle the DSI transfer result.
@@ -178,7 +178,10 @@ static void DSI_ApbClearRxFifo(MIPI_DSI_Type *base);
  * @retval kStatus_DSI_ErrorReportReceived Error Report packet received.
  * @retval kStatus_DSI_Fail Transfer failed for other reasons.
  */
-static status_t DSI_HandleResult(MIPI_DSI_Type *base, uint32_t intFlags1, uint32_t intFlags2, dsi_transfer_t *xfer);
+static status_t DSI_HandleResult(const MIPI_DSI_Type *base,
+                                 uint32_t intFlags1,
+                                 uint32_t intFlags2,
+                                 dsi_transfer_t *xfer);
 
 /*!
  * @brief Prepare for the DSI APB transfer.
@@ -192,13 +195,13 @@ static status_t DSI_HandleResult(MIPI_DSI_Type *base, uint32_t intFlags1, uint32
  * @retval kStatus_Success It is ready to start transfer.
  * @retval kStatus_DSI_NotSupported The transfer format is not supported.
  */
-static status_t DSI_PrepareApbTransfer(MIPI_DSI_Type *base, dsi_transfer_t *xfer);
+static status_t DSI_PrepareApbTransfer(const MIPI_DSI_Type *base, dsi_transfer_t *xfer);
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
 
-uint32_t DSI_GetInstance(MIPI_DSI_Type *base)
+uint32_t DSI_GetInstance(const MIPI_DSI_Type *base)
 {
     uint32_t instance;
 
@@ -338,7 +341,7 @@ static uint32_t DSI_DphyGetPllDivider(
 }
 #endif
 
-static void DSI_ApbClearRxFifo(MIPI_DSI_Type *base)
+static void DSI_ApbClearRxFifo(const MIPI_DSI_Type *base)
 {
     volatile uint32_t dummy;
     uint32_t level = base->apb->PKT_FIFO_RD_LEVEL;
@@ -360,7 +363,7 @@ static void DSI_ApbClearRxFifo(MIPI_DSI_Type *base)
  * param base MIPI DSI host peripheral base address.
  * param config Pointer to a user-defined configuration structure.
  */
-void DSI_Init(MIPI_DSI_Type *base, const dsi_config_t *config)
+void DSI_Init(const MIPI_DSI_Type *base, const dsi_config_t *config)
 {
     assert(config);
 
@@ -423,7 +426,7 @@ void DSI_Init(MIPI_DSI_Type *base, const dsi_config_t *config)
  *
  * param base MIPI DSI host peripheral base address.
  */
-void DSI_Deinit(MIPI_DSI_Type *base)
+void DSI_Deinit(const MIPI_DSI_Type *base)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     (void)CLOCK_DisableClock(s_dsiClocks[DSI_GetInstance(base)]);
@@ -477,7 +480,7 @@ void DSI_GetDefaultConfig(dsi_config_t *config)
  * param dsiHsBitClkFreq_Hz The DSI high speed bit clock frequency in Hz. It is
  * the same with DPHY PLL output.
  */
-void DSI_SetDpiConfig(MIPI_DSI_Type *base,
+void DSI_SetDpiConfig(const MIPI_DSI_Type *base,
                       const dsi_dpi_config_t *config,
                       uint8_t numLanes,
                       uint32_t dpiPixelClkFreq_Hz,
@@ -570,7 +573,7 @@ void DSI_SetDpiConfig(MIPI_DSI_Type *base,
  * return The actual D-PHY PLL output frequency. If could not configure the
  * PLL to the target frequency, the return value is 0.
  */
-uint32_t DSI_InitDphy(MIPI_DSI_Type *base, const dsi_dphy_config_t *config, uint32_t refClkFreq_Hz)
+uint32_t DSI_InitDphy(const MIPI_DSI_Type *base, const dsi_dphy_config_t *config, uint32_t refClkFreq_Hz)
 {
     assert(config);
 
@@ -648,7 +651,7 @@ uint32_t DSI_InitDphy(MIPI_DSI_Type *base, const dsi_dphy_config_t *config, uint
  *
  * param base MIPI DSI host peripheral base address.
  */
-void DSI_DeinitDphy(MIPI_DSI_Type *base)
+void DSI_DeinitDphy(const MIPI_DSI_Type *base)
 {
 #if !((defined(FSL_FEATURE_MIPI_NO_DPHY_PLL) && (FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL)))
     /* Power down the PLL. */
@@ -776,7 +779,7 @@ void DSI_GetDphyDefaultConfig(dsi_dphy_config_t *config, uint32_t txHsBitClk_Hz,
  * param flags The transfer control flags, see ref _dsi_transfer_flags.
  */
 void DSI_SetApbPacketControl(
-    MIPI_DSI_Type *base, uint16_t wordCount, uint8_t virtualChannel, dsi_tx_data_type_t dataType, uint8_t flags)
+    const MIPI_DSI_Type *base, uint16_t wordCount, uint8_t virtualChannel, dsi_tx_data_type_t dataType, uint8_t flags)
 {
     uint32_t pktCtrl = PKT_CONTROL_WORD_COUNT(wordCount) | PKT_CONTROL_HEADER_TYPE(dataType);
 
@@ -806,13 +809,13 @@ void DSI_SetApbPacketControl(
  * param payload Pointer to the payload.
  * param payloadSize Payload size in byte.
  */
-void DSI_WriteApbTxPayload(MIPI_DSI_Type *base, const uint8_t *payload, uint16_t payloadSize)
+void DSI_WriteApbTxPayload(const MIPI_DSI_Type *base, const uint8_t *payload, uint16_t payloadSize)
 {
     DSI_WriteApbTxPayloadExt(base, payload, payloadSize, false, 0U);
 }
 
 void DSI_WriteApbTxPayloadExt(
-    MIPI_DSI_Type *base, const uint8_t *payload, uint16_t payloadSize, bool sendDscCmd, uint8_t dscCmd)
+    const MIPI_DSI_Type *base, const uint8_t *payload, uint16_t payloadSize, bool sendDscCmd, uint8_t dscCmd)
 {
     uint32_t firstWord;
     uint16_t i;
@@ -877,7 +880,7 @@ void DSI_WriteApbTxPayloadExt(
     }
 }
 
-static status_t DSI_PrepareApbTransfer(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
+static status_t DSI_PrepareApbTransfer(const MIPI_DSI_Type *base, dsi_transfer_t *xfer)
 {
     /* The receive data size should be smaller than the RX FIRO. */
     assert(xfer->rxDataSize <= FSL_DSI_RX_MAX_PAYLOAD_BYTE);
@@ -956,7 +959,7 @@ static status_t DSI_PrepareApbTransfer(MIPI_DSI_Type *base, dsi_transfer_t *xfer
  * param payload Pointer to the payload.
  * param payloadSize Payload size in byte.
  */
-void DSI_ReadApbRxPayload(MIPI_DSI_Type *base, uint8_t *payload, uint16_t payloadSize)
+void DSI_ReadApbRxPayload(const MIPI_DSI_Type *base, uint8_t *payload, uint16_t payloadSize)
 {
     uint32_t tmp;
 
@@ -1000,7 +1003,7 @@ void DSI_ReadApbRxPayload(MIPI_DSI_Type *base, uint8_t *payload, uint16_t payloa
  * retval kStatus_DSI_NotSupported Transfer format not supported.
  * retval kStatus_DSI_Fail Transfer failed for other reasons.
  */
-status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
+status_t DSI_TransferBlocking(const MIPI_DSI_Type *base, dsi_transfer_t *xfer)
 {
     status_t status;
     uint32_t intFlags1Old, intFlags2Old;
@@ -1056,7 +1059,10 @@ status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
     return DSI_HandleResult(base, intFlags1Old | intFlags1New, intFlags2Old | intFlags2New, xfer);
 }
 
-static status_t DSI_HandleResult(MIPI_DSI_Type *base, uint32_t intFlags1, uint32_t intFlags2, dsi_transfer_t *xfer)
+static status_t DSI_HandleResult(const MIPI_DSI_Type *base,
+                                 uint32_t intFlags1,
+                                 uint32_t intFlags2,
+                                 dsi_transfer_t *xfer)
 {
     uint32_t rxPktHeader;
 
@@ -1129,7 +1135,10 @@ static status_t DSI_HandleResult(MIPI_DSI_Type *base, uint32_t intFlags1, uint32
  * param callback Callback function.
  * param userData User data.
  */
-status_t DSI_TransferCreateHandle(MIPI_DSI_Type *base, dsi_handle_t *handle, dsi_callback_t callback, void *userData)
+status_t DSI_TransferCreateHandle(const MIPI_DSI_Type *base,
+                                  dsi_handle_t *handle,
+                                  dsi_callback_t callback,
+                                  void *userData)
 {
     assert(handle);
 
@@ -1168,7 +1177,7 @@ status_t DSI_TransferCreateHandle(MIPI_DSI_Type *base, dsi_handle_t *handle, dsi
  * retval kStatus_DSI_Busy Failed to start transfer because DSI is busy with pervious transfer.
  * retval kStatus_DSI_NotSupported Transfer format not supported.
  */
-status_t DSI_TransferNonBlocking(MIPI_DSI_Type *base, dsi_handle_t *handle, dsi_transfer_t *xfer)
+status_t DSI_TransferNonBlocking(const MIPI_DSI_Type *base, dsi_handle_t *handle, dsi_transfer_t *xfer)
 {
     status_t status;
 
@@ -1213,7 +1222,7 @@ status_t DSI_TransferNonBlocking(MIPI_DSI_Type *base, dsi_handle_t *handle, dsi_
  * param base MIPI DSI host peripheral base address.
  * param handle pointer to dsi_handle_t structure which stores the transfer state.
  */
-void DSI_TransferAbort(MIPI_DSI_Type *base, dsi_handle_t *handle)
+void DSI_TransferAbort(const MIPI_DSI_Type *base, dsi_handle_t *handle)
 {
     assert(handle);
 
@@ -1248,7 +1257,7 @@ void DSI_TransferAbort(MIPI_DSI_Type *base, dsi_handle_t *handle)
  * param base MIPI DSI host peripheral base address.
  * param handle pointer to dsi_handle_t structure which stores the transfer state.
  */
-void DSI_TransferHandleIRQ(MIPI_DSI_Type *base, dsi_handle_t *handle)
+void DSI_TransferHandleIRQ(const MIPI_DSI_Type *base, dsi_handle_t *handle)
 {
     assert(handle);
 
@@ -1301,7 +1310,7 @@ void DSI_TransferHandleIRQ(MIPI_DSI_Type *base, dsi_handle_t *handle)
     }
 }
 
-#if defined(MIPI_DSI__DSI_HOST)
+#if defined(DSI_HOST)
 void MIPI_DriverIRQHandler(void);
 void MIPI_DriverIRQHandler(void)
 {

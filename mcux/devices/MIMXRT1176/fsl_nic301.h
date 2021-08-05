@@ -10,6 +10,26 @@
 
 #include "fsl_common.h"
 
+/*!
+ * @addtogroup nic301
+ * @{
+ */
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/* Component ID definition, used by tools. */
+#ifndef FSL_COMPONENT_ID
+#define FSL_COMPONENT_ID "platform.drivers.nic301"
+#endif
+
+/*! @name Driver version */
+/*@{*/
+/*! @brief NIC301 driver version 2.0.0. */
+#define FSL_NIC301_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 0U))
+/*@}*/
+
 #define GPV0_BASE (0x41000000UL)
 #define GPV1_BASE (0x41100000UL)
 #define GPV4_BASE (0x41400000UL)

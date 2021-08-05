@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  *
@@ -22,8 +22,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.0.1. */
-#define FSL_MECC_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 1U))
+/*! @brief Driver version 2.0.2. */
+#define FSL_MECC_DRIVER_VERSION (MAKE_VERSION(2U, 0U, 2U))
 /*@}*/
 /*! @brief Error codes for the MECC driver. */
 enum
@@ -384,6 +384,8 @@ status_t MECC_GetSingleErrorInfo(MECC_Type *base, mecc_single_error_info_t *info
  *   i = 0,1,2,3,4.....
  */
 status_t MECC_GetMultiErrorInfo(MECC_Type *base, mecc_multi_error_info_t *info, uint8_t banknumber);
+
+/*! @}*/
 
 #if defined(__cplusplus)
 }

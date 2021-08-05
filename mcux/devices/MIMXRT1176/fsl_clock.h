@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,7 +40,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -101,12 +101,12 @@
 /*!
  * @brief SYS_PLL_FREQ frequency in Hz.
  */
-#define SYS_PLL1_FREQ (1000000000U)
-#define SYS_PLL2_MFI  (22)
+#define SYS_PLL1_FREQ (1000000000UL)
+#define SYS_PLL2_MFI  (22UL)
 #define SYS_PLL2_FREQ (XTAL_FREQ * SYS_PLL2_MFI)
-#define SYS_PLL3_MFI  (20)
+#define SYS_PLL3_MFI  (20UL)
 #define SYS_PLL3_FREQ (XTAL_FREQ * SYS_PLL3_MFI)
-#define XTAL_FREQ     (24000000U)
+#define XTAL_FREQ     (24000000UL)
 
 /*! @brief Clock gate name array for ADC. */
 #define LPADC_CLOCKS                                   \
@@ -496,186 +496,190 @@
         kCLOCK_IpInvalid, kCLOCK_IpInvalid, kCLOCK_Xbar2, kCLOCK_Xbar3 \
     }
 
-/* Clock LPCG index */
+/*!
+ * @brief Clock LPCG index
+ */
 typedef enum _clock_lpcg
 {
-    kCLOCK_M7          = 0,
-    kCLOCK_M4          = 1,
-    kCLOCK_Sim_M7      = 2,
-    kCLOCK_Sim_M       = 3,
-    kCLOCK_Sim_Disp    = 4,
-    kCLOCK_Sim_Per     = 5,
-    kCLOCK_Sim_Lpsr    = 6,
-    kCLOCK_Anadig      = 7,
-    kCLOCK_Dcdc        = 8,
-    kCLOCK_Src         = 9,
-    kCLOCK_Ccm         = 10,
-    kCLOCK_Gpc         = 11,
-    kCLOCK_Ssarc       = 12,
-    kCLOCK_Sim_R       = 13,
-    kCLOCK_Wdog1       = 14,
-    kCLOCK_Wdog2       = 15,
-    kCLOCK_Wdog3       = 16,
-    kCLOCK_Wdog4       = 17,
-    kCLOCK_Ewm0        = 18,
-    kCLOCK_Sema        = 19,
-    kCLOCK_Mu_A        = 20,
-    kCLOCK_Mu_B        = 21,
-    kCLOCK_Edma        = 22,
-    kCLOCK_Edma_Lpsr   = 23,
-    kCLOCK_Romcp       = 24,
-    kCLOCK_Ocram       = 25,
-    kCLOCK_Flexram     = 26,
-    kCLOCK_Lmem        = 27,
-    kCLOCK_Flexspi1    = 28,
-    kCLOCK_Flexspi2    = 29,
-    kCLOCK_Rdc         = 30,
-    kCLOCK_M7_Xrdc     = 31,
-    kCLOCK_M4_Xrdc     = 32,
-    kCLOCK_Semc        = 33,
-    kCLOCK_Xecc        = 34,
-    kCLOCK_Iee         = 35,
-    kCLOCK_Key_Manager = 36,
-    kCLOCK_Puf         = 36,
-    kCLOCK_Ocotp       = 37,
-    kCLOCK_Snvs_Hp     = 38,
-    kCLOCK_Snvs        = 39,
-    kCLOCK_Caam        = 40,
-    kCLOCK_Jtag_Mux    = 41,
-    kCLOCK_Cstrace     = 42,
-    kCLOCK_Xbar1       = 43,
-    kCLOCK_Xbar2       = 44,
-    kCLOCK_Xbar3       = 45,
-    kCLOCK_Aoi1        = 46,
-    kCLOCK_Aoi2        = 47,
-    kCLOCK_Adc_Etc     = 48,
-    kCLOCK_Iomuxc      = 49,
-    kCLOCK_Iomuxc_Lpsr = 50,
-    kCLOCK_Gpio        = 51,
-    kCLOCK_Kpp         = 52,
-    kCLOCK_Flexio1     = 53,
-    kCLOCK_Flexio2     = 54,
-    kCLOCK_Lpadc1      = 55,
-    kCLOCK_Lpadc2      = 56,
-    kCLOCK_Dac         = 57,
-    kCLOCK_Acmp1       = 58,
-    kCLOCK_Acmp2       = 59,
-    kCLOCK_Acmp3       = 60,
-    kCLOCK_Acmp4       = 61,
-    kCLOCK_Pit1        = 62,
-    kCLOCK_Pit2        = 63,
-    kCLOCK_Gpt1        = 64,
-    kCLOCK_Gpt2        = 65,
-    kCLOCK_Gpt3        = 66,
-    kCLOCK_Gpt4        = 67,
-    kCLOCK_Gpt5        = 68,
-    kCLOCK_Gpt6        = 69,
-    kCLOCK_Qtimer1     = 70,
-    kCLOCK_Qtimer2     = 71,
-    kCLOCK_Qtimer3     = 72,
-    kCLOCK_Qtimer4     = 73,
-    kCLOCK_Enc1        = 74,
-    kCLOCK_Enc2        = 75,
-    kCLOCK_Enc3        = 76,
-    kCLOCK_Enc4        = 77,
-    kCLOCK_Hrtimer     = 78,
-    kCLOCK_Pwm1        = 79,
-    kCLOCK_Pwm2        = 80,
-    kCLOCK_Pwm3        = 81,
-    kCLOCK_Pwm4        = 82,
-    kCLOCK_Can1        = 83,
-    kCLOCK_Can2        = 84,
-    kCLOCK_Can3        = 85,
-    kCLOCK_Lpuart1     = 86,
-    kCLOCK_Lpuart2     = 87,
-    kCLOCK_Lpuart3     = 88,
-    kCLOCK_Lpuart4     = 89,
-    kCLOCK_Lpuart5     = 90,
-    kCLOCK_Lpuart6     = 91,
-    kCLOCK_Lpuart7     = 92,
-    kCLOCK_Lpuart8     = 93,
-    kCLOCK_Lpuart9     = 94,
-    kCLOCK_Lpuart10    = 95,
-    kCLOCK_Lpuart11    = 96,
-    kCLOCK_Lpuart12    = 97,
-    kCLOCK_Lpi2c1      = 98,
-    kCLOCK_Lpi2c2      = 99,
-    kCLOCK_Lpi2c3      = 100,
-    kCLOCK_Lpi2c4      = 101,
-    kCLOCK_Lpi2c5      = 102,
-    kCLOCK_Lpi2c6      = 103,
-    kCLOCK_Lpspi1      = 104,
-    kCLOCK_Lpspi2      = 105,
-    kCLOCK_Lpspi3      = 106,
-    kCLOCK_Lpspi4      = 107,
-    kCLOCK_Lpspi5      = 108,
-    kCLOCK_Lpspi6      = 109,
-    kCLOCK_Sim1        = 110,
-    kCLOCK_Sim2        = 111,
-    kCLOCK_Enet        = 112,
-    kCLOCK_Enet_1g     = 113,
-    kCLOCK_Enet_Qos    = 114,
-    kCLOCK_Usb         = 115,
-    kCLOCK_Cdog        = 116,
-    kCLOCK_Usdhc1      = 117,
-    kCLOCK_Usdhc2      = 118,
-    kCLOCK_Asrc        = 119,
-    kCLOCK_Mqs         = 120,
-    kCLOCK_Pdm         = 121,
-    kCLOCK_Spdif       = 122,
-    kCLOCK_Sai1        = 123,
-    kCLOCK_Sai2        = 124,
-    kCLOCK_Sai3        = 125,
-    kCLOCK_Sai4        = 126,
-    kCLOCK_Pxp         = 127,
-    kCLOCK_Gpu2d       = 128,
-    kCLOCK_Lcdif       = 129,
-    kCLOCK_Lcdifv2     = 130,
-    kCLOCK_Mipi_Dsi    = 131,
-    kCLOCK_Mipi_Csi    = 132,
-    kCLOCK_Csi         = 133,
-    kCLOCK_Dcic_Mipi   = 134,
-    kCLOCK_Dcic_Lcd    = 135,
-    kCLOCK_Video_Mux   = 136,
-    kCLOCK_Uniq_Edt_I  = 137,
+    kCLOCK_M7          = 0,   /*!< Clock LPCG M7. */
+    kCLOCK_M4          = 1,   /*!< Clock LPCG M4. */
+    kCLOCK_Sim_M7      = 2,   /*!< Clock LPCG SIM M7. */
+    kCLOCK_Sim_M       = 3,   /*!< Clock LPCG SIM M4. */
+    kCLOCK_Sim_Disp    = 4,   /*!< Clock LPCG SIM DISP. */
+    kCLOCK_Sim_Per     = 5,   /*!< Clock LPCG SIM PER. */
+    kCLOCK_Sim_Lpsr    = 6,   /*!< Clock LPCG SIM LPSR. */
+    kCLOCK_Anadig      = 7,   /*!< Clock LPCG Anadig. */
+    kCLOCK_Dcdc        = 8,   /*!< Clock LPCG DCDC. */
+    kCLOCK_Src         = 9,   /*!< Clock LPCG SRC. */
+    kCLOCK_Ccm         = 10,  /*!< Clock LPCG CCM. */
+    kCLOCK_Gpc         = 11,  /*!< Clock LPCG GPC. */
+    kCLOCK_Ssarc       = 12,  /*!< Clock LPCG SSARC. */
+    kCLOCK_Sim_R       = 13,  /*!< Clock LPCG SIM_R. */
+    kCLOCK_Wdog1       = 14,  /*!< Clock LPCG WDOG1. */
+    kCLOCK_Wdog2       = 15,  /*!< Clock LPCG WDOG2. */
+    kCLOCK_Wdog3       = 16,  /*!< Clock LPCG WDOG3. */
+    kCLOCK_Wdog4       = 17,  /*!< Clock LPCG WDOG4. */
+    kCLOCK_Ewm0        = 18,  /*!< Clock LPCG EWM0. */
+    kCLOCK_Sema        = 19,  /*!< Clock LPCG SEMA. */
+    kCLOCK_Mu_A        = 20,  /*!< Clock LPCG MU_A. */
+    kCLOCK_Mu_B        = 21,  /*!< Clock LPCG MU_B. */
+    kCLOCK_Edma        = 22,  /*!< Clock LPCG EDMA. */
+    kCLOCK_Edma_Lpsr   = 23,  /*!< Clock LPCG EDMA_LPSR. */
+    kCLOCK_Romcp       = 24,  /*!< Clock LPCG ROMCP. */
+    kCLOCK_Ocram       = 25,  /*!< Clock LPCG OCRAM. */
+    kCLOCK_Flexram     = 26,  /*!< Clock LPCG FLEXRAM. */
+    kCLOCK_Lmem        = 27,  /*!< Clock LPCG Lmem. */
+    kCLOCK_Flexspi1    = 28,  /*!< Clock LPCG Flexspi1. */
+    kCLOCK_Flexspi2    = 29,  /*!< Clock LPCG Flexspi2. */
+    kCLOCK_Rdc         = 30,  /*!< Clock LPCG RDC. */
+    kCLOCK_M7_Xrdc     = 31,  /*!< Clock LPCG M7 XRDC. */
+    kCLOCK_M4_Xrdc     = 32,  /*!< Clock LPCG M4 XRDC. */
+    kCLOCK_Semc        = 33,  /*!< Clock LPCG SEMC. */
+    kCLOCK_Xecc        = 34,  /*!< Clock LPCG XECC. */
+    kCLOCK_Iee         = 35,  /*!< Clock LPCG IEE. */
+    kCLOCK_Key_Manager = 36,  /*!< Clock LPCG KEY_MANAGER. */
+    kCLOCK_Puf         = 36,  /*!< Clock LPCG PUF. */
+    kCLOCK_Ocotp       = 37,  /*!< Clock LPCG OSOTP. */
+    kCLOCK_Snvs_Hp     = 38,  /*!< Clock LPCG SNVS_HP. */
+    kCLOCK_Snvs        = 39,  /*!< Clock LPCG SNVS. */
+    kCLOCK_Caam        = 40,  /*!< Clock LPCG Caam. */
+    kCLOCK_Jtag_Mux    = 41,  /*!< Clock LPCG JTAG_MUX. */
+    kCLOCK_Cstrace     = 42,  /*!< Clock LPCG CSTRACE. */
+    kCLOCK_Xbar1       = 43,  /*!< Clock LPCG XBAR1. */
+    kCLOCK_Xbar2       = 44,  /*!< Clock LPCG XBAR2. */
+    kCLOCK_Xbar3       = 45,  /*!< Clock LPCG XBAR3. */
+    kCLOCK_Aoi1        = 46,  /*!< Clock LPCG AOI1. */
+    kCLOCK_Aoi2        = 47,  /*!< Clock LPCG AOI2. */
+    kCLOCK_Adc_Etc     = 48,  /*!< Clock LPCG ADC_ETC. */
+    kCLOCK_Iomuxc      = 49,  /*!< Clock LPCG IOMUXC. */
+    kCLOCK_Iomuxc_Lpsr = 50,  /*!< Clock LPCG IOMUXC_LPSR. */
+    kCLOCK_Gpio        = 51,  /*!< Clock LPCG GPIO. */
+    kCLOCK_Kpp         = 52,  /*!< Clock LPCG KPP. */
+    kCLOCK_Flexio1     = 53,  /*!< Clock LPCG FLEXIO1. */
+    kCLOCK_Flexio2     = 54,  /*!< Clock LPCG FLEXIO2. */
+    kCLOCK_Lpadc1      = 55,  /*!< Clock LPCG LPADC1. */
+    kCLOCK_Lpadc2      = 56,  /*!< Clock LPCG LPADC2. */
+    kCLOCK_Dac         = 57,  /*!< Clock LPCG DAC. */
+    kCLOCK_Acmp1       = 58,  /*!< Clock LPCG ACMP1. */
+    kCLOCK_Acmp2       = 59,  /*!< Clock LPCG ACMP2. */
+    kCLOCK_Acmp3       = 60,  /*!< Clock LPCG ACMP3. */
+    kCLOCK_Acmp4       = 61,  /*!< Clock LPCG ACMP4. */
+    kCLOCK_Pit1        = 62,  /*!< Clock LPCG PIT1. */
+    kCLOCK_Pit2        = 63,  /*!< Clock LPCG PIT2. */
+    kCLOCK_Gpt1        = 64,  /*!< Clock LPCG GPT1. */
+    kCLOCK_Gpt2        = 65,  /*!< Clock LPCG GPT2. */
+    kCLOCK_Gpt3        = 66,  /*!< Clock LPCG GPT3. */
+    kCLOCK_Gpt4        = 67,  /*!< Clock LPCG GPT4. */
+    kCLOCK_Gpt5        = 68,  /*!< Clock LPCG GPT5. */
+    kCLOCK_Gpt6        = 69,  /*!< Clock LPCG GPT6. */
+    kCLOCK_Qtimer1     = 70,  /*!< Clock LPCG QTIMER1. */
+    kCLOCK_Qtimer2     = 71,  /*!< Clock LPCG QTIMER2. */
+    kCLOCK_Qtimer3     = 72,  /*!< Clock LPCG QTIMER3. */
+    kCLOCK_Qtimer4     = 73,  /*!< Clock LPCG QTIMER4. */
+    kCLOCK_Enc1        = 74,  /*!< Clock LPCG Enc1. */
+    kCLOCK_Enc2        = 75,  /*!< Clock LPCG Enc2. */
+    kCLOCK_Enc3        = 76,  /*!< Clock LPCG Enc3. */
+    kCLOCK_Enc4        = 77,  /*!< Clock LPCG Enc4. */
+    kCLOCK_Hrtimer     = 78,  /*!< Clock LPCG Hrtimer. */
+    kCLOCK_Pwm1        = 79,  /*!< Clock LPCG PWM1. */
+    kCLOCK_Pwm2        = 80,  /*!< Clock LPCG PWM2. */
+    kCLOCK_Pwm3        = 81,  /*!< Clock LPCG PWM3. */
+    kCLOCK_Pwm4        = 82,  /*!< Clock LPCG PWM4. */
+    kCLOCK_Can1        = 83,  /*!< Clock LPCG CAN1. */
+    kCLOCK_Can2        = 84,  /*!< Clock LPCG CAN2. */
+    kCLOCK_Can3        = 85,  /*!< Clock LPCG CAN3. */
+    kCLOCK_Lpuart1     = 86,  /*!< Clock LPCG LPUART1. */
+    kCLOCK_Lpuart2     = 87,  /*!< Clock LPCG LPUART2. */
+    kCLOCK_Lpuart3     = 88,  /*!< Clock LPCG LPUART3. */
+    kCLOCK_Lpuart4     = 89,  /*!< Clock LPCG LPUART4. */
+    kCLOCK_Lpuart5     = 90,  /*!< Clock LPCG LPUART5. */
+    kCLOCK_Lpuart6     = 91,  /*!< Clock LPCG LPUART6. */
+    kCLOCK_Lpuart7     = 92,  /*!< Clock LPCG LPUART7. */
+    kCLOCK_Lpuart8     = 93,  /*!< Clock LPCG LPUART8. */
+    kCLOCK_Lpuart9     = 94,  /*!< Clock LPCG LPUART9. */
+    kCLOCK_Lpuart10    = 95,  /*!< Clock LPCG LPUART10. */
+    kCLOCK_Lpuart11    = 96,  /*!< Clock LPCG LPUART11. */
+    kCLOCK_Lpuart12    = 97,  /*!< Clock LPCG LPUART12. */
+    kCLOCK_Lpi2c1      = 98,  /*!< Clock LPCG LPI2C1. */
+    kCLOCK_Lpi2c2      = 99,  /*!< Clock LPCG LPI2C2. */
+    kCLOCK_Lpi2c3      = 100, /*!< Clock LPCG LPI2C3. */
+    kCLOCK_Lpi2c4      = 101, /*!< Clock LPCG LPI2C4. */
+    kCLOCK_Lpi2c5      = 102, /*!< Clock LPCG LPI2C5. */
+    kCLOCK_Lpi2c6      = 103, /*!< Clock LPCG LPI2C6. */
+    kCLOCK_Lpspi1      = 104, /*!< Clock LPCG LPSPI1. */
+    kCLOCK_Lpspi2      = 105, /*!< Clock LPCG LPSPI2. */
+    kCLOCK_Lpspi3      = 106, /*!< Clock LPCG LPSPI3. */
+    kCLOCK_Lpspi4      = 107, /*!< Clock LPCG LPSPI4. */
+    kCLOCK_Lpspi5      = 108, /*!< Clock LPCG LPSPI5. */
+    kCLOCK_Lpspi6      = 109, /*!< Clock LPCG LPSPI6. */
+    kCLOCK_Sim1        = 110, /*!< Clock LPCG SIM1. */
+    kCLOCK_Sim2        = 111, /*!< Clock LPCG SIM2. */
+    kCLOCK_Enet        = 112, /*!< Clock LPCG ENET. */
+    kCLOCK_Enet_1g     = 113, /*!< Clock LPCG ENET 1G. */
+    kCLOCK_Enet_Qos    = 114, /*!< Clock LPCG ENET QOS. */
+    kCLOCK_Usb         = 115, /*!< Clock LPCG USB. */
+    kCLOCK_Cdog        = 116, /*!< Clock LPCG CDOG. */
+    kCLOCK_Usdhc1      = 117, /*!< Clock LPCG USDHC1. */
+    kCLOCK_Usdhc2      = 118, /*!< Clock LPCG USDHC2. */
+    kCLOCK_Asrc        = 119, /*!< Clock LPCG ASRC. */
+    kCLOCK_Mqs         = 120, /*!< Clock LPCG MQS. */
+    kCLOCK_Pdm         = 121, /*!< Clock LPCG PDM. */
+    kCLOCK_Spdif       = 122, /*!< Clock LPCG SPDIF. */
+    kCLOCK_Sai1        = 123, /*!< Clock LPCG SAI1. */
+    kCLOCK_Sai2        = 124, /*!< Clock LPCG SAI2. */
+    kCLOCK_Sai3        = 125, /*!< Clock LPCG SAI3. */
+    kCLOCK_Sai4        = 126, /*!< Clock LPCG SAI4. */
+    kCLOCK_Pxp         = 127, /*!< Clock LPCG PXP. */
+    kCLOCK_Gpu2d       = 128, /*!< Clock LPCG GPU2D. */
+    kCLOCK_Lcdif       = 129, /*!< Clock LPCG LCDIF. */
+    kCLOCK_Lcdifv2     = 130, /*!< Clock LPCG LCDIFV2. */
+    kCLOCK_Mipi_Dsi    = 131, /*!< Clock LPCG MIPI DSI. */
+    kCLOCK_Mipi_Csi    = 132, /*!< Clock LPCG MIPI CSI. */
+    kCLOCK_Csi         = 133, /*!< Clock LPCG CSI. */
+    kCLOCK_Dcic_Mipi   = 134, /*!< Clock LPCG DCIC MIPI. */
+    kCLOCK_Dcic_Lcd    = 135, /*!< Clock LPCG DCIC LCD. */
+    kCLOCK_Video_Mux   = 136, /*!< Clock LPCG VIDEO MUX. */
+    kCLOCK_Uniq_Edt_I  = 137, /*!< Clock LPCG Uniq_Edt_I. */
 
-    kCLOCK_IpInvalid,
+    kCLOCK_IpInvalid, /*!< Invalid value. */
 } clock_lpcg_t;
 
-/* Clock name */
+/*!
+ * @brief Clock name.
+ */
 typedef enum _clock_name
 {
-    kCLOCK_OscRc16M     = 0,
-    kCLOCK_OscRc48M     = 1,
-    kCLOCK_OscRc48MDiv2 = 2,
-    kCLOCK_OscRc400M    = 3,
-    kCLOCK_Osc24M       = 4,
-    kCLOCK_Osc24MOut    = 5,
-    kCLOCK_ArmPll       = 6,
-    kCLOCK_ArmPllOut    = 7,
-    kCLOCK_SysPll2      = 8,
-    kCLOCK_SysPll2Out   = 9,
-    kCLOCK_SysPll2Pfd0  = 10,
-    kCLOCK_SysPll2Pfd1  = 11,
-    kCLOCK_SysPll2Pfd2  = 12,
-    kCLOCK_SysPll2Pfd3  = 13,
-    kCLOCK_SysPll3      = 14,
-    kCLOCK_SysPll3Out   = 15,
-    kCLOCK_SysPll3Div2  = 16,
-    kCLOCK_SysPll3Pfd0  = 17,
-    kCLOCK_SysPll3Pfd1  = 18,
-    kCLOCK_SysPll3Pfd2  = 19,
-    kCLOCK_SysPll3Pfd3  = 20,
-    kCLOCK_SysPll1      = 21,
-    kCLOCK_SysPll1Out   = 22,
-    kCLOCK_SysPll1Div2  = 23,
-    kCLOCK_SysPll1Div5  = 24,
-    kCLOCK_AudioPll     = 25,
-    kCLOCK_AudioPllOut  = 26,
-    kCLOCK_VideoPll     = 27,
-    kCLOCK_VideoPllOut  = 28,
-    kCLOCK_CpuClk,
-    kCLOCK_CoreSysClk,
+    kCLOCK_OscRc16M     = 0,  /*!< 16MHz RC Oscillator. */
+    kCLOCK_OscRc48M     = 1,  /*!< 48MHz RC Oscillator. */
+    kCLOCK_OscRc48MDiv2 = 2,  /*!< 48MHz RC Oscillator Div2. */
+    kCLOCK_OscRc400M    = 3,  /*!< 400MHz RC Oscillator. */
+    kCLOCK_Osc24M       = 4,  /*!< 24MHz Oscillator. */
+    kCLOCK_Osc24MOut    = 5,  /*!< 48MHz Oscillator Out. */
+    kCLOCK_ArmPll       = 6,  /*!< ARM PLL. */
+    kCLOCK_ArmPllOut    = 7,  /*!< ARM PLL Out. */
+    kCLOCK_SysPll2      = 8,  /*!< SYS PLL2. */
+    kCLOCK_SysPll2Out   = 9,  /*!< SYS PLL2 OUT. */
+    kCLOCK_SysPll2Pfd0  = 10, /*!< SYS PLL2 PFD0. */
+    kCLOCK_SysPll2Pfd1  = 11, /*!< SYS PLL2 PFD1. */
+    kCLOCK_SysPll2Pfd2  = 12, /*!< SYS PLL2 PFD2. */
+    kCLOCK_SysPll2Pfd3  = 13, /*!< SYS PLL2 PFD3. */
+    kCLOCK_SysPll3      = 14, /*!< SYS PLL3. */
+    kCLOCK_SysPll3Out   = 15, /*!< SYS PLL3 OUT. */
+    kCLOCK_SysPll3Div2  = 16, /*!< SYS PLL3 DIV2 */
+    kCLOCK_SysPll3Pfd0  = 17, /*!< SYS PLL3 PFD0. */
+    kCLOCK_SysPll3Pfd1  = 18, /*!< SYS PLL3 PFD1 */
+    kCLOCK_SysPll3Pfd2  = 19, /*!< SYS PLL3 PFD2 */
+    kCLOCK_SysPll3Pfd3  = 20, /*!< SYS PLL3 PFD3 */
+    kCLOCK_SysPll1      = 21, /*!< SYS PLL1. */
+    kCLOCK_SysPll1Out   = 22, /*!< SYS PLL1 OUT. */
+    kCLOCK_SysPll1Div2  = 23, /*!< SYS PLL1 DIV2. */
+    kCLOCK_SysPll1Div5  = 24, /*!< SYS PLL1 DIV5. */
+    kCLOCK_AudioPll     = 25, /*!< SYS AUDIO PLL. */
+    kCLOCK_AudioPllOut  = 26, /*!< SYS AUDIO PLL OUT. */
+    kCLOCK_VideoPll     = 27, /*!< SYS VIDEO PLL. */
+    kCLOCK_VideoPllOut  = 28, /*!< SYS VIDEO PLL OUT. */
+    kCLOCK_CpuClk,            /*!< SYS CPU CLK. */
+    kCLOCK_CoreSysClk,        /*!< SYS CORE SYS CLK. */
 } clock_name_t;
 
 /* Clock OBSERVE SIGNALS */
@@ -789,7 +793,7 @@ typedef enum _clock_name
 
 /* Clock Source Definitions */
 /* clang-format off */
-static const clock_name_t source[][8] = {
+static const clock_name_t s_clockSourceName[][8] = {
         /*SRC0,               SRC1,             SRC2,             SRC3,            SRC4,             SRC5,              SRC6,              SRC7,                      name             index */ \
         {kCLOCK_OscRc48MDiv2, kCLOCK_Osc24MOut, kCLOCK_OscRc400M, kCLOCK_OscRc16M, kCLOCK_ArmPllOut, kCLOCK_SysPll1Out, kCLOCK_SysPll3Out, kCLOCK_VideoPllOut},     /* M7               0    */ \
         {kCLOCK_OscRc48MDiv2, kCLOCK_Osc24MOut, kCLOCK_OscRc400M, kCLOCK_OscRc16M, kCLOCK_SysPll3Pfd3, kCLOCK_SysPll3Out, kCLOCK_SysPll2Out, kCLOCK_SysPll1Div5},   /* M4               1    */ \
@@ -873,88 +877,91 @@ static const clock_name_t source[][8] = {
 };
 /* clang-format on */
 
-/* Root clock index */
+/*!
+ * @brief Root clock index
+ *
+ */
 typedef enum _clock_root
 {
-    kCLOCK_Root_M7          = 0,
-    kCLOCK_Root_M4          = 1,
-    kCLOCK_Root_Bus         = 2,
-    kCLOCK_Root_Bus_Lpsr    = 3,
-    kCLOCK_Root_Semc        = 4,
-    kCLOCK_Root_Cssys       = 5,
-    kCLOCK_Root_Cstrace     = 6,
-    kCLOCK_Root_M4_Systick  = 7,
-    kCLOCK_Root_M7_Systick  = 8,
-    kCLOCK_Root_Adc1        = 9,
-    kCLOCK_Root_Adc2        = 10,
-    kCLOCK_Root_Acmp        = 11,
-    kCLOCK_Root_Flexio1     = 12,
-    kCLOCK_Root_Flexio2     = 13,
-    kCLOCK_Root_Gpt1        = 14,
-    kCLOCK_Root_Gpt2        = 15,
-    kCLOCK_Root_Gpt3        = 16,
-    kCLOCK_Root_Gpt4        = 17,
-    kCLOCK_Root_Gpt5        = 18,
-    kCLOCK_Root_Gpt6        = 19,
-    kCLOCK_Root_Flexspi1    = 20,
-    kCLOCK_Root_Flexspi2    = 21,
-    kCLOCK_Root_Can1        = 22,
-    kCLOCK_Root_Can2        = 23,
-    kCLOCK_Root_Can3        = 24,
-    kCLOCK_Root_Lpuart1     = 25,
-    kCLOCK_Root_Lpuart2     = 26,
-    kCLOCK_Root_Lpuart3     = 27,
-    kCLOCK_Root_Lpuart4     = 28,
-    kCLOCK_Root_Lpuart5     = 29,
-    kCLOCK_Root_Lpuart6     = 30,
-    kCLOCK_Root_Lpuart7     = 31,
-    kCLOCK_Root_Lpuart8     = 32,
-    kCLOCK_Root_Lpuart9     = 33,
-    kCLOCK_Root_Lpuart10    = 34,
-    kCLOCK_Root_Lpuart11    = 35,
-    kCLOCK_Root_Lpuart12    = 36,
-    kCLOCK_Root_Lpi2c1      = 37,
-    kCLOCK_Root_Lpi2c2      = 38,
-    kCLOCK_Root_Lpi2c3      = 39,
-    kCLOCK_Root_Lpi2c4      = 40,
-    kCLOCK_Root_Lpi2c5      = 41,
-    kCLOCK_Root_Lpi2c6      = 42,
-    kCLOCK_Root_Lpspi1      = 43,
-    kCLOCK_Root_Lpspi2      = 44,
-    kCLOCK_Root_Lpspi3      = 45,
-    kCLOCK_Root_Lpspi4      = 46,
-    kCLOCK_Root_Lpspi5      = 47,
-    kCLOCK_Root_Lpspi6      = 48,
-    kCLOCK_Root_Emv1        = 49,
-    kCLOCK_Root_Emv2        = 50,
-    kCLOCK_Root_Enet1       = 51,
-    kCLOCK_Root_Enet2       = 52,
-    kCLOCK_Root_Enet_Qos    = 53,
-    kCLOCK_Root_Enet_25m    = 54,
-    kCLOCK_Root_Enet_Timer1 = 55,
-    kCLOCK_Root_Enet_Timer2 = 56,
-    kCLOCK_Root_Enet_Timer3 = 57,
-    kCLOCK_Root_Usdhc1      = 58,
-    kCLOCK_Root_Usdhc2      = 59,
-    kCLOCK_Root_Asrc        = 60,
-    kCLOCK_Root_Mqs         = 61,
-    kCLOCK_Root_Mic         = 62,
-    kCLOCK_Root_Spdif       = 63,
-    kCLOCK_Root_Sai1        = 64,
-    kCLOCK_Root_Sai2        = 65,
-    kCLOCK_Root_Sai3        = 66,
-    kCLOCK_Root_Sai4        = 67,
-    kCLOCK_Root_Gc355       = 68,
-    kCLOCK_Root_Lcdif       = 69,
-    kCLOCK_Root_Lcdifv2     = 70,
-    kCLOCK_Root_Mipi_Ref    = 71,
-    kCLOCK_Root_Mipi_Esc    = 72,
-    kCLOCK_Root_Csi2        = 73,
-    kCLOCK_Root_Csi2_Esc    = 74,
-    kCLOCK_Root_Csi2_Ui     = 75,
-    kCLOCK_Root_Csi         = 76,
-    kCLOCK_Root_Cko1        = 77,
-    kCLOCK_Root_Cko2        = 78,
+    kCLOCK_Root_M7          = 0,  /*!< CLOCK Root M7. */
+    kCLOCK_Root_M4          = 1,  /*!< CLOCK Root M4. */
+    kCLOCK_Root_Bus         = 2,  /*!< CLOCK Root Bus. */
+    kCLOCK_Root_Bus_Lpsr    = 3,  /*!< CLOCK Root Bus Lpsr. */
+    kCLOCK_Root_Semc        = 4,  /*!< CLOCK Root Semc. */
+    kCLOCK_Root_Cssys       = 5,  /*!< CLOCK Root Cssys. */
+    kCLOCK_Root_Cstrace     = 6,  /*!< CLOCK Root Cstrace. */
+    kCLOCK_Root_M4_Systick  = 7,  /*!< CLOCK Root M4 Systick. */
+    kCLOCK_Root_M7_Systick  = 8,  /*!< CLOCK Root M7 Systick. */
+    kCLOCK_Root_Adc1        = 9,  /*!< CLOCK Root Adc1. */
+    kCLOCK_Root_Adc2        = 10, /*!< CLOCK Root Adc2. */
+    kCLOCK_Root_Acmp        = 11, /*!< CLOCK Root Acmp. */
+    kCLOCK_Root_Flexio1     = 12, /*!< CLOCK Root Flexio1. */
+    kCLOCK_Root_Flexio2     = 13, /*!< CLOCK Root Flexio2. */
+    kCLOCK_Root_Gpt1        = 14, /*!< CLOCK Root Gpt1. */
+    kCLOCK_Root_Gpt2        = 15, /*!< CLOCK Root Gpt2. */
+    kCLOCK_Root_Gpt3        = 16, /*!< CLOCK Root Gpt3. */
+    kCLOCK_Root_Gpt4        = 17, /*!< CLOCK Root Gpt4. */
+    kCLOCK_Root_Gpt5        = 18, /*!< CLOCK Root Gpt5. */
+    kCLOCK_Root_Gpt6        = 19, /*!< CLOCK Root Gpt6. */
+    kCLOCK_Root_Flexspi1    = 20, /*!< CLOCK Root Flexspi1. */
+    kCLOCK_Root_Flexspi2    = 21, /*!< CLOCK Root Flexspi2. */
+    kCLOCK_Root_Can1        = 22, /*!< CLOCK Root Can1. */
+    kCLOCK_Root_Can2        = 23, /*!< CLOCK Root Can2. */
+    kCLOCK_Root_Can3        = 24, /*!< CLOCK Root Can3. */
+    kCLOCK_Root_Lpuart1     = 25, /*!< CLOCK Root Lpuart1. */
+    kCLOCK_Root_Lpuart2     = 26, /*!< CLOCK Root Lpuart2. */
+    kCLOCK_Root_Lpuart3     = 27, /*!< CLOCK Root Lpuart3. */
+    kCLOCK_Root_Lpuart4     = 28, /*!< CLOCK Root Lpuart4. */
+    kCLOCK_Root_Lpuart5     = 29, /*!< CLOCK Root Lpuart5. */
+    kCLOCK_Root_Lpuart6     = 30, /*!< CLOCK Root Lpuart6. */
+    kCLOCK_Root_Lpuart7     = 31, /*!< CLOCK Root Lpuart7. */
+    kCLOCK_Root_Lpuart8     = 32, /*!< CLOCK Root Lpuart8. */
+    kCLOCK_Root_Lpuart9     = 33, /*!< CLOCK Root Lpuart9. */
+    kCLOCK_Root_Lpuart10    = 34, /*!< CLOCK Root Lpuart10. */
+    kCLOCK_Root_Lpuart11    = 35, /*!< CLOCK Root Lpuart11. */
+    kCLOCK_Root_Lpuart12    = 36, /*!< CLOCK Root Lpuart12. */
+    kCLOCK_Root_Lpi2c1      = 37, /*!< CLOCK Root Lpi2c1. */
+    kCLOCK_Root_Lpi2c2      = 38, /*!< CLOCK Root Lpi2c2. */
+    kCLOCK_Root_Lpi2c3      = 39, /*!< CLOCK Root Lpi2c3. */
+    kCLOCK_Root_Lpi2c4      = 40, /*!< CLOCK Root Lpi2c4. */
+    kCLOCK_Root_Lpi2c5      = 41, /*!< CLOCK Root Lpi2c5. */
+    kCLOCK_Root_Lpi2c6      = 42, /*!< CLOCK Root Lpi2c6. */
+    kCLOCK_Root_Lpspi1      = 43, /*!< CLOCK Root Lpspi1. */
+    kCLOCK_Root_Lpspi2      = 44, /*!< CLOCK Root Lpspi2. */
+    kCLOCK_Root_Lpspi3      = 45, /*!< CLOCK Root Lpspi3. */
+    kCLOCK_Root_Lpspi4      = 46, /*!< CLOCK Root Lpspi4. */
+    kCLOCK_Root_Lpspi5      = 47, /*!< CLOCK Root Lpspi5. */
+    kCLOCK_Root_Lpspi6      = 48, /*!< CLOCK Root Lpspi6. */
+    kCLOCK_Root_Emv1        = 49, /*!< CLOCK Root Emv1. */
+    kCLOCK_Root_Emv2        = 50, /*!< CLOCK Root Emv2. */
+    kCLOCK_Root_Enet1       = 51, /*!< CLOCK Root Enet1. */
+    kCLOCK_Root_Enet2       = 52, /*!< CLOCK Root Enet2. */
+    kCLOCK_Root_Enet_Qos    = 53, /*!< CLOCK Root Enet Qos. */
+    kCLOCK_Root_Enet_25m    = 54, /*!< CLOCK Root Enet 25M. */
+    kCLOCK_Root_Enet_Timer1 = 55, /*!< CLOCK Root Enet Timer1. */
+    kCLOCK_Root_Enet_Timer2 = 56, /*!< CLOCK Root Enet Timer2. */
+    kCLOCK_Root_Enet_Timer3 = 57, /*!< CLOCK Root Enet Timer3. */
+    kCLOCK_Root_Usdhc1      = 58, /*!< CLOCK Root Usdhc1. */
+    kCLOCK_Root_Usdhc2      = 59, /*!< CLOCK Root Usdhc2. */
+    kCLOCK_Root_Asrc        = 60, /*!< CLOCK Root Asrc. */
+    kCLOCK_Root_Mqs         = 61, /*!< CLOCK Root Mqs. */
+    kCLOCK_Root_Mic         = 62, /*!< CLOCK Root MIC. */
+    kCLOCK_Root_Spdif       = 63, /*!< CLOCK Root Spdif */
+    kCLOCK_Root_Sai1        = 64, /*!< CLOCK Root Sai1. */
+    kCLOCK_Root_Sai2        = 65, /*!< CLOCK Root Sai2. */
+    kCLOCK_Root_Sai3        = 66, /*!< CLOCK Root Sai3. */
+    kCLOCK_Root_Sai4        = 67, /*!< CLOCK Root Sai4. */
+    kCLOCK_Root_Gc355       = 68, /*!< CLOCK Root Gc355. */
+    kCLOCK_Root_Lcdif       = 69, /*!< CLOCK Root Lcdif. */
+    kCLOCK_Root_Lcdifv2     = 70, /*!< CLOCK Root Lcdifv2. */
+    kCLOCK_Root_Mipi_Ref    = 71, /*!< CLOCK Root Mipi Ref. */
+    kCLOCK_Root_Mipi_Esc    = 72, /*!< CLOCK Root Mipi Esc. */
+    kCLOCK_Root_Csi2        = 73, /*!< CLOCK Root Csi2. */
+    kCLOCK_Root_Csi2_Esc    = 74, /*!< CLOCK Root Csi2 Esc. */
+    kCLOCK_Root_Csi2_Ui     = 75, /*!< CLOCK Root Csi2 Ui. */
+    kCLOCK_Root_Csi         = 76, /*!< CLOCK Root Csi. */
+    kCLOCK_Root_Cko1        = 77, /*!< CLOCK Root CKo1. */
+    kCLOCK_Root_Cko2        = 78, /*!< CLOCK Root CKo2. */
 } clock_root_t;
 
 /*!
@@ -963,803 +970,809 @@ typedef enum _clock_root
 typedef enum _clock_root_mux_source
 {
     /* M7 */
-    kCLOCK_M7_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_M7_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_M7_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_M7_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_M7_ClockRoot_MuxArmPllOut    = 4U,
-    kCLOCK_M7_ClockRoot_MuxSysPll1Out   = 5U,
-    kCLOCK_M7_ClockRoot_MuxSysPll3Out   = 6U,
-    kCLOCK_M7_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_M7_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< M7 mux from MuxOscRc48MDiv2. */
+    kCLOCK_M7_ClockRoot_MuxOsc24MOut    = 1U, /*!< M7 mux from MuxOsc24MOut. */
+    kCLOCK_M7_ClockRoot_MuxOscRc400M    = 2U, /*!< M7 mux from MuxOscRc400M. */
+    kCLOCK_M7_ClockRoot_MuxOscRc16M     = 3U, /*!< M7 mux from MuxOscRc16M. */
+    kCLOCK_M7_ClockRoot_MuxArmPllOut    = 4U, /*!< M7 mux from MuxArmPllOut. */
+    kCLOCK_M7_ClockRoot_MuxSysPll1Out   = 5U, /*!< M7 mux from MuxSysPll1Out. */
+    kCLOCK_M7_ClockRoot_MuxSysPll3Out   = 6U, /*!< M7 mux from MuxSysPll3Out. */
+    kCLOCK_M7_ClockRoot_MuxVideoPllOut  = 7U, /*!< M7 mux from MuxVideoPllOut. */
 
     /* M4 */
-    kCLOCK_M4_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_M4_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_M4_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_M4_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_M4_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_M4_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_M4_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_M4_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_M4_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< M4 mux from MuxOscRc48MDiv2. */
+    kCLOCK_M4_ClockRoot_MuxOsc24MOut    = 1U, /*!< M4 mux from MuxOsc24MOut. */
+    kCLOCK_M4_ClockRoot_MuxOscRc400M    = 2U, /*!< M4 mux from MuxOscRc400M. */
+    kCLOCK_M4_ClockRoot_MuxOscRc16M     = 3U, /*!< M4 mux from MuxOscRc16M. */
+    kCLOCK_M4_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< M4 mux from MuxSysPll3Pfd3. */
+    kCLOCK_M4_ClockRoot_MuxSysPll3Out   = 5U, /*!< M4 mux from MuxSysPll3Out. */
+    kCLOCK_M4_ClockRoot_MuxSysPll2Out   = 6U, /*!< M4 mux from MuxSysPll2Out. */
+    kCLOCK_M4_ClockRoot_MuxSysPll1Div5  = 7U, /*!< M4 mux from MuxSysPll1Div5. */
 
     /* BUS */
-    kCLOCK_BUS_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_BUS_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_BUS_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_BUS_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_BUS_ClockRoot_MuxSysPll3Out   = 4U,
-    kCLOCK_BUS_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_BUS_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_BUS_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_BUS_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< BUS mux from MuxOscRc48MDiv2. */
+    kCLOCK_BUS_ClockRoot_MuxOsc24MOut    = 1U, /*!< BUS mux from MuxOsc24MOut. */
+    kCLOCK_BUS_ClockRoot_MuxOscRc400M    = 2U, /*!< BUS mux from MuxOscRc400M. */
+    kCLOCK_BUS_ClockRoot_MuxOscRc16M     = 3U, /*!< BUS mux from MuxOscRc16M. */
+    kCLOCK_BUS_ClockRoot_MuxSysPll3Out   = 4U, /*!< BUS mux from MuxSysPll3Out. */
+    kCLOCK_BUS_ClockRoot_MuxSysPll1Div5  = 5U, /*!< BUS mux from MuxSysPll1Div5. */
+    kCLOCK_BUS_ClockRoot_MuxSysPll2Out   = 6U, /*!< BUS mux from MuxSysPll2Out. */
+    kCLOCK_BUS_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< BUS mux from MuxSysPll2Pfd3. */
 
     /* BUS_LPSR */
-    kCLOCK_BUS_LPSR_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_BUS_LPSR_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_BUS_LPSR_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_BUS_LPSR_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_BUS_LPSR_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_BUS_LPSR_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_BUS_LPSR_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_BUS_LPSR_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_BUS_LPSR_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< BUS_LPSR mux from MuxOscRc48MDiv2. */
+    kCLOCK_BUS_LPSR_ClockRoot_MuxOsc24MOut    = 1U, /*!< BUS_LPSR mux from MuxOsc24MOut. */
+    kCLOCK_BUS_LPSR_ClockRoot_MuxOscRc400M    = 2U, /*!< BUS_LPSR mux from MuxOscRc400M. */
+    kCLOCK_BUS_LPSR_ClockRoot_MuxOscRc16M     = 3U, /*!< BUS_LPSR mux from MuxOscRc16M. */
+    kCLOCK_BUS_LPSR_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< BUS_LPSR mux from MuxSysPll3Pfd3. */
+    kCLOCK_BUS_LPSR_ClockRoot_MuxSysPll3Out   = 5U, /*!< BUS_LPSR mux from MuxSysPll3Out. */
+    kCLOCK_BUS_LPSR_ClockRoot_MuxSysPll2Out   = 6U, /*!< BUS_LPSR mux from MuxSysPll2Out. */
+    kCLOCK_BUS_LPSR_ClockRoot_MuxSysPll1Div5  = 7U, /*!< BUS_LPSR mux from MuxSysPll1Div5. */
 
     /* SEMC */
-    kCLOCK_SEMC_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_SEMC_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_SEMC_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_SEMC_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_SEMC_ClockRoot_MuxSysPll1Div5  = 4U,
-    kCLOCK_SEMC_ClockRoot_MuxSysPll2Out   = 5U,
-    kCLOCK_SEMC_ClockRoot_MuxSysPll2Pfd1  = 6U,
-    kCLOCK_SEMC_ClockRoot_MuxSysPll3Pfd0  = 7U,
+    kCLOCK_SEMC_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< SEMC mux from MuxOscRc48MDiv2. */
+    kCLOCK_SEMC_ClockRoot_MuxOsc24MOut    = 1U, /*!< SEMC mux from MuxOsc24MOut. */
+    kCLOCK_SEMC_ClockRoot_MuxOscRc400M    = 2U, /*!< SEMC mux from MuxOscRc400M. */
+    kCLOCK_SEMC_ClockRoot_MuxOscRc16M     = 3U, /*!< SEMC mux from MuxOscRc16M. */
+    kCLOCK_SEMC_ClockRoot_MuxSysPll1Div5  = 4U, /*!< SEMC mux from MuxSysPll1Div5. */
+    kCLOCK_SEMC_ClockRoot_MuxSysPll2Out   = 5U, /*!< SEMC mux from MuxSysPll2Out. */
+    kCLOCK_SEMC_ClockRoot_MuxSysPll2Pfd1  = 6U, /*!< SEMC mux from MuxSysPll2Pfd1. */
+    kCLOCK_SEMC_ClockRoot_MuxSysPll3Pfd0  = 7U, /*!< SEMC mux from MuxSysPll3Pfd0. */
 
     /* CSSYS */
-    kCLOCK_CSSYS_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_CSSYS_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_CSSYS_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_CSSYS_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_CSSYS_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_CSSYS_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_CSSYS_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_CSSYS_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_CSSYS_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< CSSYS mux from MuxOscRc48MDiv2. */
+    kCLOCK_CSSYS_ClockRoot_MuxOsc24MOut    = 1U, /*!< CSSYS mux from MuxOsc24MOut. */
+    kCLOCK_CSSYS_ClockRoot_MuxOscRc400M    = 2U, /*!< CSSYS mux from MuxOscRc400M. */
+    kCLOCK_CSSYS_ClockRoot_MuxOscRc16M     = 3U, /*!< CSSYS mux from MuxOscRc16M. */
+    kCLOCK_CSSYS_ClockRoot_MuxSysPll3Div2  = 4U, /*!< CSSYS mux from MuxSysPll3Div2. */
+    kCLOCK_CSSYS_ClockRoot_MuxSysPll1Div5  = 5U, /*!< CSSYS mux from MuxSysPll1Div5. */
+    kCLOCK_CSSYS_ClockRoot_MuxSysPll2Out   = 6U, /*!< CSSYS mux from MuxSysPll2Out. */
+    kCLOCK_CSSYS_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< CSSYS mux from MuxSysPll2Pfd3. */
 
     /* CSTRACE */
-    kCLOCK_CSTRACE_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_CSTRACE_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_CSTRACE_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_CSTRACE_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_CSTRACE_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_CSTRACE_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_CSTRACE_ClockRoot_MuxSysPll2Pfd1  = 6U,
-    kCLOCK_CSTRACE_ClockRoot_MuxSysPll2Out   = 7U,
+    kCLOCK_CSTRACE_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< CSTRACE mux from MuxOscRc48MDiv2. */
+    kCLOCK_CSTRACE_ClockRoot_MuxOsc24MOut    = 1U, /*!< CSTRACE mux from MuxOsc24MOut. */
+    kCLOCK_CSTRACE_ClockRoot_MuxOscRc400M    = 2U, /*!< CSTRACE mux from MuxOscRc400M. */
+    kCLOCK_CSTRACE_ClockRoot_MuxOscRc16M     = 3U, /*!< CSTRACE mux from MuxOscRc16M. */
+    kCLOCK_CSTRACE_ClockRoot_MuxSysPll3Div2  = 4U, /*!< CSTRACE mux from MuxSysPll3Div2. */
+    kCLOCK_CSTRACE_ClockRoot_MuxSysPll1Div5  = 5U, /*!< CSTRACE mux from MuxSysPll1Div5. */
+    kCLOCK_CSTRACE_ClockRoot_MuxSysPll2Pfd1  = 6U, /*!< CSTRACE mux from MuxSysPll2Pfd1. */
+    kCLOCK_CSTRACE_ClockRoot_MuxSysPll2Out   = 7U, /*!< CSTRACE mux from MuxSysPll2Out. */
 
     /* M4_SYSTICK */
-    kCLOCK_M4_SYSTICK_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_M4_SYSTICK_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_M4_SYSTICK_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_M4_SYSTICK_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_M4_SYSTICK_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_M4_SYSTICK_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_M4_SYSTICK_ClockRoot_MuxSysPll2Pfd0  = 6U,
-    kCLOCK_M4_SYSTICK_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_M4_SYSTICK_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< M4_SYSTICK mux from MuxOscRc48MDiv2. */
+    kCLOCK_M4_SYSTICK_ClockRoot_MuxOsc24MOut    = 1U, /*!< M4_SYSTICK mux from MuxOsc24MOut. */
+    kCLOCK_M4_SYSTICK_ClockRoot_MuxOscRc400M    = 2U, /*!< M4_SYSTICK mux from MuxOscRc400M. */
+    kCLOCK_M4_SYSTICK_ClockRoot_MuxOscRc16M     = 3U, /*!< M4_SYSTICK mux from MuxOscRc16M. */
+    kCLOCK_M4_SYSTICK_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< M4_SYSTICK mux from MuxSysPll3Pfd3. */
+    kCLOCK_M4_SYSTICK_ClockRoot_MuxSysPll3Out   = 5U, /*!< M4_SYSTICK mux from MuxSysPll3Out. */
+    kCLOCK_M4_SYSTICK_ClockRoot_MuxSysPll2Pfd0  = 6U, /*!< M4_SYSTICK mux from MuxSysPll2Pfd0. */
+    kCLOCK_M4_SYSTICK_ClockRoot_MuxSysPll1Div5  = 7U, /*!< M4_SYSTICK mux from MuxSysPll1Div5. */
 
     /* M7_SYSTICK */
-    kCLOCK_M7_SYSTICK_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_M7_SYSTICK_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_M7_SYSTICK_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_M7_SYSTICK_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_M7_SYSTICK_ClockRoot_MuxSysPll2Out   = 4U,
-    kCLOCK_M7_SYSTICK_ClockRoot_MuxSysPll3Div2  = 5U,
-    kCLOCK_M7_SYSTICK_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_M7_SYSTICK_ClockRoot_MuxSysPll2Pfd0  = 7U,
+    kCLOCK_M7_SYSTICK_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< M7_SYSTICK mux from MuxOscRc48MDiv2. */
+    kCLOCK_M7_SYSTICK_ClockRoot_MuxOsc24MOut    = 1U, /*!< M7_SYSTICK mux from MuxOsc24MOut. */
+    kCLOCK_M7_SYSTICK_ClockRoot_MuxOscRc400M    = 2U, /*!< M7_SYSTICK mux from MuxOscRc400M. */
+    kCLOCK_M7_SYSTICK_ClockRoot_MuxOscRc16M     = 3U, /*!< M7_SYSTICK mux from MuxOscRc16M. */
+    kCLOCK_M7_SYSTICK_ClockRoot_MuxSysPll2Out   = 4U, /*!< M7_SYSTICK mux from MuxSysPll2Out. */
+    kCLOCK_M7_SYSTICK_ClockRoot_MuxSysPll3Div2  = 5U, /*!< M7_SYSTICK mux from MuxSysPll3Div2. */
+    kCLOCK_M7_SYSTICK_ClockRoot_MuxSysPll1Div5  = 6U, /*!< M7_SYSTICK mux from MuxSysPll1Div5. */
+    kCLOCK_M7_SYSTICK_ClockRoot_MuxSysPll2Pfd0  = 7U, /*!< M7_SYSTICK mux from MuxSysPll2Pfd0. */
 
     /* ADC1 */
-    kCLOCK_ADC1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_ADC1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_ADC1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_ADC1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_ADC1_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_ADC1_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_ADC1_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_ADC1_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_ADC1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< ADC1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_ADC1_ClockRoot_MuxOsc24MOut    = 1U, /*!< ADC1 mux from MuxOsc24MOut. */
+    kCLOCK_ADC1_ClockRoot_MuxOscRc400M    = 2U, /*!< ADC1 mux from MuxOscRc400M. */
+    kCLOCK_ADC1_ClockRoot_MuxOscRc16M     = 3U, /*!< ADC1 mux from MuxOscRc16M. */
+    kCLOCK_ADC1_ClockRoot_MuxSysPll3Div2  = 4U, /*!< ADC1 mux from MuxSysPll3Div2. */
+    kCLOCK_ADC1_ClockRoot_MuxSysPll1Div5  = 5U, /*!< ADC1 mux from MuxSysPll1Div5. */
+    kCLOCK_ADC1_ClockRoot_MuxSysPll2Out   = 6U, /*!< ADC1 mux from MuxSysPll2Out. */
+    kCLOCK_ADC1_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< ADC1 mux from MuxSysPll2Pfd3. */
 
     /* ADC2 */
-    kCLOCK_ADC2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_ADC2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_ADC2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_ADC2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_ADC2_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_ADC2_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_ADC2_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_ADC2_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_ADC2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< ADC2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_ADC2_ClockRoot_MuxOsc24MOut    = 1U, /*!< ADC2 mux from MuxOsc24MOut. */
+    kCLOCK_ADC2_ClockRoot_MuxOscRc400M    = 2U, /*!< ADC2 mux from MuxOscRc400M. */
+    kCLOCK_ADC2_ClockRoot_MuxOscRc16M     = 3U, /*!< ADC2 mux from MuxOscRc16M. */
+    kCLOCK_ADC2_ClockRoot_MuxSysPll3Div2  = 4U, /*!< ADC2 mux from MuxSysPll3Div2. */
+    kCLOCK_ADC2_ClockRoot_MuxSysPll1Div5  = 5U, /*!< ADC2 mux from MuxSysPll1Div5. */
+    kCLOCK_ADC2_ClockRoot_MuxSysPll2Out   = 6U, /*!< ADC2 mux from MuxSysPll2Out. */
+    kCLOCK_ADC2_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< ADC2 mux from MuxSysPll2Pfd3. */
 
     /* ACMP */
-    kCLOCK_ACMP_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_ACMP_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_ACMP_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_ACMP_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_ACMP_ClockRoot_MuxSysPll3Out   = 4U,
-    kCLOCK_ACMP_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_ACMP_ClockRoot_MuxAudioPllOut  = 6U,
-    kCLOCK_ACMP_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_ACMP_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< ACMP mux from MuxOscRc48MDiv2. */
+    kCLOCK_ACMP_ClockRoot_MuxOsc24MOut    = 1U, /*!< ACMP mux from MuxOsc24MOut. */
+    kCLOCK_ACMP_ClockRoot_MuxOscRc400M    = 2U, /*!< ACMP mux from MuxOscRc400M. */
+    kCLOCK_ACMP_ClockRoot_MuxOscRc16M     = 3U, /*!< ACMP mux from MuxOscRc16M. */
+    kCLOCK_ACMP_ClockRoot_MuxSysPll3Out   = 4U, /*!< ACMP mux from MuxSysPll3Out. */
+    kCLOCK_ACMP_ClockRoot_MuxSysPll1Div5  = 5U, /*!< ACMP mux from MuxSysPll1Div5. */
+    kCLOCK_ACMP_ClockRoot_MuxAudioPllOut  = 6U, /*!< ACMP mux from MuxAudioPllOut. */
+    kCLOCK_ACMP_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< ACMP mux from MuxSysPll2Pfd3. */
 
     /* FLEXIO1 */
-    kCLOCK_FLEXIO1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_FLEXIO1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_FLEXIO1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_FLEXIO1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_FLEXIO1_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_FLEXIO1_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_FLEXIO1_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_FLEXIO1_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_FLEXIO1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< FLEXIO1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_FLEXIO1_ClockRoot_MuxOsc24MOut    = 1U, /*!< FLEXIO1 mux from MuxOsc24MOut. */
+    kCLOCK_FLEXIO1_ClockRoot_MuxOscRc400M    = 2U, /*!< FLEXIO1 mux from MuxOscRc400M. */
+    kCLOCK_FLEXIO1_ClockRoot_MuxOscRc16M     = 3U, /*!< FLEXIO1 mux from MuxOscRc16M. */
+    kCLOCK_FLEXIO1_ClockRoot_MuxSysPll3Div2  = 4U, /*!< FLEXIO1 mux from MuxSysPll3Div2. */
+    kCLOCK_FLEXIO1_ClockRoot_MuxSysPll1Div5  = 5U, /*!< FLEXIO1 mux from MuxSysPll1Div5. */
+    kCLOCK_FLEXIO1_ClockRoot_MuxSysPll2Out   = 6U, /*!< FLEXIO1 mux from MuxSysPll2Out. */
+    kCLOCK_FLEXIO1_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< FLEXIO1 mux from MuxSysPll2Pfd3. */
 
     /* FLEXIO2 */
-    kCLOCK_FLEXIO2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_FLEXIO2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_FLEXIO2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_FLEXIO2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_FLEXIO2_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_FLEXIO2_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_FLEXIO2_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_FLEXIO2_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_FLEXIO2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< FLEXIO2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_FLEXIO2_ClockRoot_MuxOsc24MOut    = 1U, /*!< FLEXIO2 mux from MuxOsc24MOut. */
+    kCLOCK_FLEXIO2_ClockRoot_MuxOscRc400M    = 2U, /*!< FLEXIO2 mux from MuxOscRc400M. */
+    kCLOCK_FLEXIO2_ClockRoot_MuxOscRc16M     = 3U, /*!< FLEXIO2 mux from MuxOscRc16M. */
+    kCLOCK_FLEXIO2_ClockRoot_MuxSysPll3Div2  = 4U, /*!< FLEXIO2 mux from MuxSysPll3Div2. */
+    kCLOCK_FLEXIO2_ClockRoot_MuxSysPll1Div5  = 5U, /*!< FLEXIO2 mux from MuxSysPll1Div5. */
+    kCLOCK_FLEXIO2_ClockRoot_MuxSysPll2Out   = 6U, /*!< FLEXIO2 mux from MuxSysPll2Out. */
+    kCLOCK_FLEXIO2_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< FLEXIO2 mux from MuxSysPll2Pfd3. */
 
     /* GPT1 */
-    kCLOCK_GPT1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_GPT1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_GPT1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_GPT1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_GPT1_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_GPT1_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_GPT1_ClockRoot_MuxSysPll3Pfd2  = 6U,
-    kCLOCK_GPT1_ClockRoot_MuxSysPll3Pfd3  = 7U,
+    kCLOCK_GPT1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< GPT1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_GPT1_ClockRoot_MuxOsc24MOut    = 1U, /*!< GPT1 mux from MuxOsc24MOut. */
+    kCLOCK_GPT1_ClockRoot_MuxOscRc400M    = 2U, /*!< GPT1 mux from MuxOscRc400M. */
+    kCLOCK_GPT1_ClockRoot_MuxOscRc16M     = 3U, /*!< GPT1 mux from MuxOscRc16M. */
+    kCLOCK_GPT1_ClockRoot_MuxSysPll3Div2  = 4U, /*!< GPT1 mux from MuxSysPll3Div2. */
+    kCLOCK_GPT1_ClockRoot_MuxSysPll1Div5  = 5U, /*!< GPT1 mux from MuxSysPll1Div5. */
+    kCLOCK_GPT1_ClockRoot_MuxSysPll3Pfd2  = 6U, /*!< GPT1 mux from MuxSysPll3Pfd2. */
+    kCLOCK_GPT1_ClockRoot_MuxSysPll3Pfd3  = 7U, /*!< GPT1 mux from MuxSysPll3Pfd3. */
 
     /* GPT2 */
-    kCLOCK_GPT2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_GPT2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_GPT2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_GPT2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_GPT2_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_GPT2_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_GPT2_ClockRoot_MuxAudioPllOut  = 6U,
-    kCLOCK_GPT2_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_GPT2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< GPT2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_GPT2_ClockRoot_MuxOsc24MOut    = 1U, /*!< GPT2 mux from MuxOsc24MOut. */
+    kCLOCK_GPT2_ClockRoot_MuxOscRc400M    = 2U, /*!< GPT2 mux from MuxOscRc400M. */
+    kCLOCK_GPT2_ClockRoot_MuxOscRc16M     = 3U, /*!< GPT2 mux from MuxOscRc16M. */
+    kCLOCK_GPT2_ClockRoot_MuxSysPll3Div2  = 4U, /*!< GPT2 mux from MuxSysPll3Div2. */
+    kCLOCK_GPT2_ClockRoot_MuxSysPll1Div5  = 5U, /*!< GPT2 mux from MuxSysPll1Div5. */
+    kCLOCK_GPT2_ClockRoot_MuxAudioPllOut  = 6U, /*!< GPT2 mux from MuxAudioPllOut. */
+    kCLOCK_GPT2_ClockRoot_MuxVideoPllOut  = 7U, /*!< GPT2 mux from MuxVideoPllOut. */
 
     /* GPT3 */
-    kCLOCK_GPT3_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_GPT3_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_GPT3_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_GPT3_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_GPT3_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_GPT3_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_GPT3_ClockRoot_MuxAudioPllOut  = 6U,
-    kCLOCK_GPT3_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_GPT3_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< GPT3 mux from MuxOscRc48MDiv2. */
+    kCLOCK_GPT3_ClockRoot_MuxOsc24MOut    = 1U, /*!< GPT3 mux from MuxOsc24MOut. */
+    kCLOCK_GPT3_ClockRoot_MuxOscRc400M    = 2U, /*!< GPT3 mux from MuxOscRc400M. */
+    kCLOCK_GPT3_ClockRoot_MuxOscRc16M     = 3U, /*!< GPT3 mux from MuxOscRc16M. */
+    kCLOCK_GPT3_ClockRoot_MuxSysPll3Div2  = 4U, /*!< GPT3 mux from MuxSysPll3Div2. */
+    kCLOCK_GPT3_ClockRoot_MuxSysPll1Div5  = 5U, /*!< GPT3 mux from MuxSysPll1Div5. */
+    kCLOCK_GPT3_ClockRoot_MuxAudioPllOut  = 6U, /*!< GPT3 mux from MuxAudioPllOut. */
+    kCLOCK_GPT3_ClockRoot_MuxVideoPllOut  = 7U, /*!< GPT3 mux from MuxVideoPllOut. */
 
     /* GPT4 */
-    kCLOCK_GPT4_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_GPT4_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_GPT4_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_GPT4_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_GPT4_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_GPT4_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_GPT4_ClockRoot_MuxSysPll3Pfd2  = 6U,
-    kCLOCK_GPT4_ClockRoot_MuxSysPll3Pfd3  = 7U,
+    kCLOCK_GPT4_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< GPT4 mux from MuxOscRc48MDiv2. */
+    kCLOCK_GPT4_ClockRoot_MuxOsc24MOut    = 1U, /*!< GPT4 mux from MuxOsc24MOut. */
+    kCLOCK_GPT4_ClockRoot_MuxOscRc400M    = 2U, /*!< GPT4 mux from MuxOscRc400M. */
+    kCLOCK_GPT4_ClockRoot_MuxOscRc16M     = 3U, /*!< GPT4 mux from MuxOscRc16M. */
+    kCLOCK_GPT4_ClockRoot_MuxSysPll3Div2  = 4U, /*!< GPT4 mux from MuxSysPll3Div2. */
+    kCLOCK_GPT4_ClockRoot_MuxSysPll1Div5  = 5U, /*!< GPT4 mux from MuxSysPll1Div5. */
+    kCLOCK_GPT4_ClockRoot_MuxSysPll3Pfd2  = 6U, /*!< GPT4 mux from MuxSysPll3Pfd2. */
+    kCLOCK_GPT4_ClockRoot_MuxSysPll3Pfd3  = 7U, /*!< GPT4 mux from MuxSysPll3Pfd3. */
 
     /* GPT5 */
-    kCLOCK_GPT5_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_GPT5_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_GPT5_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_GPT5_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_GPT5_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_GPT5_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_GPT5_ClockRoot_MuxSysPll3Pfd2  = 6U,
-    kCLOCK_GPT5_ClockRoot_MuxSysPll3Pfd3  = 7U,
+    kCLOCK_GPT5_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< GPT5 mux from MuxOscRc48MDiv2. */
+    kCLOCK_GPT5_ClockRoot_MuxOsc24MOut    = 1U, /*!< GPT5 mux from MuxOsc24MOut. */
+    kCLOCK_GPT5_ClockRoot_MuxOscRc400M    = 2U, /*!< GPT5 mux from MuxOscRc400M. */
+    kCLOCK_GPT5_ClockRoot_MuxOscRc16M     = 3U, /*!< GPT5 mux from MuxOscRc16M. */
+    kCLOCK_GPT5_ClockRoot_MuxSysPll3Div2  = 4U, /*!< GPT5 mux from MuxSysPll3Div2. */
+    kCLOCK_GPT5_ClockRoot_MuxSysPll1Div5  = 5U, /*!< GPT5 mux from MuxSysPll1Div5. */
+    kCLOCK_GPT5_ClockRoot_MuxSysPll3Pfd2  = 6U, /*!< GPT5 mux from MuxSysPll3Pfd2. */
+    kCLOCK_GPT5_ClockRoot_MuxSysPll3Pfd3  = 7U, /*!< GPT5 mux from MuxSysPll3Pfd3. */
 
     /* GPT6 */
-    kCLOCK_GPT6_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_GPT6_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_GPT6_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_GPT6_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_GPT6_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_GPT6_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_GPT6_ClockRoot_MuxSysPll3Pfd2  = 6U,
-    kCLOCK_GPT6_ClockRoot_MuxSysPll3Pfd3  = 7U,
+    kCLOCK_GPT6_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< GPT6 mux from MuxOscRc48MDiv2. */
+    kCLOCK_GPT6_ClockRoot_MuxOsc24MOut    = 1U, /*!< GPT6 mux from MuxOsc24MOut. */
+    kCLOCK_GPT6_ClockRoot_MuxOscRc400M    = 2U, /*!< GPT6 mux from MuxOscRc400M. */
+    kCLOCK_GPT6_ClockRoot_MuxOscRc16M     = 3U, /*!< GPT6 mux from MuxOscRc16M. */
+    kCLOCK_GPT6_ClockRoot_MuxSysPll3Div2  = 4U, /*!< GPT6 mux from MuxSysPll3Div2. */
+    kCLOCK_GPT6_ClockRoot_MuxSysPll1Div5  = 5U, /*!< GPT6 mux from MuxSysPll1Div5. */
+    kCLOCK_GPT6_ClockRoot_MuxSysPll3Pfd2  = 6U, /*!< GPT6 mux from MuxSysPll3Pfd2. */
+    kCLOCK_GPT6_ClockRoot_MuxSysPll3Pfd3  = 7U, /*!< GPT6 mux from MuxSysPll3Pfd3. */
 
     /* FLEXSPI1 */
-    kCLOCK_FLEXSPI1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_FLEXSPI1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_FLEXSPI1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_FLEXSPI1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll3Pfd0  = 4U,
-    kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll2Out   = 5U,
-    kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll2Pfd2  = 6U,
-    kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll3Out   = 7U,
+    kCLOCK_FLEXSPI1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< FLEXSPI1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_FLEXSPI1_ClockRoot_MuxOsc24MOut    = 1U, /*!< FLEXSPI1 mux from MuxOsc24MOut. */
+    kCLOCK_FLEXSPI1_ClockRoot_MuxOscRc400M    = 2U, /*!< FLEXSPI1 mux from MuxOscRc400M. */
+    kCLOCK_FLEXSPI1_ClockRoot_MuxOscRc16M     = 3U, /*!< FLEXSPI1 mux from MuxOscRc16M. */
+    kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll3Pfd0  = 4U, /*!< FLEXSPI1 mux from MuxSysPll3Pfd0. */
+    kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll2Out   = 5U, /*!< FLEXSPI1 mux from MuxSysPll2Out. */
+    kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll2Pfd2  = 6U, /*!< FLEXSPI1 mux from MuxSysPll2Pfd2. */
+    kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll3Out   = 7U, /*!< FLEXSPI1 mux from MuxSysPll3Out. */
 
     /* FLEXSPI2 */
-    kCLOCK_FLEXSPI2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_FLEXSPI2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_FLEXSPI2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_FLEXSPI2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll3Pfd0  = 4U,
-    kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll2Out   = 5U,
-    kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll2Pfd2  = 6U,
-    kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll3Out   = 7U,
+    kCLOCK_FLEXSPI2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< FLEXSPI2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_FLEXSPI2_ClockRoot_MuxOsc24MOut    = 1U, /*!< FLEXSPI2 mux from MuxOsc24MOut. */
+    kCLOCK_FLEXSPI2_ClockRoot_MuxOscRc400M    = 2U, /*!< FLEXSPI2 mux from MuxOscRc400M. */
+    kCLOCK_FLEXSPI2_ClockRoot_MuxOscRc16M     = 3U, /*!< FLEXSPI2 mux from MuxOscRc16M. */
+    kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll3Pfd0  = 4U, /*!< FLEXSPI2 mux from MuxSysPll3Pfd0. */
+    kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll2Out   = 5U, /*!< FLEXSPI2 mux from MuxSysPll2Out. */
+    kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll2Pfd2  = 6U, /*!< FLEXSPI2 mux from MuxSysPll2Pfd2. */
+    kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll3Out   = 7U, /*!< FLEXSPI2 mux from MuxSysPll3Out. */
 
     /* CAN1 */
-    kCLOCK_CAN1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_CAN1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_CAN1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_CAN1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_CAN1_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_CAN1_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_CAN1_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_CAN1_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_CAN1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< CAN1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_CAN1_ClockRoot_MuxOsc24MOut    = 1U, /*!< CAN1 mux from MuxOsc24MOut. */
+    kCLOCK_CAN1_ClockRoot_MuxOscRc400M    = 2U, /*!< CAN1 mux from MuxOscRc400M. */
+    kCLOCK_CAN1_ClockRoot_MuxOscRc16M     = 3U, /*!< CAN1 mux from MuxOscRc16M. */
+    kCLOCK_CAN1_ClockRoot_MuxSysPll3Div2  = 4U, /*!< CAN1 mux from MuxSysPll3Div2. */
+    kCLOCK_CAN1_ClockRoot_MuxSysPll1Div5  = 5U, /*!< CAN1 mux from MuxSysPll1Div5. */
+    kCLOCK_CAN1_ClockRoot_MuxSysPll2Out   = 6U, /*!< CAN1 mux from MuxSysPll2Out. */
+    kCLOCK_CAN1_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< CAN1 mux from MuxSysPll2Pfd3. */
 
     /* CAN2 */
-    kCLOCK_CAN2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_CAN2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_CAN2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_CAN2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_CAN2_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_CAN2_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_CAN2_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_CAN2_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_CAN2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< CAN2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_CAN2_ClockRoot_MuxOsc24MOut    = 1U, /*!< CAN2 mux from MuxOsc24MOut. */
+    kCLOCK_CAN2_ClockRoot_MuxOscRc400M    = 2U, /*!< CAN2 mux from MuxOscRc400M. */
+    kCLOCK_CAN2_ClockRoot_MuxOscRc16M     = 3U, /*!< CAN2 mux from MuxOscRc16M. */
+    kCLOCK_CAN2_ClockRoot_MuxSysPll3Div2  = 4U, /*!< CAN2 mux from MuxSysPll3Div2. */
+    kCLOCK_CAN2_ClockRoot_MuxSysPll1Div5  = 5U, /*!< CAN2 mux from MuxSysPll1Div5. */
+    kCLOCK_CAN2_ClockRoot_MuxSysPll2Out   = 6U, /*!< CAN2 mux from MuxSysPll2Out. */
+    kCLOCK_CAN2_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< CAN2 mux from MuxSysPll2Pfd3. */
 
     /* CAN3 */
-    kCLOCK_CAN3_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_CAN3_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_CAN3_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_CAN3_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_CAN3_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_CAN3_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_CAN3_ClockRoot_MuxSysPll2Pfd3  = 6U,
-    kCLOCK_CAN3_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_CAN3_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< CAN3 mux from MuxOscRc48MDiv2. */
+    kCLOCK_CAN3_ClockRoot_MuxOsc24MOut    = 1U, /*!< CAN3 mux from MuxOsc24MOut. */
+    kCLOCK_CAN3_ClockRoot_MuxOscRc400M    = 2U, /*!< CAN3 mux from MuxOscRc400M. */
+    kCLOCK_CAN3_ClockRoot_MuxOscRc16M     = 3U, /*!< CAN3 mux from MuxOscRc16M. */
+    kCLOCK_CAN3_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< CAN3 mux from MuxSysPll3Pfd3. */
+    kCLOCK_CAN3_ClockRoot_MuxSysPll3Out   = 5U, /*!< CAN3 mux from MuxSysPll3Out. */
+    kCLOCK_CAN3_ClockRoot_MuxSysPll2Pfd3  = 6U, /*!< CAN3 mux from MuxSysPll2Pfd3. */
+    kCLOCK_CAN3_ClockRoot_MuxSysPll1Div5  = 7U, /*!< CAN3 mux from MuxSysPll1Div5. */
 
     /* LPUART1 */
-    kCLOCK_LPUART1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART1_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPUART1_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPUART1_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPUART1_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPUART1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART1_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART1 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART1_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART1 mux from MuxOscRc400M. */
+    kCLOCK_LPUART1_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART1 mux from MuxOscRc16M. */
+    kCLOCK_LPUART1_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPUART1 mux from MuxSysPll3Div2. */
+    kCLOCK_LPUART1_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPUART1 mux from MuxSysPll1Div5. */
+    kCLOCK_LPUART1_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPUART1 mux from MuxSysPll2Out. */
+    kCLOCK_LPUART1_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPUART1 mux from MuxSysPll2Pfd3. */
 
     /* LPUART2 */
-    kCLOCK_LPUART2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART2_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPUART2_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPUART2_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPUART2_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPUART2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART2_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART2 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART2_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART2 mux from MuxOscRc400M. */
+    kCLOCK_LPUART2_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART2 mux from MuxOscRc16M. */
+    kCLOCK_LPUART2_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPUART2 mux from MuxSysPll3Div2. */
+    kCLOCK_LPUART2_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPUART2 mux from MuxSysPll1Div5. */
+    kCLOCK_LPUART2_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPUART2 mux from MuxSysPll2Out. */
+    kCLOCK_LPUART2_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPUART2 mux from MuxSysPll2Pfd3. */
 
     /* LPUART3 */
-    kCLOCK_LPUART3_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART3_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART3_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART3_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART3_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPUART3_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPUART3_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPUART3_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPUART3_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART3 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART3_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART3 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART3_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART3 mux from MuxOscRc400M. */
+    kCLOCK_LPUART3_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART3 mux from MuxOscRc16M. */
+    kCLOCK_LPUART3_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPUART3 mux from MuxSysPll3Div2. */
+    kCLOCK_LPUART3_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPUART3 mux from MuxSysPll1Div5. */
+    kCLOCK_LPUART3_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPUART3 mux from MuxSysPll2Out. */
+    kCLOCK_LPUART3_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPUART3 mux from MuxSysPll2Pfd3. */
 
     /* LPUART4 */
-    kCLOCK_LPUART4_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART4_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART4_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART4_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART4_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPUART4_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPUART4_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPUART4_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPUART4_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART4 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART4_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART4 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART4_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART4 mux from MuxOscRc400M. */
+    kCLOCK_LPUART4_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART4 mux from MuxOscRc16M. */
+    kCLOCK_LPUART4_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPUART4 mux from MuxSysPll3Div2. */
+    kCLOCK_LPUART4_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPUART4 mux from MuxSysPll1Div5. */
+    kCLOCK_LPUART4_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPUART4 mux from MuxSysPll2Out. */
+    kCLOCK_LPUART4_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPUART4 mux from MuxSysPll2Pfd3. */
 
     /* LPUART5 */
-    kCLOCK_LPUART5_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART5_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART5_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART5_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART5_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPUART5_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPUART5_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPUART5_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPUART5_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART5 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART5_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART5 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART5_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART5 mux from MuxOscRc400M. */
+    kCLOCK_LPUART5_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART5 mux from MuxOscRc16M. */
+    kCLOCK_LPUART5_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPUART5 mux from MuxSysPll3Div2. */
+    kCLOCK_LPUART5_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPUART5 mux from MuxSysPll1Div5. */
+    kCLOCK_LPUART5_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPUART5 mux from MuxSysPll2Out. */
+    kCLOCK_LPUART5_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPUART5 mux from MuxSysPll2Pfd3. */
 
     /* LPUART6 */
-    kCLOCK_LPUART6_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART6_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART6_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART6_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART6_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPUART6_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPUART6_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPUART6_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPUART6_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART6 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART6_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART6 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART6_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART6 mux from MuxOscRc400M. */
+    kCLOCK_LPUART6_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART6 mux from MuxOscRc16M. */
+    kCLOCK_LPUART6_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPUART6 mux from MuxSysPll3Div2. */
+    kCLOCK_LPUART6_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPUART6 mux from MuxSysPll1Div5. */
+    kCLOCK_LPUART6_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPUART6 mux from MuxSysPll2Out. */
+    kCLOCK_LPUART6_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPUART6 mux from MuxSysPll2Pfd3. */
 
     /* LPUART7 */
-    kCLOCK_LPUART7_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART7_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART7_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART7_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART7_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPUART7_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPUART7_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPUART7_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPUART7_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART7 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART7_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART7 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART7_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART7 mux from MuxOscRc400M. */
+    kCLOCK_LPUART7_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART7 mux from MuxOscRc16M. */
+    kCLOCK_LPUART7_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPUART7 mux from MuxSysPll3Div2. */
+    kCLOCK_LPUART7_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPUART7 mux from MuxSysPll1Div5. */
+    kCLOCK_LPUART7_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPUART7 mux from MuxSysPll2Out. */
+    kCLOCK_LPUART7_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPUART7 mux from MuxSysPll2Pfd3. */
 
     /* LPUART8 */
-    kCLOCK_LPUART8_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART8_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART8_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART8_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART8_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPUART8_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPUART8_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPUART8_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPUART8_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART8 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART8_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART8 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART8_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART8 mux from MuxOscRc400M. */
+    kCLOCK_LPUART8_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART8 mux from MuxOscRc16M. */
+    kCLOCK_LPUART8_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPUART8 mux from MuxSysPll3Div2. */
+    kCLOCK_LPUART8_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPUART8 mux from MuxSysPll1Div5. */
+    kCLOCK_LPUART8_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPUART8 mux from MuxSysPll2Out. */
+    kCLOCK_LPUART8_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPUART8 mux from MuxSysPll2Pfd3. */
 
     /* LPUART9 */
-    kCLOCK_LPUART9_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART9_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART9_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART9_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART9_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPUART9_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPUART9_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPUART9_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPUART9_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART9 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART9_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART9 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART9_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART9 mux from MuxOscRc400M. */
+    kCLOCK_LPUART9_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART9 mux from MuxOscRc16M. */
+    kCLOCK_LPUART9_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPUART9 mux from MuxSysPll3Div2. */
+    kCLOCK_LPUART9_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPUART9 mux from MuxSysPll1Div5. */
+    kCLOCK_LPUART9_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPUART9 mux from MuxSysPll2Out. */
+    kCLOCK_LPUART9_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPUART9 mux from MuxSysPll2Pfd3. */
 
     /* LPUART10 */
-    kCLOCK_LPUART10_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART10_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART10_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART10_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART10_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPUART10_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPUART10_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPUART10_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPUART10_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART10 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART10_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART10 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART10_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART10 mux from MuxOscRc400M. */
+    kCLOCK_LPUART10_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART10 mux from MuxOscRc16M. */
+    kCLOCK_LPUART10_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPUART10 mux from MuxSysPll3Div2. */
+    kCLOCK_LPUART10_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPUART10 mux from MuxSysPll1Div5. */
+    kCLOCK_LPUART10_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPUART10 mux from MuxSysPll2Out. */
+    kCLOCK_LPUART10_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPUART10 mux from MuxSysPll2Pfd3. */
 
     /* LPUART11 */
-    kCLOCK_LPUART11_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART11_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART11_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART11_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART11_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_LPUART11_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_LPUART11_ClockRoot_MuxSysPll2Pfd3  = 6U,
-    kCLOCK_LPUART11_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_LPUART11_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART11 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART11_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART11 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART11_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART11 mux from MuxOscRc400M. */
+    kCLOCK_LPUART11_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART11 mux from MuxOscRc16M. */
+    kCLOCK_LPUART11_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< LPUART11 mux from MuxSysPll3Pfd3. */
+    kCLOCK_LPUART11_ClockRoot_MuxSysPll3Out   = 5U, /*!< LPUART11 mux from MuxSysPll3Out. */
+    kCLOCK_LPUART11_ClockRoot_MuxSysPll2Pfd3  = 6U, /*!< LPUART11 mux from MuxSysPll2Pfd3. */
+    kCLOCK_LPUART11_ClockRoot_MuxSysPll1Div5  = 7U, /*!< LPUART11 mux from MuxSysPll1Div5. */
 
     /* LPUART12 */
-    kCLOCK_LPUART12_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPUART12_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPUART12_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPUART12_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPUART12_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_LPUART12_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_LPUART12_ClockRoot_MuxSysPll2Pfd3  = 6U,
-    kCLOCK_LPUART12_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_LPUART12_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPUART12 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPUART12_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPUART12 mux from MuxOsc24MOut. */
+    kCLOCK_LPUART12_ClockRoot_MuxOscRc400M    = 2U, /*!< LPUART12 mux from MuxOscRc400M. */
+    kCLOCK_LPUART12_ClockRoot_MuxOscRc16M     = 3U, /*!< LPUART12 mux from MuxOscRc16M. */
+    kCLOCK_LPUART12_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< LPUART12 mux from MuxSysPll3Pfd3. */
+    kCLOCK_LPUART12_ClockRoot_MuxSysPll3Out   = 5U, /*!< LPUART12 mux from MuxSysPll3Out. */
+    kCLOCK_LPUART12_ClockRoot_MuxSysPll2Pfd3  = 6U, /*!< LPUART12 mux from MuxSysPll2Pfd3. */
+    kCLOCK_LPUART12_ClockRoot_MuxSysPll1Div5  = 7U, /*!< LPUART12 mux from MuxSysPll1Div5. */
 
     /* LPI2C1 */
-    kCLOCK_LPI2C1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPI2C1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPI2C1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPI2C1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPI2C1_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPI2C1_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPI2C1_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPI2C1_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPI2C1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPI2C1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPI2C1_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPI2C1 mux from MuxOsc24MOut. */
+    kCLOCK_LPI2C1_ClockRoot_MuxOscRc400M    = 2U, /*!< LPI2C1 mux from MuxOscRc400M. */
+    kCLOCK_LPI2C1_ClockRoot_MuxOscRc16M     = 3U, /*!< LPI2C1 mux from MuxOscRc16M. */
+    kCLOCK_LPI2C1_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPI2C1 mux from MuxSysPll3Div2. */
+    kCLOCK_LPI2C1_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPI2C1 mux from MuxSysPll1Div5. */
+    kCLOCK_LPI2C1_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPI2C1 mux from MuxSysPll2Out. */
+    kCLOCK_LPI2C1_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPI2C1 mux from MuxSysPll2Pfd3. */
 
     /* LPI2C2 */
-    kCLOCK_LPI2C2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPI2C2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPI2C2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPI2C2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPI2C2_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPI2C2_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPI2C2_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPI2C2_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPI2C2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPI2C2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPI2C2_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPI2C2 mux from MuxOsc24MOut. */
+    kCLOCK_LPI2C2_ClockRoot_MuxOscRc400M    = 2U, /*!< LPI2C2 mux from MuxOscRc400M. */
+    kCLOCK_LPI2C2_ClockRoot_MuxOscRc16M     = 3U, /*!< LPI2C2 mux from MuxOscRc16M. */
+    kCLOCK_LPI2C2_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPI2C2 mux from MuxSysPll3Div2. */
+    kCLOCK_LPI2C2_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPI2C2 mux from MuxSysPll1Div5. */
+    kCLOCK_LPI2C2_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPI2C2 mux from MuxSysPll2Out. */
+    kCLOCK_LPI2C2_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPI2C2 mux from MuxSysPll2Pfd3. */
 
     /* LPI2C3 */
-    kCLOCK_LPI2C3_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPI2C3_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPI2C3_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPI2C3_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPI2C3_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPI2C3_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPI2C3_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPI2C3_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPI2C3_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPI2C3 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPI2C3_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPI2C3 mux from MuxOsc24MOut. */
+    kCLOCK_LPI2C3_ClockRoot_MuxOscRc400M    = 2U, /*!< LPI2C3 mux from MuxOscRc400M. */
+    kCLOCK_LPI2C3_ClockRoot_MuxOscRc16M     = 3U, /*!< LPI2C3 mux from MuxOscRc16M. */
+    kCLOCK_LPI2C3_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPI2C3 mux from MuxSysPll3Div2. */
+    kCLOCK_LPI2C3_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPI2C3 mux from MuxSysPll1Div5. */
+    kCLOCK_LPI2C3_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPI2C3 mux from MuxSysPll2Out. */
+    kCLOCK_LPI2C3_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPI2C3 mux from MuxSysPll2Pfd3. */
 
     /* LPI2C4 */
-    kCLOCK_LPI2C4_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPI2C4_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPI2C4_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPI2C4_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPI2C4_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_LPI2C4_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPI2C4_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPI2C4_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPI2C4_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPI2C4 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPI2C4_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPI2C4 mux from MuxOsc24MOut. */
+    kCLOCK_LPI2C4_ClockRoot_MuxOscRc400M    = 2U, /*!< LPI2C4 mux from MuxOscRc400M. */
+    kCLOCK_LPI2C4_ClockRoot_MuxOscRc16M     = 3U, /*!< LPI2C4 mux from MuxOscRc16M. */
+    kCLOCK_LPI2C4_ClockRoot_MuxSysPll3Div2  = 4U, /*!< LPI2C4 mux from MuxSysPll3Div2. */
+    kCLOCK_LPI2C4_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPI2C4 mux from MuxSysPll1Div5. */
+    kCLOCK_LPI2C4_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPI2C4 mux from MuxSysPll2Out. */
+    kCLOCK_LPI2C4_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPI2C4 mux from MuxSysPll2Pfd3. */
 
     /* LPI2C5 */
-    kCLOCK_LPI2C5_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPI2C5_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPI2C5_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPI2C5_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPI2C5_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_LPI2C5_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_LPI2C5_ClockRoot_MuxSysPll2Pfd3  = 6U,
-    kCLOCK_LPI2C5_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_LPI2C5_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPI2C5 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPI2C5_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPI2C5 mux from MuxOsc24MOut. */
+    kCLOCK_LPI2C5_ClockRoot_MuxOscRc400M    = 2U, /*!< LPI2C5 mux from MuxOscRc400M. */
+    kCLOCK_LPI2C5_ClockRoot_MuxOscRc16M     = 3U, /*!< LPI2C5 mux from MuxOscRc16M. */
+    kCLOCK_LPI2C5_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< LPI2C5 mux from MuxSysPll3Pfd3. */
+    kCLOCK_LPI2C5_ClockRoot_MuxSysPll3Out   = 5U, /*!< LPI2C5 mux from MuxSysPll3Out. */
+    kCLOCK_LPI2C5_ClockRoot_MuxSysPll2Pfd3  = 6U, /*!< LPI2C5 mux from MuxSysPll2Pfd3. */
+    kCLOCK_LPI2C5_ClockRoot_MuxSysPll1Div5  = 7U, /*!< LPI2C5 mux from MuxSysPll1Div5. */
 
     /* LPI2C6 */
-    kCLOCK_LPI2C6_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPI2C6_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPI2C6_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPI2C6_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPI2C6_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_LPI2C6_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_LPI2C6_ClockRoot_MuxSysPll2Pfd3  = 6U,
-    kCLOCK_LPI2C6_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_LPI2C6_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPI2C6 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPI2C6_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPI2C6 mux from MuxOsc24MOut. */
+    kCLOCK_LPI2C6_ClockRoot_MuxOscRc400M    = 2U, /*!< LPI2C6 mux from MuxOscRc400M. */
+    kCLOCK_LPI2C6_ClockRoot_MuxOscRc16M     = 3U, /*!< LPI2C6 mux from MuxOscRc16M. */
+    kCLOCK_LPI2C6_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< LPI2C6 mux from MuxSysPll3Pfd3. */
+    kCLOCK_LPI2C6_ClockRoot_MuxSysPll3Out   = 5U, /*!< LPI2C6 mux from MuxSysPll3Out. */
+    kCLOCK_LPI2C6_ClockRoot_MuxSysPll2Pfd3  = 6U, /*!< LPI2C6 mux from MuxSysPll2Pfd3. */
+    kCLOCK_LPI2C6_ClockRoot_MuxSysPll1Div5  = 7U, /*!< LPI2C6 mux from MuxSysPll1Div5. */
 
     /* LPSPI1 */
-    kCLOCK_LPSPI1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPSPI1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPSPI1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPSPI1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPSPI1_ClockRoot_MuxSysPll3Pfd2  = 4U,
-    kCLOCK_LPSPI1_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPSPI1_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPSPI1_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPSPI1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPSPI1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPSPI1_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPSPI1 mux from MuxOsc24MOut. */
+    kCLOCK_LPSPI1_ClockRoot_MuxOscRc400M    = 2U, /*!< LPSPI1 mux from MuxOscRc400M. */
+    kCLOCK_LPSPI1_ClockRoot_MuxOscRc16M     = 3U, /*!< LPSPI1 mux from MuxOscRc16M. */
+    kCLOCK_LPSPI1_ClockRoot_MuxSysPll3Pfd2  = 4U, /*!< LPSPI1 mux from MuxSysPll3Pfd2. */
+    kCLOCK_LPSPI1_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPSPI1 mux from MuxSysPll1Div5. */
+    kCLOCK_LPSPI1_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPSPI1 mux from MuxSysPll2Out. */
+    kCLOCK_LPSPI1_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPSPI1 mux from MuxSysPll2Pfd3. */
 
     /* LPSPI2 */
-    kCLOCK_LPSPI2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPSPI2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPSPI2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPSPI2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPSPI2_ClockRoot_MuxSysPll3Pfd2  = 4U,
-    kCLOCK_LPSPI2_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPSPI2_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPSPI2_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPSPI2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPSPI2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPSPI2_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPSPI2 mux from MuxOsc24MOut. */
+    kCLOCK_LPSPI2_ClockRoot_MuxOscRc400M    = 2U, /*!< LPSPI2 mux from MuxOscRc400M. */
+    kCLOCK_LPSPI2_ClockRoot_MuxOscRc16M     = 3U, /*!< LPSPI2 mux from MuxOscRc16M. */
+    kCLOCK_LPSPI2_ClockRoot_MuxSysPll3Pfd2  = 4U, /*!< LPSPI2 mux from MuxSysPll3Pfd2. */
+    kCLOCK_LPSPI2_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPSPI2 mux from MuxSysPll1Div5. */
+    kCLOCK_LPSPI2_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPSPI2 mux from MuxSysPll2Out. */
+    kCLOCK_LPSPI2_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPSPI2 mux from MuxSysPll2Pfd3. */
 
     /* LPSPI3 */
-    kCLOCK_LPSPI3_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPSPI3_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPSPI3_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPSPI3_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPSPI3_ClockRoot_MuxSysPll3Pfd2  = 4U,
-    kCLOCK_LPSPI3_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPSPI3_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPSPI3_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPSPI3_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPSPI3 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPSPI3_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPSPI3 mux from MuxOsc24MOut. */
+    kCLOCK_LPSPI3_ClockRoot_MuxOscRc400M    = 2U, /*!< LPSPI3 mux from MuxOscRc400M. */
+    kCLOCK_LPSPI3_ClockRoot_MuxOscRc16M     = 3U, /*!< LPSPI3 mux from MuxOscRc16M. */
+    kCLOCK_LPSPI3_ClockRoot_MuxSysPll3Pfd2  = 4U, /*!< LPSPI3 mux from MuxSysPll3Pfd2. */
+    kCLOCK_LPSPI3_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPSPI3 mux from MuxSysPll1Div5. */
+    kCLOCK_LPSPI3_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPSPI3 mux from MuxSysPll2Out. */
+    kCLOCK_LPSPI3_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPSPI3 mux from MuxSysPll2Pfd3. */
 
     /* LPSPI4 */
-    kCLOCK_LPSPI4_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPSPI4_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPSPI4_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPSPI4_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPSPI4_ClockRoot_MuxSysPll3Pfd2  = 4U,
-    kCLOCK_LPSPI4_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_LPSPI4_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_LPSPI4_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_LPSPI4_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPSPI4 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPSPI4_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPSPI4 mux from MuxOsc24MOut. */
+    kCLOCK_LPSPI4_ClockRoot_MuxOscRc400M    = 2U, /*!< LPSPI4 mux from MuxOscRc400M. */
+    kCLOCK_LPSPI4_ClockRoot_MuxOscRc16M     = 3U, /*!< LPSPI4 mux from MuxOscRc16M. */
+    kCLOCK_LPSPI4_ClockRoot_MuxSysPll3Pfd2  = 4U, /*!< LPSPI4 mux from MuxSysPll3Pfd2. */
+    kCLOCK_LPSPI4_ClockRoot_MuxSysPll1Div5  = 5U, /*!< LPSPI4 mux from MuxSysPll1Div5. */
+    kCLOCK_LPSPI4_ClockRoot_MuxSysPll2Out   = 6U, /*!< LPSPI4 mux from MuxSysPll2Out. */
+    kCLOCK_LPSPI4_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< LPSPI4 mux from MuxSysPll2Pfd3. */
 
     /* LPSPI5 */
-    kCLOCK_LPSPI5_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPSPI5_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPSPI5_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPSPI5_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPSPI5_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_LPSPI5_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_LPSPI5_ClockRoot_MuxSysPll3Pfd2  = 6U,
-    kCLOCK_LPSPI5_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_LPSPI5_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPSPI5 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPSPI5_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPSPI5 mux from MuxOsc24MOut. */
+    kCLOCK_LPSPI5_ClockRoot_MuxOscRc400M    = 2U, /*!< LPSPI5 mux from MuxOscRc400M. */
+    kCLOCK_LPSPI5_ClockRoot_MuxOscRc16M     = 3U, /*!< LPSPI5 mux from MuxOscRc16M. */
+    kCLOCK_LPSPI5_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< LPSPI5 mux from MuxSysPll3Pfd3. */
+    kCLOCK_LPSPI5_ClockRoot_MuxSysPll3Out   = 5U, /*!< LPSPI5 mux from MuxSysPll3Out. */
+    kCLOCK_LPSPI5_ClockRoot_MuxSysPll3Pfd2  = 6U, /*!< LPSPI5 mux from MuxSysPll3Pfd2. */
+    kCLOCK_LPSPI5_ClockRoot_MuxSysPll1Div5  = 7U, /*!< LPSPI5 mux from MuxSysPll1Div5. */
 
     /* LPSPI6 */
-    kCLOCK_LPSPI6_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LPSPI6_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LPSPI6_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LPSPI6_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LPSPI6_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_LPSPI6_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_LPSPI6_ClockRoot_MuxSysPll3Pfd2  = 6U,
-    kCLOCK_LPSPI6_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_LPSPI6_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LPSPI6 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LPSPI6_ClockRoot_MuxOsc24MOut    = 1U, /*!< LPSPI6 mux from MuxOsc24MOut. */
+    kCLOCK_LPSPI6_ClockRoot_MuxOscRc400M    = 2U, /*!< LPSPI6 mux from MuxOscRc400M. */
+    kCLOCK_LPSPI6_ClockRoot_MuxOscRc16M     = 3U, /*!< LPSPI6 mux from MuxOscRc16M. */
+    kCLOCK_LPSPI6_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< LPSPI6 mux from MuxSysPll3Pfd3. */
+    kCLOCK_LPSPI6_ClockRoot_MuxSysPll3Out   = 5U, /*!< LPSPI6 mux from MuxSysPll3Out. */
+    kCLOCK_LPSPI6_ClockRoot_MuxSysPll3Pfd2  = 6U, /*!< LPSPI6 mux from MuxSysPll3Pfd2. */
+    kCLOCK_LPSPI6_ClockRoot_MuxSysPll1Div5  = 7U, /*!< LPSPI6 mux from MuxSysPll1Div5. */
 
     /* EMV1 */
-    kCLOCK_EMV1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_EMV1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_EMV1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_EMV1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_EMV1_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_EMV1_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_EMV1_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_EMV1_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_EMV1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< EMV1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_EMV1_ClockRoot_MuxOsc24MOut    = 1U, /*!< EMV1 mux from MuxOsc24MOut. */
+    kCLOCK_EMV1_ClockRoot_MuxOscRc400M    = 2U, /*!< EMV1 mux from MuxOscRc400M. */
+    kCLOCK_EMV1_ClockRoot_MuxOscRc16M     = 3U, /*!< EMV1 mux from MuxOscRc16M. */
+    kCLOCK_EMV1_ClockRoot_MuxSysPll3Div2  = 4U, /*!< EMV1 mux from MuxSysPll3Div2. */
+    kCLOCK_EMV1_ClockRoot_MuxSysPll1Div5  = 5U, /*!< EMV1 mux from MuxSysPll1Div5. */
+    kCLOCK_EMV1_ClockRoot_MuxSysPll2Out   = 6U, /*!< EMV1 mux from MuxSysPll2Out. */
+    kCLOCK_EMV1_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< EMV1 mux from MuxSysPll2Pfd3. */
 
     /* EMV2 */
-    kCLOCK_EMV2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_EMV2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_EMV2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_EMV2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_EMV2_ClockRoot_MuxSysPll3Div2  = 4U,
-    kCLOCK_EMV2_ClockRoot_MuxSysPll1Div5  = 5U,
-    kCLOCK_EMV2_ClockRoot_MuxSysPll2Out   = 6U,
-    kCLOCK_EMV2_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_EMV2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< EMV2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_EMV2_ClockRoot_MuxOsc24MOut    = 1U, /*!< EMV2 mux from MuxOsc24MOut. */
+    kCLOCK_EMV2_ClockRoot_MuxOscRc400M    = 2U, /*!< EMV2 mux from MuxOscRc400M. */
+    kCLOCK_EMV2_ClockRoot_MuxOscRc16M     = 3U, /*!< EMV2 mux from MuxOscRc16M. */
+    kCLOCK_EMV2_ClockRoot_MuxSysPll3Div2  = 4U, /*!< EMV2 mux from MuxSysPll3Div2. */
+    kCLOCK_EMV2_ClockRoot_MuxSysPll1Div5  = 5U, /*!< EMV2 mux from MuxSysPll1Div5. */
+    kCLOCK_EMV2_ClockRoot_MuxSysPll2Out   = 6U, /*!< EMV2 mux from MuxSysPll2Out. */
+    kCLOCK_EMV2_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< EMV2 mux from MuxSysPll2Pfd3. */
 
     /* ENET1 */
-    kCLOCK_ENET1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_ENET1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_ENET1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_ENET1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_ENET1_ClockRoot_MuxSysPll1Div2  = 4U,
-    kCLOCK_ENET1_ClockRoot_MuxAudioPllOut  = 5U,
-    kCLOCK_ENET1_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_ENET1_ClockRoot_MuxSysPll2Pfd1  = 7U,
+    kCLOCK_ENET1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< ENET1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_ENET1_ClockRoot_MuxOsc24MOut    = 1U, /*!< ENET1 mux from MuxOsc24MOut. */
+    kCLOCK_ENET1_ClockRoot_MuxOscRc400M    = 2U, /*!< ENET1 mux from MuxOscRc400M. */
+    kCLOCK_ENET1_ClockRoot_MuxOscRc16M     = 3U, /*!< ENET1 mux from MuxOscRc16M. */
+    kCLOCK_ENET1_ClockRoot_MuxSysPll1Div2  = 4U, /*!< ENET1 mux from MuxSysPll1Div2. */
+    kCLOCK_ENET1_ClockRoot_MuxAudioPllOut  = 5U, /*!< ENET1 mux from MuxAudioPllOut. */
+    kCLOCK_ENET1_ClockRoot_MuxSysPll1Div5  = 6U, /*!< ENET1 mux from MuxSysPll1Div5. */
+    kCLOCK_ENET1_ClockRoot_MuxSysPll2Pfd1  = 7U, /*!< ENET1 mux from MuxSysPll2Pfd1. */
 
     /* ENET2 */
-    kCLOCK_ENET2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_ENET2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_ENET2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_ENET2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_ENET2_ClockRoot_MuxSysPll1Div2  = 4U,
-    kCLOCK_ENET2_ClockRoot_MuxAudioPllOut  = 5U,
-    kCLOCK_ENET2_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_ENET2_ClockRoot_MuxSysPll2Pfd1  = 7U,
+    kCLOCK_ENET2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< ENET2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_ENET2_ClockRoot_MuxOsc24MOut    = 1U, /*!< ENET2 mux from MuxOsc24MOut. */
+    kCLOCK_ENET2_ClockRoot_MuxOscRc400M    = 2U, /*!< ENET2 mux from MuxOscRc400M. */
+    kCLOCK_ENET2_ClockRoot_MuxOscRc16M     = 3U, /*!< ENET2 mux from MuxOscRc16M. */
+    kCLOCK_ENET2_ClockRoot_MuxSysPll1Div2  = 4U, /*!< ENET2 mux from MuxSysPll1Div2. */
+    kCLOCK_ENET2_ClockRoot_MuxAudioPllOut  = 5U, /*!< ENET2 mux from MuxAudioPllOut. */
+    kCLOCK_ENET2_ClockRoot_MuxSysPll1Div5  = 6U, /*!< ENET2 mux from MuxSysPll1Div5. */
+    kCLOCK_ENET2_ClockRoot_MuxSysPll2Pfd1  = 7U, /*!< ENET2 mux from MuxSysPll2Pfd1. */
 
     /* ENET_QOS */
-    kCLOCK_ENET_QOS_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_ENET_QOS_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_ENET_QOS_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_ENET_QOS_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_ENET_QOS_ClockRoot_MuxSysPll1Div2  = 4U,
-    kCLOCK_ENET_QOS_ClockRoot_MuxAudioPllOut  = 5U,
-    kCLOCK_ENET_QOS_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_ENET_QOS_ClockRoot_MuxSysPll2Pfd1  = 7U,
+    kCLOCK_ENET_QOS_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< ENET_QOS mux from MuxOscRc48MDiv2. */
+    kCLOCK_ENET_QOS_ClockRoot_MuxOsc24MOut    = 1U, /*!< ENET_QOS mux from MuxOsc24MOut. */
+    kCLOCK_ENET_QOS_ClockRoot_MuxOscRc400M    = 2U, /*!< ENET_QOS mux from MuxOscRc400M. */
+    kCLOCK_ENET_QOS_ClockRoot_MuxOscRc16M     = 3U, /*!< ENET_QOS mux from MuxOscRc16M. */
+    kCLOCK_ENET_QOS_ClockRoot_MuxSysPll1Div2  = 4U, /*!< ENET_QOS mux from MuxSysPll1Div2. */
+    kCLOCK_ENET_QOS_ClockRoot_MuxAudioPllOut  = 5U, /*!< ENET_QOS mux from MuxAudioPllOut. */
+    kCLOCK_ENET_QOS_ClockRoot_MuxSysPll1Div5  = 6U, /*!< ENET_QOS mux from MuxSysPll1Div5. */
+    kCLOCK_ENET_QOS_ClockRoot_MuxSysPll2Pfd1  = 7U, /*!< ENET_QOS mux from MuxSysPll2Pfd1. */
 
     /* ENET_25M */
-    kCLOCK_ENET_25M_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_ENET_25M_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_ENET_25M_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_ENET_25M_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_ENET_25M_ClockRoot_MuxSysPll1Div2  = 4U,
-    kCLOCK_ENET_25M_ClockRoot_MuxAudioPllOut  = 5U,
-    kCLOCK_ENET_25M_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_ENET_25M_ClockRoot_MuxSysPll2Pfd1  = 7U,
+    kCLOCK_ENET_25M_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< ENET_25M mux from MuxOscRc48MDiv2. */
+    kCLOCK_ENET_25M_ClockRoot_MuxOsc24MOut    = 1U, /*!< ENET_25M mux from MuxOsc24MOut. */
+    kCLOCK_ENET_25M_ClockRoot_MuxOscRc400M    = 2U, /*!< ENET_25M mux from MuxOscRc400M. */
+    kCLOCK_ENET_25M_ClockRoot_MuxOscRc16M     = 3U, /*!< ENET_25M mux from MuxOscRc16M. */
+    kCLOCK_ENET_25M_ClockRoot_MuxSysPll1Div2  = 4U, /*!< ENET_25M mux from MuxSysPll1Div2. */
+    kCLOCK_ENET_25M_ClockRoot_MuxAudioPllOut  = 5U, /*!< ENET_25M mux from MuxAudioPllOut. */
+    kCLOCK_ENET_25M_ClockRoot_MuxSysPll1Div5  = 6U, /*!< ENET_25M mux from MuxSysPll1Div5. */
+    kCLOCK_ENET_25M_ClockRoot_MuxSysPll2Pfd1  = 7U, /*!< ENET_25M mux from MuxSysPll2Pfd1. */
 
     /* ENET_TIMER1 */
-    kCLOCK_ENET_TIMER1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_ENET_TIMER1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_ENET_TIMER1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_ENET_TIMER1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_ENET_TIMER1_ClockRoot_MuxSysPll1Div2  = 4U,
-    kCLOCK_ENET_TIMER1_ClockRoot_MuxAudioPllOut  = 5U,
-    kCLOCK_ENET_TIMER1_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_ENET_TIMER1_ClockRoot_MuxSysPll2Pfd1  = 7U,
+    kCLOCK_ENET_TIMER1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< ENET_TIMER1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_ENET_TIMER1_ClockRoot_MuxOsc24MOut    = 1U, /*!< ENET_TIMER1 mux from MuxOsc24MOut. */
+    kCLOCK_ENET_TIMER1_ClockRoot_MuxOscRc400M    = 2U, /*!< ENET_TIMER1 mux from MuxOscRc400M. */
+    kCLOCK_ENET_TIMER1_ClockRoot_MuxOscRc16M     = 3U, /*!< ENET_TIMER1 mux from MuxOscRc16M. */
+    kCLOCK_ENET_TIMER1_ClockRoot_MuxSysPll1Div2  = 4U, /*!< ENET_TIMER1 mux from MuxSysPll1Div2. */
+    kCLOCK_ENET_TIMER1_ClockRoot_MuxAudioPllOut  = 5U, /*!< ENET_TIMER1 mux from MuxAudioPllOut. */
+    kCLOCK_ENET_TIMER1_ClockRoot_MuxSysPll1Div5  = 6U, /*!< ENET_TIMER1 mux from MuxSysPll1Div5. */
+    kCLOCK_ENET_TIMER1_ClockRoot_MuxSysPll2Pfd1  = 7U, /*!< ENET_TIMER1 mux from MuxSysPll2Pfd1. */
 
     /* ENET_TIMER2 */
-    kCLOCK_ENET_TIMER2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_ENET_TIMER2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_ENET_TIMER2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_ENET_TIMER2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_ENET_TIMER2_ClockRoot_MuxSysPll1Div2  = 4U,
-    kCLOCK_ENET_TIMER2_ClockRoot_MuxAudioPllOut  = 5U,
-    kCLOCK_ENET_TIMER2_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_ENET_TIMER2_ClockRoot_MuxSysPll2Pfd1  = 7U,
+    kCLOCK_ENET_TIMER2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< ENET_TIMER2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_ENET_TIMER2_ClockRoot_MuxOsc24MOut    = 1U, /*!< ENET_TIMER2 mux from MuxOsc24MOut. */
+    kCLOCK_ENET_TIMER2_ClockRoot_MuxOscRc400M    = 2U, /*!< ENET_TIMER2 mux from MuxOscRc400M. */
+    kCLOCK_ENET_TIMER2_ClockRoot_MuxOscRc16M     = 3U, /*!< ENET_TIMER2 mux from MuxOscRc16M. */
+    kCLOCK_ENET_TIMER2_ClockRoot_MuxSysPll1Div2  = 4U, /*!< ENET_TIMER2 mux from MuxSysPll1Div2. */
+    kCLOCK_ENET_TIMER2_ClockRoot_MuxAudioPllOut  = 5U, /*!< ENET_TIMER2 mux from MuxAudioPllOut. */
+    kCLOCK_ENET_TIMER2_ClockRoot_MuxSysPll1Div5  = 6U, /*!< ENET_TIMER2 mux from MuxSysPll1Div5. */
+    kCLOCK_ENET_TIMER2_ClockRoot_MuxSysPll2Pfd1  = 7U, /*!< ENET_TIMER2 mux from MuxSysPll2Pfd1. */
 
     /* ENET_TIMER3 */
-    kCLOCK_ENET_TIMER3_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_ENET_TIMER3_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_ENET_TIMER3_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_ENET_TIMER3_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_ENET_TIMER3_ClockRoot_MuxSysPll1Div2  = 4U,
-    kCLOCK_ENET_TIMER3_ClockRoot_MuxAudioPllOut  = 5U,
-    kCLOCK_ENET_TIMER3_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_ENET_TIMER3_ClockRoot_MuxSysPll2Pfd1  = 7U,
+    kCLOCK_ENET_TIMER3_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< ENET_TIMER3 mux from MuxOscRc48MDiv2. */
+    kCLOCK_ENET_TIMER3_ClockRoot_MuxOsc24MOut    = 1U, /*!< ENET_TIMER3 mux from MuxOsc24MOut. */
+    kCLOCK_ENET_TIMER3_ClockRoot_MuxOscRc400M    = 2U, /*!< ENET_TIMER3 mux from MuxOscRc400M. */
+    kCLOCK_ENET_TIMER3_ClockRoot_MuxOscRc16M     = 3U, /*!< ENET_TIMER3 mux from MuxOscRc16M. */
+    kCLOCK_ENET_TIMER3_ClockRoot_MuxSysPll1Div2  = 4U, /*!< ENET_TIMER3 mux from MuxSysPll1Div2. */
+    kCLOCK_ENET_TIMER3_ClockRoot_MuxAudioPllOut  = 5U, /*!< ENET_TIMER3 mux from MuxAudioPllOut. */
+    kCLOCK_ENET_TIMER3_ClockRoot_MuxSysPll1Div5  = 6U, /*!< ENET_TIMER3 mux from MuxSysPll1Div5. */
+    kCLOCK_ENET_TIMER3_ClockRoot_MuxSysPll2Pfd1  = 7U, /*!< ENET_TIMER3 mux from MuxSysPll2Pfd1. */
 
     /* USDHC1 */
-    kCLOCK_USDHC1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_USDHC1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_USDHC1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_USDHC1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_USDHC1_ClockRoot_MuxSysPll2Pfd2  = 4U,
-    kCLOCK_USDHC1_ClockRoot_MuxSysPll2Pfd0  = 5U,
-    kCLOCK_USDHC1_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_USDHC1_ClockRoot_MuxArmPllOut    = 7U,
+    kCLOCK_USDHC1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< USDHC1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_USDHC1_ClockRoot_MuxOsc24MOut    = 1U, /*!< USDHC1 mux from MuxOsc24MOut. */
+    kCLOCK_USDHC1_ClockRoot_MuxOscRc400M    = 2U, /*!< USDHC1 mux from MuxOscRc400M. */
+    kCLOCK_USDHC1_ClockRoot_MuxOscRc16M     = 3U, /*!< USDHC1 mux from MuxOscRc16M. */
+    kCLOCK_USDHC1_ClockRoot_MuxSysPll2Pfd2  = 4U, /*!< USDHC1 mux from MuxSysPll2Pfd2. */
+    kCLOCK_USDHC1_ClockRoot_MuxSysPll2Pfd0  = 5U, /*!< USDHC1 mux from MuxSysPll2Pfd0. */
+    kCLOCK_USDHC1_ClockRoot_MuxSysPll1Div5  = 6U, /*!< USDHC1 mux from MuxSysPll1Div5. */
+    kCLOCK_USDHC1_ClockRoot_MuxArmPllOut    = 7U, /*!< USDHC1 mux from MuxArmPllOut. */
 
     /* USDHC2 */
-    kCLOCK_USDHC2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_USDHC2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_USDHC2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_USDHC2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_USDHC2_ClockRoot_MuxSysPll2Pfd2  = 4U,
-    kCLOCK_USDHC2_ClockRoot_MuxSysPll2Pfd0  = 5U,
-    kCLOCK_USDHC2_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_USDHC2_ClockRoot_MuxArmPllOut    = 7U,
+    kCLOCK_USDHC2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< USDHC2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_USDHC2_ClockRoot_MuxOsc24MOut    = 1U, /*!< USDHC2 mux from MuxOsc24MOut. */
+    kCLOCK_USDHC2_ClockRoot_MuxOscRc400M    = 2U, /*!< USDHC2 mux from MuxOscRc400M. */
+    kCLOCK_USDHC2_ClockRoot_MuxOscRc16M     = 3U, /*!< USDHC2 mux from MuxOscRc16M. */
+    kCLOCK_USDHC2_ClockRoot_MuxSysPll2Pfd2  = 4U, /*!< USDHC2 mux from MuxSysPll2Pfd2. */
+    kCLOCK_USDHC2_ClockRoot_MuxSysPll2Pfd0  = 5U, /*!< USDHC2 mux from MuxSysPll2Pfd0. */
+    kCLOCK_USDHC2_ClockRoot_MuxSysPll1Div5  = 6U, /*!< USDHC2 mux from MuxSysPll1Div5. */
+    kCLOCK_USDHC2_ClockRoot_MuxArmPllOut    = 7U, /*!< USDHC2 mux from MuxArmPllOut. */
 
     /* ASRC */
-    kCLOCK_ASRC_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_ASRC_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_ASRC_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_ASRC_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_ASRC_ClockRoot_MuxSysPll1Div5  = 4U,
-    kCLOCK_ASRC_ClockRoot_MuxSysPll3Div2  = 5U,
-    kCLOCK_ASRC_ClockRoot_MuxAudioPllOut  = 6U,
-    kCLOCK_ASRC_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_ASRC_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< ASRC mux from MuxOscRc48MDiv2. */
+    kCLOCK_ASRC_ClockRoot_MuxOsc24MOut    = 1U, /*!< ASRC mux from MuxOsc24MOut. */
+    kCLOCK_ASRC_ClockRoot_MuxOscRc400M    = 2U, /*!< ASRC mux from MuxOscRc400M. */
+    kCLOCK_ASRC_ClockRoot_MuxOscRc16M     = 3U, /*!< ASRC mux from MuxOscRc16M. */
+    kCLOCK_ASRC_ClockRoot_MuxSysPll1Div5  = 4U, /*!< ASRC mux from MuxSysPll1Div5. */
+    kCLOCK_ASRC_ClockRoot_MuxSysPll3Div2  = 5U, /*!< ASRC mux from MuxSysPll3Div2. */
+    kCLOCK_ASRC_ClockRoot_MuxAudioPllOut  = 6U, /*!< ASRC mux from MuxAudioPllOut. */
+    kCLOCK_ASRC_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< ASRC mux from MuxSysPll2Pfd3. */
 
     /* MQS */
-    kCLOCK_MQS_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_MQS_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_MQS_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_MQS_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_MQS_ClockRoot_MuxSysPll1Div5  = 4U,
-    kCLOCK_MQS_ClockRoot_MuxSysPll3Div2  = 5U,
-    kCLOCK_MQS_ClockRoot_MuxAudioPllOut  = 6U,
-    kCLOCK_MQS_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_MQS_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< MQS mux from MuxOscRc48MDiv2. */
+    kCLOCK_MQS_ClockRoot_MuxOsc24MOut    = 1U, /*!< MQS mux from MuxOsc24MOut. */
+    kCLOCK_MQS_ClockRoot_MuxOscRc400M    = 2U, /*!< MQS mux from MuxOscRc400M. */
+    kCLOCK_MQS_ClockRoot_MuxOscRc16M     = 3U, /*!< MQS mux from MuxOscRc16M. */
+    kCLOCK_MQS_ClockRoot_MuxSysPll1Div5  = 4U, /*!< MQS mux from MuxSysPll1Div5. */
+    kCLOCK_MQS_ClockRoot_MuxSysPll3Div2  = 5U, /*!< MQS mux from MuxSysPll3Div2. */
+    kCLOCK_MQS_ClockRoot_MuxAudioPllOut  = 6U, /*!< MQS mux from MuxAudioPllOut. */
+    kCLOCK_MQS_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< MQS mux from MuxSysPll2Pfd3. */
 
     /* MIC */
-    kCLOCK_MIC_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_MIC_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_MIC_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_MIC_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_MIC_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_MIC_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_MIC_ClockRoot_MuxAudioPllOut  = 6U,
-    kCLOCK_MIC_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_MIC_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< MIC mux from MuxOscRc48MDiv2. */
+    kCLOCK_MIC_ClockRoot_MuxOsc24MOut    = 1U, /*!< MIC mux from MuxOsc24MOut. */
+    kCLOCK_MIC_ClockRoot_MuxOscRc400M    = 2U, /*!< MIC mux from MuxOscRc400M. */
+    kCLOCK_MIC_ClockRoot_MuxOscRc16M     = 3U, /*!< MIC mux from MuxOscRc16M. */
+    kCLOCK_MIC_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< MIC mux from MuxSysPll3Pfd3. */
+    kCLOCK_MIC_ClockRoot_MuxSysPll3Out   = 5U, /*!< MIC mux from MuxSysPll3Out. */
+    kCLOCK_MIC_ClockRoot_MuxAudioPllOut  = 6U, /*!< MIC mux from MuxAudioPllOut. */
+    kCLOCK_MIC_ClockRoot_MuxSysPll1Div5  = 7U, /*!< MIC mux from MuxSysPll1Div5. */
 
     /* SPDIF */
-    kCLOCK_SPDIF_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_SPDIF_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_SPDIF_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_SPDIF_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_SPDIF_ClockRoot_MuxAudioPllOut  = 4U,
-    kCLOCK_SPDIF_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_SPDIF_ClockRoot_MuxSysPll3Pfd2  = 6U,
-    kCLOCK_SPDIF_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_SPDIF_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< SPDIF mux from MuxOscRc48MDiv2. */
+    kCLOCK_SPDIF_ClockRoot_MuxOsc24MOut    = 1U, /*!< SPDIF mux from MuxOsc24MOut. */
+    kCLOCK_SPDIF_ClockRoot_MuxOscRc400M    = 2U, /*!< SPDIF mux from MuxOscRc400M. */
+    kCLOCK_SPDIF_ClockRoot_MuxOscRc16M     = 3U, /*!< SPDIF mux from MuxOscRc16M. */
+    kCLOCK_SPDIF_ClockRoot_MuxAudioPllOut  = 4U, /*!< SPDIF mux from MuxAudioPllOut. */
+    kCLOCK_SPDIF_ClockRoot_MuxSysPll3Out   = 5U, /*!< SPDIF mux from MuxSysPll3Out. */
+    kCLOCK_SPDIF_ClockRoot_MuxSysPll3Pfd2  = 6U, /*!< SPDIF mux from MuxSysPll3Pfd2. */
+    kCLOCK_SPDIF_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< SPDIF mux from MuxSysPll2Pfd3. */
 
     /* SAI1 */
-    kCLOCK_SAI1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_SAI1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_SAI1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_SAI1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_SAI1_ClockRoot_MuxAudioPllOut  = 4U,
-    kCLOCK_SAI1_ClockRoot_MuxSysPll3Pfd2  = 5U,
-    kCLOCK_SAI1_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_SAI1_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_SAI1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< SAI1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_SAI1_ClockRoot_MuxOsc24MOut    = 1U, /*!< SAI1 mux from MuxOsc24MOut. */
+    kCLOCK_SAI1_ClockRoot_MuxOscRc400M    = 2U, /*!< SAI1 mux from MuxOscRc400M. */
+    kCLOCK_SAI1_ClockRoot_MuxOscRc16M     = 3U, /*!< SAI1 mux from MuxOscRc16M. */
+    kCLOCK_SAI1_ClockRoot_MuxAudioPllOut  = 4U, /*!< SAI1 mux from MuxAudioPllOut. */
+    kCLOCK_SAI1_ClockRoot_MuxSysPll3Pfd2  = 5U, /*!< SAI1 mux from MuxSysPll3Pfd2. */
+    kCLOCK_SAI1_ClockRoot_MuxSysPll1Div5  = 6U, /*!< SAI1 mux from MuxSysPll1Div5. */
+    kCLOCK_SAI1_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< SAI1 mux from MuxSysPll2Pfd3. */
 
     /* SAI2 */
-    kCLOCK_SAI2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_SAI2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_SAI2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_SAI2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_SAI2_ClockRoot_MuxAudioPllOut  = 4U,
-    kCLOCK_SAI2_ClockRoot_MuxSysPll3Pfd2  = 5U,
-    kCLOCK_SAI2_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_SAI2_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_SAI2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< SAI2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_SAI2_ClockRoot_MuxOsc24MOut    = 1U, /*!< SAI2 mux from MuxOsc24MOut. */
+    kCLOCK_SAI2_ClockRoot_MuxOscRc400M    = 2U, /*!< SAI2 mux from MuxOscRc400M. */
+    kCLOCK_SAI2_ClockRoot_MuxOscRc16M     = 3U, /*!< SAI2 mux from MuxOscRc16M. */
+    kCLOCK_SAI2_ClockRoot_MuxAudioPllOut  = 4U, /*!< SAI2 mux from MuxAudioPllOut. */
+    kCLOCK_SAI2_ClockRoot_MuxSysPll3Pfd2  = 5U, /*!< SAI2 mux from MuxSysPll3Pfd2. */
+    kCLOCK_SAI2_ClockRoot_MuxSysPll1Div5  = 6U, /*!< SAI2 mux from MuxSysPll1Div5. */
+    kCLOCK_SAI2_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< SAI2 mux from MuxSysPll2Pfd3. */
 
     /* SAI3 */
-    kCLOCK_SAI3_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_SAI3_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_SAI3_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_SAI3_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_SAI3_ClockRoot_MuxAudioPllOut  = 4U,
-    kCLOCK_SAI3_ClockRoot_MuxSysPll3Pfd2  = 5U,
-    kCLOCK_SAI3_ClockRoot_MuxSysPll1Div5  = 6U,
-    kCLOCK_SAI3_ClockRoot_MuxSysPll2Pfd3  = 7U,
+    kCLOCK_SAI3_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< SAI3 mux from MuxOscRc48MDiv2. */
+    kCLOCK_SAI3_ClockRoot_MuxOsc24MOut    = 1U, /*!< SAI3 mux from MuxOsc24MOut. */
+    kCLOCK_SAI3_ClockRoot_MuxOscRc400M    = 2U, /*!< SAI3 mux from MuxOscRc400M. */
+    kCLOCK_SAI3_ClockRoot_MuxOscRc16M     = 3U, /*!< SAI3 mux from MuxOscRc16M. */
+    kCLOCK_SAI3_ClockRoot_MuxAudioPllOut  = 4U, /*!< SAI3 mux from MuxAudioPllOut. */
+    kCLOCK_SAI3_ClockRoot_MuxSysPll3Pfd2  = 5U, /*!< SAI3 mux from MuxSysPll3Pfd2. */
+    kCLOCK_SAI3_ClockRoot_MuxSysPll1Div5  = 6U, /*!< SAI3 mux from MuxSysPll1Div5. */
+    kCLOCK_SAI3_ClockRoot_MuxSysPll2Pfd3  = 7U, /*!< SAI3 mux from MuxSysPll2Pfd3. */
 
     /* SAI4 */
-    kCLOCK_SAI4_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_SAI4_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_SAI4_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_SAI4_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_SAI4_ClockRoot_MuxSysPll3Pfd3  = 4U,
-    kCLOCK_SAI4_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_SAI4_ClockRoot_MuxAudioPllOut  = 6U,
-    kCLOCK_SAI4_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_SAI4_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< SAI4 mux from MuxOscRc48MDiv2. */
+    kCLOCK_SAI4_ClockRoot_MuxOsc24MOut    = 1U, /*!< SAI4 mux from MuxOsc24MOut. */
+    kCLOCK_SAI4_ClockRoot_MuxOscRc400M    = 2U, /*!< SAI4 mux from MuxOscRc400M. */
+    kCLOCK_SAI4_ClockRoot_MuxOscRc16M     = 3U, /*!< SAI4 mux from MuxOscRc16M. */
+    kCLOCK_SAI4_ClockRoot_MuxSysPll3Pfd3  = 4U, /*!< SAI4 mux from MuxSysPll3Pfd3. */
+    kCLOCK_SAI4_ClockRoot_MuxSysPll3Out   = 5U, /*!< SAI4 mux from MuxSysPll3Out. */
+    kCLOCK_SAI4_ClockRoot_MuxAudioPllOut  = 6U, /*!< SAI4 mux from MuxAudioPllOut. */
+    kCLOCK_SAI4_ClockRoot_MuxSysPll1Div5  = 7U, /*!< SAI4 mux from MuxSysPll1Div5. */
 
     /* GC355 */
-    kCLOCK_GC355_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_GC355_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_GC355_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_GC355_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_GC355_ClockRoot_MuxSysPll2Out   = 4U,
-    kCLOCK_GC355_ClockRoot_MuxSysPll2Pfd1  = 5U,
-    kCLOCK_GC355_ClockRoot_MuxSysPll3Out   = 6U,
-    kCLOCK_GC355_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_GC355_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< GC355 mux from MuxOscRc48MDiv2. */
+    kCLOCK_GC355_ClockRoot_MuxOsc24MOut    = 1U, /*!< GC355 mux from MuxOsc24MOut. */
+    kCLOCK_GC355_ClockRoot_MuxOscRc400M    = 2U, /*!< GC355 mux from MuxOscRc400M. */
+    kCLOCK_GC355_ClockRoot_MuxOscRc16M     = 3U, /*!< GC355 mux from MuxOscRc16M. */
+    kCLOCK_GC355_ClockRoot_MuxSysPll2Out   = 4U, /*!< GC355 mux from MuxSysPll2Out. */
+    kCLOCK_GC355_ClockRoot_MuxSysPll2Pfd1  = 5U, /*!< GC355 mux from MuxSysPll2Pfd1. */
+    kCLOCK_GC355_ClockRoot_MuxSysPll3Out   = 6U, /*!< GC355 mux from MuxSysPll3Out. */
+    kCLOCK_GC355_ClockRoot_MuxVideoPllOut  = 7U, /*!< GC355 mux from MuxVideoPllOut. */
 
     /* LCDIF */
-    kCLOCK_LCDIF_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LCDIF_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LCDIF_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LCDIF_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LCDIF_ClockRoot_MuxSysPll2Out   = 4U,
-    kCLOCK_LCDIF_ClockRoot_MuxSysPll2Pfd2  = 5U,
-    kCLOCK_LCDIF_ClockRoot_MuxSysPll3Pfd0  = 6U,
-    kCLOCK_LCDIF_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_LCDIF_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LCDIF mux from MuxOscRc48MDiv2. */
+    kCLOCK_LCDIF_ClockRoot_MuxOsc24MOut    = 1U, /*!< LCDIF mux from MuxOsc24MOut. */
+    kCLOCK_LCDIF_ClockRoot_MuxOscRc400M    = 2U, /*!< LCDIF mux from MuxOscRc400M. */
+    kCLOCK_LCDIF_ClockRoot_MuxOscRc16M     = 3U, /*!< LCDIF mux from MuxOscRc16M. */
+    kCLOCK_LCDIF_ClockRoot_MuxSysPll2Out   = 4U, /*!< LCDIF mux from MuxSysPll2Out. */
+    kCLOCK_LCDIF_ClockRoot_MuxSysPll2Pfd2  = 5U, /*!< LCDIF mux from MuxSysPll2Pfd2. */
+    kCLOCK_LCDIF_ClockRoot_MuxSysPll3Pfd0  = 6U, /*!< LCDIF mux from MuxSysPll3Pfd0. */
+    kCLOCK_LCDIF_ClockRoot_MuxVideoPllOut  = 7U, /*!< LCDIF mux from MuxVideoPllOut. */
 
     /* LCDIFV2 */
-    kCLOCK_LCDIFV2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_LCDIFV2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_LCDIFV2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_LCDIFV2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_LCDIFV2_ClockRoot_MuxSysPll2Out   = 4U,
-    kCLOCK_LCDIFV2_ClockRoot_MuxSysPll2Pfd2  = 5U,
-    kCLOCK_LCDIFV2_ClockRoot_MuxSysPll3Pfd0  = 6U,
-    kCLOCK_LCDIFV2_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_LCDIFV2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< LCDIFV2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_LCDIFV2_ClockRoot_MuxOsc24MOut    = 1U, /*!< LCDIFV2 mux from MuxOsc24MOut. */
+    kCLOCK_LCDIFV2_ClockRoot_MuxOscRc400M    = 2U, /*!< LCDIFV2 mux from MuxOscRc400M. */
+    kCLOCK_LCDIFV2_ClockRoot_MuxOscRc16M     = 3U, /*!< LCDIFV2 mux from MuxOscRc16M. */
+    kCLOCK_LCDIFV2_ClockRoot_MuxSysPll2Out   = 4U, /*!< LCDIFV2 mux from MuxSysPll2Out. */
+    kCLOCK_LCDIFV2_ClockRoot_MuxSysPll2Pfd2  = 5U, /*!< LCDIFV2 mux from MuxSysPll2Pfd2. */
+    kCLOCK_LCDIFV2_ClockRoot_MuxSysPll3Pfd0  = 6U, /*!< LCDIFV2 mux from MuxSysPll3Pfd0. */
+    kCLOCK_LCDIFV2_ClockRoot_MuxVideoPllOut  = 7U, /*!< LCDIFV2 mux from MuxVideoPllOut. */
 
     /* MIPI_REF */
-    kCLOCK_MIPI_REF_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_MIPI_REF_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_MIPI_REF_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_MIPI_REF_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_MIPI_REF_ClockRoot_MuxSysPll2Out   = 4U,
-    kCLOCK_MIPI_REF_ClockRoot_MuxSysPll2Pfd0  = 5U,
-    kCLOCK_MIPI_REF_ClockRoot_MuxSysPll3Pfd0  = 6U,
-    kCLOCK_MIPI_REF_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_MIPI_REF_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< MIPI_REF mux from MuxOscRc48MDiv2. */
+    kCLOCK_MIPI_REF_ClockRoot_MuxOsc24MOut    = 1U, /*!< MIPI_REF mux from MuxOsc24MOut. */
+    kCLOCK_MIPI_REF_ClockRoot_MuxOscRc400M    = 2U, /*!< MIPI_REF mux from MuxOscRc400M. */
+    kCLOCK_MIPI_REF_ClockRoot_MuxOscRc16M     = 3U, /*!< MIPI_REF mux from MuxOscRc16M. */
+    kCLOCK_MIPI_REF_ClockRoot_MuxSysPll2Out   = 4U, /*!< MIPI_REF mux from MuxSysPll2Out. */
+    kCLOCK_MIPI_REF_ClockRoot_MuxSysPll2Pfd0  = 5U, /*!< MIPI_REF mux from MuxSysPll2Pfd0. */
+    kCLOCK_MIPI_REF_ClockRoot_MuxSysPll3Pfd0  = 6U, /*!< MIPI_REF mux from MuxSysPll3Pfd0. */
+    kCLOCK_MIPI_REF_ClockRoot_MuxVideoPllOut  = 7U, /*!< MIPI_REF mux from MuxVideoPllOut. */
 
     /* MIPI_ESC */
-    kCLOCK_MIPI_ESC_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_MIPI_ESC_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_MIPI_ESC_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_MIPI_ESC_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_MIPI_ESC_ClockRoot_MuxSysPll2Out   = 4U,
-    kCLOCK_MIPI_ESC_ClockRoot_MuxSysPll2Pfd0  = 5U,
-    kCLOCK_MIPI_ESC_ClockRoot_MuxSysPll3Pfd0  = 6U,
-    kCLOCK_MIPI_ESC_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_MIPI_ESC_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< MIPI_ESC mux from MuxOscRc48MDiv2. */
+    kCLOCK_MIPI_ESC_ClockRoot_MuxOsc24MOut    = 1U, /*!< MIPI_ESC mux from MuxOsc24MOut. */
+    kCLOCK_MIPI_ESC_ClockRoot_MuxOscRc400M    = 2U, /*!< MIPI_ESC mux from MuxOscRc400M. */
+    kCLOCK_MIPI_ESC_ClockRoot_MuxOscRc16M     = 3U, /*!< MIPI_ESC mux from MuxOscRc16M. */
+    kCLOCK_MIPI_ESC_ClockRoot_MuxSysPll2Out   = 4U, /*!< MIPI_ESC mux from MuxSysPll2Out. */
+    kCLOCK_MIPI_ESC_ClockRoot_MuxSysPll2Pfd0  = 5U, /*!< MIPI_ESC mux from MuxSysPll2Pfd0. */
+    kCLOCK_MIPI_ESC_ClockRoot_MuxSysPll3Pfd0  = 6U, /*!< MIPI_ESC mux from MuxSysPll3Pfd0. */
+    kCLOCK_MIPI_ESC_ClockRoot_MuxVideoPllOut  = 7U, /*!< MIPI_ESC mux from MuxVideoPllOut. */
 
     /* CSI2 */
-    kCLOCK_CSI2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_CSI2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_CSI2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_CSI2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_CSI2_ClockRoot_MuxSysPll2Pfd2  = 4U,
-    kCLOCK_CSI2_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_CSI2_ClockRoot_MuxSysPll2Pfd0  = 6U,
-    kCLOCK_CSI2_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_CSI2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< CSI2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_CSI2_ClockRoot_MuxOsc24MOut    = 1U, /*!< CSI2 mux from MuxOsc24MOut. */
+    kCLOCK_CSI2_ClockRoot_MuxOscRc400M    = 2U, /*!< CSI2 mux from MuxOscRc400M. */
+    kCLOCK_CSI2_ClockRoot_MuxOscRc16M     = 3U, /*!< CSI2 mux from MuxOscRc16M. */
+    kCLOCK_CSI2_ClockRoot_MuxSysPll2Pfd2  = 4U, /*!< CSI2 mux from MuxSysPll2Pfd2. */
+    kCLOCK_CSI2_ClockRoot_MuxSysPll3Out   = 5U, /*!< CSI2 mux from MuxSysPll3Out. */
+    kCLOCK_CSI2_ClockRoot_MuxSysPll2Pfd0  = 6U, /*!< CSI2 mux from MuxSysPll2Pfd0. */
+    kCLOCK_CSI2_ClockRoot_MuxVideoPllOut  = 7U, /*!< CSI2 mux from MuxVideoPllOut. */
 
     /* CSI2_ESC */
-    kCLOCK_CSI2_ESC_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_CSI2_ESC_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_CSI2_ESC_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_CSI2_ESC_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_CSI2_ESC_ClockRoot_MuxSysPll2Pfd2  = 4U,
-    kCLOCK_CSI2_ESC_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_CSI2_ESC_ClockRoot_MuxSysPll2Pfd0  = 6U,
-    kCLOCK_CSI2_ESC_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_CSI2_ESC_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< CSI2_ESC mux from MuxOscRc48MDiv2. */
+    kCLOCK_CSI2_ESC_ClockRoot_MuxOsc24MOut    = 1U, /*!< CSI2_ESC mux from MuxOsc24MOut. */
+    kCLOCK_CSI2_ESC_ClockRoot_MuxOscRc400M    = 2U, /*!< CSI2_ESC mux from MuxOscRc400M. */
+    kCLOCK_CSI2_ESC_ClockRoot_MuxOscRc16M     = 3U, /*!< CSI2_ESC mux from MuxOscRc16M. */
+    kCLOCK_CSI2_ESC_ClockRoot_MuxSysPll2Pfd2  = 4U, /*!< CSI2_ESC mux from MuxSysPll2Pfd2. */
+    kCLOCK_CSI2_ESC_ClockRoot_MuxSysPll3Out   = 5U, /*!< CSI2_ESC mux from MuxSysPll3Out. */
+    kCLOCK_CSI2_ESC_ClockRoot_MuxSysPll2Pfd0  = 6U, /*!< CSI2_ESC mux from MuxSysPll2Pfd0. */
+    kCLOCK_CSI2_ESC_ClockRoot_MuxVideoPllOut  = 7U, /*!< CSI2_ESC mux from MuxVideoPllOut. */
 
     /* CSI2_UI */
-    kCLOCK_CSI2_UI_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_CSI2_UI_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_CSI2_UI_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_CSI2_UI_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_CSI2_UI_ClockRoot_MuxSysPll2Pfd2  = 4U,
-    kCLOCK_CSI2_UI_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_CSI2_UI_ClockRoot_MuxSysPll2Pfd0  = 6U,
-    kCLOCK_CSI2_UI_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_CSI2_UI_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< CSI2_UI mux from MuxOscRc48MDiv2. */
+    kCLOCK_CSI2_UI_ClockRoot_MuxOsc24MOut    = 1U, /*!< CSI2_UI mux from MuxOsc24MOut. */
+    kCLOCK_CSI2_UI_ClockRoot_MuxOscRc400M    = 2U, /*!< CSI2_UI mux from MuxOscRc400M. */
+    kCLOCK_CSI2_UI_ClockRoot_MuxOscRc16M     = 3U, /*!< CSI2_UI mux from MuxOscRc16M. */
+    kCLOCK_CSI2_UI_ClockRoot_MuxSysPll2Pfd2  = 4U, /*!< CSI2_UI mux from MuxSysPll2Pfd2. */
+    kCLOCK_CSI2_UI_ClockRoot_MuxSysPll3Out   = 5U, /*!< CSI2_UI mux from MuxSysPll3Out. */
+    kCLOCK_CSI2_UI_ClockRoot_MuxSysPll2Pfd0  = 6U, /*!< CSI2_UI mux from MuxSysPll2Pfd0. */
+    kCLOCK_CSI2_UI_ClockRoot_MuxVideoPllOut  = 7U, /*!< CSI2_UI mux from MuxVideoPllOut. */
 
     /* CSI */
-    kCLOCK_CSI_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_CSI_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_CSI_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_CSI_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_CSI_ClockRoot_MuxSysPll2Pfd2  = 4U,
-    kCLOCK_CSI_ClockRoot_MuxSysPll3Out   = 5U,
-    kCLOCK_CSI_ClockRoot_MuxSysPll3Pfd1  = 6U,
-    kCLOCK_CSI_ClockRoot_MuxVideoPllOut  = 7U,
+    kCLOCK_CSI_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< CSI mux from MuxOscRc48MDiv2. */
+    kCLOCK_CSI_ClockRoot_MuxOsc24MOut    = 1U, /*!< CSI mux from MuxOsc24MOut. */
+    kCLOCK_CSI_ClockRoot_MuxOscRc400M    = 2U, /*!< CSI mux from MuxOscRc400M. */
+    kCLOCK_CSI_ClockRoot_MuxOscRc16M     = 3U, /*!< CSI mux from MuxOscRc16M. */
+    kCLOCK_CSI_ClockRoot_MuxSysPll2Pfd2  = 4U, /*!< CSI mux from MuxSysPll2Pfd2. */
+    kCLOCK_CSI_ClockRoot_MuxSysPll3Out   = 5U, /*!< CSI mux from MuxSysPll3Out. */
+    kCLOCK_CSI_ClockRoot_MuxSysPll3Pfd1  = 6U, /*!< CSI mux from MuxSysPll3Pfd1. */
+    kCLOCK_CSI_ClockRoot_MuxVideoPllOut  = 7U, /*!< CSI mux from MuxVideoPllOut. */
 
     /* CKO1 */
-    kCLOCK_CKO1_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_CKO1_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_CKO1_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_CKO1_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_CKO1_ClockRoot_MuxSysPll2Pfd2  = 4U,
-    kCLOCK_CKO1_ClockRoot_MuxSysPll2Out   = 5U,
-    kCLOCK_CKO1_ClockRoot_MuxSysPll3Pfd1  = 6U,
-    kCLOCK_CKO1_ClockRoot_MuxSysPll1Div5  = 7U,
+    kCLOCK_CKO1_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< CKO1 mux from MuxOscRc48MDiv2. */
+    kCLOCK_CKO1_ClockRoot_MuxOsc24MOut    = 1U, /*!< CKO1 mux from MuxOsc24MOut. */
+    kCLOCK_CKO1_ClockRoot_MuxOscRc400M    = 2U, /*!< CKO1 mux from MuxOscRc400M. */
+    kCLOCK_CKO1_ClockRoot_MuxOscRc16M     = 3U, /*!< CKO1 mux from MuxOscRc16M. */
+    kCLOCK_CKO1_ClockRoot_MuxSysPll2Pfd2  = 4U, /*!< CKO1 mux from MuxSysPll2Pfd2. */
+    kCLOCK_CKO1_ClockRoot_MuxSysPll2Out   = 5U, /*!< CKO1 mux from MuxSysPll2Out. */
+    kCLOCK_CKO1_ClockRoot_MuxSysPll3Pfd1  = 6U, /*!< CKO1 mux from MuxSysPll3Pfd1. */
+    kCLOCK_CKO1_ClockRoot_MuxSysPll1Div5  = 7U, /*!< CKO1 mux from MuxSysPll1Div5. */
 
     /* CKO2 */
-    kCLOCK_CKO2_ClockRoot_MuxOscRc48MDiv2 = 0U,
-    kCLOCK_CKO2_ClockRoot_MuxOsc24MOut    = 1U,
-    kCLOCK_CKO2_ClockRoot_MuxOscRc400M    = 2U,
-    kCLOCK_CKO2_ClockRoot_MuxOscRc16M     = 3U,
-    kCLOCK_CKO2_ClockRoot_MuxSysPll2Pfd3  = 4U,
-    kCLOCK_CKO2_ClockRoot_MuxOscRc48M     = 5U,
-    kCLOCK_CKO2_ClockRoot_MuxSysPll3Pfd1  = 6U,
-    kCLOCK_CKO2_ClockRoot_MuxAudioPllOut  = 7U,
+    kCLOCK_CKO2_ClockRoot_MuxOscRc48MDiv2 = 0U, /*!< CKO2 mux from MuxOscRc48MDiv2. */
+    kCLOCK_CKO2_ClockRoot_MuxOsc24MOut    = 1U, /*!< CKO2 mux from MuxOsc24MOut. */
+    kCLOCK_CKO2_ClockRoot_MuxOscRc400M    = 2U, /*!< CKO2 mux from MuxOscRc400M. */
+    kCLOCK_CKO2_ClockRoot_MuxOscRc16M     = 3U, /*!< CKO2 mux from MuxOscRc16M. */
+    kCLOCK_CKO2_ClockRoot_MuxSysPll2Pfd3  = 4U, /*!< CKO2 mux from MuxSysPll2Pfd3. */
+    kCLOCK_CKO2_ClockRoot_MuxOscRc48M     = 5U, /*!< CKO2 mux from MuxOscRc48M. */
+    kCLOCK_CKO2_ClockRoot_MuxSysPll3Pfd1  = 6U, /*!< CKO2 mux from MuxSysPll3Pfd1. */
+    kCLOCK_CKO2_ClockRoot_MuxAudioPllOut  = 7U, /*!< CKO2 mux from MuxAudioPllOut. */
 } clock_root_mux_source_t;
 
+/*!
+ * @brief Clock group enumeration.
+ */
 typedef enum _clock_group
 {
-    kCLOCK_Group_FlexRAM = 0,
-    kCLOCK_Group_MipiDsi = 1,
-    kCLOCK_Group_Last,
+    kCLOCK_Group_FlexRAM = 0, /*!< FlexRAM clock group. */
+    kCLOCK_Group_MipiDsi = 1, /*!< Mipi Dsi clock group. */
+    kCLOCK_Group_Last,        /*!< Last clock group. */
 } clock_group_t;
 
+/*!
+ * @brief The structure used to configure clock group.
+ */
 typedef struct _clock_group_config
 {
     bool clockOff;     /*!< Turn off the clock. */
@@ -1816,13 +1829,16 @@ typedef enum _clock_usb_phy_src
     kCLOCK_Usbphy480M = 0, /*!< Use 480M.      */
 } clock_usb_phy_src_t;
 
-/*!@brief PLL clock source, bypass cloco source also */
+/*! @brief PLL clock source, bypass cloco source also */
 enum _clock_pll_clk_src
 {
     kCLOCK_PllClkSrc24M = 0U, /*!< Pll clock source 24M */
     kCLOCK_PllSrcClkPN  = 1U, /*!< Pll clock source CLK1_P and CLK1_N */
 };
 
+/*!
+ * @brief PLL post divider enumeration.
+ */
 typedef enum _clock_pll_post_div
 {
     kCLOCK_PllPostDiv2 = 0U, /*!< Divide by 2. */
@@ -1947,16 +1963,17 @@ typedef struct _clock_root_setpoint_config_t
 /*! @brief PLL name */
 typedef enum _clock_pll
 {
-    kCLOCK_PllArm,
-    kCLOCK_PllSys1,
-    kCLOCK_PllSys2,
-    kCLOCK_PllSys3,
-    kCLOCK_PllAudio,
-    kCLOCK_PllVideo,
-    kCLOCK_PllInvalid = -1,
+    kCLOCK_PllArm,          /*!< ARM PLL. */
+    kCLOCK_PllSys1,         /*!< SYS1 PLL, it has a dedicated frequency of 1GHz. */
+    kCLOCK_PllSys2,         /*!< SYS2 PLL, it has a dedicated frequency of 528MHz. */
+    kCLOCK_PllSys3,         /*!< SYS3 PLL, it has a dedicated frequency of 480MHz. */
+    kCLOCK_PllAudio,        /*!< Audio PLL. */
+    kCLOCK_PllVideo,        /*!< Video PLL. */
+    kCLOCK_PllInvalid = -1, /*!< Invalid value. */
 } clock_pll_t;
 
 #define PLL_PFD_COUNT 4
+
 /*! @brief PLL PFD name */
 typedef enum _clock_pfd
 {
@@ -2008,7 +2025,7 @@ typedef enum _clock_1MHzOut_behavior
 } clock_1MHzOut_behavior_t;
 
 /*!
- * @breif The clock dependence level.
+ * @brief The clock dependence level.
  */
 typedef enum _clock_level
 {
@@ -2048,7 +2065,7 @@ static inline void CLOCK_SetRootClockMux(clock_root_t root, uint8_t src)
 /*!
  * @brief Get CCM Root Clock MUX value.
  *
- * @param mux   Which mux node to get, see \ref clock_mux_t.
+ * @param root Which root clock node to get, see \ref clock_root_t.
  * @return Clock mux value.
  */
 static inline uint32_t CLOCK_GetRootClockMux(clock_root_t root)
@@ -2065,7 +2082,7 @@ static inline uint32_t CLOCK_GetRootClockMux(clock_root_t root)
  */
 static inline clock_name_t CLOCK_GetRootClockSource(clock_root_t root, uint32_t src)
 {
-    return source[root][src];
+    return s_clockSourceName[root][src];
 }
 
 /*!
@@ -2155,7 +2172,7 @@ static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config
  *
  * @note This API will not have any effect when this clock is in CPULPM or SetPoint Mode
  *
- * @param name  Which clock to enable, see \ref clock_ip_name_t.
+ * @param name  Which clock to enable, see \ref clock_lpcg_t.
  * @param value Clock gate value to set, see \ref clock_gate_value_t.
  */
 static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value)
@@ -2174,7 +2191,7 @@ static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t va
 /*!
  * @brief Enable the clock for specific IP.
  *
- * @param name  Which clock to enable, see \ref clock_ip_name_t.
+ * @param name  Which clock to enable, see \ref clock_lpcg_t.
  */
 static inline void CLOCK_EnableClock(clock_ip_name_t name)
 {
@@ -2184,7 +2201,7 @@ static inline void CLOCK_EnableClock(clock_ip_name_t name)
 /*!
  * @brief Disable the clock for specific IP.
  *
- * @param name  Which clock to disable, see \ref clock_ip_name_t.
+ * @param name  Which clock to disable, see \ref clock_lpcg_t.
  */
 static inline void CLOCK_DisableClock(clock_ip_name_t name)
 {
@@ -2205,7 +2222,7 @@ void CLOCK_SetGroupConfig(clock_group_t group, const clock_group_config_t *confi
  * This function checks the current clock configurations and then calculates
  * the clock frequency for a specific clock name defined in clock_name_t.
  *
- * @param clockName Clock names defined in clock_name_t
+ * @param name Clock names defined in clock_name_t
  * @return Clock frequency value in hertz
  */
 uint32_t CLOCK_GetFreq(clock_name_t name);
@@ -2216,14 +2233,14 @@ uint32_t CLOCK_GetFreq(clock_name_t name);
  * This function checks the current clock configurations and then calculates
  * the clock frequency for a specific clock name defined in clock_root_t.
  *
- * @param clockName Clock names defined in clock_root_t
+ * @param root Clock names defined in clock_root_t
  * @return Clock frequency value in hertz
  */
 static inline uint32_t CLOCK_GetRootClockFreq(clock_root_t root)
 {
     uint32_t freq, mux;
     mux  = CLOCK_GetRootClockMux(root);
-    freq = CLOCK_GetFreq(source[root][mux]) / (CLOCK_GetRootClockDiv(root));
+    freq = CLOCK_GetFreq(s_clockSourceName[root][mux]) / (CLOCK_GetRootClockDiv(root));
     assert(freq);
     return freq;
 }
@@ -2251,7 +2268,6 @@ static inline uint32_t CLOCK_GetM4Freq(void)
 /*!
  * @brief Check if PLL is bypassed
  *
- * @param base CCM_ANALOG base pointer.
  * @param pll PLL control name (see @ref clock_pll_t enumeration)
  * @return PLL bypass status.
  *         - true: The PLL is bypassed.
@@ -2259,19 +2275,24 @@ static inline uint32_t CLOCK_GetM4Freq(void)
  */
 static inline bool CLOCK_IsPllBypassed(clock_pll_t pll)
 {
-    switch (pll)
+    if (pll == kCLOCK_PllArm)
     {
-        case kCLOCK_PllArm:
-            return (bool)((ANADIG_PLL->ARM_PLL_CTRL & ANADIG_PLL_ARM_PLL_CTRL_BYPASS_MASK) >>
-                          ANADIG_PLL_ARM_PLL_CTRL_BYPASS_SHIFT);
-        case kCLOCK_PllSys2:
-            return (bool)((ANADIG_PLL->SYS_PLL2_CTRL & ANADIG_PLL_SYS_PLL2_CTRL_BYPASS_MASK) >>
-                          ANADIG_PLL_SYS_PLL2_CTRL_BYPASS_SHIFT);
-        case kCLOCK_PllSys3:
-            return (bool)((ANADIG_PLL->SYS_PLL3_CTRL & ANADIG_PLL_SYS_PLL3_CTRL_BYPASS_MASK) >>
-                          ANADIG_PLL_SYS_PLL3_CTRL_BYPASS_SHIFT);
-        default:
-            return false;
+        return (bool)((ANADIG_PLL->ARM_PLL_CTRL & ANADIG_PLL_ARM_PLL_CTRL_BYPASS_MASK) >>
+                      ANADIG_PLL_ARM_PLL_CTRL_BYPASS_SHIFT);
+    }
+    else if (pll == kCLOCK_PllSys2)
+    {
+        return (bool)((ANADIG_PLL->SYS_PLL2_CTRL & ANADIG_PLL_SYS_PLL2_CTRL_BYPASS_MASK) >>
+                      ANADIG_PLL_SYS_PLL2_CTRL_BYPASS_SHIFT);
+    }
+    else if (pll == kCLOCK_PllSys3)
+    {
+        return (bool)((ANADIG_PLL->SYS_PLL3_CTRL & ANADIG_PLL_SYS_PLL3_CTRL_BYPASS_MASK) >>
+                      ANADIG_PLL_SYS_PLL3_CTRL_BYPASS_SHIFT);
+    }
+    else
+    {
+        return false;
     }
 }
 
@@ -2285,28 +2306,39 @@ static inline bool CLOCK_IsPllBypassed(clock_pll_t pll)
  */
 static inline bool CLOCK_IsPllEnabled(clock_pll_t pll)
 {
-    switch (pll)
+    if (pll == kCLOCK_PllArm)
     {
-        case kCLOCK_PllArm:
-            return (bool)((ANADIG_PLL->ARM_PLL_CTRL & ANADIG_PLL_ARM_PLL_CTRL_ENABLE_CLK_MASK) >>
-                          ANADIG_PLL_ARM_PLL_CTRL_ENABLE_CLK_SHIFT);
-        case kCLOCK_PllSys2:
-            return (bool)((ANADIG_PLL->SYS_PLL2_CTRL & ANADIG_PLL_SYS_PLL2_CTRL_ENABLE_CLK_MASK) >>
-                          ANADIG_PLL_SYS_PLL2_CTRL_ENABLE_CLK_SHIFT);
-        case kCLOCK_PllSys3:
-            return (bool)((ANADIG_PLL->SYS_PLL3_CTRL & ANADIG_PLL_SYS_PLL3_CTRL_ENABLE_CLK_MASK) >>
-                          ANADIG_PLL_SYS_PLL3_CTRL_ENABLE_CLK_SHIFT);
-        case kCLOCK_PllSys1:
-            return (bool)((ANADIG_PLL->SYS_PLL1_CTRL & ANADIG_PLL_SYS_PLL1_CTRL_ENABLE_CLK_MASK) >>
-                          ANADIG_PLL_SYS_PLL1_CTRL_ENABLE_CLK_SHIFT);
-        case kCLOCK_PllAudio:
-            return (bool)((ANADIG_PLL->PLL_AUDIO_CTRL & ANADIG_PLL_PLL_AUDIO_CTRL_ENABLE_CLK_MASK) >>
-                          ANADIG_PLL_PLL_AUDIO_CTRL_ENABLE_CLK_SHIFT);
-        case kCLOCK_PllVideo:
-            return (bool)((ANADIG_PLL->PLL_VIDEO_CTRL & ANADIG_PLL_PLL_VIDEO_CTRL_ENABLE_CLK_MASK) >>
-                          ANADIG_PLL_PLL_VIDEO_CTRL_ENABLE_CLK_SHIFT);
-        default:
-            return false;
+        return (bool)((ANADIG_PLL->ARM_PLL_CTRL & ANADIG_PLL_ARM_PLL_CTRL_ENABLE_CLK_MASK) >>
+                      ANADIG_PLL_ARM_PLL_CTRL_ENABLE_CLK_SHIFT);
+    }
+    else if (pll == kCLOCK_PllSys2)
+    {
+        return (bool)((ANADIG_PLL->SYS_PLL2_CTRL & ANADIG_PLL_SYS_PLL2_CTRL_ENABLE_CLK_MASK) >>
+                      ANADIG_PLL_SYS_PLL2_CTRL_ENABLE_CLK_SHIFT);
+    }
+    else if (pll == kCLOCK_PllSys3)
+    {
+        return (bool)((ANADIG_PLL->SYS_PLL3_CTRL & ANADIG_PLL_SYS_PLL3_CTRL_ENABLE_CLK_MASK) >>
+                      ANADIG_PLL_SYS_PLL3_CTRL_ENABLE_CLK_SHIFT);
+    }
+    else if (pll == kCLOCK_PllSys1)
+    {
+        return (bool)((ANADIG_PLL->SYS_PLL1_CTRL & ANADIG_PLL_SYS_PLL1_CTRL_ENABLE_CLK_MASK) >>
+                      ANADIG_PLL_SYS_PLL1_CTRL_ENABLE_CLK_SHIFT);
+    }
+    else if (pll == kCLOCK_PllAudio)
+    {
+        return (bool)((ANADIG_PLL->PLL_AUDIO_CTRL & ANADIG_PLL_PLL_AUDIO_CTRL_ENABLE_CLK_MASK) >>
+                      ANADIG_PLL_PLL_AUDIO_CTRL_ENABLE_CLK_SHIFT);
+    }
+    else if (pll == kCLOCK_PllVideo)
+    {
+        return (bool)((ANADIG_PLL->PLL_VIDEO_CTRL & ANADIG_PLL_PLL_VIDEO_CTRL_ENABLE_CLK_MASK) >>
+                      ANADIG_PLL_PLL_VIDEO_CTRL_ENABLE_CLK_SHIFT);
+    }
+    else
+    {
+        return false;
     }
 }
 
@@ -2314,41 +2346,6 @@ static inline bool CLOCK_IsPllEnabled(clock_pll_t pll)
  * @name OSC operations
  * @{
  */
-
-/*!
- * @brief Initialize the external 24MHz clock.
- *
- * This function supports two modes:
- * 1. Use external crystal oscillator.
- * 2. Bypass the external crystal oscillator, using input source clock directly.
- *
- * After this function, please call @ref CLOCK_SetXtal0Freq to inform clock driver
- * the external clock frequency.
- *
- * @param bypassXtalOsc Pass in true to bypass the external crystal oscillator.
- * @note This device does not support bypass external crystal oscillator, so
- * the input parameter should always be false.
- */
-void CLOCK_InitExternalClk(bool bypassXtalOsc);
-
-/*!
- * @brief Deinitialize the external 24MHz clock.
- *
- * This function disables the external 24MHz clock.
- *
- * After this function, please call @ref CLOCK_SetXtal0Freq to set external clock
- * frequency to 0.
- */
-void CLOCK_DeinitExternalClk(void);
-
-/*!
- * @brief Switch the OSC.
- *
- * This function switches the OSC source for SoC.
- *
- * @param osc   OSC source to switch to.
- */
-void CLOCK_SwitchOsc(clock_osc_t osc);
 
 /*!
  * @brief Gets the RTC clock frequency.
@@ -2734,6 +2731,16 @@ void CLOCK_InitSysPll2(const clock_sys_pll2_config_t *config);
 void CLOCK_DeinitSysPll2(void);
 
 /*!
+ * @brief Check if Sys PLL2 PFD is enabled
+ *
+ * @param pfd PFD control name
+ * @return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ */
+bool CLOCK_IsSysPll2PfdEnabled(clock_pfd_t pfd);
+
+/*!
  * @brief Initialize the System PLL3.
  *
  * This function initializes the System PLL3 with specific settings
@@ -2745,6 +2752,16 @@ void CLOCK_InitSysPll3(void);
  * @brief De-initialize the System PLL3.
  */
 void CLOCK_DeinitSysPll3(void);
+
+/*!
+ * @brief Check if Sys PLL3 PFD is enabled
+ *
+ * @param pfd PFD control name
+ * @return PFD bypass status.
+ *         - true: power on.
+ *         - false: power off.
+ */
+bool CLOCK_IsSysPll3PfdEnabled(clock_pfd_t pfd);
 
 /*!
  * @name PLL/PFD operations
@@ -2789,7 +2806,6 @@ status_t CLOCK_InitAudioPllWithFreq(uint32_t freqInMhz, bool ssEnable, uint32_t 
  * This function initializes the Audio PLL with specific settings
  *
  * @param config Configuration to set to PLL.
- * @param ss Configuration to set spread spectrum
  */
 void CLOCK_InitAudioPll(const clock_audio_pll_config_t *config);
 
@@ -2801,7 +2817,7 @@ void CLOCK_DeinitAudioPll(void);
 /*!
  * @brief Set Audio PLL output frequency in GPC mode.
  *
- * @param config Pointer to @ref clock_audio_pll_gpc_config_t.
+ * @param config Pointer to clock_audio_pll_gpc_config_t structure.
  */
 void CLOCK_GPC_SetAudioPllOutputFreq(const clock_audio_pll_gpc_config_t *config);
 
@@ -2834,7 +2850,7 @@ void CLOCK_DeinitVideoPll(void);
 /*!
  * @brief Set Video PLL output frequency in GPC mode.
  *
- * @param config Pointer to @ref clock_audio_pll_gpc_config_t.
+ * @param config Pointer to clock_audio_pll_gpc_config_t structure.
  */
 void CLOCK_GPC_SetVideoPllOutputFreq(const clock_video_pll_gpc_config_t *config);
 /*!
@@ -2855,7 +2871,7 @@ uint32_t CLOCK_GetPllFreq(clock_pll_t pll);
  *
  * @param pll Which PLL of targeting PFD to be operated.
  * @param pfd Which PFD clock to enable.
- * @param pfdFrac The PFD FRAC value.
+ * @param frac The PFD FRAC value.
  * @note It is recommended that PFD settings are kept between 12-35.
  */
 void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac);
@@ -2981,8 +2997,8 @@ static inline void CLOCK_OSCPLL_SetWhiteList(clock_name_t name, uint8_t domainId
  */
 static inline bool CLOCK_OSCPLL_IsSetPointImplemented(clock_name_t name)
 {
-    return ((CCM->OSCPLL[name].CONFIG & CCM_OSCPLL_CONFIG_SETPOINT_PRESENT_MASK) >>
-            CCM_OSCPLL_CONFIG_SETPOINT_PRESENT_SHIFT);
+    return (((CCM->OSCPLL[name].CONFIG & CCM_OSCPLL_CONFIG_SETPOINT_PRESENT_MASK) >>
+             CCM_OSCPLL_CONFIG_SETPOINT_PRESENT_SHIFT) != 0UL);
 }
 
 /*!
@@ -3105,8 +3121,8 @@ static inline void CLOCK_ROOT_SetWhiteList(clock_root_t name, uint8_t domainId)
  */
 static inline bool CLOCK_ROOT_IsSetPointImplemented(clock_root_t name)
 {
-    return ((CCM->CLOCK_ROOT[name].CONFIG & CCM_CLOCK_ROOT_CONFIG_SETPOINT_PRESENT_MASK) >>
-            CCM_CLOCK_ROOT_CONFIG_SETPOINT_PRESENT_SHIFT);
+    return (((CCM->CLOCK_ROOT[name].CONFIG & CCM_CLOCK_ROOT_CONFIG_SETPOINT_PRESENT_MASK) >>
+             CCM_CLOCK_ROOT_CONFIG_SETPOINT_PRESENT_SHIFT) != 0UL);
 }
 
 /*!
@@ -3135,7 +3151,7 @@ static inline void CLOCK_ROOT_ConfigSetPoint(clock_root_t name,
                                              uint16_t spIndex,
                                              const clock_root_setpoint_config_t *config)
 {
-    assert(config);
+    assert(config != NULL);
     CCM->CLOCK_ROOT[name].SETPOINT[spIndex] =
         CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_GRADE(config->grade) |
         CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_MUX(config->mux) |
@@ -3230,7 +3246,8 @@ static inline void CLOCK_LPCG_SetWhiteList(clock_lpcg_t name, uint8_t domainId)
  */
 static inline bool CLOCK_LPCG_IsSetPointImplemented(clock_lpcg_t name)
 {
-    return ((CCM->LPCG[name].CONFIG & CCM_LPCG_CONFIG_SETPOINT_PRESENT_MASK) >> CCM_LPCG_CONFIG_SETPOINT_PRESENT_SHIFT);
+    return (((CCM->LPCG[name].CONFIG & CCM_LPCG_CONFIG_SETPOINT_PRESENT_MASK) >>
+             CCM_LPCG_CONFIG_SETPOINT_PRESENT_SHIFT) != 0UL);
 }
 
 /*!

@@ -109,7 +109,7 @@ extern "C" {
  * @param channelPair ASRC channel pair
  * @param handle ASRC eDMA handle pointer.
  * @param callback Pointer to user callback function.
- * @param txDmaHandle ASRC send edma handle pointer.
+ * @param inDmaHandle DMA handler for ASRC in.
  * @param periphConfig peripheral configuration.
  * @param userData User parameter passed to the callback function.
  */
@@ -131,7 +131,7 @@ void ASRC_TransferInCreateHandleEDMA(ASRC_Type *base,
  * @param channelPair ASRC channel pair
  * @param handle ASRC eDMA handle pointer.
  * @param callback Pointer to user callback function.
- * @param txDmaHandle ASRC send edma handle pointer.
+ * @param outDmaHandle DMA handler for ASRC out.
  * @param periphConfig peripheral configuration.
  * @param userData User parameter passed to the callback function.
  */
@@ -150,8 +150,8 @@ void ASRC_TransferOutCreateHandleEDMA(ASRC_Type *base,
  * @param base ASRC base pointer.
  * @param handle ASRC eDMA handle pointer.
  * @param asrcConfig asrc configurations.
- * @param inputSampleRate ASRC input sample rate.
- * @param outputSampleRate ASRC output sample rate.
+ * @param inSampleRate ASRC input sample rate.
+ * @param outSampleRate ASRC output sample rate.
  */
 status_t ASRC_TransferSetChannelPairConfigEDMA(ASRC_Type *base,
                                                asrc_edma_handle_t *handle,
@@ -169,7 +169,7 @@ status_t ASRC_TransferSetChannelPairConfigEDMA(ASRC_Type *base,
  * @param handle ASRC channel pair edma handle.
  * @param inSampleRate input sample rate.
  * @param outSampleRate output sample rate.
- * @param inSamples input sampleS size.
+ * @param inSamplesize input sampleS size.
  * @retval output buffer size in byte.
  */
 uint32_t ASRC_GetOutSamplesSizeEDMA(

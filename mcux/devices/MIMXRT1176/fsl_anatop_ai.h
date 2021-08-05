@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 NXP
+ * Copyright 2019,2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,108 +20,109 @@
 #define FSL_ANATOP_AI_DRIVER_VERSION (MAKE_VERSION(1, 0, 0))
 /*@}*/
 
+/*!
+ * @brief Anatop AI ITF enumeration.
+ */
 typedef enum _anatop_ai_itf
 {
-    kAI_Itf_Ldo     = 0,
-    kAI_Itf_1g      = 1,
-    kAI_Itf_Audio   = 2,
-    kAI_Itf_Video   = 3,
-    kAI_Itf_400m    = 4,
-    kAI_Itf_Temp    = 5,
-    kAI_Itf_Bandgap = 6,
+    kAI_Itf_Ldo     = 0, /*!< LDO ITF. */
+    kAI_Itf_1g      = 1, /*!< 1G PLL ITF. */
+    kAI_Itf_Audio   = 2, /*!< Audio PLL ITF. */
+    kAI_Itf_Video   = 3, /*!< Video PLL ITF. */
+    kAI_Itf_400m    = 4, /*!< 400M OSC ITF. */
+    kAI_Itf_Temp    = 5, /*!< Temperature Sensor ITF. */
+    kAI_Itf_Bandgap = 6, /*!< Bandgap ITF. */
 } anatop_ai_itf_t;
 
+/*!
+ * @brief The enumeration of ANATOP AI Register.
+ */
 typedef enum _anatop_ai_reg
 {
-    kAI_PHY_LDO_CTRL0     = 0x0,
-    kAI_PHY_LDO_CTRL0_SET = 0x4,
-    kAI_PHY_LDO_CTRL0_CLR = 0x8,
-    kAI_PHY_LDO_CTRL0_TOG = 0xC,
-    kAI_PHY_LDO_STAT0     = 0x50,
-    kAI_PHY_LDO_STAT0_SET = 0x54,
-    kAI_PHY_LDO_STAT0_CLR = 0x58,
-    kAI_PHY_LDO_STAT0_TOG = 0x5C,
+    kAI_PHY_LDO_CTRL0     = 0x0,  /*!< PHY LDO CTRL0 Register. */
+    kAI_PHY_LDO_CTRL0_SET = 0x4,  /*!< PHY LDO CTRL0 Set Register. */
+    kAI_PHY_LDO_CTRL0_CLR = 0x8,  /*!< PHY LDO CTRL0 Clr Register. */
+    kAI_PHY_LDO_CTRL0_TOG = 0xC,  /*!< PHY LDO CTRL0 TOG Register. */
+    kAI_PHY_LDO_STAT0     = 0x50, /*!< PHY LDO STAT0 Register. */
+    kAI_PHY_LDO_STAT0_SET = 0x54, /*!< PHY LDO STAT0 Set Register. */
+    kAI_PHY_LDO_STAT0_CLR = 0x58, /*!< PHY LDO STAT0 Clr Register. */
+    kAI_PHY_LDO_STAT0_TOG = 0x5C, /*!< PHY LDO STAT0 Tog Register. */
 
-    kAI_BANDGAP_CTRL0 = 0x0,
-    kAI_BANDGAP_STAT0 = 0x50,
+    kAI_BANDGAP_CTRL0 = 0x0,  /*!< BANDGAP CTRL0 Register. */
+    kAI_BANDGAP_STAT0 = 0x50, /*!< BANDGAP STAT0 Register. */
 
-    kAI_RCOSC400M_CTRL0     = 0x0,
-    kAI_RCOSC400M_CTRL0_SET = 0x4,
-    kAI_RCOSC400M_CTRL0_CLR = 0x8,
-    kAI_RCOSC400M_CTRL0_TOG = 0xC,
-    kAI_RCOSC400M_CTRL1     = 0x10,
-    kAI_RCOSC400M_CTRL1_SET = 0x14,
-    kAI_RCOSC400M_CTRL1_CLR = 0x18,
-    kAI_RCOSC400M_CTRL1_TOG = 0x1C,
-    kAI_RCOSC400M_CTRL2     = 0x20,
-    kAI_RCOSC400M_CTRL2_SET = 0x24,
-    kAI_RCOSC400M_CTRL2_CLR = 0x28,
-    kAI_RCOSC400M_CTRL2_TOG = 0x2C,
-    kAI_RCOSC400M_CTRL3     = 0x30,
-    kAI_RCOSC400M_CTRL3_SET = 0x34,
-    kAI_RCOSC400M_CTRL3_CLR = 0x38,
-    kAI_RCOSC400M_CTRL3_TOG = 0x3C,
-    kAI_RCOSC400M_STAT0     = 0x50,
-    kAI_RCOSC400M_STAT0_SET = 0x54,
-    kAI_RCOSC400M_STAT0_CLR = 0x58,
-    kAI_RCOSC400M_STAT0_TOG = 0x5C,
-    kAI_RCOSC400M_STAT1     = 0x60,
-    kAI_RCOSC400M_STAT1_SET = 0x64,
-    kAI_RCOSC400M_STAT1_CLR = 0x68,
-    kAI_RCOSC400M_STAT1_TOG = 0x6C,
-    kAI_RCOSC400M_STAT2     = 0x70,
-    kAI_RCOSC400M_STAT2_SET = 0x74,
-    kAI_RCOSC400M_STAT2_CLR = 0x78,
-    kAI_RCOSC400M_STAT2_TOG = 0x7C,
+    kAI_RCOSC400M_CTRL0     = 0x0,  /*!< RC OSC 400M CTRL0 Register. */
+    kAI_RCOSC400M_CTRL0_SET = 0x4,  /*!< RC OSC 400M CTRL0 SET Register. */
+    kAI_RCOSC400M_CTRL0_CLR = 0x8,  /*!< RC OSC 400M CTRL0 CLR Register. */
+    kAI_RCOSC400M_CTRL0_TOG = 0xC,  /*!< RC OSC 400M CTRL0 TOG Register. */
+    kAI_RCOSC400M_CTRL1     = 0x10, /*!< RC OSC 400M CTRL1 Register. */
+    kAI_RCOSC400M_CTRL1_SET = 0x14, /*!< RC OSC 400M CTRL1 SET Register. */
+    kAI_RCOSC400M_CTRL1_CLR = 0x18, /*!< RC OSC 400M CTRL1 CLR Register. */
+    kAI_RCOSC400M_CTRL1_TOG = 0x1C, /*!< RC OSC 400M CTRL1 TOG Register. */
+    kAI_RCOSC400M_CTRL2     = 0x20, /*!< RC OSC 400M CTRL2 Register. */
+    kAI_RCOSC400M_CTRL2_SET = 0x24, /*!< RC OSC 400M CTRL2 SET Register. */
+    kAI_RCOSC400M_CTRL2_CLR = 0x28, /*!< RC OSC 400M CTRL2 CLR Register. */
+    kAI_RCOSC400M_CTRL2_TOG = 0x2C, /*!< RC OSC 400M CTRL2 TOG Register. */
+    kAI_RCOSC400M_CTRL3     = 0x30, /*!< RC OSC 400M CTRL3 Register. */
+    kAI_RCOSC400M_CTRL3_SET = 0x34, /*!< RC OSC 400M CTRL3 SET Register. */
+    kAI_RCOSC400M_CTRL3_CLR = 0x38, /*!< RC OSC 400M CTRL3 CLR Register. */
+    kAI_RCOSC400M_CTRL3_TOG = 0x3C, /*!< RC OSC 400M CTRL3 TOG Register. */
+    kAI_RCOSC400M_STAT0     = 0x50, /*!< RC OSC 400M STAT0 Register. */
+    kAI_RCOSC400M_STAT0_SET = 0x54, /*!< RC OSC 400M STAT0 SET Register. */
+    kAI_RCOSC400M_STAT0_CLR = 0x58, /*!< RC OSC 400M STAT0 CLR  Register. */
+    kAI_RCOSC400M_STAT0_TOG = 0x5C, /*!< RC OSC 400M STAT0 TOG Register. */
+    kAI_RCOSC400M_STAT1     = 0x60, /*!< RC OSC 400M STAT1 Register. */
+    kAI_RCOSC400M_STAT1_SET = 0x64, /*!< RC OSC 400M STAT1 SET Register. */
+    kAI_RCOSC400M_STAT1_CLR = 0x68, /*!< RC OSC 400M STAT1 CLR Register. */
+    kAI_RCOSC400M_STAT1_TOG = 0x6C, /*!< RC OSC 400M STAT1 TOG Register. */
+    kAI_RCOSC400M_STAT2     = 0x70, /*!< RC OSC 400M STAT2 Register. */
+    kAI_RCOSC400M_STAT2_SET = 0x74, /*!< RC OSC 400M STAT2 SET Register. */
+    kAI_RCOSC400M_STAT2_CLR = 0x78, /*!< RC OSC 400M STAT2 CLR Register. */
+    kAI_RCOSC400M_STAT2_TOG = 0x7C, /*!< RC OSC 400M STAT2 TOG Register. */
 
-    kAI_PLL1G_CTRL0     = 0x0,
-    kAI_PLL1G_CTRL0_SET = 0x4,
-    kAI_PLL1G_CTRL0_CLR = 0x8,
-    kAI_PLL1G_CTRL1     = 0x10,
-    kAI_PLL1G_CTRL1_SET = 0x14,
-    kAI_PLL1G_CTRL1_CLR = 0x18,
-    kAI_PLL1G_CTRL2     = 0x20,
-    kAI_PLL1G_CTRL2_SET = 0x24,
-    kAI_PLL1G_CTRL2_CLR = 0x28,
-    kAI_PLL1G_CTRL3     = 0x30,
-    kAI_PLL1G_CTRL3_SET = 0x34,
-    kAI_PLL1G_CTRL3_CLR = 0x38,
+    kAI_PLL1G_CTRL0     = 0x0,  /*!< 1G PLL CTRL0 Register. */
+    kAI_PLL1G_CTRL0_SET = 0x4,  /*!< 1G PLL CTRL0 SET Register. */
+    kAI_PLL1G_CTRL0_CLR = 0x8,  /*!< 1G PLL CTRL0 CLR Register. */
+    kAI_PLL1G_CTRL1     = 0x10, /*!< 1G PLL CTRL1 Register. */
+    kAI_PLL1G_CTRL1_SET = 0x14, /*!< 1G PLL CTRL1 SET Register. */
+    kAI_PLL1G_CTRL1_CLR = 0x18, /*!< 1G PLL CTRL1 CLR Register. */
+    kAI_PLL1G_CTRL2     = 0x20, /*!< 1G PLL CTRL2 Register. */
+    kAI_PLL1G_CTRL2_SET = 0x24, /*!< 1G PLL CTRL2 SET Register. */
+    kAI_PLL1G_CTRL2_CLR = 0x28, /*!< 1G PLL CTRL2 CLR Register. */
+    kAI_PLL1G_CTRL3     = 0x30, /*!< 1G PLL CTRL3 Register. */
+    kAI_PLL1G_CTRL3_SET = 0x34, /*!< 1G PLL CTRL3 SET Register. */
+    kAI_PLL1G_CTRL3_CLR = 0x38, /*!< 1G PLL CTRL3 CLR Register. */
 
-    kAI_PLLAUDIO_CTRL0     = 0x0,
-    kAI_PLLAUDIO_CTRL0_SET = 0x4,
-    kAI_PLLAUDIO_CTRL0_CLR = 0x8,
-    kAI_PLLAUDIO_CTRL1     = 0x10,
-    kAI_PLLAUDIO_CTRL1_SET = 0x14,
-    kAI_PLLAUDIO_CTRL1_CLR = 0x18,
-    kAI_PLLAUDIO_CTRL2     = 0x20,
-    kAI_PLLAUDIO_CTRL2_SET = 0x24,
-    kAI_PLLAUDIO_CTRL2_CLR = 0x28,
-    kAI_PLLAUDIO_CTRL3     = 0x30,
-    kAI_PLLAUDIO_CTRL3_SET = 0x34,
-    kAI_PLLAUDIO_CTRL3_CLR = 0x38,
+    kAI_PLLAUDIO_CTRL0     = 0x0,  /*!< AUDIO PLL CTRL0 Register. */
+    kAI_PLLAUDIO_CTRL0_SET = 0x4,  /*!< AUDIO PLL CTRL0 SET Register. */
+    kAI_PLLAUDIO_CTRL0_CLR = 0x8,  /*!< AUDIO PLL CTRL0 CLR Register. */
+    kAI_PLLAUDIO_CTRL1     = 0x10, /*!< AUDIO PLL CTRL1 Register. */
+    kAI_PLLAUDIO_CTRL1_SET = 0x14, /*!< AUDIO PLL CTRL1 SET Register. */
+    kAI_PLLAUDIO_CTRL1_CLR = 0x18, /*!< AUDIO PLL CTRL1 CLR Register. */
+    kAI_PLLAUDIO_CTRL2     = 0x20, /*!< AUDIO PLL CTRL2 Register. */
+    kAI_PLLAUDIO_CTRL2_SET = 0x24, /*!< AUDIO PLL CTRL2 SET Register. */
+    kAI_PLLAUDIO_CTRL2_CLR = 0x28, /*!< AUDIO PLL CTRL2 CLR Register. */
+    kAI_PLLAUDIO_CTRL3     = 0x30, /*!< AUDIO PLL CTRL3 Register. */
+    kAI_PLLAUDIO_CTRL3_SET = 0x34, /*!< AUDIO PLL CTRL3 SET Register. */
+    kAI_PLLAUDIO_CTRL3_CLR = 0x38, /*!< AUDIO PLL CTRL3 CLR Register. */
 
-    kAI_PLLVIDEO_CTRL0     = 0x0,
-    kAI_PLLVIDEO_CTRL0_SET = 0x4,
-    kAI_PLLVIDEO_CTRL0_CLR = 0x8,
-    kAI_PLLVIDEO_CTRL1     = 0x10,
-    kAI_PLLVIDEO_CTRL1_SET = 0x14,
-    kAI_PLLVIDEO_CTRL1_CLR = 0x18,
-    kAI_PLLVIDEO_CTRL2     = 0x20,
-    kAI_PLLVIDEO_CTRL2_SET = 0x24,
-    kAI_PLLVIDEO_CTRL2_CLR = 0x28,
-    kAI_PLLVIDEO_CTRL3     = 0x30,
-    kAI_PLLVIDEO_CTRL3_SET = 0x34,
-    kAI_PLLVIDEO_CTRL3_CLR = 0x38,
+    kAI_PLLVIDEO_CTRL0     = 0x0,  /*!< VIDEO PLL CTRL0 Register. */
+    kAI_PLLVIDEO_CTRL0_SET = 0x4,  /*!< VIDEO PLL CTRL0 SET Register. */
+    kAI_PLLVIDEO_CTRL0_CLR = 0x8,  /*!< VIDEO PLL CTRL0 CLR Register. */
+    kAI_PLLVIDEO_CTRL1     = 0x10, /*!< VIDEO PLL CTRL1 Register. */
+    kAI_PLLVIDEO_CTRL1_SET = 0x14, /*!< VIDEO PLL CTRL1 SET Register. */
+    kAI_PLLVIDEO_CTRL1_CLR = 0x18, /*!< VIDEO PLL CTRL1 CLR Register. */
+    kAI_PLLVIDEO_CTRL2     = 0x20, /*!< VIDEO PLL CTRL2 Register. */
+    kAI_PLLVIDEO_CTRL2_SET = 0x24, /*!< VIDEO PLL CTRL2 SET Register. */
+    kAI_PLLVIDEO_CTRL2_CLR = 0x28, /*!< VIDEO PLL CTRL2 CLR Register. */
+    kAI_PLLVIDEO_CTRL3     = 0x30, /*!< VIDEO PLL CTRL3 Register. */
+    kAI_PLLVIDEO_CTRL3_SET = 0x34, /*!< VIDEO PLL CTRL3 SET Register. */
+    kAI_PLLVIDEO_CTRL3_CLR = 0x38, /*!< VIDEO PLL CTRL3 CLR Register. */
 } anatop_ai_reg_t;
 
 /* ----------------------------------------------------------------------------
    -- AI PHY_LDO CTRL0 Register Masks
    ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup AI_Register_Masks PHY_LDO Register Masks
- * @{
- */
 
 /*! @name CTRL0 - CTRL0 Register */
 /*! @{ */
@@ -188,12 +189,6 @@ typedef enum _anatop_ai_reg
  */
 
 /*! @} */
-/*! @} */
-
-/*!
- * @addtogroup AI_Register_Masks BANDGAP Register Masks
- * @{
- */
 
 /*! @name CTRL0 - CTRL0 Register */
 /*! @{ */
@@ -292,13 +287,6 @@ typedef enum _anatop_ai_reg
 #define AI_BANDGAP_STAT0_REFTOP_VBGUP_SHIFT (0U)
 /*! @} */
 
-/*! @} */
-
-/*!
- * @addtogroup AI_Register_Masks RCOSC 400M Register Masks
- * @{
- */
-
 /*! @name CTRL0 - CTRL0 Register */
 /*! @{ */
 #define AI_RCOSC400M_CTRL0_REF_CLK_DIV(x) \
@@ -396,11 +384,6 @@ typedef enum _anatop_ai_reg
 #define AI_RCOSC400M_STAT2_CURR_OSC_TUNE_VAL_SHIFT (24U)
 /*! @} */
 
-/*!
- * @addtogroup AI_Register_Masks PLL 1G Register Masks
- * @{
- */
-
 /*! @name CTRL0 - CTRL0 Register */
 /*! @{ */
 #define AI_PLL1G_CTRL0_HOLD_RING_OFF(x) \
@@ -428,14 +411,6 @@ typedef enum _anatop_ai_reg
 #define AI_PLL1G_CTRL0_PLL_REG_EN_MASK  (0x400000UL)
 #define AI_PLL1G_CTRL0_PLL_REG_EN_SHIFT (22U)
 /*! @} */
-/*!
- * @}
- */
-
-/*!
- * @addtogroup AI_Register_Masks PLL AUDIO Register Masks
- * @{
- */
 
 /*! @name CTRL0 - CTRL0 Register */
 /*! @{ */
@@ -464,14 +439,6 @@ typedef enum _anatop_ai_reg
 #define AI_PLLAUDIO_CTRL0_PLL_REG_EN_MASK  (0x400000UL)
 #define AI_PLLAUDIO_CTRL0_PLL_REG_EN_SHIFT (22U)
 /*! @} */
-/*!
- * @}
- */
-
-/*!
- * @addtogroup AI_Register_Masks PLL VIDEO Register Masks
- * @{
- */
 
 /*! @name CTRL0 - CTRL0 Register */
 /*! @{ */
@@ -500,9 +467,6 @@ typedef enum _anatop_ai_reg
 #define AI_PLLVIDEO_CTRL0_PLL_REG_EN_MASK  (0x400000UL)
 #define AI_PLLVIDEO_CTRL0_PLL_REG_EN_SHIFT (22U)
 /*! @} */
-/*!
- * @}
- */
 
 /*! @} */
 
