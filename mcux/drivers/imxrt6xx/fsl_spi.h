@@ -24,8 +24,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief SPI driver version 2.1.1. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+/*! @brief SPI driver version. */
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 2, 1))
 /*@}*/
 
 /*! @brief Global variable for dummy data value setting. */
@@ -272,12 +272,14 @@ struct _spi_master_handle
     uint8_t *volatile rxData;         /*!< Receive buffer */
     volatile size_t txRemainingBytes; /*!< Number of data to be transmitted [in bytes] */
     volatile size_t rxRemainingBytes; /*!< Number of data to be received [in bytes] */
-    volatile size_t toReceiveCount;   /*!< Receive data remaining in bytes */
-    size_t totalByteCount;            /*!< A number of transfer bytes */
-    volatile uint32_t state;          /*!< SPI internal state */
-    spi_master_callback_t callback;   /*!< SPI callback */
-    void *userData;                   /*!< Callback parameter */
-    uint8_t dataWidth;                /*!< Width of the data [Valid values: 1 to 16] */
+    volatile int8_t toReceiveCount; /*!< The number of data expected to receive in data width. Since the received count
+                                       and sent count should be the same to complete the transfer, if the sent count is
+                                       x and the received count is y, toReceiveCount is x-y. */
+    size_t totalByteCount;          /*!< A number of transfer bytes */
+    volatile uint32_t state;        /*!< SPI internal state */
+    spi_master_callback_t callback; /*!< SPI callback */
+    void *userData;                 /*!< Callback parameter */
+    uint8_t dataWidth;              /*!< Width of the data [Valid values: 1 to 16] */
     uint8_t sselNum;      /*!< Slave select number to be asserted when transferring data [Valid values: 0 to 3] */
     uint32_t configFlags; /*!< Additional option to control transfer */
     uint8_t txWatermark;  /*!< txFIFO watermark */

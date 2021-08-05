@@ -368,6 +368,7 @@ void DMIC_HwvadDisableIntCallback(DMIC_Type *base, dmic_hwvad_callback_t vadcb)
 /* IRQ handler functions overloading weak symbols in the startup */
 #if defined(DMIC0)
 /*DMIC0 IRQ handler */
+void DMIC0_DriverIRQHandler(void);
 void DMIC0_DriverIRQHandler(void)
 {
     if (s_dmicCallback[0] != NULL)
@@ -377,6 +378,7 @@ void DMIC0_DriverIRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 /*DMIC0 HWVAD IRQ handler */
+void HWVAD0_DriverIRQHandler(void);
 void HWVAD0_DriverIRQHandler(void)
 {
     if (s_dmicHwvadCallback[0] != NULL)

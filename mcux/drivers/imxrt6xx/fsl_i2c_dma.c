@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -58,24 +58,30 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
                                                 i2c_master_dma_handle_t *handle,
                                                 i2c_master_transfer_t *xfer);
 
+static void I2C_RunDMATransfer(I2C_Type *base, i2c_master_dma_handle_t *handle);
+
+/*!
+ * @brief Execute states until the transfer is done.
+ * @param handle Master nonblocking driver handle.
+ * @param[out] isDone Set to true if the transfer has completed.
+ * @retval #kStatus_Success
+ * @retval #kStatus_I2C_ArbitrationLost
+ * @retval #kStatus_I2C_Nak
+ */
+static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, bool *isDone);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
 
-/*<! Private handle only used for internally. */
-static i2c_master_dma_private_handle_t s_dmaPrivateHandle[FSL_FEATURE_SOC_I2C_COUNT];
-
 /*! @brief IRQ name array */
 static const IRQn_Type s_i2cIRQ[] = I2C_IRQS;
+
+/*<! Private handle only used for internally. */
+static i2c_master_dma_private_handle_t s_dmaPrivateHandle[ARRAY_SIZE(s_i2cIRQ)];
 
 /*******************************************************************************
  * Codes
  ******************************************************************************/
-
-/*!
- * @brief Prepares the transfer state machine and fills in the command buffer.
- * @param handle Master nonblocking driver handle.
- */
 static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
                                                 i2c_master_dma_handle_t *handle,
                                                 i2c_master_transfer_t *xfer)
@@ -92,7 +98,8 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
 
     if ((transfer->flags & (uint32_t)kI2C_TransferNoStartFlag) != 0U)
     {
-        /* Start condition shall be ommited, switch directly to next phase */
+        handle->checkAddrNack = false;
+        /* Start condition shall not be ommited, switch directly to next phase */
         if (transfer->dataSize == 0U)
         {
             handle->state = (uint8_t)kStopState;
@@ -132,7 +139,8 @@ static status_t I2C_InitTransferStateMachineDMA(I2C_Type *base,
             handle->remainingSubaddr = transfer->subaddressSize;
         }
 
-        handle->state = (uint8_t)kStartState;
+        handle->state         = (uint8_t)kStartState;
+        handle->checkAddrNack = true;
     }
 
     return kStatus_Success;
@@ -188,16 +196,9 @@ static void I2C_RunDMATransfer(I2C_Type *base, i2c_master_dma_handle_t *handle)
 
     handle->remainingBytesDMA -= transfer_size;
     handle->buf += transfer_size;
+    handle->checkAddrNack = false;
 }
 
-/*!
- * @brief Execute states until the transfer is done.
- * @param handle Master nonblocking driver handle.
- * @param[out] isDone Set to true if the transfer has completed.
- * @retval #kStatus_Success
- * @retval #kStatus_I2C_ArbitrationLost
- * @retval #kStatus_I2C_Nak
- */
 static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, bool *isDone)
 {
     uint32_t status;
@@ -231,13 +232,34 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
         return kStatus_I2C_StartStopError;
     }
 
+    /* Event timeout happens when the time since last bus event has been longer than the time specified by TIMEOUT
+       register. eg: Start signal fails to generate, no error status is set and transfer hangs if glitch on bus happens
+       before, the timeout status can be used to avoid the transfer hangs indefinitely. */
+    if ((status & (uint32_t)kI2C_EventTimeoutFlag) != 0U)
+    {
+        I2C_ClearStatusFlags(base, (uint32_t)kI2C_EventTimeoutFlag);
+        DMA_AbortTransfer(handle->dmaHandle);
+        base->MSTCTL = 0;
+        return kStatus_I2C_EventTimeout;
+    }
+
+    /* SCL timeout happens when the slave is holding the SCL line low and the time has been longer than the time
+       specified by TIMEOUT register. */
+    if ((status & (uint32_t)kI2C_SclTimeoutFlag) != 0U)
+    {
+        I2C_ClearStatusFlags(base, (uint32_t)kI2C_SclTimeoutFlag);
+        DMA_AbortTransfer(handle->dmaHandle);
+        base->MSTCTL = 0;
+        return kStatus_I2C_SclLowTimeout;
+    }
+
     if ((status & (uint32_t)I2C_STAT_MSTPENDING_MASK) == 0U)
     {
         return kStatus_I2C_Busy;
     }
 
     /* Get the state of the I2C module */
-    master_state = (status & (uint32_t)I2C_STAT_MSTSTATE_MASK) >> I2C_STAT_MSTSTATE_SHIFT;
+    master_state = (base->STAT & (uint32_t)I2C_STAT_MSTSTATE_MASK) >> I2C_STAT_MSTSTATE_SHIFT;
 
     if ((master_state == (uint32_t)I2C_STAT_MSTCODE_NACKADR) || (master_state == (uint32_t)I2C_STAT_MSTCODE_NACKDAT))
     {
@@ -245,7 +267,14 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
         DMA_AbortTransfer(handle->dmaHandle);
         base->MSTCTL  = I2C_MSTCTL_MSTSTOP_MASK;
         handle->state = (uint8_t)kWaitForCompletionState;
-        return kStatus_I2C_Nak;
+        if ((master_state == (uint32_t)I2C_STAT_MSTCODE_NACKADR) || (handle->checkAddrNack == true))
+        {
+            return kStatus_I2C_Addr_Nak;
+        }
+        else
+        {
+            return kStatus_I2C_Nak;
+        }
     }
 
     err = kStatus_Success;
@@ -333,7 +362,8 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
             I2C_RunDMATransfer(base, handle);
 
             /* Schedule stop condition */
-            handle->state = (uint8_t)kStopState;
+            handle->state         = (uint8_t)kStopState;
+            handle->checkAddrNack = false;
             break;
 
         case (uint8_t)kReceiveDataState:
@@ -356,7 +386,8 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
             I2C_RunDMATransfer(base, handle);
 
             /* Schedule reception of last data byte */
-            handle->state = (uint8_t)kReceiveLastDataState;
+            handle->state         = (uint8_t)kReceiveLastDataState;
+            handle->checkAddrNack = false;
             break;
 
         case (uint8_t)kReceiveLastDataState:
@@ -405,7 +436,7 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
     return err;
 }
 
-void I2C_MasterTransferDMAHandleIRQ(I2C_Type *base, i2c_master_dma_handle_t *handle)
+static void I2C_MasterTransferDMAHandleIRQ(I2C_Type *base, i2c_master_dma_handle_t *handle)
 {
     bool isDone;
     status_t result;
@@ -424,8 +455,8 @@ void I2C_MasterTransferDMAHandleIRQ(I2C_Type *base, i2c_master_dma_handle_t *han
         handle->state = (uint8_t)kIdleState;
 
         /* Disable internal IRQ enables. */
-        I2C_DisableInterrupts(base,
-                              I2C_INTSTAT_MSTPENDING_MASK | I2C_INTSTAT_MSTARBLOSS_MASK | I2C_INTSTAT_MSTSTSTPERR_MASK);
+        I2C_DisableInterrupts(base, I2C_INTSTAT_MSTPENDING_MASK | I2C_INTSTAT_MSTARBLOSS_MASK |
+                                        I2C_INTSTAT_MSTSTSTPERR_MASK | I2C_INTSTAT_EVENTTIMEOUT_MASK);
 
         /* Invoke callback. */
         if (handle->completionCallback != NULL)
@@ -484,8 +515,8 @@ void I2C_MasterTransferCreateHandleDMA(I2C_Type *base,
     FLEXCOMM_SetIRQHandler(base, handler.flexcomm_handler, handle);
 
     /* Clear internal IRQ enables and enable NVIC IRQ. */
-    I2C_DisableInterrupts(base,
-                          I2C_INTSTAT_MSTPENDING_MASK | I2C_INTSTAT_MSTARBLOSS_MASK | I2C_INTSTAT_MSTSTSTPERR_MASK);
+    I2C_DisableInterrupts(base, I2C_INTSTAT_MSTPENDING_MASK | I2C_INTSTAT_MSTARBLOSS_MASK |
+                                    I2C_INTSTAT_MSTSTSTPERR_MASK | I2C_INTSTAT_EVENTTIMEOUT_MASK);
     (void)EnableIRQ(s_i2cIRQ[instance]);
 
     /* Set the handle for DMA. */
@@ -530,8 +561,10 @@ status_t I2C_MasterTransferDMA(I2C_Type *base, i2c_master_dma_handle_t *handle, 
     I2C_MasterClearStatusFlags(base, I2C_STAT_MSTARBLOSS_MASK | I2C_STAT_MSTSTSTPERR_MASK);
 
     /* Enable I2C internal IRQ sources */
-    I2C_EnableInterrupts(base,
-                         I2C_INTSTAT_MSTARBLOSS_MASK | I2C_INTSTAT_MSTSTSTPERR_MASK | I2C_INTSTAT_MSTPENDING_MASK);
+    /* Enable arbitration lost interrupt, start/stop error interrupt and master pending interrupt.
+       The master pending flag is not set during dma transfer. */
+    I2C_EnableInterrupts(base, I2C_INTSTAT_MSTARBLOSS_MASK | I2C_INTSTAT_MSTSTSTPERR_MASK |
+                                   I2C_INTSTAT_MSTPENDING_MASK | I2C_INTSTAT_EVENTTIMEOUT_MASK);
 
     return result;
 }
@@ -583,8 +616,8 @@ void I2C_MasterTransferAbortDMA(I2C_Type *base, i2c_master_dma_handle_t *handle)
         base->MSTCTL = 0;
 
         /* Disable internal IRQ enables. */
-        I2C_DisableInterrupts(base,
-                              I2C_INTSTAT_MSTPENDING_MASK | I2C_INTSTAT_MSTARBLOSS_MASK | I2C_INTSTAT_MSTSTSTPERR_MASK);
+        I2C_DisableInterrupts(base, I2C_INTSTAT_MSTPENDING_MASK | I2C_INTSTAT_MSTARBLOSS_MASK |
+                                        I2C_INTSTAT_MSTSTSTPERR_MASK | I2C_INTSTAT_EVENTTIMEOUT_MASK);
 
         /* Wait until module is ready */
         do
@@ -596,7 +629,7 @@ void I2C_MasterTransferAbortDMA(I2C_Type *base, i2c_master_dma_handle_t *handle)
         I2C_MasterClearStatusFlags(base, I2C_STAT_MSTARBLOSS_MASK | I2C_STAT_MSTSTSTPERR_MASK);
 
         /* Get the state of the I2C module */
-        master_state = (status & I2C_STAT_MSTSTATE_MASK) >> I2C_STAT_MSTSTATE_SHIFT;
+        master_state = (base->STAT & I2C_STAT_MSTSTATE_MASK) >> I2C_STAT_MSTSTATE_SHIFT;
 
         if (master_state != (uint32_t)I2C_STAT_MSTCODE_IDLE)
         {
