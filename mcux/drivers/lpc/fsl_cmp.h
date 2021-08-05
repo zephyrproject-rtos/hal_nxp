@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -20,8 +20,8 @@
  *****************************************************************************/
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.2.0. */
-#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2U, 2U, 0U))
+/*! @brief Driver version 2.2.1. */
+#define FSL_CMP_DRIVER_VERSION (MAKE_VERSION(2U, 2U, 1U))
 /*@}*/
 
 /*! @brief CMP input mux for positive and negative sides. */
@@ -276,8 +276,8 @@ static inline void CMP_FilterSampleConfig(cmp_filtercgf_samplemode_t filterSampl
     uint32_t comp = PMC->COMP;
 
     comp &= ~(PMC_COMP_FILTERCGF_CLKDIV_MASK | PMC_COMP_FILTERCGF_SAMPLEMODE_MASK);
-    comp |= ((filterClockDivider << PMC_COMP_FILTERCGF_CLKDIV_SHIFT) |
-             (filterSampleMode << PMC_COMP_FILTERCGF_SAMPLEMODE_SHIFT));
+    comp |= (((uint32_t)filterClockDivider << PMC_COMP_FILTERCGF_CLKDIV_SHIFT) |
+             ((uint32_t)filterSampleMode << PMC_COMP_FILTERCGF_SAMPLEMODE_SHIFT));
 
     PMC->COMP = comp;
 }

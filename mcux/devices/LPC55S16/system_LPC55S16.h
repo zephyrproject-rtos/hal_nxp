@@ -11,7 +11,7 @@
 **
 **     Reference manual:    LPC55S1x/LPC551x User manual Rev.0.6  15 November 2019
 **     Version:             rev. 1.1, 2019-12-03
-**     Build:               b200420
+**     Build:               b201015
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -48,7 +48,7 @@
  */
 
 #ifndef _SYSTEM_LPC55S16_H_
-#define _SYSTEM_LPC55S16_H_                      /**< Symbol preventing repeated inclusion */
+#define _SYSTEM_LPC55S16_H_ /**< Symbol preventing repeated inclusion */
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,13 +56,12 @@ extern "C" {
 
 #include <stdint.h>
 
-#define DEFAULT_SYSTEM_CLOCK           12000000u           /* Default System clock value */
-#define CLK_RTC_32K_CLK                   32768u           /* RTC oscillator 32 kHz output (32k_clk */
-#define CLK_FRO_12MHZ                  12000000u           /* FRO 12 MHz (fro_12m) */
-#define CLK_FRO_48MHZ                  48000000u           /* FRO 48 MHz (fro_48m) */
-#define CLK_FRO_96MHZ                  96000000u           /* FRO 96 MHz (fro_96m) */
-#define CLK_CLK_IN                     16000000u           /* Default CLK_IN pin clock */
-
+#define DEFAULT_SYSTEM_CLOCK 12000000u /* Default System clock value */
+#define CLK_RTC_32K_CLK      32768u    /* RTC oscillator 32 kHz output (32k_clk */
+#define CLK_FRO_12MHZ        12000000u /* FRO 12 MHz (fro_12m) */
+#define CLK_FRO_48MHZ        48000000u /* FRO 48 MHz (fro_48m) */
+#define CLK_FRO_96MHZ        96000000u /* FRO 96 MHz (fro_96m) */
+#define CLK_CLK_IN           16000000u /* Default CLK_IN pin clock */
 
 /**
  * @brief System clock frequency (core clock)
@@ -82,7 +81,7 @@ extern uint32_t SystemCoreClock;
  * microcontroller device. For systems with variable clock speed it also updates
  * the variable SystemCoreClock. SystemInit is called from startup_device file.
  */
-void SystemInit (void);
+void SystemInit(void);
 
 /**
  * @brief Updates the SystemCoreClock variable.
@@ -91,7 +90,7 @@ void SystemInit (void);
  * execution. SystemCoreClockUpdate() evaluates the clock register settings and calculates
  * the current core clock.
  */
-void SystemCoreClockUpdate (void);
+void SystemCoreClockUpdate(void);
 
 /**
  * @brief SystemInit function hook.
@@ -103,10 +102,10 @@ void SystemCoreClockUpdate (void);
  * NOTE: No global r/w variables can be used in this hook function because the
  * initialization of these variables happens after this function.
  */
-void SystemInitHook (void);
+void SystemInitHook(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  /* _SYSTEM_LPC55S16_H_ */
+#endif /* _SYSTEM_LPC55S16_H_ */

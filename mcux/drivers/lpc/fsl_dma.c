@@ -60,15 +60,19 @@ static const IRQn_Type s_dmaIRQNumber[] = DMA_IRQS;
 static dma_handle_t *s_DMAHandle[FSL_FEATURE_DMA_ALL_CHANNELS];
 /*! @brief DMA driver internal descriptor table */
 #if (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
-DMA_ALLOCATE_HEAD_DESCRIPTORS_AT_NONCACHEABLE(s_dma_descriptor_table0, FSL_FEATURE_DMA_MAX_CHANNELS);
+AT_NONCACHEABLE_SECTION_ALIGN(static dma_descriptor_t s_dma_descriptor_table0[FSL_FEATURE_DMA_MAX_CHANNELS],
+                              FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
 #else
-DMA_ALLOCATE_HEAD_DESCRIPTORS(s_dma_descriptor_table0, FSL_FEATURE_DMA_MAX_CHANNELS);
+SDK_ALIGN(static dma_descriptor_t s_dma_descriptor_table0[FSL_FEATURE_DMA_MAX_CHANNELS],
+          FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
 #endif
 #if defined(DMA1)
 #if (defined(CPU_MIMXRT685SEVKA_dsp) || defined(CPU_MIMXRT685SFVKB_dsp))
-DMA_ALLOCATE_HEAD_DESCRIPTORS_AT_NONCACHEABLE(s_dma_descriptor_table1, FSL_FEATURE_DMA_MAX_CHANNELS);
+AT_NONCACHEABLE_SECTION_ALIGN(static dma_descriptor_t s_dma_descriptor_table1[FSL_FEATURE_DMA_MAX_CHANNELS],
+                              FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
 #else
-DMA_ALLOCATE_HEAD_DESCRIPTORS(s_dma_descriptor_table1, FSL_FEATURE_DMA_MAX_CHANNELS);
+SDK_ALIGN(static dma_descriptor_t s_dma_descriptor_table1[FSL_FEATURE_DMA_MAX_CHANNELS],
+          FSL_FEATURE_DMA_DESCRIPTOR_ALIGN_SIZE);
 #endif
 static dma_descriptor_t *s_dma_descriptor_table[] = {s_dma_descriptor_table0, s_dma_descriptor_table1};
 #else
@@ -1029,6 +1033,7 @@ void DMA_IRQHandle(DMA_Type *base)
     }
 }
 
+void DMA0_DriverIRQHandler(void);
 void DMA0_DriverIRQHandler(void)
 {
     DMA_IRQHandle(DMA0);
@@ -1036,6 +1041,7 @@ void DMA0_DriverIRQHandler(void)
 }
 
 #if defined(DMA1)
+void DMA1_DriverIRQHandler(void);
 void DMA1_DriverIRQHandler(void)
 {
     DMA_IRQHandle(DMA1);

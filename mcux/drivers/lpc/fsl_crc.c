@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2019 NXP
+ * Copyright 2016-2017, 2019-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -103,6 +103,18 @@ void CRC_Reset(CRC_Type *base)
 }
 
 /*!
+ * brief Write seed (initial checksum) to CRC peripheral module.
+ *
+ * param base   CRC peripheral address.
+ * param seed   CRC Seed value.
+ */
+void CRC_WriteSeed(CRC_Type *base, uint32_t seed)
+{
+    /*  write the seed (initial checksum) */
+    base->SEED = seed;
+}
+
+/*!
  * brief Loads actual values configured in CRC peripheral to CRC protocol configuration structure.
  *
  * The values, including seed, can be used to resume CRC calculation later.
@@ -153,7 +165,7 @@ void CRC_WriteData(CRC_Type *base, const uint8_t *data, size_t dataSize)
     }
 
     /* use 32-bit reads and writes as long as possible */
-    data32 = (const uint32_t *)data;
+    data32 = (const uint32_t *)(uint32_t)data;
     while (dataSize >= sizeof(uint32_t))
     {
         *((__O uint32_t *)&(base->WR_DATA)) = *data32;
