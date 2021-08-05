@@ -5,7 +5,7 @@
   <version>1.0</version>
   <description>LPC55S69JBD100,LPC55S69JBD64,LPC55S69JEV98</description>
   <licenseText>
-Copyright 2016-2020 NXP
+Copyright 2016-2021 NXP
 All rights reserved.
 
 SPDX-License-Identifier: BSD-3-Clause
@@ -12735,6 +12735,111 @@ SPDX-License-Identifier: BSD-3-Clause
           <resetMask>0xFFFFFFFF</resetMask>
           <fields>
             <field>
+              <name>FETCHCFG</name>
+              <description>Instruction fetch configuration.</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+              <access>read-write</access>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>NOBUF</name>
+                  <description>Instruction fetches from flash are not buffered.</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>ONEBUF</name>
+                  <description>One buffer is used for all instruction fetches.</description>
+                  <value>0x1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>ALLBUF</name>
+                  <description>All buffers may be used for instruction fetches.</description>
+                  <value>0x2</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>DATACFG</name>
+              <description>Data read configuration.</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>2</bitWidth>
+              <access>read-write</access>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>NOBUF</name>
+                  <description>Data accesses from flash are not buffered.</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>ONEBUF</name>
+                  <description>One buffer is used for all data accesses.</description>
+                  <value>0x1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>ALLBUF</name>
+                  <description>All buffers can be used for data accesses.</description>
+                  <value>0x2</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>ACCEL</name>
+              <description>Acceleration enable.</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+              <access>read-write</access>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>DISABLE</name>
+                  <description>Flash acceleration is disabled.</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>ENABLE</name>
+                  <description>Flash acceleration is enabled.</description>
+                  <value>0x1</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>PREFEN</name>
+              <description>Prefetch enable.</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+              <access>read-write</access>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>DISABLE</name>
+                  <description>No instruction prefetch is performed.</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>ENABLE</name>
+                  <description>Instruction prefetch is enabled.</description>
+                  <value>0x1</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>PREFOVR</name>
+              <description>Prefetch override.</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+              <access>read-write</access>
+              <enumeratedValues>
+                <enumeratedValue>
+                  <name>NORMAL</name>
+                  <description>Any previously initiated prefetch will be completed.</description>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>OVERRIDE</name>
+                  <description>Any previously initiated prefetch will be aborted, and the next flash line following the current execution address will be prefetched if not already buffered.</description>
+                  <value>0x1</value>
+                </enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
               <name>FLASHTIM</name>
               <description>Flash memory access time.</description>
               <bitOffset>12</bitOffset>
@@ -12785,6 +12890,21 @@ SPDX-License-Identifier: BSD-3-Clause
                   <name>FLASHTIM8</name>
                   <description>9 system clocks flash access time (for system clock rates up to 100 MHz).</description>
                   <value>0x8</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FLASHTIM9</name>
+                  <description>10 system clocks flash access time (for system clock rates up to 115 MHz).</description>
+                  <value>0x9</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FLASHTIM10</name>
+                  <description>11 system clocks flash access time (for system clock rates up to 130 MHz).</description>
+                  <value>0xA</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>FLASHTIM11</name>
+                  <description>12 system clocks flash access time (for system clock rates up to 150 MHz).</description>
+                  <value>0xB</value>
                 </enumeratedValue>
               </enumeratedValues>
             </field>
@@ -13146,7 +13266,7 @@ SPDX-License-Identifier: BSD-3-Clause
           <description>SDIO CCLKIN phase and delay control</description>
           <addressOffset>0x460</addressOffset>
           <size>32</size>
-          <access>read-write</access>
+          <access>write-only</access>
           <resetValue>0</resetValue>
           <resetMask>0x9F9F008F</resetMask>
           <fields>
@@ -13155,7 +13275,7 @@ SPDX-License-Identifier: BSD-3-Clause
               <description>Programmable delay value by which cclk_in_drv is phase-shifted with regard to cclk_in.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>2</bitWidth>
-              <access>read-write</access>
+              <access>write-only</access>
               <enumeratedValues>
                 <enumeratedValue>
                   <name>ENUM_0_DEG</name>
@@ -13184,7 +13304,7 @@ SPDX-License-Identifier: BSD-3-Clause
               <description>Programmable delay value by which cclk_in_sample is delayed with regard to cclk_in.</description>
               <bitOffset>2</bitOffset>
               <bitWidth>2</bitWidth>
-              <access>read-write</access>
+              <access>write-only</access>
               <enumeratedValues>
                 <enumeratedValue>
                   <name>ENUM_0_DEG</name>
@@ -13213,7 +13333,7 @@ SPDX-License-Identifier: BSD-3-Clause
               <description>Enables the delays CCLK_DRV_PHASE and CCLK_SAMPLE_PHASE.</description>
               <bitOffset>7</bitOffset>
               <bitWidth>1</bitWidth>
-              <access>read-write</access>
+              <access>write-only</access>
               <enumeratedValues>
                 <enumeratedValue>
                   <name>BYPASSED</name>
@@ -13232,14 +13352,14 @@ SPDX-License-Identifier: BSD-3-Clause
               <description>Programmable delay value by which cclk_in_drv is delayed with regard to cclk_in.</description>
               <bitOffset>16</bitOffset>
               <bitWidth>5</bitWidth>
-              <access>read-write</access>
+              <access>write-only</access>
             </field>
             <field>
               <name>CCLK_DRV_DELAY_ACTIVE</name>
               <description>Enables drive delay, as controlled by the CCLK_DRV_DELAY field.</description>
               <bitOffset>23</bitOffset>
               <bitWidth>1</bitWidth>
-              <access>read-write</access>
+              <access>write-only</access>
               <enumeratedValues>
                 <enumeratedValue>
                   <name>DISABLE</name>
@@ -13258,14 +13378,14 @@ SPDX-License-Identifier: BSD-3-Clause
               <description>Programmable delay value by which cclk_in_sample is delayed with regard to cclk_in.</description>
               <bitOffset>24</bitOffset>
               <bitWidth>5</bitWidth>
-              <access>read-write</access>
+              <access>write-only</access>
             </field>
             <field>
               <name>CCLK_SAMPLE_DELAY_ACTIVE</name>
               <description>Enables sample delay, as controlled by the CCLK_SAMPLE_DELAY field.</description>
               <bitOffset>31</bitOffset>
               <bitWidth>1</bitWidth>
-              <access>read-write</access>
+              <access>write-only</access>
               <enumeratedValues>
                 <enumeratedValue>
                   <name>DISABLE</name>
@@ -27633,12 +27753,20 @@ SPDX-License-Identifier: BSD-3-Clause
         <usage>registers</usage>
       </addressBlock>
       <interrupt>
+        <name>SEC_HYPERVISOR_CALL</name>
+        <value>49</value>
+      </interrupt>
+      <interrupt>
         <name>SEC_GPIO_INT0_IRQ0</name>
         <value>50</value>
       </interrupt>
       <interrupt>
         <name>SEC_GPIO_INT0_IRQ1</name>
         <value>51</value>
+      </interrupt>
+      <interrupt>
+        <name>SEC_VIO</name>
+        <value>53</value>
       </interrupt>
     </peripheral>
     <peripheral>
@@ -32215,6 +32343,10 @@ SPDX-License-Identifier: BSD-3-Clause
         <size>0xCC</size>
         <usage>registers</usage>
       </addressBlock>
+      <interrupt>
+        <name>ACMP</name>
+        <value>24</value>
+      </interrupt>
       <registers>
         <register>
           <name>RESETCTRL</name>
@@ -49670,7 +49802,7 @@ SPDX-License-Identifier: BSD-3-Clause
           <description>FIFO write data.</description>
           <addressOffset>0xE20</addressOffset>
           <size>32</size>
-          <access>read-write</access>
+          <access>write-only</access>
           <resetValue>0</resetValue>
           <resetMask>0</resetMask>
           <fields>
@@ -51415,7 +51547,7 @@ SPDX-License-Identifier: BSD-3-Clause
           <description>FIFO write data.</description>
           <addressOffset>0xE20</addressOffset>
           <size>32</size>
-          <access>read-write</access>
+          <access>write-only</access>
           <resetValue>0</resetValue>
           <resetMask>0</resetMask>
           <fields>
@@ -65126,6 +65258,10 @@ SPDX-License-Identifier: BSD-3-Clause
         <size>0x84</size>
         <usage>registers</usage>
       </addressBlock>
+      <interrupt>
+        <name>CASER</name>
+        <value>55</value>
+      </interrupt>
       <registers>
         <register>
           <name>CTRL0</name>
@@ -65709,6 +65845,10 @@ SPDX-License-Identifier: BSD-3-Clause
         <size>0x260</size>
         <usage>registers</usage>
       </addressBlock>
+      <interrupt>
+        <name>PQ</name>
+        <value>57</value>
+      </interrupt>
       <registers>
         <register>
           <name>OUTBASE</name>
@@ -82158,7 +82298,7 @@ SPDX-License-Identifier: BSD-3-Clause
           <description>Software Trigger Interrupt Register</description>
           <addressOffset>0xE00</addressOffset>
           <size>32</size>
-          <access>read-write</access>
+          <access>write-only</access>
           <resetValue>0</resetValue>
           <resetMask>0xFFFFFFFF</resetMask>
           <fields>
