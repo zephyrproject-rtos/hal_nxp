@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! Version 2.1.0. */
-#define FSL_PORT_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
+/*! Version 2.1.1. */
+#define FSL_PORT_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
 /*@}*/
 
 #if defined(FSL_FEATURE_PORT_HAS_PULL_ENABLE) && FSL_FEATURE_PORT_HAS_PULL_ENABLE
@@ -39,6 +39,15 @@ enum _port_pull
     kPORT_PullUp      = 3U, /*!< Internal pull-up resistor is enabled. */
 };
 #endif /* FSL_FEATURE_PORT_HAS_PULL_ENABLE */
+
+#if defined(FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE) && FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE
+/*! @brief Internal resistor pull value selection */
+enum _port_pull_value
+{
+    kPORT_LowPullResistor  = 0U, /*!< Low internal pull resistor value is selected. */
+    kPORT_HighPullResistor = 1U, /*!< High internal pull resistor value is selected. */
+};
+#endif /* FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE */
 
 #if defined(FSL_FEATURE_PORT_HAS_SLEW_RATE) && FSL_FEATURE_PORT_HAS_SLEW_RATE
 /*! @brief Slew rate selection */
@@ -75,6 +84,15 @@ enum _port_drive_strength
     kPORT_HighDriveStrength = 1U, /*!< High-drive strength is configured. */
 };
 #endif /* FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH */
+
+#if defined(FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1) && FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1
+/*! @brief Configures the drive strength1. */
+enum _port_drive_strength1
+{
+    kPORT_NormalDriveStrength = 0, /*!< Normal drive strength */
+    kPORT_DoubleDriveStrength = 1, /*!< Double drive strength */
+};
+#endif /* FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1 */
 
 #if defined(FSL_FEATURE_PORT_HAS_PIN_CONTROL_LOCK) && FSL_FEATURE_PORT_HAS_PIN_CONTROL_LOCK
 /*! @brief Unlock/lock the pin control register field[15:0] */
@@ -161,13 +179,19 @@ typedef struct _port_pin_config
     uint16_t : 2;
 #endif /* FSL_FEATURE_PORT_HAS_PULL_ENABLE */
 
+#if defined(FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE) && FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE
+    uint16_t pullValueSelect : 1; /*!< Pull value select */
+#endif                            /* FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE */
+
 #if defined(FSL_FEATURE_PORT_HAS_SLEW_RATE) && FSL_FEATURE_PORT_HAS_SLEW_RATE
     uint16_t slewRate : 1; /*!< Fast/slow slew rate Configure */
 #else
     uint16_t : 1;
 #endif /* FSL_FEATURE_PORT_HAS_SLEW_RATE */
 
+#if !(defined(FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE) && FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE)
     uint16_t : 1;
+#endif /* FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE */
 
 #if defined(FSL_FEATURE_PORT_HAS_PASSIVE_FILTER) && FSL_FEATURE_PORT_HAS_PASSIVE_FILTER
     uint16_t passiveFilterEnable : 1; /*!< Passive filter enable/disable */
@@ -187,7 +211,11 @@ typedef struct _port_pin_config
     uint16_t : 1;
 #endif
 
+#if defined(FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1) && FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH
+    uint16_t driveStrength1 : 1; /*!< Normal/Double drive strength enable/disable */
+#else
     uint16_t : 1;
+#endif /* FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1 */
 
 #if defined(FSL_FEATURE_PORT_PCR_MUX_WIDTH) && (FSL_FEATURE_PORT_PCR_MUX_WIDTH == 3)
     uint16_t mux : 3; /*!< Pin mux Configure */
@@ -244,7 +272,7 @@ static inline void PORT_SetPinConfig(PORT_Type *base, uint32_t pin, const port_p
 {
     assert(config);
     uint32_t addr                = (uint32_t)&base->PCR[pin];
-    *(volatile uint16_t *)(addr) = *((const uint16_t *)config);
+    *(volatile uint16_t *)(addr) = *((const uint16_t *)(const void *)config);
 }
 
 /*!
@@ -252,7 +280,7 @@ static inline void PORT_SetPinConfig(PORT_Type *base, uint32_t pin, const port_p
  *
  * This is an example to define input pins or output pins PCR configuration.
  * @code
- * // Define a digital input pin PCR configuration
+ * Define a digital input pin PCR configuration
  * port_pin_config_t config = {
  *      kPORT_PullUp ,
  *      kPORT_PullEnable,
@@ -273,13 +301,13 @@ static inline void PORT_SetMultiplePinsConfig(PORT_Type *base, uint32_t mask, co
 {
     assert(config);
 
-    uint16_t pcrl = *((const uint16_t *)config);
+    uint16_t pcrl = *((const uint16_t *)(const void *)config);
 
-    if (mask & 0xffffU)
+    if (0U != (mask & 0xffffU))
     {
         base->GPCLR = ((mask & 0xffffU) << 16) | pcrl;
     }
-    if (mask >> 16)
+    if (0U != (mask >> 16))
     {
         base->GPCHR = (mask & 0xffff0000U) | pcrl;
     }
@@ -313,12 +341,12 @@ static inline void PORT_SetMultipleInterruptPinsConfig(PORT_Type *base, uint32_t
 
     if (mask & 0xffffU)
     {
-        base->GICLR = (config << 16) | (mask & 0xffffU);
+        base->GICLR = ((uint32_t)(config << 16)) | (mask & 0xffffU);
     }
     mask = mask >> 16;
-    if (mask)
+    if (0U != mask)
     {
-        base->GICHR = (config << 16) | (mask & 0xffffU);
+        base->GICHR = ((uint32_t)(config << 16)) | (mask & 0xffffU);
     }
 }
 #endif
@@ -385,7 +413,6 @@ static inline void PORT_SetDigitalFilterConfig(PORT_Type *base, const port_digit
 }
 
 #endif /* FSL_FEATURE_PORT_HAS_DIGITAL_FILTER */
-
 /*@}*/
 
 /*! @name Interrupt */
@@ -434,6 +461,36 @@ static inline void PORT_SetPinDriveStrength(PORT_Type *base, uint32_t pin, uint8
     base->PCR[pin] = (base->PCR[pin] & ~PORT_PCR_DSE_MASK) | PORT_PCR_DSE(strength);
 }
 #endif
+
+#if defined(FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1) && FSL_FEATURE_PORT_HAS_DRIVE_STRENGTH1
+/*!
+ * @brief Enables the port pin double drive strength.
+ *
+ * @param base      PORT peripheral base pointer.
+ * @param pin       PORT pin number.
+ * @param enable  PORT pin drive strength configuration.
+ */
+static inline void PORT_EnablePinDoubleDriveStrength(PORT_Type *base, uint32_t pin, bool enable)
+{
+    base->PCR[pin] = (base->PCR[pin] & ~PORT_PCR_DSE1_MASK) | PORT_PCR_DSE1(enable);
+}
+#endif
+
+#if defined(FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE) && FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE
+/*!
+ * @brief Configures the port pin pull value.
+ *
+ * @param base      PORT peripheral base pointer.
+ * @param pin       PORT pin number.
+ * @param value  PORT pin pull value
+ *        - #kPORT_LowPullResistor = 0U - Low internal pull resistor value is selected.
+ *        - #kPORT_HighPullResistor = 1U - High internal pull resistor value is selected.
+ */
+static inline void PORT_SetPinPullValue(PORT_Type *base, uint32_t pin, uint8_t value)
+{
+    base->PCR[pin] = (base->PCR[pin] & ~PORT_PCR_PV_MASK) | PORT_PCR_PV(value);
+}
+#endif /* FSL_FEATURE_PORT_PCR_HAS_PULL_VALUE */
 
 #if !(defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
 /*!

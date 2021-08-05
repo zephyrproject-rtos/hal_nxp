@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -248,7 +248,7 @@ void CRC_WriteData(CRC_Type *base, const uint8_t *data, size_t dataSize)
     const uint32_t *data32;
 
     /* 8-bit reads and writes till source address is aligned 4 bytes */
-    while ((dataSize) && ((uint32_t)data & 3U))
+    while ((0U != dataSize) && (0U != ((uint32_t)data & 3U)))
     {
         base->ACCESS8BIT.DATALL = *data;
         data++;
@@ -256,7 +256,7 @@ void CRC_WriteData(CRC_Type *base, const uint8_t *data, size_t dataSize)
     }
 
     /* use 32-bit reads and writes as long as possible */
-    data32 = (const uint32_t *)data;
+    data32 = (const uint32_t *)(uint32_t)data;
     while (dataSize >= sizeof(uint32_t))
     {
         base->DATA = *data32;

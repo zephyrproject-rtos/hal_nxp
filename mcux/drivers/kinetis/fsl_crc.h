@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,17 +22,22 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CRC driver version. Version 2.0.1.
+/*! @brief CRC driver version. Version 2.0.3.
  *
- * Current version: 2.0.1
+ * Current version: 2.0.3
  *
  * Change log:
- * - Version 2.0.1
- *   - move DATA and DATALL macro definition from header file to source file
+ *
+ * - Version 2.0.3
+ *   - Fix MISRA issues
+ *
  * - Version 2.0.2
  *   - Fix MISRA issues
+ *
+ * - Version 2.0.1
+ *   - move DATA and DATALL macro definition from header file to source file
  */
-#define FSL_CRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_CRC_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*@}*/
 
 #ifndef CRC_DRIVER_CUSTOM_DEFAULTS

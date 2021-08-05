@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief Driver version 2.1.11. */
-#define FSL_SDHC_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 11U))
+/*! @brief Driver version 2.1.13. */
+#define FSL_SDHC_DRIVER_VERSION (MAKE_VERSION(2U, 1U, 13U))
 /*@}*/
 
 /*! @brief Maximum block count can be set one time */
@@ -331,7 +331,7 @@ typedef enum _sdhc_card_response_type
 /*! @brief The mask for LENGTH field in ADMA1's descriptor */
 #define SDHC_ADMA1_DESCRIPTOR_LENGTH_MASK (0xFFFFU)
 /*! @brief The maximum value of LENGTH filed in ADMA1's descriptor */
-#define SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY (SDHC_ADMA1_DESCRIPTOR_LENGTH_MASK + 1U)
+#define SDHC_ADMA1_DESCRIPTOR_MAX_LENGTH_PER_ENTRY (SDHC_ADMA1_DESCRIPTOR_LENGTH_MASK + 1U - 4096U)
 
 /*! @brief _sdhc_adma1_descriptor_flag The mask for the control/status field in ADMA1 descriptor */
 enum

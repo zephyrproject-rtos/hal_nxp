@@ -21,14 +21,6 @@
  ******************************************************************************/
 
 /*!
- * @name FTFx cache version
- * @{
- */
-/*! @brief Flexnvm driver version for SDK*/
-#define FSL_FTFX_CACHE_DRIVER_VERSION (MAKE_VERSION(3, 0, 0)) /*!< Version 1.0.0. */
-/*@}*/
-
-/*!
  * @brief FTFx prefetch speculation status.
  */
 typedef struct _flash_prefetch_speculation_status
@@ -47,12 +39,9 @@ enum _ftfx_cache_ram_func_constants
 
 typedef union
 {
-    uint32_t commadAddr;     
-    void (*callFlashCommand)(FTFx_REG32_ACCESS_TYPE base,
-                            uint32_t bitMask,
-                            uint32_t bitShift,
-                            uint32_t bitValue);
-}function_bit_operation_ptr_t;
+    uint32_t commadAddr;
+    void (*callFlashCommand)(FTFx_REG32_ACCESS_TYPE base, uint32_t bitMask, uint32_t bitShift, uint32_t bitValue);
+} function_bit_operation_ptr_t;
 
 /*! @brief FTFx cache driver state information.
  *

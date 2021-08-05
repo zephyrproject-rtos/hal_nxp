@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief I2C driver version 2.0.8. */
-#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 8))
+/*! @brief I2C driver version. */
+#define FSL_I2C_DRIVER_VERSION (MAKE_VERSION(2, 0, 9))
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */

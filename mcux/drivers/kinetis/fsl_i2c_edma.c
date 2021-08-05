@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -190,9 +190,6 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
     assert(NULL != xfer);
 
     status_t result = kStatus_Success;
-#if I2C_RETRY_TIMES
-    uint32_t waitTimes = I2C_RETRY_TIMES;
-#endif
 
     if (handle->state != (uint8_t)kIdleState)
     {
@@ -234,11 +231,13 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
             return result;
         }
 
-#if I2C_RETRY_TIMES
-        while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != --waitTimes))
+#if I2C_RETRY_TIMES != 0U
+        uint32_t waitTimes = I2C_RETRY_TIMES;
+        while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != waitTimes))
         {
+            waitTimes--;
         }
-        if (waitTimes == 0)
+        if (waitTimes == 0U)
         {
             return kStatus_I2C_Timeout;
         }
@@ -284,12 +283,13 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
                 base->D = (uint8_t)((handle->transfer.subaddress) >> (8U * handle->transfer.subaddressSize));
 
                 /* Wait until data transfer complete. */
-#if I2C_RETRY_TIMES
+#if I2C_RETRY_TIMES != 0U
                 waitTimes = I2C_RETRY_TIMES;
-                while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != --waitTimes))
+                while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != waitTimes))
                 {
+                    waitTimes--;
                 }
-                if (waitTimes == 0)
+                if (waitTimes == 0U)
                 {
                     return kStatus_I2C_Timeout;
                 }
@@ -323,12 +323,13 @@ static status_t I2C_InitTransferStateMachineEDMA(I2C_Type *base,
                 }
 
                 /* Wait until data transfer complete. */
-#if I2C_RETRY_TIMES
+#if I2C_RETRY_TIMES != 0U
                 waitTimes = I2C_RETRY_TIMES;
-                while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != --waitTimes))
+                while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != waitTimes))
                 {
+                    waitTimes--;
                 }
-                if (waitTimes == 0)
+                if (waitTimes == 0U)
                 {
                     return kStatus_I2C_Timeout;
                 }
@@ -417,9 +418,6 @@ void I2C_MasterCreateEDMAHandle(I2C_Type *base,
     handle->completionCallback = callback;
     handle->userData           = userData;
 
-    /* Set the base for the handle. */
-    base = base;
-
     /* Set the handle for EDMA. */
     handle->dmaHandle = edmaHandle;
 
@@ -448,10 +446,6 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
 
     status_t result;
     uint8_t tmpReg;
-    volatile uint8_t dummy = 0;
-
-    /* Add this to avoid build warning. */
-    dummy++;
 
     /* Disable dma xfer. */
     I2C_EnableDMA(base, false);
@@ -489,7 +483,7 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
             base->C1 &= ~(uint8_t)(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK);
 
             /* Read dummy to release the bus. */
-            dummy = base->D;
+            (void)base->D;
 
             /* Enabe dma transfer. */
             I2C_EnableDMA(base, true);
@@ -518,7 +512,7 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
             base->C1 = tmpReg;
 
             /* Read dummy to release the bus. */
-            dummy = base->D;
+            (void)base->D;
         }
         else
         {
@@ -526,10 +520,11 @@ status_t I2C_MasterTransferEDMA(I2C_Type *base, i2c_master_edma_handle_t *handle
         }
 
         /* Wait until data transfer complete. */
-#if I2C_RETRY_TIMES
+#if I2C_RETRY_TIMES != 0U
         uint32_t waitTimes = I2C_RETRY_TIMES;
-        while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != --waitTimes))
+        while ((0U == (base->S & (uint8_t)kI2C_IntPendingFlag)) && (0U != waitTimes))
         {
+            waitTimes--;
         }
         if (waitTimes == 0U)
         {

@@ -21,24 +21,19 @@
  * Definitions
  ******************************************************************************/
 
-/* Component ID definition, used by tools. */
-#ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "platform.drivers.flash"
-#endif
-
 /*!
  * @name FTFx status
  * @{
  */
 /*! @brief FTFx driver status group. */
 #if defined(kStatusGroup_FlashDriver)
-#define kStatusGroupGeneric kStatusGroup_Generic
+#define kStatusGroupGeneric    kStatusGroup_Generic
 #define kStatusGroupFtfxDriver kStatusGroup_FlashDriver
 #elif defined(kStatusGroup_FLASH)
-#define kStatusGroupGeneric kStatusGroup_Generic
+#define kStatusGroupGeneric    kStatusGroup_Generic
 #define kStatusGroupFtfxDriver kStatusGroup_FLASH
 #else
-#define kStatusGroupGeneric 0
+#define kStatusGroupGeneric    0
 #define kStatusGroupFtfxDriver 1
 #endif
 
@@ -83,6 +78,8 @@ enum
         MAKE_STATUS(kStatusGroupFtfxDriver, 19), /*!< The flash property value is out of range.*/
     kStatus_FTFx_InvalidSpeculationOption =
         MAKE_STATUS(kStatusGroupFtfxDriver, 20), /*!< The option of flash prefetch speculation is invalid.*/
+    kStatus_FTFx_CommandOperationInProgress =
+        MAKE_STATUS(kStatusGroupFtfxDriver, 21), /*!< The option of flash command is processing.*/
 };
 /*@}*/
 
@@ -395,6 +392,25 @@ status_t FTFx_API_UpdateFlexnvmPartitionStatus(ftfx_config_t *config);
  * @retval #kStatus_FTFx_CommandFailure Run-time error during the command execution.
  */
 status_t FTFx_CMD_Erase(ftfx_config_t *config, uint32_t start, uint32_t lengthInBytes, uint32_t key);
+
+/*!
+ * @brief Erases the flash sectors encompassed by parameters passed into function.
+ *
+ * This function erases one flash sector size based on the start address.
+ *
+ * @param config The pointer to the storage for the driver runtime state.
+ * @param start The start address of the desired flash memory to be erased.
+ *              The start address does not need to be sector-aligned but must be word-aligned.
+ * @param key The value used to validate all flash erase APIs.
+ *
+ * @retval #kStatus_FTFx_Success API was executed successfully.
+ * @retval #kStatus_FTFx_InvalidArgument An invalid argument is provided.
+ * @retval #kStatus_FTFx_AlignmentError The parameter is not aligned with the specified baseline.
+ * @retval #kStatus_FTFx_AddressError The address is out of range.
+ * @retval #kStatus_FTFx_EraseKeyError The API erase key is invalid.
+ * @retval #kStatus_FTFx_ExecuteInRamFunctionNotReady Execute-in-RAM function is not available.
+ */
+status_t FTFx_CMD_EraseSectorNonBlocking(ftfx_config_t *config, uint32_t start, uint32_t key);
 
 /*!
  * @brief Erases entire flash
