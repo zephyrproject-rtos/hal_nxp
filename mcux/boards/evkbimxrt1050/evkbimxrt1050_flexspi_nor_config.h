@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -15,8 +14,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief XIP_BOARD driver version 2.0.0. */
-#define FSL_XIP_BOARD_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief XIP_BOARD driver version 2.0.1. */
+#define FSL_XIP_BOARD_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
 /*@}*/
 
 /* FLEXSPI memory config block related defintions */
