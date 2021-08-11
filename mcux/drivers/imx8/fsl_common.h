@@ -19,6 +19,12 @@
 #include <stddef.h>
 #endif
 
+#if defined(__aarch64__)
+typedef uint64_t phys_addr_t;
+#else
+typedef uint32_t phys_addr_t;
+#endif
+
 /*
  * For CMSIS pack RTE.
  * CMSIS pack RTE generates "RTC_Components.h" which contains the statements
