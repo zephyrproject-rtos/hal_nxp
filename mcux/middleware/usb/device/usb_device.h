@@ -9,6 +9,8 @@
 #ifndef __USB_DEVICE_H__
 #define __USB_DEVICE_H__
 
+#include "usb.h"
+
 /*!
  * @addtogroup usb_device_driver
  * @{
@@ -35,6 +37,9 @@ typedef enum _usb_device_status
     kUSB_DeviceStatusBusResume,      /*!< Bus resume */
     kUSB_DeviceStatusRemoteWakeup,   /*!< Remote wakeup state */
     kUSB_DeviceStatusBusSleepResume, /*!< Bus resume */
+#if defined(USB_DEVICE_CONFIG_GET_SOF_COUNT) && (USB_DEVICE_CONFIG_GET_SOF_COUNT > 0U)
+    kUSB_DeviceStatusGetCurrentFrameCount, /*!< Get current frame count */
+#endif
 } usb_device_status_t;
 
 /*! @brief Defines USB 2.0 device state */
@@ -68,8 +73,33 @@ typedef enum _usb_endpoint_status
 /*! @brief  USB endpoint mask */
 #define USB_ENDPOINT_NUMBER_MASK (0x0FU)
 
-/*! @brief Default invalid value or the endpoint callback length of cancelled transfer */
+/*! @brief uninitialized value */
 #define USB_UNINITIALIZED_VAL_32 (0xFFFFFFFFU)
+
+/*! @brief the endpoint callback length of cancelled transfer */
+#define USB_CANCELLED_TRANSFER_LENGTH (0xFFFFFFFFU)
+
+/*! @brief invalid tranfer buffer addresss */
+#define USB_INVALID_TRANSFER_BUFFER (0xFFFFFFFEU)
+
+#if defined(USB_DEVICE_CONFIG_GET_SOF_COUNT) && (USB_DEVICE_CONFIG_GET_SOF_COUNT > 0U)
+/* USB device IP3511 max frame count */
+#define USB_DEVICE_IP3511_MAX_FRAME_COUNT (0x000007FFU)
+/* USB device EHCI max frame count */
+#define USB_DEVICE_EHCI_MAX_FRAME_COUNT (0x00003FFFU)
+/* USB device EHCI max frame count */
+#define USB_DEVICE_KHCI_MAX_FRAME_COUNT (0x000007FFU)
+
+/*! @brief usb device controller max frame count */
+#if ((defined(USB_DEVICE_CONFIG_KHCI)) && (USB_DEVICE_CONFIG_KHCI > 0U))
+#define USB_DEVICE_MAX_FRAME_COUNT (USB_DEVICE_KHCI_MAX_FRAME_COUNT)
+#elif (((defined(USB_DEVICE_CONFIG_LPCIP3511FS)) && (USB_DEVICE_CONFIG_LPCIP3511FS > 0U)) || \
+       ((defined(USB_DEVICE_CONFIG_LPCIP3511HS)) && (USB_DEVICE_CONFIG_LPCIP3511HS > 0U)))
+#define USB_DEVICE_MAX_FRAME_COUNT (USB_DEVICE_IP3511_MAX_FRAME_COUNT)
+#elif ((defined(USB_DEVICE_CONFIG_EHCI)) && (USB_DEVICE_CONFIG_EHCI > 0U))
+#define USB_DEVICE_MAX_FRAME_COUNT (USB_DEVICE_EHCI_MAX_FRAME_COUNT)
+#endif
+#endif
 
 /*! @brief Available common EVENT types in device callback */
 typedef enum _usb_device_event
@@ -605,7 +635,8 @@ extern void USB_DeviceDwc3IsrFunction(void *deviceHandle);
 extern void USB_DeviceGetVersion(uint32_t *version);
 
 #if ((defined(USB_DEVICE_CONFIG_REMOTE_WAKEUP)) && (USB_DEVICE_CONFIG_REMOTE_WAKEUP > 0U)) || \
-    ((defined(FSL_FEATURE_SOC_USB_ANALOG_COUNT) && (FSL_FEATURE_SOC_USB_ANALOG_COUNT > 0U)))
+    (((defined(USB_DEVICE_CONFIG_CHARGER_DETECT) && (USB_DEVICE_CONFIG_CHARGER_DETECT > 0U)) && \
+      (defined(FSL_FEATURE_SOC_USB_ANALOG_COUNT) && (FSL_FEATURE_SOC_USB_ANALOG_COUNT > 0U))))
 /*!
  * @brief Update the hardware tick.
  *

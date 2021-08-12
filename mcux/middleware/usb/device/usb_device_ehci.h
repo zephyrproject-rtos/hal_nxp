@@ -18,8 +18,6 @@
  * Definitions
  ******************************************************************************/
 
-#define USB_DEVICE_CONFIG_ENDPOINTS (DT_INST_PROP(0, num_bidir_endpoints))
-
 /*! @brief The maximum value of ISO type maximum packet size for HS in USB specification 2.0 */
 #define USB_DEVICE_MAX_HS_ISO_MAX_PACKET_SIZE (1024U)
 
