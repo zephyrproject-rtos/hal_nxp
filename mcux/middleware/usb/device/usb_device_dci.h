@@ -76,6 +76,9 @@ typedef enum _usb_device_control_type
 #endif
     kUSB_DeviceControlPreSetDeviceAddress, /*!< Pre set device address */
     kUSB_DeviceControlUpdateHwTick,        /*!< update hardware tick */
+#if defined(USB_DEVICE_CONFIG_GET_SOF_COUNT) && (USB_DEVICE_CONFIG_GET_SOF_COUNT > 0U)
+    kUSB_DeviceControlGetCurrentFrameCount, /*!< Get current frame count */
+#endif
 } usb_device_control_type_t;
 
 /*! @brief USB device controller initialization function typedef */
