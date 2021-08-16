@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#define DT_DRV_COMPAT nxp_kinetis_usbd
+#define DT_DRV_COMPAT nxp_mcux_usbd
 
 #include "usb_dc_mcux.h"
 
