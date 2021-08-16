@@ -1671,13 +1671,17 @@ usb_status_t USB_DeviceEhciControl(usb_device_controller_handle ehciHandle, usb_
                 }
             }
             break;
-        case kUSB_DeviceControlSetDeviceAddress:
+        case kUSB_DeviceControlPreSetDeviceAddress:
             if (NULL != param)
             {
                 temp8 = (uint8_t *)param;
-                ehciState->registerBase->DEVICEADDR = (((uint32_t)(*temp8)) << USBHS_DEVICEADDR_USBADR_SHIFT);
+                ehciState->registerBase->DEVICEADDR =
+                    ((((uint32_t)(*temp8)) << USBHS_DEVICEADDR_USBADR_SHIFT) | USBHS_DEVICEADDR_USBADRA_MASK);
                 error = kStatus_USB_Success;
             }
+            break;
+        case kUSB_DeviceControlSetDeviceAddress:
+            error = kStatus_USB_Success;
             break;
         case kUSB_DeviceControlGetSynchFrame:
             break;
