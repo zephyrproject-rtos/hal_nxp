@@ -101,3 +101,5 @@ Patch List:
 
    * Add support for LPC's Flexcomm spi driver to discard Rx by providing NULL Rx buffer.
 
+   * Align the CTimer Clock Get API on RT685 with LPC series
+
