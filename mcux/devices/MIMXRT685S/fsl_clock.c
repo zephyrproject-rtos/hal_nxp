@@ -654,7 +654,7 @@ uint32_t CLOCK_GetFlexCommClkFreq(uint32_t id)
  *  param   id    : ctimer index to get frequency.
  *  return Frequency of Ctimer Clock
  */
-uint32_t CLOCK_GetCtimerClkFreq(uint32_t id)
+uint32_t CLOCK_GetCTimerClkFreq(uint32_t id)
 {
     uint32_t freq = 0U;
 
