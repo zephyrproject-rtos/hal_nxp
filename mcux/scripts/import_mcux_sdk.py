@@ -77,7 +77,7 @@ common_device_files = [
     'fsl_romapi.c', 'fsl_romapi.h',
 ]
 
-rt1176_device_files = [
+rt11xx_device_files = [
     'cm4',
     'cm7',
     'fsl_acmp.c', 'fsl_acmp.h',
@@ -121,7 +121,7 @@ def import_sdk(directory, device_drivers_pattern = ""):
         #   1) Device headers: devices/<device>/fsl_device_registers --> mcux/devices/<device>/
         #   2) Device specific drivers: devices/<device>/drivers --> mxux/devices/<device>/
         #   3) Special driver files that are unique to the device but found in
-        #      the SDK drivers folder. (looking at you rt1176)
+        #      the SDK drivers folder. (looking at you rt11xx)
         #      devices/<device>/drivers -->mcux/devices/<device>
         #   4) Shared drivers: devices/<device>/drivers --> mcux/drivers
         #   5) XIP drivers: devices/<device>/XIP --> mcux/drivers/imx
@@ -147,17 +147,17 @@ def import_sdk(directory, device_drivers_pattern = ""):
         print('Importing {} common special drivers to {}'.format(device, device_dst))
         copy_files(common_tmp, device_dst)
 
-        if device == 'MIMXRT1176':
-            rt1176_tmp = []
+        if re.search('MIMXRT11..', device):
+            rt11xx_tmp = []
             for i in range(len(shared_drivers) - 1, -1, -1):
                 tfile = os.path.basename(shared_drivers[i])
-                if tfile in rt1176_device_files:
-                   rt1176_tmp.append(shared_drivers[i])
+                if tfile in rt11xx_device_files:
+                   rt11xx_tmp.append(shared_drivers[i])
                    # clean up list of shared driver files so we don't end up
                    # copying the driver file to two locations
                    del shared_drivers[i]
             print('Importing {} special drivers to {}'.format(device, device_dst))
-            copy_files(rt1176_tmp, device_dst)
+            copy_files(rt11xx_tmp, device_dst)
 
         print('Importing {} family shared drivers to {}'.format(family, shared_dst))
         #print('   driver_src: {},\n   driver_pattern: {},\n   shared_dst: {}'.format(drivers_src, drivers_pattern, shared_dst))
@@ -188,7 +188,7 @@ def import_sdk(directory, device_drivers_pattern = ""):
         copy_files(xip_config, board_dst)
 
         dcd_src = os.path.join(board_src, 'demo_apps', 'hello_world')
-        if board == 'evkmimxrt1170':
+        if re.search('evkmimxrt11.0', board):
             dcd_src = os.path.join(dcd_src, 'cm7')
         dcd_pattern = "dcd\.[ch]"
         dcd_files, _ = get_files(dcd_src, dcd_pattern)
@@ -197,7 +197,7 @@ def import_sdk(directory, device_drivers_pattern = ""):
         copy_files(dcd_files, board_dst)
 
         board_src = os.path.join(board_src, 'demo_apps', 'hello_world')
-        if board == 'evkmimxrt1170':
+        if re.search('evkmimxrt11.0', board):
             board_src = os.path.join(board_src, 'cm7')
         board_pattern = "clock_config.h|board.h"
         board_files, _ = get_files(board_src, board_pattern)
@@ -205,7 +205,7 @@ def import_sdk(directory, device_drivers_pattern = ""):
         print('Importing {} board files to {}'.format(board, board_dst))
         copy_files(board_files, board_dst)
 
-        if board == 'evkmimxrt1170':
+        if re.search('evkmimxrt11.0', board):
             board_src = os.path.join(directory, 'boards', board, 'display_examples', 'mipi_dsi_compliant_test', 'cm7')
             board_pattern = "display_support\.[ch]"
             board_files, _ = get_files(board_src, board_pattern)
