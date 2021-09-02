@@ -31,6 +31,7 @@ Status:
    MIMXRT1061	SDK 2.10.0 (2021-07-15)
    MIMXRT1062	SDK 2.10.0 (2021-07-15)
    MIMXRT1064	SDK 2.10.0 (2021-07-15)
+   MIMXRT1160	SDK 2.10.0 (2021-07-15)
    MIMXRT1170	SDK 2.10.0 (2021-07-15)
    MK22F51212	SDK 2.10.0 (2021-07-15)
    MK64F12	SDK 2.10.0 (2021-07-15)
@@ -107,3 +108,6 @@ Patch List:
    * Fix the number of FlexCAN mailboxes in the MKE1xF CAN_Type structs.
 
    * Fix issue of ignoring the nack signal by mistake on LPI2C
+
+   * Correct PLL Post Divider constant values for RT1160
+
