@@ -103,3 +103,4 @@ Patch List:
 
    * Align the CTimer Clock Get API on RT685 with LPC series
 
+   * Fix the number of FlexCAN mailboxes in the MKE1xF CAN_Type structs.
