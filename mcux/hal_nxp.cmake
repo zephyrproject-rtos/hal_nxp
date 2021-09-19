@@ -209,6 +209,9 @@ elseif(CONFIG_BOARD_MIMXRT1024_EVK)
   set(MCUX_BOARD evkmimxrt1024)
 elseif(CONFIG_BOARD_MIMXRT1050_EVK OR CONFIG_BOARD_MIMXRT1050_EVK_QSPI)
   set(MCUX_BOARD evkbimxrt1050)
+if (CONFIG_BOARD_MIMXRT1050_EVK_QSPI)
+  set(MCUX_BOARD_MOD _qspi)
+endif()
 elseif(CONFIG_BOARD_MIMXRT1060_EVK OR CONFIG_BOARD_MIMXRT1060_EVK_HYPERFLASH)
   set(MCUX_BOARD evkmimxrt1060)
 elseif(CONFIG_BOARD_MIMXRT1064_EVK)
@@ -228,7 +231,7 @@ if (${MCUX_BOARD} MATCHES "evk[bm]imxrt1[0-9][0-9][0-9]")
   list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/boards/${MCUX_BOARD}/xip
   )
-  include_ifdef(CONFIG_BOOT_FLEXSPI_NOR driver_xip_board_${MCUX_BOARD})
+  include_ifdef(CONFIG_BOOT_FLEXSPI_NOR driver_xip_board_${MCUX_BOARD}${MCUX_BOARD_MOD})
   zephyr_library_sources_ifdef(CONFIG_DEVICE_CONFIGURATION_DATA mcux-sdk/boards/${MCUX_BOARD}/dcd.c)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/boards/${MCUX_BOARD})
 
