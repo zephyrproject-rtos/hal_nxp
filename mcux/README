@@ -21,6 +21,7 @@ Status:
    LPC55S69	SDK 2.10.0 (2021-07-15)
    MIMX8MM	SDK 2.8.0 (2020-07-21)
    MIMX8MM-CA53	SDK 2.10.0 (2021-07-15)
+   MIMX8MQ	SDK 2.10.0 (2021-07-15)
    MIMXRT685	SDK 2.10.0 (2021-07-15)
    MIMXRT1010	SDK 2.10.0 (2021-07-15)
    MIMXRT1015	SDK 2.10.0 (2021-07-15)
@@ -102,3 +103,6 @@ Patch List:
 
    * Add support for LPC's Flexcomm spi driver to discard Rx by providing NULL Rx buffer.
 
+   * Align the CTimer Clock Get API on RT685 with LPC series
+
+   * Fix the number of FlexCAN mailboxes in the MKE1xF CAN_Type structs.
