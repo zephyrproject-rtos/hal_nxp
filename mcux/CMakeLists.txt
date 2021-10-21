@@ -1,3 +1,4 @@
+set(MCUX_SDK_PROJECT_NAME ${ZEPHYR_CURRENT_LIBRARY})
 # Translate the SoC name and part number into the mcux device and cpu
 # name respectively.
 string(TOUPPER ${CONFIG_SOC} MCUX_DEVICE)
@@ -43,7 +44,13 @@ else()
   set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER})
 endif()
 
-zephyr_include_directories(devices/${MCUX_DEVICE})
+zephyr_include_directories(mcux-sdk/devices/${MCUX_DEVICE})
+zephyr_include_directories(mcux-sdk/devices/${MCUX_DEVICE}/drivers)
+
+#include device specific drivers
+if (${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]")
+  zephyr_include_directories(mcux-sdk/devices/${MCUX_DEVICE}/xip)
+endif()
 
 # The mcux uses the cpu name to expose SoC-specific features of a
 # given peripheral. For example, the UART peripheral may be
@@ -55,35 +62,25 @@ zephyr_compile_definitions(${MCUX_CPU})
 # Build mcux device-specific objects. Although it is not normal
 # practice, drilling down like this avoids the need for repetitive
 # build scripts for every mcux device.
-zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_clock.c)
+zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_clock.c)
 if (${MCUX_DEVICE} MATCHES "LPC|MIMXRT6")
-  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_power.c)
-  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_reset.c)
+  zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_power.c)
+  zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_reset.c)
 
   if ((${MCUX_DEVICE} MATCHES "MIMXRT6") AND (CONFIG_PM))
-    zephyr_code_relocate(devices/${MCUX_DEVICE}/fsl_power.c SRAM)
+    zephyr_code_relocate(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_power.c SRAM)
   endif()
 endif()
 
 # RT11xx SOC initialization file requires additional drivers, import them
 if (${MCUX_DEVICE} MATCHES "MIMXRT11")
-  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_romapi.c)
-  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_pmu.c)
-  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_dcdc.c)
-  zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_anatop_ai.c)
-  if ("${MCUX_DEVICE}" MATCHES "MIMXRT11[0-9]6" AND (CONFIG_CPU_CORTEX_M4))
-    zephyr_include_directories(devices/${MCUX_DEVICE}/cm4/)
-    zephyr_library_sources_ifdef(
-      CONFIG_HAS_MCUX_CACHE
-      devices/${MCUX_DEVICE}/cm4/fsl_cache.c
-    )
-  endif()
+  zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_romapi.c)
+  zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_pmu.c)
+  zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_dcdc.c)
+  zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_anatop_ai.c)
 endif()
 
-# Build mcux drivers that can be used for multiple SoC's.
-add_subdirectory(boards)
 add_subdirectory(components)
-add_subdirectory(drivers)
 
 add_subdirectory_ifdef(
   CONFIG_USB_DEVICE_DRIVER
@@ -95,7 +92,9 @@ add_subdirectory_ifdef(
   middleware/wireless/framework_5.3.3
   )
 
+#Include Entry cmake component
+include(${CMAKE_CURRENT_LIST_DIR}/hal_nxp.cmake)
 enable_language(C ASM)
 
-zephyr_library_sources_ifdef(CONFIG_SOC_LPC54114_M4 devices/${MCUX_DEVICE}/gcc/startup_LPC54114_cm4.S)
-zephyr_library_sources_ifdef(CONFIG_SOC_MIMXRT685S_CM33 devices/${MCUX_DEVICE}/system_MIMXRT685S_cm33.c)
+zephyr_library_sources_ifdef(CONFIG_SOC_LPC54114_M4 mcux-sdk/devices/${MCUX_DEVICE}/gcc/startup_LPC54114_cm4.S)
+zephyr_library_sources_ifdef(CONFIG_SOC_MIMXRT685S_CM33 mcux-sdk/devices/${MCUX_DEVICE}/system_MIMXRT685S_cm33.c)
