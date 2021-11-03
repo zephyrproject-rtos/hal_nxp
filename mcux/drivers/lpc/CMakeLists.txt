@@ -8,6 +8,7 @@ zephyr_include_directories(.)
 
 zephyr_library_sources(fsl_common.c)
 zephyr_library_sources(fsl_common_arm.c)
+zephyr_library_sources_ifdef(CONFIG_ADC_LPC_ADC			fsl_adc.c)
 zephyr_library_sources_ifdef(CONFIG_ADC_MCUX_LPADC		fsl_lpadc.c)
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_CTIMER		fsl_ctimer.c)
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_LPC_RTC	fsl_rtc.c)
