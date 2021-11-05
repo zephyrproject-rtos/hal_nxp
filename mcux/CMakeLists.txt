@@ -68,7 +68,7 @@ if (${MCUX_DEVICE} MATCHES "MIMXRT11")
   zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_pmu.c)
   zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_dcdc.c)
   zephyr_library_sources(devices/${MCUX_DEVICE}/fsl_anatop_ai.c)
-  if ("${MCUX_DEVICE}" MATCHES "MIMXRT11[0-9]6_CM4")
+  if ("${MCUX_DEVICE}" MATCHES "MIMXRT11[0-9]6" AND (CONFIG_CPU_CORTEX_M4))
     zephyr_include_directories(devices/${MCUX_DEVICE}/cm4/)
     zephyr_library_sources_ifdef(
       CONFIG_HAS_MCUX_CACHE
