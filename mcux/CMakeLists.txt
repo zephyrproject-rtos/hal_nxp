@@ -80,6 +80,8 @@ if (${MCUX_DEVICE} MATCHES "MIMXRT11")
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_anatop_ai.c)
 endif()
 
+zephyr_library_sources_ifdef(CONFIG_HAS_MCUX_AUDIOMIX mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_audiomix.c)
+
 add_subdirectory(components)
 
 add_subdirectory_ifdef(
