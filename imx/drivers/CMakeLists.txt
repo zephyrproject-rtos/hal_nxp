@@ -12,6 +12,7 @@ zephyr_library_sources(
   ccm_imx6sx.c
   ccm_analog_imx6sx.c
 )
+zephyr_library_sources_ifdef(CONFIG_ADC_VF610   adc_imx6sx.c)
 endif()
 
 zephyr_library_sources_ifdef(CONFIG_COUNTER_IMX_EPIT	epit.c)
