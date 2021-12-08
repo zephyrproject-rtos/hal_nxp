@@ -43,6 +43,8 @@ zephyr_library_compile_definitions_ifdef(
 )
 
 include(driver_common)
+include(device_system)
+
 zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/common)
 
 #include shared drivers
