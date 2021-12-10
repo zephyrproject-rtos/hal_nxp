@@ -43,7 +43,20 @@ zephyr_library_compile_definitions_ifdef(
 )
 
 include(driver_common)
+
+#Include system_xxx file for MXRT platforms
+#This can be extended to other SoC series if needed
+if (CONFIG_SOC_MIMXRT1166_CM4)
+include(device_system_MIMXRT1166_cm4)
+elseif (CONFIG_SOC_MIMXRT1166_CM7)
+include(device_system_MIMXRT1166_cm7)
+elseif (CONFIG_SOC_MIMXRT1176_CM4)
+include(device_system_MIMXRT1176_cm4)
+elseif (CONFIG_SOC_MIMXRT1176_CM7)
+include(device_system_MIMXRT1176_cm7)
+elseif (CONFIG_SOC_SERIES_IMX_RT)
 include(device_system)
+endif()
 
 zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/common)
 
