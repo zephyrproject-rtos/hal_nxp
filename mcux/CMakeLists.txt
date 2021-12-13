@@ -25,6 +25,9 @@ elseif("${MCUX_DEVICE}" STREQUAL "LPC55S69_CPU1")
   set(MCUX_DEVICE LPC55S69)
 elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT1052")
   string(REGEX REPLACE "(.*)[AB]$" "CPU_\\1B" MCUX_CPU ${CONFIG_SOC_PART_NUMBER})
+elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT595S_CM33")
+  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm33)
+  set(MCUX_DEVICE MIMXRT595S)
 elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT685S_CM33")
   set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm33)
   set(MCUX_DEVICE MIMXRT685S)
@@ -63,7 +66,7 @@ zephyr_compile_definitions(${MCUX_CPU})
 # practice, drilling down like this avoids the need for repetitive
 # build scripts for every mcux device.
 zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_clock.c)
-if (${MCUX_DEVICE} MATCHES "LPC|MIMXRT6")
+if (${MCUX_DEVICE} MATCHES "LPC|MIMXRT6|MIMXRT5")
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_power.c)
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_reset.c)
 
