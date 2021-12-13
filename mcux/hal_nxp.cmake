@@ -186,6 +186,7 @@ endif()
 #include macro definition
 zephyr_compile_definitions_ifdef(CONFIG_NXP_IMX_RT_BOOT_HEADER XIP_BOOT_HEADER_ENABLE=1)
 zephyr_compile_definitions_ifdef(CONFIG_NXP_IMX_RT6XX_BOOT_HEADER BOOT_HEADER_ENABLE=1)
+zephyr_compile_definitions_ifdef(CONFIG_NXP_IMX_RT5XX_BOOT_HEADER BOOT_HEADER_ENABLE=1)
 zephyr_compile_definitions_ifdef(CONFIG_DEVICE_CONFIGURATION_DATA XIP_BOOT_HEADER_DCD_ENABLE=1)
 zephyr_compile_definitions(BOARD_FLASH_SIZE=CONFIG_FLASH_SIZE*1024)
 
@@ -203,6 +204,8 @@ elseif(CONFIG_BOARD_MIMXRT1060_EVK OR CONFIG_BOARD_MIMXRT1060_EVK_HYPERFLASH)
   set(MCUX_BOARD evkmimxrt1060)
 elseif(CONFIG_BOARD_MIMXRT1064_EVK)
   set(MCUX_BOARD evkmimxrt1064)
+elseif(CONFIG_BOARD_MIMXRT595_EVK)
+  set(MCUX_BOARD evkmimxrt595)
 elseif(CONFIG_BOARD_MIMXRT685_EVK)
   set(MCUX_BOARD evkmimxrt685)
 elseif(CONFIG_BOARD_MIMXRT1170_EVK_CM7 OR CONFIG_BOARD_MIMXRT1170_EVK_CM4)
@@ -226,6 +229,14 @@ elseif (${MCUX_BOARD} MATCHES "evkmimxrt6[0-9][0-9]")
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/boards/${MCUX_BOARD}/flash_config
   )
   include_ifdef(CONFIG_NXP_IMX_RT6XX_BOOT_HEADER    driver_flash_config)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/boards/${MCUX_BOARD})
+
+elseif (${MCUX_BOARD} MATCHES "evkmimxrt5[0-9][0-9]")
+
+  list(APPEND CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/boards/${MCUX_BOARD}/flash_config
+  )
+  include_ifdef(CONFIG_NXP_IMX_RT5XX_BOOT_HEADER    driver_flash_config)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/boards/${MCUX_BOARD})
 
 endif()
