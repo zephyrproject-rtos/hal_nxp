@@ -149,6 +149,7 @@ if (${MCUX_DEVICE} MATCHES "MIMXRT11[0-9][0-9]")
 elseif (${MCUX_DEVICE} MATCHES "MIMXRT10[0-9][0-9]")
    include_driver_ifdef(CONFIG_PM_MCUX_GPC		gpc_1		driver_gpc_1)
    include_driver_ifdef(CONFIG_PM_MCUX_DCDC		dcdc_1		driver_dcdc_1)
+   include_driver_ifdef(CONFIG_PM_MCUX_PMU		pmu		driver_pmu)
 endif()
 
 if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_kinetis")
