@@ -144,6 +144,13 @@ elseif((${MCUX_DEVICE} MATCHES "MK(28|66)") OR (${MCUX_DEVICE} MATCHES "MKE(14|1
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/lmem	driver_cache_lmem)
 endif()
 
+if (${MCUX_DEVICE} MATCHES "MIMXRT11[0-9][0-9]")
+   include_driver_ifdef(CONFIG_PM_MCUX_GPC		gpc_3		driver_gpc_3)
+elseif (${MCUX_DEVICE} MATCHES "MIMXRT10[0-9][0-9]")
+   include_driver_ifdef(CONFIG_PM_MCUX_GPC		gpc_1		driver_gpc_1)
+   include_driver_ifdef(CONFIG_PM_MCUX_DCDC		dcdc_1		driver_dcdc_1)
+endif()
+
 if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_kinetis")
 
   include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		flash		driver_flash)
