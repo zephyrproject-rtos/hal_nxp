@@ -74,3 +74,5 @@ Patch List:
       mcux/mcux-sdk/devices/MIMXRT685S/MIMXRT685S_cm33.h
       mcux/mcux-sdk/devices/MIMXRT685S/MIMXRT685S_dsp.h
 
+   * Avoid including board.h from flash_config.c file in evkmimxrt595 board folder. The following file are touched by this commit:
+      mcux/mcux-sdk/boards/evkmimxrt595/flash_config/flash_config.c  
