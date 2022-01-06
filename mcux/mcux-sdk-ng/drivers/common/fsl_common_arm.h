@@ -474,15 +474,21 @@ _Pragma("diag_suppress=Pm120")
 #endif
 
 #elif (defined(__GNUC__)) || defined(DOXYGEN_OUTPUT)
+#if defined(__ARM_ARCH_8A__) /* This macro is ARMv8-A specific */
+#define MCUX_CS "//"
+#else
+#define MCUX_CS "@"
+#endif
+
 /* For GCC, when the non-cacheable section is required, please define "__STARTUP_INITIALIZE_NONCACHEDATA"
  * in your projects to make sure the non-cacheable section variables will be initialized in system startup.
  */
 #define AT_NONCACHEABLE_SECTION_INIT(var) __attribute__((section("NonCacheable.init"))) var
 #define AT_NONCACHEABLE_SECTION_ALIGN_INIT(var, alignbytes) \
     __attribute__((section("NonCacheable.init"))) var __attribute__((aligned(alignbytes)))
-#define AT_NONCACHEABLE_SECTION(var) __attribute__((section("NonCacheable,\"aw\",%nobits @"))) var
+#define AT_NONCACHEABLE_SECTION(var) __attribute__((section("NonCacheable,\"aw\",%nobits " MCUX_CS))) var
 #define AT_NONCACHEABLE_SECTION_ALIGN(var, alignbytes) \
-    __attribute__((section("NonCacheable,\"aw\",%nobits @"))) var __attribute__((aligned(alignbytes)))
+    __attribute__((section("NonCacheable,\"aw\",%nobits " MCUX_CS))) var __attribute__((aligned(alignbytes)))
 #else
 #error Toolchain not supported.
 #endif
