@@ -75,4 +75,8 @@ Patch List:
       mcux/mcux-sdk/devices/MIMXRT685S/MIMXRT685S_dsp.h
 
    * Avoid including board.h from flash_config.c file in evkmimxrt595 board folder. The following file are touched by this commit:
-      mcux/mcux-sdk/boards/evkmimxrt595/flash_config/flash_config.c  
+      mcux/mcux-sdk/boards/evkmimxrt595/flash_config/flash_config.c
+
+   * mcux: Add support for mimxrt1050_evk_qspi. The following files were added by this commit:
+      mcux/mcux-sdk/boards/evkbimxrt1050/xip/driver_xip_board_evkbimxrt1050_qspi.cmake
+      mcux/mcux-sdk/boards/evkbimxrt1050/xip/evkbimxrt1050_flexspi_nor_qspi_config.c
