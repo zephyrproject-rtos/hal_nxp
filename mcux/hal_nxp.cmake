@@ -54,7 +54,7 @@ elseif (CONFIG_SOC_MIMXRT1176_CM4)
 include(device_system_MIMXRT1176_cm4)
 elseif (CONFIG_SOC_MIMXRT1176_CM7)
 include(device_system_MIMXRT1176_cm7)
-elseif (CONFIG_SOC_SERIES_IMX_RT)
+elseif (CONFIG_SOC_SERIES_IMX_RT OR CONFIG_SOC_SERIES_IMX_RT6XX OR CONFIG_SOC_SERIES_IMX_RT5XX)
 include(device_system)
 endif()
 
