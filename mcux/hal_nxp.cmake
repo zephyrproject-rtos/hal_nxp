@@ -135,6 +135,7 @@ include_driver_ifdef(CONFIG_COUNTER_MCUX_SNVS		snvs_hp		driver_snvs_hp)
 include_driver_ifdef(CONFIG_COUNTER_MCUX_SNVS_SRTC	snvs_lp		driver_snvs_lp)
 include_driver_ifdef(CONFIG_COUNTER_MCUX_LPTMR		lptmr		driver_lptmr)
 include_driver_ifdef(CONFIG_MCUX_LPTMR_TIMER		lptmr		driver_lptmr)
+include_driver_ifdef(CONFIG_IMX_USDHC			usdhc		driver_usdhc)
 
 if ((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4)))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv7-m7	driver_cache_armv7_m7)
