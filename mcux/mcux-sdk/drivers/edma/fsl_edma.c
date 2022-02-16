@@ -54,6 +54,9 @@ static const IRQn_Type s_edmaIRQNumber[][FSL_FEATURE_EDMA_MODULE_CHANNEL] = DMA_
 /*! @brief Pointers to transfer handle for each EDMA channel. */
 static edma_handle_t *s_EDMAHandle[FSL_FEATURE_EDMA_MODULE_CHANNEL * FSL_FEATURE_SOC_EDMA_COUNT];
 
+// temporary workaround for eDMA driver issue
+uint8_t g_total_hack_SAI_TX_channel = 0xFF;
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -1209,6 +1212,19 @@ status_t EDMA_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t
                     If go to this, means the previous transfer finished, and the DONE bit is set.
                     So shall configure TCD registers.
                 */
+		
+		/* found issue where previous transfer was not finished (had
+		 * just started) and driver gets to this point.  Instead of 
+		 * loading registers with currentTcd config, just need to 
+		 * set the ESG bit and clear DREQ bit 
+		 */
+		 if(handle->channel == g_total_hack_SAI_TX_channel) {
+			while(tcdRegs->CSR & DMA_CSR_DONE_MASK);
+			csr = tcdRegs->CSR | DMA_CSR_ESG_MASK;
+			csr &= ~(uint16_t)DMA_CSR_DREQ_MASK;
+			tcdRegs->CSR = csr;
+			return kStatus_Success;
+		}
             }
             else if (tcdRegs->DLAST_SGA != 0UL)
             {
