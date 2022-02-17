@@ -146,6 +146,7 @@ endif()
 
 if (${MCUX_DEVICE} MATCHES "MIMXRT11[0-9][0-9]")
    include_driver_ifdef(CONFIG_PM_MCUX_GPC		gpc_3		driver_gpc_3)
+   include_ifdef(CONFIG_HWINFO_MCUX_SRC_V2		driver_soc_src)
 elseif (${MCUX_DEVICE} MATCHES "MIMXRT10[0-9][0-9]")
    include_driver_ifdef(CONFIG_PM_MCUX_GPC		gpc_1		driver_gpc_1)
    include_driver_ifdef(CONFIG_PM_MCUX_DCDC		dcdc_1		driver_dcdc_1)
