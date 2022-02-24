@@ -365,7 +365,7 @@ typedef struct _sai_frame_sync
     bool frameSyncEarly;    /*!< TRUE is frame sync assert one bit before the first bit of frame
                                 FALSE is frame sync assert with the first bit of the frame */
 
-#if defined(FSL_FEATURE_SAI_HAS_FRAME_SYNC_ON_DEMAND) && FSL_FEATURE_SAI_HAS_FRAME_SYNC_ON_DEMAND
+#if defined(FSL_FEATURE_SAI_HAS_ON_DEMAND_MODE) && FSL_FEATURE_SAI_HAS_ON_DEMAND_MODE
     bool frameSyncGenerateOnDemand; /*!< internal frame sync is generated when FIFO waring flag is clear */
 #endif
 

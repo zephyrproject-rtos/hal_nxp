@@ -80,3 +80,7 @@ Patch List:
    * mcux: Add support for mimxrt1050_evk_qspi. The following files were added by this commit:
       mcux/mcux-sdk/boards/evkbimxrt1050/xip/driver_xip_board_evkbimxrt1050_qspi.cmake
       mcux/mcux-sdk/boards/evkbimxrt1050/xip/evkbimxrt1050_flexspi_nor_qspi_config.c
+
+   * Fix macro name for I2s/SAI driver FSL_FEATURE_SAI_HAS_ON_DEMAND_MODE.  The following file are touched by this commit:
+      mcux/mcux-sdk/drivers/sai/fsl_sai.c
+      mcux/mcux-sdk/drivers/sai/fsl_sai.h
