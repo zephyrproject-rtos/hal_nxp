@@ -363,7 +363,7 @@ static void SAI_GetCommonConfig(sai_transceiver_t *config,
     /* frame sync default configurations */
     config->frameSync.frameSyncWidth = (uint8_t)bitWidth;
     config->frameSync.frameSyncEarly = true;
-#if defined(FSL_FEATURE_SAI_HAS_FRAME_SYNC_ON_DEMAND) && FSL_FEATURE_SAI_HAS_FRAME_SYNC_ON_DEMAND
+#if defined(FSL_FEATURE_SAI_HAS_ON_DEMAND_MODE) && FSL_FEATURE_SAI_HAS_ON_DEMAND_MODE
     config->frameSync.frameSyncGenerateOnDemand = false;
 #endif
     config->frameSync.frameSyncPolarity = kSAI_PolarityActiveLow;
@@ -1318,7 +1318,7 @@ void SAI_TxSetFrameSyncConfig(I2S_Type *base, sai_master_slave_t masterSlave, sa
 
     tcr4 &= ~(I2S_TCR4_FSE_MASK | I2S_TCR4_FSP_MASK | I2S_TCR4_FSD_MASK | I2S_TCR4_SYWD_MASK);
 
-#if defined(FSL_FEATURE_SAI_HAS_FRAME_SYNC_ON_DEMAND) && FSL_FEATURE_SAI_HAS_FRAME_SYNC_ON_DEMAND
+#if defined(FSL_FEATURE_SAI_HAS_ON_DEMAND_MODE) && FSL_FEATURE_SAI_HAS_ON_DEMAND_MODE
     tcr4 &= ~I2S_TCR4_ONDEM_MASK;
     tcr4 |= I2S_TCR4_ONDEM(config->frameSyncGenerateOnDemand);
 #endif
@@ -1347,7 +1347,7 @@ void SAI_RxSetFrameSyncConfig(I2S_Type *base, sai_master_slave_t masterSlave, sa
 
     rcr4 &= ~(I2S_RCR4_FSE_MASK | I2S_RCR4_FSP_MASK | I2S_RCR4_FSD_MASK | I2S_RCR4_SYWD_MASK);
 
-#if defined(FSL_FEATURE_SAI_HAS_FRAME_SYNC_ON_DEMAND) && FSL_FEATURE_SAI_HAS_FRAME_SYNC_ON_DEMAND
+#if defined(FSL_FEATURE_SAI_HAS_ON_DEMAND_MODE) && FSL_FEATURE_SAI_HAS_ON_DEMAND_MODE
     rcr4 &= ~I2S_RCR4_ONDEM_MASK;
     rcr4 |= I2S_RCR4_ONDEM(config->frameSyncGenerateOnDemand);
 #endif
