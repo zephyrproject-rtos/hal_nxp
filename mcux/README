@@ -84,3 +84,8 @@ Patch List:
    * Fix macro name for I2s/SAI driver FSL_FEATURE_SAI_HAS_ON_DEMAND_MODE.  The following file are touched by this commit:
       mcux/mcux-sdk/drivers/sai/fsl_sai.c
       mcux/mcux-sdk/drivers/sai/fsl_sai.h
+
+   * mcux: edma: fix issues with scatter/gather mode.  These files are updated driver revisions from MCUX SDK,
+     and also add support for FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET.  The following file are touched by this commit:
+      mcux/mcux-sdk/drivers/edma/fsl_edma.c
+      mcux/mcux-sdk/drivers/edma/fsl_edma.h

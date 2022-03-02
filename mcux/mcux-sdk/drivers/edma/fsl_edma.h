@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -23,7 +23,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief eDMA driver version */
-#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 2)) /*!< Version 2.4.2. */
+#define FSL_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 3)) /*!< Version 2.4.3. */
 /*@}*/
 
 /*! @brief Compute the offset unit from DCHPRI3 */
@@ -563,7 +563,7 @@ void EDMA_TcdReset(edma_tcd_t *tcd);
  * @brief Configures the eDMA TCD transfer attribute.
  *
  * The TCD is a transfer control descriptor. The content of the TCD is the same as the hardware TCD registers.
- * The STCD is used in the scatter-gather mode.
+ * The TCD is used in the scatter-gather mode.
  * This function configures the TCD transfer attribute, including source address, destination address,
  * transfer size, address offset, and so on. It also configures the scatter gather feature if the
  * user supplies the next TCD address.
