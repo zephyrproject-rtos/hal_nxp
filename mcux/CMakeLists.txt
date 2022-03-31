@@ -55,6 +55,11 @@ if (${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]")
   zephyr_include_directories(mcux-sdk/devices/${MCUX_DEVICE}/xip)
 endif()
 
+#include CMSIS of mcux-sdk for Cortex-A
+if (CONFIG_CPU_CORTEX_A)
+  zephyr_include_directories(mcux-sdk/CMSIS/Core_A/Include)
+endif()
+
 # The mcux uses the cpu name to expose SoC-specific features of a
 # given peripheral. For example, the UART peripheral may be
 # instantiated with/without a hardware FIFO, and the size of that FIFO
