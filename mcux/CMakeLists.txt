@@ -102,3 +102,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/hal_nxp.cmake)
 enable_language(C ASM)
 
 zephyr_library_sources_ifdef(CONFIG_SOC_LPC54114_M4 mcux-sdk/devices/${MCUX_DEVICE}/gcc/startup_LPC54114_cm4.S)
+
+zephyr_linker_sources(RWDATA quick_access.ld)
+
