@@ -17,6 +17,11 @@
  * the pin based on the devicetree properties set
  */
 
+/*
+ * NOTE: file fixup performed by rt_fixup_pinmux.py
+ * to correct missing daisy register values
+ */
+
 &iomuxc {
 	/omit-if-no-ref/ iomuxc_gpio_ad_b0_00_acmp1_in4: IOMUXC_GPIO_AD_B0_00_ACMP1_IN4 {
 		pinmux = <0x401f80bc 5 0x0 0 0x401f82ac>;
@@ -432,7 +437,7 @@
 		pinmux = <0x401f80ec 5 0x0 0 0x401f82dc>;
 	};
 	/omit-if-no-ref/ iomuxc_gpio_ad_b0_12_arm_nmi: IOMUXC_GPIO_AD_B0_12_ARM_NMI {
-		pinmux = <0x401f80ec 7 0x0 0 0x401f82dc>;
+		pinmux = <0x401f80ec 7 0x401f8568 0 0x401f82dc>;
 	};
 	/omit-if-no-ref/ iomuxc_gpio_ad_b0_12_ccm_pmic_rdy: IOMUXC_GPIO_AD_B0_12_CCM_PMIC_RDY {
 		pinmux = <0x401f80ec 1 0x401f83fc 1 0x401f82dc>;
@@ -1265,7 +1270,7 @@
 		pinmux = <0x401f8138 7 0x0 0 0x401f8328>;
 	};
 	/omit-if-no-ref/ iomuxc_gpio_ad_b1_15_lpspi3_sck: IOMUXC_GPIO_AD_B1_15_LPSPI3_SCK {
-		pinmux = <0x401f8138 2 0x0 0 0x401f8328>;
+		pinmux = <0x401f8138 2 0x401f8510 1 0x401f8328>;
 	};
 	/omit-if-no-ref/ iomuxc_gpio_ad_b1_15_sai1_tx_sync: IOMUXC_GPIO_AD_B1_15_SAI1_TX_SYNC {
 		pinmux = <0x401f8138 3 0x401f85ac 1 0x401f8328>;
@@ -3964,7 +3969,7 @@
 		pinmux = <0x0 0 0x0 0 0x400a800c>;
 	};
 	/omit-if-no-ref/ iomuxc_snvs_wakeup_arm_nmi: IOMUXC_SNVS_WAKEUP_ARM_NMI {
-		pinmux = <0x400a8000 7 0x0 0 0x400a8018>;
+		pinmux = <0x400a8000 7 0x401f8568 1 0x400a8018>;
 	};
 	/omit-if-no-ref/ iomuxc_snvs_wakeup_gpio5_io00: IOMUXC_SNVS_WAKEUP_GPIO5_IO00 {
 		pinmux = <0x400a8000 5 0x0 0 0x400a8018>;
