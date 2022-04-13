@@ -5,5 +5,4 @@
  */
 
 . = ALIGN(4);
-KEEP(*(CodeQuickAccess))
 KEEP(*(DataQuickAccess))

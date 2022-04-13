@@ -69,10 +69,6 @@ zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_clock.c)
 if (${MCUX_DEVICE} MATCHES "LPC|MIMXRT6|MIMXRT5")
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_power.c)
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_reset.c)
-
-  if ((${MCUX_DEVICE} MATCHES "MIMXRT6") AND (CONFIG_PM))
-    zephyr_code_relocate(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_power.c SRAM)
-  endif()
 endif()
 
 # RT11xx SOC initialization file requires additional drivers, import them
@@ -103,5 +99,8 @@ enable_language(C ASM)
 
 zephyr_library_sources_ifdef(CONFIG_SOC_LPC54114_M4 mcux-sdk/devices/${MCUX_DEVICE}/gcc/startup_LPC54114_cm4.S)
 
-zephyr_linker_sources(RWDATA quick_access.ld)
-
+zephyr_linker_sources(RWDATA quick_access_data.ld)
+zephyr_linker_sources_ifdef(CONFIG_ARCH_HAS_RAMFUNC_SUPPORT
+  RAMFUNC_SECTION
+  quick_access_code.ld
+)
