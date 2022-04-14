@@ -61,7 +61,6 @@ endif()
 zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/common)
 
 #include shared drivers
-include_driver_ifdef(CONFIG_ADC_LPC_ADC		lpc_adc		driver_lpc_adc)
 include_driver_ifdef(CONFIG_ADC_MCUX_LPADC		lpadc		driver_lpadc)
 include_driver_ifdef(CONFIG_COUNTER_MCUX_CTIMER		ctimer		driver_ctimer)
 include_driver_ifdef(CONFIG_COUNTER_MCUX_LPC_RTC	lpc_rtc		driver_lpc_rtc)
