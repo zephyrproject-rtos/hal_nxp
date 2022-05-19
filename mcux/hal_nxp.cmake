@@ -140,6 +140,7 @@ include_driver_ifdef(CONFIG_IMX_USDHC			usdhc		driver_usdhc)
 include_driver_ifdef(CONFIG_MIPI_DSI_MCUX		mipi_dsi_split	driver_mipi_dsi_split)
 include_driver_ifdef(CONFIG_ADC_LPC_ADC			lpc_adc		driver_lpc_adc)
 include_driver_ifdef(CONFIG_MCUX_SDIF			sdif		driver_sdif)
+include_driver_ifdef(CONFIG_ADC_MCUX_ETC		adc_etc		driver_adc_etc)
 
 if ((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4)))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv7-m7	driver_cache_armv7_m7)
