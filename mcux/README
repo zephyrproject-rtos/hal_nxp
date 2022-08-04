@@ -58,29 +58,7 @@ Patch List:
 
    * Add USB device controller drivers, the drivers are based on MCUXpresso SDK release tag REL_2.5.0_REL9_RFP_RC3_7_1.
 
-   * Avoid including board.h header file in the devices source file. The following files that are touched by this commit:
-      mcux/mcux-sdk/boards/evkmimxrt685/flash_config/flash_config.c
-      mcux/mcux-sdk/devices/MIMXRT1011/xip/fsl_flexspi_nor_boot.h
-      mcux/mcux-sdk/devices/MIMXRT1015/xip/fsl_flexspi_nor_boot.h
-      mcux/mcux-sdk/devices/MIMXRT1021/xip/fsl_flexspi_nor_boot.h
-      mcux/mcux-sdk/devices/MIMXRT1024/xip/fsl_flexspi_nor_boot.h
-      mcux/mcux-sdk/devices/MIMXRT1052/xip/fsl_flexspi_nor_boot.h
-      mcux/mcux-sdk/devices/MIMXRT1062/xip/fsl_flexspi_nor_boot.h
-      mcux/mcux-sdk/devices/MIMXRT1064/xip/fsl_flexspi_nor_boot.h
-      mcux/mcux-sdk/devices/MIMXRT1166/xip/fsl_flexspi_nor_boot.h
-      mcux/mcux-sdk/devices/MIMXRT1176/xip/fsl_flexspi_nor_boot.h
-
    * Rename GPIO INPUTMUX_PINT_SEL on MIMXRT685. The following files that are touched by this commit:
       mcux/mcux-sdk/devices/MIMXRT685S/MIMXRT685S_cm33.h
       mcux/mcux-sdk/devices/MIMXRT685S/MIMXRT685S_dsp.h
 
-   * Avoid including board.h from flash_config.c file in evkmimxrt595 board folder. The following file are touched by this commit:
-      mcux/mcux-sdk/boards/evkmimxrt595/flash_config/flash_config.c
-
-   * mcux: Add support for mimxrt1050_evk_qspi. The following files were added by this commit:
-      mcux/mcux-sdk/boards/evkbimxrt1050/xip/driver_xip_board_evkbimxrt1050_qspi.cmake
-      mcux/mcux-sdk/boards/evkbimxrt1050/xip/evkbimxrt1050_flexspi_nor_qspi_config.c
-
-   * Fix macro name for I2s/SAI driver FSL_FEATURE_SAI_HAS_ON_DEMAND_MODE.  The following file are touched by this commit:
-      mcux/mcux-sdk/drivers/sai/fsl_sai.c
-      mcux/mcux-sdk/drivers/sai/fsl_sai.h
