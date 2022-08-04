@@ -182,7 +182,17 @@ if ((${MCUX_DEVICE} MATCHES "LPC8[0-9][0-9]") OR (${MCUX_DEVICE} MATCHES "LPC5(1
   include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		iap		driver_iap)
   include_driver_ifdef(CONFIG_ENTROPY_MCUX_RNG		iap		driver_rng)
 elseif (${MCUX_DEVICE} MATCHES "LPC55")
-  include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		iap1		driver_iap1)
+  if (${MCUX_DEVICE} MATCHES "LPC55S*3")
+   if(${CONFIG_SOC_FLASH_MCUX})
+      list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/LPC55S36/drivers
+      )
+      zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/LPC55S36/drivers/flash)
+      include(driver_flashiap)
+    endif()
+  else()
+    include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		iap1		driver_iap1)
+  endif()
   include_driver_ifdef(CONFIG_ENTROPY_MCUX_RNG		rng_1		driver_rng_1)
 endif()
 
