@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -89,6 +89,44 @@ static void SAI_SetMasterClockDivider(I2S_Type *base, uint32_t mclk_Hz, uint32_t
  * @param base SAI base pointer.
  */
 static uint32_t SAI_GetInstance(I2S_Type *base);
+
+/*!
+ * @brief sends a piece of data in non-blocking way.
+ *
+ * @param base SAI base pointer
+ * @param channel start channel number.
+ * @param channelMask enabled channels mask.
+ * @param endChannel end channel numbers.
+ * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
+ * @param buffer Pointer to the data to be written.
+ * @param size Bytes to be written.
+ */
+static void SAI_WriteNonBlocking(I2S_Type *base,
+                                 uint32_t channel,
+                                 uint32_t channelMask,
+                                 uint32_t endChannel,
+                                 uint8_t bitWidth,
+                                 uint8_t *buffer,
+                                 uint32_t size);
+
+/*!
+ * @brief Receive a piece of data in non-blocking way.
+ *
+ * @param base SAI base pointer
+ * @param channel start channel number.
+ * @param channelMask enabled channels mask.
+ * @param endChannel end channel numbers.
+ * @param bitWidth How many bits in a audio word, usually 8/16/24/32 bits.
+ * @param buffer Pointer to the data to be read.
+ * @param size Bytes to be read.
+ */
+static void SAI_ReadNonBlocking(I2S_Type *base,
+                                uint32_t channel,
+                                uint32_t channelMask,
+                                uint32_t endChannel,
+                                uint8_t bitWidth,
+                                uint8_t *buffer,
+                                uint32_t size);
 
 /*!
  * @brief Get classic I2S mode configurations.
@@ -236,7 +274,7 @@ static uint32_t SAI_GetInstance(I2S_Type *base)
     return instance;
 }
 
-void SAI_WriteNonBlocking(I2S_Type *base,
+static void SAI_WriteNonBlocking(I2S_Type *base,
                                  uint32_t channel,
                                  uint32_t channelMask,
                                  uint32_t endChannel,
@@ -269,7 +307,7 @@ void SAI_WriteNonBlocking(I2S_Type *base,
     }
 }
 
-void SAI_ReadNonBlocking(I2S_Type *base,
+static void SAI_ReadNonBlocking(I2S_Type *base,
                                 uint32_t channel,
                                 uint32_t channelMask,
                                 uint32_t endChannel,
@@ -827,11 +865,11 @@ void SAI_RxEnable(I2S_Type *base, bool enable)
  * This function will also clear all the error flags such as FIFO error, sync error etc.
  *
  * param base SAI base pointer
- * param type Reset type, FIFO reset or software reset
+ * param resetType Reset type, FIFO reset or software reset
  */
-void SAI_TxSoftwareReset(I2S_Type *base, sai_reset_type_t type)
+void SAI_TxSoftwareReset(I2S_Type *base, sai_reset_type_t resetType)
 {
-    base->TCSR |= (uint32_t)type;
+    base->TCSR |= (uint32_t)resetType;
 
     /* Clear the software reset */
     base->TCSR &= ~I2S_TCSR_SR_MASK;
@@ -846,11 +884,11 @@ void SAI_TxSoftwareReset(I2S_Type *base, sai_reset_type_t type)
  * This function will also clear all the error flags such as FIFO error, sync error etc.
  *
  * param base SAI base pointer
- * param type Reset type, FIFO reset or software reset
+ * param resetType Reset type, FIFO reset or software reset
  */
-void SAI_RxSoftwareReset(I2S_Type *base, sai_reset_type_t type)
+void SAI_RxSoftwareReset(I2S_Type *base, sai_reset_type_t resetType)
 {
-    base->RCSR |= (uint32_t)type;
+    base->RCSR |= (uint32_t)resetType;
 
     /* Clear the software reset */
     base->RCSR &= ~I2S_RCSR_SR_MASK;
