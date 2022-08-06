@@ -128,7 +128,7 @@ extern "C"{
 #include "Uart_MemMap.h"
 
 /** @brief Array of UART driver runtime state structures */
-Linflexd_Uart_Ip_StateStructureType Linflexd_Uart_Ip_apStateStructure[LINFLEXD_UART_IP_NUMBER_OF_INSTANCES];
+VAR_SEC_NOCACHE(Linflexd_Uart_Ip_apStateStructure) Linflexd_Uart_Ip_StateStructureType Linflexd_Uart_Ip_apStateStructure[LINFLEXD_UART_IP_NUMBER_OF_INSTANCES];
 
 #define UART_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Uart_MemMap.h"
