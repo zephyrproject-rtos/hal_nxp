@@ -326,6 +326,18 @@ extern "C"{
 */
 #define FUNC_P2VAR(rettype, ptrclass, memclass) ptrclass rettype * memclass
  
+/**
+ * @brief Compiler abstraction for allocating variables to nocache section
+ */
+#ifdef CONFIG_NOCACHE_MEMORY
+#ifndef STRINGIFY
+#define STRINGIFY(x) #x
+#endif /* STRINGIFY */
+#define VAR_SEC_NOCACHE(name) __attribute__((section(".nocache." STRINGIFY(name))))
+#else
+#define VAR_SEC_NOCACHE(name)
+#endif /* CONFIG_NOCACHE_MEMORY */
+
 /*==================================================================================================
 *                                             ENUMS
 ==================================================================================================*/

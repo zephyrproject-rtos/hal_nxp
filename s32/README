@@ -39,3 +39,4 @@ License Link:
 
 Patch List:
    - Change includes from "zephyr.h" to <zephyr/kernel.h>
+   - Relocate uninitialized non-cacheable variables into .nocache section defined by Zephyr.
