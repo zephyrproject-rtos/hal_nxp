@@ -1,0 +1,41 @@
+NXP S32 HAL
+###########
+
+Origin:
+   NXP Real-Time Drivers (RTD)
+   https://www.nxp.com/design/automotive-software-and-tools/real-time-drivers-rtd:AUTOMOTIVE-RTD
+
+Purpose:
+   Provides device header files and bare metal peripheral drivers for NXP S32 SoCs.
+   Zephyr shim drivers are built on top of these imported drivers to adapt the S32
+   drivers APIs to Zephyr APIs.
+
+Description:
+   The "drivers" directory contains a sub-set of NXP S32 Real-Time Drivers used to enable
+   Zephyr support on NXP S32 SoCs. The "soc" directory contains SoC-specific default
+   configuration for these drivers, used at driver initialization time. The configuration
+   was generated with NXP S32 Design Studio for S32 Platform.
+   Care should be taken to retain local changes to the driver files that are documented
+   in Patch List section of this document.
+
+Dependencies:
+   CMSIS header files
+
+URL:
+   https://www.nxp.com/design/automotive-software-and-tools/real-time-drivers-rtd:AUTOMOTIVE-RTD
+   https://www.nxp.com/design/software/development-software/s32-design-studio-ide/s32-design-studio-for-s32-platform:S32DS-S32PLATFORM
+
+Commit:
+   N/A
+
+Maintained-by:
+   External
+
+License:
+   BSD-3-Clause
+
+License Link:
+   https://spdx.org/licenses/BSD-3-Clause.html
+
+Patch List:
+   N/A
