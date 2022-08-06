@@ -1,0 +1,230 @@
+/*
+ * Copyright 1997-2016 Freescale Semiconductor, Inc.
+ * Copyright 2016-2022 NXP
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+/*!
+ * @file S32Z27_ROUND_ROBIN_ARBITER.h
+ * @version 1.7
+ * @date 2022-03-16
+ * @brief Peripheral Access Layer for S32Z27_ROUND_ROBIN_ARBITER
+ *
+ * This file contains register definitions and macros for easy access to their
+ * bit fields.
+ *
+ * This file assumes LITTLE endian system.
+ */
+
+/**
+* @page misra_violations MISRA-C:2012 violations
+*
+* @section [global]
+* Violates MISRA 2012 Advisory Rule 2.3, local typedef not referenced
+* The SoC header defines typedef for all modules.
+*
+* @section [global]
+* Violates MISRA 2012 Advisory Rule 2.5, local macro not referenced
+* The SoC header defines macros for all modules and registers.
+*
+* @section [global]
+* Violates MISRA 2012 Advisory Directive 4.9, Function-like macro
+* These are generated macros used for accessing the bit-fields from registers.
+*
+* @section [global]
+* Violates MISRA 2012 Required Rule 5.1, identifier clash
+* The supported compilers use more than 31 significant characters for identifiers.
+*
+* @section [global]
+* Violates MISRA 2012 Required Rule 5.2, identifier clash
+* The supported compilers use more than 31 significant characters for identifiers.
+*
+* @section [global]
+* Violates MISRA 2012 Required Rule 5.4, identifier clash
+* The supported compilers use more than 31 significant characters for identifiers.
+*
+* @section [global]
+* Violates MISRA 2012 Required Rule 5.5, identifier clash
+* The supported compilers use more than 31 significant characters for identifiers.
+*
+* @section [global]
+* Violates MISRA 2012 Required Rule 21.1, defined macro '__I' is reserved to the compiler
+* This type qualifier is needed to ensure correct I/O access and addressing.
+*/
+
+/* Prevention from multiple including the same memory map */
+#if !defined(S32Z27_ROUND_ROBIN_ARBITER_H_)  /* Check if memory map has not been already included */
+#define S32Z27_ROUND_ROBIN_ARBITER_H_
+
+#include "S32Z27_COMMON.h"
+
+/* ----------------------------------------------------------------------------
+   -- ROUND_ROBIN_ARBITER Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup ROUND_ROBIN_ARBITER_Peripheral_Access_Layer ROUND_ROBIN_ARBITER Peripheral Access Layer
+ * @{
+ */
+
+/** ROUND_ROBIN_ARBITER - Register Layout Typedef */
+typedef struct {
+  __IO uint32_t RRA_SLT_LO;                        /**< RRA Slot LO Register, offset: 0x0 */
+  __IO uint32_t RRA_SLT_HI;                        /**< RRA Slot HI Register, offset: 0x4 */
+  __IO uint32_t RRA_SLT_PRI;                       /**< RRA Slot Priority Register, offset: 0x8 */
+  __IO uint32_t RRA_WEIGHT_LO;                     /**< RRA Weight LO Register, offset: 0xC */
+  __IO uint32_t RRA_WEIGHT_HI;                     /**< RRA Weight HI Register, offset: 0x10 */
+} ROUND_ROBIN_ARBITER_Type, *ROUND_ROBIN_ARBITER_MemMapPtr;
+
+/** Number of instances of the ROUND_ROBIN_ARBITER module. */
+#define ROUND_ROBIN_ARBITER_INSTANCE_COUNT       (1u)
+
+/* ROUND_ROBIN_ARBITER - Peripheral instance base addresses */
+/** Peripheral CEVA_SPF2__ROUND_ROBIN_ARBITER base address */
+#define IP_CEVA_SPF2__ROUND_ROBIN_ARBITER_BASE   (0x24400FA0u)
+/** Peripheral CEVA_SPF2__ROUND_ROBIN_ARBITER base pointer */
+#define IP_CEVA_SPF2__ROUND_ROBIN_ARBITER        ((ROUND_ROBIN_ARBITER_Type *)IP_CEVA_SPF2__ROUND_ROBIN_ARBITER_BASE)
+/** Array initializer of ROUND_ROBIN_ARBITER peripheral base addresses */
+#define IP_ROUND_ROBIN_ARBITER_BASE_ADDRS        { IP_CEVA_SPF2__ROUND_ROBIN_ARBITER_BASE }
+/** Array initializer of ROUND_ROBIN_ARBITER peripheral base pointers */
+#define IP_ROUND_ROBIN_ARBITER_BASE_PTRS         { IP_CEVA_SPF2__ROUND_ROBIN_ARBITER }
+
+/* ----------------------------------------------------------------------------
+   -- ROUND_ROBIN_ARBITER Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup ROUND_ROBIN_ARBITER_Register_Masks ROUND_ROBIN_ARBITER Register Masks
+ * @{
+ */
+
+/*! @name RRA_SLT_LO - RRA Slot LO Register */
+/*! @{ */
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT0_REQM_MASK (0xFU)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT0_REQM_SHIFT (0U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT0_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT0_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT0_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT0_REQM_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT1_REQM_MASK (0xF0U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT1_REQM_SHIFT (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT1_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT1_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT1_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT1_REQM_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT2_REQM_MASK (0xF00U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT2_REQM_SHIFT (8U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT2_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT2_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT2_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT2_REQM_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT3_REQM_MASK (0xF000U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT3_REQM_SHIFT (12U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT3_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT3_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT3_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT3_REQM_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT4_REQM_MASK (0xF0000U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT4_REQM_SHIFT (16U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT4_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT4_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT4_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT4_REQM_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT5_REQM_MASK (0xF00000U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT5_REQM_SHIFT (20U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT5_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT5_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT5_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT5_REQM_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT6_REQM_MASK (0xF000000U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT6_REQM_SHIFT (24U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT6_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT6_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT6_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT6_REQM_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT7_REQM_MASK (0xF0000000U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT7_REQM_SHIFT (28U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT7_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT7_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT7_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_LO_SLOT7_REQM_MASK)
+/*! @} */
+
+/*! @name RRA_SLT_HI - RRA Slot HI Register */
+/*! @{ */
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT8_REQM_MASK (0xFU)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT8_REQM_SHIFT (0U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT8_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT8_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT8_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT8_REQM_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT9_REQM_MASK (0xF0U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT9_REQM_SHIFT (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT9_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT9_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT9_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT9_REQM_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT10_REQM_MASK (0xF00U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT10_REQM_SHIFT (8U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT10_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT10_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT10_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT10_REQM_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT11_REQM_MASK (0xF000U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT11_REQM_SHIFT (12U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT11_REQM_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT11_REQM(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT11_REQM_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_HI_SLOT11_REQM_MASK)
+/*! @} */
+
+/*! @name RRA_SLT_PRI - RRA Slot Priority Register */
+/*! @{ */
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION1_FIRST_SLOT_MASK (0xFU)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION1_FIRST_SLOT_SHIFT (0U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION1_FIRST_SLOT_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION1_FIRST_SLOT(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION1_FIRST_SLOT_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION1_FIRST_SLOT_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION2_FIRST_SLOT_MASK (0xF0U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION2_FIRST_SLOT_SHIFT (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION2_FIRST_SLOT_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION2_FIRST_SLOT(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION2_FIRST_SLOT_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION2_FIRST_SLOT_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION3_FIRST_SLOT_MASK (0xF00U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION3_FIRST_SLOT_SHIFT (8U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION3_FIRST_SLOT_WIDTH (4U)
+#define ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION3_FIRST_SLOT(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION3_FIRST_SLOT_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_SLT_PRI_RRA_RGION3_FIRST_SLOT_MASK)
+/*! @} */
+
+/*! @name RRA_WEIGHT_LO - RRA Weight LO Register */
+/*! @{ */
+
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_DDMA_RD_WEIGHT_MASK (0x7U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_DDMA_RD_WEIGHT_SHIFT (0U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_DDMA_RD_WEIGHT_WIDTH (3U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_DDMA_RD_WEIGHT(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_DDMA_RD_WEIGHT_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_DDMA_RD_WEIGHT_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_EDAP_RD_WEIGHT_MASK (0x70U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_EDAP_RD_WEIGHT_SHIFT (4U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_EDAP_RD_WEIGHT_WIDTH (3U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_EDAP_RD_WEIGHT(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_EDAP_RD_WEIGHT_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_EDAP_RD_WEIGHT_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_QMAN_WEIGHT_MASK (0x700U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_QMAN_WEIGHT_SHIFT (8U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_QMAN_WEIGHT_WIDTH (3U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_QMAN_WEIGHT(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_QMAN_WEIGHT_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_WEIGHT_LO_QMAN_WEIGHT_MASK)
+/*! @} */
+
+/*! @name RRA_WEIGHT_HI - RRA Weight HI Register */
+/*! @{ */
+
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_DDMA_WR_WEIGHT_MASK (0x70U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_DDMA_WR_WEIGHT_SHIFT (4U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_DDMA_WR_WEIGHT_WIDTH (3U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_DDMA_WR_WEIGHT(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_DDMA_WR_WEIGHT_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_DDMA_WR_WEIGHT_MASK)
+
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_EDAP_WR_WEIGHT_MASK (0x7000U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_EDAP_WR_WEIGHT_SHIFT (12U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_EDAP_WR_WEIGHT_WIDTH (3U)
+#define ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_EDAP_WR_WEIGHT(x) (((uint32_t)(((uint32_t)(x)) << ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_EDAP_WR_WEIGHT_SHIFT)) & ROUND_ROBIN_ARBITER_RRA_WEIGHT_HI_EDAP_WR_WEIGHT_MASK)
+/*! @} */
+
+/*!
+ * @}
+ */ /* end of group ROUND_ROBIN_ARBITER_Register_Masks */
+
+/*!
+ * @}
+ */ /* end of group ROUND_ROBIN_ARBITER_Peripheral_Access_Layer */
+
+#endif  /* #if !defined(S32Z27_ROUND_ROBIN_ARBITER_H_) */
