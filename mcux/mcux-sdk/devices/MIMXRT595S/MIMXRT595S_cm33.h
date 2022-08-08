@@ -29063,7 +29063,7 @@ typedef struct {
 /*! @} */
 
 /* The count of INPUTMUX_PINT_SEL */
-#define INPUTMUX_PINT_SEL_COUNT                  (8U)
+#define INPUTMUX_PINTSEL_COUNT                  (8U)
 
 /*! @name DSP_INT_SEL - Fusion DSP Interrupt Input Multiplexer */
 /*! @{ */
