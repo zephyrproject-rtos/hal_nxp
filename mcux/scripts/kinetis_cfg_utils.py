@@ -18,7 +18,7 @@ import logging
 PIN = collections.namedtuple('PIN', ['PERIPH', 'NAME_PART', 'SIGNAL', 'PORT',
                                      'PIN', 'CH', 'MUX_FUNC'])
 
-NAMESPACES = {'mex': 'http://mcuxpresso.nxp.com/XSD/mex_configuration_10'}
+NAMESPACES = {'mex': 'http://mcuxpresso.nxp.com/XSD/mex_configuration_12'}
 
 class MUXOption:
     """
@@ -326,7 +326,7 @@ class PinGroup:
         Get string representation of the object
         """
         return "PinGroup(%s)" % (self._name)
-    
+
     def __eq__(self, obj):
         """
         return true if two objects have the same pin group name
@@ -353,7 +353,7 @@ class PinGroup:
         @param props: property set
         """
         return self._pin_groups[props]
-    
+
     def get_description(self):
         """
         Get description of the pin group, if present. If no description present,
@@ -516,7 +516,7 @@ class NXPSdkUtil:
             f" * {self._copyright}\n"
             " */\n"
             "\n")
-        
+
         # Notes on the below macro:
         # Port values range from 'A'-'E', so we store them with 4 bits,
         # with port A being 0, B=1,...
@@ -637,8 +637,12 @@ def get_processor_name(mexfile):
     """
     try:
         config_tree = ET.parse(mexfile)
-        return config_tree.getroot().find('mex:common/mex:processor',
-            NAMESPACES).text
+        processor = config_tree.getroot().find('mex:common/mex:processor',
+            NAMESPACES)
+        if processor is None:
+            raise RuntimeError("Cannot locate processor name in MEX file. "
+                "Are you using v12 of the MCUXpresso configuration tools?")
+        return processor.text
     except ET.ParseError:
         print(f"Malformed XML tree {mexfile}")
         return None
