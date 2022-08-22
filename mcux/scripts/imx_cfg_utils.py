@@ -53,6 +53,15 @@ class Peripheral:
                 for register_def in register_xml.findall('register'):
                     reg = Register(register_def)
                     self._registers[reg.get_name()] = reg
+                # Parse register template definitions to locate remaining
+                # Register definitions
+                reg_templates = {}
+                for template in register_xml.findall('reg_template'):
+                    reg_templates[template.get('rid')] = template
+                for reg_instance in register_xml.findall('reg_instance'):
+                    reg = TemplatedRegister(reg_templates[reg_instance.get('rid')], reg_instance)
+                    self._registers[reg.get_name()] = reg
+
             except ET.ParseError:
                 raise RuntimeError(f"Register file {self._register_file} is not valid XML")
         elif self._register_file is None:
@@ -154,6 +163,47 @@ class Register:
         """
         return self._bit_field_map[bit_field][value]['description']
 
+
+class TemplatedRegister(Register):
+    """
+    Subclass of standard register, that implements support for templated
+    register definitions in a manner compatible with the standard register
+    class instance.
+    """
+    def __init__(self, template_xml, instance_xml):
+        """
+        Constructs a register instance based off the register template XML
+        and register instance XML
+        """
+        self._values = instance_xml.get('vals').split(' ')
+        self._name = self._sub_template(template_xml.attrib['name'])
+        self._offset = int(self._sub_template(template_xml.attrib['offset']), 0)
+        # Build mapping of register field values to descriptions
+        self._bit_field_map = {}
+        for bit_field in template_xml.findall('bit_field'):
+            bit_field_map = {}
+            for bit_field_value in bit_field.findall('bit_field_value'):
+                # Some iMX8 fields have a ?, remove that
+                bit_field_str = bit_field_value.attrib['value'].strip('?')
+                field_val = int(bit_field_str, 0)
+                bit_field_map[field_val] = bit_field_value.attrib
+            # Save bit field mapping
+            self._bit_field_map[bit_field.attrib['name']] = bit_field_map
+
+    def _sub_template(self, string):
+        """
+        Uses string substitution to replace references to template parameter
+        in string with value in a value array. For instance,
+        SW_PAD_CTL_PAD_GPIO_EMC_{1} would become SW_PAD_CTL_PAD_GPIO_EMC_15
+        if values[1] == 15
+        """
+        for i in range(len(self._values)):
+            string = re.sub(r'\{' + re.escape(str(i)) + r'\}',
+                self._values[i], string)
+        return string
+
+
+
 class SignalPin:
     """
     Internal class representing a signal on the SOC
@@ -168,7 +218,7 @@ class SignalPin:
         self._name = pin.attrib['name']
         self._properties = self._get_pin_properties(pin.find('functional_properties'))
         self._iomuxc_options = {}
-        
+
         cfg_addr = 0x0
         pad_name = self._name
         for prop in pin.findall('functional_properties/functional_property'):
@@ -421,20 +471,20 @@ class IOMUXOption:
         Get the mux reg for this iomux option
         """
         return self._mux
-    
+
     def is_gpio(self):
         """
         return True if this iomux option is for a GPIO
         """
         return self._is_gpio
-    
+
     def gpio(self):
         """
         Get iomux gpio port and pin as a tuple of (port,pin)
         only valid if is_gpio is True
         """
         return self._gpio
-     
+
     def get_mux_val(self):
         """
         Get the mux value for this iomux option
@@ -464,19 +514,19 @@ class IOMUXOption:
         Return true if iomux option has associated GPR configuration requirement
         """
         return self._has_gpr
-    
+
     def gpr_reg(self):
         """
         If has_gpr() is true, return GPR register address
         """
         return self._gpr_reg
-    
+
     def gpr_shift(self):
         """
         If has_gpr() is true, return shift on GPR register value
         """
         return self._gpr_shift
-    
+
     def gpr_val(self):
         """
         If has_gpr() is true, return GPR register value
@@ -585,7 +635,7 @@ class PinGroup:
         Get pin group name
         """
         return self._name
-    
+
     def _imx_props_to_dts(self, props, defaults):
         """
         Remap dictionary of property names from NXP defined values to
@@ -762,7 +812,7 @@ class NXPSdkUtil:
     """
     Class for iMX.RT configuration file parser for Zephyr
     """
-    def __init__(self, cfg_root, copyright_header = "", log_level = logging.ERROR):
+    def __init__(self, cfg_root, copyright_header = "", log_level = logging.DEBUG):
         """
         Initialize SDK utilities.
         Providing a signal_configuration.xml file as well as an iomuxc.h file will enable
@@ -949,7 +999,7 @@ class NXPSdkUtil:
                     dts_node += "\t};\n"
                     # Write iomuxc dts node to file
                     soc_dtsi.write(dts_node)
-            soc_dtsi.write("};\n\n") 
+            soc_dtsi.write("};\n\n")
 
     def write_pinctrl_groups(self, mexfile, outputfile):
         """
