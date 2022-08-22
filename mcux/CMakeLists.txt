@@ -104,3 +104,7 @@ zephyr_linker_sources_ifdef(CONFIG_ARCH_HAS_RAMFUNC_SUPPORT
   RAMFUNC_SECTION
   quick_access_code.ld
 )
+zephyr_linker_sources_ifdef(CONFIG_NOCACHE_MEMORY
+  NOCACHE_SECTION
+  nocache.ld
+)
