@@ -1,0 +1,7 @@
+Release Name: USB
+Release Version: 2.8.2
+Outgoing License: BSD-3-Clause
+License File: COPYING-BSD-3
+Format: source code
+Description: Description: NXP USB stack. This is a version of the USB stack that has been integrated with the MCUXpresso SDK.
+Origin: NXP (BSD-3-Clause)
