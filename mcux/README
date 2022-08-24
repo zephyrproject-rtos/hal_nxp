@@ -9,6 +9,9 @@ Origin:
    https://www.nxp.com/webapp/Download?colCode=KW40Z-CONNECTIVITY-SOFTWARE&appType=license&Parent_nodeId=1432854896956716810497&Parent_pageType=product
    https://www.nxp.com/webapp/Download?colCode=MKW2XD-MRC20A-CONNECTIVITY-SW&appType=license&Parent_nodeId=1425322332576706617013&Parent_pageType=productI
 
+   NXP MCUXpresso SDK USB
+   https://github.com/NXPmicro/mcux-sdk-middleware-usb
+
 Status:
    Some older Kinetis W family SoCs are not supported in MCUXpresso SDK, but
    instead are supported by the Kinetis Connectivity Software. This
@@ -55,6 +58,3 @@ License Link:
    https://spdx.org/licenses/BSD-3-Clause.html
 
 Patch List:
-
-   * Add USB device controller drivers, the drivers are based on MCUXpresso SDK release tag REL_2.5.0_REL9_RFP_RC3_7_1.
-
