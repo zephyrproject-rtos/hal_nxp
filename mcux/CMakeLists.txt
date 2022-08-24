@@ -84,11 +84,6 @@ zephyr_library_sources_ifdef(CONFIG_HAS_MCUX_AUDIOMIX mcux-sdk/devices/${MCUX_DE
 add_subdirectory(components)
 
 add_subdirectory_ifdef(
-  CONFIG_USB_DEVICE_DRIVER
-  middleware/usb
-  )
-
-add_subdirectory_ifdef(
   CONFIG_IEEE802154_KW41Z
   middleware/wireless/framework_5.3.3
   )
