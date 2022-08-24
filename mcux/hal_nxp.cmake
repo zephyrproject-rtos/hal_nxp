@@ -287,3 +287,16 @@ if(CONFIG_ETH_MCUX)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy/mdio/enet)
   zephyr_library_sources(mcux-sdk/components/phy/mdio/enet/fsl_enet_mdio.c)
 endif()
+
+if (CONFIG_USB_DEVICE_DRIVER)
+  list(APPEND CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb
+  )
+  include(middleware_usb_phy)
+  include_ifdef(CONFIG_USB_DC_NXP_EHCI         middleware_usb_device_ehci)
+  include_ifdef(CONFIG_USB_DC_NXP_LPCIP3511    middleware_usb_device_ip3511fs)
+
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/device)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/phy)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/include)
+endif()
