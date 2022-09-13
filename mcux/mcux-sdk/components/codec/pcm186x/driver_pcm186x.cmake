@@ -65,3 +65,4 @@ endif()
 if(${MCUX_DEVICE} STREQUAL "MIMX8QX6")
     include(component_codec_i2c_MIMX8QX6)
 endif()
+
