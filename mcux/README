@@ -58,3 +58,5 @@ License Link:
    https://spdx.org/licenses/BSD-3-Clause.html
 
 Patch List:
+  1. Delete the .a binary archive files after an SDK update before committing the changes. These files are still present in the SDK github repo but have been
+     deleted from the Zephyr HAL
