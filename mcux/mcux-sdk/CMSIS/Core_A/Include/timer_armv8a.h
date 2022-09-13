@@ -143,3 +143,4 @@ __STATIC_FORCEINLINE void ARM_TIMER_GetCounterCount(ARM_TIMER_type_t timer, uint
 #endif
 
 #endif /* __TIMER_ARMV8A_H */
+
