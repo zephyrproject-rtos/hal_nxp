@@ -890,6 +890,8 @@ class NXPSdkUtil:
         # are the port names, and those port names map to
         # dictionaries of pin->iomux option mappings
         gpio_map = collections.defaultdict(lambda: {})
+        # regex to get pin number from gpio mux option
+        pin_re = re.compile(r'gpio\d+_io(\d+)|\d+_gpiomux_io(\d\d)|_mux\d_io(\d\d)')
         with open(outputfile, "w", encoding='utf8') as gpio_dsti:
             # Write header
             gpio_dsti.write(f"/*\n"
@@ -916,12 +918,40 @@ class NXPSdkUtil:
             for port in sorted(gpio_map):
                 dts_node = (f"&gpio{port}{{\n"
                                 "\tpinmux = ")
+                gpio_gaps = []
+                last_pin_num = -1
                 for pin in sorted(gpio_map[port]):
                     iomux_opt = gpio_map[port][pin]
-                    dts_node += f"<&{iomux_opt.get_name().lower()}>,\n\t\t"
+                    opt_name = iomux_opt.get_name().lower()
+                    opt_match = pin_re.search(opt_name)
+                    if opt_match is None:
+                        logging.warning("Unmatched gpio pin num %s", opt_name)
+                        pin = 0
+                    else:
+                        # Several different pinmux patterns exist, so choose
+                        # the group with a valid string in it
+                        if opt_match.group(1):
+                            pin = int(opt_match.group(1))
+                        elif opt_match.group(2):
+                            pin = int(opt_match.group(2))
+                        elif opt_match.group(3):
+                            pin = int(opt_match.group(3))
+
+                    if (pin - last_pin_num) != 1:
+                        # gap in gpio pin number present. Account for this.
+                        gpio_gaps.append((last_pin_num + 1,
+                            ((pin - last_pin_num) - 1)))
+                    dts_node += f"<&{opt_name}>,\n\t\t"
+                    last_pin_num = pin
                 dts_node = re.sub(r',\n\t\t$', ";\n", dts_node)
+                if len(gpio_gaps) != 0:
+                    dts_node += "\tgpio-reserved-ranges = "
+                    for pair in gpio_gaps:
+                        dts_node += f"<{pair[0]} {pair[1]}>, "
+                    dts_node = re.sub(r', $', ";\n", dts_node)
                 # end group
                 dts_node += "};\n\n"
+
                 gpio_dsti.write(dts_node)
             gpio_dsti.close()
 
