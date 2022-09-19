@@ -25,7 +25,7 @@ extern "C"{
 #include "OsIf_Interrupts.h"
 
 #if defined(USING_OS_ZEPHYR)
-#include "zephyr.h"
+#include <zephyr/kernel.h>
 
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
