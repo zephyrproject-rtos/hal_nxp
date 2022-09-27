@@ -37,3 +37,8 @@ Origin:
    NXP MCUXpresso SDK USB
    https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-usb
    SHA: ff4c277499155029637526e0bf7ad7fa4c875e48
+
+
+Patch List:
+  - drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
+     be four being used for entropy in zephyr.
