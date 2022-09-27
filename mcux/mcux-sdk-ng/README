@@ -1,0 +1,44 @@
+MCUXpresso SDK NG
+##############
+
+Origin:
+   NXP MCUXpresso SDK Core
+   https://github.com/nxp-mcuxpresso/mcuxsdk-core
+   SHA: 84547d55114471cd361e32559db1c4ecb3a32815
+
+   NXP MCUXpresso SDK Component
+   https://github.com/nxp-mcuxpresso/mcux-component
+   SHA: 0a95c0536c168a97e1caac0bc41898c3cf9f75a8
+
+   NXP MCUXpresso SDK Device i.MX
+   https://github.com/nxp-mcuxpresso/mcux-devices-imx
+   SHA: bd9dec893950a163c5f9f4c53e5bc7a202b83819
+
+   NXP MCUXpresso SDK Device RT
+   https://github.com/nxp-mcuxpresso/mcux-devices-rt
+   SHA: 69599d3038bf20fdffb5b89dc3fcb34a2322f43a
+
+   NXP MCUXpresso SDK Device Kinetis
+   https://github.com/nxp-mcuxpresso/mcux-devices-kinetis
+   SHA: d3b2cbe46095f59a27d7f0d8b251bcfa7a8f5d6f
+
+   NXP MCUXpresso SDK Device LPC
+   https://github.com/nxp-mcuxpresso/mcux-devices-lpc
+   SHA: 4671b7f19480417fefb23eb8c6e71a2bc9f2d9f1
+
+   NXP MCUXpresso SDK Device MCX
+   https://github.com/nxp-mcuxpresso/mcux-devices-mcx
+   SHA: 3ff51c8cf729c59918e96f4ce33b37c3e93ffc74
+
+   NXP MCUXpresso SDK Device Wireless
+   https://github.com/nxp-mcuxpresso/mcux-devices-wireless
+   SHA: 0dbc39ab4a247d7edc1b2b9aecdf3f0ea33369af
+
+   NXP MCUXpresso SDK USB
+   https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-usb
+   SHA: ff4c277499155029637526e0bf7ad7fa4c875e48
+
+
+Patch List:
+  - drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
+     be four being used for entropy in zephyr.
