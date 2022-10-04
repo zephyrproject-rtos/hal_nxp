@@ -26,7 +26,8 @@ message("Load components for ${MCUX_DEVICE}:")
 
 #specific operation to shared drivers
 if((DEFINED CONFIG_FLASH_MCUX_FLEXSPI_XIP) AND (DEFINED CONFIG_FLASH))
-  zephyr_code_relocate(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flexspi/fsl_flexspi.c ${CONFIG_FLASH_MCUX_FLEXSPI_XIP_MEM}_TEXT)
+  zephyr_code_relocate(FILES ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flexspi/fsl_flexspi.c
+    LOCATION ${CONFIG_FLASH_MCUX_FLEXSPI_XIP_MEM}_TEXT)
 endif()
 
 if(NOT CONFIG_ASSERT OR CONFIG_FORCE_NO_ASSERT)
