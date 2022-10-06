@@ -38,7 +38,7 @@ enum
 static FLEXSPI_Type *const s_flexspiBases[] = FLEXSPI_BASE_PTRS;
 
 /*<! Private handle only used for internally. */
-static flexspi_dma_private_handle_t s_dmaPrivateHandle[ARRAY_SIZE(s_flexspiBases)];
+static flexspi_dma_private_handle_t s_dmaPrivateHandle[FSL_ARRAY_SIZE(s_flexspiBases)];
 
 #if defined(FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES) && FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES
 /*<! Private DMA descriptor array used for internally to fix FLEXSPI+DMA ERRATA.

@@ -42,7 +42,7 @@ static uint32_t ADC16_GetInstance(ADC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_adc16Bases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_adc16Bases); instance++)
     {
         if (s_adc16Bases[instance] == base)
         {
@@ -50,7 +50,7 @@ static uint32_t ADC16_GetInstance(ADC_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_adc16Bases));
+    assert(instance < FSL_ARRAY_SIZE(s_adc16Bases));
 
     return instance;
 }

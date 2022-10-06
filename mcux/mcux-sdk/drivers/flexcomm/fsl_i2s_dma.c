@@ -152,7 +152,7 @@ static uint32_t I2S_GetInstance(I2S_Type *base)
 {
     uint32_t i;
 
-    for (i = 0U; i < ARRAY_SIZE(s_I2sBaseAddrs); i++)
+    for (i = 0U; i < FSL_ARRAY_SIZE(s_I2sBaseAddrs); i++)
     {
         if ((uint32_t)base == s_I2sBaseAddrs[i])
         {

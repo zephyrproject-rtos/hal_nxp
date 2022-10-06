@@ -114,7 +114,7 @@ static uint32_t SDMA_GetInstance(SDMAARM_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_sdmaBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_sdmaBases); instance++)
     {
         if (s_sdmaBases[instance] == base)
         {
@@ -122,7 +122,7 @@ static uint32_t SDMA_GetInstance(SDMAARM_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_sdmaBases));
+    assert(instance < FSL_ARRAY_SIZE(s_sdmaBases));
 
     return instance;
 }

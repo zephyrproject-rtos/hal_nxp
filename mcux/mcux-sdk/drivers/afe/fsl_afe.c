@@ -32,14 +32,14 @@ static uint32_t AFE_GetInstance(AFE_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_AFEBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_AFEBases); instance++)
     {
         if (s_AFEBases[instance] == base)
         {
             break;
         }
     }
-    assert(instance < ARRAY_SIZE(s_AFEBases));
+    assert(instance < FSL_ARRAY_SIZE(s_AFEBases));
 
     return instance;
 }

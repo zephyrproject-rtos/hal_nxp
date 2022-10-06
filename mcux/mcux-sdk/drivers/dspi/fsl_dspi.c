@@ -106,7 +106,7 @@ static clock_ip_name_t const s_dspiClock[] = DSPI_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*! @brief Pointers to dspi handles for each instance. */
-static void *g_dspiHandle[ARRAY_SIZE(s_dspiBases)];
+static void *g_dspiHandle[FSL_ARRAY_SIZE(s_dspiBases)];
 
 /*! @brief Pointer to master IRQ handler for each instance. */
 static dspi_master_isr_t s_dspiMasterIsr;
@@ -115,7 +115,7 @@ static dspi_master_isr_t s_dspiMasterIsr;
 static dspi_slave_isr_t s_dspiSlaveIsr;
 
 /* @brief Dummy data for each instance. This data is used when user's tx buffer is NULL*/
-volatile uint8_t g_dspiDummyData[ARRAY_SIZE(s_dspiBases)] = {0};
+volatile uint8_t g_dspiDummyData[FSL_ARRAY_SIZE(s_dspiBases)] = {0};
 /**********************************************************************************************************************
  * Code
  *********************************************************************************************************************/
@@ -129,7 +129,7 @@ uint32_t DSPI_GetInstance(SPI_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_dspiBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_dspiBases); instance++)
     {
         if (s_dspiBases[instance] == base)
         {
@@ -137,7 +137,7 @@ uint32_t DSPI_GetInstance(SPI_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_dspiBases));
+    assert(instance < FSL_ARRAY_SIZE(s_dspiBases));
 
     return instance;
 }

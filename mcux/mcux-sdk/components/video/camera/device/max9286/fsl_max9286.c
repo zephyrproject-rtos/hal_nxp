@@ -461,7 +461,7 @@ static const ov10635_resolution_config_t *OV10635_GetResolutionConfig(const came
     uint8_t i;
     const ov10635_resolution_config_t *config = NULL;
 
-    for (i = 0; i < ARRAY_SIZE(s_ov10635ResolutionConfigs); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(s_ov10635ResolutionConfigs); i++)
     {
         if ((cameraConfig->resolution == s_ov10635ResolutionConfigs[i].resolution) &&
             (cameraConfig->framePerSec == s_ov10635ResolutionConfigs[i].framePerSec))
@@ -540,7 +540,7 @@ static status_t OV10635_Init(camera_device_handle_t *handle, uint8_t index)
         return kStatus_Fail;
     }
 
-    for (i = 0; i < ARRAY_SIZE(ov10635Firmware); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(ov10635Firmware); i++)
     {
         status = OV10635_Write(handle, i2cAddr, ov10635Firmware[i].reg, ov10635Firmware[i].value);
         if (status != kStatus_Success)

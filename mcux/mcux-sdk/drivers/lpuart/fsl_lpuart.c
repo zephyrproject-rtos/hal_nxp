@@ -72,7 +72,7 @@ static void LPUART_ReadNonBlocking(LPUART_Type *base, uint8_t *data, size_t leng
 /* Array of LPUART peripheral base address. */
 static LPUART_Type *const s_lpuartBases[] = LPUART_BASE_PTRS;
 /* Array of LPUART handle. */
-void *s_lpuartHandle[ARRAY_SIZE(s_lpuartBases)];
+void *s_lpuartHandle[FSL_ARRAY_SIZE(s_lpuartBases)];
 /* Array of LPUART IRQ number. */
 #if defined(FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ) && FSL_FEATURE_LPUART_HAS_SEPARATE_RX_TX_IRQ
 static const IRQn_Type s_lpuartRxIRQ[] = LPUART_RX_IRQS;
@@ -112,7 +112,7 @@ uint32_t LPUART_GetInstance(LPUART_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0U; instance < ARRAY_SIZE(s_lpuartBases); instance++)
+    for (instance = 0U; instance < FSL_ARRAY_SIZE(s_lpuartBases); instance++)
     {
         if (s_lpuartBases[instance] == base)
         {
@@ -120,7 +120,7 @@ uint32_t LPUART_GetInstance(LPUART_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_lpuartBases));
+    assert(instance < FSL_ARRAY_SIZE(s_lpuartBases));
 
     return instance;
 }

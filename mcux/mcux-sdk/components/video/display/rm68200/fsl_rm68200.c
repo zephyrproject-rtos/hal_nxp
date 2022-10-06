@@ -317,7 +317,7 @@ status_t RM68200_Init(display_handle_t *handle, const display_config_t *config)
     RM68200_DelayMs(5);
 
     /* Set the LCM page0 init settings. */
-    for (i = 0; i < ARRAY_SIZE(lcmInitPage0Setting); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(lcmInitPage0Setting); i++)
     {
         status = MIPI_DSI_GenericWrite(dsiDevice, lcmInitPage0Setting[i], 2);
 
@@ -337,7 +337,7 @@ status_t RM68200_Init(display_handle_t *handle, const display_config_t *config)
     }
 
     /* Set the LCM init settings. */
-    for (i = 0; i < ARRAY_SIZE(lcmInitSetting); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(lcmInitSetting); i++)
     {
         status = MIPI_DSI_GenericWrite(dsiDevice, lcmInitSetting[i], 2);
 

@@ -187,7 +187,7 @@ static uint32_t POWER_CalcVoltLevel(const uint32_t *freqLevels, uint32_t num, ui
     }
     else
     {
-        volt = powerLdoVoltLevel[i + ARRAY_SIZE(powerLdoVoltLevel) - num - 1U];
+        volt = powerLdoVoltLevel[i + FSL_ARRAY_SIZE(powerLdoVoltLevel) - num - 1U];
     }
 
     return volt;

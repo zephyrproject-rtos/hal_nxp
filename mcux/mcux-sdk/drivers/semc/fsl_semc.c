@@ -121,7 +121,7 @@ static uint32_t SEMC_GetInstance(SEMC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_semcBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_semcBases); instance++)
     {
         if (s_semcBases[instance] == base)
         {
@@ -129,7 +129,7 @@ static uint32_t SEMC_GetInstance(SEMC_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_semcBases));
+    assert(instance < FSL_ARRAY_SIZE(s_semcBases));
 
     return instance;
 }

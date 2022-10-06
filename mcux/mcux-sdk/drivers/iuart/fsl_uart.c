@@ -89,7 +89,7 @@ uart_isr_t s_uartIsr = (uart_isr_t)DefaultISR;
 uart_isr_t s_uartIsr;
 #endif
 
-void *s_uartHandle[ARRAY_SIZE(s_uartBases)];
+void *s_uartHandle[FSL_ARRAY_SIZE(s_uartBases)];
 
 /*******************************************************************************
  * Code

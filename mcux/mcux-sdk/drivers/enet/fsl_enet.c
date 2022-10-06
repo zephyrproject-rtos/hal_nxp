@@ -67,19 +67,19 @@ static const IRQn_Type s_enetErrIrqId[] = ENET_Error_IRQS;
 static ENET_Type *const s_enetBases[] = ENET_BASE_PTRS;
 
 /*! @brief Pointers to enet handles for each instance. */
-static enet_handle_t *s_ENETHandle[ARRAY_SIZE(s_enetBases)];
+static enet_handle_t *s_ENETHandle[FSL_ARRAY_SIZE(s_enetBases)];
 
 /* ENET ISR for transactional APIs. */
 #if FSL_FEATURE_ENET_QUEUE > 1
-static enet_isr_ring_t s_enetTxIsr[ARRAY_SIZE(s_enetBases)];
-static enet_isr_ring_t s_enetRxIsr[ARRAY_SIZE(s_enetBases)];
+static enet_isr_ring_t s_enetTxIsr[FSL_ARRAY_SIZE(s_enetBases)];
+static enet_isr_ring_t s_enetRxIsr[FSL_ARRAY_SIZE(s_enetBases)];
 #else
-static enet_isr_t s_enetTxIsr[ARRAY_SIZE(s_enetBases)];
-static enet_isr_t s_enetRxIsr[ARRAY_SIZE(s_enetBases)];
+static enet_isr_t s_enetTxIsr[FSL_ARRAY_SIZE(s_enetBases)];
+static enet_isr_t s_enetRxIsr[FSL_ARRAY_SIZE(s_enetBases)];
 #endif /* FSL_FEATURE_ENET_QUEUE > 1 */
-static enet_isr_t s_enetErrIsr[ARRAY_SIZE(s_enetBases)];
-static enet_isr_t s_enetTsIsr[ARRAY_SIZE(s_enetBases)];
-static enet_isr_t s_enet1588TimerIsr[ARRAY_SIZE(s_enetBases)];
+static enet_isr_t s_enetErrIsr[FSL_ARRAY_SIZE(s_enetBases)];
+static enet_isr_t s_enetTsIsr[FSL_ARRAY_SIZE(s_enetBases)];
+static enet_isr_t s_enet1588TimerIsr[FSL_ARRAY_SIZE(s_enetBases)];
 
 /*******************************************************************************
  * Prototypes
@@ -177,7 +177,7 @@ uint32_t ENET_GetInstance(ENET_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_enetBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_enetBases); instance++)
     {
         if (s_enetBases[instance] == base)
         {
@@ -185,7 +185,7 @@ uint32_t ENET_GetInstance(ENET_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_enetBases));
+    assert(instance < FSL_ARRAY_SIZE(s_enetBases));
 
     return instance;
 }

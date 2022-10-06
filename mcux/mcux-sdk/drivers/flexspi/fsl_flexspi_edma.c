@@ -39,7 +39,7 @@ enum
 static FLEXSPI_Type *const s_flexspiBases[] = FLEXSPI_BASE_PTRS;
 
 /*<! Private handle only used for internally. */
-static flexspi_edma_private_handle_t s_edmaPrivateHandle[ARRAY_SIZE(s_flexspiBases)];
+static flexspi_edma_private_handle_t s_edmaPrivateHandle[FSL_ARRAY_SIZE(s_flexspiBases)];
 
 /*******************************************************************************
  * Prototypes

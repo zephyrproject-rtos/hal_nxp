@@ -347,7 +347,7 @@ static const IRQn_Type s_flexcanBusOffIRQ[]    = CAN_Bus_Off_IRQS;
 static const IRQn_Type s_flexcanMbIRQ[]        = CAN_ORed_Message_buffer_IRQS;
 
 /* Array of FlexCAN handle. */
-static flexcan_handle_t *s_flexcanHandle[ARRAY_SIZE(s_flexcanBases)];
+static flexcan_handle_t *s_flexcanHandle[FSL_ARRAY_SIZE(s_flexcanBases)];
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /* Array of FlexCAN clock name. */
@@ -396,7 +396,7 @@ uint32_t FLEXCAN_GetInstance(CAN_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_flexcanBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_flexcanBases); instance++)
     {
         if (s_flexcanBases[instance] == base)
         {
@@ -404,7 +404,7 @@ uint32_t FLEXCAN_GetInstance(CAN_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_flexcanBases));
+    assert(instance < FSL_ARRAY_SIZE(s_flexcanBases));
 
     return instance;
 }

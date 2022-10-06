@@ -51,7 +51,7 @@ static status_t DC_FB_LCDIF_GetPixelFormat(video_pixel_format_t input, lcdif_fb_
 {
     uint8_t i;
 
-    for (i = 0; i < ARRAY_SIZE(s_lcdifPixelFormatMap); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(s_lcdifPixelFormatMap); i++)
     {
         if (s_lcdifPixelFormatMap[i].videoFormat == input)
         {

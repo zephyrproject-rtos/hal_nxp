@@ -198,7 +198,7 @@ uint32_t CSI2RX_GetInstance(MIPI_CSI2RX_Type *base)
 {
     uint32_t i;
 
-    for (i = 0U; i < ARRAY_SIZE(s_csi2rxBaseAddrs); i++)
+    for (i = 0U; i < FSL_ARRAY_SIZE(s_csi2rxBaseAddrs); i++)
     {
         if ((uint32_t)base == s_csi2rxBaseAddrs[i])
         {

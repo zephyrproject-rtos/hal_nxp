@@ -38,7 +38,7 @@ enum _flexcan_edma_tansfer_state
 static CAN_Type *const s_flexcanBases[] = CAN_BASE_PTRS;
 
 /* Private handle only used for internally. */
-static flexcan_edma_private_handle_t s_flexcanEdmaPrivateHandle[ARRAY_SIZE(s_flexcanBases)];
+static flexcan_edma_private_handle_t s_flexcanEdmaPrivateHandle[FSL_ARRAY_SIZE(s_flexcanBases)];
 
 /*******************************************************************************
  * Prototypes

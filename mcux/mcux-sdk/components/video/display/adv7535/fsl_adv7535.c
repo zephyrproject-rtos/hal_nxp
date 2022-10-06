@@ -159,10 +159,10 @@ status_t ADV7535_Init(display_handle_t *handle, const display_config_t *config)
      */
     ADV7535_CHECK_RET(ADV7535_I2C_ModifyReg(handle, ADV7535_DSI_CEC_ADDR, 0x03, (0x01U << 1U), 0U << 1));
 
-    ADV7535_CHECK_RET(ADV7535_I2C_ModifyRegs(handle, mainI2cAddr, s_adv7533FixedRegs, ARRAY_SIZE(s_adv7533FixedRegs)));
+    ADV7535_CHECK_RET(ADV7535_I2C_ModifyRegs(handle, mainI2cAddr, s_adv7533FixedRegs, FSL_ARRAY_SIZE(s_adv7533FixedRegs)));
 
     status =
-        ADV7535_I2C_ModifyRegs(handle, ADV7535_DSI_CEC_ADDR, s_adv7533CecFixedRegs, ARRAY_SIZE(s_adv7533CecFixedRegs));
+        ADV7535_I2C_ModifyRegs(handle, ADV7535_DSI_CEC_ADDR, s_adv7533CecFixedRegs, FSL_ARRAY_SIZE(s_adv7533CecFixedRegs));
     if (kStatus_Success != status)
     {
         return status;

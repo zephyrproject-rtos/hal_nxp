@@ -72,7 +72,7 @@ static uint32_t OSTIMER_GetInstance(OSTIMER_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_ostimerBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_ostimerBases); instance++)
     {
         if (s_ostimerBases[instance] == base)
         {
@@ -80,7 +80,7 @@ static uint32_t OSTIMER_GetInstance(OSTIMER_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_ostimerBases));
+    assert(instance < FSL_ARRAY_SIZE(s_ostimerBases));
 
     return instance;
 }

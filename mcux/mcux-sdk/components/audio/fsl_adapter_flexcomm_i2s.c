@@ -43,7 +43,7 @@ typedef struct _hal_audio_state
 static I2S_Type *const s_i2sBases[] = I2S_BASE_PTRS;
 #if (defined(HAL_AUDIO_DMA_INIT_ENABLE) && (HAL_AUDIO_DMA_INIT_ENABLE > 0U))
 /*! @brief Resource for each i2s instance. */
-static uint8_t s_dmaOccupied[ARRAY_SIZE((DMA_Type *[])DMA_BASE_PTRS)];
+static uint8_t s_dmaOccupied[FSL_ARRAY_SIZE((DMA_Type *[])DMA_BASE_PTRS)];
 #endif /* HAL_AUDIO_DMA_INIT_ENABLE */
 
 /*******************************************************************************
@@ -112,8 +112,8 @@ static hal_audio_status_t HAL_AudioCommonInit(hal_audio_handle_t handle,
        If modified, please modify the value of HAL_AUDIO_QUEUE_SIZE defined in the fsl_adapter_audio.h to be the same as
        I2S_NUM_BUFFERS. */
     assert(HAL_AUDIO_HANDLE_SIZE >= sizeof(hal_audio_state_t));
-    assert(config->instance < ARRAY_SIZE(s_i2sBases));
-    assert(config->dmaConfig->instance < ARRAY_SIZE(dmaBases));
+    assert(config->instance < FSL_ARRAY_SIZE(s_i2sBases));
+    assert(config->dmaConfig->instance < FSL_ARRAY_SIZE(dmaBases));
 
     dmaConfig   = (hal_audio_dma_config_t *)config->dmaConfig;
     audioHandle = (hal_audio_state_t *)handle;

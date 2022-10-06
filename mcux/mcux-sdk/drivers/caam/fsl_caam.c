@@ -437,7 +437,7 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, u
     {
         s_jr0->inputJobRing[s_jrIndex0] = (ADD_OFFSET((uint32_t)descaddr));
         s_jrIndex0++;
-        if (s_jrIndex0 >= ARRAY_SIZE(s_jr0->inputJobRing))
+        if (s_jrIndex0 >= FSL_ARRAY_SIZE(s_jr0->inputJobRing))
         {
             s_jrIndex0 = 0;
         }
@@ -446,7 +446,7 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, u
     {
         s_jr1->inputJobRing[s_jrIndex1] = ADD_OFFSET((uint32_t)descaddr);
         s_jrIndex1++;
-        if (s_jrIndex1 >= ARRAY_SIZE(s_jr1->inputJobRing))
+        if (s_jrIndex1 >= FSL_ARRAY_SIZE(s_jr1->inputJobRing))
         {
             s_jrIndex1 = 0;
         }
@@ -455,7 +455,7 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, u
     {
         s_jr2->inputJobRing[s_jrIndex2] = ADD_OFFSET((uint32_t)descaddr);
         s_jrIndex2++;
-        if (s_jrIndex2 >= ARRAY_SIZE(s_jr2->inputJobRing))
+        if (s_jrIndex2 >= FSL_ARRAY_SIZE(s_jr2->inputJobRing))
         {
             s_jrIndex2 = 0;
         }
@@ -464,7 +464,7 @@ static status_t caam_in_job_ring_add(CAAM_Type *base, caam_job_ring_t jobRing, u
     {
         s_jr3->inputJobRing[s_jrIndex3] = ADD_OFFSET((uint32_t)descaddr);
         s_jrIndex3++;
-        if (s_jrIndex3 >= ARRAY_SIZE(s_jr3->inputJobRing))
+        if (s_jrIndex3 >= FSL_ARRAY_SIZE(s_jr3->inputJobRing))
         {
             s_jrIndex3 = 0;
         }
@@ -533,22 +533,22 @@ static status_t caam_out_job_ring_test_and_remove(
     if (jobRing == kCAAM_JobRing0)
     {
         jr        = s_jr0->outputJobRing;
-        jrEntries = ARRAY_SIZE(s_jr0->outputJobRing);
+        jrEntries = FSL_ARRAY_SIZE(s_jr0->outputJobRing);
     }
     else if (jobRing == kCAAM_JobRing1)
     {
         jr        = s_jr1->outputJobRing;
-        jrEntries = ARRAY_SIZE(s_jr1->outputJobRing);
+        jrEntries = FSL_ARRAY_SIZE(s_jr1->outputJobRing);
     }
     else if (jobRing == kCAAM_JobRing2)
     {
         jr        = s_jr2->outputJobRing;
-        jrEntries = ARRAY_SIZE(s_jr2->outputJobRing);
+        jrEntries = FSL_ARRAY_SIZE(s_jr2->outputJobRing);
     }
     else if (jobRing == kCAAM_JobRing3)
     {
         jr        = s_jr3->outputJobRing;
-        jrEntries = ARRAY_SIZE(s_jr3->outputJobRing);
+        jrEntries = FSL_ARRAY_SIZE(s_jr3->outputJobRing);
     }
     else
     {
@@ -753,7 +753,7 @@ status_t caam_aes_gcm_non_blocking(CAAM_Type *base,
     }
 
     /* get template descriptor and it's size */
-    uint32_t descriptorSize = ARRAY_SIZE(templateAesGcm);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateAesGcm);
     (void)caam_memcpy(descriptor, templateAesGcm, sizeof(templateAesGcm));
 
     /* add descriptor size */
@@ -984,7 +984,7 @@ status_t caam_aes_ccm_non_blocking(CAAM_Type *base,
     status_t status;
 
     /* get template descriptor and it's size */
-    uint32_t descriptorSize = ARRAY_SIZE(templateAesCcm);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateAesCcm);
     (void)caam_memcpy(descriptor, templateAesCcm, sizeof(templateAesCcm));
 
     status = caam_aes_ccm_check_input_args(base, input, iv, key, output, ivSize, aadSize, keySize, tagSize);
@@ -1239,7 +1239,7 @@ status_t CAAM_AES_CryptCtrNonBlocking(CAAM_Type *base,
     }
 
     /* get template descriptor and it's size */
-    descriptorSize = ARRAY_SIZE(templateAesCtr);
+    descriptorSize = FSL_ARRAY_SIZE(templateAesCtr);
     (void)caam_memcpy(descriptor, templateAesCtr, sizeof(templateAesCtr));
 
     /* add descriptor size */
@@ -1356,7 +1356,7 @@ status_t CAAM_AES_EncryptEcbNonBlocking(CAAM_Type *base,
         return kStatus_InvalidArgument;
     }
 
-    descriptorSize = ARRAY_SIZE(templateAesEcb);
+    descriptorSize = FSL_ARRAY_SIZE(templateAesEcb);
     (void)caam_memcpy(descriptor, templateAesEcb, sizeof(templateAesEcb));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= (keySize & DESC_KEY_SIZE_MASK);
@@ -1408,7 +1408,7 @@ status_t CAAM_AES_DecryptEcbNonBlocking(CAAM_Type *base,
         return kStatus_InvalidArgument;
     }
 
-    descriptorSize = ARRAY_SIZE(templateAesEcb);
+    descriptorSize = FSL_ARRAY_SIZE(templateAesEcb);
     (void)caam_memcpy(descriptor, templateAesEcb, sizeof(templateAesEcb));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
     descriptor[1] |= (keySize & DESC_KEY_SIZE_MASK);
@@ -1479,7 +1479,7 @@ status_t CAAM_AES_EncryptCbcNonBlocking(CAAM_Type *base,
     }
 
     /* get template descriptor and it's size */
-    descriptorSize = ARRAY_SIZE(templateAesCbc);
+    descriptorSize = FSL_ARRAY_SIZE(templateAesCbc);
     (void)caam_memcpy(descriptor, templateAesCbc, sizeof(templateAesCbc));
 
     /* add descriptor size */
@@ -1547,7 +1547,7 @@ status_t CAAM_AES_DecryptCbcNonBlocking(CAAM_Type *base,
     }
 
     /* get template descriptor and it's size */
-    descriptorSize = ARRAY_SIZE(templateAesCbc);
+    descriptorSize = FSL_ARRAY_SIZE(templateAesCbc);
     (void)caam_memcpy(descriptor, templateAesCbc, sizeof(templateAesCbc));
 
     /* add descriptor size */
@@ -1716,8 +1716,8 @@ status_t CAAM_Init(CAAM_Type *base, const caam_config_t *config)
     s_jr0 = config->jobRingInterface[0];
     (void)memset(s_jr0, 0, sizeof(*s_jr0));
     s_jrIndex0 = 0;
-    caam_job_ring_set_base_address_and_size(base, kCAAM_JobRing0, s_jr0->inputJobRing, ARRAY_SIZE(s_jr0->inputJobRing),
-                                            s_jr0->outputJobRing, ARRAY_SIZE(s_jr0->outputJobRing) / 2U);
+    caam_job_ring_set_base_address_and_size(base, kCAAM_JobRing0, s_jr0->inputJobRing, FSL_ARRAY_SIZE(s_jr0->inputJobRing),
+                                            s_jr0->outputJobRing, FSL_ARRAY_SIZE(s_jr0->outputJobRing) / 2U);
 
     if (config->jobRingInterface[1] != NULL)
     {
@@ -1725,8 +1725,8 @@ status_t CAAM_Init(CAAM_Type *base, const caam_config_t *config)
         (void)memset(s_jr1, 0, sizeof(*s_jr1));
         s_jrIndex1 = 0;
         caam_job_ring_set_base_address_and_size(base, kCAAM_JobRing1, s_jr1->inputJobRing,
-                                                ARRAY_SIZE(s_jr1->inputJobRing), s_jr1->outputJobRing,
-                                                ARRAY_SIZE(s_jr1->outputJobRing) / 2U);
+                                                FSL_ARRAY_SIZE(s_jr1->inputJobRing), s_jr1->outputJobRing,
+                                                FSL_ARRAY_SIZE(s_jr1->outputJobRing) / 2U);
     }
 
     if (config->jobRingInterface[2] != NULL)
@@ -1735,8 +1735,8 @@ status_t CAAM_Init(CAAM_Type *base, const caam_config_t *config)
         (void)memset(s_jr2, 0, sizeof(*s_jr2));
         s_jrIndex2 = 0;
         caam_job_ring_set_base_address_and_size(base, kCAAM_JobRing2, s_jr2->inputJobRing,
-                                                ARRAY_SIZE(s_jr2->inputJobRing), s_jr2->outputJobRing,
-                                                ARRAY_SIZE(s_jr2->outputJobRing) / 2U);
+                                                FSL_ARRAY_SIZE(s_jr2->inputJobRing), s_jr2->outputJobRing,
+                                                FSL_ARRAY_SIZE(s_jr2->outputJobRing) / 2U);
     }
 
     if (config->jobRingInterface[3] != NULL)
@@ -1745,8 +1745,8 @@ status_t CAAM_Init(CAAM_Type *base, const caam_config_t *config)
         (void)memset(s_jr3, 0, sizeof(*s_jr3));
         s_jrIndex3 = 0;
         caam_job_ring_set_base_address_and_size(base, kCAAM_JobRing3, s_jr3->inputJobRing,
-                                                ARRAY_SIZE(s_jr3->inputJobRing), s_jr3->outputJobRing,
-                                                ARRAY_SIZE(s_jr3->outputJobRing) / 2U);
+                                                FSL_ARRAY_SIZE(s_jr3->inputJobRing), s_jr3->outputJobRing,
+                                                FSL_ARRAY_SIZE(s_jr3->outputJobRing) / 2U);
     }
 
     /*
@@ -2741,7 +2741,7 @@ static status_t caam_hash_schedule_input_data(CAAM_Type *base,
                                               uint32_t keySize)
 {
     BUILD_ASSURE(sizeof(templateHash) <= sizeof(caam_desc_hash_t), caam_desc_hash_t_size);
-    uint32_t descriptorSize = ARRAY_SIZE(templateHash);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateHash);
     uint32_t algOutSize     = 0;
 
     bool isSha = caam_hash_alg_is_sha(algo); /* MDHA engine */
@@ -2966,7 +2966,7 @@ status_t CAAM_HASH_Init(CAAM_Type *base,
     }
 
     ctxInternal->blksz = 0u;
-    for (i = 0; i < ARRAY_SIZE(ctxInternal->blk.w); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(ctxInternal->blk.w); i++)
     {
         ctxInternal->blk.w[i] = 0u;
     }
@@ -3687,7 +3687,7 @@ status_t CAAM_RNG_GetRandomDataNonBlocking(CAAM_Type *base,
 {
     /* create job descriptor */
     BUILD_ASSURE(sizeof(templateRng) <= sizeof(caam_desc_rng_t), caam_desc_rng_t_size);
-    uint32_t descriptorSize = ARRAY_SIZE(templateRng);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateRng);
 
     (void)caam_memcpy(descriptor, templateRng, sizeof(templateRng));
     descriptor[0] |= (descriptorSize & DESC_SIZE_MASK);
@@ -3809,7 +3809,7 @@ status_t CAAM_DES_EncryptEcbNonBlocking(CAAM_Type *base,
                                         const uint8_t key[CAAM_DES_KEY_SIZE])
 {
     BUILD_ASSURE(sizeof(caam_desc_cipher_des_t) >= sizeof(templateCipherDes), caam_desc_cipher_des_t_size);
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -3893,7 +3893,7 @@ status_t CAAM_DES_DecryptEcbNonBlocking(CAAM_Type *base,
                                         size_t size,
                                         const uint8_t key[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -3983,7 +3983,7 @@ status_t CAAM_DES_EncryptCbcNonBlocking(CAAM_Type *base,
                                         const uint8_t iv[CAAM_DES_IV_SIZE],
                                         const uint8_t key[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -4074,7 +4074,7 @@ status_t CAAM_DES_DecryptCbcNonBlocking(CAAM_Type *base,
                                         const uint8_t iv[CAAM_DES_IV_SIZE],
                                         const uint8_t key[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -4163,7 +4163,7 @@ status_t CAAM_DES_EncryptCfbNonBlocking(CAAM_Type *base,
                                         const uint8_t iv[CAAM_DES_IV_SIZE],
                                         const uint8_t key[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -4252,7 +4252,7 @@ status_t CAAM_DES_DecryptCfbNonBlocking(CAAM_Type *base,
                                         const uint8_t iv[CAAM_DES_IV_SIZE],
                                         const uint8_t key[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -4343,7 +4343,7 @@ status_t CAAM_DES_EncryptOfbNonBlocking(CAAM_Type *base,
                                         const uint8_t iv[CAAM_DES_IV_SIZE],
                                         const uint8_t key[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -4434,7 +4434,7 @@ status_t CAAM_DES_DecryptOfbNonBlocking(CAAM_Type *base,
                                         const uint8_t iv[CAAM_DES_IV_SIZE],
                                         const uint8_t key[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -4523,7 +4523,7 @@ status_t CAAM_DES2_EncryptEcbNonBlocking(CAAM_Type *base,
                                          const uint8_t key1[CAAM_DES_KEY_SIZE],
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -4613,7 +4613,7 @@ status_t CAAM_DES2_DecryptEcbNonBlocking(CAAM_Type *base,
                                          const uint8_t key1[CAAM_DES_KEY_SIZE],
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -4709,7 +4709,7 @@ status_t CAAM_DES2_EncryptCbcNonBlocking(CAAM_Type *base,
                                          const uint8_t key1[CAAM_DES_KEY_SIZE],
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -4806,7 +4806,7 @@ status_t CAAM_DES2_DecryptCbcNonBlocking(CAAM_Type *base,
                                          const uint8_t key1[CAAM_DES_KEY_SIZE],
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -4900,7 +4900,7 @@ status_t CAAM_DES2_EncryptCfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key1[CAAM_DES_KEY_SIZE],
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -4995,7 +4995,7 @@ status_t CAAM_DES2_DecryptCfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key1[CAAM_DES_KEY_SIZE],
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -5091,7 +5091,7 @@ status_t CAAM_DES2_EncryptOfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key1[CAAM_DES_KEY_SIZE],
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -5188,7 +5188,7 @@ status_t CAAM_DES2_DecryptOfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key1[CAAM_DES_KEY_SIZE],
                                          const uint8_t key2[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -5282,7 +5282,7 @@ status_t CAAM_DES3_EncryptEcbNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE],
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -5377,7 +5377,7 @@ status_t CAAM_DES3_DecryptEcbNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE],
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -5479,7 +5479,7 @@ status_t CAAM_DES3_EncryptCbcNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE],
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -5581,7 +5581,7 @@ status_t CAAM_DES3_DecryptCbcNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE],
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -5679,7 +5679,7 @@ status_t CAAM_DES3_EncryptCfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE],
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -5779,7 +5779,7 @@ status_t CAAM_DES3_DecryptCfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE],
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -5879,7 +5879,7 @@ status_t CAAM_DES3_EncryptOfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE],
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -5981,7 +5981,7 @@ status_t CAAM_DES3_DecryptOfbNonBlocking(CAAM_Type *base,
                                          const uint8_t key2[CAAM_DES_KEY_SIZE],
                                          const uint8_t key3[CAAM_DES_KEY_SIZE])
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateCipherDes);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateCipherDes);
 
     /* DES do not support EXTENDED lenght in FIFO LOAD/STORE command.
      * Data lenght limit is 2^16 bytes = 65 536 bytes.
@@ -6225,7 +6225,7 @@ static status_t caam_pkha_algorithm_operation_command(CAAM_Type *base,
                                                       size_t *resultSize)
 {
     uint32_t clearMask      = 0;
-    uint32_t descriptorSize = ARRAY_SIZE(templateArithmeticPKHA);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateArithmeticPKHA);
     BUILD_ASSURE(sizeof(caam_desc_pkha_t) >= sizeof(templateArithmeticPKHA), caam_desc_pkha_t_size_too_low);
 
     /* initialize descriptor from template */
@@ -6358,7 +6358,7 @@ static status_t caam_pkha_ecc_algorithm_operation_command(CAAM_Type *base,
                                                           caam_pkha_ecc_point_t *result,
                                                           caam_pkha_mode_params_t *params)
 {
-    uint32_t descriptorSize = ARRAY_SIZE(templateArithmeticECC);
+    uint32_t descriptorSize = FSL_ARRAY_SIZE(templateArithmeticECC);
     BUILD_ASSURE(sizeof(caam_desc_pkha_ecc_t) >= sizeof(templateArithmeticECC), caam_desc_pkha_ecc_t_size_too_low);
 
     /* initialize descriptor from template */

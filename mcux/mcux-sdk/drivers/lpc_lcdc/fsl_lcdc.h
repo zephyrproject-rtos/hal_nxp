@@ -39,7 +39,7 @@
 #define LCDC_CURSOR_IMG_64X64_WORDS ((uint32_t)(64U * 64U * LCDC_CURSOR_IMG_BPP / (8U * (uint32_t)sizeof(uint32_t))))
 
 /*!@brief LCD palette size in words(32-bit). */
-#define LCDC_PALETTE_SIZE_WORDS (ARRAY_SIZE(((LCD_Type *)0)->PAL))
+#define LCDC_PALETTE_SIZE_WORDS (FSL_ARRAY_SIZE(((LCD_Type *)0)->PAL))
 
 /*!
  * @brief LCD sigal polarity flags.

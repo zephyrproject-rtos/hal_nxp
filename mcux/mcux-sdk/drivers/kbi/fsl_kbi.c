@@ -42,7 +42,7 @@ static uint32_t KBI_GetInstance(KBI_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_kbiBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_kbiBases); instance++)
     {
         if (s_kbiBases[instance] == base)
         {
@@ -50,7 +50,7 @@ static uint32_t KBI_GetInstance(KBI_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_kbiBases));
+    assert(instance < FSL_ARRAY_SIZE(s_kbiBases));
 
     return instance;
 }

@@ -1007,7 +1007,7 @@ static const clock_ip_name_t s_dpuClock[] = DPU_CLOCKS;
 uint32_t DPU_GetInstance(IRIS_MVPL_Type *base)
 {
     uint32_t instance;
-    const uint32_t dpuArrayCount = ARRAY_SIZE(s_dpuBases);
+    const uint32_t dpuArrayCount = FSL_ARRAY_SIZE(s_dpuBases);
 
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < dpuArrayCount; instance++)
@@ -1041,7 +1041,7 @@ static bool DPU_CheckBufferAlignment(uint8_t bitsPerPixel, uint32_t baseAddr, ui
     };
 
     /* Find the mask to compare. */
-    for (i = 0U; i < ARRAY_SIZE(s_dpuBufferAlignMask); i++)
+    for (i = 0U; i < FSL_ARRAY_SIZE(s_dpuBufferAlignMask); i++)
     {
         if (s_dpuBufferAlignMask[i][0] == bitsPerPixel)
         {
@@ -1067,7 +1067,7 @@ static uint32_t DPU_GetDynamicRegOffset(dpu_unit_t unit)
     uint32_t offset = 0U;
     uint32_t i;
 
-    for (i = 0; i < ARRAY_SIZE(s_dpuUnitDynamicRegOffsetTable); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(s_dpuUnitDynamicRegOffsetTable); i++)
     {
         if (s_dpuUnitDynamicRegOffsetTable[i].unit == unit)
         {
@@ -1215,7 +1215,7 @@ void DPU_PreparePathConfig(IRIS_MVPL_Type *base)
     };
 
     /* Disable shadow for all pipelines. */
-    for (uint32_t i = 0; i < ARRAY_SIZE(dpuPipeLines); i++)
+    for (uint32_t i = 0; i < FSL_ARRAY_SIZE(dpuPipeLines); i++)
     {
         (void)DPU_EnableShadowLoad(base, dpuPipeLines[i], false);
     }
@@ -1228,7 +1228,7 @@ void DPU_PreparePathConfig(IRIS_MVPL_Type *base)
         kDPU_LayerBlend0,  kDPU_LayerBlend1,  kDPU_LayerBlend2, kDPU_LayerBlend3,
     };
 
-    for (uint32_t i = 0; i < ARRAY_SIZE(dpuUnits); i++)
+    for (uint32_t i = 0; i < FSL_ARRAY_SIZE(dpuUnits); i++)
     {
         DPU_SetUnitSrc(base, dpuUnits[i], 0U);
     }

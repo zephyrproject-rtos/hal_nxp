@@ -97,13 +97,13 @@ lpi2c_master_isr_t s_lpi2cMasterIsr;
 
 /*! @brief Pointers to master handles for each instance, used internally for LPI2C master interrupt and EDMA
 transactional APIs. */
-void *s_lpi2cMasterHandle[ARRAY_SIZE(kLpi2cBases)];
+void *s_lpi2cMasterHandle[FSL_ARRAY_SIZE(kLpi2cBases)];
 
 /*! @brief Pointer to slave IRQ handler for each instance. */
 static lpi2c_slave_isr_t s_lpi2cSlaveIsr;
 
 /*! @brief Pointers to slave handles for each instance. */
-static lpi2c_slave_handle_t *s_lpi2cSlaveHandle[ARRAY_SIZE(kLpi2cBases)];
+static lpi2c_slave_handle_t *s_lpi2cSlaveHandle[FSL_ARRAY_SIZE(kLpi2cBases)];
 
 /*******************************************************************************
  * Code
@@ -121,7 +121,7 @@ static lpi2c_slave_handle_t *s_lpi2cSlaveHandle[ARRAY_SIZE(kLpi2cBases)];
 uint32_t LPI2C_GetInstance(LPI2C_Type *base)
 {
     uint32_t instance;
-    for (instance = 0U; instance < ARRAY_SIZE(kLpi2cBases); ++instance)
+    for (instance = 0U; instance < FSL_ARRAY_SIZE(kLpi2cBases); ++instance)
     {
         if (kLpi2cBases[instance] == base)
         {
@@ -129,7 +129,7 @@ uint32_t LPI2C_GetInstance(LPI2C_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(kLpi2cBases));
+    assert(instance < FSL_ARRAY_SIZE(kLpi2cBases));
     return instance;
 }
 

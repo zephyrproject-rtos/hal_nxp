@@ -220,14 +220,14 @@ static int log_sprintf_internal(log_print_buffer_t *printBuf, char const *format
 
 static char const *log_get_level_name(log_level_t level)
 {
-    assert(((uint8_t)level < ARRAY_SIZE(s_logLevelName)));
+    assert(((uint8_t)level < FSL_ARRAY_SIZE(s_logLevelName)));
     return s_logLevelName[(int)level];
 }
 
 #if LOG_ENABLE_COLOR
 static char const *log_get_color(log_level_t level)
 {
-    assert(((uint8_t)level < ARRAY_SIZE(s_logColor)));
+    assert(((uint8_t)level < FSL_ARRAY_SIZE(s_logColor)));
     return s_logColor[(int)level];
 }
 #endif

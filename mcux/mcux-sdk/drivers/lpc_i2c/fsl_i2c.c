@@ -103,7 +103,7 @@ uint32_t I2C_GetInstance(I2C_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0U; instance < ARRAY_SIZE(s_i2cBases); instance++)
+    for (instance = 0U; instance < FSL_ARRAY_SIZE(s_i2cBases); instance++)
     {
         if (s_i2cBases[instance] == base)
         {
@@ -111,7 +111,7 @@ uint32_t I2C_GetInstance(I2C_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_i2cBases));
+    assert(instance < FSL_ARRAY_SIZE(s_i2cBases));
 
     return instance;
 }

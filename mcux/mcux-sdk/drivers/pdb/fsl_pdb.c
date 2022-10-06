@@ -41,7 +41,7 @@ static uint32_t PDB_GetInstance(PDB_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_pdbBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_pdbBases); instance++)
     {
         if (s_pdbBases[instance] == base)
         {
@@ -49,7 +49,7 @@ static uint32_t PDB_GetInstance(PDB_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_pdbBases));
+    assert(instance < FSL_ARRAY_SIZE(s_pdbBases));
 
     return instance;
 }

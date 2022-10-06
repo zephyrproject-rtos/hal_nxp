@@ -53,7 +53,7 @@ uint32_t CACHE64_GetInstance(CACHE64_POLSEL_Type *base)
 {
     uint32_t i;
 
-    for (i = 0; i < ARRAY_SIZE(s_cache64polselBases); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(s_cache64polselBases); i++)
     {
         if (base == s_cache64polselBases[i])
         {
@@ -61,7 +61,7 @@ uint32_t CACHE64_GetInstance(CACHE64_POLSEL_Type *base)
         }
     }
 
-    assert(i < ARRAY_SIZE(s_cache64polselBases));
+    assert(i < FSL_ARRAY_SIZE(s_cache64polselBases));
 
     return i;
 }
@@ -77,7 +77,7 @@ uint32_t CACHE64_GetInstanceByAddr(uint32_t address)
 {
     uint32_t i;
 
-    for (i = 0; i < ARRAY_SIZE(s_cache64ctrlBases); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(s_cache64ctrlBases); i++)
     {
         if ((address >= s_cache64PhymemBases[i]) && (address < s_cache64PhymemBases[i] + s_cache64PhymemSizes[i]))
         {
@@ -212,7 +212,7 @@ void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
     uint32_t endLim;
     CACHE64_CTRL_Type *base;
 
-    if (instance >= ARRAY_SIZE(s_cache64ctrlBases))
+    if (instance >= FSL_ARRAY_SIZE(s_cache64ctrlBases))
     {
         return;
     }
@@ -275,7 +275,7 @@ void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
     uint32_t endLim;
     CACHE64_CTRL_Type *base;
 
-    if (instance >= ARRAY_SIZE(s_cache64ctrlBases))
+    if (instance >= FSL_ARRAY_SIZE(s_cache64ctrlBases))
     {
         return;
     }
@@ -340,7 +340,7 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
     uint32_t endLim;
     CACHE64_CTRL_Type *base;
 
-    if (instance >= ARRAY_SIZE(s_cache64ctrlBases))
+    if (instance >= FSL_ARRAY_SIZE(s_cache64ctrlBases))
     {
         return;
     }

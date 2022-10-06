@@ -36,7 +36,7 @@ typedef void (*spdif_isr_t)(SPDIF_Type *base, spdif_handle_t *handle);
 /* Base pointer array */
 static SPDIF_Type *const s_spdifBases[] = SPDIF_BASE_PTRS;
 /*! @brief SPDIF handle pointer */
-static spdif_handle_t *s_spdifHandle[ARRAY_SIZE(s_spdifBases)][2];
+static spdif_handle_t *s_spdifHandle[FSL_ARRAY_SIZE(s_spdifBases)][2];
 /* IRQ number array */
 static const IRQn_Type s_spdifIRQ[] = SPDIF_IRQS;
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -60,7 +60,7 @@ uint32_t SPDIF_GetInstance(SPDIF_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_spdifBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_spdifBases); instance++)
     {
         if (s_spdifBases[instance] == base)
         {
@@ -68,7 +68,7 @@ uint32_t SPDIF_GetInstance(SPDIF_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_spdifBases));
+    assert(instance < FSL_ARRAY_SIZE(s_spdifBases));
 
     return instance;
 }

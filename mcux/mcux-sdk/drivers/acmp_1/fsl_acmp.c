@@ -45,7 +45,7 @@ static uint32_t ACMP_GetInstance(ACMP_Type *base)
     uint32_t instance = 0U;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_acmpBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_acmpBases); instance++)
     {
         if (s_acmpBases[instance] == base)
         {
@@ -53,7 +53,7 @@ static uint32_t ACMP_GetInstance(ACMP_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_acmpBases));
+    assert(instance < FSL_ARRAY_SIZE(s_acmpBases));
 
     return instance;
 }

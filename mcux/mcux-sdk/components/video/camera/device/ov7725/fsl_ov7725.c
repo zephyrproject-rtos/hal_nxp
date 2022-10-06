@@ -319,7 +319,7 @@ static status_t OV7725_SetClockConfig(camera_device_handle_t *handle, uint32_t f
 {
     status_t status;
 
-    for (uint32_t i = 0; i < ARRAY_SIZE(ov7725ClockConfigs); i++)
+    for (uint32_t i = 0; i < FSL_ARRAY_SIZE(ov7725ClockConfigs); i++)
     {
         if ((ov7725ClockConfigs[i].frameRate_Hz == frameRate_Hz) && (ov7725ClockConfigs[i].inputClk_Hz == inputClk_Hz))
         {
@@ -339,7 +339,7 @@ static status_t OV7725_SetClockConfig(camera_device_handle_t *handle, uint32_t f
 
 static status_t OV7725_SetPixelFormat(camera_device_handle_t *handle, video_pixel_format_t fmt)
 {
-    for (uint8_t i = 0; i < ARRAY_SIZE(ov7725PixelFormatConfigs); i++)
+    for (uint8_t i = 0; i < FSL_ARRAY_SIZE(ov7725PixelFormatConfigs); i++)
     {
         if (ov7725PixelFormatConfigs[i].fmt == fmt)
         {
@@ -419,7 +419,7 @@ status_t OV7725_Init(camera_device_handle_t *handle, const camera_config_t *conf
     OV7725_DelayMs(2);
 
     /* Start configuration */
-    status = OV7725_WriteRegs(handle, ov7725InitRegs, ARRAY_SIZE(ov7725InitRegs));
+    status = OV7725_WriteRegs(handle, ov7725InitRegs, FSL_ARRAY_SIZE(ov7725InitRegs));
     if (kStatus_Success != status)
     {
         return status;
@@ -514,7 +514,7 @@ status_t OV7725_SetSpecialEffect(camera_device_handle_t *handle, int32_t effect)
     uint8_t i;
     status_t status;
 
-    for (i = 0; i < ARRAY_SIZE(ov7725SpecialEffectConfigs); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(ov7725SpecialEffectConfigs); i++)
     {
         if (effect == (int32_t)ov7725SpecialEffectConfigs[i].effect)
         {
@@ -586,7 +586,7 @@ status_t OV7725_SetLightMode(camera_device_handle_t *handle, int32_t lightMode)
     uint8_t i;
     status_t status;
 
-    for (i = 0; i < ARRAY_SIZE(ov7725LightModeConfigs); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(ov7725LightModeConfigs); i++)
     {
         if (lightMode == (int32_t)ov7725LightModeConfigs[i].lightMode)
         {
@@ -607,7 +607,7 @@ status_t OV7725_SetNightMode(camera_device_handle_t *handle, int32_t nightMode)
 {
     uint8_t i;
 
-    for (i = 0; i < ARRAY_SIZE(ov7725NightModeConfigs); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(ov7725NightModeConfigs); i++)
     {
         if (nightMode == (int32_t)ov7725NightModeConfigs[i].nightMode)
         {
@@ -628,7 +628,7 @@ status_t OV7725_Deinit(camera_device_handle_t *handle)
 
 status_t OV7725_Control(camera_device_handle_t *handle, camera_device_cmd_t cmd, int32_t arg)
 {
-    for (uint8_t i = 0; i < ARRAY_SIZE(ov7725CmdFuncMap); i++)
+    for (uint8_t i = 0; i < FSL_ARRAY_SIZE(ov7725CmdFuncMap); i++)
     {
         if (ov7725CmdFuncMap[i].cmd == cmd)
         {

@@ -42,8 +42,8 @@ enum _ecspi_sdma_states_t
 /*! @brief Base pointer array */
 static ECSPI_Type *const s_ecspiBases[] = ECSPI_BASE_PTRS;
 /*<! Private handle only used for internally. */
-static ecspi_master_sdma_private_handle_t s_ecspiMasterSdmaPrivateHandle[ARRAY_SIZE(s_ecspiBases)];
-static ecspi_slave_sdma_private_handle_t s_ecspiSlaveSdmaPrivateHandle[ARRAY_SIZE(s_ecspiBases)];
+static ecspi_master_sdma_private_handle_t s_ecspiMasterSdmaPrivateHandle[FSL_ARRAY_SIZE(s_ecspiBases)];
+static ecspi_slave_sdma_private_handle_t s_ecspiSlaveSdmaPrivateHandle[FSL_ARRAY_SIZE(s_ecspiBases)];
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/

@@ -46,7 +46,7 @@ static uint32_t ANACTRL_GetInstance(ANACTRL_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_anactrlBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_anactrlBases); instance++)
     {
         if (s_anactrlBases[instance] == base)
         {
@@ -54,7 +54,7 @@ static uint32_t ANACTRL_GetInstance(ANACTRL_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_anactrlBases));
+    assert(instance < FSL_ARRAY_SIZE(s_anactrlBases));
 
     return instance;
 }

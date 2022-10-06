@@ -50,7 +50,7 @@ static uint32_t CAPT_GetInstance(CAPT_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_captBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_captBases); instance++)
     {
         if (s_captBases[instance] == base)
         {
@@ -58,7 +58,7 @@ static uint32_t CAPT_GetInstance(CAPT_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_captBases));
+    assert(instance < FSL_ARRAY_SIZE(s_captBases));
 
     return instance;
 }

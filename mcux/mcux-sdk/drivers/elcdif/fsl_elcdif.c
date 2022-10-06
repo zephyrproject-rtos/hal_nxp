@@ -77,7 +77,7 @@ static uint32_t ELCDIF_GetInstance(LCDIF_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_elcdifBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_elcdifBases); instance++)
     {
         if (s_elcdifBases[instance] == base)
         {
@@ -85,7 +85,7 @@ static uint32_t ELCDIF_GetInstance(LCDIF_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_elcdifBases));
+    assert(instance < FSL_ARRAY_SIZE(s_elcdifBases));
 
     return instance;
 }
@@ -102,7 +102,7 @@ static uint32_t ELCDIF_GetInstance(LCDIF_Type *base)
 void ELCDIF_RgbModeInit(LCDIF_Type *base, const elcdif_rgb_mode_config_t *config)
 {
     assert(NULL != config);
-    assert((uint32_t)config->pixelFormat < ARRAY_SIZE(s_pixelFormatReg));
+    assert((uint32_t)config->pixelFormat < FSL_ARRAY_SIZE(s_pixelFormatReg));
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
     uint32_t instance = ELCDIF_GetInstance(base);
@@ -205,7 +205,7 @@ void ELCDIF_RgbModeGetDefaultConfig(elcdif_rgb_mode_config_t *config)
  */
 void ELCDIF_RgbModeSetPixelFormat(LCDIF_Type *base, elcdif_pixel_format_t pixelFormat)
 {
-    assert((uint32_t)pixelFormat < ARRAY_SIZE(s_pixelFormatReg));
+    assert((uint32_t)pixelFormat < FSL_ARRAY_SIZE(s_pixelFormatReg));
 
     base->CTRL = (base->CTRL & ~(LCDIF_CTRL_WORD_LENGTH_MASK | LCDIF_CTRL_DATA_FORMAT_24_BIT_MASK |
                                  LCDIF_CTRL_DATA_FORMAT_18_BIT_MASK | LCDIF_CTRL_DATA_FORMAT_16_BIT_MASK)) |

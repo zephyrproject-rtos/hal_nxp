@@ -53,7 +53,7 @@ static uint32_t ENC_GetInstance(ENC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_encBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_encBases); instance++)
     {
         if (s_encBases[instance] == base)
         {
@@ -61,7 +61,7 @@ static uint32_t ENC_GetInstance(ENC_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_encBases));
+    assert(instance < FSL_ARRAY_SIZE(s_encBases));
 
     return instance;
 }

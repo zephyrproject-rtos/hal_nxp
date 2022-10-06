@@ -54,7 +54,7 @@ static uint32_t DMA_GetInstance(DMA_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_dmaBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_dmaBases); instance++)
     {
         if (s_dmaBases[instance] == base)
         {
@@ -62,7 +62,7 @@ static uint32_t DMA_GetInstance(DMA_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_dmaBases));
+    assert(instance < FSL_ARRAY_SIZE(s_dmaBases));
 
     return instance;
 }

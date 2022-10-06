@@ -123,7 +123,7 @@ static const clock_ip_name_t s_i2cClocks[] = I2C_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*! @brief Pointers to i2c handles for each instance. */
-static void *s_i2cHandle[ARRAY_SIZE(s_i2cBases)];
+static void *s_i2cHandle[FSL_ARRAY_SIZE(s_i2cBases)];
 
 /*! @brief Pointer to master IRQ handler for each instance. */
 static i2c_isr_t s_i2cMasterIsr;
@@ -140,7 +140,7 @@ static uint32_t I2C_GetInstance(I2C_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_i2cBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_i2cBases); instance++)
     {
         if (s_i2cBases[instance] == base)
         {
@@ -148,7 +148,7 @@ static uint32_t I2C_GetInstance(I2C_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_i2cBases));
+    assert(instance < FSL_ARRAY_SIZE(s_i2cBases));
 
     return instance;
 }

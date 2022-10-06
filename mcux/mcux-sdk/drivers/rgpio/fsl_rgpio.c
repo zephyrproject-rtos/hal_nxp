@@ -54,7 +54,7 @@ uint32_t RGPIO_GetInstance(RGPIO_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0U; instance < ARRAY_SIZE(s_rgpioBases); instance++)
+    for (instance = 0U; instance < FSL_ARRAY_SIZE(s_rgpioBases); instance++)
     {
         if (s_rgpioBases[instance] == base)
         {
@@ -62,7 +62,7 @@ uint32_t RGPIO_GetInstance(RGPIO_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_rgpioBases));
+    assert(instance < FSL_ARRAY_SIZE(s_rgpioBases));
 
     return instance;
 }
@@ -191,7 +191,7 @@ uint32_t FGPIO_GetInstance(FGPIO_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0U; instance < ARRAY_SIZE(s_fgpioBases); instance++)
+    for (instance = 0U; instance < FSL_ARRAY_SIZE(s_fgpioBases); instance++)
     {
         if (s_fgpioBases[instance] == base)
         {
@@ -199,7 +199,7 @@ uint32_t FGPIO_GetInstance(FGPIO_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_fgpioBases));
+    assert(instance < FSL_ARRAY_SIZE(s_fgpioBases));
 
     return instance;
 }

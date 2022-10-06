@@ -44,7 +44,7 @@ static uint32_t PWT_GetInstance(PWT_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_pwtBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_pwtBases); instance++)
     {
         if (s_pwtBases[instance] == base)
         {
@@ -52,7 +52,7 @@ static uint32_t PWT_GetInstance(PWT_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_pwtBases));
+    assert(instance < FSL_ARRAY_SIZE(s_pwtBases));
 
     return instance;
 }

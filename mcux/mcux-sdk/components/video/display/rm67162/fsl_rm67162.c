@@ -370,12 +370,12 @@ status_t RM67162_Init(display_handle_t *handle, const display_config_t *config)
     if (config->resolution == FSL_VIDEO_RESOLUTION(400, 400))
     {
         initSetting     = rm67162InitSetting_400x400;
-        initSettingSize = ARRAY_SIZE(rm67162InitSetting_400x400);
+        initSettingSize = FSL_ARRAY_SIZE(rm67162InitSetting_400x400);
     }
     else if (config->resolution == FSL_VIDEO_RESOLUTION(400, 392))
     {
         initSetting     = rm67162InitSetting_400x392;
-        initSettingSize = ARRAY_SIZE(rm67162InitSetting_400x392);
+        initSettingSize = FSL_ARRAY_SIZE(rm67162InitSetting_400x392);
     }
     else
     {

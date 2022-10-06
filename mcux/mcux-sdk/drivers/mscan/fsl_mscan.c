@@ -162,7 +162,7 @@ static const IRQn_Type s_mscanWakeUpIRQ[]    = MSCAN_WAKE_UP_IRQS;
 static const IRQn_Type s_mscanErrorIRQ[]     = MSCAN_ERR_IRQS;
 
 /* Array of MsCAN handle. */
-static mscan_handle_t *s_mscanHandle[ARRAY_SIZE(s_mscanBases)];
+static mscan_handle_t *s_mscanHandle[FSL_ARRAY_SIZE(s_mscanBases)];
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /* Array of MsCAN clock name. */
@@ -185,7 +185,7 @@ static uint32_t MSCAN_GetInstance(MSCAN_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_mscanBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_mscanBases); instance++)
     {
         if (s_mscanBases[instance] == base)
         {
@@ -193,7 +193,7 @@ static uint32_t MSCAN_GetInstance(MSCAN_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_mscanBases));
+    assert(instance < FSL_ARRAY_SIZE(s_mscanBases));
 
     return instance;
 }

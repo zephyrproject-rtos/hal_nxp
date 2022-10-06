@@ -61,12 +61,12 @@ static uint32_t SYSCTL_GetInstance(SYSCTL_Type *base)
 {
     uint8_t instance = 0;
 
-    while ((instance < ARRAY_SIZE(s_sysctlBase)) && (s_sysctlBase[instance] != base))
+    while ((instance < FSL_ARRAY_SIZE(s_sysctlBase)) && (s_sysctlBase[instance] != base))
     {
         instance++;
     }
 
-    assert(instance < ARRAY_SIZE(s_sysctlBase));
+    assert(instance < FSL_ARRAY_SIZE(s_sysctlBase));
 
     return instance;
 }

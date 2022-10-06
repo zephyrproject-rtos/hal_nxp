@@ -60,14 +60,14 @@ typedef struct _hal_audio_state
 /*! @brief Pointers to audio bases for each instance. */
 static I2S_Type *const s_i2sBases[] = I2S_BASE_PTRS;
 /*! @brief Resource for each i2s instance. */
-static uint8_t s_i2sOccupied[ARRAY_SIZE(s_i2sBases)];
+static uint8_t s_i2sOccupied[FSL_ARRAY_SIZE(s_i2sBases)];
 #if (defined(HAL_AUDIO_DMA_INIT_ENABLE) && (HAL_AUDIO_DMA_INIT_ENABLE > 0U))
 /*! @brief Resource for each dma instance. */
-static uint8_t s_dmaOccupied[ARRAY_SIZE((DMA_Type *[])DMA_BASE_PTRS)];
+static uint8_t s_dmaOccupied[FSL_ARRAY_SIZE((DMA_Type *[])DMA_BASE_PTRS)];
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && (FSL_FEATURE_SOC_DMAMUX_COUNT > 0U))
 /*! @brief Resource for each dma mux instance. */
-static uint8_t s_dmaMuxOccupied[ARRAY_SIZE((DMAMUX_Type *[])DMAMUX_BASE_PTRS)];
+static uint8_t s_dmaMuxOccupied[FSL_ARRAY_SIZE((DMAMUX_Type *[])DMAMUX_BASE_PTRS)];
 #endif /* FSL_FEATURE_SOC_DMAMUX_COUNT */
 #endif /* FSL_FEATURE_SOC_EDMA_COUNT */
 #endif /* HAL_AUDIO_DMA_INIT_ENABLE */
@@ -259,8 +259,8 @@ static hal_audio_status_t HAL_AudioCommonInit(hal_audio_handle_t handle,
        If modified, please modify the value of HAL_AUDIO_QUEUE_SIZE defined in the fsl_adapter_audio.h to be the same as
        SAI_XFER_QUEUE_SIZE. */
     assert(HAL_AUDIO_HANDLE_SIZE >= sizeof(hal_audio_state_t));
-    assert(config->instance < ARRAY_SIZE(s_i2sBases));
-    assert(config->dmaConfig->instance < ARRAY_SIZE(dmaBases));
+    assert(config->instance < FSL_ARRAY_SIZE(s_i2sBases));
+    assert(config->dmaConfig->instance < FSL_ARRAY_SIZE(dmaBases));
 
     dmaConfig     = (hal_audio_dma_config_t *)config->dmaConfig;
     featureConfig = (hal_audio_ip_config_t *)config->ipConfig;

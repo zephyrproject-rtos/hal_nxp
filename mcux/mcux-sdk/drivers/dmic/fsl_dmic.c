@@ -57,7 +57,7 @@ uint32_t DMIC_GetInstance(DMIC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_dmicBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_dmicBases); instance++)
     {
         if (s_dmicBases[instance] == base)
         {
@@ -65,7 +65,7 @@ uint32_t DMIC_GetInstance(DMIC_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_dmicBases));
+    assert(instance < FSL_ARRAY_SIZE(s_dmicBases));
 
     return instance;
 }

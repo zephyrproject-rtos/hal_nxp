@@ -299,7 +299,7 @@ static void EXCEPTION_HardFaultRegisterPrint(void)
 {
     (void)EXCEPTION_ConfigurableFaultStatusRegisterPrint();
     (void)EXCEPTION_HardFaultStatusRegisterPrint();
-    for (uint32_t i = 0; i < ARRAY_SIZE(scb_data_text); i++)
+    for (uint32_t i = 0; i < FSL_ARRAY_SIZE(scb_data_text); i++)
     {
         if (32U == scb_data_text[i].type)
         {

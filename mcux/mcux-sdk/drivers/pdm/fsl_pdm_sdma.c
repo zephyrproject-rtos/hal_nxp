@@ -27,7 +27,7 @@ typedef struct _pdm_sdma_private_handle
 static PDM_Type *const s_pdmBases[] = PDM_BASE_PTRS;
 
 /*<! Private handle only used for internally. */
-static pdm_sdma_private_handle_t s_sdmaPrivateHandle[ARRAY_SIZE(s_pdmBases)];
+static pdm_sdma_private_handle_t s_sdmaPrivateHandle[FSL_ARRAY_SIZE(s_pdmBases)];
 
 /*******************************************************************************
  * Prototypes

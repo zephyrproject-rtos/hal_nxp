@@ -43,7 +43,7 @@ static uint32_t KPP_GetInstance(KPP_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_kppBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_kppBases); instance++)
     {
         if (s_kppBases[instance] == base)
         {
@@ -51,7 +51,7 @@ static uint32_t KPP_GetInstance(KPP_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_kppBases));
+    assert(instance < FSL_ARRAY_SIZE(s_kppBases));
 
     return instance;
 }

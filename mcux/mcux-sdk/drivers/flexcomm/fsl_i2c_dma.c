@@ -77,7 +77,7 @@ static status_t I2C_RunTransferStateMachineDMA(I2C_Type *base, i2c_master_dma_ha
 static const IRQn_Type s_i2cIRQ[] = I2C_IRQS;
 
 /*<! Private handle only used for internally. */
-static i2c_master_dma_private_handle_t s_dmaPrivateHandle[ARRAY_SIZE(s_i2cIRQ)];
+static i2c_master_dma_private_handle_t s_dmaPrivateHandle[FSL_ARRAY_SIZE(s_i2cIRQ)];
 
 /*******************************************************************************
  * Codes

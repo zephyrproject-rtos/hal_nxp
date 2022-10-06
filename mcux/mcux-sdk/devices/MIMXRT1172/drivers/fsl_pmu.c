@@ -465,7 +465,7 @@ void PMU_GPCSetLpsrDigLdoTargetVoltage(uint32_t setpointMap, pmu_lpsr_dig_target
     uint8_t temp8;
     uint32_t i;
 
-    for (regIndex = 0U; regIndex < ARRAY_SIZE(lpsrDigTrgRegArray); regIndex++)
+    for (regIndex = 0U; regIndex < FSL_ARRAY_SIZE(lpsrDigTrgRegArray); regIndex++)
     {
         temp8 = (((uint8_t)(setpointMap >> (PMU_LDO_LPSR_DIG_TRG_SPX_REG_SETPOINT_COUNTS * regIndex))) & 0xFU);
         if (temp8 != 0UL)

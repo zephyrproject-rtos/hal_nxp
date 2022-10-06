@@ -42,7 +42,7 @@ static uint32_t DAC12_GetInstance(DAC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_dac12Bases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_dac12Bases); instance++)
     {
         if (s_dac12Bases[instance] == base)
         {
@@ -50,7 +50,7 @@ static uint32_t DAC12_GetInstance(DAC_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_dac12Bases));
+    assert(instance < FSL_ARRAY_SIZE(s_dac12Bases));
 
     return instance;
 }

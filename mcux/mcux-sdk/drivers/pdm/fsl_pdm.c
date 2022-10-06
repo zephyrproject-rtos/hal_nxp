@@ -39,7 +39,7 @@ static status_t PDM_ValidateSrcClockRate(uint32_t channelMask,
 /* Base pointer array */
 static PDM_Type *const s_pdmBases[] = PDM_BASE_PTRS;
 /*!@brief PDM handle pointer */
-static pdm_handle_t *s_pdmHandle[ARRAY_SIZE(s_pdmBases)];
+static pdm_handle_t *s_pdmHandle[FSL_ARRAY_SIZE(s_pdmBases)];
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /* Clock name array */
 static const clock_ip_name_t s_pdmClock[] = PDM_CLOCKS;
@@ -55,7 +55,7 @@ static const clock_ip_name_t s_pdmFilterClock[] = PDM_FILTER_CLOCKS;
 /*! @brief Pointer to tx IRQ handler for each instance. */
 static pdm_isr_t s_pdmIsr;
 /*! @brief callback for hwvad. */
-static pdm_hwvad_notification_t s_pdm_hwvad_notification[ARRAY_SIZE(s_pdmBases)];
+static pdm_hwvad_notification_t s_pdm_hwvad_notification[FSL_ARRAY_SIZE(s_pdmBases)];
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -64,7 +64,7 @@ uint32_t PDM_GetInstance(PDM_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_pdmBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_pdmBases); instance++)
     {
         if (s_pdmBases[instance] == base)
         {
@@ -72,7 +72,7 @@ uint32_t PDM_GetInstance(PDM_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_pdmBases));
+    assert(instance < FSL_ARRAY_SIZE(s_pdmBases));
 
     return instance;
 }

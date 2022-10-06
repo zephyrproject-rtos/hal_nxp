@@ -220,12 +220,12 @@ static uint32_t SDHC_GetInstance(SDHC_Type *base)
 {
     uint8_t instance = 0;
 
-    while ((instance < ARRAY_SIZE(s_sdhcBase)) && (s_sdhcBase[instance] != base))
+    while ((instance < FSL_ARRAY_SIZE(s_sdhcBase)) && (s_sdhcBase[instance] != base))
     {
         instance++;
     }
 
-    assert(instance < ARRAY_SIZE(s_sdhcBase));
+    assert(instance < FSL_ARRAY_SIZE(s_sdhcBase));
 
     return instance;
 }

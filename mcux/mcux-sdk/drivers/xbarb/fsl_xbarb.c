@@ -56,7 +56,7 @@ static uint32_t XBARB_GetInstance(XBARB_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_xbarbBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_xbarbBases); instance++)
     {
         if (s_xbarbBases[instance] == base)
         {
@@ -64,7 +64,7 @@ static uint32_t XBARB_GetInstance(XBARB_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_xbarbBases));
+    assert(instance < FSL_ARRAY_SIZE(s_xbarbBases));
 
     return instance;
 }

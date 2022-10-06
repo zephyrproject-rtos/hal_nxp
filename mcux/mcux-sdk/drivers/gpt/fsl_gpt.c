@@ -35,7 +35,7 @@ static uint32_t GPT_GetInstance(GPT_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0U; instance < ARRAY_SIZE(s_gptBases); instance++)
+    for (instance = 0U; instance < FSL_ARRAY_SIZE(s_gptBases); instance++)
     {
         if (s_gptBases[instance] == base)
         {
@@ -43,7 +43,7 @@ static uint32_t GPT_GetInstance(GPT_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_gptBases));
+    assert(instance < FSL_ARRAY_SIZE(s_gptBases));
 
     return instance;
 }

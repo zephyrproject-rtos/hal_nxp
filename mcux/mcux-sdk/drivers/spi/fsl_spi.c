@@ -107,7 +107,7 @@ static spi_isr_t s_spiMasterIsr;
 static spi_isr_t s_spiSlaveIsr;
 
 /* @brief Dummy data for each instance. This data is used when user's tx buffer is NULL*/
-volatile uint8_t g_spiDummyData[ARRAY_SIZE(s_spiBases)] = {0};
+volatile uint8_t g_spiDummyData[FSL_ARRAY_SIZE(s_spiBases)] = {0};
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -121,7 +121,7 @@ uint32_t SPI_GetInstance(SPI_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_spiBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_spiBases); instance++)
     {
         if (s_spiBases[instance] == base)
         {
@@ -129,7 +129,7 @@ uint32_t SPI_GetInstance(SPI_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_spiBases));
+    assert(instance < FSL_ARRAY_SIZE(s_spiBases));
 
     return instance;
 }

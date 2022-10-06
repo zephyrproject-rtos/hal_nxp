@@ -39,7 +39,7 @@ uint32_t TSI_GetInstance(TSI_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0U; instance < ARRAY_SIZE(s_tsiBases); instance++)
+    for (instance = 0U; instance < FSL_ARRAY_SIZE(s_tsiBases); instance++)
     {
         if (s_tsiBases[instance] == base)
         {
@@ -47,7 +47,7 @@ uint32_t TSI_GetInstance(TSI_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_tsiBases));
+    assert(instance < FSL_ARRAY_SIZE(s_tsiBases));
 
     return instance;
 }

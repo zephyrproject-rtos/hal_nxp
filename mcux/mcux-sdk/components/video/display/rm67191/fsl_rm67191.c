@@ -69,7 +69,7 @@ status_t RM67191_Init(display_handle_t *handle, const display_config_t *config)
     RM67191_DelayMs(20);
 
     /* Set the LCM init settings. */
-    for (i = 0; i < ARRAY_SIZE(lcmInitSetting); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(lcmInitSetting); i++)
     {
         status = MIPI_DSI_GenericWrite(dsiDevice, lcmInitSetting[i], 2);
 
@@ -81,7 +81,7 @@ status_t RM67191_Init(display_handle_t *handle, const display_config_t *config)
 
     /* Change to send user command. */
     const uint8_t rm67191UserCmdEntry[] = {RM67191_WRMAUCCTR, 0x00};
-    status = MIPI_DSI_GenericWrite(dsiDevice, rm67191UserCmdEntry, (int32_t)ARRAY_SIZE(rm67191UserCmdEntry));
+    status = MIPI_DSI_GenericWrite(dsiDevice, rm67191UserCmdEntry, (int32_t)FSL_ARRAY_SIZE(rm67191UserCmdEntry));
     if (kStatus_Success != status)
     {
         return status;
@@ -98,7 +98,7 @@ status_t RM67191_Init(display_handle_t *handle, const display_config_t *config)
 
     /* Set DSI mode */
     const uint8_t rm67191DsiMode[] = {RM67191_SETDSIMODE, 0x03};
-    status = MIPI_DSI_GenericWrite(dsiDevice, rm67191DsiMode, (int32_t)ARRAY_SIZE(rm67191DsiMode));
+    status = MIPI_DSI_GenericWrite(dsiDevice, rm67191DsiMode, (int32_t)FSL_ARRAY_SIZE(rm67191DsiMode));
     if (kStatus_Success != status)
     {
         return status;
@@ -106,7 +106,7 @@ status_t RM67191_Init(display_handle_t *handle, const display_config_t *config)
 
     /* Brightness. */
     const uint8_t rm67191Brightness[] = {RM67191_WRDISBV, 0xff};
-    status = MIPI_DSI_GenericWrite(dsiDevice, rm67191Brightness, (int32_t)ARRAY_SIZE(rm67191Brightness));
+    status = MIPI_DSI_GenericWrite(dsiDevice, rm67191Brightness, (int32_t)FSL_ARRAY_SIZE(rm67191Brightness));
     if (kStatus_Success != status)
     {
         return status;

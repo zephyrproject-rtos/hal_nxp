@@ -248,7 +248,7 @@ status_t BOARD_InitPsRam(void)
     FLEXSPI_SetFlashConfig(BOARD_FLEXSPI_PSRAM, &deviceconfig, kFLEXSPI_PortA1);
 
     /* Update LUT table. */
-    FLEXSPI_UpdateLUT(BOARD_FLEXSPI_PSRAM, 0, customLUT, ARRAY_SIZE(customLUT));
+    FLEXSPI_UpdateLUT(BOARD_FLEXSPI_PSRAM, 0, customLUT, FSL_ARRAY_SIZE(customLUT));
 
     /* Do software reset. */
     FLEXSPI_SoftwareReset(BOARD_FLEXSPI_PSRAM);

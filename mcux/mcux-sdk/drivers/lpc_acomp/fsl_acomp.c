@@ -51,7 +51,7 @@ static uint32_t ACOMP_GetInstance(ACOMP_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_acompBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_acompBases); instance++)
     {
         if (s_acompBases[instance] == base)
         {
@@ -59,7 +59,7 @@ static uint32_t ACOMP_GetInstance(ACOMP_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_acompBases));
+    assert(instance < FSL_ARRAY_SIZE(s_acompBases));
 
     return instance;
 }

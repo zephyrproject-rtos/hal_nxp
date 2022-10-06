@@ -44,10 +44,10 @@ static bool FLEXCOMM_PeripheralIsPresent(FLEXCOMM_Type *base, FLEXCOMM_PERIPH_T 
 static const uint32_t s_flexcommBaseAddrs[] = FLEXCOMM_BASE_ADDRS;
 
 /*! @brief Pointers to real IRQ handlers installed by drivers for each instance. */
-static flexcomm_irq_handler_t s_flexcommIrqHandler[ARRAY_SIZE(s_flexcommBaseAddrs)];
+static flexcomm_irq_handler_t s_flexcommIrqHandler[FSL_ARRAY_SIZE(s_flexcommBaseAddrs)];
 
 /*! @brief Pointers to handles for each instance to provide context to interrupt routines */
-static void *s_flexcommHandle[ARRAY_SIZE(s_flexcommBaseAddrs)];
+static void *s_flexcommHandle[FSL_ARRAY_SIZE(s_flexcommBaseAddrs)];
 
 /*! @brief Array to map FLEXCOMM instance number to IRQ number. */
 IRQn_Type const kFlexcommIrqs[] = FLEXCOMM_IRQS;

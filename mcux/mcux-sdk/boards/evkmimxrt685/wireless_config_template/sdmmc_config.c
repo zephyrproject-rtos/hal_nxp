@@ -107,13 +107,13 @@ void BOARD_SDCardIoVoltageControlInit(void)
     pca9420Config.I2C_SendFunc    = BOARD_PMIC_I2C_Send;
     pca9420Config.I2C_ReceiveFunc = BOARD_PMIC_I2C_Receive;
     PCA9420_Init(&pca9420Handle, &pca9420Config);
-    for (i = 0; i < ARRAY_SIZE(pca9420ModeCfg); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(pca9420ModeCfg); i++)
     {
         PCA9420_GetDefaultModeConfig(&pca9420ModeCfg[i]);
     }
     pca9420ModeCfg[0].ldo2OutVolt = kPCA9420_Ldo2OutVolt3V300;
     pca9420ModeCfg[1].ldo2OutVolt = kPCA9420_Ldo2OutVolt1V800;
-    PCA9420_WriteModeConfigs(&pca9420Handle, kPCA9420_Mode0, &pca9420ModeCfg[0], ARRAY_SIZE(pca9420ModeCfg));
+    PCA9420_WriteModeConfigs(&pca9420Handle, kPCA9420_Mode0, &pca9420ModeCfg[0], FSL_ARRAY_SIZE(pca9420ModeCfg));
 }
 
 void BOARD_SDCardIoVoltageControl(sdmmc_operation_voltage_t voltage)

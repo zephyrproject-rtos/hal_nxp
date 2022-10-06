@@ -147,9 +147,9 @@ static const clock_ip_name_t s_csiClocks[] = CSI_CLOCKS;
 
 /* Array for the CSI driver handle. */
 #if !CSI_DRIVER_FRAG_MODE
-static csi_handle_t *s_csiHandle[ARRAY_SIZE(s_csiBases)];
+static csi_handle_t *s_csiHandle[FSL_ARRAY_SIZE(s_csiBases)];
 #else
-static csi_frag_handle_t *s_csiHandle[ARRAY_SIZE(s_csiBases)];
+static csi_frag_handle_t *s_csiHandle[FSL_ARRAY_SIZE(s_csiBases)];
 #endif
 
 /* Array of CSI IRQ number. */
@@ -170,7 +170,7 @@ static uint32_t CSI_GetInstance(CSI_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_csiBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_csiBases); instance++)
     {
         if (s_csiBases[instance] == base)
         {
@@ -178,7 +178,7 @@ static uint32_t CSI_GetInstance(CSI_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_csiBases));
+    assert(instance < FSL_ARRAY_SIZE(s_csiBases));
 
     return instance;
 }

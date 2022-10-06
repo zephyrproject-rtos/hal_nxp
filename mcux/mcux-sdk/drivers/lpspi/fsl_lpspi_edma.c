@@ -66,8 +66,8 @@ static void LPSPI_SeparateEdmaReadData(uint8_t *rxData, uint32_t readData, uint3
 static LPSPI_Type *const s_lpspiBases[] = LPSPI_BASE_PTRS;
 
 /*! @brief Pointers to lpspi edma handles for each instance. */
-static lpspi_master_edma_private_handle_t s_lpspiMasterEdmaPrivateHandle[ARRAY_SIZE(s_lpspiBases)];
-static lpspi_slave_edma_private_handle_t s_lpspiSlaveEdmaPrivateHandle[ARRAY_SIZE(s_lpspiBases)];
+static lpspi_master_edma_private_handle_t s_lpspiMasterEdmaPrivateHandle[FSL_ARRAY_SIZE(s_lpspiBases)];
+static lpspi_slave_edma_private_handle_t s_lpspiSlaveEdmaPrivateHandle[FSL_ARRAY_SIZE(s_lpspiBases)];
 
 /***********************************************************************************************************************
  * Code

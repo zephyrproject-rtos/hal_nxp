@@ -340,7 +340,7 @@ usb_status_t USB_DeviceClassEvent(usb_device_handle handle, usb_device_class_eve
 
     for (classIndex = 0U; classIndex < classHandle->configList->count; classIndex++)
     {
-        for (mapIndex = 0U; mapIndex < (ARRAY_SIZE(s_UsbDeviceClassInterfaceMap) - 1U); mapIndex++)
+        for (mapIndex = 0U; mapIndex < (FSL_ARRAY_SIZE(s_UsbDeviceClassInterfaceMap) - 1U); mapIndex++)
         {
             if (s_UsbDeviceClassInterfaceMap[mapIndex].type ==
                 classHandle->configList->config[classIndex].classInfomation->type)

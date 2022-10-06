@@ -131,7 +131,7 @@ status_t HX8394_Init(display_handle_t *handle, const display_config_t *config)
 
     if (kStatus_Success == status)
     {
-        for (i = 0; i < ARRAY_SIZE(s_hx8394Cmds); i++)
+        for (i = 0; i < FSL_ARRAY_SIZE(s_hx8394Cmds); i++)
         {
             status = MIPI_DSI_GenericWrite(dsiDevice, s_hx8394Cmds[i].cmd, (int32_t)s_hx8394Cmds[i].cmdLen);
 

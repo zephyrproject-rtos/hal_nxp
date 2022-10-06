@@ -188,7 +188,7 @@ status_t RM68191_Init(display_handle_t *handle, const display_config_t *config)
     RM68191_DelayMs(5);
 
     /* Set the LCM init settings. */
-    for (i = 0; i < ARRAY_SIZE(s_rm68191InitSetting); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(s_rm68191InitSetting); i++)
     {
         status = MIPI_DSI_DCS_Write(dsiDevice, s_rm68191InitSetting[i].value, (int32_t)s_rm68191InitSetting[i].len);
 

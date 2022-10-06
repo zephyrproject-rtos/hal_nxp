@@ -246,7 +246,7 @@ hal_gpio_status_t HAL_GpioInit(hal_gpio_handle_t gpioHandle, hal_gpio_pin_config
         /*! @brief Array to map FGPIO instance number to clock name. */
         const clock_ip_name_t gpioClockName[] = GPIO_CLOCKS;
 
-        assert(gpioState->pin.port < ARRAY_SIZE(gpioClockName));
+        assert(gpioState->pin.port < FSL_ARRAY_SIZE(gpioClockName));
         CLOCK_EnableClock(gpioClockName[gpioState->pin.port]);
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 

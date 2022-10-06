@@ -41,7 +41,7 @@ static uint32_t LPADC_GetInstance(ADC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_lpadcBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_lpadcBases); instance++)
     {
         if (s_lpadcBases[instance] == base)
         {
@@ -49,7 +49,7 @@ static uint32_t LPADC_GetInstance(ADC_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_lpadcBases));
+    assert(instance < FSL_ARRAY_SIZE(s_lpadcBases));
 
     return instance;
 }

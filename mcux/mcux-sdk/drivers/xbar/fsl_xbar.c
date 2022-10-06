@@ -59,7 +59,7 @@ static const clock_ip_name_t s_xbarClock[] = XBAR_CLOCKS;
 static uint32_t XBAR_GetInstance(XBAR_Type *base)
 {
     uint32_t instance;
-    uint32_t xbarInstanceCount = ARRAY_SIZE(s_xbarBases);
+    uint32_t xbarInstanceCount = FSL_ARRAY_SIZE(s_xbarBases);
 
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < xbarInstanceCount; instance++)

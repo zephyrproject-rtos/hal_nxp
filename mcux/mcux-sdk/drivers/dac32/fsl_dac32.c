@@ -41,7 +41,7 @@ static uint32_t DAC32_GetInstance(DAC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_dac32Bases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_dac32Bases); instance++)
     {
         if (s_dac32Bases[instance] == base)
         {
@@ -49,7 +49,7 @@ static uint32_t DAC32_GetInstance(DAC_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_dac32Bases));
+    assert(instance < FSL_ARRAY_SIZE(s_dac32Bases));
 
     return instance;
 }

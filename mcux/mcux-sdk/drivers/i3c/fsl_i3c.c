@@ -122,13 +122,13 @@ static i3c_device_info_t devList[I3C_MAX_DEVCNT]; /*!< I3C slave record list */
 i3c_master_isr_t s_i3cMasterIsr;
 
 /*! @brief Pointers to master handles for each instance. */
-void *s_i3cMasterHandle[ARRAY_SIZE(kI3cBases)];
+void *s_i3cMasterHandle[FSL_ARRAY_SIZE(kI3cBases)];
 
 /*! @brief Pointer to slave IRQ handler for each instance. */
 static i3c_slave_isr_t s_i3cSlaveIsr;
 
 /*! @brief Pointers to slave handles for each instance. */
-i3c_slave_handle_t *s_i3cSlaveHandle[ARRAY_SIZE(kI3cBases)];
+i3c_slave_handle_t *s_i3cSlaveHandle[FSL_ARRAY_SIZE(kI3cBases)];
 
 /*******************************************************************************
  * Code
@@ -146,7 +146,7 @@ i3c_slave_handle_t *s_i3cSlaveHandle[ARRAY_SIZE(kI3cBases)];
 uint32_t I3C_GetInstance(I3C_Type *base)
 {
     uint32_t instance;
-    for (instance = 0; instance < ARRAY_SIZE(kI3cBases); ++instance)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(kI3cBases); ++instance)
     {
         if (kI3cBases[instance] == base)
         {
@@ -154,7 +154,7 @@ uint32_t I3C_GetInstance(I3C_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(kI3cBases));
+    assert(instance < FSL_ARRAY_SIZE(kI3cBases));
 
     return instance;
 }
@@ -1060,7 +1060,7 @@ void I3C_MasterRegisterIBI(I3C_Type *base, i3c_register_ibi_addr_t *ibiRule)
     assert(NULL != ibiRule);
     uint32_t ruleValue = I3C_MIBIRULES_MSB0_MASK;
 
-    for (uint32_t count = 0; count < ARRAY_SIZE(ibiRule->address); count++)
+    for (uint32_t count = 0; count < FSL_ARRAY_SIZE(ibiRule->address); count++)
     {
         ruleValue |= ((uint32_t)ibiRule->address[count]) << (count * I3C_MIBIRULES_ADDR1_SHIFT);
     }
@@ -1087,7 +1087,7 @@ void I3C_MasterGetIBIRules(I3C_Type *base, i3c_register_ibi_addr_t *ibiRule)
 
     uint32_t ruleValue = base->MIBIRULES;
 
-    for (uint32_t count = 0; count < ARRAY_SIZE(ibiRule->address); count++)
+    for (uint32_t count = 0; count < FSL_ARRAY_SIZE(ibiRule->address); count++)
     {
         ibiRule->address[count] =
             (uint8_t)(ruleValue >> (count * I3C_MIBIRULES_ADDR1_SHIFT)) & I3C_MIBIRULES_ADDR0_MASK;

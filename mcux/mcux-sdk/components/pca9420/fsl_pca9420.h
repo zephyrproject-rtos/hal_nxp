@@ -682,13 +682,13 @@ void PCA9420_GetRegulatorVolt(pca9420_modecfg_t *config, pca9420_regulator_mv_t 
  * @code
  *   pca9420_modecfg_t pca9420ModeCfg[4];
  *   uint32_t i;
- *   for (i = 0; i < ARRAY_SIZE(pca9420ModeCfg); i++)
+ *   for (i = 0; i < FSL_ARRAY_SIZE(pca9420ModeCfg); i++)
  *   {
  *       PCA9420_GetDefaultModeConfig(&pca9420ModeCfg[i]);
  *   }
  *   ...
  *   PCA9420_WriteModeConfigs(&pca9420Handle, kPCA9420_Mode0, &pca9420ModeCfg[0],
- * ARRAY_SIZE(pca9420ModeCfg));
+ * FSL_ARRAY_SIZE(pca9420ModeCfg));
  *   ...
  *   PCA9420_WriteModeConfigs(&pca9420Handle, kPCA9420_Mode2, &pca9420ModeCfg[2], 1);
  * @endcode

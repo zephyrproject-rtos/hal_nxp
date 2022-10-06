@@ -40,7 +40,7 @@ static uint32_t OPAMP_GetInstance(OPAMP_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0UL; instance < ARRAY_SIZE(s_opampBases); instance++)
+    for (instance = 0UL; instance < FSL_ARRAY_SIZE(s_opampBases); instance++)
     {
         if (s_opampBases[instance] == base)
         {
@@ -48,7 +48,7 @@ static uint32_t OPAMP_GetInstance(OPAMP_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_opampBases));
+    assert(instance < FSL_ARRAY_SIZE(s_opampBases));
 
     return instance;
 }

@@ -106,7 +106,7 @@ static uint32_t LCDIFV2_GetInstance(LCDIFV2_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_lcdifv2Bases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_lcdifv2Bases); instance++)
     {
         if (s_lcdifv2Bases[instance] == base)
         {
@@ -114,7 +114,7 @@ static uint32_t LCDIFV2_GetInstance(LCDIFV2_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_lcdifv2Bases));
+    assert(instance < FSL_ARRAY_SIZE(s_lcdifv2Bases));
 
     return instance;
 }

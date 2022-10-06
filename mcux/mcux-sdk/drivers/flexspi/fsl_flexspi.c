@@ -96,7 +96,7 @@ static const clock_ip_name_t s_flexspiClock[] = FLEXSPI_CLOCKS;
 
 #if defined(FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ) && FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ
 /*! @brief Pointers to flexspi handles for each instance. */
-static flexspi_handle_t *s_flexspiHandle[ARRAY_SIZE(s_flexspiBases)];
+static flexspi_handle_t *s_flexspiHandle[FSL_ARRAY_SIZE(s_flexspiBases)];
 #endif
 
 #if defined(FSL_FEATURE_FLEXSPI_HAS_RESET) && FSL_FEATURE_FLEXSPI_HAS_RESET
@@ -132,7 +132,7 @@ uint32_t FLEXSPI_GetInstance(FLEXSPI_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_flexspiBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_flexspiBases); instance++)
     {
         if (s_flexspiBases[instance] == base)
         {
@@ -140,7 +140,7 @@ uint32_t FLEXSPI_GetInstance(FLEXSPI_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_flexspiBases));
+    assert(instance < FSL_ARRAY_SIZE(s_flexspiBases));
 
     return instance;
 }

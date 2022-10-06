@@ -49,7 +49,7 @@ static uint32_t GPIO_GetInstance(GPIO_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0U; instance < ARRAY_SIZE(s_gpioBases); instance++)
+    for (instance = 0U; instance < FSL_ARRAY_SIZE(s_gpioBases); instance++)
     {
         if (s_gpioBases[instance] == base)
         {
@@ -57,7 +57,7 @@ static uint32_t GPIO_GetInstance(GPIO_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_gpioBases));
+    assert(instance < FSL_ARRAY_SIZE(s_gpioBases));
 
     return instance;
 }
@@ -79,7 +79,7 @@ void GPIO_PinInit(GPIO_Type *base, uint32_t pin, const gpio_pin_config_t *Config
     uint32_t instance = GPIO_GetInstance(base);
 
     /* If The clock IP is valid, enable the clock gate. */
-    if ((instance < ARRAY_SIZE(s_gpioClock)) && (kCLOCK_IpInvalid != s_gpioClock[instance]))
+    if ((instance < FSL_ARRAY_SIZE(s_gpioClock)) && (kCLOCK_IpInvalid != s_gpioClock[instance]))
     {
         (void)CLOCK_EnableClock(s_gpioClock[instance]);
     }

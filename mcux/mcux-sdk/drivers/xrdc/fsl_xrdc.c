@@ -104,7 +104,7 @@ void XRDC_Init(XRDC_Type *base)
 #else
     uint8_t i;
 
-    for (i = 0; i < ARRAY_SIZE(s_xrdcClock); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(s_xrdcClock); i++)
     {
         CLOCK_EnableClock(s_xrdcClock[i]);
     }
@@ -131,7 +131,7 @@ void XRDC_Deinit(XRDC_Type *base)
 #else
     uint8_t i;
 
-    for (i = 0; i < ARRAY_SIZE(s_xrdcClock); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(s_xrdcClock); i++)
     {
         CLOCK_DisableClock(s_xrdcClock[i]);
     }

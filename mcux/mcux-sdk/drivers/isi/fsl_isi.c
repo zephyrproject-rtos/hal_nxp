@@ -123,7 +123,7 @@ static uint32_t ISI_GetInstance(ISI_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_isiBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_isiBases); instance++)
     {
         if (s_isiBases[instance] == base)
         {
@@ -131,7 +131,7 @@ static uint32_t ISI_GetInstance(ISI_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_isiBases));
+    assert(instance < FSL_ARRAY_SIZE(s_isiBases));
 
     return instance;
 }

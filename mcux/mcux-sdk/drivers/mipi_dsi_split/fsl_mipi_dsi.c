@@ -99,7 +99,7 @@ static const DSI_HOST_IRQn s_dsiIRQ[] = DSI_HOST_IRQS;
 /*! @brief Pointers to MIPI DSI bases for each instance. */
 static DSI_HOST_Type *const s_dsiBases[] = DSI_HOST_BASE_PTRS;
 /*! @brief MIPI DSI internal handle pointer array */
-static dsi_handle_t *s_dsiHandle[ARRAY_SIZE(s_dsiBases)];
+static dsi_handle_t *s_dsiHandle[FSL_ARRAY_SIZE(s_dsiBases)];
 /*! @brief Pointer to IRQ handler. */
 static dsi_isr_t s_dsiIsr;
 
@@ -206,7 +206,7 @@ uint32_t DSI_GetInstance(const MIPI_DSI_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_dsiBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_dsiBases); instance++)
     {
         if (s_dsiBases[instance] == base->host)
         {
@@ -214,7 +214,7 @@ uint32_t DSI_GetInstance(const MIPI_DSI_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_dsiBases));
+    assert(instance < FSL_ARRAY_SIZE(s_dsiBases));
 
     return instance;
 }

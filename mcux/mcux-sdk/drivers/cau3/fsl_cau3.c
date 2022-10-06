@@ -4517,7 +4517,7 @@ status_t CAU3_CHACHA20_POLY1305_SetKey(CAU3_Type *base, cau3_handle_t *handle, c
         uint32_t w[8];
     } tempKey;
 
-    for (uint32_t i = 0; i < ARRAY_SIZE(tempKey.w); i++)
+    for (uint32_t i = 0; i < FSL_ARRAY_SIZE(tempKey.w); i++)
     {
         tempKey.w[i] = __REV(((const uint32_t *)(uintptr_t)key)[i]);
     }

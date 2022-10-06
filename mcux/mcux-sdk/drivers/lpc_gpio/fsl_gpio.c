@@ -42,7 +42,7 @@ static void GPIO_EnablePortClock(GPIO_Type *base, uint32_t port);
 static void GPIO_EnablePortClock(GPIO_Type *base, uint32_t port)
 {
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
-    assert(port < ARRAY_SIZE(s_gpioClockName));
+    assert(port < FSL_ARRAY_SIZE(s_gpioClockName));
 
     /* Upgate the GPIO clock */
     CLOCK_EnableClock(s_gpioClockName[port]);

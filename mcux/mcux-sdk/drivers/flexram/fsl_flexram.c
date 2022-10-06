@@ -61,7 +61,7 @@ static uint32_t FLEXRAM_GetInstance(FLEXRAM_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_flexramBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_flexramBases); instance++)
     {
         if (s_flexramBases[instance] == base)
         {
@@ -69,7 +69,7 @@ static uint32_t FLEXRAM_GetInstance(FLEXRAM_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_flexramBases));
+    assert(instance < FSL_ARRAY_SIZE(s_flexramBases));
 
     return instance;
 }

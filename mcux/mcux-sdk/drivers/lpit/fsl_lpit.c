@@ -51,7 +51,7 @@ uint32_t LPIT_GetInstance(LPIT_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0U; instance < ARRAY_SIZE(s_lpitBases); instance++)
+    for (instance = 0U; instance < FSL_ARRAY_SIZE(s_lpitBases); instance++)
     {
         if (s_lpitBases[instance] == base)
         {
@@ -59,7 +59,7 @@ uint32_t LPIT_GetInstance(LPIT_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_lpitBases));
+    assert(instance < FSL_ARRAY_SIZE(s_lpitBases));
 
     return instance;
 }

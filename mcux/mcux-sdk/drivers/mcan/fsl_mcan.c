@@ -176,7 +176,7 @@ static uint32_t MCAN_GetInstance(CAN_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_mcanBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_mcanBases); instance++)
     {
         if (s_mcanBases[instance] == base)
         {
@@ -184,7 +184,7 @@ static uint32_t MCAN_GetInstance(CAN_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_mcanBases));
+    assert(instance < FSL_ARRAY_SIZE(s_mcanBases));
 
     return instance;
 }

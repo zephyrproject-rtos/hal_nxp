@@ -55,7 +55,7 @@ static uint32_t LPTMR_GetInstance(LPTMR_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_lptmrBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_lptmrBases); instance++)
     {
         if (s_lptmrBases[instance] == base)
         {
@@ -63,7 +63,7 @@ static uint32_t LPTMR_GetInstance(LPTMR_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_lptmrBases));
+    assert(instance < FSL_ARRAY_SIZE(s_lptmrBases));
 
     return instance;
 }

@@ -92,7 +92,7 @@ static uint32_t LDB_GetInstance(LDB_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0U; instance < ARRAY_SIZE(s_ldbBases); instance++)
+    for (instance = 0U; instance < FSL_ARRAY_SIZE(s_ldbBases); instance++)
     {
         if (s_ldbBases[instance] == base)
         {
@@ -100,7 +100,7 @@ static uint32_t LDB_GetInstance(LDB_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_ldbBases));
+    assert(instance < FSL_ARRAY_SIZE(s_ldbBases));
 
     return instance;
 }

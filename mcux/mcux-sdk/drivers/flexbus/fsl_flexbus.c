@@ -47,7 +47,7 @@ static uint32_t FLEXBUS_GetInstance(FB_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_flexbusBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_flexbusBases); instance++)
     {
         if (s_flexbusBases[instance] == base)
         {
@@ -55,7 +55,7 @@ static uint32_t FLEXBUS_GetInstance(FB_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_flexbusBases));
+    assert(instance < FSL_ARRAY_SIZE(s_flexbusBases));
 
     return instance;
 }

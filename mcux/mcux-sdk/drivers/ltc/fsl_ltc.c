@@ -3320,7 +3320,7 @@ static void ltc_hash_move_to_ififo(ltc_hash_ctx_internal_t *ctx,
     ltc_hash_block_t blkZero;
     uint32_t i;
 
-    for (i = 0; i < ARRAY_SIZE(blkZero.w); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(blkZero.w); i++)
     {
         blkZero.w[i] = 0;
     }
@@ -3407,7 +3407,7 @@ static status_t ltc_hash_move_rest_to_context(
     uint32_t i;
 
     /* make blkZero clear */
-    for (i = 0; i < ARRAY_SIZE(blkZero.w); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(blkZero.w); i++)
     {
         blkZero.w[i] = 0;
     }

@@ -52,7 +52,7 @@ static void PDM_EDMACallback(edma_handle_t *handle, void *userData, bool done, u
 /*! @brief pdm base address pointer */
 static PDM_Type *const s_pdmBases[] = PDM_BASE_PTRS;
 /*<! Private handle only used for internally. */
-static pdm_edma_private_handle_t s_edmaPrivateHandle[ARRAY_SIZE(s_pdmBases)];
+static pdm_edma_private_handle_t s_edmaPrivateHandle[FSL_ARRAY_SIZE(s_pdmBases)];
 /*******************************************************************************
  * Code
  ******************************************************************************/

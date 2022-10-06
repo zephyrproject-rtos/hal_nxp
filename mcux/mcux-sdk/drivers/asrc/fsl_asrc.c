@@ -78,7 +78,7 @@ static status_t ASRC_ProcessSelection(uint32_t inSampleRate,
 /* Base pointer array */
 static ASRC_Type *const s_asrcBases[] = ASRC_BASE_PTRS;
 /*!@brief asrc handle pointer */
-static asrc_handle_t *s_asrcHandle[ARRAY_SIZE(s_asrcBases)][FSL_ASRC_CHANNEL_PAIR_COUNT];
+static asrc_handle_t *s_asrcHandle[FSL_ARRAY_SIZE(s_asrcBases)][FSL_ASRC_CHANNEL_PAIR_COUNT];
 /* IRQ number array */
 static const IRQn_Type s_asrcIRQ[] = ASRC_IRQS;
 
@@ -96,7 +96,7 @@ uint32_t ASRC_GetInstance(ASRC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_asrcBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_asrcBases); instance++)
     {
         if (s_asrcBases[instance] == base)
         {
@@ -104,7 +104,7 @@ uint32_t ASRC_GetInstance(ASRC_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_asrcBases));
+    assert(instance < FSL_ARRAY_SIZE(s_asrcBases));
 
     return instance;
 }

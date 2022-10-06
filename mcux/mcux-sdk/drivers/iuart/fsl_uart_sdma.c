@@ -37,7 +37,7 @@ enum _uart_sdma_tansfer_states
 
 /*<! Private handle only used for internally. */
 static UART_Type *const s_uartSdmaBases[] = UART_BASE_PTRS;
-static uart_sdma_private_handle_t s_sdmaPrivateHandle[ARRAY_SIZE(s_uartSdmaBases)];
+static uart_sdma_private_handle_t s_sdmaPrivateHandle[FSL_ARRAY_SIZE(s_uartSdmaBases)];
 
 /*******************************************************************************
  * Prototypes

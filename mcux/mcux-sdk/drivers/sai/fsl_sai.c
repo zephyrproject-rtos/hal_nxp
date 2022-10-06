@@ -108,7 +108,7 @@ static void SAI_GetCommonConfig(sai_transceiver_t *config,
 /* Base pointer array */
 static I2S_Type *const s_saiBases[] = I2S_BASE_PTRS;
 /*!@brief SAI handle pointer */
-static sai_handle_t *s_saiHandle[ARRAY_SIZE(s_saiBases)][2];
+static sai_handle_t *s_saiHandle[FSL_ARRAY_SIZE(s_saiBases)][2];
 /* IRQ number array */
 static const IRQn_Type s_saiTxIRQ[] = I2S_TX_IRQS;
 static const IRQn_Type s_saiRxIRQ[] = I2S_RX_IRQS;
@@ -223,7 +223,7 @@ static uint32_t SAI_GetInstance(I2S_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_saiBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_saiBases); instance++)
     {
         if (s_saiBases[instance] == base)
         {
@@ -231,7 +231,7 @@ static uint32_t SAI_GetInstance(I2S_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_saiBases));
+    assert(instance < FSL_ARRAY_SIZE(s_saiBases));
 
     return instance;
 }

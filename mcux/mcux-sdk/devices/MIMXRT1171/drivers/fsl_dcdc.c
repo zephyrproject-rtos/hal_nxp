@@ -51,7 +51,7 @@ static uint32_t DCDC_GetInstance(DCDC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_dcdcBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_dcdcBases); instance++)
     {
         if (s_dcdcBases[instance] == base)
         {
@@ -59,7 +59,7 @@ static uint32_t DCDC_GetInstance(DCDC_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_dcdcBases));
+    assert(instance < FSL_ARRAY_SIZE(s_dcdcBases));
 
     return instance;
 }

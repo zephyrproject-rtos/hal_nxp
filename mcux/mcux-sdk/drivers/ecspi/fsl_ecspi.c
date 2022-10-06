@@ -97,7 +97,7 @@ static void ECSPI_CommonIRQHandler(ECSPI_Type *base, ecspi_master_handle_t *hand
 /*! @brief Base pointer array */
 static ECSPI_Type *const s_ecspiBases[] = ECSPI_BASE_PTRS;
 /*! @brief ECSPI internal handle pointer array */
-static ecspi_master_handle_t *s_ecspiHandle[ARRAY_SIZE(s_ecspiBases)];
+static ecspi_master_handle_t *s_ecspiHandle[FSL_ARRAY_SIZE(s_ecspiBases)];
 /*! @brief IRQ name array */
 static const IRQn_Type s_ecspiIRQ[] = ECSPI_IRQS;
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -123,14 +123,14 @@ uint32_t ECSPI_GetInstance(ECSPI_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_ecspiBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_ecspiBases); instance++)
     {
         if (s_ecspiBases[instance] == base)
         {
             break;
         }
     }
-    assert(instance <= ARRAY_SIZE(s_ecspiBases));
+    assert(instance <= FSL_ARRAY_SIZE(s_ecspiBases));
     return instance;
 }
 

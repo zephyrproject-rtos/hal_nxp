@@ -93,7 +93,7 @@ static status_t ISI_ADAPTER_GetIsiOutFormat(video_pixel_format_t fourccFormat, i
 {
     uint32_t i;
 
-    for (i = 0; i < ARRAY_SIZE(s_isiOutputFormatMap); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(s_isiOutputFormatMap); i++)
     {
         if (s_isiOutputFormatMap[i].fourccFormat == fourccFormat)
         {

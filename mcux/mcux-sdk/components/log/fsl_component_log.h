@@ -231,7 +231,7 @@ typedef struct log_backend
     if (((logLevel > kLOG_LevelNone) && ((logger)->level >= logLevel)))                                       \
     {                                                                                                         \
         LOG_ARGUMENT_TYPE argValueList[] = {LOG_LIST_ARGUMENT(__VA_ARGS__)};                                  \
-        LOG_AsyncPrintf(logger, logLevel, LOG_TIMESTAMP_GET, format, ARRAY_SIZE(argValueList), argValueList); \
+        LOG_AsyncPrintf(logger, logLevel, LOG_TIMESTAMP_GET, format, FSL_ARRAY_SIZE(argValueList), argValueList); \
     }
 #else
 /*!

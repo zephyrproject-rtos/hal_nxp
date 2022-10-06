@@ -1342,7 +1342,7 @@ static srtm_status_t SRTM_SaiSdmaAdapter_SetParam(
         return SRTM_Status_InvalidState;
     }
 
-    if ((format > (uint8_t)SRTM_Audio_DSD32bits) || (channels >= ARRAY_SIZE(saiChannelMap)))
+    if ((format > (uint8_t)SRTM_Audio_DSD32bits) || (channels >= FSL_ARRAY_SIZE(saiChannelMap)))
     {
         SRTM_DEBUG_MESSAGE(SRTM_DEBUG_VERBOSE_ERROR, "%s: %s unsupported format or channels %d, %d!\r\n", __func__,
                            saiDirection[dir], format, channels);

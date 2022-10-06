@@ -84,7 +84,7 @@ uint32_t QSPI_GetInstance(QuadSPI_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_qspiBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_qspiBases); instance++)
     {
         if (s_qspiBases[instance] == base)
         {
@@ -92,7 +92,7 @@ uint32_t QSPI_GetInstance(QuadSPI_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_qspiBases));
+    assert(instance < FSL_ARRAY_SIZE(s_qspiBases));
 
     return instance;
 }

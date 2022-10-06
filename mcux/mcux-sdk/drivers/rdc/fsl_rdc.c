@@ -60,7 +60,7 @@ uint32_t RDC_GetInstance(RDC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_rdcBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_rdcBases); instance++)
     {
         if (s_rdcBases[instance] == base)
         {
@@ -68,7 +68,7 @@ uint32_t RDC_GetInstance(RDC_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_rdcBases));
+    assert(instance < FSL_ARRAY_SIZE(s_rdcBases));
 
     return instance;
 }

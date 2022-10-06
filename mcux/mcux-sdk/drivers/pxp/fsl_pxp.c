@@ -175,7 +175,7 @@ static uint32_t PXP_GetInstance(PXP_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_pxpBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_pxpBases); instance++)
     {
         if (s_pxpBases[instance] == base)
         {
@@ -183,7 +183,7 @@ static uint32_t PXP_GetInstance(PXP_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_pxpBases));
+    assert(instance < FSL_ARRAY_SIZE(s_pxpBases));
 
     return instance;
 }

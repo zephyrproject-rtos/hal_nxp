@@ -314,7 +314,7 @@ status_t MT9M114_Init(camera_device_handle_t *handle, const camera_config_t *con
         return status;
     }
 
-    status = MT9M114_MultiWrite(handle, mt9m114InitConfig, ARRAY_SIZE(mt9m114InitConfig));
+    status = MT9M114_MultiWrite(handle, mt9m114InitConfig, FSL_ARRAY_SIZE(mt9m114InitConfig));
     if (kStatus_Success != status)
     {
         return status;
@@ -362,11 +362,11 @@ status_t MT9M114_Init(camera_device_handle_t *handle, const camera_config_t *con
     /* Resolution */
     if (config->resolution == FSL_VIDEO_RESOLUTION(480, 272))
     {
-        status = MT9M114_MultiWrite(handle, mt9m114_480_272, ARRAY_SIZE(mt9m114_480_272));
+        status = MT9M114_MultiWrite(handle, mt9m114_480_272, FSL_ARRAY_SIZE(mt9m114_480_272));
     }
     else
     {
-        status = MT9M114_MultiWrite(handle, mt9m114_720p, ARRAY_SIZE(mt9m114_720p));
+        status = MT9M114_MultiWrite(handle, mt9m114_720p, FSL_ARRAY_SIZE(mt9m114_720p));
     }
 
     if (kStatus_Success != status)

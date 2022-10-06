@@ -206,7 +206,7 @@ static void USDHC_TransferHandleReTuning(USDHC_Type *base, usdhc_handle_t *handl
 static USDHC_Type *const s_usdhcBase[] = USDHC_BASE_PTRS;
 
 /*! @brief USDHC internal handle pointer array */
-static usdhc_handle_t *s_usdhcHandle[ARRAY_SIZE(s_usdhcBase)] = {0};
+static usdhc_handle_t *s_usdhcHandle[FSL_ARRAY_SIZE(s_usdhcBase)] = {0};
 
 /*! @brief USDHC IRQ name array */
 static const IRQn_Type s_usdhcIRQ[] = USDHC_IRQS;
@@ -237,12 +237,12 @@ static uint32_t USDHC_GetInstance(USDHC_Type *base)
 {
     uint8_t instance = 0;
 
-    while ((instance < ARRAY_SIZE(s_usdhcBase)) && (s_usdhcBase[instance] != base))
+    while ((instance < FSL_ARRAY_SIZE(s_usdhcBase)) && (s_usdhcBase[instance] != base))
     {
         instance++;
     }
 
-    assert(instance < ARRAY_SIZE(s_usdhcBase));
+    assert(instance < FSL_ARRAY_SIZE(s_usdhcBase));
 
     return instance;
 }

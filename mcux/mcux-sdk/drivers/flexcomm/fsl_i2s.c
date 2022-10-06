@@ -74,7 +74,7 @@ static const IRQn_Type s_i2sIRQ[] = I2S_IRQS;
 static uint32_t I2S_GetInstance(I2S_Type *base)
 {
     uint32_t i;
-    for (i = 0; i < (uint32_t)ARRAY_SIZE(s_i2sBaseAddrs); i++)
+    for (i = 0; i < (uint32_t)FSL_ARRAY_SIZE(s_i2sBaseAddrs); i++)
     {
         if ((uint32_t)base == s_i2sBaseAddrs[i])
         {

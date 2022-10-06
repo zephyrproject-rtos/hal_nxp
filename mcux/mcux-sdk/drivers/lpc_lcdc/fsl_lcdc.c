@@ -87,7 +87,7 @@ static uint32_t LCDC_GetInstance(LCD_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_lcdBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_lcdBases); instance++)
     {
         if (s_lcdBases[instance] == base)
         {
@@ -95,7 +95,7 @@ static uint32_t LCDC_GetInstance(LCD_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_lcdBases));
+    assert(instance < FSL_ARRAY_SIZE(s_lcdBases));
 
     return instance;
 }
@@ -355,7 +355,7 @@ void LCDC_SetPanelAddr(LCD_Type *base, lcdc_panel_t panel, uint32_t addr)
  */
 void LCDC_SetPalette(LCD_Type *base, const uint32_t *palette, uint8_t count_words)
 {
-    assert(count_words <= ARRAY_SIZE(base->PAL));
+    assert(count_words <= FSL_ARRAY_SIZE(base->PAL));
 
     uint32_t i;
 

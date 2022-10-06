@@ -48,7 +48,7 @@ static uint32_t EEPROM_GetInstance(EEPROM_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_eepromBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_eepromBases); instance++)
     {
         if (s_eepromBases[instance] == base)
         {
@@ -56,7 +56,7 @@ static uint32_t EEPROM_GetInstance(EEPROM_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_eepromBases));
+    assert(instance < FSL_ARRAY_SIZE(s_eepromBases));
 
     return instance;
 }

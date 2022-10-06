@@ -131,14 +131,14 @@ static const clock_ip_name_t s_LpspiPeriphClocks[] = LPSPI_PERIPH_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
 /*! @brief Pointers to lpspi handles for each instance. */
-static void *s_lpspiHandle[ARRAY_SIZE(s_lpspiBases)];
+static void *s_lpspiHandle[FSL_ARRAY_SIZE(s_lpspiBases)];
 
 /*! @brief Pointer to master IRQ handler for each instance. */
 static lpspi_master_isr_t s_lpspiMasterIsr;
 /*! @brief Pointer to slave IRQ handler for each instance. */
 static lpspi_slave_isr_t s_lpspiSlaveIsr;
 /* @brief Dummy data for each instance. This data is used when user's tx buffer is NULL*/
-volatile uint8_t g_lpspiDummyData[ARRAY_SIZE(s_lpspiBases)] = {0};
+volatile uint8_t g_lpspiDummyData[FSL_ARRAY_SIZE(s_lpspiBases)] = {0};
 
 /**********************************************************************************************************************
  * Code
@@ -155,7 +155,7 @@ uint32_t LPSPI_GetInstance(LPSPI_Type *base)
     uint8_t instance = 0;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_lpspiBases); instance++)
+    for (instance = 0; instance < FSL_ARRAY_SIZE(s_lpspiBases); instance++)
     {
         if (s_lpspiBases[instance] == base)
         {
@@ -163,7 +163,7 @@ uint32_t LPSPI_GetInstance(LPSPI_Type *base)
         }
     }
 
-    assert(instance < ARRAY_SIZE(s_lpspiBases));
+    assert(instance < FSL_ARRAY_SIZE(s_lpspiBases));
 
     return instance;
 }

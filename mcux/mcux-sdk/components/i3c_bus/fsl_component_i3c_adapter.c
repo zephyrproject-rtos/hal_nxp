@@ -651,7 +651,7 @@ static void I3C_MasterAdapterRegisterIBI(i3c_device_t *master, uint8_t ibiAddres
         ibiRule.ibiHasPayload = true;
     }
 
-    for (uint32_t count = 0; count < ARRAY_SIZE(ibiRule.address); count++)
+    for (uint32_t count = 0; count < FSL_ARRAY_SIZE(ibiRule.address); count++)
     {
         if (0U == ibiRule.address[count])
         {

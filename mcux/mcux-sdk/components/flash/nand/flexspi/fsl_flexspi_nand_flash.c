@@ -223,7 +223,7 @@ status_t Nand_Flash_Init(nand_config_t *config, nand_handle_t *handle)
 
                                /* Update LUT table. */
         FLEXSPI_UpdateLUT((FLEXSPI_Type *)config->driverBaseAddr, 0, memConfig->lookupTable,
-                          ARRAY_SIZE(memConfig->lookupTable));
+                          FSL_ARRAY_SIZE(memConfig->lookupTable));
 
     /* Do software reset. */
     FLEXSPI_SoftwareReset((FLEXSPI_Type *)config->driverBaseAddr);

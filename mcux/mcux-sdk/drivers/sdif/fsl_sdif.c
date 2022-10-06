@@ -218,12 +218,12 @@ static uint32_t SDIF_GetInstance(SDIF_Type *base)
 {
     uint8_t instance = 0U;
 
-    while ((instance < ARRAY_SIZE(s_sdifBase)) && (s_sdifBase[instance] != base))
+    while ((instance < FSL_ARRAY_SIZE(s_sdifBase)) && (s_sdifBase[instance] != base))
     {
         instance++;
     }
 
-    assert(instance < ARRAY_SIZE(s_sdifBase));
+    assert(instance < FSL_ARRAY_SIZE(s_sdifBase));
 
     return instance;
 }

@@ -724,7 +724,7 @@ static status_t OV5640_SoftwareReset(camera_device_handle_t *handle)
 {
     ov5640_reg_val_t param[] = {{0x3103, 0x11}, {0x3008, 0x82}};
 
-    return OV5640_LoadRegVal(handle, param, ARRAY_SIZE(param));
+    return OV5640_LoadRegVal(handle, param, FSL_ARRAY_SIZE(param));
 }
 
 static const uint8_t *OV5640_GetResolutionParam(uint32_t resolution)
@@ -735,7 +735,7 @@ static const uint8_t *OV5640_GetResolutionParam(uint32_t resolution)
      */
     uint32_t i;
 
-    for (i = 0; i < ARRAY_SIZE(resolutionParam); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(resolutionParam); i++)
     {
         if (resolution == resolutionParam[i].resolution)
         {
@@ -752,7 +752,7 @@ static const ov5640_clock_config_t *OV5640_GetClockConfig(const camera_config_t 
 
     if (kCAMERA_InterfaceMIPI == config->interface)
     {
-        for (i = 0; i < ARRAY_SIZE(s_ov5640MipiClockConfigs); i++)
+        for (i = 0; i < FSL_ARRAY_SIZE(s_ov5640MipiClockConfigs); i++)
         {
             if ((config->framePerSec == s_ov5640MipiClockConfigs[i].framePerSec) &&
                 (config->resolution == s_ov5640MipiClockConfigs[i].resolution))
@@ -763,7 +763,7 @@ static const ov5640_clock_config_t *OV5640_GetClockConfig(const camera_config_t 
     }
     else
     {
-        for (i = 0; i < ARRAY_SIZE(s_ov5640DvpClockConfigs); i++)
+        for (i = 0; i < FSL_ARRAY_SIZE(s_ov5640DvpClockConfigs); i++)
         {
             if ((config->framePerSec == s_ov5640DvpClockConfigs[i].framePerSec) &&
                 (config->resolution == s_ov5640DvpClockConfigs[i].resolution))
@@ -862,7 +862,7 @@ status_t OV5640_Init(camera_device_handle_t *handle, const camera_config_t *conf
     OV5640_DelayMs(5);
 
     /* Initialize. */
-    status = OV5640_LoadRegVal(handle, ov5640InitParam, ARRAY_SIZE(ov5640InitParam));
+    status = OV5640_LoadRegVal(handle, ov5640InitParam, FSL_ARRAY_SIZE(ov5640InitParam));
     if (kStatus_Success != status)
     {
         return status;
@@ -966,7 +966,7 @@ status_t OV5640_Deinit(camera_device_handle_t *handle)
 
 status_t OV5640_Control(camera_device_handle_t *handle, camera_device_cmd_t cmd, int32_t arg)
 {
-    for (uint8_t i = 0; i < ARRAY_SIZE(s_ov5640CmdFuncMap); i++)
+    for (uint8_t i = 0; i < FSL_ARRAY_SIZE(s_ov5640CmdFuncMap); i++)
     {
         if (s_ov5640CmdFuncMap[i].cmd == cmd)
         {
@@ -1075,7 +1075,7 @@ status_t OV5640_SetLightMode(camera_device_handle_t *handle, int32_t lightMode)
     status_t status;
     uint8_t i;
 
-    for (i = 0; i < ARRAY_SIZE(s_ov5640LightModeConfigs); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(s_ov5640LightModeConfigs); i++)
     {
         if (lightMode == (int32_t)s_ov5640LightModeConfigs[i].lightMode)
         {
@@ -1103,7 +1103,7 @@ status_t OV5640_SetSpecialEffect(camera_device_handle_t *handle, int32_t effect)
     status_t status;
     uint8_t i;
 
-    for (i = 0; i < ARRAY_SIZE(s_ov5640SpecialEffectConfigs); i++)
+    for (i = 0; i < FSL_ARRAY_SIZE(s_ov5640SpecialEffectConfigs); i++)
     {
         if (effect == (int32_t)s_ov5640SpecialEffectConfigs[i].effect)
         {
