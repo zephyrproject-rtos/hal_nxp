@@ -41,18 +41,6 @@
  extern "C" {
 #endif
 
-#ifndef KB
-#define KB(x)                  ((x) << 10)
-#endif
-
-#ifndef MB
-#define MB(x)                  ((KB(x)) << 10)
-#endif
-
-#ifndef GB
-#define GB(x)                  ((MB(x)) << 10)
-#endif
-
 /******************************************************************************/
 
 /* Following Memory types supported through MAIR encodings can be passed
