@@ -48,6 +48,10 @@
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
+#ifndef KB
+#define KB(x)                  ((x) << 10)
+#endif
+
 #ifndef CONFIG_MMU_PAGE_SIZE
 #define CONFIG_MMU_PAGE_SIZE                   4096
 #endif
