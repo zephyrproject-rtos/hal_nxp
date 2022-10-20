@@ -31,6 +31,8 @@ extern "C"
 * 3) internal and external interfaces from this unit
 * 4) user callback header files
 ==================================================================================================*/
+#include <zephyr/devicetree.h>
+
 #include "Mcal.h"
 #include "OsIf.h"
 #include "Spi_Ip_Sa_Init_PBcfg.h"
@@ -93,16 +95,22 @@ extern "C"
 #define SPI_IP_FIFO_SIZE_U16    ((uint16)5U)
 
 /** @brief HWUnits enabled/disabled */
-#define SPI_IP_0_ENABLED  (STD_ON)
-#define SPI_IP_1_ENABLED  (STD_ON)
-#define SPI_IP_3_ENABLED  (STD_ON)
-#define SPI_IP_4_ENABLED  (STD_ON)
-#define SPI_IP_5_ENABLED  (STD_ON)
-#define SPI_IP_6_ENABLED  (STD_ON)
-#define SPI_IP_7_ENABLED  (STD_ON)
-#define SPI_IP_8_ENABLED  (STD_ON)
-#define SPI_IP_9_ENABLED  (STD_ON)
+#define SPI_IP_0_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi0), okay)
+#define SPI_IP_1_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi1), okay)
+#define SPI_IP_2_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi2), okay)
+#define SPI_IP_3_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi3), okay)
+#define SPI_IP_4_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi4), okay)
+#define SPI_IP_5_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi5), okay)
+#define SPI_IP_6_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi6), okay)
+#define SPI_IP_7_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi7), okay)
+#define SPI_IP_8_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi8), okay)
+#define SPI_IP_9_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi9), okay)
+
+#if CONFIG_SPI_SLAVE
 #define SPI_IP_SLAVE_SUPPORT  (STD_ON)
+#else
+#define SPI_IP_SLAVE_SUPPORT  (STD_OFF)
+#endif
 
 /**
 * @brief Defines if transfers are made using DMA or FIFO.
