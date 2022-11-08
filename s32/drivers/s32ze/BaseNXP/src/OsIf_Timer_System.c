@@ -33,7 +33,7 @@ extern "C"{
 #elif defined(USING_OS_FREERTOS)
 #include "FreeRTOSConfig.h"
 #elif defined(USING_OS_ZEPHYR)
-#include "zephyr.h"
+#include <zephyr/kernel.h>
 #else
     /* Baremetal, make sure USING_OS_BAREMETAL is defined */
 #ifndef USING_OS_BAREMETAL
