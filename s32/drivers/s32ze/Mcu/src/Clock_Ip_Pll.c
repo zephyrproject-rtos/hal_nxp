@@ -5,7 +5,7 @@
  */
 /**
 *   @file       Clock_Ip_Pll.c
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -33,10 +33,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_PLL_VENDOR_ID_C                      43
 #define CLOCK_IP_PLL_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_PLL_AR_RELEASE_MINOR_VERSION_C       4
+#define CLOCK_IP_PLL_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_PLL_AR_RELEASE_REVISION_VERSION_C    0
 #define CLOCK_IP_PLL_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_PLL_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_PLL_SW_MINOR_VERSION_C               9
 #define CLOCK_IP_PLL_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -116,6 +116,13 @@ static void Clock_Ip_SetPlldigRdivMfiMfnSdmen(Clock_Ip_PllConfigType const* Conf
 static Clock_Ip_PllStatusReturnType Clock_Ip_CompletePlldigRdivMfiMfnSdmen(Clock_Ip_NameType PllName);
 static void Clock_Ip_EnablePlldigRdivMfiMfnSdmen(Clock_Ip_PllConfigType const* Config);
 #endif
+#ifdef CLOCK_IP_LFASTPLL_ENABLE
+static void Clock_Ip_ResetLfastPLL(Clock_Ip_PllConfigType const* Config);
+static void Clock_Ip_SetLfastPLL(Clock_Ip_PllConfigType const* Config);
+static Clock_Ip_PllStatusReturnType Clock_Ip_CompleteLfastPLL(Clock_Ip_NameType PllName);
+static void Clock_Ip_EnableLfastPLL(Clock_Ip_PllConfigType const* Config);
+#endif
+
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -152,6 +159,12 @@ static void Clock_Ip_CallbackPllEmptyDisable(Clock_Ip_NameType PllName)
 
 /* Pll with frequency modulation */
 #ifdef CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN_SSCGBYP_SPREADCTL_STEPNO_STEPSIZE
+#ifndef CLOCK_IP_FIRC_PLL_REFERENCE
+    #define CLOCK_IP_FIRC_PLL_REFERENCE 0U
+#endif
+#ifndef CLOCK_IP_FXOSC_PLL_REFERENCE
+    #define CLOCK_IP_FXOSC_PLL_REFERENCE 1U
+#endif
 static void Clock_Ip_ResetPlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize(Clock_Ip_PllConfigType const* Config)
 {
     uint32 Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
@@ -159,7 +172,7 @@ static void Clock_Ip_ResetPlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize(C
 
     /* Disable output dividers */
     for (DividerIndex = 0U; DividerIndex < Clock_Ip_apxPll[Instance].DivsNo; DividerIndex++)
-    { 
+    {
         Clock_Ip_apxPll[Instance].PllInstance->PLLODIV[DividerIndex] &= ~PLLDIG_PLLODIV_DE_MASK;
     }
 
@@ -178,11 +191,11 @@ static void Clock_Ip_SetPlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize(Clo
         {
             case FIRC_CLK:
                 /* Select input reference. */
-                Clock_Ip_apxPll[Instance].PllInstance->PLLCLKMUX = PLLDIG_PLLCLKMUX_REFCLKSEL(0U);
+                Clock_Ip_apxPll[Instance].PllInstance->PLLCLKMUX = PLLDIG_PLLCLKMUX_REFCLKSEL(CLOCK_IP_FIRC_PLL_REFERENCE);
                 break;
             case FXOSC_CLK:
                 /* Select input reference. */
-                Clock_Ip_apxPll[Instance].PllInstance->PLLCLKMUX = PLLDIG_PLLCLKMUX_REFCLKSEL(1U);
+                Clock_Ip_apxPll[Instance].PllInstance->PLLCLKMUX = PLLDIG_PLLCLKMUX_REFCLKSEL(CLOCK_IP_FXOSC_PLL_REFERENCE);
                 break;
             default:
                 /* Command is not implemented on this platform */
@@ -200,7 +213,7 @@ static void Clock_Ip_SetPlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize(Clo
         Value |= PLLDIG_PLLFD_SDMEN(Config->SigmaDelta);
         Clock_Ip_apxPll[Instance].PllInstance->PLLFD = Value;
         /* Configure modulation */
-        Value = (uint32) (PLLDIG_PLLFM_SSCGBYP((Config->ModulationFrequency != 0U) ? 0UL : 1UL) |
+        Value = (uint32) (PLLDIG_PLLFM_SSCGBYP(Config->FrequencyModulationBypass)               |
                           PLLDIG_PLLFM_SPREADCTL(Config->ModulationType)                        |
                           PLLDIG_PLLFM_STEPNO(Config->IncrementStep)                            |
                           PLLDIG_PLLFM_STEPSIZE(Config->ModulationPeriod));
@@ -256,6 +269,12 @@ static void Clock_Ip_EnablePlldigRdivMfiMfnSdmenSsscgbypSpreadctlStepnoStepsize(
 
 /* Pll without frequency modulation */
 #ifdef CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN
+#ifndef CLOCK_IP_FIRC_PLL_REFERENCE
+    #define CLOCK_IP_FIRC_PLL_REFERENCE 0U
+#endif
+#ifndef CLOCK_IP_FXOSC_PLL_REFERENCE
+    #define CLOCK_IP_FXOSC_PLL_REFERENCE 1U
+#endif
 static void Clock_Ip_ResetPlldigRdivMfiMfnSdmen(Clock_Ip_PllConfigType const* Config)
 {
     uint32 Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
@@ -263,7 +282,7 @@ static void Clock_Ip_ResetPlldigRdivMfiMfnSdmen(Clock_Ip_PllConfigType const* Co
 
     /* Disable output dividers */
     for (DividerIndex = 0U; DividerIndex < Clock_Ip_apxPll[Instance].DivsNo; DividerIndex++)
-    { 
+    {
         Clock_Ip_apxPll[Instance].PllInstance->PLLODIV[DividerIndex] &= ~PLLDIG_PLLODIV_DE_MASK;
     }
 
@@ -282,11 +301,11 @@ static void Clock_Ip_SetPlldigRdivMfiMfnSdmen(Clock_Ip_PllConfigType const* Conf
         {
             case FIRC_CLK:
                 /* Select input reference. */
-                Clock_Ip_apxPll[Instance].PllInstance->PLLCLKMUX = PLLDIG_PLLCLKMUX_REFCLKSEL(0U);
+                Clock_Ip_apxPll[Instance].PllInstance->PLLCLKMUX = PLLDIG_PLLCLKMUX_REFCLKSEL(CLOCK_IP_FIRC_PLL_REFERENCE);
                 break;
             case FXOSC_CLK:
                 /* Select input reference. */
-                Clock_Ip_apxPll[Instance].PllInstance->PLLCLKMUX = PLLDIG_PLLCLKMUX_REFCLKSEL(1U);
+                Clock_Ip_apxPll[Instance].PllInstance->PLLCLKMUX = PLLDIG_PLLCLKMUX_REFCLKSEL(CLOCK_IP_FXOSC_PLL_REFERENCE);
                 break;
             default:
                 /* Command is not implemented on this platform */
@@ -357,6 +376,111 @@ static void Clock_Ip_EnablePlldigRdivMfiMfnSdmen(Clock_Ip_PllConfigType const* C
 
 
 
+#ifdef CLOCK_IP_LFASTPLL_ENABLE
+static void Clock_Ip_ResetLfastPLL(Clock_Ip_PllConfigType const* Config)
+{
+    (void)Config;
+    uint32 Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+
+    /* Power down PLL */
+    Clock_Ip_apxLfastPll[Instance].PllInstance->PLLCR |= LFAST_PLLCR_SWPOFF(1);
+    /* Accept write register LFAST */
+    Clock_Ip_apxLfastPll[Instance].PllInstance->MCR &= (~((uint32)LFAST_MCR_DRFEN_MASK));
+    /* Clear FBDIV bit field */
+    Clock_Ip_apxLfastPll[Instance].PllInstance->PLLCR &= (~((uint32)LFAST_PLLCR_FBDIV_MASK));
+    /* Clear PREDIV bit field */
+    Clock_Ip_apxLfastPll[Instance].PllInstance->PLLCR &= (~((uint32)LFAST_PLLCR_PREDIV_MASK));
+    /* Clear FDIVEN bit field */
+    Clock_Ip_apxLfastPll[Instance].PllInstance->PLLCR &= (~((uint32)LFAST_PLLCR_FDIVEN_MASK));
+}
+static void Clock_Ip_SetLfastPLL(Clock_Ip_PllConfigType const* Config)
+{
+    uint32 Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+
+    /* Configure LFAST PLL. */
+    if (1U == Config->Enable)
+    {
+        /* Accept write register LFAST */
+        Clock_Ip_apxLfastPll[Instance].PllInstance->MCR &= (~((uint32)LFAST_MCR_DRFEN_MASK));
+
+        Clock_Ip_apxLfastPll[Instance].PllInstance->PLLCR &= (~((uint32)LFAST_PLLCR_FBDIV_MASK));
+        Clock_Ip_apxLfastPll[Instance].PllInstance->PLLCR |= LFAST_PLLCR_FBDIV(Config->MulFactorDiv);
+
+        Clock_Ip_apxLfastPll[Instance].PllInstance->PLLCR &= (~((uint32)LFAST_PLLCR_PREDIV_MASK));
+        Clock_Ip_apxLfastPll[Instance].PllInstance->PLLCR |= LFAST_PLLCR_PREDIV((uint8)(Config->Predivider - 1U));
+
+        Clock_Ip_apxLfastPll[Instance].PllInstance->PLLCR &= (~((uint32)LFAST_PLLCR_FDIVEN_MASK));
+        Clock_Ip_apxLfastPll[Instance].PllInstance->PLLCR |= LFAST_PLLCR_FDIVEN(Config->SigmaDelta);
+
+    }
+    else
+    {
+        (void)Instance;
+    }
+}
+static Clock_Ip_PllStatusReturnType Clock_Ip_CompleteLfastPLL(Clock_Ip_NameType PllName)
+{
+    Clock_Ip_PllStatusReturnType PllStatus = STATUS_PLL_LOCKED;
+    boolean TimeoutOccurred = FALSE;
+    uint32 StartTime;
+    uint32 ElapsedTime;
+    uint32 TimeoutTicks;
+    uint32 PllLockStatus;
+    uint32 PllEnableStatus;
+    uint32 Instance = Clock_Ip_au8ClockFeatures[PllName][CLOCK_IP_MODULE_INSTANCE];
+
+    Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+    /* Wait until this pll is enable */
+    do
+    {
+        PllEnableStatus = ((Clock_Ip_apxLfastPll[Instance].PllInstance->PLLLSR & LFAST_PLLLSR_PLLDIS_MASK) >> LFAST_PLLLSR_PLLDIS_SHIFT);
+        TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+    }
+    while ((0U != PllEnableStatus) && (FALSE == TimeoutOccurred));
+    if(TRUE == TimeoutOccurred)
+    {
+        PllStatus = STATUS_PLL_NOT_ENABLED;
+    }
+    else
+    {
+        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+        /* Wait until this pll is locked */
+        do
+        {
+            PllLockStatus = ((Clock_Ip_apxLfastPll[Instance].PllInstance->PLLLSR & LFAST_PLLLSR_PLDCR_MASK) >> LFAST_PLLLSR_PLDCR_SHIFT);
+            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+        }
+        while ((1U != PllLockStatus) && (FALSE == TimeoutOccurred));
+
+        if(TRUE == TimeoutOccurred)
+        {
+            PllStatus = STATUS_PLL_UNLOCKED;
+        }
+    }
+
+    return PllStatus;
+}
+static void Clock_Ip_EnableLfastPLL(Clock_Ip_PllConfigType const* Config)
+{
+    uint32 Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+
+    /* Configure LFAST PLL. */
+    if (1U == Config->Enable)
+    {
+        /* Enable LFAST PLL */
+        Clock_Ip_apxLfastPll[Instance].PllInstance->PLLCR |= LFAST_PLLCR_SWPON(1);
+    }
+    else
+    {
+        (void)Instance;
+    }
+}
+#endif
+
+
+
+
+
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
@@ -396,6 +520,15 @@ const Clock_Ip_PllCallbackType Clock_Ip_axPllCallbacks[CLOCK_IP_PLL_CALLBACKS_CO
         Clock_Ip_CompletePlldigRdivMfiMfnSdmen,       /* Complete */
         Clock_Ip_EnablePlldigRdivMfiMfnSdmen,         /* Enable */
         Clock_Ip_CallbackPllEmptyDisable,            /* Disable */
+    },
+#endif
+#ifdef CLOCK_IP_LFASTPLL_ENABLE
+    {
+        Clock_Ip_ResetLfastPLL,                                      /* Reset */
+        Clock_Ip_SetLfastPLL,                                        /* Set */
+        Clock_Ip_CompleteLfastPLL,                                   /* Complete */
+        Clock_Ip_EnableLfastPLL,                                     /* Enable */
+        Clock_Ip_CallbackPllEmptyDisable,                            /* Disable */
     },
 #endif
 };

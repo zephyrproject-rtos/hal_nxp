@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022 NXP.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,17 +25,17 @@ extern "C"{
 #include "OsIf_Interrupts.h"
 
 #if defined(USING_OS_ZEPHYR)
-#include <zephyr/kernel.h>
+#include "zephyr.h"
 
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define OSIF_INTERRUPTS_VENDOR_ID_C                    43
 #define OSIF_INTERRUPTS_AR_RELEASE_MAJOR_VERSION_C     4
-#define OSIF_INTERRUPTS_AR_RELEASE_MINOR_VERSION_C     4
+#define OSIF_INTERRUPTS_AR_RELEASE_MINOR_VERSION_C     7
 #define OSIF_INTERRUPTS_AR_RELEASE_REVISION_VERSION_C  0
 #define OSIF_INTERRUPTS_SW_MAJOR_VERSION_C             0
-#define OSIF_INTERRUPTS_SW_MINOR_VERSION_C             8
+#define OSIF_INTERRUPTS_SW_MINOR_VERSION_C             9
 #define OSIF_INTERRUPTS_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================

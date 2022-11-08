@@ -33,10 +33,10 @@ extern "C"{
 *                               SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define SCHM_ICU_AR_RELEASE_MAJOR_VERSION_C     4
-#define SCHM_ICU_AR_RELEASE_MINOR_VERSION_C     4
+#define SCHM_ICU_AR_RELEASE_MINOR_VERSION_C     7
 #define SCHM_ICU_AR_RELEASE_REVISION_VERSION_C  0
 #define SCHM_ICU_SW_MAJOR_VERSION_C             0
-#define SCHM_ICU_SW_MINOR_VERSION_C             8
+#define SCHM_ICU_SW_MINOR_VERSION_C             9
 #define SCHM_ICU_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
@@ -94,92 +94,92 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_00)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_00)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_01)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_01)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_02)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_02)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_03)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_03)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_04)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_04)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_05)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_05)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_06)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_06)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_07)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_07)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_08)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_08)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_09)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_09)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_11)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_11)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_15)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_15)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_16)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_16)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_17)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_17)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_18)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_18)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_19)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_19)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_20)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_20)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_21)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_21)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_22)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_22)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_23)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_23)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_24)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_24)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_25)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_25)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_26)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_26)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_27)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_27)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_28)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_28)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_29)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_29)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_30)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_30)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_31)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_31)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_32)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_32)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_33)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_33)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_44)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_44)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_45)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_45)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_46)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_46)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_47)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_47)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_48)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_48[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_48)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_48[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_49)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_49[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_49)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_49[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_50)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_50)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_51)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_51)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_52)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_52)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_53)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_53)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_57)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_57[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_57)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_57[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_58)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_58[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_58)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_58[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_59)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_59[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_59)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_59[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_48[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_48[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_49[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_49[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_57[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_57[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_58[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_58[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_59[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_59[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -196,7 +196,7 @@ VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_59)   static volatile uint32 re
 *                                   LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 
-#ifndef _COSMIC_C_S32ZSE_
+#ifndef _COSMIC_C_S32ZE_
 /*================================================================================================*/
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
@@ -210,14 +210,14 @@ VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_59)   static volatile uint32 re
 * 
 */
 uint32 Icu_schm_read_msr(void); 
-#endif /*ifndef _COSMIC_C_S32ZSE_*/
+#endif /*ifndef _COSMIC_C_S32ZE_*/
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
 #define RTE_START_SEC_CODE
 #include "Rte_MemMap.h"
 
-#if (defined(_GREENHILLS_C_S32ZSE_) || defined(_CODEWARRIOR_C_S32ZSE_))
+#if (defined(_GREENHILLS_C_S32ZE_) || defined(_CODEWARRIOR_C_S32ZE_))
 /*================================================================================================*/
 /** 
 * @brief   This macro returns the MSR register value (32 bits). 
@@ -263,7 +263,7 @@ ASM_KEYWORD uint32 Icu_schm_read_msr(void)
 #endif
 #endif /*#ifdef GHS||CW*/
 
-#ifdef _DIABDATA_C_S32ZSE_
+#ifdef _DIABDATA_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -299,9 +299,9 @@ ASM_KEYWORD uint32 Icu_schm_read_msr(void)
 }    
 #endif  /* MCAL_PLATFORM_ARM */
 
-#endif   /* _DIABDATA_C_S32ZSE_*/
+#endif   /* _DIABDATA_C_S32ZE_*/
 
-#ifdef _COSMIC_C_S32ZSE_
+#ifdef _COSMIC_C_S32ZE_
 /*================================================================================================*/
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
@@ -324,7 +324,7 @@ ASM_KEYWORD uint32 Icu_schm_read_msr(void)
 #endif  /*Cosmic compiler only*/
 
 
-#ifdef _HITECH_C_S32ZSE_
+#ifdef _HITECH_C_S32ZE_
 /*================================================================================================*/
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
@@ -346,7 +346,7 @@ uint32 Icu_schm_read_msr(void)
 
 #endif  /*HighTec compiler only*/
  /*================================================================================================*/
-#ifdef _LINARO_C_S32ZSE_
+#ifdef _LINARO_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -374,10 +374,10 @@ uint32 Icu_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _LINARO_C_S32ZSE_*/
+#endif   /* _LINARO_C_S32ZE_*/
 /*================================================================================================*/
 
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -405,9 +405,9 @@ uint32 Icu_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _ARM_DS5_C_S32ZSE_ */
+#endif   /* _ARM_DS5_C_S32ZE_ */
 
-#ifdef _IAR_C_S32ZSE_
+#ifdef _IAR_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -431,7 +431,7 @@ uint32 Icu_schm_read_msr(void)
 
     return (uint32)reg_tmp;
 }
-#endif   /* _IAR_C_S32ZSE_ */
+#endif   /* _IAR_C_S32ZE_ */
 
 #define RTE_STOP_SEC_CODE
 #include "Rte_MemMap.h"
@@ -444,22 +444,24 @@ uint32 Icu_schm_read_msr(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_00(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_00[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_00[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_00[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_00[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_00[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_00[u32CoreId]++;
 }
@@ -472,7 +474,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_00(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_00[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_00[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -480,22 +482,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_00(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_01(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_01[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_01[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_01[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_01[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_01[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_01[u32CoreId]++;
 }
@@ -508,7 +512,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_01(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_01[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_01[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -516,22 +520,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_01(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_02(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_02[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_02[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_02[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_02[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_02[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_02[u32CoreId]++;
 }
@@ -544,7 +550,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_02(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_02[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_02[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -552,22 +558,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_02(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_03(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_03[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_03[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_03[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_03[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_03[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_03[u32CoreId]++;
 }
@@ -580,7 +588,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_03(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_03[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_03[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -588,22 +596,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_03(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_04(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_04[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_04[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_04[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_04[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_04[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_04[u32CoreId]++;
 }
@@ -616,7 +626,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_04(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_04[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_04[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -624,22 +634,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_04(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_05(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_05[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_05[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_05[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_05[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_05[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_05[u32CoreId]++;
 }
@@ -652,7 +664,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_05(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_05[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_05[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -660,22 +672,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_05(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_06(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_06[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_06[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_06[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_06[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_06[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_06[u32CoreId]++;
 }
@@ -688,7 +702,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_06(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_06[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_06[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -696,22 +710,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_06(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_07(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_07[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_07[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_07[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_07[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_07[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_07[u32CoreId]++;
 }
@@ -724,7 +740,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_07(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_07[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_07[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -732,22 +748,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_07(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_08(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_08[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_08[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_08[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_08[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_08[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_08[u32CoreId]++;
 }
@@ -760,7 +778,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_08(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_08[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_08[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -768,22 +786,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_08(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_09(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_09[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_09[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_09[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_09[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_09[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_09[u32CoreId]++;
 }
@@ -796,7 +816,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_09(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_09[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_09[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -804,22 +824,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_09(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_11(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_11[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_11[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_11[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_11[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_11[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_11[u32CoreId]++;
 }
@@ -832,7 +854,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_11(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_11[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_11[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -840,22 +862,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_11(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_15(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_15[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_15[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_15[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_15[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_15[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_15[u32CoreId]++;
 }
@@ -868,7 +892,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_15(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_15[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_15[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -876,22 +900,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_15(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_16(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_16[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_16[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_16[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_16[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_16[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_16[u32CoreId]++;
 }
@@ -904,7 +930,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_16(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_16[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_16[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -912,22 +938,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_16(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_17(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_17[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_17[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_17[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_17[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_17[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_17[u32CoreId]++;
 }
@@ -940,7 +968,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_17(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_17[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_17[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -948,22 +976,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_17(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_18(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_18[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_18[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_18[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_18[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_18[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_18[u32CoreId]++;
 }
@@ -976,7 +1006,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_18(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_18[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_18[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -984,22 +1014,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_18(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_19(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_19[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_19[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_19[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_19[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_19[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_19[u32CoreId]++;
 }
@@ -1012,7 +1044,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_19(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_19[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_19[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1020,22 +1052,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_19(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_20(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_20[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_20[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_20[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_20[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_20[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_20[u32CoreId]++;
 }
@@ -1048,7 +1082,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_20(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_20[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_20[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1056,22 +1090,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_20(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_21(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_21[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_21[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_21[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_21[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_21[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_21[u32CoreId]++;
 }
@@ -1084,7 +1120,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_21(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_21[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_21[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1092,22 +1128,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_21(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_22(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_22[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_22[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_22[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_22[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_22[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_22[u32CoreId]++;
 }
@@ -1120,7 +1158,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_22(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_22[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_22[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1128,22 +1166,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_22(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_23(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_23[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_23[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_23[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_23[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_23[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_23[u32CoreId]++;
 }
@@ -1156,7 +1196,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_23(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_23[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_23[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1164,22 +1204,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_23(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_24(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_24[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_24[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_24[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_24[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_24[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_24[u32CoreId]++;
 }
@@ -1192,7 +1234,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_24(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_24[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_24[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1200,22 +1242,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_24(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_25(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_25[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_25[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_25[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_25[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_25[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_25[u32CoreId]++;
 }
@@ -1228,7 +1272,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_25(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_25[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_25[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1236,22 +1280,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_25(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_26(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_26[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_26[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_26[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_26[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_26[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_26[u32CoreId]++;
 }
@@ -1264,7 +1310,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_26(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_26[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_26[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1272,22 +1318,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_26(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_27(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_27[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_27[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_27[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_27[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_27[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_27[u32CoreId]++;
 }
@@ -1300,7 +1348,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_27(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_27[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_27[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1308,22 +1356,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_27(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_28(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_28[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_28[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_28[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_28[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_28[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_28[u32CoreId]++;
 }
@@ -1336,7 +1386,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_28(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_28[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_28[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1344,22 +1394,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_28(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_29(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_29[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_29[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_29[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_29[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_29[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_29[u32CoreId]++;
 }
@@ -1372,7 +1424,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_29(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_29[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_29[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1380,22 +1432,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_29(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_30(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_30[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_30[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_30[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_30[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_30[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_30[u32CoreId]++;
 }
@@ -1408,7 +1462,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_30(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_30[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_30[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1416,22 +1470,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_30(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_31(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_31[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_31[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_31[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_31[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_31[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_31[u32CoreId]++;
 }
@@ -1444,7 +1500,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_31(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_31[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_31[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1452,22 +1508,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_31(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_32(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_32[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_32[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_32[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_32[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_32[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_32[u32CoreId]++;
 }
@@ -1480,7 +1538,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_32(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_32[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_32[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1488,22 +1546,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_32(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_33(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_33[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_33[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_33[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_33[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_33[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_33[u32CoreId]++;
 }
@@ -1516,7 +1576,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_33(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_33[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_33[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1524,22 +1584,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_33(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_44(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_44[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_44[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_44[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_44[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_44[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_44[u32CoreId]++;
 }
@@ -1552,7 +1614,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_44(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_44[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_44[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1560,22 +1622,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_44(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_45(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_45[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_45[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_45[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_45[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_45[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_45[u32CoreId]++;
 }
@@ -1588,7 +1652,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_45(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_45[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_45[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1596,22 +1660,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_45(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_46(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_46[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_46[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_46[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_46[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_46[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_46[u32CoreId]++;
 }
@@ -1624,7 +1690,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_46(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_46[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_46[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1632,22 +1698,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_46(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_47(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_47[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_47[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_47[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_47[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_47[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_47[u32CoreId]++;
 }
@@ -1660,7 +1728,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_47(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_47[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_47[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1668,22 +1736,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_47(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_48(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_48[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_48[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_48[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_48[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_48[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_48[u32CoreId]++;
 }
@@ -1696,7 +1766,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_48(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_48[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_48[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1704,22 +1774,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_48(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_49(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_49[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_49[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_49[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_49[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_49[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_49[u32CoreId]++;
 }
@@ -1732,7 +1804,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_49(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_49[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_49[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1740,22 +1812,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_49(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_50(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_50[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_50[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_50[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_50[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_50[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_50[u32CoreId]++;
 }
@@ -1768,7 +1842,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_50(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_50[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_50[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1776,22 +1850,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_50(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_51(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_51[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_51[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_51[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_51[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_51[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_51[u32CoreId]++;
 }
@@ -1804,7 +1880,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_51(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_51[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_51[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1812,22 +1888,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_51(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_52(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_52[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_52[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_52[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_52[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_52[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_52[u32CoreId]++;
 }
@@ -1840,7 +1918,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_52(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_52[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_52[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1848,22 +1926,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_52(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_53(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_53[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_53[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_53[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_53[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_53[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_53[u32CoreId]++;
 }
@@ -1876,7 +1956,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_53(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_53[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_53[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1884,22 +1964,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_53(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_57(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_57[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_57[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_57[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_57[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_57[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_57[u32CoreId]++;
 }
@@ -1912,7 +1994,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_57(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_57[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_57[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1920,22 +2002,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_57(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_58(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_58[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_58[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_58[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_58[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_58[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_58[u32CoreId]++;
 }
@@ -1948,7 +2032,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_58(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_58[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_58[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1956,22 +2040,24 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_58(void)
 
 void SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_59(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_59[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_ICU_EXCLUSIVE_AREA_59[u32CoreId] = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Icu_schm_read_msr);
 #else
-        msr_ICU_EXCLUSIVE_AREA_59[u32CoreId] = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Icu_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_ICU_EXCLUSIVE_AREA_59[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_ICU_EXCLUSIVE_AREA_59[u32CoreId] = msr;
     }
     reentry_guard_ICU_EXCLUSIVE_AREA_59[u32CoreId]++;
 }
@@ -1984,7 +2070,7 @@ void SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_59(void)
     if ((ISR_ON(msr_ICU_EXCLUSIVE_AREA_59[u32CoreId]))&&(0UL == reentry_guard_ICU_EXCLUSIVE_AREA_59[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }

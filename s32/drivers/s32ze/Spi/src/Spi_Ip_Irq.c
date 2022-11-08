@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-
 /**
 *   @file    Spi_Ip_Irq.c
 *   @implements     Spi_Ip_Irq.c_Artifact
@@ -35,10 +34,10 @@ extern "C"
 ==================================================================================================*/
 #define SPI_IP_VENDOR_ID_IRQ_C                      43
 #define SPI_IP_AR_RELEASE_MAJOR_VERSION_IRQ_C       4
-#define SPI_IP_AR_RELEASE_MINOR_VERSION_IRQ_C       4
+#define SPI_IP_AR_RELEASE_MINOR_VERSION_IRQ_C       7
 #define SPI_IP_AR_RELEASE_REVISION_VERSION_IRQ_C    0
 #define SPI_IP_SW_MAJOR_VERSION_IRQ_C               0
-#define SPI_IP_SW_MINOR_VERSION_IRQ_C               8
+#define SPI_IP_SW_MINOR_VERSION_IRQ_C               9
 #define SPI_IP_SW_PATCH_VERSION_IRQ_C               0
 /*==================================================================================================
 *                                     FILE VERSION CHECKS

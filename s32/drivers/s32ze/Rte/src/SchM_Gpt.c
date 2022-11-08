@@ -33,10 +33,10 @@ extern "C"{
 *                               SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define SCHM_GPT_AR_RELEASE_MAJOR_VERSION_C     4
-#define SCHM_GPT_AR_RELEASE_MINOR_VERSION_C     4
+#define SCHM_GPT_AR_RELEASE_MINOR_VERSION_C     7
 #define SCHM_GPT_AR_RELEASE_REVISION_VERSION_C  0
 #define SCHM_GPT_SW_MAJOR_VERSION_C             0
-#define SCHM_GPT_SW_MINOR_VERSION_C             8
+#define SCHM_GPT_SW_MINOR_VERSION_C             9
 #define SCHM_GPT_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
@@ -94,114 +94,114 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_00) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_00) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_01) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_01) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_02) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_02) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_03) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_03) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_04) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_04) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_05) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_05) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_06) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_06) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_07) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_07) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_10) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_10) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_11) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_11) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_12) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_12) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_17) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_17) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_21) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_21) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_22) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_22) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_23) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_23) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_24) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_24) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_25) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_25) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_26) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_26) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_27) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_27) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_28) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_28) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_29) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_29) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_30) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_30) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_31) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_31) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_35) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_35) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_36) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_36) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_38) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_38) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_40) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_40) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_41) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_41) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_42) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_42) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_43) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_43) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_44) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_44) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_45) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_45) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_46) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_46) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_50) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_50) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_51) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_51) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_52) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_52) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_53) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_53) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_54) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_54[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_54) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_54[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_55) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_55[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_55) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_55[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_56) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_56[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_56) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_56[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_60) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_60[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_60) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_60[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_61) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_61) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_62) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_62[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_62) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_62[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_63) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_63[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_63) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_63[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_64) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_64[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_64) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_64[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_65) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_65[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_65) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_65[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_66) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_66[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_66) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_66[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_67) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_67[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_67) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_67[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_68) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_68[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_68) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_68[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_69) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_69[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_69) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_69[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_70) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_70[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_70) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_70[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_71) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_71[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_71) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_71[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_72) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_72[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_72) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_72[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_73) static volatile uint32 msr_GPT_EXCLUSIVE_AREA_73[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_73) static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_73[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_54[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_54[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_55[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_55[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_56[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_56[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_60[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_60[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_62[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_62[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_63[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_63[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_64[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_64[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_65[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_65[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_66[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_66[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_67[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_67[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_68[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_68[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_69[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_69[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_70[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_70[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_71[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_71[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_72[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_72[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_73[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_73[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -218,7 +218,7 @@ VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_73) static volatile uint32 reen
 *                                   LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 
-#ifndef _COSMIC_C_S32ZSE_
+#ifndef _COSMIC_C_S32ZE_
 /*================================================================================================*/
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
@@ -232,14 +232,14 @@ VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_73) static volatile uint32 reen
 * 
 */
 uint32 Gpt_schm_read_msr(void); 
-#endif /*ifndef _COSMIC_C_S32ZSE_*/
+#endif /*ifndef _COSMIC_C_S32ZE_*/
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
 #define RTE_START_SEC_CODE
 #include "Rte_MemMap.h"
 
-#if (defined(_GREENHILLS_C_S32ZSE_) || defined(_CODEWARRIOR_C_S32ZSE_))
+#if (defined(_GREENHILLS_C_S32ZE_) || defined(_CODEWARRIOR_C_S32ZE_))
 /*================================================================================================*/
 /** 
 * @brief   This macro returns the MSR register value (32 bits). 
@@ -285,7 +285,7 @@ ASM_KEYWORD uint32 Gpt_schm_read_msr(void)
 #endif
 #endif /*#ifdef GHS||CW*/
 
-#ifdef _DIABDATA_C_S32ZSE_
+#ifdef _DIABDATA_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -321,9 +321,9 @@ ASM_KEYWORD uint32 Gpt_schm_read_msr(void)
 }    
 #endif  /* MCAL_PLATFORM_ARM */
 
-#endif   /* _DIABDATA_C_S32ZSE_*/
+#endif   /* _DIABDATA_C_S32ZE_*/
 
-#ifdef _COSMIC_C_S32ZSE_
+#ifdef _COSMIC_C_S32ZE_
 /*================================================================================================*/
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
@@ -346,7 +346,7 @@ ASM_KEYWORD uint32 Gpt_schm_read_msr(void)
 #endif  /*Cosmic compiler only*/
 
 
-#ifdef _HITECH_C_S32ZSE_
+#ifdef _HITECH_C_S32ZE_
 /*================================================================================================*/
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
@@ -368,7 +368,7 @@ uint32 Gpt_schm_read_msr(void)
 
 #endif  /*HighTec compiler only*/
  /*================================================================================================*/
-#ifdef _LINARO_C_S32ZSE_
+#ifdef _LINARO_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -396,10 +396,10 @@ uint32 Gpt_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _LINARO_C_S32ZSE_*/
+#endif   /* _LINARO_C_S32ZE_*/
 /*================================================================================================*/
 
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -427,9 +427,9 @@ uint32 Gpt_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _ARM_DS5_C_S32ZSE_ */
+#endif   /* _ARM_DS5_C_S32ZE_ */
 
-#ifdef _IAR_C_S32ZSE_
+#ifdef _IAR_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -453,7 +453,7 @@ uint32 Gpt_schm_read_msr(void)
 
     return (uint32)reg_tmp;
 }
-#endif   /* _IAR_C_S32ZSE_ */
+#endif   /* _IAR_C_S32ZE_ */
 
 #define RTE_STOP_SEC_CODE
 #include "Rte_MemMap.h"
@@ -466,22 +466,24 @@ uint32 Gpt_schm_read_msr(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_00(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_00[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_00[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_00[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_00[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_00[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_00[u32CoreId]++;
 }
@@ -494,7 +496,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_00(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_00[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_00[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -502,22 +504,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_00(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_01(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_01[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_01[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_01[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_01[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_01[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_01[u32CoreId]++;
 }
@@ -530,7 +534,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_01(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_01[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_01[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -538,22 +542,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_01(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_02(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_02[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_02[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_02[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_02[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_02[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_02[u32CoreId]++;
 }
@@ -566,7 +572,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_02(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_02[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_02[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -574,22 +580,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_02(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_03(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_03[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_03[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_03[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_03[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_03[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_03[u32CoreId]++;
 }
@@ -602,7 +610,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_03(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_03[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_03[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -610,22 +618,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_03(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_04(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_04[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_04[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_04[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_04[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_04[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_04[u32CoreId]++;
 }
@@ -638,7 +648,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_04(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_04[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_04[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -646,22 +656,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_04(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_05(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_05[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_05[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_05[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_05[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_05[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_05[u32CoreId]++;
 }
@@ -674,7 +686,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_05(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_05[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_05[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -682,22 +694,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_05(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_06(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_06[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_06[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_06[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_06[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_06[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_06[u32CoreId]++;
 }
@@ -710,7 +724,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_06(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_06[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_06[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -718,22 +732,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_06(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_07(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_07[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_07[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_07[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_07[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_07[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_07[u32CoreId]++;
 }
@@ -746,7 +762,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_07(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_07[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_07[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -754,22 +770,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_07(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_10(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_10[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_10[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_10[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_10[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_10[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_10[u32CoreId]++;
 }
@@ -782,7 +800,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_10(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_10[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_10[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -790,22 +808,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_10(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_11(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_11[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_11[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_11[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_11[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_11[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_11[u32CoreId]++;
 }
@@ -818,7 +838,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_11(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_11[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_11[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -826,22 +846,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_11(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_12(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_12[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_12[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_12[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_12[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_12[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_12[u32CoreId]++;
 }
@@ -854,7 +876,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_12(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_12[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_12[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -862,22 +884,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_12(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_17(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_17[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_17[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_17[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_17[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_17[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_17[u32CoreId]++;
 }
@@ -890,7 +914,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_17(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_17[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_17[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -898,22 +922,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_17(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_21(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_21[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_21[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_21[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_21[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_21[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_21[u32CoreId]++;
 }
@@ -926,7 +952,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_21(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_21[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_21[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -934,22 +960,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_21(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_22(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_22[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_22[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_22[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_22[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_22[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_22[u32CoreId]++;
 }
@@ -962,7 +990,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_22(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_22[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_22[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -970,22 +998,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_22(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_23(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_23[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_23[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_23[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_23[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_23[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_23[u32CoreId]++;
 }
@@ -998,7 +1028,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_23(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_23[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_23[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1006,22 +1036,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_23(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_24(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_24[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_24[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_24[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_24[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_24[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_24[u32CoreId]++;
 }
@@ -1034,7 +1066,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_24(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_24[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_24[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1042,22 +1074,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_24(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_25(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_25[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_25[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_25[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_25[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_25[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_25[u32CoreId]++;
 }
@@ -1070,7 +1104,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_25(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_25[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_25[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1078,22 +1112,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_25(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_26(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_26[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_26[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_26[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_26[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_26[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_26[u32CoreId]++;
 }
@@ -1106,7 +1142,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_26(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_26[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_26[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1114,22 +1150,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_26(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_27(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_27[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_27[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_27[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_27[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_27[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_27[u32CoreId]++;
 }
@@ -1142,7 +1180,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_27(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_27[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_27[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1150,22 +1188,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_27(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_28(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_28[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_28[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_28[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_28[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_28[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_28[u32CoreId]++;
 }
@@ -1178,7 +1218,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_28(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_28[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_28[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1186,22 +1226,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_28(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_29(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_29[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_29[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_29[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_29[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_29[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_29[u32CoreId]++;
 }
@@ -1214,7 +1256,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_29(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_29[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_29[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1222,22 +1264,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_29(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_30(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_30[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_30[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_30[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_30[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_30[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_30[u32CoreId]++;
 }
@@ -1250,7 +1294,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_30(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_30[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_30[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1258,22 +1302,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_30(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_31(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_31[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_31[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_31[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_31[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_31[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_31[u32CoreId]++;
 }
@@ -1286,7 +1332,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_31(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_31[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_31[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1294,22 +1340,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_31(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_35(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_35[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_35[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_35[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_35[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_35[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_35[u32CoreId]++;
 }
@@ -1322,7 +1370,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_35(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_35[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_35[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1330,22 +1378,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_35(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_36(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_36[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_36[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_36[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_36[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_36[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_36[u32CoreId]++;
 }
@@ -1358,7 +1408,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_36(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_36[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_36[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1366,22 +1416,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_36(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_38(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_38[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_38[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_38[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_38[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_38[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_38[u32CoreId]++;
 }
@@ -1394,7 +1446,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_38(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_38[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_38[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1402,22 +1454,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_38(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_40(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_40[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_40[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_40[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_40[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_40[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_40[u32CoreId]++;
 }
@@ -1430,7 +1484,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_40(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_40[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_40[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1438,22 +1492,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_40(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_41(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_41[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_41[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_41[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_41[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_41[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_41[u32CoreId]++;
 }
@@ -1466,7 +1522,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_41(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_41[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_41[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1474,22 +1530,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_41(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_42(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_42[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_42[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_42[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_42[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_42[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_42[u32CoreId]++;
 }
@@ -1502,7 +1560,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_42(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_42[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_42[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1510,22 +1568,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_42(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_43(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_43[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_43[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_43[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_43[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_43[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_43[u32CoreId]++;
 }
@@ -1538,7 +1598,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_43(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_43[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_43[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1546,22 +1606,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_43(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_44(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_44[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_44[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_44[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_44[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_44[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_44[u32CoreId]++;
 }
@@ -1574,7 +1636,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_44(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_44[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_44[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1582,22 +1644,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_44(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_45(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_45[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_45[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_45[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_45[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_45[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_45[u32CoreId]++;
 }
@@ -1610,7 +1674,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_45(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_45[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_45[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1618,22 +1682,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_45(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_46(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_46[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_46[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_46[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_46[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_46[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_46[u32CoreId]++;
 }
@@ -1646,7 +1712,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_46(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_46[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_46[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1654,22 +1720,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_46(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_50(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_50[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_50[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_50[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_50[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_50[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_50[u32CoreId]++;
 }
@@ -1682,7 +1750,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_50(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_50[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_50[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1690,22 +1758,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_50(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_51(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_51[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_51[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_51[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_51[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_51[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_51[u32CoreId]++;
 }
@@ -1718,7 +1788,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_51(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_51[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_51[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1726,22 +1796,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_51(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_52(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_52[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_52[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_52[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_52[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_52[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_52[u32CoreId]++;
 }
@@ -1754,7 +1826,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_52(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_52[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_52[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1762,22 +1834,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_52(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_53(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_53[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_53[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_53[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_53[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_53[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_53[u32CoreId]++;
 }
@@ -1790,7 +1864,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_53(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_53[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_53[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1798,22 +1872,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_53(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_54(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_54[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_54[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_54[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_54[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_54[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_54[u32CoreId]++;
 }
@@ -1826,7 +1902,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_54(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_54[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_54[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1834,22 +1910,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_54(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_55(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_55[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_55[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_55[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_55[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_55[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_55[u32CoreId]++;
 }
@@ -1862,7 +1940,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_55(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_55[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_55[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1870,22 +1948,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_55(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_56(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_56[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_56[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_56[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_56[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_56[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_56[u32CoreId]++;
 }
@@ -1898,7 +1978,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_56(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_56[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_56[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1906,22 +1986,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_56(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_60(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_60[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_60[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_60[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_60[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_60[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_60[u32CoreId]++;
 }
@@ -1934,7 +2016,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_60(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_60[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_60[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1942,22 +2024,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_60(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_61(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_61[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_61[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_61[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_61[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_61[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_61[u32CoreId]++;
 }
@@ -1970,7 +2054,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_61(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_61[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_61[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1978,22 +2062,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_61(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_62(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_62[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_62[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_62[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_62[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_62[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_62[u32CoreId]++;
 }
@@ -2006,7 +2092,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_62(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_62[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_62[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -2014,22 +2100,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_62(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_63(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_63[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_63[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_63[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_63[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_63[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_63[u32CoreId]++;
 }
@@ -2042,7 +2130,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_63(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_63[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_63[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -2050,22 +2138,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_63(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_64(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_64[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_64[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_64[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_64[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_64[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_64[u32CoreId]++;
 }
@@ -2078,7 +2168,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_64(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_64[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_64[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -2086,22 +2176,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_64(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_65(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_65[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_65[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_65[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_65[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_65[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_65[u32CoreId]++;
 }
@@ -2114,7 +2206,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_65(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_65[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_65[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -2122,22 +2214,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_65(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_66(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_66[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_66[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_66[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_66[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_66[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_66[u32CoreId]++;
 }
@@ -2150,7 +2244,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_66(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_66[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_66[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -2158,22 +2252,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_66(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_67(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_67[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_67[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_67[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_67[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_67[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_67[u32CoreId]++;
 }
@@ -2186,7 +2282,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_67(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_67[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_67[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -2194,22 +2290,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_67(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_68(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_68[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_68[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_68[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_68[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_68[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_68[u32CoreId]++;
 }
@@ -2222,7 +2320,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_68(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_68[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_68[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -2230,22 +2328,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_68(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_69(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_69[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_69[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_69[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_69[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_69[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_69[u32CoreId]++;
 }
@@ -2258,7 +2358,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_69(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_69[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_69[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -2266,22 +2366,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_69(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_70(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_70[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_70[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_70[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_70[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_70[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_70[u32CoreId]++;
 }
@@ -2294,7 +2396,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_70(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_70[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_70[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -2302,22 +2404,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_70(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_71(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_71[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_71[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_71[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_71[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_71[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_71[u32CoreId]++;
 }
@@ -2330,7 +2434,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_71(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_71[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_71[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -2338,22 +2442,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_71(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_72(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_72[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_72[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_72[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_72[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_72[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_72[u32CoreId]++;
 }
@@ -2366,7 +2472,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_72(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_72[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_72[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -2374,22 +2480,24 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_72(void)
 
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_73(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_73[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_GPT_EXCLUSIVE_AREA_73[u32CoreId] = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
 #else
-        msr_GPT_EXCLUSIVE_AREA_73[u32CoreId] = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_GPT_EXCLUSIVE_AREA_73[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_GPT_EXCLUSIVE_AREA_73[u32CoreId] = msr;
     }
     reentry_guard_GPT_EXCLUSIVE_AREA_73[u32CoreId]++;
 }
@@ -2402,7 +2510,7 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_73(void)
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_73[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_73[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }

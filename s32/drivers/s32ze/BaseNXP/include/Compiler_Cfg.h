@@ -6,7 +6,7 @@
 /**
 *   @file    Compiler_Cfg.h
 *   @implements     Compiler_Cfg.h_Artifact
-*   @version 0.8.0
+*   @version 0.9.0
 *
 *   @brief   AUTOSAR BaseNXP - Module specific memory and pointer classes
 *   @details The file Compiler_Cfg.h contains the module specific parameters (ptrclass and 

@@ -6,7 +6,7 @@
 /**
 *   @file           Compiler.h
 *   @implements     Compiler.h_Artifact
-*   @version 0.8.0
+*   @version 0.9.0
 *
 *   @brief   AUTOSAR BaseNXP - SWS Compiler abstraction
 *   @details The file Compiler.h provides macros for the encapsulation of definitions and
@@ -46,10 +46,10 @@ extern "C"{
 */
 #define COMPILER_VENDOR_ID                      43
 #define COMPILER_AR_RELEASE_MAJOR_VERSION       4
-#define COMPILER_AR_RELEASE_MINOR_VERSION       4
+#define COMPILER_AR_RELEASE_MINOR_VERSION       7
 #define COMPILER_AR_RELEASE_REVISION_VERSION    0
 #define COMPILER_SW_MAJOR_VERSION               0
-#define COMPILER_SW_MINOR_VERSION               8
+#define COMPILER_SW_MINOR_VERSION               9
 #define COMPILER_SW_PATCH_VERSION               0
 /**@}*/
 /*==================================================================================================
@@ -87,7 +87,7 @@ extern "C"{
 #define NULL_PTR ((void *)0)
 
 /**************************************** Green Hills *********************************************/
-#ifdef _GREENHILLS_C_S32ZSE_
+#ifdef _GREENHILLS_C_S32ZE_
     /* Prototypes for intrinsic functions */
     /**
     * @brief The compiler abstraction shall provide the INLINE define for abstraction of the keyword
@@ -105,10 +105,38 @@ extern "C"{
     * @brief Compiler abstraction for specifying an interrupt handler.
     */
     #define INTERRUPT_FUNC      __interrupt
-#endif /* #ifdef _GREENHILLS_C_S32ZSE_ */
+    
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASM_KEYWORD  __asm
+
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASMV_KEYWORD  __asm volatile
+
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) __attribute__(( aligned(size) )) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()
+    /**
+    * @brief Compiler abstraction for the packed qualifier
+    */
+    #define PACKED __packed
+    
+#endif /* #ifdef _GREENHILLS_C_S32ZE_ */
 
 /**************************************** Wind River Diab *****************************************/
-#ifdef _DIABDATA_C_S32ZSE_
+#ifdef _DIABDATA_C_S32ZE_
     /* Prototypes for intrinsic functions */
     /**
     * @brief The compiler abstraction shall provide the INLINE define for abstraction of the keyword
@@ -131,10 +159,37 @@ extern "C"{
     #define INTERRUPT_FUNC      __interrupt__
 #endif /* __clang__*/
 
-#endif /* #ifdef _DIABDATA_C_S32ZSE_ */
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */
+    #define ASM_KEYWORD  __asm
+    
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */
+    #define ASMV_KEYWORD  __asm volatile
+
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) __attribute__(( aligned(size) )) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()
+    /**
+     * @brief Compiler abstraction for the packed qualifier
+     */
+    #define PACKED __attribute__((packed))
+    
+#endif /* #ifdef _DIABDATA_C_S32ZE_ */
 
 /*************************************** CodeWarrior **********************************************/
-#ifdef _CODEWARRIOR_C_S32ZSE_
+#ifdef _CODEWARRIOR_C_S32ZE_
     /* Prototypes for intrinsic functions */
     /**
     * @brief The compiler abstraction shall provide the INLINE define for abstraction of the keyword
@@ -152,10 +207,33 @@ extern "C"{
     * @brief Compiler abstraction for specifying an interrupt handler.
     */
     #define INTERRUPT_FUNC      __declspec(interrupt nowarn)
- #endif /* #ifdef _CODEWARRIOR_C_S32ZSE_ */
+ 
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */
+    #define ASM_KEYWORD  asm
+
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) v __attribute__(( aligned(size) ));
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()    
+    /**
+    * @brief Compiler abstraction for the packed qualifier
+    */
+    #define PACKED __packed
+
+#endif /* #ifdef _CODEWARRIOR_C_S32ZE_ */
 
 /*************************************** Cosmic ***************************************************/
-#ifdef _COSMIC_C_S32ZSE_
+#ifdef _COSMIC_C_S32ZE_
     /* Prototypes for intrinsic functions */
     /**
     * @brief The compiler abstraction shall provide the INLINE define for abstraction of the keyword
@@ -173,9 +251,28 @@ extern "C"{
     * @brief Compiler abstraction for specifying an interrupt handler.
     */
     #define INTERRUPT_FUNC @interrupt
-#endif /* #ifdef _COSMIC_C_S32ZSE_ */
+    
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */
+    #define ASM_KEYWORD  _asm
+
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align) \#pragma section [sec_name ## align]
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP() \#pragma section []
+    
+#endif /* #ifdef _COSMIC_C_S32ZE_ */
 /*************************************** HighTec **********************************************/
-#ifdef _HITECH_C_S32ZSE_
+#ifdef _HITECH_C_S32ZE_
     /* Prototypes for intrinsic functions */
     /**
     * @brief The compiler abstraction shall provide the INLINE define for abstraction of the keyword
@@ -193,10 +290,29 @@ extern "C"{
     * @brief Compiler abstraction for specifying an interrupt handler.
     */
     #define INTERRUPT_FUNC      __attribute__((interrupt));
-#endif /* #ifdef _HITECH_C_S32ZSE_ */
+    
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */
+    #define ASM_KEYWORD  __asm
+
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) __attribute__(( aligned(size) )) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()
+    
+#endif /* #ifdef _HITECH_C_S32ZE_ */
 
 /**************************************** Linaro *********************************************/
-#ifdef _LINARO_C_S32ZSE_
+#ifdef _LINARO_C_S32ZE_
     /* Prototypes for intrinsic functions */
     /**
     * @brief The compiler abstraction shall provide the INLINE define for abstraction of the keyword
@@ -213,10 +329,37 @@ extern "C"{
     /**
     * @brief Compiler abstraction for specifying an interrupt handler.
     */
-    #define INTERRUPT_FUNC     
-#endif /* #ifdef _LINARO_C_S32ZSE_ */
+    #define INTERRUPT_FUNC
+
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASM_KEYWORD  __asm__
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASMV_KEYWORD  __asm__ volatile
+
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) __attribute__(( aligned(size) )) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()    
+    /**
+     * @brief Compiler abstraction for the packed qualifier
+     */
+    #define PACKED __attribute__((__packed__))
+    
+#endif /* #ifdef _LINARO_C_S32ZE_ */
 /**************************************** DS5 *************************************************/
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
     /* Prototypes for intrinsic functions */
     /**
     * @brief The compiler abstraction shall provide the INLINE define for abstraction of the keyword
@@ -234,10 +377,32 @@ extern "C"{
     * @brief Compiler abstraction for specifying an interrupt handler.
     */
     #define INTERRUPT_FUNC
-#endif /* #ifdef _ARM_DS5_C_S32ZSE_ */
+        /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASM_KEYWORD  __asm
+
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) __align(size) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()
+    /**
+     * @brief Compiler abstraction for the packed qualifier
+     */
+    #define PACKED __packed
+    
+#endif /* #ifdef _ARM_DS5_C_S32ZE_ */
 
 /**************************************** IAR *************************************************/
-#ifdef _IAR_C_S32ZSE_
+#ifdef _IAR_C_S32ZE_
     /* Prototypes for intrinsic functions */
     /**
     * @brief The compiler abstraction shall provide the INLINE define for abstraction of the keyword
@@ -255,7 +420,35 @@ extern "C"{
     * @brief Compiler abstraction for specifying an interrupt handler.
     */
     #define INTERRUPT_FUNC
-#endif /* #ifdef _IAR_C_S32ZSE_ */
+    
+        /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASM_KEYWORD  __asm
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASMV_KEYWORD  __asm volatile
+
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align) 
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size)  _Pragma(MCAL_PUT_IN_QUOTES1(data_alignment=size)) \
+                                v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()   
+   /**
+    * @brief Compiler abstraction for the packed qualifier
+    */
+    #define PACKED __packed
+    
+#endif /* #ifdef _IAR_C_S32ZE_ */
 
 
 /**
@@ -326,18 +519,6 @@ extern "C"{
 */
 #define FUNC_P2VAR(rettype, ptrclass, memclass) ptrclass rettype * memclass
  
-/**
- * @brief Compiler abstraction for allocating variables to nocache section
- */
-#ifdef CONFIG_NOCACHE_MEMORY
-#ifndef STRINGIFY
-#define STRINGIFY(x) #x
-#endif /* STRINGIFY */
-#define VAR_SEC_NOCACHE(name) __attribute__((section(".nocache." STRINGIFY(name))))
-#else
-#define VAR_SEC_NOCACHE(name)
-#endif /* CONFIG_NOCACHE_MEMORY */
-
 /*==================================================================================================
 *                                             ENUMS
 ==================================================================================================*/

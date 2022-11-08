@@ -24,7 +24,7 @@ extern "C" {
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "Siul2_Dio_Ip_Cfg.h"
 
 #if (CPU_TYPE == CPU_TYPE_64)
@@ -44,10 +44,10 @@ extern "C" {
  */
 #define SIUL2_DIO_IP_VENDOR_ID_H                     43
 #define SIUL2_DIO_IP_AR_RELEASE_MAJOR_VERSION_H      4
-#define SIUL2_DIO_IP_AR_RELEASE_MINOR_VERSION_H      4
+#define SIUL2_DIO_IP_AR_RELEASE_MINOR_VERSION_H      7
 #define SIUL2_DIO_IP_AR_RELEASE_REVISION_VERSION_H   0
 #define SIUL2_DIO_IP_SW_MAJOR_VERSION_H              0
-#define SIUL2_DIO_IP_SW_MINOR_VERSION_H              8
+#define SIUL2_DIO_IP_SW_MINOR_VERSION_H              9
 #define SIUL2_DIO_IP_SW_PATCH_VERSION_H              0
 
 /*==================================================================================================

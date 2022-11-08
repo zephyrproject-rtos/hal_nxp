@@ -36,10 +36,10 @@ extern "C"{
 #define LINFLEXD_UART_IP_HWACCESS_VENDOR_ID                    43
 #define LINFLEXD_UART_IP_HWACCESS_MODULE_ID                    255
 #define LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION     4
-#define LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION     4
+#define LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION     7
 #define LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_REVISION_VERSION  0
 #define LINFLEXD_UART_IP_HWACCESS_SW_MAJOR_VERSION             0
-#define LINFLEXD_UART_IP_HWACCESS_SW_MINOR_VERSION             8
+#define LINFLEXD_UART_IP_HWACCESS_SW_MINOR_VERSION             9
 #define LINFLEXD_UART_IP_HWACCESS_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -75,7 +75,7 @@ extern "C"{
 
     /* Check if current file and SchM_Uart.h header file are of the same Autosar version */
     #if ((LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION != SCHM_UART_AR_RELEASE_MAJOR_VERSION) || \
-         (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION != SCHM_UART_AR_RELEASE_MAJOR_VERSION))
+         (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION != SCHM_UART_AR_RELEASE_MINOR_VERSION))
         #error "Linflexd_Uart_Ip_HwAccess.h and SchM_Uart.h are different"
     #endif
 #endif
@@ -156,6 +156,7 @@ typedef enum
     LINFLEXD_UART_MODE  = 1U
 } Linflexd_Uart_Ip_ModeType;
 
+
 /**
  * @internal
  * @brief UART Mode: FIFO/BUFFER.
@@ -192,7 +193,10 @@ typedef enum
     LINFLEXD_UART_BUFFER_OVERRUN_FLAG          = LINFLEXD_UARTSR_BOF_MASK,
     LINFLEXD_UART_FRAME_ERROR_FLAG             = LINFLEXD_UARTSR_FEF_MASK,
     LINFLEXD_UART_MESSAGE_BUFFER_FULL_FLAG     = LINFLEXD_UARTSR_RMB_MASK,
-    LINFLEXD_UART_PARITY_ERROR_FLAG            = LINFLEXD_UARTSR_PE_MASK
+    LINFLEXD_UART_PARITY_ERROR_FLAG            = LINFLEXD_UARTSR_PE_MASK,
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+    LINFLEXD_UART_TIMEOUT_INTERRUPT_FLAG       = LINFLEXD_UARTSR_TO_MASK
+#endif
 } Linflexd_Uart_Ip_StatusFlagType;
 
 /**
@@ -206,7 +210,10 @@ typedef enum
     LINFLEXD_DATA_RECEPTION_COMPLETE_INT = LINFLEXD_LINIER_DRIE_MASK,
     LINFLEXD_BUFFER_OVERRUN_INT          = LINFLEXD_LINIER_BOIE_MASK,
     LINFLEXD_FRAME_ERROR_INT             = LINFLEXD_LINIER_FEIE_MASK,
-    LINFLEXD_WAKEUP_INT                  = LINFLEXD_LINIER_WUIE_MASK
+    LINFLEXD_WAKEUP_INT                  = LINFLEXD_LINIER_WUIE_MASK,
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+    LINFLEXD_TIMEOUT_INT                 = LINFLEXD_LINIER_TOIE_MASK
+#endif
 } Linflexd_Uart_Ip_InterruptType;
 
 /*==================================================================================================
@@ -277,6 +284,38 @@ static inline void Linflexd_Uart_Ip_SetMode(LINFLEXD_Type *Base, Linflexd_Uart_I
     RegValTemp |= LINFLEXD_UARTCR_UART((uint32)Mode);
     Base->UARTCR = RegValTemp;
 }
+
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+/**
+ * @internal
+ * @brief Enable Monitor Idle State for UART module
+ *
+ * This function to enable monitor idle state of the reception line.
+ *
+ * @param Base LINFLEXD Base pointer.
+ * @param mode Enable enable/disable monitor idle state of the reception line.
+ */
+static inline void Linflexd_Uart_Ip_EnableMonitorIdleState(LINFLEXD_Type *Base, boolean Enable)
+{
+    Base->UARTCR |= LINFLEXD_UARTCR_MIS(Enable);
+}
+#endif
+
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+/**
+ * @internal
+ * @brief Enable Timer Reset for UART module Disable Timeout in UART mode
+ * Note: Disable Timeout causes only the Timer to restart which enables Timeout again.
+ *       Timer reset means it resets and starts counting again and the Timeout is enabled.
+ *
+ * @param Base LINFLEXD Base pointer.
+ * @param Enable enable/disable timeout in UART mode.
+ */
+static inline void Linflexd_Uart_Ip_EnableTimerReset(LINFLEXD_Type *Base, boolean Enable)
+{
+    Base->UARTCR |= LINFLEXD_UARTCR_DTU_PCETX(Enable);
+}
+#endif
 
 /**
  * @internal
@@ -755,6 +794,18 @@ static inline void Linflexd_Uart_Ip_SetDmaRxEnable(LINFLEXD_Type *Base, boolean 
     Base->DMARXE = LINFLEXD_DMARXE_DRE0(Enable ? 1UL : 0UL);
 }
 
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+/**
+ * @brief Configures the preset value of the timeout register in UART mode.
+ *
+ * @param Base LINFLEXD Base pointer.
+ * @param PresetValue Preset value of the timeout register.
+ */
+static inline void Linflexd_Uart_Ip_SetPresetValue(LINFLEXD_Type *Base, uint16 PresetValue)
+{
+    Base->UARTPTO = LINFLEXD_UARTPTO_PTO(PresetValue);
+}
+#endif
 
 /**
  * @brief   : Prepare for timeout checking

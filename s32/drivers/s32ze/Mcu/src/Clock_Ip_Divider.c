@@ -5,7 +5,7 @@
  */
 /**
 *   @file       Clock_Ip_Divider.c
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -34,10 +34,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_DIVIDER_VENDOR_ID_C                      43
 #define CLOCK_IP_DIVIDER_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_DIVIDER_AR_RELEASE_MINOR_VERSION_C       4
+#define CLOCK_IP_DIVIDER_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_DIVIDER_AR_RELEASE_REVISION_VERSION_C    0
 #define CLOCK_IP_DIVIDER_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_DIVIDER_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_DIVIDER_SW_MINOR_VERSION_C               9
 #define CLOCK_IP_DIVIDER_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -154,6 +154,21 @@ static void Clock_Ip_SetCgmXDeDivStatWithoutPhase(Clock_Ip_DividerConfigType con
         RegValue &= ~DividerMask;
         RegValue |= (((Config->Value-1U) << DividerShift) & DividerMask);
         Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] = RegValue;
+
+#ifdef CLOCK_IP_DIVIDER_HAVE_DIV_FMT
+        if((Instance == 0U)  && (SelectorIndex == 2U) && (DividerIndex == 2U))
+        {
+            IP_MC_CGM_0->MUX_2_DC_2 &= ~MC_CGM_MUX_2_DC_2_DIV_FMT_MASK;
+        }
+        else if((Instance == 4U) && (SelectorIndex == 2U) && (DividerIndex == 2U))
+        {
+            IP_MC_CGM_4->MUX_2_DC_2 &= ~MC_CGM_MUX_2_DC_2_DIV_FMT_MASK;
+        }
+        else
+        {
+            /* Do nothing */
+        }
+#endif
     }
 
     Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);

@@ -44,10 +44,10 @@ extern "C"{
 */
 #define STM_IP_VENDOR_ID                       43
 #define STM_IP_AR_RELEASE_MAJOR_VERSION        4
-#define STM_IP_AR_RELEASE_MINOR_VERSION        4
+#define STM_IP_AR_RELEASE_MINOR_VERSION        7
 #define STM_IP_AR_RELEASE_REVISION_VERSION     0
 #define STM_IP_SW_MAJOR_VERSION                0
-#define STM_IP_SW_MINOR_VERSION                8
+#define STM_IP_SW_MINOR_VERSION                9
 #define STM_IP_SW_PATCH_VERSION                0
 
 
@@ -149,7 +149,13 @@ extern "C"{
 #include "Gpt_MemMap.h"
 
 extern uint32 Stm_Ip_u32TargetValue[STM_INSTANCE_COUNT][STM_CHANNEL_COUNT];
-#if ((STM_IP_CHANGE_NEXT_TIMEOUT_VALUE == STD_ON) && ((defined STM_0_ISR_USED) || (defined STM_1_ISR_USED) || (defined STM_2_ISR_USED)|| (defined STM_3_ISR_USED) || (defined STM_4_ISR_USED) || (defined STM_5_ISR_USED) || (defined STM_6_ISR_USED) || (defined STM_7_ISR_USED)))
+#if ((defined STM_0_ISR_USED) || (defined STM_1_ISR_USED) || (defined STM_2_ISR_USED)  || (defined STM_3_ISR_USED)  || \
+     (defined STM_4_ISR_USED) || (defined STM_5_ISR_USED) || (defined STM_6_ISR_USED)  || (defined STM_7_ISR_USED)  || \
+     (defined STM_8_ISR_USED) || (defined STM_9_ISR_USED) || (defined STM_10_ISR_USED) || (defined STM_11_ISR_USED) || \
+     (defined STM_12_ISR_USED)|| (defined SMU_STM_0_ISR_USED) || (defined SMU_STM_2_ISR_USED) || \
+     (defined CE_STM_0_ISR_USED) || (defined CE_STM_1_ISR_USED) || (defined CE_STM_2_ISR_USED) || \
+     (defined RTU0_STM_0_ISR_USED) || (defined RTU0_STM_1_ISR_USED) || (defined RTU0_STM_2_ISR_USED) || (defined RTU0_STM_3_ISR_USED) || \
+     (defined RTU1_STM_0_ISR_USED) || (defined RTU1_STM_1_ISR_USED) || (defined RTU1_STM_2_ISR_USED) || (defined RTU1_STM_3_ISR_USED))
 extern uint32 Stm_Ip_u32NextTargetValue[STM_INSTANCE_COUNT][STM_CHANNEL_COUNT];
 #endif
 

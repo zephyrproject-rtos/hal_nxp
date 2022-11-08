@@ -33,10 +33,10 @@ extern "C"{
 ==================================================================================================*/
 #define SIUL2_ICU_IP_IRQ_VENDOR_ID                    43
 #define SIUL2_ICU_IP_IRQ_AR_RELEASE_MAJOR_VERSION     4
-#define SIUL2_ICU_IP_IRQ_AR_RELEASE_MINOR_VERSION     4
+#define SIUL2_ICU_IP_IRQ_AR_RELEASE_MINOR_VERSION     7
 #define SIUL2_ICU_IP_IRQ_AR_RELEASE_REVISION_VERSION  0
 #define SIUL2_ICU_IP_IRQ_SW_MAJOR_VERSION             0
-#define SIUL2_ICU_IP_IRQ_SW_MINOR_VERSION             8
+#define SIUL2_ICU_IP_IRQ_SW_MINOR_VERSION             9
 #define SIUL2_ICU_IP_IRQ_SW_PATCH_VERSION             0
 
 /*==================================================================================================

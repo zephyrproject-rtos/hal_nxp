@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-
 /**
 *   @file    Spi_Ip.c
 *   
@@ -48,10 +47,10 @@ extern "C"
 ==================================================================================================*/
 #define SPI_IP_VENDOR_ID_C                      43
 #define SPI_IP_AR_RELEASE_MAJOR_VERSION_C       4
-#define SPI_IP_AR_RELEASE_MINOR_VERSION_C       4
+#define SPI_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define SPI_IP_AR_RELEASE_REVISION_VERSION_C    0
 #define SPI_IP_SW_MAJOR_VERSION_C               0
-#define SPI_IP_SW_MINOR_VERSION_C               8
+#define SPI_IP_SW_MINOR_VERSION_C               9
 #define SPI_IP_SW_PATCH_VERSION_C               0
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -254,6 +253,12 @@ static void Spi_Ip_WriteCmdFifo
 (
     uint16 NumberOfWrites,
     uint8 Instance
+);
+
+static void Spi_Ip_UpdateTxRxCounter
+(
+    uint8 Instance, 
+    uint16 Length
 );
 
 #if (SPI_IP_DEV_ERROR_DETECT == STD_ON)  
@@ -1023,11 +1028,11 @@ static void Spi_Ip_WriteTxFifo
         {
             if(State->ExternalDevice->DeviceParams->FrameSize < 9u)
             {
-                Data = *((uint8*)(&State->TxBuffer[State->TxIndex]));
+                Data = *((const uint8*)(&State->TxBuffer[State->TxIndex]));
             }
             else
             {
-                Data = *((uint16*)(&State->TxBuffer[2u * State->TxIndex]));
+                Data = *((const uint16*)(&State->TxBuffer[2u * State->TxIndex]));
             }
         }
         else
@@ -1157,6 +1162,35 @@ static void Spi_Ip_WriteCmdFifo
         State->ExpectedCmdFifoWrites--;
     }
 }
+
+/**
+* @brief   This function calculates actual TX/RX counter depends on FrameSize. 
+* @details This function calculates actual TX/RX counter depends on FrameSize.
+*
+* @param[in]     Instance         Index of the hardware instance.
+* @param[in]     Length           Number of bytes transfer.
+* @return none
+*/
+static void Spi_Ip_UpdateTxRxCounter(uint8 Instance, uint16 Length)
+{
+    Spi_Ip_StateStructureType* State = Spi_Ip_apxStateStructureArray[Instance];
+    
+    if (State->ExternalDevice->DeviceParams->FrameSize < 9u)
+    {
+        State->ExpectedFifoWrites = Length;
+    }
+    else
+    {
+        State->ExpectedFifoWrites = Length/2u;
+    }
+    State->ExpectedFifoReads = State->ExpectedFifoWrites;
+    if (State->ExternalDevice->DeviceParams->FrameSize > 16u)
+    {
+        State->ExpectedFifoReads = State->ExpectedFifoWrites/2u;
+    }
+    State->ExpectedCmdFifoWrites = State->ExpectedFifoReads;
+}
+
 
 #if (SPI_IP_DEV_ERROR_DETECT == STD_ON)  
 /**
@@ -1384,7 +1418,7 @@ Spi_Ip_StatusType Spi_Ip_DeInit(uint8 Instance)
 /*================================================================================================*/
 Spi_Ip_StatusType Spi_Ip_SyncTransmit(
                                       const Spi_Ip_ExternalDeviceType *ExternalDevice,
-                                      uint8 *TxBuffer,
+                                      const uint8 *TxBuffer,
                                       uint8 *RxBuffer,
                                       uint16 Length,
                                       uint32 TimeOut
@@ -1399,7 +1433,6 @@ Spi_Ip_StatusType Spi_Ip_SyncTransmit(
     uint32 CurrentTicks = 0u; /* initialize current counter */
     uint32 ElapsedTicks = 0u; /* elapsed will give timeout */
     uint8 Instance = 0u;
-    uint8 FrameSize = 0u;
     uint16 PushrCmd = 0u;
     uint32 LsbValue = 0u;
     
@@ -1442,22 +1475,8 @@ Spi_Ip_StatusType Spi_Ip_SyncTransmit(
         State->TxIndex = 0u;
         State->TxBuffer = TxBuffer;
         State->RxBuffer = RxBuffer;
-        FrameSize = State->ExternalDevice->DeviceParams->FrameSize;
         
-        if (FrameSize < 9u)
-        {
-            State->ExpectedFifoWrites = Length;
-        }
-        else
-        {
-            State->ExpectedFifoWrites = Length/2u;
-        }
-        State->ExpectedFifoReads = State->ExpectedFifoWrites;
-        if (FrameSize > 16u)
-        {
-            State->ExpectedFifoReads = State->ExpectedFifoWrites/2u;
-        }
-        State->ExpectedCmdFifoWrites = State->ExpectedFifoReads;
+        Spi_Ip_UpdateTxRxCounter(Instance, Length);
         /* To increase the performance, Some frames can be transferred using 1 CMD. Support maximum SPI_IP_CTARE_DTCP_MAX_U16 frames. */
         /* Due to CS signal always de-assert at the beginning of next channel (after move driver to stop mode by set HALT bit) so this mode only support in IP layer
            or Job has only 1 channel */
@@ -1497,8 +1516,7 @@ Spi_Ip_StatusType Spi_Ip_SyncTransmit(
         }
         
         CurrentTicks = OsIf_GetCounter(SPI_IP_TIMEOUT_METHOD); /* initialize current counter */        
-        /* Clear Halt bit before transfer */
-        Base->MCR &= ~SPI_MCR_HALT_MASK;
+		
         /* Get current FIFO slots are available.*/
         State->CurrentTxFifoSlot = SPI_IP_FIFO_SIZE_U16;
         while(SPI_IP_STATUS_SUCCESS == Status)
@@ -1538,6 +1556,11 @@ Spi_Ip_StatusType Spi_Ip_SyncTransmit(
                 /* Update current TX FIFO slot can be written */
                 State->CurrentTxFifoSlot = 0u;
                 ElapsedTicks = 0;
+				/* Clear Halt bit, then transfer */
+				if(((Base->MCR) & SPI_MCR_HALT_MASK) == SPI_MCR_HALT_MASK)
+				{
+					Base->MCR &= ~SPI_MCR_HALT_MASK;
+				}
             }          
             /* RECEIVE */
             /* Read all data available in receive HW fifo. */
@@ -1575,7 +1598,7 @@ Spi_Ip_StatusType Spi_Ip_SyncTransmit(
 
 Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
                                        const Spi_Ip_ExternalDeviceType *ExternalDevice,
-                                       uint8 *TxBuffer,
+                                       const uint8 *TxBuffer,
                                        uint8 *RxBuffer,
                                        uint16 Length,
                                        Spi_Ip_CallbackType EndCallback
@@ -1586,7 +1609,6 @@ Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
     Spi_Ip_StatusType Status = SPI_IP_STATUS_SUCCESS;
     uint32 LsbValue;
     uint8 Instance;
-    uint8 FirstFramesSent = 0u;
     #if (SPI_IP_SLAVE_SUPPORT == STD_ON)
     uint16 NumberOfWrites = 0u;
     #endif
@@ -1631,19 +1653,16 @@ Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
         if (State->ExternalDevice->DeviceParams->FrameSize < 9u)
         {
             State->ExpectedFifoWrites = Length;
-            FirstFramesSent = 1u;
         }
         else
         {
             State->ExpectedFifoWrites = Length/2u;
-            FirstFramesSent = 1u;
         }
 
         State->ExpectedFifoReads = State->ExpectedFifoWrites;
         if (State->ExternalDevice->DeviceParams->FrameSize >16u)
         {
             State->ExpectedFifoReads = State->ExpectedFifoWrites/2u;
-            FirstFramesSent = 2u;
         }
         State->ExpectedCmdFifoWrites = State->ExpectedFifoReads;
         State->PushrCmd = ExternalDevice->PushrCmd;
@@ -1703,10 +1722,17 @@ Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
                         {
                             Spi_Ip_WriteCmdFifo(NumberOfCmdWrites, Instance);
                         }
-                        
-                        /* Send first data to trigger TCF ISR */
-                        Spi_Ip_WriteTxFifo(FirstFramesSent, Instance);
-                        State->CurrentTxFifoSlot -= FirstFramesSent;
+                        /* Limits to remaining frames. */
+						if (State->CurrentTxFifoSlot > (State->ExpectedFifoWrites - State->TxIndex))
+						{
+							State->CurrentTxFifoSlot = State->ExpectedFifoWrites - State->TxIndex;
+						}
+						if (State->CurrentTxFifoSlot != 0u)
+						{
+							Spi_Ip_WriteTxFifo(State->CurrentTxFifoSlot, Instance);
+							/* Update current TX FIFO slot can be written */
+							State->CurrentTxFifoSlot = 0u;
+						}
                     }
                     #if (SPI_IP_SLAVE_SUPPORT == STD_ON)
                     else
@@ -1758,12 +1784,12 @@ Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
                     break;
             }
             (void)Dma_Ip_SetLogicChannelTransferList(State->PhyUnitConfig->RxDmaChannel, DmaTcdList, 1u);
-            /* Enable DMA request. */
+            /* Config and Enable DMA request. */
+			Spi_Ip_DmaConfig(Instance);
             Base->RSER = SPI_RSER_CMDFFF_RE(1) | SPI_RSER_CMDFFF_DIRS(1) | SPI_RSER_TFFF_RE(1) | SPI_RSER_TFFF_DIRS(1) | SPI_RSER_RFDF_RE(1) | SPI_RSER_RFDF_DIRS(1);
-            Spi_Ip_DmaConfig(Instance);
         }
         #endif
-        SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_11();
+		SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_11();
         /* Clear Halt bit before transfer */
         Base->MCR &= ~SPI_MCR_HALT_MASK;
         SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_11();
@@ -1853,10 +1879,10 @@ Spi_Ip_StatusType Spi_Ip_AsyncTransmitFast(
             Base->MODE.CTAR[0u] = FastTransferCfg[0u].ExternalDevice->Ctar | SPI_CTAR_FMSZ(((uint32)State->ExternalDevice->DeviceParams->FrameSize - 1u) & (uint32)0xFu) | SPI_CTAR_LSBFE(LsbValue);
         #endif
         Base->CTARE[0u] = FastTransferCfg[0u].ExternalDevice->Ctare | SPI_CTARE_FMSZE((((uint32)State->ExternalDevice->DeviceParams->FrameSize - 1u) >> 4u) & (uint32)0x1u);
-        /* Enable DMA request. */
+        /* Config and Enable DMA request. */
+		Spi_Ip_DmaFastConfig(Instance, FastTransferCfg, NumberOfTransfer);
         Base->RSER = SPI_RSER_CMDFFF_RE(1u) | SPI_RSER_CMDFFF_DIRS(1u) | SPI_RSER_TFFF_RE(1u) | SPI_RSER_TFFF_DIRS(1u) | SPI_RSER_RFDF_RE(1u) | SPI_RSER_RFDF_DIRS(1u);
 
-        Spi_Ip_DmaFastConfig(Instance, FastTransferCfg, NumberOfTransfer);
         /* Clear Halt bit before transfer */
         Base->MCR &= ~SPI_MCR_HALT_MASK;
     }

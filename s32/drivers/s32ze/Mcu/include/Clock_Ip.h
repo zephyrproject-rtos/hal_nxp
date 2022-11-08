@@ -9,7 +9,7 @@
 
 /**
 *   @file    Clock_Ip.h
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK IP driver header file.
 *   @details CLOCK IP driver header file.
@@ -36,10 +36,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_VENDOR_ID                       43
 #define CLOCK_IP_AR_RELEASE_MAJOR_VERSION        4
-#define CLOCK_IP_AR_RELEASE_MINOR_VERSION        4
+#define CLOCK_IP_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_AR_RELEASE_REVISION_VERSION     0
 #define CLOCK_IP_SW_MAJOR_VERSION                0
-#define CLOCK_IP_SW_MINOR_VERSION                8
+#define CLOCK_IP_SW_MINOR_VERSION                9
 #define CLOCK_IP_SW_PATCH_VERSION                0
 
 /*==================================================================================================
@@ -185,6 +185,8 @@ void Clock_Ip_DistributePll(void);
  * @param[in] Clock_Ip_NotificationsCallbackType  notifications callback
  *
  * @return void
+ *
+ * @implements Clock_Ip_InstallNotificationsCallback_Activity
  */
 void Clock_Ip_InstallNotificationsCallback(Clock_Ip_NotificationsCallbackType Callback);
 

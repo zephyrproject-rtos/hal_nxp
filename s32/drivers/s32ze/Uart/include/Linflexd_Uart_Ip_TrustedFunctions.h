@@ -36,10 +36,10 @@ extern "C"{
 ==================================================================================================*/
 #define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_VENDOR_ID                       43
 #define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION        4
-#define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION        4
+#define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION        7
 #define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION     0
 #define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION                0
-#define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION                8
+#define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION                9
 #define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION                0
 /*==================================================================================================
 *                                     FILE VERSION CHECKS

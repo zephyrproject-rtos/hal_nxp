@@ -31,10 +31,10 @@ extern "C"{
 ==================================================================================================*/
 #define OSIF_TIMER_SYS_INTER_GENERICTIMER_VENDOR_ID_C                    43
 #define OSIF_TIMER_SYS_INTER_GENERICTIMER_AR_RELEASE_MAJOR_VERSION_C     4
-#define OSIF_TIMER_SYS_INTER_GENERICTIMER_AR_RELEASE_MINOR_VERSION_C     4
+#define OSIF_TIMER_SYS_INTER_GENERICTIMER_AR_RELEASE_MINOR_VERSION_C     7
 #define OSIF_TIMER_SYS_INTER_GENERICTIMER_AR_RELEASE_REVISION_VERSION_C  0
 #define OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_MAJOR_VERSION_C             0
-#define OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_MINOR_VERSION_C             8
+#define OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_MINOR_VERSION_C             9
 #define OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
@@ -159,43 +159,51 @@ static void write_CNTFRQ(uint32 val);
 static void write_CNTFRQ(uint32 val)
 {
     uint64 val64 = val; /* Force assembler to use a 64-bit register on AARCH64 */
+/*LDRA_NOANALYSIS*/
     ASMV_KEYWORD(
         WRITE_CNTFRQ_INSTR
         : /* No Output */
         : [Rd]"r"(val64)
     );
+/*LDRA_ANALYSIS*/
 }
 
 static void write_CNTP_CTL(uint32 val);
 static void write_CNTP_CTL(uint32 val) 
 {
     uint64 val64 = val; /* Force assembler to use a 64-bit register on AARCH64 */
+/*LDRA_NOANALYSIS*/
     ASMV_KEYWORD(
         WRITE_CNTP_CTL_INSTR
         : /* No Output */
         : [Rd]"r"(val64)
     );
+/*LDRA_ANALYSIS*/
 }
 
 static void write_CNTP_TVAL(uint32 val);
 static void write_CNTP_TVAL(uint32 val) 
 {
     uint64 val64 = val; /* Force assembler to use a 64-bit register on AARCH64 */
+/*LDRA_NOANALYSIS*/
     ASMV_KEYWORD(
         WRITE_CNTP_TVAL_INSTR
         : /* No Output */
         : [Rd]"r"(val64)
     );
+/*LDRA_ANALYSIS*/
 }
 
 static uint32 read_CNTP_TVAL(void);
 static uint32 read_CNTP_TVAL(void) 
 {
     uint64 cntp_tval = 0;
+/*LDRA_NOANALYSIS*/
     ASMV_KEYWORD(
         READ_CNTP_TVAL_INSTR
         : [Rd]"=r"(cntp_tval)
     );
+/*LDRA_ANALYSIS*/
     return cntp_tval;
 }
 #elif ((MCAL_PLATFORM_ARM == MCAL_ARM_AARCH32) || (MCAL_PLATFORM_ARM == MCAL_ARM_RARCH))
@@ -203,43 +211,51 @@ static void write_CNTFRQ(uint32 val);
 static void write_CNTFRQ(uint32 val)
 {
     uint32 val32 = val; 
+/*LDRA_NOANALYSIS*/
     ASMV_KEYWORD(
         WRITE_CNTFRQ_INSTR
         : /* No Output */
         : [Rd]"r"(val32)
     );
+/*LDRA_ANALYSIS*/
 }
 
 static void write_CNTP_CTL(uint32 val);
 static void write_CNTP_CTL(uint32 val) 
 {
     uint32 val32 = val; 
+/*LDRA_NOANALYSIS*/
     ASMV_KEYWORD(
         WRITE_CNTP_CTL_INSTR
         : /* No Output */
         : [Rd]"r"(val32)
     );
+/*LDRA_ANALYSIS*/
 }
 
 static void write_CNTP_TVAL(uint32 val);
 static void write_CNTP_TVAL(uint32 val) 
 {
     uint32 val32 = val; 
+/*LDRA_NOANALYSIS*/
     ASMV_KEYWORD(
         WRITE_CNTP_TVAL_INSTR
         : /* No Output */
         : [Rd]"r"(val32)
     );
+/*LDRA_ANALYSIS*/
 }
 
 static uint32 read_CNTP_TVAL(void);
 static uint32 read_CNTP_TVAL(void) 
 {
     uint32 cntp_tval = 0;
+/*LDRA_NOANALYSIS*/
     ASMV_KEYWORD(
         READ_CNTP_TVAL_INSTR
         : [Rd]"=r"(cntp_tval)
     );
+/*LDRA_ANALYSIS*/
     return cntp_tval;
 }
 #endif

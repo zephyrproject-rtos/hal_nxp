@@ -32,10 +32,10 @@ extern "C"{
 #define LINFLEXD_UART_IP_TYPES_VENDOR_ID                    43
 #define LINFLEXD_UART_IP_TYPES_MODULE_ID                    255
 #define LINFLEXD_UART_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
-#define LINFLEXD_UART_IP_TYPES_AR_RELEASE_MINOR_VERSION     4
+#define LINFLEXD_UART_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
 #define LINFLEXD_UART_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
 #define LINFLEXD_UART_IP_TYPES_SW_MAJOR_VERSION             0
-#define LINFLEXD_UART_IP_TYPES_SW_MINOR_VERSION             8
+#define LINFLEXD_UART_IP_TYPES_SW_MINOR_VERSION             9
 #define LINFLEXD_UART_IP_TYPES_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -87,6 +87,15 @@ typedef enum
 } Linflexd_Uart_Ip_TransferType;
 
 /**
+* @brief          The type operation of an LinflexD Uart channel.
+*/
+typedef enum
+{
+    LINFLEXD_UART_IP_SEND    = (uint8)0x00U, /**< @brief The sending operation */
+    LINFLEXD_UART_IP_RECEIVE = (uint8)0x01U  /**< @brief The receiving operation */
+} Linflexd_Uart_Ip_DataDirectionType;
+
+/**
  * @brief Driver status type.
  *
  *
@@ -104,7 +113,9 @@ typedef enum
     LINFLEXD_UART_IP_STATUS_PARITY_ERROR               = 0x08U,  /**< @brief Parity error */
     LINFLEXD_UART_IP_STATUS_NOISE_ERROR                = 0x09U,  /**< @brief Noise error */
     LINFLEXD_UART_IP_STATUS_DMA_ERROR                  = 0x10U,  /**< @brief DMA error */
-
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+    LINFLEXD_UART_IP_STATUS_RX_IDLE_STATE              = 0x11U,  /**< @brief The idle state of the reception line is generated */
+#endif
 } Linflexd_Uart_Ip_StatusType;
 
 /*==================================================================================================
@@ -119,10 +130,13 @@ typedef enum
  */
 typedef enum
 {
-    LINFLEXD_UART_IP_EVENT_RX_FULL      = 0x00U,    /**< @brief Rx buffer is full */
-    LINFLEXD_UART_IP_EVENT_TX_EMPTY     = 0x01U,    /**< @brief Tx buffer is empty */
-    LINFLEXD_UART_IP_EVENT_END_TRANSFER = 0x02U,    /**< @brief The current transfer is ending */
-    LINFLEXD_UART_IP_EVENT_ERROR        = 0x03U,    /**< @brief An error occured during transfer */
+    LINFLEXD_UART_IP_EVENT_RX_FULL          = 0x00U,    /**< @brief Rx buffer is full */
+    LINFLEXD_UART_IP_EVENT_TX_EMPTY         = 0x01U,    /**< @brief Tx buffer is empty */
+    LINFLEXD_UART_IP_EVENT_END_TRANSFER     = 0x02U,    /**< @brief The current transfer is ending */
+    LINFLEXD_UART_IP_EVENT_ERROR            = 0x03U,    /**< @brief An error occured during transfer */
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+    LINFLEXD_UART_IP_EVENT_IDLE_STATE       = 0x04U,    /**< @brief The idle state of the reception line is generated*/
+#endif
 } Linflexd_Uart_Ip_EventType;
 
 /**

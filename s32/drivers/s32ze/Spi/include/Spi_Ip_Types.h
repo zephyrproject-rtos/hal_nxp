@@ -36,10 +36,10 @@ extern "C"{
 ==================================================================================================*/
 #define SPI_IP_TYPES_VENDOR_ID                    43
 #define SPI_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
-#define SPI_IP_TYPES_AR_RELEASE_MINOR_VERSION     4
+#define SPI_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
 #define SPI_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
 #define SPI_IP_TYPES_SW_MAJOR_VERSION             0
-#define SPI_IP_TYPES_SW_MINOR_VERSION             8
+#define SPI_IP_TYPES_SW_MINOR_VERSION             9
 #define SPI_IP_TYPES_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -179,7 +179,7 @@ typedef struct
 typedef struct  
 {
     const Spi_Ip_ExternalDeviceType *ExternalDevice; /**< Point to external device configuration */
-    uint8* TxBuffer;  /**< Store pointer for Tx buffer */
+    const uint8* TxBuffer;  /**< Store pointer for Tx buffer */
     uint8* RxBuffer;  /**< Store pointer for Rx buffer */
     uint32 DefaultData;  /**< Default data to send when TxBuffer is NULL_PTR */
     uint16 Length;  /**< Number of bytes to be sent */
@@ -223,7 +223,7 @@ typedef struct
    Spi_Ip_ModeType TransferMode; /**< Store current transfer mode for HWunit */
    Spi_Ip_HwStatusType Status; /**< 0 = available, 1 = busy, 2 = fail due to overflow or underflow */
    uint8* RxBuffer;  /**< Store pointer for Rx buffer */
-   uint8* TxBuffer;  /**< Store pointer for Tx buffer */
+   const uint8* TxBuffer;  /**< Store pointer for Tx buffer */
    Spi_Ip_CallbackType Callback;  /**< Store pointer for call back function */
    uint16 RxIndex;  /**< Store current Rx index to receive data in Rx buffer */
    uint16 TxIndex;  /**< Store current Tx index to transmit data in Tx buffer */

@@ -31,10 +31,10 @@ extern "C"{
 ==================================================================================================*/
 #define LINFLEXD_UART_IP_IRQ_VENDOR_ID_C                      43
 #define LINFLEXD_UART_IP_IRQ_AR_RELEASE_MAJOR_VERSION_C       4
-#define LINFLEXD_UART_IP_IRQ_AR_RELEASE_MINOR_VERSION_C       4
+#define LINFLEXD_UART_IP_IRQ_AR_RELEASE_MINOR_VERSION_C       7
 #define LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION_C    0
 #define LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION_C               0
-#define LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION_C               8
+#define LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION_C               9
 #define LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
