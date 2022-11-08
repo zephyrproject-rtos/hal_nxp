@@ -34,10 +34,10 @@ extern "C"{
 #define SOC_IPS_VENDOR_ID                    43
 #define SOC_IPS_MODULE_ID                    0
 #define SOC_IPS_AR_RELEASE_MAJOR_VERSION     4
-#define SOC_IPS_AR_RELEASE_MINOR_VERSION     4
+#define SOC_IPS_AR_RELEASE_MINOR_VERSION     7
 #define SOC_IPS_AR_RELEASE_REVISION_VERSION  0
 #define SOC_IPS_SW_MAJOR_VERSION             0
-#define SOC_IPS_SW_MINOR_VERSION             8
+#define SOC_IPS_SW_MINOR_VERSION             9
 #define SOC_IPS_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -189,6 +189,25 @@ extern "C"{
 * @details ERR050456 LPSPI: Reset to fifo does not work as expected
 */
 #define ERR_IPV_LPSPIV2_0001         (STD_ON)
+
+/**
+* @brief Hardware errata for LINFlexD: (e007274)
+* @details e007274 LINFlexD: Consecutive headers received by LIN Slave triggers the LIN FSM to an unexpected state.
+*/
+#define ERR_IPV_LINFLEXD_E007274    (STD_ON)
+
+/**
+* @brief Hardware errata for MC_RGM: (ERR051163)
+* @details ERR051163 MC_RGM: Incorrect destructive reset event status
+*/
+#define ERR_IPV_MC_RGM_0001         (STD_ON)
+
+/**
+* @brief Hardware errata for EMIOS: (ERR009978)
+* @details ERR009978 EMIOS: eMIOS: Unexpected channel flag assertion during GPIO to
+MCB mode transition
+*/
+#define ERR_IPV_EMIOS_009978        (STD_ON)
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/

@@ -6,7 +6,7 @@
 /**
 *   @file           Platform_Types.h
 *   @implements     Platform_Types.h_Artifact
-*   @version 0.8.0
+*   @version 0.9.0
 *
 *   @brief   AUTOSAR BaseNXP - Platform dependend data type definitions.
 *   @details AUTOSAR platform types header file. It contains all 

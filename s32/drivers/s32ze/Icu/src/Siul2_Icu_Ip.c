@@ -35,10 +35,10 @@ extern "C"{
 ==================================================================================================*/
 #define SIUL2_ICU_IP_VENDOR_ID_C                   43
 #define SIUL2_ICU_IP_AR_RELEASE_MAJOR_VERSION_C    4
-#define SIUL2_ICU_IP_AR_RELEASE_MINOR_VERSION_C    4
+#define SIUL2_ICU_IP_AR_RELEASE_MINOR_VERSION_C    7
 #define SIUL2_ICU_IP_AR_RELEASE_REVISION_VERSION_C 0
 #define SIUL2_ICU_IP_SW_MAJOR_VERSION_C            0
-#define SIUL2_ICU_IP_SW_MINOR_VERSION_C            8
+#define SIUL2_ICU_IP_SW_MINOR_VERSION_C            9
 #define SIUL2_ICU_IP_SW_PATCH_VERSION_C            0
 
 /*==================================================================================================
@@ -140,8 +140,10 @@ static Siul2_Icu_Ip_InstanceConfigType Siul2_Icu_Ip_aInstanceConfiguration[SIUL2
     void Siul2_Icu_SetUserAccessAllowed(uint32 siul2BaseAddr);
 #endif
 
-#if (defined (MCAL_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == SIUL2_ICU_IP_ENABLE_USER_MODE_SUPPORT))
-    #define Call_Siul2_Icu_SetUserAccessAllowed(BaseAddr) OsIf_Trusted_Call1param(Siul2_Icu_SetUserAccessAllowed,(BaseAddr))
+#if (((defined (MCAL_SIUL2_AE_REG_PROT_AVAILABLE)) || (defined (MCAL_SIUL2_REG_PROT_AVAILABLE))) && (STD_ON == SIUL2_ICU_IP_ENABLE_USER_MODE_SUPPORT))
+    #if ((STD_ON == MCAL_SIUL2_AE_REG_PROT_AVAILABLE) || (STD_ON == MCAL_SIUL2_REG_PROT_AVAILABLE))
+        #define Call_Siul2_Icu_SetUserAccessAllowed(BaseAddr) OsIf_Trusted_Call1param(Siul2_Icu_SetUserAccessAllowed,(BaseAddr))
+    #endif
 #else
     #define Call_Siul2_Icu_SetUserAccessAllowed(BaseAddr)
 #endif
@@ -166,7 +168,7 @@ static inline void Siul2_Icu_Ip_ConfigIntFilterClock(uint8 instance, uint8 presc
  */
 void Siul2_Icu_SetUserAccessAllowed(uint32 siul2BaseAddr)
 {
-    SET_USER_ACCESS_ALLOWED(siul2BaseAddr, SIUL2_PROT_MEM_U32);
+    SET_USER_ACCESS_ALLOWED(siul2BaseAddr, SIUL2_AE_PROT_MEM_U32);
 }
 #endif /* STD_ON == SIUL2_ICU_IP_ENABLE_USER_MODE_SUPPORT */
 
@@ -177,6 +179,7 @@ void Siul2_Icu_SetUserAccessAllowed(uint32 siul2BaseAddr)
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
+#if (SIUL2_ICU_IP_DEINIT_API == STD_ON)
 /** @implements Siul2_Icu_Ip_DeInit_Activity **/
 Siul2_Icu_Ip_StatusType Siul2_Icu_Ip_DeInit(uint8 instance)
 {
@@ -226,6 +229,7 @@ Siul2_Icu_Ip_StatusType Siul2_Icu_Ip_DeInit(uint8 instance)
 
     return status;
 }
+#endif /* SIUL2_ICU_IP_DEINIT_API == STD_ON */
 
 /** @implements Siul2_Icu_Ip_Init_Activity **/
 Siul2_Icu_Ip_StatusType Siul2_Icu_Ip_Init(uint8 instance, const Siul2_Icu_Ip_ConfigType* userConfig)
@@ -242,7 +246,15 @@ Siul2_Icu_Ip_StatusType Siul2_Icu_Ip_Init(uint8 instance, const Siul2_Icu_Ip_Con
     base = Siul2_Icu_Ip_pBase[instance];
 
     /* Call user acces mode if it is enabled. */
-    Call_Siul2_Icu_SetUserAccessAllowed((uint32)Siul2_Icu_Ip_pBase[instance]);
+#ifdef SIUL2_ICU_AE_REG_PROT_AVAILABLE
+    if (instance >= SIUL2_ICU_AE_MIN_INSTANCE)
+    {
+#endif
+        Call_Siul2_Icu_SetUserAccessAllowed((uint32)Siul2_Icu_Ip_pBase[instance]);
+#ifdef SIUL2_ICU_AE_REG_PROT_AVAILABLE
+    }
+#endif
+
     /* Global IP configuration */
     Siul2_Icu_Ip_ConfigIntFilterClock(instance, userConfig->pInstanceConfig->intFilterClk);
 

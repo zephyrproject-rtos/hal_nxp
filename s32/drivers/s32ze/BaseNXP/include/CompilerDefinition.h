@@ -5,7 +5,7 @@
  */
 /**
 *   @file           CompilerDefinition.h
-*   @version 0.8.0
+*   @version 0.9.0
 *
 *   @brief   AUTOSAR BaseNXP - SWS Compiler abstraction
 *   @details The file Compiler.h provides macros for the encapsulation of definitions and
@@ -39,10 +39,10 @@ extern "C"{
 */
 #define COMPILERDEFINITION_VENDOR_ID                      43
 #define COMPILERDEFINITION_AR_RELEASE_MAJOR_VERSION       4
-#define COMPILERDEFINITION_AR_RELEASE_MINOR_VERSION       4
+#define COMPILERDEFINITION_AR_RELEASE_MINOR_VERSION       7
 #define COMPILERDEFINITION_AR_RELEASE_REVISION_VERSION    0
 #define COMPILERDEFINITION_SW_MAJOR_VERSION               0
-#define COMPILERDEFINITION_SW_MINOR_VERSION               8
+#define COMPILERDEFINITION_SW_MINOR_VERSION               9
 #define COMPILERDEFINITION_SW_PATCH_VERSION               0
 /**@}*/
 /*==================================================================================================
@@ -61,43 +61,43 @@ extern "C"{
     /**
     * @brief Symbol required to be defined when GreenHills compiler is used.
     */
-    #define _GREENHILLS_C_S32ZSE_
+    #define _GREENHILLS_C_S32ZE_
 #endif
 #ifdef __DCC__
     /**
     * @brief Symbol required to be defined when Diab compiler is used.
     */
-    #define _DIABDATA_C_S32ZSE_
+    #define _DIABDATA_C_S32ZE_
 #endif
 #ifdef __MWERKS__
     /**
     * @brief Symbol required to be defined when Codewarrior compiler is used.
     */
-    #define _CODEWARRIOR_C_S32ZSE_
+    #define _CODEWARRIOR_C_S32ZE_
 #endif
 #ifdef __CSMC__
     /**
     * @brief Symbol required to be defined when Cosmic compiler is used.
     */
-  #define _COSMIC_C_S32ZSE_
+  #define _COSMIC_C_S32ZE_
 #endif
 #if (defined(__GNUC__) && !defined(__DCC__))
          /**
         * @brief Symbol required to be defined when Linaro ARM compiler is used.
         */
-        #define _LINARO_C_S32ZSE_
+        #define _LINARO_C_S32ZE_
  #endif      
 #ifdef __CC_ARM 
         /**
         * @brief Symbol required to be defined when DS5 ARM compiler is used.
         */
-        #define _ARM_DS5_C_S32ZSE_     
+        #define _ARM_DS5_C_S32ZE_     
 #endif
 #ifdef __ICCARM__ 
         /**
         * @brief Symbol required to be defined when IAR compiler is used.
         */
-        #define _IAR_C_S32ZSE_     
+        #define _IAR_C_S32ZE_     
 #endif
 
 #ifdef __cplusplus

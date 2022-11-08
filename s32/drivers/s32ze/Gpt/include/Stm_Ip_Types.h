@@ -36,10 +36,10 @@ extern "C"{
 */
 #define STM_IP_TYPES_VENDOR_ID                       43
 #define STM_IP_TYPES_AR_RELEASE_MAJOR_VERSION        4
-#define STM_IP_TYPES_AR_RELEASE_MINOR_VERSION        4
+#define STM_IP_TYPES_AR_RELEASE_MINOR_VERSION        7
 #define STM_IP_TYPES_AR_RELEASE_REVISION_VERSION     0
 #define STM_IP_TYPES_SW_MAJOR_VERSION                0
-#define STM_IP_TYPES_SW_MINOR_VERSION                8
+#define STM_IP_TYPES_SW_MINOR_VERSION                9
 #define STM_IP_TYPES_SW_PATCH_VERSION                0
 
 /*==================================================================================================

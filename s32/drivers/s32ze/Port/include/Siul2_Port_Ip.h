@@ -25,7 +25,7 @@ extern "C" {
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
 
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "PlatformTypes.h"
 #include "Siul2_Port_Ip_Cfg.h"
 #include "Siul2_Port_Ip_Types.h"
@@ -49,10 +49,10 @@ extern "C" {
  */
 #define SIUL2_PORT_IP_VENDOR_ID_H                     43
 #define SIUL2_PORT_IP_AR_RELEASE_MAJOR_VERSION_H      4
-#define SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_H      4
+#define SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_H      7
 #define SIUL2_PORT_IP_AR_RELEASE_REVISION_VERSION_H   0
 #define SIUL2_PORT_IP_SW_MAJOR_VERSION_H              0
-#define SIUL2_PORT_IP_SW_MINOR_VERSION_H              8
+#define SIUL2_PORT_IP_SW_MINOR_VERSION_H              9
 #define SIUL2_PORT_IP_SW_PATCH_VERSION_H              0
 
 /*==================================================================================================
@@ -174,6 +174,10 @@ extern "C" {
 #endif
 
 #define SIUL2_MAX_NUM_OF_IMCR_REG       512u
+#define SIUL2_DIPORT_IMCR_AE_IDX_START  768u
+#define SIUL2_DIPORT_IMCR_AE_IDX_END    799u
+
+#define SIUL2_AE_IMCR_IDX_OFFSET        1000u
 
 /*==================================================================================================
 *                                              ENUMS

@@ -9,7 +9,7 @@
 
 /**
 *   @file    Clock_Ip_TrustedFunctions.h
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK IP type header file.
 *   @details CLOCK IP type header file.
@@ -35,10 +35,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_TRUSTEDFUNCTIONS_VENDOR_ID                       43
 #define CLOCK_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION        4
-#define CLOCK_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION        4
+#define CLOCK_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION     0
 #define CLOCK_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION                0
-#define CLOCK_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION                8
+#define CLOCK_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION                9
 #define CLOCK_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION                0
 
 /*==================================================================================================
@@ -131,6 +131,25 @@ extern "C"{
  *
  */
 extern void SRAMC_SetRamIWS(void);
+#endif
+
+#ifdef CLOCK_IP_MC_ME_AE_GS_S_SYSCLK
+/**
+ * @brief        Reset configuration for MC_ME_AE_GS_S_SYSCLK
+ *
+ * @param        Config - pointer to configuration of MC_ME_AE selector
+ * @return       None
+ *
+ */
+extern void Clock_Ip_ResetMcMeAeGssSysclk_TrustedCall(Clock_Ip_SelectorConfigType const *Config);
+/**
+ * @brief        Set configuration for MC_ME_AE_GS_S_SYSCLK
+ *
+ * @param        Config - pointer to configuration of MC_ME_AE selector
+ * @return       None
+ *
+ */
+extern void Clock_Ip_SetMcMeAeGssSysclk_TrustedCall(Clock_Ip_SelectorConfigType const *Config);
 #endif
 
 

@@ -28,10 +28,10 @@ extern "C" {
 *                               SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define SCHM_PORT_AR_RELEASE_MAJOR_VERSION     4
-#define SCHM_PORT_AR_RELEASE_MINOR_VERSION     4
+#define SCHM_PORT_AR_RELEASE_MINOR_VERSION     7
 #define SCHM_PORT_AR_RELEASE_REVISION_VERSION  0
 #define SCHM_PORT_SW_MAJOR_VERSION             0
-#define SCHM_PORT_SW_MINOR_VERSION             8
+#define SCHM_PORT_SW_MINOR_VERSION             9
 #define SCHM_PORT_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -168,6 +168,8 @@ extern void SchM_Exit_Port_PORT_EXCLUSIVE_AREA_26(void);
 
 extern void SchM_Enter_Port_PORT_EXCLUSIVE_AREA_27(void);
 extern void SchM_Exit_Port_PORT_EXCLUSIVE_AREA_27(void);
+
+
 
 
 #define RTE_STOP_SEC_CODE

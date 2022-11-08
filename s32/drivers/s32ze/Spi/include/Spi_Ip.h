@@ -39,10 +39,10 @@ extern "C"{
 ==================================================================================================*/
 #define SPI_IP_VENDOR_ID                       43
 #define SPI_IP_AR_RELEASE_MAJOR_VERSION        4
-#define SPI_IP_AR_RELEASE_MINOR_VERSION        4
+#define SPI_IP_AR_RELEASE_MINOR_VERSION        7
 #define SPI_IP_AR_RELEASE_REVISION_VERSION     0
 #define SPI_IP_SW_MAJOR_VERSION                0
-#define SPI_IP_SW_MINOR_VERSION                8
+#define SPI_IP_SW_MINOR_VERSION                9
 #define SPI_IP_SW_PATCH_VERSION                0
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -145,7 +145,7 @@ Spi_Ip_StatusType Spi_Ip_DeInit(uint8 Instance);
 */
 Spi_Ip_StatusType Spi_Ip_SyncTransmit(
                                       const Spi_Ip_ExternalDeviceType *ExternalDevice,
-                                      uint8 *TxBuffer,
+                                      const uint8 *TxBuffer,
                                       uint8 *RxBuffer,
                                       uint16 Length,
                                       uint32 TimeOut
@@ -154,7 +154,8 @@ Spi_Ip_StatusType Spi_Ip_SyncTransmit(
 /**
 * @brief            SPI/DSPI asynchronous transmission.
 * @details          This function initializes an asynchronous transfer using the bus parameters provided
-*                   by external device.
+*                   by external device. After Spi_Ip_Init function is called, SPI_IP_POLLING
+*					mode is set as default to change the default mode Spi_Ip_UpdateTransferMode should be called.
 *
 * @param[in]        ExternalDevice - pointer to the external device where data is transmitted
 * @param[in]        TxBuffer - pointer to transmit buffer.
@@ -168,7 +169,7 @@ Spi_Ip_StatusType Spi_Ip_SyncTransmit(
 */
 Spi_Ip_StatusType Spi_Ip_AsyncTransmit(
                                        const Spi_Ip_ExternalDeviceType *ExternalDevice,
-                                       uint8 *TxBuffer,
+                                       const uint8 *TxBuffer,
                                        uint8 *RxBuffer,
                                        uint16 Length,
                                        Spi_Ip_CallbackType EndCallback

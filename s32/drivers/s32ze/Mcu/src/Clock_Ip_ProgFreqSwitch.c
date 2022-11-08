@@ -6,7 +6,7 @@
 
 /**
 *   @file       Clock_Ip_ProgFreqSwitch.c
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -35,10 +35,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_PROGFREQSWITCH_VENDOR_ID_C                      43
 #define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_MINOR_VERSION_C       4
+#define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_REVISION_VERSION_C    0
 #define CLOCK_IP_PROGFREQSWITCH_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_PROGFREQSWITCH_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_PROGFREQSWITCH_SW_MINOR_VERSION_C               9
 #define CLOCK_IP_PROGFREQSWITCH_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -88,9 +88,34 @@ extern "C"{
 *                                         LOCAL CONSTANTS
 ==================================================================================================*/
 
+/* Clock start constant section data */
+#define MCU_START_SEC_CONST_32
+#include "Mcu_MemMap.h"
+
+#ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
+static const uint32 AMax[CLOCK_IP_A_MAX_SIZE] = {0U,5U,10U,15U,20U,100U};
+static const uint32 PcfsRate[CLOCK_IP_A_MAX_SIZE] = {0U,12U,48U,112U,184U,1000U};
+#endif
+
+/* Clock stop constant section data */
+#define MCU_STOP_SEC_CONST_32
+#include "Mcu_MemMap.h"
+
 /*==================================================================================================
 *                                         LOCAL VARIABLES
 ==================================================================================================*/
+
+/* Clock start initialized section data */
+#define MCU_START_SEC_VAR_CLEARED_32
+#include "Mcu_MemMap.h"
+
+#ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
+static uint32 HashPfs[CLOCK_IP_PCFS_NO];
+#endif
+
+/* Clock stop initialized section data */
+#define MCU_STOP_SEC_VAR_CLEARED_32
+#include "Mcu_MemMap.h"
 
 /*==================================================================================================
 *                                        GLOBAL VARIABLES
@@ -136,9 +161,6 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(Clock_Ip_PcfsConfigType const *Con
 {
     volatile Clock_Ip_CgmPcfsType* CgmPcfsBase  = Clock_Ip_apxCgmPcfs[Clock_Ip_au8ClockFeatures[Config->SelectorName][CLOCK_IP_MODULE_INSTANCE]];
     uint32 HwIndex                       = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_PCFS_INDEX];
-    static const uint32 AMax[CLOCK_IP_A_MAX_SIZE] = {0U,5U,10U,15U,20U,100U};
-    static const uint32 PcfsRate[CLOCK_IP_A_MAX_SIZE] = {0U,12U,48U,112U,184U,1000U};
-    static uint32 Hash[CLOCK_IP_PCFS_NO];
 
     uint32 Finput = 0U;
     uint32 Fsafe = 0U;
@@ -160,9 +182,9 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(Clock_Ip_PcfsConfigType const *Con
         CLOCK_IP_DEV_ASSERT(Config->SelectorName != RESERVED_CLK);
 #endif
 
-    if (Hash[CfgIndex] != ((((uint32)Config->ClockSourceFrequency) ^ ((uint32)Config->MaxAllowableIDDchange) ^ ((uint32)Config->Name)  ^ ((uint32)Config->SelectorName) ^ ((uint32)Config->StepDuration))))
+    if (HashPfs[CfgIndex] != ((((uint32)Config->ClockSourceFrequency) ^ ((uint32)Config->MaxAllowableIDDchange) ^ ((uint32)Config->Name)  ^ ((uint32)Config->SelectorName) ^ ((uint32)Config->StepDuration))))
     {
-        Hash[CfgIndex] = ((((uint32)Config->ClockSourceFrequency) ^ ((uint32)Config->MaxAllowableIDDchange) ^ ((uint32)Config->Name)  ^ ((uint32)Config->SelectorName) ^ ((uint32)Config->StepDuration)));
+        HashPfs[CfgIndex] = ((((uint32)Config->ClockSourceFrequency) ^ ((uint32)Config->MaxAllowableIDDchange) ^ ((uint32)Config->Name)  ^ ((uint32)Config->SelectorName) ^ ((uint32)Config->StepDuration)));
 
         Finput = Config->ClockSourceFrequency / CLOCK_IP_DIVIDE_BY_1000000;
     #if defined(CLOCK_IP_HAS_FIRC_CLK)

@@ -5,7 +5,7 @@
  */
 /**
 *   @file       Clock_Ip_Specific.c
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -42,10 +42,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_SPECIFIC_VENDOR_ID_C                      43
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_SPECIFIC_AR_RELEASE_MINOR_VERSION_C       4
+#define CLOCK_IP_SPECIFIC_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_REVISION_VERSION_C    0
 #define CLOCK_IP_SPECIFIC_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_SPECIFIC_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_SPECIFIC_SW_MINOR_VERSION_C               9
 #define CLOCK_IP_SPECIFIC_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -144,23 +144,28 @@ extern "C"{
 
 void SRAMController_SetRamIWS(uint32 SmuM33CoreClk_IwsSetting, uint32 Rtu0CoreClk_IwsSetting, uint32 Rtu1CoreClk_IwsSetting, uint32 CeM33CoreClk_IwsSetting);
 
+/* Calculate ram wait states value */
 static uint32 Clock_Ip_GetIwsSetting(uint32 ConfiguredCoreClockFrequnecy, uint32 Threshold0, uint32 Threshold1, uint32 Threshold2)
 {
-	uint32 IwsSetting = 0U;
-	
-	if (ConfiguredCoreClockFrequnecy >= Threshold2)
-	{
-		IwsSetting = 3U;
-	}
-	else if (ConfiguredCoreClockFrequnecy >= Threshold1)
-	{
-		IwsSetting = 2U;	
-	}
-	else if (ConfiguredCoreClockFrequnecy >= Threshold0)
-	{
-		IwsSetting = 1U;
-	}
+    uint32 IwsSetting = 0U;
     
+    if (ConfiguredCoreClockFrequnecy >= Threshold2)
+    {
+        IwsSetting = 3U;
+    }
+    else if (ConfiguredCoreClockFrequnecy >= Threshold1)
+    {
+        IwsSetting = 2U;    
+    }
+    else if (ConfiguredCoreClockFrequnecy >= Threshold0)
+    {
+        IwsSetting = 1U;
+    }
+    else
+    {
+        /* Nothing else to be done. */
+    }
+
     return IwsSetting;
 }
 
@@ -195,16 +200,24 @@ void Clock_Ip_SetRamWaitStates(void)
 #endif        
 
 #if (defined(CLOCK_IP_DEV_ERROR_DETECT) && (CLOCK_IP_DEV_ERROR_DETECT == STD_ON))
+#if defined(CLOCK_IP_HAS_RTU0_CORE_CLK)
     CLOCK_IP_DEV_ASSERT(Rtu0CoreClk_ConfiguredFrequency != 0U);
+#endif        
+#if defined(CLOCK_IP_HAS_RTU1_CORE_CLK)
     CLOCK_IP_DEV_ASSERT(Rtu1CoreClk_ConfiguredFrequency != 0U);
+#endif        
+#if defined(CLOCK_IP_HAS_SMU_M33_CORE_CLK)
     CLOCK_IP_DEV_ASSERT(SmuM33CoreClk_ConfiguredFrequency != 0U);
+#endif        
+#if defined(CLOCK_IP_HAS_CE_M33_CORE_CLK)
     CLOCK_IP_DEV_ASSERT(CeM33CoreClk_ConfiguredFrequency != 0U);
+#endif      
 #endif
 
-	SmuM33CoreClk_IwsSetting = Clock_Ip_GetIwsSetting(SmuM33CoreClk_ConfiguredFrequency, SMU_M33_CORE_CLK_THRESHOLD0_FREQUENCY, SMU_M33_CORE_CLK_THRESHOLD1_FREQUENCY, SMU_M33_CORE_CLK_THRESHOLD2_FREQUENCY);
-	Rtu0CoreClk_IwsSetting = Clock_Ip_GetIwsSetting(Rtu0CoreClk_ConfiguredFrequency, RTU0_CORE_CLK_THRESHOLD0_FREQUENCY, RTU0_CORE_CLK_THRESHOLD1_FREQUENCY, RTU0_CORE_CLK_THRESHOLD2_FREQUENCY);
-	Rtu1CoreClk_IwsSetting = Clock_Ip_GetIwsSetting(Rtu1CoreClk_ConfiguredFrequency, RTU1_CORE_CLK_THRESHOLD0_FREQUENCY, RTU1_CORE_CLK_THRESHOLD1_FREQUENCY, RTU1_CORE_CLK_THRESHOLD2_FREQUENCY);
-	CeM33CoreClk_IwsSetting = Clock_Ip_GetIwsSetting(CeM33CoreClk_ConfiguredFrequency, CE_M33_CORE_CLK_THRESHOLD0_FREQUENCY, CE_M33_CORE_CLK_THRESHOLD1_FREQUENCY, CE_M33_CORE_CLK_THRESHOLD2_FREQUENCY);
+    SmuM33CoreClk_IwsSetting = Clock_Ip_GetIwsSetting(SmuM33CoreClk_ConfiguredFrequency, SMU_M33_CORE_CLK_THRESHOLD0_FREQUENCY, SMU_M33_CORE_CLK_THRESHOLD1_FREQUENCY, SMU_M33_CORE_CLK_THRESHOLD2_FREQUENCY);
+    Rtu0CoreClk_IwsSetting = Clock_Ip_GetIwsSetting(Rtu0CoreClk_ConfiguredFrequency, RTU0_CORE_CLK_THRESHOLD0_FREQUENCY, RTU0_CORE_CLK_THRESHOLD1_FREQUENCY, RTU0_CORE_CLK_THRESHOLD2_FREQUENCY);
+    Rtu1CoreClk_IwsSetting = Clock_Ip_GetIwsSetting(Rtu1CoreClk_ConfiguredFrequency, RTU1_CORE_CLK_THRESHOLD0_FREQUENCY, RTU1_CORE_CLK_THRESHOLD1_FREQUENCY, RTU1_CORE_CLK_THRESHOLD2_FREQUENCY);
+    CeM33CoreClk_IwsSetting = Clock_Ip_GetIwsSetting(CeM33CoreClk_ConfiguredFrequency, CE_M33_CORE_CLK_THRESHOLD0_FREQUENCY, CE_M33_CORE_CLK_THRESHOLD1_FREQUENCY, CE_M33_CORE_CLK_THRESHOLD2_FREQUENCY);
 
     #ifdef CLOCK_IP_ENABLE_USER_MODE_SUPPORT
         #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
@@ -269,8 +282,8 @@ static void Clock_Ip_SpecificPlatformInitClock(Clock_Ip_ClockConfigType const * 
         {
             IP_CORE_PLL->PLLCLKMUX = 0U;                                                   /* FIRC input reference 48 MHz */
             IP_CORE_PLL->PLLDV = (PLLDIG_PLLDV_RDIV(1U) | PLLDIG_PLLDV_MFI(30U));          /* /1 * 30 */
-            IP_CORE_PLL->PLLCR &= ~PLLDIG_PLLCR_PLLPD_MASK;                                /* Start CORE_PLL */
             IP_CORE_PLL->PLLFD &= ~(PLLDIG_PLLFD_MFN_MASK | PLLDIG_PLLFD_SDMEN_MASK);      /* Disable modulation */
+            IP_CORE_PLL->PLLCR &= ~PLLDIG_PLLCR_PLLPD_MASK;                                /* Start CORE_PLL */
         }
 
         IP_CORE_DFS->PORTRESET |= DFS_PORT_RESET;
@@ -289,8 +302,8 @@ static void Clock_Ip_SpecificPlatformInitClock(Clock_Ip_ClockConfigType const * 
         {
             IP_PERIPH_PLL->PLLCLKMUX = 0U;                                                   /* FIRC input reference 48 MHz */
             IP_PERIPH_PLL->PLLDV = (PLLDIG_PLLDV_RDIV(1U) | PLLDIG_PLLDV_MFI(30U));          /* /1 * 30 */
-            IP_PERIPH_PLL->PLLCR &= ~PLLDIG_PLLCR_PLLPD_MASK;                                /* Start PERIPH_PLL */
             IP_PERIPH_PLL->PLLFD &= ~(PLLDIG_PLLFD_MFN_MASK | PLLDIG_PLLFD_SDMEN_MASK);      /* Disable modulation */
+            IP_PERIPH_PLL->PLLCR &= ~PLLDIG_PLLCR_PLLPD_MASK;                                /* Start PERIPH_PLL */
         }
 
         IP_PERIPH_DFS->PORTRESET |= DFS_PORT_RESET;
@@ -307,16 +320,12 @@ static void Clock_Ip_SpecificPlatformInitClock(Clock_Ip_ClockConfigType const * 
     {
         /* periph Dfs and core Dfs are not in reset */
     }
+    /* enable clock gate for DDR PLL PHI0 to input CLKOUT0 clock source */
+    IP_GPR0->CLKOUT0SEL |= GPR0_CLKOUT0SEL_CGEN(1U);
 }
 
-/* Be called after Power mode had changed */
-void Clock_Ip_ClockPowerModeChangeNotification(Clock_Ip_PowerModesType PowerMode, Clock_Ip_PowerNotificationType Notification)
-{
-    (void)PowerMode;
-    (void)Notification;
-}
 
-void McMeEnterKey(void)
+void Clock_Ip_McMeEnterKey(void)
 {
     IP_MC_ME->CTL_KEY = 0x5AF0;                                         /* Enter key */
 
@@ -326,92 +335,26 @@ void McMeEnterKey(void)
 
 #if (defined(CLOCK_IP_ENABLE_USER_MODE_SUPPORT))
   #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
+    #if (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK))
 void Clock_Ip_SpecificSetUserAccessAllowed(void)
 {
-    /* PLLDIG SetUserAccessAllowed */
-#if (defined(MCAL_PLLDIG_REG_PROT_AVAILABLE))
-  #if (STD_ON == MCAL_PLLDIG_REG_PROT_AVAILABLE)
-    #if (defined(IP_CORE_PLL_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_CORE_PLL_BASE, PLLDIG_PROT_MEM_U32);
-    #endif
-    #if (defined(IP_PERIPH_PLL_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_PERIPH_PLL_BASE, PLLDIG_PROT_MEM_U32);
-    #endif
-    #if (defined(IP_ACCEL_PLL_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_ACCEL_PLL_BASE, PLLDIG_PROT_MEM_U32);
-    #endif
-    #if (defined(IP_DDR_PLL_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_DDR_PLL_BASE, PLLDIG_PROT_MEM_U32);
-    #endif
-  #endif
-#endif /* MCAL_PLLDIG_REG_PROT_AVAILABLE */
 
-    /* DFS SetUserAccessAllowed */
-#if (defined(MCAL_DFS_REG_PROT_AVAILABLE))
-  #if(STD_ON == MCAL_DFS_REG_PROT_AVAILABLE)
-    #if (defined(IP_CORE_DFS_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_CORE_DFS_BASE, DFS_PROT_MEM_U32);
-    #endif
-    #if (defined(IP_PERIPH_DFS_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_PERIPH_DFS_BASE, DFS_PROT_MEM_U32);
-    #endif
-  #endif
-#endif /* MCAL_DFS_REG_PROT_AVAILABLE */
+#if (defined(MCAL_CMU_AE_REG_PROT_AVAILABLE))
+  #if(STD_ON == MCAL_CMU_AE_REG_PROT_AVAILABLE)
 
-    /* FXOSC SetUserAccessAllowed */
-#if (defined(MCAL_FXOSC_REG_PROT_AVAILABLE))
-  #if (STD_ON == MCAL_FXOSC_REG_PROT_AVAILABLE)
-    #if (defined(IP_FXOSC_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_FXOSC_BASE, FXOSC_PROT_MEM_U32);
+    /* CMU_AE SetUserAccessAllowed */
+    #if (defined(IP_CMU_FC_AE_1_BASE))
+    /* Set user access allowed for CMU_FC_AE_1 */
     #endif
-  #endif
-#endif /* MCAL_FXOSC_REG_PROT_AVAILABLE */
+    #if (defined(IP_CMU_FC_AE_2_BASE))
+    /* Set user access allowed for CMU_FC_AE_2 */
+    #endif
 
-    /* MC_CGM SetUserAccessAllowed */
-#if (defined(MCAL_MC_CGM_REG_PROT_AVAILABLE))
-  #if (STD_ON == MCAL_MC_CGM_REG_PROT_AVAILABLE)
-    #if (defined(IP_MC_CGM_0_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_MC_CGM_0_BASE, MC_CGM_PROT_MEM_U32);
-    #endif
-    #if (defined(IP_MC_CGM_1_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_MC_CGM_1_BASE, MC_CGM_PROT_MEM_U32);
-    #endif
-    #if (defined(IP_MC_CGM_2_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_MC_CGM_2_BASE, MC_CGM_PROT_MEM_U32);
-    #endif
-    #if (defined(IP_MC_CGM_5_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_MC_CGM_5_BASE, MC_CGM_PROT_MEM_U32);
-    #endif
-  #endif
-#endif /* MCAL_MC_CGM_REG_PROT_AVAILABLE */
+#endif
+#endif /* MCAL_CMU_AE_REG_PROT_AVAILABLE */
 
-    /* CMU SetUserAccessAllowed */
-#if (defined(MCAL_CMU_REG_PROT_AVAILABLE))
-  #if (STD_ON == MCAL_CMU_REG_PROT_AVAILABLE)
-   #if (defined(IP_CMU_FC_0_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_CMU_FC_0_BASE, CMU_PROT_MEM_U32);
-    #endif
-  #endif
-#endif /* MCAL_CMU_REG_PROT_AVAILABLE */
-
-/* SRAM SetUserAccessAllowed */
-#if (defined(MCAL_SRAMC_REG_PROT_AVAILABLE))
-  #if (STD_ON == MCAL_SRAMC_REG_PROT_AVAILABLE)
-    #if (defined(IP_SRAMC_BASE))
-    SET_USER_ACCESS_ALLOWED(IP_SRAMC_BASE, SRAMC_PROT_MEM_U32);
-    #endif
-  #endif
-#endif /* MCAL_SRAMC_REG_PROT_AVAILABLE */
-
-/* MC_ME SetUserAccessAllowed */
-#if (defined(MCAL_MC_ME_REG_PROT_AVAILABLE ))
-  #if (STD_ON == MCAL_MC_ME_REG_PROT_AVAILABLE )
-    #if (defined(IP_MC_ME_BASE))
-        SET_USER_ACCESS_ALLOWED(IP_MC_ME_BASE, MC_ME_PROT_MEM_U32);
-    #endif
-  #endif
-#endif /* MCAL_MC_ME_REG_PROT_AVAILABLE  */
 }
+#endif /* (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)) */
 #endif
 #endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
 
@@ -424,9 +367,11 @@ void Clock_Ip_Command(Clock_Ip_ClockConfigType const * Config, Clock_Ip_CommandT
             break;
 #ifdef CLOCK_IP_ENABLE_USER_MODE_SUPPORT
     #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
+        #if (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK))
         case CLOCK_IP_SET_USER_ACCESS_ALLOWED_COMMAND:
             OsIf_Trusted_Call(Clock_Ip_SpecificSetUserAccessAllowed);
             break;
+        #endif
     #endif
 #endif
         default:
@@ -451,10 +396,10 @@ void Clock_Ip_Command(Clock_Ip_ClockConfigType const * Config, Clock_Ip_CommandT
 void SRAMController_SetRamIWS(uint32 SmuM33CoreClk_IwsSetting, uint32 Rtu0CoreClk_IwsSetting, uint32 Rtu1CoreClk_IwsSetting, uint32 CeM33CoreClk_IwsSetting)
 {
 #if (1 == 1)
-	(void)SmuM33CoreClk_IwsSetting;
-	(void)Rtu0CoreClk_IwsSetting;
-	(void)Rtu1CoreClk_IwsSetting;
-	(void)CeM33CoreClk_IwsSetting;
+    (void)SmuM33CoreClk_IwsSetting;
+    (void)Rtu0CoreClk_IwsSetting;
+    (void)Rtu1CoreClk_IwsSetting;
+    (void)CeM33CoreClk_IwsSetting;
 #else
     IP_SMU__SRAMCTL_0->RAMCR |= ((IP_SMU__SRAMCTL_0->RAMCR & ~SRAMCTL_RAMCR_IWS_MASK) | SRAMCTL_RAMCR_IWS(SmuM33CoreClk_IwsSetting));
     IP_SMU__SRAMCTL_1->RAMCR |= ((IP_SMU__SRAMCTL_1->RAMCR & ~SRAMCTL_RAMCR_IWS_MASK) | SRAMCTL_RAMCR_IWS(SmuM33CoreClk_IwsSetting));

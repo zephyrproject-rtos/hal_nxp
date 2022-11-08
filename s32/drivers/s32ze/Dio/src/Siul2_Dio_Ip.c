@@ -38,10 +38,10 @@ extern "C"{
 */
 #define SIUL2_DIO_IP_VENDOR_ID_C                     43
 #define SIUL2_DIO_IP_AR_RELEASE_MAJOR_VERSION_C      4
-#define SIUL2_DIO_IP_AR_RELEASE_MINOR_VERSION_C      4
+#define SIUL2_DIO_IP_AR_RELEASE_MINOR_VERSION_C      7
 #define SIUL2_DIO_IP_AR_RELEASE_REVISION_VERSION_C   0
 #define SIUL2_DIO_IP_SW_MAJOR_VERSION_C              0
-#define SIUL2_DIO_IP_SW_MINOR_VERSION_C              8
+#define SIUL2_DIO_IP_SW_MINOR_VERSION_C              9
 #define SIUL2_DIO_IP_SW_PATCH_VERSION_C              0
 
 /*==================================================================================================

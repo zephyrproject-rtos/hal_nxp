@@ -35,10 +35,10 @@ extern "C"{
 ==================================================================================================*/
 #define SIUL2_ICU_IP_VENDOR_ID                    43
 #define SIUL2_ICU_IP_AR_RELEASE_MAJOR_VERSION     4
-#define SIUL2_ICU_IP_AR_RELEASE_MINOR_VERSION     4
+#define SIUL2_ICU_IP_AR_RELEASE_MINOR_VERSION     7
 #define SIUL2_ICU_IP_AR_RELEASE_REVISION_VERSION  0
 #define SIUL2_ICU_IP_SW_MAJOR_VERSION             0
-#define SIUL2_ICU_IP_SW_MINOR_VERSION             8
+#define SIUL2_ICU_IP_SW_MINOR_VERSION             9
 #define SIUL2_ICU_IP_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -131,6 +131,7 @@ extern SIUL2_Type * const Siul2_Icu_Ip_pBase[];
 #define ICU_START_SEC_CODE
 #include "Icu_MemMap.h"
 
+#if (SIUL2_ICU_IP_DEINIT_API == STD_ON)
 /**
  * @brief      Driver function that de-initializes SIUL hardware channel.
  * @details    This function:
@@ -140,6 +141,7 @@ extern SIUL2_Type * const Siul2_Icu_Ip_pBase[];
  * @return     Siul2_Icu_Ip_StatusType - The status of DeInit
  */
 Siul2_Icu_Ip_StatusType Siul2_Icu_Ip_DeInit(uint8 instance);
+#endif /* SIUL2_ICU_IP_DEINIT_API == STD_ON */
 
 /**
  * @brief      Driver function that initializes SIUL hardware channel.

@@ -5,7 +5,7 @@
  */
 /**
 *   @file       Clock_Ip_Gate.c
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -35,10 +35,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_GATE_VENDOR_ID_C                      43
 #define CLOCK_IP_GATE_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_GATE_AR_RELEASE_MINOR_VERSION_C       4
+#define CLOCK_IP_GATE_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_GATE_AR_RELEASE_REVISION_VERSION_C    0
 #define CLOCK_IP_GATE_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_GATE_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_GATE_SW_MINOR_VERSION_C               9
 #define CLOCK_IP_GATE_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -139,14 +139,15 @@ static void Clock_Ip_ClockSetGateClockControlEnableGprPctl(Clock_Ip_GateConfigTy
     const Clock_Ip_GateInfoType * GateInformation = &Clock_Ip_axGateInfo[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_GATE_INDEX]];
     uint32 GroupIndex      = GateInformation->GroupIndex;
     uint32 GateIndex       = GateInformation->GateIndex;
+    uint32 GateBitField    = GateInformation->GateBitField;
 
     if (Config->Enable != 0U)
     {
-        Clock_Ip_apxGprClockControlEnable[GroupIndex]->PCTL[GateIndex] |= GPR_PCTL_MASK;
+        Clock_Ip_apxGprClockControlEnable[GroupIndex]->PCTL[GateIndex] |= ((uint32)GPR_PCTL_MASK << GateBitField);
     }
     else
     {
-        Clock_Ip_apxGprClockControlEnable[GroupIndex]->PCTL[GateIndex] &= ~GPR_PCTL_MASK;
+        Clock_Ip_apxGprClockControlEnable[GroupIndex]->PCTL[GateIndex] &= ~((uint32)GPR_PCTL_MASK << GateBitField);
     }
 }
 static void Clock_Ip_ClockUpdateGateClockControlEnableGprPctl(Clock_Ip_NameType ClockName, boolean Gate)

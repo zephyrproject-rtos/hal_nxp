@@ -33,10 +33,10 @@ extern "C"{
 *                               SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define SCHM_SPI_AR_RELEASE_MAJOR_VERSION_C     4
-#define SCHM_SPI_AR_RELEASE_MINOR_VERSION_C     4
+#define SCHM_SPI_AR_RELEASE_MINOR_VERSION_C     7
 #define SCHM_SPI_AR_RELEASE_REVISION_VERSION_C  0
 #define SCHM_SPI_SW_MAJOR_VERSION_C             0
-#define SCHM_SPI_SW_MINOR_VERSION_C             8
+#define SCHM_SPI_SW_MINOR_VERSION_C             9
 #define SCHM_SPI_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
@@ -94,44 +94,44 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_00) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_00) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_01) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_01) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_02) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_02) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_03) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_03) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_04) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_04) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_05) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_05) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_06) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_06) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_07) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_07) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_08) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_08) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_09) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_09) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_10) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_10) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_11) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_11) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_12) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_12) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_13) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_13) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_14) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_14) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_15) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_15) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_16) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_16) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_17) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_17) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_SPI_EXCLUSIVE_AREA_18) static volatile uint32 msr_SPI_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_18) static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 msr_SPI_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_SPI_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -148,7 +148,7 @@ VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_18) static volatile uint32 reen
 *                                   LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 
-#ifndef _COSMIC_C_S32ZSE_
+#ifndef _COSMIC_C_S32ZE_
 /*================================================================================================*/
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
@@ -162,14 +162,14 @@ VAR_SEC_NOCACHE(reentry_guard_SPI_EXCLUSIVE_AREA_18) static volatile uint32 reen
 * 
 */
 uint32 Spi_schm_read_msr(void); 
-#endif /*ifndef _COSMIC_C_S32ZSE_*/
+#endif /*ifndef _COSMIC_C_S32ZE_*/
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
 #define RTE_START_SEC_CODE
 #include "Rte_MemMap.h"
 
-#if (defined(_GREENHILLS_C_S32ZSE_) || defined(_CODEWARRIOR_C_S32ZSE_))
+#if (defined(_GREENHILLS_C_S32ZE_) || defined(_CODEWARRIOR_C_S32ZE_))
 /*================================================================================================*/
 /** 
 * @brief   This macro returns the MSR register value (32 bits). 
@@ -215,7 +215,7 @@ ASM_KEYWORD uint32 Spi_schm_read_msr(void)
 #endif
 #endif /*#ifdef GHS||CW*/
 
-#ifdef _DIABDATA_C_S32ZSE_
+#ifdef _DIABDATA_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -251,9 +251,9 @@ ASM_KEYWORD uint32 Spi_schm_read_msr(void)
 }    
 #endif  /* MCAL_PLATFORM_ARM */
 
-#endif   /* _DIABDATA_C_S32ZSE_*/
+#endif   /* _DIABDATA_C_S32ZE_*/
 
-#ifdef _COSMIC_C_S32ZSE_
+#ifdef _COSMIC_C_S32ZE_
 /*================================================================================================*/
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
@@ -276,7 +276,7 @@ ASM_KEYWORD uint32 Spi_schm_read_msr(void)
 #endif  /*Cosmic compiler only*/
 
 
-#ifdef _HITECH_C_S32ZSE_
+#ifdef _HITECH_C_S32ZE_
 /*================================================================================================*/
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
@@ -298,7 +298,7 @@ uint32 Spi_schm_read_msr(void)
 
 #endif  /*HighTec compiler only*/
  /*================================================================================================*/
-#ifdef _LINARO_C_S32ZSE_
+#ifdef _LINARO_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -326,10 +326,10 @@ uint32 Spi_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _LINARO_C_S32ZSE_*/
+#endif   /* _LINARO_C_S32ZE_*/
 /*================================================================================================*/
 
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -357,9 +357,9 @@ uint32 Spi_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _ARM_DS5_C_S32ZSE_ */
+#endif   /* _ARM_DS5_C_S32ZE_ */
 
-#ifdef _IAR_C_S32ZSE_
+#ifdef _IAR_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -383,7 +383,7 @@ uint32 Spi_schm_read_msr(void)
 
     return (uint32)reg_tmp;
 }
-#endif   /* _IAR_C_S32ZSE_ */
+#endif   /* _IAR_C_S32ZE_ */
 
 #define RTE_STOP_SEC_CODE
 #include "Rte_MemMap.h"
@@ -396,22 +396,24 @@ uint32 Spi_schm_read_msr(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_00(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_00[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_00[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_00[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_00[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_00[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_00[u32CoreId]++;
 }
@@ -424,7 +426,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_00(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_00[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_00[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -432,22 +434,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_00(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_01(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_01[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_01[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_01[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_01[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_01[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_01[u32CoreId]++;
 }
@@ -460,7 +464,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_01(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_01[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_01[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -468,22 +472,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_01(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_02(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_02[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_02[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_02[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_02[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_02[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_02[u32CoreId]++;
 }
@@ -496,7 +502,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_02(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_02[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_02[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -504,22 +510,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_02(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_03(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_03[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_03[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_03[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_03[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_03[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_03[u32CoreId]++;
 }
@@ -532,7 +540,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_03(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_03[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_03[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -540,22 +548,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_03(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_04(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_04[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_04[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_04[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_04[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_04[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_04[u32CoreId]++;
 }
@@ -568,7 +578,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_04(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_04[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_04[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -576,22 +586,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_04(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_05(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_05[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_05[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_05[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_05[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_05[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_05[u32CoreId]++;
 }
@@ -604,7 +616,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_05(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_05[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_05[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -612,22 +624,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_05(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_06(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_06[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_06[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_06[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_06[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_06[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_06[u32CoreId]++;
 }
@@ -640,7 +654,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_06(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_06[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_06[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -648,22 +662,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_06(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_07(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_07[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_07[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_07[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_07[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_07[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_07[u32CoreId]++;
 }
@@ -676,7 +692,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_07(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_07[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_07[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -684,22 +700,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_07(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_08(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_08[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_08[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_08[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_08[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_08[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_08[u32CoreId]++;
 }
@@ -712,7 +730,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_08(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_08[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_08[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -720,22 +738,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_08(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_09(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_09[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_09[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_09[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_09[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_09[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_09[u32CoreId]++;
 }
@@ -748,7 +768,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_09(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_09[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_09[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -756,22 +776,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_09(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_10(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_10[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_10[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_10[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_10[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_10[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_10[u32CoreId]++;
 }
@@ -784,7 +806,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_10(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_10[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_10[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -792,22 +814,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_10(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_11(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_11[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_11[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_11[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_11[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_11[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_11[u32CoreId]++;
 }
@@ -820,7 +844,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_11(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_11[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_11[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -828,22 +852,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_11(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_12(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_12[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_12[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_12[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_12[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_12[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_12[u32CoreId]++;
 }
@@ -856,7 +882,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_12(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_12[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_12[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -864,22 +890,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_12(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_13(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_13[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_13[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_13[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_13[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_13[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_13[u32CoreId]++;
 }
@@ -892,7 +920,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_13(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_13[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_13[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -900,22 +928,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_13(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_14(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_14[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_14[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_14[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_14[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_14[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_14[u32CoreId]++;
 }
@@ -928,7 +958,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_14(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_14[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_14[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -936,22 +966,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_14(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_15(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_15[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_15[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_15[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_15[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_15[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_15[u32CoreId]++;
 }
@@ -964,7 +996,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_15(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_15[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_15[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -972,22 +1004,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_15(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_16(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_16[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_16[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_16[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_16[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_16[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_16[u32CoreId]++;
 }
@@ -1000,7 +1034,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_16(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_16[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_16[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1008,22 +1042,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_16(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_17(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_17[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_17[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_17[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_17[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_17[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_17[u32CoreId]++;
 }
@@ -1036,7 +1072,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_17(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_17[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_17[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1044,22 +1080,24 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_17(void)
 
 void SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_18(void)
 {
+    uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
     if(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_18[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr_SPI_EXCLUSIVE_AREA_18[u32CoreId] = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Spi_schm_read_msr);
 #else
-        msr_SPI_EXCLUSIVE_AREA_18[u32CoreId] = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Spi_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr_SPI_EXCLUSIVE_AREA_18[u32CoreId])) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
+        msr_SPI_EXCLUSIVE_AREA_18[u32CoreId] = msr;
     }
     reentry_guard_SPI_EXCLUSIVE_AREA_18[u32CoreId]++;
 }
@@ -1072,7 +1110,7 @@ void SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_18(void)
     if ((ISR_ON(msr_SPI_EXCLUSIVE_AREA_18[u32CoreId]))&&(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_18[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZSE_
+#ifdef _ARM_DS5_C_S32ZE_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -1149,7 +1187,7 @@ void SchM_Check_spi(void)
 
     EU_ASSERT(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_16[u32CoreId]);
     reentry_guard_SPI_EXCLUSIVE_AREA_16[u32CoreId] = 0UL; /*reset reentry_guard_SPI_EXCLUSIVE_AREA_16 for the next test in the suite*/
-    
+
     EU_ASSERT(0UL == reentry_guard_SPI_EXCLUSIVE_AREA_17[u32CoreId]);
     reentry_guard_SPI_EXCLUSIVE_AREA_17[u32CoreId] = 0UL; /*reset reentry_guard_SPI_EXCLUSIVE_AREA_17 for the next test in the suite*/
 

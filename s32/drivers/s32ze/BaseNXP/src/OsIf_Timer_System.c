@@ -33,7 +33,7 @@ extern "C"{
 #elif defined(USING_OS_FREERTOS)
 #include "FreeRTOSConfig.h"
 #elif defined(USING_OS_ZEPHYR)
-#include <zephyr/kernel.h>
+#include "zephyr.h"
 #else
     /* Baremetal, make sure USING_OS_BAREMETAL is defined */
 #ifndef USING_OS_BAREMETAL
@@ -63,10 +63,10 @@ extern "C"{
 ==================================================================================================*/
 #define OSIF_TIMER_SYSTEM_VENDOR_ID_C                    43
 #define OSIF_TIMER_SYSTEM_AR_RELEASE_MAJOR_VERSION_C     4
-#define OSIF_TIMER_SYSTEM_AR_RELEASE_MINOR_VERSION_C     4
+#define OSIF_TIMER_SYSTEM_AR_RELEASE_MINOR_VERSION_C     7
 #define OSIF_TIMER_SYSTEM_AR_RELEASE_REVISION_VERSION_C  0
 #define OSIF_TIMER_SYSTEM_SW_MAJOR_VERSION_C             0
-#define OSIF_TIMER_SYSTEM_SW_MINOR_VERSION_C             8
+#define OSIF_TIMER_SYSTEM_SW_MINOR_VERSION_C             9
 #define OSIF_TIMER_SYSTEM_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================

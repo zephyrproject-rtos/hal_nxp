@@ -5,7 +5,7 @@
  */
 /**
 *   @file    Std_Types.h
-*   @version 0.8.0
+*   @version 0.9.0
 *
 *   @brief   AUTOSAR BaseNXP - Standard types definition.
 *   @details AUTOSAR standard types header file. It contains all types that are used across several

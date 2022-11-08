@@ -5,7 +5,7 @@
  */
 /**
 *   @file       Clock_Ip_FracDiv.c
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -36,10 +36,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_FRACDIV_VENDOR_ID_C                      43
 #define CLOCK_IP_FRACDIV_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_FRACDIV_AR_RELEASE_MINOR_VERSION_C       4
+#define CLOCK_IP_FRACDIV_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_FRACDIV_AR_RELEASE_REVISION_VERSION_C    0
 #define CLOCK_IP_FRACDIV_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_FRACDIV_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_FRACDIV_SW_MINOR_VERSION_C               9
 #define CLOCK_IP_FRACDIV_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================

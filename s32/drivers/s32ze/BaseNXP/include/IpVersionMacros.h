@@ -5,7 +5,7 @@
  */
 /**
 *   @file    IpVersionMacros.h
-*   @version 0.8.0
+*   @version 0.9.0
 *
 *   @brief   AUTOSAR BaseNXP - IP module versions.
 *   @details Implements macros for soft and hard lock on CORTEXM hardware platform
@@ -35,10 +35,10 @@ extern "C"{
 #define IPVERSIONMACROS_VENDOR_ID                    43
 #define IPVERSIONMACROS_MODULE_ID                    0
 #define IPVERSIONMACROS_AR_RELEASE_MAJOR_VERSION     4
-#define IPVERSIONMACROS_AR_RELEASE_MINOR_VERSION     4
+#define IPVERSIONMACROS_AR_RELEASE_MINOR_VERSION     7
 #define IPVERSIONMACROS_AR_RELEASE_REVISION_VERSION  0
 #define IPVERSIONMACROS_SW_MAJOR_VERSION             0
-#define IPVERSIONMACROS_SW_MINOR_VERSION             8
+#define IPVERSIONMACROS_SW_MINOR_VERSION             9
 #define IPVERSIONMACROS_SW_PATCH_VERSION             0
 
 /*==================================================================================================

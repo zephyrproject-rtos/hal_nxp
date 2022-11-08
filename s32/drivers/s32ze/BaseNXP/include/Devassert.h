@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022 M4_SRC_COPYRIGHTED_TOs
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,10 +22,10 @@
 ==================================================================================================*/
 #define DEVASSERT_VENDOR_ID                    43
 #define DEVASSERT_AR_RELEASE_MAJOR_VERSION     4
-#define DEVASSERT_AR_RELEASE_MINOR_VERSION     4
+#define DEVASSERT_AR_RELEASE_MINOR_VERSION     7
 #define DEVASSERT_AR_RELEASE_REVISION_VERSION  0
 #define DEVASSERT_SW_MAJOR_VERSION             0
-#define DEVASSERT_SW_MINOR_VERSION             8
+#define DEVASSERT_SW_MINOR_VERSION             9
 #define DEVASSERT_SW_PATCH_VERSION             0
 
 /*==================================================================================================

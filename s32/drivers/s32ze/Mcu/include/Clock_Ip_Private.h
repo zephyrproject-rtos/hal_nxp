@@ -9,7 +9,7 @@
 
 /**
 *   @file    Clock_Ip_Private.h
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK IP driver private header file.
 *   @details CLOCK IP driver private header file.
@@ -50,10 +50,10 @@ extern "C"{
 
 #define CLOCK_IP_PRIVATE_VENDOR_ID                    43
 #define CLOCK_IP_PRIVATE_AR_RELEASE_MAJOR_VERSION     4
-#define CLOCK_IP_PRIVATE_AR_RELEASE_MINOR_VERSION     4
+#define CLOCK_IP_PRIVATE_AR_RELEASE_MINOR_VERSION     7
 #define CLOCK_IP_PRIVATE_AR_RELEASE_REVISION_VERSION  0
 #define CLOCK_IP_PRIVATE_SW_MAJOR_VERSION             0
-#define CLOCK_IP_PRIVATE_SW_MINOR_VERSION             8
+#define CLOCK_IP_PRIVATE_SW_MINOR_VERSION             9
 #define CLOCK_IP_PRIVATE_SW_PATCH_VERSION             0
 
 
@@ -480,7 +480,7 @@ extern const Clock_Ip_ClockNameSourceType Clock_Ip_aeSourceTypeClockName[CLOCK_I
 
 #include "Mcu_MemMap.h"
 
-#if (CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE > 0U) || defined(CLOCK_IP_CGU_INTERRUPT)
+#if (CLOCK_IP_CMU_INFO_SIZE > 0U) || defined(CLOCK_IP_CGU_INTERRUPT)
 extern const Clock_Ip_ClockConfigType *Clock_Ip_pxConfig;
 #endif
 
@@ -490,13 +490,13 @@ extern const Clock_Ip_ClockConfigType *Clock_Ip_pxConfig;
 
 
 /* Clock start initialized section data */
-#define MCU_START_SEC_VAR_INIT_8
+#define MCU_START_SEC_VAR_CLEARED_8
 #include "Mcu_MemMap.h"
 
 extern uint8 Clock_Ip_FreqIds[CLOCK_IP_FEATURE_NAMES_NO];
 
 /* Clock stop initialized section data */
-#define MCU_STOP_SEC_VAR_INIT_8
+#define MCU_STOP_SEC_VAR_CLEARED_8
 #include "Mcu_MemMap.h"
 
 
@@ -508,14 +508,18 @@ extern uint8 Clock_Ip_FreqIds[CLOCK_IP_FEATURE_NAMES_NO];
 
 #include "Mcu_MemMap.h"
 
+#ifdef CLOCK_IP_POWER_MODE_CHANGE_NOTIFICATION
+#if (CLOCK_IP_POWER_MODE_CHANGE_NOTIFICATION == STD_ON)
 void Clock_Ip_ClockPowerModeChangeNotification(Clock_Ip_PowerModesType PowerMode, Clock_Ip_PowerNotificationType Notification);
+#endif
+#endif
 void Clock_Ip_ReportClockErrors(Clock_Ip_NotificationType Error, Clock_Ip_NameType ClockName);
 void Clock_Ip_SetExternalSignalFrequency(Clock_Ip_NameType SignalName, uint32 Frequency);
 #if (defined(CLOCK_IP_GET_FREQUENCY_API) && (CLOCK_IP_GET_FREQUENCY_API == STD_ON))
 uint32 Clock_Ip_GetFreq(Clock_Ip_NameType ClockName);
 void Clock_Ip_SetExternalOscillatorFrequency(Clock_Ip_NameType ExtOscName, uint32 Frequency);
 #endif
-#if CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE > 0U
+#if CLOCK_IP_CMU_INFO_SIZE > 0U
 uint32 Clock_Ip_CMU_GetInterruptStatus(uint8 IndexCmu);
 void Clock_Ip_CMU_ClockFailInt(void);
 #endif

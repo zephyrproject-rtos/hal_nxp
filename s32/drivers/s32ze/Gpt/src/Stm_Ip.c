@@ -33,10 +33,10 @@ extern "C"{
 
 #define STM_IP_VENDOR_ID_C                    43
 #define STM_IP_AR_RELEASE_MAJOR_VERSION_C     4
-#define STM_IP_AR_RELEASE_MINOR_VERSION_C     4
+#define STM_IP_AR_RELEASE_MINOR_VERSION_C     7
 #define STM_IP_AR_RELEASE_REVISION_VERSION_C  0
 #define STM_IP_SW_MAJOR_VERSION_C             0
-#define STM_IP_SW_MINOR_VERSION_C             8
+#define STM_IP_SW_MINOR_VERSION_C             9
 #define STM_IP_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
@@ -913,7 +913,7 @@ ISR(STM_0_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(0U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(0U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -923,7 +923,7 @@ ISR(STM_0_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(0U, channel);
@@ -952,7 +952,7 @@ ISR(STM_1_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(1U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(1U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -962,7 +962,7 @@ ISR(STM_1_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(1U, channel);
@@ -991,7 +991,7 @@ ISR(STM_2_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(2U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(2U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1001,7 +1001,7 @@ ISR(STM_2_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(2U, channel);
@@ -1030,7 +1030,7 @@ ISR(STM_3_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(3U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(3U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1040,7 +1040,7 @@ ISR(STM_3_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(3U, channel);
@@ -1069,7 +1069,7 @@ ISR(STM_4_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(4U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(4U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1079,7 +1079,7 @@ ISR(STM_4_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(4U, channel);
@@ -1108,7 +1108,7 @@ ISR(STM_5_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(5U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(5U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1118,7 +1118,7 @@ ISR(STM_5_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(5U, channel);
@@ -1147,7 +1147,7 @@ ISR(STM_6_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(6U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(6U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1157,7 +1157,7 @@ ISR(STM_6_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(6U, channel);
@@ -1186,7 +1186,7 @@ ISR(STM_7_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(7U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(7U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1196,7 +1196,7 @@ ISR(STM_7_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(7U, channel);
@@ -1225,7 +1225,7 @@ ISR(STM_8_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(8U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(8U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1235,7 +1235,7 @@ ISR(STM_8_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(8U, channel);
@@ -1264,7 +1264,7 @@ ISR(STM_9_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(9U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(9U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1274,7 +1274,7 @@ ISR(STM_9_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(9U, channel);
@@ -1303,7 +1303,7 @@ ISR(STM_10_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(10U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(10U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1313,7 +1313,7 @@ ISR(STM_10_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(10U, channel);
@@ -1342,7 +1342,7 @@ ISR(STM_11_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(11U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(11U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1352,7 +1352,7 @@ ISR(STM_11_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(11U, channel);
@@ -1381,7 +1381,7 @@ ISR(STM_12_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(12U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(12U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1391,7 +1391,7 @@ ISR(STM_12_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(12U, channel);
@@ -1420,8 +1420,8 @@ ISR(SMU_STM_0_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(101U, channel)) << channel);
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
+        flagBits |= ((Stm_Ip_GetInterruptFlag(11U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(11U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
@@ -1430,7 +1430,7 @@ ISR(SMU_STM_0_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(11U, channel);
@@ -1459,7 +1459,7 @@ ISR(SMU_STM_2_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(12U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(12U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1469,7 +1469,7 @@ ISR(SMU_STM_2_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(12U, channel);
@@ -1491,14 +1491,14 @@ ISR(SMU_STM_2_ISR)
 */
 ISR(CE_STM_0_ISR)
 {
-    uint8 channel = 0U;    
+    uint8 channel = 0U;
     uint32 flagBits = 0U;
     uint32 enableBits = 0U;
     uint32 currentChannelMask = 0U;
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(0U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(0U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1508,7 +1508,7 @@ ISR(CE_STM_0_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(0U, channel);
@@ -1537,7 +1537,7 @@ ISR(CE_STM_1_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(1U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(1U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1547,7 +1547,7 @@ ISR(CE_STM_1_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(1U, channel);
@@ -1576,7 +1576,7 @@ ISR(CE_STM_2_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(2U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(2U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1586,7 +1586,7 @@ ISR(CE_STM_2_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(2U, channel);
@@ -1615,7 +1615,7 @@ ISR(CE_STM_3_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(3U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(3U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1625,7 +1625,7 @@ ISR(CE_STM_3_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(3U, channel);
@@ -1654,7 +1654,7 @@ ISR(RTU0_STM_0_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(3U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(3U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1664,7 +1664,7 @@ ISR(RTU0_STM_0_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(3U, channel);
@@ -1693,7 +1693,7 @@ ISR(RTU0_STM_1_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(4U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(4U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1703,7 +1703,7 @@ ISR(RTU0_STM_1_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(4U, channel);
@@ -1732,7 +1732,7 @@ ISR(RTU0_STM_2_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(5U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(5U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1742,7 +1742,7 @@ ISR(RTU0_STM_2_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(5U, channel);
@@ -1771,7 +1771,7 @@ ISR(RTU0_STM_3_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(6U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(6U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1781,7 +1781,7 @@ ISR(RTU0_STM_3_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(6U, channel);
@@ -1810,7 +1810,7 @@ ISR(RTU1_STM_0_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(7U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(7U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1820,7 +1820,7 @@ ISR(RTU1_STM_0_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(7U, channel);
@@ -1849,7 +1849,7 @@ ISR(RTU1_STM_1_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(8U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(8U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1859,7 +1859,7 @@ ISR(RTU1_STM_1_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(8U, channel);
@@ -1888,7 +1888,7 @@ ISR(RTU1_STM_2_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(9U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(9U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1898,7 +1898,7 @@ ISR(RTU1_STM_2_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(9U, channel);
@@ -1927,7 +1927,7 @@ ISR(RTU1_STM_3_ISR)
 
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         flagBits |= ((Stm_Ip_GetInterruptFlag(10U, channel)) << channel);
         enableBits |= ((Stm_Ip_GetInterruptBit(10U, channel)) << channel);
         if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
@@ -1937,7 +1937,7 @@ ISR(RTU1_STM_3_ISR)
     }
     for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
     {
-        currentChannelMask = 1U << (uint32)channel;
+        currentChannelMask = (uint32)0x1U << (uint32)channel;
         if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
         {
             Stm_Ip_ProcessCommonInterrupt(10U, channel);

@@ -5,7 +5,7 @@
  */
 /**
 *   @file       Clock_Ip_Selector.c
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -34,10 +34,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_SELECTOR_VENDOR_ID_C                      43
 #define CLOCK_IP_SELECTOR_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_SELECTOR_AR_RELEASE_MINOR_VERSION_C       4
+#define CLOCK_IP_SELECTOR_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_SELECTOR_AR_RELEASE_REVISION_VERSION_C    0
 #define CLOCK_IP_SELECTOR_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_SELECTOR_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_SELECTOR_SW_MINOR_VERSION_C               9
 #define CLOCK_IP_SELECTOR_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -95,6 +95,11 @@ extern "C"{
 
 #include "Mcu_MemMap.h"
 
+#ifdef CLOCK_IP_MC_ME_AE_GS_S_SYSCLK
+void Clock_Ip_ResetMcMeAeGssSysclk_TrustedCall(Clock_Ip_SelectorConfigType const *Config);
+void Clock_Ip_SetMcMeAeGssSysclk_TrustedCall(Clock_Ip_SelectorConfigType const *Config);
+#endif
+
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
@@ -104,6 +109,16 @@ static void Clock_Ip_CallbackSelectorEmpty(Clock_Ip_SelectorConfigType const* Co
 #ifdef CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP
 static void Clock_Ip_ResetCgmXCscCssClkswSwip(Clock_Ip_SelectorConfigType const *Config);
 static void Clock_Ip_SetCgmXCscCssClkswSwip(Clock_Ip_SelectorConfigType const *Config);
+#endif
+
+#ifdef CLOCK_IP_CGM_X_CSC_CSS_CS_GRIP
+static void Clock_Ip_SetCgmXCscCssCsGrip(Clock_Ip_SelectorConfigType const *Config);
+static void Clock_Ip_ResetCgmXCscCssCsGrip(Clock_Ip_SelectorConfigType const *Config);
+#endif
+
+#ifdef CLOCK_IP_GPR_X_CLKOUT_SEL_MUXSEL
+static void Clock_Ip_ResetGprXClkoutSelMuxsel(Clock_Ip_SelectorConfigType const *Config);
+static void Clock_Ip_SetGprXClkoutSelMuxsel(Clock_Ip_SelectorConfigType const *Config);
 #endif
 
 #ifdef CLOCK_IP_MC_ME_AE_GS_S_SYSCLK
@@ -225,45 +240,196 @@ static void Clock_Ip_SetCgmXCscCssClkswSwip(Clock_Ip_SelectorConfigType const *C
 }
 #endif
 
-
-#ifdef CLOCK_IP_MC_ME_AE_GS_S_SYSCLK
-static void Clock_Ip_ResetMcMeAeGssSysclk(Clock_Ip_SelectorConfigType const *Config)
+#ifdef CLOCK_IP_CGM_X_CSC_CSS_CS_GRIP
+static void Clock_Ip_ResetCgmXCscCssCsGrip(Clock_Ip_SelectorConfigType const *Config)
 {
-    uint32 PowerModeIndexIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_POWER_MODE_INDEX];
+    uint32 Instance           = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 SelectorIndex      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
+    uint32 SelectorResetValue = Clock_Ip_au8SoftwareMuxResetValue[Config->Name];    /* Hw value corresponding to software mux reset. */
 
-    Clock_Ip_apxSystemClock->POWER_MODE_CONFIG[PowerModeIndexIndex] &= MC_ME_AE_GS_S_SYSCLK_MASK;
-}
-static void Clock_Ip_SetMcMeAeGssSysclk(Clock_Ip_SelectorConfigType const *Config)
-{
-    uint32 SelectorValue = Clock_Ip_au16SelectorEntryAeHardwareValue[Config->Value];    /* Hw value corresponding to selector entry. Translate input clock source to hardware value. */
-    uint32 PowerModeIndexIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_POWER_MODE_INDEX];
+    uint32 SelectorMask       = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].SelectorValueMask;
+    uint32 SelectorShift      = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].SelectorValueShift;
 
-    uint32 regValue;
+    uint32 RegValue;
     boolean TimeoutOccurred = FALSE;
     uint32 StartTime;
     uint32 ElapsedTime;
     uint32 TimeoutTicks;
-    
-    regValue = Clock_Ip_apxSystemClock->POWER_MODE_CONFIG[PowerModeIndexIndex];;
-    regValue &= MC_ME_AE_GS_S_SYSCLK_MASK;
-    regValue |= MC_ME_AE_GS_S_SYSCLK(SelectorValue);
-    Clock_Ip_apxSystemClock->POWER_MODE_CONFIG[PowerModeIndexIndex]; = regValue;
-    
-    /* Enter key */
-    IP_MC_ME_AE->CTL_KEY = 0x5AF0U;                                         
-    IP_MC_ME_AE->CTL_KEY = 0xA50FU;
+
+    Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC |= (MC_CGM_MUX_CSC_CG_MASK | MC_CGM_MUX_CSC_FCG_MASK);
 
     Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
     do
     {
         TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
     }
-    while ((MC_ME_AE_TRANSITION_IS_ON_GOING == (Clock_Ip_apxCgm[Instance][SelectorIndex]->CSS & MC_ME_AE_GS_S_MTRANS_MASK)) && (FALSE == TimeoutOccurred));
+    while ((MC_CGM_MUX_CSS_CS_TRANSPARENT == (Clock_Ip_apxCgm[Instance][SelectorIndex]->CSS & MC_CGM_MUX_CSS_CS_MASK)) && (FALSE == TimeoutOccurred));
+
+    if (FALSE == TimeoutOccurred)
+    {
+        /* Set the reset value for this mux. */
+        RegValue = Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC;
+        RegValue &= ~SelectorMask;
+        RegValue |= (SelectorResetValue << SelectorShift) & SelectorMask;
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC = RegValue;
+
+        /* Clear CG and FCG bit after set the SELCTL bit */
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC &= ~(MC_CGM_MUX_CSC_FCG_MASK | MC_CGM_MUX_CSC_CG_MASK);
+    }
+}
+static void Clock_Ip_SetCgmXCscCssCsGrip(Clock_Ip_SelectorConfigType const *Config)
+{
+
+    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
+    uint32 SelectorValue = Clock_Ip_au16SelectorEntryHardwareValue[Config->Value];    /* Hw value corresponding to selector entry. Translate input clock source to hardware value. */
+
+    uint32 SelectorMask  = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].SelectorValueMask;
+    uint32 SelectorShift = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].SelectorValueShift;
+
+    uint32 RegValue;
+    boolean TimeoutOccurred = FALSE;
+    uint32 StartTime;
+    uint32 ElapsedTime;
+    uint32 TimeoutTicks;
+
+    Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC |= (MC_CGM_MUX_CSC_CG_MASK | MC_CGM_MUX_CSC_FCG_MASK);
+
+    Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+    do
+    {
+        TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+    }
+    while ((MC_CGM_MUX_CSS_CS_TRANSPARENT == (Clock_Ip_apxCgm[Instance][SelectorIndex]->CSS & MC_CGM_MUX_CSS_CS_MASK)) && (FALSE == TimeoutOccurred));
+
+    if (FALSE == TimeoutOccurred)
+    {
+        /* Configure clock source. */
+        RegValue = Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC;
+        RegValue &= ~SelectorMask;
+        RegValue |= (SelectorValue << SelectorShift) & SelectorMask;
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC = RegValue;
+
+        /* Clear CG and FCG bit after set the SELCTL bit */
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC &= ~(MC_CGM_MUX_CSC_FCG_MASK | MC_CGM_MUX_CSC_CG_MASK);
+
+        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+        /* Wait until the output clock is ungated. */
+        do
+        {
+            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+        }
+        while (((Clock_Ip_apxCgm[Instance][SelectorIndex]->CSS & MC_CGM_MUX_CSS_CS_MASK) != MC_CGM_MUX_CSS_CS_TRANSPARENT) && (FALSE == TimeoutOccurred));
+
+        if (TRUE == TimeoutOccurred)
+        {
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_CLOCK_MUX_SWITCH_ERROR, Config->Name);
+        }
+    }
+    else
+    {
+        /* Report timeout error */
+        Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
+    }
+}
+#endif
+
+
+#ifdef CLOCK_IP_GPR_X_CLKOUT_SEL_MUXSEL
+/* No implementation */
+static void Clock_Ip_ResetGprXClkoutSelMuxsel(Clock_Ip_SelectorConfigType const *Config)
+{
+    (void)Config;
+    /* No implementation for reset value */
+}
+
+/* Set GPR_m_CLKOUTnSEL[MUXSEL] register */
+static void Clock_Ip_SetGprXClkoutSelMuxsel(Clock_Ip_SelectorConfigType const *Config)
+{
+
+    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
+    uint32 SelectorValue = Clock_Ip_au16SelectorEntryClkoutHardwareValue[Config->Value];    /* Hw value corresponding to selector entry. Translate input clock source to hardware value. */
+
+    uint32 SelectorMask  = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].SelectorValueMask;
+    uint32 SelectorShift = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].SelectorValueShift;
+
+    uint32 RegValue;
+
+    RegValue = *Clock_Ip_apxGprClkout[Instance][SelectorIndex];
+    RegValue &= ~SelectorMask;
+    RegValue |= (SelectorValue << SelectorShift) & SelectorMask;
+    *Clock_Ip_apxGprClkout[Instance][SelectorIndex] = RegValue;
+}
+#endif
+
+
+#ifdef CLOCK_IP_MC_ME_AE_GS_S_SYSCLK
+/* Reset IP_MC_ME_AE[SAFE_MC] register */
+void Clock_Ip_ResetMcMeAeGssSysclk_TrustedCall(Clock_Ip_SelectorConfigType const *Config)
+{
+    uint32 PowerModeIndexIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_POWER_MODE_INDEX];
+
+    Clock_Ip_apxSystemClock->POWER_MODE_CONFIG[PowerModeIndexIndex] &= ~MC_ME_AE_GS_S_SYSCLK_MASK;
+}
+/* Set IP_MC_ME_AE[SAFE_MC] register */
+void Clock_Ip_SetMcMeAeGssSysclk_TrustedCall(Clock_Ip_SelectorConfigType const *Config)
+{
+    uint32 SelectorValue = Clock_Ip_au16SelectorEntryAeHardwareValue[Config->Value];    /* Hw value corresponding to selector entry. Translate input clock source to hardware value. */
+    uint32 PowerModeIndexIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_POWER_MODE_INDEX];
+    uint32 McMeAeCurrentMode = 0U;
+    
+    uint32 regValue;
+    boolean TimeoutOccurred = FALSE;
+    uint32 StartTime;
+    uint32 ElapsedTime;
+    uint32 TimeoutTicks;
+
+    regValue = Clock_Ip_apxSystemClock->POWER_MODE_CONFIG[PowerModeIndexIndex];;
+    regValue &= ~MC_ME_AE_GS_S_SYSCLK_MASK;
+    regValue |= MC_ME_AE_GS_S_SYSCLK(SelectorValue);
+    
+    McMeAeCurrentMode = IP_MC_ME_AE->GS & MC_ME_AE_GS_S_CURRENT_MODE_MASK;
+    Clock_Ip_apxSystemClock->POWER_MODE_CONFIG[PowerModeIndexIndex] = regValue;
+    
+    /* Enter key */
+    IP_MC_ME_AE->MCTL = McMeAeCurrentMode | 0x5AF0U;
+    IP_MC_ME_AE->MCTL = McMeAeCurrentMode | 0xA50FU;
+
+    Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+    do
+    {
+        TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+    }
+    while ((MC_ME_AE_TRANSITION_IS_ON_GOING == (IP_MC_ME_AE->GS & MC_ME_AE_GS_S_MTRANS_MASK)) && (FALSE == TimeoutOccurred));
 
     if (TRUE == TimeoutOccurred)
     {
         Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_CLOCK_MUX_SWITCH_ERROR, Config->Name);
     }
+}
+#endif
+
+#ifdef CLOCK_IP_MC_ME_AE_GS_S_SYSCLK
+static void Clock_Ip_ResetMcMeAeGssSysclk(Clock_Ip_SelectorConfigType const *Config)
+{
+#ifdef CLOCK_IP_ENABLE_USER_MODE_SUPPORT
+  #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
+    OsIf_Trusted_Call1param(Clock_Ip_ResetMcMeAeGssSysclk_TrustedCall,(Config));
+  #else
+    Clock_Ip_ResetMcMeAeGssSysclk_TrustedCall(Config);
+  #endif
+#endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
+}
+static void Clock_Ip_SetMcMeAeGssSysclk(Clock_Ip_SelectorConfigType const *Config)
+{
+#ifdef CLOCK_IP_ENABLE_USER_MODE_SUPPORT
+  #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
+    OsIf_Trusted_Call1param(Clock_Ip_SetMcMeAeGssSysclk_TrustedCall,(Config));
+  #else
+    Clock_Ip_SetMcMeAeGssSysclk_TrustedCall(Config);
+  #endif
+#endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
 }
 #endif
 
@@ -294,6 +460,20 @@ const Clock_Ip_SelectorCallbackType Clock_Ip_axSelectorCallbacks[CLOCK_IP_SELECT
     {
         Clock_Ip_ResetCgmXCscCssClkswSwip,          /* Reset */
         Clock_Ip_SetCgmXCscCssClkswSwip,            /* Set */
+    },
+#endif
+
+#ifdef CLOCK_IP_CGM_X_CSC_CSS_CS_GRIP
+    {
+        Clock_Ip_ResetCgmXCscCssCsGrip,           /* Reset */
+        Clock_Ip_SetCgmXCscCssCsGrip,             /* Set */
+    },
+#endif
+
+#ifdef CLOCK_IP_GPR_X_CLKOUT_SEL_MUXSEL
+    {
+        Clock_Ip_ResetGprXClkoutSelMuxsel,       /* Reset */
+        Clock_Ip_SetGprXClkoutSelMuxsel,         /* Set */
     },
 #endif
 

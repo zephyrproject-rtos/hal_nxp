@@ -24,7 +24,7 @@ extern "C" {
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "Siul2_Port_Ip_Defines.h"
 
 /*==================================================================================================
@@ -36,10 +36,10 @@ extern "C" {
  */
 #define SIUL2_PORT_IP_TYPES_VENDOR_ID_H                     43
 #define SIUL2_PORT_IP_TYPES_AR_RELEASE_MAJOR_VERSION_H      4
-#define SIUL2_PORT_IP_TYPES_AR_RELEASE_MINOR_VERSION_H      4
+#define SIUL2_PORT_IP_TYPES_AR_RELEASE_MINOR_VERSION_H      7
 #define SIUL2_PORT_IP_TYPES_AR_RELEASE_REVISION_VERSION_H   0
 #define SIUL2_PORT_IP_TYPES_SW_MAJOR_VERSION_H              0
-#define SIUL2_PORT_IP_TYPES_SW_MINOR_VERSION_H              8
+#define SIUL2_PORT_IP_TYPES_SW_MINOR_VERSION_H              9
 #define SIUL2_PORT_IP_TYPES_SW_PATCH_VERSION_H              0
 
 /*==================================================================================================
@@ -121,7 +121,16 @@ typedef enum
     PORT_MUX_ALT4               = 4U,   /*!< chip-specific                           */
     PORT_MUX_ALT5               = 5U,   /*!< chip-specific                           */
     PORT_MUX_ALT6               = 6U,   /*!< chip-specific                           */
-    PORT_MUX_ALT7               = 7U    /*!< chip-specific                           */
+    PORT_MUX_ALT7               = 7U,   /*!< chip-specific                           */
+    PORT_MUX_ALT8               = 8U,   /*!< chip-specific                           */
+    PORT_MUX_ALT9               = 9U,   /*!< chip-specific                           */
+    PORT_MUX_ALT10              = 10U,  /*!< chip-specific                           */
+    PORT_MUX_ALT11              = 11U,  /*!< chip-specific                           */
+    PORT_MUX_ALT12              = 12U,  /*!< chip-specific                           */
+    PORT_MUX_ALT13              = 13U,  /*!< chip-specific                           */
+    PORT_MUX_ALT14              = 14U,  /*!< chip-specific                           */
+    PORT_MUX_ALT15              = 15U,  /*!< chip-specific                           */
+    PORT_MUX_NOT_AVAILABLE      = 16U   /*!< chip-specific                           */
 } Siul2_Port_Ip_PortMux;
 
 
@@ -132,8 +141,9 @@ typedef enum
  */
 typedef enum
 {
-    PORT_INPUT_FILTER_DISABLED     = 0U, /*!< IFE OFF*/
-    PORT_INPUT_FILTER_ENABLED      = 1U  /*!< IFE ON*/
+    PORT_INPUT_FILTER_DISABLED      = 0U,    /*!< IFE OFF*/
+    PORT_INPUT_FILTER_ENABLED       = 1U,    /*!< IFE ON*/
+    PORT_INPUT_FILTER_NOT_AVAILABLE = 2U     /*!< IFE NOT AVAILABLE*/
 } Siul2_Port_Ip_PortInputFilter;
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_INPUT_FILTER */
 
@@ -144,8 +154,9 @@ typedef enum
  */
 typedef enum
 {
-    PORT_PULL_KEEP_DISABLED     = 0U, /*!< PKE OFF*/
-    PORT_PULL_KEEP_ENABLED      = 1U  /*!< PKE ON*/
+    PORT_PULL_KEEP_DISABLED         = 0U,   /*!< PKE OFF*/
+    PORT_PULL_KEEP_ENABLED          = 1U,   /*!< PKE ON*/
+    PORT_PULL_KEEP_NOT_AVAILABLE    = 2U    /*!< PKE NOT AVAILABLE*/
 } Siul2_Port_Ip_PortPullKeep;
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_PULL_KEEPER */
 
@@ -156,8 +167,9 @@ typedef enum
  */
 typedef enum
 {
-    PORT_INVERT_DISABLED     = 0U, /*!< INV OFF*/
-    PORT_INVERT_ENABLED      = 1U  /*!< INV ON*/
+    PORT_INVERT_DISABLED        = 0U,   /*!< INV OFF*/
+    PORT_INVERT_ENABLED         = 1U,   /*!< INV ON*/
+    PORT_INVERT_NOT_AVAILABLE   = 2U    /*!< INV NOT AVAILABLE*/
 } Siul2_Port_Ip_PortInvert;
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_INVERT_DATA */
 
@@ -167,8 +179,9 @@ typedef enum
  */
 typedef enum
 {
-    PORT_OUTPUT_BUFFER_DISABLED  = 0U, /*!< Output buffer disabled */
-    PORT_OUTPUT_BUFFER_ENABLED   = 1U  /*!< Output buffer enabled  */
+    PORT_OUTPUT_BUFFER_DISABLED         = 0U,   /*!< Output buffer disabled */
+    PORT_OUTPUT_BUFFER_ENABLED          = 1U,   /*!< Output buffer enabled  */
+    PORT_OUTPUT_BUFFER_NOT_AVAILABLE    = 2U    /*!< Output buffer not available  */
 } Siul2_Port_Ip_PortOutputBuffer;
 
 /*!
@@ -177,33 +190,10 @@ typedef enum
  */
 typedef enum
 {
-    PORT_INPUT_BUFFER_DISABLED   = 0U, /*!< Input buffer disabled */
-    PORT_INPUT_BUFFER_ENABLED    = 1U  /*!< Input buffer enabled  */
+    PORT_INPUT_BUFFER_DISABLED      = 0U,   /*!< Input buffer disabled */
+    PORT_INPUT_BUFFER_ENABLED       = 1U,   /*!< Input buffer enabled  */
+    PORT_INPUT_BUFFER_NOT_AVAILABLE = 2U    /*!< Input buffer not available */
 } Siul2_Port_Ip_PortInputBuffer;
-
-#ifdef FEATURE_SIUL2_HAS_INPUT_HYSTERESYS
-/*!
- * @brief Configures the Hysteresis Enable field.
- * Implements : Siul2_Port_Ip_PortHysteresis
- */
-typedef enum
-{
-    PORT_HYSTERESYS_DISABLED     = 0U, /*!< Input Hysteresis disabled */
-    PORT_HYSTERESYS_ENABLED      = 1U  /*!< Input Hysteresis enabled  */
-} Siul2_Port_Ip_PortHysteresis;
-#endif /* FEATURE_SIUL2_HAS_INPUT_HYSTERESYS */
-
-#ifdef FEATURE_SIUL2_HAS_AE_INSTANCE
-/*!
- * @brief Configures the Analog Pad Control.
- * Implements : Siul2_Port_Ip_PortAnalogPad
- */
-typedef enum
-{
-    PORT_ANALOG_PAD_CONTROL_DISABLED = 0U, /*!< Disable (the switch is off)                                 */
-    PORT_ANALOG_PAD_CONTROL_ENABLED  = 1U  /*!< Enable (another module can control the state of the switch) */
-} Siul2_Port_Ip_PortAnalogPad;
-#endif /* FEATURE_SIUL2_HAS_AE_INSTANCE */
 
 /*!
  * @brief Configures the Pin input muxing selection
@@ -238,22 +228,25 @@ typedef enum
 #ifndef SIUL2_PORT_IP_MULTIPLE_SIUL2_INSTANCES
 typedef enum
 {
-    PORT_SAFE_MODE_DISABLED     = 0U, /*!< To drive pad in hi-z state using OBE = 0, when FCCU in fault state.
+    PORT_SAFE_MODE_DISABLED         = 0U, /*!< To drive pad in hi-z state using OBE = 0, when FCCU in fault state.
                                        *   The OBE will be driven by IP/SIUL when FCCU leaves the fault state. */
-    PORT_SAFE_MODE_ENABLED      = 1U  /*!< No effect on IP/SIUL driven OBE value */
+    PORT_SAFE_MODE_ENABLED          = 1U, /*!< No effect on IP/SIUL driven OBE value */
+    PORT_SAFE_MODE_NOT_AVAILABLE    = 2U  /*!< Not available  */
 } Siul2_Port_Ip_PortSafeMode;
 #else
 typedef enum
 {
-    SIUL2_PORT_IP_SAFE_MODE_DISABLED              = 0U,  /*!< Disabled on all four application domains */
-    SIUL2_PORT_IP_SAFE_MODE_DISABLED_ON_APP_3     = 7U,  /*!< Disabled on application domain 3 */
-    SIUL2_PORT_IP_SAFE_MODE_DISABLED_ON_APP_2     = 11U, /*!< Disabled on application domain 2 */
-    SIUL2_PORT_IP_SAFE_MODE_DISABLED_ON_APP_1     = 13U, /*!< Disabled on application domain 1 */
-    SIUL2_PORT_IP_SAFE_MODE_DISABLED_ON_APP_0     = 14U, /*!< Disabled on application domain 0 */
-    SIUL2_PORT_IP_SAFE_MODE_ENABLED               = 15U  /*!< Enabled */
+    PORT_SAFE_MODE_DISABLED              = 0U,  /*!< Disabled on all four application domains */
+    PORT_SAFE_MODE_DISABLED_ON_APP_3     = 7U,  /*!< Disabled on application domain 3 */
+    PORT_SAFE_MODE_DISABLED_ON_APP_2     = 11U, /*!< Disabled on application domain 2 */
+    PORT_SAFE_MODE_DISABLED_ON_APP_1     = 13U, /*!< Disabled on application domain 1 */
+    PORT_SAFE_MODE_DISABLED_ON_APP_0     = 14U, /*!< Disabled on application domain 0 */
+    PORT_SAFE_MODE_ENABLED               = 15U, /*!< Enabled */
+    PORT_SAFE_MODE_NOT_AVAILABLE         = 16U  /*!< Not available */
 } Siul2_Port_Ip_PortSafeMode;
 #endif /* SIUL2_PORT_IP_MULTIPLE_SIUL2_INSTANCES */
 
+#ifdef FEATURE_SIUL2_PORT_IP_HAS_ANALOG_PAD_CONTROL
 /*!
  * @brief Configures the analog pad control.
  * Implements : Siul2_Port_Ip_PortAnalogPadControl
@@ -264,6 +257,7 @@ typedef enum
     PORT_ANALOG_PAD_CONTROL_ENABLED          = 1U, /*!< Enables the analog pad control to the associated pin.  */
     PORT_ANALOG_PAD_CONTROL_NOT_AVAILABLE    = 2U  /*!< The analog pad control to the associated pin is not available.  */
 } Siul2_Port_Ip_PortAnalogPadControl;
+#endif /* FEATURE_SIUL2_PORT_IP_HAS_ANALOG_PAD_CONTROL */
 
 /*!
  * @brief Configures the slew rate control.
@@ -273,7 +267,8 @@ typedef enum
 typedef enum
 {
     PORT_SLEW_RATE_FASTEST                = 0U, /*!< Fmax=133 MHz(at 1.8V), 100 MHz (at 3.3V), apply for SIUL2_0/1  */
-    PORT_SLEW_RATE_SLOWEST                = 1U  /*!< Fmax=83 MHz (at 1.8V), 63 MHz (at 3.3V), apply for SIUL2_0/1   */
+    PORT_SLEW_RATE_SLOWEST                = 1U, /*!< Fmax=83 MHz (at 1.8V), 63 MHz (at 3.3V), apply for SIUL2_0/1   */
+    PORT_SLEW_RATE_NOT_AVAILABLE          = 2U  /*!< Not available   */
 } Siul2_Port_Ip_PortSlewRateControl;
 
 #else
@@ -294,7 +289,8 @@ typedef enum
     PORT_SLEW_RATE_CONTROL12               = 12U,
     PORT_SLEW_RATE_CONTROL13               = 13U,
     PORT_SLEW_RATE_CONTROL14               = 14U,
-    PORT_SLEW_RATE_CONTROL15               = 15U
+    PORT_SLEW_RATE_CONTROL15               = 15U,
+    PORT_SLEW_RATE_NOT_AVAILABLE           = 16U
 } Siul2_Port_Ip_PortSlewRateControl;
 #endif
 
@@ -305,8 +301,9 @@ typedef enum
  */
 typedef enum
 {
-    PORT_DRIVE_STRENTGTH_DISABLED = 0U,     /*!< Disables DSE. */
-    PORT_DRIVE_STRENTGTH_ENABLED  = 1U      /*!< Enables DSE.*/
+    PORT_DRIVE_STRENTGTH_DISABLED       = 0U,   /*!< Disables DSE. */
+    PORT_DRIVE_STRENTGTH_ENABLED        = 1U,   /*!< Enables DSE.*/
+    PORT_DRIVE_STRENTGTH_NOT_AVAILABLE  = 2U    /*!< Not available.*/
 } Siul2_Port_Ip_PortDriveStrength;
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_DRIVE_STRENGTH */
 
@@ -318,7 +315,8 @@ typedef enum
 typedef enum
 {
     PORT_RECEIVER_ENABLE_DIFFERENTIAL_VREF = 0U, /*!< Enables the differential vref based receiver. */
-    PORT_RECEIVER_ENABLE_SINGLE_ENDED      = 1U  /*!< Enables the single ended receiver.            */
+    PORT_RECEIVER_ENABLE_SINGLE_ENDED      = 1U, /*!< Enables the single ended receiver.            */
+    PORT_RECEIVER_NOT_AVAILABLE            = 2U  /*!< The receive select in the associated pin is not available.  */
 } Siul2_Port_Ip_PortReceiverSelect;
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_RECEIVER_SELECT */
 
@@ -342,8 +340,9 @@ typedef enum
  */
 typedef enum
 {
-    PORT_TERMINATION_RESISTOR_DISABLED     = 0U, /*!< Disables the termination resistor to the associated pin. */
-    PORT_TERMINATION_RESISTOR_ENABLED      = 1U  /*!< Enables the termination resistor to the associated pin.  */
+    PORT_TERMINATION_RESISTOR_DISABLED      = 0U, /*!< Disables the termination resistor to the associated pin. */
+    PORT_TERMINATION_RESISTOR_ENABLED       = 1U, /*!< Enables the termination resistor to the associated pin.  */
+    PORT_TERMINATION_RESISTOR_NOT_AVAILABLE = 2U  /*!< Not available. */
 } Siul2_Port_Ip_PortTerminationResistor;
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_TERMINATION_RESISTOR */
 
@@ -354,8 +353,9 @@ typedef enum
  */
 typedef enum
 {
-    PORT_CURRENT_REFERENCE_CONTROL_DISABLED     = 0U, /*!< Disables the current reference control to the associated pin. */
-    PORT_CURRENT_REFERENCE_CONTROL_ENABLED      = 1U  /*!< Enables the current reference control to the associated pin.  */
+    PORT_CURRENT_REFERENCE_CONTROL_DISABLED         = 0U, /*!< Disables the current reference control to the associated pin. */
+    PORT_CURRENT_REFERENCE_CONTROL_ENABLED          = 1U, /*!< Enables the current reference control to the associated pin.  */
+    PORT_CURRENT_REFERENCE_CONTROL_NOT_AVAILABLE    = 2U  /*!< Not available.  */
 } Siul2_Port_Ip_PortCurrentReferenceControl;
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_CURRENT_REFERENCE_CONTROL */
 
@@ -366,8 +366,9 @@ typedef enum
  */
 typedef enum
 {
-    PORT_RX_CURRENT_BOOST_DISABLED     = 0U, /*!< Current reference is 200 μA; supports data rate up to 320 Mbaud. */
-    PORT_RX_CURRENT_BOOST_ENABLED      = 1U  /*!< Current reference is 1 mA; supports data rate up to 420 Mbaud.  */
+    PORT_RX_CURRENT_BOOST_DISABLED      = 0U, /*!< Current reference is 200 μA; supports data rate up to 320 Mbaud. */
+    PORT_RX_CURRENT_BOOST_ENABLED       = 1U, /*!< Current reference is 1 mA; supports data rate up to 420 Mbaud.  */
+    PORT_RX_CURRENT_BOOST_NOT_AVAILABLE = 2U  /*!<Not available.  */
 } Siul2_Port_Ip_PortRxCurrentBoost;
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_RX_CURRENT_BOOST */
 
@@ -378,8 +379,9 @@ typedef enum
  */
 typedef enum
 {
-    PORT_OPEN_DRAIN_DISABLED     = 0U, /*!< Output is CMOS       */
-    PORT_OPEN_DRAIN_ENABLED      = 1U  /*!< Output is open drain */
+    PORT_OPEN_DRAIN_DISABLED        = 0U, /*!< Output is CMOS       */
+    PORT_OPEN_DRAIN_ENABLED         = 1U, /*!< Output is open drain */
+    PORT_OPEN_DRAIN_NOT_AVAILABLE   = 2U  /*!< Not available */
 } Siul2_Port_Ip_PortOpenDrain;
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_OPEN_DRAIN */
 

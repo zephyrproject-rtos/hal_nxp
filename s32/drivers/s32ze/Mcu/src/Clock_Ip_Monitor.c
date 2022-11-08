@@ -5,7 +5,7 @@
  */
 /**
 *   @file       Clock_Ip_Monitor.c
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -35,10 +35,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_MONITOR_VENDOR_ID_C                      43
 #define CLOCK_IP_MONITOR_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_MONITOR_AR_RELEASE_MINOR_VERSION_C       4
+#define CLOCK_IP_MONITOR_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_MONITOR_AR_RELEASE_REVISION_VERSION_C    0
 #define CLOCK_IP_MONITOR_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_MONITOR_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_MONITOR_SW_MINOR_VERSION_C               9
 #define CLOCK_IP_MONITOR_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -120,6 +120,18 @@ extern "C"{
 *                                         LOCAL VARIABLES
 ==================================================================================================*/
 
+/* Clock start initialized section data */
+#define MCU_START_SEC_VAR_CLEARED_32
+#include "Mcu_MemMap.h"
+
+#if !(defined(CLOCK_IP_REGISTER_VALUES_OPTIMIZATION) && (CLOCK_IP_REGISTER_VALUES_OPTIMIZATION == STD_ON))
+static uint32 HashCmu[CLOCK_IP_CMUS_NO];
+#endif
+
+/* Clock stop initialized section data */
+#define MCU_STOP_SEC_VAR_CLEARED_32
+#include "Mcu_MemMap.h"
+
 /*==================================================================================================
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
@@ -198,6 +210,7 @@ static Clock_Ip_CmuStatusType Clock_Ip_ClockMonitorEmpty_GetStatus(Clock_Ip_Name
     return CLOCK_IP_CMU_STATUS_UNDEFINED;
 }
 #if (defined(CLOCK_IP_REGISTER_VALUES_OPTIMIZATION) && (CLOCK_IP_REGISTER_VALUES_OPTIMIZATION == STD_ON))
+/* Set clock monitor via register value configuration */
 static void Clock_Ip_SetClockMonitorRegisterValues(Clock_Ip_CmuConfigType const* Config, uint32 Index)
 {
     (void)Index;
@@ -305,7 +318,6 @@ static void Clock_Ip_SetCmuFcFceRefCntLfrefHfref(Clock_Ip_CmuConfigType const* C
 {
     const Clock_Ip_CmuInfoType * CmuInformation = &Clock_Ip_axCmuInfo[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_CMU_INDEX]];
     Clock_Ip_ClockMonitorType* const CmuFc    = CmuInformation->CmuInstance;
-    static uint32 Hash[CLOCK_IP_CMUS_NO];
 
     uint32 ReferenceClk = 0U;
     uint32 MonitoredClk = 0U;
@@ -320,9 +332,9 @@ static void Clock_Ip_SetCmuFcFceRefCntLfrefHfref(Clock_Ip_CmuConfigType const* C
     uint32 ModuloValue;
 
     /* Do not calculate cmu values if these values are already calculated and written in hw registers */
-    if (Hash[Index] != ((((uint32)Config->Enable) ^ ((uint32)Config->Interrupt) ^ ((uint32)Config->MonitoredClockFrequency)  ^ ((uint32)Config->Name))))
+    if (HashCmu[Index] != ((((uint32)Config->Enable) ^ ((uint32)Config->Interrupt) ^ ((uint32)Config->MonitoredClockFrequency)  ^ ((uint32)Config->Name))))
     {
-        Hash[Index] = ((((uint32)Config->Enable) ^ ((uint32)Config->Interrupt) ^ ((uint32)Config->MonitoredClockFrequency)  ^ ((uint32)Config->Name)));
+        HashCmu[Index] = ((((uint32)Config->Enable) ^ ((uint32)Config->Interrupt) ^ ((uint32)Config->MonitoredClockFrequency)  ^ ((uint32)Config->Name)));
 
         ReferenceClk = Clock_Ip_pxConfig->ConfiguredFrequencies[Clock_Ip_FreqIds[CmuInformation->Reference]].ConfiguredFrequencyValue / CLOCK_IP_DIVIDE_BY_1000;
         BusClk       = Clock_Ip_pxConfig->ConfiguredFrequencies[Clock_Ip_FreqIds[CmuInformation->Bus]].ConfiguredFrequencyValue / CLOCK_IP_DIVIDE_BY_1000;
@@ -450,6 +462,7 @@ static void Clock_Ip_EnableCmuFcFceRefCntLfrefHfref(Clock_Ip_CmuConfigType const
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
+
 #if CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE > 0U
 
 uint32 Clock_Ip_CMU_GetInterruptStatus(uint8 IndexCmu)
@@ -478,24 +491,21 @@ void Clock_Ip_CMU_ClockFailInt(void)
 
     for (IndexCmu = 0U; IndexCmu < CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE; IndexCmu++)
     {
-        /* Read flags */
-        CmuIsrValue = Clock_Ip_apxCmu[IndexCmu]->SR & CLOCK_IP_CMU_ISR_MASK;
-
-        /* Clear status flag */
-        Clock_Ip_apxCmu[IndexCmu]->SR = CmuIsrValue;
-
         /* Check whether driver is initialized */
         if(NULL_PTR != Clock_Ip_pxConfig)
         {
+            /* Read flags */
+            CmuIsrValue = Clock_Ip_apxCmu[IndexCmu]->SR & CLOCK_IP_CMU_ISR_MASK;
             /* Read interrupt enable */
             CmuIerValue = Clock_Ip_apxCmu[IndexCmu]->IER & CLOCK_IP_CMU_ISR_MASK;
-
             /* Filter all interrupts that are not enabled from cmuIsrValue */
             CmuIsrValue = CmuIsrValue & CmuIerValue;
 
             /* If at least one interrupt has been triggered */
             if (CmuIsrValue != 0U)
             {
+                /* Clear status flag */
+                Clock_Ip_apxCmu[IndexCmu]->SR = CmuIsrValue;
 #ifdef CLOCK_IP_CMU_FCCU_NOTIFICATION
                 CLOCK_IP_CMU_FCCU_NOTIFICATION(Clock_Ip_aeCmuNames[IndexCmu]);
 #else
@@ -504,10 +514,8 @@ void Clock_Ip_CMU_ClockFailInt(void)
             }
         }
     }
-
 }
 #endif
-
 
 
 /* Clock stop section code */

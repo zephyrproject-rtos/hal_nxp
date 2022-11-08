@@ -5,7 +5,7 @@
  */
 /**
 *   @file       Clock_Ip.c
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -34,10 +34,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_VENDOR_ID_C                      43
 #define CLOCK_IP_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_AR_RELEASE_MINOR_VERSION_C       4
+#define CLOCK_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_AR_RELEASE_REVISION_VERSION_C    0
 #define CLOCK_IP_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_SW_MINOR_VERSION_C               9
 #define CLOCK_IP_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -95,12 +95,39 @@ typedef struct
 /*==================================================================================================
 *                                         LOCAL CONSTANTS
 ==================================================================================================*/
+/* Clock start initialized section data */
+#define MCU_START_SEC_VAR_CLEARED_UNSPECIFIED
+#include "Mcu_MemMap.h"
 
+#if !((CLOCK_IP_CMU_INFO_SIZE > 0U) || defined(CLOCK_IP_CGU_INTERRUPT))
+static const Clock_Ip_ClockConfigType *Clock_Ip_pxConfig;                                           /* Reference to the current clock configuration */
+#endif
+
+/* Clock stop initialized section data */
+#define MCU_STOP_SEC_VAR_CLEARED_UNSPECIFIED
+#include "Mcu_MemMap.h"
 /*==================================================================================================
 *                                         LOCAL VARIABLES
 ==================================================================================================*/
+/* Clock start initialized section data */
+#define MCU_START_SEC_VAR_INIT_BOOLEAN
+#include "Mcu_MemMap.h"
 
+static boolean FunctionWasCalled = FALSE;
 
+/* Clock stop initialized section data */
+#define MCU_STOP_SEC_VAR_INIT_BOOLEAN
+#include "Mcu_MemMap.h"
+
+/* Clock start initialized section data */
+#define MCU_START_SEC_VAR_CLEARED_UNSPECIFIED
+#include "Mcu_MemMap.h"
+
+static Clock_Ip_DriverContextType Clock_Ip_driverContext;
+
+/* Clock stop initialized section data */
+#define MCU_STOP_SEC_VAR_CLEARED_UNSPECIFIED
+#include "Mcu_MemMap.h"
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
@@ -112,27 +139,31 @@ typedef struct
 #define MCU_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Mcu_MemMap.h"
 
-#if (CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE > 0U) || defined(CLOCK_IP_CGU_INTERRUPT)
+#if (CLOCK_IP_CMU_INFO_SIZE > 0U) || defined(CLOCK_IP_CGU_INTERRUPT)
 const Clock_Ip_ClockConfigType *Clock_Ip_pxConfig;                                           /* Reference to the current clock configuration */
-#else
-static const Clock_Ip_ClockConfigType *Clock_Ip_pxConfig;                                           /* Reference to the current clock configuration */
 #endif
-
-static Clock_Ip_DriverContextType Clock_Ip_driverContext;
-boolean Clock_Ip_bSentFromUpdateDriverContext = TRUE;
 
 /* Clock stop initialized section data */
 #define MCU_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Mcu_MemMap.h"
 
 /* Clock start initialized section data */
-#define MCU_START_SEC_VAR_INIT_8
+#define MCU_START_SEC_VAR_INIT_BOOLEAN
+#include "Mcu_MemMap.h"
+
+
+/* Clock stop initialized section data */
+#define MCU_STOP_SEC_VAR_INIT_BOOLEAN
+#include "Mcu_MemMap.h"
+
+/* Clock start initialized section data */
+#define MCU_START_SEC_VAR_CLEARED_8
 #include "Mcu_MemMap.h"
 
 uint8 Clock_Ip_FreqIds[CLOCK_IP_FEATURE_NAMES_NO]={0};
 
 /* Clock stop initialized section data */
-#define MCU_STOP_SEC_VAR_INIT_8
+#define MCU_STOP_SEC_VAR_CLEARED_8
 #include "Mcu_MemMap.h"
 
 
@@ -206,8 +237,6 @@ static void Clock_Ip_UpdateDriverContext(Clock_Ip_ClockConfigType const * Config
 {
     uint8 Index;
     (void)Config;
-
-    Clock_Ip_bSentFromUpdateDriverContext = TRUE;
     /* Initialize clock objects */
     Clock_Ip_Command(Clock_Ip_pxConfig, CLOCK_IP_INITIALIZE_CLOCK_OBJECTS_COMMAND);
 
@@ -511,7 +540,6 @@ static void Clock_Ip_CheckCmuClocks(Clock_Ip_ClockConfigType const * Config)
 /* Call empty callbacks to improve CCOV*/
 static void Clock_Ip_CallEmptyCallbacks(void)
 {
-    static boolean FunctionWasCalled = FALSE;
 
     if (FALSE == FunctionWasCalled)
     {
