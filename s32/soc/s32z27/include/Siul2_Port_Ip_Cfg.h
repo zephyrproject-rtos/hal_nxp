@@ -33,10 +33,10 @@ extern "C"{
 ==================================================================================================*/
 #define SIUL2_PORT_IP_VENDOR_ID_CFG_H                       43
 #define SIUL2_PORT_IP_AR_RELEASE_MAJOR_VERSION_CFG_H        4
-#define SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_CFG_H        4
+#define SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_CFG_H        7
 #define SIUL2_PORT_IP_AR_RELEASE_REVISION_VERSION_CFG_H     0
 #define SIUL2_PORT_IP_SW_MAJOR_VERSION_CFG_H                0
-#define SIUL2_PORT_IP_SW_MINOR_VERSION_CFG_H                8
+#define SIUL2_PORT_IP_SW_MINOR_VERSION_CFG_H                9
 #define SIUL2_PORT_IP_SW_PATCH_VERSION_CFG_H                0
 
 /*==================================================================================================
@@ -92,4 +92,3 @@ extern "C"{
 #endif
 
 #endif /* SIUL2_PORT_IP_CFG_H */
-

@@ -9,7 +9,7 @@
 
 /**
  *   @file    Siul2_Icu_Ip_Defines.h
- *   @version 0.8.0
+ *   @version 0.9.0
  *
  *   @brief   AUTOSAR Icu - contains the data exported by the Icu module
  *   @details Contains the information that will be exported by the module, as requested by Autosar.
@@ -17,7 +17,7 @@
  *   @addtogroup siul2_icu_ip SIUL2 IPL
  *   @{
  */
- 
+
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -30,17 +30,16 @@ extern "C"{
  * 3) internal and external interfaces from this unit
  *================================================================================================*/
 #include "StandardTypes.h"
-#include "S32Z27_SIUL2.h"
+#include "S32Z2_SIUL2.h"
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define SIUL2_ICU_IP_DEFINES_VENDOR_ID                    43
-#define SIUL2_ICU_IP_DEFINES_MODULE_ID                    122
 #define SIUL2_ICU_IP_DEFINES_AR_RELEASE_MAJOR_VERSION     4
-#define SIUL2_ICU_IP_DEFINES_AR_RELEASE_MINOR_VERSION     4
+#define SIUL2_ICU_IP_DEFINES_AR_RELEASE_MINOR_VERSION     7
 #define SIUL2_ICU_IP_DEFINES_AR_RELEASE_REVISION_VERSION  0
 #define SIUL2_ICU_IP_DEFINES_SW_MAJOR_VERSION             0
-#define SIUL2_ICU_IP_DEFINES_SW_MINOR_VERSION             8
+#define SIUL2_ICU_IP_DEFINES_SW_MINOR_VERSION             9
 #define SIUL2_ICU_IP_DEFINES_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -57,16 +56,16 @@ extern "C"{
                                        DEFINES AND MACROS
 ==================================================================================================*/
 /* Redefines the address table of the Siul2 instance. */
-#define SIUL2_ICU_IP_BASE_PTRS      { IP_SIUL2_0, IP_SIUL2_1, NULL_PTR, IP_SIUL2_3, IP_SIUL2_4, IP_SIUL2_5 }                                                                                                                                                                                                                                                                            
-   
+#define SIUL2_ICU_IP_BASE_PTRS      { IP_SIUL2_0, IP_SIUL2_1, NULL_PTR, IP_SIUL2_3, IP_SIUL2_4, IP_SIUL2_5 }
+
 #define SIUL2_ICU_IP_DEV_ERROR_DETECT (STD_OFF)
 
 /** @brief The number of Siul2 instances available on platform */
 #define SIUL2_ICU_IP_NUM_OF_INSTANCES (6U)
 
 /** @brief The number of channels available on each instance */
-#define SIUL2_ICU_IP_NUM_OF_CHANNELS  (8)
-/** @brief Adds or removes all services related to the deinitialization functionality. */
+#define SIUL2_ICU_IP_NUM_OF_CHANNELS  (8U)
+/** @brief Adds or removes all services related to the de-initialization functionality. */
 #define SIUL2_ICU_IP_DEINIT_API                 (STD_ON)
 
 /** @brief Adds or removes all services related to mode set functionality. */
@@ -77,10 +76,8 @@ extern "C"{
 
 /** @brief Add or remove all functions related to input state. */
 #define SIUL2_ICU_IP_GET_INPUT_STATE_API        (STD_ON)
-/** @brief Instance of SIUL2 used by current platform. */
-#define SIUL2_ICU_IP_INSTANCE                (0U)
 
-/** @brief Support for User mode. If this parameter has been configured to STD_ON, the FTM driver 
+/** @brief Support for User mode. If this parameter has been configured to STD_ON, the FTM driver
  *         code can be executed from both supervisor and user mode. */
 #define SIUL2_ICU_IP_ENABLE_USER_MODE_SUPPORT   (STD_OFF)
 
@@ -99,4 +96,3 @@ extern "C"{
 /** @} */
 
 #endif  /* SIUL2_ICU_IP_DEFINES_H */
-
