@@ -6,7 +6,7 @@
 
 /**
 *   @file       Clock_Ip_Cfg.h
-*   @version    0.8.0
+*   @version    0.9.0
 *
 *   @brief   AUTOSAR Mcu - Clock configuration header file.
 *   @details This file is the header containing all the necessary information for CLOCK
@@ -37,10 +37,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_CFG_VENDOR_ID                      43
 #define CLOCK_IP_CFG_AR_RELEASE_MAJOR_VERSION       4
-#define CLOCK_IP_CFG_AR_RELEASE_MINOR_VERSION       4
+#define CLOCK_IP_CFG_AR_RELEASE_MINOR_VERSION       7
 #define CLOCK_IP_CFG_AR_RELEASE_REVISION_VERSION    0
 #define CLOCK_IP_CFG_SW_MAJOR_VERSION               0
-#define CLOCK_IP_CFG_SW_MINOR_VERSION               8
+#define CLOCK_IP_CFG_SW_MINOR_VERSION               9
 #define CLOCK_IP_CFG_SW_PATCH_VERSION               0
 
 /*==================================================================================================
@@ -87,7 +87,7 @@ typedef enum
     CLOCK_IP_RAM_MEMORY_CONFIG_EXIT_POINT       = 0x88U,
     CLOCK_IP_FLASH_MEMORY_CONFIG_ENTRY_POINT    = 0x89U,
     CLOCK_IP_FLASH_MEMORY_CONFIG_EXIT_POINT     = 0x90U
- 
+
 } Clock_Ip_MemoryConfigStageType;
 #endif
 
@@ -111,7 +111,7 @@ typedef enum
 
 
 /* *************************************************************************
- * Configuration structure for Clock Configuration 
+ * Configuration structure for Clock Configuration
  * ************************************************************************* */
 
 extern const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[];
@@ -127,5 +127,3 @@ extern const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[];
 #endif /* CLOCK_IP_CFG_H */
 
 /** @} */
-
-

@@ -7,7 +7,7 @@
 /**
 *   @file           Platform_Types.h
 *   @implements     Platform_Types.h_Artifact
-*   @version 0.8.0
+*   @version 0.9.0
 *
 *   @brief   AUTOSAR BaseNXP - Platform dependend data type definitions.
 *   @details AUTOSAR platform types header file. It contains all
@@ -48,10 +48,10 @@ extern "C"{
 ==================================================================================================*/
 #define PLATFORM_TYPES_VENDOR_ID                      43
 #define PLATFORM_TYPES_AR_RELEASE_MAJOR_VERSION       4
-#define PLATFORM_TYPES_AR_RELEASE_MINOR_VERSION       4
+#define PLATFORM_TYPES_AR_RELEASE_MINOR_VERSION       7
 #define PLATFORM_TYPES_AR_RELEASE_REVISION_VERSION    0
 #define PLATFORM_TYPES_SW_MAJOR_VERSION               0
-#define PLATFORM_TYPES_SW_MINOR_VERSION               8
+#define PLATFORM_TYPES_SW_MINOR_VERSION               9
 #define PLATFORM_TYPES_SW_PATCH_VERSION               0
 
 /*==================================================================================================
@@ -119,13 +119,13 @@ extern "C"{
 */
 
 #define CPU_TYPE (CPU_TYPE_32)
-                        
-                
-            
-        
-    
 
- 
+
+
+
+
+
+
 /**
 * @brief          Bit order on register level.
 * @implements     CPU_BIT_ORDER_enum
@@ -687,4 +687,3 @@ typedef double float64;
 #endif /* #ifndef PLATFORMTYPES_H */
 
 /** @} */
-

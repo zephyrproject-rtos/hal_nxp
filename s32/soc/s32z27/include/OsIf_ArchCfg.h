@@ -30,10 +30,10 @@ extern "C"{
 ==================================================================================================*/
 #define OSIF_ARCHCFG_VENDOR_ID                    43
 #define OSIF_ARCHCFG_AR_RELEASE_MAJOR_VERSION     4
-#define OSIF_ARCHCFG_AR_RELEASE_MINOR_VERSION     4
+#define OSIF_ARCHCFG_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_ARCHCFG_AR_RELEASE_REVISION_VERSION  0
 #define OSIF_ARCHCFG_SW_MAJOR_VERSION             0
-#define OSIF_ARCHCFG_SW_MINOR_VERSION             8
+#define OSIF_ARCHCFG_SW_MINOR_VERSION             9
 #define OSIF_ARCHCFG_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -54,13 +54,13 @@ extern "C"{
 /* ARM_MIXT - is used to specify the ARM architecture MCAL_MARCH, MCAL_RARCH, MCAL_AARCH32, MCAL_AARCH64 */
 
 #define MCAL_PLATFORM_ARM  MCAL_ARM_RARCH
-                        
-                
-            
-        
-    
 
- 
+
+
+
+
+
+
 /*==================================================================================================
 *                                             ENUMS
 ==================================================================================================*/
@@ -87,4 +87,3 @@ extern "C"{
 #endif /* __cplusplus */
 #endif /* OSIF_ARCHCFG_H */
 /** @} */
-

@@ -6,7 +6,7 @@
 
 /**
 *   @file       OsIf_Cfg.h
-*   @version 0.8.0
+*   @version 0.9.0
 *
 *
 *   @addtogroup OSIF_DRIVER
@@ -29,16 +29,16 @@ extern "C"{
 #include "OsIf_ArchCfg.h"
 #include "StandardTypes.h"
 
-#include "S32Z27_SYSTICK.h"
+#include "S32Z2_SYSTICK.h"
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define OSIF_CFG_VENDOR_ID                    43
 #define OSIF_CFG_AR_RELEASE_MAJOR_VERSION     4
-#define OSIF_CFG_AR_RELEASE_MINOR_VERSION     4
+#define OSIF_CFG_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_CFG_AR_RELEASE_REVISION_VERSION  0
 #define OSIF_CFG_SW_MAJOR_VERSION             0
-#define OSIF_CFG_SW_MINOR_VERSION             8
+#define OSIF_CFG_SW_MINOR_VERSION             9
 #define OSIF_CFG_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -128,4 +128,3 @@ extern "C"{
 #endif /* __cplusplus */
 #endif /* OSIF_CFG_H */
 /** @} */
-
