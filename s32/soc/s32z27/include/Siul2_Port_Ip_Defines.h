@@ -24,16 +24,16 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "S32Z27_SIUL2.h"
+#include "S32Z2_SIUL2.h"
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define SIUL2_PORT_IP_DEFINES_VENDOR_ID_H                       43
 #define SIUL2_PORT_IP_DEFINES_AR_RELEASE_MAJOR_VERSION_H        4
-#define SIUL2_PORT_IP_DEFINES_AR_RELEASE_MINOR_VERSION_H        4
+#define SIUL2_PORT_IP_DEFINES_AR_RELEASE_MINOR_VERSION_H        7
 #define SIUL2_PORT_IP_DEFINES_AR_RELEASE_REVISION_VERSION_H     0
 #define SIUL2_PORT_IP_DEFINES_SW_MAJOR_VERSION_H                0
-#define SIUL2_PORT_IP_DEFINES_SW_MINOR_VERSION_H                8
+#define SIUL2_PORT_IP_DEFINES_SW_MINOR_VERSION_H                9
 #define SIUL2_PORT_IP_DEFINES_SW_PATCH_VERSION_H                0
 
 /*==================================================================================================
@@ -60,16 +60,17 @@ extern "C"{
 * @brief Macros defined for the SIUL2 IPV that are protected.
 */
 #define MCAL_SIUL2_REG_PROT_AVAILABLE   (STD_ON)
-/**
-* @brief Macros defined for the protection size
-*/
-#define SIUL2_PROT_MEM_U32    ((uint32)0x00000008UL)
 
 /**
 * @brief Support for User mode.
 * If this parameter has been configured to STD_ON, the PORT driver code can be executed from both supervisor and user mode.
 */
 #define PORT_ENABLE_USER_MODE_SUPPORT   (STD_OFF)
+/**
+* @brief Support for REG_PROT in SIUL2 IP.
+*        If the current platform implements REG_PROT for SIUL2 IP, this parameter will be defined, and will enable REG_PROT configuration for SIUL2 IP in PORT drvier
+*/
+#define PORT_SIUL2_REG_PROT_AVAILABLE   (STD_OFF)
 
 #ifndef MCAL_ENABLE_USER_MODE_SUPPORT
     #ifdef PORT_ENABLE_USER_MODE_SUPPORT
@@ -83,32 +84,70 @@ extern "C"{
 #define SIUL2_PORT_IP_DEV_ERROR_DETECT                         (STD_ON)
 
 /*! @brief SIUL2 module has RCVR bit */
-#define FEATURE_SIUL2_PORT_IP_HAS_RECEIVER_SELECT             (1)
+#define FEATURE_SIUL2_PORT_IP_HAS_RECEIVER_SELECT             (STD_ON)
 /*! @brief SIUL2 module has ODE bit */
-#define FEATURE_SIUL2_PORT_IP_HAS_OPEN_DRAIN                  (1)
+#define FEATURE_SIUL2_PORT_IP_HAS_OPEN_DRAIN                  (STD_ON)
 /*! @brief SIUL2 module has TRC bit */
-#define FEATURE_SIUL2_PORT_IP_HAS_TERMINATION_RESISTOR        (1)
+#define FEATURE_SIUL2_PORT_IP_HAS_TERMINATION_RESISTOR        (STD_ON)
 /*! @brief SIUL2 module has CREF bit */
-#define FEATURE_SIUL2_PORT_IP_HAS_CURRENT_REFERENCE_CONTROL   (1)
+#define FEATURE_SIUL2_PORT_IP_HAS_CURRENT_REFERENCE_CONTROL   (STD_ON)
 /*! @brief SIUL2 module has RXCB bit */
-#define FEATURE_SIUL2_PORT_IP_HAS_RX_CURRENT_BOOST            (1)
-/*! @brief SIUL2 module has HYS bit */
-#define FEATURE_SIUL2_PORT_IP_HAS_HYSTERESIS                  (1)
-/*! @brief SIUL2 module has APC bit */
-#define FEATURE_SIUL2_PORT_IP_HAS_ANALOG_PAD_CONTROL          (1)
+#define FEATURE_SIUL2_PORT_IP_HAS_RX_CURRENT_BOOST            (STD_ON)
 
 /* Workaround when this define in header is incorrect */
+/*! @name MSCR - SIUL2 Multiplexed Signal Configuration Register */
+/*! @{ */
 #ifdef SIUL2_MSCR_SRE_MASK
 #undef SIUL2_MSCR_SRE_MASK
-#define SIUL2_MSCR_SRE_MASK              (0x1C000U)
+#undef SIUL2_MSCR_SRE_SHIFT
+#undef SIUL2_MSCR_SRE_WIDTH
+#undef SIUL2_MSCR_SRE
+#define SIUL2_MSCR_SRE_MASK                      (0x1C000U)
+#define SIUL2_MSCR_SRE_SHIFT                     (14U)
+#define SIUL2_MSCR_SRE_WIDTH                     (3U)
+#define SIUL2_MSCR_SRE(x)                        (((uint32_t)(((uint32_t)(x)) << SIUL2_MSCR_SRE_SHIFT)) & SIUL2_MSCR_SRE_MASK)
 #endif /* SIUL2_MSCR_SRE_MASK */
+
+#ifdef SIUL2_MSCR_PUE_MASK
+#undef SIUL2_MSCR_PUE_MASK
+#undef SIUL2_MSCR_PUE_SHIFT
+#undef SIUL2_MSCR_PUE_WIDTH
+#undef SIUL2_MSCR_PUE
+#define SIUL2_MSCR_PUE_MASK                      (0x2000U)
+#define SIUL2_MSCR_PUE_SHIFT                     (13U)
+#define SIUL2_MSCR_PUE_WIDTH                     (1U)
+#define SIUL2_MSCR_PUE(x)                        (((uint32_t)(((uint32_t)(x)) << SIUL2_MSCR_PUE_SHIFT)) & SIUL2_MSCR_PUE_MASK)
+#endif /* SIUL2_MSCR_PUE_MASK */
+
+#ifdef SIUL2_MSCR_PUS_MASK
+#undef SIUL2_MSCR_PUS_MASK
+#undef SIUL2_MSCR_PUS_SHIFT
+#undef SIUL2_MSCR_PUS_WIDTH
+#undef SIUL2_MSCR_PUS
+#define SIUL2_MSCR_PUS_MASK                      (0x1000U)
+#define SIUL2_MSCR_PUS_SHIFT                     (12U)
+#define SIUL2_MSCR_PUS_WIDTH                     (1U)
+#define SIUL2_MSCR_PUS(x)                        (((uint32_t)(((uint32_t)(x)) << SIUL2_MSCR_PUS_SHIFT)) & SIUL2_MSCR_PUS_MASK)
+#endif /* SIUL2_MSCR_PUS_MASK */
+
+#ifdef SIUL2_MSCR_OBE_MASK
+#undef SIUL2_MSCR_OBE_MASK
+#undef SIUL2_MSCR_OBE_SHIFT
+#undef SIUL2_MSCR_OBE_WIDTH
+#undef SIUL2_MSCR_OBE
+#define SIUL2_MSCR_OBE_MASK                      (0x200000U)
+#define SIUL2_MSCR_OBE_SHIFT                     (21U)
+#define SIUL2_MSCR_OBE_WIDTH                     (1U)
+#define SIUL2_MSCR_OBE(x)                        (((uint32_t)(((uint32_t)(x)) << SIUL2_MSCR_OBE_SHIFT)) & SIUL2_MSCR_OBE_MASK)
+#endif /* SIUL2_MSCR_OBE_MASK */
+
+/*! @} */
 
 #define SIUL2_0_MSCR_BASE                (IP_SIUL2_0->MSCR)
 #define SIUL2_1_MSCR_BASE                (IP_SIUL2_1->MSCR)
 #define SIUL2_3_MSCR_BASE                (IP_SIUL2_3->MSCR)
 #define SIUL2_4_MSCR_BASE                (IP_SIUL2_4->MSCR)
 #define SIUL2_5_MSCR_BASE                (IP_SIUL2_5->MSCR)
-#define SIUL2_AE_MSCR_BASE               (IP_SIUL2_AE->MSCR)
 
 /** SIUL2_0 */
 /** Peripheral PORTA base pointer. Pins start from PAD_000 to PAD_015. */
@@ -145,30 +184,12 @@ extern "C"{
 /** SIUL2_0 */
 /** Peripheral PORTO base pointer. Pins start from PAD_170 to PAD_173. */
 #define PORTO                            ((Siul2_Port_Ip_PortType *)(SIUL2_0_MSCR_BASE + 0xA0))
-/** SIUL2_AE */
-/** Peripheral PORTAB base pointer. Pins start from PBA_00 to PBB_07 */
-#define PORTAB                            ((Siul2_Port_Ip_PortType *)(SIUL2_AE_MSCR_BASE + 0x00))
-/** Peripheral PORTBD base pointer. Pins start from PBB_08 to PBD_05 */
-#define PORTBD                            ((Siul2_Port_Ip_PortType *)(SIUL2_AE_MSCR_BASE + 0x10))
-/** Peripheral PORTDE base pointer. Pins start from PBD_06 to PBE_07 */
-#define PORTDE                            ((Siul2_Port_Ip_PortType *)(SIUL2_AE_MSCR_BASE + 0x20))
-/** Peripheral PORTYZ base pointer. Pins start from PBY_00 to PBZ_07 */
-#define PORTYZ                            ((Siul2_Port_Ip_PortType *)(SIUL2_AE_MSCR_BASE + 0x100))
-/** Peripheral PORTZX base pointer. Pins start from PBZ_08 to PBX_07 */
-#define PORTZX                            ((Siul2_Port_Ip_PortType *)(SIUL2_AE_MSCR_BASE + 0x110))
-/** Peripheral PORTXV base pointer. Pins start from PBX_08 to PBV_01 */
-#define PORTXV                            ((Siul2_Port_Ip_PortType *)(SIUL2_AE_MSCR_BASE + 0x120))
-/** Peripheral PORTVU base pointer. Pins start from PBV_02 to PBU_06 */
-#define PORTVU                            ((Siul2_Port_Ip_PortType *)(SIUL2_AE_MSCR_BASE + 0x130))
-/** Peripheral PORTU base pointer. Pins start from PBU_07 to PBU_10 */
-#define PORTU                            ((Siul2_Port_Ip_PortType *)(SIUL2_AE_MSCR_BASE + 0x140))
 
 #define PORT_SIUL2_0_IMCRS_IDX_END_U16     ((uint16)89)
 #define PORT_SIUL2_1_IMCRS_IDX_END_U16     ((uint16)209)
 #define PORT_SIUL2_3_IMCRS_IDX_END_U16     ((uint16)23)
 #define PORT_SIUL2_4_IMCRS_IDX_END_U16     ((uint16)371)
 #define PORT_SIUL2_5_IMCRS_IDX_END_U16     ((uint16)474)
-#define PORT_SIUL2_AE_IMCRS_IDX_END_U16     ((uint16)287)
 
 /* Pre-processor switch to enable/disable VirtWrapper support */
 #define PORT_VIRTWRAPPER_SUPPORT                      (STD_OFF)
@@ -199,4 +220,3 @@ extern "C"{
 /** @} */
 
 #endif /* SIUL2_PORT_IP_DEFINES */
-

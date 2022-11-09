@@ -9,7 +9,7 @@
 
 /**
  *   @file    Siul2_Icu_Ip_Cfg.h
- *   @version 0.8.0
+ *   @version 0.9.0
  *
  *   @brief   AUTOSAR Icu - contains the data exported by the Icu module
  *   @details Contains the information that will be exported by the module, as requested by Autosar.
@@ -17,7 +17,7 @@
  *   @addtogroup siul2_icu_ip SIUL2 IPL
  *   @{
  */
- 
+
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -35,10 +35,10 @@ extern "C"{
  *================================================================================================*/
 #define SIUL2_ICU_IP_CFG_VENDOR_ID                       43
 #define SIUL2_ICU_IP_CFG_AR_RELEASE_MAJOR_VERSION        4
-#define SIUL2_ICU_IP_CFG_AR_RELEASE_MINOR_VERSION        4
+#define SIUL2_ICU_IP_CFG_AR_RELEASE_MINOR_VERSION        7
 #define SIUL2_ICU_IP_CFG_AR_RELEASE_REVISION_VERSION     0
 #define SIUL2_ICU_IP_CFG_SW_MAJOR_VERSION                0
-#define SIUL2_ICU_IP_CFG_SW_MINOR_VERSION                8
+#define SIUL2_ICU_IP_CFG_SW_MINOR_VERSION                9
 #define SIUL2_ICU_IP_CFG_SW_PATCH_VERSION                0
 
 /*==================================================================================================
@@ -52,7 +52,7 @@ extern "C"{
     #endif
 #endif
 #if (SIUL2_ICU_IP_CFG_VENDOR_ID != SIUL2_ICU_IP_SA_INIT_PBCFG_VENDOR_ID)
-    #error "Siul2_Icu_Ip_Cfg.h and Siul2_Icu_Ip_SA_INIT_PBcfg.h have different vendor ids"
+    #error "Siul2_Icu_Ip_Cfg.h and Siul2_Icu_Ip_SA_INIT_PBcfg.h have different vendor IDs"
 #endif
 
 /* Check if  header file and Siul2_Icu_Ip_SA_Init_PBcfg.h file are of the same Autosar version */
@@ -89,4 +89,3 @@ extern "C"{
 /** @} */
 
 #endif  /* SIUL2_ICU_IP_CFG_H */
-
