@@ -24,37 +24,36 @@ extern "C"{
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "Stm_Ip_Init_PBcfg.h"
-
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define STM_IP_VENDOR_ID_CFG                    43
 #define STM_IP_AR_RELEASE_MAJOR_VERSION_CFG     4
-#define STM_IP_AR_RELEASE_MINOR_VERSION_CFG     4
+#define STM_IP_AR_RELEASE_MINOR_VERSION_CFG     7
 #define STM_IP_AR_RELEASE_REVISION_VERSION_CFG  0
 #define STM_IP_SW_MAJOR_VERSION_CFG             0
-#define STM_IP_SW_MINOR_VERSION_CFG             8
+#define STM_IP_SW_MINOR_VERSION_CFG             9
 #define STM_IP_SW_PATCH_VERSION_CFG             0
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
 #if (STM_IP_VENDOR_ID_CFG != STM_IP_VENDOR_ID_INIT_PBCFG_H)
-    #error "Stm_Ip_Cfg.h and Stm_Ip_Init_PBcfg.h have different vendor ids"
+    #error "Stm_Ip_Cfg.h and Stm_Ip_INIT_PBcfg.h have different vendor ids"
 #endif
 /* Check if this header file and header file are of the same Autosar version */
 #if ((STM_IP_AR_RELEASE_MAJOR_VERSION_CFG != STM_IP_AR_RELEASE_MAJOR_VERSION_INIT_PBCFG_H) || \
      (STM_IP_AR_RELEASE_MINOR_VERSION_CFG != STM_IP_AR_RELEASE_MINOR_VERSION_INIT_PBCFG_H) || \
      (STM_IP_AR_RELEASE_REVISION_VERSION_CFG != STM_IP_AR_RELEASE_REVISION_VERSION_INIT_PBCFG_H) \
     )
-    #error "AutoSar Version Numbers of Stm_Ip_Cfg.h and Stm_Ip_Init_PBcfg.h are different"
+    #error "AutoSar Version Numbers of Stm_Ip_Cfg.h and Stm_Ip_INIT_PBcfg.h are different"
 #endif
 /* Check if this header file and header file are of the same Software version */
 #if ((STM_IP_SW_MAJOR_VERSION_CFG != STM_IP_SW_MAJOR_VERSION_INIT_PBCFG_H) || \
      (STM_IP_SW_MINOR_VERSION_CFG != STM_IP_SW_MINOR_VERSION_INIT_PBCFG_H) || \
      (STM_IP_SW_PATCH_VERSION_CFG != STM_IP_SW_PATCH_VERSION_INIT_PBCFG_H) \
     )
-    #error "Software Version Numbers of Stm_Ip_Cfg.h and Stm_Ip_Init_PBcfg.h are different"
+    #error "Software Version Numbers of Stm_Ip_Cfg.h and Stm_Ip_INIT_PBcfg.h are different"
 #endif
 /*==================================================================================================
 *                                          CONSTANTS

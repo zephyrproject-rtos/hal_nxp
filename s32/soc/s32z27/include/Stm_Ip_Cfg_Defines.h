@@ -26,16 +26,16 @@ extern "C"{
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "StandardTypes.h"
-#include "S32Z27_STM.h"
+#include "S32Z2_STM.h"
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define STM_IP_DEFINES_VENDOR_ID_CFG                    43
 #define STM_IP_DEFINES_AR_RELEASE_MAJOR_VERSION_CFG     4
-#define STM_IP_DEFINES_AR_RELEASE_MINOR_VERSION_CFG     4
+#define STM_IP_DEFINES_AR_RELEASE_MINOR_VERSION_CFG     7
 #define STM_IP_DEFINES_AR_RELEASE_REVISION_VERSION_CFG  0
 #define STM_IP_DEFINES_SW_MAJOR_VERSION_CFG             0
-#define STM_IP_DEFINES_SW_MINOR_VERSION_CFG             8
+#define STM_IP_DEFINES_SW_MINOR_VERSION_CFG             9
 #define STM_IP_DEFINES_SW_PATCH_VERSION_CFG             0
 
 /*==================================================================================================
