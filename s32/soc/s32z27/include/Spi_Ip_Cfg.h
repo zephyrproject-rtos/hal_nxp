@@ -9,7 +9,7 @@
 
 /**
 *   @file    Spi_Ip_Cfg.h
-*   @version 0.8.0
+*   @version 0.9.0
 *
 *   @brief   AUTOSAR Spi - Spi configuration header file.
 *   @details This file is the header containing all the necessary information for SPI
@@ -34,18 +34,16 @@ extern "C"
 #include "Mcal.h"
 #include "OsIf.h"
 #include "Spi_Ip_Sa_Init_PBcfg.h"
-#include "S32Z27_SPI.h"
-
-#include <zephyr/devicetree.h>
+#include "S32Z2_SPI.h"
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define SPI_IP_VENDOR_ID_CFG                       43
 #define SPI_IP_AR_RELEASE_MAJOR_VERSION_CFG        4
-#define SPI_IP_AR_RELEASE_MINOR_VERSION_CFG        4
+#define SPI_IP_AR_RELEASE_MINOR_VERSION_CFG        7
 #define SPI_IP_AR_RELEASE_REVISION_VERSION_CFG     0
 #define SPI_IP_SW_MAJOR_VERSION_CFG                0
-#define SPI_IP_SW_MINOR_VERSION_CFG                8
+#define SPI_IP_SW_MINOR_VERSION_CFG                9
 #define SPI_IP_SW_PATCH_VERSION_CFG                0
 
 /*==================================================================================================
@@ -86,31 +84,25 @@ extern "C"
                                             CONSTANTS
 ==================================================================================================*/
 #define SPI_IP_CONFIG_EXT \
-    SPI_IP_SA_CONFIG_Init_PB \
+    SPI_IP_SA_CONFIG_INIT_PB \
 
-/** @brief Total number of SpiPhyUnit configured as DSPI. */
-#define SPI_IP_NUMBER_OF_INSTANCES 10U
+/** @brief Total number of SpiPhyUnit configured as SPI. */
+#define SPI_IP_NUMBER_OF_INSTANCES 9U
 
 /** @brief Number of FIFO entries supported */
 #define SPI_IP_FIFO_SIZE_U16    ((uint16)5U)
 
 /** @brief HWUnits enabled/disabled */
-#define SPI_IP_0_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi0), okay)
-#define SPI_IP_1_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi1), okay)
-#define SPI_IP_2_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi2), okay)
-#define SPI_IP_3_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi3), okay)
-#define SPI_IP_4_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi4), okay)
-#define SPI_IP_5_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi5), okay)
-#define SPI_IP_6_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi6), okay)
-#define SPI_IP_7_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi7), okay)
-#define SPI_IP_8_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi8), okay)
-#define SPI_IP_9_ENABLED  DT_NODE_HAS_STATUS(DT_NODELABEL(spi9), okay)
-
-#if CONFIG_SPI_SLAVE
+#define SPI_IP_0_ENABLED  (STD_ON)
+#define SPI_IP_1_ENABLED  (STD_ON)
+#define SPI_IP_3_ENABLED  (STD_ON)
+#define SPI_IP_4_ENABLED  (STD_ON)
+#define SPI_IP_5_ENABLED  (STD_ON)
+#define SPI_IP_6_ENABLED  (STD_ON)
+#define SPI_IP_7_ENABLED  (STD_ON)
+#define SPI_IP_8_ENABLED  (STD_ON)
+#define SPI_IP_9_ENABLED  (STD_ON)
 #define SPI_IP_SLAVE_SUPPORT  (STD_ON)
-#else
-#define SPI_IP_SLAVE_SUPPORT  (STD_OFF)
-#endif
 
 /**
 * @brief Defines if transfers are made using DMA or FIFO.
@@ -151,7 +143,7 @@ extern "C"
 /**
 * @brief SPI registers is controlled by REG_PROT IP.
 */
-#define SPI_IP_REG_PROT_AVAILABLE   (STD_ON)
+#define SPI_IP_REG_PROT_AVAILABLE   (STD_OFF)
 
 #if (STD_ON == SPI_IP_REG_PROT_AVAILABLE)
 /**
@@ -179,7 +171,7 @@ extern "C"
 * @brief Switches ON or OFF for the detection and reporting of development errors(API parameter checking) at IP level.
 */
 /** @implements SPI_IP_DEV_ERROR_DETECT_define  */
-#define SPI_IP_DEV_ERROR_DETECT     (STD_ON)
+#define SPI_IP_DEV_ERROR_DETECT     (STD_OFF)
 /*==================================================================================================
  *                                     DEFINES AND MACROS
 ==================================================================================================*/
@@ -210,5 +202,3 @@ extern "C"
 #endif
 
 /** @} */
-
-
