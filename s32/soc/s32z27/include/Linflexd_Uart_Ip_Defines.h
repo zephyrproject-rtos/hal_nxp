@@ -21,18 +21,17 @@
 * 3) internal and external interfaces from this unit
 * 4) user callback header files
 ==================================================================================================*/
-#include <zephyr/devicetree.h>
-#include "S32Z27_LINFLEXD.h"
+#include "S32Z2_LINFLEXD.h"
 #include "Mcal.h"
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define LINFLEXD_UART_IP_DEFINES_VENDOR_ID                     43
 #define LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MAJOR_VERSION      4
-#define LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MINOR_VERSION      4
+#define LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MINOR_VERSION      7
 #define LINFLEXD_UART_IP_DEFINES_AR_RELEASE_REVISION_VERSION   0
 #define LINFLEXD_UART_IP_DEFINES_SW_MAJOR_VERSION              0
-#define LINFLEXD_UART_IP_DEFINES_SW_MINOR_VERSION              8
+#define LINFLEXD_UART_IP_DEFINES_SW_MINOR_VERSION              9
 #define LINFLEXD_UART_IP_DEFINES_SW_PATCH_VERSION              0
 
 /*==================================================================================================
@@ -53,10 +52,10 @@
  *                                     DEFINES AND MACROS
 ==================================================================================================*/
 /* @brief Development error detection */
-#define LINFLEXD_UART_IP_DEV_ERROR_DETECT       (STD_ON)
+#define LINFLEXD_UART_IP_DEV_ERROR_DETECT       (STD_OFF)
 
 /* @brief Total number of channels configured */
-#define LINFLEXD_UART_IP_NUMBER_OF_INSTANCES    (DT_NUM_INST_STATUS_OKAY(nxp_s32_linflexd))
+#define LINFLEXD_UART_IP_NUMBER_OF_INSTANCES    (1U)
 
 /* @brief Uart Osif source counter. This parameter is used to select between different OsIf counter implementation */
 #define LINFLEXD_UART_IP_TIMEOUT_TYPE           (OSIF_COUNTER_DUMMY)
@@ -75,6 +74,14 @@
 
 /* @brief LINFLEXD DMA enabled instances */
 #define LINFLEXD_UART_IP_INST_HAS_DMA   {(boolean)TRUE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE}
+
+/* @brief Support for Uart Timeout Interrupt. If this parameter has been configured to TRUE, the Uart driver will enable Timeout Interrupt. */
+#define LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT  (STD_OFF)
+
+#if (STD_ON == LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT)
+    /* @brief Array of instances that have loopback mode enabled. */
+    #define LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT_PER_INSTANCE  {(boolean) FALSE, (boolean) FALSE, (boolean) FALSE, (boolean) FALSE, (boolean) FALSE, (boolean) FALSE, (boolean) FALSE, (boolean) FALSE, (boolean) FALSE, (boolean) FALSE, (boolean) FALSE, (boolean) FALSE, (boolean) FALSE}
+#endif
 
 /* @brief Support for Internal Loopback. If this parameter has been configured to TRUE, the Uart driver will be executed in Loopback mode. */
 #define LINFLEXD_UART_IP_ENABLE_INTERNAL_LOOPBACK  (STD_OFF)
@@ -127,4 +134,3 @@
 /** @} */
 
 #endif /* LINFLEXD_UART_IP_DEFINES_H */
-
