@@ -523,9 +523,13 @@ extern "C"{
  * @brief Compiler abstraction for allocating variables to nocache section
  */
 #ifdef CONFIG_NOCACHE_MEMORY
+#ifdef __ZEPHYR__
+#include <zephyr/toolchain/gcc.h>
+#else
 #ifndef STRINGIFY
 #define STRINGIFY(x) #x
 #endif /* STRINGIFY */
+#endif /* __ZEPHYR__ */
 #define VAR_SEC_NOCACHE(name) __attribute__((section(".nocache." STRINGIFY(name))))
 #else
 #define VAR_SEC_NOCACHE(name)
