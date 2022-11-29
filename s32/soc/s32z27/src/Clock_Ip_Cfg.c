@@ -448,14 +448,14 @@ const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
             #if CLOCK_IP_SELECTORS_NO > 19U
             {
                 ETH1_TX_MII_CLK,                    /* Clock name associated to selector */
-                FIRC_CLK,                    /* Name of the selected input source */
+                COREPLL_DFS3_CLK,                    /* Name of the selected input source */
             },
             #endif
 
             #if CLOCK_IP_SELECTORS_NO > 20U
             {
                 ETH1_RX_MII_CLK,                    /* Clock name associated to selector */
-                FIRC_CLK,                    /* Name of the selected input source */
+                ETH1_EXT_RX_CLK,                    /* Name of the selected input source */
             },
             #endif
 
@@ -878,7 +878,7 @@ const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
             #if CLOCK_IP_DIVIDERS_NO > 11U
             {
                 ETH1_REF_RMII_CLK,                    /* name */
-                1U,                              /* value */
+                0U,                              /* value */
                 {
                     0U,
                 }
@@ -888,7 +888,7 @@ const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
             #if CLOCK_IP_DIVIDERS_NO > 12U
             {
                 ETH1_RX_MII_CLK,                    /* name */
-                2U,                              /* value */
+                0U,                              /* value */
                 {
                     0U,
                 }
@@ -908,7 +908,7 @@ const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
             #if CLOCK_IP_DIVIDERS_NO > 14U
             {
                 ETH1_TX_MII_CLK,                    /* name */
-                2U,                              /* value */
+                0U,                              /* value */
                 {
                     0U,
                 }
