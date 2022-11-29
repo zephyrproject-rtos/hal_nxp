@@ -1806,7 +1806,11 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTransmitStatus(uint8 ctrlIndex,
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
     volatile uint32 CurrDescrCheckIndex = 0U;
     const Netc_Eth_Ip_TxBDRType *txBDR;
+#if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
+#ifdef NETC_ETH_0_USED
     uint16 TimestampInfoIndex;
+#endif
+#endif
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
@@ -2030,10 +2034,14 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
                                              Netc_Eth_Ip_RxInfoType *info)
 {
     const Netc_Eth_Ip_RxBDRType  *rxBDR;
+#if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
+#ifdef NETC_ETH_0_USED
     const Netc_Eth_Ip_TxTimestampResponseType *TempTxResponse;
     uint16 TxTimestampID;
     uint32 CurrLowTime;
     uint16 CurrDescrIdx;
+#endif
+#endif
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
     uint32 rxIndex = 0;
     uint32 HostReason = 0xFFFFFFFFU;
