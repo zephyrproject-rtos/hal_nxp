@@ -49,7 +49,7 @@ extern "C"
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
 /** @brief Total number of virtual ethernet controllers supported on NETC(VSIs). */
-#define FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS       (7U)
+#define FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS       7
 
 /** @brief Total number of physical ethernet controllers supported on NETC(PSIs). */
 #define NETC_ETH_IP_NUM_OF_PHYSICAL_CTRLS           (1U)
