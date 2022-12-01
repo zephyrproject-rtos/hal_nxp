@@ -60,4 +60,8 @@ License Link:
 Patch List:
   1. Delete the .a binary archive files after an SDK update before committing the changes. These files are still present in the SDK github repo but have been
      deleted from the Zephyr HAL
-  2. Move used job descriptors in the CAAM driver (mcux-sdk/drivers/caam/fsl_caam.c) from the stack to noncacheable section. At time of writing, there should be four being used for entropy in zephyr.
+  2. Move used job descriptors in the CAAM driver (mcux-sdk/drivers/caam/fsl_caam.c) from the stack to noncacheable section. At time of writing, there should
+     be four being used for entropy in zephyr.
+  3. Fixed flexcan_fd_frame being written into/written from the message buffer in the flexcan driver (mcux/mcux-sdk/drivers/flexcan/fsl_flexcan.c). On the
+     write side, the EDL bit is now utilized for selection of can frame type and on the receiver side, the EDL and BRS status are read from the message
+     buffer.
