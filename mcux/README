@@ -66,3 +66,4 @@ Patch List:
      write side, the EDL bit is now utilized for selection of can frame type and on the receiver side, the EDL and BRS status are read from the message
      buffer.
   4. Add device_system cmake definitions for the following SOCs: MKL25Z4, MK82F25615, MKW24D5, MKW40Z4, MKW41Z4
+  5. Fixed the FlexCAN driver to propagate kStatus_FLEXCAN_RxOverflow mailbox status when using the FlexCAN driver transactional APIs.
