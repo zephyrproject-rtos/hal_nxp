@@ -62,7 +62,7 @@ elseif (CONFIG_SOC_LPC54114_M4)
 include(device_system_LPC54114_cm4)
 elseif (CONFIG_SOC_LPC54114_M0)
 include(device_system_LPC54114_cm0plus)
-elseif (CONFIG_PLATFORM_SPECIFIC_INIT)
+else()
 include(device_system)
 endif()
 
