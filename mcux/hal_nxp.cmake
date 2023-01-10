@@ -46,6 +46,7 @@ include(driver_common)
 
 #Include system_xxx file
 #This can be extended to other SoC series if needed
+if (DEFINED CONFIG_PLATFORM_SPECIFIC_INIT OR DEFINED CONFIG_SOC_SERIES_IMX_RT6XX)
 if (CONFIG_SOC_MIMXRT1166_CM4)
 include(device_system_MIMXRT1166_cm4)
 elseif (CONFIG_SOC_MIMXRT1166_CM7)
@@ -64,6 +65,7 @@ elseif (CONFIG_SOC_LPC54114_M0)
 include(device_system_LPC54114_cm0plus)
 else()
 include(device_system)
+endif()
 endif()
 
 zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/common)
