@@ -29,7 +29,7 @@
 
 #ifndef FLEXIO_SPI_DUMMYDATA
 /*! @brief FlexIO SPI dummy transfer data, the data is sent while txData is NULL. */
-#define FLEXIO_SPI_DUMMYDATA (0xFFFFFFFFU)
+#define FLEXIO_SPI_DUMMYDATA (0x00U)
 #endif
 
 /*! @brief Retry times for waiting flag. */
