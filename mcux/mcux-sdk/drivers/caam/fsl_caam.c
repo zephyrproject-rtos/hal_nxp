@@ -3653,7 +3653,7 @@ static const uint32_t templateRng[] = {
     /* 02 */ 0x00000000u, /* place: additional input address */
     /* 03 */ 0x12820004u, /* LOAD Class 1 Data Size Register by IMM data */
     /* 04 */ 0x00000000u, /* place: data size to generate */
-    /* 05 */ 0x82500002u, /* RNG generate */
+    /* 05 */ 0x82500000u, /* RNG generate */
     /* 06 */ 0x60700000u, /* FIFO STORE message */
     /* 07 */ 0x00000000u, /* place: destination address */
     /* 08 */ 0x00000000u, /* place: destination size */
@@ -3696,6 +3696,7 @@ status_t CAAM_RNG_GetRandomDataNonBlocking(CAAM_Type *base,
     if (additionalEntropy != NULL)
     {
         descriptor[2] = ADD_OFFSET((uint32_t)additionalEntropy);
+        descriptor[5] |= (uint32_t)1U << 1;  /* set PR bit in ALG OPERATION (entropy seed) */
         descriptor[5] |= (uint32_t)1U << 11; /* set AI bit in ALG OPERATION */
     }
     else
