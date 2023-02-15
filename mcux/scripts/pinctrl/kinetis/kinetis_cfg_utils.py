@@ -22,11 +22,15 @@ PIN = collections.namedtuple('PIN', ['PERIPH', 'NAME_PART', 'SIGNAL', 'PORT',
 
 NAMESPACES = {'mex': 'http://mcuxpresso.nxp.com/XSD/mex_configuration_14'}
 
+# Pin controller types
+PORT_KINETIS = 1
+PORT_N9X = 2
+
 class MUXOption:
     """
     Internal class representing a mux option on the SOC
     """
-    def __init__(self, connection):
+    def __init__(self, connection, port_type):
         """
         Initializes a mux option
         @param connection XML connection option from signal_configuration.xml
@@ -47,11 +51,19 @@ class MUXOption:
             val = assign.attrib.get('bit_field_value')
             logging.debug('\t\t\t [ASSIGN] %s %s', reg, val)
             # Only process PCR registers
-            match = re.match(r'PORT([A-Z])_PCR(\d+)', reg)
-            if match:
-                # For muxes like PTC5, do not append peripheral name
-                if re.match(r'PT[A-Z]\d+', self._name) is None:
-                    self._name += f"_PT{match.group(1)}{match.group(2)}"
+            if port_type == PORT_KINETIS:
+                match = re.match(r'PORT([A-Z])_PCR(\d+)', reg)
+            elif port_type == PORT_N9X:
+                match = re.match(r'PORT(\d)_PCR(\d+)', reg)
+            if match and (assign.attrib.get('bit_field') == "MUX"):
+                # For muxes like PTC5 (or PIO1_8 on N9X),
+                # do not append peripheral name
+                if port_type == PORT_KINETIS:
+                    if re.match(r'PT[A-Z]\d+', self._name) is None:
+                        self._name += f"_PT{match.group(1)}{match.group(2)}"
+                elif port_type == PORT_N9X:
+                    if re.match(r'PIO\d_\d+', self._name) is None:
+                        self._name += f"_PIO{match.group(1)}_{match.group(2)}"
                 self._port = match.group(1)
                 self._pin = int(match.group(2))
                 self._mux = int(val, 16)
@@ -146,9 +158,17 @@ class SignalPin:
         Initializes a SignalPin object
         @param pin: pin XML object from signal_configuration.xml
         """
-        # Kinetis pin names are formatted as [PT[Port][Pin]]
-        pin_regex = re.search(r'PT([A-Z])(\d+)', pin.attrib['name'])
-        if pin_regex is None:
+        # Kinetis pin names are formatted as [PT[Port][Pin]],
+        # N9X pin names use the PIO[Port]_[Pin] format. Try both.
+        if re.search(r'PT([A-Z])(\d+)', pin.attrib['name']):
+            # Kinetis part.
+            pin_regex = re.search(r'PT([A-Z])(\d+)', pin.attrib['name'])
+            self._type = PORT_KINETIS
+        elif re.search(r'PIO(\d)_(\d+)', pin.attrib['name']):
+            # This may be an N9X part. Try that pin pattern
+            pin_regex = re.search(r'PIO(\d)_(\d+)', pin.attrib['name'])
+            self._type = PORT_N9X
+        else:
             logging.debug('Could not match pin name %s', pin.attrib['name'])
             self._name = ''
             return
@@ -158,7 +178,7 @@ class SignalPin:
         self._properties = self._get_pin_properties(pin.find('functional_properties'))
         self._mux_options = {}
         for connections in pin.findall('connections'):
-            mux_opt = MUXOption(connections)
+            mux_opt = MUXOption(connections, self._type)
             # Only append mux options with a valid name
             if mux_opt.get_name() != '':
                 self._mux_options[mux_opt.get_mux_name()] = mux_opt
@@ -465,12 +485,13 @@ class NXPSdkUtil:
             if signal.get_name() != '':
                 self._pins[signal.get_name()] = signal
 
-    def _write_pins(self, which_port, pins, file):
+    def _write_pins(self, which_port, pins, prefix, file):
         """
         Writes all pin mux nodes for a specific pin port to soc pinctrl dtsi
         file.
         @param which_port: pin port to define
         @param pins: list of pin mux options to write
+        @param prefix: prefix to use for pin macros
         @param file: output file to write to
         """
         port_pins = list(filter(lambda p: (p.get_port().lower() == which_port), pins))
@@ -493,7 +514,7 @@ class NXPSdkUtil:
                 continue
             seen_nodes.append(label)
 
-            file.write(f"#define {label} KINETIS_MUX('{port}',{pin},{mux}) /* PT{port}{pin} */\n")
+            file.write(f"#define {label} {prefix}('{port}',{pin},{mux}) /* PT{port}_{pin} */\n")
 
     def get_part_num(self):
         """
@@ -509,6 +530,12 @@ class NXPSdkUtil:
         """
         # Create list of all pin mux options
         pinmux_opts = []
+        # Check pin setting to see if we should write a Kinetis style pinctrl
+        # header, or a N9X style header
+        if list(self._pins.values())[0]._type == PORT_N9X:
+            n9x_mode = True
+        else:
+            n9x_mode = False
         for pin in self._pins.values():
             pinmux_opts.extend(pin.get_mux_options())
         pcr_pins = list(filter(lambda p: (p.get_periph() not in ["FB", "EZPORT"]), pinmux_opts))
@@ -523,16 +550,23 @@ class NXPSdkUtil:
         # Notes on the below macro:
         # Port values range from 'A'-'E', so we store them with 4 bits,
         # with port A being 0, B=1,...
+        # N9X uses Port values between 0-5, and these are stored as integers
         # Pin values range from 0-31, so we give 6 bits for future expansion
-        # Mux values range from 0-8, so we give 3 bits
+        # Mux values range from 0-15, so we give 4 bits
         # shift the port and pin values to the MSBs of the mux value, so they
         # don't conflict with pin configuration settings
         # Store the mux value at the offset it will actually be written to the
         # configuration register
-        mux_macro = ("#define KINETIS_MUX(port, pin, mux)\t\t\\\n"
-                "\t(((((port) - 'A') & 0xF) << 28) |\t\\\n"
-                "\t(((pin) & 0x3F) << 22) |\t\t\\\n"
-                "\t(((mux) & 0x7) << 8))\n\n")
+        if n9x_mode:
+            mux_macro = ("#define N9X_MUX(port, pin, mux)\t\t\\\n"
+                    "\t(((((port) - '0') & 0xF) << 28) |\t\\\n"
+                    "\t(((pin) & 0x3F) << 22) |\t\t\\\n"
+                    "\t(((mux) & 0xF) << 8))\n\n")
+        else:
+            mux_macro = ("#define KINETIS_MUX(port, pin, mux)\t\t\\\n"
+                    "\t(((((port) - 'A') & 0xF) << 28) |\t\\\n"
+                    "\t(((pin) & 0x3F) << 22) |\t\t\\\n"
+                    "\t(((mux) & 0x7) << 8))\n\n")
         with open(outputfile, "w", encoding="utf8") as file:
             file.write(file_header)
             # ifdef guard
@@ -540,11 +574,19 @@ class NXPSdkUtil:
             file.write(f"#define _ZEPHYR_DTS_BINDING_{self._part_num.upper()}_\n\n")
             # Write macro to make port name
             file.write(mux_macro)
-            self._write_pins('a', pcr_pins, file)
-            self._write_pins('b', pcr_pins, file)
-            self._write_pins('c', pcr_pins, file)
-            self._write_pins('d', pcr_pins, file)
-            self._write_pins('e', pcr_pins, file)
+            if n9x_mode:
+                self._write_pins('0', pcr_pins, 'N9X_MUX', file)
+                self._write_pins('1', pcr_pins, 'N9X_MUX', file)
+                self._write_pins('2', pcr_pins, 'N9X_MUX', file)
+                self._write_pins('3', pcr_pins, 'N9X_MUX', file)
+                self._write_pins('4', pcr_pins, 'N9X_MUX', file)
+                self._write_pins('5', pcr_pins, 'N9X_MUX', file)
+            else:
+                self._write_pins('a', pcr_pins, 'KINETIS_MUX', file)
+                self._write_pins('b', pcr_pins, 'KINETIS_MUX', file)
+                self._write_pins('c', pcr_pins, 'KINETIS_MUX', file)
+                self._write_pins('d', pcr_pins, 'KINETIS_MUX', file)
+                self._write_pins('e', pcr_pins, 'KINETIS_MUX', file)
             file.write("#endif\n")
 
     def _parse_mex_cfg(self, mexfile):

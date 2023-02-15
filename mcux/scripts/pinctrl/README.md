@@ -29,6 +29,7 @@ The following SOC lines are supported:
 - i.MX RT5xx series
 - Kinetis K8x, K6x, K2x series
 - LPC55(S)xx series
+- MCXN9xx series
 
 Other SOCs may function with this tooling, but are not explicitly supported.
 See [unsupported SOCs](#unsupported-socs) for more information.
