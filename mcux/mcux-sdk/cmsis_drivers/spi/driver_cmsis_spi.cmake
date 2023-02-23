@@ -41,8 +41,5 @@ endif()
 if(${MCUX_DEVICE} STREQUAL "MKE06Z4")
     include(driver_spi)
 endif()
-if(${MCUX_DEVICE} STREQUAL "MKE04Z1284")
-    include(driver_spi)
-endif()
 
 include(CMSIS_Driver_Include_SPI)
