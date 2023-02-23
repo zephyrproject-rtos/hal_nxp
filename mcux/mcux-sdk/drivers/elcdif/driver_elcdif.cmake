@@ -48,6 +48,6 @@ if(${MCUX_DEVICE} STREQUAL "MIMXRT1172_cm7")
     include(driver_memory)
 endif()
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1175_cm7")
-    include(driver_memory)
+    include(driver_common)
 endif()
 
