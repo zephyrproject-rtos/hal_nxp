@@ -123,12 +123,9 @@
 /* CACHE module features */
 
 /* @brief L1 ICACHE line size in byte. */
-#define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (64)
+#define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (32)
 /* @brief L1 DCACHE line size in byte. */
-#define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (64)
-/* @brief Has no NONCACHEABLE section. */
-#define FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION (0)
-
+#define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (32)
 
 /* CCM module features */
 
@@ -305,8 +302,8 @@
 
 /* MEMORY module features */
 
-/* @brief Memory map doesn't have offset between subsystems. */
-#define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (0)
+/* @brief Memory map has offset between subsystems. */
+#define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (1)
 
 /* MU module features */
 
