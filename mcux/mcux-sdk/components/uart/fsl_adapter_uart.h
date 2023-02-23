@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 NXP
+ * Copyright 2018-2020 NXP
  * All rights reserved.
  *
  *
@@ -58,17 +58,18 @@
 #define HAL_UART_ADAPTER_LOWPOWER (0U)
 #endif /* HAL_UART_ADAPTER_LOWPOWER */
 
+/*! @brief Enable or disable uart hardware FIFO mode (1 - enable, 0 - disable) */
 #ifndef HAL_UART_ADAPTER_FIFO
-#define HAL_UART_ADAPTER_FIFO (0U)
+#define HAL_UART_ADAPTER_FIFO (1U)
 #endif /* HAL_UART_ADAPTER_FIFO */
 
 #ifndef HAL_UART_DMA_ENABLE
 #define HAL_UART_DMA_ENABLE (0U)
 #endif /* HAL_UART_DMA_ENABLE */
 
-/*! @brief Enable or disable master SPI DMA adapter int mode (1 - enable, 0 - disable) */
+/*! @brief Enable or disable uart DMA adapter int mode (1 - enable, 0 - disable) */
 #ifndef HAL_UART_DMA_INIT_ENABLE
-#define HAL_UART_DMA_INIT_ENABLE (0U)
+#define HAL_UART_DMA_INIT_ENABLE (1U)
 #endif /* HAL_SPI_MASTER_DMA_INIT_ENABLE */
 
 /*! @brief Definition of uart dma adapter software idleline detection timeout value in ms. */
@@ -78,18 +79,18 @@
 
 /*! @brief Definition of uart adapter handle size. */
 #if (defined(UART_ADAPTER_NON_BLOCKING_MODE) && (UART_ADAPTER_NON_BLOCKING_MODE > 0U))
-#define HAL_UART_HANDLE_SIZE       (UINTPTR_SIZE * 23U + HAL_UART_ADAPTER_LOWPOWER * UINTPTR_SIZE * 4U + HAL_UART_DMA_ENABLE * UINTPTR_SIZE)
-#define HAL_UART_BLOCK_HANDLE_SIZE (UINTPTR_SIZE * 2U + HAL_UART_ADAPTER_LOWPOWER * UINTPTR_SIZE * 4U + HAL_UART_DMA_ENABLE * UINTPTR_SIZE)
+#define HAL_UART_HANDLE_SIZE       (92U + HAL_UART_ADAPTER_LOWPOWER * 16U + HAL_UART_DMA_ENABLE * 4U)
+#define HAL_UART_BLOCK_HANDLE_SIZE (8U + HAL_UART_ADAPTER_LOWPOWER * 16U + HAL_UART_DMA_ENABLE * 4U)
 #else
-#define HAL_UART_HANDLE_SIZE (UINTPTR_SIZE * 2U + HAL_UART_ADAPTER_LOWPOWER * UINTPTR_SIZE * 4U + HAL_UART_DMA_ENABLE * UINTPTR_SIZE)
+#define HAL_UART_HANDLE_SIZE (8U + HAL_UART_ADAPTER_LOWPOWER * 16U + HAL_UART_DMA_ENABLE * 4U)
 #endif
 
 /*! @brief Definition of uart dma adapter handle size. */
 #if (defined(HAL_UART_DMA_ENABLE) && (HAL_UART_DMA_ENABLE > 0U))
 #if (defined(FSL_FEATURE_SOC_DMA_COUNT) && (FSL_FEATURE_SOC_DMA_COUNT > 0U))
-#define HAL_UART_DMA_HANDLE_SIZE (UINTPTR_SIZE * 31U)
+#define HAL_UART_DMA_HANDLE_SIZE (124U)
 #elif (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))
-#define HAL_UART_DMA_HANDLE_SIZE (UINTPTR_SIZE * 35U)
+#define HAL_UART_DMA_HANDLE_SIZE (140U)
 #else
 #error This SOC does not have DMA or EDMA available!
 #endif
