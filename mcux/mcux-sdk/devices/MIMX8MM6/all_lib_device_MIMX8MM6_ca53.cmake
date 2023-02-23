@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
     ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core_A/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/port/wm8524
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8524
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm186x
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm512x
@@ -8,14 +9,9 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/i2c
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyar8031
-    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet/
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
-    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/cache/armv8-a
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/common
-    ${CMAKE_CURRENT_LIST_DIR}/../../drivers/enet
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/gpt
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/ii2c
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/igpio
@@ -36,17 +32,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_serial_manager_uart)
 #    include(device_startup)
 #    include(device_system)
-#    include(driver_cache_armv8a)
 #    include(driver_common)
-#    include(driver_enet)
 #    include(driver_ii2c_freertos)
 #    include(component_codec_i2c_MIMX8MM6)
 #    include(driver_gpt)
 #    include(driver_ii2c)
 #    include(driver_igpio)
 #    include(driver_iuart)
-#    include(driver_mdio-enet)
-#    include(driver_phy-device-ar8031)
 #    include(driver_sai)
 #    include(driver_wm8524)
 #    include(driver_pcm186x)
