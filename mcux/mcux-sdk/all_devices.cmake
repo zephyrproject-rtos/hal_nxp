@@ -657,6 +657,15 @@ if(${MCUX_DEVICE} STREQUAL "K32L3A60_cm0plus")
 
 endif()
 
+if(${MCUX_DEVICE} STREQUAL "MIMXRT1042")
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1042
+    )
+
+    include(all_lib_device_MIMXRT1042)
+
+endif()
+
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1176_cm4")
     list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/devices/MIMXRT1176
