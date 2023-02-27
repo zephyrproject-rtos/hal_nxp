@@ -220,7 +220,7 @@ AT_NONCACHEABLE_SECTION(static caam_desc_rng_t descBuf);
 #define CAAM_OFFSET FSL_MEM_M4_TCM_OFFSET
 #endif
 
-uint32_t ADD_OFFSET(uint32_t addr)
+static uint32_t ADD_OFFSET(uint32_t addr)
 {
     if (addr > FSL_MEM_M4_TCM_END)
     {
@@ -248,7 +248,7 @@ uint32_t ADD_OFFSET_SIZE(uint32_t addr, uint32_t size)
     return addr + CAAM_OFFSET;
 }
 #else /* !defined(FLS_FEATURE_CAAM_OFFSET) */
-uint32_t ADD_OFFSET(uint32_t addr);
+static uint32_t ADD_OFFSET(uint32_t addr);
 uint32_t ADD_OFFSET(uint32_t addr)
 {
     return addr;
@@ -1014,6 +1014,9 @@ status_t caam_aes_ccm_non_blocking(CAAM_Type *base,
     }
     else if (tag != 0U)
     {
+        /* If we decrypt message with tag, then desc[18] is not last FIFO LOAD because FIFO LOAD is used for TAG */
+        /* So desc[18] is changed from 0x22530000u to 0x22510000u*/
+        descriptor[18] = 0x22510000u;
         descriptor[13] |= 2u; /* ICV_TEST */
     }
     else
@@ -2907,6 +2910,10 @@ static status_t caam_hash_append_data(caam_hash_ctx_internal_t *ctxInternal,
                                          &ctxInternal->word[0], (uint32_t)&ctxInternal->word[kCAAM_HashCtxKeyStartIdx],
                                          ctxInternal->word[kCAAM_HashCtxKeySize]);
 }
+
+/*******************************************************************************
+ * HASH Code public
+ ******************************************************************************/
 
 /*!
  * brief Initialize HASH context
