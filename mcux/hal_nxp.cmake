@@ -243,7 +243,7 @@ if(CONFIG_ETH_MCUX)
   zephyr_library_sources(mcux-sdk/components/phy/device/phyrtl8211f/fsl_phyrtl8211f.c)
 
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy/mdio/enet)
-  zephyr_library_sources(mcux-sdk/components/phy/mdio/enet/fsl_enet_mdio.c)
+  #zephyr_library_sources(mcux-sdk/components/phy/mdio/enet/fsl_enet_mdio.c)
 endif()
 
 if (CONFIG_USB_DEVICE_DRIVER)

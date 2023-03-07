@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 NXP
+ * Copyright 2021-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -169,6 +169,12 @@
 
 /* SD card detection method when using wifi module. */
 #define BOARD_WIFI_SD_DETECT_TYPE kSDMMCHOST_DetectCardByHostDATA3
+
+#define BOARD_BT_UART_INSTANCE    7
+#define BOARD_BT_UART_BAUDRATE    3000000
+#define BOARD_BT_UART_CLK_FREQ    CLOCK_GetRootClockFreq(kCLOCK_Root_Lpuart7);
+#define BOARD_BT_UART_IRQ         LPUART7_IRQn
+#define BOARD_BT_UART_IRQ_HANDLER LPUART7_IRQHandler
 
 /*! @brief The Ethernet port used by network examples, default use 1G port. */
 /* Below comment is for test script to easily define which port to be used, please don't delete. */

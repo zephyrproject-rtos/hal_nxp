@@ -1,5 +1,5 @@
 /*
- * Copyright  2017- 2021 NXP
+ * Copyright  2017-2022 NXP
  * All rights reserved.
  *
  *
@@ -42,6 +42,20 @@
 #endif
 
 #endif /* CODEC_WM8960_ENABLE */
+
+#ifdef CODEC_WM8962_ENABLE
+#include "fsl_codec_wm8962_adapter.h"
+
+#if ((defined HAL_CODEC_HANDLER_SIZE) && (HAL_CODEC_HANDLER_SIZE < HAL_CODEC_WM8962_HANDLER_SIZE))
+#undef HAL_CODEC_HANDLER_SIZE
+#define HAL_CODEC_HANDLER_SIZE HAL_CODEC_WM8962_HANDLER_SIZE
+#endif
+
+#if (!(defined HAL_CODEC_HANDLER_SIZE))
+#define HAL_CODEC_HANDLER_SIZE HAL_CODEC_WM8962_HANDLER_SIZE
+#endif
+
+#endif /* CODEC_WM8962_ENABLE */
 
 #ifdef CODEC_WM8524_ENABLE
 #include "fsl_codec_wm8524_adapter.h"
@@ -221,6 +235,7 @@ enum
     kCODEC_TFA9896,  /*!< tfa9896 */
     kCODEC_PCM512X,  /*!< pcm512x */
     kCODEC_PCM186X,  /*!< pcm186x */
+    kCODEC_WM8962,   /*!< wm8962 */
 };
 /*******************************************************************************
  * API

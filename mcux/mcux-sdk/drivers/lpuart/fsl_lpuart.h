@@ -327,7 +327,7 @@ extern const IRQn_Type s_lpuartIRQ[];
 #endif
 
 /* LPUART ISR for transactional APIs. */
-extern lpuart_isr_t s_lpuartIsr;
+extern lpuart_isr_t s_lpuartIsr[];
 
 /*******************************************************************************
  * API
