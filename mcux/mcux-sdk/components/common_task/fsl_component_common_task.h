@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018, 2022 NXP
  * All rights reserved.
  *
  *
@@ -112,6 +112,24 @@ common_task_status_t COMMON_TASK_deinit(void);
  * @retval kStatus_COMMON_TASK_Error An error occurred when post a message to the common task.
  */
 common_task_status_t COMMON_TASK_post_message(common_task_message_t *msg);
+
+/*!
+ * @brief Get the common task instance
+ *
+ * This function is used to get the common task instance.
+ *
+ * @retval The instance of the common task.
+ */
+void *COMMON_TASK_get_instance(void);
+
+/*!
+ * @brief Get the pending message count of common task
+ *
+ * This function is used to get the pending message count of common task.
+ *
+ * @retval Pending message count.
+ */
+int COMMON_TASK_get_pending_message_count(void);
 
 /*! @} */
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2018-2020, 2022 NXP
  * All rights reserved.
  *
  *
@@ -24,8 +24,8 @@
     OSA_ENTER_CRITICAL()
 #define MEM_EXIT_CRITICAL() OSA_EXIT_CRITICAL()
 #else
-#define MEM_ENTER_CRITICAL()
-#define MEM_EXIT_CRITICAL()
+#define MEM_ENTER_CRITICAL() uint32_t regPrimask = DisableGlobalIRQ();
+#define MEM_EXIT_CRITICAL()  EnableGlobalIRQ(regPrimask);
 #endif
 #else
 #define MEM_ENTER_CRITICAL() uint32_t regPrimask = DisableGlobalIRQ();
