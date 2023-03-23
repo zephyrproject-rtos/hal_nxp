@@ -68,3 +68,4 @@ Patch List:
   4. Add device_system cmake definitions for the following SOCs: MKL25Z4, MK82F25615, MKW24D5, MKW40Z4, MKW41Z4
   5. Fixed the FlexCAN driver to propagate kStatus_FLEXCAN_RxOverflow mailbox status when using the FlexCAN driver transactional APIs.
   6. Fixed fsl_caam.c: CAAM_RNG_GetRandomDataNonBlocking() to not force a reseed with each request. Internal bug submitted [MCUX-57074]
+  7. Expanded flexcan_fd_frame data-byte's.
