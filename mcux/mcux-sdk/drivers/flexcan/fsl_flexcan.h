@@ -679,8 +679,6 @@ typedef struct _flexcan_fd_frame
         {
             uint32_t dataWord[16]; /*!< CAN FD Frame payload, 16 double word maximum. */
         };
-        /* Note: the maximum databyte* below is actually 64, user can add them if needed,
-           or just use dataWord[*] instead. */
         struct
         {
             uint8_t dataByte3; /*!< CAN Frame payload byte3. */
@@ -691,6 +689,62 @@ typedef struct _flexcan_fd_frame
             uint8_t dataByte6; /*!< CAN Frame payload byte6. */
             uint8_t dataByte5; /*!< CAN Frame payload byte5. */
             uint8_t dataByte4; /*!< CAN Frame payload byte4. */
+            uint8_t dataByte11; /*!< CAN Frame payload byte11. */
+            uint8_t dataByte10; /*!< CAN Frame payload byte10. */
+            uint8_t dataByte9; /*!< CAN Frame payload byte9. */
+            uint8_t dataByte8; /*!< CAN Frame payload byte8. */
+            uint8_t dataByte15; /*!< CAN Frame payload byte15. */
+            uint8_t dataByte14; /*!< CAN Frame payload byte14. */
+            uint8_t dataByte13; /*!< CAN Frame payload byte13. */
+            uint8_t dataByte12; /*!< CAN Frame payload byte12. */
+            uint8_t dataByte19; /*!< CAN Frame payload byte19. */
+            uint8_t dataByte18; /*!< CAN Frame payload byte18. */
+            uint8_t dataByte17; /*!< CAN Frame payload byte17. */
+            uint8_t dataByte16; /*!< CAN Frame payload byte16. */
+            uint8_t dataByte23; /*!< CAN Frame payload byte23. */
+            uint8_t dataByte22; /*!< CAN Frame payload byte22. */
+            uint8_t dataByte21; /*!< CAN Frame payload byte21. */
+            uint8_t dataByte20; /*!< CAN Frame payload byte20. */
+            uint8_t dataByte27; /*!< CAN Frame payload byte27. */
+            uint8_t dataByte26; /*!< CAN Frame payload byte26. */
+            uint8_t dataByte25; /*!< CAN Frame payload byte25. */
+            uint8_t dataByte24; /*!< CAN Frame payload byte24. */
+            uint8_t dataByte31; /*!< CAN Frame payload byte31. */
+            uint8_t dataByte30; /*!< CAN Frame payload byte30. */
+            uint8_t dataByte29; /*!< CAN Frame payload byte29. */
+            uint8_t dataByte28; /*!< CAN Frame payload byte28. */
+            uint8_t dataByte35; /*!< CAN Frame payload byte35. */
+            uint8_t dataByte34; /*!< CAN Frame payload byte34. */
+            uint8_t dataByte33; /*!< CAN Frame payload byte33. */
+            uint8_t dataByte32; /*!< CAN Frame payload byte32. */
+            uint8_t dataByte39; /*!< CAN Frame payload byte39. */
+            uint8_t dataByte38; /*!< CAN Frame payload byte38. */
+            uint8_t dataByte37; /*!< CAN Frame payload byte37. */
+            uint8_t dataByte36; /*!< CAN Frame payload byte36. */
+            uint8_t dataByte43; /*!< CAN Frame payload byte43. */
+            uint8_t dataByte42; /*!< CAN Frame payload byte42. */
+            uint8_t dataByte41; /*!< CAN Frame payload byte41. */
+            uint8_t dataByte40; /*!< CAN Frame payload byte40. */
+            uint8_t dataByte47; /*!< CAN Frame payload byte47. */
+            uint8_t dataByte46; /*!< CAN Frame payload byte46. */
+            uint8_t dataByte45; /*!< CAN Frame payload byte45. */
+            uint8_t dataByte44; /*!< CAN Frame payload byte44. */
+            uint8_t dataByte51; /*!< CAN Frame payload byte51. */
+            uint8_t dataByte50; /*!< CAN Frame payload byte50. */
+            uint8_t dataByte49; /*!< CAN Frame payload byte49. */
+            uint8_t dataByte48; /*!< CAN Frame payload byte48. */
+            uint8_t dataByte55; /*!< CAN Frame payload byte55. */
+            uint8_t dataByte54; /*!< CAN Frame payload byte54. */
+            uint8_t dataByte53; /*!< CAN Frame payload byte53. */
+            uint8_t dataByte52; /*!< CAN Frame payload byte52. */
+            uint8_t dataByte59; /*!< CAN Frame payload byte59. */
+            uint8_t dataByte58; /*!< CAN Frame payload byte58. */
+            uint8_t dataByte57; /*!< CAN Frame payload byte57. */
+            uint8_t dataByte56; /*!< CAN Frame payload byte56. */
+            uint8_t dataByte63; /*!< CAN Frame payload byte63. */
+            uint8_t dataByte62; /*!< CAN Frame payload byte62. */
+            uint8_t dataByte61; /*!< CAN Frame payload byte61. */
+            uint8_t dataByte60; /*!< CAN Frame payload byte60. */
         };
     };
 #if (defined(FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO) && FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO)
