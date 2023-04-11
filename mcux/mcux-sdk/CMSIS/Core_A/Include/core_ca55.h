@@ -95,8 +95,10 @@
  *                 Register Definitions
  ******************************************************************************/
 
-#ifndef BIT
+#if !defined(BIT) && !defined(__ZEPHYR__)
 #define BIT(n) (1 << (n))
+#else
+#include <zephyr/sys/util.h>
 #endif
 
 /* DAIF Register */
