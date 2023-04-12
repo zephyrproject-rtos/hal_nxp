@@ -13,7 +13,7 @@ import pathlib
 import logging
 
 # MEX file has a default namespace, map it here
-NAMESPACES = {'mex' : 'http://mcuxpresso.nxp.com/XSD/mex_configuration_12'}
+NAMESPACES = {'mex' : 'http://mcuxpresso.nxp.com/XSD/mex_configuration_13'}
 
 class Peripheral:
     """
