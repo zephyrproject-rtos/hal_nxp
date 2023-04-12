@@ -13,12 +13,13 @@ import re
 import os
 import collections
 import logging
+import pathlib
 
 # layout/index of pins tuple
 PIN = collections.namedtuple('PIN', ['PERIPH', 'NAME_PART', 'SIGNAL', 'PORT',
                                      'PIN', 'CH', 'MUX_FUNC'])
 
-NAMESPACES = {'mex': 'http://mcuxpresso.nxp.com/XSD/mex_configuration_12'}
+NAMESPACES = {'mex': 'http://mcuxpresso.nxp.com/XSD/mex_configuration_13'}
 
 class MUXOption:
     """
@@ -408,12 +409,12 @@ class NXPSdkUtil:
     """
     Class for kinetis configuration file parser
     """
-    def __init__(self, signal_file, copyright_header = "", log_level = logging.ERROR):
+    def __init__(self, cfg_root, copyright_header = "", log_level = logging.ERROR):
         """
         Initialize SDK utilities.
         Providing a signal file will enable this class to parse MEX files,
         and generate output DTS
-        @param signal_file: path to signal_configuration.xml file
+        @param cfg_root processor configuration folder root
         @param copyright_header: copyright string to add to any generated file header
         @param log_level: log level for SDK utility
         """
@@ -421,7 +422,7 @@ class NXPSdkUtil:
 
         self._logger = logging.getLogger('')
         self._logger.setLevel(log_level)
-        self._parse_signal_xml(signal_file)
+        self._parse_signal_xml(pathlib.Path(cfg_root)/'signal_configuration.xml')
         self._copyright = copyright_header
         logging.info("Loaded %d configurable pin defs", len(self._pins))
 
