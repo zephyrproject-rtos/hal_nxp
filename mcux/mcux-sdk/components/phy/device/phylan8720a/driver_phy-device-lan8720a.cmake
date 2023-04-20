@@ -21,4 +21,3 @@ if(${MCUX_DEVICE} STREQUAL "LPC54S018M")
     include(driver_phy-common_LPC54S018M)
 endif()
 
-include(driver_phy-common)

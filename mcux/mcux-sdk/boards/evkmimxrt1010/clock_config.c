@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,8 +40,6 @@ board: MIMXRT1010-EVK
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/* System clock frequency. */
-extern uint32_t SystemCoreClock;
 
 /*******************************************************************************
  ************************ BOARD_InitBootClocks function ************************
@@ -168,8 +166,6 @@ void BOARD_BootClockRUN(void)
     while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & DCDC->REG0))
     {
     }
-    /* Set AHB_PODF. */
-    CLOCK_SetDiv(kCLOCK_AhbDiv, 0);
     /* Disable IPG clock gate. */
     CLOCK_DisableClock(kCLOCK_Adc1);
     CLOCK_DisableClock(kCLOCK_Xbar1);
@@ -177,14 +173,6 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetDiv(kCLOCK_IpgDiv, 3);
     /* Init Enet PLL. */
     CLOCK_InitEnetPll(&enetPllConfig_BOARD_BootClockRUN);
-    /* Set preperiph clock source. */
-    CLOCK_SetMux(kCLOCK_PrePeriphMux, 3);
-    /* Set periph clock source. */
-    CLOCK_SetMux(kCLOCK_PeriphMux, 0);
-    /* Set periph clock2 clock source. */
-    CLOCK_SetMux(kCLOCK_PeriphClk2Mux, 0);
-    /* Set per clock source. */
-    CLOCK_SetMux(kCLOCK_PerclkMux, 0);
     /* Disable PERCLK clock gate. */
     CLOCK_DisableClock(kCLOCK_Gpt1);
     CLOCK_DisableClock(kCLOCK_Gpt1S);

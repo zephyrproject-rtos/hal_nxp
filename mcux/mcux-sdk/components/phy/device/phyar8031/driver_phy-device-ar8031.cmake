@@ -24,4 +24,3 @@ if(${MCUX_DEVICE} STREQUAL "MIMX8QX6")
     include(driver_phy-common_MIMX8QX6)
 endif()
 
-# include(driver_phy-common)
