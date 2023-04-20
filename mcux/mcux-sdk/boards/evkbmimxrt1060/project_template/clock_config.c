@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,8 +40,6 @@ board: MIMXRT1060-EVKB
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/* System clock frequency. */
-extern uint32_t SystemCoreClock;
 
 /*******************************************************************************
  ************************ BOARD_InitBootClocks function ************************

@@ -245,36 +245,17 @@ static uint32_t ADD_OFFSET(uint32_t addr)
     {
         return addr;
     }
-
-    return addr + CAAM_OFFSET;
+    else
+    {
+        return addr + CAAM_OFFSET;
+    }
 }
 
-static uint32_t ADD_OFFSET_SIZE(uint32_t addr, uint32_t size)
-{
-    if ((addr + size) > FSL_MEM_M4_TCM_END)
-    {
-        return addr;
-    }
-    else if (addr < FSL_MEM_M4_TCM_BEGIN)
-    {
-        return addr;
-    }
-
-    return addr + CAAM_OFFSET;
-}
-#else /* !defined(FLS_FEATURE_CAAM_OFFSET) */
-uint32_t ADD_OFFSET(uint32_t addr);
-uint32_t ADD_OFFSET(uint32_t addr)
+#else  /* !defined(FLS_FEATURE_CAAM_OFFSET) */
+static uint32_t ADD_OFFSET(uint32_t addr)
 {
     return addr;
 }
-
-/*static uint32_t ADD_OFFSET_SIZE(uint32_t addr);
-uint32_t ADD_OFFSET_SIZE(uint32_t addr)
-{
-    return addr;
-}*/
-
 #endif /* FLS_FEATURE_CAAM_OFFSET */
 
 #if 0
@@ -4841,10 +4822,6 @@ static const uint32_t templateCipherDes[] = {
     /* 13 */ 0x00000000u, /* place: destination address */
     /* 14 */ 0x82200000u, /* OPERATION: DES Decrypt, AS = zeroes, AAI = zeroes (CTR) */
 };
-
-/*******************************************************************************
- * DES Code public
- ******************************************************************************/
 
 /*!
  * brief Encrypts DES using ECB block mode.

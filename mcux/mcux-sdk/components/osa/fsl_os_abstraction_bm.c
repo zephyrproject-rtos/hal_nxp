@@ -1,6 +1,6 @@
 /*!
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2022 NXP
+ * Copyright 2016-2019 NXP
  *
  *
  * This is the source file for the OS Abstraction layer for MQXLite.
@@ -870,6 +870,22 @@ osa_status_t OSA_MutexDestroy(osa_mutex_handle_t mutexHandle)
 
     return KOSA_StatusSuccess;
 }
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : OSA_EventPrecreate
+ * Description   : This function is used to pre-create a event.
+ * Return         : KOSA_StatusSuccess
+ *
+ *END**************************************************************************/
+
+osa_status_t OSA_EventPrecreate(osa_event_handle_t eventHandle, osa_task_ptr_t taskHandler)
+{
+    eventHandle = eventHandle;
+    taskHandler = taskHandler;
+    return KOSA_StatusSuccess;
+}
+
 /*FUNCTION**********************************************************************
  *
  * Function Name : OSA_EventCreate
