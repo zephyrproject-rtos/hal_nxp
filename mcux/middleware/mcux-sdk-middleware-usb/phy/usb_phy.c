@@ -15,10 +15,11 @@ void *USB_EhciPhyGetBase(uint8_t controllerId)
 {
     void *usbPhyBase = NULL;
 #if ((defined FSL_FEATURE_SOC_USBPHY_COUNT) && (FSL_FEATURE_SOC_USBPHY_COUNT > 0U))
-    uint32_t instance;
-    uint32_t newinstance        = 0;
-    uint32_t usbphy_base_temp[] = USBPHY_BASE_ADDRS;
-    uint32_t usbphy_base[]      = USBPHY_BASE_ADDRS;
+#if defined(USBPHY_STACK_BASE_ADDRS)
+    uint32_t usbphy_base[] = USBPHY_STACK_BASE_ADDRS;
+#else
+    uint32_t usbphy_base[] = USBPHY_BASE_ADDRS;
+#endif
     uint32_t *temp;
     if (controllerId < (uint8_t)kUSB_ControllerEhci0)
     {
@@ -40,22 +41,18 @@ void *USB_EhciPhyGetBase(uint8_t controllerId)
     }
     else
     {
-        /*no action*/
+        return NULL;
     }
 
-    for (instance = 0; instance < (sizeof(usbphy_base_temp) / sizeof(usbphy_base_temp[0])); instance++)
+    if (controllerId < (sizeof(usbphy_base) / sizeof(usbphy_base[0])))
     {
-        if (0U != usbphy_base_temp[instance])
-        {
-            usbphy_base[newinstance++] = usbphy_base_temp[instance];
-        }
+        temp       = (uint32_t *)usbphy_base[controllerId];
+        usbPhyBase = (void *)temp;
     }
-    if (controllerId > newinstance)
+    else
     {
         return NULL;
     }
-    temp       = (uint32_t *)usbphy_base[controllerId];
-    usbPhyBase = (void *)temp;
 #endif
     return usbPhyBase;
 }

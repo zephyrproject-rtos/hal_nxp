@@ -29,7 +29,7 @@
 /*! @brief Defines USB stack minor version */
 #define USB_STACK_VERSION_MINOR (8UL)
 /*! @brief Defines USB stack bugfix version */
-#define USB_STACK_VERSION_BUGFIX (2U)
+#define USB_STACK_VERSION_BUGFIX (4U)
 
 /*! @brief USB stack version definition */
 #define USB_MAKE_VERSION(major, minor, bugfix) (((major) << 16) | ((minor) << 8) | (bugfix))
@@ -90,8 +90,7 @@ typedef enum _usb_controller_index
     kUSB_ControllerKhci1 = 1U, /*!< KHCI 1U, Currently, there are no platforms which have two KHCI IPs, this is reserved
                                   to be used in the future. */
     kUSB_ControllerEhci0 = 2U, /*!< EHCI 0U */
-    kUSB_ControllerEhci1 = 3U, /*!< EHCI 1U, Currently, there are no platforms which have two EHCI IPs, this is reserved
-                                  to be used in the future. */
+    kUSB_ControllerEhci1 = 3U, /*!< EHCI 1U */
 
     kUSB_ControllerLpcIp3511Fs0 = 4U, /*!< LPC USB IP3511 FS controller 0 */
     kUSB_ControllerLpcIp3511Fs1 = 5U, /*!< LPC USB IP3511 FS controller 1, there are no platforms which have two IP3511

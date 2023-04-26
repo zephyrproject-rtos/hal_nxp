@@ -17,5 +17,5 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 
-include(middleware_usb_host_ehci)
+include(middleware_usb_host_ehci_MIMXRT1064)
 include(component_osa)

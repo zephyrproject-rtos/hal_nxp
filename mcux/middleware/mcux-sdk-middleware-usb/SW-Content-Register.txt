@@ -1,5 +1,5 @@
 Release Name: USB
-Release Version: 2.8.2
+Release Version: 2.8.4
 Outgoing License: BSD-3-Clause
 License File: COPYING-BSD-3
 Format: source code
