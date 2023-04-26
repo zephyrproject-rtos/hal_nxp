@@ -52,8 +52,11 @@ typedef struct _usb_hsdcd_state_struct
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-
+#if defined(USBHSDCD_STACK_BASE_ADDRS)
+static const uint32_t s_hsdcdBaseAddrs[] = USBHSDCD_STACK_BASE_ADDRS;
+#else
 static const uint32_t s_hsdcdBaseAddrs[] = USBHSDCD_BASE_ADDRS;
+#endif
 
 /* Apply for device dcd state structure */
 static usb_hsdcd_state_struct_t s_UsbDeviceDcdHSState[FSL_FEATURE_SOC_USBHSDCD_COUNT];
@@ -68,18 +71,11 @@ static uint32_t USB_HSDCD_GetInstance(USBHSDCD_Type *base)
 
     for (i = 0U; i < (uint32_t)(sizeof(s_hsdcdBaseAddrs) / sizeof(s_hsdcdBaseAddrs[0])); i++)
     {
-        if (0U == s_hsdcdBaseAddrs[i])
+        if ((uint32_t)base == s_hsdcdBaseAddrs[i])
         {
-            continue;
+            return index;
         }
-        else
-        {
-            if ((uint32_t)base == s_hsdcdBaseAddrs[i])
-            {
-                return index;
-            }
-            index++;
-        }
+        index++;
     }
     return 0xFF;
 }
@@ -90,7 +86,11 @@ usb_hsdcd_status_t USB_HSDCD_Init(USBHSDCD_Type *base, usb_hsdcd_config_struct_t
     uint32_t speed;
     uint32_t index;
 #if (defined(FSL_FEATURE_USBPHY_HAS_DCD_ANALOG) && (FSL_FEATURE_USBPHY_HAS_DCD_ANALOG > 0U))
+#if defined(USBPHY_STACK_BASE_ADDRS)
+    uint32_t phyBase[] = USBPHY_STACK_BASE_ADDRS;
+#else
     uint32_t phyBase[] = USBPHY_BASE_ADDRS;
+#endif
 #endif
     if (NULL == base)
     {

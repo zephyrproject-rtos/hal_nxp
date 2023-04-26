@@ -2,7 +2,20 @@
 @page middleware_log Middleware Change Log
 
 @section USB USB stack for MCUXpresso SDK  
-  The current version of USB stack is 2.8.2.
+  The current version of USB stack is 2.8.4.
+  - 2.8.4
+    - Improvement:
+      - Add the new netc adatper for the new netc driver.
+      - Fix issues for USB device dfu and usb device msc when enable the macro USB_DEVICE_CONFIG_RETURN_VALUE_CHECK.
+      - Change the header file including order for usb.h header.
+      - Update the USB host audio class driver to fix the wrong output log.
+      - Add the workaround on dev_hid_mouse_bm case for the errata TN00071.
+      - Enable ROOT2 macro in USB device stack.
+      - Use an unified definiton for the base address of RTxxxx platforms.
+  - 2.8.3
+    - Improvement:
+      - Update the EHCI controller driver to support the address convert for TCM.
+      - Update the USB host EHCI controller driver to make sure the mutual exclusion access under multiple tasks' environment.
   - 2.8.2
     - Improvement:
       - Fix noise issue of UAC 3.1, UAC 5.1, UAC 7.1 on usb audio speaker demo.

@@ -61,7 +61,11 @@ usb_phydcd_status_t USB_PHYDCD_Init(uint8_t index, usb_phydcd_config_struct_t *c
     USB_ANALOG_Type *base;
     uint32_t *temp;
     base               = (USB_ANALOG_Type *)analog_base[0];
+#if defined(USBPHY_STACK_BASE_ADDRS)
+    uint32_t phyBase[] = USBPHY_STACK_BASE_ADDRS;
+#else
     uint32_t phyBase[] = USBPHY_BASE_ADDRS;
+#endif
     if ((NULL == config) || (NULL == base) || (NULL == config->dcdCallback))
     {
         return kStatus_phydcd_Error;
@@ -69,7 +73,7 @@ usb_phydcd_status_t USB_PHYDCD_Init(uint8_t index, usb_phydcd_config_struct_t *c
 
     dcdState                   = &s_UsbDeviceDcdHSState[index];
     dcdState->index            = index;
-    temp                       = (uint32_t *)phyBase[index + 1U];
+    temp                       = (uint32_t *)phyBase[index];
     dcdState->phyBase          = (void *)temp;
     dcdState->usbAnalogBase    = base;
     dcdState->dcdCallbackParam = config->dcdCallbackParam;

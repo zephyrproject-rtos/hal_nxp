@@ -17,8 +17,8 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
-if(CONFIG_USE_middleware_usb_host_ip3516hs_LPC55S69_cm33_core0) 
-    include(middleware_usb_host_ip3516hs_LPC55S69_cm33_core0)
+if(CONFIG_USE_middleware_usb_host_ip3516hs) 
+    include(middleware_usb_host_ip3516hs)
 endif()
 if(CONFIG_USE_middleware_usb_host_ohci) 
     include(middleware_usb_host_ohci)

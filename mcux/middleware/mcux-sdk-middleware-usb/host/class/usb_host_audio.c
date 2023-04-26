@@ -720,19 +720,31 @@ usb_status_t USB_HostAudioControlSetInterface(usb_host_class_handle classHandle,
             }
             else if (ptr1.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_INPUT)
             {
-                audioPtr->itDesc = (void *)temp;
+                if (audioPtr->itDesc == NULL)
+                {
+                    audioPtr->itDesc = (void *)temp;
+                }
             }
             else if (ptr1.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_OUTPUT)
             {
-                audioPtr->otDesc = (void *)temp;
+                if (audioPtr->otDesc == NULL)
+                {
+                    audioPtr->otDesc = (void *)temp;
+                }
             }
             else if (ptr1.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_FEATURE)
             {
-                audioPtr->fuDesc = (void *)temp;
+                if (audioPtr->fuDesc == NULL)
+                {
+                    audioPtr->fuDesc = (void *)temp;
+                }
             }
             else if (ptr1.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_CLOCK_SOURE)
             {
-                audioPtr->clockSource = (void *)temp;
+                if (audioPtr->clockSource == NULL)
+                {
+                    audioPtr->clockSource = (void *)temp;
+                }
             }
             else
             {

@@ -14,8 +14,8 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 if(CONFIG_USE_middleware_usb_device_khci) 
     include(middleware_usb_device_khci)
 endif()
-if(CONFIG_USE_middleware_usb_device_ehci) 
-    include(middleware_usb_device_ehci)
+if(CONFIG_USE_middleware_usb_device_ehci_MK66F18) 
+    include(middleware_usb_device_ehci_MK66F18)
 endif()
 
 include(component_osa)

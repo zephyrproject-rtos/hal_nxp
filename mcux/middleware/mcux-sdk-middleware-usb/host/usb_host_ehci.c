@@ -5,7 +5,6 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-
 #include "usb_host_config.h"
 #if ((defined USB_HOST_CONFIG_EHCI) && (USB_HOST_CONFIG_EHCI > 0U))
 #include "usb_host.h"
@@ -21,6 +20,9 @@
 #endif
 #if ((defined USB_HOST_CONFIG_COMPLIANCE_TEST) && (USB_HOST_CONFIG_COMPLIANCE_TEST))
 #include "usb_host.h"
+#endif
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+#include "fsl_memory.h"
 #endif
 
 /*******************************************************************************
@@ -46,6 +48,11 @@
 #define USB_HOST_EHCI_PORTSC_PTC_FORCE_ENABLE_HS (0x05U)
 #define USB_HOST_EHCI_PORTSC_PTC_FORCE_ENABLE_FS (0x06U)
 #define USB_HOST_EHCI_PORTSC_PTC_FORCE_ENABLE_LS (0x07U)
+#endif
+
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+#define USB_HOST_MEMORY_CPU_2_DMA(x) MEMORY_ConvertMemoryMapAddress((uint32_t)(x), kMEMORY_Local2DMA)
+#define USB_HOST_MEMORY_DMA_2_CPU(x) MEMORY_ConvertMemoryMapAddress((uint32_t)(x), kMEMORY_DMA2Local)
 #endif
 
 /*******************************************************************************
@@ -608,10 +615,12 @@ static void *USB_EhciNCGetBase(uint8_t controllerId)
 {
     void *usbNCBase = NULL;
 #if ((defined FSL_FEATURE_SOC_USBNC_COUNT) && (FSL_FEATURE_SOC_USBNC_COUNT > 0U))
-    uint32_t instance;
-    uint32_t newinstance       = 0;
-    uint32_t usbnc_base_temp[] = USBNC_BASE_ADDRS;
-    uint32_t usbnc_base[]      = USBNC_BASE_ADDRS;
+    uint32_t instance_count;
+#if defined(USBNC_STACK_BASE_ADDRS)
+    uint32_t usbnc_base[] = USBNC_STACK_BASE_ADDRS;
+#else
+    uint32_t usbnc_base[] = USBNC_BASE_ADDRS;
+#endif
 
     if (controllerId < (uint8_t)kUSB_ControllerEhci0)
     {
@@ -620,14 +629,8 @@ static void *USB_EhciNCGetBase(uint8_t controllerId)
 
     controllerId = controllerId - (uint8_t)kUSB_ControllerEhci0;
 
-    for (instance = 0; instance < (sizeof(usbnc_base_temp) / sizeof(usbnc_base_temp[0])); instance++)
-    {
-        if (usbnc_base_temp[instance] != 0U)
-        {
-            usbnc_base[newinstance++] = usbnc_base_temp[instance];
-        }
-    }
-    if (controllerId > newinstance)
+    instance_count = sizeof(usbnc_base) / sizeof(usbnc_base[0]);
+    if (controllerId >= instance_count)
     {
         return NULL;
     }
@@ -682,9 +685,10 @@ static void USB_HostEhciTestSingleStepGetDeviceDesc(usb_host_ehci_instance_t *eh
     usb_host_device_instance_t *deviceInstance = (usb_host_device_instance_t *)deviceHandle;
     usb_host_transfer_t *transfer;
     uint8_t timeCount;
-
+    USB_HostEhciLock();
     /* disable periodic shedule */
     USB_HostEhciStopPeriodic(ehciInstance);
+    USB_HostEhciUnlock();
 
     timeCount = 15; /* 15s */
     while (timeCount--)
@@ -839,9 +843,13 @@ static usb_status_t USB_HostEhciSingleStepQtdListInit(usb_host_ehci_instance_t *
         entryPointer = (volatile uint32_t *)dataAddress;
         dataAddress  = *entryPointer;
     }
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    *entryPointer = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(qtdPointer);
+#else
     *entryPointer = (uint32_t)qtdPointer;
-    USB_HostEhciUnlock();
+#endif
     USB_HostEhciStartAsync(ehciInstance);
+    USB_HostEhciUnlock();
 
     return kStatus_USB_Success;
 }
@@ -853,8 +861,9 @@ static void USB_HostEhciTestSingleStepGetDeviceDescData(usb_host_ehci_instance_t
     usb_host_device_instance_t *deviceInstance = (usb_host_device_instance_t *)deviceHandle;
     usb_host_transfer_t *transfer;
     uint8_t timeCount;
-
+    USB_HostEhciLock();
     USB_HostEhciStopPeriodic(ehciInstance);
+    USB_HostEhciUnlock();
 
     if (USB_HostMallocTransfer(ehciInstance->hostHandle, &transfer) != kStatus_USB_Success)
     {
@@ -1841,8 +1850,11 @@ static void USB_HostEhciStartAsync(usb_host_ehci_instance_t *ehciInstance)
             stateSync = ((ehciInstance->ehciIpBase->USBSTS & USBHS_USBSTS_AS_MASK) |
                          (ehciInstance->ehciIpBase->USBCMD & USBHS_USBCMD_ASE_MASK));
         } while ((stateSync == USBHS_USBSTS_AS_MASK) || (stateSync == USBHS_USBCMD_ASE_MASK));
-
-        ehciInstance->ehciIpBase->ASYNCLISTADDR = (uint32_t)(ehciInstance->shedFirstQh);
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        ehciInstance->ehciIpBase->ASYNCLISTADDR = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(ehciInstance->shedFirstQh);
+#else
+        ehciInstance->ehciIpBase->ASYNCLISTADDR    = (uint32_t)(ehciInstance->shedFirstQh);
+#endif
         ehciInstance->ehciIpBase->USBCMD |= USBHS_USBCMD_ASE_MASK;
         while (0U == (ehciInstance->ehciIpBase->USBSTS & USBHS_USBSTS_AS_MASK))
         {
@@ -1879,7 +1891,11 @@ static void USB_HostEhciStartPeriodic(usb_host_ehci_instance_t *ehciInstance)
             stateSync = ((ehciInstance->ehciIpBase->USBSTS & USBHS_USBSTS_PS_MASK) |
                          (ehciInstance->ehciIpBase->USBCMD & USBHS_USBCMD_PSE_MASK));
         } while ((stateSync == USBHS_USBSTS_PS_MASK) || (stateSync == USBHS_USBCMD_PSE_MASK));
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        ehciInstance->ehciIpBase->PERIODICLISTBASE = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(ehciInstance->ehciFrameList);
+#else
         ehciInstance->ehciIpBase->PERIODICLISTBASE = (uint32_t)(ehciInstance->ehciFrameList);
+#endif
         if (0U == (ehciInstance->ehciIpBase->USBCMD & USBHS_USBCMD_PSE_MASK))
         {
             ehciInstance->ehciIpBase->USBCMD |= USBHS_USBCMD_PSE_MASK; /* start periodic schedule */
@@ -1916,6 +1932,9 @@ static usb_status_t USB_HostEhciQhQtdListInit(usb_host_ehci_instance_t *ehciInst
     usb_host_ehci_qtd_t *qtdPointer     = NULL;
     usb_host_ehci_qtd_t *BaseQtdPointer = NULL;
     volatile uint32_t *entryPointer;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    uint32_t convert_addr = 0U;
+#endif
     uint32_t qtdNumber;
     uint32_t dataLength;
     uint32_t dataAddress;
@@ -1957,10 +1976,18 @@ static usb_status_t USB_HostEhciQhQtdListInit(usb_host_ehci_instance_t *ehciInst
         {
             if (qtdPointer != NULL)
             {
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+                qtdPointer->nextQtdPointer = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(ehciInstance->ehciQtdHead);
+#else
                 qtdPointer->nextQtdPointer = (uint32_t)ehciInstance->ehciQtdHead;
+#endif
             }
-            qtdPointer                 = ehciInstance->ehciQtdHead;
-            ehciInstance->ehciQtdHead  = (usb_host_ehci_qtd_t *)qtdPointer->nextQtdPointer;
+            qtdPointer = ehciInstance->ehciQtdHead;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            ehciInstance->ehciQtdHead = (usb_host_ehci_qtd_t *)USB_HOST_MEMORY_DMA_2_CPU(qtdPointer->nextQtdPointer);
+#else
+            ehciInstance->ehciQtdHead = (usb_host_ehci_qtd_t *)qtdPointer->nextQtdPointer;
+#endif
             qtdPointer->nextQtdPointer = 0;
             --qtdNumber;
         } while (0U != qtdNumber);
@@ -1987,20 +2014,33 @@ static usb_status_t USB_HostEhciQhQtdListInit(usb_host_ehci_instance_t *ehciInst
         qtdPointer->transferResults[0] =
             ((0x00000000UL << EHCI_HOST_QTD_DT_SHIFT) | (8UL << EHCI_HOST_QTD_TOTAL_BYTES_SHIFT) |
              (EHCI_HOST_PID_SETUP << EHCI_HOST_QTD_PID_CODE_SHIFT) | (EHCI_HOST_QTD_STATUS_ACTIVE_MASK));
-        dataAddress                    = ((uint32_t)transfer->setupPacket);
+        dataAddress = ((uint32_t)transfer->setupPacket);
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        convert_addr                   = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(dataAddress);
+        qtdPointer->transferResults[1] = convert_addr; /* current offset is set too */
+#else
         qtdPointer->transferResults[1] = dataAddress; /* current offset is set too */
+#endif
+
         /* set buffer pointer no matter data length */
         for (index = 0; index < 4U; ++index)
         {
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            qtdPointer->bufferPointers[index] = ((convert_addr + ((uint32_t)index + 1U) * 4U * 1024U) & 0xFFFFF000U);
+#else
             qtdPointer->bufferPointers[index] = ((dataAddress + ((uint32_t)index + 1U) * 4U * 1024U) & 0xFFFFF000U);
+#endif
         }
 
         /* data transaction qtd */
         dataLength = transfer->transferLength;
         if (dataLength != 0U)
         {
-            qtdPointer = (usb_host_ehci_qtd_t *)(qtdPointer->nextQtdPointer);
-
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            qtdPointer = (usb_host_ehci_qtd_t *)USB_HOST_MEMORY_DMA_2_CPU(qtdPointer->nextQtdPointer);
+#else
+            qtdPointer                        = (usb_host_ehci_qtd_t *)(qtdPointer->nextQtdPointer);
+#endif
             qtdPointer->alternateNextQtdPointer = EHCI_HOST_T_INVALID_VALUE;
             /* dt: need set; ioc: 0; C_Page: 0; PID Code: IN/OUT; Status: Active */
             qtdPointer->transferResults[1] = 0U;
@@ -2017,17 +2057,31 @@ static usb_status_t USB_HostEhciQhQtdListInit(usb_host_ehci_instance_t *ehciInst
                      (EHCI_HOST_PID_IN << EHCI_HOST_QTD_PID_CODE_SHIFT) | (EHCI_HOST_QTD_STATUS_ACTIVE_MASK));
             }
 
-            dataAddress                    = (uint32_t)transfer->transferBuffer;
-            qtdPointer->transferResults[1] = dataAddress; /* current offset is set too */
+            dataAddress = (uint32_t)transfer->transferBuffer;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            convert_addr                   = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(dataAddress);
+            qtdPointer->transferResults[1] = convert_addr; /* current offset is set too */
+#else
+            qtdPointer->transferResults[1]    = dataAddress; /* current offset is set too */
+#endif
             /* set buffer pointer no matter data length */
             for (index = 0; index < 4U; ++index)
             {
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+                qtdPointer->bufferPointers[index] =
+                    ((convert_addr + ((uint32_t)index + 1U) * 4U * 1024U) & 0xFFFFF000U);
+#else
                 qtdPointer->bufferPointers[index] = ((dataAddress + ((uint32_t)index + 1U) * 4U * 1024U) & 0xFFFFF000U);
+#endif
             }
         }
-
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
         /* status transaction qtd */
-        qtdPointer                          = (usb_host_ehci_qtd_t *)(qtdPointer->nextQtdPointer);
+        qtdPointer = (usb_host_ehci_qtd_t *)USB_HOST_MEMORY_DMA_2_CPU(qtdPointer->nextQtdPointer);
+#else
+        /* status transaction qtd */
+        qtdPointer = (usb_host_ehci_qtd_t *)(qtdPointer->nextQtdPointer);
+#endif
         qtdPointer->alternateNextQtdPointer = EHCI_HOST_T_INVALID_VALUE;
         /* dt: dont care; ioc: 1; C_Page: 0; PID Code: IN/OUT; Status: Active */
         qtdPointer->transferResults[1] = 0;
@@ -2076,11 +2130,21 @@ static usb_status_t USB_HostEhciQhQtdListInit(usb_host_ehci_instance_t *ehciInst
                      (EHCI_HOST_QTD_CERR_MAX_VALUE << EHCI_HOST_QTD_CERR_SHIFT) |
                      (EHCI_HOST_PID_IN << EHCI_HOST_QTD_PID_CODE_SHIFT) | (EHCI_HOST_QTD_STATUS_ACTIVE_MASK));
             }
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            convert_addr                   = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(dataAddress);
+            qtdPointer->transferResults[1] = convert_addr; /* current offset is set too */
+#else
             qtdPointer->transferResults[1] = dataAddress; /* current offset is set too */
+#endif
             /* set buffer pointer no matter data length */
             for (index = 0; index < 4U; ++index)
             {
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+                qtdPointer->bufferPointers[index] =
+                    ((convert_addr + ((uint32_t)index + 1U) * 4U * 1024U) & 0xFFFFF000U);
+#else
                 qtdPointer->bufferPointers[index] = ((dataAddress + ((uint32_t)index + 1U) * 4U * 1024U) & 0xFFFFF000U);
+#endif
             }
             dataAddress = endAddress; /* for next qtd */
 
@@ -2088,7 +2152,11 @@ static usb_status_t USB_HostEhciQhQtdListInit(usb_host_ehci_instance_t *ehciInst
             {
                 break;
             }
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            qtdPointer = (usb_host_ehci_qtd_t *)USB_HOST_MEMORY_DMA_2_CPU(qtdPointer->nextQtdPointer);
+#else
             qtdPointer = (usb_host_ehci_qtd_t *)(qtdPointer->nextQtdPointer);
+#endif
         }
 
         qtdPointer->nextQtdPointer |= EHCI_HOST_T_INVALID_VALUE;
@@ -2122,9 +2190,13 @@ static usb_status_t USB_HostEhciQhQtdListInit(usb_host_ehci_instance_t *ehciInst
         entryPointer = (volatile uint32_t *)dataAddress;
         dataAddress  = *entryPointer;
     }
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    *entryPointer = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(BaseQtdPointer);
+#else
     *entryPointer = (uint32_t)BaseQtdPointer;
-    USB_HostEhciUnlock();
+#endif
     USB_HostEhciStartAsync(ehciInstance);
+    USB_HostEhciUnlock();
 
     return kStatus_USB_Success;
 }
@@ -2144,7 +2216,11 @@ static uint32_t USB_HostEhciQtdListRelease(usb_host_ehci_instance_t *ehciInstanc
     {
         length +=
             ((qtdPointer->transferResults[0] & EHCI_HOST_QTD_TOTAL_BYTES_MASK) >> EHCI_HOST_QTD_TOTAL_BYTES_SHIFT);
-        qtdPointer = (usb_host_ehci_qtd_t *)qtdPointer->nextQtdPointer;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        qtdPointer = (usb_host_ehci_qtd_t *)USB_HOST_MEMORY_DMA_2_CPU(qtdPointer->nextQtdPointer);
+#else
+        qtdPointer   = (usb_host_ehci_qtd_t *)qtdPointer->nextQtdPointer;
+#endif
     }
     qtdPointer = ehciQtdEnd;
     length += ((qtdPointer->transferResults[0] & EHCI_HOST_QTD_TOTAL_BYTES_MASK) >> EHCI_HOST_QTD_TOTAL_BYTES_SHIFT);
@@ -2165,7 +2241,11 @@ static uint32_t USB_HostEhciQtdListRelease(usb_host_ehci_instance_t *ehciInstanc
     while (ehciQtdStart != ehciQtdEnd)
     {
         ehciInstance->ehciQtdNumber++;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        ehciQtdStart = (usb_host_ehci_qtd_t *)USB_HOST_MEMORY_DMA_2_CPU(ehciQtdStart->nextQtdPointer);
+#else
         ehciQtdStart = (usb_host_ehci_qtd_t *)ehciQtdStart->nextQtdPointer;
+#endif
     }
     ehciInstance->ehciQtdNumber++;
     USB_HostEhciUnlock();
@@ -2181,18 +2261,37 @@ static usb_status_t USB_HostEhciQhQtdListDeinit(usb_host_ehci_instance_t *ehciIn
     usb_host_transfer_t *nextTransfer;
     uint32_t currentQtdPointer;
     uint8_t needStop = 0U;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    uint32_t convert_addr = 0U;
+#endif
 
     vltQhPointer = (volatile usb_host_ehci_qh_t *)ehciPipePointer->ehciQh;
 
     USB_HostEhciLock(); /* this API is called from APP, the host task may occupy to access the same resource */
     /* remove qtd from qh */
     /*for misra 13.5*/
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    currentQtdPointer = (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(vltQhPointer->currentQtdPointer);
+#else
     currentQtdPointer = vltQhPointer->currentQtdPointer;
+#endif
+
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    convert_addr = (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(vltQhPointer->nextQtdPointer);
+    if ((0U == ((uint32_t)convert_addr & EHCI_HOST_T_INVALID_VALUE)) ||
+#else
     if ((0U == ((uint32_t)vltQhPointer->nextQtdPointer & EHCI_HOST_T_INVALID_VALUE)) ||
+#endif
         (0U == ((uint32_t)currentQtdPointer & EHCI_HOST_T_INVALID_VALUE)))
     {
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        convert_addr = (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(vltQhPointer->horizontalLinkPointer);
+        /* need stop async schedule */
+        if ((0U == (convert_addr & EHCI_HOST_T_INVALID_VALUE)) &&
+#else
         /* need stop async schedule */
         if ((0U == (vltQhPointer->horizontalLinkPointer & EHCI_HOST_T_INVALID_VALUE)) &&
+#endif
             (ehciPipePointer->pipeCommon.pipeType != USB_ENDPOINT_INTERRUPT))
         {
             needStop = 1U;
@@ -2248,7 +2347,12 @@ static usb_status_t USB_HostEhciTransferQtdListDeinit(usb_host_ehci_instance_t *
 
     USB_HostEhciLock(); /* this API is called from APP, the host task may occupy to access the same resource */
     /* remove qtd from qh */
-    qhNextQtdValue  = (uint32_t)vltQhPointer->currentQtdPointer;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    qhNextQtdValue = (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(vltQhPointer->currentQtdPointer);
+#else
+    qhNextQtdValue = (uint32_t)vltQhPointer->currentQtdPointer;
+#endif
+
     qtdPointerEntry = *((uint32_t *)qhNextQtdValue + 2); /* note: qtdPointerEntry means qtd status */
     if ((0U != (qhNextQtdValue & EHCI_HOST_T_INVALID_VALUE)) ||
         (0U == (qtdPointerEntry & EHCI_HOST_QTD_STATUS_ACTIVE_MASK)))
@@ -2467,6 +2571,9 @@ static void USB_HostEhciAddQhToFrame(usb_host_ehci_instance_t *ehciInstance,
 {
     volatile uint32_t *frameEntryPointer;
     uint32_t frameEntryValue;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    uint32_t convert_addr = 0U;
+#endif
     void *temp;
 
     /* search for the inserting point by interval */
@@ -2475,11 +2582,19 @@ static void USB_HostEhciAddQhToFrame(usb_host_ehci_instance_t *ehciInstance,
     while (NULL != frameEntryPointer)
     {
         frameEntryValue = *frameEntryPointer;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        frameEntryValue = (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(frameEntryValue);
+#endif
         if (0U != (frameEntryValue & EHCI_HOST_T_INVALID_VALUE))
         {
             /* insert into the end */
             *((uint32_t *)entryPointerValue) = EHCI_HOST_T_INVALID_VALUE;
-            *frameEntryPointer               = (entryPointerValue | EHCI_HOST_POINTER_TYPE_QH);
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            convert_addr       = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(entryPointerValue);
+            *frameEntryPointer = (convert_addr | EHCI_HOST_POINTER_TYPE_QH);
+#else
+            *frameEntryPointer = (entryPointerValue | EHCI_HOST_POINTER_TYPE_QH);
+#endif
             break;
         }
 
@@ -2492,8 +2607,16 @@ static void USB_HostEhciAddQhToFrame(usb_host_ehci_instance_t *ehciInstance,
                  ->ehciPipePointer->uframeInterval <= uframeInterval))
         {
             /* insert into this point */
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            frameEntryValue = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(frameEntryValue);
+#endif
             *((uint32_t *)entryPointerValue) = frameEntryValue;
-            *frameEntryPointer               = (entryPointerValue | EHCI_HOST_POINTER_TYPE_QH);
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            convert_addr       = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(entryPointerValue);
+            *frameEntryPointer = (convert_addr | EHCI_HOST_POINTER_TYPE_QH);
+#else
+            *frameEntryPointer = (entryPointerValue | EHCI_HOST_POINTER_TYPE_QH);
+#endif
             return;
         }
         else
@@ -2514,9 +2637,18 @@ static void USB_HostEhciRemoveFromFrame(usb_host_ehci_instance_t *ehciInstance,
     temp              = (void *)ehciInstance->ehciFrameList;
     frameEntryPointer = (volatile uint32_t *)(&((uint32_t *)temp)[framePos]);
 
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    frameEntryPointer = (volatile uint32_t *)USB_HOST_MEMORY_DMA_2_CPU(frameEntryPointer);
+#endif
+
     while (NULL != frameEntryPointer)
     {
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        frameEntryValue = *((uint32_t *)frameEntryPointer);
+        frameEntryValue = (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(frameEntryValue);
+#else
         frameEntryValue = *frameEntryPointer;
+#endif
         if (0U != (frameEntryValue & EHCI_HOST_T_INVALID_VALUE))
         {
             return;
@@ -2546,6 +2678,9 @@ static void USB_HostEhciLinkSitd(usb_host_ehci_instance_t *ehciInstance,
     uint32_t frameInterval;
     uint32_t shouldLinkFrame;
     uint32_t currentFrame;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    uint32_t convert_addr = 0U;
+#endif
     void *temp;
 
     frameInterval = ((uint32_t)ehciPipePointer->uframeInterval >> 3U);
@@ -2623,9 +2758,14 @@ static void USB_HostEhciLinkSitd(usb_host_ehci_instance_t *ehciInstance,
     {
         sitdPointer->frameEntryIndex = (uint16_t)shouldLinkFrame;
         /* add to frame list head */
-        temp                                = (void *)ehciInstance->ehciFrameList;
-        sitdPointer->nextLinkPointer        = ((uint32_t *)temp)[shouldLinkFrame];
+        temp                         = (void *)ehciInstance->ehciFrameList;
+        sitdPointer->nextLinkPointer = ((uint32_t *)temp)[shouldLinkFrame];
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        convert_addr                        = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(sitdPointer);
+        ((uint32_t *)temp)[shouldLinkFrame] = ((uint32_t)convert_addr | EHCI_HOST_POINTER_TYPE_SITD);
+#else
         ((uint32_t *)temp)[shouldLinkFrame] = ((uint32_t)sitdPointer | EHCI_HOST_POINTER_TYPE_SITD);
+#endif
         if (sitdPointer->nextSitdIndex == 0xFFU) /* 0xFF is invalid value */
         {
             break;
@@ -2711,6 +2851,9 @@ static usb_status_t USB_HostEhciSitdArrayInit(usb_host_ehci_instance_t *ehciInst
             sitdLength = ehciPipePointer->pipeCommon.maxPacketSize;
         }
         dataBufferValue = (uint32_t)(transfer->transferBuffer + (transfer->transferLength - dataLength));
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        dataBufferValue = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(dataBufferValue);
+#endif
         dataLength -= sitdLength; /* update left data length */
         sitdPointer->transferResults[1] = dataBufferValue;
         sitdPointer->transferResults[2] = ((dataBufferValue + 4U * 1024U) & 0xFFFFF000U);
@@ -2925,6 +3068,10 @@ static usb_status_t USB_HostEhciItdArrayInit(usb_host_ehci_instance_t *ehciInsta
     uint32_t linkUframe;
     uint32_t minDataPerItd =
         (uint32_t)ehciPipePointer->pipeCommon.numberPerUframe * ehciPipePointer->pipeCommon.maxPacketSize;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    uint32_t convert_addr  = 0U;
+    uint32_t convert_addr1 = 0U;
+#endif
     uint8_t maxItdNumber;
     uint16_t index = 0;
 
@@ -3000,9 +3147,17 @@ static usb_status_t USB_HostEhciItdArrayInit(usb_host_ehci_instance_t *ehciInsta
         /* itd has been set to all zero when releasing */
         itdBufferValue     = (uint32_t)(transfer->transferBuffer + (transfer->transferLength - dataLength));
         itdBufferBaseValue = itdBufferValue;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        convert_addr  = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(itdBufferBaseValue);
+        convert_addr1 = convert_addr;
+#endif
         for (index = 0; index < 7U; ++index)
         {
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            itdPointer->bufferPointers[index] = ((convert_addr + ((uint32_t)index * 4U * 1024U)) & 0xFFFFF000U);
+#else
             itdPointer->bufferPointers[index] = ((itdBufferBaseValue + ((uint32_t)index * 4U * 1024U)) & 0xFFFFF000U);
+#endif
         }
         /* initialize iTD common fields */
         itdPointer->bufferPointers[0] |=
@@ -3016,6 +3171,16 @@ static usb_status_t USB_HostEhciItdArrayInit(usb_host_ehci_instance_t *ehciInsta
         for (index = (uint8_t)(linkUframe & 0x0007U); index < 8U; index += ehciPipePointer->uframeInterval)
         {
             transactionLength = ((dataLength > minDataPerItd) ? minDataPerItd : dataLength);
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            /* initialize the uframeIndex's transaction descriptor in itd */
+            itdPointer->transactions[index] =
+                ((EHCI_HOST_ITD_STATUS_ACTIVE_MASK) | (transactionLength << EHCI_HOST_ITD_TRANSACTION_LEN_SHIFT) |
+                 ((((convert_addr1 & 0xFFFFF000U) - (convert_addr & 0xFFFFF000U)) >> EHCI_HOST_ITD_BUFFER_POINTER_SHIFT)
+                  << EHCI_HOST_ITD_PG_SHIFT) |
+                 (convert_addr1 & EHCI_HOST_ITD_TRANSACTION_OFFSET_MASK));
+            dataLength -= transactionLength;
+            convert_addr1 += transactionLength;
+#else
             /* initialize the uframeIndex's transaction descriptor in itd */
             itdPointer->transactions[index] =
                 ((EHCI_HOST_ITD_STATUS_ACTIVE_MASK) | (transactionLength << EHCI_HOST_ITD_TRANSACTION_LEN_SHIFT) |
@@ -3025,6 +3190,7 @@ static usb_status_t USB_HostEhciItdArrayInit(usb_host_ehci_instance_t *ehciInsta
                  (itdBufferValue & EHCI_HOST_ITD_TRANSACTION_OFFSET_MASK));
             dataLength -= transactionLength;
             itdBufferValue += transactionLength;
+#endif
             if (dataLength <= 0U)
             {
                 break;
@@ -3039,19 +3205,30 @@ static usb_status_t USB_HostEhciItdArrayInit(usb_host_ehci_instance_t *ehciInsta
     /* link itd to frame list (note: initialize frameEntryIndex)*/
     while (NULL != itdPointer)
     {
-        void *temp                  = (void *)ehciInstance->ehciFrameList;
-        uint32_t *linkPointer       = &((uint32_t *)temp)[linkUframe >> 3];
-        uint32_t linkValue          = *linkPointer;
+        void *temp            = (void *)ehciInstance->ehciFrameList;
+        uint32_t *linkPointer = &((uint32_t *)temp)[linkUframe >> 3];
+        uint32_t linkValue    = *linkPointer;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        linkValue = (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(linkValue);
+#endif
         itdPointer->frameEntryIndex = linkUframe >> 3;
         while ((0U == (linkValue & EHCI_HOST_T_INVALID_VALUE)) &&
                ((linkValue & EHCI_HOST_POINTER_TYPE_MASK) == EHCI_HOST_POINTER_TYPE_ITD))
         {
             linkPointer = (uint32_t *)(linkValue & EHCI_HOST_POINTER_ADDRESS_MASK);
             linkValue   = *linkPointer;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            linkValue = (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(linkValue);
+#endif
         }
         itdPointer->nextLinkPointer = *linkPointer;
-        *linkPointer                = ((uint32_t)itdPointer | EHCI_HOST_POINTER_TYPE_ITD);
-        itdPointer                  = itdPointer->nextItdPointer;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        convert_addr = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(itdPointer);
+        *linkPointer = ((uint32_t)convert_addr | EHCI_HOST_POINTER_TYPE_ITD);
+#else
+        *linkPointer = ((uint32_t)itdPointer | EHCI_HOST_POINTER_TYPE_ITD);
+#endif
+        itdPointer = itdPointer->nextItdPointer;
         if (itdPointer == NULL)
         {
             break;
@@ -3159,6 +3336,9 @@ static usb_status_t USB_HostEhciOpenControlBulk(usb_host_ehci_instance_t *ehciIn
                                                 usb_host_ehci_pipe_t *ehciPipePointer)
 {
     usb_host_ehci_qh_t *qhPointer;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    uint32_t convert_addr = 0U;
+#endif
 
     if (USB_HostEhciQhInit(ehciInstance, ehciPipePointer) != kStatus_USB_Success) /* initialize control/bulk qh */
     {
@@ -3168,8 +3348,15 @@ static usb_status_t USB_HostEhciOpenControlBulk(usb_host_ehci_instance_t *ehciIn
     qhPointer = (usb_host_ehci_qh_t *)ehciPipePointer->ehciQh;
 
     /* add qh to async */
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    qhPointer->horizontalLinkPointer =
+        (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(ehciInstance->shedFirstQh->horizontalLinkPointer);
+    convert_addr                                     = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(qhPointer);
+    ehciInstance->shedFirstQh->horizontalLinkPointer = (convert_addr | EHCI_HOST_POINTER_TYPE_QH);
+#else
     qhPointer->horizontalLinkPointer                 = ehciInstance->shedFirstQh->horizontalLinkPointer;
     ehciInstance->shedFirstQh->horizontalLinkPointer = ((uint32_t)qhPointer | EHCI_HOST_POINTER_TYPE_QH);
+#endif
 
     return kStatus_USB_Success;
 }
@@ -3180,15 +3367,26 @@ static usb_status_t USB_HostEhciCloseControlBulk(usb_host_ehci_instance_t *ehciI
     volatile usb_host_ehci_qh_t *vltPrevQhPointer;
     uint32_t horizontalLinkValue;
     uint32_t *temp;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    uint32_t convert_addr = 0U;
+#endif
+
     /* remove qh from async schedule */
     temp = (uint32_t *)ehciPipePointer->ehciQh;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    convert_addr = (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(ehciInstance->shedFirstQh->horizontalLinkPointer);
+    if ((convert_addr & EHCI_HOST_POINTER_ADDRESS_MASK) ==
+#else
     if ((ehciInstance->shedFirstQh->horizontalLinkPointer & EHCI_HOST_POINTER_ADDRESS_MASK) ==
+#endif
         (uint32_t)temp) /* the removing qh is the first qh in the async list */
     {
+        USB_HostEhciLock();
         USB_HostEhciStopAsync(ehciInstance);
         ehciInstance->shedFirstQh->horizontalLinkPointer =
             ((usb_host_ehci_qh_t *)ehciPipePointer->ehciQh)->horizontalLinkPointer;
         USB_HostEhciStartAsync(ehciInstance);
+        USB_HostEhciUnlock();
     }
     else
     {
@@ -3196,7 +3394,11 @@ static usb_status_t USB_HostEhciCloseControlBulk(usb_host_ehci_instance_t *ehciI
         vltPrevQhPointer = ehciInstance->shedFirstQh;
         while (vltPrevQhPointer != NULL)
         {
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+            horizontalLinkValue = (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(vltPrevQhPointer->horizontalLinkPointer);
+#else
             horizontalLinkValue = vltPrevQhPointer->horizontalLinkPointer;
+#endif
             if ((0U != (horizontalLinkValue & EHCI_HOST_T_INVALID_VALUE)) ||
                 ((horizontalLinkValue & EHCI_HOST_POINTER_ADDRESS_MASK) == (uint32_t)temp) ||
                 ((horizontalLinkValue & EHCI_HOST_POINTER_ADDRESS_MASK) == (uint32_t)ehciInstance->shedFirstQh))
@@ -3213,10 +3415,12 @@ static usb_status_t USB_HostEhciCloseControlBulk(usb_host_ehci_instance_t *ehciI
         if ((vltPrevQhPointer != NULL) && (0U == (horizontalLinkValue & EHCI_HOST_T_INVALID_VALUE)) &&
             ((horizontalLinkValue & EHCI_HOST_POINTER_ADDRESS_MASK) == (uint32_t)temp))
         {
+            USB_HostEhciLock();
             USB_HostEhciStopAsync(ehciInstance);
             vltPrevQhPointer->horizontalLinkPointer =
                 ((usb_host_ehci_qh_t *)ehciPipePointer->ehciQh)->horizontalLinkPointer;
             USB_HostEhciStartAsync(ehciInstance);
+            USB_HostEhciUnlock();
         }
     }
     ((usb_host_ehci_qh_t *)ehciPipePointer->ehciQh)->horizontalLinkPointer =
@@ -3555,9 +3759,10 @@ static usb_status_t USB_HostEhciControlBus(usb_host_ehci_instance_t *ehciInstanc
                 ehciInstance->ehciIpBase->GPTIMER1LD = (1 * 1000); /* 1ms */
                 ehciInstance->ehciIpBase->GPTIMER1CTL |=
                     (USBHS_GPTIMER0CTL_RUN_MASK | USBHS_GPTIMER0CTL_MODE_MASK | USBHS_GPTIMER0CTL_RST_MASK);
-
+                USB_HostEhciLock();
                 USB_HostEhciStopAsync(ehciInstance);
                 USB_HostEhciStopPeriodic(ehciInstance);
+                USB_HostEhciUnlock();
                 while (0U != (ehciInstance->ehciIpBase->USBSTS & (USBHS_USBSTS_PS_MASK | USBHS_USBSTS_AS_MASK)))
                 {
                     __NOP();
@@ -3728,7 +3933,9 @@ void USB_HostEhciTransactionDone(usb_host_ehci_instance_t *ehciInstance)
                     {
                         qtdStatus     = (vltQhPointer->transferOverlayResults[0] & EHCI_HOST_QH_STATUS_ERROR_MASK);
                         vltQtdPointer = (volatile usb_host_ehci_qtd_t *)(vltQhPointer->currentQtdPointer);
-
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+                        vltQtdPointer = (volatile usb_host_ehci_qtd_t *)USB_HOST_MEMORY_DMA_2_CPU(vltQtdPointer);
+#endif
                         if ((0U != ((uint32_t)vltQtdPointer & EHCI_HOST_T_INVALID_VALUE)) ||
                             (vltQtdPointer == NULL)) /* the error status is unreasonable */
                         {
@@ -3753,6 +3960,10 @@ void USB_HostEhciTransactionDone(usb_host_ehci_instance_t *ehciInstance)
                                     /* no action */
                                 }
                                 vltQtdPointer = (volatile usb_host_ehci_qtd_t *)vltQtdPointer->nextQtdPointer;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+                                vltQtdPointer =
+                                    (volatile usb_host_ehci_qtd_t *)USB_HOST_MEMORY_DMA_2_CPU(vltQtdPointer);
+#endif
                             } while (true);
 
                             vltQhPointer->nextQtdPointer    = EHCI_HOST_T_INVALID_VALUE;
@@ -3761,7 +3972,12 @@ void USB_HostEhciTransactionDone(usb_host_ehci_instance_t *ehciInstance)
                                 (~EHCI_HOST_QTD_STATUS_MASK); /* clear error status */
                             if (vltQtdPointer != NULL)
                             {
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+                                vltQhPointer->nextQtdPointer =
+                                    (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(vltQtdPointer->nextQtdPointer);
+#else
                                 vltQhPointer->nextQtdPointer = vltQtdPointer->nextQtdPointer;
+#endif
                             }
 
                             transfer->transferSofar = USB_HostEhciQtdListRelease(
@@ -3976,9 +4192,11 @@ static void USB_HostEhciPortChange(usb_host_ehci_instance_t *ehciInstance)
 #if ((defined FSL_FEATURE_SOC_USBPHY_COUNT) && (FSL_FEATURE_SOC_USBPHY_COUNT > 0U))
             USB_EhcihostPhyDisconnectDetectCmd(ehciInstance->controllerId, 0);
 #endif
+            USB_HostEhciLock();
             /* disable async and periodic */
             USB_HostEhciStopAsync(ehciInstance);
             USB_HostEhciStopPeriodic(ehciInstance);
+            USB_HostEhciUnlock();
             (void)OSA_EventSet(ehciInstance->taskEventHandle, EHCI_TASK_EVENT_DEVICE_DETACH);
         }
     }
@@ -3990,6 +4208,9 @@ static void USB_HostEhciTimer0(usb_host_ehci_instance_t *ehciInstance)
     usb_host_ehci_qtd_t *vltQtdPointer;
     usb_host_transfer_t *transfer;
     uint32_t backValue;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    uint32_t convert_addr = 0U;
+#endif
     volatile uint32_t *totalBytesAddress  = NULL;
     usb_host_ehci_pipe_t *ehciPipePointer = ehciInstance->ehciRunningPipeList;
     void *temp;
@@ -4019,7 +4240,12 @@ static void USB_HostEhciTimer0(usb_host_ehci_instance_t *ehciInstance)
                     {
                         if (0U != (vltQhPointer->transferOverlayResults[0] & EHCI_HOST_QTD_STATUS_ACTIVE_MASK))
                         {
-                            vltQtdPointer     = (usb_host_ehci_qtd_t *)vltQhPointer->currentQtdPointer;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+                            vltQtdPointer =
+                                (usb_host_ehci_qtd_t *)USB_HOST_MEMORY_DMA_2_CPU(vltQhPointer->currentQtdPointer);
+#else
+                            vltQtdPointer = (usb_host_ehci_qtd_t *)vltQhPointer->currentQtdPointer;
+#endif
                             totalBytesAddress = &(vltQhPointer->transferOverlayResults[0]);
                         }
                         else
@@ -4044,6 +4270,7 @@ static void USB_HostEhciTimer0(usb_host_ehci_instance_t *ehciInstance)
                             (vltQhPointer->timeOutValue)--;
                             if (vltQhPointer->timeOutValue == 0U)
                             {
+                                USB_HostEhciLock();
                                 /* stop the qh schedule */
                                 USB_HostEhciStopAsync(ehciInstance);
                                 if (backValue != (((*totalBytesAddress) & EHCI_HOST_QTD_TOTAL_BYTES_MASK) >>
@@ -4059,6 +4286,7 @@ static void USB_HostEhciTimer0(usb_host_ehci_instance_t *ehciInstance)
                                     USB_HostEhciStartAsync(ehciInstance);
                                     timeoutLabel = 1U;
                                 }
+                                USB_HostEhciUnlock();
                             }
                         }
                     }
@@ -4071,8 +4299,21 @@ static void USB_HostEhciTimer0(usb_host_ehci_instance_t *ehciInstance)
                                (0U == (vltQtdPointer->transferResults[0] & EHCI_HOST_QTD_IOC_MASK)) &&
                                (vltQtdPointer != (usb_host_ehci_qtd_t *)temp))
                         {
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+                            vltQtdPointer =
+                                (usb_host_ehci_qtd_t *)USB_HOST_MEMORY_DMA_2_CPU(vltQtdPointer->nextQtdPointer);
+#else
                             vltQtdPointer = (usb_host_ehci_qtd_t *)vltQtdPointer->nextQtdPointer;
+#endif
                         }
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+                        convert_addr = (uint32_t)USB_HOST_MEMORY_DMA_2_CPU(vltQtdPointer->nextQtdPointer);
+                        if ((vltQtdPointer != NULL) && (0U == (convert_addr & EHCI_HOST_T_INVALID_VALUE)))
+                        {
+                            vltQhPointer->nextQtdPointer = convert_addr; /* start qh if there are other qtd that don't
+                                                                            belong to the transfer */
+                        }
+#else
                         if ((vltQtdPointer != NULL) &&
                             (0U == (vltQtdPointer->nextQtdPointer & EHCI_HOST_T_INVALID_VALUE)))
                         {
@@ -4080,6 +4321,7 @@ static void USB_HostEhciTimer0(usb_host_ehci_instance_t *ehciInstance)
                                 vltQtdPointer->nextQtdPointer; /* start qh if there are other qtd that don't belong to
                                                                   the transfer */
                         }
+#endif
                         transfer->transferSofar =
                             USB_HostEhciQtdListRelease(ehciInstance, (usb_host_ehci_qtd_t *)(transfer->union1.unitHead),
                                                        (usb_host_ehci_qtd_t *)(transfer->union2.unitTail));
@@ -4172,8 +4414,10 @@ static void USB_HostEhciTimer1(usb_host_ehci_instance_t *ehciInstance)
                 ehciInstance->ehciIpBase->PORTSC1 &= ~USBHS_PORTSC1_WKDS_MASK;
                 if (0U != (ehciInstance->ehciIpBase->PORTSC1 & USBHS_PORTSC1_CCS_MASK))
                 {
+                    USB_HostEhciLock();
                     USB_HostEhciStartAsync(ehciInstance);
                     USB_HostEhciStartPeriodic(ehciInstance);
+                    USB_HostEhciUnlock();
                 }
                 (void)hostPointer->deviceCallback(hostPointer->suspendedDevice, NULL,
                                                   kUSB_HostEventResumed); /* call host callback function */
@@ -4201,7 +4445,11 @@ usb_status_t USB_HostEhciCreate(uint8_t controllerId,
     uint32_t index = 0;
     osa_status_t osaStatus;
     usb_host_ehci_instance_t *ehciInstance;
+#if defined(USBHS_STACK_BASE_ADDRS)
+    uint32_t usbhsBaseAddrs[] = USBHS_STACK_BASE_ADDRS;
+#else
     uint32_t usbhsBaseAddrs[] = USBHS_BASE_ADDRS;
+#endif
     usb_host_ehci_data_t *usbHostEhciData[USB_HOST_CONFIG_EHCI];
     uint32_t *framePointer;
     void *temp;
@@ -4822,8 +5070,10 @@ void USB_HostEhciTaskFunction(void *hostHandle)
         {
             if (0U != (bitSet & EHCI_TASK_EVENT_DEVICE_ATTACH)) /* device is attached */
             {
+                USB_HostEhciLock();
                 USB_HostEhciStartAsync(ehciInstance);
                 USB_HostEhciStartPeriodic(ehciInstance);
+                USB_HostEhciUnlock();
 
                 if (USB_HostAttachDevice(ehciInstance->hostHandle, ehciInstance->firstDeviceSpeed, 0, 0, 1,
                                          &deviceHandle) == kStatus_USB_Success)

@@ -2297,11 +2297,7 @@ usb_status_t USB_DeviceLpc3511IpControl(usb_device_controller_handle controllerH
     switch (type)
     {
         case kUSB_DeviceControlRun:
-#if ((defined(USB_DEVICE_CONFIG_ROOT2_TEST)) && (USB_DEVICE_CONFIG_ROOT2_TEST > 0U))
-            lpc3511IpState->registerBase->DEVCMDSTAT |= ((USB_LPC3511IP_DEVCMDSTAT_DCON_MASK) | (0x1 << 21));
-#else
             lpc3511IpState->registerBase->DEVCMDSTAT |= (USB_LPC3511IP_DEVCMDSTAT_DCON_MASK);
-#endif
             lpc3511IpState->registerBase->DEVCMDSTAT &= ~(USB_LPC3511IP_DEVCMDSTAT_FORCE_NEEDCLK_MASK);
             break;
 

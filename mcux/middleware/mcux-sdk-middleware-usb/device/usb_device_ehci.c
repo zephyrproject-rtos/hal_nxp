@@ -27,6 +27,9 @@
     (defined(FSL_FEATURE_SOC_USB_ANALOG_COUNT) && (FSL_FEATURE_SOC_USB_ANALOG_COUNT > 0U))
 #include "usb_phydcd.h"
 #endif
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#include "fsl_memory.h"
+#endif
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -34,6 +37,11 @@
 
 #error The SOC does not suppoort dedicated RAM case.
 
+#endif
+
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+#define USB_DEV_MEMORY_CPU_2_DMA(x) MEMORY_ConvertMemoryMapAddress((uint32_t)(x), kMEMORY_Local2DMA)
+#define USB_DEV_MEMORY_DMA_2_CPU(x) MEMORY_ConvertMemoryMapAddress((uint32_t)(x), kMEMORY_DMA2Local)
 #endif
 
 /*******************************************************************************
@@ -103,26 +111,12 @@ static uint8_t g_UsbDeviceEhciStateStatus[USB_DEVICE_CONFIG_EHCI] = {0};
      (defined(FSL_FEATURE_SOC_USBHSDCD_COUNT) && (FSL_FEATURE_SOC_USBHSDCD_COUNT > 0U)))
 static void *USB_EhciGetBase(uint8_t controllerId, uint32_t *baseArray, uint8_t baseCount)
 {
-    uint8_t instance;
-
     if (controllerId < (uint8_t)kUSB_ControllerEhci0)
     {
         return NULL;
     }
 
     controllerId = controllerId - (uint8_t)kUSB_ControllerEhci0;
-
-    for (instance = 0; instance < baseCount; instance++)
-    {
-        if (0U == baseArray[instance])
-        {
-            controllerId++;
-        }
-        else
-        {
-            break;
-        }
-    }
     if (controllerId >= baseCount)
     {
         return NULL;
@@ -181,8 +175,13 @@ static void USB_DeviceEhciSetDefaultState(usb_device_ehci_state_struct_t *ehciSt
         ehciState->qh[i].endpointStatusUnion.endpointStatusBitmap.isOpened = 0U;
     }
 
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+    /* Add QH buffer address to USBHS_EPLISTADDR_REG */
+    ehciState->registerBase->EPLISTADDR = (uint32_t)USB_DEV_MEMORY_CPU_2_DMA(ehciState->qh);
+#else
     /* Add QH buffer address to USBHS_EPLISTADDR_REG */
     ehciState->registerBase->EPLISTADDR = (uint32_t)ehciState->qh;
+#endif
 
     /* Clear device address */
     ehciState->registerBase->DEVICEADDR = 0U;
@@ -505,8 +504,12 @@ static void USB_DeviceEhciCancelControlPipe(usb_device_ehci_state_struct_t *ehci
         /* Pass the transfer buffer address */
         if (NULL == message.buffer)
         {
-            uint32_t bufferAddress = currentDtd->bufferPointerPage[0];
-            message.buffer         = (uint8_t *)((bufferAddress & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+            uint32_t bufferAddress = (uint32_t)USB_DEV_MEMORY_DMA_2_CPU(currentDtd->bufferPointerPage[0]);
+#else
+            uint32_t bufferAddress    = currentDtd->bufferPointerPage[0];
+#endif
+            message.buffer = (uint8_t *)((bufferAddress & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
                                          (currentDtd->reservedUnion.originalBufferInfo.originalBufferOffest));
         }
         /* If the dtd is active, set the message length to USB_CANCELLED_TRANSFER_LENGTH. Or set the length by using
@@ -532,7 +535,12 @@ static void USB_DeviceEhciCancelControlPipe(usb_device_ehci_state_struct_t *ehci
         }
         else
         {
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+            ehciState->dtdHard[index] =
+                (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_DMA_2_CPU(ehciState->dtdHard[index]->nextDtdPointer);
+#else
             ehciState->dtdHard[index] = (usb_device_ehci_dtd_struct_t *)ehciState->dtdHard[index]->nextDtdPointer;
+#endif
         }
 
         /* When the ioc is set or the dtd queue is empty, the up layer will be notified. */
@@ -682,6 +690,9 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
 
                     while (NULL != currentDtd)
                     {
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+                        currentDtd = (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_DMA_2_CPU((uint8_t *)currentDtd);
+#endif
                         /* Don't handle the active dtd. */
                         if ((0U !=
                              (currentDtd->dtdTokenUnion.dtdTokenBitmap.status & USB_DEVICE_ECHI_DTD_STATUS_ACTIVE)) ||
@@ -709,6 +720,9 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                                                                   USB_DEVICE_ECHI_DTD_POINTER_MASK);
                     while (NULL != currentDtd)
                     {
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+                        currentDtd = (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_DMA_2_CPU((uint8_t *)currentDtd);
+#endif
                         /* Don't handle the active dtd. */
                         if (0U != (currentDtd->dtdTokenUnion.dtdTokenBitmap.status & USB_DEVICE_ECHI_DTD_STATUS_ACTIVE))
                         {
@@ -721,6 +735,9 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                             message.buffer =
                                 (uint8_t *)((currentDtd->bufferPointerPage[0] & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
                                             (currentDtd->reservedUnion.originalBufferInfo.originalBufferOffest));
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+                            message.buffer = (uint8_t *)USB_DEV_MEMORY_DMA_2_CPU(message.buffer);
+#endif
                         }
                         /* Save the transferred data length */
                         message.length += (currentDtd->reservedUnion.originalBufferInfo.originalBufferLength -
@@ -736,8 +753,13 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                         }
                         else
                         {
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+                            ehciState->dtdHard[index] = (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_DMA_2_CPU(
+                                (uint8_t *)ehciState->dtdHard[index]->nextDtdPointer);
+#else
                             ehciState->dtdHard[index] =
                                 (usb_device_ehci_dtd_struct_t *)ehciState->dtdHard[index]->nextDtdPointer;
+#endif
                         }
 
                         /* When the ioc is set or the dtd queue is empty, the up layer will be notified. */
@@ -767,7 +789,9 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                         /* Get the next in-used dtd */
                         currentDtd = (usb_device_ehci_dtd_struct_t *)((uint32_t)ehciState->dtdHard[index] &
                                                                       USB_DEVICE_ECHI_DTD_POINTER_MASK);
-
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+                        currentDtd = (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_DMA_2_CPU((uint8_t *)currentDtd);
+#endif
                         if ((NULL != currentDtd) && (0U != (currentDtd->dtdTokenUnion.dtdTokenBitmap.status &
                                                             USB_DEVICE_ECHI_DTD_STATUS_ACTIVE)))
                         {
@@ -788,6 +812,10 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                                 /* If the endpoint transmit/receive buffer is not ready */
                                 if (0U == (ehciState->registerBase->EPSR & primeBit))
                                 {
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+                                    currentDtd =
+                                        (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_CPU_2_DMA((uint8_t *)currentDtd);
+#endif
                                     /* Prime next dtd and prime the transfer */
                                     ehciState->qh[index].nextDtdPointer         = (uint32_t)currentDtd;
                                     ehciState->qh[index].dtdTokenUnion.dtdToken = 0U;
@@ -1059,7 +1087,11 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
         /* Set the dtd field */
         dtd->nextDtdPointer         = USB_DEVICE_ECHI_DTD_TERMINATE_MASK;
         dtd->dtdTokenUnion.dtdToken = 0U;
-        dtd->bufferPointerPage[0]   = (uint32_t)(buffer + currentIndex);
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+        dtd->bufferPointerPage[0] = (uint32_t)USB_DEV_MEMORY_CPU_2_DMA((buffer + currentIndex));
+#else
+        dtd->bufferPointerPage[0] = (uint32_t)(buffer + currentIndex);
+#endif
         dtd->bufferPointerPage[1] =
             (dtd->bufferPointerPage[0] + USB_DEVICE_ECHI_DTD_PAGE_BLOCK) & USB_DEVICE_ECHI_DTD_PAGE_MASK;
         dtd->bufferPointerPage[2] = dtd->bufferPointerPage[1] + USB_DEVICE_ECHI_DTD_PAGE_BLOCK;
@@ -1071,8 +1103,13 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
         /* Save the data length needed to be transferred. */
         dtd->reservedUnion.originalBufferInfo.originalBufferLength = sendLength;
         /* Save the original buffer address */
+
         dtd->reservedUnion.originalBufferInfo.originalBufferOffest =
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+            ((uint32_t)(buffer + currentIndex)) & USB_DEVICE_ECHI_DTD_PAGE_OFFSET_MASK;
+#else
             dtd->bufferPointerPage[0] & USB_DEVICE_ECHI_DTD_PAGE_OFFSET_MASK;
+#endif
         dtd->reservedUnion.originalBufferInfo.dtdInvalid = 0U;
 
         /* Set the IOC field in last dtd. */
@@ -1090,8 +1127,12 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
         /* Add dtd to the in-used dtd queue */
         if (NULL != (ehciState->dtdTail[index]))
         {
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+            ehciState->dtdTail[index]->nextDtdPointer = (uint32_t)USB_DEV_MEMORY_CPU_2_DMA(dtd);
+#else
             ehciState->dtdTail[index]->nextDtdPointer = (uint32_t)dtd;
-            ehciState->dtdTail[index]                 = dtd;
+#endif
+            ehciState->dtdTail[index] = dtd;
         }
         else
         {
@@ -1151,7 +1192,11 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
     /* When the endpoint is not primed if qhIdle is zero, it means the QH is empty. */
     if ((0U != qhIdle) || (0U == (epStatus & primeBit)))
     {
-        ehciState->qh[index].nextDtdPointer         = (uint32_t)dtdHard;
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+        ehciState->qh[index].nextDtdPointer = (uint32_t)USB_DEV_MEMORY_CPU_2_DMA(dtdHard);
+#else
+        ehciState->qh[index].nextDtdPointer = (uint32_t)dtdHard;
+#endif
         ehciState->qh[index].dtdTokenUnion.dtdToken = 0U;
         /*make sure dtd is linked to dqh*/
         __DSB();
@@ -1292,10 +1337,18 @@ usb_status_t USB_DeviceEhciInit(uint8_t controllerId,
                                 usb_device_controller_handle *ehciHandle)
 {
     usb_device_ehci_state_struct_t *ehciState = NULL;
-    uint32_t ehci_base[]                      = USBHS_BASE_ADDRS;
+#if defined(USBHS_STACK_BASE_ADDRS)
+    uint32_t ehci_base[] = USBHS_STACK_BASE_ADDRS;
+#else
+    uint32_t ehci_base[] = USBHS_BASE_ADDRS;
+#endif
 #if (defined(USB_DEVICE_CONFIG_LOW_POWER_MODE) && (USB_DEVICE_CONFIG_LOW_POWER_MODE > 0U))
 #if (defined(FSL_FEATURE_SOC_USBNC_COUNT) && (FSL_FEATURE_SOC_USBNC_COUNT > 0U))
+#if defined(USBNC_STACK_BASE_ADDRS)
+    uint32_t usbnc_base[] = USBNC_STACK_BASE_ADDRS;
+#else
     uint32_t usbnc_base[] = USBNC_BASE_ADDRS;
+#endif
 #endif
 #endif
     uint8_t intanceIndex;
@@ -1309,7 +1362,11 @@ usb_status_t USB_DeviceEhciInit(uint8_t controllerId,
 
 #if (defined(USB_DEVICE_CONFIG_CHARGER_DETECT) && (USB_DEVICE_CONFIG_CHARGER_DETECT > 0U)) && \
     (defined(FSL_FEATURE_SOC_USBHSDCD_COUNT) && (FSL_FEATURE_SOC_USBHSDCD_COUNT > 0U))
+#if defined(USBHSDCD_STACK_BASE_ADDRS)
+    uint32_t hsdcd_base[] = USBHSDCD_STACK_BASE_ADDRS;
+#else
     uint32_t hsdcd_base[] = USBHSDCD_BASE_ADDRS;
+#endif
     USBHSDCD_Type *base;
     usb_hsdcd_config_struct_t dcdParamConfig;
     usb_hsdcd_status_t dcdError = kStatus_hsdcd_Success;
@@ -1575,6 +1632,9 @@ usb_status_t USB_DeviceEhciCancel(usb_device_controller_handle ehciHandle, uint8
     uint8_t index =
         ((ep & USB_ENDPOINT_NUMBER_MASK) << 1U) | ((ep & USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_MASK) >> 0x07U);
     uint8_t flag = 0;
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+    uint32_t convert_addr = 0U;
+#endif
 
     OSA_SR_ALLOC();
 
@@ -1600,7 +1660,12 @@ usb_status_t USB_DeviceEhciCancel(usb_device_controller_handle ehciHandle, uint8
     while (NULL != currentDtd)
     {
         currentDtd->reservedUnion.originalBufferInfo.dtdInvalid = 1U;
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+        currentDtd = (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_DMA_2_CPU(currentDtd->nextDtdPointer &
+                                                                              USB_DEVICE_ECHI_DTD_POINTER_MASK);
+#else
         currentDtd = (usb_device_ehci_dtd_struct_t *)(currentDtd->nextDtdPointer & USB_DEVICE_ECHI_DTD_POINTER_MASK);
+#endif
     }
 
     /* Get the first dtd */
@@ -1638,8 +1703,14 @@ usb_status_t USB_DeviceEhciCancel(usb_device_controller_handle ehciHandle, uint8
             /* Save the original buffer address. */
             if (NULL == message.buffer)
             {
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+                convert_addr   = (uint32_t)USB_DEV_MEMORY_DMA_2_CPU(currentDtd->bufferPointerPage[0]);
+                message.buffer = (uint8_t *)((convert_addr & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
+                                             (currentDtd->reservedUnion.originalBufferInfo.originalBufferOffest));
+#else
                 message.buffer = (uint8_t *)((currentDtd->bufferPointerPage[0] & USB_DEVICE_ECHI_DTD_PAGE_MASK) |
                                              (currentDtd->reservedUnion.originalBufferInfo.originalBufferOffest));
+#endif
             }
 
             /* Remove the dtd from the dtd in-used queue. */
@@ -1650,7 +1721,12 @@ usb_status_t USB_DeviceEhciCancel(usb_device_controller_handle ehciHandle, uint8
             }
             else
             {
+#if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
+                ehciState->dtdHard[index] =
+                    (usb_device_ehci_dtd_struct_t *)USB_DEV_MEMORY_DMA_2_CPU(ehciState->dtdHard[index]->nextDtdPointer);
+#else
                 ehciState->dtdHard[index] = (usb_device_ehci_dtd_struct_t *)ehciState->dtdHard[index]->nextDtdPointer;
+#endif
             }
 
             /* When the ioc is set or the dtd queue is empty, the up layer will be notified. */
