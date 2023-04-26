@@ -244,7 +244,7 @@ status_t USART_Init(USART_Type *base, const usart_config_t *config, uint32_t src
     {
         if ((9600U % config->baudRate_Bps) == 0U)
         {
-            base->BRG = 9600U / config->baudRate_Bps;
+            base->BRG = 9600U / config->baudRate_Bps - 1U;
         }
         else
         {

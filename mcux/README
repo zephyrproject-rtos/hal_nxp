@@ -69,3 +69,4 @@ Patch List:
   5. Fixed the FlexCAN driver to propagate kStatus_FLEXCAN_RxOverflow mailbox status when using the FlexCAN driver transactional APIs.
   6. Fixed fsl_caam.c: CAAM_RNG_GetRandomDataNonBlocking() to not force a reseed with each request. Internal bug submitted [MCUX-57074]
   7. fsl_common.h: add #ifdef ZEPHYR #endif to include Zephyr's sys utils
+  8. fsl_usart.c: Fixed calculation of BRG value for baud rate in 32KHz clock mode, in USART_Init()
