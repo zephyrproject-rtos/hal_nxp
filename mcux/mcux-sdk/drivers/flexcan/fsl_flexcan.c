@@ -2801,7 +2801,7 @@ status_t FLEXCAN_WriteFDTxMb(CAN_Type *base, uint8_t mbIdx, const flexcan_fd_fra
             cs_temp |= CAN_CS_RTR_MASK;
         }
 
-        cs_temp |= CAN_CS_CODE(kFLEXCAN_TxMbDataOrRemote) | CAN_CS_DLC(pTxFrame->length) | CAN_CS_EDL(1) |
+        cs_temp |= CAN_CS_CODE(kFLEXCAN_TxMbDataOrRemote) | CAN_CS_DLC(pTxFrame->length) | CAN_CS_EDL(pTxFrame->edl) |
                    CAN_CS_BRS(pTxFrame->brs);
 
         /* Calculate the DWORD number, dataSize 0/1/2/3 corresponds to 8/16/32/64
@@ -2968,6 +2968,14 @@ status_t FLEXCAN_ReadFDRxMb(CAN_Type *base, uint8_t mbIdx, flexcan_fd_frame_t *p
         /* Get the message ID and format. */
         pRxFrame->format = (cs_temp & CAN_CS_IDE_MASK) != 0U ? (uint8_t)kFLEXCAN_FrameFormatExtend :
                                                                (uint8_t)kFLEXCAN_FrameFormatStandard;
+
+        /* Get Bit Rate Switch flag. */
+        pRxFrame->brs =
+            (cs_temp & CAN_CS_BRS_MASK) != 0U ? 1U : 0U;
+
+        /* Get Extended Data Length flag. */
+        pRxFrame->edl =
+            (cs_temp & CAN_CS_EDL_MASK) != 0U ? 1U : 0U;
 
         /* Get the message type. */
         pRxFrame->type =
