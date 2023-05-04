@@ -4321,7 +4321,7 @@ static const uint32_t templateRng[] = {
     /* 02 */ 0x00000000u, /* place: additional input address */
     /* 03 */ 0x12820004u, /* LOAD Class 1 Data Size Register by IMM data */
     /* 04 */ 0x00000000u, /* place: data size to generate */
-    /* 05 */ 0x82500002u, /* RNG generate */
+    /* 05 */ 0x82500000u, /* RNG generate */
     /* 06 */ 0x60700000u, /* FIFO STORE message */
     /* 07 */ 0x00000000u, /* place: destination address */
     /* 08 */ 0x00000000u, /* place: destination size */
