@@ -60,12 +60,13 @@ License Link:
 Patch List:
   1. Delete the .a binary archive files after an SDK update before committing the changes. These files are still present in the SDK github repo but have been
      deleted from the Zephyr HAL
-  2. Move used job descriptors in the CAAM driver (mcux-sdk/drivers/caam/fsl_caam.c) from the stack to noncacheable section. At time of writing, there should
+  2. mcux-sdk/drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
      be four being used for entropy in zephyr.
-  3. Fixed flexcan_fd_frame being written into/written from the message buffer in the flexcan driver (mcux/mcux-sdk/drivers/flexcan/fsl_flexcan.c). On the
+  3. mcux-sdk/drivers/flexcan/fsl_flexcan.c: Fixed flexcan_fd_frame being written into/written from the message buffer in the flexcan driver. On the
      write side, the EDL bit is now utilized for selection of can frame type and on the receiver side, the EDL and BRS status are read from the message
      buffer.
   4. Add device_system cmake definitions for the following SOCs: MKL25Z4, MK82F25615, MKW24D5, MKW40Z4, MKW41Z4
   5. Fixed the FlexCAN driver to propagate kStatus_FLEXCAN_RxOverflow mailbox status when using the FlexCAN driver transactional APIs.
   6. Fixed fsl_caam.c: CAAM_RNG_GetRandomDataNonBlocking() to not force a reseed with each request. Internal bug submitted [MCUX-57074]
   7. fsl_common.h: add #ifdef ZEPHYR #endif to include Zephyr's sys utils
+  8. mcux-sdk/drivers/flexcomm/fsl_i2c.c & fsl_i2c.h: patch to fix Zephyr bug #57858. The changes will be part of the next official NXP SDK release.
