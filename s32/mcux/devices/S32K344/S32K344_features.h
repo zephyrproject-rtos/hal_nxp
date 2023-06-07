@@ -15,6 +15,8 @@
 #define FSL_FEATURE_SOC_LPUART_COUNT (16)
 /* @brief FLEXCAN availability on the SoC. */
 #define FSL_FEATURE_SOC_FLEXCAN_COUNT (6)
+/* @brief LPI2C availability on the SoC. */
+#define FSL_FEATURE_SOC_LPI2C_COUNT (2)
 
 /* LPUART module features */
 
@@ -146,5 +148,12 @@
 #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO (0)
 /* @brief Does not support Supervisor Mode (bitfield MCR[SUPV]. */
 #define FSL_FEATURE_FLEXCAN_HAS_NO_SUPV_SUPPORT (0)
+
+/* LPI2C module features */
+
+/* @brief Has separate DMA RX and TX requests. */
+#define FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(x) (0)
+/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+#define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
 
 #endif /* _S32K344_FEATURES_H_ */
