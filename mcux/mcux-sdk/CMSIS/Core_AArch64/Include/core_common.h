@@ -69,7 +69,7 @@
 #define GET_EL(_mode)		(((_mode) >> MODE_EL_SHIFT) & MODE_EL_MASK)
 
 /* MPIDR */
-#define MPIDR_AFFLVL_MASK	(0xfful)
+#define MPIDR_AFFLVL_MASK	(0xffULL)
 #define MPIDR_AFF0_SHIFT	(0)
 #define MPIDR_AFF1_SHIFT	(8)
 #define MPIDR_AFF2_SHIFT	(16)
