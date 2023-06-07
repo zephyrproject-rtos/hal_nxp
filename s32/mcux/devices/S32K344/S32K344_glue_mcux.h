@@ -121,4 +121,20 @@
 #define CAN_ORed_Message_buffer_64_95_IRQS       { FlexCAN0_1_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn}
 #define CAN_ORed_Message_buffer_IRQS             CAN_ORed_Message_buffer_0_31_IRQS
 
+/* LPI2C - Peripheral instance base addresses */
+/** Peripheral LPI2C0 base address */
+#define LPI2C0_BASE                              IP_LPI2C_0_BASE
+/** Peripheral LPI2C0 base pointer */
+#define LPI2C0                                   IP_LPI2C_0
+/** Peripheral LPI2C1 base address */
+#define LPI2C1_BASE                              IP_LPI2C_1_BASE
+/** Peripheral LPI2C1 base pointer */
+#define LPI2C1                                   IP_LPI2C_1
+/** Array initializer of LPI2C peripheral base addresses */
+#define LPI2C_BASE_ADDRS                         IP_LPI2C_BASE_ADDRS
+/** Array initializer of LPI2C peripheral base pointers */
+#define LPI2C_BASE_PTRS                          IP_LPI2C_BASE_PTRS
+/** Interrupt vectors for the LPI2C peripheral type */
+#define LPI2C_IRQS                               { LPI2C0_IRQn, LPI2C1_IRQn }
+
 #endif  /* _S32K344_GLUE_MCUX_H_ */
