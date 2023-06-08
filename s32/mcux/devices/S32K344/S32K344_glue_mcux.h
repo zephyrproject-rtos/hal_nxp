@@ -7,6 +7,8 @@
 #ifndef _S32K344_GLUE_MCUX_H_
 #define _S32K344_GLUE_MCUX_H_
 
+#include "S32K344_device.h"
+
 /* LPUART - Peripheral instance base addresses */
 /** Peripheral LPUART_0 base address */
 #define LPUART0_BASE                         IP_LPUART_0_BASE
@@ -78,5 +80,45 @@
 #define LPUART_BASE_PTRS                     IP_LPUART_BASE_PTRS
 /** Interrupt vectors for the LPUART peripheral type */
 #define LPUART_RX_TX_IRQS                    { LPUART0_IRQn, LPUART1_IRQn, LPUART2_IRQn, LPUART3_IRQn, LPUART4_IRQn, LPUART5_IRQn, LPUART6_IRQn, LPUART7_IRQn, LPUART8_IRQn, LPUART9_IRQn, LPUART10_IRQn, LPUART11_IRQn, LPUART12_IRQn, LPUART13_IRQn, LPUART14_IRQn, LPUART15_IRQn }
+
+/* CAN - Peripheral instance base addresses */
+/** Peripheral CAN_0 base address */
+#define CAN0_BASE                                IP_CAN_0_BASE
+/** Peripheral CAN_0 base pointer */
+#define CAN0                                     ((CAN_Type *)CAN0_BASE)
+/** Peripheral CAN_1 base address */
+#define CAN1_BASE                                IP_CAN_1_BASE
+/** Peripheral CAN_1 base pointer */
+#define CAN1                                     ((CAN_Type *)CAN1_BASE)
+/** Peripheral CAN_2 base address */
+#define CAN2_BASE                                IP_CAN_2_BASE
+/** Peripheral CAN_2 base pointer */
+#define CAN2                                     ((CAN_Type *)CAN2_BASE)
+/** Peripheral CAN_3 base address */
+#define CAN3_BASE                                IP_CAN_3_BASE
+/** Peripheral CAN_3 base pointer */
+#define CAN3                                     ((CAN_Type *)CAN3_BASE)
+/** Peripheral CAN_4 base address */
+#define CAN4_BASE                                IP_CAN_4_BASE
+/** Peripheral CAN_4 base pointer */
+#define CAN4                                     ((CAN_Type *)CAN4_BASE)
+/** Peripheral CAN_5 base address */
+#define CAN5_BASE                                IP_CAN_5_BASE
+/** Peripheral CAN_5 base pointer */
+#define CAN5                                     ((CAN_Type *)CAN5_BASE)
+/** Array initializer of CAN peripheral base addresses */
+#define CAN_BASE_ADDRS                           { CAN0_BASE, CAN1_BASE, CAN2_BASE, CAN3_BASE, CAN4_BASE, CAN5_BASE }
+/** Array initializer of CAN peripheral base pointers */
+#define CAN_BASE_PTRS                            { CAN0, CAN1, CAN2, CAN3, CAN4, CAN5 }
+/** Interrupt vectors for the CAN peripheral type */
+#define CAN_Rx_Warning_IRQS                      { FlexCAN0_0_IRQn, FlexCAN1_0_IRQn, FlexCAN2_0_IRQn, FlexCAN3_0_IRQn, FlexCAN4_0_IRQn, FlexCAN5_0_IRQn}
+#define CAN_Tx_Warning_IRQS                      { FlexCAN0_0_IRQn, FlexCAN1_0_IRQn, FlexCAN2_0_IRQn, FlexCAN3_0_IRQn, FlexCAN4_0_IRQn, FlexCAN5_0_IRQn}
+#define CAN_Wake_Up_IRQS                         { FlexCAN0_0_IRQn, FlexCAN1_0_IRQn, FlexCAN2_0_IRQn, FlexCAN3_0_IRQn, FlexCAN4_0_IRQn, FlexCAN5_0_IRQn}
+#define CAN_Error_IRQS                           { FlexCAN0_0_IRQn, FlexCAN1_0_IRQn, FlexCAN2_0_IRQn, FlexCAN3_0_IRQn, FlexCAN4_0_IRQn, FlexCAN5_0_IRQn}
+#define CAN_Bus_Off_IRQS                         { FlexCAN0_0_IRQn, FlexCAN1_0_IRQn, FlexCAN2_0_IRQn, FlexCAN3_0_IRQn, FlexCAN4_0_IRQn, FlexCAN5_0_IRQn}
+#define CAN_ORed_Message_buffer_0_31_IRQS        { FlexCAN0_1_IRQn, FlexCAN1_1_IRQn, FlexCAN2_1_IRQn, FlexCAN3_1_IRQn, FlexCAN4_1_IRQn, FlexCAN5_1_IRQn}
+#define CAN_ORed_Message_buffer_32_63_IRQS       { FlexCAN0_2_IRQn, FlexCAN1_2_IRQn, FlexCAN2_2_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn}
+#define CAN_ORed_Message_buffer_64_95_IRQS       { FlexCAN0_1_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn}
+#define CAN_ORed_Message_buffer_IRQS             CAN_ORed_Message_buffer_0_31_IRQS
 
 #endif  /* _S32K344_GLUE_MCUX_H_ */
