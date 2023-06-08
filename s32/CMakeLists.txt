@@ -24,6 +24,9 @@ if(CONFIG_HAS_MCUX)
   #
   # Glue code must be added for each device supported to build with MCUX. This
   # can be found in hal_nxp/s32/mcux/devices:
+  # - s32/mcux/devices/${MCUX_DEVICE}/${MCUX_DEVICE}_device.h
+  #   redefine RTD module's peripheral access layers and its register masks to be
+  #   compatible with MCUX drivers for incompatible peripherals
   # - s32/mcux/devices/${MCUX_DEVICE}/${MCUX_DEVICE}_features.h
   #   define SoC module's features
   # - s32/mcux/devices/${MCUX_DEVICE}/${MCUX_DEVICE}_glue_mcux.h
