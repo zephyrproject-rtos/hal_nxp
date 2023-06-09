@@ -169,4 +169,32 @@
 /** Interrupt vectors for the LPSPI peripheral type */
 #define LPSPI_IRQS                               { LPSPI0_IRQn, LPSPI1_IRQn, LPSPI2_IRQn, LPSPI3_IRQn, LPSPI4_IRQn, LPSPI5_IRQn }
 
+/* DMA - Peripheral instance base addresses */
+#define DMA_BASE                           IP_EDMA_BASE
+#define DMA                                ((DMA_Type*)DMA_BASE)
+#define DMA_BASE_PTRS                      {DMA}
+
+/** Interrupt vectors for the DMA peripheral type, there is no interrupt id for offset channels */
+#define DMA_IRQS                        { {DMATCD0_IRQn, DMATCD1_IRQn, DMATCD2_IRQn, DMATCD3_IRQn,  DMATCD4_IRQn, DMATCD5_IRQn,       \
+                                            DMATCD6_IRQn, DMATCD7_IRQn, DMATCD8_IRQn, DMATCD9_IRQn, DMATCD10_IRQn, DMATCD11_IRQn,     \
+                                            [12 ... 127] =  NotAvail_IRQn,                                                            \
+                                            DMATCD12_IRQn, DMATCD13_IRQn, DMATCD14_IRQn, DMATCD15_IRQn, DMATCD16_IRQn, DMATCD17_IRQn, \
+                                            DMATCD18_IRQn, DMATCD19_IRQn, DMATCD20_IRQn, DMATCD21_IRQn, DMATCD22_IRQn, DMATCD23_IRQn, \
+                                            DMATCD24_IRQn, DMATCD25_IRQn, DMATCD26_IRQn, DMATCD27_IRQn, DMATCD28_IRQn, DMATCD29_IRQn, \
+                                            DMATCD30_IRQn, DMATCD31_IRQn} }
+
+/* DMAMUX - Peripheral instance base addresses */
+/** Peripheral DMAMUX0 base address */
+#define DMAMUX0_BASE                            IP_DMAMUX_0_BASE
+/** Peripheral DMAMUX0 base pointer */
+#define DMAMUX0                                 IP_DMAMUX_0
+/** Peripheral DMAMUX1 base address */
+#define DMAMUX1_BASE                            IP_DMAMUX_1_BASE
+/** Peripheral DMAMUX1 base pointer */
+#define DMAMUX1                                 IP_DMAMUX_1
+/** Array initializer of DMAMUX peripheral base addresses */
+#define DMAMUX_BASE_ADDRS                       IP_DMAMUX_BASE_ADDRS
+/** Array initializer of DMAMUX peripheral base pointers */
+#define DMAMUX_BASE_PTRS                        IP_DMAMUX_BASE_PTRS
+
 #endif  /* _S32K344_GLUE_MCUX_H_ */
