@@ -19,6 +19,8 @@
 #define FSL_FEATURE_SOC_LPI2C_COUNT (2)
 /* @brief LPSPI availability on the SoC. */
 #define FSL_FEATURE_SOC_LPSPI_COUNT (6)
+/* @brief EDMA availability on the SoC. */
+#define FSL_FEATURE_SOC_EDMA_COUNT (1)
 
 /* LPUART module features */
 
@@ -168,5 +170,34 @@
 #define FSL_FEATURE_LPSPI_HAS_CCR1 (1)
 /* @brief Is affected by errata S32K3X4-0P55A-1P55A-ERRATA / ERR050456 (LPSPI: Reset to fifo does not work as expected). */
 #define FSL_FEATURE_LPSPI_HAS_ERRATA_050456 (1)
+
+/* EDMA module features */
+
+/* 
+ * @brief Number of DMA channels (related to number of registers TCD, DCHPRI, bit fields ERQ[ERQn], EEI[EEIn], INT[INTn],
+ * ERR[ERRn], HRS[HRSn] and bit field widths ES[ERRCHN], CEEI[CEEI], SEEI[SEEI], CERQ[CERQ], SERQ[SERQ], CDNE[CDNE],
+ * SSRT[SSRT], CERR[CERR], CINT[CINT], TCDn_CITER_ELINKYES[LINKCH], TCDn_CSR[MAJORLINKCH], TCDn_BITER_ELINKYES[LINKCH]).
+ * (Valid only for eDMA modules.) Note: this is including channels used as offset.
+ */
+#define FSL_FEATURE_EDMA_MODULE_CHANNEL (148)
+/* @brief Total number of DMA channels on all modules. Note: this is including channels used as offset. */
+#define FSL_FEATURE_EDMA_DMAMUX_CHANNELS (148)
+/* @brief Has DMA_Error interrupt vector. */
+#define FSL_FEATURE_EDMA_HAS_ERROR_IRQ (0)
+/* @brief If channel clock controlled independently */
+#define FSL_FEATURE_EDMA_CHANNEL_HAS_OWN_CLOCK_GATE (1)
+/* @brief Has no register bit fields MP_CSR[EBW]. */
+#define FSL_FEATURE_EDMA_HAS_NO_MP_CSR_EBW (1)
+
+#define FSL_FEATURE_HAVE_DMA_CONTROL_REGISTER_ACCESS_PERMISSION (1)
+
+/* DMAMUX module features */
+
+/* @brief Number of DMA channels (related to number of register CHCFGn). */
+#define FSL_FEATURE_DMAMUX_MODULE_CHANNEL (16)
+/* @brief Has the periodic trigger capability for the triggered DMA channel (register bit CHCFG0[TRIG]). */
+#define FSL_FEATURE_DMAMUX_HAS_TRIG (1)
+/* @brief Register CHCFGn width. */
+#define FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH (8)
 
 #endif /* _S32K344_FEATURES_H_ */

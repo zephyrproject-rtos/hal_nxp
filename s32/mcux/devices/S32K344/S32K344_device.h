@@ -2398,4 +2398,492 @@ typedef struct {
 /* The count of CAN_ERFFEL */
 #define CAN_ERFFEL_COUNT (128U)
 
+/* ----------------------------------------------------------------------------
+   -- DMA Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+/** DMA - Register Layout Typedef */
+typedef struct
+{
+    __IO uint32_t MP_CSR; /**< Management Page Control, offset: 0x0 */
+    __I uint32_t MP_ES;   /**< Management Page Error Status, offset: 0x4 */
+    __I uint32_t MP_INT;  /**< Management Page Interrupt Request Status, offset: 0x8 */
+    __I uint32_t MP_HRS;  /**< Management Page Hardware Request Status, offset: 0xC */
+    uint8_t RESERVED_0[240];
+    __IO uint32_t CH_GRPRI[32]; /**< Channel Arbitration Group, array offset: 0x100, array step: 0x4 */
+    uint8_t RESERVED_1[16000];
+    struct
+    {                         /* offset: 0x4000, array step: 0x10000 */
+        __IO uint32_t CH_CSR; /**< Channel Control and Status, array offset: 0x10000, array step: 0x10000 */
+        __IO uint32_t CH_ES;  /**< Channel Error Status, array offset: 0x10004, array step: 0x10000 */
+        __IO uint32_t CH_INT; /**< Channel Interrupt Status, array offset: 0x10008, array step: 0x10000 */
+        __IO uint32_t CH_SBR; /**< Channel System Bus, array offset: 0x1000C, array step: 0x10000 */
+        __IO uint32_t CH_PRI; /**< Channel Priority, array offset: 0x10010, array step: 0x10000 */
+        uint8_t RESERVED_0[12];
+        __IO uint32_t TCD_SADDR; /**< TCD Source Address, array offset: 0x10020, array step: 0x10000 */
+        __IO uint16_t TCD_SOFF;  /**< TCD Signed Source Address Offset, array offset: 0x10024, array step: 0x10000 */
+        __IO uint16_t TCD_ATTR;  /**< TCD Transfer Attributes, array offset: 0x10026, array step: 0x10000 */
+        union
+        {                                      /* offset: 0x10028, array step: 0x10000 */
+            __IO uint32_t TCD_NBYTES_MLOFFNO;  /**< TCD Transfer Size Without Minor Loop Offsets, array offset: 0x10028,
+                                                  array step: 0x10000 */
+            __IO uint32_t TCD_NBYTES_MLOFFYES; /**< TCD Transfer Size with Minor Loop Offsets, array offset: 0x10028,
+                                                  array step: 0x10000 */
+        };
+        __IO uint32_t TCD_SLAST_SDA; /**< TCD Last Source Address Adjustment / Store DADDR Address, array offset:
+                                        0x1002C, array step: 0x10000 */
+        __IO uint32_t TCD_DADDR;     /**< TCD Destination Address, array offset: 0x10030, array step: 0x10000 */
+        __IO uint16_t TCD_DOFF; /**< TCD Signed Destination Address Offset, array offset: 0x10034, array step: 0x10000 */
+        union
+        {                                     /* offset: 0x10036, array step: 0x10000 */
+            __IO uint16_t TCD_CITER_ELINKNO;  /**< TCD Current Major Loop Count (Minor Loop Channel Linking Disabled),
+                                                 array offset: 0x10036, array step: 0x10000 */
+            __IO uint16_t TCD_CITER_ELINKYES; /**< TCD Current Major Loop Count (Minor Loop Channel Linking Enabled),
+                                                 array offset: 0x10036, array step: 0x10000 */
+        };
+        __IO uint32_t TCD_DLAST_SGA; /**< TCD Last Destination Address Adjustment / Scatter Gather Address, array
+                                        offset: 0x10038, array step: 0x10000 */
+        __IO uint16_t TCD_CSR;       /**< TCD Control and Status, array offset: 0x1003C, array step: 0x10000 */
+        union
+        {                                     /* offset: 0x1003E, array step: 0x10000 */
+            __IO uint16_t TCD_BITER_ELINKNO;  /**< TCD Beginning Major Loop Count (Minor Loop Channel Linking Disabled),
+                                                 array offset: 0x1003E, array step: 0x10000 */
+            __IO uint16_t TCD_BITER_ELINKYES; /**< TCD Beginning Major Loop Count (Minor Loop Channel Linking Enabled),
+                                                 array offset: 0x1003E, array step: 0x10000 */
+        };
+        uint8_t RESERVED_1[16320];
+    } CH[148]; /* Channels from 12 -> 127 are offset channels */
+} DMA_Type;
+
+#define DMA_MP_CSR_EDBG_MASK                eDMA_CSR_EDBG_MASK
+#define DMA_MP_CSR_EDBG_SHIFT               eDMA_CSR_EDBG_SHIFT
+
+#define DMA_MP_CSR_EDBG(x)                  eDMA_CSR_EDBG(x)
+
+#define DMA_MP_CSR_ERCA_MASK                eDMA_CSR_ERCA_MASK
+#define DMA_MP_CSR_ERCA_SHIFT               eDMA_CSR_ERCA_SHIFT
+#define DMA_MP_CSR_ERCA(x)                  eDMA_CSR_ERCA(x)
+
+#define DMA_MP_CSR_HAE_MASK                 eDMA_CSR_HAE_MASK
+#define DMA_MP_CSR_HAE_SHIFT                eDMA_CSR_HAE_SHIFT
+#define DMA_MP_CSR_HAE(x)                   eDMA_CSR_HAE(x)
+
+#define DMA_MP_CSR_HALT_MASK                eDMA_CSR_HALT_MASK
+#define DMA_MP_CSR_HALT_SHIFT               eDMA_CSR_HALT_SHIFT
+#define DMA_MP_CSR_HALT(x)                  eDMA_CSR_HALT(x)
+
+#define DMA_MP_CSR_GCLC_MASK                eDMA_CSR_GCLC_MASK
+#define DMA_MP_CSR_GCLC_SHIFT               eDMA_CSR_GCLC_SHIFT
+#define DMA_MP_CSR_GCLC(x)                  eDMA_CSR_GCLC(x)
+
+#define DMA_MP_CSR_GMRC_MASK                eDMA_CSR_GMRC_MASK
+#define DMA_MP_CSR_GMRC_SHIFT               eDMA_CSR_GMRC_SHIFT
+#define DMA_MP_CSR_GMRC(x)                  eDMA_CSR_GMRC(x)
+
+#define DMA_MP_CSR_ECX_MASK                 eDMA_CSR_ECX_MASK
+#define DMA_MP_CSR_ECX_SHIFT                eDMA_CSR_ECX_SHIFT
+#define DMA_MP_CSR_ECX(x)                   eDMA_CSR_ECX(x)
+
+#define DMA_MP_CSR_CX_MASK                  eDMA_CSR_CX_MASK
+#define DMA_MP_CSR_CX_SHIFT                 eDMA_CSR_CX_SHIFT
+#define DMA_MP_CSR_CX(x)                    eDMA_CSR_CX(x)
+
+#define DMA_MP_CSR_ACTIVE_ID_MASK           eDMA_CSR_ACTIVE_ID_MASK
+#define DMA_MP_CSR_ACTIVE_ID_SHIFT          eDMA_CSR_ACTIVE_ID_SHIFT
+#define DMA_MP_CSR_ACTIVE_ID(x)             eDMA_CSR_ACTIVE_ID(x)
+
+#define DMA_MP_CSR_ACTIVE_MASK              eDMA_CSR_ACTIVE_MASK
+#define DMA_MP_CSR_ACTIVE_SHIFT             eDMA_CSR_ACTIVE_SHIFT
+#define DMA_MP_CSR_ACTIVE(x)                eDMA_CSR_ACTIVE(x)
+/*! @} */
+
+/*! @name MP_ES - Management Page Error Status */
+/*! @{ */
+
+#define DMA_MP_ES_DBE_MASK                  eDMA_ES_DBE_MASK
+#define DMA_MP_ES_DBE_SHIFT                 eDMA_ES_DBE_SHIFT
+#define DMA_MP_ES_DBE(x)                    eDMA_ES_DBE(x)
+
+#define DMA_MP_ES_SBE_MASK                  eDMA_ES_SBE_MASK
+#define DMA_MP_ES_SBE_SHIFT                 eDMA_ES_SBE_SHIFT
+#define DMA_MP_ES_SBE(x)                    eDMA_ES_SBE(x)
+
+#define DMA_MP_ES_SGE_MASK                  eDMA_ES_SGE_MASK
+#define DMA_MP_ES_SGE_SHIFT                 eDMA_ES_SGE_SHIFT
+#define DMA_MP_ES_SGE(x)                    eDMA_ES_SGE(x)
+
+#define DMA_MP_ES_NCE_MASK                  eDMA_ES_NCE_MASK
+#define DMA_MP_ES_NCE_SHIFT                 eDMA_ES_NCE_SHIFT
+#define DMA_MP_ES_NCE(x)                    eDMA_ES_NCE(x)
+
+#define DMA_MP_ES_DOE_MASK                  eDMA_ES_DOE_MASK
+#define DMA_MP_ES_DOE_SHIFT                 eDMA_ES_DOE_SHIFT
+#define DMA_MP_ES_DOE(x)                    eDMA_ES_DOE(x)
+
+#define DMA_MP_ES_DAE_MASK                  eDMA_ES_DAE_MASK
+#define DMA_MP_ES_DAE_SHIFT                 eDMA_ES_DAE_SHIFT
+#define DMA_MP_ES_DAE(x)                    eDMA_ES_DAE(x)
+
+#define DMA_MP_ES_SOE_MASK                  eDMA_ES_SOE_MASK
+#define DMA_MP_ES_SOE_SHIFT                 eDMA_ES_SOE_SHIFT
+#define DMA_MP_ES_SOE(x)                    eDMA_ES_SOE(x)
+
+#define DMA_MP_ES_SAE_MASK                  eDMA_ES_SAE_MASK
+#define DMA_MP_ES_SAE_SHIFT                 eDMA_ES_SAE_SHIFT
+#define DMA_MP_ES_SAE(x)                    eDMA_ES_SAE(x)
+
+#define DMA_MP_ES_ECX_MASK                  eDMA_ES_ECX_MASK
+#define DMA_MP_ES_ECX_SHIFT                 eDMA_ES_ECX_SHIFT
+#define DMA_MP_ES_ECX(x)                    eDMA_ES_ECX(x)
+
+#define DMA_MP_ES_ERRCHN_MASK               eDMA_ES_ERRCHN_MASK
+#define DMA_MP_ES_ERRCHN_SHIFT              eDMA_ES_ERRCHN_SHIFT
+#define DMA_MP_ES_ERRCHN(x)                 eDMA_ES_ERRCHN(x)
+
+#define DMA_MP_ES_VLD_MASK                  eDMA_ES_VLD_MASK
+#define DMA_MP_ES_VLD_SHIFT                 eDMA_ES_VLD_SHIFT
+#define DMA_MP_ES_VLD(x)                    eDMA_ES_VLD(x)
+
+/*! @} */
+
+/*! @name MP_INT - Management Page Interrupt Request Status */
+/*! @{ */
+
+#define DMA_MP_INT_INT_MASK                 eDMA_INT_INT_MASK
+#define DMA_MP_INT_INT_SHIFT                eDMA_INT_INT_SHIFT
+#define DMA_MP_INT_INT(x)                   eDMA_INT_INT(x)
+
+/*! @} */
+
+/*! @name MP_HRS - Management Page Hardware Request Status */
+/*! @{ */
+
+#define DMA_MP_HRS_HRS_MASK                 eDMA_HRS_HRS_MASK
+#define DMA_MP_HRS_HRS_SHIFT                eDMA_HRS_HRS_SHIFT
+#define DMA_MP_HRS_HRS(x)                   eDMA_HRS_HRS(x)
+/*! @} */
+
+/*! @name CH_GRPRI - Channel Arbitration Group */
+/*! @{ */
+
+#define DMA_CH_GRPRI_GRPRI_MASK             eDMA_CH_GRPRI_GRPRI_MASK
+#define DMA_CH_GRPRI_GRPRI_SHIFT            eDMA_CH_GRPRI_GRPRI_SHIFT
+#define DMA_CH_GRPRI_GRPRI(x)               eDMA_CH_GRPRI_GRPRI(x)
+/*! @} */
+
+/*! @name CH_CSR - Channel Control and Status */
+/*! @{ */
+
+#define DMA_CH_CSR_ERQ_MASK                 DMA_TCD_CH0_CSR_ERQ_MASK
+#define DMA_CH_CSR_ERQ_SHIFT                DMA_TCD_CH0_CSR_ERQ_SHIFT
+#define DMA_CH_CSR_ERQ(x)                   DMA_TCD_CH0_CSR_ERQ(x)
+
+#define DMA_CH_CSR_EARQ_MASK                DMA_TCD_CH0_CSR_EARQ_MASK
+#define DMA_CH_CSR_EARQ_SHIFT               DMA_TCD_CH0_CSR_EARQ_SHIFT
+#define DMA_CH_CSR_EARQ(x)                  DMA_TCD_CH0_CSR_EARQ(x)
+
+#define DMA_CH_CSR_EEI_MASK                 DMA_TCD_CH0_CSR_EEI_MASK
+#define DMA_CH_CSR_EEI_SHIFT                DMA_TCD_CH0_CSR_EEI_SHIFT
+#define DMA_CH_CSR_EEI(x)                   DMA_TCD_CH0_CSR_EEI(x)
+
+#define DMA_CH_CSR_EBW_MASK                 DMA_TCD_CH0_CSR_EBW_MASK
+#define DMA_CH_CSR_EBW_SHIFT                DMA_TCD_CH0_CSR_EBW_SHIFT
+#define DMA_CH_CSR_EBW(x)                   DMA_TCD_CH0_CSR_EBW(x)
+
+#define DMA_CH_CSR_DONE_MASK                DMA_TCD_CH0_CSR_DONE_MASK
+#define DMA_CH_CSR_DONE_SHIFT               DMA_TCD_CH0_CSR_DONE_SHIFT
+#define DMA_CH_CSR_DONE(x)                  DMA_TCD_CH0_CSR_DONE(x)
+
+#define DMA_CH_CSR_ACTIVE_MASK              DMA_TCD_CH0_CSR_ACTIVE_MASK
+#define DMA_CH_CSR_ACTIVE_SHIFT             DMA_TCD_CH0_CSR_ACTIVE_SHIFT
+#define DMA_CH_CSR_ACTIVE(x)                DMA_TCD_CH0_CSR_ACTIVE(x)
+/*! @} */
+
+/*! @name CH_ES - Channel Error Status */
+/*! @{ */
+
+#define DMA_CH_ES_DBE_MASK                  DMA_TCD_CH0_ES_DBE_MASK
+#define DMA_CH_ES_DBE_SHIFT                 DMA_TCD_CH0_ES_DBE_SHIFT
+#define DMA_CH_ES_DBE(x)                    DMA_TCD_CH0_ES_DBE(x)
+
+#define DMA_CH_ES_SBE_MASK                  DMA_TCD_CH0_ES_SBE_MASK
+#define DMA_CH_ES_SBE_SHIFT                 DMA_TCD_CH0_ES_SBE_SHIFT
+#define DMA_CH_ES_SBE(x)                    DMA_TCD_CH0_ES_SBE(x)
+
+#define DMA_CH_ES_SGE_MASK                  DMA_TCD_CH0_ES_SGE_MASK
+#define DMA_CH_ES_SGE_SHIFT                 DMA_TCD_CH0_ES_SGE_SHIFT
+#define DMA_CH_ES_SGE(x)                    DMA_TCD_CH0_ES_SGE(x)
+
+#define DMA_CH_ES_NCE_MASK                  DMA_TCD_CH0_ES_NCE_MASK
+#define DMA_CH_ES_NCE_SHIFT                 DMA_TCD_CH0_ES_NCE_SHIFT
+#define DMA_CH_ES_NCE(x)                    DMA_TCD_CH0_ES_NCE(x)
+
+#define DMA_CH_ES_DOE_MASK                  DMA_TCD_CH0_ES_DOE_MASK
+#define DMA_CH_ES_DOE_SHIFT                 DMA_TCD_CH0_ES_DOE_SHIFT
+#define DMA_CH_ES_DOE(x)                    DMA_TCD_CH0_ES_DOE(x)
+
+#define DMA_CH_ES_DAE_MASK                  DMA_TCD_CH0_ES_DAE_MASK
+#define DMA_CH_ES_DAE_SHIFT                 DMA_TCD_CH0_ES_DAE_SHIFT
+#define DMA_CH_ES_DAE(x)                    DMA_TCD_CH0_ES_DAE(x)
+
+#define DMA_CH_ES_SOE_MASK                  DMA_TCD_CH0_ES_SOE_MASK
+#define DMA_CH_ES_SOE_SHIFT                 DMA_TCD_CH0_ES_SOE_SHIFT
+#define DMA_CH_ES_SOE(x)                    DMA_TCD_CH0_ES_SOE(x)
+
+#define DMA_CH_ES_SAE_MASK                  DMA_TCD_CH0_ES_SAE_MASK
+#define DMA_CH_ES_SAE_SHIFT                 DMA_TCD_CH0_ES_SAE_SHIFT
+#define DMA_CH_ES_SAE(x)                    DMA_TCD_CH0_ES_SAE(x)
+
+#define DMA_CH_ES_ERR_MASK                  DMA_TCD_CH0_ES_ERR_MASK
+#define DMA_CH_ES_ERR_SHIFT                 DMA_TCD_CH0_ES_ERR_SHIFT
+#define DMA_CH_ES_ERR(x)                    DMA_TCD_CH0_ES_ERR(x)
+/*! @} */
+
+/*! @name CH_INT - Channel Interrupt Status */
+/*! @{ */
+
+#define DMA_CH_INT_INT_MASK                 DMA_TCD_CH0_INT_INT_MASK
+#define DMA_CH_INT_INT_SHIFT                DMA_TCD_CH0_INT_INT_SHIFT
+#define DMA_CH_INT_INT(x)                   DMA_TCD_CH0_INT_INT(x)
+/*! @} */
+
+/*! @name CH_SBR - Channel System Bus */
+/*! @{ */
+
+#define DMA_CH_SBR_MID_MASK                 DMA_TCD_CH0_SBR_MID_MASK
+#define DMA_CH_SBR_MID_SHIFT                DMA_TCD_CH0_SBR_MID_SHIFT
+#define DMA_CH_SBR_MID(x)                   DMA_TCD_CH0_SBR_MID(x)
+
+#define DMA_CH_SBR_PAL_MASK                 DMA_TCD_CH0_SBR_PAL_MASK
+#define DMA_CH_SBR_PAL_SHIFT                DMA_TCD_CH0_SBR_PAL_SHIFT
+#define DMA_CH_SBR_PAL(x)                   DMA_TCD_CH0_SBR_PAL(x)
+
+#define DMA_CH_SBR_EMI_MASK                 DMA_TCD_CH0_SBR_EMI_MASK
+#define DMA_CH_SBR_EMI_SHIFT                DMA_TCD_CH0_SBR_EMI_SHIFT
+#define DMA_CH_SBR_EMI(x)                   DMA_TCD_CH0_SBR_EMI(x)
+
+#define DMA_CH_SBR_ATTR_MASK                DMA_TCD_CH0_SBR_ATTR_MASK
+#define DMA_CH_SBR_ATTR_SHIFT               DMA_TCD_CH0_SBR_ATTR_SHIFT
+#define DMA_CH_SBR_ATTR(x)                  DMA_TCD_CH0_SBR_ATTR(x)
+/*! @} */
+
+/*! @name CH_PRI - Channel Priority */
+/*! @{ */
+
+#define DMA_CH_PRI_APL_MASK                 DMA_TCD_CH0_PRI_APL_MASK
+#define DMA_CH_PRI_APL_SHIFT                DMA_TCD_CH0_PRI_APL_SHIFT
+#define DMA_CH_PRI_APL(x)                   DMA_TCD_CH0_PRI_APL(x)
+
+#define DMA_CH_PRI_DPA_MASK                 DMA_TCD_CH0_PRI_DPA_MASK
+#define DMA_CH_PRI_DPA_SHIFT                DMA_TCD_CH0_PRI_DPA_SHIFT
+#define DMA_CH_PRI_DPA(x)                   DMA_TCD_CH0_PRI_DPA(x)
+
+#define DMA_CH_PRI_ECP_MASK                 DMA_TCD_CH0_PRI_ECP_MASK
+#define DMA_CH_PRI_ECP_SHIFT                DMA_TCD_CH0_PRI_ECP_SHIFT
+#define DMA_CH_PRI_ECP(x)                   DMA_TCD_CH0_PRI_ECP(x)
+/*! @} */
+
+/*! @name TCD_SADDR - TCD Source Address */
+/*! @{ */
+
+#define DMA_TCD_SADDR_SADDR_MASK            DMA_TCD_TCD0_SADDR_SADDR_MASK
+#define DMA_TCD_SADDR_SADDR_SHIFT           DMA_TCD_TCD0_SADDR_SADDR_SHIFT
+#define DMA_TCD_SADDR_SADDR(x)              DMA_TCD_TCD0_SADDR_SADDR(x)
+/*! @} */
+
+/*! @name TCD_SOFF - TCD Signed Source Address Offset */
+/*! @{ */
+
+#define DMA_TCD_SOFF_SOFF_MASK              DMA_TCD_TCD0_SOFF_SOFF_MASK
+#define DMA_TCD_SOFF_SOFF_SHIFT             DMA_TCD_TCD0_SOFF_SOFF_SHIFT
+#define DMA_TCD_SOFF_SOFF(x)                DMA_TCD_TCD0_SOFF_SOFF(x)
+/*! @} */
+
+/*! @name TCD_ATTR - TCD Transfer Attributes */
+/*! @{ */
+
+#define DMA_TCD_ATTR_DSIZE_MASK             DMA_TCD_TCD0_ATTR_DSIZE_MASK
+#define DMA_TCD_ATTR_DSIZE_SHIFT            DMA_TCD_TCD0_ATTR_DSIZE_SHIFT
+#define DMA_TCD_ATTR_DSIZE(x)               DMA_TCD_TCD0_ATTR_DSIZE(x)
+
+#define DMA_TCD_ATTR_DMOD_MASK              DMA_TCD_TCD0_ATTR_DMOD_MASK
+#define DMA_TCD_ATTR_DMOD_SHIFT             DMA_TCD_TCD0_ATTR_DMOD_SHIFT
+#define DMA_TCD_ATTR_DMOD(x)                DMA_TCD_TCD0_ATTR_DMOD(x)
+
+#define DMA_TCD_ATTR_SSIZE_MASK             DMA_TCD_TCD0_ATTR_SSIZE_MASK
+#define DMA_TCD_ATTR_SSIZE_SHIFT            DMA_TCD_TCD0_ATTR_SSIZE_SHIFT
+#define DMA_TCD_ATTR_SSIZE(x)               DMA_TCD_TCD0_ATTR_SSIZE(x)
+
+#define DMA_TCD_ATTR_SMOD_MASK              DMA_TCD_TCD0_ATTR_SMOD_MASK
+#define DMA_TCD_ATTR_SMOD_SHIFT             DMA_TCD_TCD0_ATTR_SMOD_SHIFT
+#define DMA_TCD_ATTR_SMOD(x)                DMA_TCD_TCD0_ATTR_SMOD(x)
+/*! @} */
+
+/*! @name TCD_NBYTES_MLOFFNO - TCD Transfer Size Without Minor Loop Offsets */
+/*! @{ */
+
+#define DMA_TCD_NBYTES_MLOFFNO_NBYTES_MASK  DMA_TCD_TCD0_NBYTES_MLOFFNO_NBYTES_MASK
+#define DMA_TCD_NBYTES_MLOFFNO_NBYTES_SHIFT DMA_TCD_TCD0_NBYTES_MLOFFNO_NBYTES_SHIFT
+#define DMA_TCD_NBYTES_MLOFFNO_NBYTES(x)    DMA_TCD_TCD0_NBYTES_MLOFFNO_NBYTES(x)
+
+#define DMA_TCD_NBYTES_MLOFFNO_DMLOE_MASK   DMA_TCD_TCD0_NBYTES_MLOFFNO_DMLOE_MASK
+#define DMA_TCD_NBYTES_MLOFFNO_DMLOE_SHIFT  DMA_TCD_TCD0_NBYTES_MLOFFNO_DMLOE_SHIFT
+#define DMA_TCD_NBYTES_MLOFFNO_DMLOE(x)     DMA_TCD_TCD0_NBYTES_MLOFFNO_DMLOE(x)
+
+#define DMA_TCD_NBYTES_MLOFFNO_SMLOE_MASK   DMA_TCD_TCD0_NBYTES_MLOFFNO_SMLOE_MASK
+#define DMA_TCD_NBYTES_MLOFFNO_SMLOE_SHIFT  DMA_TCD_TCD0_NBYTES_MLOFFNO_SMLOE_SHIFT
+#define DMA_TCD_NBYTES_MLOFFNO_SMLOE(x)     DMA_TCD_TCD0_NBYTES_MLOFFNO_SMLOE(x)
+/*! @} */
+
+/*! @name TCD_NBYTES_MLOFFYES - TCD Transfer Size with Minor Loop Offsets */
+/*! @{ */
+
+#define DMA_TCD_NBYTES_MLOFFYES_NBYTES_MASK  DMA_TCD_TCD0_NBYTES_MLOFFYES_NBYTES_MASK
+#define DMA_TCD_NBYTES_MLOFFYES_NBYTES_SHIFT DMA_TCD_TCD0_NBYTES_MLOFFYES_NBYTES_SHIFT
+#define DMA_TCD_NBYTES_MLOFFYES_NBYTES(x)    DMA_TCD_TCD0_NBYTES_MLOFFYES_NBYTES(x)
+
+#define DMA_TCD_NBYTES_MLOFFYES_MLOFF_MASK  DMA_TCD_TCD0_NBYTES_MLOFFYES_MLOFF_MASK
+#define DMA_TCD_NBYTES_MLOFFYES_MLOFF_SHIFT DMA_TCD_TCD0_NBYTES_MLOFFYES_MLOFF_SHIFT
+#define DMA_TCD_NBYTES_MLOFFYES_MLOFF(x)    DMA_TCD_TCD0_NBYTES_MLOFFYES_MLOFF(x)
+
+#define DMA_TCD_NBYTES_MLOFFYES_DMLOE_MASK  DMA_TCD_TCD0_NBYTES_MLOFFYES_DMLOE_MASK
+#define DMA_TCD_NBYTES_MLOFFYES_DMLOE_SHIFT DMA_TCD_TCD0_NBYTES_MLOFFYES_DMLOE_SHIFT
+#define DMA_TCD_NBYTES_MLOFFYES_DMLOE(x)    DMA_TCD_TCD0_NBYTES_MLOFFYES_DMLOE(x)
+
+#define DMA_TCD_NBYTES_MLOFFYES_SMLOE_MASK  DMA_TCD_TCD0_NBYTES_MLOFFYES_SMLOE_MASK
+#define DMA_TCD_NBYTES_MLOFFYES_SMLOE_SHIFT DMA_TCD_TCD0_NBYTES_MLOFFYES_SMLOE_SHIFT
+#define DMA_TCD_NBYTES_MLOFFYES_SMLOE(x)    DMA_TCD_TCD0_NBYTES_MLOFFYES_SMLOE(x)
+/*! @} */
+
+/*! @name TCD_SLAST_SDA - TCD Last Source Address Adjustment / Store DADDR Address */
+/*! @{ */
+
+#define DMA_TCD_SLAST_SDA_SLAST_SDA_MASK    DMA_TCD_TCD0_SLAST_SDA_SLAST_SDA_MASK
+#define DMA_TCD_SLAST_SDA_SLAST_SDA_SHIFT   DMA_TCD_TCD0_SLAST_SDA_SLAST_SDA_SHIFT
+#define DMA_TCD_SLAST_SDA_SLAST_SDA(x)      DMA_TCD_TCD0_SLAST_SDA_SLAST_SDA(x)
+/*! @} */
+
+/*! @name TCD_DADDR - TCD Destination Address */
+/*! @{ */
+
+#define DMA_TCD_DADDR_DADDR_MASK            DMA_TCD_TCD0_DADDR_DADDR_MASK
+#define DMA_TCD_DADDR_DADDR_SHIFT           DMA_TCD_TCD0_DADDR_DADDR_SHIFT
+#define DMA_TCD_DADDR_DADDR(x)              DMA_TCD_TCD0_DADDR_DADDR(x)
+/*! @} */
+
+/*! @name TCD_DOFF - TCD Signed Destination Address Offset */
+/*! @{ */
+
+#define DMA_TCD_DOFF_DOFF_MASK              DMA_TCD_TCD0_DOFF_DOFF_MASK
+#define DMA_TCD_DOFF_DOFF_SHIFT             DMA_TCD_TCD0_DOFF_DOFF_SHIFT
+#define DMA_TCD_DOFF_DOFF(x)                DMA_TCD_TCD0_DOFF_DOFF(x)
+/*! @} */
+
+/*! @name TCD_CITER_ELINKNO - TCD Current Major Loop Count (Minor Loop Channel Linking Disabled) */
+/*! @{ */
+
+#define DMA_TCD_CITER_ELINKNO_CITER_MASK    DMA_TCD_TCD0_CITER_ELINKNO_CITER_MASK
+#define DMA_TCD_CITER_ELINKNO_CITER_SHIFT   DMA_TCD_TCD0_CITER_ELINKNO_CITER_SHIFT
+#define DMA_TCD_CITER_ELINKNO_CITER(x)      DMA_TCD_TCD0_CITER_ELINKNO_CITER(x)
+
+#define DMA_TCD_CITER_ELINKNO_ELINK_MASK    DMA_TCD_TCD0_CITER_ELINKNO_ELINK_MASK
+#define DMA_TCD_CITER_ELINKNO_ELINK_SHIFT   DMA_TCD_TCD0_CITER_ELINKNO_ELINK_SHIFT
+#define DMA_TCD_CITER_ELINKNO_ELINK(x)      DMA_TCD_TCD0_CITER_ELINKNO_ELINK(x)
+/*! @} */
+
+/*! @name TCD_CITER_ELINKYES - TCD Current Major Loop Count (Minor Loop Channel Linking Enabled) */
+/*! @{ */
+
+#define DMA_TCD_CITER_ELINKYES_CITER_MASK  DMA_TCD_TCD0_CITER_ELINKYES_CITER_MASK
+#define DMA_TCD_CITER_ELINKYES_CITER_SHIFT DMA_TCD_TCD0_CITER_ELINKYES_CITER_SHIFT
+#define DMA_TCD_CITER_ELINKYES_CITER(x)    DMA_TCD_TCD0_CITER_ELINKYES_CITER(x)
+
+#define DMA_TCD_CITER_ELINKYES_LINKCH_MASK  DMA_TCD_TCD0_CITER_ELINKYES_LINKCH_MASK
+#define DMA_TCD_CITER_ELINKYES_LINKCH_SHIFT DMA_TCD_TCD0_CITER_ELINKYES_LINKCH_SHIFT
+#define DMA_TCD_CITER_ELINKYES_LINKCH(x)    DMA_TCD_TCD0_CITER_ELINKYES_LINKCH(x)
+
+#define DMA_TCD_CITER_ELINKYES_ELINK_MASK  DMA_TCD_TCD0_CITER_ELINKYES_ELINK_MASK
+#define DMA_TCD_CITER_ELINKYES_ELINK_SHIFT DMA_TCD_TCD0_CITER_ELINKYES_ELINK_SHIFT
+#define DMA_TCD_CITER_ELINKYES_ELINK(x)    DMA_TCD_TCD0_CITER_ELINKYES_ELINK(x)
+/*! @} */
+
+/*! @name TCD_DLAST_SGA - TCD Last Destination Address Adjustment / Scatter Gather Address */
+/*! @{ */
+
+#define DMA_TCD_DLAST_SGA_DLAST_SGA_MASK  DMA_TCD_TCD0_DLAST_SGA_DLAST_SGA_MASK
+#define DMA_TCD_DLAST_SGA_DLAST_SGA_SHIFT DMA_TCD_TCD0_DLAST_SGA_DLAST_SGA_SHIFT
+#define DMA_TCD_DLAST_SGA_DLAST_SGA(x)    DMA_TCD_TCD0_DLAST_SGA_DLAST_SGA(x)
+/*! @} */
+
+/*! @name TCD_CSR - TCD Control and Status */
+/*! @{ */
+
+#define DMA_TCD_CSR_START_MASK            DMA_TCD_TCD0_CSR_START_MASK
+#define DMA_TCD_CSR_START_SHIFT           DMA_TCD_TCD0_CSR_START_SHIFT
+#define DMA_TCD_CSR_START(x)              DMA_TCD_TCD0_CSR_START(x)
+
+#define DMA_TCD_CSR_INTMAJOR_MASK         DMA_TCD_TCD0_CSR_INTMAJOR_MASK
+#define DMA_TCD_CSR_INTMAJOR_SHIFT        DMA_TCD_TCD0_CSR_INTMAJOR_SHIFT
+#define DMA_TCD_CSR_INTMAJOR(x)           DMA_TCD_TCD0_CSR_INTMAJOR(x)
+
+#define DMA_TCD_CSR_INTHALF_MASK          DMA_TCD_TCD0_CSR_INTHALF_MASK
+#define DMA_TCD_CSR_INTHALF_SHIFT         DMA_TCD_TCD0_CSR_INTHALF_SHIFT
+#define DMA_TCD_CSR_INTHALF(x)            DMA_TCD_TCD0_CSR_INTHALF(x)
+
+#define DMA_TCD_CSR_DREQ_MASK             DMA_TCD_TCD0_CSR_DREQ_MASK
+#define DMA_TCD_CSR_DREQ_SHIFT            DMA_TCD_TCD0_CSR_DREQ_SHIFT
+#define DMA_TCD_CSR_DREQ(x)               DMA_TCD_TCD0_CSR_DREQ(x)
+
+#define DMA_TCD_CSR_ESG_MASK              DMA_TCD_TCD0_CSR_ESG_MASK
+#define DMA_TCD_CSR_ESG_SHIFT             DMA_TCD_TCD0_CSR_ESG_SHIFT
+#define DMA_TCD_CSR_ESG(x)                DMA_TCD_TCD0_CSR_ESG(x)
+
+#define DMA_TCD_CSR_MAJORELINK_MASK       DMA_TCD_TCD0_CSR_MAJORELINK_MASK
+#define DMA_TCD_CSR_MAJORELINK_SHIFT      DMA_TCD_TCD0_CSR_MAJORELINK_SHIFT
+#define DMA_TCD_CSR_MAJORELINK(x)         DMA_TCD_TCD0_CSR_MAJORELINK(x)
+
+#define DMA_TCD_CSR_EEOP_MASK             DMA_TCD_TCD0_CSR_EEOP_MASK
+#define DMA_TCD_CSR_EEOP_SHIFT            DMA_TCD_TCD0_CSR_EEOP_SHIFT
+#define DMA_TCD_CSR_EEOP(x)               DMA_TCD_TCD0_CSR_EEOP(x)
+
+#define DMA_TCD_CSR_ESDA_MASK             DMA_TCD_TCD0_CSR_ESDA_MASK
+#define DMA_TCD_CSR_ESDA_SHIFT            DMA_TCD_TCD0_CSR_ESDA_SHIFT
+#define DMA_TCD_CSR_ESDA(x)               DMA_TCD_TCD0_CSR_ESDA(x)
+
+#define DMA_TCD_CSR_MAJORLINKCH_MASK      DMA_TCD_TCD0_CSR_MAJORLINKCH_MASK
+#define DMA_TCD_CSR_MAJORLINKCH_SHIFT     DMA_TCD_TCD0_CSR_MAJORLINKCH_SHIFT
+#define DMA_TCD_CSR_MAJORLINKCH(x)        DMA_TCD_TCD0_CSR_MAJORLINKCH(x)
+
+#define DMA_TCD_CSR_BWC_MASK              DMA_TCD_TCD0_CSR_BWC_MASK
+#define DMA_TCD_CSR_BWC_SHIFT             DMA_TCD_TCD0_CSR_BWC_SHIFT
+#define DMA_TCD_CSR_BWC(x)                DMA_TCD_TCD0_CSR_BWC(x)
+/*! @} */
+
+/*! @name TCD_BITER_ELINKNO - TCD Beginning Major Loop Count (Minor Loop Channel Linking Disabled) */
+/*! @{ */
+
+#define DMA_TCD_BITER_ELINKNO_BITER_MASK  DMA_TCD_TCD0_BITER_ELINKNO_BITER_MASK
+#define DMA_TCD_BITER_ELINKNO_BITER_SHIFT DMA_TCD_TCD0_BITER_ELINKNO_BITER_SHIFT
+#define DMA_TCD_BITER_ELINKNO_BITER(x)    DMA_TCD_TCD0_BITER_ELINKNO_BITER(x)
+
+#define DMA_TCD_BITER_ELINKNO_ELINK_MASK  DMA_TCD_TCD0_BITER_ELINKNO_ELINK_MASK
+#define DMA_TCD_BITER_ELINKNO_ELINK_SHIFT DMA_TCD_TCD0_BITER_ELINKNO_ELINK_SHIFT
+#define DMA_TCD_BITER_ELINKNO_ELINK(x)    DMA_TCD_TCD0_BITER_ELINKNO_ELINK(x)
+/*! @} */
+
+/*! @name TCD_BITER_ELINKYES - TCD Beginning Major Loop Count (Minor Loop Channel Linking Enabled) */
+/*! @{ */
+
+#define DMA_TCD_BITER_ELINKYES_BITER_MASK  DMA_TCD_TCD0_BITER_ELINKYES_BITER_MASK
+#define DMA_TCD_BITER_ELINKYES_BITER_SHIFT DMA_TCD_TCD0_BITER_ELINKYES_BITER_SHIFT
+#define DMA_TCD_BITER_ELINKYES_BITER(x)    DMA_TCD_TCD0_BITER_ELINKYES_BITER(x)
+
+#define DMA_TCD_BITER_ELINKYES_LINKCH_MASK  DMA_TCD_TCD0_BITER_ELINKYES_LINKCH_MASK
+#define DMA_TCD_BITER_ELINKYES_LINKCH_SHIFT DMA_TCD_TCD0_BITER_ELINKYES_LINKCH_SHIFT
+#define DMA_TCD_BITER_ELINKYES_LINKCH(x)    DMA_TCD_TCD0_BITER_ELINKYES_LINKCH(x)
+
+#define DMA_TCD_BITER_ELINKYES_ELINK_MASK   DMA_TCD_TCD0_BITER_ELINKYES_ELINK_MASK
+#define DMA_TCD_BITER_ELINKYES_ELINK_SHIFT  DMA_TCD_TCD0_BITER_ELINKYES_ELINK_SHIFT
+#define DMA_TCD_BITER_ELINKYES_ELINK(x)     DMA_TCD_TCD0_BITER_ELINKYES_ELINK(x)
+/*! @} */
+
 #endif /* _S32K344_DEVICE_H_ */
