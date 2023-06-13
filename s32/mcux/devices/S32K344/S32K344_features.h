@@ -7,6 +7,8 @@
 #ifndef _S32K344_FEATURES_H_
 #define _S32K344_FEATURES_H_
 
+#include "autoconf.h"
+
 /* SOC module features */
 
 /* @brief LPUART availability on the SoC. */
@@ -98,7 +100,7 @@
 /* @brief Has a glitch filter on the receive pin (register bit field MCR[WAKSRC]). */
 #define FSL_FEATURE_FLEXCAN_HAS_GLITCH_FILTER (1)
 /* @brief Has extended interrupt mask and flag register (register IMASK2, IFLAG2). */
-#define FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER (0)
+#define FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER ((CONFIG_CAN_MAX_MB > 32) ? 1 : 0)
 /* @brief Instance has extended bit timing register (register CBT). */
 #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_EXTENDED_TIMING_REGISTERn(x) (1)
 /* @brief Has a receive FIFO DMA feature (register bit field MCR[DMA]). */
