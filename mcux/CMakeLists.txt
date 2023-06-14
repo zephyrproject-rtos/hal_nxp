@@ -108,3 +108,6 @@ zephyr_linker_sources_ifdef(CONFIG_NOCACHE_MEMORY
   NOCACHE_SECTION
   nocache.ld
 )
+zephyr_library_compile_definitions_ifdef(CONFIG_NOCACHE_MEMORY
+  __STARTUP_INITIALIZE_NONCACHEDATA
+)
