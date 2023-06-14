@@ -1,6 +1,7 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE}
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/cache/armv7-m7
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/dmamux
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/CMSIS/Core/Include
@@ -161,6 +162,7 @@ include_driver_ifdef(CONFIG_MCUX_SDIF			sdif		driver_sdif)
 include_driver_ifdef(CONFIG_ADC_MCUX_ETC		adc_etc		driver_adc_etc)
 include_driver_ifdef(CONFIG_MCUX_XBARA			xbara		driver_xbara)
 include_driver_ifdef(CONFIG_QDEC_MCUX			enc		driver_enc)
+include_driver_ifdef(CONFIG_CRYPTO_MCUX_DCP			dcp		driver_dcp)
 
 if ((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4)))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv7-m7	driver_cache_armv7_m7)
