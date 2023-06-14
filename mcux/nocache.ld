@@ -6,3 +6,4 @@
 
 . = ALIGN(4);
 KEEP(*(NonCacheable))
+KEEP(*(NonCacheable.init))
