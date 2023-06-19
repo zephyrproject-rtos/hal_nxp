@@ -4,6 +4,7 @@
 add_subdirectory(BaseNXP)
 add_subdirectory(Mcu)
 add_subdirectory(Rte)
+add_subdirectory_ifdef(CONFIG_ADC_NXP_S32_ADC_SAR Adc)
 add_subdirectory_ifdef(CONFIG_GPIO_NXP_S32 Dio)
 add_subdirectory_ifdef(CONFIG_NXP_S32_EIRQ Icu)
 add_subdirectory_ifdef(CONFIG_PINCTRL_NXP_S32 Port)
