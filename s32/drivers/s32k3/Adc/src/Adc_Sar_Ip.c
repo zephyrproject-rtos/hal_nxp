@@ -1609,6 +1609,12 @@ static inline void Adc_CheckAndCallAllChannelNotification(const uint32 Instance)
     EocFlag  = (*IMRAddr);
     EocFlag &= (*ISRAddr);
     EocFlag &= (ADC_ISR_EOC_MASK | ADC_ISR_JEOC_MASK);
+
+    /* Clear EOC Flag */
+    if (EocFlag != 0)
+    {
+        *ISRAddr = EocFlag;
+    }
 #endif /* (STD_ON == ADC_SAR_IP_EOC_ENABLED) */
 
     for (VectAdr = 0U; VectAdr < Adc_Sar_Ip_au8AdcGroupCount[Instance]; VectAdr++)
@@ -1629,13 +1635,6 @@ static inline void Adc_CheckAndCallAllChannelNotification(const uint32 Instance)
         }
     }
 
-    /* CPR_RTD_00664 */
-#if (STD_ON == ADC_SAR_IP_EOC_ENABLED)
-    if (TRUE == CeocfrFlag)
-    {
-        *ISRAddr = EocFlag;
-    }
-#endif /* (STD_ON == ADC_SAR_IP_EOC_ENABLED) */
 #if (STD_ON == ADC_SAR_IP_WDG_ENABLED)
     if (WtisrMask != 0U)
     {
