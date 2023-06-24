@@ -44,6 +44,16 @@ zephyr_library_compile_definitions_ifdef(
   CONFIG_HAS_MCUX_CACHE FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
 )
 
+
+# Required by all SCFW-based SoCs
+if (CONFIG_SOC_MIMX8QM_A53)
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE}/scfw_api
+    )
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE}/scfw_api)
+    include(driver_scfw_api)
+endif()
+
 include(driver_common)
 
 #Include system_xxx file
