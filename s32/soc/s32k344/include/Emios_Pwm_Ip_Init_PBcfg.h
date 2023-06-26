@@ -25,6 +25,8 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
+#include <zephyr/devicetree.h>
+
 #include "Emios_Pwm_Ip_Types.h"
 
 /*==================================================================================================
@@ -91,6 +93,45 @@ extern "C"{
 *                                       FUNCTION PROTOTYPES
 ==================================================================================================*/
 
+#define DT_DRV_COMPAT                     nxp_s32_emios_pwm
+
+#define EMIOS_OPWFMB_MODE_USED(node_id)                                                    \
+            COND_CODE_1(DT_NODE_HAS_PROP(node_id, pwm_mode),                               \
+                (DT_ENUM_HAS_VALUE(node_id, pwm_mode, MODE_OPWFMB)),                       \
+                    (0)) ||
+
+#define IS_EMIOS_OPWFMB_MODE_USED(n)                                                       \
+            DT_INST_FOREACH_CHILD_STATUS_OKAY(n, EMIOS_OPWFMB_MODE_USED)
+
+#define EMIOS_OPWMB_MODE_USED(node_id)                                                     \
+            COND_CODE_1(DT_NODE_HAS_PROP(node_id, pwm_mode),                               \
+                (DT_ENUM_HAS_VALUE(node_id, pwm_mode, MODE_OPWMB)),                        \
+                    (0)) ||
+
+#define IS_EMIOS_OPWMB_MODE_USED(n)                                                        \
+            DT_INST_FOREACH_CHILD_STATUS_OKAY(n, EMIOS_OPWMB_MODE_USED)
+
+#define EMIOS_OPWMCB_MODE_USED(node_id)                                                    \
+            COND_CODE_1(DT_NODE_HAS_PROP(node_id, pwm_mode),                               \
+                (DT_ENUM_HAS_VALUE(node_id, pwm_mode, MODE_OPWMCB_TRAIL_EDGE) ||           \
+                 DT_ENUM_HAS_VALUE(node_id, pwm_mode, MODE_OPWMCB_LEAD_EDGE)               \
+                ),(0)) ||
+
+#define IS_EMIOS_OPWMCB_MODE_USED(n)                                                       \
+            DT_INST_FOREACH_CHILD_STATUS_OKAY(n, EMIOS_OPWMCB_MODE_USED)
+
+/* Macro to enable the mode operations. */
+#if DT_INST_FOREACH_STATUS_OKAY(IS_EMIOS_OPWFMB_MODE_USED) 0
+#define EMIOS_PWM_IP_MODE_OPWFMB_USED
+#endif
+
+#if DT_INST_FOREACH_STATUS_OKAY(IS_EMIOS_OPWMB_MODE_USED) 0
+#define EMIOS_PWM_IP_MODE_OPWMB_USED
+#endif
+
+#if DT_INST_FOREACH_STATUS_OKAY(IS_EMIOS_OPWMCB_MODE_USED) 0
+#define EMIOS_PWM_IP_MODE_OPWMCB_USED
+#endif
 
 #ifdef __cplusplus
 }
