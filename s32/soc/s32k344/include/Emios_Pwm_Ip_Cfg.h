@@ -25,6 +25,8 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
+#include <zephyr/devicetree.h>
+
 /* Standard Types */
 #include "Std_Types.h"
 
@@ -92,8 +94,10 @@ extern "C"{
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
+#define DT_DRV_COMPAT   nxp_s32_emios_pwm
+
 /** @brief      Enable the Emios Ip */
-#define EMIOS_PWM_IP_USED                       (STD_OFF)
+#define EMIOS_PWM_IP_USED                       (DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT))
 
 /** @brief      Switch to enable the development error detection. */
 #define EMIOS_PWM_IP_DEV_ERROR_DETECT           (STD_OFF)
@@ -121,11 +125,24 @@ extern "C"{
 #define EMIOS_PWM_IP_COUNTER_BUS_BCDE              (248U)
 #define EMIOS_PWM_IP_COUNTER_BUS_F                 (22U)
 
+/** @brief Arrays to store the channel logic Index State */
+#define EMIOS_PWM_IP_USED_CHANNELS                 {\
+{255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U},  \
+{255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U},  \
+{255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U}  \
+}
 
-#define EMIOS_PWM_IP_NUM_OF_CHANNELS_USED       ((uint8)U)
-#define EMIOS_PWM_IP_INITIAL_MODES        \
-{\
-    }
+#define NUM_CHANNEL_USED(node_id)           1 +
+#define SET_INITIAL_MODE(node_id)           EMIOS_PWM_IP_MODE_NODEFINE,
+
+#define EMIOS_NUM_CHANNELS_USED(n)          DT_INST_FOREACH_CHILD_STATUS_OKAY(n, NUM_CHANNEL_USED)
+
+#define EMIOS_PWM_IP_NUM_OF_CHANNELS_USED   DT_INST_FOREACH_STATUS_OKAY(EMIOS_NUM_CHANNELS_USED) 0
+#define EMIOS_PWM_IP_SET_INITIAL_MODE(n)    DT_INST_FOREACH_CHILD_STATUS_OKAY(n, SET_INITIAL_MODE)
+#define EMIOS_PWM_IP_INITIAL_MODES                                                \
+{                                                                                 \
+    DT_INST_FOREACH_STATUS_OKAY(EMIOS_PWM_IP_SET_INITIAL_MODE)                    \
+}
 
 /*==================================================================================================
 *                                              ENUMS
@@ -162,4 +179,3 @@ typedef uint16 Emios_Pwm_Ip_DutyType;
 /** @} */
 
 #endif /* EMIOS_PWM_IP_CFG_H */
-
