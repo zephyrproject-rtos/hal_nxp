@@ -21,7 +21,7 @@ zephyr_library_sources_ifdef(CONFIG_CLOCK_CONTROL_NXP_S32
   src/Clock_Ip_Specific.c
 )
 
-zephyr_library_sources_ifdef(CONFIG_NXP_S32_PM
+zephyr_library_sources(
   src/Power_Ip.c
   src/Power_Ip_AEC.c
   src/Power_Ip_CortexM7.c
