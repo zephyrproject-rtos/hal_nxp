@@ -17,6 +17,8 @@
 #define FSL_FEATURE_SOC_FLEXCAN_COUNT (6)
 /* @brief LPI2C availability on the SoC. */
 #define FSL_FEATURE_SOC_LPI2C_COUNT (2)
+/* @brief LPSPI availability on the SoC. */
+#define FSL_FEATURE_SOC_LPSPI_COUNT (6)
 
 /* LPUART module features */
 
@@ -155,5 +157,16 @@
 #define FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(x) (0)
 /* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (4)
+
+/* LPSPI module features */
+
+/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+#define FSL_FEATURE_LPSPI_FIFO_SIZEn(x) (4)
+/* @brief Has separate DMA RX and TX requests. */
+#define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
+/* @brief Has CCR1 (related to existence of registers CCR1). */
+#define FSL_FEATURE_LPSPI_HAS_CCR1 (1)
+/* @brief Is affected by errata S32K3X4-0P55A-1P55A-ERRATA / ERR050456 (LPSPI: Reset to fifo does not work as expected). */
+#define FSL_FEATURE_LPSPI_HAS_ERRATA_050456 (1)
 
 #endif /* _S32K344_FEATURES_H_ */
