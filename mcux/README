@@ -74,3 +74,5 @@ Patch List:
   10. devices: MIMX8QM6: Add mapped versions of clock functions.
   11. devices: MIMX8QM6: Don't allow drivers to perform clock-related operations on Zephyr.
   12. devices: MIMX8QM6: Add missing LPUART interrupt macro.
+  13. mcux-sdk/drivers/lpspi/fsl_lpspi.h: add workaround for errata ERR050456 on S32K3x4 SoC
+  according to S32K3X4-0P55A-1P55A-ERRATA.
