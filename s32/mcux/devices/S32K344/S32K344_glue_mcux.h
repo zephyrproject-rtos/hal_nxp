@@ -137,4 +137,36 @@
 /** Interrupt vectors for the LPI2C peripheral type */
 #define LPI2C_IRQS                               { LPI2C0_IRQn, LPI2C1_IRQn }
 
+/* LPSPI - Peripheral instance base addresses */
+/** Peripheral LPSPI0 base address */
+#define LPSPI0_BASE                              IP_LPSPI_0_BASE
+/** Peripheral LPSPI0 base pointer */
+#define LPSPI0                                   IP_LPSPI_0
+/** Peripheral LPSPI1 base address */
+#define LPSPI1_BASE                              IP_LPSPI_1_BASE
+/** Peripheral LPSPI1 base pointer */
+#define LPSPI1                                   IP_LPSPI_1
+/** Peripheral LPSPI2 base address */
+#define LPSPI2_BASE                              IP_LPSPI_2_BASE
+/** Peripheral LPSPI2 base pointer */
+#define LPSPI2                                   IP_LPSPI_2
+/** Peripheral LPSPI3 base address */
+#define LPSPI3_BASE                              IP_LPSPI_3_BASE
+/** Peripheral LPSPI3 base pointer */
+#define LPSPI3                                   IP_LPSPI_3
+/** Peripheral LPSPI4 base address */
+#define LPSPI4_BASE                              IP_LPSPI_4_BASE
+/** Peripheral LPSPI4 base pointer */
+#define LPSPI4                                   IP_LPSPI_4
+/** Peripheral LPSPI5 base address */
+#define LPSPI5_BASE                              IP_LPSPI_5_BASE
+/** Peripheral LPSPI5 base pointer */
+#define LPSPI5                                   IP_LPSPI_5
+/** Array initializer of LPSPI peripheral base addresses */
+#define LPSPI_BASE_ADDRS                         IP_LPSPI_BASE_ADDRS
+/** Array initializer of LPSPI peripheral base pointers */
+#define LPSPI_BASE_PTRS                          IP_LPSPI_BASE_PTRS
+/** Interrupt vectors for the LPSPI peripheral type */
+#define LPSPI_IRQS                               { LPSPI0_IRQn, LPSPI1_IRQn, LPSPI2_IRQn, LPSPI3_IRQn, LPSPI4_IRQn, LPSPI5_IRQn }
+
 #endif  /* _S32K344_GLUE_MCUX_H_ */
