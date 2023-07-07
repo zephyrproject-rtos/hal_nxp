@@ -121,7 +121,7 @@ extern "C"{
 #define     QSPI_IP_ERASE_TYPES      4U
 
 /*! @brief Number of AHB buffers in the device */
-#define QSPI_IP_AHB_BUFFERS   4U
+#define QSPI_IP_AHB_BUFFERS   4
 
 /*! Invalid index in virtual LUT, used for unsupported features */
 #define     QSPI_IP_LUT_INVALID     (uint16)0xFFFFU

@@ -28,7 +28,7 @@ extern "C"{
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "Qspi_Ip_Init_PBcfg.h"
-
+#include <zephyr/devicetree.h>
 
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
@@ -74,7 +74,7 @@ extern "C"{
 /* Pre-processor switch to enable/disable development error detection for QSPI Ip API */
 #define DEV_ASSERT_QSPI(x)
 /* Number of serial flash devices */
-#define QSPI_IP_MEM_INSTANCE_COUNT        (1U)
+#define QSPI_IP_MEM_INSTANCE_COUNT        (DT_NUM_INST_STATUS_OKAY(nxp_s32_qspi_nor))
 
 /* Timeout for DLL lock sequence */
 #define QSPI_IP_DLL_LOCK_TIMEOUT          (2147483647U)
