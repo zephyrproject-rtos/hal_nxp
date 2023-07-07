@@ -143,6 +143,16 @@ extern "C"{
 #define CLOCK_IP_CONFIGURED_FREQUENCIES_0_NO       (6U)
 
 /**
+* @brief            Number of clock configurations 1
+*/
+#define CLOCK_IP_CONFIGURED_SELECTORS_1_NO       (3U)
+#define CLOCK_IP_CONFIGURED_DIVIDERS_1_NO       (3U)
+#define CLOCK_IP_CONFIGURED_EXT_CLKS_1_NO       (2U)
+#define CLOCK_IP_CONFIGURED_GATES_1_NO       (100U)
+#define CLOCK_IP_CONFIGURED_CMUS_1_NO       (4U)
+#define CLOCK_IP_CONFIGURED_FREQUENCIES_1_NO       (6U)
+
+/**
 * @brief            Supported power mode.
 */
 #define CLOCK_IP_HAS_RUN_MODE                 0U
