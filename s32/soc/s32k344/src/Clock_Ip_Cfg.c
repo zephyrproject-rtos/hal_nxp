@@ -276,7 +276,7 @@ static const Clock_Ip_SelectorConfigType Clock_Ip_SelectorConfigurations_0[CLOCK
     #if CLOCK_IP_CONFIGURED_SELECTORS_0_NO > 3U
     {
         EMAC_RX_CLK,                    /* Clock name associated to selector */
-        EMAC_MII_RMII_TX_CLK,                    /* Name of the selected input source */
+        FIRC_CLK,                    /* Name of the selected input source */
     },
     #endif
 
@@ -290,7 +290,7 @@ static const Clock_Ip_SelectorConfigType Clock_Ip_SelectorConfigurations_0[CLOCK
     #if CLOCK_IP_CONFIGURED_SELECTORS_0_NO > 5U
     {
         EMAC_TX_CLK,                    /* Clock name associated to selector */
-        EMAC_MII_RMII_TX_CLK,                    /* Name of the selected input source */
+        FIRC_CLK,                    /* Name of the selected input source */
     },
     #endif
 
@@ -471,7 +471,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 12U
     {
         EMAC_RX_CLK,                    /* name */
-        2U,                              /* value */
+        1U,                              /* value */
         {
             0U,
         }
@@ -491,7 +491,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 14U
     {
         EMAC_TX_CLK,                    /* name */
-        2U,                              /* value */
+        1U,                              /* value */
         {
             0U,
         }
@@ -584,7 +584,7 @@ static const Clock_Ip_ExtClkConfigType Clock_Ip_ExtClkConfigurations_0[CLOCK_IP_
     #if CLOCK_IP_CONFIGURED_EXT_CLKS_0_NO > 1U
     {
         EMAC_MII_RMII_TX_CLK,                    /* name */
-        50000000U,                              /* value */
+        0U,                              /* value */
     },
     #endif
 };
@@ -1405,11 +1405,903 @@ static const Clock_Ip_ConfiguredFrequencyType Clock_Ip_ConfiguredFrequencyConfig
     #endif
 };
 
+static const Clock_Ip_SelectorConfigType Clock_Ip_SelectorConfigurations_1[CLOCK_IP_CONFIGURED_SELECTORS_1_NO] = {
+
+    #if CLOCK_IP_CONFIGURED_SELECTORS_1_NO > 0U
+    {
+        EMAC_RX_CLK,                    /* Clock name associated to selector */
+        EMAC_MII_RMII_TX_CLK,                    /* Name of the selected input source */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_SELECTORS_1_NO > 1U
+    {
+        EMAC_TS_CLK,                    /* Clock name associated to selector */
+        FIRC_CLK,                    /* Name of the selected input source */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_SELECTORS_1_NO > 2U
+    {
+        EMAC_TX_CLK,                    /* Clock name associated to selector */
+        EMAC_MII_RMII_TX_CLK,                    /* Name of the selected input source */
+    },
+    #endif
+};
+
+
+static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_1[CLOCK_IP_CONFIGURED_DIVIDERS_1_NO] = {
+
+    #if CLOCK_IP_CONFIGURED_DIVIDERS_1_NO > 0U
+    {
+        EMAC_RX_CLK,                    /* name */
+        2U,                              /* value */
+        {
+            0U,
+        }
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_DIVIDERS_1_NO > 1U
+    {
+        EMAC_TS_CLK,                    /* name */
+        1U,                              /* value */
+        {
+            0U,
+        }
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_DIVIDERS_1_NO > 2U
+    {
+        EMAC_TX_CLK,                    /* name */
+        2U,                              /* value */
+        {
+            0U,
+        }
+    },
+    #endif
+};
+
+
+static const Clock_Ip_ExtClkConfigType Clock_Ip_ExtClkConfigurations_1[CLOCK_IP_CONFIGURED_EXT_CLKS_1_NO] = {
+
+    #if CLOCK_IP_CONFIGURED_EXT_CLKS_1_NO > 0U
+    {
+        EMAC_MII_RX_CLK,                    /* name */
+        0U,                              /* value */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_EXT_CLKS_1_NO > 1U
+    {
+        EMAC_MII_RMII_TX_CLK,                    /* name */
+        50000000U,                              /* value */
+    },
+    #endif
+};
+
+
+static const Clock_Ip_GateConfigType Clock_Ip_GatesConfigurations_1[CLOCK_IP_CONFIGURED_GATES_1_NO] = {
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 0U
+    {
+        ADC0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 1U
+    {
+        ADC1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 2U
+    {
+        ADC2_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 3U
+    {
+        BCTU0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 4U
+    {
+        CMP0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 5U
+    {
+        CMP1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 6U
+    {
+        CMP2_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 7U
+    {
+        CRC0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 8U
+    {
+        DMAMUX0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 9U
+    {
+        DMAMUX1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 10U
+    {
+        EDMA0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 11U
+    {
+        EDMA0_TCD0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 12U
+    {
+        EDMA0_TCD1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 13U
+    {
+        EDMA0_TCD2_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 14U
+    {
+        EDMA0_TCD3_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 15U
+    {
+        EDMA0_TCD4_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 16U
+    {
+        EDMA0_TCD5_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 17U
+    {
+        EDMA0_TCD6_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 18U
+    {
+        EDMA0_TCD7_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 19U
+    {
+        EDMA0_TCD8_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 20U
+    {
+        EDMA0_TCD9_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 21U
+    {
+        EDMA0_TCD10_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 22U
+    {
+        EDMA0_TCD11_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 23U
+    {
+        EDMA0_TCD12_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 24U
+    {
+        EDMA0_TCD13_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 25U
+    {
+        EDMA0_TCD14_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 26U
+    {
+        EDMA0_TCD15_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 27U
+    {
+        EDMA0_TCD16_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 28U
+    {
+        EDMA0_TCD17_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 29U
+    {
+        EDMA0_TCD18_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 30U
+    {
+        EDMA0_TCD19_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 31U
+    {
+        EDMA0_TCD20_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 32U
+    {
+        EDMA0_TCD21_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 33U
+    {
+        EDMA0_TCD22_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 34U
+    {
+        EDMA0_TCD23_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 35U
+    {
+        EDMA0_TCD24_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 36U
+    {
+        EDMA0_TCD25_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 37U
+    {
+        EDMA0_TCD26_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 38U
+    {
+        EDMA0_TCD27_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 39U
+    {
+        EDMA0_TCD28_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 40U
+    {
+        EDMA0_TCD29_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 41U
+    {
+        EDMA0_TCD30_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 42U
+    {
+        EDMA0_TCD31_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 43U
+    {
+        EIM_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 44U
+    {
+        EMAC0_RX_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 45U
+    {
+        EMIOS0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 46U
+    {
+        EMIOS1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 47U
+    {
+        EMIOS2_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 48U
+    {
+        ERM0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 49U
+    {
+        FLEXCAN0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 50U
+    {
+        FLEXCAN1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 51U
+    {
+        FLEXCAN2_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 52U
+    {
+        FLEXCAN3_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 53U
+    {
+        FLEXCAN4_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 54U
+    {
+        FLEXCAN5_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 55U
+    {
+        FLEXIO0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 56U
+    {
+        INTM_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 57U
+    {
+        LCU0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 58U
+    {
+        LCU1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 59U
+    {
+        LPI2C0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 60U
+    {
+        LPI2C1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 61U
+    {
+        LPSPI0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 62U
+    {
+        LPSPI1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 63U
+    {
+        LPSPI2_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 64U
+    {
+        LPSPI3_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 65U
+    {
+        LPSPI4_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 66U
+    {
+        LPSPI5_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 67U
+    {
+        LPUART0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 68U
+    {
+        LPUART1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 69U
+    {
+        LPUART2_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 70U
+    {
+        LPUART3_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 71U
+    {
+        LPUART4_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 72U
+    {
+        LPUART5_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 73U
+    {
+        LPUART6_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 74U
+    {
+        LPUART7_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 75U
+    {
+        LPUART8_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 76U
+    {
+        LPUART9_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 77U
+    {
+        LPUART10_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 78U
+    {
+        LPUART11_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 79U
+    {
+        LPUART12_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 80U
+    {
+        LPUART13_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 81U
+    {
+        LPUART14_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 82U
+    {
+        LPUART15_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 83U
+    {
+        MSCM_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 84U
+    {
+        PIT0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 85U
+    {
+        PIT1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 86U
+    {
+        PIT2_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 87U
+    {
+        QSPI0_RAM_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 88U
+    {
+        RTC0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 89U
+    {
+        SAI0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 90U
+    {
+        SAI1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 91U
+    {
+        SEMA42_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 92U
+    {
+        SIUL2_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 93U
+    {
+        STM0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 94U
+    {
+        STM1_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 95U
+    {
+        SWT0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 96U
+    {
+        TEMPSENSE_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 97U
+    {
+        TRGMUX0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 98U
+    {
+        TSENSE0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+
+    #if CLOCK_IP_CONFIGURED_GATES_1_NO > 99U
+    {
+        WKPU0_CLK,                    /* name */
+        1U,                           /* enable */
+    },
+    #endif
+};
+
+
+static const Clock_Ip_CmuConfigType Clock_Ip_CmuConfigurations_1[CLOCK_IP_CONFIGURED_CMUS_1_NO] = {
+
+    #if CLOCK_IP_CONFIGURED_CMUS_1_NO > 0U
+    {
+        FXOSC_CLK,            /* Clock name associated to clock monitor. */
+        0U,                   /*Enable/disable clock monitor CMU_FC_0 */
+        (                                           /* IER for CMU_FC_0 */
+            CMU_FC_IER_FLLIE(0U) |
+            CMU_FC_IER_FHHIE(0U) |
+            CMU_FC_IER_FLLAIE(0U) |
+            CMU_FC_IER_FHHAIE(0U)
+        ),
+        16000000U,
+        {
+                0U,          /* Start index in register values array */
+                0U,          /* End index in register values array */
+        },
+    },
+    #endif
+    #if CLOCK_IP_CONFIGURED_CMUS_1_NO > 0U
+    {
+        CORE_CLK,            /* Clock name associated to clock monitor. */
+        0U,                   /*Enable/disable clock monitor CMU_FC_3 */
+        (                                           /* IER for CMU_FC_3 */
+            CMU_FC_IER_FLLIE(0U) |
+            CMU_FC_IER_FHHIE(0U) |
+            CMU_FC_IER_FLLAIE(0U) |
+            CMU_FC_IER_FHHAIE(0U)
+        ),
+        160000000U,
+        {
+                0U,          /* Start index in register values array */
+                0U,          /* End index in register values array */
+        },
+    },
+    #endif
+    #if CLOCK_IP_CONFIGURED_CMUS_1_NO > 0U
+    {
+        AIPS_PLAT_CLK,            /* Clock name associated to clock monitor. */
+        0U,                   /*Enable/disable clock monitor CMU_FC_4 */
+        (                                           /* IER for CMU_FC_4 */
+            CMU_FC_IER_FLLIE(0U) |
+            CMU_FC_IER_FHHIE(0U) |
+            CMU_FC_IER_FLLAIE(0U) |
+            CMU_FC_IER_FHHAIE(0U)
+        ),
+        80000000U,
+        {
+                0U,          /* Start index in register values array */
+                0U,          /* End index in register values array */
+        },
+    },
+    #endif
+    #if CLOCK_IP_CONFIGURED_CMUS_1_NO > 0U
+    {
+        HSE_CLK,            /* Clock name associated to clock monitor. */
+        0U,                   /*Enable/disable clock monitor CMU_FC_5 */
+        (                                           /* IER for CMU_FC_5 */
+            CMU_FC_IER_FLLIE(0U) |
+            CMU_FC_IER_FHHIE(0U) |
+            CMU_FC_IER_FLLAIE(0U) |
+            CMU_FC_IER_FHHAIE(0U)
+        ),
+        80000000U,
+        {
+                0U,          /* Start index in register values array */
+                0U,          /* End index in register values array */
+        },
+    },
+    #endif
+};
+
+
+static const Clock_Ip_ConfiguredFrequencyType Clock_Ip_ConfiguredFrequencyConfigurations_1[CLOCK_IP_CONFIGURED_FREQUENCIES_1_NO] = {
+
+    {
+        CLOCK_IS_OFF,
+        0U,
+    },
+    #if CLOCK_IP_CONFIGURED_FREQUENCIES_1_NO > 1U
+    {
+        FIRC_CLK,
+        48000000U,
+    },
+    #endif
+    #if CLOCK_IP_CONFIGURED_FREQUENCIES_1_NO > 2U
+    {
+        FXOSC_CLK,
+        16000000U,
+    },
+    #endif
+    #if CLOCK_IP_CONFIGURED_FREQUENCIES_1_NO > 3U
+    {
+        CORE_CLK,
+        160000000U,
+    },
+    #endif
+    #if CLOCK_IP_CONFIGURED_FREQUENCIES_1_NO > 4U
+    {
+        AIPS_PLAT_CLK,
+        80000000U,
+    },
+    #endif
+    #if CLOCK_IP_CONFIGURED_FREQUENCIES_1_NO > 5U
+    {
+        AIPS_SLOW_CLK,
+        40000000U,
+    },
+    #endif
+};
+
 
 /* *************************************************************************
  * Configuration structure for Clock Configuration
  * ************************************************************************* */
-const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
+const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[2U] = {
 
     /*! @brief User Configuration structure clock_Cfg_0 */
 
@@ -1442,6 +2334,39 @@ const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
         (NULL_PTR),                       /* pcfs configurations */
         (&Clock_Ip_CmuConfigurations_0),                       /* cmus configurations */
         (&Clock_Ip_ConfiguredFrequencyConfigurations_0),       /* configureFrequencies configurations */
+    },
+
+    /*! @brief User Configuration structure clock_Cfg_1 */
+
+    {
+        1U,                          /* clkConfigId */
+        (NULL_PTR),               /* Register data if register value optimization is enabled */
+
+        0U,                       /* ircoscsCount */
+        0U,                       /* xoscsCount */
+        0U,                       /* pllsCount */
+        3U,                       /* selectorsCount */
+        3U,                       /* dividersCount */
+        0U,                       /* dividerTriggersCount */
+        0U,                       /* fracDivsCount */
+        2U,                       /* extClksCount */
+        100U,                       /* gatesCount */
+        0U,                       /* pcfsCount */
+        4U,                       /* cmusCount */
+        6U,                       /* configureFrequenciesCount */
+
+        (NULL_PTR),                       /* Ircosc configurations */
+        (NULL_PTR),                       /* Xosc configurations */
+        (NULL_PTR),                       /* Pll configurations */
+        (&Clock_Ip_SelectorConfigurations_1),                  /* Selectors configurations */
+        (&Clock_Ip_DividerConfigurations_1),                   /* dividers configurations */
+        (NULL_PTR),                       /* dividerTriggers configurations */
+        (NULL_PTR),                       /* fracDivs configurations */
+        (&Clock_Ip_ExtClkConfigurations_1),                    /* extClks configurations */
+        (&Clock_Ip_GatesConfigurations_1),                     /* gates configurations */
+        (NULL_PTR),                       /* pcfs configurations */
+        (&Clock_Ip_CmuConfigurations_1),                       /* cmus configurations */
+        (&Clock_Ip_ConfiguredFrequencyConfigurations_1),       /* configureFrequencies configurations */
     },
 };
 
