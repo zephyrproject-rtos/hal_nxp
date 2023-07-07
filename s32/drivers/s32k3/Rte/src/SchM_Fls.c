@@ -99,16 +99,16 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-static volatile uint32 msr_FLS_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-static volatile uint32 reentry_guard_FLS_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-static volatile uint32 msr_FLS_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-static volatile uint32 reentry_guard_FLS_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-static volatile uint32 msr_FLS_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-static volatile uint32 reentry_guard_FLS_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-static volatile uint32 msr_FLS_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-static volatile uint32 reentry_guard_FLS_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-static volatile uint32 msr_FLS_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
-static volatile uint32 reentry_guard_FLS_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_FLS_EXCLUSIVE_AREA_10) static volatile uint32 msr_FLS_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_FLS_EXCLUSIVE_AREA_10) static volatile uint32 reentry_guard_FLS_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_FLS_EXCLUSIVE_AREA_11) static volatile uint32 msr_FLS_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_FLS_EXCLUSIVE_AREA_11) static volatile uint32 reentry_guard_FLS_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_FLS_EXCLUSIVE_AREA_12) static volatile uint32 msr_FLS_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_FLS_EXCLUSIVE_AREA_12) static volatile uint32 reentry_guard_FLS_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_FLS_EXCLUSIVE_AREA_13) static volatile uint32 msr_FLS_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_FLS_EXCLUSIVE_AREA_13) static volatile uint32 reentry_guard_FLS_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_FLS_EXCLUSIVE_AREA_14) static volatile uint32 msr_FLS_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_FLS_EXCLUSIVE_AREA_14) static volatile uint32 reentry_guard_FLS_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
