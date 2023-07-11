@@ -31,6 +31,13 @@ if((DEFINED CONFIG_FLASH_MCUX_FLEXSPI_XIP) AND (DEFINED CONFIG_FLASH))
     LOCATION ${CONFIG_FLASH_MCUX_FLEXSPI_XIP_MEM}_TEXT)
 endif()
 
+if(CONFIG_NET_CODE_RELOCATE)
+  # Relocate networking stack to chosen RAM bank
+  zephyr_code_relocate(FILES
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/enet/fsl_enet.c
+    LOCATION "${CONFIG_NET_CODE_RAM_NAME}_TEXT")
+endif()
+
 if(NOT CONFIG_ASSERT OR CONFIG_FORCE_NO_ASSERT)
   zephyr_compile_definitions(NDEBUG) # squelch fsl_flexcan.c warning
 endif()
