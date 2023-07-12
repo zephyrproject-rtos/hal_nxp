@@ -4,7 +4,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/cache/armv7-m7
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/dmamux
-    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/CMSIS/Core/Include
 )
 
 function(include_ifdef feature_toggle module)
