@@ -70,3 +70,7 @@ Patch List:
   6. Fixed fsl_caam.c: CAAM_RNG_GetRandomDataNonBlocking() to not force a reseed with each request. Internal bug submitted [MCUX-57074]
   7. fsl_common.h: add #ifdef ZEPHYR #endif to include Zephyr's sys utils
   8. mcux-sdk/drivers/flexcomm/fsl_i2c.c & fsl_i2c.h: patch to fix Zephyr bug #57858. The changes will be part of the next official NXP SDK release.
+  9. mcux: Add support for MIMX8QM6's CA53.
+  10. devices: MIMX8QM6: Add mapped versions of clock functions.
+  11. devices: MIMX8QM6: Don't allow drivers to perform clock-related operations on Zephyr.
+  12. devices: MIMX8QM6: Add missing LPUART interrupt macro.
