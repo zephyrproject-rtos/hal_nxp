@@ -166,7 +166,7 @@ typedef struct {
 } ADC_Type, *ADC_MemMapPtr;
 
 /** Number of instances of the ADC module. */
-#define ADC_INSTANCE_COUNT                       (3u)
+#define ADC_INSTANCE_COUNT                       (3)
 
 /* ADC - Peripheral instance base addresses */
 /** Peripheral ADC_0 base address */
