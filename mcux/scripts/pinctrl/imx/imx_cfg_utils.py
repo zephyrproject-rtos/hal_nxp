@@ -163,6 +163,12 @@ class Register:
         """
         return self._bit_field_map[bit_field][value]['description']
 
+    def get_bit_fields(self):
+        """
+        Get list of all bit fields present in register
+        """
+        return self._bit_field_map.keys()
+
 
 class TemplatedRegister(Register):
     """
@@ -235,7 +241,8 @@ class SignalPin:
                 reg_name = match.group(1)
                 match = re.match(r'SW_PAD_CTL_PAD_(\w+)', reg_name)
                 pad_name = match.group(1)
-                cfg_addr = peripheral_map[periph_name].get_reg_addr(reg_name)
+                cfg_reg = peripheral_map[periph_name].get_register(reg_name)
+                cfg_addr = peripheral_map[periph_name].get_base() + cfg_reg.get_offset()
                 # We have found the pad configuration address. Break.
                 break
         for connections in pin.findall('connections'):
@@ -246,7 +253,20 @@ class SignalPin:
                 name = f"{periph_name}_{pad_name}_{name_part}"
             else:
                 name = f"{periph_name}_{pad_name}_{signal.upper()}_{name_part}"
-            iomux_opt = IOMUXOption(connection, peripheral_map, cfg_addr, name)
+            # Determine the configuration register type. This is needed for
+            # iMX RT11xx series devices
+            cfg_fields = cfg_reg.get_bit_fields()
+            if 'PDRV' in cfg_fields:
+                pin_type = 'pdrv'
+            elif 'ODE_LPSR' in cfg_fields:
+                pin_type = 'lpsr'
+            elif 'ODE_SNVS' in cfg_fields:
+                pin_type = 'snvs'
+            elif 'PUE' in cfg_fields:
+                pin_type = 'pue'
+            else:
+                pin_type = 'unknown'
+            iomux_opt = IOMUXOption(connection, peripheral_map, cfg_addr, name, pin_type)
             peripheral = connection.find('peripheral_signal_ref').attrib['peripheral']
             channel = connection.find('peripheral_signal_ref').attrib.get('channel')
             if channel is not None:
@@ -364,15 +384,14 @@ class IOMUXOption:
     """
     Internal class representing an IOMUXC option
     """
-    def __init__(self, connection, peripheral_map, cfg_reg, name):
+    def __init__(self, connection, peripheral_map, cfg_reg, name, pin_type):
         """
         Initializes an IOMUXC option object
         @param connection: connection XML object from signal_configuration.xml
         @param peripheral_map: mapping of peripheral names to peripheral objects
         @param cfg_reg: configuration register for this IOMUXC option
-        @param props: dictionary of properties and their values to apply when
-            selecting this option
         @param name: allows caller to override iomuxc name, if it is known
+        @param pin_type: sets pin type value for config register (for RT11xx)
         """
         self._mux = 0
         self._mux_val = 0
@@ -383,6 +402,7 @@ class IOMUXOption:
         self._has_gpr = False
         self._extended_config = []
         self._name = name
+        self._type = pin_type
         # Check if this connection controls a GPIO
         peripheral = connection.find('peripheral_signal_ref').attrib.get('peripheral')
         channel = connection.find('peripheral_signal_ref').attrib.get('channel')
@@ -544,6 +564,13 @@ class IOMUXOption:
         Get any extended configuration for this option
         """
         return self._extended_config
+
+    def get_cfg_type(self):
+        """
+        Get the configuration type for this option. Currently only relevant
+        for RT11xx SOCs.
+        """
+        return self._type
 
 class PinGroup:
     """
@@ -1004,21 +1031,7 @@ class NXPSdkUtil:
                     if soc_rt11xx:
                         # RT11xx pins can have multiple register layouts, so we need to
                         # record the type of pin here
-                        if 'GPIO_SD' in iomuxc_name:
-                            reg_type = 'pin-pdrv' # PDRV and PULL fields
-                        elif 'GPIO_AD' in iomuxc_name:
-                            reg_type = 'pin-pue' # PUS and PUE fields
-                        elif 'GPIO_EMC' in iomuxc_name:
-                            reg_type = 'pin-pdrv' # PDRV and PULL fields
-                        elif 'GPIO_LPSR' in iomuxc_name:
-                            reg_type = 'pin-lpsr' # PUS and PUE, with shifted ODE
-                        elif 'SNVS' in iomuxc_name:
-                            reg_type = 'pin-snvs' # PUS and PUE, with double shifted ODE
-                        elif 'GPIO_DISP' in iomuxc_name:
-                            reg_type = 'pin-pdrv' # PDRV and PULL fields
-                        else:
-                            logging.warning("Warning: unmatched signal pin name %s", iomuxc_name)
-                            reg_type = ''
+                        reg_type = f"pin-{iomux_opt.get_cfg_type()}"
                         dts_node += f"\t\t{reg_type};\n"
                     if iomux_opt.has_gpr():
                         gpr_reg = iomux_opt.gpr_reg()
