@@ -42,6 +42,11 @@ zephyr_compile_definitions_ifdef(
   ENET_ENHANCEDBUFFERDESCRIPTOR_MODE
 )
 
+zephyr_compile_definitions_ifdef(
+  CONFIG_PTP_CLOCK_NXP_ENET
+  ENET_ENHANCEDBUFFERDESCRIPTOR_MODE
+)
+
 zephyr_library_compile_definitions_ifdef(
   CONFIG_HAS_MCUX_CACHE FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
 )
@@ -120,7 +125,7 @@ include_driver_ifdef(CONFIG_DMA_MCUX_EDMA		dmamux		driver_dmamux)
 include_driver_ifdef(CONFIG_ENTROPY_MCUX_RNGA		rnga		driver_rnga)
 include_driver_ifdef(CONFIG_ENTROPY_MCUX_TRNG		trng		driver_trng)
 include_driver_ifdef(CONFIG_ENTROPY_MCUX_CAAM		caam		driver_caam)
-include_driver_ifdef(CONFIG_ETH_MCUX			enet		driver_enet)
+include_driver_ifdef(CONFIG_ETH_NXP_ENET		enet		driver_enet)
 include_driver_ifdef(CONFIG_HAS_MCUX_SMC		smc		driver_smc)
 include_driver_ifdef(CONFIG_I2C_MCUX			i2c		driver_i2c)
 include_driver_ifdef(CONFIG_I2C_MCUX_LPI2C		lpi2c		driver_lpi2c)
