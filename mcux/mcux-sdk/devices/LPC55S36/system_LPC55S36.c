@@ -92,6 +92,13 @@ __attribute__ ((weak)) void SystemInit (void) {
 /* enable the flash cache LPCAC */
   SYSCON->LPCAC_CTRL &= ~SYSCON_LPCAC_CTRL_DIS_LPCAC_MASK;
 
+  /* De-select GDET as source for CHIP_RESET */
+  ITRC0->OUT_SEL[4][0] = 0xAAAAAAAAUL;
+  ITRC0->OUT_SEL[4][1] = 0xAAAAAAAAUL;
+  /* Disable GDET_IRQ (bit 1) in ELS_INT_ENABLE */
+  ELS->ELS_INT_ENABLE &= ~S50_ELS_INT_ENABLE_GDET_INT_EN_MASK;
+
+
   SystemInitHook();
 }
 
