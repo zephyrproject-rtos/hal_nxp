@@ -43,3 +43,4 @@ Patch List:
    - Clear the EOC flag before Adc_Sar_CheckAndCallEocNotification() is called to avoid the
      race condition that prevents the next end of conversion callback to be executed, when
      a conversion is started inside the previous end of conversion completed callback.
+   - Relocate Emios_Ip_paxBase array in Emios_Mcl_Ip.c to read only region as suppose to be.
