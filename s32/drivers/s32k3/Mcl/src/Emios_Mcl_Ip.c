@@ -76,7 +76,7 @@ extern "C"{
 #define MCL_START_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"
 
-eMIOS_Type* Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
+eMIOS_Type *const Emios_Ip_paxBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
 
 #define MCL_STOP_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"
