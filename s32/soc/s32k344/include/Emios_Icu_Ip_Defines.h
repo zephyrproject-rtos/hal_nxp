@@ -27,6 +27,13 @@ extern "C"{
 #include "Std_Types.h"
 #include "S32K344_EMIOS.h"
 
+#include <zephyr/devicetree.h>
+
+#define _PWM_NXP_S32_CAPTURE_USED(node_id)  \
+        COND_CODE_1(DT_ENUM_HAS_VALUE(node_id, pwm_mode, SAIC), (+ 1), (+ 0))
+
+#define PWM_NXP_S32_CAPTURE_USED(node_id)     \
+        DT_FOREACH_CHILD_STATUS_OKAY(node_id, _PWM_NXP_S32_CAPTURE_USED)
 
 /*==================================================================================================
  *                              SOURCE FILE VERSION INFORMATION
@@ -57,7 +64,7 @@ extern "C"{
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
-#define EMIOS_ICU_IP_USED          (STD_ON)
+#define EMIOS_ICU_IP_USED          (0 || (DT_FOREACH_STATUS_OKAY(nxp_s32_emios_pwm, PWM_NXP_S32_CAPTURE_USED)))
 
 #if (STD_ON == EMIOS_ICU_IP_USED)
 
@@ -69,7 +76,7 @@ extern "C"{
 #define EMIOS_ICU_IP_NUM_OF_CHANNELS               (24U)
 
 /** @brief The number of eMios channels are used in configuration */
-#define EMIOS_ICU_IP_NUM_OF_CHANNELS_USED         ((uint8)69U)
+#define EMIOS_ICU_IP_NUM_OF_CHANNELS_USED         0 DT_FOREACH_STATUS_OKAY(nxp_s32_emios_pwm, PWM_NXP_S32_CAPTURE_USED)
 
 #define EMIOS_ICU_IP_CHANNEL_NOT_USED             ((uint8)0xFF)
 
