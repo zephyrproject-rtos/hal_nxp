@@ -77,7 +77,7 @@ WKPU_CORE1      /*!< Core 1*/ \
 #endif
 
 #define WKPU_IP_SUPPORT_INTERRUPT_REQUEST
-#define WKPU_IP_NUM_OF_CHANNELS       (64U)
+#define WKPU_IP_NUM_OF_CHANNELS       (64)
 /** @brief The number of Wkpu channels are used in configuration */
 #define WKPU_IP_NUM_OF_CHANNELS_USED  ((uint8)64U)
 #define WKPU_IP_NUM_OF_CHANNELS_IN_ONE_REG  (32U)
