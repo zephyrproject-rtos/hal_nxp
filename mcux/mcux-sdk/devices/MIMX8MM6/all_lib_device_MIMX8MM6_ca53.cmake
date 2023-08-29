@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core_A/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core_AArch64/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8524
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm186x
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm512x
@@ -10,6 +10,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../components/lists
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyar8031
+    ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/device/phyrtl8211f
     ${CMAKE_CURRENT_LIST_DIR}/../../components/phy/mdio/enet/
     ${CMAKE_CURRENT_LIST_DIR}/../../components/serial_manager
     ${CMAKE_CURRENT_LIST_DIR}/../../components/uart
@@ -22,7 +23,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
 )
@@ -47,6 +48,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_iuart)
 #    include(driver_mdio-enet)
 #    include(driver_phy-device-ar8031)
+#    include(driver_phy-device-rtl8211f)
 #    include(driver_sai)
 #    include(driver_wm8524)
 #    include(driver_pcm186x)
