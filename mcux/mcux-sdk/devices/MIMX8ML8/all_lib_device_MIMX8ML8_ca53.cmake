@@ -1,6 +1,6 @@
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/.
-    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core_A/Include
+    ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS/Core_AArch64/Include
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/wm8960
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm186x
     ${CMAKE_CURRENT_LIST_DIR}/../../components/codec/pcm512x
@@ -26,7 +26,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iuart
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/sai
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
-    ${CMAKE_CURRENT_LIST_DIR}/../../utilities/debug_console
+    ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/misc_utilities
     ${CMAKE_CURRENT_LIST_DIR}/drivers
 )

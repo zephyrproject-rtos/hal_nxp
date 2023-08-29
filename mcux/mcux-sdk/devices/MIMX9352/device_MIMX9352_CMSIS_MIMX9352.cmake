@@ -12,4 +12,3 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
 
 
 include(CMSIS_Include_core_cm_MIMX9352)
-

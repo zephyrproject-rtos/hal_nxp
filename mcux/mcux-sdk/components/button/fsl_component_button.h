@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019, 2022 NXP
+ * Copyright 2018-2019 NXP
  * All rights reserved.
  *
  *

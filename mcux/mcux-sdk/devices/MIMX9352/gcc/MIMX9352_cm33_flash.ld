@@ -235,4 +235,3 @@ SECTIONS
 
   ASSERT(__StackLimit >= __HeapLimit, "region m_data_2 overflowed with stack and heap")
 }
-

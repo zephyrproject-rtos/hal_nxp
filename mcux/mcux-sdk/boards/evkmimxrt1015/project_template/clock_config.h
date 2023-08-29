@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019,2021-2022 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -175,3 +175,4 @@ void BOARD_BootClockRUN_400M(void);
 #endif /* __cplusplus*/
 
 #endif /* _CLOCK_CONFIG_H_ */
+
