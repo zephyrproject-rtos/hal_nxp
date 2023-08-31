@@ -1,13 +1,22 @@
 list(APPEND CMAKE_MODULE_PATH
-    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE}
-    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE}/drivers
-    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/cache/armv7-m7
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE_PATH}
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flexcomm
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flexio
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/dmamux
-    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/CMSIS/Core/Include
 )
+
+if(CONFIG_CPU_CORTEX_A)
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/CMSIS/Core_AArch64/Include
+    )
+else()
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/cache/armv7-m7
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/CMSIS/Core/Include
+    )
+endif()
 
 function(include_ifdef feature_toggle module)
   if(${${feature_toggle}})
