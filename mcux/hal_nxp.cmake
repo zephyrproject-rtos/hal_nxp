@@ -3,6 +3,8 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/cache/armv7-m7
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/common
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flexcomm
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flexio
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/dmamux
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/CMSIS/Core/Include
 )
@@ -91,17 +93,17 @@ include_driver_ifdef(CONFIG_DMA_MCUX_LPC		lpc_dma		driver_lpc_dma)
 include_driver_ifdef(CONFIG_GPIO_MCUX_LPC		lpc_gpio        driver_lpc_gpio)
 include_driver_ifdef(CONFIG_NXP_PINT			pint    	driver_pint)
 include_driver_ifdef(CONFIG_NXP_PINT			inputmux	driver_inputmux)
-include_driver_ifdef(CONFIG_I2C_MCUX_FLEXCOMM		flexcomm	driver_flexcomm_i2c)
 include_driver_ifdef(CONFIG_I2C_MCUX_FLEXCOMM		flexcomm	driver_flexcomm)
-include_driver_ifdef(CONFIG_I2S_MCUX_FLEXCOMM		flexcomm	driver_flexcomm_i2s)
+include_driver_ifdef(CONFIG_I2C_MCUX_FLEXCOMM		flexcomm/i2c	driver_flexcomm_i2c)
 include_driver_ifdef(CONFIG_I2S_MCUX_FLEXCOMM		flexcomm	driver_flexcomm)
+include_driver_ifdef(CONFIG_I2S_MCUX_FLEXCOMM		flexcomm/i2s	driver_flexcomm_i2s)
 include_driver_ifdef(CONFIG_MCUX_OS_TIMER		ostimer		driver_ostimer)
 include_driver_ifdef(CONFIG_PWM_MCUX_SCTIMER		sctimer		driver_sctimer)
 include_driver_ifdef(CONFIG_SOC_FLASH_LPC		flashiap	driver_flashiap)
-include_driver_ifdef(CONFIG_SPI_MCUX_FLEXCOMM		flexcomm	driver_flexcomm_spi)
 include_driver_ifdef(CONFIG_SPI_MCUX_FLEXCOMM		flexcomm	driver_flexcomm)
-include_driver_ifdef(CONFIG_UART_MCUX_FLEXCOMM		flexcomm	driver_flexcomm_usart)
+include_driver_ifdef(CONFIG_SPI_MCUX_FLEXCOMM		flexcomm/spi	driver_flexcomm_spi)
 include_driver_ifdef(CONFIG_UART_MCUX_FLEXCOMM		flexcomm	driver_flexcomm)
+include_driver_ifdef(CONFIG_UART_MCUX_FLEXCOMM		flexcomm/usart	driver_flexcomm_usart)
 include_driver_ifdef(CONFIG_WDT_MCUX_WWDT		wwdt		driver_wwdt)
 include_driver_ifdef(CONFIG_ADC_MCUX_ADC12		adc12		driver_adc12)
 include_driver_ifdef(CONFIG_ADC_MCUX_ADC16		adc16		driver_adc16)
