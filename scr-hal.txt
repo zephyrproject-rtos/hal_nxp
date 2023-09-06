@@ -1,0 +1,9 @@
+NXP Software Content Register
+--------------------------------------------
+Package:                     hal_nxp
+Outgoing License:            BSD-3-Clause
+License File:                LICENSE.BSD-3
+Type of Content:             source
+Description and comments:    Hardware Abstraction Layer for NXP MCU's
+Release Location:            https://github.com/nxp-zephyr/hal_nxp
+Origin:                      NXP (BSD-3)
