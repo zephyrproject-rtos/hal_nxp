@@ -86,6 +86,7 @@ zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/common)
 #include shared drivers
 include_driver_ifdef(CONFIG_ADC_MCUX_LPADC		lpadc		driver_lpadc)
 include_driver_ifdef(CONFIG_COUNTER_MCUX_CTIMER		ctimer		driver_ctimer)
+include_driver_ifdef(CONFIG_PWM_MCUX_CTIMER		ctimer		driver_ctimer)
 include_driver_ifdef(CONFIG_COUNTER_MCUX_LPC_RTC	lpc_rtc		driver_lpc_rtc)
 include_driver_ifdef(CONFIG_DMA_MCUX_LPC		lpc_dma		driver_lpc_dma)
 include_driver_ifdef(CONFIG_GPIO_MCUX_LPC		lpc_gpio        driver_lpc_gpio)

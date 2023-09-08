@@ -111,3 +111,6 @@ zephyr_linker_sources_ifdef(CONFIG_NOCACHE_MEMORY
 zephyr_library_compile_definitions_ifdef(CONFIG_NOCACHE_MEMORY
   __STARTUP_INITIALIZE_NONCACHEDATA
 )
+
+# Add Zephyr-specific glue code
+add_subdirectory(zephyr)
