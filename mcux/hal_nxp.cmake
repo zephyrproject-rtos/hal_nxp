@@ -44,6 +44,10 @@ zephyr_library_compile_definitions_ifdef(
   CONFIG_HAS_MCUX_CACHE FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
 )
 
+zephyr_library_compile_definitions_ifdef(
+  CONFIG_NXP_HAL_DISABLE_IMPLICIT_CLOCKING
+  FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL=1
+)
 
 # Required by all SCFW-based SoCs
 if (CONFIG_SOC_MIMX8QM_A53)
