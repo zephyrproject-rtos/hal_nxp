@@ -76,3 +76,4 @@ Patch List:
   12. devices: MIMX8QM6: Add missing LPUART interrupt macro.
   13. mcux-sdk/drivers/lpspi/fsl_lpspi.h: add workaround for errata ERR050456 on S32K3x4 SoC
   according to S32K3X4-0P55A-1P55A-ERRATA.
+  14. devices: MIMX9352: Allow clock driver to work w/o identity mapping
