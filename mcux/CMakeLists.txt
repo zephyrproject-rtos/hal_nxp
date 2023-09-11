@@ -57,7 +57,7 @@ endif()
 
 #include CMSIS of mcux-sdk for Cortex-A
 if (CONFIG_CPU_CORTEX_A)
-  zephyr_include_directories(mcux-sdk/CMSIS/Core_A/Include)
+  zephyr_include_directories(mcux-sdk/CMSIS/Core_AArch64/Include)
 endif()
 
 # The mcux uses the cpu name to expose SoC-specific features of a
