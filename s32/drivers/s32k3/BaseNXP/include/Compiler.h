@@ -485,7 +485,7 @@ extern "C"{
  */
 #ifdef CONFIG_NOCACHE_MEMORY
 #ifdef __ZEPHYR__
-#include <zephyr/toolchain/gcc.h>
+#include <zephyr/toolchain.h>
 #else
 #ifndef STRINGIFY
 #define STRINGIFY(x) #x
