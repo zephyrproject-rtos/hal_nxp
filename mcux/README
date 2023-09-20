@@ -63,3 +63,5 @@ Patch List:
   2. mcux-sdk/drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
      be four being used for entropy in zephyr.
   3. fsl_common.h: add #ifdef ZEPHYR #endif to include Zephyr's sys utils
+  4. drivers: irqsteer: Add revision 2 of the irqsteer driver
+  5. MIMX8ML8: MIMX8ML8_dsp_features.h: Add missing macros for IRQ_STEER
