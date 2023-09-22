@@ -203,7 +203,7 @@ if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_kinetis")
   include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port/driver_port.cmake)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port)
 
-  if(${MCUX_DEVICE} MATCHES "MK(80|82|64|66|M34|M35|E14F|E16F|E18F)")
+  if(${MCUX_DEVICE} MATCHES "MK(80|82|64|66|M34|M35|E14F|E16F|E18F|22F12)")
     include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/sysmpu/driver_sysmpu.cmake)
     zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/sysmpu)
   endif()
