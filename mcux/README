@@ -63,3 +63,5 @@ Patch List:
   2. mcux-sdk/drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
      be four being used for entropy in zephyr.
   3. fsl_common.h: add #ifdef ZEPHYR #endif to include Zephyr's sys utils
+  4. mcux-sdk/drivers/pit/fsl_pit.c: add guards to avoid compilation warnings when building
+     with SDK clock control driver disabled.
