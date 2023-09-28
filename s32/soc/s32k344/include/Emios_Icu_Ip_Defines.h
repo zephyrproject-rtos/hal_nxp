@@ -90,38 +90,38 @@ extern "C"{
 /** @brief Adds or removes all services related to the timestamp functionality. */
 #define EMIOS_ICU_IP_TIMESTAMP_API                (STD_ON)
 /** @brief Adds or removes all services related to the edge detect functionality. */
-#define EMIOS_ICU_IP_EDGE_DETECT_API              (STD_ON)
+#define EMIOS_ICU_IP_EDGE_DETECT_API              (STD_OFF)
 /** @brief Adds or removes all services related to the signal mesurement functionality. */
-#define EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API       (STD_ON)
+#define EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API       (STD_OFF)
 /** @brief Adds or removes all services related to the input level. */
 #define EMIOS_ICU_IP_GET_INPUT_LEVEL_API          (STD_ON)
 /** @brief Adds or removes all services related to the deinitialization functionality. */
-#define EMIOS_ICU_IP_DEINIT_API                   (STD_ON)
+#define EMIOS_ICU_IP_DEINIT_API                   (STD_OFF)
 /** @brief Adds or removes all services related to edge count functionality. */
-#define EMIOS_ICU_IP_EDGE_COUNT_API               (STD_ON)
+#define EMIOS_ICU_IP_EDGE_COUNT_API               (STD_OFF)
 
-#define EMIOS_ICU_IP_CAPTURERGISTER_API           (STD_ON)
+#define EMIOS_ICU_IP_CAPTURERGISTER_API           (STD_OFF)
 
 /** @brief Adds or Removes the code related to overflow notification */
-#define EMIOS_ICU_IP_OVERFLOW_NOTIFICATION_API    (STD_ON)
+#define EMIOS_ICU_IP_OVERFLOW_NOTIFICATION_API    (STD_OFF)
 
 /** @brief define SAIC mode if any channels not supporting IPWM or IPM mode is configured. */
-#define EMIOS_ICU_IP_SIGNAL_MEASUREMENT_USES_SAIC_MODE  (STD_ON)
+#define EMIOS_ICU_IP_SIGNAL_MEASUREMENT_USES_SAIC_MODE  (STD_OFF)
 
 /** @brief Adds or removes the service set Max Counter for eMios. */
-#define EMIOS_ICU_IP_SET_MAX_COUNTER              (STD_ON)
+#define EMIOS_ICU_IP_SET_MAX_COUNTER              (STD_OFF)
 
 /** @brief Adds or removes the service set Initial Counter for eMios. */
-#define EMIOS_ICU_IP_SET_INITIAL_COUNTER          (STD_ON)
+#define EMIOS_ICU_IP_SET_INITIAL_COUNTER          (STD_OFF)
 
 /** @brief Adds or removes all services related to mode set functionality. */
 #define EMIOS_ICU_IP_SET_MODE_API                 (STD_OFF)
 
 /** @brief Adds or removes all services related to input state functionality. */
-#define EMIOS_ICU_IP_GET_INPUT_STATE_API          (STD_ON)
+#define EMIOS_ICU_IP_GET_INPUT_STATE_API          (STD_OFF)
 
 /** @brief Adds or removes all services related to dual clock edge functionality. */
-#define EMIOS_ICU_IP_DUAL_CLOCK_MODE_API          (STD_ON)
+#define EMIOS_ICU_IP_DUAL_CLOCK_MODE_API          (STD_OFF)
 
 /** @brief Adds or removes the support measurement with DMA. */
 #define EMIOS_ICU_IP_SIGNALMEASUREMENT_USES_DMA   (STD_OFF)
@@ -132,7 +132,7 @@ extern "C"{
 #define EMIOS_ICU_IP_DMA_MAJORLOOP_COUNT              (2U)
 #define EMIOS_ICU_IP_TIMESTAMP_USES_DMA_IPL           (STD_OFF)
 
-#define EMIOS_ICU_IP_GET_PULSE_WIDTH_API          (STD_ON)
+#define EMIOS_ICU_IP_GET_PULSE_WIDTH_API          (STD_OFF)
     /** @brief Support for User mode.
  *  If this parameter has been configured to STD_ON, the EMIOS driver code
  *  can be executed from both supervisor and user mode. */
