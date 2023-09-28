@@ -96,8 +96,15 @@ extern "C"{
 ==================================================================================================*/
 #define DT_DRV_COMPAT   nxp_s32_emios_pwm
 
+#define NUM_CHANNEL_USED(node_id)           COND_CODE_1(DT_ENUM_HAS_VALUE(node_id, pwm_mode, SAIC), (+ 0), (+ 1))
+#define EMIOS_NUM_CHANNELS_USED(n)          DT_INST_FOREACH_CHILD_STATUS_OKAY(n, NUM_CHANNEL_USED)
+
+#define SET_INITIAL_MODE(node_id)           IF_ENABLED(UTIL_NOT(DT_ENUM_HAS_VALUE(node_id, pwm_mode, SAIC)),    \
+                                                       (EMIOS_PWM_IP_MODE_NODEFINE,))
+#define EMIOS_PWM_IP_SET_INITIAL_MODE(n)    DT_INST_FOREACH_CHILD_STATUS_OKAY(n, SET_INITIAL_MODE)
+
 /** @brief      Enable the Emios Ip */
-#define EMIOS_PWM_IP_USED                       (DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT))
+#define EMIOS_PWM_IP_USED                   ((DT_INST_FOREACH_STATUS_OKAY(EMIOS_NUM_CHANNELS_USED)) || 0)
 
 /** @brief      Switch to enable the development error detection. */
 #define EMIOS_PWM_IP_DEV_ERROR_DETECT           (STD_OFF)
@@ -132,13 +139,8 @@ extern "C"{
 {255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U, 255U}  \
 }
 
-#define NUM_CHANNEL_USED(node_id)           1 +
-#define SET_INITIAL_MODE(node_id)           EMIOS_PWM_IP_MODE_NODEFINE,
+#define EMIOS_PWM_IP_NUM_OF_CHANNELS_USED   0 DT_INST_FOREACH_STATUS_OKAY(EMIOS_NUM_CHANNELS_USED)
 
-#define EMIOS_NUM_CHANNELS_USED(n)          DT_INST_FOREACH_CHILD_STATUS_OKAY(n, NUM_CHANNEL_USED)
-
-#define EMIOS_PWM_IP_NUM_OF_CHANNELS_USED   DT_INST_FOREACH_STATUS_OKAY(EMIOS_NUM_CHANNELS_USED) 0
-#define EMIOS_PWM_IP_SET_INITIAL_MODE(n)    DT_INST_FOREACH_CHILD_STATUS_OKAY(n, SET_INITIAL_MODE)
 #define EMIOS_PWM_IP_INITIAL_MODES                                                \
 {                                                                                 \
     DT_INST_FOREACH_STATUS_OKAY(EMIOS_PWM_IP_SET_INITIAL_MODE)                    \
