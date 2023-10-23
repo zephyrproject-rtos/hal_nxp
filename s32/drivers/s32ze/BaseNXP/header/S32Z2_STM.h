@@ -85,7 +85,7 @@ typedef struct {
 } STM_Type, *STM_MemMapPtr;
 
 /** Number of instances of the STM module. */
-#define STM_INSTANCE_COUNT                       (13u)
+#define STM_INSTANCE_COUNT                       (13)
 
 /* STM - Peripheral instance base addresses */
 /** Peripheral CE_STM_0 base address */
