@@ -92,7 +92,7 @@ typedef struct {
 } WKPU_Type, *WKPU_MemMapPtr;
 
 /** Number of instances of the WKPU module. */
-#define WKPU_INSTANCE_COUNT                      (1u)
+#define WKPU_INSTANCE_COUNT                      (1)
 
 /* WKPU - Peripheral instance base addresses */
 /** Peripheral WKPU base address */

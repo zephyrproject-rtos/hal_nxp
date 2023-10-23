@@ -123,7 +123,7 @@ typedef struct {
 } QuadSPI_Type, *QuadSPI_MemMapPtr;
 
 /** Number of instances of the QuadSPI module. */
-#define QuadSPI_INSTANCE_COUNT                   (1u)
+#define QuadSPI_INSTANCE_COUNT                   (1)
 
 /* QuadSPI - Peripheral instance base addresses */
 /** Peripheral QUADSPI base address */

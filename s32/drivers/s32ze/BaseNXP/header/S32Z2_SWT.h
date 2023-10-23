@@ -81,7 +81,7 @@ typedef struct {
 } SWT_Type, *SWT_MemMapPtr;
 
 /** Number of instances of the SWT module. */
-#define SWT_INSTANCE_COUNT                       (13u)
+#define SWT_INSTANCE_COUNT                       (13)
 
 /* SWT - Peripheral instance base addresses */
 /** Peripheral CE_SWT_0 base address */
