@@ -117,7 +117,7 @@ extern Netc_Eth_Ip_PCIeBaseType *netcPCIePFBase[FEATURE_NETC_NUMBER_OF_FUNC];
 
 #define ETH_43_NETC_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
-extern Netc_Eth_Ip_MACFilterHashTableEntryType *MACFilterHashTableAddrs[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+VAR_SEC_NOCACHE(MACFilterHashTableAddrs) extern Netc_Eth_Ip_MACFilterHashTableEntryType *MACFilterHashTableAddrs[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
 
 #define ETH_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
@@ -178,25 +178,25 @@ extern volatile Netc_Eth_Ip_RxTimestampInfoType Netc_Eth_Ip_RxTimestampInfoBuff[
 #include "Eth_43_NETC_MemMap.h"
 
 /** @brief Pointers to NETC internal driver state for each controller(SI). */
-Netc_Eth_Ip_StateType *Netc_Eth_Ip_apxState[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+VAR_SEC_NOCACHE(Netc_Eth_Ip_apxState) Netc_Eth_Ip_StateType *Netc_Eth_Ip_apxState[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
 
 /** @brief List of Error Reporting structures that aggregate information for each Pcie function in case of an error reported to the Event Collector. EMDIO, TIMER, SWITCH, ENETC, PSI0, VSI1-7*/
-volatile Netc_Eth_Ip_PcieFunctionErrorsReported Netc_Eth_Ip_ErrorStatus[FEATURE_NETC_NUMBER_OF_FUNC + FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS + 1U];
+VAR_SEC_NOCACHE(Netc_Eth_Ip_ErrorStatus) volatile Netc_Eth_Ip_PcieFunctionErrorsReported Netc_Eth_Ip_ErrorStatus[FEATURE_NETC_NUMBER_OF_FUNC + FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS + 1U];
 
 /* Enabled status for Time Aware Shaper for PSI */
-static boolean  Netc_Eth_Ip_PortTimeAwareShaperEnabled = FALSE;
+VAR_SEC_NOCACHE(Netc_Eth_Ip_PortTimeAwareShaperEnabled) static boolean  Netc_Eth_Ip_PortTimeAwareShaperEnabled = FALSE;
 
 /* Table entries for Time Aware Shaping configuration */
-static Netc_Eth_Ip_TimeGateSchedulingEntryDataType Netc_Eth_Ip_EthTimeGateSchedulingEntryData;
+VAR_SEC_NOCACHE(Netc_Eth_Ip_EthTimeGateSchedulingEntryData) static Netc_Eth_Ip_TimeGateSchedulingEntryDataType Netc_Eth_Ip_EthTimeGateSchedulingEntryData;
 
 /* The frequency of the NETC module for computing CBS parameters */
-static uint32 Netc_Eth_Ip_NetcClockFrequency = 0U;
+VAR_SEC_NOCACHE(Netc_Eth_Ip_NetcClockFrequency) static uint32 Netc_Eth_Ip_NetcClockFrequency = 0U;
 
 /* Key element data for ingress port filter table */
-static volatile uint32 IPFKeyeData[NETC_ETH_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN];
+VAR_SEC_NOCACHE(IPFKeyeData) static volatile uint32 IPFKeyeData[NETC_ETH_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN];
 
 /* a 16 bytes aligned table request data buffer */
-VAR_ALIGN(static volatile Netc_Eth_Ip_EnetcTableDataType Netc_Eth_Ip_EnetcTableDataBuffer, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+VAR_SEC_NOCACHE(Netc_Eth_Ip_EnetcTableDataBuffer) VAR_ALIGN(static volatile Netc_Eth_Ip_EnetcTableDataType Netc_Eth_Ip_EnetcTableDataBuffer, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
 
 #define ETH_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
