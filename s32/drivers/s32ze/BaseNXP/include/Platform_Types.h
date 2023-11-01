@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file           Platform_Types.h
 *   @implements     Platform_Types.h_Artifact
-*   @version 0.9.0
+*   @version 1.0.0
 *
 *   @brief   AUTOSAR BaseNXP - Platform dependend data type definitions.
 *   @details AUTOSAR platform types header file. It contains all 

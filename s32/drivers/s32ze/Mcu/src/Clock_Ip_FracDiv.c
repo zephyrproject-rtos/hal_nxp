@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_FracDiv.c
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -38,8 +38,8 @@ extern "C"{
 #define CLOCK_IP_FRACDIV_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_FRACDIV_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_FRACDIV_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_FRACDIV_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_FRACDIV_SW_MINOR_VERSION_C               9
+#define CLOCK_IP_FRACDIV_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_FRACDIV_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_FRACDIV_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -144,24 +144,31 @@ static void Clock_Ip_ResetDfsMfiMfn(Clock_Ip_FracDivConfigType const *Config)
 static void Clock_Ip_SetDfsMfiMfn(Clock_Ip_FracDivConfigType const *Config)
 {
 
-    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
-    uint32 DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
-
-    uint32 IntegerPart     = Config->Value[0U];          /* Integer part. */
-    uint32 FractionalPart  = Config->Value[1U];          /* Fractional part. */
+    uint32 Instance;
+    uint32 DividerIndex;
+    uint32 IntegerPart;          /* Integer part. */
+    uint32 FractionalPart;          /* Fractional part. */
 
     uint32 Value = 0U;
 
-    /* Check whether fractional divider is enabled */
-    if (0U != Config->Enable)
+    if (NULL_PTR != Config)
     {
-        /* Write the value by which input signal is divided */
-        Value |= DFS_DVPORT_MFN(FractionalPart);
-        Value |= DFS_DVPORT_MFI(IntegerPart);
-        Clock_Ip_apxDfs[Instance]->DVPORT[DividerIndex] = Value;
+        Instance        = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+        DividerIndex    = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
+        IntegerPart     = Config->Value[0U];
+        FractionalPart  = Config->Value[1U];
 
-        /* Get corresponding port out of reset state */
-        Clock_Ip_apxDfs[Instance]->PORTRESET &= ~(1UL << DividerIndex);
+        /* Check whether fractional divider is enabled */
+        if (0U != Config->Enable)
+        {
+            /* Write the value by which input signal is divided */
+            Value |= DFS_DVPORT_MFN(FractionalPart);
+            Value |= DFS_DVPORT_MFI(IntegerPart);
+            Clock_Ip_apxDfs[Instance]->DVPORT[DividerIndex] = Value;
+
+            /* Get corresponding port out of reset state */
+            Clock_Ip_apxDfs[Instance]->PORTRESET &= ~(1UL << DividerIndex);
+        }
     }
 }
 static Clock_Ip_DfsStatusType Clock_Ip_CompleteDfsMfiMfn(Clock_Ip_NameType DfsName)

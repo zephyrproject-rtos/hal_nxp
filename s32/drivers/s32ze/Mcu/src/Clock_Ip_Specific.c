@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Specific.c
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -44,8 +44,8 @@ extern "C"{
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_SPECIFIC_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_SPECIFIC_SW_MINOR_VERSION_C               9
+#define CLOCK_IP_SPECIFIC_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_SPECIFIC_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_SPECIFIC_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -135,27 +135,42 @@ extern "C"{
                                        GLOBAL VARIABLES
 ==================================================================================================*/
 
-
+/*==================================================================================================
+                                   LOCAL FUNCTION PROTOTYPES
+==================================================================================================*/
 /* Clock start section code */
 #define MCU_START_SEC_CODE
 #include "Mcu_MemMap.h"
+
+#if (defined(CLOCK_IP_ENABLE_USER_MODE_SUPPORT))
+  #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
+    #if (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK))
+void Clock_Ip_SpecificSetUserAccessAllowed(void);
+    #endif /* (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)) */
+  #endif
+#endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
 
 #ifdef CLOCK_IP_HAS_RAM_WAIT_STATES
 
 void SRAMController_SetRamIWS(uint32 SmuM33CoreClk_IwsSetting, uint32 Rtu0CoreClk_IwsSetting, uint32 Rtu1CoreClk_IwsSetting, uint32 CeM33CoreClk_IwsSetting);
 
+/*==================================================================================================
+                                       LOCAL FUNCTIONS
+==================================================================================================*/
+
+
 /* Calculate ram wait states value */
 static uint32 Clock_Ip_GetIwsSetting(uint32 ConfiguredCoreClockFrequnecy, uint32 Threshold0, uint32 Threshold1, uint32 Threshold2)
 {
     uint32 IwsSetting = 0U;
-    
+
     if (ConfiguredCoreClockFrequnecy >= Threshold2)
     {
         IwsSetting = 3U;
     }
     else if (ConfiguredCoreClockFrequnecy >= Threshold1)
     {
-        IwsSetting = 2U;    
+        IwsSetting = 2U;
     }
     else if (ConfiguredCoreClockFrequnecy >= Threshold0)
     {
@@ -173,7 +188,7 @@ static uint32 Clock_Ip_GetIwsSetting(uint32 ConfiguredCoreClockFrequnecy, uint32
 /* Function set ram wait states */
 void Clock_Ip_SetRamWaitStates(void)
 {
-   /* Process configured frequency values */    
+   /* Process configured frequency values */
     uint32 Rtu0CoreClk_IwsSetting = 0U;
     uint32 Rtu0CoreClk_ConfiguredFrequency = 0U;
 
@@ -185,33 +200,33 @@ void Clock_Ip_SetRamWaitStates(void)
 
     uint32 CeM33CoreClk_IwsSetting = 0U;
     uint32 CeM33CoreClk_ConfiguredFrequency = 0U;
-    
+
 #if defined(CLOCK_IP_HAS_RTU0_CORE_CLK)
-    Rtu0CoreClk_ConfiguredFrequency = Clock_Ip_pxConfig->ConfiguredFrequencies[Clock_Ip_FreqIds[RTU0_CORE_CLK]].ConfiguredFrequencyValue;
-#endif        
+    Rtu0CoreClk_ConfiguredFrequency = (*Clock_Ip_pxConfig->ConfiguredFrequencies)[Clock_Ip_FreqIds[RTU0_CORE_CLK]].ConfiguredFrequencyValue;
+#endif
 #if defined(CLOCK_IP_HAS_RTU1_CORE_CLK)
-    Rtu1CoreClk_ConfiguredFrequency = Clock_Ip_pxConfig->ConfiguredFrequencies[Clock_Ip_FreqIds[RTU1_CORE_CLK]].ConfiguredFrequencyValue;
-#endif        
+    Rtu1CoreClk_ConfiguredFrequency = (*Clock_Ip_pxConfig->ConfiguredFrequencies)[Clock_Ip_FreqIds[RTU1_CORE_CLK]].ConfiguredFrequencyValue;
+#endif
 #if defined(CLOCK_IP_HAS_SMU_M33_CORE_CLK)
-    SmuM33CoreClk_ConfiguredFrequency = Clock_Ip_pxConfig->ConfiguredFrequencies[Clock_Ip_FreqIds[SMU_M33_CORE_CLK]].ConfiguredFrequencyValue;
-#endif        
+    SmuM33CoreClk_ConfiguredFrequency = (*Clock_Ip_pxConfig->ConfiguredFrequencies)[Clock_Ip_FreqIds[SMU_M33_CORE_CLK]].ConfiguredFrequencyValue;
+#endif
 #if defined(CLOCK_IP_HAS_CE_M33_CORE_CLK)
-    CeM33CoreClk_ConfiguredFrequency = Clock_Ip_pxConfig->ConfiguredFrequencies[Clock_Ip_FreqIds[CE_M33_CORE_CLK]].ConfiguredFrequencyValue;
-#endif        
+    CeM33CoreClk_ConfiguredFrequency = (*Clock_Ip_pxConfig->ConfiguredFrequencies)[Clock_Ip_FreqIds[CE_M33_CORE_CLK]].ConfiguredFrequencyValue;
+#endif
 
 #if (defined(CLOCK_IP_DEV_ERROR_DETECT) && (CLOCK_IP_DEV_ERROR_DETECT == STD_ON))
 #if defined(CLOCK_IP_HAS_RTU0_CORE_CLK)
     CLOCK_IP_DEV_ASSERT(Rtu0CoreClk_ConfiguredFrequency != 0U);
-#endif        
+#endif
 #if defined(CLOCK_IP_HAS_RTU1_CORE_CLK)
     CLOCK_IP_DEV_ASSERT(Rtu1CoreClk_ConfiguredFrequency != 0U);
-#endif        
+#endif
 #if defined(CLOCK_IP_HAS_SMU_M33_CORE_CLK)
     CLOCK_IP_DEV_ASSERT(SmuM33CoreClk_ConfiguredFrequency != 0U);
-#endif        
+#endif
 #if defined(CLOCK_IP_HAS_CE_M33_CORE_CLK)
     CLOCK_IP_DEV_ASSERT(CeM33CoreClk_ConfiguredFrequency != 0U);
-#endif      
+#endif
 #endif
 
     SmuM33CoreClk_IwsSetting = Clock_Ip_GetIwsSetting(SmuM33CoreClk_ConfiguredFrequency, SMU_M33_CORE_CLK_THRESHOLD0_FREQUENCY, SMU_M33_CORE_CLK_THRESHOLD1_FREQUENCY, SMU_M33_CORE_CLK_THRESHOLD2_FREQUENCY);
@@ -233,17 +248,21 @@ void Clock_Ip_SetRamWaitStates(void)
 
 static void Clock_Ip_SpecificPlatformInitClock(Clock_Ip_ClockConfigType const * Config)
 {
-    (void)Config;
-
+    uint32 RegValue;
     uint32 CoreDfsIsInReset = IP_CORE_DFS->CTL & DFS_CTL_DFS_RESET_MASK;            /* if master core dfs is in reset */
     uint32 PeriphDfsIsInReset = IP_PERIPH_DFS->CTL & DFS_CTL_DFS_RESET_MASK;        /* if master periph dfs is in reset */
+
+    (void)Config;
 
     if ((CoreDfsIsInReset != 0U) && (PeriphDfsIsInReset != 0U))
     {
         if ((IP_CORE_PLL->PLLCR & PLLDIG_PLLCR_PLLPD_MASK) != 0U)   /* if CORE_PLL is not enabled */
         {
             IP_CORE_PLL->PLLCLKMUX = 0U;                                                   /* FIRC input reference 48 MHz */
-            IP_CORE_PLL->PLLDV = (PLLDIG_PLLDV_RDIV(1U) | PLLDIG_PLLDV_MFI(30U));          /* /1 * 30 */
+            RegValue = IP_CORE_PLL->PLLDV;
+            RegValue &= ~(PLLDIG_PLLDV_RDIV_MASK | PLLDIG_PLLDV_MFI_MASK);
+            IP_CORE_PLL->PLLDV = (RegValue | (PLLDIG_PLLDV_RDIV(1U) | PLLDIG_PLLDV_MFI(30U)) );          /* /1 * 30 */
+
             IP_CORE_PLL->PLLFD &= ~(PLLDIG_PLLFD_MFN_MASK | PLLDIG_PLLFD_SDMEN_MASK);      /* Disable modulation */
             IP_CORE_PLL->PLLCR &= ~PLLDIG_PLLCR_PLLPD_MASK;                                /* Start CORE_PLL */
         }
@@ -251,7 +270,10 @@ static void Clock_Ip_SpecificPlatformInitClock(Clock_Ip_ClockConfigType const * 
         if ((IP_PERIPH_PLL->PLLCR & PLLDIG_PLLCR_PLLPD_MASK) != 0U)   /* if PERIPH_PLL is not enabled */
         {
             IP_PERIPH_PLL->PLLCLKMUX = 0U;                                                   /* FIRC input reference 48 MHz */
-            IP_PERIPH_PLL->PLLDV = (PLLDIG_PLLDV_RDIV(1U) | PLLDIG_PLLDV_MFI(30U));          /* /1 * 30 */
+            RegValue = IP_PERIPH_PLL->PLLDV;
+            RegValue &= ~(PLLDIG_PLLDV_RDIV_MASK | PLLDIG_PLLDV_MFI_MASK);
+            IP_PERIPH_PLL->PLLDV = (RegValue | (PLLDIG_PLLDV_RDIV(1U) | PLLDIG_PLLDV_MFI(30U)) );          /* /1 * 30 */
+
             IP_PERIPH_PLL->PLLFD &= ~(PLLDIG_PLLFD_MFN_MASK | PLLDIG_PLLFD_SDMEN_MASK);      /* Disable modulation */
             IP_PERIPH_PLL->PLLCR &= ~PLLDIG_PLLCR_PLLPD_MASK;                                /* Start PERIPH_PLL */
         }
@@ -281,7 +303,10 @@ static void Clock_Ip_SpecificPlatformInitClock(Clock_Ip_ClockConfigType const * 
         if ((IP_CORE_PLL->PLLCR & PLLDIG_PLLCR_PLLPD_MASK) != 0U)   /* if CORE_PLL is not enabled */
         {
             IP_CORE_PLL->PLLCLKMUX = 0U;                                                   /* FIRC input reference 48 MHz */
-            IP_CORE_PLL->PLLDV = (PLLDIG_PLLDV_RDIV(1U) | PLLDIG_PLLDV_MFI(30U));          /* /1 * 30 */
+            RegValue = IP_CORE_PLL->PLLDV;
+            RegValue &= ~(PLLDIG_PLLDV_RDIV_MASK | PLLDIG_PLLDV_MFI_MASK);
+            IP_CORE_PLL->PLLDV = (RegValue | (PLLDIG_PLLDV_RDIV(1U) | PLLDIG_PLLDV_MFI(30U)) );          /* /1 * 30 */
+
             IP_CORE_PLL->PLLFD &= ~(PLLDIG_PLLFD_MFN_MASK | PLLDIG_PLLFD_SDMEN_MASK);      /* Disable modulation */
             IP_CORE_PLL->PLLCR &= ~PLLDIG_PLLCR_PLLPD_MASK;                                /* Start CORE_PLL */
         }
@@ -301,7 +326,10 @@ static void Clock_Ip_SpecificPlatformInitClock(Clock_Ip_ClockConfigType const * 
         if ((IP_PERIPH_PLL->PLLCR & PLLDIG_PLLCR_PLLPD_MASK) != 0U)   /* if PERIPH_PLL is not enabled */
         {
             IP_PERIPH_PLL->PLLCLKMUX = 0U;                                                   /* FIRC input reference 48 MHz */
-            IP_PERIPH_PLL->PLLDV = (PLLDIG_PLLDV_RDIV(1U) | PLLDIG_PLLDV_MFI(30U));          /* /1 * 30 */
+            RegValue = IP_PERIPH_PLL->PLLDV;
+            RegValue &= ~(PLLDIG_PLLDV_RDIV_MASK | PLLDIG_PLLDV_MFI_MASK);
+            IP_PERIPH_PLL->PLLDV = (RegValue | (PLLDIG_PLLDV_RDIV(1U) | PLLDIG_PLLDV_MFI(30U)) );          /* /1 * 30 */
+
             IP_PERIPH_PLL->PLLFD &= ~(PLLDIG_PLLFD_MFN_MASK | PLLDIG_PLLFD_SDMEN_MASK);      /* Disable modulation */
             IP_PERIPH_PLL->PLLCR &= ~PLLDIG_PLLCR_PLLPD_MASK;                                /* Start PERIPH_PLL */
         }
@@ -335,7 +363,7 @@ void Clock_Ip_McMeEnterKey(void)
 
 #if (defined(CLOCK_IP_ENABLE_USER_MODE_SUPPORT))
   #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
-    #if (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK))
+    #if (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK))
 void Clock_Ip_SpecificSetUserAccessAllowed(void)
 {
 
@@ -343,18 +371,15 @@ void Clock_Ip_SpecificSetUserAccessAllowed(void)
   #if(STD_ON == MCAL_CMU_AE_REG_PROT_AVAILABLE)
 
     /* CMU_AE SetUserAccessAllowed */
-    #if (defined(IP_CMU_FC_AE_1_BASE))
-    /* Set user access allowed for CMU_FC_AE_1 */
-    #endif
-    #if (defined(IP_CMU_FC_AE_2_BASE))
-    /* Set user access allowed for CMU_FC_AE_2 */
+    #if (defined(IP_CMU_FC_AE_1_BASE) || defined(IP_CMU_FC_AE_2_BASE))
+    SET_USER_ACCESS_ALLOWED(IP_CMU_FM_AE_0_BASE, CMU_AE_PROT_MEM_U32);
     #endif
 
 #endif
 #endif /* MCAL_CMU_AE_REG_PROT_AVAILABLE */
 
 }
-#endif /* (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)) */
+#endif /* (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)) */
 #endif
 #endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
 
@@ -367,7 +392,7 @@ void Clock_Ip_Command(Clock_Ip_ClockConfigType const * Config, Clock_Ip_CommandT
             break;
 #ifdef CLOCK_IP_ENABLE_USER_MODE_SUPPORT
     #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
-        #if (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK))
+        #if (defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK) || defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK))
         case CLOCK_IP_SET_USER_ACCESS_ALLOWED_COMMAND:
             OsIf_Trusted_Call(Clock_Ip_SpecificSetUserAccessAllowed);
             break;

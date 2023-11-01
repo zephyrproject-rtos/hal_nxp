@@ -1,18 +1,23 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef SCHM_CAN_43_CANEXCEL_H
-#define SCHM_CAN_43_CANEXCEL_H
-
 /**
-*   @file
+*   @file    SchM_Can_43_CANEXCEL.h
+*   @version 1.0.0
+*
+*   @brief   AUTOSAR Rte - module interface
+*   @details This file contains the functions prototypes and data types of the AUTOSAR Rte.
+*            This file contains sample code only. It is not part of the production code deliverables.
 *
 *   @addtogroup RTE_MODULE
 *   @{
 */
+
+#ifndef SCHM_CAN_43_CANEXCEL_H
+#define SCHM_CAN_43_CANEXCEL_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,8 +35,8 @@ extern "C" {
 #define SCHM_CAN_43_CANEXCEL_AR_RELEASE_MAJOR_VERSION     4
 #define SCHM_CAN_43_CANEXCEL_AR_RELEASE_MINOR_VERSION     7
 #define SCHM_CAN_43_CANEXCEL_AR_RELEASE_REVISION_VERSION  0
-#define SCHM_CAN_43_CANEXCEL_SW_MAJOR_VERSION             0
-#define SCHM_CAN_43_CANEXCEL_SW_MINOR_VERSION             9
+#define SCHM_CAN_43_CANEXCEL_SW_MAJOR_VERSION             1
+#define SCHM_CAN_43_CANEXCEL_SW_MINOR_VERSION             0
 #define SCHM_CAN_43_CANEXCEL_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -150,29 +155,29 @@ extern void SchM_Exit_Can_43_CANEXCEL_CAN_EXCLUSIVE_AREA_20(void);
 
 
 void Can_43_CANEXCEL_MainFunction_Write(void);
-void Can_43_CANEXCEL_MainFunction_Write_0(void);
-void Can_43_CANEXCEL_MainFunction_Write_1(void);
-void Can_43_CANEXCEL_MainFunction_Write_2(void);
-void Can_43_CANEXCEL_MainFunction_Write_3(void);
-void Can_43_CANEXCEL_MainFunction_Write_4(void);
-void Can_43_CANEXCEL_MainFunction_Write_5(void);
-void Can_43_CANEXCEL_MainFunction_Write_6(void);
-void Can_43_CANEXCEL_MainFunction_Write_7(void);
-void Can_43_CANEXCEL_MainFunction_Write_8(void);
-void Can_43_CANEXCEL_MainFunction_Write_9(void);
-void Can_43_CANEXCEL_MainFunction_Write_10(void);
+void Can_43_CANEXCEL_MainFunction_Write_CanMainFunctionRWPeriods_0(void);
+void Can_43_CANEXCEL_MainFunction_Write_CanMainFunctionRWPeriods_1(void);
+void Can_43_CANEXCEL_MainFunction_Write_CanMainFunctionRWPeriods_2(void);
+void Can_43_CANEXCEL_MainFunction_Write_CanMainFunctionRWPeriods_3(void);
+void Can_43_CANEXCEL_MainFunction_Write_CanMainFunctionRWPeriods_4(void);
+void Can_43_CANEXCEL_MainFunction_Write_CanMainFunctionRWPeriods_5(void);
+void Can_43_CANEXCEL_MainFunction_Write_CanMainFunctionRWPeriods_6(void);
+void Can_43_CANEXCEL_MainFunction_Write_CanMainFunctionRWPeriods_7(void);
+void Can_43_CANEXCEL_MainFunction_Write_CanMainFunctionRWPeriods_8(void);
+void Can_43_CANEXCEL_MainFunction_Write_CanMainFunctionRWPeriods_9(void);
+void Can_43_CANEXCEL_MainFunction_Write_CanMainFunctionRWPeriods_10(void);
 void Can_43_CANEXCEL_MainFunction_Read(void);
-void Can_43_CANEXCEL_MainFunction_Read_0(void);
-void Can_43_CANEXCEL_MainFunction_Read_1(void);
-void Can_43_CANEXCEL_MainFunction_Read_2(void);
-void Can_43_CANEXCEL_MainFunction_Read_3(void);
-void Can_43_CANEXCEL_MainFunction_Read_4(void);
-void Can_43_CANEXCEL_MainFunction_Read_5(void);
-void Can_43_CANEXCEL_MainFunction_Read_6(void);
-void Can_43_CANEXCEL_MainFunction_Read_7(void);
-void Can_43_CANEXCEL_MainFunction_Read_8(void);
-void Can_43_CANEXCEL_MainFunction_Read_9(void);
-void Can_43_CANEXCEL_MainFunction_Read_10(void);
+void Can_43_CANEXCEL_MainFunction_Read_CanMainFunctionRWPeriods_0(void);
+void Can_43_CANEXCEL_MainFunction_Read_CanMainFunctionRWPeriods_1(void);
+void Can_43_CANEXCEL_MainFunction_Read_CanMainFunctionRWPeriods_2(void);
+void Can_43_CANEXCEL_MainFunction_Read_CanMainFunctionRWPeriods_3(void);
+void Can_43_CANEXCEL_MainFunction_Read_CanMainFunctionRWPeriods_4(void);
+void Can_43_CANEXCEL_MainFunction_Read_CanMainFunctionRWPeriods_5(void);
+void Can_43_CANEXCEL_MainFunction_Read_CanMainFunctionRWPeriods_6(void);
+void Can_43_CANEXCEL_MainFunction_Read_CanMainFunctionRWPeriods_7(void);
+void Can_43_CANEXCEL_MainFunction_Read_CanMainFunctionRWPeriods_8(void);
+void Can_43_CANEXCEL_MainFunction_Read_CanMainFunctionRWPeriods_9(void);
+void Can_43_CANEXCEL_MainFunction_Read_CanMainFunctionRWPeriods_10(void);
 void Can_43_CANEXCEL_MainFunction_BusOff(void);
 void Can_43_CANEXCEL_MainFunction_Wakeup(void);
 void Can_43_CANEXCEL_MainFunction_Mode(void);

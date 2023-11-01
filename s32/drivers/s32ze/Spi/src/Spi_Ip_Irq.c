@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -36,8 +36,8 @@ extern "C"
 #define SPI_IP_AR_RELEASE_MAJOR_VERSION_IRQ_C       4
 #define SPI_IP_AR_RELEASE_MINOR_VERSION_IRQ_C       7
 #define SPI_IP_AR_RELEASE_REVISION_VERSION_IRQ_C    0
-#define SPI_IP_SW_MAJOR_VERSION_IRQ_C               0
-#define SPI_IP_SW_MINOR_VERSION_IRQ_C               9
+#define SPI_IP_SW_MAJOR_VERSION_IRQ_C               1
+#define SPI_IP_SW_MINOR_VERSION_IRQ_C               0
 #define SPI_IP_SW_PATCH_VERSION_IRQ_C               0
 /*==================================================================================================
 *                                     FILE VERSION CHECKS

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Clock_Ip_Specific.h
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK IP specific header file.
 *   @details CLOCK IP specific header file.
@@ -48,8 +48,8 @@ extern "C"{
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_SPECIFIC_SW_MAJOR_VERSION                0
-#define CLOCK_IP_SPECIFIC_SW_MINOR_VERSION                9
+#define CLOCK_IP_SPECIFIC_SW_MAJOR_VERSION                1
+#define CLOCK_IP_SPECIFIC_SW_MINOR_VERSION                0
 #define CLOCK_IP_SPECIFIC_SW_PATCH_VERSION                0
 
 /*==================================================================================================
@@ -131,7 +131,7 @@ extern "C"{
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
 
-#define CLOCK_IP_ALL_CALLBACKS_COUNT                                                   10U
+#define CLOCK_IP_ALL_CALLBACKS_COUNT                                                   11U
 #define CLOCK_IP_TRIGGER_VALUE               0xFFFFFFFFU              /* Trigger value. */
 
 #define CLOCK_IP_NUMBER_OF_HARDWARE_DFS                                                12U
@@ -152,11 +152,10 @@ extern "C"{
 #define CLOCK_IP_PLL_INSTANCES_ARRAY_SIZE    3U
 #define CLOCK_IP_LFASTPLL_INSTANCES_ARRAY_SIZE    2U
 #define CLOCK_IP_DFS_INSTANCES_ARRAY_SIZE    2U
-#define CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE    27U
 #define CLOCK_IP_PERIPHERAL_GROUPS_COUNT     7U
 #define CLOCK_IP_CMU_INFO_SIZE               28U
 #define CLOCK_IP_GATE_INFO_SIZE              101U
-#define CLOCK_IP_EXTENSIONS_SIZE             133U
+#define CLOCK_IP_EXTENSIONS_SIZE             132U
 #define CLOCK_IP_GPR_INSTANCES_COUNT         6U
 #define CLOCK_IP_CLKOUTS_COUNT               5U
 
@@ -197,7 +196,8 @@ extern "C"{
 
 #define GPR_PCTL_MASK                        GPR3_PCTL_EDMACEPCTL_PCTL_MASK
 
-#define CLOCK_IP_DIVIDER_HAVE_DIV_FMT STD_ON
+#define CLOCK_IP_DIVIDER_HAVE_DIV_FMT        STD_ON
+#define CLOCK_IP_FXOSC_ALC_SUPPORTED         (STD_ON)
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/
@@ -233,7 +233,7 @@ typedef struct {
 #if defined(CLOCK_IP_HAS_SYSTEM_CLK)
 /** MC_ME_AE - Register Layout Typedef */
 typedef struct {
-    uint32_t POWER_MODE_CONFIG[3u];                           /**< Power Mode Configuration, offset: 0x28, 0x2C and 0x30 */
+    uint32 POWER_MODE_CONFIG[3u];                           /**< Power Mode Configuration, offset: 0x28, 0x2C and 0x30 */
 }volatile Clock_Ip_SystemClockType;
 #endif
 
@@ -245,7 +245,8 @@ typedef struct {
 
 /** CMU - Register Layout Typedef */
 typedef struct {
-    uint32 GCR;                               /**< Global Configuration Register, offset: 0x0 */
+    uint8 GCR;                               /**< Global Configuration Register, offset: 0x0 */
+    uint8 RESEDVED[3];                               /**< Reserved Register, offset: 0x1 */
     uint32 RCCR;                              /**< Reference Count Configuration Register, offset: 0x4 */
     uint32 HTCR;                              /**< High Threshold Configuration Register, offset: 0x8 */
     uint32 LTCR;                              /**< Low Threshold Configuration Register, offset: 0xC */
@@ -363,15 +364,6 @@ extern const uint16 Clock_Ip_au16SelectorEntryAeHardwareValue[CLOCK_IP_FEATURE_N
 
 #include "Mcu_MemMap.h"
 
-#if (defined(CLOCK_IP_ENABLE_USER_MODE_SUPPORT))
-  #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
-    #if (defined(MCAL_CMU_AE_REG_PROT_AVAILABLE))
-      #if(STD_ON == MCAL_CMU_AE_REG_PROT_AVAILABLE)
-void Clock_Ip_SpecificSetUserAccessAllowed(void);
-      #endif
-    #endif /* MCAL_CMU_AE_REG_PROT_AVAILABLE */
-  #endif
-#endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
 void Clock_Ip_McMeEnterKey(void);
 
 /* Clock stop section code */

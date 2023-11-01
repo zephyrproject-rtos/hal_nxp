@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CE_MRU.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_CE_MRU
  *
  * This file contains register definitions and macros for easy access to their
@@ -70,86 +70,86 @@
 
 /** CE_MRU - Size of Registers Arrays */
 #define CE_MRU_CHXCONFIG_COUNT                    4u
+#define CE_MRU_NOTIFY_COUNT                       2u
 
 /** CE_MRU - Register Layout Typedef */
 typedef struct {
   struct {                                         /* offset: 0x0, array step: 0x10 */
-    __IO uint32_t CH_CFG0;                           /**< Channel (x) Configuration 0, array offset: 0x0, array step: 0x10 */
-    __IO uint32_t CH_CFG1;                           /**< Channel (x) Configuration 1, array offset: 0x4, array step: 0x10 */
-    __IO uint32_t CH_MBSTAT;                         /**< Channel (x) Mailbox Status, array offset: 0x8, array step: 0x10 */
+    __IO uint32_t CH_CFG0;                           /**< Channel (x) Configuration 0, array offset: 0x0, array step: 0x10, irregular array, not all indices are valid */
+    __IO uint32_t CH_CFG1;                           /**< Channel (x) Configuration 1, array offset: 0x4, array step: 0x10, irregular array, not all indices are valid */
+    __IO uint32_t CH_MBSTAT;                         /**< Channel (x) Mailbox Status, array offset: 0x8, array step: 0x10, irregular array, not all indices are valid */
     uint8_t RESERVED_0[4];
   } CHXCONFIG[CE_MRU_CHXCONFIG_COUNT];
   uint8_t RESERVED_0[448];
-  __I  uint32_t NOTIFY0;                           /**< Notification 0 Status, offset: 0x200 */
-  __I  uint32_t NOTIFY1;                           /**< Notification 1 Status, offset: 0x204 */
+  __I  uint32_t NOTIFY[CE_MRU_NOTIFY_COUNT];       /**< Notification 0 Status..Notification 1 Status, array offset: 0x200, array step: 0x4 */
   uint8_t RESERVED_1[15864];
   __IO uint32_t CH1_MB0;                           /**< Channel (x) Mailbox (n), offset: 0x4000 */
   __IO uint32_t CH1_MB1;                           /**< Channel (x) Mailbox (n), offset: 0x4004 */
   __IO uint32_t CH1_MB2;                           /**< Channel (x) Mailbox (n), offset: 0x4008 */
   __IO uint32_t CH1_MB3;                           /**< Channel (x) Mailbox (n), offset: 0x400C */
-  __IO uint32_t CH1_MB4;                           /**< Channel (x) Mailbox (n), offset: 0x4010 */
-  __IO uint32_t CH1_MB5;                           /**< Channel (x) Mailbox (n), offset: 0x4014 */
-  __IO uint32_t CH1_MB6;                           /**< Channel (x) Mailbox (n), offset: 0x4018 */
-  __IO uint32_t CH1_MB7;                           /**< Channel (x) Mailbox (n), offset: 0x401C */
-  __IO uint32_t CH1_MB8;                           /**< Channel (x) Mailbox (n), offset: 0x4020 */
-  __IO uint32_t CH1_MB9;                           /**< Channel (x) Mailbox (n), offset: 0x4024 */
-  __IO uint32_t CH1_MB10;                          /**< Channel (x) Mailbox (n), offset: 0x4028 */
-  __IO uint32_t CH1_MB11;                          /**< Channel (x) Mailbox (n), offset: 0x402C */
-  __IO uint32_t CH1_MB12;                          /**< Channel (x) Mailbox (n), offset: 0x4030 */
-  __IO uint32_t CH1_MB13;                          /**< Channel (x) Mailbox (n), offset: 0x4034 */
-  __IO uint32_t CH1_MB14;                          /**< Channel (x) Mailbox (n), offset: 0x4038 */
-  __IO uint32_t CH1_MB15;                          /**< Channel (x) Mailbox (n), offset: 0x403C */
+  __IO uint32_t CH1_MB4;                           /**< Channel (x) Mailbox (n), offset: 0x4010, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH1_MB5;                           /**< Channel (x) Mailbox (n), offset: 0x4014, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH1_MB6;                           /**< Channel (x) Mailbox (n), offset: 0x4018, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH1_MB7;                           /**< Channel (x) Mailbox (n), offset: 0x401C, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH1_MB8;                           /**< Channel (x) Mailbox (n), offset: 0x4020, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH1_MB9;                           /**< Channel (x) Mailbox (n), offset: 0x4024, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH1_MB10;                          /**< Channel (x) Mailbox (n), offset: 0x4028, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH1_MB11;                          /**< Channel (x) Mailbox (n), offset: 0x402C, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH1_MB12;                          /**< Channel (x) Mailbox (n), offset: 0x4030, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH1_MB13;                          /**< Channel (x) Mailbox (n), offset: 0x4034, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH1_MB14;                          /**< Channel (x) Mailbox (n), offset: 0x4038, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH1_MB15;                          /**< Channel (x) Mailbox (n), offset: 0x403C, not available in all instances (available on 12 out of 20) */
   uint8_t RESERVED_2[16320];
-  __IO uint32_t CH2_MB0;                           /**< Channel (x) Mailbox (n), offset: 0x8000 */
-  __IO uint32_t CH2_MB1;                           /**< Channel (x) Mailbox (n), offset: 0x8004 */
-  __IO uint32_t CH2_MB2;                           /**< Channel (x) Mailbox (n), offset: 0x8008 */
-  __IO uint32_t CH2_MB3;                           /**< Channel (x) Mailbox (n), offset: 0x800C */
-  __IO uint32_t CH2_MB4;                           /**< Channel (x) Mailbox (n), offset: 0x8010 */
-  __IO uint32_t CH2_MB5;                           /**< Channel (x) Mailbox (n), offset: 0x8014 */
-  __IO uint32_t CH2_MB6;                           /**< Channel (x) Mailbox (n), offset: 0x8018 */
-  __IO uint32_t CH2_MB7;                           /**< Channel (x) Mailbox (n), offset: 0x801C */
-  __IO uint32_t CH2_MB8;                           /**< Channel (x) Mailbox (n), offset: 0x8020 */
-  __IO uint32_t CH2_MB9;                           /**< Channel (x) Mailbox (n), offset: 0x8024 */
-  __IO uint32_t CH2_MB10;                          /**< Channel (x) Mailbox (n), offset: 0x8028 */
-  __IO uint32_t CH2_MB11;                          /**< Channel (x) Mailbox (n), offset: 0x802C */
-  __IO uint32_t CH2_MB12;                          /**< Channel (x) Mailbox (n), offset: 0x8030 */
-  __IO uint32_t CH2_MB13;                          /**< Channel (x) Mailbox (n), offset: 0x8034 */
-  __IO uint32_t CH2_MB14;                          /**< Channel (x) Mailbox (n), offset: 0x8038 */
-  __IO uint32_t CH2_MB15;                          /**< Channel (x) Mailbox (n), offset: 0x803C */
+  __IO uint32_t CH2_MB0;                           /**< Channel (x) Mailbox (n), offset: 0x8000, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB1;                           /**< Channel (x) Mailbox (n), offset: 0x8004, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB2;                           /**< Channel (x) Mailbox (n), offset: 0x8008, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB3;                           /**< Channel (x) Mailbox (n), offset: 0x800C, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB4;                           /**< Channel (x) Mailbox (n), offset: 0x8010, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB5;                           /**< Channel (x) Mailbox (n), offset: 0x8014, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB6;                           /**< Channel (x) Mailbox (n), offset: 0x8018, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB7;                           /**< Channel (x) Mailbox (n), offset: 0x801C, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB8;                           /**< Channel (x) Mailbox (n), offset: 0x8020, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB9;                           /**< Channel (x) Mailbox (n), offset: 0x8024, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB10;                          /**< Channel (x) Mailbox (n), offset: 0x8028, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB11;                          /**< Channel (x) Mailbox (n), offset: 0x802C, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB12;                          /**< Channel (x) Mailbox (n), offset: 0x8030, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB13;                          /**< Channel (x) Mailbox (n), offset: 0x8034, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB14;                          /**< Channel (x) Mailbox (n), offset: 0x8038, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH2_MB15;                          /**< Channel (x) Mailbox (n), offset: 0x803C, not available in all instances (available on 12 out of 20) */
   uint8_t RESERVED_3[16320];
-  __IO uint32_t CH3_MB0;                           /**< Channel (x) Mailbox (n), offset: 0xC000 */
-  __IO uint32_t CH3_MB1;                           /**< Channel (x) Mailbox (n), offset: 0xC004 */
-  __IO uint32_t CH3_MB2;                           /**< Channel (x) Mailbox (n), offset: 0xC008 */
-  __IO uint32_t CH3_MB3;                           /**< Channel (x) Mailbox (n), offset: 0xC00C */
-  __IO uint32_t CH3_MB4;                           /**< Channel (x) Mailbox (n), offset: 0xC010 */
-  __IO uint32_t CH3_MB5;                           /**< Channel (x) Mailbox (n), offset: 0xC014 */
-  __IO uint32_t CH3_MB6;                           /**< Channel (x) Mailbox (n), offset: 0xC018 */
-  __IO uint32_t CH3_MB7;                           /**< Channel (x) Mailbox (n), offset: 0xC01C */
-  __IO uint32_t CH3_MB8;                           /**< Channel (x) Mailbox (n), offset: 0xC020 */
-  __IO uint32_t CH3_MB9;                           /**< Channel (x) Mailbox (n), offset: 0xC024 */
-  __IO uint32_t CH3_MB10;                          /**< Channel (x) Mailbox (n), offset: 0xC028 */
-  __IO uint32_t CH3_MB11;                          /**< Channel (x) Mailbox (n), offset: 0xC02C */
-  __IO uint32_t CH3_MB12;                          /**< Channel (x) Mailbox (n), offset: 0xC030 */
-  __IO uint32_t CH3_MB13;                          /**< Channel (x) Mailbox (n), offset: 0xC034 */
-  __IO uint32_t CH3_MB14;                          /**< Channel (x) Mailbox (n), offset: 0xC038 */
-  __IO uint32_t CH3_MB15;                          /**< Channel (x) Mailbox (n), offset: 0xC03C */
+  __IO uint32_t CH3_MB0;                           /**< Channel (x) Mailbox (n), offset: 0xC000, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB1;                           /**< Channel (x) Mailbox (n), offset: 0xC004, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB2;                           /**< Channel (x) Mailbox (n), offset: 0xC008, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB3;                           /**< Channel (x) Mailbox (n), offset: 0xC00C, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB4;                           /**< Channel (x) Mailbox (n), offset: 0xC010, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB5;                           /**< Channel (x) Mailbox (n), offset: 0xC014, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB6;                           /**< Channel (x) Mailbox (n), offset: 0xC018, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB7;                           /**< Channel (x) Mailbox (n), offset: 0xC01C, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB8;                           /**< Channel (x) Mailbox (n), offset: 0xC020, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB9;                           /**< Channel (x) Mailbox (n), offset: 0xC024, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB10;                          /**< Channel (x) Mailbox (n), offset: 0xC028, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB11;                          /**< Channel (x) Mailbox (n), offset: 0xC02C, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB12;                          /**< Channel (x) Mailbox (n), offset: 0xC030, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB13;                          /**< Channel (x) Mailbox (n), offset: 0xC034, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB14;                          /**< Channel (x) Mailbox (n), offset: 0xC038, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH3_MB15;                          /**< Channel (x) Mailbox (n), offset: 0xC03C, not available in all instances (available on 12 out of 20) */
   uint8_t RESERVED_4[16320];
-  __IO uint32_t CH4_MB0;                           /**< Channel (x) Mailbox (n), offset: 0x10000 */
-  __IO uint32_t CH4_MB1;                           /**< Channel (x) Mailbox (n), offset: 0x10004 */
-  __IO uint32_t CH4_MB2;                           /**< Channel (x) Mailbox (n), offset: 0x10008 */
-  __IO uint32_t CH4_MB3;                           /**< Channel (x) Mailbox (n), offset: 0x1000C */
-  __IO uint32_t CH4_MB4;                           /**< Channel (x) Mailbox (n), offset: 0x10010 */
-  __IO uint32_t CH4_MB5;                           /**< Channel (x) Mailbox (n), offset: 0x10014 */
-  __IO uint32_t CH4_MB6;                           /**< Channel (x) Mailbox (n), offset: 0x10018 */
-  __IO uint32_t CH4_MB7;                           /**< Channel (x) Mailbox (n), offset: 0x1001C */
-  __IO uint32_t CH4_MB8;                           /**< Channel (x) Mailbox (n), offset: 0x10020 */
-  __IO uint32_t CH4_MB9;                           /**< Channel (x) Mailbox (n), offset: 0x10024 */
-  __IO uint32_t CH4_MB10;                          /**< Channel (x) Mailbox (n), offset: 0x10028 */
-  __IO uint32_t CH4_MB11;                          /**< Channel (x) Mailbox (n), offset: 0x1002C */
-  __IO uint32_t CH4_MB12;                          /**< Channel (x) Mailbox (n), offset: 0x10030 */
-  __IO uint32_t CH4_MB13;                          /**< Channel (x) Mailbox (n), offset: 0x10034 */
-  __IO uint32_t CH4_MB14;                          /**< Channel (x) Mailbox (n), offset: 0x10038 */
-  __IO uint32_t CH4_MB15;                          /**< Channel (x) Mailbox (n), offset: 0x1003C */
+  __IO uint32_t CH4_MB0;                           /**< Channel (x) Mailbox (n), offset: 0x10000, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB1;                           /**< Channel (x) Mailbox (n), offset: 0x10004, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB2;                           /**< Channel (x) Mailbox (n), offset: 0x10008, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB3;                           /**< Channel (x) Mailbox (n), offset: 0x1000C, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB4;                           /**< Channel (x) Mailbox (n), offset: 0x10010, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB5;                           /**< Channel (x) Mailbox (n), offset: 0x10014, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB6;                           /**< Channel (x) Mailbox (n), offset: 0x10018, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB7;                           /**< Channel (x) Mailbox (n), offset: 0x1001C, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB8;                           /**< Channel (x) Mailbox (n), offset: 0x10020, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB9;                           /**< Channel (x) Mailbox (n), offset: 0x10024, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB10;                          /**< Channel (x) Mailbox (n), offset: 0x10028, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB11;                          /**< Channel (x) Mailbox (n), offset: 0x1002C, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB12;                          /**< Channel (x) Mailbox (n), offset: 0x10030, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB13;                          /**< Channel (x) Mailbox (n), offset: 0x10034, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB14;                          /**< Channel (x) Mailbox (n), offset: 0x10038, not available in all instances (available on 12 out of 20) */
+  __IO uint32_t CH4_MB15;                          /**< Channel (x) Mailbox (n), offset: 0x1003C, not available in all instances (available on 12 out of 20) */
 } CE_MRU_Type, *CE_MRU_MemMapPtr;
 
 /** Number of instances of the CE_MRU module. */
@@ -517,52 +517,48 @@ typedef struct {
 #define CE_MRU_CH_MBSTAT_MBS15(x)                (((uint32_t)(((uint32_t)(x)) << CE_MRU_CH_MBSTAT_MBS15_SHIFT)) & CE_MRU_CH_MBSTAT_MBS15_MASK)
 /*! @} */
 
-/*! @name NOTIFY0 - Notification 0 Status */
+/*! @name NOTIFY - Notification 0 Status..Notification 1 Status */
 /*! @{ */
 
-#define CE_MRU_NOTIFY0_CH1_IS0_MASK              (0x1U)
-#define CE_MRU_NOTIFY0_CH1_IS0_SHIFT             (0U)
-#define CE_MRU_NOTIFY0_CH1_IS0_WIDTH             (1U)
-#define CE_MRU_NOTIFY0_CH1_IS0(x)                (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY0_CH1_IS0_SHIFT)) & CE_MRU_NOTIFY0_CH1_IS0_MASK)
+#define CE_MRU_NOTIFY_CH1_IS0_MASK               (0x1U)
+#define CE_MRU_NOTIFY_CH1_IS0_SHIFT              (0U)
+#define CE_MRU_NOTIFY_CH1_IS0_WIDTH              (1U)
+#define CE_MRU_NOTIFY_CH1_IS0(x)                 (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY_CH1_IS0_SHIFT)) & CE_MRU_NOTIFY_CH1_IS0_MASK)
 
-#define CE_MRU_NOTIFY0_CH2_IS0_MASK              (0x2U)
-#define CE_MRU_NOTIFY0_CH2_IS0_SHIFT             (1U)
-#define CE_MRU_NOTIFY0_CH2_IS0_WIDTH             (1U)
-#define CE_MRU_NOTIFY0_CH2_IS0(x)                (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY0_CH2_IS0_SHIFT)) & CE_MRU_NOTIFY0_CH2_IS0_MASK)
+#define CE_MRU_NOTIFY_CH1_IS1_MASK               (0x1U)
+#define CE_MRU_NOTIFY_CH1_IS1_SHIFT              (0U)
+#define CE_MRU_NOTIFY_CH1_IS1_WIDTH              (1U)
+#define CE_MRU_NOTIFY_CH1_IS1(x)                 (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY_CH1_IS1_SHIFT)) & CE_MRU_NOTIFY_CH1_IS1_MASK)
 
-#define CE_MRU_NOTIFY0_CH3_IS0_MASK              (0x4U)
-#define CE_MRU_NOTIFY0_CH3_IS0_SHIFT             (2U)
-#define CE_MRU_NOTIFY0_CH3_IS0_WIDTH             (1U)
-#define CE_MRU_NOTIFY0_CH3_IS0(x)                (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY0_CH3_IS0_SHIFT)) & CE_MRU_NOTIFY0_CH3_IS0_MASK)
+#define CE_MRU_NOTIFY_CH2_IS0_MASK               (0x2U)
+#define CE_MRU_NOTIFY_CH2_IS0_SHIFT              (1U)
+#define CE_MRU_NOTIFY_CH2_IS0_WIDTH              (1U)
+#define CE_MRU_NOTIFY_CH2_IS0(x)                 (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY_CH2_IS0_SHIFT)) & CE_MRU_NOTIFY_CH2_IS0_MASK)
 
-#define CE_MRU_NOTIFY0_CH4_IS0_MASK              (0x8U)
-#define CE_MRU_NOTIFY0_CH4_IS0_SHIFT             (3U)
-#define CE_MRU_NOTIFY0_CH4_IS0_WIDTH             (1U)
-#define CE_MRU_NOTIFY0_CH4_IS0(x)                (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY0_CH4_IS0_SHIFT)) & CE_MRU_NOTIFY0_CH4_IS0_MASK)
-/*! @} */
+#define CE_MRU_NOTIFY_CH2_IS1_MASK               (0x2U)
+#define CE_MRU_NOTIFY_CH2_IS1_SHIFT              (1U)
+#define CE_MRU_NOTIFY_CH2_IS1_WIDTH              (1U)
+#define CE_MRU_NOTIFY_CH2_IS1(x)                 (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY_CH2_IS1_SHIFT)) & CE_MRU_NOTIFY_CH2_IS1_MASK)
 
-/*! @name NOTIFY1 - Notification 1 Status */
-/*! @{ */
+#define CE_MRU_NOTIFY_CH3_IS0_MASK               (0x4U)
+#define CE_MRU_NOTIFY_CH3_IS0_SHIFT              (2U)
+#define CE_MRU_NOTIFY_CH3_IS0_WIDTH              (1U)
+#define CE_MRU_NOTIFY_CH3_IS0(x)                 (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY_CH3_IS0_SHIFT)) & CE_MRU_NOTIFY_CH3_IS0_MASK)
 
-#define CE_MRU_NOTIFY1_CH1_IS1_MASK              (0x1U)
-#define CE_MRU_NOTIFY1_CH1_IS1_SHIFT             (0U)
-#define CE_MRU_NOTIFY1_CH1_IS1_WIDTH             (1U)
-#define CE_MRU_NOTIFY1_CH1_IS1(x)                (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY1_CH1_IS1_SHIFT)) & CE_MRU_NOTIFY1_CH1_IS1_MASK)
+#define CE_MRU_NOTIFY_CH3_IS1_MASK               (0x4U)
+#define CE_MRU_NOTIFY_CH3_IS1_SHIFT              (2U)
+#define CE_MRU_NOTIFY_CH3_IS1_WIDTH              (1U)
+#define CE_MRU_NOTIFY_CH3_IS1(x)                 (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY_CH3_IS1_SHIFT)) & CE_MRU_NOTIFY_CH3_IS1_MASK)
 
-#define CE_MRU_NOTIFY1_CH2_IS1_MASK              (0x2U)
-#define CE_MRU_NOTIFY1_CH2_IS1_SHIFT             (1U)
-#define CE_MRU_NOTIFY1_CH2_IS1_WIDTH             (1U)
-#define CE_MRU_NOTIFY1_CH2_IS1(x)                (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY1_CH2_IS1_SHIFT)) & CE_MRU_NOTIFY1_CH2_IS1_MASK)
+#define CE_MRU_NOTIFY_CH4_IS0_MASK               (0x8U)
+#define CE_MRU_NOTIFY_CH4_IS0_SHIFT              (3U)
+#define CE_MRU_NOTIFY_CH4_IS0_WIDTH              (1U)
+#define CE_MRU_NOTIFY_CH4_IS0(x)                 (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY_CH4_IS0_SHIFT)) & CE_MRU_NOTIFY_CH4_IS0_MASK)
 
-#define CE_MRU_NOTIFY1_CH3_IS1_MASK              (0x4U)
-#define CE_MRU_NOTIFY1_CH3_IS1_SHIFT             (2U)
-#define CE_MRU_NOTIFY1_CH3_IS1_WIDTH             (1U)
-#define CE_MRU_NOTIFY1_CH3_IS1(x)                (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY1_CH3_IS1_SHIFT)) & CE_MRU_NOTIFY1_CH3_IS1_MASK)
-
-#define CE_MRU_NOTIFY1_CH4_IS1_MASK              (0x8U)
-#define CE_MRU_NOTIFY1_CH4_IS1_SHIFT             (3U)
-#define CE_MRU_NOTIFY1_CH4_IS1_WIDTH             (1U)
-#define CE_MRU_NOTIFY1_CH4_IS1(x)                (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY1_CH4_IS1_SHIFT)) & CE_MRU_NOTIFY1_CH4_IS1_MASK)
+#define CE_MRU_NOTIFY_CH4_IS1_MASK               (0x8U)
+#define CE_MRU_NOTIFY_CH4_IS1_SHIFT              (3U)
+#define CE_MRU_NOTIFY_CH4_IS1_WIDTH              (1U)
+#define CE_MRU_NOTIFY_CH4_IS1(x)                 (((uint32_t)(((uint32_t)(x)) << CE_MRU_NOTIFY_CH4_IS1_SHIFT)) & CE_MRU_NOTIFY_CH4_IS1_MASK)
 /*! @} */
 
 /*! @name CH1_MB0 - Channel (x) Mailbox (n) */

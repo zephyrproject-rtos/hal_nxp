@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SW_PSEUDO_MAC_PORT2.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_SW_PSEUDO_MAC_PORT2
  *
  * This file contains register definitions and macros for easy access to their
@@ -80,18 +80,17 @@
 
 /** SW_PSEUDO_MAC_PORT2 - Register Layout Typedef */
 typedef struct {
-  uint8_t RESERVED_0[4096];
-  __I  uint32_t PPMSR;                             /**< Port pseudo MAC status register, offset: 0x1000 */
-  uint8_t RESERVED_1[124];
-  __I  uint32_t PPMROCR[SW_PSEUDO_MAC_PORT2_PPMROCR_COUNT]; /**< Port pseudo MAC receive octets counter, array offset: 0x1080, array step: 0x4 */
-  __I  uint32_t PPMRUFCR[SW_PSEUDO_MAC_PORT2_PPMRUFCR_COUNT]; /**< Port pseudo MAC receive unicast frame counter register, array offset: 0x1088, array step: 0x4 */
-  __I  uint32_t PPMRMFCR[SW_PSEUDO_MAC_PORT2_PPMRMFCR_COUNT]; /**< Port pseudo MAC receive multicast frame counter register, array offset: 0x1090, array step: 0x4 */
-  __I  uint32_t PPMRBFCR[SW_PSEUDO_MAC_PORT2_PPMRBFCR_COUNT]; /**< Port pseudo MAC receive broadcast frame counter register, array offset: 0x1098, array step: 0x4 */
-  uint8_t RESERVED_2[32];
-  __I  uint32_t PPMTOCR[SW_PSEUDO_MAC_PORT2_PPMTOCR_COUNT]; /**< Port pseudo MAC transmit octets counter, array offset: 0x10C0, array step: 0x4 */
-  __I  uint32_t PPMTUFCR[SW_PSEUDO_MAC_PORT2_PPMTUFCR_COUNT]; /**< Port pseudo MAC transmit unicast frame counter register, array offset: 0x10C8, array step: 0x4 */
-  __I  uint32_t PPMTMFCR[SW_PSEUDO_MAC_PORT2_PPMTMFCR_COUNT]; /**< Port pseudo MAC transmit multicast frame counter register, array offset: 0x10D0, array step: 0x4 */
-  __I  uint32_t PPMTBFCR[SW_PSEUDO_MAC_PORT2_PPMTBFCR_COUNT]; /**< Port pseudo MAC transmit broadcast frame counter register, array offset: 0x10D8, array step: 0x4 */
+  __I  uint32_t PPMSR;                             /**< Port pseudo MAC status register, offset: 0x0 */
+  uint8_t RESERVED_0[124];
+  __I  uint32_t PPMROCR[SW_PSEUDO_MAC_PORT2_PPMROCR_COUNT]; /**< Port pseudo MAC receive octets counter, array offset: 0x80, array step: 0x4 */
+  __I  uint32_t PPMRUFCR[SW_PSEUDO_MAC_PORT2_PPMRUFCR_COUNT]; /**< Port pseudo MAC receive unicast frame counter register, array offset: 0x88, array step: 0x4 */
+  __I  uint32_t PPMRMFCR[SW_PSEUDO_MAC_PORT2_PPMRMFCR_COUNT]; /**< Port pseudo MAC receive multicast frame counter register, array offset: 0x90, array step: 0x4 */
+  __I  uint32_t PPMRBFCR[SW_PSEUDO_MAC_PORT2_PPMRBFCR_COUNT]; /**< Port pseudo MAC receive broadcast frame counter register, array offset: 0x98, array step: 0x4 */
+  uint8_t RESERVED_1[32];
+  __I  uint32_t PPMTOCR[SW_PSEUDO_MAC_PORT2_PPMTOCR_COUNT]; /**< Port pseudo MAC transmit octets counter, array offset: 0xC0, array step: 0x4 */
+  __I  uint32_t PPMTUFCR[SW_PSEUDO_MAC_PORT2_PPMTUFCR_COUNT]; /**< Port pseudo MAC transmit unicast frame counter register, array offset: 0xC8, array step: 0x4 */
+  __I  uint32_t PPMTMFCR[SW_PSEUDO_MAC_PORT2_PPMTMFCR_COUNT]; /**< Port pseudo MAC transmit multicast frame counter register, array offset: 0xD0, array step: 0x4 */
+  __I  uint32_t PPMTBFCR[SW_PSEUDO_MAC_PORT2_PPMTBFCR_COUNT]; /**< Port pseudo MAC transmit broadcast frame counter register, array offset: 0xD8, array step: 0x4 */
 } SW_PSEUDO_MAC_PORT2_Type, *SW_PSEUDO_MAC_PORT2_MemMapPtr;
 
 /** Number of instances of the SW_PSEUDO_MAC_PORT2 module. */
@@ -99,7 +98,7 @@ typedef struct {
 
 /* SW_PSEUDO_MAC_PORT2 - Peripheral instance base addresses */
 /** Peripheral NETC__SW0_PSEUDO_MAC_PORT2 base address */
-#define IP_NETC__SW0_PSEUDO_MAC_PORT2_BASE       (0x74A0C000u)
+#define IP_NETC__SW0_PSEUDO_MAC_PORT2_BASE       (0x74A0D000u)
 /** Peripheral NETC__SW0_PSEUDO_MAC_PORT2 base pointer */
 #define IP_NETC__SW0_PSEUDO_MAC_PORT2            ((SW_PSEUDO_MAC_PORT2_Type *)IP_NETC__SW0_PSEUDO_MAC_PORT2_BASE)
 /** Array initializer of SW_PSEUDO_MAC_PORT2 peripheral base addresses */

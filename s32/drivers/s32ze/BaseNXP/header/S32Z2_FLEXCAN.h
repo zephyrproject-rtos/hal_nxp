@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_FLEXCAN.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_FLEXCAN
  *
  * This file contains register definitions and macros for easy access to their
@@ -75,57 +75,57 @@
 
 /** FLEXCAN - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t MCR;                               /**< Module Configuration Register, offset: 0x0 */
-  __IO uint32_t CTRL1;                             /**< Control 1 Register, offset: 0x4 */
-  __IO uint32_t TIMER;                             /**< Free Running Timer, offset: 0x8 */
+  __IO uint32_t MCR;                               /**< Module Configuration, offset: 0x0 */
+  __IO uint32_t CTRL1;                             /**< Control 1, offset: 0x4 */
+  __IO uint32_t TIMER;                             /**< Free-Running Timer, offset: 0x8 */
   uint8_t RESERVED_0[4];
-  __IO uint32_t RXMGMASK;                          /**< Rx Mailboxes Global Mask Register, offset: 0x10 */
-  __IO uint32_t RX14MASK;                          /**< Rx 14 Mask Register, offset: 0x14 */
-  __IO uint32_t RX15MASK;                          /**< Rx 15 Mask Register, offset: 0x18 */
+  __IO uint32_t RXMGMASK;                          /**< RX Message Buffers Global Mask, offset: 0x10 */
+  __IO uint32_t RX14MASK;                          /**< Receive 14 Mask, offset: 0x14 */
+  __IO uint32_t RX15MASK;                          /**< Receive 15 Mask, offset: 0x18 */
   __IO uint32_t ECR;                               /**< Error Counter, offset: 0x1C */
-  __IO uint32_t ESR1;                              /**< Error and Status 1 Register, offset: 0x20 */
-  __IO uint32_t IMASK2;                            /**< Interrupt Masks 2 Register, offset: 0x24 */
-  __IO uint32_t IMASK1;                            /**< Interrupt Masks 1 Register, offset: 0x28 */
-  __IO uint32_t IFLAG2;                            /**< Interrupt Flags 2 Register, offset: 0x2C */
-  __IO uint32_t IFLAG1;                            /**< Interrupt Flags 1 Register, offset: 0x30 */
-  __IO uint32_t CTRL2;                             /**< Control 2 Register, offset: 0x34 */
-  __I  uint32_t ESR2;                              /**< Error and Status 2 Register, offset: 0x38 */
+  __IO uint32_t ESR1;                              /**< Error and Status 1, offset: 0x20 */
+  __IO uint32_t IMASK2;                            /**< Interrupt Masks 2, offset: 0x24 */
+  __IO uint32_t IMASK1;                            /**< Interrupt Masks 1, offset: 0x28 */
+  __IO uint32_t IFLAG2;                            /**< Interrupt Flags 2, offset: 0x2C */
+  __IO uint32_t IFLAG1;                            /**< Interrupt Flags 1, offset: 0x30 */
+  __IO uint32_t CTRL2;                             /**< Control 2, offset: 0x34 */
+  __I  uint32_t ESR2;                              /**< Error and Status 2, offset: 0x38 */
   uint8_t RESERVED_1[8];
-  __I  uint32_t CRCR;                              /**< CRC Register, offset: 0x44 */
-  __IO uint32_t RXFGMASK;                          /**< Legacy Rx FIFO Global Mask Register, offset: 0x48 */
-  __I  uint32_t RXFIR;                             /**< Legacy Rx FIFO Information Register, offset: 0x4C */
-  __IO uint32_t CBT;                               /**< CAN Bit Timing Register, offset: 0x50 */
+  __I  uint32_t CRCR;                              /**< Cyclic Redundancy Check, offset: 0x44 */
+  __IO uint32_t RXFGMASK;                          /**< Legacy RX FIFO Global Mask, offset: 0x48 */
+  __I  uint32_t RXFIR;                             /**< Legacy RX FIFO Information, offset: 0x4C */
+  __IO uint32_t CBT;                               /**< CAN Bit Timing, offset: 0x50 */
   uint8_t RESERVED_2[20];
-  __IO uint32_t IMASK4;                            /**< Interrupt Masks 4 Register, offset: 0x68 */
-  __IO uint32_t IMASK3;                            /**< Interrupt Masks 3 Register, offset: 0x6C */
-  __IO uint32_t IFLAG4;                            /**< Interrupt Flags 4 Register, offset: 0x70 */
-  __IO uint32_t IFLAG3;                            /**< Interrupt Flags 3 Register, offset: 0x74 */
+  __IO uint32_t IMASK4;                            /**< Interrupt Masks 4, offset: 0x68 */
+  __IO uint32_t IMASK3;                            /**< Interrupt Masks 3, offset: 0x6C */
+  __IO uint32_t IFLAG4;                            /**< Interrupt Flags 4, offset: 0x70 */
+  __IO uint32_t IFLAG3;                            /**< Interrupt Flags 3, offset: 0x74 */
   uint8_t RESERVED_3[2056];
-  __IO uint32_t RXIMR[FLEXCAN_RXIMR_COUNT];        /**< Rx Individual Mask Registers, array offset: 0x880, array step: 0x4 */
+  __IO uint32_t RXIMR[FLEXCAN_RXIMR_COUNT];        /**< Receive Individual Mask, array offset: 0x880, array step: 0x4 */
   uint8_t RESERVED_4[96];
-  __IO uint32_t MECR;                              /**< Memory Error Control Register, offset: 0xAE0 */
-  __IO uint32_t ERRIAR;                            /**< Error Injection Address Register, offset: 0xAE4 */
-  __IO uint32_t ERRIDPR;                           /**< Error Injection Data Pattern Register, offset: 0xAE8 */
-  __IO uint32_t ERRIPPR;                           /**< Error Injection Parity Pattern Register, offset: 0xAEC */
-  __I  uint32_t RERRAR;                            /**< Error Report Address Register, offset: 0xAF0 */
-  __I  uint32_t RERRDR;                            /**< Error Report Data Register, offset: 0xAF4 */
-  __I  uint32_t RERRSYNR;                          /**< Error Report Syndrome Register, offset: 0xAF8 */
-  __IO uint32_t ERRSR;                             /**< Error Status Register, offset: 0xAFC */
+  __IO uint32_t MECR;                              /**< Memory Error Control, offset: 0xAE0 */
+  __IO uint32_t ERRIAR;                            /**< Error Injection Address, offset: 0xAE4 */
+  __IO uint32_t ERRIDPR;                           /**< Error Injection Data Pattern, offset: 0xAE8 */
+  __IO uint32_t ERRIPPR;                           /**< Error Injection Parity Pattern, offset: 0xAEC */
+  __I  uint32_t RERRAR;                            /**< Error Report Address, offset: 0xAF0 */
+  __I  uint32_t RERRDR;                            /**< Error Report Data, offset: 0xAF4 */
+  __I  uint32_t RERRSYNR;                          /**< Error Report Syndrome, offset: 0xAF8 */
+  __IO uint32_t ERRSR;                             /**< Error Status, offset: 0xAFC */
   uint8_t RESERVED_5[240];
   __IO uint32_t EPRS;                              /**< Enhanced CAN Bit Timing Prescalers, offset: 0xBF0 */
   __IO uint32_t ENCBT;                             /**< Enhanced Nominal CAN Bit Timing, offset: 0xBF4 */
-  __IO uint32_t EDCBT;                             /**< Enhanced Data Phase CAN bit Timing, offset: 0xBF8 */
+  __IO uint32_t EDCBT;                             /**< Enhanced Data Phase CAN Bit Timing, offset: 0xBF8 */
   __IO uint32_t ETDC;                              /**< Enhanced Transceiver Delay Compensation, offset: 0xBFC */
-  __IO uint32_t FDCTRL;                            /**< CAN FD Control Register, offset: 0xC00 */
-  __IO uint32_t FDCBT;                             /**< CAN FD Bit Timing Register, offset: 0xC04 */
-  __I  uint32_t FDCRC;                             /**< CAN FD CRC Register, offset: 0xC08 */
-  __IO uint32_t ERFCR;                             /**< Enhanced Rx FIFO Control Register, offset: 0xC0C */
-  __IO uint32_t ERFIER;                            /**< Enhanced Rx FIFO Interrupt Enable Register, offset: 0xC10 */
-  __IO uint32_t ERFSR;                             /**< Enhanced Rx FIFO Status Register, offset: 0xC14 */
+  __IO uint32_t FDCTRL;                            /**< CAN FD Control, offset: 0xC00 */
+  __IO uint32_t FDCBT;                             /**< CAN FD Bit Timing, offset: 0xC04 */
+  __I  uint32_t FDCRC;                             /**< CAN FD CRC, offset: 0xC08 */
+  __IO uint32_t ERFCR;                             /**< Enhanced RX FIFO Control, offset: 0xC0C */
+  __IO uint32_t ERFIER;                            /**< Enhanced RX FIFO Interrupt Enable, offset: 0xC10 */
+  __IO uint32_t ERFSR;                             /**< Enhanced RX FIFO Status, offset: 0xC14 */
   uint8_t RESERVED_6[24];
-  __IO uint32_t HR_TIME_STAMP[FLEXCAN_HR_TIME_STAMP_COUNT]; /**< High Resolution Time Stamp, array offset: 0xC30, array step: 0x4 */
+  __IO uint32_t HR_TIME_STAMP[FLEXCAN_HR_TIME_STAMP_COUNT]; /**< High-Resolution Timestamp, array offset: 0xC30, array step: 0x4 */
   uint8_t RESERVED_7[8656];
-  __IO uint32_t ERFFEL[FLEXCAN_ERFFEL_COUNT];      /**< Enhanced Rx FIFO Filter Element, array offset: 0x3000, array step: 0x4 */
+  __IO uint32_t ERFFEL[FLEXCAN_ERFFEL_COUNT];      /**< Enhanced RX FIFO Filter Element, array offset: 0x3000, array step: 0x4 */
 } FLEXCAN_Type, *FLEXCAN_MemMapPtr;
 
 /** Number of instances of the FLEXCAN module. */
@@ -242,7 +242,7 @@ typedef struct {
  * @{
  */
 
-/*! @name MCR - Module Configuration Register */
+/*! @name MCR - Module Configuration */
 /*! @{ */
 
 #define FLEXCAN_MCR_MAXMB_MASK                   (0x7FU)
@@ -331,7 +331,7 @@ typedef struct {
 #define FLEXCAN_MCR_MDIS(x)                      (((uint32_t)(((uint32_t)(x)) << FLEXCAN_MCR_MDIS_SHIFT)) & FLEXCAN_MCR_MDIS_MASK)
 /*! @} */
 
-/*! @name CTRL1 - Control 1 Register */
+/*! @name CTRL1 - Control 1 */
 /*! @{ */
 
 #define FLEXCAN_CTRL1_PROPSEG_MASK               (0x7U)
@@ -410,7 +410,7 @@ typedef struct {
 #define FLEXCAN_CTRL1_PRESDIV(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXCAN_CTRL1_PRESDIV_SHIFT)) & FLEXCAN_CTRL1_PRESDIV_MASK)
 /*! @} */
 
-/*! @name TIMER - Free Running Timer */
+/*! @name TIMER - Free-Running Timer */
 /*! @{ */
 
 #define FLEXCAN_TIMER_TIMER_MASK                 (0xFFFFU)
@@ -419,7 +419,7 @@ typedef struct {
 #define FLEXCAN_TIMER_TIMER(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXCAN_TIMER_TIMER_SHIFT)) & FLEXCAN_TIMER_TIMER_MASK)
 /*! @} */
 
-/*! @name RXMGMASK - Rx Mailboxes Global Mask Register */
+/*! @name RXMGMASK - RX Message Buffers Global Mask */
 /*! @{ */
 
 #define FLEXCAN_RXMGMASK_MG_MASK                 (0xFFFFFFFFU)
@@ -428,7 +428,7 @@ typedef struct {
 #define FLEXCAN_RXMGMASK_MG(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXCAN_RXMGMASK_MG_SHIFT)) & FLEXCAN_RXMGMASK_MG_MASK)
 /*! @} */
 
-/*! @name RX14MASK - Rx 14 Mask Register */
+/*! @name RX14MASK - Receive 14 Mask */
 /*! @{ */
 
 #define FLEXCAN_RX14MASK_RX14M_MASK              (0xFFFFFFFFU)
@@ -437,7 +437,7 @@ typedef struct {
 #define FLEXCAN_RX14MASK_RX14M(x)                (((uint32_t)(((uint32_t)(x)) << FLEXCAN_RX14MASK_RX14M_SHIFT)) & FLEXCAN_RX14MASK_RX14M_MASK)
 /*! @} */
 
-/*! @name RX15MASK - Rx 15 Mask Register */
+/*! @name RX15MASK - Receive 15 Mask */
 /*! @{ */
 
 #define FLEXCAN_RX15MASK_RX15M_MASK              (0xFFFFFFFFU)
@@ -470,7 +470,7 @@ typedef struct {
 #define FLEXCAN_ECR_RXERRCNT_FAST(x)             (((uint32_t)(((uint32_t)(x)) << FLEXCAN_ECR_RXERRCNT_FAST_SHIFT)) & FLEXCAN_ECR_RXERRCNT_FAST_MASK)
 /*! @} */
 
-/*! @name ESR1 - Error and Status 1 Register */
+/*! @name ESR1 - Error and Status 1 */
 /*! @{ */
 
 #define FLEXCAN_ESR1_ERRINT_MASK                 (0x2U)
@@ -599,7 +599,7 @@ typedef struct {
 #define FLEXCAN_ESR1_BIT1ERR_FAST(x)             (((uint32_t)(((uint32_t)(x)) << FLEXCAN_ESR1_BIT1ERR_FAST_SHIFT)) & FLEXCAN_ESR1_BIT1ERR_FAST_MASK)
 /*! @} */
 
-/*! @name IMASK2 - Interrupt Masks 2 Register */
+/*! @name IMASK2 - Interrupt Masks 2 */
 /*! @{ */
 
 #define FLEXCAN_IMASK2_BUF63TO32M_MASK           (0xFFFFFFFFU)
@@ -608,7 +608,7 @@ typedef struct {
 #define FLEXCAN_IMASK2_BUF63TO32M(x)             (((uint32_t)(((uint32_t)(x)) << FLEXCAN_IMASK2_BUF63TO32M_SHIFT)) & FLEXCAN_IMASK2_BUF63TO32M_MASK)
 /*! @} */
 
-/*! @name IMASK1 - Interrupt Masks 1 Register */
+/*! @name IMASK1 - Interrupt Masks 1 */
 /*! @{ */
 
 #define FLEXCAN_IMASK1_BUF31TO0M_MASK            (0xFFFFFFFFU)
@@ -617,7 +617,7 @@ typedef struct {
 #define FLEXCAN_IMASK1_BUF31TO0M(x)              (((uint32_t)(((uint32_t)(x)) << FLEXCAN_IMASK1_BUF31TO0M_SHIFT)) & FLEXCAN_IMASK1_BUF31TO0M_MASK)
 /*! @} */
 
-/*! @name IFLAG2 - Interrupt Flags 2 Register */
+/*! @name IFLAG2 - Interrupt Flags 2 */
 /*! @{ */
 
 #define FLEXCAN_IFLAG2_BUF63TO32I_MASK           (0xFFFFFFFFU)
@@ -626,7 +626,7 @@ typedef struct {
 #define FLEXCAN_IFLAG2_BUF63TO32I(x)             (((uint32_t)(((uint32_t)(x)) << FLEXCAN_IFLAG2_BUF63TO32I_SHIFT)) & FLEXCAN_IFLAG2_BUF63TO32I_MASK)
 /*! @} */
 
-/*! @name IFLAG1 - Interrupt Flags 1 Register */
+/*! @name IFLAG1 - Interrupt Flags 1 */
 /*! @{ */
 
 #define FLEXCAN_IFLAG1_BUF0I_MASK                (0x1U)
@@ -660,7 +660,7 @@ typedef struct {
 #define FLEXCAN_IFLAG1_BUF31TO8I(x)              (((uint32_t)(((uint32_t)(x)) << FLEXCAN_IFLAG1_BUF31TO8I_SHIFT)) & FLEXCAN_IFLAG1_BUF31TO8I_MASK)
 /*! @} */
 
-/*! @name CTRL2 - Control 2 Register */
+/*! @name CTRL2 - Control 2 */
 /*! @{ */
 
 #define FLEXCAN_CTRL2_TSTAMPCAP_MASK             (0xC0U)
@@ -744,7 +744,7 @@ typedef struct {
 #define FLEXCAN_CTRL2_ERRMSK_FAST(x)             (((uint32_t)(((uint32_t)(x)) << FLEXCAN_CTRL2_ERRMSK_FAST_SHIFT)) & FLEXCAN_CTRL2_ERRMSK_FAST_MASK)
 /*! @} */
 
-/*! @name ESR2 - Error and Status 2 Register */
+/*! @name ESR2 - Error and Status 2 */
 /*! @{ */
 
 #define FLEXCAN_ESR2_IMB_MASK                    (0x2000U)
@@ -763,7 +763,7 @@ typedef struct {
 #define FLEXCAN_ESR2_LPTM(x)                     (((uint32_t)(((uint32_t)(x)) << FLEXCAN_ESR2_LPTM_SHIFT)) & FLEXCAN_ESR2_LPTM_MASK)
 /*! @} */
 
-/*! @name CRCR - CRC Register */
+/*! @name CRCR - Cyclic Redundancy Check */
 /*! @{ */
 
 #define FLEXCAN_CRCR_TXCRC_MASK                  (0x7FFFU)
@@ -777,7 +777,7 @@ typedef struct {
 #define FLEXCAN_CRCR_MBCRC(x)                    (((uint32_t)(((uint32_t)(x)) << FLEXCAN_CRCR_MBCRC_SHIFT)) & FLEXCAN_CRCR_MBCRC_MASK)
 /*! @} */
 
-/*! @name RXFGMASK - Legacy Rx FIFO Global Mask Register */
+/*! @name RXFGMASK - Legacy RX FIFO Global Mask */
 /*! @{ */
 
 #define FLEXCAN_RXFGMASK_FGM_MASK                (0xFFFFFFFFU)
@@ -786,7 +786,7 @@ typedef struct {
 #define FLEXCAN_RXFGMASK_FGM(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXCAN_RXFGMASK_FGM_SHIFT)) & FLEXCAN_RXFGMASK_FGM_MASK)
 /*! @} */
 
-/*! @name RXFIR - Legacy Rx FIFO Information Register */
+/*! @name RXFIR - Legacy RX FIFO Information */
 /*! @{ */
 
 #define FLEXCAN_RXFIR_IDHIT_MASK                 (0x1FFU)
@@ -795,7 +795,7 @@ typedef struct {
 #define FLEXCAN_RXFIR_IDHIT(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXCAN_RXFIR_IDHIT_SHIFT)) & FLEXCAN_RXFIR_IDHIT_MASK)
 /*! @} */
 
-/*! @name CBT - CAN Bit Timing Register */
+/*! @name CBT - CAN Bit Timing */
 /*! @{ */
 
 #define FLEXCAN_CBT_EPSEG2_MASK                  (0x1FU)
@@ -829,7 +829,7 @@ typedef struct {
 #define FLEXCAN_CBT_BTF(x)                       (((uint32_t)(((uint32_t)(x)) << FLEXCAN_CBT_BTF_SHIFT)) & FLEXCAN_CBT_BTF_MASK)
 /*! @} */
 
-/*! @name IMASK4 - Interrupt Masks 4 Register */
+/*! @name IMASK4 - Interrupt Masks 4 */
 /*! @{ */
 
 #define FLEXCAN_IMASK4_BUF127TO96M_MASK          (0xFFFFFFFFU)
@@ -838,7 +838,7 @@ typedef struct {
 #define FLEXCAN_IMASK4_BUF127TO96M(x)            (((uint32_t)(((uint32_t)(x)) << FLEXCAN_IMASK4_BUF127TO96M_SHIFT)) & FLEXCAN_IMASK4_BUF127TO96M_MASK)
 /*! @} */
 
-/*! @name IMASK3 - Interrupt Masks 3 Register */
+/*! @name IMASK3 - Interrupt Masks 3 */
 /*! @{ */
 
 #define FLEXCAN_IMASK3_BUF95TO64M_MASK           (0xFFFFFFFFU)
@@ -847,7 +847,7 @@ typedef struct {
 #define FLEXCAN_IMASK3_BUF95TO64M(x)             (((uint32_t)(((uint32_t)(x)) << FLEXCAN_IMASK3_BUF95TO64M_SHIFT)) & FLEXCAN_IMASK3_BUF95TO64M_MASK)
 /*! @} */
 
-/*! @name IFLAG4 - Interrupt Flags 4 Register */
+/*! @name IFLAG4 - Interrupt Flags 4 */
 /*! @{ */
 
 #define FLEXCAN_IFLAG4_BUF127TO96_MASK           (0xFFFFFFFFU)
@@ -856,7 +856,7 @@ typedef struct {
 #define FLEXCAN_IFLAG4_BUF127TO96(x)             (((uint32_t)(((uint32_t)(x)) << FLEXCAN_IFLAG4_BUF127TO96_SHIFT)) & FLEXCAN_IFLAG4_BUF127TO96_MASK)
 /*! @} */
 
-/*! @name IFLAG3 - Interrupt Flags 3 Register */
+/*! @name IFLAG3 - Interrupt Flags 3 */
 /*! @{ */
 
 #define FLEXCAN_IFLAG3_BUF95TO64_MASK            (0xFFFFFFFFU)
@@ -865,7 +865,7 @@ typedef struct {
 #define FLEXCAN_IFLAG3_BUF95TO64(x)              (((uint32_t)(((uint32_t)(x)) << FLEXCAN_IFLAG3_BUF95TO64_SHIFT)) & FLEXCAN_IFLAG3_BUF95TO64_MASK)
 /*! @} */
 
-/*! @name RXIMR - Rx Individual Mask Registers */
+/*! @name RXIMR - Receive Individual Mask */
 /*! @{ */
 
 #define FLEXCAN_RXIMR_MI_MASK                    (0xFFFFFFFFU)
@@ -874,7 +874,7 @@ typedef struct {
 #define FLEXCAN_RXIMR_MI(x)                      (((uint32_t)(((uint32_t)(x)) << FLEXCAN_RXIMR_MI_SHIFT)) & FLEXCAN_RXIMR_MI_MASK)
 /*! @} */
 
-/*! @name MECR - Memory Error Control Register */
+/*! @name MECR - Memory Error Control */
 /*! @{ */
 
 #define FLEXCAN_MECR_NCEFAFRZ_MASK               (0x80U)
@@ -913,7 +913,7 @@ typedef struct {
 #define FLEXCAN_MECR_ECRWRDIS(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXCAN_MECR_ECRWRDIS_SHIFT)) & FLEXCAN_MECR_ECRWRDIS_MASK)
 /*! @} */
 
-/*! @name ERRIAR - Error Injection Address Register */
+/*! @name ERRIAR - Error Injection Address */
 /*! @{ */
 
 #define FLEXCAN_ERRIAR_INJADDR_L_MASK            (0x3U)
@@ -927,7 +927,7 @@ typedef struct {
 #define FLEXCAN_ERRIAR_INJADDR_H(x)              (((uint32_t)(((uint32_t)(x)) << FLEXCAN_ERRIAR_INJADDR_H_SHIFT)) & FLEXCAN_ERRIAR_INJADDR_H_MASK)
 /*! @} */
 
-/*! @name ERRIDPR - Error Injection Data Pattern Register */
+/*! @name ERRIDPR - Error Injection Data Pattern */
 /*! @{ */
 
 #define FLEXCAN_ERRIDPR_DFLIP_MASK               (0xFFFFFFFFU)
@@ -936,7 +936,7 @@ typedef struct {
 #define FLEXCAN_ERRIDPR_DFLIP(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXCAN_ERRIDPR_DFLIP_SHIFT)) & FLEXCAN_ERRIDPR_DFLIP_MASK)
 /*! @} */
 
-/*! @name ERRIPPR - Error Injection Parity Pattern Register */
+/*! @name ERRIPPR - Error Injection Parity Pattern */
 /*! @{ */
 
 #define FLEXCAN_ERRIPPR_PFLIP0_MASK              (0x1FU)
@@ -960,7 +960,7 @@ typedef struct {
 #define FLEXCAN_ERRIPPR_PFLIP3(x)                (((uint32_t)(((uint32_t)(x)) << FLEXCAN_ERRIPPR_PFLIP3_SHIFT)) & FLEXCAN_ERRIPPR_PFLIP3_MASK)
 /*! @} */
 
-/*! @name RERRAR - Error Report Address Register */
+/*! @name RERRAR - Error Report Address */
 /*! @{ */
 
 #define FLEXCAN_RERRAR_ERRADDR_MASK              (0x3FFFU)
@@ -979,7 +979,7 @@ typedef struct {
 #define FLEXCAN_RERRAR_NCE(x)                    (((uint32_t)(((uint32_t)(x)) << FLEXCAN_RERRAR_NCE_SHIFT)) & FLEXCAN_RERRAR_NCE_MASK)
 /*! @} */
 
-/*! @name RERRDR - Error Report Data Register */
+/*! @name RERRDR - Error Report Data */
 /*! @{ */
 
 #define FLEXCAN_RERRDR_RDATA_MASK                (0xFFFFFFFFU)
@@ -988,7 +988,7 @@ typedef struct {
 #define FLEXCAN_RERRDR_RDATA(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXCAN_RERRDR_RDATA_SHIFT)) & FLEXCAN_RERRDR_RDATA_MASK)
 /*! @} */
 
-/*! @name RERRSYNR - Error Report Syndrome Register */
+/*! @name RERRSYNR - Error Report Syndrome */
 /*! @{ */
 
 #define FLEXCAN_RERRSYNR_SYND0_MASK              (0x1FU)
@@ -1032,7 +1032,7 @@ typedef struct {
 #define FLEXCAN_RERRSYNR_BE3(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXCAN_RERRSYNR_BE3_SHIFT)) & FLEXCAN_RERRSYNR_BE3_MASK)
 /*! @} */
 
-/*! @name ERRSR - Error Status Register */
+/*! @name ERRSR - Error Status */
 /*! @{ */
 
 #define FLEXCAN_ERRSR_CEIOF_MASK                 (0x1U)
@@ -1099,7 +1099,7 @@ typedef struct {
 #define FLEXCAN_ENCBT_NRJW(x)                    (((uint32_t)(((uint32_t)(x)) << FLEXCAN_ENCBT_NRJW_SHIFT)) & FLEXCAN_ENCBT_NRJW_MASK)
 /*! @} */
 
-/*! @name EDCBT - Enhanced Data Phase CAN bit Timing */
+/*! @name EDCBT - Enhanced Data Phase CAN Bit Timing */
 /*! @{ */
 
 #define FLEXCAN_EDCBT_DTSEG1_MASK                (0x1FU)
@@ -1147,7 +1147,7 @@ typedef struct {
 #define FLEXCAN_ETDC_ETDCEN(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXCAN_ETDC_ETDCEN_SHIFT)) & FLEXCAN_ETDC_ETDCEN_MASK)
 /*! @} */
 
-/*! @name FDCTRL - CAN FD Control Register */
+/*! @name FDCTRL - CAN FD Control */
 /*! @{ */
 
 #define FLEXCAN_FDCTRL_TDCVAL_MASK               (0x3FU)
@@ -1196,7 +1196,7 @@ typedef struct {
 #define FLEXCAN_FDCTRL_FDRATE(x)                 (((uint32_t)(((uint32_t)(x)) << FLEXCAN_FDCTRL_FDRATE_SHIFT)) & FLEXCAN_FDCTRL_FDRATE_MASK)
 /*! @} */
 
-/*! @name FDCBT - CAN FD Bit Timing Register */
+/*! @name FDCBT - CAN FD Bit Timing */
 /*! @{ */
 
 #define FLEXCAN_FDCBT_FPSEG2_MASK                (0x7U)
@@ -1225,7 +1225,7 @@ typedef struct {
 #define FLEXCAN_FDCBT_FPRESDIV(x)                (((uint32_t)(((uint32_t)(x)) << FLEXCAN_FDCBT_FPRESDIV_SHIFT)) & FLEXCAN_FDCBT_FPRESDIV_MASK)
 /*! @} */
 
-/*! @name FDCRC - CAN FD CRC Register */
+/*! @name FDCRC - CAN FD CRC */
 /*! @{ */
 
 #define FLEXCAN_FDCRC_FD_TXCRC_MASK              (0x1FFFFFU)
@@ -1239,7 +1239,7 @@ typedef struct {
 #define FLEXCAN_FDCRC_FD_MBCRC(x)                (((uint32_t)(((uint32_t)(x)) << FLEXCAN_FDCRC_FD_MBCRC_SHIFT)) & FLEXCAN_FDCRC_FD_MBCRC_MASK)
 /*! @} */
 
-/*! @name ERFCR - Enhanced Rx FIFO Control Register */
+/*! @name ERFCR - Enhanced RX FIFO Control */
 /*! @{ */
 
 #define FLEXCAN_ERFCR_ERFWM_MASK                 (0x1FU)
@@ -1268,7 +1268,7 @@ typedef struct {
 #define FLEXCAN_ERFCR_ERFEN(x)                   (((uint32_t)(((uint32_t)(x)) << FLEXCAN_ERFCR_ERFEN_SHIFT)) & FLEXCAN_ERFCR_ERFEN_MASK)
 /*! @} */
 
-/*! @name ERFIER - Enhanced Rx FIFO Interrupt Enable Register */
+/*! @name ERFIER - Enhanced RX FIFO Interrupt Enable */
 /*! @{ */
 
 #define FLEXCAN_ERFIER_ERFDAIE_MASK              (0x10000000U)
@@ -1292,7 +1292,7 @@ typedef struct {
 #define FLEXCAN_ERFIER_ERFUFWIE(x)               (((uint32_t)(((uint32_t)(x)) << FLEXCAN_ERFIER_ERFUFWIE_SHIFT)) & FLEXCAN_ERFIER_ERFUFWIE_MASK)
 /*! @} */
 
-/*! @name ERFSR - Enhanced Rx FIFO Status Register */
+/*! @name ERFSR - Enhanced RX FIFO Status */
 /*! @{ */
 
 #define FLEXCAN_ERFSR_ERFEL_MASK                 (0x3FU)
@@ -1336,7 +1336,7 @@ typedef struct {
 #define FLEXCAN_ERFSR_ERFUFW(x)                  (((uint32_t)(((uint32_t)(x)) << FLEXCAN_ERFSR_ERFUFW_SHIFT)) & FLEXCAN_ERFSR_ERFUFW_MASK)
 /*! @} */
 
-/*! @name HR_TIME_STAMP - High Resolution Time Stamp */
+/*! @name HR_TIME_STAMP - High-Resolution Timestamp */
 /*! @{ */
 
 #define FLEXCAN_HR_TIME_STAMP_TS_MASK            (0xFFFFFFFFU)
@@ -1345,7 +1345,7 @@ typedef struct {
 #define FLEXCAN_HR_TIME_STAMP_TS(x)              (((uint32_t)(((uint32_t)(x)) << FLEXCAN_HR_TIME_STAMP_TS_SHIFT)) & FLEXCAN_HR_TIME_STAMP_TS_MASK)
 /*! @} */
 
-/*! @name ERFFEL - Enhanced Rx FIFO Filter Element */
+/*! @name ERFFEL - Enhanced RX FIFO Filter Element */
 /*! @{ */
 
 #define FLEXCAN_ERFFEL_FEL_MASK                  (0xFFFFFFFFU)

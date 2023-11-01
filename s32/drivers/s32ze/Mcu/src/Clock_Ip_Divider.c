@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Divider.c
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -36,8 +36,8 @@ extern "C"{
 #define CLOCK_IP_DIVIDER_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_DIVIDER_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_DIVIDER_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_DIVIDER_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_DIVIDER_SW_MINOR_VERSION_C               9
+#define CLOCK_IP_DIVIDER_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_DIVIDER_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_DIVIDER_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -110,7 +110,10 @@ static void Clock_Ip_SetCgmXDeDivStatWithoutPhaseWithTrigger(Clock_Ip_DividerCon
 #ifdef CLOCK_IP_PLLDIG_PLL0DIV_DE_DIV_OUTPUT
 static void Clock_Ip_SetPlldigPll0divDeDivOutput(Clock_Ip_DividerConfigType const* Config);
 #endif
- 
+
+#ifdef CLOCK_IP_CGM_X_DE_DIV_FMT_STAT_WITHOUT_PHASE
+static void Clock_Ip_SetCgmXDeDivFmtStatWithoutPhase(Clock_Ip_DividerConfigType const* Config);
+#endif
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -133,12 +136,12 @@ static void Clock_Ip_Callback_DividerEmpty(Clock_Ip_DividerConfigType const* Con
 #ifdef CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE
 static void Clock_Ip_SetCgmXDeDivStatWithoutPhase(Clock_Ip_DividerConfigType const* Config)
 {
-    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
-    uint32 SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
-    uint32 DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
+    uint32 Instance;
+    uint32 SelectorIndex;
+    uint32 DividerIndex;
 
-    uint32 DividerMask  = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueMask;
-    uint32 DividerShift = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueShift;
+    uint32 DividerMask;
+    uint32 DividerShift;
 
     uint32 RegValue;
     boolean TimeoutOccurred = FALSE;
@@ -147,89 +150,46 @@ static void Clock_Ip_SetCgmXDeDivStatWithoutPhase(Clock_Ip_DividerConfigType con
     uint32 TimeoutTicks;
     uint32 DividerStatus;
 
-    /* Program divider value */
-    if (Config->Value != 0U)
+    if (NULL_PTR != Config)
     {
+        Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+        SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
+        DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
+        DividerMask   = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueMask;
+        DividerShift  = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueShift;
         RegValue = Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex];
-        RegValue &= ~DividerMask;
-        RegValue |= (((Config->Value-1U) << DividerShift) & DividerMask);
-        Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] = RegValue;
 
-#ifdef CLOCK_IP_DIVIDER_HAVE_DIV_FMT
-        if((Instance == 0U)  && (SelectorIndex == 2U) && (DividerIndex == 2U))
-        {
-            IP_MC_CGM_0->MUX_2_DC_2 &= ~MC_CGM_MUX_2_DC_2_DIV_FMT_MASK;
-        }
-        else if((Instance == 4U) && (SelectorIndex == 2U) && (DividerIndex == 2U))
-        {
-            IP_MC_CGM_4->MUX_2_DC_2 &= ~MC_CGM_MUX_2_DC_2_DIV_FMT_MASK;
-        }
-        else
-        {
-            /* Do nothing */
-        }
-#endif
-    }
-
-    Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-    /* Wait for acknowledge to be cleared. */
-    do
-    {
-        DividerStatus = (Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_UPD_STAT & MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_MASK);
-        TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-    }
-    while ((MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_PENDING == DividerStatus) && (FALSE == TimeoutOccurred));
-
-    if (FALSE == TimeoutOccurred)
-    {
-        /* Enable or Disable the Clock Divider */
+        /* Program divider value */
         if (Config->Value != 0U)
         {
+            RegValue &= ~DividerMask;
+            RegValue |= (((Config->Value-1U) << DividerShift) & DividerMask);
+
+        #ifdef CLOCK_IP_DIVIDER_HAVE_DIV_FMT
+            if((Instance == 0U)  && (SelectorIndex == 2U) && (DividerIndex == 2U))
+            {
+                RegValue &= ~MC_CGM_MUX_2_DC_2_DIV_FMT_MASK;
+            }
+            else if((Instance == 4U) && (SelectorIndex == 2U) && (DividerIndex == 2U))
+            {
+                RegValue &= ~MC_CGM_MUX_2_DC_2_DIV_FMT_MASK;
+            }
+            else
+            {
+                /* Do nothing */
+            }
+        #endif
+
             /* Enable divider */
-            Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] |= MC_CGM_MUX_DC_DE_MASK;
+            RegValue |= MC_CGM_MUX_DC_DE_MASK;
         }
         else
         {
-            Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] &= ~MC_CGM_MUX_DC_DE_MASK;
+            RegValue &= ~MC_CGM_MUX_DC_DE_MASK;
         }
-    }
-    else
-    {
-        /* Report timeout error */
-        Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
-    }
-}
-#endif
 
-#ifdef CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE_WITH_TRIGGER
-static void Clock_Ip_SetCgmXDeDivStatWithoutPhaseWithTrigger(Clock_Ip_DividerConfigType const* Config)
-{
-    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
-    uint32 SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
-    uint32 DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
-
-    uint32 DividerMask  = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueMask;
-    uint32 DividerShift = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueShift;
-
-    uint32 RegValue;
-    boolean TimeoutOccurred = FALSE;
-    uint32 StartTime;
-    uint32 ElapsedTime;
-    uint32 TimeoutTicks;
-    uint32 DividerStatus;
-
-    /* Program divider value */
-    if (Config->Value != 0U)
-    {
-        RegValue = Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex];
-        RegValue &= ~DividerMask;
-        RegValue |= ((Config->Value-1U) << DividerShift) & DividerMask;
         Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] = RegValue;
-    }
 
-    /* Immediate update is triggered. */
-    if ((Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_TRIG_CTRL & MC_CGM_MUX_DIV_TRIG_CTRL_TCTL_MASK) != MC_CGM_MUX_DIV_TRIG_CTRL_COMMON_TRIGGER_DIVIDER_UPDATE)
-    {
         Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
         /* Wait for acknowledge to be cleared. */
         do
@@ -238,25 +198,105 @@ static void Clock_Ip_SetCgmXDeDivStatWithoutPhaseWithTrigger(Clock_Ip_DividerCon
             TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
         }
         while ((MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_PENDING == DividerStatus) && (FALSE == TimeoutOccurred));
-    }
 
-    if (FALSE == TimeoutOccurred)
-    {
-        /* Enable or Disable the Clock Divider */
-        if (Config->Value != 0U)
+        if (TRUE == TimeoutOccurred)
         {
-            /* Enable divider */
-            Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] |= MC_CGM_MUX_DC_DE_MASK;
-        }
-        else
-        {
-            Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] &= ~MC_CGM_MUX_DC_DE_MASK;
+            /* Report timeout error */
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
         }
     }
     else
     {
-        /* Report timeout error */
-        Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
+        (void)Instance;
+        (void)SelectorIndex;
+        (void)DividerIndex;
+        (void)DividerMask;
+        (void)DividerShift;
+        (void)RegValue;
+        (void)TimeoutOccurred;
+        (void)StartTime;
+        (void)ElapsedTime;
+        (void)TimeoutTicks;
+        (void)DividerStatus;
+    }
+}
+#endif
+
+#ifdef CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE_WITH_TRIGGER
+static void Clock_Ip_SetCgmXDeDivStatWithoutPhaseWithTrigger(Clock_Ip_DividerConfigType const* Config)
+{
+    uint32 Instance;
+    uint32 SelectorIndex;
+    uint32 DividerIndex;
+
+    uint32 DividerMask;
+    uint32 DividerShift;
+
+    uint32 RegValue;
+    boolean TimeoutOccurred = FALSE;
+    uint32 StartTime;
+    uint32 ElapsedTime;
+    uint32 TimeoutTicks;
+    uint32 DividerStatus;
+
+    if (NULL_PTR != Config)
+    {
+        Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+        SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
+        DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
+        DividerMask  = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueMask;
+        DividerShift = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueShift;
+        RegValue = Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex];
+        
+
+        /* Program divider value */
+        if (Config->Value != 0U)
+        {
+            RegValue &= ~DividerMask;
+            RegValue |= ((Config->Value-1U) << DividerShift) & DividerMask;
+
+            /* Enable divider */
+            RegValue |= MC_CGM_MUX_DC_DE_MASK;
+        }
+        else
+        {
+            RegValue &= ~MC_CGM_MUX_DC_DE_MASK;
+        }
+
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] = RegValue;
+
+        /* Immediate update is triggered. */
+        if ((Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_TRIG_CTRL & MC_CGM_MUX_DIV_TRIG_CTRL_TCTL_MASK) != MC_CGM_MUX_DIV_TRIG_CTRL_COMMON_TRIGGER_DIVIDER_UPDATE)
+        {
+            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+            /* Wait for acknowledge to be cleared. */
+            do
+            {
+                DividerStatus = (Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_UPD_STAT & MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_MASK);
+                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+            }
+            while ((MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_PENDING == DividerStatus) && (FALSE == TimeoutOccurred));
+        }
+
+        if (TRUE == TimeoutOccurred)
+        {
+            /* Report timeout error */
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
+        }
+    }
+    else
+    {
+        (void)Instance;
+        (void)SelectorIndex;
+        (void)DividerIndex;
+        (void)DividerMask;
+        (void)DividerShift;
+        (void)RegValue;
+        (void)TimeoutOccurred;
+        (void)StartTime;
+        (void)ElapsedTime;
+        (void)TimeoutTicks;
+        (void)DividerStatus;
     }
 }
 #endif
@@ -265,21 +305,32 @@ static void Clock_Ip_SetCgmXDeDivStatWithoutPhaseWithTrigger(Clock_Ip_DividerCon
 static void Clock_Ip_SetPlldigPll0divDeDivOutput(Clock_Ip_DividerConfigType const* Config)
 {
 
-    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
-    uint32 DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
+    uint32 Instance;
+    uint32 DividerIndex;
     uint32 RegValue;
 
-    /* Check that divider is already disabled */
-    CLOCK_IP_DEV_ASSERT(!(Clock_Ip_apxPll[Instance].PllInstance->PLLODIV[DividerIndex] & PLLDIG_PLLODIV_DE_MASK));
-    
-    /* Check if divider is enabled */
-    if (Config->Value != 0U)
+    if (NULL_PTR != Config)
     {
-        RegValue = Clock_Ip_apxPll[Instance].PllInstance->PLLODIV[DividerIndex];
-        RegValue |= PLLDIG_PLLODIV_DE_MASK;
-        RegValue &= ~PLLDIG_PLLODIV_DIV_MASK;
-        RegValue |= PLLDIG_PLLODIV_DIV(Config->Value - 1U);
-        Clock_Ip_apxPll[Instance].PllInstance->PLLODIV[DividerIndex] = RegValue;
+        Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+        DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
+        /* Check that divider is already disabled */
+        CLOCK_IP_DEV_ASSERT(!(Clock_Ip_apxPll[Instance].PllInstance->PLLODIV[DividerIndex] & PLLDIG_PLLODIV_DE_MASK));
+
+        /* Check if divider is enabled */
+        if (Config->Value != 0U)
+        {
+            RegValue = Clock_Ip_apxPll[Instance].PllInstance->PLLODIV[DividerIndex];
+            RegValue |= PLLDIG_PLLODIV_DE_MASK;
+            RegValue &= ~PLLDIG_PLLODIV_DIV_MASK;
+            RegValue |= PLLDIG_PLLODIV_DIV(Config->Value - 1U);
+            Clock_Ip_apxPll[Instance].PllInstance->PLLODIV[DividerIndex] = RegValue;
+        }
+    }
+    else
+    {
+        (void)Instance;
+        (void)DividerIndex;
+        (void)RegValue;
     }
 }
 #endif
@@ -289,6 +340,83 @@ static void Clock_Ip_SetPlldigPll0divDeDivOutput(Clock_Ip_DividerConfigType cons
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
+#ifdef CLOCK_IP_CGM_X_DE_DIV_FMT_STAT_WITHOUT_PHASE
+static void Clock_Ip_SetCgmXDeDivFmtStatWithoutPhase(Clock_Ip_DividerConfigType const* Config)
+{
+    uint32 Instance;
+    uint32 SelectorIndex;
+    uint32 DividerIndex;
+
+    uint32 DividerMask;
+    uint32 DividerShift;
+
+    uint32 RegValue;
+    boolean TimeoutOccurred = FALSE;
+    uint32 StartTime;
+    uint32 ElapsedTime;
+    uint32 TimeoutTicks;
+    uint32 DividerStatus;
+
+    if (NULL_PTR != Config)
+    {
+        Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+        SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
+        DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
+        DividerMask  = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueMask;
+        DividerShift = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueShift;
+        RegValue = Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex];
+
+        /* Program divider value */
+        if (Config->Value != 0U)
+        {
+            RegValue &= ~DividerMask;
+            RegValue |= (((Config->Value-1U) << DividerShift) & DividerMask);
+
+            RegValue &= ~MC_CGM_MUX_2_DC_2_DIV_FMT_MASK;
+            RegValue |= (((uint32)(Config->Options[0]) << MC_CGM_MUX_2_DC_2_DIV_FMT_SHIFT) & MC_CGM_MUX_2_DC_2_DIV_FMT_MASK);
+
+            /* Enable divider */
+            RegValue |= MC_CGM_MUX_DC_DE_MASK;
+        }
+        else
+        {
+            RegValue &= ~MC_CGM_MUX_DC_DE_MASK;
+        }
+
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] = RegValue;
+
+        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+        /* Wait for acknowledge to be cleared. */
+        do
+        {
+            DividerStatus = (Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_UPD_STAT & MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_MASK);
+            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+        }
+        while ((MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_PENDING == DividerStatus) && (FALSE == TimeoutOccurred));
+
+        if (TRUE == TimeoutOccurred)
+        {
+            /* Report timeout error */
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
+        }
+    }
+    else
+    {
+        (void)Instance;
+        (void)SelectorIndex;
+        (void)DividerIndex;
+        (void)DividerMask;
+        (void)DividerShift;
+        (void)RegValue;
+        (void)TimeoutOccurred;
+        (void)StartTime;
+        (void)ElapsedTime;
+        (void)TimeoutTicks;
+        (void)DividerStatus;
+    }
+}
+#endif
+
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -314,6 +442,11 @@ const Clock_Ip_DividerCallbackType Clock_Ip_axDividerCallbacks[CLOCK_IP_DIVIDER_
         Clock_Ip_SetCgmXDeDivStatWithoutPhase,           /* Set */
     },
 #endif
+#ifdef CLOCK_IP_CGM_X_DE_DIV_FMT_STAT_WITHOUT_PHASE
+    {
+        Clock_Ip_SetCgmXDeDivFmtStatWithoutPhase,           /* Set */
+    },
+#endif
 #ifdef CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE_WITH_TRIGGER
     {
         Clock_Ip_SetCgmXDeDivStatWithoutPhaseWithTrigger,               /* Set */
@@ -324,6 +457,7 @@ const Clock_Ip_DividerCallbackType Clock_Ip_axDividerCallbacks[CLOCK_IP_DIVIDER_
         Clock_Ip_SetPlldigPll0divDeDivOutput,            /* Set */
     },
 #endif
+
 };
 
 /* Clock stop constant section data */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,8 +35,8 @@ extern "C"{
 #define SIUL2_ICU_IP_IRQ_AR_RELEASE_MAJOR_VERSION     4
 #define SIUL2_ICU_IP_IRQ_AR_RELEASE_MINOR_VERSION     7
 #define SIUL2_ICU_IP_IRQ_AR_RELEASE_REVISION_VERSION  0
-#define SIUL2_ICU_IP_IRQ_SW_MAJOR_VERSION             0
-#define SIUL2_ICU_IP_IRQ_SW_MINOR_VERSION             9
+#define SIUL2_ICU_IP_IRQ_SW_MAJOR_VERSION             1
+#define SIUL2_ICU_IP_IRQ_SW_MINOR_VERSION             0
 #define SIUL2_ICU_IP_IRQ_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -99,6 +99,8 @@ extern "C"{
 /*==================================================================================================
 *                                        DEFINES AND MACROS
 ==================================================================================================*/
+#if (STD_ON == SIUL2_ICU_IP_USED)
+
 /** @brief SIUL2 External Interrupt Channels defines. */
 #if ((defined SIUL2_ICU_IRQ_CH_0_ISR_USED) || (defined SIUL2_ICU_IRQ_CH_1_ISR_USED) ||\
      (defined SIUL2_ICU_IRQ_CH_2_ISR_USED) || (defined SIUL2_ICU_IRQ_CH_3_ISR_USED) ||\
@@ -258,6 +260,8 @@ ISR(SIUL2_EXT_IRQ_24_31_ISR);
 
 #define ICU_STOP_SEC_CODE
 #include "Icu_MemMap.h"
+
+#endif /* SIUL2_ICU_IP_USED */
 
 #ifdef __cplusplus
 }

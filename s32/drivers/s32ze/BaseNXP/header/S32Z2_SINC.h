@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SINC.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_SINC
  *
  * This file contains register definitions and macros for easy access to their
@@ -1005,11 +1005,6 @@ typedef struct {
 #define SINC_CACFR_IBDLY_SHIFT                   (20U)
 #define SINC_CACFR_IBDLY_WIDTH                   (4U)
 #define SINC_CACFR_IBDLY(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_CACFR_IBDLY_SHIFT)) & SINC_CACFR_IBDLY_MASK)
-
-#define SINC_CACFR_PTMUX_MASK                    (0x1F000000U)
-#define SINC_CACFR_PTMUX_SHIFT                   (24U)
-#define SINC_CACFR_PTMUX_WIDTH                   (5U)
-#define SINC_CACFR_PTMUX(x)                      (((uint32_t)(((uint32_t)(x)) << SINC_CACFR_PTMUX_SHIFT)) & SINC_CACFR_PTMUX_MASK)
 /*! @} */
 
 /*! @name CSR - Channel 0 Status..Channel 3 Status */

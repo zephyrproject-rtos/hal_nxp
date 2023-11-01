@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file       Clock_Ip_Derivative_001.h
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   AUTOSAR Mcu - Post-Build(PB) configuration file code template.
 *   @details Code template for Post-Build(PB) configuration file generation.
@@ -37,8 +37,8 @@ extern "C"{
 #define CLOCK_IP_DERIVATIVE_001_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_DERIVATIVE_001_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_DERIVATIVE_001_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_DERIVATIVE_001_SW_MAJOR_VERSION                0
-#define CLOCK_IP_DERIVATIVE_001_SW_MINOR_VERSION                9
+#define CLOCK_IP_DERIVATIVE_001_SW_MAJOR_VERSION                1
+#define CLOCK_IP_DERIVATIVE_001_SW_MINOR_VERSION                0
 #define CLOCK_IP_DERIVATIVE_001_SW_PATCH_VERSION                0
 
 /*==================================================================================================
@@ -53,10 +53,11 @@ extern "C"{
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
 
-#define CLOCK_IP_DIVIDER_CALLBACKS_COUNT                                               4U
+#define CLOCK_IP_DIVIDER_CALLBACKS_COUNT                                               5U
 #define CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE                                       1U
-#define CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE_WITH_TRIGGER                          2U
-#define CLOCK_IP_PLLDIG_PLL0DIV_DE_DIV_OUTPUT                                          3U
+#define CLOCK_IP_CGM_X_DE_DIV_FMT_STAT_WITHOUT_PHASE                                   2U
+#define CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE_WITH_TRIGGER                          3U
+#define CLOCK_IP_PLLDIG_PLL0DIV_DE_DIV_OUTPUT                                          4U
 
 #define CLOCK_IP_DIVIDERTRIGGER_CALLBACKS_COUNT                                        2U
 #define CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT                                1U
@@ -89,6 +90,8 @@ extern "C"{
 #define CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF                                        1U
 
 #define CLOCK_IP_CMU_INSTANCES_NO                                                      4U
+
+#define CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE    25U
 
 /*==================================================================================================
 *                                              ENUMS

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_AXBS.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_AXBS
  *
  * This file contains register definitions and macros for easy access to their
@@ -74,9 +74,9 @@
 /** AXBS - Register Layout Typedef */
 typedef struct {
   struct {                                         /* offset: 0x0, array step: 0x100 */
-    __IO uint32_t PRS;                               /**< Priority Slave Registers, array offset: 0x0, array step: 0x100 */
+    __IO uint32_t PRS;                               /**< Priority Slave Registers, array offset: 0x0, array step: 0x100, irregular array, not all indices are valid */
     uint8_t RESERVED_0[12];
-    __IO uint32_t CRS;                               /**< Control Register, array offset: 0x10, array step: 0x100 */
+    __IO uint32_t CRS;                               /**< Control Register, array offset: 0x10, array step: 0x100, irregular array, not all indices are valid */
     uint8_t RESERVED_1[236];
   } PORT[AXBS_PORT_COUNT];
   __IO uint32_t MGPCR0;                            /**< Master General Purpose Control Register, offset: 0x800 */
@@ -87,9 +87,9 @@ typedef struct {
   uint8_t RESERVED_2[252];
   __IO uint32_t MGPCR3;                            /**< Master General Purpose Control Register, offset: 0xB00 */
   uint8_t RESERVED_3[252];
-  __IO uint32_t MGPCR4;                            /**< Master General Purpose Control Register, offset: 0xC00 */
+  __IO uint32_t MGPCR4;                            /**< Master General Purpose Control Register, offset: 0xC00, available only on: CE_AXBS (missing on SMU.AXBS/SMU__AXBS) */
   uint8_t RESERVED_4[252];
-  __IO uint32_t MGPCR5;                            /**< Master General Purpose Control Register, offset: 0xD00 */
+  __IO uint32_t MGPCR5;                            /**< Master General Purpose Control Register, offset: 0xD00, available only on: CE_AXBS (missing on SMU.AXBS/SMU__AXBS) */
 } AXBS_Type, *AXBS_MemMapPtr;
 
 /** Number of instances of the AXBS module. */

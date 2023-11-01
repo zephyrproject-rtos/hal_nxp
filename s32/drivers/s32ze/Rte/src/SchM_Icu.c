@@ -1,11 +1,16 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
-*   @file
+*   @file    SchM_Icu.c
+*   @version 1.0.0
+*
+*   @brief   AUTOSAR Rte - module implementation
+*   @details This module implements stubs for the AUTOSAR Rte
+*            This file contains sample code only. It is not part of the production code deliverables.
 *
 *   @addtogroup RTE_MODULE
 *   @{
@@ -35,8 +40,8 @@ extern "C"{
 #define SCHM_ICU_AR_RELEASE_MAJOR_VERSION_C     4
 #define SCHM_ICU_AR_RELEASE_MINOR_VERSION_C     7
 #define SCHM_ICU_AR_RELEASE_REVISION_VERSION_C  0
-#define SCHM_ICU_SW_MAJOR_VERSION_C             0
-#define SCHM_ICU_SW_MINOR_VERSION_C             9
+#define SCHM_ICU_SW_MAJOR_VERSION_C             1
+#define SCHM_ICU_SW_MINOR_VERSION_C             0
 #define SCHM_ICU_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
@@ -94,92 +99,92 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_00)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_00)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_01)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_01)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_02)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_02)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_03)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_03)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_04)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_04)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_05)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_05)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_06)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_06)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_07)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_07)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_08)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_08)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_09)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_09)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_11)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_11)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_15)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_15)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_16)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_16)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_17)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_17)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_18)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_18)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_19)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_19)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_20)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_20)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_21)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_21)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_22)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_22)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_23)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_23)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_24)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_24)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_25)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_25)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_26)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_26)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_27)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_27)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_28)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_28)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_29)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_29)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_30)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_30)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_31)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_31)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_32)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_32)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_33)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_33)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_44)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_44)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_45)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_45)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_46)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_46)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_47)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_47)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_48)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_48[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_48)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_48[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_49)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_49[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_49)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_49[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_50)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_50)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_51)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_51)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_52)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_52)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_53)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_53)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_57)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_57[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_57)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_57[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_58)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_58[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_58)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_58[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ICU_EXCLUSIVE_AREA_59)             static volatile uint32 msr_ICU_EXCLUSIVE_AREA_59[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ICU_EXCLUSIVE_AREA_59)   static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_59[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_48[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_48[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_49[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_49[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_57[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_57[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_58[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_58[NUMBER_OF_CORES];
+static volatile uint32 msr_ICU_EXCLUSIVE_AREA_59[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ICU_EXCLUSIVE_AREA_59[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"

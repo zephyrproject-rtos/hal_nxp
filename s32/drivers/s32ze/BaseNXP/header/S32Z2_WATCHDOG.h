@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_WATCHDOG.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_WATCHDOG
  *
  * This file contains register definitions and macros for easy access to their
@@ -80,8 +80,7 @@ typedef struct {
   __IO uint32_t MPWDOGT;                           /**< DMSS Master Port Watchdog Threshold, offset: 0x20 */
   __I  uint32_t EPPWDOGC;                          /**< PMSS Master Port Watchdog Threshold, offset: 0x24 */
   __I  uint32_t EDPWDOGC;                          /**< EDP Master Port Count Value, offset: 0x28 */
-  __I  uint32_t IOPWDOGC;                          /**< IOP Count Value, offset: 0x2C */
-  uint8_t RESERVED_1[16];
+  uint8_t RESERVED_1[20];
   __IO uint32_t ICUWDOGCFG;                        /**< ICU Watchdog Configuration, offset: 0x40 */
   __IO uint32_t ICUWDOGT;                          /**< ICU Watchdog Threshold Configuration, offset: 0x44 */
   __IO uint32_t SYSWDOGSIG;                        /**< System Watchdog Signal, offset: 0x48 */
@@ -167,21 +166,6 @@ typedef struct {
 #define WATCHDOG_MPWDOGCFG_EDPWDOG_EN_SHIFT      (2U)
 #define WATCHDOG_MPWDOGCFG_EDPWDOG_EN_WIDTH      (1U)
 #define WATCHDOG_MPWDOGCFG_EDPWDOG_EN(x)         (((uint32_t)(((uint32_t)(x)) << WATCHDOG_MPWDOGCFG_EDPWDOG_EN_SHIFT)) & WATCHDOG_MPWDOGCFG_EDPWDOG_EN_MASK)
-
-#define WATCHDOG_MPWDOGCFG_IOPWDOG_EN_MASK       (0x8U)
-#define WATCHDOG_MPWDOGCFG_IOPWDOG_EN_SHIFT      (3U)
-#define WATCHDOG_MPWDOGCFG_IOPWDOG_EN_WIDTH      (1U)
-#define WATCHDOG_MPWDOGCFG_IOPWDOG_EN(x)         (((uint32_t)(((uint32_t)(x)) << WATCHDOG_MPWDOGCFG_IOPWDOG_EN_SHIFT)) & WATCHDOG_MPWDOGCFG_IOPWDOG_EN_MASK)
-
-#define WATCHDOG_MPWDOGCFG_AM0WDOG_EN_MASK       (0x10U)
-#define WATCHDOG_MPWDOGCFG_AM0WDOG_EN_SHIFT      (4U)
-#define WATCHDOG_MPWDOGCFG_AM0WDOG_EN_WIDTH      (1U)
-#define WATCHDOG_MPWDOGCFG_AM0WDOG_EN(x)         (((uint32_t)(((uint32_t)(x)) << WATCHDOG_MPWDOGCFG_AM0WDOG_EN_SHIFT)) & WATCHDOG_MPWDOGCFG_AM0WDOG_EN_MASK)
-
-#define WATCHDOG_MPWDOGCFG_AM1WDOG_EN_MASK       (0x20U)
-#define WATCHDOG_MPWDOGCFG_AM1WDOG_EN_SHIFT      (5U)
-#define WATCHDOG_MPWDOGCFG_AM1WDOG_EN_WIDTH      (1U)
-#define WATCHDOG_MPWDOGCFG_AM1WDOG_EN(x)         (((uint32_t)(((uint32_t)(x)) << WATCHDOG_MPWDOGCFG_AM1WDOG_EN_SHIFT)) & WATCHDOG_MPWDOGCFG_AM1WDOG_EN_MASK)
 /*! @} */
 
 /*! @name MPWDOGT - DMSS Master Port Watchdog Threshold */
@@ -209,15 +193,6 @@ typedef struct {
 #define WATCHDOG_EDPWDOGC_EDPWDOGC_SHIFT         (0U)
 #define WATCHDOG_EDPWDOGC_EDPWDOGC_WIDTH         (32U)
 #define WATCHDOG_EDPWDOGC_EDPWDOGC(x)            (((uint32_t)(((uint32_t)(x)) << WATCHDOG_EDPWDOGC_EDPWDOGC_SHIFT)) & WATCHDOG_EDPWDOGC_EDPWDOGC_MASK)
-/*! @} */
-
-/*! @name IOPWDOGC - IOP Count Value */
-/*! @{ */
-
-#define WATCHDOG_IOPWDOGC_IOPWDOGC_MASK          (0xFFFFFFFFU)
-#define WATCHDOG_IOPWDOGC_IOPWDOGC_SHIFT         (0U)
-#define WATCHDOG_IOPWDOGC_IOPWDOGC_WIDTH         (32U)
-#define WATCHDOG_IOPWDOGC_IOPWDOGC(x)            (((uint32_t)(((uint32_t)(x)) << WATCHDOG_IOPWDOGC_IOPWDOGC_SHIFT)) & WATCHDOG_IOPWDOGC_IOPWDOGC_MASK)
 /*! @} */
 
 /*! @name ICUWDOGCFG - ICU Watchdog Configuration */

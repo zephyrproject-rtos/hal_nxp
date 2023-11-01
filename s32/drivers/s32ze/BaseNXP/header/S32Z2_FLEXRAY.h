@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_FLEXRAY.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_FLEXRAY
  *
  * This file contains register definitions and macros for easy access to their
@@ -182,7 +182,8 @@ typedef struct {
   __IO uint16_t PCR30;                             /**< Protocol Configuration 30, offset: 0xDC */
   __IO uint16_t STPWHR;                            /**< Stopwatch Count High, offset: 0xDE */
   __IO uint16_t STPWLR;                            /**< Stopwatch Count Low, offset: 0xE0 */
-  uint8_t RESERVED_1[4];
+  __IO uint16_t PEOER;                             /**< Protocol Event Output Enable And Stopwatch Control, offset: 0xE2 */
+  uint8_t RESERVED_1[2];
   __IO uint16_t RFSDOR;                            /**< Receive FIFO Start Data Offset, offset: 0xE6 */
   __IO uint16_t RFSYMBADHR;                        /**< Receive FIFO System Memory Base Address High, offset: 0xE8 */
   __IO uint16_t RFSYMBADLR;                        /**< Receive FIFO System Memory Base Address Low, offset: 0xEA */
@@ -2303,6 +2304,15 @@ typedef struct {
 #define FLEXRAY_STPWLR_STPW_S_L_SHIFT            (0U)
 #define FLEXRAY_STPWLR_STPW_S_L_WIDTH            (16U)
 #define FLEXRAY_STPWLR_STPW_S_L(x)               (((uint16_t)(((uint16_t)(x)) << FLEXRAY_STPWLR_STPW_S_L_SHIFT)) & FLEXRAY_STPWLR_STPW_S_L_MASK)
+/*! @} */
+
+/*! @name PEOER - Protocol Event Output Enable And Stopwatch Control */
+/*! @{ */
+
+#define FLEXRAY_PEOER_STPW_EN_MASK               (0x100U)
+#define FLEXRAY_PEOER_STPW_EN_SHIFT              (8U)
+#define FLEXRAY_PEOER_STPW_EN_WIDTH              (1U)
+#define FLEXRAY_PEOER_STPW_EN(x)                 (((uint16_t)(((uint16_t)(x)) << FLEXRAY_PEOER_STPW_EN_SHIFT)) & FLEXRAY_PEOER_STPW_EN_MASK)
 /*! @} */
 
 /*! @name RFSDOR - Receive FIFO Start Data Offset */

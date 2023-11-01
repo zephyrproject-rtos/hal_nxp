@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file           Eth_GeneralTypes.h
-*   @version 0.9.0
+*   @version 1.0.0
 *
 *   @brief   AUTOSAR BaseNXP driver type definitions header file
 *   @details Definitions of types for the Ethernet driver

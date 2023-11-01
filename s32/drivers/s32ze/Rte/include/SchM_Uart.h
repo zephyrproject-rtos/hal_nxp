@@ -1,18 +1,23 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef SCHM_UART_H
-#define SCHM_UART_H
-
 /**
-*   @file
+*   @file    SchM_Uart.h
+*   @version 1.0.0
+*
+*   @brief   AUTOSAR Rte - module interface
+*   @details This file contains the functions prototypes and data types of the AUTOSAR Rte.
+*            This file contains sample code only. It is not part of the production code deliverables.
 *
 *   @addtogroup RTE_MODULE
 *   @{
 */
+
+#ifndef SCHM_UART_H
+#define SCHM_UART_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,8 +35,8 @@ extern "C" {
 #define SCHM_UART_AR_RELEASE_MAJOR_VERSION     4
 #define SCHM_UART_AR_RELEASE_MINOR_VERSION     7
 #define SCHM_UART_AR_RELEASE_REVISION_VERSION  0
-#define SCHM_UART_SW_MAJOR_VERSION             0
-#define SCHM_UART_SW_MINOR_VERSION             9
+#define SCHM_UART_SW_MAJOR_VERSION             1
+#define SCHM_UART_SW_MINOR_VERSION             0
 #define SCHM_UART_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -112,8 +117,44 @@ extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_07(void);
 extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_08(void);
 extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_08(void);
 
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_09(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_09(void);
 
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_10(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_10(void);
 
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_11(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_11(void);
+
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_12(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_12(void);
+
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_13(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_13(void);
+
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_14(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_14(void);
+
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_15(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_15(void);
+
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_16(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_16(void);
+
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_17(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_17(void);
+
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_18(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_18(void);
+
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_19(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_19(void);
+
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_20(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_20(void);
+
+extern void SchM_Enter_Uart_UART_EXCLUSIVE_AREA_21(void);
+extern void SchM_Exit_Uart_UART_EXCLUSIVE_AREA_21(void);
 
 #define RTE_STOP_SEC_CODE
 #include "Rte_MemMap.h"

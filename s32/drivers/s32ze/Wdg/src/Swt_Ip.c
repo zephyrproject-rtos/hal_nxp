@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,8 +35,8 @@ extern "C"{
 #define SWT_IP_AR_RELEASE_MAJOR_VERSION_C       4
 #define SWT_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define SWT_IP_AR_RELEASE_REVISION_VERSION_C    0
-#define SWT_IP_SW_MAJOR_VERSION_C               0
-#define SWT_IP_SW_MINOR_VERSION_C               9
+#define SWT_IP_SW_MAJOR_VERSION_C               1
+#define SWT_IP_SW_MINOR_VERSION_C               0
 #define SWT_IP_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -51,14 +51,16 @@ extern "C"{
 /* Check if current file and Swt_Ip header file are of the same Autosar version */
 #if ((SWT_IP_AR_RELEASE_MAJOR_VERSION_C     != SWT_IP_AR_RELEASE_MAJOR_VERSION) || \
      (SWT_IP_AR_RELEASE_MINOR_VERSION_C     != SWT_IP_AR_RELEASE_MINOR_VERSION) || \
-     (SWT_IP_AR_RELEASE_REVISION_VERSION_C  != SWT_IP_AR_RELEASE_REVISION_VERSION))
+     (SWT_IP_AR_RELEASE_REVISION_VERSION_C  != SWT_IP_AR_RELEASE_REVISION_VERSION) \
+    )
 #error "AutoSar Version Numbers of Swt_Ip.c and Swt_Ip.h are different"
 #endif
 
 /* Check if current file and Swt_Ip header file are of the same software version */
 #if ((SWT_IP_SW_MAJOR_VERSION_C != SWT_IP_SW_MAJOR_VERSION) || \
      (SWT_IP_SW_MINOR_VERSION_C != SWT_IP_SW_MINOR_VERSION) || \
-     (SWT_IP_SW_PATCH_VERSION_C != SWT_IP_SW_PATCH_VERSION))
+     (SWT_IP_SW_PATCH_VERSION_C != SWT_IP_SW_PATCH_VERSION) \
+    )
 #error "Software Version Numbers of Swt_Ip.c and Swt_Ip.h are different"
 #endif
 
@@ -70,40 +72,46 @@ extern "C"{
 /* Check if current file and Swt_Ip_Irq header file are of the same Autosar version */
 #if ((SWT_IP_AR_RELEASE_MAJOR_VERSION_C     != SWT_IP_IRQ_AR_RELEASE_MAJOR_VERSION) || \
      (SWT_IP_AR_RELEASE_MINOR_VERSION_C     != SWT_IP_IRQ_AR_RELEASE_MINOR_VERSION) || \
-     (SWT_IP_AR_RELEASE_REVISION_VERSION_C  != SWT_IP_IRQ_AR_RELEASE_REVISION_VERSION))
+     (SWT_IP_AR_RELEASE_REVISION_VERSION_C  != SWT_IP_IRQ_AR_RELEASE_REVISION_VERSION) \
+    )
 #error "AutoSar Version Numbers of Swt_Ip.c and Swt_Ip_Irq.h are different"
 #endif
 
 /* Check if current file and Swt_Ip_Irq header file are of the same software version */
 #if ((SWT_IP_SW_MAJOR_VERSION_C != SWT_IP_IRQ_SW_MAJOR_VERSION) || \
      (SWT_IP_SW_MINOR_VERSION_C != SWT_IP_IRQ_SW_MINOR_VERSION) || \
-     (SWT_IP_SW_PATCH_VERSION_C != SWT_IP_IRQ_SW_PATCH_VERSION))
+     (SWT_IP_SW_PATCH_VERSION_C != SWT_IP_IRQ_SW_PATCH_VERSION) \
+    )
 #error "Software Version Numbers of Swt_Ip.c and Swt_Ip_Irq.h are different"
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Check if current file and Devassert header file are of the same Autosar version */
     #if ((SWT_IP_AR_RELEASE_MAJOR_VERSION_C    != DEVASSERT_AR_RELEASE_MAJOR_VERSION) || \
-        (SWT_IP_AR_RELEASE_MINOR_VERSION_C     != DEVASSERT_AR_RELEASE_MINOR_VERSION))
+         (SWT_IP_AR_RELEASE_MINOR_VERSION_C    != DEVASSERT_AR_RELEASE_MINOR_VERSION) \
+        )
     #error "AutoSar Version Numbers of Swt_Ip.c and Devassert.h are different"
     #endif
 
     /* Check if current file and StandardTypes header file are of the same Autosar version */
     #if ((SWT_IP_AR_RELEASE_MAJOR_VERSION_C    != STD_AR_RELEASE_MAJOR_VERSION) || \
-        (SWT_IP_AR_RELEASE_MINOR_VERSION_C     != STD_AR_RELEASE_MINOR_VERSION))
+         (SWT_IP_AR_RELEASE_MINOR_VERSION_C    != STD_AR_RELEASE_MINOR_VERSION) \
+        )
     #error "AutoSar Version Numbers of Swt_Ip.c and StandardTypes.h are different"
     #endif
 
     /* Check if current file and StandardTypes header file are of the same Autosar version */
     #if ((SWT_IP_AR_RELEASE_MAJOR_VERSION_C    != SCHM_WDG_AR_RELEASE_MAJOR_VERSION) || \
-        (SWT_IP_AR_RELEASE_MINOR_VERSION_C     != SCHM_WDG_AR_RELEASE_MINOR_VERSION))
+         (SWT_IP_AR_RELEASE_MINOR_VERSION_C    != SCHM_WDG_AR_RELEASE_MINOR_VERSION) \
+        )
     #error "AutoSar Version Numbers of Swt_Ip.c and SchM_Wdg.h are different"
     #endif
 #endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 
 /* Check if current file and Osif header file are of the same Autosar version */
 #if ((SWT_IP_AR_RELEASE_MAJOR_VERSION_C    != OSIF_AR_RELEASE_MAJOR_VERSION) || \
-    (SWT_IP_AR_RELEASE_MINOR_VERSION_C     != OSIF_AR_RELEASE_MINOR_VERSION))
+     (SWT_IP_AR_RELEASE_MINOR_VERSION_C    != OSIF_AR_RELEASE_MINOR_VERSION) \
+    )
 #error "AutoSar Version Numbers of Swt_Ip.c and Osif.h are different"
 #endif
 
@@ -115,7 +123,6 @@ extern "C"{
 *                                          LOCAL MACROS
 ==================================================================================================*/
 #define SWT_IP_MAP(x)  (((uint32)(((uint32)(x)) << SWT_IP_MAP_SHIFT)) & SWT_IP_MAP_MASK_U32)
-
 /*==================================================================================================
 *                                         LOCAL CONSTANTS
 ==================================================================================================*/
@@ -127,11 +134,10 @@ extern "C"{
 #define WDG_START_SEC_CONST_UNSPECIFIED
 
 #include "Wdg_MemMap.h"
-
 #if SWT_IP_DISCOUNTINUOUS_INSTANCE_IDS == STD_OFF
-static SWT_Type * const Swt_Ip_sBase[SWT_INSTANCE_COUNT] = IP_SWT_BASE_PTRS;
+static Swt_Ip_Type * const Swt_Ip_sBase[SWT_INSTANCE_COUNT] = IP_SWT_BASE_PTRS;
 #else
-static SWT_Type * const Swt_Ip_sBase[SWT_INSTANCE_COUNT] = {IP_SWT_0, IP_SWT_0, IP_SWT_2, IP_SWT_3};
+static Swt_Ip_Type * const Swt_Ip_sBase[SWT_INSTANCE_COUNT] = {IP_SWT_0, IP_SWT_0, IP_SWT_2, IP_SWT_3};
 #endif
 
 #define WDG_STOP_SEC_CONST_UNSPECIFIED
@@ -142,11 +148,19 @@ static SWT_Type * const Swt_Ip_sBase[SWT_INSTANCE_COUNT] = {IP_SWT_0, IP_SWT_0, 
 
 #include "Wdg_MemMap.h"
 
-static Swt_CallbackPtrType Swt_Ip_apCallbackPtr[SWT_INSTANCE_COUNT];
-
-static boolean Wdg_Ip_abStatus[SWT_INSTANCE_COUNT];
+static Swt_CallbackPtrType Swt_Ip_apCallbackPtr[SWT_INSTANCE_NUM];
 
 #define WDG_STOP_SEC_VAR_CLEARED_UNSPECIFIED
+
+#include "Wdg_MemMap.h"
+
+#define WDG_START_SEC_VAR_CLEARED_BOOLEAN
+
+#include "Wdg_MemMap.h"
+
+static boolean Swt_Ip_abStatus[SWT_INSTANCE_NUM];
+
+#define WDG_STOP_SEC_VAR_CLEARED_BOOLEAN
 
 #include "Wdg_MemMap.h"
 
@@ -170,25 +184,25 @@ static boolean Wdg_Ip_abStatus[SWT_INSTANCE_COUNT];
 
 #include "Wdg_MemMap.h"
 
-static inline boolean Swt_Ip_IsEnable(const SWT_Type * const Base)
+static inline boolean Swt_Ip_IsEnable(const Swt_Ip_Type * const Base)
 {
     /* Checks whether the SWT is enabled */
     return ((Base->CR & SWT_CR_WEN_MASK) != 0U);
 }
 
-static inline void Swt_Ip_Enable(SWT_Type * const Base)
+static inline void Swt_Ip_Enable(Swt_Ip_Type * const Base)
 {
     /* Enables the SWT */
     Base->CR |= SWT_CR_WEN_MASK;
 }
 
-static inline void Swt_Ip_Disable(SWT_Type * const Base)
+static inline void Swt_Ip_Disable(Swt_Ip_Type * const Base)
 {
     /* Enables the SWT */
     Base->CR &= ~SWT_CR_WEN_MASK;
 }
 
-static  Swt_Ip_ServiceModeType Swt_Ip_GetServiceMode(const SWT_Type * const Base)
+static  Swt_Ip_ServiceModeType Swt_Ip_GetServiceMode(const Swt_Ip_Type * const Base)
 {
     Swt_Ip_ServiceModeType Mode;
 
@@ -200,15 +214,19 @@ static  Swt_Ip_ServiceModeType Swt_Ip_GetServiceMode(const SWT_Type * const Base
             Mode = SWT_IP_KS_SEQ_MODE;
             break;
         /* Fixed Service Sequence */
-        default:
+        case 0U:
             Mode = SWT_IP_FS_SEQ_MODE;
+            break;
+        /* Invalid mode */
+        default:
+            Mode = SWT_IP_INVALID_MODE;
             break;
     }
 
     return Mode;
 }
 
-static Swt_Ip_LockType Swt_Ip_GetLock(const SWT_Type * const Base)
+static Swt_Ip_LockType Swt_Ip_GetLock(const Swt_Ip_Type * const Base)
 {
     Swt_Ip_LockType LockMode = SWT_IP_UNLOCK;
 
@@ -232,7 +250,7 @@ static Swt_Ip_LockType Swt_Ip_GetLock(const SWT_Type * const Base)
     return LockMode;
 }
 
-static void Swt_Ip_Lock(SWT_Type * const Base,
+static void Swt_Ip_Lock(Swt_Ip_Type * const Base,
                  Swt_Ip_LockType LockConfig)
 {
     /* Configures lock bits */
@@ -253,7 +271,7 @@ static void Swt_Ip_Lock(SWT_Type * const Base,
     }
 }
 
-static Swt_Ip_StatusType Swt_Ip_Unlock(SWT_Type * const Base)
+static Swt_Ip_StatusType Swt_Ip_Unlock(Swt_Ip_Type * const Base)
 {
     Swt_Ip_StatusType Ret = SWT_IP_STATUS_SUCCESS;
 
@@ -300,25 +318,24 @@ static Swt_Ip_StatusType Swt_Ip_Unlock(SWT_Type * const Base)
     return Ret;
 }
 
-                                  
-static void Swt_Ip_RegisterConfig(SWT_Type * const Base,
-                                     const Swt_Ip_ConfigType * const ConfigPtr)
+
+static void Swt_Ip_RegisterConfig(Swt_Ip_Type * const Base,
+                                  const Swt_Ip_ConfigType * const ConfigPtr)
 {
     /* Temporary storage for control register value */
-    uint32 TempCr = 0x00UL;    
+    uint32 TempCr = 0x00UL;
     Swt_Ip_ServiceModeType ServiceMode = ConfigPtr->eServiceMode;
-    
+
     /* Sets control configuration */
     TempCr = (SWT_IP_MAP(ConfigPtr->u8MapEnBitmask)
         | SWT_CR_SMD(ServiceMode)
         | SWT_CR_RIA(ConfigPtr->bEnResetOnInvalidAccess ? 1UL : 0UL)
         | SWT_CR_WND(ConfigPtr->bEnWindow ? 1UL : 0UL)
-        | SWT_CR_ITR(ConfigPtr->bEnInterrupt ? 1UL : 0UL)
-#if (defined(SWT_IP_HAS_STOP_MODE) && (SWT_IP_HAS_STOP_MODE == 1U))        
+#if (defined(SWT_IP_HAS_STOP_MODE) && (SWT_IP_HAS_STOP_MODE == 1U))
         | SWT_CR_STP(ConfigPtr->bEnRunInStopMode? 0UL : 1UL)
-#endif    
-        | SWT_CR_FRZ(ConfigPtr->bEnRunInDebugMode ? 0UL : 1UL));
-
+#endif
+        | SWT_CR_FRZ(ConfigPtr->bEnRunInDebugMode ? 0UL : 1UL)
+        | SWT_CR_ITR(ConfigPtr->bEnInterrupt ? 1UL : 0UL));
     /* Write configuration to the SWT CR register*/
     Base->CR = TempCr;
 
@@ -359,14 +376,14 @@ static Swt_Ip_StatusType Swt_Ip_CheckTimeout(uint32 u32TimeoutValue, uint32 u32W
     return Ret;
 }
 
-static inline void Swt_Ip_ServiceCmd(SWT_Type * const Base,
-                                        uint16 ServiceKey)
+static inline void Swt_Ip_ServiceCmd(Swt_Ip_Type * const Base,
+                                     uint16 ServiceKey)
 {
     /* Services SWT instance */
     Base->SR = (Base->SR & ~SWT_SR_WSC_MASK) | SWT_SR_WSC(ServiceKey);
 }
 
-static inline uint16 Swt_Ip_ServiceKeyGen(const SWT_Type * const Base)
+static inline uint16 Swt_Ip_ServiceKeyGen(const Swt_Ip_Type * const Base)
 {
     /* Generates the next key used to service the SWT */
     return ((uint16)((((Base->SK & SWT_SK_SK_MASK) >> SWT_SK_SK_SHIFT) * 17U) + 3U));
@@ -374,37 +391,37 @@ static inline uint16 Swt_Ip_ServiceKeyGen(const SWT_Type * const Base)
 
 #if (SWT_IP_DEINIT == STD_ON)
 #if (SWT_IP_CLEAR_RESET_REQUEST == STD_ON)
-static inline boolean Swt_Ip_RequestedReset(const SWT_Type * const Base)
+static inline boolean Swt_Ip_RequestedReset(const Swt_Ip_Type * const Base)
 {
     /* Get reset request flag */
     return (((Base->RRR & SWT_RRR_RRF_MASK)>> SWT_RRR_RRF_SHIFT) == 1U);
 }
-#endif
-#endif
+#endif /* (SWT_IP_CLEAR_RESET_REQUEST == STD_ON) */
+#endif /* (SWT_IP_DEINIT == STD_ON) */
 
 #if (SWT_IP_HAS_CLEAR_RESET == 1)
 #if (SWT_IP_DEINIT == STD_ON)
-static inline void Swt_Ip_ClearRequest(SWT_Type * const Base)
+static inline void Swt_Ip_ClearRequest(Swt_Ip_Type * const Base)
 {
     /* Clear reset request flag */
     Base->RRR = SWT_RRR_RRF(1U);
 }
-#endif
-#endif
+#endif /* (SWT_IP_DEINIT == STD_ON) */
+#endif /* (SWT_IP_HAS_CLEAR_RESET == 1) */
 
-static inline boolean Swt_Ip_GetIntFlag(const SWT_Type * const Base)
+static inline boolean Swt_Ip_GetIntFlag(const Swt_Ip_Type * const Base)
 {
     /* Get interrupt flag */
     return ((Base->IR & SWT_IR_TIF_MASK) != 0U);
 }
 
-static inline boolean Swt_Ip_IsIntEnabled(const SWT_Type * const Base)
+static inline boolean Swt_Ip_IsIntEnabled(const Swt_Ip_Type * const Base)
 {
     /* Interrupt then reset request */
     return ((Base->CR & SWT_CR_ITR_MASK ) != 0U);
 }
 
-static inline void Swt_Ip_ClearIntFlag(SWT_Type * const Base)
+static inline void Swt_Ip_ClearIntFlag(Swt_Ip_Type * const Base)
 {
     /* Clear interrupt flag */
     Base->IR &= SWT_IR_TIF_MASK;
@@ -425,13 +442,13 @@ static inline void Swt_Ip_ClearIntFlag(SWT_Type * const Base)
 * @implements     Swt_Ip_Init_Activity
 */
 Swt_Ip_StatusType Swt_Ip_Init(const uint32 Instance,
-                            const Swt_Ip_ConfigType * const ConfigPtr)
+                              const Swt_Ip_ConfigType * const ConfigPtr)
 {
-    SWT_Type * const Base = Swt_Ip_sBase[Instance];
+    Swt_Ip_Type * const Base = Swt_Ip_sBase[Instance];
     Swt_Ip_StatusType Ret = SWT_IP_STATUS_SUCCESS;
 
 #if (SWT_IP_DEV_ERROR_DETECT == STD_ON)
-    DevAssert(Instance < SWT_INSTANCE_COUNT);
+    DevAssert(Instance < SWT_INSTANCE_NUM);
     DevAssert(ConfigPtr != NULL_PTR);
 #endif
 
@@ -455,7 +472,7 @@ Swt_Ip_StatusType Swt_Ip_Init(const uint32 Instance,
         {
             /* Configures the SWT instance */
             Swt_Ip_RegisterConfig(Base, ConfigPtr);
-            
+
 
             if (ConfigPtr->bEnInterrupt)
             {
@@ -469,7 +486,7 @@ Swt_Ip_StatusType Swt_Ip_Init(const uint32 Instance,
             Swt_Ip_Lock(Base, ConfigPtr->lockConfig);
 
             /* Set driver status is initialized */
-            Wdg_Ip_abStatus[Instance] = TRUE;
+            Swt_Ip_abStatus[Instance] = TRUE;
         }
     }
 
@@ -484,12 +501,12 @@ Swt_Ip_StatusType Swt_Ip_Init(const uint32 Instance,
 */
     Swt_Ip_StatusType Swt_Ip_Deinit(const uint32 Instance)
     {
-        SWT_Type * const Base = Swt_Ip_sBase[Instance];
+        Swt_Ip_Type * const Base = Swt_Ip_sBase[Instance];
         Swt_Ip_StatusType Ret;
 
     #if (SWT_IP_DEV_ERROR_DETECT == STD_ON)
-        DevAssert(Instance < SWT_INSTANCE_COUNT);
-    #endif
+        DevAssert(Instance < SWT_INSTANCE_NUM);
+    #endif /* (SWT_IP_DEV_ERROR_DETECT == STD_ON) */
 
         /* Unlocks SWT instance */
         Ret = Swt_Ip_Unlock(Base);
@@ -502,27 +519,35 @@ Swt_Ip_StatusType Swt_Ip_Init(const uint32 Instance,
             /* Clears interrupt flag */
             Base->IR = SWT_IR_TIF_MASK;
             /* Resets timeout value */
+            #ifdef  SWT_IP_HAS_MULTIPLE_HEADER_FILES
+            Base->TO = SWT_IP_TO_RESET_VALUE_U32(Instance);
+            #else
             Base->TO = SWT_IP_TO_RESET_VALUE_U32;
+            #endif
             /* Resets window value */
             Base->WN = SWT_IP_WN_RESET_VALUE_U32;
             /* Resets service key value */
             Base->SK = SWT_IP_SK_RESET_VALUE_U16;
             /* Resets control register */
+            #ifdef  SWT_IP_HAS_MULTIPLE_HEADER_FILES
+            Base->CR = (SWT_IP_CR_RESET_VALUE_U32(Instance)) & (~SWT_CR_WEN_MASK); /* make sure the SWT is disabled after reset */
+            #else
             Base->CR = SWT_IP_CR_RESET_VALUE_U32 & (~SWT_CR_WEN_MASK); /* make sure the SWT is disabled after reset */
-            
-            
+            #endif
+
+
             /* Clear RRF bit in RRR register */
             #if (SWT_IP_HAS_CLEAR_RESET == 1)
             Swt_Ip_ClearRequest(Base);
-            #endif
+            #endif /* (SWT_IP_HAS_CLEAR_RESET == 1) */
 
             /* Set driver status is uninit */
-            Wdg_Ip_abStatus[Instance] = FALSE;
+            Swt_Ip_abStatus[Instance] = FALSE;
         }
 
         return Ret;
     }
-#endif
+#endif /* (SWT_IP_DEINIT == STD_ON) */
 
 /**
 * @Description    This function services SWT instance.
@@ -531,15 +556,15 @@ Swt_Ip_StatusType Swt_Ip_Init(const uint32 Instance,
 */
 void Swt_Ip_Service(const uint32 Instance)
 {
-    SWT_Type * const Base = Swt_Ip_sBase[Instance];
+    Swt_Ip_Type * const Base = Swt_Ip_sBase[Instance];
     boolean BUnlockSequence = FALSE;
 
 #if (SWT_IP_DEV_ERROR_DETECT == STD_ON)
-    DevAssert(Instance < SWT_INSTANCE_COUNT);
-#endif
-    
+    DevAssert(Instance < SWT_INSTANCE_NUM);
+#endif /* (SWT_IP_DEV_ERROR_DETECT == STD_ON) */
+
     SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_09();
-    
+
     Swt_Ip_ServiceModeType ServiceMode = Swt_Ip_GetServiceMode(Base);
 
     switch (ServiceMode)
@@ -550,14 +575,14 @@ void Swt_Ip_Service(const uint32 Instance)
             {
                 BUnlockSequence = TRUE;
             }
-            
+
             Swt_Ip_ServiceCmd(Base, Swt_Ip_ServiceKeyGen(Base));
-            
+
             if (Swt_Ip_ServiceKeyGen(Base) == SWT_IP_UNLOCK_VALUE1_U16)
             {
                 BUnlockSequence = TRUE;
             }
-            
+
             Swt_Ip_ServiceCmd(Base, Swt_Ip_ServiceKeyGen(Base));
 
             if ((SWT_IP_SOFTLOCK == Swt_Ip_GetLock(Base)) && (TRUE == BUnlockSequence))
@@ -587,13 +612,13 @@ void Swt_Ip_Service(const uint32 Instance)
 * @implements     Swt_Ip_Config_Activity
 */
 Swt_Ip_StatusType Swt_Ip_Config(const uint32 Instance,
-                              const Swt_Ip_ConfigType * const ConfigPtr)
+                                const Swt_Ip_ConfigType * const ConfigPtr)
 {
-    SWT_Type * const Base = Swt_Ip_sBase[Instance];
+    Swt_Ip_Type * const Base = Swt_Ip_sBase[Instance];
     Swt_Ip_StatusType Ret;
 
 #if (SWT_IP_DEV_ERROR_DETECT == STD_ON)
-    DevAssert(Instance < SWT_INSTANCE_COUNT);
+    DevAssert(Instance < SWT_INSTANCE_NUM);
     DevAssert(ConfigPtr != NULL_PTR);
 #endif
 
@@ -638,12 +663,12 @@ Swt_Ip_StatusType Swt_Ip_Config(const uint32 Instance,
 Swt_Ip_StatusType Swt_Ip_SetTimeout(const uint32 Instance,
                                     const uint32 TimeoutValue, const uint32 WindowValue)
 {
-    SWT_Type * const Base = Swt_Ip_sBase[Instance];
+    Swt_Ip_Type * const Base = Swt_Ip_sBase[Instance];
     Swt_Ip_LockType LockConfig;
     Swt_Ip_StatusType Ret;
 
 #if (SWT_IP_DEV_ERROR_DETECT == STD_ON)
-    DevAssert(Instance < SWT_INSTANCE_COUNT);
+    DevAssert(Instance < SWT_INSTANCE_NUM);
 #endif
 
     LockConfig = Swt_Ip_GetLock(Base);
@@ -693,12 +718,12 @@ Swt_Ip_StatusType Swt_Ip_SetTimeout(const uint32 Instance,
 */
 Swt_Ip_StatusType Swt_Ip_StartTimer(const uint32 Instance)
 {
-    SWT_Type * const Base = Swt_Ip_sBase[Instance];
+    Swt_Ip_Type * const Base = Swt_Ip_sBase[Instance];
     Swt_Ip_LockType LockConfig;
     Swt_Ip_StatusType Ret;
 
 #if (SWT_IP_DEV_ERROR_DETECT == STD_ON)
-    DevAssert(Instance < SWT_INSTANCE_COUNT);
+    DevAssert(Instance < SWT_INSTANCE_NUM);
 #endif
 
     LockConfig = Swt_Ip_GetLock(Base);
@@ -725,12 +750,12 @@ Swt_Ip_StatusType Swt_Ip_StartTimer(const uint32 Instance)
 */
 Swt_Ip_StatusType Swt_Ip_StopTimer(const uint32 Instance)
 {
-    SWT_Type * const Base = Swt_Ip_sBase[Instance];
+    Swt_Ip_Type * const Base = Swt_Ip_sBase[Instance];
     Swt_Ip_LockType LockConfig;
     Swt_Ip_StatusType Ret;
 
 #if (SWT_IP_DEV_ERROR_DETECT == STD_ON)
-    DevAssert(Instance < SWT_INSTANCE_COUNT);
+    DevAssert(Instance < SWT_INSTANCE_NUM);
 #endif
 
     LockConfig = Swt_Ip_GetLock(Base);
@@ -763,7 +788,7 @@ Swt_Ip_StatusType Swt_Ip_StopTimer(const uint32 Instance)
 */
     Swt_Ip_StatusType Swt_Ip_ClearResetRequest(const uint32 Instance)
     {
-        SWT_Type * const Base = Swt_Ip_sBase[Instance];
+        Swt_Ip_Type * const Base = Swt_Ip_sBase[Instance];
         Swt_Ip_StatusType Ret = SWT_IP_STATUS_SUCCESS;
 
         uint32 TimeoutTicks = OsIf_MicrosToTicks(SWT_IP_OSIF_TIMEOUT_VAL, SWT_IP_TIMEOUT_METHOD);
@@ -771,8 +796,8 @@ Swt_Ip_StatusType Swt_Ip_StopTimer(const uint32 Instance)
         uint32 ElapsedTicks = 0u; /* elapsed will give timeout */
 
     #if (SWT_IP_DEV_ERROR_DETECT == STD_ON)
-        DevAssert(Instance < SWT_INSTANCE_COUNT);
-        
+        DevAssert(Instance < SWT_INSTANCE_NUM);
+
         /* Can the SWT instance be reset without system reset */
         DevAssert((SWT_IP_RRR_SUPPORT & (1UL << Instance)) != 0UL);
     #endif
@@ -789,7 +814,7 @@ Swt_Ip_StatusType Swt_Ip_StopTimer(const uint32 Instance)
                 ElapsedTicks += OsIf_GetElapsed(&CurrentTicks, SWT_IP_TIMEOUT_METHOD);
             }
 
-            if((ElapsedTicks >= TimeoutTicks) && (Swt_Ip_RequestedReset(Base)))
+            if ((ElapsedTicks >= TimeoutTicks) && (Swt_Ip_RequestedReset(Base)))
             {
                 Ret = SWT_IP_STATUS_TIMEOUT;
             }
@@ -802,9 +827,9 @@ Swt_Ip_StatusType Swt_Ip_StopTimer(const uint32 Instance)
 
         return Ret;
     }
-#endif /* SWT_IP_DEINIT == STD_ON */
-#endif /* SWT_IP_DEINIT == STD_ON */
-#endif /* SWT_IP_HAS_CLEAR_RESET == 1 */
+#endif /* (SWT_IP_CLEAR_RESET_REQUEST == STD_ON) */
+#endif /* (SWT_IP_DEINIT == STD_ON) */
+#endif /* (SWT_IP_HAS_CLEAR_RESET == 1) */
 
 /**
 * @Description    This function handles the swt interrupt request.
@@ -813,12 +838,12 @@ Swt_Ip_StatusType Swt_Ip_StopTimer(const uint32 Instance)
 */
 void Swt_Ip_IrqHandler(uint32 Instance)
 {
-    SWT_Type * const Base = Swt_Ip_sBase[Instance];
+    Swt_Ip_Type * const Base = Swt_Ip_sBase[Instance];
 
 #if (SWT_IP_DEV_ERROR_DETECT == STD_ON)
-    DevAssert(Instance < SWT_INSTANCE_COUNT);
+    DevAssert(Instance < SWT_INSTANCE_NUM);
 #endif
-    if(Wdg_Ip_abStatus[Instance] == TRUE)
+    if (TRUE == Swt_Ip_abStatus[Instance])
     {
         if  (Swt_Ip_GetIntFlag(Base) && Swt_Ip_IsIntEnabled(Base))
         {

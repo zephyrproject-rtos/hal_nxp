@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_EDMA3_MP.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_EDMA3_MP
  *
  * This file contains register definitions and macros for easy access to their
@@ -78,7 +78,7 @@ typedef struct {
   __I  uint32_t INT;                               /**< Management Page Interrupt Request Status, offset: 0x8 */
   __I  uint32_t HRS;                               /**< Management Page Hardware Request Status, offset: 0xC */
   uint8_t RESERVED_0[240];
-  __IO uint32_t CH_GRPRI[EDMA3_MP_MP_GRPRI_COUNT]; /**< Channel Arbitration Group, array offset: 0x100, array step: 0x4 */
+  __IO uint32_t CH_GRPRI[EDMA3_MP_MP_GRPRI_COUNT]; /**< Channel Arbitration Group, array offset: 0x100, array step: 0x4, irregular array, not all indices are valid */
 } EDMA3_MP_Type, *EDMA3_MP_MemMapPtr;
 
 /** Number of instances of the EDMA3_MP module. */

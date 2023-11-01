@@ -1,11 +1,16 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
-*   @file
+*   @file    SchM_EthSwt_43_NETC.c
+*   @version 1.0.0
+*
+*   @brief   AUTOSAR Rte - module implementation
+*   @details This module implements stubs for the AUTOSAR Rte
+*            This file contains sample code only. It is not part of the production code deliverables.
 *
 *   @addtogroup RTE_MODULE
 *   @{
@@ -35,8 +40,8 @@ extern "C"{
 #define SCHM_ETHSWT_43_NETC_AR_RELEASE_MAJOR_VERSION_C     4
 #define SCHM_ETHSWT_43_NETC_AR_RELEASE_MINOR_VERSION_C     7
 #define SCHM_ETHSWT_43_NETC_AR_RELEASE_REVISION_VERSION_C  0
-#define SCHM_ETHSWT_43_NETC_SW_MAJOR_VERSION_C             0
-#define SCHM_ETHSWT_43_NETC_SW_MINOR_VERSION_C             9
+#define SCHM_ETHSWT_43_NETC_SW_MAJOR_VERSION_C             1
+#define SCHM_ETHSWT_43_NETC_SW_MINOR_VERSION_C             0
 #define SCHM_ETHSWT_43_NETC_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
@@ -94,6 +99,130 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_32[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_33[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_34[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_34[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_37[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_37[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_39[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_39[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_47[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_48[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_48[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_49[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_49[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_54[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_54[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_55[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_55[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_56[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_56[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_57[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_57[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_58[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_58[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_59[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_59[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_60[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_60[NUMBER_OF_CORES];
+static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -356,6 +485,2362 @@ uint32 EthSwt_43_NETC_schm_read_msr(void)
 #define RTE_START_SEC_CODE
 #include "Rte_MemMap.h"
 
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_00(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_00[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_00[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_00[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_00(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_00[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_00[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_00[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_01(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_01[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_01[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_01[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_01(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_01[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_01[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_01[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_02(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_02[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_02[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_02[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_02(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_02[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_02[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_02[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_03(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_03[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_03[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_03[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_03(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_03[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_03[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_03[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_04(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_04[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_04[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_04[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_04(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_04[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_04[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_04[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_05(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_05[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_05[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_05[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_05(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_05[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_05[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_05[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_06(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_06[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_06[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_06[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_06(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_06[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_06[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_06[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_07(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_07[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_07[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_07[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_07(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_07[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_07[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_07[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_08(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_08[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_08[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_08[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_08(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_08[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_08[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_08[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_09(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_09[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_09[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_09[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_09(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_09[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_09[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_09[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_10(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_10[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_10[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_10[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_10(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_10[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_10[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_10[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_11(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_11[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_11[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_11[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_11(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_11[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_11[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_11[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_12(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_12[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_12[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_12[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_12(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_12[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_12[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_12[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_13(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_13[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_13[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_13[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_13(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_13[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_13[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_13[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_14(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_14[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_14[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_14[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_14(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_14[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_14[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_14[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_15(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_15[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_15[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_15[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_15(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_15[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_15[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_15[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_16(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_16[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_16[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_16[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_16(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_16[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_16[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_16[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_17(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_17[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_17[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_17[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_17(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_17[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_17[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_17[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_18(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_18[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_18[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_18[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_18(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_18[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_18[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_18[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_19(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_19[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_19[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_19[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_19(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_19[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_19[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_19[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_20(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_20[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_20[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_20[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_20(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_20[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_20[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_20[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_21(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_21[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_21[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_21[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_21(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_21[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_21[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_21[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_22(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_22[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_22[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_22[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_22(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_22[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_22[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_22[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_23(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_23[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_23[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_23[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_23(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_23[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_23[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_23[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_24(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_24[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_24[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_24[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_24(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_24[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_24[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_24[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_25(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_25[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_25[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_25[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_25(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_25[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_25[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_25[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_26(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_26[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_26[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_26[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_26(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_26[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_26[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_26[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_27(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_27[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_27[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_27[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_27(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_27[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_27[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_27[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_28(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_28[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_28[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_28[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_28(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_28[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_28[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_28[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_29(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_29[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_29[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_29[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_29(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_29[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_29[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_29[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_30(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_30[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_30[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_30[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_30(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_30[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_30[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_30[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_31(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_31[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_31[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_31[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_31(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_31[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_31[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_31[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_32(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_32[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_32[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_32[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_32(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_32[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_32[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_32[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_33(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_33[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_33[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_33[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_33(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_33[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_33[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_33[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_34(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_34[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_34[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_34[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_34(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_34[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_34[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_34[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_35(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_35[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_35[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_35[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_35(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_35[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_35[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_35[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_36(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_36[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_36[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_36[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_36(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_36[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_36[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_36[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_37(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_37[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_37[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_37[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_37(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_37[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_37[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_37[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_38(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_38[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_38[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_38[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_38(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_38[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_38[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_38[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_39(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_39[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_39[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_39[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_39(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_39[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_39[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_39[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_40(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_40[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_40[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_40[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_40(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_40[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_40[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_40[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_41(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_41[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_41[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_41[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_41(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_41[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_41[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_41[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_42(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_42[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_42[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_42[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_42(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_42[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_42[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_42[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_43(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_43[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_43[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_43[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_43(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_43[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_43[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_43[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_44(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_44[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_44[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_44[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_44(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_44[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_44[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_44[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_45(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_45[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_45[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_45[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_45(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_45[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_45[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_45[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_46(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_46[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_46[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_46[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_46(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_46[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_46[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_46[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_47(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_47[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_47[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_47[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_47(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_47[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_47[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_47[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_48(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_48[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_48[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_48[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_48(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_48[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_48[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_48[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_49(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_49[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_49[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_49[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_49(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_49[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_49[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_49[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_50(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_50[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_50[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_50[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_50(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_50[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_50[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_50[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_51(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_51[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_51[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_51[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_51(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_51[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_51[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_51[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_52(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_52[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_52[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_52[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_52(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_52[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_52[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_52[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_53(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_53[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_53[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_53[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_53(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_53[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_53[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_53[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_54(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_54[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_54[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_54[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_54(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_54[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_54[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_54[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_55(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_55[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_55[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_55[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_55(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_55[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_55[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_55[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_56(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_56[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_56[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_56[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_56(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_56[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_56[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_56[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_57(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_57[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_57[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_57[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_57(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_57[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_57[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_57[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_58(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_58[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_58[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_58[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_58(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_58[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_58[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_58[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_59(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_59[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_59[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_59[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_59(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_59[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_59[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_59[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_60(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_60[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_60[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_60[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_60(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_60[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_60[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_60[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_61(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_61[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_61[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_61[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_61(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_61[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_61[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_61[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
 
 #ifdef MCAL_TESTING_ENVIRONMENT
 /** 
@@ -376,6 +2861,192 @@ uint32 EthSwt_43_NETC_schm_read_msr(void)
 void SchM_Check_ethswt_43_netc(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_00[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_00[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_00 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_01[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_01[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_01 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_02[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_02[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_02 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_03[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_03[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_03 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_04[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_04[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_04 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_05[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_05[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_05 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_06[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_06[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_06 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_07[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_07[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_07 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_08[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_08[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_08 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_09[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_09[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_09 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_10[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_10[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_10 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_11[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_11[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_11 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_12[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_12[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_12 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_13[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_13[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_13 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_14[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_14[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_14 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_15[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_15[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_15 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_16[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_16[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_16 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_17[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_17[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_17 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_18[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_18[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_18 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_19[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_19[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_19 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_20[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_20[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_20 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_21[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_21[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_21 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_22[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_22[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_22 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_23[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_23[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_23 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_24[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_24[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_24 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_25[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_25[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_25 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_26[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_26[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_26 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_27[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_27[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_27 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_28[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_28[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_28 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_29[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_29[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_29 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_30[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_30[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_30 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_31[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_31[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_31 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_32[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_32[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_32 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_33[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_33[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_33 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_34[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_34[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_34 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_35[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_35[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_35 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_36[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_36[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_36 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_37[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_37[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_37 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_38[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_38[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_38 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_39[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_39[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_39 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_40[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_40[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_40 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_41[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_41[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_41 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_42[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_42[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_42 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_43[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_43[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_43 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_44[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_44[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_44 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_45[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_45[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_45 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_46[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_46[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_46 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_47[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_47[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_47 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_48[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_48[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_48 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_49[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_49[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_49 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_50[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_50[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_50 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_51[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_51[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_51 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_52[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_52[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_52 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_53[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_53[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_53 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_54[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_54[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_54 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_55[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_55[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_55 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_56[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_56[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_56 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_57[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_57[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_57 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_58[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_58[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_58 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_59[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_59[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_59 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_60[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_60[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_60 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_61[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_61[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_61 for the next test in the suite*/
 
 
 }

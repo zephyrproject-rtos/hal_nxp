@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file    Std_Types.h
-*   @version 0.9.0
+*   @version 1.0.0
 *
 *   @brief   AUTOSAR BaseNXP - Standard types definition.
 *   @details AUTOSAR standard types header file. It contains all types that are used across several

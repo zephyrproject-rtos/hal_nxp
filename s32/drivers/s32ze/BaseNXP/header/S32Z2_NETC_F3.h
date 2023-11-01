@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_F3.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_NETC_F3
  *
  * This file contains register definitions and macros for easy access to their
@@ -142,7 +142,7 @@ typedef struct {
     __IO uint32_t PSIVLANR;                          /**< Port station interface 0 VLAN register..Port station interface 7 VLAN register, array offset: 0x2008, array step: 0x80 */
     uint8_t RESERVED_0[4];
     __IO uint32_t PSICFGR0;                          /**< Port station interface 0 configuration register 0..Port station interface 7 configuration register 0, array offset: 0x2010, array step: 0x80 */
-    __IO uint32_t PSICFGR1;                          /**< Port station interface 1 configuration register 1..Port station interface 7 configuration register 1, array offset: 0x2014, array step: 0x80 */
+    __IO uint32_t PSICFGR1;                          /**< Port station interface 1 configuration register 1..Port station interface 7 configuration register 1, array offset: 0x2014, array step: 0x80, valid indices: [1-7] */
     __IO uint32_t PSICFGR2;                          /**< Port station interface 0 configuration register 2..Port station interface 7 configuration register 2, array offset: 0x2018, array step: 0x80 */
     uint8_t RESERVED_1[20];
     __IO uint32_t PSIVMAFCFGR;                       /**< Port station interface 0 VSI MAC address filtering configuration register..Port station interface 7 VSI MAC address filtering configuration register, array offset: 0x2030, array step: 0x80 */

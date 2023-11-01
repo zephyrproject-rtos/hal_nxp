@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -33,8 +33,8 @@ extern "C"{
 #define SIUL2_ICU_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION     4
 #define SIUL2_ICU_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION     7
 #define SIUL2_ICU_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION  0
-#define SIUL2_ICU_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION             0
-#define SIUL2_ICU_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION             9
+#define SIUL2_ICU_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION             1
+#define SIUL2_ICU_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION             0
 #define SIUL2_ICU_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -79,6 +79,8 @@ extern "C"{
 /*==================================================================================================
 *                                      FUNCTION PROTOTYPES
 ==================================================================================================*/
+#if (STD_ON == SIUL2_ICU_IP_USED)
+
 #define ICU_START_SEC_CODE
 #include "Icu_MemMap.h"
 
@@ -93,6 +95,8 @@ extern "C"{
 
 #define ICU_STOP_SEC_CODE
 #include "Icu_MemMap.h"
+
+#endif /* SIUL2_ICU_IP_USED */
 
 #ifdef __cplusplus
 }

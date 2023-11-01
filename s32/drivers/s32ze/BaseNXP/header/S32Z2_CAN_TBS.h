@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CAN_TBS.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_CAN_TBS
  *
  * This file contains register definitions and macros for easy access to their
@@ -70,7 +70,7 @@
 
 /** CAN_TBS - Register Layout Typedef */
 typedef struct {
-  __I  uint32_t CAN_TB_VALUE;                      /**< CAN Time Bus Output Value, offset: 0x0 */
+  __I  uint32_t CAN_TB_VALUE;                      /**< CAN Time Base Output Value, offset: 0x0 */
   uint8_t RESERVED_0[2044];
   __IO uint32_t CAN_TS_SEL;                        /**< CAN Timestamp Mux Selector, offset: 0x800 */
 } CAN_TBS_Type, *CAN_TBS_MemMapPtr;
@@ -197,7 +197,7 @@ typedef struct {
  * @{
  */
 
-/*! @name CAN_TB_VALUE - CAN Time Bus Output Value */
+/*! @name CAN_TB_VALUE - CAN Time Base Output Value */
 /*! @{ */
 
 #define CAN_TBS_CAN_TB_VALUE_TB_VALUE_MASK       (0xFFFFFFFFU)

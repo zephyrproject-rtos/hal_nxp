@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_QuadSPI.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_QuadSPI
  *
  * This file contains register definitions and macros for easy access to their
@@ -94,7 +94,7 @@ typedef struct {
   __IO uint32_t AWRCR;                             /**< AHB Write Configuration Register, offset: 0x50 */
   uint8_t RESERVED_3[12];
   __IO uint32_t DLLCRA;                            /**< DLL Flash Memory A Configuration Register, offset: 0x60 */
-  __IO uint32_t DLLCRB;                            /**< DLL Flash Memory B Configuration Register, offset: 0x64 */
+  __IO uint32_t DLLCRB;                            /**< DLL Flash Memory B Configuration Register, offset: 0x64, available only on: QuadSPI_1/QUADSPI_1 (missing on QuadSPI_0/QUADSPI_0) */
   uint8_t RESERVED_4[4];
   __IO uint32_t PARITYCR;                          /**< Parity Configuration Register, offset: 0x6C */
   uint8_t RESERVED_5[144];
@@ -109,7 +109,7 @@ typedef struct {
   __I  uint32_t DLLSR;                             /**< DLL Status Register, offset: 0x12C */
   __IO uint32_t DLCR;                              /**< Data Learning Configuration Register, offset: 0x130 */
   __I  uint32_t DLSR_FA;                           /**< Data Learning Status Flash Memory A Register, offset: 0x134 */
-  __I  uint32_t DLSR_FB;                           /**< Data Learning Status Flash Memory B Register, offset: 0x138 */
+  __I  uint32_t DLSR_FB;                           /**< Data Learning Status Flash Memory B Register, offset: 0x138, available only on: QuadSPI_1/QUADSPI_1 (missing on QuadSPI_0/QUADSPI_0) */
   uint8_t RESERVED_8[20];
   __I  uint32_t TBSR;                              /**< TX Buffer Status Register, offset: 0x150 */
   __IO uint32_t TBDR;                              /**< TX Buffer Data Register, offset: 0x154 */
@@ -122,11 +122,11 @@ typedef struct {
   uint8_t RESERVED_10[16];
   __IO uint32_t SFA1AD;                            /**< Serial Flash Memory A1 Top Address Register, offset: 0x180 */
   __IO uint32_t SFA2AD;                            /**< Serial Flash Memory A2 Top Address Register, offset: 0x184 */
-  __IO uint32_t SFB1AD;                            /**< Serial Flash Memory B1 Top Address Register, offset: 0x188 */
-  __IO uint32_t SFB2AD;                            /**< Serial Flash Memory B2 Top Address Register, offset: 0x18C */
+  __IO uint32_t SFB1AD;                            /**< Serial Flash Memory B1 Top Address Register, offset: 0x188, available only on: QuadSPI_1/QUADSPI_1 (missing on QuadSPI_0/QUADSPI_0) */
+  __IO uint32_t SFB2AD;                            /**< Serial Flash Memory B2 Top Address Register, offset: 0x18C, available only on: QuadSPI_1/QUADSPI_1 (missing on QuadSPI_0/QUADSPI_0) */
   __IO uint32_t DLPR;                              /**< Data Learn Pattern Register, offset: 0x190 */
   __I  uint32_t FAILA_ADDR;                        /**< Flash Memory A Failing Address Status Register, offset: 0x194 */
-  __I  uint32_t FAILB_ADDR;                        /**< flash Memory B Failing Address Status Register, offset: 0x198 */
+  __I  uint32_t FAILB_ADDR;                        /**< flash Memory B Failing Address Status Register, offset: 0x198, available only on: QuadSPI_1/QUADSPI_1 (missing on QuadSPI_0/QUADSPI_0) */
   uint8_t RESERVED_11[100];
   __I  uint32_t RBDR[QuadSPI_RBDR_COUNT];          /**< RX Buffer Data Register, array offset: 0x200, array step: 0x4 */
   __IO uint32_t LUTKEY;                            /**< LUT Key Register, offset: 0x300 */
@@ -297,11 +297,6 @@ typedef struct {
 #define QuadSPI_IPCR_IDATSZ_WIDTH                (16U)
 #define QuadSPI_IPCR_IDATSZ(x)                   (((uint32_t)(((uint32_t)(x)) << QuadSPI_IPCR_IDATSZ_SHIFT)) & QuadSPI_IPCR_IDATSZ_MASK)
 
-#define QuadSPI_IPCR_PAR_EN_MASK                 (0x10000U)
-#define QuadSPI_IPCR_PAR_EN_SHIFT                (16U)
-#define QuadSPI_IPCR_PAR_EN_WIDTH                (1U)
-#define QuadSPI_IPCR_PAR_EN(x)                   (((uint32_t)(((uint32_t)(x)) << QuadSPI_IPCR_PAR_EN_SHIFT)) & QuadSPI_IPCR_PAR_EN_MASK)
-
 #define QuadSPI_IPCR_SEQID_MASK                  (0xF000000U)
 #define QuadSPI_IPCR_SEQID_SHIFT                 (24U)
 #define QuadSPI_IPCR_SEQID_WIDTH                 (4U)
@@ -395,11 +390,6 @@ typedef struct {
 #define QuadSPI_BFGENCR_SEQID_SHIFT              (12U)
 #define QuadSPI_BFGENCR_SEQID_WIDTH              (4U)
 #define QuadSPI_BFGENCR_SEQID(x)                 (((uint32_t)(((uint32_t)(x)) << QuadSPI_BFGENCR_SEQID_SHIFT)) & QuadSPI_BFGENCR_SEQID_MASK)
-
-#define QuadSPI_BFGENCR_PAR_EN_MASK              (0x10000U)
-#define QuadSPI_BFGENCR_PAR_EN_SHIFT             (16U)
-#define QuadSPI_BFGENCR_PAR_EN_WIDTH             (1U)
-#define QuadSPI_BFGENCR_PAR_EN(x)                (((uint32_t)(((uint32_t)(x)) << QuadSPI_BFGENCR_PAR_EN_SHIFT)) & QuadSPI_BFGENCR_PAR_EN_MASK)
 
 #define QuadSPI_BFGENCR_SEQID_WR_EN_MASK         (0x20000U)
 #define QuadSPI_BFGENCR_SEQID_WR_EN_SHIFT        (17U)
@@ -1013,11 +1003,6 @@ typedef struct {
 #define QuadSPI_FR_CRCAEF_WIDTH                  (1U)
 #define QuadSPI_FR_CRCAEF(x)                     (((uint32_t)(((uint32_t)(x)) << QuadSPI_FR_CRCAEF_SHIFT)) & QuadSPI_FR_CRCAEF_MASK)
 
-#define QuadSPI_FR_IUEF_MASK                     (0x800U)
-#define QuadSPI_FR_IUEF_SHIFT                    (11U)
-#define QuadSPI_FR_IUEF_WIDTH                    (1U)
-#define QuadSPI_FR_IUEF(x)                       (((uint32_t)(((uint32_t)(x)) << QuadSPI_FR_IUEF_SHIFT)) & QuadSPI_FR_IUEF_MASK)
-
 #define QuadSPI_FR_ABOF_MASK                     (0x1000U)
 #define QuadSPI_FR_ABOF_SHIFT                    (12U)
 #define QuadSPI_FR_ABOF_WIDTH                    (1U)
@@ -1107,11 +1092,6 @@ typedef struct {
 #define QuadSPI_RSER_CRCAIE_WIDTH                (1U)
 #define QuadSPI_RSER_CRCAIE(x)                   (((uint32_t)(((uint32_t)(x)) << QuadSPI_RSER_CRCAIE_SHIFT)) & QuadSPI_RSER_CRCAIE_MASK)
 
-#define QuadSPI_RSER_IUEIE_MASK                  (0x800U)
-#define QuadSPI_RSER_IUEIE_SHIFT                 (11U)
-#define QuadSPI_RSER_IUEIE_WIDTH                 (1U)
-#define QuadSPI_RSER_IUEIE(x)                    (((uint32_t)(((uint32_t)(x)) << QuadSPI_RSER_IUEIE_SHIFT)) & QuadSPI_RSER_IUEIE_MASK)
-
 #define QuadSPI_RSER_ABOIE_MASK                  (0x1000U)
 #define QuadSPI_RSER_ABOIE_SHIFT                 (12U)
 #define QuadSPI_RSER_ABOIE_WIDTH                 (1U)
@@ -1190,11 +1170,6 @@ typedef struct {
 #define QuadSPI_SPTRCLR_PREFETCH_DIS_SHIFT       (17U)
 #define QuadSPI_SPTRCLR_PREFETCH_DIS_WIDTH       (1U)
 #define QuadSPI_SPTRCLR_PREFETCH_DIS(x)          (((uint32_t)(((uint32_t)(x)) << QuadSPI_SPTRCLR_PREFETCH_DIS_SHIFT)) & QuadSPI_SPTRCLR_PREFETCH_DIS_MASK)
-
-#define QuadSPI_SPTRCLR_STREAM_EN_MASK           (0x40000U)
-#define QuadSPI_SPTRCLR_STREAM_EN_SHIFT          (18U)
-#define QuadSPI_SPTRCLR_STREAM_EN_WIDTH          (1U)
-#define QuadSPI_SPTRCLR_STREAM_EN(x)             (((uint32_t)(((uint32_t)(x)) << QuadSPI_SPTRCLR_STREAM_EN_SHIFT)) & QuadSPI_SPTRCLR_STREAM_EN_MASK)
 
 #define QuadSPI_SPTRCLR_OTFAD_BNDRY_MASK         (0x3000000U)
 #define QuadSPI_SPTRCLR_OTFAD_BNDRY_SHIFT        (24U)

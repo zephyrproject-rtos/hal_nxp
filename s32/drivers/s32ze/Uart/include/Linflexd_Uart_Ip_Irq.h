@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,8 +35,8 @@ extern "C"{
 #define LINFLEXD_UART_IP_IRQ_AR_RELEASE_MAJOR_VERSION     4
 #define LINFLEXD_UART_IP_IRQ_AR_RELEASE_MINOR_VERSION     7
 #define LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION  0
-#define LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION             0
-#define LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION             9
+#define LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION             1
+#define LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION             0
 #define LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -48,12 +48,14 @@ extern "C"{
 #endif
 #if ((LINFLEXD_UART_IP_IRQ_AR_RELEASE_MAJOR_VERSION    != LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_IRQ_AR_RELEASE_MINOR_VERSION    != LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_DEFINES_AR_RELEASE_REVISION_VERSION))
+     (LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_DEFINES_AR_RELEASE_REVISION_VERSION) \
+    )
      #error "AUTOSAR Version Numbers of Linflexd_Uart_Ip_Irq.h and Linflexd_Uart_Ip_Defines.h are different"
 #endif
 #if ((LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION != LINFLEXD_UART_IP_DEFINES_SW_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION != LINFLEXD_UART_IP_DEFINES_SW_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION != LINFLEXD_UART_IP_DEFINES_SW_PATCH_VERSION))
+     (LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION != LINFLEXD_UART_IP_DEFINES_SW_PATCH_VERSION) \
+    )
     #error "Software Version Numbers of Linflexd_Uart_Ip_Irq.h and Linflexd_Uart_Ip_Defines.h are different"
 #endif
 
@@ -63,12 +65,14 @@ extern "C"{
 #endif
 #if ((LINFLEXD_UART_IP_IRQ_AR_RELEASE_MAJOR_VERSION    != LINFLEXD_UART_IP_CFG_AR_RELEASE_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_IRQ_AR_RELEASE_MINOR_VERSION    != LINFLEXD_UART_IP_CFG_AR_RELEASE_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_CFG_AR_RELEASE_REVISION_VERSION))
+     (LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_CFG_AR_RELEASE_REVISION_VERSION) \
+    )
      #error "AUTOSAR Version Numbers of Linflexd_Uart_Ip_Irq.h and Linflexd_Uart_Ip_Cfg.h are different"
 #endif
 #if ((LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION != LINFLEXD_UART_IP_CFG_SW_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION != LINFLEXD_UART_IP_CFG_SW_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION != LINFLEXD_UART_IP_CFG_SW_PATCH_VERSION))
+     (LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION != LINFLEXD_UART_IP_CFG_SW_PATCH_VERSION) \
+    )
     #error "Software Version Numbers of Linflexd_Uart_Ip_Irq.h and Linflexd_Uart_Ip_Cfg.h are different"
 #endif
 /*==================================================================================================
@@ -77,6 +81,10 @@ extern "C"{
 
 /*==================================================================================================
 *                                       DEFINES AND MACROS
+==================================================================================================*/
+
+/*==================================================================================================
+*                                              ENUMS
 ==================================================================================================*/
 
 /*==================================================================================================
@@ -287,12 +295,13 @@ void MSC_0_Lin_Uart_Ip_DmaTxCompleteCallback(void);
 #endif
 
 #endif
-#ifdef __cplusplus
-}
-#endif
 
 #define UART_STOP_SEC_CODE
 #include "Uart_MemMap.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 /** @} */
 

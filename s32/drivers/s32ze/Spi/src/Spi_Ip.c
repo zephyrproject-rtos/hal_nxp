@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -49,8 +49,8 @@ extern "C"
 #define SPI_IP_AR_RELEASE_MAJOR_VERSION_C       4
 #define SPI_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define SPI_IP_AR_RELEASE_REVISION_VERSION_C    0
-#define SPI_IP_SW_MAJOR_VERSION_C               0
-#define SPI_IP_SW_MINOR_VERSION_C               9
+#define SPI_IP_SW_MAJOR_VERSION_C               1
+#define SPI_IP_SW_MINOR_VERSION_C               0
 #define SPI_IP_SW_PATCH_VERSION_C               0
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -1491,9 +1491,9 @@ Spi_Ip_StatusType Spi_Ip_SyncTransmit(
         
         /* Configure external device parameters  like: cs, clock phase, clock polarity. */
         #if (SPI_IP_DUAL_CLOCK_MODE == STD_ON)
-            Base->MODE.CTAR[0u] = ExternalDevice->Ctar[State->ClockMode] | SPI_CTAR_FMSZ(((uint32)State->ExternalDevice->DeviceParams->FrameSize - 1u) & 0xFu) | SPI_CTAR_LSBFE(LsbValue);
+        Base->MODE.CTAR[0u] = ExternalDevice->Ctar[State->ClockMode] | SPI_CTAR_FMSZ(((uint32)State->ExternalDevice->DeviceParams->FrameSize - 1u) & 0xFu) | SPI_CTAR_LSBFE(LsbValue);
         #else
-            Base->MODE.CTAR[0u] = ExternalDevice->Ctar | SPI_CTAR_FMSZ(((uint32)State->ExternalDevice->DeviceParams->FrameSize - 1u) & 0xFu) | SPI_CTAR_LSBFE(LsbValue);
+        Base->MODE.CTAR[0u] = ExternalDevice->Ctar | SPI_CTAR_FMSZ(((uint32)State->ExternalDevice->DeviceParams->FrameSize - 1u) & 0xFu) | SPI_CTAR_LSBFE(LsbValue);
         #endif
         if (State->CtareDtcpSupport)
         {
@@ -2038,6 +2038,7 @@ void Spi_Ip_ManageBuffers(uint8 Instance)
         #if (SPI_IP_DMA_USED == STD_ON)
         else
         {
+            DmaChannelStatus.Done = FALSE;
             (void)Dma_Ip_GetLogicChannelStatus(State->PhyUnitConfig->RxDmaChannel, &DmaChannelStatus);
             if((boolean)TRUE == DmaChannelStatus.Done)
             {

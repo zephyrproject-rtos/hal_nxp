@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -46,8 +46,8 @@ extern "C" {
 #define SIUL2_DIO_IP_AR_RELEASE_MAJOR_VERSION_H      4
 #define SIUL2_DIO_IP_AR_RELEASE_MINOR_VERSION_H      7
 #define SIUL2_DIO_IP_AR_RELEASE_REVISION_VERSION_H   0
-#define SIUL2_DIO_IP_SW_MAJOR_VERSION_H              0
-#define SIUL2_DIO_IP_SW_MINOR_VERSION_H              9
+#define SIUL2_DIO_IP_SW_MAJOR_VERSION_H              1
+#define SIUL2_DIO_IP_SW_MINOR_VERSION_H              0
 #define SIUL2_DIO_IP_SW_PATCH_VERSION_H              0
 
 /*==================================================================================================
@@ -142,18 +142,8 @@ extern "C" {
 
 #endif
 
-#if (STD_ON == DIO_VIRTWRAPPER_SUPPORT)
 #define SIUL2_DIO_IP_MPGPDO_OFFSET_U32        ((uint32)0x1780UL)
-#ifdef SIUL2_VIRTWRAPPER_MULTIINSTANCE
-
-#define SIUL2_DIO_IP_MPGPDO_ADDR32(SIUL2_INSTANCE,PDAC_INDEX,MPGPDO_INDEX)   (Siul2_Dio_Ip_au32BaseAdresses[SIUL2_INSTANCE] + PDAC_INDEX * SIUL2_DIO_IP_PDACSLOT_SIZE_U32 + SIUL2_DIO_IP_MPGPDO_OFFSET_U32 + ((MPGPDO_INDEX) << 2UL))
-
-#else
-
-#define SIUL2_DIO_IP_MPGPDO_ADDR32(PDAC_INDEX,MPGPDO_INDEX)   (Siul2_Dio_Ip_au32BaseAdresses[(PDAC_INDEX)] + SIUL2_DIO_IP_MPGPDO_OFFSET_U32 + ((MPGPDO_INDEX) << 2UL))
-
-#endif
-#endif
+#define SIUL2_DIO_IP_MPGPDO_ADDR32(SIUL2_INSTANCE,MPGPDO_INDEX)   (Siul2_Dio_Ip_au32BaseAdresses[(SIUL2_INSTANCE)] + SIUL2_DIO_IP_MPGPDO_OFFSET_U32 + ((MPGPDO_INDEX) << 2UL))
 
 #if (STD_ON == SIUL2_DIO_IP_DEV_ERROR_DETECT)
 #define SIUL2_DIO_IP_DEV_ASSERT(par) DevAssert(par)
@@ -200,11 +190,18 @@ typedef struct
 #ifdef SIUL2_VIRTWRAPPER_MULTIINSTANCE
 extern Siul2_Dio_Ip_CoreType Siul2_Dio_Ip_au32BaseAdresses[SIUL2_INSTANCE_COUNT];
 #else
-extern Siul2_Dio_Ip_CoreType Siul2_Dio_Ip_au32BaseAdresses[3];
-#endif
+extern Siul2_Dio_Ip_CoreType Siul2_Dio_Ip_au32BaseAdresses[6];
+#endif /* SIUL2_VIRTWRAPPER_MULTIINSTANCE */
+
+#else /* (STD_ON == DIO_VIRTWRAPPER_SUPPORT) */
+
+#ifdef IP_SIUL2_AE_BASE
+extern Siul2_Dio_Ip_CoreType Siul2_Dio_Ip_au32BaseAdresses[SIUL2_INSTANCE_COUNT + SIUL2_AE_INSTANCE_COUNT];
 #else
 extern Siul2_Dio_Ip_CoreType Siul2_Dio_Ip_au32BaseAdresses[SIUL2_INSTANCE_COUNT];
-#endif
+#endif /* IP_SIUL2_AE_BASE */
+
+#endif /* (STD_ON == DIO_VIRTWRAPPER_SUPPORT) */
 
 #define DIO_STOP_SEC_VAR_INIT_32
 #include "Dio_MemMap.h"
@@ -227,12 +224,10 @@ extern Siul2_Dio_Ip_CoreType Siul2_Dio_Ip_au32BaseAdresses[SIUL2_INSTANCE_COUNT]
  *        - 0: corresponding pin is set to LOW
  *        - 1: corresponding pin is set to HIGH
  */
-void Siul2_Dio_Ip_WritePin
-(
-    Siul2_Dio_Ip_GpioType * const base,
-    Siul2_Dio_Ip_PinsChannelType pin,
-    Siul2_Dio_Ip_PinsLevelType value
-);
+void Siul2_Dio_Ip_WritePin(Siul2_Dio_Ip_GpioType * const base,
+                           Siul2_Dio_Ip_PinsChannelType pin,
+                           Siul2_Dio_Ip_PinsLevelType value
+                          );
 
 /*!
  * @brief Write all pins of a port
@@ -245,11 +240,9 @@ void Siul2_Dio_Ip_WritePin
  *        - 0: corresponding pin is set to LOW
  *        - 1: corresponding pin is set to HIGH
  */
-void Siul2_Dio_Ip_WritePins
-(
-    Siul2_Dio_Ip_GpioType * const base,
-    Siul2_Dio_Ip_PinsChannelType pins
-);
+void Siul2_Dio_Ip_WritePins(Siul2_Dio_Ip_GpioType * const base,
+                            Siul2_Dio_Ip_PinsChannelType pins
+                           );
 
 /*!
  * @brief Get the current output from a port
@@ -263,10 +256,7 @@ void Siul2_Dio_Ip_WritePins
  *        - 0: corresponding pin is set to LOW
  *        - 1: corresponding pin is set to HIGH
  */
-Siul2_Dio_Ip_PinsChannelType Siul2_Dio_Ip_GetPinsOutput
-(
-    const Siul2_Dio_Ip_GpioType * const base
-);
+Siul2_Dio_Ip_PinsChannelType Siul2_Dio_Ip_GetPinsOutput(const Siul2_Dio_Ip_GpioType * const base);
 
 /*!
  * @brief Write pins with 'Set' value
@@ -281,11 +271,9 @@ Siul2_Dio_Ip_PinsChannelType Siul2_Dio_Ip_GetPinsOutput
  *        - 0: corresponding pin is unaffected
  *        - 1: corresponding pin is set to HIGH
  */
-void Siul2_Dio_Ip_SetPins
-(
-    Siul2_Dio_Ip_GpioType * const base,
-    Siul2_Dio_Ip_PinsChannelType pins
-);
+void Siul2_Dio_Ip_SetPins(Siul2_Dio_Ip_GpioType * const base,
+                          Siul2_Dio_Ip_PinsChannelType pins
+                         );
 
 /*!
  * @brief Write pins to 'Clear' value
@@ -300,11 +288,9 @@ void Siul2_Dio_Ip_SetPins
  *        - 0: corresponding pin is unaffected
  *        - 1: corresponding pin is cleared(set to LOW)
  */
-void Siul2_Dio_Ip_ClearPins
-(
-    Siul2_Dio_Ip_GpioType * const base,
-    Siul2_Dio_Ip_PinsChannelType pins
-);
+void Siul2_Dio_Ip_ClearPins(Siul2_Dio_Ip_GpioType * const base,
+                            Siul2_Dio_Ip_PinsChannelType pins
+                           );
 
 /*!
  * @brief Toggle pins value
@@ -318,11 +304,9 @@ void Siul2_Dio_Ip_ClearPins
  *        - 0: corresponding pin is unaffected
  *        - 1: corresponding pin is toggled
  */
-void Siul2_Dio_Ip_TogglePins
-(
-    Siul2_Dio_Ip_GpioType * const base,
-    Siul2_Dio_Ip_PinsChannelType pins
-);
+void Siul2_Dio_Ip_TogglePins(Siul2_Dio_Ip_GpioType * const base,
+                             Siul2_Dio_Ip_PinsChannelType pins
+                            );
 
 /*!
  * @brief Read input pins
@@ -336,10 +320,8 @@ void Siul2_Dio_Ip_TogglePins
  *        - 0: corresponding pin is read as LOW
  *        - 1: corresponding pin is read as HIGH
  */
-Siul2_Dio_Ip_PinsChannelType Siul2_Dio_Ip_ReadPins
-(
-    const Siul2_Dio_Ip_GpioType * const base
-);
+Siul2_Dio_Ip_PinsChannelType Siul2_Dio_Ip_ReadPins(const Siul2_Dio_Ip_GpioType * const base);
+#if (STD_OFF == DIO_VIRTWRAPPER_SUPPORT)
 /*!
  * @brief Write Port using MPGPDO
  *
@@ -353,13 +335,12 @@ Siul2_Dio_Ip_PinsChannelType Siul2_Dio_Ip_ReadPins
  * @param[in] mask: mask for the affected pins
  * @return none
  */
-void Siul2_Dio_Ip_MaskedWritePins
-(
-    uint8 u8Siul2Instance,
-    uint8 u8PortId,
-    Siul2_Dio_Ip_PinsChannelType pins,
-    Siul2_Dio_Ip_PinsChannelType mask
-);
+void Siul2_Dio_Ip_MaskedWritePins(uint8 u8Siul2Instance,
+                                  uint8 u8PortId,
+                                  Siul2_Dio_Ip_PinsChannelType pins,
+                                  Siul2_Dio_Ip_PinsChannelType mask
+                                 );
+#endif /* (STD_OFF == DIO_VIRTWRAPPER_SUPPORT) */
 
 /*!
  * @brief Read input pin
@@ -373,11 +354,9 @@ void Siul2_Dio_Ip_MaskedWritePins
  *        - 0: corresponding pin is read as LOW
  *        - 1: corresponding pin is read as HIGH
  */
-Siul2_Dio_Ip_PinsLevelType Siul2_Dio_Ip_ReadPin
-(
-    const Siul2_Dio_Ip_GpioType * const base,
-    Siul2_Dio_Ip_PinsChannelType pin
-);
+Siul2_Dio_Ip_PinsLevelType Siul2_Dio_Ip_ReadPin(const Siul2_Dio_Ip_GpioType * const base,
+                                                Siul2_Dio_Ip_PinsChannelType pin
+                                               );
 
 #define DIO_STOP_SEC_CODE
 #include "Dio_MemMap.h"

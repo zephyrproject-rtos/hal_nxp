@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -34,8 +34,8 @@ extern "C" {
 #define SWT_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
 #define SWT_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
 #define SWT_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
-#define SWT_IP_TYPES_SW_MAJOR_VERSION             0
-#define SWT_IP_TYPES_SW_MINOR_VERSION             9
+#define SWT_IP_TYPES_SW_MAJOR_VERSION             1
+#define SWT_IP_TYPES_SW_MINOR_VERSION             0
 #define SWT_IP_TYPES_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -49,13 +49,15 @@ extern "C" {
 
 #if ((SWT_IP_TYPES_AR_RELEASE_MAJOR_VERSION    != SWT_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION) || \
      (SWT_IP_TYPES_AR_RELEASE_MINOR_VERSION    != SWT_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION) || \
-     (SWT_IP_TYPES_AR_RELEASE_REVISION_VERSION != SWT_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION))
+     (SWT_IP_TYPES_AR_RELEASE_REVISION_VERSION != SWT_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION) \
+    )
 #error "AutoSar Version Numbers of Swt_Ip_Types.h and Swt_Ip_Cfg_Defines.h are different"
 #endif
 
 #if ((SWT_IP_TYPES_SW_MAJOR_VERSION != SWT_IP_CFG_DEFINES_SW_MAJOR_VERSION) || \
      (SWT_IP_TYPES_SW_MINOR_VERSION != SWT_IP_CFG_DEFINES_SW_MINOR_VERSION) || \
-     (SWT_IP_TYPES_SW_PATCH_VERSION != SWT_IP_CFG_DEFINES_SW_PATCH_VERSION))
+     (SWT_IP_TYPES_SW_PATCH_VERSION != SWT_IP_CFG_DEFINES_SW_PATCH_VERSION) \
+    )
 #error "Software Version Numbers of Swt_Ip_Types.h and Swt_Ip_Cfg_Defines.h are different"
 #endif
 
@@ -83,7 +85,7 @@ extern "C" {
 ==================================================================================================*/
 
 /** @brief       Enum defining the possible type values for SWT API
-* @implements    Swt_Ip_StatusType_enumeration
+* @implements    Swt_Ip_StatusType_enum
 */
 typedef enum
 {
@@ -107,6 +109,7 @@ typedef enum
 {
     SWT_IP_FS_SEQ_MODE    = 0x00U,     /* Fixed Service Sequence */
     SWT_IP_KS_SEQ_MODE    = 0x01U,    /* Keyed Service Sequence */
+    SWT_IP_INVALID_MODE   = 0xFFU     /* Invalid mode */
 } Swt_Ip_ServiceModeType;
 
 /*==================================================================================================
@@ -122,13 +125,13 @@ typedef struct
 {
     uint8                   u8MapEnBitmask;
     boolean                 bEnResetOnInvalidAccess;
-#if (defined(SWT_IP_HAS_STOP_MODE) && (SWT_IP_HAS_STOP_MODE == 1U)) 
+#if (defined(SWT_IP_HAS_STOP_MODE) && (SWT_IP_HAS_STOP_MODE == 1U))
     boolean                 bEnRunInStopMode;
 #endif
     boolean                 bEnRunInDebugMode;
     boolean                 bEnWindow;
-    boolean                 bEnInterrupt;  
-    Swt_Ip_ServiceModeType      eServiceMode; 
+    boolean                 bEnInterrupt;
+    Swt_Ip_ServiceModeType      eServiceMode;
     uint32                  u32TimeoutValue;
     uint32                  u32WindowValue;
     uint16                  u16InitialKey;

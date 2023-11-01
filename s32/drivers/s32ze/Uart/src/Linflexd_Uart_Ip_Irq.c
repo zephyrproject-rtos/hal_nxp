@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -33,8 +33,8 @@ extern "C"{
 #define LINFLEXD_UART_IP_IRQ_AR_RELEASE_MAJOR_VERSION_C       4
 #define LINFLEXD_UART_IP_IRQ_AR_RELEASE_MINOR_VERSION_C       7
 #define LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION_C    0
-#define LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION_C               0
-#define LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION_C               9
+#define LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION_C               1
+#define LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION_C               0
 #define LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -46,12 +46,14 @@ extern "C"{
 #endif
 #if ((LINFLEXD_UART_IP_IRQ_AR_RELEASE_MAJOR_VERSION_C    != LINFLEXD_UART_IP_AR_RELEASE_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_IRQ_AR_RELEASE_MINOR_VERSION_C    != LINFLEXD_UART_IP_AR_RELEASE_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION_C != LINFLEXD_UART_IP_AR_RELEASE_REVISION_VERSION))
+     (LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION_C != LINFLEXD_UART_IP_AR_RELEASE_REVISION_VERSION) \
+    )
      #error "AUTOSAR Version Numbers of Linflexd_Uart_Ip_Irq.c and Linflexd_Uart_Ip.h are different"
 #endif
 #if ((LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION_C != LINFLEXD_UART_IP_SW_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION_C != LINFLEXD_UART_IP_SW_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION_C != LINFLEXD_UART_IP_SW_PATCH_VERSION))
+     (LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION_C != LINFLEXD_UART_IP_SW_PATCH_VERSION) \
+    )
     #error "Software Version Numbers of Linflexd_Uart_Ip_Irq.c and Linflexd_Uart_Ip.h are different"
 #endif
 /* Checks against Linflexd_Uart_Ip_Irq.h */
@@ -60,12 +62,14 @@ extern "C"{
 #endif
 #if ((LINFLEXD_UART_IP_IRQ_AR_RELEASE_MAJOR_VERSION_C    != LINFLEXD_UART_IP_IRQ_AR_RELEASE_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_IRQ_AR_RELEASE_MINOR_VERSION_C    != LINFLEXD_UART_IP_IRQ_AR_RELEASE_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION_C != LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION))
+     (LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION_C != LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION) \
+    )
      #error "AUTOSAR Version Numbers of Linflexd_Uart_Ip_Irq.c and Linflexd_Uart_Ip_Irq.h are different"
 #endif
 #if ((LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION_C != LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION_C != LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION_C != LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION))
+     (LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION_C != LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION) \
+    )
     #error "Software Version Numbers of Linflexd_Uart_Ip_Irq.c and Linflexd_Uart_Ip_Irq.h are different"
 #endif
 /*==================================================================================================

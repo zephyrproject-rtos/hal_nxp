@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file           CompilerDefinition.h
-*   @version 0.9.0
+*   @version 1.0.0
 *
 *   @brief   AUTOSAR BaseNXP - SWS Compiler abstraction
 *   @details The file Compiler.h provides macros for the encapsulation of definitions and
@@ -41,8 +41,8 @@ extern "C"{
 #define COMPILERDEFINITION_AR_RELEASE_MAJOR_VERSION       4
 #define COMPILERDEFINITION_AR_RELEASE_MINOR_VERSION       7
 #define COMPILERDEFINITION_AR_RELEASE_REVISION_VERSION    0
-#define COMPILERDEFINITION_SW_MAJOR_VERSION               0
-#define COMPILERDEFINITION_SW_MINOR_VERSION               9
+#define COMPILERDEFINITION_SW_MAJOR_VERSION               1
+#define COMPILERDEFINITION_SW_MINOR_VERSION               0
 #define COMPILERDEFINITION_SW_PATCH_VERSION               0
 /**@}*/
 /*==================================================================================================
@@ -74,12 +74,6 @@ extern "C"{
     * @brief Symbol required to be defined when Codewarrior compiler is used.
     */
     #define _CODEWARRIOR_C_S32ZE_
-#endif
-#ifdef __CSMC__
-    /**
-    * @brief Symbol required to be defined when Cosmic compiler is used.
-    */
-  #define _COSMIC_C_S32ZE_
 #endif
 #if (defined(__GNUC__) && !defined(__DCC__))
          /**

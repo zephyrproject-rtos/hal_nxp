@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SIUL2.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_SIUL2
  *
  * This file contains register definitions and macros for easy access to their
@@ -77,415 +77,415 @@
 /** SIUL2 - Register Layout Typedef */
 typedef struct {
   uint8_t RESERVED_0[4];
-  __I  uint32_t MIDR1;                             /**< SIUL2 MCU ID Register #1, offset: 0x4 */
-  __I  uint32_t MIDR2;                             /**< SIUL2 MCU ID Register #2, offset: 0x8 */
+  __I  uint32_t MIDR1;                             /**< SIUL2 MCU ID 1, offset: 0x4, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint32_t MIDR2;                             /**< SIUL2 MCU ID 2, offset: 0x8, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
   uint8_t RESERVED_1[4];
-  __IO uint32_t DISR0;                             /**< SIUL2 DMA/Interrupt Status Flag Register0, offset: 0x10 */
+  __IO uint32_t DISR0;                             /**< SIUL2 DMA/Interrupt Status Flag 0, offset: 0x10 */
   uint8_t RESERVED_2[4];
-  __IO uint32_t DIRER0;                            /**< SIUL2 DMA/Interrupt Request Enable Register0, offset: 0x18 */
+  __IO uint32_t DIRER0;                            /**< SIUL2 DMA/Interrupt Request Enable 0, offset: 0x18 */
   uint8_t RESERVED_3[4];
-  __IO uint32_t DIRSR0;                            /**< SIUL2 DMA/Interrupt Request Select Register0, offset: 0x20 */
+  __IO uint32_t DIRSR0;                            /**< SIUL2 DMA/Interrupt Request Select 0, offset: 0x20 */
   uint8_t RESERVED_4[4];
-  __IO uint32_t IREER0;                            /**< SIUL2 Interrupt Rising-Edge Event Enable Register 0, offset: 0x28 */
+  __IO uint32_t IREER0;                            /**< SIUL2 Interrupt Rising-Edge Event Enable 0, offset: 0x28 */
   uint8_t RESERVED_5[4];
-  __IO uint32_t IFEER0;                            /**< SIUL2 Interrupt Falling-Edge Event Enable Register 0, offset: 0x30 */
+  __IO uint32_t IFEER0;                            /**< SIUL2 Interrupt Falling-Edge Event Enable 0, offset: 0x30 */
   uint8_t RESERVED_6[4];
-  __IO uint32_t IFER0;                             /**< SIUL2 Interrupt Filter Enable Register 0, offset: 0x38 */
+  __IO uint32_t IFER0;                             /**< SIUL2 Interrupt Filter Enable 0, offset: 0x38 */
   uint8_t RESERVED_7[4];
-  __IO uint32_t IFMCR[SIUL2_IFMCR_COUNT];          /**< SIUL2 Interrupt Filter Maximum Counter Register, array offset: 0x40, array step: 0x4 */
+  __IO uint32_t IFMCR[SIUL2_IFMCR_COUNT];          /**< SIUL2 Interrupt Filter Maximum Counter, array offset: 0x40, array step: 0x4, irregular array, not all indices are valid */
   uint8_t RESERVED_8[48];
-  __IO uint32_t IFCPR;                             /**< SIUL2 Interrupt Filter Clock Prescaler Register, offset: 0xC0 */
+  __IO uint32_t IFCPR;                             /**< SIUL2 Interrupt Filter Clock Prescaler, offset: 0xC0 */
   uint8_t RESERVED_9[316];
-  __I  uint32_t MIDR3;                             /**< SIUL2 MCU ID Register #3, offset: 0x200 */
-  __I  uint32_t MIDR4;                             /**< SIUL2 MCU ID Register #4, offset: 0x204 */
+  __I  uint32_t MIDR3;                             /**< SIUL2 MCU ID 3, offset: 0x200, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint32_t MIDR4;                             /**< SIUL2 MCU ID 4, offset: 0x204, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
   uint8_t RESERVED_10[56];
-  __IO uint32_t MSCR[SIUL2_MSCR_COUNT];            /**< SIUL2 Multiplexed Signal Configuration Register, array offset: 0x240, array step: 0x4 */
+  __IO uint32_t MSCR[SIUL2_MSCR_COUNT];            /**< SIUL2 Multiplexed Signal Configuration Register, array offset: 0x240, array step: 0x4, irregular array, not all indices are valid */
   uint8_t RESERVED_11[32];
-  __IO uint32_t IMCR[SIUL2_IMCR_COUNT];            /**< SIUL2 Input Multiplexed Signal Configuration Register, array offset: 0xA40, array step: 0x4 */
+  __IO uint32_t IMCR[SIUL2_IMCR_COUNT];            /**< SIUL2 Input Multiplexed Signal Configuration, array offset: 0xA40, array step: 0x4, irregular array, not all indices are valid */
   uint8_t RESERVED_12[256];
-  __IO uint8_t GPDO3;                              /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1300 */
-  __IO uint8_t GPDO2;                              /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1301 */
-  __IO uint8_t GPDO1;                              /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1302 */
-  __IO uint8_t GPDO0;                              /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1303 */
-  __IO uint8_t GPDO7;                              /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1304 */
-  __IO uint8_t GPDO6;                              /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1305 */
-  __IO uint8_t GPDO5;                              /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1306 */
-  __IO uint8_t GPDO4;                              /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1307 */
-  __IO uint8_t GPDO11;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1308 */
-  __IO uint8_t GPDO10;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1309 */
-  __IO uint8_t GPDO9;                              /**< SIUL2 GPIO Pad Data Output Register, offset: 0x130A */
-  __IO uint8_t GPDO8;                              /**< SIUL2 GPIO Pad Data Output Register, offset: 0x130B */
-  __IO uint8_t GPDO15;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x130C */
-  __IO uint8_t GPDO14;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x130D */
-  __IO uint8_t GPDO13;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x130E */
-  __IO uint8_t GPDO12;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x130F */
-  __IO uint8_t GPDO19;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1310 */
-  __IO uint8_t GPDO18;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1311 */
-  __IO uint8_t GPDO17;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1312 */
-  __IO uint8_t GPDO16;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1313 */
-  __IO uint8_t GPDO23;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1314 */
-  __IO uint8_t GPDO22;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1315 */
-  __IO uint8_t GPDO21;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1316 */
-  __IO uint8_t GPDO20;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1317 */
-  __IO uint8_t GPDO27;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1318 */
-  __IO uint8_t GPDO26;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1319 */
-  __IO uint8_t GPDO25;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x131A */
-  __IO uint8_t GPDO24;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x131B */
-  __IO uint8_t GPDO31;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x131C */
-  __IO uint8_t GPDO30;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x131D */
-  __IO uint8_t GPDO29;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x131E */
-  __IO uint8_t GPDO28;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x131F */
-  __IO uint8_t GPDO35;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1320 */
-  __IO uint8_t GPDO34;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1321 */
-  __IO uint8_t GPDO33;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1322 */
-  __IO uint8_t GPDO32;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1323 */
-  __IO uint8_t GPDO39;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1324 */
-  __IO uint8_t GPDO38;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1325 */
-  __IO uint8_t GPDO37;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1326 */
-  __IO uint8_t GPDO36;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1327 */
-  __IO uint8_t GPDO43;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1328 */
-  __IO uint8_t GPDO42;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1329 */
-  __IO uint8_t GPDO41;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x132A */
-  __IO uint8_t GPDO40;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x132B */
-  __IO uint8_t GPDO47;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x132C */
-  __IO uint8_t GPDO46;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x132D */
-  __IO uint8_t GPDO45;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x132E */
-  __IO uint8_t GPDO44;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x132F */
-  __IO uint8_t GPDO51;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1330 */
-  __IO uint8_t GPDO50;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1331 */
-  __IO uint8_t GPDO49;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1332 */
-  __IO uint8_t GPDO48;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1333 */
-  __IO uint8_t GPDO55;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1334 */
-  __IO uint8_t GPDO54;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1335 */
-  __IO uint8_t GPDO53;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1336 */
-  __IO uint8_t GPDO52;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1337 */
-  __IO uint8_t GPDO59;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1338 */
-  __IO uint8_t GPDO58;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1339 */
-  __IO uint8_t GPDO57;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x133A */
-  __IO uint8_t GPDO56;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x133B */
-  __IO uint8_t GPDO63;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x133C */
-  __IO uint8_t GPDO62;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x133D */
-  __IO uint8_t GPDO61;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x133E */
-  __IO uint8_t GPDO60;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x133F */
-  __IO uint8_t GPDO67;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1340 */
-  __IO uint8_t GPDO66;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1341 */
-  __IO uint8_t GPDO65;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1342 */
-  __IO uint8_t GPDO64;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1343 */
-  __IO uint8_t GPDO71;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1344 */
-  __IO uint8_t GPDO70;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1345 */
-  __IO uint8_t GPDO69;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1346 */
-  __IO uint8_t GPDO68;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1347 */
-  __IO uint8_t GPDO75;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1348 */
-  __IO uint8_t GPDO74;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1349 */
-  __IO uint8_t GPDO73;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x134A */
-  __IO uint8_t GPDO72;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x134B */
-  __IO uint8_t GPDO79;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x134C */
-  __IO uint8_t GPDO78;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x134D */
-  __IO uint8_t GPDO77;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x134E */
-  __IO uint8_t GPDO76;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x134F */
-  __IO uint8_t GPDO83;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1350 */
-  __IO uint8_t GPDO82;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1351 */
-  __IO uint8_t GPDO81;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1352 */
-  __IO uint8_t GPDO80;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1353 */
-  __IO uint8_t GPDO87;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1354 */
-  __IO uint8_t GPDO86;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1355 */
-  __IO uint8_t GPDO85;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1356 */
-  __IO uint8_t GPDO84;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1357 */
-  __IO uint8_t GPDO91;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1358 */
-  __IO uint8_t GPDO90;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1359 */
-  __IO uint8_t GPDO89;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x135A */
-  __IO uint8_t GPDO88;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x135B */
-  __IO uint8_t GPDO95;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x135C */
-  __IO uint8_t GPDO94;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x135D */
-  __IO uint8_t GPDO93;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x135E */
-  __IO uint8_t GPDO92;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x135F */
-  __IO uint8_t GPDO99;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1360 */
-  __IO uint8_t GPDO98;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1361 */
-  __IO uint8_t GPDO97;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1362 */
-  __IO uint8_t GPDO96;                             /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1363 */
-  __IO uint8_t GPDO103;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1364 */
-  __IO uint8_t GPDO102;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1365 */
-  __IO uint8_t GPDO101;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1366 */
-  __IO uint8_t GPDO100;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1367 */
-  __IO uint8_t GPDO107;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1368 */
-  __IO uint8_t GPDO106;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1369 */
-  __IO uint8_t GPDO105;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x136A */
-  __IO uint8_t GPDO104;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x136B */
-  __IO uint8_t GPDO111;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x136C */
-  __IO uint8_t GPDO110;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x136D */
-  __IO uint8_t GPDO109;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x136E */
-  __IO uint8_t GPDO108;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x136F */
-  __IO uint8_t GPDO115;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1370 */
-  __IO uint8_t GPDO114;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1371 */
-  __IO uint8_t GPDO113;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1372 */
-  __IO uint8_t GPDO112;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1373 */
-  __IO uint8_t GPDO119;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1374 */
-  __IO uint8_t GPDO118;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1375 */
-  __IO uint8_t GPDO117;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1376 */
-  __IO uint8_t GPDO116;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1377 */
-  __IO uint8_t GPDO123;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1378 */
-  __IO uint8_t GPDO122;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1379 */
-  __IO uint8_t GPDO121;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x137A */
-  __IO uint8_t GPDO120;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x137B */
-  __IO uint8_t GPDO127;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x137C */
-  __IO uint8_t GPDO126;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x137D */
-  __IO uint8_t GPDO125;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x137E */
-  __IO uint8_t GPDO124;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x137F */
-  __IO uint8_t GPDO131;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1380 */
-  __IO uint8_t GPDO130;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1381 */
-  __IO uint8_t GPDO129;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1382 */
-  __IO uint8_t GPDO128;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1383 */
-  __IO uint8_t GPDO135;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1384 */
-  __IO uint8_t GPDO134;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1385 */
-  __IO uint8_t GPDO133;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1386 */
-  __IO uint8_t GPDO132;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1387 */
-  __IO uint8_t GPDO139;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1388 */
-  __IO uint8_t GPDO138;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1389 */
-  __IO uint8_t GPDO137;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x138A */
-  __IO uint8_t GPDO136;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x138B */
-  __IO uint8_t GPDO143;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x138C */
-  __IO uint8_t GPDO142;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x138D */
-  __IO uint8_t GPDO141;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x138E */
-  __IO uint8_t GPDO140;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x138F */
-  __IO uint8_t GPDO147;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1390 */
-  __IO uint8_t GPDO146;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1391 */
-  __IO uint8_t GPDO145;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1392 */
-  __IO uint8_t GPDO144;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1393 */
-  __IO uint8_t GPDO151;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1394 */
-  __IO uint8_t GPDO150;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1395 */
-  __IO uint8_t GPDO149;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1396 */
-  __IO uint8_t GPDO148;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1397 */
-  __IO uint8_t GPDO155;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1398 */
-  __IO uint8_t GPDO154;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x1399 */
-  __IO uint8_t GPDO153;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x139A */
-  __IO uint8_t GPDO152;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x139B */
-  __IO uint8_t GPDO159;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x139C */
-  __IO uint8_t GPDO158;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x139D */
-  __IO uint8_t GPDO157;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x139E */
-  __IO uint8_t GPDO156;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x139F */
-  __IO uint8_t GPDO163;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13A0 */
-  __IO uint8_t GPDO162;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13A1 */
-  __IO uint8_t GPDO161;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13A2 */
-  __IO uint8_t GPDO160;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13A3 */
-  __IO uint8_t GPDO167;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13A4 */
-  __IO uint8_t GPDO166;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13A5 */
-  __IO uint8_t GPDO165;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13A6 */
-  __IO uint8_t GPDO164;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13A7 */
-  __IO uint8_t GPDO171;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13A8 */
-  __IO uint8_t GPDO170;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13A9 */
-  __IO uint8_t GPDO169;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13AA */
-  __IO uint8_t GPDO168;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13AB */
+  __IO uint8_t GPDO3;                              /**< SIUL2 GPIO Pad Data Output, offset: 0x1300, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO2;                              /**< SIUL2 GPIO Pad Data Output, offset: 0x1301, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO1;                              /**< SIUL2 GPIO Pad Data Output, offset: 0x1302, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO0;                              /**< SIUL2 GPIO Pad Data Output, offset: 0x1303, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO7;                              /**< SIUL2 GPIO Pad Data Output, offset: 0x1304, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO6;                              /**< SIUL2 GPIO Pad Data Output, offset: 0x1305, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO5;                              /**< SIUL2 GPIO Pad Data Output, offset: 0x1306, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO4;                              /**< SIUL2 GPIO Pad Data Output, offset: 0x1307, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO11;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1308, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO10;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1309, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO9;                              /**< SIUL2 GPIO Pad Data Output, offset: 0x130A, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO8;                              /**< SIUL2 GPIO Pad Data Output, offset: 0x130B, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO15;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x130C, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO14;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x130D, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO13;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x130E, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO12;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x130F, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO19;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1310, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO18;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1311, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO17;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1312, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO16;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1313, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO23;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1314, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO22;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1315, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO21;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1316, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO20;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1317, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO27;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1318, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO26;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1319, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO25;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x131A, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO24;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x131B, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO31;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x131C, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO30;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x131D, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO29;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x131E, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO28;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x131F, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO35;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1320, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO34;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1321, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO33;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1322, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO32;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1323, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO39;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1324, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO38;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1325, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO37;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1326, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO36;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1327, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO43;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1328, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO42;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1329, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO41;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x132A, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO40;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x132B, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO47;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x132C, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO46;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x132D, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO45;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x132E, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO44;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x132F, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO51;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1330, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO50;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1331, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO49;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1332, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO48;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1333, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO55;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1334, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO54;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1335, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO53;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1336, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO52;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1337, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO59;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1338, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO58;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1339, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO57;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x133A, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO56;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x133B, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO63;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x133C, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO62;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x133D, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO61;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x133E, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO60;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x133F, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO67;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1340, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO66;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1341, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO65;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1342, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO64;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1343, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO71;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1344, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO70;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1345, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO69;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1346, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO68;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1347, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO75;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1348, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO74;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1349, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO73;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x134A, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO72;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x134B, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO79;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x134C, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO78;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x134D, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO77;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x134E, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO76;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x134F, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO83;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1350, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO82;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1351, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO81;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1352, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO80;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1353, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO87;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1354, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO86;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1355, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO85;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1356, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO84;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1357, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO91;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1358, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO90;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1359, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO89;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x135A, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO88;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x135B, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO95;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x135C, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO94;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x135D, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO93;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x135E, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO92;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x135F, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO99;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1360, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO98;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1361, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO97;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1362, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO96;                             /**< SIUL2 GPIO Pad Data Output, offset: 0x1363, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO103;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1364, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO102;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1365, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO101;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1366, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO100;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1367, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO107;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1368, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO106;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1369, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO105;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x136A, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO104;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x136B, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO111;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x136C, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO110;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x136D, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO109;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x136E, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO108;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x136F, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO115;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1370, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO114;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1371, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO113;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1372, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO112;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1373, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO119;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1374, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO118;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1375, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO117;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1376, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO116;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1377, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO123;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1378, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO122;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1379, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO121;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x137A, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO120;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x137B, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO127;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x137C, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO126;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x137D, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO125;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x137E, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO124;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x137F, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO131;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1380, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO130;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1381, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO129;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1382, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO128;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1383, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO135;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1384, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO134;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1385, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO133;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1386, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO132;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1387, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO139;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1388, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO138;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1389, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO137;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x138A, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO136;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x138B, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO143;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x138C, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO142;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x138D, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO141;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x138E, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO140;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x138F, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO147;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1390, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO146;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1391, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO145;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1392, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO144;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1393, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint8_t GPDO151;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1394, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO150;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1395, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO149;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1396, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO148;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1397, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO155;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1398, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO154;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x1399, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO153;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x139A, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO152;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x139B, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO159;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x139C, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO158;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x139D, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO157;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x139E, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO156;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x139F, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO163;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13A0, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO162;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13A1, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO161;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13A2, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO160;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13A3, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO167;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13A4, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO166;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13A5, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO165;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13A6, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO164;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13A7, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO171;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13A8, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO170;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13A9, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO169;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13AA, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __IO uint8_t GPDO168;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13AB, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
   uint8_t RESERVED_13[2];
-  __IO uint8_t GPDO173;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13AE */
-  __IO uint8_t GPDO172;                            /**< SIUL2 GPIO Pad Data Output Register, offset: 0x13AF */
+  __IO uint8_t GPDO173;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13AE, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint8_t GPDO172;                            /**< SIUL2 GPIO Pad Data Output, offset: 0x13AF, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
   uint8_t RESERVED_14[336];
-  __I  uint8_t GPDI3;                              /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1500 */
-  __I  uint8_t GPDI2;                              /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1501 */
-  __I  uint8_t GPDI1;                              /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1502 */
-  __I  uint8_t GPDI0;                              /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1503 */
-  __I  uint8_t GPDI7;                              /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1504 */
-  __I  uint8_t GPDI6;                              /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1505 */
-  __I  uint8_t GPDI5;                              /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1506 */
-  __I  uint8_t GPDI4;                              /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1507 */
-  __I  uint8_t GPDI11;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1508 */
-  __I  uint8_t GPDI10;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1509 */
-  __I  uint8_t GPDI9;                              /**< SIUL2 GPIO Pad Data Input Register, offset: 0x150A */
-  __I  uint8_t GPDI8;                              /**< SIUL2 GPIO Pad Data Input Register, offset: 0x150B */
-  __I  uint8_t GPDI15;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x150C */
-  __I  uint8_t GPDI14;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x150D */
-  __I  uint8_t GPDI13;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x150E */
-  __I  uint8_t GPDI12;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x150F */
-  __I  uint8_t GPDI19;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1510 */
-  __I  uint8_t GPDI18;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1511 */
-  __I  uint8_t GPDI17;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1512 */
-  __I  uint8_t GPDI16;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1513 */
-  __I  uint8_t GPDI23;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1514 */
-  __I  uint8_t GPDI22;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1515 */
-  __I  uint8_t GPDI21;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1516 */
-  __I  uint8_t GPDI20;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1517 */
-  __I  uint8_t GPDI27;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1518 */
-  __I  uint8_t GPDI26;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1519 */
-  __I  uint8_t GPDI25;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x151A */
-  __I  uint8_t GPDI24;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x151B */
-  __I  uint8_t GPDI31;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x151C */
-  __I  uint8_t GPDI30;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x151D */
-  __I  uint8_t GPDI29;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x151E */
-  __I  uint8_t GPDI28;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x151F */
-  __I  uint8_t GPDI35;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1520 */
-  __I  uint8_t GPDI34;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1521 */
-  __I  uint8_t GPDI33;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1522 */
-  __I  uint8_t GPDI32;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1523 */
-  __I  uint8_t GPDI39;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1524 */
-  __I  uint8_t GPDI38;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1525 */
-  __I  uint8_t GPDI37;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1526 */
-  __I  uint8_t GPDI36;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1527 */
-  __I  uint8_t GPDI43;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1528 */
-  __I  uint8_t GPDI42;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1529 */
-  __I  uint8_t GPDI41;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x152A */
-  __I  uint8_t GPDI40;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x152B */
-  __I  uint8_t GPDI47;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x152C */
-  __I  uint8_t GPDI46;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x152D */
-  __I  uint8_t GPDI45;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x152E */
-  __I  uint8_t GPDI44;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x152F */
-  __I  uint8_t GPDI51;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1530 */
-  __I  uint8_t GPDI50;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1531 */
-  __I  uint8_t GPDI49;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1532 */
-  __I  uint8_t GPDI48;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1533 */
-  __I  uint8_t GPDI55;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1534 */
-  __I  uint8_t GPDI54;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1535 */
-  __I  uint8_t GPDI53;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1536 */
-  __I  uint8_t GPDI52;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1537 */
-  __I  uint8_t GPDI59;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1538 */
-  __I  uint8_t GPDI58;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1539 */
-  __I  uint8_t GPDI57;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x153A */
-  __I  uint8_t GPDI56;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x153B */
-  __I  uint8_t GPDI63;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x153C */
-  __I  uint8_t GPDI62;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x153D */
-  __I  uint8_t GPDI61;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x153E */
-  __I  uint8_t GPDI60;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x153F */
-  __I  uint8_t GPDI67;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1540 */
-  __I  uint8_t GPDI66;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1541 */
-  __I  uint8_t GPDI65;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1542 */
-  __I  uint8_t GPDI64;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1543 */
-  __I  uint8_t GPDI71;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1544 */
-  __I  uint8_t GPDI70;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1545 */
-  __I  uint8_t GPDI69;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1546 */
-  __I  uint8_t GPDI68;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1547 */
-  __I  uint8_t GPDI75;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1548 */
-  __I  uint8_t GPDI74;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1549 */
-  __I  uint8_t GPDI73;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x154A */
-  __I  uint8_t GPDI72;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x154B */
-  __I  uint8_t GPDI79;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x154C */
-  __I  uint8_t GPDI78;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x154D */
-  __I  uint8_t GPDI77;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x154E */
-  __I  uint8_t GPDI76;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x154F */
-  __I  uint8_t GPDI83;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1550 */
-  __I  uint8_t GPDI82;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1551 */
-  __I  uint8_t GPDI81;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1552 */
-  __I  uint8_t GPDI80;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1553 */
-  __I  uint8_t GPDI87;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1554 */
-  __I  uint8_t GPDI86;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1555 */
-  __I  uint8_t GPDI85;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1556 */
-  __I  uint8_t GPDI84;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1557 */
-  __I  uint8_t GPDI91;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1558 */
-  __I  uint8_t GPDI90;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1559 */
-  __I  uint8_t GPDI89;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x155A */
-  __I  uint8_t GPDI88;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x155B */
-  __I  uint8_t GPDI95;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x155C */
-  __I  uint8_t GPDI94;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x155D */
-  __I  uint8_t GPDI93;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x155E */
-  __I  uint8_t GPDI92;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x155F */
-  __I  uint8_t GPDI99;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1560 */
-  __I  uint8_t GPDI98;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1561 */
-  __I  uint8_t GPDI97;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1562 */
-  __I  uint8_t GPDI96;                             /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1563 */
-  __I  uint8_t GPDI103;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1564 */
-  __I  uint8_t GPDI102;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1565 */
-  __I  uint8_t GPDI101;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1566 */
-  __I  uint8_t GPDI100;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1567 */
-  __I  uint8_t GPDI107;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1568 */
-  __I  uint8_t GPDI106;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1569 */
-  __I  uint8_t GPDI105;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x156A */
-  __I  uint8_t GPDI104;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x156B */
-  __I  uint8_t GPDI111;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x156C */
-  __I  uint8_t GPDI110;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x156D */
-  __I  uint8_t GPDI109;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x156E */
-  __I  uint8_t GPDI108;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x156F */
-  __I  uint8_t GPDI115;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1570 */
-  __I  uint8_t GPDI114;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1571 */
-  __I  uint8_t GPDI113;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1572 */
-  __I  uint8_t GPDI112;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1573 */
-  __I  uint8_t GPDI119;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1574 */
-  __I  uint8_t GPDI118;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1575 */
-  __I  uint8_t GPDI117;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1576 */
-  __I  uint8_t GPDI116;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1577 */
-  __I  uint8_t GPDI123;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1578 */
-  __I  uint8_t GPDI122;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1579 */
-  __I  uint8_t GPDI121;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x157A */
-  __I  uint8_t GPDI120;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x157B */
-  __I  uint8_t GPDI127;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x157C */
-  __I  uint8_t GPDI126;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x157D */
-  __I  uint8_t GPDI125;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x157E */
-  __I  uint8_t GPDI124;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x157F */
-  __I  uint8_t GPDI131;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1580 */
-  __I  uint8_t GPDI130;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1581 */
-  __I  uint8_t GPDI129;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1582 */
-  __I  uint8_t GPDI128;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1583 */
-  __I  uint8_t GPDI135;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1584 */
-  __I  uint8_t GPDI134;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1585 */
-  __I  uint8_t GPDI133;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1586 */
-  __I  uint8_t GPDI132;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1587 */
-  __I  uint8_t GPDI139;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1588 */
-  __I  uint8_t GPDI138;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1589 */
-  __I  uint8_t GPDI137;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x158A */
-  __I  uint8_t GPDI136;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x158B */
-  __I  uint8_t GPDI143;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x158C */
-  __I  uint8_t GPDI142;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x158D */
-  __I  uint8_t GPDI141;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x158E */
-  __I  uint8_t GPDI140;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x158F */
-  __I  uint8_t GPDI147;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1590 */
-  __I  uint8_t GPDI146;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1591 */
-  __I  uint8_t GPDI145;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1592 */
-  __I  uint8_t GPDI144;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1593 */
-  __I  uint8_t GPDI151;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1594 */
-  __I  uint8_t GPDI150;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1595 */
-  __I  uint8_t GPDI149;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1596 */
-  __I  uint8_t GPDI148;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1597 */
-  __I  uint8_t GPDI155;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1598 */
-  __I  uint8_t GPDI154;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x1599 */
-  __I  uint8_t GPDI153;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x159A */
-  __I  uint8_t GPDI152;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x159B */
-  __I  uint8_t GPDI159;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x159C */
-  __I  uint8_t GPDI158;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x159D */
-  __I  uint8_t GPDI157;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x159E */
-  __I  uint8_t GPDI156;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x159F */
-  __I  uint8_t GPDI163;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15A0 */
-  __I  uint8_t GPDI162;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15A1 */
-  __I  uint8_t GPDI161;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15A2 */
-  __I  uint8_t GPDI160;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15A3 */
-  __I  uint8_t GPDI167;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15A4 */
-  __I  uint8_t GPDI166;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15A5 */
-  __I  uint8_t GPDI165;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15A6 */
-  __I  uint8_t GPDI164;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15A7 */
-  __I  uint8_t GPDI171;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15A8 */
-  __I  uint8_t GPDI170;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15A9 */
-  __I  uint8_t GPDI169;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15AA */
-  __I  uint8_t GPDI168;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15AB */
+  __I  uint8_t GPDI3;                              /**< SIUL2 GPIO Pad Data Input, offset: 0x1500, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI2;                              /**< SIUL2 GPIO Pad Data Input, offset: 0x1501, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI1;                              /**< SIUL2 GPIO Pad Data Input, offset: 0x1502, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI0;                              /**< SIUL2 GPIO Pad Data Input, offset: 0x1503, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI7;                              /**< SIUL2 GPIO Pad Data Input, offset: 0x1504, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI6;                              /**< SIUL2 GPIO Pad Data Input, offset: 0x1505, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI5;                              /**< SIUL2 GPIO Pad Data Input, offset: 0x1506, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI4;                              /**< SIUL2 GPIO Pad Data Input, offset: 0x1507, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI11;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1508, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI10;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1509, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI9;                              /**< SIUL2 GPIO Pad Data Input, offset: 0x150A, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI8;                              /**< SIUL2 GPIO Pad Data Input, offset: 0x150B, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI15;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x150C, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI14;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x150D, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI13;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x150E, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI12;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x150F, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI19;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1510, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI18;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1511, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI17;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1512, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI16;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1513, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI23;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1514, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI22;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1515, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI21;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1516, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI20;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1517, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI27;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1518, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI26;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1519, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI25;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x151A, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI24;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x151B, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI31;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x151C, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI30;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x151D, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI29;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x151E, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI28;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x151F, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI35;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1520, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI34;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1521, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI33;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1522, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI32;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1523, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI39;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1524, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI38;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1525, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI37;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1526, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI36;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1527, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI43;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1528, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI42;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1529, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI41;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x152A, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI40;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x152B, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI47;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x152C, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI46;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x152D, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI45;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x152E, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI44;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x152F, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI51;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1530, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI50;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1531, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI49;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1532, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI48;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1533, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI55;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1534, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI54;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1535, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI53;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1536, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI52;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1537, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI59;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1538, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI58;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1539, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI57;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x153A, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI56;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x153B, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI63;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x153C, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI62;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x153D, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI61;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x153E, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI60;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x153F, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI67;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1540, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI66;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1541, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI65;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1542, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI64;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1543, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI71;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1544, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI70;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1545, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI69;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1546, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI68;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1547, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI75;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1548, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI74;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1549, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI73;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x154A, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI72;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x154B, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI79;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x154C, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI78;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x154D, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI77;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x154E, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI76;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x154F, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI83;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1550, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI82;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1551, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI81;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1552, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI80;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1553, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI87;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1554, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI86;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1555, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI85;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1556, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI84;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1557, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI91;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1558, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI90;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1559, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI89;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x155A, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI88;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x155B, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI95;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x155C, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI94;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x155D, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI93;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x155E, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI92;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x155F, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI99;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1560, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI98;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1561, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI97;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1562, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI96;                             /**< SIUL2 GPIO Pad Data Input, offset: 0x1563, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI103;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1564, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI102;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1565, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI101;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1566, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI100;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1567, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI107;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1568, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI106;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1569, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI105;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x156A, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI104;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x156B, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI111;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x156C, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI110;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x156D, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI109;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x156E, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI108;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x156F, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI115;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1570, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI114;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1571, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI113;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1572, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI112;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1573, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI119;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1574, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI118;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1575, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI117;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1576, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI116;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1577, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI123;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1578, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI122;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1579, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI121;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x157A, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI120;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x157B, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI127;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x157C, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI126;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x157D, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI125;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x157E, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI124;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x157F, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI131;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1580, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI130;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1581, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI129;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1582, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI128;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1583, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI135;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1584, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI134;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1585, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI133;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1586, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI132;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1587, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI139;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1588, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI138;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1589, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI137;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x158A, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI136;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x158B, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI143;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x158C, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI142;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x158D, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI141;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x158E, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI140;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x158F, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI147;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1590, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI146;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1591, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI145;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1592, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI144;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1593, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint8_t GPDI151;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1594, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI150;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1595, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI149;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1596, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI148;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1597, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI155;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1598, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI154;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x1599, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI153;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x159A, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI152;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x159B, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI159;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x159C, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI158;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x159D, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI157;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x159E, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI156;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x159F, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI163;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15A0, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI162;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15A1, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI161;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15A2, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI160;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15A3, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI167;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15A4, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI166;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15A5, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI165;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15A6, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI164;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15A7, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI171;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15A8, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI170;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15A9, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI169;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15AA, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
+  __I  uint8_t GPDI168;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15AB, available only on: SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_4) */
   uint8_t RESERVED_15[2];
-  __I  uint8_t GPDI173;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15AE */
-  __I  uint8_t GPDI172;                            /**< SIUL2 GPIO Pad Data Input Register, offset: 0x15AF */
+  __I  uint8_t GPDI173;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15AE, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint8_t GPDI172;                            /**< SIUL2 GPIO Pad Data Input, offset: 0x15AF, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
   uint8_t RESERVED_16[336];
-  __IO uint16_t PGPDO1;                            /**< SIUL2 Parallel GPIO Pad Data Out Register, offset: 0x1700 */
-  __IO uint16_t PGPDO0;                            /**< SIUL2 Parallel GPIO Pad Data Out Register, offset: 0x1702 */
-  __IO uint16_t PGPDO3;                            /**< SIUL2 Parallel GPIO Pad Data Out Register, offset: 0x1704 */
-  __IO uint16_t PGPDO2;                            /**< SIUL2 Parallel GPIO Pad Data Out Register, offset: 0x1706 */
-  __IO uint16_t PGPDO5;                            /**< SIUL2 Parallel GPIO Pad Data Out Register, offset: 0x1708 */
-  __IO uint16_t PGPDO4;                            /**< SIUL2 Parallel GPIO Pad Data Out Register, offset: 0x170A */
-  __IO uint16_t PGPDO7;                            /**< SIUL2 Parallel GPIO Pad Data Out Register, offset: 0x170C */
-  __IO uint16_t PGPDO6;                            /**< SIUL2 Parallel GPIO Pad Data Out Register, offset: 0x170E */
-  __IO uint16_t PGPDO9;                            /**< SIUL2 Parallel GPIO Pad Data Out Register, offset: 0x1710 */
-  __IO uint16_t PGPDO8;                            /**< SIUL2 Parallel GPIO Pad Data Out Register, offset: 0x1712 */
+  __IO uint16_t PGPDO1;                            /**< SIUL2 Parallel GPIO Pad Data Out, offset: 0x1700, available only on: SIUL2_0, SIUL2_1 (missing on SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint16_t PGPDO0;                            /**< SIUL2 Parallel GPIO Pad Data Out, offset: 0x1702, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint16_t PGPDO3;                            /**< SIUL2 Parallel GPIO Pad Data Out, offset: 0x1704, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint16_t PGPDO2;                            /**< SIUL2 Parallel GPIO Pad Data Out, offset: 0x1706, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint16_t PGPDO5;                            /**< SIUL2 Parallel GPIO Pad Data Out, offset: 0x1708, available only on: SIUL2_1, SIUL2_4 (missing on SIUL2_0, SIUL2_3, SIUL2_5) */
+  __IO uint16_t PGPDO4;                            /**< SIUL2 Parallel GPIO Pad Data Out, offset: 0x170A, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __IO uint16_t PGPDO7;                            /**< SIUL2 Parallel GPIO Pad Data Out, offset: 0x170C, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint16_t PGPDO6;                            /**< SIUL2 Parallel GPIO Pad Data Out, offset: 0x170E, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __IO uint16_t PGPDO9;                            /**< SIUL2 Parallel GPIO Pad Data Out, offset: 0x1710, available only on: SIUL2_4, SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3) */
+  __IO uint16_t PGPDO8;                            /**< SIUL2 Parallel GPIO Pad Data Out, offset: 0x1712, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
   uint8_t RESERVED_17[2];
-  __IO uint16_t PGPDO10;                           /**< SIUL2 Parallel GPIO Pad Data Out Register, offset: 0x1716 */
+  __IO uint16_t PGPDO10;                           /**< SIUL2 Parallel GPIO Pad Data Out, offset: 0x1716, available only on: SIUL2_0, SIUL2_5 (missing on SIUL2_1, SIUL2_3, SIUL2_4) */
   uint8_t RESERVED_18[40];
-  __I  uint16_t PGPDI1;                            /**< SIUL2 Parallel GPIO Pad Data In Register, offset: 0x1740 */
-  __I  uint16_t PGPDI0;                            /**< SIUL2 Parallel GPIO Pad Data In Register, offset: 0x1742 */
-  __I  uint16_t PGPDI3;                            /**< SIUL2 Parallel GPIO Pad Data In Register, offset: 0x1744 */
-  __I  uint16_t PGPDI2;                            /**< SIUL2 Parallel GPIO Pad Data In Register, offset: 0x1746 */
-  __I  uint16_t PGPDI5;                            /**< SIUL2 Parallel GPIO Pad Data In Register, offset: 0x1748 */
-  __I  uint16_t PGPDI4;                            /**< SIUL2 Parallel GPIO Pad Data In Register, offset: 0x174A */
-  __I  uint16_t PGPDI7;                            /**< SIUL2 Parallel GPIO Pad Data In Register, offset: 0x174C */
-  __I  uint16_t PGPDI6;                            /**< SIUL2 Parallel GPIO Pad Data In Register, offset: 0x174E */
-  __I  uint16_t PGPDI9;                            /**< SIUL2 Parallel GPIO Pad Data In Register, offset: 0x1750 */
-  __I  uint16_t PGPDI8;                            /**< SIUL2 Parallel GPIO Pad Data In Register, offset: 0x1752 */
+  __I  uint16_t PGPDI1;                            /**< SIUL2 Parallel GPIO Pad Data In, offset: 0x1740, available only on: SIUL2_0, SIUL2_1 (missing on SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint16_t PGPDI0;                            /**< SIUL2 Parallel GPIO Pad Data In, offset: 0x1742, available only on: SIUL2_0 (missing on SIUL2_1, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint16_t PGPDI3;                            /**< SIUL2 Parallel GPIO Pad Data In, offset: 0x1744, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint16_t PGPDI2;                            /**< SIUL2 Parallel GPIO Pad Data In, offset: 0x1746, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint16_t PGPDI5;                            /**< SIUL2 Parallel GPIO Pad Data In, offset: 0x1748, available only on: SIUL2_1, SIUL2_4 (missing on SIUL2_0, SIUL2_3, SIUL2_5) */
+  __I  uint16_t PGPDI4;                            /**< SIUL2 Parallel GPIO Pad Data In, offset: 0x174A, available only on: SIUL2_1 (missing on SIUL2_0, SIUL2_3, SIUL2_4, SIUL2_5) */
+  __I  uint16_t PGPDI7;                            /**< SIUL2 Parallel GPIO Pad Data In, offset: 0x174C, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint16_t PGPDI6;                            /**< SIUL2 Parallel GPIO Pad Data In, offset: 0x174E, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
+  __I  uint16_t PGPDI9;                            /**< SIUL2 Parallel GPIO Pad Data In, offset: 0x1750, available only on: SIUL2_4, SIUL2_5 (missing on SIUL2_0, SIUL2_1, SIUL2_3) */
+  __I  uint16_t PGPDI8;                            /**< SIUL2 Parallel GPIO Pad Data In, offset: 0x1752, available only on: SIUL2_4 (missing on SIUL2_0, SIUL2_1, SIUL2_3, SIUL2_5) */
   uint8_t RESERVED_19[2];
-  __I  uint16_t PGPDI10;                           /**< SIUL2 Parallel GPIO Pad Data In Register, offset: 0x1756 */
+  __I  uint16_t PGPDI10;                           /**< SIUL2 Parallel GPIO Pad Data In, offset: 0x1756, available only on: SIUL2_0, SIUL2_5 (missing on SIUL2_1, SIUL2_3, SIUL2_4) */
   uint8_t RESERVED_20[40];
-  __O  uint32_t MPGPDO[SIUL2_MPGPDO_COUNT];        /**< SIUL2 Masked Parallel GPIO Pad Data Out Register, array offset: 0x1780, array step: 0x4 */
+  __O  uint32_t MPGPDO[SIUL2_MPGPDO_COUNT];        /**< SIUL2 Masked Parallel GPIO Pad Data Out, array offset: 0x1780, array step: 0x4, irregular array, not all indices are valid */
 } SIUL2_Type, *SIUL2_MemMapPtr;
 
 /** Number of instances of the SIUL2 module. */
-#define SIUL2_INSTANCE_COUNT                     (5)
+#define SIUL2_INSTANCE_COUNT                     (5u)
 
 /* SIUL2 - Peripheral instance base addresses */
 /** Peripheral SIUL2_0 base address */
@@ -522,7 +522,7 @@ typedef struct {
  * @{
  */
 
-/*! @name MIDR1 - SIUL2 MCU ID Register #1 */
+/*! @name MIDR1 - SIUL2 MCU ID 1 */
 /*! @{ */
 
 #define SIUL2_MIDR1_MINOR_MASK_MASK              (0xFU)
@@ -546,7 +546,7 @@ typedef struct {
 #define SIUL2_MIDR1_PRODUCT_LINE_LETTER(x)       (((uint32_t)(((uint32_t)(x)) << SIUL2_MIDR1_PRODUCT_LINE_LETTER_SHIFT)) & SIUL2_MIDR1_PRODUCT_LINE_LETTER_MASK)
 /*! @} */
 
-/*! @name MIDR2 - SIUL2 MCU ID Register #2 */
+/*! @name MIDR2 - SIUL2 MCU ID 2 */
 /*! @{ */
 
 #define SIUL2_MIDR2_FLASH_SIZE_CODE_MASK         (0xFFU)
@@ -590,7 +590,7 @@ typedef struct {
 #define SIUL2_MIDR2_TECHNOLOGY(x)                (((uint32_t)(((uint32_t)(x)) << SIUL2_MIDR2_TECHNOLOGY_SHIFT)) & SIUL2_MIDR2_TECHNOLOGY_MASK)
 /*! @} */
 
-/*! @name DISR0 - SIUL2 DMA/Interrupt Status Flag Register0 */
+/*! @name DISR0 - SIUL2 DMA/Interrupt Status Flag 0 */
 /*! @{ */
 
 #define SIUL2_DISR0_EIF0_MASK                    (0x1U)
@@ -694,7 +694,7 @@ typedef struct {
 #define SIUL2_DISR0_EIF19(x)                     (((uint32_t)(((uint32_t)(x)) << SIUL2_DISR0_EIF19_SHIFT)) & SIUL2_DISR0_EIF19_MASK)
 /*! @} */
 
-/*! @name DIRER0 - SIUL2 DMA/Interrupt Request Enable Register0 */
+/*! @name DIRER0 - SIUL2 DMA/Interrupt Request Enable 0 */
 /*! @{ */
 
 #define SIUL2_DIRER0_EIRE0_MASK                  (0x1U)
@@ -798,7 +798,7 @@ typedef struct {
 #define SIUL2_DIRER0_EIRE19(x)                   (((uint32_t)(((uint32_t)(x)) << SIUL2_DIRER0_EIRE19_SHIFT)) & SIUL2_DIRER0_EIRE19_MASK)
 /*! @} */
 
-/*! @name DIRSR0 - SIUL2 DMA/Interrupt Request Select Register0 */
+/*! @name DIRSR0 - SIUL2 DMA/Interrupt Request Select 0 */
 /*! @{ */
 
 #define SIUL2_DIRSR0_DIRSR0_MASK                 (0x1U)
@@ -902,7 +902,7 @@ typedef struct {
 #define SIUL2_DIRSR0_DIRSR19(x)                  (((uint32_t)(((uint32_t)(x)) << SIUL2_DIRSR0_DIRSR19_SHIFT)) & SIUL2_DIRSR0_DIRSR19_MASK)
 /*! @} */
 
-/*! @name IREER0 - SIUL2 Interrupt Rising-Edge Event Enable Register 0 */
+/*! @name IREER0 - SIUL2 Interrupt Rising-Edge Event Enable 0 */
 /*! @{ */
 
 #define SIUL2_IREER0_IREE0_MASK                  (0x1U)
@@ -1006,7 +1006,7 @@ typedef struct {
 #define SIUL2_IREER0_IREE19(x)                   (((uint32_t)(((uint32_t)(x)) << SIUL2_IREER0_IREE19_SHIFT)) & SIUL2_IREER0_IREE19_MASK)
 /*! @} */
 
-/*! @name IFEER0 - SIUL2 Interrupt Falling-Edge Event Enable Register 0 */
+/*! @name IFEER0 - SIUL2 Interrupt Falling-Edge Event Enable 0 */
 /*! @{ */
 
 #define SIUL2_IFEER0_IFEE0_MASK                  (0x1U)
@@ -1110,7 +1110,7 @@ typedef struct {
 #define SIUL2_IFEER0_IFEE19(x)                   (((uint32_t)(((uint32_t)(x)) << SIUL2_IFEER0_IFEE19_SHIFT)) & SIUL2_IFEER0_IFEE19_MASK)
 /*! @} */
 
-/*! @name IFER0 - SIUL2 Interrupt Filter Enable Register 0 */
+/*! @name IFER0 - SIUL2 Interrupt Filter Enable 0 */
 /*! @{ */
 
 #define SIUL2_IFER0_IFE0_MASK                    (0x1U)
@@ -1214,7 +1214,7 @@ typedef struct {
 #define SIUL2_IFER0_IFE19(x)                     (((uint32_t)(((uint32_t)(x)) << SIUL2_IFER0_IFE19_SHIFT)) & SIUL2_IFER0_IFE19_MASK)
 /*! @} */
 
-/*! @name IFMCR - SIUL2 Interrupt Filter Maximum Counter Register */
+/*! @name IFMCR - SIUL2 Interrupt Filter Maximum Counter */
 /*! @{ */
 
 #define SIUL2_IFMCR_MAXCNT_MASK                  (0xFU)
@@ -1223,7 +1223,7 @@ typedef struct {
 #define SIUL2_IFMCR_MAXCNT(x)                    (((uint32_t)(((uint32_t)(x)) << SIUL2_IFMCR_MAXCNT_SHIFT)) & SIUL2_IFMCR_MAXCNT_MASK)
 /*! @} */
 
-/*! @name IFCPR - SIUL2 Interrupt Filter Clock Prescaler Register */
+/*! @name IFCPR - SIUL2 Interrupt Filter Clock Prescaler */
 /*! @{ */
 
 #define SIUL2_IFCPR_IFCP_MASK                    (0xFU)
@@ -1232,7 +1232,7 @@ typedef struct {
 #define SIUL2_IFCPR_IFCP(x)                      (((uint32_t)(((uint32_t)(x)) << SIUL2_IFCPR_IFCP_SHIFT)) & SIUL2_IFCPR_IFCP_MASK)
 /*! @} */
 
-/*! @name MIDR3 - SIUL2 MCU ID Register #3 */
+/*! @name MIDR3 - SIUL2 MCU ID 3 */
 /*! @{ */
 
 #define SIUL2_MIDR3_SYSTEM_RAM_SIZE_MASK         (0x3FU)
@@ -1256,7 +1256,7 @@ typedef struct {
 #define SIUL2_MIDR3_PRODUCT_FAMILY_LETTER(x)     (((uint32_t)(((uint32_t)(x)) << SIUL2_MIDR3_PRODUCT_FAMILY_LETTER_SHIFT)) & SIUL2_MIDR3_PRODUCT_FAMILY_LETTER_MASK)
 /*! @} */
 
-/*! @name MIDR4 - SIUL2 MCU ID Register #4 */
+/*! @name MIDR4 - SIUL2 MCU ID 4 */
 /*! @{ */
 
 #define SIUL2_MIDR4_AE0_MASK                     (0x1U)
@@ -1389,7 +1389,7 @@ typedef struct {
 #define SIUL2_MSCR_OBE(x)                        (((uint32_t)(((uint32_t)(x)) << SIUL2_MSCR_OBE_SHIFT)) & SIUL2_MSCR_OBE_MASK)
 /*! @} */
 
-/*! @name IMCR - SIUL2 Input Multiplexed Signal Configuration Register */
+/*! @name IMCR - SIUL2 Input Multiplexed Signal Configuration */
 /*! @{ */
 
 #define SIUL2_IMCR_SSS_MASK                      (0x7U)
@@ -1398,7 +1398,7 @@ typedef struct {
 #define SIUL2_IMCR_SSS(x)                        (((uint32_t)(((uint32_t)(x)) << SIUL2_IMCR_SSS_SHIFT)) & SIUL2_IMCR_SSS_MASK)
 /*! @} */
 
-/*! @name GPDO3 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO3 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO3_PDO_n_MASK                   (0x1U)
@@ -1407,7 +1407,7 @@ typedef struct {
 #define SIUL2_GPDO3_PDO_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO3_PDO_n_SHIFT)) & SIUL2_GPDO3_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO2 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO2 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO2_PDO_n_MASK                   (0x1U)
@@ -1416,7 +1416,7 @@ typedef struct {
 #define SIUL2_GPDO2_PDO_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO2_PDO_n_SHIFT)) & SIUL2_GPDO2_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO1 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO1 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO1_PDO_n_MASK                   (0x1U)
@@ -1425,7 +1425,7 @@ typedef struct {
 #define SIUL2_GPDO1_PDO_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO1_PDO_n_SHIFT)) & SIUL2_GPDO1_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO0 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO0 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO0_PDO_n_MASK                   (0x1U)
@@ -1434,7 +1434,7 @@ typedef struct {
 #define SIUL2_GPDO0_PDO_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO0_PDO_n_SHIFT)) & SIUL2_GPDO0_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO7 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO7 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO7_PDO_n_MASK                   (0x1U)
@@ -1443,7 +1443,7 @@ typedef struct {
 #define SIUL2_GPDO7_PDO_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO7_PDO_n_SHIFT)) & SIUL2_GPDO7_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO6 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO6 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO6_PDO_n_MASK                   (0x1U)
@@ -1452,7 +1452,7 @@ typedef struct {
 #define SIUL2_GPDO6_PDO_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO6_PDO_n_SHIFT)) & SIUL2_GPDO6_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO5 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO5 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO5_PDO_n_MASK                   (0x1U)
@@ -1461,7 +1461,7 @@ typedef struct {
 #define SIUL2_GPDO5_PDO_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO5_PDO_n_SHIFT)) & SIUL2_GPDO5_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO4 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO4 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO4_PDO_n_MASK                   (0x1U)
@@ -1470,7 +1470,7 @@ typedef struct {
 #define SIUL2_GPDO4_PDO_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO4_PDO_n_SHIFT)) & SIUL2_GPDO4_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO11 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO11 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO11_PDO_n_MASK                  (0x1U)
@@ -1479,7 +1479,7 @@ typedef struct {
 #define SIUL2_GPDO11_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO11_PDO_n_SHIFT)) & SIUL2_GPDO11_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO10 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO10 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO10_PDO_n_MASK                  (0x1U)
@@ -1488,7 +1488,7 @@ typedef struct {
 #define SIUL2_GPDO10_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO10_PDO_n_SHIFT)) & SIUL2_GPDO10_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO9 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO9 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO9_PDO_n_MASK                   (0x1U)
@@ -1497,7 +1497,7 @@ typedef struct {
 #define SIUL2_GPDO9_PDO_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO9_PDO_n_SHIFT)) & SIUL2_GPDO9_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO8 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO8 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO8_PDO_n_MASK                   (0x1U)
@@ -1506,7 +1506,7 @@ typedef struct {
 #define SIUL2_GPDO8_PDO_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO8_PDO_n_SHIFT)) & SIUL2_GPDO8_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO15 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO15 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO15_PDO_n_MASK                  (0x1U)
@@ -1515,7 +1515,7 @@ typedef struct {
 #define SIUL2_GPDO15_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO15_PDO_n_SHIFT)) & SIUL2_GPDO15_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO14 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO14 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO14_PDO_n_MASK                  (0x1U)
@@ -1524,7 +1524,7 @@ typedef struct {
 #define SIUL2_GPDO14_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO14_PDO_n_SHIFT)) & SIUL2_GPDO14_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO13 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO13 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO13_PDO_n_MASK                  (0x1U)
@@ -1533,7 +1533,7 @@ typedef struct {
 #define SIUL2_GPDO13_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO13_PDO_n_SHIFT)) & SIUL2_GPDO13_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO12 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO12 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO12_PDO_n_MASK                  (0x1U)
@@ -1542,7 +1542,7 @@ typedef struct {
 #define SIUL2_GPDO12_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO12_PDO_n_SHIFT)) & SIUL2_GPDO12_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO19 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO19 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO19_PDO_n_MASK                  (0x1U)
@@ -1551,7 +1551,7 @@ typedef struct {
 #define SIUL2_GPDO19_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO19_PDO_n_SHIFT)) & SIUL2_GPDO19_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO18 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO18 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO18_PDO_n_MASK                  (0x1U)
@@ -1560,7 +1560,7 @@ typedef struct {
 #define SIUL2_GPDO18_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO18_PDO_n_SHIFT)) & SIUL2_GPDO18_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO17 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO17 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO17_PDO_n_MASK                  (0x1U)
@@ -1569,7 +1569,7 @@ typedef struct {
 #define SIUL2_GPDO17_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO17_PDO_n_SHIFT)) & SIUL2_GPDO17_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO16 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO16 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO16_PDO_n_MASK                  (0x1U)
@@ -1578,7 +1578,7 @@ typedef struct {
 #define SIUL2_GPDO16_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO16_PDO_n_SHIFT)) & SIUL2_GPDO16_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO23 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO23 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO23_PDO_n_MASK                  (0x1U)
@@ -1587,7 +1587,7 @@ typedef struct {
 #define SIUL2_GPDO23_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO23_PDO_n_SHIFT)) & SIUL2_GPDO23_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO22 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO22 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO22_PDO_n_MASK                  (0x1U)
@@ -1596,7 +1596,7 @@ typedef struct {
 #define SIUL2_GPDO22_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO22_PDO_n_SHIFT)) & SIUL2_GPDO22_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO21 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO21 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO21_PDO_n_MASK                  (0x1U)
@@ -1605,7 +1605,7 @@ typedef struct {
 #define SIUL2_GPDO21_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO21_PDO_n_SHIFT)) & SIUL2_GPDO21_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO20 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO20 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO20_PDO_n_MASK                  (0x1U)
@@ -1614,7 +1614,7 @@ typedef struct {
 #define SIUL2_GPDO20_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO20_PDO_n_SHIFT)) & SIUL2_GPDO20_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO27 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO27 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO27_PDO_n_MASK                  (0x1U)
@@ -1623,7 +1623,7 @@ typedef struct {
 #define SIUL2_GPDO27_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO27_PDO_n_SHIFT)) & SIUL2_GPDO27_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO26 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO26 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO26_PDO_n_MASK                  (0x1U)
@@ -1632,7 +1632,7 @@ typedef struct {
 #define SIUL2_GPDO26_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO26_PDO_n_SHIFT)) & SIUL2_GPDO26_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO25 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO25 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO25_PDO_n_MASK                  (0x1U)
@@ -1641,7 +1641,7 @@ typedef struct {
 #define SIUL2_GPDO25_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO25_PDO_n_SHIFT)) & SIUL2_GPDO25_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO24 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO24 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO24_PDO_n_MASK                  (0x1U)
@@ -1650,7 +1650,7 @@ typedef struct {
 #define SIUL2_GPDO24_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO24_PDO_n_SHIFT)) & SIUL2_GPDO24_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO31 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO31 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO31_PDO_n_MASK                  (0x1U)
@@ -1659,7 +1659,7 @@ typedef struct {
 #define SIUL2_GPDO31_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO31_PDO_n_SHIFT)) & SIUL2_GPDO31_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO30 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO30 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO30_PDO_n_MASK                  (0x1U)
@@ -1668,7 +1668,7 @@ typedef struct {
 #define SIUL2_GPDO30_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO30_PDO_n_SHIFT)) & SIUL2_GPDO30_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO29 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO29 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO29_PDO_n_MASK                  (0x1U)
@@ -1677,7 +1677,7 @@ typedef struct {
 #define SIUL2_GPDO29_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO29_PDO_n_SHIFT)) & SIUL2_GPDO29_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO28 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO28 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO28_PDO_n_MASK                  (0x1U)
@@ -1686,7 +1686,7 @@ typedef struct {
 #define SIUL2_GPDO28_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO28_PDO_n_SHIFT)) & SIUL2_GPDO28_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO35 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO35 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO35_PDO_n_MASK                  (0x1U)
@@ -1695,7 +1695,7 @@ typedef struct {
 #define SIUL2_GPDO35_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO35_PDO_n_SHIFT)) & SIUL2_GPDO35_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO34 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO34 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO34_PDO_n_MASK                  (0x1U)
@@ -1704,7 +1704,7 @@ typedef struct {
 #define SIUL2_GPDO34_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO34_PDO_n_SHIFT)) & SIUL2_GPDO34_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO33 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO33 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO33_PDO_n_MASK                  (0x1U)
@@ -1713,7 +1713,7 @@ typedef struct {
 #define SIUL2_GPDO33_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO33_PDO_n_SHIFT)) & SIUL2_GPDO33_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO32 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO32 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO32_PDO_n_MASK                  (0x1U)
@@ -1722,7 +1722,7 @@ typedef struct {
 #define SIUL2_GPDO32_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO32_PDO_n_SHIFT)) & SIUL2_GPDO32_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO39 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO39 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO39_PDO_n_MASK                  (0x1U)
@@ -1731,7 +1731,7 @@ typedef struct {
 #define SIUL2_GPDO39_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO39_PDO_n_SHIFT)) & SIUL2_GPDO39_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO38 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO38 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO38_PDO_n_MASK                  (0x1U)
@@ -1740,7 +1740,7 @@ typedef struct {
 #define SIUL2_GPDO38_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO38_PDO_n_SHIFT)) & SIUL2_GPDO38_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO37 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO37 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO37_PDO_n_MASK                  (0x1U)
@@ -1749,7 +1749,7 @@ typedef struct {
 #define SIUL2_GPDO37_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO37_PDO_n_SHIFT)) & SIUL2_GPDO37_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO36 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO36 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO36_PDO_n_MASK                  (0x1U)
@@ -1758,7 +1758,7 @@ typedef struct {
 #define SIUL2_GPDO36_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO36_PDO_n_SHIFT)) & SIUL2_GPDO36_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO43 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO43 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO43_PDO_n_MASK                  (0x1U)
@@ -1767,7 +1767,7 @@ typedef struct {
 #define SIUL2_GPDO43_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO43_PDO_n_SHIFT)) & SIUL2_GPDO43_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO42 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO42 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO42_PDO_n_MASK                  (0x1U)
@@ -1776,7 +1776,7 @@ typedef struct {
 #define SIUL2_GPDO42_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO42_PDO_n_SHIFT)) & SIUL2_GPDO42_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO41 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO41 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO41_PDO_n_MASK                  (0x1U)
@@ -1785,7 +1785,7 @@ typedef struct {
 #define SIUL2_GPDO41_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO41_PDO_n_SHIFT)) & SIUL2_GPDO41_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO40 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO40 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO40_PDO_n_MASK                  (0x1U)
@@ -1794,7 +1794,7 @@ typedef struct {
 #define SIUL2_GPDO40_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO40_PDO_n_SHIFT)) & SIUL2_GPDO40_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO47 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO47 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO47_PDO_n_MASK                  (0x1U)
@@ -1803,7 +1803,7 @@ typedef struct {
 #define SIUL2_GPDO47_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO47_PDO_n_SHIFT)) & SIUL2_GPDO47_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO46 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO46 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO46_PDO_n_MASK                  (0x1U)
@@ -1812,7 +1812,7 @@ typedef struct {
 #define SIUL2_GPDO46_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO46_PDO_n_SHIFT)) & SIUL2_GPDO46_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO45 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO45 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO45_PDO_n_MASK                  (0x1U)
@@ -1821,7 +1821,7 @@ typedef struct {
 #define SIUL2_GPDO45_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO45_PDO_n_SHIFT)) & SIUL2_GPDO45_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO44 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO44 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO44_PDO_n_MASK                  (0x1U)
@@ -1830,7 +1830,7 @@ typedef struct {
 #define SIUL2_GPDO44_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO44_PDO_n_SHIFT)) & SIUL2_GPDO44_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO51 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO51 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO51_PDO_n_MASK                  (0x1U)
@@ -1839,7 +1839,7 @@ typedef struct {
 #define SIUL2_GPDO51_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO51_PDO_n_SHIFT)) & SIUL2_GPDO51_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO50 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO50 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO50_PDO_n_MASK                  (0x1U)
@@ -1848,7 +1848,7 @@ typedef struct {
 #define SIUL2_GPDO50_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO50_PDO_n_SHIFT)) & SIUL2_GPDO50_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO49 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO49 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO49_PDO_n_MASK                  (0x1U)
@@ -1857,7 +1857,7 @@ typedef struct {
 #define SIUL2_GPDO49_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO49_PDO_n_SHIFT)) & SIUL2_GPDO49_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO48 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO48 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO48_PDO_n_MASK                  (0x1U)
@@ -1866,7 +1866,7 @@ typedef struct {
 #define SIUL2_GPDO48_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO48_PDO_n_SHIFT)) & SIUL2_GPDO48_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO55 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO55 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO55_PDO_n_MASK                  (0x1U)
@@ -1875,7 +1875,7 @@ typedef struct {
 #define SIUL2_GPDO55_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO55_PDO_n_SHIFT)) & SIUL2_GPDO55_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO54 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO54 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO54_PDO_n_MASK                  (0x1U)
@@ -1884,7 +1884,7 @@ typedef struct {
 #define SIUL2_GPDO54_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO54_PDO_n_SHIFT)) & SIUL2_GPDO54_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO53 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO53 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO53_PDO_n_MASK                  (0x1U)
@@ -1893,7 +1893,7 @@ typedef struct {
 #define SIUL2_GPDO53_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO53_PDO_n_SHIFT)) & SIUL2_GPDO53_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO52 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO52 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO52_PDO_n_MASK                  (0x1U)
@@ -1902,7 +1902,7 @@ typedef struct {
 #define SIUL2_GPDO52_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO52_PDO_n_SHIFT)) & SIUL2_GPDO52_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO59 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO59 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO59_PDO_n_MASK                  (0x1U)
@@ -1911,7 +1911,7 @@ typedef struct {
 #define SIUL2_GPDO59_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO59_PDO_n_SHIFT)) & SIUL2_GPDO59_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO58 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO58 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO58_PDO_n_MASK                  (0x1U)
@@ -1920,7 +1920,7 @@ typedef struct {
 #define SIUL2_GPDO58_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO58_PDO_n_SHIFT)) & SIUL2_GPDO58_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO57 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO57 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO57_PDO_n_MASK                  (0x1U)
@@ -1929,7 +1929,7 @@ typedef struct {
 #define SIUL2_GPDO57_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO57_PDO_n_SHIFT)) & SIUL2_GPDO57_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO56 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO56 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO56_PDO_n_MASK                  (0x1U)
@@ -1938,7 +1938,7 @@ typedef struct {
 #define SIUL2_GPDO56_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO56_PDO_n_SHIFT)) & SIUL2_GPDO56_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO63 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO63 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO63_PDO_n_MASK                  (0x1U)
@@ -1947,7 +1947,7 @@ typedef struct {
 #define SIUL2_GPDO63_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO63_PDO_n_SHIFT)) & SIUL2_GPDO63_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO62 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO62 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO62_PDO_n_MASK                  (0x1U)
@@ -1956,7 +1956,7 @@ typedef struct {
 #define SIUL2_GPDO62_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO62_PDO_n_SHIFT)) & SIUL2_GPDO62_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO61 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO61 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO61_PDO_n_MASK                  (0x1U)
@@ -1965,7 +1965,7 @@ typedef struct {
 #define SIUL2_GPDO61_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO61_PDO_n_SHIFT)) & SIUL2_GPDO61_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO60 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO60 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO60_PDO_n_MASK                  (0x1U)
@@ -1974,7 +1974,7 @@ typedef struct {
 #define SIUL2_GPDO60_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO60_PDO_n_SHIFT)) & SIUL2_GPDO60_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO67 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO67 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO67_PDO_n_MASK                  (0x1U)
@@ -1983,7 +1983,7 @@ typedef struct {
 #define SIUL2_GPDO67_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO67_PDO_n_SHIFT)) & SIUL2_GPDO67_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO66 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO66 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO66_PDO_n_MASK                  (0x1U)
@@ -1992,7 +1992,7 @@ typedef struct {
 #define SIUL2_GPDO66_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO66_PDO_n_SHIFT)) & SIUL2_GPDO66_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO65 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO65 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO65_PDO_n_MASK                  (0x1U)
@@ -2001,7 +2001,7 @@ typedef struct {
 #define SIUL2_GPDO65_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO65_PDO_n_SHIFT)) & SIUL2_GPDO65_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO64 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO64 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO64_PDO_n_MASK                  (0x1U)
@@ -2010,7 +2010,7 @@ typedef struct {
 #define SIUL2_GPDO64_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO64_PDO_n_SHIFT)) & SIUL2_GPDO64_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO71 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO71 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO71_PDO_n_MASK                  (0x1U)
@@ -2019,7 +2019,7 @@ typedef struct {
 #define SIUL2_GPDO71_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO71_PDO_n_SHIFT)) & SIUL2_GPDO71_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO70 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO70 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO70_PDO_n_MASK                  (0x1U)
@@ -2028,7 +2028,7 @@ typedef struct {
 #define SIUL2_GPDO70_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO70_PDO_n_SHIFT)) & SIUL2_GPDO70_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO69 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO69 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO69_PDO_n_MASK                  (0x1U)
@@ -2037,7 +2037,7 @@ typedef struct {
 #define SIUL2_GPDO69_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO69_PDO_n_SHIFT)) & SIUL2_GPDO69_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO68 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO68 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO68_PDO_n_MASK                  (0x1U)
@@ -2046,7 +2046,7 @@ typedef struct {
 #define SIUL2_GPDO68_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO68_PDO_n_SHIFT)) & SIUL2_GPDO68_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO75 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO75 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO75_PDO_n_MASK                  (0x1U)
@@ -2055,7 +2055,7 @@ typedef struct {
 #define SIUL2_GPDO75_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO75_PDO_n_SHIFT)) & SIUL2_GPDO75_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO74 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO74 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO74_PDO_n_MASK                  (0x1U)
@@ -2064,7 +2064,7 @@ typedef struct {
 #define SIUL2_GPDO74_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO74_PDO_n_SHIFT)) & SIUL2_GPDO74_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO73 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO73 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO73_PDO_n_MASK                  (0x1U)
@@ -2073,7 +2073,7 @@ typedef struct {
 #define SIUL2_GPDO73_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO73_PDO_n_SHIFT)) & SIUL2_GPDO73_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO72 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO72 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO72_PDO_n_MASK                  (0x1U)
@@ -2082,7 +2082,7 @@ typedef struct {
 #define SIUL2_GPDO72_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO72_PDO_n_SHIFT)) & SIUL2_GPDO72_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO79 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO79 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO79_PDO_n_MASK                  (0x1U)
@@ -2091,7 +2091,7 @@ typedef struct {
 #define SIUL2_GPDO79_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO79_PDO_n_SHIFT)) & SIUL2_GPDO79_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO78 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO78 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO78_PDO_n_MASK                  (0x1U)
@@ -2100,7 +2100,7 @@ typedef struct {
 #define SIUL2_GPDO78_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO78_PDO_n_SHIFT)) & SIUL2_GPDO78_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO77 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO77 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO77_PDO_n_MASK                  (0x1U)
@@ -2109,7 +2109,7 @@ typedef struct {
 #define SIUL2_GPDO77_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO77_PDO_n_SHIFT)) & SIUL2_GPDO77_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO76 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO76 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO76_PDO_n_MASK                  (0x1U)
@@ -2118,7 +2118,7 @@ typedef struct {
 #define SIUL2_GPDO76_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO76_PDO_n_SHIFT)) & SIUL2_GPDO76_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO83 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO83 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO83_PDO_n_MASK                  (0x1U)
@@ -2127,7 +2127,7 @@ typedef struct {
 #define SIUL2_GPDO83_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO83_PDO_n_SHIFT)) & SIUL2_GPDO83_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO82 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO82 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO82_PDO_n_MASK                  (0x1U)
@@ -2136,7 +2136,7 @@ typedef struct {
 #define SIUL2_GPDO82_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO82_PDO_n_SHIFT)) & SIUL2_GPDO82_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO81 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO81 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO81_PDO_n_MASK                  (0x1U)
@@ -2145,7 +2145,7 @@ typedef struct {
 #define SIUL2_GPDO81_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO81_PDO_n_SHIFT)) & SIUL2_GPDO81_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO80 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO80 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO80_PDO_n_MASK                  (0x1U)
@@ -2154,7 +2154,7 @@ typedef struct {
 #define SIUL2_GPDO80_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO80_PDO_n_SHIFT)) & SIUL2_GPDO80_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO87 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO87 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO87_PDO_n_MASK                  (0x1U)
@@ -2163,7 +2163,7 @@ typedef struct {
 #define SIUL2_GPDO87_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO87_PDO_n_SHIFT)) & SIUL2_GPDO87_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO86 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO86 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO86_PDO_n_MASK                  (0x1U)
@@ -2172,7 +2172,7 @@ typedef struct {
 #define SIUL2_GPDO86_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO86_PDO_n_SHIFT)) & SIUL2_GPDO86_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO85 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO85 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO85_PDO_n_MASK                  (0x1U)
@@ -2181,7 +2181,7 @@ typedef struct {
 #define SIUL2_GPDO85_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO85_PDO_n_SHIFT)) & SIUL2_GPDO85_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO84 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO84 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO84_PDO_n_MASK                  (0x1U)
@@ -2190,7 +2190,7 @@ typedef struct {
 #define SIUL2_GPDO84_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO84_PDO_n_SHIFT)) & SIUL2_GPDO84_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO91 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO91 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO91_PDO_n_MASK                  (0x1U)
@@ -2199,7 +2199,7 @@ typedef struct {
 #define SIUL2_GPDO91_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO91_PDO_n_SHIFT)) & SIUL2_GPDO91_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO90 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO90 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO90_PDO_n_MASK                  (0x1U)
@@ -2208,7 +2208,7 @@ typedef struct {
 #define SIUL2_GPDO90_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO90_PDO_n_SHIFT)) & SIUL2_GPDO90_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO89 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO89 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO89_PDO_n_MASK                  (0x1U)
@@ -2217,7 +2217,7 @@ typedef struct {
 #define SIUL2_GPDO89_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO89_PDO_n_SHIFT)) & SIUL2_GPDO89_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO88 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO88 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO88_PDO_n_MASK                  (0x1U)
@@ -2226,7 +2226,7 @@ typedef struct {
 #define SIUL2_GPDO88_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO88_PDO_n_SHIFT)) & SIUL2_GPDO88_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO95 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO95 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO95_PDO_n_MASK                  (0x1U)
@@ -2235,7 +2235,7 @@ typedef struct {
 #define SIUL2_GPDO95_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO95_PDO_n_SHIFT)) & SIUL2_GPDO95_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO94 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO94 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO94_PDO_n_MASK                  (0x1U)
@@ -2244,7 +2244,7 @@ typedef struct {
 #define SIUL2_GPDO94_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO94_PDO_n_SHIFT)) & SIUL2_GPDO94_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO93 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO93 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO93_PDO_n_MASK                  (0x1U)
@@ -2253,7 +2253,7 @@ typedef struct {
 #define SIUL2_GPDO93_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO93_PDO_n_SHIFT)) & SIUL2_GPDO93_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO92 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO92 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO92_PDO_n_MASK                  (0x1U)
@@ -2262,7 +2262,7 @@ typedef struct {
 #define SIUL2_GPDO92_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO92_PDO_n_SHIFT)) & SIUL2_GPDO92_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO99 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO99 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO99_PDO_n_MASK                  (0x1U)
@@ -2271,7 +2271,7 @@ typedef struct {
 #define SIUL2_GPDO99_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO99_PDO_n_SHIFT)) & SIUL2_GPDO99_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO98 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO98 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO98_PDO_n_MASK                  (0x1U)
@@ -2280,7 +2280,7 @@ typedef struct {
 #define SIUL2_GPDO98_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO98_PDO_n_SHIFT)) & SIUL2_GPDO98_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO97 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO97 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO97_PDO_n_MASK                  (0x1U)
@@ -2289,7 +2289,7 @@ typedef struct {
 #define SIUL2_GPDO97_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO97_PDO_n_SHIFT)) & SIUL2_GPDO97_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO96 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO96 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO96_PDO_n_MASK                  (0x1U)
@@ -2298,7 +2298,7 @@ typedef struct {
 #define SIUL2_GPDO96_PDO_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO96_PDO_n_SHIFT)) & SIUL2_GPDO96_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO103 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO103 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO103_PDO_n_MASK                 (0x1U)
@@ -2307,7 +2307,7 @@ typedef struct {
 #define SIUL2_GPDO103_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO103_PDO_n_SHIFT)) & SIUL2_GPDO103_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO102 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO102 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO102_PDO_n_MASK                 (0x1U)
@@ -2316,7 +2316,7 @@ typedef struct {
 #define SIUL2_GPDO102_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO102_PDO_n_SHIFT)) & SIUL2_GPDO102_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO101 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO101 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO101_PDO_n_MASK                 (0x1U)
@@ -2325,7 +2325,7 @@ typedef struct {
 #define SIUL2_GPDO101_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO101_PDO_n_SHIFT)) & SIUL2_GPDO101_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO100 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO100 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO100_PDO_n_MASK                 (0x1U)
@@ -2334,7 +2334,7 @@ typedef struct {
 #define SIUL2_GPDO100_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO100_PDO_n_SHIFT)) & SIUL2_GPDO100_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO107 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO107 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO107_PDO_n_MASK                 (0x1U)
@@ -2343,7 +2343,7 @@ typedef struct {
 #define SIUL2_GPDO107_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO107_PDO_n_SHIFT)) & SIUL2_GPDO107_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO106 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO106 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO106_PDO_n_MASK                 (0x1U)
@@ -2352,7 +2352,7 @@ typedef struct {
 #define SIUL2_GPDO106_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO106_PDO_n_SHIFT)) & SIUL2_GPDO106_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO105 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO105 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO105_PDO_n_MASK                 (0x1U)
@@ -2361,7 +2361,7 @@ typedef struct {
 #define SIUL2_GPDO105_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO105_PDO_n_SHIFT)) & SIUL2_GPDO105_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO104 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO104 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO104_PDO_n_MASK                 (0x1U)
@@ -2370,7 +2370,7 @@ typedef struct {
 #define SIUL2_GPDO104_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO104_PDO_n_SHIFT)) & SIUL2_GPDO104_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO111 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO111 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO111_PDO_n_MASK                 (0x1U)
@@ -2379,7 +2379,7 @@ typedef struct {
 #define SIUL2_GPDO111_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO111_PDO_n_SHIFT)) & SIUL2_GPDO111_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO110 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO110 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO110_PDO_n_MASK                 (0x1U)
@@ -2388,7 +2388,7 @@ typedef struct {
 #define SIUL2_GPDO110_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO110_PDO_n_SHIFT)) & SIUL2_GPDO110_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO109 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO109 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO109_PDO_n_MASK                 (0x1U)
@@ -2397,7 +2397,7 @@ typedef struct {
 #define SIUL2_GPDO109_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO109_PDO_n_SHIFT)) & SIUL2_GPDO109_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO108 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO108 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO108_PDO_n_MASK                 (0x1U)
@@ -2406,7 +2406,7 @@ typedef struct {
 #define SIUL2_GPDO108_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO108_PDO_n_SHIFT)) & SIUL2_GPDO108_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO115 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO115 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO115_PDO_n_MASK                 (0x1U)
@@ -2415,7 +2415,7 @@ typedef struct {
 #define SIUL2_GPDO115_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO115_PDO_n_SHIFT)) & SIUL2_GPDO115_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO114 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO114 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO114_PDO_n_MASK                 (0x1U)
@@ -2424,7 +2424,7 @@ typedef struct {
 #define SIUL2_GPDO114_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO114_PDO_n_SHIFT)) & SIUL2_GPDO114_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO113 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO113 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO113_PDO_n_MASK                 (0x1U)
@@ -2433,7 +2433,7 @@ typedef struct {
 #define SIUL2_GPDO113_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO113_PDO_n_SHIFT)) & SIUL2_GPDO113_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO112 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO112 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO112_PDO_n_MASK                 (0x1U)
@@ -2442,7 +2442,7 @@ typedef struct {
 #define SIUL2_GPDO112_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO112_PDO_n_SHIFT)) & SIUL2_GPDO112_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO119 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO119 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO119_PDO_n_MASK                 (0x1U)
@@ -2451,7 +2451,7 @@ typedef struct {
 #define SIUL2_GPDO119_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO119_PDO_n_SHIFT)) & SIUL2_GPDO119_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO118 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO118 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO118_PDO_n_MASK                 (0x1U)
@@ -2460,7 +2460,7 @@ typedef struct {
 #define SIUL2_GPDO118_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO118_PDO_n_SHIFT)) & SIUL2_GPDO118_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO117 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO117 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO117_PDO_n_MASK                 (0x1U)
@@ -2469,7 +2469,7 @@ typedef struct {
 #define SIUL2_GPDO117_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO117_PDO_n_SHIFT)) & SIUL2_GPDO117_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO116 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO116 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO116_PDO_n_MASK                 (0x1U)
@@ -2478,7 +2478,7 @@ typedef struct {
 #define SIUL2_GPDO116_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO116_PDO_n_SHIFT)) & SIUL2_GPDO116_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO123 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO123 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO123_PDO_n_MASK                 (0x1U)
@@ -2487,7 +2487,7 @@ typedef struct {
 #define SIUL2_GPDO123_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO123_PDO_n_SHIFT)) & SIUL2_GPDO123_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO122 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO122 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO122_PDO_n_MASK                 (0x1U)
@@ -2496,7 +2496,7 @@ typedef struct {
 #define SIUL2_GPDO122_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO122_PDO_n_SHIFT)) & SIUL2_GPDO122_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO121 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO121 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO121_PDO_n_MASK                 (0x1U)
@@ -2505,7 +2505,7 @@ typedef struct {
 #define SIUL2_GPDO121_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO121_PDO_n_SHIFT)) & SIUL2_GPDO121_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO120 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO120 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO120_PDO_n_MASK                 (0x1U)
@@ -2514,7 +2514,7 @@ typedef struct {
 #define SIUL2_GPDO120_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO120_PDO_n_SHIFT)) & SIUL2_GPDO120_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO127 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO127 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO127_PDO_n_MASK                 (0x1U)
@@ -2523,7 +2523,7 @@ typedef struct {
 #define SIUL2_GPDO127_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO127_PDO_n_SHIFT)) & SIUL2_GPDO127_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO126 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO126 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO126_PDO_n_MASK                 (0x1U)
@@ -2532,7 +2532,7 @@ typedef struct {
 #define SIUL2_GPDO126_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO126_PDO_n_SHIFT)) & SIUL2_GPDO126_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO125 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO125 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO125_PDO_n_MASK                 (0x1U)
@@ -2541,7 +2541,7 @@ typedef struct {
 #define SIUL2_GPDO125_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO125_PDO_n_SHIFT)) & SIUL2_GPDO125_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO124 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO124 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO124_PDO_n_MASK                 (0x1U)
@@ -2550,7 +2550,7 @@ typedef struct {
 #define SIUL2_GPDO124_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO124_PDO_n_SHIFT)) & SIUL2_GPDO124_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO131 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO131 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO131_PDO_n_MASK                 (0x1U)
@@ -2559,7 +2559,7 @@ typedef struct {
 #define SIUL2_GPDO131_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO131_PDO_n_SHIFT)) & SIUL2_GPDO131_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO130 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO130 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO130_PDO_n_MASK                 (0x1U)
@@ -2568,7 +2568,7 @@ typedef struct {
 #define SIUL2_GPDO130_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO130_PDO_n_SHIFT)) & SIUL2_GPDO130_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO129 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO129 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO129_PDO_n_MASK                 (0x1U)
@@ -2577,7 +2577,7 @@ typedef struct {
 #define SIUL2_GPDO129_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO129_PDO_n_SHIFT)) & SIUL2_GPDO129_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO128 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO128 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO128_PDO_n_MASK                 (0x1U)
@@ -2586,7 +2586,7 @@ typedef struct {
 #define SIUL2_GPDO128_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO128_PDO_n_SHIFT)) & SIUL2_GPDO128_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO135 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO135 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO135_PDO_n_MASK                 (0x1U)
@@ -2595,7 +2595,7 @@ typedef struct {
 #define SIUL2_GPDO135_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO135_PDO_n_SHIFT)) & SIUL2_GPDO135_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO134 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO134 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO134_PDO_n_MASK                 (0x1U)
@@ -2604,7 +2604,7 @@ typedef struct {
 #define SIUL2_GPDO134_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO134_PDO_n_SHIFT)) & SIUL2_GPDO134_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO133 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO133 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO133_PDO_n_MASK                 (0x1U)
@@ -2613,7 +2613,7 @@ typedef struct {
 #define SIUL2_GPDO133_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO133_PDO_n_SHIFT)) & SIUL2_GPDO133_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO132 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO132 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO132_PDO_n_MASK                 (0x1U)
@@ -2622,7 +2622,7 @@ typedef struct {
 #define SIUL2_GPDO132_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO132_PDO_n_SHIFT)) & SIUL2_GPDO132_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO139 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO139 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO139_PDO_n_MASK                 (0x1U)
@@ -2631,7 +2631,7 @@ typedef struct {
 #define SIUL2_GPDO139_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO139_PDO_n_SHIFT)) & SIUL2_GPDO139_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO138 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO138 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO138_PDO_n_MASK                 (0x1U)
@@ -2640,7 +2640,7 @@ typedef struct {
 #define SIUL2_GPDO138_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO138_PDO_n_SHIFT)) & SIUL2_GPDO138_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO137 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO137 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO137_PDO_n_MASK                 (0x1U)
@@ -2649,7 +2649,7 @@ typedef struct {
 #define SIUL2_GPDO137_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO137_PDO_n_SHIFT)) & SIUL2_GPDO137_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO136 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO136 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO136_PDO_n_MASK                 (0x1U)
@@ -2658,7 +2658,7 @@ typedef struct {
 #define SIUL2_GPDO136_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO136_PDO_n_SHIFT)) & SIUL2_GPDO136_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO143 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO143 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO143_PDO_n_MASK                 (0x1U)
@@ -2667,7 +2667,7 @@ typedef struct {
 #define SIUL2_GPDO143_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO143_PDO_n_SHIFT)) & SIUL2_GPDO143_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO142 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO142 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO142_PDO_n_MASK                 (0x1U)
@@ -2676,7 +2676,7 @@ typedef struct {
 #define SIUL2_GPDO142_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO142_PDO_n_SHIFT)) & SIUL2_GPDO142_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO141 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO141 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO141_PDO_n_MASK                 (0x1U)
@@ -2685,7 +2685,7 @@ typedef struct {
 #define SIUL2_GPDO141_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO141_PDO_n_SHIFT)) & SIUL2_GPDO141_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO140 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO140 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO140_PDO_n_MASK                 (0x1U)
@@ -2694,7 +2694,7 @@ typedef struct {
 #define SIUL2_GPDO140_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO140_PDO_n_SHIFT)) & SIUL2_GPDO140_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO147 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO147 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO147_PDO_n_MASK                 (0x1U)
@@ -2703,7 +2703,7 @@ typedef struct {
 #define SIUL2_GPDO147_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO147_PDO_n_SHIFT)) & SIUL2_GPDO147_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO146 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO146 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO146_PDO_n_MASK                 (0x1U)
@@ -2712,7 +2712,7 @@ typedef struct {
 #define SIUL2_GPDO146_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO146_PDO_n_SHIFT)) & SIUL2_GPDO146_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO145 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO145 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO145_PDO_n_MASK                 (0x1U)
@@ -2721,7 +2721,7 @@ typedef struct {
 #define SIUL2_GPDO145_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO145_PDO_n_SHIFT)) & SIUL2_GPDO145_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO144 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO144 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO144_PDO_n_MASK                 (0x1U)
@@ -2730,7 +2730,7 @@ typedef struct {
 #define SIUL2_GPDO144_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO144_PDO_n_SHIFT)) & SIUL2_GPDO144_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO151 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO151 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO151_PDO_n_MASK                 (0x1U)
@@ -2739,7 +2739,7 @@ typedef struct {
 #define SIUL2_GPDO151_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO151_PDO_n_SHIFT)) & SIUL2_GPDO151_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO150 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO150 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO150_PDO_n_MASK                 (0x1U)
@@ -2748,7 +2748,7 @@ typedef struct {
 #define SIUL2_GPDO150_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO150_PDO_n_SHIFT)) & SIUL2_GPDO150_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO149 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO149 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO149_PDO_n_MASK                 (0x1U)
@@ -2757,7 +2757,7 @@ typedef struct {
 #define SIUL2_GPDO149_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO149_PDO_n_SHIFT)) & SIUL2_GPDO149_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO148 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO148 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO148_PDO_n_MASK                 (0x1U)
@@ -2766,7 +2766,7 @@ typedef struct {
 #define SIUL2_GPDO148_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO148_PDO_n_SHIFT)) & SIUL2_GPDO148_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO155 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO155 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO155_PDO_n_MASK                 (0x1U)
@@ -2775,7 +2775,7 @@ typedef struct {
 #define SIUL2_GPDO155_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO155_PDO_n_SHIFT)) & SIUL2_GPDO155_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO154 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO154 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO154_PDO_n_MASK                 (0x1U)
@@ -2784,7 +2784,7 @@ typedef struct {
 #define SIUL2_GPDO154_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO154_PDO_n_SHIFT)) & SIUL2_GPDO154_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO153 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO153 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO153_PDO_n_MASK                 (0x1U)
@@ -2793,7 +2793,7 @@ typedef struct {
 #define SIUL2_GPDO153_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO153_PDO_n_SHIFT)) & SIUL2_GPDO153_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO152 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO152 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO152_PDO_n_MASK                 (0x1U)
@@ -2802,7 +2802,7 @@ typedef struct {
 #define SIUL2_GPDO152_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO152_PDO_n_SHIFT)) & SIUL2_GPDO152_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO159 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO159 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO159_PDO_n_MASK                 (0x1U)
@@ -2811,7 +2811,7 @@ typedef struct {
 #define SIUL2_GPDO159_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO159_PDO_n_SHIFT)) & SIUL2_GPDO159_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO158 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO158 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO158_PDO_n_MASK                 (0x1U)
@@ -2820,7 +2820,7 @@ typedef struct {
 #define SIUL2_GPDO158_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO158_PDO_n_SHIFT)) & SIUL2_GPDO158_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO157 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO157 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO157_PDO_n_MASK                 (0x1U)
@@ -2829,7 +2829,7 @@ typedef struct {
 #define SIUL2_GPDO157_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO157_PDO_n_SHIFT)) & SIUL2_GPDO157_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO156 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO156 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO156_PDO_n_MASK                 (0x1U)
@@ -2838,7 +2838,7 @@ typedef struct {
 #define SIUL2_GPDO156_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO156_PDO_n_SHIFT)) & SIUL2_GPDO156_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO163 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO163 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO163_PDO_n_MASK                 (0x1U)
@@ -2847,7 +2847,7 @@ typedef struct {
 #define SIUL2_GPDO163_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO163_PDO_n_SHIFT)) & SIUL2_GPDO163_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO162 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO162 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO162_PDO_n_MASK                 (0x1U)
@@ -2856,7 +2856,7 @@ typedef struct {
 #define SIUL2_GPDO162_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO162_PDO_n_SHIFT)) & SIUL2_GPDO162_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO161 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO161 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO161_PDO_n_MASK                 (0x1U)
@@ -2865,7 +2865,7 @@ typedef struct {
 #define SIUL2_GPDO161_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO161_PDO_n_SHIFT)) & SIUL2_GPDO161_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO160 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO160 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO160_PDO_n_MASK                 (0x1U)
@@ -2874,7 +2874,7 @@ typedef struct {
 #define SIUL2_GPDO160_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO160_PDO_n_SHIFT)) & SIUL2_GPDO160_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO167 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO167 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO167_PDO_n_MASK                 (0x1U)
@@ -2883,7 +2883,7 @@ typedef struct {
 #define SIUL2_GPDO167_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO167_PDO_n_SHIFT)) & SIUL2_GPDO167_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO166 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO166 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO166_PDO_n_MASK                 (0x1U)
@@ -2892,7 +2892,7 @@ typedef struct {
 #define SIUL2_GPDO166_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO166_PDO_n_SHIFT)) & SIUL2_GPDO166_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO165 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO165 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO165_PDO_n_MASK                 (0x1U)
@@ -2901,7 +2901,7 @@ typedef struct {
 #define SIUL2_GPDO165_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO165_PDO_n_SHIFT)) & SIUL2_GPDO165_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO164 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO164 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO164_PDO_n_MASK                 (0x1U)
@@ -2910,7 +2910,7 @@ typedef struct {
 #define SIUL2_GPDO164_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO164_PDO_n_SHIFT)) & SIUL2_GPDO164_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO171 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO171 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO171_PDO_n_MASK                 (0x1U)
@@ -2919,7 +2919,7 @@ typedef struct {
 #define SIUL2_GPDO171_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO171_PDO_n_SHIFT)) & SIUL2_GPDO171_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO170 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO170 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO170_PDO_n_MASK                 (0x1U)
@@ -2928,7 +2928,7 @@ typedef struct {
 #define SIUL2_GPDO170_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO170_PDO_n_SHIFT)) & SIUL2_GPDO170_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO169 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO169 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO169_PDO_n_MASK                 (0x1U)
@@ -2937,7 +2937,7 @@ typedef struct {
 #define SIUL2_GPDO169_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO169_PDO_n_SHIFT)) & SIUL2_GPDO169_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO168 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO168 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO168_PDO_n_MASK                 (0x1U)
@@ -2946,7 +2946,7 @@ typedef struct {
 #define SIUL2_GPDO168_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO168_PDO_n_SHIFT)) & SIUL2_GPDO168_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO173 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO173 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO173_PDO_n_MASK                 (0x1U)
@@ -2955,7 +2955,7 @@ typedef struct {
 #define SIUL2_GPDO173_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO173_PDO_n_SHIFT)) & SIUL2_GPDO173_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDO172 - SIUL2 GPIO Pad Data Output Register */
+/*! @name GPDO172 - SIUL2 GPIO Pad Data Output */
 /*! @{ */
 
 #define SIUL2_GPDO172_PDO_n_MASK                 (0x1U)
@@ -2964,7 +2964,7 @@ typedef struct {
 #define SIUL2_GPDO172_PDO_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDO172_PDO_n_SHIFT)) & SIUL2_GPDO172_PDO_n_MASK)
 /*! @} */
 
-/*! @name GPDI3 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI3 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI3_PDI_n_MASK                   (0x1U)
@@ -2973,7 +2973,7 @@ typedef struct {
 #define SIUL2_GPDI3_PDI_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI3_PDI_n_SHIFT)) & SIUL2_GPDI3_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI2 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI2 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI2_PDI_n_MASK                   (0x1U)
@@ -2982,7 +2982,7 @@ typedef struct {
 #define SIUL2_GPDI2_PDI_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI2_PDI_n_SHIFT)) & SIUL2_GPDI2_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI1 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI1 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI1_PDI_n_MASK                   (0x1U)
@@ -2991,7 +2991,7 @@ typedef struct {
 #define SIUL2_GPDI1_PDI_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI1_PDI_n_SHIFT)) & SIUL2_GPDI1_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI0 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI0 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI0_PDI_n_MASK                   (0x1U)
@@ -3000,7 +3000,7 @@ typedef struct {
 #define SIUL2_GPDI0_PDI_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI0_PDI_n_SHIFT)) & SIUL2_GPDI0_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI7 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI7 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI7_PDI_n_MASK                   (0x1U)
@@ -3009,7 +3009,7 @@ typedef struct {
 #define SIUL2_GPDI7_PDI_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI7_PDI_n_SHIFT)) & SIUL2_GPDI7_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI6 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI6 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI6_PDI_n_MASK                   (0x1U)
@@ -3018,7 +3018,7 @@ typedef struct {
 #define SIUL2_GPDI6_PDI_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI6_PDI_n_SHIFT)) & SIUL2_GPDI6_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI5 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI5 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI5_PDI_n_MASK                   (0x1U)
@@ -3027,7 +3027,7 @@ typedef struct {
 #define SIUL2_GPDI5_PDI_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI5_PDI_n_SHIFT)) & SIUL2_GPDI5_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI4 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI4 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI4_PDI_n_MASK                   (0x1U)
@@ -3036,7 +3036,7 @@ typedef struct {
 #define SIUL2_GPDI4_PDI_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI4_PDI_n_SHIFT)) & SIUL2_GPDI4_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI11 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI11 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI11_PDI_n_MASK                  (0x1U)
@@ -3045,7 +3045,7 @@ typedef struct {
 #define SIUL2_GPDI11_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI11_PDI_n_SHIFT)) & SIUL2_GPDI11_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI10 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI10 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI10_PDI_n_MASK                  (0x1U)
@@ -3054,7 +3054,7 @@ typedef struct {
 #define SIUL2_GPDI10_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI10_PDI_n_SHIFT)) & SIUL2_GPDI10_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI9 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI9 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI9_PDI_n_MASK                   (0x1U)
@@ -3063,7 +3063,7 @@ typedef struct {
 #define SIUL2_GPDI9_PDI_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI9_PDI_n_SHIFT)) & SIUL2_GPDI9_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI8 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI8 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI8_PDI_n_MASK                   (0x1U)
@@ -3072,7 +3072,7 @@ typedef struct {
 #define SIUL2_GPDI8_PDI_n(x)                     (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI8_PDI_n_SHIFT)) & SIUL2_GPDI8_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI15 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI15 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI15_PDI_n_MASK                  (0x1U)
@@ -3081,7 +3081,7 @@ typedef struct {
 #define SIUL2_GPDI15_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI15_PDI_n_SHIFT)) & SIUL2_GPDI15_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI14 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI14 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI14_PDI_n_MASK                  (0x1U)
@@ -3090,7 +3090,7 @@ typedef struct {
 #define SIUL2_GPDI14_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI14_PDI_n_SHIFT)) & SIUL2_GPDI14_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI13 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI13 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI13_PDI_n_MASK                  (0x1U)
@@ -3099,7 +3099,7 @@ typedef struct {
 #define SIUL2_GPDI13_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI13_PDI_n_SHIFT)) & SIUL2_GPDI13_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI12 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI12 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI12_PDI_n_MASK                  (0x1U)
@@ -3108,7 +3108,7 @@ typedef struct {
 #define SIUL2_GPDI12_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI12_PDI_n_SHIFT)) & SIUL2_GPDI12_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI19 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI19 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI19_PDI_n_MASK                  (0x1U)
@@ -3117,7 +3117,7 @@ typedef struct {
 #define SIUL2_GPDI19_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI19_PDI_n_SHIFT)) & SIUL2_GPDI19_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI18 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI18 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI18_PDI_n_MASK                  (0x1U)
@@ -3126,7 +3126,7 @@ typedef struct {
 #define SIUL2_GPDI18_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI18_PDI_n_SHIFT)) & SIUL2_GPDI18_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI17 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI17 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI17_PDI_n_MASK                  (0x1U)
@@ -3135,7 +3135,7 @@ typedef struct {
 #define SIUL2_GPDI17_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI17_PDI_n_SHIFT)) & SIUL2_GPDI17_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI16 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI16 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI16_PDI_n_MASK                  (0x1U)
@@ -3144,7 +3144,7 @@ typedef struct {
 #define SIUL2_GPDI16_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI16_PDI_n_SHIFT)) & SIUL2_GPDI16_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI23 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI23 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI23_PDI_n_MASK                  (0x1U)
@@ -3153,7 +3153,7 @@ typedef struct {
 #define SIUL2_GPDI23_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI23_PDI_n_SHIFT)) & SIUL2_GPDI23_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI22 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI22 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI22_PDI_n_MASK                  (0x1U)
@@ -3162,7 +3162,7 @@ typedef struct {
 #define SIUL2_GPDI22_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI22_PDI_n_SHIFT)) & SIUL2_GPDI22_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI21 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI21 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI21_PDI_n_MASK                  (0x1U)
@@ -3171,7 +3171,7 @@ typedef struct {
 #define SIUL2_GPDI21_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI21_PDI_n_SHIFT)) & SIUL2_GPDI21_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI20 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI20 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI20_PDI_n_MASK                  (0x1U)
@@ -3180,7 +3180,7 @@ typedef struct {
 #define SIUL2_GPDI20_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI20_PDI_n_SHIFT)) & SIUL2_GPDI20_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI27 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI27 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI27_PDI_n_MASK                  (0x1U)
@@ -3189,7 +3189,7 @@ typedef struct {
 #define SIUL2_GPDI27_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI27_PDI_n_SHIFT)) & SIUL2_GPDI27_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI26 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI26 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI26_PDI_n_MASK                  (0x1U)
@@ -3198,7 +3198,7 @@ typedef struct {
 #define SIUL2_GPDI26_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI26_PDI_n_SHIFT)) & SIUL2_GPDI26_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI25 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI25 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI25_PDI_n_MASK                  (0x1U)
@@ -3207,7 +3207,7 @@ typedef struct {
 #define SIUL2_GPDI25_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI25_PDI_n_SHIFT)) & SIUL2_GPDI25_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI24 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI24 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI24_PDI_n_MASK                  (0x1U)
@@ -3216,7 +3216,7 @@ typedef struct {
 #define SIUL2_GPDI24_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI24_PDI_n_SHIFT)) & SIUL2_GPDI24_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI31 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI31 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI31_PDI_n_MASK                  (0x1U)
@@ -3225,7 +3225,7 @@ typedef struct {
 #define SIUL2_GPDI31_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI31_PDI_n_SHIFT)) & SIUL2_GPDI31_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI30 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI30 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI30_PDI_n_MASK                  (0x1U)
@@ -3234,7 +3234,7 @@ typedef struct {
 #define SIUL2_GPDI30_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI30_PDI_n_SHIFT)) & SIUL2_GPDI30_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI29 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI29 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI29_PDI_n_MASK                  (0x1U)
@@ -3243,7 +3243,7 @@ typedef struct {
 #define SIUL2_GPDI29_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI29_PDI_n_SHIFT)) & SIUL2_GPDI29_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI28 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI28 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI28_PDI_n_MASK                  (0x1U)
@@ -3252,7 +3252,7 @@ typedef struct {
 #define SIUL2_GPDI28_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI28_PDI_n_SHIFT)) & SIUL2_GPDI28_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI35 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI35 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI35_PDI_n_MASK                  (0x1U)
@@ -3261,7 +3261,7 @@ typedef struct {
 #define SIUL2_GPDI35_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI35_PDI_n_SHIFT)) & SIUL2_GPDI35_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI34 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI34 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI34_PDI_n_MASK                  (0x1U)
@@ -3270,7 +3270,7 @@ typedef struct {
 #define SIUL2_GPDI34_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI34_PDI_n_SHIFT)) & SIUL2_GPDI34_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI33 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI33 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI33_PDI_n_MASK                  (0x1U)
@@ -3279,7 +3279,7 @@ typedef struct {
 #define SIUL2_GPDI33_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI33_PDI_n_SHIFT)) & SIUL2_GPDI33_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI32 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI32 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI32_PDI_n_MASK                  (0x1U)
@@ -3288,7 +3288,7 @@ typedef struct {
 #define SIUL2_GPDI32_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI32_PDI_n_SHIFT)) & SIUL2_GPDI32_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI39 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI39 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI39_PDI_n_MASK                  (0x1U)
@@ -3297,7 +3297,7 @@ typedef struct {
 #define SIUL2_GPDI39_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI39_PDI_n_SHIFT)) & SIUL2_GPDI39_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI38 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI38 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI38_PDI_n_MASK                  (0x1U)
@@ -3306,7 +3306,7 @@ typedef struct {
 #define SIUL2_GPDI38_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI38_PDI_n_SHIFT)) & SIUL2_GPDI38_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI37 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI37 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI37_PDI_n_MASK                  (0x1U)
@@ -3315,7 +3315,7 @@ typedef struct {
 #define SIUL2_GPDI37_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI37_PDI_n_SHIFT)) & SIUL2_GPDI37_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI36 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI36 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI36_PDI_n_MASK                  (0x1U)
@@ -3324,7 +3324,7 @@ typedef struct {
 #define SIUL2_GPDI36_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI36_PDI_n_SHIFT)) & SIUL2_GPDI36_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI43 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI43 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI43_PDI_n_MASK                  (0x1U)
@@ -3333,7 +3333,7 @@ typedef struct {
 #define SIUL2_GPDI43_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI43_PDI_n_SHIFT)) & SIUL2_GPDI43_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI42 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI42 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI42_PDI_n_MASK                  (0x1U)
@@ -3342,7 +3342,7 @@ typedef struct {
 #define SIUL2_GPDI42_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI42_PDI_n_SHIFT)) & SIUL2_GPDI42_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI41 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI41 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI41_PDI_n_MASK                  (0x1U)
@@ -3351,7 +3351,7 @@ typedef struct {
 #define SIUL2_GPDI41_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI41_PDI_n_SHIFT)) & SIUL2_GPDI41_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI40 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI40 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI40_PDI_n_MASK                  (0x1U)
@@ -3360,7 +3360,7 @@ typedef struct {
 #define SIUL2_GPDI40_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI40_PDI_n_SHIFT)) & SIUL2_GPDI40_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI47 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI47 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI47_PDI_n_MASK                  (0x1U)
@@ -3369,7 +3369,7 @@ typedef struct {
 #define SIUL2_GPDI47_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI47_PDI_n_SHIFT)) & SIUL2_GPDI47_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI46 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI46 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI46_PDI_n_MASK                  (0x1U)
@@ -3378,7 +3378,7 @@ typedef struct {
 #define SIUL2_GPDI46_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI46_PDI_n_SHIFT)) & SIUL2_GPDI46_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI45 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI45 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI45_PDI_n_MASK                  (0x1U)
@@ -3387,7 +3387,7 @@ typedef struct {
 #define SIUL2_GPDI45_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI45_PDI_n_SHIFT)) & SIUL2_GPDI45_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI44 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI44 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI44_PDI_n_MASK                  (0x1U)
@@ -3396,7 +3396,7 @@ typedef struct {
 #define SIUL2_GPDI44_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI44_PDI_n_SHIFT)) & SIUL2_GPDI44_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI51 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI51 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI51_PDI_n_MASK                  (0x1U)
@@ -3405,7 +3405,7 @@ typedef struct {
 #define SIUL2_GPDI51_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI51_PDI_n_SHIFT)) & SIUL2_GPDI51_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI50 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI50 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI50_PDI_n_MASK                  (0x1U)
@@ -3414,7 +3414,7 @@ typedef struct {
 #define SIUL2_GPDI50_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI50_PDI_n_SHIFT)) & SIUL2_GPDI50_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI49 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI49 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI49_PDI_n_MASK                  (0x1U)
@@ -3423,7 +3423,7 @@ typedef struct {
 #define SIUL2_GPDI49_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI49_PDI_n_SHIFT)) & SIUL2_GPDI49_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI48 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI48 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI48_PDI_n_MASK                  (0x1U)
@@ -3432,7 +3432,7 @@ typedef struct {
 #define SIUL2_GPDI48_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI48_PDI_n_SHIFT)) & SIUL2_GPDI48_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI55 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI55 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI55_PDI_n_MASK                  (0x1U)
@@ -3441,7 +3441,7 @@ typedef struct {
 #define SIUL2_GPDI55_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI55_PDI_n_SHIFT)) & SIUL2_GPDI55_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI54 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI54 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI54_PDI_n_MASK                  (0x1U)
@@ -3450,7 +3450,7 @@ typedef struct {
 #define SIUL2_GPDI54_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI54_PDI_n_SHIFT)) & SIUL2_GPDI54_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI53 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI53 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI53_PDI_n_MASK                  (0x1U)
@@ -3459,7 +3459,7 @@ typedef struct {
 #define SIUL2_GPDI53_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI53_PDI_n_SHIFT)) & SIUL2_GPDI53_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI52 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI52 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI52_PDI_n_MASK                  (0x1U)
@@ -3468,7 +3468,7 @@ typedef struct {
 #define SIUL2_GPDI52_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI52_PDI_n_SHIFT)) & SIUL2_GPDI52_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI59 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI59 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI59_PDI_n_MASK                  (0x1U)
@@ -3477,7 +3477,7 @@ typedef struct {
 #define SIUL2_GPDI59_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI59_PDI_n_SHIFT)) & SIUL2_GPDI59_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI58 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI58 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI58_PDI_n_MASK                  (0x1U)
@@ -3486,7 +3486,7 @@ typedef struct {
 #define SIUL2_GPDI58_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI58_PDI_n_SHIFT)) & SIUL2_GPDI58_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI57 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI57 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI57_PDI_n_MASK                  (0x1U)
@@ -3495,7 +3495,7 @@ typedef struct {
 #define SIUL2_GPDI57_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI57_PDI_n_SHIFT)) & SIUL2_GPDI57_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI56 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI56 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI56_PDI_n_MASK                  (0x1U)
@@ -3504,7 +3504,7 @@ typedef struct {
 #define SIUL2_GPDI56_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI56_PDI_n_SHIFT)) & SIUL2_GPDI56_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI63 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI63 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI63_PDI_n_MASK                  (0x1U)
@@ -3513,7 +3513,7 @@ typedef struct {
 #define SIUL2_GPDI63_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI63_PDI_n_SHIFT)) & SIUL2_GPDI63_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI62 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI62 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI62_PDI_n_MASK                  (0x1U)
@@ -3522,7 +3522,7 @@ typedef struct {
 #define SIUL2_GPDI62_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI62_PDI_n_SHIFT)) & SIUL2_GPDI62_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI61 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI61 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI61_PDI_n_MASK                  (0x1U)
@@ -3531,7 +3531,7 @@ typedef struct {
 #define SIUL2_GPDI61_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI61_PDI_n_SHIFT)) & SIUL2_GPDI61_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI60 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI60 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI60_PDI_n_MASK                  (0x1U)
@@ -3540,7 +3540,7 @@ typedef struct {
 #define SIUL2_GPDI60_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI60_PDI_n_SHIFT)) & SIUL2_GPDI60_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI67 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI67 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI67_PDI_n_MASK                  (0x1U)
@@ -3549,7 +3549,7 @@ typedef struct {
 #define SIUL2_GPDI67_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI67_PDI_n_SHIFT)) & SIUL2_GPDI67_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI66 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI66 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI66_PDI_n_MASK                  (0x1U)
@@ -3558,7 +3558,7 @@ typedef struct {
 #define SIUL2_GPDI66_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI66_PDI_n_SHIFT)) & SIUL2_GPDI66_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI65 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI65 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI65_PDI_n_MASK                  (0x1U)
@@ -3567,7 +3567,7 @@ typedef struct {
 #define SIUL2_GPDI65_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI65_PDI_n_SHIFT)) & SIUL2_GPDI65_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI64 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI64 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI64_PDI_n_MASK                  (0x1U)
@@ -3576,7 +3576,7 @@ typedef struct {
 #define SIUL2_GPDI64_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI64_PDI_n_SHIFT)) & SIUL2_GPDI64_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI71 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI71 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI71_PDI_n_MASK                  (0x1U)
@@ -3585,7 +3585,7 @@ typedef struct {
 #define SIUL2_GPDI71_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI71_PDI_n_SHIFT)) & SIUL2_GPDI71_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI70 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI70 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI70_PDI_n_MASK                  (0x1U)
@@ -3594,7 +3594,7 @@ typedef struct {
 #define SIUL2_GPDI70_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI70_PDI_n_SHIFT)) & SIUL2_GPDI70_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI69 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI69 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI69_PDI_n_MASK                  (0x1U)
@@ -3603,7 +3603,7 @@ typedef struct {
 #define SIUL2_GPDI69_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI69_PDI_n_SHIFT)) & SIUL2_GPDI69_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI68 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI68 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI68_PDI_n_MASK                  (0x1U)
@@ -3612,7 +3612,7 @@ typedef struct {
 #define SIUL2_GPDI68_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI68_PDI_n_SHIFT)) & SIUL2_GPDI68_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI75 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI75 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI75_PDI_n_MASK                  (0x1U)
@@ -3621,7 +3621,7 @@ typedef struct {
 #define SIUL2_GPDI75_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI75_PDI_n_SHIFT)) & SIUL2_GPDI75_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI74 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI74 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI74_PDI_n_MASK                  (0x1U)
@@ -3630,7 +3630,7 @@ typedef struct {
 #define SIUL2_GPDI74_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI74_PDI_n_SHIFT)) & SIUL2_GPDI74_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI73 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI73 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI73_PDI_n_MASK                  (0x1U)
@@ -3639,7 +3639,7 @@ typedef struct {
 #define SIUL2_GPDI73_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI73_PDI_n_SHIFT)) & SIUL2_GPDI73_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI72 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI72 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI72_PDI_n_MASK                  (0x1U)
@@ -3648,7 +3648,7 @@ typedef struct {
 #define SIUL2_GPDI72_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI72_PDI_n_SHIFT)) & SIUL2_GPDI72_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI79 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI79 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI79_PDI_n_MASK                  (0x1U)
@@ -3657,7 +3657,7 @@ typedef struct {
 #define SIUL2_GPDI79_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI79_PDI_n_SHIFT)) & SIUL2_GPDI79_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI78 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI78 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI78_PDI_n_MASK                  (0x1U)
@@ -3666,7 +3666,7 @@ typedef struct {
 #define SIUL2_GPDI78_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI78_PDI_n_SHIFT)) & SIUL2_GPDI78_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI77 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI77 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI77_PDI_n_MASK                  (0x1U)
@@ -3675,7 +3675,7 @@ typedef struct {
 #define SIUL2_GPDI77_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI77_PDI_n_SHIFT)) & SIUL2_GPDI77_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI76 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI76 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI76_PDI_n_MASK                  (0x1U)
@@ -3684,7 +3684,7 @@ typedef struct {
 #define SIUL2_GPDI76_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI76_PDI_n_SHIFT)) & SIUL2_GPDI76_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI83 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI83 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI83_PDI_n_MASK                  (0x1U)
@@ -3693,7 +3693,7 @@ typedef struct {
 #define SIUL2_GPDI83_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI83_PDI_n_SHIFT)) & SIUL2_GPDI83_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI82 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI82 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI82_PDI_n_MASK                  (0x1U)
@@ -3702,7 +3702,7 @@ typedef struct {
 #define SIUL2_GPDI82_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI82_PDI_n_SHIFT)) & SIUL2_GPDI82_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI81 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI81 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI81_PDI_n_MASK                  (0x1U)
@@ -3711,7 +3711,7 @@ typedef struct {
 #define SIUL2_GPDI81_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI81_PDI_n_SHIFT)) & SIUL2_GPDI81_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI80 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI80 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI80_PDI_n_MASK                  (0x1U)
@@ -3720,7 +3720,7 @@ typedef struct {
 #define SIUL2_GPDI80_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI80_PDI_n_SHIFT)) & SIUL2_GPDI80_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI87 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI87 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI87_PDI_n_MASK                  (0x1U)
@@ -3729,7 +3729,7 @@ typedef struct {
 #define SIUL2_GPDI87_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI87_PDI_n_SHIFT)) & SIUL2_GPDI87_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI86 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI86 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI86_PDI_n_MASK                  (0x1U)
@@ -3738,7 +3738,7 @@ typedef struct {
 #define SIUL2_GPDI86_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI86_PDI_n_SHIFT)) & SIUL2_GPDI86_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI85 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI85 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI85_PDI_n_MASK                  (0x1U)
@@ -3747,7 +3747,7 @@ typedef struct {
 #define SIUL2_GPDI85_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI85_PDI_n_SHIFT)) & SIUL2_GPDI85_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI84 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI84 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI84_PDI_n_MASK                  (0x1U)
@@ -3756,7 +3756,7 @@ typedef struct {
 #define SIUL2_GPDI84_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI84_PDI_n_SHIFT)) & SIUL2_GPDI84_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI91 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI91 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI91_PDI_n_MASK                  (0x1U)
@@ -3765,7 +3765,7 @@ typedef struct {
 #define SIUL2_GPDI91_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI91_PDI_n_SHIFT)) & SIUL2_GPDI91_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI90 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI90 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI90_PDI_n_MASK                  (0x1U)
@@ -3774,7 +3774,7 @@ typedef struct {
 #define SIUL2_GPDI90_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI90_PDI_n_SHIFT)) & SIUL2_GPDI90_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI89 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI89 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI89_PDI_n_MASK                  (0x1U)
@@ -3783,7 +3783,7 @@ typedef struct {
 #define SIUL2_GPDI89_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI89_PDI_n_SHIFT)) & SIUL2_GPDI89_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI88 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI88 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI88_PDI_n_MASK                  (0x1U)
@@ -3792,7 +3792,7 @@ typedef struct {
 #define SIUL2_GPDI88_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI88_PDI_n_SHIFT)) & SIUL2_GPDI88_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI95 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI95 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI95_PDI_n_MASK                  (0x1U)
@@ -3801,7 +3801,7 @@ typedef struct {
 #define SIUL2_GPDI95_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI95_PDI_n_SHIFT)) & SIUL2_GPDI95_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI94 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI94 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI94_PDI_n_MASK                  (0x1U)
@@ -3810,7 +3810,7 @@ typedef struct {
 #define SIUL2_GPDI94_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI94_PDI_n_SHIFT)) & SIUL2_GPDI94_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI93 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI93 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI93_PDI_n_MASK                  (0x1U)
@@ -3819,7 +3819,7 @@ typedef struct {
 #define SIUL2_GPDI93_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI93_PDI_n_SHIFT)) & SIUL2_GPDI93_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI92 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI92 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI92_PDI_n_MASK                  (0x1U)
@@ -3828,7 +3828,7 @@ typedef struct {
 #define SIUL2_GPDI92_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI92_PDI_n_SHIFT)) & SIUL2_GPDI92_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI99 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI99 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI99_PDI_n_MASK                  (0x1U)
@@ -3837,7 +3837,7 @@ typedef struct {
 #define SIUL2_GPDI99_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI99_PDI_n_SHIFT)) & SIUL2_GPDI99_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI98 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI98 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI98_PDI_n_MASK                  (0x1U)
@@ -3846,7 +3846,7 @@ typedef struct {
 #define SIUL2_GPDI98_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI98_PDI_n_SHIFT)) & SIUL2_GPDI98_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI97 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI97 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI97_PDI_n_MASK                  (0x1U)
@@ -3855,7 +3855,7 @@ typedef struct {
 #define SIUL2_GPDI97_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI97_PDI_n_SHIFT)) & SIUL2_GPDI97_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI96 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI96 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI96_PDI_n_MASK                  (0x1U)
@@ -3864,7 +3864,7 @@ typedef struct {
 #define SIUL2_GPDI96_PDI_n(x)                    (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI96_PDI_n_SHIFT)) & SIUL2_GPDI96_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI103 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI103 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI103_PDI_n_MASK                 (0x1U)
@@ -3873,7 +3873,7 @@ typedef struct {
 #define SIUL2_GPDI103_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI103_PDI_n_SHIFT)) & SIUL2_GPDI103_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI102 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI102 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI102_PDI_n_MASK                 (0x1U)
@@ -3882,7 +3882,7 @@ typedef struct {
 #define SIUL2_GPDI102_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI102_PDI_n_SHIFT)) & SIUL2_GPDI102_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI101 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI101 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI101_PDI_n_MASK                 (0x1U)
@@ -3891,7 +3891,7 @@ typedef struct {
 #define SIUL2_GPDI101_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI101_PDI_n_SHIFT)) & SIUL2_GPDI101_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI100 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI100 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI100_PDI_n_MASK                 (0x1U)
@@ -3900,7 +3900,7 @@ typedef struct {
 #define SIUL2_GPDI100_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI100_PDI_n_SHIFT)) & SIUL2_GPDI100_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI107 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI107 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI107_PDI_n_MASK                 (0x1U)
@@ -3909,7 +3909,7 @@ typedef struct {
 #define SIUL2_GPDI107_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI107_PDI_n_SHIFT)) & SIUL2_GPDI107_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI106 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI106 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI106_PDI_n_MASK                 (0x1U)
@@ -3918,7 +3918,7 @@ typedef struct {
 #define SIUL2_GPDI106_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI106_PDI_n_SHIFT)) & SIUL2_GPDI106_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI105 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI105 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI105_PDI_n_MASK                 (0x1U)
@@ -3927,7 +3927,7 @@ typedef struct {
 #define SIUL2_GPDI105_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI105_PDI_n_SHIFT)) & SIUL2_GPDI105_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI104 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI104 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI104_PDI_n_MASK                 (0x1U)
@@ -3936,7 +3936,7 @@ typedef struct {
 #define SIUL2_GPDI104_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI104_PDI_n_SHIFT)) & SIUL2_GPDI104_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI111 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI111 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI111_PDI_n_MASK                 (0x1U)
@@ -3945,7 +3945,7 @@ typedef struct {
 #define SIUL2_GPDI111_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI111_PDI_n_SHIFT)) & SIUL2_GPDI111_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI110 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI110 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI110_PDI_n_MASK                 (0x1U)
@@ -3954,7 +3954,7 @@ typedef struct {
 #define SIUL2_GPDI110_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI110_PDI_n_SHIFT)) & SIUL2_GPDI110_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI109 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI109 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI109_PDI_n_MASK                 (0x1U)
@@ -3963,7 +3963,7 @@ typedef struct {
 #define SIUL2_GPDI109_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI109_PDI_n_SHIFT)) & SIUL2_GPDI109_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI108 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI108 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI108_PDI_n_MASK                 (0x1U)
@@ -3972,7 +3972,7 @@ typedef struct {
 #define SIUL2_GPDI108_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI108_PDI_n_SHIFT)) & SIUL2_GPDI108_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI115 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI115 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI115_PDI_n_MASK                 (0x1U)
@@ -3981,7 +3981,7 @@ typedef struct {
 #define SIUL2_GPDI115_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI115_PDI_n_SHIFT)) & SIUL2_GPDI115_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI114 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI114 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI114_PDI_n_MASK                 (0x1U)
@@ -3990,7 +3990,7 @@ typedef struct {
 #define SIUL2_GPDI114_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI114_PDI_n_SHIFT)) & SIUL2_GPDI114_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI113 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI113 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI113_PDI_n_MASK                 (0x1U)
@@ -3999,7 +3999,7 @@ typedef struct {
 #define SIUL2_GPDI113_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI113_PDI_n_SHIFT)) & SIUL2_GPDI113_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI112 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI112 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI112_PDI_n_MASK                 (0x1U)
@@ -4008,7 +4008,7 @@ typedef struct {
 #define SIUL2_GPDI112_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI112_PDI_n_SHIFT)) & SIUL2_GPDI112_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI119 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI119 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI119_PDI_n_MASK                 (0x1U)
@@ -4017,7 +4017,7 @@ typedef struct {
 #define SIUL2_GPDI119_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI119_PDI_n_SHIFT)) & SIUL2_GPDI119_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI118 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI118 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI118_PDI_n_MASK                 (0x1U)
@@ -4026,7 +4026,7 @@ typedef struct {
 #define SIUL2_GPDI118_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI118_PDI_n_SHIFT)) & SIUL2_GPDI118_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI117 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI117 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI117_PDI_n_MASK                 (0x1U)
@@ -4035,7 +4035,7 @@ typedef struct {
 #define SIUL2_GPDI117_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI117_PDI_n_SHIFT)) & SIUL2_GPDI117_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI116 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI116 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI116_PDI_n_MASK                 (0x1U)
@@ -4044,7 +4044,7 @@ typedef struct {
 #define SIUL2_GPDI116_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI116_PDI_n_SHIFT)) & SIUL2_GPDI116_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI123 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI123 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI123_PDI_n_MASK                 (0x1U)
@@ -4053,7 +4053,7 @@ typedef struct {
 #define SIUL2_GPDI123_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI123_PDI_n_SHIFT)) & SIUL2_GPDI123_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI122 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI122 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI122_PDI_n_MASK                 (0x1U)
@@ -4062,7 +4062,7 @@ typedef struct {
 #define SIUL2_GPDI122_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI122_PDI_n_SHIFT)) & SIUL2_GPDI122_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI121 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI121 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI121_PDI_n_MASK                 (0x1U)
@@ -4071,7 +4071,7 @@ typedef struct {
 #define SIUL2_GPDI121_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI121_PDI_n_SHIFT)) & SIUL2_GPDI121_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI120 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI120 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI120_PDI_n_MASK                 (0x1U)
@@ -4080,7 +4080,7 @@ typedef struct {
 #define SIUL2_GPDI120_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI120_PDI_n_SHIFT)) & SIUL2_GPDI120_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI127 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI127 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI127_PDI_n_MASK                 (0x1U)
@@ -4089,7 +4089,7 @@ typedef struct {
 #define SIUL2_GPDI127_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI127_PDI_n_SHIFT)) & SIUL2_GPDI127_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI126 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI126 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI126_PDI_n_MASK                 (0x1U)
@@ -4098,7 +4098,7 @@ typedef struct {
 #define SIUL2_GPDI126_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI126_PDI_n_SHIFT)) & SIUL2_GPDI126_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI125 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI125 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI125_PDI_n_MASK                 (0x1U)
@@ -4107,7 +4107,7 @@ typedef struct {
 #define SIUL2_GPDI125_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI125_PDI_n_SHIFT)) & SIUL2_GPDI125_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI124 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI124 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI124_PDI_n_MASK                 (0x1U)
@@ -4116,7 +4116,7 @@ typedef struct {
 #define SIUL2_GPDI124_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI124_PDI_n_SHIFT)) & SIUL2_GPDI124_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI131 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI131 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI131_PDI_n_MASK                 (0x1U)
@@ -4125,7 +4125,7 @@ typedef struct {
 #define SIUL2_GPDI131_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI131_PDI_n_SHIFT)) & SIUL2_GPDI131_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI130 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI130 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI130_PDI_n_MASK                 (0x1U)
@@ -4134,7 +4134,7 @@ typedef struct {
 #define SIUL2_GPDI130_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI130_PDI_n_SHIFT)) & SIUL2_GPDI130_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI129 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI129 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI129_PDI_n_MASK                 (0x1U)
@@ -4143,7 +4143,7 @@ typedef struct {
 #define SIUL2_GPDI129_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI129_PDI_n_SHIFT)) & SIUL2_GPDI129_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI128 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI128 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI128_PDI_n_MASK                 (0x1U)
@@ -4152,7 +4152,7 @@ typedef struct {
 #define SIUL2_GPDI128_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI128_PDI_n_SHIFT)) & SIUL2_GPDI128_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI135 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI135 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI135_PDI_n_MASK                 (0x1U)
@@ -4161,7 +4161,7 @@ typedef struct {
 #define SIUL2_GPDI135_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI135_PDI_n_SHIFT)) & SIUL2_GPDI135_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI134 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI134 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI134_PDI_n_MASK                 (0x1U)
@@ -4170,7 +4170,7 @@ typedef struct {
 #define SIUL2_GPDI134_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI134_PDI_n_SHIFT)) & SIUL2_GPDI134_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI133 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI133 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI133_PDI_n_MASK                 (0x1U)
@@ -4179,7 +4179,7 @@ typedef struct {
 #define SIUL2_GPDI133_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI133_PDI_n_SHIFT)) & SIUL2_GPDI133_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI132 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI132 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI132_PDI_n_MASK                 (0x1U)
@@ -4188,7 +4188,7 @@ typedef struct {
 #define SIUL2_GPDI132_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI132_PDI_n_SHIFT)) & SIUL2_GPDI132_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI139 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI139 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI139_PDI_n_MASK                 (0x1U)
@@ -4197,7 +4197,7 @@ typedef struct {
 #define SIUL2_GPDI139_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI139_PDI_n_SHIFT)) & SIUL2_GPDI139_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI138 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI138 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI138_PDI_n_MASK                 (0x1U)
@@ -4206,7 +4206,7 @@ typedef struct {
 #define SIUL2_GPDI138_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI138_PDI_n_SHIFT)) & SIUL2_GPDI138_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI137 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI137 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI137_PDI_n_MASK                 (0x1U)
@@ -4215,7 +4215,7 @@ typedef struct {
 #define SIUL2_GPDI137_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI137_PDI_n_SHIFT)) & SIUL2_GPDI137_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI136 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI136 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI136_PDI_n_MASK                 (0x1U)
@@ -4224,7 +4224,7 @@ typedef struct {
 #define SIUL2_GPDI136_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI136_PDI_n_SHIFT)) & SIUL2_GPDI136_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI143 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI143 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI143_PDI_n_MASK                 (0x1U)
@@ -4233,7 +4233,7 @@ typedef struct {
 #define SIUL2_GPDI143_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI143_PDI_n_SHIFT)) & SIUL2_GPDI143_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI142 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI142 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI142_PDI_n_MASK                 (0x1U)
@@ -4242,7 +4242,7 @@ typedef struct {
 #define SIUL2_GPDI142_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI142_PDI_n_SHIFT)) & SIUL2_GPDI142_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI141 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI141 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI141_PDI_n_MASK                 (0x1U)
@@ -4251,7 +4251,7 @@ typedef struct {
 #define SIUL2_GPDI141_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI141_PDI_n_SHIFT)) & SIUL2_GPDI141_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI140 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI140 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI140_PDI_n_MASK                 (0x1U)
@@ -4260,7 +4260,7 @@ typedef struct {
 #define SIUL2_GPDI140_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI140_PDI_n_SHIFT)) & SIUL2_GPDI140_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI147 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI147 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI147_PDI_n_MASK                 (0x1U)
@@ -4269,7 +4269,7 @@ typedef struct {
 #define SIUL2_GPDI147_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI147_PDI_n_SHIFT)) & SIUL2_GPDI147_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI146 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI146 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI146_PDI_n_MASK                 (0x1U)
@@ -4278,7 +4278,7 @@ typedef struct {
 #define SIUL2_GPDI146_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI146_PDI_n_SHIFT)) & SIUL2_GPDI146_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI145 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI145 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI145_PDI_n_MASK                 (0x1U)
@@ -4287,7 +4287,7 @@ typedef struct {
 #define SIUL2_GPDI145_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI145_PDI_n_SHIFT)) & SIUL2_GPDI145_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI144 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI144 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI144_PDI_n_MASK                 (0x1U)
@@ -4296,7 +4296,7 @@ typedef struct {
 #define SIUL2_GPDI144_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI144_PDI_n_SHIFT)) & SIUL2_GPDI144_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI151 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI151 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI151_PDI_n_MASK                 (0x1U)
@@ -4305,7 +4305,7 @@ typedef struct {
 #define SIUL2_GPDI151_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI151_PDI_n_SHIFT)) & SIUL2_GPDI151_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI150 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI150 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI150_PDI_n_MASK                 (0x1U)
@@ -4314,7 +4314,7 @@ typedef struct {
 #define SIUL2_GPDI150_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI150_PDI_n_SHIFT)) & SIUL2_GPDI150_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI149 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI149 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI149_PDI_n_MASK                 (0x1U)
@@ -4323,7 +4323,7 @@ typedef struct {
 #define SIUL2_GPDI149_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI149_PDI_n_SHIFT)) & SIUL2_GPDI149_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI148 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI148 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI148_PDI_n_MASK                 (0x1U)
@@ -4332,7 +4332,7 @@ typedef struct {
 #define SIUL2_GPDI148_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI148_PDI_n_SHIFT)) & SIUL2_GPDI148_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI155 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI155 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI155_PDI_n_MASK                 (0x1U)
@@ -4341,7 +4341,7 @@ typedef struct {
 #define SIUL2_GPDI155_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI155_PDI_n_SHIFT)) & SIUL2_GPDI155_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI154 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI154 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI154_PDI_n_MASK                 (0x1U)
@@ -4350,7 +4350,7 @@ typedef struct {
 #define SIUL2_GPDI154_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI154_PDI_n_SHIFT)) & SIUL2_GPDI154_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI153 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI153 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI153_PDI_n_MASK                 (0x1U)
@@ -4359,7 +4359,7 @@ typedef struct {
 #define SIUL2_GPDI153_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI153_PDI_n_SHIFT)) & SIUL2_GPDI153_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI152 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI152 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI152_PDI_n_MASK                 (0x1U)
@@ -4368,7 +4368,7 @@ typedef struct {
 #define SIUL2_GPDI152_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI152_PDI_n_SHIFT)) & SIUL2_GPDI152_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI159 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI159 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI159_PDI_n_MASK                 (0x1U)
@@ -4377,7 +4377,7 @@ typedef struct {
 #define SIUL2_GPDI159_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI159_PDI_n_SHIFT)) & SIUL2_GPDI159_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI158 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI158 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI158_PDI_n_MASK                 (0x1U)
@@ -4386,7 +4386,7 @@ typedef struct {
 #define SIUL2_GPDI158_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI158_PDI_n_SHIFT)) & SIUL2_GPDI158_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI157 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI157 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI157_PDI_n_MASK                 (0x1U)
@@ -4395,7 +4395,7 @@ typedef struct {
 #define SIUL2_GPDI157_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI157_PDI_n_SHIFT)) & SIUL2_GPDI157_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI156 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI156 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI156_PDI_n_MASK                 (0x1U)
@@ -4404,7 +4404,7 @@ typedef struct {
 #define SIUL2_GPDI156_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI156_PDI_n_SHIFT)) & SIUL2_GPDI156_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI163 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI163 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI163_PDI_n_MASK                 (0x1U)
@@ -4413,7 +4413,7 @@ typedef struct {
 #define SIUL2_GPDI163_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI163_PDI_n_SHIFT)) & SIUL2_GPDI163_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI162 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI162 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI162_PDI_n_MASK                 (0x1U)
@@ -4422,7 +4422,7 @@ typedef struct {
 #define SIUL2_GPDI162_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI162_PDI_n_SHIFT)) & SIUL2_GPDI162_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI161 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI161 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI161_PDI_n_MASK                 (0x1U)
@@ -4431,7 +4431,7 @@ typedef struct {
 #define SIUL2_GPDI161_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI161_PDI_n_SHIFT)) & SIUL2_GPDI161_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI160 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI160 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI160_PDI_n_MASK                 (0x1U)
@@ -4440,7 +4440,7 @@ typedef struct {
 #define SIUL2_GPDI160_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI160_PDI_n_SHIFT)) & SIUL2_GPDI160_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI167 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI167 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI167_PDI_n_MASK                 (0x1U)
@@ -4449,7 +4449,7 @@ typedef struct {
 #define SIUL2_GPDI167_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI167_PDI_n_SHIFT)) & SIUL2_GPDI167_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI166 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI166 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI166_PDI_n_MASK                 (0x1U)
@@ -4458,7 +4458,7 @@ typedef struct {
 #define SIUL2_GPDI166_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI166_PDI_n_SHIFT)) & SIUL2_GPDI166_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI165 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI165 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI165_PDI_n_MASK                 (0x1U)
@@ -4467,7 +4467,7 @@ typedef struct {
 #define SIUL2_GPDI165_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI165_PDI_n_SHIFT)) & SIUL2_GPDI165_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI164 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI164 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI164_PDI_n_MASK                 (0x1U)
@@ -4476,7 +4476,7 @@ typedef struct {
 #define SIUL2_GPDI164_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI164_PDI_n_SHIFT)) & SIUL2_GPDI164_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI171 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI171 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI171_PDI_n_MASK                 (0x1U)
@@ -4485,7 +4485,7 @@ typedef struct {
 #define SIUL2_GPDI171_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI171_PDI_n_SHIFT)) & SIUL2_GPDI171_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI170 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI170 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI170_PDI_n_MASK                 (0x1U)
@@ -4494,7 +4494,7 @@ typedef struct {
 #define SIUL2_GPDI170_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI170_PDI_n_SHIFT)) & SIUL2_GPDI170_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI169 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI169 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI169_PDI_n_MASK                 (0x1U)
@@ -4503,7 +4503,7 @@ typedef struct {
 #define SIUL2_GPDI169_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI169_PDI_n_SHIFT)) & SIUL2_GPDI169_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI168 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI168 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI168_PDI_n_MASK                 (0x1U)
@@ -4512,7 +4512,7 @@ typedef struct {
 #define SIUL2_GPDI168_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI168_PDI_n_SHIFT)) & SIUL2_GPDI168_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI173 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI173 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI173_PDI_n_MASK                 (0x1U)
@@ -4521,7 +4521,7 @@ typedef struct {
 #define SIUL2_GPDI173_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI173_PDI_n_SHIFT)) & SIUL2_GPDI173_PDI_n_MASK)
 /*! @} */
 
-/*! @name GPDI172 - SIUL2 GPIO Pad Data Input Register */
+/*! @name GPDI172 - SIUL2 GPIO Pad Data Input */
 /*! @{ */
 
 #define SIUL2_GPDI172_PDI_n_MASK                 (0x1U)
@@ -4530,7 +4530,7 @@ typedef struct {
 #define SIUL2_GPDI172_PDI_n(x)                   (((uint8_t)(((uint8_t)(x)) << SIUL2_GPDI172_PDI_n_SHIFT)) & SIUL2_GPDI172_PDI_n_MASK)
 /*! @} */
 
-/*! @name PGPDO1 - SIUL2 Parallel GPIO Pad Data Out Register */
+/*! @name PGPDO1 - SIUL2 Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_PGPDO1_PPDO0_MASK                  (0x1U)
@@ -4614,7 +4614,7 @@ typedef struct {
 #define SIUL2_PGPDO1_PPDO15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDO1_PPDO15_SHIFT)) & SIUL2_PGPDO1_PPDO15_MASK)
 /*! @} */
 
-/*! @name PGPDO0 - SIUL2 Parallel GPIO Pad Data Out Register */
+/*! @name PGPDO0 - SIUL2 Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_PGPDO0_PPDO0_MASK                  (0x1U)
@@ -4698,7 +4698,7 @@ typedef struct {
 #define SIUL2_PGPDO0_PPDO15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDO0_PPDO15_SHIFT)) & SIUL2_PGPDO0_PPDO15_MASK)
 /*! @} */
 
-/*! @name PGPDO3 - SIUL2 Parallel GPIO Pad Data Out Register */
+/*! @name PGPDO3 - SIUL2 Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_PGPDO3_PPDO0_MASK                  (0x1U)
@@ -4782,7 +4782,7 @@ typedef struct {
 #define SIUL2_PGPDO3_PPDO15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDO3_PPDO15_SHIFT)) & SIUL2_PGPDO3_PPDO15_MASK)
 /*! @} */
 
-/*! @name PGPDO2 - SIUL2 Parallel GPIO Pad Data Out Register */
+/*! @name PGPDO2 - SIUL2 Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_PGPDO2_PPDO0_MASK                  (0x1U)
@@ -4866,7 +4866,7 @@ typedef struct {
 #define SIUL2_PGPDO2_PPDO15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDO2_PPDO15_SHIFT)) & SIUL2_PGPDO2_PPDO15_MASK)
 /*! @} */
 
-/*! @name PGPDO5 - SIUL2 Parallel GPIO Pad Data Out Register */
+/*! @name PGPDO5 - SIUL2 Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_PGPDO5_PPDO0_MASK                  (0x1U)
@@ -4950,7 +4950,7 @@ typedef struct {
 #define SIUL2_PGPDO5_PPDO15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDO5_PPDO15_SHIFT)) & SIUL2_PGPDO5_PPDO15_MASK)
 /*! @} */
 
-/*! @name PGPDO4 - SIUL2 Parallel GPIO Pad Data Out Register */
+/*! @name PGPDO4 - SIUL2 Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_PGPDO4_PPDO0_MASK                  (0x1U)
@@ -5034,7 +5034,7 @@ typedef struct {
 #define SIUL2_PGPDO4_PPDO15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDO4_PPDO15_SHIFT)) & SIUL2_PGPDO4_PPDO15_MASK)
 /*! @} */
 
-/*! @name PGPDO7 - SIUL2 Parallel GPIO Pad Data Out Register */
+/*! @name PGPDO7 - SIUL2 Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_PGPDO7_PPDO0_MASK                  (0x1U)
@@ -5118,7 +5118,7 @@ typedef struct {
 #define SIUL2_PGPDO7_PPDO15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDO7_PPDO15_SHIFT)) & SIUL2_PGPDO7_PPDO15_MASK)
 /*! @} */
 
-/*! @name PGPDO6 - SIUL2 Parallel GPIO Pad Data Out Register */
+/*! @name PGPDO6 - SIUL2 Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_PGPDO6_PPDO0_MASK                  (0x1U)
@@ -5202,7 +5202,7 @@ typedef struct {
 #define SIUL2_PGPDO6_PPDO15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDO6_PPDO15_SHIFT)) & SIUL2_PGPDO6_PPDO15_MASK)
 /*! @} */
 
-/*! @name PGPDO9 - SIUL2 Parallel GPIO Pad Data Out Register */
+/*! @name PGPDO9 - SIUL2 Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_PGPDO9_PPDO0_MASK                  (0x1U)
@@ -5286,7 +5286,7 @@ typedef struct {
 #define SIUL2_PGPDO9_PPDO15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDO9_PPDO15_SHIFT)) & SIUL2_PGPDO9_PPDO15_MASK)
 /*! @} */
 
-/*! @name PGPDO8 - SIUL2 Parallel GPIO Pad Data Out Register */
+/*! @name PGPDO8 - SIUL2 Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_PGPDO8_PPDO0_MASK                  (0x1U)
@@ -5370,7 +5370,7 @@ typedef struct {
 #define SIUL2_PGPDO8_PPDO15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDO8_PPDO15_SHIFT)) & SIUL2_PGPDO8_PPDO15_MASK)
 /*! @} */
 
-/*! @name PGPDO10 - SIUL2 Parallel GPIO Pad Data Out Register */
+/*! @name PGPDO10 - SIUL2 Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_PGPDO10_PPDO2_MASK                 (0x4U)
@@ -5444,7 +5444,7 @@ typedef struct {
 #define SIUL2_PGPDO10_PPDO15(x)                  (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDO10_PPDO15_SHIFT)) & SIUL2_PGPDO10_PPDO15_MASK)
 /*! @} */
 
-/*! @name PGPDI1 - SIUL2 Parallel GPIO Pad Data In Register */
+/*! @name PGPDI1 - SIUL2 Parallel GPIO Pad Data In */
 /*! @{ */
 
 #define SIUL2_PGPDI1_PPDI0_MASK                  (0x1U)
@@ -5528,7 +5528,7 @@ typedef struct {
 #define SIUL2_PGPDI1_PPDI15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDI1_PPDI15_SHIFT)) & SIUL2_PGPDI1_PPDI15_MASK)
 /*! @} */
 
-/*! @name PGPDI0 - SIUL2 Parallel GPIO Pad Data In Register */
+/*! @name PGPDI0 - SIUL2 Parallel GPIO Pad Data In */
 /*! @{ */
 
 #define SIUL2_PGPDI0_PPDI0_MASK                  (0x1U)
@@ -5612,7 +5612,7 @@ typedef struct {
 #define SIUL2_PGPDI0_PPDI15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDI0_PPDI15_SHIFT)) & SIUL2_PGPDI0_PPDI15_MASK)
 /*! @} */
 
-/*! @name PGPDI3 - SIUL2 Parallel GPIO Pad Data In Register */
+/*! @name PGPDI3 - SIUL2 Parallel GPIO Pad Data In */
 /*! @{ */
 
 #define SIUL2_PGPDI3_PPDI0_MASK                  (0x1U)
@@ -5696,7 +5696,7 @@ typedef struct {
 #define SIUL2_PGPDI3_PPDI15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDI3_PPDI15_SHIFT)) & SIUL2_PGPDI3_PPDI15_MASK)
 /*! @} */
 
-/*! @name PGPDI2 - SIUL2 Parallel GPIO Pad Data In Register */
+/*! @name PGPDI2 - SIUL2 Parallel GPIO Pad Data In */
 /*! @{ */
 
 #define SIUL2_PGPDI2_PPDI0_MASK                  (0x1U)
@@ -5780,7 +5780,7 @@ typedef struct {
 #define SIUL2_PGPDI2_PPDI15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDI2_PPDI15_SHIFT)) & SIUL2_PGPDI2_PPDI15_MASK)
 /*! @} */
 
-/*! @name PGPDI5 - SIUL2 Parallel GPIO Pad Data In Register */
+/*! @name PGPDI5 - SIUL2 Parallel GPIO Pad Data In */
 /*! @{ */
 
 #define SIUL2_PGPDI5_PPDI0_MASK                  (0x1U)
@@ -5864,7 +5864,7 @@ typedef struct {
 #define SIUL2_PGPDI5_PPDI15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDI5_PPDI15_SHIFT)) & SIUL2_PGPDI5_PPDI15_MASK)
 /*! @} */
 
-/*! @name PGPDI4 - SIUL2 Parallel GPIO Pad Data In Register */
+/*! @name PGPDI4 - SIUL2 Parallel GPIO Pad Data In */
 /*! @{ */
 
 #define SIUL2_PGPDI4_PPDI0_MASK                  (0x1U)
@@ -5948,7 +5948,7 @@ typedef struct {
 #define SIUL2_PGPDI4_PPDI15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDI4_PPDI15_SHIFT)) & SIUL2_PGPDI4_PPDI15_MASK)
 /*! @} */
 
-/*! @name PGPDI7 - SIUL2 Parallel GPIO Pad Data In Register */
+/*! @name PGPDI7 - SIUL2 Parallel GPIO Pad Data In */
 /*! @{ */
 
 #define SIUL2_PGPDI7_PPDI0_MASK                  (0x1U)
@@ -6032,7 +6032,7 @@ typedef struct {
 #define SIUL2_PGPDI7_PPDI15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDI7_PPDI15_SHIFT)) & SIUL2_PGPDI7_PPDI15_MASK)
 /*! @} */
 
-/*! @name PGPDI6 - SIUL2 Parallel GPIO Pad Data In Register */
+/*! @name PGPDI6 - SIUL2 Parallel GPIO Pad Data In */
 /*! @{ */
 
 #define SIUL2_PGPDI6_PPDI0_MASK                  (0x1U)
@@ -6116,7 +6116,7 @@ typedef struct {
 #define SIUL2_PGPDI6_PPDI15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDI6_PPDI15_SHIFT)) & SIUL2_PGPDI6_PPDI15_MASK)
 /*! @} */
 
-/*! @name PGPDI9 - SIUL2 Parallel GPIO Pad Data In Register */
+/*! @name PGPDI9 - SIUL2 Parallel GPIO Pad Data In */
 /*! @{ */
 
 #define SIUL2_PGPDI9_PPDI0_MASK                  (0x1U)
@@ -6200,7 +6200,7 @@ typedef struct {
 #define SIUL2_PGPDI9_PPDI15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDI9_PPDI15_SHIFT)) & SIUL2_PGPDI9_PPDI15_MASK)
 /*! @} */
 
-/*! @name PGPDI8 - SIUL2 Parallel GPIO Pad Data In Register */
+/*! @name PGPDI8 - SIUL2 Parallel GPIO Pad Data In */
 /*! @{ */
 
 #define SIUL2_PGPDI8_PPDI0_MASK                  (0x1U)
@@ -6284,7 +6284,7 @@ typedef struct {
 #define SIUL2_PGPDI8_PPDI15(x)                   (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDI8_PPDI15_SHIFT)) & SIUL2_PGPDI8_PPDI15_MASK)
 /*! @} */
 
-/*! @name PGPDI10 - SIUL2 Parallel GPIO Pad Data In Register */
+/*! @name PGPDI10 - SIUL2 Parallel GPIO Pad Data In */
 /*! @{ */
 
 #define SIUL2_PGPDI10_PPDI2_MASK                 (0x4U)
@@ -6358,7 +6358,7 @@ typedef struct {
 #define SIUL2_PGPDI10_PPDI15(x)                  (((uint16_t)(((uint16_t)(x)) << SIUL2_PGPDI10_PPDI15_SHIFT)) & SIUL2_PGPDI10_PPDI15_MASK)
 /*! @} */
 
-/*! @name MPGPDO - SIUL2 Masked Parallel GPIO Pad Data Out Register */
+/*! @name MPGPDO - SIUL2 Masked Parallel GPIO Pad Data Out */
 /*! @{ */
 
 #define SIUL2_MPGPDO_MPPDO0_MASK                 (0x1U)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -38,8 +38,8 @@ extern "C"{
 #define SPI_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
 #define SPI_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
 #define SPI_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
-#define SPI_IP_TYPES_SW_MAJOR_VERSION             0
-#define SPI_IP_TYPES_SW_MINOR_VERSION             9
+#define SPI_IP_TYPES_SW_MAJOR_VERSION             1
+#define SPI_IP_TYPES_SW_MINOR_VERSION             0
 #define SPI_IP_TYPES_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -104,7 +104,7 @@ typedef void (*Spi_Ip_CallbackType)(uint8 Instance, Spi_Ip_EventType Event);
 typedef enum
 {
     SPI_IP_POLLING = 0, /**< For polling mode the application must call periodically Spi_Ip_ManageBuffers after asynchronous transfers. */
-    SPI_IP_INTERRUPT   /**< For interrupt mode the application doesn't need to perform any additional operations after asynchronous transfers. 
+    SPI_IP_INTERRUPT   /**< For interrupt mode the application doesn't need to perform any additional operations after asynchronous transfers.
                             The application must enable the interrupt requests and install the right callbacks. */
 } Spi_Ip_ModeType;
 
@@ -132,7 +132,7 @@ typedef enum
 } Spi_Ip_StatusType;
 
 /** @brief   Structure defining some parameters often change of the spi bus. */
-typedef struct  
+typedef struct
 {
    uint8 FrameSize;    /**< Frame size configured */
    boolean Lsb;    /**< Transfer LSB first or MSB first */
@@ -140,7 +140,7 @@ typedef struct
 } Spi_Ip_DeviceParamsType;
 
 /** @brief   Structure defining the parameters of the spi bus. */
-typedef struct  
+typedef struct
 {
    uint8 Instance; /**< Instance of the hardware unit. */
    #if (SPI_IP_DUAL_CLOCK_MODE == STD_ON)
@@ -148,7 +148,7 @@ typedef struct
    #else
    uint32 Ctar;         /**< CTAR register which contains clocking and frame size configuration. */
    #endif
-   uint32 Ctare;        /**< CTARE registers which contains frame size configuration. */ 
+   uint32 Ctare;        /**< CTARE registers which contains frame size configuration. */
    uint16 PushrCmd;     /**< PUSHR CMD Fifo register which contains CS and continuos mode. */
    Spi_Ip_DeviceParamsType * DeviceParams; /**< Contain configuration for bit order, frame size, default transmit data. */
 } Spi_Ip_ExternalDeviceType;
@@ -166,17 +166,17 @@ typedef enum
 
 #if ((SPI_IP_DMA_USED == STD_ON) && (SPI_IP_ENABLE_DMAFASTTRANSFER_SUPPORT == STD_ON))
 /** @brief   Structure defining transmition command needed for Dma Fast transfer. */
-typedef struct  
-{ 
+typedef struct
+{
    uint16 DmaFastPushrCmd;   /**< PUSHR CMD Fifo register which contains CS and continuos mode. */
    uint16 DmaFastPushrCmdLast;   /**< PUSHR CMD Fifo register which contains CS and disable continuos mode. */
    uint32 DefaultData;  /**< Default data to send when TxBuffer is NULL_PTR */
 } Spi_Ip_CmdDmaFastType;
 
-/** @brief   Structure defining information needed for Dma Fast transfer session. 
+/** @brief   Structure defining information needed for Dma Fast transfer session.
 * @implements Spi_Ip_FastTransferType_struct
 */
-typedef struct  
+typedef struct
 {
     const Spi_Ip_ExternalDeviceType *ExternalDevice; /**< Point to external device configuration */
     const uint8* TxBuffer;  /**< Store pointer for Tx buffer */
@@ -188,8 +188,8 @@ typedef struct
 #endif
 
 /** @brief   Structure defining information needed for SPI driver initialization. */
-typedef struct  
-{ 
+typedef struct
+{
    uint8 Instance; /**< Instance of the hardware unit. */
    uint32  Mcr; /**< Select master/slave. */
    #if (SPI_IP_SLAVE_SUPPORT == STD_ON)

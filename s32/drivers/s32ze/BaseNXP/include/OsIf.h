@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -34,22 +34,24 @@ extern "C"{
 #define OSIF_AR_RELEASE_MAJOR_VERSION     4
 #define OSIF_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_SW_MAJOR_VERSION             0
-#define OSIF_SW_MINOR_VERSION             9
+#define OSIF_SW_MAJOR_VERSION             1
+#define OSIF_SW_MINOR_VERSION             0
 #define OSIF_SW_PATCH_VERSION             0
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
-/* Checks against OsIf_Internal.h */
+/* Check if OsIf.h file and OsIf_Internal.h file are of the same vendor */
 #if (OSIF_VENDOR_ID != OSIF_INTERNAL_VENDOR_ID)
     #error "OsIf.h and OsIf_Internal.h have different vendor ids"
 #endif
+/* Check if OsIf.h file and OsIf_Internal.h file are of the same Autosar version */
 #if ((OSIF_AR_RELEASE_MAJOR_VERSION    != OSIF_INTERNAL_AR_RELEASE_MAJOR_VERSION) || \
      (OSIF_AR_RELEASE_MINOR_VERSION    != OSIF_INTERNAL_AR_RELEASE_MINOR_VERSION) || \
      (OSIF_AR_RELEASE_REVISION_VERSION != OSIF_INTERNAL_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of OsIf.h and OsIf_Internal.h are different"
 #endif
+/* Check if OsIf.h file and OsIf_Internal.h file are of the same Software version */
 #if ((OSIF_SW_MAJOR_VERSION != OSIF_INTERNAL_SW_MAJOR_VERSION) || \
      (OSIF_SW_MINOR_VERSION != OSIF_INTERNAL_SW_MINOR_VERSION) || \
      (OSIF_SW_PATCH_VERSION != OSIF_INTERNAL_SW_PATCH_VERSION) \
@@ -57,15 +59,17 @@ extern "C"{
     #error "Software Version Numbers of OsIf.h and OsIf_Internal.h are different"
 #endif
 
-/* Checks against OsIf_Cfg.h */
+/* Check if OsIf.h file and OsIf_Cfg.h file are of the same vendor */
 #if (OSIF_VENDOR_ID != OSIF_CFG_VENDOR_ID)
     #error "OsIf.h and OsIf_Cfg.h have different vendor ids"
 #endif
+/* Check if OsIf.h file and OsIf_Cfg.h file are of the same Autosar version */
 #if ((OSIF_AR_RELEASE_MAJOR_VERSION    != OSIF_CFG_AR_RELEASE_MAJOR_VERSION) || \
      (OSIF_AR_RELEASE_MINOR_VERSION    != OSIF_CFG_AR_RELEASE_MINOR_VERSION) || \
      (OSIF_AR_RELEASE_REVISION_VERSION != OSIF_CFG_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of OsIf.h and OsIf_Cfg.h are different"
 #endif
+/* Check if OsIf.h file and OsIf_Cfg.h file are of the same Software version */
 #if ((OSIF_SW_MAJOR_VERSION != OSIF_CFG_SW_MAJOR_VERSION) || \
      (OSIF_SW_MINOR_VERSION != OSIF_CFG_SW_MINOR_VERSION) || \
      (OSIF_SW_PATCH_VERSION != OSIF_CFG_SW_PATCH_VERSION) \
@@ -89,11 +93,16 @@ extern "C"{
  *
  * Counter type.
  *
+ * @detail The dummy counter of Osif is meant as a loop-counter timeout mechanism that requirement no
+ * additional resource (hardware and software). It was meant to replace the typical loop timeout of decrementing
+ * a variable each time the loop was executed until the counter reaches zero. Usage of OsIf replaced these loop counters
+ * within RTD, so the advantage is that these timeouts can be configured to be simple loop counters
+ * (using the dummy counter), not changing the RTD code.
  */
 typedef enum
 {
     OSIF_COUNTER_DUMMY, /**< dummy counter */
-#if (OSIF_USE_SYSTEM_TIMER == STD_ON)
+#if (OSIF_USE_SYSTEM_TIMER == STD_ON) 
     OSIF_COUNTER_SYSTEM, /**< system counter */
 #endif /* (OSIF_USE_SYSTEM_TIMER == STD_ON) */
 #if (OSIF_USE_CUSTOM_TIMER == STD_ON)

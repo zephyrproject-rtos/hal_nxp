@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,6 +25,7 @@ extern "C"{
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "Netc_Eth_Ip_Types.h"
+#include "Eth_GeneralTypes.h"
 
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
@@ -33,8 +34,8 @@ extern "C"{
 #define NETC_ETH_IP_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETH_IP_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETH_IP_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETH_IP_SW_MAJOR_VERSION             0
-#define NETC_ETH_IP_SW_MINOR_VERSION             9
+#define NETC_ETH_IP_SW_MAJOR_VERSION             1
+#define NETC_ETH_IP_SW_MINOR_VERSION             0
 #define NETC_ETH_IP_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -71,6 +72,19 @@ NETC_ETH_IP_CONFIG_EXT
 #define ETH_43_NETC_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Eth_43_NETC_MemMap.h"
 
+#define NETC_ETH_IP_32BIT_SHIFT (32U)    /*!< 32 bits shift */
+#define NETC_ETH_IP_24BIT_SHIFT (24U)    /*!< 24 bits shift */
+#define NETC_ETH_IP_16BIT_SHIFT (16U)    /*!< 16 bits shift */
+#define NETC_ETH_IP_8BIT_SHIFT  (8U)     /*!< 8 bits shift */
+
+#define NETC_ETH_IP_0XFF_MASK                           (0xFFU)
+#define NETC_ETH_IP_0XFFFF_MASK                         (0xFFFFU)
+#define NETC_ETH_IP_0XFFFF0000_MASK                     (0xFFFF0000UL)
+
+/* Macros for NTMP request message header */
+#define NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION       (2U)      /*!< protocol version = 0x2 */
+#define NETC_ETH_IP_CMDBD_REQFMT_NTMP_PROTOCOL_VERSION  (1U)      /*!< NTMP version is 2.0 */
+
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/
@@ -102,6 +116,29 @@ NETC_ETH_IP_CONFIG_EXT
  * @retval NETC_ETH_IP_STATUS_TIMEOUT The initialization returned a timeout.
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_Init(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+
+/**
+ * @brief            Set the credit based shaper slope
+ * @details          Set the idle slope for the credit based shaper
+ *
+ * Parameters:
+ * -[in]     ctrlIndex           Index of the controller within the context of the Ethernet Driver
+ * -[in]     TrafficClass        The value range is 0 to 7
+ * -[in]     idleSlope           Idleslope is the rate of credits that is accumulated (in bits per second)  when there  is  at  least  one packet waiting for transmission.
+ */
+Std_ReturnType Netc_Eth_Ip_ConfigureCreditBasedShaper(const uint8 ctrlIndex, const uint8 TrafficClass, const uint64 idleSlope);
+
+/**
+ * @brief            Enable/Disable the credit based shaper
+ * @details          The credit based shaper TrafficClass is Enable/Disable
+ *
+ * Parameters:
+ * -[in]     ctrlIndex            Index of the controller within the context of the Ethernet Driver
+ * -[in]     TrafficClass         The value range is 0 to 7
+ * -[in]     Enable               TRUE: enable credit based shaper. FALSE: disable credit based shaper.
+ *
+ */
+Std_ReturnType Netc_Eth_Ip_EnableCreditBasedShaper(const uint8 ctrlIndex, const uint8 TrafficClass, const boolean Enable);
 
 /*!
  * @brief Gets the current power state of the NETC instance
@@ -180,7 +217,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxBuff(uint8 ctrlIndex,
  * @param[in] options Configuration options applicable to this buffer's transmission only.
  * Can be NULL_PTR, if no special option is required.
  * @retval NETC_ETH_IP_STATUS_SUCCESS       The frame was successfully enqueued for transmission.
- * @retval NETC_ETH_IP_STATUS_TX_QUEUE_FULL There is no available space for the frame in the queue.
+ * @retval NETC_ETH_IP_STATUS_TX_BUFF_BUSY  All internal TX buffers are currently in use.
  * @retval NETC_ETH_IP_STATUS_INVALID_FRAME_LENGTH Length of the external buffer is smaller than minium of frame length.
  * @retval NETC_ETH_IP_STATUS_TX_BUFF_OVERFLOW The requested buffer length cannot be granted.
  */
@@ -211,7 +248,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
  *                    Can be NULL_PTR, if no special option is required.
  * @param[in] NumBuffers Number of buffers available in Buffers
  * @retval NETC_ETH_IP_STATUS_SUCCESS       The frame was successfully enqueued for transmission.
- * @retval NETC_ETH_IP_STATUS_TX_QUEUE_FULL There is no available space for the frame in the queue.
+ * @retval NETC_ETH_IP_STATUS_TX_BUFF_BUSY  All internal TX buffers are currently in use.
  * @retval NETC_ETH_IP_STATUS_INVALID_FRAME_LENGTH Length of the external buffer is smaller than minium of frame length.
  * @retval NETC_ETH_IP_STATUS_TX_BUFF_OVERFLOW The requested buffer length cannot be granted.
  */
@@ -329,10 +366,9 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ProvideRxBuff(uint8 ctrlIndex,
  * @param[inout] BuffListSize [IN]  Number of buffers in list. When the internal buffers are in use, this parameter shall
  *                                  contain the number of BD which need to be restored after a reception of a more than one packet.
  *                            [OUT] Returns how many Buffer Descriptors have been released.
- * @retval NETC_ETH_IP_STATUS_SUCCESS Execution with success.
  */
-Netc_Eth_Ip_StatusType Netc_Eth_Ip_ProvideMultipleRxBuff(uint8 CtrlIndex,
-                                                         uint8 Ring,
+void Netc_Eth_Ip_ProvideMultipleRxBuff(const uint8 CtrlIndex,
+                                                         const uint8 Ring,
                                                          uint8* BuffList[],
                                                          uint16* BuffListSize);
 
@@ -402,9 +438,18 @@ void Netc_Eth_Ip_GetMacAddr(uint8 CtrlIndex, uint8 *MacAddr);
  *
  * @param[in] CtrlIndex Instance number
  * @param[in] Counter The counter to be read
- * @return The value of the requested counter
+ * @return The low 32-bit value of the requested counter
  */
 uint32 Netc_Eth_Ip_GetCounter(uint8 CtrlIndex, Netc_Eth_Ip_CounterType Counter);
+
+/**
+ * @brief Gets statistics from the specified counter
+ *
+ * @param[in] CtrlIndex Instance number
+ * @param[in] Counter The counter to be read
+ * @return The 64-bit value of the requested counter
+ */
+uint64 Netc_Eth_Ip_GetCounter64(uint8 CtrlIndex, Netc_Eth_Ip_CounterType Counter);
 
 /**
  * @brief Adds a hardware address to the hash filter. The destination address of
@@ -418,7 +463,7 @@ uint32 Netc_Eth_Ip_GetCounter(uint8 CtrlIndex, Netc_Eth_Ip_CounterType Counter);
  *                                NETC_ETH_IP_STATUS_MAC_ADDR_TABLE_FULL - MAC table used for hash filter is full
  *                                NETC_ETH_IP_STATUS_TIMEOUT - Only for VSIs - the command was not processed in the allotted time
  */
-Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMulticastDstAddrToHashFilter(uint8 CtrlIndex, const uint8 *MacAddr);
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMulticastDstAddrToHashFilter(const uint8 CtrlIndex, const uint8 *MacAddr);
 
 /**
  * @brief Removes a hardware address from the hash filter. The destination address of
@@ -433,18 +478,18 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMulticastDstAddrToHashFilter(uint8 CtrlInd
  *                                found in the hash filter table
  *                                NETC_ETH_IP_STATUS_TIMEOUT - Only for VSIs - the command was not processed in the allotted time
  */
-Netc_Eth_Ip_StatusType Netc_Eth_Ip_RemoveMulticastDstAddrFromHashFilter(uint8 CtrlIndex, const uint8 *MacAddr);
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_RemoveMulticastDstAddrFromHashFilter(const uint8 CtrlIndex, const uint8 *MacAddr);
 
 /**
  * @brief Enables/Disables forwarding of the multicast traffic.
  *
  * @param[in]  CtrlIdx Instance number
- * @param[in]  Enable  TRUE -> cotroller will receive all the multicast traffic;
+ * @param[in]  EnableMulticast  TRUE -> cotroller will receive all the multicast traffic;
  *                     FALSE-> cotroller will stop receive all the multicast traffic;
  * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
  *                                NETC_ETH_IP_STATUS_TIMEOUT - Only for VSIs - the command was not processed in the allotted time
  */
-Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetMulticastForwardAll(uint8 CtrlIndex, boolean EnableMulticast);
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetMulticastForwardAll(const uint8 CtrlIndex, const boolean EnableMulticast);
 
 /**
  * @brief Disable multicast promiscuous and delete all entries in multicast MAC filter table.
@@ -453,14 +498,14 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetMulticastForwardAll(uint8 CtrlIndex, boole
  * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
  *                                NETC_ETH_IP_STATUS_TIMEOUT - Only for VSIs - the command was not processed in the allotted time
  */
-Netc_Eth_Ip_StatusType Netc_Eth_Ip_CloseMulticastReceiving(uint8 CtrlIndex);
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_CloseMulticastReceiving(const uint8 CtrlIndex);
 /**
  * @brief Realease multiple transmission buffers at once.
  *
  * @param CtrlIdx Instance number.
  * @param Ring    Ring number.
  */
-void Netc_Eth_Ip_ReleaseTxBuffers(uint8 CtrlIdx, uint8 Ring);
+void Netc_Eth_Ip_ReleaseTxBuffers(const uint8 CtrlIdx, const uint8 Ring);
 
 /**
  * @brief Set the threshold values for Rx coalescing interrupt.
@@ -483,13 +528,110 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetRxCoalescingThresholds(uint8 CtrlIdx, uint
  * @param[in]  CtrlIdx  Controller number
  * @param[in]  RingIdx  Ring Index on which the settings will be applied.
  * @param[in]  PacketsThreshold  No of packets after which the ISR will be triggered. Must be different than 0 in order to set the value.
+ *                               If a value which is not a power of two is passed through this parameter, than the actual number of packets configured
+ *                               will be the greatest power of two which is smaller than the parameter value.
  * @param[in]  TimerThreshold  No of ticks after which the ISR will be triggered. Must be different than 0 in order to set the value.
  *
  * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
- *                                NETC_ETH_IP_STATUS_ERROR - Either the coalescing interrupt is not enabled or the No of packets passed exceedes the
- *                                                        size of the ring.
+ *                                NETC_ETH_IP_STATUS_ERROR - Either the coalescing interrupt is not enabled or the No of packets passed is equal
+ *                                                          to or greater than the size of the ring.
  */
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetTxCoalescingThresholds(uint8 CtrlIdx, uint8 RingIdx, uint16 PacketsThreshold, uint32 TimerThreshold);
+
+/**
+ * @brief Add/Update time gate scheduling table entry.
+ *
+ * @param[in]  CtrlIndex Instance number
+ * @param[in]  TimeGateSchedulingTableEntry  pointer to structure Netc_Eth_Ip_TimeGateSchedulingEntryDataType that contains the data of time gate scheduling entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateTimeGateSchedulingTableEntry( const uint8 CtrlIndex,
+                                                                            const Netc_Eth_Ip_TimeGateSchedulingEntryDataType *TimeGateSchedulingTableEntry
+                                                                          );
+
+/**
+ * @brief Enables/Disables time gate scheduling feature.
+ *
+ * @param[in]  CtrlIndex Instance number
+ * @param[in]  Enable  TRUE -> time gate scheduling will be enabled;
+ *                     FALSE-> time gate scheduling will be disabled;
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                NETC_ETH_IP_STATUS_ERROR - fail to enable time gating because Operational gate control list is active
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigPortTimeGateScheduling( const uint8 CtrlIndex, const boolean Enable );
+
+/**
+ * @brief Add/Update rate policer table entry.
+ *
+ * @param[in]  CtrlIndex Instance number
+ * @param[in]  Cmd              Add and Update commands are supported
+ * @param[out] MatchedEntries   Number of matched entries
+ * @param[in]  RatePolicerTableEntry  pointer to structure Netc_Eth_Ip_RatePolicerEntryDataType that contains the data of rate policer entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateRatePolicerTableEntry( const uint8 CtrlIndex,
+                                                                     Netc_Eth_Ip_CommandsType Cmd,
+                                                                     uint32 *MatchedEntries,
+                                                                     const Netc_Eth_Ip_RatePolicerEntryDataType * RatePolicerTableEntry
+                                                                   );
+
+/**
+ * @brief Query rate policer table entry.
+ *
+ * @param[in]   CtrlIndex Instance number
+ * @param[out]  MatchedEntries   Number of matched entries
+ * @param[in]   RatePolicerEntryId       Rate policer table entry id
+ * @param[out]  RatePolicerTableEntry    pointer to structure Netc_Eth_Ip_RatePolicerEntryRspDataType that contains the data of rate policer entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRatePolicerTableEntry( const uint8 CtrlIndex,
+                                                               uint32 *MatchedEntries,
+                                                               uint32 RatePolicerEntryId,
+                                                               Netc_Eth_Ip_RatePolicerEntryRspDataType * RatePolicerTableEntry
+                                                             );
+
+/**
+ * @brief Delete rate policer table entry.
+ *
+ * @param[in]   CtrlIndex Instance number
+ * @param[out]  MatchedEntries   Number of matched entries
+ * @param[in]   RatePolicerEntryId       Rate policer table entry id
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteRatePolicerTableEntry( const uint8 CtrlIndex,
+                                                                uint32 *MatchedEntries,
+                                                                uint32 RatePolicerEntryId
+                                                              );
+
+/**
+ * @brief Add VLAN Filter Table entry.
+ *
+ * @param[in]  CtrlIndex Instance number
+ * @param[in]  VLANTableEntry  pointer to structure Netc_Eth_Ip_VLANFilterTableEntryDataType that contains the data of the VLAN Filter Table entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddVLANFilterTableEntry( const uint8 ctrlIndex, const Netc_Eth_Ip_VLANFilterTableEntryDataType *VLANTableEntry);
+
+/**
+ * @brief Query VLAN Filter Table entry. Uses the entry ID for the entry and updates the rest of the fields in the structure if the entry is found.
+ *
+ * @param[in]  CtrlIndex Instance number
+ * @param[in,out]  VLANTableEntry  pointer to structure Netc_Eth_Ip_VLANFilterTableEntryDataType that contains the data of the VLAN Filter Table entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryVLANFilterTableEntry(const uint8 ctrlIndex, Netc_Eth_Ip_VLANFilterTableEntryDataType *VLANTableEntry);
 
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
 #ifdef NETC_ETH_0_USED
@@ -497,11 +639,20 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetTxCoalescingThresholds(uint8 CtrlIdx, uint
  * @brief Set management information for a frame which will be send using management.
  *
  * @param CtrlIdx Instance number
- * @param BuffIdx Uniq buffer index id.
- * @param ManagementInfo Pointer to the timestamp information for frame identified by BuffIdx.
- * @param Status Enable/Disable management transmission on this frame.
+ * @param BuffIdx Unique buffer index id.
+ * @param SwitchIndex Index number of the switch to be used by the frame
+ * @param PortIndex Index identifier of the switch's port to be used by the frame
+ * @param Enable Enable/Disable management transmission on this frame.
  */
-void Netc_Eth_Ip_ManagementFrame(uint8 CtrlIdx, uint16 BuffIdx, const Netc_Eth_Ip_TxTimestampInfoType *ManagementInfo, boolean Status);
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_ManagementFrame(const uint8 CtrlIdx, uint16 BuffIdx, uint8 SwitchIndex, uint8 PortIndex, boolean Enable);
+
+/**
+ * @brief Set a management frame to be sent as a timestamping one
+ * @param CtrlIdx Instance number
+ * @param BuffIdx Unique buffer index id.
+ * @param Enable Enable/Disable timestamping for this frame
+ **/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_TimestampTxFrame(const uint8 CtrlIdx, const uint16 BuffIdx, const boolean Enable);
 
 /**
  * @brief
@@ -509,39 +660,231 @@ void Netc_Eth_Ip_ManagementFrame(uint8 CtrlIdx, uint16 BuffIdx, const Netc_Eth_I
  * @param CtrlIndex Instance number
  * @param Ring
  * @return void
+ * @internal This function is not an API.
+
  */
 void Netc_Eth_Ip_ReleaseUnusedTxBuff(uint8 CtrlIndex, uint8 Ring);
 
 /**
- * @brief
+ * @brief Get a pointer to the timestamp information of a particular TX frame.
  *
  * @param CtrlIdx Instance number
- * @param BuffIdx Uniq buffer index id.
- * @return Netc_Eth_Ip_StatusType
+ * @param BuffIdx Unique buffer index id.
+ * @param MgmtInfo Pointer to management information for the frame identified by BuffIdx
+ * @param TimestampInfo Pointer to timestamp information for the frame identified by BuffIdx
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - succesfully returned a pointer to the latest timestamp information
+ *                                NETC_ETH_IP_STATUS_ERROR - no timestamp information found for the requested frame
  */
-Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxTimestampInfo(const uint8 CtrlIdx, const uint32 BuffIdx, Netc_Eth_Ip_TxTimestampInfoType **TimestampInfo);
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxTimestampInfo(const uint8 CtrlIdx, const uint32 BuffIdx, Netc_Eth_Ip_TxManagementInfoType **MgmtInfo, Netc_Eth_Ip_TxTimestampInfoType **TimestampInfo);
 
 #endif /* NETC_ETH_0_USED */
 
 /**
- * @brief
+ * @brief Get a pointer to the Ingress timestamp information of a particular RX frame.
  *
- * @param CtrlIdx
- * @param DataPtr
- * @param RxTimestampInfo
- * @return Netc_Eth_Ip_StatusType
+ * @param[in] CtrlIdx - Index of the SI.
+ * @param[in] DataPtr - Data buffer address of the received frame for which the timestamp information is requested.
+ * @param[out] RxTimestampInfo  Pointer to the timestamp information.
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - succesfully returned a pointer to the latest timestamp information
+ *                                NETC_ETH_IP_STATUS_ERROR - no timestamp information found for the requested frame
  */
-Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetRxTimestampInfo(uint8 CtrlIdx, const uint8 *DataPtr, Netc_Eth_Ip_RxTimestampInfoType **RxTimestampInfo);
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetRxTimestampInfo(const uint8 CtrlIdx, const uint8 *DataPtr, Netc_Eth_Ip_RxTimestampInfoType **RxTimestampInfo);
 
 #endif /* STD_ON == NETC_ETH_IP_EXTENDED_BUFF */
 
 /**
- * @brief
+ * @brief Function updates the time pointer value with the current sys time
  *
- * @param ctrlIndex
- * @param TimePtr
+ * @param ctrlIndex Index of the Eth controller.
+ * @param TimePtr Current time stamp pointer
  */
-void Netc_Eth_Ip_GetCurrentTime(uint8 ctrlIndex, Netc_Eth_Ip_TimeType *TimePtr);
+void Netc_Eth_Ip_GetSysTime(uint8 ctrlIndex, Netc_Eth_Ip_TimeType *TimePtr);
+
+/**
+ * @brief Function de-initialises VSI controller.
+ * PSI de-init not supported since it will also reset all VSIs
+ * VSI-PSI messaging interrupt needs to be configured for the VSI reconfiguration, done by the PSI
+ *
+ * @param ctrlIndex Index of the Eth controller.
+ * @retval NETC_ETH_IP_STATUS_SUCCESS The de-initialization was successful.
+ * @retval NETC_ETH_IP_STATUS_TIMEOUT The de-initialization returned a timeout.
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_Deinit(uint8 ctrlIndex);
+
+/**
+ * @brief Checks the status of a transmissions and releases the resources
+ * @internal This function is not an API, but an internal function that needs to be used in the upper layer.
+ *
+ *
+ * @param ctrlIndex             Index of the SI.
+ * @param ring                  Ring Number.
+ * @param ConsumerIndex         Consumer read from HW.
+ * @param buff                  Buffer address.
+ * @param timeStampInfo         Parameter where the timestamp can be provided for the transmitted frame
+ * @param txStatus              Parameter where the transmission status can be provided.
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                NETC_ETH_IP_STATUS_TIMEOUT - Only for VSIs - the command was not processed in time
+ * @internal This function is not an API.
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
+                                                    uint8 ring,
+                                                    uint32 ConsumerIndex,
+                                                    const uint8 *buff,
+                                                    Netc_Eth_Ip_TimestampType *timeStampInfo,
+                                                    Netc_Eth_Ip_TxStatusType *txStatus);
+
+/**
+ * @brief The Pcie Event Collector Interrupt handler
+ * @internal This function is not an API. It must be added in the Interrupt Controller configuration as a handler.
+ *
+ * @param ctrlIndex             Index of the SI.
+ * @return void
+ */
+void Netc_Eth_Ip_PCIe_AER_Handler(uint8 ctrlIndex);
+
+/**
+ * @brief         Enable/Disable the ingress port filter feature on ENETC port
+ *
+ * @param[in]     CtrlIndex            Index of the controller within the context of the Ethernet Driver
+ * @param[in]     Enable               TRUE: enable ingress port filter feature. FALSE: disable ingress port filter feature.
+ *
+ */
+Std_ReturnType Netc_Eth_Ip_EnableIngressPortFiltering(const uint8 CtrlIndex, boolean Enable );
+
+/**
+ * @brief Add ingress port filter table entry.
+ *
+ * @param[in]   CtrlIndex Instance number
+ * @param[out]  MatchedEntries   Number of matched entries
+ * @param[in]   IngressPortFilterTableEntry    pointer to structure Netc_Eth_Ip_IngressPortFilterEntryDataType that contains the data of ingress port filter entry
+ * @param[out]  IngressPortFilterTableEntry    pointer to structure Netc_Eth_Ip_IngressPortFilterEntryDataType that contains the data of ingress port filter entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddIngressPortFilterTableEntry( uint8 CtrlIndex,
+                                                                   uint32 *MatchedEntries,
+                                                                   Netc_Eth_Ip_IngressPortFilterEntryDataType * IngressPortFilterTableEntry
+                                                                 );
+
+/**
+ * @brief Query ingress port filter table entry.
+ *
+ * @param[in]   CtrlIndex Instance number
+ * @param[out]  MatchedEntries   Number of matched entries
+ * @param[in]   IngressPortFilterTableEntry    pointer to structure Netc_Eth_Ip_IngressPortFilterEntryDataType that contains the data of ingress port filter entry
+ * @param[out]  IngressPortFilterTableEntry    pointer to structure Netc_Eth_Ip_IngressPortFilterEntryDataType that contains the data of ingress port filter entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryIngressPortFilterTableEntry( const uint8 CtrlIndex,
+                                                                     uint32 *MatchedEntries,
+                                                                     Netc_Eth_Ip_IngressPortFilterEntryDataType * IngressPortFilterTableEntry
+                                                                   );
+
+/**
+ * @brief Delete ingress port filter table entry.
+ *
+ * @param[in]   CtrlIndex Instance number
+ * @param[out]  MatchedEntries   Number of matched entries
+ * @param[in]   IngressPortFilterEntryId       Ingress port filter table entry id
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteIngressPortFilterTableEntry( const uint8 CtrlIndex,
+                                                                      uint32 *MatchedEntries,
+                                                                      uint32 IngressPortFilterEntryId
+                                                                    );
+
+
+/**
+ * @brief This function dumps the Error Capture registers for a specific PCIE device (function).
+* @param[in]  ctrlIndex                Index of the SI. Input Parameter
+* @param[in]  function                 The PCIE function for which the error statistics are requested.Input Parameter
+* @param[out] numberOfRegisters        This is an output parameter. The function returns the number of statistics registers that have been written in the Buffer parameter.
+* @param[in]  siIndex                  This is an input parameter. Must be used only if he function is VSI or PSI. For PSI it must be set to 0 while for VSI must be set to the index of the SI.
+*                                      For other functions(ENET, TIMER, SWITCH, EMDIO), this parameter is ignored.
+* @param[in]  Buffers                  Array of pointers to Netc_Eth_Ip_ErrorCaptureRegisterInformation structures.
+        *                              Application MUST allocate enough space for the maximum number of
+        *                              registers that could have a function for Error detailing.
+        *                              Netc driver offers two macros: NETC_ETH_IP_MAX_UNCORRECTABLE_ERROR_REPORTING_STATISTICS_LENGTH for the maximum number of
+        *                              uncorrectable errors status registers among the PCIE function supported and
+        *                              NETC_ETH_IP_MAX_CORRECTABLE_ERROR_REPORTING_STATISTICS_LENGTH for the maximum number of
+        *                              correctable errors status registers among the PCIE function supported.
+ * @return void
+ */
+void Netc_Eth_Ip_DumpErrorCapture (     const uint8 ctrlIdx,
+                                        const Netc_Eth_Ip_PcieFunction function,
+                                        uint8 *numberOfRegisters,
+                                        uint8 siIndex,
+                                        Netc_Eth_Ip_ErrorCaptureRegisterInformation* Buffers[]);
+
+/**
+ * @brief This function gets Timer Syncronization State function.
+* @param[in]  CtrlIndex                Index of the SI. Input Parameter
+* @param[out]  SyncState                 Timer Syncronization State
+*
+* @return          Netc_Eth_Ip_StatusType
+* @retval          NETC_ETH_IP_STATUS_SUCCESS: successful.
+* @retval          NETC_ETH_IP_STATUS_TIMEOUT: failed
+*/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetSyncState( const uint8 CtrlIndex,
+                                                boolean *SyncState);
+/*
+ * @brief Query statistics Receive Flow Steering table entry.
+ *
+ * @param[in]   ctrlIndex Instance number
+ * @param[in]   RfsTableEntry   Rfs Entry for querying
+ * @param[out]  MatchedFramesNb    Number of matched frames
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryStatisticsRfsTableEntry(const uint8 ctrlIndex,
+                                                                uint8 RfsEntryIdx,
+                                                                 uint32 * MatchedFramesNb);
+
+/**
+ * @brief Query Receive Flow Steering table entry.
+ *
+ * @param[in]   ctrlIndex Instance number
+ * @param[in]   RfsTableEntry   Rfs Entry for querying
+ * @param[out]  RfsTableEntryAddr    Address of matched rfs entry
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRfsTableEntry(const uint8 ctrlIndex,
+                                                                uint8 RfsEntryIdx,
+                                                                 uint32 * RfsTableEntryAddr);
+
+/**
+ * @brief Add Receive Flow Steering table entry.
+ *
+ * @param[in]   ctrlIndex Instance number
+ * @param[in]   RfsTableEntry   Rfs Entry to add
+ *
+ * @return Netc_Eth_Ip_StatusType NETC_ETH_IP_STATUS_SUCCESS - successfully operation
+ *                                others - error code from command ring
+ */
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddRfsTableEntry(const uint8 ctrlIndex,
+                                                     const Netc_Eth_Ip_RfsEntryType * RfsTableEntry);
+
+/**
+ * @brief This function sets SIs MAC address.
+* @param[in]  CtrlIndex           Index of the current controller. Input Parameter
+* @param[in]  SiId                Index of the SI which will have the MAC address changed. Input Parameter
+* @param[in]  MacAddr             MAC address. Input Parameter
+*
+* @return          Netc_Eth_Ip_StatusType
+* @retval          NETC_ETH_IP_STATUS_SUCCESS: successful.
+* @retval          NETC_ETH_IP_STATUS_UNSUPPORTED: SI identified by ctrlIndex parameter has type different than PSI
+*/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetSiPhysAddr( const uint8 CtrlIndex,
+                                                    const uint8 SiId,
+                                                    const uint8 *MacAddr);
 
 #define ETH_43_NETC_STOP_SEC_CODE
 #include "Eth_43_NETC_MemMap.h"

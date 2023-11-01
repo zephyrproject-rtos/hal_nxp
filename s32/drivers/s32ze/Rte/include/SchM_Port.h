@@ -1,18 +1,23 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef SCHM_PORT_H
-#define SCHM_PORT_H
-
 /**
-*   @file
+*   @file    SchM_Port.h
+*   @version 1.0.0
+*
+*   @brief   AUTOSAR Rte - module interface
+*   @details This file contains the functions prototypes and data types of the AUTOSAR Rte.
+*            This file contains sample code only. It is not part of the production code deliverables.
 *
 *   @addtogroup RTE_MODULE
 *   @{
 */
+
+#ifndef SCHM_PORT_H
+#define SCHM_PORT_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,8 +35,8 @@ extern "C" {
 #define SCHM_PORT_AR_RELEASE_MAJOR_VERSION     4
 #define SCHM_PORT_AR_RELEASE_MINOR_VERSION     7
 #define SCHM_PORT_AR_RELEASE_REVISION_VERSION  0
-#define SCHM_PORT_SW_MAJOR_VERSION             0
-#define SCHM_PORT_SW_MINOR_VERSION             9
+#define SCHM_PORT_SW_MAJOR_VERSION             1
+#define SCHM_PORT_SW_MINOR_VERSION             0
 #define SCHM_PORT_SW_PATCH_VERSION             0
 
 /*==================================================================================================

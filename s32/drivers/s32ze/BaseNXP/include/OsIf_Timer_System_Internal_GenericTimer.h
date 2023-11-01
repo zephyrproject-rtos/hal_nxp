@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,22 +25,24 @@ extern "C"{
 #define OSIF_TIMER_SYS_INTER_GENERICTIMER_AR_RELEASE_MAJOR_VERSION     4
 #define OSIF_TIMER_SYS_INTER_GENERICTIMER_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_TIMER_SYS_INTER_GENERICTIMER_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_MAJOR_VERSION             0
-#define OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_MINOR_VERSION             9
+#define OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_MAJOR_VERSION             1
+#define OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_MINOR_VERSION             0
 #define OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_PATCH_VERSION             0
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
-/* Checks against OsIf_Cfg.h */
+/* Check if OsIf_Timer_System_Internal_GenericTimer.h file and OsIf_Cfg.h file are of the same vendor */
 #if (OSIF_TIMER_SYS_INTER_GENERICTIMER_VENDOR_ID != OSIF_CFG_VENDOR_ID)
     #error "OsIf_Timer_System_Internal_GenericTimer.h and OsIf_Cfg.h have different vendor ids"
 #endif
+/* Check if OsIf_Timer_System_Internal_GenericTimer.h file and OsIf_Cfg.h file are of the same Autosar version */
 #if ((OSIF_TIMER_SYS_INTER_GENERICTIMER_AR_RELEASE_MAJOR_VERSION    != OSIF_CFG_AR_RELEASE_MAJOR_VERSION) || \
      (OSIF_TIMER_SYS_INTER_GENERICTIMER_AR_RELEASE_MINOR_VERSION    != OSIF_CFG_AR_RELEASE_MINOR_VERSION) || \
      (OSIF_TIMER_SYS_INTER_GENERICTIMER_AR_RELEASE_REVISION_VERSION != OSIF_CFG_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of OsIf_Timer_System_Internal_GenericTimer.h and OsIf_Cfg.h are different"
 #endif
+/* Check if OsIf_Timer_System_Internal_GenericTimer.h file and OsIf_Cfg.h file are of the same Software version */
 #if ((OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_MAJOR_VERSION != OSIF_CFG_SW_MAJOR_VERSION) || \
      (OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_MINOR_VERSION != OSIF_CFG_SW_MINOR_VERSION) || \
      (OSIF_TIMER_SYS_INTER_GENERICTIMER_SW_PATCH_VERSION != OSIF_CFG_SW_PATCH_VERSION) \
@@ -109,7 +111,7 @@ uint32 OsIf_Timer_System_Internal_GetElapsed(uint32 * const CurrentRef);
 #define BASENXP_STOP_SEC_CODE
 #include "BaseNXP_MemMap.h"
 
-#endif /* OSIF_USE_GENERICTIMER == STD_ON */
+#endif /* (OSIF_USE_GENERICTIMER == STD_ON) */
 #endif /* defined(OSIF_USE_GENERICTIMER) */
 
 #ifdef __cplusplus

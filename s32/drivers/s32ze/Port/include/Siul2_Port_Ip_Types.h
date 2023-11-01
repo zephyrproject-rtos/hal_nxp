@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -38,8 +38,8 @@ extern "C" {
 #define SIUL2_PORT_IP_TYPES_AR_RELEASE_MAJOR_VERSION_H      4
 #define SIUL2_PORT_IP_TYPES_AR_RELEASE_MINOR_VERSION_H      7
 #define SIUL2_PORT_IP_TYPES_AR_RELEASE_REVISION_VERSION_H   0
-#define SIUL2_PORT_IP_TYPES_SW_MAJOR_VERSION_H              0
-#define SIUL2_PORT_IP_TYPES_SW_MINOR_VERSION_H              9
+#define SIUL2_PORT_IP_TYPES_SW_MAJOR_VERSION_H              1
+#define SIUL2_PORT_IP_TYPES_SW_MINOR_VERSION_H              0
 #define SIUL2_PORT_IP_TYPES_SW_PATCH_VERSION_H              0
 
 /*==================================================================================================
@@ -82,7 +82,7 @@ extern "C" {
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
 /*! @brief SIUL2 module maximum number of input signal on a pin */
-#define FEATURE_SIUL2_MAX_NUMBER_OF_INPUT        (8U)
+#define FEATURE_SIUL2_MAX_NUMBER_OF_INPUT_U8        ((uint8)8U)
 
 /*==================================================================================================
 *                                              ENUMS
@@ -416,6 +416,9 @@ typedef enum
 typedef struct
 {
     SIUL2_Type                                  *base;                      /*!< The main SIUL2 base pointer.                               */
+#ifdef IP_SIUL2_AE_BASE
+    SIUL2_AE_Type                               *baseAE;                    /*!< The main SIUL2_AE base pointer.                            */
+#endif
     uint32                                      pinPortIdx;                 /*!< Port pin number.                                           */
     Siul2_Port_Ip_PortPullConfig                pullConfig;                 /*!< Internal resistor pull feature selection.                  */
     Siul2_Port_Ip_PortMux                       mux;                        /*!< Pin output muxing selection.                               */
@@ -456,8 +459,8 @@ typedef struct
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_OPEN_DRAIN */
     Siul2_Port_Ip_PortOutputBuffer              outputBuffer;               /*!< Configures the Output Buffer Enable.                       */
     Siul2_Port_Ip_PortInputBuffer               inputBuffer;                /*!< Configures the Input Buffer Enable.                        */
-    Siul2_Port_Ip_PortInputMux                  inputMux[FEATURE_SIUL2_MAX_NUMBER_OF_INPUT];   /*!< Configures the input muxing */
-    uint32                                      inputMuxReg[FEATURE_SIUL2_MAX_NUMBER_OF_INPUT];
+    Siul2_Port_Ip_PortInputMux                  inputMux[FEATURE_SIUL2_MAX_NUMBER_OF_INPUT_U8];   /*!< Configures the input muxing */
+    uint32                                      inputMuxReg[FEATURE_SIUL2_MAX_NUMBER_OF_INPUT_U8];
                                 /*!< Configures the input muxing register. For the pins controlled by both SIUL2_0
                                  * and SIUL2_1 instances, refer the note for PINS_DRV_SetInputBuffer function      */
     Siul2_Port_Ip_PortPinsLevelType             initValue;                  /*!< Initial value                                              */

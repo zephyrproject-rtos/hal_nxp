@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -26,7 +26,6 @@ extern "C" {
 ==================================================================================================*/
 
 #include "Std_Types.h"
-#include "PlatformTypes.h"
 #include "Siul2_Port_Ip_Cfg.h"
 #include "Siul2_Port_Ip_Types.h"
 #include "Siul2_Port_Ip_Defines.h"
@@ -51,8 +50,8 @@ extern "C" {
 #define SIUL2_PORT_IP_AR_RELEASE_MAJOR_VERSION_H      4
 #define SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_H      7
 #define SIUL2_PORT_IP_AR_RELEASE_REVISION_VERSION_H   0
-#define SIUL2_PORT_IP_SW_MAJOR_VERSION_H              0
-#define SIUL2_PORT_IP_SW_MINOR_VERSION_H              9
+#define SIUL2_PORT_IP_SW_MAJOR_VERSION_H              1
+#define SIUL2_PORT_IP_SW_MINOR_VERSION_H              0
 #define SIUL2_PORT_IP_SW_PATCH_VERSION_H              0
 
 /*==================================================================================================
@@ -64,12 +63,6 @@ extern "C" {
          (SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_H != STD_AR_RELEASE_MINOR_VERSION)    \
         )
         #error "AutoSar Version Numbers of Siul2_Port_Ip.h and StandardTypes.h are different"
-    #endif
-    /* Check if the files Siul2_Port_Ip.h and PlatformTypes.h are of the same version */
-    #if ((SIUL2_PORT_IP_AR_RELEASE_MAJOR_VERSION_H != PLATFORM_TYPES_AR_RELEASE_MAJOR_VERSION) || \
-         (SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_H != PLATFORM_TYPES_AR_RELEASE_MINOR_VERSION)    \
-        )
-        #error "AutoSar Version Numbers of Siul2_Port_Ip.h and PlatformTypes.h are different"
     #endif
     /* Check if the files Siul2_Port_Ip.h and Devassert.h are of the same version */
     #if ((SIUL2_PORT_IP_AR_RELEASE_MAJOR_VERSION_H != DEVASSERT_AR_RELEASE_MAJOR_VERSION) || \
@@ -163,9 +156,9 @@ extern "C" {
 
 /* @brief Mask definitions for IMCR bit field SSS */
 #define SIUL2_IMCR_SSS_U32                              ((uint32)0x00000007U)
-#define SIUL2_IMCR_SSS_OFFSET_U32                       ((uint32)0)
+#define SIUL2_IMCR_SSS_OFFSET_U32                       ((uint32)0UL)
 
-#define PORT_PIN_LEVEL_NOTCHANGED_U8        ((uint8)2)    /**< @brief Not changed port pin logic. */
+#define PORT_PIN_LEVEL_NOTCHANGED_U8        ((uint8)2U)    /**< @brief Not changed port pin logic. */
 
 #if (SIUL2_PORT_IP_DEV_ERROR_DETECT == STD_ON)
 #define SIUL2_PORT_IP_DEV_ASSERT(par) DevAssert(par)
@@ -173,11 +166,11 @@ extern "C" {
 #define SIUL2_PORT_IP_DEV_ASSERT(par)
 #endif
 
-#define SIUL2_MAX_NUM_OF_IMCR_REG       512u
-#define SIUL2_DIPORT_IMCR_AE_IDX_START  768u
-#define SIUL2_DIPORT_IMCR_AE_IDX_END    799u
+#define SIUL2_MAX_NUM_OF_IMCR_REG           (512u)
+#define SIUL2_DIPORT_IMCR_AE_IDX_START_U32  ((uint32)768u)
+#define SIUL2_DIPORT_IMCR_AE_IDX_END_U32    ((uint32)799u)
 
-#define SIUL2_AE_IMCR_IDX_OFFSET        1000u
+#define SIUL2_AE_IMCR_IDX_OFFSET_U32        ((uint32)1000u)
 
 /*==================================================================================================
 *                                              ENUMS
@@ -228,7 +221,8 @@ extern const uint32 Port_au32Siul2BaseAddr[];
  */
 void Siul2_Port_Ip_SetPullSel(Siul2_Port_Ip_PortType * const base,
                               uint16 pin,
-                              Siul2_Port_Ip_PortPullConfig pullConfig);
+                              Siul2_Port_Ip_PortPullConfig pullConfig
+                             );
 
 /*!
  * @brief Configures the output buffer and output signal.
@@ -244,7 +238,8 @@ void Siul2_Port_Ip_SetPullSel(Siul2_Port_Ip_PortType * const base,
 void Siul2_Port_Ip_SetOutputBuffer(Siul2_Port_Ip_PortType * const base,
                                    uint16 pin,
                                    boolean enable,
-                                   Siul2_Port_Ip_PortMux mux);
+                                   Siul2_Port_Ip_PortMux mux
+                                  );
 
 /*!
  * @brief Configures the input buffer and input signal.
@@ -268,7 +263,8 @@ void Siul2_Port_Ip_SetInputBuffer(Siul2_Port_Ip_PortType * const base,
                                   uint16 pin,
                                   boolean enable,
                                   uint32 inputMuxReg,
-                                  Siul2_Port_Ip_PortInputMux inputMux);
+                                  Siul2_Port_Ip_PortInputMux inputMux
+                                 );
 
 /*!
  * @brief Initializes the pins with the given configuration structure
@@ -281,7 +277,8 @@ void Siul2_Port_Ip_SetInputBuffer(Siul2_Port_Ip_PortType * const base,
  * @return The status of the operation
  */
 Siul2_Port_Ip_PortStatusType Siul2_Port_Ip_Init(uint32 pinCount,
-                                                const Siul2_Port_Ip_PinSettingsConfig config[]);
+                                                const Siul2_Port_Ip_PinSettingsConfig config[]
+                                               );
 
 /*!
  * @brief Configures the pin with the values form the configuration structure
@@ -295,7 +292,8 @@ Siul2_Port_Ip_PortStatusType Siul2_Port_Ip_Init(uint32 pinCount,
  */
 void Siul2_Port_Ip_SetPinDirection(Siul2_Port_Ip_PortType * const base,
                                    uint16 pin,
-                                   Siul2_Port_Ip_PortDirectionType direction);
+                                   Siul2_Port_Ip_PortDirectionType direction
+                                  );
 
 /*!
  * @brief This function configures the pin configuration with the values from the configuration structure
@@ -307,7 +305,8 @@ void Siul2_Port_Ip_SetPinDirection(Siul2_Port_Ip_PortType * const base,
  * @return MSCR register value
  */
 uint32 Siul2_Port_Ip_RevertPinConfiguration(const Siul2_Port_Ip_PortType * const base,
-                                            uint16 pin);
+                                            uint16 pin
+                                           );
 
 /*!
  * @brief This function shall return the value of the pin configuration register.
@@ -321,7 +320,59 @@ uint32 Siul2_Port_Ip_RevertPinConfiguration(const Siul2_Port_Ip_PortType * const
  */
 void Siul2_Port_Ip_GetPinConfiguration(const Siul2_Port_Ip_PortType * const base,
                                        Siul2_Port_Ip_PinSettingsConfig * config,
-                                       uint16 pin);
+                                       uint16 pin
+                                      );
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : PINS_Init
+ * Description   : This function configures the pin feature with the options
+ * provided in the given structure.
+ *
+ *END**************************************************************************/
+
+/*!
+ * @brief Initializes the pins with the given configuration structure
+ *
+ * This function configures the pins with the options provided in the
+ * given structure.
+ *
+ * @param[in] pinNumber the number of configured pins in structure
+ * @param[in] config the configuration structure
+  */
+void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config);
+
+void Siul2_Port_Ip_ConfigInternalResistor(Siul2_Port_Ip_PortType * const base,
+                                          uint16 pin,
+                                          Siul2_Port_Ip_PortPullConfig pullConfig
+                                         );
+
+void Siul2_Port_Ip_ConfigOutputBuffer(Siul2_Port_Ip_PortType * const base,
+                                      uint16 pin,
+                                      boolean enable,
+                                      Siul2_Port_Ip_PortMux mux
+                                     );
+
+void Siul2_Port_Ip_ConfigInputBuffer(Siul2_Port_Ip_PortType * const base,
+                                     uint16 pin,
+                                     boolean enable,
+                                     uint32 inputMuxReg,
+                                     Siul2_Port_Ip_PortInputMux inputMux
+                                    );
+
+void Siul2_Port_Ip_ConfigPinDirection(Siul2_Port_Ip_PortType * const base,
+                                      uint16 pin,
+                                      Siul2_Port_Ip_PortDirectionType direction
+                                     );
+
+uint32 Siul2_Port_Ip_GetValueConfigRevertPin(const Siul2_Port_Ip_PortType * const base,
+                                             uint16 pin
+                                            );
+
+void Siul2_Port_Ip_GetValuePinConfiguration(const Siul2_Port_Ip_PortType * const base,
+                                            Siul2_Port_Ip_PinSettingsConfig * config,
+                                            uint16 pin
+                                           );
 
 #define PORT_STOP_SEC_CODE
 #include "Port_MemMap.h"

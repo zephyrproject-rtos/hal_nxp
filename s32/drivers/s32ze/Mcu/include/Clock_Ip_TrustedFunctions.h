@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Clock_Ip_TrustedFunctions.h
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK IP type header file.
 *   @details CLOCK IP type header file.
@@ -37,8 +37,8 @@ extern "C"{
 #define CLOCK_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION                0
-#define CLOCK_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION                9
+#define CLOCK_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION                1
+#define CLOCK_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION                0
 #define CLOCK_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION                0
 
 /*==================================================================================================

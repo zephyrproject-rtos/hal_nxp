@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -37,8 +37,8 @@ extern "C"{
 #define SWT_IP_IRQ_AR_RELEASE_MAJOR_VERSION       4
 #define SWT_IP_IRQ_AR_RELEASE_MINOR_VERSION       7
 #define SWT_IP_IRQ_AR_RELEASE_REVISION_VERSION    0
-#define SWT_IP_IRQ_SW_MAJOR_VERSION               0
-#define SWT_IP_IRQ_SW_MINOR_VERSION               9
+#define SWT_IP_IRQ_SW_MAJOR_VERSION               1
+#define SWT_IP_IRQ_SW_MINOR_VERSION               0
 #define SWT_IP_IRQ_SW_PATCH_VERSION               0
 
 /*==================================================================================================
@@ -53,26 +53,30 @@ extern "C"{
 
 #if ((SWT_IP_IRQ_AR_RELEASE_MAJOR_VERSION    != SWT_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION) || \
      (SWT_IP_IRQ_AR_RELEASE_MINOR_VERSION    != SWT_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION) || \
-     (SWT_IP_IRQ_AR_RELEASE_REVISION_VERSION != SWT_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION))
+     (SWT_IP_IRQ_AR_RELEASE_REVISION_VERSION != SWT_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION) \
+    )
 #error "AutoSar Version Numbers of Swt_Ip_Irq.h and Swt_Ip_Cfg_Defines.h are different"
 #endif
 
 #if ((SWT_IP_IRQ_SW_MAJOR_VERSION != SWT_IP_CFG_DEFINES_SW_MAJOR_VERSION) || \
      (SWT_IP_IRQ_SW_MINOR_VERSION != SWT_IP_CFG_DEFINES_SW_MINOR_VERSION) || \
-     (SWT_IP_IRQ_SW_PATCH_VERSION != SWT_IP_CFG_DEFINES_SW_PATCH_VERSION))
+     (SWT_IP_IRQ_SW_PATCH_VERSION != SWT_IP_CFG_DEFINES_SW_PATCH_VERSION) \
+    )
 #error "Software Version Numbers of Swt_Ip_Irq.h and Swt_Ip_Cfg_Defines.h are different"
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Check if current file and Osif header file are of the same Autosar version */
     #if ((SWT_IP_IRQ_AR_RELEASE_MAJOR_VERSION    != OSIF_AR_RELEASE_MAJOR_VERSION) || \
-        (SWT_IP_IRQ_AR_RELEASE_MINOR_VERSION     != OSIF_AR_RELEASE_MINOR_VERSION))
+         (SWT_IP_IRQ_AR_RELEASE_MINOR_VERSION     != OSIF_AR_RELEASE_MINOR_VERSION) \
+        )
     #error "AutoSar Version Numbers of Swt_Ip_Irq.h and Osif.h are different"
     #endif
-    
+
     /* Check if current file and StandardTypes header file are of the same Autosar version */
     #if ((SWT_IP_IRQ_AR_RELEASE_MAJOR_VERSION    != STD_AR_RELEASE_MAJOR_VERSION) || \
-        (SWT_IP_IRQ_AR_RELEASE_MINOR_VERSION     != STD_AR_RELEASE_MINOR_VERSION))
+         (SWT_IP_IRQ_AR_RELEASE_MINOR_VERSION     != STD_AR_RELEASE_MINOR_VERSION) \
+        )
     #error "AutoSar Version Numbers of Swt_Ip_Irq.h and StandardTypes.h are different"
     #endif
 #endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
@@ -194,6 +198,78 @@ void Swt_Ip_IrqHandler(uint32 Instance);
 #endif
 #endif
 
+#ifdef SWT_IP_ISR13_USED
+#if (SWT_IP_ISR13_USED == STD_ON)
+    ISR(Swt_Ip_Swt13_Isr);
+#endif
+#endif
+
+#ifdef SWT_IP_ISR14_USED
+#if (SWT_IP_ISR14_USED == STD_ON)
+    ISR(Swt_Ip_Swt14_Isr);
+#endif
+#endif
+
+#ifdef SWT_IP_ISR15_USED
+#if (SWT_IP_ISR15_USED == STD_ON)
+    ISR(Swt_Ip_Swt15_Isr);
+#endif
+#endif
+
+#ifdef SWT_IP_ISR16_USED
+#if (SWT_IP_ISR16_USED == STD_ON)
+    ISR(Swt_Ip_Swt16_Isr);
+#endif
+#endif
+
+#ifdef SWT_IP_ISR17_USED
+#if (SWT_IP_ISR17_USED == STD_ON)
+    ISR(Swt_Ip_Swt17_Isr);
+#endif
+#endif
+
+#ifdef SWT_IP_ISR18_USED
+#if (SWT_IP_ISR18_USED == STD_ON)
+    ISR(Swt_Ip_Swt18_Isr);
+#endif
+#endif
+
+#ifdef SWT_IP_ISR19_USED
+#if (SWT_IP_ISR19_USED == STD_ON)
+    ISR(Swt_Ip_Swt19_Isr);
+#endif
+#endif
+
+#ifdef SWT_IP_ISR20_USED
+#if (SWT_IP_ISR20_USED == STD_ON)
+    ISR(Swt_Ip_Swt20_Isr);
+#endif
+#endif
+
+#ifdef SWT_IP_ISR21_USED
+#if (SWT_IP_ISR21_USED == STD_ON)
+    ISR(Swt_Ip_Swt21_Isr);
+#endif
+#endif
+
+#ifdef SWT_IP_ISR22_USED
+#if (SWT_IP_ISR22_USED == STD_ON)
+    ISR(Swt_Ip_Swt22_Isr);
+#endif
+#endif
+
+#ifdef SWT_IP_ISR23_USED
+#if (SWT_IP_ISR23_USED == STD_ON)
+    ISR(Swt_Ip_Swt23_Isr);
+#endif
+#endif
+
+#ifdef SWT_IP_ISR24_USED
+#if (SWT_IP_ISR24_USED == STD_ON)
+    ISR(Swt_Ip_Swt24_Isr);
+#endif
+#endif
+
 #ifdef WDG_ROM
     #if (WDG_ROM == 1U)
         #define WDG_STOP_SEC_CODE
@@ -214,4 +290,3 @@ void Swt_Ip_IrqHandler(uint32 Instance);
 /** @} */
 
 #endif /*SWT_IP_IRQ_H */
-

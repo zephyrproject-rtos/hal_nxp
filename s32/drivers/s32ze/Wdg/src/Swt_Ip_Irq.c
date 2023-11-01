@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -31,8 +31,8 @@ extern "C"{
 #define SWT_IP_IRQ_AR_RELEASE_MAJOR_VERSION_C       4
 #define SWT_IP_IRQ_AR_RELEASE_MINOR_VERSION_C       7
 #define SWT_IP_IRQ_AR_RELEASE_REVISION_VERSION_C    0
-#define SWT_IP_IRQ_SW_MAJOR_VERSION_C               0
-#define SWT_IP_IRQ_SW_MINOR_VERSION_C               9
+#define SWT_IP_IRQ_SW_MAJOR_VERSION_C               1
+#define SWT_IP_IRQ_SW_MINOR_VERSION_C               0
 #define SWT_IP_IRQ_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -46,13 +46,15 @@ extern "C"{
 
 #if ((SWT_IP_IRQ_AR_RELEASE_MAJOR_VERSION_C    != SWT_IP_IRQ_AR_RELEASE_MAJOR_VERSION) || \
      (SWT_IP_IRQ_AR_RELEASE_MINOR_VERSION_C    != SWT_IP_IRQ_AR_RELEASE_MINOR_VERSION) || \
-     (SWT_IP_IRQ_AR_RELEASE_REVISION_VERSION_C != SWT_IP_IRQ_AR_RELEASE_REVISION_VERSION))
+     (SWT_IP_IRQ_AR_RELEASE_REVISION_VERSION_C != SWT_IP_IRQ_AR_RELEASE_REVISION_VERSION) \
+    )
 #error "AutoSar Version Numbers of Swt_Ip_Irq.c and Swt_Ip_Irq.h are different"
 #endif
 
 #if ((SWT_IP_IRQ_SW_MAJOR_VERSION_C != SWT_IP_IRQ_SW_MAJOR_VERSION) || \
      (SWT_IP_IRQ_SW_MINOR_VERSION_C != SWT_IP_IRQ_SW_MINOR_VERSION) || \
-     (SWT_IP_IRQ_SW_PATCH_VERSION_C != SWT_IP_IRQ_SW_PATCH_VERSION))
+     (SWT_IP_IRQ_SW_PATCH_VERSION_C != SWT_IP_IRQ_SW_PATCH_VERSION) \
+    )
 #error "Software Version Numbers of Swt_Ip_Irq.c and Swt_Ip_Irq.h are different"
 #endif
 
@@ -243,6 +245,126 @@ extern "C"{
     {
         /* Call handler function */
         Swt_Ip_IrqHandler(12U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR13_USED
+#if (SWT_IP_ISR13_USED == STD_ON)
+    ISR(Swt_Ip_Swt13_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(13U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR14_USED
+#if (SWT_IP_ISR14_USED == STD_ON)
+    ISR(Swt_Ip_Swt14_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(14U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR15_USED
+#if (SWT_IP_ISR15_USED == STD_ON)
+    ISR(Swt_Ip_Swt15_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(15U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR16_USED
+#if (SWT_IP_ISR16_USED == STD_ON)
+    ISR(Swt_Ip_Swt16_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(16U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR17_USED
+#if (SWT_IP_ISR17_USED == STD_ON)
+    ISR(Swt_Ip_Swt17_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(17U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR18_USED
+#if (SWT_IP_ISR18_USED == STD_ON)
+    ISR(Swt_Ip_Swt18_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(18U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR19_USED
+#if (SWT_IP_ISR19_USED == STD_ON)
+    ISR(Swt_Ip_Swt19_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(19U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR20_USED
+#if (SWT_IP_ISR20_USED == STD_ON)
+    ISR(Swt_Ip_Swt20_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(20U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR21_USED
+#if (SWT_IP_ISR21_USED == STD_ON)
+    ISR(Swt_Ip_Swt21_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(21U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR22_USED
+#if (SWT_IP_ISR22_USED == STD_ON)
+    ISR(Swt_Ip_Swt22_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(22U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR23_USED
+#if (SWT_IP_ISR23_USED == STD_ON)
+    ISR(Swt_Ip_Swt23_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(23U);
+    }
+#endif
+#endif
+
+#ifdef SWT_IP_ISR24_USED
+#if (SWT_IP_ISR24_USED == STD_ON)
+    ISR(Swt_Ip_Swt24_Isr)
+    {
+        /* Call handler function */
+        Swt_Ip_IrqHandler(24U);
     }
 #endif
 #endif

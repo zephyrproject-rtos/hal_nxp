@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file           Mcal.h
 *   @implements     Mcal.h_Artifact
-*   @version 0.9.0
+*   @version 1.0.0
 *
 *   @brief   AUTOSAR BaseNXP - SWS Compiler abstraction specific for MCAL.
 *   @details The file Mcal.h provides MCAL specific macros used for compiler abstraction.
@@ -55,8 +55,8 @@ extern "C"{
 #define MCAL_AR_RELEASE_MAJOR_VERSION     4
 #define MCAL_AR_RELEASE_MINOR_VERSION     7
 #define MCAL_AR_RELEASE_REVISION_VERSION  0
-#define MCAL_SW_MAJOR_VERSION             0
-#define MCAL_SW_MINOR_VERSION             9
+#define MCAL_SW_MAJOR_VERSION             1
+#define MCAL_SW_MINOR_VERSION             0
 #define MCAL_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -116,13 +116,7 @@ extern "C"{
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  \
-                do  \
-                {   \
-                    OsIf_ResumeAllInterrupts();  \
-                    ASM_KEYWORD("  wfi");   \
-                    OsIf_SuspendAllInterrupts(); \
-                } while (0)
+    #define EXECUTE_WAIT()  ASM_KEYWORD("  wfi");
     /**
      * @brief Compiler abstraction for MCAL Fault Injection tests 
     */
@@ -144,13 +138,7 @@ extern "C"{
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  \
-                do  \
-                {   \
-                    OsIf_ResumeAllInterrupts();              \
-                    ASM_KEYWORD(" wfi");  \
-                    OsIf_SuspendAllInterrupts();             \
-                } while (0)    
+    #define EXECUTE_WAIT()  ASM_KEYWORD(" wfi");   
     /**
      * @brief Compiler abstraction for MCAL Fault Injection tests 
     */
@@ -172,60 +160,22 @@ extern "C"{
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  \
-                do  \
-                {   \
-                    OsIf_ResumeAllInterrupts();                  \
-                    ASM_KEYWORD (" opword 0x7C00007C");     \
-                    OsIf_SuspendAllInterrupts();                 \
-                } while (0)
+    #define EXECUTE_WAIT()  ASM_KEYWORD (" opword 0x7C00007C");
 #endif /* #ifdef _CODEWARRIOR_C_S32ZE_ */
-
-/*************************************** Cosmic ***************************************************/
-#ifdef _COSMIC_C_S32ZE_
-    /**
-    * @brief Compiler abstraction for the asm keyword.
-    */
-    #define ASM_PUBLIC_LABEL(label)  _asm("\txdef\t" #label "\n" #label ":")
-
-    /**
-    * @brief Compiler abstraction for the intrinsic wait instruction.
-    */
-    #define EXECUTE_WAIT()  \
-                do  \
-                {   \
-                    OsIf_ResumeAllInterrupts();                  \
-                    ASM_KEYWORD (" dc.l 0x7C00007C");       \
-                    OsIf_SuspendAllInterrupts();                 \
-                } while (0)
-
-#endif /* #ifdef _COSMIC_C_S32ZE_ */
 
 /*************************************** HighTec **********************************************/
 #ifdef _HITECH_C_S32ZE_
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  \
-                do  \
-                {   \
-                    OsIf_ResumeAllInterrupts();                  \
-                    ASM_KEYWORD("  wait");                  \
-                    OsIf_SuspendAllInterrupts();                 \
-                } while (0)
+    #define EXECUTE_WAIT()  ASM_KEYWORD("  wait");
 #endif /* #ifdef _HITECH_C_S32ZE_ */
 /**************************************** Linaro *********************************************/
 #ifdef _LINARO_C_S32ZE_
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  \
-                do  \
-                {   \
-                    OsIf_ResumeAllInterrupts();                  \
-                    ASM_KEYWORD("  wfi");                   \
-                    OsIf_SuspendAllInterrupts();                 \
-                } while (0)   
+    #define EXECUTE_WAIT()  ASM_KEYWORD("  wfi");   
     /**
      * @brief Compiler abstraction for MCAL Fault Injection tests 
     */
@@ -246,13 +196,7 @@ extern "C"{
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  \
-                do  \
-                {   \
-                    OsIf_ResumeAllInterrupts();                  \
-                    ASM_KEYWORD("  wfi");                   \
-                    OsIf_SuspendAllInterrupts();                 \
-                } while (0)    
+    #define EXECUTE_WAIT()  ASM_KEYWORD("  wfi"); 
     /**
      * @brief Compiler abstraction for MCAL Fault Injection tests 
     */
@@ -281,13 +225,7 @@ extern "C"{
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  \
-                do  \
-                {   \
-                    OsIf_ResumeAllInterrupts();                  \
-                    ASM_KEYWORD("  wfi");                   \
-                    OsIf_SuspendAllInterrupts();                 \
-                } while (0)    
+    #define EXECUTE_WAIT()  ASM_KEYWORD("  wfi");    
     /**
      * @brief Compiler abstraction for MCAL Fault Injection tests 
     */
@@ -305,14 +243,12 @@ extern "C"{
 #ifndef _GREENHILLS_C_S32ZE_
     #ifndef _DIABDATA_C_S32ZE_
         #ifndef _CODEWARRIOR_C_S32ZE_
-            #ifndef _COSMIC_C_S32ZE_
-                #ifndef _HITECH_C_S32ZE_
-                    #ifndef _LINARO_C_S32ZE_
-                        #ifndef _ARM_DS5_C_S32ZE_
-                            #ifndef _IAR_C_S32ZE_
-                                #error "Unsupported compiler. Compiler abstraction needs to be updated to use this compiler."
-                            #endif    
-                        #endif
+            #ifndef _HITECH_C_S32ZE_
+                #ifndef _LINARO_C_S32ZE_
+                    #ifndef _ARM_DS5_C_S32ZE_
+                        #ifndef _IAR_C_S32ZE_
+                            #error "Unsupported compiler. Compiler abstraction needs to be updated to use this compiler."
+                        #endif    
                     #endif
                 #endif
             #endif

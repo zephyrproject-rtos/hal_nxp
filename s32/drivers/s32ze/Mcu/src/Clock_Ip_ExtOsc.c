@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_ExtOsc.c
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -36,8 +36,8 @@ extern "C"{
 #define CLOCK_IP_EXTOSC_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_EXTOSC_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_EXTOSC_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_EXTOSC_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_EXTOSC_SW_MINOR_VERSION_C               9
+#define CLOCK_IP_EXTOSC_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_EXTOSC_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_EXTOSC_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -147,33 +147,60 @@ static void Clock_Ip_DisableClockIpExternalOscillatorEmpty(Clock_Ip_NameType Xos
 #ifdef CLOCK_IP_FXOSC_OSCON_BYP_EOCV_GM_SEL
 static void Clock_Ip_ResetFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const* Config)
 {
-    uint32 Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 Instance;
 
-    /* Disable FXOSC */
-    Clock_Ip_apxXosc[Instance]->CTRL &= ~FXOSC_CTRL_OSCON_MASK;
+    if (NULL_PTR != Config)
+    {
+        Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+
+        /* Disable FXOSC */
+        Clock_Ip_apxXosc[Instance]->CTRL &= ~FXOSC_CTRL_OSCON_MASK;
+    }
+    else
+    {
+        (void)Instance;
+    }
 }
 
 /* Set Fxosc configuration to register */
 static void Clock_Ip_SetFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const* Config)
 {
-    uint32 Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 Instance;
 
-    if (Config->Enable != 0U)
+    if (NULL_PTR != Config)
     {
-        Clock_Ip_apxXosc[Instance]->CTRL =
-           (
-            FXOSC_CTRL_OSCON(1U)                                                |
-            FXOSC_CTRL_OSC_BYP(Config->BypassOption)                            |
-            FXOSC_CTRL_EOCV(Config->StartupDelay)                               |
-            FXOSC_CTRL_GM_SEL(Config->TransConductance)                         |
-            FXOSC_CTRL_COMP_EN(Config->CompEn)
-           );
+        Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+
+        if (Config->Enable != 0U)
+        {
+            Clock_Ip_apxXosc[Instance]->CTRL =
+               (
+                FXOSC_CTRL_OSCON(1U)                                                |
+                FXOSC_CTRL_OSC_BYP(Config->BypassOption)                            |
+                FXOSC_CTRL_EOCV(Config->StartupDelay)                               |
+                FXOSC_CTRL_GM_SEL(Config->TransConductance)                         |
+                FXOSC_CTRL_COMP_EN(Config->CompEn)                                  |
+        #ifdef CLOCK_IP_FXOSC_ALC_SUPPORTED
+            #if (CLOCK_IP_FXOSC_ALC_SUPPORTED == STD_ON)
+                FXOSC_CTRL_ALC_D(Config->AutoLevelController)
+            #else
+                (0U)
+            #endif
+        #else
+                (0U)
+        #endif
+               );
+        }
+    #ifdef CLOCK_IP_GET_FREQUENCY_API
+    #if (CLOCK_IP_GET_FREQUENCY_API == STD_ON)
+        Clock_Ip_SetExternalOscillatorFrequency(Config->Name,Config->Freq);
+    #endif
+    #endif
     }
-#ifdef CLOCK_IP_GET_FREQUENCY_API
-#if (CLOCK_IP_GET_FREQUENCY_API == STD_ON)
-    Clock_Ip_SetExternalOscillatorFrequency(Config->Name,Config->Freq);
-#endif
-#endif
+    else
+    {
+        (void)Instance;
+    }
 }
 static void Clock_Ip_CompleteFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const* Config)
 {
@@ -182,40 +209,54 @@ static void Clock_Ip_CompleteFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType cons
     uint32 ElapsedTime;
     uint32 TimeoutTicks;
     uint32 FxoscStatus;
-    uint32 Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 Instance;
 
-    if (Config->Enable != 0U)
+    if (NULL_PTR != Config)
     {
-        /* This assumes that FXOSC_CTRL[COMP_EN] = 1 and FXOSC_CTRL[OSC_BYP] = 0 (i.e. crystal clock/oscillator output). */
-        /* In bypass mode (i.e. EXTAL output), FXOSC_CTRL[COMP_EN] = 0 and FXOSC_CTRL[OSC_BYP] = 1, which means that
-           we cannot check for stabilization. This shifts the responsibility of waiting for a stable clock to the
-           upper layers. */
-        if (Config->CompEn != 0U)
-        {
-            if(0U == Config->BypassOption)
-            {
-                Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-                /* Wait until xosc is locked */
-                do
-                {
-                    FxoscStatus = ((Clock_Ip_apxXosc[Instance]->STAT & FXOSC_STAT_OSC_STAT_MASK) >> FXOSC_STAT_OSC_STAT_SHIFT);
-                    TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-                }
-                while ((0U == FxoscStatus) && (FALSE == TimeoutOccurred));
+        Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
 
-                if (TimeoutOccurred)
-                {
-                    /* Report timeout error */
-                    Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
-                }
-            }
-            else
+        if (Config->Enable != 0U)
+        {
+            /* This assumes that FXOSC_CTRL[COMP_EN] = 1 and FXOSC_CTRL[OSC_BYP] = 0 (i.e. crystal clock/oscillator output). */
+            /* In bypass mode (i.e. EXTAL output), FXOSC_CTRL[COMP_EN] = 0 and FXOSC_CTRL[OSC_BYP] = 1, which means that
+               we cannot check for stabilization. This shifts the responsibility of waiting for a stable clock to the
+               upper layers. */
+            if (Config->CompEn != 0U)
             {
-                /* Invalid FXOSC configuration: FXOSC_CTRL[COMP_EN] = 1 enforces FXOSC_CTRL[OSC_BYP] = 0. */
-                /* Report timeout error */
-                Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_FXOSC_CONFIGURATION_ERROR, Config->Name);
+                if(0U == Config->BypassOption)
+                {
+                    Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+                    /* Wait until xosc is locked */
+                    do
+                    {
+                        FxoscStatus = ((Clock_Ip_apxXosc[Instance]->STAT & FXOSC_STAT_OSC_STAT_MASK) >> FXOSC_STAT_OSC_STAT_SHIFT);
+                        TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+                    }
+                    while ((0U == FxoscStatus) && (FALSE == TimeoutOccurred));
+
+                    if (TimeoutOccurred)
+                    {
+                        /* Report timeout error */
+                        Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
+                    }
+                }
+                else
+                {
+                    /* Invalid FXOSC configuration: FXOSC_CTRL[COMP_EN] = 1 enforces FXOSC_CTRL[OSC_BYP] = 0. */
+                    /* Report timeout error */
+                    Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_FXOSC_CONFIGURATION_ERROR, Config->Name);
+                }
             }
         }
+    }
+    else
+    {
+        (void)TimeoutOccurred;
+        (void)StartTime;
+        (void)ElapsedTime;
+        (void)TimeoutTicks;
+        (void)FxoscStatus;
+        (void)Instance;
     }
 }
 static void Clock_Ip_DisableFxoscOsconBypEocvGmSel(Clock_Ip_NameType XoscName)
@@ -227,12 +268,21 @@ static void Clock_Ip_DisableFxoscOsconBypEocvGmSel(Clock_Ip_NameType XoscName)
 }
 static void Clock_Ip_EnableFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const* Config)
 {
-    uint32 Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 Instance;
 
-    if (1U == Config->Enable)
+    if (NULL_PTR != Config)
     {
-        /* Enable SOSC. */
-        Clock_Ip_apxXosc[Instance]->CTRL |= FXOSC_CTRL_OSCON_MASK;
+        Instance = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+
+        if (1U == Config->Enable)
+        {
+            /* Enable SOSC. */
+            Clock_Ip_apxXosc[Instance]->CTRL |= FXOSC_CTRL_OSCON_MASK;
+        }
+    }
+    else
+    {
+        (void)Instance;
     }
 }
 #endif

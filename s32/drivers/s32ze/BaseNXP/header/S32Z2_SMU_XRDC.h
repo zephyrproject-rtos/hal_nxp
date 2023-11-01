@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SMU_XRDC.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_SMU_XRDC
  *
  * This file contains register definitions and macros for easy access to their
@@ -92,10 +92,10 @@ typedef struct {
   __I  uint32_t DERRLOC[SMU_XRDC_DERRLOC_COUNT];   /**< Domain Error Location, array offset: 0x200, array step: 0x4 */
   uint8_t RESERVED_4[448];
   struct {                                         /* offset: 0x400, array step: 0x10 */
-    __I  uint32_t DERR_W0;                           /**< Domain Error Word 0, array offset: 0x400, array step: 0x10 */
-    __I  uint32_t DERR_W1;                           /**< Domain Error Word 1, array offset: 0x404, array step: 0x10 */
+    __I  uint32_t DERR_W0;                           /**< Domain Error Word 0, array offset: 0x400, array step: 0x10, valid indices: [0-3, 16-17] */
+    __I  uint32_t DERR_W1;                           /**< Domain Error Word 1, array offset: 0x404, array step: 0x10, valid indices: [0-3, 16-17] */
     uint8_t RESERVED_0[4];
-    __O  uint32_t DERR_W3;                           /**< Domain Error Word 3, array offset: 0x40C, array step: 0x10 */
+    __O  uint32_t DERR_W3;                           /**< Domain Error Word 3, array offset: 0x40C, array step: 0x10, valid indices: [0-3, 16-17] */
   } DERRW0[SMU_XRDC_DERRW0_COUNT];
   uint8_t RESERVED_5[736];
   __IO uint32_t MDA_W0_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x800 */
@@ -110,8 +110,8 @@ typedef struct {
   uint8_t RESERVED_6[2012];
   struct {                                         /* offset: 0x1000, array step: 0x400 */
     struct {                                         /* offset: 0x1000, array step: index*0x400, index2*0x8 */
-      __IO uint32_t PDAC_W0;                           /**< Peripheral Domain Access Control Word 0, array offset: 0x1000, array step: index*0x400, index2*0x8 */
-      __IO uint32_t PDAC_W1;                           /**< Peripheral Domain Access Control Word 1, array offset: 0x1004, array step: index*0x400, index2*0x8 */
+      __IO uint32_t PDAC_W0;                           /**< Peripheral Domain Access Control Word 0, array offset: 0x1000, array step: index*0x400, index2*0x8, valid indices: [0][0, 4-5, 8-9, 16-21, 24-25], [1][4, 12, 16, 24-27, 36, 64, 68, 72, 76, 80, 84, 88, 92, 96, 100, 104, 108, 112] */
+      __IO uint32_t PDAC_W1;                           /**< Peripheral Domain Access Control Word 1, array offset: 0x1004, array step: index*0x400, index2*0x8, valid indices: [0][0, 4-5, 8-9, 16-21, 24-25], [1][4, 12, 16, 24-27, 36, 64, 68, 72, 76, 80, 84, 88, 92, 96, 100, 104, 108, 112] */
     } PDACN[SMU_XRDC_PDAC_SLOT_PDACN_COUNT];
     uint8_t RESERVED_0[120];
   } PDAC_SLOT[SMU_XRDC_PDAC_SLOT_COUNT];

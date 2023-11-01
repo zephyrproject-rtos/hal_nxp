@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_F3_SI3.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_NETC_F3_SI3
  *
  * This file contains register definitions and macros for easy access to their
@@ -83,26 +83,24 @@ typedef struct {
   __I  uint32_t SICTR1;                            /**< Station interface current time register 1, offset: 0x1C */
   __I  uint32_t SIPCAPR0;                          /**< Station interface port capability register 0, offset: 0x20 */
   __I  uint32_t SIPCAPR1;                          /**< Station interface port capability register 1, offset: 0x24 */
-  uint8_t RESERVED_1[8];
-  __I  uint32_t SITSR;                             /**< Station interface timer status register, offset: 0x30 */
-  uint8_t RESERVED_2[4];
+  uint8_t RESERVED_1[16];
   __IO uint32_t SIRBGCR;                           /**< Station interface receive BDR group control register, offset: 0x38 */
-  uint8_t RESERVED_3[4];
+  uint8_t RESERVED_2[4];
   __IO uint32_t SIBCAR;                            /**< Station interface buffer cache attribute register, offset: 0x40 */
-  uint8_t RESERVED_4[4];
+  uint8_t RESERVED_3[4];
   __IO uint32_t SICCAR;                            /**< Station interface command cache attribute register, offset: 0x48 */
-  uint8_t RESERVED_5[52];
+  uint8_t RESERVED_4[52];
   __I  uint32_t SIPMAR0;                           /**< Station interface primary MAC address register 0, offset: 0x80 */
   __I  uint32_t SIPMAR1;                           /**< Station interface primary MAC address register 1, offset: 0x84 */
-  uint8_t RESERVED_6[8];
+  uint8_t RESERVED_5[8];
   __I  uint32_t SICVLANR1;                         /**< Station interface custom VLAN register 1, offset: 0x90 */
   __I  uint32_t SICVLANR2;                         /**< Station interface custom VLAN register 2, offset: 0x94 */
-  uint8_t RESERVED_7[104];
+  uint8_t RESERVED_6[104];
   __IO uint32_t SIVLANIPVMR0;                      /**< Station interface VLAN to IPV mapping register 0, offset: 0x100 */
   __IO uint32_t SIVLANIPVMR1;                      /**< Station interface VLAN to IPV mapping register 1, offset: 0x104 */
-  uint8_t RESERVED_8[72];
+  uint8_t RESERVED_7[72];
   __IO uint32_t SIIPVBDRMR0;                       /**< Station interface IPV to ring mapping register, offset: 0x150 */
-  uint8_t RESERVED_9[176];
+  uint8_t RESERVED_8[176];
   union {                                          /* offset: 0x204 */
     struct {                                         /* offset: 0x204 */
       __I  uint32_t VSIMSGSR;                          /**< Virtual station interface message send register, offset: 0x204 */
@@ -112,7 +110,7 @@ typedef struct {
       __IO uint32_t VSIMSGSNDAR1;                      /**< Virtual station interface message send address register 1, offset: 0x214 */
     } VSI_A;
   } MSGSR;
-  uint8_t RESERVED_10[232];
+  uint8_t RESERVED_9[232];
   __I  uint32_t SIROCT0;                           /**< Station interface receive octets counter (ifInOctets) 0, offset: 0x300 */
   __I  uint32_t SIROCT1;                           /**< Station interface receive octets counter (ifInOctets) 1, offset: 0x304 */
   __I  uint32_t SIRFRM0;                           /**< Station interface receive frame counter (aFrameReceivedOK) 0, offset: 0x308 */
@@ -129,25 +127,25 @@ typedef struct {
   __I  uint32_t SITUCA1;                           /**< Station interface transmit unicast frame counter (ifOutUcastPkts) 1, offset: 0x334 */
   __I  uint32_t SITMCA0;                           /**< Station interface transmit multicast frame counter (ifOutMulticastPkts) 0, offset: 0x338 */
   __I  uint32_t SITMCA1;                           /**< Station interface transmit multicast frame counter (ifOutMulticastPkts) 1, offset: 0x33C */
-  uint8_t RESERVED_11[176];
+  uint8_t RESERVED_10[176];
   __I  uint32_t SIBLPR[NETC_F3_SI3_SI_BOOT_LOAD_COUNT]; /**< Station interface boot loader parameter register 0..Station interface boot loader parameter register 1, array offset: 0x3F0, array step: 0x4 */
-  uint8_t RESERVED_12[1032];
+  uint8_t RESERVED_11[1032];
   __IO uint32_t SICBDRMR;                          /**< Station interface command BDR mode register, offset: 0x800 */
   __I  uint32_t SICBDRSR;                          /**< Station interface command BDR status register, offset: 0x804 */
-  uint8_t RESERVED_13[8];
+  uint8_t RESERVED_12[8];
   __IO uint32_t SICBDRBAR0;                        /**< Station interface command BDR base address register 0, offset: 0x810 */
   __IO uint32_t SICBDRBAR1;                        /**< Station interface command BDR base address register 1, offset: 0x814 */
   __IO uint32_t SICBDRPIR;                         /**< Station interface command BDR producer index register, offset: 0x818 */
   __IO uint32_t SICBDRCIR;                         /**< Station interface command BDR consumer index register, offset: 0x81C */
   __IO uint32_t SICBDRLENR;                        /**< Station interface command BDR length register, offset: 0x820 */
-  uint8_t RESERVED_14[124];
+  uint8_t RESERVED_13[124];
   __IO uint32_t SICBDRIER;                         /**< Station interface command BDR interrupt enable register, offset: 0x8A0 */
   __IO uint32_t SICBDRIDR;                         /**< Station interface command BDR interrupt detect register, offset: 0x8A4 */
-  uint8_t RESERVED_15[88];
+  uint8_t RESERVED_14[88];
   __I  uint32_t SICAPR0;                           /**< Station interface capability register 0, offset: 0x900 */
   __I  uint32_t SICAPR1;                           /**< Station interface capability register 1, offset: 0x904 */
   __I  uint32_t SICAPR2;                           /**< Station interface capability register 2, offset: 0x908 */
-  uint8_t RESERVED_16[244];
+  uint8_t RESERVED_15[244];
   union {                                          /* offset: 0xA00 */
     struct {                                         /* offset: 0xA00 */
       __IO uint32_t VSIIER;                            /**< Virtual station interface interrupt enable register, offset: 0xA00 */
@@ -155,39 +153,39 @@ typedef struct {
       __IO uint32_t VSIIDR;                            /**< Virtual station interface interrupt detect register, offset: 0xA08 */
     } VSI;
   } INTERRUPT;
-  uint8_t RESERVED_17[12];
+  uint8_t RESERVED_16[12];
   __IO uint32_t SITXIDR0;                          /**< Station interface transmit interrupt detect register 0, offset: 0xA18 */
   __IO uint32_t SITXIDR1;                          /**< Station interface transmit interrupt detect register 1, offset: 0xA1C */
-  uint8_t RESERVED_18[8];
+  uint8_t RESERVED_17[8];
   __IO uint32_t SIRXIDR0;                          /**< Station interface receive interrupt detect register 0, offset: 0xA28 */
   __IO uint32_t SIRXIDR1;                          /**< Station interface receive interrupt detect register 1, offset: 0xA2C */
   __IO uint32_t SIMSIVR;                           /**< Station interface MSI-X vector register, offset: 0xA30 */
   __IO uint32_t SICMSIVR;                          /**< Station interface command MSI-X vector register, offset: 0xA34 */
-  uint8_t RESERVED_19[8];
+  uint8_t RESERVED_18[8];
   __IO uint32_t SITMRIER;                          /**< Station interface timer interrupt enable register, offset: 0xA40 */
   __IO uint32_t SITMRIDR;                          /**< Station interface timer interrupt detect register, offset: 0xA44 */
-  uint8_t RESERVED_20[4];
+  uint8_t RESERVED_19[4];
   __IO uint32_t SITMRMSIVR;                        /**< Station interface timer MSI-X vector register, offset: 0xA4C */
-  uint8_t RESERVED_21[176];
+  uint8_t RESERVED_20[176];
   __IO uint32_t SIMSITRVR[NETC_F3_SI3_TX_MSI_COUNT]; /**< Station interface MSI-X transmit ring 0 vector register..Station interface MSI-X transmit ring 17 vector register, array offset: 0xB00, array step: 0x4 */
-  uint8_t RESERVED_22[56];
+  uint8_t RESERVED_21[56];
   __IO uint32_t SIMSIRRVR[NETC_F3_SI3_RX_GRP_COUNT]; /**< Station interface MSI-X receive ring 0 vector register..Station interface MSI-X receive ring 17 vector register, array offset: 0xB80, array step: 0x4 */
-  uint8_t RESERVED_23[568];
+  uint8_t RESERVED_22[568];
   __IO uint32_t SICMECR;                           /**< Station interface correctable memory error configuration register, offset: 0xE00 */
   __IO uint32_t SICMESR;                           /**< Station interface correctable memory error status register, offset: 0xE04 */
-  uint8_t RESERVED_24[4];
+  uint8_t RESERVED_23[4];
   __I  uint32_t SICMECTR;                          /**< Station interface correctable memory error count register, offset: 0xE0C */
   __IO uint32_t SIUPECR;                           /**< Station interface uncorrectable programming error configuration register, offset: 0xE10 */
   __IO uint32_t SIUPESR;                           /**< Station interface uncorrectable programming error status register, offset: 0xE14 */
-  uint8_t RESERVED_25[4];
+  uint8_t RESERVED_24[4];
   __I  uint32_t SIUPECTR;                          /**< Station interface uncorrectable programming error count register, offset: 0xE1C */
   __IO uint32_t SIUNSBECR;                         /**< Station interface uncorrectable non-fatal system bus error configuration register, offset: 0xE20 */
   __IO uint32_t SIUNSBESR;                         /**< Station interface uncorrectable non-fatal system bus error status register, offset: 0xE24 */
-  uint8_t RESERVED_26[4];
+  uint8_t RESERVED_25[4];
   __I  uint32_t SIUNSBECTR;                        /**< Station interface uncorrectable non-fatal system bus error count register, offset: 0xE2C */
   __IO uint32_t SIUFSBECR;                         /**< Station interface uncorrectable fatal system bus error configuration register, offset: 0xE30 */
   __IO uint32_t SIUFSBESR;                         /**< Station interface uncorrectable fatal system bus error status register, offset: 0xE34 */
-  uint8_t RESERVED_27[8];
+  uint8_t RESERVED_26[8];
   __IO uint32_t SIUNMECR;                          /**< Station interface uncorrectable non-fatal memory error configuration register, offset: 0xE40 */
   __IO uint32_t SIUNMESR0;                         /**< Station interface uncorrectable non-fatal memory error status register 0, offset: 0xE44 */
   __I  uint32_t SIUNMESR1;                         /**< Station interface uncorrectable non-fatal memory error status register 1, offset: 0xE48 */
@@ -195,20 +193,20 @@ typedef struct {
   __IO uint32_t SIUFMECR;                          /**< Station interface uncorrectable fatal memory error configuration register, offset: 0xE50 */
   __IO uint32_t SIUFMESR0;                         /**< Station interface uncorrectable fatal memory error status register 0, offset: 0xE54 */
   __I  uint32_t SIUFMESR1;                         /**< Station interface uncorrectable fatal memory error status register 1, offset: 0xE58 */
-  uint8_t RESERVED_28[4];
+  uint8_t RESERVED_27[4];
   __IO uint32_t SIUNIECR;                          /**< Station interface uncorrectable non-fatal integrity error configuration register, offset: 0xE60 */
   __IO uint32_t SIUNIESR;                          /**< Station interface uncorrectable non-fatal integrity error status register, offset: 0xE64 */
-  uint8_t RESERVED_29[4];
+  uint8_t RESERVED_28[4];
   __I  uint32_t SIUNIECTR;                         /**< Station interface uncorrectable non-fatal integrity error count register, offset: 0xE6C */
   __IO uint32_t SIUFIECR;                          /**< Station interface uncorrectable fatal integrity error configuration register, offset: 0xE70 */
   __IO uint32_t SIUFIESR;                          /**< Station interface uncorrectable fatal integrity error status register, offset: 0xE74 */
-  uint8_t RESERVED_30[392];
+  uint8_t RESERVED_29[392];
   __I  uint32_t SIMAFTCAPR;                        /**< Station interface MAC address filter table capability register, offset: 0x1000 */
-  uint8_t RESERVED_31[252];
+  uint8_t RESERVED_30[252];
   __I  uint32_t SIVFTCAPR;                         /**< Station interface VLAN filter table capability register, offset: 0x1100 */
-  uint8_t RESERVED_32[252];
+  uint8_t RESERVED_31[252];
   __I  uint32_t SIRFSCAPR;                         /**< Station interface RFS capability register, offset: 0x1200 */
-  uint8_t RESERVED_33[28156];
+  uint8_t RESERVED_32[28156];
   struct {                                         /* offset: 0x8000, array step: 0x200 */
     __IO uint32_t TBMR;                              /**< Tx BDR 0 mode register..Tx BDR 17 mode register, array offset: 0x8000, array step: 0x200 */
     __IO uint32_t TBSR;                              /**< Tx BDR 0 status register..Tx BDR 17 status register, array offset: 0x8004, array step: 0x200 */
@@ -438,20 +436,6 @@ typedef struct {
 #define NETC_F3_SI3_SIPCAPR1_NUM_IPV_SHIFT       (31U)
 #define NETC_F3_SI3_SIPCAPR1_NUM_IPV_WIDTH       (1U)
 #define NETC_F3_SI3_SIPCAPR1_NUM_IPV(x)          (((uint32_t)(((uint32_t)(x)) << NETC_F3_SI3_SIPCAPR1_NUM_IPV_SHIFT)) & NETC_F3_SI3_SIPCAPR1_NUM_IPV_MASK)
-/*! @} */
-
-/*! @name SITSR - Station interface timer status register */
-/*! @{ */
-
-#define NETC_F3_SI3_SITSR_SYNC_MASK              (0x1U)
-#define NETC_F3_SI3_SITSR_SYNC_SHIFT             (0U)
-#define NETC_F3_SI3_SITSR_SYNC_WIDTH             (1U)
-#define NETC_F3_SI3_SITSR_SYNC(x)                (((uint32_t)(((uint32_t)(x)) << NETC_F3_SI3_SITSR_SYNC_SHIFT)) & NETC_F3_SI3_SITSR_SYNC_MASK)
-
-#define NETC_F3_SI3_SITSR_PARAM_VAL_MASK         (0xFFFFFFFEU)
-#define NETC_F3_SI3_SITSR_PARAM_VAL_SHIFT        (1U)
-#define NETC_F3_SI3_SITSR_PARAM_VAL_WIDTH        (31U)
-#define NETC_F3_SI3_SITSR_PARAM_VAL(x)           (((uint32_t)(((uint32_t)(x)) << NETC_F3_SI3_SITSR_PARAM_VAL_SHIFT)) & NETC_F3_SI3_SITSR_PARAM_VAL_MASK)
 /*! @} */
 
 /*! @name SIRBGCR - Station interface receive BDR group control register */

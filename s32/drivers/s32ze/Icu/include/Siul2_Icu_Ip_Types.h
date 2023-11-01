@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +22,7 @@ extern "C"
 /*==================================================================================================
 *                                        INCLUDE FILES
 ==================================================================================================*/
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "Siul2_Icu_Ip_Defines.h"
 
 /*==================================================================================================
@@ -32,18 +32,18 @@ extern "C"
 #define SIUL2_ICU_IP_TYPES_AR_RELEASE_MAJOR_VERSION    4
 #define SIUL2_ICU_IP_TYPES_AR_RELEASE_MINOR_VERSION    7
 #define SIUL2_ICU_IP_TYPES_AR_RELEASE_REVISION_VERSION 0
-#define SIUL2_ICU_IP_TYPES_SW_MAJOR_VERSION            0
-#define SIUL2_ICU_IP_TYPES_SW_MINOR_VERSION            9
+#define SIUL2_ICU_IP_TYPES_SW_MAJOR_VERSION            1
+#define SIUL2_ICU_IP_TYPES_SW_MINOR_VERSION            0
 #define SIUL2_ICU_IP_TYPES_SW_PATCH_VERSION            0
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if header file and StandardTypes.h file are of the same Autosar version */
+    /* Check if header file and Std_Types.h file are of the same Autosar version */
     #if ((SIUL2_ICU_IP_TYPES_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
          (SIUL2_ICU_IP_TYPES_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version Numbers of Siul2_Icu_Ip_Types.h and StandardTypes.h are different"
+        #error "AutoSar Version Numbers of Siul2_Icu_Ip_Types.h and Std_Types.h are different"
     #endif
 #endif
 
@@ -79,6 +79,8 @@ extern "C"
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/
+#if (STD_ON == SIUL2_ICU_IP_USED)
+
 #if (SIUL2_ICU_IP_DUAL_CLOCK_MODE_API == STD_ON)
 /**
  * @brief         Definition of prescaler type.
@@ -174,6 +176,8 @@ typedef struct
 /*==================================================================================================
 *                                      FUNCTION PROTOTYPES
 ==================================================================================================*/
+
+#endif /* SIUL2_ICU_IP_USED */
 
 #ifdef __cplusplus
 }

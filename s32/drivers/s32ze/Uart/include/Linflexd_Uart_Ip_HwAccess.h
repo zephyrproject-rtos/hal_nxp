@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -38,8 +38,8 @@ extern "C"{
 #define LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION     4
 #define LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION     7
 #define LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_REVISION_VERSION  0
-#define LINFLEXD_UART_IP_HWACCESS_SW_MAJOR_VERSION             0
-#define LINFLEXD_UART_IP_HWACCESS_SW_MINOR_VERSION             9
+#define LINFLEXD_UART_IP_HWACCESS_SW_MAJOR_VERSION             1
+#define LINFLEXD_UART_IP_HWACCESS_SW_MINOR_VERSION             0
 #define LINFLEXD_UART_IP_HWACCESS_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -51,31 +51,36 @@ extern "C"{
 #endif
 #if ((LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION    != LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION    != LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_DEFINES_AR_RELEASE_REVISION_VERSION))
+     (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_DEFINES_AR_RELEASE_REVISION_VERSION) \
+    )
      #error "AUTOSAR Version Numbers of Linflexd_Uart_Ip_HwAccess.h and Linflexd_Uart_Ip_Defines.h are different"
 #endif
 #if ((LINFLEXD_UART_IP_HWACCESS_SW_MAJOR_VERSION != LINFLEXD_UART_IP_DEFINES_SW_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_HWACCESS_SW_MINOR_VERSION != LINFLEXD_UART_IP_DEFINES_SW_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_HWACCESS_SW_PATCH_VERSION != LINFLEXD_UART_IP_DEFINES_SW_PATCH_VERSION))
+     (LINFLEXD_UART_IP_HWACCESS_SW_PATCH_VERSION != LINFLEXD_UART_IP_DEFINES_SW_PATCH_VERSION) \
+    )
     #error "Software Version Numbers of Linflexd_Uart_Ip_HwAccess.h and Linflexd_Uart_Ip_Defines.h are different"
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Check if current file and StandardTypes.h header file are of the same Autosar version */
     #if ((LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
-         (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
+         (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION) \
+    )
         #error "Linflexd_Uart_Ip_HwAccess.h and StandardTypes.h are different"
     #endif
 
     /* Check if current file and OsIf.h header file are of the same Autosar version */
     #if ((LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION != OSIF_AR_RELEASE_MAJOR_VERSION) || \
-         (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION != OSIF_AR_RELEASE_MINOR_VERSION))
+         (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION != OSIF_AR_RELEASE_MINOR_VERSION) \
+    )
         #error "Linflexd_Uart_Ip_HwAccess.h and OsIf.h are different"
     #endif
 
     /* Check if current file and SchM_Uart.h header file are of the same Autosar version */
     #if ((LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION != SCHM_UART_AR_RELEASE_MAJOR_VERSION) || \
-         (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION != SCHM_UART_AR_RELEASE_MINOR_VERSION))
+         (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION != SCHM_UART_AR_RELEASE_MINOR_VERSION) \
+    )
         #error "Linflexd_Uart_Ip_HwAccess.h and SchM_Uart.h are different"
     #endif
 #endif
@@ -90,7 +95,7 @@ extern "C"{
 ==================================================================================================*/
 #define DEFAULT_OSR              16U
 
-#define BAUDRATE_FRACTION_WIDTH  LINFLEXD_LINFBRR_FBR_WIDTH
+#define LINFLEXD_BAUDRATE_FRACTION_WIDTH  LINFLEXD_LINFBRR_FBR_WIDTH
 
 #ifdef CPU_BYTE_ORDER
     #if (LOW_BYTE_FIRST == CPU_BYTE_ORDER)
@@ -108,7 +113,7 @@ extern "C"{
  * @internal
  *@brief Word length in UART mode.
  *
- *implements     Linflexd_Uart_Ip_WordLengthType_Enumeration
+ *implements     Linflexd_Uart_Ip_WordLengthType_enum
  */
 typedef enum
 {
@@ -134,7 +139,7 @@ typedef enum
  * @internal
  * @brief Parity type.
  *
- *implements     Linflexd_Uart_Ip_ParityType_Enumeration
+ *implements     Linflexd_Uart_Ip_ParityType_enum
  */
 typedef enum
 {
@@ -412,50 +417,6 @@ static inline void Linflexd_Uart_Ip_SetParityType(LINFLEXD_Type *Base, Linflexd_
 
 /**
  * @internal
- * @brief Enables/disables transmitter.
- *
- * This function enables or disables the UART transmitter, Based on the parameter received.
- * Should be called only when the module is in UART mode.
- *
- * @param Base LINFLEXD Base pointer.
- * @param Enable enable/disable transmitter.
- */
-static inline void Linflexd_Uart_Ip_SetTransmitterState(LINFLEXD_Type *Base, boolean Enable)
-{
-    uint32 RegValTemp;
-
-    SchM_Enter_Uart_UART_EXCLUSIVE_AREA_00();
-    RegValTemp = Base->UARTCR;
-    RegValTemp &= ~(LINFLEXD_UARTCR_TxEn_MASK);
-    RegValTemp |= LINFLEXD_UARTCR_TxEn(Enable ? 1UL : 0UL);
-    Base->UARTCR = RegValTemp;
-    SchM_Exit_Uart_UART_EXCLUSIVE_AREA_00();
-}
-
-/**
- * @internal
- * @brief Enables/disables receiver.
- *
- * This function enables or disables the UART receiver, Based on the parameter received.
- * Should be called only when the module is in UART mode.
- *
- * @param Base LINFLEXD Base pointer.
- * @param Enable enable/disable receiver.
- */
-static inline void Linflexd_Uart_Ip_SetReceiverState(LINFLEXD_Type *Base, boolean Enable)
-{
-    uint32 RegValTemp;
-
-    SchM_Enter_Uart_UART_EXCLUSIVE_AREA_01();
-    RegValTemp = Base->UARTCR;
-    RegValTemp &= ~(LINFLEXD_UARTCR_RxEn_MASK);
-    RegValTemp |= LINFLEXD_UARTCR_RxEn(Enable ? 1UL : 0UL);
-    Base->UARTCR = RegValTemp;
-    SchM_Exit_Uart_UART_EXCLUSIVE_AREA_01();
-}
-
-/**
- * @internal
  * @brief Sets the transmission mode (FIFO/Buffer).
  *
  * This function sets the transmission mode (FIFO/Buffer).
@@ -595,9 +556,7 @@ static inline void Linflexd_Uart_Ip_SetIntegerBaudRate(LINFLEXD_Type *Base, uint
  *                      - false - use custom memory map to access the register.
  * @param StopBitsCount number of stop bits.
  */
-static inline void Linflexd_Uart_Ip_SetTxStopBitsCount(LINFLEXD_Type *Base,
-                                                       Linflexd_Uart_Ip_StopBitsCountType StopBitsCount,
-                                                       boolean DefaultOffset)
+static inline void Linflexd_Uart_Ip_SetTxStopBitsCount(LINFLEXD_Type *Base, Linflexd_Uart_Ip_StopBitsCountType StopBitsCount, boolean DefaultOffset)
 {
     uint32 RegValTemp;
 
@@ -651,34 +610,6 @@ static inline void Linflexd_Uart_Ip_ClearStatusFlag(LINFLEXD_Type * Base, Linfle
 static inline boolean Linflexd_Uart_Ip_GetStatusFlag(const LINFLEXD_Type * Base, Linflexd_Uart_Ip_StatusFlagType Flag)
 {
     return ((Base->UARTSR & (uint32)Flag) != 0U);
-}
-
-/**
- * @internal
- * @brief Enables/disables an UART interrupt.
- *
- * This function configures whether the UART Event will trigger an interrupt.
- *
- * @param Base LINFLEXD Base pointer.
- * @param IntSrc UART interrupt source.
- * @param Enable true - enable interrupt, false - disable interrupt.
- */
-static inline void Linflexd_Uart_Ip_SetInterruptMode(LINFLEXD_Type * Base, Linflexd_Uart_Ip_InterruptType IntSrc, boolean Enable)
-{
-    uint32 RegValTemp;
-
-    SchM_Enter_Uart_UART_EXCLUSIVE_AREA_02();
-    RegValTemp = Base->LINIER;
-    if (Enable)
-    {
-        RegValTemp |= (uint32)IntSrc;
-    }
-    else
-    {
-        RegValTemp &= ~(uint32)IntSrc;
-    }
-    Base->LINIER = RegValTemp;
-    SchM_Exit_Uart_UART_EXCLUSIVE_AREA_02();
 }
 
 #if defined (LINFLEXD_UART_IP_ORED_INT_LINES)
@@ -828,7 +759,17 @@ static inline boolean Linflexd_Uart_Ip_CheckTimeout(uint32 * StartTime, uint32 *
 {
     uint32 CurrentElapsedTicks = OsIf_GetElapsed(StartTime, OsifCounter);
     *ElapsedTicks += CurrentElapsedTicks;
-    return ((*ElapsedTicks >= TimeoutTicks) ? TRUE : FALSE);
+    boolean IsTimeout = FALSE;
+
+    if (*ElapsedTicks >= TimeoutTicks)
+    {
+        IsTimeout = TRUE;
+    }
+    else
+    {
+        IsTimeout = FALSE;
+    }
+    return IsTimeout;
 }
 
 #define UART_STOP_SEC_CODE

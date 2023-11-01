@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file           ComStack_Types.h
 *   @implements     ComStack_Types.h_Artifact
-*   @version 0.9.0
+*   @version 1.0.0
 *
 *   @brief   AUTOSAR BaseNXP - Communication stack types header file.
 *   @details AUTOSAR communication stack type header file.
@@ -40,8 +40,8 @@ extern "C"{
 #define COMTYPE_AR_RELEASE_MAJOR_VERSION     4
 #define COMTYPE_AR_RELEASE_MINOR_VERSION     7
 #define COMTYPE_AR_RELEASE_REVISION_VERSION  0
-#define COMTYPE_SW_MAJOR_VERSION             0
-#define COMTYPE_SW_MINOR_VERSION             9
+#define COMTYPE_SW_MAJOR_VERSION             1
+#define COMTYPE_SW_MINOR_VERSION             0
 #define COMTYPE_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -247,9 +247,9 @@ typedef uint8        PNCHandleType;
 */
 typedef struct
 {
-    uint8 * SduDataPtr;   /**< pointer to the SDU (i.e. 
-                                                                *    payload data) of the PDU */
-    PduLengthType  SduLength;                                   /**< length of the SDU in bytes */
+    uint8 * SduDataPtr;        /**< pointer to the SDU (i.e. payload data) of the PDU */
+    uint8 * MetaDataPtr;       /**< pointer to the meta data of the PDU*/
+	PduLengthType  SduLength;  /**< length of the SDU in bytes */
 } PduInfoType;
 
 /** 
@@ -259,9 +259,8 @@ typedef struct
 typedef struct
 {
     TpDataStateType TpDataState;   /**< The enum type to be used to store the state of Tp buffer */
-    PduLengthType  TxTpDataCnt;    /**< length of the SDU in bytes */
+    PduLengthType  TxTpDataCnt;    /**< Offset from the current position which identifies the number of bytes to be retransmitted. */
 } RetryInfoType;
-
 
 /** 
 * @brief   Variables of the type IcomConfigIdType defines the configuration ID. An ID of 0 is the 

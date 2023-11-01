@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -32,8 +32,8 @@ extern "C"{
 #define OSIF_TIMER_SYSTEM_AR_RELEASE_MAJOR_VERSION     4
 #define OSIF_TIMER_SYSTEM_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_TIMER_SYSTEM_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_TIMER_SYSTEM_SW_MAJOR_VERSION             0
-#define OSIF_TIMER_SYSTEM_SW_MINOR_VERSION             9
+#define OSIF_TIMER_SYSTEM_SW_MAJOR_VERSION             1
+#define OSIF_TIMER_SYSTEM_SW_MINOR_VERSION             0
 #define OSIF_TIMER_SYSTEM_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -45,7 +45,7 @@ extern "C"{
          (OSIF_TIMER_SYSTEM_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
         #error "AutoSar Version Numbers of OsIf_Timer_System.h and StandardTypes.h are different"
     #endif
-#endif
+#endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 
 /*==================================================================================================
 *                                            CONSTANTS
@@ -72,11 +72,49 @@ extern "C"{
 ==================================================================================================*/
 #define BASENXP_START_SEC_CODE
 #include "BaseNXP_MemMap.h"
-
+/*!
+ * @brief Initialize the system timer.
+ *
+ * This function initialize the system timer.
+ */
 void OsIf_Timer_System_Init(void);
+
+/*!
+ * @brief Get counter value from system timer.
+ *
+ * This function get counter value from system timer.
+ *
+ * @return Counter value
+ */
 uint32 OsIf_Timer_System_GetCounter(void);
+
+/*!
+ * @brief Get elapsed value from system timer.
+ *
+ * This function get elapsed value from system timer.
+ *
+ * @param[in] CurrentRef The pointer to current reference point
+ * @return Elapsed value
+ */
 uint32 OsIf_Timer_System_GetElapsed(uint32 * const CurrentRef);
+
+/*!
+ * @brief Set system timer frequency.
+ *
+ * This function set system timer frequency.
+ *
+ * @param[in] Freq Frequency value
+ */
 void OsIf_Timer_System_SetTimerFrequency(uint32 Freq);
+
+/*!
+ * @brief Convert micro second to ticks based on system timer frequency.
+ *
+ * This function Convert micro second to ticks based on system timer frequency.
+ *
+ * @param[in] Micros Micro second
+ * @return Ticks
+ */
 uint32 OsIf_Timer_System_MicrosToTicks(uint32 Micros);
 
 #define BASENXP_STOP_SEC_CODE

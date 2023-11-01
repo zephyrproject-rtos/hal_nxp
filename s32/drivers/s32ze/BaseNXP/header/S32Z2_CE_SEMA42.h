@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CE_SEMA42.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_CE_SEMA42
  *
  * This file contains register definitions and macros for easy access to their
@@ -73,7 +73,7 @@
 
 /** CE_SEMA42 - Register Layout Typedef */
 typedef struct {
-  __IO uint8_t GATE[CE_SEMA42_GATE_COUNT];         /**< Gate Register, array offset: 0x0, array step: 0x1 */
+  __IO uint8_t GATE[CE_SEMA42_GATE_COUNT];         /**< Gate, array offset: 0x0, array step: 0x1 */
   uint8_t RESERVED_0[50];
   union {                                          /* offset: 0x42 */
     __I  uint16_t R;                                 /**< Reset Gate Read, offset: 0x42 */
@@ -103,7 +103,7 @@ typedef struct {
  * @{
  */
 
-/*! @name GATE - Gate Register */
+/*! @name GATE - Gate */
 /*! @{ */
 
 #define CE_SEMA42_GATE_GTFSM_MASK                (0xFU)
@@ -129,11 +129,6 @@ typedef struct {
 #define CE_SEMA42_R_RSTGSM_SHIFT                 (12U)
 #define CE_SEMA42_R_RSTGSM_WIDTH                 (2U)
 #define CE_SEMA42_R_RSTGSM(x)                    (((uint16_t)(((uint16_t)(x)) << CE_SEMA42_R_RSTGSM_SHIFT)) & CE_SEMA42_R_RSTGSM_MASK)
-
-#define CE_SEMA42_R_ROZ_MASK                     (0xC000U)
-#define CE_SEMA42_R_ROZ_SHIFT                    (14U)
-#define CE_SEMA42_R_ROZ_WIDTH                    (2U)
-#define CE_SEMA42_R_ROZ(x)                       (((uint16_t)(((uint16_t)(x)) << CE_SEMA42_R_ROZ_SHIFT)) & CE_SEMA42_R_ROZ_MASK)
 /*! @} */
 
 /*! @name W - Reset Gate Write */

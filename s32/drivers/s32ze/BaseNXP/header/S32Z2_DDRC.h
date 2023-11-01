@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_DDRC.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_DDRC
  *
  * This file contains register definitions and macros for easy access to their
@@ -127,7 +127,7 @@ typedef struct {
   uint8_t RESERVED_9[92];
   __I  uint32_t DDR_SDRAM_REF_RATE;                /**< DDR Refresh Rate, offset: 0x2C0 */
   uint8_t RESERVED_10[1340];
-  __IO uint32_t TX_CFG_1;                          /**< Transaction Configuration Register 1., offset: 0x800 */
+  __IO uint32_t TX_CFG_1;                          /**< Transaction Configuration Register 1, offset: 0x800 */
   uint8_t RESERVED_11[28];
   __IO uint32_t FFI_CFG;                           /**< Freedom From Interference Configuration, offset: 0x820 */
   __IO uint32_t FFI_CFG2;                          /**< Freedom From Interference Configuration 2, offset: 0x824 */
@@ -1146,7 +1146,7 @@ typedef struct {
 #define DDRC_DDR_SDRAM_REF_RATE_REF_RATE_CS0(x)  (((uint32_t)(((uint32_t)(x)) << DDRC_DDR_SDRAM_REF_RATE_REF_RATE_CS0_SHIFT)) & DDRC_DDR_SDRAM_REF_RATE_REF_RATE_CS0_MASK)
 /*! @} */
 
-/*! @name TX_CFG_1 - Transaction Configuration Register 1. */
+/*! @name TX_CFG_1 - Transaction Configuration Register 1 */
 /*! @{ */
 
 #define DDRC_TX_CFG_1_TS_DEPTH_MASK              (0xF80U)
@@ -2413,6 +2413,11 @@ typedef struct {
 #define DDRC_ERR_DETECT_LKSTP1E_WIDTH            (1U)
 #define DDRC_ERR_DETECT_LKSTP1E(x)               (((uint32_t)(((uint32_t)(x)) << DDRC_ERR_DETECT_LKSTP1E_SHIFT)) & DDRC_ERR_DETECT_LKSTP1E_MASK)
 
+#define DDRC_ERR_DETECT_PHYE_MASK                (0x10000U)
+#define DDRC_ERR_DETECT_PHYE_SHIFT               (16U)
+#define DDRC_ERR_DETECT_PHYE_WIDTH               (1U)
+#define DDRC_ERR_DETECT_PHYE(x)                  (((uint32_t)(((uint32_t)(x)) << DDRC_ERR_DETECT_PHYE_SHIFT)) & DDRC_ERR_DETECT_PHYE_MASK)
+
 #define DDRC_ERR_DETECT_IPE_MASK                 (0x80000U)
 #define DDRC_ERR_DETECT_IPE_SHIFT                (19U)
 #define DDRC_ERR_DETECT_IPE_WIDTH                (1U)
@@ -2458,6 +2463,16 @@ typedef struct {
 #define DDRC_ERR_DETECT_RTAGE_WIDTH              (1U)
 #define DDRC_ERR_DETECT_RTAGE(x)                 (((uint32_t)(((uint32_t)(x)) << DDRC_ERR_DETECT_RTAGE_SHIFT)) & DDRC_ERR_DETECT_RTAGE_MASK)
 
+#define DDRC_ERR_DETECT_WTTE_MASK                (0x10000000U)
+#define DDRC_ERR_DETECT_WTTE_SHIFT               (28U)
+#define DDRC_ERR_DETECT_WTTE_WIDTH               (1U)
+#define DDRC_ERR_DETECT_WTTE(x)                  (((uint32_t)(((uint32_t)(x)) << DDRC_ERR_DETECT_WTTE_SHIFT)) & DDRC_ERR_DETECT_WTTE_MASK)
+
+#define DDRC_ERR_DETECT_RTTE_MASK                (0x20000000U)
+#define DDRC_ERR_DETECT_RTTE_SHIFT               (29U)
+#define DDRC_ERR_DETECT_RTTE_WIDTH               (1U)
+#define DDRC_ERR_DETECT_RTTE(x)                  (((uint32_t)(((uint32_t)(x)) << DDRC_ERR_DETECT_RTTE_SHIFT)) & DDRC_ERR_DETECT_RTTE_MASK)
+
 #define DDRC_ERR_DETECT_RTMTE_MASK               (0x40000000U)
 #define DDRC_ERR_DETECT_RTMTE_SHIFT              (30U)
 #define DDRC_ERR_DETECT_RTMTE_WIDTH              (1U)
@@ -2492,6 +2507,11 @@ typedef struct {
 #define DDRC_ERR_DISABLE_REFRATEED_WIDTH         (1U)
 #define DDRC_ERR_DISABLE_REFRATEED(x)            (((uint32_t)(((uint32_t)(x)) << DDRC_ERR_DISABLE_REFRATEED_SHIFT)) & DDRC_ERR_DISABLE_REFRATEED_MASK)
 
+#define DDRC_ERR_DISABLE_PHYED_MASK              (0x10000U)
+#define DDRC_ERR_DISABLE_PHYED_SHIFT             (16U)
+#define DDRC_ERR_DISABLE_PHYED_WIDTH             (1U)
+#define DDRC_ERR_DISABLE_PHYED(x)                (((uint32_t)(((uint32_t)(x)) << DDRC_ERR_DISABLE_PHYED_SHIFT)) & DDRC_ERR_DISABLE_PHYED_MASK)
+
 #define DDRC_ERR_DISABLE_UPDTMTED_MASK           (0x100000U)
 #define DDRC_ERR_DISABLE_UPDTMTED_SHIFT          (20U)
 #define DDRC_ERR_DISABLE_UPDTMTED_WIDTH          (1U)
@@ -2525,6 +2545,11 @@ typedef struct {
 #define DDRC_ERR_INT_EN_REFRATEEE_SHIFT          (7U)
 #define DDRC_ERR_INT_EN_REFRATEEE_WIDTH          (1U)
 #define DDRC_ERR_INT_EN_REFRATEEE(x)             (((uint32_t)(((uint32_t)(x)) << DDRC_ERR_INT_EN_REFRATEEE_SHIFT)) & DDRC_ERR_INT_EN_REFRATEEE_MASK)
+
+#define DDRC_ERR_INT_EN_PHYEE_MASK               (0x10000U)
+#define DDRC_ERR_INT_EN_PHYEE_SHIFT              (16U)
+#define DDRC_ERR_INT_EN_PHYEE_WIDTH              (1U)
+#define DDRC_ERR_INT_EN_PHYEE(x)                 (((uint32_t)(((uint32_t)(x)) << DDRC_ERR_INT_EN_PHYEE_SHIFT)) & DDRC_ERR_INT_EN_PHYEE_MASK)
 
 #define DDRC_ERR_INT_EN_UPDTMTEE_MASK            (0x100000U)
 #define DDRC_ERR_INT_EN_UPDTMTEE_SHIFT           (20U)

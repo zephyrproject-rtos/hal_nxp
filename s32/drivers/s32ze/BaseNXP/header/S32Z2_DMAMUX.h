@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_DMAMUX.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_DMAMUX
  *
  * This file contains register definitions and macros for easy access to their
@@ -69,17 +69,21 @@
  */
 
 /** DMAMUX - Size of Registers Arrays */
-#define DMAMUX_CHCFG_COUNT                        16u
+#define DMAMUX_CHCFG_COUNT                        32u
 
 /** DMAMUX - Register Layout Typedef */
 typedef struct {
-  __IO uint8_t CHCONF[DMAMUX_CHCFG_COUNT];         /**< Channel Configuration register, array offset: 0x0, array step: 0x1 */
+  __IO uint8_t CHCONF[DMAMUX_CHCFG_COUNT];         /**< Channel Configuration, array offset: 0x0, array step: 0x1, irregular array, not all indices are valid */
 } DMAMUX_Type, *DMAMUX_MemMapPtr;
 
 /** Number of instances of the DMAMUX module. */
-#define DMAMUX_INSTANCE_COUNT                    (5u)
+#define DMAMUX_INSTANCE_COUNT                    (6u)
 
 /* DMAMUX - Peripheral instance base addresses */
+/** Peripheral CE_DMAMUX base address */
+#define IP_CE_DMAMUX_BASE                        (0x448D8000u)
+/** Peripheral CE_DMAMUX base pointer */
+#define IP_CE_DMAMUX                             ((DMAMUX_Type *)IP_CE_DMAMUX_BASE)
 /** Peripheral DMAMUX_0A base address */
 #define IP_DMAMUX_0A_BASE                        (0x405A0000u)
 /** Peripheral DMAMUX_0A base pointer */
@@ -101,9 +105,9 @@ typedef struct {
 /** Peripheral DMAMUX_5 base pointer */
 #define IP_DMAMUX_5                              ((DMAMUX_Type *)IP_DMAMUX_5_BASE)
 /** Array initializer of DMAMUX peripheral base addresses */
-#define IP_DMAMUX_BASE_ADDRS                     { IP_DMAMUX_0A_BASE, IP_DMAMUX_0B_BASE, IP_DMAMUX_1_BASE, IP_DMAMUX_4_BASE, IP_DMAMUX_5_BASE }
+#define IP_DMAMUX_BASE_ADDRS                     { IP_CE_DMAMUX_BASE, IP_DMAMUX_0A_BASE, IP_DMAMUX_0B_BASE, IP_DMAMUX_1_BASE, IP_DMAMUX_4_BASE, IP_DMAMUX_5_BASE }
 /** Array initializer of DMAMUX peripheral base pointers */
-#define IP_DMAMUX_BASE_PTRS                      { IP_DMAMUX_0A, IP_DMAMUX_0B, IP_DMAMUX_1, IP_DMAMUX_4, IP_DMAMUX_5 }
+#define IP_DMAMUX_BASE_PTRS                      { IP_CE_DMAMUX, IP_DMAMUX_0A, IP_DMAMUX_0B, IP_DMAMUX_1, IP_DMAMUX_4, IP_DMAMUX_5 }
 
 /* ----------------------------------------------------------------------------
    -- DMAMUX Register Masks
@@ -114,7 +118,7 @@ typedef struct {
  * @{
  */
 
-/*! @name CHCONF - Channel Configuration register */
+/*! @name CHCONF - Channel Configuration */
 /*! @{ */
 
 #define DMAMUX_CHCONF_SOURCE_MASK                (0x3FU)

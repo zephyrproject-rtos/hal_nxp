@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -38,8 +38,8 @@ extern "C"{
 #define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION        4
 #define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION        7
 #define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION     0
-#define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION                0
-#define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION                9
+#define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION                1
+#define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION                0
 #define LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION                0
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -51,13 +51,15 @@ extern "C"{
     /* Check if Linflexd_Uart_Ip_TrustedFunctions.h header file and Linflexd_Uart_Ip_Defines.h configuration header file are of the same Autosar version */
 #if ((LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION != LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION != LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_AR_RELEASE_REVISION_VERSION))
+     (LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_AR_RELEASE_REVISION_VERSION) \
+    )
 #error "AutoSar Version Numbers of Linflexd_Uart_Ip_TrustedFunctions.h and Linflexd_Uart_Ip_Defines.h are different"
 #endif
 /* Check if Linflexd_Uart_Ip_TrustedFunctions.h header file and Linflexd_Uart_Ip_Defines.h configuration header file are of the same software version */
 #if ((LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION != LINFLEXD_UART_IP_DEFINES_SW_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION != LINFLEXD_UART_IP_DEFINES_SW_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION != LINFLEXD_UART_IP_DEFINES_SW_PATCH_VERSION))
+     (LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION != LINFLEXD_UART_IP_DEFINES_SW_PATCH_VERSION) \
+    )
 #error "Software Version Numbers of Linflexd_Uart_Ip_TrustedFunctions.h and Linflexd_Uart_Ip_Defines.h are different"
 #endif
 /*==================================================================================================
@@ -104,6 +106,6 @@ extern void Linflexd_Uart_Ip_SetUserAccess(const uint8 Instance);
 }
 #endif
 
-#endif /* LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_H */
-
 /** @} */
+
+#endif /* LINFLEXD_UART_IP_TRUSTEDFUNCTIONS_H */

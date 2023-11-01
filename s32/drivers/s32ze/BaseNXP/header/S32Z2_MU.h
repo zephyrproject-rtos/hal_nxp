@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_MU.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_MU
  *
  * This file contains register definitions and macros for easy access to their
@@ -74,7 +74,7 @@
 
 /** MU - Register Layout Typedef */
 typedef struct {
-  __I  uint32_t VER;                               /**< Version ID Register, offset: 0x0 */
+  __I  uint32_t VER;                               /**< Version ID, offset: 0x0 */
   __I  uint32_t PAR;                               /**< Parameter Register, offset: 0x4 */
   __IO uint32_t CR;                                /**< Control Register, offset: 0x8 */
   __IO uint32_t SR;                                /**< Status Register, offset: 0xC */
@@ -181,7 +181,7 @@ typedef struct {
  * @{
  */
 
-/*! @name VER - Version ID Register */
+/*! @name VER - Version ID */
 /*! @{ */
 
 #define MU_VER_FEATURE_MASK                      (0xFFFFU)
