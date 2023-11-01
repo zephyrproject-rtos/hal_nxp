@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2
  *
  * This file contains register definitions and macros for easy access to their
@@ -73,9 +73,9 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0100U
+#define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0008U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
 
 /* ----------------------------------------------------------------------------
    -- Generic macros
@@ -183,8 +183,6 @@ typedef enum {
   SMU_SBSW_timer_IRQn          = 39,               /**< timer irq */
   SMU_C_VFCCU_CFRI0_IRQn       = 40,               /**< Central FCCU reaction index0 */
   SMU_C_VFCCU_CFRI1_IRQn       = 41,               /**< Central FCCU reaction index1 */
-  SMU_C_VFCCU_CFRI2_IRQn       = 42,               /**< Central FCCU reaction index2 */
-  SMU_C_VFCCU_CFR13_IRQn       = 43,               /**< Central FCCU reaction index3 */
   SMU_DMA0_ERR_IRQn            = 48,               /**< DMA Error interrupt request */
   SMU_DMA0_0_15_IRQn           = 49,               /**< Interrupt for DMA CH0-15 */
   SMU_DMA0_16_31_IRQn          = 50,               /**< Interrupt for DMA CH16-31,DMA0_CH0_31_INT */
@@ -630,8 +628,6 @@ typedef enum {
   RTU_RTUn_STM1_IRQn           = 46,               /**< STM1 interrupt channel request 0, 1, 2, 3 */
   RTU_RTUn_STM2_IRQn           = 47,               /**< STM2 interrupt channel request 0, 1, 2, 3 */
   RTU_RTUn_STM3_IRQn           = 48,               /**< STM3 interrupt channel request 0, 1, 2, 3 */
-  RTU_RTUn_STCU20_LBIST_IRQn   = 49,               /**< LBIST IRQ */
-  RTU_RTUn_STCU20_MBIST_IRQn   = 50,               /**< MBIST IRQ */
   RTU_RTUn_PIT0_IRQn           = 51,               /**< Ored all Interrupt Channels */
   RTU_C_VFCCU_OUT0_IRQn        = 52,               /**< vfccu_reactions_out[0]/[8] */
   RTU_C_VFCCU_OUT1_IRQn        = 53,               /**< vfccu_reactions_out[1]/[9] */
@@ -1246,7 +1242,7 @@ typedef enum {
   RTU_CE_CAN16_MB_95_64_IRQn   = 713,              /**< Logical OR of Message Buffer Interrupt lines 95 to 64 */
   RTU_CE_CAN16_MB_127_96_IRQn  = 714,              /**< Logical OR of Message Buffer Interrupt lines 127 to 96 */
   RTU_CE_CAN17_INIT_OR_ERROR_IRQn = 715,           /**< Interrupt indicating that the CAN bus went to Bus Off state, Interrupt indicating that the FlexCAN has completed the Bus Off count process (it has counted 11 recessive bits 128 times) and is ready for bus off recover, Interrupt indicating Transmit Error Counter transition from less than 96 to greater than equal to 96, Interrupt indicating Receive Error Counter transition from less than 96 to greater than equal to 96, Interrupt indicating that errors were detected on the CAN bus, Interrupt indicating that errors were detected on the CAN bus for FD messages in the Fast Bit Rate region, Enhanced Rx FIFO Underflow Interrupt, Enhanced Rx FIFO Overflow Interrupt */
-  RTU_CE_CAN17_RXFIFO_DATA_IRQn = 716,          /**< Enhanced Rx FIFO Watermark Indication Interrupt, Enhanced Rx FIFO Data Available Interrupt */
+  RTU_CE_CAN17_RXFIFO_DATA_IRQn = 716,             /**< Enhanced Rx FIFO Watermark Indication Interrupt, Enhanced Rx FIFO Data Available Interrupt */
   RTU_CE_CAN17_MB_31_0_IRQn    = 717,              /**< Logical OR of Message Buffer Interrupt lines 31 to 0 */
   RTU_CE_CAN17_MB_63_32_IRQn   = 718,              /**< Logical OR of Message Buffer Interrupt lines 63 to 32 */
   RTU_CE_CAN17_MB_95_64_IRQn   = 719,              /**< Logical OR of Message Buffer Interrupt lines 95 to 64 */
@@ -1407,6 +1403,12 @@ typedef enum {
   FLEXLLCE_CE_CMU_FC0_IRQn     = 20,               /**< Error Injection Complete */
   FLEXLLCE_CE_CMU_FC1_IRQn     = 21,               /**< Fault Injection Complete */
   FLEXLLCE_CE_STM2_IRQn        = 22,               /**< Single vector for all 4 channels */
+  FLEXLLCE_CE_ERM2_Single_ECC_ERR_IRQn = 24,       /**< Single-bit ECC error */
+  FLEXLLCE_CE_ERM2_Multi_ECC_ERR_IRQn = 25,        /**< Multi-bit ECC error */
+  FLEXLLCE_CE_ERM0_Single_ECC_ERR_IRQn = 26,       /**< Single-bit ECC error */
+  FLEXLLCE_CE_ERM0_Multi_ECC_ERR_IRQn = 27,        /**< Multi-bit ECC error */
+  FLEXLLCE_CE_ERM1_Single_ECC_ERR_IRQn = 28,       /**< Single-bit ECC error */
+  FLEXLLCE_CE_ERM1_Multi_ECC_ERR_IRQn = 29,        /**< Multi-bit ECC error */
   FLEXLLCE_CE_XRDC_IRQn        = 31,               /**< XRDC.TBD Error Interrupt */
   FLEXLLCE_C_VFCCU_INDEX0_IRQn = 40,               /**< Central FCCU reaction index0 */
   FLEXLLCE_C_VFCCU_INDEX1_IRQn = 41,               /**< Central FCCU reaction index0 */

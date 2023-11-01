@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_AES_ACCEL.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_AES_ACCEL
  *
  * This file contains register definitions and macros for easy access to their
@@ -74,16 +74,16 @@
 /** AES_ACCEL - Register Layout Typedef */
 typedef struct {
   struct {                                         /* offset: 0x0, array step: 0x1000 */
-    __IO uint32_t LEN;                               /**< LEN register, array offset: 0x0, array step: 0x1000 */
-    __IO uint32_t AILEN;                             /**< AAD/IV length register, array offset: 0x4, array step: 0x1000 */
-    __IO uint32_t CRYPT;                             /**< CRYPT register, array offset: 0x8, array step: 0x1000 */
-    __I  uint32_t OWNSTAT;                           /**< OWN_Status register, array offset: 0xC, array step: 0x1000 */
-    __IO uint32_t TLVAL;                             /**< Timer Load Value Register, array offset: 0x10, array step: 0x1000 */
-    __I  uint32_t CVAL;                              /**< Current Timer Value Register, array offset: 0x14, array step: 0x1000 */
-    __IO uint32_t TCTRL;                             /**< Timer Control Register, array offset: 0x18, array step: 0x1000 */
-    __IO uint32_t TFLG;                              /**< Timer Flag Register, array offset: 0x1C, array step: 0x1000 */
-    __IO uint32_t FEEDINTMAP;                        /**< FEEDINTMAP register, array offset: 0x20, array step: 0x1000 */
-    __IO uint32_t RESULTINTMAP;                      /**< RESULTINTMAP register, array offset: 0x24, array step: 0x1000 */
+    __IO uint32_t LEN;                               /**< LEN, array offset: 0x0, array step: 0x1000 */
+    __IO uint32_t AILEN;                             /**< AAD/IV length, array offset: 0x4, array step: 0x1000 */
+    __IO uint32_t CRYPT;                             /**< CRYPT, array offset: 0x8, array step: 0x1000 */
+    __I  uint32_t OWNSTAT;                           /**< OWN_Status, array offset: 0xC, array step: 0x1000 */
+    __IO uint32_t TLVAL;                             /**< Timer Load Value, array offset: 0x10, array step: 0x1000 */
+    __I  uint32_t CVAL;                              /**< Current Timer Value, array offset: 0x14, array step: 0x1000 */
+    __IO uint32_t TCTRL;                             /**< Timer Control, array offset: 0x18, array step: 0x1000 */
+    __IO uint32_t TFLG;                              /**< Timer Flag, array offset: 0x1C, array step: 0x1000 */
+    __IO uint32_t FEEDINTMAP;                        /**< FEEDINTMAP, array offset: 0x20, array step: 0x1000 */
+    __IO uint32_t RESULTINTMAP;                      /**< RESULTINTMAP, array offset: 0x24, array step: 0x1000 */
     uint8_t RESERVED_0[4056];
   } ACCEL[AES_ACCEL_ACCEL_COUNT];
 } AES_ACCEL_Type, *AES_ACCEL_MemMapPtr;
@@ -110,7 +110,7 @@ typedef struct {
  * @{
  */
 
-/*! @name LEN - LEN register */
+/*! @name LEN - LEN */
 /*! @{ */
 
 #define AES_ACCEL_LEN_TLEN_MASK                  (0x7FFFFU)
@@ -119,7 +119,7 @@ typedef struct {
 #define AES_ACCEL_LEN_TLEN(x)                    (((uint32_t)(((uint32_t)(x)) << AES_ACCEL_LEN_TLEN_SHIFT)) & AES_ACCEL_LEN_TLEN_MASK)
 /*! @} */
 
-/*! @name AILEN - AAD/IV length register */
+/*! @name AILEN - AAD/IV length */
 /*! @{ */
 
 #define AES_ACCEL_AILEN_AAD_MASK                 (0x7FFFFU)
@@ -133,7 +133,7 @@ typedef struct {
 #define AES_ACCEL_AILEN_IVLEN(x)                 (((uint32_t)(((uint32_t)(x)) << AES_ACCEL_AILEN_IVLEN_SHIFT)) & AES_ACCEL_AILEN_IVLEN_MASK)
 /*! @} */
 
-/*! @name CRYPT - CRYPT register */
+/*! @name CRYPT - CRYPT */
 /*! @{ */
 
 #define AES_ACCEL_CRYPT_MASK_MASK                (0x7FU)
@@ -151,13 +151,13 @@ typedef struct {
 #define AES_ACCEL_CRYPT_CO_WIDTH                 (2U)
 #define AES_ACCEL_CRYPT_CO(x)                    (((uint32_t)(((uint32_t)(x)) << AES_ACCEL_CRYPT_CO_SHIFT)) & AES_ACCEL_CRYPT_CO_MASK)
 
-#define AES_ACCEL_CRYPT_KSLOT_MASK               (0xFF0000U)
+#define AES_ACCEL_CRYPT_KSLOT_MASK               (0x7F0000U)
 #define AES_ACCEL_CRYPT_KSLOT_SHIFT              (16U)
-#define AES_ACCEL_CRYPT_KSLOT_WIDTH              (8U)
+#define AES_ACCEL_CRYPT_KSLOT_WIDTH              (7U)
 #define AES_ACCEL_CRYPT_KSLOT(x)                 (((uint32_t)(((uint32_t)(x)) << AES_ACCEL_CRYPT_KSLOT_SHIFT)) & AES_ACCEL_CRYPT_KSLOT_MASK)
 /*! @} */
 
-/*! @name OWNSTAT - OWN_Status register */
+/*! @name OWNSTAT - OWN_Status */
 /*! @{ */
 
 #define AES_ACCEL_OWNSTAT_DID_MASK               (0xFU)
@@ -176,7 +176,7 @@ typedef struct {
 #define AES_ACCEL_OWNSTAT_PRIV(x)                (((uint32_t)(((uint32_t)(x)) << AES_ACCEL_OWNSTAT_PRIV_SHIFT)) & AES_ACCEL_OWNSTAT_PRIV_MASK)
 /*! @} */
 
-/*! @name TLVAL - Timer Load Value Register */
+/*! @name TLVAL - Timer Load Value */
 /*! @{ */
 
 #define AES_ACCEL_TLVAL_TSV_MASK                 (0xFFFFU)
@@ -185,7 +185,7 @@ typedef struct {
 #define AES_ACCEL_TLVAL_TSV(x)                   (((uint32_t)(((uint32_t)(x)) << AES_ACCEL_TLVAL_TSV_SHIFT)) & AES_ACCEL_TLVAL_TSV_MASK)
 /*! @} */
 
-/*! @name CVAL - Current Timer Value Register */
+/*! @name CVAL - Current Timer Value */
 /*! @{ */
 
 #define AES_ACCEL_CVAL_TVL_MASK                  (0xFFFFU)
@@ -194,7 +194,7 @@ typedef struct {
 #define AES_ACCEL_CVAL_TVL(x)                    (((uint32_t)(((uint32_t)(x)) << AES_ACCEL_CVAL_TVL_SHIFT)) & AES_ACCEL_CVAL_TVL_MASK)
 /*! @} */
 
-/*! @name TCTRL - Timer Control Register */
+/*! @name TCTRL - Timer Control */
 /*! @{ */
 
 #define AES_ACCEL_TCTRL_TEN_MASK                 (0x1U)
@@ -213,7 +213,7 @@ typedef struct {
 #define AES_ACCEL_TCTRL_FRZ(x)                   (((uint32_t)(((uint32_t)(x)) << AES_ACCEL_TCTRL_FRZ_SHIFT)) & AES_ACCEL_TCTRL_FRZ_MASK)
 /*! @} */
 
-/*! @name TFLG - Timer Flag Register */
+/*! @name TFLG - Timer Flag */
 /*! @{ */
 
 #define AES_ACCEL_TFLG_TIF_MASK                  (0x1U)
@@ -222,7 +222,7 @@ typedef struct {
 #define AES_ACCEL_TFLG_TIF(x)                    (((uint32_t)(((uint32_t)(x)) << AES_ACCEL_TFLG_TIF_SHIFT)) & AES_ACCEL_TFLG_TIF_MASK)
 /*! @} */
 
-/*! @name FEEDINTMAP - FEEDINTMAP register */
+/*! @name FEEDINTMAP - FEEDINTMAP */
 /*! @{ */
 
 #define AES_ACCEL_FEEDINTMAP_FIEN0_MASK          (0x1U)
@@ -346,7 +346,7 @@ typedef struct {
 #define AES_ACCEL_FEEDINTMAP_FIEN23(x)           (((uint32_t)(((uint32_t)(x)) << AES_ACCEL_FEEDINTMAP_FIEN23_SHIFT)) & AES_ACCEL_FEEDINTMAP_FIEN23_MASK)
 /*! @} */
 
-/*! @name RESULTINTMAP - RESULTINTMAP register */
+/*! @name RESULTINTMAP - RESULTINTMAP */
 /*! @{ */
 
 #define AES_ACCEL_RESULTINTMAP_RIEN0_MASK        (0x1U)

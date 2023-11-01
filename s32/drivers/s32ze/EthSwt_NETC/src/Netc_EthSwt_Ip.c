@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,6 +22,7 @@ extern "C"{
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "Netc_EthSwt_Ip.h"
+#include "SchM_EthSwt_43_NETC.h"
 #include "Netc_EthSwt_Ip_Types.h"
 #include "Netc_EthSwt_Ip_Cfg_Defines.h"
 #include "OsIf.h"        /* Used for timeouts. */
@@ -37,8 +38,8 @@ extern "C"{
 #define NETC_ETHSWT_IP_AR_RELEASE_MAJOR_VERSION_C       4
 #define NETC_ETHSWT_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define NETC_ETHSWT_IP_AR_RELEASE_REVISION_VERSION_C    0
-#define NETC_ETHSWT_IP_SW_MAJOR_VERSION_C               0
-#define NETC_ETHSWT_IP_SW_MINOR_VERSION_C               9
+#define NETC_ETHSWT_IP_SW_MAJOR_VERSION_C               1
+#define NETC_ETHSWT_IP_SW_MINOR_VERSION_C               0
 #define NETC_ETHSWT_IP_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -98,9 +99,11 @@ extern "C"{
 #define SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_MII_MODE (1U)
 #define SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_RMII_MODE (3U)
 #define SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_RGMII_MODE (4U)
+#define SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_SGMII_MODE (5U)
 #define SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_100MBIT (0U)
 #define SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_10MBIT (1U)
 #define SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_1000MBIT (2U)
+#define SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_2500MBIT (3U)
 
 /*==================================================================================================
 *                                         LOCAL CONSTANTS
@@ -118,8 +121,18 @@ extern "C"{
 #define NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS (9U)
 #define NETC_ETHSWT_IP_SHAPING_PSPEED_1000MBITS (99U)
 #define NETC_ETHSWT_IP_SHAPING_PSPEED_2000MBITS (199U)
+#define NETC_ETHSWT_IP_SHAPING_PSPEED_2500MBITS (249U)
 
 #define NETC_ETHSWT_IP_NUM_SHAPING_CLASS (8U)
+
+#define NETC_ETHSWT_IP_NUM_AGING_CYCLE (127U)
+#define NETC_ETHSWT_IP_NUM_AGING_CYCLE_FLOAT (127.0F)
+
+#define NETC_ETHSWT_IP_UINT16_NULL_ENTRY_ID (0xFFFFU)
+
+#define NETC_ETHSWT_IP_ONE_FLOAT (1.0F)
+
+#define MAX_32BIT ((uint32)0xFFFFFFFFUL)
 
 /*==================================================================================================
 *                                         LOCAL VARIABLES
@@ -136,13 +149,19 @@ extern "C"{
 #define ETHSWT_43_NETC_START_SEC_VAR_INIT_BOOLEAN
 #include "EthSwt_43_NETC_MemMap.h"
 
-/* Enabled status for Time Aware Shaper of each port */
-static boolean PortTimeAwareShaperEnabled[NETC_ETHSWT_NUMBER_OF_PORTS] = {(boolean)FALSE, (boolean)FALSE, (boolean)FALSE};
-
 /* Flag to determine if mirroring is active or not */
 static boolean MirrorConfigurationDone = FALSE;
 
 #define ETHSWT_43_NETC_STOP_SEC_VAR_INIT_BOOLEAN
+#include "EthSwt_43_NETC_MemMap.h"
+
+#define ETHSWT_43_NETC_START_SEC_VAR_CLEARED_BOOLEAN
+#include "EthSwt_43_NETC_MemMap.h"
+
+/* Enabled status for Time Aware Shaper of each port */
+static boolean PortTimeAwareShaperEnabled[NETC_ETHSWT_NUMBER_OF_PORTS];
+
+#define ETHSWT_43_NETC_STOP_SEC_VAR_CLEARED_BOOLEAN
 #include "EthSwt_43_NETC_MemMap.h"
 
 #define ETHSWT_43_NETC_START_SEC_VAR_INIT_UNSPECIFIED
@@ -152,7 +171,7 @@ static boolean MirrorConfigurationDone = FALSE;
 Netc_EthSwt_Ip_PortBaseType* Netc_EthSwt_Ip_PortBaseTable[] = { (Netc_EthSwt_Ip_PortBaseType*)IP_NETC__SW0_ETH_MAC_PORT0_BASE, (Netc_EthSwt_Ip_PortBaseType*)IP_NETC__SW0_ETH_MAC_PORT1_BASE };
 
 /* Base address of the registers for the pseudo Port */
-Netc_EthSwt_Ip_PseudoPortBaseType* Netc_EthSwt_Ip_PseudoPortBaseTable[] = { (Netc_EthSwt_Ip_PseudoPortBaseType*)IP_NETC__SW0_PSEUDO_MAC_PORT2_BASE };
+Netc_EthSwt_Ip_PseudoPortBaseType* Netc_EthSwt_Ip_PseudoPortBaseTable[] = { IP_NETC__SW0_PSEUDO_MAC_PORT2 };
 SW_PORT0_Type *Netc_EthSwt_Ip_SW0_PortxBaseAddr[NETC_ETHSWT_NUMBER_OF_PORTS] = {(SW_PORT0_Type*)IP_NETC__SW0_PORT0_BASE, (SW_PORT0_Type*)IP_NETC__SW0_PORT1_BASE, (SW_PORT0_Type*)IP_NETC__SW0_PORT2_BASE};
 #define ETHSWT_43_NETC_STOP_SEC_VAR_INIT_UNSPECIFIED
 #include "EthSwt_43_NETC_MemMap.h"
@@ -161,7 +180,7 @@ SW_PORT0_Type *Netc_EthSwt_Ip_SW0_PortxBaseAddr[NETC_ETHSWT_NUMBER_OF_PORTS] = {
 #include "EthSwt_43_NETC_MemMap.h"
 
 /* Table entries for Time Aware Shaping configuration of each Port */
-static Netc_EthSwt_Ip_TimeGateSchedulingEntryDataType TimeGateSchedulingEntryData[NETC_ETHSWT_NUMBER_OF_PORTS] = {0U};
+static Netc_EthSwt_Ip_TimeGateSchedulingEntryDataType TimeGateSchedulingEntryData[NETC_ETHSWT_NUMBER_OF_PORTS];
 
 #define ETHSWT_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "EthSwt_43_NETC_MemMap.h"
@@ -169,8 +188,16 @@ static Netc_EthSwt_Ip_TimeGateSchedulingEntryDataType TimeGateSchedulingEntryDat
 #define ETHSWT_43_NETC_START_SEC_VAR_INIT_32
 #include "EthSwt_43_NETC_MemMap.h"
 
+/* reference clock for 1588 timer. 0x0UL means the 1588 timer is not enabled. */
+static uint32 TimerOriginalRefClk = 0x0UL;
+/* reference clcok for clock correction and set ratio */
+static uint32 TimerRefClk = 0x0UL;
+
 /* Ingress Port Filter Entry ID for mirroing */
-uint32 MirroringIngressPortFilterEntryId = 0xFFFFFFFFUL;
+uint32 MirroringIngressPortFilterEntryId = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;
+
+/* Steps used to skip cycles that will not incress the FDB aging counters. */
+static uint32 Netc_EthSwt_Ip_MainFunctionCycle[FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS] =  {0UL};
 
 #define ETHSWT_43_NETC_STOP_SEC_VAR_INIT_32
 #include "EthSwt_43_NETC_MemMap.h"
@@ -188,7 +215,7 @@ static uint32 Netc_EthSwt_Ip_NetcClockFrequency;
 #include "EthSwt_43_NETC_MemMap.h"
 
 /* The timeout set for FDB aging */
-static uint16 Netc_EthSwt_Ip_FdbTableEntryTimeout;
+static uint16 Netc_EthSwt_Ip_FdbTableEntryTimeout[FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS];
 
 #define ETHSWT_43_NETC_STOP_SEC_VAR_CLEARED_16
 #include "EthSwt_43_NETC_MemMap.h"
@@ -200,26 +227,69 @@ static uint16 Netc_EthSwt_Ip_FdbTableEntryTimeout;
 static Netc_EthSwt_Ip_SwitchMirrorCfgType MirrorCfgBackup;
 
 /* Structure used for filling in the actual command buffer descriptor used in table operations */
-volatile Netc_EthSwt_Ip_CmdBDType CmdBDRConfig[NETC_ETHSWT_IP_CBDR_NUM];
+static volatile Netc_EthSwt_Ip_CmdBDType CmdBDRConfig[NETC_ETHSWT_IP_CBDR_NUM];
 
  /* Key element data for ingress port filter table */
-static volatile uint32 IPFKeyeData[NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN];
+static volatile uint32 Netc_EthSwt_Ip_IPFKeyeData[NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN];
 
 /* a 128 bytes aligned command ring descriptor buffer */
-VAR_ALIGN(Netc_EthSwt_Ip_NTMPMessageHeaderFormatType SwtcommandRingDescriptor0[NETC_ETHSWT_IP_ACTUAL_CBDR0_LENGTH], NETC_ETHSWT_IP_CBD_ALIGNED_SIZE)
-VAR_ALIGN(Netc_EthSwt_Ip_NTMPMessageHeaderFormatType SwtcommandRingDescriptor1[NETC_ETHSWT_IP_ACTUAL_CBDR1_LENGTH], NETC_ETHSWT_IP_CBD_ALIGNED_SIZE)
+VAR_ALIGN(static Netc_EthSwt_Ip_NTMPMessageHeaderFormatType SwtcommandRingDescriptor0[NETC_ETHSWT_IP_ACTUAL_CBDR0_LENGTH], NETC_ETHSWT_IP_CBD_ALIGNED_SIZE)
 
 /* a 16 bytes aligned FDB table request data buffer */
-VAR_ALIGN(volatile Netc_EthSwt_Ip_SwitchTableDataType TableDataBuffer, NETC_ETHSWT_IP_TABLE_ALIGNED_SIZE)
+VAR_ALIGN(static volatile Netc_EthSwt_Ip_SwitchTableDataType TableDataBuffer, NETC_ETHSWT_IP_TABLE_ALIGNED_SIZE)
 
 #define ETHSWT_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "EthSwt_43_NETC_MemMap.h"
+
 
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 #define ETHSWT_43_NETC_START_SEC_CODE
 #include "EthSwt_43_NETC_MemMap.h"
+
+/*!
+ * @brief   : Function for accessing 64 bits counters.
+ * @details : Function for extracting the counter value using base/offset
+ *
+ * @param[in] baseAddressValue base address in uint32
+ * @param[in] offsetAddressValue offset from the base
+ *
+ * @return Register value
+ */
+static inline uint64 Netc_EthSwt_Ip_Extract64bitsFrom32bitsReg(const uint32 baseAddressValue, const uint32 offsetAddressValue);
+
+/**
+ * @brief   : Function for accessing counter in a table.
+ * @details : Function for getting the counters using an offset
+ *
+ * @param[in]        base: Base address of the table.
+ * @param[in]        offset: Offset the table.
+ *
+ * @return           Result the counter value
+ */
+static inline uint64 Netc_EthSwt_Ip_ComputedRegisterValueExtractionSingleCounter(const Netc_EthSwt_Ip_PortBaseType* base, const Netc_EthSwt_Ip_SingleCounterType offset);
+
+/**
+ * @brief   : Function for accessing counter in a table.
+ * @details : Function for getting the counters using an offset
+ *
+ * @param[in]        base: Base address of the table.
+ * @param[in]        offset: Offset the table.
+ *
+ * @return           Result the counter value
+ */
+static inline uint64 Netc_EthSwt_Ip_ComputedRegisterValueExtractionPseudoCounter(const Netc_EthSwt_Ip_PseudoPortBaseType* base, const Netc_EthSwt_Ip_PseudoPortCounterType offset);
+
+/**
+ * @brief   : Function for accessing 64 bits counters in a table.
+ * @details : Function for getting the 64 bits counters using two 32 bits accesses.
+ *
+ * @param[in]        reg: 64bits register pointer.
+ *
+ * @return           Result the counter value
+ */
+static inline uint64 Netc_EthSwt_Ip_GetCounterLocal(const volatile uint64 *Reg);
 
 /**
  * @brief            Command BD Rings initialization function
@@ -324,9 +394,207 @@ static inline boolean Netc_EthSwt_Ip_TimeoutExpired( uint32 *StartTimeInOut,
                                                      uint32 TimeoutTicks
                                                    );
 
+#if (NETC_ETHSWT_NUMBER_OF_FDB_ENTRIES > 0U)
+/**
+ * @brief            FDB table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigFDBTable(const Netc_EthSwt_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES > 0U)
+/**
+ * @brief            IngressStreamIdentification table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigISITable(const Netc_EthSwt_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_SEQTAG_ENTRIES > 0U)
+/**
+ * @brief            IngressSequenceGeneration table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigSeqGenTable(const Netc_EthSwt_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_SEQRECOVERY_ENTRIES > 0U)
+/**
+ * @brief            EgressSequenceRecovery table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigSeqRecTable(const Netc_EthSwt_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_FRAMEMODIFICATION_ENTRIES > 0U)
+/**
+ * @brief            FrameModification table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigFrmModificationTable(const Netc_EthSwt_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_EGRESSTREATMENT_ENTRIES > 0U)
+/**
+ * @brief            EgressTreatment table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigEgressTreatmentTable(const Netc_EthSwt_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_INGRESSSTREAM_ENTRIES > 0U)
+/**
+ * @brief            IngressStream table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigIngressStreamTable(const Netc_EthSwt_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_VLANFILTER_ENTRIES > 0U)
+/**
+ * @brief            VLAN filter table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigVLANFilterTable(const Netc_EthSwt_Ip_ConfigType * Config);
+#endif
+
+/**
+ * @brief            Time aware shaper configuration function
+ *
+ * @param[in]        SwitchIdx: Switch ID
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigTAS(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config);
+
+/**
+ * @brief            Switch registers and ports configuration function
+ *
+ * @param[in]        SwitchIdx: Switch ID
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigSwt(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config);
+
+/* inline function for enabling PCIE for the timer, MDIO, switch, and ENETC */
+static inline void Netc_EthSwt_Ip_EnablePCIE(void);
+
 static inline Std_ReturnType Netc_EthSwt_Ip_PortRateEnumToRate(EthTrcv_BaudRateType baudRate, uint64 *portTxRate);
 
 static Std_ReturnType Netc_EthSwt_Ip_IerbReady(void);
+
+static inline void Netc_EthSwt_Ip_FillInTableDataBuffForSearchingFDBTable(const uint32 * ActionsData, const uint32 * ResumeEntryId, const Netc_EthSwt_Ip_FDBTableSearchCriteriaDataType * SearchCriteriaData);
+
+static inline Std_ReturnType Netc_EthSwt_Ip_SearchAndAgeEntryInFdbTable( uint8 SwitchIdx,
+                                                                         uint32 * ResumeEntryId,
+                                                                         uint32 * EntryId, uint32 * agingCount, boolean * FoundEntry
+                                                                       );
+
+static inline Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteFdbTableEntryById( uint8 SwitchIdx,
+                                                                                    uint32 EntryId
+                                                                                  );
+
+#if(NETC_ETHSWT_IP_CONFIG_LINK_PROTOCOL == STD_ON)
+/**
+ * @brief            Config link protocol for switch mac ports.
+ * @details
+ *
+ * @param[in]        SwitchIdx                      Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        SwitchPortIdx                  Index of the port at the addressed switch
+ * @param[in]        EthSwtPortPhysicalLayerType    Supported MII protocol: 0 MII, 1 RMII, 2 RGMII
+ *
+ */
+static void Netc_EthSwt_Ip_ConfigLinkProtocol(uint8 SwitchIdx, uint8 SwitchPortIdx, Netc_EthSwt_Ip_XmiiModeType EthSwtPortPhysicalLayerType);
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_RP_ENTRIES > 0U)
+/**
+ * @brief            Rate policer configuration function
+ *
+ * @param[in]        SwitchIdx: Switch ID
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigRP(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_SGCL_ENTRIES > 0U)
+/**
+ * @brief            Stream Gate Control List configuration function
+ *
+ * @param[in]        SwitchIdx: Switch ID
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigSGCL(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_SGI_ENTRIES > 0U)
+/**
+ * @brief            Stream Gate Instance configuration function
+ *
+ * @param[in]        SwitchIdx: Switch ID
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_EthSwt_Ip_ConfigSGI(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config);
+#endif
+
 /*==================================================================================================
 *                                         LOCAL FUNCTIONS
 ==================================================================================================*/
@@ -346,8 +614,20 @@ static inline boolean Netc_EthSwt_Ip_TimeoutExpired( uint32 *StartTimeInOut,
                                                      uint32 TimeoutTicks
                                                    )
 {
+    uint32 elapsedTime;
+
     /* get elapsed ticks */
-    *ElapsedTimeInOut += OsIf_GetElapsed(StartTimeInOut, NETC_ETHSWT_IP_TIMEOUT_TYPE);
+    elapsedTime = OsIf_GetElapsed(StartTimeInOut, NETC_ETHSWT_IP_TIMEOUT_TYPE);
+
+    /* Need to verify overflow of addition */
+    if(((uint64)elapsedTime + *ElapsedTimeInOut) < ((uint32)MAX_32BIT))
+    {
+        *ElapsedTimeInOut += elapsedTime;
+    }
+    else
+    {
+        *ElapsedTimeInOut = ((uint32)MAX_32BIT);
+    }
 
     return ((*ElapsedTimeInOut >= TimeoutTicks) ? TRUE : FALSE);
 }
@@ -411,6 +691,273 @@ static inline Std_ReturnType Netc_EthSwt_Ip_PortRateEnumToRate(EthTrcv_BaudRateT
  *END**************************************************************************/
 static Std_ReturnType Netc_EthSwt_Ip_EMDIOConfiguration( uint8 SwitchIdx );
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_SearchAndAgeEntryInFdbTable
+ * Description   : Ethernet Switch search entry ID in FDB table and increment aging count.
+ *END**************************************************************************/
+static inline Std_ReturnType Netc_EthSwt_Ip_SearchAndAgeEntryInFdbTable( uint8 SwitchIdx,
+                                                                         uint32 * ResumeEntryId,
+                                                                         uint32 * EntryId, uint32 * agingCount, boolean * FoundEntry
+                                                                       )
+{
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData;
+    uint32 NumOfElement = 0U;
+    uint32 TableEntryId;
+    uint32 ActionsData;
+    uint32 ActionsDataResponse;
+
+    Netc_EthSwt_Ip_FDBTableSearchCriteriaDataType SearchCriteriaData;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
+    *FoundEntry = FALSE;
+    SearchCriteriaData.SearchResumeEntryId=0U;
+    SearchCriteriaData.SearchActeData.ActivityCounter=0U;
+    SearchCriteriaData.SearchActeData.ActivityFlag=FALSE;
+    SearchCriteriaData.SearchCfgeData.SearchPortBitMap=0U;
+    SearchCriteriaData.SearchKeyeData.SearchFid=0U;
+    SearchCriteriaData.SearchKeyeData.SearchMulticastMacAddr=FALSE;
+
+    SearchCriteriaData.SearchMatchCriteria = (NETC_ETHSWT_IP_FDBTABLE_MATCH_CFGE_DYNAMIC_FIELD);    /* Match DYNAMIC field */
+    SearchCriteriaData.SearchCfgeData.SearchDynamicEntry = TRUE;                                   /* Search DYNAMIC entry */
+
+    /* +++ fill in FdbTabeDataBuffer for request +++ */
+    /* set the query options with full query */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_DEBUG_OPTIONS(0U) \
+                | NETC_ETHSWT_IP_FDBTABLE_REQFMT_ACTIONS_FIELD_ACTEU(1U) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(0U);
+    Netc_EthSwt_Ip_FillInTableDataBuffForSearchingFDBTable(&ActionsData, ResumeEntryId, &SearchCriteriaData);
+    /* --- fill in FdbTabeDataBuffer for request --- */
+
+    /* do the full query with Search Method */
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_FDB_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_SEARCH_METHOD;
+    OperationData.Cmd = NETC_ETHSWT_QUERY_FOLLOWEDBY_UPDATE_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_FDBTABLE_REQBUFFER_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_FDBTABLE_RESBUFFER_LEN);           /* full query needs more space for response data */
+
+    /* send the "Query" command */
+    /* [notes]: there is an error "0x8A" in NTMP response header during this query operation but it is not a real error. there should be another errata for "0x8A" later. */
+    CBDRStatus = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    if ((CBDRStatus == 0x8AU) || (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        /* check if found a matched entry */
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, &NumOfElement);
+
+        /* found a matched entry */
+        TableEntryId = TableDataBuffer.TableDataField[NETC_ETHSWT_FDBTABLE_RSPDATA_STATUS];
+        if ((1U == NumOfElement) && (TableEntryId != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID))
+        {
+            *EntryId = TableDataBuffer.TableDataField[NETC_ETHSWT_FDBTABLE_RSPDATA_ENTRYID];
+            ActionsDataResponse = TableDataBuffer.TableDataField[NETC_ETHSWT_FDBTABLE_RSPDATA_ACTEDATA];
+            *agingCount = (ActionsDataResponse & NETC_ETHSWT_IP_FDBTABLE_REPFMT_ACTE_DATA_FIELD_ACT_CNT_MASK);
+            /* Predicting the update action effect after the search */
+            if(NETC_ETHSWT_IP_FDBTABLE_REPFMT_ACTE_DATA_FIELD_ACT_FLAG_INACTIVE_FIELD ==
+               (ActionsDataResponse & NETC_ETHSWT_IP_FDBTABLE_REPFMT_ACTE_DATA_FIELD_ACT_FLAG_MASK))
+            {
+                if(*agingCount<=NETC_ETHSWT_IP_NUM_AGING_CYCLE)
+                {
+                    *agingCount += 1U;
+                }
+            }
+            else
+            {
+                *agingCount = 0U;
+            }
+            *FoundEntry = TRUE;
+        }
+
+        /* get the resume_entry_id and be ready for the next query operation */
+        /* [notes]: if the searching is completed, or there is no matched entry found, then TableDataBuffer.TableDataField[0U] will be writen with MAX_32BIT by hardware */
+        *ResumeEntryId = TableDataBuffer.TableDataField[NETC_ETHSWT_FDBTABLE_RSPDATA_STATUS];
+    }
+    else
+    {
+        status = E_NOT_OK;
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_DeleteFdbTableEntryById
+ * Description   : Ethernet Switch use the entry ID in FDB table and delete it.
+ *END**************************************************************************/
+static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteFdbTableEntryById( uint8 SwitchIdx,
+                                                                             uint32 EntryId
+                                                                           )
+{
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData;
+    uint32 NumOfElement = 0U;
+    uint32 EntryStatus;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_42();
+    /* +++ fill in FdbTabeDataBuffer for request +++ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = \
+                NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_DEBUG_OPTIONS(0U) \
+                | NETC_ETHSWT_IP_FDBTABLE_REQFMT_ACTIONS_FIELD_ACTEU(0U) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(0U);
+
+    /* fill in Access Key data with search criteria data format */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = EntryId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_42();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_FDB_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
+    OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_FDBTABLE_QUERY_REQBUFFER_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
+
+    /* send the "Delete" command */
+    /* [notes]: there is an error "0x8A" in NTMP response header during this query operation but it is not a real error. there should be another errata for "0x8A" later. */
+    CBDRStatus = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    if ((CBDRStatus == 0x8AU) || (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        /* check if found a matched entry */
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, &NumOfElement);
+
+        /* found a matched entry */
+        EntryStatus = TableDataBuffer.TableDataField[NETC_ETHSWT_FDBTABLE_RSPDATA_STATUS];
+        if (!((1U == NumOfElement) && (EntryStatus != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID)))
+        {
+            status = E_NOT_OK;
+        }
+    }
+    else
+    {
+        status = E_NOT_OK;
+    }
+
+    return status;
+}
+
+#if (NETC_ETHSWT_NUMBER_OF_RP_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigRP
+ * Description   : function for configuring the Rate Policer for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigRP(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+    uint32 RPIndex = 0U;
+    uint32 MatchedEntries = 0UL;
+    Netc_EthSwt_Ip_RatePolicerEntryDataType RPTableEntry = {0};
+
+    for (RPIndex = 0U; RPIndex < Config->NumberOfRPEntries; RPIndex++)
+    {
+        RPTableEntry = (*(Config->EthSwtRatePolicerEntries))[RPIndex];
+        CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateRatePolicerTableEntry(SwitchIdx, NETC_ETHSWT_ADD_CMD, &MatchedEntries, &RPTableEntry);
+
+        if (CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+            status = E_NOT_OK;
+            break;
+        }
+    }
+
+    return status;
+}
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_SGCL_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigSGCL
+ * Description   : function for configuring the Stream Gate Control Lists for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigSGCL(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+    uint32 SGCLIndex = 0U;
+    uint32 MatchedEntries = 0UL;
+    Netc_EthSwt_Ip_SGCLTableDataType SGCLTableEntry = {0};
+
+    for (SGCLIndex = 0U; SGCLIndex < Config->NumberOfSGCLEntries; SGCLIndex++)
+    {
+        SGCLTableEntry = (*(Config->StreamGateControlListEntries))[SGCLIndex];
+        CBDRStatus = Netc_EthSwt_Ip_AddStreamGateControlListTableEntry(SwitchIdx, NETC_ETHSWT_ADD_CMD, &MatchedEntries, &SGCLTableEntry);
+
+        if (CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+            status = E_NOT_OK;
+            break;
+        }
+    }
+
+    return status;
+}
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_SGI_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigSGI
+ * Description   : function for configuring the Stream Gate Instance Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigSGI(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+    uint32 SGIIndex = 0U;
+    uint32 MatchedEntries = 0UL;
+    Netc_EthSwt_Ip_StreamGateInstanceEntryDataType SGITableEntry = {0};
+
+    for (SGIIndex = 0U; SGIIndex < Config->NumberOfSGIEntries; SGIIndex++)
+    {
+        SGITableEntry = (*(Config->StreamGateInstanceEntries))[SGIIndex];
+        CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateStreamGateInstanceTableEntry(SwitchIdx, NETC_ETHSWT_ADD_CMD, &MatchedEntries, &SGITableEntry);
+
+        if (CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+            status = E_NOT_OK;
+            break;
+        }
+    }
+
+    return status;
+}
+#endif
+
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
@@ -434,6 +981,7 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortMode(uint8 SwitchIdx,
 
     if(TRUE == PortEnable)
     {
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_07();
         Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->POR &= ~(SW_PORT0_POR_TXDIS_MASK | SW_PORT0_POR_RXDIS_MASK);
 
         /* Write the PM0_COMMAND_CONFIG only for the MAC ports */
@@ -442,9 +990,12 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortMode(uint8 SwitchIdx,
             Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_COMMAND_CONFIG |= (SW_ETH_MAC_PORT0_PM0_COMMAND_CONFIG_RX_EN_MASK | \
                                                                                 SW_ETH_MAC_PORT0_PM0_COMMAND_CONFIG_TX_EN_MASK);
         }
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_07();
+
     }
     else
     {
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_07();
         Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->POR |= (SW_PORT0_POR_TXDIS_MASK | SW_PORT0_POR_RXDIS_MASK);
 
         /* Write the PM0_COMMAND_CONFIG only for the MAC ports */
@@ -453,6 +1004,7 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortMode(uint8 SwitchIdx,
             Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_COMMAND_CONFIG &= ~(SW_ETH_MAC_PORT0_PM0_COMMAND_CONFIG_RX_EN_MASK | \
                                                                                  SW_ETH_MAC_PORT0_PM0_COMMAND_CONFIG_TX_EN_MASK);
         }
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_07();
     }
 
     return E_OK;
@@ -570,6 +1122,26 @@ Std_ReturnType Netc_EthSwt_Ip_GetPortSpeed( uint8 SwitchIdx,
                         break;
                 }
                 break;
+            case SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_SGMII_MODE: /* RGMII mode */
+                switch((interfaceModeConfig & SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_MASK) >> SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_SHIFT)
+                {
+                    case SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_2500MBIT: /* 2500Mbps */
+                        *BaudRate = ETHTRCV_BAUD_RATE_2500MBIT;
+                        break;
+                    case SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_1000MBIT: /* 1000Mbps */
+                        *BaudRate = ETHTRCV_BAUD_RATE_1000MBIT;
+                        break;
+                    case SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_100MBIT: /* 100Mbps */
+                        *BaudRate = ETHTRCV_BAUD_RATE_100MBIT;
+                        break;
+                    case SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_10MBIT: /* 10Mbps */
+                        *BaudRate = ETHTRCV_BAUD_RATE_10MBIT;
+                        break;
+                    default:
+                        status = E_NOT_OK;
+                        break;
+                }
+                break;
             default:
                 status = E_NOT_OK;
                 break;
@@ -607,6 +1179,7 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortSpeed( uint8 SwitchIdx,
 
     if(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_MAC_PORTS)
     {
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_01();
         interfaceModeConfig = Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_IF_MODE;
 
         interfaceType = ((interfaceModeConfig & SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE_MASK) >> SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE_SHIFT) ;
@@ -618,12 +1191,12 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortSpeed( uint8 SwitchIdx,
                 if(BaudRate == ETHTRCV_BAUD_RATE_10MBIT)
                 {
                     interfaceModeConfig |= SW_ETH_MAC_PORT1_PM0_IF_MODE_M10_MASK;
-		    shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS;
+		            shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS;
                 }
                 else if(BaudRate == ETHTRCV_BAUD_RATE_100MBIT)
                 {
                     interfaceModeConfig &= ~(SW_ETH_MAC_PORT1_PM0_IF_MODE_M10_MASK);
-		    shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS;
+		            shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS;
                 }
                 else
                 {
@@ -639,21 +1212,61 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortSpeed( uint8 SwitchIdx,
                     {
                         interfaceModeConfig &= ~(SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_MASK);
                         interfaceModeConfig |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_10MBIT));
-		    	shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS;
+		    	        shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS;
                         break;
                     }
                     case ETHTRCV_BAUD_RATE_100MBIT: /* 100Mbps */
                     {
                         interfaceModeConfig &= ~(SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_MASK);
                         interfaceModeConfig |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_100MBIT));
-		    	shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS;
+		    	        shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS;
                         break;
                     }
                     case ETHTRCV_BAUD_RATE_1000MBIT: /* 1000Mbps */
                     {
                         interfaceModeConfig &= ~(SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_MASK);
                         interfaceModeConfig |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_1000MBIT));
-		    	shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_1000MBITS;
+		    	        shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_1000MBITS;
+                        break;
+                    }
+                    default:
+                    {
+                        status = E_NOT_OK;
+                        break;
+                    }
+                }
+                break;
+            }
+            case SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_SGMII_MODE: /* SGMII mode */
+            {
+                switch(BaudRate)
+                {
+                    case ETHTRCV_BAUD_RATE_10MBIT: /* 10Mbps */
+                    {
+                        interfaceModeConfig &= ~(SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_MASK);
+                        interfaceModeConfig |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_10MBIT));
+		    	        shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS;
+                        break;
+                    }
+                    case ETHTRCV_BAUD_RATE_100MBIT: /* 100Mbps */
+                    {
+                        interfaceModeConfig &= ~(SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_MASK);
+                        interfaceModeConfig |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_100MBIT));
+		    	        shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS;
+                        break;
+                    }
+                    case ETHTRCV_BAUD_RATE_1000MBIT: /* 1000Mbps */
+                    {
+                        interfaceModeConfig &= ~(SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_MASK);
+                        interfaceModeConfig |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_1000MBIT));
+		    	        shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_1000MBITS;
+                        break;
+                    }
+                    case ETHTRCV_BAUD_RATE_2500MBIT: /* 2500Mbps */
+                    {
+                        interfaceModeConfig &= ~(SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP_MASK);
+                        interfaceModeConfig |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_2500MBIT));
+		    	        shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_2500MBITS;
                         break;
                     }
                     default:
@@ -671,14 +1284,18 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortSpeed( uint8 SwitchIdx,
             }
         }
         Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_IF_MODE = interfaceModeConfig;
+
         Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCR &= ~SW_PORT0_PCR_PSPEED_MASK;
         Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(shapingPSpeedConfig);
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_01();
     }
     else
     {
 	/* pseudo port */
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_01();
         Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCR &= ~SW_PORT0_PCR_PSPEED_MASK;
         Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PCR |= SW_PORT0_PCR_PSPEED(NETC_ETHSWT_IP_SHAPING_PSPEED_2000MBITS);
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_01();
     }
 
     return status;
@@ -708,38 +1325,20 @@ Std_ReturnType Netc_EthSwt_Ip_GetDuplexMode( uint8 SwitchIdx,
     {
         interfaceModeConfig = Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_IF_MODE;
 
-        /* Is this RGMII mode == 4U */
-        if ( SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_RGMII_MODE ==
-             ((interfaceModeConfig & SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE_MASK) >> SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE_SHIFT)
-            )
-        {
-        /* Full duplex is 1 in SFD field */
-            if(SW_ETH_MAC_PORT1_PM0_IF_MODE_SFD_MASK == (interfaceModeConfig & SW_ETH_MAC_PORT1_PM0_IF_MODE_SFD_MASK))
-            {
-                *DuplexMode = ETHTRCV_DUPLEX_MODE_FULL;
-            }
-            else /* ETHTRCV_DUPLEX_MODE_HALF */
-            {
-                *DuplexMode = ETHTRCV_DUPLEX_MODE_HALF;
-            }
-        }
-        else
-        {
         /* Full duplex is 0 in HD field */
-            if (SW_ETH_MAC_PORT1_PM0_IF_MODE_HD_MASK == (interfaceModeConfig & SW_ETH_MAC_PORT1_PM0_IF_MODE_HD_MASK))
-            {
-                *DuplexMode = ETHTRCV_DUPLEX_MODE_HALF;
-            }
-            else /* ETHTRCV_DUPLEX_MODE_HALF */
-            {
-                *DuplexMode = ETHTRCV_DUPLEX_MODE_FULL;
-            }
+        if (SW_ETH_MAC_PORT1_PM0_IF_MODE_HD_MASK == (interfaceModeConfig & SW_ETH_MAC_PORT1_PM0_IF_MODE_HD_MASK))
+        {
+            *DuplexMode = ETHTRCV_DUPLEX_MODE_HALF;
+        }
+        else /* ETHTRCV_DUPLEX_MODE_HALF */
+        {
+            *DuplexMode = ETHTRCV_DUPLEX_MODE_FULL;
         }
     }
     else
     {
-    }
         *DuplexMode = ETHTRCV_DUPLEX_MODE_FULL;
+    }
 
     return status;
 }
@@ -748,20 +1347,22 @@ Std_ReturnType Netc_EthSwt_Ip_GetDuplexMode( uint8 SwitchIdx,
  *
  * Function Name : Netc_EthSwt_Ip_SetMacAddr
  * Description   : This function sets the MAC address of a certain port of switch
- *
+ * implements Netc_EthSwt_Ip_SetMacAddr_Activity
  *END**************************************************************************/
-Std_ReturnType Netc_EthSwt_Ip_SetMacAddr(uint8 SwitchIdx, uint8 portIndex, const uint8 *macAddr)
+Std_ReturnType Netc_EthSwt_Ip_SetMacAddr(uint8 SwitchIdx, uint8 PortIndex, const uint8 *MacAddr)
 {
     Std_ReturnType status = E_OK;
 
 #if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
-    DevAssert(portIndex < NETC_ETHSWT_NUMBER_OF_PORTS);
-    DevAssert(macAddr != NULL_PTR);
+    DevAssert(PortIndex < NETC_ETHSWT_NUMBER_OF_PORTS);
+    DevAssert(MacAddr != NULL_PTR);
 #endif
 
-    Netc_EthSwt_Ip_SW0_PortxBaseAddr[portIndex]->PMAR0 = (uint32)(macAddr[0U]) | ((uint32)(macAddr[1U]) << 8U) | ((uint32)(macAddr[2U]) << 16U) | ((uint32)(macAddr[3U]) << 24U);
-    Netc_EthSwt_Ip_SW0_PortxBaseAddr[portIndex]->PMAR1 = (uint32)(macAddr[4U]) | ((uint32)(macAddr[5U]) << 8U);
+    (void)SwitchIdx;
+
+    Netc_EthSwt_Ip_SW0_PortxBaseAddr[PortIndex]->PMAR0 = (uint32)(MacAddr[0U]) | ((uint32)(MacAddr[1U]) << 8U) | ((uint32)(MacAddr[2U]) << 16U) | ((uint32)(MacAddr[3U]) << 24U);
+    Netc_EthSwt_Ip_SW0_PortxBaseAddr[PortIndex]->PMAR1 = (uint32)(MacAddr[4U]) | ((uint32)(MacAddr[5U]) << 8U);
 
     return status;
 }
@@ -770,9 +1371,9 @@ Std_ReturnType Netc_EthSwt_Ip_SetMacAddr(uint8 SwitchIdx, uint8 portIndex, const
  *
  * Function Name : Netc_EthSwt_Ip_GetMacAddr
  * Description   : This function reads the MAC address of a certain port
- *
+ * implements Netc_EthSwt_Ip_GetMacAddr_Activity
  *END**************************************************************************/
-void Netc_EthSwt_Ip_GetMacAddr(uint8 SwitchIdx, uint8 portIndex, uint8 *macAddr)
+void Netc_EthSwt_Ip_GetMacAddr(uint8 SwitchIdx, uint8 PortIndex, uint8 *MacAddr)
 {
     uint32 msbMacAddr;
     uint32 lsbMacAddr;
@@ -780,24 +1381,26 @@ void Netc_EthSwt_Ip_GetMacAddr(uint8 SwitchIdx, uint8 portIndex, uint8 *macAddr)
 
 #if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
-    DevAssert(portIndex < NETC_ETHSWT_NUMBER_OF_PORTS);
-    DevAssert(macAddr != NULL_PTR);
+    DevAssert(PortIndex < NETC_ETHSWT_NUMBER_OF_PORTS);
+    DevAssert(MacAddr != NULL_PTR);
 #endif
 
+    (void)SwitchIdx;
+
     /* read data from registers */
-    msbMacAddr = Netc_EthSwt_Ip_SW0_PortxBaseAddr[portIndex]->PMAR0;
-    lsbMacAddr = Netc_EthSwt_Ip_SW0_PortxBaseAddr[portIndex]->PMAR1;
+    msbMacAddr = Netc_EthSwt_Ip_SW0_PortxBaseAddr[PortIndex]->PMAR0;
+    lsbMacAddr = Netc_EthSwt_Ip_SW0_PortxBaseAddr[PortIndex]->PMAR1;
 
     /* copy mac address in the correct order */
     for (macAddrIdx = 0U; macAddrIdx < 4U; macAddrIdx++)
     {
-        macAddr[macAddrIdx] = (uint8)(msbMacAddr & NETC_ETHSWT_IP_0XFF_MASK);
+        MacAddr[macAddrIdx] = (uint8)(msbMacAddr & NETC_ETHSWT_IP_0XFF_MASK);
         msbMacAddr >>= 8U;
     }
 
-    macAddr[4U] = (uint8)(lsbMacAddr & NETC_ETHSWT_IP_0XFF_MASK);
+    MacAddr[4U] = (uint8)(lsbMacAddr & NETC_ETHSWT_IP_0XFF_MASK);
     lsbMacAddr >>= 8U;
-    macAddr[5U] = (uint8)(lsbMacAddr & NETC_ETHSWT_IP_0XFF_MASK);
+    MacAddr[5U] = (uint8)(lsbMacAddr & NETC_ETHSWT_IP_0XFF_MASK);
 
 }
 
@@ -814,9 +1417,12 @@ Std_ReturnType Netc_EthSwt_Ip_GetPortMacAddr( uint8 SwitchIdx, uint16 Fid, const
     uint8 PortIndex;
     uint8 NumOfMatchedPorts = 0U;
     uint8 MacByteIdx;
-    uint32 NumOfMatchedElement = 0;
-    Netc_EthSwt_Ip_FdbEntryDataType FdbTableEntry;
-    uint32 PortBitMap;
+    uint32 NumOfMatchedElement = 0x0UL;
+    Netc_EthSwt_Ip_FdbEntryDataType FdbTableEntry = {0U};
+    uint32 PortBitMap = 0x0UL;
+    Netc_EthSwt_Ip_FDBTableSearchCriteriaDataType SearchCriteriaData = {0U};
+    uint32 ResumeEntryId = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;
+    boolean MatchedEntryFound = FALSE;
 
 #if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
@@ -830,15 +1436,51 @@ Std_ReturnType Netc_EthSwt_Ip_GetPortMacAddr( uint8 SwitchIdx, uint16 Fid, const
     }
     FdbTableEntry.FID = Fid;
 
-    QueryStatus = Netc_EthSwt_Ip_QueryFdbTableEntry(SwitchIdx, &NumOfMatchedElement, &FdbTableEntry);
-    if (QueryStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    if (FdbTableEntry.FID == NETC_ETHSWT_IP_UINT16_NULL_ENTRY_ID)
     {
+        do
+        {
+            NumOfMatchedElement = 1;    /* set the flag for finding a matched entry */
+            SearchCriteriaData.SearchMatchCriteria = NETC_ETHSWT_IP_FDBTABLE_MATCH_ANY_CRITERIA;
+            QueryStatus = Netc_EthSwt_Ip_SearchFdbTable(SwitchIdx, &ResumeEntryId, &SearchCriteriaData, &FdbTableEntry);
+
+            /* check if we found a matched entry */
+            for (MacByteIdx = 0U; MacByteIdx < NETC_ETHSWT_IP_MACADDRLEN; MacByteIdx++)
+            {
+                if (FdbTableEntry.MacAddr[MacByteIdx] != MacAddr[MacByteIdx])
+                {
+                    NumOfMatchedElement = 0U;
+                    break;
+                }
+            }
+
+            /* find a matched entry */
+            if (1U == NumOfMatchedElement)
+            {
+                MatchedEntryFound = TRUE;
+                /* get the port bitmap value from Fdb table response data buffer. */
+                PortBitMap |= FdbTableEntry.SwitchPortEgressBitMask;    /* for those FDB entries that have same mac address but different bit mask and FID, we will do the 'or' operation for bit mask */
+            }
+        } while (ResumeEntryId != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID);
+    }
+    else
+    {
+        QueryStatus = Netc_EthSwt_Ip_QueryFdbTableEntry(SwitchIdx, &NumOfMatchedElement, &FdbTableEntry);
+
         /* find a matched entry */
         if (1U == NumOfMatchedElement)
         {
+            MatchedEntryFound = TRUE;
             /* get the port bitmap value from Fdb table response data buffer */
-            PortBitMap = TableDataBuffer.TableDataField[NETC_ETHSWT_FDBTABLE_RSPDATA_PORTBITMAP];
+            PortBitMap = FdbTableEntry.SwitchPortEgressBitMask;
+        }
+    }
 
+    if (QueryStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+        /* find a matched entry */
+        if (TRUE == MatchedEntryFound)
+        {
             /* check matched port number */
             for (PortIndex = 0U; PortIndex < NETC_ETHSWT_IP_BITMAPLEN; PortIndex++)
             {
@@ -903,6 +1545,9 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryFdbTableEntry( uint8 SwitchIdx
     DevAssert(FdbTableEntry != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
     /* always do the full query. 0x0 = Full query. */
     ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY);
 
@@ -920,14 +1565,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryFdbTableEntry( uint8 SwitchIdx
         OperationData.TableId = NETC_ETHSWT_IP_FDB_TABLE_ID;
         OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;       /* for query command, always uses NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH method */
         OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
-        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);           /* set request data buffer length */
-        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);           /* set response data buffer with normal length */
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_FDBTABLE_QUERY_REQBUFFER_LEN);           /* set request data buffer length */
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_FDBTABLE_RESBUFFER_LEN);           /* set response data buffer with normal length */
 
         /* send command */
         status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-        /* Erroe code 0x8A is not a real error. check it on Errata. */
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
         if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
         {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
             Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
 
             /* found a matched entry */
@@ -968,6 +1621,8 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryFdbTableEntry( uint8 SwitchIdx
     return status;
 }
 
+
+
 /*FUNCTION**********************************************************************
  *
  * Function Name : Netc_EthSwt_Ip_DeleteFdbTableEntry
@@ -990,6 +1645,9 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteFdbTableEntry( uint8 SwitchId
     DevAssert(FdbTableEntry != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
     /* Delete command will ignore ActionsData data field */
     KeyeData[0U] = ((uint32)(FdbTableEntry->MacAddr[0U]) | ((uint32)(FdbTableEntry->MacAddr[1U]) << 8U) | ((uint32)(FdbTableEntry->MacAddr[2U]) << 16U) | ((uint32)(FdbTableEntry->MacAddr[3U]) << 24U));
     KeyeData[1U] = ((uint32)(FdbTableEntry->MacAddr[4U]) | ((uint32)(FdbTableEntry->MacAddr[5U]) << 8U));
@@ -1005,14 +1663,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteFdbTableEntry( uint8 SwitchId
         OperationData.TableId = NETC_ETHSWT_IP_FDB_TABLE_ID;
         OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;       /* for delete command, always uses NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH method */
         OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
-        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);           /* set request data buffer length */
-        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);           /* set response data buffer with normal length */
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_FDBTABLE_QUERY_REQBUFFER_LEN);           /* set request data buffer length */
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
 
         /* send the "Delete" command */
         status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-        /* Erroe code 0x8A is not a real error. check it on Errata. */
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
         if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
         {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
             Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
         }
     }
@@ -1050,6 +1716,9 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateFdbTableEntry( uint8 Swi
     DevAssert(FdbTableEntry->DynamicEntry == FALSE);    /* users should not be allowed to add dynamic entries */
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
     /* only support Add, Update and AddOrUpdate commands */
     if ((NETC_ETHSWT_ADD_CMD != Cmd) && (NETC_ETHSWT_UPDATE_CMD != Cmd) && (NETC_ETHSWT_ADD_OR_UPDATE_CMD != Cmd))
     {
@@ -1085,14 +1754,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateFdbTableEntry( uint8 Swi
             OperationData.TableId = NETC_ETHSWT_IP_FDB_TABLE_ID;
             OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;       /* for Add, Update, or AddorUpdate command, the Access Method should only be NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH */
             OperationData.Cmd = Cmd;
-            OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-            OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);
+            OperationData.ReqBuffLength = (NETC_ETHSWT_IP_FDBTABLE_REQBUFFER_LEN);
+            OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
 
             /* send command */
             status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-            /* Erroe code 0x8A is not a real error. check it on Errata. */
+            #if defined(ERR_IPV_NETC_051243)
+                #if (STD_ON == ERR_IPV_NETC_051243)
+            /* Error code 0x8A is not a real error. check it on Errata. */
             if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
             {
+                #endif
+            #else
+            if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+            {
+            #endif
+                status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
                 Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
             }
         }
@@ -1140,12 +1817,13 @@ static inline Std_ReturnType SearchAndFillInFdbTableList(uint32 *ResumeId, uint1
     uint8 MacAddrByteIdx;
     uint32 ActionsData;
 
-    /* set the querry options with full querry */
+    /* set the query options with full query */
     ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
                 | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_DEBUG_OPTIONS(0U) \
                 | NETC_ETHSWT_IP_FDBTABLE_REQFMT_ACTIONS_FIELD_ACTEU(0U) \
                 | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(0U);
 
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_46();
     /* fill in FdbTabeDataBuffer for request */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;
     /* fill in Access Key data with search criteria data format */
@@ -1159,29 +1837,37 @@ static inline Std_ReturnType SearchAndFillInFdbTableList(uint32 *ResumeId, uint1
 
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_ETEID] = 0U;
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_MATCHCRITERIA] = NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_CFGEMC(1U);    /* 0x1: Match CFGE_DATA[DYNAMIC] field */
-
-    /* do the full querry with Search Method */
+    
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_46();
+    /* do the full query with Search Method */
     /* fill in operation data for config field of Request Header*/
     OperationData.CmdCompletionInt = 0x0U;                                          /* command completion interrupt disabled */
     OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;           /* protocol version = 2 */
     OperationData.TableId = NETC_ETHSWT_IP_FDB_TABLE_ID;
     OperationData.AccessMethod = NETC_ETHSWT_SEARCH_METHOD;
     OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
-    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);             /* full query needs more space for response data */
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_FDBTABLE_QUERY_REQBUFFER_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_FDBTABLE_RESBUFFER_LEN);             /* full query needs more space for response data */
 
     /* send the "Query" command */
     /* [notes]: there is an error "0x8A" in NTMP response header during this query operation but it is not a real error. there should be another errata for "0x8A" later. */
     CBDRStatus = Netc_EthSwt_Ip_SendCommand(0U, NETC_ETHSWT_IP_CBDR_0, &OperationData);
 
-    /* check the status of querry command */
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* check the status of query command */
     if ((CBDRStatus == 0x8AU) || (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES))
     {
+        #endif
+    #else
+    if (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
         Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, &NumOfElement);
 
         /* get the resume_entry_id and be ready for the next query operation */
         *ResumeId = TableDataBuffer.TableDataField[NETC_ETHSWT_FDBTABLE_RSPDATA_STATUS];
-
+        /* ERR051048: NETC: Management command with search action responds with incorrect NUM_MATCHED */
         /* found a matched entry */
         if ((1U == NumOfElement) && (*ResumeId != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID))
         {
@@ -1260,6 +1946,7 @@ Std_ReturnType Netc_EthSwt_Ip_GetFdbTable( uint8 SwitchIdx,
     }
 #endif
 
+    (void)SwitchIdx;
     /*
     * Number of static FDB entries in-use (hash-based and CAM-based entries) is indicated in FDBHTOR0[STATIC_ENTRIES].
     * Number of dynamic FDB entries in-use (hash-based and CAMbased entries) is indicated in FDBHTOR1[DYN_ENTRIES].
@@ -1273,7 +1960,8 @@ Std_ReturnType Netc_EthSwt_Ip_GetFdbTable( uint8 SwitchIdx,
     }
     else    /* if *NumberOfElements > 0, do the query and fill in the structure */
     {
-        do {
+        do
+        {
             /* check if the FdbTableList is full or we get all existing entries */
             if ((NumOfExistingEntry >= *NumberOfElements) || (NumOfExistingEntry >= NumOfInUseEntry) || (status == (uint8)(E_NOT_OK)) || (QueryDone == TRUE))
             {
@@ -1282,7 +1970,7 @@ Std_ReturnType Netc_EthSwt_Ip_GetFdbTable( uint8 SwitchIdx,
 
             status = SearchAndFillInFdbTableList(&ResumeId, &NumOfExistingEntry, FdbTableList, &StatciEntryQuerying, &QueryDone);
 
-        } while ((TableDataBuffer.TableDataField[NETC_ETHSWT_FDBTABLE_RSPDATA_STATUS] != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID) || (FALSE == StatciEntryQuerying));      /* Status == 0xFFFFFFFF means the query operation is completed */
+        } while ((TableDataBuffer.TableDataField[NETC_ETHSWT_FDBTABLE_RSPDATA_STATUS] != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID) || (FALSE == StatciEntryQuerying));      /* Status == MAX_32BIT means the query operation is completed */
     }
 
     /* return the Number of elements which are currently available in the EthSwitch module or number of elements copied to FdbTableList*/
@@ -1292,22 +1980,15 @@ Std_ReturnType Netc_EthSwt_Ip_GetFdbTable( uint8 SwitchIdx,
 }
 
 /* inline function for filling in TableDataBuff in Netc_EthSwt_Ip_SearchFdbTable() function. */
-static inline void FillInTableDataBuffForSearchingFDBTable(const uint32 * ResumeEntryId, const Netc_EthSwt_Ip_FDBTableSearchCriteriaDataType * SearchCriteriaData)
+static inline void Netc_EthSwt_Ip_FillInTableDataBuffForSearchingFDBTable(const uint32 * ActionsData, const uint32 * ResumeEntryId, const Netc_EthSwt_Ip_FDBTableSearchCriteriaDataType * SearchCriteriaData)
 {
-    uint32 ActionsData;
     uint8 MatchCriteriaData;
 
-    /* set the querry options with full querry */
-    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
-                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_DEBUG_OPTIONS(0U) \
-                | NETC_ETHSWT_IP_FDBTABLE_REQFMT_ACTIONS_FIELD_ACTEU(0U) \
-                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(0U);
-
     /* +++ fill in FdbTabeDataBuffer for request +++ */
-    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = *ActionsData;
 
     /* fill in Access Key data with search criteria data format */
-    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_RESUMEENTRYID] = *ResumeEntryId;    /* ResumeEntryId should start from 0xFFFFFFFF */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_RESUMEENTRYID] = *ResumeEntryId;    /* ResumeEntryId should start from MAX_32BIT */
     /* no need to fill in ETEID data for searching purpose */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_ETEID] = 0U;
 
@@ -1334,10 +2015,11 @@ static inline void FillInTableDataBuffForSearchingFDBTable(const uint32 * Resume
     {
         MatchCriteriaData = (uint8)(SearchCriteriaData->SearchMatchCriteria);
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_MATCHCRITERIA] = NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_ACTEMC(MatchCriteriaData);
-
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_08();
         /* fill in ACTE Match Criteria data*/
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_MATCHCRITERIA] |= (NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_ACTCNT(SearchCriteriaData->SearchActeData.ActivityCounter) \
                                                                                                 | NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_ACTFLAG(SearchCriteriaData->SearchActeData.ActivityFlag ? 1U : 0U));
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_08();
     }
     else
     {
@@ -1368,6 +2050,7 @@ Std_ReturnType Netc_EthSwt_Ip_SearchFdbTable( uint8 SwitchIdx,
     NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData;
     uint32 NumOfElement = 0U;
     uint32 TableEntryId;
+    uint32 ActionsData;
 
 #if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
@@ -1377,25 +2060,37 @@ Std_ReturnType Netc_EthSwt_Ip_SearchFdbTable( uint8 SwitchIdx,
 #endif
 
     /* +++ fill in FdbTabeDataBuffer for request +++ */
-    FillInTableDataBuffForSearchingFDBTable(ResumeEntryId, SearchCriteriaData);
+    /* set the query options with full query */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_DEBUG_OPTIONS(0U) \
+                | NETC_ETHSWT_IP_FDBTABLE_REQFMT_ACTIONS_FIELD_ACTEU(0U) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(0U);
+    Netc_EthSwt_Ip_FillInTableDataBuffForSearchingFDBTable(&ActionsData, ResumeEntryId, SearchCriteriaData);
     /* --- fill in FdbTabeDataBuffer for request --- */
 
-    /* do the full querry with Search Method */
+    /* do the full query with Search Method */
     /* fill in operation data for config field of Request Header*/
     OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
     OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
     OperationData.TableId = NETC_ETHSWT_IP_FDB_TABLE_ID;
     OperationData.AccessMethod = NETC_ETHSWT_SEARCH_METHOD;
     OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
-    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);           /* full query needs more space for response data */
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_FDBTABLE_QUERY_REQBUFFER_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_FDBTABLE_RESBUFFER_LEN);           /* full query needs more space for response data */
 
     /* send the "Query" command */
     /* [notes]: there is an error "0x8A" in NTMP response header during this query operation but it is not a real error. there should be another errata for "0x8A" later. */
     CBDRStatus = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
 
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
     if ((CBDRStatus == 0x8AU) || (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES))
     {
+        #endif
+    #else
+    if (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
         /* check if found a matched entry */
         Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, &NumOfElement);
 
@@ -1429,7 +2124,7 @@ Std_ReturnType Netc_EthSwt_Ip_SearchFdbTable( uint8 SwitchIdx,
         }
 
         /* get the resume_entry_id and be ready for the next query operation */
-        /* [notes]: if the searching is completed, or there is no matched entry found, then TableDataBuffer.TableDataField[0U] will be writen with 0xFFFFFFFF by hardware */
+        /* [notes]: if the searching is completed, or there is no matched entry found, then TableDataBuffer.TableDataField[0U] will be writen with MAX_32BIT by hardware */
         *ResumeEntryId = TableDataBuffer.TableDataField[NETC_ETHSWT_FDBTABLE_RSPDATA_STATUS];
     }
     else
@@ -1450,42 +2145,52 @@ static inline Std_ReturnType SearchAndFIllInVlanFilterTableList(uint32 *ResumeId
     uint32 NumOfElement = 0U;
     uint32 CfgeData;
 
-    /* set the querry options with full querry */
+    /* set the query options with full query */
     ActionsData = (NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
                 | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_DEBUG_OPTIONS(0U));
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_48();
 
     /* fill in TabeDataBuffer for request */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;
     /* fill in Access Key data with search criteria data format */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_VLANFILTERTABLE_REQFMT_RESUMEENTRYID_FIELD] = *ResumeId;    /* resume entry id */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_48();
 
-    /* do the full querry with Search Method */
+    /* do the full query with Search Method */
     /* fill in operation data for config field of Request Header*/
     OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
     OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
     OperationData.TableId = NETC_ETHSWT_IP_VLAN_FILTER_TABLE_ID;
     OperationData.AccessMethod = NETC_ETHSWT_SEARCH_METHOD;
     OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
-    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);           /* full query needs more space for response data */
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_VLANFILTERTABLE_RESBUFFER_LEN);           /* full query needs more space for response data */
 
     /* send the "Query" command */
     /* [notes]: there is an error "0x8A" in NTMP response header during this query operation but it is not a real error. there should be another errata for "0x8A" later. */
     CBDRStatus = Netc_EthSwt_Ip_SendCommand(0U, NETC_ETHSWT_IP_CBDR_0, &OperationData);
 
-    /* check the status of querry command */
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* check the status of query command */
     if ((CBDRStatus == 0x8AU) || (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES))
     {
+        #endif
+    #else
+    if (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
         Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, &NumOfElement);
 
         /* get the resume_entry_id and be ready for the next query operation */
         *ResumeId = TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABLE_RSPDATA_STATUS];
 
+        /* ERR051048: NETC: Management command with search action responds with incorrect NUM_MATCHED */
         /* found a matched entry */
         if ((1U == NumOfElement) && (*ResumeId != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID))
         {
             /* fill in "Netc_EthSwt_Ip_VlanFilterEntryDataType" structure with data in response data buffer */
-            VlanFilterTableList[(*NumOfExistingEntry)].VlanID = TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABL_RSPDATA_VID] & NETC_ETHSWT_VLANFILTERTABLE_KEYEDATA_VID_MASK;
+            VlanFilterTableList[(*NumOfExistingEntry)].VlanID = (uint16)(TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABL_RSPDATA_VID] & NETC_ETHSWT_VLANFILTERTABLE_KEYEDATA_VID_MASK);
 
             CfgeData = TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABL_RSPDATA_CFGEDATA0];
             VlanFilterTableList[(*NumOfExistingEntry)].SpanningTreeGroupMemberId = (uint8)((CfgeData & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_STG_ID_MASK) >> NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_STG_ID_SHIFT);
@@ -1548,6 +2253,7 @@ Std_ReturnType Netc_EthSwt_Ip_GetVlanFilterTable( uint8 SwitchIdx,
     }
 #endif
 
+    (void)SwitchIdx;
     /* Number of entries in-use by the VLAN Filter table is indicated in VFHTOR[NUM_ENTRIES]. */
     NumOfInUseEntry = (uint16)(IP_NETC__SW0_BASE->VFHTOR & NETC_ETHSWT_IP_0XFFFF_MASK);    /* get how many entries exist in module */
 
@@ -1566,7 +2272,7 @@ Std_ReturnType Netc_EthSwt_Ip_GetVlanFilterTable( uint8 SwitchIdx,
             }
 
             status = SearchAndFIllInVlanFilterTableList(&ResumeId, &NumOfExistingEntry, VlanFilterTableList);
-        } while (TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABLE_RSPDATA_STATUS] != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID);      /* Status == 0xFFFFFFFF means the query operation is completed */
+        } while (TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABLE_RSPDATA_STATUS] != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID);      /* Status == MAX_32BIT means the query operation is completed */
     }
 
     /* return the Number of elements which are currently available in the EthSwitch module or number of elements copied to VlanFilterTableList*/
@@ -1598,6 +2304,9 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateVlanFilterTableEntry( ui
     DevAssert(MatchedEntries != NULL_PTR);
     DevAssert(VlanFilterTableEntry != NULL_PTR);
 #endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
 
     /* only support Add, Update and AddOrUpdate commands */
     if ((NETC_ETHSWT_ADD_CMD != Cmd) && (NETC_ETHSWT_UPDATE_CMD != Cmd) && (NETC_ETHSWT_ADD_OR_UPDATE_CMD != Cmd))
@@ -1631,14 +2340,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateVlanFilterTableEntry( ui
             OperationData.TableId = NETC_ETHSWT_IP_VLAN_FILTER_TABLE_ID;
             OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;        /* for Add command, the Access Method should only be NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH */
             OperationData.Cmd = Cmd;
-            OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-            OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);
+            OperationData.ReqBuffLength = (NETC_ETHSWT_IP_VLANFILTERTABLE_REQBUFFER_LEN);
+            OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
 
             /* send the command */
             status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-            /* Erroe code 0x8A is not a real error. check it on Errata. */
+            #if defined(ERR_IPV_NETC_051243)
+                #if (STD_ON == ERR_IPV_NETC_051243)
+            /* Error code 0x8A is not a real error. check it on Errata. */
             if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
             {
+                #endif
+            #else
+            if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+            {
+            #endif
+                status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
                 Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
             }
         }
@@ -1673,6 +2390,9 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryVlanFilterTableEntry( uint8 Sw
     DevAssert(MatchedEntries != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
     /* fill in Vlan Filter Table Request Data Buffer */
     ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY);        /* for "query" command we only provide "full query" for users */
 
@@ -1688,21 +2408,29 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryVlanFilterTableEntry( uint8 Sw
         OperationData.TableId = NETC_ETHSWT_IP_VLAN_FILTER_TABLE_ID;
         OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;
         OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
-        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);            /* set request data buffer length */
-        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);            /* set response data buffer length */
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);            /* set request data buffer length */
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_VLANFILTERTABLE_RESBUFFER_LEN);            /* set response data buffer length */
 
         /* send the "Query" command */
         status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-        /* Erroe code 0x8A is not a real error. check it on Errata. */
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
         if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
         {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
             Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
 
             /* found a matched entry */
             if (1U == *MatchedEntries)
             {
                 /* fill in "Netc_EthSwt_Ip_VlanFilterEntryDataType" structure with data in response data buffer */
-                VlanFilterTableEntry->VlanID = TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABL_RSPDATA_VID] & NETC_ETHSWT_VLANFILTERTABLE_KEYEDATA_VID_MASK;
+                VlanFilterTableEntry->VlanID = (uint16)(TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABL_RSPDATA_VID] & NETC_ETHSWT_VLANFILTERTABLE_KEYEDATA_VID_MASK);
 
                 CfgeData = TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABL_RSPDATA_CFGEDATA0];
                 VlanFilterTableEntry->SpanningTreeGroupMemberId = (uint8)((CfgeData & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_STG_ID_MASK) >> NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_STG_ID_SHIFT);
@@ -1749,6 +2477,9 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteVlanFilterTableEntry( uint8 S
     DevAssert(MatchedEntries != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
     /* fill in Vlan Filter Table Request Data Buffer */
     AccessKeyData = VlanFilterTableEntryId;
 
@@ -1762,14 +2493,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteVlanFilterTableEntry( uint8 S
         OperationData.TableId = NETC_ETHSWT_IP_VLAN_FILTER_TABLE_ID;
         OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;
         OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
-        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
 
         /* send the "Delete" command */
         status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-        /* Erroe code 0x8A is not a real error. check it on Errata. */
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
         if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
         {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
             Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
         }
     }
@@ -1803,12 +2542,17 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryEgressCountTableEntry( uint8 S
     DevAssert((EntryId > 0U) && (EntryId <= (IP_NETC__SW0_COMMON->ECTCAPR & NETC_F2_COMMON_ECTCAPR_NUM_ENTRIES_MASK)));
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_44();
+
     /* fill in Egress Count Table Request Data Buffer */
     /* fill in Actions field. only support "full query" action and no need to update Statistics Element */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = (NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
                                                                                     | NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU(NETC_ETHSWT_EGRESSCOUNTTABLE_NO_UPDATE_STATISTICS_ELEMENT));
     /* fill in Access Key field, only support Entry ID Match method */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = EntryId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_44();
 
     /* fill in operation data for config field of NTMP Request Header*/
     OperationData.CmdCompletionInt = 0x0U;                                          /* command completion interrupt disabled */
@@ -1816,14 +2560,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryEgressCountTableEntry( uint8 S
     OperationData.TableId = NETC_ETHSWT_IP_EGRESS_COUNT_TABLE_ID;
     OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                        /* only support Entry ID Match method */
     OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
-    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQBUFFER_LEN);  /* set request data buffer length */
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);  /* set request data buffer length */
     OperationData.RspBuffLength = (NETC_ETHSWT_IP_EGRESSCOUNTTABLE_RSPBUFFER_LEN);  /* set response data buffer length */
 
     /* send the "Query" command */
     status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-    /* Erroe code 0x8A is not a real error. check it on Errata. */
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
     if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
     {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
         Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
         /* found a matched entry */
         if (*MatchedEntries == 1U)
@@ -1861,12 +2613,17 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_ResetEgressCountTableEntry( uint8 S
     DevAssert((EntryId > 0U) && (EntryId <= (IP_NETC__SW0_COMMON->ECTCAPR & NETC_F2_COMMON_ECTCAPR_NUM_ENTRIES_MASK)));
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_49();
     /* fill in Egress Count Table Request Data Buffer */
     /* fill in Actions field. only support "full query" action and set STSEU to reset Statistics Element */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD] = (NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
                                                                                          | NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU(NETC_ETHSWT_EGRESSCOUNTTABLE_RESET_STATISTICS_ELEMENT));
     /* fill in Access Key field, only support Entry ID Match method */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACCESSKEY_FIELD] = EntryId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_49();
 
     /* fill in operation data for config field of NTMP Request Header*/
     OperationData.CmdCompletionInt = 0x0U;                                          /* command completion interrupt disabled */
@@ -1874,14 +2631,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_ResetEgressCountTableEntry( uint8 S
     OperationData.TableId = NETC_ETHSWT_IP_EGRESS_COUNT_TABLE_ID;
     OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                        /* only support Entry ID Match method */
     OperationData.Cmd = NETC_ETHSWT_UPDATE_CMD;
-    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQBUFFER_LEN);  /* set request data buffer length */
-    OperationData.RspBuffLength = (NETC_ETHSWT_IP_EGRESSCOUNTTABLE_RSPBUFFER_LEN);  /* set response data buffer length */
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);  /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
 
     /* send the "Update" command */
     status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-    /* Erroe code 0x8A is not a real error. check it on Errata. */
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
     if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
     {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
         Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
     }
 
@@ -1909,13 +2674,17 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateEgressTreatmentTableEntr
     DevAssert(EgressTreatmentTableEntry != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
     /* only support Add, Update and AddOrUpdate commands */
     if ((NETC_ETHSWT_ADD_CMD != Cmd) && (NETC_ETHSWT_UPDATE_CMD != Cmd) && (NETC_ETHSWT_ADD_OR_UPDATE_CMD != Cmd))
     {
         status = NETC_ETHSWT_CBDRSTATUS_INVALID_CMD;    /* not supported command */
     }
     else
-    {
+    {   
+         SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_50();
         /* fill in Egress Treatment Table Request Data Buffer */
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U);
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = EgressTreatmentTableEntry->EgressTreatmentEntryID;
@@ -1928,6 +2697,7 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateEgressTreatmentTableEntr
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA1] = EgressTreatmentTableEntry->EgressFrmModificationEID;
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA2] = EgressTreatmentTableEntry->EgressCountTableEID;
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA3] = EgressTreatmentTableEntry->EgressSeqActionsTargetEID;
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_50();
 
         /* fill in operation data for config field of Request Header*/
         OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
@@ -1935,14 +2705,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateEgressTreatmentTableEntr
         OperationData.TableId = NETC_ETHSWT_IP_EGRESS_TREATMENT_TABLE_ID;
         OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
         OperationData.Cmd = Cmd;
-        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_ETMTABLE_REQBUFFER_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
 
         /* send the command */
         status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-        /* Erroe code 0x8A is not a real error. check it on Errata. */
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
         if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
         {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
             Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
         }
 
@@ -1971,9 +2749,13 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryEgressTreatmentTableEntry( uin
     DevAssert(MatchedEntries != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_51();
     /* fill in Egress Treatment Table Request Data Buffer */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY);     /* only supports Full Query */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = EgressTreatmentTableEntry->EgressTreatmentEntryID;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_51();
 
     /* fill in operation data for config field of Request Header*/
     OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
@@ -1981,14 +2763,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryEgressTreatmentTableEntry( uin
     OperationData.TableId = NETC_ETHSWT_IP_EGRESS_TREATMENT_TABLE_ID;
     OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
     OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
-    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_EGRESSTREAMENTTABLE_RESBUFFER_LEN);
 
     /* send the command */
     status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-    /* Erroe code 0x8A is not a real error. check it on Errata. */
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
     if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
     {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
         Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
 
         /* found a matched entry */
@@ -2032,9 +2822,14 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteEgressTreatmentTableEntry( ui
     DevAssert(MatchedEntries != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_52();
+
     /* fill in Egress Treatment Table Request Data Buffer */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = 0U;     /* no need to fill in Actions field */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = EgressTreatmentTableEntryId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_52();
 
     /* fill in operation data for config field of Request Header*/
     OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
@@ -2042,14 +2837,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteEgressTreatmentTableEntry( ui
     OperationData.TableId = NETC_ETHSWT_IP_EGRESS_TREATMENT_TABLE_ID;
     OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
     OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
-    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
 
     /* send the command */
     status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-    /* Erroe code 0x8A is not a real error. check it on Errata. */
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
     if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
     {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
         Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
     }
 
@@ -2080,13 +2883,17 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateFrmModificationTableEntr
     DevAssert(FrmModificationTableEntry != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
     /* only support Add, Update and AddOrUpdate commands */
     if ((NETC_ETHSWT_ADD_CMD != Cmd) && (NETC_ETHSWT_UPDATE_CMD != Cmd) && (NETC_ETHSWT_ADD_OR_UPDATE_CMD != Cmd))
     {
         status = NETC_ETHSWT_CBDRSTATUS_INVALID_CMD;    /* not supported command */
     }
     else
-    {
+    {    
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_53();
         /* fill in Frame Modification Table Request Data Buffer */
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U);        /* Configuration Element Update */
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = FrmModificationTableEntry->FrmModificationEntryID;                /* Entry ID */
@@ -2119,6 +2926,7 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateFrmModificationTableEntr
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA3] = NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_PAYLOAD_OFFSET(FrmModificationTableEntry->PayloadOffset);
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA4] = NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_FRM_MODI_BYTES(FrmModificationTableEntry->FrmModificationDataBytes);
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA5] = FrmModificationTableEntry->FrmModificationDataEntryID;        /* Frame Modification Data Tabel Entry ID */
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_53();
 
         /* fill in operation data for config field of Request Header*/
         OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
@@ -2126,14 +2934,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateFrmModificationTableEntr
         OperationData.TableId = NETC_ETHSWT_IP_FRM_MODIFICATION_TABLE_ID;
         OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                      /* only support "Entry ID" match method */
         OperationData.Cmd = Cmd;
-        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_FRMTABLE_REQBUFFER_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
 
         /* send the command */
         status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-        /* Erroe code 0x8A is not a real error. check it on Errata. */
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
         if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
         {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
             Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
         }
     }
@@ -2165,9 +2981,14 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryFrmModificationTableEntry( uin
     DevAssert(FrmModificationTableEntry != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_54();
+
     /* fill in Frame Modification Table Request Data Buffer */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY);        /* only support "Full Query" */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = FrmModificationTableEntry->FrmModificationEntryID;                /* Entry ID */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_54();
 
     /* fill in operation data for config field of Request Header*/
     OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
@@ -2175,14 +2996,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryFrmModificationTableEntry( uin
     OperationData.TableId = NETC_ETHSWT_IP_FRM_MODIFICATION_TABLE_ID;
     OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                      /* only support "Entry ID" match method */
     OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
-    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_FRMTABLE_RSPBUFFER_LEN);
 
     /* send the command */
     status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-    /* Erroe code 0x8A is not a real error. check it on Errata. */
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
     if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
     {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
         Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
         /* found a matched entry */
         if (1U == *MatchedEntries)
@@ -2244,9 +3073,14 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteFrmModificationTableEntry( ui
     DevAssert(MatchedEntries != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_55();
+
     /* fill in Frame Modification Table Request Data Buffer */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = 0U;                               /* no need to fill in Actions field */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = FrmModificationEntryID;           /* Entry ID */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_55();
 
     /* fill in operation data for config field of Request Header*/
     OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
@@ -2254,14 +3088,22 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteFrmModificationTableEntry( ui
     OperationData.TableId = NETC_ETHSWT_IP_FRM_MODIFICATION_TABLE_ID;
     OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                      /* only support "Entry ID" match method */
     OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
-    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
 
     /* send the command */
     status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-    /* Erroe code 0x8A is not a real error. check it on Errata. */
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
     if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
     {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
         Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
     }
 
@@ -2284,6 +3126,8 @@ Std_ReturnType Netc_EthSwt_Ip_EnableIngressPortFiltering( uint8 SwitchIdx, uint8
     DevAssert(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_PORTS);
 #endif
 
+    (void)SwitchIdx;
+
     /* Convert the value */
     RegVal = (Enable) ? (0x1UL) : (0x0UL);
 
@@ -2294,7 +3138,7 @@ Std_ReturnType Netc_EthSwt_Ip_EnableIngressPortFiltering( uint8 SwitchIdx, uint8
 }
 
 /* inline function for filling in Access Keye data in function Netc_EthSwt_Ip_FillInIngressPortFilterTableReqDataBuff() */
-static inline Netc_EthSwt_Ip_CBDRStatusType FillInAccessKeyeData(const Netc_EthSwt_Ip_AccessMethodType accessMethod, const volatile uint32 *pAccessKey)
+static inline Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_FillInAccessKeyeData(const Netc_EthSwt_Ip_AccessMethodType accessMethod, const volatile uint32 *pAccessKey)
 {
     uint8 ItemIdx;
     Netc_EthSwt_Ip_CBDRStatusType status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
@@ -2343,11 +3187,12 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_FillInIngressPortFilterTable
 {
     Netc_EthSwt_Ip_CBDRStatusType status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
 
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_56();
     /* ------initialize the table request data buffer------ */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;  /* fill in Actions field */
 
     /* initialize ACCESS_KEY */
-    status = FillInAccessKeyeData(accessMethod, pAccessKey);
+    status = Netc_EthSwt_Ip_FillInAccessKeyeData(accessMethod, pAccessKey);
 
     /* initialize CFGE_DATA. This portion is present only for commands which perform an update or add. */
     if (pCfgeData != NULL_PTR)
@@ -2366,6 +3211,7 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_FillInIngressPortFilterTable
                                                                                             | NETC_ETHSWT_IP_IPFTABLE_CFGE_CONFIG_TIMECAP(pCfgeData->CfgeTimestampCaptureEable ? 1U : 0U));
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_INGRESSPORTFILTER_CFGE_FLTATGT_FIELD] = pCfgeData->CfgeTargetForSelectedFilterAction;
     }
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_56();
 
     return status;
 }
@@ -2394,64 +3240,67 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddIngressPortFilterTableEntry( uin
     DevAssert(IngressPortFilterTableEntry != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
     /* set STSEU and CFGEU flag */
     ActionsData = (NETC_ETHSWT_IP_IPFTABLE_REQFMT_ACTIONS_FIELD_STSEU(1U) | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U));
 
     /* inialize KEYE_DATA */
-    IPFKeyeData[0U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePrecedence;
-    IPFKeyeData[2U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeFrmAttributeFlagsMask) << NETC_ETHSWT_IP_16BIT_SHIFT) \
+    Netc_EthSwt_Ip_IPFKeyeData[0U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePrecedence;
+    Netc_EthSwt_Ip_IPFKeyeData[2U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeFrmAttributeFlagsMask) << NETC_ETHSWT_IP_16BIT_SHIFT) \
                  | IngressPortFilterTableEntry->IngressPortFilterkeyeData.keyeFrmAttributeFlags;
-    IPFKeyeData[3U] = NETC_ETHSWT_IP_IPFTABLE_KEYE_DATA_SRCPORTMASK(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSourcePortIDMask) \
+    Netc_EthSwt_Ip_IPFKeyeData[3U] = NETC_ETHSWT_IP_IPFTABLE_KEYE_DATA_SRCPORTMASK(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSourcePortIDMask) \
                  | NETC_ETHSWT_IP_IPFTABLE_KEYE_DATA_SRCPRTID(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSourcePortID) \
                  | NETC_ETHSWT_IP_IPFTABLE_KEYE_DATA_DSCPMASK(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDifferentiatedServicesCodePointMask) \
                  | NETC_ETHSWT_IP_IPFTABLE_KEYE_DATA_DIFFSCP(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDifferentiatedServicesCodePoint);
-    IPFKeyeData[4U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeOuterVLANTagControlInformationMask) << NETC_ETHSWT_IP_16BIT_SHIFT) \
+    Netc_EthSwt_Ip_IPFKeyeData[4U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeOuterVLANTagControlInformationMask) << NETC_ETHSWT_IP_16BIT_SHIFT) \
                  | (IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeOuterVLANTagControlInformation << NETC_ETHSWT_IP_8BIT_SHIFT);        /* big endian for TCI */
-    IPFKeyeData[5U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[1U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
+    Netc_EthSwt_Ip_IPFKeyeData[5U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[1U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[2U]) << NETC_ETHSWT_IP_16BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[3U]) << NETC_ETHSWT_IP_24BIT_SHIFT);
-    IPFKeyeData[6U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[4U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[5U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
+    Netc_EthSwt_Ip_IPFKeyeData[6U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[4U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[5U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
                  | (((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[1U]) << NETC_ETHSWT_IP_8BIT_SHIFT)) << NETC_ETHSWT_IP_16BIT_SHIFT);
-    IPFKeyeData[7U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[2U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[3U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
+    Netc_EthSwt_Ip_IPFKeyeData[7U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[2U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[3U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[4U]) << NETC_ETHSWT_IP_16BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[5U]) << NETC_ETHSWT_IP_24BIT_SHIFT);
-    IPFKeyeData[8U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[1U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
+    Netc_EthSwt_Ip_IPFKeyeData[8U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[1U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[2U]) << NETC_ETHSWT_IP_16BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[3U]) << NETC_ETHSWT_IP_24BIT_SHIFT);
-    IPFKeyeData[9U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[4U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[5U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
+    Netc_EthSwt_Ip_IPFKeyeData[9U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[4U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[5U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
                  | (((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[1U]) << NETC_ETHSWT_IP_8BIT_SHIFT)) << NETC_ETHSWT_IP_16BIT_SHIFT);
-    IPFKeyeData[10U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[2U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[3U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
+    Netc_EthSwt_Ip_IPFKeyeData[10U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[2U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[3U]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[4U]) << NETC_ETHSWT_IP_16BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[5U]) << NETC_ETHSWT_IP_24BIT_SHIFT);
-    IPFKeyeData[11U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeInnerVLANTagControlInformationMask) << NETC_ETHSWT_IP_16BIT_SHIFT) \
+    Netc_EthSwt_Ip_IPFKeyeData[11U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeInnerVLANTagControlInformationMask) << NETC_ETHSWT_IP_16BIT_SHIFT) \
                  | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeInnerVLANTagControlInformation;
-    IPFKeyeData[12U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeEtherTypeMask) << NETC_ETHSWT_IP_16BIT_SHIFT) \
+    Netc_EthSwt_Ip_IPFKeyeData[12U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeEtherTypeMask) << NETC_ETHSWT_IP_16BIT_SHIFT) \
                  | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeEtherTypeMask;
-    IPFKeyeData[13U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPProtocolMask) << NETC_ETHSWT_IP_8BIT_SHIFT) | (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPProtocol);
+    Netc_EthSwt_Ip_IPFKeyeData[13U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPProtocolMask) << NETC_ETHSWT_IP_8BIT_SHIFT) | (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPProtocol);
     for (ByteIdx = 0U; ByteIdx < 4U; ByteIdx++)
     {
-        IPFKeyeData[ByteIdx + 17U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPSourceAddress[ByteIdx];
+        Netc_EthSwt_Ip_IPFKeyeData[ByteIdx + 17U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPSourceAddress[ByteIdx];
     }
     for (ByteIdx = 0U; ByteIdx < 4U; ByteIdx++)
     {
-        IPFKeyeData[ByteIdx + 23U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPSourceAddressMask[ByteIdx];
+        Netc_EthSwt_Ip_IPFKeyeData[ByteIdx + 23U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPSourceAddressMask[ByteIdx];
     }
-    IPFKeyeData[27U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4SourcePortMask) << NETC_ETHSWT_IP_16BIT_SHIFT) | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4SourcePort;
+    Netc_EthSwt_Ip_IPFKeyeData[27U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4SourcePortMask) << NETC_ETHSWT_IP_16BIT_SHIFT) | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4SourcePort;
     for (ByteIdx = 0U; ByteIdx < 4U; ByteIdx++)
     {
-        IPFKeyeData[ByteIdx + 29U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPDestinationAddress[ByteIdx];
+        Netc_EthSwt_Ip_IPFKeyeData[ByteIdx + 29U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPDestinationAddress[ByteIdx];
     }
     for (ByteIdx = 0U; ByteIdx < 4U; ByteIdx++)
     {
-        IPFKeyeData[ByteIdx + 35U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPDestinationAddressMask[ByteIdx];
+        Netc_EthSwt_Ip_IPFKeyeData[ByteIdx + 35U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPDestinationAddressMask[ByteIdx];
     }
-    IPFKeyeData[39U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4DestinationPortMask) << NETC_ETHSWT_IP_16BIT_SHIFT) | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4DestinationPort;
+    Netc_EthSwt_Ip_IPFKeyeData[39U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4DestinationPortMask) << NETC_ETHSWT_IP_16BIT_SHIFT) | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4DestinationPort;
 
     CfgeDataIdx = 0U;
     PayloadIdx = 0U;
     for (ByteIdx = 0U; ByteIdx < 12U; ByteIdx++)
     {
-        IPFKeyeData[CfgeDataIdx + 41U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePayloadBytes[ByteIdx + PayloadIdx]) \
+        Netc_EthSwt_Ip_IPFKeyeData[CfgeDataIdx + 41U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePayloadBytes[ByteIdx + PayloadIdx]) \
                                    | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePayloadBytesMask[ByteIdx + PayloadIdx]) << NETC_ETHSWT_IP_8BIT_SHIFT) \
                                    | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePayloadBytes[ByteIdx + PayloadIdx + 1U]) << NETC_ETHSWT_IP_16BIT_SHIFT) \
                                    | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePayloadBytesMask[ByteIdx + PayloadIdx + 1U]) << NETC_ETHSWT_IP_24BIT_SHIFT);
@@ -2460,7 +3309,7 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddIngressPortFilterTableEntry( uin
     }
 
     /* only supports "NETC_ETHSWT_TERNARY_MATCH_KEY_ELEMENT_MATCH" access method */
-    status = Netc_EthSwt_Ip_FillInIngressPortFilterTableReqDataBuff(ActionsData, &IPFKeyeData[0U], &(IngressPortFilterTableEntry->IngressPortFilterCfgeData), NETC_ETHSWT_TERNARY_MATCH_KEY_ELEMENT_MATCH);
+    status = Netc_EthSwt_Ip_FillInIngressPortFilterTableReqDataBuff(ActionsData, &Netc_EthSwt_Ip_IPFKeyeData[0U], &(IngressPortFilterTableEntry->IngressPortFilterCfgeData), NETC_ETHSWT_TERNARY_MATCH_KEY_ELEMENT_MATCH);
     if (NETC_ETHSWT_CBDRSTATUS_SUCCES == status)
     {
         /* fill in operation data for config field of Request Header*/
@@ -2474,9 +3323,17 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddIngressPortFilterTableEntry( uin
 
         /* send command */
         status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-        /* Erroe code 0x8A is not a real error. check it on Errata. */
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
         if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
         {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
             Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
             /* It's an "Add followed by a Query", but even if this entry is added successfully, the MatchedEntry is still 0. So here we can not check the MatchedEntries parameter. */
             IngressPortFilterTableEntry->IngressPortFilterEntryID = TableDataBuffer.TableDataField[1U];     /* Get the Entry_ID from response data buffer */
@@ -2633,6 +3490,9 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngressPortFilterTableEntry( u
     DevAssert(IngressPortFilterTableEntry != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
     /* only support "full query" */
     ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY);
 
@@ -2653,9 +3513,17 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngressPortFilterTableEntry( u
 
         /* send command */
         status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
         /* Error code 0x8A is not a real error. check it on Errata. */
         if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
         {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
             Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
             /* if found a matched entry, then fill in the structure */
             if (1U == *MatchedEntries)
@@ -2693,6 +3561,9 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngressPortFilterTableEntry( 
     DevAssert(MatchedEntries != NULL_PTR);
 #endif
 
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
     /* inialize KEYE_DATA with Entry_ID */
     KeyeData[0U] = IngressPortFilterEntry;
 
@@ -2706,13 +3577,21 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngressPortFilterTableEntry( 
         OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
         OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
         OperationData.ReqBuffLength = (NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN);
-        OperationData.RspBuffLength = (NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_RSPBUFFER_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
 
         /* send command */
         status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-        /* Erroe code 0x8A is not a real error. check it on Errata. */
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
         if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
         {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
             Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
         }
     }
@@ -2728,6 +3607,7 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngressPortFilterTableEntry( 
  *
  * Function Name : Netc_EthSwt_Ip_ConfigPortTimeGateScheduling
  * Description   : Ethernet Switch enables or disables Time Gate Scheduling function on a port.
+ * implements Netc_EthSwt_Ip_ConfigPortTimeGateScheduling_Activity
  *
  *END**************************************************************************/
 Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_ConfigPortTimeGateScheduling( uint8 SwitchIdx,
@@ -2748,30 +3628,45 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_ConfigPortTimeGateScheduling( uint8
     DevAssert(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_PORTS);
 #endif
 
-    /* Software must also wait until PTGAGLSR[TG] is deasserted before re-enabling. */
-    Netc_EthSwt_Ip_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, NETC_ETHSWT_IP_TIMEOUT_VALUE_US);
-    do {
-        /* get the state of gate control list */
-        GateControlListState = (Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PTGAGLSR & SW_PORT0_PTGAGLSR_TG_MASK);
-        TimeExpired = Netc_EthSwt_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-    } while ((GateControlListState != 0x0U) && (FALSE == TimeExpired));
-
-    if (GateControlListState == 0x0U)
+    (void)SwitchIdx;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_60();
+    /* read the reg value first */
+    RegValue = Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PTGSCR;
+    if ((RegValue & SW_PORT0_PTGSCR_TGE_MASK) != SW_PORT0_PTGSCR_TGE_MASK)      /* time gating is disabled */
     {
-        /* read the reg value first */
-        RegValue = Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PTGSCR;
-
         if (TRUE == Enable)
         {
-            RegValue |= SW_PORT0_PTGSCR_TGE(1U);    /* Enable time gating */
+            /* Software must also wait until PTGAGLSR[TG] is deasserted before re-enabling. */
+            Netc_EthSwt_Ip_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, NETC_ETHSWT_IP_TIMEOUT_VALUE_US);
+            do {
+                /* get the state of gate control list */
+        		GateControlListState = (Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PTGAGLSR & SW_PORT0_PTGAGLSR_TG_MASK);
+        		TimeExpired = Netc_EthSwt_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+            } while ((GateControlListState != 0x0U) && (FALSE == TimeExpired));
+
+            if (GateControlListState == 0x0U)
+            {
+                RegValue |= SW_PORT0_PTGSCR_TGE(1U);    /* Enable time gating */
+            }
+            else
+            {
+                status = E_NOT_OK;  /* fail to enable time gating because Operational gate control list is active */
+            }
         }
-        else
+    }
+    else    /* time gating is enabled */
+    {
+        if (FALSE == Enable)
         {
             RegValue &= ~SW_PORT0_PTGSCR_TGE(1U);    /* Disable time gating */
         }
+    }
 
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
         /* write it back. */
         Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->PTGSCR = RegValue;
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_60();
 
         /* if time gate scheduling is enabled, and entry data is configured, then adds the entry */
         if ((TRUE == Enable) && (TRUE == PortTimeAwareShaperEnabled[SwitchPortIdx]))
@@ -2786,13 +3681,13 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_ConfigPortTimeGateScheduling( uint8
     }
     else
     {
-        status = E_NOT_OK;
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_60();
     }
 
     return status;
 }
 
-static inline void FillInGateControlListData(const uint8 *OperationTimeIdx, const Netc_EthSwt_Ip_TimeGateSchedulingEntryDataType *TimeGateSchedulingTableEntry)
+static inline void Netc_EthSwt_Ip_FillInGateControlListData(const uint8 *OperationTimeIdx, const Netc_EthSwt_Ip_TimeGateSchedulingEntryDataType *TimeGateSchedulingTableEntry)
 {
     uint8 CFGEDataIdx;
     uint16 GateEntryIdx;
@@ -2832,6 +3727,7 @@ static inline void FillInGateControlListData(const uint8 *OperationTimeIdx, cons
  *
  * Function Name : Netc_EthSwt_Ip_AddOrUpdateTimeGateSchedulingTableEntry
  * Description   : Ethernet Switch adds or updates Time Gate Scheduling table entry function.
+ * implements Netc_EthSwt_Ip_AddOrUpdateTimeGateSchedulingTableEntry_Activity
  *
  *END**************************************************************************/
 Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateTimeGateSchedulingTableEntry( uint8 SwitchIdx,
@@ -2854,10 +3750,12 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateTimeGateSchedulingTableE
 
     /* AdminControlListLength = 0U means to reset the gate control list or add the time gate scheduling entry without gate control list */
     OperationTimes = (TimeGateSchedulingTableEntry->AdminControlListLength > 0U) ? 2U : 1U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_43();
 
     /* for adding or updating gate control list, we'll have to remove the gate control list firstly */
     for (OperationTimeIdx = 0U; OperationTimeIdx < OperationTimes; OperationTimeIdx++)
     {
+        
         /* ++++++ initialize the table request data buffer ++++++ */
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U);    /* fill in Actions field */
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = TimeGateSchedulingTableEntry->TimeGateSchedulingTable_EID;    /* fill in Entry ID */
@@ -2866,7 +3764,7 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateTimeGateSchedulingTableE
         CurrentTime = IP_NETC__TMR0_BASE->TMR_CUR_TIME_L;      /* should read the Lower register first */
         CurrentTime |= ((uint64)(IP_NETC__TMR0_BASE->TMR_CUR_TIME_H)) << NETC_ETHSWT_IP_32BIT_SHIFT;
         /* get lookaheadtime */
-        LookaheadTime = IP_NETC__NETC_IERB->CFG_SW_INST[0U].STGSLR; /* [Ricky]TODO: this register is not available for now + Netc_EthSwt_Ip_SW0_PortxBaseAddr[portIndex]->RESERVED_7; */
+        LookaheadTime = IP_NETC__NETC_IERB->CFG_SW_INST[0U].STGSLR; /* [Ricky]TODO: this register is not available for now + Netc_EthSwt_Ip_SW0_PortxBaseAddr[PortIndex]->RESERVED_7; */
 
         /* calculate the NewBaseTime */
         if (TimeGateSchedulingTableEntry->AdminBaseTime >= (CurrentTime + LookaheadTime))
@@ -2878,14 +3776,14 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateTimeGateSchedulingTableE
             CycleFactor = (uint32)(CurrentTime + LookaheadTime - TimeGateSchedulingTableEntry->AdminBaseTime) / (TimeGateSchedulingTableEntry->AdminCycleTime);
             NewBaseTime = TimeGateSchedulingTableEntry->AdminBaseTime + (((uint64)CycleFactor + 1UL) * (uint64)(TimeGateSchedulingTableEntry->AdminCycleTime));
         }
-        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = (uint32)(NewBaseTime & (0xFFFFFFFFUL));
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = (uint32)(NewBaseTime & (NETC_ETHSWT_IP_BD_NULL_ENTRY_ID));
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA1] = (uint32)(NewBaseTime >> NETC_ETHSWT_IP_32BIT_SHIFT);
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA2] = TimeGateSchedulingTableEntry->AdminCycleTime;
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA3] = TimeGateSchedulingTableEntry->AdminCycleTimeExt;
         /* set Administrative Control List Length to 0 for removing the admin gate control list or adding an entry with no administrative gate control list */
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA4] = (OperationTimeIdx == 0U) ? 0x0UL : (uint32)(TimeGateSchedulingTableEntry->AdminControlListLength);
 
-        FillInGateControlListData(&OperationTimeIdx, TimeGateSchedulingTableEntry);
+        Netc_EthSwt_Ip_FillInGateControlListData(&OperationTimeIdx, TimeGateSchedulingTableEntry);
         /* ------ initialize the table request data buffer ------ */
 
         /* fill in operation data for config field of Request Header*/
@@ -2895,301 +3793,286 @@ Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateTimeGateSchedulingTableE
         OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                      /* only support NETC_ETHSWT_ENTRY_ID_MATCH method */
         OperationData.Cmd = NETC_ETHSWT_UPDATE_CMD;                                   /* can only use "update" command to add or update an time gate scheduling table entry */
         OperationData.ReqBuffLength = (NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN);    /* [Ricky]TODO: follow-up work needs to do. */
-        OperationData.RspBuffLength = (NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_RSPBUFFER_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TGSTABLE_RSPBUFFER_LEN);
 
         /* send "update" command to add/remove gate control list */
         status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
-        /* Erroe code 0x8A is not a real error. check it on Errata. */
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
         if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
         {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
             status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
         }
     }
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_43();
 
     return status;
 }
 
 /*!
+ * @brief   : Function for accessing 64 bits counters.
+ * @details : Function for extracting the counter value using base/offset
+ *
+ * @param[in] baseAddressValue base address in uint32
+ * @param[in] offsetAddressValue offset from the base
+ *
+ * @return Register value
+ */
+static inline uint64 Netc_EthSwt_Ip_Extract64bitsFrom32bitsReg(const uint32 baseAddressValue, const uint32 offsetAddressValue)
+{
+    uint32 lessSignificantPtrValue;
+    const volatile uint32 *ptrToLessSignificantData;
+    uint64 lessSignificantAddressData, mostSignificantAddressData;
+
+    /* The 64bits counter are in two chunk of 32bits */
+    /* We will need to make some arithmitic on the pointers */
+
+    /* The most significant is higher in memory, the next address to get the next 32 bits */
+    lessSignificantPtrValue = baseAddressValue + offsetAddressValue;
+
+    /* Convert back the numbers in pointers */
+    ptrToLessSignificantData = (volatile uint32 *) lessSignificantPtrValue;
+#if defined(ERR_IPV_NETC_050679)
+    /*
+    Workaround for ERR050679:
+    Accesses to 64-bit stats registers must be performed atomically
+    */
+    #if (STD_ON == ERR_IPV_NETC_050679)
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_00();
+    #endif
+#endif
+
+    /* Extract the two 32 bits of data, lower address must be read first, this will lock the higher part */
+    /* Note that there is only one higher value buffer, should be exclusive... semaphore, what about the other cores? High level problem to be aware of */
+    lessSignificantAddressData = ptrToLessSignificantData[0U]; /* must be first */
+    mostSignificantAddressData = ptrToLessSignificantData[1U];
+
+#if defined(ERR_IPV_NETC_050679)
+    #if (STD_ON == ERR_IPV_NETC_050679)
+    /*
+    Workaround for ERR050679:
+    Accesses to 64-bit stats registers must be performed atomically
+    */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_00();
+    #endif
+#endif
+
+    /* putting it all together */
+    return ((mostSignificantAddressData << NETC_ETHSWT_IP_32BIT_SHIFT) | lessSignificantAddressData);
+}
+
+/*!
+ * @brief   : Function for accessing 64 bits counters in a table.
+ * @details : Function for getting the 64 bits counters using two 32 bits accesses.
+ *
+ * @param[in] Reg 64bits register pointer
+ *
+ * @return Register value
+ */
+static inline uint64 Netc_EthSwt_Ip_GetCounterLocal(const volatile uint64 *Reg)
+{
+    return Netc_EthSwt_Ip_Extract64bitsFrom32bitsReg((uint32) Reg, 0U);
+}
+
+/*!
  * @brief Ethernet Switch get port index counter values function.
  *
- * @param[in]
- * @param[out]
- * @return
+ * @param[in] SwitchIdx
+ * @param[in] PortIndex
+ * @param[in] Counter
+ *
+ * @return Std Error
  */
-static Std_ReturnType Netc_EthSwt_Ip_GetSwtPortCounters( uint8 SwitchIdx, uint8 portIndex, Netc_EthSwt_Ip_CounterType *Counter )
+static Std_ReturnType Netc_EthSwt_Ip_GetSwtPortCounters( uint8 SwitchIdx, uint8 PortIndex, Netc_EthSwt_Ip_CounterType *Counter )
 {
-    volatile uint32 *xCR0Value;
-    volatile uint32 *xCR1Value;
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
 
     (void)SwitchIdx;
 
     /* Receive */
     /* Port MAC index Receive Ethernet Octets Counter(etherStatsOctetsn) */
-    xCR0Value = (volatile uint32 *)(&(Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_REOCTN));
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_REOCTN) + 1U;
-    Counter->rxEtherOctetCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxEtherOctetCounter = Netc_EthSwt_Ip_GetCounterLocal(&(Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_REOCTN));
 
 
     /* Port MAC index Receive Octets Counter(iflnOctetsn)  */
-    xCR0Value = (volatile uint32 *)(&(Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_ROCTN));
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_ROCTN) + 1U;
-    Counter->rxOctetCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxOctetCounter =  Netc_EthSwt_Ip_GetCounterLocal(&(Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_ROCTN));
 
     /* Port MAC index Receive Alignment Error Counter Register(aAlignmentErrorsn) */
     /* Reserved */
 
     /* Port MAC index Receive Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RXPFN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RXPFN) + 1U;
-    Counter->rxValidPauseFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxValidPauseFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RXPFN);
 
     /* Port MAC index Receive Frame Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RFRMN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RFRMN) + 1U;
-    Counter->rxFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RFRMN);
 
     /* Port MAC index Receive Frame Check Sequence Error Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RFCSN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RFCSN) + 1U;
-    Counter->rxFrameCheckSequenceErrorCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxFrameCheckSequenceErrorCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RFCSN);
 
     /* Port MAC index Receive VLAN Frame Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RVLANN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RVLANN) + 1U;
-    Counter->rxVlanFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxVlanFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RVLANN);
 
     /* Port MAC index Receive Frame Error Counter Register(ifInErrorsn) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RERRN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RERRN) + 1U;
-    Counter->rxFrameErrorCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxFrameErrorCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RERRN);
 
     /* Port MAC index Receive Unicast Frame Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RUCAN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RUCAN) + 1U;
-    Counter->rxUnicastFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxUnicastFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RUCAN);
 
     /* Port MAC index Receive Multicast Frame Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RMCAN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RMCAN) + 1U;
-    Counter->rxMulticastFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxMulticastFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RMCAN);
 
     /* Port MAC index Receive Broadcast Frame Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RBCAN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RBCAN) + 1U;
-    Counter->rxBroadcastFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxBroadcastFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RBCAN);
 
     /* Port MAC index Receive Dropped Packets Counter Register(etherStatsDropEventsn) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RDRPN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RDRPN) + 1U;
-    Counter->rxDroppedPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxDroppedPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RDRPN);
 
     /* Port MAC index Receive Packets Counter Register(etherStatsPktsn) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RPKTN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RPKTN) + 1U;
-    Counter->rxPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RPKTN);
 
     /* Port MAC index Receive Undersized Packet Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RUNDN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RUNDN) + 1U;
-    Counter->rxUndersizePacketCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxUndersizePacketCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RUNDN);
 
     /* Port MAC index Receive 64-Octet Packet Counter Register(etherStatsPkts64OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R64N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R64N) + 1U;
-    Counter->rx64OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rx64OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_R64N);
 
     /* Port MAC index Receive 65 to 127-Octet Packet Counter Register(etherStatsPkts65to127OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R127N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R127N) + 1U;
-    Counter->rx65to127OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rx65to127OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_R127N);
 
     /* Port MAC index Receive 128 to 255-Octet Packet Counter Register(etherStatsPkts128to255OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R255N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R255N) + 1U;
-    Counter->rx128to255OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rx128to255OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_R255N);
 
     /* Port MAC index Receive 256 to 511-Octet Packet Counter Register(etherStatsPkts256to511OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R511N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R511N) + 1U;
-    Counter->rx256to511OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rx256to511OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_R511N);
 
     /* Port MAC index Receive 512 to 1023-Octet Packet Counter Register(etherStatsPkts512to1023OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R1023N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R1023N) + 1U;
-    Counter->rx512to1023OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rx512to1023OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_R1023N);
 
     /* Port MAC index Receive 1024 to 1522-Octet Packet Counter Register(etherStatsPkts1024to1522OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R1522N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R1522N) + 1U;
-    Counter->rx1024to1522OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rx1024to1522OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_R1522N);
 
     /* Port MAC index Receive 1523 to Max-Octet Packet Counter Register(etherStatsPkts1523toMaxOctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R1523XN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_R1523XN) + 1U;
-    Counter->rx1523toMaxOctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rx1523toMaxOctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_R1523XN);
 
     /* Port MAC index Receive Oversized Packet Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_ROVRN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_ROVRN) + 1U;
-    Counter->rxOversizedPacketsCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxOversizedPacketsCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_ROVRN);
 
     /* Port MAC index Receive Jabber Packet Counter Register(etherStatsJabbersn) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RJBRN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RJBRN) + 1U;
-    Counter->rxJabberPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxJabberPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RJBRN);
 
     /* Port MAC index Receive Fragment Packet Counter Register(etherStatsFragmentsn) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RFRGN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RFRGN) + 1U;
-    Counter->rxFragmentPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxFragmentPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RFRGN);
 
     /* Port MAC index Receive Control Packet Counter Register */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RCNPN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RCNPN) + 1U;
-    Counter->rxControlPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxControlPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RCNPN);
 
     /* Port MAC index Receive Dropped Not Truncated Packets Counter Register(etherStatsDropEventsn) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RDRNTPN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_RDRNTPN) + 1U;
-    Counter->rxDroppedNTruncatedPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->rxDroppedNTruncatedPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_RDRNTPN);
 
     /* Port Rx discard count register */
-    Counter->rxDiscardCounter = Netc_EthSwt_Ip_SW0_PortxBaseAddr[portIndex]->PRXDCR;
+    Counter->rxDiscardCounter = Netc_EthSwt_Ip_SW0_PortxBaseAddr[PortIndex]->PRXDCR;
 
     /* Transmit */
     /* Port MAC index Transmit Ethernet Octets Counter(etherStatsOctetsn) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TEOCTN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TEOCTN) + 1U;
-    Counter->txEtherOctetCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txEtherOctetCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TEOCTN);
 
     /* Port MAC index Transmit Octets Counter Register(ifOutOctetsn) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TOCTN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TOCTN) + 1U;
-    Counter->txOctetCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txOctetCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TOCTN);
 
     /* Port MAC index Transmit Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TXPFN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TXPFN) + 1U;
-    Counter->txValidPauseFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txValidPauseFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TXPFN);
 
     /* Port MAC index Transmit Frame Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TFRMN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TFRMN) + 1U;
-    Counter->txFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TFRMN);
 
     /* Port MAC index Transmit Frame Check Sequence Error Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TFCSN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TFCSN) + 1U;
-    Counter->txFrameCheckSequenceErrorCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txFrameCheckSequenceErrorCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TFCSN);
 
     /* Port MAC index Transmit VLAN Frame Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TVLANN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TVLANN) + 1U;
-    Counter->txVlanFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txVlanFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TVLANN);
 
     /* Port MAC index Transmit Frame Error Counter Register(ifOutErrorsn) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TERRN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TERRN) + 1U;
-    Counter->txFrameErrorCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txFrameErrorCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TERRN);
 
     /* Port MAC index Transmit Unicast Frame Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TUCAN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TUCAN) + 1U;
-    Counter->txUnicastFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txUnicastFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TUCAN);
 
     /* Port MAC index Transmit Multicast Frame Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TMCAN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TMCAN) + 1U;
-    Counter->txMulticastFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txMulticastFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TMCAN);
 
     /* Port MAC index Transmit Broadcast Frame Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TBCAN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TBCAN) + 1U;
-    Counter->txBroadcastFrmCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txBroadcastFrmCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TBCAN);
 
     /* Port MAC index Transmit Packets Counter Register(etherStatsPktsN; */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TPKTN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TPKTN) + 1U;
-    Counter->txPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TPKTN);
 
     /* Port MAC index Transmit Undersized Packet Counter */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TUNDN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TUNDN) + 1U;
-    Counter->txUndersizePacketCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txUndersizePacketCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TUNDN);
 
     /* Port MAC index Transmit 64-Octet Packet Counter Register (etherStatsPkts64OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T64N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T64N) + 1U;
-    Counter->tx64OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->tx64OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_T64N);
 
     /* Port MAC index Transmit 65 to 127-Octet Packet Counter Register (etherStatsPkts65to127OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T127N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T127N) + 1U;
-    Counter->tx65to127OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->tx65to127OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_T127N);
 
     /* Port MAC index Transmit 128 to 255-Octet Packet Counter Register (etherStatsPkts128to255OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T255N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T255N) + 1U;
-    Counter->tx128to255OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->tx128to255OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_T255N);
 
     /* Port MAC index Transmit 256 to 511-Octet Packet Counter Register (etherStatsPkts256to511OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T511N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T511N) + 1U;
-    Counter->tx256to511OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->tx256to511OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_T511N);
 
     /* Port MAC index Transmit 512 to 1023-Octet Packet Counter Register (etherStatsPkts512to1023OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T1023N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T1023N) + 1U;
-    Counter->tx512to1023OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->tx512to1023OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_T1023N);
 
     /* Port MAC index Transmit 1024 to 1522-Octet Packet Counter Register (etherStatsPkts1024to1522OctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T1522N);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T1522N) + 1U;
-    Counter->tx1024to1522OctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->tx1024to1522OctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_T1522N);
 
     /* Port MAC index Transmit 1523 to TX_MTU-Octet Packet Counter Register (etherStatsPkts1523toMaxOctetsN) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T1523XN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_T1523XN) + 1U;
-    Counter->tx1523toMaxOctetPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->tx1523toMaxOctetPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_T1523XN);
 
     /* Port MAC index Transmit Control Packet Counter Register */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TCNPN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TCNPN) + 1U;
-    Counter->txControlPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txControlPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TCNPN);
 
     /* Port MAC index Transmit Deferred Packet Counter Register(aFramesWithDeferredXmissions) */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TDFRN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TDFRN) + 1U;
-    Counter->txDeferredPktCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txDeferredPktCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TDFRN);
 
     /* Port MAC index Transmit Multiple Collisions Counter Register */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TMCOLN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TMCOLN) + 1U;
-    Counter->txMultiCollisionCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txMultiCollisionCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TMCOLN);
 
     /* Port MAC index Transmit Single Collision Counter Register */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TSCOLN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TSCOLN) + 1U;
-    Counter->txSingleCollisionCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txSingleCollisionCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TSCOLN);
 
     /* Port MAC index Transmit Late Collision Counter(aLateCollisions) Register */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TLCOLN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TLCOLN) + 1U;
-    Counter->txLateCollisionCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txLateCollisionCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TLCOLN);
 
     /* Port MAC index Transmit Excessive Collisions Counter Register */
-    xCR0Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TECOLN);
-    xCR1Value = (volatile uint32 *)(&Netc_EthSwt_Ip_PortBaseTable[portIndex]->PM0_TECOLN) + 1U;
-    Counter->txExcessiveCollisionCounter = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+    Counter->txExcessiveCollisionCounter = Netc_EthSwt_Ip_GetCounterLocal(&Netc_EthSwt_Ip_PortBaseTable[PortIndex]->PM0_TECOLN);
 
+#if defined(ERR_IPV_NETC_E051023)
+    #if (STD_ON == ERR_IPV_NETC_E051023)
     /* ERR051023: NETC: Excessive collisions are counted as late collisions */
     Counter->txLateCollisionCounter -= Counter->txExcessiveCollisionCounter;
+    #endif
+#endif
 
     /* Port Tx discard count register */
-    Counter->txDiscardCounter = Netc_EthSwt_Ip_SW0_PortxBaseAddr[portIndex]->PTXDCR;
+    Counter->txDiscardCounter = Netc_EthSwt_Ip_SW0_PortxBaseAddr[PortIndex]->PTXDCR;
 
+#if defined(ERR_IPV_NETC_E051129)
+    #if (STD_ON == ERR_IPV_NETC_E051129)
     /* Errata ERR051129: Uncorrectable non-fatal integrity error count register */
-    Counter->unIntegrityErrorCounter = IP_NETC__SW0_COMMON->UNIECTR & NETC_F2_COMMON_UNIECTR_COUNT_MASK;
+    Counter->unIntegrityErrorCounter = IP_NETC__SW0_COMMON->UNIECTR;
+    Counter->unIntegrityErrorCounter &= ((uint32)NETC_F2_COMMON_UNIECTR_COUNT_MASK);
+    #endif
+#endif
 
     return E_OK;
 }
@@ -3205,6 +4088,10 @@ static Std_ReturnType Netc_EthSwt_Ip_GetSwtPseudoPortCounters( uint8 SwitchIdx, 
 {
     uint32 xCR0Value;
     uint8 PseudoPortIdx;
+
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
 
     (void)SwitchIdx;
 
@@ -3292,9 +4179,12 @@ static Std_ReturnType Netc_EthSwt_Ip_GetSwtPseudoPortCounters( uint8 SwitchIdx, 
     Counter->txLateCollisionCounter = 0xFFFFFFFFFFFFFFFFU;
     Counter->txExcessiveCollisionCounter = 0xFFFFFFFFFFFFFFFFU;
 
+#if defined(ERR_IPV_NETC_E051129)
+    #if (STD_ON == ERR_IPV_NETC_E051129)
     /* Errata ERR051129: Uncorrectable non-fatal integrity error count register */
     Counter->unIntegrityErrorCounter = IP_NETC__SW0_COMMON->UNIECTR & NETC_F2_COMMON_UNIECTR_COUNT_MASK;
-
+    #endif
+#endif
     return E_OK;
 }
 
@@ -3378,11 +4268,12 @@ Std_ReturnType Netc_EthSwt_Ip_ResetConfiguration(uint8 SwitchIdx)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
 #endif
 
-    /* set the querry options with ENTRY_ID only querry */
+    /* set the query options with ENTRY_ID only query */
     ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(1U) \
                 | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_DEBUG_OPTIONS(0U) \
                 | NETC_ETHSWT_IP_FDBTABLE_REQFMT_ACTIONS_FIELD_ACTEU(0U) \
                 | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U);
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_45();
 
     /*+++ fill in FdbTabeDataBuffer for Request Data Buffer +++ */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;    /* fill in the Actions field */
@@ -3396,6 +4287,7 @@ Std_ReturnType Netc_EthSwt_Ip_ResetConfiguration(uint8 SwitchIdx)
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_ETEID] = 0U;            /* clear other unuse data field */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_MATCHCRITERIA] = NETC_ETHSWT_IP_FDBTABLE_SEARCH_CRITERIA_CFGEMC(1U);      /* 0x1: Match CFGE_DATA[DYNAMIC] field */
     /*--- fill in FdbTabeDataBuffer for Request Data Buffer --- */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_45();
 
     /* fill in operation data for config field of Request Header*/
     OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
@@ -3403,14 +4295,163 @@ Std_ReturnType Netc_EthSwt_Ip_ResetConfiguration(uint8 SwitchIdx)
     OperationData.TableId = NETC_ETHSWT_IP_FDB_TABLE_ID;
     OperationData.AccessMethod = NETC_ETHSWT_SEARCH_METHOD;                        /* delete all matched entries with Search Method */
     OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
-    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN);
-    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN);
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_FDBTABLE_QUERY_REQBUFFER_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
 
     /* send the "Delete" command */
     CBDRStatus = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
     if (CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES)
     {
         status = E_NOT_OK;
+    }
+
+    return status;
+}
+
+static inline Std_ReturnType Netc_EthSwt_Ip_SearchAndFIllInVlanFilterTableEntry(uint32 * ResumeId,
+                                                                                uint16 * NumOfExistingEntry,
+                                                                                Netc_EthSwt_Ip_VlanFilterEntryDataType * VlanFilterTableEntry)
+{
+    Std_ReturnType status = E_OK;
+    uint32 ActionsData;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint32 NumOfElement = 0U;
+    uint32 CfgeData;
+
+    /* set the query options with full query */
+    ActionsData = (NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_DEBUG_OPTIONS(0U));
+
+    /* fill in TabeDataBuffer for request */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;
+    /* fill in Access Key data with search criteria data format */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_VLANFILTERTABLE_REQFMT_RESUMEENTRYID_FIELD] = *ResumeId;    /* resume entry id */
+
+    /* do the full query with Search Method */
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_VLAN_FILTER_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_SEARCH_METHOD;
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_VLANFILTERTABLE_RESBUFFER_LEN);           /* full query needs more space for response data */
+
+    /* send the "Query" command */
+    /* [notes]: there is an error "0x8A" in NTMP response header during this query operation but it is not a real error. there should be another errata for "0x8A" later. */
+    CBDRStatus = Netc_EthSwt_Ip_SendCommand(0U, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* check the status of query command */
+    if ((CBDRStatus == 0x8AU) || (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (CBDRStatus == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, &NumOfElement);
+
+        /* get the resume_entry_id and be ready for the next query operation */
+        *ResumeId = TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABLE_RSPDATA_STATUS];
+        /* ERR051048: NETC: Management command with search action responds with incorrect NUM_MATCHED */
+        /* found a matched entry */
+        if ((1U == NumOfElement) && (*ResumeId != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID))
+        {
+                        /* fill in "Netc_EthSwt_Ip_VlanFilterEntryDataType" structure with data in response data buffer */
+            VlanFilterTableEntry->VlanID = (uint16)(TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABL_RSPDATA_VID] & NETC_ETHSWT_VLANFILTERTABLE_KEYEDATA_VID_MASK);
+
+            CfgeData = TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABL_RSPDATA_CFGEDATA0];
+            VlanFilterTableEntry->SpanningTreeGroupMemberId = (uint8)((CfgeData & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_STG_ID_MASK) >> NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_STG_ID_SHIFT);
+            VlanFilterTableEntry->PortMembershipBitmap = (CfgeData & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_PORT_MEMBERSHIP_MASK);
+
+            CfgeData = TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABL_RSPDATA_CFGEDATA1];
+            VlanFilterTableEntry->FID = (uint16)(CfgeData & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_FID_MASK);
+            VlanFilterTableEntry->MacLearningOptions = (uint8)((CfgeData & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MLO_MASK) >> NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MLO_SHIFT);
+            VlanFilterTableEntry->MacForwardingOptions = (uint8)((CfgeData & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MFO_MASK) >> NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MFO_SHIFT);
+            VlanFilterTableEntry->IpMulticastFilteringEnable = (((CfgeData & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFE_MASK) >> NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFE_SHIFT) == 0x0UL) ? FALSE : TRUE;
+            VlanFilterTableEntry->IpMulticastFloodingEnable = (((CfgeData & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFLE_MASK) >> NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFLE_SHIFT) == 0x0UL) ? FALSE : TRUE;
+
+            VlanFilterTableEntry->EgressTreatmentApplicabilityPortBitmap = TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABL_RSPDATA_CFGEDATA2] & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_ETA_PORT_BITMAP_MASK;
+            VlanFilterTableEntry->BaseEgressTreatmentEntryID = TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABL_RSPDATA_CFGEDATA3];
+            /* increase the NumOfExistingEntry */
+            (*NumOfExistingEntry) += 1U;
+        }
+    }
+    else
+    {
+        status = E_NOT_OK;
+    }
+
+    return status;
+}
+
+static inline Std_ReturnType Netc_EthSwt_Ip_SyncVlanFilterTableMLO( uint8 SwitchIdx,
+                                                                    Netc_EthSwt_Ip_MacLearningOptionType MacLearningMode
+                                                                  )
+{
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+
+    uint16 NumOfExistingEntry = 0U;
+    static uint16 NumOfInUseEntry;
+    uint32 ResumeId = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;
+    Netc_EthSwt_Ip_VlanFilterEntryDataType VlanFilterTableEntry;
+    Netc_EthSwt_Ip_CommandsType Cmd = NETC_ETHSWT_UPDATE_CMD;
+    uint32 MatchedEntries;
+
+    /* [notes]: we will have to read entries one by one because of the errata ERR051048.
+     - ERR051048: NETC: Management command with search action responds with incorrect NUM_MATCHED
+     - Description: The NUM_MATCHED field in the command NTMP response header may be incorrect when
+       the search access method is used for the following tables: FDB table 15, L2 IPv4 Multicast
+       Filter table 16, VLAN Filter table 18, Ingress Stream Identification table 30, or Ingress Stream
+       Filter table 32.
+     - Workaround: For the query command, limit the message response buffer size (RESPONSE_LENGTH field in the request header)
+       so that NETC returns no more than one entry at a time. Under this condition, the NUM_MATCHED field value is correct
+    */
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
+
+    (void)SwitchIdx;
+    /* Number of entries in-use by the VLAN Filter table is indicated in VFHTOR[NUM_ENTRIES]. */
+    NumOfInUseEntry = (uint16)(IP_NETC__SW0_BASE->VFHTOR & NETC_ETHSWT_IP_0XFFFF_MASK);    /* get how many entries exist in module */
+
+    /* if NumOfInUseEntry == 0U, return the NumOfInUseEntry directly and will not do the query and fill in the structure */
+    if (NumOfInUseEntry == 0U)
+    {
+        NumOfExistingEntry = NumOfInUseEntry;
+    }
+    else    /* if *NumberOfElements > 0, do the query and fill in the structure */
+    {
+        do {
+            /* check if the VlanFilterTableList is full or we get all existing entries */
+            if ((NumOfExistingEntry >= NumOfInUseEntry) || (status == (uint8)(E_NOT_OK)))
+            {
+                break;
+            }
+
+            status = Netc_EthSwt_Ip_SearchAndFIllInVlanFilterTableEntry((uint32 *) &ResumeId, (uint16 *) &NumOfExistingEntry, &VlanFilterTableEntry);
+
+            if(E_OK == status)
+            {
+                /*Update MLO, for the current entry, if necessary*/
+                if(VlanFilterTableEntry.MacLearningOptions != (uint8)MacLearningMode)
+                {
+                    VlanFilterTableEntry.MacLearningOptions = (uint8)MacLearningMode;
+                    CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateVlanFilterTableEntry( SwitchIdx, Cmd, (uint32 *) &MatchedEntries, (const Netc_EthSwt_Ip_VlanFilterEntryDataType *)  &VlanFilterTableEntry );
+                    if (NETC_ETHSWT_CBDRSTATUS_SUCCES != CBDRStatus)
+                    {
+                        status = E_NOT_OK;
+                    }
+                }
+            }
+
+
+        } while (TableDataBuffer.TableDataField[NETC_ETHSWT_VLANFILTERTABLE_RSPDATA_STATUS] != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID);      /* Status == MAX_32BIT means the query operation is completed */
     }
 
     return status;
@@ -3426,36 +4467,44 @@ Std_ReturnType Netc_EthSwt_Ip_SetMacLearningMode( uint8 SwitchIdx,
                                                   Netc_EthSwt_Ip_MacLearningOptionType MacLearningMode
                                                 )
 {
-    Std_ReturnType status = E_OK;
+    Std_ReturnType status;
     uint32 MacLearningOption;
 
 #if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
 #endif
 
+    (void)SwitchIdx;
+
     MacLearningOption = IP_NETC__SW0_BASE->VFHTDECR2;
     MacLearningOption &= ~NETC_F2_VFHTDECR2_MLO_MASK;
-    switch (MacLearningMode)
+
+    status = Netc_EthSwt_Ip_SyncVlanFilterTableMLO(SwitchIdx, MacLearningMode);
+
+    if (E_OK == status)
     {
-        case ETHSWT_MACLEARNINGOPTION_HWDISABLED:
-            MacLearningOption |= NETC_F2_VFHTDECR2_MLO(ETHSWT_MACLEARNINGOPTION_HWDISABLED);
-            break;
-        case ETHSWT_MACLEARNINGOPTION_HWENABLED:
-            MacLearningOption |= NETC_F2_VFHTDECR2_MLO(ETHSWT_MACLEARNINGOPTION_HWENABLED);
-            break;
-        case ETHSWT_MACLEARNINGOPTION_SWSECUREENABLED:
-            MacLearningOption |= NETC_F2_VFHTDECR2_MLO(ETHSWT_MACLEARNINGOPTION_SWSECUREENABLED);
-            break;
-        case ETHSWT_MACLEARNINGOPTION_SWUNSECUREENABLED:
-            MacLearningOption |= NETC_F2_VFHTDECR2_MLO(ETHSWT_MACLEARNINGOPTION_SWUNSECUREENABLED);
-            break;
-        case ETHSWT_MACLEARNINGOPTION_DISABLEDWITHSWVALIDATION:
-            MacLearningOption |= NETC_F2_VFHTDECR2_MLO(ETHSWT_MACLEARNINGOPTION_DISABLEDWITHSWVALIDATION);
-            break;
-        default:
-            /* log error */
-            status = E_NOT_OK;
-            break;
+        switch (MacLearningMode)
+        {
+            case ETHSWT_MACLEARNINGOPTION_HWDISABLED:
+                MacLearningOption |= NETC_F2_VFHTDECR2_MLO(ETHSWT_MACLEARNINGOPTION_HWDISABLED);
+                break;
+            case ETHSWT_MACLEARNINGOPTION_HWENABLED:
+                MacLearningOption |= NETC_F2_VFHTDECR2_MLO(ETHSWT_MACLEARNINGOPTION_HWENABLED);
+                break;
+            case ETHSWT_MACLEARNINGOPTION_SWSECUREENABLED:
+                MacLearningOption |= NETC_F2_VFHTDECR2_MLO(ETHSWT_MACLEARNINGOPTION_SWSECUREENABLED);
+                break;
+            case ETHSWT_MACLEARNINGOPTION_SWUNSECUREENABLED:
+                MacLearningOption |= NETC_F2_VFHTDECR2_MLO(ETHSWT_MACLEARNINGOPTION_SWUNSECUREENABLED);
+                break;
+            case ETHSWT_MACLEARNINGOPTION_DISABLEDWITHSWVALIDATION:
+                MacLearningOption |= NETC_F2_VFHTDECR2_MLO(ETHSWT_MACLEARNINGOPTION_DISABLEDWITHSWVALIDATION);
+                break;
+            default:
+                /* log error */
+                status = E_NOT_OK;
+                break;
+        }
     }
 
     IP_NETC__SW0_BASE->VFHTDECR2 = MacLearningOption;
@@ -3480,6 +4529,8 @@ Std_ReturnType Netc_EthSwt_Ip_GetMacLearningMode( uint8 SwitchIdx,
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
     DevAssert(MacLearningMode != NULL_PTR);
 #endif
+
+    (void)SwitchIdx;
 
     MacLearningOption = IP_NETC__SW0_BASE->VFHTDECR2;
     MacLearningOption = ((MacLearningOption & NETC_F2_VFHTDECR2_MLO_MASK) >> NETC_F2_VFHTDECR2_MLO_SHIFT);
@@ -3517,6 +4568,10 @@ Std_ReturnType Netc_EthSwt_Ip_GetMacLearningMode( uint8 SwitchIdx,
  *END**************************************************************************/
 Std_ReturnType Netc_EthSwt_Ip_GetSwitchIdentifier(uint8 SwitchIdx, uint32 *HwVersion)
 {
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
+
     /* This dummy cast is done to support scalability in futures platforms. */
     (void)SwitchIdx;
     /* Hardware revision. */
@@ -3526,7 +4581,6 @@ Std_ReturnType Netc_EthSwt_Ip_GetSwitchIdentifier(uint8 SwitchIdx, uint32 *HwVer
 }
 
 /*FUNCTION**********************************************************************
- *
  * Function Name : Netc_EthSwt_Ip_InitCommandBDR
  * Description   : Internal function for initializing the command ring.
  *
@@ -3534,6 +4588,10 @@ Std_ReturnType Netc_EthSwt_Ip_GetSwitchIdentifier(uint8 SwitchIdx, uint32 *HwVer
 static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_InitCommandBDR(uint8 SwitchIdx, uint8 cbdrIndex)
 {
     Netc_EthSwt_Ip_CBDRStatusType status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
 
     (void)SwitchIdx;
 
@@ -3571,6 +4629,7 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_FillInFdbTableReqDataBuff(ui
 {
     uint8 ItemIdx;
     Netc_EthSwt_Ip_CBDRStatusType status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_47();
 
     /* ------initialize the table request data buffer------ */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;  /* fill in Actions field */
@@ -3606,6 +4665,7 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_FillInFdbTableReqDataBuff(ui
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FDBTABLE_CFGE_CONFIG_FIELD] = pCfgeData->Cfge_ConfigField;
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_FDBTABLE_CFGE_ETEID_FIELD] = pCfgeData->Cfge_EtEid;
     }
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_47();
 
     return status;
 }
@@ -3619,6 +4679,7 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_FillInFdbTableReqDataBuff(ui
 static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_FillInVlanFilterTableReqDataBuff(uint32 ActionsData, uint32 AccessKeyData, const Netc_EthSwt_Ip_VlanFilterTableCFGEDataType *pCfgeData, Netc_EthSwt_Ip_AccessMethodType accessMethod)
 {
     Netc_EthSwt_Ip_CBDRStatusType status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_12();
 
     /* ------initialize the table request data buffer------ */
     TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;  /* fill in Actions field */
@@ -3648,7 +4709,9 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_FillInVlanFilterTableReqData
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA1] = pCfgeData->Cfge_Data[1U];
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA2] = pCfgeData->Cfge_Data[2U];
         TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA3] = pCfgeData->Cfge_Data[3U];
+
     }
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_12();
 
     return status;
 }
@@ -3656,7 +4719,7 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_FillInVlanFilterTableReqData
 /*FUNCTION**********************************************************************
  *
  * Function Name : Netc_EthSwt_Ip_SendCommand
- * Description   : Internal function for adding an entry with different commands to command ring.
+ * Description   : Internal function for table operations with different commands like add, query, delete etc..
  *
  *END**************************************************************************/
 static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_SendCommand(uint8 SwitchIdx, uint8 cbdrIndex, const NetcEthSwt_Ip_ReqHeaderTableOperationDataType *OperationData)
@@ -3673,6 +4736,10 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_SendCommand(uint8 SwitchIdx,
     uint32 TimeoutTicks;
     boolean TimeExpired;
 
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
+
     (void)SwitchIdx;
 
     /* read the producer and consumer index register */
@@ -3686,6 +4753,7 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_SendCommand(uint8 SwitchIdx,
     }
     else
     {
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_04();
         /* +++ fill in the NTMP request message header +++ */
         /* set the table address */
         CmdBDRConfig[cbdrIndex].CmdBDAddr[producerIdx].MessageHeaderDataField[NETC_ETHSWT_IP_REQHEADER_ADDR_L] = (uint32)(&TableDataBuffer);
@@ -3705,6 +4773,7 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_SendCommand(uint8 SwitchIdx,
         /* set NTMP version to 2.0*/
         CmdBDRConfig[cbdrIndex].CmdBDAddr[producerIdx].MessageHeaderDataField[NETC_ETHSWT_IP_REQHEADER_NPFFIELD] = NETC_ETHSWT_IP_CMDBD_REQFMT_NPF_FIELD(NETC_ETHSWT_IP_CMDBD_REQFMT_NTMP_PROTOCOL_VERSION);
         /* --- fill in the NTMP request message header --- */
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_04();
 
         /* +++ write the produce index register and enable hardware to consume the command +++ */
         PreviousProducerIdx = producerIdx;        /* save the produce index before incrementing it manually */
@@ -3734,11 +4803,19 @@ static Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_SendCommand(uint8 SwitchIdx,
         } while ((rrBit != 0x1U) && (FALSE == TimeExpired));        /* wait the hardware consume the command and check RR bit to see if the processing is completed (rrBit = 1). */
         /* --- to make sure the hardware consumes and processes the command completely --- */
 
-        /* return the value of ERROR field in response data buffer indicating if there is an error for processing the command */
-        errorField = ((statusField & (NETC_ETHSWT_IP_CMDBD_RSPFMT_STATUS_FIELD_ERROR_MASK)) >> (NETC_ETHSWT_IP_CMDBD_RSPFMT_STATUS_FIELD_ERROR_SHIFT));
-        if (errorField != 0U)
+        /* the command sent was executed successfully and timely by hardware. */
+        if (FALSE == TimeExpired)
         {
-            status = errorField;     /* ERROR field should be 0. */
+            /* return the value of ERROR field in response data buffer indicating if there is an error for processing the command */
+            errorField = ((statusField & (NETC_ETHSWT_IP_CMDBD_RSPFMT_STATUS_FIELD_ERROR_MASK)) >> (NETC_ETHSWT_IP_CMDBD_RSPFMT_STATUS_FIELD_ERROR_SHIFT));
+            if (errorField != 0U)
+            {
+                status = errorField;     /* ERROR field should be 0. */
+            }
+        }
+        else    /* table operation timeout. */
+        {
+            status = NETC_ETHSWT_CBDRSTATUS_TABLE_OPERATION_TIMEOUT;   /* either NETC_ETHSWT_IP_TIMEOUT_VALUE_US is not big enough or something wrong with the entry configuration. */
         }
     }
     return status;
@@ -3754,17 +4831,19 @@ static void Netc_EthSwt_Ip_GetMatchedEntries(uint8 cbdrIndex, uint32 *NumOfEntry
 {
     uint32 producerIdx;
     uint32 statusField;
+    uint32 lengthOfCmDB;
 
     producerIdx = IP_NETC__SW0_BASE->NUM_CBDR[cbdrIndex].CBDRPIR;
 
     /* the value stored in producer index register indicates the index of next entry */
-    if (producerIdx > 0U)
+    if (producerIdx > 0UL)
     {
-        producerIdx -= 1U;
+        producerIdx -= 1UL;
     }
     else /* producerIdx increased from 15 to 0, will set it to 15, or length minus 1 */
     {
-        producerIdx = ((uint32)(CmdBDRConfig[cbdrIndex].lengthCBDR) * NETC_ETHSWT_IP_SET_OF_BD) - 0x1UL;
+        lengthOfCmDB = ((uint32)(CmdBDRConfig[cbdrIndex].lengthCBDR) * NETC_ETHSWT_IP_SET_OF_BD);
+        producerIdx = lengthOfCmDB - 0x1UL;
     }
 
     /* get status field in the response data buffer for the matched fdb entry */
@@ -3779,6 +4858,7 @@ static void Netc_EthSwt_Ip_GetMatchedEntries(uint8 cbdrIndex, uint32 *NumOfEntry
  *
  * Function Name : Netc_EthSwt_Ip_GetCounters
  * Description   : Function for getting the counters of a port
+ * For MAC counters that are 64bits, the access must be atomic.
  * implements Netc_EthSwt_Ip_GetCounters_Activity
  *END**************************************************************************/
 Std_ReturnType Netc_EthSwt_Ip_GetCounters( uint8 SwitchIdx,
@@ -3794,6 +4874,8 @@ Std_ReturnType Netc_EthSwt_Ip_GetCounters( uint8 SwitchIdx,
     DevAssert(Counter != NULL_PTR);
 #endif
 
+    (void)SwitchIdx;
+
     if(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_MAC_PORTS)
     {
         status = Netc_EthSwt_Ip_GetSwtPortCounters(SwitchIdx, SwitchPortIdx, Counter);
@@ -3808,14 +4890,33 @@ Std_ReturnType Netc_EthSwt_Ip_GetCounters( uint8 SwitchIdx,
 
 /*FUNCTION**********************************************************************
  *
- * Function Name : Netc_EthSwt_Ip_GetCounters
- * Description   : Function for getting the counters of a port
+ * Function Name : Netc_EthSwt_Ip_ComputedRegisterValueExtractionSingleCounter
+ * Description   : Function for extracting the counter value using base/offset
+ *END**************************************************************************/
+static inline uint64 Netc_EthSwt_Ip_ComputedRegisterValueExtractionSingleCounter(const Netc_EthSwt_Ip_PortBaseType* base, const Netc_EthSwt_Ip_SingleCounterType offset)
+{
+    return Netc_EthSwt_Ip_Extract64bitsFrom32bitsReg((uint32) base, (uint32) offset);
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ComputedRegisterValueExtractionPseudoCounter
+ * Description   : Function for extracting the counter value using base/offset
+ *END**************************************************************************/
+static inline uint64 Netc_EthSwt_Ip_ComputedRegisterValueExtractionPseudoCounter(const Netc_EthSwt_Ip_PseudoPortBaseType* base, const Netc_EthSwt_Ip_PseudoPortCounterType offset)
+{
+    return Netc_EthSwt_Ip_Extract64bitsFrom32bitsReg((uint32) base, (uint32) offset);
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_GetCounter
+ * Description   : Function for getting the counters of a port. 
+ * For MAC counters that are 64bits, the access must be atomic.
  * implements Netc_EthSwt_Ip_GetCounter_Activity
  *END**************************************************************************/
 Netc_EthSwt_Ip_CounterValueType Netc_EthSwt_Ip_GetCounter(uint8 SwitchIdx, uint8 SwitchPortIdx, Netc_EthSwt_Ip_SingleCounterType Counter)
 {
-    volatile uint32 *xCR0Value;
-    volatile uint32 *xCR1Value;
     uint8 PseudoPortIdx;
     uint64 CounterValue = 0UL;
 
@@ -3824,12 +4925,12 @@ Netc_EthSwt_Ip_CounterValueType Netc_EthSwt_Ip_GetCounter(uint8 SwitchIdx, uint8
     DevAssert(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_PORTS);
 #endif
 
+    (void)SwitchIdx;
+
     if(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_MAC_PORTS)
     {
-        /* Compute addres of the counter. for port 0 and port 1*/
-        xCR0Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx] + (uint32)Counter);
-        xCR1Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx] + (uint32)Counter) + 1U;
-        CounterValue = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+        /* Compute address of the counter. for port 0 and port 1*/
+        CounterValue = Netc_EthSwt_Ip_ComputedRegisterValueExtractionSingleCounter(Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx], Counter);
     }
     else
     {
@@ -3839,51 +4940,35 @@ Netc_EthSwt_Ip_CounterValueType Netc_EthSwt_Ip_GetCounter(uint8 SwitchIdx, uint8
         {
             case NETC_ETHSWT_IP_RX_OCTETS_COUNT:
                 /* Compute addres of the counter. */
-                xCR0Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMROCR0));
-                xCR1Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMROCR1));
-                CounterValue = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+                CounterValue = Netc_EthSwt_Ip_ComputedRegisterValueExtractionPseudoCounter(Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx], NETC_ETHSWT_IP_PPMROCR0);
                 break;
             case NETC_ETHSWT_IP_RX_UNICAST_FRM_COUNT:
                 /* Compute addres of the counter. */
-                xCR0Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMRUFCR0));
-                xCR1Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMROCR1));
-                CounterValue = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+                CounterValue = Netc_EthSwt_Ip_ComputedRegisterValueExtractionPseudoCounter(Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx], NETC_ETHSWT_IP_PPMRUFCR0);
                 break;
             case NETC_ETHSWT_IP_RX_MULTICAST_FRM_COUNT:
                 /* Compute addres of the counter. */
-                xCR0Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMRMFCR0));
-                xCR1Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMRMFCR1));
-                CounterValue = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+                CounterValue = Netc_EthSwt_Ip_ComputedRegisterValueExtractionPseudoCounter(Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx], NETC_ETHSWT_IP_PPMRMFCR0);
                 break;
             case NETC_ETHSWT_IP_RX_BROADCAST_FRM_COUNT:
                 /* Compute addres of the counter. */
-                xCR0Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMRBFCR0));
-                xCR1Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMRBFCR1));
-                CounterValue = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+                CounterValue = Netc_EthSwt_Ip_ComputedRegisterValueExtractionPseudoCounter(Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx], NETC_ETHSWT_IP_PPMRBFCR0);
                 break;
             case NETC_ETHSWT_IP_TX_OCTETS_COUNT:
                 /* Compute addres of the counter. */
-                xCR0Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMTOCR0));
-                xCR1Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMTOCR1));
-                CounterValue = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+                CounterValue = Netc_EthSwt_Ip_ComputedRegisterValueExtractionPseudoCounter(Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx], NETC_ETHSWT_IP_PPMTOCR0);
                 break;
             case NETC_ETHSWT_IP_TX_UNICAST_FRM_COUNT:
                 /* Compute addres of the counter. */
-                xCR0Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMTUFCR0));
-                xCR1Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMTUFCR1));
-                CounterValue = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+                CounterValue = Netc_EthSwt_Ip_ComputedRegisterValueExtractionPseudoCounter(Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx], NETC_ETHSWT_IP_PPMTUFCR0);
                 break;
             case NETC_ETHSWT_IP_TX_MULTICAST_FRM_COUNT:
                 /* Compute addres of the counter. */
-                xCR0Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMTMFCR0));
-                xCR1Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMTMFCR1));
-                CounterValue = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+                CounterValue = Netc_EthSwt_Ip_ComputedRegisterValueExtractionPseudoCounter(Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx], NETC_ETHSWT_IP_PPMTMFCR0);
                 break;
             case NETC_ETHSWT_IP_TX_BROADCAST_FRM_COUNT:
                 /* Compute addres of the counter. */
-                xCR0Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMTBFCR0));
-                xCR1Value = (volatile uint32 *)((uint32)Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx] + (uint32)(NETC_ETHSWT_IP_PPMTBFCR1));
-                CounterValue = (*xCR0Value) | ((uint64)(*xCR1Value) << NETC_ETHSWT_IP_32BIT_SHIFT);
+                CounterValue = Netc_EthSwt_Ip_ComputedRegisterValueExtractionPseudoCounter(Netc_EthSwt_Ip_PseudoPortBaseTable[PseudoPortIdx], NETC_ETHSWT_IP_PPMTBFCR0);
                 break;
             default:
                 CounterValue = 0xFFFFFFFFFFFFFFFFU;
@@ -3908,6 +4993,10 @@ Std_ReturnType Netc_EthSwt_Ip_PortGetLoopbackMode( uint8 SwitchIdx,
 {
     Std_ReturnType status = E_OK;
     uint32 portCommandConfig = 0UL;
+
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
 
     (void)SwitchIdx;
 
@@ -3945,6 +5034,8 @@ Std_ReturnType Netc_EthSwt_Ip_PortSetLoopbackMode( uint8 SwitchIdx,
     DevAssert(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_MAC_PORTS);
 #endif
 
+    (void)SwitchIdx;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_57();
     portCommandConfig = Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_COMMAND_CONFIG
                         & ~SW_ETH_MAC_PORT0_PM0_COMMAND_CONFIG_LOOP_ENA_MASK;
 
@@ -3956,9 +5047,17 @@ Std_ReturnType Netc_EthSwt_Ip_PortSetLoopbackMode( uint8 SwitchIdx,
 
     /* Write the PM0_COMMAND_CONFIG with the computed value */
     Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_COMMAND_CONFIG = portCommandConfig;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_57();
+
     return status;
 }
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_SetPortMacLayerDuplexMode
+ * Description   : Function for enabling or disabling Time Gate Scheduling on a switch port.
+ * implements Netc_EthSwt_Ip_SetPortMacLayerDuplexMode_Activity
+ *END**************************************************************************/
 Std_ReturnType Netc_EthSwt_Ip_SetPortMacLayerDuplexMode( uint8 SwitchIdx, uint8 SwitchPortIdx,
                                                          Netc_EthSwt_Ip_PortDuplexType EthSwtPortMacLayerDuplexMode
                                                         )
@@ -3974,50 +5073,36 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortMacLayerDuplexMode( uint8 SwitchIdx, uint8 
 
     if(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_MAC_PORTS)
     {
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_58();
+
         interfaceModeConfig = Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_IF_MODE;
 
-        /* Is this RGMII mode == 4U */
-        if ( SW_ETH_MAC_PORT_PM0_IF_MODE_IFMODE_RGMII_MODE == \
-             ((interfaceModeConfig & SW_ETH_MAC_PORT0_PM0_IF_MODE_IFMODE_MASK) >> SW_ETH_MAC_PORT0_PM0_IF_MODE_IFMODE_SHIFT)
-           )
+        /* Full duplex is 0 in HD field */
+        if(EthSwtPortMacLayerDuplexMode == NETC_ETHSWT_PORT_FULL_DUPLEX)
         {
-            /* Full duplex is 1 in SFD field */
-            if(EthSwtPortMacLayerDuplexMode == NETC_ETHSWT_PORT_FULL_DUPLEX)
-            {
-                interfaceModeConfig |= SW_ETH_MAC_PORT0_PM0_IF_MODE_SFD_MASK;
-            }
-            else /* ETHTRCV_DUPLEX_MODE_HALF */
-            {
-                interfaceModeConfig &= ~SW_ETH_MAC_PORT0_PM0_IF_MODE_SFD_MASK;
-            }
+            interfaceModeConfig &= ~SW_ETH_MAC_PORT0_PM0_IF_MODE_HD_MASK;
         }
-        else
+        else /* ETHTRCV_DUPLEX_MODE_HALF */
         {
-            /* Full duplex is 0 in HD field */
-            if(EthSwtPortMacLayerDuplexMode == NETC_ETHSWT_PORT_FULL_DUPLEX)
-            {
-                interfaceModeConfig &= ~SW_ETH_MAC_PORT0_PM0_IF_MODE_HD_MASK;
-            }
-            else /* ETHTRCV_DUPLEX_MODE_HALF */
-            {
-                interfaceModeConfig |= SW_ETH_MAC_PORT0_PM0_IF_MODE_HD_MASK;
-            }
+            interfaceModeConfig |= SW_ETH_MAC_PORT0_PM0_IF_MODE_HD_MASK;
         }
 
         Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_IF_MODE = interfaceModeConfig;
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_58();
+
     }
 
     return status;
 }
 
-static inline Std_ReturnType RGMIIModeConfig(uint32 *interfaceModeConfig, uint32 *shapingPSpeedConfig, EthTrcv_BaudRateType EthSwtPortMacLayerSpeed, Netc_EthSwt_Ip_PortDuplexType EthSwtPortMacLayerDuplexMode)
+static inline Std_ReturnType Netc_EthSwt_Ip_RGMIIModeConfig(uint32 *interfaceModeConfig, uint32 *shapingPSpeedConfig, EthTrcv_BaudRateType EthSwtPortMacLayerSpeed, Netc_EthSwt_Ip_PortDuplexType EthSwtPortMacLayerDuplexMode)
 {
     Std_ReturnType status = E_OK;
 
-    /* Full duplex is 1 in SFD field */
+    /* Full duplex is 0 in HD field for RGMII mode*/
     if (EthSwtPortMacLayerDuplexMode == NETC_ETHSWT_PORT_FULL_DUPLEX)
     {
-        (*interfaceModeConfig) |= SW_ETH_MAC_PORT1_PM0_IF_MODE_SFD_MASK;
+        (*interfaceModeConfig) &= ~SW_ETH_MAC_PORT1_PM0_IF_MODE_HD_MASK;
     }
 
     switch(EthSwtPortMacLayerSpeed)
@@ -4049,6 +5134,46 @@ static inline Std_ReturnType RGMIIModeConfig(uint32 *interfaceModeConfig, uint32
 
     return status;
 }
+static inline Std_ReturnType Netc_EthSwt_Ip_SGMIIModeConfig(uint32 *interfaceModeConfig, uint32 *shapingPSpeedConfig, EthTrcv_BaudRateType EthSwtPortMacLayerSpeed)
+
+{
+    Std_ReturnType status = E_OK;
+
+    switch(EthSwtPortMacLayerSpeed)
+    {
+        case ETHTRCV_BAUD_RATE_10MBIT: /* 10Mbps */
+        {
+            (*interfaceModeConfig) |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_10MBIT));
+            (*shapingPSpeedConfig) = NETC_ETHSWT_IP_SHAPING_PSPEED_10MBITS;
+            break;
+        }
+        case ETHTRCV_BAUD_RATE_100MBIT: /* 100Mbps */
+        {
+            (*interfaceModeConfig) |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_100MBIT));
+            (*shapingPSpeedConfig) = NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS;
+            break;
+        }
+        case ETHTRCV_BAUD_RATE_1000MBIT: /* 1000Mbps */
+        {
+            (*interfaceModeConfig) |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_1000MBIT));
+            (*shapingPSpeedConfig) = NETC_ETHSWT_IP_SHAPING_PSPEED_1000MBITS;
+            break;
+        }
+        case ETHTRCV_BAUD_RATE_2500MBIT: /* 2500Mbps */
+        {
+            (*interfaceModeConfig) |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_SSP(SW_ETH_MAC_PORT_PM0_IF_MODE_SSP_BAUD_RATE_2500MBIT));
+            (*shapingPSpeedConfig) = NETC_ETHSWT_IP_SHAPING_PSPEED_2500MBITS;
+            break;
+        }
+        default:
+        {
+            status = E_NOT_OK;
+            break;
+        }
+    }
+
+    return status;
+}
 
 static Std_ReturnType Netc_EthSwt_Ip_MacPortConfig( uint8 SwitchIdx, uint8 SwitchPortIdx,
                                                     Netc_EthSwt_Ip_XmiiModeType EthSwtPortPhysicalLayerType,
@@ -4060,6 +5185,10 @@ static Std_ReturnType Netc_EthSwt_Ip_MacPortConfig( uint8 SwitchIdx, uint8 Switc
     uint32 interfaceModeConfig = 0UL;
     uint32 shapingPSpeedConfig = 0UL; /* used for shaping of the port */
 
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
+
     (void) SwitchIdx;
 
     if(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_MAC_PORTS)
@@ -4068,7 +5197,7 @@ static Std_ReturnType Netc_EthSwt_Ip_MacPortConfig( uint8 SwitchIdx, uint8 Switc
         if (NETC_ETHSWT_RGMII_MODE == EthSwtPortPhysicalLayerType)
         {
             interfaceModeConfig |= (SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE(4U));
-            status = RGMIIModeConfig(&interfaceModeConfig, &shapingPSpeedConfig, EthSwtPortMacLayerSpeed, EthSwtPortMacLayerDuplexMode);
+            status = Netc_EthSwt_Ip_RGMIIModeConfig(&interfaceModeConfig, &shapingPSpeedConfig, EthSwtPortMacLayerSpeed, EthSwtPortMacLayerDuplexMode);
         }
         else if (NETC_ETHSWT_RMII_MODE == EthSwtPortPhysicalLayerType)
         {
@@ -4088,6 +5217,12 @@ static Std_ReturnType Netc_EthSwt_Ip_MacPortConfig( uint8 SwitchIdx, uint8 Switc
         {
             interfaceModeConfig = (SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE(1U));
             shapingPSpeedConfig = NETC_ETHSWT_IP_SHAPING_PSPEED_100MBITS;
+        }
+        else if (NETC_ETHSWT_SGMII_MODE == EthSwtPortPhysicalLayerType)
+        {
+             /* The MAC register IF_MODE[IFMODE] must be set to 0b101 for SGMII mode. */
+            interfaceModeConfig = (SW_ETH_MAC_PORT1_PM0_IF_MODE_IFMODE(5U));
+            status = Netc_EthSwt_Ip_SGMIIModeConfig(&interfaceModeConfig, &shapingPSpeedConfig, EthSwtPortMacLayerSpeed);
         }
         else
         {
@@ -4154,7 +5289,7 @@ static inline void ConfigCreditBaseShaperReg(uint8 SwitchPortIdx, const Netc_Eth
     uint8 shapingClass;
     uint32 localPtcTmSDUR;
 
-    if(port->ePort->portShaper != NULL)
+    if(port->ePort->portShaper != NULL_PTR)
     {
         for(shapingClass = 0U; shapingClass < NETC_ETHSWT_IP_NUM_SHAPING_CLASS; shapingClass++)
         {
@@ -4177,6 +5312,10 @@ static inline Std_ReturnType ConfigPM0CommandReg(uint8 SwitchIdx, uint8 SwitchPo
     Std_ReturnType status = E_OK;
     uint32 portCommandConfig = 0UL;
 
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
+
     /* Start the PM0_COMMAND_CONFIG value with the TX padding option */
     portCommandConfig = SW_ETH_MAC_PORT0_PM0_COMMAND_CONFIG_TXP_MASK;
 
@@ -4188,6 +5327,9 @@ static inline Std_ReturnType ConfigPM0CommandReg(uint8 SwitchIdx, uint8 SwitchPo
         {
             portCommandConfig |= SW_ETH_MAC_PORT0_PM0_COMMAND_CONFIG_TX_EN_MASK | SW_ETH_MAC_PORT0_PM0_COMMAND_CONFIG_RX_EN_MASK;
         }
+
+        /* Enable Rx and Tx Path for port */
+        Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->POR &= ~(SW_PORT0_POR_TXDIS_MASK | SW_PORT0_POR_RXDIS_MASK);
     }
     else
     {
@@ -4212,6 +5354,11 @@ static inline Std_ReturnType ConfigPM0CommandReg(uint8 SwitchIdx, uint8 SwitchPo
         /* Write the PM0_COMMAND_CONFIG with the computed value */
         Netc_EthSwt_Ip_PortBaseTable[SwitchPortIdx]->PM0_COMMAND_CONFIG = portCommandConfig;
 
+#if(NETC_ETHSWT_IP_CONFIG_LINK_PROTOCOL == STD_ON)
+        /* Config link protocol for mac ports */
+        Netc_EthSwt_Ip_ConfigLinkProtocol(SwitchIdx, SwitchPortIdx, port->EthSwtPortPhysicalLayerType);
+#endif
+
         /* Configure the interface mode, the speed and the duplex mode */
         status |= Netc_EthSwt_Ip_MacPortConfig( SwitchIdx, SwitchPortIdx, port->EthSwtPortPhysicalLayerType,
                                                 port->EthSwtPortMacLayerSpeed, port->EthSwtPortMacLayerDuplexMode
@@ -4225,7 +5372,6 @@ static Std_ReturnType Netc_EthSwt_Ip_InitPort(uint8 SwitchIdx, uint8 SwitchPortI
 {
     Std_ReturnType status = E_OK;
     uint32 bridgePortConfig = 0UL;
-
 
     (void) SwitchIdx;
 #if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
@@ -4246,10 +5392,10 @@ static Std_ReturnType Netc_EthSwt_Ip_InitPort(uint8 SwitchIdx, uint8 SwitchPortI
         | SW_PORT0_PPCPDEIMR_EPCPMPV(port->ePort->vlanEnableEgressPcpToPcpMapping?1U:0U)
         | SW_PORT0_PPCPDEIMR_EPCPMP(port->ePort->vlanEgressPcpToPcpProfile)
         | SW_PORT0_PPCPDEIMR_DRME(port->ePort->updateEgressDr?1U:0U)
-        | SW_PORT0_PPCPDEIMR_DR0DEI(port->ePort->vlanDrToDei[0U])
-        | SW_PORT0_PPCPDEIMR_DR1DEI(port->ePort->vlanDrToDei[1U])
-        | SW_PORT0_PPCPDEIMR_DR2DEI(port->ePort->vlanDrToDei[2U])
-        | SW_PORT0_PPCPDEIMR_DR3DEI(port->ePort->vlanDrToDei[3U]);
+        | SW_PORT0_PPCPDEIMR_DR0DEI(*(port->ePort->vlanDrToDei)[0U])
+        | SW_PORT0_PPCPDEIMR_DR1DEI(*(port->ePort->vlanDrToDei)[1U])
+        | SW_PORT0_PPCPDEIMR_DR2DEI(*(port->ePort->vlanDrToDei)[2U])
+        | SW_PORT0_PPCPDEIMR_DR3DEI(*(port->ePort->vlanDrToDei)[3U]);
 
     /* Bridge Port Default Vlan register configuration */
     ConfigBridgePortDefaultVlanReg(SwitchPortIdx, port);
@@ -4338,9 +5484,11 @@ Std_ReturnType Netc_EthSwt_Ip_ConfigureCreditBasedShaper(uint8 SwitchIdx, const 
     egressHiCredit = (uint32)(largeEgressHiCredit/100UL);
     egressHiCredit = (((egressHiCredit*100UL)+50UL)>egressHiCredit)?egressHiCredit:(egressHiCredit+1UL);
 
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_05();
     Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->TCT_NUM[TrafficClass].PTCCBSR0 &= ~SW_PORT0_PTCCBSR0_BW_MASK;
     Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->TCT_NUM[TrafficClass].PTCCBSR0 |= SW_PORT0_PTCCBSR0_BW(bandwidth);
     Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->TCT_NUM[TrafficClass].PTCCBSR1 = SW_PORT0_PTCCBSR1_HI_CREDIT(egressHiCredit);
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_05();
 
     return status;
 }
@@ -4360,10 +5508,13 @@ Std_ReturnType Netc_EthSwt_Ip_EnableCreditBasedShaper(uint8 SwitchIdx, const uin
     DevAssert(TrafficClass < NETC_ETHSWT_IP_NUM_SHAPING_CLASS);
 #endif
 
+    (void)SwitchIdx;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_10();
     /* clear the bit first */
     Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->TCT_NUM[TrafficClass].PTCCBSR0 &= ~SW_PORT0_PTCCBSR0_CBSE_MASK;
     /* write the bit */
     Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->TCT_NUM[TrafficClass].PTCCBSR0 |= SW_PORT0_PTCCBSR0_CBSE((TRUE==Enable)?1U:0U);
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_10();
 
     return status;
 }
@@ -4452,75 +5603,82 @@ static inline void InitMappingProfile(const Netc_EthSwt_Ip_ConfigType * Config)
 /* inline function for initializing 1588 timer */
 static inline void InitTimer1588(const Netc_EthSwt_Ip_ConfigType * Config)
 {
-    uint32 TimerRefClk;
     uint16 TimerClkPeriod;
     uint32 ClkAddendData;
     uint32 TimerClkAddend;
 
     if (Config->Timer1588ClkSrc == ETHSWT_EXTERNAL_REFERENCE_CLOCK)
     {
+        TimerOriginalRefClk = Config->netcExternalClockFrequency;
         TimerRefClk = Config->netcExternalClockFrequency;
         IP_NETC__TMR0_BASE->TMR_CTRL &= ~TMR0_BASE_TMR_CTRL_CK_SEL(1U);         /* select the external 200MHz clock for 1588 timer */
     }
-    else
+    else if (Config->Timer1588ClkSrc == ETHSWT_MODULE_REFERENCE_CLOCK)
     {
+        TimerOriginalRefClk = Config->netcClockFrequency;
         TimerRefClk = Config->netcClockFrequency;
         IP_NETC__TMR0_BASE->TMR_CTRL |= TMR0_BASE_TMR_CTRL_CK_SEL(1U);          /* select NETC system clock (default setting) for 1588 timer */
     }
+    else    /* reference clock is disabled, will not use 1588 timer */
+    {
+        TimerOriginalRefClk = 0x0UL;
+        TimerRefClk = 0x0UL;
+    }
 
-    TimerClkPeriod = (uint16)(1000U/(TimerRefClk/1000000U));                              /* clock period = 1/200000000 = 5ns */
-    ClkAddendData = (1000000U/(TimerRefClk/1000000U)) - (1000U * TimerClkPeriod);
-    TimerClkAddend = (uint32)((((uint64)0x1U << NETC_ETHSWT_IP_32BIT_SHIFT) * ClkAddendData) / 1000U);
+    /* config and eanble the 1588 timer */
+    if (TimerOriginalRefClk != 0x0UL)
+    {
+        TimerClkPeriod = (uint16)(1000U/(TimerOriginalRefClk/1000000U));                              /* clock period = 1/200000000 = 5ns */
+        ClkAddendData = (1000000U/(TimerOriginalRefClk/1000000U)) - (1000U * TimerClkPeriod);
+        TimerClkAddend = (uint32)((((uint64)0x1U << NETC_ETHSWT_IP_32BIT_SHIFT) * ClkAddendData) / 1000U);
 
-    /* FunctionTimer addend register holds the fractional part of the timer clock period */
-    IP_NETC__TMR0_BASE->TMR_ADD = TMR0_BASE_TMR_ADD_ADDEND(TimerClkAddend);
-    /* clear CLK_PERIOD data field first */
-    IP_NETC__TMR0_BASE->TMR_CTRL &= ~TMR0_BASE_TMR_CTRL_TCLK_PERIOD(0x3FFF);
-    IP_NETC__TMR0_BASE->TMR_CTRL |= TMR0_BASE_TMR_CTRL_TCLK_PERIOD(TimerClkPeriod);
-    /* Enable timer */
-    IP_NETC__TMR0_BASE->TMR_CTRL |= TMR0_BASE_TMR_CTRL_TE(1U);        /* FunctionTimer addend register holds the fractional part of the timer clock period */
-    IP_NETC__TMR0_BASE->TMR_ADD = TMR0_BASE_TMR_ADD_ADDEND(TimerClkAddend);
-    /* clear CLK_PERIOD data field first */
-    IP_NETC__TMR0_BASE->TMR_CTRL &= ~TMR0_BASE_TMR_CTRL_TCLK_PERIOD(0x3FFF);
-    IP_NETC__TMR0_BASE->TMR_CTRL |= TMR0_BASE_TMR_CTRL_TCLK_PERIOD(TimerClkPeriod);
-    /* Enable timer */
-    IP_NETC__TMR0_BASE->TMR_CTRL |= TMR0_BASE_TMR_CTRL_TE(1U);
+        /* Timer addend register holds the fractional part of the timer clock period */
+        IP_NETC__TMR0_BASE->TMR_ADD = TMR0_BASE_TMR_ADD_ADDEND(TimerClkAddend);
+        /* clear CLK_PERIOD data field first */
+        IP_NETC__TMR0_BASE->TMR_CTRL &= ~TMR0_BASE_TMR_CTRL_TCLK_PERIOD(0x3FFF);
+        IP_NETC__TMR0_BASE->TMR_CTRL |= TMR0_BASE_TMR_CTRL_TCLK_PERIOD(TimerClkPeriod);
+        /* Enable timer */
+        IP_NETC__TMR0_BASE->TMR_CTRL |= TMR0_BASE_TMR_CTRL_TE(1U);
+    }
+
 }
 
 /* inline function for initializing time gate scheduling table entries data during switch init */
 static inline void InitTimeGateSchedulingTableEntryData(const Netc_EthSwt_Ip_ConfigType * Config)
 {
-    uint8 portIndex;
+    uint8 PortIndex;
     uint8 GateControlListIdx;
 
-    for (portIndex = 0U; portIndex < NETC_ETHSWT_NUMBER_OF_PORTS; portIndex++)
+    for (PortIndex = 0U; PortIndex < NETC_ETHSWT_NUMBER_OF_PORTS; PortIndex++)
     {
-        if ((*((*(Config)).port))[portIndex].ePort->portTimeAwareShaperEnable == TRUE)
+        if ((*((*(Config)).port))[PortIndex].ePort->portTimeAwareShaperEnable == TRUE)
         {
             /* set the flag for ports */
-            PortTimeAwareShaperEnabled[portIndex] = TRUE;
+            PortTimeAwareShaperEnabled[PortIndex] = TRUE;
 
             /* write register PTGSATOR. [Ricky}: not supported for now. follow up ticket needed. */
-            /* TODO: Netc_EthSwt_Ip_SW0_PortxBaseAddr[portIndex]->RESERVED_7 should be equal to (*((*(Config)).port))[portIndex].ePort->portTimeGateSchedulingAdvanceTimeOffsetReg; */
+            /* TODO: Netc_EthSwt_Ip_SW0_PortxBaseAddr[PortIndex]->RESERVED_7 should be equal to (*((*(Config)).port))[PortIndex].ePort->portTimeGateSchedulingAdvanceTimeOffsetReg; */
 
             /* Fill in the data structure for time gate scheduling */
-            TimeGateSchedulingEntryData[portIndex].TimeGateSchedulingTable_EID = portIndex;
-            TimeGateSchedulingEntryData[portIndex].AdminBaseTime = (*((*(Config)).port))[portIndex].ePort->portEgressAdminBaseTime;
-            TimeGateSchedulingEntryData[portIndex].AdminCycleTime = (*((*(Config)).port))[portIndex].ePort->portEgressAdminCycleTime;
-            TimeGateSchedulingEntryData[portIndex].AdminCycleTimeExt = (*((*(Config)).port))[portIndex].ePort->portEgressAdminCycleTimeExt;
-            TimeGateSchedulingEntryData[portIndex].AdminControlListLength = (*((*(Config)).port))[portIndex].ePort->numberOfGateControlListEntries;
-            for (GateControlListIdx = 0U; GateControlListIdx < TimeGateSchedulingEntryData[portIndex].AdminControlListLength; GateControlListIdx++)
+            TimeGateSchedulingEntryData[PortIndex].TimeGateSchedulingTable_EID = PortIndex;
+            TimeGateSchedulingEntryData[PortIndex].AdminBaseTime = (*((*(Config)).port))[PortIndex].ePort->portEgressAdminBaseTime;
+            TimeGateSchedulingEntryData[PortIndex].AdminCycleTime = (*((*(Config)).port))[PortIndex].ePort->portEgressAdminCycleTime;
+            TimeGateSchedulingEntryData[PortIndex].AdminCycleTimeExt = (*((*(Config)).port))[PortIndex].ePort->portEgressAdminCycleTimeExt;
+            TimeGateSchedulingEntryData[PortIndex].AdminControlListLength = (*((*(Config)).port))[PortIndex].ePort->numberOfGateControlListEntries;
+            for (GateControlListIdx = 0U; GateControlListIdx < TimeGateSchedulingEntryData[PortIndex].AdminControlListLength; GateControlListIdx++)
             {
-                TimeGateSchedulingEntryData[portIndex].GateEntryAdminControlListData[GateControlListIdx].AdminTimeInterval = (*((*((*(Config)).port))[portIndex].ePort->TimeGateControlListEntries))[GateControlListIdx].AdminTimeInterval;
-                TimeGateSchedulingEntryData[portIndex].GateEntryAdminControlListData[GateControlListIdx].AdminTrafficClassGateStates = (*((*((*(Config)).port))[portIndex].ePort->TimeGateControlListEntries))[GateControlListIdx].AdminTrafficClassGateStates;
-                TimeGateSchedulingEntryData[portIndex].GateEntryAdminControlListData[GateControlListIdx].AdminGateOperationType = (*((*((*(Config)).port))[portIndex].ePort->TimeGateControlListEntries))[GateControlListIdx].AdminGateOperationType;
+                TimeGateSchedulingEntryData[PortIndex].GateEntryAdminControlListData[GateControlListIdx].AdminTimeInterval = (*((*((*(Config)).port))[PortIndex].ePort->TimeGateControlListEntries))[GateControlListIdx].AdminTimeInterval;
+                TimeGateSchedulingEntryData[PortIndex].GateEntryAdminControlListData[GateControlListIdx].AdminTrafficClassGateStates = (*((*((*(Config)).port))[PortIndex].ePort->TimeGateControlListEntries))[GateControlListIdx].AdminTrafficClassGateStates;
+                TimeGateSchedulingEntryData[PortIndex].GateEntryAdminControlListData[GateControlListIdx].AdminGateOperationType = (*((*((*(Config)).port))[PortIndex].ePort->TimeGateControlListEntries))[GateControlListIdx].AdminGateOperationType;
             }
         }
     }
 }
 
-/*  Workaround for ERR051130: 
-    Egress time gate scheduling can get corrupted when functional level reset is applied or when time gating is disabled 
+#if defined(ERR_IPV_NETC_E051130)
+    #if (STD_ON == ERR_IPV_NETC_E051130)
+/*  Workaround for ERR051130:
+    Egress time gate scheduling can get corrupted when functional level reset is applied or when time gating is disabled
 */
 /* Added 2 fake time gate control list entries for clearing the internal context for time gate scheduling feature */
 static Netc_EthSwt_Ip_CBDRStatusType InitTimeGateSchedulingFeature(uint8 SwitchIdx, uint8 SwitchPortIdx)
@@ -4528,6 +5686,10 @@ static Netc_EthSwt_Ip_CBDRStatusType InitTimeGateSchedulingFeature(uint8 SwitchI
     Netc_EthSwt_Ip_CBDRStatusType CBDRStatus = NETC_ETHSWT_CBDRSTATUS_SUCCES;
     volatile uint64 CurrentTime = 0;
     uint8 EntryIdx;
+
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
 
     /* fill in struct Netc_EthSwt_Ip_TimeGateSchedulingEntryDataType */
     TimeGateSchedulingEntryData[0U].TimeGateSchedulingTable_EID = SwitchPortIdx;
@@ -4550,9 +5712,453 @@ static Netc_EthSwt_Ip_CBDRStatusType InitTimeGateSchedulingFeature(uint8 SwitchI
 
     /* add these 2 gate control list entries */
     CBDRStatus = Netc_EthSwt_Ip_ConfigPortTimeGateScheduling(SwitchIdx, SwitchPortIdx, TRUE);
-    
+
     return CBDRStatus;
 }
+    #endif
+#endif
+
+/* inline function for enabling PCIE for the timer, MDIO, switch, and ENETC */
+static inline void Netc_EthSwt_Ip_EnablePCIE(void)
+{
+    /* Enable PCIE for the TIMER */
+    IP_NETC__NETC_F0_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
+    /* Enable PCIE for the MDIO */
+    IP_NETC__NETC_F1_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F1_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
+    /* Enable PCIE for the Switch */
+    IP_NETC__NETC_F2_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F2_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F2_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
+    /* Enable PCIE for the ENETC */
+    IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigSwt
+ * Description   : function for configuring the switch registers and ports
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigSwt(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    Std_ReturnType status = E_OK;
+    uint8 PortIndex;
+    uint8 enabledPortMask = 0U;
+
+    Netc_EthSwt_Ip_NetcClockFrequency = Config->netcClockFrequency;
+
+    if(Config->EthSwtEnableSharedLearning)
+    {
+        IP_NETC__SW0_BASE->VFHTDECR1 = NETC_F2_VFHTDECR1_VL_MODE(1U) | NETC_F2_VFHTDECR1_FID(0U);
+    }
+    else
+    {
+        IP_NETC__SW0_BASE->VFHTDECR1 = NETC_F2_VFHTDECR1_VL_MODE(0U);
+    }
+
+    IP_NETC__SW0_BASE->FDBHTMCR = NETC_F2_FDBHTMCR_DYN_LIMIT(Config->EthSwtMaxDynamicEntries);
+    IP_NETC__SW0_COMMON->CVLANR1 = NETC_F2_COMMON_CVLANR1_V(Config->EthSwtCustomVlanEtherType1);
+    IP_NETC__SW0_COMMON->CVLANR2 = NETC_F2_COMMON_CVLANR2_ETYPE(Config->EthSwtCustomVlanEtherType2);
+
+    /* Mapping profile initialization */
+    InitMappingProfile(Config);
+
+    /* Initialize the ports of the switch */
+    for (PortIndex = 0U; PortIndex < NETC_ETHSWT_NUMBER_OF_PORTS; PortIndex++)
+    {
+        status = Netc_EthSwt_Ip_InitPort(SwitchIdx, PortIndex, &(*((*(Config)).port))[PortIndex]);
+
+        if ( (TRUE == (*((*(Config)).port))[PortIndex].EthSwtPortMacLayerPortEnable) && (FALSE == (*((*(Config)).port))[PortIndex].iPort->vlanEnable ))
+        {
+            enabledPortMask |= (1U << PortIndex);
+        }
+    }
+
+    status |= Netc_EthSwt_Ip_EMDIOConfiguration(0U);  /* init EMDIO configuration register */
+
+    /* Configure the VLAN filter hash default settings */
+    IP_NETC__SW0_BASE->VFHTDECR0 = enabledPortMask; /* Add enabled ports to the default VLAN */
+    /* To add Shared learning setting in EBT */
+    /* set configured learning and forwarding options */
+    IP_NETC__SW0_BASE->VFHTDECR2 = NETC_F2_VFHTDECR2_MLO(Config->MacLearningOption) | NETC_F2_VFHTDECR2_MFO(Config->MacForwardingOption);
+
+    /* used for port aging, value in sec */
+    Netc_EthSwt_Ip_FdbTableEntryTimeout[SwitchIdx] = Config->EthSwtArlTableEntryTimeout;
+
+    /* +++ initialize 1588 timer for time gate scheduling +++ */
+    InitTimer1588(Config);
+    /* --- initialize 1588 timer for time gate scheduling --- */
+
+    /* initialize memory and length for command ring 0 and 1 */
+    CmdBDRConfig[NETC_ETHSWT_IP_CBDR_0].CmdBDAddr = &SwtcommandRingDescriptor0[0U];
+    CmdBDRConfig[NETC_ETHSWT_IP_CBDR_0].lengthCBDR = (NETC_ETHSWT_IP_CBDR0_LENGTH);
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigTAS
+ * Description   : function for configuring the Time Aware Shaper for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigTAS(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+
+    /* check if TAS is enabled or not */
+    PortTimeAwareShaperEnabled[0U] = ((*((*(Config)).port))[0U].ePort->portTimeAwareShaperEnable ||
+                                        (*((*(Config)).port))[1U].ePort->portTimeAwareShaperEnable ||
+                                        (*((*(Config)).port))[2U].ePort->portTimeAwareShaperEnable) ? TRUE : FALSE;
+
+    if (TRUE ==  PortTimeAwareShaperEnabled[0U])
+    {
+#if defined(ERR_IPV_NETC_E051130)
+    #if (STD_ON == ERR_IPV_NETC_E051130)
+        /* Default time gate scheduling conditions on the port 0 */
+        CBDRStatus = InitTimeGateSchedulingFeature(SwitchIdx, 0U);
+        if (CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+            status = E_NOT_OK;
+        }
+        else
+        {
+    #endif
+#endif
+            /* Add time gate scheduling table entries data */
+            InitTimeGateSchedulingTableEntryData(Config);
+#if defined(ERR_IPV_NETC_E051130)
+    #if (STD_ON == ERR_IPV_NETC_E051130)
+        }
+    #endif
+#endif
+    }
+    return status;
+}
+
+#if (NETC_ETHSWT_NUMBER_OF_FDB_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigFDBTable
+ * Description   : function for configuring the FDB Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigFDBTable(const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    uint32 MatchedEntries = 0U;
+    uint8 MacAddrByteIdx;
+    uint8 FdbEntryIdx;
+    Netc_EthSwt_Ip_FdbEntryDataType FdbTableEntry = {0};
+
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+
+    /* Add static FDB entries */
+    for (FdbEntryIdx = 0U; FdbEntryIdx < Config->NumberOfFdbEntries; FdbEntryIdx++)
+    {
+        /* fill in data of Mac Address */
+        for (MacAddrByteIdx = 0U; MacAddrByteIdx < NETC_ETHSWT_IP_MACADDRLEN; MacAddrByteIdx++)
+        {
+            FdbTableEntry.MacAddr[MacAddrByteIdx] = (*(Config->FdbEntries))[FdbEntryIdx].macAddr[MacAddrByteIdx];
+        }
+
+        FdbTableEntry.FID = 0U; /* fill in data of FID */
+        FdbTableEntry.SwitchPortEgressBitMask = (*(Config->FdbEntries))[FdbEntryIdx].ePortMask; /* fill in data of port bitmask */
+        FdbTableEntry.DynamicEntry = FALSE; /* static entry */
+
+        CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateFdbTableEntry(0U, NETC_ETHSWT_ADD_CMD, &MatchedEntries, &FdbTableEntry);
+        /* fail to add the static FDB entry */
+        if ((CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES) || (MatchedEntries != 0U))
+        {
+            status = E_NOT_OK;
+            break;
+        }
+
+    }
+    return status;
+}
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigISITable
+ * Description   : function for configuring the IngressStreamIdentification Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigISITable(const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    uint32 MatchedEntries = 0U;
+    uint8 FrmKeyWordIdx;
+    uint8 IsiEntryIdx;
+    Netc_EthSwt_Ip_IngrStremIdentificationTableDataType IsiTableEntry = {0};
+
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+
+    /* Add key construction rules */
+    IP_NETC__SW0_COMMON->ISIDKC0CR0 = (*(Config->EthSwtKeyConstruction))[0U].EthSwtKeyConstructionRegValue;
+    IP_NETC__SW0_COMMON->ISIDKC1CR0 = (*(Config->EthSwtKeyConstruction))[1U].EthSwtKeyConstructionRegValue;
+    IP_NETC__SW0_COMMON->ISIDKC2CR0 = (*(Config->EthSwtKeyConstruction))[2U].EthSwtKeyConstructionRegValue;
+    IP_NETC__SW0_COMMON->ISIDKC3CR0 = (*(Config->EthSwtKeyConstruction))[3U].EthSwtKeyConstructionRegValue;
+
+    /* Add payload field values */
+    IP_NETC__SW0_COMMON->ISIDKC0PF0CR = (*(Config->EthSwtKeyConstruction))[0U].EthSwtPayloadField0RegValue;
+    IP_NETC__SW0_COMMON->ISIDKC0PF1CR = (*(Config->EthSwtKeyConstruction))[0U].EthSwtPayloadField1RegValue;
+    IP_NETC__SW0_COMMON->ISIDKC1PF0CR = (*(Config->EthSwtKeyConstruction))[1U].EthSwtPayloadField0RegValue;
+    IP_NETC__SW0_COMMON->ISIDKC1PF1CR = (*(Config->EthSwtKeyConstruction))[1U].EthSwtPayloadField1RegValue;
+    IP_NETC__SW0_COMMON->ISIDKC2PF0CR = (*(Config->EthSwtKeyConstruction))[2U].EthSwtPayloadField0RegValue;
+    IP_NETC__SW0_COMMON->ISIDKC2PF1CR = (*(Config->EthSwtKeyConstruction))[2U].EthSwtPayloadField1RegValue;
+    IP_NETC__SW0_COMMON->ISIDKC3PF0CR = (*(Config->EthSwtKeyConstruction))[3U].EthSwtPayloadField0RegValue;
+    IP_NETC__SW0_COMMON->ISIDKC3PF1CR = (*(Config->EthSwtKeyConstruction))[3U].EthSwtPayloadField1RegValue;
+
+    /* Add static IngressStreamIdentification entries */
+    for (IsiEntryIdx = 0U; IsiEntryIdx < Config->NumberOfIsiEntries; IsiEntryIdx++)
+    {
+        IsiTableEntry.IngrStreamIdenResumeEntryId = (*(Config->IsiEntries))[IsiEntryIdx].IngrStreamIdenResumeEntryId;
+        IsiTableEntry.IngrStreamIdenEntryId = (*(Config->IsiEntries))[IsiEntryIdx].IngrStreamIdenEntryId;
+        IsiTableEntry.IngrStreamEntryId = (*(Config->IsiEntries))[IsiEntryIdx].IngrStreamEntryId;
+        IsiTableEntry.Keye_Keytype = (*(Config->IsiEntries))[IsiEntryIdx].Keye_Keytype;
+        IsiTableEntry.Keye_SrcPortId = (*(Config->IsiEntries))[IsiEntryIdx].Keye_SrcPortId;
+        IsiTableEntry.Keye_Spm = (*(Config->IsiEntries))[IsiEntryIdx].Keye_Spm;
+        for(FrmKeyWordIdx = 0; FrmKeyWordIdx < 4; FrmKeyWordIdx++)
+        {
+            IsiTableEntry.Keye_FrmKey[FrmKeyWordIdx] = (*(Config->IsiEntries))[IsiEntryIdx].Keye_FrmKey[FrmKeyWordIdx];
+        }
+        CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateIngrStreamIdentificationTableEntry(0U, NETC_ETHSWT_ADD_CMD, &MatchedEntries, &IsiTableEntry);
+        /* fail to add the static IngressStreamIdentification entry */
+        if ((CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES) || (MatchedEntries != 0U))
+        {
+            status = E_NOT_OK;
+            break;
+        }
+
+    }
+    return status;
+}
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_SEQTAG_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigISITable
+ * Description   : function for configuring the IngressStreamIdentification Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigSeqGenTable(const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    uint32 MatchedEntries = 0U;
+    uint8 SeqTagEntryIdx;
+    Netc_EthSwt_Ip_ISQGTableDataType SeqTagTableEntry = {0};
+
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+
+    /* Add static SequenceTag entries */
+    for (SeqTagEntryIdx = 0U; SeqTagEntryIdx < Config->NumberOfSeqTagEntries; SeqTagEntryIdx++)
+    {
+        SeqTagTableEntry.ISQGEntryId = (*(Config->SeqTagEntries))[SeqTagEntryIdx].ISQGEntryId;
+        SeqTagTableEntry.Cfge_SQTagType = (*(Config->SeqTagEntries))[SeqTagEntryIdx].Cfge_SQTagType;
+        SeqTagTableEntry.Sgse_SQGNum = (*(Config->SeqTagEntries))[SeqTagEntryIdx].Sgse_SQGNum;
+        CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateIngressSeqGenerationTableEntry(0U, NETC_ETHSWT_ADD_CMD, &MatchedEntries, &SeqTagTableEntry);
+        /* fail to add the static SequenceGeneration entry */
+        if ((CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES) || (MatchedEntries != 0U))
+        {
+            status = E_NOT_OK;
+            break;
+        }
+
+    }
+    return status;
+}
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_SEQRECOVERY_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigISITable
+ * Description   : function for configuring the IngressStreamIdentification Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigSeqRecTable(const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    uint32 MatchedEntries = 0U;
+    uint8 SeqRecEntryIdx;
+    Netc_EthSwt_Ip_EgrSeqRecoveryTableDataType SeqRecTableEntry = {0};
+
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+
+    /* Add static SequenceRecovery entries */
+    for (SeqRecEntryIdx = 0U; SeqRecEntryIdx < Config->NumberOfSeqRecoveryEntries; SeqRecEntryIdx++)
+    {
+        SeqRecTableEntry.EgrSeqRecEntryId = (*(Config->SeqRecoveryEntries))[SeqRecEntryIdx].EgrSeqRecEntryId;
+        SeqRecTableEntry.Cfge_SQTag = (*(Config->SeqRecoveryEntries))[SeqRecEntryIdx].Cfge_SQTag;
+        SeqRecTableEntry.Cfge_SQRHisLen = (*(Config->SeqRecoveryEntries))[SeqRecEntryIdx].Cfge_SQRHisLen;
+        SeqRecTableEntry.Cfge_SQRFutureWinLen = (*(Config->SeqRecoveryEntries))[SeqRecEntryIdx].Cfge_SQRFutureWinLen;
+        SeqRecTableEntry.Cfge_SQRTimeOutPeriod = (*(Config->SeqRecoveryEntries))[SeqRecEntryIdx].Cfge_SQRTimeOutPeriod;
+        SeqRecTableEntry.Cfge_SqrTnsq = (*(Config->SeqRecoveryEntries))[SeqRecEntryIdx].Cfge_SqrTnsq;
+        SeqRecTableEntry.Cfge_SqrAlg = (*(Config->SeqRecoveryEntries))[SeqRecEntryIdx].Cfge_SqrAlg;
+        SeqRecTableEntry.Cfge_SqrType = (*(Config->SeqRecoveryEntries))[SeqRecEntryIdx].Cfge_SqrType;
+        CBDRStatus = Netc_EthSwt_Ip_UpdateEgressSeqRecoveryTableEntry(0U, &MatchedEntries, &SeqRecTableEntry);
+        /* fail to add the static SequenceRecovery entry */
+        if ((CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES) || (MatchedEntries != 1U))
+        {
+            status = E_NOT_OK;
+            break;
+        }
+
+    }
+    return status;
+}
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_FRAMEMODIFICATION_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigFrmModificationTable
+ * Description   : function for configuring the FrameModification Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigFrmModificationTable(const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    uint32 MatchedEntries = 0U;
+    uint8 FrmModifEntryIdx = 0U;
+
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+    Netc_EthSwt_Ip_FrmModificationEntryDataType FrmModifTableEntry = {0};
+
+    for (FrmModifEntryIdx = 0U; FrmModifEntryIdx < Config->NumberOfFrmModifEntries; FrmModifEntryIdx++)
+    {
+        FrmModifTableEntry = (*(Config->FrameModificationEntries))[FrmModifEntryIdx];
+        CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateFrmModificationTableEntry(0U, NETC_ETHSWT_ADD_CMD, &MatchedEntries, &FrmModifTableEntry);
+
+        if (CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+            status = E_NOT_OK;
+            break;
+        }
+    }
+
+    return status;
+}
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_EGRESSTREATMENT_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigEgressTreatmentTable
+ * Description   : function for configuring the EgressTreatment Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigEgressTreatmentTable(const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    uint32 MatchedEntries = 0U;
+    uint8 EgrTrtEntryIdx = 0U;
+
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+    Netc_EthSwt_Ip_EgressTreatmentEntryDataType EgrTrtTableEntry = {0};
+
+    for (EgrTrtEntryIdx = 0U; EgrTrtEntryIdx < Config->NumberOfEgrTreatmentEntries; EgrTrtEntryIdx++)
+    {
+        EgrTrtTableEntry = (*(Config->EgressTreatmentEntries))[EgrTrtEntryIdx];
+        CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateEgressTreatmentTableEntry(0U, NETC_ETHSWT_ADD_CMD, &MatchedEntries, &EgrTrtTableEntry);
+
+        if (CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+            status = E_NOT_OK;
+            break;
+        }
+    }
+
+    return status;
+}
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_INGRESSSTREAM_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigIngressStreamTable
+ * Description   : function for configuring the IngressStream Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigIngressStreamTable(const Netc_EthSwt_Ip_ConfigType * Config)
+{
+    uint32 MatchedEntries = 0U;
+    uint8 IngrStrEntryIdx = 0U;
+
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+    Netc_EthSwt_Ip_IngressStreamEntryDataType IngrStrTableEntry = {0};
+
+    for (IngrStrEntryIdx = 0U; IngrStrEntryIdx < Config->NumberOfIngrStreamEntries; IngrStrEntryIdx++)
+    {
+        IngrStrTableEntry = (*(Config->IngressStreamEntries))[IngrStrEntryIdx];
+        CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateIngressStreamTableEntry(0U, NETC_ETHSWT_ADD_CMD, &MatchedEntries, &IngrStrTableEntry);
+
+        if (CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+            status = E_NOT_OK;
+            break;
+        }
+    }
+
+    return status;
+}
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_VLANFILTER_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigVLANFilterTable
+ * Description   : function for configuring the VLAN Filter Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_EthSwt_Ip_ConfigVLANFilterTable(const Netc_EthSwt_Ip_ConfigType * Config)
+{
+
+    uint32 VlanMatchedEntries = 0U;
+    uint8 VlanEntryIdx;
+    Netc_EthSwt_Ip_VlanFilterEntryDataType VlanFilterEntryData = {0};
+
+    Std_ReturnType status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
+
+    /* Add Vlan Filter entries */
+    for (VlanEntryIdx = 0U; VlanEntryIdx < Config->NumberOfVlanFilterEntries; VlanEntryIdx++)
+    {
+        /* fill in VlanFilterEntryData structure  */
+        VlanFilterEntryData.VlanID = (*(Config->VlanFilterEntries))[VlanEntryIdx].vlanId;
+        VlanFilterEntryData.PortMembershipBitmap = (*(Config->VlanFilterEntries))[VlanEntryIdx].iPortMask;
+
+        if (Config->EthSwtEnableSharedLearning == FALSE)
+        {
+            VlanFilterEntryData.FID = VlanFilterEntryData.VlanID;   /* for independent vlan learning, the FID should be equal to TCI */
+        }
+        else
+        {
+            VlanFilterEntryData.FID = (0U);                         /* for shared vlan learning, the FID should be always equal to 0 */
+        }
+
+        VlanFilterEntryData.MacLearningOptions = Config->MacLearningOption;                  /* enable mac learning */
+        VlanFilterEntryData.MacForwardingOptions = Config->MacForwardingOption;                /* FDB lookup, if there is no match, then frame is flooded */
+        VlanFilterEntryData.IpMulticastFloodingEnable = FALSE;          /* IP multicast flooding disable */
+        VlanFilterEntryData.IpMulticastFilteringEnable = FALSE;         /* IP multicast filtering disable */
+        VlanFilterEntryData.BaseEgressTreatmentEntryID = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;    /* egress treatment processing is by-passed */
+
+        CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateVlanFilterTableEntry(0U, NETC_ETHSWT_ADD_CMD, &VlanMatchedEntries, &VlanFilterEntryData);
+        /* fail to add the Vlan Filter entry */
+        if ((CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES) || (VlanMatchedEntries != 0U))
+        {
+            status = E_NOT_OK;
+            break;
+        }
+    }
+    return status;
+}
+#endif
+
 
 /*FUNCTION**********************************************************************
  *
@@ -4563,162 +6169,86 @@ static Netc_EthSwt_Ip_CBDRStatusType InitTimeGateSchedulingFeature(uint8 SwitchI
 Std_ReturnType Netc_EthSwt_Ip_Init(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config)
 {
     Std_ReturnType status = E_OK;
+    uint8 portIdx = 0U;
     Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
-    uint8 portIndex;
-    uint8 enabledPortMask = 0U;
-
-#if (NETC_ETHSWT_NUMBER_OF_FDB_ENTRIES > 0U)
-    uint32 MatchedEntries = 0U;
-    uint8 MacAddrByteIdx;
-    uint8 FdbEntryIdx;
-    Netc_EthSwt_Ip_FdbEntryDataType FdbTableEntry = {0};
-#endif
-#if (NETC_ETHSWT_NUMBER_OF_VLANFILTER_ENTRIES > 0U)
-    uint32 VlanMatchedEntries = 0U;
-    uint8 VlanEntryIdx;
-    Netc_EthSwt_Ip_VlanFilterEntryDataType VlanFilterEntryData = {0};
-#endif
 
 #if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
     DevAssert(Config != NULL_PTR);
 #endif
 
-    /* Enable PCIE for the TIMER */
-    IP_NETC__NETC_F0_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F0_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
-    /* Enable PCIE for the MDIO */
-    IP_NETC__NETC_F1_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F1_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
-    /* Enable PCIE for the Switch */
-    IP_NETC__NETC_F2_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F2_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F2_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
-    /* Enable PCIE for the ENETC */
-    IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
+    /* enable PCIE for the timer, MDIO, switch, and ENETC */
+    Netc_EthSwt_Ip_EnablePCIE();
 
     status = Netc_EthSwt_Ip_IerbReady();
 
     if(status == (uint8)(E_OK))
     {
-        Netc_EthSwt_Ip_NetcClockFrequency = Config->netcClockFrequency;
-
-        if(Config->EthSwtEnableSharedLearning)
-        {
-            IP_NETC__SW0_BASE->VFHTDECR1 = NETC_F2_VFHTDECR1_VL_MODE(1U) | NETC_F2_VFHTDECR1_FID(0U);
-        }
-        else
-        {
-            IP_NETC__SW0_BASE->VFHTDECR1 = NETC_F2_VFHTDECR1_VL_MODE(0U);
-        }
-
-        IP_NETC__SW0_BASE->FDBHTMCR = NETC_F2_FDBHTMCR_DYN_LIMIT(Config->EthSwtMaxDynamicEntries);
-        IP_NETC__SW0_COMMON->CVLANR1 = NETC_F2_COMMON_CVLANR1_V(Config->EthSwtCustomVlanEtherType1);
-        IP_NETC__SW0_COMMON->CVLANR2 = NETC_F2_COMMON_CVLANR2_ETYPE(Config->EthSwtCustomVlanEtherType2);
-
-        /* Mapping profile initialization */
-        InitMappingProfile(Config);
-
-        /* Initialize the ports of the switch */
-        for (portIndex = 0U; portIndex < NETC_ETHSWT_NUMBER_OF_PORTS; portIndex++)
-        {
-            status = Netc_EthSwt_Ip_InitPort(SwitchIdx, portIndex, &(*((*(Config)).port))[portIndex]);
-
-            if (TRUE == (*((*(Config)).port))[portIndex].EthSwtPortMacLayerPortEnable)
-            {
-                enabledPortMask |= (1U << portIndex);
-            }
-        }
-
-        status |= Netc_EthSwt_Ip_EMDIOConfiguration(0U);  /* init EMDIO configuration register */
-
-        /* Configure the VLAN filter hash default settings */
-        IP_NETC__SW0_BASE->VFHTDECR0 = enabledPortMask; /* Add enabled ports to the default VLAN */
-        /* To add Shared learning setting in EBT */
-        /* set configured learning and forwarding options */
-        IP_NETC__SW0_BASE->VFHTDECR2 = NETC_F2_VFHTDECR2_MLO(Config->MacLearningOption) | NETC_F2_VFHTDECR2_MFO(Config->MacForwardingOption);
-
-        /* used for port aging, value in sec */
-        Netc_EthSwt_Ip_FdbTableEntryTimeout = Config->EthSwtArlTableEntryTimeout;
-
-        /* +++ initialize 1588 timer for time gate scheduling +++ */
-        InitTimer1588(Config);
-        /* --- initialize 1588 timer for time gate scheduling --- */
-
-        /* initialize memory and length for command ring 0 and 1 */
-        CmdBDRConfig[NETC_ETHSWT_IP_CBDR_0].CmdBDAddr = &SwtcommandRingDescriptor0[0U];
-        CmdBDRConfig[NETC_ETHSWT_IP_CBDR_0].lengthCBDR = (NETC_ETHSWT_IP_CBDR0_LENGTH);
-        CmdBDRConfig[NETC_ETHSWT_IP_CBDR_1].CmdBDAddr = &SwtcommandRingDescriptor1[0U];
-        CmdBDRConfig[NETC_ETHSWT_IP_CBDR_1].lengthCBDR = (NETC_ETHSWT_IP_CBDR1_LENGTH);
+        /* configure switch registers and ports */
+        status = Netc_EthSwt_Ip_ConfigSwt(SwitchIdx,Config);
 
         /* intialize command ring 0 */
         CBDRStatus = Netc_EthSwt_Ip_InitCommandBDR(0U, NETC_ETHSWT_IP_CBDR_0);
         if (NETC_ETHSWT_CBDRSTATUS_SUCCES == CBDRStatus)
         {
 #if (NETC_ETHSWT_NUMBER_OF_FDB_ENTRIES > 0U)
-            /* Add static FDB entries */
-            for (FdbEntryIdx = 0U; FdbEntryIdx < Config->NumberOfFdbEntries; FdbEntryIdx++)
-            {
-                /* fill in data of Mac Address */
-                for (MacAddrByteIdx = 0U; MacAddrByteIdx < NETC_ETHSWT_IP_MACADDRLEN; MacAddrByteIdx++)
-                {
-                    FdbTableEntry.MacAddr[MacAddrByteIdx] = (*(Config->FdbEntries))[FdbEntryIdx].macAddr[MacAddrByteIdx];
-                }
+            /* Configure FDB table */
+            status |= Netc_EthSwt_Ip_ConfigFDBTable(Config);
+#endif
 
-                FdbTableEntry.FID = 0U; /* fill in data of FID */
-                FdbTableEntry.SwitchPortEgressBitMask = (*(Config->FdbEntries))[FdbEntryIdx].ePortMask; /* fill in data of port bitmask */
-                FdbTableEntry.DynamicEntry = FALSE; /* static entry */
+#if (NETC_ETHSWT_NUMBER_OF_RP_ENTRIES > 0U)
+            status |= Netc_EthSwt_Ip_ConfigRP(SwitchIdx,Config);
+#endif
 
-                CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateFdbTableEntry(0U, NETC_ETHSWT_ADD_CMD, &MatchedEntries, &FdbTableEntry);
-                /* fail to add the static FDB entry */
-                if ((CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES) || (MatchedEntries != 0U))
-                {
-                    status = E_NOT_OK;
-                    break;
-                }
+#if (NETC_ETHSWT_NUMBER_OF_SGCL_ENTRIES > 0U)
+            status |= Netc_EthSwt_Ip_ConfigSGCL(SwitchIdx,Config);
+#endif
 
-            }
+#if (NETC_ETHSWT_NUMBER_OF_SGI_ENTRIES > 0U)
+            status |= Netc_EthSwt_Ip_ConfigSGI(SwitchIdx,Config);
 #endif
 
 #if (NETC_ETHSWT_NUMBER_OF_VLANFILTER_ENTRIES > 0U)
-            /* Add Vlan Filter entries */
-            for (VlanEntryIdx = 0U; VlanEntryIdx < Config->NumberOfVlanFilterEntries; VlanEntryIdx++)
-            {
-                /* fill in VlanFilterEntryData structure  */
-                VlanFilterEntryData.VlanID = (*(Config->VlanFilterEntries))[VlanEntryIdx].vlanId;
-                VlanFilterEntryData.PortMembershipBitmap = (*(Config->VlanFilterEntries))[VlanEntryIdx].iPortMask;
+            /* Configure VLAN Filter table */
+            status |= Netc_EthSwt_Ip_ConfigVLANFilterTable(Config);
+#endif
+            /* Configure Time Aware Shaper */
+            status |= Netc_EthSwt_Ip_ConfigTAS(SwitchIdx, Config);
 
-                VlanFilterEntryData.FID = (0U);
-                VlanFilterEntryData.MacLearningOptions = (2U);                  /* enable mac learning */
-                VlanFilterEntryData.MacForwardingOptions = (2U);                /* FDB lookup, if there is no match, then frame is flooded */
-                VlanFilterEntryData.IpMulticastFloodingEnable = FALSE;          /* IP multicast flooding disable */
-                VlanFilterEntryData.IpMulticastFilteringEnable = FALSE;         /* IP multicast filtering disable */
-                VlanFilterEntryData.BaseEgressTreatmentEntryID = 0xFFFFFFFFUL;    /* egress treatment processing is by-passed */
-
-                CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateVlanFilterTableEntry(0U, NETC_ETHSWT_ADD_CMD, &VlanMatchedEntries, &VlanFilterEntryData);
-                /* fail to add the Vlan Filter entry */
-                if ((CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES) || (VlanMatchedEntries != 0U))
-                {
-                    status = E_NOT_OK;
-                    break;
-                }
-            }
+#if (NETC_ETHSWT_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES > 0U)
+            /* Configure IngressStreamIdentification table */
+            status |= Netc_EthSwt_Ip_ConfigISITable(Config);
 #endif
 
-            /* check if TAS is enabled or not */
-            PortTimeAwareShaperEnabled[0U] = ((*((*(Config)).port))[0U].ePort->portTimeAwareShaperEnable || 
-                                              (*((*(Config)).port))[1U].ePort->portTimeAwareShaperEnable ||
-                                              (*((*(Config)).port))[2U].ePort->portTimeAwareShaperEnable) ? TRUE : FALSE;
+#if (NETC_ETHSWT_NUMBER_OF_SEQTAG_ENTRIES > 0U)
+            /* Configure IngressSequenceGeneration table */
+            status |= Netc_EthSwt_Ip_ConfigSeqGenTable(Config);
+#endif
 
-            if (TRUE ==  PortTimeAwareShaperEnabled[0U])
+#if (NETC_ETHSWT_NUMBER_OF_SEQRECOVERY_ENTRIES > 0U)
+            /* Configure EgressSequenceRecovery table */
+            status |= Netc_EthSwt_Ip_ConfigSeqRecTable(Config);
+#endif
+#if (NETC_ETHSWT_NUMBER_OF_EGRESSTREATMENT_ENTRIES > 0U)
+            /* Configure EgressTreatment table */
+            status |= Netc_EthSwt_Ip_ConfigEgressTreatmentTable(Config);
+#endif
+#if (NETC_ETHSWT_NUMBER_OF_FRAMEMODIFICATION_ENTRIES > 0U)
+            /* Configure FrameModification table */
+            status |= Netc_EthSwt_Ip_ConfigFrmModificationTable(Config);
+#endif
+#if (NETC_ETHSWT_NUMBER_OF_INGRESSSTREAM_ENTRIES > 0U)
+            /* Configure IngressStream table */
+            status |= Netc_EthSwt_Ip_ConfigIngressStreamTable(Config);
+#endif
+            /* Enable Ingress Port Filtering for ports 
+               (for PTP and Mirroring)
+               PTP traffic from PSI is injected as Tx management on desired external port and therefore not passing as Rx through pseudo-ports.
+               PTP frames sent to external devices from PSI will not be filtered when filtering on pseudo-ports is enabled.
+               Only PTP frames from VSIs will be redirected to Ingress on PSI when filtering is enabled on pseudo-ports. */
+            for (portIdx = 0U; portIdx < NETC_ETHSWT_NUMBER_OF_PORTS; portIdx++)
             {
-                /* Default time gate scheduling conditions on the port 0 */
-                CBDRStatus = InitTimeGateSchedulingFeature(SwitchIdx, 0U);
-                if (CBDRStatus != NETC_ETHSWT_CBDRSTATUS_SUCCES)
-                {
-                    status = E_NOT_OK;
-                }
-                else
-                {
-                    /* Add time gate scheduling table entries data */
-                    InitTimeGateSchedulingTableEntryData(Config);
-                }
+                status |= Netc_EthSwt_Ip_EnableIngressPortFiltering(SwitchIdx, portIdx, TRUE);
             }
         }
         else
@@ -4774,6 +6304,8 @@ Std_ReturnType Netc_EthSwt_Ip_ReadTrcvRegister( uint8 SwitchIdx, uint8 TrcvIdx, 
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
 #endif
 
+    (void)SwitchIdx;
+
     CtrlData = NETC_F1_EMDIO_CTL_PORT_ADDR(TrcvIdx) | NETC_F1_EMDIO_CTL_DEV_ADDR(RegIdx) \
              | NETC_F1_EMDIO_CTL_READ(1U);
 
@@ -4802,7 +6334,7 @@ Std_ReturnType Netc_EthSwt_Ip_ReadTrcvRegister( uint8 SwitchIdx, uint8 TrcvIdx, 
 
 /*FUNCTION**********************************************************************
  *
- * Function Name : Netc_EthSwt_Ip_ReadTrcvRegister
+ * Function Name : Netc_EthSwt_Ip_WriteTrcvRegister
  * Description   : External function for writing the content of a transceiver register
  * implements Netc_EthSwt_Ip_WriteTrcvRegister_Activity
  *END**************************************************************************/
@@ -4817,6 +6349,8 @@ Std_ReturnType Netc_EthSwt_Ip_WriteTrcvRegister( uint8 SwitchIdx, uint8 TrcvIdx,
 #if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
 #endif
+
+    (void)SwitchIdx;
 
     CtrlData = NETC_F1_EMDIO_CTL_PORT_ADDR(TrcvIdx) | NETC_F1_EMDIO_CTL_DEV_ADDR(RegIdx);
 
@@ -4856,6 +6390,8 @@ Std_ReturnType Netc_EthSwt_Ip_GetMirrorState( uint8 SwitchIdx, Netc_EthSwt_Ip_Sw
     DevAssert(MirrorStatePtr != NULL_PTR);
 #endif
 
+    (void)SwitchIdx;
+
     MirrorState = (IP_NETC__SW0_BASE->IMDCR0) & NETC_F2_IMDCR0_MIREN_MASK;
     *MirrorStatePtr = (MirrorState == 0U) ? (NETC_ETHSWT_MIRROR_DISABLED) : (NETC_ETHSWT_MIRROR_ENABLED);
 
@@ -4877,6 +6413,7 @@ Std_ReturnType Netc_EthSwt_Ip_SetMirrorState( uint8 SwitchIdx, Netc_EthSwt_Ip_Sw
     DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
 #endif
 
+    (void)SwitchIdx;
     RegIMDCR0 = IP_NETC__SW0_BASE->IMDCR0;
     if (NETC_ETHSWT_MIRROR_ENABLED == MirrorState)
     {
@@ -4905,18 +6442,19 @@ Std_ReturnType Netc_EthSwt_Ip_DeleteMirrorConfiguration( uint8 MirroredSwitchIdx
     uint16 EFMEntryId;
     uint8 MIRDestBit;
     uint32 MatchedEntries = 0U;
+    uint32 LocalImdCr1 = 0U;
 
 #if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(MirroredSwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
 #endif
-
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_06();
     if (TRUE == MirrorConfigurationDone)
     {
         if (MirroringIngressPortFilterEntryId != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID)
         {
             /* Delete ingress port filter entry */
             CBDRStatus = Netc_EthSwt_Ip_DeleteIngressPortFilterTableEntry(MirroredSwitchIdx, &MatchedEntries, MirroringIngressPortFilterEntryId);
-            if ((NETC_ETHSWT_CBDRSTATUS_SUCCES != CBDRStatus) || (0U == MatchedEntries))
+            if ((NETC_ETHSWT_CBDRSTATUS_SUCCES != CBDRStatus) || (0UL == MatchedEntries))
             {
                 Status = E_NOT_OK;
             }
@@ -4924,13 +6462,16 @@ Std_ReturnType Netc_EthSwt_Ip_DeleteMirrorConfiguration( uint8 MirroredSwitchIdx
             {
                 /* Set ingress port filter entry to NULL again */
                 MirroringIngressPortFilterEntryId = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;
+                Status = E_OK;
             }
         }
 
         /* Delete Frame modificatin entry */
         MIRDestBit = (uint8)((IP_NETC__SW0_BASE->IMDCR0 & NETC_F2_IMDCR0_MIRDEST_MASK) >> NETC_F2_IMDCR0_MIRDEST_SHIFT);
-        EFMEntryId = (uint16)(IP_NETC__SW0_BASE->IMDCR1 & NETC_F2_IMDCR1_EFMEID_MASK);
-        if ((EFMEntryId != 0xFFFFU) && (MIRDestBit == 0U))
+        /* Read the register value in a local variable since it should have been read more than once. */
+        LocalImdCr1 = IP_NETC__SW0_BASE->IMDCR1;
+        EFMEntryId = (uint16)(LocalImdCr1 & NETC_F2_IMDCR1_EFMEID_MASK);
+        if ((EFMEntryId != NETC_ETHSWT_IP_UINT16_NULL_ENTRY_ID) && (MIRDestBit == (uint8)0U))
         {
             CBDRStatus = Netc_EthSwt_Ip_DeleteFrmModificationTableEntry(MirroredSwitchIdx, EFMEntryId, &MatchedEntries);
             if ((NETC_ETHSWT_CBDRSTATUS_SUCCES != CBDRStatus) || (0U == MatchedEntries))
@@ -4939,11 +6480,12 @@ Std_ReturnType Netc_EthSwt_Ip_DeleteMirrorConfiguration( uint8 MirroredSwitchIdx
             }
             else
             {
-                EFMEntryId = (uint16)(NETC_F2_IMDCR1_EFMEID(0xFFFFU));        /* set frame modification table entry ID to NULL */
-                IP_NETC__SW0_BASE->IMDCR1 |= EFMEntryId;
+                EFMEntryId = (uint16)(NETC_F2_IMDCR1_EFMEID(NETC_ETHSWT_IP_UINT16_NULL_ENTRY_ID));        /* set frame modification table entry ID to NULL */
+                LocalImdCr1 |= EFMEntryId;
+                IP_NETC__SW0_BASE->IMDCR1 = LocalImdCr1;
+                Status = E_OK;
             }
         }
-
         if ((uint8)(E_OK) == Status)
         {
             Status = Netc_EthSwt_Ip_SetMirrorState(MirroredSwitchIdx, NETC_ETHSWT_MIRROR_DISABLED);
@@ -4956,6 +6498,8 @@ Std_ReturnType Netc_EthSwt_Ip_DeleteMirrorConfiguration( uint8 MirroredSwitchIdx
             MirrorConfigurationDone = FALSE;
         }
     }
+
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_06();
 
     return Status;
 }
@@ -4983,8 +6527,80 @@ static inline void CheckMacAddressFilterEnableFlag(boolean *SrcMacAddrFilterEnab
     }
 }
 
-/* inline function for enabling mac address filtering */
-static inline Std_ReturnType ConfigAndEnableIngressPortFiltering(uint8 MirroredSwitchIdx, const boolean *SrcMacAddrFilterEnabled,
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigIngressPortFilterForTimestamping
+ * implements Netc_EthSwt_Ip_ConfigIngressPortFilterForTimestamping_Activity
+ *END**************************************************************************/
+Std_ReturnType Netc_EthSwt_Ip_ConfigIngressPortFilterForTimestamping(uint8 SwitchIdx)
+{
+
+    Netc_EthSwt_Ip_IngressPortFilterEntryDataType IngressPortFilterTableEntry = {0};
+    uint8 Index;
+    uint32 MatchedEntries;
+    Std_ReturnType Status;
+
+    /* CFGE Data */
+    IngressPortFilterTableEntry.IngressPortFilterCfgeData.CfgeOverrideIpv = FALSE;  /* Leave IPV as-is */
+    IngressPortFilterTableEntry.IngressPortFilterCfgeData.CfgeOverrideDr = FALSE;   /* Leave DR as-is */
+    IngressPortFilterTableEntry.IngressPortFilterCfgeData.CfgeFilterForwardingAction = NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_REDIRECTFRAMES; /* Redirect frame to management port*/
+    IngressPortFilterTableEntry.IngressPortFilterCfgeData.CfgeIngressMirroringEnable = FALSE;   /* Ingress Mirroring disabled */
+    IngressPortFilterTableEntry.IngressPortFilterCfgeData.CfgeWakeOnLanTriggerEnable = FALSE;   /* Wake-On-LAN triggering disabled */
+    IngressPortFilterTableEntry.IngressPortFilterCfgeData.CfgeFilterAction = NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_NOACTION; /* Not routing to any RP/Ingress Stream */
+    IngressPortFilterTableEntry.IngressPortFilterCfgeData.CfgeHostReason = (uint8)NETC_ETHSWT_IP_HOSTREASON_SW_PTP;   /* Software-defined hostreason to mark frame as PTP-specific */
+    IngressPortFilterTableEntry.IngressPortFilterCfgeData.CfgeTargetForSelectedFilterAction = 0xFFFFFFFFUL; /* RP/Ingress Stream by-passed */
+
+    /* KEYE Data */
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyePrecedence = 0xFFFFU; /* Set highest priority for filter */
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeFrmAttributeFlagsMask = 0x0U; /* Mask all frame attribute flags (Do not filter based on them) */
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeDifferentiatedServicesCodePointMask = 0x0U; /* Do not filter based on Differentiated Services Code Point */
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeSourcePortIDMask = 0x0U;  /* Do not filter based on Source Port */
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeOuterVLANTagControlInformationMask = 0x0U;    /* Do not filter based on Outer VLAN Tag Control Information */
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeInnerVLANTagControlInformationMask = 0x0U;    /* Do not filter based on Inner VLAN Tag Control Information */
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeEtherTypeMask = 0x0U; /* Do not filter based on EtherType */
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeIPProtocolMask = 0x0U;    /* Do not filter based on IP Protocol field */
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeL4SourcePortMask = 0x0U; /* Do not filter based on L4 Source Port */
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeL4DestinationPortMask = 0x0U;  /* Do not filter based on L4 Destination Port */
+
+    for (Index = 0; Index < 6U; Index++)
+    {
+        IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeDstMacAddrMask[Index] = 0xFU; /* Filter based on Destination MAC Address */
+        IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeSrcMacAddrMask[Index] = 0x0U; /* Do not filter based on Source MAC Address */
+    }
+    for (Index = 0; Index < 4U; Index++)
+    {
+        IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeIPSourceAddressMask[Index] = 0x0U;        /* Do not filter based on IP Source Address */
+        IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeIPDestinationAddressMask[Index] = 0x0U;   /* Do not filter based on IP Destination Address */
+    }
+    for (Index = 0; Index < 24U; Index++)
+    {
+        IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyePayloadBytesMask[Index] = 0x0U;   /* Do not filter based on Payload Bytes */
+    }
+
+    /* Generic PTP messages DMAC: 01-1B-19-00-00-00 */
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeDstMacAddr[0U] = 0x01U;
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeDstMacAddr[1U] = 0x1BU;
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeDstMacAddr[2U] = 0x19U;
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeDstMacAddr[3U] = 0x00U;
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeDstMacAddr[4U] = 0x00U;
+    IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeDstMacAddr[5U] = 0x00U;
+    Status = (Netc_EthSwt_Ip_AddIngressPortFilterTableEntry(SwitchIdx, &MatchedEntries, &IngressPortFilterTableEntry) == NETC_ETHSWT_CBDRSTATUS_SUCCES) ? E_OK : E_NOT_OK;
+
+    if (Status == E_OK)
+    {
+        /* Peer delay message DMAC: 01-80-C2-00-00-0E */
+        IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeDstMacAddr[1U] = 0x80U;
+        IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeDstMacAddr[2U] = 0xC2U;
+        IngressPortFilterTableEntry.IngressPortFilterkeyeData.KeyeDstMacAddr[5U] = 0x0EU;
+        Status = (Netc_EthSwt_Ip_AddIngressPortFilterTableEntry(SwitchIdx, &MatchedEntries, &IngressPortFilterTableEntry) == NETC_ETHSWT_CBDRSTATUS_SUCCES) ? E_OK : E_NOT_OK;
+    }
+
+    return Status;
+}
+
+/* inline function for enabling mac address filtering for port mirroring*/
+static inline Std_ReturnType Netc_EthSwt_Ip_ConfigIngressPortFilterForPortMirroring(uint8 MirroredSwitchIdx, const boolean *SrcMacAddrFilterEnabled,
                                                                  const boolean *DstMacAddrFilterEnabled,
                                                                  const Netc_EthSwt_Ip_SwitchMirrorCfgType* MirrorConfigurationPtr,
                                                                  Netc_EthSwt_Ip_IngressPortFilterEntryDataType *IngressPortFilterTableEntry
@@ -4995,6 +6611,10 @@ static inline Std_ReturnType ConfigAndEnableIngressPortFiltering(uint8 MirroredS
     uint8 MacByteIdx;
     uint8 PayloadByteIdx;
     uint32 MatchedEntries;
+
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(MirroredSwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
 
     /* config and add one ingress port filter table entry */
     IngressPortFilterTableEntry->IngressPortFilterCfgeData.CfgeOverrideIpv = FALSE;
@@ -5052,9 +6672,9 @@ static inline Std_ReturnType ConfigAndEnableIngressPortFiltering(uint8 MirroredS
     {
         IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePayloadBytesMask[PayloadByteIdx] = 0x0U;
     }
-    IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePrecedence = 0xFFFFU;      /* precedence, maximum priority */
+    IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePrecedence = NETC_ETHSWT_IP_UINT16_NULL_ENTRY_ID;      /* precedence, maximum priority */
 
-    if (MirrorConfigurationPtr->VlanIdFilter != 0xFFFFU)
+    if (MirrorConfigurationPtr->VlanIdFilter != NETC_ETHSWT_IP_UINT16_NULL_ENTRY_ID)
     {
         MirrorCfgBackup.VlanIdFilter = MirrorConfigurationPtr->VlanIdFilter;
 
@@ -5064,7 +6684,7 @@ static inline Std_ReturnType ConfigAndEnableIngressPortFiltering(uint8 MirroredS
     }
     else
     {
-        MirrorCfgBackup.VlanIdFilter = 0xFFFFU;
+        MirrorCfgBackup.VlanIdFilter = NETC_ETHSWT_IP_UINT16_NULL_ENTRY_ID;
         IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeOuterVLANTagControlInformationMask = 0x0U;
     }
 
@@ -5083,13 +6703,17 @@ static inline Std_ReturnType ConfigAndEnableIngressPortFiltering(uint8 MirroredS
 }
 
 /* inline function for retagging /double tagging egress frames with frame modification table entry */
-static inline Std_ReturnType ConfigAndEnableEgressFramesModification(uint8 MirroredSwitchIdx, const Netc_EthSwt_Ip_SwitchMirrorCfgType* MirrorConfigurationPtr)
+static inline Std_ReturnType Netc_EthSwt_Ip_ConfigEgressFrameModificationForPortMirroring(uint8 MirroredSwitchIdx, const Netc_EthSwt_Ip_SwitchMirrorCfgType* MirrorConfigurationPtr)
 {
     Std_ReturnType Status = E_OK;
     Netc_EthSwt_Ip_CBDRStatusType CBDRStatus;
     uint32 RegIMDCR1 = 0x0UL;
     uint32 MatchedEntries = 0x0UL;
     Netc_EthSwt_Ip_FrmModificationEntryDataType FrmModificationEntry = {0};
+
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(MirroredSwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
 
     if (MirrorConfigurationPtr->MirroringMode != NETC_ETHSWT_NO_VLAN_RETAGGING)
     {
@@ -5105,7 +6729,7 @@ static inline Std_ReturnType ConfigAndEnableEgressFramesModification(uint8 Mirro
         FrmModificationEntry.OuterPcpAction = 0U;                           /* Use TPID, PCP and DEI from outer VLAN header */
         FrmModificationEntry.SequenceTagAction = 0U;
         FrmModificationEntry.PayloadActions = 0U;
-        FrmModificationEntry.FrmModificationDataEntryID = 0xFFFFFFFFUL;     /* frame modification data table entry id */
+        FrmModificationEntry.FrmModificationDataEntryID = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;     /* frame modification data table entry id */
 
         CBDRStatus = Netc_EthSwt_Ip_AddOrUpdateFrmModificationTableEntry(MirroredSwitchIdx, NETC_ETHSWT_ADD_CMD, &MatchedEntries, &FrmModificationEntry);
         if (NETC_ETHSWT_CBDRSTATUS_SUCCES == CBDRStatus)
@@ -5163,15 +6787,17 @@ Std_ReturnType Netc_EthSwt_Ip_WriteMirrorConfiguration( uint8 MirroredSwitchIdx,
         /* Write IMDCR0 register */
         IP_NETC__SW0_BASE->IMDCR0 = RegIMDCR0;
 
-        RegIMDCR1 = NETC_F2_IMDCR1_EFMEID(0xFFFFU);        /* set frame modification table entry ID to NULL */
-        IP_NETC__SW0_BASE->IMDCR1 |= RegIMDCR1;
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_11();
+        RegIMDCR1 = IP_NETC__SW0_BASE->IMDCR1;
+        RegIMDCR1 |= NETC_F2_IMDCR1_EFMEID(NETC_ETHSWT_IP_UINT16_NULL_ENTRY_ID);        /* set frame modification table entry ID to NULL */
+        IP_NETC__SW0_BASE->IMDCR1 = RegIMDCR1;
 
         /* check if Mac Address Filter enabled */
         CheckMacAddressFilterEnableFlag(&SrcMacAddrFilterEnabled, &DstMacAddrFilterEnabled, MirrorConfigurationPtr);
 
         /* Start writing mirroring configuration */
         /* #1 */
-        if ((MirrorConfigurationPtr->VlanIdFilter == 0xFFFFU) && (DstMacAddrFilterEnabled == FALSE) && (SrcMacAddrFilterEnabled == FALSE))
+        if ((MirrorConfigurationPtr->VlanIdFilter == NETC_ETHSWT_IP_UINT16_NULL_ENTRY_ID) && (DstMacAddrFilterEnabled == FALSE) && (SrcMacAddrFilterEnabled == FALSE))
         {
             /* Enable port mirroring according to TrafficDirectionIngressBitMask */
             IngressBitMask = MirrorConfigurationPtr->TrafficDirectionIngressBitMask;
@@ -5186,24 +6812,12 @@ Std_ReturnType Netc_EthSwt_Ip_WriteMirrorConfiguration( uint8 MirroredSwitchIdx,
         }
         else    /* #2 ingress port filtering */
         {
-            /* using bitmask to enable port filtering */
-            IngressBitMask = MirrorConfigurationPtr->TrafficDirectionIngressBitMask;
-            for(PortIdx = 0U; PortIdx < NETC_ETHSWT_NUMBER_OF_PORTS; PortIdx++)
-            {
-                if((IngressBitMask & 0x1U) == 0x1U)
-                {
-                    /* Enable ingress port filter table lookup function for ports */
-                    Status = Netc_EthSwt_Ip_EnableIngressPortFiltering(MirroredSwitchIdx, PortIdx, TRUE);
-                }
-                IngressBitMask >>= 1U;
-            }
-
             /* Config and add the ingress port filter table entry for ingress frames filtering */
-            Status |= ConfigAndEnableIngressPortFiltering(MirroredSwitchIdx, &SrcMacAddrFilterEnabled, &DstMacAddrFilterEnabled, MirrorConfigurationPtr, &IngressPortFilterTableEntry);
+            Status |= Netc_EthSwt_Ip_ConfigIngressPortFilterForPortMirroring(MirroredSwitchIdx, &SrcMacAddrFilterEnabled, &DstMacAddrFilterEnabled, MirrorConfigurationPtr, &IngressPortFilterTableEntry);
         }
 
         /* #3 egress frame modification */
-        Status |= ConfigAndEnableEgressFramesModification(MirroredSwitchIdx, MirrorConfigurationPtr);
+        Status |= Netc_EthSwt_Ip_ConfigEgressFrameModificationForPortMirroring(MirroredSwitchIdx, MirrorConfigurationPtr);
 
         if ((uint8)(E_OK) == Status)
         {
@@ -5216,8 +6830,10 @@ Std_ReturnType Netc_EthSwt_Ip_WriteMirrorConfiguration( uint8 MirroredSwitchIdx,
             MirrorCfgBackup.CapturePortIdx = MirrorConfigurationPtr->CapturePortIdx;
             MirrorCfgBackup.TrafficDirectionIngressBitMask = MirrorConfigurationPtr->TrafficDirectionIngressBitMask;
         }
-    }
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_11();
 
+    }
+  
     return Status;
 }
 
@@ -5237,6 +6853,7 @@ Std_ReturnType Netc_EthSwt_Ip_ReadMirrorConfiguration( uint8 MirroredSwitchIdx, 
     DevAssert(MirrorConfigurationPtr != NULL_PTR);
 #endif
 
+    (void)MirroredSwitchIdx;
     if (TRUE == MirrorConfigurationDone)    /* The mirror configuration is in place */
     {
         for (MacByteIdx = 0U; MacByteIdx < NETC_ETHSWT_IP_MACADDRLEN; MacByteIdx++)
@@ -5257,9 +6874,9 @@ Std_ReturnType Netc_EthSwt_Ip_ReadMirrorConfiguration( uint8 MirroredSwitchIdx, 
             MirrorConfigurationPtr->SrcMacAddrFilter[MacByteIdx] = 0x0U;
             MirrorConfigurationPtr->DstMacAddrFilter[MacByteIdx] = 0x0U;
         }
-        MirrorConfigurationPtr->VlanIdFilter = 0xFFFFU;
+        MirrorConfigurationPtr->VlanIdFilter = NETC_ETHSWT_IP_UINT16_NULL_ENTRY_ID;
         MirrorConfigurationPtr->MirroringMode = NETC_ETHSWT_NO_VLAN_RETAGGING;
-        MirrorConfigurationPtr->VlanId = 0xFFFFU;
+        MirrorConfigurationPtr->VlanId = NETC_ETHSWT_IP_UINT16_NULL_ENTRY_ID;
         MirrorConfigurationPtr->CapturePortIdx = 0U;
         MirrorConfigurationPtr->TrafficDirectionIngressBitMask = 0x0UL;
     }
@@ -5267,6 +6884,3090 @@ Std_ReturnType Netc_EthSwt_Ip_ReadMirrorConfiguration( uint8 MirroredSwitchIdx, 
     return Status;
 }
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_MainFunction
+ * Description   : Periodically called function to age FDB entries
+ * implements Netc_EthSwt_Ip_MainFunction_Activity
+ *END**************************************************************************/
+void Netc_EthSwt_Ip_MainFunction( uint8 SwitchIdx )
+{
+    Std_ReturnType Status = E_OK;
+    Netc_EthSwt_Ip_CBDRStatusType DeleteStatus;
+    uint32 ResumeEntryId;
+    uint32 EntryId;
+    boolean FoundEntry;
+    uint32 HwAgingCount;
+    float32 MainFunctionCycleSteps;
+    float32 CalNumAgingCycle;
+    float32 AgingTimeout;
+    float32 mainPeriod;
+
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#endif
+
+    mainPeriod = (float32)NETC_ETHSWT_IP_MAIN_FUNCTION_PERIOD;
+
+    /* Calculating the number of MAIN_FUNCTION_PERIOD we needed to skip to fit in the limited number of hardware steps the hardware aging counter can accommodate. */
+    CalNumAgingCycle = (float32)Netc_EthSwt_Ip_FdbTableEntryTimeout[SwitchIdx];
+    CalNumAgingCycle /= mainPeriod;
+    if (CalNumAgingCycle < NETC_ETHSWT_IP_NUM_AGING_CYCLE_FLOAT)
+    {
+        /* The number of steps is 1 if we number of Netc_EthSwt_Ip_FdbTableEntryTimeout/NETC_ETHSWT_IP_MAIN_FUNCTION_PERIOD give us a Number of steps less than the number of steps the hardware can accommodate. */
+        MainFunctionCycleSteps = NETC_ETHSWT_IP_ONE_FLOAT;
+    }
+    else
+    {
+        /* In the case there is not a sufficient number of steps in hardware, we skip a number of MAIN_FUNCTION_PERIOD before we increment the hardware aging counter.
+           The number of skip cycle is deternimned by a round up of the number of steps we would like to have (Netc_EthSwt_Ip_FdbTableEntryTimeout/NETC_ETHSWT_IP_MAIN_FUNCTION_PERIOD)
+           divided by the number of steps supported by hardware. Note that (Netc_EthSwt_Ip_FdbTableEntryTimeout/NETC_ETHSWT_IP_MAIN_FUNCTION_PERIOD) is padded to give a rounded up result. */
+        /* Extract the number of funtion period */
+        MainFunctionCycleSteps = (float32)(Netc_EthSwt_Ip_FdbTableEntryTimeout[SwitchIdx]);
+        MainFunctionCycleSteps /= mainPeriod;
+        /* Rounding up the number of aging cycles steps */
+        MainFunctionCycleSteps += NETC_ETHSWT_IP_NUM_AGING_CYCLE_FLOAT - NETC_ETHSWT_IP_ONE_FLOAT;
+        /* Extract the number of steps */
+        MainFunctionCycleSteps /= NETC_ETHSWT_IP_NUM_AGING_CYCLE_FLOAT;
+        /* Convert float32 to uint32, missing lroundf from C99 */
+        if(MainFunctionCycleSteps <= NETC_ETHSWT_IP_ONE_FLOAT)
+        {
+            MainFunctionCycleSteps = (float32)NETC_ETHSWT_IP_ONE_FLOAT;
+        }
+    }
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_61();
+    Netc_EthSwt_Ip_MainFunctionCycle[SwitchIdx]++;
+
+    if(((float32)Netc_EthSwt_Ip_MainFunctionCycle[SwitchIdx]) >= MainFunctionCycleSteps)
+    {
+        /* Aging action */
+        /* Activity update, ACT_CNT++ if no ACT_FLAG otherwise 0 */
+        ResumeEntryId = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;
+        do
+        {
+            Status |= Netc_EthSwt_Ip_SearchAndAgeEntryInFdbTable(SwitchIdx, &ResumeEntryId, &EntryId,  &HwAgingCount, &FoundEntry);
+            if(((Std_ReturnType)E_OK == Status) && (TRUE == FoundEntry))
+            {
+                AgingTimeout = (float32)HwAgingCount;
+                AgingTimeout *= MainFunctionCycleSteps;
+                AgingTimeout *= mainPeriod;
+                if(AgingTimeout >= (float32) (Netc_EthSwt_Ip_FdbTableEntryTimeout[SwitchIdx]))
+                {
+                    DeleteStatus = Netc_EthSwt_Ip_DeleteFdbTableEntryById(SwitchIdx, EntryId);
+                    if(NETC_ETHSWT_CBDRSTATUS_SUCCES != DeleteStatus)
+                    {
+                        Status = E_NOT_OK;
+                    }
+                }
+            }
+        } while (((Std_ReturnType)E_OK == Status)
+          && ((uint32)NETC_ETHSWT_IP_BD_NULL_ENTRY_ID != ResumeEntryId) );
+        Netc_EthSwt_Ip_MainFunctionCycle[SwitchIdx] = 0UL;
+    }
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_61();
+
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_SetPruningMode
+ * Description   : External function for setting the pruning mode for ports.
+ * implements Netc_EthSwt_Ip_SetPruningMode_Activity
+ *END**************************************************************************/
+Std_ReturnType Netc_EthSwt_Ip_SetPruningMode(uint8 SwitchIdx, uint8 SwitchPortIdx, boolean PruningEnable)
+{
+    Std_ReturnType Status = E_OK;
+    uint32 bridgePortConfig = 0UL;
+
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_PORTS);
+#endif
+
+    (void)SwitchIdx;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_59();
+
+    /* read the BPCR configurate data first */
+    bridgePortConfig = Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->BPCR;
+
+    /* Configure the pruning setting for the port */
+    if (FALSE == PruningEnable)
+    {
+        bridgePortConfig |= SW_PORT0_BPCR_SRCPRND_MASK;
+    }
+    else
+    {
+        bridgePortConfig &= ~SW_PORT0_BPCR_SRCPRND_MASK;
+    }
+
+    /* write the BPCR configuration back */
+    Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->BPCR = bridgePortConfig;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_59();
+
+    return Status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_GetPruningMode
+ * Description   : External function for getting the pruning mode of ports.
+ * implements Netc_EthSwt_Ip_GetPruningMode_Activity
+ *END**************************************************************************/
+Std_ReturnType Netc_EthSwt_Ip_GetPruningMode(uint8 SwitchIdx, uint8 SwitchPortIdx, boolean *PruningEnablePtr)
+{
+    Std_ReturnType Status = E_OK;
+    uint32 bridgePortConfig = 0UL;
+
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_PORTS);
+    DevAssert(PruningEnablePtr != NULL_PTR);
+#endif
+
+    (void)SwitchIdx;
+
+    /* read the BPCR configurate data first */
+    bridgePortConfig = Netc_EthSwt_Ip_SW0_PortxBaseAddr[SwitchPortIdx]->BPCR;
+
+    /* get the pruning mode data for the port */
+    *PruningEnablePtr = ((bridgePortConfig & SW_PORT0_BPCR_SRCPRND_MASK) == 0x0UL) ? TRUE : FALSE;
+
+    return Status;
+}
+
+#if(NETC_ETHSWT_IP_CONFIG_LINK_PROTOCOL == STD_ON)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConfigLinkProtocol
+ * Description   : External function for configuring the MII protocol for ethernet ports.
+ *
+ *END**************************************************************************/
+static void Netc_EthSwt_Ip_ConfigLinkProtocol(uint8 SwitchIdx, uint8 SwitchPortIdx, Netc_EthSwt_Ip_XmiiModeType EthSwtPortPhysicalLayerType)
+{
+    uint32 Netcc1Reg;
+
+#if(NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_ON)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_PORTS);
+#endif
+
+    (void)SwitchIdx;
+
+    if(SwitchPortIdx < NETC_ETHSWT_NUMBER_OF_MAC_PORTS)
+    {
+        /* read NETCC1 register first */
+        Netcc1Reg = IP_GPR1->NETCC1;
+
+        /* modify the value for NETCC1 */
+        if ((uint8)NETC_ETHSWT_PORT0 == SwitchPortIdx)     /* link 0 */
+        {
+            Netcc1Reg |= GPR1_NETCC1_LINK0MIIP(EthSwtPortPhysicalLayerType);
+        }
+        else if ((uint8)NETC_ETHSWT_PORT1 == SwitchPortIdx)    /* link 1 */
+        {
+            Netcc1Reg |= GPR1_NETCC1_LINK1MIIP(EthSwtPortPhysicalLayerType);
+        }
+        else
+        {
+            /* avoid MISRA violation */
+        }
+
+        /* write it back */
+        IP_GPR1->NETCC1 = Netcc1Reg;
+    }
+
+}
+#endif
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_ConvertToPtpTime
+ * Description   : Convert 64-bit clock value (ns) to PTP ptpTime (secondsHi,seconds, nanoseconds)
+ *END**************************************************************************/
+static void Netc_EthSwt_Ip_ConvertToPtpTime(const uint64 clk, Netc_EthSwt_Ip_PtpTimeType *ptpTime)
+{
+    uint64 seconds64;
+
+    /* convert the ns to seconds */
+    seconds64 = clk / 1000000000UL;
+    ptpTime->seconds   = (uint32) seconds64;
+    ptpTime->secondsHi = (uint16) (seconds64 >> 32U);
+
+    /* convert the portion that is less than 1s to ns */
+    ptpTime->nanoseconds = (uint32) (clk - (uint64) (seconds64 * 1000000000UL));
+
+    return;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_GetPtpTSClk
+ * Description   : External function for getting current ptpTime of free running (ptpTime stamp) clock.
+ * implements Netc_EthSwt_Ip_GetPtpTSClk_Activity
+ *END**************************************************************************/
+Std_ReturnType Netc_EthSwt_Ip_GetPtpTSClk( uint8 SwitchIdx, Netc_EthSwt_Ip_PtpTimeType *PtpTime)
+{
+    Std_ReturnType Status = E_OK;
+    volatile uint64 FreeRunningTicks;
+    uint64 clk;
+
+    (void)SwitchIdx;
+
+    if (TimerOriginalRefClk != 0x0UL)
+    {
+        /* Read free running time registers */
+        FreeRunningTicks = IP_NETC__TMR0_BASE->TMR_FRT_L;      /* should read the Lower register first */
+        FreeRunningTicks |= ((uint64)(IP_NETC__TMR0_BASE->TMR_FRT_H)) << NETC_ETHSWT_IP_32BIT_SHIFT;
+
+        /* Convert free running ticks to nano seconds */
+        clk = FreeRunningTicks * (uint64)((uint32)((1000U) / (TimerOriginalRefClk/1000000U)));
+
+        /* Convert ns time to PTP time */
+        Netc_EthSwt_Ip_ConvertToPtpTime(clk, PtpTime);
+    }
+    else
+    {
+        Status = E_NOT_OK;      /* 1588 timer is not enabled. */
+    }
+
+    return Status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_GetPtpClk
+ * Description   : External function for getting current ptpTime of corrected clock (PTP_CLK).
+ * implements Netc_EthSwt_Ip_GetPtpClk_Activity
+ *END**************************************************************************/
+Std_ReturnType Netc_EthSwt_Ip_GetPtpClk( uint8 SwitchIdx, Netc_EthSwt_Ip_PtpTimeType *PtpTime)
+{
+    Std_ReturnType Status = E_OK;
+    volatile uint64 FreeRunningTicks;
+    volatile uint64 CorrectedTime;
+
+    (void)SwitchIdx;
+
+    if (TimerRefClk != 0x0UL)
+    {
+        /* Read Timer synchronous time registers */
+        FreeRunningTicks = IP_NETC__TMR0_BASE->TMR_FRT_L;      /* A read to TMR_FRT_L captures all 64b of FRT_H/L and 64b of SRT_H/L, for an atomic read of all 4 registers. */
+        (void)FreeRunningTicks;                                /* The cast is necessary to avoid the compiler warning. The register read is needed in order to trigger an atomic read of all 4 timer registers. */
+        CorrectedTime = IP_NETC__TMR0_BASE->TMR_SRT_L;
+        CorrectedTime |= (((uint64)(IP_NETC__TMR0_BASE->TMR_SRT_H)) << NETC_ETHSWT_IP_32BIT_SHIFT);
+
+        /* Convert ns time to PTP time */
+        Netc_EthSwt_Ip_ConvertToPtpTime(CorrectedTime, PtpTime);
+    }
+    else
+    {
+        Status = E_NOT_OK;      /* 1588 timer is not enabled. */
+    }
+
+    return Status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_GetPtpTimes
+ * Description   : External function for retrieving an atomic snapshot of both clocks in the switch.
+ * implements Netc_EthSwt_Ip_GetPtpTimes_Activity
+ *END**************************************************************************/
+Std_ReturnType Netc_EthSwt_Ip_GetPtpTimes( uint8 SwitchIdx, Netc_EthSwt_Ip_PtpTimeType *FreeRunTime, Netc_EthSwt_Ip_PtpTimeType *CorrTime)
+{
+    Std_ReturnType Status = E_OK;
+    volatile uint64 FreeRunningTicks;
+    volatile uint64 CorrectedTime;
+    uint64 clk;
+
+    (void)SwitchIdx;
+
+    if (TimerRefClk != 0x0UL)
+    {
+        /* A read to TMR_FRT_L captures all 64b of FRT_H/L and 64b of SRT_H/L, for an atomic read of all 4 registers. */
+        FreeRunningTicks = IP_NETC__TMR0_BASE->TMR_FRT_L;
+        FreeRunningTicks |= ((uint64)(IP_NETC__TMR0_BASE->TMR_FRT_H)) << NETC_ETHSWT_IP_32BIT_SHIFT;
+        CorrectedTime = IP_NETC__TMR0_BASE->TMR_SRT_L;
+        CorrectedTime |= ((uint64)(IP_NETC__TMR0_BASE->TMR_SRT_H)) << NETC_ETHSWT_IP_32BIT_SHIFT;
+
+        /* Convert free running ticks to nano seconds */
+        clk = FreeRunningTicks * (uint64)((uint32)((1000U) / (TimerOriginalRefClk/1000000U)));
+
+        /* Convert free running ns time to PTP time */
+        Netc_EthSwt_Ip_ConvertToPtpTime(clk, FreeRunTime);
+
+        /* Convert synced ns time to PTP time */
+        Netc_EthSwt_Ip_ConvertToPtpTime(CorrectedTime, CorrTime);
+    }
+    else
+    {
+        Status = E_NOT_OK;      /* 1588 timer is not enabled. */
+    }
+
+    return Status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_SetPtpClkRatio
+ * Description   : External function for adjusting the clock rate of the PTP clock.
+ * implements Netc_EthSwt_Ip_SetPtpClkRatio_Activity
+ *END**************************************************************************/
+Std_ReturnType Netc_EthSwt_Ip_SetPtpClkRatio( uint8 SwitchIdx, uint32 ClkRatio )
+{
+    Std_ReturnType Status = E_OK;
+    float32 ConvertedClkRatio;
+    uint16 TimerClkPeriod;
+    uint32 ClkAddendData;
+    uint32 TimerClkAddend;
+    uint32 IntegerPortion;
+    float32 FractionalPortion;
+	uint32 ClkRatioTemp;
+
+    (void)SwitchIdx;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_02();
+    if (TimerRefClk != 0x0UL)
+    {
+        /* convert uint32 ClkRatio to a float */
+        IntegerPortion = (uint32)((ClkRatio & 0x80000000U) >> 31U);
+		ClkRatioTemp = ClkRatio & 0x7FFFFFFFUL;
+        FractionalPortion = (float32)ClkRatioTemp/(float32)0x80000000UL;
+        ConvertedClkRatio = (float32)((float32)IntegerPortion + FractionalPortion);
+
+        /* modify the clock frequency */
+        TimerRefClk = (uint32)((float32)TimerRefClk * ConvertedClkRatio);
+
+        TimerClkPeriod = (uint16)(1000U/(TimerRefClk/1000000U));                              /* the integer portion of timer clock period (1/f) */
+        ClkAddendData = (1000000U/(TimerRefClk/1000000U)) - (1000U * TimerClkPeriod);
+        TimerClkAddend = (uint32)((((uint64)0x1U << NETC_ETHSWT_IP_32BIT_SHIFT) * ClkAddendData) / 1000U);  /* the fractional part of the timer clock period. */
+
+        /* Timer addend register holds the fractional part of the timer clock period */
+        IP_NETC__TMR0_BASE->TMR_ADD = TMR0_BASE_TMR_ADD_ADDEND(TimerClkAddend);
+        /* clear CLK_PERIOD data field first */
+        IP_NETC__TMR0_BASE->TMR_CTRL &= ~TMR0_BASE_TMR_CTRL_TCLK_PERIOD(0x3FFF);
+        IP_NETC__TMR0_BASE->TMR_CTRL |= TMR0_BASE_TMR_CTRL_TCLK_PERIOD(TimerClkPeriod);
+    }
+    else
+    {
+        Status = E_NOT_OK;      /* 1588 timer is not enabled. */
+    }
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_02();
+
+    return Status;
+}
+
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_CorrectPtpClk
+ * Description   : External function for adding/subtracting an offset to/from the corrected clock (PTP_CLK).
+ * implements Netc_EthSwt_Ip_CorrectPtpClk_Activity
+ *END**************************************************************************/
+Std_ReturnType Netc_EthSwt_Ip_CorrectPtpClk( uint8 SwitchIdx, sint64 Offset )
+{
+    Std_ReturnType Status = E_OK;
+    uint64 OriginOffset;
+    uint64 NewOffset;
+
+    (void)SwitchIdx;
+
+    /* get the existing offset first */
+    OriginOffset = IP_NETC__TMR0_BASE->TMROFF_L;
+    OriginOffset |= (uint64)(IP_NETC__TMR0_BASE->TMROFF_H) << NETC_ETHSWT_IP_32BIT_SHIFT;
+
+    /* modify the offset */
+    NewOffset = OriginOffset + ((uint64) (Offset));    /* the offset could be positive or negative */
+
+    /* write the new offset back */
+    IP_NETC__TMR0_BASE->TMROFF_L = (uint32)NewOffset;
+    IP_NETC__TMR0_BASE->TMROFF_H = (uint32)(NewOffset >> NETC_ETHSWT_IP_32BIT_SHIFT);
+
+    return Status;
+}
+
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_AddOrUpdateRatePolicerTableEntry
+ * Description   : Ethernet Switch Add or Update rate policer table entry function.Netc_EthSwt_Ip_ConvertToPtpTime
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateRatePolicerTableEntry( uint8 SwitchIdx,
+                                                                               Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                               uint32 *MatchedEntries,
+                                                                               const Netc_EthSwt_Ip_RatePolicerEntryDataType * RatePolicerTableEntry
+                                                                             )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(RatePolicerTableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add and Update commands */
+    if ((NETC_ETHSWT_ADD_CMD != Cmd) && (NETC_ETHSWT_UPDATE_CMD != Cmd))
+    {
+        status = NETC_ETHSWT_CBDRSTATUS_INVALID_CMD;    /* not supported command */
+    }
+    else
+    {
+        /* set table version and CFGEU, FEEU, ... flag */
+        ActionsData = (NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(RatePolicerTableEntry->ConfigurationElementUpdate ? 1U : 0U) \
+                    | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_FEEU(RatePolicerTableEntry->FunctionalEnableElementUpdate ? 1U : 0U)) \
+                    | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_PSEU(RatePolicerTableEntry->PolicerStateElementUpdate ? 1U : 0U) \
+                    | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_STSEU(RatePolicerTableEntry->StatisticsElementUpdate ? 1U : 0U) \
+                    | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_03();
+        /* ------initialize the table request data buffer------ */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = RatePolicerTableEntry->RatePolicerEntryId;        /* fill in Entry_ID field (Access Key) */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Cir;  /* CFGE CIR field */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA1] = RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Cbs;  /* CFGE CBS field */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA2] = RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Eir;  /* CFGE EIR field */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA3] = RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Ebs;  /* CFGE EBS field */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA4] = NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_MREN((RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Mren) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_DOY((RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Doy) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CM((RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Cm) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CF((RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Cf) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_NDOR((RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Ndor) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE(RatePolicerTableEntry->RatePolicerCfgeData.Cfge_SduType);
+        /* fill in Functional Enable Element Data */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA4] |= (NETC_ETHSWT_IP_RATEPOLICERTABLE_FEE_DATA_FEN(RatePolicerTableEntry->RatePolicerFunctionEnable ? 1U : 0U) << NETC_ETHSWT_IP_16BIT_SHIFT);
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_03();
+
+        /* fill in operation data for config field of Request Header*/
+        OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        OperationData.TableId = NETC_ETHSWT_IP_RATE_POLICER_TABLE_ID;
+        OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;       /* for Add and Update command, the Access Method should only be NETC_ETHSWT_ENTRY_ID_MATCH */
+        OperationData.Cmd = Cmd;
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_RATEPOLICERTABLE_REQBUFFER_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
+
+        /* send command */
+        status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+        {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+            Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_QueryRatePolicerTableEntry
+ * Description   : Ethernet Switch query Rate policer table entry function.
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryRatePolicerTableEntry( uint8 SwitchIdx,
+                                                                         uint32 *MatchedEntries,
+                                                                         uint32 RatePolicerEntryId,
+                                                                         Netc_EthSwt_Ip_RatePolicerEntryRspDataType * RatePolicerTableEntry
+                                                                       )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    uint32 CfgeConfigBits;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 SduType;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(RatePolicerTableEntry != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_13();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = RatePolicerEntryId;        /* fill in Entry_ID field (Access Key) */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_13();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_RATE_POLICER_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                     /* for query command, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_RATEPOLICERTABLE_RSPBUFFER_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_EthSwt_Ip_RatePolicerEntryDataType" structure with data in response data buffer */
+            RatePolicerTableEntry->RatePolicerEntryId = TableDataBuffer.TableDataField[0U];
+            /* fill in STSE data */
+            RatePolicerTableEntry->RatePolicerStseData.Stse_ByteCount = (((uint64)TableDataBuffer.TableDataField[2U]) << NETC_ETHSWT_IP_32BIT_SHIFT);
+            RatePolicerTableEntry->RatePolicerStseData.Stse_ByteCount |= (uint64)(TableDataBuffer.TableDataField[1U]);
+            RatePolicerTableEntry->RatePolicerStseData.Stse_DropFrames = TableDataBuffer.TableDataField[3U];
+            RatePolicerTableEntry->RatePolicerStseData.Stse_Dr0GrnFrames = TableDataBuffer.TableDataField[5U];
+            RatePolicerTableEntry->RatePolicerStseData.Stse_Dr1GrnFrames = TableDataBuffer.TableDataField[7U];
+            RatePolicerTableEntry->RatePolicerStseData.Stse_Dr2YlwFrames = TableDataBuffer.TableDataField[9U];
+            RatePolicerTableEntry->RatePolicerStseData.Stse_RemarkYlwFrames = TableDataBuffer.TableDataField[11U];
+            RatePolicerTableEntry->RatePolicerStseData.Stse_Dr3RedFrames = TableDataBuffer.TableDataField[13U];
+            RatePolicerTableEntry->RatePolicerStseData.Stse_RemarkRedFrames = TableDataBuffer.TableDataField[15U];
+            RatePolicerTableEntry->RatePolicerStseData.Stse_Lts = TableDataBuffer.TableDataField[17U];
+            RatePolicerTableEntry->RatePolicerStseData.Stse_CommittedTokenBucketInteger = TableDataBuffer.TableDataField[18U];
+            RatePolicerTableEntry->RatePolicerStseData.Stse_CommittedTokenBucketFractional = TableDataBuffer.TableDataField[19U];   /* 1 sign bit + 31 bits fractional */
+            RatePolicerTableEntry->RatePolicerStseData.Stse_ExcessTokenBucketInteger = TableDataBuffer.TableDataField[20U];
+            RatePolicerTableEntry->RatePolicerStseData.Stse_ExcessTokenBucketFractional = TableDataBuffer.TableDataField[21U];     /* 1 sign bit + 31 bits fractional */
+            /* fill in CFGE data */
+            RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Cir = TableDataBuffer.TableDataField[22U];
+            RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Cbs = TableDataBuffer.TableDataField[23U];
+            RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Eir = TableDataBuffer.TableDataField[24U];
+            RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Ebs = TableDataBuffer.TableDataField[25U];
+            CfgeConfigBits = TableDataBuffer.TableDataField[26U];
+            RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Mren = ((CfgeConfigBits & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_MREN_MASK) == 0U) ? FALSE : TRUE;
+            RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Doy = ((CfgeConfigBits & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_DOY_MASK) == 0U) ? FALSE : TRUE;
+            RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Cm = ((CfgeConfigBits & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CM_MASK) == 0U) ? FALSE : TRUE;
+            RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Cf = ((CfgeConfigBits & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CF_MASK) == 0U) ? FALSE : TRUE;
+            RatePolicerTableEntry->RatePolicerCfgeData.Cfge_Ndor = ((CfgeConfigBits & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_NDOR_MASK) == 0U) ? FALSE : TRUE;
+            SduType = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE_MASK) >> NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE_SHIFT);
+            switch (SduType)
+            {
+                case 0U:
+                    RatePolicerTableEntry->RatePolicerCfgeData.Cfge_SduType = NETC_ETHSWT_IP_PPDU;
+                    break;
+                case 1U:
+                    RatePolicerTableEntry->RatePolicerCfgeData.Cfge_SduType = NETC_ETHSWT_IP_MPDU;
+                    break;
+                case 2U:
+                    RatePolicerTableEntry->RatePolicerCfgeData.Cfge_SduType = NETC_ETHSWT_IP_MSDU;
+                    break;
+                default:
+                    RatePolicerTableEntry->RatePolicerCfgeData.Cfge_SduType = NETC_ETHSWT_IP_RSDTYPE;
+                    break;
+            }
+            /* fill FEE data */
+            RatePolicerTableEntry->RatePolicerFunctionEnable = (((CfgeConfigBits >> NETC_ETHSWT_IP_16BIT_SHIFT) & NETC_ETHSWT_IP_RATEPOLICERTABLE_FEE_DATA_FEN_MASK) == 0U) ? FALSE : TRUE;
+            /* fill PSE data */
+            RatePolicerTableEntry->MarkRedFlag = (((CfgeConfigBits >> NETC_ETHSWT_IP_24BIT_SHIFT) & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_MREN_MASK) == 0U) ? FALSE : TRUE;
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_DeleteRatePolicerTableEntry
+ * Description   : Ethernet Switch delete Rate policer table entry function.
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteRatePolicerTableEntry( uint8 SwitchIdx,
+                                                                          uint32 *MatchedEntries,
+                                                                          uint32 RatePolicerEntryId
+                                                                        )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData = 0U;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_14();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* Delete command will ignore ActionsData data field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = RatePolicerEntryId;        /* fill in Entry_ID field (Access Key) */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_14();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_RATE_POLICER_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                      /* for delete command, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);           /* set response data buffer with normal length */
+
+    /* send the "Delete" command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_AddOrUpdateIngressStreamTableEntry
+ * Description   : Ethernet Switch Add or Update ingress stream table entry function.
+ * implements Netc_EthSwt_Ip_AddOrUpdateIngressStreamTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateIngressStreamTableEntry( uint8 SwitchIdx,
+                                                                                 Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 const Netc_EthSwt_Ip_IngressStreamEntryDataType * IngressStreamTableEntry
+                                                                               )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(IngressStreamTableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add and Update commands */
+    if ((NETC_ETHSWT_ADD_CMD != Cmd) && (NETC_ETHSWT_UPDATE_CMD != Cmd))
+    {
+        status = NETC_ETHSWT_CBDRSTATUS_INVALID_CMD;    /* not supported command */
+    }
+    else
+    {
+        /* set table version and CFGEU flag */
+        ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U) \
+                    | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_15();
+        /* ------initialize the table request data buffer------ */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = IngressStreamTableEntry->IngressStreamEntryId;        /* fill in Entry_ID field (Access Key) */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SFE((IngressStreamTableEntry->IngressStreamCfgeData.StreamFilteringEnable) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IPV(IngressStreamTableEntry->IngressStreamCfgeData.InternalPriorityValue) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OIPV((IngressStreamTableEntry->IngressStreamCfgeData.OverrideIPV) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_DR(IngressStreamTableEntry->IngressStreamCfgeData.DropResilience) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ODR((IngressStreamTableEntry->IngressStreamCfgeData.OverrideDR) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IMIRE((IngressStreamTableEntry->IngressStreamCfgeData.IngressMirroringEnable) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE((IngressStreamTableEntry->IngressStreamCfgeData.TimeStampCaptureEnable) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SPPD((IngressStreamTableEntry->IngressStreamCfgeData.SrcPortPruningDisable) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ISQA(IngressStreamTableEntry->IngressStreamCfgeData.IngressSeqAction) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ORP((IngressStreamTableEntry->IngressStreamCfgeData.OverrideRatePolicerInstanceEID) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OSGI((IngressStreamTableEntry->IngressStreamCfgeData.OverrideStreamGateInstanceEID) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_HR(IngressStreamTableEntry->IngressStreamCfgeData.HostReason) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_FA(IngressStreamTableEntry->IngressStreamCfgeData.ForwardingActions) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE(IngressStreamTableEntry->IngressStreamCfgeData.SduType);
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA1] = NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_MSDU(IngressStreamTableEntry->IngressStreamCfgeData.MaximumServiceDataUnit) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG(IngressStreamTableEntry->IngressStreamCfgeData.IngressFrmModiEntryFrmLenChange) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EPORT(IngressStreamTableEntry->IngressStreamCfgeData.EgressPort) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OETEID(IngressStreamTableEntry->IngressStreamCfgeData.OverrideET_EID) \
+                                                                                    | NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_CTD(IngressStreamTableEntry->IngressStreamCfgeData.CutThrDisable);
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA2] = IngressStreamTableEntry->IngressStreamCfgeData.IngressSeqGeneration_EID;
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA3] = IngressStreamTableEntry->IngressStreamCfgeData.RatePolicer_EID;
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA4] = IngressStreamTableEntry->IngressStreamCfgeData.StreamGateInstance_EID;
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA5] = IngressStreamTableEntry->IngressStreamCfgeData.IngressFrmModification_EID;
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA6] = IngressStreamTableEntry->IngressStreamCfgeData.EgressTreatment_EID;
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA7] = IngressStreamTableEntry->IngressStreamCfgeData.IngressStreamCounter_EID;
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA8] = NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP(IngressStreamTableEntry->IngressStreamCfgeData.EgressPortBitMap);
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA9] = NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SIMAP(IngressStreamTableEntry->IngressStreamCfgeData.StationInterfaceMap);
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_15();
+
+        /* fill in operation data for config field of Request Header*/
+        OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_TABLE_ID;
+        OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;       /* for Add and Update command, the Access Method should only be NETC_ETHSWT_ENTRY_ID_MATCH */
+        OperationData.Cmd = Cmd;
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_INGRESSSTREAMTABLE_REQBUFFER_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
+
+        /* send command */
+        status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+        {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+            Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_QueryIngressStreamTableEntry
+ * Description   : Ethernet Switch query Ingress Stream table entry function.
+ * implements Netc_EthSwt_Ip_QueryIngressStreamTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngressStreamTableEntry( uint8 SwitchIdx,
+                                                                           uint32 *MatchedEntries,
+                                                                           uint32 IngressStreamEntryId,
+                                                                           Netc_EthSwt_Ip_IngressStreamEntryDataType * IngressStreamTableEntry
+                                                                         )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    uint32 CfgeConfigBits;
+    uint32 CfgeConfigBits2;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 SduType;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(IngressStreamTableEntry != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_16();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = IngressStreamEntryId;        /* fill in Entry_ID field (Access Key) */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_16();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                     /* for query command, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);     /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_INGRESSSTREAMTABLE_RSPBUFFER_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_EthSwt_Ip_IngressStreamEntryDataType" structure with data in response data buffer */
+            IngressStreamTableEntry->IngressStreamEntryId = TableDataBuffer.TableDataField[0U];
+            /* fill in CFGE data */
+            CfgeConfigBits = TableDataBuffer.TableDataField[1U];
+            IngressStreamTableEntry->IngressStreamCfgeData.StreamFilteringEnable = ((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SFE_MASK) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.InternalPriorityValue = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IPV_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IPV_SHIFT);
+            IngressStreamTableEntry->IngressStreamCfgeData.OverrideIPV = (((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OIPV_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OIPV_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.DropResilience = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_DR_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_DR_SHIFT);
+            IngressStreamTableEntry->IngressStreamCfgeData.OverrideDR = (((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ODR_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ODR_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.IngressMirroringEnable = (((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IMIRE_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IMIRE_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.TimeStampCaptureEnable = (((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.SrcPortPruningDisable = (((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SPPD_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SPPD_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.IngressSeqAction = ((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ISQA_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ISQA_SHIFT);
+            IngressStreamTableEntry->IngressStreamCfgeData.OverrideRatePolicerInstanceEID = (((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ORP_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ORP_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.OverrideStreamGateInstanceEID = (((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OSGI_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OSGI_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.HostReason = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_HR_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_HR_SHIFT);
+            IngressStreamTableEntry->IngressStreamCfgeData.ForwardingActions = ((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_FA_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_FA_SHIFT);
+            SduType = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_SHIFT);
+            switch (SduType)
+            {
+                case 0U:
+                    IngressStreamTableEntry->IngressStreamCfgeData.SduType = NETC_ETHSWT_IP_PPDU;
+                    break;
+                case 1U:
+                    IngressStreamTableEntry->IngressStreamCfgeData.SduType = NETC_ETHSWT_IP_MPDU;
+                    break;
+                case 2U:
+                    IngressStreamTableEntry->IngressStreamCfgeData.SduType = NETC_ETHSWT_IP_MSDU;
+                    break;
+                default:
+                    IngressStreamTableEntry->IngressStreamCfgeData.SduType = NETC_ETHSWT_IP_RSDTYPE;
+                    break;
+            }
+
+            CfgeConfigBits2 = TableDataBuffer.TableDataField[2U];
+            IngressStreamTableEntry->IngressStreamCfgeData.MaximumServiceDataUnit = (uint16)((CfgeConfigBits2 & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_MSDU_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_MSDU_SHIFT);
+            IngressStreamTableEntry->IngressStreamCfgeData.IngressFrmModiEntryFrmLenChange = (uint8)((CfgeConfigBits2 & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG_SHIFT);
+            IngressStreamTableEntry->IngressStreamCfgeData.EgressPort = (uint8)((CfgeConfigBits2 & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EPORT_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EPORT_SHIFT);
+            IngressStreamTableEntry->IngressStreamCfgeData.OverrideET_EID = ((CfgeConfigBits2 & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OETEID_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OETEID_SHIFT);
+            IngressStreamTableEntry->IngressStreamCfgeData.CutThrDisable = ((CfgeConfigBits2 & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_CTD_MASK) >> NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_CTD_SHIFT);
+
+            IngressStreamTableEntry->IngressStreamCfgeData.IngressSeqGeneration_EID = TableDataBuffer.TableDataField[3U];
+            IngressStreamTableEntry->IngressStreamCfgeData.RatePolicer_EID = TableDataBuffer.TableDataField[4U];
+            IngressStreamTableEntry->IngressStreamCfgeData.StreamGateInstance_EID = TableDataBuffer.TableDataField[5U];
+            IngressStreamTableEntry->IngressStreamCfgeData.IngressFrmModification_EID = TableDataBuffer.TableDataField[6U];
+            IngressStreamTableEntry->IngressStreamCfgeData.EgressTreatment_EID = TableDataBuffer.TableDataField[7U];
+            IngressStreamTableEntry->IngressStreamCfgeData.IngressStreamCounter_EID = TableDataBuffer.TableDataField[8U];
+            IngressStreamTableEntry->IngressStreamCfgeData.EgressPortBitMap = TableDataBuffer.TableDataField[9U] & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP_MASK;
+            IngressStreamTableEntry->IngressStreamCfgeData.StationInterfaceMap = (uint16)(TableDataBuffer.TableDataField[10U] & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SIMAP_MASK);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_DeleteIngressStreamTableEntry
+ * Description   : Ethernet Switch delete Ingress Stream table entry function.
+ * implements Netc_EthSwt_Ip_DeleteIngressStreamTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngressStreamTableEntry( uint8 SwitchIdx,
+                                                                            uint32 *MatchedEntries,
+                                                                            uint32 IngressStreamEntryId
+                                                                          )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData = 0U;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_17();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* Delete command will ignore ActionsData data field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = IngressStreamEntryId;        /* fill in Entry_ID field (Access Key) */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_17();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                      /* for delete command, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);           /* set response data buffer with normal length */
+
+    /* send the "Delete" command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_AddOrUpdateIngressStreamCountTableEntry
+ * Description   : Ethernet Switch Add or Update ingress stream count table entry function.
+ * implements Netc_EthSwt_Ip_AddOrUpdateIngressStreamCountTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateIngressStreamCountTableEntry( uint8 SwitchIdx,
+                                                                                       Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                       uint32 *MatchedEntries,
+                                                                                       uint32 IngressStreamCountId
+                                                                                     )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add and Update commands */
+    if ((NETC_ETHSWT_ADD_CMD != Cmd) && (NETC_ETHSWT_UPDATE_CMD != Cmd))
+    {
+        status = NETC_ETHSWT_CBDRSTATUS_INVALID_CMD;    /* not supported command */
+    }
+    else
+    {
+        /* set table version and CFGEU flag */
+        ActionsData = NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU(1U) \
+                    | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_18();
+        /* ------initialize the table request data buffer------ */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        /* fill in KEYE_DATA */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACCESSKEY_FIELD] = IngressStreamCountId;     /* fill in ISC_ID field */
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_18();
+
+        /* fill in operation data for config field of Request Header*/
+        OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_COUNT_TABLE_ID;
+        /* for Add and Update command, the Access Method should only be NETC_ETHSWT_ENTRY_ID_MATCH */
+        OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
+        OperationData.Cmd = Cmd;
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_ISCTABLE_RSPBUFFER_LEN);
+
+        /* send command */
+        status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+        {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+            Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_QueryIngressStreamCountTableEntry
+ * Description   : Ethernet Switch query Ingress Stream Count table entry function.
+ * implements Netc_EthSwt_Ip_QueryIngressStreamCountTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngressStreamCountTableEntry( uint8 SwitchIdx,
+                                                                         uint32 *MatchedEntries,
+                                                                         uint32 IngressStreamCountEntryId,
+                                                                         Netc_EthSwt_Ip_IngressStreamCountTableRspDataType * IngressStreamCountTableEntry
+                                                                       )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(IngressStreamCountTableEntry != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_19();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;                      /* fill in Actions field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACCESSKEY_FIELD] = IngressStreamCountEntryId;        /* fill in Entry_ID field (Access Key) */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_19();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_COUNT_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                     /* for query command, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);    /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_ISCTABLE_RSPBUFFER_LEN);              /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_EthSwt_Ip_RatePolicerEntryDataType" structure with data in response data buffer */
+            IngressStreamCountTableEntry->IngressStreamCountId = TableDataBuffer.TableDataField[0U];
+            /* fill in STSE data */
+            IngressStreamCountTableEntry->IngressStreamCountStseData.RxCount = TableDataBuffer.TableDataField[1U];
+            IngressStreamCountTableEntry->IngressStreamCountStseData.MSduDropCount = TableDataBuffer.TableDataField[3U];
+            IngressStreamCountTableEntry->IngressStreamCountStseData.PolicerDropCount = TableDataBuffer.TableDataField[5U];
+            IngressStreamCountTableEntry->IngressStreamCountStseData.StreamGateDropCount = TableDataBuffer.TableDataField[7U];
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_DeleteIngressStreamCountTableEntry
+ * Description   : Ethernet Switch delete Ingress Stream table entry function.
+ * implements Netc_EthSwt_Ip_DeleteIngressStreamCountTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngressStreamCountTableEntry( uint8 SwitchIdx,
+                                                                                  uint32 *MatchedEntries,
+                                                                                  uint32 IngressStreamCountId
+                                                                                )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData = 0U;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_20();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* Delete command will ignore ActionsData data field */
+    /* fill in KEYE_DATA field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACCESSKEY_FIELD] = IngressStreamCountId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_20();
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_COUNT_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                      /* for delete command, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_ISCTABLE_RSPBUFFER_LEN);                 /* set response data buffer with normal length */
+
+    /* send the "Delete" command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_AddOrUpdateIngressStreamFilterTableEntry
+ * Description   : Ethernet Switch Add or Update ingress stream filter table entry function.
+ * implements Netc_EthSwt_Ip_AddOrUpdateIngressStreamFilterTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateIngressStreamFilterTableEntry( uint8 SwitchIdx,
+                                                                                       Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                       uint32 *MatchedEntries,
+                                                                                       const Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableEntry
+                                                                                     )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(IngressStreamFilterTableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add and Update commands */
+    if ((NETC_ETHSWT_ADD_CMD != Cmd) && (NETC_ETHSWT_UPDATE_CMD != Cmd))
+    {
+        status = NETC_ETHSWT_CBDRSTATUS_INVALID_CMD;    /* not supported command */
+    }
+    else
+    {
+        /* set table version and CFGEU flag */
+        ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U) \
+                    | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_21();
+        /* ------initialize the table request data buffer------ */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        /* fill in KEYE_DATA */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = IngressStreamFilterTableEntry->IngressStreamFilterKeyeData.IngressStream_EID;     /* fill in IS_EID field */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = IngressStreamFilterTableEntry->IngressStreamFilterKeyeData.Pcp;                       /* fill in PCP field */
+        /* fill in CFGE_DATA */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA1] = NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV(IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.InternalPriorityValue) \
+                                                                                    | NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV((IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideIPV) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR(IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.DropResilience) \
+                                                                                    | NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR((IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideDR) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE((IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.IngressMirroringEnable) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE((IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.TimeStampCaptureEnable) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP((IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideRatePolicerInstanceEID) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI((IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideStreamGateInstanceEID) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE(IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.SduType) \
+                                                                                    | NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD(IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.CutThrDisable) \
+                                                                                    | NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU(IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.MaximumServiceDataUnit);
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA2] = IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.RatePolicer_EID;
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA3] = IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.StreamGateInstance_EID;
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA4] = IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.IngressStreamCounter_EID;
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_21();
+
+        /* fill in operation data for config field of Request Header*/
+        OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_FILTER_TABLE_ID;
+        /* for Add and Update command, the Access Method should only be NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH */
+        OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;
+        OperationData.Cmd = Cmd;
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_ISFILTERTABLE_REQBUFFER_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
+
+        /* send command */
+        status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+        {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+            Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_QueryIngressStreamFilterTableEntry
+ * Description   : Ethernet Switch query Ingress Stream Filter table entry function.
+ * implements Netc_EthSwt_Ip_QueryIngressStreamFilterTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngressStreamFilterTableEntry( uint8 SwitchIdx,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableEntry
+                                                                               )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    uint32 CfgeConfigBits;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 SduType;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(IngressStreamFilterTableEntry != NULL_PTR);
+#endif
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_22();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in KEYE_DATA field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = IngressStreamFilterTableEntry->IngressStreamFilterKeyeData.IngressStream_EID;
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = IngressStreamFilterTableEntry->IngressStreamFilterKeyeData.Pcp;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_22();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_FILTER_TABLE_ID;
+    /* for query function, always uses NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH method */
+    OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_ISFILTERTABLE_OTHER_REQBUFFER_LEN);     /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_ISFILTERTABLE_RSPBUFFER_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_EthSwt_Ip_IngressStreamFilterEntryDataType" structure with data in response data buffer */
+            IngressStreamFilterTableEntry->IngressStreamFilterEntryId = TableDataBuffer.TableDataField[1U];
+            /* fill in KEYE_DATA */
+            IngressStreamFilterTableEntry->IngressStreamFilterKeyeData.IngressStream_EID = TableDataBuffer.TableDataField[2U];
+            IngressStreamFilterTableEntry->IngressStreamFilterKeyeData.Pcp = (uint8)(TableDataBuffer.TableDataField[3U] & NETC_ETHSWT_IP_ISFILTERTABLE_KEYE_PCP_MASK);
+            /* fill in CFGE data */
+            CfgeConfigBits = TableDataBuffer.TableDataField[4U];
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.InternalPriorityValue = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV_SHIFT);
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideIPV = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.DropResilience = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR_SHIFT);
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideDR = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.IngressMirroringEnable = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.TimeStampCaptureEnable = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideRatePolicerInstanceEID = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideStreamGateInstanceEID = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.CutThrDisable = (CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD_SHIFT;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.MaximumServiceDataUnit = (uint16)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU_SHIFT);
+
+            SduType = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE_SHIFT);
+            switch (SduType)
+            {
+                case 0U:
+                    IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_PPDU;
+                    break;
+                case 1U:
+                    IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_MPDU;
+                    break;
+                case 2U:
+                    IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_MSDU;
+                    break;
+                default:
+                    IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_RSDTYPE;
+                    break;
+            }
+
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.RatePolicer_EID = TableDataBuffer.TableDataField[5U];
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.StreamGateInstance_EID = TableDataBuffer.TableDataField[6U];
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.IngressStreamCounter_EID = TableDataBuffer.TableDataField[7U];
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_DeleteIngressStreamFilterTableEntry
+ * Description   : Ethernet Switch delete Ingress Stream table entry function.
+ * implements Netc_EthSwt_Ip_DeleteIngressStreamFilterTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngressStreamFilterTableEntry( uint8 SwitchIdx,
+                                                                                  uint32 *MatchedEntries,
+                                                                                  const Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableEntry
+                                                                                )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData = 0U;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(IngressStreamFilterTableEntry != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_23();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* Delete command will ignore ActionsData data field */
+    /* fill in KEYE_DATA field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = IngressStreamFilterTableEntry->IngressStreamFilterKeyeData.IngressStream_EID;
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = IngressStreamFilterTableEntry->IngressStreamFilterKeyeData.Pcp;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_23();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_FILTER_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;                      /* for delete command, always uses NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH method */
+    OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_ISFILTERTABLE_OTHER_REQBUFFER_LEN);           /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);                 /* set response data buffer with normal length */
+
+    /* send the "Delete" command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_SearchIngressStreamFilterTableEntry
+ * Description   : Ethernet Switch search Ingress Stream Filter table entry one by one.
+ * implements Netc_EthSwt_Ip_SearchIngressStreamFilterTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_SearchIngressStreamFilterTableEntry( uint8 SwitchIdx,
+                                                                                  uint32 * ResumeEntryId,
+                                                                                  uint32 * MatchedEntry,
+                                                                                  Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableEntry
+                                                                                )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    uint32 CfgeConfigBits;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 SduType;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(ResumeEntryId != NULL_PTR);
+    DevAssert(MatchedEntry != NULL_PTR);
+    DevAssert(IngressStreamFilterTableEntry != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntry first */
+    *MatchedEntry = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_24();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in KEYE_DATA field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = *ResumeEntryId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_24();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_FILTER_TABLE_ID;
+    /* query function with NETC_ETHSWT_SEARCH_METHOD method */
+    OperationData.AccessMethod = NETC_ETHSWT_SEARCH_METHOD;
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_ISFILTERTABLE_OTHER_REQBUFFER_LEN);     /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_ISFILTERTABLE_RSPBUFFER_LEN);            /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntry);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntry)
+        {
+            /* fill in "Netc_EthSwt_Ip_IngressStreamFilterEntryDataType" structure with data in response data buffer */
+            *ResumeEntryId = TableDataBuffer.TableDataField[0U];        /* update the resume entry id for next search */
+            IngressStreamFilterTableEntry->IngressStreamFilterEntryId = TableDataBuffer.TableDataField[1U];
+            /* fill in KEYE_DATA */
+            IngressStreamFilterTableEntry->IngressStreamFilterKeyeData.IngressStream_EID = TableDataBuffer.TableDataField[2U];
+            IngressStreamFilterTableEntry->IngressStreamFilterKeyeData.Pcp = (uint8)(TableDataBuffer.TableDataField[3U] & NETC_ETHSWT_IP_ISFILTERTABLE_KEYE_PCP_MASK);
+            /* fill in CFGE data */
+            CfgeConfigBits = TableDataBuffer.TableDataField[4U];
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.InternalPriorityValue = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV_SHIFT);
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideIPV = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.DropResilience = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR_SHIFT);
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideDR = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.IngressMirroringEnable = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.TimeStampCaptureEnable = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideRatePolicerInstanceEID = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.OverrideStreamGateInstanceEID = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.CutThrDisable = (CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD_SHIFT;
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.MaximumServiceDataUnit = (uint16)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU_SHIFT);
+
+            SduType = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE_SHIFT);
+            switch (SduType)
+            {
+                case 0U:
+                    IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_PPDU;
+                    break;
+                case 1U:
+                    IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_MPDU;
+                    break;
+                case 2U:
+                    IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_MSDU;
+                    break;
+                default:
+                    IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_RSDTYPE;
+                    break;
+            }
+
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.RatePolicer_EID = TableDataBuffer.TableDataField[5U];
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.StreamGateInstance_EID = TableDataBuffer.TableDataField[6U];
+            IngressStreamFilterTableEntry->IngressStreamFilterCfgeData.IngressStreamCounter_EID = TableDataBuffer.TableDataField[7U];
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_SearchAndFillIngressStreamFilterTable
+ * Description   : inline function for searching and filling Ingress Stream Filter table entries.
+ *END**************************************************************************/
+static inline Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_SearchAndFillIngressStreamFilterTable( uint8 SwitchIdx,
+                                                                                                  uint32 * ResumeEntryId,
+                                                                                                  uint16 * NumOfExistingEntry,
+                                                                                                  Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableEntry
+                                                                                                )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    uint32 CfgeConfigBits;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 SduType;
+    uint32 MatchedEntries = 0x0UL;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(ResumeEntryId != NULL_PTR);
+    DevAssert(IngressStreamFilterTableEntry != NULL_PTR);
+#endif
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_25();
+
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in KEYE_DATA field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = *ResumeEntryId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_25();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_FILTER_TABLE_ID;
+    /* query function with NETC_ETHSWT_SEARCH_METHOD method */
+    OperationData.AccessMethod = NETC_ETHSWT_SEARCH_METHOD;
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_ISFILTERTABLE_OTHER_REQBUFFER_LEN);     /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_ISFILTERTABLE_RSPBUFFER_LEN);            /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, &MatchedEntries);
+
+        /* get the resume_entry_id and be ready for the next query operation */
+        *ResumeEntryId = TableDataBuffer.TableDataField[0U];
+
+        /* ERR051048: NETC: Management command with search action responds with incorrect NUM_MATCHED */
+        /* found a matched entry */
+        if ((1U == MatchedEntries) && (*ResumeEntryId != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID))
+        {
+            /* fill in "Netc_EthSwt_Ip_IngressStreamFilterEntryDataType" structure with data in response data buffer */
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterEntryId = TableDataBuffer.TableDataField[1U];
+            /* fill in KEYE_DATA */
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterKeyeData.IngressStream_EID = TableDataBuffer.TableDataField[2U];
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterKeyeData.Pcp = (uint8)(TableDataBuffer.TableDataField[3U] & NETC_ETHSWT_IP_ISFILTERTABLE_KEYE_PCP_MASK);
+            /* fill in CFGE data */
+            CfgeConfigBits = TableDataBuffer.TableDataField[4U];
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.InternalPriorityValue = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV_SHIFT);
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.OverrideIPV = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.DropResilience = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR_SHIFT);
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.OverrideDR = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.IngressMirroringEnable = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.TimeStampCaptureEnable = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.OverrideRatePolicerInstanceEID = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.OverrideStreamGateInstanceEID = (((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.CutThrDisable = (CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD_SHIFT;
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.MaximumServiceDataUnit = (uint16)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU_SHIFT);
+
+            SduType = (uint8)((CfgeConfigBits & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE_MASK) >> NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE_SHIFT);
+            switch (SduType)
+            {
+                case 0U:
+                    IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_PPDU;
+                    break;
+                case 1U:
+                    IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_MPDU;
+                    break;
+                case 2U:
+                    IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_MSDU;
+                    break;
+                default:
+                    IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.SduType = NETC_ETHSWT_IP_RSDTYPE;
+                    break;
+            }
+
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.RatePolicer_EID = TableDataBuffer.TableDataField[5U];
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.StreamGateInstance_EID = TableDataBuffer.TableDataField[6U];
+            IngressStreamFilterTableEntry[*NumOfExistingEntry].IngressStreamFilterCfgeData.IngressStreamCounter_EID = TableDataBuffer.TableDataField[7U];
+
+            /* increase the NumOfExistingEntry */
+            (*NumOfExistingEntry) += 1U;
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_GetIngressStreamFilterTable
+ * Description   : Ethernet Switch get ingress stream filter table function.
+ * implements Netc_EthSwt_Ip_GetIngressStreamFilterTable_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_GetIngressStreamFilterTable( uint8 SwitchIdx,
+                                                                          uint16 * NumberOfElements,
+                                                                          Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableList
+                                                                        )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status = E_OK;
+    uint16 NumOfExistingEntry = 0U;
+    uint32 ResumeId = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;
+
+    /* [notes]: we will have to read entries one by one because of the errata ERR051048.
+     - ERR051048: NETC: Management command with search action responds with incorrect NUM_MATCHED
+     - Description: The NUM_MATCHED field in the command NTMP response header may be incorrect when
+       the search access method is used for the following tables: FDB table 15, L2 IPv4 Multicast
+       Filter table 16, VLAN Filter table 18, Ingress Stream Identification table 30, or Ingress Stream
+       Filter table 32.
+     - Workaround: For the query command, limit the message response buffer size (RESPONSE_LENGTH field in the request header)
+       so that NETC returns no more than one entry at a time. Under this condition, the NUM_MATCHED field value is correct
+    */
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(NumberOfElements != NULL_PTR);
+    DevAssert(*NumberOfElements != 0U);
+    DevAssert(IngressStreamFilterTableList != NULL_PTR);
+#endif
+
+    do
+    {
+        /* check if the IngressStreamFilterTableList is full or we get all existing entries */
+        if ((NumOfExistingEntry >= *NumberOfElements) || (status == (uint8)(E_NOT_OK)))
+        {
+            break;
+        }
+
+        status = Netc_EthSwt_Ip_SearchAndFillIngressStreamFilterTable(SwitchIdx, &ResumeId, &NumOfExistingEntry, IngressStreamFilterTableList);
+
+    } while (ResumeId != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID);      /* ResumeId == NETC_ETHSWT_IP_BD_NULL_ENTRY_ID means the query operation is completed */
+
+    /* return the Number of elements which are currently available in the EthSwitch module or number of elements copied to IngressStreamFilterTableList*/
+    *NumberOfElements = NumOfExistingEntry;
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_AddOrUpdateStreamGateInstanceTableEntry
+ * Description   : Ethernet Switch Add or Update Stream Gate Instance table entry function.
+ * implements Netc_EthSwt_Ip_AddOrUpdateStreamGateInstanceTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateStreamGateInstanceTableEntry( uint8 SwitchIdx,
+                                                                                      Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                      uint32 *MatchedEntries,
+                                                                                      const Netc_EthSwt_Ip_StreamGateInstanceEntryDataType * StreamGateInstanceTableEntry
+                                                                                    )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(StreamGateInstanceTableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add and Update commands */
+    if ((NETC_ETHSWT_ADD_CMD != Cmd) && (NETC_ETHSWT_UPDATE_CMD != Cmd))
+    {
+        status = NETC_ETHSWT_CBDRSTATUS_INVALID_CMD;    /* not supported command */
+    }
+    else
+    {
+        /* set table version and update actions*/
+        ActionsData = NETC_ETHSWT_IP_SGITABLE_REQFMT_ACFGEU(1U) \
+                    | NETC_ETHSWT_IP_SGITABLE_REQFMT_CFGEU(1U) \
+                    | NETC_ETHSWT_IP_SGITABLE_REQFMT_SGISEU(1U) \
+                    | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_26();
+        /* ------initialize the table request data buffer------ */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        /* fill in KEYE_DATA */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = StreamGateInstanceTableEntry->SGIEntryId;     /* fill in Entry_ID */
+        /* fill in ACFGE_DATA */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = StreamGateInstanceTableEntry->AdminSGCLEntryId;
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA1] = (uint32)(StreamGateInstanceTableEntry->AdminBaseTime & 0xFFFFFFFFUL);
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA2] = (uint32)(StreamGateInstanceTableEntry->AdminBaseTime >> NETC_ETHSWT_IP_32BIT_SHIFT);
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA3] = StreamGateInstanceTableEntry->AdminCycleTimeExt;
+        /* fill in CFGE_DATA and ICFGE_DATA */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA4] = (NETC_ETHSWT_IP_SGITABLE_CFGE_OEXEN(StreamGateInstanceTableEntry->Cfge_Oexen ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_SGITABLE_CFGE_IRXEN(StreamGateInstanceTableEntry->Cfge_Irxen ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_SGITABLE_CFGE_SDUTYPE(StreamGateInstanceTableEntry->SduType) \
+                                                                                    | (NETC_ETHSWT_IP_SGITABLE_ICFGE_IPV(StreamGateInstanceTableEntry->Icfge_Ipv) << NETC_ETHSWT_IP_8BIT_SHIFT) \
+                                                                                    | (NETC_ETHSWT_IP_SGITABLE_ICFGE_OIPV(StreamGateInstanceTableEntry->Icfge_Oipv ? 1U : 0U) << NETC_ETHSWT_IP_8BIT_SHIFT) \
+                                                                                    | (NETC_ETHSWT_IP_SGITABLE_ICFGE_GST(StreamGateInstanceTableEntry->Icfge_Gst) << NETC_ETHSWT_IP_8BIT_SHIFT) \
+                                                                                    | (NETC_ETHSWT_IP_SGITABLE_ICFGE_CTD(StreamGateInstanceTableEntry->Icfge_Ctd ? 1U : 0U) << NETC_ETHSWT_IP_8BIT_SHIFT)) & 0xFFFFU;
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_26();
+
+        /* fill in operation data for config field of Request Header*/
+        OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        OperationData.TableId = NETC_ETHSWT_IP_STREAM_GATE_INSTANCE_TABLE_ID;
+        /* for Add and Update command, the Access Method should only be NETC_ETHSWT_ENTRY_ID_MATCH */
+        OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
+        OperationData.Cmd = Cmd;
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_SGITABLE_REQBUFFER_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
+
+        /* send command */
+        status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+        {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+            Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_QueryStreamGateInstanceTableEntry
+ * Description   : Ethernet Switch query Ingress Stream Filter table entry function.
+ * implements Netc_EthSwt_Ip_QueryStreamGateInstanceTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryStreamGateInstanceTableEntry( uint8 SwitchIdx,
+                                                                                uint32 *MatchedEntries,
+                                                                                uint32 SGIEntryId,
+                                                                                Netc_EthSwt_Ip_StreamGateInstanceEntryRspDataType * SGITableEntryRspData
+                                                                              )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    uint32 ConfigBits;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 SduType;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(SGITableEntryRspData != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_27();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in ACCESS_KEY field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = SGIEntryId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_27();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_STREAM_GATE_INSTANCE_TABLE_ID;
+    /* for query function, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);     /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_SGITABLE_RSPBUFFER_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_EthSwt_Ip_StreamGateInstanceEntryRspDataType" structure with data in response data buffer */
+            SGITableEntryRspData->SGIEntryId = TableDataBuffer.TableDataField[0U];
+            /* fill in SGISE_DATA */
+            SGITableEntryRspData->OperationalSGCLEntryID = TableDataBuffer.TableDataField[1U];
+            SGITableEntryRspData->ConfigChangeTime = ((uint64)(TableDataBuffer.TableDataField[3U]) << NETC_ETHSWT_IP_32BIT_SHIFT);
+            SGITableEntryRspData->ConfigChangeTime |= (uint64)(TableDataBuffer.TableDataField[2U]);
+            SGITableEntryRspData->OperationalBaseTime = ((uint64)(TableDataBuffer.TableDataField[5U]) << NETC_ETHSWT_IP_32BIT_SHIFT);
+            SGITableEntryRspData->OperationalBaseTime |= (uint64)(TableDataBuffer.TableDataField[4U]);
+            SGITableEntryRspData->OperationalCycleTimeExt = TableDataBuffer.TableDataField[6U];
+            ConfigBits = TableDataBuffer.TableDataField[7U];
+            SGITableEntryRspData->SGISEOex = (uint8)(ConfigBits & NETC_ETHSWT_IP_SGITABLE_SGISE_OEX_MASK);
+            SGITableEntryRspData->SGISEIrx = (uint8)((ConfigBits & NETC_ETHSWT_IP_SGITABLE_SGISE_IRX_MASK) >> NETC_ETHSWT_IP_SGITABLE_SGISE_IRX_SHIFT);
+            SGITableEntryRspData->SGISEState = (uint8)((ConfigBits & NETC_ETHSWT_IP_SGITABLE_SGISE_STATE_MASK) >> NETC_ETHSWT_IP_SGITABLE_SGISE_STATE_SHIFT);
+
+            /* fill in CFGE data */
+            ConfigBits = TableDataBuffer.TableDataField[7U] >> NETC_ETHSWT_IP_8BIT_SHIFT;
+            SGITableEntryRspData->Cfge_Oexen = ((ConfigBits & NETC_ETHSWT_IP_SGITABLE_CFGE_OEXEN_MASK) == 0U) ? FALSE : TRUE;
+            SGITableEntryRspData->Cfge_Irxen = ((ConfigBits & NETC_ETHSWT_IP_SGITABLE_CFGE_IRXEN_MASK) == 0U) ? FALSE : TRUE;
+            SduType = (uint8)((ConfigBits & NETC_ETHSWT_IP_SGITABLE_CFGE_SDUTYPE_MASK) >> NETC_ETHSWT_IP_SGITABLE_CFGE_SDUTYPE_SHIFT);
+            switch (SduType)
+            {
+                case 0U:
+                    SGITableEntryRspData->SduType = NETC_ETHSWT_IP_PPDU;
+                    break;
+                case 1U:
+                    SGITableEntryRspData->SduType = NETC_ETHSWT_IP_MPDU;
+                    break;
+                case 2U:
+                    SGITableEntryRspData->SduType = NETC_ETHSWT_IP_MSDU;
+                    break;
+                default:
+                    SGITableEntryRspData->SduType = NETC_ETHSWT_IP_RSDTYPE;
+                    break;
+            }
+
+            /* fill in ICFGE data */
+            ConfigBits = TableDataBuffer.TableDataField[7U] >> NETC_ETHSWT_IP_16BIT_SHIFT;
+            SGITableEntryRspData->Icfge_Ipv = (uint8)(ConfigBits & NETC_ETHSWT_IP_SGITABLE_ICFGE_IPV_MASK);
+            SGITableEntryRspData->Icfge_Oipv = ((ConfigBits & NETC_ETHSWT_IP_SGITABLE_ICFGE_OIPV_MASK) == 0U) ? FALSE : TRUE;
+            SGITableEntryRspData->Icfge_Gst = (ConfigBits & NETC_ETHSWT_IP_SGITABLE_ICFGE_GST_MASK) >> NETC_ETHSWT_IP_SGITABLE_ICFGE_GST_SHIFT;
+            SGITableEntryRspData->Icfge_Ctd = ((ConfigBits & NETC_ETHSWT_IP_SGITABLE_ICFGE_CTD_MASK) >> NETC_ETHSWT_IP_SGITABLE_ICFGE_CTD_SHIFT)!=0U;
+
+            /* fill in ACFGE data */
+            SGITableEntryRspData->AdminSGCLEntryId = TableDataBuffer.TableDataField[8U];
+            SGITableEntryRspData->AdminBaseTime = (((uint64)(TableDataBuffer.TableDataField[10U])) << NETC_ETHSWT_IP_32BIT_SHIFT);
+            SGITableEntryRspData->AdminBaseTime |= (uint64)(TableDataBuffer.TableDataField[9U]);
+            SGITableEntryRspData->AdminCycleTimeExt = TableDataBuffer.TableDataField[11U];
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_DeleteStreamGateInstanceTableEntry
+ * Description   : Ethernet Switch delete Stream Gate Instance table entry function.
+ * implements Netc_EthSwt_Ip_DeleteStreamGateInstanceTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteStreamGateInstanceTableEntry( uint8 SwitchIdx,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 uint32 SGIEntryId
+                                                                               )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData = 0U;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_28();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* Delete command will ignore ActionsData data field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = SGIEntryId;        /* fill in Entry_ID field (Access Key) */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_28();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_STREAM_GATE_INSTANCE_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                      /* for delete command, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);           /* set response data buffer with normal length */
+
+    /* send the "Delete" command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_AddStreamGateControlListTableEntry
+ * Description   : Ethernet Switch Add Stream Gate Control List table entry function.
+ * implements Netc_EthSwt_Ip_AddStreamGateControlListTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddStreamGateControlListTableEntry( uint8 SwitchIdx,
+                                                                                 Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 const Netc_EthSwt_Ip_SGCLTableDataType * SGCLTableEntry
+                                                                                )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 ListIdx;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(SGCLTableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+    if (SGCLTableEntry->Cfge_ListLength > 0U)
+    {
+        DevAssert(SGCLTableEntry->ListEntries != NULL_PTR);
+    }
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add commands */
+    if (NETC_ETHSWT_ADD_CMD != Cmd)
+    {
+        status = NETC_ETHSWT_CBDRSTATUS_INVALID_CMD;    /* not supported command */
+    }
+    else
+    {
+        /* set table version*/
+        ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_29();
+        /* ------initialize the table request data buffer------ */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        /* fill in ACCESS_KEY */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = SGCLTableEntry->SGCLEntryId;     /* fill in Entry_ID */
+        /* fill in CFGE_DATA */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = SGCLTableEntry->Cfge_CycleTime;
+        /* Software must set LIST_LENGTH to N-1, where N is the size of the list being configured LIST_LENGTH=(N-1). will do it reversely when querying */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA1] = NETC_ETHSWT_IP_SGCLTABLE_CFGE_LISTLEN((uint8)(SGCLTableEntry->Cfge_ListLength - 1U)) \
+                                                                                    | NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTOIPV((SGCLTableEntry->Cfge_ExtOIPV) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTIPV(SGCLTableEntry->Cfge_ExtIpv) \
+                                                                                    | NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTCTD((SGCLTableEntry->Cfge_ExtCtd) ? 1U : 0U) \
+                                                                                    | NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTGTST(SGCLTableEntry->Cfge_ExtGtst);
+
+        /* fill in list entries data */
+        if (SGCLTableEntry->Cfge_ListLength > 0U)
+        {
+            for (ListIdx = 0U; ListIdx < SGCLTableEntry->Cfge_ListLength; ListIdx++)
+            {
+                TableDataBuffer.TableDataField[(uint8)NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA2 + (2U * ListIdx)] = SGCLTableEntry->ListEntries[ListIdx].SGCL_TimeInterval;
+                TableDataBuffer.TableDataField[(uint8)NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA3 + (2U * ListIdx)] = NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOM(SGCLTableEntry->ListEntries[ListIdx].SGCL_IntervalOctetsMax) \
+                                                                                                            | NETC_ETHSWT_IP_SGCLTABLE_CFGE_IPV(SGCLTableEntry->ListEntries[ListIdx].SGCL_Ipv) \
+                                                                                                            | NETC_ETHSWT_IP_SGCLTABLE_CFGE_OIPV((SGCLTableEntry->ListEntries[ListIdx].SGCL_Oipv) ? 1U : 0U) \
+                                                                                                            | NETC_ETHSWT_IP_SGCLTABLE_CFGE_CTD((SGCLTableEntry->ListEntries[ListIdx].SGCL_Ctd) ? 1U : 0U) \
+                                                                                                            | NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOMEN((SGCLTableEntry->ListEntries[ListIdx].SGCL_IntervalOctetMaxEnable) ? 1U : 0U) \
+                                                                                                            | NETC_ETHSWT_IP_SGCLTABLE_CFGE_GTST(SGCLTableEntry->ListEntries[ListIdx].SGCL_GateState);
+            }
+        }
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_29();
+
+        /* fill in operation data for config field of Request Header*/
+        OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        OperationData.TableId = NETC_ETHSWT_IP_STREAM_GATE_CTRL_LIST_TABLE_ID;
+        /* for Add and Update command, the Access Method should only be NETC_ETHSWT_ENTRY_ID_MATCH */
+        OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
+        OperationData.Cmd = Cmd;
+        /* the request and response data buffer length are variable based on the length of control list*/
+        OperationData.ReqBuffLength = (uint16)((uint8)(16U + (8U * SGCLTableEntry->Cfge_ListLength)));
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
+
+        /* send command */
+        status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+        {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+            Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_QueryStreamGateControlListTableEntry
+ * Description   : Ethernet Switch query Ingress Stream Control List table entry function.
+ * implements Netc_EthSwt_Ip_QueryStreamGateControlListTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryStreamGateControlListTableEntry( uint8 SwitchIdx,
+                                                                                   uint32 *MatchedEntries,
+                                                                                   uint32 SGCLEntryId,
+                                                                                   uint8 ListLen,
+                                                                                   Netc_EthSwt_Ip_SGCLTableDataType * SGCLTableEntryRspData
+                                                                                 )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    uint32 ConfigBits;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 ListIdx;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(SGCLTableEntryRspData != NULL_PTR);
+    if (ListLen > 0U)
+    {
+        DevAssert(SGCLTableEntryRspData->ListEntries != NULL_PTR);
+    }
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_30();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in ACCESS_KEY field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = SGCLEntryId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_30();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_STREAM_GATE_CTRL_LIST_TABLE_ID;
+    /* for query function, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);     /* set request data buffer length */
+    OperationData.RspBuffLength = (uint16)((uint8)(16U + (8U * ListLen)));           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_EthSwt_Ip_SGCLTableDataType" structure with data in response data buffer */
+            SGCLTableEntryRspData->SGCLEntryId = TableDataBuffer.TableDataField[0U];
+
+            /* fill in SGCLSE_DATA */
+            SGCLTableEntryRspData->Sgclse_RefCount = (TableDataBuffer.TableDataField[1U] & NETC_ETHSWT_IP_SGCLTABLE_SGCLSE_REFCOUNT_MASK);
+
+            /* fill in CFGE data */
+            SGCLTableEntryRspData->Cfge_CycleTime = TableDataBuffer.TableDataField[2U];
+            ConfigBits = TableDataBuffer.TableDataField[3U];
+            SGCLTableEntryRspData->Cfge_ListLength = (uint8)(ConfigBits & NETC_ETHSWT_IP_SGCLTABLE_CFGE_LISTLEN_MASK) + 1U;
+            SGCLTableEntryRspData->Cfge_ExtIpv = (uint8)((ConfigBits & NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTIPV_MASK) >> NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTIPV_SHIFT);
+            SGCLTableEntryRspData->Cfge_ExtOIPV = ((ConfigBits & NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTOIPV_MASK) == 0x0UL) ? FALSE : TRUE;
+            SGCLTableEntryRspData->Cfge_ExtCtd = ((ConfigBits & NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTCTD_MASK) == 0x0UL) ? FALSE : TRUE;
+            SGCLTableEntryRspData->Cfge_ExtGtst = (ConfigBits & NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTGTST_MASK) >> NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTGTST_SHIFT;
+
+            if (SGCLTableEntryRspData->Cfge_ListLength > 0U)
+            {
+                for (ListIdx = 0U; ListIdx < SGCLTableEntryRspData->Cfge_ListLength; ListIdx++)
+                {
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_TimeInterval = TableDataBuffer.TableDataField[4U + (2U * ListIdx)];
+                    ConfigBits = TableDataBuffer.TableDataField[5U + (2U * ListIdx)];
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_IntervalOctetsMax = ConfigBits & NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOM_MASK;
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_Ipv = (uint8)((ConfigBits & NETC_ETHSWT_IP_SGCLTABLE_CFGE_IPV_MASK) >> NETC_ETHSWT_IP_SGCLTABLE_CFGE_IPV_SHIFT);
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_Oipv = ((ConfigBits & NETC_ETHSWT_IP_SGCLTABLE_CFGE_OIPV_MASK) == 0x0UL) ?  FALSE : TRUE;
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_Ctd = ((ConfigBits & NETC_ETHSWT_IP_SGCLTABLE_CFGE_CTD_MASK) == 0x0UL) ?  FALSE : TRUE;
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_IntervalOctetMaxEnable = ((ConfigBits & NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOMEN_MASK) == 0x0UL) ?  FALSE : TRUE;
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_GateState = (ConfigBits & NETC_ETHSWT_IP_SGCLTABLE_CFGE_GTST_MASK) >> NETC_ETHSWT_IP_SGCLTABLE_CFGE_GTST_SHIFT;
+                }
+            }
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_DeleteStreamGateControlListTableEntry
+ * Description   : Ethernet Switch delete Stream Gate Instance table entry function.
+ * implements Netc_EthSwt_Ip_DeleteStreamGateControlListTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteStreamGateControlListTableEntry( uint8 SwitchIdx,
+                                                                                    uint32 *MatchedEntries,
+                                                                                    uint32 SGCLEntryId
+                                                                                  )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData = 0U;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_31();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* Delete command will ignore ActionsData data field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = SGCLEntryId;        /* fill in Entry_ID field (Access Key) */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_31();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_STREAM_GATE_CTRL_LIST_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                      /* for delete command, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);           /* set response data buffer with normal length */
+
+    /* send the "Delete" command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_AddOrUpdateIngressSeqGenerationTableEntry
+ * Description   : Ethernet Switch Add or Update Ingress Sequence Generation table entry function.
+ * implements Netc_EthSwt_Ip_AddOrUpdateIngressSeqGenerationTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateIngressSeqGenerationTableEntry( uint8 SwitchIdx,
+                                                                                        Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                        uint32 *MatchedEntries,
+                                                                                        const Netc_EthSwt_Ip_ISQGTableDataType * ISQGTableEntry
+                                                                                      )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(ISQGTableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add and Update commands */
+    if ((NETC_ETHSWT_ADD_CMD != Cmd) && (NETC_ETHSWT_UPDATE_CMD != Cmd))
+    {
+        status = NETC_ETHSWT_CBDRSTATUS_INVALID_CMD;    /* not supported command */
+    }
+    else
+    {
+        /* set table version and update actions*/
+        ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U) \
+                    | NETC_ETHSWT_IP_ISQGTABLE_REQFMT_ACTIONS_FIELD_SGSEU(1U) \
+                    | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_32();
+        /* ------initialize the table request data buffer------ */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        /* fill in KEYE_DATA */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = ISQGTableEntry->ISQGEntryId;     /* fill in Entry_ID */
+        /* fill in ACFGE_DATA */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = ISQGTableEntry->Cfge_SQTagType;
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_32();
+
+        /* fill in operation data for config field of Request Header*/
+        OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        OperationData.TableId = NETC_ETHSWT_IP_INGRESS_SEQ_GENERATION_TABLE_ID;
+        /* for Add and Update command, the Access Method should only be NETC_ETHSWT_ENTRY_ID_MATCH */
+        OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
+        OperationData.Cmd = Cmd;
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_ISQGTABLE_REQBUFFER_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
+
+        /* send command */
+        status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+        {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+            Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_QueryIngressSeqGenerationTableEntry
+ * Description   : Ethernet Switch query Ingress Sequence Generation table entry function.
+ * implements Netc_EthSwt_Ip_QueryIngressSeqGenerationTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngressSeqGenerationTableEntry( uint8 SwitchIdx,
+                                                                                  uint32 *MatchedEntries,
+                                                                                  uint32 ISQGEntryId,
+                                                                                  Netc_EthSwt_Ip_ISQGTableDataType * ISQGRspData
+                                                                                )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    uint32 ConfigBits;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(ISQGRspData != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_33();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in ACCESS_KEY field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = ISQGEntryId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_33();
+ 
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_SEQ_GENERATION_TABLE_ID;
+    /* for query function, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);     /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_ISQGTABLE_RSPBUFFER_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_EthSwt_Ip_ISQGTableDataType" structure with data in response data buffer */
+            ISQGRspData->ISQGEntryId = TableDataBuffer.TableDataField[0U];
+
+            /* fill in CFGE data */
+            ConfigBits = TableDataBuffer.TableDataField[1U];
+            ISQGRspData->Cfge_SQTagType = (ConfigBits & NETC_ETHSWT_IP_ISQGTABLE_CFGE_SQTAG_MASK);
+            ISQGRspData->Sgse_SQGNum = (uint16)((ConfigBits >> NETC_ETHSWT_IP_16BIT_SHIFT) & 0xFFFFU);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_DeleteIngressSeqGenerationTableEntry
+ * implements Netc_EthSwt_Ip_DeleteIngressSeqGenerationTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngressSeqGenerationTableEntry( uint8 SwitchIdx,
+                                                                                   uint32 *MatchedEntries,
+                                                                                   uint32 ISQGEntryId
+                                                                                 )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData = 0U;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_34();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* Delete command will ignore ActionsData data field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = ISQGEntryId;        /* fill in Entry_ID field (Access Key) */
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_34();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_SEQ_GENERATION_TABLE_ID;
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;                      /* for delete command, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);           /* set response data buffer with normal length */
+
+    /* send the "Delete" command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_UpdateEgressSeqRecoveryTableEntry
+ * Description   : Ethernet Switch Add or Update Ingress Sequence Generation table entry function.
+ * implements Netc_EthSwt_Ip_UpdateEgressSeqRecoveryTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_UpdateEgressSeqRecoveryTableEntry( uint8 SwitchIdx,
+                                                                                uint32 *MatchedEntries,
+                                                                                const Netc_EthSwt_Ip_EgrSeqRecoveryTableDataType * EgrSQRTableEntry
+                                                                              )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(EgrSQRTableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* set table version and update actions*/
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U) \
+                | NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_STSEU(1U) \
+                | NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_SRSEU(1U) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_35();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in ACCESS_KEY */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = EgrSQRTableEntry->EgrSeqRecEntryId;     /* fill in Entry_ID */
+    /* fill in CFGE_DATA */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQTAG(EgrSQRTableEntry->Cfge_SQTag) \
+                                                                                | NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTNSQ(EgrSQRTableEntry->Cfge_SqrTnsq) \
+                                                                                | NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRALG(EgrSQRTableEntry->Cfge_SqrAlg) \
+                                                                                | NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTYPE(EgrSQRTableEntry->Cfge_SqrType) \
+                                                                                | NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRHL(EgrSQRTableEntry->Cfge_SQRHisLen) \
+                                                                                | NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRFWL(EgrSQRTableEntry->Cfge_SQRFutureWinLen);
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA1] = NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTP(EgrSQRTableEntry->Cfge_SQRTimeOutPeriod);
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_35();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_EGRESS_SEQ_RECOVERY_TABLE_ID;
+    /* for Update command, the Access Method should only be NETC_ETHSWT_ENTRY_ID_MATCH */
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
+    OperationData.Cmd = NETC_ETHSWT_UPDATE_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_EGRSQRTABLE_REQBUFFER_LEN);
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_QueryEgressSeqRecoveryTableEntry
+ * Description   : Ethernet Switch query Ingress Sequence Generation table entry function.
+ * implements Netc_EthSwt_Ip_QueryEgressSeqRecoveryTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryEgressSeqRecoveryTableEntry( uint8 SwitchIdx,
+                                                                               uint32 *MatchedEntries,
+                                                                               uint32 ESQREntryId,
+                                                                               Netc_EthSwt_Ip_EgrSeqRecoveryTableRspDataType * ESQRRspData
+                                                                             )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    uint32 ConfigBits;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 HisIdx;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(ESQRRspData != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_36();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in ACCESS_KEY field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = ESQREntryId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_36();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_EGRESS_SEQ_RECOVERY_TABLE_ID;
+    /* for query function, always uses NETC_ETHSWT_ENTRY_ID_MATCH method */
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_EGRSQRTABLE_REQBUFFER_LEN);     /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_EGRSQRTABLE_RSPBUFFER_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_EthSwt_Ip_EgrSeqRecoveryTableRspDataType" structure with data in response data buffer */
+            ESQRRspData->EgrSeqRecEntryId = TableDataBuffer.TableDataField[0U];
+
+            /* fill in STSE_DATA */
+            ESQRRspData->Stse_InOrderPkts = (((uint64)(TableDataBuffer.TableDataField[2U])) << NETC_ETHSWT_IP_32BIT_SHIFT);
+            ESQRRspData->Stse_InOrderPkts |= (uint64)(TableDataBuffer.TableDataField[1U]);
+            ESQRRspData->Stse_OutOfOrderPkts = (((uint64)(TableDataBuffer.TableDataField[4U])) << NETC_ETHSWT_IP_32BIT_SHIFT);
+            ESQRRspData->Stse_OutOfOrderPkts |= (uint64)(TableDataBuffer.TableDataField[3U]);
+            ESQRRspData->Stse_RoguePkts = (((uint64)(TableDataBuffer.TableDataField[6U])) << NETC_ETHSWT_IP_32BIT_SHIFT);
+            ESQRRspData->Stse_RoguePkts |= (uint64)(TableDataBuffer.TableDataField[5U]);
+            ESQRRspData->Stse_DuplicatePkts = (((uint64)(TableDataBuffer.TableDataField[8U])) << NETC_ETHSWT_IP_32BIT_SHIFT);
+            ESQRRspData->Stse_DuplicatePkts |= (uint64)(TableDataBuffer.TableDataField[7U]);
+            ESQRRspData->Stse_LostPkts = (((uint64)(TableDataBuffer.TableDataField[10U])) << NETC_ETHSWT_IP_32BIT_SHIFT);
+            ESQRRspData->Stse_LostPkts |= (uint64)(TableDataBuffer.TableDataField[9U]);
+            ESQRRspData->Stse_TaglessPkts = (((uint64)(TableDataBuffer.TableDataField[12U])) << NETC_ETHSWT_IP_32BIT_SHIFT);
+            ESQRRspData->Stse_TaglessPkts |= (uint64)(TableDataBuffer.TableDataField[11U]);
+            ESQRRspData->Stse_SeqRecResets = TableDataBuffer.TableDataField[13U];
+
+            /* fill in CFGE data */
+            ConfigBits = TableDataBuffer.TableDataField[14U];
+            ESQRRspData->Cfge_SQTag = (uint8)(ConfigBits & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQTAG_MASK);
+            ESQRRspData->Cfge_SqrTnsq = (ConfigBits & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTNSQ_MASK) >> NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTNSQ_SHIFT;
+            ESQRRspData->Cfge_SqrAlg = (ConfigBits & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRALG_MASK) >> NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRALG_SHIFT;
+            ESQRRspData->Cfge_SqrType = (ConfigBits & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTYPE_MASK) >> NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTYPE_SHIFT;
+            ESQRRspData->Cfge_SQRHisLen = (uint8)((ConfigBits & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRHL_MASK) >> NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRHL_SHIFT);
+            ESQRRspData->Cfge_SQRFutureWinLen = (uint16)((ConfigBits & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRFWL_MASK) >> NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRFWL_SHIFT);
+            ESQRRspData->Cfge_SQRTimeOutPeriod = (uint16)(TableDataBuffer.TableDataField[15U] & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTP_MASK);
+
+            /* fill in SRSE data */
+            ConfigBits = TableDataBuffer.TableDataField[16U];
+            ESQRRspData->Srse_SqrNum = (uint16)(ConfigBits & NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRNUM_MASK);
+            ESQRRspData->Srse_TakeAny = (uint8)((ConfigBits & NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_TAKEANY_MASK) >> NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_TAKEANY_SHIFT);
+            ESQRRspData->Srse_LostCntEnable = ((ConfigBits & NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_LCE_MASK) == 0U) ? FALSE : TRUE;
+            ESQRRspData->Srse_SqrTimeStamp = (uint16)((ConfigBits & NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRTS_MASK) >> NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRTS_SHIFT);
+
+            for (HisIdx = 0U; HisIdx < 4U; HisIdx++)
+            {
+                ESQRRspData->Srse_SqrHistory[HisIdx] = TableDataBuffer.TableDataField[17U + HisIdx];
+            }
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_AddOrUpdateIngrStreamIdentificationTableEntry
+ * Description   : Ethernet Switch Add or Update Ingress Stream Identification table entry function.
+ * implements Netc_EthSwt_Ip_AddOrUpdateIngrStreamIdentificationTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateIngrStreamIdentificationTableEntry( uint8 SwitchIdx,
+                                                                                            Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                            uint32 *MatchedEntries,
+                                                                                            const Netc_EthSwt_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                          )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 FrmKeyIdx;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(ISITableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add and Update commands */
+    if ((NETC_ETHSWT_ADD_CMD != Cmd) && (NETC_ETHSWT_UPDATE_CMD != Cmd))
+    {
+        status = NETC_ETHSWT_CBDRSTATUS_INVALID_CMD;    /* not supported command */
+    }
+    else
+    {
+        /* set table version and update actions*/
+        ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U) \
+                    | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+        SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_37();
+        /* ------initialize the table request data buffer------ */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        /* fill in KEYE_DATA */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = NETC_ETHSWT_IP_ISITABLE_KEYE_KEYTYPE(ISITableEntry->Keye_Keytype) \
+                                                                                        | NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID(ISITableEntry->Keye_SrcPortId) \
+                                                                                        | NETC_ETHSWT_IP_ISITABLE_KEYE_SPM(ISITableEntry->Keye_Spm);
+        SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_37();
+
+        for (FrmKeyIdx = 0U; FrmKeyIdx < 4U; FrmKeyIdx++)
+        {
+            TableDataBuffer.TableDataField[(uint8)NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0 + FrmKeyIdx] = ISITableEntry->Keye_FrmKey[FrmKeyIdx];    /* [Ricky]TODO: need to check the data format, big endian */
+        }
+        /* fill in CFGE_DATA */
+        TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA4] = ISITableEntry->IngrStreamEntryId;     /* IS_EID */
+
+        /* fill in operation data for config field of Request Header*/
+        OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_IDEN_TABLE_ID;
+        /* for Add and Update command, the Access Method should only be NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH */
+        OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;
+        OperationData.Cmd = Cmd;
+        OperationData.ReqBuffLength = (NETC_ETHSWT_IP_ISITABLE_ADD_REQBUFFER_LEN);
+        OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
+
+        /* send command */
+        status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+        {
+            #endif
+        #else
+        if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+        {
+        #endif
+            status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+            Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_QueryIngrStreamIdentificationTableEntry
+ * Description   : Ethernet Switch query Ingress Stream Identification table entry function.
+ * implements Netc_EthSwt_Ip_QueryIngrStreamIdentificationTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngrStreamIdentificationTableEntry( uint8 SwitchIdx,
+                                                                                      uint32 *MatchedEntries,
+                                                                                      Netc_EthSwt_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                    )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    uint32 ConfigBits;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 FrmKeyIdx;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(ISITableEntry != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_38();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in KEYE_DATA */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = NETC_ETHSWT_IP_ISITABLE_KEYE_KEYTYPE(ISITableEntry->Keye_Keytype) \
+                                                                                    | NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID(ISITableEntry->Keye_SrcPortId) \
+                                                                                    | NETC_ETHSWT_IP_ISITABLE_KEYE_SPM(ISITableEntry->Keye_Spm);
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_38();
+
+    for (FrmKeyIdx = 0U; FrmKeyIdx < 4U; FrmKeyIdx++)
+    {
+        TableDataBuffer.TableDataField[(uint8)NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0 + FrmKeyIdx] = ISITableEntry->Keye_FrmKey[FrmKeyIdx];    /* [Ricky]TODO: need to check the data format, big endian */
+    }
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_IDEN_TABLE_ID;
+    /* for query function, always uses NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH method */
+    OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_ISITABLE_QUERY_REQBUFFER_LEN);     /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_ISITABLE_RSQBUFFER_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_EthSwt_Ip_IngrStremIdentificationTableDataType" structure with data in response data buffer */
+            ISITableEntry->IngrStreamIdenEntryId = TableDataBuffer.TableDataField[1U];
+
+            /* fill in KEYE data */
+            ConfigBits = TableDataBuffer.TableDataField[2U];
+            ISITableEntry->Keye_Keytype = (ConfigBits & NETC_ETHSWT_IP_ISITABLE_KEYE_KEYTYPE_MASK);
+            ISITableEntry->Keye_SrcPortId = (uint8)((ConfigBits & NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID_MASK) >> NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID_SHIFT);
+            ISITableEntry->Keye_Spm = (ConfigBits & NETC_ETHSWT_IP_ISITABLE_KEYE_SPM_MASK) >> NETC_ETHSWT_IP_ISITABLE_KEYE_SPM_SHIFT;
+
+            for (FrmKeyIdx = 0U; FrmKeyIdx < 4U; FrmKeyIdx++)
+            {
+                ISITableEntry->Keye_FrmKey[FrmKeyIdx] = TableDataBuffer.TableDataField[3U + FrmKeyIdx];
+            }
+
+            /* fill in CFGE data */
+            ISITableEntry->IngrStreamEntryId = TableDataBuffer.TableDataField[7U];
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_DeleteIngrStreamIdentificationTableEntry
+ * Description   : Ethernet Switch delete Ingress Stream Identification table entry function.
+ * implements Netc_EthSwt_Ip_DeleteIngrStreamIdentificationTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngrStreamIdentificationTableEntry( uint8 SwitchIdx,
+                                                                                       uint32 *MatchedEntries,
+                                                                                       const Netc_EthSwt_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                     )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData = 0U;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint8 FrmKeyIdx;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(ISITableEntry != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_39();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in KEYE_DATA */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = NETC_ETHSWT_IP_ISITABLE_KEYE_KEYTYPE(ISITableEntry->Keye_Keytype) \
+                                                                                    | NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID(ISITableEntry->Keye_SrcPortId) \
+                                                                                    | NETC_ETHSWT_IP_ISITABLE_KEYE_SPM(ISITableEntry->Keye_Spm);
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_39();
+
+    for (FrmKeyIdx = 0U; FrmKeyIdx < 4U; FrmKeyIdx++)
+    {
+        TableDataBuffer.TableDataField[(uint8)NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0 + FrmKeyIdx] = ISITableEntry->Keye_FrmKey[FrmKeyIdx];    /* [Ricky]TODO: need to check the data format, big endian */
+    }
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_IDEN_TABLE_ID;
+    /* for query function, always uses NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH method */
+    OperationData.AccessMethod = NETC_ETHSWT_EXACT_MATCH_KEY_ELEMENT_MATCH;
+    OperationData.Cmd = NETC_ETHSWT_DELETE_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_ISITABLE_QUERY_REQBUFFER_LEN);     /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_SearchAndFillIngrStreamIdentificationTable
+ * Description   : inline function for searching and filling Ingress Stream Filter table entries.
+ *END**************************************************************************/
+static inline Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_SearchAndFillIngrStreamIdentificationTable( uint8 SwitchIdx,
+                                                                                                       uint32 * ResumeEntryId,
+                                                                                                       uint16 * NumOfExistingEntry,
+                                                                                                       Netc_EthSwt_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                                     )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    uint32 ConfigBits;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+    uint32 MatchedEntries = 0x0UL;
+    uint8 FrmKeyIdx;
+    uint8 TableMemIdx;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(ResumeEntryId != NULL_PTR);
+    DevAssert(ISITableEntry != NULL_PTR);
+#endif
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETHSWT_TABLES_FULL_QUERY) \
+                | NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_40();
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in KEYE_DATA field */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = *ResumeEntryId;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_40();
+
+    /* clear the memory for searching, otherwise will get 0x89 error code */
+    for (TableMemIdx = 0U; TableMemIdx < 6U; TableMemIdx++)
+    {
+        TableDataBuffer.TableDataField[(uint8)NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0 + TableMemIdx] = 0U;
+    }
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_INGRESS_STREAM_IDEN_TABLE_ID;
+    /* query function with NETC_ETHSWT_SEARCH_METHOD method */
+    OperationData.AccessMethod = NETC_ETHSWT_SEARCH_METHOD;
+    OperationData.Cmd = NETC_ETHSWT_QUERY_CMD;
+    OperationData.ReqBuffLength = (NETC_ETHSWT_IP_ISITABLE_QUERY_REQBUFFER_LEN);     /* set request data buffer length */
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_ISITABLE_RSQBUFFER_LEN);            /* set response data buffer length */
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, &MatchedEntries);
+
+        /* get the resume_entry_id and be ready for the next query operation */
+        *ResumeEntryId = TableDataBuffer.TableDataField[0U];
+
+        /* ERR051048: NETC: Management command with search action responds with incorrect NUM_MATCHED */
+        /* found a matched entry */
+        if ((1U == MatchedEntries) && (*ResumeEntryId != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID))
+        {
+            /* fill in "Netc_EthSwt_Ip_IngrStremIdentificationTableDataType" structure with data in response data buffer */
+            ISITableEntry[*NumOfExistingEntry].IngrStreamIdenEntryId = TableDataBuffer.TableDataField[1U];
+
+            /* fill in KEYE data */
+            ConfigBits = TableDataBuffer.TableDataField[2U];
+            ISITableEntry[*NumOfExistingEntry].Keye_Keytype = (ConfigBits & NETC_ETHSWT_IP_ISITABLE_KEYE_KEYTYPE_MASK);
+            ISITableEntry[*NumOfExistingEntry].Keye_SrcPortId = (uint8)((ConfigBits & NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID_MASK) >> NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID_SHIFT);
+            ISITableEntry[*NumOfExistingEntry].Keye_Spm = (ConfigBits & NETC_ETHSWT_IP_ISITABLE_KEYE_SPM_MASK) >> NETC_ETHSWT_IP_ISITABLE_KEYE_SPM_SHIFT;
+
+            for (FrmKeyIdx = 0U; FrmKeyIdx < 4U; FrmKeyIdx++)
+            {
+                ISITableEntry[*NumOfExistingEntry].Keye_FrmKey[FrmKeyIdx] = TableDataBuffer.TableDataField[3U + FrmKeyIdx];
+            }
+
+            /* fill in CFGE data */
+            ISITableEntry[*NumOfExistingEntry].IngrStreamEntryId = TableDataBuffer.TableDataField[7U];
+
+            /* increase the NumOfExistingEntry */
+            (*NumOfExistingEntry) += 1U;
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_GetIngrStreamIdentificationTable
+ * Description   : Ethernet Switch get ingress stream filter table function.
+ * implements Netc_EthSwt_Ip_GetIngrStreamIdentificationTable_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_GetIngrStreamIdentificationTable( uint8 SwitchIdx,
+                                                                               uint16 * NumberOfElements,
+                                                                               Netc_EthSwt_Ip_IngrStremIdentificationTableDataType * ISITableList
+                                                                             )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status = E_OK;
+    uint16 NumOfExistingEntry = 0U;
+    uint32 ResumeId = NETC_ETHSWT_IP_BD_NULL_ENTRY_ID;
+
+    /* [notes]: we will have to read entries one by one because of the errata ERR051048.
+     - ERR051048: NETC: Management command with search action responds with incorrect NUM_MATCHED
+     - Description: The NUM_MATCHED field in the command NTMP response header may be incorrect when
+       the search access method is used for the following tables: FDB table 15, L2 IPv4 Multicast
+       Filter table 16, VLAN Filter table 18, Ingress Stream Identification table 30, or Ingress Stream
+       Filter table 32.
+     - Workaround: For the query command, limit the message response buffer size (RESPONSE_LENGTH field in the request header)
+       so that NETC returns no more than one entry at a time. Under this condition, the NUM_MATCHED field value is correct
+    */
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(NumberOfElements != NULL_PTR);
+    DevAssert(*NumberOfElements != 0U);
+    DevAssert(ISITableList != NULL_PTR);
+#endif
+
+    do
+    {
+        /* check if the ISITableList is full or we get all existing entries */
+        if ((NumOfExistingEntry >= *NumberOfElements) || (status == (uint8)(E_NOT_OK)))
+        {
+            break;
+        }
+
+        status = Netc_EthSwt_Ip_SearchAndFillIngrStreamIdentificationTable(SwitchIdx, &ResumeId, &NumOfExistingEntry, ISITableList);
+
+    } while (ResumeId != NETC_ETHSWT_IP_BD_NULL_ENTRY_ID);      /* ResumeId == NETC_ETHSWT_IP_BD_NULL_ENTRY_ID means the query operation is completed */
+
+    /* return the Number of elements which are currently available in the EthSwitch module or number of elements copied to ISITableList*/
+    *NumberOfElements = NumOfExistingEntry;
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_UpdateEgressSchedulerTableEntry
+ * Description   : Ethernet Switch Update Egress Class Scheduler table entry function.
+ * implements Netc_EthSwt_Ip_UpdateEgressSchedulerTableEntry_Activity
+ *END**************************************************************************/
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_UpdateEgressSchedulerTableEntry( uint8 SwitchIdx,
+                                                                            uint32 EntryId,
+                                                                            uint32 *MatchedEntries,
+                                                                            const Netc_EthSwt_Ip_PortSchedulerType * SchedulerTableEntry
+                                                                        )
+{
+    Netc_EthSwt_Ip_CBDRStatusType status;
+    uint32 ActionsData;
+    NetcEthSwt_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+    DevAssert(SchedulerTableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert((EntryId > 0U) && (EntryId < NETC_ETHSWT_NUMBER_OF_PORTS));
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* set table version*/
+    ActionsData = NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_41();
+
+    /* ------initialize the table request data buffer------ */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+
+    /* fill in Access Key field, only support Entry ID Match method */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ENTRYID_FIELD] = EntryId;
+
+    /* fill in CFGE_DATA */
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA0] = NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_CQ_ASSG(SchedulerTableEntry->numberOfWBFSQueues) \
+                                                                                | NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_OAL(SchedulerTableEntry->overheadAccountingLength);
+
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA1] = NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_0(SchedulerTableEntry->portEgressSchedulerWeightList[0U]) \
+                                                                                | NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_1(SchedulerTableEntry->portEgressSchedulerWeightList[1U]) \
+                                                                                | NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_2(SchedulerTableEntry->portEgressSchedulerWeightList[2U]) \
+                                                                                | NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_3(SchedulerTableEntry->portEgressSchedulerWeightList[3U]);
+
+    TableDataBuffer.TableDataField[NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA2] = NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_4(SchedulerTableEntry->portEgressSchedulerWeightList[4U]) \
+                                                                                | NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_5(SchedulerTableEntry->portEgressSchedulerWeightList[5U]) \
+                                                                                | NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_6(SchedulerTableEntry->portEgressSchedulerWeightList[6U]) \
+                                                                                | NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_7(SchedulerTableEntry->portEgressSchedulerWeightList[7U]);
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_41();
+
+    /* fill in operation data for config field of Request Header*/
+    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    OperationData.Version = NETC_ETHSWT_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    OperationData.TableId = NETC_ETHSWT_IP_CLASS_SCHEDULER_TABLE_ID;
+    /* for Add and Update command, the Access Method should only be NETC_ETHSWT_ENTRY_ID_MATCH */
+    OperationData.AccessMethod = NETC_ETHSWT_ENTRY_ID_MATCH;
+    OperationData.Cmd = NETC_ETHSWT_UPDATE_CMD;
+
+    /* the request and response data buffer length are variable based on the length of control list*/
+    OperationData.ReqBuffLength = NETC_ETHSWT_IP_EGRSCHTABLE_REQBUFFER_LEN ;
+    OperationData.RspBuffLength = (NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
+
+    /* send command */
+    status = Netc_EthSwt_Ip_SendCommand(SwitchIdx, NETC_ETHSWT_IP_CBDR_0, &OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if ((status == 0x8AU) || (status == NETC_ETHSWT_CBDRSTATUS_SUCCES))
+    {
+        #endif
+    #else
+    if (status == NETC_ETHSWT_CBDRSTATUS_SUCCES)
+    {
+    #endif
+        status = NETC_ETHSWT_CBDRSTATUS_SUCCES;
+        Netc_EthSwt_Ip_GetMatchedEntries(NETC_ETHSWT_IP_CBDR_0, MatchedEntries);
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_EthSwt_Ip_SetSyncState
+ * Description   : Function to set the Timers Synchronization state
+ * implements Netc_EthSwt_Ip_SetSyncState_Activity
+ *END**************************************************************************/
+Std_ReturnType Netc_EthSwt_Ip_SetSyncState(uint8 SwitchIdx, boolean SyncState)
+{
+    Std_ReturnType status = E_OK;
+
+#if (STD_ON == NETC_ETHSWT_IP_DEV_ERROR_DETECT)
+    DevAssert(SwitchIdx < FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS);
+#else
+    (void)SwitchIdx; /*Cast to void because there might be cases when NETC_ETHSWT_IP_DEV_ERROR_DETECT == STD_OFF and SwitchIdx will be unused */
+#endif
+    SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_09();
+    IP_NETC__TMR0_BASE->TMR_PARAM |= SyncState ? 1U : 0U;
+    SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_09();
+
+    return status;
+}
 #define ETHSWT_43_NETC_STOP_SEC_CODE
 #include "EthSwt_43_NETC_MemMap.h"
 

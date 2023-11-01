@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SW_PORT0.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_SW_PORT0
  *
  * This file contains register definitions and macros for easy access to their
@@ -118,7 +118,8 @@ typedef struct {
   __IO uint32_t PTXDCRR1;                          /**< Port Tx discard count reason register 1, offset: 0x1EC */
   uint8_t RESERVED_13[16];
   struct {                                         /* offset: 0x200, array step: 0x20 */
-    uint8_t RESERVED_0[8];
+    __I  uint32_t PTGSTCSR;                          /**< Port time gate scheduling traffic class 0 status register..Port time gate scheduling traffic class 7 status register, array offset: 0x200, array step: 0x20 */
+    uint8_t RESERVED_0[4];
     __IO uint32_t PTCTMSDUR;                         /**< Port traffic class 0 transmit maximum SDU register..Port traffic class 7 transmit maximum SDU register, array offset: 0x208, array step: 0x20 */
     uint8_t RESERVED_1[4];
     __IO uint32_t PTCCBSR0;                          /**< Port transmit traffic class 0 credit based shaper register 0..Port transmit traffic class 7 credit based shaper register 0, array offset: 0x210, array step: 0x20 */
@@ -842,6 +843,15 @@ typedef struct {
 #define SW_PORT0_PTXDCRR1_TT_SHIFT               (28U)
 #define SW_PORT0_PTXDCRR1_TT_WIDTH               (4U)
 #define SW_PORT0_PTXDCRR1_TT(x)                  (((uint32_t)(((uint32_t)(x)) << SW_PORT0_PTXDCRR1_TT_SHIFT)) & SW_PORT0_PTXDCRR1_TT_MASK)
+/*! @} */
+
+/*! @name PTGSTCSR - Port time gate scheduling traffic class 0 status register..Port time gate scheduling traffic class 7 status register */
+/*! @{ */
+
+#define SW_PORT0_PTGSTCSR_LH_STATE_MASK          (0x10000U)
+#define SW_PORT0_PTGSTCSR_LH_STATE_SHIFT         (16U)
+#define SW_PORT0_PTGSTCSR_LH_STATE_WIDTH         (1U)
+#define SW_PORT0_PTGSTCSR_LH_STATE(x)            (((uint32_t)(((uint32_t)(x)) << SW_PORT0_PTGSTCSR_LH_STATE_SHIFT)) & SW_PORT0_PTGSTCSR_LH_STATE_MASK)
 /*! @} */
 
 /*! @name PTCTMSDUR - Port traffic class 0 transmit maximum SDU register..Port traffic class 7 transmit maximum SDU register */

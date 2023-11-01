@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_PIT.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_PIT
  *
  * This file contains register definitions and macros for easy access to their
@@ -73,17 +73,17 @@
 
 /** PIT - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t MCR;                               /**< PIT Module Control Register, offset: 0x0 */
+  __IO uint32_t MCR;                               /**< PIT Module Control, offset: 0x0 */
   uint8_t RESERVED_0[220];
-  __I  uint32_t LTMR64H;                           /**< PIT Upper Lifetime Timer Register, offset: 0xE0 */
-  __I  uint32_t LTMR64L;                           /**< PIT Lower Lifetime Timer Register, offset: 0xE4 */
+  __I  uint32_t LTMR64H;                           /**< PIT Upper Lifetimer, offset: 0xE0 */
+  __I  uint32_t LTMR64L;                           /**< PIT Lower Lifetimer, offset: 0xE4 */
   uint8_t RESERVED_1[24];
   struct {                                         /* offset: 0x100, array step: 0x10 */
-    __IO uint32_t LDVAL;                             /**< Timer Load Value Register, array offset: 0x100, array step: 0x10 */
-    __I  uint32_t CVAL;                              /**< Current Timer Value Register, array offset: 0x104, array step: 0x10 */
-    __IO uint32_t TCTRL;                             /**< Timer Control Register, array offset: 0x108, array step: 0x10 */
-    __IO uint32_t TFLG;                              /**< Timer Flag Register, array offset: 0x10C, array step: 0x10 */
-  } CHANNEL[PIT_TIMER_COUNT];
+    __IO uint32_t LDVAL;                             /**< Timer Load Value, array offset: 0x100, array step: 0x10, irregular array, not all indices are valid */
+    __I  uint32_t CVAL;                              /**< Current Timer Value, array offset: 0x104, array step: 0x10, irregular array, not all indices are valid */
+    __IO uint32_t TCTRL;                             /**< Timer Control, array offset: 0x108, array step: 0x10, irregular array, not all indices are valid */
+    __IO uint32_t TFLG;                              /**< Timer Flag, array offset: 0x10C, array step: 0x10, irregular array, not all indices are valid */
+  } TIMER[PIT_TIMER_COUNT];
 } PIT_Type, *PIT_MemMapPtr;
 
 /** Number of instances of the PIT module. */
@@ -152,7 +152,7 @@ typedef struct {
  * @{
  */
 
-/*! @name MCR - PIT Module Control Register */
+/*! @name MCR - PIT Module Control */
 /*! @{ */
 
 #define PIT_MCR_FRZ_MASK                         (0x1U)
@@ -166,7 +166,7 @@ typedef struct {
 #define PIT_MCR_MDIS(x)                          (((uint32_t)(((uint32_t)(x)) << PIT_MCR_MDIS_SHIFT)) & PIT_MCR_MDIS_MASK)
 /*! @} */
 
-/*! @name LTMR64H - PIT Upper Lifetime Timer Register */
+/*! @name LTMR64H - PIT Upper Lifetimer */
 /*! @{ */
 
 #define PIT_LTMR64H_LTH_MASK                     (0xFFFFFFFFU)
@@ -175,7 +175,7 @@ typedef struct {
 #define PIT_LTMR64H_LTH(x)                       (((uint32_t)(((uint32_t)(x)) << PIT_LTMR64H_LTH_SHIFT)) & PIT_LTMR64H_LTH_MASK)
 /*! @} */
 
-/*! @name LTMR64L - PIT Lower Lifetime Timer Register */
+/*! @name LTMR64L - PIT Lower Lifetimer */
 /*! @{ */
 
 #define PIT_LTMR64L_LTL_MASK                     (0xFFFFFFFFU)
@@ -184,7 +184,7 @@ typedef struct {
 #define PIT_LTMR64L_LTL(x)                       (((uint32_t)(((uint32_t)(x)) << PIT_LTMR64L_LTL_SHIFT)) & PIT_LTMR64L_LTL_MASK)
 /*! @} */
 
-/*! @name LDVAL - Timer Load Value Register */
+/*! @name LDVAL - Timer Load Value */
 /*! @{ */
 
 #define PIT_LDVAL_TSV_MASK                       (0xFFFFFFFFU)  /* Merged from fields with different position or width, of widths (24, 32), largest definition used */
@@ -193,7 +193,7 @@ typedef struct {
 #define PIT_LDVAL_TSV(x)                         (((uint32_t)(((uint32_t)(x)) << PIT_LDVAL_TSV_SHIFT)) & PIT_LDVAL_TSV_MASK)  /* Merged from fields with different position or width, of widths (24, 32), largest definition used */
 /*! @} */
 
-/*! @name CVAL - Current Timer Value Register */
+/*! @name CVAL - Current Timer Value */
 /*! @{ */
 
 #define PIT_CVAL_TVL_MASK                        (0xFFFFFFFFU)
@@ -202,7 +202,7 @@ typedef struct {
 #define PIT_CVAL_TVL(x)                          (((uint32_t)(((uint32_t)(x)) << PIT_CVAL_TVL_SHIFT)) & PIT_CVAL_TVL_MASK)
 /*! @} */
 
-/*! @name TCTRL - Timer Control Register */
+/*! @name TCTRL - Timer Control */
 /*! @{ */
 
 #define PIT_TCTRL_TEN_MASK                       (0x1U)
@@ -221,7 +221,7 @@ typedef struct {
 #define PIT_TCTRL_CHN(x)                         (((uint32_t)(((uint32_t)(x)) << PIT_TCTRL_CHN_SHIFT)) & PIT_TCTRL_CHN_MASK)
 /*! @} */
 
-/*! @name TFLG - Timer Flag Register */
+/*! @name TFLG - Timer Flag */
 /*! @{ */
 
 #define PIT_TFLG_TIF_MASK                        (0x1U)

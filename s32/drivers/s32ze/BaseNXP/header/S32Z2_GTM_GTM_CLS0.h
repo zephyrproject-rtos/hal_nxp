@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GTM_gtm_cls0.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_GTM_gtm_cls0
  *
  * This file contains register definitions and macros for easy access to their
@@ -75,15 +75,15 @@
 
 /** GTM_gtm_cls0 - Register Layout Typedef */
 typedef struct {
-  __I  uint32_t GTM_REV;                           /**< GTM Version control register, offset: 0x0 */
-  __IO uint32_t GTM_RST;                           /**< GTM Global reset register, offset: 0x4 */
-  __IO uint32_t GTM_CTRL;                          /**< GTM Global control register, offset: 0x8 */
-  __IO uint32_t GTM_CFG;                           /**< GTM Configuration register, offset: 0xC */
-  __I  uint32_t GTM_AEI_ADDR_XPT;                  /**< GTM AEI Timeout exception address register, offset: 0x10 */
-  __I  uint32_t GTM_AEI_STA_XPT;                   /**< GTM AEI Non zero status register, offset: 0x14 */
+  __I  uint32_t GTM_REV;                           /**< GTM version control register, offset: 0x0 */
+  __IO uint32_t GTM_RST;                           /**< GTM global reset register, offset: 0x4 */
+  __IO uint32_t GTM_CTRL;                          /**< GTM global control register, offset: 0x8 */
+  __IO uint32_t GTM_CFG;                           /**< GTM configuration register, offset: 0xC */
+  __I  uint32_t GTM_AEI_ADDR_XPT;                  /**< GTM AEI timeout exception address register, offset: 0x10 */
+  __I  uint32_t GTM_AEI_STA_XPT;                   /**< GTM AEI non zero status register, offset: 0x14 */
   __IO uint32_t GTM_IRQ_NOTIFY;                    /**< GTM Interrupt notification register, offset: 0x18 */
-  __IO uint32_t GTM_IRQ_EN;                        /**< GTM Interrupt enable register, offset: 0x1C */
-  __IO uint32_t GTM_EIRQ_EN;                       /**< GTM Error interrupt enable register, offset: 0x20 */
+  __IO uint32_t GTM_IRQ_EN;                        /**< GTM interrupt enable register, offset: 0x1C */
+  __IO uint32_t GTM_EIRQ_EN;                       /**< GTM error interrupt enable register, offset: 0x20 */
   __IO uint32_t GTM_IRQ_FORCINT;                   /**< GTM Software interrupt generation register, offset: 0x24 */
   __IO uint32_t GTM_IRQ_MODE;                      /**< GTM top level interrupts mode selection, offset: 0x28 */
   __IO uint32_t GTM_CLS_CLK_CFG;                   /**< GTM Cluster Clock Configuration, offset: 0x2C */
@@ -105,11 +105,11 @@ typedef struct {
   __IO uint32_t CMU_CLK_5_CTRL;                    /**< CMU control for clock resolution generator [x], offset: 0xA0 */
   __IO uint32_t CMU_CLK_6_CTRL;                    /**< CMU control for clock resolution generator 6, offset: 0xA4 */
   __IO uint32_t CMU_CLK_7_CTRL;                    /**< CMU control for clock resolution generator 7, offset: 0xA8 */
-  __IO uint32_t CMU_ECLK_0_NUM;                    /**< The numerator forthe external clock resolution generator [z], offset: 0xAC */
+  __IO uint32_t CMU_ECLK_0_NUM;                    /**< The numerator for the external clock resolution generator [z], offset: 0xAC */
   __IO uint32_t CMU_ECLK_0_DEN;                    /**< The denominator for the external clock resolution generator [z], offset: 0xB0 */
-  __IO uint32_t CMU_ECLK_1_NUM;                    /**< The numerator forthe external clock resolution generator [z], offset: 0xB4 */
+  __IO uint32_t CMU_ECLK_1_NUM;                    /**< The numerator for the external clock resolution generator [z], offset: 0xB4 */
   __IO uint32_t CMU_ECLK_1_DEN;                    /**< The denominator for the external clock resolution generator [z], offset: 0xB8 */
-  __IO uint32_t CMU_ECLK_2_NUM;                    /**< The numerator forthe external clock resolution generator [z], offset: 0xBC */
+  __IO uint32_t CMU_ECLK_2_NUM;                    /**< The numerator for the external clock resolution generator [z], offset: 0xBC */
   __IO uint32_t CMU_ECLK_2_DEN;                    /**< The denominator for the external clock resolution generator [z], offset: 0xC0 */
   __IO uint32_t CMU_FXCLK_CTRL;                    /**< CMU control for selection of FCR subblock input, offset: 0xC4 */
   __IO uint32_t CMU_GLB_CTRL;                      /**< CMU synchronizing ARU and clock source, offset: 0xC8 */
@@ -153,8 +153,8 @@ typedef struct {
   __IO uint32_t ARU_1_DYN_ROUTE_SR_LOW;            /**< ARU [g] shadow register of DYN_ROUTE register lower bits, offset: 0x1DC */
   __IO uint32_t ARU_0_DYN_ROUTE_SR_HIGH;           /**< ARU [g] shadow register of DYN_ROUTE register higher bits, offset: 0x1E0 */
   __IO uint32_t ARU_1_DYN_ROUTE_SR_HIGH;           /**< ARU [g] shadow register of DYN_ROUTE register higher bits, offset: 0x1E4 */
-  __IO uint32_t ARU_0_DYN_RDADDR;                  /**< ARU [g] read ID for dynamic routing, offset: 0x1E8 */
-  __IO uint32_t ARU_1_DYN_RDADDR;                  /**< ARU [g] read ID for dynamic routing, offset: 0x1EC */
+  __IO uint32_t ARU_0_DYN_RDADDR;                  /**< ARU [g] master ID for dynamic routing, offset: 0x1E8 */
+  __IO uint32_t ARU_1_DYN_RDADDR;                  /**< ARU [g] master ID for dynamic routing, offset: 0x1EC */
   uint8_t RESERVED_5[12];
   __I  uint32_t ARU_CADDR;                         /**< ARU caddr counter value, offset: 0x1FC */
   __IO uint32_t BRC_SRC_0_ADDR;                    /**< BRC read address for input channel [x], offset: 0x200 */
@@ -188,11 +188,11 @@ typedef struct {
   __IO uint32_t BRC_RST;                           /**< BRC software reset register, offset: 0x270 */
   __IO uint32_t BRC_EIRQ_EN;                       /**< BRC error interrupt enable register, offset: 0x274 */
   uint8_t RESERVED_6[392];
-  __I  uint32_t ICM_IRQG_0;                        /**< ICM Interrupt group register covering infrastructural and safety components (ARU, BRC, AEI, PSM0, PSM1, MAP, CMP,SPE), offset: 0x400 */
+  __I  uint32_t ICM_IRQG_0;                        /**< ICM Interrupt group register covering infrastructural and safety components (ARU, BRC, AEI, PSM0, PSM1, MAP, CMP, SPE), offset: 0x400 */
   __I  uint32_t ICM_IRQG_1;                        /**< ICM Interrupt group register covering DPLL, offset: 0x404 */
   __I  uint32_t ICM_IRQG_2;                        /**< ICM Interrupt group register covering TIM0, TIM1, TIM2, TIM3, offset: 0x408 */
   uint8_t RESERVED_7[4];
-  __I  uint32_t ICM_IRQG_4;                        /**< ICM Interrupt group register covering MCS0 to MCS3 sub-modules, offset: 0x410 */
+  __I  uint32_t ICM_IRQG_4;                        /**< ICM Interrupt group register covering MCS0 to MCS3 submodules, offset: 0x410 */
   uint8_t RESERVED_8[28];
   __I  uint32_t ICM_IRQG_MEI;                      /**< ICM Interrupt group register for module error interrupt information, offset: 0x430 */
   __I  uint32_t ICM_IRQG_CEI0;                     /**< ICM Interrupt group register 0 for channel error interrupt information, offset: 0x434 */
@@ -1523,8 +1523,8 @@ typedef struct {
   __IO uint32_t DPLL_RAM1B_RSVD_5_15;              /**< DPLL RAM1B reserved data [k], offset: 0x85BC */
   __IO uint32_t DPLL_MLS1;                         /**< Calculated Number of Sub-Pulses between two nominal STATE Events for DPLL_CTRL_1.SMC = 0, offset: 0x85C0 */
   __IO uint32_t DPLL_MLS2;                         /**< Calculated Number of Sub-Pulses between two nominal STATE Events for DPLL_CTRL_1.SMC=1 and RMO=1, offset: 0x85C4 */
-  __IO uint32_t DPLL_CNT_NUM_1;                    /**< Number of SUB_INC1 pulses in continous mode, offset: 0x85C8 */
-  __IO uint32_t DPLL_CNT_NUM_2;                    /**< Number of SUB_INC2 pulses in continous mode, offset: 0x85CC */
+  __IO uint32_t DPLL_CNT_NUM_1;                    /**< Number of SUB_INC1 pulses in continuous mode, offset: 0x85C8 */
+  __IO uint32_t DPLL_CNT_NUM_2;                    /**< Number of SUB_INC2 pulses in continuous mode, offset: 0x85CC */
   __IO uint32_t DPLL_PVT;                          /**< Plausibility Value of Next TRIGGER Slope, offset: 0x85D0 */
   __IO uint32_t DPLL_RAM1B_RSVD_6_0;               /**< DPLL RAM1B reserved data [k], offset: 0x85D4 */
   __IO uint32_t DPLL_RAM1B_RSVD_6_1;               /**< DPLL RAM1B reserved data [k], offset: 0x85D8 */
@@ -1885,9 +1885,9 @@ typedef struct {
   __IO uint32_t DPLL_INC_CNT2_MASK;                /**< Notify value of DPLL_INC_CNT2, offset: 0x8F60 */
   __IO uint32_t DPLL_NUSC_EXT1;                    /**< Number of Recent STATE Events used for Calculations, offset: 0x8F64 */
   __IO uint32_t DPLL_NUSC_EXT2;                    /**< Number of Recent STATE Events used for Calculations, offset: 0x8F68 */
-  __IO uint32_t DPLL_CTN_MIN;                      /**< Minmum value of predicted nominal increment of TRIGGER, offset: 0x8F6C */
+  __IO uint32_t DPLL_CTN_MIN;                      /**< Minimum value of predicted nominal increment of TRIGGER, offset: 0x8F6C */
   __IO uint32_t DPLL_CTN_MAX;                      /**< Maximum value of predicted nominal increment of TRIGGER, offset: 0x8F70 */
-  __IO uint32_t DPLL_CSN_MIN;                      /**< Minmum value of predicted nominal increment of STATE, offset: 0x8F74 */
+  __IO uint32_t DPLL_CSN_MIN;                      /**< Minimum value of predicted nominal increment of STATE, offset: 0x8F74 */
   __IO uint32_t DPLL_CSN_MAX;                      /**< Maximum value of predicted nominal increment of STATE, offset: 0x8F78 */
   __IO uint32_t DPLL_SW_TRIG;                      /**< Software triggered input events, offset: 0x8F7C */
   __I  uint32_t DPLL_MP_T;                         /**< Missing pulses of TRIGGER, offset: 0x8F80 */
@@ -1920,7 +1920,7 @@ typedef struct {
  * @{
  */
 
-/*! @name GTM_REV - GTM Version control register */
+/*! @name GTM_REV - GTM version control register */
 /*! @{ */
 
 #define GTM_gtm_cls0_GTM_REV_REL_ITER_MASK       (0xFU)
@@ -1954,7 +1954,7 @@ typedef struct {
 #define GTM_gtm_cls0_GTM_REV_VER_MAJOR(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_GTM_REV_VER_MAJOR_SHIFT)) & GTM_gtm_cls0_GTM_REV_VER_MAJOR_MASK)
 /*! @} */
 
-/*! @name GTM_RST - GTM Global reset register */
+/*! @name GTM_RST - GTM global reset register */
 /*! @{ */
 
 #define GTM_gtm_cls0_GTM_RST_RST_MASK            (0x1U)
@@ -1968,7 +1968,7 @@ typedef struct {
 #define GTM_gtm_cls0_GTM_RST_BRIDGE_MODE_WRDIS(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_GTM_RST_BRIDGE_MODE_WRDIS_SHIFT)) & GTM_gtm_cls0_GTM_RST_BRIDGE_MODE_WRDIS_MASK)
 /*! @} */
 
-/*! @name GTM_CTRL - GTM Global control register */
+/*! @name GTM_CTRL - GTM global control register */
 /*! @{ */
 
 #define GTM_gtm_cls0_GTM_CTRL_RF_PROT_MASK       (0x1U)
@@ -1992,7 +1992,7 @@ typedef struct {
 #define GTM_gtm_cls0_GTM_CTRL_AEIM_CLUSTER(x)    (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_GTM_CTRL_AEIM_CLUSTER_SHIFT)) & GTM_gtm_cls0_GTM_CTRL_AEIM_CLUSTER_MASK)
 /*! @} */
 
-/*! @name GTM_CFG - GTM Configuration register */
+/*! @name GTM_CFG - GTM configuration register */
 /*! @{ */
 
 #define GTM_gtm_cls0_GTM_CFG_SRC_IN_MUX_MASK     (0x1U)
@@ -2001,7 +2001,7 @@ typedef struct {
 #define GTM_gtm_cls0_GTM_CFG_SRC_IN_MUX(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_GTM_CFG_SRC_IN_MUX_SHIFT)) & GTM_gtm_cls0_GTM_CFG_SRC_IN_MUX_MASK)
 /*! @} */
 
-/*! @name GTM_AEI_ADDR_XPT - GTM AEI Timeout exception address register */
+/*! @name GTM_AEI_ADDR_XPT - GTM AEI timeout exception address register */
 /*! @{ */
 
 #define GTM_gtm_cls0_GTM_AEI_ADDR_XPT_TO_ADDR_MASK (0x1FFFFFU)
@@ -2015,7 +2015,7 @@ typedef struct {
 #define GTM_gtm_cls0_GTM_AEI_ADDR_XPT_TO_W1R0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_GTM_AEI_ADDR_XPT_TO_W1R0_SHIFT)) & GTM_gtm_cls0_GTM_AEI_ADDR_XPT_TO_W1R0_MASK)
 /*! @} */
 
-/*! @name GTM_AEI_STA_XPT - GTM AEI Non zero status register */
+/*! @name GTM_AEI_STA_XPT - GTM AEI non zero status register */
 /*! @{ */
 
 #define GTM_gtm_cls0_GTM_AEI_STA_XPT_ADDR_MASK   (0x1FFFFFU)
@@ -2078,7 +2078,7 @@ typedef struct {
 #define GTM_gtm_cls0_GTM_IRQ_NOTIFY_CLK_PER_ERR(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_GTM_IRQ_NOTIFY_CLK_PER_ERR_SHIFT)) & GTM_gtm_cls0_GTM_IRQ_NOTIFY_CLK_PER_ERR_MASK)
 /*! @} */
 
-/*! @name GTM_IRQ_EN - GTM Interrupt enable register */
+/*! @name GTM_IRQ_EN - GTM interrupt enable register */
 /*! @{ */
 
 #define GTM_gtm_cls0_GTM_IRQ_EN_AEI_TO_XPT_IRQ_EN_MASK (0x1U)
@@ -2127,7 +2127,7 @@ typedef struct {
 #define GTM_gtm_cls0_GTM_IRQ_EN_CLK_PER_ERR_IRQ_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_GTM_IRQ_EN_CLK_PER_ERR_IRQ_EN_SHIFT)) & GTM_gtm_cls0_GTM_IRQ_EN_CLK_PER_ERR_IRQ_EN_MASK)
 /*! @} */
 
-/*! @name GTM_EIRQ_EN - GTM Error interrupt enable register */
+/*! @name GTM_EIRQ_EN - GTM error interrupt enable register */
 /*! @{ */
 
 #define GTM_gtm_cls0_GTM_EIRQ_EN_AEI_TO_XPT_EIRQ_EN_MASK (0x1U)
@@ -2557,7 +2557,7 @@ typedef struct {
 #define GTM_gtm_cls0_CMU_CLK_7_CTRL_CLK_SEL(x)   (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_CMU_CLK_7_CTRL_CLK_SEL_SHIFT)) & GTM_gtm_cls0_CMU_CLK_7_CTRL_CLK_SEL_MASK)
 /*! @} */
 
-/*! @name CMU_ECLK_0_NUM - The numerator forthe external clock resolution generator [z] */
+/*! @name CMU_ECLK_0_NUM - The numerator for the external clock resolution generator [z] */
 /*! @{ */
 
 #define GTM_gtm_cls0_CMU_ECLK_0_NUM_ECLK_NUM_MASK (0xFFFFFFU)
@@ -2575,7 +2575,7 @@ typedef struct {
 #define GTM_gtm_cls0_CMU_ECLK_0_DEN_ECLK_DEN(x)  (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_CMU_ECLK_0_DEN_ECLK_DEN_SHIFT)) & GTM_gtm_cls0_CMU_ECLK_0_DEN_ECLK_DEN_MASK)
 /*! @} */
 
-/*! @name CMU_ECLK_1_NUM - The numerator forthe external clock resolution generator [z] */
+/*! @name CMU_ECLK_1_NUM - The numerator for the external clock resolution generator [z] */
 /*! @{ */
 
 #define GTM_gtm_cls0_CMU_ECLK_1_NUM_ECLK_NUM_MASK (0xFFFFFFU)
@@ -2593,7 +2593,7 @@ typedef struct {
 #define GTM_gtm_cls0_CMU_ECLK_1_DEN_ECLK_DEN(x)  (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_CMU_ECLK_1_DEN_ECLK_DEN_SHIFT)) & GTM_gtm_cls0_CMU_ECLK_1_DEN_ECLK_DEN_MASK)
 /*! @} */
 
-/*! @name CMU_ECLK_2_NUM - The numerator forthe external clock resolution generator [z] */
+/*! @name CMU_ECLK_2_NUM - The numerator for the external clock resolution generator [z] */
 /*! @{ */
 
 #define GTM_gtm_cls0_CMU_ECLK_2_NUM_ECLK_NUM_MASK (0xFFFFFFU)
@@ -3207,7 +3207,7 @@ typedef struct {
 #define GTM_gtm_cls0_ARU_1_DYN_ROUTE_SR_HIGH_DYN_UPDATE_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_ARU_1_DYN_ROUTE_SR_HIGH_DYN_UPDATE_EN_SHIFT)) & GTM_gtm_cls0_ARU_1_DYN_ROUTE_SR_HIGH_DYN_UPDATE_EN_MASK)
 /*! @} */
 
-/*! @name ARU_0_DYN_RDADDR - ARU [g] read ID for dynamic routing */
+/*! @name ARU_0_DYN_RDADDR - ARU [g] master ID for dynamic routing */
 /*! @{ */
 
 #define GTM_gtm_cls0_ARU_0_DYN_RDADDR_DYN_ARU_RDADDR_MASK (0x1FFU)
@@ -3216,7 +3216,7 @@ typedef struct {
 #define GTM_gtm_cls0_ARU_0_DYN_RDADDR_DYN_ARU_RDADDR(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_ARU_0_DYN_RDADDR_DYN_ARU_RDADDR_SHIFT)) & GTM_gtm_cls0_ARU_0_DYN_RDADDR_DYN_ARU_RDADDR_MASK)
 /*! @} */
 
-/*! @name ARU_1_DYN_RDADDR - ARU [g] read ID for dynamic routing */
+/*! @name ARU_1_DYN_RDADDR - ARU [g] master ID for dynamic routing */
 /*! @{ */
 
 #define GTM_gtm_cls0_ARU_1_DYN_RDADDR_DYN_ARU_RDADDR_MASK (0x1FFU)
@@ -5129,7 +5129,7 @@ typedef struct {
 #define GTM_gtm_cls0_BRC_EIRQ_EN_DID_EIRQ_EN11(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_BRC_EIRQ_EN_DID_EIRQ_EN11_SHIFT)) & GTM_gtm_cls0_BRC_EIRQ_EN_DID_EIRQ_EN11_MASK)
 /*! @} */
 
-/*! @name ICM_IRQG_0 - ICM Interrupt group register covering infrastructural and safety components (ARU, BRC, AEI, PSM0, PSM1, MAP, CMP,SPE) */
+/*! @name ICM_IRQG_0 - ICM Interrupt group register covering infrastructural and safety components (ARU, BRC, AEI, PSM0, PSM1, MAP, CMP, SPE) */
 /*! @{ */
 
 #define GTM_gtm_cls0_ICM_IRQG_0_ARU_NEW_DATA0_IRQ_MASK (0x1U)
@@ -5476,7 +5476,7 @@ typedef struct {
 #define GTM_gtm_cls0_ICM_IRQG_2_TIM2_CH7_IRQ(x)  (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_ICM_IRQG_2_TIM2_CH7_IRQ_SHIFT)) & GTM_gtm_cls0_ICM_IRQG_2_TIM2_CH7_IRQ_MASK)
 /*! @} */
 
-/*! @name ICM_IRQG_4 - ICM Interrupt group register covering MCS0 to MCS3 sub-modules */
+/*! @name ICM_IRQG_4 - ICM Interrupt group register covering MCS0 to MCS3 submodules */
 /*! @{ */
 
 #define GTM_gtm_cls0_ICM_IRQG_4_MCS0_CH0_IRQ_MASK (0x1U)
@@ -11178,15 +11178,15 @@ typedef struct {
 /*! @name TOM0_CH0_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH0_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH0_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -11381,15 +11381,15 @@ typedef struct {
 /*! @name TOM0_CH1_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH1_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH1_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -11584,15 +11584,15 @@ typedef struct {
 /*! @name TOM0_CH2_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH2_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH2_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -11787,15 +11787,15 @@ typedef struct {
 /*! @name TOM0_CH3_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH3_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH3_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -11990,15 +11990,15 @@ typedef struct {
 /*! @name TOM0_CH4_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH4_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH4_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -12193,15 +12193,15 @@ typedef struct {
 /*! @name TOM0_CH5_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH5_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH5_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -12396,15 +12396,15 @@ typedef struct {
 /*! @name TOM0_CH6_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH6_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH6_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -12599,15 +12599,15 @@ typedef struct {
 /*! @name TOM0_CH7_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH7_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH7_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -12792,15 +12792,15 @@ typedef struct {
 /*! @name TOM0_CH8_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH8_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH8_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -12985,15 +12985,15 @@ typedef struct {
 /*! @name TOM0_CH9_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH9_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH9_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -13173,15 +13173,15 @@ typedef struct {
 /*! @name TOM0_CH10_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH10_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH10_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -13361,15 +13361,15 @@ typedef struct {
 /*! @name TOM0_CH11_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH11_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH11_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -13549,15 +13549,15 @@ typedef struct {
 /*! @name TOM0_CH12_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH12_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH12_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -13737,15 +13737,15 @@ typedef struct {
 /*! @name TOM0_CH13_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH13_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH13_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -13925,15 +13925,15 @@ typedef struct {
 /*! @name TOM0_CH14_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH14_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH14_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -14118,15 +14118,15 @@ typedef struct {
 /*! @name TOM0_CH15_IRQ_FORCINT - TOM[i] channel [x] force interrupt register */
 /*! @{ */
 
-#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC0_MASK (0x1U)
-#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC0_SHIFT (0U)
-#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC_MASK (0x1U)
+#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC_SHIFT (0U)
+#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU0TC_MASK)
 
-#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC0_MASK (0x2U)
-#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC0_SHIFT (1U)
-#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC0_WIDTH (1U)
-#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC0(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC0_SHIFT)) & GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC0_MASK)
+#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC_MASK (0x2U)
+#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC_SHIFT (1U)
+#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC_WIDTH (1U)
+#define GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC_SHIFT)) & GTM_gtm_cls0_TOM0_CH15_IRQ_FORCINT_TRG_CCU1TC_MASK)
 /*! @} */
 
 /*! @name TOM0_CH15_IRQ_MODE - TOM[i] channel [x] interrupt mode register */
@@ -24312,6 +24312,11 @@ typedef struct {
 #define GTM_gtm_cls0_FIFO0_CH1_CTRL_RBM_WIDTH    (1U)
 #define GTM_gtm_cls0_FIFO0_CH1_CTRL_RBM(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH1_CTRL_RBM_SHIFT)) & GTM_gtm_cls0_FIFO0_CH1_CTRL_RBM_MASK)
 
+#define GTM_gtm_cls0_FIFO0_CH1_CTRL_RAP_MASK     (0x2U)
+#define GTM_gtm_cls0_FIFO0_CH1_CTRL_RAP_SHIFT    (1U)
+#define GTM_gtm_cls0_FIFO0_CH1_CTRL_RAP_WIDTH    (1U)
+#define GTM_gtm_cls0_FIFO0_CH1_CTRL_RAP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH1_CTRL_RAP_SHIFT)) & GTM_gtm_cls0_FIFO0_CH1_CTRL_RAP_MASK)
+
 #define GTM_gtm_cls0_FIFO0_CH1_CTRL_FLUSH_MASK   (0x4U)
 #define GTM_gtm_cls0_FIFO0_CH1_CTRL_FLUSH_SHIFT  (2U)
 #define GTM_gtm_cls0_FIFO0_CH1_CTRL_FLUSH_WIDTH  (1U)
@@ -24532,6 +24537,11 @@ typedef struct {
 #define GTM_gtm_cls0_FIFO0_CH2_CTRL_RBM_SHIFT    (0U)
 #define GTM_gtm_cls0_FIFO0_CH2_CTRL_RBM_WIDTH    (1U)
 #define GTM_gtm_cls0_FIFO0_CH2_CTRL_RBM(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH2_CTRL_RBM_SHIFT)) & GTM_gtm_cls0_FIFO0_CH2_CTRL_RBM_MASK)
+
+#define GTM_gtm_cls0_FIFO0_CH2_CTRL_RAP_MASK     (0x2U)
+#define GTM_gtm_cls0_FIFO0_CH2_CTRL_RAP_SHIFT    (1U)
+#define GTM_gtm_cls0_FIFO0_CH2_CTRL_RAP_WIDTH    (1U)
+#define GTM_gtm_cls0_FIFO0_CH2_CTRL_RAP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH2_CTRL_RAP_SHIFT)) & GTM_gtm_cls0_FIFO0_CH2_CTRL_RAP_MASK)
 
 #define GTM_gtm_cls0_FIFO0_CH2_CTRL_FLUSH_MASK   (0x4U)
 #define GTM_gtm_cls0_FIFO0_CH2_CTRL_FLUSH_SHIFT  (2U)
@@ -24754,6 +24764,11 @@ typedef struct {
 #define GTM_gtm_cls0_FIFO0_CH3_CTRL_RBM_WIDTH    (1U)
 #define GTM_gtm_cls0_FIFO0_CH3_CTRL_RBM(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH3_CTRL_RBM_SHIFT)) & GTM_gtm_cls0_FIFO0_CH3_CTRL_RBM_MASK)
 
+#define GTM_gtm_cls0_FIFO0_CH3_CTRL_RAP_MASK     (0x2U)
+#define GTM_gtm_cls0_FIFO0_CH3_CTRL_RAP_SHIFT    (1U)
+#define GTM_gtm_cls0_FIFO0_CH3_CTRL_RAP_WIDTH    (1U)
+#define GTM_gtm_cls0_FIFO0_CH3_CTRL_RAP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH3_CTRL_RAP_SHIFT)) & GTM_gtm_cls0_FIFO0_CH3_CTRL_RAP_MASK)
+
 #define GTM_gtm_cls0_FIFO0_CH3_CTRL_FLUSH_MASK   (0x4U)
 #define GTM_gtm_cls0_FIFO0_CH3_CTRL_FLUSH_SHIFT  (2U)
 #define GTM_gtm_cls0_FIFO0_CH3_CTRL_FLUSH_WIDTH  (1U)
@@ -24974,6 +24989,11 @@ typedef struct {
 #define GTM_gtm_cls0_FIFO0_CH4_CTRL_RBM_SHIFT    (0U)
 #define GTM_gtm_cls0_FIFO0_CH4_CTRL_RBM_WIDTH    (1U)
 #define GTM_gtm_cls0_FIFO0_CH4_CTRL_RBM(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH4_CTRL_RBM_SHIFT)) & GTM_gtm_cls0_FIFO0_CH4_CTRL_RBM_MASK)
+
+#define GTM_gtm_cls0_FIFO0_CH4_CTRL_RAP_MASK     (0x2U)
+#define GTM_gtm_cls0_FIFO0_CH4_CTRL_RAP_SHIFT    (1U)
+#define GTM_gtm_cls0_FIFO0_CH4_CTRL_RAP_WIDTH    (1U)
+#define GTM_gtm_cls0_FIFO0_CH4_CTRL_RAP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH4_CTRL_RAP_SHIFT)) & GTM_gtm_cls0_FIFO0_CH4_CTRL_RAP_MASK)
 
 #define GTM_gtm_cls0_FIFO0_CH4_CTRL_FLUSH_MASK   (0x4U)
 #define GTM_gtm_cls0_FIFO0_CH4_CTRL_FLUSH_SHIFT  (2U)
@@ -25196,6 +25216,11 @@ typedef struct {
 #define GTM_gtm_cls0_FIFO0_CH5_CTRL_RBM_WIDTH    (1U)
 #define GTM_gtm_cls0_FIFO0_CH5_CTRL_RBM(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH5_CTRL_RBM_SHIFT)) & GTM_gtm_cls0_FIFO0_CH5_CTRL_RBM_MASK)
 
+#define GTM_gtm_cls0_FIFO0_CH5_CTRL_RAP_MASK     (0x2U)
+#define GTM_gtm_cls0_FIFO0_CH5_CTRL_RAP_SHIFT    (1U)
+#define GTM_gtm_cls0_FIFO0_CH5_CTRL_RAP_WIDTH    (1U)
+#define GTM_gtm_cls0_FIFO0_CH5_CTRL_RAP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH5_CTRL_RAP_SHIFT)) & GTM_gtm_cls0_FIFO0_CH5_CTRL_RAP_MASK)
+
 #define GTM_gtm_cls0_FIFO0_CH5_CTRL_FLUSH_MASK   (0x4U)
 #define GTM_gtm_cls0_FIFO0_CH5_CTRL_FLUSH_SHIFT  (2U)
 #define GTM_gtm_cls0_FIFO0_CH5_CTRL_FLUSH_WIDTH  (1U)
@@ -25417,6 +25442,11 @@ typedef struct {
 #define GTM_gtm_cls0_FIFO0_CH6_CTRL_RBM_WIDTH    (1U)
 #define GTM_gtm_cls0_FIFO0_CH6_CTRL_RBM(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH6_CTRL_RBM_SHIFT)) & GTM_gtm_cls0_FIFO0_CH6_CTRL_RBM_MASK)
 
+#define GTM_gtm_cls0_FIFO0_CH6_CTRL_RAP_MASK     (0x2U)
+#define GTM_gtm_cls0_FIFO0_CH6_CTRL_RAP_SHIFT    (1U)
+#define GTM_gtm_cls0_FIFO0_CH6_CTRL_RAP_WIDTH    (1U)
+#define GTM_gtm_cls0_FIFO0_CH6_CTRL_RAP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH6_CTRL_RAP_SHIFT)) & GTM_gtm_cls0_FIFO0_CH6_CTRL_RAP_MASK)
+
 #define GTM_gtm_cls0_FIFO0_CH6_CTRL_FLUSH_MASK   (0x4U)
 #define GTM_gtm_cls0_FIFO0_CH6_CTRL_FLUSH_SHIFT  (2U)
 #define GTM_gtm_cls0_FIFO0_CH6_CTRL_FLUSH_WIDTH  (1U)
@@ -25637,6 +25667,11 @@ typedef struct {
 #define GTM_gtm_cls0_FIFO0_CH7_CTRL_RBM_SHIFT    (0U)
 #define GTM_gtm_cls0_FIFO0_CH7_CTRL_RBM_WIDTH    (1U)
 #define GTM_gtm_cls0_FIFO0_CH7_CTRL_RBM(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH7_CTRL_RBM_SHIFT)) & GTM_gtm_cls0_FIFO0_CH7_CTRL_RBM_MASK)
+
+#define GTM_gtm_cls0_FIFO0_CH7_CTRL_RAP_MASK     (0x2U)
+#define GTM_gtm_cls0_FIFO0_CH7_CTRL_RAP_SHIFT    (1U)
+#define GTM_gtm_cls0_FIFO0_CH7_CTRL_RAP_WIDTH    (1U)
+#define GTM_gtm_cls0_FIFO0_CH7_CTRL_RAP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_FIFO0_CH7_CTRL_RAP_SHIFT)) & GTM_gtm_cls0_FIFO0_CH7_CTRL_RAP_MASK)
 
 #define GTM_gtm_cls0_FIFO0_CH7_CTRL_FLUSH_MASK   (0x4U)
 #define GTM_gtm_cls0_FIFO0_CH7_CTRL_FLUSH_SHIFT  (2U)
@@ -31938,7 +31973,7 @@ typedef struct {
 #define GTM_gtm_cls0_DPLL_MLS2_NOT_USED(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_DPLL_MLS2_NOT_USED_SHIFT)) & GTM_gtm_cls0_DPLL_MLS2_NOT_USED_MASK)
 /*! @} */
 
-/*! @name DPLL_CNT_NUM_1 - Number of SUB_INC1 pulses in continous mode */
+/*! @name DPLL_CNT_NUM_1 - Number of SUB_INC1 pulses in continuous mode */
 /*! @{ */
 
 #define GTM_gtm_cls0_DPLL_CNT_NUM_1_CNT_NUM_1_MASK (0xFFFFFFU)
@@ -31947,7 +31982,7 @@ typedef struct {
 #define GTM_gtm_cls0_DPLL_CNT_NUM_1_CNT_NUM_1(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_DPLL_CNT_NUM_1_CNT_NUM_1_SHIFT)) & GTM_gtm_cls0_DPLL_CNT_NUM_1_CNT_NUM_1_MASK)
 /*! @} */
 
-/*! @name DPLL_CNT_NUM_2 - Number of SUB_INC2 pulses in continous mode */
+/*! @name DPLL_CNT_NUM_2 - Number of SUB_INC2 pulses in continuous mode */
 /*! @{ */
 
 #define GTM_gtm_cls0_DPLL_CNT_NUM_2_CNT_NUM_2_MASK (0xFFFFFFU)
@@ -36207,7 +36242,7 @@ typedef struct {
 #define GTM_gtm_cls0_DPLL_NUSC_EXT2_WVSN(x)      (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_DPLL_NUSC_EXT2_WVSN_SHIFT)) & GTM_gtm_cls0_DPLL_NUSC_EXT2_WVSN_MASK)
 /*! @} */
 
-/*! @name DPLL_CTN_MIN - Minmum value of predicted nominal increment of TRIGGER */
+/*! @name DPLL_CTN_MIN - Minimum value of predicted nominal increment of TRIGGER */
 /*! @{ */
 
 #define GTM_gtm_cls0_DPLL_CTN_MIN_CTN_MIN_MASK   (0xFFFFFFU)
@@ -36225,7 +36260,7 @@ typedef struct {
 #define GTM_gtm_cls0_DPLL_CTN_MAX_CTN_MAX(x)     (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls0_DPLL_CTN_MAX_CTN_MAX_SHIFT)) & GTM_gtm_cls0_DPLL_CTN_MAX_CTN_MAX_MASK)
 /*! @} */
 
-/*! @name DPLL_CSN_MIN - Minmum value of predicted nominal increment of STATE */
+/*! @name DPLL_CSN_MIN - Minimum value of predicted nominal increment of STATE */
 /*! @{ */
 
 #define GTM_gtm_cls0_DPLL_CSN_MIN_CSN_MIN_MASK   (0xFFFFFFU)

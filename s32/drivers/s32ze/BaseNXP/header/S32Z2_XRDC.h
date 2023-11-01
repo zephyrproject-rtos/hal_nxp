@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_XRDC.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_XRDC
  *
  * This file contains register definitions and macros for easy access to their
@@ -85,59 +85,59 @@ typedef struct {
   __I  uint32_t HWCFG0;                            /**< Hardware Configuration 0, offset: 0xF0 */
   __I  uint32_t HWCFG1;                            /**< Hardware Configuration 1, offset: 0xF4 */
   uint8_t RESERVED_1[8];
-  __I  uint8_t MDACFG[XRDC_MDAC_COUNT];            /**< Master Domain Assignment Configuration, array offset: 0x100, array step: 0x1 */
+  __I  uint8_t MDACFG[XRDC_MDAC_COUNT];            /**< Master Domain Assignment Configuration, array offset: 0x100, array step: 0x1, irregular array, not all indices are valid */
   uint8_t RESERVED_2[59];
-  __I  uint8_t MRCFG[XRDC_MRC_COUNT];              /**< Memory Region Configuration, array offset: 0x140, array step: 0x1 */
+  __I  uint8_t MRCFG[XRDC_MRC_COUNT];              /**< Memory Region Configuration, array offset: 0x140, array step: 0x1, irregular array, not all indices are valid */
   uint8_t RESERVED_3[189];
   __I  uint32_t DERRLOC[XRDC_DERRLOC_COUNT];       /**< Domain Error Location, array offset: 0x200, array step: 0x4 */
   uint8_t RESERVED_4[448];
   struct {                                         /* offset: 0x400, array step: 0x10 */
-    __I  uint32_t DERR_W0;                           /**< Domain Error Word 0, array offset: 0x400, array step: 0x10 */
-    __I  uint32_t DERR_W1;                           /**< Domain Error Word 1, array offset: 0x404, array step: 0x10 */
+    __I  uint32_t DERR_W0;                           /**< Domain Error Word 0, array offset: 0x400, array step: 0x10, irregular array, not all indices are valid */
+    __I  uint32_t DERR_W1;                           /**< Domain Error Word 1, array offset: 0x404, array step: 0x10, irregular array, not all indices are valid */
     uint8_t RESERVED_0[4];
-    __O  uint32_t DERR_W3;                           /**< Domain Error Word 3, array offset: 0x40C, array step: 0x10 */
+    __O  uint32_t DERR_W3;                           /**< Domain Error Word 3, array offset: 0x40C, array step: 0x10, irregular array, not all indices are valid */
   } DERRW0[XRDC_DERRW0_COUNT];
   uint8_t RESERVED_5[704];
-  __IO uint32_t MDA_W0_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x800 */
-  __IO uint32_t MDA_W1_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x804 */
-  __IO uint32_t MDA_W2_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x808 */
-  __IO uint32_t MDA_W3_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x80C */
-  __IO uint32_t MDA_W4_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x810 */
-  __IO uint32_t MDA_W5_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x814 */
-  __IO uint32_t MDA_W6_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x818 */
-  __IO uint32_t MDA_W7_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x81C */
-  __IO uint32_t MDA_W0_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x820 */
-  __IO uint32_t MDA_W1_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x824 */
-  __IO uint32_t MDA_W2_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x828 */
-  __IO uint32_t MDA_W3_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x82C */
-  __IO uint32_t MDA_W4_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x830 */
-  __IO uint32_t MDA_W5_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x834 */
-  __IO uint32_t MDA_W6_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x838 */
-  __IO uint32_t MDA_W7_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x83C */
-  __IO uint32_t MDA_W0_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x840 */
-  __IO uint32_t MDA_W1_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x844 */
-  __IO uint32_t MDA_W2_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x848 */
-  __IO uint32_t MDA_W3_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x84C */
-  __IO uint32_t MDA_W4_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x850 */
-  __IO uint32_t MDA_W5_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x854 */
-  __IO uint32_t MDA_W6_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x858 */
-  __IO uint32_t MDA_W7_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x85C */
-  __IO uint32_t MDA_W0_3_DFMT1;                    /**< Master Domain Assignment, offset: 0x860 */
+  __IO uint32_t MDA_W0_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x800, available only on: CE_XRDC, XRDC_0, XRDC_1, XRDC_2, XRDC_3A, XRDC_4, XRDC_5 (missing on XRDC_3B) */
+  __IO uint32_t MDA_W1_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x804, available only on: CE_XRDC (missing on XRDC_0, XRDC_1, XRDC_2, XRDC_3A, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W2_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x808, available only on: CE_XRDC (missing on XRDC_0, XRDC_1, XRDC_2, XRDC_3A, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W3_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x80C, available only on: CE_XRDC (missing on XRDC_0, XRDC_1, XRDC_2, XRDC_3A, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W4_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x810, available only on: CE_XRDC (missing on XRDC_0, XRDC_1, XRDC_2, XRDC_3A, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W5_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x814, available only on: CE_XRDC (missing on XRDC_0, XRDC_1, XRDC_2, XRDC_3A, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W6_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x818, available only on: CE_XRDC (missing on XRDC_0, XRDC_1, XRDC_2, XRDC_3A, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W7_0_DFMT1;                    /**< Master Domain Assignment, offset: 0x81C, available only on: CE_XRDC (missing on XRDC_0, XRDC_1, XRDC_2, XRDC_3A, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W0_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x820, available only on: CE_XRDC, XRDC_0, XRDC_1, XRDC_2, XRDC_3A, XRDC_4, XRDC_5 (missing on XRDC_3B) */
+  __IO uint32_t MDA_W1_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x824, available only on: XRDC_1, XRDC_3A (missing on CE_XRDC, XRDC_0, XRDC_2, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W2_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x828, available only on: XRDC_1, XRDC_3A (missing on CE_XRDC, XRDC_0, XRDC_2, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W3_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x82C, available only on: XRDC_1, XRDC_3A (missing on CE_XRDC, XRDC_0, XRDC_2, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W4_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x830, available only on: XRDC_1, XRDC_3A (missing on CE_XRDC, XRDC_0, XRDC_2, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W5_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x834, available only on: XRDC_1, XRDC_3A (missing on CE_XRDC, XRDC_0, XRDC_2, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W6_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x838, available only on: XRDC_1, XRDC_3A (missing on CE_XRDC, XRDC_0, XRDC_2, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W7_1_DFMT1;                    /**< Master Domain Assignment, offset: 0x83C, available only on: XRDC_1, XRDC_3A (missing on CE_XRDC, XRDC_0, XRDC_2, XRDC_3B, XRDC_4, XRDC_5) */
+  __IO uint32_t MDA_W0_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x840, available only on: CE_XRDC, XRDC_0, XRDC_1, XRDC_2, XRDC_3A, XRDC_4, XRDC_5 (missing on XRDC_3B) */
+  __IO uint32_t MDA_W1_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x844, available only on: CE_XRDC, XRDC_0, XRDC_3A, XRDC_4 (missing on XRDC_1, XRDC_2, XRDC_3B, XRDC_5) */
+  __IO uint32_t MDA_W2_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x848, available only on: CE_XRDC, XRDC_0, XRDC_3A, XRDC_4 (missing on XRDC_1, XRDC_2, XRDC_3B, XRDC_5) */
+  __IO uint32_t MDA_W3_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x84C, available only on: CE_XRDC, XRDC_0, XRDC_3A, XRDC_4 (missing on XRDC_1, XRDC_2, XRDC_3B, XRDC_5) */
+  __IO uint32_t MDA_W4_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x850, available only on: CE_XRDC, XRDC_3A, XRDC_4 (missing on XRDC_0, XRDC_1, XRDC_2, XRDC_3B, XRDC_5) */
+  __IO uint32_t MDA_W5_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x854, available only on: CE_XRDC, XRDC_3A, XRDC_4 (missing on XRDC_0, XRDC_1, XRDC_2, XRDC_3B, XRDC_5) */
+  __IO uint32_t MDA_W6_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x858, available only on: CE_XRDC, XRDC_3A, XRDC_4 (missing on XRDC_0, XRDC_1, XRDC_2, XRDC_3B, XRDC_5) */
+  __IO uint32_t MDA_W7_2_DFMT1;                    /**< Master Domain Assignment, offset: 0x85C, available only on: CE_XRDC, XRDC_3A, XRDC_4 (missing on XRDC_0, XRDC_1, XRDC_2, XRDC_3B, XRDC_5) */
+  __IO uint32_t MDA_W0_3_DFMT1;                    /**< Master Domain Assignment, offset: 0x860, available only on: XRDC_0, XRDC_1 (missing on CE_XRDC, XRDC_2, XRDC_3A, XRDC_3B, XRDC_4, XRDC_5) */
   uint8_t RESERVED_6[28];
-  __IO uint32_t MDA_W0_4_DFMT1;                    /**< Master Domain Assignment, offset: 0x880 */
+  __IO uint32_t MDA_W0_4_DFMT1;                    /**< Master Domain Assignment, offset: 0x880, available only on: XRDC_0, XRDC_1 (missing on CE_XRDC, XRDC_2, XRDC_3A, XRDC_3B, XRDC_4, XRDC_5) */
   uint8_t RESERVED_7[1916];
   struct {                                         /* offset: 0x1000, array step: 0x400 */
     struct {                                         /* offset: 0x1000, array step: index*0x400, index2*0x8 */
-      __IO uint32_t PDAC_W0;                           /**< Peripheral Domain Access Control Word 0, array offset: 0x1000, array step: index*0x400, index2*0x8 */
-      __IO uint32_t PDAC_W1;                           /**< Peripheral Domain Access Control Word 1, array offset: 0x1004, array step: index*0x400, index2*0x8 */
+      __IO uint32_t PDAC_W0;                           /**< Peripheral Domain Access Control Word 0, array offset: 0x1000, array step: index*0x400, index2*0x8, irregular array, not all indices are valid */
+      __IO uint32_t PDAC_W1;                           /**< Peripheral Domain Access Control Word 1, array offset: 0x1004, array step: index*0x400, index2*0x8, irregular array, not all indices are valid */
     } PDACN[XRDC_PDAC_SLOT_PDACN_COUNT];
     uint8_t RESERVED_0[8];
   } PDAC_SLOT[XRDC_PDAC_SLOT_COUNT];
   struct {                                         /* offset: 0x2000, array step: index*0x200, index2*0x20 */
-    __IO uint32_t XRDC_MRGD_W0;                      /**< Memory Region Descriptor Word 0, array offset: 0x2000, array step: index*0x200, index2*0x20 */
-    __IO uint32_t XRDC_MRGD_W1;                      /**< Memory Region Descriptor Word 1, array offset: 0x2004, array step: index*0x200, index2*0x20 */
-    __IO uint32_t XRDC_MRGD_W2;                      /**< Memory Region Descriptor Word 2, array offset: 0x2008, array step: index*0x200, index2*0x20 */
-    __IO uint32_t XRDC_MRGD_W3;                      /**< Memory Region Descriptor Word 3, array offset: 0x200C, array step: index*0x200, index2*0x20 */
+    __IO uint32_t XRDC_MRGD_W0;                      /**< Memory Region Descriptor Word 0, array offset: 0x2000, array step: index*0x200, index2*0x20, irregular array, not all indices are valid */
+    __IO uint32_t XRDC_MRGD_W1;                      /**< Memory Region Descriptor Word 1, array offset: 0x2004, array step: index*0x200, index2*0x20, irregular array, not all indices are valid */
+    __IO uint32_t XRDC_MRGD_W2;                      /**< Memory Region Descriptor Word 2, array offset: 0x2008, array step: index*0x200, index2*0x20, irregular array, not all indices are valid */
+    __IO uint32_t XRDC_MRGD_W3;                      /**< Memory Region Descriptor Word 3, array offset: 0x200C, array step: index*0x200, index2*0x20, irregular array, not all indices are valid */
     uint8_t RESERVED_0[16];
   } MRGDN[XRDC_MRCN_COUNT][XRDC_MRCN_MRGDN_COUNT];
 } XRDC_Type, *XRDC_MemMapPtr;

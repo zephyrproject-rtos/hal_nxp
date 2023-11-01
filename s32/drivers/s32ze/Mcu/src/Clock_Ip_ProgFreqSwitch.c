@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       Clock_Ip_ProgFreqSwitch.c
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -37,8 +37,8 @@ extern "C"{
 #define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_PROGFREQSWITCH_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_PROGFREQSWITCH_SW_MINOR_VERSION_C               9
+#define CLOCK_IP_PROGFREQSWITCH_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_PROGFREQSWITCH_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_PROGFREQSWITCH_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -74,13 +74,12 @@ extern "C"{
 ==================================================================================================*/
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
 /* Pcfs settings that are dependent on device */
-#define CLOCK_IP_A_MAX_SIZE 6U
+#define CLOCK_IP_A_MAX_SIZE 4U
 
 /* microA per MHz */
 #define CLOCK_IP_DYNAMIC_IDD_CHANGE 2360U
 
 #define CLOCK_IP_DIVIDE_BY_1000000                              1000000U
-#define CLOCK_IP_DIVIDE_BY_100000                               100000U
 #define CLOCK_IP_CONSTANT_2048000                               (1024U * 2000U)
 #endif
 
@@ -93,8 +92,8 @@ extern "C"{
 #include "Mcu_MemMap.h"
 
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
-static const uint32 AMax[CLOCK_IP_A_MAX_SIZE] = {0U,5U,10U,15U,20U,100U};
-static const uint32 PcfsRate[CLOCK_IP_A_MAX_SIZE] = {0U,12U,48U,112U,184U,1000U};
+static const uint32 AMax[CLOCK_IP_A_MAX_SIZE] = {5U,10U,150U,200U};
+static const uint32 PcfsRate[CLOCK_IP_A_MAX_SIZE] = {12U,48U,112U,184U};
 #endif
 
 /* Clock stop constant section data */
@@ -110,7 +109,7 @@ static const uint32 PcfsRate[CLOCK_IP_A_MAX_SIZE] = {0U,12U,48U,112U,184U,1000U}
 #include "Mcu_MemMap.h"
 
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
-static uint32 HashPfs[CLOCK_IP_PCFS_NO];
+static uint32 HashPfs[CLOCK_IP_PCFS_COUNT];
 #endif
 
 /* Clock stop initialized section data */
@@ -130,9 +129,13 @@ static uint32 HashPfs[CLOCK_IP_PCFS_NO];
 #include "Mcu_MemMap.h"
 
 
-static void Clock_Ip_ProgressiveFrequencyClockSwitchEmpty(Clock_Ip_PcfsConfigType const* Config, uint32 Index);
+static void Clock_Ip_ProgressiveFrequencyClockSwitchEmpty(  Clock_Ip_PcfsConfigType const* Config,
+                                                            uint32 Index
+                                                          );
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
-static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(Clock_Ip_PcfsConfigType const *Config, uint32 CfgIndex);
+static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *Config,
+                                                uint32 CfgIndex
+                                              );
 #endif
 
 /* Clock stop section code */
@@ -149,7 +152,9 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(Clock_Ip_PcfsConfigType const *Con
 
 #include "Mcu_MemMap.h"
 
-static void Clock_Ip_ProgressiveFrequencyClockSwitchEmpty(Clock_Ip_PcfsConfigType const* Config, uint32 Index)
+static void Clock_Ip_ProgressiveFrequencyClockSwitchEmpty(  Clock_Ip_PcfsConfigType const* Config,
+                                                            uint32 Index
+                                                          )
 {
     (void)Config;
     (void)Index;
@@ -157,10 +162,12 @@ static void Clock_Ip_ProgressiveFrequencyClockSwitchEmpty(Clock_Ip_PcfsConfigTyp
 }
 
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
-static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(Clock_Ip_PcfsConfigType const *Config, uint32 CfgIndex)
+static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *Config,
+                                                uint32 CfgIndex
+                                              )
 {
-    volatile Clock_Ip_CgmPcfsType* CgmPcfsBase  = Clock_Ip_apxCgmPcfs[Clock_Ip_au8ClockFeatures[Config->SelectorName][CLOCK_IP_MODULE_INSTANCE]];
-    uint32 HwIndex                       = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_PCFS_INDEX];
+    volatile Clock_Ip_CgmPcfsType* CgmPcfsBase;
+    uint32 HwIndex;
 
     uint32 Finput = 0U;
     uint32 Fsafe = 0U;
@@ -178,92 +185,122 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(Clock_Ip_PcfsConfigType const *Con
     uint32 DivStartValue;
     uint32 DivEndValue;
 
-#if (defined(CLOCK_IP_DEV_ERROR_DETECT) && (CLOCK_IP_DEV_ERROR_DETECT == STD_ON))
-        CLOCK_IP_DEV_ASSERT(Config->SelectorName != RESERVED_CLK);
-#endif
-
-    if (HashPfs[CfgIndex] != ((((uint32)Config->ClockSourceFrequency) ^ ((uint32)Config->MaxAllowableIDDchange) ^ ((uint32)Config->Name)  ^ ((uint32)Config->SelectorName) ^ ((uint32)Config->StepDuration))))
+    if (NULL_PTR != Config)
     {
-        HashPfs[CfgIndex] = ((((uint32)Config->ClockSourceFrequency) ^ ((uint32)Config->MaxAllowableIDDchange) ^ ((uint32)Config->Name)  ^ ((uint32)Config->SelectorName) ^ ((uint32)Config->StepDuration)));
+        CgmPcfsBase  = Clock_Ip_apxCgmPcfs[Clock_Ip_au8ClockFeatures[Config->SelectorName][CLOCK_IP_MODULE_INSTANCE]];
+        HwIndex      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_PCFS_INDEX];
 
-        Finput = Config->ClockSourceFrequency / CLOCK_IP_DIVIDE_BY_1000000;
-    #if defined(CLOCK_IP_HAS_FIRC_CLK)
-        Fsafe = Clock_Ip_pxConfig->ConfiguredFrequencies[Clock_Ip_FreqIds[FIRC_CLK]].ConfiguredFrequencyValue / CLOCK_IP_DIVIDE_BY_1000000;
-        
-        
-    #endif
+        #if (defined(CLOCK_IP_DEV_ERROR_DETECT) && (CLOCK_IP_DEV_ERROR_DETECT == STD_ON))
+        CLOCK_IP_DEV_ASSERT(Config->SelectorName != RESERVED_CLK);
+        #endif
 
-#if (defined(CLOCK_IP_DEV_ERROR_DETECT) && (CLOCK_IP_DEV_ERROR_DETECT == STD_ON))
-        CLOCK_IP_DEV_ASSERT(Finput != 0U);
-        CLOCK_IP_DEV_ASSERT(Fsafe != 0U);
-        CLOCK_IP_DEV_ASSERT(Config->MaxAllowableIDDchange != 0U);
-        CLOCK_IP_DEV_ASSERT(Config->StepDuration != 0U);
-#endif
-
-        /* Calculate amax=fchg/Finput */
-        AmaxBrut = (Config->MaxAllowableIDDchange * Config->StepDuration * CLOCK_IP_DIVIDE_BY_100000 / (Finput * CLOCK_IP_DYNAMIC_IDD_CHANGE));
-        Rate = AmaxBrut;
-
-        /* Round pcfs rate by rounding amax */
-        if (AmaxBrut < AMax[0U])
+        if (HashPfs[CfgIndex] != ((((uint32)Config->ClockSourceFrequency) ^ ((uint32)Config->MaxAllowableIDDchange) ^ ((uint32)Config->Name)  ^ ((uint32)Config->SelectorName) ^ ((uint32)Config->StepDuration))))
         {
-            Rate = PcfsRate[0U];
-        }
-        else if (AmaxBrut > AMax[CLOCK_IP_A_MAX_SIZE-1U])
-        {
-            Rate = PcfsRate[CLOCK_IP_A_MAX_SIZE-1U];
-        }
-        else
-        {
-            for (Index = 1U; Index < (uint8)CLOCK_IP_A_MAX_SIZE; Index++)
+            HashPfs[CfgIndex] = ((((uint32)Config->ClockSourceFrequency) ^ ((uint32)Config->MaxAllowableIDDchange) ^ ((uint32)Config->Name)  ^ ((uint32)Config->SelectorName) ^ ((uint32)Config->StepDuration)));
+
+            Finput = Config->ClockSourceFrequency / CLOCK_IP_DIVIDE_BY_1000000;
+        #if defined(CLOCK_IP_HAS_FIRC_CLK)
+            Fsafe = (*Clock_Ip_pxConfig->ConfiguredFrequencies)[Clock_Ip_FreqIds[FIRC_CLK]].ConfiguredFrequencyValue / CLOCK_IP_DIVIDE_BY_1000000;
+        #endif
+        #if (defined(CLOCK_IP_HAS_P5_AE_CLK) && defined(CLOCK_IP_HAS_FIRC_AE_CLK))
+            if (P5_AE_CLK == Config->Name)
             {
-                if (AMax[Index-1U] < AmaxBrut)
+                Fsafe = (*Clock_Ip_pxConfig->ConfiguredFrequencies)[Clock_Ip_FreqIds[FIRC_AE_CLK]].ConfiguredFrequencyValue / CLOCK_IP_DIVIDE_BY_1000000;
+            }
+        #endif
+
+        #if (defined(CLOCK_IP_DEV_ERROR_DETECT) && (CLOCK_IP_DEV_ERROR_DETECT == STD_ON))
+            CLOCK_IP_DEV_ASSERT(Finput != 0U);
+            CLOCK_IP_DEV_ASSERT(Fsafe != 0U);
+            CLOCK_IP_DEV_ASSERT(Config->MaxAllowableIDDchange != 0U);
+            CLOCK_IP_DEV_ASSERT(Config->StepDuration != 0U);
+        #endif
+
+            /* Calculate amax=fchg/Finput */
+            AmaxBrut = (Config->MaxAllowableIDDchange * CLOCK_IP_DIVIDE_BY_1000000 / (Finput * CLOCK_IP_DYNAMIC_IDD_CHANGE));
+            Rate = AmaxBrut;
+
+            /* Round pcfs rate by rounding amax */
+            if (AmaxBrut <= AMax[0U])
+            {
+                Rate = PcfsRate[0U];
+            }
+            else if (AmaxBrut >= AMax[CLOCK_IP_A_MAX_SIZE-1U])
+            {
+                Rate = PcfsRate[CLOCK_IP_A_MAX_SIZE-1U];
+            }
+            else
+            {
+                for (Index = 1U; Index < (uint8)CLOCK_IP_A_MAX_SIZE; Index++)
                 {
-                    Rate = PcfsRate[Index];
+                    if (AMax[Index-1U] < AmaxBrut)
+                    {
+                        Rate = PcfsRate[Index-1U];
+                    }
                 }
             }
-        }
 
-        /* Calculate K by using formula k = ceil(0.5 + sqrt(0.25 - (2000 * (1 -(Finput/fsafe)) / Rate))) */
+            /* Calculate K by using formula k = ceil(0.5 + sqrt(0.25 - (2000 * (1 -(Finput/fsafe)) / Rate))) */
 
-        Var1 = 256U + ((CLOCK_IP_CONSTANT_2048000 * Finput) / (Fsafe * Rate)) - (CLOCK_IP_CONSTANT_2048000 / Rate);
-        Var2 = 1UL << 30U;   /* The second-to-top bit is set: use 1u << 14 for uint16 type; use 1uL<<30 for uint32 type  */
-        Var3 = 0U;
+            Var1 = 256U + ((CLOCK_IP_CONSTANT_2048000 * Finput) / (Fsafe * Rate)) - (CLOCK_IP_CONSTANT_2048000 / Rate);
+            Var2 = 1UL << 30U;   /* The second-to-top bit is set: use 1u << 14 for uint16 type; use 1uL<<30 for uint32 type  */
+            Var3 = 0U;
 
-        /* Implement sqrt from K formula by using a square-root computing in embedded C */
+            /* Implement sqrt from K formula by using a square-root computing in embedded C */
 
-        /* "one" starts at the highest power of four <= than the argument */
-        while (Var2 > Var1)
-        {
-            Var2 = Var2 >> 2;
-        }
-        /* Implement sqrt from K formula by using a square-root computing in embedded C */
-
-        while (Var2 != 0U)
-        {
-            if (Var1 >= (Var3 + Var2))
+            /* "one" starts at the highest power of four <= than the argument */
+            while (Var2 > Var1)
             {
-                Var1 = Var1 - (Var3 + Var2);
-                Var3 = Var3 + (Var2 << 1U);
+                Var2 = Var2 >> 2;
+            }
+            /* Implement sqrt from K formula by using a square-root computing in embedded C */
+
+            while (Var2 != 0U)
+            {
+                if (Var1 >= (Var3 + Var2))
+                {
+                    Var1 = Var1 - (Var3 + Var2);
+                    Var3 = Var3 + (Var2 << 1U);
+                }
+
+                Var3 = Var3 >> 1U;
+                Var2 = Var2 >> 2U;
             }
 
-            Var3 = Var3 >> 1U;
-            Var2 = Var2 >> 2U;
+            K = (64U + 127U + (Var3 << 2U)) >> 7U;   /* Calculated K from k = ceil(0.5 + sqrt(0.25 - (2000 * (1 -(Fi/Fsafe)) / Rate))) */
+
+            Sdur = Config->StepDuration * Fsafe;
+            DivcInit = Rate * K;
+            DivcRate = Rate;
+            DivStartValue = 999U + ((Rate * K * (K+1U)) >> 1U);
+            DivEndValue = (Finput * 1000U / Fsafe) - 1U;
+
+            /* Configure pcfs registers */
+            CgmPcfsBase->PCFS_SDUR = MC_CGM_PCFS_SDUR_SDUR(Sdur);
+            CgmPcfsBase->PCFS[HwIndex].DIVC = MC_CGM_PCFS_DIVC_RATE(DivcRate) | MC_CGM_PCFS_DIVC_INIT(DivcInit);
+            CgmPcfsBase->PCFS[HwIndex].DIVE = MC_CGM_PCFS_DIVE_DIVE(DivEndValue);
+            CgmPcfsBase->PCFS[HwIndex].DIVS = MC_CGM_PCFS_DIVS_DIVS(DivStartValue);
         }
-
-        K = (64U + 127U + (Var3 << 2U)) >> 7U;   /* Calculated K from k = ceil(0.5 + sqrt(0.25 - (2000 * (1 -(Fi/Fsafe)) / Rate))) */
-
-        Sdur = Config->StepDuration * Fsafe;
-        DivcInit = Rate * K;
-        DivcRate = Rate;
-        DivStartValue = 999U + ((Rate * K * (K+1U)) >> 1U);
-        DivEndValue = (Finput * 1000U / Fsafe) - 1U;
-
-        /* Configure pcfs registers */
-        CgmPcfsBase->PCFS_SDUR = MC_CGM_PCFS_SDUR_SDUR(Sdur);
-        CgmPcfsBase->PCFS[HwIndex].DIVC = MC_CGM_PCFS_DIVC_RATE(DivcRate) | MC_CGM_PCFS_DIVC_INIT(DivcInit);
-        CgmPcfsBase->PCFS[HwIndex].DIVE = MC_CGM_PCFS_DIVE_DIVE(DivEndValue);
-        CgmPcfsBase->PCFS[HwIndex].DIVS = MC_CGM_PCFS_DIVS_DIVS(DivStartValue);
+    }
+    else
+    {
+        (void)CfgIndex;
+        (void)CgmPcfsBase;
+        (void)HwIndex;
+        (void)Finput;
+        (void)Fsafe;
+        (void)AmaxBrut;
+        (void)Rate;
+        (void)Index;
+        (void)Var1;
+        (void)Var2;
+        (void)Var3;
+        (void)K;
+        (void)Sdur;
+        (void)DivcInit;
+        (void)DivcRate;
+        (void)DivStartValue;
+        (void)DivEndValue;
     }
 }
 #endif

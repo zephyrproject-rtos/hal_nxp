@@ -1,11 +1,16 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
-*   @file
+*   @file    SchM_Gpt.c
+*   @version 1.0.0
+*
+*   @brief   AUTOSAR Rte - module implementation
+*   @details This module implements stubs for the AUTOSAR Rte
+*            This file contains sample code only. It is not part of the production code deliverables.
 *
 *   @addtogroup RTE_MODULE
 *   @{
@@ -35,8 +40,8 @@ extern "C"{
 #define SCHM_GPT_AR_RELEASE_MAJOR_VERSION_C     4
 #define SCHM_GPT_AR_RELEASE_MINOR_VERSION_C     7
 #define SCHM_GPT_AR_RELEASE_REVISION_VERSION_C  0
-#define SCHM_GPT_SW_MAJOR_VERSION_C             0
-#define SCHM_GPT_SW_MINOR_VERSION_C             9
+#define SCHM_GPT_SW_MAJOR_VERSION_C             1
+#define SCHM_GPT_SW_MINOR_VERSION_C             0
 #define SCHM_GPT_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
@@ -94,114 +99,110 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_00)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_00)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_01)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_01)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_02)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_02)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_03)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_03)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_04)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_04)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_05)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_05)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_06)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_06)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_07)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_07)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_10)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_10)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_11)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_11)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_12)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_12)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_17)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_17)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_21)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_21)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_22)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_22)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_23)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_23)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_24)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_24)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_25)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_25)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_26)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_26)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_27)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_27)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_28)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_28)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_29)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_29)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_30)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_30)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_31)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_31)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_35)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_35)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_36)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_36)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_38)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_38)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_40)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_40)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_41)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_41)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_42)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_42)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_43)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_43)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_44)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_44)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_45)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_45)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_46)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_46)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_50)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_50)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_51)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_51)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_52)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_52)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_53)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_53)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_54)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_54[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_54)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_54[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_55)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_55[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_55)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_55[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_56)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_56[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_56)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_56[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_60)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_60[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_60)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_60[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_61)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_61)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_62)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_62[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_62)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_62[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_63)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_63[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_63)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_63[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_64)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_64[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_64)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_64[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_65)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_65[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_65)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_65[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_66)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_66[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_66)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_66[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_67)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_67[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_67)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_67[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_68)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_68[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_68)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_68[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_69)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_69[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_69)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_69[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_70)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_70[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_70)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_70[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_71)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_71[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_71)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_71[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_72)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_72[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_72)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_72[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_GPT_EXCLUSIVE_AREA_73)              static volatile uint32 msr_GPT_EXCLUSIVE_AREA_73[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_GPT_EXCLUSIVE_AREA_73)    static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_73[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_30[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_31[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_35[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_36[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_38[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_39[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_39[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_40[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_41[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_42[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_43[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_44[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_45[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_46[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_50[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_51[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_52[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_53[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_54[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_54[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_55[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_55[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_56[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_56[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_60[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_60[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_62[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_62[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_63[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_63[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_64[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_64[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_65[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_65[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_66[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_66[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_67[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_67[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_68[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_68[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_69[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_69[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_70[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_70[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_71[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_71[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_72[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_72[NUMBER_OF_CORES];
+static volatile uint32 msr_GPT_EXCLUSIVE_AREA_73[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_GPT_EXCLUSIVE_AREA_73[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -844,44 +845,6 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_11(void)
     }
 }
 
-void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_12(void)
-{
-    uint32 msr;
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_12[u32CoreId])
-    {
-#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
-#else
-        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
-#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
-        {
-            OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-        }
-        msr_GPT_EXCLUSIVE_AREA_12[u32CoreId] = msr;
-    }
-    reentry_guard_GPT_EXCLUSIVE_AREA_12[u32CoreId]++;
-}
-
-void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_12(void)
-{
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    reentry_guard_GPT_EXCLUSIVE_AREA_12[u32CoreId]--;
-    if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_12[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_12[u32CoreId]))         /*if interrupts were enabled*/
-    {
-        OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-    }
-}
-
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_17(void)
 {
     uint32 msr;
@@ -1148,82 +1111,6 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_26(void)
     }
 }
 
-void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_27(void)
-{
-    uint32 msr;
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_27[u32CoreId])
-    {
-#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
-#else
-        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
-#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
-        {
-            OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-        }
-        msr_GPT_EXCLUSIVE_AREA_27[u32CoreId] = msr;
-    }
-    reentry_guard_GPT_EXCLUSIVE_AREA_27[u32CoreId]++;
-}
-
-void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_27(void)
-{
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    reentry_guard_GPT_EXCLUSIVE_AREA_27[u32CoreId]--;
-    if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_27[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_27[u32CoreId]))         /*if interrupts were enabled*/
-    {
-        OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-    }
-}
-
-void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_28(void)
-{
-    uint32 msr;
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_28[u32CoreId])
-    {
-#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
-#else
-        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
-#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
-        {
-            OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-        }
-        msr_GPT_EXCLUSIVE_AREA_28[u32CoreId] = msr;
-    }
-    reentry_guard_GPT_EXCLUSIVE_AREA_28[u32CoreId]++;
-}
-
-void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_28(void)
-{
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    reentry_guard_GPT_EXCLUSIVE_AREA_28[u32CoreId]--;
-    if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_28[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_28[u32CoreId]))         /*if interrupts were enabled*/
-    {
-        OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-    }
-}
-
 void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_29(void)
 {
     uint32 msr;
@@ -1444,6 +1331,44 @@ void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_38(void)
 
     reentry_guard_GPT_EXCLUSIVE_AREA_38[u32CoreId]--;
     if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_38[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_38[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_39(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_39[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(Gpt_schm_read_msr);
+#else
+        msr = Gpt_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_GPT_EXCLUSIVE_AREA_39[u32CoreId] = msr;
+    }
+    reentry_guard_GPT_EXCLUSIVE_AREA_39[u32CoreId]++;
+}
+
+void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_39(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_GPT_EXCLUSIVE_AREA_39[u32CoreId]--;
+    if ((ISR_ON(msr_GPT_EXCLUSIVE_AREA_39[u32CoreId]))&&(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_39[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -2567,9 +2492,6 @@ void SchM_Check_gpt(void)
     EU_ASSERT(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_11[u32CoreId]);
     reentry_guard_GPT_EXCLUSIVE_AREA_11[u32CoreId] = 0UL; /*reset reentry_guard_GPT_EXCLUSIVE_AREA_11 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_12[u32CoreId]);
-    reentry_guard_GPT_EXCLUSIVE_AREA_12[u32CoreId] = 0UL; /*reset reentry_guard_GPT_EXCLUSIVE_AREA_12 for the next test in the suite*/
-
     EU_ASSERT(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_17[u32CoreId]);
     reentry_guard_GPT_EXCLUSIVE_AREA_17[u32CoreId] = 0UL; /*reset reentry_guard_GPT_EXCLUSIVE_AREA_17 for the next test in the suite*/
 
@@ -2591,12 +2513,6 @@ void SchM_Check_gpt(void)
     EU_ASSERT(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_26[u32CoreId]);
     reentry_guard_GPT_EXCLUSIVE_AREA_26[u32CoreId] = 0UL; /*reset reentry_guard_GPT_EXCLUSIVE_AREA_26 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_27[u32CoreId]);
-    reentry_guard_GPT_EXCLUSIVE_AREA_27[u32CoreId] = 0UL; /*reset reentry_guard_GPT_EXCLUSIVE_AREA_27 for the next test in the suite*/
-
-    EU_ASSERT(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_28[u32CoreId]);
-    reentry_guard_GPT_EXCLUSIVE_AREA_28[u32CoreId] = 0UL; /*reset reentry_guard_GPT_EXCLUSIVE_AREA_28 for the next test in the suite*/
-
     EU_ASSERT(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_29[u32CoreId]);
     reentry_guard_GPT_EXCLUSIVE_AREA_29[u32CoreId] = 0UL; /*reset reentry_guard_GPT_EXCLUSIVE_AREA_29 for the next test in the suite*/
 
@@ -2614,6 +2530,9 @@ void SchM_Check_gpt(void)
 
     EU_ASSERT(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_38[u32CoreId]);
     reentry_guard_GPT_EXCLUSIVE_AREA_38[u32CoreId] = 0UL; /*reset reentry_guard_GPT_EXCLUSIVE_AREA_38 for the next test in the suite*/
+
+    EU_ASSERT(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_39[u32CoreId]);
+    reentry_guard_GPT_EXCLUSIVE_AREA_39[u32CoreId] = 0UL; /*reset reentry_guard_GPT_EXCLUSIVE_AREA_39 for the next test in the suite*/
 
     EU_ASSERT(0UL == reentry_guard_GPT_EXCLUSIVE_AREA_40[u32CoreId]);
     reentry_guard_GPT_EXCLUSIVE_AREA_40[u32CoreId] = 0UL; /*reset reentry_guard_GPT_EXCLUSIVE_AREA_40 for the next test in the suite*/

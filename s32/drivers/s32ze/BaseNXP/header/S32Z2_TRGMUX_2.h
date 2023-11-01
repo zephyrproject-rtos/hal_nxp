@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_TRGMUX_2.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_TRGMUX_2
  *
  * This file contains register definitions and macros for easy access to their
@@ -70,30 +70,30 @@
 
 /** TRGMUX_2 - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t TIM0_1_0;                          /**< TRGMUX TIM0_1_0 Register, offset: 0x0 */
-  __IO uint32_t TIM0_3_2;                          /**< TRGMUX TIM0_3_2 Register, offset: 0x4 */
-  __IO uint32_t TIM0_5_4;                          /**< TRGMUX TIM0_5_4 Register, offset: 0x8 */
-  __IO uint32_t TIM0_7_6;                          /**< TRGMUX TIM0_7_6 Register, offset: 0xC */
-  __IO uint32_t TIM1_1_0;                          /**< TRGMUX TIM1_1_0 Register, offset: 0x10 */
-  __IO uint32_t TIM1_3_2;                          /**< TRGMUX TIM1_3_2 Register, offset: 0x14 */
-  __IO uint32_t TIM1_5_4;                          /**< TRGMUX TIM1_5_4 Register, offset: 0x18 */
-  __IO uint32_t TIM1_7_6;                          /**< TRGMUX TIM1_7_6 Register, offset: 0x1C */
-  __IO uint32_t TIM2_1_0;                          /**< TRGMUX TIM2_1_0 Register, offset: 0x20 */
-  __IO uint32_t TIM2_3_2;                          /**< TRGMUX TIM2_3_2 Register, offset: 0x24 */
-  __IO uint32_t TIM2_5_4;                          /**< TRGMUX TIM2_5_4 Register, offset: 0x28 */
-  __IO uint32_t TIM2_7_6;                          /**< TRGMUX TIM2_7_6 Register, offset: 0x2C */
-  __IO uint32_t TIO1_1_0;                          /**< TRGMUX TIO1_1_0 Register, offset: 0x30 */
-  __IO uint32_t TIO1_3_2;                          /**< TRGMUX TIO1_3_2 Register, offset: 0x34 */
-  __IO uint32_t TIO1_5_4;                          /**< TRGMUX TIO1_5_4 Register, offset: 0x38 */
-  __IO uint32_t TIO1_7_6;                          /**< TRGMUX TIO1_7_6 Register, offset: 0x3C */
-  __IO uint32_t TIO2_1_0;                          /**< TRGMUX TIO2_1_0 Register, offset: 0x40 */
-  __IO uint32_t TIO2_3_2;                          /**< TRGMUX TIO2_3_2 Register, offset: 0x44 */
-  __IO uint32_t TIO2_5_4;                          /**< TRGMUX TIO2_5_4 Register, offset: 0x48 */
-  __IO uint32_t TIO2_7_6;                          /**< TRGMUX TIO2_7_6 Register, offset: 0x4C */
-  __IO uint32_t TIO3_1_0;                          /**< TRGMUX TIO3_1_0 Register, offset: 0x50 */
-  __IO uint32_t TIO3_3_2;                          /**< TRGMUX TIO3_3_2 Register, offset: 0x54 */
-  __IO uint32_t TIO3_5_4;                          /**< TRGMUX TIO3_5_4 Register, offset: 0x58 */
-  __IO uint32_t TIO3_7_6;                          /**< TRGMUX TIO3_7_6 Register, offset: 0x5C */
+  __IO uint32_t TIM0_1_0;                          /**< TRGMUX TIM0_1_0 Configuration, offset: 0x0 */
+  __IO uint32_t TIM0_3_2;                          /**< TRGMUX TIM0_3_2 Configuration, offset: 0x4 */
+  __IO uint32_t TIM0_5_4;                          /**< TRGMUX TIM0_5_4 Configuration, offset: 0x8 */
+  __IO uint32_t TIM0_7_6;                          /**< TRGMUX TIM0_7_6 Configuration, offset: 0xC */
+  __IO uint32_t TIM1_1_0;                          /**< TRGMUX TIM1_1_0 Configuration, offset: 0x10 */
+  __IO uint32_t TIM1_3_2;                          /**< TRGMUX TIM1_3_2 Configuration, offset: 0x14 */
+  __IO uint32_t TIM1_5_4;                          /**< TRGMUX TIM1_5_4 Configuration, offset: 0x18 */
+  __IO uint32_t TIM1_7_6;                          /**< TRGMUX TIM1_7_6 Configuration, offset: 0x1C */
+  __IO uint32_t TIM2_1_0;                          /**< TRGMUX TIM2_1_0 Configuration, offset: 0x20 */
+  __IO uint32_t TIM2_3_2;                          /**< TRGMUX TIM2_3_2 Configuration, offset: 0x24 */
+  __IO uint32_t TIM2_5_4;                          /**< TRGMUX TIM2_5_4 Configuration, offset: 0x28 */
+  __IO uint32_t TIM2_7_6;                          /**< TRGMUX TIM2_7_6 Configuration, offset: 0x2C */
+  __IO uint32_t TIO1_1_0;                          /**< TRGMUX TIO1_1_0 Configuration, offset: 0x30 */
+  __IO uint32_t TIO1_3_2;                          /**< TRGMUX TIO1_3_2 Configuration, offset: 0x34 */
+  __IO uint32_t TIO1_5_4;                          /**< TRGMUX TIO1_5_4 Configuration, offset: 0x38 */
+  __IO uint32_t TIO1_7_6;                          /**< TRGMUX TIO1_7_6 Configuration, offset: 0x3C */
+  __IO uint32_t TIO2_1_0;                          /**< TRGMUX TIO2_1_0 Configuration, offset: 0x40 */
+  __IO uint32_t TIO2_3_2;                          /**< TRGMUX TIO2_3_2 Configuration, offset: 0x44 */
+  __IO uint32_t TIO2_5_4;                          /**< TRGMUX TIO2_5_4 Configuration, offset: 0x48 */
+  __IO uint32_t TIO2_7_6;                          /**< TRGMUX TIO2_7_6 Configuration, offset: 0x4C */
+  __IO uint32_t TIO3_1_0;                          /**< TRGMUX TIO3_1_0 Configuration, offset: 0x50 */
+  __IO uint32_t TIO3_3_2;                          /**< TRGMUX TIO3_3_2 Configuration, offset: 0x54 */
+  __IO uint32_t TIO3_5_4;                          /**< TRGMUX TIO3_5_4 Configuration, offset: 0x58 */
+  __IO uint32_t TIO3_7_6;                          /**< TRGMUX TIO3_7_6 Configuration, offset: 0x5C */
 } TRGMUX_2_Type, *TRGMUX_2_MemMapPtr;
 
 /** Number of instances of the TRGMUX_2 module. */
@@ -118,7 +118,7 @@ typedef struct {
  * @{
  */
 
-/*! @name TIM0_1_0 - TRGMUX TIM0_1_0 Register */
+/*! @name TIM0_1_0 - TRGMUX TIM0_1_0 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM0_1_0_SEL0_MASK              (0xFFU)
@@ -137,7 +137,7 @@ typedef struct {
 #define TRGMUX_2_TIM0_1_0_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM0_1_0_LK_SHIFT)) & TRGMUX_2_TIM0_1_0_LK_MASK)
 /*! @} */
 
-/*! @name TIM0_3_2 - TRGMUX TIM0_3_2 Register */
+/*! @name TIM0_3_2 - TRGMUX TIM0_3_2 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM0_3_2_SEL0_MASK              (0xFFU)
@@ -156,7 +156,7 @@ typedef struct {
 #define TRGMUX_2_TIM0_3_2_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM0_3_2_LK_SHIFT)) & TRGMUX_2_TIM0_3_2_LK_MASK)
 /*! @} */
 
-/*! @name TIM0_5_4 - TRGMUX TIM0_5_4 Register */
+/*! @name TIM0_5_4 - TRGMUX TIM0_5_4 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM0_5_4_SEL0_MASK              (0xFFU)
@@ -175,7 +175,7 @@ typedef struct {
 #define TRGMUX_2_TIM0_5_4_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM0_5_4_LK_SHIFT)) & TRGMUX_2_TIM0_5_4_LK_MASK)
 /*! @} */
 
-/*! @name TIM0_7_6 - TRGMUX TIM0_7_6 Register */
+/*! @name TIM0_7_6 - TRGMUX TIM0_7_6 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM0_7_6_SEL0_MASK              (0xFFU)
@@ -194,7 +194,7 @@ typedef struct {
 #define TRGMUX_2_TIM0_7_6_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM0_7_6_LK_SHIFT)) & TRGMUX_2_TIM0_7_6_LK_MASK)
 /*! @} */
 
-/*! @name TIM1_1_0 - TRGMUX TIM1_1_0 Register */
+/*! @name TIM1_1_0 - TRGMUX TIM1_1_0 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM1_1_0_SEL0_MASK              (0xFFU)
@@ -213,7 +213,7 @@ typedef struct {
 #define TRGMUX_2_TIM1_1_0_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM1_1_0_LK_SHIFT)) & TRGMUX_2_TIM1_1_0_LK_MASK)
 /*! @} */
 
-/*! @name TIM1_3_2 - TRGMUX TIM1_3_2 Register */
+/*! @name TIM1_3_2 - TRGMUX TIM1_3_2 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM1_3_2_SEL0_MASK              (0xFFU)
@@ -232,7 +232,7 @@ typedef struct {
 #define TRGMUX_2_TIM1_3_2_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM1_3_2_LK_SHIFT)) & TRGMUX_2_TIM1_3_2_LK_MASK)
 /*! @} */
 
-/*! @name TIM1_5_4 - TRGMUX TIM1_5_4 Register */
+/*! @name TIM1_5_4 - TRGMUX TIM1_5_4 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM1_5_4_SEL0_MASK              (0xFFU)
@@ -251,7 +251,7 @@ typedef struct {
 #define TRGMUX_2_TIM1_5_4_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM1_5_4_LK_SHIFT)) & TRGMUX_2_TIM1_5_4_LK_MASK)
 /*! @} */
 
-/*! @name TIM1_7_6 - TRGMUX TIM1_7_6 Register */
+/*! @name TIM1_7_6 - TRGMUX TIM1_7_6 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM1_7_6_SEL0_MASK              (0xFFU)
@@ -270,7 +270,7 @@ typedef struct {
 #define TRGMUX_2_TIM1_7_6_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM1_7_6_LK_SHIFT)) & TRGMUX_2_TIM1_7_6_LK_MASK)
 /*! @} */
 
-/*! @name TIM2_1_0 - TRGMUX TIM2_1_0 Register */
+/*! @name TIM2_1_0 - TRGMUX TIM2_1_0 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM2_1_0_SEL0_MASK              (0xFFU)
@@ -289,7 +289,7 @@ typedef struct {
 #define TRGMUX_2_TIM2_1_0_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM2_1_0_LK_SHIFT)) & TRGMUX_2_TIM2_1_0_LK_MASK)
 /*! @} */
 
-/*! @name TIM2_3_2 - TRGMUX TIM2_3_2 Register */
+/*! @name TIM2_3_2 - TRGMUX TIM2_3_2 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM2_3_2_SEL0_MASK              (0xFFU)
@@ -308,7 +308,7 @@ typedef struct {
 #define TRGMUX_2_TIM2_3_2_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM2_3_2_LK_SHIFT)) & TRGMUX_2_TIM2_3_2_LK_MASK)
 /*! @} */
 
-/*! @name TIM2_5_4 - TRGMUX TIM2_5_4 Register */
+/*! @name TIM2_5_4 - TRGMUX TIM2_5_4 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM2_5_4_SEL0_MASK              (0xFFU)
@@ -327,7 +327,7 @@ typedef struct {
 #define TRGMUX_2_TIM2_5_4_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM2_5_4_LK_SHIFT)) & TRGMUX_2_TIM2_5_4_LK_MASK)
 /*! @} */
 
-/*! @name TIM2_7_6 - TRGMUX TIM2_7_6 Register */
+/*! @name TIM2_7_6 - TRGMUX TIM2_7_6 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIM2_7_6_SEL0_MASK              (0xFFU)
@@ -346,7 +346,7 @@ typedef struct {
 #define TRGMUX_2_TIM2_7_6_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIM2_7_6_LK_SHIFT)) & TRGMUX_2_TIM2_7_6_LK_MASK)
 /*! @} */
 
-/*! @name TIO1_1_0 - TRGMUX TIO1_1_0 Register */
+/*! @name TIO1_1_0 - TRGMUX TIO1_1_0 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO1_1_0_SEL0_MASK              (0xFFU)
@@ -365,7 +365,7 @@ typedef struct {
 #define TRGMUX_2_TIO1_1_0_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIO1_1_0_LK_SHIFT)) & TRGMUX_2_TIO1_1_0_LK_MASK)
 /*! @} */
 
-/*! @name TIO1_3_2 - TRGMUX TIO1_3_2 Register */
+/*! @name TIO1_3_2 - TRGMUX TIO1_3_2 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO1_3_2_SEL0_MASK              (0xFFU)
@@ -384,7 +384,7 @@ typedef struct {
 #define TRGMUX_2_TIO1_3_2_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIO1_3_2_LK_SHIFT)) & TRGMUX_2_TIO1_3_2_LK_MASK)
 /*! @} */
 
-/*! @name TIO1_5_4 - TRGMUX TIO1_5_4 Register */
+/*! @name TIO1_5_4 - TRGMUX TIO1_5_4 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO1_5_4_SEL0_MASK              (0xFFU)
@@ -403,7 +403,7 @@ typedef struct {
 #define TRGMUX_2_TIO1_5_4_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIO1_5_4_LK_SHIFT)) & TRGMUX_2_TIO1_5_4_LK_MASK)
 /*! @} */
 
-/*! @name TIO1_7_6 - TRGMUX TIO1_7_6 Register */
+/*! @name TIO1_7_6 - TRGMUX TIO1_7_6 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO1_7_6_SEL0_MASK              (0xFFU)
@@ -422,7 +422,7 @@ typedef struct {
 #define TRGMUX_2_TIO1_7_6_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIO1_7_6_LK_SHIFT)) & TRGMUX_2_TIO1_7_6_LK_MASK)
 /*! @} */
 
-/*! @name TIO2_1_0 - TRGMUX TIO2_1_0 Register */
+/*! @name TIO2_1_0 - TRGMUX TIO2_1_0 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO2_1_0_SEL0_MASK              (0xFFU)
@@ -441,7 +441,7 @@ typedef struct {
 #define TRGMUX_2_TIO2_1_0_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIO2_1_0_LK_SHIFT)) & TRGMUX_2_TIO2_1_0_LK_MASK)
 /*! @} */
 
-/*! @name TIO2_3_2 - TRGMUX TIO2_3_2 Register */
+/*! @name TIO2_3_2 - TRGMUX TIO2_3_2 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO2_3_2_SEL0_MASK              (0xFFU)
@@ -460,7 +460,7 @@ typedef struct {
 #define TRGMUX_2_TIO2_3_2_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIO2_3_2_LK_SHIFT)) & TRGMUX_2_TIO2_3_2_LK_MASK)
 /*! @} */
 
-/*! @name TIO2_5_4 - TRGMUX TIO2_5_4 Register */
+/*! @name TIO2_5_4 - TRGMUX TIO2_5_4 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO2_5_4_SEL0_MASK              (0xFFU)
@@ -479,7 +479,7 @@ typedef struct {
 #define TRGMUX_2_TIO2_5_4_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIO2_5_4_LK_SHIFT)) & TRGMUX_2_TIO2_5_4_LK_MASK)
 /*! @} */
 
-/*! @name TIO2_7_6 - TRGMUX TIO2_7_6 Register */
+/*! @name TIO2_7_6 - TRGMUX TIO2_7_6 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO2_7_6_SEL0_MASK              (0xFFU)
@@ -498,7 +498,7 @@ typedef struct {
 #define TRGMUX_2_TIO2_7_6_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIO2_7_6_LK_SHIFT)) & TRGMUX_2_TIO2_7_6_LK_MASK)
 /*! @} */
 
-/*! @name TIO3_1_0 - TRGMUX TIO3_1_0 Register */
+/*! @name TIO3_1_0 - TRGMUX TIO3_1_0 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO3_1_0_SEL0_MASK              (0xFFU)
@@ -517,7 +517,7 @@ typedef struct {
 #define TRGMUX_2_TIO3_1_0_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIO3_1_0_LK_SHIFT)) & TRGMUX_2_TIO3_1_0_LK_MASK)
 /*! @} */
 
-/*! @name TIO3_3_2 - TRGMUX TIO3_3_2 Register */
+/*! @name TIO3_3_2 - TRGMUX TIO3_3_2 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO3_3_2_SEL0_MASK              (0xFFU)
@@ -536,7 +536,7 @@ typedef struct {
 #define TRGMUX_2_TIO3_3_2_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIO3_3_2_LK_SHIFT)) & TRGMUX_2_TIO3_3_2_LK_MASK)
 /*! @} */
 
-/*! @name TIO3_5_4 - TRGMUX TIO3_5_4 Register */
+/*! @name TIO3_5_4 - TRGMUX TIO3_5_4 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO3_5_4_SEL0_MASK              (0xFFU)
@@ -555,7 +555,7 @@ typedef struct {
 #define TRGMUX_2_TIO3_5_4_LK(x)                  (((uint32_t)(((uint32_t)(x)) << TRGMUX_2_TIO3_5_4_LK_SHIFT)) & TRGMUX_2_TIO3_5_4_LK_MASK)
 /*! @} */
 
-/*! @name TIO3_7_6 - TRGMUX TIO3_7_6 Register */
+/*! @name TIO3_7_6 - TRGMUX TIO3_7_6 Configuration */
 /*! @{ */
 
 #define TRGMUX_2_TIO3_7_6_SEL0_MASK              (0xFFU)

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SRAMCTL.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_SRAMCTL
  *
  * This file contains register definitions and macros for easy access to their
@@ -89,7 +89,7 @@ typedef struct {
   uint8_t RESERVED_3[60];
   __IO uint32_t RAMCR2;                            /**< RAM Control 2, offset: 0x80 */
   uint8_t RESERVED_4[124];
-  __IO uint32_t RAMPC;                             /**< RAM Power Control, offset: 0x100 */
+  __IO uint32_t RAMPC;                             /**< RAM Power Control, offset: 0x100, not available in all instances (available on 16 out of 27) */
 } SRAMCTL_Type, *SRAMCTL_MemMapPtr;
 
 /** Number of instances of the SRAMCTL module. */
@@ -427,10 +427,10 @@ typedef struct {
 /*! @name RAMPC - RAM Power Control */
 /*! @{ */
 
-#define SRAMCTL_RAMPC_PCUT_MASK                  (0xFFFFU)
+#define SRAMCTL_RAMPC_PCUT_MASK                  (0xFFU)  /* Merged from fields with different position or width, of widths (4, 8), largest definition used */
 #define SRAMCTL_RAMPC_PCUT_SHIFT                 (0U)
-#define SRAMCTL_RAMPC_PCUT_WIDTH                 (16U)
-#define SRAMCTL_RAMPC_PCUT(x)                    (((uint32_t)(((uint32_t)(x)) << SRAMCTL_RAMPC_PCUT_SHIFT)) & SRAMCTL_RAMPC_PCUT_MASK)
+#define SRAMCTL_RAMPC_PCUT_WIDTH                 (8U)
+#define SRAMCTL_RAMPC_PCUT(x)                    (((uint32_t)(((uint32_t)(x)) << SRAMCTL_RAMPC_PCUT_SHIFT)) & SRAMCTL_RAMPC_PCUT_MASK)  /* Merged from fields with different position or width, of widths (4, 8), largest definition used */
 
 #define SRAMCTL_RAMPC_PCNT_MASK                  (0xF0000U)
 #define SRAMCTL_RAMPC_PCNT_SHIFT                 (16U)

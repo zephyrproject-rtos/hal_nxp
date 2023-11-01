@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Clock_Ip_Types.h
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK IP type header file.
 *   @details CLOCK IP type header file.
@@ -29,7 +29,7 @@ extern "C"{
 ==================================================================================================*/
 #include "StandardTypes.h"
 #include "Clock_Ip_Cfg_Defines.h"
-
+#include "Mcal.h"
 /*==================================================================================================
                                SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -37,8 +37,8 @@ extern "C"{
 #define CLOCK_IP_TYPES_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_TYPES_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_TYPES_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_TYPES_SW_MAJOR_VERSION                0
-#define CLOCK_IP_TYPES_SW_MINOR_VERSION                9
+#define CLOCK_IP_TYPES_SW_MAJOR_VERSION                1
+#define CLOCK_IP_TYPES_SW_MINOR_VERSION                0
 #define CLOCK_IP_TYPES_SW_PATCH_VERSION                0
 
 /*==================================================================================================
@@ -71,6 +71,13 @@ extern "C"{
     #error "Software Version Numbers of Clock_Ip_Types.h and Clock_Ip_Cfg_Defines.h are different"
 #endif
 
+#ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
+/* Check if Clock_Ip_Types.h file and Mcal.h file are of the same Autosar version */
+#if ((CLOCK_IP_TYPES_AR_RELEASE_MAJOR_VERSION    != MCAL_AR_RELEASE_MAJOR_VERSION) || \
+     (CLOCK_IP_TYPES_AR_RELEASE_MINOR_VERSION    != MCAL_AR_RELEASE_MINOR_VERSION))
+    #error "AutoSar Version Numbers of Clock_Ip_Types.h and Mcal.h are different"
+#endif
+#endif
 /*==================================================================================================
 *                                            CONSTANTS
 ==================================================================================================*/
@@ -78,101 +85,11 @@ extern "C"{
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
-/* Number of internal oscillators */
-#if CLOCK_IP_IRCOSCS_COUNT > 0U
-    #define CLOCK_IP_IRCOSCS_NO                  CLOCK_IP_IRCOSCS_COUNT
-#else
-    #define CLOCK_IP_IRCOSCS_NO                  1U
-#endif
-
-/* Number of external oscillators */
-#if CLOCK_IP_XOSCS_COUNT > 0U
-    #define CLOCK_IP_XOSCS_NO                  CLOCK_IP_XOSCS_COUNT
-#else
-    #define CLOCK_IP_XOSCS_NO                  1U
-#endif
-
-/* Number of pllS */
-#if CLOCK_IP_PLLS_COUNT > 0U
-    #define CLOCK_IP_PLLS_NO                  CLOCK_IP_PLLS_COUNT
-#else
-    #define CLOCK_IP_PLLS_NO                  1U
-#endif
-
-/* Number of selectors */
-#if CLOCK_IP_SELECTORS_COUNT > 0U
-    #define CLOCK_IP_SELECTORS_NO                  CLOCK_IP_SELECTORS_COUNT
-#else
-    #define CLOCK_IP_SELECTORS_NO                  1U
-#endif
-
-/* Number of dividers */
-#if CLOCK_IP_DIVIDERS_COUNT > 0U
-    #define CLOCK_IP_DIVIDERS_NO                  CLOCK_IP_DIVIDERS_COUNT
-#else
-    #define CLOCK_IP_DIVIDERS_NO                  1U
-#endif
-
-/* Number of dividers */
-#if CLOCK_IP_DIVIDER_TRIGGERS_COUNT > 0U
-    #define CLOCK_IP_DIVIDER_TRIGGERS_NO                  CLOCK_IP_DIVIDER_TRIGGERS_COUNT
-#else
-    #define CLOCK_IP_DIVIDER_TRIGGERS_NO          1U
-#endif
-
-/* Number of fractional dividers */
-#if CLOCK_IP_FRACTIONAL_DIVIDERS_COUNT > 0U
-    #define CLOCK_IP_FRACTIONAL_DIVIDERS_NO                  CLOCK_IP_FRACTIONAL_DIVIDERS_COUNT
-#else
-    #define CLOCK_IP_FRACTIONAL_DIVIDERS_NO                  1U
-#endif
-
-/* Number of external clocks */
-#if CLOCK_IP_EXT_CLKS_COUNT > 0U
-    #define CLOCK_IP_EXT_CLKS_NO                  CLOCK_IP_EXT_CLKS_COUNT
-#else
-    #define CLOCK_IP_EXT_CLKS_NO                  1U
-#endif
-
-/* Number of external clocks */
-#if CLOCK_IP_GATES_COUNT > 0U
-    #define CLOCK_IP_GATES_NO                  CLOCK_IP_GATES_COUNT
-#else
-    #define CLOCK_IP_GATES_NO                  1U
-#endif
-
-/* Number of progressive frequemcy clock switching */
-#if CLOCK_IP_PCFS_COUNT > 0U
-    #define CLOCK_IP_PCFS_NO                  CLOCK_IP_PCFS_COUNT
-#else
-    #define CLOCK_IP_PCFS_NO                  1U
-#endif
-
-/* Number of external clocks */
-#if CLOCK_IP_CMUS_COUNT > 0U
-    #define CLOCK_IP_CMUS_NO                  CLOCK_IP_CMUS_COUNT
-#else
-    #define CLOCK_IP_CMUS_NO                  1U
-#endif
-
-/* Number of configured frequencies values */
-#if CLOCK_IP_CONFIGURED_FREQUENCIES_COUNT > 0U
-    #define CLOCK_IP_CONFIGURED_FREQUENCIES_NO       CLOCK_IP_CONFIGURED_FREQUENCIES_COUNT
-#else
-    #define CLOCK_IP_CONFIGURED_FREQUENCIES_NO       1U
-#endif
-
-/* Number of special peripheral clocks */
-#if CLOCK_IP_SPECIFIC_PERIPH_COUNT > 0U
-    #define CLOCK_IP_SPECIFIC_PERIPH_NO       CLOCK_IP_SPECIFIC_PERIPH_COUNT
-#else
-    #define CLOCK_IP_SPECIFIC_PERIPH_NO       1U
-#endif
 
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/
-#if (defined(CLOCK_IP_POWER_MODE_CHANGE_NOTIFICATION))
+#if (defined(CLOCK_IP_POWER_NOTIFICATIONS))
 /** @brief Power modes. */
 typedef enum {
 
@@ -279,6 +196,18 @@ typedef enum {
 #endif
 #if defined(CLOCK_IP_HAS_PLL1_CLK)
     PLL1_CLK                   = CLOCK_IP_HAS_PLL1_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_PLLAUX_CLK)
+    PLLAUX_CLK                   = CLOCK_IP_HAS_PLLAUX_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_PLLAUX_PHI0_CLK)
+    PLLAUX_PHI0_CLK                   = CLOCK_IP_HAS_PLLAUX_PHI0_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_PLLAUX_PHI1_CLK)
+    PLLAUX_PHI1_CLK                   = CLOCK_IP_HAS_PLLAUX_PHI1_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_PLLAUX_PHI2_CLK)
+    PLLAUX_PHI2_CLK                   = CLOCK_IP_HAS_PLLAUX_PHI2_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_SPLL_CLK)
     SPLL_CLK                  = CLOCK_IP_HAS_SPLL_CLK,
@@ -496,6 +425,9 @@ typedef enum {
 #if defined(CLOCK_IP_HAS_PLL_POSTDIV_CLK)
     PLL_POSTDIV_CLK           = CLOCK_IP_HAS_PLL_POSTDIV_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_PLLAUX_POSTDIV_CLK)
+    PLLAUX_POSTDIV_CLK           = CLOCK_IP_HAS_PLLAUX_POSTDIV_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_SIRCDIV1_CLK)
     SIRCDIV1_CLK              = CLOCK_IP_HAS_SIRCDIV1_CLK,
 #endif
@@ -585,6 +517,9 @@ typedef enum {
 #endif
 #if defined(CLOCK_IP_HAS_ETH_RGMII_REF_CLK)
     ETH_RGMII_REF_CLK         = CLOCK_IP_HAS_ETH_RGMII_REF_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_TMR_1588_CLK)
+    TMR_1588_CLK            = CLOCK_IP_HAS_TMR_1588_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_ETH_EXT_TS_CLK)
     ETH_EXT_TS_CLK            = CLOCK_IP_HAS_ETH_EXT_TS_CLK,
@@ -1010,13 +945,16 @@ typedef enum {
     P4_PSI5_S_UTIL_CLK        = CLOCK_IP_HAS_P4_PSI5_S_UTIL_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_SYSTEM_DRUN_CLK)
-    SYSTEM_DRUN_CLK        = CLOCK_IP_HAS_SYSTEM_DRUN_CLK,
+    SYSTEM_DRUN_CLK           = CLOCK_IP_HAS_SYSTEM_DRUN_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
-    SYSTEM_DIV2_CLK        = CLOCK_IP_HAS_SYSTEM_DIV2_CLK,
+    SYSTEM_DIV2_CLK           = CLOCK_IP_HAS_SYSTEM_DIV2_CLK,
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-    SYSTEM_DIV4_CLK        = CLOCK_IP_HAS_SYSTEM_DIV4_CLK,
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+    SYSTEM_DIV4_MON1_CLK      = CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+    SYSTEM_DIV4_MON2_CLK      = CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_SYS_CLK)
     SYS_CLK                   = CLOCK_IP_HAS_SYS_CLK,
@@ -1085,8 +1023,14 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_ADC6_CLK)
     ADC6_CLK                  = CLOCK_IP_HAS_ADC6_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_ADCBIST_CLK)
+    ADCBIST_CLK                  = CLOCK_IP_HAS_ADCBIST_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_BCTU0_CLK)
     BCTU0_CLK                 = CLOCK_IP_HAS_BCTU0_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_BCTU1_CLK)
+    BCTU1_CLK                 = CLOCK_IP_HAS_BCTU1_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_CE_SYS_DIV2_MON_CLK)
     CE_SYS_DIV2_MON_CLK       = CLOCK_IP_HAS_CE_SYS_DIV2_MON_CLK,
@@ -1147,6 +1091,21 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #endif
 #if defined(CLOCK_IP_HAS_CMU1_CLK)
     CMU1_CLK                  = CLOCK_IP_HAS_CMU1_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_COOLFLUX_D_RAM0_CLK)
+    COOLFLUX_D_RAM0_CLK                  = CLOCK_IP_HAS_COOLFLUX_D_RAM0_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_COOLFLUX_D_RAM1_CLK)
+    COOLFLUX_D_RAM1_CLK                  = CLOCK_IP_HAS_COOLFLUX_D_RAM1_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_COOLFLUX_DSP16L_CLK)
+    COOLFLUX_DSP16L_CLK                  = CLOCK_IP_HAS_COOLFLUX_DSP16L_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_COOLFLUX_I_RAM0_CLK)
+    COOLFLUX_I_RAM0_CLK                  = CLOCK_IP_HAS_COOLFLUX_I_RAM0_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_COOLFLUX_I_RAM1_CLK)
+    COOLFLUX_I_RAM1_CLK                  = CLOCK_IP_HAS_COOLFLUX_I_RAM1_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_CORE_A53_CLUSTER_0_CLK)
     CORE_A53_CLUSTER_0_CLK    = CLOCK_IP_HAS_CORE_A53_CLUSTER_0_CLK,
@@ -1210,6 +1169,9 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #endif
 #if defined(CLOCK_IP_HAS_DMAMUX5_CLK)
     DMAMUX5_CLK               = CLOCK_IP_HAS_DMAMUX5_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_DSPI_MSC_CLK)
+    DSPI_MSC_CLK               = CLOCK_IP_HAS_DSPI_MSC_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_EDMA_CLK)
     EDMA_CLK                  = CLOCK_IP_HAS_EDMA_CLK,
@@ -1316,6 +1278,102 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_EDMA1_CLK)
     EDMA1_CLK                 = CLOCK_IP_HAS_EDMA1_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD0_CLK)
+    EDMA1_TCD0_CLK            = CLOCK_IP_HAS_EDMA1_TCD0_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD1_CLK)
+    EDMA1_TCD1_CLK            = CLOCK_IP_HAS_EDMA1_TCD1_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD2_CLK)
+    EDMA1_TCD2_CLK            = CLOCK_IP_HAS_EDMA1_TCD2_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD3_CLK)
+    EDMA1_TCD3_CLK            = CLOCK_IP_HAS_EDMA1_TCD3_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD4_CLK)
+    EDMA1_TCD4_CLK            = CLOCK_IP_HAS_EDMA1_TCD4_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD5_CLK)
+    EDMA1_TCD5_CLK            = CLOCK_IP_HAS_EDMA1_TCD5_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD6_CLK)
+    EDMA1_TCD6_CLK            = CLOCK_IP_HAS_EDMA1_TCD6_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD7_CLK)
+    EDMA1_TCD7_CLK            = CLOCK_IP_HAS_EDMA1_TCD7_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD8_CLK)
+    EDMA1_TCD8_CLK            = CLOCK_IP_HAS_EDMA1_TCD8_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD9_CLK)
+    EDMA1_TCD9_CLK            = CLOCK_IP_HAS_EDMA1_TCD9_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD10_CLK)
+    EDMA1_TCD10_CLK           = CLOCK_IP_HAS_EDMA1_TCD10_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD11_CLK)
+    EDMA1_TCD11_CLK           = CLOCK_IP_HAS_EDMA1_TCD11_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD12_CLK)
+    EDMA1_TCD12_CLK           = CLOCK_IP_HAS_EDMA1_TCD12_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD13_CLK)
+    EDMA1_TCD13_CLK           = CLOCK_IP_HAS_EDMA1_TCD13_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD14_CLK)
+    EDMA1_TCD14_CLK           = CLOCK_IP_HAS_EDMA1_TCD14_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD15_CLK)
+    EDMA1_TCD15_CLK           = CLOCK_IP_HAS_EDMA1_TCD15_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD16_CLK)
+    EDMA1_TCD16_CLK           = CLOCK_IP_HAS_EDMA1_TCD16_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD17_CLK)
+    EDMA1_TCD17_CLK           = CLOCK_IP_HAS_EDMA1_TCD17_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD18_CLK)
+    EDMA1_TCD18_CLK           = CLOCK_IP_HAS_EDMA1_TCD18_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD19_CLK)
+    EDMA1_TCD19_CLK           = CLOCK_IP_HAS_EDMA1_TCD19_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD20_CLK)
+    EDMA1_TCD20_CLK           = CLOCK_IP_HAS_EDMA1_TCD20_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD21_CLK)
+    EDMA1_TCD21_CLK           = CLOCK_IP_HAS_EDMA1_TCD21_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD22_CLK)
+    EDMA1_TCD22_CLK           = CLOCK_IP_HAS_EDMA1_TCD22_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD23_CLK)
+    EDMA1_TCD23_CLK           = CLOCK_IP_HAS_EDMA1_TCD23_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD24_CLK)
+    EDMA1_TCD24_CLK           = CLOCK_IP_HAS_EDMA1_TCD24_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD25_CLK)
+    EDMA1_TCD25_CLK           = CLOCK_IP_HAS_EDMA1_TCD25_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD26_CLK)
+    EDMA1_TCD26_CLK           = CLOCK_IP_HAS_EDMA1_TCD26_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD27_CLK)
+    EDMA1_TCD27_CLK           = CLOCK_IP_HAS_EDMA1_TCD27_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD28_CLK)
+    EDMA1_TCD28_CLK           = CLOCK_IP_HAS_EDMA1_TCD28_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD29_CLK)
+    EDMA1_TCD29_CLK           = CLOCK_IP_HAS_EDMA1_TCD29_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD30_CLK)
+    EDMA1_TCD30_CLK           = CLOCK_IP_HAS_EDMA1_TCD30_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EDMA1_TCD31_CLK)
+    EDMA1_TCD31_CLK           = CLOCK_IP_HAS_EDMA1_TCD31_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_EDMA3_CLK)
     EDMA3_CLK                 = CLOCK_IP_HAS_EDMA3_CLK,
 #endif
@@ -1324,6 +1382,12 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #endif
 #if defined(CLOCK_IP_HAS_EDMA5_CLK)
     EDMA5_CLK                 = CLOCK_IP_HAS_EDMA5_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EFLEX_PWM0_CLK)
+    EFLEX_PWM0_CLK                 = CLOCK_IP_HAS_EFLEX_PWM0_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_EFLEX_PWM1_CLK)
+    EFLEX_PWM1_CLK                 = CLOCK_IP_HAS_EFLEX_PWM1_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_FDMA0_CLK)
     FDMA0_CLK                 = CLOCK_IP_HAS_FDMA0_CLK,
@@ -1589,6 +1653,9 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_GLB_LBIST_CLK)
     GLB_LBIST_CLK             = CLOCK_IP_HAS_GLB_LBIST_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_GMAC0_CLK)
+    GMAC0_CLK               = CLOCK_IP_HAS_GMAC0_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_GMAC_TS_CLK)
     GMAC_TS_CLK               = CLOCK_IP_HAS_GMAC_TS_CLK,
 #endif
@@ -1601,6 +1668,18 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_GMAC0_TS_CLK)
     GMAC0_TS_CLK              = CLOCK_IP_HAS_GMAC0_TS_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_GMAC0_TX_RMII_CLK)
+    GMAC0_TX_RMII_CLK         = CLOCK_IP_HAS_GMAC0_TX_RMII_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_GMAC0_MII_RX_CLK)
+    GMAC0_MII_RX_CLK          = CLOCK_IP_HAS_GMAC0_MII_RX_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_GMAC0_MII_RMII_TX_CLK)
+    GMAC0_MII_RMII_TX_CLK     = CLOCK_IP_HAS_GMAC0_MII_RMII_TX_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_GMAC1_MII_RX_CLK)
+    GMAC1_MII_RX_CLK          = CLOCK_IP_HAS_GMAC1_MII_RX_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_GMAC1_RX_CLK)
     GMAC1_RX_CLK              = CLOCK_IP_HAS_GMAC1_RX_CLK,
 #endif
@@ -1609,6 +1688,12 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #endif
 #if defined(CLOCK_IP_HAS_GMAC1_TS_CLK)
     GMAC1_TS_CLK              = CLOCK_IP_HAS_GMAC1_TS_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_GMAC1_RMII_CLK)
+    GMAC1_RMII_CLK            = CLOCK_IP_HAS_GMAC1_RMII_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_GMAC1_RMII_EXT_CLK)
+    GMAC1_RMII_EXT_CLK        = CLOCK_IP_HAS_GMAC1_RMII_EXT_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_GPIO0_CLK)
     GPIO0_CLK                 = CLOCK_IP_HAS_GPIO0_CLK,
@@ -1631,11 +1716,8 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_IDIV4_CLK)
     IDIV4_CLK                   = CLOCK_IP_HAS_IDIV4_CLK,
 #endif
-#if defined(CLOCK_IP_HAS_I3C0_CLK)
-    I3C0_CLK                   = CLOCK_IP_HAS_I3C0_CLK,
-#endif
-#if defined(CLOCK_IP_HAS_I3C1_CLK)
-    I3C1_CLK                   = CLOCK_IP_HAS_I3C1_CLK,
+#if defined(CLOCK_IP_HAS_IGF0_CLK)
+    IGF0_CLK                   = CLOCK_IP_HAS_IGF0_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_IIIC0_CLK)
     IIIC0_CLK                 = CLOCK_IP_HAS_IIIC0_CLK,
@@ -1826,6 +1908,9 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_LPUART15_CLK)
     LPUART15_CLK              = CLOCK_IP_HAS_LPUART15_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_LPUART_MSC_CLK)
+    LPUART_MSC_CLK              = CLOCK_IP_HAS_LPUART_MSC_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_LVDS_CLK)
     LVDS_CLK              = CLOCK_IP_HAS_LVDS_CLK,
 #endif
@@ -1846,6 +1931,24 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #endif
 #if defined(CLOCK_IP_HAS_MUB_CLK)
     MUB_CLK                   = CLOCK_IP_HAS_MUB_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_MU2A_CLK)
+    MU2A_CLK                   = CLOCK_IP_HAS_MU2A_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_MU2B_CLK)
+    MU2B_CLK                   = CLOCK_IP_HAS_MU2B_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_MU3A_CLK)
+    MU3A_CLK                   = CLOCK_IP_HAS_MU3A_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_MU3B_CLK)
+    MU3B_CLK                   = CLOCK_IP_HAS_MU3B_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_MU4A_CLK)
+    MU4A_CLK                   = CLOCK_IP_HAS_MU4A_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_MU4B_CLK)
+    MU4B_CLK                   = CLOCK_IP_HAS_MU4B_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_OCOTP_CLK)
     OCOTP_CLK                = CLOCK_IP_HAS_OCOTP_CLK,
@@ -2102,6 +2205,9 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_ETH0_TX_RGMII_LPBK_CLK)
     ETH0_TX_RGMII_LPBK_CLK    = CLOCK_IP_HAS_ETH0_TX_RGMII_LPBK_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_ETH0_PS_TX_CLK)
+    ETH0_PS_TX_CLK            = CLOCK_IP_HAS_ETH0_PS_TX_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_ETH1_REF_RMII_CLK)
     ETH1_REF_RMII_CLK         = CLOCK_IP_HAS_ETH1_REF_RMII_CLK,
 #endif
@@ -2119,6 +2225,24 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #endif
 #if defined(CLOCK_IP_HAS_ETH1_TX_RGMII_LPBK_CLK)
     ETH1_TX_RGMII_LPBK_CLK    = CLOCK_IP_HAS_ETH1_TX_RGMII_LPBK_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_ETH1_PS_TX_CLK)
+    ETH1_PS_TX_CLK            = CLOCK_IP_HAS_ETH1_PS_TX_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_ETPU_AB_REGISTERS_CLK)
+    ETPU_AB_REGISTERS_CLK    = CLOCK_IP_HAS_ETPU_AB_REGISTERS_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_ETPU_CODE_RAM1_CLK)
+    ETPU_CODE_RAM1_CLK    = CLOCK_IP_HAS_ETPU_CODE_RAM1_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_ETPU_CODE_RAM2_CLK)
+    ETPU_CODE_RAM2_CLK    = CLOCK_IP_HAS_ETPU_CODE_RAM2_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_ETPU_RAM_MIRROR_CLK)
+    ETPU_RAM_MIRROR_CLK    = CLOCK_IP_HAS_ETPU_RAM_MIRROR_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_ETPU_RAM_SDM_CLK)
+    ETPU_RAM_SDM_CLK    = CLOCK_IP_HAS_ETPU_RAM_SDM_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_P1_REG_INTF_CLK)
     P1_REG_INTF_CLK           = CLOCK_IP_HAS_P1_REG_INTF_CLK,
@@ -2435,8 +2559,17 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_STMC_CLK)
     STMC_CLK                  = CLOCK_IP_HAS_STMC_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_STMD_CLK)
+    STMD_CLK                  = CLOCK_IP_HAS_STMD_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_SWG_CLK)
     SWG_CLK                  = CLOCK_IP_HAS_SWG_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_SWG0_CLK)
+    SWG0_CLK                  = CLOCK_IP_HAS_SWG0_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_SWG1_CLK)
+    SWG1_CLK                  = CLOCK_IP_HAS_SWG1_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_SWG_PAD_CLK)
     SWG_PAD_CLK                  = CLOCK_IP_HAS_SWG_PAD_CLK,
@@ -2482,6 +2615,9 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #endif
 #if defined(CLOCK_IP_HAS_TRGMUX0_CLK)
     TRGMUX0_CLK               = CLOCK_IP_HAS_TRGMUX0_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_TRGMUX1_CLK)
+    TRGMUX1_CLK               = CLOCK_IP_HAS_TRGMUX1_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_TSENSE0_CLK)
     TSENSE0_CLK               = CLOCK_IP_HAS_TSENSE0_CLK,
@@ -2621,6 +2757,21 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_SAR_ADC_CLK)
     SAR_ADC_CLK               = CLOCK_IP_HAS_SAR_ADC_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_SDA_AP_CLK)
+    SDA_AP_CLK               = CLOCK_IP_HAS_SDA_AP_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_SDADC0_CLK)
+    SDADC0_CLK               = CLOCK_IP_HAS_SDADC0_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_SDADC1_CLK)
+    SDADC1_CLK               = CLOCK_IP_HAS_SDADC1_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_SDADC2_CLK)
+    SDADC2_CLK               = CLOCK_IP_HAS_SDADC2_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_SDADC3_CLK)
+    SDADC3_CLK               = CLOCK_IP_HAS_SDADC3_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_SEMA42_1_CLK)
     SEMA42_1_CLK              = CLOCK_IP_HAS_SEMA42_1_CLK,
 #endif
@@ -2666,6 +2817,36 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
 #if defined(CLOCK_IP_HAS_TCK_CLK)
     TCK_CLK                  = CLOCK_IP_HAS_TCK_CLK,
 #endif
+#if defined(CLOCK_IP_HAS_AES_CLK)
+    AES_CLK                  = CLOCK_IP_HAS_AES_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_AES_ACCEL_CLK)
+    AES_ACCEL_CLK                  = CLOCK_IP_HAS_AES_ACCEL_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_AES_APP0_CLK)
+    AES_APP0_CLK                  = CLOCK_IP_HAS_AES_APP0_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_AES_APP1_CLK)
+    AES_APP1_CLK                  = CLOCK_IP_HAS_AES_APP1_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_AES_APP2_CLK)
+    AES_APP2_CLK                  = CLOCK_IP_HAS_AES_APP2_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_AES_APP3_CLK)
+    AES_APP3_CLK                  = CLOCK_IP_HAS_AES_APP3_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_AES_APP4_CLK)
+    AES_APP4_CLK                  = CLOCK_IP_HAS_AES_APP4_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_AES_APP5_CLK)
+    AES_APP5_CLK                  = CLOCK_IP_HAS_AES_APP5_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_AES_APP6_CLK)
+    AES_APP6_CLK                  = CLOCK_IP_HAS_AES_APP6_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_AES_APP7_CLK)
+    AES_APP7_CLK                  = CLOCK_IP_HAS_AES_APP7_CLK,
+#endif
 #if defined(CLOCK_IP_HAS_DSPI_SCK_TST_CLK)
     DSPI_SCK_TST_CLK          = CLOCK_IP_HAS_DSPI_SCK_TST_CLK,
 #endif
@@ -2688,15 +2869,6 @@ typedef enum
     CLOCK_IP_PLL_STATUS_UNDEFINED               = 0x02U,    /**< PLL Status is unknown */
 
 } Clock_Ip_PllStatusType;
-
-/** @brief Clock ip cmu status return codes. */
-typedef enum
-{
-    CLOCK_IP_CMU_IN_RANGE                        = 0x00U,    /**< Frequency is in range */
-    CLOCK_IP_CMU_HIGH_FREQ                       = 0x01U,    /**< Frequency is higher than high limit */
-    CLOCK_IP_CMU_LOW_FREQ                        = 0x02U,    /**< Frequency is lower than low limit */
-    CLOCK_IP_CMU_STATUS_UNDEFINED                = 0X03U,    /**< CMU status is unknown */
-} Clock_Ip_CmuStatusType;
 
 /** @brief Clock ip report error types. */
 typedef enum
@@ -2721,12 +2893,6 @@ typedef enum
     COMMON_TRIGGER_DIVIDER_UPDATE,     /**< @brief Common trigger divider update.  */
 
 } Clock_Ip_TriggerDividerType;
-
-/** @brief specific peripheral. */
-typedef enum
-{
-    RESERVED_VALUE,
-} Clock_Ip_SpecificPeriphParamType;
 
 /*==================================================================================================
 *                                  STRUCTURES AND OTHER TYPEDEFS
@@ -2783,20 +2949,20 @@ typedef struct
  */
 typedef struct
 {
-    Clock_Ip_NameType       Name;               /**< Clock name associated to xosc */
+    Clock_Ip_NameType       Name;                   /**< Clock name associated to xosc */
 
-    uint32                  Freq;               /**< External oscillator frequency. */
+    uint32                  Freq;                   /**< External oscillator frequency. */
 
-    uint16                  Enable;             /**< Enable xosc. */
+    uint16                  Enable;                 /**< Enable xosc. */
 
-    uint16                  StartupDelay;       /**< Startup stabilization time. */
-    uint8                   BypassOption;       /**< XOSC bypass option */
-    uint8                   CompEn;             /**< Comparator enable */
-    uint8                   TransConductance;   /**< Crystal overdrive protection */
+    uint16                  StartupDelay;           /**< Startup stabilization time. */
+    uint8                   BypassOption;           /**< XOSC bypass option */
+    uint8                   CompEn;                 /**< Comparator enable */
+    uint8                   TransConductance;       /**< Crystal overdrive protection */
 
-    uint8                   Gain;               /**< Gain value */
-    uint8                   Monitor;            /**< Monitor type */
-
+    uint8                   Gain;                   /**< Gain value */
+    uint8                   Monitor;                /**< Monitor type */
+    uint8                   AutoLevelController;    /**< Automatic level controller */
 
 } Clock_Ip_XoscConfigType;
 
@@ -2945,26 +3111,6 @@ typedef struct
 } Clock_Ip_ConfiguredFrequencyType;
 
 /*!
- * @brief Clock Specific peripheral configure.
- * Implements Clock_Ip_SpecificPerpihParamType_Class
- */
-typedef struct
-{
-    Clock_Ip_SpecificPeriphParamType     ParamsType;
-    uint32                               ParamsValue;
-} Clock_Ip_SpecificPerpihParamType;
-
-/*!
- * @brief Clock Specific peripheral structure.
- * Implements Clock_IP_SpecificPeriphConfigType_Class
- */
-typedef struct
-{
-    uint8                                  ParamsNo;
-    Clock_Ip_SpecificPerpihParamType       Params[CLOCK_IP_SPECIFIC_PERIPH_NO];
-} Clock_IP_SpecificPeriphConfigType;
-
-/*!
  * @brief Clock configuration structure.
  * Implements Clock_Ip_ClockConfigType_Class
  */
@@ -2987,20 +3133,19 @@ typedef struct
     uint8   CmusCount;                                                                  /**< Clock cmus count */
     uint8   ConfigureFrequenciesCount;                                                  /**< Configured frequencies count */
 
-    Clock_Ip_IrcoscConfigType          Ircoscs[CLOCK_IP_IRCOSCS_NO];                       /**< IRCOSCs */
-    Clock_Ip_XoscConfigType            Xoscs[CLOCK_IP_XOSCS_NO];                           /**< XOSCs */
-    Clock_Ip_PllConfigType             Plls[CLOCK_IP_PLLS_NO];                             /**< PLLs */
-    Clock_Ip_SelectorConfigType        Selectors[CLOCK_IP_SELECTORS_NO];                   /**< Selectors */
-    Clock_Ip_DividerConfigType         Dividers[CLOCK_IP_DIVIDERS_NO];                     /**< Dividers */
-    Clock_Ip_DividerTriggerConfigType  DividerTriggers[CLOCK_IP_DIVIDER_TRIGGERS_NO];      /**< Divider triggers */
-    Clock_Ip_FracDivConfigType         FracDivs[CLOCK_IP_FRACTIONAL_DIVIDERS_NO];          /**< Fractional dividers */
-    Clock_Ip_ExtClkConfigType          ExtClks[CLOCK_IP_EXT_CLKS_NO];                      /**< External clocks */
-    Clock_Ip_GateConfigType            Gates[CLOCK_IP_GATES_NO];                           /**< Clock gates */
-    Clock_Ip_PcfsConfigType            Pcfs[CLOCK_IP_PCFS_NO];                             /**< Progressive clock switching */
-    Clock_Ip_CmuConfigType             Cmus[CLOCK_IP_CMUS_NO];                             /**< Clock cmus */
-    Clock_IP_SpecificPeriphConfigType  SpecificPeriphalConfiguration;                   /**< Clock specific peripheral configuration */
-
-    Clock_Ip_ConfiguredFrequencyType   ConfiguredFrequencies[CLOCK_IP_CONFIGURED_FREQUENCIES_NO];     /**< Configured frequency values */
+    const Clock_Ip_IrcoscConfigType          (*Ircoscs)[];                              /**< IRCOSCs */
+    const Clock_Ip_XoscConfigType            (*Xoscs)[];                                /**< XOSCs */
+    const Clock_Ip_PllConfigType             (*Plls)[];                                 /**< PLLs */
+    const Clock_Ip_SelectorConfigType        (*Selectors)[];                            /**< Selectors */
+    const Clock_Ip_DividerConfigType         (*Dividers)[];                             /**< Dividers */
+    const Clock_Ip_DividerTriggerConfigType  (*DividerTriggers)[];                      /**< Divider triggers */
+    const Clock_Ip_FracDivConfigType         (*FracDivs)[];                             /**< Fractional dividers */
+    const Clock_Ip_ExtClkConfigType          (*ExtClks)[];                              /**< External clocks */
+    const Clock_Ip_GateConfigType            (*Gates)[];                                /**< Clock gates */
+    const Clock_Ip_PcfsConfigType            (*Pcfs)[];                                 /**< Progressive clock switching */
+    const Clock_Ip_CmuConfigType             (*Cmus)[];                                 /**< Clock cmus */
+    const Clock_Ip_ConfiguredFrequencyType   (*ConfiguredFrequencies)[];                /**< Configured frequency values */
+    
 } Clock_Ip_ClockConfigType;
 
 /*==================================================================================================

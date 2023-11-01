@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -34,9 +34,15 @@ extern "C"{
 #if defined(USING_OS_ZEPHYR)
 #include "OsIf_Interrupts.h"
 #ifdef MCAL_ENABLE_USER_MODE_SUPPORT
-#include "rtd.h"    /* System calls for RTD */
-#endif
+/* System calls for RTD */
+#include "rtd.h"
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
 #endif /* defined(USING_OS_ZEPHYR) */
+
+#if defined(USING_OS_FREERTOS)
+#include "FreeRTOS.h"
+#include "task.h"
+#endif /* defined(USING_OS_FREERTOS) */
 
 #if !defined(USING_OS_AUTOSAROS)
 #ifdef MCAL_ENABLE_USER_MODE_SUPPORT
@@ -46,9 +52,9 @@ uint32 Sys_GoToUser_Return(uint32 u32SwitchToSupervisor, uint32 u32returnValue);
 uint32 Sys_GoToSupervisor(void);
 uint32 Sys_GoToUser(void);
 #else
-/*import inline function for switch context from system.h */
+/* import inline function for switch context from system.h */
 #include "system.h"
-#endif
+#endif /*  (MCAL_PLATFORM_ARM  == MCAL_ARM_MARCH) */
 void Sys_SuspendInterrupts(void);
 void Sys_ResumeInterrupts(void);
 #endif /* def MCAL_ENABLE_USER_MODE_SUPPORT */
@@ -66,37 +72,65 @@ void Sys_EL1ResumeInterrupts(void);
 #define OSIF_INTERNAL_AR_RELEASE_MAJOR_VERSION     4
 #define OSIF_INTERNAL_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_INTERNAL_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_INTERNAL_SW_MAJOR_VERSION             0
-#define OSIF_INTERNAL_SW_MINOR_VERSION             9
+#define OSIF_INTERNAL_SW_MAJOR_VERSION             1
+#define OSIF_INTERNAL_SW_MINOR_VERSION             0
 #define OSIF_INTERNAL_SW_PATCH_VERSION             0
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
-/* Checks against StandardTypes.h */
+/* Check if OsIf_Internal.h file and OsIf_Cfg.h file are of the same vendor */
+#if (OSIF_INTERNAL_VENDOR_ID != OSIF_CFG_VENDOR_ID)
+    #error "OsIf_Internal.h and OsIf_Cfg.h have different vendor ids"
+#endif
+/* Check if OsIf_Internal.h file and OsIf_Cfg.h file are of the same Autosar version */
+#if ((OSIF_INTERNAL_AR_RELEASE_MAJOR_VERSION    != OSIF_CFG_AR_RELEASE_MAJOR_VERSION) || \
+     (OSIF_INTERNAL_AR_RELEASE_MINOR_VERSION    != OSIF_CFG_AR_RELEASE_MINOR_VERSION) || \
+     (OSIF_INTERNAL_AR_RELEASE_REVISION_VERSION != OSIF_CFG_AR_RELEASE_REVISION_VERSION))
+    #error "AUTOSAR Version Numbers of OsIf_Internal.h and OsIf_Cfg.h are different"
+#endif
+/* Check if OsIf_Internal.h file and OsIf_Cfg.h file are of the same Software version */
+#if ((OSIF_INTERNAL_SW_MAJOR_VERSION != OSIF_CFG_SW_MAJOR_VERSION) || \
+     (OSIF_INTERNAL_SW_MINOR_VERSION != OSIF_CFG_SW_MINOR_VERSION) || \
+     (OSIF_INTERNAL_SW_PATCH_VERSION != OSIF_CFG_SW_PATCH_VERSION) \
+    )
+    #error "Software Version Numbers of OsIf_Internal.h and OsIf_Cfg.h are different"
+#endif
+
+/* Check if OsIf_Internal.h file and StandardTypes.h file are of the same Autosar version */
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if ((OSIF_INTERNAL_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
          (OSIF_INTERNAL_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
         #error "AutoSar Version Numbers of OsIf_Internal.h and StandardTypes.h are different"
     #endif
-#endif
+#endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 
-/* Checks against Soc_Ips.h */
+/* Check if OsIf_Internal.h file and Soc_Ips.h file are of the same Autosar version */
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if ((OSIF_INTERNAL_AR_RELEASE_MAJOR_VERSION != SOC_IPS_AR_RELEASE_MAJOR_VERSION) || \
          (OSIF_INTERNAL_AR_RELEASE_MINOR_VERSION != SOC_IPS_AR_RELEASE_MINOR_VERSION))
         #error "AutoSar Version Numbers of OsIf_Internal.h and Soc_Ips.h are different"
     #endif
-#endif
+#endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 
 #if defined(USING_OS_AUTOSAROS)
-/* Checks against Os.h */
+/* Check if OsIf_Internal.h file and Os.h file are of the same Autosar version */
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if ((OSIF_INTERNAL_AR_RELEASE_MAJOR_VERSION != OS_AR_RELEASE_MAJOR_VERSION) || \
          (OSIF_INTERNAL_AR_RELEASE_MINOR_VERSION != OS_AR_RELEASE_MINOR_VERSION))
         #error "AutoSar Version Numbers of OsIf_Internal.h and Os.h are different"
     #endif
-#endif
+#endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
+#endif /* defined(USING_OS_AUTOSAROS) */
+
+#if defined(USING_OS_ZEPHYR)
+/* Check if OsIf_Internal.h file and OsIf_Interrupts.h file are of the same Autosar version */
+#ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
+    #if ((OSIF_INTERNAL_AR_RELEASE_MAJOR_VERSION != OSIF_INTERRUPTS_AR_RELEASE_MAJOR_VERSION) || \
+         (OSIF_INTERNAL_AR_RELEASE_MINOR_VERSION != OSIF_INTERRUPTS_AR_RELEASE_MINOR_VERSION))
+        #error "AutoSar Version Numbers of OsIf_Internal.h and OsIf_Interrupts.h are different"
+    #endif
+#endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 #endif /* defined(USING_OS_AUTOSAROS) */
 
 /*==================================================================================================
@@ -190,10 +224,16 @@ void Sys_EL1ResumeInterrupts(void);
         #elif (MCAL_PLATFORM_ARM  == MCAL_ARM_AARCH32) || (MCAL_PLATFORM_ARM  == MCAL_ARM_RARCH) 
             #define ResumeAllInterrupts()   Sys_EL1ResumeInterrupts()
             #define SuspendAllInterrupts()  Sys_EL1SuspendInterrupts()
-        #else
-            #define ResumeAllInterrupts()   ASM_KEYWORD(" cpsie i")
-            #define SuspendAllInterrupts()  ASM_KEYWORD(" cpsid i")
-        #endif /* MCAL_PLATFORM_ARM  == MCAL_ARM_AARCH64 */
+        #elif (MCAL_PLATFORM_ARM  == MCAL_ARM_MARCH)
+            #if defined(USING_OS_FREERTOS)
+                #define ResumeAllInterrupts()   taskEXIT_CRITICAL()
+                #define SuspendAllInterrupts()  taskENTER_CRITICAL()
+            #else
+                #define ResumeAllInterrupts()   ASM_KEYWORD(" cpsie i")
+                #define SuspendAllInterrupts()  ASM_KEYWORD(" cpsid i")
+            #endif /* defined(USING_OS_FREERTOS) */
+
+         #endif /* MCAL_PLATFORM_ARM  == MCAL_ARM_AARCH64 */
     #else  
         #if (MCAL_PLATFORM_ARM  == MCAL_ARM_AARCH32) || (MCAL_PLATFORM_ARM  == MCAL_ARM_RARCH) 
             #define ResumeAllInterrupts()  OsIf_Trusted_Call(Sys_EL1ResumeInterrupts)

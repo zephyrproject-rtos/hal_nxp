@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_eMIOS.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_eMIOS
  *
  * This file contains register definitions and macros for easy access to their
@@ -77,33 +77,32 @@ typedef struct {
   __IO uint32_t MCR;                               /**< Module Configuration, offset: 0x0 */
   __I  uint32_t GFLAG;                             /**< Global Flag, offset: 0x4 */
   __IO uint32_t OUDIS;                             /**< Output Update Disable, offset: 0x8 */
-  __IO uint32_t UCDIS;                             /**< Disable Channel, offset: 0xC */
-  uint8_t RESERVED_0[16];
+  uint8_t RESERVED_0[20];
   union {                                          /* offset: 0x20 */
     struct {                                         /* offset: 0x20, array step: 0x20 */
-      __IO uint32_t A;                                 /**< UC A 0..UC A 31, array offset: 0x20, array step: 0x20 */
-      __IO uint32_t B;                                 /**< UC B 0..UC B 31, array offset: 0x24, array step: 0x20 */
-      __IO uint32_t CNT;                               /**< UC Counter 0..UC Counter 31, array offset: 0x28, array step: 0x20 */
-      __IO uint32_t C;                                 /**< UC Control 0..UC Control 31, array offset: 0x2C, array step: 0x20 */
-      __IO uint32_t S;                                 /**< UC Status 0..UC Status 31, array offset: 0x30, array step: 0x20 */
-      __IO uint32_t ALTA;                              /**< Alternate Address 0..Alternate Address 31, array offset: 0x34, array step: 0x20 */
-      __IO uint32_t C2;                                /**< UC Control 2 0..UC Control 2 31, array offset: 0x38, array step: 0x20 */
+      __IO uint32_t A;                                 /**< UC A 0..UC A 31, array offset: 0x20, array step: 0x20, valid indices: [0-7, 16-31] */
+      __IO uint32_t B;                                 /**< UC B 0..UC B 31, array offset: 0x24, array step: 0x20, valid indices: [0-7, 16-31] */
+      __IO uint32_t CNT;                               /**< UC Counter 0..UC Counter 31, array offset: 0x28, array step: 0x20, valid indices: [0-7, 16-31] */
+      __IO uint32_t C;                                 /**< UC Control 0..UC Control 31, array offset: 0x2C, array step: 0x20, valid indices: [0-7, 16-31] */
+      __IO uint32_t S;                                 /**< UC Status 0..UC Status 31, array offset: 0x30, array step: 0x20, valid indices: [0-7, 16-31] */
+      __IO uint32_t ALTA;                              /**< Alternate Address 0..Alternate Address 31, array offset: 0x34, array step: 0x20, valid indices: [0-7, 16-31] */
+      __IO uint32_t C2;                                /**< UC Control 2 0..UC Control 2 31, array offset: 0x38, array step: 0x20, valid indices: [0-7, 16-31] */
       uint8_t RESERVED_0[4];
     } UC[eMIOS_CH_UC_UC_COUNT];
     struct {                                         /* offset: 0x20, array step: 0x40 */
-      __IO uint32_t WSCAEC;                            /**< WSC Capture A and Event Counter 8..WSC Capture A and Event Counter 14, array offset: 0x20, array step: 0x40 */
-      __I  uint32_t WSCAPB;                            /**< WSC Capture B 8..WSC Capture B 14, array offset: 0x24, array step: 0x40 */
-      __IO uint32_t WSC1;                              /**< WSC Control 1 8..WSC Control 1 14, array offset: 0x28, array step: 0x40 */
-      __IO uint32_t WSC2;                              /**< WSC Control 2 8..WSC Control 2 14, array offset: 0x2C, array step: 0x40 */
-      __IO uint32_t WSS;                               /**< WSC Status 8..WSC Status 14, array offset: 0x30, array step: 0x40 */
-      __IO uint32_t WSEV;                              /**< WSC Event 8..WSC Event 14, array offset: 0x34, array step: 0x40 */
-      __I  uint32_t WSCEV;                             /**< WSC Capture Event 8..WSC Capture Event 14, array offset: 0x38, array step: 0x40 */
-      __I  uint32_t WSPW;                              /**< WSC Pulse Width 8..WSC Pulse Width 14, array offset: 0x3C, array step: 0x40 */
-      __IO uint32_t WSPWCNT;                           /**< WSC Pulse Width Counter 8..WSC Pulse Width Counter 14, array offset: 0x40, array step: 0x40 */
-      __IO uint32_t WSFC;                              /**< WSC FIFO Control 8..WSC FIFO Control 14, array offset: 0x44, array step: 0x40 */
-      __I  uint32_t WSFR;                              /**< WSC FIFO Read 8..WSC FIFO Read 14, array offset: 0x48, array step: 0x40 */
-      __I  uint32_t WSFCNT;                            /**< WSC FIFO Counter 8..WSC FIFO Counter 14, array offset: 0x4C, array step: 0x40 */
-      __I  uint32_t WSFPNT;                            /**< WSC FIFO Pointer 8..WSC FIFO Pointer 14, array offset: 0x50, array step: 0x40 */
+      __IO uint32_t WSCAEC;                            /**< WSC Capture A and Event Counter 8..WSC Capture A and Event Counter 14, array offset: 0x20, array step: 0x40, valid indices: [4-7] */
+      __I  uint32_t WSCAPB;                            /**< WSC Capture B 8..WSC Capture B 14, array offset: 0x24, array step: 0x40, valid indices: [4-7] */
+      __IO uint32_t WSC1;                              /**< WSC Control 1 8..WSC Control 1 14, array offset: 0x28, array step: 0x40, valid indices: [4-7] */
+      __IO uint32_t WSC2;                              /**< WSC Control 2 8..WSC Control 2 14, array offset: 0x2C, array step: 0x40, valid indices: [4-7] */
+      __IO uint32_t WSS;                               /**< WSC Status 8..WSC Status 14, array offset: 0x30, array step: 0x40, valid indices: [4-7] */
+      __IO uint32_t WSEV;                              /**< WSC Event 8..WSC Event 14, array offset: 0x34, array step: 0x40, valid indices: [4-7] */
+      __I  uint32_t WSCEV;                             /**< WSC Capture Event 8..WSC Capture Event 14, array offset: 0x38, array step: 0x40, valid indices: [4-7] */
+      __I  uint32_t WSPW;                              /**< WSC Pulse Width 8..WSC Pulse Width 14, array offset: 0x3C, array step: 0x40, valid indices: [4-7] */
+      __IO uint32_t WSPWCNT;                           /**< WSC Pulse Width Counter 8..WSC Pulse Width Counter 14, array offset: 0x40, array step: 0x40, valid indices: [4-7] */
+      __IO uint32_t WSFC;                              /**< WSC FIFO Control 8..WSC FIFO Control 14, array offset: 0x44, array step: 0x40, valid indices: [4-7] */
+      __I  uint32_t WSFR;                              /**< WSC FIFO Read 8..WSC FIFO Read 14, array offset: 0x48, array step: 0x40, valid indices: [4-7] */
+      __I  uint32_t WSFCNT;                            /**< WSC FIFO Counter 8..WSC FIFO Counter 14, array offset: 0x4C, array step: 0x40, valid indices: [4-7] */
+      __I  uint32_t WSFPNT;                            /**< WSC FIFO Pointer 8..WSC FIFO Pointer 14, array offset: 0x50, array step: 0x40, valid indices: [4-7] */
       uint8_t RESERVED_0[12];
     } WSC[eMIOS_CH_WSC_WSC_COUNT];
   } CH;
@@ -157,11 +156,6 @@ typedef struct {
 #define eMIOS_MCR_FRZ_SHIFT                      (29U)
 #define eMIOS_MCR_FRZ_WIDTH                      (1U)
 #define eMIOS_MCR_FRZ(x)                         (((uint32_t)(((uint32_t)(x)) << eMIOS_MCR_FRZ_SHIFT)) & eMIOS_MCR_FRZ_MASK)
-
-#define eMIOS_MCR_MDIS_MASK                      (0x40000000U)
-#define eMIOS_MCR_MDIS_SHIFT                     (30U)
-#define eMIOS_MCR_MDIS_WIDTH                     (1U)
-#define eMIOS_MCR_MDIS(x)                        (((uint32_t)(((uint32_t)(x)) << eMIOS_MCR_MDIS_SHIFT)) & eMIOS_MCR_MDIS_MASK)
 /*! @} */
 
 /*! @name GFLAG - Global Flag */
@@ -452,150 +446,6 @@ typedef struct {
 #define eMIOS_OUDIS_OU31(x)                      (((uint32_t)(((uint32_t)(x)) << eMIOS_OUDIS_OU31_SHIFT)) & eMIOS_OUDIS_OU31_MASK)
 /*! @} */
 
-/*! @name UCDIS - Disable Channel */
-/*! @{ */
-
-#define eMIOS_UCDIS_UCDIS0_MASK                  (0x1U)
-#define eMIOS_UCDIS_UCDIS0_SHIFT                 (0U)
-#define eMIOS_UCDIS_UCDIS0_WIDTH                 (1U)
-#define eMIOS_UCDIS_UCDIS0(x)                    (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS0_SHIFT)) & eMIOS_UCDIS_UCDIS0_MASK)
-
-#define eMIOS_UCDIS_UCDIS1_MASK                  (0x2U)
-#define eMIOS_UCDIS_UCDIS1_SHIFT                 (1U)
-#define eMIOS_UCDIS_UCDIS1_WIDTH                 (1U)
-#define eMIOS_UCDIS_UCDIS1(x)                    (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS1_SHIFT)) & eMIOS_UCDIS_UCDIS1_MASK)
-
-#define eMIOS_UCDIS_UCDIS2_MASK                  (0x4U)
-#define eMIOS_UCDIS_UCDIS2_SHIFT                 (2U)
-#define eMIOS_UCDIS_UCDIS2_WIDTH                 (1U)
-#define eMIOS_UCDIS_UCDIS2(x)                    (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS2_SHIFT)) & eMIOS_UCDIS_UCDIS2_MASK)
-
-#define eMIOS_UCDIS_UCDIS3_MASK                  (0x8U)
-#define eMIOS_UCDIS_UCDIS3_SHIFT                 (3U)
-#define eMIOS_UCDIS_UCDIS3_WIDTH                 (1U)
-#define eMIOS_UCDIS_UCDIS3(x)                    (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS3_SHIFT)) & eMIOS_UCDIS_UCDIS3_MASK)
-
-#define eMIOS_UCDIS_UCDIS4_MASK                  (0x10U)
-#define eMIOS_UCDIS_UCDIS4_SHIFT                 (4U)
-#define eMIOS_UCDIS_UCDIS4_WIDTH                 (1U)
-#define eMIOS_UCDIS_UCDIS4(x)                    (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS4_SHIFT)) & eMIOS_UCDIS_UCDIS4_MASK)
-
-#define eMIOS_UCDIS_UCDIS5_MASK                  (0x20U)
-#define eMIOS_UCDIS_UCDIS5_SHIFT                 (5U)
-#define eMIOS_UCDIS_UCDIS5_WIDTH                 (1U)
-#define eMIOS_UCDIS_UCDIS5(x)                    (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS5_SHIFT)) & eMIOS_UCDIS_UCDIS5_MASK)
-
-#define eMIOS_UCDIS_UCDIS6_MASK                  (0x40U)
-#define eMIOS_UCDIS_UCDIS6_SHIFT                 (6U)
-#define eMIOS_UCDIS_UCDIS6_WIDTH                 (1U)
-#define eMIOS_UCDIS_UCDIS6(x)                    (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS6_SHIFT)) & eMIOS_UCDIS_UCDIS6_MASK)
-
-#define eMIOS_UCDIS_UCDIS7_MASK                  (0x80U)
-#define eMIOS_UCDIS_UCDIS7_SHIFT                 (7U)
-#define eMIOS_UCDIS_UCDIS7_WIDTH                 (1U)
-#define eMIOS_UCDIS_UCDIS7(x)                    (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS7_SHIFT)) & eMIOS_UCDIS_UCDIS7_MASK)
-
-#define eMIOS_UCDIS_UCDIS8_MASK                  (0x100U)
-#define eMIOS_UCDIS_UCDIS8_SHIFT                 (8U)
-#define eMIOS_UCDIS_UCDIS8_WIDTH                 (1U)
-#define eMIOS_UCDIS_UCDIS8(x)                    (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS8_SHIFT)) & eMIOS_UCDIS_UCDIS8_MASK)
-
-#define eMIOS_UCDIS_UCDIS10_MASK                 (0x400U)
-#define eMIOS_UCDIS_UCDIS10_SHIFT                (10U)
-#define eMIOS_UCDIS_UCDIS10_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS10(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS10_SHIFT)) & eMIOS_UCDIS_UCDIS10_MASK)
-
-#define eMIOS_UCDIS_UCDIS12_MASK                 (0x1000U)
-#define eMIOS_UCDIS_UCDIS12_SHIFT                (12U)
-#define eMIOS_UCDIS_UCDIS12_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS12(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS12_SHIFT)) & eMIOS_UCDIS_UCDIS12_MASK)
-
-#define eMIOS_UCDIS_UCDIS14_MASK                 (0x4000U)
-#define eMIOS_UCDIS_UCDIS14_SHIFT                (14U)
-#define eMIOS_UCDIS_UCDIS14_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS14(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS14_SHIFT)) & eMIOS_UCDIS_UCDIS14_MASK)
-
-#define eMIOS_UCDIS_UCDIS16_MASK                 (0x10000U)
-#define eMIOS_UCDIS_UCDIS16_SHIFT                (16U)
-#define eMIOS_UCDIS_UCDIS16_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS16(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS16_SHIFT)) & eMIOS_UCDIS_UCDIS16_MASK)
-
-#define eMIOS_UCDIS_UCDIS17_MASK                 (0x20000U)
-#define eMIOS_UCDIS_UCDIS17_SHIFT                (17U)
-#define eMIOS_UCDIS_UCDIS17_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS17(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS17_SHIFT)) & eMIOS_UCDIS_UCDIS17_MASK)
-
-#define eMIOS_UCDIS_UCDIS18_MASK                 (0x40000U)
-#define eMIOS_UCDIS_UCDIS18_SHIFT                (18U)
-#define eMIOS_UCDIS_UCDIS18_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS18(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS18_SHIFT)) & eMIOS_UCDIS_UCDIS18_MASK)
-
-#define eMIOS_UCDIS_UCDIS19_MASK                 (0x80000U)
-#define eMIOS_UCDIS_UCDIS19_SHIFT                (19U)
-#define eMIOS_UCDIS_UCDIS19_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS19(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS19_SHIFT)) & eMIOS_UCDIS_UCDIS19_MASK)
-
-#define eMIOS_UCDIS_UCDIS20_MASK                 (0x100000U)
-#define eMIOS_UCDIS_UCDIS20_SHIFT                (20U)
-#define eMIOS_UCDIS_UCDIS20_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS20(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS20_SHIFT)) & eMIOS_UCDIS_UCDIS20_MASK)
-
-#define eMIOS_UCDIS_UCDIS21_MASK                 (0x200000U)
-#define eMIOS_UCDIS_UCDIS21_SHIFT                (21U)
-#define eMIOS_UCDIS_UCDIS21_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS21(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS21_SHIFT)) & eMIOS_UCDIS_UCDIS21_MASK)
-
-#define eMIOS_UCDIS_UCDIS22_MASK                 (0x400000U)
-#define eMIOS_UCDIS_UCDIS22_SHIFT                (22U)
-#define eMIOS_UCDIS_UCDIS22_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS22(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS22_SHIFT)) & eMIOS_UCDIS_UCDIS22_MASK)
-
-#define eMIOS_UCDIS_UCDIS23_MASK                 (0x800000U)
-#define eMIOS_UCDIS_UCDIS23_SHIFT                (23U)
-#define eMIOS_UCDIS_UCDIS23_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS23(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS23_SHIFT)) & eMIOS_UCDIS_UCDIS23_MASK)
-
-#define eMIOS_UCDIS_UCDIS24_MASK                 (0x1000000U)
-#define eMIOS_UCDIS_UCDIS24_SHIFT                (24U)
-#define eMIOS_UCDIS_UCDIS24_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS24(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS24_SHIFT)) & eMIOS_UCDIS_UCDIS24_MASK)
-
-#define eMIOS_UCDIS_UCDIS25_MASK                 (0x2000000U)
-#define eMIOS_UCDIS_UCDIS25_SHIFT                (25U)
-#define eMIOS_UCDIS_UCDIS25_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS25(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS25_SHIFT)) & eMIOS_UCDIS_UCDIS25_MASK)
-
-#define eMIOS_UCDIS_UCDIS26_MASK                 (0x4000000U)
-#define eMIOS_UCDIS_UCDIS26_SHIFT                (26U)
-#define eMIOS_UCDIS_UCDIS26_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS26(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS26_SHIFT)) & eMIOS_UCDIS_UCDIS26_MASK)
-
-#define eMIOS_UCDIS_UCDIS27_MASK                 (0x8000000U)
-#define eMIOS_UCDIS_UCDIS27_SHIFT                (27U)
-#define eMIOS_UCDIS_UCDIS27_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS27(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS27_SHIFT)) & eMIOS_UCDIS_UCDIS27_MASK)
-
-#define eMIOS_UCDIS_UCDIS28_MASK                 (0x10000000U)
-#define eMIOS_UCDIS_UCDIS28_SHIFT                (28U)
-#define eMIOS_UCDIS_UCDIS28_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS28(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS28_SHIFT)) & eMIOS_UCDIS_UCDIS28_MASK)
-
-#define eMIOS_UCDIS_UCDIS29_MASK                 (0x20000000U)
-#define eMIOS_UCDIS_UCDIS29_SHIFT                (29U)
-#define eMIOS_UCDIS_UCDIS29_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS29(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS29_SHIFT)) & eMIOS_UCDIS_UCDIS29_MASK)
-
-#define eMIOS_UCDIS_UCDIS30_MASK                 (0x40000000U)
-#define eMIOS_UCDIS_UCDIS30_SHIFT                (30U)
-#define eMIOS_UCDIS_UCDIS30_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS30(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS30_SHIFT)) & eMIOS_UCDIS_UCDIS30_MASK)
-
-#define eMIOS_UCDIS_UCDIS31_MASK                 (0x80000000U)
-#define eMIOS_UCDIS_UCDIS31_SHIFT                (31U)
-#define eMIOS_UCDIS_UCDIS31_WIDTH                (1U)
-#define eMIOS_UCDIS_UCDIS31(x)                   (((uint32_t)(((uint32_t)(x)) << eMIOS_UCDIS_UCDIS31_SHIFT)) & eMIOS_UCDIS_UCDIS31_MASK)
-/*! @} */
-
 /*! @name A - UC A 0..UC A 31 */
 /*! @{ */
 
@@ -820,10 +670,10 @@ typedef struct {
 #define eMIOS_WSC1_FCK_WIDTH                     (1U)
 #define eMIOS_WSC1_FCK(x)                        (((uint32_t)(((uint32_t)(x)) << eMIOS_WSC1_FCK_SHIFT)) & eMIOS_WSC1_FCK_MASK)
 
-#define eMIOS_WSC1_IF4_7_MASK                    (0x780000U)
-#define eMIOS_WSC1_IF4_7_SHIFT                   (19U)
-#define eMIOS_WSC1_IF4_7_WIDTH                   (4U)
-#define eMIOS_WSC1_IF4_7(x)                      (((uint32_t)(((uint32_t)(x)) << eMIOS_WSC1_IF4_7_SHIFT)) & eMIOS_WSC1_IF4_7_MASK)
+#define eMIOS_WSC1_IF0_3_MASK                    (0x780000U)
+#define eMIOS_WSC1_IF0_3_SHIFT                   (19U)
+#define eMIOS_WSC1_IF0_3_WIDTH                   (4U)
+#define eMIOS_WSC1_IF0_3(x)                      (((uint32_t)(((uint32_t)(x)) << eMIOS_WSC1_IF0_3_SHIFT)) & eMIOS_WSC1_IF0_3_MASK)
 
 #define eMIOS_WSC1_DMA_MASK                      (0x1000000U)
 #define eMIOS_WSC1_DMA_SHIFT                     (24U)
@@ -835,10 +685,10 @@ typedef struct {
 #define eMIOS_WSC1_CPREN_WIDTH                   (1U)
 #define eMIOS_WSC1_CPREN(x)                      (((uint32_t)(((uint32_t)(x)) << eMIOS_WSC1_CPREN_SHIFT)) & eMIOS_WSC1_CPREN_MASK)
 
-#define eMIOS_WSC1_IF0_3_MASK                    (0x3C000000U)
-#define eMIOS_WSC1_IF0_3_SHIFT                   (26U)
-#define eMIOS_WSC1_IF0_3_WIDTH                   (4U)
-#define eMIOS_WSC1_IF0_3(x)                      (((uint32_t)(((uint32_t)(x)) << eMIOS_WSC1_IF0_3_SHIFT)) & eMIOS_WSC1_IF0_3_MASK)
+#define eMIOS_WSC1_IF4_7_MASK                    (0x3C000000U)
+#define eMIOS_WSC1_IF4_7_SHIFT                   (26U)
+#define eMIOS_WSC1_IF4_7_WIDTH                   (4U)
+#define eMIOS_WSC1_IF4_7(x)                      (((uint32_t)(((uint32_t)(x)) << eMIOS_WSC1_IF4_7_SHIFT)) & eMIOS_WSC1_IF4_7_MASK)
 
 #define eMIOS_WSC1_FREN_MASK                     (0x80000000U)
 #define eMIOS_WSC1_FREN_SHIFT                    (31U)

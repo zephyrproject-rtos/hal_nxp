@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_TRGMUX_1.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_TRGMUX_1
  *
  * This file contains register definitions and macros for easy access to their
@@ -70,11 +70,11 @@
 
 /** TRGMUX_1 - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t REG_0;                             /**< TRGMUX REG_0 Register, offset: 0x0 */
-  __IO uint32_t REG_1;                             /**< TRGMUX REG_1 Register, offset: 0x4 */
-  __IO uint32_t REG_2;                             /**< TRGMUX REG_2 Register, offset: 0x8 */
-  __IO uint32_t REG_3;                             /**< TRGMUX REG_3 Register, offset: 0xC */
-  __IO uint32_t REG_4;                             /**< TRGMUX REG_4 Register, offset: 0x10 */
+  __IO uint32_t REG_0;                             /**< TRGMUX REG_0 Configuration, offset: 0x0 */
+  __IO uint32_t REG_1;                             /**< TRGMUX REG_1 Configuration, offset: 0x4 */
+  __IO uint32_t REG_2;                             /**< TRGMUX REG_2 Configuration, offset: 0x8 */
+  __IO uint32_t REG_3;                             /**< TRGMUX REG_3 Configuration, offset: 0xC */
+  __IO uint32_t REG_4;                             /**< TRGMUX REG_4 Configuration, offset: 0x10 */
 } TRGMUX_1_Type, *TRGMUX_1_MemMapPtr;
 
 /** Number of instances of the TRGMUX_1 module. */
@@ -99,7 +99,7 @@ typedef struct {
  * @{
  */
 
-/*! @name REG_0 - TRGMUX REG_0 Register */
+/*! @name REG_0 - TRGMUX REG_0 Configuration */
 /*! @{ */
 
 #define TRGMUX_1_REG_0_SEL0_MASK                 (0x3FU)
@@ -128,7 +128,7 @@ typedef struct {
 #define TRGMUX_1_REG_0_LK(x)                     (((uint32_t)(((uint32_t)(x)) << TRGMUX_1_REG_0_LK_SHIFT)) & TRGMUX_1_REG_0_LK_MASK)
 /*! @} */
 
-/*! @name REG_1 - TRGMUX REG_1 Register */
+/*! @name REG_1 - TRGMUX REG_1 Configuration */
 /*! @{ */
 
 #define TRGMUX_1_REG_1_SEL0_MASK                 (0x3FU)
@@ -157,7 +157,7 @@ typedef struct {
 #define TRGMUX_1_REG_1_LK(x)                     (((uint32_t)(((uint32_t)(x)) << TRGMUX_1_REG_1_LK_SHIFT)) & TRGMUX_1_REG_1_LK_MASK)
 /*! @} */
 
-/*! @name REG_2 - TRGMUX REG_2 Register */
+/*! @name REG_2 - TRGMUX REG_2 Configuration */
 /*! @{ */
 
 #define TRGMUX_1_REG_2_SEL0_MASK                 (0x3FU)
@@ -186,7 +186,7 @@ typedef struct {
 #define TRGMUX_1_REG_2_LK(x)                     (((uint32_t)(((uint32_t)(x)) << TRGMUX_1_REG_2_LK_SHIFT)) & TRGMUX_1_REG_2_LK_MASK)
 /*! @} */
 
-/*! @name REG_3 - TRGMUX REG_3 Register */
+/*! @name REG_3 - TRGMUX REG_3 Configuration */
 /*! @{ */
 
 #define TRGMUX_1_REG_3_SEL0_MASK                 (0x3FU)
@@ -215,7 +215,7 @@ typedef struct {
 #define TRGMUX_1_REG_3_LK(x)                     (((uint32_t)(((uint32_t)(x)) << TRGMUX_1_REG_3_LK_SHIFT)) & TRGMUX_1_REG_3_LK_MASK)
 /*! @} */
 
-/*! @name REG_4 - TRGMUX REG_4 Register */
+/*! @name REG_4 - TRGMUX REG_4 Configuration */
 /*! @{ */
 
 #define TRGMUX_1_REG_4_SEL0_MASK                 (0x3FU)

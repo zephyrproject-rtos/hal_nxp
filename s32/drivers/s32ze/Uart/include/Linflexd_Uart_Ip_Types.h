@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -34,8 +34,8 @@ extern "C"{
 #define LINFLEXD_UART_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
 #define LINFLEXD_UART_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
 #define LINFLEXD_UART_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
-#define LINFLEXD_UART_IP_TYPES_SW_MAJOR_VERSION             0
-#define LINFLEXD_UART_IP_TYPES_SW_MINOR_VERSION             9
+#define LINFLEXD_UART_IP_TYPES_SW_MAJOR_VERSION             1
+#define LINFLEXD_UART_IP_TYPES_SW_MINOR_VERSION             0
 #define LINFLEXD_UART_IP_TYPES_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -47,19 +47,22 @@ extern "C"{
 #endif
 #if ((LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MAJOR_VERSION    != LINFLEXD_UART_IP_TYPES_AR_RELEASE_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_MINOR_VERSION    != LINFLEXD_UART_IP_TYPES_AR_RELEASE_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_TYPES_AR_RELEASE_REVISION_VERSION))
+     (LINFLEXD_UART_IP_HWACCESS_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_TYPES_AR_RELEASE_REVISION_VERSION) \
+    )
      #error "AUTOSAR Version Numbers of Linflexd_Uart_Ip_HwAccess.h and Linflexd_Uart_Ip_Types.h are different"
 #endif
 #if ((LINFLEXD_UART_IP_HWACCESS_SW_MAJOR_VERSION != LINFLEXD_UART_IP_TYPES_SW_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_HWACCESS_SW_MINOR_VERSION != LINFLEXD_UART_IP_TYPES_SW_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_HWACCESS_SW_PATCH_VERSION != LINFLEXD_UART_IP_TYPES_SW_PATCH_VERSION))
+     (LINFLEXD_UART_IP_HWACCESS_SW_PATCH_VERSION != LINFLEXD_UART_IP_TYPES_SW_PATCH_VERSION) \
+    )
     #error "Software Version Numbers of Linflexd_Uart_Ip_HwAccess.h and Linflexd_Uart_Ip_Types.h are different"
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
 /* Check if current file and StandardTypes.h header file are of the same Autosar version */
     #if ((LINFLEXD_UART_IP_TYPES_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
-            (LINFLEXD_UART_IP_TYPES_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
+         (LINFLEXD_UART_IP_TYPES_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION) \
+        )
         #error "Linflexd_Uart_Ip_Types.h and StandardTypes.h are different"
     #endif
 #endif
@@ -135,7 +138,7 @@ typedef enum
     LINFLEXD_UART_IP_EVENT_END_TRANSFER     = 0x02U,    /**< @brief The current transfer is ending */
     LINFLEXD_UART_IP_EVENT_ERROR            = 0x03U,    /**< @brief An error occured during transfer */
 #if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
-    LINFLEXD_UART_IP_EVENT_IDLE_STATE       = 0x04U,    /**< @brief The idle state of the reception line is generated*/
+    LINFLEXD_UART_IP_EVENT_IDLE_STATE       = 0x04U    /**< @brief The idle state of the reception line is generated*/
 #endif
 } Linflexd_Uart_Ip_EventType;
 
@@ -178,7 +181,8 @@ typedef struct
 {
     uint32 BaudRate;                                 /**< @brief Baudrate value*/
     uint32 BaudRateMantissa;                         /**< @brief Baudrate mantissa*/
-    uint8 BaudRateFractionalDivisor;                  /**< @brief Baudrate Divisor*/
+    uint8 BaudRateDivisor;                           /**< @brief Baudrate Divisor*/
+    uint8 BaudRateFractionalDivisor;                 /**< @brief Fractional Baudrate*/
     /**
      *
      * @brief    Parity control - enabled/disabled
@@ -242,5 +246,3 @@ Linflexd_Uart_Ip_BaudrateType;
 /**  @} */
 
 #endif /* LINFLEXD_UART_IP_TYPES_H */
-
-

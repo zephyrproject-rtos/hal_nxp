@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SMU_MRU.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_SMU_MRU
  *
  * This file contains register definitions and macros for easy access to their
@@ -70,6 +70,7 @@
 
 /** SMU_MRU - Size of Registers Arrays */
 #define SMU_MRU_CHXCONFIG_COUNT                   12u
+#define SMU_MRU_NOTIFY_COUNT                      2u
 
 /** SMU_MRU - Register Layout Typedef */
 typedef struct {
@@ -80,8 +81,7 @@ typedef struct {
     uint8_t RESERVED_0[4];
   } CHXCONFIG[SMU_MRU_CHXCONFIG_COUNT];
   uint8_t RESERVED_0[320];
-  __I  uint32_t NOTIFY0;                           /**< Notification 0 Status, offset: 0x200 */
-  __I  uint32_t NOTIFY1;                           /**< Notification 1 Status, offset: 0x204 */
+  __I  uint32_t NOTIFY[SMU_MRU_NOTIFY_COUNT];      /**< Notification 0 Status..Notification 1 Status, array offset: 0x200, array step: 0x4 */
   uint8_t RESERVED_1[65016];
   __IO uint32_t CH1_MB0;                           /**< Channel (x) Mailbox (n), offset: 0x10000 */
   __IO uint32_t CH1_MB1;                           /**< Channel (x) Mailbox (n), offset: 0x10004 */
@@ -237,132 +237,128 @@ typedef struct {
 #define SMU_MRU_CH_MBSTAT_MBS3(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_CH_MBSTAT_MBS3_SHIFT)) & SMU_MRU_CH_MBSTAT_MBS3_MASK)
 /*! @} */
 
-/*! @name NOTIFY0 - Notification 0 Status */
+/*! @name NOTIFY - Notification 0 Status..Notification 1 Status */
 /*! @{ */
 
-#define SMU_MRU_NOTIFY0_CH1_IS0_MASK             (0x1U)
-#define SMU_MRU_NOTIFY0_CH1_IS0_SHIFT            (0U)
-#define SMU_MRU_NOTIFY0_CH1_IS0_WIDTH            (1U)
-#define SMU_MRU_NOTIFY0_CH1_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH1_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH1_IS0_MASK)
+#define SMU_MRU_NOTIFY_CH1_IS0_MASK              (0x1U)
+#define SMU_MRU_NOTIFY_CH1_IS0_SHIFT             (0U)
+#define SMU_MRU_NOTIFY_CH1_IS0_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH1_IS0(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH1_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH1_IS0_MASK)
 
-#define SMU_MRU_NOTIFY0_CH2_IS0_MASK             (0x2U)
-#define SMU_MRU_NOTIFY0_CH2_IS0_SHIFT            (1U)
-#define SMU_MRU_NOTIFY0_CH2_IS0_WIDTH            (1U)
-#define SMU_MRU_NOTIFY0_CH2_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH2_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH2_IS0_MASK)
+#define SMU_MRU_NOTIFY_CH2_IS0_MASK              (0x2U)
+#define SMU_MRU_NOTIFY_CH2_IS0_SHIFT             (1U)
+#define SMU_MRU_NOTIFY_CH2_IS0_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH2_IS0(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH2_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH2_IS0_MASK)
 
-#define SMU_MRU_NOTIFY0_CH3_IS0_MASK             (0x4U)
-#define SMU_MRU_NOTIFY0_CH3_IS0_SHIFT            (2U)
-#define SMU_MRU_NOTIFY0_CH3_IS0_WIDTH            (1U)
-#define SMU_MRU_NOTIFY0_CH3_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH3_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH3_IS0_MASK)
+#define SMU_MRU_NOTIFY_CH3_IS0_MASK              (0x4U)
+#define SMU_MRU_NOTIFY_CH3_IS0_SHIFT             (2U)
+#define SMU_MRU_NOTIFY_CH3_IS0_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH3_IS0(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH3_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH3_IS0_MASK)
 
-#define SMU_MRU_NOTIFY0_CH4_IS0_MASK             (0x8U)
-#define SMU_MRU_NOTIFY0_CH4_IS0_SHIFT            (3U)
-#define SMU_MRU_NOTIFY0_CH4_IS0_WIDTH            (1U)
-#define SMU_MRU_NOTIFY0_CH4_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH4_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH4_IS0_MASK)
+#define SMU_MRU_NOTIFY_CH4_IS0_MASK              (0x8U)
+#define SMU_MRU_NOTIFY_CH4_IS0_SHIFT             (3U)
+#define SMU_MRU_NOTIFY_CH4_IS0_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH4_IS0(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH4_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH4_IS0_MASK)
 
-#define SMU_MRU_NOTIFY0_CH5_IS0_MASK             (0x10U)
-#define SMU_MRU_NOTIFY0_CH5_IS0_SHIFT            (4U)
-#define SMU_MRU_NOTIFY0_CH5_IS0_WIDTH            (1U)
-#define SMU_MRU_NOTIFY0_CH5_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH5_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH5_IS0_MASK)
+#define SMU_MRU_NOTIFY_CH5_IS0_MASK              (0x10U)
+#define SMU_MRU_NOTIFY_CH5_IS0_SHIFT             (4U)
+#define SMU_MRU_NOTIFY_CH5_IS0_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH5_IS0(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH5_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH5_IS0_MASK)
 
-#define SMU_MRU_NOTIFY0_CH6_IS0_MASK             (0x20U)
-#define SMU_MRU_NOTIFY0_CH6_IS0_SHIFT            (5U)
-#define SMU_MRU_NOTIFY0_CH6_IS0_WIDTH            (1U)
-#define SMU_MRU_NOTIFY0_CH6_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH6_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH6_IS0_MASK)
+#define SMU_MRU_NOTIFY_CH6_IS0_MASK              (0x20U)
+#define SMU_MRU_NOTIFY_CH6_IS0_SHIFT             (5U)
+#define SMU_MRU_NOTIFY_CH6_IS0_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH6_IS0(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH6_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH6_IS0_MASK)
 
-#define SMU_MRU_NOTIFY0_CH7_IS0_MASK             (0x40U)
-#define SMU_MRU_NOTIFY0_CH7_IS0_SHIFT            (6U)
-#define SMU_MRU_NOTIFY0_CH7_IS0_WIDTH            (1U)
-#define SMU_MRU_NOTIFY0_CH7_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH7_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH7_IS0_MASK)
+#define SMU_MRU_NOTIFY_CH7_IS0_MASK              (0x40U)
+#define SMU_MRU_NOTIFY_CH7_IS0_SHIFT             (6U)
+#define SMU_MRU_NOTIFY_CH7_IS0_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH7_IS0(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH7_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH7_IS0_MASK)
 
-#define SMU_MRU_NOTIFY0_CH8_IS0_MASK             (0x80U)
-#define SMU_MRU_NOTIFY0_CH8_IS0_SHIFT            (7U)
-#define SMU_MRU_NOTIFY0_CH8_IS0_WIDTH            (1U)
-#define SMU_MRU_NOTIFY0_CH8_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH8_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH8_IS0_MASK)
+#define SMU_MRU_NOTIFY_CH8_IS0_MASK              (0x80U)
+#define SMU_MRU_NOTIFY_CH8_IS0_SHIFT             (7U)
+#define SMU_MRU_NOTIFY_CH8_IS0_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH8_IS0(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH8_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH8_IS0_MASK)
 
-#define SMU_MRU_NOTIFY0_CH9_IS0_MASK             (0x100U)
-#define SMU_MRU_NOTIFY0_CH9_IS0_SHIFT            (8U)
-#define SMU_MRU_NOTIFY0_CH9_IS0_WIDTH            (1U)
-#define SMU_MRU_NOTIFY0_CH9_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH9_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH9_IS0_MASK)
+#define SMU_MRU_NOTIFY_CH9_IS0_MASK              (0x100U)
+#define SMU_MRU_NOTIFY_CH9_IS0_SHIFT             (8U)
+#define SMU_MRU_NOTIFY_CH9_IS0_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH9_IS0(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH9_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH9_IS0_MASK)
 
-#define SMU_MRU_NOTIFY0_CH10_IS0_MASK            (0x200U)
-#define SMU_MRU_NOTIFY0_CH10_IS0_SHIFT           (9U)
-#define SMU_MRU_NOTIFY0_CH10_IS0_WIDTH           (1U)
-#define SMU_MRU_NOTIFY0_CH10_IS0(x)              (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH10_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH10_IS0_MASK)
+#define SMU_MRU_NOTIFY_CH10_IS0_MASK             (0x200U)
+#define SMU_MRU_NOTIFY_CH10_IS0_SHIFT            (9U)
+#define SMU_MRU_NOTIFY_CH10_IS0_WIDTH            (1U)
+#define SMU_MRU_NOTIFY_CH10_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH10_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH10_IS0_MASK)
 
-#define SMU_MRU_NOTIFY0_CH11_IS0_MASK            (0x400U)
-#define SMU_MRU_NOTIFY0_CH11_IS0_SHIFT           (10U)
-#define SMU_MRU_NOTIFY0_CH11_IS0_WIDTH           (1U)
-#define SMU_MRU_NOTIFY0_CH11_IS0(x)              (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH11_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH11_IS0_MASK)
+#define SMU_MRU_NOTIFY_CH11_IS0_MASK             (0x400U)
+#define SMU_MRU_NOTIFY_CH11_IS0_SHIFT            (10U)
+#define SMU_MRU_NOTIFY_CH11_IS0_WIDTH            (1U)
+#define SMU_MRU_NOTIFY_CH11_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH11_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH11_IS0_MASK)
 
-#define SMU_MRU_NOTIFY0_CH12_IS0_MASK            (0x800U)
-#define SMU_MRU_NOTIFY0_CH12_IS0_SHIFT           (11U)
-#define SMU_MRU_NOTIFY0_CH12_IS0_WIDTH           (1U)
-#define SMU_MRU_NOTIFY0_CH12_IS0(x)              (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY0_CH12_IS0_SHIFT)) & SMU_MRU_NOTIFY0_CH12_IS0_MASK)
-/*! @} */
+#define SMU_MRU_NOTIFY_CH12_IS0_MASK             (0x800U)
+#define SMU_MRU_NOTIFY_CH12_IS0_SHIFT            (11U)
+#define SMU_MRU_NOTIFY_CH12_IS0_WIDTH            (1U)
+#define SMU_MRU_NOTIFY_CH12_IS0(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH12_IS0_SHIFT)) & SMU_MRU_NOTIFY_CH12_IS0_MASK)
 
-/*! @name NOTIFY1 - Notification 1 Status */
-/*! @{ */
+#define SMU_MRU_NOTIFY_CH1_IS1_MASK              (0x1U)
+#define SMU_MRU_NOTIFY_CH1_IS1_SHIFT             (0U)
+#define SMU_MRU_NOTIFY_CH1_IS1_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH1_IS1(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH1_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH1_IS1_MASK)
 
-#define SMU_MRU_NOTIFY1_CH1_IS1_MASK             (0x1U)
-#define SMU_MRU_NOTIFY1_CH1_IS1_SHIFT            (0U)
-#define SMU_MRU_NOTIFY1_CH1_IS1_WIDTH            (1U)
-#define SMU_MRU_NOTIFY1_CH1_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH1_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH1_IS1_MASK)
+#define SMU_MRU_NOTIFY_CH2_IS1_MASK              (0x2U)
+#define SMU_MRU_NOTIFY_CH2_IS1_SHIFT             (1U)
+#define SMU_MRU_NOTIFY_CH2_IS1_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH2_IS1(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH2_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH2_IS1_MASK)
 
-#define SMU_MRU_NOTIFY1_CH2_IS1_MASK             (0x2U)
-#define SMU_MRU_NOTIFY1_CH2_IS1_SHIFT            (1U)
-#define SMU_MRU_NOTIFY1_CH2_IS1_WIDTH            (1U)
-#define SMU_MRU_NOTIFY1_CH2_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH2_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH2_IS1_MASK)
+#define SMU_MRU_NOTIFY_CH3_IS1_MASK              (0x4U)
+#define SMU_MRU_NOTIFY_CH3_IS1_SHIFT             (2U)
+#define SMU_MRU_NOTIFY_CH3_IS1_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH3_IS1(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH3_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH3_IS1_MASK)
 
-#define SMU_MRU_NOTIFY1_CH3_IS1_MASK             (0x4U)
-#define SMU_MRU_NOTIFY1_CH3_IS1_SHIFT            (2U)
-#define SMU_MRU_NOTIFY1_CH3_IS1_WIDTH            (1U)
-#define SMU_MRU_NOTIFY1_CH3_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH3_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH3_IS1_MASK)
+#define SMU_MRU_NOTIFY_CH4_IS1_MASK              (0x8U)
+#define SMU_MRU_NOTIFY_CH4_IS1_SHIFT             (3U)
+#define SMU_MRU_NOTIFY_CH4_IS1_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH4_IS1(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH4_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH4_IS1_MASK)
 
-#define SMU_MRU_NOTIFY1_CH4_IS1_MASK             (0x8U)
-#define SMU_MRU_NOTIFY1_CH4_IS1_SHIFT            (3U)
-#define SMU_MRU_NOTIFY1_CH4_IS1_WIDTH            (1U)
-#define SMU_MRU_NOTIFY1_CH4_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH4_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH4_IS1_MASK)
+#define SMU_MRU_NOTIFY_CH5_IS1_MASK              (0x10U)
+#define SMU_MRU_NOTIFY_CH5_IS1_SHIFT             (4U)
+#define SMU_MRU_NOTIFY_CH5_IS1_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH5_IS1(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH5_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH5_IS1_MASK)
 
-#define SMU_MRU_NOTIFY1_CH5_IS1_MASK             (0x10U)
-#define SMU_MRU_NOTIFY1_CH5_IS1_SHIFT            (4U)
-#define SMU_MRU_NOTIFY1_CH5_IS1_WIDTH            (1U)
-#define SMU_MRU_NOTIFY1_CH5_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH5_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH5_IS1_MASK)
+#define SMU_MRU_NOTIFY_CH6_IS1_MASK              (0x20U)
+#define SMU_MRU_NOTIFY_CH6_IS1_SHIFT             (5U)
+#define SMU_MRU_NOTIFY_CH6_IS1_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH6_IS1(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH6_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH6_IS1_MASK)
 
-#define SMU_MRU_NOTIFY1_CH6_IS1_MASK             (0x20U)
-#define SMU_MRU_NOTIFY1_CH6_IS1_SHIFT            (5U)
-#define SMU_MRU_NOTIFY1_CH6_IS1_WIDTH            (1U)
-#define SMU_MRU_NOTIFY1_CH6_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH6_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH6_IS1_MASK)
+#define SMU_MRU_NOTIFY_CH7_IS1_MASK              (0x40U)
+#define SMU_MRU_NOTIFY_CH7_IS1_SHIFT             (6U)
+#define SMU_MRU_NOTIFY_CH7_IS1_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH7_IS1(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH7_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH7_IS1_MASK)
 
-#define SMU_MRU_NOTIFY1_CH7_IS1_MASK             (0x40U)
-#define SMU_MRU_NOTIFY1_CH7_IS1_SHIFT            (6U)
-#define SMU_MRU_NOTIFY1_CH7_IS1_WIDTH            (1U)
-#define SMU_MRU_NOTIFY1_CH7_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH7_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH7_IS1_MASK)
+#define SMU_MRU_NOTIFY_CH8_IS1_MASK              (0x80U)
+#define SMU_MRU_NOTIFY_CH8_IS1_SHIFT             (7U)
+#define SMU_MRU_NOTIFY_CH8_IS1_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH8_IS1(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH8_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH8_IS1_MASK)
 
-#define SMU_MRU_NOTIFY1_CH8_IS1_MASK             (0x80U)
-#define SMU_MRU_NOTIFY1_CH8_IS1_SHIFT            (7U)
-#define SMU_MRU_NOTIFY1_CH8_IS1_WIDTH            (1U)
-#define SMU_MRU_NOTIFY1_CH8_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH8_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH8_IS1_MASK)
+#define SMU_MRU_NOTIFY_CH9_IS1_MASK              (0x100U)
+#define SMU_MRU_NOTIFY_CH9_IS1_SHIFT             (8U)
+#define SMU_MRU_NOTIFY_CH9_IS1_WIDTH             (1U)
+#define SMU_MRU_NOTIFY_CH9_IS1(x)                (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH9_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH9_IS1_MASK)
 
-#define SMU_MRU_NOTIFY1_CH9_IS1_MASK             (0x100U)
-#define SMU_MRU_NOTIFY1_CH9_IS1_SHIFT            (8U)
-#define SMU_MRU_NOTIFY1_CH9_IS1_WIDTH            (1U)
-#define SMU_MRU_NOTIFY1_CH9_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH9_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH9_IS1_MASK)
+#define SMU_MRU_NOTIFY_CH10_IS1_MASK             (0x200U)
+#define SMU_MRU_NOTIFY_CH10_IS1_SHIFT            (9U)
+#define SMU_MRU_NOTIFY_CH10_IS1_WIDTH            (1U)
+#define SMU_MRU_NOTIFY_CH10_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH10_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH10_IS1_MASK)
 
-#define SMU_MRU_NOTIFY1_CH10_IS1_MASK            (0x200U)
-#define SMU_MRU_NOTIFY1_CH10_IS1_SHIFT           (9U)
-#define SMU_MRU_NOTIFY1_CH10_IS1_WIDTH           (1U)
-#define SMU_MRU_NOTIFY1_CH10_IS1(x)              (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH10_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH10_IS1_MASK)
+#define SMU_MRU_NOTIFY_CH11_IS1_MASK             (0x400U)
+#define SMU_MRU_NOTIFY_CH11_IS1_SHIFT            (10U)
+#define SMU_MRU_NOTIFY_CH11_IS1_WIDTH            (1U)
+#define SMU_MRU_NOTIFY_CH11_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH11_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH11_IS1_MASK)
 
-#define SMU_MRU_NOTIFY1_CH11_IS1_MASK            (0x400U)
-#define SMU_MRU_NOTIFY1_CH11_IS1_SHIFT           (10U)
-#define SMU_MRU_NOTIFY1_CH11_IS1_WIDTH           (1U)
-#define SMU_MRU_NOTIFY1_CH11_IS1(x)              (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH11_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH11_IS1_MASK)
-
-#define SMU_MRU_NOTIFY1_CH12_IS1_MASK            (0x800U)
-#define SMU_MRU_NOTIFY1_CH12_IS1_SHIFT           (11U)
-#define SMU_MRU_NOTIFY1_CH12_IS1_WIDTH           (1U)
-#define SMU_MRU_NOTIFY1_CH12_IS1(x)              (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY1_CH12_IS1_SHIFT)) & SMU_MRU_NOTIFY1_CH12_IS1_MASK)
+#define SMU_MRU_NOTIFY_CH12_IS1_MASK             (0x800U)
+#define SMU_MRU_NOTIFY_CH12_IS1_SHIFT            (11U)
+#define SMU_MRU_NOTIFY_CH12_IS1_WIDTH            (1U)
+#define SMU_MRU_NOTIFY_CH12_IS1(x)               (((uint32_t)(((uint32_t)(x)) << SMU_MRU_NOTIFY_CH12_IS1_SHIFT)) & SMU_MRU_NOTIFY_CH12_IS1_MASK)
 /*! @} */
 
 /*! @name CH1_MB0 - Channel (x) Mailbox (n) */

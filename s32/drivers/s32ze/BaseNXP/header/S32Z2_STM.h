@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_STM.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_STM
  *
  * This file contains register definitions and macros for easy access to their
@@ -85,7 +85,7 @@ typedef struct {
 } STM_Type, *STM_MemMapPtr;
 
 /** Number of instances of the STM module. */
-#define STM_INSTANCE_COUNT                       (13)
+#define STM_INSTANCE_COUNT                       (13u)
 
 /* STM - Peripheral instance base addresses */
 /** Peripheral CE_STM_0 base address */

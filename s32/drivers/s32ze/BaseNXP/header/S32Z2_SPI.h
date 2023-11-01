@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SPI.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_SPI
  *
  * This file contains register definitions and macros for easy access to their
@@ -106,7 +106,7 @@ typedef struct {
 } SPI_Type, *SPI_MemMapPtr;
 
 /** Number of instances of the SPI module. */
-#define SPI_INSTANCE_COUNT                       (10)
+#define SPI_INSTANCE_COUNT                       (10u)
 
 /* SPI - Peripheral instance base addresses */
 /** Peripheral SPI_0 base address */

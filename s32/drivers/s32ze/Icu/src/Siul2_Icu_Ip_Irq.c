@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +22,7 @@ extern "C"{
 *  3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "SchM_Icu.h"
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "Siul2_Icu_Ip.h"
 #include "Siul2_Icu_Ip_Irq.h"
 
@@ -33,18 +33,18 @@ extern "C"{
 #define SIUL2_ICU_IRQ_AR_RELEASE_MAJOR_VERSION_C       4
 #define SIUL2_ICU_IRQ_AR_RELEASE_MINOR_VERSION_C       7
 #define SIUL2_ICU_IRQ_AR_RELEASE_REVISION_VERSION_C    0
-#define SIUL2_ICU_IRQ_SW_MAJOR_VERSION_C               0
-#define SIUL2_ICU_IRQ_SW_MINOR_VERSION_C               9
+#define SIUL2_ICU_IRQ_SW_MAJOR_VERSION_C               1
+#define SIUL2_ICU_IRQ_SW_MINOR_VERSION_C               0
 #define SIUL2_ICU_IRQ_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if header file and StandardTypes.h file are of the same Autosar version */
+    /* Check if header file and Std_Types.h file are of the same Autosar version */
     #if ((SIUL2_ICU_IRQ_AR_RELEASE_MAJOR_VERSION_C != STD_AR_RELEASE_MAJOR_VERSION) || \
          (SIUL2_ICU_IRQ_AR_RELEASE_MINOR_VERSION_C != STD_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version Numbers of Siul2_Icu_Ip_Irq.c and StandardTypes.h are different"
+        #error "AutoSar Version Numbers of Siul2_Icu_Ip_Irq.c and Std_Types.h are different"
     #endif
 
     /* Check if header file and SchM_Icu.h file are of the same Autosar version */
@@ -91,12 +91,21 @@ extern "C"{
 /*==================================================================================================
 *                                  GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
+#if (STD_ON == SIUL2_ICU_IP_USED)
+
 #define ICU_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Icu_MemMap.h"
 
-extern Siul2_Icu_Ip_State Siul2_Icu_Ip_aChannelState[SIUL2_ICU_IP_NUM_OF_INSTANCES][SIUL2_ICU_IP_NUM_OF_CHANNELS];
+extern Siul2_Icu_Ip_State Siul2_Icu_Ip_aChannelState[SIUL2_ICU_IP_NUM_OF_CHANNELS_USED];
 
 #define ICU_STOP_SEC_VAR_CLEARED_UNSPECIFIED
+#include "Icu_MemMap.h"
+
+#define ICU_START_SEC_VAR_INIT_8
+#include "Icu_MemMap.h"
+/* This array stores the positions in the Siul2_Icu_Ip_aChannelState array of the configured Siul2 channels. */
+extern uint8 Siul2_Icu_Ip_IndexInChState[SIUL2_ICU_IP_NUM_OF_INSTANCES][SIUL2_ICU_IP_NUM_OF_CHANNELS];
+#define ICU_STOP_SEC_VAR_INIT_8
 #include "Icu_MemMap.h"
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
@@ -173,20 +182,70 @@ static inline void Siul2_Icu_Ip_ProcessSingleInterrupt(uint8 instance)
     uint8  u8IrqChannel    = 0U;
     uint32 u32RegIrqMask   = 0U;
     uint32 u32ChannelMask  = 1U;
-    uint32 u32RegFlags = Siul2_Icu_Ip_pBase[instance]->DISR0;
-    uint32 u32RegIrqEn = Siul2_Icu_Ip_pBase[instance]->DIRER0;
-    
+    uint32 u32RegFlags     = 0U;
+    uint32 u32RegIrqEn     = 0U;
+#ifdef SIUL2_ICU_AE_AVAILABLE
+    if (instance >= SIUL2_ICU_AE_MIN_INSTANCE)
+    {
+        u32RegFlags = Siul2_Ae_Icu_Ip_pBase[instance - SIUL2_ICU_AE_MIN_INSTANCE]->DISR0;
+        u32RegIrqEn = Siul2_Ae_Icu_Ip_pBase[instance - SIUL2_ICU_AE_MIN_INSTANCE]->DIRER0;
+    }
+    else
+    {
+#endif
+        u32RegFlags = Siul2_Icu_Ip_pBase[instance]->DISR0;
+        u32RegIrqEn = Siul2_Icu_Ip_pBase[instance]->DIRER0;
+#ifdef SIUL2_ICU_AE_AVAILABLE
+    }
+#endif
     /* Select which channels will be serviced - only the enabled irq ones*/
     u32RegIrqMask = u32RegFlags & u32RegIrqEn;
 
     for (u8IrqChannel = 0; u8IrqChannel < SIUL2_ICU_IP_NUM_OF_CHANNELS; u8IrqChannel++)
     {
-        if (0x0U != (u32RegIrqMask & u32ChannelMask))
+        if (TRUE != Siul2_Icu_Ip_aChannelState[Siul2_Icu_Ip_IndexInChState[instance][u8IrqChannel]].chInit)
         {
-            /* Clear pending interrupt serviced */
-            Siul2_Icu_Ip_pBase[instance]->DISR0 = u32RegFlags;
-    
-            Siul2_Icu_Ip_ReportEvents(instance, u8IrqChannel);
+            if (0x0U != (u32RegFlags & u32ChannelMask))
+            {
+#ifdef SIUL2_ICU_AE_AVAILABLE
+                if (instance >= SIUL2_ICU_AE_MIN_INSTANCE)
+                {
+                    /* Clear pending interrupt serviced */
+                    Siul2_Ae_Icu_Ip_pBase[instance - SIUL2_ICU_AE_MIN_INSTANCE]->DISR0 = u32RegFlags & u32ChannelMask;
+                }
+                else
+                {
+#endif
+                    /* Clear pending interrupt serviced */
+                    Siul2_Icu_Ip_pBase[instance]->DISR0 = u32RegFlags & u32ChannelMask;
+#ifdef SIUL2_ICU_AE_AVAILABLE
+                }
+#endif
+            }
+        }
+        else
+        {
+            if (0x0U != (u32RegIrqMask & u32ChannelMask))
+            {
+
+                
+#ifdef SIUL2_ICU_AE_AVAILABLE
+                if (instance >= SIUL2_ICU_AE_MIN_INSTANCE)
+                {
+                    /* Clear pending interrupt serviced */
+                    Siul2_Ae_Icu_Ip_pBase[instance - SIUL2_ICU_AE_MIN_INSTANCE]->DISR0 = u32RegFlags & u32ChannelMask;
+                }
+                else
+                {
+#endif
+                    /* Clear pending interrupt serviced */
+                    Siul2_Icu_Ip_pBase[instance]->DISR0 = u32RegFlags & u32ChannelMask;
+#ifdef SIUL2_ICU_AE_AVAILABLE
+                }
+#endif
+
+                Siul2_Icu_Ip_ReportEvents(instance, u8IrqChannel);
+            }
         }
         u32ChannelMask <<= (uint32)1U;
     }
@@ -212,7 +271,7 @@ static inline void Siul2_Icu_Ip_ProcessSingleInterrupt(uint8 instance)
 /** @implements Siul2_Icu_Ip_ProcessInterrupt_Activity */
 static inline void Siul2_Icu_Ip_ProcessInterrupt(uint8 instance, uint8 firstHwChannel)
 {
-    uint8  u8IrqChannel    = firstHwChannel;
+    uint8  u8IrqChannel;
     uint32 u32RegIrqMask   = (uint32)0xFFU << (uint32)firstHwChannel;
     uint32 u32ChannelMask  = (uint32)1U << (uint32)firstHwChannel;
 
@@ -222,13 +281,13 @@ static inline void Siul2_Icu_Ip_ProcessInterrupt(uint8 instance, uint8 firstHwCh
     /* Select which channels will be serviced - only the enabled irq ones*/
     u32RegIrqMask = u32RegFlags & u32RegIrqEn & u32RegIrqMask;
 
-    for (u8IrqChannel = firstHwChannel; u8IrqChannel < (firstHwChannel + 8U); u8IrqChannel++)
+    for (u8IrqChannel = (uint8)firstHwChannel; u8IrqChannel < (uint8)(firstHwChannel + 8U); u8IrqChannel++)
     {
         if (0x0U != (u32RegIrqMask & u32ChannelMask))
         {
             /* Clear pending interrupt serviced */
-            (Siul2_Icu_Ip_pBase[instance])->DISR0 = u32RegFlags & u32RegIrqMask;
-            
+            (Siul2_Icu_Ip_pBase[instance])->DISR0 = u32RegFlags & u32ChannelMask;
+
             Siul2_Icu_Ip_ReportEvents(instance, u8IrqChannel);
         }
         u32ChannelMask <<= (uint32)1U;
@@ -257,18 +316,20 @@ static inline void Siul2_Icu_Ip_ProcessInterrupt(uint8 instance, uint8 firstHwCh
     || (defined SIUL2_AE_ICU_EIRQ_SINGLE_INT))
 static inline void Siul2_Icu_Ip_ReportEvents(uint8 instance, uint8 hwChannel)
 {
+    uint8 u8ChIndex = Siul2_Icu_Ip_IndexInChState[instance][hwChannel];
+
     /* Calling HLD Report Events for the logical channel. */
-    if (Siul2_Icu_Ip_aChannelState[instance][hwChannel].callback != NULL_PTR)
+    if (Siul2_Icu_Ip_aChannelState[u8ChIndex].callback != NULL_PTR)
     {
-        Siul2_Icu_Ip_aChannelState[instance][hwChannel].callback(Siul2_Icu_Ip_aChannelState[instance][hwChannel].callbackParam, FALSE);
+        Siul2_Icu_Ip_aChannelState[u8ChIndex].callback(Siul2_Icu_Ip_aChannelState[u8ChIndex].callbackParam, FALSE);
     }
     else
     {
         /* Calling Notification for the IPL channel. */
-        if ((NULL_PTR != Siul2_Icu_Ip_aChannelState[instance][hwChannel].Siul2ChannelNotification) && \
-            ((boolean)TRUE == Siul2_Icu_Ip_aChannelState[instance][hwChannel].notificationEnable))
+        if ((NULL_PTR != Siul2_Icu_Ip_aChannelState[u8ChIndex].Siul2ChannelNotification) && \
+            ((boolean)TRUE == Siul2_Icu_Ip_aChannelState[u8ChIndex].notificationEnable))
         {
-            Siul2_Icu_Ip_aChannelState[instance][hwChannel].Siul2ChannelNotification();
+            Siul2_Icu_Ip_aChannelState[u8ChIndex].Siul2ChannelNotification();
         }
     }
 }
@@ -280,7 +341,7 @@ static inline void Siul2_Icu_Ip_ReportEvents(uint8 instance, uint8 hwChannel)
 #if (defined(SIUL2_0_ICU_EIRQ_SINGLE_INT))
 ISR(SIUL2_0_ICU_EIRQ_SINGLE_INT_HANDLER)
 {
-    /*calling process interrupt function of corressponding instance*/
+    /*calling process interrupt function of corresponding instance*/
     Siul2_Icu_Ip_ProcessSingleInterrupt(0U);
 }
 #endif /* SIUL2_0_ICU_EIRQ_SINGLE_INT */
@@ -288,7 +349,7 @@ ISR(SIUL2_0_ICU_EIRQ_SINGLE_INT_HANDLER)
 #if (defined(SIUL2_1_ICU_EIRQ_SINGLE_INT))
 ISR(SIUL2_1_ICU_EIRQ_SINGLE_INT_HANDLER)
 {
-    /*calling process interrupt function of corressponding instance*/
+    /*calling process interrupt function of corresponding instance*/
     Siul2_Icu_Ip_ProcessSingleInterrupt(1U);
 }
 #endif /* SIUL2_1_ICU_EIRQ_SINGLE_INT */
@@ -296,7 +357,7 @@ ISR(SIUL2_1_ICU_EIRQ_SINGLE_INT_HANDLER)
 #if (defined(SIUL2_4_ICU_EIRQ_SINGLE_INT))
 ISR(SIUL2_4_ICU_EIRQ_SINGLE_INT_HANDLER)
 {
-    /*calling process interrupt function of corressponding instance*/
+    /*calling process interrupt function of corresponding instance*/
     Siul2_Icu_Ip_ProcessSingleInterrupt(4U);
 }
 #endif /* SIUL2_4_ICU_EIRQ_SINGLE_INT */
@@ -304,7 +365,7 @@ ISR(SIUL2_4_ICU_EIRQ_SINGLE_INT_HANDLER)
 #if (defined(SIUL2_5_ICU_EIRQ_SINGLE_INT))
 ISR(SIUL2_5_ICU_EIRQ_SINGLE_INT_HANDLER)
 {
-    /*calling process interrupt function of corressponding instance*/
+    /*calling process interrupt function of corresponding instance*/
     Siul2_Icu_Ip_ProcessSingleInterrupt(5U);
 }
 #endif /* SIUL2_5_ICU_EIRQ_SINGLE_INT */
@@ -312,7 +373,7 @@ ISR(SIUL2_5_ICU_EIRQ_SINGLE_INT_HANDLER)
 #if (defined(SIUL2_AE_ICU_EIRQ_SINGLE_INT))
 ISR(SIUL2_AE_ICU_EIRQ_SINGLE_INT_HANDLER)
 {
-    /*calling process interrupt function of corressponding instance*/
+    /*calling process interrupt function of corresponding instance*/
     Siul2_Icu_Ip_ProcessSingleInterrupt(6U);
 }
 #endif /* SIUL2_AE_ICU_EIRQ_SINGLE_INT */
@@ -363,6 +424,8 @@ ISR(SIUL2_EXT_IRQ_24_31_ISR)
 
 #define ICU_STOP_SEC_CODE
 #include "Icu_MemMap.h"
+
+#endif /* SIUL2_ICU_IP_USED */
 
 #ifdef __cplusplus
 }

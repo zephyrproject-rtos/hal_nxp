@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_EIM.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_EIM
  *
  * This file contains register definitions and macros for easy access to their
@@ -73,146 +73,146 @@ typedef struct {
   __IO uint32_t EIMCR;                             /**< Error Injection Module Configuration Register, offset: 0x0 */
   __IO uint32_t EICHEN;                            /**< Error Injection Channel Enable register, offset: 0x4 */
   uint8_t RESERVED_0[248];
-  __IO uint32_t EICHD0_WORD0;                      /**< Error Injection Channel Descriptor 0, Word0, offset: 0x100 */
-  __IO uint32_t EICHD0_WORD1;                      /**< Error Injection Channel Descriptor 0, Word1, offset: 0x104 */
-  __IO uint32_t EICHD0_WORD2;                      /**< Error Injection Channel Descriptor 0, Word2, offset: 0x108 */
-  __IO uint32_t EICHD0_WORD3;                      /**< Error Injection Channel Descriptor 0, Word3, offset: 0x10C */
+  __IO uint32_t EICHD0_WORD0;                      /**< Error Injection Channel Descriptor 0, Word0, offset: 0x100, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD0_WORD1;                      /**< Error Injection Channel Descriptor 0, Word1, offset: 0x104, not available in all instances (available on 7 out of 8) */
+  __IO uint32_t EICHD0_WORD2;                      /**< Error Injection Channel Descriptor 0, Word2, offset: 0x108, not available in all instances (available on 7 out of 8) */
+  __IO uint32_t EICHD0_WORD3;                      /**< Error Injection Channel Descriptor 0, Word3, offset: 0x10C, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_1[48];
-  __IO uint32_t EICHD1_WORD0;                      /**< Error Injection Channel Descriptor 1, Word0, offset: 0x140 */
-  __IO uint32_t EICHD1_WORD1;                      /**< Error Injection Channel Descriptor 1, Word1, offset: 0x144 */
-  __IO uint32_t EICHD1_WORD2;                      /**< Error Injection Channel Descriptor 1, Word2, offset: 0x148 */
-  __IO uint32_t EICHD1_WORD3;                      /**< Error Injection Channel Descriptor 1, Word3, offset: 0x14C */
-  __IO uint32_t EICHD1_WORD4;                      /**< Error Injection Channel Descriptor 1, Word4, offset: 0x150 */
-  __IO uint32_t EICHD1_WORD5;                      /**< Error Injection Channel Descriptor 1, Word5, offset: 0x154 */
-  __IO uint32_t EICHD1_WORD6;                      /**< Error Injection Channel Descriptor 1, Word6, offset: 0x158 */
-  __IO uint32_t EICHD1_WORD7;                      /**< Error Injection Channel Descriptor 1, Word7, offset: 0x15C */
-  __IO uint32_t EICHD1_WORD8;                      /**< Error Injection Channel Descriptor 1, Word8, offset: 0x160 */
+  __IO uint32_t EICHD1_WORD0;                      /**< Error Injection Channel Descriptor 1, Word0, offset: 0x140, not available in all instances (available on 2 out of 8) */
+  __IO uint32_t EICHD1_WORD1;                      /**< Error Injection Channel Descriptor 1, Word1, offset: 0x144, not available in all instances (available on 6 out of 8) */
+  __IO uint32_t EICHD1_WORD2;                      /**< Error Injection Channel Descriptor 1, Word2, offset: 0x148, not available in all instances (available on 5 out of 8) */
+  __IO uint32_t EICHD1_WORD3;                      /**< Error Injection Channel Descriptor 1, Word3, offset: 0x14C, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD1_WORD4;                      /**< Error Injection Channel Descriptor 1, Word4, offset: 0x150, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD1_WORD5;                      /**< Error Injection Channel Descriptor 1, Word5, offset: 0x154, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD1_WORD6;                      /**< Error Injection Channel Descriptor 1, Word6, offset: 0x158, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD1_WORD7;                      /**< Error Injection Channel Descriptor 1, Word7, offset: 0x15C, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD1_WORD8;                      /**< Error Injection Channel Descriptor 1, Word8, offset: 0x160, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_2[28];
-  __IO uint32_t EICHD2_WORD0;                      /**< Error Injection Channel Descriptor 2, Word0, offset: 0x180 */
-  __IO uint32_t EICHD2_WORD1;                      /**< Error Injection Channel Descriptor 2, Word1, offset: 0x184 */
-  __IO uint32_t EICHD2_WORD2;                      /**< Error Injection Channel Descriptor 2, Word2, offset: 0x188 */
+  __IO uint32_t EICHD2_WORD0;                      /**< Error Injection Channel Descriptor 2, Word0, offset: 0x180, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD2_WORD1;                      /**< Error Injection Channel Descriptor 2, Word1, offset: 0x184, not available in all instances (available on 6 out of 8) */
+  __IO uint32_t EICHD2_WORD2;                      /**< Error Injection Channel Descriptor 2, Word2, offset: 0x188, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_3[52];
-  __IO uint32_t EICHD3_WORD0;                      /**< Error Injection Channel Descriptor 3, Word0, offset: 0x1C0 */
-  __IO uint32_t EICHD3_WORD1;                      /**< Error Injection Channel Descriptor 3, Word1, offset: 0x1C4 */
-  __IO uint32_t EICHD3_WORD2;                      /**< Error Injection Channel Descriptor 3, Word2, offset: 0x1C8 */
+  __IO uint32_t EICHD3_WORD0;                      /**< Error Injection Channel Descriptor 3, Word0, offset: 0x1C0, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD3_WORD1;                      /**< Error Injection Channel Descriptor 3, Word1, offset: 0x1C4, not available in all instances (available on 6 out of 8) */
+  __IO uint32_t EICHD3_WORD2;                      /**< Error Injection Channel Descriptor 3, Word2, offset: 0x1C8, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_4[52];
-  __IO uint32_t EICHD4_WORD0;                      /**< Error Injection Channel Descriptor 4, Word0, offset: 0x200 */
-  __IO uint32_t EICHD4_WORD1;                      /**< Error Injection Channel Descriptor 4, Word1, offset: 0x204 */
-  __IO uint32_t EICHD4_WORD2;                      /**< Error Injection Channel Descriptor 4, Word2, offset: 0x208 */
+  __IO uint32_t EICHD4_WORD0;                      /**< Error Injection Channel Descriptor 4, Word0, offset: 0x200, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD4_WORD1;                      /**< Error Injection Channel Descriptor 4, Word1, offset: 0x204, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD4_WORD2;                      /**< Error Injection Channel Descriptor 4, Word2, offset: 0x208, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_5[52];
-  __IO uint32_t EICHD5_WORD0;                      /**< Error Injection Channel Descriptor 5, Word0, offset: 0x240 */
-  __IO uint32_t EICHD5_WORD1;                      /**< Error Injection Channel Descriptor 5, Word1, offset: 0x244 */
-  __IO uint32_t EICHD5_WORD2;                      /**< Error Injection Channel Descriptor 5, Word2, offset: 0x248 */
+  __IO uint32_t EICHD5_WORD0;                      /**< Error Injection Channel Descriptor 5, Word0, offset: 0x240, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD5_WORD1;                      /**< Error Injection Channel Descriptor 5, Word1, offset: 0x244, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD5_WORD2;                      /**< Error Injection Channel Descriptor 5, Word2, offset: 0x248, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_6[52];
-  __IO uint32_t EICHD6_WORD0;                      /**< Error Injection Channel Descriptor 6, Word0, offset: 0x280 */
-  __IO uint32_t EICHD6_WORD1;                      /**< Error Injection Channel Descriptor 6, Word1, offset: 0x284 */
-  __IO uint32_t EICHD6_WORD2;                      /**< Error Injection Channel Descriptor 6, Word2, offset: 0x288 */
+  __IO uint32_t EICHD6_WORD0;                      /**< Error Injection Channel Descriptor 6, Word0, offset: 0x280, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD6_WORD1;                      /**< Error Injection Channel Descriptor 6, Word1, offset: 0x284, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD6_WORD2;                      /**< Error Injection Channel Descriptor 6, Word2, offset: 0x288, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_7[52];
-  __IO uint32_t EICHD7_WORD0;                      /**< Error Injection Channel Descriptor 7, Word0, offset: 0x2C0 */
-  __IO uint32_t EICHD7_WORD1;                      /**< Error Injection Channel Descriptor 7, Word1, offset: 0x2C4 */
-  __IO uint32_t EICHD7_WORD2;                      /**< Error Injection Channel Descriptor 7, Word2, offset: 0x2C8 */
+  __IO uint32_t EICHD7_WORD0;                      /**< Error Injection Channel Descriptor 7, Word0, offset: 0x2C0, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD7_WORD1;                      /**< Error Injection Channel Descriptor 7, Word1, offset: 0x2C4, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD7_WORD2;                      /**< Error Injection Channel Descriptor 7, Word2, offset: 0x2C8, not available in all instances (available on 4 out of 8) */
   uint8_t RESERVED_8[52];
-  __IO uint32_t EICHD8_WORD0;                      /**< Error Injection Channel Descriptor 8, Word0, offset: 0x300 */
-  __IO uint32_t EICHD8_WORD1;                      /**< Error Injection Channel Descriptor 8, Word1, offset: 0x304 */
-  __IO uint32_t EICHD8_WORD2;                      /**< Error Injection Channel Descriptor 8, Word2, offset: 0x308 */
-  __IO uint32_t EICHD8_WORD3;                      /**< Error Injection Channel Descriptor 8, Word3, offset: 0x30C */
-  __IO uint32_t EICHD8_WORD4;                      /**< Error Injection Channel Descriptor 8, Word4, offset: 0x310 */
-  __IO uint32_t EICHD8_WORD5;                      /**< Error Injection Channel Descriptor 8, Word5, offset: 0x314 */
-  __IO uint32_t EICHD8_WORD6;                      /**< Error Injection Channel Descriptor 8, Word6, offset: 0x318 */
-  __IO uint32_t EICHD8_WORD7;                      /**< Error Injection Channel Descriptor 8, Word7, offset: 0x31C */
-  __IO uint32_t EICHD8_WORD8;                      /**< Error Injection Channel Descriptor 8, Word8, offset: 0x320 */
+  __IO uint32_t EICHD8_WORD0;                      /**< Error Injection Channel Descriptor 8, Word0, offset: 0x300, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD8_WORD1;                      /**< Error Injection Channel Descriptor 8, Word1, offset: 0x304, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD8_WORD2;                      /**< Error Injection Channel Descriptor 8, Word2, offset: 0x308, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD8_WORD3;                      /**< Error Injection Channel Descriptor 8, Word3, offset: 0x30C, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD8_WORD4;                      /**< Error Injection Channel Descriptor 8, Word4, offset: 0x310, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD8_WORD5;                      /**< Error Injection Channel Descriptor 8, Word5, offset: 0x314, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD8_WORD6;                      /**< Error Injection Channel Descriptor 8, Word6, offset: 0x318, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD8_WORD7;                      /**< Error Injection Channel Descriptor 8, Word7, offset: 0x31C, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD8_WORD8;                      /**< Error Injection Channel Descriptor 8, Word8, offset: 0x320, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_9[28];
-  __IO uint32_t EICHD9_WORD0;                      /**< Error Injection Channel Descriptor 9, Word0, offset: 0x340 */
-  __IO uint32_t EICHD9_WORD1;                      /**< Error Injection Channel Descriptor 9, Word1, offset: 0x344 */
-  __IO uint32_t EICHD9_WORD2;                      /**< Error Injection Channel Descriptor 9, Word2, offset: 0x348 */
-  __IO uint32_t EICHD9_WORD3;                      /**< Error Injection Channel Descriptor 9, Word3, offset: 0x34C */
-  __IO uint32_t EICHD9_WORD4;                      /**< Error Injection Channel Descriptor 9, Word4, offset: 0x350 */
-  __IO uint32_t EICHD9_WORD5;                      /**< Error Injection Channel Descriptor 9, Word5, offset: 0x354 */
-  __IO uint32_t EICHD9_WORD6;                      /**< Error Injection Channel Descriptor 9, Word6, offset: 0x358 */
-  __IO uint32_t EICHD9_WORD7;                      /**< Error Injection Channel Descriptor 9, Word7, offset: 0x35C */
-  __IO uint32_t EICHD9_WORD8;                      /**< Error Injection Channel Descriptor 9, Word8, offset: 0x360 */
+  __IO uint32_t EICHD9_WORD0;                      /**< Error Injection Channel Descriptor 9, Word0, offset: 0x340, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD9_WORD1;                      /**< Error Injection Channel Descriptor 9, Word1, offset: 0x344, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD9_WORD2;                      /**< Error Injection Channel Descriptor 9, Word2, offset: 0x348, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD9_WORD3;                      /**< Error Injection Channel Descriptor 9, Word3, offset: 0x34C, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD9_WORD4;                      /**< Error Injection Channel Descriptor 9, Word4, offset: 0x350, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD9_WORD5;                      /**< Error Injection Channel Descriptor 9, Word5, offset: 0x354, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD9_WORD6;                      /**< Error Injection Channel Descriptor 9, Word6, offset: 0x358, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD9_WORD7;                      /**< Error Injection Channel Descriptor 9, Word7, offset: 0x35C, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD9_WORD8;                      /**< Error Injection Channel Descriptor 9, Word8, offset: 0x360, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_10[28];
-  __IO uint32_t EICHD10_WORD0;                     /**< Error Injection Channel Descriptor 10, Word0, offset: 0x380 */
-  __IO uint32_t EICHD10_WORD1;                     /**< Error Injection Channel Descriptor 10, Word1, offset: 0x384 */
-  __IO uint32_t EICHD10_WORD2;                     /**< Error Injection Channel Descriptor 10, Word2, offset: 0x388 */
-  __IO uint32_t EICHD10_WORD3;                     /**< Error Injection Channel Descriptor 10, Word3, offset: 0x38C */
-  __IO uint32_t EICHD10_WORD4;                     /**< Error Injection Channel Descriptor 10, Word4, offset: 0x390 */
+  __IO uint32_t EICHD10_WORD0;                     /**< Error Injection Channel Descriptor 10, Word0, offset: 0x380, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD10_WORD1;                     /**< Error Injection Channel Descriptor 10, Word1, offset: 0x384, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD10_WORD2;                     /**< Error Injection Channel Descriptor 10, Word2, offset: 0x388, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD10_WORD3;                     /**< Error Injection Channel Descriptor 10, Word3, offset: 0x38C, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD10_WORD4;                     /**< Error Injection Channel Descriptor 10, Word4, offset: 0x390, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_11[44];
-  __IO uint32_t EICHD11_WORD0;                     /**< Error Injection Channel Descriptor 11, Word0, offset: 0x3C0 */
-  __IO uint32_t EICHD11_WORD1;                     /**< Error Injection Channel Descriptor 11, Word1, offset: 0x3C4 */
-  __IO uint32_t EICHD11_WORD2;                     /**< Error Injection Channel Descriptor 11, Word2, offset: 0x3C8 */
+  __IO uint32_t EICHD11_WORD0;                     /**< Error Injection Channel Descriptor 11, Word0, offset: 0x3C0, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD11_WORD1;                     /**< Error Injection Channel Descriptor 11, Word1, offset: 0x3C4, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD11_WORD2;                     /**< Error Injection Channel Descriptor 11, Word2, offset: 0x3C8, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_12[52];
-  __IO uint32_t EICHD12_WORD0;                     /**< Error Injection Channel Descriptor 12, Word0, offset: 0x400 */
-  __IO uint32_t EICHD12_WORD1;                     /**< Error Injection Channel Descriptor 12, Word1, offset: 0x404 */
-  __IO uint32_t EICHD12_WORD2;                     /**< Error Injection Channel Descriptor 12, Word2, offset: 0x408 */
+  __IO uint32_t EICHD12_WORD0;                     /**< Error Injection Channel Descriptor 12, Word0, offset: 0x400, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD12_WORD1;                     /**< Error Injection Channel Descriptor 12, Word1, offset: 0x404, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD12_WORD2;                     /**< Error Injection Channel Descriptor 12, Word2, offset: 0x408, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_13[52];
-  __IO uint32_t EICHD13_WORD0;                     /**< Error Injection Channel Descriptor 13, Word0, offset: 0x440 */
-  __IO uint32_t EICHD13_WORD1;                     /**< Error Injection Channel Descriptor 13, Word1, offset: 0x444 */
-  __IO uint32_t EICHD13_WORD2;                     /**< Error Injection Channel Descriptor 13, Word2, offset: 0x448 */
+  __IO uint32_t EICHD13_WORD0;                     /**< Error Injection Channel Descriptor 13, Word0, offset: 0x440, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD13_WORD1;                     /**< Error Injection Channel Descriptor 13, Word1, offset: 0x444, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD13_WORD2;                     /**< Error Injection Channel Descriptor 13, Word2, offset: 0x448, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_14[52];
-  __IO uint32_t EICHD14_WORD0;                     /**< Error Injection Channel Descriptor 14, Word0, offset: 0x480 */
-  __IO uint32_t EICHD14_WORD1;                     /**< Error Injection Channel Descriptor 14, Word1, offset: 0x484 */
-  __IO uint32_t EICHD14_WORD2;                     /**< Error Injection Channel Descriptor 14, Word2, offset: 0x488 */
+  __IO uint32_t EICHD14_WORD0;                     /**< Error Injection Channel Descriptor 14, Word0, offset: 0x480, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD14_WORD1;                     /**< Error Injection Channel Descriptor 14, Word1, offset: 0x484, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD14_WORD2;                     /**< Error Injection Channel Descriptor 14, Word2, offset: 0x488, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_15[52];
-  __IO uint32_t EICHD15_WORD0;                     /**< Error Injection Channel Descriptor 15, Word0, offset: 0x4C0 */
-  __IO uint32_t EICHD15_WORD1;                     /**< Error Injection Channel Descriptor 15, Word1, offset: 0x4C4 */
-  __IO uint32_t EICHD15_WORD2;                     /**< Error Injection Channel Descriptor 15, Word2, offset: 0x4C8 */
+  __IO uint32_t EICHD15_WORD0;                     /**< Error Injection Channel Descriptor 15, Word0, offset: 0x4C0, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD15_WORD1;                     /**< Error Injection Channel Descriptor 15, Word1, offset: 0x4C4, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD15_WORD2;                     /**< Error Injection Channel Descriptor 15, Word2, offset: 0x4C8, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_16[52];
-  __IO uint32_t EICHD16_WORD0;                     /**< Error Injection Channel Descriptor 16, Word0, offset: 0x500 */
-  __IO uint32_t EICHD16_WORD1;                     /**< Error Injection Channel Descriptor 16, Word1, offset: 0x504 */
-  __IO uint32_t EICHD16_WORD2;                     /**< Error Injection Channel Descriptor 16, Word2, offset: 0x508 */
+  __IO uint32_t EICHD16_WORD0;                     /**< Error Injection Channel Descriptor 16, Word0, offset: 0x500, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD16_WORD1;                     /**< Error Injection Channel Descriptor 16, Word1, offset: 0x504, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD16_WORD2;                     /**< Error Injection Channel Descriptor 16, Word2, offset: 0x508, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_17[52];
-  __IO uint32_t EICHD17_WORD0;                     /**< Error Injection Channel Descriptor 17, Word0, offset: 0x540 */
-  __IO uint32_t EICHD17_WORD1;                     /**< Error Injection Channel Descriptor 17, Word1, offset: 0x544 */
-  __IO uint32_t EICHD17_WORD2;                     /**< Error Injection Channel Descriptor 17, Word2, offset: 0x548 */
+  __IO uint32_t EICHD17_WORD0;                     /**< Error Injection Channel Descriptor 17, Word0, offset: 0x540, not available in all instances (available on 2 out of 8) */
+  __IO uint32_t EICHD17_WORD1;                     /**< Error Injection Channel Descriptor 17, Word1, offset: 0x544, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD17_WORD2;                     /**< Error Injection Channel Descriptor 17, Word2, offset: 0x548, not available in all instances (available on 2 out of 8) */
   uint8_t RESERVED_18[56];
-  __IO uint32_t EICHD18_WORD1;                     /**< Error Injection Channel Descriptor 18, Word1, offset: 0x584 */
-  __IO uint32_t EICHD18_WORD2;                     /**< Error Injection Channel Descriptor 18, Word2, offset: 0x588 */
+  __IO uint32_t EICHD18_WORD1;                     /**< Error Injection Channel Descriptor 18, Word1, offset: 0x584, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD18_WORD2;                     /**< Error Injection Channel Descriptor 18, Word2, offset: 0x588, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_19[52];
-  __IO uint32_t EICHD19_WORD0;                     /**< Error Injection Channel Descriptor 19, Word0, offset: 0x5C0 */
-  __IO uint32_t EICHD19_WORD1;                     /**< Error Injection Channel Descriptor 19, Word1, offset: 0x5C4 */
-  __IO uint32_t EICHD19_WORD2;                     /**< Error Injection Channel Descriptor 19, Word2, offset: 0x5C8 */
+  __IO uint32_t EICHD19_WORD0;                     /**< Error Injection Channel Descriptor 19, Word0, offset: 0x5C0, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD19_WORD1;                     /**< Error Injection Channel Descriptor 19, Word1, offset: 0x5C4, not available in all instances (available on 4 out of 8) */
+  __IO uint32_t EICHD19_WORD2;                     /**< Error Injection Channel Descriptor 19, Word2, offset: 0x5C8, not available in all instances (available on 4 out of 8) */
   uint8_t RESERVED_20[52];
-  __IO uint32_t EICHD20_WORD0;                     /**< Error Injection Channel Descriptor 20, Word0, offset: 0x600 */
-  __IO uint32_t EICHD20_WORD1;                     /**< Error Injection Channel Descriptor 20, Word1, offset: 0x604 */
-  __IO uint32_t EICHD20_WORD2;                     /**< Error Injection Channel Descriptor 20, Word2, offset: 0x608 */
+  __IO uint32_t EICHD20_WORD0;                     /**< Error Injection Channel Descriptor 20, Word0, offset: 0x600, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD20_WORD1;                     /**< Error Injection Channel Descriptor 20, Word1, offset: 0x604, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD20_WORD2;                     /**< Error Injection Channel Descriptor 20, Word2, offset: 0x608, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_21[52];
-  __IO uint32_t EICHD21_WORD0;                     /**< Error Injection Channel Descriptor 21, Word0, offset: 0x640 */
-  __IO uint32_t EICHD21_WORD1;                     /**< Error Injection Channel Descriptor 21, Word1, offset: 0x644 */
-  __IO uint32_t EICHD21_WORD2;                     /**< Error Injection Channel Descriptor 21, Word2, offset: 0x648 */
+  __IO uint32_t EICHD21_WORD0;                     /**< Error Injection Channel Descriptor 21, Word0, offset: 0x640, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD21_WORD1;                     /**< Error Injection Channel Descriptor 21, Word1, offset: 0x644, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD21_WORD2;                     /**< Error Injection Channel Descriptor 21, Word2, offset: 0x648, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_22[52];
-  __IO uint32_t EICHD22_WORD0;                     /**< Error Injection Channel Descriptor 22, Word0, offset: 0x680 */
-  __IO uint32_t EICHD22_WORD1;                     /**< Error Injection Channel Descriptor 22, Word1, offset: 0x684 */
-  __IO uint32_t EICHD22_WORD2;                     /**< Error Injection Channel Descriptor 22, Word2, offset: 0x688 */
+  __IO uint32_t EICHD22_WORD0;                     /**< Error Injection Channel Descriptor 22, Word0, offset: 0x680, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD22_WORD1;                     /**< Error Injection Channel Descriptor 22, Word1, offset: 0x684, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD22_WORD2;                     /**< Error Injection Channel Descriptor 22, Word2, offset: 0x688, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_23[56];
-  __IO uint32_t EICHD23_WORD1;                     /**< Error Injection Channel Descriptor 23, Word1, offset: 0x6C4 */
+  __IO uint32_t EICHD23_WORD1;                     /**< Error Injection Channel Descriptor 23, Word1, offset: 0x6C4, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_24[60];
-  __IO uint32_t EICHD24_WORD1;                     /**< Error Injection Channel Descriptor 24, Word1, offset: 0x704 */
+  __IO uint32_t EICHD24_WORD1;                     /**< Error Injection Channel Descriptor 24, Word1, offset: 0x704, not available in all instances (available on 4 out of 8) */
   uint8_t RESERVED_25[60];
-  __IO uint32_t EICHD25_WORD1;                     /**< Error Injection Channel Descriptor 25, Word1, offset: 0x744 */
+  __IO uint32_t EICHD25_WORD1;                     /**< Error Injection Channel Descriptor 25, Word1, offset: 0x744, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_26[56];
-  __IO uint32_t EICHD26_WORD0;                     /**< Error Injection Channel Descriptor 26, Word0, offset: 0x780 */
-  __IO uint32_t EICHD26_WORD1;                     /**< Error Injection Channel Descriptor 26, Word1, offset: 0x784 */
-  __IO uint32_t EICHD26_WORD2;                     /**< Error Injection Channel Descriptor 26, Word2, offset: 0x788 */
+  __IO uint32_t EICHD26_WORD0;                     /**< Error Injection Channel Descriptor 26, Word0, offset: 0x780, not available in all instances (available on 2 out of 8) */
+  __IO uint32_t EICHD26_WORD1;                     /**< Error Injection Channel Descriptor 26, Word1, offset: 0x784, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD26_WORD2;                     /**< Error Injection Channel Descriptor 26, Word2, offset: 0x788, not available in all instances (available on 2 out of 8) */
   uint8_t RESERVED_27[52];
-  __IO uint32_t EICHD27_WORD0;                     /**< Error Injection Channel Descriptor 27, Word0, offset: 0x7C0 */
-  __IO uint32_t EICHD27_WORD1;                     /**< Error Injection Channel Descriptor 27, Word1, offset: 0x7C4 */
-  __IO uint32_t EICHD27_WORD2;                     /**< Error Injection Channel Descriptor 27, Word2, offset: 0x7C8 */
+  __IO uint32_t EICHD27_WORD0;                     /**< Error Injection Channel Descriptor 27, Word0, offset: 0x7C0, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD27_WORD1;                     /**< Error Injection Channel Descriptor 27, Word1, offset: 0x7C4, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD27_WORD2;                     /**< Error Injection Channel Descriptor 27, Word2, offset: 0x7C8, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_28[52];
-  __IO uint32_t EICHD28_WORD0;                     /**< Error Injection Channel Descriptor 28, Word0, offset: 0x800 */
-  __IO uint32_t EICHD28_WORD1;                     /**< Error Injection Channel Descriptor 28, Word1, offset: 0x804 */
-  __IO uint32_t EICHD28_WORD2;                     /**< Error Injection Channel Descriptor 28, Word2, offset: 0x808 */
+  __IO uint32_t EICHD28_WORD0;                     /**< Error Injection Channel Descriptor 28, Word0, offset: 0x800, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD28_WORD1;                     /**< Error Injection Channel Descriptor 28, Word1, offset: 0x804, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD28_WORD2;                     /**< Error Injection Channel Descriptor 28, Word2, offset: 0x808, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_29[52];
-  __IO uint32_t EICHD29_WORD0;                     /**< Error Injection Channel Descriptor 29, Word0, offset: 0x840 */
-  __IO uint32_t EICHD29_WORD1;                     /**< Error Injection Channel Descriptor 29, Word1, offset: 0x844 */
-  __IO uint32_t EICHD29_WORD2;                     /**< Error Injection Channel Descriptor 29, Word2, offset: 0x848 */
+  __IO uint32_t EICHD29_WORD0;                     /**< Error Injection Channel Descriptor 29, Word0, offset: 0x840, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD29_WORD1;                     /**< Error Injection Channel Descriptor 29, Word1, offset: 0x844, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD29_WORD2;                     /**< Error Injection Channel Descriptor 29, Word2, offset: 0x848, not available in all instances (available on 1 out of 8) */
   uint8_t RESERVED_30[52];
-  __IO uint32_t EICHD30_WORD0;                     /**< Error Injection Channel Descriptor 30, Word0, offset: 0x880 */
-  __IO uint32_t EICHD30_WORD1;                     /**< Error Injection Channel Descriptor 30, Word1, offset: 0x884 */
-  __IO uint32_t EICHD30_WORD2;                     /**< Error Injection Channel Descriptor 30, Word2, offset: 0x888 */
+  __IO uint32_t EICHD30_WORD0;                     /**< Error Injection Channel Descriptor 30, Word0, offset: 0x880, not available in all instances (available on 1 out of 8) */
+  __IO uint32_t EICHD30_WORD1;                     /**< Error Injection Channel Descriptor 30, Word1, offset: 0x884, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD30_WORD2;                     /**< Error Injection Channel Descriptor 30, Word2, offset: 0x888, not available in all instances (available on 3 out of 8) */
   uint8_t RESERVED_31[56];
-  __IO uint32_t EICHD31_WORD1;                     /**< Error Injection Channel Descriptor 31, Word1, offset: 0x8C4 */
-  __IO uint32_t EICHD31_WORD2;                     /**< Error Injection Channel Descriptor 31, Word2, offset: 0x8C8 */
+  __IO uint32_t EICHD31_WORD1;                     /**< Error Injection Channel Descriptor 31, Word1, offset: 0x8C4, not available in all instances (available on 3 out of 8) */
+  __IO uint32_t EICHD31_WORD2;                     /**< Error Injection Channel Descriptor 31, Word2, offset: 0x8C8, not available in all instances (available on 2 out of 8) */
 } EIM_Type, *EIM_MemMapPtr;
 
 /** Number of instances of the EIM module. */

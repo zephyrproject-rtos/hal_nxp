@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,8 +35,8 @@ extern "C"{
 #define STM_IP_AR_RELEASE_MAJOR_VERSION_C     4
 #define STM_IP_AR_RELEASE_MINOR_VERSION_C     7
 #define STM_IP_AR_RELEASE_REVISION_VERSION_C  0
-#define STM_IP_SW_MAJOR_VERSION_C             0
-#define STM_IP_SW_MINOR_VERSION_C             9
+#define STM_IP_SW_MAJOR_VERSION_C             1
+#define STM_IP_SW_MINOR_VERSION_C             0
 #define STM_IP_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
@@ -100,37 +100,84 @@ extern "C"{
 #define GPT_START_SEC_VAR_CLEARED_32
 #include "Gpt_MemMap.h"
 /** @brief Global array variable used to store the runtime target time value. */
-uint32 Stm_Ip_u32TargetValue[STM_INSTANCE_COUNT][STM_CHANNEL_COUNT];
-#if ((defined STM_0_ISR_USED) || (defined STM_1_ISR_USED) || (defined STM_2_ISR_USED)  || (defined STM_3_ISR_USED)  || \
-     (defined STM_4_ISR_USED) || (defined STM_5_ISR_USED) || (defined STM_6_ISR_USED)  || (defined STM_7_ISR_USED)  || \
-     (defined STM_8_ISR_USED) || (defined STM_9_ISR_USED) || (defined STM_10_ISR_USED) || (defined STM_11_ISR_USED) || \
-     (defined STM_12_ISR_USED)|| (defined SMU_STM_0_ISR_USED) || (defined SMU_STM_2_ISR_USED) || \
-     (defined CE_STM_0_ISR_USED) || (defined CE_STM_1_ISR_USED) || (defined CE_STM_2_ISR_USED) || \
-     (defined RTU0_STM_0_ISR_USED) || (defined RTU0_STM_1_ISR_USED) || (defined RTU0_STM_2_ISR_USED) || (defined RTU0_STM_3_ISR_USED) || \
-     (defined RTU1_STM_0_ISR_USED) || (defined RTU1_STM_1_ISR_USED) || (defined RTU1_STM_2_ISR_USED) || (defined RTU1_STM_3_ISR_USED))
-uint32 Stm_Ip_u32NextTargetValue[STM_INSTANCE_COUNT][STM_CHANNEL_COUNT];
+uint32 Stm_Ip_u32TargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT];
+#if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
+        defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
+        defined(STM_8_ISR_USED) || defined(STM_9_ISR_USED) || defined(STM_10_ISR_USED) || defined(STM_11_ISR_USED) || \
+        defined(STM_12_ISR_USED)|| defined(SMU_STM_0_ISR_USED) || defined(SMU_STM_2_ISR_USED) || \
+        defined(CE_STM_0_ISR_USED) || defined(CE_STM_1_ISR_USED) || defined(CE_STM_2_ISR_USED) || \
+        defined(RTU0_STM_0_ISR_USED) || defined(RTU0_STM_1_ISR_USED) || defined(RTU0_STM_2_ISR_USED) || defined(RTU0_STM_3_ISR_USED) || \
+        defined(RTU1_STM_0_ISR_USED) || defined(RTU1_STM_1_ISR_USED) || defined(RTU1_STM_2_ISR_USED) || defined(RTU1_STM_3_ISR_USED) || \
+        defined(RTU2_STM_0_ISR_USED) || defined(RTU2_STM_1_ISR_USED) || defined(RTU2_STM_2_ISR_USED) || defined(RTU2_STM_3_ISR_USED) || \
+        defined(RTU3_STM_0_ISR_USED) || defined(RTU3_STM_1_ISR_USED) || defined(RTU3_STM_2_ISR_USED) || defined(RTU3_STM_3_ISR_USED) || \
+        defined(CRS_STM_0_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
+uint32 Stm_Ip_u32NextTargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT];
 #endif
+
 #define GPT_STOP_SEC_VAR_CLEARED_32
 #include "Gpt_MemMap.h"
 
 #define GPT_START_SEC_CONST_UNSPECIFIED
 #include "Gpt_MemMap.h"
+
+#if (defined(CRS_FSS_AND_RTU_BASE_ADDR_OF_STM_REGISTERS_CONCATENATED) && (CRS_FSS_AND_RTU_BASE_ADDR_OF_STM_REGISTERS_CONCATENATED == STD_ON))
 /** @brief Table of base addresses for STM instances. */
-STM_Type * const stmBase[STM_INSTANCE_COUNT] = IP_STM_BASE_PTRS;
+#define IP_STM_BASE_PTRS_CONCATENATED   { IP_CRS__STM, IP_FSS__COSS_STM_0, IP_FSS__COSS_STM_1, IP_FSS__COSS_STM_2, IP_FSS__COSS_STM_3, IP_FSS__STM_0, IP_FSS__STM_1, IP_FSS__STM_AUX_0, IP_FSS__STM_AUX_1, IP_FSS__STM_AUX_2, (STM_Type *)IP_RTU0__RTU_STM0_BASE, (STM_Type *)IP_RTU0__RTU_STM1_BASE, (STM_Type *)IP_RTU0__RTU_STM2_BASE, (STM_Type *)IP_RTU0__RTU_STM3_BASE, (STM_Type *)IP_RTU1__RTU_STM0_BASE, (STM_Type *)IP_RTU1__RTU_STM1_BASE, (STM_Type *)IP_RTU1__RTU_STM2_BASE, (STM_Type *)IP_RTU1__RTU_STM3_BASE, (STM_Type *)IP_RTU2__RTU_STM0_BASE, (STM_Type *)IP_RTU2__RTU_STM1_BASE, (STM_Type *)IP_RTU2__RTU_STM2_BASE, (STM_Type *)IP_RTU2__RTU_STM3_BASE, (STM_Type *)IP_RTU3__RTU_STM0_BASE, (STM_Type *)IP_RTU3__RTU_STM1_BASE, (STM_Type *)IP_RTU3__RTU_STM2_BASE, (STM_Type *)IP_RTU3__RTU_STM3_BASE  }
+STM_Type * const stmBase[GPT_STM_INSTANCE_COUNT] = IP_STM_BASE_PTRS_CONCATENATED;
+#else
+/** @brief Table of base addresses for STM instances. */
+STM_Type * const stmBase[GPT_STM_INSTANCE_COUNT] = IP_STM_BASE_PTRS;
+#endif
+
 #define GPT_STOP_SEC_CONST_UNSPECIFIED
 #include "Gpt_MemMap.h"
 
 #define GPT_START_SEC_VAR_INIT_UNSPECIFIED
 #include "Gpt_MemMap.h"
-#if ((defined STM_0_ISR_USED) || (defined STM_1_ISR_USED) || (defined STM_2_ISR_USED)  || (defined STM_3_ISR_USED)  || \
-     (defined STM_4_ISR_USED) || (defined STM_5_ISR_USED) || (defined STM_6_ISR_USED)  || (defined STM_7_ISR_USED)  || \
-     (defined STM_8_ISR_USED) || (defined STM_9_ISR_USED) || (defined STM_10_ISR_USED) || (defined STM_11_ISR_USED) || \
-     (defined STM_12_ISR_USED)|| (defined SMU_STM_0_ISR_USED) || (defined SMU_STM_2_ISR_USED) || \
-     (defined CE_STM_0_ISR_USED) || (defined CE_STM_1_ISR_USED) || (defined CE_STM_2_ISR_USED) || \
-     (defined RTU0_STM_0_ISR_USED) || (defined RTU0_STM_1_ISR_USED) || (defined RTU0_STM_2_ISR_USED) || (defined RTU0_STM_3_ISR_USED) || \
-     (defined RTU1_STM_0_ISR_USED) || (defined RTU1_STM_1_ISR_USED) || (defined RTU1_STM_2_ISR_USED) || (defined RTU1_STM_3_ISR_USED))
+#if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
+        defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
+        defined(STM_8_ISR_USED) || defined(STM_9_ISR_USED) || defined(STM_10_ISR_USED) || defined(STM_11_ISR_USED) || \
+        defined(STM_12_ISR_USED)|| defined(SMU_STM_0_ISR_USED) || defined(SMU_STM_2_ISR_USED) || \
+        defined(CE_STM_0_ISR_USED) || defined(CE_STM_1_ISR_USED) || defined(CE_STM_2_ISR_USED) || \
+        defined(RTU0_STM_0_ISR_USED) || defined(RTU0_STM_1_ISR_USED) || defined(RTU0_STM_2_ISR_USED) || defined(RTU0_STM_3_ISR_USED) || \
+        defined(RTU1_STM_0_ISR_USED) || defined(RTU1_STM_1_ISR_USED) || defined(RTU1_STM_2_ISR_USED) || defined(RTU1_STM_3_ISR_USED) || \
+        defined(RTU2_STM_0_ISR_USED) || defined(RTU2_STM_1_ISR_USED) || defined(RTU2_STM_2_ISR_USED) || defined(RTU2_STM_3_ISR_USED) || \
+        defined(RTU3_STM_0_ISR_USED) || defined(RTU3_STM_1_ISR_USED) || defined(RTU3_STM_2_ISR_USED) || defined(RTU3_STM_3_ISR_USED) || \
+        defined(CRS_STM_0_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
 /** @brief Global array variable used to channel state for process common interrupt */
-static Stm_Ip_ChState Stm_Ip_u32ChState[STM_INSTANCE_COUNT][STM_CHANNEL_COUNT] =  {
+static Stm_Ip_ChState Stm_Ip_u32ChState[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT] =  {
                                                                                     {
                                                                                         {
                                                                                             (boolean)FALSE,
@@ -142,7 +189,7 @@ static Stm_Ip_ChState Stm_Ip_u32ChState[STM_INSTANCE_COUNT][STM_CHANNEL_COUNT] =
                                                                                 };
 #endif
 #if (STM_IP_SET_CLOCK_MODE == STD_ON)
-static Stm_Ip_InstanceState Stm_Ip_u32InstanceState[STM_INSTANCE_COUNT] =   {
+static Stm_Ip_InstanceState Stm_Ip_u32InstanceState[GPT_STM_INSTANCE_COUNT] =   {
                                                                                 {
                                                                                     0U,
                                                                                     0U
@@ -161,160 +208,378 @@ static inline void Stm_Ip_SetDebugMode(uint8 instance, boolean stopRun);
 static inline void Stm_Ip_TimerEnable(uint8 instance, boolean enable);
 static inline uint32 Stm_Ip_GetTimerEnableBit(uint8 instance);
 static inline void Stm_Ip_SetPrescaler(uint8 instance, uint8 prescalerValue);
-static inline void Stm_Ip_ChannelEnable(uint8 instance, uint8 channel, boolean enable);
-static inline void Stm_Ip_ClearInterruptFlag(uint8 instance, uint8 channel);
+static inline void Stm_Ip_SetInterruptEnableFlag(uint8 instance, uint8 channel, boolean enable);
+static inline void Stm_Ip_ClearInterruptStatusFlag(uint8 instance, uint8 channel);
 static inline void Stm_Ip_SetCmpValue(uint8 instance, uint8 channel, uint32 compareValue);
 static inline uint32 Stm_Ip_GetCmpValue(uint8 instance, uint8 channel);
 static inline void Stm_Ip_SetCntValue(uint8 instance, uint32 counterValue);
 static inline uint32 Stm_Ip_GetCntValue(uint8 instance);
 
-
-#if (STM_IP_MODULE_SINGLE_INTERRUPT == STD_ON)
-#ifdef STM_0_ISR_USED
-ISR(STM_0_ISR);
+#if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
+        defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
+        defined(STM_8_ISR_USED) || defined(STM_9_ISR_USED) || defined(STM_10_ISR_USED) || defined(STM_11_ISR_USED) || \
+        defined(STM_12_ISR_USED)|| defined(SMU_STM_0_ISR_USED) || defined(SMU_STM_2_ISR_USED) || \
+        defined(CE_STM_0_ISR_USED) || defined(CE_STM_1_ISR_USED) || defined(CE_STM_2_ISR_USED) || \
+        defined(RTU0_STM_0_ISR_USED) || defined(RTU0_STM_1_ISR_USED) || defined(RTU0_STM_2_ISR_USED) || defined(RTU0_STM_3_ISR_USED) || \
+        defined(RTU1_STM_0_ISR_USED) || defined(RTU1_STM_1_ISR_USED) || defined(RTU1_STM_2_ISR_USED) || defined(RTU1_STM_3_ISR_USED) || \
+        defined(RTU2_STM_0_ISR_USED) || defined(RTU2_STM_1_ISR_USED) || defined(RTU2_STM_2_ISR_USED) || defined(RTU2_STM_3_ISR_USED) || \
+        defined(RTU3_STM_0_ISR_USED) || defined(RTU3_STM_1_ISR_USED) || defined(RTU3_STM_2_ISR_USED) || defined(RTU3_STM_3_ISR_USED) || \
+        defined(CRS_STM_0_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
+static void Stm_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel);
+static inline boolean Stm_Ip_GetInterruptEnableFlag(uint8 instance, uint8 channel);
 #endif
-#ifdef STM_1_ISR_USED
-ISR(STM_1_ISR);
-#endif
-#ifdef STM_2_ISR_USED
-ISR(STM_2_ISR);
-#endif
-#ifdef STM_3_ISR_USED
-ISR(STM_3_ISR);
-#endif
-#ifdef STM_4_ISR_USED
-ISR(STM_4_ISR);
-#endif
-#ifdef STM_5_ISR_USED
-ISR(STM_5_ISR);
-#endif
-#ifdef STM_6_ISR_USED
-ISR(STM_6_ISR);
-#endif
-#ifdef STM_7_ISR_USED
-ISR(STM_7_ISR);
-#endif
-#ifdef STM_8_ISR_USED
-ISR(STM_8_ISR);
-#endif
-#ifdef STM_9_ISR_USED
-ISR(STM_9_ISR);
-#endif
-#ifdef STM_10_ISR_USED
-ISR(STM_10_ISR);
-#endif
-#ifdef STM_11_ISR_USED
-ISR(STM_11_ISR);
-#endif
-#ifdef STM_12_ISR_USED
-ISR(STM_12_ISR);
-#endif
-#ifdef SMU_STM_0_ISR_USED
-ISR(SMU_STM_0_ISR);
-#endif
-#ifdef SMU_STM_2_ISR_USED
-ISR(SMU_STM_2_ISR);
-#endif
-#ifdef CE_STM_0_ISR_USED
-ISR(CE_STM_0_ISR);
-#endif
-#ifdef CE_STM_1_ISR_USED
-ISR(CE_STM_1_ISR);
-#endif
-#ifdef CE_STM_2_ISR_USED
-ISR(CE_STM_2_ISR);
-#endif
-#ifdef RTU0_STM_0_ISR_USED
-ISR(RTU0_STM_0_ISR);
-#endif
-#ifdef RTU0_STM_1_ISR_USED
-ISR(RTU0_STM_1_ISR);
-#endif
-#ifdef RTU0_STM_2_ISR_USED
-ISR(RTU0_STM_2_ISR);
-#endif
-#ifdef RTU0_STM_3_ISR_USED
-ISR(RTU0_STM_3_ISR);
-#endif
-#ifdef RTU1_STM_0_ISR_USED
-ISR(RTU1_STM_0_ISR);
-#endif
-#ifdef RTU1_STM_1_ISR_USED
-ISR(RTU1_STM_1_ISR);
-#endif
-#ifdef RTU1_STM_2_ISR_USED
-ISR(RTU1_STM_2_ISR);
-#endif
-#ifdef RTU1_STM_3_ISR_USED
-ISR(RTU1_STM_3_ISR);
-#endif
-
-#endif /* STM_IP_MODULE_SINGLE_INTERRUPT == STD_ON */
-#if ((defined STM_0_ISR_USED) || (defined STM_1_ISR_USED) || (defined STM_2_ISR_USED)  || (defined STM_3_ISR_USED)  || \
-     (defined STM_4_ISR_USED) || (defined STM_5_ISR_USED) || (defined STM_6_ISR_USED)  || (defined STM_7_ISR_USED)  || \
-     (defined STM_8_ISR_USED) || (defined STM_9_ISR_USED) || (defined STM_10_ISR_USED) || (defined STM_11_ISR_USED) || \
-     (defined STM_12_ISR_USED)|| (defined SMU_STM_0_ISR_USED) || (defined SMU_STM_2_ISR_USED) || \
-     (defined CE_STM_0_ISR_USED) || (defined CE_STM_1_ISR_USED) || (defined CE_STM_2_ISR_USED) || \
-     (defined RTU0_STM_0_ISR_USED) || (defined RTU0_STM_1_ISR_USED) || (defined RTU0_STM_2_ISR_USED) || (defined RTU0_STM_3_ISR_USED) || \
-     (defined RTU1_STM_0_ISR_USED) || (defined RTU1_STM_1_ISR_USED) || (defined RTU1_STM_2_ISR_USED) || (defined RTU1_STM_3_ISR_USED))
-static inline void Stm_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel);
-static inline uint32 Stm_Ip_GetInterruptBit(uint8 instance, uint8 channel);
-#endif
-
+/*=============================================================================== )===================
+*                                   GLOBAL FUNCTION PROTOTYPES
+==================================================================================================*/
 #if (STD_ON == STM_IP_ENABLE_USER_MODE_SUPPORT)
     void Stm_Ip_SetUserAccessAllowed(uint32 StmBaseAddr);
 #endif
 
-
 #if (defined(MCAL_STM_REG_PROT_AVAILABLE) && (STD_ON == STM_IP_ENABLE_USER_MODE_SUPPORT))
-
-    #define Call_Stm_Ip_SetUserAccessAllowed(StmBaseAddr) OsIf_Trusted_Call1param(Stm_Ip_SetUserAccessAllowed,(StmBaseAddr))
-
+    #define Call_Stm_Ip_SetUserAccessAllowed(BaseAddr) OsIf_Trusted_Call1param(Stm_Ip_SetUserAccessAllowed,(BaseAddr))
 #else
-
-    #define Call_Stm_Ip_SetUserAccessAllowed(StmBaseAddr)
+    #define Call_Stm_Ip_SetUserAccessAllowed(BaseAddr)
 #endif
 
+#if ((STD_ON == STM_GPT_IP_MODULE_SINGLE_INTERRUPT) || (STD_ON == STM_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS))
 
-#if (defined(MCAL_STM_REG_PROT_AVAILABLE) && (STD_ON == STM_IP_ENABLE_USER_MODE_SUPPORT))
-/**
-* @brief        Enables STM registers writing in User Mode by configuring REG_PROT
-* @details      Sets the UAA (User Access Allowed) bit of the STM IP allowing STM registers writing in User Mode
-*
-* @param[in]    none
-*
-* @return       none
-*
-* @pre          Should be executed in supervisor mode
-* @post         none
-*/
-void Stm_Ip_SetUserAccessAllowed (uint32 StmBaseAddr)
-{
-    SET_USER_ACCESS_ALLOWED(StmBaseAddr, STM_PROT_MEM_U32);
-}
-#endif /* STM_IP_ENABLE_USER_MODE_SUPPORT */
+#if defined(RTU0_STM_0_ISR_USED)
+ISR(RTU0_STM_0_ISR);
+#endif
+#if defined(RTU0_STM_1_ISR_USED)
+ISR(RTU0_STM_1_ISR);
+#endif
+#if defined(RTU0_STM_2_ISR_USED)
+ISR(RTU0_STM_2_ISR);
+#endif
+#if defined(RTU0_STM_3_ISR_USED)
+ISR(RTU0_STM_3_ISR);
+#endif
+#if defined(RTU1_STM_0_ISR_USED)
+ISR(RTU1_STM_0_ISR);
+#endif
+#if defined(RTU1_STM_1_ISR_USED)
+ISR(RTU1_STM_1_ISR);
+#endif
+#if defined(RTU1_STM_2_ISR_USED)
+ISR(RTU1_STM_2_ISR);
+#endif
+#if defined(RTU1_STM_3_ISR_USED)
+ISR(RTU1_STM_3_ISR);
+#endif
+#if defined(RTU2_STM_0_ISR_USED)
+ISR(RTU2_STM_0_ISR);
+#endif
+#if defined(RTU2_STM_1_ISR_USED)
+ISR(RTU2_STM_1_ISR);
+#endif
+#if defined(RTU2_STM_2_ISR_USED)
+ISR(RTU2_STM_2_ISR);
+#endif
+#if defined(RTU2_STM_3_ISR_USED)
+ISR(RTU2_STM_3_ISR);
+#endif
+#if defined(RTU3_STM_0_ISR_USED)
+ISR(RTU3_STM_0_ISR);
+#endif
+#if defined(RTU3_STM_1_ISR_USED)
+ISR(RTU3_STM_1_ISR);
+#endif
+#if defined(RTU3_STM_2_ISR_USED)
+ISR(RTU3_STM_2_ISR);
+#endif
+#if defined(RTU3_STM_3_ISR_USED)
+ISR(RTU3_STM_3_ISR);
+#endif
+
+#if (STD_ON == STM_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS)
+
+#if defined(CRS_STM_0_ISR_USED)
+ISR(CRS_STM_0_ISR);
+#endif
+#if defined(RTU0_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_0_ISR);
+#endif
+#if defined(RTU0_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_1_ISR);
+#endif
+#if defined(RTU0_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_2_ISR);
+#endif
+#if defined(RTU0_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_3_ISR);
+#endif
+#if defined(RTU0_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_0_ISR);
+#endif
+#if defined(RTU0_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_1_ISR);
+#endif
+#if defined(RTU0_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_2_ISR);
+#endif
+#if defined(RTU0_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_3_ISR);
+#endif
+#if defined(RTU0_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_0_ISR);
+#endif
+#if defined(RTU0_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_1_ISR);
+#endif
+#if defined(RTU0_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_2_ISR);
+#endif
+#if defined(RTU0_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_3_ISR);
+#endif
+#if defined(RTU0_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_0_ISR);
+#endif
+#if defined(RTU0_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_1_ISR);
+#endif
+#if defined(RTU0_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_2_ISR);
+#endif
+#if defined(RTU0_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_3_ISR);
+#endif
+
+#if defined(RTU1_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_0_ISR);
+#endif
+#if defined(RTU1_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_1_ISR);
+#endif
+#if defined(RTU1_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_2_ISR);
+#endif
+#if defined(RTU1_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_3_ISR);
+#endif
+#if defined(RTU1_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_0_ISR);
+#endif
+#if defined(RTU1_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_1_ISR);
+#endif
+#if defined(RTU1_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_2_ISR);
+#endif
+#if defined(RTU1_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_3_ISR);
+#endif
+#if defined(RTU1_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_0_ISR);
+#endif
+#if defined(RTU1_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_1_ISR);
+#endif
+#if defined(RTU1_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_2_ISR);
+#endif
+#if defined(RTU1_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_3_ISR);
+#endif
+
+#if defined(RTU1_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_0_ISR);
+#endif
+#if defined(RTU1_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_1_ISR);
+#endif
+#if defined(RTU1_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_2_ISR);
+#endif
+#if defined(RTU1_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_3_ISR);
+#endif
+
+#if defined(RTU2_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_0_ISR);
+#endif
+#if defined(RTU2_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_1_ISR);
+#endif
+#if defined(RTU2_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_2_ISR);
+#endif
+#if defined(RTU2_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_3_ISR);
+#endif
+
+#if defined(RTU2_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_0_ISR);
+#endif
+#if defined(RTU2_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_1_ISR);
+#endif
+#if defined(RTU2_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_2_ISR);
+#endif
+#if defined(RTU2_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_3_ISR);
+#endif
+
+#if defined(RTU2_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_0_ISR);
+#endif
+#if defined(RTU2_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_1_ISR);
+#endif
+#if defined(RTU2_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_2_ISR);
+#endif
+#if defined(RTU2_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_3_ISR);
+#endif
+
+#if defined(RTU2_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_0_ISR);
+#endif
+#if defined(RTU2_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_1_ISR);
+#endif
+#if defined(RTU2_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_2_ISR);
+#endif
+#if defined(RTU2_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_3_ISR);
+#endif
+#if defined(RTU3_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_0_ISR);
+#endif
+#if defined(RTU3_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_1_ISR);
+#endif
+#if defined(RTU3_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_2_ISR);
+#endif
+#if defined(RTU3_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_3_ISR);
+#endif
+
+#if defined(RTU3_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_0_ISR);
+#endif
+#if defined(RTU3_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_1_ISR);
+#endif
+#if defined(RTU3_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_2_ISR);
+#endif
+#if defined(RTU3_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_3_ISR);
+#endif
+
+#if defined(RTU3_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_0_ISR);
+#endif
+#if defined(RTU3_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_1_ISR);
+#endif
+#if defined(RTU3_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_2_ISR);
+#endif
+#if defined(RTU3_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_3_ISR);
+#endif
+
+#if defined(RTU3_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_0_ISR);
+#endif
+#if defined(RTU3_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_1_ISR);
+#endif
+#if defined(RTU3_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_2_ISR);
+#endif
+#if defined(RTU3_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_3_ISR);
+#endif
+
+#endif  /* STD_ON == STM_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS */
+
+#if (STD_ON == STM_GPT_IP_MODULE_SINGLE_INTERRUPT)
+#if defined(STM_0_ISR_USED)
+ISR(STM_0_ISR);
+#endif
+#if defined(STM_1_ISR_USED)
+ISR(STM_1_ISR);
+#endif
+#if defined(STM_2_ISR_USED)
+ISR(STM_2_ISR);
+#endif
+#if defined(STM_3_ISR_USED)
+ISR(STM_3_ISR);
+#endif
+#if defined(STM_4_ISR_USED)
+ISR(STM_4_ISR);
+#endif
+#if defined(STM_5_ISR_USED)
+ISR(STM_5_ISR);
+#endif
+#if defined(STM_6_ISR_USED)
+ISR(STM_6_ISR);
+#endif
+#if defined(STM_7_ISR_USED)
+ISR(STM_7_ISR);
+#endif
+#if defined(STM_8_ISR_USED)
+ISR(STM_8_ISR);
+#endif
+#if defined(STM_9_ISR_USED)
+ISR(STM_9_ISR);
+#endif
+#if defined(STM_10_ISR_USED)
+ISR(STM_10_ISR);
+#endif
+#if defined(STM_11_ISR_USED)
+ISR(STM_11_ISR);
+#endif
+#if defined(STM_12_ISR_USED)
+ISR(STM_12_ISR);
+#endif
+#if defined(CE_STM_0_ISR_USED)
+ISR(CE_STM_0_ISR);
+#endif
+#if defined(CE_STM_1_ISR_USED)
+ISR(CE_STM_1_ISR);
+#endif
+#if defined(CE_STM_2_ISR_USED)
+ISR(CE_STM_2_ISR);
+#endif
+#if defined(SMU_STM_0_ISR_USED)
+ISR(SMU_STM_0_ISR);
+#endif
+#if defined(SMU_STM_2_ISR_USED)
+ISR(SMU_STM_2_ISR);
+#endif
+
+#endif /* STD_ON == STM_GPT_IP_MODULE_SINGLE_INTERRUPT */
+
+#endif /* (STD_ON == STM_GPT_IP_MODULE_SINGLE_INTERRUPT) || (STD_ON == STM_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS) */
 
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
-/*================================================================================================*/
-/**
-* @brief
-* Function Name : Stm_Ip_GetInterruptFlag
-* Description   : Gets interrupt request flag:
-*
-* @param[in]     instance     STM hw instance number
-* @param[in]     channel      STM hw channel number
-*
-* @return        flag         flag bit value 0/1
-*
-*/
-uint32 Stm_Ip_GetInterruptFlag(uint8 instance, uint8 channel)
-{
-    uint32 flag = 0U;
-    flag = stmBase[instance]->CHANNEL[channel].CIR;
-    return flag;
-}
 
 static inline void Stm_Ip_SetDebugMode(uint8 instance, boolean stopRun)
 {
@@ -362,7 +627,19 @@ static inline void Stm_Ip_SetPrescaler(uint8 instance, uint8 prescalerValue)
 
 }
 
-static inline void Stm_Ip_ChannelEnable(uint8 instance, uint8 channel, boolean enable)
+/**
+ * @brief
+ * Function Name : Stm_Ip_SetInterruptEnableFlag
+ * Description   : Set the Channel Interrupt Enable Flag (CEN): channel interrupt enable registers (CCR0 - CCR3)
+ *
+ * @param[in]   instance    STM hw instance number
+ * @param[in]   channel     STM hw channel number
+ * @param[in]   enable      enable/disable the STM Interrupt
+ *
+ * @return  void
+ * @pre     The driver needs to be initialized.
+ */
+static inline void Stm_Ip_SetInterruptEnableFlag(uint8 instance, uint8 channel, boolean enable)
 {
     SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_31();
     /* Enable ChannelEnable */
@@ -377,25 +654,64 @@ static inline void Stm_Ip_ChannelEnable(uint8 instance, uint8 channel, boolean e
     SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_31();
 }
 
-static inline void Stm_Ip_ClearInterruptFlag(uint8 instance, uint8 channel)
+/**
+ * @brief
+ * Function Name : Stm_Ip_ClearInterruptStatusFlag
+ * Description   : Clear the Channel Interrupt Status Flag (CIF): channel interrupt registers (CIR0 - CIR3)
+ *
+ * @param[in]   instance    STM hw instance number
+ * @param[in]   channel     STM hw channel number
+ *
+ * @return  void
+ * @pre     The driver needs to be initialized.
+ */
+static inline void Stm_Ip_ClearInterruptStatusFlag(uint8 instance, uint8 channel)
 {
-    /* Clear InterruptFlag */
+    /* Clear Channel Interrupt Status Flag */
     stmBase[instance]->CHANNEL[channel].CIR = STM_CIR_CIF_MASK;
 }
 
-#if ((defined STM_0_ISR_USED) || (defined STM_1_ISR_USED) || (defined STM_2_ISR_USED)  || (defined STM_3_ISR_USED)  || \
-     (defined STM_4_ISR_USED) || (defined STM_5_ISR_USED) || (defined STM_6_ISR_USED)  || (defined STM_7_ISR_USED)  || \
-     (defined STM_8_ISR_USED) || (defined STM_9_ISR_USED) || (defined STM_10_ISR_USED) || (defined STM_11_ISR_USED) || \
-     (defined STM_12_ISR_USED)|| (defined SMU_STM_0_ISR_USED) || (defined SMU_STM_2_ISR_USED) || \
-     (defined CE_STM_0_ISR_USED) || (defined CE_STM_1_ISR_USED) || (defined CE_STM_2_ISR_USED) || \
-     (defined RTU0_STM_0_ISR_USED) || (defined RTU0_STM_1_ISR_USED) || (defined RTU0_STM_2_ISR_USED) || (defined RTU0_STM_3_ISR_USED) || \
-     (defined RTU1_STM_0_ISR_USED) || (defined RTU1_STM_1_ISR_USED) || (defined RTU1_STM_2_ISR_USED) || (defined RTU1_STM_3_ISR_USED))
-static inline uint32 Stm_Ip_GetInterruptBit(uint8 instance, uint8 channel)
+#if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
+        defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
+        defined(STM_8_ISR_USED) || defined(STM_9_ISR_USED) || defined(STM_10_ISR_USED) || defined(STM_11_ISR_USED) || \
+        defined(STM_12_ISR_USED)|| defined(SMU_STM_0_ISR_USED) || defined(SMU_STM_2_ISR_USED) || \
+        defined(CE_STM_0_ISR_USED) || defined(CE_STM_1_ISR_USED) || defined(CE_STM_2_ISR_USED) || \
+        defined(RTU0_STM_0_ISR_USED) || defined(RTU0_STM_1_ISR_USED) || defined(RTU0_STM_2_ISR_USED) || defined(RTU0_STM_3_ISR_USED) || \
+        defined(RTU1_STM_0_ISR_USED) || defined(RTU1_STM_1_ISR_USED) || defined(RTU1_STM_2_ISR_USED) || defined(RTU1_STM_3_ISR_USED) || \
+        defined(RTU2_STM_0_ISR_USED) || defined(RTU2_STM_1_ISR_USED) || defined(RTU2_STM_2_ISR_USED) || defined(RTU2_STM_3_ISR_USED) || \
+        defined(RTU3_STM_0_ISR_USED) || defined(RTU3_STM_1_ISR_USED) || defined(RTU3_STM_2_ISR_USED) || defined(RTU3_STM_3_ISR_USED) || \
+        defined(CRS_STM_0_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
+
+/**
+ * @brief
+ * Function Name : Stm_Ip_GetInterruptEnableFlag
+ * Description   : Get the state of Channel Interrupt Enable Flag (CEN): channel interrupt enable registers (CCR0 - CCR3)
+ *
+ * @param[in]   instance    STM hw instance number
+ * @param[in]   channel     STM hw channel number
+ *
+ * @return  TRUE if a Channel Interrupt is enabled, FALSE otherwise
+ * @pre     The driver needs to be initialized.
+ */
+static inline boolean Stm_Ip_GetInterruptEnableFlag(uint8 instance, uint8 channel)
 {
-    uint32 flag = 0U;
-    /* Get InterruptBit CCR*/
-    flag = stmBase[instance]->CHANNEL[channel].CCR;
-    return flag;
+    return (0U != (stmBase[instance]->CHANNEL[channel].CCR & STM_CCR_CEN_MASK)) ? TRUE : FALSE;
 }
 #endif
 
@@ -427,13 +743,32 @@ static inline uint32 Stm_Ip_GetCntValue(uint8 instance)
     return currentCntValue;
 }
 
-#if ((defined STM_0_ISR_USED) || (defined STM_1_ISR_USED) || (defined STM_2_ISR_USED)  || (defined STM_3_ISR_USED)  || \
-     (defined STM_4_ISR_USED) || (defined STM_5_ISR_USED) || (defined STM_6_ISR_USED)  || (defined STM_7_ISR_USED)  || \
-     (defined STM_8_ISR_USED) || (defined STM_9_ISR_USED) || (defined STM_10_ISR_USED) || (defined STM_11_ISR_USED) || \
-     (defined STM_12_ISR_USED)|| (defined SMU_STM_0_ISR_USED) || (defined SMU_STM_2_ISR_USED) || \
-     (defined CE_STM_0_ISR_USED) || (defined CE_STM_1_ISR_USED) || (defined CE_STM_2_ISR_USED) || \
-     (defined RTU0_STM_0_ISR_USED) || (defined RTU0_STM_1_ISR_USED) || (defined RTU0_STM_2_ISR_USED) || (defined RTU0_STM_3_ISR_USED) || \
-     (defined RTU1_STM_0_ISR_USED) || (defined RTU1_STM_1_ISR_USED) || (defined RTU1_STM_2_ISR_USED) || (defined RTU1_STM_3_ISR_USED))
+#if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
+        defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
+        defined(STM_8_ISR_USED) || defined(STM_9_ISR_USED) || defined(STM_10_ISR_USED) || defined(STM_11_ISR_USED) || \
+        defined(STM_12_ISR_USED)|| defined(SMU_STM_0_ISR_USED) || defined(SMU_STM_2_ISR_USED) || \
+        defined(CE_STM_0_ISR_USED) || defined(CE_STM_1_ISR_USED) || defined(CE_STM_2_ISR_USED) || \
+        defined(RTU0_STM_0_ISR_USED) || defined(RTU0_STM_1_ISR_USED) || defined(RTU0_STM_2_ISR_USED) || defined(RTU0_STM_3_ISR_USED) || \
+        defined(RTU1_STM_0_ISR_USED) || defined(RTU1_STM_1_ISR_USED) || defined(RTU1_STM_2_ISR_USED) || defined(RTU1_STM_3_ISR_USED) || \
+        defined(RTU2_STM_0_ISR_USED) || defined(RTU2_STM_1_ISR_USED) || defined(RTU2_STM_2_ISR_USED) || defined(RTU2_STM_3_ISR_USED) || \
+        defined(RTU3_STM_0_ISR_USED) || defined(RTU3_STM_1_ISR_USED) || defined(RTU3_STM_2_ISR_USED) || defined(RTU3_STM_3_ISR_USED) || \
+        defined(CRS_STM_0_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
 /**
 * @brief   Driver routine to process all the interrupts of STM.
 * @details Support function used by interrupt service routines to implement STM specific operations
@@ -444,38 +779,75 @@ static inline uint32 Stm_Ip_GetCntValue(uint8 instance)
 *
 * @implements       Stm_Ip_ProcessCommonInterrupt_Activity
 */
-static inline void Stm_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel)
+static void Stm_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel)
 {
-    uint32 oldCmpValue = 0U;
-    uint32 targetValue = 0U;
+    uint32 oldCmpValue;
+    uint32 targetValue;
 
-#if(STM_IP_CHANGE_NEXT_TIMEOUT_VALUE == STD_ON)
-    if(0x0U != Stm_Ip_u32NextTargetValue[instance][channel])
+    boolean IsChEvEnabled;
+    boolean HasChEvOccurred;
+
+    boolean                 chInit;
+    Stm_Ip_CallbackType     callback;
+    uint8                   callbackParam;
+    Stm_Ip_ChannelModeType  channelMode;
+
+    if ((instance < GPT_STM_INSTANCE_COUNT) && (channel < STM_CHANNEL_COUNT))
     {
-        Stm_Ip_u32TargetValue[instance][channel] = Stm_Ip_u32NextTargetValue[instance][channel];
-        Stm_Ip_u32NextTargetValue[instance][channel] = 0x0U;
-    }
+        /* enter critical section */
+        SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_11();
+        {
+            /* check if channel event is enabled */
+            IsChEvEnabled = Stm_Ip_GetInterruptEnableFlag(instance, channel);
+
+            /* check if channel event has occurred */
+            HasChEvOccurred = Stm_Ip_GetInterruptStatusFlag(instance, channel);
+
+            if (IsChEvEnabled && HasChEvOccurred)
+            {
+                /* Clear pending interrupts */
+                Stm_Ip_ClearInterruptStatusFlag(instance, channel);
+            }
+        }
+        /* exit critical section */
+        SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_11();
+
+        /* Check for spurious interrupts */
+        if (IsChEvEnabled && HasChEvOccurred)
+        {
+            chInit          = Stm_Ip_u32ChState[instance][channel].chInit;
+            callback        = Stm_Ip_u32ChState[instance][channel].callback;
+            channelMode     = Stm_Ip_u32ChState[instance][channel].channelMode;
+            callbackParam   = Stm_Ip_u32ChState[instance][channel].callbackParam;
+            
+#if (STM_IP_CHANGE_NEXT_TIMEOUT_VALUE == STD_ON)
+            if(0x0U != Stm_Ip_u32NextTargetValue[instance][channel])
+            {
+                Stm_Ip_u32TargetValue[instance][channel] = Stm_Ip_u32NextTargetValue[instance][channel];
+                Stm_Ip_u32NextTargetValue[instance][channel] = 0x0U;
+            }
 #endif
-    /* Check if channel mode is ONE-SHOT */
-    if((STM_IP_CH_MODE_ONESHOT == Stm_Ip_u32ChState[instance][channel].channelMode))
-    {
-        Stm_Ip_DisableChannel(instance, channel);
-    }
-    else
-    {
-        /*Get current CMP value*/
-        oldCmpValue = Stm_Ip_GetCmpValue(instance, channel);
-        /*Get current target value*/
-        targetValue = Stm_Ip_u32TargetValue[instance][channel];
-        /*Set new CMP value*/
-        Stm_Ip_SetCmpValue(instance, channel, (oldCmpValue + targetValue));
-    }
+            /* Check if channel mode is ONE-SHOT */
+            if(STM_IP_CH_MODE_ONESHOT == channelMode)
+            {
+                Stm_Ip_DisableChannel(instance, channel);
+            }
+            else
+            {
+                /*Get current CMP value*/
+                oldCmpValue = Stm_Ip_GetCmpValue(instance, channel);
+                /*Get current target value*/
+                targetValue = Stm_Ip_u32TargetValue[instance][channel];
+                /*Set new CMP value*/
+                Stm_Ip_SetCmpValue(instance, channel, (oldCmpValue + targetValue));
+            }
 
-    /* Call upper layer handler */
-    if((TRUE == Stm_Ip_u32ChState[instance][channel].chInit) && \
-            (NULL_PTR != Stm_Ip_u32ChState[instance][channel].callback))
-    {
-        Stm_Ip_u32ChState[instance][channel].callback(Stm_Ip_u32ChState[instance][channel].callbackParam);
+            /* Call GPT upper layer handler */
+            if ((TRUE == chInit) && (NULL_PTR != callback))
+            {
+                callback(callbackParam);
+            }
+        }
     }
 }
 #endif
@@ -483,7 +855,24 @@ static inline void Stm_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel)
 /*==================================================================================================
 *                                       GLOBAL FUNCTIONS
 ==================================================================================================*/
-/*================================================================================================*/
+#if (defined(MCAL_STM_REG_PROT_AVAILABLE) && (STD_ON == STM_IP_ENABLE_USER_MODE_SUPPORT))
+/**
+ * @brief        Enables STM registers writing in User Mode by configuring REG_PROT
+ * @details      Sets the UAA (User Access Allowed) bit of the STM IP allowing STM registers writing in User Mode
+ *
+ * @param[in]    StmBaseAddr
+ *
+ * @return       none
+ *
+ * @pre          Should be executed in supervisor mode
+ */
+void Stm_Ip_SetUserAccessAllowed(uint32 StmBaseAddr)
+{
+    SET_USER_ACCESS_ALLOWED(StmBaseAddr, STM_PROT_MEM_U32);
+}
+#endif
+
+
 /**
 * @brief         Function Name : Stm_Ip_Init
 * @details       Initializes the STM instance. This functions is called for each STM hw Instance and:
@@ -501,10 +890,11 @@ static inline void Stm_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel)
 void Stm_Ip_Init(uint8 instance, const Stm_Ip_InstanceConfigType *configPtr)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
     DevAssert(NULL_PTR != configPtr);
 #endif
-   /* Enable register access from user mode, if enabled from configuration file */
+
+    /* Enable register access from user mode, if enabled from configuration file */
     Call_Stm_Ip_SetUserAccessAllowed((uint32)stmBase[instance]);
     Stm_Ip_SetCntValue(instance, 0U);
     Stm_Ip_SetDebugMode(instance, configPtr->stopInDebugMode);
@@ -535,23 +925,42 @@ void Stm_Ip_InitChannel(uint8 instance, const Stm_Ip_ChannelConfigType *configPt
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
     DevAssert(NULL_PTR != configPtr);
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
     DevAssert(STM_CHANNEL_COUNT > configPtr->hwChannel);
 #endif
 
-    /*Disable hw channel */
-    Stm_Ip_ChannelEnable(instance, configPtr->hwChannel, FALSE);
-    /* Clear Interrupt Flag */
-    Stm_Ip_ClearInterruptFlag(instance, configPtr->hwChannel);
+    /* Disable Channel Interrupt */
+    Stm_Ip_SetInterruptEnableFlag(instance, configPtr->hwChannel, FALSE);
+    /* Clear Channel Interrupt Status Flag */
+    Stm_Ip_ClearInterruptStatusFlag(instance, configPtr->hwChannel);
     /*Set compare value to 0*/
     Stm_Ip_SetCmpValue(instance, configPtr->hwChannel, 0U);
-#if ((defined STM_0_ISR_USED) || (defined STM_1_ISR_USED) || (defined STM_2_ISR_USED)  || (defined STM_3_ISR_USED)  || \
-     (defined STM_4_ISR_USED) || (defined STM_5_ISR_USED) || (defined STM_6_ISR_USED)  || (defined STM_7_ISR_USED)  || \
-     (defined STM_8_ISR_USED) || (defined STM_9_ISR_USED) || (defined STM_10_ISR_USED) || (defined STM_11_ISR_USED) || \
-     (defined STM_12_ISR_USED)|| (defined SMU_STM_0_ISR_USED) || (defined SMU_STM_2_ISR_USED) || \
-     (defined CE_STM_0_ISR_USED) || (defined CE_STM_1_ISR_USED) || (defined CE_STM_2_ISR_USED) || \
-     (defined RTU0_STM_0_ISR_USED) || (defined RTU0_STM_1_ISR_USED) || (defined RTU0_STM_2_ISR_USED) || (defined RTU0_STM_3_ISR_USED) || \
-     (defined RTU1_STM_0_ISR_USED) || (defined RTU1_STM_1_ISR_USED) || (defined RTU1_STM_2_ISR_USED) || (defined RTU1_STM_3_ISR_USED))
+#if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
+        defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
+        defined(STM_8_ISR_USED) || defined(STM_9_ISR_USED) || defined(STM_10_ISR_USED) || defined(STM_11_ISR_USED) || \
+        defined(STM_12_ISR_USED)|| defined(SMU_STM_0_ISR_USED) || defined(SMU_STM_2_ISR_USED) || \
+        defined(CE_STM_0_ISR_USED) || defined(CE_STM_1_ISR_USED) || defined(CE_STM_2_ISR_USED) || \
+        defined(RTU0_STM_0_ISR_USED) || defined(RTU0_STM_1_ISR_USED) || defined(RTU0_STM_2_ISR_USED) || defined(RTU0_STM_3_ISR_USED) || \
+        defined(RTU1_STM_0_ISR_USED) || defined(RTU1_STM_1_ISR_USED) || defined(RTU1_STM_2_ISR_USED) || defined(RTU1_STM_3_ISR_USED) || \
+        defined(RTU2_STM_0_ISR_USED) || defined(RTU2_STM_1_ISR_USED) || defined(RTU2_STM_2_ISR_USED) || defined(RTU2_STM_3_ISR_USED) || \
+        defined(RTU3_STM_0_ISR_USED) || defined(RTU3_STM_1_ISR_USED) || defined(RTU3_STM_2_ISR_USED) || defined(RTU3_STM_3_ISR_USED) || \
+        defined(CRS_STM_0_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
     Stm_Ip_u32ChState[instance][configPtr->hwChannel].chInit = TRUE;
     Stm_Ip_u32ChState[instance][configPtr->hwChannel].callback = configPtr->callback;
     Stm_Ip_u32ChState[instance][configPtr->hwChannel].callbackParam = configPtr->callbackParam;
@@ -575,7 +984,7 @@ void Stm_Ip_InitChannel(uint8 instance, const Stm_Ip_ChannelConfigType *configPt
 void Stm_Ip_Deinit(uint8 instance)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
 #endif
 
     uint8 channelIndex;
@@ -583,10 +992,10 @@ void Stm_Ip_Deinit(uint8 instance)
     /* Reset all channels to default */
     for (channelIndex = 0; channelIndex < STM_CHANNEL_COUNT; channelIndex++)
     {
-        /* Disable channels */
-        Stm_Ip_ChannelEnable(instance, channelIndex, FALSE);
-        /* Clear interrupt flags */
-        Stm_Ip_ClearInterruptFlag(instance, channelIndex);
+        /* Disable Channel Interrupt */
+        Stm_Ip_SetInterruptEnableFlag(instance, channelIndex, FALSE);
+        /* Clear Channel Interrupt Status Flag */
+        Stm_Ip_ClearInterruptStatusFlag(instance, channelIndex);
         /* Sets compare value to 0 */
         Stm_Ip_SetCmpValue(instance, channelIndex, 0x0U);
     }
@@ -616,18 +1025,25 @@ void Stm_Ip_Deinit(uint8 instance)
 void Stm_Ip_StartCounting(uint8 instance, uint8 channel, uint32 compareValue)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
     DevAssert(STM_CHANNEL_COUNT > channel);
 #endif
 
     uint32 currentCntValue;
 
-    currentCntValue = 0U;
+    /* enter critical section */
+    SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_39();
+    {
+        currentCntValue = Stm_Ip_GetCntValue(instance);
+        Stm_Ip_SetCmpValue(instance, channel, (currentCntValue + compareValue));
+    }
+    /* exit critical section */
+    SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_39();
+
     Stm_Ip_u32TargetValue[instance][channel] = compareValue;
-    currentCntValue = Stm_Ip_GetCntValue(instance);
-    Stm_Ip_SetCmpValue(instance, channel, (currentCntValue + compareValue));
-    /*Enable hw Channel*/
-    Stm_Ip_ChannelEnable(instance, channel, TRUE);
+
+    /* Enable Channel Interrupt */
+    Stm_Ip_SetInterruptEnableFlag(instance, channel, TRUE);
 }
 /*================================================================================================*/
 #if STM_IP_ABSOLUTE_COUNTING_API  == STD_ON
@@ -647,14 +1063,14 @@ void Stm_Ip_StartCounting(uint8 instance, uint8 channel, uint32 compareValue)
 void Stm_Ip_StartCountingAbsolute(uint8 instance, uint8 channel, uint32 compareValue)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
     DevAssert(STM_CHANNEL_COUNT > channel);
 #endif
 
     Stm_Ip_u32TargetValue[instance][channel] = 0U;
     Stm_Ip_SetCmpValue(instance, channel, compareValue);
-    /*Enable hw Channel*/
-    Stm_Ip_ChannelEnable(instance, channel, TRUE);
+    /* Enable Channel Interrupt */
+    Stm_Ip_SetInterruptEnableFlag(instance, channel, TRUE);
 }
 #endif
 /*================================================================================================*/
@@ -673,7 +1089,7 @@ void Stm_Ip_StartCountingAbsolute(uint8 instance, uint8 channel, uint32 compareV
 void Stm_Ip_StartTimer(uint8 instance, uint32 startValue)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
 #endif
 
     Stm_Ip_SetCntValue(instance, startValue);
@@ -694,7 +1110,7 @@ void Stm_Ip_StartTimer(uint8 instance, uint32 startValue)
 void Stm_Ip_StopTimer(uint8 instance)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
 #endif
 
     Stm_Ip_TimerEnable(instance, FALSE);
@@ -714,12 +1130,12 @@ void Stm_Ip_StopTimer(uint8 instance)
 void Stm_Ip_EnableChannel(uint8 instance, uint8 channel)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
     DevAssert(STM_CHANNEL_COUNT > channel);
 #endif
 
-    Stm_Ip_ClearInterruptFlag(instance, channel);
-    Stm_Ip_ChannelEnable(instance, channel, TRUE);
+    Stm_Ip_ClearInterruptStatusFlag(instance, channel);
+    Stm_Ip_SetInterruptEnableFlag(instance, channel, TRUE);
 }
 
 /*================================================================================================*/
@@ -736,12 +1152,12 @@ void Stm_Ip_EnableChannel(uint8 instance, uint8 channel)
 void Stm_Ip_DisableChannel(uint8 instance, uint8 channel)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
     DevAssert(STM_CHANNEL_COUNT > channel);
 #endif
 
-    Stm_Ip_ChannelEnable(instance, channel, FALSE);
-    Stm_Ip_ClearInterruptFlag(instance, channel);
+    Stm_Ip_SetInterruptEnableFlag(instance, channel, FALSE);
+    Stm_Ip_ClearInterruptStatusFlag(instance, channel);
 }
 
 /*================================================================================================*/
@@ -758,12 +1174,10 @@ void Stm_Ip_DisableChannel(uint8 instance, uint8 channel)
 uint32 Stm_Ip_GetCounterValue(uint8 instance)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
 #endif
 
-    uint32 currentCounterValue;
-
-    currentCounterValue = 0;
+    uint32 currentCounterValue = 0;
 
     currentCounterValue = Stm_Ip_GetCntValue(instance);
 
@@ -785,13 +1199,11 @@ uint32 Stm_Ip_GetCounterValue(uint8 instance)
 uint32 Stm_Ip_GetCompareValue(uint8 instance,  uint8 channel)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
     DevAssert(STM_CHANNEL_COUNT > channel);
 #endif
 
-    uint32 currentCompareValue;
-
-    currentCompareValue = 0;
+    uint32 currentCompareValue = 0;
 
     currentCompareValue = Stm_Ip_GetCmpValue(instance, channel);
 
@@ -815,13 +1227,39 @@ uint32 Stm_Ip_GetCompareValue(uint8 instance,  uint8 channel)
 void Stm_Ip_ChangeNextTimeoutValue(uint8 instance, uint8 channel, uint32 value)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
     DevAssert(STM_CHANNEL_COUNT > channel);
 #endif
+#if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
+        defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
+        defined(STM_8_ISR_USED) || defined(STM_9_ISR_USED) || defined(STM_10_ISR_USED) || defined(STM_11_ISR_USED) || \
+        defined(STM_12_ISR_USED)|| defined(SMU_STM_0_ISR_USED) || defined(SMU_STM_2_ISR_USED) || \
+        defined(CE_STM_0_ISR_USED) || defined(CE_STM_1_ISR_USED) || defined(CE_STM_2_ISR_USED) || \
+        defined(RTU0_STM_0_ISR_USED) || defined(RTU0_STM_1_ISR_USED) || defined(RTU0_STM_2_ISR_USED) || defined(RTU0_STM_3_ISR_USED) || \
+        defined(RTU1_STM_0_ISR_USED) || defined(RTU1_STM_1_ISR_USED) || defined(RTU1_STM_2_ISR_USED) || defined(RTU1_STM_3_ISR_USED) || \
+        defined(RTU2_STM_0_ISR_USED) || defined(RTU2_STM_1_ISR_USED) || defined(RTU2_STM_2_ISR_USED) || defined(RTU2_STM_3_ISR_USED) || \
+        defined(RTU3_STM_0_ISR_USED) || defined(RTU3_STM_1_ISR_USED) || defined(RTU3_STM_2_ISR_USED) || defined(RTU3_STM_3_ISR_USED) || \
+        defined(CRS_STM_0_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
 
     /* Update the target time value to be used on next cycle */
     Stm_Ip_u32NextTargetValue[instance][channel] = value;
-
+#endif
 }
 #endif
 
@@ -841,7 +1279,7 @@ void Stm_Ip_ChangeNextTimeoutValue(uint8 instance, uint8 channel, uint32 value)
 void Stm_Ip_SetClockMode(uint8 instance, Stm_Ip_ClockModeType clockMode)
 {
 #if STM_IP_DEV_ERROR_DETECT == STD_ON
-    DevAssert(STM_INSTANCE_COUNT > instance);
+    DevAssert(GPT_STM_INSTANCE_COUNT > instance);
 #endif
 
     if(STM_IP_CLOCKMODE_NORMAL == clockMode)
@@ -870,7 +1308,6 @@ void Stm_Ip_SetClockMode(uint8 instance, Stm_Ip_ClockModeType clockMode)
 */
 void Stm_Ip_PredefCounting(uint8 instance, uint8 prescaler, boolean freezeEnable)
 {
-
     /* Enable register access from user mode, if enabled from configuration file */
     Call_Stm_Ip_SetUserAccessAllowed((uint32)stmBase[instance]);
     /* check if the timer is not enabled - TEN bit*/
@@ -893,9 +1330,791 @@ void Stm_Ip_PredefCounting(uint8 instance, uint8 prescaler, boolean freezeEnable
     }
 }
 
+#if ((STD_ON == STM_GPT_IP_MODULE_SINGLE_INTERRUPT) || (STD_ON == STM_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS))
+
+#if defined(RTU0_STM_0_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU0_STM_0 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU0_STM_0_ISR){
+    uint8 channel;
+#if defined(RTU0_STM_0_IP_EXISTS)
+    uint8 instance = RTU0_STM_0_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU0_STM_0_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU0_STM_1_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU0_STM_1 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU0_STM_1_ISR){
+    uint8 channel;
+#if defined(RTU0_STM_1_IP_EXISTS)
+    uint8 instance = RTU0_STM_1_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU0_STM_1_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU0_STM_2_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU0_STM_2 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU0_STM_2_ISR){
+    uint8 channel;
+#if defined(RTU0_STM_2_IP_EXISTS)
+    uint8 instance = RTU0_STM_2_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU0_STM_2_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU0_STM_3_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU0_STM_3 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU0_STM_3_ISR){
+    uint8 channel;
+#if defined(RTU0_STM_3_IP_EXISTS)
+    uint8 instance = RTU0_STM_3_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU0_STM_3_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU1_STM_0_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU1_STM_0 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU1_STM_0_ISR){
+    uint8 channel;
+#if defined(RTU1_STM_0_IP_EXISTS)
+    uint8 instance = RTU1_STM_0_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU1_STM_0_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU1_STM_1_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU1_STM_1 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU1_STM_1_ISR){
+    uint8 channel;
+#if defined(RTU1_STM_1_IP_EXISTS)
+    uint8 instance = RTU1_STM_1_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU1_STM_1_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU1_STM_2_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU1_STM_2 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU1_STM_2_ISR){
+    uint8 channel;
+#if defined(RTU1_STM_2_IP_EXISTS)
+    uint8 instance = RTU1_STM_2_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU1_STM_2_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU1_STM_3_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU1_STM_3 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU1_STM_3_ISR){
+    uint8 channel;
+#if defined(RTU1_STM_3_IP_EXISTS)
+    uint8 instance = RTU1_STM_3_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU1_STM_3_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU2_STM_0_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU2_STM_0 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU2_STM_0_ISR){
+    uint8 channel;
+#if defined(RTU2_STM_0_IP_EXISTS)
+    uint8 instance = RTU2_STM_0_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU2_STM_0_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU2_STM_1_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU2_STM_1 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU2_STM_1_ISR){
+    uint8 channel;
+#if defined(RTU2_STM_1_IP_EXISTS)
+    uint8 instance = RTU2_STM_1_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU2_STM_1_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU2_STM_2_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU2_STM_2 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU2_STM_2_ISR){
+    uint8 channel;
+#if defined(RTU2_STM_2_IP_EXISTS)
+    uint8 instance = RTU2_STM_2_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU2_STM_2_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU2_STM_3_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU2_STM_3 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU2_STM_3_ISR){
+    uint8 channel;
+#if defined(RTU2_STM_3_IP_EXISTS)
+    uint8 instance = RTU2_STM_3_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU2_STM_3_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU3_STM_0_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU3_STM_0 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU3_STM_0_ISR){
+    uint8 channel;
+#if defined(RTU3_STM_0_IP_EXISTS)
+    uint8 instance = RTU3_STM_0_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU3_STM_0_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU3_STM_1_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU3_STM_1 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU3_STM_1_ISR){
+    uint8 channel;
+#if defined(RTU3_STM_1_IP_EXISTS)
+    uint8 instance = RTU3_STM_1_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU3_STM_1_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU3_STM_2_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU3_STM_2 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU3_STM_2_ISR){
+    uint8 channel;
+#if defined(RTU3_STM_2_IP_EXISTS)
+    uint8 instance = RTU3_STM_2_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU3_STM_2_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU3_STM_3_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common RTU3_STM_3 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU3_STM_3_ISR){
+    uint8 channel;
+#if defined(RTU3_STM_3_IP_EXISTS)
+    uint8 instance = RTU3_STM_3_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < RTU3_STM_3_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if (STD_ON == STM_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS)
+
+#if defined(CRS_STM_0_ISR_USED)
+/**
+* @brief   Interrupt handler for STM channels.
+* @details Interrupt Service Routine corresponding to common CRS_STM_0 module.
+* @param[in] none
+* @return  none
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(CRS_STM_0_ISR){
+    uint8 channel;
+#if defined(CRS_STM_0_IP_EXISTS)
+    uint8 instance = CRS_STM_0_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < CRS_STM_0_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU0_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+
+#endif  /* STD_ON == STM_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS */
+
 /*================================================================================================*/
-#if (STM_IP_MODULE_SINGLE_INTERRUPT == STD_ON) /* STM_IP_MODULE_SINGLE_INTERRUPT == STD_ON */
-#ifdef STM_0_ISR_USED
+#if (STD_ON == STM_GPT_IP_MODULE_SINGLE_INTERRUPT)
+#if defined(STM_0_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_0 module.
@@ -904,1048 +2123,412 @@ void Stm_Ip_PredefCounting(uint8 instance, uint8 prescaler, boolean freezeEnable
 * @isr
 * @pre      The driver needs to be initialized.
 */
-ISR(STM_0_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_0_ISR){
+    uint8 channel;
+#if defined(STM_0_IP_EXISTS)
+    uint8 instance = STM_0_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_0_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(0U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(0U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(0U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(0U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_1_ISR_USED
+
+#if defined(STM_1_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_1 module.
-*
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_1_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_1_ISR){
+    uint8 channel;
+#if defined(STM_1_IP_EXISTS)
+    uint8 instance = STM_1_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_1_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(1U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(1U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(1U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(1U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_2_ISR_USED
+
+#if defined(STM_2_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_2 module.
-*
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_2_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_2_ISR){
+    uint8 channel;
+#if defined(STM_2_IP_EXISTS)
+    uint8 instance = STM_2_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_2_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(2U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(2U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(2U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(2U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_3_ISR_USED
+
+#if defined(STM_3_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_3 module.
-*
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_3_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_3_ISR){
+    uint8 channel;
+#if defined(STM_3_IP_EXISTS)
+    uint8 instance = STM_3_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_3_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(3U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(3U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(3U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(3U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_4_ISR_USED
+#if defined(STM_4_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_4 module.
-*
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_4_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_4_ISR){
+    uint8 channel;
+#if defined(STM_4_IP_EXISTS)
+    uint8 instance = STM_4_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_4_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(4U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(4U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(4U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(4U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_5_ISR_USED
+
+#if defined(STM_5_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_5 module.
-*
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_5_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_5_ISR){
+    uint8 channel;
+#if defined(STM_5_IP_EXISTS)
+    uint8 instance = STM_5_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_5_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(5U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(5U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(5U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(5U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_6_ISR_USED
+
+#if defined(STM_6_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_6 module.
-*
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_6_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_6_ISR){
+    uint8 channel;
+#if defined(STM_6_IP_EXISTS)
+    uint8 instance = STM_6_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_6_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(6U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(6U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(6U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(6U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_7_ISR_USED
+
+#if defined(STM_7_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_7 module.
-*
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_7_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_7_ISR){
+    uint8 channel;
+#if defined(STM_7_IP_EXISTS)
+    uint8 instance = STM_7_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_7_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(7U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(7U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(7U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(7U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_8_ISR_USED
+#if defined(STM_8_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_8 module.
-*
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_8_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_8_ISR){
+    uint8 channel;
+#if defined(STM_8_IP_EXISTS)
+    uint8 instance = STM_8_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_8_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(8U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(8U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(8U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(8U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_9_ISR_USED
+
+#if defined(STM_9_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_9 module.
-*
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_9_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_9_ISR){
+    uint8 channel;
+#if defined(STM_9_IP_EXISTS)
+    uint8 instance = STM_9_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_9_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(9U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(9U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(9U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(9U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_10_ISR_USED
+
+#if defined(STM_10_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_10 module.
-*
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_10_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_10_ISR){
+    uint8 channel;
+#if defined(STM_10_IP_EXISTS)
+    uint8 instance = STM_10_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_10_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(10U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(10U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(10U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(10U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_11_ISR_USED
+
+#if defined(STM_11_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_10 module.
-*
+* @details Interrupt Service Routine corresponding to common STM_11 module.
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_11_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_11_ISR){
+    uint8 channel;
+#if defined(STM_11_IP_EXISTS)
+    uint8 instance = STM_11_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_11_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(11U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(11U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(11U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(11U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef STM_12_ISR_USED
+
+#if defined(STM_12_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
 * @details Interrupt Service Routine corresponding to common STM_12 module.
-*
 * @param[in] none
-* @return  void
+* @return   none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(STM_12_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(STM_12_ISR){
+    uint8 channel;
+#if defined(STM_12_IP_EXISTS)
+    uint8 instance = STM_12_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < STM_12_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(12U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(12U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(12U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(12U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
 /*================================================================================================*/
-#ifdef SMU_STM_0_ISR_USED
+#if defined(CE_STM_0_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
+* @details Interrupt Service Routine corresponding to common CE_STM_0 module.
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(SMU_STM_0_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(CE_STM_0_ISR){
+    uint8 channel;
+#if defined(CE_STM_0_IP_EXISTS)
+    uint8 instance = CE_STM_0_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < CE_STM_0_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(11U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(11U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(11U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(11U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef SMU_STM_2_ISR_USED
+
+#if defined(CE_STM_1_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
+* @details Interrupt Service Routine corresponding to common CE_STM_1 module.
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(SMU_STM_2_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(CE_STM_1_ISR){
+    uint8 channel;
+#if defined(CE_STM_1_IP_EXISTS)
+    uint8 instance = CE_STM_1_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < CE_STM_1_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(12U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(12U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(12U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(12U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef CE_STM_0_ISR_USED
+
+#if defined(CE_STM_2_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
+* @details Interrupt Service Routine corresponding to common CE_STM_2 module.
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(CE_STM_0_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(CE_STM_2_ISR){
+    uint8 channel;
+#if defined(CE_STM_2_IP_EXISTS)
+    uint8 instance = CE_STM_2_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < CE_STM_2_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(0U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(0U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(0U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(0U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef CE_STM_1_ISR_USED
+
+#if defined(SMU_STM_0_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
+* @details Interrupt Service Routine corresponding to common SMU_STM_0 module.
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(CE_STM_1_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(SMU_STM_0_ISR){
+    uint8 channel;
+#if defined(SMU_STM_0_IP_EXISTS)
+    uint8 instance = SMU_STM_0_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < SMU_STM_0_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(1U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(1U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(1U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(1U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef CE_STM_2_ISR_USED
+
+#if defined(SMU_STM_2_ISR_USED)
 /**
 * @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
+* @details Interrupt Service Routine corresponding to common SMU_STM_2 module.
 * @param[in] none
-* @return  void
+* @return  none
 * @isr
 * @pre      The driver needs to be initialized.
-*
 */
-ISR(CE_STM_2_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
+ISR(SMU_STM_2_ISR){
+    uint8 channel;
+#if defined(SMU_STM_2_IP_EXISTS)
+    uint8 instance = SMU_STM_2_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined STM instance number"
+#endif
+    for (channel = 0U; channel < SMU_STM_2_IP_CHANNELS_NUMBER; ++channel)
     {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(2U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(2U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(2U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(2U, channel);
-        }
+        Stm_Ip_ProcessCommonInterrupt(instance, channel);
     }
 }
 #endif
-/*================================================================================================*/
-#ifdef CE_STM_3_ISR_USED
-/**
-* @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
-* @param[in] none
-* @return  void
-* @isr
-* @pre      The driver needs to be initialized.
-*
-*/
-ISR(CE_STM_3_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
 
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(3U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(3U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(3U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(3U, channel);
-        }
-    }
-}
-#endif
-/*================================================================================================*/
-#ifdef RTU0_STM_0_ISR_USED
-/**
-* @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
-* @param[in] none
-* @return  void
-* @isr
-* @pre      The driver needs to be initialized.
-*
-*/
-ISR(RTU0_STM_0_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
+#endif /* STD_ON == STM_GPT_IP_MODULE_SINGLE_INTERRUPT */
 
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(3U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(3U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(3U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(3U, channel);
-        }
-    }
-}
-#endif
-/*================================================================================================*/
-#ifdef RTU0_STM_1_ISR_USED
-/**
-* @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
-* @param[in] none
-* @return  void
-* @isr
-* @pre      The driver needs to be initialized.
-*
-*/
-ISR(RTU0_STM_1_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(4U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(4U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(4U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(4U, channel);
-        }
-    }
-}
-#endif
-/*================================================================================================*/
-#ifdef RTU0_STM_2_ISR_USED
-/**
-* @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
-* @param[in] none
-* @return  void
-* @isr
-* @pre      The driver needs to be initialized.
-*
-*/
-ISR(RTU0_STM_2_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(5U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(5U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(5U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(5U, channel);
-        }
-    }
-}
-#endif
-/*================================================================================================*/
-#ifdef RTU0_STM_3_ISR_USED
-/**
-* @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
-* @param[in] none
-* @return  void
-* @isr
-* @pre      The driver needs to be initialized.
-*
-*/
-ISR(RTU0_STM_3_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(6U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(6U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(6U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(6U, channel);
-        }
-    }
-}
-#endif
-/*================================================================================================*/
-#ifdef RTU1_STM_0_ISR_USED
-/**
-* @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
-* @param[in] none
-* @return  void
-* @isr
-* @pre      The driver needs to be initialized.
-*
-*/
-ISR(RTU1_STM_0_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(7U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(7U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(7U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(7U, channel);
-        }
-    }
-}
-#endif
-/*================================================================================================*/
-#ifdef RTU1_STM_1_ISR_USED
-/**
-* @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
-* @param[in] none
-* @return  void
-* @isr
-* @pre      The driver needs to be initialized.
-*
-*/
-ISR(RTU1_STM_1_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(8U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(8U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(8U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(8U, channel);
-        }
-    }
-}
-#endif
-/*================================================================================================*/
-#ifdef RTU1_STM_2_ISR_USED
-/**
-* @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
-* @param[in] none
-* @return  void
-* @isr
-* @pre      The driver needs to be initialized.
-*
-*/
-ISR(RTU1_STM_2_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(9U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(9U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(9U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(9U, channel);
-        }
-    }
-}
-#endif
-/*================================================================================================*/
-#ifdef RTU1_STM_3_ISR_USED
-/**
-* @brief   Interrupt handler for STM channels.
-* @details Interrupt Service Routine corresponding to common STM_12 module.
-*
-* @param[in] none
-* @return  void
-* @isr
-* @pre      The driver needs to be initialized.
-*
-*/
-ISR(RTU1_STM_3_ISR)
-{
-    uint8 channel = 0U;
-    uint32 flagBits = 0U;
-    uint32 enableBits = 0U;
-    uint32 currentChannelMask = 0U;
-
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        flagBits |= ((Stm_Ip_GetInterruptFlag(10U, channel)) << channel);
-        enableBits |= ((Stm_Ip_GetInterruptBit(10U, channel)) << channel);
-        if((currentChannelMask == (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ClearInterruptFlag(10U, channel);
-        }
-    }
-    for (channel = 0U; channel < STM_CHANNEL_COUNT; channel++)
-    {
-        currentChannelMask = (uint32)0x1U << (uint32)channel;
-        if((currentChannelMask== (flagBits & currentChannelMask)) && (currentChannelMask == (enableBits & currentChannelMask)))
-        {
-            Stm_Ip_ProcessCommonInterrupt(10U, channel);
-        }
-    }
-}
-#endif
-#endif /* STM_IP_MODULE_SINGLE_INTERRUPT == STD_ON */
+#endif /* (STD_ON == STM_GPT_IP_MODULE_SINGLE_INTERRUPT) || (STD_ON == STM_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS) */
 
 #define GPT_STOP_SEC_CODE
 #include "Gpt_MemMap.h"

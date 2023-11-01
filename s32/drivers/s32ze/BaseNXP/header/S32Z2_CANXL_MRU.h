@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CANXL_MRU.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_CANXL_MRU
  *
  * This file contains register definitions and macros for easy access to their
@@ -70,6 +70,7 @@
 
 /** CANXL_MRU - Size of Registers Arrays */
 #define CANXL_MRU_CHXCONFIG_COUNT                 1u
+#define CANXL_MRU_NOTIFY_COUNT                    2u
 
 /** CANXL_MRU - Register Layout Typedef */
 typedef struct {
@@ -79,8 +80,7 @@ typedef struct {
     __IO uint32_t CH_MBSTAT;                         /**< Channel (x) Mailbox Status, array offset: 0x8, array step: 0xC */
   } CHXCONFIG[CANXL_MRU_CHXCONFIG_COUNT];
   uint8_t RESERVED_0[500];
-  __I  uint32_t NOTIFY0;                           /**< Notification 0 Status, offset: 0x200 */
-  __I  uint32_t NOTIFY1;                           /**< Notification 1 Status, offset: 0x204 */
+  __I  uint32_t NOTIFY[CANXL_MRU_NOTIFY_COUNT];    /**< Notification 0 Status..Notification 1 Status, array offset: 0x200, array step: 0x4 */
   uint8_t RESERVED_1[3576];
   __IO uint32_t CH1_MB0;                           /**< Channel (x) Mailbox (n), offset: 0x1000 */
   __IO uint32_t CH1_MB1;                           /**< Channel (x) Mailbox (n), offset: 0x1004 */
@@ -201,22 +201,18 @@ typedef struct {
 #define CANXL_MRU_CH_MBSTAT_MBS3(x)              (((uint32_t)(((uint32_t)(x)) << CANXL_MRU_CH_MBSTAT_MBS3_SHIFT)) & CANXL_MRU_CH_MBSTAT_MBS3_MASK)
 /*! @} */
 
-/*! @name NOTIFY0 - Notification 0 Status */
+/*! @name NOTIFY - Notification 0 Status..Notification 1 Status */
 /*! @{ */
 
-#define CANXL_MRU_NOTIFY0_CH1_IS0_MASK           (0x1U)
-#define CANXL_MRU_NOTIFY0_CH1_IS0_SHIFT          (0U)
-#define CANXL_MRU_NOTIFY0_CH1_IS0_WIDTH          (1U)
-#define CANXL_MRU_NOTIFY0_CH1_IS0(x)             (((uint32_t)(((uint32_t)(x)) << CANXL_MRU_NOTIFY0_CH1_IS0_SHIFT)) & CANXL_MRU_NOTIFY0_CH1_IS0_MASK)
-/*! @} */
+#define CANXL_MRU_NOTIFY_CH1_IS0_MASK            (0x1U)
+#define CANXL_MRU_NOTIFY_CH1_IS0_SHIFT           (0U)
+#define CANXL_MRU_NOTIFY_CH1_IS0_WIDTH           (1U)
+#define CANXL_MRU_NOTIFY_CH1_IS0(x)              (((uint32_t)(((uint32_t)(x)) << CANXL_MRU_NOTIFY_CH1_IS0_SHIFT)) & CANXL_MRU_NOTIFY_CH1_IS0_MASK)
 
-/*! @name NOTIFY1 - Notification 1 Status */
-/*! @{ */
-
-#define CANXL_MRU_NOTIFY1_CH1_IS1_MASK           (0x1U)
-#define CANXL_MRU_NOTIFY1_CH1_IS1_SHIFT          (0U)
-#define CANXL_MRU_NOTIFY1_CH1_IS1_WIDTH          (1U)
-#define CANXL_MRU_NOTIFY1_CH1_IS1(x)             (((uint32_t)(((uint32_t)(x)) << CANXL_MRU_NOTIFY1_CH1_IS1_SHIFT)) & CANXL_MRU_NOTIFY1_CH1_IS1_MASK)
+#define CANXL_MRU_NOTIFY_CH1_IS1_MASK            (0x1U)
+#define CANXL_MRU_NOTIFY_CH1_IS1_SHIFT           (0U)
+#define CANXL_MRU_NOTIFY_CH1_IS1_WIDTH           (1U)
+#define CANXL_MRU_NOTIFY_CH1_IS1(x)              (((uint32_t)(((uint32_t)(x)) << CANXL_MRU_NOTIFY_CH1_IS1_SHIFT)) & CANXL_MRU_NOTIFY_CH1_IS1_MASK)
 /*! @} */
 
 /*! @name CH1_MB0 - Channel (x) Mailbox (n) */

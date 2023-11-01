@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SMU_SRG_S.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_SMU_SRG_S
  *
  * This file contains register definitions and macros for easy access to their
@@ -128,16 +128,6 @@ typedef struct {
 #define SMU_SRG_S_CR0_DEDOW_WIDTH                (1U)
 #define SMU_SRG_S_CR0_DEDOW(x)                   (((uint32_t)(((uint32_t)(x)) << SMU_SRG_S_CR0_DEDOW_SHIFT)) & SMU_SRG_S_CR0_DEDOW_MASK)
 
-#define SMU_SRG_S_CR0_CCMCEDOW_MASK              (0x10U)
-#define SMU_SRG_S_CR0_CCMCEDOW_SHIFT             (4U)
-#define SMU_SRG_S_CR0_CCMCEDOW_WIDTH             (1U)
-#define SMU_SRG_S_CR0_CCMCEDOW(x)                (((uint32_t)(((uint32_t)(x)) << SMU_SRG_S_CR0_CCMCEDOW_SHIFT)) & SMU_SRG_S_CR0_CCMCEDOW_MASK)
-
-#define SMU_SRG_S_CR0_CSMCEDOW_MASK              (0x20U)
-#define SMU_SRG_S_CR0_CSMCEDOW_SHIFT             (5U)
-#define SMU_SRG_S_CR0_CSMCEDOW_WIDTH             (1U)
-#define SMU_SRG_S_CR0_CSMCEDOW(x)                (((uint32_t)(((uint32_t)(x)) << SMU_SRG_S_CR0_CSMCEDOW_SHIFT)) & SMU_SRG_S_CR0_CSMCEDOW_MASK)
-
 #define SMU_SRG_S_CR0_MSTR0HPE_MASK              (0x100U)
 #define SMU_SRG_S_CR0_MSTR0HPE_SHIFT             (8U)
 #define SMU_SRG_S_CR0_MSTR0HPE_WIDTH             (1U)
@@ -152,16 +142,6 @@ typedef struct {
 #define SMU_SRG_S_CR0_CSMHPE_SHIFT               (10U)
 #define SMU_SRG_S_CR0_CSMHPE_WIDTH               (1U)
 #define SMU_SRG_S_CR0_CSMHPE(x)                  (((uint32_t)(((uint32_t)(x)) << SMU_SRG_S_CR0_CSMHPE_SHIFT)) & SMU_SRG_S_CR0_CSMHPE_MASK)
-
-#define SMU_SRG_S_CR0_CCMCEHPE_MASK              (0x1000U)
-#define SMU_SRG_S_CR0_CCMCEHPE_SHIFT             (12U)
-#define SMU_SRG_S_CR0_CCMCEHPE_WIDTH             (1U)
-#define SMU_SRG_S_CR0_CCMCEHPE(x)                (((uint32_t)(((uint32_t)(x)) << SMU_SRG_S_CR0_CCMCEHPE_SHIFT)) & SMU_SRG_S_CR0_CCMCEHPE_MASK)
-
-#define SMU_SRG_S_CR0_CSMCEHPE_MASK              (0x2000U)
-#define SMU_SRG_S_CR0_CSMCEHPE_SHIFT             (13U)
-#define SMU_SRG_S_CR0_CSMCEHPE_WIDTH             (1U)
-#define SMU_SRG_S_CR0_CSMCEHPE(x)                (((uint32_t)(((uint32_t)(x)) << SMU_SRG_S_CR0_CSMCEHPE_SHIFT)) & SMU_SRG_S_CR0_CSMCEHPE_MASK)
 
 #define SMU_SRG_S_CR0_SLV0SBE_MASK               (0x10000U)
 #define SMU_SRG_S_CR0_SLV0SBE_SHIFT              (16U)
@@ -371,26 +351,6 @@ typedef struct {
 #define SMU_SRG_S_SR0_SDRE_SHIFT                 (11U)
 #define SMU_SRG_S_SR0_SDRE_WIDTH                 (1U)
 #define SMU_SRG_S_SR0_SDRE(x)                    (((uint32_t)(((uint32_t)(x)) << SMU_SRG_S_SR0_SDRE_SHIFT)) & SMU_SRG_S_SR0_SDRE_MASK)
-
-#define SMU_SRG_S_SR0_CECTRE_MASK                (0x1000U)
-#define SMU_SRG_S_SR0_CECTRE_SHIFT               (12U)
-#define SMU_SRG_S_SR0_CECTRE_WIDTH               (1U)
-#define SMU_SRG_S_SR0_CECTRE(x)                  (((uint32_t)(((uint32_t)(x)) << SMU_SRG_S_SR0_CECTRE_SHIFT)) & SMU_SRG_S_SR0_CECTRE_MASK)
-
-#define SMU_SRG_S_SR0_CECDRE_MASK                (0x2000U)
-#define SMU_SRG_S_SR0_CECDRE_SHIFT               (13U)
-#define SMU_SRG_S_SR0_CECDRE_WIDTH               (1U)
-#define SMU_SRG_S_SR0_CECDRE(x)                  (((uint32_t)(((uint32_t)(x)) << SMU_SRG_S_SR0_CECDRE_SHIFT)) & SMU_SRG_S_SR0_CECDRE_MASK)
-
-#define SMU_SRG_S_SR0_CESTRE_MASK                (0x4000U)
-#define SMU_SRG_S_SR0_CESTRE_SHIFT               (14U)
-#define SMU_SRG_S_SR0_CESTRE_WIDTH               (1U)
-#define SMU_SRG_S_SR0_CESTRE(x)                  (((uint32_t)(((uint32_t)(x)) << SMU_SRG_S_SR0_CESTRE_SHIFT)) & SMU_SRG_S_SR0_CESTRE_MASK)
-
-#define SMU_SRG_S_SR0_CESDRE_MASK                (0x8000U)
-#define SMU_SRG_S_SR0_CESDRE_SHIFT               (15U)
-#define SMU_SRG_S_SR0_CESDRE_WIDTH               (1U)
-#define SMU_SRG_S_SR0_CESDRE(x)                  (((uint32_t)(((uint32_t)(x)) << SMU_SRG_S_SR0_CESDRE_SHIFT)) & SMU_SRG_S_SR0_CESDRE_MASK)
 
 #define SMU_SRG_S_SR0_CCCMCRE_MASK               (0x10000U)
 #define SMU_SRG_S_SR0_CCCMCRE_SHIFT              (16U)

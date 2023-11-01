@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_Boot.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_Boot
  *
  * This file contains register definitions and macros for easy access to their
@@ -70,15 +70,15 @@
 
 /** Boot - Register Layout Typedef */
 typedef struct {
-  __I  uint32_t BOOT_GPR_BMR1;                     /**< Boot Configuration 1, offset: 0x0 */
-  __I  uint32_t BOOT_GPR_BMR2;                     /**< Boot Configuration 2, offset: 0x4 */
+  __I  uint32_t BOOT_GPR_BMR1;                     /**< Boot Configuration 1, offset: 0x0, available only on: BMR (missing on POR) */
+  __I  uint32_t BOOT_GPR_BMR2;                     /**< Boot Configuration 2, offset: 0x4, available only on: BMR (missing on POR) */
   uint8_t RESERVED_0[100];
-  __IO uint32_t BOOT_POR_CTRL_REG;                 /**< Boot POR Control, offset: 0x6C */
-  __IO uint32_t BOOT_POR_C1_REG;                   /**< BOOT POR Control 1 Register, offset: 0x70 */
+  __IO uint32_t BOOT_POR_CTRL_REG;                 /**< Boot POR Control, offset: 0x6C, available only on: POR (missing on BMR) */
+  __IO uint32_t BOOT_POR_C1_REG;                   /**< BOOT POR Control 1 Register, offset: 0x70, available only on: POR (missing on BMR) */
   uint8_t RESERVED_1[4];
-  __IO uint32_t BOOT_DEST_C0_REG;                  /**< BOOT DEST Control 0 Register, offset: 0x78 */
+  __IO uint32_t BOOT_DEST_C0_REG;                  /**< BOOT DEST Control 0 Register, offset: 0x78, available only on: POR (missing on BMR) */
   uint8_t RESERVED_2[8];
-  __I  uint32_t BOOT_FUNC_C0_REG;                  /**< BOOT FUNC Control 0 Register, offset: 0x84 */
+  __IO uint32_t BOOT_FUNC_C0_REG;                  /**< BOOT FUNC Control 0 Register, offset: 0x84, available only on: POR (missing on BMR) */
 } Boot_Type, *Boot_MemMapPtr;
 
 /** Number of instances of the Boot module. */
@@ -181,9 +181,9 @@ typedef struct {
 /*! @name BOOT_DEST_C0_REG - BOOT DEST Control 0 Register */
 /*! @{ */
 
-#define Boot_BOOT_DEST_C0_REG_LPDDR4_FUNC_RESET_COUNTER_MASK (0xFU)
+#define Boot_BOOT_DEST_C0_REG_LPDDR4_FUNC_RESET_COUNTER_MASK (0x7U)
 #define Boot_BOOT_DEST_C0_REG_LPDDR4_FUNC_RESET_COUNTER_SHIFT (0U)
-#define Boot_BOOT_DEST_C0_REG_LPDDR4_FUNC_RESET_COUNTER_WIDTH (4U)
+#define Boot_BOOT_DEST_C0_REG_LPDDR4_FUNC_RESET_COUNTER_WIDTH (3U)
 #define Boot_BOOT_DEST_C0_REG_LPDDR4_FUNC_RESET_COUNTER(x) (((uint32_t)(((uint32_t)(x)) << Boot_BOOT_DEST_C0_REG_LPDDR4_FUNC_RESET_COUNTER_SHIFT)) & Boot_BOOT_DEST_C0_REG_LPDDR4_FUNC_RESET_COUNTER_MASK)
 /*! @} */
 

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_LCU.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_LCU
  *
  * This file contains register definitions and macros for easy access to their
@@ -295,9 +295,9 @@ typedef struct {
 #define LCU_SCTRL_SW_MODE_WIDTH                  (4U)
 #define LCU_SCTRL_SW_MODE(x)                     (((uint32_t)(((uint32_t)(x)) << LCU_SCTRL_SW_MODE_SHIFT)) & LCU_SCTRL_SW_MODE_MASK)
 
-#define LCU_SCTRL_SW_SYNC_SEL_MASK               (0x300U)
+#define LCU_SCTRL_SW_SYNC_SEL_MASK               (0x100U)
 #define LCU_SCTRL_SW_SYNC_SEL_SHIFT              (8U)
-#define LCU_SCTRL_SW_SYNC_SEL_WIDTH              (2U)
+#define LCU_SCTRL_SW_SYNC_SEL_WIDTH              (1U)
 #define LCU_SCTRL_SW_SYNC_SEL(x)                 (((uint32_t)(((uint32_t)(x)) << LCU_SCTRL_SW_SYNC_SEL_SHIFT)) & LCU_SCTRL_SW_SYNC_SEL_MASK)
 /*! @} */
 

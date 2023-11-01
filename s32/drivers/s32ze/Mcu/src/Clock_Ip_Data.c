@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Data.c
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -44,8 +44,8 @@ extern "C"{
 #define CLOCK_IP_DATA_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_DATA_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_DATA_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_DATA_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_DATA_SW_MINOR_VERSION_C               9
+#define CLOCK_IP_DATA_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_DATA_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_DATA_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -115,7 +115,7 @@ extern "C"{
 #define CLOCK_IP_SWMUX_DIV                     8U
 #define CLOCK_IP_CLKOUT                        9U
 #define CLOCK_IP_CLKOUT_CMU                    9U
-
+#define CLOCK_IP_HWMUX_MUL_DIV                 10U
 
 #define CLOCK_IP_DDR_EXTENSION                          0U
 #define CLOCK_IP_P0_SYS_EXTENSION                       1U
@@ -186,70 +186,69 @@ extern "C"{
 #define CLOCK_IP_P1_DSPI60_EXTENSION                    66U
 #define CLOCK_IP_P1_LFAST0_REF_EXTENSION                67U
 #define CLOCK_IP_P1_LFAST1_REF_EXTENSION                68U
-#define CLOCK_IP_P1_LFAST_DFT_EXTENSION                 69U
-#define CLOCK_IP_P1_NETC_AXI_EXTENSION                  70U
-#define CLOCK_IP_P1_LIN_EXTENSION                       71U
-#define CLOCK_IP_ETH_TS_EXTENSION                       72U
-#define CLOCK_IP_ETH_TS_DIV4_EXTENSION                  73U
-#define CLOCK_IP_ETH0_REF_RMII_EXTENSION                74U
-#define CLOCK_IP_ETH0_RX_MII_EXTENSION                  75U
-#define CLOCK_IP_ETH0_RX_RGMII_EXTENSION                76U
-#define CLOCK_IP_ETH0_TX_RGMII_EXTENSION                77U
-#define CLOCK_IP_ETH0_TX_RGMII_LPBK_EXTENSION           78U
-#define CLOCK_IP_ETH1_REF_RMII_EXTENSION                79U
-#define CLOCK_IP_ETH1_RX_MII_EXTENSION                  80U
-#define CLOCK_IP_ETH1_RX_RGMII_EXTENSION                81U
-#define CLOCK_IP_ETH1_TX_MII_EXTENSION                  82U
-#define CLOCK_IP_ETH1_TX_RGMII_EXTENSION                83U
-#define CLOCK_IP_ETH1_TX_RGMII_LPBK_EXTENSION           84U
-#define CLOCK_IP_P1_REG_INTF_EXTENSION                  85U
-#define CLOCK_IP_P2_DBG_ATB_EXTENSION                   86U
-#define CLOCK_IP_P2_REG_INTF_EXTENSION                  87U
-#define CLOCK_IP_P3_AES_EXTENSION                       88U
-#define CLOCK_IP_P3_CLKOUT_SRC_EXTENSION                89U
-#define CLOCK_IP_P3_DBG_TS_EXTENSION                    90U
-#define CLOCK_IP_P3_REG_INTF_EXTENSION                  91U
-#define CLOCK_IP_P4_CLKOUT_SRC_EXTENSION                92U
-#define CLOCK_IP_P4_DSPI60_EXTENSION                    93U
-#define CLOCK_IP_P4_EMIOS_LCU_EXTENSION                 94U
-#define CLOCK_IP_P4_LIN_EXTENSION                       95U
-#define CLOCK_IP_P4_PSI5_125K_EXTENSION                 96U
-#define CLOCK_IP_P4_PSI5_189K_EXTENSION                 97U
-#define CLOCK_IP_P4_PSI5_S_BAUD_EXTENSION               98U
-#define CLOCK_IP_P4_PSI5_S_CORE_EXTENSION               99U
-#define CLOCK_IP_P4_PSI5_S_TRIG0_EXTENSION              100U
-#define CLOCK_IP_P4_PSI5_S_TRIG1_EXTENSION              101U
-#define CLOCK_IP_P4_PSI5_S_TRIG2_EXTENSION              102U
-#define CLOCK_IP_P4_PSI5_S_TRIG3_EXTENSION              103U
-#define CLOCK_IP_P4_PSI5_S_UART_EXTENSION               104U
-#define CLOCK_IP_P4_PSI5_S_WDOG0_EXTENSION              105U
-#define CLOCK_IP_P4_PSI5_S_WDOG1_EXTENSION              106U
-#define CLOCK_IP_P4_PSI5_S_WDOG2_EXTENSION              107U
-#define CLOCK_IP_P4_PSI5_S_WDOG3_EXTENSION              108U
-#define CLOCK_IP_P4_QSPI0_2X_EXTENSION                  109U
-#define CLOCK_IP_P4_QSPI0_1X_EXTENSION                  110U
-#define CLOCK_IP_P4_QSPI1_2X_EXTENSION                  111U
-#define CLOCK_IP_P4_QSPI1_1X_EXTENSION                  112U
-#define CLOCK_IP_P4_REG_INTF_2X_EXTENSION               113U
-#define CLOCK_IP_P4_REG_INTF_EXTENSION                  114U
-#define CLOCK_IP_P4_SDHC_IP_EXTENSION                   115U
-#define CLOCK_IP_P4_SDHC_IP_DIV2_EXTENSION              116U
-#define CLOCK_IP_P5_AE_EXTENSION                        117U
-#define CLOCK_IP_P5_CANXL_PE_EXTENSION                  118U
-#define CLOCK_IP_P5_CANXL_CHI_EXTENSION                 119U
-#define CLOCK_IP_P5_CLKOUT_SRC_EXTENSION                120U
-#define CLOCK_IP_P5_LIN_EXTENSION                       121U
-#define CLOCK_IP_P5_REG_INTF_EXTENSION                  122U
-#define CLOCK_IP_P6_REG_INTF_EXTENSION                  123U
-#define CLOCK_IP_P0_PSI5_1US_EXTENSION                  124U
-#define CLOCK_IP_P4_PSI5_1US_EXTENSION                  125U
-#define CLOCK_IP_RTU0_REG_INTF_EXTENSION                126U
-#define CLOCK_IP_RTU1_REG_INTF_EXTENSION                127U
-#define CLOCK_IP_P4_SDHC_EXTENSION                      128U
-#define CLOCK_IP_P0_DSPI_EXTENSION                      129U
-#define CLOCK_IP_P1_DSPI_EXTENSION                      130U
-#define CLOCK_IP_P4_DSPI_EXTENSION                      131U
-#define CLOCK_IP_P5_DSPI_EXTENSION                      132U
+#define CLOCK_IP_P1_NETC_AXI_EXTENSION                  69U
+#define CLOCK_IP_P1_LIN_EXTENSION                       70U
+#define CLOCK_IP_ETH_TS_EXTENSION                       71U
+#define CLOCK_IP_ETH_TS_DIV4_EXTENSION                  72U
+#define CLOCK_IP_ETH0_REF_RMII_EXTENSION                73U
+#define CLOCK_IP_ETH0_RX_MII_EXTENSION                  74U
+#define CLOCK_IP_ETH0_RX_RGMII_EXTENSION                75U
+#define CLOCK_IP_ETH0_TX_RGMII_EXTENSION                76U
+#define CLOCK_IP_ETH0_TX_RGMII_LPBK_EXTENSION           77U
+#define CLOCK_IP_ETH1_REF_RMII_EXTENSION                78U
+#define CLOCK_IP_ETH1_RX_MII_EXTENSION                  79U
+#define CLOCK_IP_ETH1_RX_RGMII_EXTENSION                80U
+#define CLOCK_IP_ETH1_TX_MII_EXTENSION                  81U
+#define CLOCK_IP_ETH1_TX_RGMII_EXTENSION                82U
+#define CLOCK_IP_ETH1_TX_RGMII_LPBK_EXTENSION           83U
+#define CLOCK_IP_P1_REG_INTF_EXTENSION                  84U
+#define CLOCK_IP_P2_DBG_ATB_EXTENSION                   85U
+#define CLOCK_IP_P2_REG_INTF_EXTENSION                  86U
+#define CLOCK_IP_P3_AES_EXTENSION                       87U
+#define CLOCK_IP_P3_CLKOUT_SRC_EXTENSION                88U
+#define CLOCK_IP_P3_DBG_TS_EXTENSION                    89U
+#define CLOCK_IP_P3_REG_INTF_EXTENSION                  90U
+#define CLOCK_IP_P4_CLKOUT_SRC_EXTENSION                91U
+#define CLOCK_IP_P4_DSPI60_EXTENSION                    92U
+#define CLOCK_IP_P4_EMIOS_LCU_EXTENSION                 93U
+#define CLOCK_IP_P4_LIN_EXTENSION                       94U
+#define CLOCK_IP_P4_PSI5_125K_EXTENSION                 95U
+#define CLOCK_IP_P4_PSI5_189K_EXTENSION                 96U
+#define CLOCK_IP_P4_PSI5_S_BAUD_EXTENSION               97U
+#define CLOCK_IP_P4_PSI5_S_CORE_EXTENSION               98U
+#define CLOCK_IP_P4_PSI5_S_TRIG0_EXTENSION              99U
+#define CLOCK_IP_P4_PSI5_S_TRIG1_EXTENSION              100U
+#define CLOCK_IP_P4_PSI5_S_TRIG2_EXTENSION              101U
+#define CLOCK_IP_P4_PSI5_S_TRIG3_EXTENSION              102U
+#define CLOCK_IP_P4_PSI5_S_UART_EXTENSION               103U
+#define CLOCK_IP_P4_PSI5_S_WDOG0_EXTENSION              104U
+#define CLOCK_IP_P4_PSI5_S_WDOG1_EXTENSION              105U
+#define CLOCK_IP_P4_PSI5_S_WDOG2_EXTENSION              106U
+#define CLOCK_IP_P4_PSI5_S_WDOG3_EXTENSION              107U
+#define CLOCK_IP_P4_QSPI0_2X_EXTENSION                  108U
+#define CLOCK_IP_P4_QSPI0_1X_EXTENSION                  109U
+#define CLOCK_IP_P4_QSPI1_2X_EXTENSION                  110U
+#define CLOCK_IP_P4_QSPI1_1X_EXTENSION                  111U
+#define CLOCK_IP_P4_REG_INTF_2X_EXTENSION               112U
+#define CLOCK_IP_P4_REG_INTF_EXTENSION                  113U
+#define CLOCK_IP_P4_SDHC_IP_EXTENSION                   114U
+#define CLOCK_IP_P4_SDHC_IP_DIV2_EXTENSION              115U
+#define CLOCK_IP_P5_AE_EXTENSION                        116U
+#define CLOCK_IP_P5_CANXL_PE_EXTENSION                  117U
+#define CLOCK_IP_P5_CANXL_CHI_EXTENSION                 118U
+#define CLOCK_IP_P5_CLKOUT_SRC_EXTENSION                119U
+#define CLOCK_IP_P5_LIN_EXTENSION                       120U
+#define CLOCK_IP_P5_REG_INTF_EXTENSION                  121U
+#define CLOCK_IP_P6_REG_INTF_EXTENSION                  122U
+#define CLOCK_IP_P0_PSI5_1US_EXTENSION                  123U
+#define CLOCK_IP_P4_PSI5_1US_EXTENSION                  124U
+#define CLOCK_IP_RTU0_REG_INTF_EXTENSION                125U
+#define CLOCK_IP_RTU1_REG_INTF_EXTENSION                126U
+#define CLOCK_IP_P4_SDHC_EXTENSION                      127U
+#define CLOCK_IP_P0_DSPI_EXTENSION                      128U
+#define CLOCK_IP_P1_DSPI_EXTENSION                      129U
+#define CLOCK_IP_P4_DSPI_EXTENSION                      130U
+#define CLOCK_IP_P5_DSPI_EXTENSION                      131U
 
 #define CLOCK_IP_COREPLL_INSTANCE                       0U
 #define CLOCK_IP_PERIPHPLL_INSTANCE                     1U
@@ -284,28 +283,28 @@ extern "C"{
 #define CLOCK_IP_CMU_FC_2A_INSTANCE                     3U
 #define CLOCK_IP_CMU_FC_2B_INSTANCE                     4U
 #define CLOCK_IP_CMU_FC_2C_INSTANCE                     5U
-#define CLOCK_IP_CMU_FC_2D_INSTANCE                     6U
-#define CLOCK_IP_CMU_FC_3_INSTANCE                      7U
-#define CLOCK_IP_CMU_FC_4_INSTANCE                      8U
-#define CLOCK_IP_CMU_FC_5_INSTANCE                      9U
-#define CLOCK_IP_CMU_FC_6_INSTANCE                      10U
-#define CLOCK_IP_CE_CMU_FC_0_INSTANCE                   11U
-#define CLOCK_IP_CE_CMU_FC_1_INSTANCE                   12U
-#define CLOCK_IP_CE_CMU_FC_2_INSTANCE                   13U
-#define CLOCK_IP_RTU0_CMU_FC_0_INSTANCE                 14U
-#define CLOCK_IP_RTU0_CMU_FC_1_INSTANCE                 15U
-#define CLOCK_IP_RTU0_CMU_FC_2_INSTANCE                 16U
-#define CLOCK_IP_RTU0_CMU_FC_3_INSTANCE                 17U
-#define CLOCK_IP_RTU0_CMU_FC_4_INSTANCE                 18U
-#define CLOCK_IP_RTU1_CMU_FC_0_INSTANCE                 19U
-#define CLOCK_IP_RTU1_CMU_FC_1_INSTANCE                 20U
-#define CLOCK_IP_RTU1_CMU_FC_2_INSTANCE                 21U
-#define CLOCK_IP_RTU1_CMU_FC_3_INSTANCE                 22U
-#define CLOCK_IP_RTU1_CMU_FC_4_INSTANCE                 23U
-#define CLOCK_IP_CMU_FC_DEBUG_1_INSTANCE                24U
-#define CLOCK_IP_CMU_FC_DEBUG_2_INSTANCE                25U
-#define CLOCK_IP_CMU_FC_AE_1_INSTANCE                   26U
-#define CLOCK_IP_CMU_FC_AE_2_INSTANCE                   27U
+#define CLOCK_IP_CMU_FC_3_INSTANCE                      6U
+#define CLOCK_IP_CMU_FC_4_INSTANCE                      7U
+#define CLOCK_IP_CMU_FC_5_INSTANCE                      8U
+#define CLOCK_IP_CMU_FC_6_INSTANCE                      9U
+#define CLOCK_IP_CE_CMU_FC_0_INSTANCE                   10U
+#define CLOCK_IP_CE_CMU_FC_1_INSTANCE                   11U
+#define CLOCK_IP_CE_CMU_FC_2_INSTANCE                   12U
+#define CLOCK_IP_RTU0_CMU_FC_0_INSTANCE                 13U
+#define CLOCK_IP_RTU0_CMU_FC_1_INSTANCE                 14U
+#define CLOCK_IP_RTU0_CMU_FC_2_INSTANCE                 15U
+#define CLOCK_IP_RTU0_CMU_FC_3_INSTANCE                 16U
+#define CLOCK_IP_RTU0_CMU_FC_4_INSTANCE                 17U
+#define CLOCK_IP_RTU1_CMU_FC_0_INSTANCE                 18U
+#define CLOCK_IP_RTU1_CMU_FC_1_INSTANCE                 19U
+#define CLOCK_IP_RTU1_CMU_FC_2_INSTANCE                 20U
+#define CLOCK_IP_RTU1_CMU_FC_3_INSTANCE                 21U
+#define CLOCK_IP_RTU1_CMU_FC_4_INSTANCE                 22U
+#define CLOCK_IP_CMU_FC_DEBUG_1_INSTANCE                23U
+#define CLOCK_IP_CMU_FC_DEBUG_2_INSTANCE                24U
+#define CLOCK_IP_CMU_FC_AE_1_INSTANCE                   25U
+#define CLOCK_IP_CMU_FC_AE_2_INSTANCE                   26U
+#define CLOCK_IP_CMU_FC_AE_3_INSTANCE                   27U
 
 #define CLOCK_IP_P6_GROUP_0_BIT0_INDEX                       0U
 #define CLOCK_IP_P0_GROUP_13_BIT0_INDEX                      1U
@@ -541,6 +540,7 @@ const uint8 Clock_Ip_au8DividerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE_WITH_TRIGGER,      /* CLOCK_IP_HWMUX_DIV_TRIGGER */
     CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE,                   /*CLOCK_IP_SWMUX_DIV */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_CGM_X_DE_DIV_FMT_STAT_WITHOUT_PHASE,               /* CLOCK_IP_HWMUX_MUL_DIV */
 };
 const uint8 Clock_Ip_au8DividerTriggerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -551,6 +551,7 @@ const uint8 Clock_Ip_au8DividerTriggerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT,            /* CLOCK_IP_HWMUX_DIV_TRIGGER */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
@@ -565,8 +566,10 @@ const uint8 Clock_Ip_au8XoscCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
 const uint8 Clock_Ip_au8IrcoscCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -589,11 +592,13 @@ const uint8 Clock_Ip_au8GateCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
 const uint8 Clock_Ip_au8FractionalDividerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_DFS_MFI_MFN,                                       /* CLOCK_IP_PCFS_DFS */
     CLOCK_IP_DFS_MFI_MFN,                                       /* CLOCK_IP_DFS */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -607,6 +612,7 @@ const uint8 Clock_Ip_au8PllCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN_SSCGBYP_SPREADCTL_STEPNO_STEPSIZE,/* CLOCK_IP_PLL_MOD */
     CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN,                         /* CLOCK_IP_PLL */
     CLOCK_IP_LFASTPLL_ENABLE,                                   /* CLOCK_IP_LFASTPLL */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -629,11 +635,13 @@ const uint8 Clock_Ip_au8SelectorCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP,                         /* CLOCK_IP_HWMUX_DIV_TRIGGER */
     CLOCK_IP_CGM_X_CSC_CSS_CS_GRIP,                             /* CLOCK_IP_SWMUX_DIV */
     CLOCK_IP_GPR_X_CLKOUT_SEL_MUXSEL,                           /* CLOCK_IP_CLKOUT */
+    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP,                         /* CLOCK_IP_HWMUX_MUL_DIV */
 };
 const uint8 Clock_Ip_au8PcfsCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS,                    /* CLOCK_IP_PCFS_DFS */
     CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS,                    /* CLOCK_IP_PCFS_PLL_OUT */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -653,6 +661,7 @@ const uint8 Clock_Ip_au8CmuCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF,                    /* CLOCK_IP_CLKOUT_CMU */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
 
 
@@ -710,7 +719,7 @@ const uint8 Clock_Ip_au8ClockFeatures[CLOCK_IP_NAMES_NO][CLOCK_IP_FEATURES_NO] =
 /*   LFAST0_PLL_PH0_CLK clock   */ {0U,                               CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          0U},                                /*   LFAST0_PLL_PH0_CLK clock   */
 /*   LFAST0_PLL_PH0_CLK clock   */ {0U,                               CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          0U},                                /*   LFAST0_PLL_PH0_CLK clock   */
 /*   eth_rgmii_ref clock        */ {0U,                               CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          0U},                                /*   eth_rgmii_ref clock        */
-/*   eth_ext_ts clock           */ {0U,                               CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          0U},                                /*   eth_ext_ts clock           */
+/*   tmr_1588_ref clock         */ {0U,                               CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          0U},                                /*   tmr_1588_ref clock           */
 /*   eth0_ext_rx clock          */ {0U,                               CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          0U},                                /*   eth0_ext_rx clock          */
 /*   eth0_ext_tx clock          */ {0U,                               CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          0U},                                /*   eth0_ext_tx clock          */
 /*   eth1_ext_rx clock          */ {0U,                               CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          0U},                                /*   eth1_ext_rx clock          */
@@ -759,10 +768,13 @@ const uint8 Clock_Ip_au8ClockFeatures[CLOCK_IP_NAMES_NO][CLOCK_IP_FEATURES_NO] =
 /*   SYSTEM_CLK clock           */ {CLOCK_IP_CGM_AE_INSTANCE,         CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          0U},                                /*   SYSTEM_CLK clock           */
 #endif
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
-/*   SYSTEM_DIV2_CLK clock      */ {CLOCK_IP_CGM_AE_INSTANCE,         CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          CLOCK_IP_CMU_FC_AE_1_INSTANCE},     /*   SYSTEM_DIV2_CLK clock      */
+/*   SYSTEM_DIV2_CLK clock      */ {CLOCK_IP_CGM_AE_INSTANCE,         CLOCK_IP_CMU,                          0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          CLOCK_IP_CMU_FC_AE_1_INSTANCE},     /*   SYSTEM_DIV2_CLK clock      */
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-/*   SYSTEM_DIV4_CLK clock      */ {CLOCK_IP_CGM_AE_INSTANCE,         CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          CLOCK_IP_CMU_FC_AE_1_INSTANCE},     /*   SYSTEM_DIV4_CLK clock      */
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+/*   SYSTEM_DIV4_MON1_CLK clock */ {CLOCK_IP_CGM_AE_INSTANCE,         CLOCK_IP_CMU,                          0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          CLOCK_IP_CMU_FC_AE_2_INSTANCE},     /*   SYSTEM_DIV4_MON1_CLK clock      */
+#endif
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+/*   SYSTEM_DIV4_MON2_CLK clock */ {CLOCK_IP_CGM_AE_INSTANCE,         CLOCK_IP_CMU,                          0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          CLOCK_IP_CMU_FC_AE_3_INSTANCE},     /*   SYSTEM_DIV4_MON2_CLK clock      */
 #endif
 /*   THE_LAST_PRODUCER_CLK      */ {0U,                               CLOCK_IP_NO_CALLBACK,                  0U,                                      0U,                 0U,                          0U,                          0U,                               0U,                          0U},                                /*   THE_LAST_PRODUCER_CLK      */
 /*   ADC0_CLK clock             */ {0U,                               CLOCK_IP_GATE,                         0U,                                      0U,                 0U,                          0U,                          CLOCK_IP_P0_GROUP_13_BIT0_INDEX,       0U,                          0U},                                /*   ADC0_CLK clock             */
@@ -856,7 +868,7 @@ const uint8 Clock_Ip_au8ClockFeatures[CLOCK_IP_NAMES_NO][CLOCK_IP_FEATURES_NO] =
 /*   P0_LIN_CLK clock           */ {CLOCK_IP_CGM0_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P0_LIN_EXTENSION,               0U,                 CLOCK_IP_SEL_4_INDEX,        0U,                          0U,                               0U,                          0U},                                /*   P0_LIN_CLK clock           */
 /*   P0_NANO_CLK clock          */ {CLOCK_IP_CGM0_INSTANCE,           CLOCK_IP_HWMUX,                        CLOCK_IP_P0_NANO_EXTENSION,              0U,                 CLOCK_IP_SEL_7_INDEX,        0U,                          0U,                               0U,                          0U},                                /*   P0_NANO_CLK clock          */
 /*   P0_PSI5_125K_CLK clock     */ {CLOCK_IP_CGM0_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P0_PSI5_125K_EXTENSION,         0U,                 CLOCK_IP_SEL_2_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                               0U,                          0U},                                /*   P0_PSI5_125K_CLK clock     */
-/*   P0_PSI5_189K_CLK clock     */ {CLOCK_IP_CGM0_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P0_PSI5_189K_EXTENSION,         0U,                 CLOCK_IP_SEL_2_INDEX,        CLOCK_IP_DIV_2_INDEX,        0U,                               0U,                          0U},                                /*   P0_PSI5_189K_CLK clock     */
+/*   P0_PSI5_189K_CLK clock     */ {CLOCK_IP_CGM0_INSTANCE,           CLOCK_IP_HWMUX_MUL_DIV,                CLOCK_IP_P0_PSI5_189K_EXTENSION,         0U,                 CLOCK_IP_SEL_2_INDEX,        CLOCK_IP_DIV_2_INDEX,        0U,                               0U,                          0U},                                /*   P0_PSI5_189K_CLK clock     */
 /*   P0_PSI5_S_BAUD_CLK clock   */ {CLOCK_IP_CGM0_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P0_PSI5_S_BAUD_EXTENSION,       0U,                 CLOCK_IP_SEL_2_INDEX,        CLOCK_IP_DIV_5_INDEX,        0U,                               0U,                          0U},                                /*   P0_PSI5_S_BAUD_CLK clock   */
 /*   P0_PSI5_S_CORE_CLK clock   */ {CLOCK_IP_CGM0_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P0_PSI5_S_CORE_EXTENSION,       0U,                 CLOCK_IP_SEL_2_INDEX,        0U,                          0U,                               0U,                          0U},                                /*   P0_PSI5_S_CORE_CLK clock   */
 /*   P0_PSI5_S_TRIG0_CLK clock  */ {CLOCK_IP_CGM0_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P0_PSI5_S_TRIG0_EXTENSION,      0U,                 CLOCK_IP_SEL_3_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                               0U,                          0U},                                /*   P0_PSI5_S_TRIG0_CLK clock  */
@@ -878,16 +890,15 @@ const uint8 Clock_Ip_au8ClockFeatures[CLOCK_IP_NAMES_NO][CLOCK_IP_FEATURES_NO] =
 /*   ETH0_RX_MII_CLK clock      */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH0_RX_MII_EXTENSION,          0U,                 CLOCK_IP_SEL_7_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                               0U,                          0U},                                /*   ETH0_RX_MII_CLK clock      */
 /*   ETH0_RX_RGMII_CLK clock    */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH0_RX_RGMII_EXTENSION,        0U,                 CLOCK_IP_SEL_7_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                               0U,                          0U},                                /*   ETH0_RX_RGMII_CLK clock    */
 /*   ETH0_TX_RGMII_CLK clock    */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH0_TX_RGMII_EXTENSION,        0U,                 CLOCK_IP_SEL_6_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                               0U,                          0U},                                /*   ETH0_TX_RGMII_CLK clock    */
-/*   ETH0_TX_RGMII_LPBK_CLK     */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH0_TX_RGMII_LPBK_EXTENSION,   0U,                 CLOCK_IP_SEL_6_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                               0U,                          0U},                                /*   ETH0_TX_RGMII_LPBK_CLK     */
+/*   ETH0_PS_TX_CLK             */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH0_TX_RGMII_LPBK_EXTENSION,   0U,                 CLOCK_IP_SEL_6_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                               0U,                          0U},                                /*   ETH0_PS_TX_CLK     */
 /*   ETH1_REF_RMII_CLK clock    */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH1_REF_RMII_EXTENSION,        0U,                 CLOCK_IP_SEL_9_INDEX,        CLOCK_IP_DIV_2_INDEX,        0U,                               0U,                          0U},                                /*   ETH1_REF_RMII_CLK clock    */
 /*   ETH1_RX_MII_CLK clock      */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH1_RX_MII_EXTENSION,          0U,                 CLOCK_IP_SEL_9_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                               0U,                          0U},                                /*   ETH1_RX_MII_CLK clock      */
 /*   ETH1_RX_RGMII_CLK clock    */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH1_RX_RGMII_EXTENSION,        0U,                 CLOCK_IP_SEL_9_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                               0U,                          0U},                                /*   ETH1_RX_RGMII_CLK clock    */
 /*   ETH1_TX_MII_CLK clock      */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH1_TX_MII_EXTENSION,          0U,                 CLOCK_IP_SEL_8_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                               0U,                          0U},                                /*   ETH1_TX_MII_CLK clock      */
 /*   ETH1_TX_RGMII_CLK clock    */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH1_TX_RGMII_EXTENSION,        0U,                 CLOCK_IP_SEL_8_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                               0U,                          0U},                                /*   ETH1_TX_RGMII_CLK clock    */
-/*   ETH1_TX_RGMII_LPBK_CLK     */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH1_TX_RGMII_LPBK_EXTENSION,   0U,                 CLOCK_IP_SEL_8_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                               0U,                          0U},                                /*   ETH1_TX_RGMII_LPBK_CLK     */
+/*   ETH1_PS_TX_CLK             */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_ETH1_TX_RGMII_LPBK_EXTENSION,   0U,                 CLOCK_IP_SEL_8_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                               0U,                          0U},                                /*   ETH1_PS_TX_CLK     */
 /*   P1_LFAST0_REF_CLK clock    */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P1_LFAST0_REF_EXTENSION,        0U,                 CLOCK_IP_SEL_11_INDEX,       CLOCK_IP_DIV_0_INDEX,        0U,                               0U,                          0U},                                /*   P1_LFAST0_REF_CLK clock    */
 /*   P1_LFAST1_REF_CLK clock    */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P1_LFAST1_REF_EXTENSION,        0U,                 CLOCK_IP_SEL_12_INDEX,       CLOCK_IP_DIV_0_INDEX,        0U,                               0U,                          0U},                                /*   P1_LFAST1_REF_CLK clock    */
-/*   P1_LFAST_DFT_CLK clock     */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P1_LFAST_DFT_EXTENSION,         0U,                 CLOCK_IP_SEL_13_INDEX,       0U,                          0U,                               0U,                          0U},                                /*   P1_LFAST_DFT_CLK clock     */
 /*   P1_NETC_AXI_CLK clock      */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P1_NETC_AXI_EXTENSION,          0U,                 CLOCK_IP_SEL_14_INDEX,       CLOCK_IP_DIV_0_INDEX,        0U,                               0U,                          0U},                                /*   P1_NETC_AXI_CLK clock      */
 /*   P1_LIN_CLK clock           */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P1_LIN_EXTENSION,               0U,                 CLOCK_IP_SEL_4_INDEX,        0U,                          0U,                               0U,                          0U},                                /*   P1_LIN_CLK clock           */
 /*   P1_REG_INTF_CLK clock      */ {CLOCK_IP_CGM1_INSTANCE,           CLOCK_IP_HWMUX_DIV_CMU,                CLOCK_IP_P1_REG_INTF_EXTENSION,          0U,                 CLOCK_IP_SEL_1_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                               0U,                          CLOCK_IP_CMU_FC_1_INSTANCE},        /*   P1_REG_INTF_CLK clock      */
@@ -905,7 +916,7 @@ const uint8 Clock_Ip_au8ClockFeatures[CLOCK_IP_NAMES_NO][CLOCK_IP_FEATURES_NO] =
 /*   P4_EMIOS_LCU_CLK clock     */ {CLOCK_IP_CGM4_INSTANCE,           CLOCK_IP_HWMUX,                        CLOCK_IP_P4_EMIOS_LCU_EXTENSION,         0U,                 CLOCK_IP_SEL_11_INDEX,       0U,                          0U,                               0U,                          0U},                                /*   P4_EMIOS_LCU_CLK clock     */
 /*   P4_LIN_CLK clock           */ {CLOCK_IP_CGM4_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P4_LIN_EXTENSION,               0U,                 CLOCK_IP_SEL_8_INDEX,        0U,                          0U,                               0U,                          0U},                                /*   P4_LIN_CLK clock           */
 /*   P4_PSI5_125K_CLK clock     */ {CLOCK_IP_CGM4_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P4_PSI5_125K_EXTENSION,         0U,                 CLOCK_IP_SEL_2_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                               0U,                          0U},                                /*   P4_PSI5_125K_CLK clock     */
-/*   P4_PSI5_189K_CLK clock     */ {CLOCK_IP_CGM4_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P4_PSI5_189K_EXTENSION,         0U,                 CLOCK_IP_SEL_2_INDEX,        CLOCK_IP_DIV_2_INDEX,        0U,                               0U,                          0U},                                /*   P4_PSI5_189K_CLK clock     */
+/*   P4_PSI5_189K_CLK clock     */ {CLOCK_IP_CGM4_INSTANCE,           CLOCK_IP_HWMUX_MUL_DIV,                CLOCK_IP_P4_PSI5_189K_EXTENSION,         0U,                 CLOCK_IP_SEL_2_INDEX,        CLOCK_IP_DIV_2_INDEX,        0U,                               0U,                          0U},                                /*   P4_PSI5_189K_CLK clock     */
 /*   P4_PSI5_S_BAUD_CLK clock   */ {CLOCK_IP_CGM4_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P4_PSI5_S_BAUD_EXTENSION,       0U,                 CLOCK_IP_SEL_2_INDEX,        CLOCK_IP_DIV_5_INDEX,        0U,                               0U,                          0U},                                /*   P4_PSI5_S_BAUD_CLK clock   */
 /*   P4_PSI5_S_CORE_CLK clock   */ {CLOCK_IP_CGM4_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P4_PSI5_S_CORE_EXTENSION,       0U,                 CLOCK_IP_SEL_2_INDEX,        0U,                          0U,                               0U,                          0U},                                /*   P4_PSI5_S_CORE_CLK clock   */
 /*   P4_PSI5_S_TRIG0_CLK clock  */ {CLOCK_IP_CGM4_INSTANCE,           CLOCK_IP_HWMUX_DIV,                    CLOCK_IP_P4_PSI5_S_TRIG0_EXTENSION,      0U,                 CLOCK_IP_SEL_3_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                               0U,                          0U},                                /*   P4_PSI5_S_TRIG0_CLK clock  */
@@ -1030,7 +1041,7 @@ const uint8 Clock_Ip_au8SoftwareMuxResetValue[CLOCK_IP_NAMES_NO] = {
     0U,                                       /*!< LFAST0_PLL_PH0_CLK                      */
     0U,                                       /*!< LFAST1_PLL_PH0_CLK                      */
     0U,                                       /*!< ETH_RGMII_REF_CLK                       */
-    0U,                                       /*!< ETH_EXT_TS_CLK                          */
+    0U,                                       /*!< TMR_1588_CLK                          */
     0U,                                       /*!< ETH0_EXT_RX_CLK                         */
     0U,                                       /*!< ETH0_EXT_TX_CLK                         */
     0U,                                       /*!< ETH1_EXT_RX_CLK                         */
@@ -1075,8 +1086,11 @@ const uint8 Clock_Ip_au8SoftwareMuxResetValue[CLOCK_IP_NAMES_NO] = {
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
     0U,                                       /*!< SYSTEM_DIV2_CLK                         */
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-    0U,                                       /*!< SYSTEM_DIV4_CLK                         */
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+    0U,                                       /*!< SYSTEM_DIV4_MON1_CLK                         */
+#endif
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+    0U,                                       /*!< SYSTEM_DIV4_MON2_CLK                         */
 #endif
     0U,                                       /*!< THE_LAST_PRODUCER_CLK                   */
     0U,                                       /*!< ADC0_CLK                                */
@@ -1192,16 +1206,15 @@ const uint8 Clock_Ip_au8SoftwareMuxResetValue[CLOCK_IP_NAMES_NO] = {
     0U,                                       /*!< ETH0_RX_MII_CLK                         */
     0U,                                       /*!< ETH0_RX_RGMII_CLK                       */
     0U,                                       /*!< ETH0_TX_RGMII_CLK                       */
-    0U,                                       /*!< ETH0_TX_RGMII_LPBK_CLK                  */
+    0U,                                       /*!< ETH0_PS_TX_CLK                          */
     0U,                                       /*!< ETH1_REF_RMII_CLK                       */
     0U,                                       /*!< ETH1_RX_MII_CLK                         */
     0U,                                       /*!< ETH1_RX_RGMII_CLK                       */
     0U,                                       /*!< ETH1_TX_MII_CLK                         */
     0U,                                       /*!< ETH1_TX_RGMII_CLK                       */
-    0U,                                       /*!< ETH1_TX_RGMII_LPBK_CLK                  */
+    0U,                                       /*!< ETH1_PS_TX_CLK                          */
     0U,                                       /*!< P1_LFAST0_REF_CLK                       */
     0U,                                       /*!< P1_LFAST1_REF_CLK                       */
-    0U,                                       /*!< P1_LFAST_DFT_CLK                        */
     0U,                                       /*!< P1_NETC_AXI_CLK                         */
     0U,                                       /*!< P1_LIN_CLK                              */
     0U,                                       /*!< P1_REG_INTF_CLK                         */
@@ -1405,8 +1418,11 @@ const uint16 Clock_Ip_au16SelectorEntryHardwareValue[CLOCK_IP_NAMES_NO] = {
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
     0U,                                       /*!< SYSTEM_DIV2_CL                          */
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-    0U,                                       /*!< SYSTEM_DIV4_CLK                         */
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+    0U,                                       /*!< SYSTEM_DIV4_MON1_CLK                         */
+#endif
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+    0U,                                       /*!< SYSTEM_DIV4_MON2_CLK                         */
 #endif
     0U,                                       /*!<   THE_LAST_PRODUCER_CLK                 */
     0U,                                       /*!<   ADC0_CLK clock                        */
@@ -1522,16 +1538,15 @@ const uint16 Clock_Ip_au16SelectorEntryHardwareValue[CLOCK_IP_NAMES_NO] = {
     0U,                                       /*!<   ETH0_RX_MII_CLK clock                 */
     0U,                                       /*!<   ETH0_RX_RGMII_CLK clock               */
     0U,                                       /*!<   ETH0_TX_RGMII_CLK clock               */
-    0U,                                       /*!<   ETH0_TX_RGMII_LPBK_CLK                */
+    0U,                                       /*!<   ETH0_PS_TX_CLK                        */
     0U,                                       /*!<   ETH1_REF_RMII_CLK clock               */
     0U,                                       /*!<   ETH1_RX_MII_CLK clock                 */
     0U,                                       /*!<   ETH1_RX_RGMII_CLK clock               */
     0U,                                       /*!<   ETH1_TX_MII_CLK clock                 */
     0U,                                       /*!<   ETH1_TX_RGMII_CLK clock               */
-    0U,                                       /*!<   ETH1_TX_RGMII_LPBK_CLK                */
+    0U,                                       /*!<   ETH1_PS_TX_CLK                        */
     0U,                                       /*!<   P1_LFAST0_REF_CLK clock               */
     0U,                                       /*!<   P1_LFAST1_REF_CLK clock               */
-    0U,                                       /*!<   P1_LFAST_DFT_CLK clock                */
     0U,                                       /*!<   P1_NETC_AXI_CLK clock                 */
     0U,                                       /*!<   P1_LIN_CLK clock                      */
     0U,                                       /*!<   P1_REG_INTF_CLK clock                 */
@@ -1673,7 +1688,7 @@ const uint16 Clock_Ip_au16SelectorEntryClkoutHardwareValue[CLOCK_IP_NAMES_NO] = 
     0U,                                       /*!< LFAST0_PLL_PH0_CLK                      */
     1U,                                       /*!< LFAST1_PLL_PH0_CLK                      */
     0U,                                       /*!< ETH_RGMII_REF_CLK                       */
-    0U,                                       /*!< ETH_EXT_TS_CLK                          */
+    0U,                                       /*!< TMR_1588_CLK                          */
     0U,                                       /*!< ETH0_EXT_RX_CLK                         */
     0U,                                       /*!< ETH0_EXT_TX_CLK                         */
     0U,                                       /*!< ETH1_EXT_RX_CLK                         */
@@ -1718,8 +1733,11 @@ const uint16 Clock_Ip_au16SelectorEntryClkoutHardwareValue[CLOCK_IP_NAMES_NO] = 
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
     0U,                                       /*!< SYSTEM_DIV2_CLK                         */
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-    0U,                                       /*!< SYSTEM_DIV4_CLK                         */
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+    0U,                                       /*!< SYSTEM_DIV4_MON1_CLK                         */
+#endif
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+    0U,                                       /*!< SYSTEM_DIV4_MON2_CLK                         */
 #endif
     0U,                                       /*!< THE_LAST_PRODUCER_CLK                   */
     0U,                                       /*!< ADC0_CLK                                */
@@ -1835,16 +1853,15 @@ const uint16 Clock_Ip_au16SelectorEntryClkoutHardwareValue[CLOCK_IP_NAMES_NO] = 
     14U,                                      /*!< ETH0_RX_MII_CLK                         */
     15U,                                      /*!< ETH0_RX_RGMII_CLK                       */
     13U,                                      /*!< ETH0_TX_RGMII_CLK                       */
-    0U,                                       /*!< ETH0_TX_RGMII_LPBK_CLK                  */
+    0U,                                       /*!< ETH0_PS_TX_CLK                          */
     21U,                                      /*!< ETH1_REF_RMII_CLK                       */
     19U,                                      /*!< ETH1_RX_MII_CLK                         */
     20U,                                      /*!< ETH1_RX_RGMII_CLK                       */
     17U,                                      /*!< ETH1_TX_MII_CLK                         */
     18U,                                      /*!< ETH1_TX_RGMII_CLK                       */
-    0U,                                       /*!< ETH1_TX_RGMII_LPBK_CLK                  */
+    0U,                                       /*!< ETH1_PS_TX_CLK                          */
     0U,                                       /*!< P1_LFAST0_REF_CLK                       */
     0U,                                       /*!< P1_LFAST1_REF_CLK                       */
-    0U,                                       /*!< P1_LFAST_DFT_CLK                        */
     0U,                                       /*!< P1_NETC_AXI_CLK                         */
     9U,                                       /*!< P1_LIN_CLK                              */
     5U,                                       /*!< P1_REG_INTF_CLK                         */
@@ -1882,10 +1899,10 @@ const uint16 Clock_Ip_au16SelectorEntryClkoutHardwareValue[CLOCK_IP_NAMES_NO] = 
     3U,                                       /*!< P4_REG_INTF_CLK                         */
     21U,                                      /*!< P4_SDHC_IP_CLK                          */
     22U,                                      /*!< P4_SDHC_IP_DIV2_CLK                     */
-    0U,                                       /*!< P5_DIPORT_CLK                           */
-    0U,                                       /*!< P5_AE_CLK                               */
-    0U,                                       /*!< P5_CANXL_PE_CLK                         */
-    0U,                                       /*!< P5_CANXL_CHI_CLK                        */
+    7U,                                       /*!< P5_DIPORT_CLK                           */
+    8U,                                       /*!< P5_AE_CLK                               */
+    9U,                                       /*!< P5_CANXL_PE_CLK                         */
+    10U,                                      /*!< P5_CANXL_CHI_CLK                        */
     0U,                                       /*!< P5_CLKOUT_SRC_CLK                       */
     5U,                                       /*!< P5_LIN_CLK                              */
     3U,                                       /*!< P5_REG_INTF_CLK                         */
@@ -2039,8 +2056,11 @@ const uint16 Clock_Ip_au16SelectorEntryAeHardwareValue[CLOCK_IP_FEATURE_NAMES_NO
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
     0U,                                       /*!< SYSTEM_DIV2_CL                          */
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-    0U,                                       /*!< SYSTEM_DIV4_CLK                         */
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+    0U,                                       /*!< SYSTEM_DIV4_MON1_CLK                         */
+#endif
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+    0U,                                       /*!< SYSTEM_DIV4_MON2_CLK                         */
 #endif
     0U,                                       /*!<   THE_LAST_PRODUCER_CLK                 */
     0U,                                       /*!<   ADC0_CLK clock                        */
@@ -2156,16 +2176,15 @@ const uint16 Clock_Ip_au16SelectorEntryAeHardwareValue[CLOCK_IP_FEATURE_NAMES_NO
     0U,                                       /*!<   ETH0_RX_MII_CLK clock                 */
     0U,                                       /*!<   ETH0_RX_RGMII_CLK clock               */
     0U,                                       /*!<   ETH0_TX_RGMII_CLK clock               */
-    0U,                                       /*!<   ETH0_TX_RGMII_LPBK_CLK                */
+    0U,                                       /*!<   ETH0_PS_TX_CLK                        */
     0U,                                       /*!<   ETH1_REF_RMII_CLK clock               */
     0U,                                       /*!<   ETH1_RX_MII_CLK clock                 */
     0U,                                       /*!<   ETH1_RX_RGMII_CLK clock               */
     0U,                                       /*!<   ETH1_TX_MII_CLK clock                 */
     0U,                                       /*!<   ETH1_TX_RGMII_CLK clock               */
-    0U,                                       /*!<   ETH1_TX_RGMII_LPBK_CLK                */
+    0U,                                       /*!<   ETH1_PS_TX_CLK                        */
     0U,                                       /*!<   P1_LFAST0_REF_CLK clock               */
     0U,                                       /*!<   P1_LFAST1_REF_CLK clock               */
-    0U,                                       /*!<   P1_LFAST_DFT_CLK clock                */
     0U,                                       /*!<   P1_NETC_AXI_CLK clock                 */
     0U,                                       /*!<   P1_LIN_CLK clock                      */
     0U,                                       /*!<   P1_REG_INTF_CLK clock                 */
@@ -2321,7 +2340,7 @@ const uint32 Clock_Ip_au8ClockNameTypes[CLOCK_IP_NAMES_NO] =
 /*   LFAST0_PLL_PH0_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LFAST0_PLL_PH0_CLK clock   */
 /*   LFAST1_PLL_PH0_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LFAST0_PLL_PH0_CLK clock   */
 /*   eth_rgmii_ref clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   eth_rgmii_ref clock        */
-/*   eth_ext_ts clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   eth_ext_ts clock           */
+/*   tmr_1588_ref clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   tmr_1588_ref clock           */
 /*   eth0_ext_rx clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   eth0_ext_rx clock          */
 /*   eth0_ext_tx clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   eth0_ext_tx clock          */
 /*   eth1_ext_rx clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   eth1_ext_rx clock          */
@@ -2372,8 +2391,11 @@ const uint32 Clock_Ip_au8ClockNameTypes[CLOCK_IP_NAMES_NO] =
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
 /*   SYSTEM_DIV2_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SYSTEM_DIV2_CLK clock   */
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-/*   SYSTEM_DIV4_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SYSTEM_DIV4_CLK clock   */
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+/*   SYSTEM_DIV4_MON1_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SYSTEM_DIV4_MON1_CLK clock   */
+#endif
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+/*   SYSTEM_DIV4_MON2_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SYSTEM_DIV4_MON2_CLK clock   */
 #endif
 /*   THE_LAST_PRODUCER_CLK      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   THE_LAST_PRODUCER_CLK      */
 /*   ADC0_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ADC0_CLK clock             */
@@ -2489,16 +2511,15 @@ const uint32 Clock_Ip_au8ClockNameTypes[CLOCK_IP_NAMES_NO] =
 /*   ETH0_RX_MII_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH0_RX_MII_CLK clock      */
 /*   ETH0_RX_RGMII_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH0_RX_RGMII_CLK clock    */
 /*   ETH0_TX_RGMII_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH0_TX_RGMII_CLK clock    */
-/*   ETH0_TX_RGMII_LPBK_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH0_TX_RGMII_LPBK_CLK     */
+/*   ETH0_PS_TX_CLK             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH0_PS_TX_CLK     */
 /*   ETH1_REF_RMII_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH1_REF_RMII_CLK clock    */
 /*   ETH1_RX_MII_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH1_RX_MII_CLK clock      */
 /*   ETH1_RX_RGMII_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH1_RX_RGMII_CLK clock    */
 /*   ETH1_TX_MII_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH1_TX_MII_CLK clock      */
 /*   ETH1_TX_RGMII_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH1_TX_RGMII_CLK clock    */
-/*   ETH1_TX_RGMII_LPBK_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH1_TX_RGMII_LPBK_CLK     */
+/*   ETH1_PS_TX_CLK             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ETH1_PS_TX_CLK     */
 /*   P1_LFAST0_REF_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   P1_LFAST0_REF_CLK clock    */
 /*   P1_LFAST1_REF_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   P1_LFAST1_REF_CLK clock    */
-/*   P1_LFAST_DFT_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   P1_LFAST_DFT_CLK clock     */
 /*   P1_NETC_AXI_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   P1_NETC_AXI_CLK clock      */
 /*   P1_LIN_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   P1_LIN_CLK clock           */
 /*   P1_REG_INTF_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   P1_REG_INTF_CLK clock      */
@@ -2909,42 +2930,40 @@ DFS_Type* const Clock_Ip_apxDfs[CLOCK_IP_DFS_INSTANCES_ARRAY_SIZE] = {
 };
 Clock_Ip_ClockMonitorType* const Clock_Ip_apxCmu[CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE] =
 {
-    (Clock_Ip_ClockMonitorType*)IP_SMU__CMU_FC,
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_0,
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_1,
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_2A,
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_2B,
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_2C,
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_3,
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_4,
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_5,
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_6,
-    (Clock_Ip_ClockMonitorType*)IP_CE_CMU_FC_0,
-    (Clock_Ip_ClockMonitorType*)IP_CE_CMU_FC_1,
-    (Clock_Ip_ClockMonitorType*)IP_CE_CMU_FC_2,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_0,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_1,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_2,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_3,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_4,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_0,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_1,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_2,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_3,
-    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_4,
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_DEBUG_1,
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_DEBUG_2,
+    (Clock_Ip_ClockMonitorType*)IP_SMU__CMU_FC_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_0_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_1_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_2A_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_2B_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_2C_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_3_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_4_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_5_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_6_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CE_CMU_FC_0_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CE_CMU_FC_1_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CE_CMU_FC_2_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_0_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_1_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_2_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_3_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_4_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_0_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_1_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_2_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_3_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_RTU0__CMU_FC_4_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_DEBUG_1_BASE,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_DEBUG_2_BASE,
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_AE_1,
-#else
-    NULL_PTR,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_AE_1_BASE,
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_AE_2,
-#else
-    NULL_PTR,
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_AE_2_BASE,
 #endif
-
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_AE_3_BASE,
+#endif
 };
 Clock_Ip_NameType const Clock_Ip_aeCmuNames[CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE] =
 {
@@ -2975,13 +2994,12 @@ Clock_Ip_NameType const Clock_Ip_aeCmuNames[CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE] =
     P1_CLKOUT_SRC_CLK,
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
     SYSTEM_DIV2_CLK,
-#else
-    RESERVED_CLK,
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
-    SYSTEM_DIV4_CLK,
-#else
-    RESERVED_CLK,
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+    SYSTEM_DIV4_MON1_CLK,
+#endif
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+    SYSTEM_DIV4_MON2_CLK,
 #endif
 };
 
@@ -3028,13 +3046,6 @@ Clock_Ip_CmuInfoType const Clock_Ip_axCmuInfo[CLOCK_IP_CMU_INFO_SIZE] =  {
     FXOSC_CLK,                                       /* Name of the reference clock */
     P2_REG_INTF_CLK,                                 /* Name of the bus clock */
     (Clock_Ip_ClockMonitorType*)IP_CMU_FC_2C,        /* Cmu instance */
-},
-/* CLOCK_IP_CMU_FC_2D_INSTANCE */
-{
-    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
-    FXOSC_CLK,                                       /* Name of the reference clock */
-    P2_MATH_DIV3_CLK,                                /* Name of the bus clock */
-    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_2D,        /* Cmu instance */
 },
 /* CLOCK_IP_CMU_FC_3_INSTANCE */
 {
@@ -3170,14 +3181,12 @@ Clock_Ip_CmuInfoType const Clock_Ip_axCmuInfo[CLOCK_IP_CMU_INFO_SIZE] =  {
     (Clock_Ip_ClockMonitorType*)IP_CMU_FC_DEBUG_2,   /* Cmu instance */
 },
 
-
-
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
 /* CLOCK_IP_CMU_FC_AE_1_INSTANCE */
 {
     SYSTEM_DIV2_CLK,                                 /* Name of the clock that supports cmu (clock monitor) */
-    FXOSC_CLK,                                       /* Name of the reference clock */
-    RESERVED_CLK,                                    /* Name of the bus clock */
+    FIRC_AE_CLK,                                       /* Name of the reference clock */
+    SYSTEM_DIV2_CLK,                                    /* Name of the bus clock */
     (Clock_Ip_ClockMonitorType*)IP_CMU_FC_AE_1,      /* Cmu instance */
 },
 #else
@@ -3189,12 +3198,12 @@ Clock_Ip_CmuInfoType const Clock_Ip_axCmuInfo[CLOCK_IP_CMU_INFO_SIZE] =  {
 },
 #endif
 
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
 /* CLOCK_IP_CMU_FC_AE_2_INSTANCE */
 {
-    SYSTEM_DIV4_CLK,                                 /* Name of the clock that supports cmu (clock monitor) */
-    FXOSC_CLK,                                       /* Name of the reference clock */
-    RESERVED_CLK,                                    /* Name of the bus clock */
+    SYSTEM_DIV4_MON1_CLK,                            /* Name of the clock that supports cmu (clock monitor) */
+    FIRC_AE_CLK,                                       /* Name of the reference clock */
+    SYSTEM_DIV2_CLK,                                    /* Name of the bus clock */
     (Clock_Ip_ClockMonitorType*)IP_CMU_FC_AE_2,      /* Cmu instance */
 },
 #else
@@ -3205,7 +3214,26 @@ Clock_Ip_CmuInfoType const Clock_Ip_axCmuInfo[CLOCK_IP_CMU_INFO_SIZE] =  {
     NULL_PTR,   /* Cmu instance */
 },
 #endif
+
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+/* CLOCK_IP_CMU_FC_AE_3_INSTANCE */
+{
+    SYSTEM_DIV4_MON2_CLK,                            /* Name of the clock that supports cmu (clock monitor) */
+    FIRC_AE_CLK,                                       /* Name of the reference clock */
+    SYSTEM_DIV2_CLK,                                    /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_AE_3,      /* Cmu instance */
+},
+#else
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,   /* Cmu instance */
+},
+#endif
 };
+
+
 Clock_Ip_GprClockControlEnable_Type* const Clock_Ip_apxGprClockControlEnable[CLOCK_IP_PERIPHERAL_GROUPS_COUNT] =
 {
     (Clock_Ip_GprClockControlEnable_Type*)(IP_GPR0_PCTL_BASE),
@@ -3305,8 +3333,11 @@ const Clock_Ip_ClockNameSourceType Clock_Ip_aeSourceTypeClockName[CLOCK_IP_PRODU
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
     UKNOWN_TYPE,                               /*!< SYSTEM_DIV2_CL                          */
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-    UKNOWN_TYPE,                               /*!< SYSTEM_DIV4_CLK                         */
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+    UKNOWN_TYPE,                               /*!< SYSTEM_DIV4_MON1_CLK                         */
+#endif
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+    UKNOWN_TYPE,                               /*!< SYSTEM_DIV4_MON2_CLK                         */
 #endif
 };
 
@@ -3407,7 +3438,6 @@ const Clock_Ip_ClockExtensionType Clock_Ip_axFeatureExtensions[CLOCK_IP_EXTENSIO
     {MC_CGM_MUX_3_CSC_SELCTL_MASK,     MC_CGM_MUX_3_CSC_SELCTL_SHIFT,     0U,                                0U},                               /* CLOCK_IP_P1_DSPI60_EXTENSION */
     {MC_CGM_MUX_11_CSC_SELCTL_MASK,    MC_CGM_MUX_11_CSC_SELCTL_SHIFT,    MC_CGM_MUX_11_DC_0_DIV_MASK,       MC_CGM_MUX_11_DC_0_DIV_SHIFT},     /* CLOCK_IP_P1_LFAST0_REF_EXTENSION */
     {MC_CGM_MUX_12_CSC_SELCTL_MASK,    MC_CGM_MUX_12_CSC_SELCTL_SHIFT,    MC_CGM_MUX_11_DC_0_DIV_MASK,       MC_CGM_MUX_12_DC_0_DIV_SHIFT},     /* CLOCK_IP_P1_LFAST1_REF_EXTENSION */
-    {MC_CGM_MUX_13_CSC_SELCTL_MASK,    MC_CGM_MUX_13_CSC_SELCTL_SHIFT,    0U,                                0U},                               /* CLOCK_IP_P1_LFAST_DFT_EXTENSION */
     {MC_CGM_MUX_14_CSC_SELCTL_MASK,    MC_CGM_MUX_14_CSC_SELCTL_SHIFT,    MC_CGM_MUX_14_DC_0_DIV_MASK,       MC_CGM_MUX_14_DC_0_DIV_SHIFT},     /* CLOCK_IP_P1_NETC_AXI_EXTENSION */
     {MC_CGM_MUX_4_CSC_SELCTL_MASK,     MC_CGM_MUX_4_CSC_SELCTL_SHIFT,     0U,                                0U},                               /* CLOCK_IP_P1_LIN_EXTENSION */
     {MC_CGM_MUX_5_CSC_SELCTL_MASK,     MC_CGM_MUX_5_CSC_SELCTL_SHIFT,     MC_CGM_MUX_5_DC_0_DIV_MASK,        MC_CGM_MUX_5_DC_0_DIV_SHIFT},      /* P1_ETH_TS_EXTENSION */

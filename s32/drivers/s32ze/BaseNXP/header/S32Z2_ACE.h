@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_ACE.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_ACE
  *
  * This file contains register definitions and macros for easy access to their
@@ -70,15 +70,15 @@
 
 /** ACE - Register Layout Typedef */
 typedef struct {
-  __O  uint64_t INIT_VEC;                          /**< , offset: 0x0 */
-  __O  uint64_t DATA_IN;                           /**< , offset: 0x8 */
+  __O  uint64_t INIT_VEC;                          /**< Initial Value, offset: 0x0, available only on: AES.ACE.AHB/AES__ACE__AHB (missing on AES.ACE.AHB2/AES__ACE__AHB2) */
+  __O  uint64_t DATA_IN;                           /**< Data Input, offset: 0x8, available only on: AES.ACE.AHB/AES__ACE__AHB (missing on AES.ACE.AHB2/AES__ACE__AHB2) */
   uint8_t RESERVED_0[240];
-  __I  uint64_t STATUS;                            /**< , offset: 0x100 */
-  __IO uint64_t CONTROL;                           /**< , offset: 0x108 */
+  __I  uint64_t STATUS;                            /**< Status, offset: 0x100, available only on: AES.ACE.AHB2/AES__ACE__AHB2 (missing on AES.ACE.AHB/AES__ACE__AHB) */
+  __IO uint64_t CONTROL;                           /**< Control, offset: 0x108, available only on: AES.ACE.AHB2/AES__ACE__AHB2 (missing on AES.ACE.AHB/AES__ACE__AHB) */
   uint8_t RESERVED_1[8];
-  __IO uint64_t RESULT;                            /**< , offset: 0x118 */
-  __IO uint64_t AUTH_TAG;                          /**< , offset: 0x120 */
-  __I  uint64_t VERSION;                           /**< , offset: 0x128 */
+  __IO uint64_t RESULT;                            /**< Result, offset: 0x118, available only on: AES.ACE.AHB2/AES__ACE__AHB2 (missing on AES.ACE.AHB/AES__ACE__AHB) */
+  __IO uint64_t AUTH_TAG;                          /**< Auth Tag Output, offset: 0x120, available only on: AES.ACE.AHB2/AES__ACE__AHB2 (missing on AES.ACE.AHB/AES__ACE__AHB) */
+  __I  uint64_t VERSION;                           /**< ACE Version, offset: 0x128, available only on: AES.ACE.AHB2/AES__ACE__AHB2 (missing on AES.ACE.AHB/AES__ACE__AHB) */
 } ACE_Type, *ACE_MemMapPtr;
 
 /** Number of instances of the ACE module. */
@@ -107,7 +107,7 @@ typedef struct {
  * @{
  */
 
-/*! @name INIT_VEC -  */
+/*! @name INIT_VEC - Initial Value */
 /*! @{ */
 
 #define ACE_INIT_VEC_DATA_MASK                   (0xFFFFFFFFFFFFFFFFU)
@@ -116,7 +116,7 @@ typedef struct {
 #define ACE_INIT_VEC_DATA(x)                     (((uint64_t)(((uint64_t)(x)) << ACE_INIT_VEC_DATA_SHIFT)) & ACE_INIT_VEC_DATA_MASK)
 /*! @} */
 
-/*! @name DATA_IN -  */
+/*! @name DATA_IN - Data Input */
 /*! @{ */
 
 #define ACE_DATA_IN_DATA_MASK                    (0xFFFFFFFFFFFFFFFFU)
@@ -125,13 +125,8 @@ typedef struct {
 #define ACE_DATA_IN_DATA(x)                      (((uint64_t)(((uint64_t)(x)) << ACE_DATA_IN_DATA_SHIFT)) & ACE_DATA_IN_DATA_MASK)
 /*! @} */
 
-/*! @name STATUS -  */
+/*! @name STATUS - Status */
 /*! @{ */
-
-#define ACE_STATUS_RFU_IRQ_MASK                  (0x1U)
-#define ACE_STATUS_RFU_IRQ_SHIFT                 (0U)
-#define ACE_STATUS_RFU_IRQ_WIDTH                 (1U)
-#define ACE_STATUS_RFU_IRQ(x)                    (((uint64_t)(((uint64_t)(x)) << ACE_STATUS_RFU_IRQ_SHIFT)) & ACE_STATUS_RFU_IRQ_MASK)
 
 #define ACE_STATUS_BUSY_MASK                     (0x2U)
 #define ACE_STATUS_BUSY_SHIFT                    (1U)
@@ -142,11 +137,6 @@ typedef struct {
 #define ACE_STATUS_ERROR_SHIFT                   (2U)
 #define ACE_STATUS_ERROR_WIDTH                   (3U)
 #define ACE_STATUS_ERROR(x)                      (((uint64_t)(((uint64_t)(x)) << ACE_STATUS_ERROR_SHIFT)) & ACE_STATUS_ERROR_MASK)
-
-#define ACE_STATUS_RFU2_MASK                     (0xFFE0U)
-#define ACE_STATUS_RFU2_SHIFT                    (5U)
-#define ACE_STATUS_RFU2_WIDTH                    (11U)
-#define ACE_STATUS_RFU2(x)                       (((uint64_t)(((uint64_t)(x)) << ACE_STATUS_RFU2_SHIFT)) & ACE_STATUS_RFU2_MASK)
 
 #define ACE_STATUS_K_ERR_MASK                    (0x10000U)
 #define ACE_STATUS_K_ERR_SHIFT                   (16U)
@@ -197,14 +187,9 @@ typedef struct {
 #define ACE_STATUS_KP_CRC_ERR_SHIFT              (25U)
 #define ACE_STATUS_KP_CRC_ERR_WIDTH              (1U)
 #define ACE_STATUS_KP_CRC_ERR(x)                 (((uint64_t)(((uint64_t)(x)) << ACE_STATUS_KP_CRC_ERR_SHIFT)) & ACE_STATUS_KP_CRC_ERR_MASK)
-
-#define ACE_STATUS_RFU_MASK                      (0xFFFFFFFFFC000000U)
-#define ACE_STATUS_RFU_SHIFT                     (26U)
-#define ACE_STATUS_RFU_WIDTH                     (38U)
-#define ACE_STATUS_RFU(x)                        (((uint64_t)(((uint64_t)(x)) << ACE_STATUS_RFU_SHIFT)) & ACE_STATUS_RFU_MASK)
 /*! @} */
 
-/*! @name CONTROL -  */
+/*! @name CONTROL - Control */
 /*! @{ */
 
 #define ACE_CONTROL_ENABLE_MASK                  (0x1U)
@@ -221,14 +206,9 @@ typedef struct {
 #define ACE_CONTROL_MASK_SHIFT                   (2U)
 #define ACE_CONTROL_MASK_WIDTH                   (7U)
 #define ACE_CONTROL_MASK(x)                      (((uint64_t)(((uint64_t)(x)) << ACE_CONTROL_MASK_SHIFT)) & ACE_CONTROL_MASK_MASK)
-
-#define ACE_CONTROL_RFU_MASK                     (0xFFFFFFFFFFFFFE00U)
-#define ACE_CONTROL_RFU_SHIFT                    (9U)
-#define ACE_CONTROL_RFU_WIDTH                    (55U)
-#define ACE_CONTROL_RFU(x)                       (((uint64_t)(((uint64_t)(x)) << ACE_CONTROL_RFU_SHIFT)) & ACE_CONTROL_RFU_MASK)
 /*! @} */
 
-/*! @name RESULT -  */
+/*! @name RESULT - Result */
 /*! @{ */
 
 #define ACE_RESULT_DATA_MASK                     (0xFFFFFFFFFFFFFFFFU)
@@ -237,7 +217,7 @@ typedef struct {
 #define ACE_RESULT_DATA(x)                       (((uint64_t)(((uint64_t)(x)) << ACE_RESULT_DATA_SHIFT)) & ACE_RESULT_DATA_MASK)
 /*! @} */
 
-/*! @name AUTH_TAG -  */
+/*! @name AUTH_TAG - Auth Tag Output */
 /*! @{ */
 
 #define ACE_AUTH_TAG_DATA_MASK                   (0xFFFFFFFFFFFFFFFFU)
@@ -246,7 +226,7 @@ typedef struct {
 #define ACE_AUTH_TAG_DATA(x)                     (((uint64_t)(((uint64_t)(x)) << ACE_AUTH_TAG_DATA_SHIFT)) & ACE_AUTH_TAG_DATA_MASK)
 /*! @} */
 
-/*! @name VERSION -  */
+/*! @name VERSION - ACE Version */
 /*! @{ */
 
 #define ACE_VERSION_EXT_REV_MASK                 (0xFU)
@@ -273,11 +253,6 @@ typedef struct {
 #define ACE_VERSION_MILESTONE_SHIFT              (16U)
 #define ACE_VERSION_MILESTONE_WIDTH              (2U)
 #define ACE_VERSION_MILESTONE(x)                 (((uint64_t)(((uint64_t)(x)) << ACE_VERSION_MILESTONE_SHIFT)) & ACE_VERSION_MILESTONE_MASK)
-
-#define ACE_VERSION_VERSION_RSVD_MASK            (0xFFFFFFFFFFFC0000U)
-#define ACE_VERSION_VERSION_RSVD_SHIFT           (18U)
-#define ACE_VERSION_VERSION_RSVD_WIDTH           (46U)
-#define ACE_VERSION_VERSION_RSVD(x)              (((uint64_t)(((uint64_t)(x)) << ACE_VERSION_VERSION_RSVD_SHIFT)) & ACE_VERSION_VERSION_RSVD_MASK)
 /*! @} */
 
 /*!

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,8 +35,8 @@ extern "C"{
 #define NETC_ETH_IP_IRQ_AR_RELEASE_MAJOR_VERSION_C    4
 #define NETC_ETH_IP_IRQ_AR_RELEASE_MINOR_VERSION_C    7
 #define NETC_ETH_IP_IRQ_AR_RELEASE_REVISION_VERSION_C 0
-#define NETC_ETH_IP_IRQ_SW_MAJOR_VERSION_C            0
-#define NETC_ETH_IP_IRQ_SW_MINOR_VERSION_C            9
+#define NETC_ETH_IP_IRQ_SW_MAJOR_VERSION_C            1
+#define NETC_ETH_IP_IRQ_SW_MINOR_VERSION_C            0
 #define NETC_ETH_IP_IRQ_SW_PATCH_VERSION_C            0
 
 /*==================================================================================================
@@ -76,6 +76,13 @@ extern "C"{
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
+#define ETH_43_NETC_START_SEC_VAR_INIT_UNSPECIFIED
+#include "Eth_43_NETC_MemMap.h"
+
+extern Netc_Eth_Ip_VfBaseType *netcVFBase[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+
+#define ETH_43_NETC_STOP_SEC_VAR_INIT_UNSPECIFIED
+#include "Eth_43_NETC_MemMap.h"
 
 /*==================================================================================================
 *                                        GLOBAL VARIABLES
@@ -90,29 +97,43 @@ extern Netc_Eth_Ip_SiBaseType *netcSIsBase[8U];
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 /**
- * @brief 
- * 
- * @param CtrlIndex 
+ * @brief
+ *
+ * @param CtrlIndex
  */
 static inline void Netc_Eth_Ip_MSIX_Tx(uint8 CtrlIndex);
 
 /**
- * @brief 
- * 
- * @param CtrlIndex 
+ * @brief
+ *
+ * @param CtrlIndex
  */
 static inline void Netc_Eth_Ip_MSIX_Rx(uint8 CtrlIndex);
+
+/**
+ * @brief Local function used to process PSI Message Receive event
+ *
+ * @param VSIIndex
+ */
+static inline void Netc_Eth_Ip_ProcessMsgRcv(uint8 VSIIndex);
+
+/**
+ * @brief Local function used to re-initialize the VSI after a Function Level Reset event
+ *
+ * @param VSIIndex
+ */
+static inline void Netc_Eth_Ip_InitVSIAfterFlr(uint8 VSIIndex);
 
 /*==================================================================================================
 *                                         LOCAL FUNCTIONS
 ==================================================================================================*/
-
+/* implements Netc_Eth_Ip_MSIX_Tx_Activity */
 static inline void Netc_Eth_Ip_MSIX_Tx(uint8 CtrlIndex)
 {
     uint8  RingIndex;
     uint32 TxRingIntStatus = netcSIsBase[CtrlIndex]->SITXIDR0;
     /*
-    * Checking the first queue Interrupt Enable flag 
+    * Checking the first queue Interrupt Enable flag
     *  In order to fulfill requirement CPR_RTD_00664, the interrupt enable flag for the first queue is checked for the following reasons:
     * 1. The interrupts are enabled at controller level, therefore if one queue has the interrupt enabled, then all of the queues will have it.
     * 2. In ETH driver case, the queues are mandatory configured in order, so that the first queue enables the interrupt, then all of the queues will have the interrupt enable flag set
@@ -161,15 +182,16 @@ static inline void Netc_Eth_Ip_MSIX_Tx(uint8 CtrlIndex)
     {
         /*  MISRA C-2012 Rule 15.7 */
     }
-       
+
 }
 
+/* implements Netc_Eth_Ip_MSIX_Rx_Activity */
 static inline void Netc_Eth_Ip_MSIX_Rx(uint8 CtrlIndex)
 {
     uint8  RingIndex;
     uint32 interruptStatus = netcSIsBase[CtrlIndex]->SIRXIDR0;
     /*
-    * Checking the first queue Interrupt Enable flag 
+    * Checking the first queue Interrupt Enable flag
     *  In order to fulfill requirement CPR_RTD_00664, the interrupt enable flag for the first queue is checked for the following reasons:
     * 1. The interrupts are enabled at controller level, therefore if one queue has the interrupt enabled, then all of the queues will have it.
     * 2. In ETH driver case, the queues are mandatory configured in order, so that the first queue enables the interrupt, then all of the queues will have the interrupt enable flag set
@@ -179,7 +201,7 @@ static inline void Netc_Eth_Ip_MSIX_Rx(uint8 CtrlIndex)
     {
         /* Clear RX interrupt flag for all SIs.*/
         netcSIsBase[CtrlIndex]->SIRXIDR0 = interruptStatus;
-        
+
          /* Check is current controller was intialized.  Req CPR_RTD_00011 is fulfilled.*/
         if (NULL_PTR != Netc_Eth_Ip_apxState[CtrlIndex])
         {
@@ -195,107 +217,300 @@ static inline void Netc_Eth_Ip_MSIX_Rx(uint8 CtrlIndex)
     }
 }
 
+static inline void Netc_Eth_Ip_ProcessMsgRcv(uint8 VSIIndex)
+{
+    const Netc_Eth_Ip_GeneralSIConfigType * SIConfig;
+    const Netc_Eth_Ip_VsiToPsiMsgType *CmdMacReceivedAddr;
+    Netc_Eth_Ip_VsiToPsiMsgActionType CommandType;
+    uint8 HashValue;
+    Netc_Eth_Ip_StatusType PSIResponse = NETC_ETH_IP_STATUS_NOT_REAL_ERROR;
+
+    CmdMacReceivedAddr =(const Netc_Eth_Ip_VsiToPsiMsgType *)(netcSIsBase[NETC_ETH_IP_PSI_INDEX]->MSGSR.PSI_A.VSI_NUM[VSIIndex - 1U].PSIVMSGRCVAR0 & \
+                        NETC_F3_SI0_PSIVMSGRCVAR0_ADDRL_MASK);
+    CommandType = (Netc_Eth_Ip_VsiToPsiMsgActionType)((uint16)((uint32)CmdMacReceivedAddr->Class << 8U) + ((uint32)CmdMacReceivedAddr->Command));
+
+    /* Check if the driver was intialized.  Req CPR_RTD_00011 is fulfilled.*/
+    if (NULL_PTR != Netc_Eth_Ip_apxState[NETC_ETH_IP_PSI_INDEX])
+    {
+        /*Get the SI general configuration */
+        SIConfig = &(*Netc_Eth_Ip_apxState[NETC_ETH_IP_PSI_INDEX]->SIGeneralConfig)[VSIIndex];
+
+        switch(CommandType)
+        {
+            case NETC_ETH_IP_VSITOPSI_MAC_ADDR_SET:
+            {
+                if (SIConfig->changeMACAllowed == TRUE)
+                {
+                    /* For the VSIs write the MAC address in the PSIaMAR0 and PSIaMAR1 registers. */
+                    IP_NETC__ENETC0_BASE->NUM_SI[VSIIndex].PSIPMAR0 =  (uint32)(CmdMacReceivedAddr->Data[2U])         | \
+                                                                                ((uint32)(CmdMacReceivedAddr->Data[3U]) << 8U ) | \
+                                                                                ((uint32)(CmdMacReceivedAddr->Data[4U]) << 16U) | \
+                                                                                ((uint32)(CmdMacReceivedAddr->Data[5U]) << 24U);
+                    IP_NETC__ENETC0_BASE->NUM_SI[VSIIndex].PSIPMAR1 =  (uint32)(CmdMacReceivedAddr->Data[6U])         | \
+                                                                                ((uint32)(CmdMacReceivedAddr->Data[7U]) << 8U);
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_CMD_SUCCESFUL;
+                }
+                else
+                {
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED;
+                }
+
+                break;
+            }
+            case NETC_ETH_IP_VSITOPSI_ADD_RX_MAC_ADDR_FILTER:
+            {
+                if (SIConfig->hashFilterUpdateAllowed == TRUE)
+                {
+                    HashValue = CmdMacReceivedAddr->Data[0U];
+                    if ((HashValue & NETC_ETH_IP_SELECT_HASH_REGISTER) != (uint8)0U)
+                    {
+                        IP_NETC__ENETC0_BASE->NUM_SI[VSIIndex].PSIMMHFR1 |= (uint32)((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
+                    }
+                    else
+                    {
+                        IP_NETC__ENETC0_BASE->NUM_SI[VSIIndex].PSIMMHFR0 |= (uint32)((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
+                    }
+
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_CMD_SUCCESFUL;
+                }
+                else
+                {
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED;
+                }
+
+                break;
+            }
+            case NETC_ETH_IP_VSITOPSI_DELETE_RX_MAC_ADDR_FILTER:
+            {
+                if (SIConfig->hashFilterUpdateAllowed == TRUE)
+                {
+                    HashValue = CmdMacReceivedAddr->Data[0U];
+                    if ((HashValue & NETC_ETH_IP_SELECT_HASH_REGISTER) != (uint8)0U)
+                    {
+                        IP_NETC__ENETC0_BASE->NUM_SI[VSIIndex].PSIMMHFR1 &= ~(uint32)((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
+                    }
+                    else
+                    {
+                        IP_NETC__ENETC0_BASE->NUM_SI[VSIIndex].PSIMMHFR0 &= ~(uint32)((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
+                    }
+
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_CMD_SUCCESFUL;
+                }
+                else
+                {
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED;
+                }
+
+                break;
+            }
+            case NETC_ETH_IP_VSITOPSI_ENABLE_MULTICAST:
+            {
+                if (SIConfig->multicastPromiscuousChangeAllowed == TRUE)
+                {
+                    /* Enable MAC multicast promiscuous mode. */
+                    IP_NETC__ENETC0_BASE->PSIPMMR |= ((uint32)((uint32)1U << ((uint8)VSIIndex + NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT)));
+
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_CMD_SUCCESFUL;
+                }
+                else
+                {
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED;
+                }
+
+                break;
+            }
+            case NETC_ETH_IP_VSITOPSI_DISABLE_MULTICAST:
+            {
+                if (SIConfig->multicastPromiscuousChangeAllowed == TRUE)
+                {
+                    /* Disable MAC multicast promiscuous mode. */
+                    IP_NETC__ENETC0_BASE->PSIPMMR &= ~((uint32) ((uint32)1U << ((uint8)VSIIndex + NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT)));
+
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_CMD_SUCCESFUL;
+                }
+                else
+                {
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED;
+                }
+
+                break;
+            }
+            case NETC_ETH_IP_VSITOPSI_CLOSE_FILTER:
+            {
+                if (SIConfig->multicastPromiscuousChangeAllowed == TRUE)
+                {
+                    /* Disable MAC multicast promiscuous mode. */
+                    IP_NETC__ENETC0_BASE->PSIPMMR &= ~((uint32)((uint32)1U << ((uint8)VSIIndex + NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT)));
+                }
+
+                if (SIConfig->hashFilterUpdateAllowed == TRUE)
+                {
+                    /* Clear all entries in filter. */
+                    IP_NETC__ENETC0_BASE->NUM_SI[VSIIndex].PSIMMHFR1 = (uint32)0x0U;
+                    IP_NETC__ENETC0_BASE->NUM_SI[VSIIndex].PSIMMHFR0 = (uint32)0x0U;
+                }
+
+                /* A positive response is expected by current IPW implementation*/
+                PSIResponse = NETC_ETH_IP_PSITOVSI_CMD_SUCCESFUL;
+
+                break;
+            }
+                case NETC_ETH_IP_VSITOPSI_GET_SYNC_STATE:
+            {
+                if ((IP_NETC__ENETC0_SI0->SITSR & NETC_F3_SI0_SITSR_SYNC_MASK) != 0U)
+                {
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_SYNC_STATUS_TRUE;
+                }
+                else
+                {
+                    PSIResponse = NETC_ETH_IP_PSITOVSI_SYNC_STATUS_FALSE;
+                }
+
+                break;
+            }
+            default:
+            {
+                /* Do nothing. */
+                break;
+            }
+        }
+    }
+
+    /* Write the PSI response to MC (Message Code) field and Set the MSn (Message Sent)  bit to the corresponding VSI */
+    IP_NETC__ENETC0_SI0->MSGSR.PSI_A.PSIMSGSR = ((uint32)PSIResponse << NETC_ETH_IP_PSI_MSG_POS) | (NETC_ETH_IP_VSI_ENABLE << VSIIndex);
+
+    /*  Mark the processing as complete by clearing the MR bit from PSIMSGRR. */
+    IP_NETC__ENETC0_SI0->MSGSR.PSI_A.PSIMSGRR = (uint32)((uint32)NETC_ETH_IP_MSG_RCV_COMPLETE << VSIIndex);
+}
+
+
+static inline void Netc_Eth_Ip_InitVSIAfterFlr(uint8 VSIIndex)
+{
+    const Netc_Eth_Ip_GeneralSIConfigType * SIConfig;
+    uint8  siHwId;
+
+    /* Check if the driver was intialized.  Req CPR_RTD_00011 is fulfilled.*/
+    if (NULL_PTR != Netc_Eth_Ip_apxState[NETC_ETH_IP_PSI_INDEX])
+    {
+        /*Get the SI general configuration */
+        SIConfig = &(*Netc_Eth_Ip_apxState[NETC_ETH_IP_PSI_INDEX]->SIGeneralConfig)[VSIIndex];
+
+        /* Identify the VSI in the list of SIs to configure */
+        siHwId =  SIConfig->siId;
+
+        /* Enable/disable MAC multicast/unicast promiscuous mode. */
+        IP_NETC__ENETC0_BASE->PSIPMMR = ((uint32)(Netc_Eth_Ip_apxState[NETC_ETH_IP_PSI_INDEX]->generalConfig->maskMACPromiscuousMulticastEnable) << NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT) | \
+                                        (uint32)(Netc_Eth_Ip_apxState[NETC_ETH_IP_PSI_INDEX]->generalConfig->maskMACPromiscuousUnicastEnable);
+
+        if (TRUE == SIConfig->enableSi)
+        {
+            /** Assure that SI is not enabled. */
+            netcSIsBase[siHwId]->SIMR &= ~(NETC_F3_SI0_SIMR_EN_MASK);
+
+            /* Master enable for a station interface.*/
+            IP_NETC__ENETC0_BASE->PMR = IP_NETC__ENETC0_BASE->PMR | (NETC_F3_PMR_SI0EN_MASK << siHwId);
+
+            /* For the VSIs write the MAC address in the PSIaMAR0 and PSIaMAR1 registers */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIPMAR0 = ((uint32)SIConfig->primaryMACAddress[0U])          | \
+                                                            (((uint32)SIConfig->primaryMACAddress[1U]) << 8U)  | \
+                                                            (((uint32)SIConfig->primaryMACAddress[2U]) << 16U) | \
+                                                            (((uint32)SIConfig->primaryMACAddress[3U]) << 24U);
+
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIPMAR1 = ((uint32)SIConfig->primaryMACAddress[4U]) | \
+                                                            (((uint32)SIConfig->primaryMACAddress[5U]) << 8U);
+
+            /* Configure where the PSI receives the message for enabled VSIs. */
+    /*                     if(NULL_PTR != config->generalConfig->RxVsiMsgCmdToPsi[siHwId - 1U])
+            {
+                IP_NETC__ENETC0_SI0->MSGSR.PSI_A.VSI_NUM[siHwId - 1U].PSIVMSGRCVAR0 = (uint32)config->generalConfig->RxVsiMsgCmdToPsi[siHwId - 1U] | \
+                                                                                    NETC_ETH_IP_VSITOPSI_MSG_SIZE;
+            }
+    */
+
+            /* Number of entries in a MSI table for the current SI. */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR2 = NETC_ETH_IP_NUM_OF_ENTRIES_MSITABLE;
+
+            /* Configure the number or TX and RX BD Rings for each SI */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 &= ~(NETC_F3_PSICFGR0_NUM_TX_BDR_MASK | NETC_F3_PSICFGR0_NUM_RX_BDR_MASK);
+
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_NUM_TX_BDR(SIConfig->NumberOfTxBDR) | \
+                                                            NETC_F3_PSICFGR0_NUM_RX_BDR(SIConfig->NumberOfRxBDR);
+
+            /* Configure the bandwidth weight for the current SI */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_SIBW(SIConfig->SIBandwidthWeight);
+
+#if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
+        if (TRUE == SIConfig->EnableSIVlan)
+        {
+            /* Enable VLAN and select tag protocol, priority code point, drop eligible indicator and VLAN identifier */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIVLANR = NETC_F3_PSIVLANR_TPID(SIConfig->SiVLANConfig.ProtocolIdentifier) |
+                                                            NETC_F3_PSIVLANR_PCP(SIConfig->SiVLANConfig.PriorityCodePoint) |
+                                                            NETC_F3_PSIVLANR_VID(SIConfig->SiVLANConfig.VlanIdentifier) |
+                                                            NETC_F3_PSIVLANR_E(1U) | NETC_F3_PSIVLANR_DEI((uint8)SIConfig->SiVLANConfig.DropIndicator);
+        }
+        else
+        {
+            /* Disable VLAN and select tag protocol */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIVLANR &= ~NETC_F3_PSIVLANR_E(1U);
+        }
+
+        IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 &= ~(NETC_F3_PSICFGR0_SIVC_MASK | NETC_F3_PSICFGR0_SIVIE_MASK | NETC_F3_PSICFGR0_VTE_MASK);
+        /* Insert VLAN Ethertype and enable insertion of the SI-based VLAN into frames sent by this SI. This config apply for generic */
+        IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_SIVC(SIConfig->SIVlanControl) |
+                                                        NETC_F3_PSICFGR0_SIVIE((uint8)SIConfig->EnableSoftwareVlanInsert) |
+                                                        NETC_F3_PSICFGR0_VTE((SIConfig->EnableVLANTagExtract) ? 1U : 0U); ;
+#endif
+
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_ASE((SIConfig->enableAntiSpoofing) ? 1U : 0U);
+
+            /* Enable bus for virtual function. */
+            netcVFBase[VSIIndex]->PCI_CFH_CMD |= NETC_VF1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U);
+
+        }
+    }
+
+}
+
+
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
+/* implements Netc_Eth_Ip_MSIX_SIMsgEvent_Activity */
 void Netc_Eth_Ip_MSIX_SIMsgEvent(uint8 RxChannelId, const uint32 * RxBuffer, uint8 BufferSize)
 {
     uint8 CounterRxMsgFromVsi;
     uint8 RxMsgFromVsiMask;
-    uint8 HashValue;
-    const Netc_Eth_Ip_VsiToPsiMsgType *CmdMacReceivedAddr;
-    Netc_Eth_Ip_VsiToPsiMsgActionType CommandType;
+    uint32 FlrMask;
 
     /*Check if the Interrupt for PSI is enabled*/
-    if ((netcSIsBase[NETC_ETH_IP_PSI_INDEX]->INTERRUPT.PSI.PSIIER & 0xFEU) != (uint32)0U)
+    if ((netcSIsBase[NETC_ETH_IP_PSI_INDEX]->INTERRUPT.PSI.PSIIER & NETC_ETH_IP_PSIIER_MASK) != (uint32)0U)
     {
         /* Status of received messages. */
-        RxMsgFromVsiMask = (uint8)(netcSIsBase[NETC_ETH_IP_PSI_INDEX]->INTERRUPT.PSI.PSIIDR & 0xFEU);
-        /* Clear status for messages that will be addressed. */
-        netcSIsBase[NETC_ETH_IP_PSI_INDEX]->INTERRUPT.PSI.PSIIDR = (uint32)RxMsgFromVsiMask;
+        RxMsgFromVsiMask = (uint8)(netcSIsBase[NETC_ETH_IP_PSI_INDEX]->INTERRUPT.PSI.PSIIDR & NETC_ETH_IP_PSI_MR_EV_MASK);
+
+        /* Function Level Reset Mask. */
+        FlrMask = (uint32)(netcSIsBase[NETC_ETH_IP_PSI_INDEX]->INTERRUPT.PSI.PSIIDR & NETC_ETH_IP_FLR_EV_MASK);
+
+        /* Clear status for messages that will be addressed and for the SI that will be reset at function level. */
+        netcSIsBase[NETC_ETH_IP_PSI_INDEX]->INTERRUPT.PSI.PSIIDR = (uint32)RxMsgFromVsiMask | (uint32)FlrMask;
         /*Check if driver is initialized on the current controller */
         if (NULL_PTR != Netc_Eth_Ip_apxState[NETC_ETH_IP_PSI_INDEX])
         {
             for(CounterRxMsgFromVsi = 1U; CounterRxMsgFromVsi < FEATURE_NETC_ETH_NUMBER_OF_CTRLS; CounterRxMsgFromVsi++)
             {
-                if(((1U << CounterRxMsgFromVsi) & (uint32)RxMsgFromVsiMask) != (uint32)0U)
+                if((((uint32)1U << CounterRxMsgFromVsi) & (uint32)RxMsgFromVsiMask) != (uint32)0U)
                 {
-                    CmdMacReceivedAddr =(const Netc_Eth_Ip_VsiToPsiMsgType *)(netcSIsBase[NETC_ETH_IP_PSI_INDEX]->MSGSR.PSI_A.VSI_NUM[CounterRxMsgFromVsi - 1U].PSIVMSGRCVAR0 & \
-                                        NETC_F3_SI0_PSIVMSGRCVAR0_ADDRL_MASK);
-                    CommandType = (Netc_Eth_Ip_VsiToPsiMsgActionType)((uint16)((uint32)CmdMacReceivedAddr->Class << 8U) + ((uint32)CmdMacReceivedAddr->Command));
+                    Netc_Eth_Ip_ProcessMsgRcv(CounterRxMsgFromVsi);
+                }
 
-                    switch(CommandType)
-                    {
-                        case NETC_ETH_IP_VSITOPSI_MAC_ADDR_SET:
-                        {
-                            /* For the VSIs write the MAC address in the PSIaMAR0 and PSIaMAR1 registers. */
-                            IP_NETC__ENETC0_BASE->NUM_SI[CounterRxMsgFromVsi].PSIPMAR0 =  CmdMacReceivedAddr->Data[2U]         | \
-                                                                                        (CmdMacReceivedAddr->Data[3U] << 8U ) | \
-                                                                                        (CmdMacReceivedAddr->Data[4U] << 16U) | \
-                                                                                        (CmdMacReceivedAddr->Data[5U] << 24U);
-                            IP_NETC__ENETC0_BASE->NUM_SI[CounterRxMsgFromVsi].PSIPMAR1 =  CmdMacReceivedAddr->Data[6U]         | \
-                                                                                        (CmdMacReceivedAddr->Data[7U] << 8U);
-                            break;
-                        }
-                        case NETC_ETH_IP_VSITOPSI_ADD_RX_MAC_ADDR_FILTER:
-                        {
-                            HashValue = CmdMacReceivedAddr->Data[0U];
-                            if((HashValue & NETC_ETH_IP_SELECT_HASH_REGISTER) != (uint8)0U)
-                            {
-                                IP_NETC__ENETC0_BASE->NUM_SI[CounterRxMsgFromVsi].PSIMMHFR1 |= (uint32)((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
-                            }
-                            else
-                            {
-                                IP_NETC__ENETC0_BASE->NUM_SI[CounterRxMsgFromVsi].PSIMMHFR0 |= (uint32)((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
-                            }
-                            break;
-                        }
-                        case NETC_ETH_IP_VSITOPSI_DELETE_RX_MAC_ADDR_FILTER:
-                        {
-                            HashValue = CmdMacReceivedAddr->Data[0U];
-                            if((HashValue & NETC_ETH_IP_SELECT_HASH_REGISTER) != (uint8)0U)
-                            {
-                                IP_NETC__ENETC0_BASE->NUM_SI[CounterRxMsgFromVsi].PSIMMHFR1 &= ~(uint32)((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
-                            }
-                            else
-                            {
-                                IP_NETC__ENETC0_BASE->NUM_SI[CounterRxMsgFromVsi].PSIMMHFR0 &= ~(uint32)((uint32)1U << (HashValue & NETC_ETH_IP_HASH_VALUE));
-                            }
-                            break;
-                        }
-                        case NETC_ETH_IP_VSITOPSI_ENABLE_MULTICAST:
-                        {
-                            /* Enable MAC multicast promiscuous mode. */
-                            IP_NETC__ENETC0_BASE->PSIPMMR |= ((uint32)((uint32)1U << ((uint8)CounterRxMsgFromVsi + NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT)));
-                            break;
-                        }
-                        case NETC_ETH_IP_VSITOPSI_DISABLE_MULTICAST:
-                        {
-                            /* Disable MAC multicast promiscuous mode. */
-                            IP_NETC__ENETC0_BASE->PSIPMMR &= ~((uint32) ((uint32)1U << ((uint8)CounterRxMsgFromVsi + NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT)));
-                            break;
-                        }
-                        case NETC_ETH_IP_VSITOPSI_CLOSE_FILTER:
-                        {
-                            /* Disable MAC multicast promiscuous mode. */
-                            IP_NETC__ENETC0_BASE->PSIPMMR &= ~((uint32)((uint32)1U << ((uint8)CounterRxMsgFromVsi + NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT)));
-                            /* Clear all entries in filter. */
-                            IP_NETC__ENETC0_BASE->NUM_SI[CounterRxMsgFromVsi].PSIMMHFR1 = (uint32)0x0U;
-                            IP_NETC__ENETC0_BASE->NUM_SI[CounterRxMsgFromVsi].PSIMMHFR0 = (uint32)0x0U;
-                            break;
-                        }
-                        default:
-                        {
-                            /* Do nothing. */
-                            break;
-                        }
-                    }
-                    /*  Mark the processing as complete by clearing the MR bit from PSIMSGRR. */
-                    IP_NETC__ENETC0_SI0->MSGSR.PSI_A.PSIMSGRR = (uint32)((uint32)1U << CounterRxMsgFromVsi);
+                if((((uint32)1U << NETC_ETH_IP_PSI_IDR_FLR(CounterRxMsgFromVsi)) & (uint32)FlrMask) != (uint32)0U)
+                {
+                    Netc_Eth_Ip_InitVSIAfterFlr(CounterRxMsgFromVsi);
                 }
             }
         }
     }
+
     (void)RxChannelId;
     (void)RxBuffer;
     (void)BufferSize;
@@ -428,6 +643,11 @@ void Netc_Eth_Ip_7_MSIX_RxEvent(uint8 RxChannelId, const uint32 * RxBuffer, uint
     (void)RxChannelId;
     (void)RxBuffer;
     (void)BufferSize;
+}
+
+ISR(Netc_Eth_Ip_ErrorReporting)
+{
+    Netc_Eth_Ip_PCIe_AER_Handler(0u);
 }
 
 #ifdef __cplusplus

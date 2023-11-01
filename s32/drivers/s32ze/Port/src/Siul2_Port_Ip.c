@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -40,8 +40,8 @@ extern "C"{
 #define SIUL2_PORT_IP_AR_RELEASE_MAJOR_VERSION_C      4
 #define SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_C      7
 #define SIUL2_PORT_IP_AR_RELEASE_REVISION_VERSION_C   0
-#define SIUL2_PORT_IP_SW_MAJOR_VERSION_C              0
-#define SIUL2_PORT_IP_SW_MINOR_VERSION_C              9
+#define SIUL2_PORT_IP_SW_MAJOR_VERSION_C              1
+#define SIUL2_PORT_IP_SW_MINOR_VERSION_C              0
 #define SIUL2_PORT_IP_SW_PATCH_VERSION_C              0
 
 /*==================================================================================================
@@ -92,12 +92,28 @@ extern "C"{
 /*==================================================================================================
 *                           LOCAL TYPEDEFS (STRUCTURES, UNIONS, ENUMS)
 ==================================================================================================*/
-#define SIUL2_NUM_OF_PIN_PORT           16u
+#define SIUL2_NUM_OF_PIN_PORT_U16           ((uint16)16u)
 
 /*==================================================================================================
 *                                          LOCAL MACROS
 ==================================================================================================*/
-
+#if (defined(MCAL_ENABLE_USER_MODE_SUPPORT) && defined(PORT_ENABLE_USER_MODE_SUPPORT) && (STD_ON == PORT_ENABLE_USER_MODE_SUPPORT))
+    #define Call_Siul2_Port_Ip_PinInit(config)                                                  OsIf_Trusted_Call1param(Siul2_Port_Ip_PinInit, (config))
+    #define Call_Siul2_Port_Ip_ConfigInternalResistor(base, pin, pullConfig)                    OsIf_Trusted_Call3params(Siul2_Port_Ip_ConfigInternalResistor, (base), (pin), (pullConfig))
+    #define Call_Siul2_Port_Ip_ConfigOutputBuffer(base, pin, enable, mux)                       OsIf_Trusted_Call4params(Siul2_Port_Ip_ConfigOutputBuffer, (base), (pin), (enable), (mux))
+    #define Call_Siul2_Port_Ip_ConfigInputBuffer(base, pin, enable, inputMuxReg, inputMux)      OsIf_Trusted_Call5params(Siul2_Port_Ip_ConfigInputBuffer, (base), (pin), (enable), (inputMuxReg), (inputMux))
+    #define Call_Siul2_Port_Ip_ConfigPinDirection(base, pin, direction)                         OsIf_Trusted_Call3params(Siul2_Port_Ip_ConfigPinDirection, (base), (pin), (direction))
+    #define Call_Siul2_Port_Ip_GetValueConfigRevertPin(base, pin)                               OsIf_Trusted_Call_Return2param(Siul2_Port_Ip_GetValueConfigRevertPin, (base), (pin))
+    #define Call_Siul2_Port_Ip_GetValuePinConfiguration(base, config, pin)                      OsIf_Trusted_Call3params(Siul2_Port_Ip_GetValuePinConfiguration, (base), (config), (pin))
+#else
+    #define Call_Siul2_Port_Ip_PinInit(config)                                                  Siul2_Port_Ip_PinInit(config)
+    #define Call_Siul2_Port_Ip_ConfigInternalResistor(base, pin, pullConfig)                    Siul2_Port_Ip_ConfigInternalResistor(base, pin, pullConfig)
+    #define Call_Siul2_Port_Ip_ConfigOutputBuffer(base, pin, enable, mux)                       Siul2_Port_Ip_ConfigOutputBuffer(base, pin, enable, mux)
+    #define Call_Siul2_Port_Ip_ConfigInputBuffer(base, pin, enable, inputMuxReg, inputMux)      Siul2_Port_Ip_ConfigInputBuffer(base, pin, enable, inputMuxReg, inputMux)
+    #define Call_Siul2_Port_Ip_ConfigPinDirection(base, pin, direction)                         Siul2_Port_Ip_ConfigPinDirection(base, pin, direction)
+    #define Call_Siul2_Port_Ip_GetValueConfigRevertPin(base, pin)                               Siul2_Port_Ip_GetValueConfigRevertPin(base, pin)
+    #define Call_Siul2_Port_Ip_GetValuePinConfiguration(base, config, pin)                      Siul2_Port_Ip_GetValuePinConfiguration(base, config, pin)
+#endif
 /*==================================================================================================
 *                                         LOCAL CONSTANTS
 ==================================================================================================*/
@@ -257,22 +273,28 @@ static uint32 u32MaxPinConfigured;
   */
 static inline uint8 Siul2_Port_Ip_GetSiulInstance(const Siul2_Port_Ip_PinSettingsConfig * config);
 
-/*!
- * @brief Initializes the pins with the given configuration structure
- *
- * This function configures the pins with the options provided in the
- * given structure.
- *
- * @param[in] pinNumber the number of configured pins in structure
- * @param[in] config the configuration structure
-  */
-static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config);
 
 /*!
  * @brief Get the instance of Input Multiplexed Signal Configuration Register
  *
  */
-static inline void Siul2_Port_Ip_GetIMCRInstance(const Siul2_Port_Ip_PinSettingsConfig * config, uint32 * imcrRegIdx, SIUL2_Type ** imcrBase, uint8 inputMuxIterator);
+static inline void Siul2_Port_Ip_GetIMCRInstance(const Siul2_Port_Ip_PinSettingsConfig * config,
+                                                 uint32 * imcrRegIdx,
+                                                 SIUL2_Type ** imcrBase,
+                                                 uint8 inputMuxIterator
+                                                );
+
+#ifdef IP_SIUL2_AE_BASE
+/*!
+ * @brief Get the instance of Input Multiplexed Signal Configuration Register of SIUL2_AE
+ *
+ */
+static inline void Siul2_Port_Ip_Siul2AE_GetIMCRInstance(const Siul2_Port_Ip_PinSettingsConfig * config,
+                                                         uint32 * imcrRegIdx,
+                                                         SIUL2_AE_Type ** imcrBase,
+                                                         uint8 inputMuxIterator
+                                                        );
+#endif /* IP_SIUL2_AE_BASE */
 
 /*!
  * @brief Write to Input Multiplexed Signal Configuration Register
@@ -292,19 +314,9 @@ static inline void Siul2_Port_Ip_WriteIMCRConfiguration(const Siul2_Port_Ip_PinS
   */
 static inline void Siul2_Port_Ip_GetMSCRConfiguration(Siul2_Port_Ip_PinSettingsConfig * config,
                                                       const Siul2_Port_Ip_PortType * const base,
-                                                      uint16 pin);
+                                                      uint16 pin
+                                                     );
 
-#if (defined(MCAL_ENABLE_USER_MODE_SUPPORT) && defined(PORT_ENABLE_USER_MODE_SUPPORT) && (STD_ON == PORT_ENABLE_USER_MODE_SUPPORT))
-#if (defined(MCAL_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == MCAL_SIUL2_REG_PROT_AVAILABLE))
-#if (defined(PORT_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == PORT_SIUL2_REG_PROT_AVAILABLE))
-/*!
- * @brief Enables SIUL2 registers writing in User Mode by configuring REG_PROT
- *
-  */
-void Siul2_Port_Ip_SetUserAccessAllowed(void);
-#endif /* (defined(PORT_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == PORT_SIUL2_REG_PROT_AVAILABLE)) */
-#endif /* (defined(MCAL_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == MCAL_SIUL2_REG_PROT_AVAILABLE)) */
-#endif /* (defined(MCAL_ENABLE_USER_MODE_SUPPORT) && defined(PORT_ENABLE_USER_MODE_SUPPORT) && (STD_ON == PORT_ENABLE_USER_MODE_SUPPORT)) */
 /*==================================================================================================
 *                                         LOCAL FUNCTIONS
 ==================================================================================================*/
@@ -321,45 +333,75 @@ static inline uint8 Siul2_Port_Ip_GetSiulInstance(const Siul2_Port_Ip_PinSetting
     uint8 siulInstance = 0U;
 
     SIUL2_PORT_IP_DEV_ASSERT((boolean)(config != NULL_PTR));
-
 #ifdef IP_SIUL2
     if (config->base == IP_SIUL2)
     {
         siulInstance = 0U;
     }
 #endif /* IP_SIUL2 */
-#ifdef IP_SIUL2_0
+
+#if (defined(IP_SIUL2_0) && (PORT_VIRTWRAPPER_SUPPORT == STD_ON))
+    if ((config->base == IP_SIUL2_0) || (config->base == SIUL2_0_PDAC0) || (config->base == SIUL2_0_PDAC1) || (config->base == SIUL2_0_PDAC2) || (config->base == SIUL2_0_PDAC3))
+    {
+        siulInstance = 0U;
+    }
+#elif defined(IP_SIUL2_0)
     if (config->base == IP_SIUL2_0)
     {
         siulInstance = 0U;
     }
-#endif /* IP_SIUL2_0 */
-#ifdef IP_SIUL2_1
+#endif /* (defined(IP_SIUL2_0) && (PORT_VIRTWRAPPER_SUPPORT == STD_ON)) */
+
+#if (defined(IP_SIUL2_1) && (PORT_VIRTWRAPPER_SUPPORT == STD_ON))
+    else if ((config->base == IP_SIUL2_1) || (config->base == SIUL2_1_PDAC0) || (config->base == SIUL2_1_PDAC1) || (config->base == SIUL2_1_PDAC2) || (config->base == SIUL2_1_PDAC3))
+    {
+        siulInstance = 1U;
+    }
+#elif defined(IP_SIUL2_1)
     else if (config->base == IP_SIUL2_1)
     {
         siulInstance = 1U;
     }
-#endif /* IP_SIUL2_1 */
-#ifdef IP_SIUL2_3
+#endif /* (defined(IP_SIUL2_1) && (PORT_VIRTWRAPPER_SUPPORT == STD_ON)) */
+
+#if (defined(IP_SIUL2_3) && (PORT_VIRTWRAPPER_SUPPORT == STD_ON))
+    else if ((config->base == IP_SIUL2_3) || (config->base == SIUL2_3_PDAC0) || (config->base == SIUL2_3_PDAC1) || (config->base == SIUL2_3_PDAC2) || (config->base == SIUL2_3_PDAC3))
+    {
+        siulInstance = 2U;
+    }
+#elif defined(IP_SIUL2_3)
     else if (config->base == IP_SIUL2_3)
     {
         siulInstance = 2U;
     }
-#endif /* IP_SIUL2_3 */
-#ifdef IP_SIUL2_4
+#endif /* (defined(IP_SIUL2_3) && (PORT_VIRTWRAPPER_SUPPORT == STD_ON)) */
+
+#if (defined(IP_SIUL2_4) && (PORT_VIRTWRAPPER_SUPPORT == STD_ON))
+    else if ((config->base == IP_SIUL2_4) || (config->base == SIUL2_4_PDAC0) || (config->base == SIUL2_4_PDAC1) || (config->base == SIUL2_4_PDAC2) || (config->base == SIUL2_4_PDAC3))
+    {
+        siulInstance = 3U;
+    }
+#elif defined(IP_SIUL2_4)
     else if (config->base == IP_SIUL2_4)
     {
         siulInstance = 3U;
     }
-#endif /* IP_SIUL2_4 */
-#ifdef IP_SIUL2_5
+#endif /* (defined(IP_SIUL2_4) && (PORT_VIRTWRAPPER_SUPPORT == STD_ON)) */
+
+#if (defined(IP_SIUL2_5) && (PORT_VIRTWRAPPER_SUPPORT == STD_ON))
+    else if ((config->base == IP_SIUL2_5) || (config->base == SIUL2_5_PDAC0) || (config->base == SIUL2_5_PDAC1) || (config->base == SIUL2_5_PDAC2) || (config->base == SIUL2_5_PDAC3))
+    {
+        siulInstance = 4U;
+    }
+#elif defined(IP_SIUL2_5)
     else if (config->base == IP_SIUL2_5)
     {
         siulInstance = 4U;
     }
-#endif /* IP_SIUL2_5 */
+#endif /* (defined(IP_SIUL2_5) && (PORT_VIRTWRAPPER_SUPPORT == STD_ON)) */
+
 #ifdef IP_SIUL2_AE
-    else if (config->base == IP_SIUL2_AE)
+    else if (config->baseAE == IP_SIUL2_AE)
     {
         siulInstance = 5U;
     }
@@ -379,7 +421,17 @@ static inline uint8 Siul2_Port_Ip_GetSiulInstance(const Siul2_Port_Ip_PinSetting
  * provided in the given structure.
  *
  *END**************************************************************************/
-static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config)
+
+/*!
+ * @brief Initializes the pins with the given configuration structure
+ *
+ * This function configures the pins with the options provided in the
+ * given structure.
+ *
+ * @param[in] pinNumber the number of configured pins in structure
+ * @param[in] config the configuration structure
+  */
+void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config)
 {
     uint32 pinsValues = 0U;
     uint8 siulInstance = 0U;
@@ -392,7 +444,7 @@ static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config
     if (config->pullConfig != PORT_INTERNAL_PULL_NOT_ENABLED)
     {
 #ifdef IP_SIUL2_AE
-        if (config->base == IP_SIUL2_AE)
+        if (config->baseAE == IP_SIUL2_AE)
         {
             pinsValues |= SIUL2_AE_MSCR_PUE(1);
             pinsValues |= SIUL2_AE_MSCR_PUS(config->pullConfig);
@@ -407,7 +459,7 @@ static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config
     if (PORT_OUTPUT_BUFFER_NOT_AVAILABLE != config->outputBuffer)
     {
 #ifdef IP_SIUL2_AE
-        if (config->base == IP_SIUL2_AE)
+        if (config->baseAE == IP_SIUL2_AE)
         {
             pinsValues |= SIUL2_AE_MSCR_OBE(config->outputBuffer);
         }
@@ -459,12 +511,21 @@ static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_DRIVE_STRENGTH */
     if (PORT_INPUT_BUFFER_NOT_AVAILABLE != config->inputBuffer)
     {
-        pinsValues |= SIUL2_MSCR_IBE(config->inputBuffer);
+#ifdef IP_SIUL2_AE
+        if (config->baseAE == IP_SIUL2_AE)
+        {
+            pinsValues |= SIUL2_AE_MSCR_IBE(config->inputBuffer);
+        }
+        else
+#endif /* IP_SIUL2_AE */
+        {
+            pinsValues |= SIUL2_MSCR_IBE(config->inputBuffer);
+        }
     }
     if (PORT_SLEW_RATE_NOT_AVAILABLE != config->slewRateCtrlSel)
     {
 #ifdef IP_SIUL2_AE
-        if (config->base == IP_SIUL2_AE)
+        if (config->baseAE == IP_SIUL2_AE)
         {
             pinsValues |= SIUL2_AE_MSCR_SRE(config->slewRateCtrlSel);
         }
@@ -490,10 +551,10 @@ static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config
 #if (STD_ON == FEATURE_SIUL2_PORT_IP_HAS_HYSTERESIS)
     if (PORT_HYSTERESIS_NOT_AVAILABLE != config->hysteresis)
     {
-#ifdef SIUL2_MSCR_HYS_MASK
-        if (config->base == IP_SIUL2_AE)
+#ifdef SIUL2_AE_MSCR_HYS_MASK
+        if (config->baseAE == IP_SIUL2_AE)
         {
-            pinsValues |= SIUL2_MSCR_HYS(config->hysteresis);
+            pinsValues |= SIUL2_AE_MSCR_HYS(config->hysteresis);
         }
 #endif
     }
@@ -504,10 +565,10 @@ static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config
 #if (STD_ON == FEATURE_SIUL2_PORT_IP_HAS_ANALOG_PAD_CONTROL)
     if (PORT_ANALOG_PAD_CONTROL_NOT_AVAILABLE != config->analogPadControl)
     {
-#ifdef SIUL2_MSCR_APC_MASK
-        if (config->base == IP_SIUL2_AE)
+#ifdef SIUL2_AE_MSCR_APC_MASK
+        if (config->baseAE == IP_SIUL2_AE)
         {
-            pinsValues |= SIUL2_MSCR_APC(config->analogPadControl);
+            pinsValues |= SIUL2_AE_MSCR_APC(config->analogPadControl);
         }
 #endif
     }
@@ -530,8 +591,17 @@ static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config
     }
 #endif /* STD_ON == FEATURE_SIUL2_PORT_IP_HAS_RX_CURRENT_BOOST */
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_RX_CURRENT_BOOST */
-    pinsValues |= SIUL2_MSCR_SSS(config->mux);
 
+#ifdef IP_SIUL2_AE
+    if (config->baseAE == IP_SIUL2_AE)
+    {
+        pinsValues |= SIUL2_AE_MSCR_SSS(config->mux);
+    }
+    else
+#endif /* IP_SIUL2_AE */
+    {
+        pinsValues |= SIUL2_MSCR_SSS(config->mux);
+    }
     /* Configure initial value for GPIO pin in GPIO mux */
     if ((PORT_MUX_AS_GPIO == config->mux) && (PORT_OUTPUT_BUFFER_ENABLED == config->outputBuffer))
     {
@@ -552,7 +622,16 @@ static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config
     }
 
     /* Write to Multiplexed Signal Configuration Register */
-    config->base->MSCR[config->pinPortIdx] = pinsValues;
+#ifdef IP_SIUL2_AE
+    if (config->baseAE == IP_SIUL2_AE)
+    {
+        config->baseAE->MSCR[config->pinPortIdx] = pinsValues;
+    }
+    else
+#endif /* IP_SIUL2_AE */
+    {
+        config->base->MSCR[config->pinPortIdx] = pinsValues;
+    }
 
     /* Write to Input Multiplexed Signal Configuration Register */
     Siul2_Port_Ip_WriteIMCRConfiguration(config);
@@ -562,7 +641,11 @@ static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config
  * @brief Get the instance of Input Multiplexed Signal Configuration Register
  *
  */
-static inline void Siul2_Port_Ip_GetIMCRInstance(const Siul2_Port_Ip_PinSettingsConfig * config, uint32 * imcrRegIdx, SIUL2_Type ** imcrBase, uint8 inputMuxIterator)
+static inline void Siul2_Port_Ip_GetIMCRInstance(const Siul2_Port_Ip_PinSettingsConfig * config,
+                                                 uint32 * imcrRegIdx,
+                                                 SIUL2_Type ** imcrBase,
+                                                 uint8 inputMuxIterator
+                                                )
 {
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
     uint8 imcrPdacSlot;
@@ -623,7 +706,7 @@ static inline void Siul2_Port_Ip_GetIMCRInstance(const Siul2_Port_Ip_PinSettings
         }
     }
 #ifdef IP_SIUL2_3_BASE
-    else if ((SIUL2_MAX_NUM_OF_IMCR_REG <= *imcrRegIdx) && (SIUL2_AE_IMCR_IDX_OFFSET >= *imcrRegIdx))
+    else if (SIUL2_AE_IMCR_IDX_OFFSET_U32 > *imcrRegIdx)
     {
         /* Use the base address of SIUL2_3 */
         *imcrBase = (SIUL2_Type *)IP_SIUL2_3_BASE;
@@ -634,18 +717,34 @@ static inline void Siul2_Port_Ip_GetIMCRInstance(const Siul2_Port_Ip_PinSettings
 #endif /* PORT_VIRTWRAPPER_SUPPORT*/
     }
 #endif /* IP_SIUL2_3_BASE */
-#ifdef IP_SIUL2_AE_BASE
-    else if (SIUL2_AE_IMCR_IDX_OFFSET <= *imcrRegIdx)
-    {
-        *imcrBase = (SIUL2_Type *)IP_SIUL2_AE_BASE;
-        *imcrRegIdx = *imcrRegIdx - SIUL2_AE_IMCR_IDX_OFFSET;
-    }
-#endif /* IP_SIUL2_AE_BASE */
     else
     {
         /* Do nothing */
     }
 }
+
+#ifdef IP_SIUL2_AE_BASE
+/*!
+ * @brief Get the instance of Input Multiplexed Signal Configuration Register of SIUL2_AE
+ *
+ */
+static inline void Siul2_Port_Ip_Siul2AE_GetIMCRInstance(const Siul2_Port_Ip_PinSettingsConfig * config,
+                                                         uint32 * imcrRegIdx,
+                                                         SIUL2_AE_Type ** imcrBaseAE,
+                                                         uint8 inputMuxIterator
+                                                        )
+{
+    /* Write to Input Mux register */
+    *imcrRegIdx = config->inputMuxReg[inputMuxIterator];
+
+    if (SIUL2_AE_IMCR_IDX_OFFSET_U32 <= *imcrRegIdx)
+    {
+        *imcrBaseAE = (SIUL2_AE_Type *)IP_SIUL2_AE_BASE;
+        *imcrRegIdx = *imcrRegIdx - SIUL2_AE_IMCR_IDX_OFFSET_U32;
+    }
+}
+#endif /* IP_SIUL2_AE_BASE */
+
 /*!
  * @brief Write to Input Multiplexed Signal Configuration Register (IMCR)
  *
@@ -664,21 +763,42 @@ static inline void Siul2_Port_Ip_WriteIMCRConfiguration(const Siul2_Port_Ip_PinS
 #ifdef IP_SIUL2_BASE
     SIUL2_Type * imcrBase = (SIUL2_Type *)IP_SIUL2_BASE;
 #endif /* IP_SIUL2_BASE */
+#ifdef IP_SIUL2_AE_BASE
+    SIUL2_AE_Type * imcrBaseAE = (SIUL2_AE_Type *)IP_SIUL2_AE_BASE;
+#endif /* IP_SIUL2_AE_BASE */
 
     /* Write to Input Multiplexed Signal Configuration Register (IMCR) */
     if (PORT_INPUT_BUFFER_ENABLED == config->inputBuffer)
     {
-        for (inputMuxIterator = 0U; inputMuxIterator < FEATURE_SIUL2_MAX_NUMBER_OF_INPUT; inputMuxIterator++)
+        for (inputMuxIterator = 0U; inputMuxIterator < FEATURE_SIUL2_MAX_NUMBER_OF_INPUT_U8; inputMuxIterator++)
         {
             /* Check if input mux information needs to be configured */
             if (PORT_INPUT_MUX_NO_INIT != config->inputMux[inputMuxIterator])
             {
                 /* Get the instance of Input Multiplexed Signal Configuration Register (IMCR) */
-                Siul2_Port_Ip_GetIMCRInstance(config, &imcrRegIdx, &imcrBase, inputMuxIterator);
+#ifdef IP_SIUL2_AE_BASE
+                if ((config->baseAE) != NULL_PTR)
+                {
+                    Siul2_Port_Ip_Siul2AE_GetIMCRInstance(config, &imcrRegIdx, &imcrBaseAE, inputMuxIterator);
+                }
+                else
+#endif /* IP_SIUL2_AE_BASE */
+                {
+                    Siul2_Port_Ip_GetIMCRInstance(config, &imcrRegIdx, &imcrBase, inputMuxIterator);
+                }
                 if (imcrRegIdx < SIUL2_IMCR_COUNT)
                 {
                     /* Config input signal */
-                    imcrBase->IMCR[imcrRegIdx % SIUL2_MAX_NUM_OF_IMCR_REG] = SIUL2_IMCR_SSS(config->inputMux[inputMuxIterator]);
+#ifdef IP_SIUL2_AE
+                    if ((config->baseAE) != NULL_PTR)
+                    {
+                        imcrBaseAE->IMCR[imcrRegIdx % SIUL2_MAX_NUM_OF_IMCR_REG] = SIUL2_AE_IMCR_SSS(config->inputMux[inputMuxIterator]);
+                    }
+                    else
+#endif /* IP_SIUL2_AE */
+                    {
+                        imcrBase->IMCR[imcrRegIdx % SIUL2_MAX_NUM_OF_IMCR_REG] = SIUL2_IMCR_SSS(config->inputMux[inputMuxIterator]);
+                    }
                 }
             }
         }
@@ -696,21 +816,31 @@ static inline void Siul2_Port_Ip_WriteIMCRConfiguration(const Siul2_Port_Ip_PinS
   */
 static inline void Siul2_Port_Ip_GetMSCRConfiguration(Siul2_Port_Ip_PinSettingsConfig * config,
                                                       const Siul2_Port_Ip_PortType * const base,
-                                                      uint16 pin)
+                                                      uint16 pin
+                                                     )
 {
-    uint32 u32RegVal = 0xFFFFFFFFUL;
+    uint32 u32RegVal = 0UL;
     /* This var used to fix misra rule 10.8 to 10.5*/
-    uint32 u32TempVal = 0xFFFFFFFFUL;
+    uint32 u32TempVal = 0UL;
     Siul2_Port_Ip_PortPullConfig pullValue;
 
     u32RegVal = base->MSCR[pin];
-    u32TempVal = (u32RegVal & SIUL2_MSCR_SSS_MASK) >> SIUL2_MSCR_SSS_SHIFT;
+#ifdef IP_SIUL2_AE
+    if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
+    {
+        u32TempVal = (u32RegVal & SIUL2_AE_MSCR_SSS_MASK) >> SIUL2_AE_MSCR_SSS_SHIFT;
+    }
+    else
+#endif /* IP_SIUL2_AE */
+    {
+        u32TempVal = (u32RegVal & SIUL2_MSCR_SSS_MASK) >> SIUL2_MSCR_SSS_SHIFT;
+    }
     config->mux = (Siul2_Port_Ip_PortMux)(u32TempVal);
     u32TempVal = (u32RegVal & SIUL2_MSCR_SMC_MASK) >> SIUL2_MSCR_SMC_SHIFT;
     config->safeMode = (Siul2_Port_Ip_PortSafeMode)(u32TempVal);
 
 #ifdef IP_SIUL2_AE
-    if (config->base == IP_SIUL2_AE)
+    if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
     {
         if (0U == ((u32RegVal & SIUL2_AE_MSCR_PUE_MASK) >> SIUL2_AE_MSCR_PUE_SHIFT))
         {
@@ -787,7 +917,7 @@ static inline void Siul2_Port_Ip_GetMSCRConfiguration(Siul2_Port_Ip_PinSettingsC
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_TERMINATION_RESISTOR */
 #ifdef FEATURE_SIUL2_PORT_IP_HAS_HYSTERESIS
 #if (STD_ON == FEATURE_SIUL2_PORT_IP_HAS_HYSTERESIS)
-    u32TempVal = (u32RegVal & SIUL2_MSCR_HYS_MASK) >> SIUL2_MSCR_HYS_SHIFT;
+    u32TempVal = (u32RegVal & SIUL2_AE_MSCR_HYS_MASK) >> SIUL2_AE_MSCR_HYS_SHIFT;
     config->hysteresis = (Siul2_Port_Ip_PortInputHysteresis)(u32TempVal);
 #endif /* STD_ON == FEATURE_SIUL2_PORT_IP_HAS_HYSTERESIS */
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_HYSTERESIS */
@@ -803,38 +933,41 @@ static inline void Siul2_Port_Ip_GetMSCRConfiguration(Siul2_Port_Ip_PinSettingsC
     config->rxCurrentBoost = (Siul2_Port_Ip_PortRxCurrentBoost)(u32TempVal);
 #endif /* STD_ON == FEATURE_SIUL2_PORT_IP_HAS_RX_CURRENT_BOOST */
 #endif /* FEATURE_SIUL2_PORT_IP_HAS_RX_CURRENT_BOOST */
-    u32TempVal = (u32RegVal & SIUL2_MSCR_IBE_MASK) >> SIUL2_MSCR_IBE_SHIFT;
+#ifdef IP_SIUL2_AE
+    if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
+    {
+        u32TempVal = (u32RegVal & SIUL2_AE_MSCR_IBE_MASK) >> SIUL2_AE_MSCR_IBE_SHIFT;
+    }
+    else
+#endif /* IP_SIUL2_AE */
+    {
+        u32TempVal = (u32RegVal & SIUL2_MSCR_IBE_MASK) >> SIUL2_MSCR_IBE_SHIFT;
+    }
     config->inputBuffer = (Siul2_Port_Ip_PortInputBuffer)(u32TempVal);
-    u32TempVal = (u32RegVal & SIUL2_MSCR_OBE_MASK) >> SIUL2_MSCR_OBE_SHIFT;
+#ifdef IP_SIUL2_AE
+    if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
+    {
+        u32TempVal = (u32RegVal & SIUL2_AE_MSCR_OBE_MASK) >> SIUL2_AE_MSCR_OBE_SHIFT;
+    }
+    else
+#endif /* IP_SIUL2_AE */
+    {
+        u32TempVal = (u32RegVal & SIUL2_MSCR_OBE_MASK) >> SIUL2_MSCR_OBE_SHIFT;
+    }
     config->outputBuffer = (Siul2_Port_Ip_PortOutputBuffer)(u32TempVal);
+#ifdef FEATURE_SIUL2_PORT_IP_HAS_ANALOG_PAD_CONTROL
+#if (STD_ON == FEATURE_SIUL2_PORT_IP_HAS_ANALOG_PAD_CONTROL)
+#ifdef IP_SIUL2_AE
+    if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
+    {
+        u32TempVal = (u32RegVal & SIUL2_AE_MSCR_APC_MASK) >> SIUL2_AE_MSCR_APC_SHIFT;
+        config->analogPadControl = (Siul2_Port_Ip_PortAnalogPadControl)(u32TempVal);
+    }
+#endif /* IP_SIUL2_AE */
+#endif /* STD_ON == FEATURE_SIUL2_PORT_IP_HAS_ANALOG_PAD_CONTROL */
+#endif/* FEATURE_SIUL2_PORT_IP_HAS_ANALOG_PAD_CONTROL */
 }
 
-#if (defined(MCAL_ENABLE_USER_MODE_SUPPORT) && defined(PORT_ENABLE_USER_MODE_SUPPORT) && (STD_ON == PORT_ENABLE_USER_MODE_SUPPORT))
-#if (defined(MCAL_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == MCAL_SIUL2_REG_PROT_AVAILABLE))
-#if (defined(PORT_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == PORT_SIUL2_REG_PROT_AVAILABLE))
-/*FUNCTION**********************************************************************
- *
- * Function Name : Siul2_Port_Ip_SetUserAccessAllowed
- * Description   : Enables SIUL2 registers writing in User Mode by configuring REG_PROT
- *                 Sets the UAA (User Access Allowed) bit of the SIUL2 IP allowing SIUL2 registers writing in User Mode
- *
- *END**************************************************************************/
-
-void Siul2_Port_Ip_SetUserAccessAllowed(void)
-{
-#ifdef IP_SIUL2_BASE
-    SET_USER_ACCESS_ALLOWED(IP_SIUL2_BASE, SIUL2_PROT_MEM_U32);
-#endif /* IP_SIUL2_BASE */
-#ifdef IP_SIUL2_0_BASE
-    SET_USER_ACCESS_ALLOWED(IP_SIUL2_0_BASE, SIUL2_PROT_MEM_U32);
-#endif /* IP_SIUL2_0_BASE */
-#ifdef IP_SIUL2_1_BASE
-    SET_USER_ACCESS_ALLOWED(IP_SIUL2_1_BASE, SIUL2_PROT_MEM_U32);
-#endif /* IP_SIUL2_1_BASE */
-}
-#endif /* (defined(PORT_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == PORT_SIUL2_REG_PROT_AVAILABLE)) */
-#endif /* (defined(MCAL_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == MCAL_SIUL2_REG_PROT_AVAILABLE)) */
-#endif /* (defined(MCAL_ENABLE_USER_MODE_SUPPORT) && defined(PORT_ENABLE_USER_MODE_SUPPORT) && (STD_ON == PORT_ENABLE_USER_MODE_SUPPORT)) */
 
 /*FUNCTION**********************************************************************
  *
@@ -845,18 +978,10 @@ void Siul2_Port_Ip_SetUserAccessAllowed(void)
  * @implements Siul2_Port_Ip_Init_Activity
  *END**************************************************************************/
 Siul2_Port_Ip_PortStatusType Siul2_Port_Ip_Init(uint32 pinCount,
-                                                const Siul2_Port_Ip_PinSettingsConfig config[])
+                                                const Siul2_Port_Ip_PinSettingsConfig config[]
+                                               )
 {
     uint32 i;
-
-#if (defined(MCAL_ENABLE_USER_MODE_SUPPORT) && defined(PORT_ENABLE_USER_MODE_SUPPORT) && (STD_ON == PORT_ENABLE_USER_MODE_SUPPORT))
-#if (defined(MCAL_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == MCAL_SIUL2_REG_PROT_AVAILABLE))
-#if (defined(PORT_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == PORT_SIUL2_REG_PROT_AVAILABLE))
-    /* Enable register access from user mode, if enabled from configuration file */
-    OsIf_Trusted_Call(Siul2_Port_Ip_SetUserAccessAllowed);
-#endif /* (defined(PORT_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == PORT_SIUL2_REG_PROT_AVAILABLE)) */
-#endif /* (defined(MCAL_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == MCAL_SIUL2_REG_PROT_AVAILABLE)) */
-#endif /* (defined(MCAL_ENABLE_USER_MODE_SUPPORT) && defined(PORT_ENABLE_USER_MODE_SUPPORT) && (STD_ON == PORT_ENABLE_USER_MODE_SUPPORT)) */
 
     /* Store the configuration pointer */
     pPort_Setting = config;
@@ -865,29 +990,21 @@ Siul2_Port_Ip_PortStatusType Siul2_Port_Ip_Init(uint32 pinCount,
     u32MaxPinConfigured = pinCount;
     for (i = 0U; i < pinCount; i++)
     {
-        Siul2_Port_Ip_PinInit(&config[i]);
+        Call_Siul2_Port_Ip_PinInit(&config[i]);
     }
 
     return SIUL2_PORT_SUCCESS;
 }
 
-/*FUNCTION**********************************************************************
- *
- * Function Name : Siul2_Port_Ip_SetPullSel
- * Description   : This function configures the internal resistor.
- *
- * @implements Siul2_Port_Ip_SetPullSel_Activity
- *END**************************************************************************/
-void Siul2_Port_Ip_SetPullSel(Siul2_Port_Ip_PortType * const base,
-                              uint16 pin,
-                              Siul2_Port_Ip_PortPullConfig pullConfig)
+
+void Siul2_Port_Ip_ConfigInternalResistor(Siul2_Port_Ip_PortType * const base,
+                                          uint16 pin,
+                                          Siul2_Port_Ip_PortPullConfig pullConfig
+                                         )
 {
     uint32 regVal;
     uint32 pueVal;
     uint32 pusVal;
-
-    SIUL2_PORT_IP_DEV_ASSERT((boolean)(base != NULL_PTR));
-    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT));
 
     /* If that pin belongs to SIUL2_AE*/
 #ifdef IP_SIUL2_AE
@@ -947,6 +1064,61 @@ void Siul2_Port_Ip_SetPullSel(Siul2_Port_Ip_PortType * const base,
 
 /*FUNCTION**********************************************************************
  *
+ * Function Name : Siul2_Port_Ip_SetPullSel
+ * Description   : This function configures the internal resistor.
+ *
+ * @implements Siul2_Port_Ip_SetPullSel_Activity
+ *END**************************************************************************/
+void Siul2_Port_Ip_SetPullSel(Siul2_Port_Ip_PortType * const base,
+                              uint16 pin,
+                              Siul2_Port_Ip_PortPullConfig pullConfig
+                             )
+{
+
+    SIUL2_PORT_IP_DEV_ASSERT((boolean)(base != NULL_PTR));
+    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT_U16));
+
+    Call_Siul2_Port_Ip_ConfigInternalResistor(base, pin, pullConfig);
+}
+
+void Siul2_Port_Ip_ConfigOutputBuffer(Siul2_Port_Ip_PortType * const base,
+                                      uint16 pin,
+                                      boolean enable,
+                                      Siul2_Port_Ip_PortMux mux
+                                     )
+{
+    /* Enter critical region */
+    SchM_Enter_Port_PORT_EXCLUSIVE_AREA_02();
+
+#ifdef IP_SIUL2_AE
+    if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
+    {
+        /* Clear the OBE bit field */
+        base->MSCR[pin] &= ~SIUL2_AE_MSCR_OBE_MASK;
+        /* Write the OBE bit field with enable */
+        base->MSCR[pin] |= SIUL2_AE_MSCR_OBE(enable ? 1UL : 0UL);
+        /* Clear the SSS bit field */
+        base->MSCR[pin] &= ~SIUL2_AE_MSCR_SSS_MASK;
+        /* Write the SSS bit field with mux */
+        base->MSCR[pin] |= SIUL2_AE_MSCR_SSS(mux);
+    }
+    else
+#endif /* IP_SIUL2_AE */
+    {
+        /* Clear the OBE bit field */
+        base->MSCR[pin] &= ~SIUL2_MSCR_OBE_MASK;
+        /* Write the OBE bit field with enable */
+        base->MSCR[pin] |= SIUL2_MSCR_OBE(enable ? 1UL : 0UL);
+        /* Clear the SSS bit field */
+        base->MSCR[pin] &= ~SIUL2_MSCR_SSS_MASK;
+        /* Write the SSS bit field with mux */
+        base->MSCR[pin] |= SIUL2_MSCR_SSS(mux);
+    }
+    /* Exit critical region */
+    SchM_Exit_Port_PORT_EXCLUSIVE_AREA_02();
+}
+/*FUNCTION**********************************************************************
+ *
  * Function Name : Siul2_Port_Ip_SetOutputBuffer
  * Description   : This function configures the output buffer.
  *
@@ -955,58 +1127,33 @@ void Siul2_Port_Ip_SetPullSel(Siul2_Port_Ip_PortType * const base,
 void Siul2_Port_Ip_SetOutputBuffer(Siul2_Port_Ip_PortType * const base,
                                    uint16 pin,
                                    boolean enable,
-                                   Siul2_Port_Ip_PortMux mux)
+                                   Siul2_Port_Ip_PortMux mux
+                                  )
 {
     SIUL2_PORT_IP_DEV_ASSERT((boolean)(base != NULL_PTR));
-    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT));
+    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT_U16));
 
-    /* Enter critical region */
-    SchM_Enter_Port_PORT_EXCLUSIVE_AREA_02();
-
-    /* Clear the OBE bit field */
-    base->MSCR[pin] &= ~SIUL2_MSCR_OBE_MASK;
-    /* Write the OBE bit field with enable */
-#ifdef IP_SIUL2_AE
-    if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
-    {
-        base->MSCR[pin] |= SIUL2_AE_MSCR_OBE(enable ? 1UL : 0UL);
-    }
-    else
-#endif /* IP_SIUL2_AE */
-    {
-        base->MSCR[pin] |= SIUL2_MSCR_OBE(enable ? 1UL : 0UL);
-    }
-    /* Clear the SSS bit field */
-    base->MSCR[pin] &= ~SIUL2_MSCR_SSS_MASK;
-    /* Write the SSS bit field with mux */
-    base->MSCR[pin] |= SIUL2_MSCR_SSS(mux);
-
-    /* Exit critical region */
-    SchM_Exit_Port_PORT_EXCLUSIVE_AREA_02();
+    Call_Siul2_Port_Ip_ConfigOutputBuffer(base, pin, enable, mux);
 }
 
-/*FUNCTION**********************************************************************
- *
- * Function Name : Siul2_Port_Ip_SetInputBuffer
- * Description   : This function configures the input buffer.
- *
- * @implements Siul2_Port_Ip_SetInputBuffer_Activity
- *END**************************************************************************/
-void Siul2_Port_Ip_SetInputBuffer(Siul2_Port_Ip_PortType * const base,
-                                  uint16 pin,
-                                  boolean enable,
-                                  uint32 inputMuxReg,
-                                  Siul2_Port_Ip_PortInputMux inputMux)
+void Siul2_Port_Ip_ConfigInputBuffer(Siul2_Port_Ip_PortType * const base,
+                                     uint16 pin,
+                                     boolean enable,
+                                     uint32 inputMuxReg,
+                                     Siul2_Port_Ip_PortInputMux inputMux)
 {
     /* Dummy address */
-    SIUL2_Type * siul2Base = (SIUL2_Type *)0xFFFFFFFFU;
+    SIUL2_Type * siul2Base = (SIUL2_Type *)0UL;
+#ifdef IP_SIUL2_AE_BASE
+    SIUL2_AE_Type * siul2BaseAE = (SIUL2_AE_Type *)0UL;
+#endif
     uint32 imcrRegIdx = inputMuxReg;
     uint32 imcrVal;
-    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT));
+
 #ifdef IP_SIUL2_AE_BASE
     if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
     {
-        SIUL2_PORT_IP_DEV_ASSERT((boolean)(!((SIUL2_DIPORT_IMCR_AE_IDX_START <= inputMuxReg) && (SIUL2_DIPORT_IMCR_AE_IDX_END >= inputMuxReg))));
+        SIUL2_PORT_IP_DEV_ASSERT((boolean)(!((SIUL2_DIPORT_IMCR_AE_IDX_START_U32 <= inputMuxReg) && (SIUL2_DIPORT_IMCR_AE_IDX_END_U32 >= inputMuxReg))));
     }
 #endif
 
@@ -1016,17 +1163,26 @@ void Siul2_Port_Ip_SetInputBuffer(Siul2_Port_Ip_PortType * const base,
     if (base != NULL_PTR)
     {
         /* Enable/disable input buffer for input signal */
-        base->MSCR[pin] &= ~SIUL2_MSCR_IBE_MASK;
-        base->MSCR[pin] |= SIUL2_MSCR_IBE(enable ? 1UL : 0UL);
+#ifdef IP_SIUL2_AE
+        if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
+        {
+            base->MSCR[pin] &= ~SIUL2_AE_MSCR_IBE_MASK;
+            base->MSCR[pin] |= SIUL2_AE_MSCR_IBE(enable ? 1UL : 0UL);
+        }
+        else
+#endif /* IP_SIUL2_AE */
+        {
+            base->MSCR[pin] &= ~SIUL2_MSCR_IBE_MASK;
+            base->MSCR[pin] |= SIUL2_MSCR_IBE(enable ? 1UL : 0UL);
+        }
     }
-
     /* Check input mux to configure input signal */
     if (inputMux != PORT_INPUT_MUX_NO_INIT)
     {
 #ifdef IP_SIUL2_AE_BASE
         if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
         {
-            siul2Base = (SIUL2_Type *)IP_SIUL2_AE_BASE;
+            siul2BaseAE = (SIUL2_AE_Type *)IP_SIUL2_AE_BASE;
         }
         else
         {
@@ -1071,33 +1227,57 @@ void Siul2_Port_Ip_SetInputBuffer(Siul2_Port_Ip_PortType * const base,
 #ifdef IP_SIUL2_AE_BASE
         }
 #endif /* IP_SIUL2_AE_BASE */
-        if (imcrRegIdx < SIUL2_IMCR_COUNT)
+#ifdef IP_SIUL2_AE
+        if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
         {
-            /* Configure input mux */
-            imcrVal  = siul2Base->IMCR[imcrRegIdx % SIUL2_MAX_NUM_OF_IMCR_REG];
-            imcrVal &= ~SIUL2_IMCR_SSS_MASK;
-            imcrVal |= SIUL2_IMCR_SSS(inputMux);
-            siul2Base->IMCR[imcrRegIdx % SIUL2_MAX_NUM_OF_IMCR_REG] = imcrVal;
+            if (imcrRegIdx < SIUL2_IMCR_COUNT)
+            {
+                /* Configure input mux */
+                imcrVal  = siul2BaseAE->IMCR[imcrRegIdx % SIUL2_MAX_NUM_OF_IMCR_REG];
+                imcrVal &= ~SIUL2_AE_IMCR_SSS_MASK;
+                imcrVal |= SIUL2_AE_IMCR_SSS(inputMux);
+                siul2BaseAE->IMCR[imcrRegIdx % SIUL2_MAX_NUM_OF_IMCR_REG] = imcrVal;
+            }
+        }
+        else
+#endif /* IP_SIUL2_AE */
+        {
+            if (imcrRegIdx < SIUL2_IMCR_COUNT)
+            {
+                /* Configure input mux */
+                imcrVal  = siul2Base->IMCR[imcrRegIdx % SIUL2_MAX_NUM_OF_IMCR_REG];
+                imcrVal &= ~SIUL2_IMCR_SSS_MASK;
+                imcrVal |= SIUL2_IMCR_SSS(inputMux);
+                siul2Base->IMCR[imcrRegIdx % SIUL2_MAX_NUM_OF_IMCR_REG] = imcrVal;
+            }
         }
     }
     /* Exit critical region */
     SchM_Exit_Port_PORT_EXCLUSIVE_AREA_03();
 }
-
 /*FUNCTION**********************************************************************
  *
- * Function Name : Siul2_Port_Ip_SetPinDirection
- * Description   : This function configures the pin direction
+ * Function Name : Siul2_Port_Ip_SetInputBuffer
+ * Description   : This function configures the input buffer.
  *
- * @implements Siul2_Port_Ip_SetPinDirection_Activity
+ * @implements Siul2_Port_Ip_SetInputBuffer_Activity
  *END**************************************************************************/
-void Siul2_Port_Ip_SetPinDirection(Siul2_Port_Ip_PortType * const base,
-                                   uint16 pin,
-                                   Siul2_Port_Ip_PortDirectionType direction)
+void Siul2_Port_Ip_SetInputBuffer(Siul2_Port_Ip_PortType * const base,
+                                  uint16 pin,
+                                  boolean enable,
+                                  uint32 inputMuxReg,
+                                  Siul2_Port_Ip_PortInputMux inputMux
+                                 )
 {
-    SIUL2_PORT_IP_DEV_ASSERT((boolean)(base != NULL_PTR));
-    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT));
+    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT_U16));
+    Call_Siul2_Port_Ip_ConfigInputBuffer(base, pin, enable, inputMuxReg, inputMux);
+}
 
+void Siul2_Port_Ip_ConfigPinDirection(Siul2_Port_Ip_PortType * const base,
+                                      uint16 pin,
+                                      Siul2_Port_Ip_PortDirectionType direction
+                                     )
+{
     /* Enter critical region */
     SchM_Enter_Port_PORT_EXCLUSIVE_AREA_04();
 
@@ -1109,35 +1289,55 @@ void Siul2_Port_Ip_SetPinDirection(Siul2_Port_Ip_PortType * const base,
             if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
             {
                 base->MSCR[pin] &= ~SIUL2_AE_MSCR_OBE_MASK;
+                base->MSCR[pin] |= SIUL2_AE_MSCR_IBE(1UL);
             }
             else
 #endif /* IP_SIUL2_AE */
             {
                 base->MSCR[pin] &= ~SIUL2_MSCR_OBE_MASK;
+                base->MSCR[pin] |= SIUL2_MSCR_IBE(1UL);
             }
-            base->MSCR[pin] |= SIUL2_MSCR_IBE(1UL);
             break;
         /* If the pin's direction is output */
         case SIUL2_PORT_OUT:
-            base->MSCR[pin] &= ~SIUL2_MSCR_IBE_MASK;
 #ifdef IP_SIUL2_AE
             if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
             {
+                base->MSCR[pin] &= ~SIUL2_AE_MSCR_IBE_MASK;
                 base->MSCR[pin] |= SIUL2_AE_MSCR_OBE(1UL);
             }
             else
 #endif /* IP_SIUL2_AE */
             {
+                base->MSCR[pin] &= ~SIUL2_MSCR_IBE_MASK;
                 base->MSCR[pin] |= SIUL2_MSCR_OBE(1UL);
             }
             break;
         /* If the pin's direction is inout */
         case SIUL2_PORT_IN_OUT:
-            base->MSCR[pin] |= (SIUL2_MSCR_IBE_MASK | SIUL2_MSCR_OBE_MASK);
+#ifdef IP_SIUL2_AE
+            if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
+            {
+                base->MSCR[pin] |= (SIUL2_AE_MSCR_IBE_MASK | SIUL2_AE_MSCR_OBE_MASK);
+            }
+            else
+#endif /* IP_SIUL2_AE */
+            {
+                base->MSCR[pin] |= (SIUL2_MSCR_IBE_MASK | SIUL2_MSCR_OBE_MASK);
+            }
             break;
         /* If the pin's direction is hi_z */
         case SIUL2_PORT_HI_Z:
-            base->MSCR[pin] &= ~(SIUL2_MSCR_IBE_MASK | SIUL2_MSCR_OBE_MASK);
+#ifdef IP_SIUL2_AE
+            if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE)
+            {
+                base->MSCR[pin] &= ~(SIUL2_AE_MSCR_IBE_MASK | SIUL2_AE_MSCR_OBE_MASK);
+            }
+            else
+#endif /* IP_SIUL2_AE */
+            {
+                base->MSCR[pin] &= ~(SIUL2_MSCR_IBE_MASK | SIUL2_MSCR_OBE_MASK);
+            }
             break;
         default:
             /* Do nothing */
@@ -1147,16 +1347,27 @@ void Siul2_Port_Ip_SetPinDirection(Siul2_Port_Ip_PortType * const base,
     /* Exit critical region */
     SchM_Exit_Port_PORT_EXCLUSIVE_AREA_04();
 }
-
 /*FUNCTION**********************************************************************
  *
- * Function Name : Siul2_Port_Ip_RevertPinConfiguration
- * Description   : This function configures the pin configuration with the values from the configuration structure
+ * Function Name : Siul2_Port_Ip_SetPinDirection
+ * Description   : This function configures the pin direction
  *
- * @implements Siul2_Port_Ip_RevertPinConfiguration_Activity
+ * @implements Siul2_Port_Ip_SetPinDirection_Activity
  *END**************************************************************************/
-uint32 Siul2_Port_Ip_RevertPinConfiguration(const Siul2_Port_Ip_PortType * const base,
-                                            uint16 pin)
+void Siul2_Port_Ip_SetPinDirection(Siul2_Port_Ip_PortType * const base,
+                                   uint16 pin,
+                                   Siul2_Port_Ip_PortDirectionType direction
+                                  )
+{
+    SIUL2_PORT_IP_DEV_ASSERT((boolean)(base != NULL_PTR));
+    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT_U16));
+
+    Call_Siul2_Port_Ip_ConfigPinDirection(base, pin, direction);
+}
+
+uint32 Siul2_Port_Ip_GetValueConfigRevertPin(const Siul2_Port_Ip_PortType * const base,
+                                             uint16 pin
+                                            )
 {
     uint32 u32PinIdx;
     uint32 u32RegVal = 0xFFFFFFFFUL;
@@ -1164,9 +1375,6 @@ uint32 Siul2_Port_Ip_RevertPinConfiguration(const Siul2_Port_Ip_PortType * const
     uint32 MaxPinConfigured = u32MaxPinConfigured;
     uint32 portNumber;
     uint32 u32MscrId;
-
-    SIUL2_PORT_IP_DEV_ASSERT((boolean)(base != NULL_PTR));
-    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT));
 
     /* Get the PortID:  Subtract the address of the first mscr from the base parameter then divide to 4 and 16 because there are 16 ports but each MSCR has 4 bytes */
 #if (2 <= SIUL2_NUM_SIUL2_INSTANCES_U8)
@@ -1180,33 +1388,41 @@ uint32 Siul2_Port_Ip_RevertPinConfiguration(const Siul2_Port_Ip_PortType * const
     else
     {
 #endif /* IP_SIUL2_AE_BASE */
+        /* Only S32ZE has SIUL2_5 */
+#ifdef IP_SIUL2_5_BASE
         if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_5_BASE)
         {
             portNumber = (Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)base - (Siul2_Port_Ip_CoreType)SIUL2_5_MSCR_BASE) >> 2U) >> 4U);
         }
-        else if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_4_BASE)
-        {
-            portNumber = (Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)base - (Siul2_Port_Ip_CoreType)SIUL2_4_MSCR_BASE) >> 2U) >> 4U);
-        }
-        else if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_3_BASE)
-        {
-            portNumber = (Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)base - (Siul2_Port_Ip_CoreType)SIUL2_3_MSCR_BASE) >> 2U) >> 4U);
-        }
         else
-#endif /* SIUL2_PORT_IP_MULTIPLE_SIUL2_INSTANCES */
         {
-            if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_1_BASE)
+#endif /* IP_SIUL2_5_BASE */
+            if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_4_BASE)
             {
-                portNumber = (Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)base - (Siul2_Port_Ip_CoreType)SIUL2_1_MSCR_BASE) >> 2U) >> 4U);
+                portNumber = (Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)base - (Siul2_Port_Ip_CoreType)SIUL2_4_MSCR_BASE) >> 2U) >> 4U);
+            }
+            else if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_3_BASE)
+            {
+                portNumber = (Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)base - (Siul2_Port_Ip_CoreType)SIUL2_3_MSCR_BASE) >> 2U) >> 4U);
             }
             else
+#endif /* SIUL2_PORT_IP_MULTIPLE_SIUL2_INSTANCES */
             {
-                portNumber = (Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)base - (Siul2_Port_Ip_CoreType)SIUL2_0_MSCR_BASE) >> 2U) >> 4U);
+                if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_1_BASE)
+                {
+                    portNumber = (Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)base - (Siul2_Port_Ip_CoreType)SIUL2_1_MSCR_BASE) >> 2U) >> 4U);
+                }
+                else
+                {
+                    portNumber = (Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)base - (Siul2_Port_Ip_CoreType)SIUL2_0_MSCR_BASE) >> 2U) >> 4U);
+                }
             }
+#ifdef IP_SIUL2_5_BASE
         }
+#endif /* IP_SIUL2_5_BASE */
 #ifdef IP_SIUL2_AE_BASE
     }
-#endif
+#endif /* IP_SIUL2_AE_BASE */
 #else /* (2 <= SIUL2_NUM_SIUL2_INSTANCES_U8) */
     portNumber = (Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)base - (Siul2_Port_Ip_CoreType)SIUL2_MSCR_BASE) >> 2U) >> 4U);
 #endif /* (2 <= SIUL2_NUM_SIUL2_INSTANCES_U8) */
@@ -1220,26 +1436,40 @@ uint32 Siul2_Port_Ip_RevertPinConfiguration(const Siul2_Port_Ip_PortType * const
         /* If we found that pin */
         if (ConfigPtr[u32PinIdx].pinPortIdx == u32MscrId)
         {
-            Siul2_Port_Ip_PinInit(&ConfigPtr[u32PinIdx]);
+            Call_Siul2_Port_Ip_PinInit(&ConfigPtr[u32PinIdx]);
             u32RegVal = base->MSCR[pin];
             /* Break the loop. Do not need to search in all pin configuration's structure */
             break;
         }
     }
+
+    return u32RegVal;
+}
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Siul2_Port_Ip_RevertPinConfiguration
+ * Description   : This function configures the pin configuration with the values from the configuration structure
+ *
+ * @implements Siul2_Port_Ip_RevertPinConfiguration_Activity
+ *END**************************************************************************/
+uint32 Siul2_Port_Ip_RevertPinConfiguration(const Siul2_Port_Ip_PortType * const base,
+                                            uint16 pin
+                                           )
+{
+    uint32 u32RegVal = 0xFFFFFFFFUL;
+
+    SIUL2_PORT_IP_DEV_ASSERT((boolean)(base != NULL_PTR));
+    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT_U16));
+
+    u32RegVal = Call_Siul2_Port_Ip_GetValueConfigRevertPin(base, pin);
     /* Return the MSCR value */
     return u32RegVal;
 }
 
-/*FUNCTION**********************************************************************
- *
- * Function Name : Siul2_Port_Ip_GetPinConfiguration
- * Description   : This function returns the value of the pin configuration register.
- *
- * @implements Siul2_Port_Ip_GetPinConfiguration_Activity
- *END**************************************************************************/
-void Siul2_Port_Ip_GetPinConfiguration(const Siul2_Port_Ip_PortType * const base,
-                                       Siul2_Port_Ip_PinSettingsConfig * config,
-                                       uint16 pin)
+void Siul2_Port_Ip_GetValuePinConfiguration(const Siul2_Port_Ip_PortType * const base,
+                                            Siul2_Port_Ip_PinSettingsConfig * config,
+                                            uint16 pin
+                                           )
 {
     const Siul2_Port_Ip_PinSettingsConfig * ConfigPtr = pPort_Setting;
     uint32 MaxPinConfigured = u32MaxPinConfigured;
@@ -1248,9 +1478,6 @@ void Siul2_Port_Ip_GetPinConfiguration(const Siul2_Port_Ip_PortType * const base
     uint32 u32MscrBase;
     uint32 u32PinIdx;
     uint8 inputMuxIterator;
-
-    SIUL2_PORT_IP_DEV_ASSERT((boolean)(base != NULL_PTR));
-    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT));
 
     /* Choose the MSCR base address for the pin */
 #if (2 <= SIUL2_NUM_SIUL2_INSTANCES_U8)
@@ -1263,36 +1490,44 @@ void Siul2_Port_Ip_GetPinConfiguration(const Siul2_Port_Ip_PortType * const base
     else
     {
 #endif
+        /* Only S32ZE has SIUL2_5 */
+#ifdef IP_SIUL2_5_BASE
         if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_5_BASE)
         {
             u32MscrBase = (Siul2_Port_Ip_CoreType)SIUL2_5_MSCR_BASE;
         }
-        else if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_4_BASE)
-        {
-            u32MscrBase = (Siul2_Port_Ip_CoreType)SIUL2_4_MSCR_BASE;
-        }
-        else if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_3_BASE)
-        {
-            u32MscrBase = (Siul2_Port_Ip_CoreType)SIUL2_3_MSCR_BASE;
-        }
         else
-#endif /* SIUL2_PORT_IP_MULTIPLE_SIUL2_INSTANCES */
         {
-            if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_1_BASE)
+#endif /* IP_SIUL2_5_BASE */
+            if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_4_BASE)
             {
-                u32MscrBase = (Siul2_Port_Ip_CoreType)SIUL2_1_MSCR_BASE;
+                u32MscrBase = (Siul2_Port_Ip_CoreType)SIUL2_4_MSCR_BASE;
+            }
+            else if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_3_BASE)
+            {
+                u32MscrBase = (Siul2_Port_Ip_CoreType)SIUL2_3_MSCR_BASE;
             }
             else
+#endif /* SIUL2_PORT_IP_MULTIPLE_SIUL2_INSTANCES */
             {
-                u32MscrBase = (Siul2_Port_Ip_CoreType)SIUL2_0_MSCR_BASE;
+                if (base > (Siul2_Port_Ip_PortType *)IP_SIUL2_1_BASE)
+                {
+                    u32MscrBase = (Siul2_Port_Ip_CoreType)SIUL2_1_MSCR_BASE;
+                }
+                else
+                {
+                    u32MscrBase = (Siul2_Port_Ip_CoreType)SIUL2_0_MSCR_BASE;
+                }
             }
+#ifdef IP_SIUL2_5_BASE
         }
+#endif /* IP_SIUL2_5_BASE */
 #ifdef IP_SIUL2_AE_BASE
     }
-#endif
-#else
+#endif /* IP_SIUL2_AE_BASE */
+#else /* (2 <= SIUL2_NUM_SIUL2_INSTANCES_U8) */
     u32MscrBase = (Siul2_Port_Ip_CoreType)SIUL2_MSCR_BASE;
-#endif
+#endif /* (2 <= SIUL2_NUM_SIUL2_INSTANCES_U8) */
 
     /* Get the PortID:  Subtract the address of the first mscr from the base parameter then divide to 4 and 16 because there are 16 ports and each MSCR has 4 bytes */
     portNumber = (Siul2_Port_Ip_CoreType)((Siul2_Port_Ip_CoreType)base - u32MscrBase) / 64UL;
@@ -1304,11 +1539,20 @@ void Siul2_Port_Ip_GetPinConfiguration(const Siul2_Port_Ip_PortType * const base
         /* If that pin was found */
         if (ConfigPtr[u32PinIdx].pinPortIdx == u32MscrId)
         {
-            config->base = ConfigPtr[u32PinIdx].base;
+#ifdef IP_SIUL2_AE_BASE
+            if ((Siul2_Port_Ip_PortType *)IP_SIUL2_AE_BASE < base)
+            {
+                config->baseAE = ConfigPtr[u32PinIdx].baseAE;
+            }
+            else
+#endif /* IP_SIUL2_AE_BASE */
+            {
+                config->base = ConfigPtr[u32PinIdx].base;
+            }
             config->pinPortIdx = ConfigPtr[u32PinIdx].pinPortIdx;
             config->initValue = ConfigPtr[u32PinIdx].initValue;
 
-            for (inputMuxIterator = 0U; inputMuxIterator < FEATURE_SIUL2_MAX_NUMBER_OF_INPUT; inputMuxIterator++)
+            for (inputMuxIterator = 0U; inputMuxIterator < FEATURE_SIUL2_MAX_NUMBER_OF_INPUT_U8; inputMuxIterator++)
             {
                 config->inputMuxReg[inputMuxIterator] = ConfigPtr[u32PinIdx].inputMuxReg[inputMuxIterator];
                 config->inputMux[inputMuxIterator] = ConfigPtr[u32PinIdx].inputMux[inputMuxIterator];
@@ -1319,6 +1563,24 @@ void Siul2_Port_Ip_GetPinConfiguration(const Siul2_Port_Ip_PortType * const base
             break;
         }
     }
+}
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Siul2_Port_Ip_GetPinConfiguration
+ * Description   : This function returns the value of the pin configuration register.
+ *
+ * @implements Siul2_Port_Ip_GetPinConfiguration_Activity
+ *END**************************************************************************/
+void Siul2_Port_Ip_GetPinConfiguration(const Siul2_Port_Ip_PortType * const base,
+                                       Siul2_Port_Ip_PinSettingsConfig * config,
+                                       uint16 pin
+                                      )
+{
+
+    SIUL2_PORT_IP_DEV_ASSERT((boolean)(base != NULL_PTR));
+    SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT_U16));
+
+    Call_Siul2_Port_Ip_GetValuePinConfiguration(base, config, pin);
 }
 
 #define PORT_STOP_SEC_CODE

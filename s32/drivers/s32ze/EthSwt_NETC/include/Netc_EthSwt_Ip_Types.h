@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -37,8 +37,8 @@ extern "C"{
 #define NETC_ETHSWT_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETHSWT_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETHSWT_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETHSWT_IP_TYPES_SW_MAJOR_VERSION             0
-#define NETC_ETHSWT_IP_TYPES_SW_MINOR_VERSION             9
+#define NETC_ETHSWT_IP_TYPES_SW_MAJOR_VERSION             1
+#define NETC_ETHSWT_IP_TYPES_SW_MINOR_VERSION             0
 #define NETC_ETHSWT_IP_TYPES_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -92,7 +92,7 @@ extern "C"{
 ==================================================================================================*/
 
 #define NETC_ETHSWT_NUMBER_OF_PSEUDO_PORT (1U)  /*!< number of pseudoport */
-#define NETC_ETHSWT_NUMBER_OF_PORTS       3  /*!< number of ports */
+#define NETC_ETHSWT_NUMBER_OF_PORTS       (3U)  /*!< number of ports */
 #define NETC_ETHSWT_NUMBER_OF_MAC_PORTS   (2U)  /*!< number of mac ports*/
 #define NETC_ETHSWT_NUMBER_OF_VID_PER_PORT (255U)   /*!< 3 number of vid per port */
 
@@ -152,6 +152,7 @@ typedef enum {
 
 /*!
  * @brief defines FDB entries.
+ * @implements Netc_EthSwt_Ip_FdbEntryDataType_struct
  */
 typedef struct
 {
@@ -169,11 +170,12 @@ typedef struct
 
 /*!
  * @brief defines Vlan Filter entries.
+ * @implements Netc_EthSwt_Ip_VlanFilterEntryDataType_struct
  */
 typedef struct
 {
     uint32 PortMembershipBitmap;                        /*!< Port Membership Bitmap */
-    uint32 VlanID;                                      /*!< Vlan ID */
+    uint16 VlanID;                                      /*!< Vlan ID */
     uint16 FID;                                         /*!< Filtering ID */
     uint32 EgressTreatmentApplicabilityPortBitmap;      /*!< Egress Treatment Applicability Port Bitmap */
     uint32 BaseEgressTreatmentEntryID;                  /*!< Base Egress Treatment Entry ID */
@@ -194,6 +196,16 @@ typedef struct
 #define NETC_ETHSWT_IP_FRM_MODIFICATION_TABLE_ID        (40U)    /*!< Frame Modification table id */
 #define NETC_ETHSWT_IP_INGRESS_PORT_FILTER_TABLE_ID     (13U)    /*!< Ingress Port Filter table id */
 #define NETC_ETHSWT_IP_TIME_GATE_SCHEDULING_TABLE_ID    (5U)     /*!< Ingress Port Filter table id */
+#define NETC_ETHSWT_IP_RATE_POLICER_TABLE_ID            (10U)    /*!< Rate Policer table id */
+#define NETC_ETHSWT_IP_INGRESS_STREAM_IDEN_TABLE_ID     (30U)    /*!< Ingress Stream Identification table id */
+#define NETC_ETHSWT_IP_INGRESS_STREAM_TABLE_ID          (31U)    /*!< Ingress Stream table id */
+#define NETC_ETHSWT_IP_INGRESS_STREAM_FILTER_TABLE_ID   (32U)    /*!< Ingress Stream Filter table id */
+#define NETC_ETHSWT_IP_INGRESS_SEQ_GENERATION_TABLE_ID  (34U)    /*!< Ingress Sequence Generation table id */
+#define NETC_ETHSWT_IP_EGRESS_SEQ_RECOVERY_TABLE_ID     (35U)    /*!< Egress Sequence Recovery table id */
+#define NETC_ETHSWT_IP_STREAM_GATE_INSTANCE_TABLE_ID    (36U)    /*!< Stream Gate Instance table id */
+#define NETC_ETHSWT_IP_STREAM_GATE_CTRL_LIST_TABLE_ID   (37U)    /*!< Stream Gate Control List table id */
+#define NETC_ETHSWT_IP_CLASS_SCHEDULER_TABLE_ID         (23U)    /*!< ETM Class Scheduler table id */
+#define NETC_ETHSWT_IP_INGRESS_STREAM_COUNT_TABLE_ID    (38U)    /*!< INgress Stream Count table id */
 
 #define NETC_ETHSWT_IP_BD_ENTRY_EXIST              (1U)     /*!< BD entry exist */
 #define NETC_ETHSWT_IP_BD_ENTRY_NOT_EXIST          (0U)     /*!< BD entry not exist*/
@@ -210,6 +222,7 @@ typedef uint32 Netc_EthSwt_Ip_CBDRStatusType;
 #define NETC_ETHSWT_CBDRSTATUS_RR_ERROR                                         (0x3UL)     /*!< The hardware does not consume the command, or the operation has not finished by hardware. */
 #define NETC_ETHSWT_CBDRSTATUS_NUMMATCHED_ERROR                                 (0x4UL)     /*!< The NUM_MATCHED field should be 1 when the entry exists for any commands */
 #define NETC_ETHSWT_CBDRSTATUS_ACCESSMETHOD_ERROR                               (0x5UL)     /*!< Access_method should be 0, 1, or 2, or the command is not supported by this access method */
+#define NETC_ETHSWT_CBDRSTATUS_TABLE_OPERATION_TIMEOUT                          (0x6UL)     /*!< Table operations timeout for commands like add, query, delete etc. */
 #define NETC_ETHSWT_CBDRSTATUS_INVALID_TABLE_ID                                 (0x080UL)   /*!< Invalid table ID */
 #define NETC_ETHSWT_CBDRSTATUS_NOT_SUPPORTED_ACCESS_METHOD                      (0x081UL)   /*!< Access method specified is not supported */
 #define NETC_ETHSWT_CBDRSTATUS_TABLE_INDEX_OUTOFRANGE                           (0x082UL)   /*!< Table index out of range */
@@ -251,6 +264,7 @@ typedef enum {
 
 /*!
  * @brief defines commands type.
+ * @implements Netc_EthSwt_Ip_CommandsType_enum
  */
 typedef enum {
     NETC_ETHSWT_DELETE_CMD = 0x1U,                                  /*!< delete command */
@@ -374,6 +388,416 @@ typedef enum {
  * @brief CMBDR request NPF.
  */
 #define NETC_ETHSWT_IP_CMDBD_REQFMT_NPF_FIELD(x)                         (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_CMDBD_REQFMT_NPF_FIELD_SHIFT)) & NETC_ETHSWT_IP_CMDBD_REQFMT_NPF_FIELD_MASK)
+
+/*!
+* @brief Rate Policer Table FEE_DATA Format
+*/
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_FEE_DATA_FEN_SHIFT              (0U)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_FEE_DATA_FEN_MASK               (0x00000001UL)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_FEE_DATA_FEN(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_RATEPOLICERTABLE_FEE_DATA_FEN_SHIFT)) & NETC_ETHSWT_IP_RATEPOLICERTABLE_FEE_DATA_FEN_MASK)
+
+/*!
+* @brief Rate Policer Table CFGE_DATA config bits Format
+*/
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_MREN_SHIFT            (0U)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_MREN_MASK             (0x00000001UL)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_MREN(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_MREN_SHIFT)) & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_MREN_MASK)
+
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_DOY_SHIFT             (1U)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_DOY_MASK              (0x00000002UL)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_DOY(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_DOY_SHIFT)) & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_DOY_MASK)
+
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CM_SHIFT              (2U)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CM_MASK               (0x00000004UL)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CM(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CM_SHIFT)) & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CM_MASK)
+
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CF_SHIFT              (3U)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CF_MASK               (0x00000008UL)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CF(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CF_SHIFT)) & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_CF_MASK)
+
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_NDOR_SHIFT            (4U)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_NDOR_MASK             (0x00000010UL)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_NDOR(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_NDOR_SHIFT)) & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_NDOR_MASK)
+
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE_SHIFT        (5U)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE_MASK         (0x00000060UL)
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE(x)           (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE_SHIFT)) & NETC_ETHSWT_IP_RATEPOLICERTABLE_CFGE_DATA_SDU_TYPE_MASK)
+
+/*!
+* @brief Ingress Stream Table CFGE_DATA config bits Format
+*/
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SFE_SHIFT                (0U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SFE_MASK                 (0x00000001UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SFE(x)                   (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SFE_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SFE_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IPV_SHIFT                (4U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IPV_MASK                 (0x000000F0UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IPV(x)                   (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IPV_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IPV_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OIPV_SHIFT               (8U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OIPV_MASK                (0x00000100UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OIPV(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OIPV_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OIPV_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_DR_SHIFT                 (9U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_DR_MASK                  (0x00000600UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_DR(x)                    (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_DR_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_DR_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ODR_SHIFT                (11U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ODR_MASK                 (0x00000800UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ODR(x)                   (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ODR_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ODR_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IMIRE_SHIFT              (12U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IMIRE_MASK               (0x00001000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IMIRE(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IMIRE_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IMIRE_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE_SHIFT           (13U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE_MASK            (0x00002000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE(x)              (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SPPD_SHIFT               (15U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SPPD_MASK                (0x00008000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SPPD(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SPPD_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SPPD_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ISQA_SHIFT               (16U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ISQA_MASK                (0x00030000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ISQA(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ISQA_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ISQA_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ORP_SHIFT                (18U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ORP_MASK                 (0x00040000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ORP(x)                   (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ORP_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_ORP_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OSGI_SHIFT               (19U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OSGI_MASK                (0x00080000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OSGI(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OSGI_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OSGI_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_HR_SHIFT                 (20U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_HR_MASK                  (0x00F00000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_HR(x)                    (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_HR_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_HR_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_FA_SHIFT                 (24U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_FA_MASK                  (0x07000000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_FA(x)                    (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_FA_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_FA_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_SHIFT            (27U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_MASK             (0x18000000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_MSDU_SHIFT               (0U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_MSDU_MASK                (0x0000FFFFUL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_MSDU(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_MSDU_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_MSDU_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG_SHIFT         (16U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG_MASK          (0x007F0000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG(x)            (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EPORT_SHIFT              (23U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EPORT_MASK               (0x0F800000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EPORT(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EPORT_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EPORT_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OETEID_SHIFT             (28U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OETEID_MASK              (0x30000000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OETEID(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OETEID_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_OETEID_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_CTD_SHIFT                (30U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_CTD_MASK                 (0xC0000000UL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_CTD(x)                   (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_CTD_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_CTD_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP_SHIFT      (0U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP_MASK       (0x00FFFFFFUL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP(x)         (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP_MASK)
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SIMAP_SHIFT              (0U)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SIMAP_MASK               (0x0000FFFFUL)
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SIMAP(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SIMAP_SHIFT)) & NETC_ETHSWT_IP_INGRESSSTREAMTABLE_CFGE_SIMAP_MASK)
+
+/*!
+* @brief Ingress Stream Filter Table KEYE_DATA config bits Format
+*/
+#define NETC_ETHSWT_IP_ISFILTERTABLE_KEYE_PCP_SHIFT          (0U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_KEYE_PCP_MASK           (0x00000007UL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_KEYE_PCP(x)             (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_KEYE_PCP_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_KEYE_PCP_MASK)
+
+/*!
+* @brief Ingress Stream Filter Table CFGE_DATA config bits Format
+*/
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV_SHIFT                (0U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV_MASK                 (0x0000000FUL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV(x)                   (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IPV_MASK)
+
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV_SHIFT               (4U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV_MASK                (0x00000010UL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OIPV_MASK)
+
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR_SHIFT                 (5U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR_MASK                  (0x00000060UL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR(x)                    (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_DR_MASK)
+
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR_SHIFT                (7U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR_MASK                 (0x00000080UL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR(x)                   (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ODR_MASK)
+
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE_SHIFT              (8U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE_MASK               (0x00000100UL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_IMIRE_MASK)
+
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE_SHIFT           (9U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE_MASK            (0x00000200UL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE(x)              (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_TIMECAPE_MASK)
+
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI_SHIFT               (10U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI_MASK                (0x00000400UL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_OSGI_MASK)
+
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD_SHIFT                (11U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD_MASK                 (0x00000800UL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD(x)                   (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_CTD_MASK)
+
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP_SHIFT                (12U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP_MASK                 (0x00001000UL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP(x)                   (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_ORP_MASK)
+
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE_SHIFT            (13U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE_MASK             (0x00006000UL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_SDUTYPE_MASK)
+
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU_SHIFT               (16U)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU_MASK                (0xFFFF0000UL)
+#define NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU_SHIFT)) & NETC_ETHSWT_IP_ISFILTERTABLE_CFGE_MSDU_MASK)
+
+/*!
+ * @brief Stream Gate Instance Table Request Data Buffer ACFGEU (Admin Configuration Element Update.) field.
+ */
+#define NETC_ETHSWT_IP_SGITABLE_REQFMT_ACFGEU_SHIFT                 (0U)
+#define NETC_ETHSWT_IP_SGITABLE_REQFMT_ACFGEU_MASK                  (0x00000001UL)
+#define NETC_ETHSWT_IP_SGITABLE_REQFMT_ACFGEU(x)                    (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_REQFMT_ACFGEU_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_REQFMT_ACFGEU_MASK)
+
+/*!
+ * @brief Stream Gate Instance Table Request Data Buffer CFGEU (Configuration Element Update) field.
+ */
+#define NETC_ETHSWT_IP_SGITABLE_REQFMT_CFGEU_SHIFT                  (1U)
+#define NETC_ETHSWT_IP_SGITABLE_REQFMT_CFGEU_MASK                   (0x00000002UL)
+#define NETC_ETHSWT_IP_SGITABLE_REQFMT_CFGEU(x)                     (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_REQFMT_CFGEU_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_REQFMT_CFGEU_MASK)
+
+/*!
+ * @brief Stream Gate Instance Table Request Data Buffer SGISEU (Stream Gate Instance State Element Update) field.
+ */
+#define NETC_ETHSWT_IP_SGITABLE_REQFMT_SGISEU_SHIFT                 (2U)
+#define NETC_ETHSWT_IP_SGITABLE_REQFMT_SGISEU_MASK                  (0x00000004UL)
+#define NETC_ETHSWT_IP_SGITABLE_REQFMT_SGISEU(x)                    (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_REQFMT_SGISEU_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_REQFMT_SGISEU_MASK)
+
+/*!
+* @brief Stream Gate Instance Table CFGE_DATA config bits Format
+*/
+/* Octets Exceeded Enable */
+#define NETC_ETHSWT_IP_SGITABLE_CFGE_OEXEN_SHIFT            (0U)
+#define NETC_ETHSWT_IP_SGITABLE_CFGE_OEXEN_MASK             (0x00000001UL)
+#define NETC_ETHSWT_IP_SGITABLE_CFGE_OEXEN(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_CFGE_OEXEN_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_CFGE_OEXEN_MASK)
+
+/* Invalid Receive Enable */
+#define NETC_ETHSWT_IP_SGITABLE_CFGE_IRXEN_SHIFT            (1U)
+#define NETC_ETHSWT_IP_SGITABLE_CFGE_IRXEN_MASK             (0x00000002UL)
+#define NETC_ETHSWT_IP_SGITABLE_CFGE_IRXEN(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_CFGE_IRXEN_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_CFGE_IRXEN_MASK)
+
+/* Protocol/Service Data Unit */
+#define NETC_ETHSWT_IP_SGITABLE_CFGE_SDUTYPE_SHIFT          (2U)
+#define NETC_ETHSWT_IP_SGITABLE_CFGE_SDUTYPE_MASK           (0x0000000CUL)
+#define NETC_ETHSWT_IP_SGITABLE_CFGE_SDUTYPE(x)             (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_CFGE_SDUTYPE_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_CFGE_SDUTYPE_MASK)
+
+/*!
+* @brief Stream Gate Instance Table ICFGE_DATA config bits Format
+*/
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_IPV_SHIFT             (0U)
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_IPV_MASK              (0x0000000FUL)
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_IPV(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_ICFGE_IPV_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_ICFGE_IPV_MASK)
+
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_OIPV_SHIFT            (4U)
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_OIPV_MASK             (0x00000010UL)
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_OIPV(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_ICFGE_OIPV_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_ICFGE_OIPV_MASK)
+
+/* Gate State */
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_GST_SHIFT             (5U)
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_GST_MASK              (0x00000020UL)
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_GST(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_ICFGE_GST_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_ICFGE_GST_MASK)
+
+/* Cut Through Disabled */
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_CTD_SHIFT             (6U)
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_CTD_MASK              (0x00000040UL)
+#define NETC_ETHSWT_IP_SGITABLE_ICFGE_CTD(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_ICFGE_CTD_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_ICFGE_CTD_MASK)
+
+/*!
+ * @brief ICFGE_DATA Gate State data format enum type.
+ * This field specifies the gate state to use before the administrative stream gate control list takes affect.
+ */
+typedef uint32 Netc_EthSwt_Ip_SGITABLE_GateStateType;
+#define NETC_ETHSWT_IP_SGITABLE_GATE_CLOSE                  (0x0U)      /*!< 0b = Closed; frames are not permitted to pass through. */
+#define NETC_ETHSWT_IP_SGITABLE_GATE_OPEN                   (0x1U)      /*!< 1b = Open; frames are permitted to pass through. */
+
+/*!
+* @brief Stream Gate Instance Table SGISE_DATA config bits Format
+*/
+#define NETC_ETHSWT_IP_SGITABLE_SGISE_OEX_SHIFT                 (0U)
+#define NETC_ETHSWT_IP_SGITABLE_SGISE_OEX_MASK                  (0x00000001UL)
+#define NETC_ETHSWT_IP_SGITABLE_SGISE_OEX(x)                    (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_SGISE_OEX_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_SGISE_OEX_MASK)
+
+#define NETC_ETHSWT_IP_SGITABLE_SGISE_IRX_SHIFT                 (1U)
+#define NETC_ETHSWT_IP_SGITABLE_SGISE_IRX_MASK                  (0x00000002UL)
+#define NETC_ETHSWT_IP_SGITABLE_SGISE_IRX(x)                    (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_SGISE_IRX_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_SGISE_IRX_MASK)
+
+#define NETC_ETHSWT_IP_SGITABLE_SGISE_STATE_SHIFT               (2U)
+#define NETC_ETHSWT_IP_SGITABLE_SGISE_STATE_MASK                (0x0000001CUL)
+#define NETC_ETHSWT_IP_SGITABLE_SGISE_STATE(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGITABLE_SGISE_STATE_SHIFT)) & NETC_ETHSWT_IP_SGITABLE_SGISE_STATE_MASK)
+
+/*!
+* @brief Stream Gate Control List Table CFGE_DATA config bits Format
+*/
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_LISTLEN_SHIFT             (0U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_LISTLEN_MASK              (0x000000FFUL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_LISTLEN(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_LISTLEN_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_LISTLEN_MASK)
+
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTOIPV_SHIFT             (16U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTOIPV_MASK              (0x00010000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTOIPV(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTOIPV_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTOIPV_MASK)
+
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTIPV_SHIFT              (17U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTIPV_MASK               (0x001E0000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTIPV(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTIPV_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTIPV_MASK)
+
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTCTD_SHIFT              (21U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTCTD_MASK               (0x00200000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTCTD(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTCTD_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTCTD_MASK)
+
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTGTST_SHIFT             (22U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTGTST_MASK              (0x00400000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTGTST(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTGTST_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_EXTGTST_MASK)
+
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOM_SHIFT                 (0U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOM_MASK                  (0x00FFFFFFUL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOM(x)                    (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOM_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOM_MASK)
+
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_IPV_SHIFT                 (24U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_IPV_MASK                  (0x0F000000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_IPV(x)                    (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_IPV_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_IPV_MASK)
+
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_OIPV_SHIFT                (28U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_OIPV_MASK                 (0x10000000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_OIPV(x)                   (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_OIPV_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_OIPV_MASK)
+
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_CTD_SHIFT                 (29U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_CTD_MASK                  (0x20000000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_CTD(x)                    (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_CTD_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_CTD_MASK)
+
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOMEN_SHIFT               (30U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOMEN_MASK                (0x40000000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOMEN(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOMEN_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_IOMEN_MASK)
+
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_GTST_SHIFT                (31U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_GTST_MASK                 (0x80000000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_GTST(x)                   (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_GTST_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_GTST_MASK)
+
+/*!
+ * @brief Stream Gate Control List Table SGCLSE_DATA format enum type.
+ * This field indicates whether or not a stream gate control list (SGCL) is in-use in a Stream Gate Instance (SGI).
+ */
+typedef uint32 Netc_EthSwt_Ip_SGCLTABLE_RefCountType;
+#define NETC_ETHSWT_IP_SGCLTABLE_NOT_INUSE_BYSGI                (0x00U)      /*!< Not in-use by an SGI. */
+#define NETC_ETHSWT_IP_SGCLTABLE_INUSE_BYSGI                    (0x01U)      /*!< In-use by an SGI. */
+#define NETC_ETHSWT_IP_SGCLTABLE_REFCOUNT_RESERVED              (0x02U)      /*!< others reserved. */
+
+/*!
+* @brief Stream Gate Control List Table SGCLSE_DATA Format*/
+#define NETC_ETHSWT_IP_SGCLTABLE_SGCLSE_REFCOUNT_SHIFT          (0U)
+#define NETC_ETHSWT_IP_SGCLTABLE_SGCLSE_REFCOUNT_MASK           (0x000000FFUL)
+#define NETC_ETHSWT_IP_SGCLTABLE_SGCLSE_REFCOUNT(x)             (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_SGCLSE_REFCOUNT_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_SGCLSE_REFCOUNT_MASK)
+
+typedef uint32 Netc_EthSwt_Ip_ISQGTABLE_SQTagType;
+#define NETC_ETHSWT_IP_ISQGTABLE_RSVDTYPE                       (0x00U)      /*!< reserved. */
+#define NETC_ETHSWT_IP_ISQGTABLE_DRAFT20_RTAG                   (0x01U)      /*!< 802.1CB draft 2.0 R-TAG. */
+#define NETC_ETHSWT_IP_ISQGTABLE_RTAG                           (0x02U)      /*!< 802.1CB R-TAG.. */
+#define NETC_ETHSWT_IP_ISQGTABLE_HSRTAG                         (0x03U)      /*!< HSR Tag. */
+
+/*!
+* @brief Ingress Sequence Generation Table CFGE_DATA config bits Format
+*/
+#define NETC_ETHSWT_IP_ISQGTABLE_CFGE_SQTAG_SHIFT               (0U)
+#define NETC_ETHSWT_IP_ISQGTABLE_CFGE_SQTAG_MASK                (0x00000007UL)
+#define NETC_ETHSWT_IP_ISQGTABLE_CFGE_SQTAG(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISQGTABLE_CFGE_SQTAG_SHIFT)) & NETC_ETHSWT_IP_ISQGTABLE_CFGE_SQTAG_MASK)
+
+/*!
+* @brief Egress Sequence Recovery Table CFGE_DATA config bits Format
+*/
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQTAG_SHIFT             (0U)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQTAG_MASK              (0x00000007UL)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQTAG(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQTAG_SHIFT)) & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQTAG_MASK)
+
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTNSQ_SHIFT           (3U)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTNSQ_MASK            (0x00000008UL)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTNSQ(x)              (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTNSQ_SHIFT)) & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTNSQ_MASK)
+
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRALG_SHIFT            (4U)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRALG_MASK             (0x00000010UL)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRALG(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRALG_SHIFT)) & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRALG_MASK)
+
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTYPE_SHIFT           (5U)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTYPE_MASK            (0x00000020UL)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTYPE(x)              (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTYPE_SHIFT)) & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTYPE_MASK)
+
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRHL_SHIFT             (8U)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRHL_MASK              (0x00007F00UL)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRHL(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRHL_SHIFT)) & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRHL_MASK)
+
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRFWL_SHIFT            (16U)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRFWL_MASK             (0x0FFF0000UL)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRFWL(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRFWL_SHIFT)) & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRFWL_MASK)
+
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTP_SHIFT             (0U)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTP_MASK              (0x00000FFFUL)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTP(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTP_SHIFT)) & NETC_ETHSWT_IP_EGRSQRTABLE_CFGE_SQRTP_MASK)
+
+/*!
+* @brief Egress Sequence Recovery Table SRSE_DATA config bits Format
+*/
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRNUM_SHIFT            (0U)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRNUM_MASK             (0x0000FFFFUL)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRNUM(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRNUM_SHIFT)) & NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRNUM_MASK)
+
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_TAKEANY_SHIFT           (16U)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_TAKEANY_MASK            (0x00010000UL)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_TAKEANY(x)              (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_TAKEANY_SHIFT)) & NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_TAKEANY_MASK)
+
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_LCE_SHIFT               (17U)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_LCE_MASK                (0x00020000UL)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_LCE(x)                  (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_LCE_SHIFT)) & NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_LCE_MASK)
+
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRTS_SHIFT             (18U)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRTS_MASK              (0x3FFC0000UL)
+#define NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRTS(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRTS_SHIFT)) & NETC_ETHSWT_IP_EGRSQRTABLE_SRSE_SQRTS_MASK)
+
+/*!
+* @brief Ingres Stream Identification (ISI) Table KEYE_DATA bits Format
+*/
+#define NETC_ETHSWT_IP_ISITABLE_KEYE_KEYTYPE_SHIFT          (0U)
+#define NETC_ETHSWT_IP_ISITABLE_KEYE_KEYTYPE_MASK           (0x00000003UL)
+#define NETC_ETHSWT_IP_ISITABLE_KEYE_KEYTYPE(x)             (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISITABLE_KEYE_KEYTYPE_SHIFT)) & NETC_ETHSWT_IP_ISITABLE_KEYE_KEYTYPE_MASK)
+
+#define NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID_SHIFT        (2U)
+#define NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID_MASK         (0x0000007CUL)
+#define NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID(x)           (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID_SHIFT)) & NETC_ETHSWT_IP_ISITABLE_KEYE_SRCPORTID_MASK)
+
+#define NETC_ETHSWT_IP_ISITABLE_KEYE_SPM_SHIFT              (7U)
+#define NETC_ETHSWT_IP_ISITABLE_KEYE_SPM_MASK               (0x00000080UL)
+#define NETC_ETHSWT_IP_ISITABLE_KEYE_SPM(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISITABLE_KEYE_SPM_SHIFT)) & NETC_ETHSWT_IP_ISITABLE_KEYE_SPM_MASK)
+
+typedef uint32 Netc_EthSwt_Ip_KeyTypeIdxType;
+#define NETC_ETHSWT_IP_SWT_KEYTYPE_0                        (0x00U)         /* Switch function, key construction is specified in ISIDKC0CR0 */
+#define NETC_ETHSWT_IP_SWT_KEYTYPE_1                        (0x01U)         /* Switch function, key construction is specified in ISIDKC1CR0 */
+#define NETC_ETHSWT_IP_SWT_KEYTYPE_2                        (0x02U)         /* Switch function, key construction is specified in ISIDKC2CR0 */
+#define NETC_ETHSWT_IP_SWT_KEYTYPE_3                        (0x03U)         /* Switch function, key construction is specified in ISIDKC3CR0 */
+#define NETC_ETHSWT_IP_ENETC_KEYTYPE_0                      (0x00U)         /* Enetc function, key construction is specified in ISIDKC0CR0 */
+#define NETC_ETHSWT_IP_ENETC_KEYTYPE_1                      (0x01U)         /* Enetc function, key construction is specified in ISIDKC1CR0 */
+
+typedef uint32 Netc_EthSwt_Ip_SrcPortMasqIdxType;
+#define NETC_ETHSWT_IP_MATCH_FROM_SWT_PORTS                 (0x00U)         /* Match frames from switch port(s). */
+#define NETC_ETHSWT_IP_MATCH_FROM_SWT_MANAGEMENT_PORTS      (0x01U)         /* Match frame from switch management port(s) that has switch port masquerading. */
 
 /*!
  * @brief NTMP request and response message header format for buffer descriptors of command rings.
@@ -546,6 +970,384 @@ typedef struct {
     uint32 Cfge_ConfigField;       /*!< FDB table config field */
     uint32 Cfge_EtEid;             /*!< FDB table eid */
 } Netc_EthSwt_Ip_FDBTableCFGEDataType;
+
+/*!
+ * @brief Rate policer Table Service Data Unit enum type.
+ */
+typedef enum
+{
+    NETC_ETHSWT_IP_PPDU = 0U,       /*!< Physical Layer PDU */
+    NETC_ETHSWT_IP_MPDU = 1U,       /*!< MAC PDU */
+    NETC_ETHSWT_IP_MSDU = 2U,       /*!< MAC SDU */
+    NETC_ETHSWT_IP_RSDTYPE = 3U     /* reservered type */
+}Netc_EthSwt_Ip_SDUType;
+
+/*!
+ * @brief Rate Policer Table CFGE_DATA Format.
+ */
+typedef struct {
+    uint32 Cfge_Cir;            /*!< Committed Information Rate (CIR) field */
+    uint32 Cfge_Cbs;            /*!< Committed Burst SizeExpressed (CBS) field */
+    uint32 Cfge_Eir;            /*!< Excess Information Rate (EIR) field */
+    uint32 Cfge_Ebs;            /*!< Excess Burst Size (EBS) field */
+    boolean Cfge_Mren;          /*!< Mark All Frames Red Enable, 0:disable, 1:enable */
+    boolean Cfge_Doy;           /*!< Drop on Yellow, 0:not dropped, 1:dropped */
+    boolean Cfge_Cm;            /*!< Color mode, 0:color blind, 1:color aware */
+    boolean Cfge_Cf;            /*!< Coupling flag, 0:C and E token buckets are not coupled. 1:C and E token buckets are coupled*/
+    boolean Cfge_Ndor;          /*!< No Drop on Red, 0:frames marded "red" are alwayts dropped, 1: not dropped */
+    Netc_EthSwt_Ip_SDUType Cfge_SduType;     /*!< Service Data Unit Type */
+} Netc_EthSwt_Ip_RatePolicerTableCFGEDataType; 
+
+/*!
+ * @brief Rate Policer Table STSE_DATA Format.
+ */
+typedef struct {
+    uint64 Stse_ByteCount;            /*!< Number of bytes received by the rate policer instance */
+    uint32 Stse_DropFrames;           /*!< Number of frames dropped by the rate policer instance */
+    uint32 Stse_Dr0GrnFrames;         /*!< Number of frames marked green with DR=0 by the rate policer instance */
+    uint32 Stse_Dr1GrnFrames;         /*!< Number of frames marked green with DR=1 by the rate policer instance */
+    uint32 Stse_Dr2YlwFrames;         /*!< Number of frames marked yellow with DR=2 by the rate policer instance */
+    uint32 Stse_RemarkYlwFrames;      /*!< Number of frames re-marked from green to yellow by the rate policer instance */
+    uint32 Stse_Dr3RedFrames;         /*!< Number of frames marked red (DR=3) by the rate policer instance */
+    uint32 Stse_RemarkRedFrames;      /*!< Number of frames re-marked from green or yellow to red by the rate policer instance */
+    uint32 Stse_Lts;                  /*!< Last timestamp */
+    uint32 Stse_CommittedTokenBucketInteger;    /*!< Committed token bucket contents, integer portion */
+    uint32 Stse_CommittedTokenBucketFractional; /*!< Committed token bucket contents, fractional portion (31 bits) + sign bit (1 bit, BCS) */
+    uint32 Stse_ExcessTokenBucketInteger;       /*!< Excess token bucket contents, integer portion (32 bits)*/
+    uint32 Stse_ExcessTokenBucketFractional;   /*!< Excess token bucket contents, fractional portion (31 bits) + sign bit (1 bit, BES) */
+} Netc_EthSwt_Ip_RatePolicerTableSTSEDataType; 
+
+/*!
+ * @brief defines Rate Policer entries.
+ */
+typedef struct
+{
+    uint32 RatePolicerEntryId;                  /* Entry ID */
+    Netc_EthSwt_Ip_RatePolicerTableCFGEDataType RatePolicerCfgeData;    /* CFGE Data */ 
+    boolean ConfigurationElementUpdate;         /* Update Actions, CFGEU */  
+    boolean FunctionalEnableElementUpdate;      /* Update Actions, FEEU */
+    boolean PolicerStateElementUpdate;          /* Update Actions, PSEU */
+    boolean StatisticsElementUpdate;            /* Update Actions, STSEU */
+    boolean RatePolicerFunctionEnable;          /* False = The rate policer instance is disabled; True 1b = The rate policer instance is enabled */
+} Netc_EthSwt_Ip_RatePolicerEntryDataType;
+
+/*!
+ * @brief defines Rate Policer entrie response data.
+ */
+typedef struct
+{
+    uint32 RatePolicerEntryId;                  /* Entry ID */
+    Netc_EthSwt_Ip_RatePolicerTableSTSEDataType RatePolicerStseData;    /* Statistics Element Data */ 
+    Netc_EthSwt_Ip_RatePolicerTableCFGEDataType RatePolicerCfgeData;    /* CFGE Data */ 
+    boolean RatePolicerFunctionEnable;          /* False = The rate policer instance is disabled; True 1b = The rate policer instance is enabled */
+    boolean MarkRedFlag;                        /* 0b = Indicates that the rate policer blocking "mark all frames red" function has not been triggered */
+                                                /* 1b = Indicates that all frames arriving at this rate policer are marked red by the rate policer blocking "mark all frames red" function. */
+} Netc_EthSwt_Ip_RatePolicerEntryRspDataType;
+
+/*!
+ * @brief Forwarding Action data type definitions for Ingress Stream Table.
+ */
+typedef uint32 Netc_EthSwt_Ip_SwtForwardingActionDataType;
+#define NETC_ETHSWT_IP_SWT_DISCARDFRAMES                (0x0U)           /*!< discard frames */
+#define NETC_ETHSWT_IP_SWT_REDIRECTFRAMES               (0x1U)           /*!< Re-direct frame to switch management port without any frame modification */
+#define NETC_ETHSWT_IP_SWT_STREAMFORWARDING             (0x2U)           /*!< Stream forwarding */
+#define NETC_ETHSWT_IP_SWT_BRIDGEFORWARDING             (0x3U)           /*!< 802.1Q bridge forwarding */
+#define NETC_ETHSWT_IP_SWT_COPYANDSTREAMFORWARDING      (0x4U)           /*!< Copy to switch management port with specified HR and stream forwarding */
+#define NETC_ETHSWT_IP_SWT_COPYANDBRIDGEFORWARDING      (0x5U)           /*!< Copy to switch management port with specified HR and Bridge forwarding */
+
+typedef uint32 Netc_EthSwt_Ip_EnetcForwardingActionDataType;
+#define NETC_ETHSWT_IP_ENETC_DISCARDFRAMES                (0x0U)           /*!< discard frames */
+#define NETC_ETHSWT_IP_ENETC_ALLOWWITHOUTSIBITMAP         (0x1U)           /*!< Allow without setting the pre L2 filtering SI bitmap. */
+#define NETC_ETHSWT_IP_SWT_ALLOWWITHSIBITMAP              (0x2U)           /*!< Allow with setting the pre L2 filtering SI bitmap to the value configured in the SI_MAP field of this entry. */
+
+/*!
+ * @brief Override ET_EID data format enum type.
+ */
+typedef uint32 Netc_EthSwt_Ip_OETEIDIdxType;
+#define  NETC_ETHSWT_IP_NO_EGRESS_PKT_PROCESSING_ACTIONS_SPECIFIED  (0x0U)      /*!< No egress packet processing actions specified */
+#define NETC_ETHSWT_IP_SINGLEPORT_EGRESS_TREATMENT_TABLE_ACCESS     (0x1U)      /*!< Single-port Egress Treatment table access. */
+#define NETC_ETHSWT_IP_MULTIPORT_PKT_EGRESS_TREATMENT_TABLE_ACCESS  (0x2U)      /*!< Multi-port packet Egress Treatment table access */
+#define NETC_ETHSWT_IP_MULTIPORT_ABS_EGRESS_TREATMENT_TABLE_ACCESS  (0x3U)      /*!< Multi-port absolute Egress Treatment table access */
+
+/*!
+ * @brief Cut-Through Disable data format enum type.
+ */
+typedef uint32 Netc_EthSwt_Ip_CutThroughtDisableIdxType;
+#define NETC_ETHSWT_IP_DONOT_OVERRIDE_CUTTHROUGH_STATE          (0x0U)      /*!< Do not override cut-through state */
+#define NETC_ETHSWT_IP_DISABLE_CUTTHROUGH_FOR_OUTGOING_PORT     (0x1U)      /*!< Disable cut-through for the outgoing port specified in the EPORT field */
+#define NETC_ETHSWT_IP_DISABLE_CUTTHROUGH_FOR_ALL_PORTS         (0x2U)      /*!< Disable cut-through for all ports specified in the destination port bitmap */
+#define NETC_ETHSWT_IP_DISABLE_CUTTHROUGH_RESERVED              (0x3U)      /*!< Reserved */
+
+/*!
+ * @brief Ingress Sequence Action data format enum type.
+ */
+typedef uint32 Netc_EthSwt_Ip_IngressSeqActionIdxType;
+#define NETC_ETHSWT_IP_FRER_SEQ_GENERATION_FUNC_NOT_PERFORMED   (0x0U)      /*!< FRER sequence generation function is not performed. */
+#define NETC_ETHSWT_IP_FRER_SEQ_GENERATION_FUNC_PERFORMED       (0x1U)      /*!< FRER sequence generation function is performed. */
+
+/*!
+ * @brief Egress Sequence Recovery Table CFGE_DATA enum type.
+ */
+typedef uint32 Netc_EthSwt_Ip_ESQRTABLE_CFGE_SQRTnsqIdxType;
+#define NETC_ETHSWT_IP_ESQRTABLE_DISCARD_FRAME_AND_COUNT        (0x0U)      /*!< Discard frame and count in both the TAGLESS_PACKETS counter and in the port's PTXDCR register. */
+#define NETC_ETHSWT_IP_ESQRTABLE_ACCEPT_FRAME_AND_NORECOVERY    (0x1U)      /*!< Accept frame and do not perform recovery function. */
+
+typedef uint32 Netc_EthSwt_Ip_ESQRTABLE_CFGE_SQRAlgIdxType;
+#define NETC_ETHSWT_IP_ESQRTABLE_VECTOR_ALGORITHM               (0x0U)      /*!< Vector algorithm. */
+#define NETC_ETHSWT_IP_ESQRTABLE_MATCH_ALGORITHM                (0x1U)      /*!< Match algorithm. */
+
+typedef uint32 Netc_EthSwt_Ip_ESQRTABLE_CFGE_SQRTypeIdxType;
+#define NETC_ETHSWT_IP_ESQRTABLE_SEQUENCY_REC_FUNC              (0x0U)      /*!< Sequence recovery function. */
+#define NETC_ETHSWT_IP_ESQRTABLE_INDIVIDUAL_REC_FUNC            (0x1U)      /*!< Individual recovery function. */
+
+/*!
+ * @brief Ingress Stream Table CFGE_DATA Format.
+ */
+typedef struct {
+    uint32 IngressSeqGeneration_EID;                         /*!< Ingress Sequence Generation Entry ID */
+    uint32 RatePolicer_EID;                                  /*!< Rate Policer Entry ID */
+    uint32 StreamGateInstance_EID;                           /*!< Stream Gate Instance Entry ID */
+    uint32 IngressFrmModification_EID;                       /*!< Ingress Frame Modification Entry ID */
+    uint32 EgressTreatment_EID;                              /*!< Egress Treatment Entry ID */
+    uint32 IngressStreamCounter_EID;                         /*!< Ingress Stream counter Index */
+    uint32 EgressPortBitMap;                                 /*!< Egress Port bitmap */
+    uint16 StationInterfaceMap;                              /*!< Station Interface Map */
+    uint16 MaximumServiceDataUnit;                           /*!< Maximum Service Data Unit */
+    uint8 IngressFrmModiEntryFrmLenChange;                   /*!< Ingress Frame Modification Entry Frame Length Change */
+    uint8 EgressPort;                                        /*!< Egress Port */
+    Netc_EthSwt_Ip_OETEIDIdxType OverrideET_EID;             /*!< Override ET_EID */
+    Netc_EthSwt_Ip_CutThroughtDisableIdxType CutThrDisable;  /*!< Cut-Trought disable */
+    Netc_EthSwt_Ip_SDUType SduType;                          /*!< Service Data Unit type to use for MSDU (Maximum Service Data Unit) field. */
+    Netc_EthSwt_Ip_SwtForwardingActionDataType ForwardingActions;   /*!< Forwarding actions */
+    uint8 HostReason;                                               /*!< Host reason */
+    uint8 DropResilience;                                           /*!< New Drop Resilience (DR) to be assigned to the frame, if ODR is 1. */
+    uint8 InternalPriorityValue;                                    /*!< Internal Priority Value (IPV) */
+    boolean OverrideStreamGateInstanceEID;                          /*!< Override Stream Gate Instance Entry ID */
+    boolean OverrideRatePolicerInstanceEID;                         /*!< Override Rate Policer (instance) ID. */
+    Netc_EthSwt_Ip_IngressSeqActionIdxType IngressSeqAction;        /*!< Ingress Sequence Action */
+    boolean SrcPortPruningDisable;                                  /*!< Source Port Pruning Disable. */
+    boolean TimeStampCaptureEnable;                                 /*!< Timestamp Capture Enable */
+    boolean IngressMirroringEnable;                                 /*!< Ingress Mirroring Enable */
+    boolean OverrideDR;                                             /*!< Override Drop Resilience (DR) */
+    boolean OverrideIPV;                                            /*!< Override Internal Priority Value (IPV) */
+    boolean StreamFilteringEnable;                                  /*!< Stream Filtering Enable */
+} Netc_EthSwt_Ip_IngressStreamTableCFGEDataType; 
+
+/*!
+ * @brief defines Ingress Stream entries.
+ * @implements Netc_EthSwt_Ip_IngressStreamEntryDataType_struct
+ */
+typedef struct
+{
+    uint32 IngressStreamEntryId;                  /* Entry ID */
+    Netc_EthSwt_Ip_IngressStreamTableCFGEDataType IngressStreamCfgeData;    /* CFGE Data */ 
+} Netc_EthSwt_Ip_IngressStreamEntryDataType;
+
+/*!
+ * @brief Ingress Stream Filter Table CFGE_DATA Format.
+ */
+typedef struct {
+    uint32 RatePolicer_EID;                                         /*!< Rate Policer Entry ID */
+    uint32 StreamGateInstance_EID;                                  /*!< Stream Gate Instance Entry ID */
+    uint32 IngressStreamCounter_EID;                                /*!< Ingress Stream counter Index */
+    uint16 MaximumServiceDataUnit;                                  /*!< Maximum Service Data Unit */
+    uint8 InternalPriorityValue;                                    /*!< Internal Priority Value (IPV) */
+    uint8 DropResilience;                                           /*!< New Drop Resilience (DR) to be assigned to the frame, if ODR is 1. */
+    Netc_EthSwt_Ip_CutThroughtDisableIdxType CutThrDisable;         /*!< Cut-Trought disable */
+    Netc_EthSwt_Ip_SDUType SduType;                                 /*!< Service Data Unit type to use for MSDU (Maximum Service Data Unit) field. */
+    boolean OverrideIPV;                                            /*!< Override Internal Priority Value (IPV) */
+    boolean OverrideDR;                                             /*!< Override Drop Resilience (DR) */
+    boolean TimeStampCaptureEnable;                                 /*!< Timestamp Capture Enable */
+    boolean IngressMirroringEnable;                                 /*!< Ingress Mirroring Enable */
+    boolean OverrideStreamGateInstanceEID;                          /*!< Override Stream Gate Instance Entry ID */
+    boolean OverrideRatePolicerInstanceEID;                         /*!< Override Rate Policer (instance) ID. */
+} Netc_EthSwt_Ip_IngressStreamFilterTableCFGEDataType; 
+
+
+/*!
+ * @brief Define Ingress Stream Counter entries
+ */
+typedef struct
+{
+    uint32 RxCount;                                                 /*!< Receive Count. */
+    uint32 MSduDropCount;                                           /*!< MSDU (Maximum Service Data Unit) Drop Count. */
+    uint32 PolicerDropCount;                                        /*!< Policer Drop Count. */
+    uint32 StreamGateDropCount;                                     /*!< Stream Gating Drop Count. */
+} Netc_EthSwt_Ip_IngressStreamCountTableSTSEDataType;
+
+/*!
+ * @implements Netc_EthSwt_Ip_IngressStreamCountTableRspDataType_struct
+ */
+typedef struct
+{
+    uint32 IngressStreamCountId;
+    Netc_EthSwt_Ip_IngressStreamCountTableSTSEDataType IngressStreamCountStseData;
+} Netc_EthSwt_Ip_IngressStreamCountTableRspDataType;
+
+/*!
+ * @brief Ingress Stream Filter Table KEYE_DATA Format.
+ */
+typedef struct {
+    uint32 IngressStream_EID;                           /*!< Ingress Stream Entry ID */
+    uint8 Pcp;                                          /*!< Priority Code Point. Outer VLAN TAG PCP of the received frame */
+} Netc_EthSwt_Ip_IngressStreamFilterTableKEYEDataType; 
+
+/*!
+ * @brief defines Ingress Stream Filter entries.
+ * @implements Netc_EthSwt_Ip_IngressStreamFilterEntryDataType_struct
+ */
+typedef struct
+{
+    Netc_EthSwt_Ip_IngressStreamFilterTableCFGEDataType IngressStreamFilterCfgeData;    /* CFGE Data */ 
+    Netc_EthSwt_Ip_IngressStreamFilterTableKEYEDataType IngressStreamFilterKeyeData;    /* KEYE Data */
+    uint32 IngressStreamFilterEntryId;                  /* Entry ID */
+} Netc_EthSwt_Ip_IngressStreamFilterEntryDataType;
+
+/*!
+ * @brief defines Stream Gate Instance entries.
+ * @implements Netc_EthSwt_Ip_StreamGateInstanceEntryDataType_struct
+ */
+typedef struct
+{
+    uint32 SGIEntryId;                                      /* Stream Gate Instance Entry ID */
+    uint32 AdminSGCLEntryId;                                /* Administrative Stream Gate Control List Entry ID */
+    uint64 AdminBaseTime;                                   /* Admin Base Time */
+    uint32 AdminCycleTimeExt;                               /* Admin Cycle Time Extension */
+    Netc_EthSwt_Ip_SGITABLE_GateStateType Icfge_Gst;        /* Gate State */
+    boolean Icfge_Ctd;                                      /* Cut-Through Disable Flag */
+    uint8 Icfge_Ipv;                                        /* Internal Priority Value (IPV) */
+    Netc_EthSwt_Ip_SDUType SduType;                         /* Protocol/Service Data Unit) */
+    boolean Icfge_Oipv;                                     /* Override Internal Priority Value (IPV) */
+    boolean Cfge_Oexen;                                     /* Octets Exceeded Enable */
+    boolean Cfge_Irxen;                                     /* Invalid Receive Enable */
+} Netc_EthSwt_Ip_StreamGateInstanceEntryDataType;
+
+/*!
+ * @brief defines Stream Gate Instance entries response data type.
+ * @implements Netc_EthSwt_Ip_StreamGateInstanceEntryRspDataType_struct
+ */
+typedef struct
+{
+    uint32 SGIEntryId;                                      /* Stream Gate Instance Entry ID */
+    uint32 OperationalSGCLEntryID;                          /* Operational Stream Gate Control List Entry ID */
+    uint64 ConfigChangeTime;                                /* Configuration Change Time */
+    uint64 OperationalBaseTime;                             /* Operational Base Time */
+    uint32 OperationalCycleTimeExt;                         /* Oper Cycle Time Extension */
+    uint8 SGISEOex;                                         /* Octets Exceeded Flag */
+    uint8 SGISEIrx;                                         /* Invalid Receive Flag */
+    uint8 SGISEState;                                       /* Current Gate Instance State */
+    uint32 AdminSGCLEntryId;                                /* Administrative Stream Gate Control List Entry ID */
+    uint64 AdminBaseTime;                                   /* Admin Base Time */
+    uint32 AdminCycleTimeExt;                               /* Admin Cycle Time Extension */
+    Netc_EthSwt_Ip_SGITABLE_GateStateType Icfge_Gst;        /* Gate State */
+    boolean Icfge_Ctd;                                      /* Cut-Through Disable Flag */
+    uint8 Icfge_Ipv;                                        /* Internal Priority Value (IPV) */
+    Netc_EthSwt_Ip_SDUType SduType;                         /* Protocol/Service Data Unit) */
+    boolean Icfge_Oipv;                                     /* Override Internal Priority Value (IPV) */
+    boolean Cfge_Oexen;                                     /* Octets Exceeded Enable */
+    boolean Cfge_Irxen;                                     /* Invalid Receive Enable */
+} Netc_EthSwt_Ip_StreamGateInstanceEntryRspDataType;
+
+/*!
+ * @brief defines Stream Gate Control List entries data type.
+ */
+typedef struct
+{
+    uint32 SGCL_TimeInterval;                               /* Time Interval for Gate Entry i */
+    uint32 SGCL_IntervalOctetsMax;                          /* Interval Octets Maximum for Gate Entry i, */
+    uint8 SGCL_Ipv;                                         /* Internal Priority Value for Gate Entry i */
+    boolean SGCL_Oipv;                                      /* Override Internal Priority Value for Gate Entry i */
+    boolean SGCL_Ctd;                                       /* Cut Through Disable for Gate Entry i */
+    boolean SGCL_IntervalOctetMaxEnable;                    /* Interval Octet Maximum Enabled for Gate Entry i, */
+    Netc_EthSwt_Ip_SGITABLE_GateStateType SGCL_GateState;   /* Gate State for Gate Entry i, */
+} Netc_EthSwt_Ip_SGCLEntriesDataType;
+
+/*!
+ * @brief defines Stream Gate Control List table data type.
+ * @implements Netc_EthSwt_Ip_SGCLTableDataType_struct
+ */
+typedef struct
+{
+    uint32 SGCLEntryId;                                     /* Stream Gate Control List Entry ID */
+    uint32 Cfge_CycleTime;                                  /* This field specifies the cycle time of the stream gate control list. */
+    uint8 Cfge_ListLength;                                  /* This field indicates the number of entries in the stream gate control list. */
+    uint8 Cfge_ExtIpv;                                      /* List Extension Internal Priority Value */
+    boolean Cfge_ExtOIPV;                                   /* Extension Override Internal Priority Value */
+    boolean Cfge_ExtCtd;                                    /* Extension Cut Through Disabled. 0b = No action. 1b = Cut-through disabled. */
+    Netc_EthSwt_Ip_SGITABLE_GateStateType Cfge_ExtGtst;     /* Extension Gate State */
+    Netc_EthSwt_Ip_SGCLEntriesDataType *ListEntries;        /* Stream Gate Control List entries pointer */
+    Netc_EthSwt_Ip_SGCLTABLE_RefCountType Sgclse_RefCount;  /* Ref count, an element in response data buffer */
+} Netc_EthSwt_Ip_SGCLTableDataType;
+
+/*!
+ * @brief defines Ingress Sequence Generation table data type.
+ * @implements Netc_EthSwt_Ip_ISQGTableDataType_struct
+ */
+typedef struct
+{
+    uint32 ISQGEntryId;                                     /* Ingress Sequence Generation table Entry ID */
+    Netc_EthSwt_Ip_ISQGTABLE_SQTagType Cfge_SQTagType;      /* This field specifies the sequence tag type to insert for sequence generation. */
+    uint16 Sgse_SQGNum;                                     /* This field specifies the next sequence number value to be used in the tag to be added to the frame. */
+} Netc_EthSwt_Ip_ISQGTableDataType;
+
+/*!
+ * @brief defines Egress Sequence Recovery table request data type.
+ * @implements Netc_EthSwt_Ip_EgrSeqRecoveryTableDataType_struct
+ */
+typedef struct
+{
+    uint32 EgrSeqRecEntryId;                                        /* egress sequence recovery table Entry ID */
+    uint8 Cfge_SQTag;                                               /* Sequence Tag */
+    uint8 Cfge_SQRHisLen;                                           /* Sequence Recovery History Length */
+    uint16 Cfge_SQRFutureWinLen;                                    /* Sequence Recovery Future Window LengthThis */
+    uint16 Cfge_SQRTimeOutPeriod;                                   /* Sequence Timeout Period */
+    Netc_EthSwt_Ip_ESQRTABLE_CFGE_SQRTnsqIdxType Cfge_SqrTnsq;      /* Sequence Recovery Take No Sequence */
+    Netc_EthSwt_Ip_ESQRTABLE_CFGE_SQRAlgIdxType Cfge_SqrAlg;        /* Sequence Recovery Algorithm */
+    Netc_EthSwt_Ip_ESQRTABLE_CFGE_SQRTypeIdxType Cfge_SqrType;      /* Sequence Recovery Function type */
+} Netc_EthSwt_Ip_EgrSeqRecoveryTableDataType;
+
+/*!
+ * @brief defines Egress Sequence Recovery table response data type.
+ * @implements Netc_EthSwt_Ip_EgrSeqRecoveryTableRspDataType_struct
+ */
+typedef struct
+{
+    uint32 EgrSeqRecEntryId;                                        /* egress sequence recovery table Entry ID */
+    uint64 Stse_InOrderPkts;                                        /* In Order Packets */
+    uint64 Stse_OutOfOrderPkts;                                     /* Out of Order Packets */
+    uint64 Stse_RoguePkts;                                          /* Rogue Packets */
+    uint64 Stse_DuplicatePkts;                                      /* Duplicate Packets */
+    uint64 Stse_LostPkts;                                           /* Lost Packets */
+    uint64 Stse_TaglessPkts;                                        /* Tag-Less Packets */
+    uint32 Stse_SeqRecResets;                                        /* Sequence Recovery Resets */
+    uint32 Srse_SqrHistory[4U];                                     /* Recovery History */
+    uint16 Srse_SqrNum;                                             /* Sequence Recovery Number */
+    uint16 Srse_SqrTimeStamp;                                       /* Sequence Recovery Timestamp */
+    boolean Srse_LostCntEnable;                                     /* Lost Count Enable */
+    uint8 Srse_TakeAny;                                             /* This field is set to 1 when the recovery function is reset, and cleared after the first frame is received. */
+    uint8 Cfge_SQTag;                                               /* Sequence Tag */
+    uint8 Cfge_SQRHisLen;                                           /* Sequence Recovery History Length */
+    uint16 Cfge_SQRFutureWinLen;                                    /* Sequence Recovery Future Window LengthThis */
+    uint16 Cfge_SQRTimeOutPeriod;                                   /* Sequence Timeout Period */
+    Netc_EthSwt_Ip_ESQRTABLE_CFGE_SQRTnsqIdxType Cfge_SqrTnsq;      /* Sequence Recovery Take No Sequence */
+    Netc_EthSwt_Ip_ESQRTABLE_CFGE_SQRAlgIdxType Cfge_SqrAlg;        /* Sequence Recovery Algorithm */
+    Netc_EthSwt_Ip_ESQRTABLE_CFGE_SQRTypeIdxType Cfge_SqrType;      /* Sequence Recovery Function type */
+} Netc_EthSwt_Ip_EgrSeqRecoveryTableRspDataType;
+
+/*!
+ * @brief defines Ingress Stream Identification table request/response data type.
+ * @implements Netc_EthSwt_Ip_IngrStremIdentificationTableDataType_struct
+ */
+typedef struct 
+{
+    uint32 IngrStreamIdenResumeEntryId;                             /* Ingress Stream Identification tabel Resume Entry ID */
+    uint32 IngrStreamIdenEntryId;                                   /* Ingress Stream Identification tabel Entry ID */
+    uint32 IngrStreamEntryId;                                       /* Ingress Stream table Entry ID */
+    Netc_EthSwt_Ip_KeyTypeIdxType Keye_Keytype;                     /* Key type for key construction */
+    uint8 Keye_SrcPortId;                                           /* Source port Id */
+    Netc_EthSwt_Ip_SrcPortMasqIdxType Keye_Spm;                     /* Source port masquerading */
+    uint32 Keye_FrmKey[4U];                                         /* Frame portion of the Key */
+}Netc_EthSwt_Ip_IngrStremIdentificationTableDataType;
 
 /*!
  * @brief FDB Table CFGE_DATA format enum type.
@@ -765,12 +1567,56 @@ typedef enum {
 #define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU_SHIFT         (0U)
 #define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU_MASK          (0x00000001UL)
 #define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU(x)            (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU_SHIFT)) & NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_CFGEU_MASK)
+
+/*!
+ * @brief Rate Policer Table Request Data Buffer FEEU field.
+ */
+#define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_FEEU_SHIFT          (1U)
+#define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_FEEU_MASK           (0x00000002UL)
+#define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_FEEU(x)             (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_FEEU_SHIFT)) & NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_FEEU_MASK)
+
+/*!
+ * @brief Rate Policer Table Request Data Buffer PSEU field.
+ */
+#define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_PSEU_SHIFT          (2U)
+#define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_PSEU_MASK           (0x00000004UL)
+#define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_PSEU(x)             (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_PSEU_SHIFT)) & NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_PSEU_MASK)
+
+/*!
+ * @brief Rate Policer Table Request Data Buffer STSEU field.
+ */
+#define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_STSEU_SHIFT          (3U)
+#define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_STSEU_MASK           (0x00000008UL)
+#define NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_STSEU(x)             (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_STSEU_SHIFT)) & NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_ACTIONS_FIELD_STSEU_MASK)
+
 /*!
  * @brief FDB table Request Data Buffer ACTEU field.
  */
 #define NETC_ETHSWT_IP_FDBTABLE_REQFMT_ACTIONS_FIELD_ACTEU_SHIFT            (1U)
 #define NETC_ETHSWT_IP_FDBTABLE_REQFMT_ACTIONS_FIELD_ACTEU_MASK             (0x00000002UL)
 #define NETC_ETHSWT_IP_FDBTABLE_REQFMT_ACTIONS_FIELD_ACTEU(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_FDBTABLE_REQFMT_ACTIONS_FIELD_ACTEU_SHIFT)) & NETC_ETHSWT_IP_FDBTABLE_REQFMT_ACTIONS_FIELD_ACTEU_MASK)
+
+/*!
+ * @brief Ingress Sequence Generation Table Request Data Buffer SGSEU field.
+ */
+#define NETC_ETHSWT_IP_ISQGTABLE_REQFMT_ACTIONS_FIELD_SGSEU_SHIFT           (1U)
+#define NETC_ETHSWT_IP_ISQGTABLE_REQFMT_ACTIONS_FIELD_SGSEU_MASK            (0x00000002UL)
+#define NETC_ETHSWT_IP_ISQGTABLE_REQFMT_ACTIONS_FIELD_SGSEU(x)              (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ISQGTABLE_REQFMT_ACTIONS_FIELD_SGSEU_SHIFT)) & NETC_ETHSWT_IP_ISQGTABLE_REQFMT_ACTIONS_FIELD_SGSEU_MASK)
+
+/*!
+ * @brief Egress Sequence Recovery Table Request Data Buffer STSEU field.
+ */
+#define NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_STSEU_SHIFT           (1U)
+#define NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_STSEU_MASK            (0x00000002UL)
+#define NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_STSEU(x)              (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_STSEU_SHIFT)) & NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_STSEU_MASK)
+
+/*!
+ * @brief Egress Sequence Recovery Table Request Data Buffer SRSEU field.
+ */
+#define NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_SRSEU_SHIFT           (2U)
+#define NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_SRSEU_MASK            (0x00000004UL)
+#define NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_SRSEU(x)              (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_SRSEU_SHIFT)) & NETC_ETHSWT_IP_ESQRTABLE_REQFMT_ACTIONS_FIELD_SRSEU_MASK)
+
 /*!
  * @brief Switch Tables Request Data Buffer DEBUG_OPTIONS field.
  */
@@ -815,6 +1661,17 @@ typedef enum {
 } Netc_EthSwt_Ip_FDBTable_ResponsDataIndexType;
 /* ---bits field and structure for FDB Table Request Data Buffer Format--- */
 
+/* index of Ingress Count Table Request Data Buffer Format */
+#define NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD                        (0U)        /*!< first uint32 item of Ingress Count Table Request Data Buffer Format */
+#define NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACCESSKEY_FIELD                      (1U)        /*!< second uint32 item of Ingress Count Table Request Data Buffer Format */
+
+/*!
+ * @brief Data fields in Ingress Count Table Request Data Buffer Format.
+ */
+#define NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU_SHIFT            (0U)
+#define NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU_MASK             (0x00000001UL)
+#define NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU_SHIFT)) & NETC_ETHSWT_IP_INGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU_MASK)
+
 /* index of Egress Count Table Request Data Buffer Format */
 #define NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD                        (0U)        /*!< first uint32 item of Egress Count Table Request Data Buffer Format */
 #define NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACCESSKEY_FIELD                      (1U)        /*!< second uint32 item of Egress Count Table Request Data Buffer Format */
@@ -826,6 +1683,24 @@ typedef enum {
 #define NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU_MASK             (0x00000001UL)
 #define NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU_SHIFT)) & NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU_MASK)
 
+/* index of data fields in FDB Table Response Action Buffer Format, ACT_FLAG */
+#define NETC_ETHSWT_IP_FDBTABLE_REPFMT_ACTE_DATA_FIELD_ACT_FLAG_INACTIVE_FIELD                    (0U)        /*!< FDB table entry was not active during this time period */
+#define NETC_ETHSWT_IP_FDBTABLE_REPFMT_ACTE_DATA_FIELD_ACT_FLAG_ACTIVE_FIELD                      (1U)        /*!< FDB table entry was active during this time period */
+
+/*!
+ * @brief Data fields in FDB Table Response Action Buffer Format, ACT_FLAG.
+ */
+#define NETC_ETHSWT_IP_FDBTABLE_REPFMT_ACTE_DATA_FIELD_ACT_FLAG_SHIFT            (7U)
+#define NETC_ETHSWT_IP_FDBTABLE_REPFMT_ACTE_DATA_FIELD_ACT_FLAG_MASK             (0x00000080UL)
+#define NETC_ETHSWT_IP_FDBTABLE_REPFMT_ACTE_DATA_FIELD_ACT_FLAG(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU_SHIFT)) & NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU_MASK)
+
+/*!
+ * @brief Data fields in FDB Table Response Action Buffer Format, ACT_CNT.
+ */
+#define NETC_ETHSWT_IP_FDBTABLE_REPFMT_ACTE_DATA_FIELD_ACT_CNT_SHIFT            (0U)
+#define NETC_ETHSWT_IP_FDBTABLE_REPFMT_ACTE_DATA_FIELD_ACT_CNT_MASK             (0x0000007FUL)
+#define NETC_ETHSWT_IP_FDBTABLE_REPFMT_ACTE_DATA_FIELD_ACT_CNT(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU_SHIFT)) & NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQFMT_ACTIONS_FIELD_STSEU_MASK)
+
 /*!
  * @brief Egress Count Table update actions data type enumeration. Netc_EthSwt_Ip_ECTableUpdateActionsDataType
  */
@@ -834,8 +1709,14 @@ typedef enum {
     NETC_ETHSWT_EGRESSCOUNTTABLE_RESET_STATISTICS_ELEMENT                           /*!< All counters within the Statistics Element are reset  */
 } Netc_EthSwt_Ip_ECTableUpdateActionsDataType;
 
+typedef enum {
+    NETC_ETHSWT_INGRESSCOUNTTABLE_NO_UPDATE_STATISTICS_ELEMENT = 0U,                 /*!< No update performed to the Statistics Element  */
+    NETC_ETHSWT_INGRESSCOUNTTABLE_RESET_STATISTICS_ELEMENT                           /*!< All counters within the Statistics Element are reset  */
+} Netc_EthSwt_Ip_ICTableUpdateActionsDataType;
+
 /*!
  * @brief Statistics data of Egress Count Table in response data buffer. Netc_EthSwt_Ip_ECTableStatisticsDataType
+ * @implements Netc_EthSwt_Ip_ECTableStatisticsDataType_struct
  */
 typedef struct {
     uint64 EnqueuedFrmCnt;       /*!< Enqueued Frame Count data, the number of frames enqueued on egress class queues */
@@ -923,6 +1804,7 @@ typedef enum {
 
 /*!
  * @brief defines Egress Treatment Table entries.
+ * @implements Netc_EthSwt_Ip_EgressTreatmentEntryDataType_struct
  */
 typedef struct
 {
@@ -1064,6 +1946,7 @@ typedef enum {
 
 /*!
  * @brief defines Frame Modification Table entries.
+ * @implements Netc_EthSwt_Ip_FrmModificationEntryDataType_struct
  */
 typedef struct
 {
@@ -1264,6 +2147,7 @@ typedef struct
 
 /*!
  * @brief defines Ingress Port Filter Table entries.
+ * @implements Netc_EthSwt_Ip_IngressPortFilterEntryDataType_struct
  */
 typedef struct
 {
@@ -1315,6 +2199,7 @@ typedef struct
 
 /*!
  * @brief defines Time Gate Scheduling Table entries.
+ * @implements Netc_EthSwt_Ip_TimeGateSchedulingEntryDataType_struct
  */
 typedef struct
 {
@@ -1374,6 +2259,7 @@ typedef enum
     NETC_ETHSWT_MII_MODE            = 0U,    /**< MII interface mode */
     NETC_ETHSWT_RMII_MODE           = 1U,    /**< RMII interface mode */
     NETC_ETHSWT_RGMII_MODE          = 2U,    /**< RGMII interface mode */
+    NETC_ETHSWT_SGMII_MODE          = 3U,    /**< SGMII interface mode */
 } Netc_EthSwt_Ip_XmiiModeType;
 
 /*!
@@ -1453,7 +2339,10 @@ typedef enum {
     NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA3,                    /*!< forth item of CFGEDATA but sixth item of Switch Tables Request Data Buffer Format */
     NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA4,                    /*!< fifth item of CFGEDATA but seventh item of Switch Tables Request Data Buffer Format */
     NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA5,                    /*!< sixth item of CFGEDATA but eighth item of Switch Tables Request Data Buffer Format */
-    NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA6                     /*!< seventh item of CFGEDATA but ninth item of Switch Tables Request Data Buffer Format */
+    NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA6,                    /*!< seventh item of CFGEDATA but ninth item of Switch Tables Request Data Buffer Format */
+    NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA7,
+    NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA8,
+    NETC_ETHSWT_IP_SWITCHTABLE_REQFMT_CFGEDATA9
 } Netc_EthSwt_Ip_SwitchTableRequestDataIndexType;
 
 /* bits field for Vlan Filter Table CFGE_DATA Format */
@@ -1697,83 +2586,6 @@ typedef struct {
     uint32 unIntegrityErrorCounter;              /* Uncorrectable non-fatal integrity error count register (UNIECTR) which tracks how many events have been detected. */
 } Netc_EthSwt_Ip_CounterType;
 
-/*!
- * @brief Netc_EthSwt counter enum Netc_EthSwt_Ip_SingleCounterType
- */
-typedef enum {
-    NETC_ETHSWT_IP_RX_ETH_OCTETS_COUNT                 = 0x1100U,  /*!< Port MAC 0 Receive Ethernet Octets Counter(etherStatsOctetsn) (PM0_REOCTn) */
-    NETC_ETHSWT_IP_RX_OCTETS_COUNT                     = 0x1108U,  /*!< Supported by pseudo port. Port MAC 0 Receive Octets Counter(iflnOctetsn) (PM0_ROCTn) */
-    NETC_ETHSWT_IP_RX_VALID_PAUSE_FRM_COUNT            = 0x1118U,  /*!< Port MAC 0 Receive Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn) (PM0_RXPFn) */
-    NETC_ETHSWT_IP_RX_FRM_COUNT                        = 0x1120U,  /*!< Port MAC 0 Receive Frame Counter Register(aFramesReceivedOKn) (PM0_RFRMn)  */
-    NETC_ETHSWT_IP_RX_FRM_CHK_SEQUENCE_COUNT           = 0x1128U,  /*!< Port MAC 0 Receive Frame Check Sequence Error Counter Register() (PM0_RFCSn)  */
-    NETC_ETHSWT_IP_RX_VLAN_FRM_COUNT                   = 0x1130U,  /*!< Port MAC 0 Receive VLAN Frame Counter Register(VLANReceivedOKn) (PM0_RVLANn)  */
-    NETC_ETHSWT_IP_RX_FRM_ERROR_COUNT                  = 0x1138U,  /*!< Port MAC 0 Receive Frame Error Counter Register(ifInErrorsn) (PM0_RERRn)  */
-    NETC_ETHSWT_IP_RX_UNICAST_FRM_COUNT                 = 0x1140U,  /*!< Supported by pseudo port. Port MAC 0 Receive Unicast Frame Counter Register(ifInUcastPktsn) (PM0_RUCAn)  */
-    NETC_ETHSWT_IP_RX_MULTICAST_FRM_COUNT              = 0x1148U,  /*!< Supported by pseudo port. Port MAC 0 Receive Multicast Frame Counter Register(ifInMulticastPktsn) (PM0_RMCAn)  */
-    NETC_ETHSWT_IP_RX_BROADCAST_FRM_COUNT              = 0x1150U,  /*!< Supported by pseudo port. Port MAC 0 Receive Broadcast Frame Counter Register(ifInBroadcastPktsn) (PM0_RBCAn)  */
-    NETC_ETHSWT_IP_RX_DROPPED_PKTS_COUNT               = 0x1158U,  /*!< Port MAC 0 Receive Dropped Packets Counter Register(etherStatsDropEventsn) (PM0_RDRPn)  */
-    NETC_ETHSWT_IP_RX_PKTS_COUNT                       = 0x1160U,  /*!< Port MAC 0 Receive Packets Counter Register(etherStatsPktsn) (PM0_RPKTn)  */
-    NETC_ETHSWT_IP_RX_UNDERSIZED_PKT_COUNT             = 0x1168U,  /*!< Port MAC 0 Receive Undersized Packet Counter Register(etherStatsUndersizePktsn) (PM0_RUNDn)  */
-    NETC_ETHSWT_IP_RX_64_OCTETS_PKT_COUNT              = 0x1170U,  /*!< Port MAC 0 Receive 64-Octet Packet Counter Register(etherStatsPkts64OctetsN) (PM0_R64n)  */
-    NETC_ETHSWT_IP_RX_127_OCTETS_PKT_COUNT             = 0x1178U,  /*!< Port MAC 0 Receive 65 to 127-Octet Packet Counter Register(etherStatsPkts65to127OctetsN) (PM0_R127n)  */
-    NETC_ETHSWT_IP_RX_255_OCTETS_PKT_COUNT             = 0x1180U,  /*!< Port MAC 0 Receive 128 to 255-Octet Packet Counter Register(etherStatsPkts128to255OctetsN) (PM0_R255n)  */
-    NETC_ETHSWT_IP_RX_511_OCTETS_PKT_COUNT             = 0x1188U,  /*!< Port MAC 0 Receive 256 to 511-Octet Packet Counter Register(etherStatsPkts256to511OctetsN) (PM0_R511n)  */
-    NETC_ETHSWT_IP_RX_1023_OCTETS_PKT_COUNT            = 0x1190U,  /*!< Port MAC 0 Receive 512 to 1023-Octet Packet Counter Register(etherStatsPkts512to1023OctetsN) (PM0_R1023n)  */
-    NETC_ETHSWT_IP_RX_1522_OCTETS_PKT_COUNT            = 0x1198U,  /*!< Port MAC 0 Receive 1024 to 1522-Octet Packet Counter Register(etherStatsPkts1024to1522OctetsN) (PM0_R1522n)  */
-    NETC_ETHSWT_IP_RX_1523_TOMAXOCTETS_PKT_COUNT       = 0x11A0U,  /*!< Port MAC 0 Receive 1523 to Max-Octet Packet Counter Register(etherStatsPkts1523toMaxOctetsN) (PM0_R1523Xn)  */
-    NETC_ETHSWT_IP_RX_OVERSIZED_PKT_COUNT              = 0x11A8U,  /*!< Port MAC 0 Receive Oversized Packet Counter Register(etherStatsOversizePktsn) (PM0_ROVRn)  */
-    NETC_ETHSWT_IP_RX_JABBER_PKT_COUNT                 = 0x11B0U,  /*!< Port MAC 0 Receive Jabber Packet Counter Register(etherStatsJabbersn) (PM0_RJBRn)  */
-    NETC_ETHSWT_IP_RX_FRAGMENT_PKT_COUNT               = 0x11B8U,  /*!< Port MAC 0 Receive Fragment Packet Counter Register(etherStatsFragmentsn (PM0_RFRGn)  */
-    NETC_ETHSWT_IP_RX_CONTROL_PKT_COUNT                = 0x11C0U,  /*!< Port MAC 0 Receive Control Packet Counter Register (PM0_RCNPn)  */
-    NETC_ETHSWT_IP_RX_DROPPED_NOT_TRUNCATED_PKT_COUNT  = 0x11C8U,  /*!< Port MAC 0 Receive Dropped Not Truncated Packets Counter Register(etherStatsDropEventsn) (PM0_RDRNTPn)  */
-
-    NETC_ETHSWT_IP_TX_ETH_OCTETS_COUNT                 = 0x1200U,  /*!< Port MAC 0 Transmit Ethernet Octets Counter(etherStatsOctetsn) (PM0_TEOCTn)  */
-    NETC_ETHSWT_IP_TX_OCTETS_COUNT                     = 0x1208U,  /*!< Supported by pseudo port. Port MAC 0 Transmit Octets Counter Register(ifOutOctetsn) (PM0_TOCTn)  */
-    NETC_ETHSWT_IP_TX_VALID_PAUSE_FRM_COUNT            = 0x1218U,  /*!< Port MAC 0 Transmit Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn) (PM0_TXPFn)  */
-    NETC_ETHSWT_IP_TX_FRM_COUNT                        = 0x1220U,  /*!< Port MAC 0 Transmit Frame Counter Register(aFramesTransmittedOKn) (PM0_TFRMn)  */
-    NETC_ETHSWT_IP_TX_FRM_CHK_SEQUENCE_COUNT           = 0x1228U,  /*!< Port MAC 0 Transmit Frame Check Sequence Error Counter Register() (PM0_TFCSn)  */
-    NETC_ETHSWT_IP_TX_VLAN_FRM_COUNT                   = 0x1230U,  /*!< Port MAC 0 Transmit VLAN Frame Counter Register(VLANTransmittedOKn) (PM0_TVLANn)  */
-    NETC_ETHSWT_IP_TX_FRM_ERROR_COUNT                  = 0x1238U,  /*!< Port MAC 0 Transmit Frame Error Counter Register(ifOutErrorsn) (PM0_TERRn)  */
-    NETC_ETHSWT_IP_TX_UNICAST_FRM_COUNT                 = 0x1240U,  /*!< Supported by pseudo port. Port MAC 0 Transmit Unicast Frame Counter Register(ifOutUcastPktsn) (PM0_TUCAn)  */
-    NETC_ETHSWT_IP_TX_MULTICAST_FRM_COUNT              = 0x1248U,  /*!< Supported by pseudo port. Port MAC 0 Transmit Multicast Frame Counter Register(ifOutMulticastPktsn) (PM0_TMCAn)  */
-    NETC_ETHSWT_IP_TX_BROADCAST_FRM_COUNT              = 0x1250U,  /*!< Supported by pseudo port. Port MAC 0 Transmit Broadcast Frame Counter Register(ifOutBroadcastPktsn) (PM0_TBCAn)  */
-    NETC_ETHSWT_IP_TX_PKTS_COUNT                       = 0x1260U,  /*!< Port MAC 0 Transmit Packets Counter Register(etherStatsPktsn) (PM0_TPKTn)  */
-    NETC_ETHSWT_IP_TX_UNDERSIZED_PKT_COUNT             = 0x1268U,  /*!< Port MAC 0 Transmit Undersized Packet Counter Register(etherStatsUndersizePktsn) (PM0_TUNDn)  */
-    NETC_ETHSWT_IP_TX_64_OCTETS_PKT_COUNT              = 0x1270U,  /*!< Port MAC 0 Transmit 64-Octet Packet Counter Register (etherStatsPkts64OctetsN) (PM0_T64n)  */
-    NETC_ETHSWT_IP_TX_127_OCTETS_PKT_COUNT             = 0x1278U,  /*!< Port MAC 0 Transmit 65 to 127-Octet Packet Counter Register (etherStatsPkts65to127OctetsN) (PM0_T127n)  */
-    NETC_ETHSWT_IP_TX_255_OCTETS_PKT_COUNT             = 0x1280U,  /*!< Port MAC 0 Transmit 128 to 255-Octet Packet Counter Register (etherStatsPkts128to255OctetsN) (PM0_T255n)  */
-    NETC_ETHSWT_IP_TX_511_OCTETS_PKT_COUNT             = 0x1288U,  /*!< Port MAC 0 Transmit 256 to 511-Octet Packet Counter Register (etherStatsPkts256to511OctetsN) (PM0_T511n)  */
-    NETC_ETHSWT_IP_TX_1023_OCTETS_PKT_COUNT            = 0x1290U,  /*!< Port MAC 0 Transmit 512 to 1023-Octet Packet Counter Register (etherStatsPkts512to1023OctetsN) (PM0_T1023n)  */
-    NETC_ETHSWT_IP_TX_1522_OCTETS_PKT_COUNT            = 0x1298U,  /*!< Port MAC 0 Transmit 1024 to 1522-Octet Packet Counter Register (etherStatsPkts1024to1522OctetsN) (PM0_T1522n)  */
-    NETC_ETHSWT_IP_TX_1523_TOMAXOCTETS_PKT_COUNT       = 0x12A0U,  /*!< Port MAC 0 Transmit 1523 to TX_MTU-Octet Packet Counter Register (etherStatsPkts1523toMaxOctetsN) (PM0_T1523Xn)  */
-    NETC_ETHSWT_IP_TX_CONTROL_PKT_COUNT                = 0x12C0U,  /*!< Port MAC 0 Transmit Control Packet Counter Register (PM0_TCNPn)  */
-    NETC_ETHSWT_IP_TX_DEFERRED_PKT_COUNT               = 0x12D0U,  /*!< Port MAC 0 Transmit Deferred Packet Counter Register(aFramesWithDeferredXmissions) (PM0_TDFRn)  */
-    NETC_ETHSWT_IP_TX_MULTIPLE_COLLISIONS_COUNT        = 0x12D8U,  /*!< Port MAC 0 Transmit Multiple Collisions Counter Register(aMultipleCollisionFrames) (PM0_TMCOLn)  */
-    NETC_ETHSWT_IP_TX_SINGLE_COLLISION_COUNT           = 0x12E0U,  /*!< Port MAC 0 Transmit Single Collision Counter(aSingleCollisionFrames) Register (PM0_TSCOLn)  */
-    NETC_ETHSWT_IP_TX_LATE_COLLISION_COUNT             = 0x12E8U,  /*!< Port MAC 0 Transmit Late Collision Counter(aLateCollisions) Register (PM0_TLCOLn)  */
-    NETC_ETHSWT_IP_TX_EXCESSIVE_COLLISIONS_COUNT       = 0x12F0U   /*!< Port MAC 0 Transmit Excessive Collisions Counter Register (PM0_TECOLn)  */
-} Netc_EthSwt_Ip_SingleCounterType;
-
-typedef enum {
-    NETC_ETHSWT_IP_PPMROCR0 = 0x1080U,  /*!< Port pseudo MAC receive octets counter PPMROCR0. The lower 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMROCR1 = 0x1084U,  /*!< Port pseudo MAC receive octets counter PPMROCR1. The upper 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMRUFCR0 = 0x1088U, /*!< Port pseudo MAC receive unicast frame counter register PPMRUFCR0. The lower 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMRUFCR1 = 0x108CU, /*!< Port pseudo MAC receive unicast frame counter register PPMRUFCR1. The upper 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMRMFCR0 = 0x1090U, /*!< Port pseudo MAC receive multicast frame counter register PPMRMFCR0. The lower 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMRMFCR1 = 0x1094U, /*!< Port pseudo MAC receive multicast frame counter register PPMRMFCR1. The upper 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMRBFCR0 = 0x1098U, /*!< Port pseudo MAC receive broadcast frame counter register PPMRBFCR0. The lower 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMRBFCR1 = 0x109CU, /*!< Port pseudo MAC receive broadcast frame counter register PPMRBFCR1. The upper 32bits of the counter.  */
-
-    NETC_ETHSWT_IP_PPMTOCR0 = 0x10C0U, /*!< Port pseudo MAC transmit octets counter PPMTOCR0. The lower 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMTOCR1 = 0x10C4U, /*!< Port pseudo MAC transmit octets counter PPMTOCR1. The upper 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMTUFCR0 = 0x10C8U, /*!< Port pseudo MAC transmit unicast frame counter register PPMTUFCR0. The lower 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMTUFCR1 = 0x10CCU, /*!< Port pseudo MAC transmit unicast frame counter register PPMTUFCR1. The upper 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMTMFCR0 = 0x10D0U, /*!< Port pseudo MAC transmit multicast frame counter register PPMTMFCR0. The lower 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMTMFCR1 = 0x10D4U, /*!< Port pseudo MAC transmit multicast frame counter register PPMTMFCR1. The upper 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMTBFCR0 = 0x10D8U, /*!< Port pseudo MAC transmit broadcast frame counter register PPMTBFCR0. The lower 32bits of the counter.  */
-    NETC_ETHSWT_IP_PPMTBFCR1 = 0x10DCU, /*!< Port pseudo MAC transmit broadcast frame counter register PPMTBFCR1. The upper 32bits of the counter.  */
-} Netc_EthSwt_Ip_PseudoPortCounterType;
-
 typedef uint64 Netc_EthSwt_Ip_CounterValueType;
 
 /*!
@@ -1843,11 +2655,68 @@ typedef struct {
     uint8 vlanIngressPcpToPcpProfile; /*!< If there is frame modification and enable use this profile */
 } Netc_EthSwt_Ip_PortIngressType;
 
+
 /*!
- * @brief Defines the scheduler algorithm.
+ * @brief Port Egress Class Scheduler table CFGE_DATA config field.
+ */
+/* CQ_ASSG field */
+#define NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_CQ_ASSG_SHIFT             (0U)
+#define NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_CQ_ASSG_MASK              (0x0000000FUL)
+#define NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_CQ_ASSG(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_CQ_ASSG_SHIFT)) & NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_CQ_ASSG_MASK)
+
+/* OAL field */
+#define NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_OAL_SHIFT             (16U)
+#define NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_OAL_MASK              (0x7FF0000UL)
+#define NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_OAL(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_OAL_SHIFT)) & NETC_ETHSWT_IP_SCHTABLE_CFGE_DATA_OAL_MASK)
+
+/* WBFS_WEIGHT_0 field */
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_0_SHIFT             (0U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_0_MASK              (0x000000FFUL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_0(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_0_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_0_MASK)
+
+/* WBFS_WEIGHT_1 field */
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_1_SHIFT             (8U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_1_MASK              (0x0000FF00UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_1(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_1_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_1_MASK)
+
+/* WBFS_WEIGHT_2 field */
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_2_SHIFT             (16U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_2_MASK              (0x00FF0000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_2(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_2_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_2_MASK)
+
+/* WBFS_WEIGHT_3 field */
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_3_SHIFT             (24U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_3_MASK              (0xFF000000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_3(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_3_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_3_MASK)
+
+/* WBFS_WEIGHT_4 field */
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_4_SHIFT             (0U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_4_MASK              (0x000000FFUL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_4(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_4_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_4_MASK)
+
+/* WBFS_WEIGHT_5 field */
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_5_SHIFT             (8U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_5_MASK              (0x0000FF00UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_5(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_5_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_5_MASK)
+
+/* WBFS_WEIGHT_6 field */
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_6_SHIFT             (16U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_6_MASK              (0x00FF0000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_6(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_6_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_6_MASK)
+
+/* WBFS_WEIGHT_7 field */
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_7_SHIFT             (24U)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_7_MASK              (0xFF000000UL)
+#define NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_7(x)                (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_7_SHIFT)) & NETC_ETHSWT_IP_SGCLTABLE_CFGE_DATA_WBFS_WEIGHT_7_MASK)
+
+/*!
+ * @brief Defines the port egress class scheduler.
+ * @implements Netc_EthSwt_Ip_PortSchedulerType_struct
  */
 typedef struct {
-    uint32 EthSwtPortSchedulerPredecessorOrder; /*!< The order of the scheduler predecessors. */
+    uint8  numberOfWBFSQueues; /* Number of queues using the weighted fair share algorithm */
+    uint16 overheadAccountingLength; /* Added to the actual length of each frame when performing class scheduler WBFS calculations */
+    uint8  portEgressSchedulerWeightList[NETC_ETHSWT_WBFS_QUEUES_NB]; /* Array holding the queue weights for WBFS (weighted fair share) scheduler inputs  */
 } Netc_EthSwt_Ip_PortSchedulerType;
 
 /*!
@@ -1904,6 +2773,17 @@ typedef struct {
 } Netc_EthSwt_Ip_PortType;
 
 /*!
+ * @brief Key Construction Rule
+ * @implements : Netc_EthSwt_Ip_KeyConstructionRuleType_struct
+*/
+typedef struct
+{
+    uint32 EthSwtKeyConstructionRegValue;  /**<  Value to be added in the Key Construction Register*/
+    uint32 EthSwtPayloadField0RegValue;  /**<  Value to be added in the Payload Field 0 Register*/
+    uint32 EthSwtPayloadField1RegValue;  /**<  Value to be added in the Payload Field 0 Register*/
+} Netc_EthSwt_Ip_KeyConstructionRuleType;
+
+/*!
  * @brief Configuration of one Ethernet Switch for initalisation
  */
 typedef struct {
@@ -1915,6 +2795,46 @@ typedef struct {
     uint16 EthSwtCustomVlanEtherType1;  /*!< Custom VLAN */
     uint16 EthSwtCustomVlanEtherType2;  /*!< Custom VLAN */
     Netc_EthSwt_Ip_PortType (*port)[NETC_ETHSWT_NUMBER_OF_PORTS]; /*!< Port description. */
+    Netc_EthSwt_Ip_KeyConstructionRuleType (*EthSwtKeyConstruction)[4U]; /*!< Represents a Key Construction Rule. */
+#if (NETC_ETHSWT_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES > 0U)
+    uint8 NumberOfIsiEntries; /*!< Number of Ingress Stream Identification entries. */
+    const Netc_EthSwt_Ip_IngrStremIdentificationTableDataType (*IsiEntries)[NETC_ETHSWT_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES]; /*!< Pointer to an array containing the StreamIdentification configuration. */
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_SEQTAG_ENTRIES > 0U)
+    uint8 NumberOfSeqTagEntries; /*!< Number of Sequence tag entries. */
+    const Netc_EthSwt_Ip_ISQGTableDataType (*SeqTagEntries)[NETC_ETHSWT_NUMBER_OF_SEQTAG_ENTRIES]; /*!< Pointer to an array containing the SequenceTag configuration. */
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_SEQRECOVERY_ENTRIES > 0U)
+    uint8 NumberOfSeqRecoveryEntries; /*!< Number of Sequence tag entries. */
+    const Netc_EthSwt_Ip_EgrSeqRecoveryTableDataType (*SeqRecoveryEntries)[NETC_ETHSWT_NUMBER_OF_SEQRECOVERY_ENTRIES]; /*!< Pointer to an array containing the SequenceRecovery configuration. */
+#endif
+
+#if (NETC_ETHSWT_NUMBER_OF_RP_ENTRIES > 0U)
+    uint8 NumberOfRPEntries; /*!< Number of Rate Policer/Flow Meter entries */
+    const Netc_EthSwt_Ip_RatePolicerEntryDataType (*EthSwtRatePolicerEntries)[NETC_ETHSWT_NUMBER_OF_RP_ENTRIES]; /*!< Pointer to an array containing entries for the rate policer table. */
+#endif
+#if (NETC_ETHSWT_NUMBER_OF_SGCL_ENTRIES > 0U)
+    uint8 NumberOfSGCLEntries; /*!< Number of Stream Gate Instance entries */
+    const Netc_EthSwt_Ip_SGCLTableDataType (*StreamGateControlListEntries)[NETC_ETHSWT_NUMBER_OF_SGCL_ENTRIES]; /*!< Pointer to an array containing configurations for Stream Gate Control Lists. */
+#endif
+#if (NETC_ETHSWT_NUMBER_OF_SGI_ENTRIES > 0U)
+    uint8 NumberOfSGIEntries; /*!< Number of Stream Gate Instance entries */
+    const Netc_EthSwt_Ip_StreamGateInstanceEntryDataType (*StreamGateInstanceEntries)[NETC_ETHSWT_NUMBER_OF_SGI_ENTRIES]; /*!< Pointer to an array containing configurations for Stream Gate Instances. */
+#endif
+#if (NETC_ETHSWT_NUMBER_OF_FRAMEMODIFICATION_ENTRIES > 0U)
+    uint8 NumberOfFrmModifEntries; /*!< Number of Frame Modification entries */
+    const Netc_EthSwt_Ip_FrmModificationEntryDataType (*FrameModificationEntries)[NETC_ETHSWT_NUMBER_OF_FRAMEMODIFICATION_ENTRIES]; /*!< Pointer to an array containing configurations for Frame Modification. */
+#endif
+#if (NETC_ETHSWT_NUMBER_OF_EGRESSTREATMENT_ENTRIES > 0U)
+    uint8 NumberOfEgrTreatmentEntries; /*!< Number of Egress Treatment entries */
+    const Netc_EthSwt_Ip_EgressTreatmentEntryDataType (*EgressTreatmentEntries)[NETC_ETHSWT_NUMBER_OF_EGRESSTREATMENT_ENTRIES]; /*!< Pointer to an array containing configurations for Egress Treatment. */
+#endif
+#if (NETC_ETHSWT_NUMBER_OF_INGRESSSTREAM_ENTRIES > 0U)
+    uint8 NumberOfIngrStreamEntries; /*!< Number of Ingress Stream entries */
+    const Netc_EthSwt_Ip_IngressStreamEntryDataType (*IngressStreamEntries)[NETC_ETHSWT_NUMBER_OF_INGRESSSTREAM_ENTRIES]; /*!< Pointer to an array containing configurations for Ingress Stream. */
+#endif
 #if (NETC_ETHSWT_NUMBER_OF_FDB_ENTRIES > 0U)
     uint8 NumberOfFdbEntries; /*!< Number of FDB entries. */
     const Netc_EthSwt_Ip_FdbEntryType (*FdbEntries)[NETC_ETHSWT_NUMBER_OF_FDB_ENTRIES]; /*!< Pointer to an array containing the FDB configuration. */
@@ -1967,6 +2887,17 @@ typedef struct
                                                 If the value is set to 65535, the value shall be ignored */
     Netc_EthSwt_Ip_SwitchMirroringModeType    MirroringMode;     /*!< @brief specifies the mode how the mirrored traffic should be tagged : 0x00 == No VLAN retagging; 0x01 == VLAN retagging; 0x03 == VLAN Double tagging */
 } Netc_EthSwt_Ip_SwitchMirrorCfgType;
+
+/*!
+ * @brief PTP time
+ * @implements Netc_EthSwt_Ip_PtpTimeType_struct
+*/
+typedef struct
+{
+    uint32 nanoseconds;  /**< Nanoseconds */
+    uint32 seconds;      /**< Lower 32-bit of seconds */
+    uint16 secondsHi;    /**< Upper 16-bit of seconds */
+} Netc_EthSwt_Ip_PtpTimeType;
 
 /*==================================================================================================
 *                                  GLOBAL VARIABLE DECLARATIONS

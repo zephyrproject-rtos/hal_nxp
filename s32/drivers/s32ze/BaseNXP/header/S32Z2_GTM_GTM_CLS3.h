@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GTM_gtm_cls3.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_GTM_gtm_cls3
  *
  * This file contains register definitions and macros for easy access to their
@@ -401,13 +401,13 @@ typedef struct {
   __IO uint32_t TIO3_G0_CH0_IRQ_MODE;              /**< TIO[i] channel [c] IRQ mode configuration register, offset: 0x3010 */
   __IO uint32_t TIO3_G0_CH0_CTRL2;                 /**< TIO[i] group [g] channel [c] control register, offset: 0x3014 */
   uint8_t RESERVED_47[8];
-  __IO uint32_t TIO3_G0_CH0_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation), offset: 0x3020 */
-  __IO uint32_t TIO3_G0_CH0_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation), offset: 0x3024 */
-  __IO uint32_t TIO3_G0_CH0_SOP;                   /**< TIO[i] channel [c] resource S operand register, offset: 0x3028 */
+  __IO uint32_t TIO3_G0_CH0_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x3020 */
+  __IO uint32_t TIO3_G0_CH0_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x3024 */
+  __IO uint32_t TIO3_G0_CH0_SOP;                   /**< TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ), offset: 0x3028 */
   uint8_t RESERVED_48[4];
-  __IO uint32_t TIO3_G0_CH0_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation), offset: 0x3030 */
-  __IO uint32_t TIO3_G0_CH0_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation), offset: 0x3034 */
-  __IO uint32_t TIO3_G0_CH0_OOP;                   /**< TIO[i] channel [c] resource O operand register, offset: 0x3038 */
+  __IO uint32_t TIO3_G0_CH0_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00-, offset: 0x3030 */
+  __IO uint32_t TIO3_G0_CH0_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00-, offset: 0x3034 */
+  __IO uint32_t TIO3_G0_CH0_OOP;                   /**< TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-), offset: 0x3038 */
   __I  uint32_t TIO3_G0_CH0_SHIFTCNT;              /**< TIO[i] channel [c] resource shift count register, offset: 0x303C */
   __IO uint32_t TIO3_G0_CH1_CTRL;                  /**< TIO[i] group [g] channel [c] control register, offset: 0x3040 */
   __IO uint32_t TIO3_G0_CH1_IRQ_NOTIFY;            /**< TIO[i] channel [c] interrupt notification register, offset: 0x3044 */
@@ -416,13 +416,13 @@ typedef struct {
   __IO uint32_t TIO3_G0_CH1_IRQ_MODE;              /**< TIO[i] channel [c] IRQ mode configuration register, offset: 0x3050 */
   __IO uint32_t TIO3_G0_CH1_CTRL2;                 /**< TIO[i] group [g] channel [c] control register, offset: 0x3054 */
   uint8_t RESERVED_49[8];
-  __IO uint32_t TIO3_G0_CH1_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation), offset: 0x3060 */
-  __IO uint32_t TIO3_G0_CH1_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation), offset: 0x3064 */
-  __IO uint32_t TIO3_G0_CH1_SOP;                   /**< TIO[i] channel [c] resource S operand register, offset: 0x3068 */
+  __IO uint32_t TIO3_G0_CH1_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x3060 */
+  __IO uint32_t TIO3_G0_CH1_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x3064 */
+  __IO uint32_t TIO3_G0_CH1_SOP;                   /**< TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ), offset: 0x3068 */
   uint8_t RESERVED_50[4];
-  __IO uint32_t TIO3_G0_CH1_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation), offset: 0x3070 */
-  __IO uint32_t TIO3_G0_CH1_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation), offset: 0x3074 */
-  __IO uint32_t TIO3_G0_CH1_OOP;                   /**< TIO[i] channel [c] resource O operand register, offset: 0x3078 */
+  __IO uint32_t TIO3_G0_CH1_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00-, offset: 0x3070 */
+  __IO uint32_t TIO3_G0_CH1_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00-, offset: 0x3074 */
+  __IO uint32_t TIO3_G0_CH1_OOP;                   /**< TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-), offset: 0x3078 */
   __I  uint32_t TIO3_G0_CH1_SHIFTCNT;              /**< TIO[i] channel [c] resource shift count register, offset: 0x307C */
   __IO uint32_t TIO3_G0_CH2_CTRL;                  /**< TIO[i] group [g] channel [c] control register, offset: 0x3080 */
   __IO uint32_t TIO3_G0_CH2_IRQ_NOTIFY;            /**< TIO[i] channel [c] interrupt notification register, offset: 0x3084 */
@@ -431,13 +431,13 @@ typedef struct {
   __IO uint32_t TIO3_G0_CH2_IRQ_MODE;              /**< TIO[i] channel [c] IRQ mode configuration register, offset: 0x3090 */
   __IO uint32_t TIO3_G0_CH2_CTRL2;                 /**< TIO[i] group [g] channel [c] control register, offset: 0x3094 */
   uint8_t RESERVED_51[8];
-  __IO uint32_t TIO3_G0_CH2_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation), offset: 0x30A0 */
-  __IO uint32_t TIO3_G0_CH2_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation), offset: 0x30A4 */
-  __IO uint32_t TIO3_G0_CH2_SOP;                   /**< TIO[i] channel [c] resource S operand register, offset: 0x30A8 */
+  __IO uint32_t TIO3_G0_CH2_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x30A0 */
+  __IO uint32_t TIO3_G0_CH2_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x30A4 */
+  __IO uint32_t TIO3_G0_CH2_SOP;                   /**< TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ), offset: 0x30A8 */
   uint8_t RESERVED_52[4];
-  __IO uint32_t TIO3_G0_CH2_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation), offset: 0x30B0 */
-  __IO uint32_t TIO3_G0_CH2_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation), offset: 0x30B4 */
-  __IO uint32_t TIO3_G0_CH2_OOP;                   /**< TIO[i] channel [c] resource O operand register, offset: 0x30B8 */
+  __IO uint32_t TIO3_G0_CH2_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00-, offset: 0x30B0 */
+  __IO uint32_t TIO3_G0_CH2_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00-, offset: 0x30B4 */
+  __IO uint32_t TIO3_G0_CH2_OOP;                   /**< TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-), offset: 0x30B8 */
   __I  uint32_t TIO3_G0_CH2_SHIFTCNT;              /**< TIO[i] channel [c] resource shift count register, offset: 0x30BC */
   __IO uint32_t TIO3_G0_CH3_CTRL;                  /**< TIO[i] group [g] channel [c] control register, offset: 0x30C0 */
   __IO uint32_t TIO3_G0_CH3_IRQ_NOTIFY;            /**< TIO[i] channel [c] interrupt notification register, offset: 0x30C4 */
@@ -446,13 +446,13 @@ typedef struct {
   __IO uint32_t TIO3_G0_CH3_IRQ_MODE;              /**< TIO[i] channel [c] IRQ mode configuration register, offset: 0x30D0 */
   __IO uint32_t TIO3_G0_CH3_CTRL2;                 /**< TIO[i] group [g] channel [c] control register, offset: 0x30D4 */
   uint8_t RESERVED_53[8];
-  __IO uint32_t TIO3_G0_CH3_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation), offset: 0x30E0 */
-  __IO uint32_t TIO3_G0_CH3_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation), offset: 0x30E4 */
-  __IO uint32_t TIO3_G0_CH3_SOP;                   /**< TIO[i] channel [c] resource S operand register, offset: 0x30E8 */
+  __IO uint32_t TIO3_G0_CH3_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x30E0 */
+  __IO uint32_t TIO3_G0_CH3_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x30E4 */
+  __IO uint32_t TIO3_G0_CH3_SOP;                   /**< TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ), offset: 0x30E8 */
   uint8_t RESERVED_54[4];
-  __IO uint32_t TIO3_G0_CH3_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation), offset: 0x30F0 */
-  __IO uint32_t TIO3_G0_CH3_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation), offset: 0x30F4 */
-  __IO uint32_t TIO3_G0_CH3_OOP;                   /**< TIO[i] channel [c] resource O operand register, offset: 0x30F8 */
+  __IO uint32_t TIO3_G0_CH3_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00-, offset: 0x30F0 */
+  __IO uint32_t TIO3_G0_CH3_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00-, offset: 0x30F4 */
+  __IO uint32_t TIO3_G0_CH3_OOP;                   /**< TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-), offset: 0x30F8 */
   __I  uint32_t TIO3_G0_CH3_SHIFTCNT;              /**< TIO[i] channel [c] resource shift count register, offset: 0x30FC */
   __IO uint32_t TIO3_G0_CH4_CTRL;                  /**< TIO[i] group [g] channel [c] control register, offset: 0x3100 */
   __IO uint32_t TIO3_G0_CH4_IRQ_NOTIFY;            /**< TIO[i] channel [c] interrupt notification register, offset: 0x3104 */
@@ -461,13 +461,13 @@ typedef struct {
   __IO uint32_t TIO3_G0_CH4_IRQ_MODE;              /**< TIO[i] channel [c] IRQ mode configuration register, offset: 0x3110 */
   __IO uint32_t TIO3_G0_CH4_CTRL2;                 /**< TIO[i] group [g] channel [c] control register, offset: 0x3114 */
   uint8_t RESERVED_55[8];
-  __IO uint32_t TIO3_G0_CH4_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation), offset: 0x3120 */
-  __IO uint32_t TIO3_G0_CH4_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation), offset: 0x3124 */
-  __IO uint32_t TIO3_G0_CH4_SOP;                   /**< TIO[i] channel [c] resource S operand register, offset: 0x3128 */
+  __IO uint32_t TIO3_G0_CH4_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x3120 */
+  __IO uint32_t TIO3_G0_CH4_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x3124 */
+  __IO uint32_t TIO3_G0_CH4_SOP;                   /**< TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ), offset: 0x3128 */
   uint8_t RESERVED_56[4];
-  __IO uint32_t TIO3_G0_CH4_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation), offset: 0x3130 */
-  __IO uint32_t TIO3_G0_CH4_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation), offset: 0x3134 */
-  __IO uint32_t TIO3_G0_CH4_OOP;                   /**< TIO[i] channel [c] resource O operand register, offset: 0x3138 */
+  __IO uint32_t TIO3_G0_CH4_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00-, offset: 0x3130 */
+  __IO uint32_t TIO3_G0_CH4_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00-, offset: 0x3134 */
+  __IO uint32_t TIO3_G0_CH4_OOP;                   /**< TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-), offset: 0x3138 */
   __I  uint32_t TIO3_G0_CH4_SHIFTCNT;              /**< TIO[i] channel [c] resource shift count register, offset: 0x313C */
   __IO uint32_t TIO3_G0_CH5_CTRL;                  /**< TIO[i] group [g] channel [c] control register, offset: 0x3140 */
   __IO uint32_t TIO3_G0_CH5_IRQ_NOTIFY;            /**< TIO[i] channel [c] interrupt notification register, offset: 0x3144 */
@@ -476,13 +476,13 @@ typedef struct {
   __IO uint32_t TIO3_G0_CH5_IRQ_MODE;              /**< TIO[i] channel [c] IRQ mode configuration register, offset: 0x3150 */
   __IO uint32_t TIO3_G0_CH5_CTRL2;                 /**< TIO[i] group [g] channel [c] control register, offset: 0x3154 */
   uint8_t RESERVED_57[8];
-  __IO uint32_t TIO3_G0_CH5_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation), offset: 0x3160 */
-  __IO uint32_t TIO3_G0_CH5_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation), offset: 0x3164 */
-  __IO uint32_t TIO3_G0_CH5_SOP;                   /**< TIO[i] channel [c] resource S operand register, offset: 0x3168 */
+  __IO uint32_t TIO3_G0_CH5_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x3160 */
+  __IO uint32_t TIO3_G0_CH5_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x3164 */
+  __IO uint32_t TIO3_G0_CH5_SOP;                   /**< TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ), offset: 0x3168 */
   uint8_t RESERVED_58[4];
-  __IO uint32_t TIO3_G0_CH5_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation), offset: 0x3170 */
-  __IO uint32_t TIO3_G0_CH5_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation), offset: 0x3174 */
-  __IO uint32_t TIO3_G0_CH5_OOP;                   /**< TIO[i] channel [c] resource O operand register, offset: 0x3178 */
+  __IO uint32_t TIO3_G0_CH5_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00-, offset: 0x3170 */
+  __IO uint32_t TIO3_G0_CH5_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00-, offset: 0x3174 */
+  __IO uint32_t TIO3_G0_CH5_OOP;                   /**< TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-), offset: 0x3178 */
   __I  uint32_t TIO3_G0_CH5_SHIFTCNT;              /**< TIO[i] channel [c] resource shift count register, offset: 0x317C */
   __IO uint32_t TIO3_G0_CH6_CTRL;                  /**< TIO[i] group [g] channel [c] control register, offset: 0x3180 */
   __IO uint32_t TIO3_G0_CH6_IRQ_NOTIFY;            /**< TIO[i] channel [c] interrupt notification register, offset: 0x3184 */
@@ -491,13 +491,13 @@ typedef struct {
   __IO uint32_t TIO3_G0_CH6_IRQ_MODE;              /**< TIO[i] channel [c] IRQ mode configuration register, offset: 0x3190 */
   __IO uint32_t TIO3_G0_CH6_CTRL2;                 /**< TIO[i] group [g] channel [c] control register, offset: 0x3194 */
   uint8_t RESERVED_59[8];
-  __IO uint32_t TIO3_G0_CH6_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation), offset: 0x31A0 */
-  __IO uint32_t TIO3_G0_CH6_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation), offset: 0x31A4 */
-  __IO uint32_t TIO3_G0_CH6_SOP;                   /**< TIO[i] channel [c] resource S operand register, offset: 0x31A8 */
+  __IO uint32_t TIO3_G0_CH6_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x31A0 */
+  __IO uint32_t TIO3_G0_CH6_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x31A4 */
+  __IO uint32_t TIO3_G0_CH6_SOP;                   /**< TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ), offset: 0x31A8 */
   uint8_t RESERVED_60[4];
-  __IO uint32_t TIO3_G0_CH6_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation), offset: 0x31B0 */
-  __IO uint32_t TIO3_G0_CH6_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation), offset: 0x31B4 */
-  __IO uint32_t TIO3_G0_CH6_OOP;                   /**< TIO[i] channel [c] resource O operand register, offset: 0x31B8 */
+  __IO uint32_t TIO3_G0_CH6_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00-, offset: 0x31B0 */
+  __IO uint32_t TIO3_G0_CH6_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00-, offset: 0x31B4 */
+  __IO uint32_t TIO3_G0_CH6_OOP;                   /**< TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-), offset: 0x31B8 */
   __I  uint32_t TIO3_G0_CH6_SHIFTCNT;              /**< TIO[i] channel [c] resource shift count register, offset: 0x31BC */
   __IO uint32_t TIO3_G0_CH7_CTRL;                  /**< TIO[i] group [g] channel [c] control register, offset: 0x31C0 */
   __IO uint32_t TIO3_G0_CH7_IRQ_NOTIFY;            /**< TIO[i] channel [c] interrupt notification register, offset: 0x31C4 */
@@ -506,13 +506,13 @@ typedef struct {
   __IO uint32_t TIO3_G0_CH7_IRQ_MODE;              /**< TIO[i] channel [c] IRQ mode configuration register, offset: 0x31D0 */
   __IO uint32_t TIO3_G0_CH7_CTRL2;                 /**< TIO[i] group [g] channel [c] control register, offset: 0x31D4 */
   uint8_t RESERVED_61[8];
-  __IO uint32_t TIO3_G0_CH7_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation), offset: 0x31E0 */
-  __IO uint32_t TIO3_G0_CH7_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation), offset: 0x31E4 */
-  __IO uint32_t TIO3_G0_CH7_SOP;                   /**< TIO[i] channel [c] resource S operand register, offset: 0x31E8 */
+  __IO uint32_t TIO3_G0_CH7_SINST;                 /**< TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x31E0 */
+  __IO uint32_t TIO3_G0_CH7_SCMD;                  /**< TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0-, offset: 0x31E4 */
+  __IO uint32_t TIO3_G0_CH7_SOP;                   /**< TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ), offset: 0x31E8 */
   uint8_t RESERVED_62[4];
-  __IO uint32_t TIO3_G0_CH7_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation), offset: 0x31F0 */
-  __IO uint32_t TIO3_G0_CH7_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation), offset: 0x31F4 */
-  __IO uint32_t TIO3_G0_CH7_OOP;                   /**< TIO[i] channel [c] resource O operand register, offset: 0x31F8 */
+  __IO uint32_t TIO3_G0_CH7_OINST;                 /**< TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00-, offset: 0x31F0 */
+  __IO uint32_t TIO3_G0_CH7_OCMD;                  /**< TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00-, offset: 0x31F4 */
+  __IO uint32_t TIO3_G0_CH7_OOP;                   /**< TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-), offset: 0x31F8 */
   __I  uint32_t TIO3_G0_CH7_SHIFTCNT;              /**< TIO[i] channel [c] resource shift count register, offset: 0x31FC */
   __IO uint32_t TIO3_G0_ISEL0_CTRL1;               /**< TIO[i] input selection register 1, offset: 0x3200 */
   __IO uint32_t TIO3_G0_ISEL0_CTRL2;               /**< TIO[i] input selection register 2, offset: 0x3204 */
@@ -6434,7 +6434,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH0_CTRL2_DUAL_CMP_MST_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH0_CTRL2_DUAL_CMP_MST_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH0_CTRL2_DUAL_CMP_MST_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH0_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) */
+/*! @name TIO3_G0_CH0_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH0_SINST_OP_MASK   (0xFFFFFFU)
@@ -6458,7 +6458,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH0_SINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH0_SINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH0_SINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH0_SCMD - TIO[i] channel [c] resource S command register (buffer operation) */
+/*! @name TIO3_G0_CH0_SCMD - TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH0_SCMD_CMD_MASK   (0x3F000000U)
@@ -6477,7 +6477,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH0_SCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH0_SCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH0_SCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH0_SOP - TIO[i] channel [c] resource S operand register */
+/*! @name TIO3_G0_CH0_SOP - TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH0_SOP_OP_MASK     (0xFFFFFFU)
@@ -6486,7 +6486,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH0_SOP_OP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH0_SOP_OP_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH0_SOP_OP_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH0_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) */
+/*! @name TIO3_G0_CH0_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH0_OINST_OP_MASK   (0xFFFFFFU)
@@ -6510,7 +6510,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH0_OINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH0_OINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH0_OINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH0_OCMD - TIO[i] channel [c] resource O command register (buffer operation) */
+/*! @name TIO3_G0_CH0_OCMD - TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH0_OCMD_CMD_MASK   (0x3F000000U)
@@ -6529,7 +6529,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH0_OCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH0_OCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH0_OCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH0_OOP - TIO[i] channel [c] resource O operand register */
+/*! @name TIO3_G0_CH0_OOP - TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH0_OOP_OP_MASK     (0xFFFFFFU)
@@ -6806,7 +6806,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH1_CTRL2_DUAL_CMP_MST_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH1_CTRL2_DUAL_CMP_MST_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH1_CTRL2_DUAL_CMP_MST_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH1_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) */
+/*! @name TIO3_G0_CH1_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH1_SINST_OP_MASK   (0xFFFFFFU)
@@ -6830,7 +6830,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH1_SINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH1_SINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH1_SINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH1_SCMD - TIO[i] channel [c] resource S command register (buffer operation) */
+/*! @name TIO3_G0_CH1_SCMD - TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH1_SCMD_CMD_MASK   (0x3F000000U)
@@ -6849,7 +6849,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH1_SCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH1_SCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH1_SCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH1_SOP - TIO[i] channel [c] resource S operand register */
+/*! @name TIO3_G0_CH1_SOP - TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH1_SOP_OP_MASK     (0xFFFFFFU)
@@ -6858,7 +6858,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH1_SOP_OP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH1_SOP_OP_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH1_SOP_OP_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH1_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) */
+/*! @name TIO3_G0_CH1_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH1_OINST_OP_MASK   (0xFFFFFFU)
@@ -6882,7 +6882,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH1_OINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH1_OINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH1_OINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH1_OCMD - TIO[i] channel [c] resource O command register (buffer operation) */
+/*! @name TIO3_G0_CH1_OCMD - TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH1_OCMD_CMD_MASK   (0x3F000000U)
@@ -6901,7 +6901,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH1_OCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH1_OCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH1_OCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH1_OOP - TIO[i] channel [c] resource O operand register */
+/*! @name TIO3_G0_CH1_OOP - TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH1_OOP_OP_MASK     (0xFFFFFFU)
@@ -7178,7 +7178,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH2_CTRL2_DUAL_CMP_MST_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH2_CTRL2_DUAL_CMP_MST_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH2_CTRL2_DUAL_CMP_MST_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH2_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) */
+/*! @name TIO3_G0_CH2_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH2_SINST_OP_MASK   (0xFFFFFFU)
@@ -7202,7 +7202,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH2_SINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH2_SINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH2_SINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH2_SCMD - TIO[i] channel [c] resource S command register (buffer operation) */
+/*! @name TIO3_G0_CH2_SCMD - TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH2_SCMD_CMD_MASK   (0x3F000000U)
@@ -7221,7 +7221,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH2_SCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH2_SCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH2_SCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH2_SOP - TIO[i] channel [c] resource S operand register */
+/*! @name TIO3_G0_CH2_SOP - TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH2_SOP_OP_MASK     (0xFFFFFFU)
@@ -7230,7 +7230,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH2_SOP_OP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH2_SOP_OP_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH2_SOP_OP_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH2_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) */
+/*! @name TIO3_G0_CH2_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH2_OINST_OP_MASK   (0xFFFFFFU)
@@ -7254,7 +7254,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH2_OINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH2_OINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH2_OINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH2_OCMD - TIO[i] channel [c] resource O command register (buffer operation) */
+/*! @name TIO3_G0_CH2_OCMD - TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH2_OCMD_CMD_MASK   (0x3F000000U)
@@ -7273,7 +7273,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH2_OCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH2_OCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH2_OCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH2_OOP - TIO[i] channel [c] resource O operand register */
+/*! @name TIO3_G0_CH2_OOP - TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH2_OOP_OP_MASK     (0xFFFFFFU)
@@ -7550,7 +7550,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH3_CTRL2_DUAL_CMP_MST_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH3_CTRL2_DUAL_CMP_MST_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH3_CTRL2_DUAL_CMP_MST_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH3_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) */
+/*! @name TIO3_G0_CH3_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH3_SINST_OP_MASK   (0xFFFFFFU)
@@ -7574,7 +7574,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH3_SINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH3_SINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH3_SINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH3_SCMD - TIO[i] channel [c] resource S command register (buffer operation) */
+/*! @name TIO3_G0_CH3_SCMD - TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH3_SCMD_CMD_MASK   (0x3F000000U)
@@ -7593,7 +7593,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH3_SCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH3_SCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH3_SCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH3_SOP - TIO[i] channel [c] resource S operand register */
+/*! @name TIO3_G0_CH3_SOP - TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH3_SOP_OP_MASK     (0xFFFFFFU)
@@ -7602,7 +7602,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH3_SOP_OP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH3_SOP_OP_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH3_SOP_OP_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH3_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) */
+/*! @name TIO3_G0_CH3_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH3_OINST_OP_MASK   (0xFFFFFFU)
@@ -7626,7 +7626,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH3_OINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH3_OINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH3_OINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH3_OCMD - TIO[i] channel [c] resource O command register (buffer operation) */
+/*! @name TIO3_G0_CH3_OCMD - TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH3_OCMD_CMD_MASK   (0x3F000000U)
@@ -7645,7 +7645,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH3_OCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH3_OCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH3_OCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH3_OOP - TIO[i] channel [c] resource O operand register */
+/*! @name TIO3_G0_CH3_OOP - TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH3_OOP_OP_MASK     (0xFFFFFFU)
@@ -7922,7 +7922,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH4_CTRL2_DUAL_CMP_MST_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH4_CTRL2_DUAL_CMP_MST_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH4_CTRL2_DUAL_CMP_MST_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH4_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) */
+/*! @name TIO3_G0_CH4_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH4_SINST_OP_MASK   (0xFFFFFFU)
@@ -7946,7 +7946,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH4_SINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH4_SINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH4_SINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH4_SCMD - TIO[i] channel [c] resource S command register (buffer operation) */
+/*! @name TIO3_G0_CH4_SCMD - TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH4_SCMD_CMD_MASK   (0x3F000000U)
@@ -7965,7 +7965,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH4_SCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH4_SCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH4_SCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH4_SOP - TIO[i] channel [c] resource S operand register */
+/*! @name TIO3_G0_CH4_SOP - TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH4_SOP_OP_MASK     (0xFFFFFFU)
@@ -7974,7 +7974,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH4_SOP_OP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH4_SOP_OP_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH4_SOP_OP_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH4_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) */
+/*! @name TIO3_G0_CH4_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH4_OINST_OP_MASK   (0xFFFFFFU)
@@ -7998,7 +7998,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH4_OINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH4_OINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH4_OINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH4_OCMD - TIO[i] channel [c] resource O command register (buffer operation) */
+/*! @name TIO3_G0_CH4_OCMD - TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH4_OCMD_CMD_MASK   (0x3F000000U)
@@ -8017,7 +8017,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH4_OCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH4_OCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH4_OCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH4_OOP - TIO[i] channel [c] resource O operand register */
+/*! @name TIO3_G0_CH4_OOP - TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH4_OOP_OP_MASK     (0xFFFFFFU)
@@ -8294,7 +8294,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH5_CTRL2_DUAL_CMP_MST_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH5_CTRL2_DUAL_CMP_MST_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH5_CTRL2_DUAL_CMP_MST_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH5_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) */
+/*! @name TIO3_G0_CH5_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH5_SINST_OP_MASK   (0xFFFFFFU)
@@ -8318,7 +8318,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH5_SINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH5_SINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH5_SINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH5_SCMD - TIO[i] channel [c] resource S command register (buffer operation) */
+/*! @name TIO3_G0_CH5_SCMD - TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH5_SCMD_CMD_MASK   (0x3F000000U)
@@ -8337,7 +8337,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH5_SCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH5_SCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH5_SCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH5_SOP - TIO[i] channel [c] resource S operand register */
+/*! @name TIO3_G0_CH5_SOP - TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH5_SOP_OP_MASK     (0xFFFFFFU)
@@ -8346,7 +8346,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH5_SOP_OP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH5_SOP_OP_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH5_SOP_OP_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH5_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) */
+/*! @name TIO3_G0_CH5_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH5_OINST_OP_MASK   (0xFFFFFFU)
@@ -8370,7 +8370,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH5_OINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH5_OINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH5_OINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH5_OCMD - TIO[i] channel [c] resource O command register (buffer operation) */
+/*! @name TIO3_G0_CH5_OCMD - TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH5_OCMD_CMD_MASK   (0x3F000000U)
@@ -8389,7 +8389,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH5_OCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH5_OCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH5_OCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH5_OOP - TIO[i] channel [c] resource O operand register */
+/*! @name TIO3_G0_CH5_OOP - TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH5_OOP_OP_MASK     (0xFFFFFFU)
@@ -8666,7 +8666,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH6_CTRL2_DUAL_CMP_MST_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH6_CTRL2_DUAL_CMP_MST_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH6_CTRL2_DUAL_CMP_MST_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH6_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) */
+/*! @name TIO3_G0_CH6_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH6_SINST_OP_MASK   (0xFFFFFFU)
@@ -8690,7 +8690,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH6_SINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH6_SINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH6_SINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH6_SCMD - TIO[i] channel [c] resource S command register (buffer operation) */
+/*! @name TIO3_G0_CH6_SCMD - TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH6_SCMD_CMD_MASK   (0x3F000000U)
@@ -8709,7 +8709,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH6_SCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH6_SCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH6_SCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH6_SOP - TIO[i] channel [c] resource S operand register */
+/*! @name TIO3_G0_CH6_SOP - TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH6_SOP_OP_MASK     (0xFFFFFFU)
@@ -8718,7 +8718,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH6_SOP_OP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH6_SOP_OP_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH6_SOP_OP_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH6_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) */
+/*! @name TIO3_G0_CH6_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH6_OINST_OP_MASK   (0xFFFFFFU)
@@ -8742,7 +8742,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH6_OINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH6_OINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH6_OINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH6_OCMD - TIO[i] channel [c] resource O command register (buffer operation) */
+/*! @name TIO3_G0_CH6_OCMD - TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH6_OCMD_CMD_MASK   (0x3F000000U)
@@ -8761,7 +8761,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH6_OCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH6_OCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH6_OCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH6_OOP - TIO[i] channel [c] resource O operand register */
+/*! @name TIO3_G0_CH6_OOP - TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH6_OOP_OP_MASK     (0xFFFFFFU)
@@ -9038,7 +9038,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH7_CTRL2_DUAL_CMP_MST_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH7_CTRL2_DUAL_CMP_MST_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH7_CTRL2_DUAL_CMP_MST_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH7_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) */
+/*! @name TIO3_G0_CH7_SINST - TIO[i] channel [c] resource S instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH7_SINST_OP_MASK   (0xFFFFFFU)
@@ -9062,7 +9062,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH7_SINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH7_SINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH7_SINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH7_SCMD - TIO[i] channel [c] resource S command register (buffer operation) */
+/*! @name TIO3_G0_CH7_SCMD - TIO[i] channel [c] resource S command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH7_SCMD_CMD_MASK   (0x3F000000U)
@@ -9081,7 +9081,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH7_SCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH7_SCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH7_SCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH7_SOP - TIO[i] channel [c] resource S operand register */
+/*! @name TIO3_G0_CH7_SOP - TIO[i] channel [c] resource S operand register TIO[i]_G[g]_CH[c]_CTRL.PL_S_MODE=0b0- or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b10- or TIO[i]_G[g]_OP_USAGE.MODE[c]=0b1-0 ) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH7_SOP_OP_MASK     (0xFFFFFFU)
@@ -9090,7 +9090,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH7_SOP_OP(x)       (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH7_SOP_OP_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH7_SOP_OP_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH7_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) */
+/*! @name TIO3_G0_CH7_OINST - TIO[i] channel [c] resource O instruction register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE =0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH7_OINST_OP_MASK   (0xFFFFFFU)
@@ -9114,7 +9114,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH7_OINST_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH7_OINST_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH7_OINST_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH7_OCMD - TIO[i] channel [c] resource O command register (buffer operation) */
+/*! @name TIO3_G0_CH7_OCMD - TIO[i] channel [c] resource O command register (buffer operation) TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b00- */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH7_OCMD_CMD_MASK   (0x3F000000U)
@@ -9133,7 +9133,7 @@ typedef struct {
 #define GTM_gtm_cls3_TIO3_G0_CH7_OCMD_INSTR_PULL_EN(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_TIO3_G0_CH7_OCMD_INSTR_PULL_EN_SHIFT)) & GTM_gtm_cls3_TIO3_G0_CH7_OCMD_INSTR_PULL_EN_MASK)
 /*! @} */
 
-/*! @name TIO3_G0_CH7_OOP - TIO[i] channel [c] resource O operand register */
+/*! @name TIO3_G0_CH7_OOP - TIO[i] channel [c] resource O operand register !(TIO[i]_G[g]_CH[c]_CTRL.PL_O_MODE=0b1--) or (TIO[i]_G[g]_OP_USAGE.MODE[c]=0b11-) */
 /*! @{ */
 
 #define GTM_gtm_cls3_TIO3_G0_CH7_OOP_OP_MASK     (0xFFFFFFU)

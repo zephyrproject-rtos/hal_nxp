@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 M4_SRC_COPYRIGHTED_TOs
+ * Copyright 2021-2023 M4_SRC_COPYRIGHTED_TOs
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -24,8 +24,8 @@
 #define DEVASSERT_AR_RELEASE_MAJOR_VERSION     4
 #define DEVASSERT_AR_RELEASE_MINOR_VERSION     7
 #define DEVASSERT_AR_RELEASE_REVISION_VERSION  0
-#define DEVASSERT_SW_MAJOR_VERSION             0
-#define DEVASSERT_SW_MINOR_VERSION             9
+#define DEVASSERT_SW_MAJOR_VERSION             1
+#define DEVASSERT_SW_MINOR_VERSION             0
 #define DEVASSERT_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -33,8 +33,8 @@
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Check if the files Devassert.h and PlatformTypes.h are of the same version */
-    #if ((DEVASSERT_AR_RELEASE_MAJOR_VERSION != PLATFORM_TYPES_AR_RELEASE_MAJOR_VERSION) || \
-         (DEVASSERT_AR_RELEASE_MINOR_VERSION != PLATFORM_TYPES_AR_RELEASE_MINOR_VERSION)     \
+    #if ((DEVASSERT_AR_RELEASE_MAJOR_VERSION != PLATFORM_AR_RELEASE_MAJOR_VERSION) || \
+         (DEVASSERT_AR_RELEASE_MINOR_VERSION != PLATFORM_AR_RELEASE_MINOR_VERSION)     \
         )
         #error "AUTOSAR Version Numbers of Devassert.h and PlatformTypes.h are different"
     #endif
@@ -53,7 +53,8 @@
     #define DevAssert(x)
 #else
 
-#if ((MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64) || \
+
+ #if ((MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64) || \
      (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH32) || \
      (MCAL_PLATFORM_ARM == MCAL_ARM_RARCH))
     #define BREAKPOINT_INSTR        "HLT #0"
@@ -70,7 +71,7 @@ static inline void DevAssert(volatile boolean x)
 }
 #endif
 
-#endif /* DEVASSERT_H */
+ #endif /* DEVASSERT_H */
 
 /*******************************************************************************
  * EOF

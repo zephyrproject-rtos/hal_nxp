@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_MC_CGM.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_MC_CGM
  *
  * This file contains register definitions and macros for easy access to their
@@ -72,115 +72,115 @@
 typedef struct {
   __IO uint32_t PCFS_SDUR;                         /**< PCFS Step Duration, offset: 0x0 */
   uint8_t RESERVED_0[132];
-  __IO uint32_t PCFS_DIVC12;                       /**< PCFS Divider Change 12 Register, offset: 0x88 */
-  __IO uint32_t PCFS_DIVE12;                       /**< PCFS Divider End 12 Register, offset: 0x8C */
-  __IO uint32_t PCFS_DIVS12;                       /**< PCFS Divider Start 12 Register, offset: 0x90 */
+  __IO uint32_t PCFS_DIVC12;                       /**< PCFS Divider Change 12 Register, offset: 0x88, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_3 (missing on MC_CGM_2, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t PCFS_DIVE12;                       /**< PCFS Divider End 12 Register, offset: 0x8C, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_3 (missing on MC_CGM_2, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t PCFS_DIVS12;                       /**< PCFS Divider Start 12 Register, offset: 0x90, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_3 (missing on MC_CGM_2, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_1[24];
-  __IO uint32_t PCFS_DIVC15;                       /**< PCFS Divider Change 15 Register, offset: 0xAC */
-  __IO uint32_t PCFS_DIVE15;                       /**< PCFS Divider End 15 Register, offset: 0xB0 */
-  __IO uint32_t PCFS_DIVS15;                       /**< PCFS Divider Start 15 Register, offset: 0xB4 */
+  __IO uint32_t PCFS_DIVC15;                       /**< PCFS Divider Change 15 Register, offset: 0xAC, available only on: MC_CGM_2, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_0, MC_CGM_1, MC_CGM_3, MC_CGM_6) */
+  __IO uint32_t PCFS_DIVE15;                       /**< PCFS Divider End 15 Register, offset: 0xB0, available only on: MC_CGM_2, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_0, MC_CGM_1, MC_CGM_3, MC_CGM_6) */
+  __IO uint32_t PCFS_DIVS15;                       /**< PCFS Divider Start 15 Register, offset: 0xB4, available only on: MC_CGM_2, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_0, MC_CGM_1, MC_CGM_3, MC_CGM_6) */
   uint8_t RESERVED_2[288];
-  __IO uint32_t PCFS_DIVC40;                       /**< PCFS Divider Change 40 Register, offset: 0x1D8 */
-  __IO uint32_t PCFS_DIVE40;                       /**< PCFS Divider End 40 Register, offset: 0x1DC */
-  __IO uint32_t PCFS_DIVS40;                       /**< PCFS Divider Start 40 Register, offset: 0x1E0 */
+  __IO uint32_t PCFS_DIVC40;                       /**< PCFS Divider Change 40 Register, offset: 0x1D8, available only on: MC_CGM_6 (missing on MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5) */
+  __IO uint32_t PCFS_DIVE40;                       /**< PCFS Divider End 40 Register, offset: 0x1DC, available only on: MC_CGM_6 (missing on MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5) */
+  __IO uint32_t PCFS_DIVS40;                       /**< PCFS Divider Start 40 Register, offset: 0x1E0, available only on: MC_CGM_6 (missing on MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5) */
   uint8_t RESERVED_3[284];
   __IO uint32_t MUX_0_CSC;                         /**< Clock Mux 0 Select Control Register, offset: 0x300 */
   __I  uint32_t MUX_0_CSS;                         /**< Clock Mux 0 Select Status Register, offset: 0x304 */
-  __IO uint32_t MUX_0_DC_0;                        /**< Clock Mux 0 Divider 0 Control Register, offset: 0x308 */
-  __IO uint32_t MUX_0_DC_1;                        /**< Clock Mux 0 Divider 1 Control Register, offset: 0x30C */
+  __IO uint32_t MUX_0_DC_0;                        /**< Clock Mux 0 Divider 0 Control Register, offset: 0x308, available only on: MC_CGM_5, MC_CGM_6 (missing on MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4) */
+  __IO uint32_t MUX_0_DC_1;                        /**< Clock Mux 0 Divider 1 Control Register, offset: 0x30C, available only on: MC_CGM_6 (missing on MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5) */
   uint8_t RESERVED_4[44];
-  __I  uint32_t MUX_0_DIV_UPD_STAT;                /**< Clock Mux 0 Divider Update Status Register, offset: 0x33C */
+  __I  uint32_t MUX_0_DIV_UPD_STAT;                /**< Clock Mux 0 Divider Update Status Register, offset: 0x33C, available only on: MC_CGM_5, MC_CGM_6 (missing on MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4) */
   __IO uint32_t MUX_1_CSC;                         /**< Clock Mux 1 Select Control Register, offset: 0x340 */
   __I  uint32_t MUX_1_CSS;                         /**< Clock Mux 1 Select Status Register, offset: 0x344 */
   __IO uint32_t MUX_1_DC_0;                        /**< Clock Mux 1 Divider 0 Control Register, offset: 0x348 */
-  __IO uint32_t MUX_1_DC_1;                        /**< Clock Mux 1 Divider 1 Control Register, offset: 0x34C */
+  __IO uint32_t MUX_1_DC_1;                        /**< Clock Mux 1 Divider 1 Control Register, offset: 0x34C, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_5[44];
   __I  uint32_t MUX_1_DIV_UPD_STAT;                /**< Clock Mux 1 Divider Update Status Register, offset: 0x37C */
-  __IO uint32_t MUX_2_CSC;                         /**< Clock Mux 2 Select Control Register, offset: 0x380 */
-  __I  uint32_t MUX_2_CSS;                         /**< Clock Mux 2 Select Status Register, offset: 0x384 */
-  __IO uint32_t MUX_2_DC_0;                        /**< Clock Mux 2 Divider 0 Control Register, offset: 0x388 */
-  __IO uint32_t MUX_2_DC_1;                        /**< Clock Mux 2 Divider 1 Control Register, offset: 0x38C */
-  __IO uint32_t MUX_2_DC_2;                        /**< Clock Mux 2 Divider 2 Control Register, offset: 0x390 */
-  __IO uint32_t MUX_2_DC_3;                        /**< Clock Mux 2 Divider 3 Control Register, offset: 0x394 */
-  __IO uint32_t MUX_2_DC_4;                        /**< Clock Mux 2 Divider 4 Control Register, offset: 0x398 */
-  __IO uint32_t MUX_2_DC_5;                        /**< Clock Mux 2 Divider 5 Control Register, offset: 0x39C */
+  __IO uint32_t MUX_2_CSC;                         /**< Clock Mux 2 Select Control Register, offset: 0x380, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_6) */
+  __I  uint32_t MUX_2_CSS;                         /**< Clock Mux 2 Select Status Register, offset: 0x384, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_6) */
+  __IO uint32_t MUX_2_DC_0;                        /**< Clock Mux 2 Divider 0 Control Register, offset: 0x388, available only on: MC_CGM_0, MC_CGM_3, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_6) */
+  __IO uint32_t MUX_2_DC_1;                        /**< Clock Mux 2 Divider 1 Control Register, offset: 0x38C, available only on: MC_CGM_0, MC_CGM_3, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_2_DC_2;                        /**< Clock Mux 2 Divider 2 Control Register, offset: 0x390, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_2_DC_3;                        /**< Clock Mux 2 Divider 3 Control Register, offset: 0x394, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_2_DC_4;                        /**< Clock Mux 2 Divider 4 Control Register, offset: 0x398, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_2_DC_5;                        /**< Clock Mux 2 Divider 5 Control Register, offset: 0x39C, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_6[28];
-  __I  uint32_t MUX_2_DIV_UPD_STAT;                /**< Clock Mux 2 Divider Update Status Register, offset: 0x3BC */
-  __IO uint32_t MUX_3_CSC;                         /**< Clock Mux 3 Select Control Register, offset: 0x3C0 */
-  __I  uint32_t MUX_3_CSS;                         /**< Clock Mux 3 Select Status Register, offset: 0x3C4 */
-  __IO uint32_t MUX_3_DC_0;                        /**< Clock Mux 3 Divider 0 Control Register, offset: 0x3C8 */
-  __IO uint32_t MUX_3_DC_1;                        /**< Clock Mux 3 Divider 1 Control Register, offset: 0x3CC */
-  __IO uint32_t MUX_3_DC_2;                        /**< Clock Mux 3 Divider 2 Control Register, offset: 0x3D0 */
-  __IO uint32_t MUX_3_DC_3;                        /**< Clock Mux 3 Divider 3 Control Register, offset: 0x3D4 */
-  __IO uint32_t MUX_3_DC_4;                        /**< Clock Mux 3 Divider 4 Control Register, offset: 0x3D8 */
-  __IO uint32_t MUX_3_DC_5;                        /**< Clock Mux 3 Divider 5 Control Register, offset: 0x3DC */
-  __IO uint32_t MUX_3_DC_6;                        /**< Clock Mux 3 Divider 6 Control Register, offset: 0x3E0 */
-  __IO uint32_t MUX_3_DC_7;                        /**< Clock Mux 3 Divider 7 Control Register, offset: 0x3E4 */
+  __I  uint32_t MUX_2_DIV_UPD_STAT;                /**< Clock Mux 2 Divider Update Status Register, offset: 0x3BC, available only on: MC_CGM_0, MC_CGM_3, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_6) */
+  __IO uint32_t MUX_3_CSC;                         /**< Clock Mux 3 Select Control Register, offset: 0x3C0, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_6) */
+  __I  uint32_t MUX_3_CSS;                         /**< Clock Mux 3 Select Status Register, offset: 0x3C4, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_6) */
+  __IO uint32_t MUX_3_DC_0;                        /**< Clock Mux 3 Divider 0 Control Register, offset: 0x3C8, available only on: MC_CGM_0, MC_CGM_3, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_3_DC_1;                        /**< Clock Mux 3 Divider 1 Control Register, offset: 0x3CC, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_3_DC_2;                        /**< Clock Mux 3 Divider 2 Control Register, offset: 0x3D0, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_3_DC_3;                        /**< Clock Mux 3 Divider 3 Control Register, offset: 0x3D4, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_3_DC_4;                        /**< Clock Mux 3 Divider 4 Control Register, offset: 0x3D8, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_3_DC_5;                        /**< Clock Mux 3 Divider 5 Control Register, offset: 0x3DC, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_3_DC_6;                        /**< Clock Mux 3 Divider 6 Control Register, offset: 0x3E0, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_3_DC_7;                        /**< Clock Mux 3 Divider 7 Control Register, offset: 0x3E4, available only on: MC_CGM_0, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_7[20];
-  __I  uint32_t MUX_3_DIV_UPD_STAT;                /**< Clock Mux 3 Divider Update Status Register, offset: 0x3FC */
-  __IO uint32_t MUX_4_CSC;                         /**< Clock Mux 4 Select Control Register, offset: 0x400 */
-  __I  uint32_t MUX_4_CSS;                         /**< Clock Mux 4 Select Status Register, offset: 0x404 */
-  __IO uint32_t MUX_4_DC_0;                        /**< Clock Mux 4 Divider 0 Control Register, offset: 0x408 */
+  __I  uint32_t MUX_3_DIV_UPD_STAT;                /**< Clock Mux 3 Divider Update Status Register, offset: 0x3FC, available only on: MC_CGM_0, MC_CGM_3, MC_CGM_4 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_4_CSC;                         /**< Clock Mux 4 Select Control Register, offset: 0x400, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_3, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_2, MC_CGM_6) */
+  __I  uint32_t MUX_4_CSS;                         /**< Clock Mux 4 Select Status Register, offset: 0x404, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_3, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_2, MC_CGM_6) */
+  __IO uint32_t MUX_4_DC_0;                        /**< Clock Mux 4 Divider 0 Control Register, offset: 0x408, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_3, MC_CGM_5 (missing on MC_CGM_2, MC_CGM_4, MC_CGM_6) */
   uint8_t RESERVED_8[48];
-  __I  uint32_t MUX_4_DIV_UPD_STAT;                /**< Clock Mux 4 Divider Update Status Register, offset: 0x43C */
-  __IO uint32_t MUX_5_CSC;                         /**< Clock Mux 5 Select Control Register, offset: 0x440 */
-  __I  uint32_t MUX_5_CSS;                         /**< Clock Mux 5 Select Status Register, offset: 0x444 */
-  __IO uint32_t MUX_5_DC_0;                        /**< Clock Mux 5 Divider 0 Control Register, offset: 0x448 */
-  __IO uint32_t MUX_5_DC_1;                        /**< Clock Mux 5 Divider 1 Control Register, offset: 0x44C */
-  __IO uint32_t MUX_5_DC_2;                        /**< Clock Mux 5 Divider 2 Control Register, offset: 0x450 */
+  __I  uint32_t MUX_4_DIV_UPD_STAT;                /**< Clock Mux 4 Divider Update Status Register, offset: 0x43C, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_3, MC_CGM_5 (missing on MC_CGM_2, MC_CGM_4, MC_CGM_6) */
+  __IO uint32_t MUX_5_CSC;                         /**< Clock Mux 5 Select Control Register, offset: 0x440, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_6) */
+  __I  uint32_t MUX_5_CSS;                         /**< Clock Mux 5 Select Status Register, offset: 0x444, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4, MC_CGM_5 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_6) */
+  __IO uint32_t MUX_5_DC_0;                        /**< Clock Mux 5 Divider 0 Control Register, offset: 0x448, available only on: MC_CGM_1, MC_CGM_5 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_6) */
+  __IO uint32_t MUX_5_DC_1;                        /**< Clock Mux 5 Divider 1 Control Register, offset: 0x44C, available only on: MC_CGM_5 (missing on MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_6) */
+  __IO uint32_t MUX_5_DC_2;                        /**< Clock Mux 5 Divider 2 Control Register, offset: 0x450, available only on: MC_CGM_5 (missing on MC_CGM_0, MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_6) */
   uint8_t RESERVED_9[40];
-  __I  uint32_t MUX_5_DIV_UPD_STAT;                /**< Clock Mux 5 Divider Update Status Register, offset: 0x47C */
-  __IO uint32_t MUX_6_CSC;                         /**< Clock Mux 6 Select Control Register, offset: 0x480 */
-  __I  uint32_t MUX_6_CSS;                         /**< Clock Mux 6 Select Status Register, offset: 0x484 */
-  __IO uint32_t MUX_6_DC_0;                        /**< Clock Mux 6 Divider 0 Control Register, offset: 0x488 */
-  __IO uint32_t MUX_6_DC_1;                        /**< Clock Mux 6 Divider 1 Control Register, offset: 0x48C */
+  __I  uint32_t MUX_5_DIV_UPD_STAT;                /**< Clock Mux 5 Divider Update Status Register, offset: 0x47C, available only on: MC_CGM_1, MC_CGM_5 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_6) */
+  __IO uint32_t MUX_6_CSC;                         /**< Clock Mux 6 Select Control Register, offset: 0x480, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __I  uint32_t MUX_6_CSS;                         /**< Clock Mux 6 Select Status Register, offset: 0x484, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_6_DC_0;                        /**< Clock Mux 6 Divider 0 Control Register, offset: 0x488, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_6_DC_1;                        /**< Clock Mux 6 Divider 1 Control Register, offset: 0x48C, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_10[44];
-  __I  uint32_t MUX_6_DIV_UPD_STAT;                /**< Clock Mux 6 Divider Update Status Register, offset: 0x4BC */
-  __IO uint32_t MUX_7_CSC;                         /**< Clock Mux 7 Select Control Register, offset: 0x4C0 */
-  __I  uint32_t MUX_7_CSS;                         /**< Clock Mux 7 Select Status Register, offset: 0x4C4 */
-  __IO uint32_t MUX_7_DC_0;                        /**< Clock Mux 7 Divider 0 Control Register, offset: 0x4C8 */
-  __IO uint32_t MUX_7_DC_1;                        /**< Clock Mux 7 Divider 1 Control Register, offset: 0x4CC */
-  __IO uint32_t MUX_7_DC_2;                        /**< Clock Mux 7 Divider 2 Control Register, offset: 0x4D0 */
+  __I  uint32_t MUX_6_DIV_UPD_STAT;                /**< Clock Mux 6 Divider Update Status Register, offset: 0x4BC, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_7_CSC;                         /**< Clock Mux 7 Select Control Register, offset: 0x4C0, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __I  uint32_t MUX_7_CSS;                         /**< Clock Mux 7 Select Status Register, offset: 0x4C4, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_7_DC_0;                        /**< Clock Mux 7 Divider 0 Control Register, offset: 0x4C8, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_7_DC_1;                        /**< Clock Mux 7 Divider 1 Control Register, offset: 0x4CC, available only on: MC_CGM_0, MC_CGM_1 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_7_DC_2;                        /**< Clock Mux 7 Divider 2 Control Register, offset: 0x4D0, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_11[32];
-  __IO uint32_t MUX_7_DIV_TRIG_CTRL;               /**< Clock Mux 7 Divider Trigger Control Register, offset: 0x4F4 */
-  __O  uint32_t MUX_7_DIV_TRIG;                    /**< Clock Mux 7 Divider Trigger Register, offset: 0x4F8 */
-  __I  uint32_t MUX_7_DIV_UPD_STAT;                /**< Clock Mux 7 Divider Update Status Register, offset: 0x4FC */
-  __IO uint32_t MUX_8_CSC;                         /**< Clock Mux 8 Select Control Register, offset: 0x500 */
-  __I  uint32_t MUX_8_CSS;                         /**< Clock Mux 8 Select Status Register, offset: 0x504 */
-  __IO uint32_t MUX_8_DC_0;                        /**< Clock Mux 8 Divider 0 Control Register, offset: 0x508 */
-  __IO uint32_t MUX_8_DC_1;                        /**< Clock Mux 8 Divider 1 Control Register, offset: 0x50C */
+  __IO uint32_t MUX_7_DIV_TRIG_CTRL;               /**< Clock Mux 7 Divider Trigger Control Register, offset: 0x4F4, available only on: MC_CGM_0 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __O  uint32_t MUX_7_DIV_TRIG;                    /**< Clock Mux 7 Divider Trigger Register, offset: 0x4F8, available only on: MC_CGM_0 (missing on MC_CGM_1, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __I  uint32_t MUX_7_DIV_UPD_STAT;                /**< Clock Mux 7 Divider Update Status Register, offset: 0x4FC, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_8_CSC;                         /**< Clock Mux 8 Select Control Register, offset: 0x500, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __I  uint32_t MUX_8_CSS;                         /**< Clock Mux 8 Select Status Register, offset: 0x504, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_8_DC_0;                        /**< Clock Mux 8 Divider 0 Control Register, offset: 0x508, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_8_DC_1;                        /**< Clock Mux 8 Divider 1 Control Register, offset: 0x50C, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_12[44];
-  __I  uint32_t MUX_8_DIV_UPD_STAT;                /**< Clock Mux 8 Divider Update Status Register, offset: 0x53C */
-  __IO uint32_t MUX_9_CSC;                         /**< Clock Mux 9 Select Control Register, offset: 0x540 */
-  __I  uint32_t MUX_9_CSS;                         /**< Clock Mux 9 Select Status Register, offset: 0x544 */
-  __IO uint32_t MUX_9_DC_0;                        /**< Clock Mux 9 Divider 0 Control Register, offset: 0x548 */
-  __IO uint32_t MUX_9_DC_1;                        /**< Clock Mux 9 Divider 1 Control Register, offset: 0x54C */
-  __IO uint32_t MUX_9_DC_2;                        /**< Clock Mux 9 Divider 2 Control Register, offset: 0x550 */
+  __I  uint32_t MUX_8_DIV_UPD_STAT;                /**< Clock Mux 8 Divider Update Status Register, offset: 0x53C, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_9_CSC;                         /**< Clock Mux 9 Select Control Register, offset: 0x540, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __I  uint32_t MUX_9_CSS;                         /**< Clock Mux 9 Select Status Register, offset: 0x544, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_9_DC_0;                        /**< Clock Mux 9 Divider 0 Control Register, offset: 0x548, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_9_DC_1;                        /**< Clock Mux 9 Divider 1 Control Register, offset: 0x54C, available only on: MC_CGM_1, MC_CGM_4 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_9_DC_2;                        /**< Clock Mux 9 Divider 2 Control Register, offset: 0x550, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_13[40];
-  __I  uint32_t MUX_9_DIV_UPD_STAT;                /**< Clock Mux 9 Divider Update Status Register, offset: 0x57C */
-  __IO uint32_t MUX_10_CSC;                        /**< Clock Mux 10 Select Control Register, offset: 0x580 */
-  __I  uint32_t MUX_10_CSS;                        /**< Clock Mux 10 Select Status Register, offset: 0x584 */
-  __IO uint32_t MUX_10_DC_0;                       /**< Clock Mux 10 Divider 0 Control Register, offset: 0x588 */
+  __I  uint32_t MUX_9_DIV_UPD_STAT;                /**< Clock Mux 9 Divider Update Status Register, offset: 0x57C, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_10_CSC;                        /**< Clock Mux 10 Select Control Register, offset: 0x580, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __I  uint32_t MUX_10_CSS;                        /**< Clock Mux 10 Select Status Register, offset: 0x584, available only on: MC_CGM_0, MC_CGM_1, MC_CGM_4 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_10_DC_0;                       /**< Clock Mux 10 Divider 0 Control Register, offset: 0x588, available only on: MC_CGM_0, MC_CGM_1 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_14[48];
-  __I  uint32_t MUX_10_DIV_UPD_STAT;               /**< Clock Mux 10 Divider Update Status Register, offset: 0x5BC */
-  __IO uint32_t MUX_11_CSC;                        /**< Clock Mux 11 Select Control Register, offset: 0x5C0 */
-  __I  uint32_t MUX_11_CSS;                        /**< Clock Mux 11 Select Status Register, offset: 0x5C4 */
-  __IO uint32_t MUX_11_DC_0;                       /**< Clock Mux 11 Divider 0 Control Register, offset: 0x5C8 */
+  __I  uint32_t MUX_10_DIV_UPD_STAT;               /**< Clock Mux 10 Divider Update Status Register, offset: 0x5BC, available only on: MC_CGM_0, MC_CGM_1 (missing on MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_11_CSC;                        /**< Clock Mux 11 Select Control Register, offset: 0x5C0, available only on: MC_CGM_1, MC_CGM_4 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __I  uint32_t MUX_11_CSS;                        /**< Clock Mux 11 Select Status Register, offset: 0x5C4, available only on: MC_CGM_1, MC_CGM_4 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_11_DC_0;                       /**< Clock Mux 11 Divider 0 Control Register, offset: 0x5C8, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_15[48];
-  __I  uint32_t MUX_11_DIV_UPD_STAT;               /**< Clock Mux 11 Divider Update Status Register, offset: 0x5FC */
-  __IO uint32_t MUX_12_CSC;                        /**< Clock Mux 12 Select Control Register, offset: 0x600 */
-  __I  uint32_t MUX_12_CSS;                        /**< Clock Mux 12 Select Status Register, offset: 0x604 */
-  __IO uint32_t MUX_12_DC_0;                       /**< Clock Mux 12 Divider 0 Control Register, offset: 0x608 */
+  __I  uint32_t MUX_11_DIV_UPD_STAT;               /**< Clock Mux 11 Divider Update Status Register, offset: 0x5FC, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_12_CSC;                        /**< Clock Mux 12 Select Control Register, offset: 0x600, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __I  uint32_t MUX_12_CSS;                        /**< Clock Mux 12 Select Status Register, offset: 0x604, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_12_DC_0;                       /**< Clock Mux 12 Divider 0 Control Register, offset: 0x608, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_16[48];
-  __I  uint32_t MUX_12_DIV_UPD_STAT;               /**< Clock Mux 12 Divider Update Status Register, offset: 0x63C */
-  __IO uint32_t MUX_13_CSC;                        /**< Clock Mux 13 Select Control Register, offset: 0x640 */
-  __I  uint32_t MUX_13_CSS;                        /**< Clock Mux 13 Select Status Register, offset: 0x644 */
+  __I  uint32_t MUX_12_DIV_UPD_STAT;               /**< Clock Mux 12 Divider Update Status Register, offset: 0x63C, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_13_CSC;                        /**< Clock Mux 13 Select Control Register, offset: 0x640, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __I  uint32_t MUX_13_CSS;                        /**< Clock Mux 13 Select Status Register, offset: 0x644, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_17[56];
-  __IO uint32_t MUX_14_CSC;                        /**< Clock Mux 14 Select Control Register, offset: 0x680 */
-  __I  uint32_t MUX_14_CSS;                        /**< Clock Mux 14 Select Status Register, offset: 0x684 */
-  __IO uint32_t MUX_14_DC_0;                       /**< Clock Mux 14 Divider 0 Control Register, offset: 0x688 */
+  __IO uint32_t MUX_14_CSC;                        /**< Clock Mux 14 Select Control Register, offset: 0x680, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __I  uint32_t MUX_14_CSS;                        /**< Clock Mux 14 Select Status Register, offset: 0x684, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
+  __IO uint32_t MUX_14_DC_0;                       /**< Clock Mux 14 Divider 0 Control Register, offset: 0x688, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
   uint8_t RESERVED_18[48];
-  __I  uint32_t MUX_14_DIV_UPD_STAT;               /**< Clock Mux 14 Divider Update Status Register, offset: 0x6BC */
+  __I  uint32_t MUX_14_DIV_UPD_STAT;               /**< Clock Mux 14 Divider Update Status Register, offset: 0x6BC, available only on: MC_CGM_1 (missing on MC_CGM_0, MC_CGM_2, MC_CGM_3, MC_CGM_4, MC_CGM_5, MC_CGM_6) */
 } MC_CGM_Type, *MC_CGM_MemMapPtr;
 
 /** Number of instances of the MC_CGM module. */

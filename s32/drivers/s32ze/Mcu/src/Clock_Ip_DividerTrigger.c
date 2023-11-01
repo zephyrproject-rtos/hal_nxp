@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       Clock_Ip_DividerTrigger.c
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -37,8 +37,8 @@ extern "C"{
 #define CLOCK_IP_DIVIDERTRIGGER_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_DIVIDERTRIGGER_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_DIVIDERTRIGGER_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_DIVIDERTRIGGER_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_DIVIDERTRIGGER_SW_MINOR_VERSION_C               9
+#define CLOCK_IP_DIVIDERTRIGGER_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_DIVIDERTRIGGER_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_DIVIDERTRIGGER_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -124,24 +124,36 @@ static void Clock_Ip_Callback_DividerTriggerEmpty(Clock_Ip_DividerTriggerConfigT
 #ifdef CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT
 static void Clock_Ip_ConfigureCgmXDivTrigCtrlTctlHhenUpdStat(Clock_Ip_DividerTriggerConfigType const* Config)
 {
-    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
-    uint32 SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
+    uint32 Instance;
+    uint32 SelectorIndex;
 
-    /* Check whether trigger is enabled */
-    if (Config->TriggerType != IMMEDIATE_DIVIDER_UPDATE)
+    if (NULL_PTR != Config)
     {
-        Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_TRIG_CTRL = (MC_CGM_MUX_DIV_TRIG_CTRL_TCTL_MASK);
+        Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+        SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
+
+        /* Check whether trigger is enabled */
+        if (Config->TriggerType != IMMEDIATE_DIVIDER_UPDATE)
+        {
+            Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_TRIG_CTRL = (MC_CGM_MUX_DIV_TRIG_CTRL_TCTL_MASK);
+        }
+        else
+        {
+            Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_TRIG_CTRL &= ~(MC_CGM_MUX_DIV_TRIG_CTRL_TCTL_MASK);
+        }
     }
     else
     {
-        Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_TRIG_CTRL &= ~(MC_CGM_MUX_DIV_TRIG_CTRL_TCTL_MASK);
+        (void)Config;
+        (void)Instance;
+        (void)SelectorIndex;
     }
 }
 
 static void Clock_Ip_TriggerUpdateCgmXDivTrigCtrlTctlHhenUpdStat(Clock_Ip_DividerTriggerConfigType const* Config)
 {
-    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
-    uint32 SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
+    uint32 Instance;
+    uint32 SelectorIndex;
 
     boolean TimeoutOccurred = FALSE;
     uint32 StartTime;
@@ -149,26 +161,42 @@ static void Clock_Ip_TriggerUpdateCgmXDivTrigCtrlTctlHhenUpdStat(Clock_Ip_Divide
     uint32 TimeoutTicks;
     uint32 DividerStatus;
 
-    /* Check whether trigger is enabled */
-    if (Config->TriggerType != IMMEDIATE_DIVIDER_UPDATE)
+    if (NULL_PTR != Config)
     {
-        Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_TRIG = MC_CGM_MUX_DIV_TRIG_TRIGGER(CLOCK_IP_TRIGGER_VALUE);
+        Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+        SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
 
-        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-        /* Wait for acknowledge to be cleared. */
-        do
+        /* Check whether trigger is enabled */
+        if (Config->TriggerType != IMMEDIATE_DIVIDER_UPDATE)
         {
-            DividerStatus = (Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_UPD_STAT & MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_MASK);
-            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-        }
-        while ((MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_PENDING == DividerStatus) && (FALSE == TimeoutOccurred));
+            Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_TRIG = MC_CGM_MUX_DIV_TRIG_TRIGGER(CLOCK_IP_TRIGGER_VALUE);
 
-        /* timeout notification */
-        if (TRUE == TimeoutOccurred)
-        {
-            /* Report timeout error */
-            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
+            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+            /* Wait for acknowledge to be cleared. */
+            do
+            {
+                DividerStatus = (Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_UPD_STAT & MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_MASK);
+                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+            }
+            while ((MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_PENDING == DividerStatus) && (FALSE == TimeoutOccurred));
+
+            /* timeout notification */
+            if (TRUE == TimeoutOccurred)
+            {
+                /* Report timeout error */
+                Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
+            }
         }
+    }
+    else
+    {
+        (void)Instance;
+        (void)SelectorIndex;
+        (void)TimeoutOccurred;
+        (void)StartTime;
+        (void)ElapsedTime;
+        (void)TimeoutTicks;
+        (void)DividerStatus;
     }
 }
 #endif

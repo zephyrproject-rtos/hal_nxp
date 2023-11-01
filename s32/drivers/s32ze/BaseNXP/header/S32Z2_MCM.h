@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_MCM.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_MCM
  *
  * This file contains register definitions and macros for easy access to their
@@ -82,7 +82,7 @@ typedef struct {
   uint8_t RESERVED_3[8];
   __I  uint32_t CPCR2;                             /**< Core Platform Control 2, offset: 0x34 */
   uint8_t RESERVED_4[24];
-  __IO uint32_t GPCR0;                             /**< General Purpose Control Register 0, offset: 0x50 */
+  __IO uint32_t GPCR0;                             /**< General Purpose Control 0, offset: 0x50 */
   uint8_t RESERVED_5[940];
   __IO uint32_t LMDR0;                             /**< Local Memory Descriptor 0, offset: 0x400 */
   __IO uint32_t LMDR1;                             /**< Local Memory Descriptor 1, offset: 0x404 */
@@ -342,7 +342,7 @@ typedef struct {
 #define MCM_CPCR2_SBCS(x)                        (((uint32_t)(((uint32_t)(x)) << MCM_CPCR2_SBCS_SHIFT)) & MCM_CPCR2_SBCS_MASK)
 /*! @} */
 
-/*! @name GPCR0 - General Purpose Control Register 0 */
+/*! @name GPCR0 - General Purpose Control 0 */
 /*! @{ */
 
 #define MCM_GPCR0_CORE_TASKID_MASK               (0xFU)

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2
  *
  * This file contains register definitions and macros for easy access to their
@@ -44,7 +44,6 @@
 #include "S32Z2_CANXL_SIC.h"
 #include "S32Z2_CAN_HUB.h"
 #include "S32Z2_CAN_TBS.h"
-#include "S32Z2_CE_DMAMUX.h"
 #include "S32Z2_CE_L_VFCCU.h"
 #include "S32Z2_CE_MRU.h"
 #include "S32Z2_CE_SEMA42.h"
@@ -56,6 +55,7 @@
 #include "S32Z2_CORE_DEBUGGER_INTERFACE.h"
 #include "S32Z2_CORE_SAFETY.h"
 #include "S32Z2_CRC.h"
+#include "S32Z2_CSTCU.h"
 #include "S32Z2_CTU.h"
 #include "S32Z2_C_VFCCU.h"
 #include "S32Z2_DATA_MEMORY_SUBSYSTEM.h"
@@ -117,6 +117,8 @@
 #include "S32Z2_LLC_CSR.h"
 #include "S32Z2_LLC_FSC.h"
 #include "S32Z2_LMEM64.h"
+#include "S32Z2_LSTCU.h"
+#include "S32Z2_LSTCU_14_15_17_18.h"
 #include "S32Z2_L_VFCCU.h"
 #include "S32Z2_MCM.h"
 #include "S32Z2_MC_CGM.h"

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_LFAST.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_LFAST
  *
  * This file contains register definitions and macros for easy access to their
@@ -75,36 +75,36 @@
 
 /** LFAST - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t MCR;                               /**< LFAST Mode Configuration Register, offset: 0x0 */
-  __IO uint32_t SCR;                               /**< LFAST Speed Control Register, offset: 0x4 */
-  __IO uint32_t COCR;                              /**< LFAST Correlator Control Register, offset: 0x8 */
-  __IO uint32_t TMCR;                              /**< LFAST Test Mode Control Register, offset: 0xC */
-  __IO uint32_t ALCR;                              /**< LFAST Auto Loopback Control Register, offset: 0x10 */
-  __IO uint32_t RCDCR;                             /**< LFAST Rate Change Delay Control Register, offset: 0x14 */
-  __IO uint32_t SLCR;                              /**< LFAST Wakeup Delay Control Register, offset: 0x18 */
-  __IO uint32_t ICR;                               /**< LFAST ICLC Control Register, offset: 0x1C */
-  __IO uint32_t PICR;                              /**< LFAST Ping Control Register, offset: 0x20 */
-  uint8_t RESERVED_0[8];
-  __IO uint32_t RFCR;                              /**< LFAST Rx FIFO CTS Control Register, offset: 0x2C */
-  __IO uint32_t TIER;                              /**< LFAST Tx Interrupt Enable Register, offset: 0x30 */
-  __IO uint32_t RIER;                              /**< LFAST Rx Interrupt Enable Register, offset: 0x34 */
-  __IO uint32_t RIIER;                             /**< LFAST Rx ICLC Interrupt Enable Register, offset: 0x38 */
-  __IO uint32_t PLLCR;                             /**< LFAST PLL Control Register, offset: 0x3C */
-  uint8_t RESERVED_1[4];
-  __IO uint32_t UNSTCR;                            /**< LFAST Unsolicited Tx Control Register, offset: 0x44 */
+  __IO uint32_t MCR;                               /**< LFAST Mode Configuration, offset: 0x0 */
+  __IO uint32_t SCR;                               /**< LFAST Speed Control, offset: 0x4 */
+  __IO uint32_t COCR;                              /**< LFAST Correlator Control, offset: 0x8 */
+  __IO uint32_t TMCR;                              /**< LFAST Test Mode Control, offset: 0xC */
+  __IO uint32_t ALCR;                              /**< LFAST Auto Loopback Control, offset: 0x10 */
+  __IO uint32_t RCDCR;                             /**< LFAST Rate Change Delay Control, offset: 0x14 */
+  uint8_t RESERVED_0[4];
+  __IO uint32_t ICR;                               /**< LFAST ICLC Control, offset: 0x1C */
+  __IO uint32_t PICR;                              /**< LFAST Ping Control, offset: 0x20 */
+  uint8_t RESERVED_1[8];
+  __IO uint32_t RFCR;                              /**< LFAST Rx FIFO CTS Control, offset: 0x2C */
+  __IO uint32_t TIER;                              /**< LFAST Tx Interrupt Enable, offset: 0x30 */
+  __IO uint32_t RIER;                              /**< LFAST Rx Interrupt Enable, offset: 0x34 */
+  __IO uint32_t RIIER;                             /**< LFAST Rx ICLC Interrupt Enable, offset: 0x38 */
+  __IO uint32_t PLLCR;                             /**< LFAST PLL Control, offset: 0x3C */
+  uint8_t RESERVED_2[4];
+  __IO uint32_t UNSTCR;                            /**< LFAST Unsolicited Tx Control, offset: 0x44 */
   __IO uint32_t UNSTDR[LFAST_UNSTDR_COUNT];        /**< LFAST Unsolicited Tx Data Registers, array offset: 0x48, array step: 0x4 */
-  uint8_t RESERVED_2[20];
-  __I  uint32_t GSR;                               /**< LFAST Global Status Register, offset: 0x80 */
-  __I  uint32_t PISR;                              /**< LFAST Ping Status Register, offset: 0x84 */
-  uint8_t RESERVED_3[12];
-  __I  uint32_t DFSR;                              /**< LFAST Data Frame Status Register, offset: 0x94 */
-  __IO uint32_t TISR;                              /**< LFAST Tx Interrupt Status Register, offset: 0x98 */
-  __IO uint32_t RISR;                              /**< LFAST Rx Interrupt Status Register, offset: 0x9C */
-  __IO uint32_t RIISR;                             /**< LFAST Rx ICLC Interrupt Status Register, offset: 0xA0 */
-  __I  uint32_t PLLLSR;                            /**< LFAST PLL and LVDS Status Register, offset: 0xA4 */
-  __IO uint32_t UNSRSR;                            /**< LFAST Unsolicited Rx Status Register, offset: 0xA8 */
-  __I  uint32_t UNSRDR[LFAST_UNSRDR_COUNT];        /**< LFAST Unsolicited Rx Data Register, array offset: 0xAC, array step: 0x4 */
-  uint8_t RESERVED_4[4];
+  uint8_t RESERVED_3[20];
+  __I  uint32_t GSR;                               /**< LFAST Global Status, offset: 0x80 */
+  __I  uint32_t PISR;                              /**< LFAST Ping Status, offset: 0x84 */
+  uint8_t RESERVED_4[12];
+  __I  uint32_t DFSR;                              /**< LFAST Data Frame Status, offset: 0x94 */
+  __IO uint32_t TISR;                              /**< LFAST Tx Interrupt Status, offset: 0x98 */
+  __IO uint32_t RISR;                              /**< LFAST Rx Interrupt Status, offset: 0x9C */
+  __IO uint32_t RIISR;                             /**< LFAST Rx ICLC Interrupt Status, offset: 0xA0 */
+  __I  uint32_t PLLLSR;                            /**< LFAST PLL and LVDS Status, offset: 0xA4 */
+  __IO uint32_t UNSRSR;                            /**< LFAST Unsolicited Rx Status, offset: 0xA8 */
+  __I  uint32_t UNSRDR[LFAST_UNSRDR_COUNT];        /**< LFAST Unsolicited Rx Data, array offset: 0xAC, array step: 0x4 */
+  uint8_t RESERVED_5[4];
   __IO uint32_t GPR[LFAST_GPR_COUNT];              /**< General Purpose registers, array offset: 0xD4, array step: 0x4 */
 } LFAST_Type, *LFAST_MemMapPtr;
 
@@ -134,7 +134,7 @@ typedef struct {
  * @{
  */
 
-/*! @name MCR - LFAST Mode Configuration Register */
+/*! @name MCR - LFAST Mode Configuration */
 /*! @{ */
 
 #define LFAST_MCR_DATAEN_MASK                    (0x1U)
@@ -188,7 +188,7 @@ typedef struct {
 #define LFAST_MCR_MSEN(x)                        (((uint32_t)(((uint32_t)(x)) << LFAST_MCR_MSEN_SHIFT)) & LFAST_MCR_MSEN_MASK)
 /*! @} */
 
-/*! @name SCR - LFAST Speed Control Register */
+/*! @name SCR - LFAST Speed Control */
 /*! @{ */
 
 #define LFAST_SCR_TDR_MASK                       (0x1U)
@@ -207,7 +207,7 @@ typedef struct {
 #define LFAST_SCR_DRMD(x)                        (((uint32_t)(((uint32_t)(x)) << LFAST_SCR_DRMD_SHIFT)) & LFAST_SCR_DRMD_MASK)
 /*! @} */
 
-/*! @name COCR - LFAST Correlator Control Register */
+/*! @name COCR - LFAST Correlator Control */
 /*! @{ */
 
 #define LFAST_COCR_PHSSEL_MASK                   (0x1U)
@@ -226,7 +226,7 @@ typedef struct {
 #define LFAST_COCR_SMPSEL(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_COCR_SMPSEL_SHIFT)) & LFAST_COCR_SMPSEL_MASK)
 /*! @} */
 
-/*! @name TMCR - LFAST Test Mode Control Register */
+/*! @name TMCR - LFAST Test Mode Control */
 /*! @{ */
 
 #define LFAST_TMCR_LPFRMTH_MASK                  (0xFFFFU)
@@ -250,7 +250,7 @@ typedef struct {
 #define LFAST_TMCR_CLKTST(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_TMCR_CLKTST_SHIFT)) & LFAST_TMCR_CLKTST_MASK)
 /*! @} */
 
-/*! @name ALCR - LFAST Auto Loopback Control Register */
+/*! @name ALCR - LFAST Auto Loopback Control */
 /*! @{ */
 
 #define LFAST_ALCR_LPFMCNT_MASK                  (0xFFFFU)
@@ -264,7 +264,7 @@ typedef struct {
 #define LFAST_ALCR_LPCNTEN(x)                    (((uint32_t)(((uint32_t)(x)) << LFAST_ALCR_LPCNTEN_SHIFT)) & LFAST_ALCR_LPCNTEN_MASK)
 /*! @} */
 
-/*! @name RCDCR - LFAST Rate Change Delay Control Register */
+/*! @name RCDCR - LFAST Rate Change Delay Control */
 /*! @{ */
 
 #define LFAST_RCDCR_DRCNT_MASK                   (0xF0000U)
@@ -273,31 +273,7 @@ typedef struct {
 #define LFAST_RCDCR_DRCNT(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_RCDCR_DRCNT_SHIFT)) & LFAST_RCDCR_DRCNT_MASK)
 /*! @} */
 
-/*! @name SLCR - LFAST Wakeup Delay Control Register */
-/*! @{ */
-
-#define LFAST_SLCR_LWKCNT_MASK                   (0xFU)
-#define LFAST_SLCR_LWKCNT_SHIFT                  (0U)
-#define LFAST_SLCR_LWKCNT_WIDTH                  (4U)
-#define LFAST_SLCR_LWKCNT(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_SLCR_LWKCNT_SHIFT)) & LFAST_SLCR_LWKCNT_MASK)
-
-#define LFAST_SLCR_HWKCNT_MASK                   (0xFF00U)
-#define LFAST_SLCR_HWKCNT_SHIFT                  (8U)
-#define LFAST_SLCR_HWKCNT_WIDTH                  (8U)
-#define LFAST_SLCR_HWKCNT(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_SLCR_HWKCNT_SHIFT)) & LFAST_SLCR_HWKCNT_MASK)
-
-#define LFAST_SLCR_LSCNT_MASK                    (0xF0000U)
-#define LFAST_SLCR_LSCNT_SHIFT                   (16U)
-#define LFAST_SLCR_LSCNT_WIDTH                   (4U)
-#define LFAST_SLCR_LSCNT(x)                      (((uint32_t)(((uint32_t)(x)) << LFAST_SLCR_LSCNT_SHIFT)) & LFAST_SLCR_LSCNT_MASK)
-
-#define LFAST_SLCR_HSCNT_MASK                    (0xFF000000U)
-#define LFAST_SLCR_HSCNT_SHIFT                   (24U)
-#define LFAST_SLCR_HSCNT_WIDTH                   (8U)
-#define LFAST_SLCR_HSCNT(x)                      (((uint32_t)(((uint32_t)(x)) << LFAST_SLCR_HSCNT_SHIFT)) & LFAST_SLCR_HSCNT_MASK)
-/*! @} */
-
-/*! @name ICR - LFAST ICLC Control Register */
+/*! @name ICR - LFAST ICLC Control */
 /*! @{ */
 
 #define LFAST_ICR_ICLCPLD_MASK                   (0xFFU)
@@ -316,7 +292,7 @@ typedef struct {
 #define LFAST_ICR_ICLCSEQ(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_ICR_ICLCSEQ_SHIFT)) & LFAST_ICR_ICLCSEQ_MASK)
 /*! @} */
 
-/*! @name PICR - LFAST Ping Control Register */
+/*! @name PICR - LFAST Ping Control */
 /*! @{ */
 
 #define LFAST_PICR_PNGPYLD_MASK                  (0xFFU)
@@ -335,7 +311,7 @@ typedef struct {
 #define LFAST_PICR_PNGREQ(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_PICR_PNGREQ_SHIFT)) & LFAST_PICR_PNGREQ_MASK)
 /*! @} */
 
-/*! @name RFCR - LFAST Rx FIFO CTS Control Register */
+/*! @name RFCR - LFAST Rx FIFO CTS Control */
 /*! @{ */
 
 #define LFAST_RFCR_RCTSMN_MASK                   (0x3FU)
@@ -349,7 +325,7 @@ typedef struct {
 #define LFAST_RFCR_RCTSMX(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_RFCR_RCTSMX_SHIFT)) & LFAST_RFCR_RCTSMX_MASK)
 /*! @} */
 
-/*! @name TIER - LFAST Tx Interrupt Enable Register */
+/*! @name TIER - LFAST Tx Interrupt Enable */
 /*! @{ */
 
 #define LFAST_TIER_TXDTIE_MASK                   (0x1U)
@@ -383,7 +359,7 @@ typedef struct {
 #define LFAST_TIER_TXIIE(x)                      (((uint32_t)(((uint32_t)(x)) << LFAST_TIER_TXIIE_SHIFT)) & LFAST_TIER_TXIIE_MASK)
 /*! @} */
 
-/*! @name RIER - LFAST Rx Interrupt Enable Register */
+/*! @name RIER - LFAST Rx Interrupt Enable */
 /*! @{ */
 
 #define LFAST_RIER_RXUNSIE_MASK                  (0x2U)
@@ -442,7 +418,7 @@ typedef struct {
 #define LFAST_RIER_RXUOIE(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_RIER_RXUOIE_SHIFT)) & LFAST_RIER_RXUOIE_MASK)
 /*! @} */
 
-/*! @name RIIER - LFAST Rx ICLC Interrupt Enable Register */
+/*! @name RIIER - LFAST Rx ICLC Interrupt Enable */
 /*! @{ */
 
 #define LFAST_RIIER_ICPONIE_MASK                 (0x1U)
@@ -516,7 +492,7 @@ typedef struct {
 #define LFAST_RIIER_ICPFIE(x)                    (((uint32_t)(((uint32_t)(x)) << LFAST_RIIER_ICPFIE_SHIFT)) & LFAST_RIIER_ICPFIE_MASK)
 /*! @} */
 
-/*! @name PLLCR - LFAST PLL Control Register */
+/*! @name PLLCR - LFAST PLL Control */
 /*! @{ */
 
 #define LFAST_PLLCR_PREDIV_MASK                  (0x3U)
@@ -560,7 +536,7 @@ typedef struct {
 #define LFAST_PLLCR_SWPOFF(x)                    (((uint32_t)(((uint32_t)(x)) << LFAST_PLLCR_SWPOFF_SHIFT)) & LFAST_PLLCR_SWPOFF_MASK)
 /*! @} */
 
-/*! @name UNSTCR - LFAST Unsolicited Tx Control Register */
+/*! @name UNSTCR - LFAST Unsolicited Tx Control */
 /*! @{ */
 
 #define LFAST_UNSTCR_UNSHDR_MASK                 (0x7FU)
@@ -583,7 +559,7 @@ typedef struct {
 #define LFAST_UNSTDR_UNTXD(x)                    (((uint32_t)(((uint32_t)(x)) << LFAST_UNSTDR_UNTXD_SHIFT)) & LFAST_UNSTDR_UNTXD_MASK)
 /*! @} */
 
-/*! @name GSR - LFAST Global Status Register */
+/*! @name GSR - LFAST Global Status */
 /*! @{ */
 
 #define LFAST_GSR_LPCSDV_MASK                    (0x1U)
@@ -632,7 +608,7 @@ typedef struct {
 #define LFAST_GSR_DUALMD(x)                      (((uint32_t)(((uint32_t)(x)) << LFAST_GSR_DUALMD_SHIFT)) & LFAST_GSR_DUALMD_MASK)
 /*! @} */
 
-/*! @name PISR - LFAST Ping Status Register */
+/*! @name PISR - LFAST Ping Status */
 /*! @{ */
 
 #define LFAST_PISR_RXPNGD_MASK                   (0xFFU)
@@ -641,7 +617,7 @@ typedef struct {
 #define LFAST_PISR_RXPNGD(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_PISR_RXPNGD_SHIFT)) & LFAST_PISR_RXPNGD_MASK)
 /*! @} */
 
-/*! @name DFSR - LFAST Data Frame Status Register */
+/*! @name DFSR - LFAST Data Frame Status */
 /*! @{ */
 
 #define LFAST_DFSR_TXFCNT_MASK                   (0x7U)
@@ -665,7 +641,7 @@ typedef struct {
 #define LFAST_DFSR_RXDCNT(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_DFSR_RXDCNT_SHIFT)) & LFAST_DFSR_RXDCNT_MASK)
 /*! @} */
 
-/*! @name TISR - LFAST Tx Interrupt Status Register */
+/*! @name TISR - LFAST Tx Interrupt Status */
 /*! @{ */
 
 #define LFAST_TISR_TXDTF_MASK                    (0x1U)
@@ -699,7 +675,7 @@ typedef struct {
 #define LFAST_TISR_TXIEF(x)                      (((uint32_t)(((uint32_t)(x)) << LFAST_TISR_TXIEF_SHIFT)) & LFAST_TISR_TXIEF_MASK)
 /*! @} */
 
-/*! @name RISR - LFAST Rx Interrupt Status Register */
+/*! @name RISR - LFAST Rx Interrupt Status */
 /*! @{ */
 
 #define LFAST_RISR_RXUNSF_MASK                   (0x2U)
@@ -758,7 +734,7 @@ typedef struct {
 #define LFAST_RISR_RXUOF(x)                      (((uint32_t)(((uint32_t)(x)) << LFAST_RISR_RXUOF_SHIFT)) & LFAST_RISR_RXUOF_MASK)
 /*! @} */
 
-/*! @name RIISR - LFAST Rx ICLC Interrupt Status Register */
+/*! @name RIISR - LFAST Rx ICLC Interrupt Status */
 /*! @{ */
 
 #define LFAST_RIISR_ICPONF_MASK                  (0x1U)
@@ -832,7 +808,7 @@ typedef struct {
 #define LFAST_RIISR_ICPFF(x)                     (((uint32_t)(((uint32_t)(x)) << LFAST_RIISR_ICPFF_SHIFT)) & LFAST_RIISR_ICPFF_MASK)
 /*! @} */
 
-/*! @name PLLLSR - LFAST PLL and LVDS Status Register */
+/*! @name PLLLSR - LFAST PLL and LVDS Status */
 /*! @{ */
 
 #define LFAST_PLLLSR_LDSLPS_MASK                 (0x4U)
@@ -856,7 +832,7 @@ typedef struct {
 #define LFAST_PLLLSR_PLLDIS(x)                   (((uint32_t)(((uint32_t)(x)) << LFAST_PLLLSR_PLLDIS_SHIFT)) & LFAST_PLLLSR_PLLDIS_MASK)
 /*! @} */
 
-/*! @name UNSRSR - LFAST Unsolicited Rx Status Register */
+/*! @name UNSRSR - LFAST Unsolicited Rx Status */
 /*! @{ */
 
 #define LFAST_UNSRSR_URPCNT_MASK                 (0x7U)
@@ -870,7 +846,7 @@ typedef struct {
 #define LFAST_UNSRSR_URXDV(x)                    (((uint32_t)(((uint32_t)(x)) << LFAST_UNSRSR_URXDV_SHIFT)) & LFAST_UNSRSR_URXDV_MASK)
 /*! @} */
 
-/*! @name UNSRDR - LFAST Unsolicited Rx Data Register */
+/*! @name UNSRDR - LFAST Unsolicited Rx Data */
 /*! @{ */
 
 #define LFAST_UNSRDR_UNRXD_MASK                  (0xFFFFFFFFU)

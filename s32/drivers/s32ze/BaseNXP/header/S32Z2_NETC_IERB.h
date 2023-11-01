@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_IERB.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_NETC_IERB
  *
  * This file contains register definitions and macros for easy access to their
@@ -113,7 +113,7 @@ typedef struct {
   __IO uint32_t SBCR;                              /**< System bus configuration register, offset: 0x180 */
   __IO uint32_t SBOTCR;                            /**< System bus outstanding transaction control register, offset: 0x184 */
   uint8_t RESERVED_8[8];
-  __IO uint32_t SGLTTR;                            /**< Stream gating lag time for timestamp refresh register, offset: 0x190 */
+  __IO uint32_t SGLTTR;                            /**< Stream gating lag time for refresh register, offset: 0x190 */
   uint8_t RESERVED_9[108];
   struct {                                         /* offset: 0x200, array step: 0x10 */
     __I  uint32_t RBCR;                              /**< Root complex 0 binding configuration register, array offset: 0x200, array step: 0x10 */
@@ -559,7 +559,7 @@ typedef struct {
 #define NETC_IERB_SBOTCR_OT_LIMIT(x)             (((uint32_t)(((uint32_t)(x)) << NETC_IERB_SBOTCR_OT_LIMIT_SHIFT)) & NETC_IERB_SBOTCR_OT_LIMIT_MASK)
 /*! @} */
 
-/*! @name SGLTTR - Stream gating lag time for timestamp refresh register */
+/*! @name SGLTTR - Stream gating lag time for refresh register */
 /*! @{ */
 
 #define NETC_IERB_SGLTTR_LAG_TIME_MASK           (0x1FU)

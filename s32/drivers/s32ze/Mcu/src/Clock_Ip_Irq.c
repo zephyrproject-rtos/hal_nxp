@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Irq.c
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -26,6 +26,7 @@ extern "C"{
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "Clock_Ip_Private.h"
+
 /*==================================================================================================
                                SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -33,8 +34,8 @@ extern "C"{
 #define CLOCK_IP_IRQ_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_IRQ_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_IRQ_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_IRQ_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_IRQ_SW_MINOR_VERSION_C               9
+#define CLOCK_IP_IRQ_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_IRQ_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_IRQ_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -99,7 +100,6 @@ extern "C"{
 
 #include "Mcu_MemMap.h"
 #if CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE > 0U
-ISR(Mcu_Cmu_ClockFail_IRQHandler);
 
 /**
 * @brief        This function clear the CMU interrupt flag from CMU module.
@@ -114,6 +114,7 @@ ISR(Mcu_Cmu_ClockFail_IRQHandler)
     EXIT_INTERRUPT();
 }
 #endif
+
 
 
 #define MCU_STOP_SEC_CODE

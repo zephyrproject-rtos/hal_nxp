@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Frequency.c
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -41,8 +41,8 @@ extern "C"{
 #define CLOCK_IP_FREQUENCY_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_FREQUENCY_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_FREQUENCY_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_FREQUENCY_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_FREQUENCY_SW_MINOR_VERSION_C               9
+#define CLOCK_IP_FREQUENCY_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_FREQUENCY_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_FREQUENCY_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -101,7 +101,7 @@ typedef struct{
 #define CLOCK_IP_ENABLED             0xFFFFFFFFU
 
 #define CLOCK_IP_ETH_RGMII_REF_CLK_INDEX_ENTRY       0U
-#define CLOCK_IP_ETH_EXT_TS_CLK_INDEX_ENTRY          1U
+#define CLOCK_IP_TMR_1588_CLK_INDEX_ENTRY          1U
 #define CLOCK_IP_ETH0_EXT_RX_CLK_INDEX_ENTRY         2U
 #define CLOCK_IP_ETH0_EXT_TX_CLK_INDEX_ENTRY         3U
 #define CLOCK_IP_ETH1_EXT_RX_CLK_INDEX_ENTRY         4U
@@ -202,7 +202,7 @@ static uint32 Clock_Ip_Get_PERIPHPLL_DFS4_Frequency(void);
 static uint32 Clock_Ip_Get_PERIPHPLL_DFS5_Frequency(void);
 static uint32 Clock_Ip_Get_DDRPLL_PHI0_Frequency(void);
 static uint32 Clock_Ip_Get_eth_rgmii_ref_Frequency(void);
-static uint32 Clock_Ip_Get_eth_ext_ts_Frequency(void);
+static uint32 Clock_Ip_Get_tmr_1588_ref_Frequency(void);
 static uint32 Clock_Ip_Get_eth0_ext_rx_Frequency(void);
 static uint32 Clock_Ip_Get_eth0_ext_tx_Frequency(void);
 static uint32 Clock_Ip_Get_eth1_ext_rx_Frequency(void);
@@ -242,8 +242,8 @@ static uint32 Clock_Ip_Get_SYSTEM_CLK_Frequency(void);
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
 static uint32 Clock_Ip_Get_SYSTEM_DIV2_CLK_Frequency(void);
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-static uint32 Clock_Ip_Get_SYSTEM_DIV4_CLK_Frequency(void);
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+static uint32 Clock_Ip_Get_SYSTEM_DIV4_MON1_CLK_Frequency(void);
 #endif
 static uint32 Clock_Ip_Get_ADC0_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_ADC1_CLK_Frequency(void);
@@ -359,16 +359,15 @@ static uint32 Clock_Ip_Get_ETH0_REF_RMII_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_ETH0_RX_MII_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_ETH0_RX_RGMII_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_ETH0_TX_RGMII_CLK_Frequency(void);
-static uint32 Clock_Ip_Get_ETH0_TX_RGMII_LPBK_CLK_Frequency(void);
+static uint32 Clock_Ip_Get_ETH0_PS_TX_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_ETH1_REF_RMII_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_ETH1_RX_MII_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_ETH1_RX_RGMII_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_ETH1_TX_MII_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_ETH1_TX_RGMII_CLK_Frequency(void);
-static uint32 Clock_Ip_Get_ETH1_TX_RGMII_LPBK_CLK_Frequency(void);
+static uint32 Clock_Ip_Get_ETH1_PS_TX_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_P1_LFAST0_REF_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_P1_LFAST1_REF_CLK_Frequency(void);
-static uint32 Clock_Ip_Get_P1_LFAST_DFT_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_P1_NETC_AXI_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_P1_LIN_CLK_Frequency(void);
 static uint32 Clock_Ip_Get_P1_REG_INTF_CLK_Frequency(void);
@@ -524,7 +523,7 @@ static const getFreqType Clock_Ip_apfFreqTableClkSrc[CLOCK_IP_SELECTOR_SOURCE_NO
     Clock_Ip_Get_Zero_Frequency,                          /* clock name for 45 hardware value */
     Clock_Ip_Get_Zero_Frequency,                          /* clock name for 46 hardware value */
     Clock_Ip_Get_eth_rgmii_ref_Frequency,                 /* clock name for 47 hardware value */
-    Clock_Ip_Get_eth_ext_ts_Frequency,                    /* clock name for 48 hardware value */
+    Clock_Ip_Get_tmr_1588_ref_Frequency,                    /* clock name for 48 hardware value */
     Clock_Ip_Get_eth0_ext_rx_Frequency,                   /* clock name for 49 hardware value */
     Clock_Ip_Get_eth0_ext_tx_Frequency,                   /* clock name for 50 hardware value */
     Clock_Ip_Get_eth1_ext_rx_Frequency,                   /* clock name for 51 hardware value */
@@ -751,10 +750,10 @@ static const getFreqType Clock_Ip_apfFreqTableCLKOUT3SEL[CLOCK_IP_SELECTOR_SOURC
     Clock_Ip_Get_P5_LIN_BAUD_CLK_Frequency,               /* clock name for 4  hardware value P5_LIN_BAUD_CLK */
     Clock_Ip_Get_P5_LIN_CLK_Frequency,                    /* clock name for 5  hardware value P5_LIN_CLK */
     Clock_Ip_Get_P5_DSPI_CLK_Frequency,                   /* clock name for 6  hardware value P5_DSPI_CLK */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 7  hardware value P5_DIPORT_CLK */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 8  hardware value P5_AE_CLK */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 9  hardware value P5_CANXL_PE_CLK */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 10 hardware value P5_CANXL_CHI_CLK */
+    Clock_Ip_Get_P5_DIPORT_CLK_Frequency,                 /* clock name for 7  hardware value P5_DIPORT_CLK */
+    Clock_Ip_Get_P5_AE_CLK_Frequency,                     /* clock name for 8  hardware value P5_AE_CLK */
+    Clock_Ip_Get_P5_CANXL_PE_CLK_Frequency,               /* clock name for 9  hardware value P5_CANXL_PE_CLK */
+    Clock_Ip_Get_P5_CANXL_CHI_CLK_Frequency,              /* clock name for 10 hardware value P5_CANXL_CHI_CLK */
     Clock_Ip_Get_Zero_Frequency,                          /* clock name for 11 hardware value */
     Clock_Ip_Get_Zero_Frequency,                          /* clock name for 12 hardware value */
     Clock_Ip_Get_Zero_Frequency,                          /* clock name for 13 hardware value */
@@ -816,8 +815,8 @@ static const getFreqType Clock_Ip_apfFreqTableCLKOUT4SEL[CLOCK_IP_SELECTOR_SOURC
     Clock_Ip_Get_P3_SYS_DIV4_CLK_Frequency,               /* clock name for 2  hardware value CE_SYS_DIV4_CLK */
     Clock_Ip_Get_P3_REG_INTF_CLK_Frequency,               /* clock name for 3  hardware value P3_REG_INTF_CLK */
     Clock_Ip_Get_P3_DBG_TS_CLK_Frequency,                 /* clock name for 4  hardware value P3_DBG_TS_CLK */
-    Clock_Ip_Get_P3_AES_CLK_Frequency,                    /* clock name for 5  hardware value P3_AES_CLK */
-    Clock_Ip_Get_P3_CAN_PE_CLK_Frequency,                 /* clock name for 6  hardware value P3_CAN_PE_CLK */
+    Clock_Ip_Get_P3_CAN_PE_CLK_Frequency,                 /* clock name for 5  hardware value P3_CAN_PE_CLK */
+    Clock_Ip_Get_P2_SYS_CLK_Frequency,                    /* clock name for 6  hardware value P2_SYS_CLK */
     Clock_Ip_Get_RTU0_CORE_DIV2_CLK_Frequency,            /* clock name for 7  hardware value RTU0_CORE_DIV2_CLK */
     Clock_Ip_Get_RTU1_CORE_DIV2_CLK_Frequency,            /* clock name for 8  hardware value RTU1_CORE_DIV2_CLK */
     Clock_Ip_Get_DDR_CLK_Frequency,                       /* clock name for 9  hardware value DDR_CLK */
@@ -928,7 +927,7 @@ static const getFreqType Clock_Ip_apfFreqTable[CLOCK_IP_NAMES_NO] =
     Clock_Ip_Get_LFAST0_PLL_CLK_Frequency,                          /* LFAST0_PLL_PH0_CLK clock            */
     Clock_Ip_Get_LFAST1_PLL_CLK_Frequency,                          /* LFAST1_PLL_PH0_CLK clock            */
     Clock_Ip_Get_eth_rgmii_ref_Frequency,                           /* eth_rgmii_ref clock                 */
-    Clock_Ip_Get_eth_ext_ts_Frequency,                              /* eth_ext_ts clock                    */
+    Clock_Ip_Get_tmr_1588_ref_Frequency,                              /* tmr_1588_ref clock                    */
     Clock_Ip_Get_eth0_ext_rx_Frequency,                             /* eth0_ext_rx clock                   */
     Clock_Ip_Get_eth0_ext_tx_Frequency,                             /* eth0_ext_tx clock                   */
     Clock_Ip_Get_eth1_ext_rx_Frequency,                             /* eth1_ext_rx clock                   */
@@ -965,7 +964,7 @@ static const getFreqType Clock_Ip_apfFreqTable[CLOCK_IP_NAMES_NO] =
     Clock_Ip_Get_P0_PSI5_S_UTIL_CLK_Frequency,                      /* P0_PSI5_S_UTIL_CLK clock            */
     Clock_Ip_Get_P4_PSI5_S_UTIL_CLK_Frequency,                      /* P4_PSI5_S_UTIL_CLK clock            */
 #if defined(CLOCK_IP_HAS_SYSTEM_DRUN_CLK)
-    Clock_Ip_Get_Zero_Frequency,                                    /* SYSTEM_DRUN_CLK clock               */
+    Clock_Ip_Get_SYSTEM_CLK_Frequency,                              /* SYSTEM_DRUN_CLK clock               */
 #endif
 #if defined(CLOCK_IP_HAS_SYSTEM_RUN0_CLK)
     Clock_Ip_Get_Zero_Frequency,                                    /* SYSTEM_RUN0_CLK clock               */
@@ -979,8 +978,11 @@ static const getFreqType Clock_Ip_apfFreqTable[CLOCK_IP_NAMES_NO] =
 #if defined(CLOCK_IP_HAS_SYSTEM_DIV2_CLK)
     Clock_Ip_Get_SYSTEM_DIV2_CLK_Frequency,                         /* SYSTEM_DIV2_CLK clock               */
 #endif
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-    Clock_Ip_Get_SYSTEM_DIV4_CLK_Frequency,                         /* SYSTEM_DIV4_CLK clock               */
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+    Clock_Ip_Get_SYSTEM_DIV4_MON1_CLK_Frequency,                    /* SYSTEM_DIV4_MON1_CLK clock               */
+#endif
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON2_CLK)
+    Clock_Ip_Get_SYSTEM_DIV4_MON1_CLK_Frequency,                    /* SYSTEM_DIV4_MON2_CLK clock               */
 #endif
     NULL_PTR,                                                       /* THE_LAST_PRODUCER_CLK*/
     Clock_Ip_Get_ADC0_CLK_Frequency,                                /* ADC0_CLK clock                      */
@@ -1096,16 +1098,15 @@ static const getFreqType Clock_Ip_apfFreqTable[CLOCK_IP_NAMES_NO] =
     Clock_Ip_Get_ETH0_RX_MII_CLK_Frequency,                         /* ETH0_RX_MII_CLK clock               */
     Clock_Ip_Get_ETH0_RX_RGMII_CLK_Frequency,                       /* ETH0_RX_RGMII_CLK clock             */
     Clock_Ip_Get_ETH0_TX_RGMII_CLK_Frequency,                       /* ETH0_TX_RGMII_CLK clock             */
-    Clock_Ip_Get_ETH0_TX_RGMII_LPBK_CLK_Frequency,                    /* ETH0_TX_RGMII_LPBK_CLK clock          */
+    Clock_Ip_Get_ETH0_PS_TX_CLK_Frequency,                          /* ETH0_PS_TX_CLK clock          */
     Clock_Ip_Get_ETH1_REF_RMII_CLK_Frequency,                       /* ETH1_REF_RMII_CLK clock             */
     Clock_Ip_Get_ETH1_RX_MII_CLK_Frequency,                         /* ETH1_RX_MII_CLK clock               */
     Clock_Ip_Get_ETH1_RX_RGMII_CLK_Frequency,                       /* ETH1_RX_RGMII_CLK clock             */
     Clock_Ip_Get_ETH1_TX_MII_CLK_Frequency,                         /* ETH1_TX_MII_CLK clock               */
     Clock_Ip_Get_ETH1_TX_RGMII_CLK_Frequency,                       /* ETH1_TX_RGMII_CLK clock             */
-    Clock_Ip_Get_ETH1_TX_RGMII_LPBK_CLK_Frequency,                    /* ETH1_TX_RGMII_LPBK_CLK clock          */
+    Clock_Ip_Get_ETH1_PS_TX_CLK_Frequency,                          /* ETH1_PS_TX_CLK clock          */
     Clock_Ip_Get_P1_LFAST0_REF_CLK_Frequency,                       /* P1_LFAST0_REF_CLK clock             */
     Clock_Ip_Get_P1_LFAST1_REF_CLK_Frequency,                       /* P1_LFAST1_REF_CLK clock             */
-    Clock_Ip_Get_P1_LFAST_DFT_CLK_Frequency,                        /* P1_LFAST_DFT_CLK clock              */
     Clock_Ip_Get_P1_NETC_AXI_CLK_Frequency,                         /* P1_NETC_AXI_CLK clock               */
     Clock_Ip_Get_P1_LIN_CLK_Frequency,                              /* P1_LIN_CLK clock                    */
     Clock_Ip_Get_P1_REG_INTF_CLK_Frequency,                         /* P1_REG_INTF_CLK clock               */
@@ -1299,7 +1300,7 @@ static const getFreqType Clock_Ip_apfFreqTableAeClkSrc[CLOCK_IP_SELECTOR_SOURCE_
 
 /* External oscillators */
 static uint32 Clock_Ip_u32Fxosc = CLOCK_IP_DEFAULT_FXOSC_FREQUENCY;
-static extSignalFreq Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_EXT_SIGNALS_NO] =  {{ETH_RGMII_REF_CLK,0U},{ETH_EXT_TS_CLK,0U},{ETH0_EXT_RX_CLK,0U},{ETH0_EXT_TX_CLK,0U},{ETH1_EXT_RX_CLK,0U},{ETH1_EXT_TX_CLK,0U},{LFAST0_EXT_REF_CLK,0U},{LFAST1_EXT_REF_CLK,0U}};
+static extSignalFreq Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_EXT_SIGNALS_NO] =  {{ETH_RGMII_REF_CLK,0U},{TMR_1588_CLK,0U},{ETH0_EXT_RX_CLK,0U},{ETH0_EXT_TX_CLK,0U},{ETH1_EXT_RX_CLK,0U},{ETH1_EXT_TX_CLK,0U},{LFAST0_EXT_REF_CLK,0U},{LFAST1_EXT_REF_CLK,0U}};
 
 static uint32 Clock_Ip_u32CorePllFreq        = CLOCK_IP_COREPLL_FREQ;
 static uint32 Clock_Ip_u32CorePllChecksum    = CLOCK_IP_COREPLL_CHECKSUM;
@@ -1609,10 +1610,10 @@ static uint32 Clock_Ip_Get_eth_rgmii_ref_Frequency(void) {
     return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_ETH_RGMII_REF_CLK_INDEX_ENTRY].Frequency;
 }
 
-/* Return eth_ext_ts frequency */
-static uint32 Clock_Ip_Get_eth_ext_ts_Frequency(void) {
+/* Return tmr_1588_ref frequency */
+static uint32 Clock_Ip_Get_tmr_1588_ref_Frequency(void) {
 
-    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_ETH_EXT_TS_CLK_INDEX_ENTRY].Frequency;
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_TMR_1588_CLK_INDEX_ENTRY].Frequency;
 }
 
 /* Return eth0_ext_rx frequency */
@@ -2014,6 +2015,7 @@ static uint32 Clock_Ip_Get_DDR_CLK_Frequency(void) {
     uint32 Frequency;
     Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_6->MUX_0_CSS & MC_CGM_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_MUX_0_CSS_SELSTAT_SHIFT)]();/*  Selector value */
     Frequency /= (((IP_MC_CGM_6->MUX_0_DC_0 & MC_CGM_MUX_6_DC_0_DIV_MASK) >> MC_CGM_MUX_6_DC_0_DIV_SHIFT) + 1U);                          /*  Apply divider value */
+    Frequency &= Clock_Ip_u32EnableGate[((IP_GPR6_PCTL->DDRPCTL & GPR6_PCTL_DDRPCTL_PCTL_MASK) >> GPR6_PCTL_DDRPCTL_PCTL_SHIFT)];          /*  Apply peripheral clock gate */
     return Frequency;
 }
 
@@ -2285,9 +2287,9 @@ static uint32 Clock_Ip_Get_SYSTEM_DIV2_CLK_Frequency(void)
 }
 #endif
 
-#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_CLK)
-/* Return SYSTEM_DIV4_CLK frequency */
-static uint32 Clock_Ip_Get_SYSTEM_DIV4_CLK_Frequency(void)
+#if defined(CLOCK_IP_HAS_SYSTEM_DIV4_MON1_CLK)
+/* Return SYSTEM_DIV4_MON1_CLK frequency */
+static uint32 Clock_Ip_Get_SYSTEM_DIV4_MON1_CLK_Frequency(void)
 {
     return Clock_Ip_Get_SYSTEM_CLK_Frequency() >> 2U;
 }
@@ -2878,7 +2880,9 @@ static uint32 Clock_Ip_Get_FLEXCAN23_CLK_Frequency(void) {
 static uint32 Clock_Ip_Get_IIIC0_CLK_Frequency(void) {
 
     uint32 Frequency;
-    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_0_CSS & MC_CGM_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_MUX_0_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_1_CSS & MC_CGM_MUX_1_CSS_SELSTAT_MASK) >> MC_CGM_MUX_1_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DE_MASK) >> MC_CGM_MUX_1_DC_0_DE_SHIFT)];                    /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DIV_MASK) >> MC_CGM_MUX_1_DC_0_DIV_SHIFT) + 1U);                          /*  Apply divider value */
     Frequency &= Clock_Ip_u32EnableGate[((IP_GPR0_PCTL->I3C0PCTL & GPR0_PCTL_I3C0PCTL_PCTL_MASK) >> GPR0_PCTL_I3C0PCTL_PCTL_SHIFT)];          /*  Apply peripheral clock gate */
     return Frequency;
 }
@@ -2887,7 +2891,9 @@ static uint32 Clock_Ip_Get_IIIC0_CLK_Frequency(void) {
 static uint32 Clock_Ip_Get_IIIC1_CLK_Frequency(void) {
 
     uint32 Frequency;
-    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_1->MUX_0_CSS & MC_CGM_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_MUX_0_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_1->MUX_1_CSS & MC_CGM_MUX_1_CSS_SELSTAT_MASK) >> MC_CGM_MUX_1_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_1->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DE_MASK) >> MC_CGM_MUX_1_DC_0_DE_SHIFT)];                    /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_1->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DIV_MASK) >> MC_CGM_MUX_1_DC_0_DIV_SHIFT) + 1U);                          /*  Apply divider value */
     Frequency &= Clock_Ip_u32EnableGate[((IP_GPR1_PCTL->I3C1PCTL & GPR1_PCTL_I3C1PCTL_PCTL_MASK) >> GPR1_PCTL_I3C1PCTL_PCTL_SHIFT)];          /*  Apply peripheral clock gate */
     return Frequency;
 }
@@ -2896,7 +2902,9 @@ static uint32 Clock_Ip_Get_IIIC1_CLK_Frequency(void) {
 static uint32 Clock_Ip_Get_IIIC2_CLK_Frequency(void) {
 
     uint32 Frequency;
-    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_4->MUX_0_CSS & MC_CGM_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_MUX_0_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_4->MUX_1_CSS & MC_CGM_MUX_1_CSS_SELSTAT_MASK) >> MC_CGM_MUX_1_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_4->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DE_MASK) >> MC_CGM_MUX_1_DC_0_DE_SHIFT)];                    /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_4->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DIV_MASK) >> MC_CGM_MUX_1_DC_0_DIV_SHIFT) + 1U);                          /*  Apply divider value */
     Frequency &= Clock_Ip_u32EnableGate[((IP_GPR4_PCTL->I3C2PCTL & GPR4_PCTL_I3C2PCTL_PCTL_MASK) >> GPR4_PCTL_I3C2PCTL_PCTL_SHIFT)];          /*  Apply peripheral clock gate */
     return Frequency;
 }
@@ -3031,9 +3039,50 @@ static uint32 Clock_Ip_Get_P0_PSI5_125K_CLK_Frequency(void) {
 static uint32 Clock_Ip_Get_P0_PSI5_189K_CLK_Frequency(void) {
 
     uint32 Frequency;
-    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_2_CSS & MC_CGM_MUX_2_CSS_SELSTAT_MASK) >> MC_CGM_MUX_2_CSS_SELSTAT_SHIFT)]();/*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DE_MASK) >> MC_CGM_MUX_2_DC_2_DE_SHIFT)];                    /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DIV_MASK) >> MC_CGM_MUX_2_DC_2_DIV_SHIFT) + 1U);                          /*  Apply divider value */
+    uint32 Multi;
+    uint32 Div;
+    uint32 Fin;
+
+    if(((IP_MC_CGM_0->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DIV_FMT_MASK) >> MC_CGM_MUX_2_DC_2_DIV_FMT_SHIFT) == 1U)
+    {
+        Multi = 10U;
+    }
+    else if(((IP_MC_CGM_0->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DIV_FMT_MASK) >> MC_CGM_MUX_2_DC_2_DIV_FMT_SHIFT) == 2U)
+    {
+        Multi = 100U;
+    }
+    else if(((IP_MC_CGM_0->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DIV_FMT_MASK) >> MC_CGM_MUX_2_DC_2_DIV_FMT_SHIFT) == 3U)
+    {
+        Multi = 1000U;
+    }
+    else
+    {
+        Multi = 1U;
+    }
+    Fin = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_2_CSS & MC_CGM_MUX_2_CSS_SELSTAT_MASK) >> MC_CGM_MUX_2_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Fin &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DE_MASK) >> MC_CGM_MUX_2_DC_2_DE_SHIFT)];         /*  Divider enable/disable */
+    Div = (((IP_MC_CGM_0->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DIV_MASK) >> MC_CGM_MUX_2_DC_2_DIV_SHIFT) + 1U);                             /*  Apply divider value */
+
+    if(0U == Fin)
+    {
+        Frequency = 0;
+    }
+    else
+    {
+        if (Multi == ((uint32)(Multi * Fin) / Fin))
+        {
+            Frequency = ((Multi * Fin)/Div);                                        /* calculate when Multi * Fin <= 2^32-1 */
+        }
+        else if (Div == ((uint32)(Fin/Div) * Fin))
+        {
+            Frequency = ((Fin/Div)*Multi);                                          /* calculate when Fin % Div == 0*/
+        }
+        else
+        {
+            Frequency = (Fin/Div)*Multi;                        /*calculate with even part*/
+            Frequency += ((Fin - ((Fin/Div)*Div) )*Multi)/Div;  /*calculate with remainder*/
+        }
+    }
     return Frequency;
 }
 
@@ -3229,8 +3278,8 @@ static uint32 Clock_Ip_Get_ETH0_TX_RGMII_CLK_Frequency(void) {
     return Frequency;
 }
 
-/* Return ETH0_TX_RGMII_LPBK_CLK frequency */
-static uint32 Clock_Ip_Get_ETH0_TX_RGMII_LPBK_CLK_Frequency(void) {
+/* Return ETH0_PS_TX_CLK frequency */
+static uint32 Clock_Ip_Get_ETH0_PS_TX_CLK_Frequency(void) {
 
     uint32 Frequency;
     Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_1->MUX_6_CSS & MC_CGM_MUX_6_CSS_SELSTAT_MASK) >> MC_CGM_MUX_6_CSS_SELSTAT_SHIFT)]();/*  Selector value */
@@ -3289,8 +3338,8 @@ static uint32 Clock_Ip_Get_ETH1_TX_RGMII_CLK_Frequency(void) {
     return Frequency;
 }
 
-/* Return ETH1_TX_RGMII_LPBK_CLK frequency */
-static uint32 Clock_Ip_Get_ETH1_TX_RGMII_LPBK_CLK_Frequency(void) {
+/* Return ETH1_PS_TX_CLK frequency */
+static uint32 Clock_Ip_Get_ETH1_PS_TX_CLK_Frequency(void) {
 
     uint32 Frequency;
     Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_1->MUX_8_CSS & MC_CGM_MUX_8_CSS_SELSTAT_MASK) >> MC_CGM_MUX_8_CSS_SELSTAT_SHIFT)]();/*  Selector value */
@@ -3306,14 +3355,6 @@ static uint32 Clock_Ip_Get_P1_LFAST1_REF_CLK_Frequency(void) {
     Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_1->MUX_12_CSS & MC_CGM_MUX_12_CSS_SELSTAT_MASK) >> MC_CGM_MUX_12_CSS_SELSTAT_SHIFT)]();/*  Selector value */
     Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_1->MUX_12_DC_0 & MC_CGM_MUX_12_DC_0_DE_MASK) >> MC_CGM_MUX_12_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
     Frequency /= (((IP_MC_CGM_1->MUX_12_DC_0 & MC_CGM_MUX_12_DC_0_DIV_MASK) >> MC_CGM_MUX_12_DC_0_DIV_SHIFT) + 1U);                       /*  Apply divider value */
-    return Frequency;
-}
-
-/* Return P1_LFAST_DFT_CLK frequency */
-static uint32 Clock_Ip_Get_P1_LFAST_DFT_CLK_Frequency(void) {
-
-    uint32 Frequency;
-    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_1->MUX_13_CSS & MC_CGM_MUX_13_CSS_SELSTAT_MASK) >> MC_CGM_MUX_13_CSS_SELSTAT_SHIFT)]();/*  Selector value */
     return Frequency;
 }
 
@@ -3421,9 +3462,50 @@ static uint32 Clock_Ip_Get_P4_PSI5_125K_CLK_Frequency(void) {
 static uint32 Clock_Ip_Get_P4_PSI5_189K_CLK_Frequency(void) {
 
     uint32 Frequency;
-    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_4->MUX_2_CSS & MC_CGM_MUX_2_CSS_SELSTAT_MASK) >> MC_CGM_MUX_2_CSS_SELSTAT_SHIFT)]();/*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_4->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DE_MASK) >> MC_CGM_MUX_2_DC_2_DE_SHIFT)];                    /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_4->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DIV_MASK) >> MC_CGM_MUX_2_DC_2_DIV_SHIFT) + 1U);                          /*  Apply divider value */
+    uint32 Multi;
+    uint32 Div;
+    uint32 Fin;
+
+    if(((IP_MC_CGM_4->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DIV_FMT_MASK) >> MC_CGM_MUX_2_DC_2_DIV_FMT_SHIFT) == 1U)
+    {
+        Multi = 10U;
+    }
+    else if(((IP_MC_CGM_4->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DIV_FMT_MASK) >> MC_CGM_MUX_2_DC_2_DIV_FMT_SHIFT) == 2U)
+    {
+        Multi = 100U;
+    }
+    else if(((IP_MC_CGM_4->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DIV_FMT_MASK) >> MC_CGM_MUX_2_DC_2_DIV_FMT_SHIFT) == 3U)
+    {
+        Multi = 1000U;
+    }
+    else
+    {
+        Multi = 1U;
+    }
+    Fin = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_4->MUX_2_CSS & MC_CGM_MUX_2_CSS_SELSTAT_MASK) >> MC_CGM_MUX_2_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Fin &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_4->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DE_MASK) >> MC_CGM_MUX_2_DC_2_DE_SHIFT)];                    /*  Divider enable/disable */
+    Div = (((IP_MC_CGM_4->MUX_2_DC_2 & MC_CGM_MUX_2_DC_2_DIV_MASK) >> MC_CGM_MUX_2_DC_2_DIV_SHIFT) + 1U);                          /*  Apply divider value */
+
+    if(0U == Fin)
+    {
+        Frequency = 0;
+    }
+    else
+    {
+        if (Multi == ((uint32)(Multi * Fin) / Fin))
+        {
+            Frequency = ((Multi * Fin)/Div);                                        /* calculate when Multi * Fin <= 2^32-1 */
+        }
+        else if (Div == ((uint32)(Fin/Div) * Fin))
+        {
+            Frequency = ((Fin/Div)*Multi);                                          /* calculate when Fin % Div == 0*/
+        }
+        else
+        {
+            Frequency = (Fin/Div)*Multi;                        /*calculate with even part*/
+            Frequency += ((Fin - ((Fin/Div)*Div) )*Multi)/Div;  /*calculate with remainder*/
+        }
+    }
     return Frequency;
 }
 
@@ -3943,7 +4025,9 @@ static uint32 Clock_Ip_Get_SPI7_CLK_Frequency(void) {
 static uint32 Clock_Ip_Get_SRX0_CLK_Frequency(void) {
 
     uint32 Frequency;
-    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_1->MUX_0_CSS & MC_CGM_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_MUX_0_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_1->MUX_1_CSS & MC_CGM_MUX_1_CSS_SELSTAT_MASK) >> MC_CGM_MUX_1_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_1->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DE_MASK) >> MC_CGM_MUX_1_DC_0_DE_SHIFT)];                    /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_1->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DIV_MASK) >> MC_CGM_MUX_1_DC_0_DIV_SHIFT) + 1U);                          /*  Apply divider value */
     Frequency &= Clock_Ip_u32EnableGate[((IP_GPR1_PCTL->SRX0PCTL & GPR1_PCTL_SRX0PCTL_PCTL_MASK) >> GPR1_PCTL_SRX0PCTL_PCTL_SHIFT)];          /*  Apply peripheral clock gate */
     return Frequency;
 }
@@ -3952,7 +4036,9 @@ static uint32 Clock_Ip_Get_SRX0_CLK_Frequency(void) {
 static uint32 Clock_Ip_Get_SRX1_CLK_Frequency(void) {
 
     uint32 Frequency;
-    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_4->MUX_0_CSS & MC_CGM_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_MUX_0_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_4->MUX_1_CSS & MC_CGM_MUX_1_CSS_SELSTAT_MASK) >> MC_CGM_MUX_1_CSS_SELSTAT_SHIFT)]();/*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_4->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DE_MASK) >> MC_CGM_MUX_1_DC_0_DE_SHIFT)];                    /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_4->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DIV_MASK) >> MC_CGM_MUX_1_DC_0_DIV_SHIFT) + 1U);                          /*  Apply divider value */
     Frequency &= Clock_Ip_u32EnableGate[((IP_GPR4_PCTL->SRX1PCTL & GPR4_PCTL_SRX1PCTL_PCTL_MASK) >> GPR4_PCTL_SRX1PCTL_PCTL_SHIFT)];          /*  Apply peripheral clock gate */
     return Frequency;
 }
@@ -3987,18 +4073,21 @@ static uint32 Clock_Ip_Get_Px_PSI5_S_UTIL_CLK_Frequency(void) {
 }
 
 /* Return PLL_VCO frequency */
+#define CLOCK_IP_PLL_VCO_MAX_FREQ             (2400000000U)
 static uint32 PLL_VCO(const PLLDIG_Type *Base)
 {
     uint32 Fin;
     uint32 Rdiv;
     uint32 Mfi;
     uint32 Mfn;
-    uint32 Fout;
+    uint32 Fout = 0U;
     uint32 Var1;
     uint32 Var2;
     uint32 Var3;
     uint32 Var4;
     uint32 Var5;
+    boolean Overflow = FALSE;
+
     Fin  = (((Base->PLLCLKMUX & PLLDIG_PLLCLKMUX_REFCLKSEL_MASK) >> PLLDIG_PLLCLKMUX_REFCLKSEL_SHIFT) == 0U) ? Clock_Ip_Get_FIRC_CLK_Frequency() : Clock_Ip_Get_FXOSC_CLK_Frequency();   /* input freq */
     Rdiv = ((Base->PLLDV & PLLDIG_PLLDV_RDIV_MASK) >> PLLDIG_PLLDV_RDIV_SHIFT);              /* Rdiv */
     Mfi  = ((Base->PLLDV & PLLDIG_PLLDV_MFI_MASK) >> PLLDIG_PLLDV_MFI_SHIFT);                /* Mfi */
@@ -4011,15 +4100,61 @@ static uint32 PLL_VCO(const PLLDIG_Type *Base)
     Var4 = Fin / Var3;                                      /* Fin divide by (Rdiv multiplied by 18432) */
     Var5 = Fin - (Var4 * Var3);                               /* Fin minus Var4 multiplied by (Rdiv mul 18432) */
 
-    Fout = Var1 * Fin;                                      /* Var1 multipied by Fin */
-    Fout += Fin / Rdiv * Var2;                              /* Fin divided by Rdiv and multiplied by Var2 */
-    Fout += Var4 * Mfn;                                     /* Mfn multiplied by Var4 */
-    Fout += Var5 * Mfn / Var3;                              /* Var5 multiplied by Mfn and divide by (Rdiv mul 18432) */
+    if (0U != Fin)
+    {
+        if (Var1 == ((uint32)(Var1 * Fin) / Fin))
+        {
+            Fout = Var1 * Fin;                                      /* Var1 multipied by Fin */
+        }
+        else
+        {
+            Overflow = TRUE;
+        }
+
+        if ((Var2 == ((uint32)(Fin * Var2) / Fin)) && (CLOCK_IP_PLL_VCO_MAX_FREQ >= Fout))
+        {
+            Fout += Fin / Rdiv * Var2;                              /* Fin divided by Rdiv and multiplied by Var2 */
+        }
+        else
+        {
+            Overflow = TRUE;
+        }
+
+        if (0U != Var4)
+        {
+            if ((Mfn == ((uint32)(Var4 * Mfn) / Var4)) && (CLOCK_IP_PLL_VCO_MAX_FREQ >= Fout))
+            {
+                Fout += Var4 * Mfn;                                     /* Mfn multiplied by Var4 */
+            }
+            else
+            {
+                Overflow = TRUE;
+            }
+        }
+
+        if (0U != Mfn)
+        {
+            if ((Var5  == ((uint32)(Var5 * Mfn) / Mfn)) && (CLOCK_IP_PLL_VCO_MAX_FREQ >= Fout))
+            {
+                Fout += Var5 * Mfn / Var3;                              /* Var5 multiplied by Mfn and divide by (Rdiv mul 18432) */
+            }
+            else
+            {
+                Overflow = TRUE;
+            }
+        }
+    }
+
+    if (TRUE == Overflow)
+    {
+        Fout = 0U;
+    }
 
     return Fout;
 }
 
 /* Return LFAST_PLL_VCO frequency */
+#define CLOCK_IP_LFAST_PLL_VCO_MAX_FREQ             (2400000000U)
 static uint32 LFAST_PLL_VCO(const LFAST_Type *Base)
 {
     uint32 Fin;
@@ -4027,6 +4162,7 @@ static uint32 LFAST_PLL_VCO(const LFAST_Type *Base)
     uint32 PllMode;
     uint32 Fbdiv;
     uint32 Fout = 0U;
+    boolean Overflow = FALSE;
 
     /* Input frequency */
     if (Base == IP_LFAST_0) {
@@ -4043,9 +4179,41 @@ static uint32 LFAST_PLL_VCO(const LFAST_Type *Base)
     Fbdiv  = ((Base->PLLCR & LFAST_PLLCR_FBDIV_MASK) >> LFAST_PLLCR_FBDIV_SHIFT);                /* multiplied */
     PllMode = ((Base->PLLCR & LFAST_PLLCR_FDIVEN_MASK) >> LFAST_PLLCR_FDIVEN_SHIFT);             /* Pll mode */
 
-    Fout = (uint32)(((Fin * Fbdiv )/ Prediv) +  ((Fin * PllMode)/(2U*Prediv)));                              /* Fin multiplied by Fbdiv and divide by (Prediv) */
+    if (0U != Fin)
+    {
+        if (Fbdiv == ((uint32)(Fin * Fbdiv) / Fin))
+        {
+            Fout += ((Fin * Fbdiv )/ Prediv);
+        }
+        else
+        {
+            Overflow = TRUE;
+        }
 
-    return (((Base->PLLLSR & LFAST_PLLLSR_PLDCR_MASK) >> LFAST_PLLLSR_PLDCR_SHIFT) == 1U) ? Fout : 0U;
+        if ((PllMode == ((uint32)(Fin * PllMode) / Fin)) && (CLOCK_IP_LFAST_PLL_VCO_MAX_FREQ >= Fout))
+        {
+            if(((Fin / Prediv) > ((Fin * PllMode)/(2U*Prediv))) && (Fout < (Fout + (Fin/Prediv))))
+            {
+                /*Fout += (Fin/Prediv) when PllMode = 0 and Fout += (Fin/(2*Prediv)) when PllMode = 1*/
+                Fout += (Fin/Prediv) - ((Fin * PllMode)/(2U*Prediv));
+            }
+            else
+            {
+                Overflow = TRUE;
+            }
+        }
+        else
+        {
+            Overflow = TRUE;
+        }
+    }
+
+    if ((1U != ((Base->PLLLSR & LFAST_PLLLSR_PLDCR_MASK) >> LFAST_PLLLSR_PLDCR_SHIFT)) || (TRUE == Overflow))
+    {
+        Fout = 0U;
+    }
+
+    return Fout;
 }
 
 /* Return DFS_OUTPUT frequency */
@@ -4056,6 +4224,8 @@ static uint32 DFS_OUTPUT(const DFS_Type *Base, uint32 Channel, uint32 Fin)
     uint32 Divider;
     uint32 DividerResult;
     uint32 DividerModulo;
+    uint32 Fout = 0U;
+    boolean Overflow = FALSE;
 
     Mfi = ((Base->DVPORT[Channel] & DFS_DVPORT_MFI_MASK) >> DFS_DVPORT_MFI_SHIFT);              /* Mfi */
     Mfn = ((Base->DVPORT[Channel] & DFS_DVPORT_MFN_MASK) >> DFS_DVPORT_MFN_SHIFT);              /* Mfn */
@@ -4064,9 +4234,33 @@ static uint32 DFS_OUTPUT(const DFS_Type *Base, uint32 Channel, uint32 Fin)
     DividerResult = (Divider != 0U) ? (Fin / Divider) : 0U;                 /* Fin divide by Divider */
     DividerModulo = Fin - (Divider * DividerResult);                        /* Fin minus DividerResult multiplied by Divider */
 
-    /* DividerResult multiplied by 18 added DividerModulo multiplied by 18 divide by Divider */
-    return (Divider != 0U) ? ((DividerResult << CLOCK_IP_MUL_BY_16) + (DividerResult << CLOCK_IP_MUL_BY_2) +
-                                        (((DividerModulo << CLOCK_IP_MUL_BY_16) + (DividerModulo << CLOCK_IP_MUL_BY_2)) / Divider)) : 0U;
+    if (Divider != 0U)
+    {
+        if ((DividerResult << CLOCK_IP_MUL_BY_16) <= ((DividerResult << CLOCK_IP_MUL_BY_16) + (DividerResult << CLOCK_IP_MUL_BY_2)))
+        {
+            Fout += (DividerResult << CLOCK_IP_MUL_BY_16) + (DividerResult << CLOCK_IP_MUL_BY_2);
+        }
+        else
+        {
+            Overflow = TRUE;
+        }
+
+        if (Fout <= (Fout + (((DividerModulo << CLOCK_IP_MUL_BY_16) + (DividerModulo << CLOCK_IP_MUL_BY_2)) / Divider)))
+        {
+            Fout += ((DividerModulo << CLOCK_IP_MUL_BY_16) + (DividerModulo << CLOCK_IP_MUL_BY_2)) / Divider;
+        }
+        else
+        {
+            Overflow = TRUE;
+        }
+    }
+
+    if (TRUE == Overflow)
+    {
+        Fout = 0U;
+    }
+
+    return Fout;
 }
 
 /* Get external frequency */
@@ -4074,19 +4268,6 @@ void Clock_Ip_SetExternalOscillatorFrequency(Clock_Ip_NameType ExtOscName, uint3
 {
     (void)ExtOscName;
     Clock_Ip_u32Fxosc = Frequency;
-}
-/* Get external frequency */
-void Clock_Ip_SetExternalSignalFrequency(Clock_Ip_NameType SignalName, uint32 Frequency)
-{
-    uint32 Index;
-    for (Index = 0U; Index < CLOCK_IP_EXT_SIGNALS_NO; Index++)
-    {
-        if (SignalName == Clock_Ip_axExtSignalFreqEntries[Index].Name)
-        {
-            Clock_Ip_axExtSignalFreqEntries[Index].Frequency = Frequency;
-            break;
-        }
-    }
 }
 
 /* Return LFAST0_PLL_CLK_ frequency */
@@ -4113,23 +4294,34 @@ uint32 Clock_Ip_GetFreq(Clock_Ip_NameType ClockName)
 #define MCU_STOP_SEC_CODE
 #include "Mcu_MemMap.h"
 
-#else
+#endif  /* #if (defined(CLOCK_IP_GET_FREQUENCY_API) && (CLOCK_IP_GET_FREQUENCY_API == STD_ON)) */
+
 /* Clock start section code */
 #define MCU_START_SEC_CODE
 #include "Mcu_MemMap.h"
 
-/* Set external frequency */
+/* Set frequency value for External Signal */
 void Clock_Ip_SetExternalSignalFrequency(Clock_Ip_NameType SignalName, uint32 Frequency)
 {
+#if (defined(CLOCK_IP_GET_FREQUENCY_API) && (CLOCK_IP_GET_FREQUENCY_API == STD_ON))
+    uint32 Index;
+    for (Index = 0U; Index < CLOCK_IP_EXT_SIGNALS_NO; Index++)
+    {
+        if (SignalName == Clock_Ip_axExtSignalFreqEntries[Index].Name)
+        {
+            Clock_Ip_axExtSignalFreqEntries[Index].Frequency = Frequency;
+            break;
+        }
+    }
+#else
     (void)SignalName;
     (void)Frequency;
+#endif
 }
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 #include "Mcu_MemMap.h"
-
-#endif  /* #if (defined(CLOCK_IP_GET_FREQUENCY_API) && (CLOCK_IP_GET_FREQUENCY_API == STD_ON)) */
 
 
 #endif /* (CLOCK_IP_PLATFORM_SPECIFIC) */

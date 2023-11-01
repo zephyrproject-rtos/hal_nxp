@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file    StandardTypes.h
 *   @implements     StandardTypes.h_Artifact
-*   @version 0.9.0
+*   @version 1.0.0
 *
 *   @brief   AUTOSAR BaseNXP - Standard types definition.
 *   @details AUTOSAR standard types header file. It contains all types that are used across several
@@ -47,8 +47,8 @@ extern "C"{
 #define STD_AR_RELEASE_MAJOR_VERSION      4
 #define STD_AR_RELEASE_MINOR_VERSION      7
 #define STD_AR_RELEASE_REVISION_VERSION   0
-#define STD_SW_MAJOR_VERSION              0
-#define STD_SW_MINOR_VERSION              9
+#define STD_SW_MAJOR_VERSION              1
+#define STD_SW_MINOR_VERSION              0
 #define STD_SW_PATCH_VERSION              0
 
 /*==================================================================================================
@@ -56,8 +56,8 @@ extern "C"{
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
 /* Check if source file and Platform_Types header file are of the same Autosar version */
-#if ((STD_AR_RELEASE_MAJOR_VERSION != PLATFORM_TYPES_AR_RELEASE_MAJOR_VERSION) || \
-    (STD_AR_RELEASE_MINOR_VERSION  != PLATFORM_TYPES_AR_RELEASE_MINOR_VERSION))
+#if ((STD_AR_RELEASE_MAJOR_VERSION != PLATFORM_AR_RELEASE_MAJOR_VERSION) || \
+    (STD_AR_RELEASE_MINOR_VERSION  != PLATFORM_AR_RELEASE_MINOR_VERSION))
     #error "AutoSar Version Numbers of StandardTypes.h and Platform_Types.h are different"
 #endif
 #endif
@@ -77,43 +77,43 @@ extern "C"{
 * @brief Physical state 5V or 3.3V
 * @implements SymbolDefinitions_enum
 */
-#define STD_HIGH    0x01
+#define STD_HIGH    0x01U
 
 /**
 * @brief Physical state 0V.
 * @implements SymbolDefinitions_enum
 */
-#define STD_LOW     0x00
+#define STD_LOW     0x00U
 
 /**
 * @brief Logical state active.
 * @implements SymbolDefinitions_enum
 */
-#define STD_ACTIVE  0x01
+#define STD_ACTIVE  0x01U
 
 /**
 * @brief Logical state idle.
 * @implements SymbolDefinitions_enum
 */
-#define STD_IDLE    0x00
+#define STD_IDLE    0x00U
 
 /**
 * @brief ON State.
 * @implements SymbolDefinitions_enum
 */
-#define STD_ON      0x01
+#define STD_ON      0x01U
 
 /**
 * @brief OFF state.
 * @implements SymbolDefinitions_enum
 */
-#define STD_OFF     0x00
+#define STD_OFF     0x00U
 
 /**
 * @brief Return code for failure/error.
 * @implements SymbolDefinitions_enum
 */
-#define E_NOT_OK    0x01
+#define E_NOT_OK    0x01U
 
 /*==================================================================================================
 *                                       DEFINES AND MACROS
@@ -141,7 +141,7 @@ extern "C"{
     /**
     * @brief Success return code
     */
-    #define E_OK      0x00
+    #define E_OK      0x00U
     /**
     * @brief This type is defined for OSEK compliance.
     */

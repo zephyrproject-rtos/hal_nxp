@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file    RegLockMacros.h
 *   
-*   @version 0.9.0
+*   @version 1.0.0
 *
 *   @brief   AUTOSAR BaseNXP - IP module versions.
 *   @details Implements macros for soft and hard lock on CORTEXM hardware platform
@@ -40,8 +40,8 @@ extern "C"{
 #define REGLOCKMACROS_AR_RELEASE_MAJOR_VERSION     4
 #define REGLOCKMACROS_AR_RELEASE_MINOR_VERSION     7
 #define REGLOCKMACROS_AR_RELEASE_REVISION_VERSION  0
-#define REGLOCKMACROS_SW_MAJOR_VERSION             0
-#define REGLOCKMACROS_SW_MINOR_VERSION             9
+#define REGLOCKMACROS_SW_MAJOR_VERSION             1
+#define REGLOCKMACROS_SW_MINOR_VERSION             0
 #define REGLOCKMACROS_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -49,8 +49,8 @@ extern "C"{
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Check if source file and Platform_Types.h header file are of the same Autosar version */
-    #if ((REGLOCKMACROS_AR_RELEASE_MAJOR_VERSION != PLATFORM_TYPES_AR_RELEASE_MAJOR_VERSION) || \
-         (REGLOCKMACROS_AR_RELEASE_MINOR_VERSION != PLATFORM_TYPES_AR_RELEASE_MINOR_VERSION))
+    #if ((REGLOCKMACROS_AR_RELEASE_MAJOR_VERSION != PLATFORM_AR_RELEASE_MAJOR_VERSION) || \
+         (REGLOCKMACROS_AR_RELEASE_MINOR_VERSION != PLATFORM_AR_RELEASE_MINOR_VERSION))
         #error "AutoSar Version Numbers of RegLockMacros.h and Platform_Types.h are different"
     #endif
 

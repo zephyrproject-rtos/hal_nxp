@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,8 +35,8 @@ extern "C"{
 #define NETC_ETHSWT_IP_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETHSWT_IP_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETHSWT_IP_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETHSWT_IP_SW_MAJOR_VERSION             0
-#define NETC_ETHSWT_IP_SW_MINOR_VERSION             9
+#define NETC_ETHSWT_IP_SW_MAJOR_VERSION             1
+#define NETC_ETHSWT_IP_SW_MINOR_VERSION             0
 #define NETC_ETHSWT_IP_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -91,6 +91,7 @@ extern "C"{
 #define ETHSWT_43_NETC_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "EthSwt_43_NETC_MemMap.h"
 
+/** @brief   Export NETC ETHSWT configurations. */
 NETC_ETHSWT_CONFIG_EXT
 
 #define ETHSWT_43_NETC_STOP_SEC_CONFIG_DATA_UNSPECIFIED
@@ -163,10 +164,6 @@ extern uint32 MirroringIngressPortFilterEntryId;
 *                   - Configure all configuration parameters (e.g. port structure, VLAN configuration, ...)
 *                     at all ports of the switch and the switch itself.
 *                   - Perform a soft reset
-*                   - Youri: Not initial version but should: After resetting the switch and
-*                     EthSwtLowPowerModeSupport set to TRUE, the Ethernet switch shall
-*                     enter an inactive or low power mode. If EthSwtLowPowerModeSupport is not defined or set to
-*                     FALSE the Ethernet switch shall enter an active state
 *
 * @param[in]        SwitchIdx   Index of the switch within the context of the Ethernet Switch Driver
 *                   Config      Structure for the initialization
@@ -174,11 +171,20 @@ extern uint32 MirroringIngressPortFilterEntryId;
 * @return           Result of the operation
 * @retval           E_OK        success
 * @retval           E_NOT_OK    switch could not be initialized
-*
-* @api
-*
 */
 Std_ReturnType Netc_EthSwt_Ip_Init(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigType * Config);
+
+/**
+* @brief            Ethernet Switch function to prepare the IPF table for PTP
+* @details          Add hardcoded entries to the Ingress Port Filter table to redirect frames with PTP-specific DMACs
+*
+* @param[in]        SwitchIdx       Index of the switch within the context of the Ethernet Switch Driver
+*
+* @return           Result of the operation
+* @retval           E_OK        success
+* @retval           E_NOT_OK    entries could not be added
+*/
+Std_ReturnType Netc_EthSwt_Ip_ConfigIngressPortFilterForTimestamping(uint8 SwitchIdx);
 
 /**
 * @brief            Ethernet Switch read transceiver reg function.
@@ -192,31 +198,9 @@ Std_ReturnType Netc_EthSwt_Ip_Init(uint8 SwitchIdx, const Netc_EthSwt_Ip_ConfigT
 *
 * @return           Result of the operation
 * @retval           E_OK        success
-* @retval           E_NOT_OK    drop counter could not be obtained
-*
-* @api
-*
+* @retval           E_NOT_OK    Register could not be read
 */
 Std_ReturnType Netc_EthSwt_Ip_ReadTrcvRegister( uint8 SwitchIdx, uint8 TrcvIdx, uint8 RegIdx, uint16 * RegVal );
-
-/**
-* @brief            Ethernet Switch read transceiver reg function.
-* @details          Generic API for reading the content of a transceiver register
-*
-* @param[in]        SwitchIdx       Index of the switch within the context of the Ethernet Switch Driver
-*                   TrcvIdx         Index of the transceiver referenced by port
-*                   RegIdx          Index of the register
-*                   RegVal          Content for the indexed register
-*
-* @return           Result of the operation
-* @retval           E_OK        success
-* @retval           E_NOT_OK    drop counter could not be obtained
-*
-* @api
-*
-*
-*/
-Std_ReturnType Netc_EthSwt_Ip_WriteTrcvRegister( uint8 SwitchIdx, uint8 TrcvIdx, uint8 RegIdx, uint16 RegVal );
 
 /**
  * @brief   Ethernet Switch write transceiver reg function.
@@ -229,8 +213,23 @@ Std_ReturnType Netc_EthSwt_Ip_WriteTrcvRegister( uint8 SwitchIdx, uint8 TrcvIdx,
  *
  * @return Result of the operation
  * @retval E_OK        success
- * @retval E_NOT_OK    The indexed switch port could not be set to PortMode
+ * @retval E_NOT_OK    Register could not be written to
  *
+ */
+Std_ReturnType Netc_EthSwt_Ip_WriteTrcvRegister( uint8 SwitchIdx, uint8 TrcvIdx, uint8 RegIdx, uint16 RegVal );
+
+/**
+ * @brief   Ethernet Switch Set switch port mode function
+ * @details Generic API for enabling/disabling ports
+ *
+    @param[in]      SwitchIdx       Index of the switch within the context of the Ethernet Switch Driver
+*                   SwitchPortIdx   Index of the switch's port which is to be set
+*                   PortEnable      FALSE: the port of the switch is disabled
+*                                   TRUE: the port of the switch is enabled
+ *
+ * @return Result of the operation
+ * @retval E_OK        success
+ * @retval E_NOT_OK    The indexed switch port could not be set to PortMode
  */
 Std_ReturnType Netc_EthSwt_Ip_SetPortMode(uint8 SwitchIdx,
                                           uint8 SwitchPortIdx,
@@ -250,10 +249,6 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortMode(uint8 SwitchIdx,
 * @return           Result of the operation
 * @retval           E_OK        success
 * @retval           E_NOT_OK    The mode of the indexed switch port could not be obtained.
-*
-* @api
-*
-*
 */
 Std_ReturnType Netc_EthSwt_Ip_GetPortMode( uint8 SwitchIdx,
                                            uint8 SwitchPortIdx,
@@ -275,9 +270,6 @@ Std_ReturnType Netc_EthSwt_Ip_GetPortMode( uint8 SwitchIdx,
 * @return           Result of the operation
 * @retval           E_OK        success
 * @retval           E_NOT_OK    Baud rate of the indexed switch port could not be obtained
-*
-* @api
-*
 */
 Std_ReturnType Netc_EthSwt_Ip_GetPortSpeed( uint8 SwitchIdx,
                                             uint8 SwitchPortIdx,
@@ -298,9 +290,6 @@ Std_ReturnType Netc_EthSwt_Ip_GetPortSpeed( uint8 SwitchIdx,
 * @return           Result of the operation
 * @retval           E_OK        success
 * @retval           E_NOT_OK    Baud rate of the indexed switch port could not be changed
-*
-* @api
-*
 */
 Std_ReturnType Netc_EthSwt_Ip_SetPortSpeed( uint8 SwitchIdx, uint8 SwitchPortIdx, EthTrcv_BaudRateType BaudRate);
 
@@ -319,9 +308,6 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortSpeed( uint8 SwitchIdx, uint8 SwitchPortIdx
 * @return           Result of the operation
 * @retval           E_OK        success
 * @retval           E_NOT_OK    duplex mode of the indexed switch port could not be obtained
-*
-* @api
-*
 */
 Std_ReturnType Netc_EthSwt_Ip_GetDuplexMode( uint8 SwitchIdx,
                                              uint8 SwitchPortIdx,
@@ -330,31 +316,27 @@ Std_ReturnType Netc_EthSwt_Ip_GetDuplexMode( uint8 SwitchIdx,
 
 /**
  * @brief       This function sets the MAC address of a certain
- * @description This will be used to set the MAC address asignated to a certain port of the switch
+ * @details     This will be used to set the MAC address asignated to a certain port of the switch
  *
- * @param[in]  switchIndex  the index of the switch
- * @param[in]  portIndex    the index of the port
- * @param[out] macAddr      The physical address of the port
+ * @param[in]  SwitchIndex  the index of the switch
+ * @param[in]  PortIndex    the index of the port
+ * @param[in]  MacAddr      The physical address of the port
  *
- * @return      0: E_OK
- *             1: E_NOT_OK, portIndex error
- * @api
- *
+ * @return     Result of the operation
+ * @retval     E_OK       Success
+ * @retval     E_NOT_OK   MAC Address could not be changed
  */
-Std_ReturnType Netc_EthSwt_Ip_SetMacAddr(uint8 SwitchIdx, uint8 portIndex, const uint8 *macAddr);
+Std_ReturnType Netc_EthSwt_Ip_SetMacAddr(uint8 SwitchIdx, uint8 PortIndex, const uint8 *MacAddr);
 
 /**
  * @brief       This function reads the MAC address of a certain port
- * @description This will be used to read the MAC address asignated to a certain port of the switch
+ * @details     This will be used to read the MAC address asignated to a certain port of the switch
  *
- * @param[in]  switchIndex  the index of the switch
- * @param[in]  portIndex    the index of the port
- * @param[out] macAddr      The physical address of the port
- *
- * @api
- *
+ * @param[in]  SwitchIndex  the index of the switch
+ * @param[in]  PortIndex    the index of the port
+ * @param[out] MacAddr      The physical address of the port
  */
-void Netc_EthSwt_Ip_GetMacAddr(uint8 SwitchIdx, uint8 portIndex, uint8 *macAddr);
+void Netc_EthSwt_Ip_GetMacAddr(uint8 SwitchIdx, uint8 PortIndex, uint8 *MacAddr);
 
 /**
 * @brief            Ethernet Switch get port MAC address function.
@@ -374,9 +356,6 @@ void Netc_EthSwt_Ip_GetMacAddr(uint8 SwitchIdx, uint8 portIndex, uint8 *macAddr)
 * @return           Result of the operation
 * @retval           E_OK        success
 * @retval           E_NOT_OK    multiple ports were found
-*
-* @api
-*
 */
 Std_ReturnType Netc_EthSwt_Ip_GetPortMacAddr( uint8 SwitchIdx, uint16 Fid, const uint8 * MacAddr, uint8 * PortIdx);
 
@@ -394,9 +373,6 @@ Std_ReturnType Netc_EthSwt_Ip_GetPortMacAddr( uint8 SwitchIdx, uint16 Fid, const
 * @return           Result of the operation
 * @retval           E_OK        success
 * @retval           E_NOT_OK    counter values read failure
-*
-* @api
-*
 */
 Std_ReturnType Netc_EthSwt_Ip_GetCounters( uint8 SwitchIdx, uint8 SwitchPortIdx, Netc_EthSwt_Ip_CounterType *Counter );
 
@@ -411,10 +387,6 @@ Std_ReturnType Netc_EthSwt_Ip_GetCounters( uint8 SwitchIdx, uint8 SwitchPortIdx,
  * @param[in]    Counter         single counter register offset
  * 
  * @return       Single counter value. The meaning of these values is described at Netc_EthSwt_Ip_SingleCounterType.
- * 
- *
- * @api
- *
  */
 Netc_EthSwt_Ip_CounterValueType Netc_EthSwt_Ip_GetCounter( uint8 SwitchIdx, uint8 SwitchPortIdx, Netc_EthSwt_Ip_SingleCounterType Counter );
 
@@ -431,9 +403,6 @@ Netc_EthSwt_Ip_CounterValueType Netc_EthSwt_Ip_GetCounter( uint8 SwitchIdx, uint
 * @return           Result of the operation
 * @retval           E_OK        success
 * @retval           E_NOT_OK    Query command error or no mached Vlan ID entry found
-*
-* @api
-*
 */
 Std_ReturnType Netc_EthSwt_Ip_EnableVlan( uint8 SwitchIdx, uint8 SwitchPortIdx, uint16 VlanId, boolean Enable );
 
@@ -448,10 +417,7 @@ Std_ReturnType Netc_EthSwt_Ip_EnableVlan( uint8 SwitchIdx, uint8 SwitchPortIdx, 
 *
 * @return           Result of the operation
 * @retval           E_OK        success
-* @retval           E_NOT_OK    configuration could be persistently reset
-*
-* @api
-*
+* @retval           E_NOT_OK    MAC learning mode could not be set
 */
 Std_ReturnType Netc_EthSwt_Ip_SetMacLearningMode( uint8 SwitchIdx, Netc_EthSwt_Ip_MacLearningOptionType MacLearningMode );
 
@@ -467,10 +433,7 @@ Std_ReturnType Netc_EthSwt_Ip_SetMacLearningMode( uint8 SwitchIdx, Netc_EthSwt_I
 *
 * @return           Result of the operation
 * @retval           E_OK        success
-* @retval           E_NOT_OK    configuration could be persistently reset
-*
-* @api
-*
+* @retval           E_NOT_OK    MAC learning mode could not be read
 */
 Std_ReturnType Netc_EthSwt_Ip_GetMacLearningMode( uint8 SwitchIdx, Netc_EthSwt_Ip_MacLearningOptionType * MacLearningMode );
 
@@ -479,7 +442,7 @@ Std_ReturnType Netc_EthSwt_Ip_GetMacLearningMode( uint8 SwitchIdx, Netc_EthSwt_I
 * @details          Obtain the current status of the port loopback for the indexed external Ethernet switch port
 *
 * @param[in]        SwitchIdx       Index of the switch within the context of the Ethernet Switch Driver
-*                   SwitchPortIdx   Index of the port at the addressed switch
+* @param[in]        SwitchPortIdx   Index of the port at the addressed switch
 *
 * @param[out]       LoopbackEnable  Pointer to the memory where the port loopback mode true/false
 *
@@ -487,9 +450,6 @@ Std_ReturnType Netc_EthSwt_Ip_GetMacLearningMode( uint8 SwitchIdx, Netc_EthSwt_I
 * @retval           E_OK        the requested port loopback state for the indexed Ethernet switch port was set successfully.
 * @retval           E_NOT_OK    the port loopback configuration for the indexed Ethernet switch returned not successfully.
 *                               (i.e. indexed ethernet switch is not available)
-*
-* @api
-*
 */
 Std_ReturnType Netc_EthSwt_Ip_PortGetLoopbackMode( uint8 SwitchIdx,
                                                    uint8 SwitchPortIdx,
@@ -508,9 +468,6 @@ Std_ReturnType Netc_EthSwt_Ip_PortGetLoopbackMode( uint8 SwitchIdx,
 * @retval           E_OK        the port loopback state for the indexed Ethernet switch port was set successfully.
 * @retval           E_NOT_OK    the port loopback configuration for the indexed Ethernet switch was not set successfully.
 *                               (i.e. indexed ethernet switch is not available)
-*
-* @api
-*
 */
 Std_ReturnType Netc_EthSwt_Ip_PortSetLoopbackMode( uint8 SwitchIdx,
                                                    uint8 SwitchPortIdx,
@@ -998,6 +955,10 @@ Std_ReturnType Netc_EthSwt_Ip_DeleteMirrorConfiguration( uint8 MirroredSwitchIdx
  * -[in]     SwitchPortIdx   Index of the port at the addressed switch
  * -[in]     TrafficClass        The value range is 0 to 7
  * -[in]     idleSlope            Idleslope is the rate of credits that is accumulated (in bits per second)  when there  is  at  least  one packet waiting for transmission.
+ *
+ * @return           Result of the operation
+ * @retval           E_OK : success
+ * @retval           others : fail
  */
 Std_ReturnType Netc_EthSwt_Ip_ConfigureCreditBasedShaper(uint8 SwitchIdx, const uint8 SwitchPortIdx, const uint8 TrafficClass, const uint64 idleSlope);
 
@@ -1009,8 +970,11 @@ Std_ReturnType Netc_EthSwt_Ip_ConfigureCreditBasedShaper(uint8 SwitchIdx, const 
  * -[in]     SwitchIdx            Index of the switch within the context of the Ethernet Switch Driver
  * -[in]     SwitchPortIdx    Index of the port at the addressed switch
  * -[in]     TrafficClass         The value range is 0 to 7
- * -[in]     Enable                  TRUE: enable credit based shaper on the port. FALSE: disable credit based shaper on the port.   
+ * -[in]     Enable                  TRUE: enable credit based shaper on the port. FALSE: disable credit based shaper on the port.
  * 
+ * @return           Result of the operation
+ * @retval           E_OK : success
+ * @retval           others : fail
  */
 Std_ReturnType Netc_EthSwt_Ip_EnableCreditBasedShaper(uint8 SwitchIdx, const uint8 SwitchPortIdx, const uint8 TrafficClass, const boolean Enable);
 
@@ -1062,7 +1026,711 @@ Std_ReturnType Netc_EthSwt_Ip_SetPortMacLayerDuplexMode( uint8 SwitchIdx,
                                                          uint8 SwitchPortIdx, 
                                                          Netc_EthSwt_Ip_PortDuplexType EthSwtPortMacLayerDuplexMode
                                                        );
+/**
+ * @brief            Periodically called function to age the FDB entries.
+ * @details          
+ * 
+ * @param[in]        SwitchIdx                      Index of the switch within the context of the Ethernet Switch Driver
+ * 
+ */
+void Netc_EthSwt_Ip_MainFunction( uint8 SwitchIdx );
 
+/*
+ * @brief            Set the pruning mode on a switch port.
+ * @details          
+ * 
+ * @param[in]        SwitchIdx                      Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        SwitchPortIdx                  Index of the port at the addressed switch
+ * @param[in]        PruningEnable                  TRUE : pruning is enabled; FALSE : pruning is disabled;
+ * 
+ * @return          Result of the operation
+ * @retval          E_OK        success
+ * @retval          E_NOT_OK    fail to set the pruning mode
+ */
+Std_ReturnType Netc_EthSwt_Ip_SetPruningMode(uint8 SwitchIdx, uint8 SwitchPortIdx, boolean PruningEnable);
+
+/**
+ * @brief            Get the pruning mode on a switch port.
+ * @details          
+ * 
+ * @param[in]        SwitchIdx                      Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        SwitchPortIdx                  Index of the port at the addressed switch
+ * @param[out]       PruningEnablePtr               TRUE : pruning is enabled; FALSE : pruning is disabled;
+ * 
+ * @return          Result of the operation
+ * @retval          E_OK        success
+ * @retval          E_NOT_OK    fail to get the pruning mode
+ */
+Std_ReturnType Netc_EthSwt_Ip_GetPruningMode(uint8 SwitchIdx, uint8 SwitchPortIdx, boolean *PruningEnablePtr);
+
+/**
+ * @brief            Retrieve time of free-running clock in the switch.
+ * @details          
+ * 
+ * @param[in]        SwitchIdx          Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       PtpTime            ptpTime Time of the free-running clock
+ * 
+ * @return          Result of the operation
+ * @retval          E_OK        success
+ * @retval          E_NOT_OK    fail to get the time of free-running clock
+ */
+Std_ReturnType Netc_EthSwt_Ip_GetPtpTSClk( uint8 SwitchIdx, Netc_EthSwt_Ip_PtpTimeType *PtpTime );
+
+/**
+ * @brief            Retrieve time of corrected clock (synchronized time) in the switch.
+ * @details          
+ * 
+ * @param[in]        SwitchIdx          Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       PtpTime            ptpTime Time of the corrected clock
+ * 
+ * @return          Result of the operation
+ * @retval          E_OK        success
+ * @retval          E_NOT_OK    fail to get the time of corrected clock
+ */
+Std_ReturnType Netc_EthSwt_Ip_GetPtpClk( uint8 SwitchIdx, Netc_EthSwt_Ip_PtpTimeType *PtpTime );
+
+/**
+ * @brief            Retrieve both time of free-running clock and corrected clock (synchronized time) in the switch.
+ * @details          
+ * 
+ * @param[in]        SwitchIdx          Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       FreeRunTime        Time of the free-running clock
+ * @param[out]       CorrTime           Time of the corrected clock
+ * 
+ * @return          Result of the operation
+ * @retval          E_OK        success
+ * @retval          E_NOT_OK    fail to get the time of free-running and corrected clock
+ */
+Std_ReturnType Netc_EthSwt_Ip_GetPtpTimes( uint8 SwitchIdx, Netc_EthSwt_Ip_PtpTimeType *FreeRunTime, Netc_EthSwt_Ip_PtpTimeType *CorrTime );
+
+/**
+ * @brief            Set a clk ratio for the corrected clock in the switch.
+ * @details          
+ * 
+ * @param[in]        SwitchIdx          Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        ClkRatio           is a fixed-point clock rate value with a single-bit integer part and a 31-bit fractional part.
+ * 
+ * @return          Result of the operation
+ * @retval          E_OK        success
+ * @retval          E_NOT_OK    fail to set the clk ratio
+ */
+Std_ReturnType Netc_EthSwt_Ip_SetPtpClkRatio( uint8 SwitchIdx, uint32 ClkRatio );
+
+/**
+ * @brief            Add/Subtract an offset to/from the corrected clock (PTP_CLK).
+ * @details          
+ * 
+ * @param[in]        SwitchIdx          Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        Offset             signed value, to add or substract from the offset register.
+ * 
+ * @return          Result of the operation
+ * @retval          E_OK        success
+ * @retval          E_NOT_OK    fail to correct the offset
+ */
+Std_ReturnType Netc_EthSwt_Ip_CorrectPtpClk( uint8 SwitchIdx, sint64 Offset );
+
+/**
+ * @brief            Add or Update Rate Policer Table Entry function
+ * @details          External function for adding or updating one Rate Policer entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx        Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        Cmd              Add and Update commands are supported
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        RatePolicerTableEntry    Pointer points to a Rate policer entry structure Netc_EthSwt_Ip_RatePolicerEntryDataType
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateRatePolicerTableEntry( uint8 SwitchIdx,
+                                                                               Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                               uint32 *MatchedEntries,
+                                                                               const Netc_EthSwt_Ip_RatePolicerEntryDataType * RatePolicerTableEntry
+                                                                             );
+
+/**
+ * @brief            Query Rate Policer Table Entry function
+ * @details          External function for querying one Rate Policer entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        RatePolicerEntryId     Rate Policer table entry ID
+ * @param[out]       RatePolicerTableEntry  A pointer that returns the data of a matched entry by "query" operation
+ *                                          The data is valid only when MatchedEntries equals 1.
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryRatePolicerTableEntry( uint8 SwitchIdx,
+                                                                         uint32 *MatchedEntries,
+                                                                         uint32 RatePolicerEntryId,
+                                                                         Netc_EthSwt_Ip_RatePolicerEntryRspDataType * RatePolicerTableEntry
+                                                                       );
+
+/**
+ * @brief            Delete Rate Policer Table Entry function
+ * @details          External function for deleting one Rate Policer entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        RatePolicerEntryId     Rate Policer entry ID
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteRatePolicerTableEntry( uint8 SwitchIdx,
+                                                                          uint32 *MatchedEntries,
+                                                                          uint32 RatePolicerEntryId
+                                                                        );
+
+/**
+ * @brief            Add or Update Ingress Stream Table Entry function
+ * @details          External function for adding or updating one Ingress Stream entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx        Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        Cmd              Add and Update commands are supported
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        IngressStreamTableEntry    Pointer points to a Ingress Stream entry structure Netc_EthSwt_Ip_IngressStreamEntryDataType
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateIngressStreamTableEntry( uint8 SwitchIdx,
+                                                                                 Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 const Netc_EthSwt_Ip_IngressStreamEntryDataType * IngressStreamTableEntry
+                                                                               );
+
+/**
+ * @brief            Query Ingress Stream Table Entry function
+ * @details          External function for querying one Ingress Stream entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        IngressStreamEntryId     Ingress Stream table entry ID
+ * @param[out]       IngressStreamTableEntry  A pointer that returns the data of a matched entry by "query" operation
+ *                                            The data is valid only when MatchedEntries equals 1.
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngressStreamTableEntry( uint8 SwitchIdx,
+                                                                           uint32 *MatchedEntries,
+                                                                           uint32 IngressStreamEntryId,
+                                                                           Netc_EthSwt_Ip_IngressStreamEntryDataType * IngressStreamTableEntry
+                                                                         );
+
+/**
+ * @brief            Delete Ingress Stream Table Entry function
+ * @details          External function for deleting one Ingress Stream entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        IngressStreamEntryId     Ingress Stream entry ID
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngressStreamTableEntry( uint8 SwitchIdx,
+                                                                            uint32 *MatchedEntries,
+                                                                            uint32 IngressStreamEntryId
+                                                                          );
+
+/**
+ * @brief            Add or Update Ingress Stream Count Table Entry function
+ * @details          External function for adding or updating one Ingress Stream Count entry with "Exact Match Key Element Match" access method.
+ *                   That means only "Exact Match Key Element Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx                  Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        Cmd                        Add and Update commands are supported
+ * @param[out]       MatchedEntries             Number of matched entries
+ * @param[in]        IngressStreamCountEntryId  Index of the Ingress Stream Count Table Entry to be added or reset
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateIngressStreamCountTableEntry( uint8 SwitchIdx,
+                                                                                       Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                       uint32 *MatchedEntries,
+                                                                                       uint32 IngressStreamCountId
+                                                                                     );
+
+/**
+ * @brief            Query Ingress Stream Count Table Entry function
+ * @details          External function for querying one Ingress Stream Count entry with "Exact Match Key Element Match" access method.
+ *                   That means only "Exact Match Key Element Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx                       Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries                  Number of matched entry
+ * @param[in]        IngressStreamCountEntryId       Index of the Ingress Stream Count Table Entry to be queried
+ * @param[out]       IngressStreamCountTableEntry    A pointer that returns the data of a matched entry by "query" operation
+ *                                                   The data is valid only when MatchedEntries equals 1.
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngressStreamCountTableEntry( uint8 SwitchIdx,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 uint32 IngressStreamCountEntryId,
+                                                                                 Netc_EthSwt_Ip_IngressStreamCountTableRspDataType * IngressStreamCountTableEntry
+                                                                               );
+
+/**
+ * @brief            Delete Ingress Stream Count Table Entry function
+ * @details          External function for deleting one Ingress Stream Count entry with "Exact Match Key Element Match" access method.
+ *                   That means only "Exact Match Key Element Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        IngressStreamCountId   Index of the Ingress Stream Count Table Entry to be deleted
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngressStreamCountTableEntry( uint8 SwitchIdx,
+                                                                                  uint32 *MatchedEntries,
+                                                                                  uint32 IngressStreamCountId
+                                                                                );
+
+/**
+ * @brief            Add or Update Ingress Stream Filter Table Entry function
+ * @details          External function for adding or updating one Ingress Stream Filter entry with "Exact Match Key Element Match" access method.
+ *                   That means only "Exact Match Key Element Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx        Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        Cmd              Add and Update commands are supported
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        IngressStreamFilterTableEntry    Pointer points to a Ingress Stream Filter entry structure Netc_EthSwt_Ip_IngressStreamFilterEntryDataType
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateIngressStreamFilterTableEntry( uint8 SwitchIdx,
+                                                                                       Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                       uint32 *MatchedEntries,
+                                                                                       const Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableEntry
+                                                                                     );
+
+/**
+ * @brief            Query Ingress Stream Filter Table Entry function
+ * @details          External function for querying one Ingress Stream Filter entry with "Exact Match Key Element Match" access method.
+ *                   That means only "Exact Match Key Element Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        IngressStreamFilterTableEntry  A pointer that provides the data of KEYE_DATA filed for "query" operation
+ * @param[out]       IngressStreamFilterTableEntry  A pointer that returns the data of a matched entry by "query" operation
+ *                                            The data is valid only when MatchedEntries equals 1.
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngressStreamFilterTableEntry( uint8 SwitchIdx,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableEntry
+                                                                               );
+
+/**
+ * @brief            Delete Ingress Stream Filter Table Entry function
+ * @details          External function for deleting one Ingress Stream Filter entry with "Exact Match Key Element Match" access method.
+ *                   That means only "Exact Match Key Element Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        IngressStreamFilterTableEntry     A pointer that provides the data of KEYE_DATA filed for "delete" operation
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngressStreamFilterTableEntry( uint8 SwitchIdx,
+                                                                                  uint32 *MatchedEntries,
+                                                                                  const Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableEntry
+                                                                                );
+
+/**
+ * @brief            Query Ingress Stream Filter Table Entry function with Search method
+ * @details          External function for searching Ingress Stream Filter entry one by one with Search method.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        ResumeEntryId          resume entry id for searching
+ * @param[out]       MatchedEntry         Number of matched entry
+ * @param[out]       IngressStreamTableEntry  A pointer that returns the data of a matched entry by "search" operation
+ *                                            The data is valid only when MatchedEntry equals 1.
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_SearchIngressStreamFilterTableEntry( uint8 SwitchIdx,
+                                                                                  uint32 * ResumeEntryId,
+                                                                                  uint32 * MatchedEntry,
+                                                                                  Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableEntry
+                                                                                );
+
+/**
+ * @brief            Dump Ingress Stream Filter Table Entry function
+ * @details          External function for dumping all Ingress Stream Filter entries.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        NumberOfElements       Number of entries that want to be dumped
+ * @param[out]       NumberOfElements       Number of entries that actually are dumped (number of existing entries)
+ * @param[out]       IngressStreamFilterTableList  A pointer that returns the list of NumberOfElements entries
+ *                                            
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_GetIngressStreamFilterTable( uint8 SwitchIdx,
+                                                                          uint16 * NumberOfElements,
+                                                                          Netc_EthSwt_Ip_IngressStreamFilterEntryDataType * IngressStreamFilterTableList
+                                                                        );
+
+/**
+ * @brief            Add or Update Stream Gate Instance Table Entry function
+ * @details          External function for adding or updating one Stream Gate Instance entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx        Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        Cmd              Add and Update commands are supported
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        StreamGateInstanceTableEntry    Pointer points to a Stream Gate Instance entry structure Netc_EthSwt_Ip_StreamGateInstanceEntryDataType
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateStreamGateInstanceTableEntry( uint8 SwitchIdx,
+                                                                                      Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                      uint32 *MatchedEntries,
+                                                                                      const Netc_EthSwt_Ip_StreamGateInstanceEntryDataType * StreamGateInstanceTableEntry
+                                                                                    );
+
+/**
+ * @brief            Query Stream Gate Instance Table Entry function
+ * @details          External function for querying one Stream Gate Instance entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        SGIEntryId             Stream Gate Instance entry ID
+ * @param[out]       SGITableEntryRspData   A pointer that returns the data of a matched entry by "query" operation
+ *                                          The data is valid only when MatchedEntries equals 1.
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryStreamGateInstanceTableEntry( uint8 SwitchIdx,
+                                                                                uint32 *MatchedEntries,
+                                                                                uint32 SGIEntryId,
+                                                                                Netc_EthSwt_Ip_StreamGateInstanceEntryRspDataType * SGITableEntryRspData
+                                                                              );
+
+/**
+ * @brief            Delete Stream Gate Instance Table Entry function
+ * @details          External function for deleting one Stream Gate Instance entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        SGIEntryId             Stream Gate Instance entry ID
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteStreamGateInstanceTableEntry( uint8 SwitchIdx,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 uint32 SGIEntryId
+                                                                               );
+
+/**
+ * @brief            Add Stream Gate Control List Table Entry function
+ * @details          External function for adding one Stream Gate Control List entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx        Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        Cmd              Add and Update commands are supported
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        SGCLTableEntry   Pointer points to a Stream Gate Control List entry structure Netc_EthSwt_Ip_SGCLTableDataType
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddStreamGateControlListTableEntry( uint8 SwitchIdx,
+                                                                                 Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 const Netc_EthSwt_Ip_SGCLTableDataType * SGCLTableEntry
+                                                                                );
+
+/**
+ * @brief            Query Stream Gate Control List Table Entry function
+ * @details          External function for querying one Stream Gate Control List entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        SGCLEntryId            Stream Gate Control List entry ID
+ * @param[in]        ListLen                Stream Gate Control List entry length, it has to be set to the same value as LIST_LENGTH when adding the entry
+ * @param[out]       SGCLTableEntryRspData  A pointer that returns the data of a matched entry by "query" operation
+ *                                          The data is valid only when MatchedEntries equals 1.
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryStreamGateControlListTableEntry( uint8 SwitchIdx,
+                                                                                   uint32 *MatchedEntries,
+                                                                                   uint32 SGCLEntryId,
+                                                                                   uint8 ListLen,
+                                                                                   Netc_EthSwt_Ip_SGCLTableDataType * SGCLTableEntryRspData
+                                                                                 );
+
+/**
+ * @brief            Delete Stream Gate Control List Table Entry function
+ * @details          External function for deleting one Stream Gate Control List entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        SGCLEntryId            Stream Gate Control List entry ID
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteStreamGateControlListTableEntry( uint8 SwitchIdx,
+                                                                                    uint32 *MatchedEntries,
+                                                                                    uint32 SGCLEntryId
+                                                                                  );
+
+/**
+ * @brief            Add or Update Ingress Sequence Generation Table Entry function
+ * @details          External function for adding or updating one Ingress Sequence Generation entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx        Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        Cmd              Add and Update commands are supported
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        ISQGTableEntry   Pointer points to a Stream Gate Instance entry structure Netc_EthSwt_Ip_ISQGTableDataType
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateIngressSeqGenerationTableEntry( uint8 SwitchIdx,
+                                                                                        Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                        uint32 *MatchedEntries,
+                                                                                        const Netc_EthSwt_Ip_ISQGTableDataType * ISQGTableEntry
+                                                                                      );
+
+/**
+ * @brief            Query Ingress Sequence Generation Table Entry function
+ * @details          External function for querying one Ingress Sequence Generation entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        ISQGEntryId            Ingress Sequence Generation entry ID
+ * @param[out]       ISQGRspData            A pointer that returns the data of a matched entry by "query" operation
+ *                                          The data is valid only when MatchedEntries equals 1.
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngressSeqGenerationTableEntry( uint8 SwitchIdx,
+                                                                                  uint32 *MatchedEntries,
+                                                                                  uint32 ISQGEntryId,
+                                                                                  Netc_EthSwt_Ip_ISQGTableDataType * ISQGRspData
+                                                                                );
+
+/**
+ * @brief            Delete Ingress Sequence Generation Table Entry function
+ * @details          External function for deleting one Ingress Sequence Generation entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        ISQGEntryId            Ingress Sequence Generation entry ID
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngressSeqGenerationTableEntry( uint8 SwitchIdx,
+                                                                                   uint32 *MatchedEntries,
+                                                                                   uint32 ISQGEntryId
+                                                                                 );
+
+/**
+ * @brief            Update Egress Sequence Recovery Table Entry function
+ * @details          External function for updating one Egress Sequence Recovery entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx        Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        EgrSQRTableEntry   Pointer points to an Egress Sequence Recovery entry structure Netc_EthSwt_Ip_EgrSeqRecoveryTableDataType
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_UpdateEgressSeqRecoveryTableEntry( uint8 SwitchIdx,
+                                                                                uint32 *MatchedEntries,
+                                                                                const Netc_EthSwt_Ip_EgrSeqRecoveryTableDataType * EgrSQRTableEntry
+                                                                              );
+
+/**
+ * @brief            Query Egress Sequence Recovery Table Entry function
+ * @details          External function for querying one Egress Sequence Recovery entry with "Entry ID Match" access method.
+ *                   That means only "Entry ID Match" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        ESQREntryId            Egress Sequence Recovery entry ID
+ * @param[out]       ESQRRspData            A pointer that returns the data of a matched entry by "query" operation
+ *                                          The data is valid only when MatchedEntries equals 1.
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryEgressSeqRecoveryTableEntry( uint8 SwitchIdx,
+                                                                               uint32 *MatchedEntries,
+                                                                               uint32 ESQREntryId,
+                                                                               Netc_EthSwt_Ip_EgrSeqRecoveryTableRspDataType * ESQRRspData
+                                                                             );
+
+/**
+ * @brief            Add or Update Ingress Stream Identification Table Entry function
+ * @details          External function for adding or updating one Ingress Stream Identification entry with "KEY_ELEMENT" access method.
+ *                   That means only "KEY_ELEMENT" access method is supported.
+ * 
+ * @param[in]        SwitchIdx        Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        Cmd              Add and Update commands are supported
+ * @param[out]       MatchedEntries   Number of matched entries
+ * @param[in]        ISQGTableEntry   Pointer points to a Ingress Stream Identification entry structure Netc_EthSwt_Ip_IngrStremIdentificationTableDataType
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_AddOrUpdateIngrStreamIdentificationTableEntry( uint8 SwitchIdx,
+                                                                                            Netc_EthSwt_Ip_CommandsType Cmd,
+                                                                                            uint32 *MatchedEntries,
+                                                                                            const Netc_EthSwt_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                          );
+
+/**
+ * @brief            Query Ingress Stream Identification Table Entry function
+ * @details          External function for querying one Ingress Stream Identification entry with "KEY_ELEMENT" access method.
+ *                   That means only "KEY_ELEMENT" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        ISITableEntry          A pointer that provides the data with the "query" operation
+ * @param[out]       ISITableEntry          A pointer that returns the data of a matched entry by "query" operation
+ *                                          The data is valid only when MatchedEntries equals 1.
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_QueryIngrStreamIdentificationTableEntry( uint8 SwitchIdx,
+                                                                                      uint32 *MatchedEntries,
+                                                                                      Netc_EthSwt_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                    );
+
+/**
+ * @brief            Delete Ingress Stream Identification Table Entry function
+ * @details          External function for deleting one Ingress Stream Identification entry with "KEY_ELEMENT" access method.
+ *                   That means only "KEY_ELEMENT" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        ISITableEntry          A pointer that provides the data with the "delete" operation
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_DeleteIngrStreamIdentificationTableEntry( uint8 SwitchIdx,
+                                                                                       uint32 *MatchedEntries,
+                                                                                       const Netc_EthSwt_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                     );
+
+/**
+ * @brief            Dump all Ingress Stream Identification Table Entries function
+ * @details          External function for dumping all Ingress Stream Identification entries with "SEARCH_CRITERIA" access method.
+ *                   That means only "SEARCH_CRITERIA" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        NumberOfElements       Number of entries that want to be dumped
+ * @param[out]       NumberOfElements       Number of entries that actually are dumped (number of existing entries)
+ * @param[out]       ISITableList           A pointer that returns the list of NumberOfElements entries
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_GetIngrStreamIdentificationTable( uint8 SwitchIdx,
+                                                                               uint16 * NumberOfElements,
+                                                                               Netc_EthSwt_Ip_IngrStremIdentificationTableDataType * ISITableList
+                                                                             );
+
+                                                                             /**
+ * @brief            Update Egress Scheduler Table Entry function
+ * @details          External function for updating one Egress Scheduler Table entry with "ENTRY_ID" access method.
+ *                   That means only "ENTRY_ID" access method is supported.
+ * 
+ * @param[in]        SwitchIdx              Index of the switch within the context of the Ethernet Switch Driver
+ * @param[in]        EntryId                Egress Scheduler entry ID
+ * @param[out]       MatchedEntries         Number of matched entry
+ * @param[in]        SchedulerTableEntry    A pointer that provides the data for the "update" operation
+ * 
+ * @return           Result of the operation
+ * @retval           0 : NETC_ETHSWT_CBDRSTATUS_SUCCES, success
+ * @retval           others : fail
+ */
+Netc_EthSwt_Ip_CBDRStatusType Netc_EthSwt_Ip_UpdateEgressSchedulerTableEntry( uint8 SwitchIdx,
+                                                                            uint32 EntryId,
+                                                                            uint32 *MatchedEntries,
+                                                                            const Netc_EthSwt_Ip_PortSchedulerType * SchedulerTableEntry
+                                                                        );
+
+/**
+ * @brief           Set Timer Synchronization State.
+ * @details         This function sets the Timer Synchronization state.
+ *
+ * @param[in]       SwitchIdx Index of the switch
+ * @param[in]       SyncState Timer synchronization state
+
+ * @return          Std_ReturnType     
+ * @retval          E_OK: successful.
+ * @retval          E_NOT_OK: failed
+ * 
+ */
+Std_ReturnType Netc_EthSwt_Ip_SetSyncState(uint8 SwitchIdx, boolean SyncState);
 
 #define ETHSWT_43_NETC_STOP_SEC_CODE
 #include "EthSwt_43_NETC_MemMap.h"

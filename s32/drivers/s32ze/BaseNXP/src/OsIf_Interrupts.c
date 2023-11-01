@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP.
+ * Copyright 2021-2023 NXP.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -34,22 +34,24 @@ extern "C"{
 #define OSIF_INTERRUPTS_AR_RELEASE_MAJOR_VERSION_C     4
 #define OSIF_INTERRUPTS_AR_RELEASE_MINOR_VERSION_C     7
 #define OSIF_INTERRUPTS_AR_RELEASE_REVISION_VERSION_C  0
-#define OSIF_INTERRUPTS_SW_MAJOR_VERSION_C             0
-#define OSIF_INTERRUPTS_SW_MINOR_VERSION_C             9
+#define OSIF_INTERRUPTS_SW_MAJOR_VERSION_C             1
+#define OSIF_INTERRUPTS_SW_MINOR_VERSION_C             0
 #define OSIF_INTERRUPTS_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
-/* Checks against OsIf.h */
+/* Check if OsIf_Interrupts.c file and OsIf.h file are of the same vendor */
 #if (OSIF_INTERRUPTS_VENDOR_ID_C != OSIF_VENDOR_ID)
     #error "OsIf_Interrupts.c and OsIf.h have different vendor ids"
 #endif
+/* Check if OsIf_Interrupts.c file and OsIf.h file are of the same Autosar version */
 #if ((OSIF_INTERRUPTS_AR_RELEASE_MAJOR_VERSION_C    != OSIF_AR_RELEASE_MAJOR_VERSION) || \
      (OSIF_INTERRUPTS_AR_RELEASE_MINOR_VERSION_C    != OSIF_AR_RELEASE_MINOR_VERSION) || \
      (OSIF_INTERRUPTS_AR_RELEASE_REVISION_VERSION_C != OSIF_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of OsIf_Interrupts.c and OsIf.h are different"
 #endif
+/* Check if OsIf_Interrupts.c file and OsIf.h file are of the same Software version */
 #if ((OSIF_INTERRUPTS_SW_MAJOR_VERSION_C != OSIF_SW_MAJOR_VERSION) || \
      (OSIF_INTERRUPTS_SW_MINOR_VERSION_C != OSIF_SW_MINOR_VERSION) || \
      (OSIF_INTERRUPTS_SW_PATCH_VERSION_C != OSIF_SW_PATCH_VERSION) \
@@ -57,15 +59,17 @@ extern "C"{
     #error "Software Version Numbers of OsIf_Interrupts.c and OsIf.h are different"
 #endif
 
-/* Checks against OsIf_Interrupts.h */
+/* Check if OsIf_Interrupts.c file and OsIf_Interrupts.h file are of the same vendor */
 #if (OSIF_INTERRUPTS_VENDOR_ID_C != OSIF_INTERRUPTS_VENDOR_ID)
     #error "OsIf_Interrupts.c and OsIf_Interrupts.h have different vendor ids"
 #endif
+/* Check if OsIf_Interrupts.c file and OsIf_Interrupts.h file are of the same Autosar version */
 #if ((OSIF_INTERRUPTS_AR_RELEASE_MAJOR_VERSION_C    != OSIF_INTERRUPTS_AR_RELEASE_MAJOR_VERSION) || \
      (OSIF_INTERRUPTS_AR_RELEASE_MINOR_VERSION_C    != OSIF_INTERRUPTS_AR_RELEASE_MINOR_VERSION) || \
      (OSIF_INTERRUPTS_AR_RELEASE_REVISION_VERSION_C != OSIF_INTERRUPTS_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of OsIf_Interrupts.c and OsIf_Interrupts.h are different"
 #endif
+/* Check if OsIf_Interrupts.c file and OsIf_Interrupts.h file are of the same Software version */
 #if ((OSIF_INTERRUPTS_SW_MAJOR_VERSION_C != OSIF_INTERRUPTS_SW_MAJOR_VERSION) || \
      (OSIF_INTERRUPTS_SW_MINOR_VERSION_C != OSIF_INTERRUPTS_SW_MINOR_VERSION) || \
      (OSIF_INTERRUPTS_SW_PATCH_VERSION_C != OSIF_INTERRUPTS_SW_PATCH_VERSION) \
@@ -123,6 +127,12 @@ static uint32 OsIf_au32SuspendLevel[OSIF_MAX_COREIDX_SUPPORTED];
 #define BASENXP_START_SEC_CODE
 #include "BaseNXP_MemMap.h"
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : OsIf_Interrupts_SuspendAllInterrupts.
+ * Description   : Suspend all interrupts.
+ * 
+ *END**************************************************************************/
 void OsIf_Interrupts_SuspendAllInterrupts(void)
 {
     uint32 CoreId = OsIfCoreID();
@@ -133,6 +143,12 @@ void OsIf_Interrupts_SuspendAllInterrupts(void)
     }
 }
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : OsIf_Interrupts_ResumeAllInterrupts.
+ * Description   : Resume all interrupts.
+ * 
+ *END**************************************************************************/
 void OsIf_Interrupts_ResumeAllInterrupts(void)
 {
     uint32 CoreId = OsIfCoreID();

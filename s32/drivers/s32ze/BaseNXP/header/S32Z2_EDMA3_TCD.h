@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_EDMA3_TCD.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_EDMA3_TCD
  *
  * This file contains register definitions and macros for easy access to their
@@ -74,31 +74,31 @@
 /** EDMA3_TCD - Register Layout Typedef */
 typedef struct {
   struct {                                         /* offset: 0x0, array step: 0x10000 */
-    __IO uint32_t CH_CSR;                            /**< Channel Control and Status, array offset: 0x0, array step: 0x10000 */
-    __IO uint32_t CH_ES;                             /**< Channel Error Status, array offset: 0x4, array step: 0x10000 */
-    __IO uint32_t CH_INT;                            /**< Channel Interrupt Status, array offset: 0x8, array step: 0x10000 */
-    __IO uint32_t CH_SBR;                            /**< Channel System Bus, array offset: 0xC, array step: 0x10000 */
-    __IO uint32_t CH_PRI;                            /**< Channel Priority, array offset: 0x10, array step: 0x10000 */
+    __IO uint32_t CH_CSR;                            /**< Channel Control and Status, array offset: 0x0, array step: 0x10000, irregular array, not all indices are valid */
+    __IO uint32_t CH_ES;                             /**< Channel Error Status, array offset: 0x4, array step: 0x10000, irregular array, not all indices are valid */
+    __IO uint32_t CH_INT;                            /**< Channel Interrupt Status, array offset: 0x8, array step: 0x10000, irregular array, not all indices are valid */
+    __IO uint32_t CH_SBR;                            /**< Channel System Bus, array offset: 0xC, array step: 0x10000, irregular array, not all indices are valid */
+    __IO uint32_t CH_PRI;                            /**< Channel Priority, array offset: 0x10, array step: 0x10000, irregular array, not all indices are valid */
     uint8_t RESERVED_0[12];
-    __IO uint32_t SADDR;                             /**< TCD Source Address, array offset: 0x20, array step: 0x10000 */
-    __IO uint16_t SOFF;                              /**< TCD Signed Source Address Offset, array offset: 0x24, array step: 0x10000 */
-    __IO uint16_t ATTR;                              /**< TCD Transfer Attributes, array offset: 0x26, array step: 0x10000 */
+    __IO uint32_t SADDR;                             /**< TCD Source Address, array offset: 0x20, array step: 0x10000, irregular array, not all indices are valid */
+    __IO uint16_t SOFF;                              /**< TCD Signed Source Address Offset, array offset: 0x24, array step: 0x10000, irregular array, not all indices are valid */
+    __IO uint16_t ATTR;                              /**< TCD Transfer Attributes, array offset: 0x26, array step: 0x10000, irregular array, not all indices are valid */
     union {                                          /* offset: 0x28, array step: 0x10000 */
-      __IO uint32_t NBYTES_MLOFFNO;                    /**< TCD Transfer Size Without Minor Loop Offsets, array offset: 0x28, array step: 0x10000 */
-      __IO uint32_t NBYTES_MLOFFYES;                   /**< TCD Transfer Size with Minor Loop Offsets, array offset: 0x28, array step: 0x10000 */
+      __IO uint32_t NBYTES_MLOFFNO;                    /**< TCD Transfer Size Without Minor Loop Offsets, array offset: 0x28, array step: 0x10000, irregular array, not all indices are valid */
+      __IO uint32_t NBYTES_MLOFFYES;                   /**< TCD Transfer Size with Minor Loop Offsets, array offset: 0x28, array step: 0x10000, irregular array, not all indices are valid */
     } NBYTES;
-    __IO uint32_t SLAST_SDA;                         /**< TCD Last Source Address Adjustment / Store DADDR Address, array offset: 0x2C, array step: 0x10000 */
-    __IO uint32_t DADDR;                             /**< TCD Destination Address, array offset: 0x30, array step: 0x10000 */
-    __IO uint16_t DOFF;                              /**< TCD Signed Destination Address Offset, array offset: 0x34, array step: 0x10000 */
+    __IO uint32_t SLAST_SDA;                         /**< TCD Last Source Address Adjustment / Store DADDR Address, array offset: 0x2C, array step: 0x10000, irregular array, not all indices are valid */
+    __IO uint32_t DADDR;                             /**< TCD Destination Address, array offset: 0x30, array step: 0x10000, irregular array, not all indices are valid */
+    __IO uint16_t DOFF;                              /**< TCD Signed Destination Address Offset, array offset: 0x34, array step: 0x10000, irregular array, not all indices are valid */
     union {                                          /* offset: 0x36, array step: 0x10000 */
-      __IO uint16_t CITER_ELINKNO;                     /**< TCD Current Major Loop Count (Minor Loop Channel Linking Disabled), array offset: 0x36, array step: 0x10000 */
-      __IO uint16_t CITER_ELINKYES;                    /**< TCD Current Major Loop Count (Minor Loop Channel Linking Enabled), array offset: 0x36, array step: 0x10000 */
+      __IO uint16_t CITER_ELINKNO;                     /**< TCD Current Major Loop Count (Minor Loop Channel Linking Disabled), array offset: 0x36, array step: 0x10000, irregular array, not all indices are valid */
+      __IO uint16_t CITER_ELINKYES;                    /**< TCD Current Major Loop Count (Minor Loop Channel Linking Enabled), array offset: 0x36, array step: 0x10000, irregular array, not all indices are valid */
     } CITER;
-    __IO uint32_t DLAST_SGA;                         /**< TCD Last Destination Address Adjustment / Scatter Gather Address, array offset: 0x38, array step: 0x10000 */
-    __IO uint16_t CSR;                               /**< TCD Control and Status, array offset: 0x3C, array step: 0x10000 */
+    __IO uint32_t DLAST_SGA;                         /**< TCD Last Destination Address Adjustment / Scatter Gather Address, array offset: 0x38, array step: 0x10000, irregular array, not all indices are valid */
+    __IO uint16_t CSR;                               /**< TCD Control and Status, array offset: 0x3C, array step: 0x10000, irregular array, not all indices are valid */
     union {                                          /* offset: 0x3E, array step: 0x10000 */
-      __IO uint16_t BITER_ELINKNO;                     /**< TCD Beginning Major Loop Count (Minor Loop Channel Linking Disabled), array offset: 0x3E, array step: 0x10000 */
-      __IO uint16_t BITER_ELINKYES;                    /**< TCD Beginning Major Loop Count (Minor Loop Channel Linking Enabled), array offset: 0x3E, array step: 0x10000 */
+      __IO uint16_t BITER_ELINKNO;                     /**< TCD Beginning Major Loop Count (Minor Loop Channel Linking Disabled), array offset: 0x3E, array step: 0x10000, irregular array, not all indices are valid */
+      __IO uint16_t BITER_ELINKYES;                    /**< TCD Beginning Major Loop Count (Minor Loop Channel Linking Enabled), array offset: 0x3E, array step: 0x10000, irregular array, not all indices are valid */
     } BITER;
     uint8_t RESERVED_1[65472];
   } TCD[EDMA3_TCD_TCD_COUNT];

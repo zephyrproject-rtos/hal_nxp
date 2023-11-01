@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Clock_Ip.h
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   CLOCK IP driver header file.
 *   @details CLOCK IP driver header file.
@@ -38,8 +38,8 @@ extern "C"{
 #define CLOCK_IP_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_SW_MAJOR_VERSION                0
-#define CLOCK_IP_SW_MINOR_VERSION                9
+#define CLOCK_IP_SW_MAJOR_VERSION                1
+#define CLOCK_IP_SW_MINOR_VERSION                0
 #define CLOCK_IP_SW_PATCH_VERSION                0
 
 /*==================================================================================================
@@ -189,29 +189,6 @@ void Clock_Ip_DistributePll(void);
  * @implements Clock_Ip_InstallNotificationsCallback_Activity
  */
 void Clock_Ip_InstallNotificationsCallback(Clock_Ip_NotificationsCallbackType Callback);
-
-/*!
- * @brief Clears status flags for a monitor clock.
- *
- * This function clears status flags for a monitor clock.
- *
- * @param[in] ClockName  Clock Name.
- *
- * @return void
- */
-void Clock_Ip_ClearClockMonitorStatus(Clock_Ip_NameType ClockName);
-
-/*!
- * @brief Returns the clock monitor status.
- *
- * This function returns status of the clock monitor: undefined, lower, higher, in range.
- * This function returns undefined status if this function is called when corresponding
- * cmu is not enabled.
- *
- * @return Status.  Cmu status
- */
-Clock_Ip_CmuStatusType Clock_Ip_GetClockMonitorStatus(Clock_Ip_NameType ClockName);
-
 /*!
  * @brief Disables a clock monitor.
  *
@@ -222,7 +199,6 @@ Clock_Ip_CmuStatusType Clock_Ip_GetClockMonitorStatus(Clock_Ip_NameType ClockNam
  * @return void
  */
 void Clock_Ip_DisableClockMonitor(Clock_Ip_NameType ClockName);
-
 /*!
  * @brief Disables clock for a peripheral.
  *

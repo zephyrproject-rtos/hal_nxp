@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    Mru_Ip_Irq.c
-*   @implements     Mru_Ip_Irq.c_Artifact
+*
 *   @version 1.0.0
 *
 *   @brief   ISR handler file.
@@ -32,29 +32,29 @@ extern "C"
 /*==================================================================================================
 *                                       SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
-#define MRU_IP_VENDOR_ID_IRQ_C                      43
-#define MRU_IP_AR_RELEASE_MAJOR_VERSION_IRQ_C       4
-#define MRU_IP_AR_RELEASE_MINOR_VERSION_IRQ_C       7
-#define MRU_IP_AR_RELEASE_REVISION_VERSION_IRQ_C    0
-#define MRU_IP_SW_MAJOR_VERSION_IRQ_C               0
-#define MRU_IP_SW_MINOR_VERSION_IRQ_C               9
-#define MRU_IP_SW_PATCH_VERSION_IRQ_C               0
+#define CDD_PLATFORM_MRU_IP_VENDOR_ID_IRQ_C                      43
+#define CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION_IRQ_C       4
+#define CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_IRQ_C       7
+#define CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION_IRQ_C    0
+#define CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_IRQ_C               1
+#define CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION_IRQ_C               0
+#define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_IRQ_C               0
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
 /* Check if Mru_Ip.h and Mru_Ip_Irq.c are of the same vendor */
-#if (MRU_IP_VENDOR_ID != MRU_IP_VENDOR_ID_IRQ_C)
+#if (CDD_PLATFORM_MRU_IP_VENDOR_ID != CDD_PLATFORM_MRU_IP_VENDOR_ID_IRQ_C)
     #error "Mru_Ip.h and Mru_Ip_Irq.c have different vendor ids"
 #endif
 /* Check if Mru_Ip.h file and Mru_Ip_Irq.c file are of the same Autosar version */
-#if ((MRU_IP_AR_RELEASE_MAJOR_VERSION != MRU_IP_AR_RELEASE_MAJOR_VERSION_IRQ_C) || \
-     (MRU_IP_AR_RELEASE_MINOR_VERSION != MRU_IP_AR_RELEASE_MINOR_VERSION_IRQ_C) || \
-     (MRU_IP_AR_RELEASE_REVISION_VERSION != MRU_IP_AR_RELEASE_REVISION_VERSION_IRQ_C))
+#if ((CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION != CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION_IRQ_C) || \
+     (CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION != CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_IRQ_C) || \
+     (CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION != CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION_IRQ_C))
 #error "AutoSar Version Numbers of Mru_Ip.h and Mru_Ip_Irq.c are different"
 #endif
-#if ((MRU_IP_SW_MAJOR_VERSION != MRU_IP_SW_MAJOR_VERSION_IRQ_C) || \
-     (MRU_IP_SW_MINOR_VERSION != MRU_IP_SW_MINOR_VERSION_IRQ_C) || \
-     (MRU_IP_SW_PATCH_VERSION != MRU_IP_SW_PATCH_VERSION_IRQ_C))
+#if ((CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION != CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_IRQ_C) || \
+     (CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION != CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION_IRQ_C) || \
+     (CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION != CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_IRQ_C))
 #error "Software Version Numbers of Mru_Ip.h and Mru_Ip_Irq.c are different"
 #endif
 /*==================================================================================================
@@ -105,6 +105,7 @@ ISR(Mru_Ip_RTU0_MRU0_Int0_IRQHandler);
 ISR(Mru_Ip_RTU0_MRU0_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef RTU0_MRU1_ENABLED
     #if (!defined MRU_IP_SKIP_RTU0_MRU1_INT0_HANDLER)
 ISR(Mru_Ip_RTU0_MRU1_Int0_IRQHandler);
@@ -113,6 +114,7 @@ ISR(Mru_Ip_RTU0_MRU1_Int0_IRQHandler);
 ISR(Mru_Ip_RTU0_MRU1_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef RTU0_MRU2_ENABLED
     #if (!defined MRU_IP_SKIP_RTU0_MRU2_INT0_HANDLER)
 ISR(Mru_Ip_RTU0_MRU2_Int0_IRQHandler);
@@ -121,6 +123,7 @@ ISR(Mru_Ip_RTU0_MRU2_Int0_IRQHandler);
 ISR(Mru_Ip_RTU0_MRU2_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef RTU0_MRU3_ENABLED
     #if (!defined MRU_IP_SKIP_RTU0_MRU3_INT0_HANDLER)
 ISR(Mru_Ip_RTU0_MRU3_Int0_IRQHandler);
@@ -138,6 +141,7 @@ ISR(Mru_Ip_RTU1_MRU4_Int0_IRQHandler);
 ISR(Mru_Ip_RTU1_MRU4_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef RTU1_MRU5_ENABLED
     #if (!defined MRU_IP_SKIP_RTU1_MRU5_INT0_HANDLER)
 ISR(Mru_Ip_RTU1_MRU5_Int0_IRQHandler);
@@ -146,6 +150,7 @@ ISR(Mru_Ip_RTU1_MRU5_Int0_IRQHandler);
 ISR(Mru_Ip_RTU1_MRU5_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef RTU1_MRU6_ENABLED
     #if (!defined MRU_IP_SKIP_RTU1_MRU6_INT0_HANDLER)
 ISR(Mru_Ip_RTU1_MRU6_Int0_IRQHandler);
@@ -154,6 +159,7 @@ ISR(Mru_Ip_RTU1_MRU6_Int0_IRQHandler);
 ISR(Mru_Ip_RTU1_MRU6_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef RTU1_MRU7_ENABLED
     #if (!defined MRU_IP_SKIP_RTU1_MRU7_INT0_HANDLER)
 ISR(Mru_Ip_RTU1_MRU7_Int0_IRQHandler);
@@ -171,6 +177,7 @@ ISR(Mru_Ip_CE_MRU0_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU0_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU1_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU1_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU1_Int0_IRQHandler);
@@ -179,6 +186,7 @@ ISR(Mru_Ip_CE_MRU1_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU1_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU2_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU2_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU2_Int0_IRQHandler);
@@ -187,6 +195,7 @@ ISR(Mru_Ip_CE_MRU2_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU2_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU3_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU3_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU3_Int0_IRQHandler);
@@ -195,6 +204,7 @@ ISR(Mru_Ip_CE_MRU3_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU3_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU4_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU4_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU4_Int0_IRQHandler);
@@ -203,6 +213,7 @@ ISR(Mru_Ip_CE_MRU4_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU4_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU5_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU5_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU5_Int0_IRQHandler);
@@ -211,6 +222,7 @@ ISR(Mru_Ip_CE_MRU5_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU5_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU6_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU6_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU6_Int0_IRQHandler);
@@ -219,6 +231,7 @@ ISR(Mru_Ip_CE_MRU6_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU6_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU7_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU7_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU7_Int0_IRQHandler);
@@ -227,6 +240,7 @@ ISR(Mru_Ip_CE_MRU7_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU7_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU8_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU8_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU8_Int0_IRQHandler);
@@ -235,6 +249,7 @@ ISR(Mru_Ip_CE_MRU8_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU8_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU9_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU9_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU9_Int0_IRQHandler);
@@ -243,6 +258,7 @@ ISR(Mru_Ip_CE_MRU9_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU9_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU10_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU10_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU10_Int0_IRQHandler);
@@ -251,6 +267,7 @@ ISR(Mru_Ip_CE_MRU10_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU10_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU11_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU11_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU11_Int0_IRQHandler);
@@ -259,6 +276,7 @@ ISR(Mru_Ip_CE_MRU11_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU11_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU12_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU12_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU12_Int0_IRQHandler);
@@ -267,6 +285,7 @@ ISR(Mru_Ip_CE_MRU12_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU12_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU13_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU13_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU13_Int0_IRQHandler);
@@ -275,6 +294,7 @@ ISR(Mru_Ip_CE_MRU13_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU13_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU14_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU14_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU14_Int0_IRQHandler);
@@ -283,6 +303,7 @@ ISR(Mru_Ip_CE_MRU14_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU14_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU15_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU15_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU15_Int0_IRQHandler);
@@ -291,6 +312,7 @@ ISR(Mru_Ip_CE_MRU15_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU15_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU16_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU16_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU16_Int0_IRQHandler);
@@ -299,6 +321,7 @@ ISR(Mru_Ip_CE_MRU16_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU16_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU17_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU17_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU17_Int0_IRQHandler);
@@ -307,6 +330,7 @@ ISR(Mru_Ip_CE_MRU17_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU17_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU18_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU18_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU18_Int0_IRQHandler);
@@ -315,6 +339,7 @@ ISR(Mru_Ip_CE_MRU18_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU18_Int1_IRQHandler);
     #endif
 #endif
+
 #ifdef CE_MRU19_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU19_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU19_Int0_IRQHandler);
@@ -323,6 +348,7 @@ ISR(Mru_Ip_CE_MRU19_Int0_IRQHandler);
 ISR(Mru_Ip_CE_MRU19_Int1_IRQHandler);
     #endif
 #endif
+
 #if ((defined CE_MRU6_ENABLED && (!defined MRU_IP_SKIP_CE_MRU6_INT0_HANDLER)) || (defined CE_MRU7_ENABLED && (!defined MRU_IP_SKIP_CE_MRU7_INT0_HANDLER)) || (defined CE_MRU8_ENABLED && (!defined MRU_IP_SKIP_CE_MRU8_INT0_HANDLER)) || \
      (defined CE_MRU9_ENABLED && (!defined MRU_IP_SKIP_CE_MRU9_INT0_HANDLER)) || (defined CE_MRU10_ENABLED && (!defined MRU_IP_SKIP_CE_MRU10_INT0_HANDLER)) || (defined CE_MRU11_ENABLED && (!defined MRU_IP_SKIP_CE_MRU11_INT0_HANDLER)))
 ISR(Mru_Ip_CE_MRU6_TO_MRU11_Int0_IRQHandler);
@@ -438,6 +464,7 @@ ISR(Mru_Ip_RTU0_MRU0_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef RTU0_MRU1_ENABLED
     #if (!defined MRU_IP_SKIP_RTU0_MRU1_INT0_HANDLER)
 ISR(Mru_Ip_RTU0_MRU1_Int0_IRQHandler)
@@ -488,6 +515,7 @@ ISR(Mru_Ip_RTU0_MRU1_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef RTU0_MRU2_ENABLED
     #if (!defined MRU_IP_SKIP_RTU0_MRU2_INT0_HANDLER)
 ISR(Mru_Ip_RTU0_MRU2_Int0_IRQHandler)
@@ -538,6 +566,7 @@ ISR(Mru_Ip_RTU0_MRU2_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef RTU0_MRU3_ENABLED
     #if (!defined MRU_IP_SKIP_RTU0_MRU3_INT0_HANDLER)
 ISR(Mru_Ip_RTU0_MRU3_Int0_IRQHandler)
@@ -639,6 +668,7 @@ ISR(Mru_Ip_RTU1_MRU4_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef RTU1_MRU5_ENABLED
     #if (!defined MRU_IP_SKIP_RTU1_MRU5_INT0_HANDLER)
 ISR(Mru_Ip_RTU1_MRU5_Int0_IRQHandler)
@@ -689,6 +719,7 @@ ISR(Mru_Ip_RTU1_MRU5_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef RTU1_MRU6_ENABLED
     #if (!defined MRU_IP_SKIP_RTU1_MRU6_INT0_HANDLER)
 ISR(Mru_Ip_RTU1_MRU6_Int0_IRQHandler)
@@ -739,6 +770,7 @@ ISR(Mru_Ip_RTU1_MRU6_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef RTU1_MRU7_ENABLED
     #if (!defined MRU_IP_SKIP_RTU1_MRU7_INT0_HANDLER)
 ISR(Mru_Ip_RTU1_MRU7_Int0_IRQHandler)
@@ -808,7 +840,7 @@ ISR(Mru_Ip_CE_MRU0_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU0_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -832,7 +864,7 @@ ISR(Mru_Ip_CE_MRU0_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU0_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -840,6 +872,7 @@ ISR(Mru_Ip_CE_MRU0_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU1_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU1_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU1_Int0_IRQHandler)
@@ -858,7 +891,7 @@ ISR(Mru_Ip_CE_MRU1_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU1_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -882,7 +915,7 @@ ISR(Mru_Ip_CE_MRU1_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU1_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -890,6 +923,7 @@ ISR(Mru_Ip_CE_MRU1_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU2_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU2_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU2_Int0_IRQHandler)
@@ -908,7 +942,7 @@ ISR(Mru_Ip_CE_MRU2_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU2_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -932,7 +966,7 @@ ISR(Mru_Ip_CE_MRU2_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU2_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -940,6 +974,7 @@ ISR(Mru_Ip_CE_MRU2_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU3_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU3_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU3_Int0_IRQHandler)
@@ -958,7 +993,7 @@ ISR(Mru_Ip_CE_MRU3_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU3_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -982,7 +1017,7 @@ ISR(Mru_Ip_CE_MRU3_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU3_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -990,6 +1025,7 @@ ISR(Mru_Ip_CE_MRU3_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU4_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU4_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU4_Int0_IRQHandler)
@@ -1008,7 +1044,7 @@ ISR(Mru_Ip_CE_MRU4_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU4_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1032,7 +1068,7 @@ ISR(Mru_Ip_CE_MRU4_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU4_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1040,6 +1076,7 @@ ISR(Mru_Ip_CE_MRU4_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU5_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU5_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU5_Int0_IRQHandler)
@@ -1058,7 +1095,7 @@ ISR(Mru_Ip_CE_MRU5_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU5_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1082,7 +1119,7 @@ ISR(Mru_Ip_CE_MRU5_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU5_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1090,6 +1127,7 @@ ISR(Mru_Ip_CE_MRU5_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU6_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU6_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU6_Int0_IRQHandler)
@@ -1108,7 +1146,7 @@ ISR(Mru_Ip_CE_MRU6_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU6_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1132,7 +1170,7 @@ ISR(Mru_Ip_CE_MRU6_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU6_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1140,6 +1178,7 @@ ISR(Mru_Ip_CE_MRU6_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU7_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU7_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU7_Int0_IRQHandler)
@@ -1158,7 +1197,7 @@ ISR(Mru_Ip_CE_MRU7_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU7_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1182,7 +1221,7 @@ ISR(Mru_Ip_CE_MRU7_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU7_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1190,6 +1229,7 @@ ISR(Mru_Ip_CE_MRU7_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU8_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU8_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU8_Int0_IRQHandler)
@@ -1208,7 +1248,7 @@ ISR(Mru_Ip_CE_MRU8_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU8_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1232,7 +1272,7 @@ ISR(Mru_Ip_CE_MRU8_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU8_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1240,6 +1280,7 @@ ISR(Mru_Ip_CE_MRU8_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU9_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU9_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU9_Int0_IRQHandler)
@@ -1258,7 +1299,7 @@ ISR(Mru_Ip_CE_MRU9_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU9_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1282,7 +1323,7 @@ ISR(Mru_Ip_CE_MRU9_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU9_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1290,6 +1331,7 @@ ISR(Mru_Ip_CE_MRU9_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU10_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU10_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU10_Int0_IRQHandler)
@@ -1308,7 +1350,7 @@ ISR(Mru_Ip_CE_MRU10_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU10_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1332,7 +1374,7 @@ ISR(Mru_Ip_CE_MRU10_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU10_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1340,6 +1382,7 @@ ISR(Mru_Ip_CE_MRU10_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU11_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU11_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU11_Int0_IRQHandler)
@@ -1358,7 +1401,7 @@ ISR(Mru_Ip_CE_MRU11_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU11_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1382,7 +1425,7 @@ ISR(Mru_Ip_CE_MRU11_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU11_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1390,6 +1433,7 @@ ISR(Mru_Ip_CE_MRU11_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU12_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU12_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU12_Int0_IRQHandler)
@@ -1408,7 +1452,7 @@ ISR(Mru_Ip_CE_MRU12_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU12_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1432,7 +1476,7 @@ ISR(Mru_Ip_CE_MRU12_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU12_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1440,6 +1484,7 @@ ISR(Mru_Ip_CE_MRU12_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU13_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU13_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU13_Int0_IRQHandler)
@@ -1458,7 +1503,7 @@ ISR(Mru_Ip_CE_MRU13_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU13_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1482,7 +1527,7 @@ ISR(Mru_Ip_CE_MRU13_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU13_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1490,6 +1535,7 @@ ISR(Mru_Ip_CE_MRU13_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU14_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU14_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU14_Int0_IRQHandler)
@@ -1508,7 +1554,7 @@ ISR(Mru_Ip_CE_MRU14_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU14_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1532,7 +1578,7 @@ ISR(Mru_Ip_CE_MRU14_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU14_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1540,6 +1586,7 @@ ISR(Mru_Ip_CE_MRU14_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU15_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU15_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU15_Int0_IRQHandler)
@@ -1558,7 +1605,7 @@ ISR(Mru_Ip_CE_MRU15_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU15_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1582,7 +1629,7 @@ ISR(Mru_Ip_CE_MRU15_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU15_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1590,6 +1637,7 @@ ISR(Mru_Ip_CE_MRU15_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU16_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU16_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU16_Int0_IRQHandler)
@@ -1608,7 +1656,7 @@ ISR(Mru_Ip_CE_MRU16_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU16_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1632,7 +1680,7 @@ ISR(Mru_Ip_CE_MRU16_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU16_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1640,6 +1688,7 @@ ISR(Mru_Ip_CE_MRU16_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU17_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU17_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU17_Int0_IRQHandler)
@@ -1658,7 +1707,7 @@ ISR(Mru_Ip_CE_MRU17_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU17_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1682,7 +1731,7 @@ ISR(Mru_Ip_CE_MRU17_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU17_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1690,6 +1739,7 @@ ISR(Mru_Ip_CE_MRU17_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU18_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU18_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU18_Int0_IRQHandler)
@@ -1708,7 +1758,7 @@ ISR(Mru_Ip_CE_MRU18_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU18_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1732,7 +1782,7 @@ ISR(Mru_Ip_CE_MRU18_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU18_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1740,6 +1790,7 @@ ISR(Mru_Ip_CE_MRU18_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #ifdef CE_MRU19_ENABLED
     #if (!defined MRU_IP_SKIP_CE_MRU19_INT0_HANDLER)
 ISR(Mru_Ip_CE_MRU19_Int0_IRQHandler)
@@ -1758,7 +1809,7 @@ ISR(Mru_Ip_CE_MRU19_Int0_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU19_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1782,7 +1833,7 @@ ISR(Mru_Ip_CE_MRU19_Int1_IRQHandler)
     {
         /* the driver has not been initialized */
         /* clear all flags for all channels */
-        for(ChannelIdx = 0u; ChannelIdx < CE_MRU_CHXCONFIG_COUNT; ChannelIdx++)
+        for(ChannelIdx = 0u; ChannelIdx < CE_MRU19_CH_NUM; ChannelIdx++)
         {
             Base->CHXCONFIG[ChannelIdx].CH_MBSTAT &= (uint32)0xFFFFFFFFu;
         }
@@ -1790,6 +1841,7 @@ ISR(Mru_Ip_CE_MRU19_Int1_IRQHandler)
 }
     #endif
 #endif
+
 #if ((defined CE_MRU6_ENABLED && (!defined MRU_IP_SKIP_CE_MRU6_INT0_HANDLER)) || (defined CE_MRU7_ENABLED && (!defined MRU_IP_SKIP_CE_MRU7_INT0_HANDLER)) || (defined CE_MRU8_ENABLED && (!defined MRU_IP_SKIP_CE_MRU8_INT0_HANDLER)) || \
      (defined CE_MRU9_ENABLED && (!defined MRU_IP_SKIP_CE_MRU9_INT0_HANDLER)) || (defined CE_MRU10_ENABLED && (!defined MRU_IP_SKIP_CE_MRU10_INT0_HANDLER)) || (defined CE_MRU11_ENABLED && (!defined MRU_IP_SKIP_CE_MRU11_INT0_HANDLER)))
 ISR(Mru_Ip_CE_MRU6_TO_MRU11_Int0_IRQHandler)

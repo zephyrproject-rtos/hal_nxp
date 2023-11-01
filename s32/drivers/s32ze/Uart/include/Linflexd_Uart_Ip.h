@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -32,8 +32,8 @@ extern "C"{
 #define LINFLEXD_UART_IP_AR_RELEASE_MAJOR_VERSION     4
 #define LINFLEXD_UART_IP_AR_RELEASE_MINOR_VERSION     7
 #define LINFLEXD_UART_IP_AR_RELEASE_REVISION_VERSION  0
-#define LINFLEXD_UART_IP_SW_MAJOR_VERSION             0
-#define LINFLEXD_UART_IP_SW_MINOR_VERSION             9
+#define LINFLEXD_UART_IP_SW_MAJOR_VERSION             1
+#define LINFLEXD_UART_IP_SW_MINOR_VERSION             0
 #define LINFLEXD_UART_IP_SW_PATCH_VERSION             0
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
@@ -44,12 +44,14 @@ extern "C"{
 #endif
 #if ((LINFLEXD_UART_IP_AR_RELEASE_MAJOR_VERSION    != LINFLEXD_UART_IP_TYPES_AR_RELEASE_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_AR_RELEASE_MINOR_VERSION    != LINFLEXD_UART_IP_TYPES_AR_RELEASE_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_TYPES_AR_RELEASE_REVISION_VERSION))
+     (LINFLEXD_UART_IP_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_TYPES_AR_RELEASE_REVISION_VERSION) \
+    )
      #error "AUTOSAR Version Numbers of Linflexd_Uart_Ip.h and Linflexd_Uart_Ip_Types.h are different"
 #endif
 #if ((LINFLEXD_UART_IP_SW_MAJOR_VERSION != LINFLEXD_UART_IP_TYPES_SW_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_SW_MINOR_VERSION != LINFLEXD_UART_IP_TYPES_SW_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_SW_PATCH_VERSION != LINFLEXD_UART_IP_TYPES_SW_PATCH_VERSION))
+     (LINFLEXD_UART_IP_SW_PATCH_VERSION != LINFLEXD_UART_IP_TYPES_SW_PATCH_VERSION) \
+    )
     #error "Software Version Numbers of Linflexd_Uart_Ip.h and Linflexd_Uart_Ip_Types.h are different"
 #endif
 
@@ -59,12 +61,14 @@ extern "C"{
 #endif
 #if ((LINFLEXD_UART_IP_AR_RELEASE_MAJOR_VERSION    != LINFLEXD_UART_IP_CFG_AR_RELEASE_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_AR_RELEASE_MINOR_VERSION    != LINFLEXD_UART_IP_CFG_AR_RELEASE_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_CFG_AR_RELEASE_REVISION_VERSION))
+     (LINFLEXD_UART_IP_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_CFG_AR_RELEASE_REVISION_VERSION) \
+    )
      #error "AUTOSAR Version Numbers of Linflexd_Uart_Ip.h and Linflexd_Uart_Ip_Cfg.h are different"
 #endif
 #if ((LINFLEXD_UART_IP_SW_MAJOR_VERSION != LINFLEXD_UART_IP_CFG_SW_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_SW_MINOR_VERSION != LINFLEXD_UART_IP_CFG_SW_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_SW_PATCH_VERSION != LINFLEXD_UART_IP_CFG_SW_PATCH_VERSION))
+     (LINFLEXD_UART_IP_SW_PATCH_VERSION != LINFLEXD_UART_IP_CFG_SW_PATCH_VERSION) \
+    )
     #error "Software Version Numbers of Linflexd_Uart_Ip.h and Linflexd_Uart_Ip_Cfg.h are different"
 #endif
 
@@ -106,7 +110,7 @@ LINFLEXD_UART_IP_CONFIG_EXT
  * @details This function computes the fractional and integer parts of the baud rate divisor
  *          to obtain the desired baud rate using the current protocol clock.
  *
- * @param[in] Instance     - LINFLEXD instance number.
+ * @param[in] Instance     - LINFLEXD hardware instance number.
  * @param[in] DesiredBaudRate - Desired baud rate.
  * @param[in] ClockFrequency  - the current clock frequency used in the baud rate parameters calculations.
  * @return Linflexd_Uart_Ip_StatusType
@@ -116,7 +120,8 @@ LINFLEXD_UART_IP_CONFIG_EXT
  */
 Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SetBaudrate(const uint8 Instance,
                                                          const Linflexd_Uart_Ip_BaudrateType DesiredBaudRate,
-                                                         const uint32 ClockFrequency);
+                                                         const uint32 ClockFrequency
+                                                         );
 
 
 /**
@@ -125,7 +130,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SetBaudrate(const uint8 Instance,
  * @details This function returns the current UART baud rate, according to register values
  * and the protocol clock frequency.
  *
- * @param[in] Instance         - LINFLEXD instance number.
+ * @param[in] Instance         - LINFLEXD hardware instance number.
  * @param[out] ConfiguredBaudRate - Pointer to a valid memory location where the current baudrate value will be provided.
  * @return void
  */
@@ -136,7 +141,7 @@ void Linflexd_Uart_Ip_GetBaudrate(const uint8 Instance, uint32 * ConfiguredBaudR
  * @brief Initializes a LINFLEXD instance for UART operations.
  *
  *
- * @param Instance[in] - LINFLEXD instance number.
+ * @param Instance[in] - LINFLEXD hardware instance number.
  * @param UserConfig[in]  - User configuration structure.
  * @return void
  */
@@ -147,7 +152,7 @@ void Linflexd_Uart_Ip_Init(const uint8 Instance, const Linflexd_Uart_Ip_UserConf
  * @brief Shuts down the UART functionality of the LINFLEXD module
  * by disabling interrupts and transmitter/receiver.
  *
- * @param Instance[in] - LINFLEXD instance number.
+ * @param Instance[in] - LINFLEXD hardware instance number.
  * @retval LINFLEXD_UART_IP_STATUS_ERROR   - The current transfer processes are not finished completely
  * @retval LINFLEXD_UART_IP_STATUS_SUCCESS - Operation ended successfully.
  */
@@ -159,14 +164,12 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_Deinit(const uint8 Instance);
  * @details This function can be called from the tx callback to provide the driver
  * with a new buffer, for continuous transmission.
  *
- * @param Instance[in] - LINFLEXD instance number.
+ * @param Instance[in] - LINFLEXD hardware instance number.
  * @param TxBuff[in]     - Source buffer containing 8-bit data chars to send.
  * @param TxSize[in]   - The number of bytes to send.
  * @return void
  */
-void Linflexd_Uart_Ip_SetTxBuffer(const uint8 Instance,
-                                  const uint8 * TxBuff,
-                                  const uint32 TxSize);
+void Linflexd_Uart_Ip_SetTxBuffer(const uint8 Instance, const uint8 * TxBuff, const uint32 TxSize);
 
 
 /**
@@ -175,20 +178,18 @@ void Linflexd_Uart_Ip_SetTxBuffer(const uint8 Instance,
  * @details This function can be called from the rx callback to provide the driver
  * with a new buffer, for continuous reception.
  *
- * @param Instance[in] - LINFLEXD instance number.
+ * @param Instance[in] - LINFLEXD hardware instance number.
  * @param TxBuff[in]     - Source buffer containing 8-bit data chars to receive.
  * @param TxSize[in]   - The number of bytes to receive.
  * @return void
 */
-void Linflexd_Uart_Ip_SetRxBuffer(const uint8 Instance,
-                                  uint8 * RxBuff,
-                                  const uint32 RxSize);
+void Linflexd_Uart_Ip_SetRxBuffer(const uint8 Instance, uint8 * RxBuff, const uint32 RxSize);
 
 
 /**
  * @brief Terminates a non-blocking receive early.
  *
- * @param Instance[in] - LINFLEXD instance number
+ * @param Instance[in] - LINFLEXD hardware instance number
  *
  * @return Linflexd_Uart_Ip_StatusType
  * @retval LINFLEXD_UART_IP_STATUS_SUCCESS - Operation has been successfully ended or no operation was on-going.
@@ -199,7 +200,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AbortReceivingData(const uint8 Inst
 /**
  * @brief Terminates a non-blocking transfer(send) early.
  *
- * @param Instance[in] - LINFLEXD instance number
+ * @param Instance[in] - LINFLEXD hardware instance number
  *
  * @return Linflexd_Uart_Ip_StatusType
  * @retval LINFLEXD_UART_IP_STATUS_SUCCESS - Operation has been successfully ended or no operation was on-going.
@@ -212,7 +213,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AbortSendingData(const uint8 Instan
  *
  * @details Blocking means that the function does not return until the transmission is complete.
  *
- * @param Instance[in] - LINFLEXD instance number.
+ * @param Instance[in] - LINFLEXD hardware instance number.
  * @param TxBuff[in]     - Source buffer containing 8-bit data chars to send.
  * @param TxSize[in]   - TxBuff size.
  * @param Timeout[in]       Timeout value in microseconds.
@@ -222,17 +223,14 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AbortSendingData(const uint8 Instan
  * @retval LINFLEXD_UART_IP_STATUS_SUCCESS - Operation ended successfully.
  * @retval LINFLEXD_UART_IP_STATUS_TIMEOUT - Operation has timeout.
  */
-Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SyncSend(const uint8 Instance,
-                                                      const uint8 *TxBuff,
-                                                      const uint32 TxSize,
-                                                      const uint32 Timeout);
+Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SyncSend(const uint8 Instance, const uint8 *TxBuff, const uint32 TxSize, const uint32 Timeout);
 
 /**
  * @brief Sends data using LINFLEXD module in UART mode with polling method.
  *
  * @details Blocking means that the function does not return until the transmission is complete.
  *
- * @param Instance[in] - LINFLEXD instance number.
+ * @param Instance[in] - LINFLEXD hardware instance number.
  * @param RxBuff[in]     - Source buffer containing 8-bit data chars to receive.
  * @param RxSize[in]   - RxBuff size.
  * @param Timeout[in]       Timeout value in microseconds.
@@ -242,10 +240,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SyncSend(const uint8 Instance,
  * @retval LINFLEXD_UART_IP_STATUS_SUCCESS - Operation ended successfully.
  * @retval LINFLEXD_UART_IP_STATUS_TIMEOUT - Operation has timeout.
  */
-Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SyncReceive(const uint8 Instance,
-                                                         uint8 * RxBuff,
-                                                         const uint32 RxSize,
-                                                         const uint32 Timeout);
+Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SyncReceive(const uint8 Instance, uint8 * RxBuff, const uint32 RxSize, const uint32 Timeout);
 
 /**
  * @brief Starts data reception from the LINFLEXD module in UART mode with non-blocking method.
@@ -254,16 +249,14 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SyncReceive(const uint8 Instance,
  * Non-blocking means that the function returns immediately.
  * The application has to get the receive status to know when the receive is complete.
  *
- * @param Instance[in] - LINFLEXD instance number.
+ * @param Instance[in] - LINFLEXD hardware instance number.
  * @param RxBuff[in]     - Buffer containing 8-bit read data chars to be received.
  * @param RxSize[in]   - Size of RxBuff.
  * @return Linflexd_Uart_Ip_StatusType
  * @retval LINFLEXD_UART_IP_STATUS_BUSY    - A trasfer is ongoing, therefore a new transfer can't begin.
  * @retval LINFLEXD_UART_IP_STATUS_SUCCESS - Operation started successfully.
  */
-Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AsyncReceive(const uint8 Instance,
-                                                          uint8 * RxBuff,
-                                                          const uint32 RxSize);
+Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AsyncReceive(const uint8 Instance, uint8 * RxBuff, const uint32 RxSize);
 
 /**
  * @brief Sends data using LINFLEXD module in UART mode with non-blocking method.
@@ -273,22 +266,20 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AsyncReceive(const uint8 Instance,
  * Non-blocking  means that the function returns immediately.
  * The application has to get the transmit status to know when the transmission is complete.
  *
- * @param Instance[in] - LINFLEXD instance number.
+ * @param Instance[in] - LINFLEXD hardware instance number.
  * @param TxBuff[in]     - source buffer containing 8-bit data chars to send.
  * @param TxSize[in]   -  the number of bytes to send.
  * @return Linflexd_Uart_Ip_StatusType
  * @retval LINFLEXD_UART_IP_STATUS_BUSY    - A trasfer is ongoing, therefore a new transfer can't begin.
  * @retval LINFLEXD_UART_IP_STATUS_SUCCESS - Operation started successfully.
  */
-Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AsyncSend(const uint8 Instance,
-                                                       const uint8 * TxBuff,
-                                                       const uint32 TxSize);
+Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AsyncSend(const uint8 Instance, const uint8 * TxBuff, const uint32 TxSize);
 
 
 /**
  * @brief Returns whether the status of the previous transmission.
  *
- * @param Instance[in]      - LINFLEXD instance number.
+ * @param Instance[in]      - LINFLEXD hardware instance number.
  * @param BytesRemaining[out] - Pointer to value that is populated with the number of bytes that
  *                               have been sent in the active transfer.
  *        @note In DMA mode, this parameter may not be accurate, in case the transfer completes
@@ -308,7 +299,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_GetTransmitStatus(const uint8 Insta
 /**
  * @brief Returns whether the status of the previous reception.
  *
- * @param Instance[in]      - LINFLEXD instance number
+ * @param Instance[in]      - LINFLEXD hardware instance number
  * @param BytesRemaining[out] - Pointer to value that is filled  with the number of bytes that
  *                               still need to be received in the active transfer.
  *        @note The parameter BytesRemaining may not be accurate, in case the transfer completes
@@ -334,7 +325,7 @@ void Linflexd_Uart_Ip_IRQHandler(uint8 Instance);
  * @brief   : Finish up a transmit by completing the process of sending
  * data and disabling the DMA requests. This is a part of callback for DMA major loop
  * completion, so it must match the DMA callback signature.
- * @param Instance LINFLEXD instance number
+ * @param Instance LINFLEXD hardware instance number
  * @return void
  */
 void Linflexd_Uart_Ip_CompleteSendUsingDma(uint8 Instance);
@@ -344,7 +335,7 @@ void Linflexd_Uart_Ip_CompleteSendUsingDma(uint8 Instance);
  * @brief   : Finish up a receive by completing the process of receiving data
  * and disabling the DMA requests. This is a part of callback for DMA major loop
  * completion, so it must match the DMA callback signature.
- * @param Instance LINFLEXD instance number
+ * @param Instance LINFLEXD hardware instance number
  * @return void
  */
 void Linflexd_Uart_Ip_CompleteReceiveUsingDma(uint8 Instance);

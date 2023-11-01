@@ -1,4 +1,4 @@
-# Copyright 2022 NXP
+# Copyright 2022-2023 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 add_subdirectory(BaseNXP)
@@ -10,7 +10,7 @@ add_subdirectory(Rte)
 add_subdirectory_ifdef(CONFIG_NXP_S32_SPI Spi)
 add_subdirectory_ifdef(CONFIG_UART_NXP_S32_LINFLEXD Uart)
 add_subdirectory_ifdef(CONFIG_COUNTER_NXP_S32_SYS_TIMER Gpt)
-add_subdirectory_ifdef(CONFIG_WDT_NXP_S32 Swt)
+add_subdirectory_ifdef(CONFIG_WDT_NXP_S32 Wdg)
 add_subdirectory_ifdef(CONFIG_MBOX_NXP_S32_MRU Platform)
 if (CONFIG_ETH_NXP_S32_NETC)
   add_subdirectory(Eth_NETC)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -14,8 +14,8 @@
 *   @{
 */
 
-#ifndef MRU_IP_TYPES_H
-#define MRU_IP_TYPES_H
+#ifndef CDD_MRU_IP_TYPES_H
+#define CDD_MRU_IP_TYPES_H
 
 #ifdef __cplusplus
 extern "C"{
@@ -33,39 +33,39 @@ extern "C"{
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
-#define MRU_IP_TYPES_VENDOR_ID                    43
-#define MRU_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
-#define MRU_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
-#define MRU_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
-#define MRU_IP_TYPES_SW_MAJOR_VERSION             0
-#define MRU_IP_TYPES_SW_MINOR_VERSION             9
-#define MRU_IP_TYPES_SW_PATCH_VERSION             0
+#define CDD_PLATFORM_MRU_IP_TYPES_VENDOR_ID                    43
+#define CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
+#define CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
+#define CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
+#define CDD_PLATFORM_MRU_IP_TYPES_SW_MAJOR_VERSION             1
+#define CDD_PLATFORM_MRU_IP_TYPES_SW_MINOR_VERSION             0
+#define CDD_PLATFORM_MRU_IP_TYPES_SW_PATCH_VERSION             0
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Check if current file and StandardTypes header file are of the same Autosar version */
-    #if ((MRU_IP_TYPES_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
-         (MRU_IP_TYPES_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
+    #if ((CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
+         (CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
     #error "AutoSar Version Numbers of Mru_Ip_Types.h and StandardTypes.h are different"
     #endif
 #endif
 
 /* Check if Mru_Ip_Types.h header file and Mru_Ip_Cfg.h configuration header file are of the same vendor */
-#if (MRU_IP_TYPES_VENDOR_ID != MRU_IP_VENDOR_ID_CFG)
+#if (CDD_PLATFORM_MRU_IP_TYPES_VENDOR_ID != CDD_PLATFORM_MRU_IP_VENDOR_ID_CFG)
     #error "Mru_Ip_Types.h and Mru_Ip_Cfg.h have different vendor IDs"
 #endif
     /* Check if Mru_Ip_Types.h header file and Mru_Ip_Cfg.h  configuration header file are of the same Autosar version */
-#if ((MRU_IP_TYPES_AR_RELEASE_MAJOR_VERSION != MRU_IP_AR_RELEASE_MAJOR_VERSION_CFG) || \
-     (MRU_IP_TYPES_AR_RELEASE_MINOR_VERSION != MRU_IP_AR_RELEASE_MINOR_VERSION_CFG) || \
-     (MRU_IP_TYPES_AR_RELEASE_REVISION_VERSION != MRU_IP_AR_RELEASE_REVISION_VERSION_CFG))
+#if ((CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MAJOR_VERSION != CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION_CFG) || \
+     (CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_MINOR_VERSION != CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_CFG) || \
+     (CDD_PLATFORM_MRU_IP_TYPES_AR_RELEASE_REVISION_VERSION != CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION_CFG))
 #error "AutoSar Version Numbers of Mru_Ip_Types.h and Mru_Ip_Cfg.h are different"
 #endif
 /* Check if Mru_Ip_Types.h header file and Mru_Ip_Cfg.h configuration header file are of the same software version */
-#if ((MRU_IP_TYPES_SW_MAJOR_VERSION != MRU_IP_SW_MAJOR_VERSION_CFG) || \
-     (MRU_IP_TYPES_SW_MINOR_VERSION != MRU_IP_SW_MINOR_VERSION_CFG) || \
-     (MRU_IP_TYPES_SW_PATCH_VERSION != MRU_IP_SW_PATCH_VERSION_CFG))
+#if ((CDD_PLATFORM_MRU_IP_TYPES_SW_MAJOR_VERSION != CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_CFG) || \
+     (CDD_PLATFORM_MRU_IP_TYPES_SW_MINOR_VERSION != CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION_CFG) || \
+     (CDD_PLATFORM_MRU_IP_TYPES_SW_PATCH_VERSION != CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_CFG))
 #error "Software Version Numbers of Mru_Ip_Types.h and Mru_Ip_Cfg.h are different"
 #endif
 /*==================================================================================================
@@ -83,23 +83,36 @@ extern "C"{
 /*==================================================================================================
 *                                  STRUCTURES AND OTHER TYPEDEFS
 ==================================================================================================*/
-/** @brief   Enum defining the possible return types.
-*
-* @implements Mru_Ip_StatusType_enum
-*/
-typedef enum
-{
-   MRU_IP_STATUS_SUCCESS = 0u, /**< Successful operation. */
-   MRU_IP_STATUS_FAIL    = 1u, /**< Failed operation. */
-} Mru_Ip_StatusType;
+
+/**
+ * @brief      Mru Return values
+ * @details    Return information after transmit or read mailbox.
+ *
+ */
+ #define  MRU_IP_STATUS_SUCCESS   0u /**< Successful operation. */
+ #define  MRU_IP_STATUS_FAIL      1u /**< Failed operation. */
+ #define  MRU_IP_STATUS_TIMEOUT   2u /**< Timeout operation. */
+/**
+ * @brief      Mru Mailbox status
+ */
+#define MRU_IP_MAILBOX_INACTIVE   0u /**< Mailbox status is inactive. */
+#define MRU_IP_MAILBOX_ACTIVE     1u /**< Mailbox status is active. */
+
+/** @brief   Type defining the possible return types. */
+typedef uint8 Mru_Ip_StatusType;
+
+
+/** @brief   Type defining the Mailbox status.*/
+typedef uint8 Mru_Ip_MBStatusType;
 
 /** @brief   Structure defining the data configuration for the transmitting channel. */
 typedef struct  
 {
-   uint8 NumTxMB;                   /**< The number of MailBox used. */ 
-   volatile uint32 * const * MBAddList;     /**< List of MailBox address used. */
-   volatile uint32 * ChMBSTATAdd;                  /**< The data configuartion for MBSTAT register. */
+   uint8 NumTxMB;                         /**< The number of MailBox used. */ 
+   volatile uint32 * const * MBAddList;   /**< List of MailBox address used. */
+   volatile uint32 * ChMBSTATAdd;         /**< The data configuartion for MBSTAT register. */
    uint8 LastTxMBIndex;                   /**< Last MailBox which is enabled by receiver. */
+   boolean bOverwriteMBEnb;               /**< Allow overwriting to mailbox. */
 } Mru_Ip_TransmitChannelType;
 
 /** @brief   ISR notification function type for receiving channel. */
@@ -112,6 +125,7 @@ typedef struct
    uint8 InstanceId;                                     /**< Instance Id of the hardware unit. */
    uint8 ChannelIndex;                                   /**< Channel Index. */
    uint8 NumRxMB;                                        /**< The number of MailBox used. */ 
+   uint8 * ListRxMB;                                     /**< The list of MailBox used. */ 
    volatile const uint32 * const * MBAddList;                    /**< List of MailBox address used. */
    uint32 * RxBuffer;                                    /**< Receiving buffer. */
    Mru_Ip_ReceiveNotificationType ReceiveNotification;   /**< Store pointer for ISR notification function */
@@ -132,7 +146,7 @@ typedef struct
    uint32 ChCFG1;                                  /**< The data configuartion for CH_CFG1 register. */
    volatile uint32 * ChMBSTATAdd;                  /**< The data configuartion for MBSTAT register. */
    uint32 NumMailbox;                              /**< Number of Mailbox. */
-   const Mru_Ip_MBLinkReceiveChannelType (* MBLinkReceiveChCfg)[2U]; /**< Link Mailbox to the receiving channel configuration. */
+   const Mru_Ip_MBLinkReceiveChannelType (* MBLinkReceiveChCfg)[NUMBER_OF_INTERRUPT_GROUP]; /**< Link Mailbox to the receiving channel configuration corresponding to groups interrupt. */
 } Mru_Ip_ChannelCfgType;
 
 /** @brief   Structure defining information needed for MRU driver initialization. */
@@ -141,7 +155,7 @@ typedef struct
    uint8 InstanceId;                               /**< Instance Id of the hardware unit. */
    uint8 NumChannel;                               /**< Number of channel. */
    const Mru_Ip_ChannelCfgType * ChannelCfg;       /**< The configuration of receiving channels  */
-   volatile const uint32 * NOTIFYAdd[2U];
+   volatile const uint32 * NOTIFYAdd[NOTIFY_STATUS_COUNT];
    uint8 StateIndex;                               /**< State index for the HW unit  */
 } Mru_Ip_ConfigType;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -26,9 +26,12 @@ extern "C"{
 ==================================================================================================*/
 #include "Siul2_Icu_Ip_Types.h"
 #include "Siul2_Icu_Ip_Cfg.h"
-#if (SIUL2_ICU_IP_ENABLE_USER_MODE_SUPPORT == STD_ON)
-#include "Reg_eSys.h"
-#endif
+
+#if (STD_ON == SIUL2_ICU_IP_USED)
+    #if (STD_ON == SIUL2_ICU_IP_ENABLE_USER_MODE_SUPPORT)
+        #include "Reg_eSys.h"
+    #endif
+#endif /* SIUL2_ICU_IP_USED */
 
 /*==================================================================================================
 *                                SOURCE FILE VERSION INFORMATION
@@ -37,8 +40,8 @@ extern "C"{
 #define SIUL2_ICU_IP_AR_RELEASE_MAJOR_VERSION     4
 #define SIUL2_ICU_IP_AR_RELEASE_MINOR_VERSION     7
 #define SIUL2_ICU_IP_AR_RELEASE_REVISION_VERSION  0
-#define SIUL2_ICU_IP_SW_MAJOR_VERSION             0
-#define SIUL2_ICU_IP_SW_MINOR_VERSION             9
+#define SIUL2_ICU_IP_SW_MAJOR_VERSION             1
+#define SIUL2_ICU_IP_SW_MINOR_VERSION             0
 #define SIUL2_ICU_IP_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -79,13 +82,15 @@ extern "C"{
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    #if (SIUL2_ICU_IP_ENABLE_USER_MODE_SUPPORT == STD_ON)
-    /* Check if header file and Reg_eSys.h file are of the same Autosar version */
-        #if ((SIUL2_ICU_IP_AR_RELEASE_MAJOR_VERSION != REG_ESYS_AR_RELEASE_MAJOR_VERSION) || \
-             (SIUL2_ICU_IP_AR_RELEASE_MINOR_VERSION != REG_ESYS_AR_RELEASE_MINOR_VERSION))
-            #error "AutoSar Version Numbers of Siul2_Icu_Ip.h and Reg_eSys.h are different"
+    #if (STD_ON == SIUL2_ICU_IP_USED)
+        #if (SIUL2_ICU_IP_ENABLE_USER_MODE_SUPPORT == STD_ON)
+        /* Check if header file and Reg_eSys.h file are of the same Autosar version */
+            #if ((SIUL2_ICU_IP_AR_RELEASE_MAJOR_VERSION != REG_ESYS_AR_RELEASE_MAJOR_VERSION) || \
+                (SIUL2_ICU_IP_AR_RELEASE_MINOR_VERSION != REG_ESYS_AR_RELEASE_MINOR_VERSION))
+                #error "AutoSar Version Numbers of Siul2_Icu_Ip.h and Reg_eSys.h are different"
+            #endif
         #endif
-    #endif
+    #endif /* SIUL2_ICU_IP_USED */
 #endif
 
 
@@ -96,6 +101,8 @@ extern "C"{
 /*==================================================================================================
 *                                        DEFINES AND MACROS
 ==================================================================================================*/
+#if (STD_ON == SIUL2_ICU_IP_USED)
+
 #if (defined SIUL2_ICU_CONFIG_EXT)
 #define ICU_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Icu_MemMap.h"
@@ -121,6 +128,11 @@ SIUL2_ICU_CONFIG_EXT
 #include "Icu_MemMap.h"
 
 extern SIUL2_Type * const Siul2_Icu_Ip_pBase[];
+
+#ifdef SIUL2_ICU_AE_AVAILABLE
+/* Table of base addresses for SUIL2 instances. */
+extern SIUL2_AE_Type * const Siul2_Ae_Icu_Ip_pBase[];
+#endif
 
 #define ICU_STOP_SEC_CONST_UNSPECIFIED
 #include "Icu_MemMap.h"
@@ -256,6 +268,8 @@ void Siul2_Icu_Ip_DisableNotification(uint8 instance, uint8 hwChannel);
 
 #define ICU_STOP_SEC_CODE
 #include "Icu_MemMap.h"
+
+#endif /* SIUL2_ICU_IP_USED */
 
 #ifdef __cplusplus
 }

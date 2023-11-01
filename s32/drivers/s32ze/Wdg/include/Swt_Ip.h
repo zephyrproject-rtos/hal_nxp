@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -28,6 +28,7 @@ extern "C"{
 
 #include "Swt_Ip_Types.h"
 #include "Swt_Ip_DeviceRegisters.h"
+#include "Swt_Ip_Cfg.h"
 
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
@@ -37,8 +38,8 @@ extern "C"{
 #define SWT_IP_AR_RELEASE_MAJOR_VERSION     4
 #define SWT_IP_AR_RELEASE_MINOR_VERSION     7
 #define SWT_IP_AR_RELEASE_REVISION_VERSION  0
-#define SWT_IP_SW_MAJOR_VERSION             0
-#define SWT_IP_SW_MINOR_VERSION             9
+#define SWT_IP_SW_MAJOR_VERSION             1
+#define SWT_IP_SW_MINOR_VERSION             0
 #define SWT_IP_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -52,13 +53,15 @@ extern "C"{
 
 #if ((SWT_IP_AR_RELEASE_MAJOR_VERSION    != SWT_IP_TYPES_AR_RELEASE_MAJOR_VERSION) || \
      (SWT_IP_AR_RELEASE_MINOR_VERSION    != SWT_IP_TYPES_AR_RELEASE_MINOR_VERSION) || \
-     (SWT_IP_AR_RELEASE_REVISION_VERSION != SWT_IP_TYPES_AR_RELEASE_REVISION_VERSION))
+     (SWT_IP_AR_RELEASE_REVISION_VERSION != SWT_IP_TYPES_AR_RELEASE_REVISION_VERSION) \
+    )
 #error "AutoSar Version Numbers of Swt_Ip.h and Swt_Ip_Types.h are different"
 #endif
 
 #if ((SWT_IP_SW_MAJOR_VERSION != SWT_IP_TYPES_SW_MAJOR_VERSION) || \
      (SWT_IP_SW_MINOR_VERSION != SWT_IP_TYPES_SW_MINOR_VERSION) || \
-     (SWT_IP_SW_PATCH_VERSION != SWT_IP_TYPES_SW_PATCH_VERSION))
+     (SWT_IP_SW_PATCH_VERSION != SWT_IP_TYPES_SW_PATCH_VERSION) \
+    )
 #error "Software Version Numbers of Swt_Ip.h and Swt_Ip_Types.h are different"
 #endif
 
@@ -69,14 +72,35 @@ extern "C"{
 
 #if ((SWT_IP_AR_RELEASE_MAJOR_VERSION    != SWT_IP_DEVICE_REGISTERS_AR_RELEASE_MAJOR_VERSION) || \
      (SWT_IP_AR_RELEASE_MINOR_VERSION    != SWT_IP_DEVICE_REGISTERS_AR_RELEASE_MINOR_VERSION) || \
-     (SWT_IP_AR_RELEASE_REVISION_VERSION != SWT_IP_DEVICE_REGISTERS_AR_RELEASE_REVISION_VERSION))
+     (SWT_IP_AR_RELEASE_REVISION_VERSION != SWT_IP_DEVICE_REGISTERS_AR_RELEASE_REVISION_VERSION) \
+    )
 #error "AutoSar Version Numbers of Swt_Ip.h and Swt_Ip_DeviceRegisters.h are different"
 #endif
 
 #if ((SWT_IP_SW_MAJOR_VERSION != SWT_IP_DEVICE_REGISTERS_SW_MAJOR_VERSION) || \
      (SWT_IP_SW_MINOR_VERSION != SWT_IP_DEVICE_REGISTERS_SW_MINOR_VERSION) || \
-     (SWT_IP_SW_PATCH_VERSION != SWT_IP_DEVICE_REGISTERS_SW_PATCH_VERSION))
+     (SWT_IP_SW_PATCH_VERSION != SWT_IP_DEVICE_REGISTERS_SW_PATCH_VERSION) \
+    )
 #error "Software Version Numbers of Swt_Ip.h and Swt_Ip_DeviceRegisters.h are different"
+#endif
+
+/* Check if current file and Swt_Ip_Cfg header file are of the same vendor */
+#if (SWT_IP_VENDOR_ID != SWT_IP_VENDOR_ID_CFG_H)
+#error "Swt_Ip.h and Swt_Ip_Cfg.h have different vendor ids"
+#endif
+
+#if ((SWT_IP_AR_RELEASE_MAJOR_VERSION    != SWT_IP_AR_RELEASE_MAJOR_VERSION_CFG_H) || \
+     (SWT_IP_AR_RELEASE_MINOR_VERSION    != SWT_IP_AR_RELEASE_MINOR_VERSION_CFG_H) || \
+     (SWT_IP_AR_RELEASE_REVISION_VERSION != SWT_IP_AR_RELEASE_REVISION_VERSION_CFG_H) \
+    )
+#error "AutoSar Version Numbers of Swt_Ip.h and Swt_Ip_Cfg.h are different"
+#endif
+
+#if ((SWT_IP_SW_MAJOR_VERSION != SWT_IP_SW_MAJOR_VERSION_CFG_H) || \
+     (SWT_IP_SW_MINOR_VERSION != SWT_IP_SW_MINOR_VERSION_CFG_H) || \
+     (SWT_IP_SW_PATCH_VERSION != SWT_IP_SW_PATCH_VERSION_CFG_H) \
+    )
+#error "Software Version Numbers of Swt_Ip.h and Swt_Ip_Cfg.h are different"
 #endif
 
 /*==================================================================================================
@@ -121,13 +145,13 @@ extern "C"{
  *              ConfigPtr pointer.
  *
  * @param[in]   Instance     SWT Instance number.
- * @param[in]   ConfigPtr  Pointer to the configuration structure 
+ * @param[in]   ConfigPtr  Pointer to the configuration structure
  *                              which will be used to configure the SWT driver
  *
  * @return      An error code or SWT_IP_STATUS_SUCCESS
  */
 Swt_Ip_StatusType Swt_Ip_Init(const uint32 Instance,
-                        const Swt_Ip_ConfigType * const ConfigPtr);
+                              const Swt_Ip_ConfigType * const ConfigPtr);
 
 #if (SWT_IP_DEINIT == STD_ON)
 /*!
@@ -139,7 +163,7 @@ Swt_Ip_StatusType Swt_Ip_Init(const uint32 Instance,
  * @return      An error code or SWT_IP_STATUS_SUCCESS
  */
     Swt_Ip_StatusType Swt_Ip_Deinit(const uint32 Instance);
-#endif
+#endif  /* (SWT_IP_DEINIT == STD_ON) */
 
 
 /*!
@@ -164,7 +188,7 @@ Swt_Ip_StatusType Swt_Ip_Init(const uint32 Instance,
  * @return      An error code or SWT_IP_STATUS_SUCCESS
  */
 Swt_Ip_StatusType Swt_Ip_Config(const uint32 Instance,
-                            const Swt_Ip_ConfigType * const ConfigPtr);
+                                const Swt_Ip_ConfigType * const ConfigPtr);
 
 /*!
  * @brief       Sets the timeout value for SWT instance.
@@ -177,7 +201,7 @@ Swt_Ip_StatusType Swt_Ip_Config(const uint32 Instance,
  * @return      An error code or SWT_IP_STATUS_SUCCESS
  */
 Swt_Ip_StatusType Swt_Ip_SetTimeout(const uint32 Instance,
-                                const uint32 TimeoutValue, const uint32 WindowValue);
+                                    const uint32 TimeoutValue, const uint32 WindowValue);
 
 /*!
  * @brief       Starts the timer of SWT instance.
@@ -209,12 +233,12 @@ Swt_Ip_StatusType Swt_Ip_StopTimer(const uint32 Instance);
  *
  * @return                             Swt_Ip_StatusType.
  * @retval  SWT_IP_STATUS_SUCCESS      Clear reset request successfully.
- * @retval  SWT_IP_STATUS_ERROR        Clear reset request encountered error 
+ * @retval  SWT_IP_STATUS_ERROR        Clear reset request encountered error
  *                                     caused by unlock sequence failed.
  */
     Swt_Ip_StatusType Swt_Ip_ClearResetRequest(const uint32 Instance);
-#endif
-#endif
+#endif /* (SWT_IP_CLEAR_RESET_REQUEST == STD_ON) */
+#endif /* (SWT_IP_DEINIT == STD_ON) */
 
 
 #ifdef WDG_ROM
@@ -237,4 +261,3 @@ Swt_Ip_StatusType Swt_Ip_StopTimer(const uint32 Instance);
 /** @} */
 
 #endif /*SWT_IP_H */
-

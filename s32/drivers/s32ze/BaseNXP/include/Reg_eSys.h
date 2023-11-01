@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -34,8 +34,8 @@ extern "C"{
 #define REG_ESYS_AR_RELEASE_MAJOR_VERSION     4
 #define REG_ESYS_AR_RELEASE_MINOR_VERSION     7
 #define REG_ESYS_AR_RELEASE_REVISION_VERSION  0
-#define REG_ESYS_SW_MAJOR_VERSION             0
-#define REG_ESYS_SW_MINOR_VERSION             9
+#define REG_ESYS_SW_MAJOR_VERSION             1
+#define REG_ESYS_SW_MINOR_VERSION             0
 #define REG_ESYS_SW_PATCH_VERSION             0
 
 /*==================================================================================================

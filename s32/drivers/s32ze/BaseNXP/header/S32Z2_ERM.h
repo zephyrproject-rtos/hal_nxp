@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_ERM.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.1
+ * @date 2023-07-20
  * @brief Peripheral Access Layer for S32Z2_ERM
  *
  * This file contains register definitions and macros for easy access to their
@@ -71,108 +71,108 @@
 /** ERM - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CR0;                               /**< ERM Configuration Register 0, offset: 0x0 */
-  __IO uint32_t CR1;                               /**< ERM Configuration Register 1, offset: 0x4 */
-  __IO uint32_t CR2;                               /**< ERM Configuration Register 2, offset: 0x8 */
+  __IO uint32_t CR1;                               /**< ERM Configuration Register 1, offset: 0x4, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
+  __IO uint32_t CR2;                               /**< ERM Configuration Register 2, offset: 0x8, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_0[4];
   __IO uint32_t SR0;                               /**< ERM Status Register 0, offset: 0x10 */
-  __IO uint32_t SR1;                               /**< ERM Status Register 1, offset: 0x14 */
-  __IO uint32_t SR2;                               /**< ERM Status Register 2, offset: 0x18 */
+  __IO uint32_t SR1;                               /**< ERM Status Register 1, offset: 0x14, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
+  __IO uint32_t SR2;                               /**< ERM Status Register 2, offset: 0x18, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_1[228];
-  __I  uint32_t EAR0;                              /**< ERM Memory 0 Error Address Register, offset: 0x100 */
-  __I  uint32_t SYN0;                              /**< ERM Memory 0 Syndrome Register, offset: 0x104 */
-  __IO uint32_t CORR_ERR_CNT0;                     /**< ERM Memory 0 Correctable Error Count Register, offset: 0x108 */
+  __I  uint32_t EAR0;                              /**< ERM Memory 0 Error Address Register, offset: 0x100, available only on: CE_ERM_0, CE_ERM_2, ERM_0, ERM_1, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_2) */
+  __I  uint32_t SYN0;                              /**< ERM Memory 0 Syndrome Register, offset: 0x104, available only on: CE_ERM_0, ERM_0, ERM_1, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM (missing on CE_ERM_1, CE_ERM_2, ERM_2) */
+  __IO uint32_t CORR_ERR_CNT0;                     /**< ERM Memory 0 Correctable Error Count Register, offset: 0x108, available only on: CE_ERM_0, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM (missing on CE_ERM_1) */
   uint8_t RESERVED_2[4];
-  __I  uint32_t EAR1;                              /**< ERM Memory 1 Error Address Register, offset: 0x110 */
-  __I  uint32_t SYN1;                              /**< ERM Memory 1 Syndrome Register, offset: 0x114 */
-  __IO uint32_t CORR_ERR_CNT1;                     /**< ERM Memory 1 Correctable Error Count Register, offset: 0x118 */
+  __I  uint32_t EAR1;                              /**< ERM Memory 1 Error Address Register, offset: 0x110, available only on: CE_ERM_0, CE_ERM_2, ERM_3, ERM_5, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_4) */
+  __I  uint32_t SYN1;                              /**< ERM Memory 1 Syndrome Register, offset: 0x114, available only on: CE_ERM_0, ERM_3, SMU.ERM/SMU__ERM (missing on CE_ERM_1, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT1;                     /**< ERM Memory 1 Correctable Error Count Register, offset: 0x118, available only on: CE_ERM_0, CE_ERM_2, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1) */
   uint8_t RESERVED_3[4];
-  __I  uint32_t EAR2;                              /**< ERM Memory 2 Error Address Register, offset: 0x120 */
-  __I  uint32_t SYN2;                              /**< ERM Memory 2 Syndrome Register, offset: 0x124 */
-  __IO uint32_t CORR_ERR_CNT2;                     /**< ERM Memory 2 Correctable Error Count Register, offset: 0x128 */
+  __I  uint32_t EAR2;                              /**< ERM Memory 2 Error Address Register, offset: 0x120, available only on: CE_ERM_0, CE_ERM_2, ERM_3, ERM_5, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_4) */
+  __I  uint32_t SYN2;                              /**< ERM Memory 2 Syndrome Register, offset: 0x124, available only on: CE_ERM_0, ERM_3, SMU.ERM/SMU__ERM (missing on CE_ERM_1, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT2;                     /**< ERM Memory 2 Correctable Error Count Register, offset: 0x128, available only on: CE_ERM_0, CE_ERM_2, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1) */
   uint8_t RESERVED_4[4];
-  __I  uint32_t EAR3;                              /**< ERM Memory 3 Error Address Register, offset: 0x130 */
-  __I  uint32_t SYN3;                              /**< ERM Memory 3 Syndrome Register, offset: 0x134 */
-  __IO uint32_t CORR_ERR_CNT3;                     /**< ERM Memory 3 Correctable Error Count Register, offset: 0x138 */
+  __I  uint32_t EAR3;                              /**< ERM Memory 3 Error Address Register, offset: 0x130, available only on: CE_ERM_0, CE_ERM_2, ERM_3, ERM_5, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_4) */
+  __I  uint32_t SYN3;                              /**< ERM Memory 3 Syndrome Register, offset: 0x134, available only on: ERM_3, SMU.ERM/SMU__ERM (missing on CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT3;                     /**< ERM Memory 3 Correctable Error Count Register, offset: 0x138, available only on: CE_ERM_0, CE_ERM_2, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1) */
   uint8_t RESERVED_5[4];
-  __I  uint32_t EAR4;                              /**< ERM Memory 4 Error Address Register, offset: 0x140 */
+  __I  uint32_t EAR4;                              /**< ERM Memory 4 Error Address Register, offset: 0x140, available only on: CE_ERM_2, ERM_5 (missing on CE_ERM_0, CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, SMU.ERM/SMU__ERM) */
   uint8_t RESERVED_6[4];
-  __IO uint32_t CORR_ERR_CNT4;                     /**< ERM Memory 4 Correctable Error Count Register, offset: 0x148 */
+  __IO uint32_t CORR_ERR_CNT4;                     /**< ERM Memory 4 Correctable Error Count Register, offset: 0x148, available only on: CE_ERM_2, ERM_2, ERM_3, ERM_4, ERM_5 (missing on CE_ERM_0, CE_ERM_1, ERM_0, ERM_1, SMU.ERM/SMU__ERM) */
   uint8_t RESERVED_7[4];
-  __I  uint32_t EAR5;                              /**< ERM Memory 5 Error Address Register, offset: 0x150 */
-  __I  uint32_t SYN5;                              /**< ERM Memory 5 Syndrome Register, offset: 0x154 */
-  __IO uint32_t CORR_ERR_CNT5;                     /**< ERM Memory 5 Correctable Error Count Register, offset: 0x158 */
+  __I  uint32_t EAR5;                              /**< ERM Memory 5 Error Address Register, offset: 0x150, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
+  __I  uint32_t SYN5;                              /**< ERM Memory 5 Syndrome Register, offset: 0x154, available only on: CE_ERM_0, ERM_3, SMU.ERM/SMU__ERM (missing on CE_ERM_1, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT5;                     /**< ERM Memory 5 Correctable Error Count Register, offset: 0x158, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_4, ERM_5) */
   uint8_t RESERVED_8[4];
-  __I  uint32_t EAR6;                              /**< ERM Memory 6 Error Address Register, offset: 0x160 */
-  __I  uint32_t SYN6;                              /**< ERM Memory 6 Syndrome Register, offset: 0x164 */
-  __IO uint32_t CORR_ERR_CNT6;                     /**< ERM Memory 6 Correctable Error Count Register, offset: 0x168 */
+  __I  uint32_t EAR6;                              /**< ERM Memory 6 Error Address Register, offset: 0x160, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __I  uint32_t SYN6;                              /**< ERM Memory 6 Syndrome Register, offset: 0x164, available only on: CE_ERM_0, CE_ERM_1, SMU.ERM/SMU__ERM (missing on CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT6;                     /**< ERM Memory 6 Correctable Error Count Register, offset: 0x168, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_4, ERM_5) */
   uint8_t RESERVED_9[4];
-  __I  uint32_t EAR7;                              /**< ERM Memory 7 Error Address Register, offset: 0x170 */
-  __I  uint32_t SYN7;                              /**< ERM Memory 7 Syndrome Register, offset: 0x174 */
-  __IO uint32_t CORR_ERR_CNT7;                     /**< ERM Memory 7 Correctable Error Count Register, offset: 0x178 */
+  __I  uint32_t EAR7;                              /**< ERM Memory 7 Error Address Register, offset: 0x170, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
+  __I  uint32_t SYN7;                              /**< ERM Memory 7 Syndrome Register, offset: 0x174, available only on: CE_ERM_0, CE_ERM_1, SMU.ERM/SMU__ERM (missing on CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT7;                     /**< ERM Memory 7 Correctable Error Count Register, offset: 0x178, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_4, ERM_5) */
   uint8_t RESERVED_10[4];
-  __I  uint32_t EAR8;                              /**< ERM Memory 8 Error Address Register, offset: 0x180 */
-  __I  uint32_t SYN8;                              /**< ERM Memory 8 Syndrome Register, offset: 0x184 */
-  __IO uint32_t CORR_ERR_CNT8;                     /**< ERM Memory 8 Correctable Error Count Register, offset: 0x188 */
+  __I  uint32_t EAR8;                              /**< ERM Memory 8 Error Address Register, offset: 0x180, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
+  __I  uint32_t SYN8;                              /**< ERM Memory 8 Syndrome Register, offset: 0x184, available only on: CE_ERM_0, CE_ERM_1, SMU.ERM/SMU__ERM (missing on CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT8;                     /**< ERM Memory 8 Correctable Error Count Register, offset: 0x188, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_11[4];
-  __I  uint32_t EAR9;                              /**< ERM Memory 9 Error Address Register, offset: 0x190 */
-  __I  uint32_t SYN9;                              /**< ERM Memory 9 Syndrome Register, offset: 0x194 */
-  __IO uint32_t CORR_ERR_CNT9;                     /**< ERM Memory 9 Correctable Error Count Register, offset: 0x198 */
+  __I  uint32_t EAR9;                              /**< ERM Memory 9 Error Address Register, offset: 0x190, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
+  __I  uint32_t SYN9;                              /**< ERM Memory 9 Syndrome Register, offset: 0x194, available only on: CE_ERM_0, CE_ERM_1, ERM_3, SMU.ERM/SMU__ERM (missing on CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT9;                     /**< ERM Memory 9 Correctable Error Count Register, offset: 0x198, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_12[4];
-  __I  uint32_t EAR10;                             /**< ERM Memory 10 Error Address Register, offset: 0x1A0 */
-  __I  uint32_t SYN10;                             /**< ERM Memory 10 Syndrome Register, offset: 0x1A4 */
-  __IO uint32_t CORR_ERR_CNT10;                    /**< ERM Memory 10 Correctable Error Count Register, offset: 0x1A8 */
+  __I  uint32_t EAR10;                             /**< ERM Memory 10 Error Address Register, offset: 0x1A0, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __I  uint32_t SYN10;                             /**< ERM Memory 10 Syndrome Register, offset: 0x1A4, available only on: CE_ERM_0, SMU.ERM/SMU__ERM (missing on CE_ERM_1, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT10;                    /**< ERM Memory 10 Correctable Error Count Register, offset: 0x1A8, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_13[4];
-  __I  uint32_t EAR11;                             /**< ERM Memory 11 Error Address Register, offset: 0x1B0 */
-  __I  uint32_t SYN11;                             /**< ERM Memory 11 Syndrome Register, offset: 0x1B4 */
-  __IO uint32_t CORR_ERR_CNT11;                    /**< ERM Memory 11 Correctable Error Count Register, offset: 0x1B8 */
+  __I  uint32_t EAR11;                             /**< ERM Memory 11 Error Address Register, offset: 0x1B0, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __I  uint32_t SYN11;                             /**< ERM Memory 11 Syndrome Register, offset: 0x1B4, available only on: CE_ERM_0, SMU.ERM/SMU__ERM (missing on CE_ERM_1, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT11;                    /**< ERM Memory 11 Correctable Error Count Register, offset: 0x1B8, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_14[4];
-  __I  uint32_t EAR12;                             /**< ERM Memory 12 Error Address Register, offset: 0x1C0 */
-  __I  uint32_t SYN12;                             /**< ERM Memory 12 Syndrome Register, offset: 0x1C4 */
-  __IO uint32_t CORR_ERR_CNT12;                    /**< ERM Memory 12 Correctable Error Count Register, offset: 0x1C8 */
+  __I  uint32_t EAR12;                             /**< ERM Memory 12 Error Address Register, offset: 0x1C0, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __I  uint32_t SYN12;                             /**< ERM Memory 12 Syndrome Register, offset: 0x1C4, available only on: CE_ERM_0, SMU.ERM/SMU__ERM (missing on CE_ERM_1, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT12;                    /**< ERM Memory 12 Correctable Error Count Register, offset: 0x1C8, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_15[4];
-  __I  uint32_t EAR13;                             /**< ERM Memory 13 Error Address Register, offset: 0x1D0 */
-  __I  uint32_t SYN13;                             /**< ERM Memory 13 Syndrome Register, offset: 0x1D4 */
-  __IO uint32_t CORR_ERR_CNT13;                    /**< ERM Memory 13 Correctable Error Count Register, offset: 0x1D8 */
+  __I  uint32_t EAR13;                             /**< ERM Memory 13 Error Address Register, offset: 0x1D0, available only on: CE_ERM_0, CE_ERM_2, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __I  uint32_t SYN13;                             /**< ERM Memory 13 Syndrome Register, offset: 0x1D4, available only on: CE_ERM_0, SMU.ERM/SMU__ERM (missing on CE_ERM_1, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT13;                    /**< ERM Memory 13 Correctable Error Count Register, offset: 0x1D8, available only on: CE_ERM_0, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_16[4];
-  __I  uint32_t EAR14;                             /**< ERM Memory 14 Error Address Register, offset: 0x1E0 */
-  __I  uint32_t SYN14;                             /**< ERM Memory 14 Syndrome Register, offset: 0x1E4 */
-  __IO uint32_t CORR_ERR_CNT14;                    /**< ERM Memory 14 Correctable Error Count Register, offset: 0x1E8 */
+  __I  uint32_t EAR14;                             /**< ERM Memory 14 Error Address Register, offset: 0x1E0, available only on: CE_ERM_0, CE_ERM_2, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __I  uint32_t SYN14;                             /**< ERM Memory 14 Syndrome Register, offset: 0x1E4, available only on: CE_ERM_0, SMU.ERM/SMU__ERM (missing on CE_ERM_1, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
+  __IO uint32_t CORR_ERR_CNT14;                    /**< ERM Memory 14 Correctable Error Count Register, offset: 0x1E8, available only on: CE_ERM_0, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_17[4];
-  __I  uint32_t EAR15;                             /**< ERM Memory 15 Error Address Register, offset: 0x1F0 */
+  __I  uint32_t EAR15;                             /**< ERM Memory 15 Error Address Register, offset: 0x1F0, available only on: CE_ERM_0, CE_ERM_2, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
   uint8_t RESERVED_18[4];
-  __IO uint32_t CORR_ERR_CNT15;                    /**< ERM Memory 15 Correctable Error Count Register, offset: 0x1F8 */
+  __IO uint32_t CORR_ERR_CNT15;                    /**< ERM Memory 15 Correctable Error Count Register, offset: 0x1F8, available only on: CE_ERM_0, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_19[4];
-  __I  uint32_t EAR16;                             /**< ERM Memory 16 Error Address Register, offset: 0x200 */
+  __I  uint32_t EAR16;                             /**< ERM Memory 16 Error Address Register, offset: 0x200, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
   uint8_t RESERVED_20[4];
-  __IO uint32_t CORR_ERR_CNT16;                    /**< ERM Memory 16 Correctable Error Count Register, offset: 0x208 */
+  __IO uint32_t CORR_ERR_CNT16;                    /**< ERM Memory 16 Correctable Error Count Register, offset: 0x208, available only on: CE_ERM_0, CE_ERM_1, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_21[4];
-  __I  uint32_t EAR17;                             /**< ERM Memory 17 Error Address Register, offset: 0x210 */
+  __I  uint32_t EAR17;                             /**< ERM Memory 17 Error Address Register, offset: 0x210, available only on: CE_ERM_0, CE_ERM_2, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
   uint8_t RESERVED_22[4];
-  __IO uint32_t CORR_ERR_CNT17;                    /**< ERM Memory 17 Correctable Error Count Register, offset: 0x218 */
+  __IO uint32_t CORR_ERR_CNT17;                    /**< ERM Memory 17 Correctable Error Count Register, offset: 0x218, available only on: CE_ERM_0, CE_ERM_2, ERM_3, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_4, ERM_5) */
   uint8_t RESERVED_23[4];
-  __I  uint32_t EAR18;                             /**< ERM Memory 18 Error Address Register, offset: 0x220 */
-  __I  uint32_t SYN18;                             /**< ERM Memory 18 Syndrome Register, offset: 0x224 */
-  __IO uint32_t CORR_ERR_CNT18;                    /**< ERM Memory 18 Correctable Error Count Register, offset: 0x228 */
+  __I  uint32_t EAR18;                             /**< ERM Memory 18 Error Address Register, offset: 0x220, available only on: CE_ERM_0, CE_ERM_2 (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
+  __I  uint32_t SYN18;                             /**< ERM Memory 18 Syndrome Register, offset: 0x224, available only on: CE_ERM_0 (missing on CE_ERM_1, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
+  __IO uint32_t CORR_ERR_CNT18;                    /**< ERM Memory 18 Correctable Error Count Register, offset: 0x228, available only on: CE_ERM_0, CE_ERM_2, SMU.ERM/SMU__ERM (missing on CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5) */
   uint8_t RESERVED_24[4];
-  __I  uint32_t EAR19;                             /**< ERM Memory 19 Error Address Register, offset: 0x230 */
+  __I  uint32_t EAR19;                             /**< ERM Memory 19 Error Address Register, offset: 0x230, available only on: CE_ERM_2 (missing on CE_ERM_0, CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
   uint8_t RESERVED_25[4];
-  __IO uint32_t CORR_ERR_CNT19;                    /**< ERM Memory 19 Correctable Error Count Register, offset: 0x238 */
+  __IO uint32_t CORR_ERR_CNT19;                    /**< ERM Memory 19 Correctable Error Count Register, offset: 0x238, available only on: CE_ERM_2 (missing on CE_ERM_0, CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
   uint8_t RESERVED_26[4];
-  __I  uint32_t EAR20;                             /**< ERM Memory 20 Error Address Register, offset: 0x240 */
-  __I  uint32_t SYN20;                             /**< ERM Memory 20 Syndrome Register, offset: 0x244 */
-  __IO uint32_t CORR_ERR_CNT20;                    /**< ERM Memory 20 Correctable Error Count Register, offset: 0x248 */
+  __I  uint32_t EAR20;                             /**< ERM Memory 20 Error Address Register, offset: 0x240, available only on: CE_ERM_1, CE_ERM_2 (missing on CE_ERM_0, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
+  __I  uint32_t SYN20;                             /**< ERM Memory 20 Syndrome Register, offset: 0x244, available only on: CE_ERM_1 (missing on CE_ERM_0, CE_ERM_2, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
+  __IO uint32_t CORR_ERR_CNT20;                    /**< ERM Memory 20 Correctable Error Count Register, offset: 0x248, available only on: CE_ERM_1, CE_ERM_2 (missing on CE_ERM_0, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
   uint8_t RESERVED_27[4];
-  __I  uint32_t EAR21;                             /**< ERM Memory 21 Error Address Register, offset: 0x250 */
+  __I  uint32_t EAR21;                             /**< ERM Memory 21 Error Address Register, offset: 0x250, available only on: CE_ERM_2 (missing on CE_ERM_0, CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
   uint8_t RESERVED_28[4];
-  __IO uint32_t CORR_ERR_CNT21;                    /**< ERM Memory 21 Correctable Error Count Register, offset: 0x258 */
+  __IO uint32_t CORR_ERR_CNT21;                    /**< ERM Memory 21 Correctable Error Count Register, offset: 0x258, available only on: CE_ERM_2 (missing on CE_ERM_0, CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
   uint8_t RESERVED_29[4];
-  __I  uint32_t EAR22;                             /**< ERM Memory 22 Error Address Register, offset: 0x260 */
+  __I  uint32_t EAR22;                             /**< ERM Memory 22 Error Address Register, offset: 0x260, available only on: CE_ERM_2 (missing on CE_ERM_0, CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
   uint8_t RESERVED_30[4];
-  __IO uint32_t CORR_ERR_CNT22;                    /**< ERM Memory 22 Correctable Error Count Register, offset: 0x268 */
+  __IO uint32_t CORR_ERR_CNT22;                    /**< ERM Memory 22 Correctable Error Count Register, offset: 0x268, available only on: CE_ERM_2 (missing on CE_ERM_0, CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
   uint8_t RESERVED_31[4];
-  __I  uint32_t EAR23;                             /**< ERM Memory 23 Error Address Register, offset: 0x270 */
+  __I  uint32_t EAR23;                             /**< ERM Memory 23 Error Address Register, offset: 0x270, available only on: CE_ERM_2 (missing on CE_ERM_0, CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
   uint8_t RESERVED_32[4];
-  __IO uint32_t CORR_ERR_CNT23;                    /**< ERM Memory 23 Correctable Error Count Register, offset: 0x278 */
+  __IO uint32_t CORR_ERR_CNT23;                    /**< ERM Memory 23 Correctable Error Count Register, offset: 0x278, available only on: CE_ERM_2 (missing on CE_ERM_0, CE_ERM_1, ERM_0, ERM_1, ERM_2, ERM_3, ERM_4, ERM_5, SMU.ERM/SMU__ERM) */
 } ERM_Type, *ERM_MemMapPtr;
 
 /** Number of instances of the ERM module. */
