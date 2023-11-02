@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -34,7 +34,7 @@ extern "C"{
 #include "S32Z2_NETC_F3_SI5.h"
 #include "S32Z2_NETC_F3_SI6.h"
 #include "S32Z2_NETC_F3_SI7.h"
-
+#include "S32Z2_NETC_IERB.h"
 #include "S32Z2_NETC_VF1_PCI_HDR_TYPE0.h"
 #include "S32Z2_NETC_VF2_PCI_HDR_TYPE0.h"
 #include "S32Z2_NETC_VF3_PCI_HDR_TYPE0.h"
@@ -52,8 +52,27 @@ extern "C"{
 #include "S32Z2_NETC_F3_COMMON.h"
 
 #include "S32Z2_TMR0_BASE.h"
+
+#include "S32Z2_IERC_PCI.h"
+
+#include "S32Z2_NETC_F1_GLOBAL.h"
 #include "S32Z2_SW_ETH_MAC_PORT0.h"
 #include "S32Z2_SW_ETH_MAC_PORT1.h"
+#include "S32Z2_NETC_F0_GLOBAL.h"
+
+#include "S32Z2_IERC_PCI.h"
+
+#include "S32Z2_NETC_F1_GLOBAL.h"
+#include "S32Z2_NETC_F0_GLOBAL.h"
+
+#include "S32Z2_NETC_F2_COMMON.h"
+#include "S32Z2_NETC_F3_COMMON.h"
+
+#include "S32Z2_NETC_PRIV.h"
+/** @brief MSI table base address of each SI. */
+#define NETC_ETH_IP_MSI_BASE_PTRS { (uint32 *)(0x74BB0000U), (uint32 *)(0x74C30000U), (uint32 *)(0x74C40000U), (uint32 *)(0x74C50000U), \
+                                    (uint32 *)(0x74C60000U), (uint32 *)(0x74C70000U), (uint32 *)(0x74C80000U), (uint32 *)(0x74C90000U) }
+
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -61,8 +80,8 @@ extern "C"{
 #define NETC_ETH_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETH_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETH_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETH_IP_CFG_DEFINES_SW_MAJOR_VERSION             0
-#define NETC_ETH_IP_CFG_DEFINES_SW_MINOR_VERSION             9
+#define NETC_ETH_IP_CFG_DEFINES_SW_MAJOR_VERSION             1
+#define NETC_ETH_IP_CFG_DEFINES_SW_MINOR_VERSION             0
 #define NETC_ETH_IP_CFG_DEFINES_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -88,7 +107,9 @@ extern "C"{
  *        LIMITATION: must be multiple of 8.
  */
 /** @brief Total number of command BDRs. */
-#define NETC_ETH_IP_COMMAND_BDR_LENGTH          (8U)
+#define NETC_ETH_IP_COMMAND_BDR_LENGTH          (2U)    /*!< BD ring length. 2 means the actual size of ring is 16 because it is in sets of 8 BDs */
+#define NETC_ETH_IP_SET_OF_BD                   (8U)    /*!< set of BD */
+#define NETC_ETH_IP_ACTUAL_CBDR_SIZE            ((NETC_ETH_IP_COMMAND_BDR_LENGTH) * (NETC_ETH_IP_SET_OF_BD))    /*!< CBDR actual size */
 
 /** @brief Development error enable/disable. */
 #define NETC_ETH_IP_DEV_ERROR_DETECT            (STD_OFF)
@@ -97,6 +118,9 @@ extern "C"{
 
 /** @brief Minimum number of bytes supported by a frame. */
 #define NETC_ETH_IP_MIN_FRAME_LENGTH         (16U)
+
+/** @brief First buffer define. Used to check the hardware limitation of frame length */
+#define NETC_ETH_IP_FIRST_BUFFER_IDX        (0U)
 
 /** @brief Number of traffic classes. */
 #define NETC_ETH_IP_NUMBER_OF_PRIORITIES        (8U)
@@ -137,6 +161,8 @@ extern "C"{
 #define NETC_ETH_IP_RXBD_READY_MASK             (0x40000000UL)
 /** @brief RX buffer descriptor length mask. */
 #define NETC_ETH_IP_RXBD_LENGTH_MASK            (0x0000FFFFUL)
+/** @brief RX buffer descriptor source port mask. */
+#define NETC_ETH_IP_RXBD_SRC_PORT_MASK          (0x0000001FUL)
 /** @brief RX buffer descriptor error mask. */
 #define NETC_ETH_IP_RXBD_ERROR_MASK             (0x00FF0000UL)
 /** @brief RX buffer descriptor error shift value. */
@@ -163,7 +189,10 @@ extern "C"{
 #define Netc_Eth_Ip_VsiBaseType              NETC_F3_SI1_Type
 
 /** @brief Virtual function(VF) type */
-#define Netc_Eth_Ip_VfBaseType               NETC_F1_PCI_HDR_TYPE0_Type
+#define Netc_Eth_Ip_VfBaseType               NETC_VF1_PCI_HDR_TYPE0_Type
+
+/** @brief NETC PCI Express ECAM PF type */
+#define Netc_Eth_Ip_PCIeBaseType             NETC_F0_PCI_HDR_TYPE0_Type
 
 /** @brief ENETC function struct type. */
 #define Netc_Eth_Ip_EnetcBaseType            NETC_F3_Type
@@ -188,9 +217,24 @@ extern "C"{
 #define NETC_ETH_IP_DR_SHIFT                 (10U)
 
 /* TX write-back fields. */
-#define NETC_ETH_IP_HOSTREASON_WB_MASK       (0x0000003CUL)
+#define NETC_ETH_IP_HOSTREASON_WB_MASK       (0x0000000FUL)
+#define NETC_ETH_IP_HOSTREASON_WB_SHIFT      (0x2U)
 #define NETC_ETH_IP_HOSTREASON_REGULAR_FRAME (0x00000000UL)
-#define NETC_ETH_IP_HOSTREASON_TIMESTAMP     (0x0000000CUL)
+#define NETC_ETH_IP_HOSTREASON_INGR_MIRROR   (0x00000001UL)
+#define NETC_ETH_IP_HOSTREASON_MAC_LEARN     (0x00000002UL)
+#define NETC_ETH_IP_HOSTREASON_TIMESTAMP     (0x00000003UL)
+#define NETC_ETH_IP_HOSTREASON_RESERVEDx4    (0x00000004UL)
+#define NETC_ETH_IP_HOSTREASON_RESERVEDx5    (0x00000005UL)
+#define NETC_ETH_IP_HOSTREASON_RESERVEDx6    (0x00000006UL)
+#define NETC_ETH_IP_HOSTREASON_RESERVEDx7    (0x00000007UL)
+#define NETC_ETH_IP_HOSTREASON_SW_PTP        (0x00000008UL)
+#define NETC_ETH_IP_HOSTREASON_SWx9          (0x00000009UL)
+#define NETC_ETH_IP_HOSTREASON_SWxA          (0x0000000AUL)
+#define NETC_ETH_IP_HOSTREASON_SWxB          (0x0000000BUL)
+#define NETC_ETH_IP_HOSTREASON_SWxC          (0x0000000CUL)
+#define NETC_ETH_IP_HOSTREASON_SWxD          (0x0000000DUL)
+#define NETC_ETH_IP_HOSTREASON_SWxE          (0x0000000EUL)
+#define NETC_ETH_IP_HOSTREASON_SWxF          (0x0000000FUL)
 #define NETC_ETH_IP_TX_WB_STATUS_MASK        (0x01FFU)
 
 /* Descriptor options for extended buffer. */
@@ -224,10 +268,58 @@ extern "C"{
 #define NETC_ETH_IP_VSI_MSG_STATUS               (0x00000002UL)
 /** @brief Define used to code the 32 bytes message. */
 #define NETC_ETH_IP_VSITOPSI_MSG_SIZE            (0x00000001UL)
+/** @brief Define VSI Enable value for PSIMSGSR register. */
+#define NETC_ETH_IP_VSI_ENABLE                    (1U)
+/** @brief Define Message receive complete value for PSIMSGRR register. */
+#define NETC_ETH_IP_MSG_RCV_COMPLETE              (1U)
+/** @brief Define PSI Message shift value for PSIMSGSR register. */
+#define NETC_ETH_IP_PSI_MSG_POS                  (16U)
+/** @brief Define interrupt enable register for the PSI. */
+#define NETC_ETH_IP_PSIIER_MASK                  (0xFE00FEU)
+/** @brief Define PSI message receive event mask */
+#define NETC_ETH_IP_PSI_MR_EV_MASK                  (0xFEU)
+/** @brief Define FLR event mask */
+#define NETC_ETH_IP_FLR_EV_MASK                  (0x00FE0000UL)
+/** @brief Define FLRn shift value for PSIIDR register, x = 1..7 */
+#define NETC_ETH_IP_PSI_IDR_FLR(x)           (16U + (x))
 
 #define NETC_ETH_IP_VLAN_SUPPORT          (STD_ON)
 /*! @brief Enables/Disables internal cache management */
 #define  NETC_ETH_IP_HAS_CACHE_MANAGEMENT       (STD_OFF)
+
+/*!< the length of response data buffer in bytes for Ingress Port Filter table */
+#define NETC_ETH_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN    (224U)
+/*!< the length of response data buffer in bytes for Ingress Port Filter table */
+#define NETC_ETH_IP_INGRESSPORTFILTERTABLE_RSPBUFFER_LEN    (236U)
+/*!< the length of response data buffer in bytes for time gate scheduling table */
+#define NETC_ETH_IP_TGSTABLE_RSPBUFFER_LEN                  (12U) 
+/*!< the length of request data buffer in bytes for add cmd for rate policer table */  
+#define NETC_ETH_IP_RATEPOLICERTABLE_REQBUFFER_LEN          (27U) 
+/*!< the length of response data buffer in bytes for rate policer table */  
+#define NETC_ETH_IP_RATEPOLICERTABLE_RSPBUFFER_LEN          (108U) 
+/*!< 0 bytes response data buffer length for add, update and delete cmd for tables */  
+#define NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN        (0U) 
+/*!< 4 bytes response data buffer length for add, update and delete cmd for tables */  
+#define NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN        (4U) 
+/*!< 8 bytes request data buffer length for query and delete cmd for tables */  
+#define NETC_ETH_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN        (8U) 
+/*!< 53 uint32 items of Ingress Port Filter Table KEYE_DATA Format */ 
+#define NETC_ETH_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN    (53U) 
+/*!< 16-byte aligned memory for command tables */
+#define NETC_ETH_IP_TABLE_ALIGNED_SIZE                      (16U)
+/* The maximum number of VLAN Filter Table entries */
+#define NETC_ETH_IP_NUMBER_OF_VLAN_FILTER_ENTRIES              (0U)
+/* The maximum number of gate control list */
+#define NETC_ETH_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES      (2U)
+/* The maximum number of static ingress port filter table list */
+#define NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST              (3U)
+#define NETC_ETH_IP_TABLEDATA_BUFFER_LENGTH  ((236)/4)
+ 
+/* Maxim number of registers that can be interrogated in case of the correctable errors */
+#define NETC_ETH_IP_MAX_CORRECTABLE_ERROR_REPORTING_STATISTICS_LENGTH (1U)
+
+/* Maxim number of registers that can be interrogated in case of the uncorrectable errors */
+#define NETC_ETH_IP_MAX_UNCORRECTABLE_ERROR_REPORTING_STATISTICS_LENGTH (27u)
 /*==================================================================================================
                                              ENUMS
 ==================================================================================================*/

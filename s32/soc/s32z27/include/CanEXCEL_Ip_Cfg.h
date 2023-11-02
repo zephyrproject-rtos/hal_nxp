@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -32,8 +32,8 @@ extern "C"{
 #define CANEXCEL_IP_CFG_AR_RELEASE_MAJOR_VERSION_H       4
 #define CANEXCEL_IP_CFG_AR_RELEASE_MINOR_VERSION_H       7
 #define CANEXCEL_IP_CFG_AR_RELEASE_REVISION_VERSION_H    0
-#define CANEXCEL_IP_CFG_SW_MAJOR_VERSION_H               0
-#define CANEXCEL_IP_CFG_SW_MINOR_VERSION_H               9
+#define CANEXCEL_IP_CFG_SW_MAJOR_VERSION_H               1
+#define CANEXCEL_IP_CFG_SW_MINOR_VERSION_H               0
 #define CANEXCEL_IP_CFG_SW_PATCH_VERSION_H               0
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
@@ -48,11 +48,12 @@ extern "C"{
 #define CANEXCEL_IP_SERVICE_TIMEOUT_TYPE (OSIF_COUNTER_DUMMY)
 #define CANEXCEL_IP_DEV_ERROR_DETECT (STD_OFF)
 #define CANEXCEL_IP_HAS_TS_ENABLE (STD_ON)
-
+#define CANEXCEL_IP_MSGDESC_MAX_DEPTH (16U)
+#define CANEXCEL_IP_MAX_FILTER_BANK (32U)
+#define CANEXCEL_IP_ERROR_INTERRUPT_SUPPORT (STD_ON)
 #define CANEXCEL_IP_USE_FRZ_IRQ (STD_ON)
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 #endif /* CANEXCEL_IP_CFG_H_ */
-

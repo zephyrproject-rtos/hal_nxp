@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -33,8 +33,8 @@ extern "C"{
 #define NETC_ETH_IP_CFG_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETH_IP_CFG_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETH_IP_CFG_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETH_IP_CFG_SW_MAJOR_VERSION             0
-#define NETC_ETH_IP_CFG_SW_MINOR_VERSION             9
+#define NETC_ETH_IP_CFG_SW_MAJOR_VERSION             1
+#define NETC_ETH_IP_CFG_SW_MINOR_VERSION             0
 #define NETC_ETH_IP_CFG_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -84,12 +84,12 @@ extern "C"{
 
 #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS)
     /** @brief Array of the feature of external buffers support indexed at controller level. */
-    #define NETC_ETH_IP_INST_HAS_EXTERNAL_TX_BUFFERS  {(boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE}
+    #define NETC_ETH_IP_INST_HAS_EXTERNAL_TX_BUFFERS  {(boolean)FALSE}
 #endif
 
 #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS)
     /** @brief Array of the feature of external buffers support indexed at controller level. */
-    #define NETC_ETH_IP_INST_HAS_EXTERNAL_RX_BUFFERS  {(boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE, (boolean)FALSE}
+    #define NETC_ETH_IP_INST_HAS_EXTERNAL_RX_BUFFERS  {(boolean)FALSE}
 #endif
 
 /*==================================================================================================

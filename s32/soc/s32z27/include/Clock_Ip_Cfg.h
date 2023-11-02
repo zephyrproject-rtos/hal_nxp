@@ -1,12 +1,12 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       Clock_Ip_Cfg.h
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   AUTOSAR Mcu - Clock configuration header file.
 *   @details This file is the header containing all the necessary information for CLOCK
@@ -31,6 +31,7 @@ extern "C"{
  2) needed interfaces from external units
  3) internal and external interfaces from this unit
 ==================================================================================================*/
+#include "Clock_Ip_Types.h"
 
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
@@ -39,13 +40,34 @@ extern "C"{
 #define CLOCK_IP_CFG_AR_RELEASE_MAJOR_VERSION       4
 #define CLOCK_IP_CFG_AR_RELEASE_MINOR_VERSION       7
 #define CLOCK_IP_CFG_AR_RELEASE_REVISION_VERSION    0
-#define CLOCK_IP_CFG_SW_MAJOR_VERSION               0
-#define CLOCK_IP_CFG_SW_MINOR_VERSION               9
+#define CLOCK_IP_CFG_SW_MAJOR_VERSION               1
+#define CLOCK_IP_CFG_SW_MINOR_VERSION               0
 #define CLOCK_IP_CFG_SW_PATCH_VERSION               0
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
+/* Check if Clock_Ip_Cfg.h file and Clock_Ip_Types.h file are of the same vendor */
+#if (CLOCK_IP_CFG_VENDOR_ID != CLOCK_IP_TYPES_VENDOR_ID)
+    #error "Clock_Ip_Cfg.h and Clock_Ip_Types.h have different vendor ids"
+#endif
+
+/* Check if Clock_Ip_Cfg.h file and Clock_Ip_Types.h file are of the same Autosar version */
+#if ((CLOCK_IP_CFG_AR_RELEASE_MAJOR_VERSION != CLOCK_IP_TYPES_AR_RELEASE_MAJOR_VERSION) || \
+     (CLOCK_IP_CFG_AR_RELEASE_MINOR_VERSION != CLOCK_IP_TYPES_AR_RELEASE_MINOR_VERSION) || \
+     (CLOCK_IP_CFG_AR_RELEASE_REVISION_VERSION != CLOCK_IP_TYPES_AR_RELEASE_REVISION_VERSION) \
+    )
+    #error "AutoSar Version Numbers of Clock_Ip_Cfg.h and Clock_Ip_Types.h are different"
+#endif
+
+/* Check if Clock_Ip_Cfg.h file and Clock_Ip_Types.h file are of the same Software version */
+#if ((CLOCK_IP_CFG_SW_MAJOR_VERSION != CLOCK_IP_TYPES_SW_MAJOR_VERSION) || \
+     (CLOCK_IP_CFG_SW_MINOR_VERSION != CLOCK_IP_TYPES_SW_MINOR_VERSION) || \
+     (CLOCK_IP_CFG_SW_PATCH_VERSION != CLOCK_IP_TYPES_SW_PATCH_VERSION) \
+    )
+  #error "Software Version Numbers of Clock_Ip_Cfg.h and Clock_Ip_Types.h are different"
+#endif
+
 /*==================================================================================================
                                            DEFINES AND MACROS
 ==================================================================================================*/
@@ -102,6 +124,18 @@ typedef enum
 #define MCU_START_SEC_CODE
 #include "Mcu_MemMap.h"
 
+#if CLOCK_IP_CMUS_COUNT > 0U
+
+/**
+* @brief        This function clear the CMU interrupt flag from CMU module.
+* @details      Called by RGM ISR routine when a user notification for CMU FCCU events is configured
+*
+* @return       void
+*
+*/
+ISR(Mcu_Cmu_ClockFail_IRQHandler);
+
+#endif
 #define MCU_STOP_SEC_CODE
 #include "Mcu_MemMap.h"
 
@@ -111,7 +145,7 @@ typedef enum
 
 
 /* *************************************************************************
- * Configuration structure for Clock Configuration
+ * Configuration structure for Clock Configuration 
  * ************************************************************************* */
 
 extern const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[];

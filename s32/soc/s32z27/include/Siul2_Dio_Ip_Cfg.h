@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -11,7 +11,7 @@
 *   @file Siul2_Dio_Ip_Cfg.h
 *   @implements Siul2_Dio_Ip_Cfg.h_Artifact
 *
-*   @addtogroup DIO_IPL
+*   @addtogroup DIO_CFG
 *   @{
 */
 
@@ -34,8 +34,8 @@ extern "C"{
 #define SIUL2_DIO_IP_AR_RELEASE_MAJOR_VERSION_CFG_H        4
 #define SIUL2_DIO_IP_AR_RELEASE_MINOR_VERSION_CFG_H        7
 #define SIUL2_DIO_IP_AR_RELEASE_REVISION_VERSION_CFG_H     0
-#define SIUL2_DIO_IP_SW_MAJOR_VERSION_CFG_H                0
-#define SIUL2_DIO_IP_SW_MINOR_VERSION_CFG_H                9
+#define SIUL2_DIO_IP_SW_MAJOR_VERSION_CFG_H                1
+#define SIUL2_DIO_IP_SW_MINOR_VERSION_CFG_H                0
 #define SIUL2_DIO_IP_SW_PATCH_VERSION_CFG_H                0
 
 /*==================================================================================================
@@ -51,6 +51,26 @@ extern "C"{
 ==================================================================================================*/
 /* Pre-processor switch to enable/disable VirtWrapper support */
 #define DIO_VIRTWRAPPER_SUPPORT                 (STD_OFF)
+
+/**
+* @brief Support for User mode.
+*        If this parameter has been configured to STD_ON, the Dio driver code can be executed from both supervisor and user mode.
+*/
+#define DIO_ENABLE_USER_MODE_SUPPORT          (STD_OFF)
+
+/**
+* @brief Support for REG_PROT in SIUL2 IP.
+*        If the current platform implements REG_PROT for SIUL2 IP, this parameter will be defined, and will enable REG_PROT configuration for SIUL2 IP in DIO drvier
+*/
+#define DIO_SIUL2_REG_PROT_AVAILABLE    (STD_OFF)
+
+#ifndef MCAL_ENABLE_USER_MODE_SUPPORT
+ #ifdef DIO_ENABLE_USER_MODE_SUPPORT
+  #if (STD_ON == DIO_ENABLE_USER_MODE_SUPPORT)
+    #error MCAL_ENABLE_USER_MODE_SUPPORT is not enabled. For running Dio in user mode the MCAL_ENABLE_USER_MODE_SUPPORT needs to be defined
+  #endif /* (STD_ON == DIO_ENABLE_USER_MODE_SUPPORT) */
+ #endif /* ifdef DIO_ENABLE_USER_MODE_SUPPORT*/
+#endif /* ifndef MCAL_ENABLE_USER_MODE_SUPPORT */
 
 /**
 * @brief          Pre-processor switch to enable/disable development error detection for Dio Ip API

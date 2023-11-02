@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -11,8 +11,8 @@
 #define NETC_ETH_IP_SA_INIT_PBCFG_AR_RELEASE_MAJOR_VERSION      4
 #define NETC_ETH_IP_SA_INIT_PBCFG_AR_RELEASE_MINOR_VERSION      7
 #define NETC_ETH_IP_SA_INIT_PBCFG_AR_RELEASE_REVISION_VERSION   0
-#define NETC_ETH_IP_SA_INIT_PBCFG_SW_MAJOR_VERSION              0
-#define NETC_ETH_IP_SA_INIT_PBCFG_SW_MINOR_VERSION              9
+#define NETC_ETH_IP_SA_INIT_PBCFG_SW_MAJOR_VERSION              1
+#define NETC_ETH_IP_SA_INIT_PBCFG_SW_MINOR_VERSION              0
 #define NETC_ETH_IP_SA_INIT_PBCFG_SW_PATCH_VERSION              0
 
 /* Not used but required to build the baremetal drivers */

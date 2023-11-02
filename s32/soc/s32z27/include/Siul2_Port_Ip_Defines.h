@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -32,8 +32,8 @@ extern "C"{
 #define SIUL2_PORT_IP_DEFINES_AR_RELEASE_MAJOR_VERSION_H        4
 #define SIUL2_PORT_IP_DEFINES_AR_RELEASE_MINOR_VERSION_H        7
 #define SIUL2_PORT_IP_DEFINES_AR_RELEASE_REVISION_VERSION_H     0
-#define SIUL2_PORT_IP_DEFINES_SW_MAJOR_VERSION_H                0
-#define SIUL2_PORT_IP_DEFINES_SW_MINOR_VERSION_H                9
+#define SIUL2_PORT_IP_DEFINES_SW_MAJOR_VERSION_H                1
+#define SIUL2_PORT_IP_DEFINES_SW_MINOR_VERSION_H                0
 #define SIUL2_PORT_IP_DEFINES_SW_PATCH_VERSION_H                0
 
 /*==================================================================================================
@@ -81,7 +81,7 @@ extern "C"{
 #endif /* ifndef MCAL_ENABLE_USER_MODE_SUPPORT */
 
 /* Pre-processor switch to enable/disable development error detection for Siul2 Ip API */
-#define SIUL2_PORT_IP_DEV_ERROR_DETECT                         (STD_ON)
+#define SIUL2_PORT_IP_DEV_ERROR_DETECT                         (STD_OFF)
 
 /*! @brief SIUL2 module has RCVR bit */
 #define FEATURE_SIUL2_PORT_IP_HAS_RECEIVER_SELECT             (STD_ON)
@@ -93,55 +93,6 @@ extern "C"{
 #define FEATURE_SIUL2_PORT_IP_HAS_CURRENT_REFERENCE_CONTROL   (STD_ON)
 /*! @brief SIUL2 module has RXCB bit */
 #define FEATURE_SIUL2_PORT_IP_HAS_RX_CURRENT_BOOST            (STD_ON)
-
-/* Workaround when this define in header is incorrect */
-/*! @name MSCR - SIUL2 Multiplexed Signal Configuration Register */
-/*! @{ */
-#ifdef SIUL2_MSCR_SRE_MASK
-#undef SIUL2_MSCR_SRE_MASK
-#undef SIUL2_MSCR_SRE_SHIFT
-#undef SIUL2_MSCR_SRE_WIDTH
-#undef SIUL2_MSCR_SRE
-#define SIUL2_MSCR_SRE_MASK                      (0x1C000U)
-#define SIUL2_MSCR_SRE_SHIFT                     (14U)
-#define SIUL2_MSCR_SRE_WIDTH                     (3U)
-#define SIUL2_MSCR_SRE(x)                        (((uint32_t)(((uint32_t)(x)) << SIUL2_MSCR_SRE_SHIFT)) & SIUL2_MSCR_SRE_MASK)
-#endif /* SIUL2_MSCR_SRE_MASK */
-
-#ifdef SIUL2_MSCR_PUE_MASK
-#undef SIUL2_MSCR_PUE_MASK
-#undef SIUL2_MSCR_PUE_SHIFT
-#undef SIUL2_MSCR_PUE_WIDTH
-#undef SIUL2_MSCR_PUE
-#define SIUL2_MSCR_PUE_MASK                      (0x2000U)
-#define SIUL2_MSCR_PUE_SHIFT                     (13U)
-#define SIUL2_MSCR_PUE_WIDTH                     (1U)
-#define SIUL2_MSCR_PUE(x)                        (((uint32_t)(((uint32_t)(x)) << SIUL2_MSCR_PUE_SHIFT)) & SIUL2_MSCR_PUE_MASK)
-#endif /* SIUL2_MSCR_PUE_MASK */
-
-#ifdef SIUL2_MSCR_PUS_MASK
-#undef SIUL2_MSCR_PUS_MASK
-#undef SIUL2_MSCR_PUS_SHIFT
-#undef SIUL2_MSCR_PUS_WIDTH
-#undef SIUL2_MSCR_PUS
-#define SIUL2_MSCR_PUS_MASK                      (0x1000U)
-#define SIUL2_MSCR_PUS_SHIFT                     (12U)
-#define SIUL2_MSCR_PUS_WIDTH                     (1U)
-#define SIUL2_MSCR_PUS(x)                        (((uint32_t)(((uint32_t)(x)) << SIUL2_MSCR_PUS_SHIFT)) & SIUL2_MSCR_PUS_MASK)
-#endif /* SIUL2_MSCR_PUS_MASK */
-
-#ifdef SIUL2_MSCR_OBE_MASK
-#undef SIUL2_MSCR_OBE_MASK
-#undef SIUL2_MSCR_OBE_SHIFT
-#undef SIUL2_MSCR_OBE_WIDTH
-#undef SIUL2_MSCR_OBE
-#define SIUL2_MSCR_OBE_MASK                      (0x200000U)
-#define SIUL2_MSCR_OBE_SHIFT                     (21U)
-#define SIUL2_MSCR_OBE_WIDTH                     (1U)
-#define SIUL2_MSCR_OBE(x)                        (((uint32_t)(((uint32_t)(x)) << SIUL2_MSCR_OBE_SHIFT)) & SIUL2_MSCR_OBE_MASK)
-#endif /* SIUL2_MSCR_OBE_MASK */
-
-/*! @} */
 
 #define SIUL2_0_MSCR_BASE                (IP_SIUL2_0->MSCR)
 #define SIUL2_1_MSCR_BASE                (IP_SIUL2_1->MSCR)

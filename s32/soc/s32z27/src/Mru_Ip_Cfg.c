@@ -1,12 +1,12 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    Mru_Ip_Cfg.c
-*   @version 0.9.0
+*   @version 1.0.0
 *
 *   @brief   AUTOSAR Platform - Pre-Compile configuration file code template.
 *   @details Code template for Pre-Compile configuration file generation.
@@ -33,31 +33,31 @@ extern "C"
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 
-#define MRU_IP_MODULE_ID_CFG_C                        255
-#define MRU_IP_VENDOR_ID_CFG_C                        43
-#define MRU_IP_AR_RELEASE_MAJOR_VERSION_CFG_C         4
-#define MRU_IP_AR_RELEASE_MINOR_VERSION_CFG_C         7
-#define MRU_IP_AR_RELEASE_REVISION_VERSION_CFG_C      0
-#define MRU_IP_SW_MAJOR_VERSION_CFG_C                 0
-#define MRU_IP_SW_MINOR_VERSION_CFG_C                 9
-#define MRU_IP_SW_PATCH_VERSION_CFG_C                 0
+#define CDD_PLATFORM_MRU_IP_MODULE_ID_CFG_C                        255
+#define CDD_PLATFORM_MRU_IP_VENDOR_ID_CFG_C                        43
+#define CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION_CFG_C         4
+#define CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_CFG_C         7
+#define CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION_CFG_C      0
+#define CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_CFG_C                 1
+#define CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION_CFG_C                 0
+#define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_CFG_C                 0
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
 /* Check if Mru_Ip.h and Mru_Ip_Cfg.c are of the same vendor */
-#if (MRU_IP_VENDOR_ID != MRU_IP_VENDOR_ID_CFG_C)
+#if (CDD_PLATFORM_MRU_IP_VENDOR_ID != CDD_PLATFORM_MRU_IP_VENDOR_ID_CFG_C)
     #error "Mru_Ip.h and Mru_Ip_Cfg.c have different vendor ids"
 #endif
 /* Check if Mru_Ip.h file and Mru_Ip_Cfg.c file are of the same Autosar version */
-#if ((MRU_IP_AR_RELEASE_MAJOR_VERSION != MRU_IP_AR_RELEASE_MAJOR_VERSION_CFG_C) || \
-     (MRU_IP_AR_RELEASE_MINOR_VERSION != MRU_IP_AR_RELEASE_MINOR_VERSION_CFG_C) || \
-     (MRU_IP_AR_RELEASE_REVISION_VERSION != MRU_IP_AR_RELEASE_REVISION_VERSION_CFG_C))
+#if ((CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION != CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION_CFG_C) || \
+     (CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION != CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_CFG_C) || \
+     (CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION != CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION_CFG_C))
 #error "AutoSar Version Numbers of Mru_Ip.h and Mru_Ip_Cfg.c are different"
 #endif
-#if ((MRU_IP_SW_MAJOR_VERSION != MRU_IP_SW_MAJOR_VERSION_CFG_C) || \
-     (MRU_IP_SW_MINOR_VERSION != MRU_IP_SW_MINOR_VERSION_CFG_C) || \
-     (MRU_IP_SW_PATCH_VERSION != MRU_IP_SW_PATCH_VERSION_CFG_C))
+#if ((CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION != CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_CFG_C) || \
+     (CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION != CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION_CFG_C) || \
+     (CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION != CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_CFG_C))
 #error "Software Version Numbers of Mru_Ip.h and Mru_Ip_Cfg.c are different"
 #endif
 /*==================================================================================================

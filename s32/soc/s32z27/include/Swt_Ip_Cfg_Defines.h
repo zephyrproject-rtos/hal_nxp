@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -37,8 +37,8 @@ extern "C"{
 #define SWT_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION     4
 #define SWT_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION     7
 #define SWT_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION  0
-#define SWT_IP_CFG_DEFINES_SW_MAJOR_VERSION             0
-#define SWT_IP_CFG_DEFINES_SW_MINOR_VERSION             9
+#define SWT_IP_CFG_DEFINES_SW_MAJOR_VERSION             1
+#define SWT_IP_CFG_DEFINES_SW_MINOR_VERSION             0
 #define SWT_IP_CFG_DEFINES_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -48,7 +48,8 @@ extern "C"{
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Check if current file and SchM_Wdg header file are of the same Autosar version */
     #if ((SWT_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION    != STD_AR_RELEASE_MAJOR_VERSION) || \
-        (SWT_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION     != STD_AR_RELEASE_MINOR_VERSION))
+         (SWT_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION     != STD_AR_RELEASE_MINOR_VERSION) \
+        )
     #error "AutoSar Version Numbers of Swt_Ip_Cfg_Defines.h and StandardTypes.h are different"
     #endif
 #endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
@@ -92,6 +93,7 @@ extern "C"{
 * @brief  Define indicating for which Swt instances the Clear Reset Request feature is supported
 */
 #define SWT_IP_CLEAR_RESET_REQUEST (STD_OFF)
+
 /**
 * @brief  This variable will indicate if the ISR for SWT instances is used
 */
@@ -108,7 +110,6 @@ extern "C"{
 #define SWT_IP_ISR10_USED (STD_ON)
 #define SWT_IP_ISR11_USED (STD_ON)
 #define SWT_IP_ISR12_USED (STD_ON)
-
 
 /**
 * @brief  Define a certain timeout method from OsIf will be used in the driver
@@ -134,6 +135,14 @@ extern "C"{
 * @brief  Support for running in stop mode
 */
 #define SWT_IP_HAS_STOP_MODE  (1U) 
+/**
+* @brief  Define pointer type to access SWT register
+*/
+#define Swt_Ip_Type  SWT_Type
+/**
+* @brief  The number of Swt instance
+*/
+#define SWT_INSTANCE_NUM  (SWT_INSTANCE_COUNT) 
 /**
 * @brief  Support for clear reset request
 */
@@ -198,4 +207,3 @@ extern "C"{
 /** @} */
 
 #endif /* SWT_IP_CFG_DEFINES_H */
-

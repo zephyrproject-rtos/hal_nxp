@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -56,8 +56,8 @@ extern "C"{
 #define NETC_ETHSWT_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETHSWT_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETHSWT_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETHSWT_IP_CFG_DEFINES_SW_MAJOR_VERSION             0
-#define NETC_ETHSWT_IP_CFG_DEFINES_SW_MINOR_VERSION             9
+#define NETC_ETHSWT_IP_CFG_DEFINES_SW_MAJOR_VERSION             1
+#define NETC_ETHSWT_IP_CFG_DEFINES_SW_MINOR_VERSION             0
 #define NETC_ETHSWT_IP_CFG_DEFINES_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -79,8 +79,6 @@ extern "C"{
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
 
-#define NETC_ETHSWT_IP_DEV_ERROR_DETECT STD_ON /*!< NETC dev error detected.*/
-
 #define NETC_NUMBER_OF_PRIORITIES (8U) /*!< Number of priorities.*/
 
 #define NETC_TXBD_BUF_LEN_MASK           (0x0000FFFFUL) /*!< TX buffer length mask.*/
@@ -95,22 +93,163 @@ extern "C"{
 
 #define FEATURE_NETC_ETHSWT_IP_NUMBER_OF_SWTS	(1U) /*!< Number of switchs.*/
 
-#define NETC_ETHSWT_IP_TABLE_REQBUFFER_LEN   (48U)     /*!< the length of request data buffer in bytes for FDB and other small tables */
-#define NETC_ETHSWT_IP_TABLE_RESBUFFER_LEN   (36U)     /*!< 36 bytes is buffer lenth*/
+#define NETC_ETHSWT_IP_FDBTABLE_REQBUFFER_LEN                   (48U)     /*!< the length of request data buffer in bytes for FDB and other small tables */
+#define NETC_ETHSWT_IP_EGRESSTREAMENTTABLE_RESBUFFER_LEN        (20U)     /*!< 20 bytes is response buffer lenth*/
+#define NETC_ETHSWT_IP_FDBTABLE_QUERY_REQBUFFER_LEN             (36U)     /*!< 36 bytes is request buffer lenth for query and delete cmd of FDB table*/
+#define NETC_ETHSWT_IP_FDBTABLE_RESBUFFER_LEN                   (36U)     /*!< 36 bytes is response buffer lenth*/
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_REQBUFFER_LEN            (24U)      /*!< the length of request data buffer in bytes for vlan filter table */
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_RESBUFFER_LEN            (28U)     /*!< 28 bytes is response buffer lenth*/
 
-#define NETC_ETHSWT_IP_EGRESSCOUNTTABLE_REQBUFFER_LEN   (8U)      /*!< the length of request data buffer in bytes for Egress Count table, this size has to be 8 bytes. */
-#define NETC_ETHSWT_IP_EGRESSCOUNTTABLE_RSPBUFFER_LEN   (20U)     /*!< the length of response data buffer in bytes for Egress Count table */
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_REQBUFFER_LEN           (27U)     /*!< the length of request data buffer in bytes for add cmd for rate policer table */
+#define NETC_ETHSWT_IP_RATEPOLICERTABLE_RSPBUFFER_LEN           (108U)    /*!< the length of response data buffer in bytes for rate policer table */
 
-#define NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN   (224U)     /*!< the length of response data buffer in bytes for Ingress Port Filter table */
-#define NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_RSPBUFFER_LEN   (236U)     /*!< the length of response data buffer in bytes for Ingress Port Filter table */
+#define NETC_ETHSWT_IP_EGRESSCOUNTTABLE_RSPBUFFER_LEN           (20U)     /*!< the length of response data buffer in bytes for Egress Count table */
+
+#define NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN     (224U)    /*!< the length of request data buffer in bytes for Ingress Port Filter table */
+#define NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_RSPBUFFER_LEN     (236U)    /*!< the length of response data buffer in bytes for Ingress Port Filter table */
+
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_REQBUFFER_LEN         (46U)     /*!< the length of request data buffer in bytes for add and update cmd for ingress stream table */
+#define NETC_ETHSWT_IP_INGRESSSTREAMTABLE_RSPBUFFER_LEN         (42U)     /*!< the length of response data buffer in bytes for ingress stream table */
+
+#define NETC_ETHSWT_IP_ISFILTERTABLE_REQBUFFER_LEN              (28U)      /*!< the length of request data buffer in bytes for add and update cmd for ingress stream filter table */
+#define NETC_ETHSWT_IP_ISFILTERTABLE_OTHER_REQBUFFER_LEN        (12U)      /*!< the length of request data buffer in bytes for query (search) and delete cmd for ingress stream filter table */
+#define NETC_ETHSWT_IP_ISFILTERTABLE_RSPBUFFER_LEN              (32U)      /*!< the length of response data buffer in bytes for ingress stream filter table */
+
+#define NETC_ETHSWT_IP_SGITABLE_REQBUFFER_LEN                   (26U)      /*!< the length of request data buffer in bytes for add and update cmd for stream gate instance table */
+#define NETC_ETHSWT_IP_SGITABLE_RSPBUFFER_LEN                   (48U)      /*!< the length of response data buffer in bytes for stream gate instance table */
+
+#define NETC_ETHSWT_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN         (8U)       /*!< 8 bytes request data buffer length for query and delete cmd for tables */
+#define NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN         (0U)       /*!< 0 bytes response data buffer length for add, update and delete cmd for tables */
+#define NETC_ETHSWT_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN         (4U)       /*!< 4 bytes response data buffer length for add, update and delete cmd for tables */
+
+#define NETC_ETHSWT_IP_TGSTABLE_RSPBUFFER_LEN                   (12U)     /*!< the length of response data buffer in bytes for time gate scheduling table */
+#define NETC_ETHSWT_IP_FRMTABLE_REQBUFFER_LEN                   (32U)     /*!< the length of request data buffer in bytes for frame modification table */
+#define NETC_ETHSWT_IP_FRMTABLE_RSPBUFFER_LEN                   (28U)     /*!< the length of response data buffer in bytes for frame modification table */
+#define NETC_ETHSWT_IP_ETMTABLE_REQBUFFER_LEN                   (24U)     /*!< the length of request data buffer in bytes for egress treatment table */
+
+#define NETC_ETHSWT_IP_ISQGTABLE_REQBUFFER_LEN                  (9U)     /*!< the length of request data buffer in bytes for add and update cmd for ingress sequence generation table */
+#define NETC_ETHSWT_IP_ISQGTABLE_RSPBUFFER_LEN                  (8U)     /*!< the length of response data buffer in bytes for query cmd for ingress sequence generation table */
+
+#define NETC_ETHSWT_IP_EGRSQRTABLE_REQBUFFER_LEN                (16U)     /*!< the length of request data buffer in bytes for update  and query cmd for Egress sequence recovery table */
+#define NETC_ETHSWT_IP_EGRSQRTABLE_RSPBUFFER_LEN                (84U)     /*!< the length of response data buffer in bytes for query cmd for Egress sequence recovery table */
+#define NETC_ETHSWT_IP_ISITABLE_ADD_REQBUFFER_LEN               (28U)     /*!< the length of request data buffer in bytes for add and update cmd for ingress stream identification table */
+#define NETC_ETHSWT_IP_ISITABLE_QUERY_REQBUFFER_LEN             (24U)     /*!< the length of request data buffer in bytes for query and delete cmd for ingress stream identification table */
+#define NETC_ETHSWT_IP_ISITABLE_RSQBUFFER_LEN                   (32U)     /*!< the length of response data buffer in bytes for query cmd for ingress stream identification table */
+
+#define NETC_ETHSWT_IP_EGRSCHTABLE_REQBUFFER_LEN                (20U)     /*!< the length of request data buffer in bytes for update cmd for Egress scheduler table */
+#define NETC_ETHSWT_IP_EGRSCHTABLE_RSPBUFFER_LEN                (16U)     /*!< the length of response data buffer in bytes for query cmd for Egress scheduler table */
+
+#define NETC_ETHSWT_IP_ISCTABLE_RSPBUFFER_LEN                   (36U)     /*!< the lenght of response data buffer in bytes for query cmd for ingress stream count table */
+
+/* The maximum number of Weighted Fair Share Queues */
+#define NETC_ETHSWT_WBFS_QUEUES_NB (8U)
+
+#define NETC_ETHSWT_IP_HOSTREASON_REGULAR_FRAME (0x00000000UL)
+#define NETC_ETHSWT_IP_HOSTREASON_INGR_MIRROR   (0x00000001UL)
+#define NETC_ETHSWT_IP_HOSTREASON_MAC_LEARN     (0x00000002UL)
+#define NETC_ETHSWT_IP_HOSTREASON_TIMESTAMP     (0x00000003UL)
+#define NETC_ETHSWT_IP_HOSTREASON_RESERVEDx4    (0x00000004UL)
+#define NETC_ETHSWT_IP_HOSTREASON_RESERVEDx5    (0x00000005UL)
+#define NETC_ETHSWT_IP_HOSTREASON_RESERVEDx6    (0x00000006UL)
+#define NETC_ETHSWT_IP_HOSTREASON_RESERVEDx7    (0x00000007UL)
+#define NETC_ETHSWT_IP_HOSTREASON_SW_PTP        (0x00000008UL)
+#define NETC_ETHSWT_IP_HOSTREASON_SWx9          (0x00000009UL)
+#define NETC_ETHSWT_IP_HOSTREASON_SWxA          (0x0000000AUL)
+#define NETC_ETHSWT_IP_HOSTREASON_SWxB          (0x0000000BUL)
+#define NETC_ETHSWT_IP_HOSTREASON_SWxC          (0x0000000CUL)
+#define NETC_ETHSWT_IP_HOSTREASON_SWxD          (0x0000000DUL)
+#define NETC_ETHSWT_IP_HOSTREASON_SWxE          (0x0000000EUL)
+#define NETC_ETHSWT_IP_HOSTREASON_SWxF          (0x0000000FUL)
 
 /* The maximum number of gate control list */
 #define NETC_ETHSWT_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES              (8U)
+
+/*  NETC dev error detected. */
+#define NETC_ETHSWT_IP_DEV_ERROR_DETECT         (STD_OFF)
+
 #define NETC_ETHSWT_IP_TABLEDATA_BUFFER_LENGTH  ((236)/4)
+ #define NETC_ETHSWT_IP_CONFIG_LINK_PROTOCOL    (STD_ON)
 
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/
+
+/*!
+ * @brief Netc_EthSwt counter enum Netc_EthSwt_Ip_SingleCounterType
+ */
+typedef enum {
+    NETC_ETHSWT_IP_RX_ETH_OCTETS_COUNT                 = 0x100U,  /*!< Port MAC 0 Receive Ethernet Octets Counter(etherStatsOctetsn) (PM0_REOCTn) */
+    NETC_ETHSWT_IP_RX_OCTETS_COUNT                     = 0x108U,  /*!< Supported by pseudo port. Port MAC 0 Receive Octets Counter(iflnOctetsn) (PM0_ROCTn) */
+    NETC_ETHSWT_IP_RX_VALID_PAUSE_FRM_COUNT            = 0x118U,  /*!< Port MAC 0 Receive Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn) (PM0_RXPFn) */
+    NETC_ETHSWT_IP_RX_FRM_COUNT                        = 0x120U,  /*!< Port MAC 0 Receive Frame Counter Register(aFramesReceivedOKn) (PM0_RFRMn)  */
+    NETC_ETHSWT_IP_RX_FRM_CHK_SEQUENCE_COUNT           = 0x128U,  /*!< Port MAC 0 Receive Frame Check Sequence Error Counter Register() (PM0_RFCSn)  */
+    NETC_ETHSWT_IP_RX_VLAN_FRM_COUNT                   = 0x130U,  /*!< Port MAC 0 Receive VLAN Frame Counter Register(VLANReceivedOKn) (PM0_RVLANn)  */
+    NETC_ETHSWT_IP_RX_FRM_ERROR_COUNT                  = 0x138U,  /*!< Port MAC 0 Receive Frame Error Counter Register(ifInErrorsn) (PM0_RERRn)  */
+    NETC_ETHSWT_IP_RX_UNICAST_FRM_COUNT                = 0x140U,  /*!< Supported by pseudo port. Port MAC 0 Receive Unicast Frame Counter Register(ifInUcastPktsn) (PM0_RUCAn)  */
+    NETC_ETHSWT_IP_RX_MULTICAST_FRM_COUNT              = 0x148U,  /*!< Supported by pseudo port. Port MAC 0 Receive Multicast Frame Counter Register(ifInMulticastPktsn) (PM0_RMCAn)  */
+    NETC_ETHSWT_IP_RX_BROADCAST_FRM_COUNT              = 0x150U,  /*!< Supported by pseudo port. Port MAC 0 Receive Broadcast Frame Counter Register(ifInBroadcastPktsn) (PM0_RBCAn)  */
+    NETC_ETHSWT_IP_RX_DROPPED_PKTS_COUNT               = 0x158U,  /*!< Port MAC 0 Receive Dropped Packets Counter Register(etherStatsDropEventsn) (PM0_RDRPn)  */
+    NETC_ETHSWT_IP_RX_PKTS_COUNT                       = 0x160U,  /*!< Port MAC 0 Receive Packets Counter Register(etherStatsPktsn) (PM0_RPKTn)  */
+    NETC_ETHSWT_IP_RX_UNDERSIZED_PKT_COUNT             = 0x168U,  /*!< Port MAC 0 Receive Undersized Packet Counter Register(etherStatsUndersizePktsn) (PM0_RUNDn)  */
+    NETC_ETHSWT_IP_RX_64_OCTETS_PKT_COUNT              = 0x170U,  /*!< Port MAC 0 Receive 64-Octet Packet Counter Register(etherStatsPkts64OctetsN) (PM0_R64n)  */
+    NETC_ETHSWT_IP_RX_127_OCTETS_PKT_COUNT             = 0x178U,  /*!< Port MAC 0 Receive 65 to 127-Octet Packet Counter Register(etherStatsPkts65to127OctetsN) (PM0_R127n)  */
+    NETC_ETHSWT_IP_RX_255_OCTETS_PKT_COUNT             = 0x180U,  /*!< Port MAC 0 Receive 128 to 255-Octet Packet Counter Register(etherStatsPkts128to255OctetsN) (PM0_R255n)  */
+    NETC_ETHSWT_IP_RX_511_OCTETS_PKT_COUNT             = 0x188U,  /*!< Port MAC 0 Receive 256 to 511-Octet Packet Counter Register(etherStatsPkts256to511OctetsN) (PM0_R511n)  */
+    NETC_ETHSWT_IP_RX_1023_OCTETS_PKT_COUNT            = 0x190U,  /*!< Port MAC 0 Receive 512 to 1023-Octet Packet Counter Register(etherStatsPkts512to1023OctetsN) (PM0_R1023n)  */
+    NETC_ETHSWT_IP_RX_1522_OCTETS_PKT_COUNT            = 0x198U,  /*!< Port MAC 0 Receive 1024 to 1522-Octet Packet Counter Register(etherStatsPkts1024to1522OctetsN) (PM0_R1522n)  */
+    NETC_ETHSWT_IP_RX_1523_TOMAXOCTETS_PKT_COUNT       = 0x1A0U,  /*!< Port MAC 0 Receive 1523 to Max-Octet Packet Counter Register(etherStatsPkts1523toMaxOctetsN) (PM0_R1523Xn)  */
+    NETC_ETHSWT_IP_RX_OVERSIZED_PKT_COUNT              = 0x1A8U,  /*!< Port MAC 0 Receive Oversized Packet Counter Register(etherStatsOversizePktsn) (PM0_ROVRn)  */
+    NETC_ETHSWT_IP_RX_JABBER_PKT_COUNT                 = 0x1B0U,  /*!< Port MAC 0 Receive Jabber Packet Counter Register(etherStatsJabbersn) (PM0_RJBRn)  */
+    NETC_ETHSWT_IP_RX_FRAGMENT_PKT_COUNT               = 0x1B8U,  /*!< Port MAC 0 Receive Fragment Packet Counter Register(etherStatsFragmentsn (PM0_RFRGn)  */
+    NETC_ETHSWT_IP_RX_CONTROL_PKT_COUNT                = 0x1C0U,  /*!< Port MAC 0 Receive Control Packet Counter Register (PM0_RCNPn)  */
+    NETC_ETHSWT_IP_RX_DROPPED_NOT_TRUNCATED_PKT_COUNT  = 0x1C8U,  /*!< Port MAC 0 Receive Dropped Not Truncated Packets Counter Register(etherStatsDropEventsn) (PM0_RDRNTPn)  */
+
+    NETC_ETHSWT_IP_TX_ETH_OCTETS_COUNT                 = 0x200U,  /*!< Port MAC 0 Transmit Ethernet Octets Counter(etherStatsOctetsn) (PM0_TEOCTn)  */
+    NETC_ETHSWT_IP_TX_OCTETS_COUNT                     = 0x208U,  /*!< Supported by pseudo port. Port MAC 0 Transmit Octets Counter Register(ifOutOctetsn) (PM0_TOCTn)  */
+    NETC_ETHSWT_IP_TX_VALID_PAUSE_FRM_COUNT            = 0x218U,  /*!< Port MAC 0 Transmit Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn) (PM0_TXPFn)  */
+    NETC_ETHSWT_IP_TX_FRM_COUNT                        = 0x220U,  /*!< Port MAC 0 Transmit Frame Counter Register(aFramesTransmittedOKn) (PM0_TFRMn)  */
+    NETC_ETHSWT_IP_TX_FRM_CHK_SEQUENCE_COUNT           = 0x228U,  /*!< Port MAC 0 Transmit Frame Check Sequence Error Counter Register() (PM0_TFCSn)  */
+    NETC_ETHSWT_IP_TX_VLAN_FRM_COUNT                   = 0x230U,  /*!< Port MAC 0 Transmit VLAN Frame Counter Register(VLANTransmittedOKn) (PM0_TVLANn)  */
+    NETC_ETHSWT_IP_TX_FRM_ERROR_COUNT                  = 0x238U,  /*!< Port MAC 0 Transmit Frame Error Counter Register(ifOutErrorsn) (PM0_TERRn)  */
+    NETC_ETHSWT_IP_TX_UNICAST_FRM_COUNT                = 0x240U,  /*!< Supported by pseudo port. Port MAC 0 Transmit Unicast Frame Counter Register(ifOutUcastPktsn) (PM0_TUCAn)  */
+    NETC_ETHSWT_IP_TX_MULTICAST_FRM_COUNT              = 0x248U,  /*!< Supported by pseudo port. Port MAC 0 Transmit Multicast Frame Counter Register(ifOutMulticastPktsn) (PM0_TMCAn)  */
+    NETC_ETHSWT_IP_TX_BROADCAST_FRM_COUNT              = 0x250U,  /*!< Supported by pseudo port. Port MAC 0 Transmit Broadcast Frame Counter Register(ifOutBroadcastPktsn) (PM0_TBCAn)  */
+    NETC_ETHSWT_IP_TX_PKTS_COUNT                       = 0x260U,  /*!< Port MAC 0 Transmit Packets Counter Register(etherStatsPktsn) (PM0_TPKTn)  */
+    NETC_ETHSWT_IP_TX_UNDERSIZED_PKT_COUNT             = 0x268U,  /*!< Port MAC 0 Transmit Undersized Packet Counter Register(etherStatsUndersizePktsn) (PM0_TUNDn)  */
+    NETC_ETHSWT_IP_TX_64_OCTETS_PKT_COUNT              = 0x270U,  /*!< Port MAC 0 Transmit 64-Octet Packet Counter Register (etherStatsPkts64OctetsN) (PM0_T64n)  */
+    NETC_ETHSWT_IP_TX_127_OCTETS_PKT_COUNT             = 0x278U,  /*!< Port MAC 0 Transmit 65 to 127-Octet Packet Counter Register (etherStatsPkts65to127OctetsN) (PM0_T127n)  */
+    NETC_ETHSWT_IP_TX_255_OCTETS_PKT_COUNT             = 0x280U,  /*!< Port MAC 0 Transmit 128 to 255-Octet Packet Counter Register (etherStatsPkts128to255OctetsN) (PM0_T255n)  */
+    NETC_ETHSWT_IP_TX_511_OCTETS_PKT_COUNT             = 0x288U,  /*!< Port MAC 0 Transmit 256 to 511-Octet Packet Counter Register (etherStatsPkts256to511OctetsN) (PM0_T511n)  */
+    NETC_ETHSWT_IP_TX_1023_OCTETS_PKT_COUNT            = 0x290U,  /*!< Port MAC 0 Transmit 512 to 1023-Octet Packet Counter Register (etherStatsPkts512to1023OctetsN) (PM0_T1023n)  */
+    NETC_ETHSWT_IP_TX_1522_OCTETS_PKT_COUNT            = 0x298U,  /*!< Port MAC 0 Transmit 1024 to 1522-Octet Packet Counter Register (etherStatsPkts1024to1522OctetsN) (PM0_T1522n)  */
+    NETC_ETHSWT_IP_TX_1523_TOMAXOCTETS_PKT_COUNT       = 0x2A0U,  /*!< Port MAC 0 Transmit 1523 to TX_MTU-Octet Packet Counter Register (etherStatsPkts1523toMaxOctetsN) (PM0_T1523Xn)  */
+    NETC_ETHSWT_IP_TX_CONTROL_PKT_COUNT                = 0x2C0U,  /*!< Port MAC 0 Transmit Control Packet Counter Register (PM0_TCNPn)  */
+    NETC_ETHSWT_IP_TX_DEFERRED_PKT_COUNT               = 0x2D0U,  /*!< Port MAC 0 Transmit Deferred Packet Counter Register(aFramesWithDeferredXmissions) (PM0_TDFRn)  */
+    NETC_ETHSWT_IP_TX_MULTIPLE_COLLISIONS_COUNT        = 0x2D8U,  /*!< Port MAC 0 Transmit Multiple Collisions Counter Register(aMultipleCollisionFrames) (PM0_TMCOLn)  */
+    NETC_ETHSWT_IP_TX_SINGLE_COLLISION_COUNT           = 0x2E0U,  /*!< Port MAC 0 Transmit Single Collision Counter(aSingleCollisionFrames) Register (PM0_TSCOLn)  */
+    NETC_ETHSWT_IP_TX_LATE_COLLISION_COUNT             = 0x2E8U,  /*!< Port MAC 0 Transmit Late Collision Counter(aLateCollisions) Register (PM0_TLCOLn)  */
+    NETC_ETHSWT_IP_TX_EXCESSIVE_COLLISIONS_COUNT       = 0x2F0U   /*!< Port MAC 0 Transmit Excessive Collisions Counter Register (PM0_TECOLn)  */
+} Netc_EthSwt_Ip_SingleCounterType;
+
+typedef enum {
+    NETC_ETHSWT_IP_PPMROCR0 = 0x80U,  /*!< Port pseudo MAC receive octets counter PPMROCR0. The lower 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMROCR1 = 0x84U,  /*!< Port pseudo MAC receive octets counter PPMROCR1. The upper 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMRUFCR0 = 0x88U, /*!< Port pseudo MAC receive unicast frame counter register PPMRUFCR0. The lower 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMRUFCR1 = 0x8CU, /*!< Port pseudo MAC receive unicast frame counter register PPMRUFCR1. The upper 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMRMFCR0 = 0x90U, /*!< Port pseudo MAC receive multicast frame counter register PPMRMFCR0. The lower 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMRMFCR1 = 0x94U, /*!< Port pseudo MAC receive multicast frame counter register PPMRMFCR1. The upper 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMRBFCR0 = 0x98U, /*!< Port pseudo MAC receive broadcast frame counter register PPMRBFCR0. The lower 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMRBFCR1 = 0x9CU, /*!< Port pseudo MAC receive broadcast frame counter register PPMRBFCR1. The upper 32bits of the counter.  */
+
+    NETC_ETHSWT_IP_PPMTOCR0 = 0xC0U, /*!< Port pseudo MAC transmit octets counter PPMTOCR0. The lower 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMTOCR1 = 0xC4U, /*!< Port pseudo MAC transmit octets counter PPMTOCR1. The upper 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMTUFCR0 = 0xC8U, /*!< Port pseudo MAC transmit unicast frame counter register PPMTUFCR0. The lower 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMTUFCR1 = 0xCCU, /*!< Port pseudo MAC transmit unicast frame counter register PPMTUFCR1. The upper 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMTMFCR0 = 0xD0U, /*!< Port pseudo MAC transmit multicast frame counter register PPMTMFCR0. The lower 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMTMFCR1 = 0xD4U, /*!< Port pseudo MAC transmit multicast frame counter register PPMTMFCR1. The upper 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMTBFCR0 = 0xD8U, /*!< Port pseudo MAC transmit broadcast frame counter register PPMTBFCR0. The lower 32bits of the counter.  */
+    NETC_ETHSWT_IP_PPMTBFCR1 = 0xDCU, /*!< Port pseudo MAC transmit broadcast frame counter register PPMTBFCR1. The upper 32bits of the counter.  */
+} Netc_EthSwt_Ip_PseudoPortCounterType;
 
 /*==================================================================================================
 *                                  STRUCTURES AND OTHER TYPEDEFS

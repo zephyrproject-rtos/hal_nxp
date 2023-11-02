@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,8 +35,8 @@ extern "C"{
 #define SIUL2_PORT_IP_AR_RELEASE_MAJOR_VERSION_CFG_H        4
 #define SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_CFG_H        7
 #define SIUL2_PORT_IP_AR_RELEASE_REVISION_VERSION_CFG_H     0
-#define SIUL2_PORT_IP_SW_MAJOR_VERSION_CFG_H                0
-#define SIUL2_PORT_IP_SW_MINOR_VERSION_CFG_H                9
+#define SIUL2_PORT_IP_SW_MAJOR_VERSION_CFG_H                1
+#define SIUL2_PORT_IP_SW_MINOR_VERSION_CFG_H                0
 #define SIUL2_PORT_IP_SW_PATCH_VERSION_CFG_H                0
 
 /*==================================================================================================

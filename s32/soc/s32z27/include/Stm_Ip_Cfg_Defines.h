@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,27 +25,27 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "S32Z2_STM.h"
-/*==================================================================================================
+    /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define STM_IP_DEFINES_VENDOR_ID_CFG                    43
 #define STM_IP_DEFINES_AR_RELEASE_MAJOR_VERSION_CFG     4
 #define STM_IP_DEFINES_AR_RELEASE_MINOR_VERSION_CFG     7
 #define STM_IP_DEFINES_AR_RELEASE_REVISION_VERSION_CFG  0
-#define STM_IP_DEFINES_SW_MAJOR_VERSION_CFG             0
-#define STM_IP_DEFINES_SW_MINOR_VERSION_CFG             9
+#define STM_IP_DEFINES_SW_MAJOR_VERSION_CFG             1
+#define STM_IP_DEFINES_SW_MINOR_VERSION_CFG             0
 #define STM_IP_DEFINES_SW_PATCH_VERSION_CFG             0
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
-/* Check if header file and StandardTypes.h file are of the same Autosar version */
+/* Check if header file and Std_Types.h file are of the same Autosar version */
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if ((STM_IP_DEFINES_AR_RELEASE_MAJOR_VERSION_CFG != STD_AR_RELEASE_MAJOR_VERSION) || \
          (STM_IP_DEFINES_AR_RELEASE_MINOR_VERSION_CFG != STD_AR_RELEASE_MINOR_VERSION))
-    #error "AutoSar Version Numbers of Stm_Ip_Cfg_Defines.h and StandardTypes.h are different"
+    #error "AutoSar Version Numbers of Stm_Ip_Cfg_Defines.h and Std_Types.h are different"
     #endif
 #endif
 /*==================================================================================================
@@ -58,13 +58,25 @@ extern "C"{
 /**
 * @brief These defines indicate that at least one channel from each module is used in all configurations.
 */
-#define STM_IP_USED (STD_ON)
+#define STM_IP_USED (STD_ON) 
 /**
 * @brief This define is used to select between interrupt on each channel and source interrupt
 *        on entire module sources hardware implementations.
 *
 */
-#define STM_IP_MODULE_SINGLE_INTERRUPT (STD_ON)
+#define STM_GPT_IP_MODULE_SINGLE_INTERRUPT	(STD_ON)
+/**
+*
+* @brief  CRS_FSS_AND_RTU_BASE_ADDR_OF_STM_REGISTERS_CONCATENATED
+*/
+#define CRS_FSS_AND_RTU_BASE_ADDR_OF_STM_REGISTERS_CONCATENATED (STD_OFF)
+
+/**
+ * @brief   This define is STD_ON when on the same platform there are interrupts for all channels in one ISR,
+ *          but also interrupt for each channel separately
+ *
+ */
+#define STM_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS    (STD_OFF)
 /**
 * @brief    STM_IP_SET_CLOCK_MODE switch
 * @details  Enable/disable API for Dual Mode support.
