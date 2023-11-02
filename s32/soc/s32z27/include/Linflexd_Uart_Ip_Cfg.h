@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -16,8 +16,7 @@
 
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C"{
 #endif
 
 
@@ -40,8 +39,8 @@ extern "C"
 #define LINFLEXD_UART_IP_CFG_AR_RELEASE_MAJOR_VERSION      4
 #define LINFLEXD_UART_IP_CFG_AR_RELEASE_MINOR_VERSION      7
 #define LINFLEXD_UART_IP_CFG_AR_RELEASE_REVISION_VERSION   0
-#define LINFLEXD_UART_IP_CFG_SW_MAJOR_VERSION              0
-#define LINFLEXD_UART_IP_CFG_SW_MINOR_VERSION              9
+#define LINFLEXD_UART_IP_CFG_SW_MAJOR_VERSION              1
+#define LINFLEXD_UART_IP_CFG_SW_MINOR_VERSION              0
 #define LINFLEXD_UART_IP_CFG_SW_PATCH_VERSION              0
 
 /*==================================================================================================
@@ -53,68 +52,46 @@ extern "C"
 #endif
 #if ((LINFLEXD_UART_IP_CFG_AR_RELEASE_MAJOR_VERSION    != LINFLEXD_UART_IP_SA_INIT_PBCFG_AR_RELEASE_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_CFG_AR_RELEASE_MINOR_VERSION    != LINFLEXD_UART_IP_SA_INIT_PBCFG_AR_RELEASE_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_CFG_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_SA_INIT_PBCFG_AR_RELEASE_REVISION_VERSION))
+     (LINFLEXD_UART_IP_CFG_AR_RELEASE_REVISION_VERSION != LINFLEXD_UART_IP_SA_INIT_PBCFG_AR_RELEASE_REVISION_VERSION) \
+    )
      #error "AUTOSAR Version Numbers of Linflexd_Uart_Ip_Cfg.h and Linflexd_Uart_Ip_Sa_Init_PBcfg.h are different"
 #endif
 #if ((LINFLEXD_UART_IP_CFG_SW_MAJOR_VERSION != LINFLEXD_UART_IP_SA_INIT_PBCFG_SW_MAJOR_VERSION) || \
      (LINFLEXD_UART_IP_CFG_SW_MINOR_VERSION != LINFLEXD_UART_IP_SA_INIT_PBCFG_SW_MINOR_VERSION) || \
-     (LINFLEXD_UART_IP_CFG_SW_PATCH_VERSION != LINFLEXD_UART_IP_SA_INIT_PBCFG_SW_PATCH_VERSION))
+     (LINFLEXD_UART_IP_CFG_SW_PATCH_VERSION != LINFLEXD_UART_IP_SA_INIT_PBCFG_SW_PATCH_VERSION) \
+    )
     #error "Software Version Numbers of Linflexd_Uart_Ip_Cfg.h and Linflexd_Uart_Ip_Sa_Init_PBcfg.h are different"
 #endif
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Check if current file and StandardTypes.h header file are of the same Autosar version */
     #if ((LINFLEXD_UART_IP_CFG_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
-            (LINFLEXD_UART_IP_CFG_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
+         (LINFLEXD_UART_IP_CFG_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION) \
+        )
         #error "AutoSar Version Numbers of Linflexd_Uart_Ip_Cfg.h and StandardTypes.h are different"
     #endif
 #endif
 
 /*==================================================================================================
-                          LOCAL TYPEDEFS (STRUCTURES, UNIONS, ENUMS)
+*                                       FILE VERSION CHECKS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                       LOCAL CONSTANTS
-==================================================================================================*/
-
-
-/*==================================================================================================
-*                                       LOCAL MACROS
+*                                            CONSTANTS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                       LOCAL VARIABLES
-==================================================================================================*/
-
-
-/*==================================================================================================
-                                       GLOBAL CONSTANTS
+*                                       DEFINES AND MACROS
 ==================================================================================================*/
 
 #define LINFLEXD_UART_IP_CONFIG_EXT \
-     LINFLEXD_UART_IP_SA_CONFIG_INIT_PB \
+     LINFLEXD_UART_IP_SA_CONFIG_INIT_PB
 /*==================================================================================================
-                                       GLOBAL MACROS
+*                                  GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                   LOCAL FUNCTION PROTOTYPES
+*                                       FUNCTION PROTOTYPES
 ==================================================================================================*/
-#define UART_START_SEC_CODE
-#include "Uart_MemMap.h"
-extern void s32_uart_callback(uint8 HwInstance, Linflexd_Uart_Ip_EventType Event, void *UserData);
-#define UART_STOP_SEC_CODE
-#include "Uart_MemMap.h"
-
-/*==================================================================================================
-                                       LOCAL FUNCTIONS
-==================================================================================================*/
-
-
-/*==================================================================================================
-                                       GLOBAL FUNCTIONS
-==================================================================================================*/
-
 
 #ifdef __cplusplus
 }

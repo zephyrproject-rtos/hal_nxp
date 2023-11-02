@@ -1,12 +1,12 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       Clock_Ip_Cfg_Defines.h
-*   @version    0.9.0
+*   @version    1.0.0
 *
 *   @brief   AUTOSAR Mcu - Post-Build(PB) configuration file code template.
 *   @details Code template for Post-Build(PB) configuration file generation.
@@ -38,7 +38,6 @@ extern "C"{
 #include "S32Z2_MC_ME.h"
 #include "S32Z2_DFS.h"
 #include "S32Z2_CMU_FC.h"
-#include "S32Z2_CMU_FC.h"
 #include "S32Z2_GPR0.h"
 #include "S32Z2_GPR0_PCTL.h"
 #include "S32Z2_GPR1.h"
@@ -59,8 +58,8 @@ extern "C"{
 #define CLOCK_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_CFG_DEFINES_SW_MAJOR_VERSION                0
-#define CLOCK_IP_CFG_DEFINES_SW_MINOR_VERSION                9
+#define CLOCK_IP_CFG_DEFINES_SW_MAJOR_VERSION                1
+#define CLOCK_IP_CFG_DEFINES_SW_MINOR_VERSION                0
 #define CLOCK_IP_CFG_DEFINES_SW_PATCH_VERSION                0
 
 /*==================================================================================================
@@ -93,7 +92,7 @@ extern "C"{
 /**
 * @brief            Max number of selectors
 */
-#define CLOCK_IP_SELECTORS_COUNT       (64U)
+#define CLOCK_IP_SELECTORS_COUNT       (63U)
 
 /**
 * @brief            Max number of dividers
@@ -136,14 +135,17 @@ extern "C"{
 #define CLOCK_IP_CONFIGURED_FREQUENCIES_COUNT       (17U)
 
 /**
-* @brief            Max number of specific peripheral (eMIOS) units
+* @brief            Number of clock configurations 0
 */
-#define CLOCK_IP_SPECIFIC_PERIPH_COUNT       (0U)
-
-/**
-* @brief            Supported power mode.
-*/
-#define CLOCK_IP_HAS_RUN_MODE                0U
+#define CLOCK_IP_CONFIGURED_XOSCS_0_NO       (1U)
+#define CLOCK_IP_CONFIGURED_PLLS_0_NO       (5U)
+#define CLOCK_IP_CONFIGURED_SELECTORS_0_NO       (63U)
+#define CLOCK_IP_CONFIGURED_DIVIDERS_0_NO       (85U)
+#define CLOCK_IP_CONFIGURED_DIVIDER_TRIGGERS_0_NO       (1U)
+#define CLOCK_IP_CONFIGURED_FRACTIONAL_DIVIDERS_0_NO       (12U)
+#define CLOCK_IP_CONFIGURED_EXT_CLKS_0_NO       (8U)
+#define CLOCK_IP_CONFIGURED_GATES_0_NO       (101U)
+#define CLOCK_IP_CONFIGURED_CMUS_0_NO       (15U)
 
 /**
 * @brief            Firc frequency.
@@ -211,7 +213,7 @@ extern "C"{
 #define CLOCK_IP_HAS_LFAST0_PLL_PH0_CLK         30U
 #define CLOCK_IP_HAS_LFAST1_PLL_PH0_CLK         31U
 #define CLOCK_IP_HAS_ETH_RGMII_REF_CLK         32U
-#define CLOCK_IP_HAS_ETH_EXT_TS_CLK         33U
+#define CLOCK_IP_HAS_TMR_1588_CLK         33U
 #define CLOCK_IP_HAS_ETH0_EXT_RX_CLK         34U
 #define CLOCK_IP_HAS_ETH0_EXT_TX_CLK         35U
 #define CLOCK_IP_HAS_ETH1_EXT_RX_CLK         36U
@@ -361,116 +363,115 @@ extern "C"{
 #define CLOCK_IP_HAS_ETH0_RX_MII_CLK         180U
 #define CLOCK_IP_HAS_ETH0_RX_RGMII_CLK         181U
 #define CLOCK_IP_HAS_ETH0_TX_RGMII_CLK         182U
-#define CLOCK_IP_HAS_ETH0_TX_RGMII_LPBK_CLK         183U
+#define CLOCK_IP_HAS_ETH0_PS_TX_CLK         183U
 #define CLOCK_IP_HAS_ETH1_REF_RMII_CLK         184U
 #define CLOCK_IP_HAS_ETH1_RX_MII_CLK         185U
 #define CLOCK_IP_HAS_ETH1_RX_RGMII_CLK         186U
 #define CLOCK_IP_HAS_ETH1_TX_MII_CLK         187U
 #define CLOCK_IP_HAS_ETH1_TX_RGMII_CLK         188U
-#define CLOCK_IP_HAS_ETH1_TX_RGMII_LPBK_CLK         189U
+#define CLOCK_IP_HAS_ETH1_PS_TX_CLK         189U
 #define CLOCK_IP_HAS_P1_LFAST0_REF_CLK         190U
 #define CLOCK_IP_HAS_P1_LFAST1_REF_CLK         191U
-#define CLOCK_IP_HAS_P1_LFAST_DFT_CLK         192U
-#define CLOCK_IP_HAS_P1_NETC_AXI_CLK         193U
-#define CLOCK_IP_HAS_P1_LIN_CLK         194U
-#define CLOCK_IP_HAS_P1_REG_INTF_CLK         195U
-#define CLOCK_IP_HAS_P2_DBG_ATB_CLK         196U
-#define CLOCK_IP_HAS_P2_REG_INTF_CLK         197U
-#define CLOCK_IP_HAS_P3_AES_CLK         198U
-#define CLOCK_IP_HAS_P3_CLKOUT_SRC_CLK         199U
-#define CLOCK_IP_HAS_P3_DBG_TS_CLK         200U
-#define CLOCK_IP_HAS_P3_REG_INTF_CLK         201U
-#define CLOCK_IP_HAS_P3_SYS_MON1_CLK         202U
-#define CLOCK_IP_HAS_P3_SYS_MON2_CLK         203U
-#define CLOCK_IP_HAS_P3_SYS_MON3_CLK         204U
-#define CLOCK_IP_HAS_P4_CLKOUT_SRC_CLK         205U
-#define CLOCK_IP_HAS_P4_DSPI60_CLK         206U
-#define CLOCK_IP_HAS_P4_EMIOS_LCU_CLK         207U
-#define CLOCK_IP_HAS_P4_LIN_CLK         208U
-#define CLOCK_IP_HAS_P4_PSI5_125K_CLK         209U
-#define CLOCK_IP_HAS_P4_PSI5_189K_CLK         210U
-#define CLOCK_IP_HAS_P4_PSI5_S_BAUD_CLK         211U
-#define CLOCK_IP_HAS_P4_PSI5_S_CORE_CLK         212U
-#define CLOCK_IP_HAS_P4_PSI5_S_TRIG0_CLK         213U
-#define CLOCK_IP_HAS_P4_PSI5_S_TRIG1_CLK         214U
-#define CLOCK_IP_HAS_P4_PSI5_S_TRIG2_CLK         215U
-#define CLOCK_IP_HAS_P4_PSI5_S_TRIG3_CLK         216U
-#define CLOCK_IP_HAS_P4_PSI5_S_UART_CLK         217U
-#define CLOCK_IP_HAS_P4_PSI5_S_WDOG0_CLK         218U
-#define CLOCK_IP_HAS_P4_PSI5_S_WDOG1_CLK         219U
-#define CLOCK_IP_HAS_P4_PSI5_S_WDOG2_CLK         220U
-#define CLOCK_IP_HAS_P4_PSI5_S_WDOG3_CLK         221U
-#define CLOCK_IP_HAS_P4_QSPI0_2X_CLK         222U
-#define CLOCK_IP_HAS_P4_QSPI0_1X_CLK         223U
-#define CLOCK_IP_HAS_P4_QSPI1_2X_CLK         224U
-#define CLOCK_IP_HAS_P4_QSPI1_1X_CLK         225U
-#define CLOCK_IP_HAS_P4_REG_INTF_2X_CLK         226U
-#define CLOCK_IP_HAS_P4_REG_INTF_CLK         227U
-#define CLOCK_IP_HAS_P4_SDHC_IP_CLK         228U
-#define CLOCK_IP_HAS_P4_SDHC_IP_DIV2_CLK         229U
-#define CLOCK_IP_HAS_P5_DIPORT_CLK         230U
-#define CLOCK_IP_HAS_P5_AE_CLK         231U
-#define CLOCK_IP_HAS_P5_CANXL_PE_CLK         232U
-#define CLOCK_IP_HAS_P5_CANXL_CHI_CLK         233U
-#define CLOCK_IP_HAS_P5_CLKOUT_SRC_CLK         234U
-#define CLOCK_IP_HAS_P5_LIN_CLK         235U
-#define CLOCK_IP_HAS_P5_REG_INTF_CLK         236U
-#define CLOCK_IP_HAS_P6_REG_INTF_CLK         237U
-#define CLOCK_IP_HAS_PIT0_CLK         238U
-#define CLOCK_IP_HAS_PIT1_CLK         239U
-#define CLOCK_IP_HAS_PIT4_CLK         240U
-#define CLOCK_IP_HAS_PIT5_CLK         241U
-#define CLOCK_IP_HAS_P0_PSI5_1US_CLK         242U
-#define CLOCK_IP_HAS_PSI5_0_CLK         243U
-#define CLOCK_IP_HAS_P4_PSI5_1US_CLK         244U
-#define CLOCK_IP_HAS_PSI5_1_CLK         245U
-#define CLOCK_IP_HAS_PSI5S_0_CLK         246U
-#define CLOCK_IP_HAS_PSI5S_1_CLK         247U
-#define CLOCK_IP_HAS_QSPI0_CLK         248U
-#define CLOCK_IP_HAS_QSPI1_CLK         249U
-#define CLOCK_IP_HAS_RTU0_CORE_MON1_CLK         250U
-#define CLOCK_IP_HAS_RTU0_CORE_MON2_CLK         251U
-#define CLOCK_IP_HAS_RTU0_CORE_DIV2_MON1_CLK         252U
-#define CLOCK_IP_HAS_RTU0_CORE_DIV2_MON2_CLK         253U
-#define CLOCK_IP_HAS_RTU0_CORE_DIV2_MON3_CLK         254U
-#define CLOCK_IP_HAS_RTU0_REG_INTF_CLK         255U
-#define CLOCK_IP_HAS_RTU1_CORE_MON1_CLK         256U
-#define CLOCK_IP_HAS_RTU1_CORE_MON2_CLK         257U
-#define CLOCK_IP_HAS_RTU1_CORE_DIV2_MON1_CLK         258U
-#define CLOCK_IP_HAS_RTU1_CORE_DIV2_MON2_CLK         259U
-#define CLOCK_IP_HAS_RTU1_CORE_DIV2_MON3_CLK         260U
-#define CLOCK_IP_HAS_RTU1_REG_INTF_CLK         261U
-#define CLOCK_IP_HAS_P4_SDHC_CLK         262U
-#define CLOCK_IP_HAS_RXLUT_CLK         263U
-#define CLOCK_IP_HAS_SDHC0_CLK         264U
-#define CLOCK_IP_HAS_SINC_CLK         265U
-#define CLOCK_IP_HAS_SIPI0_CLK         266U
-#define CLOCK_IP_HAS_SIPI1_CLK         267U
-#define CLOCK_IP_HAS_SIUL2_0_CLK         268U
-#define CLOCK_IP_HAS_SIUL2_1_CLK         269U
-#define CLOCK_IP_HAS_SIUL2_4_CLK         270U
-#define CLOCK_IP_HAS_SIUL2_5_CLK         271U
-#define CLOCK_IP_HAS_P0_DSPI_CLK         272U
-#define CLOCK_IP_HAS_SPI0_CLK         273U
-#define CLOCK_IP_HAS_SPI1_CLK         274U
-#define CLOCK_IP_HAS_P1_DSPI_CLK         275U
-#define CLOCK_IP_HAS_SPI2_CLK         276U
-#define CLOCK_IP_HAS_SPI3_CLK         277U
-#define CLOCK_IP_HAS_SPI4_CLK         278U
-#define CLOCK_IP_HAS_P4_DSPI_CLK         279U
-#define CLOCK_IP_HAS_SPI5_CLK         280U
-#define CLOCK_IP_HAS_SPI6_CLK         281U
-#define CLOCK_IP_HAS_SPI7_CLK         282U
-#define CLOCK_IP_HAS_P5_DSPI_CLK         283U
-#define CLOCK_IP_HAS_SPI8_CLK         284U
-#define CLOCK_IP_HAS_SPI9_CLK         285U
-#define CLOCK_IP_HAS_SRX0_CLK         286U
-#define CLOCK_IP_HAS_SRX1_CLK         287U
-#define CLOCK_IP_HAS_CORE_PLL_REFCLKOUT         288U
-#define CLOCK_IP_HAS_CORE_PLL_FBCLKOUT         289U
-#define CLOCK_IP_HAS_PERIPH_PLL_REFCLKOUT         290U
-#define CLOCK_IP_HAS_PERIPH_PLL_FBCLKOUT         291U
-#define CLOCK_IP_FEATURE_NAMES_NO         292U
+#define CLOCK_IP_HAS_P1_NETC_AXI_CLK         192U
+#define CLOCK_IP_HAS_P1_LIN_CLK         193U
+#define CLOCK_IP_HAS_P1_REG_INTF_CLK         194U
+#define CLOCK_IP_HAS_P2_DBG_ATB_CLK         195U
+#define CLOCK_IP_HAS_P2_REG_INTF_CLK         196U
+#define CLOCK_IP_HAS_P3_AES_CLK         197U
+#define CLOCK_IP_HAS_P3_CLKOUT_SRC_CLK         198U
+#define CLOCK_IP_HAS_P3_DBG_TS_CLK         199U
+#define CLOCK_IP_HAS_P3_REG_INTF_CLK         200U
+#define CLOCK_IP_HAS_P3_SYS_MON1_CLK         201U
+#define CLOCK_IP_HAS_P3_SYS_MON2_CLK         202U
+#define CLOCK_IP_HAS_P3_SYS_MON3_CLK         203U
+#define CLOCK_IP_HAS_P4_CLKOUT_SRC_CLK         204U
+#define CLOCK_IP_HAS_P4_DSPI60_CLK         205U
+#define CLOCK_IP_HAS_P4_EMIOS_LCU_CLK         206U
+#define CLOCK_IP_HAS_P4_LIN_CLK         207U
+#define CLOCK_IP_HAS_P4_PSI5_125K_CLK         208U
+#define CLOCK_IP_HAS_P4_PSI5_189K_CLK         209U
+#define CLOCK_IP_HAS_P4_PSI5_S_BAUD_CLK         210U
+#define CLOCK_IP_HAS_P4_PSI5_S_CORE_CLK         211U
+#define CLOCK_IP_HAS_P4_PSI5_S_TRIG0_CLK         212U
+#define CLOCK_IP_HAS_P4_PSI5_S_TRIG1_CLK         213U
+#define CLOCK_IP_HAS_P4_PSI5_S_TRIG2_CLK         214U
+#define CLOCK_IP_HAS_P4_PSI5_S_TRIG3_CLK         215U
+#define CLOCK_IP_HAS_P4_PSI5_S_UART_CLK         216U
+#define CLOCK_IP_HAS_P4_PSI5_S_WDOG0_CLK         217U
+#define CLOCK_IP_HAS_P4_PSI5_S_WDOG1_CLK         218U
+#define CLOCK_IP_HAS_P4_PSI5_S_WDOG2_CLK         219U
+#define CLOCK_IP_HAS_P4_PSI5_S_WDOG3_CLK         220U
+#define CLOCK_IP_HAS_P4_QSPI0_2X_CLK         221U
+#define CLOCK_IP_HAS_P4_QSPI0_1X_CLK         222U
+#define CLOCK_IP_HAS_P4_QSPI1_2X_CLK         223U
+#define CLOCK_IP_HAS_P4_QSPI1_1X_CLK         224U
+#define CLOCK_IP_HAS_P4_REG_INTF_2X_CLK         225U
+#define CLOCK_IP_HAS_P4_REG_INTF_CLK         226U
+#define CLOCK_IP_HAS_P4_SDHC_IP_CLK         227U
+#define CLOCK_IP_HAS_P4_SDHC_IP_DIV2_CLK         228U
+#define CLOCK_IP_HAS_P5_DIPORT_CLK         229U
+#define CLOCK_IP_HAS_P5_AE_CLK         230U
+#define CLOCK_IP_HAS_P5_CANXL_PE_CLK         231U
+#define CLOCK_IP_HAS_P5_CANXL_CHI_CLK         232U
+#define CLOCK_IP_HAS_P5_CLKOUT_SRC_CLK         233U
+#define CLOCK_IP_HAS_P5_LIN_CLK         234U
+#define CLOCK_IP_HAS_P5_REG_INTF_CLK         235U
+#define CLOCK_IP_HAS_P6_REG_INTF_CLK         236U
+#define CLOCK_IP_HAS_PIT0_CLK         237U
+#define CLOCK_IP_HAS_PIT1_CLK         238U
+#define CLOCK_IP_HAS_PIT4_CLK         239U
+#define CLOCK_IP_HAS_PIT5_CLK         240U
+#define CLOCK_IP_HAS_P0_PSI5_1US_CLK         241U
+#define CLOCK_IP_HAS_PSI5_0_CLK         242U
+#define CLOCK_IP_HAS_P4_PSI5_1US_CLK         243U
+#define CLOCK_IP_HAS_PSI5_1_CLK         244U
+#define CLOCK_IP_HAS_PSI5S_0_CLK         245U
+#define CLOCK_IP_HAS_PSI5S_1_CLK         246U
+#define CLOCK_IP_HAS_QSPI0_CLK         247U
+#define CLOCK_IP_HAS_QSPI1_CLK         248U
+#define CLOCK_IP_HAS_RTU0_CORE_MON1_CLK         249U
+#define CLOCK_IP_HAS_RTU0_CORE_MON2_CLK         250U
+#define CLOCK_IP_HAS_RTU0_CORE_DIV2_MON1_CLK         251U
+#define CLOCK_IP_HAS_RTU0_CORE_DIV2_MON2_CLK         252U
+#define CLOCK_IP_HAS_RTU0_CORE_DIV2_MON3_CLK         253U
+#define CLOCK_IP_HAS_RTU0_REG_INTF_CLK         254U
+#define CLOCK_IP_HAS_RTU1_CORE_MON1_CLK         255U
+#define CLOCK_IP_HAS_RTU1_CORE_MON2_CLK         256U
+#define CLOCK_IP_HAS_RTU1_CORE_DIV2_MON1_CLK         257U
+#define CLOCK_IP_HAS_RTU1_CORE_DIV2_MON2_CLK         258U
+#define CLOCK_IP_HAS_RTU1_CORE_DIV2_MON3_CLK         259U
+#define CLOCK_IP_HAS_RTU1_REG_INTF_CLK         260U
+#define CLOCK_IP_HAS_P4_SDHC_CLK         261U
+#define CLOCK_IP_HAS_RXLUT_CLK         262U
+#define CLOCK_IP_HAS_SDHC0_CLK         263U
+#define CLOCK_IP_HAS_SINC_CLK         264U
+#define CLOCK_IP_HAS_SIPI0_CLK         265U
+#define CLOCK_IP_HAS_SIPI1_CLK         266U
+#define CLOCK_IP_HAS_SIUL2_0_CLK         267U
+#define CLOCK_IP_HAS_SIUL2_1_CLK         268U
+#define CLOCK_IP_HAS_SIUL2_4_CLK         269U
+#define CLOCK_IP_HAS_SIUL2_5_CLK         270U
+#define CLOCK_IP_HAS_P0_DSPI_CLK         271U
+#define CLOCK_IP_HAS_SPI0_CLK         272U
+#define CLOCK_IP_HAS_SPI1_CLK         273U
+#define CLOCK_IP_HAS_P1_DSPI_CLK         274U
+#define CLOCK_IP_HAS_SPI2_CLK         275U
+#define CLOCK_IP_HAS_SPI3_CLK         276U
+#define CLOCK_IP_HAS_SPI4_CLK         277U
+#define CLOCK_IP_HAS_P4_DSPI_CLK         278U
+#define CLOCK_IP_HAS_SPI5_CLK         279U
+#define CLOCK_IP_HAS_SPI6_CLK         280U
+#define CLOCK_IP_HAS_SPI7_CLK         281U
+#define CLOCK_IP_HAS_P5_DSPI_CLK         282U
+#define CLOCK_IP_HAS_SPI8_CLK         283U
+#define CLOCK_IP_HAS_SPI9_CLK         284U
+#define CLOCK_IP_HAS_SRX0_CLK         285U
+#define CLOCK_IP_HAS_SRX1_CLK         286U
+#define CLOCK_IP_HAS_CORE_PLL_REFCLKOUT         287U
+#define CLOCK_IP_HAS_CORE_PLL_FBCLKOUT         288U
+#define CLOCK_IP_HAS_PERIPH_PLL_REFCLKOUT         289U
+#define CLOCK_IP_HAS_PERIPH_PLL_FBCLKOUT         290U
+#define CLOCK_IP_FEATURE_NAMES_NO         291U
 
 /*==================================================================================================
                                              ENUMS

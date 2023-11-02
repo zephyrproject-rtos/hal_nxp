@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -14,6 +14,10 @@
 *   @{
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 /*==================================================================================================
 *                                        INCLUDE FILES
 * 1) system and project includes
@@ -21,7 +25,6 @@
 * 3) internal and external interfaces from this unit
 * 4) user callback header files
 ==================================================================================================*/
-#include <zephyr/devicetree.h>
 #include "S32Z2_LINFLEXD.h"
 #include "Mcal.h"
 /*==================================================================================================
@@ -31,8 +34,8 @@
 #define LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MAJOR_VERSION      4
 #define LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MINOR_VERSION      7
 #define LINFLEXD_UART_IP_DEFINES_AR_RELEASE_REVISION_VERSION   0
-#define LINFLEXD_UART_IP_DEFINES_SW_MAJOR_VERSION              0
-#define LINFLEXD_UART_IP_DEFINES_SW_MINOR_VERSION              9
+#define LINFLEXD_UART_IP_DEFINES_SW_MAJOR_VERSION              1
+#define LINFLEXD_UART_IP_DEFINES_SW_MINOR_VERSION              0
 #define LINFLEXD_UART_IP_DEFINES_SW_PATCH_VERSION              0
 
 /*==================================================================================================
@@ -41,7 +44,8 @@
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Checks against Mcal.h */
     #if ((LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MAJOR_VERSION != MCAL_AR_RELEASE_MAJOR_VERSION) || \
-         (LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MINOR_VERSION != MCAL_AR_RELEASE_MINOR_VERSION))
+         (LINFLEXD_UART_IP_DEFINES_AR_RELEASE_MINOR_VERSION != MCAL_AR_RELEASE_MINOR_VERSION) \
+    )
         #error "AUTOSAR Version Numbers of Linflexd_Uart_Ip_Defines.h and Mcal.h are different"
     #endif
 #endif
@@ -52,11 +56,14 @@
 /*==================================================================================================
  *                                     DEFINES AND MACROS
 ==================================================================================================*/
+/* @Custom baudrate values */
+#define LINFLEXD_UART_IP_CUSTOM_BAUDRATE
+
 /* @brief Development error detection */
 #define LINFLEXD_UART_IP_DEV_ERROR_DETECT       (STD_OFF)
 
 /* @brief Total number of channels configured */
-#define LINFLEXD_UART_IP_NUMBER_OF_INSTANCES    (DT_NUM_INST_STATUS_OKAY(nxp_s32_linflexd))
+#define LINFLEXD_UART_IP_NUMBER_OF_INSTANCES    (1U)
 
 /* @brief Uart Osif source counter. This parameter is used to select between different OsIf counter implementation */
 #define LINFLEXD_UART_IP_TIMEOUT_TYPE           (OSIF_COUNTER_DUMMY)
