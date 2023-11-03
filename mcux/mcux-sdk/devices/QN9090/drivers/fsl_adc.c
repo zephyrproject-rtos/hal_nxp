@@ -26,7 +26,7 @@ static uint32_t ADC_GetInstance(ADC_Type *base)
     uint32_t instance;
 
     /* Find the instance index from base address mappings. */
-    for (instance = 0; instance < ARRAY_SIZE(s_adcBases); instance++)
+    for (instance = 0; instance < ARRAY_SIZE_MCUX(s_adcBases); instance++)
     {
         if (s_adcBases[instance] == base)
         {

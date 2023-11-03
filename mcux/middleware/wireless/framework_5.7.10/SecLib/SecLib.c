@@ -3381,7 +3381,7 @@ static uint32_t u32Reverse(uint32_t u32InWord)
 {
     uint32_t u32OutWord;
 
-    asm volatile ("REV %[reverse], %[input];"
+    __asm volatile ("REV %[reverse], %[input];"
                   : [reverse] "=r" (u32OutWord)
                   : [input]  "r"  (u32InWord)   );
 

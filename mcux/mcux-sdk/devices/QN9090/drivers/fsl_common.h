@@ -189,9 +189,10 @@ typedef int32_t status_t;
 /* @} */
 
 /*! @brief Computes the number of elements in an array. */
-#if !defined(ARRAY_SIZE)
-#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-#endif
+//#if !defined(ARRAY_SIZE)
+//#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+//#endif
+#define ARRAY_SIZE_MCUX(x) (sizeof(x) / sizeof((x)[0]))
 
 /*! @name UINT16_MAX/UINT32_MAX value */
 /* @{ */

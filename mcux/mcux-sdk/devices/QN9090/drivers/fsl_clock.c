@@ -1204,6 +1204,43 @@ void CLOCK_Xtal32M_WaitUntilStable(uint32_t u32AdditionalWait_us)
     CLOCK_uDelay(u32AdditionalWait_us);
 }
 
+
+/* Get FLEXCOMM Clk */
+uint32_t CLOCK_GetFlexCommClkFreq(uint32_t id)
+{
+    uint32_t freq = 0U;
+
+    switch (id) {
+        case 0U:
+        case 1U:
+            /* USART */
+            freq = CLOCK_GetFreq(kCLOCK_Xtal32M); // 32000000UL;
+            break;
+        case 2U:
+        case 3U:
+        case 6U:
+            /* I2C */
+            freq = CLOCK_GetFreq(kCLOCK_Xtal32M); // 32000000UL;
+            break;
+        case 4U:
+        case 5U:
+            /* SPI */
+            freq = CLOCK_GetFreq(kCLOCK_Xtal32M); // 32000000UL;
+            break;
+        case 14U:
+            /* Quad SPI / SpiFi */
+            freq = CLOCK_GetSpifiClkFreq();
+            break;
+
+        default:
+            freq = 0U;
+            break;
+    }
+
+    //  CLOCK_GetFRGClock <= fractional clock divider for both usarts
+    return freq;
+}
+
 static uint8_t CLOCK_u8OscCapConvert(int32_t OscCap_val, uint8_t u8CapBankDiscontinuity)
 {
     /* Compensate for discontinuity in the capacitor banks */

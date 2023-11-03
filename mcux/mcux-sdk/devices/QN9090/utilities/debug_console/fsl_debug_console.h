@@ -22,6 +22,8 @@
 #ifndef _FSL_DEBUGCONSOLE_H_
 #define _FSL_DEBUGCONSOLE_H_
 
+/* Disable all contents : zephyr doe not use it */
+#if 0
 #include "fsl_common.h"
 #include "serial_manager.h"
 
@@ -223,5 +225,7 @@ status_t DbgConsole_TryGetchar(char *ch);
 #endif /* __cplusplus */
 
 /*! @} */
+
+#endif
 
 #endif /* _FSL_DEBUGCONSOLE_H_ */

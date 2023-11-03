@@ -6,7 +6,7 @@
  */
 
 #include "fsl_common.h"
-#include "fsl_debug_console.h"
+//#include "fsl_debug_console.h"
 #include "FunctionLib.h"
 #include "rom_psector.h"
 #include "psector_api.h"

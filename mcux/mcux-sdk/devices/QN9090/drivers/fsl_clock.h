@@ -599,6 +599,11 @@ void CLOCK_SetXtal32M_LDO(void);
  */
 void CLOCK_Xtal32M_WaitUntilStable(uint32_t u32AdditionalWait_us);
 
+/*! @brief  Return Frequency of FlexComm Clock
+ *  @return Frequency of FlexComm Clock
+ */
+uint32_t CLOCK_GetFlexCommClkFreq(uint32_t id);
+
 /**
  * @brief  Waits until number of microseconds elapses.
  * @param   usec:     number of microseconds to wait

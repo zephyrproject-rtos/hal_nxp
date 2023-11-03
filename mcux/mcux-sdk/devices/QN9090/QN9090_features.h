@@ -187,10 +187,6 @@
 /* @brief GPIO availability on the SoC. */
 #define FSL_FEATURE_SOC_GPIO_COUNT (FSL_FEATURE_SOC_LPC_GPIO_COUNT)
 
-// TODO: COPIED FROM LPC ; IS THIS CORRECT ????
-/* @brief GPIO has interrupts */
-//#define FSL_FEATURE_GPIO_HAS_INTERRUPT (1)
-
 /* I2C module features */
 
 /* @brief I2C peripheral clock frequency 8MHz. */

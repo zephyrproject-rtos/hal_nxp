@@ -43,6 +43,9 @@ elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT1166_CM4")
 elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT1166_CM7")
   set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm7)
   set(MCUX_DEVICE MIMXRT1166)
+elseif("${MCUX_DEVICE}" STREQUAL "QN9090")
+  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER})
+  set(MCUX_USE_ONLY_PRIVATE_DRIVERS TRUE)
 else()
   set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER})
 endif()
@@ -71,7 +74,7 @@ zephyr_compile_definitions(${MCUX_CPU})
 # practice, drilling down like this avoids the need for repetitive
 # build scripts for every mcux device.
 zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_clock.c)
-if (${MCUX_DEVICE} MATCHES "LPC|MIMXRT6|MIMXRT5")
+if (${MCUX_DEVICE} MATCHES "LPC|MIMXRT6|MIMXRT5|QN")
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_power.c)
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_reset.c)
 endif()
@@ -93,12 +96,23 @@ add_subdirectory_ifdef(
   middleware/wireless/framework_5.3.3
   )
 
+
+if (CONFIG_BT_NXP_IPM)
+  add_subdirectory(middleware/wireless/ble_controller)
+  add_subdirectory(middleware/wireless/bluetooth)
+endif()
+
+if (${MCUX_DEVICE} MATCHES "QN")
+  add_subdirectory(middleware/wireless/framework_5.7.10)
+endif()
+
 #Include Entry cmake component
 include(${CMAKE_CURRENT_LIST_DIR}/hal_nxp.cmake)
 enable_language(C ASM)
 
 zephyr_library_sources_ifdef(CONFIG_SOC_LPC54114_M4 mcux-sdk/devices/${MCUX_DEVICE}/gcc/startup_LPC54114_cm4.S)
 
+if (NOT ${MCUX_DEVICE} MATCHES "QN")
 zephyr_linker_sources(RWDATA quick_access_data.ld)
 zephyr_linker_sources_ifdef(CONFIG_ARCH_HAS_RAMFUNC_SUPPORT
   RAMFUNC_SECTION
@@ -111,3 +125,4 @@ zephyr_linker_sources_ifdef(CONFIG_NOCACHE_MEMORY
 zephyr_library_compile_definitions_ifdef(CONFIG_NOCACHE_MEMORY
   __STARTUP_INITIALIZE_NONCACHEDATA
 )
+endif()

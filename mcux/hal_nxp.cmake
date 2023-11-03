@@ -61,7 +61,9 @@ if (CONFIG_SOC_MIMX8QM_A53)
     include(driver_scfw_api)
 endif()
 
-include(driver_common)
+if(NOT MCUX_USE_ONLY_PRIVATE_DRIVERS)
+  include(driver_common)
+endif()
 
 #Include system_xxx file
 #This can be extended to other SoC series if needed
@@ -88,6 +90,9 @@ include(device_system)
 endif()
 endif()
 
+if(MCUX_USE_ONLY_PRIVATE_DRIVERS)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE}/drivers/)
+else()
 zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/common)
 
 #include shared drivers
@@ -185,6 +190,7 @@ include_driver_ifdef(CONFIG_QDEC_MCUX			enc		driver_enc)
 include_driver_ifdef(CONFIG_CRYPTO_MCUX_DCP			dcp		driver_dcp)
 include_driver_ifdef(CONFIG_DMA_MCUX_SMARTDMA		smartdma	driver_lpc_smartdma)
 include_driver_ifdef(CONFIG_DAC_MCUX_LPDAC			dac_1		driver_dac_1)
+endif()
 
 if ((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4)))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv7-m7	driver_cache_armv7_m7)
@@ -254,6 +260,11 @@ endif()
 if(${MCUX_DEVICE} MATCHES "MIMXRT(5|6)")
   include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lpc_iopctl/driver_lpc_iopctl.cmake)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lpc_iopctl)
+endif()
+
+if(${MCUX_DEVICE} MATCHES "QN")
+  add_subdirectory(mcux-sdk/devices/${MCUX_DEVICE}/soc)
+  add_subdirectory(mcux-sdk/devices/${MCUX_DEVICE}/utilities)
 endif()
 
 if(CONFIG_ETH_MCUX)

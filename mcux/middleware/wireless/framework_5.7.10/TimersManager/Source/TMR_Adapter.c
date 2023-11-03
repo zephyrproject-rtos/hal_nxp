@@ -1898,7 +1898,7 @@ static void FRO32K_Update32kFrequency(uint32_t *freq)
         LpIoSet(4, 0);
 
 #if FRO32K_CAL_INCOMPLETE_PRINTF
-        PRINTF("32K cal incomplete\r\n");
+        //PRINTF("32K cal incomplete\r\n");
         TMR_DBG_LOG("32K cal incomplete");
 #endif
     }

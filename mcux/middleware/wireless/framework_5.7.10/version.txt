@@ -1,0 +1,19 @@
+FWK                        version: 5.7.10
+                           Location: middleware/wireless/framework
+                           Description: Connectivity Framework middleware for
+                           Connectivity stacks
+                           License: Open Source - BSD-3-Clause
+                           Author: NXP
+                           name: Connectivity Framework
+                           Format: source code and header Files
+
+SecLib                     version: 5.7.10
+                           Location:
+                           middleware/wireless/framework/SecLib/lib_crypto_*.
+                           a
+                           Description: Connectivity Security Library
+                           License: Proprietary, See EULA
+                           LA_OPT_NXP_Software_License.htm
+                           Author: NXP
+                           name: Connectivity SecLib
+                           Format: Binary libraries

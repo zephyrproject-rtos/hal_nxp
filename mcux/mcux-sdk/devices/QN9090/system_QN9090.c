@@ -266,6 +266,9 @@ void ResetISR(void)
 
 void ResetISR2(void)
 {
+    /* Force clock to switch to FRO32M to speed up initialization */
+    SYSCON -> MAINCLKSEL = 3;  // BOARD_MAINCLK_FRO32M
+
     if ((void (*)(void))WarmMain != NULL)
     {
         unsigned int warm_start;

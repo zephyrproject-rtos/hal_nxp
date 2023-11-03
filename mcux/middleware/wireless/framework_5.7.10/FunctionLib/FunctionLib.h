@@ -14,7 +14,6 @@
 #define _FUNCTION_LIB_H_
 
 #include "EmbeddedTypes.h"
-#include <setjmp.h>
 
 /*! *********************************************************************************
 *************************************************************************************
@@ -32,12 +31,6 @@
 
 #define FLib_MemSet16 FLib_MemSet
 
-
-extern jmp_buf  *exception_buf;
-#define TRY do {jmp_buf exc_buf;                  \
-                jmp_buf *old_buf = exception_buf; \
-                exception_buf = &exc_buf;         \
-                switch (setjmp(exc_buf)) { case 0:
 
 #define CATCH(x) break; case x:
 #define YRT } exception_buf = old_buf; } while(0)

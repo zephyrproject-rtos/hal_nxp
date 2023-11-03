@@ -86,6 +86,19 @@ void TRNG_Deinit(RNG_Type *base);
  */
 status_t TRNG_GetRandomData(RNG_Type *base, void *data, size_t data_size);
 
+
+/* Fix to connect MCUX-entropy (zephyr) to fsl_rng of qn9090 */
+static inline status_t RNG_Init(RNG_Type *base) {
+    trng_config_t userConfig;
+    (void) TRNG_GetDefaultConfig(&userConfig);
+    return TRNG_Init(base, &userConfig);
+}
+
+/* Fix to connect MCUX-entropy (zephyr) to fsl_rng of qn9090 */
+static inline status_t RNG_GetRandomData(RNG_Type *base, void *data, size_t data_size) {
+    return TRNG_GetRandomData(base, data, data_size);
+};
+
 #if defined(__cplusplus)
 }
 #endif
