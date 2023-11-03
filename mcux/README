@@ -71,3 +71,5 @@ Patch List:
   8. MIMX8QM6: drivers: fsl_clock.c: Report NULL frequency for unsupported core
   9. devices: MIMX8QX6: Add header files for QXP's DSP core
   10. MIMX8QX6: scfw_api: Switch to including generic fsl_device_registers.h
+  11. mcux-sdk/drivers/i3c/fsl_i3c.c: add guards to avoid compilation warnings when building
+      with SDK clock control driver disabled for SoC has no reset driver.
