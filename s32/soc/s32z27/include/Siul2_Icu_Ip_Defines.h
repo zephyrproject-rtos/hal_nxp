@@ -69,7 +69,7 @@ extern "C"{
 #define SIUL2_ICU_IP_NUM_OF_INSTANCES          (6U)
 
 /** @brief The number of channels available on each instance */
-#define SIUL2_ICU_IP_NUM_OF_CHANNELS           (8U)
+#define SIUL2_ICU_IP_NUM_OF_CHANNELS           (8)
 
 /** @brief The number of Siul2 channels are used in configuration */
 #define SIUL2_ICU_IP_NUM_OF_CHANNELS_USED      ((uint8)32U)

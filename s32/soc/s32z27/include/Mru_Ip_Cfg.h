@@ -31,6 +31,8 @@ extern "C"
 * 3) internal and external interfaces from this unit
 * 4) user callback header files
 ==================================================================================================*/
+#include <zephyr/devicetree.h>
+
 #include "Mcal.h"
 #include "OsIf.h"
 #include "Mru_Ip_CfgDefines.h"
@@ -102,24 +104,10 @@ extern "C"
  *                                     DEFINES AND MACROS
 ==================================================================================================*/
 
-#define MRU_IP_CONFIG_EXT \
-    extern const Mru_Ip_ConfigType Mru_Ip_HWUnitConfig_RTU0_MRU0; \
-    extern const Mru_Ip_ConfigType Mru_Ip_HWUnitConfig_RTU0_MRU1; \
-    extern const Mru_Ip_ConfigType Mru_Ip_HWUnitConfig_RTU0_MRU2; \
-    extern const Mru_Ip_ConfigType Mru_Ip_HWUnitConfig_RTU0_MRU3; \
-    extern const Mru_Ip_ConfigType Mru_Ip_HWUnitConfig_RTU1_MRU4; \
-    extern const Mru_Ip_ConfigType Mru_Ip_HWUnitConfig_RTU1_MRU5; \
-    extern const Mru_Ip_ConfigType Mru_Ip_HWUnitConfig_RTU1_MRU6; \
-    extern const Mru_Ip_ConfigType Mru_Ip_HWUnitConfig_RTU1_MRU7; \
-    extern const Mru_Ip_ReceiveChannelType Mru_Ip_ReceiveChCfg_PlatformMruReceivingChannel_0; \
-    extern const Mru_Ip_ReceiveChannelType Mru_Ip_ReceiveChCfg_PlatformMruReceivingChannel_1; \
-    extern const Mru_Ip_ReceiveChannelType Mru_Ip_ReceiveChCfg_PlatformMruReceivingChannel_2; \
-    extern const Mru_Ip_ReceiveChannelType Mru_Ip_ReceiveChCfg_PlatformMruReceivingChannel_3; \
-    extern const Mru_Ip_ReceiveChannelType Mru_Ip_ReceiveChCfg_PlatformMruReceivingChannel_4; \
-    extern const Mru_Ip_ReceiveChannelType Mru_Ip_ReceiveChCfg_PlatformMruReceivingChannel_5; \
-    extern const Mru_Ip_ReceiveChannelType Mru_Ip_ReceiveChCfg_PlatformMruReceivingChannel_6; \
-    extern const Mru_Ip_ReceiveChannelType Mru_Ip_ReceiveChCfg_PlatformMruReceivingChannel_7; \
+/* Not used by Zephyr integration but required to build the drivers */
+#define MRU_IP_CONFIG_EXT
 
+#if DT_NODE_HAS_STATUS(DT_NODELABEL(mru0), okay)
 /**
 * @brief RTU0_MRU0 is enabled and used.
 */
@@ -132,6 +120,8 @@ extern "C"
 * @brief Instance ID for RTU0_MRU0.
 */
 #define MRU_IP_RTU0_MRU0_ID                (0U)
+#endif
+#if DT_NODE_HAS_STATUS(DT_NODELABEL(mru1), okay)
 /**
 * @brief RTU0_MRU1 is enabled and used.
 */
@@ -144,6 +134,8 @@ extern "C"
 * @brief Instance ID for RTU0_MRU1.
 */
 #define MRU_IP_RTU0_MRU1_ID                (1U)
+#endif
+#if DT_NODE_HAS_STATUS(DT_NODELABEL(mru2), okay)
 /**
 * @brief RTU0_MRU2 is enabled and used.
 */
@@ -156,6 +148,8 @@ extern "C"
 * @brief Instance ID for RTU0_MRU2.
 */
 #define MRU_IP_RTU0_MRU2_ID                (2U)
+#endif
+#if DT_NODE_HAS_STATUS(DT_NODELABEL(mru3), okay)
 /**
 * @brief RTU0_MRU3 is enabled and used.
 */
@@ -168,6 +162,8 @@ extern "C"
 * @brief Instance ID for RTU0_MRU3.
 */
 #define MRU_IP_RTU0_MRU3_ID                (3U)
+#endif
+#if DT_NODE_HAS_STATUS(DT_NODELABEL(mru4), okay)
 /**
 * @brief RTU1_MRU4 is enabled and used.
 */
@@ -180,6 +176,8 @@ extern "C"
 * @brief Instance ID for RTU1_MRU4.
 */
 #define MRU_IP_RTU1_MRU4_ID                (4U)
+#endif
+#if DT_NODE_HAS_STATUS(DT_NODELABEL(mru5), okay)
 /**
 * @brief RTU1_MRU5 is enabled and used.
 */
@@ -192,6 +190,8 @@ extern "C"
 * @brief Instance ID for RTU1_MRU5.
 */
 #define MRU_IP_RTU1_MRU5_ID                (5U)
+#endif
+#if DT_NODE_HAS_STATUS(DT_NODELABEL(mru6), okay)
 /**
 * @brief RTU1_MRU6 is enabled and used.
 */
@@ -204,6 +204,8 @@ extern "C"
 * @brief Instance ID for RTU1_MRU6.
 */
 #define MRU_IP_RTU1_MRU6_ID                (6U)
+#endif
+#if DT_NODE_HAS_STATUS(DT_NODELABEL(mru7), okay)
 /**
 * @brief RTU1_MRU7 is enabled and used.
 */
@@ -216,6 +218,8 @@ extern "C"
 * @brief Instance ID for RTU1_MRU7.
 */
 #define MRU_IP_RTU1_MRU7_ID                (7U)
+#endif
+
 /**
 * @brief Number of instance is used by the driver.
 */
@@ -224,38 +228,11 @@ extern "C"
 /**
 * @brief ID for interrupt group 0.
 */
-#define MRU_IP_INT_GROUP_0  0u
+#define MRU_IP_INT_GROUP_0  0
 /**
 * @brief ID for interrupt group 1.
 */
-#define MRU_IP_INT_GROUP_1  1u
-/**
-* @brief Skip the Platform default interrupt handler.
-*/
-#define MRU_IP_SKIP_RTU0_MRU0_INT1_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU0_MRU0_INT2_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU0_MRU0_INT3_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU0_MRU1_INT1_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU0_MRU1_INT2_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU0_MRU1_INT3_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU0_MRU2_INT1_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU0_MRU2_INT2_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU0_MRU2_INT3_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU0_MRU3_INT1_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU0_MRU3_INT2_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU0_MRU3_INT3_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU4_INT1_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU4_INT2_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU4_INT3_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU5_INT1_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU5_INT2_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU5_INT3_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU6_INT1_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU6_INT2_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU6_INT3_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU7_INT1_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU7_INT2_HANDLER  (STD_ON)
-#define MRU_IP_SKIP_RTU1_MRU7_INT3_HANDLER  (STD_ON)
+#define MRU_IP_INT_GROUP_1  1
 /*==================================================================================================
 *                                            ENUMS
 ==================================================================================================*/
