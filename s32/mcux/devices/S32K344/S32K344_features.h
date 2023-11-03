@@ -169,7 +169,7 @@
 /* @brief Has CCR1 (related to existence of registers CCR1). */
 #define FSL_FEATURE_LPSPI_HAS_CCR1 (1)
 /* @brief Is affected by errata S32K3X4-0P55A-1P55A-ERRATA / ERR050456 (LPSPI: Reset to fifo does not work as expected). */
-#define FSL_FEATURE_LPSPI_HAS_ERRATA_050456 (1)
+#define FSL_FEATURE_LPSPI_HAS_ERRATA_050456 (0)
 
 /* EDMA module features */
 
