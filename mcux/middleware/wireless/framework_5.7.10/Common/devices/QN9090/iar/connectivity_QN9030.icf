@@ -1,0 +1,332 @@
+/*
+** ###################################################################
+**     Processors:          QN9090/K32W061
+**
+**
+**     Compiler:            IAR ANSI C/C++ Compiler for ARM
+**     Reference manual:    QN9090/K32W061 User manual Rev.0.9  7 Nov 2016
+**     Version:             rev. 1.1, 2016-11-25
+**     Build:               b161227
+**
+**     Abstract:
+**         Linker file for the IAR ANSI C/C++ Compiler for ARM
+**
+**     Copyright (c) 2016 Freescale Semiconductor, Inc.
+**     Copyright 2016 - 2019 NXP
+**     All rights reserved.
+**
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+** ###################################################################
+*/
+
+/******************* Map of QN9090/K32W061 FLASH ****************************************************
+
+
+             0x000a_0000
+    - - - +---------------+ - - - - - - - -
+          |   _ _ _ _ _   |
+          | Flash config  |
+   8.5k   |   - - - - -   |
+          |               |
+          |  RESERVED     |  0x9de00
+    - - - +---------------+ - - - - - - - -
+          |               |
+          |     NOT       |
+          |  AVAILABLE    |
+          |               | 0x50000 m_flash_end
+    - - - +---------------+ - - - - - - - -    - - - +---------------+ - - - - - - - -
+          |               | NV_STORAGE_START_ADDRESS
+   31.5k  |               |
+          |   NVM_region  |
+          |               |
+          |               | NV_STORAGE_END_ADDRESS
+    - - - +---------------+ - - - - - - - -
+          |               | INT_STORAGE_START
+          |               |
+          |               |
+   MAX    | OTAP Internal |
+   144k   |    Storage*   |
+          |               |
+          |               |
+          |               |
+          |               | INT_STORAGE_END (Must be aligned on a 8K to support the OTA remap mechanism)
+    - - - +---------------+ - - - - - - - -
+          |               | m_text_end
+          |               |
+          |               |
+    MAX   |  Application  |
+    144k  |               |
+          |               |
+          |               | m_text_start
+    - - - +---------------+ - - - - - - - -
+             0x0000_0000
+
+ * - This section is optional for application that does not support OTA
+     (gUseInternalStorageLink_d not defined or equal to 0).
+     In this case the application (m_text_end) could be up to NV_STORAGE_END_ADDRESS-1 and
+     its MAX size will be 288k
+**************************************************************************************************************/
+
+/*** Internal flash memory characteristics ***/
+define exported symbol m_flash_start          = 0x00000000;
+define exported symbol m_flash_end            = 0x0004FFFF;
+define symbol          m_flash_size           = 0x00050000;
+define symbol          m_sector_size          = 512;
+
+
+define symbol          m_update_page_address = 0x9de00;
+define symbol          m_config_page_address = 0x9fc00;
+
+/*
+ * The Resume stack is used during Warm boot execution stack size for the boot rom during warm boot and application
+ * The Sc=ratch data is a 1k area of global variable that get used by Warm boot too
+ */
+define symbol          BOOT_SCRATCH_DATA_SZ = 0x400;
+define symbol          BOOT_RESUME_STACK_SIZE = 0x400;
+
+
+define symbol          __base_RAM_Bank0 = 0x04000000;             /* RAM0 Bank0 */
+define symbol          __size_RAM_Bank0 = 0x00004000;             /* 16kB */
+define symbol          __top_RAM_Bank0  = __base_RAM_Bank0 + __size_RAM_Bank0;
+
+define symbol          __base_RAM_Bank1 = 0x04004000;             /* RAM0 Bank1 */
+define symbol          __size_RAM_Bank1 = 0x00004000;             /* 16kB */
+define symbol          __top_RAM_Bank1  = __base_RAM_Bank1 + __size_RAM_Bank1;
+
+define symbol          __base_RAM_Bank2 = 0x04008000;             /* RAM0 Bank2 */
+define symbol          __size_RAM_Bank2 = 0x00004000;             /* 16kB */
+define symbol          __top_RAM_Bank2  = __base_RAM_Bank2 + __size_RAM_Bank2;
+
+define symbol          __base_RAM_Bank3 = 0x0400c000;             /* RAM0 Bank3 */
+define symbol          __size_RAM_Bank3 = 0x00004000;             /* 16kB */
+define symbol          __top_RAM_Bank3  = __base_RAM_Bank3 + __size_RAM_Bank3;
+
+define symbol          __base_RAM_Bank4 = 0x04010000;             /* RAM0 Bank4 */
+define symbol          __size_RAM_Bank4 = 0x00002000;             /* 8kB */
+define symbol          __top_RAM_Bank4  = __base_RAM_Bank4 + __size_RAM_Bank4;
+
+define symbol          __base_RAM_Bank5 = 0x04012000;             /* RAM0 Bank5 */
+define symbol          __size_RAM_Bank5 = 0x00002000;             /* 8kB */
+define symbol          __top_RAM_Bank5  = __base_RAM_Bank5 + __size_RAM_Bank5;
+
+define symbol          __base_RAM_Bank6 = 0x04014000;             /* RAM0 Bank6 */
+define symbol          __size_RAM_Bank6 = 0x00001000;             /* 4kB */
+define symbol          __top_RAM_Bank6  = __base_RAM_Bank6 + __size_RAM_Bank6;
+
+define symbol          __base_RAM_Bank7 = 0x04015000;             /* RAM0 Bank7 */
+define symbol          __size_RAM_Bank7 = 0x00001000;             /* 4kB */
+/*
+ * the 32 top bytes of the RAM0/Bank7 are used for WarmBoot.
+ * These impose that the Bank7 remain under retention.
+ */
+define symbol          __BootInterfaceSz       = 32;
+define symbol          __top_RAM_Bank7  = __base_RAM_Bank7 + __size_RAM_Bank7 -__BootInterfaceSz ;
+
+/* Define a symbol for the top of each memory region */
+define symbol          __base_Flash320       = 0x0;            /* Flash320 */
+define symbol          __size_Flash320       = 0x50000;        /* 320K bytes */
+define symbol          __top_Flash320        = __base_Flash320 + __size_Flash320;
+
+define symbol          __base_Flash          = __base_Flash320;
+define symbol          __size_Flash          = __size_Flash320;
+define symbol          __top_Flash           = __top_Flash320;
+/* RAM0 bank : [0x04000000..0x04000400] trampled at Warm boot
+ * Likewise we choose to place the Boot Resume stack contiguous to this area in
+ * [0x04000400..0x04000800].
+ * so that we have a 2kB region that can be unretained and be used as a scratch area.
+ * Ideally to minimize retained memory one should concentrate in Bank0 all data not
+ * requiring retention.
+ */
+define symbol          __base_unretainedRAM0 = 0x4000000;
+define symbol          __size_unretainedRAM0 = BOOT_SCRATCH_DATA_SZ + BOOT_RESUME_STACK_SIZE;
+define symbol          __top_unretainedRAM0  = __base_unretainedRAM0 + __size_unretainedRAM0;   /* start of normal use RAM0 */
+/* The remainder of Bank0 is usable it is up to the papplication designer to decide
+ * to retain Bank0 or not. If so the default below allow for maximum RAM capacity, gaining 14kB
+ * but requiring to retain Bank0 at the expense of power ~420nA.
+ */
+define exported symbol __base_RAM0           = __top_unretainedRAM0;                         /* RAM0 */
+define symbol          __size_RAM0           = __top_RAM_Bank7 - __top_unretainedRAM0;
+/* __base_RAM will be set to __base_RAM0 if the approach favours capacity and
+ * otherwise the Stack of the startup task will be placed in a way such that the top of the stack
+ * that require retention be in Bank1 while the bootom of this stack will go downwards into Bank0 down to __StackLimit
+ */
+define symbol          __base_RAM            = __base_RAM0;
+define symbol          __size_RAM            = __size_RAM0;
+define symbol          __top_RAM             = __top_RAM_Bank7;
+
+
+/*******************************************
+ * Define the limits of the memory regions *
+ *******************************************/
+define memory mem with size = 4G;
+
+/****************************************************
+ *******         User Defines                 *******
+ ****************************************************/
+if (!isdefinedsymbol(gUseNVMLink_d)) {
+  define symbol gUseNVMLink_d = 0;
+  define symbol gNVMSectorCountLink_d = 0;
+}
+if (!isdefinedsymbol(__ram_vector_table__)) {
+  define symbol __ram_vector_table__ = 0;
+}
+if (!isdefinedsymbol(gNVMSectorCountLink_d)) {
+  define symbol gNVMSectorCountLink_d = 63;
+}
+if (!isdefinedsymbol(gUseInternalStorageLink_d)) {
+  define symbol gUseInternalStorageLink_d = 0;
+}
+if (!isdefinedsymbol(__app_stated_size__)) {
+  define symbol __app_stated_size__ = 0 ;
+}
+if (!isdefinedsymbol(__app_load_address__)) {
+  define symbol __app_load_address__ = 0 ;
+}
+/****************************************************
+ ******          Flash regions sizes           ******
+ ****************************************************/
+define symbol __vector_table_size__     = 0x120;
+define symbol __ram_vector_table_size__ = (__ram_vector_table__) ? 0x120 : 0;
+define symbol NV_STORAGE_SIZE           = gNVMSectorCountLink_d * m_sector_size;
+define symbol m_reserved_flash_size     = 3 * m_sector_size;
+define exported symbol m_app_size       = (__app_stated_size__) ? __app_stated_size__ : 0x48000;
+
+/****************************************************
+ ******        Flash Regions, low to high      ******
+ ****************************************************/
+define exported symbol m_app_start      = (__app_load_address__) ? __app_load_address__ : 0x0;
+define symbol m_app_end                 = m_app_start + m_app_size - 1;
+define symbol m_text_start              = m_app_start;
+define symbol m_interrupts_start        = m_text_start;
+define symbol m_interrupts_end          = m_interrupts_start + __vector_table_size__ - 1;
+
+/****************************************************
+ *****        Flash Regions, high to low       ******
+ ****************************************************/
+define exported symbol NV_STORAGE_START_ADDRESS = m_flash_end;
+define exported symbol NV_STORAGE_END_ADDRESS   = NV_STORAGE_START_ADDRESS - NV_STORAGE_SIZE + 1;
+define exported symbol INT_STORAGE_START        = NV_STORAGE_END_ADDRESS - 1;
+if (gUseInternalStorageLink_d){
+  define exported symbol INT_STORAGE_END  = m_app_end + 1;
+  define exported symbol INT_STORAGE_SIZE = INT_STORAGE_START - INT_STORAGE_END + 1;
+}else{
+  define exported symbol INT_STORAGE_END  = INT_STORAGE_START + 1;
+  define exported symbol INT_STORAGE_SIZE = 0;
+}
+define symbol m_text_end                = INT_STORAGE_END - 1;
+
+
+/* Exported Defines */
+define exported symbol NV_STORAGE_SECTOR_SIZE        = m_sector_size;
+define exported symbol NV_STORAGE_MAX_SECTORS        = gNVMSectorCountLink_d;
+define symbol NV_VIRTUAL_PAGE_BOUND                  = NV_STORAGE_START_ADDRESS - (NV_STORAGE_SIZE / 2);
+define exported symbol INT_STORAGE_SECTOR_SIZE       = m_sector_size;
+
+/*********************
+ * RAM memory config *
+ *********************/
+define symbol m_scratch_ram_start      = __base_unretainedRAM0;  // ROM Bootloader tramples the first 1k of RAM + boot resume stack
+define symbol m_scratch_ram_end        = __top_unretainedRAM0;
+
+define symbol m_data_end               = __top_RAM_Bank7;
+
+/* RAM memory sizes */
+if (isdefinedsymbol(__stack_size__)) {
+  define symbol __size_stack__ = __stack_size__;
+} else {
+  define symbol __size_stack__ = 0x0800;
+}
+if (isdefinedsymbol(__heap_size__)) {
+  define symbol __size_heap__   = __heap_size__;
+} else {
+  define symbol __size_heap__   = 0x0000;
+}
+
+
+
+
+define symbol STACK_SIZE                       = 0x1000; /* 4kB is probably overkill */
+
+if (isdefinedsymbol(gLpOptimizedPlacement_d)) {
+  /* C-Stack is placed astride Bank0 unretained and Bank1 retained */
+  /* The part of the C-Stack that is kept in retention can be trimmed so as to save space in retained bank */
+  define symbol __StartupStackRetained         = 0x200;
+  define symbol __StackTop                     = (__base_RAM_Bank1 + __StartupStackRetained - 1);
+  define symbol __StackBottom                  = (__StackTop - STACK_SIZE);  /* only the top 256 bytes of the startup_task are retained */
+  define symbol __size_of_ram                  = (__top_RAM - __StackTop);
+  define exported symbol _RAM_START_           = __StackTop;
+  define exported symbol _RAM_END_             = __top_RAM_Bank6;
+  define region m_ll_exchange_mem_region       = mem:[from __base_RAM_Bank7 to __top_RAM_Bank7 - 1];
+} else {
+  /* C Stack is placed at the top of Bank7 */
+  /* Bank0 is kept in retention */
+  define symbol __StackTop                     = (__top_RAM_Bank7 - 1);
+  define symbol __StackBottom                  = (__StackTop - STACK_SIZE);  /* only the top 256 bytes of the startup_task are retained */
+  define exported symbol _RAM_START_           = m_scratch_ram_end;
+  define exported symbol _RAM_END_             = __top_RAM_Bank6;
+  define region m_ll_exchange_mem_region       = mem:[from _RAM_START_ to _RAM_START_ + 0x2800 -1];
+}
+define symbol m_interrupts_ram_start   = m_scratch_ram_end;
+define symbol m_interrupts_ram_end     = m_interrupts_ram_start + __vector_table_size__ - 1;
+define symbol m_data_start             = m_interrupts_ram_end + 1;
+
+/* Exported Defines */
+define exported symbol __VECTOR_TABLE          = m_app_start;
+define exported symbol __VECTOR_RAM            = m_interrupts_ram_start;
+define exported symbol __RAM_VECTOR_TABLE_SIZE = __ram_vector_table_size__;
+
+define exported symbol _SCRATCH_AREA_START_    = m_scratch_ram_start;
+define exported symbol _SCRATCH_AREA_END_      = m_scratch_ram_end;
+
+
+
+//Flash
+define region m_interrupts_region     = mem:[from m_interrupts_start to m_interrupts_end];
+define region TEXT_region             = mem:[from m_text_start to m_text_end];
+if (gUseInternalStorageLink_d) {
+  define region InternalStorage       = mem:[from INT_STORAGE_END to INT_STORAGE_START];
+}
+
+//RAM
+define region m_scratch_region                 = mem:[from m_scratch_ram_start to m_scratch_ram_end];
+define region m_interrupts_ram_region          = mem:[from m_interrupts_ram_start to m_interrupts_ram_end];
+define region DATA_region                      = mem:[from _RAM_START_ to _RAM_END_];
+define exported symbol _end_boot_resume_stack  = __top_unretainedRAM0;
+/* MemManagerLight may expand up to __HEAP_end__ */
+define exported symbol __HEAP_end__            = __top_RAM_Bank6 - 1;
+
+define block HEAP      with alignment = 8, size = __size_heap__     { };
+define block RW        { readwrite };
+define block ZI        { zi };
+
+initialize by copy { readwrite, section .textrw };
+if (isdefinedsymbol(__USE_DLIB_PERTHREAD))
+{
+  /* Required in a multi-threaded application */
+  initialize by copy with packing = none { section __DLIB_PERTHREAD };
+}
+do not initialize  { section .noinit };
+do not initialize  { section .s_end_fw_retention };
+do not initialize  { section .s_start_non_ret };
+
+
+place in m_interrupts_region         { readonly section .intvec };
+place in TEXT_region                 { readonly };
+
+place in DATA_region                 { block RW };
+place in DATA_region                 { block ZI };
+place in DATA_region                 { last block HEAP };
+
+if (isdefinedsymbol(gLpOptimizedPlacement_d)) {
+  place in m_ll_exchange_mem_region    { section .ll.exchange_mem };
+} else {
+  place in DATA_region                 { section .ll.exchange_mem };
+}
+place in DATA_region                 { last section .s_end_fw_retention };
+place in DATA_region                 { last section .s_start_non_ret };
+
+place in m_interrupts_ram_region     { section m_interrupts_ram };
