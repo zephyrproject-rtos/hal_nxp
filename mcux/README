@@ -73,3 +73,8 @@ Patch List:
   10. MIMX8QX6: scfw_api: Switch to including generic fsl_device_registers.h
   11. mcux-sdk/drivers/i3c/fsl_i3c.c: add guards to avoid compilation warnings when building
       with SDK clock control driver disabled for SoC has no reset driver.
+  12. MCUXGH-1081[IRQSTEER] Improve for portability
+  13. drivers: irqsteer: Add function for querying the master interrupts status
+  14. devices: MIMX8ML8: Fix naming inconsistency
+  15. devices: MIMX8ML8: Add missing FSL_FEATURE_* macros
+  16. devices: MIMX8ML8: fsl_clock: Add missing definitions for IRQ_STEER
