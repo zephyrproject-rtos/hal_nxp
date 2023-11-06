@@ -46,10 +46,8 @@ if(CONFIG_HAS_MCUX)
 
   set(MCUX_SDK_PROJECT_NAME ${ZEPHYR_CURRENT_LIBRARY})
 
-  # Translate the SoC name and part number into the MCUX device and CPU
-  # name respectively
+  # Translate the SoC name into the MCUX device
   string(TOUPPER ${CONFIG_SOC} MCUX_DEVICE)
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER})
 
   # This is normally done in mcux/hal_nxp.cmake, but we need to point to the
   # path on this directory instead
@@ -59,7 +57,7 @@ if(CONFIG_HAS_MCUX)
   )
 
   # MCUX uses the CPU name to expose SoC-specific features of a given peripheral
-  zephyr_compile_definitions(${MCUX_CPU})
+  zephyr_compile_definitions(CPU_${MCUX_DEVICE})
 
   # Clock control is supported through RTD, so disable it in the MCUX drivers
   zephyr_compile_definitions(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL=1)
