@@ -37,10 +37,22 @@ License:
 License Link:
    https://spdx.org/licenses/BSD-3-Clause.html
 
-Patch List:
-   - Change includes from "zephyr.h" to <zephyr/kernel.h>
+Patch List for S32K3:
    - Relocate uninitialized non-cacheable variables into .nocache section defined by Zephyr.
    - Clear the EOC flag before Adc_Sar_CheckAndCallEocNotification() is called to avoid the
      race condition that prevents the next end of conversion callback to be executed, when
      a conversion is started inside the previous end of conversion completed callback.
    - Relocate Emios_Ip_paxBase array in Emios_Mcl_Ip.c to read only region as suppose to be.
+   - Remove 'u' suffix from macros so that they can be used with LISTIFY in shim drivers.
+
+Patch List for S32Z/E:
+   - Relocate uninitialized non-cacheable variables into .nocache section defined by Zephyr.
+   - Remove 'u' suffix from macros so that they can be used with LISTIFY in shim drivers.
+   - Set the number of UART LINFlexD instances configured that bases on the number of
+     devicetree UART nodes enabled.
+   - Set the number of SPI instances configured that bases on the number of devicetree SPI
+     nodes enabled. Enable SPI slave support bases on CONFIG_SPI_SLAVE.
+   - Wrap the defined macros of each MRU instance base on devicetree MRU node so that they
+     is built when node enabled.
+   - Rename the PIT struct from TIMER to CHANNEL so that the MCUX PIT driver can be reused
+     for S32Z/E.
