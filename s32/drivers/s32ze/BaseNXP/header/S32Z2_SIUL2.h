@@ -485,7 +485,7 @@ typedef struct {
 } SIUL2_Type, *SIUL2_MemMapPtr;
 
 /** Number of instances of the SIUL2 module. */
-#define SIUL2_INSTANCE_COUNT                     (5u)
+#define SIUL2_INSTANCE_COUNT                     (5)
 
 /* SIUL2 - Peripheral instance base addresses */
 /** Peripheral SIUL2_0 base address */
