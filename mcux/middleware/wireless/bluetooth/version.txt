@@ -1,0 +1,7 @@
+BLE                        version: 1.7.4
+                           Location: middleware/wireless/bluetooth
+                           Description: Bluetooth Low Energy Software
+                           License: Open Source - BSD-3-Clause
+                           Author: NXP
+                           name: Bluetooth Low Energy Application Source
+                           Format: Source code and header Files
