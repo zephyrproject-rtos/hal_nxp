@@ -78,3 +78,7 @@ Patch List:
   14. devices: MIMX8ML8: Fix naming inconsistency
   15. devices: MIMX8ML8: Add missing FSL_FEATURE_* macros
   16. devices: MIMX8ML8: fsl_clock: Add missing definitions for IRQ_STEER
+  17. devices: MIMX9352: Add new SAI-related FSL_FEATURE_* macros
+  18. drivers: fsl_sai: Allow enabling/disabling implicit channel configuration
+  19. drivers: fsl_sai: Allow NULL FIFO watermark
+  20. drivers: fsl_sai: Fix compilation warnings when asserts are disabled
