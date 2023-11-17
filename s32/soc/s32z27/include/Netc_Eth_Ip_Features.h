@@ -55,7 +55,7 @@ extern "C"
 #define NETC_ETH_IP_NUM_OF_PHYSICAL_CTRLS           (1U)
 
 /** @brief Total number of ethernet controllers supported on NETC(VSI + PSI). */
-#define FEATURE_NETC_ETH_NUMBER_OF_CTRLS            (8U)
+#define FEATURE_NETC_ETH_NUMBER_OF_CTRLS            (8)
 
 #define FEATURE_NETC_NUMBER_OF_FUNC            (4U)
 /** @brief Index of the physical SI. */
