@@ -37,6 +37,9 @@ License:
 License Link:
    https://spdx.org/licenses/BSD-3-Clause.html
 
+Patch List for S32K1:
+   - Define __MPU_PRESENT as 0 to be able to use NXP SYSMPU driver.
+
 Patch List for S32K3:
    - Relocate uninitialized non-cacheable variables into .nocache section defined by Zephyr.
    - Clear the EOC flag before Adc_Sar_CheckAndCallEocNotification() is called to avoid the
