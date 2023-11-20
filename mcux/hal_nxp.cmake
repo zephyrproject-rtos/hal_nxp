@@ -60,6 +60,13 @@ zephyr_library_compile_definitions_ifdef(
   CONFIG_HAS_MCUX_CACHE FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
 )
 
+# note: if FSL_IRQSTEER_ENABLE_MASTER_INT is not
+# defined then it will automatically be defined
+# and set to 1 via fsl_irqsteer.h
+zephyr_library_compile_definitions_ifdef(
+  CONFIG_NXP_IRQSTEER
+  FSL_IRQSTEER_ENABLE_MASTER_INT=0
+)
 
 # Required by all SCFW-based SoCs
 if (CONFIG_SOC_MIMX8QM_A53 OR CONFIG_SOC_MIMX8QM_ADSP OR CONFIG_SOC_MIMX8QXP_ADSP)
