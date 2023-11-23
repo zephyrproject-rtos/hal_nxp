@@ -84,3 +84,5 @@ Patch List:
   20. drivers: fsl_sai: Fix compilation warnings when asserts are disabled
   21. mcux-sdk/drivers/ftm/fsl_ftm.c: make public FTM_GetInstance() function (mcux-sdk#155)
   22. mcux-sdk-middleware-usb: fix ip control return value for ip3511
+  23. drivers: edma: Introduce revision 2 of eDMA driver
+  24. devices: MIMX9352: Add SoC layer definitions required for using edma rev2
