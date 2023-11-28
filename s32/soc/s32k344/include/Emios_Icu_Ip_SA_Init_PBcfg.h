@@ -94,6 +94,8 @@ extern "C"{
 
 #define EMIOS_PWM_NODE(n)   DT_CHILD(DT_INST(n, nxp_s32_emios), pwm)
 
+#define HAS_QDEC (DT_HAS_COMPAT_STATUS_OKAY(nxp_qdec_s32) && CONFIG_QDEC_NXP_S32)
+
 #define EMIOS_ICU_CHANNEL(node_id, ch)                                   \
         IF_ENABLED(DT_ENUM_HAS_VALUE(node_id, pwm_mode, SAIC),           \
                   ((DT_PROP(node_id, channel) == ch) ||))
@@ -177,7 +179,7 @@ extern "C"{
 #endif /* DT_FOREACH_CHILD_STATUS_OKAY_VARGS */
 
 #if DT_FOREACH_CHILD_STATUS_OKAY_VARGS(EMIOS_PWM_NODE(EMIOS_0_DRV_INST), \
-                                       EMIOS_ICU_CHANNEL, 6) 0
+                                       EMIOS_ICU_CHANNEL, 6) 0 || HAS_QDEC
 #ifndef ICU_EMIOS_0_CH_6_ISR_USED
     /** @brief Macros for indicate EMIOS interrupts used by ICU. */
     #define ICU_EMIOS_0_CH_6_ISR_USED    (STD_ON)
@@ -190,7 +192,7 @@ extern "C"{
 #endif /* DT_FOREACH_CHILD_STATUS_OKAY_VARGS */
 
 #if DT_FOREACH_CHILD_STATUS_OKAY_VARGS(EMIOS_PWM_NODE(EMIOS_0_DRV_INST), \
-                                       EMIOS_ICU_CHANNEL, 7) 0
+                                       EMIOS_ICU_CHANNEL, 7) 0 || HAS_QDEC
 #ifndef ICU_EMIOS_0_CH_7_ISR_USED
     /** @brief Macros for indicate EMIOS interrupts used by ICU. */
     #define ICU_EMIOS_0_CH_7_ISR_USED    (STD_ON)
@@ -1034,7 +1036,7 @@ extern "C"{
 #endif
 #endif /* DT_FOREACH_CHILD_STATUS_OKAY_VARGS */
 
-#define EMIOS_ICU_CONFIG_SA_INIT_PB
+#define EMIOS_ICU_CONFIG_SA_INIT_PB 
 
 #endif  /* EMIOS_ICU_IP_USED */
 

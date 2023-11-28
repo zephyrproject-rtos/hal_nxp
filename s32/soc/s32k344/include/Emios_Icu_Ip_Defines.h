@@ -35,6 +35,9 @@ extern "C"{
 #define PWM_NXP_S32_CAPTURE_USED(node_id)     \
         DT_FOREACH_CHILD_STATUS_OKAY(node_id, _PWM_NXP_S32_CAPTURE_USED)
 
+#define QDEC_NXP_S32_MCB_USED  \
+	COND_CODE_1(DT_HAS_COMPAT_STATUS_OKAY(nxp_qdec_s32), (+ 2), (+ 0))
+
 /*==================================================================================================
  *                              SOURCE FILE VERSION INFORMATION
  *================================================================================================*/
@@ -64,7 +67,9 @@ extern "C"{
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
-#define EMIOS_ICU_IP_USED          (0 || (DT_FOREACH_STATUS_OKAY(nxp_s32_emios_pwm, PWM_NXP_S32_CAPTURE_USED)))
+
+#define EMIOS_ICU_IP_USED	   (0 || (DT_FOREACH_STATUS_OKAY(nxp_s32_emios_pwm, \
+	PWM_NXP_S32_CAPTURE_USED)) || DT_HAS_COMPAT_STATUS_OKAY(nxp_qdec_s32))
 
 #if (STD_ON == EMIOS_ICU_IP_USED)
 
@@ -76,7 +81,7 @@ extern "C"{
 #define EMIOS_ICU_IP_NUM_OF_CHANNELS               (24U)
 
 /** @brief The number of eMios channels are used in configuration */
-#define EMIOS_ICU_IP_NUM_OF_CHANNELS_USED         0 DT_FOREACH_STATUS_OKAY(nxp_s32_emios_pwm, PWM_NXP_S32_CAPTURE_USED)
+#define EMIOS_ICU_IP_NUM_OF_CHANNELS_USED	  0 DT_FOREACH_STATUS_OKAY(nxp_s32_emios_pwm, PWM_NXP_S32_CAPTURE_USED) + QDEC_NXP_S32_MCB_USED
 
 #define EMIOS_ICU_IP_CHANNEL_NOT_USED             ((uint8)0xFF)
 
@@ -92,27 +97,27 @@ extern "C"{
 /** @brief Adds or removes all services related to the edge detect functionality. */
 #define EMIOS_ICU_IP_EDGE_DETECT_API              (STD_OFF)
 /** @brief Adds or removes all services related to the signal mesurement functionality. */
-#define EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API       (STD_OFF)
+#define EMIOS_ICU_IP_SIGNAL_MEASUREMENT_API	  (STD_OFF || DT_HAS_COMPAT_STATUS_OKAY(nxp_qdec_s32))
 /** @brief Adds or removes all services related to the input level. */
 #define EMIOS_ICU_IP_GET_INPUT_LEVEL_API          (STD_ON)
 /** @brief Adds or removes all services related to the deinitialization functionality. */
 #define EMIOS_ICU_IP_DEINIT_API                   (STD_OFF)
 /** @brief Adds or removes all services related to edge count functionality. */
-#define EMIOS_ICU_IP_EDGE_COUNT_API               (STD_OFF)
+#define EMIOS_ICU_IP_EDGE_COUNT_API		  (STD_OFF || DT_HAS_COMPAT_STATUS_OKAY(nxp_qdec_s32))
 
 #define EMIOS_ICU_IP_CAPTURERGISTER_API           (STD_OFF)
 
 /** @brief Adds or Removes the code related to overflow notification */
-#define EMIOS_ICU_IP_OVERFLOW_NOTIFICATION_API    (STD_OFF)
+#define EMIOS_ICU_IP_OVERFLOW_NOTIFICATION_API	  (STD_OFF || DT_HAS_COMPAT_STATUS_OKAY(nxp_qdec_s32))
 
 /** @brief define SAIC mode if any channels not supporting IPWM or IPM mode is configured. */
 #define EMIOS_ICU_IP_SIGNAL_MEASUREMENT_USES_SAIC_MODE  (STD_OFF)
 
 /** @brief Adds or removes the service set Max Counter for eMios. */
-#define EMIOS_ICU_IP_SET_MAX_COUNTER              (STD_OFF)
+#define EMIOS_ICU_IP_SET_MAX_COUNTER		  (STD_OFF || DT_HAS_COMPAT_STATUS_OKAY(nxp_qdec_s32))
 
 /** @brief Adds or removes the service set Initial Counter for eMios. */
-#define EMIOS_ICU_IP_SET_INITIAL_COUNTER          (STD_OFF)
+#define EMIOS_ICU_IP_SET_INITIAL_COUNTER	  (STD_OFF || DT_HAS_COMPAT_STATUS_OKAY(nxp_qdec_s32))
 
 /** @brief Adds or removes all services related to mode set functionality. */
 #define EMIOS_ICU_IP_SET_MODE_API                 (STD_OFF)
