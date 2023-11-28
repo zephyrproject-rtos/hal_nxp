@@ -84,9 +84,9 @@ LCU_Type * const Lcu_Ip_paxBaseInst[LCU_INSTANCE_COUNT] = IP_LCU_BASE_PTRS;
 #define MCL_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"
 
-static Lcu_Ip_HwOutputStateType * Lcu_Ip_paxHwOutputState[LCU_INSTANCE_COUNT][LCU_LC_COUNT][LCU_NUM_OUTPUT_PER_LC];
+VAR_SEC_NOCACHE(Lcu_Ip_paxHwOutputState) static Lcu_Ip_HwOutputStateType * Lcu_Ip_paxHwOutputState[LCU_INSTANCE_COUNT][LCU_LC_COUNT][LCU_NUM_OUTPUT_PER_LC];
 
-static uint8 Lcu_Ip_au8OperationMode[LCU_INSTANCE_COUNT];
+VAR_SEC_NOCACHE(Lcu_Ip_au8OperationMode) static uint8 Lcu_Ip_au8OperationMode[LCU_INSTANCE_COUNT];
 
 #define MCL_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"

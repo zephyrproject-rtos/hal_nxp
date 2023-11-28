@@ -169,7 +169,7 @@ extern "C"{
    the LCU Driver obtains all information for the Logic Cell and corresponding
    Cell Configurations.
    The Pointer is loaded when Lcu_Ip_Init() is called. */
-static const Lcu_Ip_InitType * Lcu_Ip_pxInit;
+VAR_SEC_NOCACHE(Lcu_Ip_pxInit) static const Lcu_Ip_InitType * Lcu_Ip_pxInit;
 
 #define MCL_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"

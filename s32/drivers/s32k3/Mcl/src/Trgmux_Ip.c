@@ -171,7 +171,7 @@ static TRGMUX_Type * const Trgmux_Ip_paxBaseInst[TRGMUX_INSTANCE_COUNT] = IP_TRG
    the TRGMUX Driver obtains all information for the Logic Triggers and corresponding
    Triggers Configurations.
    The Pointer is loaded when Trgmux_Ip_Init() is called. */
-static const Trgmux_Ip_InitType * Trgmux_Ip_pxInit;
+VAR_SEC_NOCACHE(Trgmux_Ip_pxInit) static const Trgmux_Ip_InitType * Trgmux_Ip_pxInit;
 
 #define MCL_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Mcl_MemMap.h"
