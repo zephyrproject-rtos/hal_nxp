@@ -104,7 +104,7 @@ typedef struct {
 } LCU_Type, *LCU_MemMapPtr;
 
 /** Number of instances of the LCU module. */
-#define LCU_INSTANCE_COUNT                       (2u)
+#define LCU_INSTANCE_COUNT                       (2)
 
 /* LCU - Peripheral instance base addresses */
 /** Peripheral LCU_0 base address */

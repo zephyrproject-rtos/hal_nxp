@@ -77,7 +77,7 @@ typedef struct {
 } TRGMUX_Type, *TRGMUX_MemMapPtr;
 
 /** Number of instances of the TRGMUX module. */
-#define TRGMUX_INSTANCE_COUNT                    (1u)
+#define TRGMUX_INSTANCE_COUNT                    (1)
 
 /* TRGMUX - Peripheral instance base addresses */
 /** Peripheral TRGMUX base address */
