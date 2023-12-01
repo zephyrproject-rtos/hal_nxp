@@ -550,4 +550,54 @@ typedef struct {
  * @}
  */ /* end of group LPUART_Peripheral_Access_Layer */
 
+/*!
+ * @addtogroup LPI2C_Peripheral_Access_Layer LPI2C Peripheral Access Layer
+ * @{
+ */
+
+/* LPI2C - Peripheral instance base addresses */
+/** Peripheral LPI2C0 base address */
+#define LPI2C0_BASE                              IP_LPI2C0_BASE
+/** Peripheral LPI2C0 base pointer */
+#define LPI2C0                                   IP_LPI2C0
+/** Array initializer of LPI2C peripheral base addresses */
+#define LPI2C_BASE_ADDRS                         IP_LPI2C_BASE_ADDRS
+/** Array initializer of LPI2C peripheral base pointers */
+#define LPI2C_BASE_PTRS                          IP_LPI2C_BASE_PTRS
+/** Interrupt vectors for the LPI2C peripheral type */
+#define LPI2C_IRQS                               { LPI2C0_Master_IRQn }
+
+/*!
+ * @}
+ */ /* end of group LPI2C_Peripheral_Access_Layer */
+
+/*!
+ * @addtogroup LPSPI_Peripheral_Access_Layer LPSPI Peripheral Access Layer
+ * @{
+ */
+
+/* LPSPI - Peripheral instance base addresses */
+/** Peripheral LPSPI0 base address */
+#define LPSPI0_BASE                              IP_LPSPI0_BASE
+/** Peripheral LPSPI0 base pointer */
+#define LPSPI0                                   IP_LPSPI0
+/** Peripheral LPSPI1 base address */
+#define LPSPI1_BASE                              IP_LPSPI1_BASE
+/** Peripheral LPSPI1 base pointer */
+#define LPSPI1                                   IP_LPSPI1
+/** Peripheral LPSPI2 base address */
+#define LPSPI2_BASE                              IP_LPSPI2_BASE
+/** Peripheral LPSPI2 base pointer */
+#define LPSPI2                                   IP_LPSPI2
+/** Array initializer of LPSPI peripheral base addresses */
+#define LPSPI_BASE_ADDRS                         IP_LPSPI_BASE_ADDRS
+/** Array initializer of LPSPI peripheral base pointers */
+#define LPSPI_BASE_PTRS                          IP_LPSPI_BASE_PTRS
+/** Interrupt vectors for the LPSPI peripheral type */
+#define LPSPI_IRQS                               { LPSPI0_IRQn, LPSPI1_IRQn, LPSPI2_IRQn }
+
+/*!
+ * @}
+ */ /* end of group LPSPI_Peripheral_Access_Layer */
+
 #endif /* _S32K146_DEVICE_H_ */
