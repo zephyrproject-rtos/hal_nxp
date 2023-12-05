@@ -550,6 +550,11 @@ typedef struct {
  * @}
  */ /* end of group LPUART_Peripheral_Access_Layer */
 
+
+/* ----------------------------------------------------------------------------
+   -- LPI2C Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
 /*!
  * @addtogroup LPI2C_Peripheral_Access_Layer LPI2C Peripheral Access Layer
  * @{
@@ -570,6 +575,10 @@ typedef struct {
 /*!
  * @}
  */ /* end of group LPI2C_Peripheral_Access_Layer */
+
+/* ----------------------------------------------------------------------------
+   -- LPSPI Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
 
 /*!
  * @addtogroup LPSPI_Peripheral_Access_Layer LPSPI Peripheral Access Layer
@@ -599,5 +608,46 @@ typedef struct {
 /*!
  * @}
  */ /* end of group LPSPI_Peripheral_Access_Layer */
+
+/* ----------------------------------------------------------------------------
+   -- LMEM Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup LMEM_Peripheral_Access_Layer LMEM Peripheral Access Layer
+ * @{
+ */
+
+/*!
+ * @addtogroup LMEM_Register_Masks LMEM Register Masks
+ * @{
+ */
+
+/*! @name PCCCR - Cache control register */
+/*! @{ */
+
+/* ENWRBUF - Enable Write Buffer is not available on this SoC */
+#define LMEM_PCCCR_ENWRBUF_MASK                  (0U)
+#define LMEM_PCCCR_ENWRBUF_SHIFT                 (0U)
+#define LMEM_PCCCR_ENWRBUF(x)                    (((uint32_t)(((uint32_t)(x)) << LMEM_PCCCR_ENWRBUF_SHIFT)) & LMEM_PCCCR_ENWRBUF_MASK)
+/*! @} */
+
+/*!
+ * @}
+ */ /* end of group LMEM_Register_Masks */
+
+/* LMEM - Peripheral instance base addresses */
+/** Peripheral LMEM base address */
+#define LMEM_BASE                                IP_LMEM_BASE
+/** Peripheral LMEM base pointer */
+#define LMEM                                     IP_LMEM
+/** Array initializer of LMEM peripheral base addresses */
+#define LMEM_BASE_ADDRS                          IP_LMEM_BASE_ADDRS
+/** Array initializer of LMEM peripheral base pointers */
+#define LMEM_BASE_PTRS                           IP_LMEM_BASE_PTRS
+
+/*!
+ * @}
+ */ /* end of group LMEM_Peripheral_Access_Layer */
 
 #endif /* _S32K146_DEVICE_H_ */

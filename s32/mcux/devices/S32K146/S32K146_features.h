@@ -21,6 +21,8 @@
 #define FSL_FEATURE_SOC_LPI2C_COUNT (1)
 /* @brief LPSPI availability on the SoC. */
 #define FSL_FEATURE_SOC_LPSPI_COUNT (3)
+/* @brief LMEM availability on the SoC. */
+#define FSL_FEATURE_SOC_LMEM_COUNT (1)
 
 /* SYSMPU module features */
 
@@ -155,5 +157,16 @@
 #define FSL_FEATURE_LPSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
 /* @brief Has CCR1 (related to existence of registers CCR1). */
 #define FSL_FEATURE_LPSPI_HAS_CCR1 (0)
+
+/* LMEM module features */
+
+/* @brief Has process identifier support. */
+#define FSL_FEATURE_LMEM_HAS_SYSTEMBUS_CACHE (0)
+/* @brief Has L1 cache. */
+#define FSL_FEATURE_HAS_L1CACHE (1)
+/* @brief L1 ICACHE line size in byte. */
+#define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (16)
+/* @brief L1 DCACHE line size in byte. */
+#define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (16)
 
 #endif /* _S32K146_FEATURES_H_ */
