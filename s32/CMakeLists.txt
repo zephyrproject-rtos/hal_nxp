@@ -99,6 +99,8 @@ if(CONFIG_HAS_MCUX)
 
     zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/../mcux/mcux-sdk/drivers/sysmpu)
     include_mcux_driver_ifdef(CONFIG_ARM_MPU sysmpu driver_sysmpu)
+
+    include_mcux_driver_ifdef(CONFIG_HAS_MCUX_CACHE cache/lmem driver_cache_lmem)
   endif()
 
 endif()
