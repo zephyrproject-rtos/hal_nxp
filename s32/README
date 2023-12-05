@@ -60,3 +60,5 @@ Patch List for S32Z/E:
      is built when node enabled.
    - Rename the PIT struct from TIMER to CHANNEL so that the MCUX PIT driver can be reused
      for S32Z/E.
+   - Remove 'static inline' keywords from 'Netc_Eth_Ip_MSIX_Rx' function so that it can be
+     used as an extern function outside of the file declaration.
