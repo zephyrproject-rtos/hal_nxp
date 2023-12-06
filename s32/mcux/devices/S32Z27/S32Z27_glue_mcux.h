@@ -7,6 +7,8 @@
 #ifndef _S32Z27_GLUE_MCUX_H_
 #define _S32Z27_GLUE_MCUX_H_
 
+#include "S32Z27_device.h"
+
 /* PIT - Peripheral instance base addresses */
 /** Peripheral PIT0 base address */
 #define PIT0_BASE                                IP_PIT_0_BASE
@@ -38,14 +40,5 @@
 #define I3C_BASE_PTRS                            IP_I3C_BASE_PTRS
 /** Interrupt vectors for the I3C peripheral type */
 #define I3C_IRQS                                 { RTU_I3C0_IRQn, RTU_I3C1_IRQn, RTU_I3C2_IRQn }
-
-/*
- * These bit fields are not existed on this SoC, I3C slave request IBI will not be
- * supported because I3C functionality is not stable in this SoC. Keep define these
- * macros in order to build.
- */
-#define I3C_IBIEXT2_EXT5(x)                     0
-#define I3C_IBIEXT2_EXT6(x)                     0
-#define I3C_IBIEXT2_EXT7(x)                     0
 
 #endif /* _S32Z27_GLUE_MCUX_H_ */

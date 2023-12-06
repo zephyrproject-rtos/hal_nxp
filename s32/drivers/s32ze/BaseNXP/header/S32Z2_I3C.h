@@ -73,7 +73,7 @@ typedef struct {
   __IO uint32_t MCONFIG;                           /**< Controller Configuration, offset: 0x0 */
   __IO uint32_t SCONFIG;                           /**< Target Configuration, offset: 0x4 */
   __IO uint32_t SSTATUS;                           /**< Target Status, offset: 0x8 */
-  uint8_t RESERVED_0[4];
+  __IO uint32_t SCTRL;                             /**< Reserved, keep it in order to build, offset 0xC */
   __IO uint32_t SINTSET;                           /**< Target Interrupt Set, offset: 0x10 */
   __IO uint32_t SINTCLR;                           /**< Target Interrupt Clear, offset: 0x14 */
   __I  uint32_t SINTMASKED;                        /**< Target Interrupt Mask, offset: 0x18 */
@@ -87,50 +87,57 @@ typedef struct {
   __O  uint32_t SWDATAH;                           /**< Target Write Data Half-word, offset: 0x38 */
   __O  uint32_t SWDATAHE;                          /**< Target Write Data Half-word End, offset: 0x3C */
   __I  uint32_t SRDATAB;                           /**< Target Read Data Byte, offset: 0x40 */
-  uint8_t RESERVED_1[4];
+  uint8_t RESERVED_0[4];
   union {                                          /* offset: 0x48 */
     __I  uint32_t MRDATAH;                           /**< Controller Read Data Halfword, offset: 0x48 */
     __I  uint32_t SRDATAH;                           /**< Target Read Data Halfword, offset: 0x48 */
-  } SRDATAH_MRDATAH;
-  uint8_t RESERVED_2[8];
+  };
+  uint8_t RESERVED_1[8];
   union {                                          /* offset: 0x54 */
     __IO uint32_t SWDATAB1;                          /**< Target Write Data Byte, offset: 0x54 */
   } SWDATA_B_H;
-  uint8_t RESERVED_3[4];
+  uint8_t RESERVED_2[4];
   __I  uint32_t SCAPABILITIES2;                    /**< Target Capabilities 2, offset: 0x5C */
   __I  uint32_t SCAPABILITIES;                     /**< Target Capabilities, offset: 0x60 */
-  uint8_t RESERVED_4[12];
+  uint8_t RESERVED_3[4];
+  __IO uint32_t SMAXLIMITS;                        /**< Reserved, keep it in order to build, offset: 0x68 */
+  __IO uint32_t SIDPARTNO;                         /**< Reserved, keep it in order to build, offset: 0x6C */
        uint32_t SIDEXT;                            /**< Target ID Extension, offset: 0x70 */
-  uint8_t RESERVED_5[8];
+  __IO uint32_t SVENDORID;                         /**< Reserved, keep it in order to build, offset: 0x74 */
+  __IO uint32_t STCCLOCK;                          /**< Reserved, keep it in order to build, offset: 0x78 */
   __I  uint32_t SMSGLAST;                          /**< Target Message Last Matched, offset: 0x7C */
-  uint8_t RESERVED_6[4];
+  uint8_t RESERVED_4[4];
   __IO uint32_t MCTRL;                             /**< Controller Control, offset: 0x84 */
   __IO uint32_t MSTATUS;                           /**< Controller Status, offset: 0x88 */
-  uint8_t RESERVED_7[4];
+  __IO uint32_t MIBIRULES;                         /**< Reserved, keep it in order to build, offset: 0x8C */
   __IO uint32_t MINTSET;                           /**< Controller Interrupt Set, offset: 0x90 */
   __IO uint32_t MINTCLR;                           /**< Controller Interrupt Clear, offset: 0x94 */
   __I  uint32_t MINTMASKED;                        /**< Controller Interrupt Mask, offset: 0x98 */
   __IO uint32_t MERRWARN;                          /**< Controller Errors and Warnings, offset: 0x9C */
   __IO uint32_t MDMACTRL;                          /**< Controller DMA Control, offset: 0xA0 */
-  uint8_t RESERVED_8[8];
+  uint8_t RESERVED_5[8];
   __IO uint32_t MDATACTRL;                         /**< Controller Data Control, offset: 0xAC */
   __O  uint32_t MWDATAB;                           /**< Controller Write Data Byte, offset: 0xB0 */
   __O  uint32_t MWDATABE;                          /**< Controller Write Data Byte End, offset: 0xB4 */
   __O  uint32_t MWDATAH;                           /**< Controller Write Data Halfword, offset: 0xB8 */
   __O  uint32_t MWDATAHE;                          /**< Controller Write Data Halfword End, offset: 0xBC */
   __I  uint32_t MRDATAB;                           /**< Controller Read Data Byte, offset: 0xC0 */
-  uint8_t RESERVED_9[8];
+  uint8_t RESERVED_6[8];
   union {                                          /* offset: 0xCC */
     __O  uint32_t MWDATAB1;                          /**< Controller Write Byte Data 1(to bus), offset: 0xCC */
-  } MWDATA_B1_H1;
+  };
   union {                                          /* offset: 0xD0 */
     __O  uint32_t MWMSG_SDR_CONTROL;                 /**< Controller Write Message Control in SDR mode, offset: 0xD0 */
     __O  uint32_t MWMSG_SDR_DATA;                    /**< Controller Write Message Data in SDR mode, offset: 0xD0 */
-  } MWMSG_SDR;
+  };
   __I  uint32_t MRMSG_SDR;                         /**< Controller Read Message in SDR mode, offset: 0xD4 */
-  uint8_t RESERVED_10[72];
+  uint8_t RESERVED_10[4];
+  __I  uint32_t MRMSG_DDR;                         /**< Reserved, keep it in order to build, offset: 0xDC */
+  uint8_t RESERVED_11[4];
+  __IO uint32_t MDYNADDR;                          /**< Reserved, keep it in order to build, offset: 0xE4 */
+  uint8_t RESERVED_12[56];
   __IO uint32_t SMAPCTRL1;                         /**< Map Feature Control 1, offset: 0x120 */
-  uint8_t RESERVED_11[3788];
+  uint8_t RESERVED_13[3788];
   __IO uint32_t SELFRESET;                         /**< Self Reset, offset: 0xFF0 */
 } I3C_Type, *I3C_MemMapPtr;
 
