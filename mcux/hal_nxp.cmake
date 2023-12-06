@@ -68,6 +68,11 @@ zephyr_library_compile_definitions_ifdef(
   FSL_IRQSTEER_ENABLE_MASTER_INT=0
 )
 
+zephyr_library_compile_definitions_ifdef(
+  CONFIG_DAI_NXP_SAI
+  MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG=1
+)
+
 # Required by all SCFW-based SoCs
 if (CONFIG_SOC_MIMX8QM_A53 OR CONFIG_SOC_MIMX8QM_ADSP OR CONFIG_SOC_MIMX8QXP_ADSP)
     list(APPEND CMAKE_MODULE_PATH
