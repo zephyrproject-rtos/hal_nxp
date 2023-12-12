@@ -70,6 +70,11 @@ zephyr_library_compile_definitions_ifdef(
 
 zephyr_library_compile_definitions_ifdef(
   CONFIG_DAI_NXP_SAI
+  MCUX_SDK_SAI_ALLOW_NULL_FIFO_WATERMARK=1
+)
+
+zephyr_library_compile_definitions_ifdef(
+  CONFIG_DAI_NXP_SAI
   MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG=1
 )
 
