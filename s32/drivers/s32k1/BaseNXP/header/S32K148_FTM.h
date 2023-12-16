@@ -69,7 +69,7 @@
  */
 
 /** FTM - Size of Registers Arrays */
-#define FTM_CONTROLS_COUNT                        8u
+#define FTM_CnSC_COUNT                            8u
 #define FTM_CV_MIRROR_COUNT                       8u
 
 /** FTM - Register Layout Typedef */
@@ -78,9 +78,9 @@ typedef struct {
   __IO uint32_t CNT;                               /**< Counter, offset: 0x4 */
   __IO uint32_t MOD;                               /**< Modulo, offset: 0x8 */
   struct {                                         /* offset: 0xC, array step: 0x8 */
-    __IO uint32_t CSC;                              /**< Channel (n) Status And Control, array offset: 0xC, array step: 0x8 */
-    __IO uint32_t CV;                               /**< Channel (n) Value, array offset: 0x10, array step: 0x8 */
-  } CONTROLS[FTM_CONTROLS_COUNT];
+    __IO uint32_t CnSC;                              /**< Channel (n) Status And Control, array offset: 0xC, array step: 0x8 */
+    __IO uint32_t CnV;                               /**< Channel (n) Value, array offset: 0x10, array step: 0x8 */
+  } CONTROLS[FTM_CnSC_COUNT];
   __IO uint32_t CNTIN;                             /**< Counter Initial Value, offset: 0x4C */
   __IO uint32_t STATUS;                            /**< Capture And Compare Status, offset: 0x50 */
   __IO uint32_t MODE;                              /**< Features Mode Selection, offset: 0x54 */
@@ -269,69 +269,69 @@ typedef struct {
 /*! @name CnSC - Channel (n) Status And Control */
 /*! @{ */
 
-#define FTM_CSC_DMA_MASK                        (0x1U)
-#define FTM_CSC_DMA_SHIFT                       (0U)
-#define FTM_CSC_DMA_WIDTH                       (1U)
-#define FTM_CSC_DMA(x)                          (((uint32_t)(((uint32_t)(x)) << FTM_CSC_DMA_SHIFT)) & FTM_CSC_DMA_MASK)
+#define FTM_CnSC_DMA_MASK                        (0x1U)
+#define FTM_CnSC_DMA_SHIFT                       (0U)
+#define FTM_CnSC_DMA_WIDTH                       (1U)
+#define FTM_CnSC_DMA(x)                          (((uint32_t)(((uint32_t)(x)) << FTM_CnSC_DMA_SHIFT)) & FTM_CnSC_DMA_MASK)
 
-#define FTM_CSC_ICRST_MASK                      (0x2U)
-#define FTM_CSC_ICRST_SHIFT                     (1U)
-#define FTM_CSC_ICRST_WIDTH                     (1U)
-#define FTM_CSC_ICRST(x)                        (((uint32_t)(((uint32_t)(x)) << FTM_CSC_ICRST_SHIFT)) & FTM_CSC_ICRST_MASK)
+#define FTM_CnSC_ICRST_MASK                      (0x2U)
+#define FTM_CnSC_ICRST_SHIFT                     (1U)
+#define FTM_CnSC_ICRST_WIDTH                     (1U)
+#define FTM_CnSC_ICRST(x)                        (((uint32_t)(((uint32_t)(x)) << FTM_CnSC_ICRST_SHIFT)) & FTM_CnSC_ICRST_MASK)
 
-#define FTM_CSC_ELSA_MASK                       (0x4U)
-#define FTM_CSC_ELSA_SHIFT                      (2U)
-#define FTM_CSC_ELSA_WIDTH                      (1U)
-#define FTM_CSC_ELSA(x)                         (((uint32_t)(((uint32_t)(x)) << FTM_CSC_ELSA_SHIFT)) & FTM_CSC_ELSA_MASK)
+#define FTM_CnSC_ELSA_MASK                       (0x4U)
+#define FTM_CnSC_ELSA_SHIFT                      (2U)
+#define FTM_CnSC_ELSA_WIDTH                      (1U)
+#define FTM_CnSC_ELSA(x)                         (((uint32_t)(((uint32_t)(x)) << FTM_CnSC_ELSA_SHIFT)) & FTM_CnSC_ELSA_MASK)
 
-#define FTM_CSC_ELSB_MASK                       (0x8U)
-#define FTM_CSC_ELSB_SHIFT                      (3U)
-#define FTM_CSC_ELSB_WIDTH                      (1U)
-#define FTM_CSC_ELSB(x)                         (((uint32_t)(((uint32_t)(x)) << FTM_CSC_ELSB_SHIFT)) & FTM_CSC_ELSB_MASK)
+#define FTM_CnSC_ELSB_MASK                       (0x8U)
+#define FTM_CnSC_ELSB_SHIFT                      (3U)
+#define FTM_CnSC_ELSB_WIDTH                      (1U)
+#define FTM_CnSC_ELSB(x)                         (((uint32_t)(((uint32_t)(x)) << FTM_CnSC_ELSB_SHIFT)) & FTM_CnSC_ELSB_MASK)
 
-#define FTM_CSC_MSA_MASK                        (0x10U)
-#define FTM_CSC_MSA_SHIFT                       (4U)
-#define FTM_CSC_MSA_WIDTH                       (1U)
-#define FTM_CSC_MSA(x)                          (((uint32_t)(((uint32_t)(x)) << FTM_CSC_MSA_SHIFT)) & FTM_CSC_MSA_MASK)
+#define FTM_CnSC_MSA_MASK                        (0x10U)
+#define FTM_CnSC_MSA_SHIFT                       (4U)
+#define FTM_CnSC_MSA_WIDTH                       (1U)
+#define FTM_CnSC_MSA(x)                          (((uint32_t)(((uint32_t)(x)) << FTM_CnSC_MSA_SHIFT)) & FTM_CnSC_MSA_MASK)
 
-#define FTM_CSC_MSB_MASK                        (0x20U)
-#define FTM_CSC_MSB_SHIFT                       (5U)
-#define FTM_CSC_MSB_WIDTH                       (1U)
-#define FTM_CSC_MSB(x)                          (((uint32_t)(((uint32_t)(x)) << FTM_CSC_MSB_SHIFT)) & FTM_CSC_MSB_MASK)
+#define FTM_CnSC_MSB_MASK                        (0x20U)
+#define FTM_CnSC_MSB_SHIFT                       (5U)
+#define FTM_CnSC_MSB_WIDTH                       (1U)
+#define FTM_CnSC_MSB(x)                          (((uint32_t)(((uint32_t)(x)) << FTM_CnSC_MSB_SHIFT)) & FTM_CnSC_MSB_MASK)
 
-#define FTM_CSC_CHIE_MASK                       (0x40U)
-#define FTM_CSC_CHIE_SHIFT                      (6U)
-#define FTM_CSC_CHIE_WIDTH                      (1U)
-#define FTM_CSC_CHIE(x)                         (((uint32_t)(((uint32_t)(x)) << FTM_CSC_CHIE_SHIFT)) & FTM_CSC_CHIE_MASK)
+#define FTM_CnSC_CHIE_MASK                       (0x40U)
+#define FTM_CnSC_CHIE_SHIFT                      (6U)
+#define FTM_CnSC_CHIE_WIDTH                      (1U)
+#define FTM_CnSC_CHIE(x)                         (((uint32_t)(((uint32_t)(x)) << FTM_CnSC_CHIE_SHIFT)) & FTM_CnSC_CHIE_MASK)
 
-#define FTM_CSC_CHF_MASK                        (0x80U)
-#define FTM_CSC_CHF_SHIFT                       (7U)
-#define FTM_CSC_CHF_WIDTH                       (1U)
-#define FTM_CSC_CHF(x)                          (((uint32_t)(((uint32_t)(x)) << FTM_CSC_CHF_SHIFT)) & FTM_CSC_CHF_MASK)
+#define FTM_CnSC_CHF_MASK                        (0x80U)
+#define FTM_CnSC_CHF_SHIFT                       (7U)
+#define FTM_CnSC_CHF_WIDTH                       (1U)
+#define FTM_CnSC_CHF(x)                          (((uint32_t)(((uint32_t)(x)) << FTM_CnSC_CHF_SHIFT)) & FTM_CnSC_CHF_MASK)
 
-#define FTM_CSC_TRIGMODE_MASK                   (0x100U)
-#define FTM_CSC_TRIGMODE_SHIFT                  (8U)
-#define FTM_CSC_TRIGMODE_WIDTH                  (1U)
-#define FTM_CSC_TRIGMODE(x)                     (((uint32_t)(((uint32_t)(x)) << FTM_CSC_TRIGMODE_SHIFT)) & FTM_CSC_TRIGMODE_MASK)
+#define FTM_CnSC_TRIGMODE_MASK                   (0x100U)
+#define FTM_CnSC_TRIGMODE_SHIFT                  (8U)
+#define FTM_CnSC_TRIGMODE_WIDTH                  (1U)
+#define FTM_CnSC_TRIGMODE(x)                     (((uint32_t)(((uint32_t)(x)) << FTM_CnSC_TRIGMODE_SHIFT)) & FTM_CnSC_TRIGMODE_MASK)
 
-#define FTM_CSC_CHIS_MASK                       (0x200U)
-#define FTM_CSC_CHIS_SHIFT                      (9U)
-#define FTM_CSC_CHIS_WIDTH                      (1U)
-#define FTM_CSC_CHIS(x)                         (((uint32_t)(((uint32_t)(x)) << FTM_CSC_CHIS_SHIFT)) & FTM_CSC_CHIS_MASK)
+#define FTM_CnSC_CHIS_MASK                       (0x200U)
+#define FTM_CnSC_CHIS_SHIFT                      (9U)
+#define FTM_CnSC_CHIS_WIDTH                      (1U)
+#define FTM_CnSC_CHIS(x)                         (((uint32_t)(((uint32_t)(x)) << FTM_CnSC_CHIS_SHIFT)) & FTM_CnSC_CHIS_MASK)
 
-#define FTM_CSC_CHOV_MASK                       (0x400U)
-#define FTM_CSC_CHOV_SHIFT                      (10U)
-#define FTM_CSC_CHOV_WIDTH                      (1U)
-#define FTM_CSC_CHOV(x)                         (((uint32_t)(((uint32_t)(x)) << FTM_CSC_CHOV_SHIFT)) & FTM_CSC_CHOV_MASK)
+#define FTM_CnSC_CHOV_MASK                       (0x400U)
+#define FTM_CnSC_CHOV_SHIFT                      (10U)
+#define FTM_CnSC_CHOV_WIDTH                      (1U)
+#define FTM_CnSC_CHOV(x)                         (((uint32_t)(((uint32_t)(x)) << FTM_CnSC_CHOV_SHIFT)) & FTM_CnSC_CHOV_MASK)
 /*! @} */
 
 /*! @name CnV - Channel (n) Value */
 /*! @{ */
 
-#define FTM_CV_VAL_MASK                         (0xFFFFU)
-#define FTM_CV_VAL_SHIFT                        (0U)
-#define FTM_CV_VAL_WIDTH                        (16U)
-#define FTM_CV_VAL(x)                           (((uint32_t)(((uint32_t)(x)) << FTM_CV_VAL_SHIFT)) & FTM_CV_VAL_MASK)
+#define FTM_CnV_VAL_MASK                         (0xFFFFU)
+#define FTM_CnV_VAL_SHIFT                        (0U)
+#define FTM_CnV_VAL_WIDTH                        (16U)
+#define FTM_CnV_VAL(x)                           (((uint32_t)(((uint32_t)(x)) << FTM_CnV_VAL_SHIFT)) & FTM_CnV_VAL_MASK)
 /*! @} */
 
 /*! @name CNTIN - Counter Initial Value */
