@@ -23,6 +23,8 @@
 #define FSL_FEATURE_SOC_LPSPI_COUNT (3)
 /* @brief LMEM availability on the SoC. */
 #define FSL_FEATURE_SOC_LMEM_COUNT (1)
+/* @brief FTM availability on the SoC. */
+#define FSL_FEATURE_SOC_FTM_COUNT (6)
 
 /* SYSMPU module features */
 
@@ -168,5 +170,32 @@
 #define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (16)
 /* @brief L1 DCACHE line size in byte. */
 #define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (16)
+
+/* FTM module features */
+
+/* @brief Number of channels. */
+#define FSL_FEATURE_FTM_CHANNEL_COUNTn(x) (8)
+/* @brief Has counter reset by the selected input capture event (register bits C0SC[ICRST], C1SC[ICRST], ...). */
+#define FSL_FEATURE_FTM_HAS_COUNTER_RESET_BY_CAPTURE_EVENT (1)
+/* @brief Has extended deadtime value. */
+#define FSL_FEATURE_FTM_HAS_EXTENDED_DEADTIME_VALUE (1)
+/* @brief Enable pwm output for the module. */
+#define FSL_FEATURE_FTM_HAS_ENABLE_PWM_OUTPUT (1)
+/* @brief Has half-cycle reload for the module. */
+#define FSL_FEATURE_FTM_HAS_HALFCYCLE_RELOAD (1)
+/* @brief Has reload interrupt. */
+#define FSL_FEATURE_FTM_HAS_RELOAD_INTERRUPT (1)
+/* @brief Has reload initialization trigger. */
+#define FSL_FEATURE_FTM_HAS_RELOAD_INITIALIZATION_TRIGGER (1)
+/* @brief Has DMA support, bitfield CnSC[DMA]. */
+#define FSL_FEATURE_FTM_HAS_DMA_SUPPORT (1)
+/* @brief If channel 6 is used to generate channel trigger, bitfield EXTTRIG[CH6TRIG]. */
+#define FSL_FEATURE_FTM_HAS_CHANNEL6_TRIGGER (1)
+/* @brief If channel 7 is used to generate channel trigger, bitfield EXTTRIG[CH7TRIG]. */
+#define FSL_FEATURE_FTM_HAS_CHANNEL7_TRIGGER (1)
+/* @brief If instance has only TPM function. */
+#define FSL_FEATURE_FTM_IS_TPM_ONLY_INSTANCEn(x) (0)
+/* @brief Has frequency of the reload opportunities, bitfield CONF[LDFQ]. */
+#define FSL_FEATURE_FTM_HAS_CONF_LDFQ_BIT (1)
 
 #endif /* _S32K146_FEATURES_H_ */

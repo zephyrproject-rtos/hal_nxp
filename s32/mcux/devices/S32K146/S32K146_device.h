@@ -650,4 +650,47 @@ typedef struct {
  * @}
  */ /* end of group LMEM_Peripheral_Access_Layer */
 
+/* ----------------------------------------------------------------------------
+   -- FTM Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup FTM_Peripheral_Access_Layer FTM Peripheral Access Layer
+ * @{
+ */
+
+/* FTM - Peripheral instance base addresses */
+/** Peripheral FTM0 base address */
+#define FTM0_BASE                                IP_FTM0_BASE
+/** Peripheral FTM0 base pointer */
+#define FTM0                                     IP_FTM0
+/** Peripheral FTM1 base address */
+#define FTM1_BASE                                IP_FTM1_BASE
+/** Peripheral FTM1 base pointer */
+#define FTM1                                     IP_FTM1
+/** Peripheral FTM2 base address */
+#define FTM2_BASE                                IP_FTM2_BASE
+/** Peripheral FTM2 base pointer */
+#define FTM2                                     IP_FTM2
+/** Peripheral FTM3 base address */
+#define FTM3_BASE                                IP_FTM3_BASE
+/** Peripheral FTM3 base pointer */
+#define FTM3                                     IP_FTM3
+/** Peripheral FTM4 base address */
+#define FTM4_BASE                                IP_FTM4_BASE
+/** Peripheral FTM4 base pointer */
+#define FTM4                                     IP_FTM4
+/** Peripheral FTM5 base address */
+#define FTM5_BASE                                IP_FTM5_BASE
+/** Peripheral FTM5 base pointer */
+#define FTM5                                     IP_FTM5
+/** Array initializer of FTM peripheral base addresses */
+#define FTM_BASE_ADDRS                           IP_FTM_BASE_ADDRS
+/** Array initializer of FTM peripheral base pointers */
+#define FTM_BASE_PTRS                            IP_FTM_BASE_PTRS
+
+/*!
+ * @}
+ */ /* end of group FTM_Peripheral_Access_Layer */
+
 #endif /* _S32K146_DEVICE_H_ */
