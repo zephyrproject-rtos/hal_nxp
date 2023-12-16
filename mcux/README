@@ -82,3 +82,4 @@ Patch List:
   18. drivers: fsl_sai: Allow enabling/disabling implicit channel configuration
   19. drivers: fsl_sai: Allow NULL FIFO watermark
   20. drivers: fsl_sai: Fix compilation warnings when asserts are disabled
+  21. mcux-sdk/drivers/ftm/fsl_ftm.c: make public FTM_GetInstance() function (mcux-sdk#155)
