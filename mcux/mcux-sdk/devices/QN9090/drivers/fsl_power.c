@@ -282,7 +282,7 @@ static void POWER_UpdateTrimmingVoltageValue(void)
         pwd_trim_val         = POWER_GET_PWD_TRIM_VALUE(ulpbg_trim_flash_val);
     }
 #ifdef DUMP_CONFIG
-    PRINTF("reg=0x%x active_trim=0x%X pwd_trim=0x%X\r\n", ulpbg_trim_flash_val, active_trim_val, pwd_trim_val);
+    //PRINTF("reg=0x%x active_trim=0x%X pwd_trim=0x%X\r\n", ulpbg_trim_flash_val, active_trim_val, pwd_trim_val);
 #endif
 }
 
@@ -381,18 +381,18 @@ void POWER_DisplayActiveVoltage(void)
 
     Chip_LOWPOWER_GetSystemVoltages(&ldo_voltage);
 
-    PRINTF("LDOPMU       : %d\n", (int)(ldo_voltage.LDOPMU & 0x1fUL));
-    PRINTF("LDOPMUBOOST  : %d\n", (int)(ldo_voltage.LDOPMUBOOST & 0x1fUL));
-    PRINTF("LDOMEM       : %d\n", (int)(ldo_voltage.LDOMEM & 0x1fUL));
-    PRINTF("LDOMEMBOOST  : %d\n", (int)(ldo_voltage.LDOMEMBOOST & 0x1fUL));
-    PRINTF("LDOCORE      : %d\n", (int)(ldo_voltage.LDOCORE & 0x07UL));
-    PRINTF("LDOFLASHCORE : %d\n", (int)(ldo_voltage.LDOFLASHCORE & 0x07UL));
-    PRINTF("LDOFLASHNV   : %d\n", (int)(ldo_voltage.LDOFLASHNV & 0x07UL));
-    PRINTF("LDOADC       : %d\n", (int)(ldo_voltage.LDOADC & 0x07UL));
+    //PRINTF("LDOPMU       : %d\n", (int)(ldo_voltage.LDOPMU & 0x1fUL));
+    //PRINTF("LDOPMUBOOST  : %d\n", (int)(ldo_voltage.LDOPMUBOOST & 0x1fUL));
+    //PRINTF("LDOMEM       : %d\n", (int)(ldo_voltage.LDOMEM & 0x1fUL));
+    //PRINTF("LDOMEMBOOST  : %d\n", (int)(ldo_voltage.LDOMEMBOOST & 0x1fUL));
+    //PRINTF("LDOCORE      : %d\n", (int)(ldo_voltage.LDOCORE & 0x07UL));
+    //PRINTF("LDOFLASHCORE : %d\n", (int)(ldo_voltage.LDOFLASHCORE & 0x07UL));
+    //PRINTF("LDOFLASHNV   : %d\n", (int)(ldo_voltage.LDOFLASHNV & 0x07UL));
+    //PRINTF("LDOADC       : %d\n", (int)(ldo_voltage.LDOADC & 0x07UL));
 
-    PRINTF("LDOPMUBOOST_ENABLE : %d\n", ldo_voltage.LDOPMUBOOST_ENABLE);
+    //PRINTF("LDOPMUBOOST_ENABLE : %d\n", ldo_voltage.LDOPMUBOOST_ENABLE);
 
-    PRINTF("\n");
+    //PRINTF("\n");
 }
 
 void POWER_ApplyActiveVoltage(const LPC_LOWPOWER_LDOVOLTAGE_T *ldo_voltage)
@@ -637,7 +637,7 @@ bool POWER_BodVbatConfig(pm_bod_cfg_t *bod_cfg_p)
 #endif
     }
 
-    // PRINTF( "BODVBAT=0x%X ANACTRL_CTRL=0x%X _STAT=0x%X _VAL=0x%X _INTENSET=0x%X\n", PMC->BODVBAT,
+    // //PRINTF( "BODVBAT=0x%X ANACTRL_CTRL=0x%X _STAT=0x%X _VAL=0x%X _INTENSET=0x%X\n", PMC->BODVBAT,
     // SYSCON->ANACTRL_CTRL, SYSCON->ANACTRL_STAT, SYSCON->ANACTRL_VAL, SYSCON->ANACTRL_INTENSET);
 
     return true;
@@ -681,11 +681,11 @@ void POWER_GetPowerDownConfig(pm_power_config_t *pm_power_config, void* pm_confi
     wakeup_src0 = (int)pm_power_config->pm_wakeup_src & 0xFFFFFFFF;
     wakeup_src1 = (int)(pm_power_config->pm_wakeup_src >> 32) & 0xFFFFFFFF;
 #ifdef TRACE_VRB
-    PRINTF("POWER_EnterPowerDownMode:\n");
-    PRINTF("  wakeup_src0      : 0x%x\n", wakeup_src0);
-    PRINTF("  wakeup_src1      : 0x%x\n", wakeup_src1);
-    PRINTF("  wakeup_io        : 0x%x\n", pm_power_config->pm_wakeup_io);
-    PRINTF("  pm_config        : 0x%x\n", pm_power_config->pm_config);
+    //PRINTF("POWER_EnterPowerDownMode:\n");
+    //PRINTF("  wakeup_src0      : 0x%x\n", wakeup_src0);
+    //PRINTF("  wakeup_src1      : 0x%x\n", wakeup_src1);
+    //PRINTF("  wakeup_io        : 0x%x\n", pm_power_config->pm_wakeup_io);
+    //PRINTF("  pm_config        : 0x%x\n", pm_power_config->pm_config);
 #endif
 
     lp_config->CFG = LOWPOWER_CFG_MODE_POWERDOWN;
@@ -887,7 +887,7 @@ void POWER_GoToPowerDown( void* pm_config )
     if (lp_config->DIGPWDN & LOWPOWER_DIGPWDN_COMM0)
     {
         /* remove console if not done */
-        DbgConsole_Deinit();
+        //DbgConsole_Deinit();
 
         /* Disable clocks to FLEXCOM power domain. This power domain is not reseted on wakeup by HW */
         POWER_FlexcomClocksDisable();
@@ -937,9 +937,9 @@ bool POWER_EnterDeepDownMode(pm_power_config_t *pm_power_config)
     wakeup_src1 = (int)(pm_power_config->pm_wakeup_src >> 32) & 0xFFFFFFFF;
 
 #ifdef TRACE_VRB
-    PRINTF("POWER_EnterDeepDownMode:\n");
-    PRINTF("  wakeup_src0      : 0x%x\n", wakeup_src0);
-    PRINTF("  wakeup_src1      : 0x%x\n", wakeup_src1);
+    //PRINTF("POWER_EnterDeepDownMode:\n");
+    //PRINTF("  wakeup_src0      : 0x%x\n", wakeup_src0);
+    //PRINTF("  wakeup_src1      : 0x%x\n", wakeup_src1);
 #else
     (void)wakeup_src0;
 #endif
@@ -988,7 +988,7 @@ bool POWER_EnterDeepDownMode(pm_power_config_t *pm_power_config)
 #endif
 
     /* remove console if not done */
-    DbgConsole_Deinit();
+    //DbgConsole_Deinit();
 
     /* Disable clocks to FLEXCOM power domain. This power domain is not reseted on wakeup by HW */
     POWER_FlexcomClocksDisable();
@@ -1137,22 +1137,22 @@ void POWER_SetDcdc1v3(void)
 #ifdef DUMP_CONFIG
 static void LF_DumpConfig(LPC_LOWPOWER_T *LV_LowPowerMode)
 {
-    PRINTF("Powerdown configuration\n");
-    PRINTF("CFG:             0x%x\n", LV_LowPowerMode->CFG);
-    PRINTF("PMUPWDN:         0x%x\n", LV_LowPowerMode->PMUPWDN);
-    PRINTF("DIGPWDN:         0x%x\n", LV_LowPowerMode->DIGPWDN);
-    PRINTF("VOLTAGE:         0x%x\n", LV_LowPowerMode->VOLTAGE);
-    PRINTF("WAKEUPSRCINT0:   0x%x\n", LV_LowPowerMode->WAKEUPSRCINT0);
-    PRINTF("WAKEUPSRCINT1:   0x%x\n", LV_LowPowerMode->WAKEUPSRCINT1);
-    PRINTF("SLEEPPOSTPONE:   0x%x\n", LV_LowPowerMode->SLEEPPOSTPONE);
-    PRINTF("WAKEUPIOSRC      0x%x\n", LV_LowPowerMode->WAKEUPIOSRC);
-    PRINTF("GPIOLATCH        0x%x\n", LV_LowPowerMode->GPIOLATCH);
-    PRINTF("TIMERCFG         0x%x\n", LV_LowPowerMode->TIMERCFG);
-    PRINTF("TIMERBLECFG      0x%x\n", LV_LowPowerMode->TIMERBLECFG);
-    PRINTF("TIMERCOUNTLSB    0x%x\n", LV_LowPowerMode->TIMERCOUNTLSB);
-    PRINTF("TIMERCOUNTMSB    0x%x\n", LV_LowPowerMode->TIMERCOUNTMSB);
-    PRINTF("TIMER2NDCOUNTLSB 0x%x\n", LV_LowPowerMode->TIMER2NDCOUNTLSB);
-    PRINTF("TIMER2NDCOUNTMSB 0x%x\n", LV_LowPowerMode->TIMER2NDCOUNTMSB);
+    //PRINTF("Powerdown configuration\n");
+    //PRINTF("CFG:             0x%x\n", LV_LowPowerMode->CFG);
+    //PRINTF("PMUPWDN:         0x%x\n", LV_LowPowerMode->PMUPWDN);
+    //PRINTF("DIGPWDN:         0x%x\n", LV_LowPowerMode->DIGPWDN);
+    //PRINTF("VOLTAGE:         0x%x\n", LV_LowPowerMode->VOLTAGE);
+    //PRINTF("WAKEUPSRCINT0:   0x%x\n", LV_LowPowerMode->WAKEUPSRCINT0);
+    //PRINTF("WAKEUPSRCINT1:   0x%x\n", LV_LowPowerMode->WAKEUPSRCINT1);
+    //PRINTF("SLEEPPOSTPONE:   0x%x\n", LV_LowPowerMode->SLEEPPOSTPONE);
+    //PRINTF("WAKEUPIOSRC      0x%x\n", LV_LowPowerMode->WAKEUPIOSRC);
+    //PRINTF("GPIOLATCH        0x%x\n", LV_LowPowerMode->GPIOLATCH);
+    //PRINTF("TIMERCFG         0x%x\n", LV_LowPowerMode->TIMERCFG);
+    //PRINTF("TIMERBLECFG      0x%x\n", LV_LowPowerMode->TIMERBLECFG);
+    //PRINTF("TIMERCOUNTLSB    0x%x\n", LV_LowPowerMode->TIMERCOUNTLSB);
+    //PRINTF("TIMERCOUNTMSB    0x%x\n", LV_LowPowerMode->TIMERCOUNTMSB);
+    //PRINTF("TIMER2NDCOUNTLSB 0x%x\n", LV_LowPowerMode->TIMER2NDCOUNTLSB);
+    //PRINTF("TIMER2NDCOUNTMSB 0x%x\n", LV_LowPowerMode->TIMER2NDCOUNTMSB);
 }
 
 #endif
