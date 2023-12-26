@@ -41,6 +41,7 @@ Patch List for S32K1:
    - Define __MPU_PRESENT as 0 to be able to use NXP SYSMPU driver.
    - Relocate uninitialized non-cacheable variables into .nocache section defined by Zephyr.
    - Rename fields and macros of FTM device headers to allow compatibility with MCUX FTM driver.
+   - Rename fields and macros of FlexCAN device headers to allow compatibility with MCUX FlexCAN driver.
 
 Patch List for S32K3:
    - Relocate uninitialized non-cacheable variables into .nocache section defined by Zephyr.
