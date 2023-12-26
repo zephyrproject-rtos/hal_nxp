@@ -693,4 +693,44 @@ typedef struct {
  * @}
  */ /* end of group FTM_Peripheral_Access_Layer */
 
+/* ----------------------------------------------------------------------------
+   -- CAN Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup CAN_Peripheral_Access_Layer CAN Peripheral Access Layer
+ * @{
+ */
+
+/* CAN - Peripheral instance base addresses */
+/** Peripheral CAN_0 base address */
+#define CAN0_BASE                                IP_FLEXCAN0_BASE
+/** Peripheral CAN_0 base pointer */
+#define CAN0                                     IP_FLEXCAN0
+/** Peripheral CAN_1 base address */
+#define CAN1_BASE                                IP_FLEXCAN1_BASE
+/** Peripheral CAN_1 base pointer */
+#define CAN1                                     IP_FLEXCAN1
+/** Peripheral CAN_2 base address */
+#define CAN2_BASE                                IP_FLEXCAN2_BASE
+/** Peripheral CAN_2 base pointer */
+#define CAN2                                     IP_FLEXCAN2
+/** Array initializer of CAN peripheral base addresses */
+#define CAN_BASE_ADDRS                           IP_FLEXCAN_BASE_ADDRS
+/** Array initializer of CAN peripheral base pointers */
+#define CAN_BASE_PTRS                            IP_FLEXCAN_BASE_PTRS
+/** Interrupt vectors for the CAN peripheral type */
+#define CAN_Rx_Warning_IRQS                      { CAN0_ORed_IRQn, CAN1_ORed_IRQn, CAN2_ORed_IRQn }
+#define CAN_Tx_Warning_IRQS                      { CAN0_ORed_IRQn, CAN1_ORed_IRQn, CAN2_ORed_IRQn }
+#define CAN_Wake_Up_IRQS                         { CAN0_Wake_Up_IRQn, NotAvail_IRQn, NotAvail_IRQn }
+#define CAN_Error_IRQS                           { CAN0_Error_IRQn, CAN1_Error_IRQn, CAN2_Error_IRQn }
+#define CAN_Bus_Off_IRQS                         { CAN0_ORed_IRQn, CAN1_ORed_IRQn, CAN2_ORed_IRQn }
+#define CAN_ORed_Message_buffer_0_15_IRQS        { CAN0_ORed_0_15_MB_IRQn, CAN1_ORed_0_15_MB_IRQn, CAN2_ORed_0_15_MB_IRQn }
+#define CAN_ORed_Message_buffer_16_31_IRQS       { CAN0_ORed_16_31_MB_IRQn, NotAvail_IRQn, NotAvail_IRQn }
+#define CAN_ORed_Message_buffer_IRQS             { CAN0_ORed_IRQn, CAN1_ORed_IRQn, CAN2_ORed_IRQn }
+
+/*!
+ * @}
+ */ /* end of group CAN_Peripheral_Access_Layer */
+
 #endif /* _S32K146_DEVICE_H_ */
