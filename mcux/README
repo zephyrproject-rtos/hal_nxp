@@ -83,3 +83,4 @@ Patch List:
   19. drivers: fsl_sai: Allow NULL FIFO watermark
   20. drivers: fsl_sai: Fix compilation warnings when asserts are disabled
   21. mcux-sdk/drivers/ftm/fsl_ftm.c: make public FTM_GetInstance() function (mcux-sdk#155)
+  22. mcux-sdk-middleware-usb: fix ip control return value for ip3511
