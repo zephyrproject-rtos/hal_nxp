@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_middleware_nxp_usb_K32L2B31A_manifest_v3_13" name="USB Host, Device, OTG Stack" brief="Host, Device, OTG" format_version="3.13" api_version="2.0.0" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.13.xsd">
+
+  <externalDefinitions>
+    <definition extID="K32L2B31xxxxA"/>
+    <definition extID="armgcc"/>
+    <definition extID="component.osa.K32L2B31A"/>
+  </externalDefinitions>
+  <ksdk id="MCUXpressoSDK2140_middleware_nxp_usb_K32L2B31A_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_usb_K32L2B31A_manifest_v3_13" version="2.14.0"/>
+  <components>
+    <component id="middleware.usb.device.khci_config_header.K32L2B31A" name="USB device khci config header" brief="USB device khci config header" version="2.9.0" full_name="USB device khci config header" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="project_template" package_base_path="../middleware/usb" project_base_path="source">
+      <source relative_path="../../output/npw/device_config/khci" project_relative_path="generated" config="true" type="c_include">
+        <files mask="usb_device_config.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_khci_config_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/npw/device_config/khci" project_relative_path="generated" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.common_header.K32L2B31A" name="USB Common Header" brief="Middleware usb common_header" version="2.9.0" full_name="USB Common Header" devices="K32L2B31xxxxA" category="USB/USB Common Header" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="component.osa.K32L2B31A"/>
+      </dependencies>
+      <source relative_path="../../include" project_relative_path="include" type="c_include">
+        <files mask="usb.h"/>
+        <files mask="usb_misc.h"/>
+        <files mask="usb_spec.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_common_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.common_header.K32L2B31A" name="USB Device Common Header" brief="Middleware usb device common_header" version="2.9.0" full_name="USB Device Common Header" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.K32L2B31A"/>
+          <component_dependency value="middleware.usb.common_header.K32L2B31A"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../device" project_relative_path="device/include" type="c_include">
+        <files mask="usb_device.h"/>
+      </source>
+      <source relative_path="../../device" project_relative_path="device/source" type="c_include">
+        <files mask="usb_device_dci.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_common_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../device" project_relative_path="device/include" type="c_include"/>
+        <include_path relative_path="../../device" project_relative_path="device/source" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device_controller_khci.K32L2B31A" name="USB Device KHCI Controller Driver(FS)" brief="Middleware usb device khci" version="2.9.0" full_name="USB Device KHCI Controller Driver(FS)" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.device.khci_config_header.K32L2B31A"/>
+          <component_dependency value="middleware.usb.device.common_header.K32L2B31A"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../device" project_relative_path="device/source/khci" type="src">
+        <files mask="usb_device_khci.c"/>
+      </source>
+      <source relative_path="../../device" project_relative_path="device/source/khci" type="c_include">
+        <files mask="usb_device_khci.h"/>
+      </source>
+      <source relative_path="../../include" project_relative_path="include" type="c_include">
+        <files mask="usb.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_khci.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../device" project_relative_path="device/source/khci" type="c_include"/>
+        <include_path relative_path="../../include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.stack.external.K32L2B31A" name="USB Device Stack" brief="Middleware usb device stack external" version="2.9.0" full_name="USB Device Stack" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.K32L2B31A"/>
+          <component_dependency value="middleware.usb.device.controller.driver.K32L2B31A"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class" type="src">
+        <files mask="usb_device_class.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class" type="c_include">
+        <files mask="usb_device_class.h"/>
+      </source>
+      <source relative_path="../../output/source/device" project_relative_path="device/source" type="src">
+        <files mask="usb_device_ch9.c"/>
+      </source>
+      <source relative_path="../../output/source/device" project_relative_path="device/source" type="c_include">
+        <files mask="usb_device_ch9.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_stack_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class" type="c_include"/>
+        <include_path relative_path="../../output/source/device" project_relative_path="device/source" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+        <include_path relative_path="../../output/source/device" project_relative_path="output/source/device" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.audio.external.K32L2B31A" name="USB Device Audio" brief="Middleware usb device audio external" version="2.9.0" full_name="USB Device Audio" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.K32L2B31A"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/audio" type="src">
+        <files mask="usb_device_audio.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/audio" type="c_include">
+        <files mask="usb_device_audio.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_audio_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/audio" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.cdc.external.K32L2B31A" name="USB Device CDC" brief="Middleware usb device cdc external" version="2.9.0" full_name="USB Device CDC" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.K32L2B31A"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/cdc" type="src">
+        <files mask="usb_device_cdc_acm.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/cdc" type="c_include">
+        <files mask="usb_device_cdc_acm.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_cdc_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/cdc" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.cdc.rndis.external.K32L2B31A" name="USB Device CDC RNDIS" brief="Middleware usb device cdc rndis external" version="2.9.0" full_name="USB Device CDC RNDIS" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.device.stack.external.K32L2B31A"/>
+          <component_dependency value="middleware.usb.device.cdc.external.K32L2B31A"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/cdc_rndis" type="src">
+        <files mask="usb_device_cdc_rndis.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/cdc_rndis" type="c_include">
+        <files mask="usb_device_cdc_rndis.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_cdc_rndis_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/cdc_rndis" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.hid.external.K32L2B31A" name="USB Device HID" brief="Middleware usb device hid external" version="2.9.0" full_name="USB Device HID" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.K32L2B31A"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/hid" type="src">
+        <files mask="usb_device_hid.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/hid" type="c_include">
+        <files mask="usb_device_hid.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_hid_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/hid" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.dfu.external.K32L2B31A" name="USB Device DFU" brief="Middleware usb device dfu external" version="2.9.0" full_name="USB Device DFU" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.K32L2B31A"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/dfu" type="src">
+        <files mask="usb_device_dfu.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/dfu" type="c_include">
+        <files mask="usb_device_dfu.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_dfu_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/dfu" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.msd.external.K32L2B31A" name="USB Device MSD" brief="Middleware usb device msd external" version="2.9.0" full_name="USB Device MSD" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.K32L2B31A"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/msc" type="src">
+        <files mask="usb_device_msc.c"/>
+        <files mask="usb_device_msc_ufi.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/msc" type="c_include">
+        <files mask="usb_device_msc.h"/>
+        <files mask="usb_device_msc_ufi.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_msd_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/msc" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.phdc.external.K32L2B31A" name="USB Device PHDC" brief="Middleware usb device phdc external" version="2.9.0" full_name="USB Device PHDC" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.K32L2B31A"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/phdc" type="src">
+        <files mask="usb_device_phdc.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/phdc" type="c_include">
+        <files mask="usb_device_phdc.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_phdc_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/phdc" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.video.external.K32L2B31A" name="USB Device Video" brief="Middleware usb device video external" version="2.9.0" full_name="USB Device Video" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.K32L2B31A"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/video" type="src">
+        <files mask="usb_device_video.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/video" type="c_include">
+        <files mask="usb_device_video.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_video_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/video" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.ccid.external.K32L2B31A" name="USB Device CCID" brief="Middleware usb device ccid external" version="2.9.0" full_name="USB Device CCID" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.K32L2B31A"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/ccid" type="src">
+        <files mask="usb_device_ccid.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/ccid" type="c_include">
+        <files mask="usb_device_ccid.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_ccid_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/ccid" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.printer.external.K32L2B31A" name="USB Device Printer" brief="Middleware usb device printer external" version="2.9.0" full_name="USB Device Printer" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.K32L2B31A"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/printer" type="src">
+        <files mask="usb_device_printer.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/printer" type="c_include">
+        <files mask="usb_device_printer.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_printer_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/printer" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.controller.driver.K32L2B31A" name="USB Device Common Controller" brief="Middleware usb device controller driver" version="2.9.0" full_name="USB Device Common Controller" devices="K32L2B31xxxxA" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.K32L2B31A"/>
+          <component_dependency value="middleware.usb.device_controller_khci.K32L2B31A"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../device" project_relative_path="device/include" type="c_include">
+        <files mask="usb_device.h"/>
+      </source>
+      <source relative_path="../../device" project_relative_path="device/source" type="src">
+        <files mask="usb_device_dci.c"/>
+      </source>
+      <source relative_path="../../device" project_relative_path="device/source" type="c_include">
+        <files mask="usb_device_dci.h"/>
+      </source>
+      <source exclude="true" relative_path="./" type="doc">
+        <files mask="ChangeLogKSDK.txt" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_controller_driver.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../device" project_relative_path="device/include" type="c_include"/>
+        <include_path relative_path="../../device" project_relative_path="device/source" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host.common_header.K32L2B31A" name="USB Host Common Header" brief="Middleware usb host common_header" version="2.9.0" full_name="USB Host Common Header" devices="K32L2B31xxxxA" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.K32L2B31A"/>
+          <component_dependency value="middleware.usb.common_header.K32L2B31A"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../host" project_relative_path="host" type="c_include">
+        <files mask="usb_host.h"/>
+        <files mask="usb_host_hci.h"/>
+        <files mask="usb_host_devices.h"/>
+        <files mask="usb_host_framework.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_common_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host" project_relative_path="host" type="c_include"/>
+      </include_paths>
+    </component>
+  </components>
+</ksdk:manifest>

@@ -1,8 +1,14 @@
 /*!
 @page middleware_log Middleware Change Log
 
-@section USB USB stack for MCUXpresso SDK  
-  The current version of USB stack is 2.8.4.
+@section USB USB stack for MCUXpresso SDK
+  The current version of USB stack is 2.9.0.
+  - 2.9.0
+    - Improvement:
+      - Change ROOT2 as enabled by default in device stack.
+      - Implement independent frequency adjustment for speaker and recorder of composite audio unified demos.
+      - Fix vulnerability for host stack. CVE number: CVE-2023-38749
+      - Delete deprecated enet driver function for enet adapter.
   - 2.8.4
     - Improvement:
       - Add the new netc adatper for the new netc driver.

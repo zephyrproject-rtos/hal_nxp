@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_middleware_nxp_usb_LPC5506CPXXXX_manifest_v3_10" name="USB Host, Device, OTG Stack" brief="Host, Device, OTG" format_version="3.10" api_version="2.0.0" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
+  <!--Timestamp (UTC): 2023-01-09 15:36:46.694063-->
+  <!--This manifest is generated based on sdk repo commit: dcc319a0105d6a9ebec0bc625dd7aae64718cd3d-->
+  <externalDefinitions>
+    <definition extID="LPC5506CPXXXX"/>
+    <definition extID="component.osa.LPC5506CPXXXX"/>
+    <definition extID="cm33_core0_LPC5506CPXXXX"/>
+  </externalDefinitions>
+  <ksdk id="MCUXpressoSDK2130_middleware_nxp_usb_LPC5506CPXXXX_manifest_v3_10" name="MCUXpressoSDK2130_middleware_nxp_usb_LPC5506CPXXXX_manifest_v3_10" version="2.13.0"/>
+  <components>
+    <component id="middleware.usb.common_header.LPC5506CPXXXX" name="USB Common Header" brief="Middleware usb common_header" version="2.8.4" full_name="USB Common Header" devices="LPC5506CPXXXX" device_cores="cm33_core0_LPC5506CPXXXX" category="USB/USB Common Header" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="component.osa.LPC5506CPXXXX"/>
+      </dependencies>
+      <source relative_path="./include" project_relative_path="include" type="c_include">
+        <files mask="usb.h"/>
+        <files mask="usb_misc.h"/>
+        <files mask="usb_spec.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.common_header.LPC5506CPXXXX" name="USB Device Common Header" brief="Middleware usb device common_header" version="2.8.4" full_name="USB Device Common Header" devices="LPC5506CPXXXX" device_cores="cm33_core0_LPC5506CPXXXX" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.LPC5506CPXXXX"/>
+          <component_dependency value="middleware.usb.common_header.LPC5506CPXXXX"/>
+        </all>
+      </dependencies>
+      <source relative_path="./device" project_relative_path="device/include" type="c_include">
+        <files mask="usb_device.h"/>
+      </source>
+      <source relative_path="./device" project_relative_path="device/source" type="c_include">
+        <files mask="usb_device_dci.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./device" project_relative_path="device/include" type="c_include"/>
+        <include_path relative_path="./device" project_relative_path="device/source" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host.common_header.LPC5506CPXXXX" name="USB Host Common Header" brief="Middleware usb host common_header" version="2.8.4" full_name="USB Host Common Header" devices="LPC5506CPXXXX" device_cores="cm33_core0_LPC5506CPXXXX" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.LPC5506CPXXXX"/>
+          <component_dependency value="middleware.usb.common_header.LPC5506CPXXXX"/>
+        </all>
+      </dependencies>
+      <source relative_path="./host" project_relative_path="host" type="c_include">
+        <files mask="usb_host.h"/>
+        <files mask="usb_host_hci.h"/>
+        <files mask="usb_host_devices.h"/>
+        <files mask="usb_host_framework.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host" project_relative_path="host" type="c_include"/>
+      </include_paths>
+    </component>
+  </components>
+</ksdk:manifest>

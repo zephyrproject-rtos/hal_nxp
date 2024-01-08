@@ -2299,13 +2299,11 @@ usb_status_t USB_DeviceLpc3511IpControl(usb_device_controller_handle controllerH
         case kUSB_DeviceControlRun:
             lpc3511IpState->registerBase->DEVCMDSTAT |= (USB_LPC3511IP_DEVCMDSTAT_DCON_MASK);
             lpc3511IpState->registerBase->DEVCMDSTAT &= ~(USB_LPC3511IP_DEVCMDSTAT_FORCE_NEEDCLK_MASK);
-            error = kStatus_USB_Success;
             break;
 
         case kUSB_DeviceControlStop:
             lpc3511IpState->registerBase->DEVCMDSTAT |= USB_LPC3511IP_DEVCMDSTAT_FORCE_NEEDCLK_MASK;
             lpc3511IpState->registerBase->DEVCMDSTAT &= (~USB_LPC3511IP_DEVCMDSTAT_DCON_MASK);
-            error = kStatus_USB_Success;
             break;
 
         case kUSB_DeviceControlEndpointInit:

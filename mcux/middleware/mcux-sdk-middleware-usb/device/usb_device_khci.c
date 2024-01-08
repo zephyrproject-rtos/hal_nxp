@@ -1458,6 +1458,9 @@ usb_status_t USB_DeviceKhciCancel(usb_device_controller_handle khciHandle, uint8
 usb_status_t USB_DeviceKhciControl(usb_device_controller_handle khciHandle, usb_device_control_type_t type, void *param)
 {
     usb_device_khci_state_struct_t *khciState = (usb_device_khci_state_struct_t *)khciHandle;
+#if defined(USB_DEVICE_CONFIG_GET_SOF_COUNT) && (USB_DEVICE_CONFIG_GET_SOF_COUNT > 0U)
+    uint32_t *temp32;
+#endif
     uint16_t *temp16;
     uint8_t *temp8;
     uint8_t count;
@@ -1640,7 +1643,15 @@ usb_status_t USB_DeviceKhciControl(usb_device_controller_handle khciHandle, usb_
             status = kStatus_USB_Success;
             break;
 #endif
-
+#if defined(USB_DEVICE_CONFIG_GET_SOF_COUNT) && (USB_DEVICE_CONFIG_GET_SOF_COUNT > 0U)
+        case kUSB_DeviceControlGetCurrentFrameCount:
+            if (NULL != param)
+            {
+                temp32  = (uint32_t *)param;
+                *temp32 = (uint32_t)((khciState->registerBase->FRMNUMH << 8U) | (khciState->registerBase->FRMNUML));
+            }
+            break;
+#endif
         default:
             /*no action*/
             break;

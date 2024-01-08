@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_middleware_nxp_usb_LPC55S06_manifest_v3_13" name="USB Host, Device, OTG Stack" brief="Host, Device, OTG" format_version="3.13" api_version="2.0.0" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.13.xsd">
+
+  <externalDefinitions>
+    <definition extID="LPC55S06"/>
+    <definition extID="component.osa.LPC55S06"/>
+    <definition extID="armgcc"/>
+  </externalDefinitions>
+  <ksdk id="MCUXpressoSDK2140_middleware_nxp_usb_LPC55S06_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_usb_LPC55S06_manifest_v3_13" version="2.14.0"/>
+  <components>
+    <component id="middleware.usb.common_header.LPC55S06" name="USB Common Header" brief="Middleware usb common_header" version="2.9.0" full_name="USB Common Header" devices="LPC55S06" category="USB/USB Common Header" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="component.osa.LPC55S06"/>
+      </dependencies>
+      <source relative_path="../../include" project_relative_path="include" type="c_include">
+        <files mask="usb.h"/>
+        <files mask="usb_misc.h"/>
+        <files mask="usb_spec.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_common_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.common_header.LPC55S06" name="USB Device Common Header" brief="Middleware usb device common_header" version="2.9.0" full_name="USB Device Common Header" devices="LPC55S06" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.LPC55S06"/>
+          <component_dependency value="middleware.usb.common_header.LPC55S06"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../device" project_relative_path="device/include" type="c_include">
+        <files mask="usb_device.h"/>
+      </source>
+      <source relative_path="../../device" project_relative_path="device/source" type="c_include">
+        <files mask="usb_device_dci.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_common_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../device" project_relative_path="device/include" type="c_include"/>
+        <include_path relative_path="../../device" project_relative_path="device/source" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host.common_header.LPC55S06" name="USB Host Common Header" brief="Middleware usb host common_header" version="2.9.0" full_name="USB Host Common Header" devices="LPC55S06" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.LPC55S06"/>
+          <component_dependency value="middleware.usb.common_header.LPC55S06"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../host" project_relative_path="host" type="c_include">
+        <files mask="usb_host.h"/>
+        <files mask="usb_host_hci.h"/>
+        <files mask="usb_host_devices.h"/>
+        <files mask="usb_host_framework.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_common_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host" project_relative_path="host" type="c_include"/>
+      </include_paths>
+    </component>
+  </components>
+</ksdk:manifest>
