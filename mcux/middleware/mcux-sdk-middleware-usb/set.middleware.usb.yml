@@ -1,0 +1,2818 @@
+---
+set.middleware.usb:
+  section-type: set
+  belong_to: set.middleware.usb
+  contents:
+    repo_base_path: middleware/usb
+    files:
+    - source: middleware/usb/ChangeLogKSDK.txt
+      type: changelog
+    package_base_path: middleware/usb
+  section_info:
+    fixed_id: nxp_usb
+    type: middleware
+    version: 2.9.0
+    display_name: USB Host, Device, OTG Stack
+    description: Host, Device, OTG
+    set_location:
+      repo_base_path: middleware/usb
+    vendor: NXP
+    product:
+      kex_package:
+        kex_web_ui:
+          ui_control: true
+          ui_release_specific: true
+          ui_control_default: false
+          ui_category: Middleware
+        scr:
+        - scr.middleware.usb
+      cmsis_pack:
+        vendor: NXP
+        supported: true
+        pack_root:
+          pack_type: SWP
+          pack_name: USB
+          pack_version: 1.0.0
+        scr:
+        - scr.middleware.usb
+    component_taxonomy:
+      usb.device:
+        cclass: USB
+        cgroup: USB Device
+      usb.host:
+        cclass: USB
+        cgroup: USB Host
+      usb.common.header:
+        cclass: USB
+        cgroup: USB Common Header
+      usb.phy:
+        cclass: USB
+        cgroup: USB PHY
+      usb.device.stack:
+        cclass: USB
+        cgroup: USB Device
+      usb.host.stack:
+        cclass: USB
+        cgroup: USB Host
+scr.middleware.usb:
+  belong_to: set.middleware.usb
+  section-type: scr
+  contents:
+    license:
+    - license.bsd-3
+    Name: USB
+    Version: 2.9.0
+    Format: source code
+    Description: NXP USB stack. This is a version of the USB stack that has been integrated
+      with the MCUXpresso SDK.
+    Location: middleware/usb
+    Origin: NXP (BSD-3-Clause)
+docs.USB:
+  section-type: component
+  meta-name: docs.USB
+  contents:
+    repo_base_path: middleware/usb/docs
+    project_base_path: USB
+    files:
+    - source: middleware/usb/docs/MCUXpresso SDK USB Stack User's Guide.pdf
+      components: middleware.usb.host.stack
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: doc
+    - source: middleware/usb/docs/MCUXpresso SDK USB Stack OTG Reference Manual.pdf
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: doc
+    - source: middleware/usb/docs/MCUXpresso SDK USB Stack Host Reference Manual.pdf
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: doc
+    - source: middleware/usb/docs/MCUXpresso SDK USB Stack Composite Host User's Guide.pdf
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: doc
+    - source: middleware/usb/docs/Steps to migrate from M4 USB project to M0p USB
+        example project.pdf
+      boards: frdmk32l3a6
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: doc
+    - source: middleware/usb/docs/Enable More USB Examples on M4 Core for RT1170 or
+        M7 Core for RT1180.pdf
+      boards: evkmimxrt1170
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: doc
+    - source: middleware/usb/docs/MCUXpresso SDK USB Type-C PD Stack Reference Manual.pdf
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: doc
+    - source: middleware/usb/docs/MCUXpresso SDK USB Type-C Power Delivery Stack User's
+        Guide.pdf
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: doc
+    package_base_path: middleware/usb/docs
+  belong_to: set.middleware.usb
+  section_info:
+    version: 1.0.0
+    type: documentation
+    full_name: Docs usb
+    description: Docs usb
+    taxonomy:
+      cclass: docs
+      cgroup: USB
+    product:
+      cmsis_pack:
+        supported: false
+    display_name: USB
+    vendor: NXP
+  cmake_module_name: docs_USB
+middleware.usb.device.khci_config_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: source
+    cc-include:
+    - repo_relative_path: output/npw/device_config/khci
+      project_relative_path: generated
+      target_file:
+      - usb_device_config.h
+      package_relative_path: output/npw/device_config/khci
+    files:
+    - source: middleware/usb/output/npw/device_config/khci/usb_device_config.h
+      project_relative_path: generated
+      repo_relative_path: output/npw/device_config/khci
+      package_relative_path: output/npw/device_config/khci
+      type: c_include
+      config: true
+    - source: middleware/usb/middleware_usb_device_khci_config_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    description: USB device khci config header
+    version: 2.9.0
+    type: project_template
+    full_name: USB device khci config header
+    display_name: USB device khci config header
+    taxonomy:
+      csub: khci_config_header
+      cclass: USB
+      cgroup: USB Device
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - K32L2B11xxxxA
+      - K32L2B21xxxxA
+      - K32L2B31xxxxA
+      - MK22FN128xxx10
+      - MK22FN128xxx12
+      - MK22FN256xxx12
+      - MK22FN512xxx12
+      - K32L2A31xxxxA
+      - K32L2A41xxxxA
+      - K32L3A60xxx
+  meta-name: middleware.usb.device.khci_config_header
+  cmake_module_name: middleware_usb_device_khci_config_header
+middleware.usb.device.ip3511fs_config_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: source
+    cc-include:
+    - repo_relative_path: output/npw/device_config/ip3511fs
+      project_relative_path: generated
+      target_file:
+      - usb_device_config.h
+      package_relative_path: output/npw/device_config/ip3511fs
+    files:
+    - source: middleware/usb/output/npw/device_config/ip3511fs/usb_device_config.h
+      project_relative_path: generated
+      repo_relative_path: output/npw/device_config/ip3511fs
+      package_relative_path: output/npw/device_config/ip3511fs
+      type: c_include
+      config: true
+    - source: middleware/usb/middleware_usb_device_ip3511fs_config_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    description: USB device ip3511fs config header
+    version: 2.9.0
+    type: project_template
+    full_name: USB device ip3511fs config header
+    display_name: USB device ip3511fs config header
+    taxonomy:
+      csub: ip3511fs_config_header
+      cclass: USB
+      cgroup: USB Device
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - LPC51U68
+      - LPC54005
+      - LPC54016
+      - LPC54018
+      - LPC54018J2M
+      - LPC54018J4M
+      - LPC54605J512
+      - LPC54605J256
+      - LPC54606J512
+      - LPC54606J256
+      - LPC54607J256
+      - LPC54607J512
+      - LPC54608J512
+      - LPC54616J512
+      - LPC54616J256
+      - LPC54618J512
+      - LPC54628J512
+      - LPC54S005
+      - LPC54S016
+      - LPC54S018
+      - LPC54S018J2M
+      - LPC54S018J4M
+      - LPC5512
+      - LPC5514
+      - LPC5516
+      - LPC5526
+      - LPC5528
+      - LPC55S14
+      - LPC55S16
+      - LPC55S26
+      - LPC55S28
+      - LPC55S66
+      - LPC55S69
+  meta-name: middleware.usb.device.ip3511fs_config_header
+  cmake_module_name: middleware_usb_device_ip3511fs_config_header
+middleware.usb.device.ip3511hs_config_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: source
+    cc-include:
+    - repo_relative_path: output/npw/device_config/ip3511hs
+      project_relative_path: generated
+      target_file:
+      - usb_device_config.h
+      package_relative_path: output/npw/device_config/ip3511hs
+    files:
+    - source: middleware/usb/output/npw/device_config/ip3511hs/usb_device_config.h
+      project_relative_path: generated
+      repo_relative_path: output/npw/device_config/ip3511hs
+      package_relative_path: output/npw/device_config/ip3511hs
+      type: c_include
+      config: true
+    - source: middleware/usb/middleware_usb_device_ip3511hs_config_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    description: USB device ip3511hs config header
+    version: 2.9.0
+    type: project_template
+    full_name: USB device ip3511hs config header
+    display_name: USB device ip3511hs config header
+    taxonomy:
+      csub: ip3511hs_config_header
+      cclass: USB
+      cgroup: USB Device
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - LPC54005
+      - LPC54016
+      - LPC54018
+      - LPC54018J2M
+      - LPC54018J4M
+      - LPC54605J512
+      - LPC54605J256
+      - LPC54606J512
+      - LPC54606J256
+      - LPC54607J256
+      - LPC54607J512
+      - LPC54608J512
+      - LPC54616J512
+      - LPC54616J256
+      - LPC54618J512
+      - LPC54628J512
+      - LPC54S005
+      - LPC54S016
+      - LPC54S018
+      - LPC54S018J2M
+      - LPC54S018J4M
+      - LPC5514
+      - LPC5516
+      - LPC5526
+      - LPC5528
+      - LPC55S14
+      - LPC55S16
+      - LPC55S26
+      - LPC55S28
+      - LPC55S66
+      - LPC55S69
+      - MIMXRT533S
+      - MIMXRT555S
+      - MIMXRT595S
+      - MIMXRT633S
+      - MIMXRT685S
+  meta-name: middleware.usb.device.ip3511hs_config_header
+  cmake_module_name: middleware_usb_device_ip3511hs_config_header
+middleware.usb.device.ehci_config_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: source
+    cc-include:
+    - repo_relative_path: output/npw/device_config/ehci
+      project_relative_path: generated
+      target_file:
+      - usb_device_config.h
+      package_relative_path: output/npw/device_config/ehci
+    files:
+    - source: middleware/usb/output/npw/device_config/ehci/usb_device_config.h
+      project_relative_path: generated
+      repo_relative_path: output/npw/device_config/ehci
+      package_relative_path: output/npw/device_config/ehci
+      type: c_include
+      config: true
+    - source: middleware/usb/middleware_usb_device_ehci_config_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    description: USB device ehci config header
+    version: 2.9.0
+    type: project_template
+    full_name: USB device ehci config header
+    display_name: USB device ehci config header
+    taxonomy:
+      csub: ehci_config_header
+      cclass: USB
+      cgroup: USB Device
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - MIMXRT1041xxxxB
+      - MIMXRT1042xxxxB
+      - MIMXRT1051xxxxB
+      - MIMXRT1052xxxxB
+      - MIMXRT1061xxxxA
+      - MIMXRT1061xxxxB
+      - MIMXRT1062xxxxA
+      - MIMXRT1062xxxxB
+      - MIMXRT1064xxxxA
+      - MIMXRT1011xxxxx
+      - MIMXRT1015xxxxx
+      - MIMXRT1021xxxxx
+      - MIMXRT1024xxxxx
+      - MIMXRT1165xxxxx
+      - MIMXRT1166xxxxx
+      - MIMXRT1171xxxxx
+      - MIMXRT1172xxxxx
+      - MIMXRT1173xxxxx
+      - MIMXRT1175xxxxx
+      - MIMXRT1176xxxxx
+  meta-name: middleware.usb.device.ehci_config_header
+  cmake_module_name: middleware_usb_device_ehci_config_header
+middleware.usb.common_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+    files:
+    - source: middleware/usb/include/usb.h
+      repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+      type: c_include
+    - source: middleware/usb/include/usb_misc.h
+      repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+      type: c_include
+    - source: middleware/usb/include/usb_spec.h
+      repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+      type: c_include
+    - source: middleware/usb/middleware_usb_common_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Common Header
+    description: Middleware usb common_header
+    taxonomy:
+      csub: common_header
+      cclass: USB
+      cgroup: USB Common Header
+    display_name: USB Common Header
+    vendor: NXP
+  dependency:
+    allOf:
+    - component.osa
+  meta-name: middleware.usb.common_header
+  cmake_module_name: middleware_usb_common_header
+middleware.usb.device.common_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device
+      project_relative_path: device/include
+      package_relative_path: device
+    - repo_relative_path: device
+      project_relative_path: device/source
+      package_relative_path: device
+    files:
+    - source: middleware/usb/device/usb_device.h
+      project_relative_path: device/include
+      repo_relative_path: device
+      package_relative_path: device
+      type: c_include
+    - source: middleware/usb/device/usb_device_dci.h
+      project_relative_path: device/source
+      repo_relative_path: device
+      package_relative_path: device
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_common_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device Common Header
+    description: Middleware usb device common_header
+    taxonomy:
+      csub: common_header
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device Common Header
+    vendor: NXP
+  dependency:
+    allOf:
+    - component.osa
+    - middleware.usb.common_header
+  meta-name: middleware.usb.device.common_header
+  cmake_module_name: middleware_usb_device_common_header
+middleware.usb.device.ip3511fs:
+  section-type: component
+  meta-name: middleware.usb.device_controller_ip3511fs
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device
+      project_relative_path: device/source/lpcip3511
+      package_relative_path: device
+    - repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+    files:
+    - source: middleware/usb/device/usb_device_lpcip3511.c
+      project_relative_path: device/source/lpcip3511
+      repo_relative_path: device
+      package_relative_path: device
+      type: src
+    - source: middleware/usb/device/usb_device_lpcip3511.h
+      project_relative_path: device/source/lpcip3511
+      repo_relative_path: device
+      package_relative_path: device
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_ip3511fs.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device IP3511FS Controller Driver(FS)
+    description: Middleware usb device ip3511fs
+    taxonomy:
+      csub: ip3511fs
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device IP3511FS Controller Driver(FS)
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - LPC51U68
+      - LPC54005
+      - LPC54016
+      - LPC54018
+      - LPC54018J2M
+      - LPC54018J4M
+      - LPC54605J512
+      - LPC54605J256
+      - LPC54606J512
+      - LPC54606J256
+      - LPC54607J256
+      - LPC54607J512
+      - LPC54608J512
+      - LPC54616J512
+      - LPC54616J256
+      - LPC54618J512
+      - LPC54628J512
+      - LPC54S005
+      - LPC54S016
+      - LPC54S018
+      - LPC54S018J2M
+      - LPC54S018J4M
+      - LPC5512
+      - LPC5514
+      - LPC5516
+      - LPC5526
+      - LPC5528
+      - LPC55S14
+      - LPC55S16
+      - LPC55S26
+      - LPC55S28
+      - LPC55S66
+      - LPC55S69
+    - middleware.usb.device.ip3511fs_config_header
+    - middleware.usb.device.common_header
+  cmake_module_name: middleware_usb_device_ip3511fs
+middleware.usb.device.ip3511hs:
+  section-type: component
+  meta-name: middleware.usb.device_controller_ip3511hs
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device
+      project_relative_path: device/source/lpcip3511
+      package_relative_path: device
+    - repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+    files:
+    - source: middleware/usb/device/usb_device_lpcip3511.c
+      project_relative_path: device/source/lpcip3511
+      repo_relative_path: device
+      package_relative_path: device
+      type: src
+    - source: middleware/usb/device/usb_device_lpcip3511.h
+      project_relative_path: device/source/lpcip3511
+      repo_relative_path: device
+      package_relative_path: device
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_ip3511hs.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device IP3511HS Controller Driver(HS)
+    description: Middleware usb device ip3511hs
+    taxonomy:
+      csub: ip3511hs
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device IP3511HS Controller Driver(HS)
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - LPC54005
+      - LPC54016
+      - LPC54018
+      - LPC54018J2M
+      - LPC54018J4M
+      - LPC54605J512
+      - LPC54605J256
+      - LPC54606J512
+      - LPC54606J256
+      - LPC54607J256
+      - LPC54607J512
+      - LPC54608J512
+      - LPC54616J512
+      - LPC54616J256
+      - LPC54618J512
+      - LPC54628J512
+      - LPC54S005
+      - LPC54S016
+      - LPC54S018
+      - LPC54S018J2M
+      - LPC54S018J4M
+      - LPC5514
+      - LPC5516
+      - LPC5526
+      - LPC5528
+      - LPC55S14
+      - LPC55S16
+      - LPC55S26
+      - LPC55S28
+      - LPC55S66
+      - LPC55S69
+      - MIMXRT533S
+      - MIMXRT555S
+      - MIMXRT595S
+      - MIMXRT633S
+      - MIMXRT685S
+    - middleware.usb.device.ip3511hs_config_header
+    - middleware.usb.device.common_header
+    - anyOf:
+      - allOf:
+        - middleware.usb.phy
+        - device_id:
+          - MCIMX7U3xxxxx
+          - MCIMX7U5xxxxx
+          - MIMXRT1011xxxxx
+          - MIMXRT1015xxxxx
+          - MIMXRT1021xxxxx
+          - MIMXRT1024xxxxx
+          - MIMXRT1041xxxxB
+          - MIMXRT1042xxxxB
+          - MIMXRT1051xxxxB
+          - MIMXRT1052xxxxB
+          - MIMXRT1061xxxxA
+          - MIMXRT1061xxxxB
+          - MIMXRT1062xxxxA
+          - MIMXRT1062xxxxB
+          - MIMXRT1064xxxxA
+          - MIMXRT1165xxxxx
+          - MIMXRT1166xxxxx
+          - MIMXRT1171xxxxx
+          - MIMXRT1172xxxxx
+          - MIMXRT1173xxxxx
+          - MIMXRT1175xxxxx
+          - MIMXRT1176xxxxx
+          - MIMXRT533S
+          - MIMXRT555S
+          - MIMXRT595S
+          - MIMXRT633S
+          - MIMXRT685S
+          - LPC5514
+          - LPC5516
+          - LPC5526
+          - LPC5528
+          - LPC55S14
+          - LPC55S16
+          - LPC55S26
+          - LPC55S28
+          - LPC55S66
+          - LPC55S69
+      - not:
+          device_id:
+          - MCIMX7U3xxxxx
+          - MCIMX7U5xxxxx
+          - MIMXRT1011xxxxx
+          - MIMXRT1015xxxxx
+          - MIMXRT1021xxxxx
+          - MIMXRT1024xxxxx
+          - MIMXRT1041xxxxB
+          - MIMXRT1042xxxxB
+          - MIMXRT1051xxxxB
+          - MIMXRT1052xxxxB
+          - MIMXRT1061xxxxA
+          - MIMXRT1061xxxxB
+          - MIMXRT1062xxxxA
+          - MIMXRT1062xxxxB
+          - MIMXRT1064xxxxA
+          - MIMXRT1165xxxxx
+          - MIMXRT1166xxxxx
+          - MIMXRT1171xxxxx
+          - MIMXRT1172xxxxx
+          - MIMXRT1173xxxxx
+          - MIMXRT1175xxxxx
+          - MIMXRT1176xxxxx
+          - MIMXRT533S
+          - MIMXRT555S
+          - MIMXRT595S
+          - MIMXRT633S
+          - MIMXRT685S
+          - LPC5514
+          - LPC5516
+          - LPC5526
+          - LPC5528
+          - LPC55S14
+          - LPC55S16
+          - LPC55S26
+          - LPC55S28
+          - LPC55S66
+          - LPC55S69
+  cmake_module_name: middleware_usb_device_ip3511hs
+middleware.usb.device.khci:
+  section-type: component
+  meta-name: middleware.usb.device_controller_khci
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device
+      project_relative_path: device/source/khci
+      package_relative_path: device
+    - repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+    files:
+    - source: middleware/usb/device/usb_device_khci.c
+      project_relative_path: device/source/khci
+      repo_relative_path: device
+      package_relative_path: device
+      type: src
+    - source: middleware/usb/device/usb_device_khci.h
+      project_relative_path: device/source/khci
+      repo_relative_path: device
+      package_relative_path: device
+      type: c_include
+    - source: middleware/usb/include/usb.h
+      repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_khci.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device KHCI Controller Driver(FS)
+    description: Middleware usb device khci
+    taxonomy:
+      csub: khci
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device KHCI Controller Driver(FS)
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - K32L2B11xxxxA
+      - K32L2B21xxxxA
+      - K32L2B31xxxxA
+      - MK22FN128xxx10
+      - MK22FN128xxx12
+      - MK22FN256xxx12
+      - MK22FN512xxx12
+      - K32L2A31xxxxA
+      - K32L2A41xxxxA
+      - K32L3A60xxx
+    - middleware.usb.device.khci_config_header
+    - middleware.usb.device.common_header
+  cmake_module_name: middleware_usb_device_khci
+middleware.usb.device.ehci:
+  section-type: component
+  meta-name: middleware.usb.device_controller_ehci
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device
+      project_relative_path: device/source/ehci
+      package_relative_path: device
+    - repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+    files:
+    - source: middleware/usb/device/usb_device_ehci.c
+      project_relative_path: device/source/ehci
+      repo_relative_path: device
+      package_relative_path: device
+      type: src
+    - source: middleware/usb/device/usb_device_ehci.h
+      project_relative_path: device/source/ehci
+      repo_relative_path: device
+      package_relative_path: device
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_ehci.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device EHCI Controller Driver(HS)
+    description: Middleware usb device ehci
+    taxonomy:
+      csub: ehci
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device EHCI Controller Driver(HS)
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - MIMXRT1041xxxxB
+      - MIMXRT1042xxxxB
+      - MIMXRT1051xxxxB
+      - MIMXRT1052xxxxB
+      - MIMXRT1061xxxxA
+      - MIMXRT1061xxxxB
+      - MIMXRT1062xxxxA
+      - MIMXRT1062xxxxB
+      - MIMXRT1064xxxxA
+      - MIMXRT1011xxxxx
+      - MIMXRT1015xxxxx
+      - MIMXRT1021xxxxx
+      - MIMXRT1024xxxxx
+      - MIMXRT1165xxxxx
+      - MIMXRT1166xxxxx
+      - MIMXRT1171xxxxx
+      - MIMXRT1172xxxxx
+      - MIMXRT1173xxxxx
+      - MIMXRT1175xxxxx
+      - MIMXRT1176xxxxx
+    - middleware.usb.device.ehci_config_header
+    - middleware.usb.device.common_header
+    - anyOf:
+      - allOf:
+        - middleware.usb.phy
+        - device_id:
+          - MCIMX7U3xxxxx
+          - MCIMX7U5xxxxx
+          - MIMXRT1011xxxxx
+          - MIMXRT1015xxxxx
+          - MIMXRT1021xxxxx
+          - MIMXRT1024xxxxx
+          - MIMXRT1041xxxxB
+          - MIMXRT1042xxxxB
+          - MIMXRT1051xxxxB
+          - MIMXRT1052xxxxB
+          - MIMXRT1061xxxxA
+          - MIMXRT1061xxxxB
+          - MIMXRT1062xxxxA
+          - MIMXRT1062xxxxB
+          - MIMXRT1064xxxxA
+          - MIMXRT1165xxxxx
+          - MIMXRT1166xxxxx
+          - MIMXRT1171xxxxx
+          - MIMXRT1172xxxxx
+          - MIMXRT1173xxxxx
+          - MIMXRT1175xxxxx
+          - MIMXRT1176xxxxx
+          - MIMXRT533S
+          - MIMXRT555S
+          - MIMXRT595S
+          - MIMXRT633S
+          - MIMXRT685S
+          - LPC5514
+          - LPC5516
+          - LPC5526
+          - LPC5528
+          - LPC55S14
+          - LPC55S16
+          - LPC55S26
+          - LPC55S28
+          - LPC55S66
+          - LPC55S69
+      - not:
+          device_id:
+          - MCIMX7U3xxxxx
+          - MCIMX7U5xxxxx
+          - MIMXRT1011xxxxx
+          - MIMXRT1015xxxxx
+          - MIMXRT1021xxxxx
+          - MIMXRT1024xxxxx
+          - MIMXRT1041xxxxB
+          - MIMXRT1042xxxxB
+          - MIMXRT1051xxxxB
+          - MIMXRT1052xxxxB
+          - MIMXRT1061xxxxA
+          - MIMXRT1061xxxxB
+          - MIMXRT1062xxxxA
+          - MIMXRT1062xxxxB
+          - MIMXRT1064xxxxA
+          - MIMXRT1165xxxxx
+          - MIMXRT1166xxxxx
+          - MIMXRT1171xxxxx
+          - MIMXRT1172xxxxx
+          - MIMXRT1173xxxxx
+          - MIMXRT1175xxxxx
+          - MIMXRT1176xxxxx
+          - MIMXRT533S
+          - MIMXRT555S
+          - MIMXRT595S
+          - MIMXRT633S
+          - MIMXRT685S
+          - LPC5514
+          - LPC5516
+          - LPC5526
+          - LPC5528
+          - LPC55S14
+          - LPC55S16
+          - LPC55S26
+          - LPC55S28
+          - LPC55S66
+          - LPC55S69
+  cmake_module_name: middleware_usb_device_ehci
+middleware.usb.phy:
+  section-type: component
+  meta-name: middleware.usb.phy
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: phy
+      project_relative_path: phy
+      package_relative_path: phy
+    files:
+    - source: middleware/usb/phy/usb_phy.c
+      repo_relative_path: phy
+      project_relative_path: phy
+      package_relative_path: phy
+      type: src
+    - source: middleware/usb/phy/usb_phy.h
+      repo_relative_path: phy
+      project_relative_path: phy
+      package_relative_path: phy
+      type: c_include
+    - source: middleware/usb/middleware_usb_phy.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB PHY
+    description: Middleware usb phy
+    taxonomy:
+      csub: phy
+      cclass: USB
+      cgroup: USB PHY
+    display_name: USB PHY
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - MCIMX7U3xxxxx
+      - MCIMX7U5xxxxx
+      - MIMXRT1011xxxxx
+      - MIMXRT1015xxxxx
+      - MIMXRT1021xxxxx
+      - MIMXRT1024xxxxx
+      - MIMXRT1041xxxxB
+      - MIMXRT1042xxxxB
+      - MIMXRT1051xxxxB
+      - MIMXRT1052xxxxB
+      - MIMXRT1061xxxxA
+      - MIMXRT1061xxxxB
+      - MIMXRT1062xxxxA
+      - MIMXRT1062xxxxB
+      - MIMXRT1064xxxxA
+      - MIMXRT1165xxxxx
+      - MIMXRT1166xxxxx
+      - MIMXRT1171xxxxx
+      - MIMXRT1172xxxxx
+      - MIMXRT1173xxxxx
+      - MIMXRT1175xxxxx
+      - MIMXRT1176xxxxx
+      - MIMXRT533S
+      - MIMXRT555S
+      - MIMXRT595S
+      - MIMXRT633S
+      - MIMXRT685S
+      - LPC5514
+      - LPC5516
+      - LPC5526
+      - LPC5528
+      - LPC55S14
+      - LPC55S16
+      - LPC55S26
+      - LPC55S28
+      - LPC55S66
+      - LPC55S69
+    - middleware.usb.common_header
+    - anyOf:
+      - allOf:
+        - driver.memory
+        - device_id:
+          - MIMXRT1165xxxxx
+          - MIMXRT1166xxxxx
+          - MIMXRT1171xxxxx
+          - MIMXRT1172xxxxx
+          - MIMXRT1173xxxxx
+          - MIMXRT1175xxxxx
+          - MIMXRT1176xxxxx
+      - not:
+          device_id:
+          - MIMXRT1165xxxxx
+          - MIMXRT1166xxxxx
+          - MIMXRT1171xxxxx
+          - MIMXRT1172xxxxx
+          - MIMXRT1173xxxxx
+          - MIMXRT1175xxxxx
+          - MIMXRT1176xxxxx
+  cmake_module_name: middleware_usb_phy
+middleware.usb.device.stack.external:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device/class
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class
+    - repo_relative_path: device
+      package_relative_path: output/source/device
+      project_relative_path: device/source
+    - repo_relative_path: output/source/device/class
+      project_relative_path: output/source/device/class
+      package_relative_path: output/source/device/class
+    - repo_relative_path: output/source/device
+      project_relative_path: output/source/device
+      package_relative_path: output/source/device
+    files:
+    - source: middleware/usb/output/source/device/class/usb_device_class.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_class.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/output/source/device/usb_device_ch9.c
+      package_relative_path: output/source/device
+      project_relative_path: device/source
+      repo_relative_path: device
+      type: src
+    - source: middleware/usb/output/source/device/usb_device_ch9.h
+      package_relative_path: output/source/device
+      project_relative_path: device/source
+      repo_relative_path: device
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_stack_external.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device Stack
+    description: Middleware usb device stack external
+    taxonomy:
+      csub: stack
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device Stack
+    vendor: NXP
+  dependency:
+    allOf:
+    - component.osa
+    - middleware.usb.device.controller.driver
+  meta-name: middleware.usb.device.stack.external
+  cmake_module_name: middleware_usb_device_stack_external
+middleware.usb.device.audio.external:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device/class
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/audio
+    - repo_relative_path: output/source/device/class
+      project_relative_path: output/source/device/class
+      package_relative_path: output/source/device/class
+    files:
+    - source: middleware/usb/output/source/device/class/usb_device_audio.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/audio
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_audio.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/audio
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_audio_external.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device Audio
+    description: Middleware usb device audio external
+    taxonomy:
+      csub: audio
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device Audio
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.device.stack.external
+  meta-name: middleware.usb.device.audio.external
+  cmake_module_name: middleware_usb_device_audio_external
+middleware.usb.device.cdc.external:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device/class
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/cdc
+    - repo_relative_path: output/source/device/class
+      project_relative_path: output/source/device/class
+      package_relative_path: output/source/device/class
+    files:
+    - source: middleware/usb/output/source/device/class/usb_device_cdc_acm.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/cdc
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_cdc_acm.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/cdc
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_cdc_external.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device CDC
+    description: Middleware usb device cdc external
+    taxonomy:
+      csub: cdc
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device CDC
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.device.stack.external
+  meta-name: middleware.usb.device.cdc.external
+  cmake_module_name: middleware_usb_device_cdc_external
+middleware.usb.device.cdc.rndis.external:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device/class
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/cdc_rndis
+    - repo_relative_path: output/source/device/class
+      project_relative_path: output/source/device/class
+      package_relative_path: output/source/device/class
+    files:
+    - source: middleware/usb/output/source/device/class/usb_device_cdc_rndis.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/cdc_rndis
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_cdc_rndis.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/cdc_rndis
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_cdc_rndis_external.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device CDC RNDIS
+    description: Middleware usb device cdc rndis external
+    taxonomy:
+      csub: cdc rndis
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device CDC RNDIS
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.device.stack.external
+    - middleware.usb.device.cdc.external
+  meta-name: middleware.usb.device.cdc.rndis.external
+  cmake_module_name: middleware_usb_device_cdc_rndis_external
+middleware.usb.device.hid.external:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device/class
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/hid
+    - repo_relative_path: output/source/device/class
+      project_relative_path: output/source/device/class
+      package_relative_path: output/source/device/class
+    files:
+    - source: middleware/usb/output/source/device/class/usb_device_hid.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/hid
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_hid.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/hid
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_hid_external.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device HID
+    description: Middleware usb device hid external
+    taxonomy:
+      csub: hid
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device HID
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.device.stack.external
+  meta-name: middleware.usb.device.hid.external
+  cmake_module_name: middleware_usb_device_hid_external
+middleware.usb.device.dfu.external:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device/class
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/dfu
+    - repo_relative_path: output/source/device/class
+      project_relative_path: output/source/device/class
+      package_relative_path: output/source/device/class
+    files:
+    - source: middleware/usb/output/source/device/class/usb_device_dfu.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/dfu
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_dfu.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/dfu
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_dfu_external.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device DFU
+    description: Middleware usb device dfu external
+    taxonomy:
+      csub: dfu
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device DFU
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.device.stack.external
+  meta-name: middleware.usb.device.dfu.external
+  cmake_module_name: middleware_usb_device_dfu_external
+middleware.usb.device.msd.external:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device/class
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/msc
+    - repo_relative_path: output/source/device/class
+      project_relative_path: output/source/device/class
+      package_relative_path: output/source/device/class
+    files:
+    - source: middleware/usb/output/source/device/class/usb_device_msc.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/msc
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_msc.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/msc
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/output/source/device/class/usb_device_msc_ufi.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/msc
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_msc_ufi.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/msc
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_msd_external.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device MSD
+    description: Middleware usb device msd external
+    taxonomy:
+      csub: msd
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device MSD
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.device.stack.external
+  meta-name: middleware.usb.device.msd.external
+  cmake_module_name: middleware_usb_device_msd_external
+middleware.usb.device.phdc.external:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device/class
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/phdc
+    - repo_relative_path: output/source/device/class
+      project_relative_path: output/source/device/class
+      package_relative_path: output/source/device/class
+    files:
+    - source: middleware/usb/output/source/device/class/usb_device_phdc.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/phdc
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_phdc.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/phdc
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_phdc_external.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device PHDC
+    description: Middleware usb device phdc external
+    taxonomy:
+      csub: phdc
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device PHDC
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.device.stack.external
+  meta-name: middleware.usb.device.phdc.external
+  cmake_module_name: middleware_usb_device_phdc_external
+middleware.usb.device.video.external:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device/class
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/video
+    - repo_relative_path: output/source/device/class
+      project_relative_path: output/source/device/class
+      package_relative_path: output/source/device/class
+    files:
+    - source: middleware/usb/output/source/device/class/usb_device_video.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/video
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_video.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/video
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_video_external.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device Video
+    description: Middleware usb device video external
+    taxonomy:
+      csub: video
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device Video
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.device.stack.external
+  meta-name: middleware.usb.device.video.external
+  cmake_module_name: middleware_usb_device_video_external
+middleware.usb.device.ccid.external:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device/class
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/ccid
+    - repo_relative_path: output/source/device/class
+      project_relative_path: output/source/device/class
+      package_relative_path: output/source/device/class
+    files:
+    - source: middleware/usb/output/source/device/class/usb_device_ccid.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/ccid
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_ccid.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/ccid
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_ccid_external.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device CCID
+    description: Middleware usb device ccid external
+    taxonomy:
+      csub: ccid
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device CCID
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.device.stack.external
+  meta-name: middleware.usb.device.ccid.external
+  cmake_module_name: middleware_usb_device_ccid_external
+middleware.usb.device.printer.external:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device/class
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/printer
+    - repo_relative_path: output/source/device/class
+      project_relative_path: output/source/device/class
+      package_relative_path: output/source/device/class
+    files:
+    - source: middleware/usb/output/source/device/class/usb_device_printer.c
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/printer
+      repo_relative_path: device/class
+      type: src
+    - source: middleware/usb/output/source/device/class/usb_device_printer.h
+      package_relative_path: output/source/device/class
+      project_relative_path: device/class/printer
+      repo_relative_path: device/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_device_printer_external.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device Printer
+    description: Middleware usb device printer external
+    taxonomy:
+      csub: printer
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device Printer
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.device.stack.external
+  meta-name: middleware.usb.device.printer.external
+  cmake_module_name: middleware_usb_device_printer_external
+middleware.usb.device.controller.driver:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: device
+      project_relative_path: device/include
+      package_relative_path: device
+    - repo_relative_path: device
+      project_relative_path: device/source
+      package_relative_path: device
+    files:
+    - source: middleware/usb/device/usb_device.h
+      project_relative_path: device/include
+      repo_relative_path: device
+      package_relative_path: device
+      type: c_include
+    - source: middleware/usb/device/usb_device_dci.c
+      project_relative_path: device/source
+      repo_relative_path: device
+      package_relative_path: device
+      type: src
+    - source: middleware/usb/device/usb_device_dci.h
+      project_relative_path: device/source
+      repo_relative_path: device
+      package_relative_path: device
+      type: c_include
+    - source: middleware/usb/ChangeLogKSDK.txt
+      hidden: true
+      exclude: true
+      repo_relative_path: "./"
+      project_relative_path: "./"
+      package_relative_path: "./"
+      type: doc
+    - source: middleware/usb/middleware_usb_device_controller_driver.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Device Common Controller
+    description: Middleware usb device controller driver
+    taxonomy:
+      csub: driver
+      cclass: USB
+      cgroup: USB Device
+    display_name: USB Device Common Controller
+    vendor: NXP
+  dependency:
+    allOf:
+    - component.osa
+    - anyOf:
+      - middleware.usb.device.khci
+      - middleware.usb.device.ehci
+      - middleware.usb.device.ip3511fs
+      - middleware.usb.device.ip3511hs
+  meta-name: middleware.usb.device.controller.driver
+  cmake_module_name: middleware_usb_device_controller_driver
+middleware.usb.host.khci:
+  section-type: component
+  meta-name: middleware.usb.host_controller_khci
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+    - repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+    files:
+    - source: middleware/usb/host/usb_host_khci.c
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: src
+    - source: middleware/usb/host/usb_host_khci.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_khci.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host KHCI Controller Driver(FS)
+    description: Middleware usb host khci
+    taxonomy:
+      csub: khci
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host KHCI Controller Driver(FS)
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - K32L2A31xxxxA
+      - K32L2A41xxxxA
+      - K32L3A60xxx
+      - MK22FN128xxx10
+      - MK22FN128xxx12
+      - MK22FN256xxx12
+      - MK22FN512xxx12
+    - middleware.usb.host.khci_config_header
+    - middleware.usb.host.common_header
+  cmake_module_name: middleware_usb_host_khci
+middleware.usb.host.ohci:
+  section-type: component
+  meta-name: middleware.usb.host_controller_ohci
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+    - repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+    files:
+    - source: middleware/usb/host/usb_host_ohci.c
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: src
+    - source: middleware/usb/host/usb_host_ohci.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_ohci.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host OHCI Controller Driver(FS)
+    description: Middleware usb host ohci
+    taxonomy:
+      csub: ohci
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host OHCI Controller Driver(FS)
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - LPC54005
+      - LPC54016
+      - LPC54018
+      - LPC54018J2M
+      - LPC54018J4M
+      - LPC54605J512
+      - LPC54605J256
+      - LPC54606J512
+      - LPC54606J256
+      - LPC54607J256
+      - LPC54607J512
+      - LPC54608J512
+      - LPC54616J512
+      - LPC54616J256
+      - LPC54618J512
+      - LPC54628J512
+      - LPC54S005
+      - LPC54S016
+      - LPC54S018
+      - LPC54S018J2M
+      - LPC54S018J4M
+      - LPC5512
+      - LPC5514
+      - LPC5516
+      - LPC5526
+      - LPC5528
+      - LPC55S14
+      - LPC55S16
+      - LPC55S26
+      - LPC55S28
+      - LPC55S66
+      - LPC55S69
+    - middleware.usb.host.ohci_config_header
+    - middleware.usb.host.common_header
+  cmake_module_name: middleware_usb_host_ohci
+middleware.usb.host.ip3516hs:
+  section-type: component
+  meta-name: middleware.usb.host_controller_ip3516hs
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+    - repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+    files:
+    - source: middleware/usb/host/usb_host_ip3516hs.c
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: src
+    - source: middleware/usb/host/usb_host_ip3516hs.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_ip3516hs.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host IP3516HS Controller Driver(HS)
+    description: Middleware usb host ip3516hs
+    taxonomy:
+      csub: ip3516hs
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host IP3516HS Controller Driver(HS)
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - LPC54005
+      - LPC54016
+      - LPC54018
+      - LPC54018J2M
+      - LPC54018J4M
+      - LPC54605J512
+      - LPC54605J256
+      - LPC54606J512
+      - LPC54606J256
+      - LPC54607J256
+      - LPC54607J512
+      - LPC54608J512
+      - LPC54616J512
+      - LPC54616J256
+      - LPC54618J512
+      - LPC54628J512
+      - LPC54S005
+      - LPC54S016
+      - LPC54S018
+      - LPC54S018J2M
+      - LPC54S018J4M
+      - LPC5514
+      - LPC5516
+      - LPC5526
+      - LPC5528
+      - LPC55S14
+      - LPC55S16
+      - LPC55S26
+      - LPC55S28
+      - LPC55S66
+      - LPC55S69
+      - MIMXRT533S
+      - MIMXRT555S
+      - MIMXRT595S
+      - MIMXRT633S
+      - MIMXRT685S
+    - middleware.usb.host.ip3516hs_config_header
+    - middleware.usb.host.common_header
+    - anyOf:
+      - allOf:
+        - middleware.usb.phy
+        - device_id:
+          - MCIMX7U3xxxxx
+          - MCIMX7U5xxxxx
+          - MIMXRT1011xxxxx
+          - MIMXRT1015xxxxx
+          - MIMXRT1021xxxxx
+          - MIMXRT1024xxxxx
+          - MIMXRT1041xxxxB
+          - MIMXRT1042xxxxB
+          - MIMXRT1051xxxxB
+          - MIMXRT1052xxxxB
+          - MIMXRT1061xxxxA
+          - MIMXRT1061xxxxB
+          - MIMXRT1062xxxxA
+          - MIMXRT1062xxxxB
+          - MIMXRT1064xxxxA
+          - MIMXRT1165xxxxx
+          - MIMXRT1166xxxxx
+          - MIMXRT1171xxxxx
+          - MIMXRT1172xxxxx
+          - MIMXRT1173xxxxx
+          - MIMXRT1175xxxxx
+          - MIMXRT1176xxxxx
+          - MIMXRT533S
+          - MIMXRT555S
+          - MIMXRT595S
+          - MIMXRT633S
+          - MIMXRT685S
+          - LPC5514
+          - LPC5516
+          - LPC5526
+          - LPC5528
+          - LPC55S14
+          - LPC55S16
+          - LPC55S26
+          - LPC55S28
+          - LPC55S66
+          - LPC55S69
+      - not:
+          device_id:
+          - MCIMX7U3xxxxx
+          - MCIMX7U5xxxxx
+          - MIMXRT1011xxxxx
+          - MIMXRT1015xxxxx
+          - MIMXRT1021xxxxx
+          - MIMXRT1024xxxxx
+          - MIMXRT1041xxxxB
+          - MIMXRT1042xxxxB
+          - MIMXRT1051xxxxB
+          - MIMXRT1052xxxxB
+          - MIMXRT1061xxxxA
+          - MIMXRT1061xxxxB
+          - MIMXRT1062xxxxA
+          - MIMXRT1062xxxxB
+          - MIMXRT1064xxxxA
+          - MIMXRT1165xxxxx
+          - MIMXRT1166xxxxx
+          - MIMXRT1171xxxxx
+          - MIMXRT1172xxxxx
+          - MIMXRT1173xxxxx
+          - MIMXRT1175xxxxx
+          - MIMXRT1176xxxxx
+          - MIMXRT533S
+          - MIMXRT555S
+          - MIMXRT595S
+          - MIMXRT633S
+          - MIMXRT685S
+          - LPC5514
+          - LPC5516
+          - LPC5526
+          - LPC5528
+          - LPC55S14
+          - LPC55S16
+          - LPC55S26
+          - LPC55S28
+          - LPC55S66
+          - LPC55S69
+  cmake_module_name: middleware_usb_host_ip3516hs
+middleware.usb.host.ehci:
+  section-type: component
+  meta-name: middleware.usb.host_controller_ehci
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+    - repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+    files:
+    - source: middleware/usb/host/usb_host_ehci.c
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: src
+    - source: middleware/usb/host/usb_host_ehci.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_ehci.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host EHCI Controller Driver(HS)
+    description: Middleware usb host ehci
+    taxonomy:
+      csub: ehci
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host EHCI Controller Driver(HS)
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - MIMXRT1041xxxxB
+      - MIMXRT1042xxxxB
+      - MIMXRT1051xxxxB
+      - MIMXRT1052xxxxB
+      - MIMXRT1061xxxxA
+      - MIMXRT1061xxxxB
+      - MIMXRT1062xxxxA
+      - MIMXRT1062xxxxB
+      - MIMXRT1064xxxxA
+      - MIMXRT1011xxxxx
+      - MIMXRT1015xxxxx
+      - MIMXRT1021xxxxx
+      - MIMXRT1024xxxxx
+      - MIMXRT1165xxxxx
+      - MIMXRT1166xxxxx
+      - MIMXRT1171xxxxx
+      - MIMXRT1172xxxxx
+      - MIMXRT1173xxxxx
+      - MIMXRT1175xxxxx
+      - MIMXRT1176xxxxx
+    - middleware.usb.host.ehci_config_header
+    - middleware.usb.host.common_header
+    - anyOf:
+      - allOf:
+        - middleware.usb.phy
+        - device_id:
+          - MCIMX7U3xxxxx
+          - MCIMX7U5xxxxx
+          - MIMXRT1011xxxxx
+          - MIMXRT1015xxxxx
+          - MIMXRT1021xxxxx
+          - MIMXRT1024xxxxx
+          - MIMXRT1041xxxxB
+          - MIMXRT1042xxxxB
+          - MIMXRT1051xxxxB
+          - MIMXRT1052xxxxB
+          - MIMXRT1061xxxxA
+          - MIMXRT1061xxxxB
+          - MIMXRT1062xxxxA
+          - MIMXRT1062xxxxB
+          - MIMXRT1064xxxxA
+          - MIMXRT1165xxxxx
+          - MIMXRT1166xxxxx
+          - MIMXRT1171xxxxx
+          - MIMXRT1172xxxxx
+          - MIMXRT1173xxxxx
+          - MIMXRT1175xxxxx
+          - MIMXRT1176xxxxx
+          - MIMXRT533S
+          - MIMXRT555S
+          - MIMXRT595S
+          - MIMXRT633S
+          - MIMXRT685S
+          - LPC5514
+          - LPC5516
+          - LPC5526
+          - LPC5528
+          - LPC55S14
+          - LPC55S16
+          - LPC55S26
+          - LPC55S28
+          - LPC55S66
+          - LPC55S69
+      - not:
+          device_id:
+          - MCIMX7U3xxxxx
+          - MCIMX7U5xxxxx
+          - MIMXRT1011xxxxx
+          - MIMXRT1015xxxxx
+          - MIMXRT1021xxxxx
+          - MIMXRT1024xxxxx
+          - MIMXRT1041xxxxB
+          - MIMXRT1042xxxxB
+          - MIMXRT1051xxxxB
+          - MIMXRT1052xxxxB
+          - MIMXRT1061xxxxA
+          - MIMXRT1061xxxxB
+          - MIMXRT1062xxxxA
+          - MIMXRT1062xxxxB
+          - MIMXRT1064xxxxA
+          - MIMXRT1165xxxxx
+          - MIMXRT1166xxxxx
+          - MIMXRT1171xxxxx
+          - MIMXRT1172xxxxx
+          - MIMXRT1173xxxxx
+          - MIMXRT1175xxxxx
+          - MIMXRT1176xxxxx
+          - MIMXRT533S
+          - MIMXRT555S
+          - MIMXRT595S
+          - MIMXRT633S
+          - MIMXRT685S
+          - LPC5514
+          - LPC5516
+          - LPC5526
+          - LPC5528
+          - LPC55S14
+          - LPC55S16
+          - LPC55S26
+          - LPC55S28
+          - LPC55S66
+          - LPC55S69
+  cmake_module_name: middleware_usb_host_ehci
+middleware.usb.host.audio:
+  section-type: component
+  meta-name: middleware.usb.host_audio
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+    files:
+    - source: middleware/usb/host/class/usb_host_audio.c
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: src
+    - source: middleware/usb/host/class/usb_host_audio.h
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_audio.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host Audio
+    description: Middleware usb host audio
+    taxonomy:
+      csub: audio
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host Audio
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.host.stack
+  cmake_module_name: middleware_usb_host_audio
+middleware.usb.host.cdc:
+  section-type: component
+  meta-name: middleware.usb.host_cdc
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+    files:
+    - source: middleware/usb/host/class/usb_host_cdc.c
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: src
+    - source: middleware/usb/host/class/usb_host_cdc.h
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_cdc.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host CDC
+    description: Middleware usb host cdc
+    taxonomy:
+      csub: cdc
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host CDC
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.host.stack
+  cmake_module_name: middleware_usb_host_cdc
+middleware.usb.host.cdc_rndis:
+  section-type: component
+  meta-name: middleware.usb.host_cdc_rndis
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+    files:
+    - source: middleware/usb/host/class/usb_host_cdc_rndis.c
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: src
+    - source: middleware/usb/host/class/usb_host_cdc_rndis.h
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_cdc_rndis.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host CDC RNDIS
+    description: Middleware usb host cdc_rndis
+    taxonomy:
+      csub: cdc_rndis
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host CDC RNDIS
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.host.stack
+    - middleware.usb.host.cdc
+  cmake_module_name: middleware_usb_host_cdc_rndis
+middleware.usb.host.hid:
+  section-type: component
+  meta-name: middleware.usb.host_hid
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+    files:
+    - source: middleware/usb/host/class/usb_host_hid.c
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: src
+    - source: middleware/usb/host/class/usb_host_hid.h
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_hid.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host HID
+    description: Middleware usb host hid
+    taxonomy:
+      csub: hid
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host HID
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.host.stack
+  cmake_module_name: middleware_usb_host_hid
+middleware.usb.host.msd:
+  section-type: component
+  meta-name: middleware.usb.host_msd
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+    files:
+    - source: middleware/usb/host/class/usb_host_msd.c
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: src
+    - source: middleware/usb/host/class/usb_host_msd.h
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: c_include
+    - source: middleware/usb/host/class/usb_host_msd_ufi.c
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: src
+    - source: middleware/usb/middleware_usb_host_msd.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host MSD
+    description: Middleware usb host msd
+    taxonomy:
+      csub: msd
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host MSD
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.host.stack
+  cmake_module_name: middleware_usb_host_msd
+middleware.usb.host.video:
+  section-type: component
+  meta-name: middleware.usb.host_video
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+    files:
+    - source: middleware/usb/host/class/usb_host_video.c
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: src
+    - source: middleware/usb/host/class/usb_host_video.h
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_video.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host Video
+    description: Middleware usb host video
+    taxonomy:
+      csub: video
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host Video
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.host.stack
+  cmake_module_name: middleware_usb_host_video
+middleware.usb.host.phdc:
+  section-type: component
+  meta-name: middleware.usb.host_phdc
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+    files:
+    - source: middleware/usb/host/class/usb_host_phdc.c
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: src
+    - source: middleware/usb/host/class/usb_host_phdc.h
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_phdc.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host PHDC
+    description: Middleware usb host phdc
+    taxonomy:
+      csub: phdc
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host PHDC
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.host.stack
+  cmake_module_name: middleware_usb_host_phdc
+middleware.usb.host.printer:
+  section-type: component
+  meta-name: middleware.usb.host_printer
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+    files:
+    - source: middleware/usb/host/class/usb_host_printer.c
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: src
+    - source: middleware/usb/host/class/usb_host_printer.h
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_printer.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host Printer
+    description: Middleware usb host printer
+    taxonomy:
+      csub: printer
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host Printer
+    vendor: NXP
+  dependency:
+    allOf:
+    - middleware.usb.host.stack
+  cmake_module_name: middleware_usb_host_printer
+middleware.usb.host.common_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+    files:
+    - source: middleware/usb/host/usb_host.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/host/usb_host_hci.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/host/usb_host_devices.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/host/usb_host_framework.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_common_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host Common Header
+    description: Middleware usb host common_header
+    taxonomy:
+      csub: common_header
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host Common Header
+    vendor: NXP
+  dependency:
+    allOf:
+    - component.osa
+    - middleware.usb.common_header
+  meta-name: middleware.usb.host.common_header
+  cmake_module_name: middleware_usb_host_common_header
+middleware.usb.host.khci_config_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: source
+    cc-include:
+    - repo_relative_path: output/npw/host_config/khci
+      project_relative_path: generated
+      target_file:
+      - usb_host_config.h
+      package_relative_path: output/npw/host_config/khci
+    files:
+    - source: middleware/usb/output/npw/host_config/khci/usb_host_config.h
+      project_relative_path: generated
+      repo_relative_path: output/npw/host_config/khci
+      package_relative_path: output/npw/host_config/khci
+      type: c_include
+      config: true
+    - source: middleware/usb/middleware_usb_host_khci_config_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    description: USB host khci config header
+    version: 2.9.0
+    type: project_template
+    full_name: USB host khci config header
+    display_name: USB host khci config header
+    taxonomy:
+      csub: khci_config_header
+      cclass: USB
+      cgroup: USB Host
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - K32L2A31xxxxA
+      - K32L2A41xxxxA
+      - K32L3A60xxx
+      - MK22FN128xxx10
+      - MK22FN128xxx12
+      - MK22FN256xxx12
+      - MK22FN512xxx12
+  meta-name: middleware.usb.host.khci_config_header
+  cmake_module_name: middleware_usb_host_khci_config_header
+middleware.usb.host.ohci_config_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: source
+    cc-include:
+    - repo_relative_path: output/npw/host_config/ohci
+      project_relative_path: generated
+      target_file:
+      - usb_host_config.h
+      package_relative_path: output/npw/host_config/ohci
+    files:
+    - source: middleware/usb/output/npw/host_config/ohci/usb_host_config.h
+      project_relative_path: generated
+      repo_relative_path: output/npw/host_config/ohci
+      package_relative_path: output/npw/host_config/ohci
+      type: c_include
+      config: true
+    - source: middleware/usb/middleware_usb_host_ohci_config_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    description: USB host ohci config header
+    version: 2.9.0
+    type: project_template
+    full_name: USB host ohci config header
+    display_name: USB host ohci config header
+    taxonomy:
+      csub: ohci_config_header
+      cclass: USB
+      cgroup: USB Host
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - LPC54005
+      - LPC54016
+      - LPC54018
+      - LPC54018J2M
+      - LPC54018J4M
+      - LPC54605J512
+      - LPC54605J256
+      - LPC54606J512
+      - LPC54606J256
+      - LPC54607J256
+      - LPC54607J512
+      - LPC54608J512
+      - LPC54616J512
+      - LPC54616J256
+      - LPC54618J512
+      - LPC54628J512
+      - LPC54S005
+      - LPC54S016
+      - LPC54S018
+      - LPC54S018J2M
+      - LPC54S018J4M
+      - LPC5512
+      - LPC5514
+      - LPC5516
+      - LPC5526
+      - LPC5528
+      - LPC55S14
+      - LPC55S16
+      - LPC55S26
+      - LPC55S28
+      - LPC55S66
+      - LPC55S69
+  meta-name: middleware.usb.host.ohci_config_header
+  cmake_module_name: middleware_usb_host_ohci_config_header
+middleware.usb.host.ip3516hs_config_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: source
+    cc-include:
+    - repo_relative_path: output/npw/host_config/ip3516hs
+      project_relative_path: generated
+      target_file:
+      - usb_host_config.h
+      package_relative_path: output/npw/host_config/ip3516hs
+    files:
+    - source: middleware/usb/output/npw/host_config/ip3516hs/usb_host_config.h
+      project_relative_path: generated
+      repo_relative_path: output/npw/host_config/ip3516hs
+      package_relative_path: output/npw/host_config/ip3516hs
+      type: c_include
+      config: true
+    - source: middleware/usb/middleware_usb_host_ip3516hs_config_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    description: USB host ip3516hs config header
+    version: 2.9.0
+    type: project_template
+    full_name: USB host ip3516hs config header
+    display_name: USB host ip3516hs config header
+    taxonomy:
+      csub: ip3516hs_config_header
+      cclass: USB
+      cgroup: USB Host
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - LPC54005
+      - LPC54016
+      - LPC54018
+      - LPC54018J2M
+      - LPC54018J4M
+      - LPC54605J512
+      - LPC54605J256
+      - LPC54606J512
+      - LPC54606J256
+      - LPC54607J256
+      - LPC54607J512
+      - LPC54608J512
+      - LPC54616J512
+      - LPC54616J256
+      - LPC54618J512
+      - LPC54628J512
+      - LPC54S005
+      - LPC54S016
+      - LPC54S018
+      - LPC54S018J2M
+      - LPC54S018J4M
+      - LPC5514
+      - LPC5516
+      - LPC5526
+      - LPC5528
+      - LPC55S14
+      - LPC55S16
+      - LPC55S26
+      - LPC55S28
+      - LPC55S66
+      - LPC55S69
+      - MIMXRT533S
+      - MIMXRT555S
+      - MIMXRT595S
+      - MIMXRT633S
+      - MIMXRT685S
+  meta-name: middleware.usb.host.ip3516hs_config_header
+  cmake_module_name: middleware_usb_host_ip3516hs_config_header
+middleware.usb.host.ehci_config_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: source
+    cc-include:
+    - repo_relative_path: output/npw/host_config/ehci
+      project_relative_path: generated
+      target_file:
+      - usb_host_config.h
+      package_relative_path: output/npw/host_config/ehci
+    files:
+    - source: middleware/usb/output/npw/host_config/ehci/usb_host_config.h
+      project_relative_path: generated
+      repo_relative_path: output/npw/host_config/ehci
+      package_relative_path: output/npw/host_config/ehci
+      type: c_include
+      config: true
+    - source: middleware/usb/middleware_usb_host_ehci_config_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    description: USB host ehci config header
+    version: 2.9.0
+    type: project_template
+    full_name: USB host ehci config header
+    display_name: USB host ehci config header
+    taxonomy:
+      csub: ehci_config_header
+      cclass: USB
+      cgroup: USB Host
+    vendor: NXP
+  dependency:
+    allOf:
+    - device_id:
+      - MIMXRT1041xxxxB
+      - MIMXRT1042xxxxB
+      - MIMXRT1051xxxxB
+      - MIMXRT1052xxxxB
+      - MIMXRT1061xxxxA
+      - MIMXRT1061xxxxB
+      - MIMXRT1062xxxxA
+      - MIMXRT1062xxxxB
+      - MIMXRT1064xxxxA
+      - MIMXRT1011xxxxx
+      - MIMXRT1015xxxxx
+      - MIMXRT1021xxxxx
+      - MIMXRT1024xxxxx
+      - MIMXRT1165xxxxx
+      - MIMXRT1166xxxxx
+      - MIMXRT1171xxxxx
+      - MIMXRT1172xxxxx
+      - MIMXRT1173xxxxx
+      - MIMXRT1175xxxxx
+      - MIMXRT1176xxxxx
+  meta-name: middleware.usb.host.ehci_config_header
+  cmake_module_name: middleware_usb_host_ehci_config_header
+middleware.usb.host.stack:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+    - repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+    - repo_relative_path: include
+      project_relative_path: include
+      package_relative_path: include
+    files:
+    - source: middleware/usb/host/usb_host.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/host/usb_host_hci.c
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: src
+    - source: middleware/usb/host/usb_host_hci.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/host/usb_host_devices.c
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: src
+    - source: middleware/usb/host/usb_host_devices.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/host/usb_host_framework.h
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: c_include
+    - source: middleware/usb/host/usb_host_framework.c
+      repo_relative_path: host
+      project_relative_path: host
+      package_relative_path: host
+      type: src
+    - source: middleware/usb/host/class/usb_host_hub.c
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: src
+    - source: middleware/usb/host/class/usb_host_hub.h
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: c_include
+    - source: middleware/usb/host/class/usb_host_hub_app.c
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: src
+    - source: middleware/usb/host/class/usb_host_hub_app.h
+      repo_relative_path: host/class
+      project_relative_path: host/class
+      package_relative_path: host/class
+      type: c_include
+    - source: middleware/usb/middleware_usb_host_stack.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    version: 2.9.0
+    type: middleware
+    full_name: USB Host Stack
+    description: Middleware usb host stack
+    taxonomy:
+      csub: stack
+      cclass: USB
+      cgroup: USB Host
+    display_name: USB Host Stack
+    vendor: NXP
+  dependency:
+    allOf:
+    - component.osa
+    - anyOf:
+      - middleware.usb.host.khci
+      - middleware.usb.host.ehci
+      - middleware.usb.host.ohci
+      - middleware.usb.host.ip3516hs
+  meta-name: middleware.usb.host.stack
+  cmake_module_name: middleware_usb_host_stack

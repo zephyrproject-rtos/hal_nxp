@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_middleware_nxp_usb_LPC54628_manifest_v3_13" name="USB Host, Device, OTG Stack" brief="Host, Device, OTG" format_version="3.13" api_version="2.0.0" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.13.xsd">
+
+  <externalDefinitions>
+    <definition extID="LPC54628J512"/>
+    <definition extID="armgcc"/>
+    <definition extID="component.osa.LPC54628"/>
+  </externalDefinitions>
+  <ksdk id="MCUXpressoSDK2140_middleware_nxp_usb_LPC54628_manifest_v3_13" name="MCUXpressoSDK2140_middleware_nxp_usb_LPC54628_manifest_v3_13" version="2.14.0"/>
+  <components>
+    <component id="middleware.usb.device.ip3511fs_config_header.LPC54628" name="USB device ip3511fs config header" brief="USB device ip3511fs config header" version="2.9.0" full_name="USB device ip3511fs config header" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="project_template" package_base_path="../middleware/usb" project_base_path="source">
+      <source relative_path="../../output/npw/device_config/ip3511fs" project_relative_path="generated" config="true" type="c_include">
+        <files mask="usb_device_config.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_ip3511fs_config_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/npw/device_config/ip3511fs" project_relative_path="generated" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.ip3511hs_config_header.LPC54628" name="USB device ip3511hs config header" brief="USB device ip3511hs config header" version="2.9.0" full_name="USB device ip3511hs config header" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="project_template" package_base_path="../middleware/usb" project_base_path="source">
+      <source relative_path="../../output/npw/device_config/ip3511hs" project_relative_path="generated" config="true" type="c_include">
+        <files mask="usb_device_config.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_ip3511hs_config_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/npw/device_config/ip3511hs" project_relative_path="generated" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.common_header.LPC54628" name="USB Common Header" brief="Middleware usb common_header" version="2.9.0" full_name="USB Common Header" devices="LPC54628J512" category="USB/USB Common Header" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="component.osa.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../include" project_relative_path="include" type="c_include">
+        <files mask="usb.h"/>
+        <files mask="usb_misc.h"/>
+        <files mask="usb_spec.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_common_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.common_header.LPC54628" name="USB Device Common Header" brief="Middleware usb device common_header" version="2.9.0" full_name="USB Device Common Header" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.LPC54628"/>
+          <component_dependency value="middleware.usb.common_header.LPC54628"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../device" project_relative_path="device/include" type="c_include">
+        <files mask="usb_device.h"/>
+      </source>
+      <source relative_path="../../device" project_relative_path="device/source" type="c_include">
+        <files mask="usb_device_dci.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_common_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../device" project_relative_path="device/include" type="c_include"/>
+        <include_path relative_path="../../device" project_relative_path="device/source" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device_controller_ip3511fs.LPC54628" name="USB Device IP3511FS Controller Driver(FS)" brief="Middleware usb device ip3511fs" version="2.9.0" full_name="USB Device IP3511FS Controller Driver(FS)" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.device.ip3511fs_config_header.LPC54628"/>
+          <component_dependency value="middleware.usb.device.common_header.LPC54628"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../device" project_relative_path="device/source/lpcip3511" type="src">
+        <files mask="usb_device_lpcip3511.c"/>
+      </source>
+      <source relative_path="../../device" project_relative_path="device/source/lpcip3511" type="c_include">
+        <files mask="usb_device_lpcip3511.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_ip3511fs.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../device" project_relative_path="device/source/lpcip3511" type="c_include"/>
+        <include_path relative_path="../../include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device_controller_ip3511hs.LPC54628" name="USB Device IP3511HS Controller Driver(HS)" brief="Middleware usb device ip3511hs" version="2.9.0" full_name="USB Device IP3511HS Controller Driver(HS)" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.device.ip3511hs_config_header.LPC54628"/>
+          <component_dependency value="middleware.usb.device.common_header.LPC54628"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../device" project_relative_path="device/source/lpcip3511" type="src">
+        <files mask="usb_device_lpcip3511.c"/>
+      </source>
+      <source relative_path="../../device" project_relative_path="device/source/lpcip3511" type="c_include">
+        <files mask="usb_device_lpcip3511.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_ip3511hs.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../device" project_relative_path="device/source/lpcip3511" type="c_include"/>
+        <include_path relative_path="../../include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.stack.external.LPC54628" name="USB Device Stack" brief="Middleware usb device stack external" version="2.9.0" full_name="USB Device Stack" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.LPC54628"/>
+          <component_dependency value="middleware.usb.device.controller.driver.LPC54628"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class" type="src">
+        <files mask="usb_device_class.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class" type="c_include">
+        <files mask="usb_device_class.h"/>
+      </source>
+      <source relative_path="../../output/source/device" project_relative_path="device/source" type="src">
+        <files mask="usb_device_ch9.c"/>
+      </source>
+      <source relative_path="../../output/source/device" project_relative_path="device/source" type="c_include">
+        <files mask="usb_device_ch9.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_stack_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class" type="c_include"/>
+        <include_path relative_path="../../output/source/device" project_relative_path="device/source" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+        <include_path relative_path="../../output/source/device" project_relative_path="output/source/device" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.audio.external.LPC54628" name="USB Device Audio" brief="Middleware usb device audio external" version="2.9.0" full_name="USB Device Audio" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/audio" type="src">
+        <files mask="usb_device_audio.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/audio" type="c_include">
+        <files mask="usb_device_audio.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_audio_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/audio" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.cdc.external.LPC54628" name="USB Device CDC" brief="Middleware usb device cdc external" version="2.9.0" full_name="USB Device CDC" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/cdc" type="src">
+        <files mask="usb_device_cdc_acm.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/cdc" type="c_include">
+        <files mask="usb_device_cdc_acm.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_cdc_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/cdc" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.cdc.rndis.external.LPC54628" name="USB Device CDC RNDIS" brief="Middleware usb device cdc rndis external" version="2.9.0" full_name="USB Device CDC RNDIS" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.device.stack.external.LPC54628"/>
+          <component_dependency value="middleware.usb.device.cdc.external.LPC54628"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/cdc_rndis" type="src">
+        <files mask="usb_device_cdc_rndis.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/cdc_rndis" type="c_include">
+        <files mask="usb_device_cdc_rndis.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_cdc_rndis_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/cdc_rndis" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.hid.external.LPC54628" name="USB Device HID" brief="Middleware usb device hid external" version="2.9.0" full_name="USB Device HID" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/hid" type="src">
+        <files mask="usb_device_hid.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/hid" type="c_include">
+        <files mask="usb_device_hid.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_hid_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/hid" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.dfu.external.LPC54628" name="USB Device DFU" brief="Middleware usb device dfu external" version="2.9.0" full_name="USB Device DFU" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/dfu" type="src">
+        <files mask="usb_device_dfu.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/dfu" type="c_include">
+        <files mask="usb_device_dfu.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_dfu_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/dfu" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.msd.external.LPC54628" name="USB Device MSD" brief="Middleware usb device msd external" version="2.9.0" full_name="USB Device MSD" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/msc" type="src">
+        <files mask="usb_device_msc.c"/>
+        <files mask="usb_device_msc_ufi.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/msc" type="c_include">
+        <files mask="usb_device_msc.h"/>
+        <files mask="usb_device_msc_ufi.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_msd_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/msc" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.phdc.external.LPC54628" name="USB Device PHDC" brief="Middleware usb device phdc external" version="2.9.0" full_name="USB Device PHDC" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/phdc" type="src">
+        <files mask="usb_device_phdc.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/phdc" type="c_include">
+        <files mask="usb_device_phdc.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_phdc_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/phdc" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.video.external.LPC54628" name="USB Device Video" brief="Middleware usb device video external" version="2.9.0" full_name="USB Device Video" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/video" type="src">
+        <files mask="usb_device_video.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/video" type="c_include">
+        <files mask="usb_device_video.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_video_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/video" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.ccid.external.LPC54628" name="USB Device CCID" brief="Middleware usb device ccid external" version="2.9.0" full_name="USB Device CCID" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/ccid" type="src">
+        <files mask="usb_device_ccid.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/ccid" type="c_include">
+        <files mask="usb_device_ccid.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_ccid_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/ccid" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.printer.external.LPC54628" name="USB Device Printer" brief="Middleware usb device printer external" version="2.9.0" full_name="USB Device Printer" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/printer" type="src">
+        <files mask="usb_device_printer.c"/>
+      </source>
+      <source relative_path="../../output/source/device/class" project_relative_path="device/class/printer" type="c_include">
+        <files mask="usb_device_printer.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_printer_external.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="device/class/printer" type="c_include"/>
+        <include_path relative_path="../../output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.controller.driver.LPC54628" name="USB Device Common Controller" brief="Middleware usb device controller driver" version="2.9.0" full_name="USB Device Common Controller" devices="LPC54628J512" category="USB/USB Device" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <any_of>
+            <component_dependency value="middleware.usb.device_controller_ip3511fs.LPC54628"/>
+            <component_dependency value="middleware.usb.device_controller_ip3511hs.LPC54628"/>
+          </any_of>
+          <component_dependency value="component.osa.LPC54628"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../device" project_relative_path="device/include" type="c_include">
+        <files mask="usb_device.h"/>
+      </source>
+      <source relative_path="../../device" project_relative_path="device/source" type="src">
+        <files mask="usb_device_dci.c"/>
+      </source>
+      <source relative_path="../../device" project_relative_path="device/source" type="c_include">
+        <files mask="usb_device_dci.h"/>
+      </source>
+      <source exclude="true" relative_path="./" type="doc">
+        <files mask="ChangeLogKSDK.txt" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_device_controller_driver.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../device" project_relative_path="device/include" type="c_include"/>
+        <include_path relative_path="../../device" project_relative_path="device/source" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_controller_ohci.LPC54628" name="USB Host OHCI Controller Driver(FS)" brief="Middleware usb host ohci" version="2.9.0" full_name="USB Host OHCI Controller Driver(FS)" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.host.ohci_config_header.LPC54628"/>
+          <component_dependency value="middleware.usb.host.common_header.LPC54628"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../host" project_relative_path="host" type="src">
+        <files mask="usb_host_ohci.c"/>
+      </source>
+      <source relative_path="../../host" project_relative_path="host" type="c_include">
+        <files mask="usb_host_ohci.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_ohci.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host" project_relative_path="host" type="c_include"/>
+        <include_path relative_path="../../include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_controller_ip3516hs.LPC54628" name="USB Host IP3516HS Controller Driver(HS)" brief="Middleware usb host ip3516hs" version="2.9.0" full_name="USB Host IP3516HS Controller Driver(HS)" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.host.ip3516hs_config_header.LPC54628"/>
+          <component_dependency value="middleware.usb.host.common_header.LPC54628"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../host" project_relative_path="host" type="src">
+        <files mask="usb_host_ip3516hs.c"/>
+      </source>
+      <source relative_path="../../host" project_relative_path="host" type="c_include">
+        <files mask="usb_host_ip3516hs.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_ip3516hs.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host" project_relative_path="host" type="c_include"/>
+        <include_path relative_path="../../include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_audio.LPC54628" name="USB Host Audio" brief="Middleware usb host audio" version="2.9.0" full_name="USB Host Audio" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_audio.c"/>
+      </source>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_audio.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_audio.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_cdc.LPC54628" name="USB Host CDC" brief="Middleware usb host cdc" version="2.9.0" full_name="USB Host CDC" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_cdc.c"/>
+      </source>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_cdc.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_cdc.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_cdc_rndis.LPC54628" name="USB Host CDC RNDIS" brief="Middleware usb host cdc_rndis" version="2.9.0" full_name="USB Host CDC RNDIS" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.host.stack.LPC54628"/>
+          <component_dependency value="middleware.usb.host_cdc.LPC54628"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_cdc_rndis.c"/>
+      </source>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_cdc_rndis.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_cdc_rndis.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_hid.LPC54628" name="USB Host HID" brief="Middleware usb host hid" version="2.9.0" full_name="USB Host HID" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_hid.c"/>
+      </source>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_hid.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_hid.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_msd.LPC54628" name="USB Host MSD" brief="Middleware usb host msd" version="2.9.0" full_name="USB Host MSD" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_msd.c"/>
+        <files mask="usb_host_msd_ufi.c"/>
+      </source>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_msd.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_msd.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_video.LPC54628" name="USB Host Video" brief="Middleware usb host video" version="2.9.0" full_name="USB Host Video" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_video.c"/>
+      </source>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_video.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_video.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_phdc.LPC54628" name="USB Host PHDC" brief="Middleware usb host phdc" version="2.9.0" full_name="USB Host PHDC" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_phdc.c"/>
+      </source>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_phdc.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_phdc.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_printer.LPC54628" name="USB Host Printer" brief="Middleware usb host printer" version="2.9.0" full_name="USB Host Printer" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.LPC54628"/>
+      </dependencies>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_printer.c"/>
+      </source>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_printer.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_printer.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host.common_header.LPC54628" name="USB Host Common Header" brief="Middleware usb host common_header" version="2.9.0" full_name="USB Host Common Header" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.LPC54628"/>
+          <component_dependency value="middleware.usb.common_header.LPC54628"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../host" project_relative_path="host" type="c_include">
+        <files mask="usb_host.h"/>
+        <files mask="usb_host_hci.h"/>
+        <files mask="usb_host_devices.h"/>
+        <files mask="usb_host_framework.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_common_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host" project_relative_path="host" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host.ohci_config_header.LPC54628" name="USB host ohci config header" brief="USB host ohci config header" version="2.9.0" full_name="USB host ohci config header" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="project_template" package_base_path="../middleware/usb" project_base_path="source">
+      <source relative_path="../../output/npw/host_config/ohci" project_relative_path="generated" config="true" type="c_include">
+        <files mask="usb_host_config.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_ohci_config_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/npw/host_config/ohci" project_relative_path="generated" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host.ip3516hs_config_header.LPC54628" name="USB host ip3516hs config header" brief="USB host ip3516hs config header" version="2.9.0" full_name="USB host ip3516hs config header" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="project_template" package_base_path="../middleware/usb" project_base_path="source">
+      <source relative_path="../../output/npw/host_config/ip3516hs" project_relative_path="generated" config="true" type="c_include">
+        <files mask="usb_host_config.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_ip3516hs_config_header.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../output/npw/host_config/ip3516hs" project_relative_path="generated" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host.stack.LPC54628" name="USB Host Stack" brief="Middleware usb host stack" version="2.9.0" full_name="USB Host Stack" devices="LPC54628J512" category="USB/USB Host" user_visible="true" type="middleware" package_base_path="../middleware/usb" project_base_path="usb">
+      <dependencies>
+        <all>
+          <any_of>
+            <component_dependency value="middleware.usb.host_controller_ohci.LPC54628"/>
+            <component_dependency value="middleware.usb.host_controller_ip3516hs.LPC54628"/>
+          </any_of>
+          <component_dependency value="component.osa.LPC54628"/>
+        </all>
+      </dependencies>
+      <source relative_path="../../host" project_relative_path="host" type="c_include">
+        <files mask="usb_host.h"/>
+        <files mask="usb_host_hci.h"/>
+        <files mask="usb_host_devices.h"/>
+        <files mask="usb_host_framework.h"/>
+      </source>
+      <source relative_path="../../host" project_relative_path="host" type="src">
+        <files mask="usb_host_hci.c"/>
+        <files mask="usb_host_devices.c"/>
+        <files mask="usb_host_framework.c"/>
+      </source>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_hub.c"/>
+        <files mask="usb_host_hub_app.c"/>
+      </source>
+      <source relative_path="../../host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_hub.h"/>
+        <files mask="usb_host_hub_app.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="middleware_usb_host_stack.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="../../host" project_relative_path="host" type="c_include"/>
+        <include_path relative_path="../../host/class" project_relative_path="host/class" type="c_include"/>
+        <include_path relative_path="../../include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+  </components>
+</ksdk:manifest>

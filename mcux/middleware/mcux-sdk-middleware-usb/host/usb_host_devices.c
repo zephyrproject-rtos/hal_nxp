@@ -447,6 +447,8 @@ static usb_status_t USB_HostProcessCallback(usb_host_device_instance_t *deviceIn
             temp          = (void *)&deviceInstance->enumBuffer[0];
             configureDesc = (usb_descriptor_configuration_t *)temp;
 
+            /* clear the potential configuration information that is got for the previous configuration */
+            (void)memset(&deviceInstance->configuration, 0, sizeof(deviceInstance->configuration));
             deviceInstance->configurationLen = USB_SHORT_FROM_LITTLE_ENDIAN_ADDRESS(configureDesc->wTotalLength);
             if (deviceInstance->configurationDesc != NULL)
             {

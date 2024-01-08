@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_middleware_nxp_usb_MK22F51212_manifest_v3_10" name="USB Host, Device, OTG Stack" brief="Host, Device, OTG" format_version="3.10" api_version="2.0.0" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.10.xsd">
+  <!--Timestamp (UTC): 2023-03-27 10:46:42.417074-->
+  <!--This manifest is generated based on sdk repo commit: 7a3cf97dd3582e3ee8a98ede814ff1f2a45ea519-->
+  <externalDefinitions>
+    <definition extID="MK22FN512xxx12"/>
+    <definition extID="component.osa.MK22F51212"/>
+    <definition extID="core0_MK22FN512xxx12"/>
+    <definition extID="armgcc"/>
+  </externalDefinitions>
+  <ksdk id="MCUXpressoSDK2130_middleware_nxp_usb_MK22F51212_manifest_v3_10" name="MCUXpressoSDK2130_middleware_nxp_usb_MK22F51212_manifest_v3_10" version="2.13.0"/>
+  <components>
+    <component id="middleware.usb.common_header.MK22F51212" name="USB Common Header" brief="Middleware usb common_header" version="2.8.4" full_name="USB Common Header" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Common Header" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="component.osa.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./include" project_relative_path="include" type="c_include">
+        <files mask="usb.h"/>
+        <files mask="usb_misc.h"/>
+        <files mask="usb_spec.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_common_header_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.audio.external.MK22F51212" name="USB Device Audio" brief="Middleware usb device audio external" version="2.8.4" full_name="USB Device Audio" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/audio" type="src">
+        <files mask="usb_device_audio.c"/>
+      </source>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/audio" type="c_include">
+        <files mask="usb_device_audio.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/source/device/class" project_relative_path="device/class/audio" type="c_include"/>
+        <include_path relative_path="./output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.ccid.external.MK22F51212" name="USB Device CCID" brief="Middleware usb device ccid external" version="2.8.4" full_name="USB Device CCID" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/ccid" type="src">
+        <files mask="usb_device_ccid.c"/>
+      </source>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/ccid" type="c_include">
+        <files mask="usb_device_ccid.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/source/device/class" project_relative_path="device/class/ccid" type="c_include"/>
+        <include_path relative_path="./output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.cdc.external.MK22F51212" name="USB Device CDC" brief="Middleware usb device cdc external" version="2.8.4" full_name="USB Device CDC" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/cdc" type="src">
+        <files mask="usb_device_cdc_acm.c"/>
+      </source>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/cdc" type="c_include">
+        <files mask="usb_device_cdc_acm.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_device_cdc_external_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/source/device/class" project_relative_path="device/class/cdc" type="c_include"/>
+        <include_path relative_path="./output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.cdc.rndis.external.MK22F51212" name="USB Device CDC RNDIS" brief="Middleware usb device cdc rndis external" version="2.8.4" full_name="USB Device CDC RNDIS" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.device.stack.external.MK22F51212"/>
+          <component_dependency value="middleware.usb.device.cdc.external.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/cdc_rndis" type="src">
+        <files mask="usb_device_cdc_rndis.c"/>
+      </source>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/cdc_rndis" type="c_include">
+        <files mask="usb_device_cdc_rndis.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/source/device/class" project_relative_path="device/class/cdc_rndis" type="c_include"/>
+        <include_path relative_path="./output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.common_header.MK22F51212" name="USB Device Common Header" brief="Middleware usb device common_header" version="2.8.4" full_name="USB Device Common Header" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.MK22F51212"/>
+          <component_dependency value="middleware.usb.common_header.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./device" project_relative_path="device/include" type="c_include">
+        <files mask="usb_device.h"/>
+      </source>
+      <source relative_path="./device" project_relative_path="device/source" type="c_include">
+        <files mask="usb_device_dci.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_device_common_header_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./device" project_relative_path="device/include" type="c_include"/>
+        <include_path relative_path="./device" project_relative_path="device/source" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.controller.driver.MK22F51212" name="USB Device Common Controller" brief="Middleware usb device controller driver" version="2.8.4" full_name="USB Device Common Controller" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.MK22F51212"/>
+          <component_dependency value="middleware.usb.device_controller_khci.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./device" project_relative_path="device/include" type="c_include">
+        <files mask="usb_device.h"/>
+      </source>
+      <source relative_path="./device" project_relative_path="device/source" type="src">
+        <files mask="usb_device_dci.c"/>
+      </source>
+      <source relative_path="./device" project_relative_path="device/source" type="c_include">
+        <files mask="usb_device_dci.h"/>
+      </source>
+      <source exclude="true" relative_path="./" type="doc">
+        <files mask="ChangeLogKSDK.txt" hidden="true"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_device_controller_driver_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./device" project_relative_path="device/include" type="c_include"/>
+        <include_path relative_path="./device" project_relative_path="device/source" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.dfu.external.MK22F51212" name="USB Device DFU" brief="Middleware usb device dfu external" version="2.8.4" full_name="USB Device DFU" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/dfu" type="src">
+        <files mask="usb_device_dfu.c"/>
+      </source>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/dfu" type="c_include">
+        <files mask="usb_device_dfu.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/source/device/class" project_relative_path="device/class/dfu" type="c_include"/>
+        <include_path relative_path="./output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.hid.external.MK22F51212" name="USB Device HID" brief="Middleware usb device hid external" version="2.8.4" full_name="USB Device HID" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/hid" type="src">
+        <files mask="usb_device_hid.c"/>
+      </source>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/hid" type="c_include">
+        <files mask="usb_device_hid.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/source/device/class" project_relative_path="device/class/hid" type="c_include"/>
+        <include_path relative_path="./output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device_controller_khci.MK22F51212" name="USB Device KHCI Controller Driver(FS)" brief="Middleware usb device khci" version="2.8.4" full_name="USB Device KHCI Controller Driver(FS)" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.device.khci_config_header.MK22F51212"/>
+          <component_dependency value="middleware.usb.device.common_header.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./device" project_relative_path="device/source/khci" type="src">
+        <files mask="usb_device_khci.c"/>
+      </source>
+      <source relative_path="./device" project_relative_path="device/source/khci" type="c_include">
+        <files mask="usb_device_khci.h"/>
+      </source>
+      <source relative_path="./include" project_relative_path="include" type="c_include">
+        <files mask="usb.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_device_khci_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./device" project_relative_path="device/source/khci" type="c_include"/>
+        <include_path relative_path="./include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.khci_config_header.MK22F51212" name="USB device khci config header" brief="USB device khci config header" version="2.8.4" full_name="USB device khci config header" devices="MK22FN512xxx12" user_visible="true" type="project_template" package_base_path=".././" project_base_path="source">
+      <source relative_path="./output/npw/device_config/khci" project_relative_path="generated" type="c_include">
+        <files mask="usb_device_config.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/npw/device_config/khci" project_relative_path="generated" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.msd.external.MK22F51212" name="USB Device MSD" brief="Middleware usb device msd external" version="2.8.4" full_name="USB Device MSD" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/msc" type="src">
+        <files mask="usb_device_msc.c"/>
+        <files mask="usb_device_msc_ufi.c"/>
+      </source>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/msc" type="c_include">
+        <files mask="usb_device_msc.h"/>
+        <files mask="usb_device_msc_ufi.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/source/device/class" project_relative_path="device/class/msc" type="c_include"/>
+        <include_path relative_path="./output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.phdc.external.MK22F51212" name="USB Device PHDC" brief="Middleware usb device phdc external" version="2.8.4" full_name="USB Device PHDC" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/phdc" type="src">
+        <files mask="usb_device_phdc.c"/>
+      </source>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/phdc" type="c_include">
+        <files mask="usb_device_phdc.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/source/device/class" project_relative_path="device/class/phdc" type="c_include"/>
+        <include_path relative_path="./output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.printer.external.MK22F51212" name="USB Device Printer" brief="Middleware usb device printer external" version="2.8.4" full_name="USB Device Printer" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/printer" type="src">
+        <files mask="usb_device_printer.c"/>
+      </source>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/printer" type="c_include">
+        <files mask="usb_device_printer.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/source/device/class" project_relative_path="device/class/printer" type="c_include"/>
+        <include_path relative_path="./output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.stack.external.MK22F51212" name="USB Device Stack" brief="Middleware usb device stack external" version="2.8.4" full_name="USB Device Stack" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.MK22F51212"/>
+          <component_dependency value="middleware.usb.device.controller.driver.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class" type="src">
+        <files mask="usb_device_class.c"/>
+      </source>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class" type="c_include">
+        <files mask="usb_device_class.h"/>
+      </source>
+      <source relative_path="./output/source/device" project_relative_path="device/source" type="src">
+        <files mask="usb_device_ch9.c"/>
+      </source>
+      <source relative_path="./output/source/device" project_relative_path="device/source" type="c_include">
+        <files mask="usb_device_ch9.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_device_stack_external_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/source/device/class" project_relative_path="device/class" type="c_include"/>
+        <include_path relative_path="./output/source/device" project_relative_path="device/source" type="c_include"/>
+        <include_path relative_path="./output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+        <include_path relative_path="./output/source/device" project_relative_path="output/source/device" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.device.video.external.MK22F51212" name="USB Device Video" brief="Middleware usb device video external" version="2.8.4" full_name="USB Device Video" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Device" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.device.stack.external.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/video" type="src">
+        <files mask="usb_device_video.c"/>
+      </source>
+      <source relative_path="./output/source/device/class" project_relative_path="device/class/video" type="c_include">
+        <files mask="usb_device_video.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/source/device/class" project_relative_path="device/class/video" type="c_include"/>
+        <include_path relative_path="./output/source/device/class" project_relative_path="output/source/device/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_audio.MK22F51212" name="USB Host Audio" brief="Middleware usb host audio" version="2.8.4" full_name="USB Host Audio" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_audio.c"/>
+      </source>
+      <source relative_path="./host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_audio.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_host_audio_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_cdc.MK22F51212" name="USB Host CDC" brief="Middleware usb host cdc" version="2.8.4" full_name="USB Host CDC" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_cdc.c"/>
+      </source>
+      <source relative_path="./host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_cdc.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_host_cdc_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_cdc_rndis.MK22F51212" name="USB Host CDC RNDIS" brief="Middleware usb host cdc_rndis" version="2.8.4" full_name="USB Host CDC RNDIS" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.host.stack.MK22F51212"/>
+          <component_dependency value="middleware.usb.host_cdc.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_cdc_rndis.c"/>
+      </source>
+      <source relative_path="./host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_cdc_rndis.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host.common_header.MK22F51212" name="USB Host Common Header" brief="Middleware usb host common_header" version="2.8.4" full_name="USB Host Common Header" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.MK22F51212"/>
+          <component_dependency value="middleware.usb.common_header.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./host" project_relative_path="host" type="c_include">
+        <files mask="usb_host.h"/>
+        <files mask="usb_host_hci.h"/>
+        <files mask="usb_host_devices.h"/>
+        <files mask="usb_host_framework.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_host_common_header_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host" project_relative_path="host" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_hid.MK22F51212" name="USB Host HID" brief="Middleware usb host hid" version="2.8.4" full_name="USB Host HID" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_hid.c"/>
+      </source>
+      <source relative_path="./host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_hid.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_host_hid_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_controller_khci.MK22F51212" name="USB Host KHCI Controller Driver(FS)" brief="Middleware usb host khci" version="2.8.4" full_name="USB Host KHCI Controller Driver(FS)" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.host.khci_config_header.MK22F51212"/>
+          <component_dependency value="middleware.usb.host.common_header.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./host" project_relative_path="host" type="src">
+        <files mask="usb_host_khci.c"/>
+      </source>
+      <source relative_path="./host" project_relative_path="host" type="c_include">
+        <files mask="usb_host_khci.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_host_khci_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host" project_relative_path="host" type="c_include"/>
+        <include_path relative_path="./include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host.khci_config_header.MK22F51212" name="USB host khci config header" brief="USB host khci config header" version="2.8.4" full_name="USB host khci config header" devices="MK22FN512xxx12" user_visible="true" type="project_template" package_base_path=".././" project_base_path="source">
+      <source relative_path="./output/npw/host_config/khci" project_relative_path="generated" type="c_include">
+        <files mask="usb_host_config.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/npw/host_config/khci" project_relative_path="generated" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_msd.MK22F51212" name="USB Host MSD" brief="Middleware usb host msd" version="2.8.4" full_name="USB Host MSD" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_msd.c"/>
+        <files mask="usb_host_msd_ufi.c"/>
+      </source>
+      <source relative_path="./host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_msd.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_host_msd_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_phdc.MK22F51212" name="USB Host PHDC" brief="Middleware usb host phdc" version="2.8.4" full_name="USB Host PHDC" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_phdc.c"/>
+      </source>
+      <source relative_path="./host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_phdc.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_host_phdc_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_printer.MK22F51212" name="USB Host Printer" brief="Middleware usb host printer" version="2.8.4" full_name="USB Host Printer" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_printer.c"/>
+      </source>
+      <source relative_path="./host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_printer.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_host_printer_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host.stack.MK22F51212" name="USB Host Stack" brief="Middleware usb host stack" version="2.8.4" full_name="USB Host Stack" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.MK22F51212"/>
+          <component_dependency value="middleware.usb.host_controller_khci.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./host" project_relative_path="host" type="c_include">
+        <files mask="usb_host.h"/>
+        <files mask="usb_host_hci.h"/>
+        <files mask="usb_host_devices.h"/>
+        <files mask="usb_host_framework.h"/>
+      </source>
+      <source relative_path="./host" project_relative_path="host" type="src">
+        <files mask="usb_host_hci.c"/>
+        <files mask="usb_host_devices.c"/>
+        <files mask="usb_host_framework.c"/>
+      </source>
+      <source relative_path="./host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_hub.c"/>
+        <files mask="usb_host_hub_app.c"/>
+      </source>
+      <source relative_path="./host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_hub.h"/>
+        <files mask="usb_host_hub_app.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" project_relative_path="." type="workspace">
+        <files mask="middleware_usb_host_stack_MK22F51212.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host" project_relative_path="host" type="c_include"/>
+        <include_path relative_path="./host/class" project_relative_path="host/class" type="c_include"/>
+        <include_path relative_path="./include" project_relative_path="include" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.host_video.MK22F51212" name="USB Host Video" brief="Middleware usb host video" version="2.8.4" full_name="USB Host Video" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB Host" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <component_dependency value="middleware.usb.host.stack.MK22F51212"/>
+      </dependencies>
+      <source relative_path="./host/class" project_relative_path="host/class" type="src">
+        <files mask="usb_host_video.c"/>
+      </source>
+      <source relative_path="./host/class" project_relative_path="host/class" type="c_include">
+        <files mask="usb_host_video.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./host/class" project_relative_path="host/class" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.otg.common_header.MK22F51212" name="USB OTG Common Header" brief="Middleware usb otg common_header" version="2.8.4" full_name="USB OTG Common Header" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB OTG" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="component.osa.MK22F51212"/>
+          <component_dependency value="middleware.usb.common_header.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./otg" project_relative_path="otg" type="c_include">
+        <files mask="usb_otg.h"/>
+        <files mask="usb_otg_oci.h"/>
+        <files mask="usb_otg_peripheral.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./otg" project_relative_path="otg" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.otg.config_header.MK22F51212" name="USB OTG config header" brief="USB OTG config header" version="2.8.4" full_name="USB OTG config header" devices="MK22FN512xxx12" user_visible="true" type="project_template" package_base_path=".././" project_base_path="source">
+      <source relative_path="./output/npw/otg_config" project_relative_path="generated" type="c_include">
+        <files mask="usb_otg_config.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./output/npw/otg_config" project_relative_path="generated" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.otg_controller_khci.MK22F51212" name="USB OTG KHCI Controller" brief="Middleware usb otg khci controller" version="2.8.4" full_name="USB OTG KHCI Controller" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB OTG" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.otg.config_header.MK22F51212"/>
+          <component_dependency value="middleware.usb.otg.common_header.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./otg" project_relative_path="otg" type="src">
+        <files mask="usb_otg_khci.c"/>
+      </source>
+      <source relative_path="./otg" project_relative_path="otg" type="c_include">
+        <files mask="usb_otg_khci.h"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./otg" project_relative_path="otg" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="middleware.usb.otg.MK22F51212" name="USB OTG Stack" brief="Middleware usb otg stack" version="2.8.4" full_name="USB OTG Stack" devices="MK22FN512xxx12" device_cores="core0_MK22FN512xxx12" category="USB/USB OTG" user_visible="true" type="middleware" package_base_path=".././" project_base_path="usb">
+      <dependencies>
+        <all>
+          <component_dependency value="middleware.usb.host.stack.MK22F51212"/>
+          <component_dependency value="middleware.usb.device.controller.driver.MK22F51212"/>
+          <component_dependency value="middleware.usb.otg_controller_khci.MK22F51212"/>
+          <component_dependency value="middleware.usb.otg.config_header.MK22F51212"/>
+        </all>
+      </dependencies>
+      <source relative_path="./otg" project_relative_path="otg" type="c_include">
+        <files mask="usb_otg.h"/>
+        <files mask="usb_otg_oci.h"/>
+        <files mask="usb_otg_peripheral.h"/>
+      </source>
+      <source relative_path="./otg" project_relative_path="otg" type="src">
+        <files mask="usb_otg_oci.c"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="./otg" project_relative_path="otg" type="c_include"/>
+      </include_paths>
+    </component>
+  </components>
+</ksdk:manifest>

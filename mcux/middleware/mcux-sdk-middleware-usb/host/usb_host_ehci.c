@@ -2187,8 +2187,12 @@ static usb_status_t USB_HostEhciQhQtdListInit(usb_host_ehci_instance_t *ehciInst
     dataAddress  = *entryPointer; /* dataAddress variable means entry value here */
     while ((0U != dataAddress) && (0U == (dataAddress & EHCI_HOST_T_INVALID_VALUE)))
     {
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+        entryPointer = (volatile uint32_t *)USB_HOST_MEMORY_DMA_2_CPU(dataAddress);
+#else
         entryPointer = (volatile uint32_t *)dataAddress;
-        dataAddress  = *entryPointer;
+#endif
+        dataAddress = *entryPointer;
     }
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
     *entryPointer = (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(BaseQtdPointer);
@@ -2678,6 +2682,7 @@ static void USB_HostEhciLinkSitd(usb_host_ehci_instance_t *ehciInstance,
     uint32_t frameInterval;
     uint32_t shouldLinkFrame;
     uint32_t currentFrame;
+    uint8_t sitdPointerIndex = 0U;
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
     uint32_t convert_addr = 0U;
 #endif
@@ -2766,11 +2771,12 @@ static void USB_HostEhciLinkSitd(usb_host_ehci_instance_t *ehciInstance,
 #else
         ((uint32_t *)temp)[shouldLinkFrame] = ((uint32_t)sitdPointer | EHCI_HOST_POINTER_TYPE_SITD);
 #endif
-        if (sitdPointer->nextSitdIndex == 0xFFU) /* 0xFF is invalid value */
+        sitdPointerIndex = sitdPointer->nextSitdIndex;
+        if (sitdPointerIndex == 0xFFU) /* 0xFF is invalid value */
         {
             break;
         }
-        sitdPointer = &(ehciInstance->ehciSitdIndexBase[sitdPointer->nextSitdIndex]); /* next sitd */
+        sitdPointer = &(ehciInstance->ehciSitdIndexBase[sitdPointerIndex]); /* next sitd */
 
         shouldLinkFrame += frameInterval;
         currentFrame += frameInterval;
@@ -4643,8 +4649,13 @@ usb_status_t USB_HostEhciCreate(uint8_t controllerId,
     ehciInstance->shedFirstQh->currentQtdPointer       = EHCI_HOST_T_INVALID_VALUE;
     ehciInstance->shedFirstQh->nextQtdPointer          = EHCI_HOST_T_INVALID_VALUE;
     ehciInstance->shedFirstQh->alternateNextQtdPointer = EHCI_HOST_T_INVALID_VALUE;
+#if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
+    ehciInstance->shedFirstQh->horizontalLinkPointer =
+        (uint32_t)USB_HOST_MEMORY_CPU_2_DMA(((uint32_t)(ehciInstance->shedFirstQh) | EHCI_HOST_POINTER_TYPE_QH));
+#else
     ehciInstance->shedFirstQh->horizontalLinkPointer =
         (uint32_t)((uint32_t)(ehciInstance->shedFirstQh) | EHCI_HOST_POINTER_TYPE_QH);
+#endif
 
     /* initialize periodic list */
     temp         = (void *)ehciInstance->ehciFrameList;
