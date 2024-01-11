@@ -91,3 +91,4 @@ Patch List:
      - mcux-sdk\middleware\issdk\docs
      - mcux-sdk\docs
   26. mcux: mcux-sdk: Fix "loop" labels in inline assembly to use unique identifiers.
+  27. mcux-sdk-middleware-usb: Fix build issues with the code from github
