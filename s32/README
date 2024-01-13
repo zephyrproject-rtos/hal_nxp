@@ -64,3 +64,5 @@ Patch List for S32Z/E:
      for S32Z/E.
    - Remove 'static inline' keywords from 'Netc_Eth_Ip_MSIX_Rx' function so that it can be
      used as an extern function outside of the file declaration.
+   - Update the function 'Canexcel_Ip_ConfigFdTx' so that it allows to configure
+     Remote Transmission Request (RTR) frames.

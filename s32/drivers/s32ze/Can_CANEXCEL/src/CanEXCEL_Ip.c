@@ -677,6 +677,12 @@ static void Canexcel_Ip_ConfigFdTx(uint8 instance, uint8 mbIdx, uint32 id,const 
     }
 
     dlcValue = (uint16)CAN_ComputeDLCValue((uint8)(info->dataLength));
+
+    if(dlcValue == 0)
+    {
+        TxMsg->Header.word3 |= CANXL_TX_HEADER_RTR_MASK;
+    }
+
     if(info->frame == CANEXCEL_FD_FRAME)
     {
         if (info->enable_brs == TRUE)
