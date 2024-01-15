@@ -114,7 +114,7 @@ def main():
 
     data_version = get_pack_version(temp_dir.name)
     print(f"Found data pack version {data_version}")
-    if round(data_version) != 13:
+    if round(data_version) != 14:
         print("Warning: This tool is only verified for data pack version 13, "
             "other versions may not work")
 

@@ -19,7 +19,7 @@ import pathlib
 PIN = collections.namedtuple('PIN', ['PERIPH', 'NAME_PART', 'SIGNAL', 'PORT',
                                      'PIN', 'CH', 'MUX_FUNC'])
 
-NAMESPACES = {'mex': 'http://mcuxpresso.nxp.com/XSD/mex_configuration_13'}
+NAMESPACES = {'mex': 'http://mcuxpresso.nxp.com/XSD/mex_configuration_14'}
 
 class MUXOption:
     """
