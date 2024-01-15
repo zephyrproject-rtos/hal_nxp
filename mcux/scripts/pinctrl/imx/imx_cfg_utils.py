@@ -13,7 +13,7 @@ import pathlib
 import logging
 
 # MEX file has a default namespace, map it here
-NAMESPACES = {'mex' : 'http://mcuxpresso.nxp.com/XSD/mex_configuration_13'}
+NAMESPACES = {'mex' : 'http://mcuxpresso.nxp.com/XSD/mex_configuration_14'}
 
 class Peripheral:
     """
@@ -1216,8 +1216,7 @@ def get_processor_name(mexfile):
         processor = config_tree.getroot().find('mex:common/mex:processor',
             NAMESPACES)
         if processor is None:
-            raise RuntimeError("Cannot locate processor name in MEX file. "
-                "Are you using v12 of the MCUXpresso configuration tools?")
+            raise RuntimeError("Cannot locate processor name in MEX file.")
         return processor.text
     except ET.ParseError:
         logging.error("Malformed XML tree %s", mexfile)

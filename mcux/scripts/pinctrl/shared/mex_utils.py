@@ -3,7 +3,7 @@ Convenience methods, used to get board and processor data from MEX files
 """
 
 # MEX file has a default namespace, map it here
-NAMESPACES = {'mex' : 'http://mcuxpresso.nxp.com/XSD/mex_configuration_13'}
+NAMESPACES = {'mex' : 'http://mcuxpresso.nxp.com/XSD/mex_configuration_14'}
 
 import xml.etree.ElementTree as ET
 import logging
@@ -27,8 +27,11 @@ class NxpMexUtil():
         """
         try:
             config_tree = ET.parse(self.mexfile)
-            return float(config_tree.getroot().find('mex:tools/mex:pins',
-                NAMESPACES).get('version'))
+            pins_version = config_tree.getroot().find('mex:tools/mex:pins',
+                NAMESPACES)
+            if pins_version is None:
+                return 0.0
+            return float(pins_version.get('version'))
         except ET.ParseError:
             logging.error("Malformed XML tree %s", self.mexfile)
             return None

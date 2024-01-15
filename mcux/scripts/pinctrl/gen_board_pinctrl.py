@@ -107,12 +107,15 @@ def main():
     """
     args = parse_args()
     utils = mex_utils.NxpMexUtil(args.mex_file)
+    pins_version = utils.get_pins_version()
+
+    if round(pins_version) != 14:
+        print("Warning: This tool is only verified for MEX files version 14, "
+            "other versions may not work")
+
     board_name = utils.get_board_name()
     processor_name = utils.get_processor_name()
     package_name = utils.get_package_name()
-    pins_version = utils.get_pins_version()
-    if not args.board_output:
-        args.board_output = f"{board_name.lower().replace('-', '_')}-pinctrl.dtsi"
 
     # Extract the Data pack to a temporary directory
     temp_dir = tempfile.TemporaryDirectory()
@@ -126,12 +129,13 @@ def main():
 
     print(f"Found data pack version {data_version}, pins version {pins_version} "
         f"for processor {processor_name}")
-    if round(data_version) != 13:
-        print("Warning: This tool is only verified for data pack version 13, "
+    if round(data_version) != 14:
+        print("Warning: This tool is only verified for data pack version 14, "
             "other versions may not work")
-    if round(pins_version) != 13:
-        print("Warning: This tool is only verified for MEX files version 13, "
-            "other versions may not work")
+
+    if not args.board_output:
+        args.board_output = f"{board_name.lower().replace('-', '_')}-pinctrl.dtsi"
+
     # Initialize SOC specific utility, and generate board pin control
     if args.copyright:
         # Add default copyright
