@@ -86,3 +86,7 @@ Patch List:
   22. mcux-sdk-middleware-usb: fix ip control return value for ip3511
   23. drivers: edma: Introduce revision 2 of eDMA driver
   24. devices: MIMX9352: Add SoC layer definitions required for using edma rev2
+  25. exclude the following directories and files from mcux-sdk update to reduce HAL size:
+     - mcux-sdk\manifests
+     - mcux-sdk\middleware\issdk\docs
+     - mcux-sdk\docs
