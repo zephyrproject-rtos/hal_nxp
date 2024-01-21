@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -732,5 +732,32 @@ typedef struct {
 /*!
  * @}
  */ /* end of group CAN_Peripheral_Access_Layer */
+
+/* ----------------------------------------------------------------------------
+   -- WDOG Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup WDOG_Peripheral_Access_Layer WDOG Peripheral Access Layer
+ * @{
+ */
+
+ /* WDOG - Peripheral instance base addresses */
+/** Peripheral WDOG base address */
+#define WDOG_BASE                                IP_WDOG_BASE
+/** Peripheral WDOG base pointer */
+#define WDOG                                     IP_WDOG
+/** Array initializer of WDOG peripheral base addresses */
+#define WDOG_BASE_ADDRS                          IP_WDOG_BASE_ADDRS
+/** Array initializer of WDOG peripheral base pointers */
+#define WDOG_BASE_PTRS                           IP_WDOG_BASE_PTRS
+/** Interrupt vectors for the WDOG peripheral type */
+#define WDOG_IRQS                                { WDOG_EWM_IRQn }
+#define WDOG_UPDATE_KEY                          (0xD928C520U)
+#define WDOG_REFRESH_KEY                         (0xB480A602U)
+
+/*!
+ * @}
+ */ /* end of group WDOG_Peripheral_Access_Layer */
 
 #endif /* _S32K146_DEVICE_H_ */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -27,6 +27,8 @@
 #define FSL_FEATURE_SOC_FTM_COUNT (6)
 /* @brief FLEXCAN availability on the SoC. */
 #define FSL_FEATURE_SOC_FLEXCAN_COUNT (3)
+/* @brief WDOG availability on the SoC. */
+#define FSL_FEATURE_SOC_WDOG_COUNT (1)
 
 /* SYSMPU module features */
 
@@ -242,5 +244,12 @@
 #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO (0)
 /* @brief Does not support Supervisor Mode (bitfield MCR[SUPV]. */
 #define FSL_FEATURE_FLEXCAN_HAS_NO_SUPV_SUPPORT (0)
+
+/* WDOG module features */
+
+/* @brief Watchdog is available. */
+#define FSL_FEATURE_WDOG_HAS_WATCHDOG (1)
+/* @brief WDOG_CNT can be 32-bit written. */
+#define FSL_FEATURE_WDOG_HAS_32BIT_ACCESS (1)
 
 #endif /* _S32K146_FEATURES_H_ */
