@@ -760,4 +760,30 @@ typedef struct {
  * @}
  */ /* end of group WDOG_Peripheral_Access_Layer */
 
+/* ----------------------------------------------------------------------------
+   -- RTC Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup RTC_Peripheral_Access_Layer RTC Peripheral Access Layer
+ * @{
+ */
+
+/* RTC - Peripheral instance base addresses */
+/** Peripheral RTC base address */
+#define RTC_BASE                                 IP_RTC_BASE
+/** Peripheral RTC base pointer */
+#define RTC                                      IP_RTC
+/** Array initializer of RTC peripheral base addresses */
+#define RTC_BASE_ADDRS                           IP_RTC_BASE_ADDRS
+/** Array initializer of RTC peripheral base pointers */
+#define RTC_BASE_PTRS                            IP_RTC_BASE_PTRS
+/** Interrupt vectors for the RTC peripheral type */
+#define RTC_IRQS                                 { RTC_IRQn }
+#define RTC_SECONDS_IRQS                         { RTC_Seconds_IRQn }
+
+/*!
+ * @}
+ */ /* end of group RTC_Peripheral_Access_Layer */
+
 #endif /* _S32K146_DEVICE_H_ */
