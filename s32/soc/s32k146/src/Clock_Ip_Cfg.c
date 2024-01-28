@@ -239,7 +239,7 @@ const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
             #if CLOCK_IP_SELECTORS_NO > 4U
             {
                 RTC_CLK,                    /* Clock name associated to selector */
-                SOSCDIV1_CLK,                    /* Name of the selected input source */
+                RTC_CLKIN,                    /* Name of the selected input source */
             },
             #endif
 
