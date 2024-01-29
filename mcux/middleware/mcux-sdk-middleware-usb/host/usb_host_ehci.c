@@ -7,6 +7,14 @@
  */
 #include "usb_host_config.h"
 #if ((defined USB_HOST_CONFIG_EHCI) && (USB_HOST_CONFIG_EHCI > 0U))
+#if (defined CONFIG_UHC_DRIVER)
+#include "usb_host_mcux_drv_port.h"
+#include "fsl_device_registers.h"
+#include "usb_host_ehci.h"
+#if ((defined FSL_FEATURE_SOC_USBPHY_COUNT) && (FSL_FEATURE_SOC_USBPHY_COUNT))
+#include "usb_phy.h"
+#endif
+#else
 #include "usb_host.h"
 #include "usb_host_hci.h"
 #include "usb_host_devices.h"
@@ -20,6 +28,7 @@
 #endif
 #if ((defined USB_HOST_CONFIG_COMPLIANCE_TEST) && (USB_HOST_CONFIG_COMPLIANCE_TEST))
 #include "usb_host.h"
+#endif
 #endif
 #if (defined(FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET) && (FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET > 0U))
 #include "fsl_memory.h"
