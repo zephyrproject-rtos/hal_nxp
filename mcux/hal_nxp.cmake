@@ -215,7 +215,7 @@ include_driver_ifdef(CONFIG_DMA_MCUX_SMARTDMA		smartdma	driver_lpc_smartdma)
 include_driver_ifdef(CONFIG_DAC_MCUX_LPDAC			dac_1		driver_dac_1)
 include_driver_ifdef(CONFIG_NXP_IRQSTEER			irqsteer	driver_irqsteer)
 include_driver_ifdef(CONFIG_AUDIO_DMIC_MCUX		dmic		driver_dmic)
-include_driver_ifdef(CONFIG_DMA_NXP_EDMA	edma		driver_edma_rev2)
+include_driver_ifdef(CONFIG_DMA_NXP_EDMA	edma_rev2		driver_edma_rev2)
 
 if ((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4)))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv7-m7	driver_cache_armv7_m7)
