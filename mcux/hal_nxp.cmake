@@ -354,6 +354,19 @@ if (CONFIG_USB_DEVICE_DRIVER)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/include)
 endif()
 
+if (CONFIG_UHC_DRIVER)
+  list(APPEND CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb
+  )
+  include_ifdef(CONFIG_USB_UHC_NXP_PHY          middleware_usb_phy)
+  include_ifdef(CONFIG_USB_UHC_NXP_EHCI         middleware_usb_host_ehci)
+  include_ifdef(CONFIG_USB_UHC_NXP_KHCI         middleware_usb_host_khci)
+
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/host)
+  zephyr_include_directories_ifdef(CONFIG_USB_UHC_NXP_PHY, ${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/phy)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/include)
+endif()
+
 if(CONFIG_ENTROPY_MCUX_CSS)
   list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/css_pkc
