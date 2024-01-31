@@ -90,3 +90,4 @@ Patch List:
      - mcux-sdk\manifests
      - mcux-sdk\middleware\issdk\docs
      - mcux-sdk\docs
+  26. mcux: mcux-sdk: Fix "loop" labels in inline assembly to use unique identifiers.
