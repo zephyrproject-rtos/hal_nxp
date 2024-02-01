@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_LPSPI_EDMA_H_
-#define _FSL_LPSPI_EDMA_H_
+#ifndef FSL_LPSPI_EDMA_H_
+#define FSL_LPSPI_EDMA_H_
 
 #include "fsl_lpspi.h"
 #include "fsl_edma.h"
@@ -20,10 +20,10 @@
  * Definitions
  **********************************************************************************************************************/
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief LPSPI EDMA driver version. */
-#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
-/*@}*/
+#define FSL_LPSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 4, 2))
+/*! @} */
 
 /*!
  * @brief Forward declaration of the _lpspi_master_edma_handle typedefs.
@@ -77,7 +77,7 @@ struct _lpspi_master_edma_handle
     volatile uint8_t bytesLastRead;    /*!< Bytes for last read RDR. */
     volatile bool isThereExtraRxBytes; /*!< Is there extra RX byte. */
 
-    uint8_t *volatile txData;             /*!< Send buffer. */
+    const uint8_t *volatile txData;       /*!< Send buffer. */
     uint8_t *volatile rxData;             /*!< Receive buffer. */
     volatile size_t txRemainingByteCount; /*!< Number of bytes remaining to send.*/
     volatile size_t rxRemainingByteCount; /*!< Number of bytes remaining to receive.*/
@@ -122,7 +122,7 @@ struct _lpspi_slave_edma_handle
 
     uint8_t nbytes; /*!< eDMA minor byte transfer count initially configured. */
 
-    uint8_t *volatile txData;             /*!< Send buffer. */
+    const uint8_t *volatile txData;       /*!< Send buffer. */
     uint8_t *volatile rxData;             /*!< Receive buffer. */
     volatile size_t txRemainingByteCount; /*!< Number of bytes remaining to send.*/
     volatile size_t rxRemainingByteCount; /*!< Number of bytes remaining to receive.*/
@@ -336,4 +336,4 @@ status_t LPSPI_SlaveTransferGetCountEDMA(LPSPI_Type *base, lpspi_slave_edma_hand
 
 /*! @}*/
 
-#endif /*_FSL_LPSPI_EDMA_H_*/
+#endif /*FSL_LPSPI_EDMA_H_*/

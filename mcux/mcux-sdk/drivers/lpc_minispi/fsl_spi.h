@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_SPI_H_
-#define _FSL_SPI_H_
+#ifndef FSL_SPI_H_
+#define FSL_SPI_H_
 
 #include "fsl_common.h"
 
@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SPI driver version. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 6))
-/*@}*/
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 0, 7))
+/*! @} */
 
 #ifndef SPI_DUMMYDATA
 /*! @brief SPI dummy transfer data, the data is sent while txBuff is NULL. */
@@ -227,7 +227,7 @@ enum _spi_status_flags
 /*! @brief SPI transfer structure */
 typedef struct _spi_transfer
 {
-    uint8_t *txData;      /*!< Send buffer */
+    const uint8_t *txData;/*!< Send buffer */
     uint8_t *rxData;      /*!< Receive buffer */
     size_t dataSize;      /*!< Transfer bytes */
     uint32_t configFlags; /*!< Additional option to control transfer @ref _spi_xfer_option. */
@@ -249,7 +249,7 @@ typedef void (*spi_slave_callback_t)(SPI_Type *base, spi_slave_handle_t *handle,
 /*! @brief SPI transfer handle structure */
 struct _spi_master_handle
 {
-    uint8_t *volatile txData;         /*!< Transfer buffer */
+    const uint8_t *volatile txData;   /*!< Transfer buffer */
     uint8_t *volatile rxData;         /*!< Receive buffer */
     volatile size_t txRemainingBytes; /*!< Number of data to be transmitted [in bytes] */
     volatile size_t rxRemainingBytes; /*!< Number of data to be received [in bytes] */
@@ -680,4 +680,4 @@ void SPI_SlaveTransferHandleIRQ(SPI_Type *base, spi_slave_handle_t *handle);
 
 /*! @} */
 
-#endif /* _FSL_SPI_H_*/
+#endif /* FSL_SPI_H_*/
