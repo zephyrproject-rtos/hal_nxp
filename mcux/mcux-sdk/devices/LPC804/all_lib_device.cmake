@@ -236,9 +236,6 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/project_template
   ${CMAKE_CURRENT_LIST_DIR}/../../CMSIS
   ${CMAKE_CURRENT_LIST_DIR}/../../boards/lpcxpresso804
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/MIMXRT1166
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC845
-  ${CMAKE_CURRENT_LIST_DIR}/../../devices/LPC55S06
 )
 
 include(set_board_lpcxpresso804 OPTIONAL)

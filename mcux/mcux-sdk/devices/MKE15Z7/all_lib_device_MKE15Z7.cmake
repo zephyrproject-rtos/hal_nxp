@@ -40,7 +40,6 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/trgmux
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/tsi
     ${CMAKE_CURRENT_LIST_DIR}/../../drivers/wdog32
-    ${CMAKE_CURRENT_LIST_DIR}/../../middleware/issdk
     ${CMAKE_CURRENT_LIST_DIR}/../../../rtos/freertos/freertos-kernel
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities
     ${CMAKE_CURRENT_LIST_DIR}/../../utilities/assert
@@ -63,8 +62,6 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_lpi2c_edma)
 #    include(driver_gpio)
 #    include(component_lists)
-#    include(middleware_issdk_sensor_interface_common)
-#    include(middleware_issdk_sensor_allregdefs)
 #    include(device_system)
 #    include(driver_lpit)
 #    include(utility_debug_console)
@@ -72,8 +69,8 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_acmp)
 #    include(device_startup)
 #    include(driver_pdb)
-#    include(CMSIS_Driver_Include_USART)
-#    include(CMSIS_Driver_Include_SPI)
+#    include(CMSIS_Driver_Include_USART OPTIONAL)
+#    include(CMSIS_Driver_Include_SPI OPTIONAL)
 #    include(utility_debug_console_lite)
 #    include(driver_adc12)
 #    include(driver_flexio_uart)
@@ -81,13 +78,13 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_ewm)
 #    include(utility_assert)
 #    include(driver_lpuart)
-#    include(CMSIS_Include_core_cm)
+#    include(CMSIS_Include_core_cm OPTIONAL)
 #    include(driver_flexio_spi)
 #    include(middleware_freertos-kernel_extension)
 #    include(driver_flexio)
 #    include(driver_ftm)
 #    include(driver_trgmux)
-#    include(CMSIS_Driver_Include_I2C)
+#    include(CMSIS_Driver_Include_I2C OPTIONAL)
 #    include(utility_assert_lite)
 #    include(driver_tsi_v5)
 #    include(driver_flexio_i2c_master)
@@ -101,8 +98,7 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(component_log_backend_ringbuffer)
 #    include(driver_lpuart_edma)
 #    include(device_CMSIS)
-#    include(CMSIS_Driver_Include_Common)
-#    include(middleware_issdk_sensor_nps300x)
+#    include(CMSIS_Driver_Include_Common OPTIONAL)
 #    include(component_osa_bm)
 #    include(driver_wdog32)
 #    include(driver_lpi2c)
@@ -114,14 +110,9 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_crc)
 #    include(driver_flexio_uart_edma)
 #    include(utility_notifier)
-#    include(middleware_issdk_drivers_gpio_kinetis_ke15z)
 #    include(driver_edma_MKE15Z7)
-#    include(middleware_issdk_drivers_ads)
-#    include(middleware_issdk_drivers_host)
 #    include(component_osa_free_rtos)
-#    include(middleware_issdk_drivers_cmsis_drivers)
 #    include(driver_lptmr)
-#    include(middleware_issdk_drivers_systick_utils)
 #    include(component_serial_manager)
 #    include(component_serial_manager_uart)
 #    include(driver_lpspi_freertos)
@@ -131,4 +122,3 @@ list(APPEND CMAKE_MODULE_PATH
 #    include(driver_rcm)
 #    include(component_log_backend_debugconsole)
 #    include(driver_cmsis_lpuart)
-#    include(middleware_issdk_sensor_fxps7250d4)
