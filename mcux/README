@@ -3,14 +3,17 @@ MCUXpresso SDK
 
 Origin:
    NXP MCUXpresso SDK
-   https://github.com/NXPmicro/mcux-sdk
+   https://github.com/nxp-mcuxpresso/mcux-sdk
+   SHA: acc105f1e6304bf3a16ebbb503f8882a4daa1408
 
    NXP Kinetis Connectivity Software
    https://www.nxp.com/webapp/Download?colCode=KW40Z-CONNECTIVITY-SOFTWARE&appType=license&Parent_nodeId=1432854896956716810497&Parent_pageType=product
    https://www.nxp.com/webapp/Download?colCode=MKW2XD-MRC20A-CONNECTIVITY-SW&appType=license&Parent_nodeId=1425322332576706617013&Parent_pageType=productI
 
    NXP MCUXpresso SDK USB
-   https://github.com/NXPmicro/mcux-sdk-middleware-usb
+
+   https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-usb
+   SHA: c8317a37546b18bef2072d6075e061d668b3f1c7
 
 Status:
    Some older Kinetis W family SoCs are not supported in MCUXpresso SDK, but
@@ -58,37 +61,10 @@ License Link:
    https://spdx.org/licenses/BSD-3-Clause.html
 
 Patch List:
-  1. Delete the .a binary archive files after an SDK update before committing the changes. These files are still present in the SDK github repo but have been
-     deleted from the Zephyr HAL
-  2. mcux-sdk/drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
+  1. mcux-sdk/drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
      be four being used for entropy in zephyr.
-  3. fsl_common.h: add #ifdef ZEPHYR #endif to include Zephyr's sys utils
-  4. mcux-sdk/drivers/pit/fsl_pit.c: add guards to avoid compilation warnings when building
-     with SDK clock control driver disabled.
-  5. devices: MIMX8QM6: Add header files for QM's DSP core
-  6. devices: MIMX8QM6_dsp.h: Adjust DSP core interrupts
-  7. devices: MIMX8QM6_dsp.h: Add missing LPUART IRQ macro
-  8. MIMX8QM6: drivers: fsl_clock.c: Report NULL frequency for unsupported core
-  9. devices: MIMX8QX6: Add header files for QXP's DSP core
-  10. MIMX8QX6: scfw_api: Switch to including generic fsl_device_registers.h
-  11. mcux-sdk/drivers/i3c/fsl_i3c.c: add guards to avoid compilation warnings when building
-      with SDK clock control driver disabled for SoC has no reset driver.
-  12. MCUXGH-1081[IRQSTEER] Improve for portability
-  13. drivers: irqsteer: Add function for querying the master interrupts status
-  14. devices: MIMX8ML8: Fix naming inconsistency
-  15. devices: MIMX8ML8: Add missing FSL_FEATURE_* macros
-  16. devices: MIMX8ML8: fsl_clock: Add missing definitions for IRQ_STEER
-  17. devices: MIMX9352: Add new SAI-related FSL_FEATURE_* macros
-  18. drivers: fsl_sai: Allow enabling/disabling implicit channel configuration
-  19. drivers: fsl_sai: Allow NULL FIFO watermark
-  20. drivers: fsl_sai: Fix compilation warnings when asserts are disabled
-  21. mcux-sdk/drivers/ftm/fsl_ftm.c: make public FTM_GetInstance() function (mcux-sdk#155)
-  22. mcux-sdk-middleware-usb: fix ip control return value for ip3511
-  23. drivers: edma: Introduce revision 2 of eDMA driver
-  24. devices: MIMX9352: Add SoC layer definitions required for using edma rev2
-  25. exclude the following directories and files from mcux-sdk update to reduce HAL size:
+  2. Patched middleware_usb_common_header.cmake file to address build issue. PR submitted to upstream
+  3. exclude the following directories and files from mcux-sdk update to reduce HAL size:
+     - All *.a binary archive files. Files are still present in the SDK github repo but are not allowed in Zephyr Project
      - mcux-sdk\manifests
-     - mcux-sdk\middleware\issdk\docs
      - mcux-sdk\docs
-  26. mcux: mcux-sdk: Fix "loop" labels in inline assembly to use unique identifiers.
-  27. mcux-sdk-middleware-usb: Fix build issues with the code from github
