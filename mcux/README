@@ -92,3 +92,7 @@ Patch List:
      - mcux-sdk\docs
   26. mcux: mcux-sdk: Fix "loop" labels in inline assembly to use unique identifiers.
   27. mcux-sdk-middleware-usb: Fix build issues with the code from github
+  28. devices: MIMX8QX6: change IRQ_START_INDEX to 0
+  29. devices: MIMX8QM6: fsl_clock: Add missing definition for AUDIO IRQSTEER
+  30. devices: MIMX8QM6: Fix naming inconsistency
+  31. devices: MIMX8QM6: Add missing FSL_FEATURE_* macros
