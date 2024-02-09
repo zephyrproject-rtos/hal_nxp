@@ -92,3 +92,6 @@ Patch List:
      - mcux-sdk\docs
   26. mcux: mcux-sdk: Fix "loop" labels in inline assembly to use unique identifiers.
   27. mcux-sdk-middleware-usb: Fix build issues with the code from github
+  28. cleanup: drivers: irqsteer: align interrupt query function w/ MCUX_SDK coding style
+  29. drivers: irqsteer: move register index computation to function
+  30. drivers: irqsteer: adjust register index computation formula
