@@ -92,3 +92,5 @@ Patch List:
      - mcux-sdk\docs
   26. mcux: mcux-sdk: Fix "loop" labels in inline assembly to use unique identifiers.
   27. mcux-sdk-middleware-usb: Fix build issues with the code from github
+  28. devices: MIMX8QX6: add soc layer definitions required for using EDMA rev2
+  29. devices: MIMX8QM6: add soc layer definitions required for using EDMA rev2
