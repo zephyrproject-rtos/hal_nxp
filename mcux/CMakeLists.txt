@@ -1,52 +1,26 @@
 set(MCUX_SDK_PROJECT_NAME ${ZEPHYR_CURRENT_LIBRARY})
 # Translate the SoC name and part number into the mcux device and cpu
 # name respectively.
+# When this code completes, the following variables will be defined:
+# MCUX_DEVICE: SOC name, suffixed by core name when using a dual core part.
+#              Example: MIMXRT595S_cm33, or LPC55S36
+# MCUX_CPU: "CPU"+ SOC part number, followed by core name when using a dual core part.
+#              Example: CPU_MIMXRT595SFAWC_cm33, or  CPU_LPC55S36JBD100
+# MCU_DEVICE_PATH: SOC name without core suffix. Must match the name of the
+#              folder in MCUX HAL. IE MIMXRT595S, or LPC55S36
 
-# Get MCUX_DEVICE and MCUX_DEVICE_PATH from CONFIG_SOC
-# For example, if CONFIG_SOC=mimx8ml8_ca53, then MCUX_DEVICE=MIMX8ML8_ca53
-# and MCUX_DEVICE_PATH=MIMX8ML8
-string(FIND ${CONFIG_SOC} "_" pos)
-if(pos GREATER -1)
-  string(REPLACE "_" ";" MCUX_DEVICE_TMP ${CONFIG_SOC})
-  list(GET MCUX_DEVICE_TMP 0 MCUX_DEVICE_SOC)
-  list(GET MCUX_DEVICE_TMP 1 MCUX_DEVICE_CORE)
-  string(TOUPPER ${MCUX_DEVICE_SOC} MCUX_DEVICE_PATH)
-  set(MCUX_DEVICE ${MCUX_DEVICE_PATH}_${MCUX_DEVICE_CORE})
+if(NOT HWMv2)
+  # Include HWMv1 logic for MCUX variables
+  include(${CMAKE_CURRENT_LIST_DIR}/hwmv1.cmake)
 else()
-  string(TOUPPER ${CONFIG_SOC} MCUX_DEVICE)
   string(TOUPPER ${CONFIG_SOC} MCUX_DEVICE_PATH)
-endif()
+  string(TOUPPER ${CONFIG_SOC} MCUX_DEVICE)
+  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER})
 
-if("${MCUX_DEVICE}" STREQUAL "LPC51U68")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER})
-elseif("${MCUX_DEVICE}" STREQUAL "LPC54114")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm4)
-elseif("${MCUX_DEVICE}" STREQUAL "LPC54114_m0")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm0plus)
-elseif("${MCUX_DEVICE}" STREQUAL "LPC55S16")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER})
-elseif("${MCUX_DEVICE}" STREQUAL "LPC55S28")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER})
-elseif("${MCUX_DEVICE}" STREQUAL "LPC55S69_cpu0")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm33_core0)
-elseif("${MCUX_DEVICE}" STREQUAL "LPC55S69_cpu1")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm33_core1)
-elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT1052")
-  string(REGEX REPLACE "(.*)[AB]$" "CPU_\\1B" MCUX_CPU ${CONFIG_SOC_PART_NUMBER})
-elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT595S_cm33")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm33)
-elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT685S_cm33")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm33)
-elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT1176_cm4")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm4)
-elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT1176_cm7")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm7)
-elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT1166_cm4")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm4)
-elseif("${MCUX_DEVICE}" STREQUAL "MIMXRT1166_cm7")
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER}_cm7)
-else()
-  set(MCUX_CPU CPU_${CONFIG_SOC_PART_NUMBER})
+  if(DEFINED CONFIG_MCUX_CORE_SUFFIX)
+    string(APPEND MCUX_DEVICE ${CONFIG_MCUX_CORE_SUFFIX})
+    string(APPEND MCUX_CPU ${CONFIG_MCUX_CORE_SUFFIX})
+  endif()
 endif()
 
 zephyr_include_directories(mcux-sdk/devices/${MCUX_DEVICE_PATH})

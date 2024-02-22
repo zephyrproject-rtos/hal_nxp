@@ -91,7 +91,7 @@ include(driver_common)
 
 #Include system_xxx file
 #This can be extended to other SoC series if needed
-if (DEFINED CONFIG_PLATFORM_SPECIFIC_INIT OR DEFINED CONFIG_SOC_SERIES_IMX_RT6XX
+if (DEFINED CONFIG_PLATFORM_SPECIFIC_INIT OR DEFINED CONIFG_SOC_SERIES_IMXRT6XX
     OR DEFINED CONFIG_SOC_SERIES_LPC55XXX)
 if (CONFIG_SOC_MIMXRT1166_CM4)
 include(device_system_MIMXRT1166_cm4)
@@ -249,7 +249,8 @@ if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_kinetis")
 
 endif()
 
-if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_lpc")
+# Temporary change to handle LPC SOC family name change between HWMv1 and HWMv2
+if(("${CONFIG_SOC_FAMILY}" STREQUAL "lpc") OR ("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_lpc"))
 
 if ((${MCUX_DEVICE} MATCHES "LPC8[0-9][0-9]") OR (${MCUX_DEVICE} MATCHES "LPC5(1|4)"))
   include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		iap		driver_iap)
