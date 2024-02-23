@@ -1,11 +1,11 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _S32Z27_GLUE_MCUX_H_
-#define _S32Z27_GLUE_MCUX_H_
+#ifndef _S32Z270_GLUE_MCUX_H_
+#define _S32Z270_GLUE_MCUX_H_
 
 /* PIT - Peripheral instance base addresses */
 /** Peripheral PIT0 base address */
@@ -48,4 +48,4 @@
 #define I3C_IBIEXT2_EXT6(x)                     0
 #define I3C_IBIEXT2_EXT7(x)                     0
 
-#endif /* _S32Z27_GLUE_MCUX_H_ */
+#endif /* _S32Z270_GLUE_MCUX_H_ */

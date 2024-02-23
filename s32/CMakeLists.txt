@@ -1,20 +1,17 @@
-# Copyright 2022-2023 NXP
+# Copyright 2022-2024 NXP
 
 # Set the SoC specific drivers and configuration to build
-if(${CONFIG_SOC} STREQUAL "s32z27")
+if(HWMv2)
   set(SOC_BASE ${CONFIG_SOC})
-  set(DRIVERS_BASE s32ze)
-elseif(${CONFIG_SOC} MATCHES "s32k3.*")
-  set(SOC_BASE ${CONFIG_SOC})
-  set(DRIVERS_BASE s32k3)
-elseif(${CONFIG_SOC} MATCHES "s32k1.*")
-  set(SOC_BASE ${CONFIG_SOC})
-  set(DRIVERS_BASE s32k1)
 else()
-  message(FATAL_ERROR "SoC ${CONFIG_SOC} not supported")
+  if(${CONFIG_SOC} STREQUAL "s32z27")
+    set(SOC_BASE "s32z270")
+  else()
+    set(SOC_BASE ${CONFIG_SOC})
+  endif()
 endif()
 
-add_subdirectory(drivers/${DRIVERS_BASE})
+add_subdirectory(drivers/${SOC_SERIES})
 add_subdirectory(soc/${SOC_BASE})
 
 if(CONFIG_HAS_MCUX)
@@ -60,7 +57,7 @@ if(CONFIG_HAS_MCUX)
   set(MCUX_SDK_PROJECT_NAME ${ZEPHYR_CURRENT_LIBRARY})
 
   # Translate the SoC name into the MCUX device
-  string(TOUPPER ${CONFIG_SOC} MCUX_DEVICE)
+  string(TOUPPER ${SOC_BASE} MCUX_DEVICE)
 
   # This is normally done in mcux/hal_nxp.cmake, but we need to point to the
   # path on this directory instead
