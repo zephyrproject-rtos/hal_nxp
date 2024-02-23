@@ -1,11 +1,11 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _S32Z27_FEATURES_H_
-#define _S32Z27_FEATURES_H_
+#ifndef _S32Z270_FEATURES_H_
+#define _S32Z270_FEATURES_H_
 
 /* SOC module features */
 
@@ -41,4 +41,4 @@
 /* @brief Has ERRATA_051617. */
 #define FSL_FEATURE_I3C_HAS_ERRATA_051617 (1)
 
-#endif /* _S32Z27_FEATURES_H_ */
+#endif /* _S32Z270_FEATURES_H_ */
