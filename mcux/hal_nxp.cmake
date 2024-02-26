@@ -81,9 +81,9 @@ zephyr_library_compile_definitions_ifdef(
 # Required by all SCFW-based SoCs
 if (CONFIG_SOC_MIMX8QM_A53 OR CONFIG_SOC_MIMX8QM_ADSP OR CONFIG_SOC_MIMX8QXP_ADSP)
     list(APPEND CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE}/scfw_api
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE_PATH}/scfw_api
     )
-    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE}/scfw_api)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE_PATH}/scfw_api)
     include(driver_scfw_api)
 endif()
 
