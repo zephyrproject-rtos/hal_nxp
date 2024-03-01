@@ -1,6 +1,6 @@
 zephyr_include_directories(.)
 
-if(CONFIG_SOC_MCIMX7_M4)
+if(CONFIG_SOC_MCIMX7D_M4)
 zephyr_library_sources(
   ccm_imx7d.c
   ccm_analog_imx7d.c
