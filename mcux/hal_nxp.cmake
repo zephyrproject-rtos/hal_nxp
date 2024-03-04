@@ -3,6 +3,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/common
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flexcomm
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lpflexcomm
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flexio
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/dmamux
 )
@@ -92,7 +93,7 @@ include(driver_common)
 #Include system_xxx file
 #This can be extended to other SoC series if needed
 if (DEFINED CONFIG_PLATFORM_SPECIFIC_INIT OR DEFINED CONFIG_SOC_SERIES_IMXRT6XX
-    OR DEFINED CONFIG_SOC_SERIES_LPC55XXX)
+    OR DEFINED CONFIG_SOC_SERIES_LPC55XXX OR DEFINED CONFIG_SOC_SERIES_MCXNX4X)
 if (CONFIG_SOC_MIMXRT1166_CM4)
 include(device_system_MIMXRT1166_cm4)
 elseif (CONFIG_SOC_MIMXRT1166_CM7)
@@ -109,6 +110,10 @@ elseif (CONFIG_SOC_LPC54114_M4)
 include(device_system_LPC54114_cm4)
 elseif (CONFIG_SOC_LPC54114_M0)
 include(device_system_LPC54114_cm0plus)
+elseif (CONFIG_SOC_MCXN947_CPU0)
+include(device_system_MCXN947_cm33_core0)
+elseif (CONFIG_SOC_MCXN947_CPU1)
+include(device_system_MCXN947_cm33_core1)
 else()
 include(device_system)
 endif()
@@ -169,7 +174,12 @@ include_driver_ifdef(CONFIG_MCUX_FLEXIO			flexio		driver_flexio)
 include_driver_ifdef(CONFIG_SPI_MCUX_FLEXIO		flexio/spi	driver_flexio_spi)
 include_driver_ifdef(CONFIG_UART_MCUX			uart		driver_uart)
 include_driver_ifdef(CONFIG_UART_MCUX_LPSCI		lpsci		driver_lpsci)
+if (CONFIG_NXP_LP_FLEXCOMM)
+include_driver_ifdef(CONFIG_UART_MCUX_LPUART		lpflexcomm	driver_lpflexcomm)
+include_driver_ifdef(CONFIG_UART_MCUX_LPUART		lpflexcomm/lpuart	driver_lpuart)
+else()
 include_driver_ifdef(CONFIG_UART_MCUX_LPUART		lpuart		driver_lpuart)
+endif()
 include_driver_ifdef(CONFIG_WDT_MCUX_WDOG		wdog		driver_wdog)
 include_driver_ifdef(CONFIG_WDT_MCUX_WDOG32		wdog32		driver_wdog32)
 include_driver_ifdef(CONFIG_COUNTER_MCUX_GPT		gpt		driver_gpt)
@@ -196,7 +206,7 @@ include_driver_ifdef(CONFIG_HWINFO_MCUX_SRC		src		driver_src)
 include_driver_ifdef(CONFIG_HWINFO_MCUX_SIM		sim		driver_sim)
 include_driver_ifdef(CONFIG_HWINFO_MCUX_RCM		rcm		driver_rcm)
 include_driver_ifdef(CONFIG_IPM_MCUX			mailbox		driver_mailbox)
-include_driver_ifdef(CONFIG_MBOX_NXP_MAILBOX			mailbox		driver_mailbox)
+include_driver_ifdef(CONFIG_MBOX_NXP_MAILBOX		mailbox		driver_mailbox)
 include_driver_ifdef(CONFIG_COUNTER_MCUX_SNVS		snvs_hp		driver_snvs_hp)
 include_driver_ifdef(CONFIG_COUNTER_MCUX_SNVS_SRTC	snvs_lp		driver_snvs_lp)
 include_driver_ifdef(CONFIG_COUNTER_MCUX_LPTMR		lptmr		driver_lptmr)
@@ -209,12 +219,13 @@ include_driver_ifdef(CONFIG_MCUX_SDIF			sdif		driver_sdif)
 include_driver_ifdef(CONFIG_ADC_MCUX_ETC		adc_etc		driver_adc_etc)
 include_driver_ifdef(CONFIG_MCUX_XBARA			xbara		driver_xbara)
 include_driver_ifdef(CONFIG_QDEC_MCUX			enc		driver_enc)
-include_driver_ifdef(CONFIG_CRYPTO_MCUX_DCP			dcp		driver_dcp)
+include_driver_ifdef(CONFIG_CRYPTO_MCUX_DCP		dcp		driver_dcp)
 include_driver_ifdef(CONFIG_DMA_MCUX_SMARTDMA		smartdma	driver_lpc_smartdma)
-include_driver_ifdef(CONFIG_DAC_MCUX_LPDAC			dac_1		driver_dac_1)
-include_driver_ifdef(CONFIG_NXP_IRQSTEER			irqsteer	driver_irqsteer)
+include_driver_ifdef(CONFIG_DAC_MCUX_LPDAC		dac_1		driver_dac_1)
+include_driver_ifdef(CONFIG_NXP_IRQSTEER		irqsteer	driver_irqsteer)
 include_driver_ifdef(CONFIG_AUDIO_DMIC_MCUX		dmic		driver_dmic)
-include_driver_ifdef(CONFIG_DMA_NXP_EDMA	edma_rev2		driver_edma_rev2)
+include_driver_ifdef(CONFIG_DMA_NXP_EDMA		edma_rev2	driver_edma_rev2)
+include_driver_ifdef(CONFIG_SOC_FAMILY_NXP_MCX		mcx_spc		driver_mcx_spc)
 
 if ((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4)))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv7-m7	driver_cache_armv7_m7)
@@ -252,6 +263,13 @@ if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_kinetis")
     include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/sysmpu/driver_sysmpu.cmake)
     zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/sysmpu)
   endif()
+
+endif()
+
+if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_mcx")
+
+  include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port/driver_port.cmake)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port)
 
 endif()
 
