@@ -11,7 +11,7 @@ zephyr_library_sources_ifdef(CONFIG_BT_NXP_IPM		        fsl_adc.c)
 zephyr_library_sources_ifdef(CONFIG_BT                      fsl_aes.c)
 # fsl_cic_XX
 # fsl_cmp
-zephyr_library_sources_ifdef(CONFIG_BT_NXP_IPM		        fsl_common.c)
+zephyr_library_sources(fsl_common.c)
 zephyr_library_sources_ifdef(CONFIG_COUNTER_MCUX_CTIMER     fsl_ctimer.c)
 zephyr_library_sources_ifdef(CONFIG_DMA_MCUX_LPC            fsl_dma.c)
 # fsl_dmic_XX
