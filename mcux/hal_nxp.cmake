@@ -281,6 +281,7 @@ endif()
 endif()
 
 if(${MCUX_DEVICE} MATCHES "MIMXRT(5|6)")
+  set(CONFIG_USE_driver_pca9420 true)
   include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lpc_iopctl/driver_lpc_iopctl.cmake)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lpc_iopctl)
 endif()
