@@ -218,7 +218,7 @@ include_driver_ifdef(CONFIG_DMA_NXP_EDMA	edma_rev2		driver_edma_rev2)
 
 if ((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4)))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv7-m7	driver_cache_armv7_m7)
-elseif(${MCUX_DEVICE} MATCHES "MIMXRT(5|6)")
+elseif((${MCUX_DEVICE} MATCHES "MIMXRT(5|6)") OR (${MCUX_DEVICE} MATCHES "RW61"))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/cache64	driver_cache_cache64)
 elseif((${MCUX_DEVICE} MATCHES "MK(28|66)") OR (${MCUX_DEVICE} MATCHES "MKE(14|16|18)") OR (CONFIG_SOC_MIMXRT1166_CM4) OR (CONFIG_SOC_MIMXRT1176_CM4))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/lmem	driver_cache_lmem)
@@ -232,6 +232,14 @@ elseif (${MCUX_DEVICE} MATCHES "MIMXRT10[0-9][0-9]")
    include_driver_ifdef(CONFIG_PM_MCUX_DCDC		dcdc_1		driver_dcdc_1)
    include_driver_ifdef(CONFIG_PM_MCUX_PMU		pmu		driver_pmu)
 endif()
+
+if((${MCUX_DEVICE} MATCHES "RW61") AND (NOT DEFINED CONFIG_MINIMAL_LIBC))
+	# Whenever building for RW61x without minimal LIBC, use optimized memcpy.
+	# This will avoid issues with unaligned access to peripheral RAM regions
+	# caused by the memcpy implmentation in newlib
+	zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/utilities/misc_utilities/fsl_memcpy.S)
+endif()
+
 
 if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_kinetis")
 

@@ -68,3 +68,4 @@ Patch List:
      - All *.a binary archive files. Files are still present in the SDK github repo but are not allowed in Zephyr Project
      - mcux-sdk\manifests
      - mcux-sdk\docs
+  4. Add RW61X device_system.cmake
