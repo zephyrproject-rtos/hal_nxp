@@ -69,3 +69,4 @@ Patch List:
      - mcux-sdk\manifests
      - mcux-sdk\docs
   4. Add RW61X device_system.cmake
+  5. devices: MCXN947: Update system file to remove SDK sepecific defines
