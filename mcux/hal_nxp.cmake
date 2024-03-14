@@ -269,6 +269,9 @@ endif()
 
 if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_mcx")
 
+  include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		mcx_romapi	driver_flashiap)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/mcx_romapi/flash)
+
   include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port/driver_port.cmake)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port)
 
