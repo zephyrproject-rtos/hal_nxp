@@ -70,3 +70,6 @@ Patch List:
      - mcux-sdk\docs
   4. Add RW61X device_system.cmake
   5. devices: MCXN947: Update system file to remove SDK sepecific defines
+  6. devices: MIMX8UD7: add header and source files for HIFI4 DSP core
+  7. devices: MIMX8UD7: fsl_device_registers.h: add support for HIFI4 DSP
+  8. devices: MIMX8UD7: add cmake file for reset driver
