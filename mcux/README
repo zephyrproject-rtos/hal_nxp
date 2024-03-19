@@ -73,3 +73,8 @@ Patch List:
   6. devices: MIMX8UD7: add header and source files for HIFI4 DSP core
   7. devices: MIMX8UD7: fsl_device_registers.h: add support for HIFI4 DSP
   8. devices: MIMX8UD7: add cmake file for reset driver
+  9. Add usb_host_mcux_drv_port.h file for using MCUX SDK USB host controller driver easily in Zephyr.
+     - usb_host_mcux_drv_port.h contains the simplified structs, enums and APIs that MCUX SDK USB host controller drivers need.
+     - Update usb_host_ehci.c and usb_host_khci.c if in Zephyr environment.
+       - Add include of usb_host_mcux_drv_port.h.
+       - Remove include of usb_host.h, usb_host_hci.h, usb_host_devices.h and usb_host_framework.h.
