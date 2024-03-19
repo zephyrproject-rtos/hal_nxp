@@ -8,6 +8,11 @@
 
 #include "usb_device_config.h"
 #include "usb.h"
+/* CONFIG_UDC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
+#if ((defined CONFIG_UDC_DRIVER) && (CONFIG_UDC_DRIVER))
+#include "fsl_device_registers.h"
+#include "usb_device_mcux_drv_port.h"
+#else
 #include "usb_device.h"
 #include "fsl_device_registers.h"
 #if (defined(USB_DEVICE_CONFIG_CHARGER_DETECT) && (USB_DEVICE_CONFIG_CHARGER_DETECT > 0U)) && \
@@ -19,10 +24,16 @@
 #include "usb_phy.h"
 #endif
 #endif
+#endif
 #if (((defined(USB_DEVICE_CONFIG_LPCIP3511FS)) && (USB_DEVICE_CONFIG_LPCIP3511FS > 0U)) || \
      ((defined(USB_DEVICE_CONFIG_LPCIP3511HS)) && (USB_DEVICE_CONFIG_LPCIP3511HS > 0U)))
+/* CONFIG_UDC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
+#if ((defined CONFIG_UDC_DRIVER) && (CONFIG_UDC_DRIVER))
+#include "usb_device_lpcip3511.h"
+#else
 #include "usb_device_dci.h"
 #include "usb_device_lpcip3511.h"
+#endif
 
 #if ((defined(USB_DEVICE_CONFIG_LPCIP3511HS)) && (USB_DEVICE_CONFIG_LPCIP3511HS > 0U))
 
