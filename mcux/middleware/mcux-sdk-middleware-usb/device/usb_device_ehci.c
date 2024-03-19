@@ -9,9 +9,17 @@
 #include "usb_device_config.h"
 #include "fsl_device_registers.h"
 #include "usb.h"
+/* CONFIG_UDC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
+#if !((defined CONFIG_UDC_DRIVER) && (CONFIG_UDC_DRIVER))
 #include "usb_device.h"
+#endif
 #if ((defined(USB_DEVICE_CONFIG_EHCI)) && (USB_DEVICE_CONFIG_EHCI > 0U))
 
+/* CONFIG_UDC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
+#if ((defined CONFIG_UDC_DRIVER) && (CONFIG_UDC_DRIVER))
+#include "usb_device_mcux_drv_port.h"
+#include "usb_device_ehci.h"
+#else
 #include "usb_device_dci.h"
 
 #include "usb_device_ehci.h"
@@ -29,6 +37,7 @@
 #endif
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
 #include "fsl_memory.h"
+#endif
 #endif
 /*******************************************************************************
  * Definitions
