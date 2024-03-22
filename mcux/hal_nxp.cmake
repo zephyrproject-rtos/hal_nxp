@@ -308,6 +308,11 @@ endif()
 
 endif()
 
+if(${MCUX_DEVICE} MATCHES "MCXN")
+    include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/vref_1/driver_vref_1.cmake)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/vref_1)
+endif()
+
 if(${MCUX_DEVICE} MATCHES "MIMXRT(5|6)")
   include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lpc_iopctl/driver_lpc_iopctl.cmake)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lpc_iopctl)
