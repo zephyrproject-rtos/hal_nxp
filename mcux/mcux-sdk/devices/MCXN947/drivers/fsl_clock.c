@@ -1732,6 +1732,7 @@ uint32_t CLOCK_GetWdtClkFreq(uint32_t id)
                 freq = CLOCK_GetFroHfFreq() / ((SYSCON->FROHFDIV & 0xffU) + 1U);
                 break;
             case 2U:
+            case 3U:
                 freq = CLOCK_GetClk1MFreq();
                 break;
             default:
