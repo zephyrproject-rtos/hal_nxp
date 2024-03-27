@@ -1734,6 +1734,9 @@ uint32_t CLOCK_GetWdtClkFreq(uint32_t id)
             case 2U:
                 freq = CLOCK_GetClk1MFreq();
                 break;
+            case 3U:
+                freq = CLOCK_GetClk1MFreq();
+                break;
             default:
                 freq = 0U;
                 break;
