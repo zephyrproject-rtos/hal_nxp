@@ -73,3 +73,4 @@ Patch List:
   6. devices: MIMX8UD7: add header and source files for HIFI4 DSP core
   7. devices: MIMX8UD7: fsl_device_registers.h: add support for HIFI4 DSP
   8. devices: MIMX8UD7: add cmake file for reset driver
+  9. drivers: lpflexcomm: lpi2c: Fixed an error in the driver when interacting with the lpflexcomm driver
