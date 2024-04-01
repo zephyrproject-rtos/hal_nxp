@@ -77,3 +77,4 @@ Patch List:
   10. devices: LPC5534: Changed FSL_FEATURE_PWM_HAS_NO_WAITEN from 1 to 0 to solve pwm issue.
   11. devices: LPC5536: Changed FSL_FEATURE_PWM_HAS_NO_WAITEN from 1 to 0 to solve pwm issue.
   12. devices: LPC55S36: Changed FSL_FEATURE_PWM_HAS_NO_WAITEN from 1 to 0 to solve pwm issue.
+  13. devices: MIMX8UD7: add definition for LPUART_RX_TX_IRQS
