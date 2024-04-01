@@ -79,3 +79,4 @@ Patch List:
   12. devices: LPC55S36: Changed FSL_FEATURE_PWM_HAS_NO_WAITEN from 1 to 0 to solve pwm issue.
   13. devices: MIMX8UD7: add definition for LPUART_RX_TX_IRQS
   14. devices: MCXN947: clock: Updated the clock frequency, case 3 on GetWdtClkFreq returns 1MHZ
+  15. devices: MIMX8UD7: add soc layer definitions required for using EDMA rev2
