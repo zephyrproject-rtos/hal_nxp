@@ -75,3 +75,4 @@ Patch List:
       - Update usb_device_ehci.c and usb_device_lpcip3511.c if in Zephyr environment.
         - Add include of usb_device_mcux_drv_port.h.
         - Remove include of usb_device.h and usb_device_dci.h.
+  7. drivers: csi: Rework to fix the low framerate issue
