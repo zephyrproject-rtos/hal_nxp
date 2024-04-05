@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef _FSL_SPI_H_
-#define _FSL_SPI_H_
+#ifndef FSL_SPI_H_
+#define FSL_SPI_H_
 
 #include "fsl_common.h"
 #include "fsl_flexcomm.h"
@@ -23,10 +23,10 @@
  ******************************************************************************/
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief SPI driver version. */
-#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 1))
-/*@}*/
+#define FSL_SPI_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @} */
 /*! @brief SPI default SSEL COUNT*/
 #if !(defined(FSL_FEATURE_SPI_SSEL_COUNT) || defined(FSL_FEATURE_SPI_IS_SSEL_PIN_COUNT_EQUAL_TO_THREE))
 #define FSL_FEATURE_SPI_SSEL_COUNT (4U)
@@ -239,7 +239,7 @@ enum _spi_statusflags
 /*! @brief SPI transfer structure */
 typedef struct _spi_transfer
 {
-    uint8_t *txData;      /*!< Send buffer */
+    const uint8_t *txData;/*!< Send buffer */
     uint8_t *rxData;      /*!< Receive buffer */
     uint32_t configFlags; /*!< Additional option to control transfer, @ref spi_xfer_option_t. */
     size_t dataSize;      /*!< Transfer bytes */
@@ -248,7 +248,7 @@ typedef struct _spi_transfer
 /*! @brief SPI half-duplex(master only) transfer structure */
 typedef struct _spi_half_duplex_transfer
 {
-    uint8_t *txData;            /*!< Send buffer */
+    const uint8_t *txData;            /*!< Send buffer */
     uint8_t *rxData;            /*!< Receive buffer */
     size_t txDataSize;          /*!< Transfer bytes for transmit */
     size_t rxDataSize;          /*!< Transfer bytes */
@@ -280,7 +280,7 @@ typedef void (*spi_slave_callback_t)(SPI_Type *base, spi_slave_handle_t *handle,
 /*! @brief SPI transfer handle structure */
 struct _spi_master_handle
 {
-    uint8_t *volatile txData;         /*!< Transfer buffer */
+    const uint8_t *volatile txData;   /*!< Transfer buffer */
     uint8_t *volatile rxData;         /*!< Receive buffer */
     volatile size_t txRemainingBytes; /*!< Number of data to be transmitted [in bytes] */
     volatile size_t rxRemainingBytes; /*!< Number of data to be received [in bytes] */
@@ -755,4 +755,4 @@ static inline void SPI_SlaveTransferHandleIRQ(SPI_Type *base, spi_slave_handle_t
 
 /*! @} */
 
-#endif /* _FSL_SPI_H_*/
+#endif /* FSL_SPI_H_*/
