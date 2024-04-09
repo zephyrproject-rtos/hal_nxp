@@ -114,13 +114,19 @@ void FLEXIO_Init(FLEXIO_Type *base, const flexio_config_t *userConfig)
     FLEXIO_Reset(base);
 
     ctrlReg = base->CTRL;
+#ifdef FSL_FEATURE_FLEXIO_HAS_NO_DOZE_MODE_SUPPORT
+    ctrlReg &= ~(FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
+#else
     ctrlReg &= ~(FLEXIO_CTRL_DOZEN_MASK | FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
+#endif
     ctrlReg |= (FLEXIO_CTRL_DBGE(userConfig->enableInDebug) | FLEXIO_CTRL_FASTACC(userConfig->enableFastAccess) |
                 FLEXIO_CTRL_FLEXEN(userConfig->enableFlexio));
+#ifndef FSL_FEATURE_FLEXIO_HAS_NO_DOZE_MODE_SUPPORT
     if (!userConfig->enableInDoze)
     {
         ctrlReg |= FLEXIO_CTRL_DOZEN_MASK;
     }
+#endif
 
     base->CTRL = ctrlReg;
 }

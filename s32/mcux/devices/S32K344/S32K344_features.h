@@ -21,6 +21,8 @@
 #define FSL_FEATURE_SOC_LPSPI_COUNT (6)
 /* @brief EDMA availability on the SoC. */
 #define FSL_FEATURE_SOC_EDMA_COUNT (1)
+/* @brief FLEXIO availability on the SoC. */
+#define FSL_FEATURE_SOC_FLEXIO_COUNT (1)
 
 /* LPUART module features */
 
@@ -199,6 +201,13 @@
 #define FSL_FEATURE_DMAMUX_HAS_TRIG (1)
 /* @brief Register CHCFGn width. */
 #define FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH (8)
+
+/* FLEXIO module features */
+
+/* @brief Has pin input output related registers */
+#define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
+/* @brief Has doze mode in Flexio */
+#define FSL_FEATURE_FLEXIO_HAS_NO_DOZE_MODE_SUPPORT (1)
 
 /* @brief Memory map has offset between subsystems. */
 #define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (1)
