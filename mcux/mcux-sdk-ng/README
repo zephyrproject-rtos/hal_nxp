@@ -46,3 +46,4 @@ Patch List:
   - drivers/adc12/fsl_adc12.c: add guards to avoid compilation warnings when building
       with SDK clock control driver disabled.
   - drivers: irqsteer: adjust CHn_MASK index computation
+  - drivers: flexio lcd: Pass a parameter to the GPIO callback functions
