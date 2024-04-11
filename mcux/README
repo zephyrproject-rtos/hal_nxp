@@ -69,3 +69,4 @@ Patch List:
      - mcux-sdk\manifests
      - mcux-sdk\docs
   4. devices: MCXN947: clock: Updated the clock frequency, case 3 on GetWdtClkFreq returns 1MHZ
+  5. drivers: flexio lcd: Pass a parameter to the GPIO callback functions.
