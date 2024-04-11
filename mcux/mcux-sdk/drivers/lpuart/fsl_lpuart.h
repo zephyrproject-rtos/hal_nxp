@@ -9,6 +9,7 @@
 #define FSL_LPUART_H_
 
 #include "fsl_common.h"
+#include "fsl_clock.h"
 
 /*!
  * @addtogroup lpuart_driver
