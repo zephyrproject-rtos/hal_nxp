@@ -70,3 +70,8 @@ Patch List:
      - mcux-sdk\docs
   4. devices: MCXN947: clock: Updated the clock frequency, case 3 on GetWdtClkFreq returns 1MHZ
   5. drivers: flexio lcd: Pass a parameter to the GPIO callback functions.
+  6. Add usb_device_mcux_drv_port.h file for using MCUX SDK USB device controller driver easily in Zephyr.
+      - usb_device_mcux_drv_port.h contains the simplified structs, enums and APIs that MCUX SDK USB device controller drivers need.
+      - Update usb_device_ehci.c and usb_device_lpcip3511.c if in Zephyr environment.
+        - Add include of usb_device_mcux_drv_port.h.
+        - Remove include of usb_device.h and usb_device_dci.h.
