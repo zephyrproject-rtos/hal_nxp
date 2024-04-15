@@ -32,6 +32,11 @@ static sc_ipc_t ipcHandle;
  * Code
  ******************************************************************************/
 
+bool CLOCK_EnableClock(clock_ip_name_t name)
+{
+	return CLOCK_EnableClockExt(name, 0);
+}
+
 /*!
  * brief Initialize Clock module.
  *

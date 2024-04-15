@@ -446,10 +446,7 @@ bool CLOCK_EnableClockExt(clock_ip_name_t name, uint32_t gate);
  * @param name  Which clock to enable, see \ref clock_ip_name_t.
  * @return true for success, false for failure.
  */
-static inline bool CLOCK_EnableClock(clock_ip_name_t name)
-{
-    return CLOCK_EnableClockExt(name, 0);
-}
+bool CLOCK_EnableClock(clock_ip_name_t name);
 
 /*!
  * @brief Disable the clock for specific IP.
