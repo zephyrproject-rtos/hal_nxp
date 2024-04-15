@@ -276,7 +276,7 @@ static void (*hci_rx_callback)(uint8_t packetType, uint8_t *data, uint16_t len);
 /*                                Public memory                               */
 /* -------------------------------------------------------------------------- */
 
-static const uint8_t hci_cal_data_params[HCI_CMD_STORE_BT_CAL_DATA_PARAM_LENGTH] = {
+const uint8_t hci_cal_data_params[HCI_CMD_STORE_BT_CAL_DATA_PARAM_LENGTH] = {
     0x00U,                            //  Sequence Number : 0x00
     0x00U,                            //  Action : 0x00
     0x01U,                            //  Type : Not use CheckSum
@@ -330,7 +330,7 @@ static const uint8_t hci_cal_data_params[HCI_CMD_STORE_BT_CAL_DATA_PARAM_LENGTH]
  *    2.diversity case(enable ant3)
  *    3.diversity case(enable ant4)
  */
-static const uint8_t hci_cal_data_annex100_params[HCI_CMD_STORE_BT_CAL_DATA_PARAM_ANNEX100_LENGTH] = {
+const uint8_t hci_cal_data_annex100_params[HCI_CMD_STORE_BT_CAL_DATA_PARAM_ANNEX100_LENGTH] = {
     /*                   BT_HW_INFO   START              */
     0x64U, //  Annex Type : 0x64
     0x00U, //  CheckSum: Annex100 ignores checksum
@@ -462,6 +462,12 @@ int PLATFORM_TerminateBle(void)
         if (OSA_EventDestroy((osa_event_handle_t)wakeUpEventGroup) != KOSA_StatusSuccess)
         {
             ret = -3;
+            break;
+        }
+
+        if (OSA_MutexDestroy((osa_mutex_handle_t)bleMutexHandle) != KOSA_StatusSuccess)
+        {
+            ret = -4;
             break;
         }
 
