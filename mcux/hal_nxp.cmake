@@ -258,6 +258,10 @@ elseif((${MCUX_DEVICE} MATCHES "MK(28|66)") OR (${MCUX_DEVICE} MATCHES "MKE(14|1
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/lmem	driver_cache_lmem)
 endif()
 
+if(CONFIG_CPU_CORTEX_A)
+  include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv8-a	driver_cache_armv8a)
+endif()
+
 if (${MCUX_DEVICE} MATCHES "MIMXRT11[0-9][0-9]")
    include_driver_ifdef(CONFIG_PM_MCUX_GPC		gpc_3		driver_gpc_3)
    include_ifdef(CONFIG_HWINFO_MCUX_SRC_V2		driver_soc_src)
