@@ -70,6 +70,11 @@ add_subdirectory_ifdef(
   middleware/wireless/framework_5.3.3
   )
 
+add_subdirectory_ifdef(
+  CONFIG_WIFI_NXP
+  middleware/wifi_nxp
+  )
+
 #Include Entry cmake component
 include(${CMAKE_CURRENT_LIST_DIR}/hal_nxp.cmake)
 enable_language(C ASM)

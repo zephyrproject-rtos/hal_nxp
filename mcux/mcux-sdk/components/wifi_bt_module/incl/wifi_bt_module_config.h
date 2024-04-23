@@ -5,6 +5,9 @@
  *  SPDX-License-Identifier: BSD-3-Clause
  */
 
+#ifndef _WIFI_BT_MODULE_CONFIG_H_
+#define _WIFI_BT_MODULE_CONFIG_H_
+
 /* Wi-Fi boards configuration list */
 
 /* AzureWave AW-NM191-uSD */
@@ -347,10 +350,8 @@
  */
 #define SD8987
 
-#elif defined(WIFI_BOARD_RW610)
-#define RW610
-#define WIFI_BT_TX_PWR_LIMITS "wlan_txpwrlimit_cfg_WW_rw610.h"
-
 #else
 #error "Please define macro related to wifi board"
 #endif
+
+#endif /* _WIFI_BT_MODULE_CONFIG_H_ */
