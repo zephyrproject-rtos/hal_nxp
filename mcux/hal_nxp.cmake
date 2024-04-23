@@ -6,6 +6,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lpflexcomm
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flexio
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/dmamux
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa
 )
 
 if(CONFIG_CPU_CORTEX_A)
@@ -246,6 +247,7 @@ include_driver_ifdef(CONFIG_ADC_MCUX_GAU		cns_adc		driver_cns_adc)
 include_driver_ifdef(CONFIG_DAC_MCUX_GAU		cns_dac		driver_cns_dac)
 include_driver_ifdef(CONFIG_DAI_NXP_ESAI		esai		driver_esai)
 include_driver_ifdef(CONFIG_MCUX_LPCMP		        lpcmp		driver_lpcmp)
+include_driver_ifdef(CONFIG_NXP_RF_IMU			imu		driver_imu)
 
 if ((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4)))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv7-m7	driver_cache_armv7_m7)
@@ -364,6 +366,7 @@ if (CONFIG_USB_DEVICE_DRIVER)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/include)
 endif()
 
+
 if (CONFIG_UDC_DRIVER)
   list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb
@@ -375,4 +378,29 @@ if (CONFIG_UDC_DRIVER)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/device)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/phy)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/include)
+endif()
+
+if(${MCUX_DEVICE} MATCHES "RW61")
+  set(CONFIG_USE_component_osa_zephyr true)
+endif()
+
+include_ifdef(CONFIG_USE_component_osa_zephyr set_component_osa)
+
+if(CONFIG_WIFI_NXP)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk/components/wifi_bt_module)
+    include(component_wifi_bt_module_tx_pwr_limits)
+endif()
+
+if(CONFIG_NXP_FW_LOADER)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk/components/conn_fwloader)
+    include(driver_conn_fwloader)
+endif()
+
+if(CONFIG_NXP_RF_IMU)
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/rpmsg
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/imu
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/gdma
+    )
+    include(component_wireless_imu_adapter)
 endif()
