@@ -1,0 +1,7 @@
+Release Name: NXP Wi-Fi driver
+Release Version: 1.3.r41.p2
+Outgoing License: LA_OPT_NXP_Software_License.txt v35 May 2022- Additional distribution license granted - License in Section 2.3 applies
+License File: LA_OPT_NXP_Software_License.txt     
+Format: source code, header files, firmware binaries                
+Description: NXP Wi-Fi driver and networking utilities
+Origin: NXP
