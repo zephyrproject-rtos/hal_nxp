@@ -1900,11 +1900,31 @@ hal_uart_dma_status_t HAL_UartDMAInit(hal_uart_handle_t handle,
     EDMA_CreateHandle(&uartDmaHandle->txEdmaHandle, dmaBases[dmaConfig->dma_instance], dmaConfig->tx_channel);
     EDMA_CreateHandle(&uartDmaHandle->rxEdmaHandle, dmaBases[dmaConfig->dma_instance], dmaConfig->rx_channel);
 #if (defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && (FSL_FEATURE_EDMA_HAS_CHANNEL_MUX > 0U))
+#if (defined(FSL_EDMA_SOC_IP_DMA4) && (FSL_EDMA_SOC_IP_DMA4 > 0) && \
+     defined(FSL_EDMA_SOC_IP_DMA3) && (FSL_EDMA_SOC_IP_DMA3 > 0))
+    if(dmaBases[dmaConfig->dma_instance] == (EDMA_Type *)DMA4)
+    {
+        dma_channel_mux_configure_t *dmaChannelMux = dmaConfig->dma_channel_mux_configure;
+        EDMA_SetChannelMux(dmaBases[dmaConfig->dma_instance], dmaConfig->tx_channel,
+                           (dma4_request_source_t)dmaChannelMux->dma_dmamux_configure.dma_tx_channel_mux);
+        EDMA_SetChannelMux(dmaBases[dmaConfig->dma_instance], dmaConfig->rx_channel,
+                           (dma4_request_source_t)dmaChannelMux->dma_dmamux_configure.dma_rx_channel_mux);
+    }
+    else
+    {
+        dma_channel_mux_configure_t *dmaChannelMux = dmaConfig->dma_channel_mux_configure;
+        EDMA_SetChannelMux(dmaBases[dmaConfig->dma_instance], dmaConfig->tx_channel,
+                           (dma3_request_source_t)dmaChannelMux->dma_dmamux_configure.dma_tx_channel_mux);
+        EDMA_SetChannelMux(dmaBases[dmaConfig->dma_instance], dmaConfig->rx_channel,
+                           (dma3_request_source_t)dmaChannelMux->dma_dmamux_configure.dma_rx_channel_mux);
+    }
+#else
     dma_channel_mux_configure_t *dmaChannelMux = dmaConfig->dma_channel_mux_configure;
     EDMA_SetChannelMux(dmaBases[dmaConfig->dma_instance], dmaConfig->tx_channel,
                        (int32_t)dmaChannelMux->dma_dmamux_configure.dma_tx_channel_mux);
     EDMA_SetChannelMux(dmaBases[dmaConfig->dma_instance], dmaConfig->rx_channel,
                        (int32_t)dmaChannelMux->dma_dmamux_configure.dma_rx_channel_mux);
+#endif
 #if (defined(HAL_UART_ADAPTER_LOWPOWER) && (HAL_UART_ADAPTER_LOWPOWER > 0U))
     (void)memcpy(&uartDmaHandle->dma_channel_mux_configure, dmaConfig->dma_channel_mux_configure,
                  sizeof(dma_channel_mux_configure_t));
