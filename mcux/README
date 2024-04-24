@@ -4,7 +4,7 @@ MCUXpresso SDK
 Origin:
    NXP MCUXpresso SDK
    https://github.com/nxp-mcuxpresso/mcux-sdk
-   SHA: acc105f1e6304bf3a16ebbb503f8882a4daa1408
+   SHA: a6bf851f65020c437704e53d2d9587ae21789d65
 
    NXP Kinetis Connectivity Software
    https://www.nxp.com/webapp/Download?colCode=KW40Z-CONNECTIVITY-SOFTWARE&appType=license&Parent_nodeId=1432854896956716810497&Parent_pageType=product
@@ -68,15 +68,4 @@ Patch List:
      - All *.a binary archive files. Files are still present in the SDK github repo but are not allowed in Zephyr Project
      - mcux-sdk\manifests
      - mcux-sdk\docs
-  4. Add RW61X device_system.cmake
-  5. devices: MCXN947: Update system file to remove SDK sepecific defines
-  6. devices: MIMX8UD7: add header and source files for HIFI4 DSP core
-  7. devices: MIMX8UD7: fsl_device_registers.h: add support for HIFI4 DSP
-  8. devices: MIMX8UD7: add cmake file for reset driver
-  9. drivers: lpflexcomm: lpi2c: Fixed an error in the driver when interacting with the lpflexcomm driver
-  10. devices: LPC5534: Changed FSL_FEATURE_PWM_HAS_NO_WAITEN from 1 to 0 to solve pwm issue.
-  11. devices: LPC5536: Changed FSL_FEATURE_PWM_HAS_NO_WAITEN from 1 to 0 to solve pwm issue.
-  12. devices: LPC55S36: Changed FSL_FEATURE_PWM_HAS_NO_WAITEN from 1 to 0 to solve pwm issue.
-  13. devices: MIMX8UD7: add definition for LPUART_RX_TX_IRQS
-  14. devices: MCXN947: clock: Updated the clock frequency, case 3 on GetWdtClkFreq returns 1MHZ
-  15. devices: MIMX8UD7: add soc layer definitions required for using EDMA rev2
+  4. devices: MCXN947: clock: Updated the clock frequency, case 3 on GetWdtClkFreq returns 1MHZ
