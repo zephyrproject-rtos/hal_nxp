@@ -4,3 +4,37 @@ build:
   kconfig-ext: True
   settings:
     dts_root: .
+blobs:
+#IW612
+  - path: iw612/uart_nw61x_se.h
+    sha256: 7655e871c377a21b1bf03defb13edb04e844e84508f04ffa90052f3163d430d0
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/BSD_3.txt
+    url: https://raw.githubusercontent.com/NXP/wifi_nxp/MCUX_2.15.100/wifi_bt_firmware/nw61x/uart_nw61x_se.h
+    description: "Firmware for NXP IW612 Wi-Fi + Bluetooth single-chip solution"
+    doc-url: https://www.nxp.com/products/wireless-connectivity/wi-fi-plus-bluetooth-plus-802-15-4/2-4-5-ghz-dual-band-1x1-wi-fi-6-802-11ax-plus-bluetooth-5-4-plus-802-15-4-tri-radio-solution:IW612
+  - path: rw61x/rw61x_sb_ble_15d4_combo_a2.bin
+    sha256: 41e9837790c23c25b5e29defef87cbcc559f452c3bbcc4c894429237e3a2e98d
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcux-sdk/raw/MCUX_2.15.000_RW610_K32W1/components/conn_fwloader/fw_bin/rw61x_sb_ble_15d4_combo_a2.bin
+    description: "BLE and 15.4 combo firmware for RW612 A2 boards"
+    doc-url: https://github.com/nxp-mcuxpresso/mcux-sdk/tree/main/components/conn_fwloader/readme.txt
+  - path: rw61x/rw61x_sb_ble_a2.bin
+    sha256: 983f8a9e04305ae2ca44d501e469ab2144781e23b249813e373ec9969417b74d
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcux-sdk/raw/MCUX_2.15.000_RW610_K32W1/components/conn_fwloader/fw_bin/rw61x_sb_ble_a2.bin
+    description: "BLE firmware for RW612 A2 boards"
+    doc-url: https://github.com/nxp-mcuxpresso/mcux-sdk/tree/main/components/conn_fwloader/readme.txt
+  - path: rw61x/rw61x_sb_wifi_a2.bin
+    sha256: d288e5f6341b119d86a5f0fadd81bff7320ca7e8908eaaf364bd8317b0904c86
+    type: img
+    version: '1.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcux-sdk/raw/MCUX_2.15.000_RW610_K32W1/components/conn_fwloader/fw_bin/rw61x_sb_wifi_a2.bin
+    description: "WiFi firmware for RW612 A2 boards"
+    doc-url: https://github.com/nxp-mcuxpresso/mcux-sdk/tree/main/components/conn_fwloader/readme.txt
