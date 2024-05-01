@@ -79,7 +79,8 @@ typedef struct {
   __IO uint32_t CFG1;                              /**< ADC Configuration Register 1, offset: 0x40 */
   __IO uint32_t CFG2;                              /**< ADC Configuration Register 2, offset: 0x44 */
   __I  uint32_t R[ADC_R_COUNT];                    /**< ADC Data Result Registers, array offset: 0x48, array step: 0x4 */
-  __IO uint32_t CV[ADC_CV_COUNT];                  /**< Compare Value Registers, array offset: 0x88, array step: 0x4 */
+  __IO uint32_t CV1;                               /**< Compare Value Registers, array offset: 0x88, array step: 0x4 */
+  __IO uint32_t CV2;                               /**< Compare Value Registers, array offset: 0x8c, array step: 0x4 */
   __IO uint32_t SC2;                               /**< Status and Control Register 2, offset: 0x90 */
   __IO uint32_t SC3;                               /**< Status and Control Register 3, offset: 0x94 */
   __IO uint32_t BASE_OFS;                          /**< BASE Offset Register, offset: 0x98 */
@@ -121,6 +122,8 @@ typedef struct {
 #define IP_ADC_BASE_ADDRS                        { IP_ADC0_BASE, IP_ADC1_BASE }
 /** Array initializer of ADC peripheral base pointers */
 #define IP_ADC_BASE_PTRS                         { IP_ADC0, IP_ADC1 }
+
+#define ADC_BASE_PTRS                            IP_ADC_BASE_PTRS
 
 /* ----------------------------------------------------------------------------
    -- ADC Register Masks

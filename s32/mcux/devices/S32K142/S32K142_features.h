@@ -11,26 +11,36 @@
 
 /* @brief SYSMPU availability on the SoC. */
 #define FSL_FEATURE_SOC_SYSMPU_COUNT (1)
+/* @brief ADC12 availability on the SoC. */
+#define FSL_FEATURE_SOC_ADC12_COUNT (2)
 /* @brief PORT availability on the SoC. */
 #define FSL_FEATURE_SOC_PORT_COUNT (5)
 /* @brief GPIO availability on the SoC. */
 #define FSL_FEATURE_SOC_GPIO_COUNT (5)
 /* @brief LPUART availability on the SoC. */
-#define FSL_FEATURE_SOC_LPUART_COUNT (3)
+#define FSL_FEATURE_SOC_LPUART_COUNT (2)
 /* @brief LPI2C availability on the SoC. */
 #define FSL_FEATURE_SOC_LPI2C_COUNT (1)
 /* @brief LPSPI availability on the SoC. */
-#define FSL_FEATURE_SOC_LPSPI_COUNT (3)
+#define FSL_FEATURE_SOC_LPSPI_COUNT (1)
 /* @brief LMEM availability on the SoC. */
 #define FSL_FEATURE_SOC_LMEM_COUNT (1)
 /* @brief FTM availability on the SoC. */
-#define FSL_FEATURE_SOC_FTM_COUNT (6)
+#define FSL_FEATURE_SOC_FTM_COUNT (4)
 /* @brief FLEXCAN availability on the SoC. */
-#define FSL_FEATURE_SOC_FLEXCAN_COUNT (3)
+#define FSL_FEATURE_SOC_FLEXCAN_COUNT (2)
 /* @brief WDOG availability on the SoC. */
 #define FSL_FEATURE_SOC_WDOG_COUNT (1)
 /* @brief RTC availability on the SoC. */
 #define FSL_FEATURE_SOC_RTC_COUNT (1)
+
+/* ADC12 module features */
+
+/* @brief Has DMA support (bit SC2[DMAEN]. */
+#define FSL_FEATURE_ADC12_HAS_DMA_SUPPORT (1)
+/* @brief Conversion control count (related to number of registers SC1n and Rn). */
+#define FSL_FEATURE_ADC12_CONVERSION_CONTROL_COUNT (16)
+
 
 /* SYSMPU module features */
 

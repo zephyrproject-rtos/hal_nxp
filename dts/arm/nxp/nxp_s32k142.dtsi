@@ -13,7 +13,21 @@
              compatible = "arm,cortex-m4f";
          };
      };
- 
+
+
+
+    /*
+    adc1: adc@40027000 {
+        compatible = "nxp,kinetis-adc12";
+        reg = <0x40027000 0x1000>;
+        interrupts = <73 0>;
+        clocks = <&pcc 0x9c KINETIS_PCC_SRC_FIRC_ASYNC>;
+        clk-source = <0>;
+        clk-divider = <1>;
+        status = "disabled";
+        #io-channel-cells = <1>;
+    };
+    */
      soc {
          /*
           * SRAM_L and SRAM_U ranges form a contiguous block but misaligned
@@ -30,6 +44,26 @@
              compatible = "mmio-sram";
              reg = <0x20000000 DT_SIZE_K(12)>;
          };
+         adc0: adc@4003b000 {
+            compatible = "nxp,kinetis-adc12";
+            reg = <0x4003b000 0x1000>;
+            interrupts = <39 0>;
+            clk-source = <0>;
+            clk-divider = <1>;
+            status = "disabled";
+            #io-channel-cells = <1>;
+            sample-time = <0x02>;
+        };
+        adc1: adc@40027000 {
+            compatible = "nxp,kinetis-adc12";
+            reg = <0x40027000 0x1000>;
+            interrupts = <73 0>;
+            clk-source = <0>;
+            clk-divider = <1>;
+            status = "disabled";
+            #io-channel-cells = <1>;
+            sample-time = <0x02>;
+        };
      };
  };
 /delete-node/ &ftm4;
