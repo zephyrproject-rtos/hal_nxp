@@ -57,7 +57,7 @@
         adc1: adc@40027000 {
             compatible = "nxp,kinetis-adc12";
             reg = <0x40027000 0x1000>;
-            interrupts = <73 0>;
+            interrupts = <40 0>;
             clk-source = <0>;
             clk-divider = <1>;
             status = "disabled";
