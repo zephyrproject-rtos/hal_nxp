@@ -70,3 +70,8 @@ Patch List:
      - mcux-sdk\docs
   4. devices: MCXN947: clock: Updated the clock frequency, case 3 on GetWdtClkFreq returns 1MHZ
   5. drivers: flexio lcd: Pass a parameter to the GPIO callback functions.
+  6. SW-Content-Register.txt: Removed this file, as well as the LA_OPT license
+     files in MCUX SDK.  The Zephyr MCUX HAL includes its own SCR file, and does
+     not include LA_OPT licensed components.  Future SDK updates should check the
+     contents of the SW-Content-Register file to ensure no LA_OPT licensed files
+     are added to the Zephyr MCUX HAL
