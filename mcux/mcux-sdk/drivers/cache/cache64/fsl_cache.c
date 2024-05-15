@@ -220,7 +220,6 @@ void CACHE64_InvalidateCache(CACHE64_CTRL_Type *base)
 void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
     uint32_t endAddr = address + size_byte - 0x01U;
-    uint32_t pccReg  = 0;
     /* Align address to cache line size. */
     uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
     uint8_t bufIndex   = 0;
@@ -232,13 +231,18 @@ void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
     {
         return;
     }
+
     base    = s_cache64ctrlBases[instance];
     endLim  = s_cache64PhymemBases[bufIndex] + s_cache64PhymemSizes[bufIndex] - 0x01U;
     endAddr = endAddr > endLim ? endLim : endAddr;
 
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+    /* Clear Bit 28 of the address as CACHE64 does not work with the secure alias address */
+    startAddr &= ~(0x10000000U);
+    endAddr &= ~(0x10000000U);
+#endif
     /* Set the invalidate by line command and use the physical address. */
-    pccReg = (base->CLCR & ~CACHE64_CTRL_CLCR_LCMD_MASK) | CACHE64_CTRL_CLCR_LCMD(1) | CACHE64_CTRL_CLCR_LADSEL_MASK;
-    base->CLCR = pccReg;
+    base->CLCR = CACHE64_CTRL_CLCR_LCMD(1) | CACHE64_CTRL_CLCR_LADSEL_MASK;
 
     while (startAddr < endAddr)
     {
@@ -284,7 +288,6 @@ void CACHE64_CleanCache(CACHE64_CTRL_Type *base)
 void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
 {
     uint32_t endAddr = address + size_byte - 0x01U;
-    uint32_t pccReg  = 0;
     /* Align address to cache line size. */
     uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
     uint8_t bufIndex   = 0;
@@ -300,9 +303,14 @@ void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
     endLim  = s_cache64PhymemBases[bufIndex] + s_cache64PhymemSizes[bufIndex] - 0x01U;
     endAddr = endAddr > endLim ? endLim : endAddr;
 
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+    /* Clear Bit 28 of the address as CACHE64 does not work with the secure alias address */
+    startAddr &= ~(0x10000000U);
+    endAddr &= ~(0x10000000U);
+#endif
+
     /* Set the push by line command. */
-    pccReg = (base->CLCR & ~CACHE64_CTRL_CLCR_LCMD_MASK) | CACHE64_CTRL_CLCR_LCMD(2) | CACHE64_CTRL_CLCR_LADSEL_MASK;
-    base->CLCR = pccReg;
+    base->CLCR = CACHE64_CTRL_CLCR_LCMD(2) | CACHE64_CTRL_CLCR_LADSEL_MASK;;
 
     while (startAddr < endAddr)
     {
@@ -350,7 +358,6 @@ void CACHE64_CleanInvalidateCache(CACHE64_CTRL_Type *base)
 void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
     uint32_t endAddr = address + size_byte - 0x01U;
-    uint32_t pccReg  = 0;
     /* Align address to cache line size. */
     uint32_t startAddr = address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U);
     uint8_t bufIndex   = 0;
@@ -366,9 +373,14 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
     endLim  = s_cache64PhymemBases[bufIndex] + s_cache64PhymemSizes[bufIndex] - 0x01U;
     endAddr = endAddr > endLim ? endLim : endAddr;
 
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+    /* Clear Bit 28 of the address as CACHE64 does not work with the secure alias address */
+    startAddr &= ~(0x10000000U);
+    endAddr &= ~(0x10000000U);
+#endif
+
     /* Set the push by line command. */
-    pccReg = (base->CLCR & ~CACHE64_CTRL_CLCR_LCMD_MASK) | CACHE64_CTRL_CLCR_LCMD(3) | CACHE64_CTRL_CLCR_LADSEL_MASK;
-    base->CLCR = pccReg;
+    base->CLCR = CACHE64_CTRL_CLCR_LCMD(3) | CACHE64_CTRL_CLCR_LADSEL_MASK;
 
     while (startAddr < endAddr)
     {
