@@ -1,0 +1,1 @@
+add_subdirectory_ifdef(CONFIG_SOC_SERIES_RW6XX rw61x)
