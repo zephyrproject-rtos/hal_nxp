@@ -19,16 +19,16 @@ if(CONFIG_SOC_SERIES_RW6XX)
 
     zephyr_compile_definitions(gPlatformDisableVendorSpecificInit=1U)
 
-    if (CONFIG_MONOLITHIC_WIFI OR CONFIG_MONOLITHIC_BT OR CONFIG_MONOLITHIC_IEEE802154)
+    if (CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_BT OR CONFIG_NXP_MONOLITHIC_IEEE802154)
         zephyr_compile_definitions(gPlatformMonolithicApp_d=1U)
 
-        zephyr_compile_definitions_ifndef(CONFIG_MONOLITHIC_BT
+        zephyr_compile_definitions_ifndef(CONFIG_NXP_MONOLITHIC_BT
                                           BLE_FW_ADDRESS=0U)
 
-        zephyr_compile_definitions_ifndef(CONFIG_MONOLITHIC_WIFI
+        zephyr_compile_definitions_ifndef(CONFIG_NXP_MONOLITHIC_WIFI
                                           WIFI_FW_ADDRESS=0U)
 
-        zephyr_compile_definitions_ifndef(CONFIG_MONOLITHIC_IEEE802154
+        zephyr_compile_definitions_ifndef(CONFIG_NXP_MONOLITHIC_IEEE802154
                                           COMBO_FW_ADDRESS=0U)
     endif()
 endif()

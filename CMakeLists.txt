@@ -15,3 +15,5 @@ else()
     imx
     )
 endif()
+
+add_subdirectory(zephyr/src)
