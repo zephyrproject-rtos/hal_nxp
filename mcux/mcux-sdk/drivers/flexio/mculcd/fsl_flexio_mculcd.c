@@ -1203,7 +1203,7 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
 #else
                 base->setRDWRPin(false, base->userData);
 #endif
-	    }
+            }
             FLEXIO_MCULCD_SetSingleBeatWriteConfig(base);
             FLEXIO_MCULCD_EnableInterrupts(base, (uint32_t)kFLEXIO_MCULCD_TxEmptyInterruptEnable);
         }
