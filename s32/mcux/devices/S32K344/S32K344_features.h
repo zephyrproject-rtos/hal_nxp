@@ -21,6 +21,8 @@
 #define FSL_FEATURE_SOC_LPSPI_COUNT (6)
 /* @brief EDMA availability on the SoC. */
 #define FSL_FEATURE_SOC_EDMA_COUNT (1)
+/* @brief FLEXIO availability on the SoC. */
+#define FSL_FEATURE_SOC_FLEXIO_COUNT (1)
 
 /* LPUART module features */
 
@@ -199,6 +201,35 @@
 #define FSL_FEATURE_DMAMUX_HAS_TRIG (1)
 /* @brief Register CHCFGn width. */
 #define FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH (8)
+
+/* FLEXIO module features */
+
+/* @brief Has pin input output related registers */
+#define FSL_FEATURE_FLEXIO_HAS_PIN_REGISTER (1)
+/* @brief Has doze mode in Flexio */
+#define FSL_FEATURE_FLEXIO_HAS_DOZE_MODE_SUPPORT (0)
+/* @brief Has Shifter Status Register (FLEXIO_SHIFTSTAT) */
+#define FSL_FEATURE_FLEXIO_HAS_SHIFTER_STATUS (1)
+/* @brief Has Pin Data Input Register (FLEXIO_PIN) */
+#define FSL_FEATURE_FLEXIO_HAS_PIN_STATUS (1)
+/* @brief Has Shifter Buffer N Nibble Byte Swapped Register (FLEXIO_SHIFTBUFNBSn) */
+#define FSL_FEATURE_FLEXIO_HAS_SHFT_BUFFER_NIBBLE_BYTE_SWAP (1)
+/* @brief Has Shifter Buffer N Half Word Swapped Register (FLEXIO_SHIFTBUFHWSn) */
+#define FSL_FEATURE_FLEXIO_HAS_SHFT_BUFFER_HALF_WORD_SWAP (1)
+/* @brief Has Shifter Buffer N Nibble Swapped Register (FLEXIO_SHIFTBUFNISn) */
+#define FSL_FEATURE_FLEXIO_HAS_SHFT_BUFFER_NIBBLE_SWAP (1)
+/* @brief Supports Shifter State Mode (FLEXIO_SHIFTCTLn[SMOD]) */
+#define FSL_FEATURE_FLEXIO_HAS_STATE_MODE (1)
+/* @brief Supports Shifter Logic Mode (FLEXIO_SHIFTCTLn[SMOD]) */
+#define FSL_FEATURE_FLEXIO_HAS_LOGIC_MODE (1)
+/* @brief Supports paralle width (FLEXIO_SHIFTCFGn[PWIDTH]) */
+#define FSL_FEATURE_FLEXIO_HAS_PARALLEL_WIDTH (1)
+/* @brief Reset value of the FLEXIO_VERID register */
+#define FSL_FEATURE_FLEXIO_VERID_RESET_VALUE (0x02010003)
+/* @brief Reset value of the FLEXIO_PARAM register */
+#define FSL_FEATURE_FLEXIO_PARAM_RESET_VALUE (0x04200808)
+/* @brief Flexio DMA request base channel */
+#define FSL_FEATURE_FLEXIO_DMA_REQUEST_BASE_CHANNEL (0)
 
 /* @brief Memory map has offset between subsystems. */
 #define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (1)

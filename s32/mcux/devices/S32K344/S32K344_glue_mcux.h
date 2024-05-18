@@ -197,4 +197,15 @@
 /** Array initializer of DMAMUX peripheral base pointers */
 #define DMAMUX_BASE_PTRS                        IP_DMAMUX_BASE_PTRS
 
+/* FLEXIO - Peripheral instance base addresses */
+/** Peripheral FLEXIO base address */
+#define FLEXIO_BASE                             IP_FLEXIO_BASE
+/** Peripheral FLEXIO base pointer */
+#define FLEXIO                                  IP_FLEXIO
+/** Array initializer of FLEXIO peripheral base addresses */
+#define FLEXIO_BASE_ADDRS                       IP_FLEXIO_BASE_ADDRS
+/** Array initializer of FLEXIO peripheral base pointers */
+#define FLEXIO_BASE_PTRS                        IP_FLEXIO_BASE_PTRS
+/** Interrupt vectors for the FLEXIO peripheral type */
+#define FLEXIO_IRQS                              { FLEXIO_IRQn }
 #endif  /* _S32K344_GLUE_MCUX_H_ */
