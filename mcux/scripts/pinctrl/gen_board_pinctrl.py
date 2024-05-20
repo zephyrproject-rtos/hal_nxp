@@ -78,6 +78,9 @@ def processor_to_controller(processor_name):
     if "MK" in processor_name:
         # Kinetis config tools
         return 'PORT'
+    if "MCX" in processor_name:
+        # Kinetis config tools
+        return 'PORT'
     # Unknown processor family
     return "UNKNOWN"
 
