@@ -171,18 +171,17 @@ uint32_t IRQSTEER_GetMasterIrqCount(IRQSTEER_Type *base, irqsteer_int_master_t i
     return count;
 }
 
-static uint32_t IRQSTEER_GetRegIndex(irqsteer_int_master_t intMasterIndex, uint32_t slice)
+static uint32_t IRQSTEER_GetRegIndex(irqsteer_int_master_t intMasterIndex,
+				     uint32_t slice, uint32_t sliceNum)
 {
     uint32_t base = (uint32_t)FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT - 1u - ((uint32_t)intMasterIndex * 2u);
 
     if (0u != ((uint32_t)FSL_FEATURE_IRQSTEER_CHn_MASK_COUNT % 2u))
     {
-        return base + slice;
+        base += sliceNum - 1;
     }
-    else
-    {
-        return base - slice;
-    }
+
+    return base - slice;
 }
 
 /*!
@@ -231,7 +230,7 @@ IRQn_Type IRQSTEER_GetMasterNextInterrupt(IRQSTEER_Type *base, irqsteer_int_mast
         bitOffset = 0;
 
         /* compute the index of the register to be queried */
-        regIndex = IRQSTEER_GetRegIndex(intMasterIndex, i);
+        regIndex = IRQSTEER_GetRegIndex(intMasterIndex, i, sliceNum + 1);
 
         /* get register's value */
         chanStatus = base->CHn_STATUS[regIndex];
@@ -261,7 +260,7 @@ uint64_t IRQSTEER_GetMasterInterruptsStatus(IRQSTEER_Type *base, irqsteer_int_ma
     sliceNum = IRQSTEER_GetMasterIrqCount(base, intMasterIndex) / 32u - 1u;
 
     for (i = 0; i <= sliceNum; i++) {
-        regIndex = IRQSTEER_GetRegIndex(intMasterIndex, i);
+        regIndex = IRQSTEER_GetRegIndex(intMasterIndex, i, sliceNum + 1);
 
         chanStatus = base->CHn_STATUS[regIndex];
 
