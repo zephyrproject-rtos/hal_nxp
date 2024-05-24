@@ -7,7 +7,7 @@
 #ifndef _S32K344_FEATURES_H_
 #define _S32K344_FEATURES_H_
 
-#include "autoconf.h"
+#include <zephyr/autoconf.h>
 
 /* SOC module features */
 
