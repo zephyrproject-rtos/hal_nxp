@@ -18,6 +18,13 @@
  */
 
 &iomuxc {
+	/omit-if-no-ref/ iomuxc_uart1_rxd__lpuart1_rx: IOMUXC_UART1_RXD__LPUART1_RX {
+		pinmux = <0x443C01D0 0x0 0x0 0x0 0x443C03D4>;
+	};
+	/omit-if-no-ref/ iomuxc_uart1_txd__lpuart1_tx: IOMUXC_UART1_TXD__LPUART1_TX {
+		pinmux = <0x443C01D4 0x0 0x0 0x0 0x443C03D8>;
+	};
+
 	/omit-if-no-ref/ iomuxc_gpio_io15__lpuart3_rx: IOMUXC_GPIO_IO15__LPUART3_RX {
 		pinmux = <0x443C004C 0x01 0x443C0558 0x01 0x443C0250>;
 	};
