@@ -16,6 +16,11 @@
  * the pin based on the devicetree properties set
  */
 
+/*
+ * NOTE: file fixup performed by imx_fixup_pinmux.py
+ * to correct missing daisy register values
+ */
+
 &iomuxc {
 	/omit-if-no-ref/ iomuxc_gpio_ad_00_acmp1_in1: IOMUXC_GPIO_AD_00_ACMP1_IN1 {
 		pinmux = <0x42a1010c 5 0x0 0 0x42a10354>;
@@ -921,7 +926,7 @@
 		pinmux = <0x42a1016c 5 0x0 0 0x42a103b4>;
 		pin-pue;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_ad_24_ecat_link_act[0]: IOMUXC_GPIO_AD_24_ECAT_LINK_ACT[0] {
+	/omit-if-no-ref/ iomuxc_gpio_ad_24_ecat_link_act_0: IOMUXC_GPIO_AD_24_ECAT_LINK_ACT_0 {
 		pinmux = <0x42a1016c 12 0x0 0 0x42a103b4>;
 		pin-pue;
 	};
@@ -957,7 +962,7 @@
 		pinmux = <0x42a10170 5 0x0 0 0x42a103b8>;
 		pin-pue;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_ad_25_ecat_link_act[1]: IOMUXC_GPIO_AD_25_ECAT_LINK_ACT[1] {
+	/omit-if-no-ref/ iomuxc_gpio_ad_25_ecat_link_act_1: IOMUXC_GPIO_AD_25_ECAT_LINK_ACT_1 {
 		pinmux = <0x42a10170 12 0x0 0 0x42a103b8>;
 		pin-pue;
 	};
@@ -1362,7 +1367,7 @@
 		pin-pue;
 	};
 	/omit-if-no-ref/ iomuxc_gpio_ad_33_netc_tmr_trig2: IOMUXC_GPIO_AD_33_NETC_TMR_TRIG2 {
-		pinmux = <0x42a10190 2 0x42a107d0 2 0x42a103d8>;
+		pinmux = <0x42a10190 2 0x42a1093c 0 0x42a103d8>;
 		pin-pue;
 	};
 	/omit-if-no-ref/ iomuxc_gpio_ad_33_sinc2_embit3: IOMUXC_GPIO_AD_33_SINC2_EMBIT3 {
@@ -1665,7 +1670,7 @@
 		pinmux = <0x443c001c 2 0x443c0168 0 0x443c0090>;
 		pin-pue;
 	};
-	/omit-if-no-ref/ iomuxc_aon_gpio_aon_08_ecat_link_act[0]: IOMUXC_AON_GPIO_AON_08_ECAT_LINK_ACT[0] {
+	/omit-if-no-ref/ iomuxc_aon_gpio_aon_08_ecat_link_act_0: IOMUXC_AON_GPIO_AON_08_ECAT_LINK_ACT_0 {
 		pinmux = <0x443c0020 12 0x0 0 0x443c0094>;
 		pin-pue;
 	};
@@ -1697,7 +1702,7 @@
 		pinmux = <0x443c0020 1 0x0 0 0x443c0094>;
 		pin-pue;
 	};
-	/omit-if-no-ref/ iomuxc_aon_gpio_aon_09_ecat_link_act[1]: IOMUXC_AON_GPIO_AON_09_ECAT_LINK_ACT[1] {
+	/omit-if-no-ref/ iomuxc_aon_gpio_aon_09_ecat_link_act_1: IOMUXC_AON_GPIO_AON_09_ECAT_LINK_ACT_1 {
 		pinmux = <0x443c0024 12 0x0 0 0x443c0098>;
 		pin-pue;
 	};
@@ -2825,7 +2830,7 @@
 		pinmux = <0x42a10228 9 0x0 0 0x42a10470>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_b2_02_ecat_pt1_rxd[2]: IOMUXC_GPIO_B2_02_ECAT_PT1_RXD[2] {
+	/omit-if-no-ref/ iomuxc_gpio_b2_02_ecat_pt1_rxd_2: IOMUXC_GPIO_B2_02_ECAT_PT1_RXD_2 {
 		pinmux = <0x42a10228 12 0x42a104c8 1 0x42a10470>;
 		pin-pdrv;
 	};
@@ -2857,7 +2862,7 @@
 		pinmux = <0x42a10228 4 0x42a108c8 2 0x42a10470>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_b2_03_ecat_pt1_rxd[3]: IOMUXC_GPIO_B2_03_ECAT_PT1_RXD[3] {
+	/omit-if-no-ref/ iomuxc_gpio_b2_03_ecat_pt1_rxd_3: IOMUXC_GPIO_B2_03_ECAT_PT1_RXD_3 {
 		pinmux = <0x42a1022c 12 0x42a104d0 1 0x42a10474>;
 		pin-pdrv;
 	};
@@ -2889,7 +2894,7 @@
 		pinmux = <0x42a1022c 10 0x42a10a18 2 0x42a10474>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_b2_04_ecat_pt1_txd[2]: IOMUXC_GPIO_B2_04_ECAT_PT1_TXD[2] {
+	/omit-if-no-ref/ iomuxc_gpio_b2_04_ecat_pt1_txd_2: IOMUXC_GPIO_B2_04_ECAT_PT1_TXD_2 {
 		pinmux = <0x42a10230 12 0x0 0 0x42a10478>;
 		pin-pdrv;
 	};
@@ -2929,7 +2934,7 @@
 		pinmux = <0x42a10230 10 0x42a10a1c 2 0x42a10478>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_b2_05_ecat_pt1_txd[3]: IOMUXC_GPIO_B2_05_ECAT_PT1_TXD[3] {
+	/omit-if-no-ref/ iomuxc_gpio_b2_05_ecat_pt1_txd_3: IOMUXC_GPIO_B2_05_ECAT_PT1_TXD_3 {
 		pinmux = <0x42a10234 12 0x0 0 0x42a1047c>;
 		pin-pdrv;
 	};
@@ -2973,7 +2978,7 @@
 		pinmux = <0x42a10234 10 0x42a10a20 2 0x42a1047c>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_b2_06_ecat_pt1_txd[0]: IOMUXC_GPIO_B2_06_ECAT_PT1_TXD[0] {
+	/omit-if-no-ref/ iomuxc_gpio_b2_06_ecat_pt1_txd_0: IOMUXC_GPIO_B2_06_ECAT_PT1_TXD_0 {
 		pinmux = <0x42a10238 12 0x0 0 0x42a10480>;
 		pin-pdrv;
 	};
@@ -3021,7 +3026,7 @@
 		pinmux = <0x42a10238 10 0x42a10a24 2 0x42a10480>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_b2_07_ecat_pt1_txd[1]: IOMUXC_GPIO_B2_07_ECAT_PT1_TXD[1] {
+	/omit-if-no-ref/ iomuxc_gpio_b2_07_ecat_pt1_txd_1: IOMUXC_GPIO_B2_07_ECAT_PT1_TXD_1 {
 		pinmux = <0x42a1023c 12 0x0 0 0x42a10484>;
 		pin-pdrv;
 	};
@@ -3153,7 +3158,7 @@
 		pinmux = <0x42a10244 10 0x42a10a00 2 0x42a1048c>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_b2_10_ecat_pt1_rxd[0]: IOMUXC_GPIO_B2_10_ECAT_PT1_RXD[0] {
+	/omit-if-no-ref/ iomuxc_gpio_b2_10_ecat_pt1_rxd_0: IOMUXC_GPIO_B2_10_ECAT_PT1_RXD_0 {
 		pinmux = <0x42a10248 12 0x42a104b8 2 0x42a10490>;
 		pin-pdrv;
 	};
@@ -3205,7 +3210,7 @@
 		pinmux = <0x42a10248 10 0x42a10a08 1 0x42a10490>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_b2_11_ecat_pt1_rxd[1]: IOMUXC_GPIO_B2_11_ECAT_PT1_RXD[1] {
+	/omit-if-no-ref/ iomuxc_gpio_b2_11_ecat_pt1_rxd_1: IOMUXC_GPIO_B2_11_ECAT_PT1_RXD_1 {
 		pinmux = <0x42a1024c 12 0x42a104c0 2 0x42a10494>;
 		pin-pdrv;
 	};
@@ -3353,7 +3358,7 @@
 		pinmux = <0x42a10254 10 0x42a10a14 1 0x42a1049c>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_00_ecat_pt0_txd[3]: IOMUXC_GPIO_EMC_B1_00_ECAT_PT0_TXD[3] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_00_ecat_pt0_txd_3: IOMUXC_GPIO_EMC_B1_00_ECAT_PT0_TXD_3 {
 		pinmux = <0x42a10010 10 0x0 0 0x42a10258>;
 		pin-pdrv;
 	};
@@ -3397,7 +3402,7 @@
 		pinmux = <0x42a10010 1 0x0 0 0x42a10258>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_01_ecat_pt0_txd[2]: IOMUXC_GPIO_EMC_B1_01_ECAT_PT0_TXD[2] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_01_ecat_pt0_txd_2: IOMUXC_GPIO_EMC_B1_01_ECAT_PT0_TXD_2 {
 		pinmux = <0x42a10014 10 0x0 0 0x42a1025c>;
 		pin-pdrv;
 	};
@@ -3485,7 +3490,7 @@
 		pinmux = <0x42a10018 1 0x0 0 0x42a10260>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_03_ecat_pt0_rxd[3]: IOMUXC_GPIO_EMC_B1_03_ECAT_PT0_RXD[3] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_03_ecat_pt0_rxd_3: IOMUXC_GPIO_EMC_B1_03_ECAT_PT0_RXD_3 {
 		pinmux = <0x42a1001c 10 0x42a104cc 0 0x42a10264>;
 		pin-pdrv;
 	};
@@ -3529,7 +3534,7 @@
 		pinmux = <0x42a1001c 1 0x0 0 0x42a10264>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_04_ecat_pt0_rxd[2]: IOMUXC_GPIO_EMC_B1_04_ECAT_PT0_RXD[2] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_04_ecat_pt0_rxd_2: IOMUXC_GPIO_EMC_B1_04_ECAT_PT0_RXD_2 {
 		pinmux = <0x42a10020 10 0x42a104c4 0 0x42a10268>;
 		pin-pdrv;
 	};
@@ -3573,7 +3578,7 @@
 		pinmux = <0x42a10020 1 0x0 0 0x42a10268>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_05_ecat_pt0_txd[0]: IOMUXC_GPIO_EMC_B1_05_ECAT_PT0_TXD[0] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_05_ecat_pt0_txd_0: IOMUXC_GPIO_EMC_B1_05_ECAT_PT0_TXD_0 {
 		pinmux = <0x42a10024 10 0x0 0 0x42a1026c>;
 		pin-pdrv;
 	};
@@ -3617,7 +3622,7 @@
 		pinmux = <0x42a10024 1 0x0 0 0x42a1026c>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_06_ecat_pt0_txd[1]: IOMUXC_GPIO_EMC_B1_06_ECAT_PT0_TXD[1] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_06_ecat_pt0_txd_1: IOMUXC_GPIO_EMC_B1_06_ECAT_PT0_TXD_1 {
 		pinmux = <0x42a10028 10 0x0 0 0x42a10270>;
 		pin-pdrv;
 	};
@@ -3749,7 +3754,7 @@
 		pinmux = <0x42a10030 12 0x0 0 0x42a10278>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_09_ecat_pt0_rxd[0]: IOMUXC_GPIO_EMC_B1_09_ECAT_PT0_RXD[0] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_09_ecat_pt0_rxd_0: IOMUXC_GPIO_EMC_B1_09_ECAT_PT0_RXD_0 {
 		pinmux = <0x42a10034 10 0x42a104b4 0 0x42a1027c>;
 		pin-pdrv;
 	};
@@ -3793,7 +3798,7 @@
 		pinmux = <0x42a10034 12 0x0 0 0x42a1027c>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_10_ecat_pt0_rxd[1]: IOMUXC_GPIO_EMC_B1_10_ECAT_PT0_RXD[1] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_10_ecat_pt0_rxd_1: IOMUXC_GPIO_EMC_B1_10_ECAT_PT0_RXD_1 {
 		pinmux = <0x42a10038 10 0x42a104bc 0 0x42a10280>;
 		pin-pdrv;
 	};
@@ -4441,7 +4446,7 @@
 		pinmux = <0x42a10074 12 0x0 0 0x42a102bc>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_26_ecat_pt1_txd[1]: IOMUXC_GPIO_EMC_B1_26_ECAT_PT1_TXD[1] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_26_ecat_pt1_txd_1: IOMUXC_GPIO_EMC_B1_26_ECAT_PT1_TXD_1 {
 		pinmux = <0x42a10078 6 0x0 0 0x42a102c0>;
 		pin-pdrv;
 	};
@@ -4477,7 +4482,7 @@
 		pinmux = <0x42a10078 2 0x0 0 0x42a102c0>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_27_ecat_pt1_txd[0]: IOMUXC_GPIO_EMC_B1_27_ECAT_PT1_TXD[0] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_27_ecat_pt1_txd_0: IOMUXC_GPIO_EMC_B1_27_ECAT_PT1_TXD_0 {
 		pinmux = <0x42a1007c 6 0x0 0 0x42a102c4>;
 		pin-pdrv;
 	};
@@ -4597,7 +4602,7 @@
 		pinmux = <0x42a10084 2 0x0 0 0x42a102cc>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_30_ecat_pt1_rxd[0]: IOMUXC_GPIO_EMC_B1_30_ECAT_PT1_RXD[0] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_30_ecat_pt1_rxd_0: IOMUXC_GPIO_EMC_B1_30_ECAT_PT1_RXD_0 {
 		pinmux = <0x42a10088 6 0x42a104b8 0 0x42a102d0>;
 		pin-pdrv;
 	};
@@ -4637,7 +4642,7 @@
 		pinmux = <0x42a10088 2 0x42a10934 0 0x42a102d0>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_31_ecat_pt1_rxd[1]: IOMUXC_GPIO_EMC_B1_31_ECAT_PT1_RXD[1] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_31_ecat_pt1_rxd_1: IOMUXC_GPIO_EMC_B1_31_ECAT_PT1_RXD_1 {
 		pinmux = <0x42a1008c 6 0x42a104c0 0 0x42a102d4>;
 		pin-pdrv;
 	};
@@ -4757,7 +4762,7 @@
 		pinmux = <0x42a10094 12 0x0 0 0x42a102dc>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_34_ecat_pt1_rxd[2]: IOMUXC_GPIO_EMC_B1_34_ECAT_PT1_RXD[2] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_34_ecat_pt1_rxd_2: IOMUXC_GPIO_EMC_B1_34_ECAT_PT1_RXD_2 {
 		pinmux = <0x42a10098 6 0x42a104c8 0 0x42a102e0>;
 		pin-pdrv;
 	};
@@ -4797,7 +4802,7 @@
 		pinmux = <0x42a10098 12 0x0 0 0x42a102e0>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_35_ecat_pt1_rxd[3]: IOMUXC_GPIO_EMC_B1_35_ECAT_PT1_RXD[3] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_35_ecat_pt1_rxd_3: IOMUXC_GPIO_EMC_B1_35_ECAT_PT1_RXD_3 {
 		pinmux = <0x42a1009c 6 0x42a104d0 0 0x42a102e4>;
 		pin-pdrv;
 	};
@@ -4837,7 +4842,7 @@
 		pinmux = <0x42a1009c 12 0x0 0 0x42a102e4>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_36_ecat_pt1_txd[3]: IOMUXC_GPIO_EMC_B1_36_ECAT_PT1_TXD[3] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_36_ecat_pt1_txd_3: IOMUXC_GPIO_EMC_B1_36_ECAT_PT1_TXD_3 {
 		pinmux = <0x42a100a0 6 0x0 0 0x42a102e8>;
 		pin-pdrv;
 	};
@@ -4873,7 +4878,7 @@
 		pinmux = <0x42a100a0 12 0x0 0 0x42a102e8>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b1_37_ecat_pt1_txd[2]: IOMUXC_GPIO_EMC_B1_37_ECAT_PT1_TXD[2] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b1_37_ecat_pt1_txd_2: IOMUXC_GPIO_EMC_B1_37_ECAT_PT1_TXD_2 {
 		pinmux = <0x42a100a4 6 0x0 0 0x42a102ec>;
 		pin-pdrv;
 	};
@@ -5097,7 +5102,7 @@
 		pinmux = <0x42a100b8 6 0x42a10948 0 0x42a10300>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_01_ecat_pt0_rxd[2]: IOMUXC_GPIO_EMC_B2_01_ECAT_PT0_RXD[2] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_01_ecat_pt0_rxd_2: IOMUXC_GPIO_EMC_B2_01_ECAT_PT0_RXD_2 {
 		pinmux = <0x42a100bc 12 0x42a104c4 1 0x42a10304>;
 		pin-pdrv;
 	};
@@ -5145,7 +5150,7 @@
 		pinmux = <0x42a100c0 9 0x0 0 0x42a10308>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_02_ecat_pt0_rxd[3]: IOMUXC_GPIO_EMC_B2_02_ECAT_PT0_RXD[3] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_02_ecat_pt0_rxd_3: IOMUXC_GPIO_EMC_B2_02_ECAT_PT0_RXD_3 {
 		pinmux = <0x42a100c0 12 0x42a104cc 1 0x42a10308>;
 		pin-pdrv;
 	};
@@ -5181,7 +5186,7 @@
 		pinmux = <0x42a100c0 6 0x42a10950 0 0x42a10308>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_03_ecat_pt0_txd[2]: IOMUXC_GPIO_EMC_B2_03_ECAT_PT0_TXD[2] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_03_ecat_pt0_txd_2: IOMUXC_GPIO_EMC_B2_03_ECAT_PT0_TXD_2 {
 		pinmux = <0x42a100c4 12 0x0 0 0x42a1030c>;
 		pin-pdrv;
 	};
@@ -5221,7 +5226,7 @@
 		pinmux = <0x42a100c4 6 0x42a10954 0 0x42a1030c>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_04_ecat_pt0_txd[3]: IOMUXC_GPIO_EMC_B2_04_ECAT_PT0_TXD[3] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_04_ecat_pt0_txd_3: IOMUXC_GPIO_EMC_B2_04_ECAT_PT0_TXD_3 {
 		pinmux = <0x42a100c8 12 0x0 0 0x42a10310>;
 		pin-pdrv;
 	};
@@ -5261,7 +5266,7 @@
 		pinmux = <0x42a100c8 6 0x42a10958 0 0x42a10310>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_05_ecat_pt0_txd[0]: IOMUXC_GPIO_EMC_B2_05_ECAT_PT0_TXD[0] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_05_ecat_pt0_txd_0: IOMUXC_GPIO_EMC_B2_05_ECAT_PT0_TXD_0 {
 		pinmux = <0x42a100cc 12 0x0 0 0x42a10314>;
 		pin-pdrv;
 	};
@@ -5305,7 +5310,7 @@
 		pinmux = <0x42a100cc 6 0x42a1095c 0 0x42a10314>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_06_ecat_pt0_txd[1]: IOMUXC_GPIO_EMC_B2_06_ECAT_PT0_TXD[1] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_06_ecat_pt0_txd_1: IOMUXC_GPIO_EMC_B2_06_ECAT_PT0_TXD_1 {
 		pinmux = <0x42a100d0 12 0x0 0 0x42a10318>;
 		pin-pdrv;
 	};
@@ -5429,7 +5434,7 @@
 		pinmux = <0x42a100d8 6 0x42a10968 0 0x42a10320>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_09_ecat_pt0_rxd[0]: IOMUXC_GPIO_EMC_B2_09_ECAT_PT0_RXD[0] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_09_ecat_pt0_rxd_0: IOMUXC_GPIO_EMC_B2_09_ECAT_PT0_RXD_0 {
 		pinmux = <0x42a100dc 12 0x42a104b4 1 0x42a10324>;
 		pin-pdrv;
 	};
@@ -5469,7 +5474,7 @@
 		pinmux = <0x42a100dc 6 0x42a1096c 0 0x42a10324>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_10_ecat_pt0_rxd[1]: IOMUXC_GPIO_EMC_B2_10_ECAT_PT0_RXD[1] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_10_ecat_pt0_rxd_1: IOMUXC_GPIO_EMC_B2_10_ECAT_PT0_RXD_1 {
 		pinmux = <0x42a100e0 12 0x42a104bc 1 0x42a10328>;
 		pin-pdrv;
 	};
@@ -5597,7 +5602,7 @@
 		pinmux = <0x42a100e8 6 0x42a10978 0 0x42a10330>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_13_ecat_pt1_txd[0]: IOMUXC_GPIO_EMC_B2_13_ECAT_PT1_TXD[0] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_13_ecat_pt1_txd_0: IOMUXC_GPIO_EMC_B2_13_ECAT_PT1_TXD_0 {
 		pinmux = <0x42a100ec 12 0x0 0 0x42a10334>;
 		pin-pdrv;
 	};
@@ -5641,7 +5646,7 @@
 		pinmux = <0x42a100ec 6 0x42a1097c 0 0x42a10334>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_14_ecat_pt1_txd[1]: IOMUXC_GPIO_EMC_B2_14_ECAT_PT1_TXD[1] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_14_ecat_pt1_txd_1: IOMUXC_GPIO_EMC_B2_14_ECAT_PT1_TXD_1 {
 		pinmux = <0x42a100f0 12 0x0 0 0x42a10338>;
 		pin-pdrv;
 	};
@@ -5773,7 +5778,7 @@
 		pinmux = <0x42a100f8 6 0x42a10934 1 0x42a10340>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_17_ecat_pt1_rxd[0]: IOMUXC_GPIO_EMC_B2_17_ECAT_PT1_RXD[0] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_17_ecat_pt1_rxd_0: IOMUXC_GPIO_EMC_B2_17_ECAT_PT1_RXD_0 {
 		pinmux = <0x42a100fc 12 0x42a104b8 1 0x42a10344>;
 		pin-pdrv;
 	};
@@ -5813,7 +5818,7 @@
 		pinmux = <0x42a100fc 6 0x42a10938 1 0x42a10344>;
 		pin-pdrv;
 	};
-	/omit-if-no-ref/ iomuxc_gpio_emc_b2_18_ecat_pt1_rxd[1]: IOMUXC_GPIO_EMC_B2_18_ECAT_PT1_RXD[1] {
+	/omit-if-no-ref/ iomuxc_gpio_emc_b2_18_ecat_pt1_rxd_1: IOMUXC_GPIO_EMC_B2_18_ECAT_PT1_RXD_1 {
 		pinmux = <0x42a10100 12 0x42a104c0 1 0x42a10348>;
 		pin-pdrv;
 	};
