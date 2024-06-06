@@ -23,6 +23,7 @@
 #include "usb_device_dci.h"
 
 #include "usb_device_ehci.h"
+#endif
 #if (defined(USB_DEVICE_CONFIG_LOW_POWER_MODE) && (USB_DEVICE_CONFIG_LOW_POWER_MODE > 0U))
 #if ((defined FSL_FEATURE_SOC_USBPHY_COUNT) && (FSL_FEATURE_SOC_USBPHY_COUNT > 0U))
 #include "usb_phy.h"
@@ -37,7 +38,6 @@
 #endif
 #if defined FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET && FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET
 #include "fsl_memory.h"
-#endif
 #endif
 /*******************************************************************************
  * Definitions

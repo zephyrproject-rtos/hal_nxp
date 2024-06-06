@@ -157,7 +157,7 @@ typedef enum _usb_endpoint_status
  */
 usb_status_t USB_DeviceNotificationTrigger(void *handle, void *msg);
 
-#ifdef CONFIG_USB_UDC_NXP_EHCI
+#if ((defined USB_DEVICE_CONFIG_EHCI) && (USB_DEVICE_CONFIG_EHCI))
 /*!
  * @brief Device EHCI ISR function.
  *
@@ -168,7 +168,8 @@ usb_status_t USB_DeviceNotificationTrigger(void *handle, void *msg);
 extern void USB_DeviceEhciIsrFunction(void *deviceHandle);
 #endif
 
-#ifdef CONFIG_USB_UDC_NXP_IP3511
+#if ((defined USB_DEVICE_CONFIG_LPCIP3511HS) && (USB_DEVICE_CONFIG_LPCIP3511HS)) ||\
+    ((defined USB_DEVICE_CONFIG_LPCIP3511FS) && (USB_DEVICE_CONFIG_LPCIP3511FS))
 /*!
  * @brief Device LPC USB ISR function.
  *
