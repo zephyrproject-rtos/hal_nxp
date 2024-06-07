@@ -339,6 +339,10 @@ if(${MCUX_DEVICE} MATCHES "MIMXRT(5|6)")
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lpc_iopctl)
 endif()
 
+if(CONFIG_SOC_FAMILY_NXP_IMXRT)
+  include_driver_ifdef(CONFIG_ETH_NXP_ENET ocotp driver_ocotp)
+endif()
+
 if(CONFIG_ETH_MCUX)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy/device/phyksz8081)
