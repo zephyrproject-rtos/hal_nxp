@@ -43,6 +43,8 @@ endif()
 # fsl_device_registers.h and ${MCUX_DEVICE}_features.h
 zephyr_compile_definitions(${MCUX_CPU})
 
+zephyr_compile_definitions_ifdef(CONFIG_CLOCK_CONTROL_IMX_SCMI FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL=1)
+
 # Build mcux device-specific objects. Although it is not normal
 # practice, drilling down like this avoids the need for repetitive
 # build scripts for every mcux device.
