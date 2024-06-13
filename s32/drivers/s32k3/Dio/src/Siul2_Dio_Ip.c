@@ -28,6 +28,7 @@ extern "C"{
 #if (STD_ON == SIUL2_DIO_IP_DEV_ERROR_DETECT)
     #include "Devassert.h"
 #endif /* (STD_ON == SIUL2_DIO_IP_DEV_ERROR_DETECT) */
+#include "cmsis_compiler.h"
 
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
@@ -146,15 +147,11 @@ static inline uint16 Siul2_Dio_Ip_Rev_Bit_16(uint16 value);
 /* Reverse bit order in each halfword independently */
 static inline uint16 Siul2_Dio_Ip_Rev_Bit_16(uint16 value)
 {
-    uint8 i;
-    uint16 ret = 0U;
+    uint32 ret;
 
-    for (i = 0U; i < 8U; i++)
-    {
-        ret |= (uint16)((((value >> i) & 1U) << (15U - i)) | (((value << i) & 0x8000U) >> (15U - i)));
-    }
+    ret = __RBIT((uint32)value) >> 16U;
 
-    return ret;
+    return (uint16)ret;
 }
 
 /*==================================================================================================

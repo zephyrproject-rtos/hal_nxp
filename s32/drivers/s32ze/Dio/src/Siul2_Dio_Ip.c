@@ -31,6 +31,7 @@ extern "C"{
 #if (defined(MCAL_ENABLE_USER_MODE_SUPPORT) && defined(DIO_ENABLE_USER_MODE_SUPPORT) && (STD_ON == DIO_ENABLE_USER_MODE_SUPPORT))
     #include "OsIf_Internal.h"
 #endif /* (defined(MCAL_ENABLE_USER_MODE_SUPPORT) && defined(DIO_ENABLE_USER_MODE_SUPPORT) && (STD_ON == DIO_ENABLE_USER_MODE_SUPPORT)) */
+#include "cmsis_compiler.h"
 
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
@@ -223,15 +224,11 @@ Siul2_Dio_Ip_PinsChannelType Siul2_Dio_Ip_ReadPinsRunTime(const Siul2_Dio_Ip_Gpi
 /* Reverse bit order in each halfword independently */
 static inline uint16 Siul2_Dio_Ip_Rev_Bit_16(uint16 value)
 {
-    uint8 i;
-    uint16 ret = 0U;
+    uint32 ret;
 
-    for (i = 0U; i < 8U; i++)
-    {
-        ret |= (uint16)((((value >> i) & 1U) << (15U - i)) | (((value << i) & 0x8000U) >> (15U - i)));
-    }
+    ret = __RBIT((uint32)value) >> 16U;
 
-    return ret;
+    return (uint16)ret;
 }
 
 /*==================================================================================================
