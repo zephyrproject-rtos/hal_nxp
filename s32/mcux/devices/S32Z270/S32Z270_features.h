@@ -15,7 +15,7 @@
 /* PIT module features */
 
 /* @brief Number of channels (related to number of registers LDVALn, CVALn, TCTRLn, TFLGn). */
-#define FSL_FEATURE_PIT_TIMER_COUNT (4)
+#define FSL_FEATURE_PIT_TIMER_COUNT (6)
 /* @brief Has lifetime timer (related to existence of registers LTMR64L and LTMR64H). */
 #define FSL_FEATURE_PIT_HAS_LIFETIME_TIMER (1)
 /* @brief Has chain mode (related to existence of register bit field TCTRLn[CHN]). */
