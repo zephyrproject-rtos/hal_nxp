@@ -62,10 +62,6 @@
 /*******************************************************************************
  * Declaration
  ******************************************************************************/
-#ifdef __ZEPHYR__
-const uint8_t gUseRtos_c = 1;
-#endif
-
 /*! IMU handle instance for each IMU link */
 static hal_imu_handle_t imuHandleCh[kIMU_LinkMax];
 
