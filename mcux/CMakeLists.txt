@@ -43,10 +43,12 @@ endif()
 # fsl_device_registers.h and ${MCUX_DEVICE}_features.h
 zephyr_compile_definitions(${MCUX_CPU})
 
+zephyr_compile_definitions_ifdef(CONFIG_CLOCK_CONTROL_IMX_SCMI FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL=1)
+
 # Build mcux device-specific objects. Although it is not normal
 # practice, drilling down like this avoids the need for repetitive
 # build scripts for every mcux device.
-zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_clock.c)
+zephyr_library_sources_ifndef(CONFIG_CLOCK_CONTROL_IMX_SCMI mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_clock.c)
 if (${MCUX_DEVICE} MATCHES "LPC|MIMXRT6|MIMXRT5|RW6|MCXN.4.")
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_power.c)
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_reset.c)
@@ -59,6 +61,31 @@ if (${MCUX_DEVICE} MATCHES "MIMXRT11")
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_pmu.c)
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_dcdc.c)
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_anatop_ai.c)
+endif()
+
+if (${MCUX_DEVICE} MATCHES "MIMX9596")
+  zephyr_include_directories(mcux-sdk/components/imx_sm/components/scmi/)
+  zephyr_include_directories(mcux-sdk/components/imx_sm/components/smt/)
+  zephyr_include_directories(mcux-sdk/components/imx_sm/components/crc/)
+
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_base.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_bbm.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_clock.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_cpu.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_fusa.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_lmm.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_misc.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_perf.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_pinctrl.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_power.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_reset.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_sensor.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_sys.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/scmi/scmi_voltage.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/smt/smt.c)
+  zephyr_library_sources(mcux-sdk/components/imx_sm/components/crc/crc.c)
+  zephyr_library_sources(mcux-sdk/devices/MIMX9596/drivers/fsl_mu.c)
 endif()
 
 zephyr_library_sources_ifdef(CONFIG_HAS_MCUX_AUDIOMIX mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_audiomix.c)
