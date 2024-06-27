@@ -155,8 +155,6 @@ void *OSA_MemoryAllocate(uint32_t memLength)
     /* Allocating on the System Heap */
     void *p = k_malloc(memLength);
 
-    OSA_ASSERT(p != NULL, "Memory of length: %u, could not be allocated\r\n", memLength);
-
     if (p != NULL)
     {
         (void)memset(p, 0, memLength);
@@ -167,8 +165,6 @@ void *OSA_MemoryAllocate(uint32_t memLength)
 
 void OSA_MemoryFree(void *p)
 {
-    OSA_ASSERT(p != NULL, "Trying to free memory pointing to NULL\r\n");
-
     if (p != NULL)
     {
         k_free(p);
@@ -180,8 +176,6 @@ void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes)
     /* Allocating on the System Heap */
     void *p = k_aligned_alloc(alignbytes, memLength);
 
-    OSA_ASSERT(p != NULL, "Memory of length: %u, could not be allocated\r\n", memLength);
-
     if (p != NULL)
     {
         (void)memset(p, 0, memLength);
@@ -192,8 +186,6 @@ void *OSA_MemoryAllocateAlign(uint32_t memLength, uint32_t alignbytes)
 
 void OSA_MemoryFreeAlign(void *p)
 {
-    OSA_ASSERT(p != NULL, "Trying to free memory pointing to NULL\r\n");
-
     if (p != NULL)
     {
         k_free(p);
