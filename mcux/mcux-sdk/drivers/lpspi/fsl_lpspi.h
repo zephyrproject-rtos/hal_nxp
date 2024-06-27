@@ -20,10 +20,10 @@
  *********************************************************************************************************************/
 
 /*! @name Driver version */
-/*! @{ */
+/*@{*/
 /*! @brief LPSPI driver version. */
-#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 6, 6))
-/*! @} */
+#define FSL_LPSPI_DRIVER_VERSION (MAKE_VERSION(2, 6, 7))
+/*@}*/
 
 #ifndef LPSPI_DUMMY_DATA
 /*! @brief LPSPI dummy data if no Tx data.*/
@@ -389,7 +389,7 @@ struct _lpspi_master_handle
     volatile uint8_t bytesEachWrite; /*!< Bytes for each write TDR. */
     volatile uint8_t bytesEachRead;  /*!< Bytes for each read RDR. */
 
-    const uint8_t *volatile txData;       /*!< Send buffer. */
+    const uint8_t *volatile txData;            /*!< Send buffer. */
     uint8_t *volatile rxData;             /*!< Receive buffer. */
     volatile size_t txRemainingByteCount; /*!< Number of bytes remaining to send.*/
     volatile size_t rxRemainingByteCount; /*!< Number of bytes remaining to receive.*/
@@ -419,7 +419,7 @@ struct _lpspi_slave_handle
     volatile uint8_t bytesEachWrite; /*!< Bytes for each write TDR. */
     volatile uint8_t bytesEachRead;  /*!< Bytes for each read RDR. */
 
-    const uint8_t *volatile txData; /*!< Send buffer. */
+    const uint8_t *volatile txData;           /*!< Send buffer. */
     uint8_t *volatile rxData; /*!< Receive buffer. */
 
     volatile size_t txRemainingByteCount; /*!< Number of bytes remaining to send.*/
