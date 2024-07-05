@@ -58,6 +58,11 @@ zephyr_compile_definitions_ifdef(
   ENET_ENHANCEDBUFFERDESCRIPTOR_MODE
 )
 
+zephyr_compile_definitions_ifdef(
+  CONFIG_SOC_MIMX9596
+  FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL=1
+)
+
 zephyr_library_compile_definitions_ifdef(
   CONFIG_HAS_MCUX_CACHE FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL
 )
@@ -150,8 +155,6 @@ include_driver_ifdef(CONFIG_UART_MCUX_FLEXCOMM		flexcomm/usart	driver_flexcomm_u
 include_driver_ifdef(CONFIG_WDT_MCUX_WWDT		wwdt		driver_wwdt)
 include_driver_ifdef(CONFIG_ADC_MCUX_ADC12		adc12		driver_adc12)
 include_driver_ifdef(CONFIG_ADC_MCUX_ADC16		adc16		driver_adc16)
-include_driver_ifdef(CONFIG_IPM_IMX			mu		driver_mu)
-include_driver_ifdef(CONFIG_MBOX_NXP_IMX_MU		mu		driver_mu)
 include_driver_ifdef(CONFIG_CAN_MCUX_FLEXCAN		flexcan		driver_flexcan)
 include_driver_ifdef(CONFIG_CAN_MCUX_FLEXCAN_FD		flexcan		driver_flexcan)
 include_driver_ifdef(CONFIG_COUNTER_NXP_PIT		pit		driver_pit)
@@ -269,6 +272,14 @@ elseif((${MCUX_DEVICE} MATCHES "MK(28|66)") OR (${MCUX_DEVICE} MATCHES "MKE(14|1
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/lmem	driver_cache_lmem)
 elseif(CONFIG_SOC_MIMXRT1189_CM33)
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE    cache/xcache  driver_cache_xcache)
+endif()
+
+if (${MCUX_DEVICE} MATCHES "MIMX9596")
+  include_driver_ifdef(CONFIG_IPM_IMX			mu1		driver_mu1)
+  include_driver_ifdef(CONFIG_MBOX_NXP_IMX_MU		mu1		driver_mu1)
+else()
+  include_driver_ifdef(CONFIG_IPM_IMX			mu		driver_mu)
+  include_driver_ifdef(CONFIG_MBOX_NXP_IMX_MU		mu		driver_mu)
 endif()
 
 if(CONFIG_CPU_CORTEX_A)
