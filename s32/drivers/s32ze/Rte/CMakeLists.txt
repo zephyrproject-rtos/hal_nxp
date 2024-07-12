@@ -1,4 +1,4 @@
-# Copyright 2022-2023 NXP
+# Copyright 2022-2024 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 zephyr_include_directories(include)
@@ -13,3 +13,4 @@ zephyr_library_sources_ifdef(CONFIG_WDT_NXP_S32 src/SchM_Wdg.c)
 zephyr_library_sources_ifdef(CONFIG_CAN_NXP_S32_CANXL src/SchM_Can_43_CANEXCEL.c)
 zephyr_library_sources_ifdef(CONFIG_ETH_NXP_S32_NETC src/SchM_Eth_43_NETC.c)
 zephyr_library_sources_ifdef(CONFIG_ETH_NXP_S32_NETC src/SchM_EthSwt_43_NETC.c)
+zephyr_library_sources_ifdef(CONFIG_I2C_NXP_S32_I3C src/SchM_I2c.c)

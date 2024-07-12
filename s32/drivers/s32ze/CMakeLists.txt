@@ -1,4 +1,4 @@
-# Copyright 2022-2023 NXP
+# Copyright 2022-2024 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 add_subdirectory(BaseNXP)
@@ -17,3 +17,4 @@ if (CONFIG_ETH_NXP_S32_NETC)
   add_subdirectory(EthSwt_NETC)
 endif()
 add_subdirectory_ifdef(CONFIG_CAN_NXP_S32_CANXL Can_CANEXCEL)
+add_subdirectory_ifdef(CONFIG_I2C_NXP_S32_I3C I2c)
