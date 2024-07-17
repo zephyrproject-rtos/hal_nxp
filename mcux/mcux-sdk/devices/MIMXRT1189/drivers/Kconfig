@@ -59,3 +59,10 @@ config MCUX_USE_driver_soc_src
     select MCUX_USE_driver_common
     help
       SOC SRC Driver
+
+# driver_ele_base_api
+config MCUX_USE_driver_ele_base_api
+    bool "ELE BASE API Driver"
+    select MCUX_USE_driver_common
+    help
+      ELE BASE API Driver

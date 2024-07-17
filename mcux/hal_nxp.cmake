@@ -256,6 +256,8 @@ include_driver_ifdef(CONFIG_DAC_MCUX_GAU		cns_dac		driver_cns_dac)
 include_driver_ifdef(CONFIG_DAI_NXP_ESAI		esai		driver_esai)
 include_driver_ifdef(CONFIG_MCUX_LPCMP		        lpcmp		driver_lpcmp)
 include_driver_ifdef(CONFIG_NXP_RF_IMU			imu		driver_imu)
+include_driver_ifdef(CONFIG_TRDC_MCUX_TRDC              trdc            driver_trdc)
+include_driver_ifdef(CONFIG_S3MU_MCUX_S3MU              s3mu            driver_s3mu)
 
 if ((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4 OR CONFIG_SOC_MIMXRT1189_CM33)))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv7-m7	driver_cache_armv7_m7)
