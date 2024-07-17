@@ -19,7 +19,7 @@
  * Definitions
  *******************************************************************************/
 
-#define BIT(x)         (uint32_t)(1UL << (x))
+#define _BIT(x)         (uint32_t)(1UL << (x))
 #define MU_READ_HEADER (0x01u)
 #define GET_HDR_SIZE(x)   (((x) & (uint32_t)0xFF00) >> 8u)
 
@@ -79,7 +79,7 @@ status_t S3MU_SendMessage(S3MU_Type *mu, void *buf, size_t wordCount)
 /* Static function to write one word to transmit register specified by index */
 static void s3mu_hal_send_data(S3MU_Type *mu, uint32_t regid, uint32_t *data)
 {
-    uint32_t mask = (BIT(regid));
+    uint32_t mask = (_BIT(regid));
     while ((mu->TSR & mask) == 0u)
     {
     }
@@ -167,7 +167,7 @@ status_t S3MU_ReadMessage(S3MU_Type *mu, uint32_t *buf, size_t *size, uint8_t re
 /* Static function to retrieve one word from receive register specified by index */
 static void s3mu_hal_receive_data(S3MU_Type *mu, uint32_t regid, uint32_t *data)
 {
-    uint32_t mask = BIT(regid);
+    uint32_t mask = _BIT(regid);
 
     while ((mu->RSR & mask) == 0u)
     {
@@ -248,7 +248,7 @@ static status_t s3mu_read_data_wait(S3MU_Type *mu, uint32_t *buf, uint8_t *size,
 /* Static function to retrieve one word from receive register specified by index with wait */
 static status_t s3mu_hal_receive_data_wait(S3MU_Type *mu, uint8_t regid, uint32_t *data, uint32_t wait)
 {
-    uint32_t mask = BIT(regid);
+    uint32_t mask = _BIT(regid);
     status_t ret = kStatus_Fail;
     while ((mu->RSR & mask) == 0u)
     {
