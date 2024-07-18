@@ -74,7 +74,6 @@
 #include "S32K344_SIRC.h"
 #include "S32K344_STCU.h"
 #include "S32K344_STM.h"
-#include "S32K344_SWT.h"
 #include "S32K344_SXOSC.h"
 #include "S32K344_TEMPSENSE.h"
 #include "S32K344_TRGMUX.h"
