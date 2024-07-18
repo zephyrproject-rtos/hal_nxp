@@ -3,11 +3,6 @@
 
 zephyr_include_directories(include)
 
-zephyr_library_sources_ifdef(CONFIG_NXP_S32_EIRQ
-    src/Siul2_Icu_Ip.c
-    src/Siul2_Icu_Ip_Irq.c
-)
-
 zephyr_library_sources_ifdef(CONFIG_NXP_S32_WKPU
     src/Wkpu_Ip.c
     src/Wkpu_Ip_Irq.c
