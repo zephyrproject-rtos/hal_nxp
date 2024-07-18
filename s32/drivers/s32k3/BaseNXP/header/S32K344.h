@@ -75,7 +75,6 @@
 #include "S32K344_SELFTEST_GPR.h"
 #include "S32K344_SEMA42.h"
 #include "S32K344_SIRC.h"
-#include "S32K344_SIUL2.h"
 #include "S32K344_STCU.h"
 #include "S32K344_STM.h"
 #include "S32K344_SWT.h"
