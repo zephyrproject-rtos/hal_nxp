@@ -213,7 +213,6 @@
 #include "S32Z2_SPI.h"
 #include "S32Z2_SRAMCTL.h"
 #include "S32Z2_SRX.h"
-#include "S32Z2_STM.h"
 #include "S32Z2_SW_ETH_MAC_PORT0.h"
 #include "S32Z2_SW_ETH_MAC_PORT1.h"
 #include "S32Z2_SW_PORT0.h"
