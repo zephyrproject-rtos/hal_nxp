@@ -83,7 +83,6 @@
 #include "S32K344_TRGMUX.h"
 #include "S32K344_TSPC.h"
 #include "S32K344_VIRT_WRAPPER.h"
-#include "S32K344_WKPU.h"
 #include "S32K344_XBIC.h"
 #include "S32K344_XRDC.h"
 #include "S32K344_NVIC.h"
