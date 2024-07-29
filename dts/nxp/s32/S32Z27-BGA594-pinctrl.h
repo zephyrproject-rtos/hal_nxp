@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022, 2024 NXP
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -294,14 +294,14 @@
 #define PB14_EMIOS_1_CH14_O             NXP_S32_PINMUX(0, 30, 3, 0, 0)
 #define PB14_EMIOS_1_CH14_I             NXP_S32_PINMUX(0, 30, 0, 14, 2)
 #define PI15_EMIOS_1_CH16_I             NXP_S32_PINMUX(0, 111, 0, 15, 3)
-#define PJ0_EMIOS_1_CH23_I              NXP_S32_PINMUX(0, 112, 0, 23, 4)
-#define PJ1_EMIOS_1_CH21_I              NXP_S32_PINMUX(0, 113, 0, 21, 4)
-#define PJ2_EMIOS_1_CH20_I              NXP_S32_PINMUX(0, 114, 0, 20, 4)
+#define PJ0_EMIOS_1_CH23_I              NXP_S32_PINMUX(0, 112, 0, 23, 3)
+#define PJ1_EMIOS_1_CH21_I              NXP_S32_PINMUX(0, 113, 0, 21, 3)
+#define PJ2_EMIOS_1_CH20_I              NXP_S32_PINMUX(0, 114, 0, 20, 3)
 #define PJ3_EMIOS_1_CH19_I              NXP_S32_PINMUX(0, 115, 0, 18, 3)
 #define PJ4_EMIOS_1_CH18_I              NXP_S32_PINMUX(0, 116, 0, 17, 3)
-#define PJ5_EMIOS_1_CH17_I              NXP_S32_PINMUX(0, 117, 0, 16, 4)
+#define PJ5_EMIOS_1_CH17_I              NXP_S32_PINMUX(0, 117, 0, 16, 3)
 #define PJ8_EMIOS_1_CH31_I              NXP_S32_PINMUX(0, 120, 0, 32, 3)
-#define PJ9_EMIOS_1_CH30_I              NXP_S32_PINMUX(0, 121, 0, 31, 4)
+#define PJ9_EMIOS_1_CH30_I              NXP_S32_PINMUX(0, 121, 0, 31, 3)
 #define PJ11_EMIOS_1_CH29_I             NXP_S32_PINMUX(0, 123, 0, 29, 3)
 #define PJ12_EMIOS_1_CH28_I             NXP_S32_PINMUX(0, 124, 0, 28, 3)
 #define PJ13_EMIOS_1_CH27_I             NXP_S32_PINMUX(0, 125, 0, 27, 3)
@@ -610,7 +610,6 @@
 
 /* MSC_0_DSPI */
 #define PA11_DSPI_10_PCS0_O             NXP_S32_PINMUX(0, 11, 1, 0, 0)
-#define PA11_DSPI_10_PCS0_I             NXP_S32_PINMUX(0, 11, 0, 9, 2)
 #define PA12_DSPI_10_PCS1               NXP_S32_PINMUX(0, 12, 1, 0, 0)
 #define PB6_DSPI_10_PCS2                NXP_S32_PINMUX(0, 22, 6, 0, 0)
 
@@ -630,7 +629,7 @@
 #define PA13_LIN_2_TX                   NXP_S32_PINMUX(0, 13, 4, 0, 0)
 #define PA14_LIN_2_RX                   NXP_S32_PINMUX(0, 14, 0, 50, 2)
 
-/* LINFLEX_12 */
+/* MSC_0_LIN */
 #define PA13_LIN_12_RX                  NXP_S32_PINMUX(0, 13, 0, 49, 2)
 #define PA14_LIN_12_TX                  NXP_S32_PINMUX(0, 14, 1, 0, 0)
 
