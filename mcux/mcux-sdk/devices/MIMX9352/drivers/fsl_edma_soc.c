@@ -21,6 +21,70 @@
  * Prototypes
  ******************************************************************************/
 extern void EDMA_DriverIRQHandler(uint32_t instance, uint32_t channel);
+extern void DMA4_0_1_DriverIRQHandler(void);
+extern void DMA4_2_3_DriverIRQHandler(void);
+extern void DMA4_4_5_DriverIRQHandler(void);
+extern void DMA4_6_7_DriverIRQHandler(void);
+extern void DMA4_8_9_DriverIRQHandler(void);
+extern void DMA4_10_11_DriverIRQHandler(void);
+extern void DMA4_12_13_DriverIRQHandler(void);
+extern void DMA4_14_15_DriverIRQHandler(void);
+extern void DMA4_16_17_DriverIRQHandler(void);
+extern void DMA4_18_19_DriverIRQHandler(void);
+extern void DMA4_20_21_DriverIRQHandler(void);
+extern void DMA4_22_23_DriverIRQHandler(void);
+extern void DMA4_24_25_DriverIRQHandler(void);
+extern void DMA4_26_27_DriverIRQHandler(void);
+extern void DMA4_28_29_DriverIRQHandler(void);
+extern void DMA4_30_31_DriverIRQHandler(void);
+extern void DMA4_32_33_DriverIRQHandler(void);
+extern void DMA4_34_35_DriverIRQHandler(void);
+extern void DMA4_36_37_DriverIRQHandler(void);
+extern void DMA4_38_39_DriverIRQHandler(void);
+extern void DMA4_40_41_DriverIRQHandler(void);
+extern void DMA4_42_43_DriverIRQHandler(void);
+extern void DMA4_44_45_DriverIRQHandler(void);
+extern void DMA4_46_47_DriverIRQHandler(void);
+extern void DMA4_48_49_DriverIRQHandler(void);
+extern void DMA4_50_51_DriverIRQHandler(void);
+extern void DMA4_52_53_DriverIRQHandler(void);
+extern void DMA4_54_55_DriverIRQHandler(void);
+extern void DMA4_56_57_DriverIRQHandler(void);
+extern void DMA4_58_59_DriverIRQHandler(void);
+extern void DMA4_60_61_DriverIRQHandler(void);
+extern void DMA4_62_63_DriverIRQHandler(void);
+extern void DMA_0_DriverIRQHandler(void);
+extern void DMA_1_DriverIRQHandler(void);
+extern void DMA_2_DriverIRQHandler(void);
+extern void DMA_3_DriverIRQHandler(void);
+extern void DMA_4_DriverIRQHandler(void);
+extern void DMA_5_DriverIRQHandler(void);
+extern void DMA_6_DriverIRQHandler(void);
+extern void DMA_7_DriverIRQHandler(void);
+extern void DMA_8_DriverIRQHandler(void);
+extern void DMA_9_DriverIRQHandler(void);
+extern void DMA_10_DriverIRQHandler(void);
+extern void DMA_11_DriverIRQHandler(void);
+extern void DMA_12_DriverIRQHandler(void);
+extern void DMA_13_DriverIRQHandler(void);
+extern void DMA_14_DriverIRQHandler(void);
+extern void DMA_15_DriverIRQHandler(void);
+extern void DMA_16_DriverIRQHandler(void);
+extern void DMA_17_DriverIRQHandler(void);
+extern void DMA_18_DriverIRQHandler(void);
+extern void DMA_19_DriverIRQHandler(void);
+extern void DMA_20_DriverIRQHandler(void);
+extern void DMA_21_DriverIRQHandler(void);
+extern void DMA_22_DriverIRQHandler(void);
+extern void DMA_23_DriverIRQHandler(void);
+extern void DMA_24_DriverIRQHandler(void);
+extern void DMA_25_DriverIRQHandler(void);
+extern void DMA_26_DriverIRQHandler(void);
+extern void DMA_27_DriverIRQHandler(void);
+extern void DMA_28_DriverIRQHandler(void);
+extern void DMA_29_DriverIRQHandler(void);
+extern void DMA_30_DriverIRQHandler(void);
+extern void DMA3_DriverIRQHandler(uint32_t instance, uint32_t channel);
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -214,6 +278,198 @@ void DMA4_30_31_DriverIRQHandler(void)
     EDMA_DriverIRQHandler(1U, 30U);
     /* Instance 1 channel 31 */
     EDMA_DriverIRQHandler(1U, 31U);
+}
+
+/*!
+ * brief DMA instance 1, channel 32~33 IRQ handler.
+ *
+ */
+void DMA4_32_33_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 32 */
+    EDMA_DriverIRQHandler(1U, 32U);
+    /* Instance 1 channel 33 */
+    EDMA_DriverIRQHandler(1U, 33U);
+}
+
+/*!
+ * brief DMA instance 1, channel 34~35 IRQ handler.
+ *
+ */
+void DMA4_34_35_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 34 */
+    EDMA_DriverIRQHandler(1U, 34U);
+    /* Instance 1 channel 35 */
+    EDMA_DriverIRQHandler(1U, 35U);
+}
+
+/*!
+ * brief DMA instance 1, channel 36~37 IRQ handler.
+ *
+ */
+void DMA4_36_37_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 36 */
+    EDMA_DriverIRQHandler(1U, 36U);
+    /* Instance 1 channel 37 */
+    EDMA_DriverIRQHandler(1U, 37U);
+}
+
+/*!
+ * brief DMA instance 1, channel 38~39 IRQ handler.
+ *
+ */
+void DMA4_38_39_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 38 */
+    EDMA_DriverIRQHandler(1U, 38U);
+    /* Instance 1 channel 39 */
+    EDMA_DriverIRQHandler(1U, 39U);
+}
+
+/*!
+ * brief DMA instance 1, channel 40~41 IRQ handler.
+ *
+ */
+void DMA4_40_41_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 40 */
+    EDMA_DriverIRQHandler(1U, 40U);
+    /* Instance 1 channel 41 */
+    EDMA_DriverIRQHandler(1U, 41U);
+}
+
+/*!
+ * brief DMA instance 1, channel 42~43 IRQ handler.
+ *
+ */
+void DMA4_42_43_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 42 */
+    EDMA_DriverIRQHandler(1U, 42U);
+    /* Instance 1 channel 43 */
+    EDMA_DriverIRQHandler(1U, 43U);
+}
+
+/*!
+ * brief DMA instance 1, channel 44~45 IRQ handler.
+ *
+ */
+void DMA4_44_45_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 44 */
+    EDMA_DriverIRQHandler(1U, 44U);
+    /* Instance 1 channel 45 */
+    EDMA_DriverIRQHandler(1U, 45U);
+}
+
+/*!
+ * brief DMA instance 1, channel 46~47 IRQ handler.
+ *
+ */
+void DMA4_46_47_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 46 */
+    EDMA_DriverIRQHandler(1U, 46U);
+    /* Instance 1 channel 47 */
+    EDMA_DriverIRQHandler(1U, 47U);
+}
+
+/*!
+ * brief DMA instance 1, channel 48~49 IRQ handler.
+ *
+ */
+void DMA4_48_49_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 48 */
+    EDMA_DriverIRQHandler(1U, 48U);
+    /* Instance 1 channel 49 */
+    EDMA_DriverIRQHandler(1U, 49U);
+}
+
+/*!
+ * brief DMA instance 1, channel 50~51 IRQ handler.
+ *
+ */
+void DMA4_50_51_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 50 */
+    EDMA_DriverIRQHandler(1U, 50U);
+    /* Instance 1 channel 51 */
+    EDMA_DriverIRQHandler(1U, 51U);
+}
+
+/*!
+ * brief DMA instance 1, channel 52~53 IRQ handler.
+ *
+ */
+void DMA4_52_53_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 52 */
+    EDMA_DriverIRQHandler(1U, 52U);
+    /* Instance 1 channel 53 */
+    EDMA_DriverIRQHandler(1U, 53U);
+}
+
+/*!
+ * brief DMA instance 1, channel 54~55 IRQ handler.
+ *
+ */
+void DMA4_54_55_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 54 */
+    EDMA_DriverIRQHandler(1U, 54U);
+    /* Instance 1 channel 55 */
+    EDMA_DriverIRQHandler(1U, 55U);
+}
+
+/*!
+ * brief DMA instance 1, channel 56~57 IRQ handler.
+ *
+ */
+void DMA4_56_57_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 56 */
+    EDMA_DriverIRQHandler(1U, 56U);
+    /* Instance 1 channel 57 */
+    EDMA_DriverIRQHandler(1U, 57U);
+}
+
+/*!
+ * brief DMA instance 1, channel 58~59 IRQ handler.
+ *
+ */
+void DMA4_58_59_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 58 */
+    EDMA_DriverIRQHandler(1U, 58U);
+    /* Instance 1 channel 59 */
+    EDMA_DriverIRQHandler(1U, 59U);
+}
+
+/*!
+ * brief DMA instance 1, channel 60~61 IRQ handler.
+ *
+ */
+void DMA4_60_61_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 60 */
+    EDMA_DriverIRQHandler(1U, 60U);
+    /* Instance 1 channel 61 */
+    EDMA_DriverIRQHandler(1U, 61U);
+}
+
+/*!
+ * brief DMA instance 1, channel 62~63 IRQ handler.
+ *
+ */
+void DMA4_62_63_DriverIRQHandler(void)
+{
+    /* Instance 1 channel 62 */
+    EDMA_DriverIRQHandler(1U, 62U);
+    /* Instance 1 channel 63 */
+    EDMA_DriverIRQHandler(1U, 63U);
 }
 
 /*!
@@ -524,4 +780,9 @@ void DMA_30_DriverIRQHandler(void)
 {
     /* Instance0 channel 30 */
     EDMA_DriverIRQHandler(0U, 30U);
+}
+
+void DMA3_DriverIRQHandler(uint32_t instance, uint32_t channel)
+{
+    EDMA_DriverIRQHandler(0U, channel);
 }
