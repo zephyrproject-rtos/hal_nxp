@@ -40,8 +40,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.1.4. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 1, 4))
+/*! @brief CLOCK driver version 2.3.0. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -243,6 +243,14 @@
 #define PMU_TUPLE_REG(base, tuple) ((volatile uint32_t *)(((uint32_t)(base)) + ((uint32_t)(tuple)&0xFFCU)))
 #define PMU_TUPLE_SEL(tuple)       (((uint32_t)(tuple) >> 12U) & 0x3U)
 
+/*! @brief Clock name used to get clock frequency. */
+typedef enum _clock_name
+{
+    kCLOCK_CoreSysClk,       /*!< Core clock  (aka HCLK)                                 */
+    kCLOCK_BusClk,           /*!< Bus clock (AHB/APB clock, aka HCLK)                    */
+    kCLOCK_MclkClk,          /*!< MCLK, to MCLK pin                                      */
+} clock_name_t;
+
 /*!
  * @brief Peripheral clock name difinition used for
  * clock gate.
@@ -377,16 +385,22 @@ typedef enum _clock_attach_id
     kFFRO_to_USIM_CLK      = CLKCTL0_TUPLE_MUXA(0x774U, 2),
     kNONE_to_USIM_CLK      = CLKCTL0_TUPLE_MUXA(0x774U, 3),
 
-    kMAIN_CLK_to_GAU_CLK       = CLKCTL0_TUPLE_MUXA(0x77CU, 0),
-    kT3PLL_MCI_256M_to_GAU_CLK = CLKCTL0_TUPLE_MUXA(0x77CU, 1),
-    kAVPLL_CH2_to_GAU_CLK      = CLKCTL0_TUPLE_MUXA(0x77CU, 2),
-    kNONE_to_GAU_CLK           = CLKCTL0_TUPLE_MUXA(0x77CU, 3),
-
     kMAIN_CLK_to_LCD_CLK          = CLKCTL0_TUPLE_MUXA(0x778U, 0),
     kT3PLL_MCI_FLEXSPI_to_LCD_CLK = CLKCTL0_TUPLE_MUXA(0x778U, 1),
     kTCPU_MCI_FLEXSPI_to_LCD_CLK  = CLKCTL0_TUPLE_MUXA(0x778U, 2),
     kTDDR_MCI_FLEXSPI_to_LCD_CLK  = CLKCTL0_TUPLE_MUXA(0x778U, 3),
     kNONE_to_LCD_CLK              = CLKCTL0_TUPLE_MUXA(0x778U, 7),
+
+    kMAIN_CLK_to_GAU_CLK       = CLKCTL0_TUPLE_MUXA(0x77CU, 0),
+    kT3PLL_MCI_256M_to_GAU_CLK = CLKCTL0_TUPLE_MUXA(0x77CU, 1),
+    kAVPLL_CH2_to_GAU_CLK      = CLKCTL0_TUPLE_MUXA(0x77CU, 2),
+    kNONE_to_GAU_CLK           = CLKCTL0_TUPLE_MUXA(0x77CU, 3),
+
+    kT3PLL_MCI_256M_to_ELS_GDET = CLKCTL0_TUPLE_MUXA(0x7A8U, 0),
+    kELS_128M_to_ELS_GDET       = CLKCTL0_TUPLE_MUXA(0x7A8U, 1),
+    kELS_64M_to_ELS_GDET        = CLKCTL0_TUPLE_MUXA(0x7A8U, 2),
+    kOTP_FUSE_32M_to_ELS_GDET   = CLKCTL0_TUPLE_MUXA(0x7A8U, 3),
+    kNONE_to_ELS_GDET           = CLKCTL0_TUPLE_MUXA(0x7A8U, 7),
 
     kLPOSC_to_OSTIMER_CLK    = CLKCTL1_TUPLE_MUXA(0x480U, 0),
     kCLK32K_to_OSTIMER_CLK   = CLKCTL1_TUPLE_MUXA(0x480U, 1),
@@ -435,7 +449,7 @@ typedef enum _clock_attach_id
     kMCLK_IN_to_DMIC_CLK   = CLKCTL1_TUPLE_MUXA(0x700U, 3),
     kLPOSC_to_DMIC_CLK     = CLKCTL1_TUPLE_MUXA(0x700U, 4),
     kCLK32K_to_DMIC_CLK    = CLKCTL1_TUPLE_MUXA(0x700U, 5),
-    kMAIN_CLK_to_DMIC_CLK  = CLKCTL1_TUPLE_MUXA(0x700U, 5),
+    kMAIN_CLK_to_DMIC_CLK  = CLKCTL1_TUPLE_MUXA(0x700U, 6),
     kNONE_to_DMIC_CLK      = CLKCTL1_TUPLE_MUXA(0x700U, 7),
 
     kMAIN_CLK_to_CTIMER0  = CLKCTL1_TUPLE_MUXA(0x720U, 0),
@@ -685,6 +699,11 @@ void CLOCK_AttachClk(clock_attach_id_t connection);
  * @param   divider     : Value to be divided.
  */
 void CLOCK_SetClkDiv(clock_div_name_t name, uint32_t divider);
+
+/*! @brief  Return Frequency of selected clock
+ *  @return Frequency of selected clock
+ */
+uint32_t CLOCK_GetFreq(clock_name_t clockName);
 
 /*! @brief  Return Input frequency for the Fractional baud rate generator
  *  @return Input Frequency for FRG
