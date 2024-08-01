@@ -2931,7 +2931,7 @@ static usb_status_t USB_HostIp3516HsTokenDone(usb_host_ip3516hs_state_struct_t *
                     {
                         if (0U != trDone)
                         {
-                            if ((0U == (pipe->trList->transferLength % pipe->pipeCommon.maxPacketSize)) &&
+                            if ((0U == (pipe->trList->transferSofar % pipe->pipeCommon.maxPacketSize)) &&
                                 (pipe->trList->transferSofar < pipe->trList->transferLength))
                             {
                                 (void)USB_HostIp3516HsWriteBulkPipe(usbHostState, pipe, pipe->trList);
@@ -3016,7 +3016,6 @@ static usb_status_t USB_HostIp3516HsTokenDone(usb_host_ip3516hs_state_struct_t *
                 case USB_ENDPOINT_ISOCHRONOUS:
 #if 1
                     indexLength.indexLength = trCurrent->union2.frame;
-                    trCurrent->union2.frame = 0u;
                     if ((0U != s_UsbHostIp3516HsPtd[usbHostState->controllerId]
                                    .iso[indexLength.state.tdIndex]
                                    .stateUnion.stateBitField.A) &&
@@ -3028,7 +3027,7 @@ static usb_status_t USB_HostIp3516HsTokenDone(usb_host_ip3516hs_state_struct_t *
                         pipe = (usb_host_ip3516hs_pipe_struct_t *)temp;
                         continue;
                     }
-
+                    trCurrent->union2.frame = 0u;
                     pipe->bufferIndex  = indexLength.state.bufferIndex;
                     pipe->bufferLength = indexLength.state.bufferLength;
                     if (USB_IN == trCurrent->direction)
@@ -4017,6 +4016,7 @@ void USB_HostIp3516HsIsrFunction(void *hostHandle)
 
     interruptStatus = usbHostState->usbRegBase->USBSTS;
     interruptStatus &= usbHostState->usbRegBase->USBINTR;
+    usbHostState->usbRegBase->USBSTS = interruptStatus; /* clear interrupt */
 
     if (0U != (interruptStatus & USB_HOST_IP3516HS_USBSTS_ISO_IRQ_MASK)) /* Write back done head */
     {
@@ -4061,8 +4061,6 @@ void USB_HostIp3516HsIsrFunction(void *hostHandle)
     {
         (void)OSA_EventSet(usbHostState->ip3516HsEvent, USB_HOST_IP3516HS_EVENT_PORT_CHANGE);
     }
-
-    usbHostState->usbRegBase->USBSTS = interruptStatus; /* clear interrupt */
 }
 
 #endif

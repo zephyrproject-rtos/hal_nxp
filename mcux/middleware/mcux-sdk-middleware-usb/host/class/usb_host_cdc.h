@@ -17,7 +17,6 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-
 /* Class-specific request */
 /* CDC 1.2 */
 /*! @brief CDC class-specific request (SEND_ENCAPSULATED_COMMAND) */
@@ -31,6 +30,11 @@
 #define USB_HOST_CDC_GET_LINE_CODING 0x21U
 /*! @brief CDC class-specific request (SET_CONTROL_LINE_STATE) */
 #define USB_HOST_CDC_SET_CONTROL_LINE_STATE 0x22U
+
+/*! @brief CDC Class-specific Management Element Notifications */
+#define USB_HOST_CDC_NOTIFICATION_NETWORK_CONNECTION      (0x00U)
+#define USB_HOST_CDC_NOTIFICATION_RESPONSE_AVAILABLE      (0x01U)
+#define USB_HOST_CDC_NOTIFICATION_CONNECTION_SPEED_CHANGE (0x2AU)
 
 /*! @brief CDC class-specific notifications(SerialState) bitmap*/
 #define USB_HOST_ACM_UART_STATE_BITMAP_BTXCARRITER 0x01U
@@ -65,6 +69,8 @@
 #define USB_HOST_DESC_SUBTYPE_CS 0x07U
 /*! @brief CDC class-specific bDescriptor SubType in functional descriptors*/
 #define USB_HOST_DESC_SUBTYPE_TOM 0x08U
+/*! @brief CDC class-specific bDescriptor SubType in functional descriptors*/
+#define USB_HOST_DESC_SUBTYPE_ECM 0x0FU
 
 /*See the CDC specification page20*/
 /*! @brief CDC class-specific code, Communications Interface Class Code*/
@@ -185,6 +191,21 @@ typedef struct _usb_host_cdc_tom_desc_struct
     uint8_t bmCapabilities;     /*!<Operational modes:.*/
 } usb_host_cdc_tom_desc_struct_t;
 
+typedef struct _usb_host_cdc_ethernet_networking_desc_struct
+{
+    uint8_t bFunctionLength;         /*! @brief Size of this functional descriptor, in bytes. */
+    uint8_t bDescriptorType;         /*! @brief CS_INTERFACE */
+    uint8_t bDescriptorSubtype;      /*! @brief Ethernet Networking functional descriptor subtype */
+    uint8_t iMACAddress;             /*! @brief Index of string descriptor. */
+    uint8_t bmEthernetStatistics[4]; /*! @brief Indicates which Ethernet statistics functions the device collects. */
+    uint8_t
+        wMaxSegmentSize[2];  /*! @brief The maximum segment size that the Ethernet device is capable of supporting. */
+    uint8_t
+        wNumberMCFilters[2]; /*! @brief Contains the number of multicast filters that can be configured by the host. */
+    uint8_t bNumberPowerFilters; /*! @brief Contains the number of pattern filters that are available for causing
+                                    wake-up of the host. */
+} usb_host_cdc_ethernet_networking_desc_struct_t;
+
 /*! @brief CDC common Functional Descriptor structure */
 typedef struct _usb_host_cdc_common_desc_struct
 {
@@ -205,6 +226,7 @@ typedef union _usb_cdc_func_desc_struct
     usb_host_cdc_telephone_ringer_desc_struct_t tr;
     usb_host_cdc_tom_desc_struct_t tom;
     usb_host_cdc_tcLsr_desc_struct_t tcLsr;
+    usb_host_cdc_ethernet_networking_desc_struct_t ecm;
 } usb_cdc_func_desc_struct_t;
 
 typedef struct _usb_host_cdc_instance_struct
@@ -220,7 +242,9 @@ typedef struct _usb_host_cdc_instance_struct
     usb_host_cdc_head_function_desc_struct_t *headDesc;     /*!< CDC class-specific head function descriptor*/
     usb_host_cdc_call_manage_desc_struct_t *callManageDesc; /*!< cdCDCc class-specific call manage descriptor*/
     usb_host_cdc_abstract_control_desc_struct_t
-        *abstractControlDesc; /*!< CDC class-specific abstract control descriptor*/
+        *abstractControlDesc;                               /*!< CDC class-specific abstract control descriptor*/
+    usb_host_cdc_ethernet_networking_desc_struct_t
+        *ethernetNetworkingDesc;                            /*!< CDC class-specific ethernet networking descriptor*/
     usb_host_cdc_union_interface_desc_struct_t *unionInterfaceDesc; /*!< CDC class-specific union function descriptor*/
     void *interruptCallbackParam;                                   /*!< CDC interrupt in transfer callback parameter*/
     void *controlCallbackParam;                                     /*!< CDC control transfer callback parameter*/
@@ -232,12 +256,12 @@ typedef struct _usb_host_cdc_instance_struct
     transfer_callback_t outCallbackFn;       /*!< CDC bulk out transfer callback function pointer*/
     transfer_callback_t inCallbackFn;        /*!< CDC bulk in transfer callback function pointer*/
 #if ((defined USB_HOST_CONFIG_CLASS_AUTO_CLEAR_STALL) && USB_HOST_CONFIG_CLASS_AUTO_CLEAR_STALL)
-    uint8_t *stallDataBuffer; /*!< Keep the data buffer for stall transfer's data*/
-    uint32_t stallDataLength; /*!< Keep the data length for stall transfer's data*/
+    uint8_t *stallDataBuffer;                /*!< Keep the data buffer for stall transfer's data*/
+    uint32_t stallDataLength;                /*!< Keep the data length for stall transfer's data*/
 #endif
-    uint16_t packetSize;        /*!< CDC control pipe maximum packet size*/
-    uint16_t bulkOutPacketSize; /*!< CDC bulk out maximum packet size*/
-    uint16_t bulkInPacketSize;  /*!< CDC bulk in maximum packet size*/
+    uint16_t packetSize;                     /*!< CDC control pipe maximum packet size*/
+    uint16_t bulkOutPacketSize;              /*!< CDC bulk out maximum packet size*/
+    uint16_t bulkInPacketSize;               /*!< CDC bulk in maximum packet size*/
 } usb_host_cdc_instance_struct_t;
 
 #ifdef __cplusplus
@@ -446,9 +470,9 @@ extern usb_status_t USB_HostCdcGetAcmLineCoding(usb_host_class_handle classHandl
  * @retval kStatus_USB_Error          send transfer fail, please reference to USB_HostSendSetup.
  */
 extern usb_status_t USB_HostCdcSetAcmLineCoding(usb_host_class_handle classHandle,
-                                         usb_host_cdc_line_coding_struct_t *uartLineCoding,
-                                         transfer_callback_t callbackFn,
-                                         void *callbackParam);
+                                                usb_host_cdc_line_coding_struct_t *uartLineCoding,
+                                                transfer_callback_t callbackFn,
+                                                void *callbackParam);
 
 /*!
  * @brief CDC setControlLineState.
@@ -532,6 +556,25 @@ extern usb_status_t USB_HostCdcGetAcmDescriptor(usb_host_class_handle classHandl
                                                 usb_host_cdc_call_manage_desc_struct_t **callManageDesc,
                                                 usb_host_cdc_abstract_control_desc_struct_t **abstractControlDesc,
                                                 usb_host_cdc_union_interface_desc_struct_t **unionInterfaceDesc);
+
+/*!
+ * @brief CDC gets the ECM descriptor.
+ *
+ * This function is hunting for the class-specific ECM descriptor in the configuration and gets the corresponding
+ * descriptor.
+ *
+ * @param classHandle            The class handle.
+ * @param headDesc               The head function descriptor pointer.
+ * @param unionInterfaceDesc     The union functional descriptor pointer.
+ * @param ethernetNetworkingDesc The ethernet networking functional descriptor pointer.
+ *
+ * @return An error code or kStatus_USB_Success.
+ */
+extern usb_status_t USB_HostCdcGetEcmDescriptor(
+    usb_host_class_handle classHandle,
+    usb_host_cdc_head_function_desc_struct_t **headDesc,
+    usb_host_cdc_union_interface_desc_struct_t **unionInterfaceDesc,
+    usb_host_cdc_ethernet_networking_desc_struct_t **ethernetNetworkingDesc);
 
 /*!
  * @brief CDC send control transfer common code.
