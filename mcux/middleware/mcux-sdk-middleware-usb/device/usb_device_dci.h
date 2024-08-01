@@ -33,6 +33,9 @@ typedef enum _usb_device_notification
     kUSB_DeviceNotifyError,            /*!< Errors happened in bus */
     kUSB_DeviceNotifyDetach,           /*!< Device disconnected from a host */
     kUSB_DeviceNotifyAttach,           /*!< Device connected to a host */
+#if (defined(USB_DEVICE_CONFIG_SOF_NOTIFICATIONS) && (USB_DEVICE_CONFIG_SOF_NOTIFICATIONS > 0U))
+    kUSB_DeviceNotifySOF,              /*!< Start of Frame received */
+#endif
 #if (defined(USB_DEVICE_CONFIG_CHARGER_DETECT) && (USB_DEVICE_CONFIG_CHARGER_DETECT > 0U))
     kUSB_DeviceNotifyDcdDetectFinished, /*!< Device charger detection finished */
 #endif

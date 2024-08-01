@@ -184,10 +184,10 @@ usb_status_t USB_HostHubInit(usb_device_handle deviceHandle, usb_host_class_hand
     }
 
 #if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-    hubInstance->hubDescriptor    = (uint8_t *)SDK_Malloc(7 + (USB_HOST_HUB_MAX_PORT >> 3) + 1, USB_CACHE_LINESIZE);
-    hubInstance->portStatusBuffer = (uint8_t *)SDK_Malloc(4, USB_CACHE_LINESIZE);
-    hubInstance->hubStatusBuffer  = (uint8_t *)SDK_Malloc(4, USB_CACHE_LINESIZE);
-    hubInstance->hubBitmapBuffer  = (uint8_t *)SDK_Malloc((USB_HOST_HUB_MAX_PORT >> 3) + 1, USB_CACHE_LINESIZE);
+    hubInstance->hubDescriptor    = (uint8_t *)OSA_MemoryAllocateAlign(7 + (USB_HOST_HUB_MAX_PORT >> 3) + 1, USB_CACHE_LINESIZE);
+    hubInstance->portStatusBuffer = (uint8_t *)OSA_MemoryAllocateAlign(4, USB_CACHE_LINESIZE);
+    hubInstance->hubStatusBuffer  = (uint8_t *)OSA_MemoryAllocateAlign(4, USB_CACHE_LINESIZE);
+    hubInstance->hubBitmapBuffer  = (uint8_t *)OSA_MemoryAllocateAlign((USB_HOST_HUB_MAX_PORT >> 3) + 1, USB_CACHE_LINESIZE);
 #endif
 
     /* initialize hub instance structure */
@@ -346,10 +346,10 @@ usb_status_t USB_HostHubDeinit(usb_device_handle deviceHandle, usb_host_class_ha
         /* notify host driver that the interface will not be used */
         (void)USB_HostCloseDeviceInterface(deviceHandle, hubInstance->interfaceHandle);
 #if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-        SDK_Free(hubInstance->hubDescriptor);
-        SDK_Free(hubInstance->portStatusBuffer);
-        SDK_Free(hubInstance->hubStatusBuffer);
-        SDK_Free(hubInstance->hubBitmapBuffer);
+        OSA_MemoryFreeAlign(hubInstance->hubDescriptor);
+        OSA_MemoryFreeAlign(hubInstance->portStatusBuffer);
+        OSA_MemoryFreeAlign(hubInstance->hubStatusBuffer);
+        OSA_MemoryFreeAlign(hubInstance->hubBitmapBuffer);
 #endif
         OSA_MemoryFree(hubInstance);
     }

@@ -375,6 +375,19 @@ typedef struct _usb_audio_2_0_ctrl_fu_desc
     uint8_t bmaControls0[4]; /*!< The Controls bitmap for master channel 0:*/
 } usb_audio_2_0_ctrl_fu_desc_t;
 
+
+/*! @brief Audio control interface feature unit descriptor structure */
+typedef struct _usb_audio_2_0_ctrl_mu_desc
+{
+    uint8_t blength;            /*!< Total size of the output terminal descriptor*/
+    uint8_t bdescriptortype;    /*!< Descriptor type of audio output terminal descriptor*/
+    uint8_t bdescriptorsubtype; /*!< Subtype of audio output terminal descriptor*/
+    uint8_t bunitid;   /*!< Constant uniquely identifying the unit within the audio function. This value is used in all
+                          requests to address this unit*/
+    uint8_t bNrInPins; /*!< Number of Input Pins of this Unit: p*/
+    uint8_t baSourceID[4];
+} usb_audio_2_0_ctrl_mu_desc_t;
+
 /*! @brief Audio as isochronous audio data endpoint descriptor structure */
 typedef struct _usb_audio_2_0_stream_specific_iso_endp_desc
 {

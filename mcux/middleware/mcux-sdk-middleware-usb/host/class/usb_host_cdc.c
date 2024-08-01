@@ -650,6 +650,35 @@ usb_status_t USB_HostCdcSetDataInterface(usb_host_class_handle classHandle,
         }
     }
 
+#if defined(USB_HOST_CONFIG_CDC_ECM) && USB_HOST_CONFIG_CDC_ECM
+    usb_host_interface_t *ifPointer  = (usb_host_interface_t *)interfaceHandle;
+    usb_descriptor_union_t *ifBuffer = (usb_descriptor_union_t *)(ifPointer->interfaceExtension);
+    uint32_t extIndex                = 0;
+
+    for (; extIndex < ifPointer->interfaceExtensionLength;
+         extIndex += ifBuffer->common.bLength,
+         ifBuffer = (usb_descriptor_union_t *)((uint8_t *)ifBuffer + ifBuffer->common.bLength))
+    {
+        if (ifBuffer->common.bDescriptorType == USB_DESCRIPTOR_TYPE_INTERFACE &&
+            ifBuffer->interface.bAlternateSetting == alternateSetting)
+        {
+            ifPointer->epCount = ifBuffer->interface.bNumEndpoints;
+            break;
+        }
+    }
+
+    for (uint32_t epIndex = 0; epIndex < ifPointer->epCount && extIndex < ifPointer->interfaceExtensionLength;
+         extIndex += ifBuffer->common.bLength,
+                  ifBuffer = (usb_descriptor_union_t *)((uint8_t *)ifBuffer + ifBuffer->common.bLength))
+    {
+        if (ifBuffer->common.bDescriptorType == USB_DESCRIPTOR_TYPE_ENDPOINT)
+        {
+            ifPointer->epList[epIndex].epDesc = (usb_descriptor_endpoint_t *)ifBuffer;
+            epIndex++;
+        }
+    }
+#endif
+
     if (alternateSetting == 0U)
     {
         if (callbackFn != NULL)
@@ -1300,4 +1329,77 @@ usb_status_t USB_HostCdcGetAcmDescriptor(usb_host_class_handle classHandle,
     return status;
 }
 
+usb_status_t USB_HostCdcGetEcmDescriptor(usb_host_class_handle classHandle,
+                                         usb_host_cdc_head_function_desc_struct_t **headDesc,
+                                         usb_host_cdc_union_interface_desc_struct_t **unionInterfaceDesc,
+                                         usb_host_cdc_ethernet_networking_desc_struct_t **ethernetNetworkingDesc)
+{
+    usb_status_t status = kStatus_USB_Success;
+
+    usb_host_cdc_head_function_desc_struct_t *ifHeadDesc                     = NULL;
+    usb_host_cdc_union_interface_desc_struct_t *ifUnionInterfaceDesc         = NULL;
+    usb_host_cdc_ethernet_networking_desc_struct_t *ifEthernetNetworkingDesc = NULL;
+
+    usb_host_cdc_instance_struct_t *cdcInstance = (usb_host_cdc_instance_struct_t *)classHandle;
+    usb_host_interface_t *ifPointer             = (usb_host_interface_t *)cdcInstance->controlInterfaceHandle;
+    usb_descriptor_union_t *ifBuffer            = (usb_descriptor_union_t *)(ifPointer->interfaceExtension);
+    usb_cdc_func_desc_struct_t *funcBuffer;
+
+    for (uint32_t ifIndex  = 0; ifIndex < ifPointer->interfaceExtensionLength; ifIndex += ifBuffer->common.bLength,
+                  ifBuffer = (usb_descriptor_union_t *)((uint8_t *)ifBuffer + ifBuffer->common.bLength))
+    {
+        if (ifBuffer->common.bDescriptorType == 0x24U)
+        {
+            funcBuffer = (usb_cdc_func_desc_struct_t *)ifBuffer;
+            switch (funcBuffer->common.bDescriptorSubtype)
+            {
+                case USB_HOST_DESC_SUBTYPE_HEADER:
+                    ifHeadDesc = &funcBuffer->head;
+                    if ((((uint32_t)(ifHeadDesc->bcdCDC[1U]) << 8U) + ifHeadDesc->bcdCDC[0U]) > 0x0110U)
+                    {
+                        status = kStatus_USB_Error;
+                    }
+                    break;
+
+                case USB_HOST_DESC_SUBTYPE_UNION:
+                    if (funcBuffer->unionDesc.bControlInterface == ifPointer->interfaceDesc->bInterfaceNumber)
+                    {
+                        ifUnionInterfaceDesc = &funcBuffer->unionDesc;
+                    }
+                    else
+                    {
+                        status = kStatus_USB_Error;
+                    }
+                    break;
+
+                case USB_HOST_DESC_SUBTYPE_ECM:
+                    ifEthernetNetworkingDesc            = &funcBuffer->ecm;
+                    cdcInstance->headDesc               = ifHeadDesc;
+                    cdcInstance->unionInterfaceDesc     = ifUnionInterfaceDesc;
+                    cdcInstance->ethernetNetworkingDesc = ifEthernetNetworkingDesc;
+                    if (headDesc)
+                    {
+                        *headDesc = cdcInstance->headDesc;
+                    }
+                    if (unionInterfaceDesc)
+                    {
+                        *unionInterfaceDesc = cdcInstance->unionInterfaceDesc;
+                    }
+                    if (ethernetNetworkingDesc)
+                    {
+                        *ethernetNetworkingDesc = cdcInstance->ethernetNetworkingDesc;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            if (status != kStatus_USB_Success)
+            {
+                break;
+            }
+        }
+    }
+    return status;
+}
 #endif

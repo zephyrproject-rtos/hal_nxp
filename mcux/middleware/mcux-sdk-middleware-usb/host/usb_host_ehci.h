@@ -103,6 +103,11 @@
 #define EHCI_TASK_EVENT_PORT_CHANGE      (0x08U)
 #define EHCI_TASK_EVENT_TIMER0           (0x10U)
 #define EHCI_TASK_EVENT_TIMER1           (0x20U)
+#if ((defined(USB_HOST_CONFIG_LOW_POWER_MODE)) && (USB_HOST_CONFIG_LOW_POWER_MODE > 0U))
+#if ((defined(USB_HOST_CONFIG_LPM_L1)) && (USB_HOST_CONFIG_LPM_L1 > 0U))
+#define EHCI_TASK_EVENT_HOST_COMPLETED_LPM  (0x40U)
+#endif
+#endif
 
 #define USB_HostEhciLock()   (void)OSA_MutexLock(ehciInstance->ehciMutex, USB_OSA_WAIT_TIMEOUT)
 #define USB_HostEhciUnlock() (void)OSA_MutexUnlock(ehciInstance->ehciMutex)
@@ -160,6 +165,10 @@ typedef enum _bus_ehci_suspend_request_state
     kBus_EhciStartSuspend,
     kBus_EhciSuspended,
     kBus_EhciStartResume,
+    kBus_EhciL1StartSleep,
+    kBus_EhciL1Sleeped,
+    kBus_EhciL1StartResume,
+    kBus_EhciHsError,
 } bus_ehci_suspend_request_state_t;
 #endif
 
@@ -324,6 +333,10 @@ typedef struct _usb_host_ehci_instance
     uint8_t ehciSitdNumber;   /*!< Idle SITD number*/
     uint8_t ehciQtdNumber;    /*!< Idle QTD number*/
 #if ((defined(USB_HOST_CONFIG_LOW_POWER_MODE)) && (USB_HOST_CONFIG_LOW_POWER_MODE > 0U))
+#if ((defined(USB_HOST_CONFIG_LPM_L1)) && (USB_HOST_CONFIG_LPM_L1 > 0U))
+    uint8_t hirdValue;
+    uint8_t L1remoteWakeupEnable;
+#endif
     bus_ehci_suspend_request_state_t busSuspendStatus; /*!< Bus Suspend Status*/
 #endif
 } usb_host_ehci_instance_t;

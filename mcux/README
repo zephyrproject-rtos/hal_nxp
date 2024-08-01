@@ -12,7 +12,8 @@ Origin:
 
    NXP MCUXpresso SDK USB
    https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-usb
-   SHA: c8317a37546b18bef2072d6075e061d668b3f1c7
+   SHA: e0f1fc8488508db2f92ae454f4378513d96e83e2
+   SDK 2.16.000 merge
 
    NXP MCUXpresso SDK Connectivity Framework
    https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-connectivity-framework
@@ -67,7 +68,7 @@ Patch List:
   - mcux-sdk/drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
      be four being used for entropy in zephyr.
      
-  - Patched middleware_usb_common_header.cmake file to address build issue. PR submitted to upstream
+  - Patched middleware\mcux-sdk-middleware-usb\middleware_usb_common_header.cmake to remove "#include(component_osa)". PR submitted to upstream
   
   - exclude the following directories and files from mcux-sdk update to reduce HAL size:
      - All *.a binary archive files. Files are still present in the SDK github repo but are not allowed in Zephyr Project

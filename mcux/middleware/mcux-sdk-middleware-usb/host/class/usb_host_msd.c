@@ -352,9 +352,9 @@ static void USB_HostMsdCswCallback(void *param, usb_host_transfer_t *transfer, u
     {
         /* kStatus_USB_Success */
         if ((transfer->transferSofar == USB_HOST_UFI_CSW_LENGTH) &&
-            (msdInstance->msdCommand.cswBlock.CSWSignature == USB_LONG_TO_LITTLE_ENDIAN(USB_HOST_MSD_CSW_SIGNATURE)))
+            (msdInstance->msdCommand.cswBlock->CSWSignature == USB_LONG_TO_LITTLE_ENDIAN(USB_HOST_MSD_CSW_SIGNATURE)))
         {
-            switch (msdInstance->msdCommand.cswBlock.CSWStatus)
+            switch (msdInstance->msdCommand.cswBlock->CSWStatus)
             {
                 case 0:
                     USB_HostMsdCommandDone(msdInstance, kStatus_USB_Success);
@@ -635,7 +635,7 @@ static usb_status_t USB_HostMsdProcessCommand(usb_host_msd_instance_t *msdInstan
     {
         case kMSD_CommandTransferCBW: /* ufi CBW phase */
             transfer->direction      = USB_OUT;
-            transfer->transferBuffer = (uint8_t *)(&(msdInstance->msdCommand.cbwBlock));
+            transfer->transferBuffer = (uint8_t *)msdInstance->msdCommand.cbwBlock;
             transfer->transferLength = USB_HOST_UFI_CBW_LENGTH;
             transfer->callbackFn     = USB_HostMsdCbwCallback;
             transfer->callbackParam  = msdInstance;
@@ -688,7 +688,7 @@ static usb_status_t USB_HostMsdProcessCommand(usb_host_msd_instance_t *msdInstan
             break;
         case kMSD_CommandTransferCSW: /* ufi CSW phase */
             transfer->direction      = USB_IN;
-            transfer->transferBuffer = (uint8_t *)&msdInstance->msdCommand.cswBlock;
+            transfer->transferBuffer = (uint8_t *)msdInstance->msdCommand.cswBlock;
             transfer->transferLength = USB_HOST_UFI_CSW_LENGTH;
             transfer->callbackFn     = USB_HostMsdCswCallback;
             transfer->callbackParam  = msdInstance;
@@ -736,7 +736,7 @@ usb_status_t USB_HostMsdCommand(usb_host_class_handle classHandle,
                                 uint8_t byteValues[10])
 {
     usb_host_msd_instance_t *msdInstance = (usb_host_msd_instance_t *)classHandle;
-    usb_host_cbw_t *cbwPointer           = &(msdInstance->msdCommand.cbwBlock);
+    usb_host_cbw_t *cbwPointer           = msdInstance->msdCommand.cbwBlock;
     uint8_t index                        = 0;
 
     if (classHandle == NULL)
@@ -908,6 +908,16 @@ usb_status_t USB_HostMsdInit(usb_device_handle deviceHandle, usb_host_class_hand
         return kStatus_USB_AllocFail;
     }
 
+#if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
+    msdInstance->msdCommand.cbwBlock =
+        (usb_host_cbw_t *)OSA_MemoryAllocateAlign(sizeof(usb_host_cbw_t), USB_CACHE_LINESIZE);
+    msdInstance->msdCommand.cswBlock =
+        (usb_host_csw_t *)OSA_MemoryAllocateAlign(sizeof(usb_host_csw_t), USB_CACHE_LINESIZE);
+#else
+    msdInstance->msdCommand.cbwBlock = (usb_host_cbw_t *)OSA_MemoryAllocate(sizeof(usb_host_cbw_t));
+    msdInstance->msdCommand.cswBlock = (usb_host_csw_t *)OSA_MemoryAllocate(sizeof(usb_host_csw_t));
+#endif
+
     /* initialize msd instance */
     msdInstance->deviceHandle    = deviceHandle;
     msdInstance->interfaceHandle = NULL;
@@ -917,7 +927,7 @@ usb_status_t USB_HostMsdInit(usb_device_handle deviceHandle, usb_host_class_hand
     (void)USB_HostHelperGetPeripheralInformation(deviceHandle, (uint32_t)kUSB_HostGetDeviceControlPipe, &infoValue);
     temp                                          = (uint32_t *)infoValue;
     msdInstance->controlPipe                      = (usb_host_pipe_handle)temp;
-    msdInstance->msdCommand.cbwBlock.CBWSignature = USB_LONG_TO_LITTLE_ENDIAN(USB_HOST_MSD_CBW_SIGNATURE);
+    msdInstance->msdCommand.cbwBlock->CBWSignature = USB_LONG_TO_LITTLE_ENDIAN(USB_HOST_MSD_CBW_SIGNATURE);
     status = USB_HostMallocTransfer(msdInstance->hostHandle, &(msdInstance->msdCommand.transfer));
     if (status != kStatus_USB_Success)
     {
@@ -1082,6 +1092,13 @@ usb_status_t USB_HostMsdDeinit(usb_device_handle deviceHandle, usb_host_class_ha
         }
         (void)USB_HostCloseDeviceInterface(
             deviceHandle, msdInstance->interfaceHandle); /* notify host driver the interface is closed */
+#if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
+        OSA_MemoryFreeAlign(msdInstance->msdCommand.cbwBlock);
+        OSA_MemoryFreeAlign(msdInstance->msdCommand.cswBlock);
+#else
+        OSA_MemoryFree(msdInstance->msdCommand.cbwBlock);
+        OSA_MemoryFree(msdInstance->msdCommand.cswBlock);
+#endif
         OSA_MemoryFree(msdInstance);
     }
     else
