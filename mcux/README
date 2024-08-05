@@ -96,3 +96,4 @@ Patch List:
       - MCXA14x family
       - MCXA15x family
       - MCXN23x family
+  - add kUSB_DeviceNotifySOF to usb_device_mcux_drv_port.h SDK USB stack already supports it in SDK 2.16.0
