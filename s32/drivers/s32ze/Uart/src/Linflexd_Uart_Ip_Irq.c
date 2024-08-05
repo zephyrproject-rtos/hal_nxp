@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -33,7 +33,7 @@ extern "C"{
 #define LINFLEXD_UART_IP_IRQ_AR_RELEASE_MAJOR_VERSION_C       4
 #define LINFLEXD_UART_IP_IRQ_AR_RELEASE_MINOR_VERSION_C       7
 #define LINFLEXD_UART_IP_IRQ_AR_RELEASE_REVISION_VERSION_C    0
-#define LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION_C               1
+#define LINFLEXD_UART_IP_IRQ_SW_MAJOR_VERSION_C               2
 #define LINFLEXD_UART_IP_IRQ_SW_MINOR_VERSION_C               0
 #define LINFLEXD_UART_IP_IRQ_SW_PATCH_VERSION_C               0
 
@@ -110,7 +110,7 @@ extern "C"{
 #define UART_START_SEC_CODE
 #include "Uart_MemMap.h"
 
-#if (LINFLEXD_INSTANCE_COUNT > 0U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 0U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_0
 /* Implementation of LINFLEXD0 handler named in startup code. */
 ISR(LINFLEXD0_UART_IRQHandler)
@@ -119,7 +119,7 @@ ISR(LINFLEXD0_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 1U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 1U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_1
 /* Implementation of LINFLEXD1 handler named in startup code. */
 ISR(LINFLEXD1_UART_IRQHandler)
@@ -128,7 +128,7 @@ ISR(LINFLEXD1_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 2U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 2U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_2
 /* Implementation of LINFLEXD2 handler named in startup code. */
 ISR(LINFLEXD2_UART_IRQHandler)
@@ -137,7 +137,7 @@ ISR(LINFLEXD2_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 3U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 3U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_3
 /* Implementation of LINFLEXD3 handler named in startup code. */
 ISR(LINFLEXD3_UART_IRQHandler)
@@ -146,7 +146,7 @@ ISR(LINFLEXD3_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 4U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 4U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_4
 /* Implementation of LINFLEXD4 handler named in startup code. */
 ISR(LINFLEXD4_UART_IRQHandler)
@@ -155,7 +155,7 @@ ISR(LINFLEXD4_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 5U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 5U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_5
 /* Implementation of LINFLEXD5 handler named in startup code. */
 ISR(LINFLEXD5_UART_IRQHandler)
@@ -164,7 +164,7 @@ ISR(LINFLEXD5_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 6U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 6U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_6
 /* Implementation of LINFLEXD6 handler named in startup code. */
 ISR(LINFLEXD6_UART_IRQHandler)
@@ -173,7 +173,7 @@ ISR(LINFLEXD6_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 7U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 7U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_7
 /* Implementation of LINFLEXD7 handler named in startup code. */
 ISR(LINFLEXD7_UART_IRQHandler)
@@ -182,7 +182,7 @@ ISR(LINFLEXD7_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 8U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 8U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_8
 /* Implementation of LINFLEXD8 handler named in startup code. */
 ISR(LINFLEXD8_UART_IRQHandler)
@@ -191,7 +191,7 @@ ISR(LINFLEXD8_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 9U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 9U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_9
 /* Implementation of LINFLEXD9 handler named in startup code. */
 ISR(LINFLEXD9_UART_IRQHandler)
@@ -200,7 +200,7 @@ ISR(LINFLEXD9_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 10U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 10U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_10
 /* Implementation of LINFLEXD10 handler named in startup code. */
 ISR(LINFLEXD10_UART_IRQHandler)
@@ -209,7 +209,7 @@ ISR(LINFLEXD10_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 11U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 11U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_11
 /* Implementation of LINFLEXD11 handler named in startup code. */
 ISR(LINFLEXD11_UART_IRQHandler)
@@ -218,7 +218,7 @@ ISR(LINFLEXD11_UART_IRQHandler)
 }
 #endif
 #endif
-#if (LINFLEXD_INSTANCE_COUNT > 12U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 12U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_12
 /* Implementation of LINFLEXD12 handler named in startup code. */
 ISR(LINFLEXD12_UART_IRQHandler)
@@ -236,7 +236,7 @@ ISR(MSC_0_LIN_UART_IRQHandler)
 #endif
 
 #if (LINFLEXD_UART_IP_HAS_DMA_ENABLED == STD_ON)
-#if (LINFLEXD_INSTANCE_COUNT > 0U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 0U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_0
 /* Implementation of LINFlexD0 Tx callback function for Dma interrupt. */
 void Linflexd_0_Uart_Ip_DmaTxCompleteCallback(void)
@@ -251,7 +251,7 @@ void Linflexd_0_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 1U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 1U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_1
 /* Implementation of LINFlexD1 Tx callback function for Dma interrupt. */
 void Linflexd_1_Uart_Ip_DmaTxCompleteCallback(void)
@@ -266,7 +266,7 @@ void Linflexd_1_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 2U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 2U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_2
 /* Implementation of LINFlexD2 Tx callback function for Dma interrupt. */
 void Linflexd_2_Uart_Ip_DmaTxCompleteCallback(void)
@@ -281,7 +281,7 @@ void Linflexd_2_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 3U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 3U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_3
 /* Implementation of LINFlexD3 Tx callback function for Dma interrupt. */
 void Linflexd_3_Uart_Ip_DmaTxCompleteCallback(void)
@@ -296,7 +296,7 @@ void Linflexd_3_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 4U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 4U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_4
 /* Implementation of LINFlexD4 Tx callback function for Dma interrupt. */
 void Linflexd_4_Uart_Ip_DmaTxCompleteCallback(void)
@@ -311,7 +311,7 @@ void Linflexd_4_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 5U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 5U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_5
 /* Implementation of LINFlexD5 Tx callback function for Dma interrupt. */
 void Linflexd_5_Uart_Ip_DmaTxCompleteCallback(void)
@@ -326,7 +326,7 @@ void Linflexd_5_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 6U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 6U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_6
 /* Implementation of LINFlexD6 Tx callback function for Dma interrupt. */
 void Linflexd_6_Uart_Ip_DmaTxCompleteCallback(void)
@@ -341,7 +341,7 @@ void Linflexd_6_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 7U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 7U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_7
 /* Implementation of LINFlexD7 Tx callback function for Dma interrupt. */
 void Linflexd_7_Uart_Ip_DmaTxCompleteCallback(void)
@@ -356,7 +356,7 @@ void Linflexd_7_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 8U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 8U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_8
 /* Implementation of LINFlexD8 Tx callback function for Dma interrupt. */
 void Linflexd_8_Uart_Ip_DmaTxCompleteCallback(void)
@@ -371,7 +371,7 @@ void Linflexd_8_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 9U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 9U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_9
 /* Implementation of LINFlexD9 Tx callback function for Dma interrupt. */
 void Linflexd_9_Uart_Ip_DmaTxCompleteCallback(void)
@@ -386,7 +386,7 @@ void Linflexd_9_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 10U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 10U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_10
 /* Implementation of LINFlexD10 Tx callback function for Dma interrupt. */
 void Linflexd_10_Uart_Ip_DmaTxCompleteCallback(void)
@@ -401,7 +401,7 @@ void Linflexd_10_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 11U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 11U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_11
 /* Implementation of LINFlexD11 Tx callback function for Dma interrupt. */
 void Linflexd_11_Uart_Ip_DmaTxCompleteCallback(void)
@@ -416,7 +416,7 @@ void Linflexd_11_Uart_Ip_DmaRxCompleteCallback(void)
 #endif
 #endif
 
-#if (LINFLEXD_INSTANCE_COUNT > 12U)
+#if (LINFLEXD_IP_INSTANCE_COUNT > 12U)
 #ifdef LINFLEXD_UART_IP_INSTANCE_USING_12
 /* Implementation of LINFlexD12 Tx callback function for Dma interrupt. */
 void Linflexd_12_Uart_Ip_DmaTxCompleteCallback(void)

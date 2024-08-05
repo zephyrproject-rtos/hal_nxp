@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_FLEXRAY.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_FLEXRAY
  *
  * This file contains register definitions and macros for easy access to their
@@ -198,7 +198,7 @@ typedef struct {
   __IO uint16_t EEIDR;                             /**< ECC Error Injection Data, offset: 0xFC */
   __IO uint16_t EEICR;                             /**< ECC Error Injection Code, offset: 0xFE */
   uint8_t RESERVED_2[1792];
-  struct {                                         /* offset: 0x800, array step: 0x8 */
+  struct FLEXRAY_MB {                              /* offset: 0x800, array step: 0x8 */
     __IO uint16_t CCSR;                              /**< MB Configuration Control Status, array offset: 0x800, array step: 0x8 */
     __IO uint16_t CCFR;                              /**< MB Cycle Counter Filter, array offset: 0x802, array step: 0x8 */
     __IO uint16_t FIDR;                              /**< MB FID, array offset: 0x804, array step: 0x8 */

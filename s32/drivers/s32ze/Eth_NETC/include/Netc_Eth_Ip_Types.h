@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -35,7 +35,7 @@ extern "C"{
 #define NETC_ETH_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETH_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETH_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETH_IP_TYPES_SW_MAJOR_VERSION             1
+#define NETC_ETH_IP_TYPES_SW_MAJOR_VERSION             2
 #define NETC_ETH_IP_TYPES_SW_MINOR_VERSION             0
 #define NETC_ETH_IP_TYPES_SW_PATCH_VERSION             0
 
@@ -289,6 +289,13 @@ extern "C"{
 /** @brief STATUS field get */
 #define NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_GET_STATUS(x)                 (uint8)(((x) << NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_STATUS_LEFT_SHIFT) >> NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_STATUS_RIGHT_SHIFT)
 
+/** @brief STATUS field shift */
+#define NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_STATUS_RFS_LEFT_SHIFT              (4U)
+/** @brief STATUS field mask */
+#define NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_STATUS_RFS_RIGHT_SHIFT             (28U)
+/** @brief STATUS field get */
+#define NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_RFS_GET_STATUS(x)                 (uint8)(((x) << NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_STATUS_RFS_LEFT_SHIFT) >> NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_STATUS_RFS_RIGHT_SHIFT)
+
 /** @brief TPID field */
 #define NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_TPID_SHIFT                  (16U)
 /** @brief TPID field set mask */
@@ -480,6 +487,263 @@ typedef uint32 Netc_Eth_Ip_CfgeFilterActionDataType;
 #define NETC_ETH_IP_INGRESSPORTFILTERTABLE_INGRESSSTREAMIDENTIFICATIONACTION     (0x2U) /*!< Ingress stream identification action where the Ingress Stream Entry ID (IS_EID) is set to the value configured in the FLTA_TGT field of this entry */
 #define NETC_ETH_IP_INGRESSPORTFILTERTABLE_SETTINGL2FILTERINGSIBITMAP            (0x3U) /*!< valid on ENETC side. Setting a pre L2 filtering SI bitmap that will be used by the L2 filtering function to determine the final SI bitmap */
 
+typedef uint32 Netc_Eth_Ip_EnetcForwardingActionDataType;
+#define NETC_ETH_IP_ENETC_DISCARDFRAMES                (0x0U)           /*!< discard frames */
+#define NETC_ETH_IP_ENETC_ALLOWWITHOUTSIBITMAP         (0x1U)           /*!< Allow without setting the pre L2 filtering SI bitmap. */
+#define NETC_ETH_IP_SWT_ALLOWWITHSIBITMAP              (0x2U)           /*!< Allow with setting the pre L2 filtering SI bitmap to the value configured in the SI_MAP field of this entry. */
+
+/*!
+* @brief Ingres Stream Identification (ISI) Table KEYE_DATA bits Format
+*/
+#define NETC_ETH_IP_ISITABLE_KEYE_KEYTYPE_SHIFT          (0U)
+#define NETC_ETH_IP_ISITABLE_KEYE_KEYTYPE_MASK           (0x00000003UL)
+#define NETC_ETH_IP_ISITABLE_KEYE_KEYTYPE(x)             (((uint32)(((uint32)(x)) << NETC_ETH_IP_ISITABLE_KEYE_KEYTYPE_SHIFT)) & NETC_ETH_IP_ISITABLE_KEYE_KEYTYPE_MASK)
+
+#define NETC_ETH_IP_ISITABLE_KEYE_SRCPORTID_SHIFT        (2U)
+#define NETC_ETH_IP_ISITABLE_KEYE_SRCPORTID_MASK         (0x0000007CUL)
+#define NETC_ETH_IP_ISITABLE_KEYE_SRCPORTID(x)           (((uint32)(((uint32)(x)) << NETC_ETH_IP_ISITABLE_KEYE_SRCPORTID_SHIFT)) & NETC_ETH_IP_ISITABLE_KEYE_SRCPORTID_MASK)
+
+#define NETC_ETH_IP_ISITABLE_KEYE_SPM_SHIFT              (7U)
+#define NETC_ETH_IP_ISITABLE_KEYE_SPM_MASK               (0x00000080UL)
+#define NETC_ETH_IP_ISITABLE_KEYE_SPM(x)                 (((uint32)(((uint32)(x)) << NETC_ETH_IP_ISITABLE_KEYE_SPM_SHIFT)) & NETC_ETH_IP_ISITABLE_KEYE_SPM_MASK)
+
+
+
+typedef uint32 Netc_Eth_Ip_KeyTypeIdxType;
+#define NETC_ETH_IP_ENETC_KEYTYPE_0                      (0x00U)         /* Enetc function, key construction is specified in ISIDKC0CR0 */
+#define NETC_ETH_IP_ENETC_KEYTYPE_1                      (0x01U)         /* Enetc function, key construction is specified in ISIDKC1CR0 */
+
+/*!
+ * @brief Stream Gate Instance Table Request Data Buffer ACFGEU (Admin Configuration Element Update.) field.
+ */
+#define NETC_ETH_IP_SGITABLE_REQFMT_ACFGEU_SHIFT                 (0U)
+#define NETC_ETH_IP_SGITABLE_REQFMT_ACFGEU_MASK                  (0x00000001UL)
+#define NETC_ETH_IP_SGITABLE_REQFMT_ACFGEU(x)                    (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_REQFMT_ACFGEU_SHIFT)) & NETC_ETH_IP_SGITABLE_REQFMT_ACFGEU_MASK)
+
+/*!
+ * @brief Stream Gate Instance Table Request Data Buffer CFGEU (Configuration Element Update) field.
+ */
+#define NETC_ETH_IP_SGITABLE_REQFMT_CFGEU_SHIFT                  (1U)
+#define NETC_ETH_IP_SGITABLE_REQFMT_CFGEU_MASK                   (0x00000002UL)
+#define NETC_ETH_IP_SGITABLE_REQFMT_CFGEU(x)                     (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_REQFMT_CFGEU_SHIFT)) & NETC_ETH_IP_SGITABLE_REQFMT_CFGEU_MASK)
+
+/*!
+ * @brief Stream Gate Instance Table Request Data Buffer SGISEU (Stream Gate Instance State Element Update) field.
+ */
+#define NETC_ETH_IP_SGITABLE_REQFMT_SGISEU_SHIFT                 (2U)
+#define NETC_ETH_IP_SGITABLE_REQFMT_SGISEU_MASK                  (0x00000004UL)
+#define NETC_ETH_IP_SGITABLE_REQFMT_SGISEU(x)                    (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_REQFMT_SGISEU_SHIFT)) & NETC_ETH_IP_SGITABLE_REQFMT_SGISEU_MASK)
+
+/*!
+* @brief Stream Gate Instance Table CFGE_DATA config bits Format
+*/
+/* Octets Exceeded Enable */
+#define NETC_ETH_IP_SGITABLE_CFGE_OEXEN_SHIFT            (0U)
+#define NETC_ETH_IP_SGITABLE_CFGE_OEXEN_MASK             (0x00000001UL)
+#define NETC_ETH_IP_SGITABLE_CFGE_OEXEN(x)               (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_CFGE_OEXEN_SHIFT)) & NETC_ETH_IP_SGITABLE_CFGE_OEXEN_MASK)
+
+/* Invalid Receive Enable */
+#define NETC_ETH_IP_SGITABLE_CFGE_IRXEN_SHIFT            (1U)
+#define NETC_ETH_IP_SGITABLE_CFGE_IRXEN_MASK             (0x00000002UL)
+#define NETC_ETH_IP_SGITABLE_CFGE_IRXEN(x)               (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_CFGE_IRXEN_SHIFT)) & NETC_ETH_IP_SGITABLE_CFGE_IRXEN_MASK)
+
+/* Protocol/Service Data Unit */
+#define NETC_ETH_IP_SGITABLE_CFGE_SDUTYPE_SHIFT          (2U)
+#define NETC_ETH_IP_SGITABLE_CFGE_SDUTYPE_MASK           (0x0000000CUL)
+#define NETC_ETH_IP_SGITABLE_CFGE_SDUTYPE(x)             (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_CFGE_SDUTYPE_SHIFT)) & NETC_ETH_IP_SGITABLE_CFGE_SDUTYPE_MASK)
+
+/*!
+* @brief Stream Gate Instance Table ICFGE_DATA config bits Format
+*/
+#define NETC_ETH_IP_SGITABLE_ICFGE_IPV_SHIFT             (0U)
+#define NETC_ETH_IP_SGITABLE_ICFGE_IPV_MASK              (0x0000000FUL)
+#define NETC_ETH_IP_SGITABLE_ICFGE_IPV(x)                (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_ICFGE_IPV_SHIFT)) & NETC_ETH_IP_SGITABLE_ICFGE_IPV_MASK)
+
+#define NETC_ETH_IP_SGITABLE_ICFGE_OIPV_SHIFT            (4U)
+#define NETC_ETH_IP_SGITABLE_ICFGE_OIPV_MASK             (0x00000010UL)
+#define NETC_ETH_IP_SGITABLE_ICFGE_OIPV(x)               (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_ICFGE_OIPV_SHIFT)) & NETC_ETH_IP_SGITABLE_ICFGE_OIPV_MASK)
+
+/* Gate State */
+#define NETC_ETH_IP_SGITABLE_ICFGE_GST_SHIFT             (5U)
+#define NETC_ETH_IP_SGITABLE_ICFGE_GST_MASK              (0x00000020UL)
+#define NETC_ETH_IP_SGITABLE_ICFGE_GST(x)                (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_ICFGE_GST_SHIFT)) & NETC_ETH_IP_SGITABLE_ICFGE_GST_MASK)
+
+/* Cut Through Disabled */
+#define NETC_ETH_IP_SGITABLE_ICFGE_CTD_SHIFT             (6U)
+#define NETC_ETH_IP_SGITABLE_ICFGE_CTD_MASK              (0x00000040UL)
+#define NETC_ETH_IP_SGITABLE_ICFGE_CTD(x)                (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_ICFGE_CTD_SHIFT)) & NETC_ETH_IP_SGITABLE_ICFGE_CTD_MASK)
+
+/*!
+ * @brief ICFGE_DATA Gate State data format enum type.
+ * This field specifies the gate state to use before the administrative stream gate control list takes affect.
+ */
+typedef uint32 Netc_Eth_Ip_SGITABLE_GateStateType;
+#define NETC_ETH_IP_SGITABLE_GATE_CLOSE                  (0x0U)      /*!< 0b = Closed; frames are not permitted to pass through. */
+#define NETC_ETH_IP_SGITABLE_GATE_OPEN                   (0x1U)      /*!< 1b = Open; frames are permitted to pass through. */
+
+/*!
+* @brief Stream Gate Instance Table SGISE_DATA config bits Format
+*/
+#define NETC_ETH_IP_SGITABLE_SGISE_OEX_SHIFT                 (0U)
+#define NETC_ETH_IP_SGITABLE_SGISE_OEX_MASK                  (0x00000001UL)
+#define NETC_ETH_IP_SGITABLE_SGISE_OEX(x)                    (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_SGISE_OEX_SHIFT)) & NETC_ETH_IP_SGITABLE_SGISE_OEX_MASK)
+
+#define NETC_ETH_IP_SGITABLE_SGISE_IRX_SHIFT                 (1U)
+#define NETC_ETH_IP_SGITABLE_SGISE_IRX_MASK                  (0x00000002UL)
+#define NETC_ETH_IP_SGITABLE_SGISE_IRX(x)                    (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_SGISE_IRX_SHIFT)) & NETC_ETH_IP_SGITABLE_SGISE_IRX_MASK)
+
+#define NETC_ETH_IP_SGITABLE_SGISE_STATE_SHIFT               (2U)
+#define NETC_ETH_IP_SGITABLE_SGISE_STATE_MASK                (0x0000001CUL)
+#define NETC_ETH_IP_SGITABLE_SGISE_STATE(x)                  (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGITABLE_SGISE_STATE_SHIFT)) & NETC_ETH_IP_SGITABLE_SGISE_STATE_MASK)
+
+/*!
+* @brief Stream Gate Control List Table CFGE_DATA config bits Format
+*/
+#define NETC_ETH_IP_SGCLTABLE_CFGE_LISTLEN_SHIFT             (0U)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_LISTLEN_MASK              (0x000000FFUL)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_LISTLEN(x)                (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_CFGE_LISTLEN_SHIFT)) & NETC_ETH_IP_SGCLTABLE_CFGE_LISTLEN_MASK)
+
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTOIPV_SHIFT             (16U)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTOIPV_MASK              (0x00010000UL)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTOIPV(x)                (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_CFGE_EXTOIPV_SHIFT)) & NETC_ETH_IP_SGCLTABLE_CFGE_EXTOIPV_MASK)
+
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTIPV_SHIFT              (17U)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTIPV_MASK               (0x001E0000UL)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTIPV(x)                 (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_CFGE_EXTIPV_SHIFT)) & NETC_ETH_IP_SGCLTABLE_CFGE_EXTIPV_MASK)
+
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTCTD_SHIFT              (21U)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTCTD_MASK               (0x00200000UL)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTCTD(x)                 (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_CFGE_EXTCTD_SHIFT)) & NETC_ETH_IP_SGCLTABLE_CFGE_EXTCTD_MASK)
+
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTGTST_SHIFT             (22U)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTGTST_MASK              (0x00400000UL)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_EXTGTST(x)                (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_CFGE_EXTGTST_SHIFT)) & NETC_ETH_IP_SGCLTABLE_CFGE_EXTGTST_MASK)
+
+#define NETC_ETH_IP_SGCLTABLE_CFGE_IOM_SHIFT                 (0U)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_IOM_MASK                  (0x00FFFFFFUL)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_IOM(x)                    (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_CFGE_IOM_SHIFT)) & NETC_ETH_IP_SGCLTABLE_CFGE_IOM_MASK)
+
+#define NETC_ETH_IP_SGCLTABLE_CFGE_IPV_SHIFT                 (24U)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_IPV_MASK                  (0x0F000000UL)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_IPV(x)                    (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_CFGE_IPV_SHIFT)) & NETC_ETH_IP_SGCLTABLE_CFGE_IPV_MASK)
+
+#define NETC_ETH_IP_SGCLTABLE_CFGE_OIPV_SHIFT                (28U)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_OIPV_MASK                 (0x10000000UL)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_OIPV(x)                   (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_CFGE_OIPV_SHIFT)) & NETC_ETH_IP_SGCLTABLE_CFGE_OIPV_MASK)
+
+#define NETC_ETH_IP_SGCLTABLE_CFGE_CTD_SHIFT                 (29U)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_CTD_MASK                  (0x20000000UL)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_CTD(x)                    (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_CFGE_CTD_SHIFT)) & NETC_ETH_IP_SGCLTABLE_CFGE_CTD_MASK)
+
+#define NETC_ETH_IP_SGCLTABLE_CFGE_IOMEN_SHIFT               (30U)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_IOMEN_MASK                (0x40000000UL)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_IOMEN(x)                  (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_CFGE_IOMEN_SHIFT)) & NETC_ETH_IP_SGCLTABLE_CFGE_IOMEN_MASK)
+
+#define NETC_ETH_IP_SGCLTABLE_CFGE_GTST_SHIFT                (31U)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_GTST_MASK                 (0x80000000UL)
+#define NETC_ETH_IP_SGCLTABLE_CFGE_GTST(x)                   (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_CFGE_GTST_SHIFT)) & NETC_ETH_IP_SGCLTABLE_CFGE_GTST_MASK)
+
+/*!
+ * @brief Stream Gate Control List Table SGCLSE_DATA format enum type.
+ * This field indicates whether or not a stream gate control list (SGCL) is in-use in a Stream Gate Instance (SGI).
+ */
+typedef uint32 Netc_Eth_Ip_SGCLTABLE_RefCountType;
+#define NETC_ETH_IP_SGCLTABLE_NOT_INUSE_BYSGI                (0x00U)      /*!< Not in-use by an SGI. */
+#define NETC_ETH_IP_SGCLTABLE_INUSE_BYSGI                    (0x01U)      /*!< In-use by an SGI. */
+#define NETC_ETH_IP_SGCLTABLE_REFCOUNT_RESERVED              (0x02U)      /*!< others reserved. */
+
+/*!
+* @brief Stream Gate Control List Table SGCLSE_DATA Format*/
+#define NETC_ETH_IP_SGCLTABLE_SGCLSE_REFCOUNT_SHIFT          (0U)
+#define NETC_ETH_IP_SGCLTABLE_SGCLSE_REFCOUNT_MASK           (0x000000FFUL)
+#define NETC_ETH_IP_SGCLTABLE_SGCLSE_REFCOUNT(x)             (((uint32)(((uint32)(x)) << NETC_ETH_IP_SGCLTABLE_SGCLSE_REFCOUNT_SHIFT)) & NETC_ETH_IP_SGCLTABLE_SGCLSE_REFCOUNT_MASK)
+
+/*!
+* @brief Ingress Stream Table CFGE_DATA config bits Format
+*/
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SFE_SHIFT                (0U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SFE_MASK                 (0x00000001UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SFE(x)                   (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SFE_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SFE_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IPV_SHIFT                (4U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IPV_MASK                 (0x000000F0UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IPV(x)                   (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IPV_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IPV_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OIPV_SHIFT               (8U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OIPV_MASK                (0x00000100UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OIPV(x)                  (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OIPV_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OIPV_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_DR_SHIFT                 (9U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_DR_MASK                  (0x00000600UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_DR(x)                    (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_DR_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_DR_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ODR_SHIFT                (11U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ODR_MASK                 (0x00000800UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ODR(x)                   (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ODR_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ODR_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IMIRE_SHIFT              (12U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IMIRE_MASK               (0x00001000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IMIRE(x)                 (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IMIRE_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IMIRE_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE_SHIFT           (13U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE_MASK            (0x00002000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE(x)              (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SPPD_SHIFT               (15U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SPPD_MASK                (0x00008000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SPPD(x)                  (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SPPD_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SPPD_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ISQA_SHIFT               (16U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ISQA_MASK                (0x00030000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ISQA(x)                  (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ISQA_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ISQA_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ORP_SHIFT                (18U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ORP_MASK                 (0x00040000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ORP(x)                   (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ORP_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ORP_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OSGI_SHIFT               (19U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OSGI_MASK                (0x00080000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OSGI(x)                  (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OSGI_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OSGI_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_HR_SHIFT                 (20U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_HR_MASK                  (0x00F00000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_HR(x)                    (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_HR_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_HR_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_FA_SHIFT                 (24U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_FA_MASK                  (0x07000000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_FA(x)                    (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_FA_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_FA_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_SHIFT            (27U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_MASK             (0x18000000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE(x)               (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_MSDU_SHIFT               (0U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_MSDU_MASK                (0x0000FFFFUL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_MSDU(x)                  (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_MSDU_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_MSDU_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG_SHIFT         (16U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG_MASK          (0x007F0000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG(x)            (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_EPORT_SHIFT              (23U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_EPORT_MASK               (0x0F800000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_EPORT(x)                 (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_EPORT_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_EPORT_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OETEID_SHIFT             (28U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OETEID_MASK              (0x30000000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OETEID(x)                (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OETEID_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OETEID_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_CTD_SHIFT                (30U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_CTD_MASK                 (0xC0000000UL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_CTD(x)                   (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_CTD_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_CTD_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP_SHIFT      (0U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP_MASK       (0x00FFFFFFUL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP(x)         (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_EGRESSPORTMAP_MASK)
+
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SIMAP_SHIFT              (0U)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SIMAP_MASK               (0x0000FFFFUL)
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SIMAP(x)                 (((uint32)(((uint32)(x)) << NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SIMAP_SHIFT)) & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SIMAP_MASK)
 
 
 
@@ -505,11 +769,65 @@ typedef uint32 Netc_Eth_Ip_CfgeFilterActionDataType;
 #define NETC_ETH_IP_64BYTE_TO_FIRST_WORD(x)                                      ((x) & 0x00000000FFFFFFFFULL)
 #define NETC_ETH_IP_64BYTE_TO_SECOND_WORD(x)                                     (((x) & 0xFFFFFFFF00000000ULL) >> 32U)
 
+/*! @brief Custom Rx Tag definitions */
+
+/* Position of tag's first byte in a frame */
+#define NETC_ETH_IP_RX_CUSTOM_TAG_START_BYTE        (12U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_NUM_BYTES         (6U)
+
+/* Type Field */
+#define NETC_ETH_IP_RX_CUSTOM_TAG_TYPE_SHIFT        (4U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_TYPE_MASK         (0xF0U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_TYPE(x)           (((uint8)(((uint8)(x)) << NETC_ETH_IP_RX_CUSTOM_TAG_TYPE_SHIFT)) & NETC_ETH_IP_RX_CUSTOM_TAG_TYPE_MASK)
+
+/* Subtype Field */
+#define NETC_ETH_IP_RX_CUSTOM_TAG_SUBTYPE_SHIFT     (0U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_SUBTYPE_MASK      (0x0FU)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_SUBTYPE(x)        (((uint8)(((uint8)(x)) << NETC_ETH_IP_RX_CUSTOM_TAG_SUBTYPE_SHIFT)) & NETC_ETH_IP_RX_CUSTOM_TAG_SUBTYPE_MASK)
+
+/* Drop Resilience Field*/
+#define NETC_ETH_IP_RX_CUSTOM_TAG_DR_SHIFT          (6U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_DR_MASK           (0xC0U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_DR(x)             (((uint8)(((uint8)(x)) << NETC_ETH_IP_RX_CUSTOM_TAG_DR_SHIFT)) & NETC_ETH_IP_RX_CUSTOM_TAG_DR_MASK)
+
+/* Internal Priority Value Field */
+#define NETC_ETH_IP_RX_CUSTOM_TAG_IPV_SHIFT          (2U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_IPV_MASK           (0x3CU)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_IPV(x)             (((uint8)(((uint8)(x)) << NETC_ETH_IP_RX_CUSTOM_TAG_IPV_SHIFT)) & NETC_ETH_IP_RX_CUSTOM_TAG_IPV_MASK)
+
+/* Source Port Field */
+#define NETC_ETH_IP_RX_CUSTOM_TAG_SRCPORT_SHIFT      (3U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_SRCPORT_MASK       (0xF1U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_SRCPORT(x)         (((uint8)(((uint8)(x)) << NETC_ETH_IP_RX_CUSTOM_TAG_SRCPORT_SHIFT)) & NETC_ETH_IP_RX_CUSTOM_TAG_SRCPORT_MASK)
+
+/* Source Switch Field */
+#define NETC_ETH_IP_RX_CUSTOM_TAG_SRCSWITCH_SHIFT    (0U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_SRCSWITCH_MASK     (0x07U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_SRCSWITCH(x)       (((uint8)(((uint8)(x)) << NETC_ETH_IP_RX_CUSTOM_TAG_SRCSWITCH_SHIFT)) & NETC_ETH_IP_RX_CUSTOM_TAG_SRCSWITCH_MASK)
+
+/* Host Reason Field */
+#define NETC_ETH_IP_RX_CUSTOM_TAG_HOSTREASON_SHIFT   (4U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_HOSTREASON_MASK    (0xF0U)
+#define NETC_ETH_IP_RX_CUSTOM_TAG_HOSTREASON(x)      (((uint8)(((uint8)(x)) << NETC_ETH_IP_RX_CUSTOM_TAG_HOSTREASON_SHIFT)) & NETC_ETH_IP_RX_CUSTOM_TAG_HOSTREASON_MASK)
+
+/*!
+ * @brief VSI to PSI messaging definitions.
+ */
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+/* Data field position used to store the CRC byte obtained by removing 1 for Class field, 1 for Command field and 1 because of indexing starting with 0 */
+#define NETC_ETH_IP_VSI_MSG_CRC_POS     (((uint8)(sizeof(Netc_Eth_Ip_VsiToPsiMsgType)) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8) (3U))
+ /* Standard 8-bit polynomial used in embedded networks */
+#define NETC_ETH_IP_VSI_MSG_POLYNOMIAL  (0x97)
+
+#endif
+#endif
+
 
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/
-/** @brief Controller power state indication. 
+/** @brief Controller power state indication.
 *   implements Netc_Eth_Ip_PowerStateType_enum */
 typedef enum
 {
@@ -533,7 +851,7 @@ typedef enum
     ICM_HIGH_PRIORITY = 1U     /*!< ICM high priority */
 } Netc_Eth_Ip_ICMType;
 
-/** @brief Return values. 
+/** @brief Return values.
 *   implements Netc_Eth_Ip_StatusType_enum */
 typedef enum
 {
@@ -555,6 +873,7 @@ typedef enum
     NETC_ETH_IP_PSITOVSI_PERMISSION_DENIED              = 0x8001U, /*!< PSI sent negative response - permission denied */
     NETC_ETH_IP_PSITOVSI_SYNC_STATUS_TRUE               = 0x8002U, /*!< PSI sent affirmative response to sync status request */
     NETC_ETH_IP_PSITOVSI_SYNC_STATUS_FALSE              = 0x8003U, /*!< PSI sent negative response to sync status request */
+    NETC_ETH_IP_PSITOVSI_MSG_INTEGRITY_ERROR            = 0x8004U, /*!< PSI received erronous data */
 
     NETC_ETH_IP_STATUS_TX_MANAGEMENT_BUFF_BUSY = 0x904U,   /*!< All internal TX buffers are currently in use */
     /* Specific error codes */
@@ -567,10 +886,21 @@ typedef enum
 #if(NETC_ETH_IP_HAS_CACHE_MANAGEMENT == STD_ON)
     NETC_ETH_IP_STATUS_CACHE_ERROR                = 0xA07U,   /*!< Cache operation failed. */
 #endif
-    NETC_ETH_IP_STATUS_NOT_REAL_ERROR             = 0x8AU     /*!< Error code 0x8A is not a real error. This need to be cover errata */
+    NETC_ETH_IP_STATUS_NOT_REAL_ERROR             = 0x8AU,     /*!< Error code 0x8A is not a real error. This need to be cover errata */
+
+    /* Time scheduling table error code*/
+    NETC_ETH_CBDRSTATUS_UPTATE_EXISTING_ADMIN_GATE_CONTROL              = 0x0D1U,   /* Update action attempted on an existing admin gate control. An existing admin gate control list cannot be modified, Delete admin gate control list first before creating a new admin list. (Use update action with ADMIN_CONTROL_LIST_LENGTH =0 to perform delete). */
+    NETC_ETH_CBDRSTATUS_UPDATE_ACTION_EXCEED_MAX_GCL_LEN                = 0x0D2U,   /* Update action attempted exceeds TGSTCAPR[MAX_GCL_LEN]. */
+    NETC_ETH_CBDRSTATUS_UPDATE_ACTION_EXCEED_NUM_WORDS                  = 0x0D3U,   /* Update action attempted exceeds TGSTCAPR[NUM_WORDS]. */
+    NETC_ETH_CBDRSTATUS_INSUFFICIENT_RESOURCES                          = 0x0D4U,   /* Insufficient resources to perform the requested operation (not enough free time gate list entries) */
+    NETC_ETH_CBDRSTATUS_TRANSMITTING_TIME_NOT_SUFFICIENT                = 0x0D5U,   /* Update action attempted with ADMIN_CYCLE_TIME, ADMIN_TIME_INTERVAL_GE_i or truncated ADMIN_TIME_INTERVAL_GE_n due ADMIN_CYCLE_TIME specified is not sufficient to transmit 64 byte of frame data + header overhead. Where header overhead = PTXSDUOR[PTXSDUOR] + PTXSDUOR[PPDU_BCO]. */
+    NETC_ETH_CBDRSTATUS_ADMIN_BASE_TIME_IS_MORE_THAN_1S                 = 0x0D6U,   /* Update action attempted with ADMIN_BASE_TIME specified is more than one second in the past from tcs advance time. */
+    NETC_ETH_CBDRSTATUS_ADMIN_CYCLE_TIME_OVERFLOW                       = 0x0D7U,   /* Update action attempted with ADMIN_CYCLE_TIME + ADMIN_CYCLE_TIME_EXT is greater than 2^32-1. */
+    NETC_ETH_CBDRSTATUS_RETRY_QUERY                                     = 0x0D8U,   /* Query action issued when config change occurred. Retry query. */
+    NETC_ETH_CBDRSTATUS_INVALID_ADMIN_HR_CB_GE                          = 0x0D9U   /* Update action attempted with ADMIN_HR_CB_GE_i set to an invalid value. */
 } Netc_Eth_Ip_StatusType;
 
-/** @brief Counters supported by ENETC. 
+/** @brief Counters supported by ENETC.
  * implements Netc_Eth_Ip_CounterType_enum */
 typedef enum
 {
@@ -598,7 +928,7 @@ typedef enum
     NETC_ETH_IP_CUSTOM_VLAN2     = 0x03U        /*!< Custom VLAN as defined by CVLANR2[ETYPE] */
 } Netc_Eth_Ip_VlanProtocolIdentifierType;
 
-/** @brief Error type returned when transmit status is unsuccessfully. 
+/** @brief Error type returned when transmit status is unsuccessfully.
  * implements Netc_Eth_Ip_TxStatusType_enum */
 typedef enum
 {
@@ -621,6 +951,18 @@ typedef enum
     NETC_ETH_TX_FRM_DROP_SW_CONGESTION = 0x100U,  /*!< Frame dropped due to switch congestion */
     NETC_ETH_TX_NOT_SENT               = 0xFFFU  /*!< Frame not transmitted yet */
 } Netc_Eth_Ip_TxStatusType;
+
+/** @brief Low-level Tx management object status. */
+typedef enum
+{
+    NETC_ETH_IP_TX_MGMT_FREE               = 0x00U, /*!< Object is unused. */
+    NETC_ETH_IP_TX_MGMT_PREPARED           = 0x02U, /*!< Object is associated to a management frame ready to be sent. */
+    NETC_ETH_IP_TX_MGMT_PREPARED_TIMESTAMP = 0x03U, /*!< Object is associated to a timestamp management frame ready to be sent. */
+    NETC_ETH_IP_TX_MGMT_QUEUED             = 0x04U, /*!< Associated management frame is queued, pending confirmation. */
+    NETC_ETH_IP_TX_MGMT_QUEUED_TIMESTAMP   = 0x05U, /*!< Associated timestamp frame is queued, pending confirmation. */
+    NETC_ETH_IP_TX_MGMT_WAITING_TIMESTAMP  = 0x09U, /*!< Object is associated to a sent frame (confirmed) waiting for a timestamp reply. */
+    NETC_ETH_IP_TX_MGMT_READY              = 0x10U  /*!< Associated frame is fully processed and the object is ready to use by higher levels. */
+}Netc_Eth_Ip_TxManagementStateType;
 
 /** @brief Error type returned when receive status is unsuccessfully.
 * implements Netc_Eth_Ip_RxStatusType_enum */
@@ -657,6 +999,18 @@ typedef enum
     NETC_ETH_IP_TXSTART       = 0x02U  /*!< TX_START field is present in the descriptor. */
 } Netc_Eth_Ip_TxOptionsFlagType;
 
+#if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
+/** @brief This flag will indicate what offloads are enabled in the TX descriptor.
+*/
+typedef enum
+{
+    NETC_ETH_IP_E_FLAGS_NONE               = 0U, /* No extension flags */
+    NETC_ETH_IP_E_FLAGS_VLAN_INSERT        = 1U, /* VLAN Insert offload */
+    NETC_ETH_IP_E_FLAGS_ONE_STEP_TIMESTAMP = 2U, /* IEEE 1588 PTP one-step timestamp offload */
+    NETC_ETH_IP_E_FLAGS_TWO_STEP_TIMESTAMP = 4U  /* IEEE 1588 PTP two-step timestamp offload */
+}Netc_Eth_Ip_TxOptionsExtensionFlagType;
+#endif
+
 /**
  * @brief Action type which can be done through VSI to PSI messaging.
  *        0x1234 -> first byte(12)  - CLASS
@@ -683,7 +1037,10 @@ typedef enum {
     NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA3,                    /*!< forth item of CFGEDATA but sixth item of Enetc Tables Request Data Buffer Format */
     NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA4,                    /*!< fifth item of CFGEDATA but seventh item of Enetc Tables Request Data Buffer Format */
     NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA5,                    /*!< sixth item of CFGEDATA but eighth item of Enetc Tables Request Data Buffer Format */
-    NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA6                     /*!< seventh item of CFGEDATA but ninth item of Enetc Tables Request Data Buffer Format */
+    NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA6,                    /*!< seventh item of CFGEDATA but ninth item of Enetc Tables Request Data Buffer Format */
+    NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA7,
+    NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA8,
+    NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA9
 } Netc_Eth_Ip_EnetcTableRequestDataIndexType;
 
 /*!
@@ -743,7 +1100,7 @@ typedef enum {
     NETC_ETH_IP_CBD_DATA_4 = 0x05U,
     NETC_ETH_IP_CBD_LENGTH_INDEX = 0x06U,
     NETC_ETH_IP_CBD_CMD = 0x07U
-} NetcEth_Ip_ReqHeaderNTMP1TableOperationDataType;
+} Netc_Eth_Ip_ReqHeaderNTMP1TableOperationDataType;
 
 /*!
  * @brief enum type for administrative gate operation type (as per IEEE 802.1Q-2018) field for gate control list entry.
@@ -825,7 +1182,7 @@ typedef struct {
     uint8 TableId;                                      /*!< TABLE_ID in config field of Request Message Header Data Format */
     Netc_Eth_Ip_AccessMethodType AccessMethod;          /*!< ACCESS_METHOD in config field of Request Message Header Data Format */
     Netc_Eth_Ip_CommandsType Cmd;                       /*!< COMMAND in config field of Request Message Header Data Format */
-} NetcEth_Ip_ReqHeaderTableOperationDataType;
+} Netc_Eth_Ip_ReqHeaderTableOperationDataType;
 
 /*!
  * @brief NTMP V1.0 entry set message header format index enum for buffer descriptors of command rings.
@@ -839,7 +1196,7 @@ typedef struct {
     uint8 Format;                   /*!<  */
     uint8 Class;                             /*!<  */
     uint8 Command;                             /*!<  */
-} NetcEth_Ip_SetMessageHeaderTableOperationDataType;
+} Netc_Eth_Ip_SetMessageHeaderTableOperationDataType;
 
 
 /** @brief  Station interface command buffer description. */
@@ -862,7 +1219,7 @@ typedef struct
 typedef struct
 {
     uint32 dataBuffAddr;     /*!< Address where the data for transmit operation is stored. */
-    const uint32 RESERVED_0; /*!< UNUSED! Only used for the system with address spaces on 64 bits. */
+    uint32 RESERVED_0;       /*!< UNUSED! Only used for the system with address spaces on 64 bits. */
     uint32 length;           /*!< Length of data buffer(it will be in bytes). */
     uint32 buffConfig;       /*!< Buffer descriptor configuration for a normal descriptor. */
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
@@ -967,7 +1324,7 @@ typedef struct
 
 /**
  * @brief Receive Flow Steering configuration data type.
- * @details Structure used to define the attributes of a RFS entry. 
+ * @details Structure used to define the attributes of a RFS entry.
  * implements     Netc_Eth_Ip_RfsEntryType_structure
  */
 typedef struct
@@ -1067,6 +1424,132 @@ typedef struct
 } Netc_Eth_Ip_RatePolicerEntryRspDataType;
 
 /*!
+ * @brief Key Construction Rule
+ * @implements : Netc_Eth_Ip_KeyConstructionRuleType_struct
+*/
+typedef struct
+{
+    uint32 EthKeyConstructionRegValue;  /**<  Value to be added in the Key Construction Register*/
+    uint32 EthPayloadField0RegValue;  /**<  Value to be added in the Payload Field 0 Register*/
+    uint32 EthPayloadField1RegValue;  /**<  Value to be added in the Payload Field 0 Register*/
+} Netc_Eth_Ip_KeyConstructionRuleType;
+
+/*!
+ * @brief Ingress Stream Table CFGE_DATA Format.
+ */
+typedef struct {
+    uint32 RatePolicer_EID;                                         /*!< Rate Policer Entry ID */
+    uint32 StreamGateInstance_EID;                                  /*!< Stream Gate Instance Entry ID */
+    uint32 IngressStreamCounter_EID;                                /*!< Ingress Stream counter Index */
+    uint16 StationInterfaceMap;                                     /*!< Station Interface Map */
+    uint16 MaximumServiceDataUnit;                                  /*!< Maximum Service Data Unit */
+    Netc_Eth_Ip_SDUType SduType;                                    /*!< Service Data Unit type to use for MSDU (Maximum Service Data Unit) field. */
+    Netc_Eth_Ip_EnetcForwardingActionDataType ForwardingActions;    /*!< Forwarding actions */
+    uint8 DropResilience;                                           /*!< New Drop Resilience (DR) to be assigned to the frame, if ODR is 1. */
+    uint8 InternalPriorityValue;                                    /*!< Internal Priority Value (IPV) */
+    boolean OverrideStreamGateInstanceEID;                          /*!< Override Stream Gate Instance Entry ID */
+    boolean OverrideRatePolicerInstanceEID;                         /*!< Override Rate Policer (instance) ID. */
+    boolean OverrideDR;                                             /*!< Override Drop Resilience (DR) */
+    boolean OverrideIPV;                                            /*!< Override Internal Priority Value (IPV) */
+    boolean StreamFilteringEnable;                                  /*!< Stream Filtering Enable */
+} Netc_Eth_Ip_IngressStreamTableCFGEDataType;
+
+/*!
+ * @brief defines Ingress Stream entries.
+ *
+ */
+typedef struct
+{
+    uint32 IngressStreamEntryId;                  /* Entry ID */
+    Netc_Eth_Ip_IngressStreamTableCFGEDataType IngressStreamCfgeData;    /* CFGE Data */
+} Netc_Eth_Ip_IngressStreamEntryDataType;
+
+/*!
+ * @brief defines Ingress Stream Identification table request/response data type.
+ *
+ */
+typedef struct
+{
+    uint32 IngrStreamIdenResumeEntryId;                             /* Ingress Stream Identification table Resume Entry ID */
+    uint32 IngrStreamIdenEntryId;                                   /* Ingress Stream Identification table Entry ID */
+    uint32 IngrStreamEntryId;                                       /* Ingress Stream table Entry ID */
+    Netc_Eth_Ip_KeyTypeIdxType Keye_Keytype;                        /* Key type for key construction */
+    uint32 Keye_FrmKey[4U];                                         /* Frame portion of the Key */
+} Netc_Eth_Ip_IngrStremIdentificationTableDataType;
+
+/*!
+ * @brief defines Stream Gate Instance entries.
+ *
+ */
+typedef struct
+{
+    uint32 SGIEntryId;                                      /* Stream Gate Instance Entry ID */
+    uint32 AdminSGCLEntryId;                                /* Administrative Stream Gate Control List Entry ID */
+    uint64 AdminBaseTime;                                   /* Admin Base Time */
+    uint32 AdminCycleTimeExt;                               /* Admin Cycle Time Extension */
+    Netc_Eth_Ip_SGITABLE_GateStateType Icfge_Gst;           /* Gate State */
+    uint8 Icfge_Ipv;                                        /* Internal Priority Value (IPV) */
+    Netc_Eth_Ip_SDUType SduType;                            /* Protocol/Service Data Unit) */
+    boolean Icfge_Oipv;                                     /* Override Internal Priority Value (IPV) */
+    boolean Cfge_Oexen;                                     /* Octets Exceeded Enable */
+    boolean Cfge_Irxen;                                     /* Invalid Receive Enable */
+} Netc_Eth_Ip_StreamGateInstanceEntryDataType;
+
+/*!
+ * @brief defines Stream Gate Instance entries response data type.
+ *
+ */
+typedef struct
+{
+    uint32 SGIEntryId;                                      /* Stream Gate Instance Entry ID */
+    uint32 OperationalSGCLEntryID;                          /* Operational Stream Gate Control List Entry ID */
+    uint64 ConfigChangeTime;                                /* Configuration Change Time */
+    uint64 OperationalBaseTime;                             /* Operational Base Time */
+    uint32 OperationalCycleTimeExt;                         /* Oper Cycle Time Extension */
+    uint8 SGISEOex;                                         /* Octets Exceeded Flag */
+    uint8 SGISEIrx;                                         /* Invalid Receive Flag */
+    uint8 SGISEState;                                       /* Current Gate Instance State */
+    uint32 AdminSGCLEntryId;                                /* Administrative Stream Gate Control List Entry ID */
+    uint64 AdminBaseTime;                                   /* Admin Base Time */
+    uint32 AdminCycleTimeExt;                               /* Admin Cycle Time Extension */
+    Netc_Eth_Ip_SGITABLE_GateStateType Icfge_Gst;           /* Gate State */
+    uint8 Icfge_Ipv;                                        /* Internal Priority Value (IPV) */
+    Netc_Eth_Ip_SDUType SduType;                            /* Protocol/Service Data Unit) */
+    boolean Icfge_Oipv;                                     /* Override Internal Priority Value (IPV) */
+    boolean Cfge_Oexen;                                     /* Octets Exceeded Enable */
+    boolean Cfge_Irxen;                                     /* Invalid Receive Enable */
+} Netc_Eth_Ip_StreamGateInstanceEntryRspDataType;
+
+/*!
+ * @brief defines Stream Gate Control List entries data type.
+ */
+typedef struct
+{
+    uint32 SGCL_TimeInterval;                               /* Time Interval for Gate Entry i */
+    uint32 SGCL_IntervalOctetsMax;                          /* Interval Octets Maximum for Gate Entry i, */
+    uint8 SGCL_Ipv;                                         /* Internal Priority Value for Gate Entry i */
+    boolean SGCL_Oipv;                                      /* Override Internal Priority Value for Gate Entry i */
+    boolean SGCL_IntervalOctetMaxEnable;                    /* Interval Octet Maximum Enabled for Gate Entry i, */
+    Netc_Eth_Ip_SGITABLE_GateStateType SGCL_GateState;   /* Gate State for Gate Entry i, */
+} Netc_Eth_Ip_SGCLEntriesDataType;
+
+/*!
+ * @brief defines Stream Gate Control List table data type.
+ *
+ */
+typedef struct
+{
+    uint32 SGCLEntryId;                                     /* Stream Gate Control List Entry ID */
+    uint32 Cfge_CycleTime;                                  /* This field specifies the cycle time of the stream gate control list. */
+    uint8 Cfge_ListLength;                                  /* This field indicates the number of entries in the stream gate control list. */
+    uint8 Cfge_ExtIpv;                                      /* List Extension Internal Priority Value */
+    boolean Cfge_ExtOIPV;                                   /* Extension Override Internal Priority Value */
+    Netc_Eth_Ip_SGITABLE_GateStateType Cfge_ExtGtst;     /* Extension Gate State */
+    Netc_Eth_Ip_SGCLEntriesDataType *ListEntries;        /* Stream Gate Control List entries pointer */
+    Netc_Eth_Ip_SGCLTABLE_RefCountType Sgclse_RefCount;  /* Ref count, an element in response data buffer */
+} Netc_Eth_Ip_SGCLTableDataType;
+
+/*!
  * @brief Request and Response Data Buffer Format of Tables supported by ENETC.
  */
 typedef struct {
@@ -1122,12 +1605,12 @@ typedef struct
  */
 typedef enum
 {
-    TIMER = 0U,
-    EMDIO,
-    SWITCH,
-    ENETC,
-    PSI,
-    VSI
+    TIMER = 0U, /* Timer Function */
+    EMDIO, /* EMDIO Function */
+    SWITCH, /* SWITCH Function */
+    ENETC, /* This value can be ONLY given as a parameter to Netc_Eth_Ip_DumpErrorCapture to get the error counters statistics for ENETC module */
+    PSI, /* Name according to NETC Reference Manual ENETC PF (SI0)*/
+    VSI /* Name according to NETC Reference Manual  ENETC PF (SI+)*/
 } Netc_Eth_Ip_PcieFunction;
 
 /** @brief Structure that contain the name of PCIe function and the Error Status corresponding to this function.
@@ -1263,10 +1746,10 @@ typedef struct
     uint32 portEgressAdminCycleTime; /*!< Administrative Cycle Time */
     uint32 portEgressAdminCycleTimeExt; /*!< Administrative Cycle Time Extension */
     uint8 numberOfGateControlListEntries; /*!< Number of entries in Administrative Gate Control list. */
-    Netc_Eth_Ip_GateEntryAdminControlListDataType (*TimeGateControlListEntries)[NETC_ETH_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES]; /*!< Pointer to an array containing the gate control list for port. */
+    const Netc_Eth_Ip_GateEntryAdminControlListDataType (*TimeGateControlListEntries)[NETC_ETH_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES]; /*!< Pointer to an array containing the gate control list for port. */
 #if (NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST > 0U)
     uint8 numberOfIPFTableList; /*!< Number of ingress port filter table entries in list. */
-    Netc_Eth_Ip_IngressPortFilterEntryDataType (*IngressPortFilterTableList)[NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST]; /*!< Pointer to an array containing the ingress port filter table entries list. */
+    const Netc_Eth_Ip_IngressPortFilterEntryDataType (*IngressPortFilterTableList)[NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST]; /*!< Pointer to an array containing the ingress port filter table entries list. */
 #endif
     /* ------------ Port configuration ------------- */
     /* TBD: Port configuration register (PCR)   - low priority for basic driver */
@@ -1277,15 +1760,40 @@ typedef struct
     /* TBD: Port stream gate configuration register (PSGCR) - low priority for basic driver */
     /* TBD: A lot of other stream gate and frame preemption settings - low priority for basic driver */
     Netc_Eth_Ip_CreditBasedShaperConfigType (*cbsConfig)[NETC_ETH_IP_NUMBER_OF_PRIORITIES]; /*!< Configuration of each CBS used. */
+    const Netc_Eth_Ip_KeyConstructionRuleType (*EthKeyConstruction)[2U];
 #if (NETC_ETH_IP_NUMBER_OF_VLAN_FILTER_ENTRIES > 0)
     uint8 NumberOfVLANFilterEntries; /*!< NUmber of VLAN Filter Table entries. */
     const Netc_Eth_Ip_VLANFilterTableEntryDataType (*VLANTableEntries)[NETC_ETH_IP_NUMBER_OF_VLAN_FILTER_ENTRIES]; /*!< Pointer to an array containing the configured VLAN Filter table entries. */
 #endif
+#if (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0)
+    uint8 NumberOfRPTableEntries; /*!< NUmber of Rate Policer Table entries. */
+    const Netc_Eth_Ip_RatePolicerEntryDataType (*RPTableEntries)[NETC_ETH_IP_NUMBER_OF_RP_ENTRIES]; /*!< Pointer to an array containing the configured Rate Policer table entries. */
+#endif
+#if (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U)
+    uint8 NumberOfSGCLEntries; /*!< Number of Stream Gate Instance entries */
+    const Netc_Eth_Ip_SGCLTableDataType (*StreamGateControlListEntries)[NETC_ETH_NUMBER_OF_SGCL_ENTRIES]; /*!< Pointer to an array containing configurations for Stream Gate Control Lists. */
+#endif
+#if (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U)
+    uint8 NumberOfSGIEntries; /*!< Number of Stream Gate Instance entries */
+    const Netc_Eth_Ip_StreamGateInstanceEntryDataType (*StreamGateInstanceEntries)[NETC_ETH_NUMBER_OF_SGI_ENTRIES]; /*!< Pointer to an array containing configurations for Stream Gate Instances. */
+#endif
+#if (NETC_ETH_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES > 0U)
+    uint8 NumberOfIsiEntries; /*!< Number of Ingress Stream Identification entries. */
+    const Netc_Eth_Ip_IngrStremIdentificationTableDataType (*IsiEntries)[NETC_ETH_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES]; /*!< Pointer to an array containing the StreamIdentification configuration. */
+#endif
+#if (NETC_ETH_NUMBER_OF_INGRESSSTREAM_ENTRIES > 0U)
+    uint8 NumberOfIngrStreamEntries; /*!< Number of Ingress Stream entries */
+    const Netc_Eth_Ip_IngressStreamEntryDataType (*IngressStreamEntries)[NETC_ETH_NUMBER_OF_INGRESSSTREAM_ENTRIES]; /*!< Pointer to an array containing configurations for Ingress Stream. */
+#endif
     uint16 maskMACPromiscuousMulticastEnable; /*!< Enable/Disable promiscuous multicast for all controllers. */
     uint16 maskMACPromiscuousUnicastEnable;   /*!< Enable/Disable promiscuous unicast for all controllers. */
+
 #if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
     uint32 CustomVlanEthertype1;              /*!< Configure for custom VLAN Ethertype 1 register (CVLANR1). */
     uint32 CustomVlanEthertype2;              /*!< Configure for custom VLAN Ethertype 1 register (CVLANR2). */
+    uint16 maskMACVLANPromiscuousEnable;      /*!< Enable/Disable promiscuous VLAN for all controllers. */
+    uint32 maskVLANAllowUntaggedEnable;       /*!< Enable/Disable permssion of the SI to receive untagged traffic
+                                                   while the VLAN support is enabled for ENTC0. */
 #endif
     uint8 rxCheckSumOffloadingTCPUDP;         /*!< Enable/Disable Rx Checksum offload for TCP/UDP. */
     uint8 rxCheckSumOffloadingIPV4;           /*!< Enable/Disable Rx Checksum offload for IPV4. */
@@ -1298,12 +1806,23 @@ typedef struct
     uint8 errorReportigIntegrityErrorsThreshold; /* The number of Integrity Errors which will trigger the Error Reporting error. This threshold is set for all the functions */
     uint8 errorReportingSystemBusErrorsThreshold; /* The number of System Bus Errors which will trigger the Error Reporting error. This threshold is set for all the functions */
     Netc_Eth_Ip_PcieAerErrorReportingCallbackType errorReportingCallback;
+#if ((STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON == NETC_ETH_IP_CUSTOM_TAG_SUPPORT))
+    uint16 CustomTPID;
+    uint8 CustomIPV;
+    uint8 CustomDR;
+#endif
+    uint8 defaultIPV;                          /*!< PQOSMR[DDR] - set the default value of Drop Resilience which is used in following cases: 
+                                                    1. enableVlanToIpvMapping is disabled.
+                                                    2. enableVlanToIpvMapping is enabled, but the incoming frame is not VLAN tagged. */ 
+    uint8 defaultDR;                           /*!< PQOSMR[DIPV] - set the default value of Drop Resilience which is used in following cases: 
+                                                    1. enableVlanToIpvMapping is disabled.
+                                                    2. enableVlanToIpvMapping is enabled, but the incoming frame is not VLAN tagged. */ 
 } Netc_Eth_Ip_EnetcGeneralConfigType;
 
 /** @brief The station interface configuration. This applies to all SIs either PSI or VSI. */
 typedef struct
 {
-    boolean enableVlanToIpvMapping;            /*!< V2IPVE - enables the mapping of PCP+DEI to IPV. */
+    boolean enableVlanToIpvMapping;            /*!< V2IPVE - enables the mapping of PCP+DEI to IPV for each SI. */
     boolean discardBroadcastFrames;            /*!< RNBM - enables or disables discarding all broadcast frames */
     boolean discardMulticastFrames;            /*!< RNMM - enables or disables discarding all multicast frames */
     boolean discardUnicastFrames;              /*!< RNUM - enables or disables discarding all unicast frames */
@@ -1315,12 +1834,12 @@ typedef struct
     Netc_Eth_Ip_VsiToPsiMsgType *VSItoPSIMsgCommand; /*!< Address of the command message sent from VSI to PSI. */
     uint8 CtrlLogicalIndex;                    /*!< This member keep the value of controller index for the callback function. */
 
-    /* TODO: This information will be added temporary until MRU driver will be created. */
-    uint32 *txMruMailboxAddr;    /*!< Mailbox address for TX. */
-    uint32 *rxMruMailboxAddr;    /*!< Mailbox address for RX. */
-    uint32 *siMsgMruMailboxAddr; /*!< Mailbox address for VSI to PSI messenging. */
+    uint32 *txMruMailboxAddr;              /*!< Mailbox address for TX. */
+    uint32 *rxMruMailboxAddr;              /*!< Mailbox address for RX. */
+    uint32 *siMsgMruMailboxAddr;           /*!< Mailbox address for VSI to PSI messaging. */
+    boolean EnableSIMsgInterrupt;          /*!< Interrupt SI support messaging enable. */
 
-    uint8 MACFilterTableMaxNumOfEntries; /*!< Maximum number of entries in the MAC filter table. */
+    uint8 MACFilterTableMaxNumOfEntries;   /*!< Maximum number of entries in the MAC filter table. */
     uint32 RxInterrupts;                   /*!< Channel interrupt sources. A logical OR of "Netc_Eth_Ip_ChInterruptType". */
     uint32 TxInterrupts;                   /*!< Channel interrupt sources. A logical OR of "Netc_Eth_Ip_ChInterruptType". */
 } Netc_Eth_Ip_StationInterfaceConfigType;
@@ -1474,24 +1993,24 @@ typedef struct
 /** @brief Transmit options for a particular frame. */
 typedef struct
 {
-    Netc_Eth_Ip_TxOptionsFlagType Flag; /*!< This option will set the usage of the additional fields. */
-    uint8 SwtMgSendingOpt;              /*!< Select between: 0 - Switch Port Masquerading
-                                                             1 - Direct Switch Enqueue */
-    uint8 TimestampRefReq;              /*!< Valid when SwtMgSendingOpt = 1. Request to capture the timestamp
-                                             when the frame's SFD is transmitted by the switch's Ethernet MAC. */
-    uint8 IngrOrEgrPortNumber;          /*!< Ingress or Egress switch port number this frame is to be injected towards.
-                                             Ingress - SwtMgSendingOpt = 0; Egress - SwtMgSendingOpt = 1 */
-    uint8 InternalPriority;             /*!< Used to determine switch egress queue and buffer pool. SwtMgSendingOpt = 1 */
-    uint8 DiscardResilience;            /*!< This field is used for congestion management handling within the switch. */
-    uint8 TxStartEnable;                /*!< Transmit start enable */
-    uint32 TxStartTime;                 /*!< Transmit start time */
+    Netc_Eth_Ip_TxOptionsFlagType Flag;                     /*!< This option will set the usage of the additional fields. */
+    uint8 SwtMgSendingOpt;                                  /*!< Select between: 0 - Switch Port Masquerading
+                                                                 1 - Direct Switch Enqueue */
+    uint8 TimestampRefReq;                                  /*!< Valid when SwtMgSendingOpt = 1. Request to capture the timestamp
+                                                                 when the frame's SFD is transmitted by the switch's Ethernet MAC. */
+    uint8 IngrOrEgrPortNumber;                              /*!< Ingress or Egress switch port number this frame is to be injected towards.
+                                                                 Ingress - SwtMgSendingOpt = 0; Egress - SwtMgSendingOpt = 1 */
+    uint8 InternalPriority;                                 /*!< Used to determine switch egress queue and buffer pool. SwtMgSendingOpt = 1 */
+    uint8 DiscardResilience;                                /*!< This field is used for congestion management handling within the switch. */
+    uint8 TxStartEnable;                                    /*!< Transmit start enable */
+    uint32 TxStartTime;                                     /*!< Transmit start time */
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
-    uint8 PriorityCodePoint;            /*!< Contains the PCP value of the VLAN tag to be inserted in the packet during transmission. */
-    uint8 DropEligible;                 /*!< Contains the DEI value of the VLAN tag to be inserted in the packet during transmission. */
-    uint8 ExtensionFlags;               /*!< Indicates what offloads are enabled for this frame. */
-    uint8 TagProtocolID;                /*!< Contains the TPID of the VLAN tag to be inserted in the packet during transmission. */
-    uint16 VlanID;                      /*!< Identifier of the VLAN tag to be inserted in the packet during transmission. */
-    uint32 Timestamp;                   /*!< Timestamp value used to update packet header field on transmission. */
+    uint8 PriorityCodePoint;                                /*!< Contains the PCP value of the VLAN tag to be inserted in the packet during transmission. */
+    uint8 DropEligible;                                     /*!< Contains the DEI value of the VLAN tag to be inserted in the packet during transmission. */
+    Netc_Eth_Ip_TxOptionsExtensionFlagType ExtensionFlags;  /*!< Indicates what offloads are enabled for this frame. */
+    uint8 TagProtocolID;                                    /*!< Contains the TPID of the VLAN tag to be inserted in the packet during transmission. */
+    uint16 VlanID;                                          /*!< Identifier of the VLAN tag to be inserted in the packet during transmission. */
+    uint32 Timestamp;                                       /*!< Timestamp value used to update packet header field on transmission. */
 #endif
 } Netc_Eth_Ip_TxOptionsType;
 
@@ -1525,7 +2044,7 @@ typedef struct
     Netc_Eth_Ip_VlanType         VlanInfo;          /*!< Informations of VLAN frames.*/
 #endif
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
-    uint64                       PacketTimestamp;   /*!< The timestamp of the received packet. */
+    Netc_Eth_Ip_TimestampType    PacketTimestamp;   /*!< The timestamp of the received packet. */
 #endif
 } Netc_Eth_Ip_RxInfoType;
 
@@ -1563,22 +2082,19 @@ typedef struct
 
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
 #ifdef NETC_ETH_0_USED
-/** @brief Management information. 
+/** @brief Management information.
   * implements     Netc_Eth_Ip_TxManagementInfoType_structure  */
 typedef struct
 {
-    boolean TxTimestampFlag;
-    boolean ManagementFrameFlag;
-    boolean TxTimestampRcvFlag;
+    Netc_Eth_Ip_TxManagementStateType State;
     uint8   CtrlIdx;
     uint8   SwitchIndex;
     uint8   PortIndex;
     uint16  TxTimeStampID;
     uint16  TxBuffId;
-    Netc_Eth_Ip_TxBDRType *TxBuffAddr;
 } Netc_Eth_Ip_TxManagementInfoType;
 
-/** @brief Timestamp information. 
+/** @brief Timestamp information.
   * implements     Netc_Eth_Ip_TxTimestampInfoType_structure */
 typedef struct
 {
@@ -1590,7 +2106,7 @@ typedef struct
 } Netc_Eth_Ip_TxTimestampInfoType;
 #endif /* NETC_ETH_0_USED */
 
-/** @brief Timestamp received frame information. 
+/** @brief Timestamp received frame information.
  * implements     Netc_Eth_Ip_RxTimestampInfoType_structure */
 typedef struct
 {
@@ -1671,6 +2187,18 @@ typedef struct
 
     Netc_Eth_Ip_ErrorCaptureRegLabel RegName; /* Error Capture Register name */
 } Netc_Eth_Ip_ErrorCaptureRegisterInformation;
+
+#if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
+#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+typedef struct
+{
+    uint16 NumberOfUsedBuff;    /* Number of buffers currently used. */
+    uint16 MaxNumberOfUsedBuff; /* Maximum number of buffers used since the last check. */
+    uint16 TotalNumberOfBuff;   /* Buffers allocated in total for the current FIFO. */
+}Netc_Eth_Ip_FillLevelInfo;
+#endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
+#endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
+
 
 /*==================================================================================================
 *                                  GLOBAL VARIABLE DECLARATIONS

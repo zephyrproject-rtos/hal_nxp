@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GPR2.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_GPR2
  *
  * This file contains register definitions and macros for easy access to their
@@ -75,16 +75,17 @@ typedef struct {
   __IO uint32_t LVFCCULD7;                         /**< VFCCU Local DID register 7, offset: 0x8 */
   __IO uint32_t LVFCCULD8;                         /**< VFCCU Local DID register 8, offset: 0xC */
   __IO uint32_t SPF2C;                             /**< CEVA_SPF2 Control, offset: 0x10 */
-  uint8_t RESERVED_0[52];
+  uint8_t RESERVED_0[36];
+  __IO uint32_t FUNCC4;                            /**< Miscellaneous Control, offset: 0x38 */
+  uint8_t RESERVED_1[12];
   __I  uint32_t INITM2;                            /**< NoC Initiator NIU Timeout Status, offset: 0x48 */
   __I  uint32_t TARGTMS2;                          /**< NoC Target NIU Timeout Status, offset: 0x4C */
   __IO uint32_t TARGTMC2;                          /**< NoC Target NIU Timeout Control, offset: 0x50 */
-  uint8_t RESERVED_1[4];
-  __IO uint32_t SMURSTCNT;                         /**< SMU Cortex-M33 Core Reset Counter, offset: 0x58 */
   uint8_t RESERVED_2[4];
+  __IO uint32_t SMURSTCNT;                         /**< SMU Cortex-M33 Core Reset Counter, offset: 0x58 */
+  uint8_t RESERVED_3[4];
   __I  uint32_t SMUS;                              /**< SMU Cortex-M33 Core Status, offset: 0x60 */
-  uint8_t RESERVED_3[24];
-  __IO uint32_t LVFCCU2S;                          /**< VFCCU Fault Status 2, offset: 0x7C */
+  uint8_t RESERVED_4[28];
   __IO uint32_t XPAR2;                             /**< Interface parity control and status register, offset: 0x80 */
 } GPR2_Type, *GPR2_MemMapPtr;
 
@@ -175,6 +176,15 @@ typedef struct {
 #define GPR2_SPF2C_ICULOCK(x)                    (((uint32_t)(((uint32_t)(x)) << GPR2_SPF2C_ICULOCK_SHIFT)) & GPR2_SPF2C_ICULOCK_MASK)
 /*! @} */
 
+/*! @name FUNCC4 - Miscellaneous Control */
+/*! @{ */
+
+#define GPR2_FUNCC4_CTRL_MASK                    (0xFFFFFFFFU)
+#define GPR2_FUNCC4_CTRL_SHIFT                   (0U)
+#define GPR2_FUNCC4_CTRL_WIDTH                   (32U)
+#define GPR2_FUNCC4_CTRL(x)                      (((uint32_t)(((uint32_t)(x)) << GPR2_FUNCC4_CTRL_SHIFT)) & GPR2_FUNCC4_CTRL_MASK)
+/*! @} */
+
 /*! @name INITM2 - NoC Initiator NIU Timeout Status */
 /*! @{ */
 
@@ -253,15 +263,6 @@ typedef struct {
 #define GPR2_SMUS_SYSRSTREQ_SHIFT                (7U)
 #define GPR2_SMUS_SYSRSTREQ_WIDTH                (1U)
 #define GPR2_SMUS_SYSRSTREQ(x)                   (((uint32_t)(((uint32_t)(x)) << GPR2_SMUS_SYSRSTREQ_SHIFT)) & GPR2_SMUS_SYSRSTREQ_MASK)
-/*! @} */
-
-/*! @name LVFCCU2S - VFCCU Fault Status 2 */
-/*! @{ */
-
-#define GPR2_LVFCCU2S_STAT_MASK                  (0xFFFFFFFFU)
-#define GPR2_LVFCCU2S_STAT_SHIFT                 (0U)
-#define GPR2_LVFCCU2S_STAT_WIDTH                 (32U)
-#define GPR2_LVFCCU2S_STAT(x)                    (((uint32_t)(((uint32_t)(x)) << GPR2_LVFCCU2S_STAT_SHIFT)) & GPR2_LVFCCU2S_STAT_MASK)
 /*! @} */
 
 /*! @name XPAR2 - Interface parity control and status register */

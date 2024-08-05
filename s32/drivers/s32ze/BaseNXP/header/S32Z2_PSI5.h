@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_PSI5.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_PSI5
  *
  * This file contains register definitions and macros for easy access to their
@@ -79,7 +79,7 @@ typedef struct {
   uint8_t RESERVED_0[2];
   __IO uint16_t GCR;                               /**< Global Control Register, offset: 0x2 */
   uint8_t RESERVED_1[4];
-  struct {                                         /* offset: 0x8, array step: 0x1C0 */
+  struct PSI5_CHANNEL {                            /* offset: 0x8, array step: 0x1C0 */
     __IO uint32_t CH_PCCR;                           /**< PSI5 Channel Control Register, array offset: 0x8, array step: 0x1C0 */
     __IO uint32_t CH_DCR;                            /**< DMA Control Register, array offset: 0xC, array step: 0x1C0 */
     __IO uint32_t CH_DSR;                            /**< DMA Status Register, array offset: 0x10, array step: 0x1C0 */
@@ -93,7 +93,7 @@ typedef struct {
     __I  uint32_t CH_DDSR;                           /**< DMA Diagnostic Status Register, array offset: 0x30, array step: 0x1C0 */
     __I  uint32_t CH_PMRRL;                          /**< PSI5 Message Receive Register Low, array offset: 0x34, array step: 0x1C0 */
     __I  uint32_t CH_PMRRH;                          /**< PSI5 Message Receive Register High, array offset: 0x38, array step: 0x1C0 */
-    struct {                                         /* offset: 0x3C, array step: index*0x1C0, index2*0x8 */
+    struct PSI5_CHANNEL_CH_PMR {                     /* offset: 0x3C, array step: index*0x1C0, index2*0x8 */
       __IO uint32_t CH_PMRL;                           /**< PSI5 Message Register Low i, array offset: 0x3C, array step: index*0x1C0, index2*0x8 */
       __IO uint32_t CH_PMRH;                           /**< PSI5 Message Register High i, array offset: 0x40, array step: index*0x1C0, index2*0x8 */
     } CH_PMR[PSI5_CHANNEL_CH_PMR_COUNT];

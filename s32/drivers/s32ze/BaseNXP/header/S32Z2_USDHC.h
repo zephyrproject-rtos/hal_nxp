@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_USDHC.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_USDHC
  *
  * This file contains register definitions and macros for easy access to their
@@ -460,6 +460,11 @@ typedef struct {
 #define USDHC_SYS_CTRL_DTOCV_SHIFT               (16U)
 #define USDHC_SYS_CTRL_DTOCV_WIDTH               (4U)
 #define USDHC_SYS_CTRL_DTOCV(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_SYS_CTRL_DTOCV_SHIFT)) & USDHC_SYS_CTRL_DTOCV_MASK)
+
+#define USDHC_SYS_CTRL_RST_FIFO_MASK             (0x400000U)
+#define USDHC_SYS_CTRL_RST_FIFO_SHIFT            (22U)
+#define USDHC_SYS_CTRL_RST_FIFO_WIDTH            (1U)
+#define USDHC_SYS_CTRL_RST_FIFO(x)               (((uint32_t)(((uint32_t)(x)) << USDHC_SYS_CTRL_RST_FIFO_SHIFT)) & USDHC_SYS_CTRL_RST_FIFO_MASK)
 
 #define USDHC_SYS_CTRL_IPP_RST_N_MASK            (0x800000U)
 #define USDHC_SYS_CTRL_IPP_RST_N_SHIFT           (23U)

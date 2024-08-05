@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_MC_RGM.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_MC_RGM
  *
  * This file contains register definitions and macros for easy access to their
@@ -86,12 +86,12 @@ typedef struct {
   uint8_t RESERVED_1[4];
   __IO uint32_t FRENTC;                            /**< Functional Reset Entry Timeout Control Register, offset: 0x28 */
   uint8_t RESERVED_2[20];
-  struct {                                         /* offset: 0x40, array step: 0x8 */
+  struct MC_RGM_PRST_0 {                           /* offset: 0x40, array step: 0x8 */
     __IO uint32_t PRST_0;                            /**< Peripheral Reset, array offset: 0x40, array step: 0x8 */
     uint8_t RESERVED_0[4];
   } PRST_0[MC_RGM_PRST_0_COUNT];
   uint8_t RESERVED_3[232];
-  struct {                                         /* offset: 0x140, array step: 0x8 */
+  struct MC_RGM_PSTAT_0 {                          /* offset: 0x140, array step: 0x8 */
     __I  uint32_t PSTAT_0;                           /**< Peripheral Reset Status Register, array offset: 0x140, array step: 0x8 */
     uint8_t RESERVED_0[4];
   } PSTAT_0[MC_RGM_PSTAT_0_COUNT];

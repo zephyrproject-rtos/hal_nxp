@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_ExtOsc.c
-*   @version    1.0.0
+*   @version    2.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -36,7 +36,7 @@ extern "C"{
 #define CLOCK_IP_EXTOSC_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_EXTOSC_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_EXTOSC_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_EXTOSC_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_EXTOSC_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_EXTOSC_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_EXTOSC_SW_PATCH_VERSION_C               0
 
@@ -95,27 +95,18 @@ extern "C"{
 #define MCU_START_SEC_CODE
 
 #include "Mcu_MemMap.h"
-
-
-
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 
 static void Clock_Ip_ExternalOscillatorEmpty(Clock_Ip_XoscConfigType const* Config);
-static void Clock_Ip_DisableClockIpExternalOscillatorEmpty(Clock_Ip_NameType XoscName);
-
+static void Clock_Ip_ExternalOscillatorEmpty(Clock_Ip_XoscConfigType const* Config);
 #ifdef CLOCK_IP_FXOSC_OSCON_BYP_EOCV_GM_SEL
 static void Clock_Ip_ResetFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const* Config);
 static void Clock_Ip_SetFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const* Config);
 static void Clock_Ip_CompleteFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const* Config);
-static void Clock_Ip_DisableFxoscOsconBypEocvGmSel(Clock_Ip_NameType XoscName);
 static void Clock_Ip_EnableFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const* Config);
 #endif
-static void Clock_Ip_ExternalOscillatorEmpty(Clock_Ip_XoscConfigType const* Config);
-
-
-
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -135,19 +126,16 @@ static void Clock_Ip_ExternalOscillatorEmpty(Clock_Ip_XoscConfigType const* Conf
     (void)Config;
     /* No implementation */
 }
-static void Clock_Ip_DisableClockIpExternalOscillatorEmpty(Clock_Ip_NameType XoscName)
-{
-    (void)XoscName;
-    /* No implementation */
-}
-
-
-
 
 #ifdef CLOCK_IP_FXOSC_OSCON_BYP_EOCV_GM_SEL
 static void Clock_Ip_ResetFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const* Config)
 {
     uint32 Instance;
+    boolean TimeoutOccurred = FALSE;
+    uint32 StartTime;
+    uint32 ElapsedTime;
+    uint32 TimeoutTicks;
+    uint32 FxoscStatus;
 
     if (NULL_PTR != Config)
     {
@@ -155,6 +143,20 @@ static void Clock_Ip_ResetFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const* 
 
         /* Disable FXOSC */
         Clock_Ip_apxXosc[Instance]->CTRL &= ~FXOSC_CTRL_OSCON_MASK;
+        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+        /* Wait until xosc is locked */
+        do
+        {
+            FxoscStatus = ((Clock_Ip_apxXosc[Instance]->STAT & FXOSC_STAT_OSC_STAT_MASK) >> FXOSC_STAT_OSC_STAT_SHIFT);
+            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+        }
+        while ((1U == FxoscStatus) && (FALSE == TimeoutOccurred));
+
+        if (TimeoutOccurred)
+        {
+            /* Report timeout error */
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
+        }
     }
     else
     {
@@ -259,13 +261,6 @@ static void Clock_Ip_CompleteFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType cons
         (void)Instance;
     }
 }
-static void Clock_Ip_DisableFxoscOsconBypEocvGmSel(Clock_Ip_NameType XoscName)
-{
-    uint32 Instance = Clock_Ip_au8ClockFeatures[XoscName][CLOCK_IP_MODULE_INSTANCE];
-
-    /* Disable SOSC. */
-    Clock_Ip_apxXosc[Instance]->CTRL &= ~FXOSC_CTRL_OSCON_MASK;
-}
 static void Clock_Ip_EnableFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const* Config)
 {
     uint32 Instance;
@@ -308,21 +303,20 @@ static void Clock_Ip_EnableFxoscOsconBypEocvGmSel(Clock_Ip_XoscConfigType const*
 const Clock_Ip_ExtOscCallbackType Clock_Ip_axExtOscCallbacks[CLOCK_IP_XOSC_CALLBACKS_COUNT] =
 {
     {
-        Clock_Ip_ExternalOscillatorEmpty,        /* Reset */
-        Clock_Ip_ExternalOscillatorEmpty,        /* Set */
-        Clock_Ip_ExternalOscillatorEmpty,        /* Complete */
-        Clock_Ip_DisableClockIpExternalOscillatorEmpty, /* Disable */
-        Clock_Ip_ExternalOscillatorEmpty,        /* Enable */
+        &Clock_Ip_ExternalOscillatorEmpty,        /* Reset */
+        &Clock_Ip_ExternalOscillatorEmpty,        /* Set */
+        &Clock_Ip_ExternalOscillatorEmpty,        /* Complete */
+        &Clock_Ip_ExternalOscillatorEmpty,        /* Enable */
     },
 #ifdef CLOCK_IP_FXOSC_OSCON_BYP_EOCV_GM_SEL
     {
-        Clock_Ip_ResetFxoscOsconBypEocvGmSel,        /* Reset */
-        Clock_Ip_SetFxoscOsconBypEocvGmSel,          /* Set */
-        Clock_Ip_CompleteFxoscOsconBypEocvGmSel,     /* Complete */
-        Clock_Ip_DisableFxoscOsconBypEocvGmSel,      /* Disable */
-        Clock_Ip_EnableFxoscOsconBypEocvGmSel,       /* Enable */
+        &Clock_Ip_ResetFxoscOsconBypEocvGmSel,        /* Reset */
+        &Clock_Ip_SetFxoscOsconBypEocvGmSel,          /* Set */
+        &Clock_Ip_CompleteFxoscOsconBypEocvGmSel,     /* Complete */
+        &Clock_Ip_EnableFxoscOsconBypEocvGmSel,       /* Enable */
     },
 #endif
+
 };
 
 /* Clock stop constant section data */

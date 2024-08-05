@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SRX.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_SRX
  *
  * This file contains register definitions and macros for easy access to their
@@ -89,7 +89,7 @@ typedef struct {
   __IO uint32_t FMSG_RDY_IE;                       /**< Fast Message Ready Interrupt Control Register, offset: 0x34 */
   __IO uint32_t SMSG_RDY_IE;                       /**< Slow Serial Message Ready Interrupt Enable Register, offset: 0x38 */
   uint8_t RESERVED_2[36];
-  struct {                                         /* offset: 0x60, array step: 0x44 */
+  struct SRX_CNL {                                 /* offset: 0x60, array step: 0x44 */
     __IO uint32_t CH_CLK_CTRL;                       /**< Channel '0' Clock Control Register..Channel '7' Clock Control Register, array offset: 0x60, array step: 0x44 */
     __IO uint32_t CH_STATUS;                         /**< Channel '0' Status Register..Channel '7' Status Register, array offset: 0x64, array step: 0x44 */
     __IO uint32_t CH_CONFIG;                         /**< Channel '0' Configuration Register..Channel '7' Configuration Register, array offset: 0x68, array step: 0x44 */

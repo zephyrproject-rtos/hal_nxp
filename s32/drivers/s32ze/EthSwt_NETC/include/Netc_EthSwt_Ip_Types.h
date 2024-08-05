@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -27,7 +27,7 @@ extern "C"{
 #include "Netc_EthSwt_Ip_Cfg.h"
 #include "Netc_EthSwt_Ip_Cfg_Defines.h"
 #include "Eth_GeneralTypes.h"
-#include "StandardTypes.h"
+#include "Std_Types.h"
 
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
@@ -37,7 +37,7 @@ extern "C"{
 #define NETC_ETHSWT_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETHSWT_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETHSWT_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETHSWT_IP_TYPES_SW_MAJOR_VERSION             1
+#define NETC_ETHSWT_IP_TYPES_SW_MAJOR_VERSION             2
 #define NETC_ETHSWT_IP_TYPES_SW_MINOR_VERSION             0
 #define NETC_ETHSWT_IP_TYPES_SW_PATCH_VERSION             0
 
@@ -76,41 +76,42 @@ extern "C"{
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-	#if ((NETC_ETHSWT_IP_TYPES_AR_RELEASE_MAJOR_VERSION != ETH_GENERALTYPES_AR_RELEASE_MAJOR_VERSION) || \
-		 (NETC_ETHSWT_IP_TYPES_AR_RELEASE_MINOR_VERSION != ETH_GENERALTYPES_AR_RELEASE_MINOR_VERSION) \
-		)
-		#error "AutoSar Version Numbers of Netc_EthSwt_Ip_Types.h and Eth_GeneralTypes.h are different"
-	#endif
     /* Check if header file and StandardTypes.h are of the same AUTOSAR version */
+    #if ((NETC_ETHSWT_IP_TYPES_AR_RELEASE_MAJOR_VERSION != ETH_GENERALTYPES_AR_RELEASE_MAJOR_VERSION) || \
+         (NETC_ETHSWT_IP_TYPES_AR_RELEASE_MINOR_VERSION != ETH_GENERALTYPES_AR_RELEASE_MINOR_VERSION) \
+        )
+        #error "AutoSar Version Numbers of Netc_EthSwt_Ip_Types.h and Eth_GeneralTypes.h are different"
+    #endif
+    /* Check if header file and Std_Types.h are of the same AUTOSAR version */
     #if ((NETC_ETHSWT_IP_TYPES_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
          (NETC_ETHSWT_IP_TYPES_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
-        #error "AUTOSAR Version Numbers of Netc_EthSwt_Ip_Types.h and StandardTypes.h are different"
+        #error "AUTOSAR Version Numbers of Netc_EthSwt_Ip_Types.h and Std_Types.h are different"
     #endif
 #endif
 /*==================================================================================================
 *                                            CONSTANTS
 ==================================================================================================*/
 
-#define NETC_ETHSWT_NUMBER_OF_PSEUDO_PORT (1U)  /*!< number of pseudoport */
-#define NETC_ETHSWT_NUMBER_OF_PORTS       3  /*!< number of ports */
-#define NETC_ETHSWT_NUMBER_OF_MAC_PORTS   (2U)  /*!< number of mac ports*/
-#define NETC_ETHSWT_NUMBER_OF_VID_PER_PORT (255U)   /*!< 3 number of vid per port */
+#define NETC_ETHSWT_IP_NUMBER_OF_PSEUDO_PORT (1U)  /*!< number of pseudoport */
+#define NETC_ETHSWT_IP_NUMBER_OF_PORTS       (3U)  /*!< number of ports */
+#define NETC_ETHSWT_IP_NUMBER_OF_MAC_PORTS   (2U)  /*!< number of mac ports*/
+#define NETC_ETHSWT_IP_NUMBER_OF_VID_PER_PORT (255U)   /*!< 3 number of vid per port */
 
 #define NETC_ETHSWT_IP_FDB_KEYE_DATA_ITEMS                 (3U)      /*!< 3 uint32 items of FDB table KEYE DATA Format */
 #define NETC_ETHSWT_IP_FDB_SEARCH_CRITERIA_DATA_ITEMS      (8U)      /*!< 8 uint32 items of FDB table SEARCH CRITERIA Format */
 
-#define NETC_ETHSWT_TABLE_CFGEDATA_ITEMS                   (4U)      /*!< 4 uint32 items of CFGE_DATA Format for Tables */
+#define NETC_ETHSWT_IP_TABLE_CFGEDATA_ITEMS                   (4U)      /*!< 4 uint32 items of CFGE_DATA Format for Tables */
 
 #define NETC_ETHSWT_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN      (53U)      /*!< 53 uint32 items of Ingress Port Filter Table KEYE_DATA Format */
 
-#define NETC_ETHSWT_NUMBER_OF_PROFILES (2U)
-#define NETC_ETHSWT_NUMBER_OF_PCP_DEI (16U)
-#define NETC_ETHSWT_NUMBER_OF_PCP     (8U)
-#define NETC_ETHSWT_NUMBER_OF_IPV     (8U)
-#define NETC_ETHSWT_NUMBER_OF_DR      (4U)
+#define NETC_ETHSWT_IP_NUMBER_OF_PROFILES (2U)
+#define NETC_ETHSWT_IP_NUMBER_OF_PCP_DEI (16U)
+#define NETC_ETHSWT_IP_NUMBER_OF_PCP     (8U)
+#define NETC_ETHSWT_IP_NUMBER_OF_IPV     (8U)
+#define NETC_ETHSWT_IP_NUMBER_OF_DR      (4U)
 
-#define NETC_ETHSWT_EFMEID_FOR_MIRRORING                (0U)        /* Default egress frame modification entry id for mirroring */
-#define NETC_ETHSWT_EFM_LEN_CHANGE_FOR_MIRRORING        (4U)        /* EFM_LEN_CHANGE value for double tagging when modifying mirrored egress frames */
+#define NETC_ETHSWT_IP_EFMEID_FOR_MIRRORING                (0U)        /* Default egress frame modification entry id for mirroring */
+#define NETC_ETHSWT_IP_EFM_LEN_CHANGE_FOR_MIRRORING        (4U)        /* EFM_LEN_CHANGE value for double tagging when modifying mirrored egress frames */
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
@@ -156,16 +157,39 @@ typedef enum {
  */
 typedef struct
 {
-    uint8 MacAddr[6];                                   /*!< MAC Address */
-    uint16 FID;                                         /*!< Filtering ID */
-    uint32 SwitchPortEgressBitMask;                     /*!< Port Bitmap */
-    uint32 ET_EID;                                      /*!< Egress Treatment Table Entry ID */
-    uint8 CutThroughDisable;                            /*!< CTD */
-    uint8 OverridETEID;                                 /*!< OETEID */
-    uint8 EgressPort;                                   /*!< EPORT */
-    boolean IngressMirroringEnable;                     /*!< IMIRE */
-    boolean DynamicEntry;                               /*!< 0b = Static entry, 1b = Dynamic entry */
-    boolean TimeStampCapture;                           /*!< TIMECAPE */
+    uint8 MacAddr[6];                                   /*!< MAC Address - This field is defined in network byte order(big-endian). Most significant byte of the MAC address is stored at the lowest byte offset of this field.*/
+    uint16 FID;                                         /*!< Filtering ID - used to connect the FDB table with the VLAN Filter Table.*/
+                                                        /*!<              - it can be set to 0 when shared learning is used.*/
+    uint32 SwitchPortEgressBitMask;                     /*!< Port Bitmap - This field identifies the destination port(s) to which the frame is to be forwarded.*/
+                                                        /*!<             - The destination port(s) are represented as a bitmap, where each bit of the bitmap corresponds to a port on the switch.*/
+                                                        /*!<             - Least significant bit of the bitmap corresponds to the smallest port number; */
+                                                        /*!<             - i.e. bit offset 0 of the bitmap corresponds to port numbered 0, bit offset 1 to port numbered 1, and so on. */
+    uint32 ET_EID;                                      /*!< Egress Treatment Table Entry ID - This field specifies the index (or base index) to be used when accessing the Egress Treatment table.*/
+                                                        /*!<                                 - This field is valid if the OETEID Option field is set to value other than 00b.*/
+                                                        /*!<                                 - When no egress treatment needed - set entry ID to 0xFFFFFFFFUL. */
+    uint8 CutThroughDisable;                            /*!< CTD - 00b = Do not override cut-through state.*/
+                                                        /*!<     - 01b = Disable cut-through for the outgoing port specified in the EPORT. Cut-through is not disabled for the other ports specified in destination port bitmap.*/
+                                                        /*!<     - 10b = Disable cut-through for all ports specified in the destination port bitmap.*/
+                                                        /*!<     - 11b = Reserved.*/
+                                                        /*!<     - Note: Cut-through should be disabled for any outgoing port where its Egress Treatment table entry specifies an Egress Sequence Recovery action. */
+    uint8 OverridETEID;                                 /*!< OETEID - 00b = No egress packet processing actions specified. Do not override ET_EID (and associated applicability port bitmap).*/
+                                                        /*!<        - 01b = Single-port Egress Treatment table access. Only one port requires egress packet processing. That port identifier is specified in the EPORT field of this entry. */
+                                                        /*!<              = The applicability port bitmap is set with a 1 for the port that is been identified in the EPORT field of this entry. For other ports, the applicability port bitmap is set to 0. */
+                                                        /*!<              = The group assigned to packets matching this entry will have a single Egress Treatment table entry, for the port identified in the EPORT field of this entry. */
+                                                        /*!<        - 10b = Multi-port packed Egress Treatment table access. Applicability port bitmap is set to the port bitmap specified in PORT_BITMAP field of this entry.*/
+                                                        /*!<              = The group assigned to packets matching this entry will have an Egress Treatment table entry for each port set to 1 in the applicability port bitmap.*/
+                                                        /*!<        - 11b = Multi-port absolute Egress Treatment table access. Applicability port bitmap is set with 1 for all ports. */
+                                                        /*!<              = The group assigned to packets matching this entry will have Egress Treatment table entries for all ports on the switch. */
+    uint8 EgressPort;                                   /*!< EPORT - This field specifies the identifier of the port requiring egress packet processing when the Override ET_EID Option field is set to 01b (single-port Egress Treatment table access option). */
+                                                        /*!<       - The port is expressed as an integer value, and must correspond to a port that is set in the destination port bitmap.*/
+                                                        /*!<       - Valid if OETEID = 1 or CTD = 1.*/
+    boolean IngressMirroringEnable;                     /*!< IMIRE - 0b = No ingress mirroring action specified in this entry.*/
+                                                        /*!<       - 1b = The frame is mirrored to the mirror destination specified in the IMDCR0 register. */
+                                                        /*!<       - Mirroring should never be handled from the entries if the AUTOSAR mirroring is used.*/
+    boolean DynamicEntry;                               /*!< DYNAMIC - This field determines whether the entry is static or dynamic. */
+                                                        /*!<         - 0b = Static entry, */
+                                                        /*!<         - 1b = Dynamic entry */
+    boolean TimeStampCapture;                           /*!< TIMECAPE - set allways to 'false' */
 } Netc_EthSwt_Ip_FdbEntryDataType;
 
 /*!
@@ -174,16 +198,55 @@ typedef struct
  */
 typedef struct
 {
-    uint32 PortMembershipBitmap;                        /*!< Port Membership Bitmap */
+    uint32 PortMembershipBitmap;                        /*!< Port Membership Bitmap - on this field are set the memberships of certain ports to a specified VLAN ID. */
     uint16 VlanID;                                      /*!< Vlan ID */
-    uint16 FID;                                         /*!< Filtering ID */
-    uint32 EgressTreatmentApplicabilityPortBitmap;      /*!< Egress Treatment Applicability Port Bitmap */
-    uint32 BaseEgressTreatmentEntryID;                  /*!< Base Egress Treatment Entry ID */
-    uint8 SpanningTreeGroupMemberId;                    /*!< STG_ID */
-    uint8 MacForwardingOptions;                         /*!< MFO */
-    uint8 MacLearningOptions;                           /*!< MLO */
-    boolean IpMulticastFloodingEnable;                  /*!< IP Multicast Flooding Enable */
-    boolean IpMulticastFilteringEnable;                 /*!< IP Multicast Filtering Enable */
+    uint16 FID;                                         /*!< Filtering ID - The Filtering ID (FID) is a locally significant identifier (global to the switch), */
+                                                        /*!<              - that is used as a key value when hardware performs a lookup into the FDB table and the L2 IPV4 Multicast Filter table.*/
+                                                        /*!<              - The FID is used to identify a set of VIDs, which in turn allows sharing of the same address (MAC, IP) between multiple VIDs during lookups into the FDB table and L2 IPV4 Multicast Filter table.*/
+                                                        /*!<              - This allows the support of the independent and shared learning modes.*/
+    uint32 EgressTreatmentApplicabilityPortBitmap;      /*!< ETA_PORT_BITMAP - This field specifies the Egress Treatment applicability port bitmap. See BASE_ET_EID field for more details. */
+                                                        /*!<                 - All ports that have their bit set to 1 in the Egress Treatment applicability port bitmap must member of this VLAN.*/
+                                                        /*!<                 - Valid if BASE_ET_EID is not NULL.*/
+                                                        /*!<                 - Note: Bits beyond the valid range of switch ports will be ignored.*/
+    uint32 BaseEgressTreatmentEntryID;                  /*!< BASE_ET_EID - This field is used to convey the egress packet processing actions to be applied to packets matching this entry.*/
+                                                        /*!<             - The egress packet processing actions are specified in the Egress Treatment table, where each table entry contains the egress packet   */
+                                                        /*!<             - processing actions to be applied to a scope of packets (e.g. packets from a particular VLAN) exiting on a particular egress port of the switch.*/
+                                                        /*!<             - The means by which one specifies the Egress Treatment table entries to be accessed, is through the Egress Treatment group.*/
+                                                        /*!<             - Within the hardware, an Egress Treatment group is determined by a base index (first Egress Treatment table entry of the group) and */
+                                                        /*!<             - an applicability port bitmap (a bitmap corresponding to all ports of the switch) which indicates (with a 1) which ports */
+                                                        /*!<             - have Egress Treatment table entries present.*/
+    uint8 SpanningTreeGroupMemberId;                    /*!< STG_ID - This field specifies the spanning tree protocol group to which this VLAN belongs.*/
+                                                        /*!<        - The value in this field is expressed as an integer and is used to index the spanning tree protocol per-port state register (BPSTGSR) to */
+                                                        /*!<        - obtain the port spanning tree protocol state. The BPSTGSR register maintains spanning tree protocol port states for every spanning tree protocol group.*/
+                                                        /*!<        - The information retrieved from this register is used to perform spanning tree protocol (STP) port state checking */
+                                                        /*!<        - during ingress VLAN filtering processing and egress VLAN filtering processing.*/
+    uint8 MacForwardingOptions;                         /*!< MFO - 00b = Reserved.*/
+                                                        /*!<     - 01b = No FDB lookup is performed, the frame is flooded.*/
+                                                        /*!<     - 10b = FDB lookup is performed, and if there is no match, the frame is flooded.*/
+                                                        /*!<     - 11b = FDB lookup is performed, and if there is no match, the frame is discarded.*/
+    uint8 MacLearningOptions;                           /*!< MLO - 000b = Reserved. */
+                                                        /*!<     - 001b = Disable MAC learing. Mac learning is not performed during the forwarding processing.*/
+                                                        /*!<     - 010b = Hardware MAC learning is performed.*/
+                                                        /*!<     - 011b = Software MAC learning secure. A MAC learning lookup is performed into the FDB table. */
+                                                        /*!<            = If there is no match, no attempt is made to add a new entry, and the frame is redirect to the switch management port. */
+                                                        /*!<            = If there is match, and the entry's port number does not match frame ingress port number,  */
+                                                        /*!<            = the frame is redirected to the switch management port if station move is allowed, otherwise the frame is discarded. */
+                                                        /*!<     - 101b = Disable MAC learning with SMAC validation. A MAC learning lookup is performed into the FDB table.*/
+                                                        /*!<            = If there is no match or there is a match but the ingress port is not a member of the FDB entry,*/
+                                                        /*!<            = the frame is discarded and counted against the bridge port discard count register (BPDCR) with discard reason BPDCRR0[MACLNFDR] set to 1.*/
+    boolean IpMulticastFloodingEnable;                  /*!< IPMFLE - If IP multicast filtering is performed (IPMFE = 1b, and the frame is identified as a multicast IP packet), and there was no match found,*/
+                                                        /*!<        - then the frame is forwarded according to this field.*/
+                                                        /*!<        - 0b = IP Multicast Flooding disabled, frame is discarded.*/
+                                                        /*!<        - 1b = IP Multicast Flooding enabled, frame is flooded.*/
+                                                        /*!<        - If IP multicast filtering is disabled (IPMFE = 0b), this field is ignored by hardware.*/
+    boolean IpMulticastFilteringEnable;                 /*!< IPMFE - This field specifies whether IP multicast filtering is to be performed. */
+                                                        /*!<       - IP multicast filtering is accomplished by executing one or two exact match lookups: Source Specific Multicast (SSM) exact match lookup (if at least one entry added) */
+                                                        /*!<       - utilizing both source IP address and destination IP address,and if there is no match, followed by Any Source Multicast (ASM) exact match lookup (if at least one entry added) */
+                                                        /*!<       - utilizing destination IP address only. If an entry is found, the frame is forwarded according to the matched table entry. */
+                                                        /*!<       - If no entry is found, then the frame will be forwarded according to IPMFLE.*/
+                                                        /*!<       - 0b = No IP multicast filtering is performed.*/
+                                                        /*!<       - 1b = If the frame is identified as a multicast IP packet, then IP multicast filtering isperformed.*/
+                                                        /*!<            = If the frame is not identified as an IP multicast packet, the IP multicast filtering is not performed.*/
 } Netc_EthSwt_Ip_VlanFilterEntryDataType;
 
 /******************************************************************************
@@ -216,41 +279,41 @@ typedef struct
  * @brief defines CBDR status type.
  */
 typedef uint32 Netc_EthSwt_Ip_CBDRStatusType;
-#define NETC_ETHSWT_CBDRSTATUS_SUCCES                                           (0x0UL)     /*!< cbdr status success */
-#define NETC_ETHSWT_CBDRSTATUS_INDEX_ERROR                                      (0x1UL)     /*!< index of ring should be 0 or 1 */
-#define NETC_ETHSWT_CBDRSTATUS_RINGFULL                                         (0x2UL)     /*!< Ring is full */
-#define NETC_ETHSWT_CBDRSTATUS_RR_ERROR                                         (0x3UL)     /*!< The hardware does not consume the command, or the operation has not finished by hardware. */
-#define NETC_ETHSWT_CBDRSTATUS_NUMMATCHED_ERROR                                 (0x4UL)     /*!< The NUM_MATCHED field should be 1 when the entry exists for any commands */
-#define NETC_ETHSWT_CBDRSTATUS_ACCESSMETHOD_ERROR                               (0x5UL)     /*!< Access_method should be 0, 1, or 2, or the command is not supported by this access method */
-#define NETC_ETHSWT_CBDRSTATUS_TABLE_OPERATION_TIMEOUT                          (0x6UL)     /*!< Table operations timeout for commands like add, query, delete etc. */
-#define NETC_ETHSWT_CBDRSTATUS_INVALID_TABLE_ID                                 (0x080UL)   /*!< Invalid table ID */
-#define NETC_ETHSWT_CBDRSTATUS_NOT_SUPPORTED_ACCESS_METHOD                      (0x081UL)   /*!< Access method specified is not supported */
-#define NETC_ETHSWT_CBDRSTATUS_TABLE_INDEX_OUTOFRANGE                           (0x082UL)   /*!< Table index out of range */
-#define NETC_ETHSWT_CBDRSTATUS_BUFFER_NOT_SUFFICIENT                            (0x083UL)   /*!< Request data buffer size or response data buffer size is not sufficient */
-#define NETC_ETHSWT_CBDRSTATUS_INVALID_CMD                                      (0x084UL)   /*!< Invalid command */
-#define NETC_ETHSWT_CBDRSTATUS_REQUEST_DATA_BUFFER_ERROR                        (0x085UL)   /*!< Request Data buffer error */
-#define NETC_ETHSWT_CBDRSTATUS_ECC_OR_PARITY_ERROR                              (0x086UL)   /*!< Multi-bit ECC or parity error observed during command processing */
-#define NETC_ETHSWT_CBDRSTATUS_EXCEEDED_HASH_ENTRY_LIMIT                        (0x087UL)   /*!< Exceeded hash entry limit */
-#define NETC_ETHSWT_CBDRSTATUS_EXCEEDED_MAXIMUM_HASH_COLLISION_CHAIN_LIMIT      (0x088UL)   /*!< Exceeded maximum hash collision chain limit */
-#define NETC_ETHSWT_CBDRSTATUS_INVALID_ENTRY_ID                                 (0x089UL)   /*!< Invalid ENTRY_ID for HW Managed tables (hash, TCAM) */
-#define NETC_ETHSWT_CBDRSTATUS_SEARCH_CMD_FILLED_THE_RESPONSE_DATA_BUFFER       (0x08AUL)   /*!< Search command filled the response data buffer before completing the command */
-#define NETC_ETHSWT_CBDRSTATUS_CMD_FOR_INDEX_TABLE_BEFORE_OSR                   (0x08BUL)   /*!< Command for index table before OSR[ITM_STATE]=0 */
-#define NETC_ETHSWT_CBDRSTATUS_INVALID_QUERRY_ACTION                            (0x08CUL)   /*!< Query action specifed is invalid */
-#define NETC_ETHSWT_CBDRSTATUS_INVALID_TABLE_ACCESS_PRIVILEGE                   (0x08DUL)   /*!< Invalid table access privilege */
-#define NETC_ETHSWT_CBDRSTATUS_SYSTEM_BUS_READ_ERROR                            (0x08EUL)   /*!< System Bus Read Error encountered while processing the command. */
-#define NETC_ETHSWT_CBDRSTATUS_SYSTEM_BUS_WRITE_ERROR                           (0x08FUL)   /*!< System Bus Write Error encountered while processing the command. */
-#define NETC_ETHSWT_CBDRSTATUS_CLIENT_FAULT                                     (0x090UL)   /*!< Client encountered a fault while processing the command. */
-#define NETC_ETHSWT_CBDRSTATUS_RESERVED_ERROR                                   (0x091UL)   /*!< 0x091 to 0x0FF = reserved */
-#define NETC_ETHSWT_CBDRSTATUS_TABLE_SPECIFIC_ERROR                             (0x100UL)   /*!< 0x100 to 0xFFF = Table specific error codes */
-#define NETC_ETHSWT_CBDRSTATUS_UPTATE_EXISTING_ADMIN_GATE_CONTROL               (0x0D1UL)   /* Update action attempted on an existing admin gate control. An existing admin gate control list cannot be modified, Delete admin gate control list first before creating a new admin list. (Use update action with ADMIN_CONTROL_LIST_LENGTH =0 to perform delete). */
-#define NETC_ETHSWT_CBDRSTATUS_UPDATE_ACTION_EXCEED_MAX_GCL_LEN                 (0x0D2UL)   /* Update action attempted exceeds TGSTCAPR[MAX_GCL_LEN]. */
-#define NETC_ETHSWT_CBDRSTATUS_UPDATE_ACTION_EXCEED_NUM_WORDS                   (0x0D3UL)   /* Update action attempted exceeds TGSTCAPR[NUM_WORDS]. */
-#define NETC_ETHSWT_CBDRSTATUS_INSUFFICIENT_RESOURCES                           (0x0D4UL)   /* Insufficient resources to perform the requested operation (not enough free time gate list entries) */
-#define NETC_ETHSWT_CBDRSTATUS_TRANSMITTING_TIME_NOT_SUFFICIENT                 (0x0D5UL)   /* Update action attempted with ADMIN_CYCLE_TIME, ADMIN_TIME_INTERVAL_GE_i or truncated ADMIN_TIME_INTERVAL_GE_n due ADMIN_CYCLE_TIME specified is not sufficient to transmit 64 byte of frame data + header overhead. Where header overhead = PTXSDUOR[PTXSDUOR] + PTXSDUOR[PPDU_BCO]. */
-#define NETC_ETHSWT_CBDRSTATUS_ADMIN_BASE_TIME_IS_MORE_THAN_1S                  (0x0D6UL)   /* Update action attempted with ADMIN_BASE_TIME specified is more than one second in the past from tcs advance time. */
-#define NETC_ETHSWT_CBDRSTATUS_ADMIN_CYCLE_TIME_OVERFLOW                        (0x0D7UL)   /* Update action attempted with ADMIN_CYCLE_TIME + ADMIN_CYCLE_TIME_EXT is greater than 2^32-1. */
-#define NETC_ETHSWT_CBDRSTATUS_RETRY_QUERY                                      (0x0D8UL)   /* Query action issued when config change occurred. Retry query. */
-#define NETC_ETHSWT_CBDRSTATUS_INVALID_ADMIN_HR_CB_GE                           (0x0D9UL)   /* Update action attempted with ADMIN_HR_CB_GE_i set to an invalid value. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_SUCCESS                                           (0x0UL)     /*!< cbdr status success */
+#define NETC_ETHSWT_IP_CBDRSTATUS_INDEX_ERROR                                      (0x1UL)     /*!< index of ring should be 0 or 1 */
+#define NETC_ETHSWT_IP_CBDRSTATUS_RINGFULL                                         (0x2UL)     /*!< Ring is full */
+#define NETC_ETHSWT_IP_CBDRSTATUS_RR_ERROR                                         (0x3UL)     /*!< The hardware does not consume the command, or the operation has not finished by hardware. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_NUMMATCHED_ERROR                                 (0x4UL)     /*!< The NUM_MATCHED field should be 1 when the entry exists for any commands */
+#define NETC_ETHSWT_IP_CBDRSTATUS_ACCESSMETHOD_ERROR                               (0x5UL)     /*!< Access_method should be 0, 1, or 2, or the command is not supported by this access method */
+#define NETC_ETHSWT_IP_CBDRSTATUS_TABLE_OPERATION_TIMEOUT                          (0x6UL)     /*!< Table operations timeout for commands like add, query, delete etc. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_INVALID_TABLE_ID                                 (0x080UL)   /*!< Invalid table ID */
+#define NETC_ETHSWT_IP_CBDRSTATUS_NOT_SUPPORTED_ACCESS_METHOD                      (0x081UL)   /*!< Access method specified is not supported */
+#define NETC_ETHSWT_IP_CBDRSTATUS_TABLE_INDEX_OUTOFRANGE                           (0x082UL)   /*!< Table index out of range */
+#define NETC_ETHSWT_IP_CBDRSTATUS_BUFFER_NOT_SUFFICIENT                            (0x083UL)   /*!< Request data buffer size or response data buffer size is not sufficient */
+#define NETC_ETHSWT_IP_CBDRSTATUS_INVALID_CMD                                      (0x084UL)   /*!< Invalid command */
+#define NETC_ETHSWT_IP_CBDRSTATUS_REQUEST_DATA_BUFFER_ERROR                        (0x085UL)   /*!< Request Data buffer error */
+#define NETC_ETHSWT_IP_CBDRSTATUS_ECC_OR_PARITY_ERROR                              (0x086UL)   /*!< Multi-bit ECC or parity error observed during command processing */
+#define NETC_ETHSWT_IP_CBDRSTATUS_EXCEEDED_HASH_ENTRY_LIMIT                        (0x087UL)   /*!< Exceeded hash entry limit */
+#define NETC_ETHSWT_IP_CBDRSTATUS_EXCEEDED_MAXIMUM_HASH_COLLISION_CHAIN_LIMIT      (0x088UL)   /*!< Exceeded maximum hash collision chain limit */
+#define NETC_ETHSWT_IP_CBDRSTATUS_INVALID_ENTRY_ID                                 (0x089UL)   /*!< Invalid ENTRY_ID for HW Managed tables (hash, TCAM) */
+#define NETC_ETHSWT_IP_CBDRSTATUS_SEARCH_CMD_FILLED_THE_RESPONSE_DATA_BUFFER       (0x08AUL)   /*!< Search command filled the response data buffer before completing the command */
+#define NETC_ETHSWT_IP_CBDRSTATUS_CMD_FOR_INDEX_TABLE_BEFORE_OSR                   (0x08BUL)   /*!< Command for index table before OSR[ITM_STATE]=0 */
+#define NETC_ETHSWT_IP_CBDRSTATUS_INVALID_QUERRY_ACTION                            (0x08CUL)   /*!< Query action specifed is invalid */
+#define NETC_ETHSWT_IP_CBDRSTATUS_INVALID_TABLE_ACCESS_PRIVILEGE                   (0x08DUL)   /*!< Invalid table access privilege */
+#define NETC_ETHSWT_IP_CBDRSTATUS_SYSTEM_BUS_READ_ERROR                            (0x08EUL)   /*!< System Bus Read Error encountered while processing the command. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_SYSTEM_BUS_WRITE_ERROR                           (0x08FUL)   /*!< System Bus Write Error encountered while processing the command. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_CLIENT_FAULT                                     (0x090UL)   /*!< Client encountered a fault while processing the command. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_RESERVED_ERROR                                   (0x091UL)   /*!< 0x091 to 0x0FF = reserved */
+#define NETC_ETHSWT_IP_CBDRSTATUS_TABLE_SPECIFIC_ERROR                             (0x100UL)   /*!< 0x100 to 0xFFF = Table specific error codes */
+#define NETC_ETHSWT_IP_CBDRSTATUS_UPTATE_EXISTING_ADMIN_GATE_CONTROL               (0x0D1UL)   /* Update action attempted on an existing admin gate control. An existing admin gate control list cannot be modified, Delete admin gate control list first before creating a new admin list. (Use update action with ADMIN_CONTROL_LIST_LENGTH =0 to perform delete). */
+#define NETC_ETHSWT_IP_CBDRSTATUS_UPDATE_ACTION_EXCEED_MAX_GCL_LEN                 (0x0D2UL)   /* Update action attempted exceeds TGSTCAPR[MAX_GCL_LEN]. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_UPDATE_ACTION_EXCEED_NUM_WORDS                   (0x0D3UL)   /* Update action attempted exceeds TGSTCAPR[NUM_WORDS]. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_INSUFFICIENT_RESOURCES                           (0x0D4UL)   /* Insufficient resources to perform the requested operation (not enough free time gate list entries) */
+#define NETC_ETHSWT_IP_CBDRSTATUS_TRANSMITTING_TIME_NOT_SUFFICIENT                 (0x0D5UL)   /* Update action attempted with ADMIN_CYCLE_TIME, ADMIN_TIME_INTERVAL_GE_i or truncated ADMIN_TIME_INTERVAL_GE_n due ADMIN_CYCLE_TIME specified is not sufficient to transmit 64 byte of frame data + header overhead. Where header overhead = PTXSDUOR[PTXSDUOR] + PTXSDUOR[PPDU_BCO]. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_ADMIN_BASE_TIME_IS_MORE_THAN_1S                  (0x0D6UL)   /* Update action attempted with ADMIN_BASE_TIME specified is more than one second in the past from tcs advance time. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_ADMIN_CYCLE_TIME_OVERFLOW                        (0x0D7UL)   /* Update action attempted with ADMIN_CYCLE_TIME + ADMIN_CYCLE_TIME_EXT is greater than 2^32-1. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_RETRY_QUERY                                      (0x0D8UL)   /* Query action issued when config change occurred. Retry query. */
+#define NETC_ETHSWT_IP_CBDRSTATUS_INVALID_ADMIN_HR_CB_GE                           (0x0D9UL)   /* Update action attempted with ADMIN_HR_CB_GE_i set to an invalid value. */
 
 /*!
  * @brief defines access method type.
@@ -830,7 +893,7 @@ typedef struct {
     uint8 TableId;                                      /*!< TABLE_ID in config field of Request Message Header Data Format */
     Netc_EthSwt_Ip_AccessMethodType AccessMethod;       /*!< ACCESS_METHOD in config field of Request Message Header Data Format */
     Netc_EthSwt_Ip_CommandsType Cmd;                    /*!< COMMAND in config field of Request Message Header Data Format */
-} NetcEthSwt_Ip_ReqHeaderTableOperationDataType;
+} Netc_EthSwt_Ip_ReqHeaderTableOperationDataType;
 
 /*!
  * @brief buffer descriptors of command rings.
@@ -996,7 +1059,7 @@ typedef struct {
     boolean Cfge_Cf;            /*!< Coupling flag, 0:C and E token buckets are not coupled. 1:C and E token buckets are coupled*/
     boolean Cfge_Ndor;          /*!< No Drop on Red, 0:frames marded "red" are alwayts dropped, 1: not dropped */
     Netc_EthSwt_Ip_SDUType Cfge_SduType;     /*!< Service Data Unit Type */
-} Netc_EthSwt_Ip_RatePolicerTableCFGEDataType; 
+} Netc_EthSwt_Ip_RatePolicerTableCFGEDataType;
 
 /*!
  * @brief Rate Policer Table STSE_DATA Format.
@@ -1015,16 +1078,17 @@ typedef struct {
     uint32 Stse_CommittedTokenBucketFractional; /*!< Committed token bucket contents, fractional portion (31 bits) + sign bit (1 bit, BCS) */
     uint32 Stse_ExcessTokenBucketInteger;       /*!< Excess token bucket contents, integer portion (32 bits)*/
     uint32 Stse_ExcessTokenBucketFractional;   /*!< Excess token bucket contents, fractional portion (31 bits) + sign bit (1 bit, BES) */
-} Netc_EthSwt_Ip_RatePolicerTableSTSEDataType; 
+} Netc_EthSwt_Ip_RatePolicerTableSTSEDataType;
 
 /*!
  * @brief defines Rate Policer entries.
+ *
  */
 typedef struct
 {
     uint32 RatePolicerEntryId;                  /* Entry ID */
-    Netc_EthSwt_Ip_RatePolicerTableCFGEDataType RatePolicerCfgeData;    /* CFGE Data */ 
-    boolean ConfigurationElementUpdate;         /* Update Actions, CFGEU */  
+    Netc_EthSwt_Ip_RatePolicerTableCFGEDataType RatePolicerCfgeData;    /* CFGE Data */
+    boolean ConfigurationElementUpdate;         /* Update Actions, CFGEU */
     boolean FunctionalEnableElementUpdate;      /* Update Actions, FEEU */
     boolean PolicerStateElementUpdate;          /* Update Actions, PSEU */
     boolean StatisticsElementUpdate;            /* Update Actions, STSEU */
@@ -1033,12 +1097,13 @@ typedef struct
 
 /*!
  * @brief defines Rate Policer entrie response data.
+ *
  */
 typedef struct
 {
     uint32 RatePolicerEntryId;                  /* Entry ID */
-    Netc_EthSwt_Ip_RatePolicerTableSTSEDataType RatePolicerStseData;    /* Statistics Element Data */ 
-    Netc_EthSwt_Ip_RatePolicerTableCFGEDataType RatePolicerCfgeData;    /* CFGE Data */ 
+    Netc_EthSwt_Ip_RatePolicerTableSTSEDataType RatePolicerStseData;    /* Statistics Element Data */
+    Netc_EthSwt_Ip_RatePolicerTableCFGEDataType RatePolicerCfgeData;    /* CFGE Data */
     boolean RatePolicerFunctionEnable;          /* False = The rate policer instance is disabled; True 1b = The rate policer instance is enabled */
     boolean MarkRedFlag;                        /* 0b = Indicates that the rate policer blocking "mark all frames red" function has not been triggered */
                                                 /* 1b = Indicates that all frames arriving at this rate policer are marked red by the rate policer blocking "mark all frames red" function. */
@@ -1064,7 +1129,7 @@ typedef uint32 Netc_EthSwt_Ip_EnetcForwardingActionDataType;
  * @brief Override ET_EID data format enum type.
  */
 typedef uint32 Netc_EthSwt_Ip_OETEIDIdxType;
-#define  NETC_ETHSWT_IP_NO_EGRESS_PKT_PROCESSING_ACTIONS_SPECIFIED  (0x0U)      /*!< No egress packet processing actions specified */
+#define NETC_ETHSWT_IP_NO_EGRESS_PKT_PROCESSING_ACTIONS_SPECIFIED  (0x0U)      /*!< No egress packet processing actions specified */
 #define NETC_ETHSWT_IP_SINGLEPORT_EGRESS_TREATMENT_TABLE_ACCESS     (0x1U)      /*!< Single-port Egress Treatment table access. */
 #define NETC_ETHSWT_IP_MULTIPORT_PKT_EGRESS_TREATMENT_TABLE_ACCESS  (0x2U)      /*!< Multi-port packet Egress Treatment table access */
 #define NETC_ETHSWT_IP_MULTIPORT_ABS_EGRESS_TREATMENT_TABLE_ACCESS  (0x3U)      /*!< Multi-port absolute Egress Treatment table access */
@@ -1131,7 +1196,7 @@ typedef struct {
     boolean OverrideDR;                                             /*!< Override Drop Resilience (DR) */
     boolean OverrideIPV;                                            /*!< Override Internal Priority Value (IPV) */
     boolean StreamFilteringEnable;                                  /*!< Stream Filtering Enable */
-} Netc_EthSwt_Ip_IngressStreamTableCFGEDataType; 
+} Netc_EthSwt_Ip_IngressStreamTableCFGEDataType;
 
 /*!
  * @brief defines Ingress Stream entries.
@@ -1140,7 +1205,7 @@ typedef struct {
 typedef struct
 {
     uint32 IngressStreamEntryId;                  /* Entry ID */
-    Netc_EthSwt_Ip_IngressStreamTableCFGEDataType IngressStreamCfgeData;    /* CFGE Data */ 
+    Netc_EthSwt_Ip_IngressStreamTableCFGEDataType IngressStreamCfgeData;    /* CFGE Data */
 } Netc_EthSwt_Ip_IngressStreamEntryDataType;
 
 /*!
@@ -1161,7 +1226,7 @@ typedef struct {
     boolean IngressMirroringEnable;                                 /*!< Ingress Mirroring Enable */
     boolean OverrideStreamGateInstanceEID;                          /*!< Override Stream Gate Instance Entry ID */
     boolean OverrideRatePolicerInstanceEID;                         /*!< Override Rate Policer (instance) ID. */
-} Netc_EthSwt_Ip_IngressStreamFilterTableCFGEDataType; 
+} Netc_EthSwt_Ip_IngressStreamFilterTableCFGEDataType;
 
 
 /*!
@@ -1190,7 +1255,7 @@ typedef struct
 typedef struct {
     uint32 IngressStream_EID;                           /*!< Ingress Stream Entry ID */
     uint8 Pcp;                                          /*!< Priority Code Point. Outer VLAN TAG PCP of the received frame */
-} Netc_EthSwt_Ip_IngressStreamFilterTableKEYEDataType; 
+} Netc_EthSwt_Ip_IngressStreamFilterTableKEYEDataType;
 
 /*!
  * @brief defines Ingress Stream Filter entries.
@@ -1198,7 +1263,7 @@ typedef struct {
  */
 typedef struct
 {
-    Netc_EthSwt_Ip_IngressStreamFilterTableCFGEDataType IngressStreamFilterCfgeData;    /* CFGE Data */ 
+    Netc_EthSwt_Ip_IngressStreamFilterTableCFGEDataType IngressStreamFilterCfgeData;    /* CFGE Data */
     Netc_EthSwt_Ip_IngressStreamFilterTableKEYEDataType IngressStreamFilterKeyeData;    /* KEYE Data */
     uint32 IngressStreamFilterEntryId;                  /* Entry ID */
 } Netc_EthSwt_Ip_IngressStreamFilterEntryDataType;
@@ -1338,7 +1403,7 @@ typedef struct
  * @brief defines Ingress Stream Identification table request/response data type.
  * @implements Netc_EthSwt_Ip_IngrStremIdentificationTableDataType_struct
  */
-typedef struct 
+typedef struct
 {
     uint32 IngrStreamIdenResumeEntryId;                             /* Ingress Stream Identification tabel Resume Entry ID */
     uint32 IngrStreamIdenEntryId;                                   /* Ingress Stream Identification tabel Entry ID */
@@ -1773,23 +1838,23 @@ typedef enum {
  * @brief Egress Treatment Table egress counter action data type definitions.
  */
 typedef uint32 Netc_EthSwt_Ip_EgressTreatmentTableCounterActionType;
-#define NETC_ETHSWT_EGRESSTREATMENTTABLE_NOT_INCREMENT_EGRESSFRMCOUNTER         (0x0U)   /*!< Do not increment egress frame counter  */
-#define NETC_ETHSWT_EGRESSTREATMENTTABLE_INCREMENT_EGRESSFRMCOUNTER             (0x1U)   /*!< Increment egress frame counter  */
+#define NETC_ETHSWT_IP_EGRESSTREATMENTTABLE_NOT_INCREMENT_EGRESSFRMCOUNTER         (0x0U)   /*!< Do not increment egress frame counter  */
+#define NETC_ETHSWT_IP_EGRESSTREATMENTTABLE_INCREMENT_EGRESSFRMCOUNTER             (0x1U)   /*!< Increment egress frame counter  */
 
 /*!
  * @brief Egress Treatment Table egress sequence actions data type definitions.
  */
 typedef uint32 Netc_EthSwt_Ip_EgressTreatmentTableSequenceActionType;
-#define NETC_ETHSWT_EGRESSTREATMENTTABLE_NO_SEQUENCE_ACTION_REQUIRED            (0x0U)   /*!< No Sequence Action required  */
-#define NETC_ETHSWT_EGRESSTREATMENTTABLE_SEQUENCE_RECOVERY_ACTION               (0x2U)   /*!< Sequence Recovery action  */
+#define NETC_ETHSWT_IP_EGRESSTREATMENTTABLE_NO_SEQUENCE_ACTION_REQUIRED            (0x0U)   /*!< No Sequence Action required  */
+#define NETC_ETHSWT_IP_EGRESSTREATMENTTABLE_SEQUENCE_RECOVERY_ACTION               (0x2U)   /*!< Sequence Recovery action  */
 
 /*!
  * @brief Egress Treatment Table egress frame modification mode data type definitions.
  */
 typedef uint32 Netc_EthSwt_Ip_EgressTreatmentTableFrmModificationModeType;
-#define NETC_ETHSWT_EGRESSTREATMENTTABLE_DEFAULT_FRM_MODIFICATION_MODE          (0x0U)    /*!< Normal/Default mode  */
-#define NETC_ETHSWT_EGRESSTREATMENTTABLE_L2ACTION_FRM_MODIFICATION_MODE         (0x1U)    /*!< When EFM_EID[L2_ACT]=1b  */
-#define NETC_ETHSWT_EGRESSTREATMENTTABLE_PAYLOADACTION_FRM_MODIFICATION_MODE    (0x2U)    /*!< When EFM_EID[PLD_ACT]=001b  */
+#define NETC_ETHSWT_IP_EGRESSTREATMENTTABLE_DEFAULT_FRM_MODIFICATION_MODE          (0x0U)    /*!< Normal/Default mode  */
+#define NETC_ETHSWT_IP_EGRESSTREATMENTTABLE_L2ACTION_FRM_MODIFICATION_MODE         (0x1U)    /*!< When EFM_EID[L2_ACT]=1b  */
+#define NETC_ETHSWT_IP_EGRESSTREATMENTTABLE_PAYLOADACTION_FRM_MODIFICATION_MODE    (0x2U)    /*!< When EFM_EID[PLD_ACT]=001b  */
 
 /*!
  * @brief Egress Treatment Table response data type enumeration. Netc_EthSwt_Ip_EgressTreatmentTable_RspDataIndexType
@@ -1824,7 +1889,7 @@ typedef struct
  */
 #define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_DEST_MAC_ADDR_H_SHIFT              (16U)
 #define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_DEST_MAC_ADDR_H_MASK               (0xFFFF0000UL)
-#define NENETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_DEST_MAC_ADDR_H(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_DEST_MAC_ADDR_H_SHIFT)) & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_DEST_MAC_ADDR_H_MASK)
+#define NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_DEST_MAC_ADDR_H(x)               (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_DEST_MAC_ADDR_H_SHIFT)) & NETC_ETHSWT_IP_FRMMODIFICATIONTABLE_CFGE_DEST_MAC_ADDR_H_MASK)
 
 /*!
  * @brief SMAC_PORT field in Frame Modification Table CFGE_DATA format.
@@ -2208,7 +2273,9 @@ typedef struct
     uint32 AdminCycleTime;                              /*!< Administrative Cycle Time */
     uint32 AdminCycleTimeExt;                           /*!< Administrative Cycle Time Extension */
     uint16 AdminControlListLength;                      /*!< Administrative Control List Length */
+#if (NETC_ETHSWT_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES > 0U)
     Netc_EthSwt_Ip_GateEntryAdminControlListDataType GateEntryAdminControlListData[NETC_ETHSWT_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES];
+#endif
 } Netc_EthSwt_Ip_TimeGateSchedulingEntryDataType;
 
 /**
@@ -2349,138 +2416,138 @@ typedef enum {
 /*!
  * @brief Vlan Filter Table Config Data STG_ID field.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_STG_ID_SHIFT                   (24U)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_STG_ID_SHIFT                   (24U)
 /*!
  * @brief Vlan Filter Table Config Data STG_ID field mask.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_STG_ID_MASK                    (0x0F000000UL)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_STG_ID_MASK                    (0x0F000000UL)
 /*!
  * @brief Vlan Filter Table Config Data STG_ID.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_STG_ID(x)                      (((uint32)(((uint32)(x)) << NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_STG_ID_SHIFT)) & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_STG_ID_MASK)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_STG_ID(x)                      (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_STG_ID_SHIFT)) & NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_STG_ID_MASK)
 
 /*!
  * @brief Vlan Filter Table Config Data PORT membership field.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_PORT_MEMBERSHIP_SHIFT          (0U)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_PORT_MEMBERSHIP_SHIFT          (0U)
 /*!
  * @brief Vlan Filter Table Config Data PORT membership field mask.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_PORT_MEMBERSHIP_MASK           (0x00FFFFFFUL)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_PORT_MEMBERSHIP_MASK           (0x00FFFFFFUL)
 /*!
  * @brief Vlan Filter Table Config Data PORT membership.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_PORT_MEMBERSHIP(x)             (((uint32)(((uint32)(x)) << NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_PORT_MEMBERSHIP_SHIFT)) & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_PORT_MEMBERSHIP_MASK)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_PORT_MEMBERSHIP(x)             (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_PORT_MEMBERSHIP_SHIFT)) & NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_PORT_MEMBERSHIP_MASK)
 
 /*!
  * @brief Vlan Filter Table Config Data IPMFLE field.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFLE_SHIFT                   (23U)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_IPMFLE_SHIFT                   (23U)
 /*!
  * @brief Vlan Filter Table Config Data IPMFLE field mask.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFLE_MASK                    (0x00800000UL)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_IPMFLE_MASK                    (0x00800000UL)
 /*!
  * @brief Vlan Filter Table Config Data IPMFLE.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFLE(x)                      (((uint32)(((uint32)(x)) << NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFLE_SHIFT)) & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFLE_MASK)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_IPMFLE(x)                      (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_IPMFLE_SHIFT)) & NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_IPMFLE_MASK)
 
 /*!
  * @brief Vlan Filter Table Config Data IPMFE field.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFE_SHIFT                    (22U)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_IPMFE_SHIFT                    (22U)
 /*!
  * @brief Vlan Filter Table Config Data IPMFE field mask.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFE_MASK                     (0x00400000UL)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_IPMFE_MASK                     (0x00400000UL)
 /*!
  * @brief Vlan Filter Table Config Data IPMFE.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFE(x)                       (((uint32)(((uint32)(x)) << NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFE_SHIFT)) & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_IPMFE_MASK)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_IPMFE(x)                       (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_IPMFE_SHIFT)) & NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_IPMFE_MASK)
 
 /*!
  * @brief Vlan Filter Table Config Data MFO field.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MFO_SHIFT                      (19U)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_MFO_SHIFT                      (19U)
 /*!
  * @brief Vlan Filter Table Config Data MFO field mask.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MFO_MASK                       (0x00180000UL)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_MFO_MASK                       (0x00180000UL)
 /*!
  * @brief Vlan Filter Table Config Data MFO.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MFO(x)                         (((uint32)(((uint32)(x)) << NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MFO_SHIFT)) & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MFO_MASK)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_MFO(x)                         (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_MFO_SHIFT)) & NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_MFO_MASK)
 
 /*!
  * @brief Vlan Filter Table Config Data MLO field.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MLO_SHIFT                      (16U)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_MLO_SHIFT                      (16U)
 /*!
  * @brief Vlan Filter Table Config Data MLO field mask.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MLO_MASK                       (0x00070000UL)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_MLO_MASK                       (0x00070000UL)
 /*!
  * @brief Vlan Filter Table Config Data MLO.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MLO(x)                         (((uint32)(((uint32)(x)) << NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MLO_SHIFT)) & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_MLO_MASK)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_MLO(x)                         (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_MLO_SHIFT)) & NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_MLO_MASK)
 
 /*!
  * @brief Vlan Filter Table Config Data FID field.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_FID_SHIFT                      (0U)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_FID_SHIFT                      (0U)
 /*!
  * @brief Vlan Filter Table Config Data FID field mask.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_FID_MASK                       (0x00000FFFUL)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_FID_MASK                       (0x00000FFFUL)
 /*!
  * @brief Vlan Filter Table Config Data FID.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_FID(x)                         (((uint32)(((uint32)(x)) << NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_FID_SHIFT)) & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_FID_MASK)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_FID(x)                         (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_FID_SHIFT)) & NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_FID_MASK)
 
 /*!
  * @brief Vlan Filter Table Config Data ETA port bitmap field.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_ETA_PORT_BITMAP_SHIFT          (0U)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_ETA_PORT_BITMAP_SHIFT          (0U)
 /*!
  * @brief Vlan Filter Table Config Data ETA port bitmap field mask.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_ETA_PORT_BITMAP_MASK           (0x00FFFFFFUL)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_ETA_PORT_BITMAP_MASK           (0x00FFFFFFUL)
 /*!
  * @brief Vlan Filter Table Config Data ETA port bitmap.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_ETA_PORT_BITMAP(x)             (((uint32)(((uint32)(x)) << NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_ETA_PORT_BITMAP_SHIFT)) & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_ETA_PORT_BITMAP_MASK)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_ETA_PORT_BITMAP(x)             (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_ETA_PORT_BITMAP_SHIFT)) & NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_ETA_PORT_BITMAP_MASK)
 
 /*!
  * @brief Vlan Filter Table Config Data base ET_EID field.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_BASE_ET_EID_SHIFT              (0U)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_BASE_ET_EID_SHIFT              (0U)
 /*!
  * @brief Vlan Filter Table Config Data base ET_EID field mask.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_BASE_ET_EID_MASK               (0xFFFFFFFFUL)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_BASE_ET_EID_MASK               (0xFFFFFFFFUL)
 /*!
  * @brief Vlan Filter Table Config Data base ET_EID.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_BASE_ET_EID(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_BASE_ET_EID_SHIFT)) & NETC_ETHSWT_VLANFILTERTABLE_CFGEDATA_BASE_ET_EID_MASK)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_BASE_ET_EID(x)                 (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_BASE_ET_EID_SHIFT)) & NETC_ETHSWT_IP_VLANFILTERTABLE_CFGEDATA_BASE_ET_EID_MASK)
 
 /*!
  * @brief Vlan Filter Table Config Data KEY_DATA bits field.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_KEYEDATA_VID_SHIFT                      (0U)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_KEYEDATA_VID_SHIFT                      (0U)
 /*!
  * @brief Vlan Filter Table Config Data KEY_DATA bits field mask.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_KEYEDATA_VID_MASK                       (0x00000FFFUL)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_KEYEDATA_VID_MASK                       (0x00000FFFUL)
 /*!
  * @brief Vlan Filter Table Config Data KEY_DATA bits.
  */
-#define NETC_ETHSWT_VLANFILTERTABLE_KEYEDATA_VID(x)                         (((uint32)(((uint32)(x)) << NETC_ETHSWT_VLANFILTERTABLE_KEYEDATA_VID_SHIFT)) & NETC_ETHSWT_VLANFILTERTABLE_KEYEDATA_VID_MASK)
+#define NETC_ETHSWT_IP_VLANFILTERTABLE_KEYEDATA_VID(x)                         (((uint32)(((uint32)(x)) << NETC_ETHSWT_IP_VLANFILTERTABLE_KEYEDATA_VID_SHIFT)) & NETC_ETHSWT_IP_VLANFILTERTABLE_KEYEDATA_VID_MASK)
 
 /*!
  * @brief Vlan Filter Table response data type enumeration. Netc_EthSwt_Ip_VlanFilterTable_ResponsDataIndexType
  */
 typedef enum {
-    NETC_ETHSWT_VLANFILTERTABLE_RSPDATA_STATUS = 0x0U,     /*!< Status Field In Vlan Filter Table Response Data Buffer */
+    NETC_ETHSWT_IP_VLANFILTERTABLE_RSPDATA_STATUS = 0x0U,     /*!< Status Field In Vlan Filter Table Response Data Buffer */
     NETC_ETHSWT_VLANFILTERTABL_RSPDATA_ENTRYID,            /*!< Entry_ID Field In Vlan Filter Table Response Data Buffer */
     NETC_ETHSWT_VLANFILTERTABL_RSPDATA_VID,                /*!< VID field of KEYE DATA In Vlan Filter Table Response Data Buffer */
     NETC_ETHSWT_VLANFILTERTABL_RSPDATA_CFGEDATA0,          /*!< The first element of CFGE DATA In Vlan Filter Table Response Data Buffer */
@@ -2493,7 +2560,7 @@ typedef enum {
  * @brief Vlan Filter Table CFGE_DATA format.
  */
 typedef struct {
-    uint32 Cfge_Data[NETC_ETHSWT_TABLE_CFGEDATA_ITEMS]; /*!< Config data for Vlan Filtre Table */
+    uint32 Cfge_Data[NETC_ETHSWT_IP_TABLE_CFGEDATA_ITEMS]; /*!< Config data for Vlan Filtre Table */
 } Netc_EthSwt_Ip_VlanFilterTableCFGEDataType;
 /* ---bits field and structure for Vlan Filter Table Data Buffer Format--- */
 
@@ -2529,63 +2596,64 @@ typedef struct
  * @brief Netc_EthSwt counter structure Netc_EthSwt_Ip_CounterType
  */
 typedef struct {
-    uint64 rxEtherOctetCounter;                  /*!< Port MAC 0 Receive Ethernet Octets Counter(etherStatsOctetsn) (PM0_REOCTn) */
-    uint64 rxOctetCounter;                       /*!< Supported by pseudo port. Port MAC 0 Receive Octets Counter(iflnOctetsn) (PM0_ROCTn) */
-    uint64 rxValidPauseFrmCounter;               /*!< Port MAC 0 Receive Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn) (PM0_RXPFn) */
-    uint64 rxFrmCounter;                         /*!< MAC 0 Receive Frame Counter Register(aFramesReceivedOKn) (PM0_RFRMn) */
-    uint64 rxFrameCheckSequenceErrorCounter;     /*!< Port MAC 0 Receive Frame Check Sequence Error Counter Register() (PM0_RFCSn) */
-    uint64 rxVlanFrmCounter;                     /*!< Port MAC 0 Receive VLAN Frame Counter Register(VLANReceivedOKn) (PM0_RVLANn) */
-    uint64 rxFrameErrorCounter;                  /*!< Port MAC 0 Receive Frame Error Counter Register(ifInErrorsn) (PM0_RERRn) */
-    uint64 rxUnicastFrmCounter;                  /*!< Supported by pseudo port. Port MAC 0 Receive Unicast Frame Counter Register(ifInUcastPktsn) (PM0_RUCAn) */
-    uint64 rxMulticastFrmCounter;                /*!< Supported by pseudo port. Port MAC 0 Receive Multicast Frame Counter Register(ifInMulticastPktsn) (PM0_RMCAn) */
-    uint64 rxBroadcastFrmCounter;                /*!< Supported by pseudo port. Port MAC 0 Receive Broadcast Frame Counter Register(ifInBroadcastPktsn) (PM0_RBCAn) */
-    uint64 rxDroppedPktCounter;                  /*!< Port MAC 0 Receive Dropped Packets Counter Register(etherStatsDropEventsn) (PM0_RDRPn) */
-    uint64 rxPktCounter;                         /*!< Port MAC 0 Receive Packets Counter Register(etherStatsPktsn) (PM0_RPKTn) */
-    uint64 rxUndersizePacketCounter;             /*!< Port MAC 0 Receive Undersized Packet Counter Register(etherStatsUndersizePktsn) (PM0_RUNDn) */
-    uint64 rx64OctetPktCounter;                  /*!< Port MAC 0 Receive 64-Octet Packet Counter Register(etherStatsPkts64OctetsN) (PM0_R64n) */
-    uint64 rx65to127OctetPktCounter;             /*!< Port MAC 0 Receive 65 to 127-Octet Packet Counter Register(etherStatsPkts65to127OctetsN) (PM0_R127n) */
-    uint64 rx128to255OctetPktCounter;            /*!< Port MAC 0 Receive 128 to 255-Octet Packet Counter Register(etherStatsPkts128to255OctetsN) (PM0_R255n) */
-    uint64 rx256to511OctetPktCounter;            /*!< Port MAC 0 Receive 256 to 511-Octet Packet Counter Register(etherStatsPkts256to511OctetsN) (PM0_R511n) */
-    uint64 rx512to1023OctetPktCounter;           /*!< Port MAC 0 Receive 512 to 1023-Octet Packet Counter Register(etherStatsPkts512to1023OctetsN) (PM0_R1023n) */
-    uint64 rx1024to1522OctetPktCounter;          /*!< Port MAC 0 Receive 1024 to 1522-Octet Packet Counter Register(etherStatsPkts1024to1522OctetsN) (PM0_R1522n) */
-    uint64 rx1523toMaxOctetPktCounter;           /*!< Port MAC 0 Receive 1523 to Max-Octet Packet Counter Register(etherStatsPkts1523toMaxOctetsN) (PM0_R1523Xn) */
-    uint64 rxOversizedPacketsCounter;            /*!< Port MAC 0 Receive Oversized Packet Counter Register(etherStatsOversizePktsn) (PM0_ROVRn) */
-    uint64 rxJabberPktCounter;                   /*!< Port MAC 0 Receive Jabber Packet Counter Register(etherStatsJabbersn) (PM0_RJBRn) */
-    uint64 rxFragmentPktCounter;                 /*!< Port MAC 0 Receive Fragment Packet Counter Register(etherStatsFragmentsn (PM0_RFRGn) */
-    uint64 rxControlPktCounter;                  /*!< Port MAC 0 Receive Control Packet Counter Register (PM0_RCNPn) */
-    uint64 rxDroppedNTruncatedPktCounter;        /*!< Port MAC 0 Receive Dropped Not Truncated Packets Counter Register(etherStatsDropEventsn) (PM0_RDRNTPn) */
+    uint64 rxEtherOctetCounter;                  /*!< Port Receive Ethernet Octets Counter(etherStatsOctetsn) (PM0_REOCTn) */
+    uint64 rxOctetCounter;                       /*!< Supported by pseudo port. Port Receive Octets Counter(iflnOctetsn) (PM0_ROCTn) */
+    uint64 rxValidPauseFrmCounter;               /*!< Port Receive Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn) (PM0_RXPFn) */
+    uint64 rxFrmCounter;                         /*!< Receive Frame Counter Register(aFramesReceivedOKn) (PM0_RFRMn) */
+    uint64 rxFrameCheckSequenceErrorCounter;     /*!< Port Receive Frame Check Sequence Error Counter Register() (PM0_RFCSn) */
+    uint64 rxVlanFrmCounter;                     /*!< Port Receive VLAN Frame Counter Register(VLANReceivedOKn) (PM0_RVLANn) */
+    uint64 rxFrameErrorCounter;                  /*!< Port Receive Frame Error Counter Register(ifInErrorsn) (PM0_RERRn) */
+    uint64 rxUnicastFrmCounter;                  /*!< Supported by pseudo port. Port Receive Unicast Frame Counter Register(ifInUcastPktsn) (PM0_RUCAn) */
+    uint64 rxMulticastFrmCounter;                /*!< Supported by pseudo port. Port Receive Multicast Frame Counter Register(ifInMulticastPktsn) (PM0_RMCAn) */
+    uint64 rxBroadcastFrmCounter;                /*!< Supported by pseudo port. Port Receive Broadcast Frame Counter Register(ifInBroadcastPktsn) (PM0_RBCAn) */
+    uint64 rxDroppedPktCounter;                  /*!< Port Receive Dropped Packets Counter Register(etherStatsDropEventsn) (PM0_RDRPn) */
+    uint64 rxPktCounter;                         /*!< Port Receive Packets Counter Register(etherStatsPktsn) (PM0_RPKTn) */
+    uint64 rxUndersizePacketCounter;             /*!< Port Receive Undersized Packet Counter Register(etherStatsUndersizePktsn) (PM0_RUNDn) */
+    uint64 rx64OctetPktCounter;                  /*!< Port Receive 64-Octet Packet Counter Register(etherStatsPkts64OctetsN) (PM0_R64n) */
+    uint64 rx65to127OctetPktCounter;             /*!< Port Receive 65 to 127-Octet Packet Counter Register(etherStatsPkts65to127OctetsN) (PM0_R127n) */
+    uint64 rx128to255OctetPktCounter;            /*!< Port Receive 128 to 255-Octet Packet Counter Register(etherStatsPkts128to255OctetsN) (PM0_R255n) */
+    uint64 rx256to511OctetPktCounter;            /*!< Port Receive 256 to 511-Octet Packet Counter Register(etherStatsPkts256to511OctetsN) (PM0_R511n) */
+    uint64 rx512to1023OctetPktCounter;           /*!< Port Receive 512 to 1023-Octet Packet Counter Register(etherStatsPkts512to1023OctetsN) (PM0_R1023n) */
+    uint64 rx1024to1522OctetPktCounter;          /*!< Port Receive 1024 to 1522-Octet Packet Counter Register(etherStatsPkts1024to1522OctetsN) (PM0_R1522n) */
+    uint64 rx1523toMaxOctetPktCounter;           /*!< Port Receive 1523 to Max-Octet Packet Counter Register(etherStatsPkts1523toMaxOctetsN) (PM0_R1523Xn) */
+    uint64 rxOversizedPacketsCounter;            /*!< Port Receive Oversized Packet Counter Register(etherStatsOversizePktsn) (PM0_ROVRn) */
+    uint64 rxJabberPktCounter;                   /*!< Port Receive Jabber Packet Counter Register(etherStatsJabbersn) (PM0_RJBRn) */
+    uint64 rxFragmentPktCounter;                 /*!< Port Receive Fragment Packet Counter Register(etherStatsFragmentsn (PM0_RFRGn) */
+    uint64 rxControlPktCounter;                  /*!< Port Receive Control Packet Counter Register (PM0_RCNPn) */
+    uint64 rxDroppedNTruncatedPktCounter;        /*!< Port Receive Dropped Not Truncated Packets Counter Register(etherStatsDropEventsn) (PM0_RDRNTPn) */
 
-    uint64 txEtherOctetCounter;                  /*!< MAC 0 Transmit Ethernet Octets Counter(etherStatsOctetsn) (PM0_TEOCTn) */
-    uint64 txOctetCounter;                       /*!< Supported by pseudo port. Port MAC 0 Transmit Octets Counter Register(ifOutOctetsn) (PM0_TOCTn) */
-    uint64 txValidPauseFrmCounter;               /*!< Port MAC 0 Transmit Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn) (PM0_TXPFn) */
-    uint64 txFrmCounter;                         /*!< Port MAC 0 Transmit Frame Counter Register(aFramesTransmittedOKn) (PM0_TFRMn) */
-    uint64 txFrameCheckSequenceErrorCounter;     /*!< Port MAC 0 Transmit Frame Check Sequence Error Counter Register() (PM0_TFCSn) */
-    uint64 txVlanFrmCounter;                     /*!< Port MAC 0 Transmit VLAN Frame Counter Register(VLANTransmittedOKn) (PM0_TVLANn) */
-    uint64 txFrameErrorCounter;                  /*!< Port MAC 0 Transmit Frame Error Counter Register(ifOutErrorsn) (PM0_TERRn) */
-    uint64 txUnicastFrmCounter;                  /*!< Supported by pseudo port. Port MAC 0 Transmit Unicast Frame Counter Register(ifOutUcastPktsn) (PM0_TUCAn) */
-    uint64 txMulticastFrmCounter;                /*!< Supported by pseudo port. Port MAC 0 Transmit Multicast Frame Counter Register(ifOutMulticastPktsn) (PM0_TMCAn) */
-    uint64 txBroadcastFrmCounter;                /*!< Supported by pseudo port. Port MAC 0 Transmit Broadcast Frame Counter Register(ifOutBroadcastPktsn) (PM0_TBCAn) */
-    uint64 txPktCounter;                         /*!< Port MAC 0 Transmit Packets Counter Register(etherStatsPktsn) (PM0_TPKTn) */
-    uint64 txUndersizePacketCounter;             /*!< Port MAC 0 Transmit Undersized Packet Counter Register(etherStatsUndersizePktsn) (PM0_TUNDn) */
-    uint64 tx64OctetPktCounter;                  /*!< Port MAC 0 Transmit 64-Octet Packet Counter Register (etherStatsPkts64OctetsN) (PM0_T64n) */
-    uint64 tx65to127OctetPktCounter;             /*!< Port MAC 0 Transmit 65 to 127-Octet Packet Counter Register (etherStatsPkts65to127OctetsN) (PM0_T127n) */
-    uint64 tx128to255OctetPktCounter;            /*!< Port MAC 0 Transmit 128 to 255-Octet Packet Counter Register (etherStatsPkts128to255OctetsN) (PM0_T255n) */
-    uint64 tx256to511OctetPktCounter;            /*!< Port MAC 0 Transmit 256 to 511-Octet Packet Counter Register (etherStatsPkts256to511OctetsN) (PM0_T511n) */
-    uint64 tx512to1023OctetPktCounter;           /*!< Port MAC 0 Transmit 512 to 1023-Octet Packet Counter Register (etherStatsPkts512to1023OctetsN) (PM0_T1023n) */
-    uint64 tx1024to1522OctetPktCounter;          /*!< Port MAC 0 Transmit 1024 to 1522-Octet Packet Counter Register (etherStatsPkts1024to1522OctetsN) (PM0_T1522n) */
-    uint64 tx1523toMaxOctetPktCounter;           /*!< Port MAC 0 Transmit 1523 to TX_MTU-Octet Packet Counter Register (etherStatsPkts1523toMaxOctetsN) (PM0_T1523Xn) */
-    uint64 txControlPktCounter;                  /*!< Port MAC 0 Transmit Control Packet Counter Register (PM0_TCNPn) */
-    uint64 txDeferredPktCounter;                 /*!< Port MAC 0 Transmit Deferred Packet Counter Register(aFramesWithDeferredXmissions) (PM0_TDFRn) */
-    uint64 txMultiCollisionCounter;              /*!< Port MAC 0 Transmit Multiple Collisions Counter Register(aMultipleCollisionFrames) (PM0_TMCOLn) */
-    uint64 txSingleCollisionCounter;             /*!< Port MAC 0 Transmit Single Collision Counter(aSingleCollisionFrames) Register (PM0_TSCOLn) */
-    uint64 txLateCollisionCounter;               /*!< Port MAC 0 Transmit Late Collision Counter(aLateCollisions) Register (PM0_TLCOLn) */
-    uint64 txExcessiveCollisionCounter;          /*!< Port MAC 0 Transmit Excessive Collisions Counter Register (PM0_TECOLn) */
+    uint64 txEtherOctetCounter;                  /*!< Transmit Ethernet Octets Counter(etherStatsOctetsn) (PM0_TEOCTn) */
+    uint64 txOctetCounter;                       /*!< Supported by pseudo port. Port Transmit Octets Counter Register(ifOutOctetsn) (PM0_TOCTn) */
+    uint64 txValidPauseFrmCounter;               /*!< Port Transmit Valid Pause Frame Counter Register(aPAUSEMACCtrlFramesReceivedn) (PM0_TXPFn) */
+    uint64 txFrmCounter;                         /*!< Port Transmit Frame Counter Register(aFramesTransmittedOKn) (PM0_TFRMn) */
+    uint64 txFrameCheckSequenceErrorCounter;     /*!< Port Transmit Frame Check Sequence Error Counter Register() (PM0_TFCSn) */
+    uint64 txVlanFrmCounter;                     /*!< Port Transmit VLAN Frame Counter Register(VLANTransmittedOKn) (PM0_TVLANn) */
+    uint64 txFrameErrorCounter;                  /*!< Port Transmit Frame Error Counter Register(ifOutErrorsn) (PM0_TERRn) */
+    uint64 txUnicastFrmCounter;                  /*!< Supported by pseudo port. Port Transmit Unicast Frame Counter Register(ifOutUcastPktsn) (PM0_TUCAn) */
+    uint64 txMulticastFrmCounter;                /*!< Supported by pseudo port. Port Transmit Multicast Frame Counter Register(ifOutMulticastPktsn) (PM0_TMCAn) */
+    uint64 txBroadcastFrmCounter;                /*!< Supported by pseudo port. Port Transmit Broadcast Frame Counter Register(ifOutBroadcastPktsn) (PM0_TBCAn) */
+    uint64 txPktCounter;                         /*!< Port Transmit Packets Counter Register(etherStatsPktsn) (PM0_TPKTn) */
+    uint64 txUndersizePacketCounter;             /*!< Port Transmit Undersized Packet Counter Register(etherStatsUndersizePktsn) (PM0_TUNDn) */
+    uint64 tx64OctetPktCounter;                  /*!< Port Transmit 64-Octet Packet Counter Register (etherStatsPkts64OctetsN) (PM0_T64n) */
+    uint64 tx65to127OctetPktCounter;             /*!< Port Transmit 65 to 127-Octet Packet Counter Register (etherStatsPkts65to127OctetsN) (PM0_T127n) */
+    uint64 tx128to255OctetPktCounter;            /*!< Port Transmit 128 to 255-Octet Packet Counter Register (etherStatsPkts128to255OctetsN) (PM0_T255n) */
+    uint64 tx256to511OctetPktCounter;            /*!< Port Transmit 256 to 511-Octet Packet Counter Register (etherStatsPkts256to511OctetsN) (PM0_T511n) */
+    uint64 tx512to1023OctetPktCounter;           /*!< Port Transmit 512 to 1023-Octet Packet Counter Register (etherStatsPkts512to1023OctetsN) (PM0_T1023n) */
+    uint64 tx1024to1522OctetPktCounter;          /*!< Port Transmit 1024 to 1522-Octet Packet Counter Register (etherStatsPkts1024to1522OctetsN) (PM0_T1522n) */
+    uint64 tx1523toMaxOctetPktCounter;           /*!< Port Transmit 1523 to TX_MTU-Octet Packet Counter Register (etherStatsPkts1523toMaxOctetsN) (PM0_T1523Xn) */
+    uint64 txControlPktCounter;                  /*!< Port Transmit Control Packet Counter Register (PM0_TCNPn) */
+    uint64 txDeferredPktCounter;                 /*!< Port Transmit Deferred Packet Counter Register(aFramesWithDeferredXmissions) (PM0_TDFRn) */
+    uint64 txMultiCollisionCounter;              /*!< Port Transmit Multiple Collisions Counter Register(aMultipleCollisionFrames) (PM0_TMCOLn) */
+    uint64 txSingleCollisionCounter;             /*!< Port Transmit Single Collision Counter(aSingleCollisionFrames) Register (PM0_TSCOLn) */
+    uint64 txLateCollisionCounter;               /*!< Port Transmit Late Collision Counter(aLateCollisions) Register (PM0_TLCOLn) */
+    uint64 txExcessiveCollisionCounter;          /*!< Port Transmit Excessive Collisions Counter Register (PM0_TECOLn) */
 
     uint32 rxDiscardCounter;                     /*!< Port Rx discard count register (PRXDCR) */
     uint32 txDiscardCounter;                     /*!< Port Tx discard count register (PTXDCR) */
     uint32 unIntegrityErrorCounter;              /* Uncorrectable non-fatal integrity error count register (UNIECTR) which tracks how many events have been detected. */
 } Netc_EthSwt_Ip_CounterType;
 
+/* Netc_EthSwt_Ip_CounterValueType_typedef */
 typedef uint64 Netc_EthSwt_Ip_CounterValueType;
 
 /*!
@@ -2737,8 +2805,10 @@ typedef struct {
     Netc_EthSwt_Ip_PortSchedulerType *portScheduler; /*!< Defines the scheduler algorithm. */
     Netc_EthSwt_Ip_PortShaperType (*portShaper)[8U]; /*!< Represents a Shaper in the egress port. */
     boolean portEgressAllowCutThroughFrames; /*!< Allow cut through frames */
+    boolean enablePreemption; /*!< Enable egress frame preemption */
+    uint8 preemptionTCprofiles;  /*!< Mark trafic classes as preemptable or express */
     boolean updateEgressDr; /*!< If there is frame modification and enable DEI change */
-    uint8 (*vlanDrToDei)[NETC_ETHSWT_NUMBER_OF_DR]; /*!< If there is frame modification and enable map DR to DEI */
+    uint8 (*vlanDrToDei)[NETC_ETHSWT_IP_NUMBER_OF_DR]; /*!< If there is frame modification and enable map DR to DEI */
     uint8 vlanMappingProfile; /*!< Select the VLANIPV profile 0/1 using the PCP and DEI */
     boolean vlanEnableEgressPcpToPcpMapping; /*!< If there is frame modification enable the PCP change */
     uint8 vlanEgressPcpToPcpProfile; /*!< If there is frame modification and enable use this profile */
@@ -2749,8 +2819,10 @@ typedef struct {
     uint64 portEgressAdminBaseTime;  /*!< Administrative Base Time */
     uint32 portEgressAdminCycleTime; /*!< Administrative Cycle Time */
     uint32 portEgressAdminCycleTimeExt; /*!< Administrative Cycle Time Extension */
+#if (NETC_ETHSWT_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES > 0U)
     uint8 numberOfGateControlListEntries; /*!< Number of entries in Administrative Gate Control list. */
     Netc_EthSwt_Ip_GateEntryAdminControlListDataType (*TimeGateControlListEntries)[NETC_ETHSWT_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES]; /*!< Pointer to an array containing the gate control list for port. */
+#endif
 } Netc_EthSwt_Ip_PortEgressType;
 
 /*!
@@ -2794,7 +2866,7 @@ typedef struct {
     boolean EthSwtEnableSharedLearning; /*!< Used to determine the FID when doing a lookup in the FDB table. 0: Independent VLAN learning: FID is set to to the VID assigned to the frame 1: Shared VLAN learning: Use the FID specified in this register */
     uint16 EthSwtCustomVlanEtherType1;  /*!< Custom VLAN */
     uint16 EthSwtCustomVlanEtherType2;  /*!< Custom VLAN */
-    Netc_EthSwt_Ip_PortType (*port)[NETC_ETHSWT_NUMBER_OF_PORTS]; /*!< Port description. */
+    Netc_EthSwt_Ip_PortType (*port)[NETC_ETHSWT_IP_NUMBER_OF_PORTS]; /*!< Port description. */
     Netc_EthSwt_Ip_KeyConstructionRuleType (*EthSwtKeyConstruction)[4U]; /*!< Represents a Key Construction Rule. */
 #if (NETC_ETHSWT_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES > 0U)
     uint8 NumberOfIsiEntries; /*!< Number of Ingress Stream Identification entries. */
@@ -2810,7 +2882,10 @@ typedef struct {
     uint8 NumberOfSeqRecoveryEntries; /*!< Number of Sequence tag entries. */
     const Netc_EthSwt_Ip_EgrSeqRecoveryTableDataType (*SeqRecoveryEntries)[NETC_ETHSWT_NUMBER_OF_SEQRECOVERY_ENTRIES]; /*!< Pointer to an array containing the SequenceRecovery configuration. */
 #endif
-
+#if (NETC_ETHSWT_NUMBER_OF_IPFT_ENTRIES > 0U)
+    uint8 NumberOfIpftEntries; /*!< Number of Ingress Port Filter entries. */
+    const Netc_EthSwt_Ip_IngressPortFilterEntryDataType (*IngressPortFilterEntries)[NETC_ETHSWT_NUMBER_OF_IPFT_ENTRIES]; /*!< Pointer to an array containing the Ingress Port Filter table configuration. */
+#endif
 #if (NETC_ETHSWT_NUMBER_OF_RP_ENTRIES > 0U)
     uint8 NumberOfRPEntries; /*!< Number of Rate Policer/Flow Meter entries */
     const Netc_EthSwt_Ip_RatePolicerEntryDataType (*EthSwtRatePolicerEntries)[NETC_ETHSWT_NUMBER_OF_RP_ENTRIES]; /*!< Pointer to an array containing entries for the rate policer table. */
@@ -2835,6 +2910,13 @@ typedef struct {
     uint8 NumberOfIngrStreamEntries; /*!< Number of Ingress Stream entries */
     const Netc_EthSwt_Ip_IngressStreamEntryDataType (*IngressStreamEntries)[NETC_ETHSWT_NUMBER_OF_INGRESSSTREAM_ENTRIES]; /*!< Pointer to an array containing configurations for Ingress Stream. */
 #endif
+#if (NETC_ETHSWT_NUMBER_OF_STREAMFILTER_ENTRIES > 0U)
+    uint8 NumberOfIngrStreamFilterEntries; /*!< Number of Ingress Stream Filter entries */
+    const Netc_EthSwt_Ip_IngressStreamFilterEntryDataType (*IngressStreamFilterEntries)[NETC_ETHSWT_NUMBER_OF_STREAMFILTER_ENTRIES]; /*!< Pointer to an array containing configurations for Ingress Stream Filter. */
+#endif
+#if (NETC_ETHSWT_NUMBER_OF_STREAMCOUNT_ENTRIES > 0U)
+    uint8 NumberOfIngrStreamCountEntries; /*!< Number of Ingress Stream Count entries */
+#endif
 #if (NETC_ETHSWT_NUMBER_OF_FDB_ENTRIES > 0U)
     uint8 NumberOfFdbEntries; /*!< Number of FDB entries. */
     const Netc_EthSwt_Ip_FdbEntryType (*FdbEntries)[NETC_ETHSWT_NUMBER_OF_FDB_ENTRIES]; /*!< Pointer to an array containing the FDB configuration. */
@@ -2843,11 +2925,11 @@ typedef struct {
     uint8 NumberOfVlanFilterEntries; /*!< Number of Vlan Filter entries. */
     const Netc_EthSwt_Ip_VlanFilterEntryType (*VlanFilterEntries)[NETC_ETHSWT_NUMBER_OF_VLANFILTER_ENTRIES]; /*!< Pointer to an array containing the Vlan configuration. */
 #endif
-    uint8 (*vlanPcpDei2IpvProfile)[NETC_ETHSWT_NUMBER_OF_PROFILES][NETC_ETHSWT_NUMBER_OF_PCP_DEI]; /*!< Profiles for PCP_DEI to IPV ingress mapping. */
-    uint8 (*vlanPcpDei2DrProfile)[NETC_ETHSWT_NUMBER_OF_PROFILES][NETC_ETHSWT_NUMBER_OF_PCP_DEI]; /*!< Profiles for PCP_DEI to DR ingress mapping. */
-    uint8 (*vlanPcp2PcpProfile)[NETC_ETHSWT_NUMBER_OF_PROFILES][NETC_ETHSWT_NUMBER_OF_PCP]; /*!< Profiles for PCP to PCP frame modification. */
-    uint8 (*vlanIpvDr2PcpProfile)[NETC_ETHSWT_NUMBER_OF_PROFILES][NETC_ETHSWT_NUMBER_OF_IPV][NETC_ETHSWT_NUMBER_OF_DR]; /*!< Profiles for egress IPV/DR to PCP frame modification. */
-	uint32 netcClockFrequency;  /*!< Netc system clock */
+    uint8 (*vlanPcpDei2IpvProfile)[NETC_ETHSWT_IP_NUMBER_OF_PROFILES][NETC_ETHSWT_IP_NUMBER_OF_PCP_DEI]; /*!< Profiles for PCP_DEI to IPV ingress mapping. */
+    uint8 (*vlanPcpDei2DrProfile)[NETC_ETHSWT_IP_NUMBER_OF_PROFILES][NETC_ETHSWT_IP_NUMBER_OF_PCP_DEI]; /*!< Profiles for PCP_DEI to DR ingress mapping. */
+    uint8 (*vlanPcp2PcpProfile)[NETC_ETHSWT_IP_NUMBER_OF_PROFILES][NETC_ETHSWT_IP_NUMBER_OF_PCP]; /*!< Profiles for PCP to PCP frame modification. */
+    uint8 (*vlanIpvDr2PcpProfile)[NETC_ETHSWT_IP_NUMBER_OF_PROFILES][NETC_ETHSWT_IP_NUMBER_OF_IPV][NETC_ETHSWT_IP_NUMBER_OF_DR]; /*!< Profiles for egress IPV/DR to PCP frame modification. */
+    uint32 netcClockFrequency;  /*!< Netc system clock */
     uint32 netcExternalClockFrequency;  /*!< extern reference clock */
     Netc_EthSwt_Ip_1588ClockSourceOptionType Timer1588ClkSrc;   /*!< reference clock source for 1588 timer */
 } Netc_EthSwt_Ip_ConfigType;
@@ -2872,7 +2954,7 @@ typedef enum
     NETC_ETHSWT_VLAN_DOUBLE_TAGGING  = 0x2U      /*!< @brief VLAN Double tagging. */
 } Netc_EthSwt_Ip_SwitchMirroringModeType;
 
-/** @brief The Netc_EthSwt_Ip_SwitchMirrorCfgType specify the mirror configuration which is set up per Ethernet switch. 
+/** @brief The Netc_EthSwt_Ip_SwitchMirrorCfgType specify the mirror configuration which is set up per Ethernet switch.
 *   @implements Netc_EthSwt_Ip_SwitchMirrorCfgType_struct
 * */
 typedef struct

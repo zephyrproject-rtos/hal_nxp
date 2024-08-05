@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    SchM_Eth_43_NETC.c
-*   @version 1.0.0
+*   @version 2.0.0
 *
 *   @brief   AUTOSAR Rte - module implementation
 *   @details This module implements stubs for the AUTOSAR Rte
@@ -40,7 +40,7 @@ extern "C"{
 #define SCHM_ETH_43_NETC_AR_RELEASE_MAJOR_VERSION_C     4
 #define SCHM_ETH_43_NETC_AR_RELEASE_MINOR_VERSION_C     7
 #define SCHM_ETH_43_NETC_AR_RELEASE_REVISION_VERSION_C  0
-#define SCHM_ETH_43_NETC_SW_MAJOR_VERSION_C             1
+#define SCHM_ETH_43_NETC_SW_MAJOR_VERSION_C             2
 #define SCHM_ETH_43_NETC_SW_MINOR_VERSION_C             0
 #define SCHM_ETH_43_NETC_SW_PATCH_VERSION_C             0
 
@@ -99,64 +99,64 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_00) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_00) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_01) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_01) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_02) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_02) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_03) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_03) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_04) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_04) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_05) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_05) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_07) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_07) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_08) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_08) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_09) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_09) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_10) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_10) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_11) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_11) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_12) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_12) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_13) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_13) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_14) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_14) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_15) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_15) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_16) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_16) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_17) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_17) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_18) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_18) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_19) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_19) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_20) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_20) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_21) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_21) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_22) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_22) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_23) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_23) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_24) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_24) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_25) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_25) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_26) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_26) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_27) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_27) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_28) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_28) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_ETH_EXCLUSIVE_AREA_29) static volatile uint32 msr_ETH_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_ETH_EXCLUSIVE_AREA_29) static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_15[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_16[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_17[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_18[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_19[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_20[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_21[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_22[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_23[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_24[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_25[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_26[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_27[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_28[NUMBER_OF_CORES];
+static volatile uint32 msr_ETH_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_ETH_EXCLUSIVE_AREA_29[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -323,7 +323,7 @@ uint32 Eth_43_NETC_schm_read_msr(void)
 
 #endif  /*HighTec compiler only*/
  /*================================================================================================*/
-#ifdef _LINARO_C_S32ZE_
+#ifdef _GCC_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -351,7 +351,7 @@ uint32 Eth_43_NETC_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _LINARO_C_S32ZE_*/
+#endif   /* _GCC_C_S32ZE_*/
 /*================================================================================================*/
 
 #ifdef _ARM_DS5_C_S32ZE_

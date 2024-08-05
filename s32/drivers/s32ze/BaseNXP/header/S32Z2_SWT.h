@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SWT.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_SWT
  *
  * This file contains register definitions and macros for easy access to their
@@ -81,7 +81,7 @@ typedef struct {
 } SWT_Type, *SWT_MemMapPtr;
 
 /** Number of instances of the SWT module. */
-#define SWT_INSTANCE_COUNT                       (13)
+#define SWT_INSTANCE_COUNT                       (13u)
 
 /* SWT - Peripheral instance base addresses */
 /** Peripheral CE_SWT_0 base address */

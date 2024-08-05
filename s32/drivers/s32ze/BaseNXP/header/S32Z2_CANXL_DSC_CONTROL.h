@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CANXL_DSC_CONTROL.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_CANXL_DSC_CONTROL
  *
  * This file contains register definitions and macros for easy access to their
@@ -73,20 +73,12 @@
 
 /** CANXL_DSC_CONTROL - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x20 */
-    union {                                          /* offset: 0x0, array step: 0x20 */
-      __I  uint32_t DCSTA;                             /**< Descriptor Control Status, array offset: 0x0, array step: 0x20 */
-    } STA;
-    union {                                          /* offset: 0x4, array step: 0x20 */
-      __IO uint32_t DCSYSPUSH;                         /**< Descriptor Control System Push, array offset: 0x4, array step: 0x20 */
-    } PUSHPOP;
-    union {                                          /* offset: 0x8, array step: 0x20 */
-      __IO uint32_t DCSYSLOCK;                         /**< Descriptor Control System Lock, array offset: 0x8, array step: 0x20 */
-    } SYSLOCK;
+  struct CANXL_DSC_CONTROL_DSCMBCTRLAR {           /* offset: 0x0, array step: 0x20 */
+    __I  uint32_t DCSTA;                             /**< Descriptor Control Status, array offset: 0x0, array step: 0x20 */
+    __IO uint32_t DCSYSPUSH;                         /**< Descriptor Control System Push, array offset: 0x4, array step: 0x20 */
+    __IO uint32_t DCSYSLOCK;                         /**< Descriptor Control System Lock, array offset: 0x8, array step: 0x20 */
     uint8_t RESERVED_0[8];
-    union {                                          /* offset: 0x14, array step: 0x20 */
-      __IO uint32_t DCACT;                             /**< Descriptor Control Activation, array offset: 0x14, array step: 0x20 */
-    } ACT;
+    __IO uint32_t DCACT;                             /**< Descriptor Control Activation, array offset: 0x14, array step: 0x20 */
     uint8_t RESERVED_1[8];
   } DSCMBCTRLAR[CANXL_DSC_CONTROL_DSCMBCTRLAR_COUNT];
 } CANXL_DSC_CONTROL_Type, *CANXL_DSC_CONTROL_MemMapPtr;

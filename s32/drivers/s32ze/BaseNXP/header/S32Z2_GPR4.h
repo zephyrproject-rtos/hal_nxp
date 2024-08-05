@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GPR4.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_GPR4
  *
  * This file contains register definitions and macros for easy access to their
@@ -83,8 +83,7 @@ typedef struct {
   uint8_t RESERVED_2[56];
   __IO uint32_t MEW0MSTDIS;                        /**< MEW_0 Master ID Disable, offset: 0x90 */
   __IO uint32_t MEW1MSTDIS;                        /**< MEW_1 Master ID Disable, offset: 0x94 */
-  __IO uint32_t LVFCCU4S;                          /**< VFCCU Fault Status 4, offset: 0x98 */
-  uint8_t RESERVED_3[4];
+  uint8_t RESERVED_3[8];
   __IO uint32_t HSE_SYS_FUSEC;                     /**< System Fuse Update Disable, offset: 0xA0 */
 } GPR4_Type, *GPR4_MemMapPtr;
 
@@ -208,15 +207,6 @@ typedef struct {
 #define GPR4_MEW1MSTDIS_MID_SHIFT                (1U)
 #define GPR4_MEW1MSTDIS_MID_WIDTH                (6U)
 #define GPR4_MEW1MSTDIS_MID(x)                   (((uint32_t)(((uint32_t)(x)) << GPR4_MEW1MSTDIS_MID_SHIFT)) & GPR4_MEW1MSTDIS_MID_MASK)
-/*! @} */
-
-/*! @name LVFCCU4S - VFCCU Fault Status 4 */
-/*! @{ */
-
-#define GPR4_LVFCCU4S_STAT_MASK                  (0xFFFFFFFFU)
-#define GPR4_LVFCCU4S_STAT_SHIFT                 (0U)
-#define GPR4_LVFCCU4S_STAT_WIDTH                 (32U)
-#define GPR4_LVFCCU4S_STAT(x)                    (((uint32_t)(((uint32_t)(x)) << GPR4_LVFCCU4S_STAT_SHIFT)) & GPR4_LVFCCU4S_STAT_MASK)
 /*! @} */
 
 /*! @name HSE_SYS_FUSEC - System Fuse Update Disable */

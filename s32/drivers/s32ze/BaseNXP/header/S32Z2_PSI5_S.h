@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_PSI5_S.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_PSI5_S
  *
  * This file contains register definitions and macros for easy access to their
@@ -84,12 +84,12 @@ typedef struct {
   __IO uint32_t LINFBRR;                           /**< PSI5_S LIN Fractional Baud Rate Register, offset: 0x24 */
   __IO uint32_t LINIBRR;                           /**< PSI5_S LIN Integer Baud Rate Register, offset: 0x28 */
   uint8_t RESERVED_2[4];
-  __I  uint32_t LINCR2;                            /**< PSI5_S LIN Control Register 2, offset: 0x30 */
+  __IO  uint32_t LINCR2;                           /**< PSI5_S LIN Control Register 2, offset: 0x30 */
   uint8_t RESERVED_3[4];
   __IO uint32_t BDRL;                              /**< PSI5_S Buffer Data Register Least Significant, offset: 0x38 */
   __IO uint32_t BDRM;                              /**< PSI5_S Buffer Data Register Most Significant, offset: 0x3C */
   uint8_t RESERVED_4[12];
-  __I  uint32_t GCR;                               /**< PSI5_S Global Control register, offset: 0x4C */
+  __IO  uint32_t GCR;                              /**< PSI5_S Global Control register, offset: 0x4C */
   __IO uint32_t UARTPTO;                           /**< PSI5_S UART Preset Timeout Register, offset: 0x50 */
   __I  uint32_t UARTCTO;                           /**< PSI5_S UART Current Timeout register, offset: 0x54 */
   __IO uint32_t DMATXE;                            /**< DMA Tx Enable Register, offset: 0x58 */
@@ -106,19 +106,19 @@ typedef struct {
   uint8_t RESERVED_6[16];
   __I  uint32_t MBOX_SR_IRQ;                       /**< PSI5_S Mbox Status Irq, offset: 0xE0 */
   __IO uint32_t ERR_SR_IRQ;                        /**< PSI5_S Error Status IRQ, offset: 0xE4 */
-  struct {                                         /* offset: 0xE8, array step: 0x8 */
+  struct PSI5_S_IRQ {                              /* offset: 0xE8, array step: 0x8 */
     __IO uint32_t MBOX_SEL_IRQ;                      /**< PSI5_S Mailbox select IRQ[irq_n], array offset: 0xE8, array step: 0x8 */
     __IO uint32_t ERR_SEL_IRQ;                       /**< PSI5_S Error Select IRQ[irq_n], array offset: 0xEC, array step: 0x8 */
   } IRQ[PSI5_S_IRQ_COUNT];
   __I  uint32_t WDGTSSR;                           /**< PSI5_S Watchdog Error Status and Watchdog Timestamp status register, offset: 0x128 */
-  __I  uint32_t DIRCMD;                            /**< PSI5_S ECU to Sensor Direct Command Write register, offset: 0x12C */
+  __IO  uint32_t DIRCMD;                           /**< PSI5_S ECU to Sensor Direct Command Write register, offset: 0x12C */
   uint8_t RESERVED_7[60];
   __IO uint32_t CH0_MSGA;                          /**< PSI5_S channel 0 message configuration register A, offset: 0x16C */
   __IO uint32_t CH0_MSGB;                          /**< PSI5_S channel 0 message configuration register B, offset: 0x170 */
   uint8_t RESERVED_8[4];
   __IO uint32_t CH0_MBOX_SR;                       /**< PSI5_S Mailbox status register channel0, offset: 0x178 */
   uint8_t RESERVED_9[20];
-  struct {                                         /* offset: 0x190, array step: 0x3C */
+  struct PSI5_S_CH {                               /* offset: 0x190, array step: 0x3C */
     __IO uint32_t MSGA;                              /**< PSI5_S channel message configuration register A, array offset: 0x190, array step: 0x3C */
     __IO uint32_t MSGB;                              /**< PSI5_S channel message configuration register B, array offset: 0x194, array step: 0x3C */
     uint8_t RESERVED_0[4];

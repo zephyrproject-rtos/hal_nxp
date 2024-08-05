@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_RTU_XRDC.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_RTU_XRDC
  *
  * This file contains register definitions and macros for easy access to their
@@ -91,7 +91,7 @@ typedef struct {
   uint8_t RESERVED_3[177];
   __I  uint32_t DERRLOC[RTU_XRDC_DERRLOC_COUNT];   /**< Domain Error Location, array offset: 0x200, array step: 0x4 */
   uint8_t RESERVED_4[448];
-  struct {                                         /* offset: 0x400, array step: 0x10 */
+  struct RTU_XRDC_DERRW0 {                         /* offset: 0x400, array step: 0x10 */
     __I  uint32_t DERR_W0;                           /**< Domain Error Word 0, array offset: 0x400, array step: 0x10, valid indices: [0-14, 16-18] */
     __I  uint32_t DERR_W1;                           /**< Domain Error Word 1, array offset: 0x404, array step: 0x10, valid indices: [0-14, 16-18] */
     uint8_t RESERVED_0[4];
@@ -172,15 +172,15 @@ typedef struct {
   __IO uint32_t MDA_W7_11_DFMT1;                   /**< Master Domain Assignment, offset: 0x97C */
   __IO uint32_t MDA_W0_12_DFMT1;                   /**< Master Domain Assignment, offset: 0x980 */
   uint8_t RESERVED_10[1660];
-  struct {                                         /* offset: 0x1000, array step: 0x400 */
-    struct {                                         /* offset: 0x1000, array step: index*0x400, index2*0x8 */
+  struct RTU_XRDC_PDAC_SLOT {                      /* offset: 0x1000, array step: 0x400 */
+    struct RTU_XRDC_PDAC_SLOT_PDACN {                /* offset: 0x1000, array step: index*0x400, index2*0x8 */
       __IO uint32_t PDAC_W0;                           /**< Peripheral Domain Access Control Word 0, array offset: 0x1000, array step: index*0x400, index2*0x8, valid indices: [0][0-15, 18-29, 31-42], [1][0-8, 10-17, 21-24], [2][0-7, 9, 12-15, 18-29, 31-42] */
       __IO uint32_t PDAC_W1;                           /**< Peripheral Domain Access Control Word 1, array offset: 0x1004, array step: index*0x400, index2*0x8, valid indices: [0][0-15, 18-29, 31-42], [1][0-8, 10-17, 21-24], [2][0-7, 9, 12-15, 18-29, 31-42] */
     } PDACN[RTU_XRDC_PDAC_SLOT_PDACN_COUNT];
     uint8_t RESERVED_0[680];
   } PDAC_SLOT[RTU_XRDC_PDAC_SLOT_COUNT];
   uint8_t RESERVED_11[1024];
-  struct {                                         /* offset: 0x2000, array step: index*0x200, index2*0x20 */
+  struct RTU_XRDC_MRGDN {                          /* offset: 0x2000, array step: index*0x200, index2*0x20 */
     __IO uint32_t XRDC_MRGD_W0;                      /**< Memory Region Descriptor Word 0, array offset: 0x2000, array step: index*0x200, index2*0x20 */
     __IO uint32_t XRDC_MRGD_W1;                      /**< Memory Region Descriptor Word 1, array offset: 0x2004, array step: index*0x200, index2*0x20 */
     __IO uint32_t XRDC_MRGD_W2;                      /**< Memory Region Descriptor Word 2, array offset: 0x2008, array step: index*0x200, index2*0x20 */

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_F2.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_NETC_F2
  *
  * This file contains register definitions and macros for easy access to their
@@ -96,7 +96,7 @@ typedef struct {
   uint8_t RESERVED_5[24];
   __IO uint32_t CTFCR;                             /**< Cut-through forwarding count register, offset: 0x440 */
   uint8_t RESERVED_6[956];
-  struct {                                         /* offset: 0x800, array step: 0x30 */
+  struct NETC_F2_NUM_CBDR {                        /* offset: 0x800, array step: 0x30 */
     __IO uint32_t CBDRMR;                            /**< Command BDR 0 mode register..Command BDR 1 mode register, array offset: 0x800, array step: 0x30 */
     __I  uint32_t CBDRSR;                            /**< Command BDR 0 status register..Command BDR 1 status register, array offset: 0x804, array step: 0x30 */
     uint8_t RESERVED_0[8];
@@ -108,14 +108,14 @@ typedef struct {
     uint8_t RESERVED_1[12];
   } NUM_CBDR[NETC_F2_NUM_CBDR_COUNT];
   uint8_t RESERVED_7[64];
-  struct {                                         /* offset: 0x8A0, array step: 0x10 */
+  struct NETC_F2_NUM_CBDR_INT {                    /* offset: 0x8A0, array step: 0x10 */
     __IO uint32_t CBDRIER;                           /**< Command BDR 0 interrupt enable register..Command BDR 1 interrupt enable register, array offset: 0x8A0, array step: 0x10 */
     __IO uint32_t CBDRIDR;                           /**< Command BDR 0 interrupt detect register..Command BDR 1 interrupt detect register, array offset: 0x8A4, array step: 0x10 */
     __IO uint32_t CBDRMSIVR;                         /**< Command BDR 0 MSI-X vector register..Command BDR 1 MSI-X vector register, array offset: 0x8A8, array step: 0x10 */
     uint8_t RESERVED_0[4];
   } NUM_CBDR_INT[NETC_F2_NUM_CBDR_INT_COUNT];
   uint8_t RESERVED_8[64];
-  struct {                                         /* offset: 0x900, array step: 0x20 */
+  struct NETC_F2_MAP_PCP {                         /* offset: 0x900, array step: 0x20 */
     __IO uint32_t QOSVLANMPR[NETC_F2_MAP_PCP_MAP_IPV_COUNT];   /**< QoS to VLAN mapping profile 0 register 0..QoS to VLAN mapping profile 1 register 3, array offset: 0x900, array step: index*0x20, index2*0x4 */
     uint8_t RESERVED_0[16];
   } MAP_PCP[NETC_F2_MAP_PCP_COUNT];

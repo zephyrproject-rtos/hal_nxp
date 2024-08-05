@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SPI.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_SPI
  *
  * This file contains register definitions and macros for easy access to their
@@ -88,7 +88,7 @@ typedef struct {
   __IO uint32_t SR;                                /**< Status Register, offset: 0x2C */
   __IO uint32_t RSER;                              /**< DMA/Interrupt Request Select and Enable Register, offset: 0x30 */
   union {                                          /* offset: 0x34 */
-    struct {                                         /* offset: 0x34 */
+    struct SPI_PUSHR_FIFO {                          /* offset: 0x34 */
       __IO uint16_t TX;                                /**< SPI_TX register, offset: 0x34 */
       __IO uint16_t CMD;                               /**< SPI_CMD register, offset: 0x36 */
     } FIFO;
@@ -106,7 +106,7 @@ typedef struct {
 } SPI_Type, *SPI_MemMapPtr;
 
 /** Number of instances of the SPI module. */
-#define SPI_INSTANCE_COUNT                       (10)
+#define SPI_INSTANCE_COUNT                       (10u)
 
 /* SPI - Peripheral instance base addresses */
 /** Peripheral SPI_0 base address */

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SBSW.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_SBSW
  *
  * This file contains register definitions and macros for easy access to their
@@ -82,7 +82,7 @@ typedef struct {
   __I  uint32_t TMC_FAULT_STATUS;                  /**< TMC Fault Status, offset: 0x14 */
   __I  uint32_t TMWDP_FAULT_STATUS;                /**< TMWDP Fault Status, offset: 0x18 */
   uint8_t RESERVED_0[4];
-  struct {                                         /* offset: 0x20, array step: 0x20 */
+  struct SBSW_TMC {                                /* offset: 0x20, array step: 0x20 */
     __IO uint32_t CONFIG;                            /**< TMC Configuration, array offset: 0x20, array step: 0x20 */
     __IO uint32_t DISTANCE;                          /**< TMC Distance, array offset: 0x24, array step: 0x20 */
     __IO uint32_t TIMEOUT;                           /**< TMC Timeout, array offset: 0x28, array step: 0x20 */
@@ -99,7 +99,7 @@ typedef struct {
   __I  uint32_t TMWDP_AUTOMATA_ILLGL_TRANS;        /**< TMWDP Automata Illegal Transition, offset: 0x430 */
   __I  uint32_t TMWDP_AUTOMATA_TIME_VIOLATION;     /**< TMWDP Automata Time Violation, offset: 0x434 */
   uint8_t RESERVED_1[24];
-  struct {                                         /* offset: 0x450, array step: 0x8 */
+  struct SBSW_AUT {                                /* offset: 0x450, array step: 0x8 */
     __I  uint32_t STATUS;                            /**< TMWDP Automaton Status, array offset: 0x450, array step: 0x8 */
     __IO uint32_t PRGS_REQ;                          /**< TMWDP Automaton Progress Request, array offset: 0x454, array step: 0x8 */
   } AUT[SBSW_AUT_COUNT];

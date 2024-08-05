@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_AXBS.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_AXBS
  *
  * This file contains register definitions and macros for easy access to their
@@ -73,7 +73,7 @@
 
 /** AXBS - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x100 */
+  struct AXBS_PORT {                               /* offset: 0x0, array step: 0x100 */
     __IO uint32_t PRS;                               /**< Priority Slave Registers, array offset: 0x0, array step: 0x100, irregular array, not all indices are valid */
     uint8_t RESERVED_0[12];
     __IO uint32_t CRS;                               /**< Control Register, array offset: 0x10, array step: 0x100, irregular array, not all indices are valid */

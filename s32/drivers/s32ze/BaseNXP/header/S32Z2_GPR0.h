@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GPR0.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_GPR0
  *
  * This file contains register definitions and macros for easy access to their
@@ -75,14 +75,14 @@ typedef struct {
   __IO uint32_t LVFCCULD1;                         /**< VFCCU Local DID register 1, offset: 0x8 */
   __IO uint32_t LVFCCULD2;                         /**< VFCCU Local DID register 2, offset: 0xC */
   __IO uint32_t FROSTICKC;                         /**< FlexRay OS Tick Mux Selector, offset: 0x10 */
-  uint8_t RESERVED_0[52];
+  uint8_t RESERVED_0[36];
+  __IO uint32_t FUNCC0;                            /**< Source Control for SINC HTRIGs, offset: 0x38 */
+  uint8_t RESERVED_1[12];
   __I  uint32_t INITM0;                            /**< NoC Initiator NIU Timeout Status, offset: 0x48 */
   __I  uint32_t TARGTMS0;                          /**< NoC Target NIU Timeout Status, offset: 0x4C */
   __IO uint32_t TARGTMC0;                          /**< NoC Target NIU Timeout Control, offset: 0x50 */
-  uint8_t RESERVED_1[4];
+  uint8_t RESERVED_2[4];
   __IO uint32_t CLKOUT0SEL;                        /**< CLKOUT_0 MUX select, offset: 0x58 */
-  uint8_t RESERVED_2[20];
-  __IO uint32_t LVFCCU0S;                          /**< VFCCU Fault Status 0, offset: 0x70 */
 } GPR0_Type, *GPR0_MemMapPtr;
 
 /** Number of instances of the GPR0 module. */
@@ -152,6 +152,15 @@ typedef struct {
 #define GPR0_FROSTICKC_SEL(x)                    (((uint32_t)(((uint32_t)(x)) << GPR0_FROSTICKC_SEL_SHIFT)) & GPR0_FROSTICKC_SEL_MASK)
 /*! @} */
 
+/*! @name FUNCC0 - Source Control for SINC HTRIGs */
+/*! @{ */
+
+#define GPR0_FUNCC0_CTRL_MASK                    (0xFFFFFFFFU)
+#define GPR0_FUNCC0_CTRL_SHIFT                   (0U)
+#define GPR0_FUNCC0_CTRL_WIDTH                   (32U)
+#define GPR0_FUNCC0_CTRL(x)                      (((uint32_t)(((uint32_t)(x)) << GPR0_FUNCC0_CTRL_SHIFT)) & GPR0_FUNCC0_CTRL_MASK)
+/*! @} */
+
 /*! @name INITM0 - NoC Initiator NIU Timeout Status */
 /*! @{ */
 
@@ -191,15 +200,6 @@ typedef struct {
 #define GPR0_CLKOUT0SEL_CGEN_SHIFT               (6U)
 #define GPR0_CLKOUT0SEL_CGEN_WIDTH               (1U)
 #define GPR0_CLKOUT0SEL_CGEN(x)                  (((uint32_t)(((uint32_t)(x)) << GPR0_CLKOUT0SEL_CGEN_SHIFT)) & GPR0_CLKOUT0SEL_CGEN_MASK)
-/*! @} */
-
-/*! @name LVFCCU0S - VFCCU Fault Status 0 */
-/*! @{ */
-
-#define GPR0_LVFCCU0S_STAT_MASK                  (0xFFFFFFFFU)
-#define GPR0_LVFCCU0S_STAT_SHIFT                 (0U)
-#define GPR0_LVFCCU0S_STAT_WIDTH                 (32U)
-#define GPR0_LVFCCU0S_STAT(x)                    (((uint32_t)(((uint32_t)(x)) << GPR0_LVFCCU0S_STAT_SHIFT)) & GPR0_LVFCCU0S_STAT_MASK)
 /*! @} */
 
 /*!

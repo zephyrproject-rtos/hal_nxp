@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_LCU.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_LCU
  *
  * This file contains register definitions and macros for easy access to their
@@ -76,7 +76,7 @@
 
 /** LCU - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x40 */
+  struct LCU_LC {                                  /* offset: 0x0, array step: 0x40 */
     __IO uint32_t LUTCTRL[LCU_LC_LUTCTRL_COUNT];     /**< LC 0 Output 0 LUT Control..LC 2 Output 3 LUT Control, array offset: 0x0, array step: index*0x40, index2*0x4 */
     __IO uint32_t FILT[LCU_LC_FILT_COUNT];           /**< LC 0 Output 0 Filter..LC 2 Output 3 Filter, array offset: 0x10, array step: index*0x40, index2*0x4 */
     __IO uint32_t INTDMAEN;                          /**< LC 0 Interrupt and DMA Enable..LC 2 Interrupt and DMA Enable, array offset: 0x20, array step: 0x40 */

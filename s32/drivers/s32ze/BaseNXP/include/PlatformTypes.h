@@ -1,29 +1,30 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
-*   @file           Platform_Types.h
-*   @implements     Platform_Types.h_Artifact
-*   @version 1.0.0
+*   @file           PlatformTypes.h
+*   @implements     PlatformTypes.h_Artifact
+*   @version 2.0.0
 *
 *   @brief   AUTOSAR BaseNXP - Platform dependend data type definitions.
-*   @details AUTOSAR platform types header file. It contains all 
-*            platform dependent types and symbols. Those types must be abstracted in order to 
+*   @details AUTOSAR platform types header file. It contains all
+*            platform dependent types and symbols. Those types must be abstracted in order to
 *            become platform and compiler independent.
 *
 *   @addtogroup BASENXP_COMPONENT
 *   @{
 */
 
-/**   
-* @note         It is not allowed to add any extension to this file. Any extension invalidates the 
+
+/**
+* @note         It is not allowed to add any extension to this file. Any extension invalidates the
 *               AUTOSAR conformity
 */
 
-#ifndef PLATFORM_TYPES_H
-#define PLATFORM_TYPES_H
+#ifndef PLATFORMTYPES_H
+#define PLATFORMTYPES_H
 
 #ifdef __cplusplus
 extern "C"{
@@ -35,7 +36,7 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "PlatformTypes.h"
+#include "Platform_Types.h"
 
 /*==================================================================================================
 *                               SOURCE FILE VERSION INFORMATION
@@ -53,27 +54,7 @@ extern "C"{
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
 
-/*==================================================================================================
-                                             ENUMS
-==================================================================================================*/
 
-/*==================================================================================================
-                                 STRUCTURES AND OTHER TYPEDEFS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                 GLOBAL VARIABLE DECLARATIONS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                    FUNCTION PROTOTYPES
-==================================================================================================*/
-
-#ifdef __cplusplus
-}
-#endif
-
-
-#endif /* #ifndef PLATFORM_TYPES_H */
+#endif /* #ifndef PLATFORMTYPES_H */
 
 /** @} */

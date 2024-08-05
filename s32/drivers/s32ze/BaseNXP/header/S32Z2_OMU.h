@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_OMU.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_OMU
  *
  * This file contains register definitions and macros for easy access to their
@@ -74,7 +74,7 @@
 
 /** OMU - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x1000 */
+  struct OMU_ZONE_REGS {                           /* offset: 0x0, array step: 0x1000 */
     __I  uint32_t ZZRSR;                             /**< Zone Request Status 0..Zone Request Status 3, array offset: 0x0, array step: 0x1000 */
     __IO uint32_t ZER;                               /**< Zone Enable 0..Zone Enable 3, array offset: 0x4, array step: 0x1000 */
     uint8_t RESERVED_0[4088];
@@ -83,7 +83,7 @@ typedef struct {
   __IO uint32_t ZRR;                               /**< Zone Request, offset: 0x4004 */
   __I  uint32_t ZESR;                              /**< Zone Enable Status, offset: 0x4008 */
   uint8_t RESERVED_0[1012];
-  struct {                                         /* offset: 0x4400, array step: 0x10 */
+  struct OMU_OVERLAY_REGION_DESCRIPTOR {           /* offset: 0x4400, array step: 0x10 */
     __IO uint32_t ORDLSA;                            /**< ORD0 Logical Start Address..ORD63 Logical Start Address, array offset: 0x4400, array step: 0x10 */
     __IO uint32_t ORDPSA;                            /**< ORD0 Physical Start Address..ORD63 Physical Start Address, array offset: 0x4404, array step: 0x10 */
     __IO uint32_t ORDRS;                             /**< ORD0 Region Size..ORD63 Region Size, array offset: 0x4408, array step: 0x10 */

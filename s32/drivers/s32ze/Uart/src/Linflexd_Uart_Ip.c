@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -44,7 +44,7 @@ extern "C"{
 #define LINFLEXD_UART_IP_AR_RELEASE_MAJOR_VERSION_C       4
 #define LINFLEXD_UART_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define LINFLEXD_UART_IP_AR_RELEASE_REVISION_VERSION_C    0
-#define LINFLEXD_UART_IP_SW_MAJOR_VERSION_C               1
+#define LINFLEXD_UART_IP_SW_MAJOR_VERSION_C               2
 #define LINFLEXD_UART_IP_SW_MINOR_VERSION_C               0
 #define LINFLEXD_UART_IP_SW_PATCH_VERSION_C               0
 
@@ -133,7 +133,7 @@ extern "C"{
 #include "Uart_MemMap.h"
 
 /** @brief Array of UART driver runtime state structures */
-VAR_SEC_NOCACHE(Linflexd_Uart_Ip_apStateStructure) Linflexd_Uart_Ip_StateStructureType Linflexd_Uart_Ip_apStateStructure[LINFLEXD_UART_IP_NUMBER_OF_INSTANCES];
+Linflexd_Uart_Ip_StateStructureType Linflexd_Uart_Ip_apStateStructure[LINFLEXD_UART_IP_NUMBER_OF_INSTANCES];
 
 #define UART_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Uart_MemMap.h"
@@ -142,10 +142,10 @@ VAR_SEC_NOCACHE(Linflexd_Uart_Ip_apStateStructure) Linflexd_Uart_Ip_StateStructu
 #include "Uart_MemMap.h"
 
 /** @brief User config structure. */
-VAR_SEC_NOCACHE(Linflexd_Uart_Ip_apUserConfig) static const Linflexd_Uart_Ip_UserConfigType* Linflexd_Uart_Ip_apUserConfig[LINFLEXD_INSTANCE_COUNT];
+static const Linflexd_Uart_Ip_UserConfigType* Linflexd_Uart_Ip_apUserConfig[LINFLEXD_IP_INSTANCE_COUNT];
 
 /** @brief Array of pointers to UART driver runtime state structures */
-VAR_SEC_NOCACHE(Linflexd_Uart_Ip_apStateStructuresArray) static Linflexd_Uart_Ip_StateStructureType* Linflexd_Uart_Ip_apStateStructuresArray[LINFLEXD_INSTANCE_COUNT];
+static Linflexd_Uart_Ip_StateStructureType* Linflexd_Uart_Ip_apStateStructuresArray[LINFLEXD_IP_INSTANCE_COUNT];
 
 #define UART_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Uart_MemMap.h"
@@ -155,7 +155,7 @@ VAR_SEC_NOCACHE(Linflexd_Uart_Ip_apStateStructuresArray) static Linflexd_Uart_Ip
 #include "Uart_MemMap.h"
 
 /** @brief Table of base addresses for LINFLEXD instances. */
-static LINFLEXD_Type* const Linflexd_Uart_Ip_apBases[LINFLEXD_INSTANCE_COUNT] = IP_LINFLEXD_BASE_PTRS;
+static LINFLEXD_Type* const Linflexd_Uart_Ip_apBases[LINFLEXD_IP_INSTANCE_COUNT] = LINFLEXD_IP_BASE_PTRS;
 
 #define UART_STOP_SEC_CONST_UNSPECIFIED
 #include "Uart_MemMap.h"
@@ -165,7 +165,7 @@ static LINFLEXD_Type* const Linflexd_Uart_Ip_apBases[LINFLEXD_INSTANCE_COUNT] = 
 #include "Uart_MemMap.h"
 
 /** @brief Table storing DMA capabilities for LINFLEXD instances. */
-static const boolean Linflexd_Uart_Ip_InstHasDma[LINFLEXD_INSTANCE_COUNT] = LINFLEXD_UART_IP_INST_HAS_DMA;
+static const boolean Linflexd_Uart_Ip_InstHasDma[LINFLEXD_IP_INSTANCE_COUNT] = LINFLEXD_UART_IP_INST_HAS_DMA;
 
 #define UART_STOP_SEC_CONST_BOOLEAN
 #include "Uart_MemMap.h"
@@ -176,7 +176,7 @@ static const boolean Linflexd_Uart_Ip_InstHasDma[LINFLEXD_INSTANCE_COUNT] = LINF
 #include "Uart_MemMap.h"
 
 /** @brief Table storing timeout interrupt capabilities for LINFLEXD instances. */
-static const boolean Linflexd_Uart_Ip_InstHasTimeoutInterruptEnabled[LINFLEXD_INSTANCE_COUNT] = LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT_PER_INSTANCE;
+static const boolean Linflexd_Uart_Ip_InstHasTimeoutInterruptEnabled[LINFLEXD_IP_INSTANCE_COUNT] = LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT_PER_INSTANCE;
 
 #define UART_STOP_SEC_CONST_BOOLEAN
 #include "Uart_MemMap.h"
@@ -187,7 +187,7 @@ static const boolean Linflexd_Uart_Ip_InstHasTimeoutInterruptEnabled[LINFLEXD_IN
 #include "Uart_MemMap.h"
 
 /** @brief Table storing internal loopback capabilities for LINFLEXD instances. */
-static const boolean Linflexd_Uart_Ip_InstHasLoopbackEnabled[LINFLEXD_INSTANCE_COUNT] = LINFLEXD_UART_IP_ENABLE_INTERNAL_LOOPBACK_PER_INSTANCE;
+static const boolean Linflexd_Uart_Ip_InstHasLoopbackEnabled[LINFLEXD_IP_INSTANCE_COUNT] = LINFLEXD_UART_IP_ENABLE_INTERNAL_LOOPBACK_PER_INSTANCE;
 
 #define UART_STOP_SEC_CONST_BOOLEAN
 #include "Uart_MemMap.h"
@@ -237,7 +237,15 @@ static uint16 Linflexd_Uart_Ip_GetActualWordLengthValue(const uint8 Instance);
 static void Linflexd_Uart_Ip_SetTransmitterState(LINFLEXD_Type *Base, boolean Enable);
 static void Linflexd_Uart_Ip_SetReceiverState(LINFLEXD_Type *Base, boolean Enable);
 static void Linflexd_Uart_Ip_SetInterruptMode(LINFLEXD_Type * Base, Linflexd_Uart_Ip_InterruptType IntSrc, boolean Enable);
-
+static void Linflexd_Uart_Ip_SetUp_Baudrate(const uint8 Instance);
+static void Linflexd_Uart_Ip_SetTxRxMode(const uint8 Instance);
+static void Linflexd_Uart_Ip_SetUp_Parity(const uint8 Instance);
+static void Linflexd_Uart_Ip_SetUp_SetTxRxStopBitsCount(const uint8 Instance);
+static void Linflexd_Uart_Ip_SyncSendData(const uint8 Instance, const uint32 Timeout);
+static boolean Linflexd_Uart_Ip_SetUp_EnterInitMode(LINFLEXD_Type *Base);
+static void Linflexd_Uart_Ip_CompleteAsyncReceiveData(const uint8 Instance);
+static void Linflexd_Uart_Ip_UpdateErrorIRQHandler(const uint8 Instance);
+static void Linflexd_Uart_Ip_Callback(const uint8 Instance, const Linflexd_Uart_Ip_EventType Event);
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
@@ -249,7 +257,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SetBaudrate(const uint8 Instance,
                                                         )
 {
 
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
 
     LINFLEXD_Type * Base;
     uint32 Surplus;
@@ -257,9 +265,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SetBaudrate(const uint8 Instance,
     uint8 Numerator;
     uint32 Mantissa;
     uint32 FractionDenominator;
-    uint32 StartTime;
-    uint32 TimeoutTicks;
-    uint32 ElapsedTicks = 0;
+    uint32 Baudrate;
     boolean ResetIdle = FALSE;
     boolean IsReturn = FALSE;
     Linflexd_Uart_Ip_StateStructureType * UartState;
@@ -293,20 +299,13 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SetBaudrate(const uint8 Instance,
             FractionNumerator = 0;
             Mantissa++;
         }
+        /* The current baudrate value is equal to ClockFrequency/((Mantissa + FractionNumerator/FractionDenominator) * DEFAULT_OSR)*/
+        Baudrate = (uint32)((ClockFrequency * FractionDenominator)/(((Mantissa * FractionDenominator) + FractionNumerator) * DEFAULT_OSR));
 
         if (Linflexd_Uart_Ip_GetLinState(Base) != LINFLEXD_STATE_INIT_MODE)
         {
-            /* Request init mode and wait until the mode entry is complete */
-            Linflexd_Uart_Ip_EnterInitMode(Base);
-
-            Linflexd_Uart_Ip_StartTimeout(&StartTime, &TimeoutTicks, (uint32)LINFLEXD_UART_IP_TIMEOUT_VALUE_US, LINFLEXD_UART_IP_TIMEOUT_TYPE);
-
-            while (!Linflexd_Uart_Ip_CheckTimeout(&StartTime, &ElapsedTicks, TimeoutTicks, LINFLEXD_UART_IP_TIMEOUT_TYPE) &&
-                   (Linflexd_Uart_Ip_GetLinState(Base) != LINFLEXD_STATE_INIT_MODE)
-                  ) {}
-
             /* Init mode error */
-            if (Linflexd_Uart_Ip_GetLinState(Base) != LINFLEXD_STATE_INIT_MODE)
+            if (Linflexd_Uart_Ip_SetUp_EnterInitMode(Base) != TRUE)
             {
                 Status = LINFLEXD_UART_IP_STATUS_ERROR;
                 IsReturn = TRUE;
@@ -328,7 +327,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SetBaudrate(const uint8 Instance,
                 Linflexd_Uart_Ip_EnterNormalMode(Base);
             }
             /* Save current baudrate value */
-            UartState->Baudrate = (uint32)DesiredBaudRate;
+            UartState->Baudrate = Baudrate;
             Status = LINFLEXD_UART_IP_STATUS_SUCCESS;
         }
     }
@@ -344,7 +343,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SetBaudrate(const uint8 Instance,
 /* implements     Linflexd_Uart_Ip_GetBaudrate_Activity*/
 void Linflexd_Uart_Ip_GetBaudrate(const uint8 Instance, uint32 * ConfiguredBaudRate)
 {
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
     LINFLEXD_UART_IP_DEV_ASSERT(ConfiguredBaudRate != NULL_PTR);
 
     const Linflexd_Uart_Ip_StateStructureType *UartStatePtr;
@@ -363,7 +362,7 @@ void Linflexd_Uart_Ip_GetBaudrate(const uint8 Instance, uint32 * ConfiguredBaudR
  * operation.
  * This function will initialize the run-time state structure to keep track of
  * the on-going transfers, initialize the module to user defined settings and
- * default settings, enable the module-level interrupt to the core, and enable
+ * default settings, enable the module-level interrupt to the partition, and enable
  * the UART module transmitter and receiver.
  *
  *END**************************************************************************/
@@ -371,12 +370,9 @@ void Linflexd_Uart_Ip_GetBaudrate(const uint8 Instance, uint32 * ConfiguredBaudR
 void Linflexd_Uart_Ip_Init(const uint8 Instance, const Linflexd_Uart_Ip_UserConfigType * UserConfig)
 {
     uint32 Index;
-    uint32 StartTime;
-    uint32 TimeoutTicks;
-    uint32 ElapsedTicks = 0;
     uint8 *ClearStructPtr;
 
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
     LINFLEXD_UART_IP_DEV_ASSERT(NULL_PTR == Linflexd_Uart_Ip_apStateStructuresArray[Instance]);
     LINFLEXD_UART_IP_DEV_ASSERT(UserConfig != NULL_PTR);
 #if (LINFLEXD_UART_IP_HAS_DMA_ENABLED == STD_ON)
@@ -398,18 +394,10 @@ void Linflexd_Uart_Ip_Init(const uint8 Instance, const Linflexd_Uart_Ip_UserConf
 #if (STD_ON == LINFLEXD_UART_IP_SET_USER_ACCESS_ALLOWED_AVAILABLE)
     Linflexd_Uart_Ip_SetUserAccessAllowed(Instance);
 #endif
-    /* Request init mode and wait until the mode entry is complete */
-    Linflexd_Uart_Ip_EnterInitMode(Base);
 
     UartStatePtr->IsDriverInitialized = FALSE;
-
-    Linflexd_Uart_Ip_StartTimeout(&StartTime, &TimeoutTicks, (uint32)LINFLEXD_UART_IP_TIMEOUT_VALUE_US, LINFLEXD_UART_IP_TIMEOUT_TYPE);
-    while (!Linflexd_Uart_Ip_CheckTimeout(&StartTime, &ElapsedTicks, TimeoutTicks, LINFLEXD_UART_IP_TIMEOUT_TYPE) &&
-           (Linflexd_Uart_Ip_GetLinState(Base) != LINFLEXD_STATE_INIT_MODE)
-          )
-    {}
-
-    if (LINFLEXD_STATE_INIT_MODE == Linflexd_Uart_Ip_GetLinState(Base))
+    /* Request init mode and wait until the mode entry is complete */
+    if (TRUE == Linflexd_Uart_Ip_SetUp_EnterInitMode(Base))
     {
         UartStatePtr->IsDriverInitialized = TRUE;
     }
@@ -439,7 +427,7 @@ void Linflexd_Uart_Ip_Init(const uint8 Instance, const Linflexd_Uart_Ip_UserConf
 /* implements     Linflexd_Uart_Ip_Deinit_Activity */
 Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_Deinit(const uint8 Instance)
 {
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
 
     LINFLEXD_Type * Base;
     Linflexd_Uart_Ip_StatusType RetVal;
@@ -501,7 +489,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_Deinit(const uint8 Instance)
 /* implements     Linflexd_Uart_Ip_SetTxBuffer_Activity */
 void Linflexd_Uart_Ip_SetTxBuffer(const uint8 Instance, const uint8 * TxBuff, const uint32 TxSize)
 {
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
     LINFLEXD_UART_IP_DEV_ASSERT(TxBuff != NULL_PTR);
     LINFLEXD_UART_IP_DEV_ASSERT(TxSize > 0U);
 
@@ -527,7 +515,7 @@ void Linflexd_Uart_Ip_SetTxBuffer(const uint8 Instance, const uint8 * TxBuff, co
 /* implements     Linflexd_Uart_Ip_SetRxBuffer_Activity */
 void Linflexd_Uart_Ip_SetRxBuffer(const uint8 Instance, uint8 * RxBuff, const uint32 RxSize)
 {
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
     LINFLEXD_UART_IP_DEV_ASSERT(RxBuff != NULL_PTR);
     LINFLEXD_UART_IP_DEV_ASSERT(RxSize > 0U);
 
@@ -730,13 +718,10 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SyncSend(const uint8 Instance, cons
     /* Check the validity of the parameters */
     LINFLEXD_UART_IP_DEV_ASSERT(TxSize > 0U);
     LINFLEXD_UART_IP_DEV_ASSERT(TxBuff != NULL_PTR);
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
 
     Linflexd_Uart_Ip_StateStructureType * UartState;
     LINFLEXD_Type * Base;
-    uint32 StartTime;
-    uint32 TimeoutTicks;
-    uint32 ElapsedTicks = 0;
     Linflexd_Uart_Ip_StatusType Status = LINFLEXD_UART_IP_STATUS_BUSY;
     UartState = (Linflexd_Uart_Ip_StateStructureType *)Linflexd_Uart_Ip_apStateStructuresArray[Instance];
     Base = Linflexd_Uart_Ip_apBases[Instance];
@@ -773,31 +758,12 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SyncSend(const uint8 Instance, cons
         /* Enable the transmitter */
         Linflexd_Uart_Ip_SetTransmitterState(Base, TRUE);
 
-        Linflexd_Uart_Ip_StartTimeout(&StartTime, &TimeoutTicks, Timeout, LINFLEXD_UART_IP_TIMEOUT_TYPE);
-
-        while ((UartState->TxSize > 0U) && !Linflexd_Uart_Ip_CheckTimeout(&StartTime, &ElapsedTicks, TimeoutTicks, LINFLEXD_UART_IP_TIMEOUT_TYPE))
-        {
-            Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_DATA_TRANSMITTED_FLAG);
-            Linflexd_Uart_Ip_PutData(Instance);
-            /* Wait until data transmited flag is set or timeout occurs if there is an error during transmission */
-            while (!Linflexd_Uart_Ip_GetStatusFlag(Base, LINFLEXD_UART_DATA_TRANSMITTED_FLAG) && \
-                   !Linflexd_Uart_Ip_CheckTimeout(&StartTime, &ElapsedTicks, TimeoutTicks, LINFLEXD_UART_IP_TIMEOUT_TYPE) \
-                  )
-            {}
-        }
-        Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_DATA_TRANSMITTED_FLAG);
+        /* Process for sync send data*/
+        Linflexd_Uart_Ip_SyncSendData(Instance, Timeout);
 
         /* Disable the transmitter */
         Linflexd_Uart_Ip_SetTransmitterState(Base, FALSE);
 
-        /* Check if Timeout occur */
-        if (UartState->TxSize > 0U)
-        {
-            UartState->TransmitStatus = LINFLEXD_UART_IP_STATUS_TIMEOUT;
-        }else /* The transmit process is complete */
-        {
-            UartState->TransmitStatus = LINFLEXD_UART_IP_STATUS_SUCCESS;
-        }
         UartState->IsTxBusy = FALSE;
         Status = UartState->TransmitStatus;
     }
@@ -865,7 +831,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SyncReceive(const uint8 Instance, u
     /* Check the validity of the parameters */
     LINFLEXD_UART_IP_DEV_ASSERT(RxSize > 0U);
     LINFLEXD_UART_IP_DEV_ASSERT(RxBuff != NULL_PTR);
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
 
     Linflexd_Uart_Ip_StateStructureType * UartState;
     LINFLEXD_Type * Base;
@@ -903,12 +869,6 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SyncReceive(const uint8 Instance, u
         /* Update status and clear the flag according to the error occurred */
         Linflexd_Uart_Ip_UpdateReceiver(Instance, &StartTime, &ElapsedTicks, TimeoutTicks);
 
-        /* Check if Timeout occur */
-        if (Linflexd_Uart_Ip_CheckTimeout(&StartTime, &ElapsedTicks, TimeoutTicks, LINFLEXD_UART_IP_TIMEOUT_TYPE))
-        {
-            UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_TIMEOUT;
-        }
-
         if (LINFLEXD_UART_IP_STATUS_BUSY == UartState->ReceiveStatus)
         {
             UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_SUCCESS;
@@ -932,7 +892,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_SyncReceive(const uint8 Instance, u
 /* implements     Linflexd_Uart_Ip_AbortReceivingData_Activity*/
 Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AbortReceivingData(const uint8 Instance)
 {
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
 
     Linflexd_Uart_Ip_StateStructureType * UartState;
     const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
@@ -986,7 +946,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AbortReceivingData(const uint8 Inst
 /* implements     Linflexd_Uart_Ip_AbortSendingData_Activity */
 Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AbortSendingData(const uint8 Instance)
 {
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
 
     Linflexd_Uart_Ip_StateStructureType * UartState;
     const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
@@ -1039,7 +999,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AbortSendingData(const uint8 Instan
  *END**************************************************************************/
 static Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_StartReceiveUsingInterrupts(const uint8 Instance, uint8 * RxBuff, const uint32 RxSize)
 {
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
     LINFLEXD_UART_IP_DEV_ASSERT(RxBuff != NULL_PTR);
 
     Linflexd_Uart_Ip_StateStructureType * UartState;
@@ -1101,7 +1061,7 @@ static Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_StartReceiveUsingInterrupts(
 /* implements     Linflexd_Uart_Ip_GetReceiveStatus_Activity */
 Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_GetReceiveStatus(const uint8 Instance, uint32 * BytesRemaining)
 {
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
 
     const Linflexd_Uart_Ip_StateStructureType * UartState;
     const Linflexd_Uart_Ip_UserConfigType *UartUserCfg;
@@ -1162,7 +1122,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_GetReceiveStatus(const uint8 Instan
  /* implements     Linflexd_Uart_Ip_GetTransmitStatus_Activity */
 Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_GetTransmitStatus(const uint8 Instance, uint32 * BytesRemaining)
 {
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
 
     const Linflexd_Uart_Ip_StateStructureType * UartState;
     const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
@@ -1210,7 +1170,7 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_GetTransmitStatus(const uint8 Insta
 Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AsyncReceive(const uint8 Instance, uint8 * RxBuff, const uint32 RxSize)
 {
     LINFLEXD_UART_IP_DEV_ASSERT(RxBuff != NULL_PTR);
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
 
     LINFLEXD_Type * Base;
     Linflexd_Uart_Ip_StatusType RetVal = LINFLEXD_UART_IP_STATUS_ERROR;
@@ -1313,7 +1273,7 @@ static Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_StartSendUsingInterrupts(con
 Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AsyncSend(const uint8 Instance, const uint8 * TxBuff, const uint32 TxSize)
 {
     LINFLEXD_UART_IP_DEV_ASSERT(TxBuff != NULL_PTR);
-    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_INSTANCE_COUNT);
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
 
     Linflexd_Uart_Ip_StatusType RetVal = LINFLEXD_UART_IP_STATUS_ERROR;
     const Linflexd_Uart_Ip_UserConfigType *UartUserCfg;
@@ -1353,11 +1313,9 @@ Linflexd_Uart_Ip_StatusType Linflexd_Uart_Ip_AsyncSend(const uint8 Instance, con
 static void Linflexd_Uart_Ip_RxIRQHandler(uint8 Instance)
 {
     const Linflexd_Uart_Ip_StateStructureType * UartState;
-    const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
     LINFLEXD_Type * Base;
 
     Base = Linflexd_Uart_Ip_apBases[Instance];
-    UartUserCfg = Linflexd_Uart_Ip_apUserConfig[Instance];
     UartState = (Linflexd_Uart_Ip_StateStructureType *)Linflexd_Uart_Ip_apStateStructuresArray[Instance];
 
     if (UartState != NULL_PTR)
@@ -1377,10 +1335,7 @@ static void Linflexd_Uart_Ip_RxIRQHandler(uint8 Instance)
             {
                 /* Invoke the callback when the buffer is finished;
                 * Application can provide another buffer inside the callback by calling Linflexd_Uart_Ip_SetRxBuffer */
-                if (UartUserCfg->Callback != NULL_PTR)
-                {
-                    UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_RX_FULL, UartUserCfg->CallbackParam);
-                }
+                Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_RX_FULL);
             }
 
             /* Finish reception if this was the last byte received */
@@ -1390,10 +1345,7 @@ static void Linflexd_Uart_Ip_RxIRQHandler(uint8 Instance)
                 Linflexd_Uart_Ip_CompleteReceiveUsingInterrupts(Instance);
 
                 /* Invoke callback if there is one */
-                if (UartUserCfg->Callback != NULL_PTR)
-                {
-                    UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_END_TRANSFER, UartUserCfg->CallbackParam);
-                }
+                Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_END_TRANSFER);
             }
         }
         /* Case of spurious interrupt when driver had an error in initialization */
@@ -1425,11 +1377,9 @@ static void Linflexd_Uart_Ip_RxIRQHandler(uint8 Instance)
 static void Linflexd_Uart_Ip_TxIRQHandler(uint8 Instance)
 {
     const Linflexd_Uart_Ip_StateStructureType * UartState;
-    const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
     LINFLEXD_Type * Base;
 
     Base = Linflexd_Uart_Ip_apBases[Instance];
-    UartUserCfg = Linflexd_Uart_Ip_apUserConfig[Instance];
     UartState = (Linflexd_Uart_Ip_StateStructureType *)Linflexd_Uart_Ip_apStateStructuresArray[Instance];
 
     if (UartState != NULL_PTR)
@@ -1449,22 +1399,14 @@ static void Linflexd_Uart_Ip_TxIRQHandler(uint8 Instance)
             {
                 /* Invoke the callback when the buffer is finished;
                 * Application can provide another buffer inside the callback by calling Linflexd_Uart_Ip_SetTxBuffer */
-                if (UartUserCfg->Callback != NULL_PTR)
-                {
-                    UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_TX_EMPTY, UartUserCfg->CallbackParam);
-                }
-
+                Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_TX_EMPTY);
                 /* If there is no more data to send, complete the transmission */
                 if (0U == UartState->TxSize)
                 {
                     Linflexd_Uart_Ip_CompleteSendUsingInterrupts(Instance);
 
                     /* Call the callback to notify application that the transfer is complete */
-                    if (UartUserCfg->Callback != NULL_PTR)
-                    {
-                        UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_END_TRANSFER, UartUserCfg->CallbackParam);
-                    }
-
+                    Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_END_TRANSFER);
                     /* Clear the flag */
                     Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_DATA_TRANSMITTED_FLAG);
                 }
@@ -1476,7 +1418,7 @@ static void Linflexd_Uart_Ip_TxIRQHandler(uint8 Instance)
             Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_DATA_TRANSMITTED_FLAG);
         }
     }
-    /* Case of spurious interrupt when driver is not at all initialized*/
+    /* Case of spurious interrupt when driver had an error in initialization */
     else
     {
         Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_DATA_TRANSMITTED_FLAG);
@@ -1492,97 +1434,21 @@ static void Linflexd_Uart_Ip_TxIRQHandler(uint8 Instance)
  *END**************************************************************************/
 static void Linflexd_Uart_Ip_ErrIRQHandler(uint8 Instance)
 {
-    Linflexd_Uart_Ip_StateStructureType * UartState;
-    const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
+    const Linflexd_Uart_Ip_StateStructureType * UartState;
     LINFLEXD_Type * Base;
 
     Base = Linflexd_Uart_Ip_apBases[Instance];
-    UartUserCfg = Linflexd_Uart_Ip_apUserConfig[Instance];
     UartState = (Linflexd_Uart_Ip_StateStructureType *)Linflexd_Uart_Ip_apStateStructuresArray[Instance];
-#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
-    uint16 WordLengthValue = Linflexd_Uart_Ip_GetActualWordLengthValue(Instance);
-#endif
 
     if (UartState != NULL_PTR)
     {
         if (UartState->IsDriverInitialized)
         {
             /* Update the receive status according to the error occurred */
-            if (Linflexd_Uart_Ip_GetStatusFlag(Base, LINFLEXD_UART_BUFFER_OVERRUN_FLAG))
-            {
-                /* Update the status */
-                UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_RX_OVERRUN;
-                /* The read dummy data not apply for DMA
-                   because reading the BDRM register in this mode IPS operation result will returns IPS transfer error status*/
-                if (LINFLEXD_UART_IP_USING_INTERRUPTS == UartUserCfg->TransferType)
-                {
-                    /* Read dummy to take the byte that caused the overrun error and shifts it to the buffer */
-                    Linflexd_Uart_Ip_GetData(Instance);
-                }
-                /* Clear the flag */
-                Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_BUFFER_OVERRUN_FLAG);
-            }
-            else if (Linflexd_Uart_Ip_GetStatusFlag(Base, LINFLEXD_UART_FRAME_ERROR_FLAG))
-            {
-                /* Update the status */
-                UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_FRAMING_ERROR;
-                /* The read dummy data not apply for DMA
-                   because reading the BDRM register in this mode IPS operation result will returns IPS transfer error status*/
-                if (LINFLEXD_UART_IP_USING_INTERRUPTS == UartUserCfg->TransferType)
-                {
-                    /* Read dummy to take the byte that caused the framing error and shifts it to the buffer */
-                    Linflexd_Uart_Ip_GetData(Instance);
-                }
-                /* Clear the flag */
-                Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_FRAME_ERROR_FLAG);
-            }
-#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
-            else if (Linflexd_Uart_Ip_GetStatusFlag(Base, LINFLEXD_UART_TIMEOUT_INTERRUPT_FLAG))
-            {
-                /* Disable the receiver to stop timer counter */
-                Linflexd_Uart_Ip_SetReceiverState(Base, FALSE);
-                /* Update the status */
-                UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_RX_IDLE_STATE;
-                /* Clear Timeout Interrupt Error flag */
-                Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_TIMEOUT_INTERRUPT_FLAG);
-                /* Reset the value of the PTO to default by the number of bits in a word + 2U (stop and start bit) */
-                Linflexd_Uart_Ip_SetPresetValue(Base, WordLengthValue + 2U);
-            }
-#endif
-            else
-            {
-                /* This branch should never be reached - avoid MISRA violations */
-                UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_ERROR;
-            }
+            Linflexd_Uart_Ip_UpdateErrorIRQHandler(Instance);
 
             /* Terminate the current reception */
-            if (LINFLEXD_UART_IP_USING_INTERRUPTS == UartUserCfg->TransferType)
-            {
-                Linflexd_Uart_Ip_CompleteReceiveUsingInterrupts(Instance);
-            }
-#if (LINFLEXD_UART_IP_HAS_DMA_ENABLED == STD_ON)
-            else
-            {
-                /* Release the DMA channel */
-                (void)Dma_Ip_SetLogicChannelCommand(UartUserCfg->RxDMAChannel, DMA_IP_CH_CLEAR_HARDWARE_REQUEST);
-                Linflexd_Uart_Ip_CompleteReceiveUsingDma(Instance);
-            }
-#endif
-
-            /* Invoke the callback, if any */
-            if (UartUserCfg->Callback != NULL_PTR)
-            {
-#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
-                if (LINFLEXD_UART_IP_STATUS_RX_IDLE_STATE == UartState->ReceiveStatus)
-                {
-                    UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_IDLE_STATE, UartUserCfg->CallbackParam);
-                }
-                else
-#endif
-                {
-                    UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_ERROR, UartUserCfg->CallbackParam);
-                }
-            }
+            Linflexd_Uart_Ip_CompleteAsyncReceiveData(Instance);
         }
         /* Case of spurious interrupt when driver had an error in initialization */
         else
@@ -1591,7 +1457,7 @@ static void Linflexd_Uart_Ip_ErrIRQHandler(uint8 Instance)
             Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_FRAME_ERROR_FLAG);
         }
     }
-    /* Case of spurious interrupt when driver is not at all initialized*/
+    /* Case of spurious interrupt when driver had an error in initialization */
     else
     {
         Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_BUFFER_OVERRUN_FLAG);
@@ -1926,21 +1792,14 @@ void Linflexd_Uart_Ip_CompleteSendUsingDma(uint8 Instance)
         /* Update transmit status */
         UartState->TransmitStatus = LINFLEXD_UART_IP_STATUS_DMA_ERROR;
         /* Invoke callback if there is one */
-        if (UartUserCfg->Callback != NULL_PTR)
-        {
-            UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_ERROR, UartUserCfg->CallbackParam);
-        }
+        Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_ERROR);
     }
 
     /* Invoke the callback when the buffer is finished;
      * Application can provide another buffer inside the callback by calling Linflexd_Uart_Ip_SetTxBuffer */
     if (LINFLEXD_UART_IP_STATUS_BUSY == UartState->TransmitStatus)
     {
-        if (UartUserCfg->Callback != NULL_PTR)
-        {
-            /* Pass the state structure as parameter for internal information retrieval */
-            UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_TX_EMPTY, UartUserCfg->CallbackParam);
-        }
+        Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_TX_EMPTY);
     }
 
     /* If the callback has updated the tx buffer, update the DMA descriptor to continue the transfer;
@@ -1994,10 +1853,7 @@ void Linflexd_Uart_Ip_CompleteSendUsingDma(uint8 Instance)
         {
             UartState->TransmitStatus = LINFLEXD_UART_IP_STATUS_SUCCESS;
             /* Call the callback to notify application that the transfer is complete */
-            if (UartUserCfg->Callback != NULL_PTR)
-            {
-                UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_END_TRANSFER, UartUserCfg->CallbackParam);
-            }
+            Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_END_TRANSFER);
         }
     }
 }
@@ -2040,20 +1896,14 @@ void Linflexd_Uart_Ip_CompleteReceiveUsingDma(uint8 Instance)
         /* Update transmit status */
         UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_DMA_ERROR;
         /* Invoke callback if there is one */
-        if (UartUserCfg->Callback != NULL_PTR)
-        {
-            UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_ERROR, UartUserCfg->CallbackParam);
-        }
+        Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_ERROR);
     }
 
     /* Invoke the callback when the buffer is finished */
     if (LINFLEXD_UART_IP_STATUS_BUSY == UartState->ReceiveStatus)
     {
         /* Application can provide another buffer inside the callback by calling Linflexd_Uart_Ip_SetRxBuffer */
-        if (UartUserCfg->Callback != NULL_PTR)
-        {
-            UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_RX_FULL, UartUserCfg->CallbackParam);
-        }
+        Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_RX_FULL);
     }
 
     /* If the callback has updated the rx buffer, update the DMA descriptor to continue the transfer;
@@ -2114,10 +1964,7 @@ void Linflexd_Uart_Ip_CompleteReceiveUsingDma(uint8 Instance)
             UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_SUCCESS;
 
             /* Call the callback to notify application that the transfer is complete */
-            if (UartUserCfg->Callback != NULL_PTR)
-            {
-                UartUserCfg->Callback(Instance, LINFLEXD_UART_IP_EVENT_END_TRANSFER, UartUserCfg->CallbackParam);
-            }
+            Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_END_TRANSFER);
         }
         /* Disable error interrupts */
         Linflexd_Uart_Ip_SetInterruptMode(Base, LINFLEXD_FRAME_ERROR_INT, FALSE);
@@ -2149,7 +1996,7 @@ static void Linflexd_Uart_Ip_FlushRxFifo(const LINFLEXD_Type *Base,const Linflex
 
         /* Get the address of the FIFO */
         FifoBase = (volatile const uint8 *)(&(Base->BDRM));
-#ifdef CORE_BIG_ENDIAN
+#ifdef PARTITION_BIG_ENDIAN
         FifoBase = &FifoBase[3];
 #endif
 
@@ -2166,7 +2013,7 @@ static void Linflexd_Uart_Ip_FlushRxFifo(const LINFLEXD_Type *Base,const Linflex
 
         /* Get the address of the FIFO */
         u16FifoBase = (volatile const uint16 *)(&(Base->BDRM));
-#ifdef CORE_BIG_ENDIAN
+#ifdef PARTITION_BIG_ENDIAN
         u16FifoBase = &u16FifoBase[1];
 #endif
 
@@ -2189,12 +2036,7 @@ static void Linflexd_Uart_Ip_FlushRxFifo(const LINFLEXD_Type *Base,const Linflex
  *END**************************************************************************/
 static void Linflexd_Uart_Ip_SetUp_Init(const uint8 Instance)
 {
-    const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
     LINFLEXD_Type * Base = Linflexd_Uart_Ip_apBases[Instance];
-    Linflexd_Uart_Ip_StateStructureType * UartStatePtr;
-
-    UartUserCfg = Linflexd_Uart_Ip_apUserConfig[Instance];
-    UartStatePtr = Linflexd_Uart_Ip_apStateStructuresArray[Instance];
 
     /* Set UARTSR to Default Value. */
     Base->UARTSR = 0xFF;
@@ -2202,23 +2044,8 @@ static void Linflexd_Uart_Ip_SetUp_Init(const uint8 Instance)
     /* Set UART mode */
     Linflexd_Uart_Ip_SetMode(Base, LINFLEXD_UART_MODE);
 
-    /* Check for Custom Baurate is enable or not */
-    if (16U != UartUserCfg->BaudRateDivisor)
-    {
-        /* Reduced Oversampling is enabled */
-        Base->UARTCR |= LINFLEXD_UARTCR_ROSE(1);
-        Base->UARTCR |= LINFLEXD_UARTCR_OSR(UartUserCfg->BaudRateDivisor);
-    }
-    else
-    {
-        Base->UARTCR &= ~LINFLEXD_UARTCR_ROSE(1);
-    }
-
     /* Set the baud rate */
-    Linflexd_Uart_Ip_SetIntegerBaudRate(Base, UartUserCfg->BaudRateMantissa);
-    Linflexd_Uart_Ip_SetFractionalBaudRate(Base, UartUserCfg->BaudRateFractionalDivisor);
-
-    UartStatePtr->Baudrate = UartUserCfg->BaudRate;
+    Linflexd_Uart_Ip_SetUp_Baudrate(Instance);
 
 #if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
     Linflexd_Uart_Ip_SetUp_SetupTimeoutParameters(Instance);
@@ -2231,45 +2058,17 @@ static void Linflexd_Uart_Ip_SetUp_Init(const uint8 Instance)
     }
 #endif
 
-#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
-    if (Linflexd_Uart_Ip_InstHasTimeoutInterruptEnabled[Instance])
-    {
-        Linflexd_Uart_Ip_EnableTimerReset(Base, TRUE);
-        Linflexd_Uart_Ip_EnableMonitorIdleState(Base, TRUE);
-        /* Reset the value of the PTO to default by the number of bits in a word + 2U (stop and start bit) */
-        Linflexd_Uart_Ip_SetPresetValue(Base, (uint16)UartUserCfg->WordLength + 2U);
-    }
-#endif
-
     /* Set word length */
     Linflexd_Uart_Ip_SetWordLength(Instance);
 
     /* Set parity */
-    if (UartUserCfg->ParityCheck)
-    {
-        Linflexd_Uart_Ip_SetParityControl(Base, TRUE);
-        Linflexd_Uart_Ip_SetParityType(Base, UartUserCfg->ParityType);
-    }
-    else
-    {
-        Linflexd_Uart_Ip_SetParityControl(Base, FALSE);
-    }
+    Linflexd_Uart_Ip_SetUp_Parity(Instance);
 
     /* Set stop bits count */
-    Linflexd_Uart_Ip_SetRxStopBitsCount(Base, UartUserCfg->StopBitsCount);
-    Linflexd_Uart_Ip_SetTxStopBitsCount(Base, UartUserCfg->StopBitsCount, TRUE);
+    Linflexd_Uart_Ip_SetUp_SetTxRxStopBitsCount(Instance);
 
     /* Enable FIFO for DMA based communication, or buffer mode for interrupt based communication */
-    if (LINFLEXD_UART_IP_USING_DMA == UartUserCfg->TransferType)
-    {
-        Linflexd_Uart_Ip_SetTxMode(Base, LINFLEXD_UART_RXTX_FIFO_MODE);
-        Linflexd_Uart_Ip_SetRxMode(Base, LINFLEXD_UART_RXTX_FIFO_MODE);
-    }
-    else
-    {
-        Linflexd_Uart_Ip_SetTxMode(Base, LINFLEXD_UART_RXTX_BUFFER_MODE);
-        Linflexd_Uart_Ip_SetRxMode(Base, LINFLEXD_UART_RXTX_BUFFER_MODE);
-    }
+    Linflexd_Uart_Ip_SetTxRxMode(Instance);
 }
 
 /*FUNCTION**********************************************************************
@@ -2344,6 +2143,12 @@ static void Linflexd_Uart_Ip_UpdateReceiver(const uint8 Instance, uint32 * Start
                 UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_NOISE_ERROR;
                 /* Clear the flag */
                 Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_NOISE_FLAG);
+                IsError = TRUE;
+            }
+            /* Check if Timeout occur */
+            if (Linflexd_Uart_Ip_CheckTimeout(StartTime, ElapsedTicks, TimeoutTicks, LINFLEXD_UART_IP_TIMEOUT_TYPE))
+            {
+                UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_TIMEOUT;
                 IsError = TRUE;
             }
 
@@ -2584,6 +2389,313 @@ static void Linflexd_Uart_Ip_SetInterruptMode(LINFLEXD_Type * Base, Linflexd_Uar
     SchM_Exit_Uart_UART_EXCLUSIVE_AREA_02();
 }
 
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Linflexd_Uart_Ip_SetUp_Baudrate
+ * Description   : Set up baudrate for Linflexd Uart.
+ *
+ *END**************************************************************************/
+static void Linflexd_Uart_Ip_SetUp_Baudrate(const uint8 Instance)
+{
+    const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
+    LINFLEXD_Type * Base = Linflexd_Uart_Ip_apBases[Instance];
+    Linflexd_Uart_Ip_StateStructureType * UartStatePtr;
+
+    UartUserCfg = Linflexd_Uart_Ip_apUserConfig[Instance];
+    UartStatePtr = Linflexd_Uart_Ip_apStateStructuresArray[Instance];
+
+    /* Check for Custom Baurate is enable or not */
+    if (16U != UartUserCfg->BaudRateDivisor)
+    {
+        /* Reduced Oversampling is enabled */
+        Base->UARTCR |= LINFLEXD_UARTCR_ROSE(1);
+        Base->UARTCR |= LINFLEXD_UARTCR_OSR(UartUserCfg->BaudRateDivisor);
+    }
+    else
+    {
+        Base->UARTCR &= ~LINFLEXD_UARTCR_ROSE(1);
+    }
+
+    /* Set the baud rate */
+    Linflexd_Uart_Ip_SetIntegerBaudRate(Base, UartUserCfg->BaudRateMantissa);
+    Linflexd_Uart_Ip_SetFractionalBaudRate(Base, UartUserCfg->BaudRateFractionalDivisor);
+
+    UartStatePtr->Baudrate = UartUserCfg->BaudRate;
+
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Linflexd_Uart_Ip_SetTxRxMode
+ * Description   : Set up Tx/Rx FIFO or buffer mode for Linflexd Uart.
+ *
+ *END**************************************************************************/
+static void Linflexd_Uart_Ip_SetTxRxMode(const uint8 Instance)
+{
+    const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
+    LINFLEXD_Type * Base = Linflexd_Uart_Ip_apBases[Instance];
+
+    UartUserCfg = Linflexd_Uart_Ip_apUserConfig[Instance];
+
+    /* Enable FIFO for DMA based communication, or buffer mode for interrupt based communication */
+    if (LINFLEXD_UART_IP_USING_DMA == UartUserCfg->TransferType)
+    {
+        Linflexd_Uart_Ip_SetTxMode(Base, LINFLEXD_UART_RXTX_FIFO_MODE);
+        Linflexd_Uart_Ip_SetRxMode(Base, LINFLEXD_UART_RXTX_FIFO_MODE);
+    }
+    else
+    {
+        Linflexd_Uart_Ip_SetTxMode(Base, LINFLEXD_UART_RXTX_BUFFER_MODE);
+        Linflexd_Uart_Ip_SetRxMode(Base, LINFLEXD_UART_RXTX_BUFFER_MODE);
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Linflexd_Uart_Ip_SetUp_Parity
+ * Description   : Set up parity for Linflexd Uart.
+ *
+ *END**************************************************************************/
+static void Linflexd_Uart_Ip_SetUp_Parity(const uint8 Instance)
+{
+    const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
+    LINFLEXD_Type * Base = Linflexd_Uart_Ip_apBases[Instance];
+
+    UartUserCfg = Linflexd_Uart_Ip_apUserConfig[Instance];
+
+    if (UartUserCfg->ParityCheck)
+    {
+        Linflexd_Uart_Ip_SetParityControl(Base, TRUE);
+        Linflexd_Uart_Ip_SetParityType(Base, UartUserCfg->ParityType);
+    }
+    else
+    {
+        Linflexd_Uart_Ip_SetParityControl(Base, FALSE);
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Linflexd_Uart_Ip_SetUp_SetTxRxStopBitsCount
+ * Description   : Set up stop bits count for Linflexd Uart.
+ *
+ *END**************************************************************************/
+static void Linflexd_Uart_Ip_SetUp_SetTxRxStopBitsCount(const uint8 Instance)
+{
+    const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
+    LINFLEXD_Type * Base = Linflexd_Uart_Ip_apBases[Instance];
+
+    UartUserCfg = Linflexd_Uart_Ip_apUserConfig[Instance];
+
+    Linflexd_Uart_Ip_SetRxStopBitsCount(Base, UartUserCfg->StopBitsCount);
+    Linflexd_Uart_Ip_SetTxStopBitsCount(Base, UartUserCfg->StopBitsCount, TRUE);
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Linflexd_Uart_Ip_SyncSendData
+ * Description   : Sync data sending process for Linflexd Uart.
+ *
+ *END**************************************************************************/
+static void Linflexd_Uart_Ip_SyncSendData(const uint8 Instance, const uint32 Timeout)
+{
+    /* Check the validity of the parameters */
+    LINFLEXD_UART_IP_DEV_ASSERT(Instance < LINFLEXD_IP_INSTANCE_COUNT);
+
+    Linflexd_Uart_Ip_StateStructureType * UartState;
+    LINFLEXD_Type * Base;
+    uint32 StartTime;
+    uint32 TimeoutTicks;
+    uint32 ElapsedTicks = 0;
+
+    UartState = (Linflexd_Uart_Ip_StateStructureType *)Linflexd_Uart_Ip_apStateStructuresArray[Instance];
+    Base = Linflexd_Uart_Ip_apBases[Instance];
+
+    LINFLEXD_UART_IP_DEV_ASSERT(UartState != NULL_PTR);
+
+    Linflexd_Uart_Ip_StartTimeout(&StartTime, &TimeoutTicks, Timeout, LINFLEXD_UART_IP_TIMEOUT_TYPE);
+
+    while ((UartState->TxSize > 0U) && !Linflexd_Uart_Ip_CheckTimeout(&StartTime, &ElapsedTicks, TimeoutTicks, LINFLEXD_UART_IP_TIMEOUT_TYPE))
+    {
+        Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_DATA_TRANSMITTED_FLAG);
+        Linflexd_Uart_Ip_PutData(Instance);
+        /* Wait until data transmited flag is set or timeout occurs if there is an error during transmission */
+        while (!Linflexd_Uart_Ip_GetStatusFlag(Base, LINFLEXD_UART_DATA_TRANSMITTED_FLAG) && \
+               !Linflexd_Uart_Ip_CheckTimeout(&StartTime, &ElapsedTicks, TimeoutTicks, LINFLEXD_UART_IP_TIMEOUT_TYPE) \
+              )
+        {}
+    }
+    Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_DATA_TRANSMITTED_FLAG);
+
+    /* Check if Timeout occur */
+    if (UartState->TxSize > 0U)
+    {
+        UartState->TransmitStatus = LINFLEXD_UART_IP_STATUS_TIMEOUT;
+    }
+    else /* The transmit process is complete */
+    {
+        UartState->TransmitStatus = LINFLEXD_UART_IP_STATUS_SUCCESS;
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Linflexd_Uart_Ip_SetUp_EnterInitMode
+ * Description   : Set up enter init mode for Linflexd Uart.
+ *
+ *END**************************************************************************/
+static boolean Linflexd_Uart_Ip_SetUp_EnterInitMode(LINFLEXD_Type *Base)
+{
+    uint32 StartTime;
+    uint32 TimeoutTicks;
+    uint32 ElapsedTicks = 0;
+    boolean RetVal = FALSE;
+
+    /* Request init mode and wait until the mode entry is complete */
+    Linflexd_Uart_Ip_EnterInitMode(Base);
+
+    Linflexd_Uart_Ip_StartTimeout(&StartTime, &TimeoutTicks, (uint32)LINFLEXD_UART_IP_TIMEOUT_VALUE_US, LINFLEXD_UART_IP_TIMEOUT_TYPE);
+
+    while (!Linflexd_Uart_Ip_CheckTimeout(&StartTime, &ElapsedTicks, TimeoutTicks, LINFLEXD_UART_IP_TIMEOUT_TYPE) &&
+          (Linflexd_Uart_Ip_GetLinState(Base) != LINFLEXD_STATE_INIT_MODE)
+    )
+    {}
+
+    if (LINFLEXD_STATE_INIT_MODE == Linflexd_Uart_Ip_GetLinState(Base))
+    {
+        RetVal = TRUE;
+    }
+    return RetVal;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Linflexd_Uart_Ip_CompleteAsyncReceiveData
+ * Description   : Aync data receiving process for Linflexd Uart.
+ *
+ *END**************************************************************************/
+static void Linflexd_Uart_Ip_CompleteAsyncReceiveData(const uint8 Instance)
+{
+    const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+    const Linflexd_Uart_Ip_StateStructureType * UartState;
+
+    UartState = (Linflexd_Uart_Ip_StateStructureType *)Linflexd_Uart_Ip_apStateStructuresArray[Instance];
+#endif
+    UartUserCfg = Linflexd_Uart_Ip_apUserConfig[Instance];
+
+    if (LINFLEXD_UART_IP_USING_INTERRUPTS == UartUserCfg->TransferType)
+    {
+        Linflexd_Uart_Ip_CompleteReceiveUsingInterrupts(Instance);
+    }
+#if (LINFLEXD_UART_IP_HAS_DMA_ENABLED == STD_ON)
+    else
+    {
+        /* Release the DMA channel */
+        (void)Dma_Ip_SetLogicChannelCommand(UartUserCfg->RxDMAChannel, DMA_IP_CH_CLEAR_HARDWARE_REQUEST);
+        Linflexd_Uart_Ip_CompleteReceiveUsingDma(Instance);
+    }
+#endif
+
+    /* Invoke the callback, if any */
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+    if (LINFLEXD_UART_IP_STATUS_RX_IDLE_STATE == UartState->ReceiveStatus)
+    {
+        Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_IDLE_STATE);
+    }
+    else
+    {
+#endif
+        Linflexd_Uart_Ip_Callback(Instance, LINFLEXD_UART_IP_EVENT_ERROR);
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+    }
+#endif
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Linflexd_Uart_Ip_UpdateErrorIRQHandler
+ * Description   : Update the receive status according to the error occurred for Linflexd Uart.
+ *
+ *END**************************************************************************/
+static void Linflexd_Uart_Ip_UpdateErrorIRQHandler(const uint8 Instance)
+{
+    Linflexd_Uart_Ip_StateStructureType * UartState;
+    const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
+    LINFLEXD_Type * Base;
+
+    Base = Linflexd_Uart_Ip_apBases[Instance];
+    UartUserCfg = Linflexd_Uart_Ip_apUserConfig[Instance];
+    UartState = (Linflexd_Uart_Ip_StateStructureType *)Linflexd_Uart_Ip_apStateStructuresArray[Instance];
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+    uint16 WordLengthValue = Linflexd_Uart_Ip_GetActualWordLengthValue(Instance);
+#endif
+
+    if (Linflexd_Uart_Ip_GetStatusFlag(Base, LINFLEXD_UART_BUFFER_OVERRUN_FLAG))
+    {
+        /* Update the status */
+        UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_RX_OVERRUN;
+        /* The read dummy data not apply for DMA
+            because reading the BDRM register in this mode IPS operation result will returns IPS transfer error status*/
+        if (LINFLEXD_UART_IP_USING_INTERRUPTS == UartUserCfg->TransferType)
+        {
+            /* Read dummy to take the byte that caused the overrun error and shifts it to the buffer */
+            Linflexd_Uart_Ip_GetData(Instance);
+        }
+        /* Clear the flag */
+        Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_BUFFER_OVERRUN_FLAG);
+    }
+    else if (Linflexd_Uart_Ip_GetStatusFlag(Base, LINFLEXD_UART_FRAME_ERROR_FLAG))
+    {
+        /* Update the status */
+        UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_FRAMING_ERROR;
+        /* The read dummy data not apply for DMA
+           because reading the BDRM register in this mode IPS operation result will returns IPS transfer error status*/
+        if (LINFLEXD_UART_IP_USING_INTERRUPTS == UartUserCfg->TransferType)
+        {
+            /* Read dummy to take the byte that caused the framing error and shifts it to the buffer */
+            Linflexd_Uart_Ip_GetData(Instance);
+        }
+        /* Clear the flag */
+        Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_FRAME_ERROR_FLAG);
+    }
+#if (LINFLEXD_UART_IP_ENABLE_TIMEOUT_INTERRUPT == STD_ON)
+    else if (Linflexd_Uart_Ip_GetStatusFlag(Base, LINFLEXD_UART_TIMEOUT_INTERRUPT_FLAG))
+    {
+        /* Disable the receiver to stop timer counter */
+        Linflexd_Uart_Ip_SetReceiverState(Base, FALSE);
+        /* Update the status */
+        UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_RX_IDLE_STATE;
+        /* Clear Timeout Interrupt Error flag */
+        Linflexd_Uart_Ip_ClearStatusFlag(Base, LINFLEXD_UART_TIMEOUT_INTERRUPT_FLAG);
+        /* Reset the value of the PTO to default by the number of bits in a word + 2U (stop and start bit) */
+        Linflexd_Uart_Ip_SetPresetValue(Base, WordLengthValue + 2U);
+    }
+#endif
+    else
+    {
+        /* This branch should never be reached - avoid MISRA violations */
+        UartState->ReceiveStatus = LINFLEXD_UART_IP_STATUS_ERROR;
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Linflexd_Uart_Ip_Callback
+ * Description   : Enter callback function for Linflexd Uart.
+ *
+ *END**************************************************************************/
+static void Linflexd_Uart_Ip_Callback(const uint8 Instance, const Linflexd_Uart_Ip_EventType Event)
+{
+    const Linflexd_Uart_Ip_UserConfigType * UartUserCfg;
+
+    UartUserCfg = Linflexd_Uart_Ip_apUserConfig[Instance];
+
+    if (UartUserCfg->Callback != NULL_PTR)
+    {
+        UartUserCfg->Callback(Instance, Event, UartUserCfg->CallbackParam);
+    }
+}
 #define UART_STOP_SEC_CODE
 #include "Uart_MemMap.h"
 

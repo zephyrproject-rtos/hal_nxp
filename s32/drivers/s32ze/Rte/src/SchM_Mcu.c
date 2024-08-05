@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    SchM_Mcu.c
-*   @version 1.0.0
+*   @version 2.0.0
 *
 *   @brief   AUTOSAR Rte - module implementation
 *   @details This module implements stubs for the AUTOSAR Rte
@@ -40,7 +40,7 @@ extern "C"{
 #define SCHM_MCU_AR_RELEASE_MAJOR_VERSION_C     4
 #define SCHM_MCU_AR_RELEASE_MINOR_VERSION_C     7
 #define SCHM_MCU_AR_RELEASE_REVISION_VERSION_C  0
-#define SCHM_MCU_SW_MAJOR_VERSION_C             1
+#define SCHM_MCU_SW_MAJOR_VERSION_C             2
 #define SCHM_MCU_SW_MINOR_VERSION_C             0
 #define SCHM_MCU_SW_PATCH_VERSION_C             0
 
@@ -99,12 +99,12 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_MCU_EXCLUSIVE_AREA_00) static volatile uint32 msr_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCU_EXCLUSIVE_AREA_00) static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCU_EXCLUSIVE_AREA_01) static volatile uint32 msr_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCU_EXCLUSIVE_AREA_01) static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCU_EXCLUSIVE_AREA_02) static volatile uint32 msr_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCU_EXCLUSIVE_AREA_02) static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -271,7 +271,7 @@ uint32 Mcu_schm_read_msr(void)
 
 #endif  /*HighTec compiler only*/
  /*================================================================================================*/
-#ifdef _LINARO_C_S32ZE_
+#ifdef _GCC_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -299,7 +299,7 @@ uint32 Mcu_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _LINARO_C_S32ZE_*/
+#endif   /* _GCC_C_S32ZE_*/
 /*================================================================================================*/
 
 #ifdef _ARM_DS5_C_S32ZE_
