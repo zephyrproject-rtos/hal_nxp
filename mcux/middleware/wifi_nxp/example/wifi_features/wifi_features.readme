@@ -1,0 +1,123 @@
+Overview
+========
+This is the Wi-Fi features example to demonstrate the Wi-Fi features like host sleep, offload.
+
+Before building the example application select Wi-Fi module macro in the app_config.h. (see #define WIFI_<SoC Name>_BOARD_<Module Name>).
+For more information about Wi-Fi module connection see:
+    readme_modules.txt
+    Getting started guide on supported modules configuration:
+    https://www.nxp.com/document/guide/getting-started-with-nxp-wi-fi-modules-using-i-mx-rt-platform:GS-WIFI-MODULES-IMXRT-PLATFORM
+
+
+Prepare the Demo
+================
+1.  Connect a micro USB cable between the PC host and the CMSIS DAP USB port on the board
+2.  Open a serial terminal with the following settings:
+    - 115200 baud rate
+    - 8 data bits
+    - No parity
+    - One stop bit
+    - No flow control
+3.  Connect the WiFi module to SD card slot.
+4.  Download the program to the target board.
+5.  Either press the reset button on your board or launch the debugger in your IDE to begin running the demo.
+
+
+Running the demo
+================
+1. Macro CONFIG_WIFI_FEATURES, ENABLE_HOST_SLEEP and ENABLE_OFFLOAD is enabled in app_config.h
+2. When the demo starts, a welcome message would appear on the terminal, press enter for command prompt:
+========================================
+wifi features demo
+========================================
+Initialize CLI
+========================================
+Initialize WLAN Driver
+========================================
+MAC Address: 00:50:43:02:FE:01
+[net] Initialized TCP/IP networking stack
+========================================
+app_cb: WLAN: received event 10
+========================================
+app_cb: WLAN initialized
+========================================
+WLAN CLIs are initialized
+========================================
+WLAN Features are initialized
+========================================
+CLIs Available:
+========================================
+
+help
+wlan-version
+wlan-mac
+wlan-scan
+wlan-scan-opt ssid <ssid> bssid ...
+wlan-add <profile_name> ssid <ssid> bssid...
+wlan-remove <profile_name>
+wlan-list
+wlan-connect <profile_name>
+wlan-start-network <profile_name>
+wlan-stop-network
+wlan-disconnect
+wlan-stat
+wlan-info
+wlan-address
+wlan-get-uap-channel
+wlan-get-uap-sta-list
+wlan-ieee-ps <0/1>
+wlan-deep-sleep-ps <0/1>
+wlan-roaming <0/1> rssi_low <rssi_threshold>
+wlan-host-sleep <0/1> wowlan_test <0/1>
+wlan-send-hostcmd
+ping [-s <packet_size>] [-c <packet_count>] [-W <timeout in sec>] <ip_address>
+iperf [-s|-c <host>|-a|-h] [options]
+dhcp-stat
+enable-ns-offload
+wlan-tcp-keep-alive <0/1> <timeout_value> <interval_value> ...
+wlan-auto-arp
+wlan-add-packet-filter 0/1 <patterns number> <ptn_len> <pkt_offset> <ptn> ...........
+suspend
+========================================
+# enable-ns-offload
+Enabled  wlan IPv6 NS offload feature
+# wlan-host-sleep 1 wowlan_test 1
+# suspend
+System Enter sleep
+
+# wlan-auto-arp
+Enabled  wlan auto arp offload feature
+# wlan-host-sleep 1 wowlan_test 1
+# suspend
+System Enter sleep
+
+# wlan-tcp-keep-alive 1 5000 2000 20
+56:0E:2D:C4:C8:9D
+1->keep_alive_enable:1
+Enabled wlan tcp keep alive feature
+# wlan-ieee-ps 1
+
+# wlan-add-packet-filter 1
+Enabled pkt filter offload feature
+
+#wlan-roaming 1 rssi_low 70
+
+Note:- 
+1. send Neighbour Solicitation packets on air on response to ipv6 ping.
+ping6 <IPv6 address of DUT> i.e. IPV6 of DUT will get from wlan-info cli.
+2. Send arp broadcast packet from AP backend Station using following cmd.
+arping -c 1 <IP addr of DUT>
+3. send tcp keep alive packet on air.
+4. wlan-add-packet-filter is used for packet drop and wake up host on packet match.
+Drop on match helps host to remain in suspend mode in case of drop on match condition is met. 
+In this case packet is dropped by firmware without waking up the host.
+Wake on match wakes up the host in case of wake on match condition in met.
+5.Roaming is triggered when RSSI value of connected AP drops below set threshold by the user.
+Once roaming starts, if DUT finds better rssi value of another AP with same SSID and security
+then DUT connects to that AP which is known as a roamable AP.
+If roamable AP is not available then maintain current connection till link loss.
+6.For Target Wake Time(TWT), enable CONFIG_WMM and CONFIG_WMM_ENH in wifi_config.h file.
+7.Power and Hardware rework for WIFI_IW61x_BOARD_RD_USD Board:
+  - Use external 5V power supply for WIFI_IW61x_BOARD_RD_USD Board.
+  - Do Hardware rework to make sure R97 on WIFI_IW61x_BOARD_RD_USD board is populated with 0 ohm resistor.
+  - Connect a jumper wire between J26(pin 2) of RT1170 to J10(pin 37) of WIFI_IW61x_BOARD_RD_USD Board.

@@ -1,0 +1,161 @@
+#!/bin/bash
+########################################################################
+# File : scrubRelFiles
+#
+# This script extracts the necessary source files (c and h) 
+# needed for a particular release and then removes all code that is
+# not needed.
+#
+# It takes the destination release directory name as an input parameter
+# on the command-line. All necessary code is copied to this directory
+# and then cleaned. The destination directory should be used for
+# building the release.
+#
+# PREREQUISITES:
+#    - Script should be invoked from the top level source directory
+#    - The following files are used by this script
+#        - allMacros.txt (List of all Macros to be considered for pick)
+#        - keepMacros.txt (List of all Macros to be kept)
+#        - removeMacros.txt - AUTO GENERATED - (List of Macros to be removed)
+#        - ignoreMacros.txt - NOT USED - (List of Macros to be ignored)
+#    - The following tool should be installed on host system
+#        - unifdef
+#
+# USAGE:
+#    - Go to the source code directory where pick needs to run
+#    - Run this command: path/to/scrubRelFiles <destinationDirName>
+#    - Script will copy all files from current directory to a new directory
+#      as specified in the destinationDirName at one step above level
+#    - Script will run unifdef command on all .c and .h files to remove the
+#      conditional code covered by Macros of removeMacros.txt, and keep the
+#      conditional code covered by Macros of keepMacros.txt.
+########################################################################
+printUsage() {
+    echo ""
+    echo "Insufficient Arguments"
+    echo ""
+    echo "Usage : scrubRelFile <destinationDirectoryName> [SoC_type]"
+    echo ""
+    echo "(Optional) SoC Types Available:"
+    echo "SD9177 and RW610 [Default operation is for 8987, 8978 and 8801 SoC types]"
+    echo ""
+}
+
+########################################
+# Main
+#
+if [ $# -lt 1 ]; then
+	printUsage
+	exit 1
+fi
+
+dir=`pwd`
+scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+destinationDir=$1
+soc_type=$2
+
+########################################
+# Change permissions of files in script directory
+#
+chmod 755 $scriptDir/*
+
+########################################
+# Transfer files to the destination directory
+#
+echo "Creating destination directory and transferring files..."
+cd ..
+if [ -d "$destinationDir" ]; then
+    echo "$destinationDir exists. Deleting it and proceeding further."
+fi
+mkdir -p $destinationDir
+cd $destinationDir
+cp -r $dir/* .
+rm -rf internal
+rm -rf wifi_bt_firmware/fw_bins
+echo "done."
+
+########################################
+# IMPORTANT
+# The script has changed directory to the destination directory at this stage.
+
+########################################
+# Generate the list of macros NOT needed for this release
+#
+if [ -f "$scriptDir/removeMacros.txt" ]; then
+    echo "removeMacros.txt exists. Deleting it and proceeding further."
+    rm -f $scriptDir/removeMacros.txt
+fi
+if [ "$soc_type" = "RW610" ]; then
+    $scriptDir/genMacroList.x64 -a $scriptDir/allMacros_rw610.txt -r $scriptDir/keepMacros_rw610.txt >> $scriptDir/removeMacros.txt
+elif [ "$soc_type" = "SD9177" ]; then
+    $scriptDir/genMacroList.x64 -a $scriptDir/allMacros_iw61x.txt -r $scriptDir/keepMacros_iw61x.txt >> $scriptDir/removeMacros.txt
+else
+    $scriptDir/genMacroList.x64 -a $scriptDir/allMacros.txt -r $scriptDir/keepMacros.txt >> $scriptDir/removeMacros.txt
+fi
+
+########################################
+# Call unifdef to remove all code that is not needed.
+#
+echo "Removing code that is not needed for this release..."
+
+#create argument for unifdef based on macros to be removed
+if [ "$soc_type" = "RW610" ]; then
+    for x in `cat $scriptDir/keepMacros_rw610.txt`
+    do
+    unifdef_arg="$unifdef_arg -D$x"
+    echo -n "- keep the Redfinch code controlled by a defined macro "
+    echo -D$x
+    done
+elif [ "$soc_type" = "SD9177" ]; then
+    for x in `cat $scriptDir/keepMacros_iw61x.txt`
+    do
+    unifdef_arg="$unifdef_arg -D$x"
+    echo -n "- keep the Firecrest code controlled by a defined macro "
+    echo -D$x
+    done
+else
+    for x in `cat $scriptDir/keepMacros.txt`
+    do
+    unifdef_arg="$unifdef_arg -D$x"
+    echo -n "- keep the code controlled by a defined macro "
+    echo -D$x
+    done
+fi
+
+for x in `cat $scriptDir/removeMacros.txt`
+do
+unifdef_arg="$unifdef_arg -U$x"
+echo -n "- removing code controlled by undefined macro "
+echo -U$x
+done
+
+#scrubbing source code
+for x in `find . -iname "*.[ch]"`
+do
+echo "----Scrubbing $x----"
+unifdef $unifdef_arg $x >> "$x"2
+rm -f $x
+mv "$x"2 $x
+echo "----$x replaced with "$x"2----"
+done
+
+########################################
+# Remove all temp files
+#
+rm -f $scriptDir/removeMacros.txt
+
+########################################
+# Eliminate all trailing white spaces.
+#
+for x in `find . -type f -iname "*"`
+do
+	sed -i 's/[[:space:]]\+$//' $x
+	sed -i 's/#define CONFIG_WIFI_INTERNAL 1$//' $x
+done
+
+########################################
+echo "DONE"
+echo -n "Cleaned code is available in ../"
+echo -n $destinationDir
+echo " directory."
+echo ""
