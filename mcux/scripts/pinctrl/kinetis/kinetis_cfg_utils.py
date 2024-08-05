@@ -25,6 +25,7 @@ NAMESPACES = {'mex': 'http://mcuxpresso.nxp.com/XSD/mex_configuration_14'}
 # Pin controller types
 PORT_KINETIS = 1
 PORT_N9X = 2
+PORT_A15X = 3
 
 class MUXOption:
     """
@@ -53,7 +54,7 @@ class MUXOption:
             # Only process PCR registers
             if port_type == PORT_KINETIS:
                 match = re.match(r'PORT([A-Z])_PCR(\d+)', reg)
-            elif port_type == PORT_N9X:
+            elif port_type == PORT_N9X or port_type == PORT_A15X:
                 match = re.match(r'PORT(\d)_PCR(\d+)', reg)
             if match and (assign.attrib.get('bit_field') == "MUX"):
                 # For muxes like PTC5 (or PIO1_8 on N9X),
@@ -64,6 +65,9 @@ class MUXOption:
                 elif port_type == PORT_N9X:
                     if re.match(r'PIO\d_\d+', self._name) is None:
                         self._name += f"_PIO{match.group(1)}_{match.group(2)}"
+                elif port_type == PORT_A15X:
+                    if re.match(r'P\d_\d+', self._name) is None:
+                        self._name += f"_P{match.group(1)}_{match.group(2)}"
                 self._port = match.group(1)
                 self._pin = int(match.group(2))
                 self._mux = int(val, 16)
@@ -168,6 +172,10 @@ class SignalPin:
             # This may be an N9X part. Try that pin pattern
             pin_regex = re.search(r'PIO(\d)_(\d+)', pin.attrib['name'])
             self._type = PORT_N9X
+        elif re.search(r'P(\d)_(\d+)', pin.attrib['name']):
+            # This may be an A15X part. Try that pin pattern
+            pin_regex = re.search(r'P(\d)_(\d+)', pin.attrib['name'])
+            self._type = PORT_A15X
         else:
             logging.debug('Could not match pin name %s', pin.attrib['name'])
             self._name = ''
@@ -536,6 +544,10 @@ class NXPSdkUtil:
             n9x_mode = True
         else:
             n9x_mode = False
+        if list(self._pins.values())[0]._type == PORT_A15X:
+            a15x_mode = True
+        else:
+            a15x_mode = False
         for pin in self._pins.values():
             pinmux_opts.extend(pin.get_mux_options())
         pcr_pins = list(filter(lambda p: (p.get_periph() not in ["FB", "EZPORT"]), pinmux_opts))
@@ -562,6 +574,11 @@ class NXPSdkUtil:
                     "\t(((((port) - '0') & 0xF) << 28) |\t\\\n"
                     "\t(((pin) & 0x3F) << 22) |\t\t\\\n"
                     "\t(((mux) & 0xF) << 8))\n\n")
+        elif a15x_mode:
+            mux_macro = ("#define A15X_MUX(port, pin, mux)\t\t\\\n"
+                    "\t(((((port) - '0') & 0xF) << 28) |\t\\\n"
+                    "\t(((pin) & 0x3F) << 22) |\t\t\\\n"
+                    "\t(((mux) & 0xF) << 8))\n\n")
         else:
             mux_macro = ("#define KINETIS_MUX(port, pin, mux)\t\t\\\n"
                     "\t(((((port) - 'A') & 0xF) << 28) |\t\\\n"
@@ -581,6 +598,13 @@ class NXPSdkUtil:
                 self._write_pins('3', pcr_pins, 'N9X_MUX', file)
                 self._write_pins('4', pcr_pins, 'N9X_MUX', file)
                 self._write_pins('5', pcr_pins, 'N9X_MUX', file)
+            elif a15x_mode:
+                self._write_pins('0', pcr_pins, 'A15X_MUX', file)
+                self._write_pins('1', pcr_pins, 'A15X_MUX', file)
+                self._write_pins('2', pcr_pins, 'A15X_MUX', file)
+                self._write_pins('3', pcr_pins, 'A15X_MUX', file)
+                self._write_pins('4', pcr_pins, 'A15X_MUX', file)
+                self._write_pins('5', pcr_pins, 'A15X_MUX', file)
             else:
                 self._write_pins('a', pcr_pins, 'KINETIS_MUX', file)
                 self._write_pins('b', pcr_pins, 'KINETIS_MUX', file)
