@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -33,7 +33,7 @@ extern "C"{
 #define CANEXCEL_IP_AR_RELEASE_MAJOR_VERSION_H       4
 #define CANEXCEL_IP_AR_RELEASE_MINOR_VERSION_H       7
 #define CANEXCEL_IP_AR_RELEASE_REVISION_VERSION_H    0
-#define CANEXCEL_IP_SW_MAJOR_VERSION_H               1
+#define CANEXCEL_IP_SW_MAJOR_VERSION_H               2
 #define CANEXCEL_IP_SW_MINOR_VERSION_H               0
 #define CANEXCEL_IP_SW_PATCH_VERSION_H               0
 
@@ -48,14 +48,14 @@ extern "C"{
 #if ((CANEXCEL_IP_AR_RELEASE_MAJOR_VERSION_H    != CANEXCEL_IP_TYPES_AR_RELEASE_MAJOR_VERSION_H) || \
      (CANEXCEL_IP_AR_RELEASE_MINOR_VERSION_H    != CANEXCEL_IP_TYPES_AR_RELEASE_MINOR_VERSION_H) || \
      (CANEXCEL_IP_AR_RELEASE_REVISION_VERSION_H != CANEXCEL_IP_TYPES_AR_RELEASE_REVISION_VERSION_H) \
-    )
+)
     #error "AutoSar Version Numbers of CanEXCEL_Ip.h and CanEXCEL_Ip_Types.h are different"
 #endif
 /* Check if current file and CanEXCEL_Ip_Types.h are of the same Software version */
 #if ((CANEXCEL_IP_SW_MAJOR_VERSION_H != CANEXCEL_IP_TYPES_SW_MAJOR_VERSION_H) || \
      (CANEXCEL_IP_SW_MINOR_VERSION_H != CANEXCEL_IP_TYPES_SW_MINOR_VERSION_H) || \
      (CANEXCEL_IP_SW_PATCH_VERSION_H != CANEXCEL_IP_TYPES_SW_PATCH_VERSION_H) \
-    )
+)
     #error "Software Version Numbers of CanEXCEL_Ip.h and CanEXCEL_Ip_Types.h are different"
 #endif
 /*==================================================================================================
@@ -105,12 +105,11 @@ Canexcel_Ip_StatusType Canexcel_Ip_Init(uint8 instance, const Canexcel_Ip_Config
  *  @param[in] frameType Message format type
  *  @param[in] mask      Mask value
  *  @note      This function should be called from StopMode or FreezeMode.
- *  @return    CANEXCEL_STATUS_SUCCESS if successful;<br>
- *             CANEXCEL_STATUS_ERROR if the instance is not in Freeze Mode.
+ *  @return    none
  */
-Canexcel_Ip_StatusType Canexcel_Ip_SetRxIndividualMask(uint8 instance, uint8 descNo, Canexcel_Ip_FrameType frameType, uint32 mask);
+void Canexcel_Ip_SetRxIndividualMask(uint8 instance, uint8 descNo, Canexcel_Ip_FrameType frameType, uint32 mask);
 /**
- *  @brief     CanEXCEL config XL Message for Tx with Id, SDT, VCAN, length 
+ *  @brief     CanEXCEL config XL Message for Tx with Id, SDT, VCAN, length
  *  @details   This function will config transmit parameters form Canexcel_DataInfoType and
  *             the message Id
  *  @param[in] instance A CanEXCEL instance number
@@ -266,11 +265,11 @@ void Canexcel_Ip_MainFunctionWrite(uint8 instance, uint8 mb_idx);
 /**
  *  @brief     CanEXCEL Rx FIFO field configuration
  *  @note This function requires the module to be in Stop or Freeze Mode.
- *  @param[in] instance        A CanEXCEL instance number  
+ *  @param[in] instance        A CanEXCEL instance number
  *  @param[in] filterConfig Pointer to the filter configuration structure.
  *  @return CANEXCEL_STATUS_ERROR if the RxFifo wasn't activated by CanExcel_Init, or the CanExcel instance is not in freeze mode;
  *          CANEXCEL_STATUS_SUCCESS if successful.
- */ 
+ */
 Canexcel_Ip_StatusType Canexcel_Ip_ConfigRxFifo(uint8 instance,const Canexcel_Ip_RxFifoFilter * filterConfig);
 /**
  *  @brief     Set the CanEXCEL instance in STOP mode
@@ -331,7 +330,7 @@ Canexcel_Ip_StatusType Canexcel_Ip_ConfigTimeStamp(uint8 instance, const Canexce
 #endif
 /**
  * @brief Check if the descriptor is configured for reception of XL frame or not.
- * 
+ *
  * @param[in]   u8Instance    A CanEXCEL instance number
  * @param[in]   descNo        A CanEXCEL decriptor number
  */
@@ -339,18 +338,18 @@ boolean Canexcel_Ip_IsXLFrameType(uint8 instance, uint8 descNo);
 /**
  * @brief Enable\Disable an Error Interrupt
  * @note This function need to be call after the CANXL Instance is in FreezeMode
- * 
+ *
  * @param[in]   u8Instance    A CanEXCEL instance number
  * @param[in]   type          Error type for wich to cofig the Interrupt
  * @param[in]   enable        TRUE will Enable the interrupt\FALSE will disable the interrupt
- * 
+ *
  * @return  CANEXCEL_STATUS_SUCCESS Configured successfully.<br>
  *          CANEXCEL_STATUS_ERROR   Either interface is not in Freeze mode or not a valid error type.<br>
  */
 Canexcel_Ip_StatusType Canexcel_Ip_SetErrorInt(uint8 u8Instance, Canexcel_Ip_ErrorIntType type, boolean enable);
 /**
  * @brief Get the TxError Counter
- * 
+ *
  * @param[in]   instance    A CanEXCEL instance number
  * @param[out]  pValue      Pointer to a variable to return the TxError Counter Value
  * @return CANEXCEL_STATUS_ERROR    It can not update and get the TxError Status
@@ -360,7 +359,7 @@ Canexcel_Ip_StatusType Canexcel_Ip_SetErrorInt(uint8 u8Instance, Canexcel_Ip_Err
 Canexcel_Ip_StatusType Canexcel_Ip_GetControllerTxErrorCounter(uint8 instance, uint8 * pValue);
 /**
  * @brief Get the RxError Counter.
- * 
+ *
  * @param[in]   instance    A CanEXCEL instance number
  * @param[out]  pValue      Pointer to a variable to return the RxError Counter Value
  * @return CANEXCEL_STATUS_ERROR    It can not update and get the RxError Status
@@ -370,7 +369,7 @@ Canexcel_Ip_StatusType Canexcel_Ip_GetControllerTxErrorCounter(uint8 instance, u
 Canexcel_Ip_StatusType Canexcel_Ip_GetControllerRxErrorCounter(uint8 instance, uint8 * pValue);
 /**
  * @brief Get the CanEXCEL Controller Status.
- * 
+ *
  * @param[in]   instance    A CanEXCEL instance number
  * @param[out]  pValue      Pointer to a variable to return the Controller Status
  * @return CANEXCEL_STATUS_ERROR    It can not update and get the Status
@@ -569,7 +568,7 @@ Canexcel_Ip_StatusType Canexcel_Ip_ConfigRejFltBank1(uint8 Instance, const Canex
 /**
  * @brief   Configures Acceptance Address filter for a desired filter number
  * @details This function request the CanExcel module to be in Freeze Mode.
- * @note    If the filter position is higher than the 31 it measn it is alocated in filter bank1 and is position 
+ * @note    If the filter position is higher than the 31 it measn it is alocated in filter bank1 and is position
  *          in the filter bank is (filterNo - 32). If is lower than 32 represents the filter position from bank0.
  *          This function requires CanEXCEL instance to be set in FreezeMode.
  * @param[in]       Instance         A CanExcel instance number
@@ -619,6 +618,22 @@ uint8 Canexcel_Ip_GetMsgDescIntStatusFlag(uint8 instance, uint8 descNo);
  *            CANEXCEL_STATUS_TIMEOUT if fail to set;<br>
  */
 Canexcel_Ip_StatusType Canexcel_Ip_DeactivateMD(uint8 instance, uint8 descNo);
+
+#if (CANXL_IP_HAS_ABORT == STD_ON)
+/**
+ * @brief Abort the given Message Descriptor.
+ * @details This function shall abort given Message descriptor and move it to EMPTY state.
+ * @note    The system pointer and hardware pointer of the Message descriptor equal to zero after abort.
+ *
+ * @param[in]   instance         A CanExcel instance number
+ * @param[in]   descNo           the Message Descriptor index
+ * @return    CANEXCEL_STATUS_SUCCESS if successful;<br>
+ *            CANEXCEL_STATUS_TIMEOUT if fail to set;<br>
+ *            CANEXCEL_STATUS_NO_TRANSFER_IN_PROGRESS if no transfer initiated before abort;<br>
+ */
+Canexcel_Ip_StatusType Canexcel_Ip_AbortMD(uint8 instance, uint8 descNo);
+#endif
+
 /**
  *  @brief DeInitializes the CanEXCEL peripheral.
  *  @details This function will reset CanEXCEL module at reset Values.

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GPR5.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_GPR5
  *
  * This file contains register definitions and macros for easy access to their
@@ -74,14 +74,14 @@ typedef struct {
   __IO uint32_t LVFCCULD15;                        /**< VFCCU Local DID register 15, offset: 0x4 */
   __IO uint32_t LVFCCULD16;                        /**< VFCCU Local DID register 16, offset: 0x8 */
   __IO uint32_t LVFCCULD17;                        /**< VFCCU Local DID register 17, offset: 0xC */
-  uint8_t RESERVED_0[52];
+  uint8_t RESERVED_0[20];
+  __IO uint32_t DESTC10;                           /**< CANXL_PE_CLK Configuration, offset: 0x24 */
+  uint8_t RESERVED_1[28];
   __I  uint32_t INITM5;                            /**< NoC Initiator NIU Timeout Status, offset: 0x44 */
   __I  uint32_t TARGTMS5;                          /**< NoC Target NIU Timeout Status, offset: 0x48 */
   __IO uint32_t TARGTMC5;                          /**< NoC Target NIU Timeout Control, offset: 0x4C */
-  uint8_t RESERVED_1[4];
+  uint8_t RESERVED_2[4];
   __IO uint32_t CLKOUT3SEL;                        /**< CLKOUT_3 MUX select, offset: 0x54 */
-  uint8_t RESERVED_2[20];
-  __IO uint32_t LVFCCU5S;                          /**< VFCCU Fault Status 5, offset: 0x6C */
 } GPR5_Type, *GPR5_MemMapPtr;
 
 /** Number of instances of the GPR5 module. */
@@ -142,6 +142,15 @@ typedef struct {
 #define GPR5_LVFCCULD17_FHID(x)                  (((uint32_t)(((uint32_t)(x)) << GPR5_LVFCCULD17_FHID_SHIFT)) & GPR5_LVFCCULD17_FHID_MASK)
 /*! @} */
 
+/*! @name DESTC10 - CANXL_PE_CLK Configuration */
+/*! @{ */
+
+#define GPR5_DESTC10_CTRL_MASK                   (0xFFFFFFFFU)
+#define GPR5_DESTC10_CTRL_SHIFT                  (0U)
+#define GPR5_DESTC10_CTRL_WIDTH                  (32U)
+#define GPR5_DESTC10_CTRL(x)                     (((uint32_t)(((uint32_t)(x)) << GPR5_DESTC10_CTRL_SHIFT)) & GPR5_DESTC10_CTRL_MASK)
+/*! @} */
+
 /*! @name INITM5 - NoC Initiator NIU Timeout Status */
 /*! @{ */
 
@@ -176,15 +185,6 @@ typedef struct {
 #define GPR5_CLKOUT3SEL_MUXSEL_SHIFT             (0U)
 #define GPR5_CLKOUT3SEL_MUXSEL_WIDTH             (4U)
 #define GPR5_CLKOUT3SEL_MUXSEL(x)                (((uint32_t)(((uint32_t)(x)) << GPR5_CLKOUT3SEL_MUXSEL_SHIFT)) & GPR5_CLKOUT3SEL_MUXSEL_MASK)
-/*! @} */
-
-/*! @name LVFCCU5S - VFCCU Fault Status 5 */
-/*! @{ */
-
-#define GPR5_LVFCCU5S_STAT_MASK                  (0xFFFFFFFFU)
-#define GPR5_LVFCCU5S_STAT_SHIFT                 (0U)
-#define GPR5_LVFCCU5S_STAT_WIDTH                 (32U)
-#define GPR5_LVFCCU5S_STAT(x)                    (((uint32_t)(((uint32_t)(x)) << GPR5_LVFCCU5S_STAT_SHIFT)) & GPR5_LVFCCU5S_STAT_MASK)
 /*! @} */
 
 /*!

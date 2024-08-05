@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CSTCU.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_CSTCU
  *
  * This file contains register definitions and macros for easy access to their
@@ -69,7 +69,8 @@
  */
 
 /** CSTCU - Size of Registers Arrays */
-#define CSTCU_LSTCU_STAT_COUNT                    1u
+#define CSTCU_LRFSTAT_COUNT                       1u
+#define CSTCU_LUFSTAT_COUNT                       1u
 #define CSTCU_BYPLSTCU_COUNT                      1u
 #define CSTCU_LSTCU_MBSCH_COUNT                   20u
 #define CSTCU_LSTCU_LBSCH_COUNT                   20u
@@ -87,22 +88,20 @@ typedef struct {
   uint8_t RESERVED_2[4];
   __IO uint32_t ERR_FM;                            /**< Error Fault Mapping, offset: 0x28 */
   uint8_t RESERVED_3[4];
-  struct {                                         /* offset: 0x30, array step: 0x14 */
-    __I  uint32_t LRFSTAT;                           /**< LSTCU Recoverable Fault Status, array offset: 0x30, array step: 0x14 */
-    uint8_t RESERVED_0[12];
-    __I  uint32_t LUFSTAT;                           /**< LSTCU Unrecoverable Fault Status, array offset: 0x40, array step: 0x14 */
-  } LSTCU_STAT[CSTCU_LSTCU_STAT_COUNT];
+  __I  uint32_t LRFSTAT[CSTCU_LRFSTAT_COUNT];      /**< LSTCU Recoverable Fault Status, array offset: 0x30, array step: 0x4 */
   uint8_t RESERVED_4[12];
+  __I  uint32_t LUFSTAT[CSTCU_LUFSTAT_COUNT];      /**< LSTCU Unrecoverable Fault Status, array offset: 0x40, array step: 0x4 */
+  uint8_t RESERVED_5[12];
   __IO uint32_t RDEN;                              /**< Reset Domain Self-Test Enable, offset: 0x50 */
   __I  uint32_t RDENSTAT;                          /**< Reset Domain Enable Status, offset: 0x54 */
   __I  uint32_t LASTRDEN;                          /**< Last Run Reset Domain Enable, offset: 0x58 */
-  uint8_t RESERVED_5[4];
+  uint8_t RESERVED_6[4];
   __IO uint32_t BYPLSTCU[CSTCU_BYPLSTCU_COUNT];    /**< Bypass LSTCU, array offset: 0x60, array step: 0x4 */
-  uint8_t RESERVED_6[12];
+  uint8_t RESERVED_7[12];
   __IO uint32_t STAG;                              /**< Stagger, offset: 0x70 */
-  uint8_t RESERVED_7[396];
+  uint8_t RESERVED_8[396];
   __IO uint32_t LMBPTR[CSTCU_LSTCU_MBSCH_COUNT];   /**< LSTCU MBIST Run Phase Scheduler Pointer, array offset: 0x200, array step: 0x4 */
-  uint8_t RESERVED_8[176];
+  uint8_t RESERVED_9[176];
   __IO uint32_t LLBPTR[CSTCU_LSTCU_LBSCH_COUNT];   /**< LSTCU LBIST Run phase Scheduler Pointer, array offset: 0x300, array step: 0x4 */
 } CSTCU_Type, *CSTCU_MemMapPtr;
 

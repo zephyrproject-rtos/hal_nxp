@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
-*   @file    SchM_Wdg.h
-*   @version 1.0.0
+*   @file    SchM_Platform.h
+*   @version 2.0.0
 *
 *   @brief   AUTOSAR Rte - module interface
 *   @details This file contains the functions prototypes and data types of the AUTOSAR Rte.
@@ -16,8 +16,8 @@
 *   @{
 */
 
-#ifndef SCHM_WDG_H
-#define SCHM_WDG_H
+#ifndef SCHM_PLATFORM_H
+#define SCHM_PLATFORM_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,12 +32,12 @@ extern "C" {
 /*==================================================================================================
 *                               SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
-#define SCHM_WDG_AR_RELEASE_MAJOR_VERSION     4
-#define SCHM_WDG_AR_RELEASE_MINOR_VERSION     7
-#define SCHM_WDG_AR_RELEASE_REVISION_VERSION  0
-#define SCHM_WDG_SW_MAJOR_VERSION             1
-#define SCHM_WDG_SW_MINOR_VERSION             0
-#define SCHM_WDG_SW_PATCH_VERSION             0
+#define SCHM_PLATFORM_AR_RELEASE_MAJOR_VERSION     4
+#define SCHM_PLATFORM_AR_RELEASE_MINOR_VERSION     7
+#define SCHM_PLATFORM_AR_RELEASE_REVISION_VERSION  0
+#define SCHM_PLATFORM_SW_MAJOR_VERSION             2
+#define SCHM_PLATFORM_SW_MINOR_VERSION             0
+#define SCHM_PLATFORM_SW_PATCH_VERSION             0
 
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
@@ -87,53 +87,47 @@ extern "C" {
 @remarks Covers 
 @remarks Implements 
 */
-void SchM_Check_wdg(void);
+void SchM_Check_platform(void);
 #endif /*MCAL_TESTING_ENVIRONMENT*/
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_00(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_00(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_00(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_00(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_01(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_01(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_01(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_01(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_02(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_02(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_02(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_02(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_03(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_03(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_03(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_03(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_04(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_04(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_04(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_04(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_05(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_05(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_05(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_05(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_06(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_06(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_06(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_06(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_07(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_07(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_07(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_07(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_08(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_08(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_08(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_08(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_09(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_09(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_09(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_09(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_10(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_10(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_10(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_10(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_11(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_11(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_11(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_11(void);
 
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_12(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_12(void);
-
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_13(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_13(void);
-
-extern void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_14(void);
-extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_14(void);
+extern void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_12(void);
+extern void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_12(void);
 
 
 
@@ -147,4 +141,4 @@ extern void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_14(void);
 
 /** @} */
 
-#endif /* SCHM_WDG_H */
+#endif /* SCHM_PLATFORM_H */

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_TMU.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_TMU
  *
  * This file contains register definitions and macros for easy access to their
@@ -104,7 +104,7 @@ typedef struct {
   __IO uint32_t TTCFGR;                            /**< Temperature Configuration, offset: 0x80 */
   __IO uint32_t TSCFGR;                            /**< Sensor Configuration, offset: 0x84 */
   uint8_t RESERVED_6[120];
-  struct {                                         /* offset: 0x100, array step: 0x10 */
+  struct TMU_TRITRATSR {                           /* offset: 0x100, array step: 0x10 */
     __I  uint32_t TRITSR;                            /**< Report Immediate Temperature at Site, array offset: 0x100, array step: 0x10 */
     __I  uint32_t TRATSR;                            /**< Report Average Temperature at Site, array offset: 0x104, array step: 0x10 */
     uint8_t RESERVED_0[8];

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GPR6.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_GPR6
  *
  * This file contains register definitions and macros for easy access to their
@@ -77,8 +77,7 @@ typedef struct {
   uint8_t RESERVED_0[4];
   __I  uint32_t TARGTMS6;                          /**< NoC Target NIU Timeout Status, offset: 0x14 */
   __IO uint32_t TARGTMC6;                          /**< NoC Target NIU Timeout Control, offset: 0x18 */
-  __IO uint32_t LVFCCU6S;                          /**< VFCCU Fault Status 6, offset: 0x1C */
-  uint8_t RESERVED_1[24];
+  uint8_t RESERVED_1[28];
   __IO uint32_t XPAR5;                             /**< Interface parity control and status register, offset: 0x38 */
 } GPR6_Type, *GPR6_MemMapPtr;
 
@@ -156,15 +155,6 @@ typedef struct {
 #define GPR6_TARGTMC6_EN_SHIFT                   (0U)
 #define GPR6_TARGTMC6_EN_WIDTH                   (32U)
 #define GPR6_TARGTMC6_EN(x)                      (((uint32_t)(((uint32_t)(x)) << GPR6_TARGTMC6_EN_SHIFT)) & GPR6_TARGTMC6_EN_MASK)
-/*! @} */
-
-/*! @name LVFCCU6S - VFCCU Fault Status 6 */
-/*! @{ */
-
-#define GPR6_LVFCCU6S_STAT_MASK                  (0xFFFFFFFFU)
-#define GPR6_LVFCCU6S_STAT_SHIFT                 (0U)
-#define GPR6_LVFCCU6S_STAT_WIDTH                 (32U)
-#define GPR6_LVFCCU6S_STAT(x)                    (((uint32_t)(((uint32_t)(x)) << GPR6_LVFCCU6S_STAT_SHIFT)) & GPR6_LVFCCU6S_STAT_MASK)
 /*! @} */
 
 /*! @name XPAR5 - Interface parity control and status register */

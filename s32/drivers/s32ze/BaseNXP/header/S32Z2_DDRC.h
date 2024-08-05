@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_DDRC.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_DDRC
  *
  * This file contains register definitions and macros for easy access to their
@@ -75,7 +75,7 @@
 
 /** DDRC - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x8 */
+  struct DDRC_CS_BNDS {                            /* offset: 0x0, array step: 0x8 */
     __IO uint32_t CS_BNDS;                           /**< Rank 0 Memory Bounds..Rank 1 Memory Bounds, array offset: 0x0, array step: 0x8 */
     uint8_t RESERVED_0[4];
   } CS_BNDS[DDRC_CS_BNDS_COUNT];

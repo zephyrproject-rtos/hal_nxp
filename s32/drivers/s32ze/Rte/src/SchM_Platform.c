@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
-*   @file    SchM_Wdg.c
-*   @version 1.0.0
+*   @file    SchM_Platform.c
+*   @version 2.0.0
 *
 *   @brief   AUTOSAR Rte - module implementation
 *   @details This module implements stubs for the AUTOSAR Rte
@@ -29,7 +29,7 @@ extern "C"{
 #include "Std_Types.h"
 #include "Mcal.h"
 #include "OsIf.h"
-#include "SchM_Wdg.h"
+#include "SchM_Platform.h"
 #ifdef MCAL_TESTING_ENVIRONMENT
 #include "EUnit.h" /* EUnit Test Suite */
 #endif
@@ -37,12 +37,12 @@ extern "C"{
 /*==================================================================================================
 *                               SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
-#define SCHM_WDG_AR_RELEASE_MAJOR_VERSION_C     4
-#define SCHM_WDG_AR_RELEASE_MINOR_VERSION_C     7
-#define SCHM_WDG_AR_RELEASE_REVISION_VERSION_C  0
-#define SCHM_WDG_SW_MAJOR_VERSION_C             1
-#define SCHM_WDG_SW_MINOR_VERSION_C             0
-#define SCHM_WDG_SW_PATCH_VERSION_C             0
+#define SCHM_PLATFORM_AR_RELEASE_MAJOR_VERSION_C     4
+#define SCHM_PLATFORM_AR_RELEASE_MINOR_VERSION_C     7
+#define SCHM_PLATFORM_AR_RELEASE_REVISION_VERSION_C  0
+#define SCHM_PLATFORM_SW_MAJOR_VERSION_C             2
+#define SCHM_PLATFORM_SW_MINOR_VERSION_C             0
+#define SCHM_PLATFORM_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
 *                                       LOCAL CONSTANTS
@@ -99,36 +99,32 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_00) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_00) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_01) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_01) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_02) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_02) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_03) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_03) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_04) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_04) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_05) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_05) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_06) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_06) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_07) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_07) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_08) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_08) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_09) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_09) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_10) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_10) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_11) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_11) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_12) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_12) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_13) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_13) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_13[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_WDG_EXCLUSIVE_AREA_14) static volatile uint32 msr_WDG_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_14) static volatile uint32 reentry_guard_WDG_EXCLUSIVE_AREA_14[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_06[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_07[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_08[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_09[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_10[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_11[NUMBER_OF_CORES];
+static volatile uint32 msr_PLATFORM_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PLATFORM_EXCLUSIVE_AREA_12[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -158,7 +154,7 @@ VAR_SEC_NOCACHE(reentry_guard_WDG_EXCLUSIVE_AREA_14) static volatile uint32 reen
 * @post None
 * 
 */
-uint32 Wdg_schm_read_msr(void); 
+uint32 Platform_schm_read_msr(void); 
 #endif /*ifndef _COSMIC_C_S32ZE_*/
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
@@ -178,17 +174,17 @@ uint32 Wdg_schm_read_msr(void);
 */
 #ifdef MCAL_PLATFORM_ARM
 #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
-ASM_KEYWORD uint32 Wdg_schm_read_msr(void)
+ASM_KEYWORD uint32 Platform_schm_read_msr(void)
 {
     mrs x0, S3_3_c4_c2_1
 }
 #elif  (MCAL_PLATFORM_ARM == MCAL_ARM_RARCH)
-ASM_KEYWORD uint32 Wdg_schm_read_msr(void)
+ASM_KEYWORD uint32 Platform_schm_read_msr(void)
 {
     mrs r0, CPSR
 }
 #else
-ASM_KEYWORD uint32 Wdg_schm_read_msr(void)
+ASM_KEYWORD uint32 Platform_schm_read_msr(void)
 {
 #if ((defined MCAL_ENABLE_USER_MODE_SUPPORT)&&(!defined MCAL_PLATFORM_ARM_M0PLUS))
     mrs r0, BASEPRI
@@ -199,12 +195,12 @@ ASM_KEYWORD uint32 Wdg_schm_read_msr(void)
 #endif
 #else
 #ifdef MCAL_PLATFORM_S12
-ASM_KEYWORD uint32 Wdg_schm_read_msr(void)
+ASM_KEYWORD uint32 Platform_schm_read_msr(void)
 {
    tfr ccr, d6
 }
 #else
-ASM_KEYWORD uint32 Wdg_schm_read_msr(void)
+ASM_KEYWORD uint32 Platform_schm_read_msr(void)
 {
     mfmsr r3
 }
@@ -225,7 +221,7 @@ ASM_KEYWORD uint32 Wdg_schm_read_msr(void)
 * 
 */
 #ifdef MCAL_PLATFORM_ARM
-uint32 Wdg_schm_read_msr(void)
+uint32 Platform_schm_read_msr(void)
 {
     register uint32 reg_tmp;
     #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
@@ -242,7 +238,7 @@ uint32 Wdg_schm_read_msr(void)
     return (uint32)reg_tmp;
 }
 #else
-ASM_KEYWORD uint32 Wdg_schm_read_msr(void)
+ASM_KEYWORD uint32 Platform_schm_read_msr(void)
 {
     mfmsr r3
 }    
@@ -265,9 +261,9 @@ ASM_KEYWORD uint32 Wdg_schm_read_msr(void)
 */
 
 #ifdef MCAL_PLATFORM_S12
-    #define Wdg_schm_read_msr()  ASM_KEYWORD("tfr ccr, d6")
+    #define Platform_schm_read_msr()  ASM_KEYWORD("tfr ccr, d6")
 #else
-    #define Wdg_schm_read_msr() ASM_KEYWORD("mfmsr r3")
+    #define Platform_schm_read_msr() ASM_KEYWORD("mfmsr r3")
 #endif
 
 #endif  /*Cosmic compiler only*/
@@ -286,7 +282,7 @@ ASM_KEYWORD uint32 Wdg_schm_read_msr(void)
 * @post None
 * 
 */
-uint32 Wdg_schm_read_msr(void)
+uint32 Platform_schm_read_msr(void)
 {
     uint32 result;
     __asm volatile("mfmsr %0" : "=r" (result) :);
@@ -295,7 +291,7 @@ uint32 Wdg_schm_read_msr(void)
 
 #endif  /*HighTec compiler only*/
  /*================================================================================================*/
-#ifdef _LINARO_C_S32ZE_
+#ifdef _GCC_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -307,7 +303,7 @@ uint32 Wdg_schm_read_msr(void)
 * @post None
 * 
 */
-uint32 Wdg_schm_read_msr(void)
+uint32 Platform_schm_read_msr(void)
 {
     register uint32 reg_tmp;
     #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
@@ -323,7 +319,7 @@ uint32 Wdg_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _LINARO_C_S32ZE_*/
+#endif   /* _GCC_C_S32ZE_*/
 /*================================================================================================*/
 
 #ifdef _ARM_DS5_C_S32ZE_
@@ -338,7 +334,7 @@ uint32 Wdg_schm_read_msr(void)
 * @post None
 * 
 */
-uint32 Wdg_schm_read_msr(void)
+uint32 Platform_schm_read_msr(void)
 {
     register uint32 reg_tmp;
     #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
@@ -368,7 +364,7 @@ uint32 Wdg_schm_read_msr(void)
 * @post None
 * 
 */
-uint32 Wdg_schm_read_msr(void)
+uint32 Platform_schm_read_msr(void)
 {
     register uint32 reg_tmp;
 
@@ -391,17 +387,17 @@ uint32 Wdg_schm_read_msr(void)
 #define RTE_START_SEC_CODE
 #include "Rte_MemMap.h"
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_00(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_00(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_00[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_00[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -410,17 +406,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_00(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_00[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_00[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_00[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_00[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_00(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_00(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_00[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_00[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_00[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_00[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_00[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_00[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -429,17 +425,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_00(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_01(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_01(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_01[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_01[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -448,17 +444,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_01(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_01[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_01[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_01[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_01[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_01(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_01(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_01[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_01[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_01[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_01[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_01[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_01[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -467,17 +463,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_01(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_02(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_02(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_02[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_02[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -486,17 +482,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_02(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_02[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_02[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_02[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_02[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_02(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_02(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_02[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_02[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_02[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_02[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_02[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_02[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -505,17 +501,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_02(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_03(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_03(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_03[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_03[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -524,17 +520,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_03(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_03[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_03[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_03[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_03[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_03(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_03(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_03[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_03[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_03[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_03[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_03[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_03[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -543,17 +539,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_03(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_04(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_04(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_04[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_04[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -562,17 +558,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_04(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_04[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_04[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_04[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_04[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_04(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_04(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_04[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_04[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_04[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_04[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_04[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_04[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -581,17 +577,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_04(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_05(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_05(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_05[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_05[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -600,17 +596,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_05(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_05[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_05[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_05[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_05[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_05(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_05(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_05[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_05[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_05[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_05[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_05[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_05[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -619,17 +615,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_05(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_06(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_06(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_06[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_06[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -638,17 +634,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_06(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_06[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_06[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_06[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_06[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_06(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_06(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_06[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_06[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_06[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_06[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_06[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_06[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -657,17 +653,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_06(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_07(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_07(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_07[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_07[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -676,17 +672,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_07(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_07[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_07[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_07[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_07[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_07(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_07(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_07[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_07[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_07[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_07[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_07[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_07[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -695,17 +691,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_07(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_08(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_08(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_08[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_08[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -714,17 +710,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_08(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_08[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_08[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_08[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_08[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_08(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_08(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_08[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_08[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_08[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_08[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_08[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_08[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -733,17 +729,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_08(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_09(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_09(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_09[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_09[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -752,17 +748,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_09(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_09[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_09[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_09[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_09[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_09(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_09(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_09[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_09[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_09[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_09[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_09[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_09[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -771,17 +767,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_09(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_10(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_10(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_10[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_10[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -790,17 +786,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_10(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_10[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_10[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_10[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_10[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_10(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_10(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_10[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_10[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_10[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_10[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_10[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_10[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -809,17 +805,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_10(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_11(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_11(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_11[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_11[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -828,17 +824,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_11(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_11[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_11[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_11[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_11[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_11(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_11(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_11[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_11[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_11[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_11[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_11[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_11[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -847,17 +843,17 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_11(void)
     }
 }
 
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_12(void)
+void SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_12(void)
 {
     uint32 msr;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_12[u32CoreId])
+    if(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_12[u32CoreId])
     {
 #if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
+        msr = OsIf_Trusted_Call_Return(Platform_schm_read_msr);
 #else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
+        msr = Platform_schm_read_msr();  /*read MSR (to store interrupts state)*/
 #endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
@@ -866,93 +862,17 @@ void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_12(void)
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
-        msr_WDG_EXCLUSIVE_AREA_12[u32CoreId] = msr;
+        msr_PLATFORM_EXCLUSIVE_AREA_12[u32CoreId] = msr;
     }
-    reentry_guard_WDG_EXCLUSIVE_AREA_12[u32CoreId]++;
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_12[u32CoreId]++;
 }
 
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_12(void)
+void SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_12(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    reentry_guard_WDG_EXCLUSIVE_AREA_12[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_12[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_12[u32CoreId]))         /*if interrupts were enabled*/
-    {
-        OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-    }
-}
-
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_13(void)
-{
-    uint32 msr;
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_13[u32CoreId])
-    {
-#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
-#else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
-#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
-        {
-            OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-        }
-        msr_WDG_EXCLUSIVE_AREA_13[u32CoreId] = msr;
-    }
-    reentry_guard_WDG_EXCLUSIVE_AREA_13[u32CoreId]++;
-}
-
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_13(void)
-{
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    reentry_guard_WDG_EXCLUSIVE_AREA_13[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_13[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_13[u32CoreId]))         /*if interrupts were enabled*/
-    {
-        OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-    }
-}
-
-void SchM_Enter_Wdg_WDG_EXCLUSIVE_AREA_14(void)
-{
-    uint32 msr;
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    if(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_14[u32CoreId])
-    {
-#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
-        msr = OsIf_Trusted_Call_Return(Wdg_schm_read_msr);
-#else
-        msr = Wdg_schm_read_msr();  /*read MSR (to store interrupts state)*/
-#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
-        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
-        {
-            OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32ZE_
-            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
-#endif
-        }
-        msr_WDG_EXCLUSIVE_AREA_14[u32CoreId] = msr;
-    }
-    reentry_guard_WDG_EXCLUSIVE_AREA_14[u32CoreId]++;
-}
-
-void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_14(void)
-{
-    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
-
-    reentry_guard_WDG_EXCLUSIVE_AREA_14[u32CoreId]--;
-    if ((ISR_ON(msr_WDG_EXCLUSIVE_AREA_14[u32CoreId]))&&(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_14[u32CoreId]))         /*if interrupts were enabled*/
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_12[u32CoreId]--;
+    if ((ISR_ON(msr_PLATFORM_EXCLUSIVE_AREA_12[u32CoreId]))&&(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_12[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
 #ifdef _ARM_DS5_C_S32ZE_
@@ -978,54 +898,48 @@ void SchM_Exit_Wdg_WDG_EXCLUSIVE_AREA_14(void)
 @remarks Covers 
 @remarks Implements 
 */
-void SchM_Check_wdg(void)
+void SchM_Check_platform(void)
 {
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_00[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_00[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_00 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_00[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_00[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_00 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_01[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_01[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_01 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_01[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_01[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_01 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_02[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_02[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_02 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_02[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_02[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_02 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_03[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_03[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_03 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_03[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_03[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_03 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_04[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_04[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_04 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_04[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_04[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_04 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_05[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_05[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_05 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_05[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_05[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_05 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_06[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_06[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_06 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_06[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_06[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_06 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_07[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_07[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_07 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_07[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_07[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_07 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_08[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_08[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_08 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_08[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_08[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_08 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_09[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_09[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_09 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_09[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_09[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_09 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_10[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_10[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_10 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_10[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_10[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_10 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_11[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_11[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_11 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_11[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_11[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_11 for the next test in the suite*/
 
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_12[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_12[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_12 for the next test in the suite*/
-
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_13[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_13[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_13 for the next test in the suite*/
-
-    EU_ASSERT(0UL == reentry_guard_WDG_EXCLUSIVE_AREA_14[u32CoreId]);
-    reentry_guard_WDG_EXCLUSIVE_AREA_14[u32CoreId] = 0UL; /*reset reentry_guard_WDG_EXCLUSIVE_AREA_14 for the next test in the suite*/
+    EU_ASSERT(0UL == reentry_guard_PLATFORM_EXCLUSIVE_AREA_12[u32CoreId]);
+    reentry_guard_PLATFORM_EXCLUSIVE_AREA_12[u32CoreId] = 0UL; /*reset reentry_guard_PLATFORM_EXCLUSIVE_AREA_12 for the next test in the suite*/
 
 
 }

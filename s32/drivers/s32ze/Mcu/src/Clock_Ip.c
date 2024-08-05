@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip.c
-*   @version    1.0.0
+*   @version    2.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -36,7 +36,7 @@ extern "C"{
 #define CLOCK_IP_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_SW_PATCH_VERSION_C               0
 
@@ -199,14 +199,10 @@ static void Clock_Ip_CheckCmuClocks(Clock_Ip_ClockConfigType const * Config);
 #endif
 
 /* Clock Report Error Callback */
-static Clock_Ip_NotificationsCallbackType Clock_Ip_pfkNotificationsCallback = Clock_Ip_NotificatonsEmptyCallback;
+static Clock_Ip_NotificationsCallbackType Clock_Ip_pfkNotificationsCallback = &Clock_Ip_NotificatonsEmptyCallback;
 
 #define MCU_STOP_SEC_CODE
 #include "Mcu_MemMap.h"
-
-/*==================================================================================================
-*                                         LOCAL VARIABLES
-==================================================================================================*/
 
 /*==================================================================================================
 *                                         LOCAL FUNCTIONS
@@ -567,7 +563,7 @@ static void Clock_Ip_CallEmptyCallbacks(void)
         (void)Clock_Ip_axFracDivCallbacks[CLOCK_IP_NO_CALLBACK].Complete(CLOCK_IS_OFF);
 
         Clock_Ip_axGateCallbacks[CLOCK_IP_NO_CALLBACK].Set(NULL_PTR);
-        Clock_Ip_axGateCallbacks[CLOCK_IP_NO_CALLBACK].Update(RESERVED_CLK,FALSE);
+        Clock_Ip_axGateCallbacks[CLOCK_IP_NO_CALLBACK].Update(CLOCK_IS_OFF,FALSE);
 
         Clock_Ip_axIntOscCallbacks[CLOCK_IP_NO_CALLBACK].Set(NULL_PTR);
 
@@ -758,14 +754,14 @@ void Clock_Ip_InitClock(Clock_Ip_ClockConfigType const * Config)
         Clock_Ip_axIntOscCallbacks[CallbackIndex].Set(&(*Config->Ircoscs)[Index]);
     }
 
+    /* Initialize clock objects, internal driver data */
+    Clock_Ip_UpdateDriverContext(Config);
+
     for (Index = 0U; Index < Config->XoscsCount; Index++)     /* Configure all xoscs from configuration */
     {
         CallbackIndex = Clock_Ip_au8XoscCallbackIndex[Clock_Ip_au8ClockFeatures[(*(Config->Xoscs))[Index].Name][CLOCK_IP_CALLBACK]];
         Clock_Ip_axExtOscCallbacks[CallbackIndex].Set(&(*Config->Xoscs)[Index]);
     }
-
-    /* Initialize clock objects, internal driver data */
-    Clock_Ip_UpdateDriverContext(Config);
 
     /* Configure the PCFS  */
     for (Index = 0U; Index < Config->PcfsCount; Index++)       /* Configure all progressive frequency switching clocks from configuration */
@@ -1092,7 +1088,7 @@ void Clock_Ip_SetUserAccessAllowed(void)
  *
  * @implements Clock_Ip_GetClockFrequency_Activity
  * END**************************************************************************/
-uint32 Clock_Ip_GetClockFrequency(Clock_Ip_NameType ClockName)
+uint64 Clock_Ip_GetClockFrequency(Clock_Ip_NameType ClockName)
 {
 #if (defined(CLOCK_IP_DEV_ERROR_DETECT))
   #if (CLOCK_IP_DEV_ERROR_DETECT == STD_ON)
@@ -1211,7 +1207,7 @@ void Clock_Ip_WriteRegisterValues(const Clock_Ip_RegisterIndexType *Indexes)
     uint32 *RegAddr;
     uint32 RegData;
     uint32 Index;
-    
+
     CLOCK_IP_DEV_ASSERT(NULL_PTR != Clock_Ip_pxConfig);
     /* 'Clock_Ip_pxConfig' is set by Clock_Ip_InitClock().
      *  It doesn't make sense to call this function without clock initialization. */
@@ -1219,10 +1215,10 @@ void Clock_Ip_WriteRegisterValues(const Clock_Ip_RegisterIndexType *Indexes)
     {
         /* Register values array must be valid */
         CLOCK_IP_DEV_ASSERT(NULL_PTR != Clock_Ip_pxConfig->RegValues);
-        
+
         /* Valus of indexes must be valid */
         CLOCK_IP_DEV_ASSERT(Indexes->StartIndex < Indexes->EndIndex);
-        
+
         for (Index = Indexes->StartIndex; Index < Indexes->EndIndex; Index++)
         {
             RegAddr = (*Clock_Ip_pxConfig->RegValues)[Index].RegisterAddr;
@@ -1230,9 +1226,9 @@ void Clock_Ip_WriteRegisterValues(const Clock_Ip_RegisterIndexType *Indexes)
             *RegAddr = RegData;
         }
     }
-}    
+}
 #endif
-        
+
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GPR1.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_GPR1
  *
  * This file contains register definitions and macros for easy access to their
@@ -74,18 +74,19 @@ typedef struct {
   __IO uint32_t LVFCCULD3;                         /**< VFCCU Local DID register 3, offset: 0x4 */
   __IO uint32_t LVFCCULD4;                         /**< VFCCU Local DID register 4, offset: 0x8 */
   __IO uint32_t LVFCCULD5;                         /**< VFCCU Local DID register 5, offset: 0xC */
-  uint8_t RESERVED_0[36];
-  __IO uint32_t FUNCC2;                            /**< Functional Reset Control register 2, offset: 0x34 */
+  uint8_t RESERVED_0[20];
+  __IO uint32_t DESTC2;                            /**< Source Control for RGMII TX CLK, offset: 0x24 */
   uint8_t RESERVED_1[12];
+  __IO uint32_t FUNCC2;                            /**< Zipwire Configuration, offset: 0x34 */
+  uint8_t RESERVED_2[12];
   __I  uint32_t INITM1;                            /**< NoC Initiator NIU Timeout Status, offset: 0x44 */
   __I  uint32_t TARGTMS1;                          /**< NoC Target NIU Timeout Status, offset: 0x48 */
   __IO uint32_t TARGTMC1;                          /**< NoC Target NIU Timeout Control, offset: 0x4C */
-  uint8_t RESERVED_2[4];
+  uint8_t RESERVED_3[4];
   __IO uint32_t NETCC0;                            /**< NETC Control register 0, offset: 0x54 */
   __IO uint32_t NETCC1;                            /**< NETC Control register 1, offset: 0x58 */
   __IO uint32_t CLKOUT1SEL;                        /**< CLKOUT_1 MUX select, offset: 0x5C */
-  uint8_t RESERVED_3[16];
-  __IO uint32_t LVFCCU1S;                          /**< VFCCU Fault Status 1, offset: 0x70 */
+  uint8_t RESERVED_4[20];
   __IO uint32_t XPAR1;                             /**< Interface parity control and status register, offset: 0x74 */
 } GPR1_Type, *GPR1_MemMapPtr;
 
@@ -147,7 +148,16 @@ typedef struct {
 #define GPR1_LVFCCULD5_FHID(x)                   (((uint32_t)(((uint32_t)(x)) << GPR1_LVFCCULD5_FHID_SHIFT)) & GPR1_LVFCCULD5_FHID_MASK)
 /*! @} */
 
-/*! @name FUNCC2 - Functional Reset Control register 2 */
+/*! @name DESTC2 - Source Control for RGMII TX CLK */
+/*! @{ */
+
+#define GPR1_DESTC2_CTRL_MASK                    (0xFFFFFFFFU)
+#define GPR1_DESTC2_CTRL_SHIFT                   (0U)
+#define GPR1_DESTC2_CTRL_WIDTH                   (32U)
+#define GPR1_DESTC2_CTRL(x)                      (((uint32_t)(((uint32_t)(x)) << GPR1_DESTC2_CTRL_SHIFT)) & GPR1_DESTC2_CTRL_MASK)
+/*! @} */
+
+/*! @name FUNCC2 - Zipwire Configuration */
 /*! @{ */
 
 #define GPR1_FUNCC2_CTRL_MASK                    (0xFFFFFFFFU)
@@ -213,15 +223,6 @@ typedef struct {
 #define GPR1_CLKOUT1SEL_MUXSEL_SHIFT             (0U)
 #define GPR1_CLKOUT1SEL_MUXSEL_WIDTH             (6U)
 #define GPR1_CLKOUT1SEL_MUXSEL(x)                (((uint32_t)(((uint32_t)(x)) << GPR1_CLKOUT1SEL_MUXSEL_SHIFT)) & GPR1_CLKOUT1SEL_MUXSEL_MASK)
-/*! @} */
-
-/*! @name LVFCCU1S - VFCCU Fault Status 1 */
-/*! @{ */
-
-#define GPR1_LVFCCU1S_STAT_MASK                  (0xFFFFFFFFU)
-#define GPR1_LVFCCU1S_STAT_SHIFT                 (0U)
-#define GPR1_LVFCCU1S_STAT_WIDTH                 (32U)
-#define GPR1_LVFCCU1S_STAT(x)                    (((uint32_t)(((uint32_t)(x)) << GPR1_LVFCCU1S_STAT_SHIFT)) & GPR1_LVFCCU1S_STAT_MASK)
 /*! @} */
 
 /*! @name XPAR1 - Interface parity control and status register */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -7,7 +7,7 @@
 /**
 *   @file    Mru_Ip_Irq.c
 *
-*   @version 1.0.0
+*   @version 2.0.0
 *
 *   @brief   ISR handler file.
 *   @details Declaration APIs for Mru ISR.
@@ -36,7 +36,7 @@ extern "C"
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION_IRQ_C       4
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_IRQ_C       7
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION_IRQ_C    0
-#define CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_IRQ_C               1
+#define CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_IRQ_C               2
 #define CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION_IRQ_C               0
 #define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_IRQ_C               0
 /*==================================================================================================
@@ -75,6 +75,9 @@ extern "C"
 /*==================================================================================================
 *                                      GLOBAL VARIABLES
 ==================================================================================================*/
+#ifdef PLATFORM_IP_ENABLE_MRU
+#if (PLATFORM_IP_ENABLE_MRU == STD_ON)
+
 #define PLATFORM_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Platform_MemMap.h"
 
@@ -1985,6 +1988,9 @@ ISR(Mru_Ip_CE_MRU6_TO_MRU11_Int1_IRQHandler)
 
 #define PLATFORM_STOP_SEC_CODE
 #include "Platform_MemMap.h"
+
+#endif /* PLATFORM_IP_ENABLE_MRU == STD_ON)*/
+#endif /* PLATFORM_IP_ENABLE_MRU */
 
 #ifdef __cplusplus
 }

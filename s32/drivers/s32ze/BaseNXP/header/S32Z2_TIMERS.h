@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_TIMERS.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_TIMERS
  *
  * This file contains register definitions and macros for easy access to their
@@ -138,11 +138,6 @@ typedef struct {
 #define TIMERS_TIMER0_CFG_TM_WIDTH               (2U)
 #define TIMERS_TIMER0_CFG_TM(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER0_CFG_TM_SHIFT)) & TIMERS_TIMER0_CFG_TM_MASK)
 
-#define TIMERS_TIMER0_CFG_TREST_EN_MASK          (0x200U)
-#define TIMERS_TIMER0_CFG_TREST_EN_SHIFT         (9U)
-#define TIMERS_TIMER0_CFG_TREST_EN_WIDTH         (1U)
-#define TIMERS_TIMER0_CFG_TREST_EN(x)            (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER0_CFG_TREST_EN_SHIFT)) & TIMERS_TIMER0_CFG_TREST_EN_MASK)
-
 #define TIMERS_TIMER0_CFG_CAS_MASK               (0x400U)
 #define TIMERS_TIMER0_CFG_CAS_SHIFT              (10U)
 #define TIMERS_TIMER0_CFG_CAS_WIDTH              (1U)
@@ -219,21 +214,6 @@ typedef struct {
 #define TIMERS_TIMER1_CFG_ES_WIDTH               (1U)
 #define TIMERS_TIMER1_CFG_ES(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER1_CFG_ES_SHIFT)) & TIMERS_TIMER1_CFG_ES_MASK)
 
-#define TIMERS_TIMER1_CFG_TP_MASK                (0x40U)
-#define TIMERS_TIMER1_CFG_TP_SHIFT               (6U)
-#define TIMERS_TIMER1_CFG_TP_WIDTH               (1U)
-#define TIMERS_TIMER1_CFG_TP(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER1_CFG_TP_SHIFT)) & TIMERS_TIMER1_CFG_TP_MASK)
-
-#define TIMERS_TIMER1_CFG_TM_MASK                (0x180U)
-#define TIMERS_TIMER1_CFG_TM_SHIFT               (7U)
-#define TIMERS_TIMER1_CFG_TM_WIDTH               (2U)
-#define TIMERS_TIMER1_CFG_TM(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER1_CFG_TM_SHIFT)) & TIMERS_TIMER1_CFG_TM_MASK)
-
-#define TIMERS_TIMER1_CFG_TREST_EN_MASK          (0x200U)
-#define TIMERS_TIMER1_CFG_TREST_EN_SHIFT         (9U)
-#define TIMERS_TIMER1_CFG_TREST_EN_WIDTH         (1U)
-#define TIMERS_TIMER1_CFG_TREST_EN(x)            (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER1_CFG_TREST_EN_SHIFT)) & TIMERS_TIMER1_CFG_TREST_EN_MASK)
-
 #define TIMERS_TIMER1_CFG_RES_MASK               (0x10000U)
 #define TIMERS_TIMER1_CFG_RES_SHIFT              (16U)
 #define TIMERS_TIMER1_CFG_RES_WIDTH              (1U)
@@ -243,11 +223,6 @@ typedef struct {
 #define TIMERS_TIMER1_CFG_PC_SHIFT               (17U)
 #define TIMERS_TIMER1_CFG_PC_WIDTH               (1U)
 #define TIMERS_TIMER1_CFG_PC(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER1_CFG_PC_SHIFT)) & TIMERS_TIMER1_CFG_PC_MASK)
-
-#define TIMERS_TIMER1_CFG_CT_MASK                (0x40000U)
-#define TIMERS_TIMER1_CFG_CT_SHIFT               (18U)
-#define TIMERS_TIMER1_CFG_CT_WIDTH               (1U)
-#define TIMERS_TIMER1_CFG_CT(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER1_CFG_CT_SHIFT)) & TIMERS_TIMER1_CFG_CT_MASK)
 
 #define TIMERS_TIMER1_CFG_RU_MASK                (0x80000U)
 #define TIMERS_TIMER1_CFG_RU_SHIFT               (19U)
@@ -305,21 +280,6 @@ typedef struct {
 #define TIMERS_TIMER2_CFG_ES_WIDTH               (1U)
 #define TIMERS_TIMER2_CFG_ES(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER2_CFG_ES_SHIFT)) & TIMERS_TIMER2_CFG_ES_MASK)
 
-#define TIMERS_TIMER2_CFG_TP_MASK                (0x40U)
-#define TIMERS_TIMER2_CFG_TP_SHIFT               (6U)
-#define TIMERS_TIMER2_CFG_TP_WIDTH               (1U)
-#define TIMERS_TIMER2_CFG_TP(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER2_CFG_TP_SHIFT)) & TIMERS_TIMER2_CFG_TP_MASK)
-
-#define TIMERS_TIMER2_CFG_TM_MASK                (0x180U)
-#define TIMERS_TIMER2_CFG_TM_SHIFT               (7U)
-#define TIMERS_TIMER2_CFG_TM_WIDTH               (2U)
-#define TIMERS_TIMER2_CFG_TM(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER2_CFG_TM_SHIFT)) & TIMERS_TIMER2_CFG_TM_MASK)
-
-#define TIMERS_TIMER2_CFG_TREST_EN_MASK          (0x200U)
-#define TIMERS_TIMER2_CFG_TREST_EN_SHIFT         (9U)
-#define TIMERS_TIMER2_CFG_TREST_EN_WIDTH         (1U)
-#define TIMERS_TIMER2_CFG_TREST_EN(x)            (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER2_CFG_TREST_EN_SHIFT)) & TIMERS_TIMER2_CFG_TREST_EN_MASK)
-
 #define TIMERS_TIMER2_CFG_CAS_MASK               (0x400U)
 #define TIMERS_TIMER2_CFG_CAS_SHIFT              (10U)
 #define TIMERS_TIMER2_CFG_CAS_WIDTH              (1U)
@@ -334,11 +294,6 @@ typedef struct {
 #define TIMERS_TIMER2_CFG_PC_SHIFT               (17U)
 #define TIMERS_TIMER2_CFG_PC_WIDTH               (1U)
 #define TIMERS_TIMER2_CFG_PC(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER2_CFG_PC_SHIFT)) & TIMERS_TIMER2_CFG_PC_MASK)
-
-#define TIMERS_TIMER2_CFG_CT_MASK                (0x40000U)
-#define TIMERS_TIMER2_CFG_CT_SHIFT               (18U)
-#define TIMERS_TIMER2_CFG_CT_WIDTH               (1U)
-#define TIMERS_TIMER2_CFG_CT(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER2_CFG_CT_SHIFT)) & TIMERS_TIMER2_CFG_CT_MASK)
 
 #define TIMERS_TIMER2_CFG_RU_MASK                (0x80000U)
 #define TIMERS_TIMER2_CFG_RU_SHIFT               (19U)
@@ -396,21 +351,6 @@ typedef struct {
 #define TIMERS_TIMER3_CFG_ES_WIDTH               (1U)
 #define TIMERS_TIMER3_CFG_ES(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER3_CFG_ES_SHIFT)) & TIMERS_TIMER3_CFG_ES_MASK)
 
-#define TIMERS_TIMER3_CFG_TP_MASK                (0x40U)
-#define TIMERS_TIMER3_CFG_TP_SHIFT               (6U)
-#define TIMERS_TIMER3_CFG_TP_WIDTH               (1U)
-#define TIMERS_TIMER3_CFG_TP(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER3_CFG_TP_SHIFT)) & TIMERS_TIMER3_CFG_TP_MASK)
-
-#define TIMERS_TIMER3_CFG_TM_MASK                (0x180U)
-#define TIMERS_TIMER3_CFG_TM_SHIFT               (7U)
-#define TIMERS_TIMER3_CFG_TM_WIDTH               (2U)
-#define TIMERS_TIMER3_CFG_TM(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER3_CFG_TM_SHIFT)) & TIMERS_TIMER3_CFG_TM_MASK)
-
-#define TIMERS_TIMER3_CFG_TREST_EN_MASK          (0x200U)
-#define TIMERS_TIMER3_CFG_TREST_EN_SHIFT         (9U)
-#define TIMERS_TIMER3_CFG_TREST_EN_WIDTH         (1U)
-#define TIMERS_TIMER3_CFG_TREST_EN(x)            (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER3_CFG_TREST_EN_SHIFT)) & TIMERS_TIMER3_CFG_TREST_EN_MASK)
-
 #define TIMERS_TIMER3_CFG_RES_MASK               (0x10000U)
 #define TIMERS_TIMER3_CFG_RES_SHIFT              (16U)
 #define TIMERS_TIMER3_CFG_RES_WIDTH              (1U)
@@ -420,11 +360,6 @@ typedef struct {
 #define TIMERS_TIMER3_CFG_PC_SHIFT               (17U)
 #define TIMERS_TIMER3_CFG_PC_WIDTH               (1U)
 #define TIMERS_TIMER3_CFG_PC(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER3_CFG_PC_SHIFT)) & TIMERS_TIMER3_CFG_PC_MASK)
-
-#define TIMERS_TIMER3_CFG_CT_MASK                (0x40000U)
-#define TIMERS_TIMER3_CFG_CT_SHIFT               (18U)
-#define TIMERS_TIMER3_CFG_CT_WIDTH               (1U)
-#define TIMERS_TIMER3_CFG_CT(x)                  (((uint32_t)(((uint32_t)(x)) << TIMERS_TIMER3_CFG_CT_SHIFT)) & TIMERS_TIMER3_CFG_CT_MASK)
 
 #define TIMERS_TIMER3_CFG_RU_MASK                (0x80000U)
 #define TIMERS_TIMER3_CFG_RU_SHIFT               (19U)

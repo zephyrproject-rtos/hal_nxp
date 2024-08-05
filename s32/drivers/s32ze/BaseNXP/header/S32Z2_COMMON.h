@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2
  *
  * This file contains register definitions and macros for easy access to their
@@ -75,7 +75,7 @@
  * compatible) */
 #define MCU_MEM_MAP_VERSION 0x0200U
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0001U
+#define MCU_MEM_MAP_VERSION_MINOR 0x0003U
 
 /* ----------------------------------------------------------------------------
    -- Generic macros
@@ -264,8 +264,8 @@ typedef enum {
   SMU_CANXL1_INT_RX_TX_DATA_IRQn = 130,            /**< 'CANXL: CAN frame data */
   SMU_CANXL1_INT_ERR_IRQn      = 131,              /**< CANXL: error occurred in CANXL */
   SMU_I3C0_IRQn                = 132,              /**< Interrupt Request */
-  SMU_I3C1_IRQn                = 133,              /**< Interrupt Request */
-  SMU_I3C2_IRQn                = 134,              /**< Interrupt Request */
+  SMU_LPI2C1_IRQn              = 133,              /**< Interrupt Request */
+  SMU_LPI2C2_IRQn              = 134,              /**< Interrupt Request */
   SMU_MC_RGM_IRQn              = 135,              /**< Interrupt Request to System */
   SMU_HSE_MU0_TX_IRQn          = 136,              /**< Ored tx interrupt to MU-0 */
   SMU_HSE_MU0_RX_IRQn          = 137,              /**< Ored rx interrupt to MU-0 */
@@ -841,7 +841,6 @@ typedef enum {
   RTU_CANXL0_INT_RX_TX_ERR_IRQn = 266,             /**< CANXL: protocol engine error occured related to reception or transmission of CAN frames. */
   RTU_CANXL0_INT_INTERNAL_ERR_IRQn = 267,          /**< CANXL: internal exception is detected */
   RTU_CANXL0_INT_LRAM_ECC_NOCORR_ERR_IRQn = 268,   /**< CANXL: non-correctable error occured within  internal data RAM  */
-  RTU_CANXL0_INT_IRAM_ECC_NOCORR_ERR_IRQn = 269,   /**< CANXL: non-correctable error occured within  internal code RAM */
   RTU_CANXL0_INT_RAM_ECC_CORR_ERR_IRQn = 270,      /**< CANXL: correctable error occured within  internal data RAM or code RAM */
   RTU_CANXL0_INT_FREEZE_IRQn   = 271,              /**< CANXL: IP has entered or exited freeze mode */
   RTU_CANXL1_INT_TX_MB_1_IRQn  = 272,              /**< CANXL: CAN frame transmission from one of the Tx message buffers 0-31 completed */
@@ -853,12 +852,11 @@ typedef enum {
   RTU_CANXL1_INT_RX_TX_ERR_IRQn = 278,             /**< CANXL: protocol engine error occured related to reception or transmission of CAN frames. */
   RTU_CANXL1_INT_INTERNAL_ERR_IRQn = 279,          /**< CANXL: internal exception is detected */
   RTU_CANXL1_INT_LRAM_ECC_NOCORR_ERR_IRQn = 280,   /**< CANXL: non-correctable error occured within  internal data RAM  */
-  RTU_CANXL1_INT_IRAM_ECC_NOCORR_ERR_IRQn = 281,   /**< CANXL: non-correctable error occured within  internal code RAM */
   RTU_CANXL1_INT_RAM_ECC_CORR_ERR_IRQn = 282,      /**< CANXL: correctable error occured within  internal data RAM or code RAM */
   RTU_CANXL1_INT_FREEZE_IRQn   = 283,              /**< CANXL: IP has entered or exited freeze mode */
   RTU_I3C0_IRQn                = 284,              /**< Interrupt Request */
-  RTU_I3C1_IRQn                = 285,              /**< Interrupt Request */
-  RTU_I3C2_IRQn                = 286,              /**< Interrupt Request */
+  RTU_LPI2C1_IRQn              = 285,              /**< Interrupt Request */
+  RTU_LPI2C2_IRQn              = 286,              /**< Interrupt Request */
   RTU_MC_RGM_IRQn              = 287,              /**< Interrupt Request to System */
   RTU_HSE_MU0_TX_IRQn          = 288,              /**< Ored tx interrupt to MU-0 */
   RTU_HSE_MU0_RX_IRQn          = 289,              /**< Ored rx interrupt to MU-0 */
@@ -1675,7 +1673,6 @@ typedef enum {
   FLEXLLCE_CANXL0_INT_RX_TX_ERR_IRQn = 306,        /**< CANXL: protocol engine error occured related to reception or transmission of CAN frames. */
   FLEXLLCE_CANXL0_INT_INTERNAL_ERR_IRQn = 307,     /**< CANXL: internal exception is detected */
   FLEXLLCE_CANXL0_INT_LRAM_ECC_NOCORR_ERR_IRQn = 308, /**< CANXL: non-correctable error occured within  internal data RAM  */
-  FLEXLLCE_CANXL0_INT_IRAM_ECC_NOCORR_ERR_IRQn = 309, /**< CANXL: non-correctable error occured within  internal data RAM  */
   FLEXLLCE_CANXL0_INT_RAM_ECC_CORR_ERR_IRQn = 310, /**< CANXL: correctable error occured within  internal data RAM or code RAM */
   FLEXLLCE_CANXL0_INT_FREEZE_IRQn = 311,           /**< CANXL: IP has entered or exited freeze mode */
   FLEXLLCE_CANXL1_INT_TX_MB_1_IRQn = 312,          /**< CANXL: CAN frame transmission from one of the Tx message buffers 0-31 completed */
@@ -1687,7 +1684,6 @@ typedef enum {
   FLEXLLCE_CANXL1_INT_RX_TX_ERR_IRQn = 318,        /**< CANXL: protocol engine error occured related to reception or transmission of CAN frames. */
   FLEXLLCE_CANXL1_INT_INTERNAL_ERR_IRQn = 319,     /**< CANXL: internal exception is detected */
   FLEXLLCE_CANXL1_INT_LRAM_ECC_NOCORR_ERR_IRQn = 320, /**< CANXL: non-correctable error occured within  internal data RAM  */
-  FLEXLLCE_CANXL1_INT_IRAM_ECC_NOCORR_ERR_IRQn = 321, /**< CANXL: non-correctable error occured within  internal data RAM  */
   FLEXLLCE_CANXL1_INT_RAM_ECC_CORR_ERR_IRQn = 322, /**< CANXL: correctable error occured within  internal data RAM or code RAM */
   FLEXLLCE_CANXL1_INT_FREEZE_IRQn = 323,           /**< CANXL: IP has entered or exited freeze mode */
   FLEXLLCE_LINFLEXD0_IRQn      = 324,              /**< Ored of Internal Receiver Interrupt request, Internal Transmitter interrupt request and Internal Error Interrupt request */

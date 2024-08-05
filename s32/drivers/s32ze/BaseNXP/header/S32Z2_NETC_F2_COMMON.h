@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_F2_COMMON.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_NETC_F2_COMMON
  *
  * This file contains register definitions and macros for easy access to their
@@ -120,13 +120,13 @@ typedef struct {
   __I  uint32_t TCRPTSR;                           /**< Time capture receive port timestamp register, offset: 0x1114 */
   __IO uint32_t TCMSIVR;                           /**< Time capture MSI-X vector register, offset: 0x1118 */
   uint8_t RESERVED_13[228];
-  __IO uint32_t CVLANR1;                           /**< Custom VLAN Ethertype register 1, offset: 0x1200 */
-  __IO uint32_t CVLANR2;                           /**< Custom VLAN Ethertype register 2, offset: 0x1204 */
-  __IO uint32_t PSRTAGETR;                         /**< Pre-Standard RTAG Ethertype register, offset: 0x1208 */
+  __IO uint32_t CVLANR1;                           /**< Custom VLAN EtherType register 1, offset: 0x1200 */
+  __IO uint32_t CVLANR2;                           /**< Custom VLAN EtherType register 2, offset: 0x1204 */
+  __IO uint32_t PSRTAGETR;                         /**< Pre-Standard RTAG EtherType register, offset: 0x1208 */
   uint8_t RESERVED_14[20];
   __IO uint32_t DOSL2CR;                           /**< DoS L2 configuration register, offset: 0x1220 */
   uint8_t RESERVED_15[220];
-  struct {                                         /* offset: 0x1300, array step: 0x10 */
+  struct NETC_F2_COMMON_NUM_PROFILE {              /* offset: 0x1300, array step: 0x10 */
     __IO uint32_t VLANIPVMPR0;                       /**< VLAN to IPV mapping profile 0 register 0..VLAN to IPV mapping profile 1 register 0, array offset: 0x1300, array step: 0x10 */
     __IO uint32_t VLANIPVMPR1;                       /**< VLAN to IPV mapping profile 0 register 1..VLAN to IPV mapping profile 1 register 1, array offset: 0x1304, array step: 0x10 */
     __IO uint32_t VLANDRMPR;                         /**< VLAN to DR mapping profile 0 register..VLAN to DR mapping profile 1 register, array offset: 0x1308, array step: 0x10 */
@@ -743,7 +743,7 @@ typedef struct {
 #define NETC_F2_COMMON_TCMSIVR_VECTOR(x)         (((uint32_t)(((uint32_t)(x)) << NETC_F2_COMMON_TCMSIVR_VECTOR_SHIFT)) & NETC_F2_COMMON_TCMSIVR_VECTOR_MASK)
 /*! @} */
 
-/*! @name CVLANR1 - Custom VLAN Ethertype register 1 */
+/*! @name CVLANR1 - Custom VLAN EtherType register 1 */
 /*! @{ */
 
 #define NETC_F2_COMMON_CVLANR1_ETYPE_MASK        (0xFFFFU)
@@ -757,7 +757,7 @@ typedef struct {
 #define NETC_F2_COMMON_CVLANR1_V(x)              (((uint32_t)(((uint32_t)(x)) << NETC_F2_COMMON_CVLANR1_V_SHIFT)) & NETC_F2_COMMON_CVLANR1_V_MASK)
 /*! @} */
 
-/*! @name CVLANR2 - Custom VLAN Ethertype register 2 */
+/*! @name CVLANR2 - Custom VLAN EtherType register 2 */
 /*! @{ */
 
 #define NETC_F2_COMMON_CVLANR2_ETYPE_MASK        (0xFFFFU)
@@ -771,7 +771,7 @@ typedef struct {
 #define NETC_F2_COMMON_CVLANR2_V(x)              (((uint32_t)(((uint32_t)(x)) << NETC_F2_COMMON_CVLANR2_V_SHIFT)) & NETC_F2_COMMON_CVLANR2_V_MASK)
 /*! @} */
 
-/*! @name PSRTAGETR - Pre-Standard RTAG Ethertype register */
+/*! @name PSRTAGETR - Pre-Standard RTAG EtherType register */
 /*! @{ */
 
 #define NETC_F2_COMMON_PSRTAGETR_ETHERTYPE_MASK  (0xFFFFU)

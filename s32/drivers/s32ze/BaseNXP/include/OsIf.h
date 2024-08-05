@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -34,7 +34,7 @@ extern "C"{
 #define OSIF_AR_RELEASE_MAJOR_VERSION     4
 #define OSIF_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_SW_MAJOR_VERSION             1
+#define OSIF_SW_MAJOR_VERSION             2
 #define OSIF_SW_MINOR_VERSION             0
 #define OSIF_SW_PATCH_VERSION             0
 
@@ -93,14 +93,48 @@ extern "C"{
  *
  * Counter type.
  *
- * @detail The dummy counter of Osif is meant as a loop-counter timeout mechanism that requirement no
+ * The dummy counter of Osif is meant as a loop-counter timeout mechanism that requirement no
  * additional resource (hardware and software). It was meant to replace the typical loop timeout of decrementing
- * a variable each time the loop was executed until the counter reaches zero. Usage of OsIf replaced these loop counters
- * within RTD, so the advantage is that these timeouts can be configured to be simple loop counters
- * (using the dummy counter), not changing the RTD code.
+ * a variable each time the loop was executed until the counter reaches zero. The dummy counter is implemented 
+ * in order to have a dummy implementation for the timeout mechanisms used in the drivers without changing the RTD code
+ *
+   @latexonly
+    \begin{left}
+    \includegraphics[scale=0.4]{OsIf_CounterDummyType.png}
+    \end{left}
+   @endlatexonly
+ *
+ * The system counter of Osif is a loop-counter timeout mechanism that uses real system resources(hardware and software).
+ * By using the system counter a typical loop timeout mechanism is used, decrementing a variable each time the loop is executed
+ * until the counter reaches zero. The system counter is meant to be used in an OS-specific environment.
+ *
+   @latexonly
+    \begin{left}
+    \includegraphics[scale=0.4]{OsIf_CounterSystemType.png}
+    \end{left}
+   @endlatexonly
+ *
+ * The custom counter of Osif is meant as a loop-counter timeout mechanism that gives the possibility for the user
+ * to define it's own time counter system. The user will have to define his own APIs to cover the necessary functionalities.
+ * The necessary APIs to be implemented can be found in the header file OsIf_Timer_Custom.h
+ *
+   @latexonly
+    \begin{left}
+    \includegraphics[scale=0.4]{OsIf_CounterCustomType.png}
+    \end{left}
+   @endlatexonly
+ *
+ * Enumerator
+ *
+   @latexonly
+    \begin{left}
+    \includegraphics[scale=0.3]{OsIf_CounterType.png}
+    \end{left}
+   @endlatexonly
  */
 typedef enum
 {
+/*! @cond */
     OSIF_COUNTER_DUMMY, /**< dummy counter */
 #if (OSIF_USE_SYSTEM_TIMER == STD_ON) 
     OSIF_COUNTER_SYSTEM, /**< system counter */
@@ -108,6 +142,7 @@ typedef enum
 #if (OSIF_USE_CUSTOM_TIMER == STD_ON)
     OSIF_COUNTER_CUSTOM /**< custom counter */
 #endif /* (OSIF_USE_CUSTOM_TIMER == STD_ON) */
+/*! @endcond */
 } OsIf_CounterType;
 
 /*==================================================================================================
@@ -174,6 +209,20 @@ void OsIf_SetTimerFrequency(uint32 Freq, OsIf_CounterType SelectedCounter);
  * @return the equivalent value in ticks
  */
 uint32 OsIf_MicrosToTicks(uint32 Micros, OsIf_CounterType SelectedCounter);
+
+/*!
+ * @brief Get physical core id
+ *
+ * This function gets physical core id.
+ *
+ * @param[in] void
+ * @return the physical core id
+ */
+#ifdef OSIF_GET_PHYSICAL_CORE_ID_ENABLE
+#if (OSIF_GET_PHYSICAL_CORE_ID_ENABLE == STD_ON)
+uint8 OsIf_GetPhysicalCoreId(void);
+#endif /* #ifdef OSIF_GET_PHYSICAL_CORE_ID_ENABLE */
+#endif /* #if (OSIF_GET_PHYSICAL_CORE_ID_ENABLE == STD_ON) */
 
 #define BASENXP_STOP_SEC_CODE
 #include "BaseNXP_MemMap.h"

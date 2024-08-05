@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_RTU_MRU.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_RTU_MRU
  *
  * This file contains register definitions and macros for easy access to their
@@ -74,7 +74,7 @@
 
 /** RTU_MRU - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x10 */
+  struct RTU_MRU_CHXCONFIG {                       /* offset: 0x0, array step: 0x10 */
     __IO uint32_t CH_CFG0;                           /**< Channel (x) Configuration 0, array offset: 0x0, array step: 0x10 */
     __IO uint32_t CH_CFG1;                           /**< Channel (x) Configuration 1, array offset: 0x4, array step: 0x10 */
     __IO uint32_t CH_MBSTAT;                         /**< Channel (x) Mailbox Status, array offset: 0x8, array step: 0x10 */
@@ -135,7 +135,7 @@ typedef struct {
 } RTU_MRU_Type, *RTU_MRU_MemMapPtr;
 
 /** Number of instances of the RTU_MRU module. */
-#define RTU_MRU_INSTANCE_COUNT                   (8)
+#define RTU_MRU_INSTANCE_COUNT                   (8u)
 
 /* RTU_MRU - Peripheral instance base addresses */
 /** Peripheral RTU0__MRU_0 base address */

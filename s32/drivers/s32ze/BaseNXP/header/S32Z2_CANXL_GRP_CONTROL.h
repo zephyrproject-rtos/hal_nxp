@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CANXL_GRP_CONTROL.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_CANXL_GRP_CONTROL
  *
  * This file contains register definitions and macros for easy access to their
@@ -88,9 +88,9 @@ typedef struct {
   uint8_t RESERVED_2[16];
   __IO uint32_t FREEDSC0;                          /**< Free Descriptor Index 0, offset: 0x94 */
   uint8_t RESERVED_3[112];
-  __IO uint32_t OVERRUNF[CANXL_GRP_CONTROL_OVERRUNFARRAY_COUNT]; /**< Descriptor Overrun Flag, array offset: 0x108, array step: 0x4 */
+  __IO uint32_t OVERRUNF[CANXL_GRP_CONTROL_OVERRUNFARRAY_COUNT]; /**< Descriptor Overrun Flag 1..Descriptor Overrun Flag 4, array offset: 0x108, array step: 0x4 */
   uint8_t RESERVED_4[32];
-  __IO uint32_t URUNF[CANXL_GRP_CONTROL_URUNFARRAY_COUNT]; /**< Under Run Flag, array offset: 0x138, array step: 0x4 */
+  __IO uint32_t URUNF[CANXL_GRP_CONTROL_URUNFARRAY_COUNT]; /**< Under Run Flag 1..Under Run Flag 4, array offset: 0x138, array step: 0x4 */
 } CANXL_GRP_CONTROL_Type, *CANXL_GRP_CONTROL_MemMapPtr;
 
 /** Number of instances of the CANXL_GRP_CONTROL module. */
@@ -2153,7 +2153,7 @@ typedef struct {
 #define CANXL_GRP_CONTROL_FREEDSC0_TMWMRK(x)     (((uint32_t)(((uint32_t)(x)) << CANXL_GRP_CONTROL_FREEDSC0_TMWMRK_SHIFT)) & CANXL_GRP_CONTROL_FREEDSC0_TMWMRK_MASK)
 /*! @} */
 
-/*! @name OVERRUNF - Descriptor Overrun Flag */
+/*! @name OVERRUNF - Descriptor Overrun Flag 1..Descriptor Overrun Flag 4 */
 /*! @{ */
 
 #define CANXL_GRP_CONTROL_OVERRUNF_OVRRF0_MASK   (0x1U)
@@ -2797,7 +2797,7 @@ typedef struct {
 #define CANXL_GRP_CONTROL_OVERRUNF_OVRRF127(x)   (((uint32_t)(((uint32_t)(x)) << CANXL_GRP_CONTROL_OVERRUNF_OVRRF127_SHIFT)) & CANXL_GRP_CONTROL_OVERRUNF_OVRRF127_MASK)
 /*! @} */
 
-/*! @name URUNF - Under Run Flag */
+/*! @name URUNF - Under Run Flag 1..Under Run Flag 4 */
 /*! @{ */
 
 #define CANXL_GRP_CONTROL_URUNF_URUNF0_MASK      (0x1U)

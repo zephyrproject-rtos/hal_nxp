@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_C_VFCCU.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_C_VFCCU
  *
  * This file contains register definitions and macros for easy access to their
@@ -101,7 +101,7 @@ typedef struct {
   uint8_t RESERVED_7[60];
   __IO uint32_t GMEOUTDC;                          /**< Global Minimum EOUT Duration, offset: 0x19C */
   __IO uint32_t GEOUTTCT;                          /**< Global EOUT Timer Disable, offset: 0x1A0 */
-  struct {                                         /* offset: 0x1A4, array step: 0x14 */
+  struct C_VFCCU_GLB_EOUT {                        /* offset: 0x1A4, array step: 0x14 */
     __IO uint32_t GEOUTPNC;                          /**< Global EOUT Pin, array offset: 0x1A4, array step: 0x14 */
     __IO uint32_t GEOUTPMC;                          /**< Global EOUT Pin Map, array offset: 0x1A8, array step: 0x14 */
     __IO uint32_t GEOUTMC;                           /**< Global EOUT Mode, array offset: 0x1AC, array step: 0x14 */
