@@ -87,3 +87,4 @@ Patch List:
   11. mcux-sdk-middleware-connectivity-framework: rw61x: Fix assertion OSA Mutex Alloc fail
   12. mcux-sdk-middleware-connectivity-framework: rw61x: Remove static from hci_cal_data buffers to be used inside Zephyr
   13. devices: MCXN947: added missing inputmux_connections.cmake file
+  14. add kUSB_DeviceNotifySOF to usb_device_mcux_drv_port.h SDK USB stack already supports it in SDK 2.16.0
