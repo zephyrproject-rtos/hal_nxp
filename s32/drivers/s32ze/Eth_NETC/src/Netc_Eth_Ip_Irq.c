@@ -114,7 +114,7 @@ static inline void Netc_Eth_Ip_MSIX_Tx_CheckAllRings(const uint32 TxRingIntStatu
  *
  * @param CtrlIndex
  */
-static inline void Netc_Eth_Ip_MSIX_Rx(uint8 CtrlIndex);
+void Netc_Eth_Ip_MSIX_Rx(uint8 CtrlIndex);
 
 /**
  * @brief Local function used to process PSI Message Receive event
@@ -227,7 +227,7 @@ static inline void Netc_Eth_Ip_MSIX_Tx(uint8 CtrlIndex)
 /***************************************************************************
  * implements     Netc_Eth_Ip_MSIX_Rx_Activity
  ***************************************************************************/
-static inline void Netc_Eth_Ip_MSIX_Rx(uint8 CtrlIndex)
+void Netc_Eth_Ip_MSIX_Rx(uint8 CtrlIndex)
 {
     uint8  RingIndex;
     uint32 interruptStatus = netcSIsBase[CtrlIndex]->SIRXIDR0;

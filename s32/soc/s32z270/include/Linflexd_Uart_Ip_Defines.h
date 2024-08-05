@@ -25,6 +25,7 @@ extern "C"{
 * 3) internal and external interfaces from this unit
 * 4) user callback header files
 ==================================================================================================*/
+#include <zephyr/devicetree.h>
 #include "S32Z2_LINFLEXD.h"
 #include "Mcal.h"
 /*==================================================================================================
@@ -65,7 +66,7 @@ extern "C"{
 #define LINFLEXD_UART_IP_DEV_ERROR_DETECT       (STD_OFF)
 
 /* @brief Total number of channels configured */
-#define LINFLEXD_UART_IP_NUMBER_OF_INSTANCES    (2U)
+#define LINFLEXD_UART_IP_NUMBER_OF_INSTANCES    (DT_NUM_INST_STATUS_OKAY(nxp_s32_linflexd))
 
 /* @brief Uart Osif source counter. This parameter is used to select between different OsIf counter implementation */
 #define LINFLEXD_UART_IP_TIMEOUT_TYPE           (OSIF_COUNTER_DUMMY)

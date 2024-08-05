@@ -88,7 +88,7 @@ typedef struct {
 } NETC_F1_Type, *NETC_F1_MemMapPtr;
 
 /** Number of instances of the NETC_F1 module. */
-#define NETC_F1_INSTANCE_COUNT                   (1u)
+#define NETC_F1_INSTANCE_COUNT                   (1)
 
 /* NETC_F1 - Peripheral instance base addresses */
 /** Peripheral NETC__EMDIO_BASE base address */

@@ -31,6 +31,7 @@ extern "C"
 * 3) internal and external interfaces from this unit
 * 4) user callback header files
 ==================================================================================================*/
+#include <zephyr/devicetree.h>
 #include "Mcal.h"
 #include "OsIf.h"
 #include "Spi_Ip_Sa_Init_PBcfg.h"
@@ -87,16 +88,13 @@ extern "C"
     SPI_IP_SA_CONFIG_INIT_PB \
 
 /** @brief Total number of SpiPhyUnit configured as SPI. */
-#define SPI_IP_NUMBER_OF_INSTANCES (3U)
+#define SPI_IP_NUMBER_OF_INSTANCES (DT_NUM_INST_STATUS_OKAY(nxp_s32_spi))
 
 /** @brief Number of FIFO entries supported */
 #define SPI_IP_FIFO_SIZE_U16    ((uint16)5U)
 
-/** @brief HWUnits enabled/disabled */
-#define SPI_IP_0_ENABLED  (STD_ON)
-#define SPI_IP_1_ENABLED  (STD_ON)
-#define SPI_IP_4_ENABLED  (STD_ON)
-#define SPI_IP_SLAVE_SUPPORT  (STD_ON)
+/** @brief Enable Spi Slave Support */
+#define SPI_IP_SLAVE_SUPPORT  IS_ENABLED(CONFIG_SPI_SLAVE)
 
 /**
 * @brief Defines if transfers are made using DMA or FIFO.

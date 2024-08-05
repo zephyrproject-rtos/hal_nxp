@@ -93,7 +93,7 @@ extern "C"{
 ==================================================================================================*/
 
 #define NETC_ETHSWT_IP_NUMBER_OF_PSEUDO_PORT (1U)  /*!< number of pseudoport */
-#define NETC_ETHSWT_IP_NUMBER_OF_PORTS       (3U)  /*!< number of ports */
+#define NETC_ETHSWT_IP_NUMBER_OF_PORTS       3  /*!< number of ports */
 #define NETC_ETHSWT_IP_NUMBER_OF_MAC_PORTS   (2U)  /*!< number of mac ports*/
 #define NETC_ETHSWT_IP_NUMBER_OF_VID_PER_PORT (255U)   /*!< 3 number of vid per port */
 
