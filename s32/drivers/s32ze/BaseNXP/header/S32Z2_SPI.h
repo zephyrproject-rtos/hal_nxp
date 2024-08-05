@@ -106,7 +106,7 @@ typedef struct {
 } SPI_Type, *SPI_MemMapPtr;
 
 /** Number of instances of the SPI module. */
-#define SPI_INSTANCE_COUNT                       (10u)
+#define SPI_INSTANCE_COUNT                       (10)
 
 /* SPI - Peripheral instance base addresses */
 /** Peripheral SPI_0 base address */
