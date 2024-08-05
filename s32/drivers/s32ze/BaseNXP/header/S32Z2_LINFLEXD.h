@@ -95,7 +95,7 @@ typedef struct {
 } LINFLEXD_Type, *LINFLEXD_MemMapPtr;
 
 /** Number of instances of the LINFLEXD module. */
-#define LINFLEXD_INSTANCE_COUNT                  (13u)
+#define LINFLEXD_INSTANCE_COUNT                  (13)
 
 /* LINFLEXD - Peripheral instance base addresses */
 /** Peripheral LINFLEX_0 base address */

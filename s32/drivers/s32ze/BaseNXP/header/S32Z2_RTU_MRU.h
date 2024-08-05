@@ -135,7 +135,7 @@ typedef struct {
 } RTU_MRU_Type, *RTU_MRU_MemMapPtr;
 
 /** Number of instances of the RTU_MRU module. */
-#define RTU_MRU_INSTANCE_COUNT                   (8u)
+#define RTU_MRU_INSTANCE_COUNT                   (8)
 
 /* RTU_MRU - Peripheral instance base addresses */
 /** Peripheral RTU0__MRU_0 base address */
