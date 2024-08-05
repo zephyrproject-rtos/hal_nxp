@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -40,7 +40,7 @@ extern "C"{
 #define NETC_ETH_IP_AR_RELEASE_MAJOR_VERSION_C       4
 #define NETC_ETH_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define NETC_ETH_IP_AR_RELEASE_REVISION_VERSION_C    0
-#define NETC_ETH_IP_SW_MAJOR_VERSION_C               1
+#define NETC_ETH_IP_SW_MAJOR_VERSION_C               2
 #define NETC_ETH_IP_SW_MINOR_VERSION_C               0
 #define NETC_ETH_IP_SW_PATCH_VERSION_C               0
 
@@ -78,7 +78,7 @@ extern "C"{
 *                                          LOCAL MACROS
 ==================================================================================================*/
 #define NETC_ETH_IP_NANO_TO_SECONDS(x) ((x)/1000000000U)
-#define NETC_ETH_IP_GET_NANOSECONDS(x) ((x)%1000000000U)
+#define NETC_ETH_IP_GET_NANOSECONDS(x) ((uint64)(x)%1000000000ULL)
 /*==================================================================================================
 *                                         LOCAL CONSTANTS
 ==================================================================================================*/
@@ -100,9 +100,17 @@ extern "C"{
 #define NETC_ETH_IP_UCORR_ERR_MASK_SHIFT (NETC_F1_PCI_HDR_TYPE0_PCIE_CFC_AER_UCORR_ERR_MASK_UCORR_INT_ERR_MASK_SHIFT)
 #define NETC_ETH_IP_CORR_ERR_MASK_SHIFT (NETC_F1_PCI_HDR_TYPE0_PCIE_CFC_AER_CORR_ERR_MASK_CORR_INT_MASK_SHIFT)
 #define NETC_ETH_IP_UCORR_SEV_MASK ((uint32)NETC_F1_PCI_HDR_TYPE0_PCIE_CFC_AER_UCORR_ERR_SEV_UCORR_INT_SEV_MASK)
+#define NETC_ETH_IP_AER_ROOT_CLEAR_STATUS_MASK ((uint32)(0x7F))
+
 /*==================================================================================================
 *                                         LOCAL VARIABLES
 ==================================================================================================*/
+
+#if defined(ERR_IPV_NETC_051587)
+    #if (STD_ON == ERR_IPV_NETC_051587)
+static boolean Netc_Eth_Ip_TGSAdminListRegistered;
+    #endif
+#endif
 
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
@@ -117,7 +125,7 @@ extern Netc_Eth_Ip_PCIeBaseType *netcPCIePFBase[FEATURE_NETC_NUMBER_OF_FUNC];
 
 #define ETH_43_NETC_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
-VAR_SEC_NOCACHE(MACFilterHashTableAddrs) extern Netc_Eth_Ip_MACFilterHashTableEntryType *MACFilterHashTableAddrs[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+extern Netc_Eth_Ip_MACFilterHashTableEntryType *MACFilterHashTableAddrs[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
 
 #define ETH_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
@@ -146,13 +154,9 @@ static const boolean Netc_Eth_Ip_ControllerHasExternalRxBufferManagement[FEATURE
 
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
 #ifdef NETC_ETH_0_USED
-#define ETH_43_NETC_START_SEC_VAR_CLEARED_UNSPECIFIED
-#include "Eth_43_NETC_MemMap.h"
 /** @brief Store timestamp information of transmitted frames. */
-extern volatile Netc_Eth_Ip_TxManagementInfoType Netc_Eth_Ip_TxManagementInfoBuff[NETC_ETH_IP_NUM_OF_PHYSICAL_CTRLS][NETC_ETH_0_TXBDR_0_MAX_NUM_OF_DESCR];
-extern volatile Netc_Eth_Ip_TxTimestampInfoType Netc_Eth_Ip_TxTimestampInfoBuff[NETC_ETH_IP_NUM_OF_PHYSICAL_CTRLS][NETC_ETH_0_TXBDR_0_MAX_NUM_OF_DESCR];
-#define ETH_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED
-#include "Eth_43_NETC_MemMap.h"
+extern volatile Netc_Eth_Ip_TxManagementInfoType Netc_Eth_Ip_TxManagementInfoBuff[NETC_ETH_IP_NUM_OF_PHYSICAL_CTRLS][NETC_ETH_0_TXBDR_0_MAX_NUM_OF_DESCR / NETC_ETH_IP_PRODUCER_INCR];
+extern volatile Netc_Eth_Ip_TxTimestampInfoType Netc_Eth_Ip_TxTimestampInfoBuff[NETC_ETH_IP_NUM_OF_PHYSICAL_CTRLS][NETC_ETH_0_TXBDR_0_MAX_NUM_OF_DESCR / NETC_ETH_IP_PRODUCER_INCR];
 #endif /* NETC_ETH_0_USED */
 
 #define ETH_43_NETC_START_SEC_VAR_CLEARED_32
@@ -177,28 +181,51 @@ extern volatile Netc_Eth_Ip_RxTimestampInfoType Netc_Eth_Ip_RxTimestampInfoBuff[
 #define ETH_43_NETC_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
 
+#if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
+#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+/** @brief Structures used to measure the usage of the FIFOs*/
+volatile uint16 Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff[FEATURE_NETC_ETH_NUMBER_OF_CTRLS][NETC_ETH_IP_MAX_NUMBER_OF_RXRINGS];
+volatile Netc_Eth_Ip_FillLevelInfo Netc_Eth_Ip_Tx_FillLevelInfo[FEATURE_NETC_ETH_NUMBER_OF_CTRLS][NETC_ETH_IP_MAX_NUMBER_OF_TXRINGS];
+#endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
+#endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
+
 /** @brief Pointers to NETC internal driver state for each controller(SI). */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_apxState) Netc_Eth_Ip_StateType *Netc_Eth_Ip_apxState[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+Netc_Eth_Ip_StateType *Netc_Eth_Ip_apxState[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
 
 /** @brief List of Error Reporting structures that aggregate information for each Pcie function in case of an error reported to the Event Collector. EMDIO, TIMER, SWITCH, ENETC, PSI0, VSI1-7*/
-VAR_SEC_NOCACHE(Netc_Eth_Ip_ErrorStatus) volatile Netc_Eth_Ip_PcieFunctionErrorsReported Netc_Eth_Ip_ErrorStatus[FEATURE_NETC_NUMBER_OF_FUNC + FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS + 1U];
+static volatile Netc_Eth_Ip_PcieFunctionErrorsReported Netc_Eth_Ip_ErrorStatus[FEATURE_NETC_NUMBER_OF_FUNC + FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS];
 
 /* Enabled status for Time Aware Shaper for PSI */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_PortTimeAwareShaperEnabled) static boolean  Netc_Eth_Ip_PortTimeAwareShaperEnabled = FALSE;
+static boolean  Netc_Eth_Ip_PortTimeAwareShaperEnabled = FALSE;
 
 /* Table entries for Time Aware Shaping configuration */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_EthTimeGateSchedulingEntryData) static Netc_Eth_Ip_TimeGateSchedulingEntryDataType Netc_Eth_Ip_EthTimeGateSchedulingEntryData;
+static Netc_Eth_Ip_TimeGateSchedulingEntryDataType Netc_Eth_Ip_EthTimeGateSchedulingEntryData;
 
 /* The frequency of the NETC module for computing CBS parameters */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_NetcClockFrequency) static uint32 Netc_Eth_Ip_NetcClockFrequency = 0U;
-
-/* Key element data for ingress port filter table */
-VAR_SEC_NOCACHE(IPFKeyeData) static volatile uint32 IPFKeyeData[NETC_ETH_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN];
+static uint32 Netc_Eth_Ip_NetcClockFrequency = 0U;
 
 /* a 16 bytes aligned table request data buffer */
-VAR_SEC_NOCACHE(Netc_Eth_Ip_EnetcTableDataBuffer) VAR_ALIGN(static volatile Netc_Eth_Ip_EnetcTableDataType Netc_Eth_Ip_EnetcTableDataBuffer, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+VAR_ALIGN(static volatile Netc_Eth_Ip_EnetcTableDataType Netc_Eth_Ip_EnetcTableDataBuffer, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+static VAR_ALIGN(Netc_Eth_Ip_ReqHeaderTableOperationDataType Netc_Eth_Ip_OperationData, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+
+static VAR_ALIGN(Netc_Eth_Ip_SetMessageHeaderTableOperationDataType Netc_Eth_Ip_TableData, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+
+/* Local copy of the pointer to the configuration data. */
+static const Netc_Eth_Ip_ConfigType * Netc_Eth_Ip_ConfigPtr[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+
+
 
 #define ETH_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
+#include "Eth_43_NETC_MemMap.h"
+
+#define ETH_43_NETC_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
+#include "Eth_43_NETC_MemMap.h"
+
+static VAR_ALIGN(uint32 Netc_Eth_Ip_RfsSetDataBuffer[NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE], NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+/* Key element data for ingress port filter table */
+static volatile VAR_ALIGN(uint32 Netc_Eth_Ip_IPFKeyeData[NETC_ETH_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN], NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+
+#define ETH_43_NETC_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
 
 #if (NETC_ETH_IP_HAS_CACHE_MANAGEMENT == STD_ON)
@@ -257,6 +284,53 @@ static void Netc_Eth_Ip_InitRxBD(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *
  */
 static void Netc_Eth_Ip_InitCBDR(uint8 ctrlIndex);
 
+
+/**
+ * @brief
+ *
+ * @param ctrlIndex
+ * @param config    General configuration of the controller.
+ */
+static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_InitSI(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+
+#if (NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST > 0U)
+/**
+ * @brief Initialize IPF table
+ *
+ * @param ctrlIndex
+ * @param config    General configuration of the controller.
+ */
+static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_InitIngressPortFilterTable(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+/**
+ * @brief Initializing ingress port filter table entries data during ENETC init
+ *
+ * @param config    General configuration of the controller.
+ * @param IPFTableListIdx
+ * @param IngressPortFilterTableEntry
+ */
+static inline void Netc_Eth_Ip_InitIPFTableEntryData(const Netc_Eth_Ip_ConfigType * Config, uint8 IPFTableListIdx, Netc_Eth_Ip_IngressPortFilterEntryDataType *IngressPortFilterTableEntry);
+#endif
+
+/**
+ * @brief Local function used by Netc_Eth_Ip_EnableIrq to enable and set the configuration for interrupt.
+ * @details Number of defaults MSI entries in table for ENETC is 48.
+ *
+ * @param ctrlIndex Number of the current SI.
+ * @param config    General configuration of the controller.
+ * @param msiTableConfig  MSI entries
+ */
+static inline void Netc_Eth_Ip_EnableIrq_ConfigMsiTableTx(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config, Netc_Eth_Ip_MSITable* const msiTableConfig);
+
+/**
+ * @brief Local function used by Netc_Eth_Ip_EnableIrq to enable and set the configuration for interrupt.
+ * @details Number of defaults MSI entries in table for ENETC is 48.
+ *
+ * @param ctrlIndex Number of the current SI.
+ * @param config    General configuration of the controller.
+ * @param msiTableConfig  MSI entries
+ */
+static inline void Netc_Eth_Ip_EnableIrq_ConfigMsiTableRx(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config, Netc_Eth_Ip_MSITable* const msiTableConfig);
+
 /**
  * @brief This function will be used to enable and set all the configuration for interrupt.
  * @details Number of defaults MSI entries in table for ENETC is 48.
@@ -264,7 +338,7 @@ static void Netc_Eth_Ip_InitCBDR(uint8 ctrlIndex);
  * @param ctrlIndex Number of the current SI.
  * @param config    General configuration of the controller.
  */
-void Netc_Eth_Ip_EnableIrq(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+static inline void Netc_Eth_Ip_EnableIrq(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
 
 /**
  * @brief Prepare to use a timeout.
@@ -388,6 +462,109 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetupErrorReporting(const Netc_Eth_Ip_
 static Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigVLANFilterTable(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config);
 #endif
 
+#if (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0U)
+/**
+ * @brief            Rate Policer table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_Eth_Ip_ConfigRatePolicerTable(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETH_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES > 0U)
+/**
+ * @brief            IngressStreamIdentification table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_Eth_Ip_ConfigISITable(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETH_NUMBER_OF_INGRESSSTREAM_ENTRIES > 0U)
+/**
+ * @brief            IngressStream table configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_Eth_Ip_ConfigIngressStreamTable(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U)
+/**
+ * @brief            Stream Gate Control List configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_Eth_Ip_ConfigSGCL(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config);
+#endif
+
+#if (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U)
+/**
+ * @brief            Stream Gate Instance configuration function
+ *
+ * @param[in]        Config: Pointer to the configuration of one Ethernet Switch for initalisation
+ *
+ * @return           Result of the operation
+ * @retval           0 : E_OK, success
+ * @retval           1 : E_NOT_OK, fail
+ */
+static Std_ReturnType Netc_Eth_Ip_ConfigSGI(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config);
+#endif
+
+/*!
+ * @brief
+ * @details
+ *
+ * @param[in] BufferIndex
+ * @param[in] options
+ * @param[in] txBD
+ */
+static inline void Netc_Eth_Ip_ConfigureBufferDescriptors(const uint16 BufferIndex, const Netc_Eth_Ip_TxOptionsType *options, Netc_Eth_Ip_TxBDRType *txBD);
+
+/*!
+ * @brief   : Local function used by Netc_Eth_Ip_Init
+ * @details : Function used by Netc_Eth_Ip_Init for firt step initialization
+ *
+ * @param[in] ctrlIndex controller index
+ * @param[in] config controller configuration
+ */
+static inline void Netc_Eth_Ip_Init_FirstPart(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+
+/*!
+ * @brief   : Local function used by Netc_Eth_Ip_Init
+ * @details : Function used by Netc_Eth_Ip_Init for second step initialization
+ *
+ * @param[in] ctrlIndex controller index
+ * @param[in] config controller configuration
+ */
+static inline void Netc_Eth_Ip_Init_SecondPart(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+
+
+/*!
+ * @brief   : Function for initializing NTMP table.
+ * @details : Function enables the netc controller, initializes the tables and then diasbles the netc controller
+ *
+ * @param[in] ctrlIndex controller index
+ * @param[in] config controller configuration
+ */
+static inline void Netc_Eth_Ip_InitSI_ConfigureVSI(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+
 /*!
  * @brief   : Function for initializing NTMP table.
  * @details : Function enables the netc controller, initializes the tables and then diasbles the netc controller
@@ -397,6 +574,350 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigVLANFilterTable(uint8 ctrlIndex,
  *
  */
 static inline void Netc_Eth_Ip_InitNTMPTables(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config);
+
+/*!
+ * @brief   : Internal function for reading the  error status registers for EMDIO
+
+ * @param[in] ctrlIdx controller index
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ * @return    Number of registers read.
+ */
+static inline uint8 Netc_Eth_Ip_GetErrorStatisticsForEMDIO (const uint8 ctrlIdx, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the system bus non fatal error status registers for SWITCH
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetSystemBusErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the Uncorrectable non-fatal memory error status registers for SWITCH
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetMemoryErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the Port0 error status registers for SWITCH
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetPort0ErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the Port1 error status registers for SWITCH
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetPort1ErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   :  Internal function for reading the uncorrectable non-fatal integrity error statistics registers for SWITCH
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetIntegrityFaultStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the fatal error statistics registers for SWITCH
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetFatalErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the Correctable error statistics registers for SWITCH
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetCorrectableErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for gathering error statistics information for SWITCH
+
+ * @param[in] ctrlIdx controller index
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ * @return    Number of registers read.
+ */
+static inline uint8 Netc_Eth_Ip_GetErrorStatisticsForSWITCH (const uint8 ctrlIdx, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for gathering error statistics information for TIMER
+ *
+ * @param[in] ctrlIdx controller index
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ * @return    Number of registers read.
+ */
+static inline uint8 Netc_Eth_Ip_GetErrorStatisticsForTIMER(const uint8 ctrlIdx, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the Correctable error statistics registers for ENETC
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetCorrectableErrorStatisticsForENETC (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the memory error statistics registers for ENETC
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetMemoryErrorStatisticsForENETC(uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the integrity error statistics registers for ENETC
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetIntegrityFaultStatisticsForENETC (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : nternal function for reading the fatal error statistics registers for ENETC
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetFatalErrorStatisticsForENETC (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for gathering error statistics information for enetc
+
+ * @param[in] ctrlIdx controller index
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ * @return    Number of registers read.
+ */
+static inline uint8 Netc_Eth_Ip_GetErrorStatisticsForENETC(const uint8 ctrlIdx, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the programming error statistics registers for for a SI (siIndex).
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] siIndex The index of SI.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetProgrammingErrorStatisticsForSI (uint8 *countRegisters, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the MEMORY error statistics registers for for a SI (siIndex).
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] siIndex The index of SI.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetMemoryErrorStatisticsForSI (uint8 *countRegisters, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the FATAL MEMORY error statistics registers for for a SI (siIndex).
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] siIndex The index of SI.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetFatalMemoryErrorStatisticsForSI (uint8 *countRegisters, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the FATAL integrity error statistics registers for for a SI (siIndex).
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] siIndex The index of SI.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetFatalIntegrityErrorStatisticsForSI (uint8 *countRegisters, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the FATAL system bus error statistics registers for for a SI (siIndex).
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] siIndex The index of SI.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetFatalSystemBusErrorStatisticsForSI (uint8 *countRegisters, const uint8 ctrlIdx, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for reading the correctable error statistics registers for for a SI (siIndex).
+ *
+ * @param[in] StartPoint The start point index of the Buffers array where the information shall be stored.
+ * @param[in] siIndex The index of SI.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ */
+static inline void Netc_Eth_Ip_GetCorrectableErrorStatisticsForSI (uint8 *countRegisters, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+/*!
+ * @brief   : Internal function for gathering error statistics information for si
+
+ * @param[in] ctrlIdx controller index
+  * @param[in] siIndex The index of SI.
+ * @param[in] Buffers Memory location where the information will be stored
+ *
+ * @return    Number of registers read.
+ */
+static inline uint8 Netc_Eth_Ip_GetErrorStatisticsForSI(const uint8 ctrlIdx, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[]);
+
+#if(defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF))
+/*!
+ * @brief  : Local fuction used by Netc_Eth_Ip_ReadFrame
+ * @details
+ * @param[in] ctrlIndex
+ * @param[in] ring
+ * @param[in] status
+ * @param[in] CurrLowTime
+ * @return    VOID
+ */
+static inline void Netc_Eth_Ip_HostReasonTimeStamp(uint8 ctrlIndex,
+                                                   uint8 ring,
+                                                   Netc_Eth_Ip_StatusType* status,
+                                                   uint32 CurrLowTime
+                                                   );
+#endif
+
+#if(defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON == NETC_ETH_IP_CUSTOM_TAG_SUPPORT))
+/*!
+ * @brief  : Local fuction used by Netc_Eth_Ip_ReadFrame
+ * @details
+ * @param[in] ctrlIndex
+ * @param[in] ring
+ * @param[in] tagBytes
+ * @param[in] buff
+ * @return    VOID
+ */
+static inline void Netc_Eth_Ip_ReadFrame_AddCustomRxTagHeader(uint8 ctrlIndex,
+                                                              uint8 ring,
+                                                              const uint8* tagBytes,
+                                                              Netc_Eth_Ip_BufferType *buff
+                                                              );
+#endif /* defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON == NETC_ETH_IP_CUSTOM_TAG_SUPPORT) */
+
+#if(defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON==NETC_ETH_IP_CUSTOM_TAG_SUPPORT))
+/*!
+ * @brief  : Local fuction used by Netc_Eth_Ip_ReadFrame
+ * @details
+ * @param[in] ctrlIndex
+ * @param[in] ring
+ * @param[in] tagBytes
+ * @param[in] HostReason
+ */
+static inline void Netc_Eth_Ip_ReadFrame_CustomizedTPID(uint8 ctrlIndex,
+                                                        uint8 ring,
+                                                        uint8 *tagBytes,
+                                                        uint32 HostReason
+                                                        );
+#endif
+
+/*!
+ * @brief  : Local fuction used by Netc_Eth_Ip_ConfigPortTimeGateScheduling function
+ * @details
+ * @param[in] RegValue
+ * @param[in] status
+ * @return    VOID
+ */
+static inline void Netc_Eth_Ip_ConfigPortTimeGateScheduling_GateControlState(uint32* const RegValue, Netc_Eth_Ip_StatusType* const status);
+
+/*!
+ * @brief  : Local fuction used by Netc_Eth_Ip_ReadFrame
+ * @details
+ * @param[in] ctrlIndex
+ * @param[in] ring
+ * @param[in] buff
+ * @return    VOID
+ */
+static inline void Netc_Eth_Ip_ReadFrame_ReturnBufferDetails(uint8 ctrlIndex,
+                                                              uint8 ring,
+                                                              Netc_Eth_Ip_BufferType *buff
+                                                              );
+
+/*!
+ * @brief  : Local fuction used by Netc_Eth_Ip_EnableController
+ * @details
+ * @param[in] ctrlIndex
+ * @return    VOID
+ */
+static inline void Netc_Eth_Ip_EnableController_RxCoalescing(uint8 ctrlIndex);
+
+/*!
+ * @brief  : Local fuction used by Netc_Eth_Ip_EnableController
+ * @details
+ * @param[in] ctrlIndex
+ * @return    VOID
+ */
+static inline void Netc_Eth_Ip_EnableController_TxCoalescing(uint8 ctrlIndex);
+
+/*!
+ * @brief  : Local fuction used by Netc_Eth_Ip_SetupErrorReporting
+ * @details
+ * @param[in] ctrlIndex
+ * @return    VOID
+ */
+static inline void Netc_Eth_Ip_SetupErrorReporting_EnableUncorrectableErrors(const Netc_Eth_Ip_EnetcGeneralConfigType *psi0Config);
+
+/*!
+ * @brief  : Local fuction used by Netc_Eth_Ip_SetupErrorReporting
+ * @details
+ * @param[in] ctrlIndex
+ * @return    VOID
+ */
+static inline void Netc_Eth_Ip_SetupErrorReporting_EnableCorrectableErrors(const Netc_Eth_Ip_EnetcGeneralConfigType *psi0Config);
+
+/*!
+ * @brief  : Local fuction used by Netc_Eth_Ip_DeleteMACFilterEntry
+ * @details
+ * @param[in] CtrlIndex
+ * @param[in] MatchedEntry
+ * @param[in] CurrentEntry
+ * @param[in] MacAddr
+ * @return    VOID
+ */
+static inline void Netc_Eth_Ip_DeleteMACFilterEntry_MarkEntryEmpty(const uint8 CtrlIndex,
+                                                                   boolean* const MatchedEntry,
+                                                                   const uint8 CurrentEntry,
+                                                                   const uint8 *MacAddr);
+
+/*!
+ * @brief   : Internal function for processing the interrupt status for VSIx
+ * @param[in] ctrlIdx controller index
+ * @param[in] index  index in the ErrorStatus structure
+ * @return    VOID
+ */
+static inline void Netc_Eth_Ip_ProcessErrorStatusForInterruptForVSIs(const uint8 ctrlIndex, const uint8 index);
+
+/*!
+ * @brief   : Internal function for processing the interrupt status for EMDIO, TIMER,SWTICH, ENETC
+ * @param[in] ctrlIdx controller index
+ * @param[in] index  index in the ErrorStatus structure
+ * @return    VOID
+ */
+static inline void Netc_Eth_Ip_ProcessErrorStatusForInterruptForFunctions(const uint8 ctrlIndex, const uint8 index);
 
 /*==================================================================================================
 *                                         LOCAL FUNCTIONS
@@ -467,6 +988,11 @@ static void Netc_Eth_Ip_InitStateStructure(uint8 ctrlIndex, const Netc_Eth_Ip_Co
         {
             config->stateStructure->LockTxBuffDescr[u8TxBDIdx][currBDIdx] = FALSE;
         }
+#if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
+#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+        Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][u8TxBDIdx].TotalNumberOfBuff = config->stateStructure->TxRingSize[u8TxBDIdx] - (uint16)1U;
+#endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
+#endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
     }
     /* Keep the interrupt setting for using information later. Per driver implementation the interrupts are enabled at controller level
     (either all rings or none have interrupts enabled)m we will check the first ring value configured. */
@@ -535,19 +1061,6 @@ static void Netc_Eth_Ip_InitTxBD(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *
         /* Loop through all descriptors of the ring. */
         for (currBDIdx = 0U; currBDIdx < (*config->paCtrlTxRingConfig)[currentTxBDR].ringSize; currBDIdx++)
         {
-#if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
-    #ifdef NETC_ETH_0_USED
-            if (((uint8)0U == ctrlIndex) && ((uint8)0U == currentTxBDR))
-            {
-                Netc_Eth_Ip_TxManagementInfoBuff[ctrlIndex][currBDIdx].TxTimestampFlag = FALSE;
-                Netc_Eth_Ip_TxManagementInfoBuff[ctrlIndex][currBDIdx].ManagementFrameFlag = FALSE;
-                Netc_Eth_Ip_TxManagementInfoBuff[ctrlIndex][currBDIdx].TxTimestampRcvFlag = FALSE;
-                Netc_Eth_Ip_TxManagementInfoBuff[ctrlIndex][currBDIdx].TxTimeStampID = (uint16)0xFFFFU;
-                Netc_Eth_Ip_TxManagementInfoBuff[ctrlIndex][currBDIdx].TxBuffId = (uint16)0xFFFFU;
-                Netc_Eth_Ip_TxManagementInfoBuff[ctrlIndex][currBDIdx].PortIndex = (uint8)0xFFU;
-            }
-    #endif
-#endif
 #if (STD_ON == NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS)
             if (!Netc_Eth_Ip_ControllerHasExternalTxBufferManagement[ctrlIndex])
             {
@@ -622,6 +1135,79 @@ static void Netc_Eth_Ip_InitRxBD(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *
     }
 }
 
+static void Netc_Eth_Ip_Init_IpvToBdrMapping(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+{
+    netcSIsBase[ctrlIndex]->SIIPVBDRMR0 =
+        NETC_F3_SI0_SIIPVBDRMR0_IPV0BDR(config->siConfig->ipvToBDR[0]) |
+        NETC_F3_SI0_SIIPVBDRMR0_IPV1BDR(config->siConfig->ipvToBDR[1]) |
+        NETC_F3_SI0_SIIPVBDRMR0_IPV2BDR(config->siConfig->ipvToBDR[2]) |
+        NETC_F3_SI0_SIIPVBDRMR0_IPV3BDR(config->siConfig->ipvToBDR[3]) |
+        NETC_F3_SI0_SIIPVBDRMR0_IPV4BDR(config->siConfig->ipvToBDR[4]) |
+        NETC_F3_SI0_SIIPVBDRMR0_IPV5BDR(config->siConfig->ipvToBDR[5]) |
+        NETC_F3_SI0_SIIPVBDRMR0_IPV6BDR(config->siConfig->ipvToBDR[6]) |
+        NETC_F3_SI0_SIIPVBDRMR0_IPV7BDR(config->siConfig->ipvToBDR[7]);
+}
+
+static void Netc_Eth_Ip_Init_VlanToIpvMapping(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+{
+    /* Define default values for IPV and DR in case enableVlanToIpvMapping is disabled or the incomming frame doesn't have VLAN data. */
+    if (ctrlIndex == 0U)
+    {
+        IP_NETC__ENETC0_PORT->PQOSMR |= (ENETC_PORT_PQOSMR_DDR(config->generalConfig->defaultDR)  |
+                                        ENETC_PORT_PQOSMR_DIPV(config->generalConfig->defaultIPV) |
+                                        ENETC_PORT_PQOSMR_VS(1U)); /* PQOSMR[VS] = 1 --> outer tag is considered. */
+                                                                   /* PQOSMR[VE] = 1 --> enable the use of VLAN tag data to determine IPV and DR, over the default settings. */
+    }
+
+    /* Configure the receive BD rings assignment to group by setting SIRBGCR register according to the rules defined in the register definition.*/
+    netcSIsBase[ctrlIndex]->SIRBGCR |= NETC_F3_SI0_SIRBGCR_NUM_GROUPS(1U); /* 1 Group, if 0 --> all incomming frames are received by RX BD Ring 0 regardles. */
+
+    if(ctrlIndex == 0U)
+    {
+        netcSIsBase[ctrlIndex]->SIRBGCR |= NETC_F3_SI0_SIRBGCR_RINGS_PER_GROUP(8U); /* 9 rings group PSI0 */
+    }
+    else
+    {
+        netcSIsBase[ctrlIndex]->SIRBGCR |= NETC_F3_SI0_SIRBGCR_RINGS_PER_GROUP(7U); /* 8 rings group for other SIs */
+    }
+
+    /* Default receive group = 0. The default receive group is used when there is no match for RFS and RSS is disabled. */
+    netcSIsBase[ctrlIndex]->SIMR &= (netcSIsBase[ctrlIndex]->SIMR ^ NETC_F3_SI0_SIMR_DEFAULT_RX_GROUP(1U));
+
+#if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
+    if(config->siConfig->enableVlanToIpvMapping == TRUE)
+    {
+    /* enableVlanToIpvMapping == true -> VLAN tag PCP+DEI field is used to map to an IPV value by the SI (SIVLANIPVMR0/1 registers). */
+    netcSIsBase[ctrlIndex]->SIMR |= (NETC_F3_SI1_SIMR_V2IPVE(1U));
+    netcSIsBase[ctrlIndex]->SIVLANIPVMR0 =
+        NETC_F3_SI0_SIVLANIPVMR0_PCP_DEI_0(config->siConfig->vlanToIpv[0])|
+        NETC_F3_SI0_SIVLANIPVMR0_PCP_DEI_1(config->siConfig->vlanToIpv[1])|
+        NETC_F3_SI0_SIVLANIPVMR0_PCP_DEI_2(config->siConfig->vlanToIpv[2])|
+        NETC_F3_SI0_SIVLANIPVMR0_PCP_DEI_3(config->siConfig->vlanToIpv[3])|
+        NETC_F3_SI0_SIVLANIPVMR0_PCP_DEI_4(config->siConfig->vlanToIpv[4])|
+        NETC_F3_SI0_SIVLANIPVMR0_PCP_DEI_5(config->siConfig->vlanToIpv[5])|
+        NETC_F3_SI0_SIVLANIPVMR0_PCP_DEI_6(config->siConfig->vlanToIpv[6])|
+        NETC_F3_SI0_SIVLANIPVMR0_PCP_DEI_7(config->siConfig->vlanToIpv[7]);
+    netcSIsBase[ctrlIndex]->SIVLANIPVMR1 =
+        NETC_F3_SI0_SIVLANIPVMR1_PCP_DEI_8(config->siConfig->vlanToIpv[8])  |
+        NETC_F3_SI0_SIVLANIPVMR1_PCP_DEI_9(config->siConfig->vlanToIpv[9])  |
+        NETC_F3_SI0_SIVLANIPVMR1_PCP_DEI_10(config->siConfig->vlanToIpv[10])|
+        NETC_F3_SI0_SIVLANIPVMR1_PCP_DEI_11(config->siConfig->vlanToIpv[11])|
+        NETC_F3_SI0_SIVLANIPVMR1_PCP_DEI_12(config->siConfig->vlanToIpv[12])|
+        NETC_F3_SI0_SIVLANIPVMR1_PCP_DEI_13(config->siConfig->vlanToIpv[13])|
+        NETC_F3_SI0_SIVLANIPVMR1_PCP_DEI_14(config->siConfig->vlanToIpv[14])|
+        NETC_F3_SI0_SIVLANIPVMR1_PCP_DEI_15(config->siConfig->vlanToIpv[15]);
+    }
+    else
+    { /* enableVlanToIpvMapping == false -> The port default IPV is used (PQOSMR[DIPV] and PQOSMR[DDR]) */
+#endif
+        /* V2IPVE is toggled off. 011 &= (011 ^ 010) ,  001 &= (001 ^ 010) */
+        netcSIsBase[ctrlIndex]->SIMR &= (netcSIsBase[ctrlIndex]->SIMR ^ NETC_F3_SI0_SIMR_V2IPVE(1U));
+#if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
+    }
+#endif
+}
+
 static void Netc_Eth_Ip_InitCBDR(uint8 ctrlIndex)
 {
 
@@ -632,77 +1218,259 @@ static void Netc_Eth_Ip_InitCBDR(uint8 ctrlIndex)
     netcSIsBase[ctrlIndex]->SICBDRMR   = NETC_F3_SI0_SICBDRMR_EN(1U);
 }
 
-void Netc_Eth_Ip_EnableIrq(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+
+static inline void Netc_Eth_Ip_EnableIrq_ConfigMsiTableTx(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config, Netc_Eth_Ip_MSITable* const msiTableConfig)
+{
+    uint8 txBDRIndex;
+    msiTableConfig->msiTable[NETC_ETH_IP_TX_MSI_TABLE_INDEX].msgAddr       = (*config->siConfig).txMruMailboxAddr;
+    msiTableConfig->msiTable[NETC_ETH_IP_TX_MSI_TABLE_INDEX].controlVector = 0x0U;
+    msiTableConfig->msiTable[NETC_ETH_IP_TX_MSI_TABLE_INDEX].msgData       = 0xFFFFFFFFU;
+
+    for (txBDRIndex = 0U; txBDRIndex < (*config->siConfig).NumberOfTxBDR; txBDRIndex++)
+    {
+        netcSIsBase[ctrlIndex]->SIMSITRVR[txBDRIndex] = NETC_ETH_IP_TX_MSI_TABLE_INDEX;
+    }
+}
+
+static inline void Netc_Eth_Ip_EnableIrq_ConfigMsiTableRx(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config, Netc_Eth_Ip_MSITable* const msiTableConfig)
 {
     uint8 rxBDRIndex;
-    uint8 txBDRIndex;
+    msiTableConfig->msiTable[NETC_ETH_IP_RX_MSI_TABLE_INDEX].msgAddr       = (*config->siConfig).rxMruMailboxAddr;
+    msiTableConfig->msiTable[NETC_ETH_IP_RX_MSI_TABLE_INDEX].controlVector = 0x0U;
+    msiTableConfig->msiTable[NETC_ETH_IP_RX_MSI_TABLE_INDEX].msgData       = 0xFFFFFFFFU;
+
+    for (rxBDRIndex = 0U; rxBDRIndex < (*config->siConfig).NumberOfRxBDR; rxBDRIndex++)
+    {
+        netcSIsBase[ctrlIndex]->BDR_NUM[rxBDRIndex].RBICR0 |= NETC_F3_SI0_RBICR0_ICPT(1U);
+        netcSIsBase[ctrlIndex]->BDR_NUM[rxBDRIndex].RBICR0 |= NETC_F3_SI0_RBICR0_ICEN_MASK;
+        netcSIsBase[ctrlIndex]->SIMSIRRVR[rxBDRIndex] = NETC_ETH_IP_RX_MSI_TABLE_INDEX;
+    }
+}
+
+static inline void Netc_Eth_Ip_EnableIrq(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+{
     Netc_Eth_Ip_MSITable *msiTableConfig;
-    Netc_Eth_Ip_VfBaseType *VSIConfig;
+    Netc_Eth_Ip_VfBaseType     *VSIConfig;
+    NETC_F3_PCI_HDR_TYPE0_Type *PSIConfig;
     uint32* msiBaseAddr[] = NETC_ETH_IP_MSI_BASE_PTRS;
-    NETC_F3_PCI_HDR_TYPE0_Type *PSIConfig = IP_NETC__NETC_F3_PCI_HDR_TYPE0;
 
     msiTableConfig = (Netc_Eth_Ip_MSITable *)msiBaseAddr[ctrlIndex];
 
-    if (((*config->siConfig).RxInterrupts != 0U) || ((*config->siConfig).TxInterrupts != 0U))
+    if ((0U != (*config->siConfig).TxInterrupts) && \
+        (NULL_PTR != (*config->siConfig).txMruMailboxAddr))
     {
-        /* Enable MSI-X for configured function(SI).This will let MSI-X to request service. */
-        if (NETC_ETH_IP_PHYSICAL_SI == config->SiType)
-        {
-            PSIConfig->PCI_CFC_MSIX_MSG_CTL |= NETC_ETH_IP_MSI_MSG_CTL_ENABLE_MASK;
-        }
-        else
-        {
-            VSIConfig = netcVFBase[ctrlIndex];
-            VSIConfig->PCI_CFC_MSIX_MSG_CTL |= NETC_ETH_IP_MSI_MSG_CTL_ENABLE_MASK;
-        }
-
-        if ((*config->siConfig).TxInterrupts != 0U)
-        {
-            msiTableConfig->msiTable[NETC_ETH_IP_TX_MSI_TABLE_INDEX].msgAddr       = (*config->siConfig).txMruMailboxAddr;
-            msiTableConfig->msiTable[NETC_ETH_IP_TX_MSI_TABLE_INDEX].controlVector = 0x0U;
-            msiTableConfig->msiTable[NETC_ETH_IP_TX_MSI_TABLE_INDEX].msgData       = 0xFFFFFFFFU;
-
-            for (txBDRIndex = 0U; txBDRIndex < (*config->siConfig).NumberOfTxBDR; txBDRIndex++)
-            {
-                netcSIsBase[ctrlIndex]->SIMSITRVR[txBDRIndex] = NETC_ETH_IP_TX_MSI_TABLE_INDEX;
-            }
-        }
-
-        if ((*config->siConfig).RxInterrupts != 0U)
-        {
-            msiTableConfig->msiTable[NETC_ETH_IP_RX_MSI_TABLE_INDEX].msgAddr       = (*config->siConfig).rxMruMailboxAddr;
-            msiTableConfig->msiTable[NETC_ETH_IP_RX_MSI_TABLE_INDEX].controlVector = 0x0U;
-            msiTableConfig->msiTable[NETC_ETH_IP_RX_MSI_TABLE_INDEX].msgData       = 0xFFFFFFFFU;
-
-            for (rxBDRIndex = 0U; rxBDRIndex < (*config->siConfig).NumberOfRxBDR; rxBDRIndex++)
-            {
-                netcSIsBase[ctrlIndex]->BDR_NUM[rxBDRIndex].RBICR0 |= NETC_F3_SI0_RBICR0_ICPT(1U);
-                netcSIsBase[ctrlIndex]->BDR_NUM[rxBDRIndex].RBICR0 |= NETC_F3_SI0_RBICR0_ICEN_MASK;
-                netcSIsBase[ctrlIndex]->SIMSIRRVR[rxBDRIndex] = NETC_ETH_IP_RX_MSI_TABLE_INDEX;
-            }
-        }
-
-        if ((NETC_ETH_IP_PHYSICAL_SI == config->SiType) &&
-            ((*config->siConfig).siMsgMruMailboxAddr != NULL_PTR))
-        {
-            netcSIsBase[ctrlIndex]->INTERRUPT.PSI.PSIIER |= 0xFE00FEU;
-        }
+        Netc_Eth_Ip_EnableIrq_ConfigMsiTableTx(ctrlIndex, config, msiTableConfig);
     }
 
-
-    if ((*config->siConfig).siMsgMruMailboxAddr != NULL_PTR)
+    if ((0U != (*config->siConfig).RxInterrupts) && \
+        (NULL_PTR != (*config->siConfig).rxMruMailboxAddr))
     {
+        Netc_Eth_Ip_EnableIrq_ConfigMsiTableRx(ctrlIndex, config, msiTableConfig);
+    }
+
+    /* Enable MSI-X for configured function(SI).This will let MSI-X to request service. */
+    if((TRUE == (*config->siConfig).EnableSIMsgInterrupt) && \
+       (NETC_ETH_IP_PHYSICAL_SI == config->SiType) && \
+       (NULL_PTR != (*config->siConfig).siMsgMruMailboxAddr))
+    {
+        /* Set the mailbox where PSI will receive the messages from VSIs. */
         msiTableConfig->msiTable[NETC_ETH_IP_SITOSI_MESSAGE_MSI_TABLE_INDEX].msgAddr       = (*config->siConfig).siMsgMruMailboxAddr;
         msiTableConfig->msiTable[NETC_ETH_IP_SITOSI_MESSAGE_MSI_TABLE_INDEX].controlVector = 0x0U;
         msiTableConfig->msiTable[NETC_ETH_IP_SITOSI_MESSAGE_MSI_TABLE_INDEX].msgData       = 0xFFFFFFFFU;
 
-        if (NETC_ETH_IP_PHYSICAL_SI == config->SiType)
-        {
-            netcSIsBase[ctrlIndex]->INTERRUPT.PSI.PSIIER |= 0xFE00FEU;
-        }
+        /* Enable the interrupt for all the other VSIs.
+            The VSIs can be configured on other cores and there is no information if them are using or not SI messaging support. */
+        netcSIsBase[ctrlIndex]->INTERRUPT.PSI.PSIIER |= 0xFE00FEU;
     }
 
+    if (NETC_ETH_IP_PHYSICAL_SI == config->SiType)
+    {
+        PSIConfig = IP_NETC__NETC_F3_PCI_HDR_TYPE0;
+        PSIConfig->PCI_CFC_MSIX_MSG_CTL |= NETC_ETH_IP_MSI_MSG_CTL_ENABLE_MASK;
+    }
+    else
+    {
+        VSIConfig = netcVFBase[ctrlIndex];
+        VSIConfig->PCI_CFC_MSIX_MSG_CTL |= NETC_ETH_IP_MSI_MSG_CTL_ENABLE_MASK;
+    }
 }
+
+static inline void Netc_Eth_Ip_ConfigPortTimeGateScheduling_GateControlState(uint32* const RegValue, Netc_Eth_Ip_StatusType* const status)
+{
+    uint32 GateControlListState;
+    uint32 StartTime;
+    uint32 ElapsedTime;
+    uint32 TimeoutTicks;
+    boolean TimeExpired;
+    /* Software must also wait until PTGAGLSR[TG] is deasserted before re-enabling. */
+    Netc_Eth_Ip_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, NETC_ETH_IP_TIMEOUT_VALUE_US);
+    do {
+        /* get the state of gate control list */
+        GateControlListState = (IP_NETC__ENETC0_PORT->PTGAGLSR & ENETC_PORT_PTGAGLSR_TG_MASK);
+        TimeExpired = Netc_Eth_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+    } while ((GateControlListState != 0x0U) && (FALSE == TimeExpired));
+
+    if (GateControlListState == 0x0U)
+    {
+        *RegValue |= ENETC_PORT_PTGSCR_TGE(1U);    /* Enable time gating */
+    }
+    else
+    {
+        *status = NETC_ETH_IP_STATUS_ERROR;  /* fail to enable time gating because Operational gate control list is active */
+    }
+}
+
+static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_InitSI(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+{
+    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
+    uint32 StartTime;
+    uint32 ElapsedTime;
+    uint32 TimeoutTicks;
+
+    if (NETC_ETH_IP_PHYSICAL_SI == config->SiType)
+    {
+        /* Use generalConfig to configure the general part of NETC */
+
+        /*Workaround for errata ERR051300: Disable all netc watchdogs to avoid watchdog timeout*/
+#if defined(ERR_IPV_NETC_051300)
+    #if (STD_ON == ERR_IPV_NETC_051300)
+        IP_NETC__NETC_PRIV->NETCWDTR = NETC_PRIV_NETCWDTR_MCED(1U) | NETC_PRIV_NETCWDTR_MCPD(1U) | NETC_PRIV_NETCWDTR_PCED(1U) | NETC_PRIV_NETCWDTR_HTAD(1U);
+    #endif
+#endif
+
+        /* Enable function to master memory transaction requests and enable function to respond to memory space accesses (register accesses).
+            Setting this bit may trigger the locking of IERB registers if not already done either explicitly through the NETCRR[LOCK] bit,
+            or an earlier function initializing. Setting memory access enable will load IERB register values into the function and start any
+            initialization of local table memory.
+            Poll OSR[STATE] bit and wait for 0b0 before continuing device configuration.
+        */
+        IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
+
+        /* Enable the VFs;Enable memory space for VFs */
+        IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_SRIOV_CTL |= NETC_F3_PCI_HDR_TYPE0_PCIE_CFC_SRIOV_CTL_VF_ENABLE_MASK | \
+                                                              NETC_F3_PCI_HDR_TYPE0_PCIE_CFC_SRIOV_CTL_VF_MSE_MASK;
+
+        /* Wait for a successfully ENETC init. */
+        Netc_Eth_Ip_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, NETC_ETH_IP_TIMEOUT_VALUE_US);
+        do
+        {
+            if(NETC_F3_COMMON_OSR_STATE_MASK != (IP_NETC__ENETC0_COMMON->OSR & NETC_F3_COMMON_OSR_STATE_MASK))
+            {
+                Status = NETC_ETH_IP_STATUS_SUCCESS;
+                break;
+            }
+            else
+            {
+                Status = NETC_ETH_IP_STATUS_TIMEOUT;
+            }
+        }while(!Netc_Eth_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks));
+
+        /** TODO: This will be supported later. */
+        /* Configure the number of MSIs for all SIs - Port station interface a configuration register 2 (PSI0CFGR2 - PSI7CFGR2) */
+
+        /* Enable/disable MAC multicast/unicast promiscuous mode. */
+        IP_NETC__ENETC0_BASE->PSIPMMR = ((uint32)((*config->generalConfig).maskMACPromiscuousMulticastEnable) << NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT) | \
+                                        (uint32)((*config->generalConfig).maskMACPromiscuousUnicastEnable);
+
+        /* Set Layer 3 IPv4 Header checksum validation*/
+        IP_NETC__ENETC0_BASE->PARCSCR = NETC_F3_PARCSCR_L4CD((*config->generalConfig).rxCheckSumOffloadingIPV4);
+        /*
+        Checking only TCP offload because when it is enabled, UDP is by default enabled in configuration
+        Set Layer 4 TCP and UDP checksum validation
+        */
+        IP_NETC__ENETC0_BASE->PARCSCR |= NETC_F3_PARCSCR_L3CD((*config->generalConfig).rxCheckSumOffloadingTCPUDP);
+
+#if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
+        /* Configure for Custom VLAN Ethertype 1 */
+        IP_NETC__ENETC0_COMMON->CVLANR1 = config->generalConfig->CustomVlanEthertype1;
+        /* Configure for Custom VLAN Ethertype 2 */
+        IP_NETC__ENETC0_COMMON->CVLANR2 = config->generalConfig->CustomVlanEthertype2;
+        /* Enable/disable MAC VLAN promiscuous mode and permssion of the SI to receive untagged traffic while the VLAN support is enabled for ENTC0. */
+        IP_NETC__ENETC0_BASE->PSIPVMR =(uint32)((*config->generalConfig).maskMACVLANPromiscuousEnable) |
+                                                  config->generalConfig->maskVLANAllowUntaggedEnable   ;
+        /*Disable OAI - Outer As Inner*/
+        IP_NETC__ENETC0_BASE->PVCLCTR = NETC_F3_PVCLCTR_OAI(0U);
+        /*Enable VS - VLAN Select*/
+        IP_NETC__ENETC0_BASE->PSIVLANFMR = NETC_F3_PSIVLANFMR_VS(1U);
+#endif
+        Netc_Eth_Ip_InitSI_ConfigureVSI(ctrlIndex, config);
+
+        /** TODO: Advanced feature configuration. TBA later. */
+        /* Configure the number of MAC and VLAN filter entries for all SIs - Port station interface 0 VSI MAC address filtering configuration register (PSI0VMAFCFGR) and
+                                                                             Port station interface 0 VLAN filtering configuration register (PSI0VLANFCFGR)
+                                                                             Port station interface a VSI MAC address filtering configuration register (PSI1VMAFCFGR - PSI7VMAFCFGR) and
+                                                                             Port station interface a VLAN filtering configuration register (PSI1VLANFCFGR - PSI7VLANFCFGR)*/
+        /* Configure the internal priority to ICM priority mapping - Receive IPV to ICM priority mapping register 0 (IPV2ICMPMR0) */
+        /* Configure the IPV to traffic class assignment - Transmit priority to traffic class mapping register 0 (PRIO2TCMR0) */
+        IP_NETC__ENETC0_BASE->PRIO2TCMR0 = NETC_F3_PRIO2TCMR0_PRIO0TC((uint32)((*config->generalConfig).priorityToTrafficClassic[0])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO1TC((uint32)((*config->generalConfig).priorityToTrafficClassic[1])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO2TC((uint32)((*config->generalConfig).priorityToTrafficClassic[2])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO3TC((uint32)((*config->generalConfig).priorityToTrafficClassic[3])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO4TC((uint32)((*config->generalConfig).priorityToTrafficClassic[4])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO5TC((uint32)((*config->generalConfig).priorityToTrafficClassic[5])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO6TC((uint32)((*config->generalConfig).priorityToTrafficClassic[6])) |
+                                           NETC_F3_PRIO2TCMR0_PRIO7TC((uint32)((*config->generalConfig).priorityToTrafficClassic[7]));
+
+        /* Configure speed and other settings in Port configuration register (PCR) */
+
+        if ((*config->generalConfig).enableCorrectableErrors || (*config->generalConfig).enableUncorrectableErrors)
+        {
+            Status = Netc_Eth_Ip_SetupErrorReporting(config->generalConfig);
+        }
+
+    }
+    else
+    {
+        /* Wait until PSI start current VSI. */
+        Netc_Eth_Ip_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, NETC_ETH_IP_TIMEOUT_VALUE_US);
+        do
+        {
+            if (NETC_VF1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK == \
+                ((netcVFBase[ctrlIndex]->PCI_CFH_CMD & NETC_VF1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK)))
+            {
+                Status = NETC_ETH_IP_STATUS_SUCCESS;
+                break;
+            }
+            else
+            {
+                Status = NETC_ETH_IP_STATUS_TIMEOUT;
+            }
+        }while(!Netc_Eth_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks));
+    }
+
+    return Status;
+}
+
+#if (NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST > 0U)
+static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_InitIngressPortFilterTable(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+{
+    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
+    Netc_Eth_Ip_IngressPortFilterEntryDataType IngressPortFilterTableEntry = {0U};
+    uint8 IPFTableListIdx;
+    uint32 MatchedEntries = 0UL;
+
+    /* Initialize IPF table */
+    if ((*config->generalConfig).numberOfIPFTableList > 0U)
+    {
+        /* Set the EN bit in Station interface mode register (SIMR) to enable psi0*/
+        netcSIsBase[ctrlIndex]->SIMR |= NETC_F3_SI0_SIMR_EN_MASK;
+
+        for (IPFTableListIdx = 0U; IPFTableListIdx < (*config->generalConfig).numberOfIPFTableList; IPFTableListIdx++)
+        {
+            /* init IPF table entry data */
+            Netc_Eth_Ip_InitIPFTableEntryData(config, IPFTableListIdx, &IngressPortFilterTableEntry);
+
+            /* add static IPF table entries */
+            Status = Netc_Eth_Ip_AddIngressPortFilterTableEntry(0U, &MatchedEntries, &IngressPortFilterTableEntry);
+        }
+
+        /* Clear the EN bit in Station interface mode register (SIMR) to disalbe psi0 */
+        netcSIsBase[ctrlIndex]->SIMR &= ~NETC_F3_SI0_SIMR_EN_MASK;
+    }
+
+    return Status;
+}
+#endif
 
 static inline uint8 Netc_Eth_Ip_ComputeMACHashValue(const uint8 *MacAddr)
 {
@@ -802,27 +1570,42 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(uin
             {
                 PSIResponseStatus = (Netc_Eth_Ip_StatusType) (((Netc_Eth_Ip_VsiBaseType*) netcSIsBase[VsiId])->MSGSR.VSI_A.VSIMSGRR >> NETC_ETH_IP_PSI_MSG_POS );
 
-                if(NETC_ETH_IP_PSITOVSI_CMD_SUCCESFUL == PSIResponseStatus)
+                switch(PSIResponseStatus)
                 {
-                    Status = NETC_ETH_IP_STATUS_SUCCESS;
-                }
-                else if(NETC_ETH_IP_PSITOVSI_SYNC_STATUS_TRUE == PSIResponseStatus)
-                {
-                    /*load sync state into the output partameter*/
-                    *PsiRspMessage = TRUE;
-                    Status = NETC_ETH_IP_STATUS_SUCCESS;
-                }
-                else if(NETC_ETH_IP_PSITOVSI_SYNC_STATUS_FALSE == PSIResponseStatus)
-                {
-                    *PsiRspMessage = FALSE;
-                    Status = NETC_ETH_IP_STATUS_SUCCESS;
-                }
-                else /*PSI Status Return have only 4 value*/
-                {
-                    Status = NETC_ETH_IP_STATUS_ERROR;
+                    case NETC_ETH_IP_PSITOVSI_CMD_SUCCESFUL:
+                    {
+                        Status = NETC_ETH_IP_STATUS_SUCCESS;
+                        break;
+                    }
+                    case NETC_ETH_IP_PSITOVSI_SYNC_STATUS_TRUE:
+                    {
+                        /*load sync state into the output partameter*/
+                        *PsiRspMessage = 1U;
+                        Status = NETC_ETH_IP_STATUS_SUCCESS;
+                        break;
+                    }
+                    case NETC_ETH_IP_PSITOVSI_SYNC_STATUS_FALSE:
+                    {
+                        *PsiRspMessage = 0U;
+                        Status = NETC_ETH_IP_STATUS_SUCCESS;
+                        break;
+                    }
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+                    case NETC_ETH_IP_PSITOVSI_MSG_INTEGRITY_ERROR:
+                    {
+                        Status = NETC_ETH_IP_STATUS_ERROR;
+                        break;
+                    }
+    #endif
+#endif
+                    default:
+                    {
+                        Status = NETC_ETH_IP_STATUS_ERROR;
+                        break;
+                    }
                 }
             }
-
             break;
         }
         else
@@ -871,7 +1654,6 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddMACFilterEntry(uint8 CtrlInd
 
 static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteMACFilterEntry(const uint8 CtrlIndex, const uint8 HashValue, const uint8 *MacAddr)
 {
-    uint8 MACBytesMached;
     uint8 CurrentEntry;
     Netc_Eth_Ip_StatusType Status;
     boolean MatchedEntry = FALSE;
@@ -890,39 +1672,13 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteMACFilterEntry(const uint
             )
         {
             HashNumOfMatches++;
-
-            /* There will be one entry removed at a time. */
-            if(MatchedEntry == FALSE)
-            {
-                MACBytesMached = 0U;
-                while ( (MacAddr[MACBytesMached] == MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].MACAddr[MACBytesMached]) && (MACBytesMached < NETC_ETH_IP_MAC_BYTES_SIZE) )
-                {
-                    MACBytesMached++;
-                }
-
-                if(NETC_ETH_IP_MAC_BYTES_SIZE == MACBytesMached)
-                {
-                    /* Provide data was matched. */
-                    MatchedEntry = TRUE;
-                    /* Mark entry as an empty slot. */
-                    MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].EntryStatus = FALSE;
-                    SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_01();
-                }
-                else
-                {
-                    SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_01();
-                }
-            }
-            else
-            {
-                SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_01();
-            }
+            Netc_Eth_Ip_DeleteMACFilterEntry_MarkEntryEmpty(CtrlIndex, &MatchedEntry, CurrentEntry, MacAddr);
         }
         else
         {
             SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_01();
         }
-}
+    }
 
     if(MatchedEntry)
     {
@@ -942,6 +1698,66 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteMACFilterEntry(const uint
 
     return Status;
 }
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+uint8 Netc_Eth_Ip_VsiMsgCalculateCRC8(const Netc_Eth_Ip_VsiToPsiMsgType * MsgCommandConfig, uint8 MsgLength)
+{
+    uint8 Data;
+    uint8 Crc = (uint8) 0U;
+    uint8 ByteNb;
+    uint8 BitNb;
+
+    /* Calculate modulo 2 division for each message byte. */
+    for(ByteNb = 0U; ByteNb < MsgLength; ByteNb++)
+    {
+        if(ByteNb == 0U) /* Class field*/
+        {
+            Data = MsgCommandConfig->Class;
+        }
+        else if(ByteNb == 1U) /* Command field*/
+        {
+            Data = MsgCommandConfig->Command;
+        }
+        else /* Data field array. ByteNb - 2 to start indexing Data field array from 0  */
+        {
+            Data = MsgCommandConfig->Data[ByteNb - 2U];
+        }
+
+        /* Take the next byte into the Crc */
+        Crc ^= Data;
+
+        /* Calculate modulo 2 division bit by bit */
+        for(BitNb = 8U; BitNb > 0U; BitNb--)
+        {
+            if((Crc & ((uint8) 1U << (uint8) 7U)) != (uint8) 0U)
+            {
+                Crc = (Crc << (uint8) 1U) ^ (uint8) NETC_ETH_IP_VSI_MSG_POLYNOMIAL;
+            }
+            else
+            {
+                Crc = Crc << (uint8) 1U;
+            }
+        }
+    }
+
+    return Crc;
+}
+    #endif
+#endif
+
+/* Local function to clear the VSI to PSI message buffer */
+static inline void Netc_Eth_Ip_ClearVsiToPsiMsgBuff(Netc_Eth_Ip_VsiToPsiMsgType *MsgCommandConfig, uint8 Size)
+{
+    uint8 DataIdx;
+
+    MsgCommandConfig->Class   = (uint8)0U;
+    MsgCommandConfig->Command = (uint8)0U;
+
+    for(DataIdx = 0; DataIdx < (Size - (uint8) 2U); DataIdx++)
+    {
+        MsgCommandConfig->Data[DataIdx] = (uint8)0U;
+    }
+}
 
 static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
                                                              Netc_Eth_Ip_VsiToPsiMsgActionType MsgAction, \
@@ -950,6 +1766,9 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
 {
     Netc_Eth_Ip_StatusType Status;
     Netc_Eth_Ip_VsiToPsiMsgType *MsgCommandConfig = Netc_Eth_Ip_apxState[VsiId]->VSItoPSIMsgCommand;
+
+    /*Clear the buffer before sending a new command */
+    Netc_Eth_Ip_ClearVsiToPsiMsgBuff(MsgCommandConfig,  ((uint8) sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8) NETC_ETH_IP_VSITOPSI_MSG_SIZE));
 
     switch (MsgAction)
     {
@@ -966,7 +1785,13 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
             MsgCommandConfig->Data[4U] = MacAddr[2U];
             MsgCommandConfig->Data[5U] = MacAddr[3U];
             MsgCommandConfig->Data[6U] = MacAddr[4U];
-            MsgCommandConfig->Data[7U] = MacAddr[5u];
+            MsgCommandConfig->Data[7U] = MacAddr[5U];
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+            /* Calculate CRC, for the number of transmited bytes (10 bytes for this command), and assign it to Data fields last byte */
+            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
+    #endif
+#endif
             Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
             break;
         }
@@ -980,7 +1805,12 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
             MsgCommandConfig->Data[1U] = (uint8)0U;
             /* Exact match(EM) will be deactivated when hash table is used. */
             MsgCommandConfig->Data[2U] = (uint8)0U;
-
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+            /* Calculate CRC, for the number of transmited bytes (5 bytes for this command), and assign it to Data fields last byte */
+            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
+    #endif
+#endif
             Status = Netc_Eth_Ip_AddMACFilterEntry(VsiId, MsgCommandConfig->Data[0U], MacAddr);
 
             if(NETC_ETH_IP_STATUS_SUCCESS == Status)
@@ -1003,6 +1833,12 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
                 MsgCommandConfig->Data[1U] = (uint8)0U;
                 /* Exact match(EM) will be deactivated when hash table is used. */
                 MsgCommandConfig->Data[2U] = (uint8)0U;
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+            /* Calculate CRC, for the number of transmited bytes (5 bytes for this command), and assign it to Data fields last byte */
+                MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
+    #endif
+#endif
                 Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
             }
 
@@ -1013,6 +1849,12 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
             /* Set class for command message. */
             MsgCommandConfig->Class   = (uint8)0x10U;
             MsgCommandConfig->Command = (uint8)0x00U;
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+            /* Calculate CRC, for the number of transmited bytes (2 bytes for this command), and assign it to Data fields last byte */
+            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
+    #endif
+#endif
             Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
             break;
         }
@@ -1021,6 +1863,12 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
             /* Set class for command message. */
             MsgCommandConfig->Class   = (uint8)0x10U;
             MsgCommandConfig->Command = (uint8)0x10U;
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+            /* Calculate CRC, for the number of transmited bytes (2 bytes for this command), and assign it to Data fields last byte */
+            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
+    #endif
+#endif
             Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
             break;
         }
@@ -1029,6 +1877,12 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
             /* Set class for command message. */
             MsgCommandConfig->Class   = (uint8)0x10U;
             MsgCommandConfig->Command = (uint8)0x20U;
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+            /* Calculate CRC, for the number of transmited bytes (2 bytes for this command), and assign it to Data fields last byte */
+            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
+    #endif
+#endif
             Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
             break;
         }
@@ -1037,6 +1891,12 @@ static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_VsiToPsiMsg(uint8 VsiId, \
             /* Set class for command message. */
             MsgCommandConfig->Class   = (uint8)0x20U;
             MsgCommandConfig->Command = (uint8)0x00U;
+#if defined(ERR_IPV_NETC_051247)
+    #if (STD_ON == ERR_IPV_NETC_051247)
+            /* Calculate CRC, for the number of transmited bytes (2 bytes for this command), and assign it to Data fields last byte */
+            MsgCommandConfig->Data[NETC_ETH_IP_VSI_MSG_CRC_POS] = Netc_Eth_Ip_VsiMsgCalculateCRC8( MsgCommandConfig, (((uint8)sizeof(Netc_Eth_Ip_VsiToPsiMsgType) * (uint8)NETC_ETH_IP_VSITOPSI_MSG_SIZE) - (uint8)1U));
+    #endif
+#endif
             Status = Netc_Eth_Ip_WaitVsiToPsiMsgTransmission(VsiId, MsgCommandConfig, PsiRspMessage);
             break;
         }
@@ -1084,7 +1944,7 @@ static uint8 Netc_Eth_Ip_CoalescingTxPacketsConversion (uint16 PacketsThreshold)
  * Description   : Internal function for adding an entry with different commands to command ring.
  *
  *END**************************************************************************/
-static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendCommand(const uint8 CtrlIndex, const NetcEth_Ip_ReqHeaderTableOperationDataType *OperationData)
+static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendCommand(const uint8 CtrlIndex, const Netc_Eth_Ip_ReqHeaderTableOperationDataType *OperationData)
 {
     uint32 producerIdx;
     uint32 consumerIdx;
@@ -1175,7 +2035,7 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendCommand(const uint8 CtrlIndex, con
  * Description   : Internal function for adding an entry with different commands to command ring (short format) for NTMP V1.0.
  *
  *END**************************************************************************/
-static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_ShortFormat(uint8 CtrlIndex, const NetcEth_Ip_SetMessageHeaderTableOperationDataType *OperationData)
+static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_ShortFormat(uint8 CtrlIndex, const Netc_Eth_Ip_SetMessageHeaderTableOperationDataType *OperationData)
 {
     uint32 producerIdx;
     uint32 consumerIdx;
@@ -1267,7 +2127,7 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_ShortFormat(uint8 Ctr
 
 /*FUNCTION**********************************************************************
  *
- * Function Name : Netc_Eth_Ip_SetVLANFilterTableEntry
+ * Function Name : Netc_Eth_Ip_AddVLANFilterTableEntry
  * Description   : Internal function for adding an entry to the VLAN Filter Table.
 
  * implements     Netc_Eth_Ip_AddVLANFilterTableEntry_Activity
@@ -1275,7 +2135,6 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_ShortFormat(uint8 Ctr
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddVLANFilterTableEntry( const uint8 ctrlIndex, const Netc_Eth_Ip_VLANFilterTableEntryDataType *VLANTableEntry)
 {
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
-    NetcEth_Ip_SetMessageHeaderTableOperationDataType TableData = {0U};
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
@@ -1283,15 +2142,15 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddVLANFilterTableEntry( const uint8 ctrlInde
 #endif
 
     /* Fill in the configured data */
-    TableData.Data0 = NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_SET_TPID(VLANTableEntry->TPID);
-    TableData.Data0 |= (uint32)VLANTableEntry->VLANId;
-    TableData.SI_Bitmap = VLANTableEntry->SIBitmap;
-    TableData.Index = VLANTableEntry->VLANFilterTable_EID;
+    Netc_Eth_Ip_TableData.Data0 = NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_SET_TPID(VLANTableEntry->TPID);
+    Netc_Eth_Ip_TableData.Data0 |= (uint32)VLANTableEntry->VLANId;
+    Netc_Eth_Ip_TableData.SI_Bitmap = VLANTableEntry->SIBitmap;
+    Netc_Eth_Ip_TableData.Index = VLANTableEntry->VLANFilterTable_EID;
     /* Class 2 for VLAN Filter Table */
-    TableData.Class = 2U;
+    Netc_Eth_Ip_TableData.Class = 2U;
     /* Command 0 for adding an entry to the VLAN Filter Table */
-    TableData.Command = 0U;
-    status = Netc_Eth_Ip_SendNTMP1Command_ShortFormat(ctrlIndex, &TableData);
+    Netc_Eth_Ip_TableData.Command = 0U;
+    status = Netc_Eth_Ip_SendNTMP1Command_ShortFormat(ctrlIndex, &Netc_Eth_Ip_TableData);
     return status;
 }
 
@@ -1305,7 +2164,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddVLANFilterTableEntry( const uint8 ctrlInde
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryVLANFilterTableEntry(const uint8 ctrlIndex, Netc_Eth_Ip_VLANFilterTableEntryDataType *VLANTableEntry)
 {
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
-    NetcEth_Ip_SetMessageHeaderTableOperationDataType TableData = {0U};
     uint32 producerIdx;
     uint32 lengthOfCmDB;
 
@@ -1315,12 +2173,12 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryVLANFilterTableEntry(const uint8 ctrlInd
 #endif
 
     /* Fill in the table entry ID */
-    TableData.Index = VLANTableEntry->VLANFilterTable_EID;
+    Netc_Eth_Ip_TableData.Index = VLANTableEntry->VLANFilterTable_EID;
     /* Class 2 for VLAN Filter Table */
-    TableData.Class = 2U;
+    Netc_Eth_Ip_TableData.Class = 2U;
     /* Command 1 for adding an entry to the VLAN Filter Table */
-    TableData.Command = 1U;
-    status = Netc_Eth_Ip_SendNTMP1Command_ShortFormat(ctrlIndex, &TableData);
+    Netc_Eth_Ip_TableData.Command = 1U;
+    status = Netc_Eth_Ip_SendNTMP1Command_ShortFormat(ctrlIndex, &Netc_Eth_Ip_TableData);
     producerIdx = netcSIsBase[ctrlIndex]->SICBDRPIR;
 
     /* the value stored in producer index register indicates the index of next entry */
@@ -1370,13 +2228,196 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigVLANFilterTable(uint8 ctrlIndex,
 }
 #endif
 
+#if (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0)
 /*FUNCTION**********************************************************************
  *
- * Function Name : Netc_Eth_Ip_SendNTMP1Command_ShortFormat
- * Description   : Internal function for adding an entry with different commands to command ring (short format) for NTMP V1.0.
+ * Function Name : Netc_Eth_Ip_ConfigRatePolicerTable
+ * Description   : Add the configured entries to the Rate Policer Table.
  *
  *END**************************************************************************/
-static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_LongFormat(uint8 CtrlIndex, const NetcEth_Ip_SetMessageHeaderTableOperationDataType *OperationData)
+static Std_ReturnType Netc_Eth_Ip_ConfigRatePolicerTable(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config)
+{
+    uint8 RPTableIdx;
+    Std_ReturnType status = E_OK;
+    Netc_Eth_Ip_StatusType CmdStatus = NETC_ETH_IP_STATUS_SUCCESS;
+    Netc_Eth_Ip_RatePolicerEntryDataType RPTableEntry = {0};
+    uint32 MatchedEntries = 0UL;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+#endif
+
+    for (RPTableIdx = 0U; RPTableIdx < Config->generalConfig->NumberOfRPTableEntries; RPTableIdx++)
+    {
+        RPTableEntry = (*(Config->generalConfig->RPTableEntries))[RPTableIdx];
+        CmdStatus = Netc_Eth_Ip_AddOrUpdateRatePolicerTableEntry(ctrlIndex, NETC_ETH_ADD_CMD, &MatchedEntries, &RPTableEntry);
+
+        if (CmdStatus != NETC_ETH_IP_STATUS_SUCCESS)
+        {
+            status = E_NOT_OK;
+            break;
+        }
+    }
+
+    return status;
+}
+#endif
+
+#if (NETC_ETH_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_ConfigISITable
+ * Description   : function for configuring the IngressStreamIdentification Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_Eth_Ip_ConfigISITable(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config)
+{
+    uint32 MatchedEntries = 0U;
+    uint8 FrmKeyWordIdx;
+    uint8 IsiEntryIdx;
+    Netc_Eth_Ip_IngrStremIdentificationTableDataType IsiTableEntry = {0};
+
+    Std_ReturnType status = E_OK;
+    Netc_Eth_Ip_StatusType CBDRStatus;
+
+    /* Add key construction rules */
+    IP_NETC__SW0_COMMON->ISIDKC0CR0 = (*(Config->generalConfig->EthKeyConstruction))[0U].EthKeyConstructionRegValue;
+    IP_NETC__SW0_COMMON->ISIDKC1CR0 = (*(Config->generalConfig->EthKeyConstruction))[1U].EthKeyConstructionRegValue;
+
+    /* Add payload field values */
+    IP_NETC__SW0_COMMON->ISIDKC0PF0CR = (*(Config->generalConfig->EthKeyConstruction))[0U].EthPayloadField0RegValue;
+    IP_NETC__SW0_COMMON->ISIDKC0PF1CR = (*(Config->generalConfig->EthKeyConstruction))[0U].EthPayloadField1RegValue;
+    IP_NETC__SW0_COMMON->ISIDKC1PF0CR = (*(Config->generalConfig->EthKeyConstruction))[1U].EthPayloadField0RegValue;
+    IP_NETC__SW0_COMMON->ISIDKC1PF1CR = (*(Config->generalConfig->EthKeyConstruction))[1U].EthPayloadField1RegValue;
+
+    /* Add static IngressStreamIdentification entries */
+    for (IsiEntryIdx = 0U; IsiEntryIdx < Config->generalConfig->NumberOfIsiEntries; IsiEntryIdx++)
+    {
+        IsiTableEntry.IngrStreamIdenResumeEntryId = (*(Config->generalConfig->IsiEntries))[IsiEntryIdx].IngrStreamIdenResumeEntryId;
+        IsiTableEntry.IngrStreamIdenEntryId = (*(Config->generalConfig->IsiEntries))[IsiEntryIdx].IngrStreamIdenEntryId;
+        IsiTableEntry.IngrStreamEntryId = (*(Config->generalConfig->IsiEntries))[IsiEntryIdx].IngrStreamEntryId;
+        IsiTableEntry.Keye_Keytype = (*(Config->generalConfig->IsiEntries))[IsiEntryIdx].Keye_Keytype;
+        for(FrmKeyWordIdx = 0; FrmKeyWordIdx < 3; FrmKeyWordIdx++)
+        {
+            IsiTableEntry.Keye_FrmKey[FrmKeyWordIdx] = (*(Config->generalConfig->IsiEntries))[IsiEntryIdx].Keye_FrmKey[FrmKeyWordIdx];
+        }
+        CBDRStatus = Netc_Eth_Ip_AddOrUpdateIngrStreamIdentificationTableEntry(ctrlIndex, NETC_ETH_ADD_CMD, &MatchedEntries, &IsiTableEntry);
+        /* fail to add the static IngressStreamIdentification entry */
+        if ((CBDRStatus != NETC_ETH_IP_STATUS_SUCCESS) || (MatchedEntries != 0U))
+        {
+            status = E_NOT_OK;
+            break;
+        }
+
+    }
+    return status;
+}
+#endif
+
+#if (NETC_ETH_NUMBER_OF_INGRESSSTREAM_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_ConfigIngressStreamTable
+ * Description   : function for configuring the IngressStream Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_Eth_Ip_ConfigIngressStreamTable(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config)
+{
+    uint32 MatchedEntries = 0U;
+    uint8 IngrStrEntryIdx = 0U;
+
+    Std_ReturnType status = E_OK;
+    Netc_Eth_Ip_StatusType CBDRStatus;
+    Netc_Eth_Ip_IngressStreamEntryDataType IngrStrTableEntry = {0};
+
+    for (IngrStrEntryIdx = 0U; IngrStrEntryIdx < Config->generalConfig->NumberOfIngrStreamEntries; IngrStrEntryIdx++)
+    {
+        IngrStrTableEntry = (*(Config->generalConfig->IngressStreamEntries))[IngrStrEntryIdx];
+
+        /*Add Ingress Stream Table entry*/
+        CBDRStatus = Netc_Eth_Ip_AddOrUpdateIngressStreamTableEntry(ctrlIndex, NETC_ETH_ADD_CMD, &MatchedEntries, &IngrStrTableEntry);
+
+        if (CBDRStatus != NETC_ETH_IP_STATUS_SUCCESS)
+        {
+            status = E_NOT_OK;
+            break;
+        }
+
+    }
+
+    return status;
+}
+#endif
+
+#if (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_ConfigSGCL
+ * Description   : function for configuring the Stream Gate Control Lists for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_Eth_Ip_ConfigSGCL(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config)
+{
+    Std_ReturnType status = E_OK;
+    Netc_Eth_Ip_StatusType CBDRStatus = NETC_ETH_IP_STATUS_SUCCESS;
+    uint32 SGCLIndex = 0U;
+    uint32 MatchedEntries = 0UL;
+    Netc_Eth_Ip_SGCLTableDataType SGCLTableEntry = {0};
+
+    for (SGCLIndex = 0U; SGCLIndex < Config->generalConfig->NumberOfSGCLEntries; SGCLIndex++)
+    {
+        SGCLTableEntry = (*(Config->generalConfig->StreamGateControlListEntries))[SGCLIndex];
+        CBDRStatus = Netc_Eth_Ip_AddStreamGateControlListTableEntry(ctrlIndex, NETC_ETH_ADD_CMD, &MatchedEntries, &SGCLTableEntry);
+
+        if (CBDRStatus != NETC_ETH_IP_STATUS_SUCCESS)
+        {
+            status = E_NOT_OK;
+            break;
+        }
+    }
+
+    return status;
+}
+#endif
+
+#if (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U)
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_ConfigSGI
+ * Description   : function for configuring the Stream Gate Instance Table for the switch
+ *
+ *END**************************************************************************/
+static Std_ReturnType Netc_Eth_Ip_ConfigSGI(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType * Config)
+{
+    Std_ReturnType status = E_OK;
+    Netc_Eth_Ip_StatusType CBDRStatus = NETC_ETH_IP_STATUS_SUCCESS;
+    uint32 SGIIndex = 0U;
+    uint32 MatchedEntries = 0UL;
+    Netc_Eth_Ip_StreamGateInstanceEntryDataType SGITableEntry = {0};
+
+    for (SGIIndex = 0U; SGIIndex < Config->generalConfig->NumberOfSGIEntries; SGIIndex++)
+    {
+        SGITableEntry = (*(Config->generalConfig->StreamGateInstanceEntries))[SGIIndex];
+        CBDRStatus = Netc_Eth_Ip_AddOrUpdateStreamGateInstanceTableEntry(ctrlIndex, NETC_ETH_ADD_CMD, &MatchedEntries, &SGITableEntry);
+
+        if (CBDRStatus != NETC_ETH_IP_STATUS_SUCCESS)
+        {
+            status = E_NOT_OK;
+            break;
+        }
+    }
+
+    return status;
+}
+#endif
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_SendNTMP1Command_LongFormat
+ * Description   : Internal function for adding an entry with different commands to command ring (long format) for NTMP V1.0.
+ *
+ *END**************************************************************************/
+static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_LongFormat(uint8 CtrlIndex, const Netc_Eth_Ip_SetMessageHeaderTableOperationDataType *OperationData)
 {
     uint32 producerIdx;
     uint32 consumerIdx;
@@ -1450,7 +2491,7 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_LongFormat(uint8 Ctrl
         }
         else
         {
-            statusField = NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_GET_STATUS(Netc_Eth_Ip_apxState[CtrlIndex]->EnetcCommandBDConfig.commandBDAddr[consumerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_CMD]);    /* get status field in the response data buffer */
+            statusField = NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_RFS_GET_STATUS(Netc_Eth_Ip_apxState[CtrlIndex]->EnetcCommandBDConfig.commandBDAddr[consumerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_CMD]);    /* get status field in the response data buffer */
             if (statusField != 0U)
             {
                 status = NETC_ETH_IP_STATUS_ERROR;     /* STATUS field should be 0. */
@@ -1466,7 +2507,7 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_LongFormat(uint8 Ctrl
  * Description   : Internal function for querying statistics of a RFS entry with t commands to command ring (short format) for NTMP V1.0.
  *
  *END**************************************************************************/
-static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_RfsShortFormat(const uint8 CtrlIndex, const NetcEth_Ip_SetMessageHeaderTableOperationDataType *OperationData)
+static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_RfsShortFormat(const uint8 CtrlIndex, const Netc_Eth_Ip_SetMessageHeaderTableOperationDataType *OperationData)
 {
     uint32 producerIdx;
     uint32 consumerIdx;
@@ -1532,7 +2573,7 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendNTMP1Command_RfsShortFormat(const 
         }
         else
         {
-            statusField = NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_GET_STATUS(Netc_Eth_Ip_apxState[CtrlIndex]->EnetcCommandBDConfig.commandBDAddr[consumerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_CMD]);    /* get status field in the response data buffer */
+            statusField = NETC_ETH_IP_CMDBD_REQFMT_CONFIG_FIELD_RFS_GET_STATUS(Netc_Eth_Ip_apxState[CtrlIndex]->EnetcCommandBDConfig.commandBDAddr[consumerIdx].MessageHeaderDataField[NETC_ETH_IP_CBD_CMD]);    /* get status field in the response data buffer */
             if (statusField != 0U)
             {
                 status = NETC_ETH_IP_STATUS_ERROR;     /* STATUS field should be 0. */
@@ -1614,8 +2655,6 @@ static void Netc_Eth_Ip_FillRfsSetDataBuffer(uint32 * RfsSetDataBuffer, const Ne
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddRfsTableEntry(const uint8 ctrlIndex, const Netc_Eth_Ip_RfsEntryType * RfsTableEntry)
 {
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
-    NetcEth_Ip_SetMessageHeaderTableOperationDataType TableData = {0U};
-    static uint32 RfsSetDataBuffer[NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE];
 
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
@@ -1624,22 +2663,22 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddRfsTableEntry(const uint8 ctrlIndex, const
 #endif
 
     /* Fill in the configured data. */
-    Netc_Eth_Ip_FillRfsSetDataBuffer(RfsSetDataBuffer, RfsTableEntry);
+    Netc_Eth_Ip_FillRfsSetDataBuffer(Netc_Eth_Ip_RfsSetDataBuffer, RfsTableEntry);
 
     /* RFS Data buffer address.
        There is an alignment restrictions for the data address to be 16-byte aligned;
        hardware ignores the least significant 4 bits of the ADDR field. */
-    TableData.Data0 = (uint32)  &RfsSetDataBuffer;
-    TableData.Length = (uint16)( NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE * 4U);
-    TableData.Index = RfsTableEntry->RfsTableEntryId;
+    Netc_Eth_Ip_TableData.Data0 = (uint32)  &Netc_Eth_Ip_RfsSetDataBuffer;
+    Netc_Eth_Ip_TableData.Length = (uint16)( NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE * 4U);
+    Netc_Eth_Ip_TableData.Index = RfsTableEntry->RfsTableEntryId;
 
     /*Set the format to Long format */
-    TableData.Format = 0;
+    Netc_Eth_Ip_TableData.Format = 0;
     /* Class 4 for RFS Table */
-    TableData.Class = 4U;
+    Netc_Eth_Ip_TableData.Class = 4U;
     /* Command 0 for adding an entry to the RFS Table */
-    TableData.Command = 0U;
-    status = Netc_Eth_Ip_SendNTMP1Command_LongFormat(ctrlIndex, &TableData);
+    Netc_Eth_Ip_TableData.Command = 0U;
+    status = Netc_Eth_Ip_SendNTMP1Command_LongFormat(ctrlIndex, &Netc_Eth_Ip_TableData);
     return status;
 }
 
@@ -1653,7 +2692,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddRfsTableEntry(const uint8 ctrlIndex, const
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRfsTableEntry(const uint8 ctrlIndex, uint8 RfsEntryIdx, uint32 * RfsTableEntryAddr)
 {
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
-    NetcEth_Ip_SetMessageHeaderTableOperationDataType TableData = {0U};
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
@@ -1661,19 +2699,19 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRfsTableEntry(const uint8 ctrlIndex, uin
 #endif
 
     /* Fill in the table entry ID */
-    TableData.Index = RfsEntryIdx;
+    Netc_Eth_Ip_TableData.Index = RfsEntryIdx;
     /* Fill in the table entry address */
-    TableData.Data0 = (uint32)RfsTableEntryAddr;
+    Netc_Eth_Ip_TableData.Data0 = (uint32)RfsTableEntryAddr;
     /* Fill in the table entry length */
-    TableData.Length = (uint16)( NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE * 4U);
+    Netc_Eth_Ip_TableData.Length = (uint16)( NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE * 4U);
     /* Class 4 for RFS Table */
-    TableData.Class = 4U;
+    Netc_Eth_Ip_TableData.Class = 4U;
     /* Command 1 for adding an querrying to the RFS Table (Long format) */
-    TableData.Command = 1U;
+    Netc_Eth_Ip_TableData.Command = 1U;
     /*Long format*/
-    TableData.Format = 0U;
+    Netc_Eth_Ip_TableData.Format = 0U;
 
-    status = Netc_Eth_Ip_SendNTMP1Command_LongFormat(ctrlIndex, &TableData);
+    status = Netc_Eth_Ip_SendNTMP1Command_LongFormat(ctrlIndex, &Netc_Eth_Ip_TableData);
 
     return status;
 }
@@ -1688,7 +2726,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRfsTableEntry(const uint8 ctrlIndex, uin
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryStatisticsRfsTableEntry(const uint8 ctrlIndex, uint8 RfsEntryIdx, uint32 * MatchedFramesNb)
 {
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
-    NetcEth_Ip_SetMessageHeaderTableOperationDataType TableData = {0U};
     uint32 producerIdx;
     uint32 lengthOfCmDB;
 
@@ -1698,16 +2735,16 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryStatisticsRfsTableEntry(const uint8 ctrl
 #endif
 
     /* Fill in the table entry ID */
-    TableData.Index = RfsEntryIdx;
+    Netc_Eth_Ip_TableData.Index = RfsEntryIdx;
     /* Class 4 for RFS Table */
-    TableData.Class = 4U;
+    Netc_Eth_Ip_TableData.Class = 4U;
     /* Command 1 for adding an querrying statistical information for RFS Table Entry (Short Format) */
-    TableData.Command = 2U;
+    Netc_Eth_Ip_TableData.Command = 2U;
     /*Short Format*/
-    TableData.Format = 1U;
+    Netc_Eth_Ip_TableData.Format = 1U;
 
     /*To check what format should be sent here*/
-    status = Netc_Eth_Ip_SendNTMP1Command_RfsShortFormat(ctrlIndex, &TableData);
+    status = Netc_Eth_Ip_SendNTMP1Command_RfsShortFormat(ctrlIndex, &Netc_Eth_Ip_TableData);
 
     producerIdx = netcSIsBase[ctrlIndex]->SICBDRPIR;
 
@@ -1770,11 +2807,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigPortTimeGateScheduling( const uint8 Ctr
 {
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
     uint32 RegValue;
-    uint32 GateControlListState;
-    uint32 StartTime;
-    uint32 ElapsedTime;
-    uint32 TimeoutTicks;
-    boolean TimeExpired;
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
@@ -1788,22 +2820,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ConfigPortTimeGateScheduling( const uint8 Ctr
     {
         if (TRUE == Enable)
         {
-            /* Software must also wait until PTGAGLSR[TG] is deasserted before re-enabling. */
-            Netc_Eth_Ip_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, NETC_ETH_IP_TIMEOUT_VALUE_US);
-            do {
-                /* get the state of gate control list */
-                GateControlListState = (IP_NETC__ENETC0_PORT->PTGAGLSR & ENETC_PORT_PTGAGLSR_TG_MASK);
-                TimeExpired = Netc_Eth_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            } while ((GateControlListState != 0x0U) && (FALSE == TimeExpired));
-
-            if (GateControlListState == 0x0U)
-            {
-                RegValue |= ENETC_PORT_PTGSCR_TGE(1U);    /* Enable time gating */
-            }
-            else
-            {
-                status = NETC_ETH_IP_STATUS_ERROR;  /* fail to enable time gating because Operational gate control list is active */
-            }
+            Netc_Eth_Ip_ConfigPortTimeGateScheduling_GateControlState(&RegValue, &status);
         }
     }
     else    /* time gating is enabled */
@@ -1873,7 +2890,7 @@ static inline void FillInGateControlListData(const uint8 *OperationTimeIdx, cons
 
             CFGEDataIdx += 2U;      /* CFGE data field index increased by 2 */
         }
-        
+
     }
 }
 
@@ -1889,13 +2906,20 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateTimeGateSchedulingTableEntry( cons
                                                                           )
 {
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
-    NetcEth_Ip_ReqHeaderTableOperationDataType OperationData;
     uint8 OperationTimes;
     uint8 OperationTimeIdx;
     volatile uint64 CurrentTime = 0;
     uint32 CycleFactor;
     uint64 NewBaseTime;
     uint32 LookaheadTime;
+#if defined(ERR_IPV_NETC_051587)
+    #if (STD_ON == ERR_IPV_NETC_051587)
+    uint32 AdminCtrlListLength;
+    uint32 CmdProccesingTime;
+    uint64 CalculatedTime;
+    uint32 NetcClkPeriod;
+    #endif
+#endif
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
@@ -1914,19 +2938,41 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateTimeGateSchedulingTableEntry( cons
         Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = TimeGateSchedulingTableEntry->TimeGateSchedulingTable_EID;    /* fill in Entry ID */
         /* fill in CFGE_DATA */
         /* get the current time from 1588 timer */
-        CurrentTime = IP_NETC__TMR0_BASE->TMR_CUR_TIME_L;      /* should read the Lower register first */
-        CurrentTime |= ((uint64)(IP_NETC__TMR0_BASE->TMR_CUR_TIME_H)) << NETC_ETH_IP_32BIT_SHIFT;
+        CurrentTime = Netc_EthSwt_Ip_TimerBase->TMR_CUR_TIME_L;      /* should read the Lower register first */
+        CurrentTime |= ((uint64)(Netc_EthSwt_Ip_TimerBase->TMR_CUR_TIME_H)) << NETC_ETH_IP_32BIT_SHIFT;
         /* get lookaheadtime */
         LookaheadTime = IP_NETC__NETC_IERB->CFG_ENETC_INST[0U].ETGSLR + IP_NETC__ENETC0_PORT->PTGSATOR;
 
         /* calculate the NewBaseTime */
+#if defined(ERR_IPV_NETC_051587)
+    #if (STD_ON == ERR_IPV_NETC_051587)
+        NetcClkPeriod = (Netc_EthSwt_Ip_TimerBase->TMR_CTRL & TMR0_BASE_TMR_CTRL_TCLK_PERIOD_MASK) >> TMR0_BASE_TMR_CTRL_TCLK_PERIOD_SHIFT;
+        AdminCtrlListLength = (uint32)(TimeGateSchedulingTableEntry->AdminControlListLength);
+        CmdProccesingTime = (300U + ((uint32)(AdminCtrlListLength)*7U) + (AdminCtrlListLength*AdminCtrlListLength*5U)) * NetcClkPeriod;
+        CalculatedTime = (uint64)CurrentTime + (uint64)LookaheadTime + (uint64)CmdProccesingTime + ((uint64)2U * (uint64)TimeGateSchedulingTableEntry->AdminCycleTime);
+
+        if ((Netc_Eth_Ip_TGSAdminListRegistered == (boolean)FALSE) || \
+        (TimeGateSchedulingTableEntry->AdminBaseTime >= CalculatedTime))
+    #else
         if (TimeGateSchedulingTableEntry->AdminBaseTime >= (CurrentTime + LookaheadTime))
+    #endif
+#else
+        if (TimeGateSchedulingTableEntry->AdminBaseTime >= (CurrentTime + LookaheadTime))
+#endif
         {
             NewBaseTime = TimeGateSchedulingTableEntry->AdminBaseTime;
         }
         else
         {
-            CycleFactor = (uint32)(CurrentTime + LookaheadTime - TimeGateSchedulingTableEntry->AdminBaseTime) / (TimeGateSchedulingTableEntry->AdminCycleTime);
+#if defined(ERR_IPV_NETC_051587)
+    #if (STD_ON == ERR_IPV_NETC_051587)
+            CycleFactor = (uint32)(((((uint64)CurrentTime + (uint64)LookaheadTime + (uint64)CmdProccesingTime) - TimeGateSchedulingTableEntry->AdminBaseTime) / (uint64)TimeGateSchedulingTableEntry->AdminCycleTime) + 2U);
+    #else
+            CycleFactor = ((uint32)(CurrentTime + LookaheadTime - TimeGateSchedulingTableEntry->AdminBaseTime)) / (TimeGateSchedulingTableEntry->AdminCycleTime);
+    #endif
+#else
+            CycleFactor = ((uint32)(CurrentTime + LookaheadTime - TimeGateSchedulingTableEntry->AdminBaseTime)) / (TimeGateSchedulingTableEntry->AdminCycleTime);
+#endif
             NewBaseTime = TimeGateSchedulingTableEntry->AdminBaseTime + (((uint64)CycleFactor + 1UL) * (uint64)(TimeGateSchedulingTableEntry->AdminCycleTime));
         }
         Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA0] = (uint32)(NewBaseTime & (0xFFFFFFFFUL));
@@ -1942,16 +2988,31 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateTimeGateSchedulingTableEntry( cons
         /* ------ initialize the table request data buffer ------ */
 
         /* fill in operation data for config field of Request Header*/
-        OperationData.CmdCompletionInt = 0x0U;                                          /* command completion interrupt disabled */
-        OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;              /* protocol version = 2 */
-        OperationData.TableId = NETC_ETH_IP_TIME_GATE_SCHEDULING_TABLE_ID;
-        OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;                           /* only support NETC_ETH_ENTRY_ID_MATCH method */
-        OperationData.Cmd = NETC_ETH_UPDATE_CMD;                                        /* can only use "update" command to add or update an time gate scheduling table entry */
-        OperationData.ReqBuffLength = (NETC_ETH_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN);
-        OperationData.RspBuffLength = (NETC_ETH_IP_TGSTABLE_RSPBUFFER_LEN);
+        Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                          /* command completion interrupt disabled */
+        Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;              /* protocol version = 2 */
+        Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_TIME_GATE_SCHEDULING_TABLE_ID;
+        Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;                           /* only support NETC_ETH_ENTRY_ID_MATCH method */
+        Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_UPDATE_CMD;                                        /* can only use "update" command to add or update an time gate scheduling table entry */
+        Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_TGSTABLE_ADD_REQBUFFER_LEN);
+        Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TGSTABLE_RSPBUFFER_LEN);
 
         /* send "update" command to add/remove gate control list */
-        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &OperationData);
+        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+
+        #if defined(ERR_IPV_NETC_051254)
+            #if (STD_ON == ERR_IPV_NETC_051254)
+        if (NETC_ETH_CBDRSTATUS_ADMIN_BASE_TIME_IS_MORE_THAN_1S == status)
+        {
+            /* set Administrative Control List Length to 0 for removing the admin gate control list */
+            Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA4] = 0x0UL;
+            FillInGateControlListData(&OperationTimeIdx, TimeGateSchedulingTableEntry);
+
+            /* send "update" command to remove gate control list */
+            (void)Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+
+        }
+            #endif
+        #endif
 #if defined(ERR_IPV_NETC_051243)
     #if (STD_ON == ERR_IPV_NETC_051243)
         /* Error code 0x8A is not a real error. check it on Errata. */
@@ -1962,6 +3023,15 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateTimeGateSchedulingTableEntry( cons
     #endif
 #endif
     }
+
+#if defined(ERR_IPV_NETC_051587)
+    #if (STD_ON == ERR_IPV_NETC_051587)
+    if (status == NETC_ETH_IP_STATUS_SUCCESS)
+    {
+        Netc_Eth_Ip_TGSAdminListRegistered = (boolean)TRUE;
+    }
+    #endif
+#endif
 
     return status;
 }
@@ -2014,8 +3084,8 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_InitTimeGateSchedulingFeature(uint8 ct
     Netc_Eth_Ip_EthTimeGateSchedulingEntryData.AdminControlListLength = 2U;         /* 2 entries */
 
     /* get the current time from 1588 timer */
-    CurrentTime = IP_NETC__TMR0_BASE->TMR_CUR_TIME_L;      /* should read the Lower register first */
-    CurrentTime |= ((uint64)(IP_NETC__TMR0_BASE->TMR_CUR_TIME_H)) << NETC_ETH_IP_32BIT_SHIFT;
+    CurrentTime = Netc_EthSwt_Ip_TimerBase->TMR_CUR_TIME_L;      /* should read the Lower register first */
+    CurrentTime |= ((uint64)(Netc_EthSwt_Ip_TimerBase->TMR_CUR_TIME_H)) << NETC_ETH_IP_32BIT_SHIFT;
     Netc_Eth_Ip_EthTimeGateSchedulingEntryData.AdminBaseTime = CurrentTime;        /* set base time to current time */
 
     /* fill in gate control list entries data */
@@ -2067,13 +3137,6 @@ static void Netc_Eth_Ip_GetMatchedEntries(uint8 CtrlIndex, uint32 *NumOfEntry)
 
 }
 
-/*FUNCTION**********************************************************************
- *
- * Function Name : Netc_Eth_Ip_AddOrUpdateRatePolicerTableEntry
- * Description   : Add or Update rate policer table entry function.
- *
- *
- *END**************************************************************************/
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateRatePolicerTableEntry( const uint8 CtrlIndex,
                                                                      Netc_Eth_Ip_CommandsType Cmd,
                                                                      uint32 *MatchedEntries,
@@ -2082,7 +3145,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateRatePolicerTableEntry( const uint8
 {
     Netc_Eth_Ip_StatusType status;
     uint32 ActionsData;
-    NetcEth_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
@@ -2127,16 +3189,16 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateRatePolicerTableEntry( const uint8
         SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_15();
 
         /* fill in operation data for config field of Request Header*/
-        OperationData.CmdCompletionInt = 0x0U;                                     /* command completion interrupt disabled */
-        OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
-        OperationData.TableId = NETC_ETH_IP_RATE_POLICER_TABLE_ID;
-        OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;       /* for Add and Update command, the Access Method should only be NETC_ETH_ENTRY_ID_MATCH */
-        OperationData.Cmd = Cmd;
-        OperationData.ReqBuffLength = (NETC_ETH_IP_RATEPOLICERTABLE_REQBUFFER_LEN);
-        OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
+        Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                     /* command completion interrupt disabled */
+        Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_RATE_POLICER_TABLE_ID;
+        Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;       /* for Add and Update command, the Access Method should only be NETC_ETH_ENTRY_ID_MATCH */
+        Netc_Eth_Ip_OperationData.Cmd = Cmd;
+        Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_RATEPOLICERTABLE_REQBUFFER_LEN);
+        Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
 
         /* send command */
-        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &OperationData);
+        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
 #if defined(ERR_IPV_NETC_051243)
     #if (STD_ON == ERR_IPV_NETC_051243)
         /* Error code 0x8A is not a real error. check it on Errata. */
@@ -2155,13 +3217,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateRatePolicerTableEntry( const uint8
     return status;
 }
 
-/*FUNCTION**********************************************************************
- *
- * Function Name : Netc_Eth_Ip_QueryRatePolicerTableEntry
- * Description   : Query Rate policer table entry function.
- *
- *
- *END**************************************************************************/
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRatePolicerTableEntry( const uint8 CtrlIndex,
                                                                uint32 *MatchedEntries,
                                                                uint32 RatePolicerEntryId,
@@ -2171,7 +3226,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRatePolicerTableEntry( const uint8 CtrlI
     Netc_Eth_Ip_StatusType status;
     uint32 ActionsData;
     uint32 CfgeConfigBits;
-    NetcEth_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
     uint8 SduType;
     uint64 TempTableDataField;
 
@@ -2195,16 +3249,16 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryRatePolicerTableEntry( const uint8 CtrlI
     SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_21();
 
     /* fill in operation data for config field of Request Header*/
-    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
-    OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;            /* protocol version = 2 */
-    OperationData.TableId = NETC_ETH_IP_RATE_POLICER_TABLE_ID;
-    OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;                         /* for query command, always uses NETC_ETH_ENTRY_ID_MATCH method */
-    OperationData.Cmd = NETC_ETH_QUERY_CMD;
-    OperationData.ReqBuffLength = (NETC_ETH_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
-    OperationData.RspBuffLength = (NETC_ETH_IP_RATEPOLICERTABLE_RSPBUFFER_LEN);             /* set response data buffer length */
+    Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;            /* protocol version = 2 */
+    Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_RATE_POLICER_TABLE_ID;
+    Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;                         /* for query command, always uses NETC_ETH_ENTRY_ID_MATCH method */
+    Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_QUERY_CMD;
+    Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_RATEPOLICERTABLE_RSPBUFFER_LEN);             /* set response data buffer length */
 
     /* send command */
-    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &OperationData);
+    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
 #if defined(ERR_IPV_NETC_051243)
     #if (STD_ON == ERR_IPV_NETC_051243)
     /* Error code 0x8A is not a real error. check it on Errata. */
@@ -2289,7 +3343,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteRatePolicerTableEntry( const uint8 Ctrl
 {
     Netc_Eth_Ip_StatusType status;
     uint32 ActionsData = 0U;
-    NetcEth_Ip_ReqHeaderTableOperationDataType OperationData = {0U};
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
@@ -2305,16 +3358,16 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteRatePolicerTableEntry( const uint8 Ctrl
     SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_22();
 
     /* fill in operation data for config field of Request Header*/
-    OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
-    OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
-    OperationData.TableId = NETC_ETH_IP_RATE_POLICER_TABLE_ID;
-    OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;                      /* for delete command, always uses NETC_ETH_ENTRY_ID_MATCH method */
-    OperationData.Cmd = NETC_ETH_DELETE_CMD;
-    OperationData.ReqBuffLength = (NETC_ETH_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
-    OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);           /* set response data buffer with normal length */
+    Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_RATE_POLICER_TABLE_ID;
+    Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;                      /* for delete command, always uses NETC_ETH_ENTRY_ID_MATCH method */
+    Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_DELETE_CMD;
+    Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);           /* set response data buffer with normal length */
 
     /* send the "Delete" command */
-    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &OperationData);
+    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
 #if defined(ERR_IPV_NETC_051243)
     #if (STD_ON == ERR_IPV_NETC_051243)
     /* Error code 0x8A is not a real error. check it on Errata. */
@@ -2332,12 +3385,1116 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteRatePolicerTableEntry( const uint8 Ctrl
     return status;
 }
 
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateIngrStreamIdentificationTableEntry( const uint8 CtrlIndex,
+                                                                                            Netc_Eth_Ip_CommandsType Cmd,
+                                                                                            uint32 *MatchedEntries,
+                                                                                            const Netc_Eth_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                          )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData;
+    uint8 FrmKeyIdx;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(ISITableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add and Update commands */
+    if ((NETC_ETH_ADD_CMD != Cmd) && (NETC_ETH_UPDATE_CMD != Cmd))
+    {
+        status = NETC_ETH_IP_STATUS_UNSUPPORTED;    /* not supported command */
+    }
+    else
+    {
+        /* set table version and update actions*/
+        ActionsData = NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U) \
+                    | NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+        /* ------initialize the table request data buffer------ */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        /* fill in KEYE_DATA */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = NETC_ETH_IP_ISITABLE_KEYE_KEYTYPE(ISITableEntry->Keye_Keytype) \
+                                                                                        | NETC_ETH_IP_ISITABLE_KEYE_SRCPORTID(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                        | NETC_ETH_IP_ISITABLE_KEYE_SPM(NETC_ETH_IP_BD_ZERO_ENTRY_ID);
+
+        for (FrmKeyIdx = 0U; FrmKeyIdx < 4U; FrmKeyIdx++)
+        {
+            Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[(uint8)NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA0 + FrmKeyIdx] = ISITableEntry->Keye_FrmKey[FrmKeyIdx];    /* [Ricky]TODO: need to check the data format, big endian */
+        }
+        /* fill in CFGE_DATA */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA4] = ISITableEntry->IngrStreamEntryId;     /* IS_EID */
+
+        /* fill in operation data for config field of Request Header*/
+        Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_INGRESS_STREAM_IDEN_TABLE_ID;
+        /* for Add and Update command, the Access Method should only be NETC_ETH_EXACT_MATCH_KEY_ELEMENT_MATCH */
+        Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_EXACT_MATCH_KEY_ELEMENT_MATCH;
+        Netc_Eth_Ip_OperationData.Cmd = Cmd;
+        Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_ISITABLE_ADD_REQBUFFER_LEN);
+        Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
+
+        /* send command */
+        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+        {
+            #endif
+        #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+        {
+        #endif
+            status = NETC_ETH_IP_STATUS_SUCCESS;
+            Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryIngrStreamIdentificationTableEntry( const uint8 CtrlIndex,
+                                                                                      uint32 *MatchedEntries,
+                                                                                      Netc_Eth_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                    )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData;
+    uint32 ConfigBits;
+    uint8 FrmKeyIdx;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(ISITableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETH_TABLES_FULL_QUERY) \
+                | NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    /* ------initialize the table request data buffer------ */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in KEYE_DATA */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = NETC_ETH_IP_ISITABLE_KEYE_KEYTYPE(ISITableEntry->Keye_Keytype) \
+                                                                                        | NETC_ETH_IP_ISITABLE_KEYE_SRCPORTID(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                        | NETC_ETH_IP_ISITABLE_KEYE_SPM(NETC_ETH_IP_BD_ZERO_ENTRY_ID);
+
+    for (FrmKeyIdx = 0U; FrmKeyIdx < 4U; FrmKeyIdx++)
+    {
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[(uint8)NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA0 + FrmKeyIdx] = ISITableEntry->Keye_FrmKey[FrmKeyIdx];    /* [Ricky]TODO: need to check the data format, big endian */
+    }
+
+    /* fill in operation data for config field of Request Header*/
+    Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_INGRESS_STREAM_IDEN_TABLE_ID;
+    /* for query function, always uses NETC_ETH_EXACT_MATCH_KEY_ELEMENT_MATCH method */
+    Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_EXACT_MATCH_KEY_ELEMENT_MATCH;
+    Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_QUERY_CMD;
+    Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_ISITABLE_QUERY_REQBUFFER_LEN);     /* set request data buffer length */
+    Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_ISITABLE_RSQBUFFER_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+    {
+        #endif
+    #else
+    if (status == NETC_ETH_IP_STATUS_SUCCESS)
+    {
+    #endif
+        status = NETC_ETH_IP_STATUS_SUCCESS;
+        Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_Eth_Ip_IngrStremIdentificationTableDataType" structure with data in response data buffer */
+            ISITableEntry->IngrStreamIdenEntryId = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[1U];
+
+            /* fill in KEYE data */
+            ConfigBits = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[2U];
+            ISITableEntry->Keye_Keytype = (ConfigBits & NETC_ETH_IP_ISITABLE_KEYE_KEYTYPE_MASK);
+
+            for (FrmKeyIdx = 0U; FrmKeyIdx < 4U; FrmKeyIdx++)
+            {
+                ISITableEntry->Keye_FrmKey[FrmKeyIdx] = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[3U + FrmKeyIdx];
+            }
+
+            /* fill in CFGE data */
+            ISITableEntry->IngrStreamEntryId = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[7U];
+        }
+    }
+
+    return status;
+}
+
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteIngrStreamIdentificationTableEntry( const uint8 CtrlIndex,
+                                                                                       uint32 *MatchedEntries,
+                                                                                       const Netc_Eth_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                     )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData = 0U;
+    uint8 FrmKeyIdx;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(ISITableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* ------initialize the table request data buffer------ */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in KEYE_DATA */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = NETC_ETH_IP_ISITABLE_KEYE_KEYTYPE(ISITableEntry->Keye_Keytype) \
+                                                                                        | NETC_ETH_IP_ISITABLE_KEYE_SRCPORTID(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                        | NETC_ETH_IP_ISITABLE_KEYE_SPM(NETC_ETH_IP_BD_ZERO_ENTRY_ID);
+
+    for (FrmKeyIdx = 0U; FrmKeyIdx < 4U; FrmKeyIdx++)
+    {
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[(uint8)NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA0 + FrmKeyIdx] = ISITableEntry->Keye_FrmKey[FrmKeyIdx];    /* [Ricky]TODO: need to check the data format, big endian */
+    }
+
+    /* fill in operation data for config field of Request Header*/
+    Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_INGRESS_STREAM_IDEN_TABLE_ID;
+    /* for query function, always uses NETC_ETH_EXACT_MATCH_KEY_ELEMENT_MATCH method */
+    Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_EXACT_MATCH_KEY_ELEMENT_MATCH;
+    Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_DELETE_CMD;
+    Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_ISITABLE_QUERY_REQBUFFER_LEN);     /* set request data buffer length */
+    Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+            #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+            #endif
+        #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+        #endif
+        {
+            status = NETC_ETH_IP_STATUS_SUCCESS;
+            Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+        }
+
+    return status;
+}
+
+static inline Netc_Eth_Ip_StatusType Netc_Eth_Ip_SearchAndFillIngrStreamIdentificationTable( const uint8 CtrlIndex,
+                                                                                                       uint32 * ResumeEntryId,
+                                                                                                       uint16 * NumOfExistingEntry,
+                                                                                                       Netc_Eth_Ip_IngrStremIdentificationTableDataType * ISITableEntry
+                                                                                                     )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData;
+    uint32 ConfigBits;
+    uint32 MatchedEntries = 0x0UL;
+    uint8 FrmKeyIdx;
+    uint8 TableMemIdx;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(ISITableEntry != NULL_PTR);
+    DevAssert(ResumeEntryId != NULL_PTR);
+#endif
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETH_TABLES_FULL_QUERY) \
+                | NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    /* ------initialize the table request data buffer------ */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in KEYE_DATA field */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = *ResumeEntryId;
+
+    /* clear the memory for searching, otherwise will get 0x89 error code */
+    for (TableMemIdx = 0U; TableMemIdx < 6U; TableMemIdx++)
+    {
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[(uint8)NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA0 + TableMemIdx] = 0U;
+    }
+
+    /* fill in operation data for config field of Request Header*/
+    Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_INGRESS_STREAM_IDEN_TABLE_ID;
+    /* query function with NETC_ETH_SEARCH_METHOD method */
+    Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_SEARCH_METHOD;
+    Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_QUERY_CMD;
+    Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_ISITABLE_QUERY_REQBUFFER_LEN);     /* set request data buffer length */
+    Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_ISITABLE_RSQBUFFER_LEN);            /* set response data buffer length */
+
+    /* send command */
+    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+    {
+        #endif
+    #else
+    if (status == NETC_ETH_IP_STATUS_SUCCESS)
+    {
+    #endif
+        status = NETC_ETH_IP_STATUS_SUCCESS;
+        Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, &MatchedEntries);
+
+        /* get the resume_entry_id and be ready for the next query operation */
+        *ResumeEntryId = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[0U];
+
+        /* ERR051048: NETC: Management command with search action responds with incorrect NUM_MATCHED */
+        /* found a matched entry */
+        if ((1U == MatchedEntries) && (*ResumeEntryId != NETC_ETH_IP_BD_NULL_ENTRY_ID))
+        {
+            /* fill in "Netc_Eth_Ip_IngrStremIdentificationTableDataType" structure with data in response data buffer */
+            ISITableEntry[*NumOfExistingEntry].IngrStreamIdenEntryId = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[1U];
+
+            /* fill in KEYE data */
+            ConfigBits = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[2U];
+            ISITableEntry[*NumOfExistingEntry].Keye_Keytype = (ConfigBits & NETC_ETH_IP_ISITABLE_KEYE_KEYTYPE_MASK);
+
+            for (FrmKeyIdx = 0U; FrmKeyIdx < 2U; FrmKeyIdx++)
+            {
+                ISITableEntry[*NumOfExistingEntry].Keye_FrmKey[FrmKeyIdx] = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[3U + FrmKeyIdx];
+            }
+
+            /* fill in CFGE data */
+            ISITableEntry[*NumOfExistingEntry].IngrStreamEntryId = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[7U];
+
+            /* increase the NumOfExistingEntry */
+            (*NumOfExistingEntry) += 1U;
+        }
+    }
+
+    return status;
+}
+
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetIngrStreamIdentificationTable( const uint8 CtrlIndex,
+                                                                               uint16 * NumberOfElements,
+                                                                               Netc_Eth_Ip_IngrStremIdentificationTableDataType * ISITableList
+                                                                             )
+{
+    Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
+    uint16 NumOfExistingEntry = 0U;
+    uint32 ResumeId = NETC_ETH_IP_BD_NULL_ENTRY_ID;
+
+    /* [notes]: we will have to read entries one by one because of the errata ERR051048.
+     - ERR051048: NETC: Management command with search action responds with incorrect NUM_MATCHED
+     - Description: The NUM_MATCHED field in the command NTMP response header may be incorrect when
+       the search access method is used for the following tables: FDB table 15, L2 IPv4 Multicast
+       Filter table 16, VLAN Filter table 18, Ingress Stream Identification table 30, or Ingress Stream
+       Filter table 32.
+     - Workaround: For the query command, limit the message response buffer size (RESPONSE_LENGTH field in the request header)
+       so that NETC returns no more than one entry at a time. Under this condition, the NUM_MATCHED field value is correct
+    */
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(NumberOfElements != NULL_PTR);
+    DevAssert(*NumberOfElements != 0U);
+    DevAssert(ISITableList != NULL_PTR);
+#endif
+
+    do
+    {
+        /* check if the ISITableList is full or we get all existing entries */
+        if ((NumOfExistingEntry >= *NumberOfElements) || (status != NETC_ETH_IP_STATUS_SUCCESS))
+        {
+            break;
+        }
+
+        status = Netc_Eth_Ip_SearchAndFillIngrStreamIdentificationTable(CtrlIndex, &ResumeId, &NumOfExistingEntry, ISITableList);
+
+    } while (ResumeId != NETC_ETH_IP_BD_NULL_ENTRY_ID);      /* ResumeId == NETC_ETH_IP_BD_NULL_ENTRY_ID means the query operation is completed */
+
+    /* return the Number of elements which are currently available in the EthSwitch module or number of elements copied to ISITableList*/
+    *NumberOfElements = NumOfExistingEntry;
+
+    return status;
+}
+
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateStreamGateInstanceTableEntry( const uint8 CtrlIndex,
+                                                                                      Netc_Eth_Ip_CommandsType Cmd,
+                                                                                      uint32 *MatchedEntries,
+                                                                                      const Netc_Eth_Ip_StreamGateInstanceEntryDataType * StreamGateInstanceTableEntry
+                                                                                    )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(StreamGateInstanceTableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add and Update commands */
+    if ((NETC_ETH_ADD_CMD != Cmd) && (NETC_ETH_UPDATE_CMD != Cmd))
+    {
+        status = NETC_ETH_IP_STATUS_UNSUPPORTED;    /* not supported command */
+    }
+    else
+    {
+        /* set table version and update actions*/
+        ActionsData = NETC_ETH_IP_SGITABLE_REQFMT_ACFGEU(1U) \
+                    | NETC_ETH_IP_SGITABLE_REQFMT_CFGEU(1U) \
+                    | NETC_ETH_IP_SGITABLE_REQFMT_SGISEU(1U) \
+                    | NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+        /* ------initialize the table request data buffer------ */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        /* fill in KEYE_DATA */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = StreamGateInstanceTableEntry->SGIEntryId;     /* fill in Entry_ID */
+        /* fill in ACFGE_DATA */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA0] = StreamGateInstanceTableEntry->AdminSGCLEntryId;
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA1] = (uint32)(StreamGateInstanceTableEntry->AdminBaseTime & 0xFFFFFFFFUL);
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA2] = (uint32)(StreamGateInstanceTableEntry->AdminBaseTime >> NETC_ETH_IP_32BIT_SHIFT);
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA3] = StreamGateInstanceTableEntry->AdminCycleTimeExt;
+        /* fill in CFGE_DATA and ICFGE_DATA */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA4] = (NETC_ETH_IP_SGITABLE_CFGE_OEXEN(StreamGateInstanceTableEntry->Cfge_Oexen ? 1U : 0U) \
+                                                                                    | NETC_ETH_IP_SGITABLE_CFGE_IRXEN(StreamGateInstanceTableEntry->Cfge_Irxen ? 1U : 0U) \
+                                                                                    | NETC_ETH_IP_SGITABLE_CFGE_SDUTYPE(StreamGateInstanceTableEntry->SduType) \
+                                                                                    | (NETC_ETH_IP_SGITABLE_ICFGE_IPV(StreamGateInstanceTableEntry->Icfge_Ipv) << NETC_ETH_IP_8BIT_SHIFT) \
+                                                                                    | (NETC_ETH_IP_SGITABLE_ICFGE_OIPV(StreamGateInstanceTableEntry->Icfge_Oipv ? 1U : 0U) << NETC_ETH_IP_8BIT_SHIFT) \
+                                                                                    | (NETC_ETH_IP_SGITABLE_ICFGE_GST(StreamGateInstanceTableEntry->Icfge_Gst) << NETC_ETH_IP_8BIT_SHIFT) \
+                                                                                    | (NETC_ETH_IP_SGITABLE_ICFGE_CTD(NETC_ETH_IP_BD_ZERO_ENTRY_ID) << NETC_ETH_IP_8BIT_SHIFT)) & 0xFFFFU;
+
+        /* fill in operation data for config field of Request Header*/
+        Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_STREAM_GATE_INSTANCE_TABLE_ID;
+        /* for Add and Update command, the Access Method should only be NETC_ETH_ENTRY_ID_MATCH */
+        Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;
+        Netc_Eth_Ip_OperationData.Cmd = Cmd;
+        Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_SGITABLE_REQBUFFER_LEN);
+        Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
+
+        /* send command */
+        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+        {
+            #endif
+        #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+        {
+        #endif
+            status = NETC_ETH_IP_STATUS_SUCCESS;
+            Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_QueryStreamGateInstanceTableEntry
+ * Description   : Ethernet Switch query Ingress Stream Filter table entry function.
+ *
+ *END**************************************************************************/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryStreamGateInstanceTableEntry( const uint8 CtrlIndex,
+                                                                                uint32 *MatchedEntries,
+                                                                                uint32 SGIEntryId,
+                                                                                Netc_Eth_Ip_StreamGateInstanceEntryRspDataType * SGITableEntryRspData
+                                                                              )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData;
+    uint32 ConfigBits;
+    uint8 SduType;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(SGITableEntryRspData != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETH_TABLES_FULL_QUERY) \
+                | NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    /* ------initialize the table request data buffer------ */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in ACCESS_KEY field */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = SGIEntryId;
+
+    /* fill in operation data for config field of Request Header*/
+    Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_STREAM_GATE_INSTANCE_TABLE_ID;
+    /* for query function, always uses NETC_ETH_ENTRY_ID_MATCH method */
+    Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;
+    Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_QUERY_CMD;
+    Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);     /* set request data buffer length */
+    Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_SGITABLE_RSPBUFFER_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+    {
+        #endif
+    #else
+    if (status == NETC_ETH_IP_STATUS_SUCCESS)
+    {
+    #endif
+        status = NETC_ETH_IP_STATUS_SUCCESS;
+        Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_Eth_Ip_StreamGateInstanceEntryRspDataType" structure with data in response data buffer */
+            SGITableEntryRspData->SGIEntryId = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[0U];
+            /* fill in SGISE_DATA */
+            SGITableEntryRspData->OperationalSGCLEntryID = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[1U];
+            SGITableEntryRspData->ConfigChangeTime = ((uint64)(Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[3U]) << NETC_ETH_IP_32BIT_SHIFT);
+            SGITableEntryRspData->ConfigChangeTime |= (uint64)(Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[2U]);
+            SGITableEntryRspData->OperationalBaseTime = ((uint64)(Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[5U]) << NETC_ETH_IP_32BIT_SHIFT);
+            SGITableEntryRspData->OperationalBaseTime |= (uint64)(Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[4U]);
+            SGITableEntryRspData->OperationalCycleTimeExt = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[6U];
+            ConfigBits = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[7U];
+            SGITableEntryRspData->SGISEOex = (uint8)(ConfigBits & NETC_ETH_IP_SGITABLE_SGISE_OEX_MASK);
+            SGITableEntryRspData->SGISEIrx = (uint8)((ConfigBits & NETC_ETH_IP_SGITABLE_SGISE_IRX_MASK) >> NETC_ETH_IP_SGITABLE_SGISE_IRX_SHIFT);
+            SGITableEntryRspData->SGISEState = (uint8)((ConfigBits & NETC_ETH_IP_SGITABLE_SGISE_STATE_MASK) >> NETC_ETH_IP_SGITABLE_SGISE_STATE_SHIFT);
+
+            /* fill in CFGE data */
+            ConfigBits = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[7U] >> NETC_ETH_IP_8BIT_SHIFT;
+            SGITableEntryRspData->Cfge_Oexen = ((ConfigBits & NETC_ETH_IP_SGITABLE_CFGE_OEXEN_MASK) == 0U) ? FALSE : TRUE;
+            SGITableEntryRspData->Cfge_Irxen = ((ConfigBits & NETC_ETH_IP_SGITABLE_CFGE_IRXEN_MASK) == 0U) ? FALSE : TRUE;
+            SduType = (uint8)((ConfigBits & NETC_ETH_IP_SGITABLE_CFGE_SDUTYPE_MASK) >> NETC_ETH_IP_SGITABLE_CFGE_SDUTYPE_SHIFT);
+            switch (SduType)
+            {
+                case 0U:
+                    SGITableEntryRspData->SduType = NETC_ETH_IP_PPDU;
+                    break;
+                case 1U:
+                    SGITableEntryRspData->SduType = NETC_ETH_IP_MPDU;
+                    break;
+                case 2U:
+                    SGITableEntryRspData->SduType = NETC_ETH_IP_MSDU;
+                    break;
+                default:
+                    SGITableEntryRspData->SduType = NETC_ETH_IP_RSDTYPE;
+                    break;
+            }
+
+            /* fill in ICFGE data */
+            ConfigBits = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[7U] >> NETC_ETH_IP_16BIT_SHIFT;
+            SGITableEntryRspData->Icfge_Ipv = (uint8)(ConfigBits & NETC_ETH_IP_SGITABLE_ICFGE_IPV_MASK);
+            SGITableEntryRspData->Icfge_Oipv = ((ConfigBits & NETC_ETH_IP_SGITABLE_ICFGE_OIPV_MASK) == 0U) ? FALSE : TRUE;
+            SGITableEntryRspData->Icfge_Gst = (ConfigBits & NETC_ETH_IP_SGITABLE_ICFGE_GST_MASK) >> NETC_ETH_IP_SGITABLE_ICFGE_GST_SHIFT;
+
+            /* fill in ACFGE data */
+            SGITableEntryRspData->AdminSGCLEntryId = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[8U];
+            SGITableEntryRspData->AdminBaseTime = (((uint64)(Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[10U])) << NETC_ETH_IP_32BIT_SHIFT);
+            SGITableEntryRspData->AdminBaseTime |= (uint64)(Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[9U]);
+            SGITableEntryRspData->AdminCycleTimeExt = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[11U];
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_DeleteStreamGateInstanceTableEntry
+ * Description   : Ethernet Switch delete Stream Gate Instance table entry function.
+ *
+ *END**************************************************************************/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteStreamGateInstanceTableEntry( const uint8 CtrlIndex,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 uint32 SGIEntryId
+                                                                               )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData = 0U;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    /* ------initialize the table request data buffer------ */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* Delete command will ignore ActionsData data field */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = SGIEntryId;        /* fill in Entry_ID field (Access Key) */
+
+    /* fill in operation data for config field of Request Header*/
+    Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_STREAM_GATE_INSTANCE_TABLE_ID;
+    Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;                      /* for delete command, always uses NETC_ETH_ENTRY_ID_MATCH method */
+    Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_DELETE_CMD;
+    Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);           /* set response data buffer with normal length */
+
+    /* send the "Delete" command */
+    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+            #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+            #endif
+        #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+        #endif
+        {
+            status = NETC_ETH_IP_STATUS_SUCCESS;
+            Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+        }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_AddStreamGateControlListTableEntry
+ * Description   : Ethernet Switch Add Stream Gate Control List table entry function.
+ *
+ *END**************************************************************************/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddStreamGateControlListTableEntry( const uint8 CtrlIndex,
+                                                                                 Netc_Eth_Ip_CommandsType Cmd,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 const Netc_Eth_Ip_SGCLTableDataType * SGCLTableEntry
+                                                                                )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData;
+    uint8 ListIdx;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(SGCLTableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+    if (SGCLTableEntry->Cfge_ListLength > 0U)
+    {
+        DevAssert(SGCLTableEntry->ListEntries != NULL_PTR);
+    }
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add command */
+    if (NETC_ETH_ADD_CMD != Cmd)
+    {
+        status = NETC_ETH_IP_STATUS_UNSUPPORTED;    /* not supported command */
+    }
+    else
+    {
+        /* set table version*/
+        ActionsData = NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+        /* ------initialize the table request data buffer------ */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        /* fill in ACCESS_KEY */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = SGCLTableEntry->SGCLEntryId;     /* fill in Entry_ID */
+        /* fill in CFGE_DATA */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA0] = SGCLTableEntry->Cfge_CycleTime;
+        /* Software must set LIST_LENGTH to N-1, where N is the size of the list being configured LIST_LENGTH=(N-1). will do it reversely when querying */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA1] = NETC_ETH_IP_SGCLTABLE_CFGE_LISTLEN((uint8)(SGCLTableEntry->Cfge_ListLength - 1U)) \
+                                                                                    | NETC_ETH_IP_SGCLTABLE_CFGE_EXTOIPV((SGCLTableEntry->Cfge_ExtOIPV) ? 1U : 0U) \
+                                                                                    | NETC_ETH_IP_SGCLTABLE_CFGE_EXTIPV(SGCLTableEntry->Cfge_ExtIpv) \
+                                                                                    | NETC_ETH_IP_SGCLTABLE_CFGE_EXTCTD(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                    | NETC_ETH_IP_SGCLTABLE_CFGE_EXTGTST(SGCLTableEntry->Cfge_ExtGtst);
+
+        /* fill in list entries data */
+        if (SGCLTableEntry->Cfge_ListLength > 0U)
+        {
+            for (ListIdx = 0U; ListIdx < SGCLTableEntry->Cfge_ListLength; ListIdx++)
+            {
+                Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[(uint8)NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA2 + (2U * ListIdx)] = SGCLTableEntry->ListEntries[ListIdx].SGCL_TimeInterval;
+                Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[(uint8)NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA3 + (2U * ListIdx)] = NETC_ETH_IP_SGCLTABLE_CFGE_IOM(SGCLTableEntry->ListEntries[ListIdx].SGCL_IntervalOctetsMax) \
+                                                                                                            | NETC_ETH_IP_SGCLTABLE_CFGE_IPV(SGCLTableEntry->ListEntries[ListIdx].SGCL_Ipv) \
+                                                                                                            | NETC_ETH_IP_SGCLTABLE_CFGE_OIPV((SGCLTableEntry->ListEntries[ListIdx].SGCL_Oipv) ? 1U : 0U) \
+                                                                                                            | NETC_ETH_IP_SGCLTABLE_CFGE_CTD(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                                            | NETC_ETH_IP_SGCLTABLE_CFGE_IOMEN((SGCLTableEntry->ListEntries[ListIdx].SGCL_IntervalOctetMaxEnable) ? 1U : 0U) \
+                                                                                                            | NETC_ETH_IP_SGCLTABLE_CFGE_GTST(SGCLTableEntry->ListEntries[ListIdx].SGCL_GateState);
+            }
+        }
+
+        /* fill in operation data for config field of Request Header*/
+        Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_STREAM_GATE_CTRL_LIST_TABLE_ID;
+        /* for Add and Update command, the Access Method should only be NETC_ETH_ENTRY_ID_MATCH */
+        Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;
+        Netc_Eth_Ip_OperationData.Cmd = Cmd;
+        /* the request and response data buffer length are variable based on the length of control list*/
+        Netc_Eth_Ip_OperationData.ReqBuffLength = (uint16)((uint8)(16U + (8U * SGCLTableEntry->Cfge_ListLength)));
+        Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
+
+        /* send command */
+        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+        {
+            #endif
+        #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+        {
+        #endif
+            status = NETC_ETH_IP_STATUS_SUCCESS;
+            Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_QueryStreamGateControlListTableEntry
+ * Description   : Ethernet Switch query Ingress Stream Control List table entry function.
+ *
+ *END**************************************************************************/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryStreamGateControlListTableEntry( const uint8 CtrlIndex,
+                                                                                   uint32 *MatchedEntries,
+                                                                                   uint32 SGCLEntryId,
+                                                                                   uint8 ListLen,
+                                                                                   Netc_Eth_Ip_SGCLTableDataType * SGCLTableEntryRspData
+                                                                                 )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData;
+    uint32 ConfigBits;
+    uint8 ListIdx;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(SGCLTableEntryRspData != NULL_PTR);
+    if (ListLen > 0U)
+    {
+        DevAssert(SGCLTableEntryRspData->ListEntries != NULL_PTR);
+    }
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETH_TABLES_FULL_QUERY) \
+                | NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    /* ------initialize the table request data buffer------ */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    /* fill in ACCESS_KEY field */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = SGCLEntryId;
+
+    /* fill in operation data for config field of Request Header*/
+    Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_STREAM_GATE_CTRL_LIST_TABLE_ID;
+    /* for query function, always uses NETC_ETH_ENTRY_ID_MATCH method */
+    Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;
+    Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_QUERY_CMD;
+    Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);     /* set request data buffer length */
+    Netc_Eth_Ip_OperationData.RspBuffLength = (uint16)((uint8)(16U + (8U * ListLen)));           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+    {
+        #endif
+    #else
+    if (status == NETC_ETH_IP_STATUS_SUCCESS)
+    {
+    #endif
+        status = NETC_ETH_IP_STATUS_SUCCESS;
+        Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_Eth_Ip_SGCLTableDataType" structure with data in response data buffer */
+            SGCLTableEntryRspData->SGCLEntryId = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[0U];
+
+            /* fill in SGCLSE_DATA */
+            SGCLTableEntryRspData->Sgclse_RefCount = (Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[1U] & NETC_ETH_IP_SGCLTABLE_SGCLSE_REFCOUNT_MASK);
+
+            /* fill in CFGE data */
+            SGCLTableEntryRspData->Cfge_CycleTime = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[2U];
+            ConfigBits = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[3U];
+            SGCLTableEntryRspData->Cfge_ListLength = (uint8)(ConfigBits & NETC_ETH_IP_SGCLTABLE_CFGE_LISTLEN_MASK) + 1U;
+            SGCLTableEntryRspData->Cfge_ExtIpv = (uint8)((ConfigBits & NETC_ETH_IP_SGCLTABLE_CFGE_EXTIPV_MASK) >> NETC_ETH_IP_SGCLTABLE_CFGE_EXTIPV_SHIFT);
+            SGCLTableEntryRspData->Cfge_ExtOIPV = ((ConfigBits & NETC_ETH_IP_SGCLTABLE_CFGE_EXTOIPV_MASK) == 0x0UL) ? FALSE : TRUE;
+            SGCLTableEntryRspData->Cfge_ExtGtst = (ConfigBits & NETC_ETH_IP_SGCLTABLE_CFGE_EXTGTST_MASK) >> NETC_ETH_IP_SGCLTABLE_CFGE_EXTGTST_SHIFT;
+
+            if (SGCLTableEntryRspData->Cfge_ListLength > 0U)
+            {
+                for (ListIdx = 0U; ListIdx < SGCLTableEntryRspData->Cfge_ListLength; ListIdx++)
+                {
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_TimeInterval = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[4U + (2U * ListIdx)];
+                    ConfigBits = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[5U + (2U * ListIdx)];
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_IntervalOctetsMax = ConfigBits & NETC_ETH_IP_SGCLTABLE_CFGE_IOM_MASK;
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_Ipv = (uint8)((ConfigBits & NETC_ETH_IP_SGCLTABLE_CFGE_IPV_MASK) >> NETC_ETH_IP_SGCLTABLE_CFGE_IPV_SHIFT);
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_Oipv = ((ConfigBits & NETC_ETH_IP_SGCLTABLE_CFGE_OIPV_MASK) == 0x0UL) ?  FALSE : TRUE;
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_IntervalOctetMaxEnable = ((ConfigBits & NETC_ETH_IP_SGCLTABLE_CFGE_IOMEN_MASK) == 0x0UL) ?  FALSE : TRUE;
+                    SGCLTableEntryRspData->ListEntries[ListIdx].SGCL_GateState = (ConfigBits & NETC_ETH_IP_SGCLTABLE_CFGE_GTST_MASK) >> NETC_ETH_IP_SGCLTABLE_CFGE_GTST_SHIFT;
+                }
+            }
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_DeleteStreamGateControlListTableEntry
+ * Description   : Ethernet Switch delete Stream Gate Instance table entry function.
+ *
+ *END**************************************************************************/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteStreamGateControlListTableEntry( const uint8 CtrlIndex,
+                                                                                    uint32 *MatchedEntries,
+                                                                                    uint32 SGCLEntryId
+                                                                                  )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData = 0U;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    /* ------initialize the table request data buffer------ */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* Delete command will ignore ActionsData data field */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = SGCLEntryId;        /* fill in Entry_ID field (Access Key) */
+
+    /* fill in operation data for config field of Request Header*/
+    Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_STREAM_GATE_CTRL_LIST_TABLE_ID;
+    Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;                      /* for delete command, always uses NETC_ETH_ENTRY_ID_MATCH method */
+    Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_DELETE_CMD;
+    Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);           /* set response data buffer with normal length */
+
+    /* send the "Delete" command */
+    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+            #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+            #endif
+        #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+        #endif
+        {
+            status = NETC_ETH_IP_STATUS_SUCCESS;
+            Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+        }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_AddOrUpdateIngressStreamTableEntry
+ * Description   : Ethernet Switch Add or Update ingress stream table entry function.
+ *
+ *END**************************************************************************/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddOrUpdateIngressStreamTableEntry( const uint8 CtrlIndex,
+                                                                                 Netc_Eth_Ip_CommandsType Cmd,
+                                                                                 uint32 *MatchedEntries,
+                                                                                 const Netc_Eth_Ip_IngressStreamEntryDataType * IngressStreamTableEntry
+                                                                               )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(IngressStreamTableEntry != NULL_PTR);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* only support Add and Update commands */
+    if ((NETC_ETH_ADD_CMD != Cmd) && (NETC_ETH_UPDATE_CMD != Cmd))
+    {
+        status = NETC_ETH_IP_STATUS_UNSUPPORTED;    /* not supported command */
+    }
+    else
+    {
+        /* set table version and CFGEU flag */
+        ActionsData = NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U) \
+                    | NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+        /* ------initialize the table request data buffer------ */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = IngressStreamTableEntry->IngressStreamEntryId;        /* fill in Entry_ID field (Access Key) */
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA0] = NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SFE((IngressStreamTableEntry->IngressStreamCfgeData.StreamFilteringEnable) ? 1U : 0U) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IPV(IngressStreamTableEntry->IngressStreamCfgeData.InternalPriorityValue) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OIPV((IngressStreamTableEntry->IngressStreamCfgeData.OverrideIPV) ? 1U : 0U) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_DR(IngressStreamTableEntry->IngressStreamCfgeData.DropResilience) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ODR((IngressStreamTableEntry->IngressStreamCfgeData.OverrideDR) ? 1U : 0U) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IMIRE(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_TIMECAPE(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SPPD(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ISQA(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ORP((IngressStreamTableEntry->IngressStreamCfgeData.OverrideRatePolicerInstanceEID) ? 1U : 0U) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OSGI((IngressStreamTableEntry->IngressStreamCfgeData.OverrideStreamGateInstanceEID) ? 1U : 0U) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_HR(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_FA(IngressStreamTableEntry->IngressStreamCfgeData.ForwardingActions) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE(IngressStreamTableEntry->IngressStreamCfgeData.SduType);
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA1] = NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_MSDU(IngressStreamTableEntry->IngressStreamCfgeData.MaximumServiceDataUnit) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IFMELENCHG(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_EPORT(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OETEID(NETC_ETH_IP_BD_ZERO_ENTRY_ID) \
+                                                                                    | NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_CTD(NETC_ETH_IP_BD_ZERO_ENTRY_ID);
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA2] = NETC_ETH_IP_BD_NULL_ENTRY_ID;
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA3] = IngressStreamTableEntry->IngressStreamCfgeData.RatePolicer_EID;
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA4] = IngressStreamTableEntry->IngressStreamCfgeData.StreamGateInstance_EID;
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA5] = NETC_ETH_IP_BD_NULL_ENTRY_ID;
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA6] = NETC_ETH_IP_BD_NULL_ENTRY_ID;
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA7] = IngressStreamTableEntry->IngressStreamCfgeData.IngressStreamCounter_EID;
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA8] = NETC_ETH_IP_BD_ZERO_ENTRY_ID;
+        Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_CFGEDATA9] = NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SIMAP(IngressStreamTableEntry->IngressStreamCfgeData.StationInterfaceMap);
+
+        /* fill in operation data for config field of Request Header*/
+        Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+        Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_INGRESS_STREAM_TABLE_ID;
+        Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;       /* for Add and Update command, the Access Method should only be NETC_ETH_ENTRY_ID_MATCH */
+        Netc_Eth_Ip_OperationData.Cmd = Cmd;
+        Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_INGRESSSTREAMTABLE_REQBUFFER_LEN);
+        Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);
+
+        /* send command */
+        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+        #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+        {
+            #endif
+        #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+        {
+        #endif
+            status = NETC_ETH_IP_STATUS_SUCCESS;
+            Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_QueryIngressStreamTableEntry
+ * Description   : Ethernet Switch query Ingress Stream table entry function.
+ *
+ *END**************************************************************************/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryIngressStreamTableEntry( const uint8 CtrlIndex,
+                                                                           uint32 *MatchedEntries,
+                                                                           uint32 IngressStreamEntryId,
+                                                                           Netc_Eth_Ip_IngressStreamEntryDataType * IngressStreamTableEntry
+                                                                         )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData;
+    uint32 CfgeConfigBits;
+    uint32 CfgeConfigBits2;
+    uint8 SduType;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(MatchedEntries != NULL_PTR);
+    DevAssert(IngressStreamTableEntry != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+
+    /* always do the full query. 0x0 = Full query. */
+    ActionsData = NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETH_TABLES_FULL_QUERY) \
+                | NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_TABLE_VERSIONS(0U);
+
+    /* ------initialize the table request data buffer------ */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* fill in Actions field */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = IngressStreamEntryId;        /* fill in Entry_ID field (Access Key) */
+
+    /* fill in operation data for config field of Request Header*/
+    Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_INGRESS_STREAM_TABLE_ID;
+    Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;                     /* for query command, always uses NETC_ETH_ENTRY_ID_MATCH method */
+    Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_QUERY_CMD;
+    Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);     /* set request data buffer length */
+    Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_INGRESSSTREAMTABLE_RSPBUFFER_LEN);           /* set response data buffer length */
+
+    /* send command */
+    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+        #if (STD_ON == ERR_IPV_NETC_051243)
+    /* Error code 0x8A is not a real error. check it on Errata. */
+    if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+    {
+        #endif
+    #else
+    if (status == NETC_ETH_IP_STATUS_SUCCESS)
+    {
+    #endif
+        status = NETC_ETH_IP_STATUS_SUCCESS;
+        Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+
+        /* found a matched entry */
+        if (1U == *MatchedEntries)
+        {
+            /* fill in "Netc_Eth_Ip_IngressStreamEntryDataType" structure with data in response data buffer */
+            IngressStreamTableEntry->IngressStreamEntryId = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[0U];
+            /* fill in CFGE data */
+            CfgeConfigBits = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[1U];
+            IngressStreamTableEntry->IngressStreamCfgeData.StreamFilteringEnable = ((CfgeConfigBits & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SFE_MASK) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.InternalPriorityValue = (uint8)((CfgeConfigBits & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IPV_MASK) >> NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_IPV_SHIFT);
+            IngressStreamTableEntry->IngressStreamCfgeData.OverrideIPV = (((CfgeConfigBits & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OIPV_MASK) >> NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OIPV_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.DropResilience = (uint8)((CfgeConfigBits & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_DR_MASK) >> NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_DR_SHIFT);
+            IngressStreamTableEntry->IngressStreamCfgeData.OverrideDR = (((CfgeConfigBits & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ODR_MASK) >> NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ODR_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.OverrideRatePolicerInstanceEID = (((CfgeConfigBits & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ORP_MASK) >> NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_ORP_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.OverrideStreamGateInstanceEID = (((CfgeConfigBits & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OSGI_MASK) >> NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_OSGI_SHIFT) > 0U) ? TRUE : FALSE;
+            IngressStreamTableEntry->IngressStreamCfgeData.ForwardingActions = ((CfgeConfigBits & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_FA_MASK) >> NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_FA_SHIFT);
+            SduType = (uint8)((CfgeConfigBits & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_MASK) >> NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SDUTYPE_SHIFT);
+            switch (SduType)
+            {
+                case 0U:
+                    IngressStreamTableEntry->IngressStreamCfgeData.SduType = NETC_ETH_IP_PPDU;
+                    break;
+                case 1U:
+                    IngressStreamTableEntry->IngressStreamCfgeData.SduType = NETC_ETH_IP_MPDU;
+                    break;
+                case 2U:
+                    IngressStreamTableEntry->IngressStreamCfgeData.SduType = NETC_ETH_IP_MSDU;
+                    break;
+                default:
+                    IngressStreamTableEntry->IngressStreamCfgeData.SduType = NETC_ETH_IP_RSDTYPE;
+                    break;
+            }
+
+            CfgeConfigBits2 = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[2U];
+            IngressStreamTableEntry->IngressStreamCfgeData.MaximumServiceDataUnit = (uint16)((CfgeConfigBits2 & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_MSDU_MASK) >> NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_MSDU_SHIFT);
+
+            IngressStreamTableEntry->IngressStreamCfgeData.RatePolicer_EID = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[4U];
+            IngressStreamTableEntry->IngressStreamCfgeData.StreamGateInstance_EID = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[5U];
+            IngressStreamTableEntry->IngressStreamCfgeData.IngressStreamCounter_EID = Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[8U];
+            IngressStreamTableEntry->IngressStreamCfgeData.StationInterfaceMap = (uint16)(Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[10U] & NETC_ETH_IP_INGRESSSTREAMTABLE_CFGE_SIMAP_MASK);
+        }
+    }
+
+    return status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_DeleteIngressStreamTableEntry
+ * Description   : Ethernet Switch delete Ingress Stream table entry function.
+ *
+ *END**************************************************************************/
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteIngressStreamTableEntry( const uint8 CtrlIndex,
+                                                                            uint32 *MatchedEntries,
+                                                                            uint32 IngressStreamEntryId
+                                                                          )
+{
+    Netc_Eth_Ip_StatusType status;
+    uint32 ActionsData = 0U;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(MatchedEntries != NULL_PTR);
+#endif
+
+    /* clear the variable MatchedEntries first */
+    *MatchedEntries = 0U;
+    /* ------initialize the table request data buffer------ */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD] = ActionsData;      /* Delete command will ignore ActionsData data field */
+    Netc_Eth_Ip_EnetcTableDataBuffer.TableDataField[NETC_ETH_IP_ENETCTABLE_REQFMT_ENTRYID_FIELD] = IngressStreamEntryId;        /* fill in Entry_ID field (Access Key) */
+
+    /* fill in operation data for config field of Request Header*/
+    Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+    Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;         /* protocol version = 2 */
+    Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_INGRESS_STREAM_TABLE_ID;
+    Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;                      /* for delete command, always uses NETC_ETH_ENTRY_ID_MATCH method */
+    Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_DELETE_CMD;
+    Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_TABLE_COMMON_REQBUFFER_8BYTE_LEN);           /* set request data buffer length */
+    Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN);           /* set response data buffer with normal length */
+
+    /* send the "Delete" command */
+    status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
+    #if defined(ERR_IPV_NETC_051243)
+            #if (STD_ON == ERR_IPV_NETC_051243)
+        /* Error code 0x8A is not a real error. check it on Errata. */
+        if (((uint16)status == 0x8AU) || (status == NETC_ETH_IP_STATUS_SUCCESS))
+            #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+            #endif
+        #else
+        if (status == NETC_ETH_IP_STATUS_SUCCESS)
+        #endif
+        {
+            status = NETC_ETH_IP_STATUS_SUCCESS;
+            Netc_Eth_Ip_GetMatchedEntries(CtrlIndex, MatchedEntries);
+        }
+
+    return status;
+}
+
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
                                                     uint8 ring,
                                                     uint32 ConsumerIndex,
                                                     const uint8 *buff,
-                                                    Netc_Eth_Ip_TimestampType *timeStampInfo,
-                                                    Netc_Eth_Ip_TxStatusType *txStatus)
+                                                    Netc_Eth_Ip_TxInfoType *info)
 
 {
 
@@ -2349,7 +4506,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
     uint32 currentTimeLow;
     uint64 nanoSeconds;
 #ifdef NETC_ETH_0_USED
-    uint16 TimestampInfoIndex;
+    uint16 ManagementInfoIndex;
 #endif /* NETC_ETH_0_USED */
 #endif /* STD_ON == NETC_ETH_IP_EXTENDED_BUFF */
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
@@ -2373,20 +4530,20 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
         {
             /* Get the descriptor corresponding to the buff pointer (by looping through the descriptors) */
             txBDR = (Netc_Eth_Ip_TxBDRType *)((uint32)(Netc_Eth_Ip_apxState[ctrlIndex]->FirstTxRingDescAddr[ring]) + (((uint32)(LastDescrCheckIndex / NETC_ETH_IP_PRODUCER_INCR)) * ((uint32)(sizeof(Netc_Eth_Ip_TxBDRType)))));
-
             /* Check if there was a writeback in the descriptor */
             if (NETC_ETH_IP_TXBD_WRITEBACK_MASK == (txBDR->buffConfig & NETC_ETH_IP_TXBD_WRITEBACK_MASK))
             {
                 /* Check the STATUS bitfield and read the possible errors and store them in info */
-                if (0U != (uint16)(((Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->FlagsAndStatus & NETC_ETH_IP_TX_WB_STATUS_MASK))
+                if ((0U != (uint16)(((Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->FlagsAndStatus & NETC_ETH_IP_TX_WB_STATUS_MASK)) && \
+                   (NULL_PTR != info))
                 {
-                    *txStatus = (Netc_Eth_Ip_TxStatusType)(((const Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->FlagsAndStatus & NETC_ETH_IP_TX_WB_STATUS_MASK);
+                    info->txStatus = (Netc_Eth_Ip_TxStatusType)(((const Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->FlagsAndStatus & NETC_ETH_IP_TX_WB_STATUS_MASK);
                 }
                 else
                 {
     #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
                     /* Get the frame Timestamp */
-                    if (NULL_PTR != timeStampInfo)
+                    if (NULL_PTR != info)
                     {
                         /*Read the HIGH Part from SICTR registers in a succesive manner, first the LOW part, then imediately, the HIGH part*/
                         currentTimeLow = (uint32)(netcSIsBase[ctrlIndex]->SICTR0);
@@ -2401,33 +4558,51 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
                         nanoSeconds = (uint64) ( (uint64)(((uint64)currentTimeHigh) << 32U) | (uint64)((const Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->Timestamp );
 
                         /*Take the nanoseconds*/
-                        timeStampInfo->nanoseconds = (uint32) (NETC_ETH_IP_GET_NANOSECONDS(((const Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->Timestamp));
+                        info->timestamp.nanoseconds = (uint32) (NETC_ETH_IP_GET_NANOSECONDS(nanoSeconds));
 
                         /*Take the seconds, the low part of 32bits*/
-                        timeStampInfo->seconds = (uint32) (NETC_ETH_IP_NANO_TO_SECONDS(nanoSeconds) & NETC_ETH_IP_SECONDS_LOW_MASK_U64);
+                        info->timestamp.seconds = (uint32) (NETC_ETH_IP_NANO_TO_SECONDS(nanoSeconds) & NETC_ETH_IP_SECONDS_LOW_MASK_U64);
 
                         /*Take the seconds, the high part of 16bits*/
-                        timeStampInfo->secondsHi = (uint16) ((NETC_ETH_IP_NANO_TO_SECONDS(nanoSeconds) >> 32U) & 0xFFFFU);
+                        info->timestamp.secondsHi = (uint16) ((NETC_ETH_IP_NANO_TO_SECONDS(nanoSeconds) >> 32U) & 0xFFFFU);
                     }
 
     #ifdef NETC_ETH_0_USED
-                    if(((uint8)0U == ring) && ((uint8)0U == ctrlIndex))
+                    if ((NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[ctrlIndex]->SiType) && ((uint8)0U == ring))
                     {
-                        TimestampInfoIndex = (0U != ConsumerIndex) ? ((uint16)ConsumerIndex) : (Netc_Eth_Ip_apxState[ctrlIndex]->TxRingSize[ring]);
-                        Netc_Eth_Ip_TxManagementInfoBuff[0U][(TimestampInfoIndex / NETC_ETH_IP_PRODUCER_INCR) - 1U].TxTimeStampID = (uint16)(((Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->TxTimestampID);
+                        ManagementInfoIndex = LastDescrCheckIndex / NETC_ETH_IP_PRODUCER_INCR;
+
+                        Netc_Eth_Ip_TxManagementInfoBuff[ctrlIndex][ManagementInfoIndex].TxTimeStampID = (uint16)(((Netc_Eth_Ip_TxBDRWritebackType *)txBDR)->TxTimestampID);
+
+                        /* Mark frame as sent in management object */
+                        switch(Netc_Eth_Ip_TxManagementInfoBuff[ctrlIndex][ManagementInfoIndex].State)
+                        {
+                            case NETC_ETH_IP_TX_MGMT_QUEUED:
+                                Netc_Eth_Ip_TxManagementInfoBuff[ctrlIndex][ManagementInfoIndex].State = NETC_ETH_IP_TX_MGMT_READY;
+                                break;
+                            case NETC_ETH_IP_TX_MGMT_QUEUED_TIMESTAMP:
+                                Netc_Eth_Ip_TxManagementInfoBuff[ctrlIndex][ManagementInfoIndex].State = NETC_ETH_IP_TX_MGMT_WAITING_TIMESTAMP;
+                                break;
+                            default:
+                                /* This case should never be accessed. */
+                                break;
+                        }
                     }
     #endif
     #else
-                    (void)timeStampInfo;
+                    (void)info;
     #endif
 
                 }
             }
             else
             {
-                /* The writeback will only be set if there is a problem sending the frame.
-                   If the frame is sent successfully the status needs to be set manually */
-                *txStatus = NETC_ETH_TX_NO_ERR;
+                if (NULL_PTR != info)
+                {
+                    /* The writeback will only be set if there is a problem sending the frame.
+                    If the frame is sent successfully the status needs to be set manually */
+                    info->txStatus = NETC_ETH_TX_NO_ERR;
+                }
             }
             /* Update status of the data buffer. */
             Netc_Eth_Ip_apxState[ctrlIndex]->LockTxBuffDescr[ring][LastDescrCheckIndex] = FALSE;
@@ -2443,6 +4618,18 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_CheckFrameStatus(uint8 ctrlIndex,
     {
         status = NETC_ETH_IP_STATUS_BUFF_NOT_FOUND;
     }
+
+#if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
+#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+    Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].NumberOfUsedBuff = ((ConsumerIndex <= Netc_Eth_Ip_apxState[ctrlIndex]->LogicTxProducerIndex[ring]) ?
+        (Netc_Eth_Ip_apxState[ctrlIndex]->LogicTxProducerIndex[ring] - ConsumerIndex) : (Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].TotalNumberOfBuff + 1U - ConsumerIndex + Netc_Eth_Ip_apxState[ctrlIndex]->LogicTxProducerIndex[ring]));
+
+    if (Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].MaxNumberOfUsedBuff < Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].NumberOfUsedBuff)
+    {
+        Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].MaxNumberOfUsedBuff = Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].NumberOfUsedBuff;
+    }
+#endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
+#endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
 
     return status;
 }
@@ -2485,7 +4672,7 @@ static inline void Netc_Eth_Ip_ConfigCreditBasedShaperReg(const uint8 ctrlIndex,
 static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetupErrorReporting(const Netc_Eth_Ip_EnetcGeneralConfigType *psi0Config)
 {
     /** @brief Enum with the generic Pcie Functions present in the NETC SOC. */
-    const Netc_Eth_Ip_PcieFunction Netc_Eth_Ip_PcieFunctionMapping[FEATURE_NETC_NUMBER_OF_FUNC] = {TIMER, EMDIO, SWITCH, ENETC};
+    const Netc_Eth_Ip_PcieFunction Netc_Eth_Ip_PcieFunctionMapping[FEATURE_NETC_NUMBER_OF_FUNC] = {TIMER, EMDIO, SWITCH, PSI};
 
     uint8 u8Iterator = 0U;
     Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
@@ -2514,16 +4701,12 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetupErrorReporting(const Netc_Eth_Ip_
 
     for (u8Iterator = 0U; u8Iterator < FEATURE_NETC_NUMBER_OF_FUNC; u8Iterator++)
     {
-        /* Initialize the error reporting structure which will revel the status on SWITCH, TIMER, EMDIO and ENETC */
+        /* Initialize the error reporting structure which will revel the status on SWITCH, TIMER, EMDIO and PSI */
         Netc_Eth_Ip_ErrorStatus[u8Iterator].Function = Netc_Eth_Ip_PcieFunctionMapping[u8Iterator];
         Netc_Eth_Ip_ErrorStatus[u8Iterator].StatusErrors = 0U;
     }
 
-    /* Initialize the error reporting structure which will reveal the status for PSI */
-    Netc_Eth_Ip_ErrorStatus[NETC_ETH_IP_PSI0_FUNCTION_INDEX].Function = PSI;
-    Netc_Eth_Ip_ErrorStatus[NETC_ETH_IP_PSI0_FUNCTION_INDEX].StatusErrors = 0U;
-
-    for (u8Iterator = FEATURE_NETC_NUMBER_OF_FUNC+1U; u8Iterator < (FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS + FEATURE_NETC_NUMBER_OF_FUNC); u8Iterator++)
+    for (u8Iterator = FEATURE_NETC_NUMBER_OF_FUNC; u8Iterator < (FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS + FEATURE_NETC_NUMBER_OF_FUNC); u8Iterator++)
     {
         /* Initialize the error reporting structure which will reveal the status on each VSI */
         Netc_Eth_Ip_ErrorStatus[u8Iterator].Function = VSI;
@@ -2536,102 +4719,11 @@ static Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetupErrorReporting(const Netc_Eth_Ip_
     /* Enable the Pcie AER Error Reporting */
     if (psi0Config->enableUncorrectableErrors)
     {
-        /* For the Event Collector to assert INTA for a reported error, it must enable the reporting of the error
-        When set, this bit enables the generation of an interrupt when a fatal error is reported by any of the Integrated Endpoints (iEPs)
-        or the Event Collector itself.*/
-        IP_NETC__IERC_F0_PCI_HDR_TYPE0->PCIE_CFC_AER_ROOT_ERR_CMD |= (ierc_pci_PCIE_CFC_AER_ROOT_ERR_CMD_NON_FATAL_ERR_RPT_EN(1U) |
-                                                                    ierc_pci_PCIE_CFC_AER_ROOT_ERR_CMD_FATAL_ERR_RPT_EN(1U));
-        /*Unmask interrupts for ENETC0, SWITCH, TIMER, EMDIO*/
-        for (u8Iterator = 0U; u8Iterator < FEATURE_NETC_NUMBER_OF_FUNC; u8Iterator++ )
-        {
-            netcPCIePFBase[u8Iterator]->PCIE_CFC_AER_UCORR_ERR_MASK = NETC_F1_PCI_HDR_TYPE0_PCIE_CFC_AER_UCORR_ERR_MASK_UCORR_INT_ERR_MASK(0U);
-        }
-
-        /*Unmask interrupts for PSI0*/
-        IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_UCORR_ERR_MASK = NETC_F3_PCI_HDR_TYPE0_PCIE_CFC_AER_UCORR_ERR_MASK_UCORR_INT_ERR_MASK(0U);
-
-        /*Unmask interrupts for vfs*/
-        for (u8Iterator = 1U; u8Iterator < FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS; u8Iterator++ )
-        {
-            netcVFBase[u8Iterator]->PCIE_CFC_AER_UCORR_ERR_MASK = NETC_VF1_PCI_HDR_TYPE0_PCIE_CFC_AER_UCORR_ERR_MASK_UCORR_INT_ERR_MASK(0U);
-        }
-
-        for (u8Iterator = 0U; u8Iterator < FEATURE_NETC_ETH_NUMBER_OF_CTRLS; u8Iterator++ )
-        {
-            netcSIsBase[u8Iterator]->SIUPECR = NETC_F3_SI0_SIUPECR_RD(0U);
-            netcSIsBase[u8Iterator]->SIUNSBECR = NETC_F3_SI0_SIUNSBECR_THRESHOLD(psi0Config->errorReportingSystemBusErrorsThreshold);
-            netcSIsBase[u8Iterator]->SIUNMECR = NETC_F3_SI0_SIUNMECR_RD(0U) | NETC_F3_SI0_SIUNMECR_THRESHOLD(psi0Config->errorReportingMultiBitECCErrorsThreshold);
-            netcSIsBase[u8Iterator]->SIUFSBECR = NETC_F3_SI0_SIUFSBECR_RD(0U);
-            netcSIsBase[u8Iterator]->SIUFMECR = NETC_F3_SI0_SIUFMECR_RD(0U);
-            netcSIsBase[u8Iterator]->SIUFIECR = NETC_F3_SI0_SIUFIECR_RD(0U);
-        }
-
-        /* Switch system bus error. */
-        IP_NETC__SW0_COMMON->UNSBECR = NETC_F2_COMMON_UNSBECR_THRESHOLD(psi0Config->errorReportingSystemBusErrorsThreshold);
-
-
-        IP_NETC__SW0_COMMON->UNMACECR = ~NETC_F2_COMMON_UNMACECR_PORT0(0U) |
-                                        ~NETC_F2_COMMON_UNMACECR_PORT1(0U) |
-                                        ~NETC_F2_COMMON_UNMACECR_PORT2(0U);
-        IP_NETC__ENETC0_COMMON->UNMACECR = NETC_F3_COMMON_UNMACECR_PORT0(0u);
-
-        /*Internal memory multi bit ECC error */
-        IP_NETC__NETC_PRIV->UNMECR = NETC_PRIV_UNMECR_RD(0U) | NETC_PRIV_UNMECR_THRESHOLD(psi0Config->errorReportingMultiBitECCErrorsThreshold);
-        IP_NETC__ENETC0_COMMON->UNMECR = NETC_F3_COMMON_UNMECR_RD(0U) | NETC_F3_COMMON_UNMECR_THRESHOLD(psi0Config->errorReportingMultiBitECCErrorsThreshold);
-        IP_NETC__SW0_COMMON->UNMECR =  NETC_F2_COMMON_UNMECR_RD(0U) | NETC_F2_COMMON_UNMECR_THRESHOLD(psi0Config->errorReportingMultiBitECCErrorsThreshold);
-
-        /*integrity error Uncorrectable Non-Fatal Integrity Faults */
-        ((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUNIECR = NETC_F1_GLOBAL_EMDIOUNIECR_THRESHOLD(psi0Config->errorReportigIntegrityErrorsThreshold) | NETC_F1_GLOBAL_EMDIOUNIECR_RD(0U);
-
-        /*integrity error Uncorrectable Non-Fatal Integrity Faults*/
-        IP_NETC__NETC_PRIV->UNIECR = NETC_PRIV_UNIECR_RD(0U) |NETC_PRIV_UNIECR_THRESHOLD(psi0Config->errorReportigIntegrityErrorsThreshold);
-        IP_NETC__ENETC0_COMMON->UNIECR = NETC_F3_COMMON_UNIECR_RD(0U) | NETC_F3_COMMON_UNIECR_THRESHOLD(psi0Config->errorReportigIntegrityErrorsThreshold);
-        IP_NETC__SW0_COMMON->UNIECR =  NETC_F2_COMMON_UNIECR_RD(0U) | NETC_F2_COMMON_UNIECR_THRESHOLD(psi0Config->errorReportigIntegrityErrorsThreshold);
-
-        ((IP_NETC__TMR0_GLOBAL->ERROR).TIMER).TUFSBECR = NETC_F0_GLOBAL_TUFSBECR_RD(0U);
-        ((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUFSBECR = NETC_F1_GLOBAL_EMDIOUFSBECR_RD(0U);
-        IP_NETC__SW0_COMMON->UFSBECR = NETC_F2_COMMON_UFSBECR_RD(0U);
-
-        IP_NETC__NETC_PRIV->UFMECR = NETC_PRIV_UFMECR_RD(0U);
-        IP_NETC__ENETC0_COMMON->UFMECR = NETC_F3_COMMON_UFMECR_RD(0U) ;
-        IP_NETC__SW0_COMMON->UFMECR =  NETC_F2_COMMON_UFMECR_RD(0U);
-
-        IP_NETC__NETC_PRIV->UFIECR = NETC_PRIV_UFIECR_RD(0U);
-        IP_NETC__ENETC0_COMMON->UFIECR = NETC_F3_COMMON_UFIECR_RD(0U) ;
-        IP_NETC__SW0_COMMON->UFIECR =  NETC_F2_COMMON_UFIECR_RD(0U);
-
-        IP_NETC__SW0_COMMON->UFSBECR = NETC_F2_COMMON_UFSBECR_RD(0U);
-
+        Netc_Eth_Ip_SetupErrorReporting_EnableUncorrectableErrors(psi0Config);
     }
     if (psi0Config->enableCorrectableErrors)
     {
-        /* For the Event Collector to assert INTA for a reported error, it must enable the reporting of the error
-        When set, this bit enables the generation of an interrupt when a correctable error is reported by any of the Integrated Endpoints (iEPs)
-        or the Event Collector itself.*/
-        IP_NETC__IERC_F0_PCI_HDR_TYPE0->PCIE_CFC_AER_ROOT_ERR_CMD |= ierc_pci_PCIE_CFC_AER_ROOT_ERR_CMD_CORR_ERR_RPT_EN(1U);
-
-        /* Function F0 (Timer) and F1 (EMDIO) must not clear mask bit, enabling reporting of correctable interrupts, to prevent loss of uncorrectable error reporting.*/
-        for (u8Iterator = 2U; u8Iterator < FEATURE_NETC_NUMBER_OF_FUNC; u8Iterator++ )
-        {
-            netcPCIePFBase[u8Iterator]->PCIE_CFC_AER_CORR_ERR_MASK = NETC_F0_PCI_HDR_TYPE0_PCIE_CFC_AER_CORR_ERR_MASK_CORR_INT_MASK(0U);
-        }
-
-        /*Unmask interrupts for PSI0*/
-        IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_CORR_ERR_MASK = NETC_F3_PCI_HDR_TYPE0_PCIE_CFC_AER_CORR_ERR_MASK_CORR_INT_MASK(0U);
-
-        for (u8Iterator = 1U; u8Iterator < FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS; u8Iterator++ )
-        {
-            netcVFBase[u8Iterator]->PCIE_CFC_AER_CORR_ERR_MASK = NETC_VF1_PCI_HDR_TYPE0_PCIE_CFC_AER_CORR_ERR_MASK_CORR_INT_MASK(0U);
-        }
-
-        for (u8Iterator = 0U; u8Iterator < FEATURE_NETC_ETH_NUMBER_OF_CTRLS; u8Iterator++ )
-        {
-            netcSIsBase[u8Iterator]->SICMECR = NETC_F3_SI0_SICMECR_THRESHOLD(psi0Config->errorReportigSingleECCErrorsThreshold);
-        }
-
-        IP_NETC__NETC_PRIV->CMECR = NETC_PRIV_CMECR_THRESHOLD(psi0Config->errorReportigSingleECCErrorsThreshold);
-        IP_NETC__ENETC0_COMMON->CMECR = NETC_F3_COMMON_CMECR_THRESHOLD(psi0Config->errorReportigSingleECCErrorsThreshold) ;
-        IP_NETC__SW0_COMMON->CMECR =  NETC_F2_COMMON_CMECR_THRESHOLD(psi0Config->errorReportigSingleECCErrorsThreshold);
+        Netc_Eth_Ip_SetupErrorReporting_EnableCorrectableErrors(psi0Config);
     }
 
     return Status;
@@ -2718,6 +4810,942 @@ static inline void Netc_Eth_Ip_InitIPFTableEntryData(const Netc_Eth_Ip_ConfigTyp
 
 }
 #endif
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_ClearErrorStatus
+ * Description   : Internal function that reads the status bit of a error reporting registers and clears it.
+ *
+ *END**************************************************************************/
+static inline boolean Netc_Eth_Ip_ClearErrorStatus (volatile uint32 *RegAddress)
+{
+    boolean returnValue = FALSE;
+
+    if ((*RegAddress & NETC_ETH_IP_CLEAR_ERROR_STATUS_MASK) != 0U)
+    {
+        *RegAddress |= NETC_ETH_IP_CLEAR_ERROR_STATUS_MASK;
+        returnValue = TRUE;
+    }
+
+    return returnValue;
+}
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetErrorStatisticsForEMDIO
+ * Description   : Internal function for reading the  error status registers for EMDIO
+ *
+ *END**************************************************************************/
+static inline uint8 Netc_Eth_Ip_GetErrorStatisticsForEMDIO (const uint8 ctrlIdx, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    uint8 countRegisters = 0U;
+
+    if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerUncorrectableErrEnabled)
+    {
+        /*This is the EMDIO uncorrectable non-fatal integrity error status register*/
+        if (Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *)&(((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUNIESR)))
+        {
+            if (Buffers[countRegisters] != NULL_PTR)
+            {
+                Buffers[countRegisters]->RegName = EMDIOUNIESR;
+                Buffers[countRegisters]->RegRawValueLow = ((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUNIESR;
+                Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
+                countRegisters++;
+            }
+        }
+        /* EMDIO system bus error status register. */
+        if (Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUFSBESR)))
+        {
+            if (Buffers[countRegisters] != NULL_PTR)
+            {
+                /* EMDIO system bus error. */
+                Buffers[countRegisters]->RegName = EMDIOUFSBESR;
+                Buffers[countRegisters]->RegRawValueLow = ((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUFSBESR;
+                Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
+                countRegisters++;
+            }
+        }
+    }
+    return countRegisters;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetSystemBusErrorStatisticsForSWITCH
+ * Description   : Internal function for reading the system bus non fatal error status registers for SWITCH
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetSystemBusErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    /* Switch system bus error.*/
+    if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__SW0_COMMON->UNSBESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UNSBESR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNSBESR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            /* Indicates how many system bus error events have been encountered. UNSBESR[SB_ID] indicates the last source*/
+            Buffers[*countRegisters]->RegName = UNSBECTR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNSBECTR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetMemoryErrorStatisticsForSWITCH
+ * Description   : Internal function for reading the Uncorrectable non-fatal memory error status registers for SWITCH
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetMemoryErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__SW0_COMMON->UNMESR0)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            /* Memory ID + Syndrome*/
+            Buffers[*countRegisters]->RegName = UNMESR0;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNMESR0;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            /* Address information (row) of last ECC event.*/
+            Buffers[*countRegisters]->RegName = UNMESR1;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNMESR1;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            /* This is the uncorrectable non-fatal memory error count register which tracks how many events have been detected.*/
+            Buffers[*countRegisters]->RegName = UNMECTR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNMECTR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetPort0ErrorStatisticsForSWITCH
+ * Description   : Internal function for reading the Port0 error status registers for SWITCH
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetPort0ErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    if (Buffers[*countRegisters] != NULL_PTR)
+    {
+        Buffers[*countRegisters]->RegName = PM0_RERR;
+        Buffers[*countRegisters]->RegRawValueLow = (uint32)(IP_NETC__SW0_ETH_MAC_PORT0->PM0_RERRN);
+        Buffers[*countRegisters]->RegRawValueHigh = (uint32)(IP_NETC__SW0_ETH_MAC_PORT0->PM0_RERRN >> 32U);
+        (*countRegisters)++;
+    }
+    if (Buffers[*countRegisters] != NULL_PTR)
+    {
+        /* EventError.*/
+        Buffers[*countRegisters]->RegName = PM0_EVENT;
+        Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT0->PM0_IEVENT;
+        Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+        (*countRegisters)++;
+    }
+    if (Buffers[*countRegisters] != NULL_PTR)
+    {
+        /* A count of received MAC frames / MAC frame fragments rejected due to unknown
+        SMD value or arriving with an SMD-C when no frame is in progress.*/
+        Buffers[*countRegisters]->RegName = MAC_MERGE_MMFSECR0;
+        Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT0->MAC_MERGE_MMFSECR;
+        Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+        (*countRegisters)++;
+    }
+    if (Buffers[*countRegisters] != NULL_PTR)
+    {
+        /* A count of MAC frames with reassembly errors.*/
+        Buffers[*countRegisters]->RegName = MAC_MERGE_MMFAECR0;
+        Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT0->MAC_MERGE_MMFAECR;
+        Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+        (*countRegisters)++;
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetPort1ErrorStatisticsForSWITCH
+ * Description   : Internal function for reading the Port1 error status registers for SWITCH
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetPort1ErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    if (Buffers[*countRegisters] != NULL_PTR)
+    {
+        Buffers[*countRegisters]->RegName = PM1_RERR;
+        Buffers[*countRegisters]->RegRawValueLow = (uint32)(IP_NETC__SW0_ETH_MAC_PORT1->PM1_RERRN);
+        Buffers[*countRegisters]->RegRawValueHigh = (uint32)(IP_NETC__SW0_ETH_MAC_PORT1->PM1_RERRN >> 32U);
+        (*countRegisters)++;
+    }
+    if (Buffers[*countRegisters] != NULL_PTR)
+    {
+        /* EventError.*/
+        Buffers[*countRegisters]->RegName = PM1_EVENT;
+        Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT1->PM1_IEVENT;
+        Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+        (*countRegisters)++;
+    }
+    if (Buffers[*countRegisters] != NULL_PTR)
+    {
+        /* A count of received MAC frames / MAC frame fragments rejected due to unknown
+        SMD value or arriving with an SMD-C when no frame is in progress.*/
+        Buffers[*countRegisters]->RegName = MAC_MERGE_MMFSECR1;
+        Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT1->MAC_MERGE_MMFSECR;
+        Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+        (*countRegisters)++;
+    }
+    if (Buffers[*countRegisters] != NULL_PTR)
+    {
+        /* A count of MAC frames with reassembly errors.*/
+        Buffers[*countRegisters]->RegName = MAC_MERGE_MMFAECR1;
+        Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT1->MAC_MERGE_MMFAECR;
+        Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+        (*countRegisters)++;
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetIntegrityFaultStatisticsForSWITCH
+ * Description   : Internal function for reading the uncorrectable non-fatal integrity error statistics registers for SWITCH
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetIntegrityFaultStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    /* Integrity fault*/
+    if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(IP_NETC__SW0_COMMON->UNIESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UNIESR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNIESR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        /* Indicates the number of non-fatal integrity faults detected which includes internal FCS and parity errors.*/
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UNIECTR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNIECTR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetFatalErrorStatisticsForSWITCH
+ * Description   : Internal function for reading the fatal error statistics registers for SWITCH
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetFatalErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    /* Fatal system bus error status register. */
+    if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(IP_NETC__SW0_COMMON->UFSBESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UFSBESR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UFSBESR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+    /* Uncorrectable fatal memory error status register 0.*/
+    if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(IP_NETC__SW0_COMMON->UFMESR0)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UFMESR0;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UFMESR0;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UFMESR1;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UFMESR1;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+    /* Fatal integrity error status register. */
+    if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__SW0_COMMON->UFIESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UFIESR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UFIESR;
+            Buffers[*countRegisters]->RegRawValueHigh = 0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetCorrectableErrorStatisticsForSWITCH
+ * Description   : Internal function for reading the Correctable error statistics registers for SWITCH
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetCorrectableErrorStatisticsForSWITCH (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    /* Internal memory single bit ECC error*/
+    if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(IP_NETC__SW0_COMMON->CMESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            /* correctable memory error */
+            Buffers[*countRegisters]->RegName = CMESR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->CMESR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetErrorStatisticsForSWITCH
+ * Description   : Internal function for gathering error statistics information for SWITCH
+ *
+ *END**************************************************************************/
+static inline uint8 Netc_Eth_Ip_GetErrorStatisticsForSWITCH (const uint8 ctrlIdx, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    uint8 countRegisters = 0U;
+
+    if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerCorrectableErrEnabled)
+    {
+       Netc_Eth_Ip_GetCorrectableErrorStatisticsForSWITCH(&countRegisters, Buffers);
+    }
+
+    if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerUncorrectableErrEnabled)
+    {
+        Netc_Eth_Ip_GetSystemBusErrorStatisticsForSWITCH (&countRegisters, Buffers);
+
+        Netc_Eth_Ip_GetMemoryErrorStatisticsForSWITCH (&countRegisters, Buffers);
+
+        /* Incremented for each frame received with an error (except for undersized/fragment frame):
+            FIFO overflow error
+            CRC error
+            Payload length error
+            Jabber and oversized error
+            Alignment error
+        A non-fatal error has occurred in the Ethernet MAC bound to PORT0. See PMa_IEVENT for details and how to clear the event*/
+        if((IP_NETC__SW0_COMMON->UNMACESR & (uint32)0x01) != (uint32)0U)
+        {
+            Netc_Eth_Ip_GetPort0ErrorStatisticsForSWITCH(&countRegisters, Buffers);
+        }
+
+        if((IP_NETC__SW0_COMMON->UNMACESR & (uint32)0x02) != (uint32)0U)
+        {
+            Netc_Eth_Ip_GetPort1ErrorStatisticsForSWITCH (&countRegisters, Buffers);
+        }
+
+        Netc_Eth_Ip_GetIntegrityFaultStatisticsForSWITCH(&countRegisters, Buffers);
+
+        Netc_Eth_Ip_GetFatalErrorStatisticsForSWITCH(&countRegisters, Buffers);
+    }
+    return countRegisters;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetErrorStatisticsForTIMER
+ * Description   : Internal function for gathering error statistics information for TIMER
+ *
+ *END**************************************************************************/
+static inline uint8 Netc_Eth_Ip_GetErrorStatisticsForTIMER(const uint8 ctrlIdx, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    uint8 countRegisters = 0U;
+
+    /* timer system bus error. */
+    if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerUncorrectableErrEnabled)
+    {
+        if (Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(((IP_NETC__TMR0_GLOBAL->ERROR).TIMER).TUFSBESR )))
+        {
+            if (Buffers[countRegisters] != NULL_PTR)
+            {
+                Buffers[countRegisters]->RegName = TUFSBESR;
+                Buffers[countRegisters]->RegRawValueLow = ((IP_NETC__TMR0_GLOBAL->ERROR).TIMER).TUFSBESR;
+                Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
+                countRegisters++;
+            }
+        }
+    }
+    return countRegisters;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetCorrectableErrorStatisticsForENETC
+ * Description   : Internal function for reading the Correctable error statistics registers for ENETC
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetCorrectableErrorStatisticsForENETC (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__ENETC0_COMMON->CMESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            /* correctable memory error */
+            Buffers[*countRegisters]->RegName = CMESR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->CMESR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetMemoryErrorStatisticsForENETC
+ * Description   : Internal function for reading the memory error statistics registers for ENETC
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetMemoryErrorStatisticsForENETC(uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+   if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__ENETC0_COMMON->UNMESR0)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            /* Memory ID + Syndrome*/
+            Buffers[*countRegisters]->RegName = UNMESR0;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UNMESR0;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            /* Address information (row) of last ECC event.*/
+            Buffers[*countRegisters]->RegName = UNMESR1;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UNMESR1;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            /* This is the uncorrectable non-fatal memory error count register which tracks how many events have been detected.*/
+            Buffers[*countRegisters]->RegName = UNMECTR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UNMECTR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetIntegrityFaultStatisticsForENETC
+ * Description   : Internal function for reading the integrity error statistics registers for ENETC
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetIntegrityFaultStatisticsForENETC (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__ENETC0_COMMON->UNIESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UNIESR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UNIESR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UNIECTR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UNIECTR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetMemoryErrorStatisticsForENETC
+ * Description   : Internal function for reading the fatal error statistics registers for ENETC
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetFatalErrorStatisticsForENETC (uint8 *countRegisters, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__ENETC0_COMMON->UFMESR0)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UFMESR0;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UFMESR0;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UFMESR1;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UFMESR1;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+
+    if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__ENETC0_COMMON->UFIESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = UFIESR;
+            Buffers[*countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UFIESR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetMemoryErrorStatisticsForENETC
+ * Description   : Internal function for gathering error statistics information for SWITCH
+ *
+ *END**************************************************************************/
+static inline uint8 Netc_Eth_Ip_GetErrorStatisticsForENETC(const uint8 ctrlIdx, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    uint8 countRegisters = 0U;
+
+    if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerCorrectableErrEnabled)
+    {
+        Netc_Eth_Ip_GetCorrectableErrorStatisticsForENETC(&countRegisters, Buffers);
+    }
+
+    if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerUncorrectableErrEnabled)
+    {
+        Netc_Eth_Ip_GetMemoryErrorStatisticsForENETC(&countRegisters, Buffers);
+
+        Netc_Eth_Ip_GetIntegrityFaultStatisticsForENETC(&countRegisters, Buffers);
+
+        Netc_Eth_Ip_GetFatalErrorStatisticsForENETC(&countRegisters, Buffers);
+    }
+
+    return countRegisters;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetProgrammingErrorStatisticsForSI
+ * Description   : Internal function for reading the programming error statistics registers for for a SI (siIndex).
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetProgrammingErrorStatisticsForSI (uint8 *countRegisters, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(netcSIsBase[siIndex]->SIUPESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = SIUPESR;
+            Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUPESR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = SIUPECTR;
+            Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUPECTR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetMemoryErrorStatisticsForSI
+ * Description   : Internal function for reading the non-fatal memory error statistics registers for for a SI (siIndex).
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetMemoryErrorStatisticsForSI (uint8 *countRegisters, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    /* Multi-bit ECC error. */
+    if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(netcSIsBase[siIndex]->SIUNMESR0)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = SIUNMESR0;
+            Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUNMESR0;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = SIUNMESR1;
+            Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUNMESR1;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = SIUNMECTR;
+            Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUNMECTR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetFatalMemoryErrorStatisticsForSI
+ * Description   : Internal function for reading the Fatal memory error statistics registers for for a SI (siIndex).
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetFatalMemoryErrorStatisticsForSI (uint8 *countRegisters, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    /* Fatal Multi-bit ECC error. */
+    if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(netcSIsBase[siIndex]->SIUFMESR0)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = SIUFMESR0;
+            Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUFMESR0;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = SIUFMESR1;
+            Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUFMESR1;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetFatalIntegrityErrorStatisticsForSI
+ * Description   : Internal function for reading the Fatal integrity error statistics registers for for a SI (siIndex).
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetFatalIntegrityErrorStatisticsForSI (uint8 *countRegisters, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *) &(netcSIsBase[siIndex]->SIUFIESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = SIUFIESR;
+            Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUFIESR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetFatalSystemBusErrorStatisticsForSI
+ * Description   : Internal function for reading the Fatal System bus error statistics registers for for a SI (siIndex).
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetFatalSystemBusErrorStatisticsForSI (uint8 *countRegisters, const uint8 ctrlIdx, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    uint32 sbStatus = 0U;
+
+    if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(netcSIsBase[siIndex]->SIUFSBESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = SIUFSBESR;
+            Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUFSBESR;
+            Buffers[*countRegisters]->RegRawValueHigh = 0U;
+            (*countRegisters)++;
+        }
+
+        for (uint8 idx = 0U; idx < Netc_Eth_Ip_apxState[ctrlIdx]->SIGeneralConfig[siIndex]->NumberOfTxBDR; idx++)
+        {
+        /*A system bus error has occurred during one or more transactions related to this transmit ring, including possibly
+        the transmit BD writeback entry itself. To avoid the possibility of referencing unreliable
+        BD writeback contents,
+        See error detect register SIUNSBESR/SIUFSBESR for more information. Write 1 to clear.*/
+            sbStatus= netcSIsBase[siIndex]->BDR_NUM[idx].TBSR;
+
+            if ((sbStatus & (uint32)0x00010000) != 0U)
+            {
+                sbStatus &= ~((uint32)0x00010000);
+                netcSIsBase[siIndex]->BDR_NUM[idx].TBSR = sbStatus;
+                if (Buffers[*countRegisters] != NULL_PTR)
+                {
+                    Buffers[*countRegisters]->RegName = TBCIR;
+                    Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->BDR_NUM[idx].TBCIR;
+                    /* save also the current BDR with error */
+                    Buffers[*countRegisters]->RegRawValueHigh = (uint32)idx;
+                    (*countRegisters)++;
+                }
+            }
+        }
+
+        for (uint8 idx = 0U; idx < Netc_Eth_Ip_apxState[ctrlIdx]->SIGeneralConfig[siIndex]->NumberOfRxBDR; idx++)
+        {
+            sbStatus= netcSIsBase[siIndex]->BDR_NUM[idx].RBSR;
+            if ((sbStatus & (uint32)0x00010000)  != 0U)
+            {
+                sbStatus &= ~((uint32)0x00010000);
+                netcSIsBase[siIndex]->BDR_NUM[idx].RBSR = sbStatus;
+                if (Buffers[*countRegisters] != NULL_PTR)
+                {
+                    Buffers[*countRegisters]->RegName = RBPIR;
+                    Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->BDR_NUM[idx].RBPIR;
+                    /* save also the current BDR with error */
+                    Buffers[*countRegisters]->RegRawValueHigh = (uint32)idx;
+                    (*countRegisters)++;
+                }
+            }
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetCorrectableErrorStatisticsForSI
+ * Description   : Internal function for reading the Correctable error statistics registers for for a SI (siIndex).
+ *
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_GetCorrectableErrorStatisticsForSI (uint8 *countRegisters, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(netcSIsBase[siIndex]->SICMESR)))
+    {
+        if (Buffers[*countRegisters] != NULL_PTR)
+        {
+            Buffers[*countRegisters]->RegName = SICMESR;
+            Buffers[*countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SICMESR;
+            Buffers[*countRegisters]->RegRawValueHigh = (uint32)0U;
+            (*countRegisters)++;
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_GetErrorStatisticsForSI
+ * Description   : Function that reads the registers for error statistics for a SI (siIndex) and reports the statistics to upper layers.
+ *
+ *END**************************************************************************/
+static inline uint8 Netc_Eth_Ip_GetErrorStatisticsForSI(const uint8 ctrlIdx, const uint8 siIndex, Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
+{
+    uint8 countRegisters = 0U;
+
+    if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerUncorrectableErrEnabled)
+    {
+        Netc_Eth_Ip_GetProgrammingErrorStatisticsForSI(&countRegisters, siIndex, Buffers);
+
+        Netc_Eth_Ip_GetMemoryErrorStatisticsForSI(&countRegisters, siIndex, Buffers);
+
+        Netc_Eth_Ip_GetFatalMemoryErrorStatisticsForSI(&countRegisters, siIndex, Buffers);
+
+        Netc_Eth_Ip_GetFatalSystemBusErrorStatisticsForSI(&countRegisters, ctrlIdx, siIndex, Buffers);
+
+        Netc_Eth_Ip_GetFatalIntegrityErrorStatisticsForSI(&countRegisters, siIndex, Buffers);
+    }
+
+    if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerCorrectableErrEnabled)
+    {
+        Netc_Eth_Ip_GetCorrectableErrorStatisticsForSI(&countRegisters, siIndex, Buffers);
+    }
+
+    return countRegisters;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_ProcessErrorStatusForInterruptForFunctions
+ * Description   : Function that checks the error status register bit, clears it and fills in the Netc_Eth_Ip_ErrorStatus structure on the
+ *                 pcie Function index with the type of error.
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_ProcessErrorStatusForInterruptForFunctions(const uint8 ctrlIndex, const uint8 index)
+{
+    Netc_Eth_Ip_ErrorStatus[index].StatusErrors = 0u;
+
+    if ((netcPCIePFBase[index]->PCIE_CFC_AER_UCORR_ERR_STAT & NETC_ETH_IP_UCORR_STATUS_BIT) != (uint32)0U)
+    {
+        /* Interrupt enable bit check
+        Un-masked interrupts are marked as 0*/
+        if ((netcPCIePFBase[index]->PCIE_CFC_AER_UCORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_UCORR_ERR_MASK_SHIFT)) == (uint32)0U)
+        {
+            /* Clean error status bit */
+            netcPCIePFBase[index]->PCIE_CFC_AER_UCORR_ERR_STAT = (uint32)NETC_ETH_IP_UCORR_STATUS_BIT;
+            /* Report error in case this feature is enabled in configuration */
+            if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerUncorrectableErrEnabled)
+            {
+                /*If the reg bit is 0 - Error is Non-fatal else is Fatal*/
+                if((netcPCIePFBase[index]->PCIE_CFC_AER_UCORR_ERR_SEV & NETC_ETH_IP_UCORR_SEV_MASK) != 0U)
+                {
+                    Netc_Eth_Ip_ErrorStatus[index].StatusErrors = NETC_ETH_IP_FATAL_ERROR;
+                }
+                else
+                {
+                    Netc_Eth_Ip_ErrorStatus[index].StatusErrors = NETC_ETH_IP_NON_FATAL_ERROR;
+                }
+            }
+        }
+    }
+
+    if ((netcPCIePFBase[index]->PCIE_CFC_AER_CORR_ERR_STAT & NETC_ETH_IP_CORR_STATUS_BIT) != (uint32)0U)
+    {
+        /* Un-masked interrupts are marked as 0*/
+        if ((netcPCIePFBase[index]->PCIE_CFC_AER_CORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_CORR_ERR_MASK_SHIFT)) == (uint32)0U)
+        {
+            netcPCIePFBase[index]->PCIE_CFC_AER_CORR_ERR_STAT = NETC_ETH_IP_CORR_STATUS_BIT;
+            if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerCorrectableErrEnabled)
+            {
+                SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
+                Netc_Eth_Ip_ErrorStatus[index].StatusErrors |= NETC_ETH_IP_CORRECTABLE_ERROR;
+                SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
+            }
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_ProcessErrorStatusForInterruptForVSIs
+ * Description   : Function that checks the error status register bit, clears it and fills in the Netc_Eth_Ip_ErrorStatus structure on the
+ *                 VSIx index with the type of error.
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_ProcessErrorStatusForInterruptForVSIs(const uint8 ctrlIndex, const uint8 index)
+{
+    /* Index used to address the netcVFBase array that contains base addresses for all VFs. NULL_PTR is added on position 0 as the hardware has only 7 VF starting from 1 */
+    uint8 relativeIndex = 0U;
+
+    Netc_Eth_Ip_ErrorStatus[index].StatusErrors = 0u;
+
+    /* netcVFBase has the index 0 null since virtual station interfaces start from 1
+       relativeIndex = Function array index - relative number in the list of functions (TIMER EMDIO SWITCH PSI VF1 ...VF8) + 1 (VFs start from 1)*/
+    relativeIndex = index - FEATURE_NETC_NUMBER_OF_FUNC + 1u;
+
+    if ((netcVFBase[relativeIndex]->PCIE_CFC_AER_UCORR_ERR_STAT & NETC_ETH_IP_UCORR_STATUS_BIT) != (uint32)0U)
+    {
+        /* Un-masked interrupts are marked as 0*/
+        if ((netcVFBase[relativeIndex]->PCIE_CFC_AER_UCORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_UCORR_ERR_MASK_SHIFT)) == (uint32)0U)
+        {
+
+            netcVFBase[relativeIndex]->PCIE_CFC_AER_UCORR_ERR_STAT = NETC_ETH_IP_UCORR_STATUS_BIT;
+            /*If the reg bit is 0 - Error is Non-fatal else is Fatal*/
+            if((netcVFBase[relativeIndex]->PCIE_CFC_AER_UCORR_ERR_SEV & NETC_ETH_IP_UCORR_SEV_MASK) != 0U)
+            {
+                if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerUncorrectableErrEnabled)
+                {
+                    Netc_Eth_Ip_ErrorStatus[index].StatusErrors = NETC_ETH_IP_FATAL_ERROR;
+                }
+            }
+            else
+            {
+                if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerUncorrectableErrEnabled)
+                {
+                    Netc_Eth_Ip_ErrorStatus[index].StatusErrors |= NETC_ETH_IP_NON_FATAL_ERROR;
+                }
+            }
+        }
+    }
+    if ((netcVFBase[relativeIndex]->PCIE_CFC_AER_CORR_ERR_STAT & NETC_ETH_IP_CORR_STATUS_BIT) != (uint32)0U)
+    {
+        /* Un-masked interrupts are marked as 0*/
+        if ((netcVFBase[relativeIndex]->PCIE_CFC_AER_UCORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_CORR_ERR_MASK_SHIFT)) != (uint32)0U)
+        {
+            netcVFBase[relativeIndex]->PCIE_CFC_AER_CORR_ERR_STAT = NETC_ETH_IP_CORR_STATUS_BIT;
+            if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerCorrectableErrEnabled)
+            {
+                SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
+                Netc_Eth_Ip_ErrorStatus[index].StatusErrors |= NETC_ETH_IP_CORRECTABLE_ERROR;
+                SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
+            }
+        }
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_ProcessErrorStatusForInterruptForVSIs
+ * Description   : Function that checks the error status register bit, clears it and fills in the Netc_Eth_Ip_ErrorStatus structure on the
+ *                 PSI0 index with the type of error.
+ *END**************************************************************************/
+static inline void Netc_Eth_Ip_ProcessErrorStatusForInterruptForPSI0(const uint8 ctrlIndex)
+{
+   /* Uncorrectable Error reporting for PSI0 */
+    if ((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_UCORR_ERR_STAT & NETC_ETH_IP_UCORR_STATUS_BIT) != (uint32)0U)
+    {
+        /* Un-masked interrupts are marked as 0*/
+        if ((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_UCORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_UCORR_ERR_MASK_SHIFT))  == (uint32)0U)
+        {
+            IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_UCORR_ERR_STAT = NETC_ETH_IP_UCORR_STATUS_BIT;
+            /*If the reg bit is 0 - Error is Non-fatal else is Fatal*/
+            if((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_UCORR_ERR_SEV & NETC_ETH_IP_UCORR_SEV_MASK) != 0U)
+            {
+                if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerUncorrectableErrEnabled)
+                {
+                    Netc_Eth_Ip_ErrorStatus[NETC_ETH_IP_PSI0_FUNCTION_INDEX].StatusErrors = NETC_ETH_IP_FATAL_ERROR;
+                }
+            }
+            else
+            {
+                if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerUncorrectableErrEnabled)
+                {
+                    Netc_Eth_Ip_ErrorStatus[NETC_ETH_IP_PSI0_FUNCTION_INDEX].StatusErrors = NETC_ETH_IP_NON_FATAL_ERROR;
+                }
+            }
+        }
+    }
+    /* Correctable Error reporting for PSI0 */
+    if ((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_CORR_ERR_STAT & NETC_ETH_IP_CORR_STATUS_BIT) != (uint32)0U)
+    {
+        /* Un-masked interrupts are marked as 0*/
+        if ((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_CORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_CORR_ERR_MASK_SHIFT)) == (uint32)0U)
+        {
+            IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_CORR_ERR_STAT = NETC_ETH_IP_CORR_STATUS_BIT;
+            if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerCorrectableErrEnabled)
+            {
+                SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
+                Netc_Eth_Ip_ErrorStatus[NETC_ETH_IP_PSI0_FUNCTION_INDEX].StatusErrors |= NETC_ETH_IP_CORRECTABLE_ERROR;
+                SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
+            }
+        }
+    }
+}
+
+
+static inline void Netc_Eth_Ip_Init_FirstPart(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+{
+    /* Configure VLAN to IPV - Station interface VLAN to IPV mapping register 0/1 (SIVLANIPVMR0/1) and Station interface VLAN to IPV mapping register 1 (SIVLANIPVMR1) */
+    Netc_Eth_Ip_Init_VlanToIpvMapping(ctrlIndex, config);
+
+    /* Configure IPV to BDR - Station interface IPV to ring mapping register (SIIPVBDRMR0) */
+    Netc_Eth_Ip_Init_IpvToBdrMapping(ctrlIndex, config);
+
+    /* Initialize State structure */
+    Netc_Eth_Ip_InitStateStructure(ctrlIndex, config);
+
+    /* Configure Command ring */
+    Netc_Eth_Ip_InitCBDR(ctrlIndex);
+}
+
+static inline void Netc_Eth_Ip_Init_SecondPart(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+{
+    Netc_Eth_Ip_InitNTMPTables(ctrlIndex, config);
+    /* Initialize TX BDRs */
+    Netc_Eth_Ip_InitTxBD(ctrlIndex, config);
+    /* Initialize RX BDRs */
+    Netc_Eth_Ip_InitRxBD(ctrlIndex, config);
+
+}
 
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
@@ -2730,221 +5758,20 @@ static inline void Netc_Eth_Ip_InitIPFTableEntryData(const Netc_Eth_Ip_ConfigTyp
  *END**************************************************************************/
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_Init(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
 {
-    uint8  u8Iterator;
-    uint8  siHwId;
-    uint32 StartTime;
-    uint32 ElapsedTime;
-    uint32 TimeoutTicks;
     Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_SUCCESS;
-    Netc_Eth_Ip_IngressPortFilterEntryDataType IngressPortFilterTableEntry = {0U};
-    uint8 IPFTableListIdx;
-    uint32 MatchedEntries = 0UL;
-
-#if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
-    const Netc_Eth_Ip_GeneralSIConfigType *SiConfig;
-#endif
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(config != NULL_PTR);
 #endif
 
-    if (NETC_ETH_IP_PHYSICAL_SI == config->SiType)
-    {
-        /* Use generalConfig to configure the general part of NETC */
-
-        /* Enable function to master memory transaction requests and enable function to respond to memory space accesses (register accesses).
-            Setting this bit may trigger the locking of IERB registers if not already done either explicitly through the NETCRR[LOCK] bit,
-            or an earlier function initializing. Setting memory access enable will load IERB register values into the function and start any
-            initialization of local table memory.
-            Poll OSR[STATE] bit and wait for 0b0 before continuing device configuration.
-        */
-        IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCI_CFH_CMD = NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U) | NETC_F3_PCI_HDR_TYPE0_PCI_CFH_CMD_MEM_ACCESS(1U);
-
-        /* Enable the VFs;Enable memory space for VFs */
-        IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_SRIOV_CTL |= NETC_F3_PCI_HDR_TYPE0_PCIE_CFC_SRIOV_CTL_VF_ENABLE_MASK | \
-                                                              NETC_F3_PCI_HDR_TYPE0_PCIE_CFC_SRIOV_CTL_VF_MSE_MASK;
-
-        /* Wait for a successfully ENETC init. */
-        Netc_Eth_Ip_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, NETC_ETH_IP_TIMEOUT_VALUE_US);
-        do
-        {
-            if(NETC_F3_COMMON_OSR_STATE_MASK != (IP_NETC__ENETC0_COMMON->OSR & NETC_F3_COMMON_OSR_STATE_MASK))
-            {
-                Status = NETC_ETH_IP_STATUS_SUCCESS;
-                break;
-            }
-            else
-            {
-                Status = NETC_ETH_IP_STATUS_TIMEOUT;
-            }
-        }while(!Netc_Eth_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks));
-
-        /** TODO: This will be supported later. */
-        /* Configure the number of MSIs for all SIs - Port station interface a configuration register 2 (PSI0CFGR2 - PSI7CFGR2) */
-
-        /* Enable/disable MAC multicast/unicast promiscuous mode. */
-        IP_NETC__ENETC0_BASE->PSIPMMR = ((uint32)((*config->generalConfig).maskMACPromiscuousMulticastEnable) << NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT) | \
-                                        (uint32)((*config->generalConfig).maskMACPromiscuousUnicastEnable);
-
-        /* Set Layer 3 IPv4 Header checksum validation*/
-        IP_NETC__ENETC0_BASE->PARCSCR = NETC_F3_PARCSCR_L4CD((*config->generalConfig).rxCheckSumOffloadingIPV4);
-        /*
-        Checking only TCP offload because when it is enabled, UDP is by default enabled in configuration
-        Set Layer 4 TCP and UDP checksum validation
-        */
-        IP_NETC__ENETC0_BASE->PARCSCR = NETC_F3_PARCSCR_L3CD((*config->generalConfig).rxCheckSumOffloadingTCPUDP);
-
-#if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
-        /* Configure for Custom VLAN Ethertype 1 */
-        IP_NETC__ENETC0_COMMON->CVLANR1 = config->generalConfig->CustomVlanEthertype1;
-        /* Configure for Custom VLAN Ethertype 2 */
-        IP_NETC__ENETC0_COMMON->CVLANR2 = config->generalConfig->CustomVlanEthertype2;
-#endif
-
-        /* Configure the VSIs using config->generalConfig */
-        for (u8Iterator = 0U; u8Iterator < (*config->generalConfig).numberOfConfiguredSis; u8Iterator++)
-        {
-            /* Identify the PSI in the list of SIs to configure */
-            siHwId = (*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].siId;
-
-            /* Enable PSI; In reset configuration PSI is already started, but to be sure that will not be any problems. */
-            if (TRUE == (*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].enableSi)
-            {
-                /** Assure that SI is not enabled. */
-                netcSIsBase[siHwId]->SIMR &= ~(NETC_F3_SI0_SIMR_EN_MASK);
-
-                if (ctrlIndex == siHwId)
-                {
-                    /* Master enable for a station interface.*/
-                    IP_NETC__ENETC0_BASE->PMR = IP_NETC__ENETC0_BASE->PMR | (NETC_F3_PMR_SI0EN_MASK << siHwId);
-
-                    /* For the PSI the MAC address will be configured both for the ENETC Port and for the PSI0 */
-                    /* Configure the port primary MAC address */
-                    IP_NETC__ENETC0_PORT->PMAR0 = ((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[0U])          | \
-                                                  (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[1U]) << 8U)  | \
-                                                  (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[2U]) << 16U) | \
-                                                  (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[3U]) << 24U);
-                    IP_NETC__ENETC0_PORT->PMAR1 = ((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[4U]) | \
-                                                  (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[5U]) << 8U);
-                    IP_NETC__ENETC0_PORT->POR = 0U;     /* Enable Rx and Tx Path for port (for S32N the default status for Rx and Tx path is disabled.) */
-                }
-                else
-                {
-
-                    /* Master enable for a station interface.*/
-                    IP_NETC__ENETC0_BASE->PMR = IP_NETC__ENETC0_BASE->PMR | (NETC_F3_PMR_SI0EN_MASK << siHwId);
-
-                    /* For the VSIs write the MAC address in the PSIaMAR0 and PSIaMAR1 registers */
-                    IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIPMAR0 = ((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[0U])          | \
-                                                                    (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[1U]) << 8U)  | \
-                                                                    (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[2U]) << 16U) | \
-                                                                    (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[3U]) << 24U);
-
-                    IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIPMAR1 = ((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[4U]) | \
-                                                                    (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[5U] )<< 8U);
-                    /* Configure where the PSI receives the message for enabled VSIs. */
-                    if(NULL_PTR != config->generalConfig->RxVsiMsgCmdToPsi[siHwId - 1U])
-                    {
-                        IP_NETC__ENETC0_SI0->MSGSR.PSI_A.VSI_NUM[siHwId - 1U].PSIVMSGRCVAR0 = (uint32)config->generalConfig->RxVsiMsgCmdToPsi[siHwId - 1U] | \
-                                                                                              NETC_ETH_IP_VSITOPSI_MSG_SIZE;
-                    }
-                }
-
-                /* Number of entries in a MSI table for the current SI. */
-                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR2 = NETC_ETH_IP_NUM_OF_ENTRIES_MSITABLE;
-
-                /* Configure the number or TX and RX BD Rings for each SI */
-                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 &= ~(NETC_F3_PSICFGR0_NUM_TX_BDR_MASK | NETC_F3_PSICFGR0_NUM_RX_BDR_MASK);
-
-                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_NUM_TX_BDR((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].NumberOfTxBDR) | \
-                                                                 NETC_F3_PSICFGR0_NUM_RX_BDR((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].NumberOfRxBDR);
-
-                /* Configure the bandwidth weight for the current SI */
-                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_SIBW((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].SIBandwidthWeight);
-
-#if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
-                SiConfig = &((*config->generalConfig->stationInterfaceGeneralConfig)[siHwId]);
-
-                if (TRUE == SiConfig->EnableSIVlan)
-                {
-                    /* Enable VLAN and select tag protocol, priority code point, drop eligible indicator and VLAN identifier */
-                    IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIVLANR = NETC_F3_PSIVLANR_TPID(SiConfig->SiVLANConfig.ProtocolIdentifier) |
-                                                                    NETC_F3_PSIVLANR_PCP(SiConfig->SiVLANConfig.PriorityCodePoint) |
-                                                                    NETC_F3_PSIVLANR_VID(SiConfig->SiVLANConfig.VlanIdentifier) |
-                                                                    NETC_F3_PSIVLANR_E(1U) | NETC_F3_PSIVLANR_DEI((uint8)SiConfig->SiVLANConfig.DropIndicator);
-                }
-                else
-                {
-                    /* Disable VLAN and select tag protocol */
-                    IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIVLANR &= ~NETC_F3_PSIVLANR_E(1U);
-                }
-
-                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 &= ~(NETC_F3_PSICFGR0_SIVC_MASK | NETC_F3_PSICFGR0_SIVIE_MASK | NETC_F3_PSICFGR0_VTE_MASK);
-                /* Insert VLAN Ethertype and enable insertion of the SI-based VLAN into frames sent by this SI. This config apply for generic */
-                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_SIVC(SiConfig->SIVlanControl) |
-                                                                 NETC_F3_PSICFGR0_SIVIE((uint8)SiConfig->EnableSoftwareVlanInsert) |
-                                                                 NETC_F3_PSICFGR0_VTE((SiConfig->EnableVLANTagExtract) ? 1U : 0U); ;
-#endif
-
-                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_ASE(((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].enableAntiSpoofing) ? 1U : 0U);
-
-                if (ctrlIndex != siHwId)
-                {
-                    /* Enable bus for virtual function. */
-                    netcVFBase[u8Iterator]->PCI_CFH_CMD |= NETC_VF1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U);
-                }
-            }
-        }
-
-        /** TODO: Advanced feature configuration. TBA later. */
-        /* Configure the number of MAC and VLAN filter entries for all SIs - Port station interface 0 VSI MAC address filtering configuration register (PSI0VMAFCFGR) and
-                                                                             Port station interface 0 VLAN filtering configuration register (PSI0VLANFCFGR)
-                                                                             Port station interface a VSI MAC address filtering configuration register (PSI1VMAFCFGR - PSI7VMAFCFGR) and
-                                                                             Port station interface a VLAN filtering configuration register (PSI1VLANFCFGR - PSI7VLANFCFGR)*/
-        /* Configure the internal priority to ICM priority mapping - Receive IPV to ICM priority mapping register 0 (IPV2ICMPMR0) */
-        /* Configure the IPV to traffic class assignment - Transmit priority to traffic class mapping register 0 (PRIO2TCMR0) */
-        /* Configure speed and other settings in Port configuration register (PCR) */
-
-        if ((*config->generalConfig).enableCorrectableErrors || (*config->generalConfig).enableUncorrectableErrors)
-        {
-            Status = Netc_Eth_Ip_SetupErrorReporting(config->generalConfig);
-        }
-
-    }
-    else
-    {
-        /* Wait until PSI start current VSI. */
-        Netc_Eth_Ip_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, NETC_ETH_IP_TIMEOUT_VALUE_US);
-        do
-        {
-            if (NETC_VF1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK == \
-                ((netcVFBase[ctrlIndex]->PCI_CFH_CMD & NETC_VF1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK)))
-            {
-                Status = NETC_ETH_IP_STATUS_SUCCESS;
-                break;
-            }
-            else
-            {
-                Status = NETC_ETH_IP_STATUS_TIMEOUT;
-            }
-        }while(!Netc_Eth_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks));
-    }
+    /* Configure SI */
+    Status = Netc_Eth_Ip_InitSI(ctrlIndex, config);
 
     /* Added to be sure this is not executed when VSI get a timeout. */
     if(NETC_ETH_IP_STATUS_SUCCESS == Status)
     {
-#if (NETC_ETH_IP_VLAN_SUPPORT == STD_ON)
-        /** TODO: To be configured later when with al VLAN configurations. */
-        /* Configure VLAN to IPV - Station interface VLAN to IPV mapping register 0 (SIVLANIPVMR0) and Station interface VLAN to IPV mapping register 1 (SIVLANIPVMR1) */
-        /* Configure IPV to BDR - Station interface IPV to ring mapping register (SIIPVBDRMR0) */
-#endif
-
-        /* Initialize State structure */
-        Netc_Eth_Ip_InitStateStructure(ctrlIndex, config);
-
-        /* Configure Command ring */
-        Netc_Eth_Ip_InitCBDR(ctrlIndex);
+        Netc_Eth_Ip_Init_FirstPart(ctrlIndex, config);
 
         /* only for PSI0 */
         if (NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[ctrlIndex]->SiType)
@@ -2956,47 +5783,62 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_Init(uint8 ctrlIndex, const Netc_Eth_Ip_Confi
             Netc_Eth_Ip_NetcClockFrequency = config->netcClockFrequency;
             /* Configure Credit Based Shaper registers */
             Netc_Eth_Ip_ConfigCreditBasedShaperReg(ctrlIndex, config);
-
 #if (NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST > 0U)
             /* Initialize IPF table */
-            if ((*config->generalConfig).numberOfIPFTableList > 0U)
-            {
-                /* Set the EN bit in Station interface mode register (SIMR) to enable psi0*/
-                netcSIsBase[ctrlIndex]->SIMR |= NETC_F3_SI0_SIMR_EN_MASK;
-
-                for (IPFTableListIdx = 0U; IPFTableListIdx < (*config->generalConfig).numberOfIPFTableList; IPFTableListIdx++)
-                {
-                    /* init IPF table entry data */
-                    Netc_Eth_Ip_InitIPFTableEntryData(config, IPFTableListIdx, &IngressPortFilterTableEntry);
-
-                    /* add static IPF table entries */
-                    Status = Netc_Eth_Ip_AddIngressPortFilterTableEntry(0U, &MatchedEntries, &IngressPortFilterTableEntry);
-                }
-
-                /* Clear the EN bit in Station interface mode register (SIMR) to disalbe psi0 */
-                netcSIsBase[ctrlIndex]->SIMR &= ~NETC_F3_SI0_SIMR_EN_MASK;
-            }
+            Status = Netc_Eth_Ip_InitIngressPortFilterTable(ctrlIndex, config);
 #endif
         }
-
-        Netc_Eth_Ip_InitNTMPTables(ctrlIndex, config);
-
-        /* Initialize TX BDRs */
-        Netc_Eth_Ip_InitTxBD(ctrlIndex, config);
-        /* Initialize RX BDRs */
-        Netc_Eth_Ip_InitRxBD(ctrlIndex, config);
-
+        Netc_Eth_Ip_Init_SecondPart(ctrlIndex, config);
         /* Check if any interrupt is enabled and configure the hardware */
-        if (((*config->siConfig).siMsgMruMailboxAddr != NULL_PTR) ||
-             ((*config->siConfig).TxInterrupts != 0U) ||
-             ((*config->siConfig).RxInterrupts != 0U))
+        if ((TRUE == (*config->siConfig).EnableSIMsgInterrupt) ||
+            ((*config->siConfig).TxInterrupts != 0U) ||
+            ((*config->siConfig).RxInterrupts != 0U))
         {
             /* Enable interrupts for the current controller. */
             Netc_Eth_Ip_EnableIrq(ctrlIndex, config);
         }
 
+        Netc_Eth_Ip_ConfigPtr[ctrlIndex] = config;
+
     }
     return Status;
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : Netc_Eth_Ip_StartTSN
+ * Description   : function for starting the Time Sensitive Networking functionality
+ * implements Netc_Eth_Ip_StartTSN_Activity
+ *END**************************************************************************/
+Std_ReturnType Netc_Eth_Ip_StartTSN(uint8 ctrlIndex)
+{
+    Std_ReturnType status = E_OK;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(Netc_Eth_Ip_ConfigPtr[ctrlIndex] != NULL_PTR);
+#endif
+
+#if (NETC_ETH_IP_NUMBER_OF_RP_ENTRIES > 0U)
+    status |= Netc_Eth_Ip_ConfigRatePolicerTable(ctrlIndex,Netc_Eth_Ip_ConfigPtr[ctrlIndex]);
+#endif
+#if (NETC_ETH_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES > 0U)
+    status |= Netc_Eth_Ip_ConfigISITable(ctrlIndex,Netc_Eth_Ip_ConfigPtr[ctrlIndex]);
+#endif
+#if (NETC_ETH_NUMBER_OF_INGRESSSTREAM_ENTRIES > 0U)
+    status |= Netc_Eth_Ip_ConfigIngressStreamTable(ctrlIndex,Netc_Eth_Ip_ConfigPtr[ctrlIndex]);
+#endif
+#if (NETC_ETH_NUMBER_OF_SGCL_ENTRIES > 0U)
+    status |= Netc_Eth_Ip_ConfigSGCL(ctrlIndex,Netc_Eth_Ip_ConfigPtr[ctrlIndex]);
+#endif
+#if (NETC_ETH_NUMBER_OF_SGI_ENTRIES > 0U)
+    status |= Netc_Eth_Ip_ConfigSGI(ctrlIndex,Netc_Eth_Ip_ConfigPtr[ctrlIndex]);
+#endif
+
+    (void)ctrlIndex;
+    (void)Netc_Eth_Ip_ConfigPtr;
+
+    return status;
 }
 
 /*FUNCTION**********************************************************************
@@ -3092,60 +5934,21 @@ Std_ReturnType Netc_Eth_Ip_EnableCreditBasedShaper(const uint8 ctrlIndex, const 
  *END**************************************************************************/
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_EnableController(uint8 ctrlIndex)
 {
-    uint8 ringCounter = 0U;
-    /* Assumption: If the Coalescing ISR is enabled on the ctrlIndex, it means all the rings will have the ISR enabled.
-    Context: If at least one controller has the Tx Coalesing Isr Enabled, TxCoalescingIsrEnabled will be true if the generated thresholds will not be 0. */
-    boolean TxCoalescingIsrEnabled =  ((Netc_Eth_Ip_apxState[ctrlIndex]->TxTimerThreshold[0U] != 0U) &&
-                                       (Netc_Eth_Ip_apxState[ctrlIndex]->TxPacketsThreshold[0U] != 0U)) ? TRUE : FALSE ;
-    boolean RxCoalescingIsrEnabled =  ((Netc_Eth_Ip_apxState[ctrlIndex]->RxTimerThreshold[0U] != 0U) &&
-                                       (Netc_Eth_Ip_apxState[ctrlIndex]->RxPacketsThreshold[0U] != 0U)) ? TRUE : FALSE ;
+
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
     DevAssert(Netc_Eth_Ip_apxState[ctrlIndex] != NULL_PTR);
 #endif
-    if ( Netc_Eth_Ip_apxState[ctrlIndex]->RxInterrupts != 0U)
+    if (Netc_Eth_Ip_apxState[ctrlIndex]->RxInterrupts != 0U)
     {
-        /* Tx and Rx Interrupts enabled*/
-        for (ringCounter = 0U; ringCounter < Netc_Eth_Ip_apxState[ctrlIndex]->NumberOfRxBDR; ringCounter++)
-        {
-            SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_03();
-            /* Write the interrupt settings as configured */
-            netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].RBIER  |= (uint32)1U;
-            if (RxCoalescingIsrEnabled)
-            {
-                /*If timer threshold is used it should be set when RBaICR0[ICEN]=0 to avoid missing a "first packet" received condition which starts the timer.*/
-                netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].RBICR1 |= NETC_F3_SI0_RBICR1_ICTT( Netc_Eth_Ip_apxState[ctrlIndex]->RxTimerThreshold[ringCounter]);
-                netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].RBICR0 |= NETC_F3_SI0_RBICR0_ICPT(Netc_Eth_Ip_apxState[ctrlIndex]->RxPacketsThreshold[ringCounter]);
-                netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].RBICR0 |= NETC_F3_SI0_RBICR0_ICEN(1U);
-                SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_03();
-            }
-            else
-            {                
-                SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_03();
-            }
-        }
+        Netc_Eth_Ip_EnableController_RxCoalescing(ctrlIndex);
     }
     SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_03();
-    if ( Netc_Eth_Ip_apxState[ctrlIndex]->TxInterrupts != 0U)
+    if (Netc_Eth_Ip_apxState[ctrlIndex]->TxInterrupts != 0U)
     {
-        for (ringCounter = 0U; ringCounter < Netc_Eth_Ip_apxState[ctrlIndex]->NumberOfTxBDR; ringCounter++)
-        {
-
-            if (TxCoalescingIsrEnabled)
-            {
-                netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].TBIER  = NETC_F3_SI0_TBIER_TXTIE(1U);
-                /*If timer threshold is used it should be set when TBaICR0[ICEN]=0 to avoid missing a "firstpacket" transmitted condition which starts the timer.*/
-                netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].TBICR1 |= NETC_F3_SI0_TBICR1_ICTT( Netc_Eth_Ip_apxState[ctrlIndex]->TxTimerThreshold[ringCounter]);
-                /*If packet threshold is used it should be set when TBaICR0[ICEN] is set */
-                netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].TBICR0 |= (NETC_F3_SI0_TBICR0_ICEN(1U) | NETC_F3_SI0_TBICR0_ICPT(Netc_Eth_Ip_apxState[ctrlIndex]->TxPacketsThreshold[ringCounter]));
-
-            }
-            else
-            {
-                netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].TBIER  = NETC_F3_SI0_TBIER_TXFIE(1U);
-            }
-        }
+        Netc_Eth_Ip_EnableController_TxCoalescing(ctrlIndex);
     }
+
 
     /* Set the EN bit in Station interface mode register (SIMR) */
     netcSIsBase[ctrlIndex]->SIMR |= NETC_F3_SI0_SIMR_EN_MASK;
@@ -3265,10 +6068,10 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DisableController(uint8 ctrlIndex)
             Netc_Eth_Ip_apxState[ctrlIndex]->RxCurrentDesc[ringCounter]  = Netc_Eth_Ip_apxState[ctrlIndex]->FirstRxRingDescAddr[ringCounter];
             Netc_Eth_Ip_apxState[ctrlIndex]->rxCurrentIndex[ringCounter] = 0U;
         }
-        SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_02();
 
         Status = NETC_ETH_IP_STATUS_SUCCESS;
     }
+    SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_02();
 
     return Status;
 }
@@ -3485,6 +6288,8 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendMultiBufferFrame(uint8 ctrlIndex,
             txBD->length = (((uint32)FrameLength << 16U) | Buffers[BufferIndex].length);
             /* Write buffer address in the descriptor. */
             txBD->dataBuffAddr = (uint32)Buffers[BufferIndex].data;
+            /* Clear the high part of buffer address(used for 64 bit address). */
+            txBD->RESERVED_0   = (uint32)0U;
             ProducerIndex = (ProducerIndex + NETC_ETH_IP_PRODUCER_INCR) % (uint32)Netc_Eth_Ip_apxState[ctrlIndex]->TxRingSize[ring];
 
             /* Update buffer descriptor for transmission */
@@ -3508,42 +6313,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendMultiBufferFrame(uint8 ctrlIndex,
                 txBD->buffConfig = NETC_ETH_IP_TXBD_FRAME_INTERRUPT_MASK | NETC_ETH_IP_TXBD_FINAL_MASK;
 #endif
             }
-
-            if ((0U == BufferIndex) && (options != NULL_PTR))
-            {
-                if(NETC_ETH_IP_SWT_MANAGEMNT == options->Flag)
-                {
-                    /* Set Flag(FL) type; set ingress or egress port value; set value of flag qualifier(FLQ). */
-                    txBD->buffConfig |= (((uint32)NETC_ETH_IP_FLQ_VALUE << NETC_ETH_IP_FLQ_SHIFT) | \
-                                         ((uint32)(options->IngrOrEgrPortNumber) << NETC_ETH_IP_INGR_EGRESS_PORT_SHIFT));
-                    if(1U == options->SwtMgSendingOpt)
-                    {
-                        txBD->buffConfig |= ((((uint32)options->SwtMgSendingOpt) << NETC_ETH_IP_SMSO_SHIFT) | \
-                                            (((uint32)options->TimestampRefReq) << NETC_ETH_IP_TSR_SHIFT)  | \
-                                            (((uint32)options->InternalPriority) << NETC_ETH_IP_IPV_SHIFT) | \
-                                            (((uint32)options->DiscardResilience) << NETC_ETH_IP_DR_SHIFT));
-                    }
-                }
-                else if (NETC_ETH_IP_TXSTART == options->Flag)
-                {
-                    txBD->buffConfig |= (((uint32)NETC_ETH_IP_TXSTART) << NETC_ETH_IP_FL_SHIFT)  | \
-                                        (((uint32)options->TxStartEnable) << NETC_ETH_IP_TSR_SHIFT) | \
-                                        (options->TxStartTime);
-                }
-                else
-                {
-                    /*MISRA C-2012 Rule 15.7*/
-                }
-#if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
-                txBD->timestamp = options->Timestamp;
-                txBD->extendVlanBuffConfig = ((((uint32)options->PriorityCodePoint) << NETC_ETH_IP_PCP_SHIFT) & NETC_ETH_IP_PCP_MASK) | \
-                                             ((((uint32)options->DropEligible) << NETC_ETH_IP_DEI_SHIFT) & NETC_ETH_IP_DEI_MASK) | \
-                                             ((((uint32)options->VlanID) << NETC_ETH_IP_VID_SHIFT) & NETC_ETH_IP_VID_MASK ) | \
-                                             ((((uint32)options->TagProtocolID) << NETC_ETH_IP_TPID_SHIFT) & NETC_ETH_IP_TPID_MASK);
-                txBD->extendBuffConfig |= (((uint32)options->ExtensionFlags) << NETC_ETH_IP_E_FLAGS_SHIFT) & NETC_ETH_IP_E_FLAGS_MASK;
-#endif
-            }
-
+            Netc_Eth_Ip_ConfigureBufferDescriptors(BufferIndex, options, txBD);
             BufferIndex++;
         }
         /* Writes in memory for BD are optimized and syncronization before starting transmission need to be done
@@ -3565,12 +6335,11 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendMultiBufferFrame(uint8 ctrlIndex,
             Netc_Eth_Ip_apxState[ctrlIndex]->LogicTxProducerIndex[ring] = (uint16)ProducerIndex;
             /* Write the producer index into register to start frame sending. */
             netcSIsBase[ctrlIndex]->BDR_NUM[ring].TBPIR = ProducerIndex;
-            
+
 #if (STD_ON == NETC_ETH_IP_HAS_CACHE_MANAGEMENT)
             }
 #endif
     }
-
     return Status;
 }
 
@@ -3634,12 +6403,14 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
 #endif /* NETC_ETH_IP_HAS_EXTERNAL_TX_BUFFERS */
             /* Save the address of the external buffer to be used in GetTransmitStatus for correctly identifying the descriptor. */
             Netc_Eth_Ip_apxState[ctrlIndex]->TxDataBuffAddr[ring][ProducerIndex] = buff->data;
-            
+
             txBD = (Netc_Eth_Ip_TxBDRType *)((uint32)(Netc_Eth_Ip_apxState[ctrlIndex]->FirstTxRingDescAddr[ring]) + (uint32)((ProducerIndex / NETC_ETH_IP_PRODUCER_INCR) * ((uint32)(sizeof(Netc_Eth_Ip_TxBDRType)))));
             /* Write buffer and frame length in the buffer descriptor. */
             txBD->length = (((uint32)buff->length << 16U) | buff->length);
             /* Write buffer address in the descriptor. */
             txBD->dataBuffAddr = (uint32)buff->data;
+            /* Clear the high part of buffer address(used for 64 bit address). */
+            txBD->RESERVED_0   = (uint32)0U;
 
             /* Check if there was a writeback in the descriptor */
             if (NETC_ETH_IP_TXBD_WRITEBACK_MASK == (txBD->buffConfig & NETC_ETH_IP_TXBD_WRITEBACK_MASK))
@@ -3653,21 +6424,24 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
                 txBD->buffConfig = NETC_ETH_IP_TXBD_FRAME_INTERRUPT_MASK | NETC_ETH_IP_TXBD_FINAL_MASK;
 #endif
             }
-            else
-            {
-                /*MISRA C-2012 Rule 15.7*/
-            }
 
             if(options != NULL_PTR)
             {
-                if(NETC_ETH_IP_SWT_MANAGEMNT == options->Flag)
+                if ((NETC_ETH_IP_SWT_MANAGEMNT == options->Flag) && (ctrlIndex == 0U) && (ring == 0U))  /* Management frame */
                 {
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
 #ifdef NETC_ETH_0_USED
                     /* Resetting the management frame flag here is OK as long as there is no chance of re-using the position in the array
                     before the message it points to is processed. This is indeed ensured by the ProvideTxBuffer function which needs to
                     successfully provide a buffer if the SetManagementInfo function, which sets the flag, is to be called. */
-                    Netc_Eth_Ip_TxManagementInfoBuff[0U][ProducerIndex / NETC_ETH_IP_PRODUCER_INCR].ManagementFrameFlag = FALSE;
+                    if (Netc_Eth_Ip_TxManagementInfoBuff[0U][ProducerIndex / NETC_ETH_IP_PRODUCER_INCR].State == NETC_ETH_IP_TX_MGMT_PREPARED)
+                    {
+                        Netc_Eth_Ip_TxManagementInfoBuff[0U][ProducerIndex / NETC_ETH_IP_PRODUCER_INCR].State = NETC_ETH_IP_TX_MGMT_QUEUED;
+                    }
+                    else
+                    {
+                        Netc_Eth_Ip_TxManagementInfoBuff[0U][ProducerIndex / NETC_ETH_IP_PRODUCER_INCR].State = NETC_ETH_IP_TX_MGMT_QUEUED_TIMESTAMP;
+                    }
 #endif
 #endif
                     /* Set Flag(FL) type; set ingress or egress port value; set value of flag qualifier(FLQ). */
@@ -3681,13 +6455,13 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
                                             ((uint32)options->DiscardResilience << NETC_ETH_IP_DR_SHIFT);
                     }
                 }
-                else if (NETC_ETH_IP_TXSTART == options->Flag)
+                else if (NETC_ETH_IP_TXSTART == options->Flag)  /* Frame with preset time to be sent at */
                 {
                     txBD->buffConfig |= ((((uint32)NETC_ETH_IP_TXSTART) << NETC_ETH_IP_FL_SHIFT) |
                                         (((uint32)options->TxStartEnable) << NETC_ETH_IP_TSR_SHIFT) |
                                         (options->TxStartTime));
                 }
-                else
+                else    /* Regular frame */
                 {
                     /*MISRA C-2012 Rule 15.7*/
                 }
@@ -3721,6 +6495,16 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
             /* Write the producer index into register to start frame sending. */
             netcSIsBase[ctrlIndex]->BDR_NUM[ring].TBPIR = NextProducerIndex;
 
+#if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
+#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+            Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].NumberOfUsedBuff++;
+            if (Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].MaxNumberOfUsedBuff < Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].NumberOfUsedBuff)
+            {
+                Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].MaxNumberOfUsedBuff = Netc_Eth_Ip_Tx_FillLevelInfo[ctrlIndex][ring].NumberOfUsedBuff;
+            }
+#endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
+#endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
+
 #if (STD_ON == NETC_ETH_IP_HAS_CACHE_MANAGEMENT)
             }/*   if (E_NOT_OK == CacheStatus) */
 #endif
@@ -3739,7 +6523,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SendFrame(uint8 ctrlIndex,
 
 /*FUNCTION**********************************************************************
  *
- 
+
  * Function Name : Netc_Eth_Ip_GetTransmitStatus
  * implements     Netc_Eth_Ip_GetTransmitStatus_Activity
  *END**************************************************************************/
@@ -3760,7 +6544,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTransmitStatus(uint8 ctrlIndex,
     /* Read the consumer index */
     ConsumerIndex = netcSIsBase[ctrlIndex]->BDR_NUM[ring].TBCIR;
 
-    status = Netc_Eth_Ip_CheckFrameStatus(ctrlIndex, ring, ConsumerIndex, buff->data, &(info->timestamp), &(info->txStatus));
+    status = Netc_Eth_Ip_CheckFrameStatus(ctrlIndex, ring, ConsumerIndex, buff->data, info);
 
     return status;
 }
@@ -3928,7 +6712,11 @@ static inline uint64 Netc_Eth_Ip_GetCounterLocal(const volatile uint32 *Reg)
  */
 static inline void Netc_Eth_Ip_InitNTMPTables(uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
 {
+#if defined(ERR_IPV_NETC_E051130)
+    #if (STD_ON == ERR_IPV_NETC_E051130)
     Netc_Eth_Ip_StatusType Status;
+    #endif
+#endif
 
     /* Tables initialization should be done after enabling the controller. Set the EN bit in Station interface mode register (SIMR) to enable psi0*/
     netcSIsBase[ctrlIndex]->SIMR |= NETC_F3_SI0_SIMR_EN_MASK;
@@ -3972,6 +6760,494 @@ static inline void Netc_Eth_Ip_InitNTMPTables(uint8 ctrlIndex, const Netc_Eth_Ip
     netcSIsBase[ctrlIndex]->SIMR &= ~NETC_F3_SI0_SIMR_EN_MASK;
 }
 
+#if(defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON == NETC_ETH_IP_CUSTOM_TAG_SUPPORT))
+static inline void Netc_Eth_Ip_ReadFrame_AddCustomRxTagHeader(uint8 ctrlIndex,
+                                                              uint8 ring,
+                                                              const uint8* tagBytes,
+                                                              Netc_Eth_Ip_BufferType *buff
+                                                              )
+{
+    uint16 byteId;
+    const Netc_Eth_Ip_RxBDRType  *rxBDR;
+    uint32 HostReason;
+
+    rxBDR = Netc_Eth_Ip_apxState[ctrlIndex]->RxCurrentDesc[ring];
+    HostReason = ((rxBDR->configRxBD[3U] >> NETC_ETH_IP_HOSTREASON_WB_SHIFT) & NETC_ETH_IP_HOSTREASON_WB_MASK);
+    if ((0U == ctrlIndex) && (0U == ring) && (NETC_ETH_IP_HOSTREASON_SW_PTP == HostReason))
+    {
+        /* Shift data to leave space for tag */
+        for (byteId = (buff->length - 1U); byteId >= NETC_ETH_IP_RX_CUSTOM_TAG_START_BYTE; byteId--)
+        {
+            (buff->data)[byteId + (uint16)(NETC_ETH_IP_RX_CUSTOM_TAG_NUM_BYTES)] = (buff->data)[byteId];
+        }
+
+        /* Number of bytes that will be added before the payload. */
+        for (byteId = 0U; byteId < (uint16)(NETC_ETH_IP_RX_CUSTOM_TAG_NUM_BYTES); byteId++)
+        {
+            (buff->data)[byteId + NETC_ETH_IP_RX_CUSTOM_TAG_START_BYTE] = tagBytes[byteId];
+        }
+        buff->length += NETC_ETH_IP_RX_CUSTOM_TAG_NUM_BYTES;
+    }
+}
+#endif /* defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON == NETC_ETH_IP_CUSTOM_TAG_SUPPORT) */
+
+
+#if(defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF))
+static inline void Netc_Eth_Ip_HostReasonTimeStamp(uint8 ctrlIndex,
+                                                   uint8 ring,
+                                                   Netc_Eth_Ip_StatusType* status,
+                                                   uint32 CurrLowTime
+                                                   )
+{
+    const Netc_Eth_Ip_TxTimestampResponseType *TempTxResponse;
+    uint16 TxTimestampID;
+    Netc_Eth_Ip_TimeType LatestTxTimestamp = { 0U, 0U};
+    uint32 CurrHighTime = 0U;
+
+    CurrHighTime = netcSIsBase[0U]->SICTR1;
+
+    if ((0U == ctrlIndex) && (0U == ring))
+    {
+        TempTxResponse = (Netc_Eth_Ip_TxTimestampResponseType *)Netc_Eth_Ip_apxState[ctrlIndex]->RxCurrentDesc[ring];
+        TxTimestampID = TempTxResponse->TxTimestampID;
+
+        LatestTxTimestamp.nanosecondsL = TempTxResponse->Timestamp;
+        LatestTxTimestamp.nanosecondsH = CurrHighTime;
+        if(CurrLowTime < LatestTxTimestamp.nanosecondsL)
+        {
+            LatestTxTimestamp.nanosecondsH--;
+        }
+
+        Netc_Eth_Ip_TxTimestampInfoBuff[ctrlIndex][TxTimestampInfoBuffIdx].TimestampValue.nanosecondsL = LatestTxTimestamp.nanosecondsL;
+        Netc_Eth_Ip_TxTimestampInfoBuff[ctrlIndex][TxTimestampInfoBuffIdx].TimestampValue.nanosecondsH =  LatestTxTimestamp.nanosecondsH;
+        Netc_Eth_Ip_TxTimestampInfoBuff[ctrlIndex][TxTimestampInfoBuffIdx].TxTimeStampID = TxTimestampID;
+        TxTimestampInfoBuffIdx++;
+        TxTimestampInfoBuffIdx = (NETC_ETH_0_TXBDR_0_MAX_NUM_OF_DESCR / NETC_ETH_IP_PRODUCER_INCR == TxTimestampInfoBuffIdx) ? 0U : TxTimestampInfoBuffIdx;
+
+        *status = NETC_ETH_IP_STATUS_HOSTREASON_TIMESTAMP;
+    }
+}
+#endif
+
+
+
+static inline void Netc_Eth_Ip_ReadFrame_ReturnBufferDetails(uint8 ctrlIndex,
+                                                             uint8 ring,
+                                                             Netc_Eth_Ip_BufferType *buff
+                                                             )
+{
+    const Netc_Eth_Ip_RxBDRType  *rxBDR;
+    uint32 rxIndex = 0;
+#if (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)
+    uint32 bufferIndex = 0;
+#endif
+
+    rxBDR = Netc_Eth_Ip_apxState[ctrlIndex]->RxCurrentDesc[ring];
+    rxIndex = Netc_Eth_Ip_apxState[ctrlIndex]->rxCurrentIndex[ring];
+#if (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)
+    bufferIndex = ring * NETC_ETH_MAX_NUMBER_OF_RXBD + rxIndex;
+
+    if (!Netc_Eth_Ip_ControllerHasExternalRxBufferManagement[ctrlIndex])
+    {
+#endif
+        /* All conditions meet, return buffer data details. */
+        buff->data = (uint8 *)((uint32)(Netc_Eth_Ip_apxState[ctrlIndex]->FirstRxDataBufferAddr[ring]) + \
+                    (rxIndex * Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffMaxLenAddr[ring]));
+#if (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)
+    }
+    else
+    {
+        buff->data = (uint8*)Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffAddr[bufferIndex];
+    }
+#endif
+    /* According to the requirement CPR_RTD_00284.eth */
+    if (rxBDR->configRxBD[2U] > Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffMaxLenAddr[ring])
+    {
+        buff->length = (uint16)(Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffMaxLenAddr[ring] & NETC_ETH_IP_RXBD_LENGTH_MASK);
+    }
+    else
+    {
+        buff->length = (uint16)(rxBDR->configRxBD[2U] & NETC_ETH_IP_RXBD_LENGTH_MASK);
+    }
+}
+
+#if(defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON==NETC_ETH_IP_CUSTOM_TAG_SUPPORT))
+static inline void Netc_Eth_Ip_ReadFrame_CustomizedTPID(uint8 ctrlIndex,
+                                                        uint8 ring,
+                                                        uint8 *tagBytes,
+                                                        uint32 HostReason
+                                                        )
+{
+    Netc_Eth_Ip_RxBDRType  *rxBDR;
+    rxBDR = Netc_Eth_Ip_apxState[ctrlIndex]->RxCurrentDesc[ring];
+    if ((0U == ctrlIndex) && (0U == ring) && (NETC_ETH_IP_HOSTREASON_SW_PTP == HostReason))
+    {
+        /* Could be another customised TPID */
+        tagBytes[0U] = (uint8)((Netc_Eth_Ip_apxState[0U]->generalConfig->CustomTPID >> 8) & 0xFFU);
+        tagBytes[1U] = (uint8)(Netc_Eth_Ip_apxState[0U]->generalConfig->CustomTPID & 0xFFU);
+        tagBytes[2U] = NETC_ETH_IP_RX_CUSTOM_TAG_TYPE(2U) | NETC_ETH_IP_RX_CUSTOM_TAG_SUBTYPE(0U);
+        tagBytes[3U] = NETC_ETH_IP_RX_CUSTOM_TAG_DR((uint8)(Netc_Eth_Ip_apxState[0U]->generalConfig->CustomDR)) | NETC_ETH_IP_RX_CUSTOM_TAG_IPV((uint8)(Netc_Eth_Ip_apxState[0U]->generalConfig->CustomIPV));
+        tagBytes[4U] = NETC_ETH_IP_RX_CUSTOM_TAG_SRCPORT((rxBDR->configRxBD[1U] & NETC_ETH_IP_RXBD_SRC_PORT_MASK)) | \
+                       NETC_ETH_IP_RX_CUSTOM_TAG_SRCSWITCH(0U);
+        tagBytes[5U] = NETC_ETH_IP_RX_CUSTOM_TAG_HOSTREASON(HostReason);
+    }
+}
+#endif
+
+
+static inline void Netc_Eth_Ip_EnableController_RxCoalescing(uint8 ctrlIndex)
+{
+    uint8 ringCounter = 0U;
+
+    /* Assumption: If the Coalescing ISR is enabled on the ctrlIndex, it means all the rings will have the ISR enabled.
+    Context: If at least one controller has the Tx Coalesing Isr Enabled, TxCoalescingIsrEnabled will be true if the generated thresholds will not be 0. */
+    boolean RxCoalescingIsrEnabled =  ((Netc_Eth_Ip_apxState[ctrlIndex]->RxTimerThreshold[0U] != 0U) &&
+                                       (Netc_Eth_Ip_apxState[ctrlIndex]->RxPacketsThreshold[0U] != 0U)) ? TRUE : FALSE ;
+
+    /* Tx and Rx Interrupts enabled*/
+    for (ringCounter = 0U; ringCounter < Netc_Eth_Ip_apxState[ctrlIndex]->NumberOfRxBDR; ringCounter++)
+    {
+        SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_03();
+        /* Write the interrupt settings as configured */
+        netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].RBIER  |= (uint32)1U;
+        if (RxCoalescingIsrEnabled)
+        {
+            /*If timer threshold is used it should be set when RBaICR0[ICEN]=0 to avoid missing a "first packet" received condition which starts the timer.*/
+            netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].RBICR1 |= NETC_F3_SI0_RBICR1_ICTT( Netc_Eth_Ip_apxState[ctrlIndex]->RxTimerThreshold[ringCounter]);
+            netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].RBICR0 |= NETC_F3_SI0_RBICR0_ICPT(Netc_Eth_Ip_apxState[ctrlIndex]->RxPacketsThreshold[ringCounter]);
+            netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].RBICR0 |= NETC_F3_SI0_RBICR0_ICEN(1U);
+            SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_03();
+        }
+        else
+        {
+            SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_03();
+        }
+    }
+}
+
+
+static inline void Netc_Eth_Ip_EnableController_TxCoalescing(uint8 ctrlIndex)
+{
+    uint8 ringCounter = 0U;
+
+    /* Assumption: If the Coalescing ISR is enabled on the ctrlIndex, it means all the rings will have the ISR enabled.
+    Context: If at least one controller has the Tx Coalesing Isr Enabled, TxCoalescingIsrEnabled will be true if the generated thresholds will not be 0. */
+    boolean TxCoalescingIsrEnabled =  ((Netc_Eth_Ip_apxState[ctrlIndex]->TxTimerThreshold[0U] != 0U) &&
+                                    (Netc_Eth_Ip_apxState[ctrlIndex]->TxPacketsThreshold[0U] != 0U)) ? TRUE : FALSE ;
+    for (ringCounter = 0U; ringCounter < Netc_Eth_Ip_apxState[ctrlIndex]->NumberOfTxBDR; ringCounter++)
+    {
+
+        if (TxCoalescingIsrEnabled)
+        {
+            netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].TBIER  = NETC_F3_SI0_TBIER_TXTIE(1U);
+            /*If timer threshold is used it should be set when TBaICR0[ICEN]=0 to avoid missing a "firstpacket" transmitted condition which starts the timer.*/
+            netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].TBICR1 |= NETC_F3_SI0_TBICR1_ICTT( Netc_Eth_Ip_apxState[ctrlIndex]->TxTimerThreshold[ringCounter]);
+            /*If packet threshold is used it should be set when TBaICR0[ICEN] is set */
+            netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].TBICR0 |= (NETC_F3_SI0_TBICR0_ICEN(1U) | NETC_F3_SI0_TBICR0_ICPT(Netc_Eth_Ip_apxState[ctrlIndex]->TxPacketsThreshold[ringCounter]));
+
+        }
+        else
+        {
+            netcSIsBase[ctrlIndex]->BDR_NUM[ringCounter].TBIER  = NETC_F3_SI0_TBIER_TXFIE(1U);
+        }
+    }
+}
+
+static inline void Netc_Eth_Ip_SetupErrorReporting_EnableUncorrectableErrors(const Netc_Eth_Ip_EnetcGeneralConfigType *psi0Config)
+{
+    uint8 u8Iterator = 0U;
+    /* For the Event Collector to assert INTA for a reported error, it must enable the reporting of the error
+    When set, this bit enables the generation of an interrupt when a fatal error is reported by any of the Integrated Endpoints (iEPs)
+    or the Event Collector itself.*/
+    IP_NETC__IERC_F0_PCI_HDR_TYPE0->PCIE_CFC_AER_ROOT_ERR_CMD |= (ierc_pci_PCIE_CFC_AER_ROOT_ERR_CMD_NON_FATAL_ERR_RPT_EN(1U) |
+                                                                ierc_pci_PCIE_CFC_AER_ROOT_ERR_CMD_FATAL_ERR_RPT_EN(1U));
+    /*Unmask interrupts for ENETC0, SWITCH, TIMER, EMDIO*/
+    for (u8Iterator = 0U; u8Iterator < FEATURE_NETC_NUMBER_OF_FUNC; u8Iterator++ )
+    {
+        netcPCIePFBase[u8Iterator]->PCIE_CFC_AER_UCORR_ERR_MASK = NETC_F1_PCI_HDR_TYPE0_PCIE_CFC_AER_UCORR_ERR_MASK_UCORR_INT_ERR_MASK(0U);
+    }
+
+    /*Unmask interrupts for PSI0*/
+    IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_UCORR_ERR_MASK = NETC_F3_PCI_HDR_TYPE0_PCIE_CFC_AER_UCORR_ERR_MASK_UCORR_INT_ERR_MASK(0U);
+
+    /*Unmask interrupts for vfs*/
+    for (u8Iterator = 1U; u8Iterator < FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS; u8Iterator++ )
+    {
+        netcVFBase[u8Iterator]->PCIE_CFC_AER_UCORR_ERR_MASK = NETC_VF1_PCI_HDR_TYPE0_PCIE_CFC_AER_UCORR_ERR_MASK_UCORR_INT_ERR_MASK(0U);
+    }
+
+    for (u8Iterator = 0U; u8Iterator < FEATURE_NETC_ETH_NUMBER_OF_CTRLS; u8Iterator++ )
+    {
+        netcSIsBase[u8Iterator]->SIUPECR = NETC_F3_SI0_SIUPECR_RD(0U);
+        netcSIsBase[u8Iterator]->SIUNSBECR = NETC_F3_SI0_SIUNSBECR_THRESHOLD(psi0Config->errorReportingSystemBusErrorsThreshold);
+        netcSIsBase[u8Iterator]->SIUNMECR = NETC_F3_SI0_SIUNMECR_RD(0U) | NETC_F3_SI0_SIUNMECR_THRESHOLD(psi0Config->errorReportingMultiBitECCErrorsThreshold);
+        netcSIsBase[u8Iterator]->SIUFSBECR = NETC_F3_SI0_SIUFSBECR_RD(0U);
+        netcSIsBase[u8Iterator]->SIUFMECR = NETC_F3_SI0_SIUFMECR_RD(0U);
+        netcSIsBase[u8Iterator]->SIUFIECR = NETC_F3_SI0_SIUFIECR_RD(0U);
+    }
+
+    /* Switch system bus error. */
+    IP_NETC__SW0_COMMON->UNSBECR = NETC_F2_COMMON_UNSBECR_THRESHOLD(psi0Config->errorReportingSystemBusErrorsThreshold);
+
+
+    IP_NETC__SW0_COMMON->UNMACECR = ~NETC_F2_COMMON_UNMACECR_PORT0(0U) |
+                                    ~NETC_F2_COMMON_UNMACECR_PORT1(0U) |
+                                    ~NETC_F2_COMMON_UNMACECR_PORT2(0U);
+    IP_NETC__ENETC0_COMMON->UNMACECR = NETC_F3_COMMON_UNMACECR_PORT0(0u);
+
+    /*Internal memory multi bit ECC error */
+    IP_NETC__NETC_PRIV->UNMECR = NETC_PRIV_UNMECR_RD(0U) | NETC_PRIV_UNMECR_THRESHOLD(psi0Config->errorReportingMultiBitECCErrorsThreshold);
+    IP_NETC__ENETC0_COMMON->UNMECR = NETC_F3_COMMON_UNMECR_RD(0U) | NETC_F3_COMMON_UNMECR_THRESHOLD(psi0Config->errorReportingMultiBitECCErrorsThreshold);
+    IP_NETC__SW0_COMMON->UNMECR =  NETC_F2_COMMON_UNMECR_RD(0U) | NETC_F2_COMMON_UNMECR_THRESHOLD(psi0Config->errorReportingMultiBitECCErrorsThreshold);
+
+    /*integrity error Uncorrectable Non-Fatal Integrity Faults */
+    ((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUNIECR = NETC_F1_GLOBAL_EMDIOUNIECR_THRESHOLD(psi0Config->errorReportigIntegrityErrorsThreshold) | NETC_F1_GLOBAL_EMDIOUNIECR_RD(0U);
+
+    /*integrity error Uncorrectable Non-Fatal Integrity Faults*/
+    IP_NETC__NETC_PRIV->UNIECR = NETC_PRIV_UNIECR_RD(0U) |NETC_PRIV_UNIECR_THRESHOLD(psi0Config->errorReportigIntegrityErrorsThreshold);
+    IP_NETC__ENETC0_COMMON->UNIECR = NETC_F3_COMMON_UNIECR_RD(0U) | NETC_F3_COMMON_UNIECR_THRESHOLD(psi0Config->errorReportigIntegrityErrorsThreshold);
+    IP_NETC__SW0_COMMON->UNIECR =  NETC_F2_COMMON_UNIECR_RD(0U) | NETC_F2_COMMON_UNIECR_THRESHOLD(psi0Config->errorReportigIntegrityErrorsThreshold);
+
+    ((IP_NETC__TMR0_GLOBAL->ERROR).TIMER).TUFSBECR = NETC_F0_GLOBAL_TUFSBECR_RD(0U);
+    ((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUFSBECR = NETC_F1_GLOBAL_EMDIOUFSBECR_RD(0U);
+    IP_NETC__SW0_COMMON->UFSBECR = NETC_F2_COMMON_UFSBECR_RD(0U);
+
+    IP_NETC__NETC_PRIV->UFMECR = NETC_PRIV_UFMECR_RD(0U);
+    IP_NETC__ENETC0_COMMON->UFMECR = NETC_F3_COMMON_UFMECR_RD(0U) ;
+    IP_NETC__SW0_COMMON->UFMECR =  NETC_F2_COMMON_UFMECR_RD(0U);
+
+    IP_NETC__NETC_PRIV->UFIECR = NETC_PRIV_UFIECR_RD(0U);
+    IP_NETC__ENETC0_COMMON->UFIECR = NETC_F3_COMMON_UFIECR_RD(0U) ;
+    IP_NETC__SW0_COMMON->UFIECR =  NETC_F2_COMMON_UFIECR_RD(0U);
+
+    IP_NETC__SW0_COMMON->UFSBECR = NETC_F2_COMMON_UFSBECR_RD(0U);
+}
+
+
+static inline void Netc_Eth_Ip_SetupErrorReporting_EnableCorrectableErrors(const Netc_Eth_Ip_EnetcGeneralConfigType *psi0Config)
+{
+    uint8 u8Iterator = 0U;
+    /* For the Event Collector to assert INTA for a reported error, it must enable the reporting of the error
+    When set, this bit enables the generation of an interrupt when a correctable error is reported by any of the Integrated Endpoints (iEPs)
+    or the Event Collector itself.*/
+    IP_NETC__IERC_F0_PCI_HDR_TYPE0->PCIE_CFC_AER_ROOT_ERR_CMD |= ierc_pci_PCIE_CFC_AER_ROOT_ERR_CMD_CORR_ERR_RPT_EN(1U);
+
+    /* Function F0 (Timer) and F1 (EMDIO) must not clear mask bit, enabling reporting of correctable interrupts, to prevent loss of uncorrectable error reporting.*/
+    for (u8Iterator = 2U; u8Iterator < FEATURE_NETC_NUMBER_OF_FUNC; u8Iterator++ )
+    {
+        netcPCIePFBase[u8Iterator]->PCIE_CFC_AER_CORR_ERR_MASK = NETC_F0_PCI_HDR_TYPE0_PCIE_CFC_AER_CORR_ERR_MASK_CORR_INT_MASK(0U);
+    }
+
+    /*Unmask interrupts for PSI0*/
+    IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_CORR_ERR_MASK = NETC_F3_PCI_HDR_TYPE0_PCIE_CFC_AER_CORR_ERR_MASK_CORR_INT_MASK(0U);
+
+    for (u8Iterator = 1U; u8Iterator < FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS; u8Iterator++ )
+    {
+        netcVFBase[u8Iterator]->PCIE_CFC_AER_CORR_ERR_MASK = NETC_VF1_PCI_HDR_TYPE0_PCIE_CFC_AER_CORR_ERR_MASK_CORR_INT_MASK(0U);
+    }
+
+    for (u8Iterator = 0U; u8Iterator < FEATURE_NETC_ETH_NUMBER_OF_CTRLS; u8Iterator++ )
+    {
+        netcSIsBase[u8Iterator]->SICMECR = NETC_F3_SI0_SICMECR_THRESHOLD(psi0Config->errorReportigSingleECCErrorsThreshold);
+    }
+
+    IP_NETC__NETC_PRIV->CMECR = NETC_PRIV_CMECR_THRESHOLD(psi0Config->errorReportigSingleECCErrorsThreshold);
+    IP_NETC__ENETC0_COMMON->CMECR = NETC_F3_COMMON_CMECR_THRESHOLD(psi0Config->errorReportigSingleECCErrorsThreshold) ;
+    IP_NETC__SW0_COMMON->CMECR =  NETC_F2_COMMON_CMECR_THRESHOLD(psi0Config->errorReportigSingleECCErrorsThreshold);
+}
+
+
+static inline void Netc_Eth_Ip_DeleteMACFilterEntry_MarkEntryEmpty(const uint8 CtrlIndex,
+                                                                   boolean* const MatchedEntry,
+                                                                   const uint8 CurrentEntry,
+                                                                   const uint8 *MacAddr)
+{
+    uint8 MACBytesMached = 0U;
+    /* There will be one entry removed at a time. */
+    if(*MatchedEntry == FALSE)
+    {
+        while((MacAddr[MACBytesMached] == MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].MACAddr[MACBytesMached]) && (MACBytesMached < NETC_ETH_IP_MAC_BYTES_SIZE))
+        {
+            MACBytesMached++;
+        }
+
+        if(NETC_ETH_IP_MAC_BYTES_SIZE == MACBytesMached)
+        {
+            /* Provide data was matched. */
+            *MatchedEntry = TRUE;
+            /* Mark entry as an empty slot. */
+            MACFilterHashTableAddrs[CtrlIndex][CurrentEntry].EntryStatus = FALSE;
+            SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_01();
+        }
+        else
+        {
+            SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_01();
+        }
+    }
+    else
+    {
+        SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_01();
+    }
+}
+
+
+static inline void Netc_Eth_Ip_ConfigureBufferDescriptors(const uint16 BufferIndex, const Netc_Eth_Ip_TxOptionsType *options, Netc_Eth_Ip_TxBDRType *txBD)
+{
+    if ((0U == BufferIndex) && (options != NULL_PTR))
+    {
+        if(NETC_ETH_IP_SWT_MANAGEMNT == options->Flag)
+        {
+            /* Set Flag(FL) type; set ingress or egress port value; set value of flag qualifier(FLQ). */
+            txBD->buffConfig |= (((uint32)NETC_ETH_IP_FLQ_VALUE << NETC_ETH_IP_FLQ_SHIFT) | \
+                                ((uint32)(options->IngrOrEgrPortNumber) << NETC_ETH_IP_INGR_EGRESS_PORT_SHIFT));
+            if(1U == options->SwtMgSendingOpt)
+            {
+                txBD->buffConfig |= ((((uint32)options->SwtMgSendingOpt) << NETC_ETH_IP_SMSO_SHIFT) | \
+                                    (((uint32)options->TimestampRefReq) << NETC_ETH_IP_TSR_SHIFT)  | \
+                                    (((uint32)options->InternalPriority) << NETC_ETH_IP_IPV_SHIFT) | \
+                                    (((uint32)options->DiscardResilience) << NETC_ETH_IP_DR_SHIFT));
+            }
+        }
+        else if (NETC_ETH_IP_TXSTART == options->Flag)
+        {
+            txBD->buffConfig |= (((uint32)NETC_ETH_IP_TXSTART) << NETC_ETH_IP_FL_SHIFT)  | \
+                                (((uint32)options->TxStartEnable) << NETC_ETH_IP_TSR_SHIFT) | \
+                                (options->TxStartTime);
+        }
+        else
+        {
+            /*MISRA C-2012 Rule 15.7*/
+        }
+    #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
+        txBD->timestamp = options->Timestamp;
+        txBD->extendVlanBuffConfig = ((((uint32)options->PriorityCodePoint) << NETC_ETH_IP_PCP_SHIFT) & NETC_ETH_IP_PCP_MASK) | \
+                                    ((((uint32)options->DropEligible) << NETC_ETH_IP_DEI_SHIFT) & NETC_ETH_IP_DEI_MASK) | \
+                                    ((((uint32)options->VlanID) << NETC_ETH_IP_VID_SHIFT) & NETC_ETH_IP_VID_MASK ) | \
+                                    ((((uint32)options->TagProtocolID) << NETC_ETH_IP_TPID_SHIFT) & NETC_ETH_IP_TPID_MASK);
+        txBD->extendBuffConfig |= (((uint32)options->ExtensionFlags) << NETC_ETH_IP_E_FLAGS_SHIFT) & NETC_ETH_IP_E_FLAGS_MASK;
+    #endif
+    }
+}
+
+static inline void Netc_Eth_Ip_InitSI_ConfigureVSI(const uint8 ctrlIndex, const Netc_Eth_Ip_ConfigType *config)
+{
+    uint8  u8Iterator;
+    uint8  siHwId;
+#if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
+    const Netc_Eth_Ip_GeneralSIConfigType *SiConfig;
+#endif
+    /* Configure the VSIs using config->generalConfig */
+    for (u8Iterator = 0U; u8Iterator < (*config->generalConfig).numberOfConfiguredSis; u8Iterator++)
+    {
+        /* Identify the PSI in the list of SIs to configure */
+        siHwId = (*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].siId;
+
+        /* Enable PSI; In reset configuration PSI is already started, but to be sure that will not be any problems. */
+        if (TRUE == (*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].enableSi)
+        {
+            /** Assure that SI is not enabled. */
+            netcSIsBase[siHwId]->SIMR &= ~(NETC_F3_SI0_SIMR_EN_MASK);
+
+            if (ctrlIndex == siHwId)
+            {
+                /* Master enable for a station interface.*/
+                IP_NETC__ENETC0_BASE->PMR = IP_NETC__ENETC0_BASE->PMR | (NETC_F3_PMR_SI0EN_MASK << siHwId);
+
+                /* For the PSI the MAC address will be configured both for the ENETC Port and for the PSI0 */
+                /* Configure the port primary MAC address */
+                IP_NETC__ENETC0_PORT->PMAR0 = ((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[0U])          | \
+                                              (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[1U]) << 8U)  | \
+                                              (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[2U]) << 16U) | \
+                                              (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[3U]) << 24U);
+                IP_NETC__ENETC0_PORT->PMAR1 = ((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[4U]) | \
+                                              (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[5U]) << 8U);
+                IP_NETC__ENETC0_PORT->POR = 0U;     /* Enable Rx and Tx Path for port (for S32N the default status for Rx and Tx path is disabled.) */
+            }
+            else
+            {
+
+                /* Master enable for a station interface.*/
+                IP_NETC__ENETC0_BASE->PMR = IP_NETC__ENETC0_BASE->PMR | (NETC_F3_PMR_SI0EN_MASK << siHwId);
+
+                /* For the VSIs write the MAC address in the PSIaMAR0 and PSIaMAR1 registers */
+                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIPMAR0 = ((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[0U])          | \
+                                                                (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[1U]) << 8U)  | \
+                                                                (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[2U]) << 16U) | \
+                                                                (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[3U]) << 24U);
+
+                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIPMAR1 = ((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[4U]) | \
+                                                                (((uint32)(*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].primaryMACAddress[5U] )<< 8U);
+                /* Configure where the PSI receives the message for enabled VSIs. */
+                if(NULL_PTR != config->generalConfig->RxVsiMsgCmdToPsi[siHwId - 1U])
+                {
+                    IP_NETC__ENETC0_SI0->MSGSR.PSI_A.VSI_NUM[siHwId - 1U].PSIVMSGRCVAR0 = (uint32)config->generalConfig->RxVsiMsgCmdToPsi[siHwId - 1U] | \
+                                                                                          NETC_ETH_IP_VSITOPSI_MSG_SIZE;
+                }
+            }
+
+            /* Number of entries in a MSI table for the current SI. */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR2 = NETC_ETH_IP_NUM_OF_ENTRIES_MSITABLE;
+
+            /* Configure the number or TX and RX BD Rings for each SI */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 &= ~(NETC_F3_PSICFGR0_NUM_TX_BDR_MASK | NETC_F3_PSICFGR0_NUM_RX_BDR_MASK);
+
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_NUM_TX_BDR((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].NumberOfTxBDR) | \
+                                                             NETC_F3_PSICFGR0_NUM_RX_BDR((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].NumberOfRxBDR);
+
+            /* Configure the bandwidth weight for the current SI */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_SIBW((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].SIBandwidthWeight);
+
+            /* Configure pruning to be enabled by default for each SI. */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_SPE_MASK;
+
+            /* Configure the station interface PRIO to TC mapping register for the current SI */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR1 = NETC_F3_PSICFGR1_TC0_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[0]) | \
+                                                            NETC_F3_PSICFGR1_TC1_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[1]) | \
+                                                            NETC_F3_PSICFGR1_TC2_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[2]) | \
+                                                            NETC_F3_PSICFGR1_TC3_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[3]) | \
+                                                            NETC_F3_PSICFGR1_TC4_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[4]) | \
+                                                            NETC_F3_PSICFGR1_TC5_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[5]) | \
+                                                            NETC_F3_PSICFGR1_TC6_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[6]) | \
+                                                            NETC_F3_PSICFGR1_TC7_MAP((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].priorityToTrafficClassMapping[7]);
+
+#if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
+            SiConfig = &((*config->generalConfig->stationInterfaceGeneralConfig)[siHwId]);
+
+            if (TRUE == SiConfig->EnableSIVlan)
+            {
+                /* Enable VLAN and select tag protocol, priority code point, drop eligible indicator and VLAN identifier */
+                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIVLANR = NETC_F3_PSIVLANR_TPID(SiConfig->SiVLANConfig.ProtocolIdentifier) |
+                                                                NETC_F3_PSIVLANR_PCP(SiConfig->SiVLANConfig.PriorityCodePoint) |
+                                                                NETC_F3_PSIVLANR_VID(SiConfig->SiVLANConfig.VlanIdentifier) |
+                                                                NETC_F3_PSIVLANR_E(1U) | NETC_F3_PSIVLANR_DEI((SiConfig->SiVLANConfig.DropIndicator) ? 1U : 0U);
+            }
+            else
+            {
+                /* Disable VLAN and select tag protocol */
+                IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSIVLANR &= ~NETC_F3_PSIVLANR_E(1U);
+            }
+
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 &= ~(NETC_F3_PSICFGR0_SIVC_MASK | NETC_F3_PSICFGR0_SIVIE_MASK | NETC_F3_PSICFGR0_VTE_MASK);
+            /* Insert VLAN Ethertype and enable insertion of the SI-based VLAN into frames sent by this SI. This config apply for generic */
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_SIVC(SiConfig->SIVlanControl) |
+                                                             NETC_F3_PSICFGR0_SIVIE((SiConfig->EnableSoftwareVlanInsert) ? 1U : 0U) |
+                                                             NETC_F3_PSICFGR0_VTE((SiConfig->EnableVLANTagExtract) ? 1U : 0U);
+#endif
+
+            IP_NETC__ENETC0_BASE->NUM_SI[siHwId].PSICFGR0 |= NETC_F3_PSICFGR0_ASE(((*(*config->generalConfig).stationInterfaceGeneralConfig)[u8Iterator].enableAntiSpoofing) ? 1U : 0U);
+
+            if (ctrlIndex != siHwId)
+            {
+                /* Enable bus for virtual function. */
+                netcVFBase[u8Iterator]->PCI_CFH_CMD |= NETC_VF1_PCI_HDR_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN(1U);
+            }
+        }
+    }
+
+}
+
+
+
 /*FUNCTION**********************************************************************
  *
  * Function Name : Netc_Eth_Ip_GetCounter64
@@ -4001,6 +7277,11 @@ boolean Netc_Eth_Ip_IsFrameAvailable(uint8 ctrlIndex, uint8 ring)
     boolean bFrameAvailable = FALSE;
     uint32 rxConsumerIdx;
     uint32 rxProducerIdx;
+#if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
+#if (STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
+    uint32 rxCurrentOccupied;
+#endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
+#endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
@@ -4010,6 +7291,18 @@ boolean Netc_Eth_Ip_IsFrameAvailable(uint8 ctrlIndex, uint8 ring)
 
     rxConsumerIdx = netcSIsBase[ctrlIndex]->BDR_NUM[ring].RBCIR;
     rxProducerIdx = netcSIsBase[ctrlIndex]->BDR_NUM[ring].RBPIR;
+
+#if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
+#if (STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
+    /* Update maximum fill level of current ring */
+    rxCurrentOccupied = (rxConsumerIdx > rxProducerIdx) ? (Netc_Eth_Ip_apxState[ctrlIndex]->RxRingSize[ring] - rxConsumerIdx + rxProducerIdx) : (rxProducerIdx - rxConsumerIdx);
+
+    if (rxCurrentOccupied > Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff[ctrlIndex][ring])
+    {
+        Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff[ctrlIndex][ring] = rxCurrentOccupied;
+    }
+#endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
+#endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
 
     /* Get the current descriptor corresponding to the buff pointer (by looping through the descriptors) */
     rxBDR = Netc_Eth_Ip_apxState[ctrlIndex]->RxCurrentDesc[ring];
@@ -4036,24 +7329,21 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
                                              Netc_Eth_Ip_RxInfoType *info)
 {
     const Netc_Eth_Ip_RxBDRType  *rxBDR;
+
+#if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
     uint32 CurrLowTime = 0U;
     uint32 CurrHighTime = 0U;
-#if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
+    uint32 rxIndex = 0;
+    uint64 nanoseconds = 0U;
 #ifdef NETC_ETH_0_USED
-    Netc_Eth_Ip_TimeType LatestTxTimestamp = { 0U, 0U};
-    const Netc_Eth_Ip_TxTimestampResponseType *TempTxResponse;
-    uint16 TxTimestampID;
+#if (STD_ON == NETC_ETH_IP_CUSTOM_TAG_SUPPORT)
+
+    uint8 tagBytes[NETC_ETH_IP_RX_CUSTOM_TAG_NUM_BYTES] = { 0U };
+#endif /*STD_ON == NETC_ETH_IP_CUSTOM_TAG_SUPPORT*/
 #endif /* NETC_ETH_0_USED */
-#else /* STD_ON == NETC_ETH_IP_EXTENDED_BUFF */
-    (void)CurrLowTime;
-    (void)CurrHighTime;
 #endif /* STD_ON == NETC_ETH_IP_EXTENDED_BUFF */
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
-    uint32 rxIndex = 0;
     uint32 HostReason;
-#if (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)
-    uint32 bufferIndex = 0;
-#endif
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(ctrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
@@ -4066,17 +7356,15 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
 #endif
     /* Get the current descriptor corresponding to the buff pointer (by looping through the descriptors) */
     rxBDR = Netc_Eth_Ip_apxState[ctrlIndex]->RxCurrentDesc[ring];
+#if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
     rxIndex = Netc_Eth_Ip_apxState[ctrlIndex]->rxCurrentIndex[ring];
-#if (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)
-    bufferIndex = ring * NETC_ETH_MAX_NUMBER_OF_RXBD + rxIndex;
-#endif
+#endif /* STD_ON == NETC_ETH_IP_EXTENDED_BUFF */
     if (NETC_ETH_IP_RXBD_READY_MASK != (rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_READY_MASK))
     {
         status = NETC_ETH_IP_STATUS_RX_QUEUE_EMPTY;
     }
     else
     {
-
         /* Store information about received frame. */
         if (NULL_PTR != info)
         {
@@ -4085,7 +7373,17 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
             info->finalDes = ((rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_FINAL_MASK)  > 0U) ? TRUE : FALSE;
             info->timestampReceived = ((rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_TIMESTAMP_FLAG_MASK) > 0U) ? TRUE : FALSE;
             info->vlanHeaderAvl = ((rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_VLAN_HEAD_FLAG_MASK) > 0U) ? TRUE : FALSE;
-            info->pktLen = (uint16)(rxBDR->configRxBD[2U] & NETC_ETH_IP_RXBD_LENGTH_MASK);
+            #ifdef MCAL_ENABLE_FAULT_INJECTION
+                MCAL_FAULT_INJECTION_POINT(ETH_CHANGE_BUFFER_LENGTH_FIP_1);
+            #endif
+            if (rxBDR->configRxBD[2U] > Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffMaxLenAddr[ring])
+            {
+                info->pktLen = (uint16)(Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffMaxLenAddr[ring] & NETC_ETH_IP_RXBD_LENGTH_MASK);
+            }
+            else
+            {
+                info->pktLen = (uint16)(rxBDR->configRxBD[2U] & NETC_ETH_IP_RXBD_LENGTH_MASK);
+            }
             info->rxStatus = (Netc_Eth_Ip_RxStatusType)((rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_ERROR_MASK) >> NETC_ETH_IP_RXBD_ERROR_SHIFT);
             info->hostReason = (Netc_Eth_Ip_HostReasonType)((rxBDR->configRxBD[3U] & NETC_ETH_IP_RXBD_HOST_REASON_MASK) >> NETC_ETH_IP_RXBD_HOST_REASON_SHIFT);
 #if (STD_ON == NETC_ETH_IP_VLAN_SUPPORT)
@@ -4106,6 +7404,10 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
         {
             HostReason = ((rxBDR->configRxBD[3U] >> NETC_ETH_IP_HOSTREASON_WB_SHIFT) & NETC_ETH_IP_HOSTREASON_WB_MASK);
 
+            #if(defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON==NETC_ETH_IP_CUSTOM_TAG_SUPPORT))
+            Netc_Eth_Ip_ReadFrame_CustomizedTPID(ctrlIndex, ring, tagBytes, HostReason);
+            #endif /* defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON==NETC_ETH_IP_CUSTOM_TAG_SUPPORT) */
+
             if ((NETC_ETH_IP_HOSTREASON_REGULAR_FRAME == HostReason) || (NETC_ETH_IP_HOSTREASON_SW_PTP == HostReason))
             {
 
@@ -4119,31 +7421,21 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
                 else
                 {
 #endif
-#if (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)
-                    if (!Netc_Eth_Ip_ControllerHasExternalRxBufferManagement[ctrlIndex])
-                    {
-#endif
-                        /* All conditions meet, return buffer data details. */
-                        buff->data = (uint8 *)((uint32)(Netc_Eth_Ip_apxState[ctrlIndex]->FirstRxDataBufferAddr[ring]) + \
-                                    (rxIndex * Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffMaxLenAddr[ring]));
-#if (NETC_ETH_IP_HAS_EXTERNAL_RX_BUFFERS == STD_ON)
-                    }
-                    else
-                    {
-                        buff->data = (uint8*)Netc_Eth_Ip_apxState[ctrlIndex]->RxDataBuffAddr[bufferIndex];
-                    }
-#endif
-                    buff->length = (uint16)(rxBDR->configRxBD[2U] & NETC_ETH_IP_RXBD_LENGTH_MASK);
-
+                    Netc_Eth_Ip_ReadFrame_ReturnBufferDetails(ctrlIndex, ring, buff);
 
 #if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
                     if(CurrLowTime < rxBDR->extendConfigRxBD[0U])
                     {
                         CurrHighTime--;
                     }
+
                     if (NULL_PTR != info)
                     {
-                        info->PacketTimestamp = (uint64)(rxBDR->extendConfigRxBD[0U]) | (uint64)(((uint64)(CurrHighTime)) << 32U);
+                        nanoseconds = (uint64)(rxBDR->extendConfigRxBD[0U]) | (uint64)(((uint64)(CurrHighTime)) << 32U);
+                        info->PacketTimestamp.nanoseconds = NETC_ETH_IP_GET_NANOSECONDS(nanoseconds);
+                        info->PacketTimestamp.seconds     = (uint32) (NETC_ETH_IP_NANO_TO_SECONDS(nanoseconds) & NETC_ETH_IP_SECONDS_LOW_MASK_U64);
+                        info->PacketTimestamp.secondsHi   = (uint16) ((NETC_ETH_IP_NANO_TO_SECONDS(nanoseconds) >> 32U) & 0xFFFFU);
+
                     }
 
                     if (NETC_ETH_IP_HOSTREASON_SW_PTP == HostReason)
@@ -4164,46 +7456,30 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_ReadFrame(uint8 ctrlIndex,
                         Netc_Eth_Ip_RxTimestampInfoBuff[ctrlIndex][ring][rxIndex].TimestampID = Netc_Eth_Ip_RxTimestampID;
                         Netc_Eth_Ip_RxTimestampInfoBuff[ctrlIndex][ring][rxIndex].TimestampValueInvalidForSwt = (boolean)FALSE;
                         SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_20();
-
                     }
-#endif
+#endif /* STD_ON == NETC_ETH_IP_EXTENDED_BUFF */
 
 #if (STD_ON == NETC_ETH_IP_HAS_CACHE_MANAGEMENT)
                 }
-#endif /* STD_ON == NETC_ETH_IP_EXTENDED_BUFF */
+#endif /* STD_ON == NETC_ETH_IP_HAS_CACHE_MANAGEMENT */
             }
 
-#if (STD_ON == NETC_ETH_IP_EXTENDED_BUFF)
-#ifdef NETC_ETH_0_USED
+            #if(defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF))
             else if(NETC_ETH_IP_HOSTREASON_TIMESTAMP == HostReason)
             {
-                if((0U == ctrlIndex) && (0U == ring))
-                {
-                    TempTxResponse = (Netc_Eth_Ip_TxTimestampResponseType *)Netc_Eth_Ip_apxState[ctrlIndex]->RxCurrentDesc[ring];
-                    TxTimestampID = TempTxResponse->TxTimestampID;
-
-                    LatestTxTimestamp.nanosecondsL = TempTxResponse->Timestamp;
-                    LatestTxTimestamp.nanosecondsH = CurrHighTime;
-                    if(CurrLowTime < LatestTxTimestamp.nanosecondsL)
-                    {
-                        LatestTxTimestamp.nanosecondsH--;
-                    }
-
-                    Netc_Eth_Ip_TxTimestampInfoBuff[ctrlIndex][TxTimestampInfoBuffIdx].TimestampValue.nanosecondsL = LatestTxTimestamp.nanosecondsL;
-                    Netc_Eth_Ip_TxTimestampInfoBuff[ctrlIndex][TxTimestampInfoBuffIdx].TimestampValue.nanosecondsH =  LatestTxTimestamp.nanosecondsH;
-                    Netc_Eth_Ip_TxTimestampInfoBuff[ctrlIndex][TxTimestampInfoBuffIdx].TxTimeStampID = TxTimestampID;
-                    TxTimestampInfoBuffIdx++;
-                    TxTimestampInfoBuffIdx = (NETC_ETH_0_TXBDR_0_MAX_NUM_OF_DESCR == TxTimestampInfoBuffIdx) ? 0U : TxTimestampInfoBuffIdx;
-
-                    status = NETC_ETH_IP_STATUS_HOSTREASON_TIMESTAMP;
-                }
+                Netc_Eth_Ip_HostReasonTimeStamp(ctrlIndex, ring, &status, CurrLowTime);
             }
-#endif /* NETC_ETH_0_USED */
-#endif /* STD_ON == NETC_ETH_IP_EXTENDED_BUFF */
+            #endif /* defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) */
             else
             {
                 status = NETC_ETH_IP_STATUS_HOSTREASON_UNKNOWN;
             }
+
+            #if(defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON == NETC_ETH_IP_CUSTOM_TAG_SUPPORT))
+            /* Add custom Rx tag/header */
+            Netc_Eth_Ip_ReadFrame_AddCustomRxTagHeader(ctrlIndex, ring, tagBytes, buff);
+            info->pktLen += NETC_ETH_IP_RX_CUSTOM_TAG_NUM_BYTES;
+            #endif /* defined(NETC_ETH_0_USED) && (STD_ON == NETC_ETH_IP_EXTENDED_BUFF) && (STD_ON == NETC_ETH_IP_CUSTOM_TAG_SUPPORT) */
         }
         else
         {
@@ -4374,7 +7650,7 @@ void Netc_Eth_Ip_ProvideMultipleRxBuff(const uint8 CtrlIndex,
     *BuffListSize = BuffListIndex;
 
     /* Update consumer index. */
-    
+
     /* When the development error is enabled we need to add a barrier first in order to avoid speculative
         exection before the previous else if condition is completed. */
     MCAL_INSTRUCTION_SYNC_BARRIER();
@@ -4570,7 +7846,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_CloseMulticastReceiving(const uint8 CtrlIndex
 #endif
 
     if (NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[CtrlIndex]->SiType)
-    {           
+    {
         SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_12();
         /* Disable MAC multicast promiscuous mode. */
         IP_NETC__ENETC0_BASE->PSIPMMR &= ~((uint32)1U << (CtrlIndex + NETC_F3_PSIPMMR_SI0_MAC_MP_SHIFT));
@@ -4711,29 +7987,37 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetRxCoalescingThresholds(uint8 CtrlIdx, uint
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_ManagementFrame(const uint8 CtrlIdx, uint16 BuffIdx, uint8 SwitchIndex, uint8 PortIndex, boolean Enable)
 {
     uint16 CurrentIndex;
-    Netc_Eth_Ip_StatusType Status;
+    Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_UNSUPPORTED;
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIdx < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(Netc_Eth_Ip_apxState[CtrlIdx] != NULL_PTR);
 #endif
 
     if (NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[CtrlIdx]->SiType)
     {
         CurrentIndex = Netc_Eth_Ip_apxState[CtrlIdx]->LogicTxProducerIndex[0U];
 
-        Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].CtrlIdx = CtrlIdx;
-        Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].TxBuffId = BuffIdx;
-        Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].SwitchIndex = SwitchIndex;
-        Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].PortIndex = PortIndex;
-        Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].ManagementFrameFlag = Enable;
-        Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].TxTimestampFlag = FALSE;
-        Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].TxTimestampRcvFlag = FALSE;
-
-        Status = NETC_ETH_IP_STATUS_SUCCESS;
-    }
-    else
-    {
-        Status = NETC_ETH_IP_STATUS_UNSUPPORTED;
+        if (Enable == TRUE)
+        {
+            if (Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].State == NETC_ETH_IP_TX_MGMT_FREE)
+            {
+                Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].State = NETC_ETH_IP_TX_MGMT_PREPARED;
+                Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].CtrlIdx = CtrlIdx;
+                Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].TxBuffId = BuffIdx;
+                Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].SwitchIndex = SwitchIndex;
+                Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].PortIndex = PortIndex;
+                Status = NETC_ETH_IP_STATUS_SUCCESS;
+            }
+        }
+        else
+        {
+            if (Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].TxBuffId == BuffIdx)
+            {
+                Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR].State = NETC_ETH_IP_TX_MGMT_FREE;
+                Status = NETC_ETH_IP_STATUS_SUCCESS;
+            }
+        }
     }
 
     return Status;
@@ -4748,17 +8032,23 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_TimestampTxFrame(const uint8 CtrlIdx, const u
 {
     uint16 CurrentIndex;
     volatile Netc_Eth_Ip_TxManagementInfoType *TxMgmtInfo;
+    Netc_Eth_Ip_TxManagementStateType TxMgmtObjState;
     Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_ERROR;
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIdx < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(Netc_Eth_Ip_apxState[CtrlIdx] != NULL_PTR);
+#endif
     if (NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[CtrlIdx]->SiType)
     {
         CurrentIndex = Netc_Eth_Ip_apxState[CtrlIdx]->LogicTxProducerIndex[0U];
         TxMgmtInfo = &Netc_Eth_Ip_TxManagementInfoBuff[0U][CurrentIndex / (uint16)NETC_ETH_IP_PRODUCER_INCR];
+        TxMgmtObjState = TxMgmtInfo->State;
 
         if (TxMgmtInfo->TxBuffId == BuffIdx)
         {
-            if ((TxMgmtInfo->ManagementFrameFlag == TRUE))
+            if ((TxMgmtObjState == NETC_ETH_IP_TX_MGMT_PREPARED) || (TxMgmtObjState == NETC_ETH_IP_TX_MGMT_PREPARED_TIMESTAMP))
             {
-                TxMgmtInfo->TxTimestampFlag = Enable;
+                TxMgmtInfo->State = (Enable == TRUE) ? NETC_ETH_IP_TX_MGMT_PREPARED_TIMESTAMP : NETC_ETH_IP_TX_MGMT_PREPARED;
                 Status = NETC_ETH_IP_STATUS_SUCCESS;
             }
         }
@@ -4774,12 +8064,12 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_TimestampTxFrame(const uint8 CtrlIdx, const u
  *END**************************************************************************/
 Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxTimestampInfo(const uint8 CtrlIdx, \
                                                       const uint32 BuffIdx, \
-                                                      Netc_Eth_Ip_TxManagementInfoType **MgmtInfo, Netc_Eth_Ip_TxTimestampInfoType **TimestampInfo)
+                                                      Netc_Eth_Ip_TxManagementInfoType **MgmtInfo, \
+                                                      Netc_Eth_Ip_TxTimestampInfoType **TimestampInfo
+                                                      )
 {
     Netc_Eth_Ip_StatusType Status = NETC_ETH_IP_STATUS_ERROR;
     uint32 BufferIdx;
-    uint16 LatestTimestampID;
-    boolean FirstTimestampFlag = FALSE;
     uint32 TsBufferIdx;
     *MgmtInfo = NULL_PTR;
     *TimestampInfo = NULL_PTR;
@@ -4790,50 +8080,35 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxTimestampInfo(const uint8 CtrlIdx, \
     DevAssert(CtrlIdx < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
 #endif
 
+    SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_23();
+
     /* Search for timestamps associated to the frame with BuffIdx */
-    for(BufferIdx = 0U; BufferIdx < NETC_ETH_0_TXBDR_0_MAX_NUM_OF_DESCR; BufferIdx++)
+    for(BufferIdx = 0U; BufferIdx < NETC_ETH_0_TXBDR_0_MAX_NUM_OF_DESCR / NETC_ETH_IP_PRODUCER_INCR; BufferIdx++)
     {
-        SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_23();
-        tempBufferIdx = Netc_Eth_Ip_TxManagementInfoBuff[0u][BufferIdx].TxBuffId;
-        tempCtrlIdx = Netc_Eth_Ip_TxManagementInfoBuff[0u][BufferIdx].CtrlIdx;
-        if ((BuffIdx == (uint32)tempBufferIdx) && (CtrlIdx == (uint32)tempCtrlIdx))
+        tempBufferIdx = Netc_Eth_Ip_TxManagementInfoBuff[0U][BufferIdx].TxBuffId;
+        tempCtrlIdx = Netc_Eth_Ip_TxManagementInfoBuff[0U][BufferIdx].CtrlIdx;
+        if ((Netc_Eth_Ip_TxManagementInfoBuff[0U][BufferIdx].State != NETC_ETH_IP_TX_MGMT_FREE) && (BuffIdx == (uint32)tempBufferIdx) && (CtrlIdx == (uint32)tempCtrlIdx))
         {
-            if (Netc_Eth_Ip_TxManagementInfoBuff[0u][BufferIdx].TxTimestampFlag == (boolean)TRUE)
+            *MgmtInfo =  (Netc_Eth_Ip_TxManagementInfoType *)&Netc_Eth_Ip_TxManagementInfoBuff[0U][BufferIdx];
+            Status = NETC_ETH_IP_STATUS_SUCCESS;
+
+            if (Netc_Eth_Ip_TxManagementInfoBuff[0U][BufferIdx].State == NETC_ETH_IP_TX_MGMT_WAITING_TIMESTAMP)
             {
-                if (Netc_Eth_Ip_TxManagementInfoBuff[0u][BufferIdx].TxTimestampRcvFlag == (boolean)FALSE)
+                for (TsBufferIdx = 0U; TsBufferIdx < NETC_ETH_0_TXBDR_0_MAX_NUM_OF_DESCR / NETC_ETH_IP_PRODUCER_INCR; TsBufferIdx++)
                 {
-                    /* Mark the first matching timestamp found */
-                    if(FALSE == FirstTimestampFlag)
+                    if (Netc_Eth_Ip_TxTimestampInfoBuff[0U][TsBufferIdx].TxTimeStampID == (*MgmtInfo)->TxTimeStampID)
                     {
-                        LatestTimestampID = Netc_Eth_Ip_TxManagementInfoBuff[0u][BufferIdx].TxTimeStampID;
-                        FirstTimestampFlag = TRUE;
-                        *MgmtInfo =  (Netc_Eth_Ip_TxManagementInfoType *)&Netc_Eth_Ip_TxManagementInfoBuff[0u][BufferIdx];
-                        Status = NETC_ETH_IP_STATUS_SUCCESS;
-                    }
-                    else
-                    {
-                        /* Update to keep track only of the latest timestamp info found */
-                        if(Netc_Eth_Ip_TxManagementInfoBuff[0u][BufferIdx].TxTimeStampID > LatestTimestampID)
-                        {
-                            LatestTimestampID = Netc_Eth_Ip_TxManagementInfoBuff[0u][BufferIdx].TxTimeStampID;
-                            *MgmtInfo =  (Netc_Eth_Ip_TxManagementInfoType *)&Netc_Eth_Ip_TxManagementInfoBuff[0u][BufferIdx];
-                            *TimestampInfo = NULL_PTR;
-                        }
-                    }
-                    for (TsBufferIdx = 0U; TsBufferIdx < NETC_ETH_0_TXBDR_0_MAX_NUM_OF_DESCR; TsBufferIdx++)
-                    {
-                        if (Netc_Eth_Ip_TxTimestampInfoBuff[0u][TsBufferIdx].TxTimeStampID == Netc_Eth_Ip_TxManagementInfoBuff[0u][BufferIdx].TxTimeStampID)
-                        {
-                            Netc_Eth_Ip_TxManagementInfoBuff[0u][BufferIdx].TxTimestampRcvFlag = TRUE;
-                            *TimestampInfo = (Netc_Eth_Ip_TxTimestampInfoType *)&Netc_Eth_Ip_TxTimestampInfoBuff[0u][TsBufferIdx];
-                            break;
-                        }
+                        (*MgmtInfo)->State = NETC_ETH_IP_TX_MGMT_READY;
+                        *TimestampInfo = (Netc_Eth_Ip_TxTimestampInfoType *)&Netc_Eth_Ip_TxTimestampInfoBuff[0U][TsBufferIdx];
+                        break;
                     }
                 }
             }
+            break;
         }
-        SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_23();
     }
+
+    SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_23();
 
     return Status;
 }
@@ -4853,7 +8128,7 @@ void Netc_Eth_Ip_ReleaseUnusedTxBuff(uint8 CtrlIndex, uint8 Ring)
 #endif
 
     CurrentProducerIdx = Netc_Eth_Ip_apxState[CtrlIndex]->LogicTxProducerIndex[Ring];
-    
+
     /* When the development error is enabled we need to add a barrier first in order to avoid speculative
         exection before the previous else if condition is completed. */
     MCAL_INSTRUCTION_SYNC_BARRIER();
@@ -4980,6 +8255,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_Deinit(uint8 ctrlIndex)
     return Status;
 }
 
+
 /*FUNCTION**********************************************************************
  *
  * Function Name : Netc_Eth_Ip_PCIe_AER_Handler
@@ -4988,168 +8264,35 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_Deinit(uint8 ctrlIndex)
 void Netc_Eth_Ip_PCIe_AER_Handler(uint8 ctrlIndex)
 {
     uint8 i = 0U;
-    uint8 relativeIndex = 0U;
 
-    /* Error reporting for TIMER EMDIO SWITCH ENETC */
-    for( i = 0U; i < FEATURE_NETC_NUMBER_OF_FUNC; i++)
+    if (IP_NETC__IERC_F0_PCI_HDR_TYPE0->PCIE_CFC_AER_ROOT_ERR_STAT != 0U)
     {
-        Netc_Eth_Ip_ErrorStatus[i].StatusErrors = 0u;
-        /* Error bit status check */
-        if ((netcPCIePFBase[i]->PCIE_CFC_AER_UCORR_ERR_STAT & NETC_ETH_IP_UCORR_STATUS_BIT) != (uint32)0U)
+        IP_NETC__IERC_F0_PCI_HDR_TYPE0->PCIE_CFC_AER_ROOT_ERR_STAT = NETC_ETH_IP_AER_ROOT_CLEAR_STATUS_MASK;
+        /* Error reporting for TIMER EMDIO SWITCH ENETC */
+        for( i = 0U; i < FEATURE_NETC_NUMBER_OF_FUNC; i++)
         {
-            /* Interrupt enable bit check
-            Un-masked interrupts are marked as 0*/
-            if ((netcPCIePFBase[i]->PCIE_CFC_AER_UCORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_UCORR_ERR_MASK_SHIFT)) == (uint32)0U)
-            {
-                /* Clean error status bit */
-                netcPCIePFBase[i]->PCIE_CFC_AER_UCORR_ERR_STAT = (uint32)NETC_ETH_IP_UCORR_STATUS_BIT;
-                /* Report error in case this feature is enabled in configuration */
-                if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerUncorrectableErrEnabled)
-                {
-                    /*If the reg bit is 0 - Error is Non-fatal else is Fatal*/
-                    if((netcPCIePFBase[i]->PCIE_CFC_AER_UCORR_ERR_SEV & NETC_ETH_IP_UCORR_SEV_MASK) != 0U)
-                    {
-                        Netc_Eth_Ip_ErrorStatus[i].StatusErrors = NETC_ETH_IP_FATAL_ERROR;
-                    }
-                    else
-                    {
-                        Netc_Eth_Ip_ErrorStatus[i].StatusErrors = NETC_ETH_IP_NON_FATAL_ERROR;
-                    }
-                }
-
-            }
+            /* At this point the status error bit is checked and cleared.
+            The structure that contains information on the error Netc_Eth_Ip_ErrorStatus will be filled in */
+            Netc_Eth_Ip_ProcessErrorStatusForInterruptForFunctions(ctrlIndex, i);
         }
-        if ((netcPCIePFBase[i]->PCIE_CFC_AER_CORR_ERR_STAT & NETC_ETH_IP_CORR_STATUS_BIT) != (uint32)0U)
-        {
-            /* Un-masked interrupts are marked as 0*/
-            if ((netcPCIePFBase[i]->PCIE_CFC_AER_CORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_CORR_ERR_MASK_SHIFT)) == (uint32)0U)
-            {
-                 netcPCIePFBase[i]->PCIE_CFC_AER_CORR_ERR_STAT = NETC_ETH_IP_CORR_STATUS_BIT;
-                if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerCorrectableErrEnabled)
-                {
-                    SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
-                    Netc_Eth_Ip_ErrorStatus[i].StatusErrors |= NETC_ETH_IP_CORRECTABLE_ERROR;
-                    SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
 
-                }
-            }
+        /* Error reporting for VSIx */
+        for (i = FEATURE_NETC_NUMBER_OF_FUNC; i < (FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS + FEATURE_NETC_NUMBER_OF_FUNC ); i++)
+        {
+            /* At this point the status error bit is checked and cleared.
+            The structure that contains information on the error Netc_Eth_Ip_ErrorStatus will be filled in */
+            Netc_Eth_Ip_ProcessErrorStatusForInterruptForVSIs(ctrlIndex, i);
+        }
+
+        /* At this point the status error bit for PSI0 is checked and cleared.
+        The structure that contains information on the error Netc_Eth_Ip_ErrorStatus will be filled in */
+        Netc_Eth_Ip_ProcessErrorStatusForInterruptForPSI0(ctrlIndex);
+
+        if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerErrorReportingCallback != NULL_PTR)
+        {
+            Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerErrorReportingCallback (ctrlIndex, (const Netc_Eth_Ip_PcieFunctionErrorsReported *)&Netc_Eth_Ip_ErrorStatus);
         }
     }
-
-    /* Error reporting for VSIx */
-    for (i = FEATURE_NETC_NUMBER_OF_FUNC + 1U; i < (FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS + FEATURE_NETC_NUMBER_OF_FUNC + 1U); i++)
-    {
-        Netc_Eth_Ip_ErrorStatus[i].StatusErrors = 0u;
-
-        /* netcVFBase has the index 0 null since virtual station interfaces start from 1*/
-        relativeIndex = i - FEATURE_NETC_NUMBER_OF_FUNC;
-
-        if ((netcVFBase[relativeIndex]->PCIE_CFC_AER_UCORR_ERR_STAT & NETC_ETH_IP_UCORR_STATUS_BIT) != (uint32)0U)
-        {
-            /* Un-masked interrupts are marked as 0*/
-            if ((netcVFBase[relativeIndex]->PCIE_CFC_AER_UCORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_UCORR_ERR_MASK_SHIFT)) == (uint32)0U)
-            {
-
-                netcVFBase[relativeIndex]->PCIE_CFC_AER_UCORR_ERR_STAT = NETC_ETH_IP_UCORR_STATUS_BIT;
-                /*If the reg bit is 0 - Error is Non-fatal else is Fatal*/
-                if((netcVFBase[relativeIndex]->PCIE_CFC_AER_UCORR_ERR_SEV & NETC_ETH_IP_UCORR_SEV_MASK) != 0U)
-                {
-                    if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerUncorrectableErrEnabled)
-                    {                
-                        Netc_Eth_Ip_ErrorStatus[i].StatusErrors = NETC_ETH_IP_FATAL_ERROR;
-
-                    }
-                }
-                else
-                {
-                    if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerUncorrectableErrEnabled)
-                    {
-                        Netc_Eth_Ip_ErrorStatus[i].StatusErrors |= NETC_ETH_IP_NON_FATAL_ERROR;
-
-                    }
-                }
-
-            }
-        }
-        if ((netcVFBase[relativeIndex]->PCIE_CFC_AER_CORR_ERR_STAT & NETC_ETH_IP_CORR_STATUS_BIT) != (uint32)0U)
-        {
-            /* Un-masked interrupts are marked as 0*/
-            if ((netcVFBase[relativeIndex]->PCIE_CFC_AER_UCORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_CORR_ERR_MASK_SHIFT)) != (uint32)0U)
-            {
-                netcVFBase[relativeIndex]->PCIE_CFC_AER_CORR_ERR_STAT = NETC_ETH_IP_CORR_STATUS_BIT;
-                if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerCorrectableErrEnabled)
-                {
-                    SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
-                    Netc_Eth_Ip_ErrorStatus[i].StatusErrors |= NETC_ETH_IP_CORRECTABLE_ERROR;
-                    SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
-
-                }
-
-            }
-
-        }
-    }
-
-    /* Uncorrectable Error reporting for PSI0 */
-    if ((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_UCORR_ERR_STAT & NETC_ETH_IP_UCORR_STATUS_BIT) != (uint32)0U)
-    {
-        /* Un-masked interrupts are marked as 0*/
-        if ((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_UCORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_UCORR_ERR_MASK_SHIFT))  == (uint32)0U)
-        {
-            IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_UCORR_ERR_STAT = NETC_ETH_IP_UCORR_STATUS_BIT;
-            /*If the reg bit is 0 - Error is Non-fatal else is Fatal*/
-            if((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_UCORR_ERR_SEV & NETC_ETH_IP_UCORR_SEV_MASK) != 0U)
-            {
-                if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerUncorrectableErrEnabled)
-                {
-                    Netc_Eth_Ip_ErrorStatus[NETC_ETH_IP_PSI0_FUNCTION_INDEX].StatusErrors = NETC_ETH_IP_FATAL_ERROR;
-                }
-            }
-            else
-            {
-                if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerUncorrectableErrEnabled)
-                {
-                    Netc_Eth_Ip_ErrorStatus[NETC_ETH_IP_PSI0_FUNCTION_INDEX].StatusErrors = NETC_ETH_IP_NON_FATAL_ERROR;
-                }
-            }
-
-        }
-    }
-    /* Correctable Error reporting for PSI0 */
-    if ((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_CORR_ERR_STAT & NETC_ETH_IP_CORR_STATUS_BIT) != (uint32)0U)
-    {
-        /* Un-masked interrupts are marked as 0*/
-        if ((IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_CORR_ERR_MASK & ((uint32)1U << NETC_ETH_IP_CORR_ERR_MASK_SHIFT)) == (uint32)0U)
-        {
-            IP_NETC__NETC_F3_PCI_HDR_TYPE0->PCIE_CFC_AER_CORR_ERR_STAT = NETC_ETH_IP_CORR_STATUS_BIT;
-            if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerCorrectableErrEnabled)
-            {                
-                SchM_Exit_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
-                Netc_Eth_Ip_ErrorStatus[NETC_ETH_IP_PSI0_FUNCTION_INDEX].StatusErrors |= NETC_ETH_IP_CORRECTABLE_ERROR;
-                SchM_Enter_Eth_43_NETC_ETH_EXCLUSIVE_AREA_27();
-
-            }
-
-        }
-    }
-
-    if (Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerErrorReportingCallback != NULL_PTR)
-    {
-        Netc_Eth_Ip_apxState[ctrlIndex]->PcieAerErrorReportingCallback (ctrlIndex, (const Netc_Eth_Ip_PcieFunctionErrorsReported *)&Netc_Eth_Ip_ErrorStatus);
-    }
-}
-
-static inline boolean Netc_Eth_Ip_ClearErrorStatus (volatile uint32 *RegAddress)
-{
-    boolean returnValue = FALSE;
-
-    if ((*RegAddress & NETC_ETH_IP_CLEAR_ERROR_STATUS_MASK) != 0U)
-    {
-        *RegAddress |= NETC_ETH_IP_CLEAR_ERROR_STATUS_MASK;
-        returnValue = TRUE;
-    }
-
-    return returnValue;
 }
 
 /*FUNCTION**********************************************************************
@@ -5230,367 +8373,34 @@ void Netc_Eth_Ip_DumpErrorCapture (     const uint8 ctrlIdx,
                                         const Netc_Eth_Ip_PcieFunction function,
                                         uint8 *numberOfRegisters,
                                         uint8 siIndex,
-                                        Netc_Eth_Ip_ErrorCaptureRegisterInformation* Buffers[])
+                                        Netc_Eth_Ip_ErrorCaptureRegisterInformation* const Buffers[])
 {
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
-    DevAssert(numberOfRegisters != NULL_PTR);
+    DevAssert(ctrlIdx < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[ctrlIdx]);
     DevAssert(Netc_Eth_Ip_apxState[ctrlIdx]->SiType == NETC_ETH_IP_PHYSICAL_SI);
+    DevAssert(numberOfRegisters != NULL_PTR);
 #endif
-    uint8 countRegisters = 0U;
-    uint32 sbStatus = 0U;
+    volatile uint8 countRegisters = 0U;
 
     switch (function)
     {
         case EMDIO:
-        if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerUncorrectableErrEnabled)
-        {
-            /*This is the EMDIO uncorrectable non-fatal integrity error status register*/
-            if (Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *)&(((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUNIESR)))
-            {
-                if (Buffers[countRegisters] != NULL_PTR)
-                {
-                    Buffers[countRegisters]->RegName = EMDIOUNIESR;
-                    Buffers[countRegisters]->RegRawValueLow = ((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUNIESR;
-                    Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                    countRegisters++;
-                }
-            }
-            /* EMDIO system bus error status register. */
-            if (Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUFSBESR)))
-            {
-                if (Buffers[countRegisters] != NULL_PTR)
-                {
-                    /* EMDIO system bus error. */
-                    Buffers[countRegisters]->RegName = EMDIOUFSBESR;
-                    Buffers[countRegisters]->RegRawValueLow = ((IP_NETC__EMDIO_GLOBAL->ERROR).EMDIO).EMDIOUFSBESR;
-                    Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                    countRegisters++;
-                }
-            }
-        }
-        *numberOfRegisters = countRegisters;
-        break;
+            *numberOfRegisters = Netc_Eth_Ip_GetErrorStatisticsForEMDIO(ctrlIdx, Buffers);
+            break;
 
         case SWITCH:
-            if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerCorrectableErrEnabled)
-            {
-                /* Internal memory single bit ECC error*/
-                if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(IP_NETC__SW0_COMMON->CMESR)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* correctable memory error */
-                        Buffers[countRegisters]->RegName = CMESR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->CMESR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-            }
-
-            if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerUncorrectableErrEnabled)
-            {
-                /* Switch system bus error.*/
-                if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__SW0_COMMON->UNSBESR)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UNSBESR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNSBESR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* Indicates how many system bus error events have been encountered. UNSBESR[SB_ID] indicates the last source*/
-                        Buffers[countRegisters]->RegName = UNSBECTR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNSBECTR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-
-                if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__SW0_COMMON->UNMESR0)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* Memory ID + Syndrome*/
-                        Buffers[countRegisters]->RegName = UNMESR0;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNMESR0;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* Address information (row) of last ECC event.*/
-                        Buffers[countRegisters]->RegName = UNMESR1;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNMESR1;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* This is the uncorrectable non-fatal memory error count register which tracks how many events have been detected.*/
-                        Buffers[countRegisters]->RegName = UNMECTR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNMECTR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-                /* Incremented for each frame received with an error (except for undersized/fragment frame):
-                    FIFO overflow error
-                    CRC error
-                    Payload length error
-                    Jabber and oversized error
-                    Alignment error
-                A non-fatal error has occurred in the Ethernet MAC bound to PORT0. See PMa_IEVENT for details and how to clear the event*/
-                if((IP_NETC__SW0_COMMON->UNMACESR & (uint32)0x01) != (uint32)0U)
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = PM0_RERR;
-                        Buffers[countRegisters]->RegRawValueLow = (uint32)(IP_NETC__SW0_ETH_MAC_PORT0->PM0_RERRN);
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)(IP_NETC__SW0_ETH_MAC_PORT0->PM0_RERRN >> 32U);
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* EventError.*/
-                        Buffers[countRegisters]->RegName = PM0_EVENT;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT0->PM0_IEVENT;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* A count of received MAC frames / MAC frame fragments rejected due to unknown
-                        SMD value or arriving with an SMD-C when no frame is in progress.*/
-                        Buffers[countRegisters]->RegName = MAC_MERGE_MMFSECR0;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT0->MAC_MERGE_MMFSECR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* A count of MAC frames with reassembly errors.*/
-                        Buffers[countRegisters]->RegName = MAC_MERGE_MMFAECR0;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT0->MAC_MERGE_MMFAECR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-                if((IP_NETC__SW0_COMMON->UNMACESR & (uint32)0x02) != (uint32)0U)
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = PM1_RERR;
-                        Buffers[countRegisters]->RegRawValueLow = (uint32)(IP_NETC__SW0_ETH_MAC_PORT1->PM1_RERRN);
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)(IP_NETC__SW0_ETH_MAC_PORT1->PM1_RERRN >> 32U);
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* EventError.*/
-                        Buffers[countRegisters]->RegName = PM1_EVENT;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT1->PM1_IEVENT;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* A count of received MAC frames / MAC frame fragments rejected due to unknown
-                        SMD value or arriving with an SMD-C when no frame is in progress.*/
-                        Buffers[countRegisters]->RegName = MAC_MERGE_MMFSECR1;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT1->MAC_MERGE_MMFSECR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* A count of MAC frames with reassembly errors.*/
-                        Buffers[countRegisters]->RegName = MAC_MERGE_MMFAECR1;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_ETH_MAC_PORT1->MAC_MERGE_MMFAECR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-                /* Integrity fault*/
-                if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(IP_NETC__SW0_COMMON->UNIESR)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UNIESR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNIESR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    /* Indicates the number of non-fatal integrity faults detected which includes internal FCS and parity errors.*/
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UNIECTR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UNIECTR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-                /* Fatal system bus error status register. */
-                if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(IP_NETC__SW0_COMMON->UFSBESR)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UFSBESR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UFSBESR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-                /* Uncorrectable fatal memory error status register 0.*/
-                if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(IP_NETC__SW0_COMMON->UFMESR0)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UFMESR0;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UFMESR0;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UFMESR1;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UFMESR1;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-                /* Fatal integrity error status register. */
-                if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__SW0_COMMON->UFIESR)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UFIESR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__SW0_COMMON->UFIESR;
-                        Buffers[countRegisters]->RegRawValueHigh = 0U;
-                        countRegisters++;
-                    }
-                }
-            }
             /* Return the value of the registers that have been written */
-            *numberOfRegisters = countRegisters;
-
+            *numberOfRegisters = Netc_Eth_Ip_GetErrorStatisticsForSWITCH(ctrlIdx, Buffers);
             break;
 
         case TIMER:
-            /* timer system bus error. */
-            if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerUncorrectableErrEnabled)
-            {
-                if (Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(((IP_NETC__TMR0_GLOBAL->ERROR).TIMER).TUFSBESR )))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = TUFSBESR;
-                        Buffers[countRegisters]->RegRawValueLow = ((IP_NETC__TMR0_GLOBAL->ERROR).TIMER).TUFSBESR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-            }
-            *numberOfRegisters = countRegisters;
+            *numberOfRegisters = Netc_Eth_Ip_GetErrorStatisticsForTIMER(ctrlIdx, Buffers);
             break;
 
         case ENETC:
-            if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerCorrectableErrEnabled)
-            {
-                if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__ENETC0_COMMON->CMESR)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* correctable memory error */
-                        Buffers[countRegisters]->RegName = CMESR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->CMESR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-            }
 
-            if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerUncorrectableErrEnabled)
-            {
-                if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__ENETC0_COMMON->UNMESR0)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* Memory ID + Syndrome*/
-                        Buffers[countRegisters]->RegName = UNMESR0;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UNMESR0;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* Address information (row) of last ECC event.*/
-                        Buffers[countRegisters]->RegName = UNMESR1;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UNMESR1;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        /* This is the uncorrectable non-fatal memory error count register which tracks how many events have been detected.*/
-                        Buffers[countRegisters]->RegName = UNMECTR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UNMECTR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-
-                if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__ENETC0_COMMON->UNIESR)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UNIESR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UNIESR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UNIECTR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UNIECTR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-
-                if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__ENETC0_COMMON->UFMESR0)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UFMESR0;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UFMESR0;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UFMESR1;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UFMESR1;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-
-                if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(IP_NETC__ENETC0_COMMON->UFIESR)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = UFIESR;
-                        Buffers[countRegisters]->RegRawValueLow = IP_NETC__ENETC0_COMMON->UFIESR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-            }
-            *numberOfRegisters = countRegisters;
+            *numberOfRegisters = Netc_Eth_Ip_GetErrorStatisticsForENETC(ctrlIdx, Buffers);
             break;
 
         case PSI:
@@ -5598,145 +8408,8 @@ void Netc_Eth_Ip_DumpErrorCapture (     const uint8 ctrlIdx,
         #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
             DevAssert(siIndex < 8U);
         #endif
-            if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerUncorrectableErrEnabled)
-            {
-                if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(netcSIsBase[siIndex]->SIUPESR)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = SIUPESR;
-                        Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUPESR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = SIUPECTR;
-                        Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUPECTR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-                /* Multi-bit ECC error. */
-                if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(netcSIsBase[siIndex]->SIUNMESR0)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = SIUNMESR0;
-                        Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUNMESR0;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = SIUNMESR1;
-                        Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUNMESR1;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = SIUNMECTR;
-                        Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUNMECTR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-                /* Fatal Multi-bit ECC error. */
-                if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(netcSIsBase[siIndex]->SIUFMESR0)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = SIUFMESR0;
-                        Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUFMESR0;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = SIUFMESR1;
-                        Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUFMESR1;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-
-                if(Netc_Eth_Ip_ClearErrorStatus((volatile uint32 *) &(netcSIsBase[siIndex]->SIUFSBESR)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = SIUFSBESR;
-                        Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUFSBESR;
-                        Buffers[countRegisters]->RegRawValueHigh = 0U;
-                        countRegisters++;
-                    }
-                    for (uint8 idx = 0U; idx < Netc_Eth_Ip_apxState[ctrlIdx]->SIGeneralConfig[siIndex]->NumberOfTxBDR; idx++)
-                    {
-                    /*A system bus error has occurred during one or more transactions related to this transmit ring, including possibly
-                    the transmit BD writeback entry itself. To avoid the possibility of referencing unreliable
-                    BD writeback contents,
-                    See error detect register SIUNSBESR/SIUFSBESR for more information. Write 1 to clear.*/
-                        sbStatus= netcSIsBase[siIndex]->BDR_NUM[idx].TBSR;
-
-                        if ((sbStatus & (uint32)0x00010000) != 0U)
-                        {
-                            sbStatus &= ~((uint32)0x00010000);
-                            netcSIsBase[siIndex]->BDR_NUM[idx].TBSR = sbStatus;
-                            if (Buffers[countRegisters] != NULL_PTR)
-                            {
-                                Buffers[countRegisters]->RegName = TBCIR;
-                                Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->BDR_NUM[idx].TBCIR;
-                                /* save also the current BDR with error */
-                                Buffers[countRegisters]->RegRawValueHigh = (uint32)idx;
-                                countRegisters++;
-                            }
-                        }
-                    }
-                    for (uint8 idx = 0U; idx < Netc_Eth_Ip_apxState[ctrlIdx]->SIGeneralConfig[siIndex]->NumberOfRxBDR; idx++)
-                    {
-                        sbStatus= netcSIsBase[siIndex]->BDR_NUM[idx].RBSR;
-                        if ((sbStatus & (uint32)0x00010000)  != 0U)
-                        {
-                            sbStatus &= ~((uint32)0x00010000);
-                            netcSIsBase[siIndex]->BDR_NUM[idx].RBSR = sbStatus;
-                            if (Buffers[countRegisters] != NULL_PTR)
-                            {
-                                Buffers[countRegisters]->RegName = RBPIR;
-                                Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->BDR_NUM[idx].RBPIR;
-                                /* save also the current BDR with error */
-                                Buffers[countRegisters]->RegRawValueHigh = (uint32)idx;
-                                countRegisters++;
-                            }
-                        }
-                    }
-
-                    if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *) &(netcSIsBase[siIndex]->SIUFIESR)))
-                    {
-                        if (Buffers[countRegisters] != NULL_PTR)
-                        {
-                            Buffers[countRegisters]->RegName = SIUFIESR;
-                            Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SIUFIESR;
-                            Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                            countRegisters++;
-                        }
-                    }
-                }
-            }
-            if (Netc_Eth_Ip_apxState[ctrlIdx]->PcieAerCorrectableErrEnabled)
-            {
-                if(Netc_Eth_Ip_ClearErrorStatus( (volatile uint32 *)&(netcSIsBase[siIndex]->SICMESR)))
-                {
-                    if (Buffers[countRegisters] != NULL_PTR)
-                    {
-                        Buffers[countRegisters]->RegName = SICMESR;
-                        Buffers[countRegisters]->RegRawValueLow = netcSIsBase[siIndex]->SICMESR;
-                        Buffers[countRegisters]->RegRawValueHigh = (uint32)0U;
-                        countRegisters++;
-                    }
-                }
-            }
-            *numberOfRegisters = countRegisters;
-        break;
+            *numberOfRegisters = Netc_Eth_Ip_GetErrorStatisticsForSI(ctrlIdx, siIndex, Buffers);
+            break;
 
         default:
             *numberOfRegisters = countRegisters;
@@ -5795,7 +8468,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddIngressPortFilterTableEntry( uint8 CtrlInd
                                                                  )
 {
     Netc_Eth_Ip_StatusType status;
-    NetcEth_Ip_ReqHeaderTableOperationDataType OperationData;
     uint32 ActionsData;
     uint8 ByteIdx;
     uint8 CfgeDataIdx;
@@ -5814,58 +8486,58 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddIngressPortFilterTableEntry( uint8 CtrlInd
     ActionsData = (NETC_ETH_IP_IPFTABLE_REQFMT_ACTIONS_FIELD_STSEU(1U) | NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_CFGEU(1U));
 
     /* inialize KEYE_DATA */
-    IPFKeyeData[0U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePrecedence;
-    IPFKeyeData[2U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeFrmAttributeFlagsMask) << NETC_ETH_IP_16BIT_SHIFT) \
+    Netc_Eth_Ip_IPFKeyeData[0U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePrecedence;
+    Netc_Eth_Ip_IPFKeyeData[2U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeFrmAttributeFlagsMask) << NETC_ETH_IP_16BIT_SHIFT) \
                  | IngressPortFilterTableEntry->IngressPortFilterkeyeData.keyeFrmAttributeFlags;
-    IPFKeyeData[3U] = NETC_ETH_IP_IPFTABLE_KEYE_DATA_DSCPMASK(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDifferentiatedServicesCodePointMask) \
+    Netc_Eth_Ip_IPFKeyeData[3U] = NETC_ETH_IP_IPFTABLE_KEYE_DATA_DSCPMASK(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDifferentiatedServicesCodePointMask) \
                  | NETC_ETH_IP_IPFTABLE_KEYE_DATA_DIFFSCP(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDifferentiatedServicesCodePoint);
-    IPFKeyeData[4U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeOuterVLANTagControlInformationMask) << NETC_ETH_IP_16BIT_SHIFT) \
+    Netc_Eth_Ip_IPFKeyeData[4U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeOuterVLANTagControlInformationMask) << NETC_ETH_IP_16BIT_SHIFT) \
                  | (IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeOuterVLANTagControlInformation << NETC_ETH_IP_8BIT_SHIFT);        /* big endian for TCI */
-    IPFKeyeData[5U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[1U]) << NETC_ETH_IP_8BIT_SHIFT) \
+    Netc_Eth_Ip_IPFKeyeData[5U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[1U]) << NETC_ETH_IP_8BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[2U]) << NETC_ETH_IP_16BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[3U]) << NETC_ETH_IP_24BIT_SHIFT);
-    IPFKeyeData[6U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[4U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[5U]) << NETC_ETH_IP_8BIT_SHIFT) \
+    Netc_Eth_Ip_IPFKeyeData[6U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[4U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddr[5U]) << NETC_ETH_IP_8BIT_SHIFT) \
                  | (((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[1U]) << NETC_ETH_IP_8BIT_SHIFT)) << NETC_ETH_IP_16BIT_SHIFT);
-    IPFKeyeData[7U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[2U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[3U]) << NETC_ETH_IP_8BIT_SHIFT) \
+    Netc_Eth_Ip_IPFKeyeData[7U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[2U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[3U]) << NETC_ETH_IP_8BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[4U]) << NETC_ETH_IP_16BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeDstMacAddrMask[5U]) << NETC_ETH_IP_24BIT_SHIFT);
-    IPFKeyeData[8U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[1U]) << NETC_ETH_IP_8BIT_SHIFT) \
+    Netc_Eth_Ip_IPFKeyeData[8U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[1U]) << NETC_ETH_IP_8BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[2U]) << NETC_ETH_IP_16BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[3U]) << NETC_ETH_IP_24BIT_SHIFT);
-    IPFKeyeData[9U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[4U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[5U]) << NETC_ETH_IP_8BIT_SHIFT) \
+    Netc_Eth_Ip_IPFKeyeData[9U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[4U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddr[5U]) << NETC_ETH_IP_8BIT_SHIFT) \
                  | (((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[0U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[1U]) << NETC_ETH_IP_8BIT_SHIFT)) << NETC_ETH_IP_16BIT_SHIFT);
-    IPFKeyeData[10U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[2U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[3U]) << NETC_ETH_IP_8BIT_SHIFT) \
+    Netc_Eth_Ip_IPFKeyeData[10U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[2U]) | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[3U]) << NETC_ETH_IP_8BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[4U]) << NETC_ETH_IP_16BIT_SHIFT) \
                  | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeSrcMacAddrMask[5U]) << NETC_ETH_IP_24BIT_SHIFT);
-    IPFKeyeData[11U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeInnerVLANTagControlInformationMask) << NETC_ETH_IP_16BIT_SHIFT) \
+    Netc_Eth_Ip_IPFKeyeData[11U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeInnerVLANTagControlInformationMask) << NETC_ETH_IP_16BIT_SHIFT) \
                  | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeInnerVLANTagControlInformation;
-    IPFKeyeData[12U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeEtherTypeMask) << NETC_ETH_IP_16BIT_SHIFT) \
+    Netc_Eth_Ip_IPFKeyeData[12U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeEtherTypeMask) << NETC_ETH_IP_16BIT_SHIFT) \
                  | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeEtherTypeMask;
-    IPFKeyeData[13U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPProtocolMask) << NETC_ETH_IP_8BIT_SHIFT) | (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPProtocol);
+    Netc_Eth_Ip_IPFKeyeData[13U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPProtocolMask) << NETC_ETH_IP_8BIT_SHIFT) | (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPProtocol);
     for (ByteIdx = 0U; ByteIdx < 4U; ByteIdx++)
     {
-        IPFKeyeData[ByteIdx + 17U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPSourceAddress[ByteIdx];
+        Netc_Eth_Ip_IPFKeyeData[ByteIdx + 17U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPSourceAddress[ByteIdx];
     }
     for (ByteIdx = 0U; ByteIdx < 4U; ByteIdx++)
     {
-        IPFKeyeData[ByteIdx + 23U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPSourceAddressMask[ByteIdx];
+        Netc_Eth_Ip_IPFKeyeData[ByteIdx + 23U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPSourceAddressMask[ByteIdx];
     }
-    IPFKeyeData[27U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4SourcePortMask) << NETC_ETH_IP_16BIT_SHIFT) | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4SourcePort;
+    Netc_Eth_Ip_IPFKeyeData[27U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4SourcePortMask) << NETC_ETH_IP_16BIT_SHIFT) | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4SourcePort;
     for (ByteIdx = 0U; ByteIdx < 4U; ByteIdx++)
     {
-        IPFKeyeData[ByteIdx + 29U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPDestinationAddress[ByteIdx];
+        Netc_Eth_Ip_IPFKeyeData[ByteIdx + 29U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPDestinationAddress[ByteIdx];
     }
     for (ByteIdx = 0U; ByteIdx < 4U; ByteIdx++)
     {
-        IPFKeyeData[ByteIdx + 35U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPDestinationAddressMask[ByteIdx];
+        Netc_Eth_Ip_IPFKeyeData[ByteIdx + 35U] = IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeIPDestinationAddressMask[ByteIdx];
     }
-    IPFKeyeData[39U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4DestinationPortMask) << NETC_ETH_IP_16BIT_SHIFT) | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4DestinationPort;
+    Netc_Eth_Ip_IPFKeyeData[39U] = ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4DestinationPortMask) << NETC_ETH_IP_16BIT_SHIFT) | IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyeL4DestinationPort;
 
     CfgeDataIdx = 0U;
     PayloadIdx = 0U;
     for (ByteIdx = 0U; ByteIdx < 12U; ByteIdx++)
     {
-        IPFKeyeData[CfgeDataIdx + 41U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePayloadBytes[ByteIdx + PayloadIdx]) \
+        Netc_Eth_Ip_IPFKeyeData[CfgeDataIdx + 41U] = (uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePayloadBytes[ByteIdx + PayloadIdx]) \
                                    | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePayloadBytesMask[ByteIdx + PayloadIdx]) << NETC_ETH_IP_8BIT_SHIFT) \
                                    | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePayloadBytes[ByteIdx + PayloadIdx + 1U]) << NETC_ETH_IP_16BIT_SHIFT) \
                                    | ((uint32)(IngressPortFilterTableEntry->IngressPortFilterkeyeData.KeyePayloadBytesMask[ByteIdx + PayloadIdx + 1U]) << NETC_ETH_IP_24BIT_SHIFT);
@@ -5874,20 +8546,20 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_AddIngressPortFilterTableEntry( uint8 CtrlInd
     }
 
     /* only supports "NETC_ETH_TERNARY_MATCH_KEY_ELEMENT_MATCH" access method */
-    status = Netc_Eth_Ip_FillInIngressPortFilterTableReqDataBuff(ActionsData, &IPFKeyeData[0U], &(IngressPortFilterTableEntry->IngressPortFilterCfgeData), NETC_ETH_TERNARY_MATCH_KEY_ELEMENT_MATCH);
+    status = Netc_Eth_Ip_FillInIngressPortFilterTableReqDataBuff(ActionsData, &Netc_Eth_Ip_IPFKeyeData[0U], &(IngressPortFilterTableEntry->IngressPortFilterCfgeData), NETC_ETH_TERNARY_MATCH_KEY_ELEMENT_MATCH);
     if (NETC_ETH_IP_STATUS_SUCCESS == status)
     {
         /* fill in operation data for config field of Request Header*/
-        OperationData.CmdCompletionInt = 0x0U;                                          /* command completion interrupt disabled */
-        OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;              /* protocol version = 2 */
-        OperationData.TableId = NETC_ETH_IP_INGRESS_PORT_FILTER_TABLE_ID;
-        OperationData.AccessMethod = NETC_ETH_TERNARY_MATCH_KEY_ELEMENT_MATCH;          /* for Adding an ingress port filter entry, the Access Method should only be NETC_ETH_TERNARY_MATCH_KEY_ELEMENT_MATCH */
-        OperationData.Cmd = NETC_ETH_ADD_FOLLOWEDBY_QUERY_CMD;                       /* can only use "Add followed by a Query" command to add an ingress port filter table entry */
-        OperationData.ReqBuffLength = (NETC_ETH_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN);
-        OperationData.RspBuffLength = (NETC_ETH_IP_INGRESSPORTFILTERTABLE_RSPBUFFER_LEN);
+        Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                          /* command completion interrupt disabled */
+        Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;              /* protocol version = 2 */
+        Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_INGRESS_PORT_FILTER_TABLE_ID;
+        Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_TERNARY_MATCH_KEY_ELEMENT_MATCH;          /* for Adding an ingress port filter entry, the Access Method should only be NETC_ETH_TERNARY_MATCH_KEY_ELEMENT_MATCH */
+        Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_ADD_FOLLOWEDBY_QUERY_CMD;                       /* can only use "Add followed by a Query" command to add an ingress port filter table entry */
+        Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN);
+        Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_INGRESSPORTFILTERTABLE_RSPBUFFER_LEN);
 
         /* send command */
-        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &OperationData);
+        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
 #if defined(ERR_IPV_NETC_051243)
     #if (STD_ON == ERR_IPV_NETC_051243)
     /* Error code 0x8A is not a real error. check it on Errata. */
@@ -6044,8 +8716,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryIngressPortFilterTableEntry( const uint8
                                                                    )
 {
     Netc_Eth_Ip_StatusType status;
-    NetcEth_Ip_ReqHeaderTableOperationDataType OperationData;
-    uint32 KeyeData[NETC_ETH_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN];
     uint32 ActionsData;
 
 
@@ -6062,22 +8732,22 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_QueryIngressPortFilterTableEntry( const uint8
     ActionsData = NETC_ETH_IP_ENETCTABLE_REQFMT_ACTIONS_FIELD_QUERY_ACTIONS(NETC_ETH_TABLES_FULL_QUERY);
 
     /* inialize KEYE_DATA with Entry_ID */
-    KeyeData[0U] = IngressPortFilterTableEntry->IngressPortFilterEntryID;
+    Netc_Eth_Ip_IPFKeyeData[0U] = IngressPortFilterTableEntry->IngressPortFilterEntryID;
 
-    status = Netc_Eth_Ip_FillInIngressPortFilterTableReqDataBuff(ActionsData, &KeyeData[0U], NULL_PTR, NETC_ETH_ENTRY_ID_MATCH);
+    status = Netc_Eth_Ip_FillInIngressPortFilterTableReqDataBuff(ActionsData, &Netc_Eth_Ip_IPFKeyeData[0U], NULL_PTR, NETC_ETH_ENTRY_ID_MATCH);
     if (NETC_ETH_IP_STATUS_SUCCESS == status)
     {
         /* fill in operation data for config field of Request Header*/
-        OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
-        OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;            /* protocol version = 2 */
-        OperationData.TableId = NETC_ETH_IP_INGRESS_PORT_FILTER_TABLE_ID;
-        OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;
-        OperationData.Cmd = NETC_ETH_QUERY_CMD;
-        OperationData.ReqBuffLength = (NETC_ETH_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN);
-        OperationData.RspBuffLength = (NETC_ETH_IP_INGRESSPORTFILTERTABLE_RSPBUFFER_LEN);
+        Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;            /* protocol version = 2 */
+        Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_INGRESS_PORT_FILTER_TABLE_ID;
+        Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;
+        Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_QUERY_CMD;
+        Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN);
+        Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_INGRESSPORTFILTERTABLE_RSPBUFFER_LEN);
 
         /* send command */
-        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &OperationData);
+        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
 #if defined(ERR_IPV_NETC_051243)
     #if (STD_ON == ERR_IPV_NETC_051243)
     /* Error code 0x8A is not a real error. check it on Errata. */
@@ -6117,7 +8787,6 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteIngressPortFilterTableEntry( const uint
                                                                     )
 {
     Netc_Eth_Ip_StatusType status;
-    NetcEth_Ip_ReqHeaderTableOperationDataType OperationData;
     uint32 KeyeData[1U];
     uint32 ActionsData = 0x0UL;
 
@@ -6136,16 +8805,16 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_DeleteIngressPortFilterTableEntry( const uint
     if (NETC_ETH_IP_STATUS_SUCCESS == status)
     {
         /* fill in operation data for config field of Request Header*/
-        OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
-        OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;            /* protocol version = 2 */
-        OperationData.TableId = NETC_ETH_IP_INGRESS_PORT_FILTER_TABLE_ID;
-        OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;
-        OperationData.Cmd = NETC_ETH_DELETE_CMD;
-        OperationData.ReqBuffLength = (NETC_ETH_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN);
-        OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
+        Netc_Eth_Ip_OperationData.CmdCompletionInt = 0x0U;                                        /* command completion interrupt disabled */
+        Netc_Eth_Ip_OperationData.Version = NETC_ETH_IP_CMDBD_REQFMT_PROTOCOL_VERSION;            /* protocol version = 2 */
+        Netc_Eth_Ip_OperationData.TableId = NETC_ETH_IP_INGRESS_PORT_FILTER_TABLE_ID;
+        Netc_Eth_Ip_OperationData.AccessMethod = NETC_ETH_ENTRY_ID_MATCH;
+        Netc_Eth_Ip_OperationData.Cmd = NETC_ETH_DELETE_CMD;
+        Netc_Eth_Ip_OperationData.ReqBuffLength = (NETC_ETH_IP_INGRESSPORTFILTERTABLE_REQBUFFER_LEN);
+        Netc_Eth_Ip_OperationData.RspBuffLength = (NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_4BYTE_LEN);
 
         /* send command */
-        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &OperationData);
+        status = Netc_Eth_Ip_SendCommand(CtrlIndex, &Netc_Eth_Ip_OperationData);
 #if defined(ERR_IPV_NETC_051243)
     #if (STD_ON == ERR_IPV_NETC_051243)
     /* Error code 0x8A is not a real error. check it on Errata. */
@@ -6184,6 +8853,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetSyncState( const uint8 CtrlIndex,
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[CtrlIndex]);
     DevAssert(SyncState != NULL_PTR);
 #endif
 
@@ -6191,7 +8861,7 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetSyncState( const uint8 CtrlIndex,
         otherwise it must use VSI to PSI messaging to request a read from the PSI */
     if(Netc_Eth_Ip_apxState[CtrlIndex]->SiType == NETC_ETH_IP_PHYSICAL_SI)
     {
-        *SyncState = (boolean)(IP_NETC__ENETC0_SI0->SITSR & NETC_F3_SI0_SITSR_SYNC_MASK);
+        *SyncState = ((IP_NETC__ENETC0_SI0->SITSR & NETC_F3_SI0_SITSR_SYNC_MASK) == 1UL) ? (boolean)TRUE: (boolean)FALSE;
     }
     else
     {
@@ -6208,42 +8878,44 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetSyncState( const uint8 CtrlIndex,
  * Description   : Set the MAC addresses of PSI/VSIs from the PSI controller .
  * implements Netc_Eth_Ip_SetSiPhysAddr_Activity
  *END**************************************************************************/
-Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetSiPhysAddr( const uint8 CtrlIndex,
-                                            const uint8 SiId,
-                                            const uint8 *MacAddr
-                                                            )
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetSiPhysAddr(const uint8 CtrlIndex,
+                                                 const uint8 SiId,
+                                                 const uint8 *MacAddr)
 {
     Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
 
 #if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
     DevAssert(CtrlIndex == NETC_ETH_IP_PSI_INDEX);
     DevAssert(SiId < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(NULL_PTR != Netc_Eth_Ip_apxState[CtrlIndex]);
+    DevAssert(MacAddr != NULL_PTR);
 #endif
 
-    /*Check if the controller is PSI. MAC changing allowed only for PSI */
-    if (NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[CtrlIndex]->SiType)
+    /* Check if the controller is PSI. MAC changing allowed only for PSI */
+    if( (NETC_ETH_IP_PHYSICAL_SI == Netc_Eth_Ip_apxState[CtrlIndex]->SiType) && \
+        (NULL_PTR != MacAddr))
     {
-        /*VSI MAC change*/
-        if(NETC_ETH_IP_PHYSICAL_SI != Netc_Eth_Ip_apxState[SiId]->SiType)
+        /* VSI MAC change */
+        if(NETC_ETH_IP_PSI_INDEX != SiId)
         {
             /* For the VSIs write the MAC address in the PSIaMAR0 and PSIaMAR1 registers. */
-            IP_NETC__ENETC0_BASE->NUM_SI[SiId].PSIPMAR0 =  (uint32)MacAddr[0U] | \
-                                                            ((uint32)MacAddr[1U] << 8U ) | \
-                                                            ((uint32)MacAddr[2U] << 16U) | \
-                                                            ((uint32)MacAddr[3U] << 24U);
-            IP_NETC__ENETC0_BASE->NUM_SI[SiId].PSIPMAR1 =  (uint32)MacAddr[4U] | \
-                                                            ((uint32)MacAddr[5U] << 8U);
+            IP_NETC__ENETC0_BASE->NUM_SI[SiId].PSIPMAR0 = (uint32)MacAddr[0U]          | \
+                                                          ((uint32)MacAddr[1U] << 8U ) | \
+                                                          ((uint32)MacAddr[2U] << 16U) | \
+                                                          ((uint32)MacAddr[3U] << 24U);
+            IP_NETC__ENETC0_BASE->NUM_SI[SiId].PSIPMAR1 = (uint32)MacAddr[4U] | \
+                                                          ((uint32)MacAddr[5U] << 8U);
         }
         else
         {
             /* For the PSI the MAC address will be configured both for the ENETC Port and for the PSI0 */
             /* Configure the port primary MAC address */
-            IP_NETC__ENETC0_PORT->PMAR0 = (uint32)MacAddr[0U] | \
-                                            ((uint32)MacAddr[1U] << 8U)  | \
-                                            ((uint32)MacAddr[2U] << 16U) | \
-                                            ((uint32)MacAddr[3U] << 24U);
+            IP_NETC__ENETC0_PORT->PMAR0 = (uint32)MacAddr[0U]          | \
+                                          ((uint32)MacAddr[1U] << 8U)  | \
+                                          ((uint32)MacAddr[2U] << 16U) | \
+                                          ((uint32)MacAddr[3U] << 24U);
             IP_NETC__ENETC0_PORT->PMAR1 = (uint32)MacAddr[4U] | \
-                                            ((uint32)MacAddr[5U] << 8U);
+                                          ((uint32)MacAddr[5U] << 8U);
         }
 
     }
@@ -6252,9 +8924,62 @@ Netc_Eth_Ip_StatusType Netc_Eth_Ip_SetSiPhysAddr( const uint8 CtrlIndex,
         status = NETC_ETH_IP_STATUS_UNSUPPORTED;
     }
 
+    return status;
+}
+
+#if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
+#if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetTxRingFillLevel(const uint8 CtrlIndex, const uint8 RingIdx, Netc_Eth_Ip_FillLevelInfo * FillInfo)
+{
+    Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(FillInfo != NULL_PTR);
+#endif
+
+    FillInfo->TotalNumberOfBuff = Netc_Eth_Ip_Tx_FillLevelInfo[CtrlIndex][RingIdx].TotalNumberOfBuff;
+    FillInfo->MaxNumberOfUsedBuff = Netc_Eth_Ip_Tx_FillLevelInfo[CtrlIndex][RingIdx].MaxNumberOfUsedBuff;
+    FillInfo->NumberOfUsedBuff = Netc_Eth_Ip_Tx_FillLevelInfo[CtrlIndex][RingIdx].NumberOfUsedBuff;
+
+    Netc_Eth_Ip_Tx_FillLevelInfo[CtrlIndex][RingIdx].MaxNumberOfUsedBuff = 0U;
 
     return status;
 }
+
+Netc_Eth_Ip_StatusType Netc_Eth_Ip_GetRxRingFillLevel(const uint8 CtrlIndex, const uint8 RingIdx, Netc_Eth_Ip_FillLevelInfo * FillInfo)
+{
+    Netc_Eth_Ip_StatusType status = NETC_ETH_IP_STATUS_SUCCESS;
+    uint32 rxConsumerIdx;
+    uint32 rxProducerIdx;
+
+#if (STD_ON == NETC_ETH_IP_DEV_ERROR_DETECT)
+    DevAssert(CtrlIndex < FEATURE_NETC_ETH_NUMBER_OF_CTRLS);
+    DevAssert(Netc_Eth_Ip_apxState[CtrlIndex] != NULL_PTR);
+    DevAssert(RingIdx < Netc_Eth_Ip_apxState[CtrlIndex]->NumberOfRxBDR);
+    DevAssert(FillInfo != NULL_PTR);
+#endif
+
+    rxConsumerIdx = Netc_Eth_Ip_apxState[CtrlIndex]->LogicRxConsumerIndex[RingIdx];
+    rxProducerIdx = netcSIsBase[CtrlIndex]->BDR_NUM[RingIdx].RBPIR;
+
+    FillInfo->TotalNumberOfBuff = Netc_Eth_Ip_apxState[CtrlIndex]->RxRingSize[RingIdx] - 1U;
+    FillInfo->NumberOfUsedBuff = (rxConsumerIdx > rxProducerIdx) ? (Netc_Eth_Ip_apxState[CtrlIndex]->RxRingSize[RingIdx] - rxConsumerIdx + rxProducerIdx) : (rxProducerIdx - rxConsumerIdx);
+    if (FillInfo->NumberOfUsedBuff > Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff[CtrlIndex][RingIdx])
+    {
+        FillInfo->MaxNumberOfUsedBuff = FillInfo->NumberOfUsedBuff;
+    }
+    else
+    {
+        FillInfo->MaxNumberOfUsedBuff = Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff[CtrlIndex][RingIdx];
+    }
+
+    Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff[CtrlIndex][RingIdx] = 0U;
+
+    return status;
+}
+#endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
+#endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
 
 #define ETH_43_NETC_STOP_SEC_CODE
 #include "Eth_43_NETC_MemMap.h"

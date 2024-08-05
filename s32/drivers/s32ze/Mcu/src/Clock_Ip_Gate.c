@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_Gate.c
-*   @version    1.0.0
+*   @version    2.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -37,7 +37,7 @@ extern "C"{
 #define CLOCK_IP_GATE_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_GATE_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_GATE_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_GATE_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_GATE_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_GATE_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_GATE_SW_PATCH_VERSION_C               0
 
@@ -96,6 +96,7 @@ extern "C"{
 #define MCU_START_SEC_CODE
 
 #include "Mcu_MemMap.h"
+
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
@@ -106,6 +107,7 @@ static void Clock_Ip_ClockUpdateGateEmpty(Clock_Ip_NameType ClockName, boolean G
 static void Clock_Ip_ClockSetGateClockControlEnableGprPctl(Clock_Ip_GateConfigType const* Config);
 static void Clock_Ip_ClockUpdateGateClockControlEnableGprPctl(Clock_Ip_NameType ClockName, boolean Gate);
 #endif
+
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -195,6 +197,7 @@ static void Clock_Ip_ClockUpdateGateClockControlEnableGprPctl(Clock_Ip_NameType 
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
+
 /* Clock start constant section data */
 #define MCU_START_SEC_CONST_UNSPECIFIED
 
@@ -203,15 +206,16 @@ static void Clock_Ip_ClockUpdateGateClockControlEnableGprPctl(Clock_Ip_NameType 
 const Clock_Ip_GateCallbackType Clock_Ip_axGateCallbacks[CLOCK_IP_GATE_CALLBACKS_COUNT] =
 {
     {
-        Clock_Ip_ClockSetGateEmpty,     /* Set */
-        Clock_Ip_ClockUpdateGateEmpty,  /* Update */
+        &Clock_Ip_ClockSetGateEmpty,     /* Set */
+        &Clock_Ip_ClockUpdateGateEmpty,  /* Update */
     },
 #ifdef CLOCK_IP_CONTROL_ENABLE_GPR_PCTL
     {
-        Clock_Ip_ClockSetGateClockControlEnableGprPctl,       /* Set */
-        Clock_Ip_ClockUpdateGateClockControlEnableGprPctl,    /* Update */
+        &Clock_Ip_ClockSetGateClockControlEnableGprPctl,       /* Set */
+        &Clock_Ip_ClockUpdateGateClockControlEnableGprPctl,    /* Update */
     },
 #endif
+
 };
 
 
@@ -226,4 +230,3 @@ const Clock_Ip_GateCallbackType Clock_Ip_axGateCallbacks[CLOCK_IP_GATE_CALLBACKS
 #endif
 
 /** @} */
-

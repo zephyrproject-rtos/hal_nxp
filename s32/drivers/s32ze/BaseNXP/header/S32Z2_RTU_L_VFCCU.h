@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_RTU_L_VFCCU.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_RTU_L_VFCCU
  *
  * This file contains register definitions and macros for easy access to their
@@ -93,7 +93,7 @@ typedef struct {
   __IO uint32_t GDBGCFG;                           /**< Global Debug, offset: 0x2E4 */
   __I  uint32_t GDBGSTAT;                          /**< Global Debug Status, offset: 0x2E8 */
   uint8_t RESERVED_6[15636];
-  struct {                                         /* offset: 0x4000, array step: 0x20 */
+  struct RTU_L_VFCCU_SW_RKN {                      /* offset: 0x4000, array step: 0x20 */
     __I  uint32_t SWRPTDID;                          /**< Software Fault Reported DID, array offset: 0x4000, array step: 0x20 */
     __IO uint32_t SWRKSET_0;                         /**< Software Reaction Set, array offset: 0x4004, array step: 0x20 */
     uint8_t RESERVED_0[4];

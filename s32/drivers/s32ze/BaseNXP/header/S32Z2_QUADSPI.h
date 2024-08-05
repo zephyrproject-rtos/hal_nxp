@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_QuadSPI.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_QuadSPI
  *
  * This file contains register definitions and macros for easy access to their
@@ -134,7 +134,7 @@ typedef struct {
   uint8_t RESERVED_12[8];
   __IO uint32_t LUT[QuadSPI_LUT_COUNT];            /**< LUT Register, array offset: 0x310, array step: 0x4 */
   uint8_t RESERVED_13[944];
-  struct {                                         /* offset: 0x800, array step: 0x20 */
+  struct QuadSPI_FRAD {                            /* offset: 0x800, array step: 0x20 */
     __IO uint32_t WORD0;                             /**< Flash Region Start Address, array offset: 0x800, array step: 0x20 */
     __IO uint32_t WORD1;                             /**< Flash Region End Address, array offset: 0x804, array step: 0x20 */
     __IO uint32_t WORD2;                             /**< Flash Region Privileges, array offset: 0x808, array step: 0x20 */
@@ -143,7 +143,7 @@ typedef struct {
     __I  uint32_t WORD5;                             /**< Flash Region Compare Status Data, array offset: 0x814, array step: 0x20 */
     uint8_t RESERVED_0[8];
   } FRAD[QuadSPI_FRAD_COUNT];
-  struct {                                         /* offset: 0x900, array step: 0x10 */
+  struct QuadSPI_MDAD {                            /* offset: 0x900, array step: 0x10 */
     __IO uint32_t TGMDAD;                            /**< Target Group n Master Domain Access Descriptor, array offset: 0x900, array step: 0x10 */
     __I  uint32_t TGSFAR;                            /**< Target Group n SFAR Address, array offset: 0x904, array step: 0x10 */
     __IO uint32_t TGSFARS;                           /**< Target Group n SFAR Status, array offset: 0x908, array step: 0x10 */

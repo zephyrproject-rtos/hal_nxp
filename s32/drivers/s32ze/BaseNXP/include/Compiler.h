@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file           Compiler.h
 *   @implements     Compiler.h_Artifact
-*   @version 1.0.0
+*   @version 2.0.0
 *
 *   @brief   AUTOSAR BaseNXP - SWS Compiler abstraction
 *   @details The file Compiler.h provides macros for the encapsulation of definitions and
@@ -48,7 +48,7 @@ extern "C"{
 #define COMPILER_AR_RELEASE_MAJOR_VERSION       4
 #define COMPILER_AR_RELEASE_MINOR_VERSION       7
 #define COMPILER_AR_RELEASE_REVISION_VERSION    0
-#define COMPILER_SW_MAJOR_VERSION               1
+#define COMPILER_SW_MAJOR_VERSION               2
 #define COMPILER_SW_MINOR_VERSION               0
 #define COMPILER_SW_PATCH_VERSION               0
 /**@}*/
@@ -272,8 +272,8 @@ extern "C"{
     
 #endif /* #ifdef _HITECH_C_S32ZE_ */
 
-/**************************************** Linaro *********************************************/
-#ifdef _LINARO_C_S32ZE_
+/**************************************** GCC *********************************************/
+#ifdef _GCC_C_S32ZE_
     /* Prototypes for intrinsic functions */
     /**
     * @brief The compiler abstraction shall provide the INLINE define for abstraction of the keyword
@@ -318,7 +318,7 @@ extern "C"{
      */
     #define PACKED __attribute__((__packed__))
     
-#endif /* #ifdef _LINARO_C_S32ZE_ */
+#endif /* #ifdef _GCC_C_S32ZE_ */
 /**************************************** DS5 *************************************************/
 #ifdef _ARM_DS5_C_S32ZE_
     /* Prototypes for intrinsic functions */
@@ -479,23 +479,7 @@ extern "C"{
 * definition of functions returning a pointer to a variable.
 */
 #define FUNC_P2VAR(rettype, ptrclass, memclass) ptrclass rettype * memclass
-
-/**
- * @brief Compiler abstraction for allocating variables to nocache section
- */
-#ifdef CONFIG_NOCACHE_MEMORY
-#ifdef __ZEPHYR__
-#include <zephyr/toolchain.h>
-#else
-#ifndef STRINGIFY
-#define STRINGIFY(x) #x
-#endif /* STRINGIFY */
-#endif /* __ZEPHYR__ */
-#define VAR_SEC_NOCACHE(name) __attribute__((section(".nocache." STRINGIFY(name))))
-#else
-#define VAR_SEC_NOCACHE(name)
-#endif /* CONFIG_NOCACHE_MEMORY */
-
+ 
 /*==================================================================================================
 *                                             ENUMS
 ==================================================================================================*/

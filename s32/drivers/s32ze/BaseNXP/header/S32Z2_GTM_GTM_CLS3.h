@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GTM_gtm_cls3.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_GTM_gtm_cls3
  *
  * This file contains register definitions and macros for easy access to their
@@ -69,6 +69,8 @@
  */
 
 /** GTM_gtm_cls3 - Size of Registers Arrays */
+#define GTM_gtm_cls3_CDTM3_DTM4_CH4_DTV_COUNT     4u
+#define GTM_gtm_cls3_CDTM3_DTM5_CH4_DTV_COUNT     4u
 #define GTM_gtm_cls3_MCS3_MEM_COUNT               3072u
 
 /** GTM_gtm_cls3 - Register Layout Typedef */
@@ -77,9 +79,9 @@ typedef struct {
   __IO uint32_t ATOM3_CH0_RDADDR;                  /**< ATOM[i] channel[x] ARU read address register, offset: 0x1800 */
   __IO uint32_t ATOM3_CH0_CTRL;                    /**< ATOM[i] channel [x] control register, offset: 0x1804 */
   __IO uint32_t ATOM3_CH0_SR0;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1808 */
-  __IO uint32_t ATOM3_CH0_SR1;                     /**< ATOM[i] channel [x] CCU1 compare shadow register, offset: 0x180C */
+  __IO uint32_t ATOM3_CH0_SR1;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x180C */
   __IO uint32_t ATOM3_CH0_CM0;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1810 */
-  __IO uint32_t ATOM3_CH0_CM1;                     /**< ATOM[i] channel [x] CCU1 compare register, offset: 0x1814 */
+  __IO uint32_t ATOM3_CH0_CM1;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1814 */
   __IO uint32_t ATOM3_CH0_CN0;                     /**< ATOM[i] channel [x] CCU0 counter register, offset: 0x1818 */
   __IO uint32_t ATOM3_CH0_STAT;                    /**< ATOM[i] channel [x] status register, offset: 0x181C */
   __IO uint32_t ATOM3_CH0_IRQ_NOTIFY;              /**< ATOM[i] channel [x] interrupt notification register, offset: 0x1820 */
@@ -92,9 +94,9 @@ typedef struct {
   __IO uint32_t ATOM3_CH1_RDADDR;                  /**< ATOM[i] channel[x] ARU read address register, offset: 0x1880 */
   __IO uint32_t ATOM3_CH1_CTRL;                    /**< ATOM[i] channel [x] control register, offset: 0x1884 */
   __IO uint32_t ATOM3_CH1_SR0;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1888 */
-  __IO uint32_t ATOM3_CH1_SR1;                     /**< ATOM[i] channel [x] CCU1 compare shadow register, offset: 0x188C */
+  __IO uint32_t ATOM3_CH1_SR1;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x188C */
   __IO uint32_t ATOM3_CH1_CM0;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1890 */
-  __IO uint32_t ATOM3_CH1_CM1;                     /**< ATOM[i] channel [x] CCU1 compare register, offset: 0x1894 */
+  __IO uint32_t ATOM3_CH1_CM1;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1894 */
   __IO uint32_t ATOM3_CH1_CN0;                     /**< ATOM[i] channel [x] CCU0 counter register, offset: 0x1898 */
   __IO uint32_t ATOM3_CH1_STAT;                    /**< ATOM[i] channel [x] status register, offset: 0x189C */
   __IO uint32_t ATOM3_CH1_IRQ_NOTIFY;              /**< ATOM[i] channel [x] interrupt notification register, offset: 0x18A0 */
@@ -107,9 +109,9 @@ typedef struct {
   __IO uint32_t ATOM3_CH2_RDADDR;                  /**< ATOM[i] channel[x] ARU read address register, offset: 0x1900 */
   __IO uint32_t ATOM3_CH2_CTRL;                    /**< ATOM[i] channel [x] control register, offset: 0x1904 */
   __IO uint32_t ATOM3_CH2_SR0;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1908 */
-  __IO uint32_t ATOM3_CH2_SR1;                     /**< ATOM[i] channel [x] CCU1 compare shadow register, offset: 0x190C */
+  __IO uint32_t ATOM3_CH2_SR1;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x190C */
   __IO uint32_t ATOM3_CH2_CM0;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1910 */
-  __IO uint32_t ATOM3_CH2_CM1;                     /**< ATOM[i] channel [x] CCU1 compare register, offset: 0x1914 */
+  __IO uint32_t ATOM3_CH2_CM1;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1914 */
   __IO uint32_t ATOM3_CH2_CN0;                     /**< ATOM[i] channel [x] CCU0 counter register, offset: 0x1918 */
   __IO uint32_t ATOM3_CH2_STAT;                    /**< ATOM[i] channel [x] status register, offset: 0x191C */
   __IO uint32_t ATOM3_CH2_IRQ_NOTIFY;              /**< ATOM[i] channel [x] interrupt notification register, offset: 0x1920 */
@@ -122,9 +124,9 @@ typedef struct {
   __IO uint32_t ATOM3_CH3_RDADDR;                  /**< ATOM[i] channel[x] ARU read address register, offset: 0x1980 */
   __IO uint32_t ATOM3_CH3_CTRL;                    /**< ATOM[i] channel [x] control register, offset: 0x1984 */
   __IO uint32_t ATOM3_CH3_SR0;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1988 */
-  __IO uint32_t ATOM3_CH3_SR1;                     /**< ATOM[i] channel [x] CCU1 compare shadow register, offset: 0x198C */
+  __IO uint32_t ATOM3_CH3_SR1;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x198C */
   __IO uint32_t ATOM3_CH3_CM0;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1990 */
-  __IO uint32_t ATOM3_CH3_CM1;                     /**< ATOM[i] channel [x] CCU1 compare register, offset: 0x1994 */
+  __IO uint32_t ATOM3_CH3_CM1;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1994 */
   __IO uint32_t ATOM3_CH3_CN0;                     /**< ATOM[i] channel [x] CCU0 counter register, offset: 0x1998 */
   __IO uint32_t ATOM3_CH3_STAT;                    /**< ATOM[i] channel [x] status register, offset: 0x199C */
   __IO uint32_t ATOM3_CH3_IRQ_NOTIFY;              /**< ATOM[i] channel [x] interrupt notification register, offset: 0x19A0 */
@@ -137,9 +139,9 @@ typedef struct {
   __IO uint32_t ATOM3_CH4_RDADDR;                  /**< ATOM[i] channel[x] ARU read address register, offset: 0x1A00 */
   __IO uint32_t ATOM3_CH4_CTRL;                    /**< ATOM[i] channel [x] control register, offset: 0x1A04 */
   __IO uint32_t ATOM3_CH4_SR0;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1A08 */
-  __IO uint32_t ATOM3_CH4_SR1;                     /**< ATOM[i] channel [x] CCU1 compare shadow register, offset: 0x1A0C */
+  __IO uint32_t ATOM3_CH4_SR1;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1A0C */
   __IO uint32_t ATOM3_CH4_CM0;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1A10 */
-  __IO uint32_t ATOM3_CH4_CM1;                     /**< ATOM[i] channel [x] CCU1 compare register, offset: 0x1A14 */
+  __IO uint32_t ATOM3_CH4_CM1;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1A14 */
   __IO uint32_t ATOM3_CH4_CN0;                     /**< ATOM[i] channel [x] CCU0 counter register, offset: 0x1A18 */
   __IO uint32_t ATOM3_CH4_STAT;                    /**< ATOM[i] channel [x] status register, offset: 0x1A1C */
   __IO uint32_t ATOM3_CH4_IRQ_NOTIFY;              /**< ATOM[i] channel [x] interrupt notification register, offset: 0x1A20 */
@@ -152,9 +154,9 @@ typedef struct {
   __IO uint32_t ATOM3_CH5_RDADDR;                  /**< ATOM[i] channel[x] ARU read address register, offset: 0x1A80 */
   __IO uint32_t ATOM3_CH5_CTRL;                    /**< ATOM[i] channel [x] control register, offset: 0x1A84 */
   __IO uint32_t ATOM3_CH5_SR0;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1A88 */
-  __IO uint32_t ATOM3_CH5_SR1;                     /**< ATOM[i] channel [x] CCU1 compare shadow register, offset: 0x1A8C */
+  __IO uint32_t ATOM3_CH5_SR1;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1A8C */
   __IO uint32_t ATOM3_CH5_CM0;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1A90 */
-  __IO uint32_t ATOM3_CH5_CM1;                     /**< ATOM[i] channel [x] CCU1 compare register, offset: 0x1A94 */
+  __IO uint32_t ATOM3_CH5_CM1;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1A94 */
   __IO uint32_t ATOM3_CH5_CN0;                     /**< ATOM[i] channel [x] CCU0 counter register, offset: 0x1A98 */
   __IO uint32_t ATOM3_CH5_STAT;                    /**< ATOM[i] channel [x] status register, offset: 0x1A9C */
   __IO uint32_t ATOM3_CH5_IRQ_NOTIFY;              /**< ATOM[i] channel [x] interrupt notification register, offset: 0x1AA0 */
@@ -167,9 +169,9 @@ typedef struct {
   __IO uint32_t ATOM3_CH6_RDADDR;                  /**< ATOM[i] channel[x] ARU read address register, offset: 0x1B00 */
   __IO uint32_t ATOM3_CH6_CTRL;                    /**< ATOM[i] channel [x] control register, offset: 0x1B04 */
   __IO uint32_t ATOM3_CH6_SR0;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1B08 */
-  __IO uint32_t ATOM3_CH6_SR1;                     /**< ATOM[i] channel [x] CCU1 compare shadow register, offset: 0x1B0C */
+  __IO uint32_t ATOM3_CH6_SR1;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1B0C */
   __IO uint32_t ATOM3_CH6_CM0;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1B10 */
-  __IO uint32_t ATOM3_CH6_CM1;                     /**< ATOM[i] channel [x] CCU1 compare register, offset: 0x1B14 */
+  __IO uint32_t ATOM3_CH6_CM1;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1B14 */
   __IO uint32_t ATOM3_CH6_CN0;                     /**< ATOM[i] channel [x] CCU0 counter register, offset: 0x1B18 */
   __IO uint32_t ATOM3_CH6_STAT;                    /**< ATOM[i] channel [x] status register, offset: 0x1B1C */
   __IO uint32_t ATOM3_CH6_IRQ_NOTIFY;              /**< ATOM[i] channel [x] interrupt notification register, offset: 0x1B20 */
@@ -182,9 +184,9 @@ typedef struct {
   __IO uint32_t ATOM3_CH7_RDADDR;                  /**< ATOM[i] channel[x] ARU read address register, offset: 0x1B80 */
   __IO uint32_t ATOM3_CH7_CTRL;                    /**< ATOM[i] channel [x] control register, offset: 0x1B84 */
   __IO uint32_t ATOM3_CH7_SR0;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1B88 */
-  __IO uint32_t ATOM3_CH7_SR1;                     /**< ATOM[i] channel [x] CCU1 compare shadow register, offset: 0x1B8C */
+  __IO uint32_t ATOM3_CH7_SR1;                     /**< ATOM[i] channel [x] CCU0 compare shadow register, offset: 0x1B8C */
   __IO uint32_t ATOM3_CH7_CM0;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1B90 */
-  __IO uint32_t ATOM3_CH7_CM1;                     /**< ATOM[i] channel [x] CCU1 compare register, offset: 0x1B94 */
+  __IO uint32_t ATOM3_CH7_CM1;                     /**< ATOM[i] channel [x] CCU0 compare register, offset: 0x1B94 */
   __IO uint32_t ATOM3_CH7_CN0;                     /**< ATOM[i] channel [x] CCU0 counter register, offset: 0x1B98 */
   __IO uint32_t ATOM3_CH7_STAT;                    /**< ATOM[i] channel [x] status register, offset: 0x1B9C */
   __IO uint32_t ATOM3_CH7_IRQ_NOTIFY;              /**< ATOM[i] channel [x] interrupt notification register, offset: 0x1BA0 */
@@ -600,10 +602,7 @@ typedef struct {
   __IO uint32_t CDTM3_DTM4_CH_CTRL2;               /**< CDTM[i]_DTM[d] channel control register 2, offset: 0x4508 */
   __IO uint32_t CDTM3_DTM4_CH_CTRL2_SR;            /**< CDTM[i] DTM[j] channel control register 2 shadow, offset: 0x450C */
   __IO uint32_t CDTM3_DTM4_PS_CTRL;                /**< CDTM[i]_DTM[d] phase shift unit configuration and control register, offset: 0x4510 */
-  __IO uint32_t CDTM3_DTM4_CH0_DTV;                /**< CDTM[i]_DTM[d] channel [x] dead time reload values, offset: 0x4514 */
-  __IO uint32_t CDTM3_DTM4_CH1_DTV;                /**< CDTM[i]_DTM[d] channel [x] dead time reload values, offset: 0x4518 */
-  __IO uint32_t CDTM3_DTM4_CH2_DTV;                /**< CDTM[i]_DTM[d] channel [x] dead time reload values, offset: 0x451C */
-  __IO uint32_t CDTM3_DTM4_CH3_DTV;                /**< CDTM[i]_DTM[d] channel [x] dead time reload values, offset: 0x4520 */
+  __IO uint32_t CDTM3_DTM4_CH_DTV[GTM_gtm_cls3_CDTM3_DTM4_CH4_DTV_COUNT]; /**< CDTM[i]_DTM[d] channel [x] dead time reload values, array offset: 0x4514, array step: 0x4 */
   __IO uint32_t CDTM3_DTM4_CH_SR;                  /**< CDTM[i]_DTM[d] channel shadow register, offset: 0x4524 */
   __IO uint32_t CDTM3_DTM4_CH_CTRL3;               /**< CDTM[i]_DTM[d] channel control register 3, offset: 0x4528 */
   __IO uint32_t CDTM3_DTM4_CTRL2;                  /**< CDTM[i]_DTM[d] global configuration and control register 2, offset: 0x452C */
@@ -616,10 +615,7 @@ typedef struct {
   __IO uint32_t CDTM3_DTM5_CH_CTRL2;               /**< CDTM[i]_DTM[d] channel control register 2, offset: 0x4548 */
   __IO uint32_t CDTM3_DTM5_CH_CTRL2_SR;            /**< CDTM[i] DTM[j] channel control register 2 shadow, offset: 0x454C */
   __IO uint32_t CDTM3_DTM5_PS_CTRL;                /**< CDTM[i]_DTM[d] phase shift unit configuration and control register, offset: 0x4550 */
-  __IO uint32_t CDTM3_DTM5_CH0_DTV;                /**< CDTM[i]_DTM[d] channel [x] dead time reload values, offset: 0x4554 */
-  __IO uint32_t CDTM3_DTM5_CH1_DTV;                /**< CDTM[i]_DTM[d] channel [x] dead time reload values, offset: 0x4558 */
-  __IO uint32_t CDTM3_DTM5_CH2_DTV;                /**< CDTM[i]_DTM[d] channel [x] dead time reload values, offset: 0x455C */
-  __IO uint32_t CDTM3_DTM5_CH3_DTV;                /**< CDTM[i]_DTM[d] channel [x] dead time reload values, offset: 0x4560 */
+  __IO uint32_t CDTM3_DTM5_CH_DTV[GTM_gtm_cls3_CDTM3_DTM5_CH4_DTV_COUNT]; /**< CDTM[i]_DTM[d] channel [x] dead time reload values, array offset: 0x4554, array step: 0x4 */
   __IO uint32_t CDTM3_DTM5_CH_SR;                  /**< CDTM[i]_DTM[d] channel shadow register, offset: 0x4564 */
   __IO uint32_t CDTM3_DTM5_CH_CTRL3;               /**< CDTM[i]_DTM[d] channel control register 3, offset: 0x4568 */
   __IO uint32_t CDTM3_DTM5_CTRL2;                  /**< CDTM[i]_DTM[d] global configuration and control register 2, offset: 0x456C */
@@ -826,7 +822,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH0_SR0_SR0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH0_SR0_SR0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH0_SR0_SR0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH0_SR1 - ATOM[i] channel [x] CCU1 compare shadow register */
+/*! @name ATOM3_CH0_SR1 - ATOM[i] channel [x] CCU0 compare shadow register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH0_SR1_SR1_MASK      (0xFFFFFFU)
@@ -844,7 +840,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH0_CM0_CM0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH0_CM0_CM0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH0_CM0_CM0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH0_CM1 - ATOM[i] channel [x] CCU1 compare register */
+/*! @name ATOM3_CH0_CM1 - ATOM[i] channel [x] CCU0 compare register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH0_CM1_CM1_MASK      (0xFFFFFFU)
@@ -1103,7 +1099,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH1_SR0_SR0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH1_SR0_SR0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH1_SR0_SR0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH1_SR1 - ATOM[i] channel [x] CCU1 compare shadow register */
+/*! @name ATOM3_CH1_SR1 - ATOM[i] channel [x] CCU0 compare shadow register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH1_SR1_SR1_MASK      (0xFFFFFFU)
@@ -1121,7 +1117,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH1_CM0_CM0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH1_CM0_CM0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH1_CM0_CM0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH1_CM1 - ATOM[i] channel [x] CCU1 compare register */
+/*! @name ATOM3_CH1_CM1 - ATOM[i] channel [x] CCU0 compare register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH1_CM1_CM1_MASK      (0xFFFFFFU)
@@ -1380,7 +1376,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH2_SR0_SR0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH2_SR0_SR0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH2_SR0_SR0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH2_SR1 - ATOM[i] channel [x] CCU1 compare shadow register */
+/*! @name ATOM3_CH2_SR1 - ATOM[i] channel [x] CCU0 compare shadow register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH2_SR1_SR1_MASK      (0xFFFFFFU)
@@ -1398,7 +1394,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH2_CM0_CM0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH2_CM0_CM0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH2_CM0_CM0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH2_CM1 - ATOM[i] channel [x] CCU1 compare register */
+/*! @name ATOM3_CH2_CM1 - ATOM[i] channel [x] CCU0 compare register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH2_CM1_CM1_MASK      (0xFFFFFFU)
@@ -1657,7 +1653,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH3_SR0_SR0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH3_SR0_SR0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH3_SR0_SR0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH3_SR1 - ATOM[i] channel [x] CCU1 compare shadow register */
+/*! @name ATOM3_CH3_SR1 - ATOM[i] channel [x] CCU0 compare shadow register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH3_SR1_SR1_MASK      (0xFFFFFFU)
@@ -1675,7 +1671,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH3_CM0_CM0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH3_CM0_CM0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH3_CM0_CM0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH3_CM1 - ATOM[i] channel [x] CCU1 compare register */
+/*! @name ATOM3_CH3_CM1 - ATOM[i] channel [x] CCU0 compare register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH3_CM1_CM1_MASK      (0xFFFFFFU)
@@ -1934,7 +1930,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH4_SR0_SR0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH4_SR0_SR0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH4_SR0_SR0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH4_SR1 - ATOM[i] channel [x] CCU1 compare shadow register */
+/*! @name ATOM3_CH4_SR1 - ATOM[i] channel [x] CCU0 compare shadow register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH4_SR1_SR1_MASK      (0xFFFFFFU)
@@ -1952,7 +1948,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH4_CM0_CM0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH4_CM0_CM0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH4_CM0_CM0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH4_CM1 - ATOM[i] channel [x] CCU1 compare register */
+/*! @name ATOM3_CH4_CM1 - ATOM[i] channel [x] CCU0 compare register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH4_CM1_CM1_MASK      (0xFFFFFFU)
@@ -2211,7 +2207,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH5_SR0_SR0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH5_SR0_SR0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH5_SR0_SR0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH5_SR1 - ATOM[i] channel [x] CCU1 compare shadow register */
+/*! @name ATOM3_CH5_SR1 - ATOM[i] channel [x] CCU0 compare shadow register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH5_SR1_SR1_MASK      (0xFFFFFFU)
@@ -2229,7 +2225,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH5_CM0_CM0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH5_CM0_CM0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH5_CM0_CM0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH5_CM1 - ATOM[i] channel [x] CCU1 compare register */
+/*! @name ATOM3_CH5_CM1 - ATOM[i] channel [x] CCU0 compare register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH5_CM1_CM1_MASK      (0xFFFFFFU)
@@ -2488,7 +2484,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH6_SR0_SR0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH6_SR0_SR0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH6_SR0_SR0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH6_SR1 - ATOM[i] channel [x] CCU1 compare shadow register */
+/*! @name ATOM3_CH6_SR1 - ATOM[i] channel [x] CCU0 compare shadow register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH6_SR1_SR1_MASK      (0xFFFFFFU)
@@ -2506,7 +2502,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH6_CM0_CM0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH6_CM0_CM0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH6_CM0_CM0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH6_CM1 - ATOM[i] channel [x] CCU1 compare register */
+/*! @name ATOM3_CH6_CM1 - ATOM[i] channel [x] CCU0 compare register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH6_CM1_CM1_MASK      (0xFFFFFFU)
@@ -2765,7 +2761,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH7_SR0_SR0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH7_SR0_SR0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH7_SR0_SR0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH7_SR1 - ATOM[i] channel [x] CCU1 compare shadow register */
+/*! @name ATOM3_CH7_SR1 - ATOM[i] channel [x] CCU0 compare shadow register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH7_SR1_SR1_MASK      (0xFFFFFFU)
@@ -2783,7 +2779,7 @@ typedef struct {
 #define GTM_gtm_cls3_ATOM3_CH7_CM0_CM0(x)        (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_ATOM3_CH7_CM0_CM0_SHIFT)) & GTM_gtm_cls3_ATOM3_CH7_CM0_CM0_MASK)
 /*! @} */
 
-/*! @name ATOM3_CH7_CM1 - ATOM[i] channel [x] CCU1 compare register */
+/*! @name ATOM3_CH7_CM1 - ATOM[i] channel [x] CCU0 compare register */
 /*! @{ */
 
 #define GTM_gtm_cls3_ATOM3_CH7_CM1_CM1_MASK      (0xFFFFFFU)
@@ -12458,60 +12454,18 @@ typedef struct {
 #define GTM_gtm_cls3_CDTM3_DTM4_PS_CTRL_SHIFT_SEL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM4_PS_CTRL_SHIFT_SEL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM4_PS_CTRL_SHIFT_SEL_MASK)
 /*! @} */
 
-/*! @name CDTM3_DTM4_CH0_DTV - CDTM[i]_DTM[d] channel [x] dead time reload values */
+/*! @name CDTM3_DTM4_CH_DTV - CDTM[i]_DTM[d] channel [x] dead time reload values */
 /*! @{ */
 
-#define GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELRISE_MASK (0x1FFFU)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELRISE_SHIFT (0U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELRISE_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELRISE(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELRISE_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELRISE_MASK)
+#define GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELRISE_MASK (0x1FFFU)
+#define GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELRISE_SHIFT (0U)
+#define GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELRISE_WIDTH (13U)
+#define GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELRISE(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELRISE_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELRISE_MASK)
 
-#define GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELFALL_MASK (0x1FFF0000U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELFALL_SHIFT (16U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELFALL_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELFALL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELFALL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM4_CH0_DTV_RELFALL_MASK)
-/*! @} */
-
-/*! @name CDTM3_DTM4_CH1_DTV - CDTM[i]_DTM[d] channel [x] dead time reload values */
-/*! @{ */
-
-#define GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELRISE_MASK (0x1FFFU)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELRISE_SHIFT (0U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELRISE_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELRISE(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELRISE_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELRISE_MASK)
-
-#define GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELFALL_MASK (0x1FFF0000U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELFALL_SHIFT (16U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELFALL_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELFALL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELFALL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM4_CH1_DTV_RELFALL_MASK)
-/*! @} */
-
-/*! @name CDTM3_DTM4_CH2_DTV - CDTM[i]_DTM[d] channel [x] dead time reload values */
-/*! @{ */
-
-#define GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELRISE_MASK (0x1FFFU)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELRISE_SHIFT (0U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELRISE_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELRISE(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELRISE_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELRISE_MASK)
-
-#define GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELFALL_MASK (0x1FFF0000U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELFALL_SHIFT (16U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELFALL_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELFALL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELFALL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM4_CH2_DTV_RELFALL_MASK)
-/*! @} */
-
-/*! @name CDTM3_DTM4_CH3_DTV - CDTM[i]_DTM[d] channel [x] dead time reload values */
-/*! @{ */
-
-#define GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELRISE_MASK (0x1FFFU)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELRISE_SHIFT (0U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELRISE_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELRISE(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELRISE_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELRISE_MASK)
-
-#define GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELFALL_MASK (0x1FFF0000U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELFALL_SHIFT (16U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELFALL_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELFALL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELFALL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM4_CH3_DTV_RELFALL_MASK)
+#define GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELFALL_MASK (0x1FFF0000U)
+#define GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELFALL_SHIFT (16U)
+#define GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELFALL_WIDTH (13U)
+#define GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELFALL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELFALL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM4_CH_DTV_RELFALL_MASK)
 /*! @} */
 
 /*! @name CDTM3_DTM4_CH_SR - CDTM[i]_DTM[d] channel shadow register */
@@ -13382,60 +13336,18 @@ typedef struct {
 #define GTM_gtm_cls3_CDTM3_DTM5_PS_CTRL_SHIFT_SEL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM5_PS_CTRL_SHIFT_SEL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM5_PS_CTRL_SHIFT_SEL_MASK)
 /*! @} */
 
-/*! @name CDTM3_DTM5_CH0_DTV - CDTM[i]_DTM[d] channel [x] dead time reload values */
+/*! @name CDTM3_DTM5_CH_DTV - CDTM[i]_DTM[d] channel [x] dead time reload values */
 /*! @{ */
 
-#define GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELRISE_MASK (0x1FFFU)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELRISE_SHIFT (0U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELRISE_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELRISE(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELRISE_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELRISE_MASK)
+#define GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELRISE_MASK (0x1FFFU)
+#define GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELRISE_SHIFT (0U)
+#define GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELRISE_WIDTH (13U)
+#define GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELRISE(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELRISE_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELRISE_MASK)
 
-#define GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELFALL_MASK (0x1FFF0000U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELFALL_SHIFT (16U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELFALL_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELFALL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELFALL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM5_CH0_DTV_RELFALL_MASK)
-/*! @} */
-
-/*! @name CDTM3_DTM5_CH1_DTV - CDTM[i]_DTM[d] channel [x] dead time reload values */
-/*! @{ */
-
-#define GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELRISE_MASK (0x1FFFU)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELRISE_SHIFT (0U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELRISE_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELRISE(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELRISE_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELRISE_MASK)
-
-#define GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELFALL_MASK (0x1FFF0000U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELFALL_SHIFT (16U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELFALL_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELFALL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELFALL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM5_CH1_DTV_RELFALL_MASK)
-/*! @} */
-
-/*! @name CDTM3_DTM5_CH2_DTV - CDTM[i]_DTM[d] channel [x] dead time reload values */
-/*! @{ */
-
-#define GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELRISE_MASK (0x1FFFU)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELRISE_SHIFT (0U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELRISE_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELRISE(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELRISE_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELRISE_MASK)
-
-#define GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELFALL_MASK (0x1FFF0000U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELFALL_SHIFT (16U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELFALL_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELFALL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELFALL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM5_CH2_DTV_RELFALL_MASK)
-/*! @} */
-
-/*! @name CDTM3_DTM5_CH3_DTV - CDTM[i]_DTM[d] channel [x] dead time reload values */
-/*! @{ */
-
-#define GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELRISE_MASK (0x1FFFU)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELRISE_SHIFT (0U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELRISE_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELRISE(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELRISE_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELRISE_MASK)
-
-#define GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELFALL_MASK (0x1FFF0000U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELFALL_SHIFT (16U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELFALL_WIDTH (13U)
-#define GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELFALL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELFALL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM5_CH3_DTV_RELFALL_MASK)
+#define GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELFALL_MASK (0x1FFF0000U)
+#define GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELFALL_SHIFT (16U)
+#define GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELFALL_WIDTH (13U)
+#define GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELFALL(x) (((uint32_t)(((uint32_t)(x)) << GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELFALL_SHIFT)) & GTM_gtm_cls3_CDTM3_DTM5_CH_DTV_RELFALL_MASK)
 /*! @} */
 
 /*! @name CDTM3_DTM5_CH_SR - CDTM[i]_DTM[d] channel shadow register */

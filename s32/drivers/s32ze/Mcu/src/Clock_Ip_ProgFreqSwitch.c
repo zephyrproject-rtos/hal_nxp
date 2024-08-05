@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       Clock_Ip_ProgFreqSwitch.c
-*   @version    1.0.0
+*   @version    2.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -37,7 +37,7 @@ extern "C"{
 #define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_PROGFREQSWITCH_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_PROGFREQSWITCH_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_PROGFREQSWITCH_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_PROGFREQSWITCH_SW_PATCH_VERSION_C               0
 
@@ -71,6 +71,10 @@ extern "C"{
 
 /*==================================================================================================
 *                                          LOCAL MACROS
+==================================================================================================*/
+
+/*==================================================================================================
+*                                         LOCAL MACROS
 ==================================================================================================*/
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
 /* Pcfs settings that are dependent on device */
@@ -137,6 +141,7 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *C
                                                 uint32 CfgIndex
                                               );
 #endif
+
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -276,10 +281,27 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *C
             DivEndValue = (Finput * 1000U / Fsafe) - 1U;
 
             /* Configure pcfs registers */
-            CgmPcfsBase->PCFS_SDUR = MC_CGM_PCFS_SDUR_SDUR(Sdur);
-            CgmPcfsBase->PCFS[HwIndex].DIVC = MC_CGM_PCFS_DIVC_RATE(DivcRate) | MC_CGM_PCFS_DIVC_INIT(DivcInit);
-            CgmPcfsBase->PCFS[HwIndex].DIVE = MC_CGM_PCFS_DIVE_DIVE(DivEndValue);
-            CgmPcfsBase->PCFS[HwIndex].DIVS = MC_CGM_PCFS_DIVS_DIVS(DivStartValue);
+        #if (defined(CLOCK_IP_HAS_P5_AE_CLK) && defined(CLOCK_IP_HAS_FIRC_AE_CLK))
+            if (P5_AE_CLK==Config->Name)
+            {
+                #if (defined(CLOCK_IP_DEV_ERROR_DETECT) && (CLOCK_IP_DEV_ERROR_DETECT == STD_ON))
+                CLOCK_IP_DEV_ASSERT(Sdur < 256U);
+                #endif
+                IP_MC_CGM_AE->PCS_SDUR = MC_CGM_PCS_SDUR_SDUR(Sdur);
+                IP_MC_CGM_AE->PCS_DIVC1 = MC_CGM_PCS_DIVC1_RATE(DivcRate) | MC_CGM_PCS_DIVC1_INIT(DivcInit);
+                IP_MC_CGM_AE->PCS_DIVE1 = MC_CGM_PCS_DIVE1_DIVE(DivEndValue);
+                IP_MC_CGM_AE->PCS_DIVS1 = MC_CGM_PCS_DIVS1_DIVS(DivStartValue);
+            }
+            else
+            {
+        #endif
+                CgmPcfsBase->PCFS_SDUR = MC_CGM_PCFS_SDUR_SDUR(Sdur);
+                CgmPcfsBase->PCFS[HwIndex].DIVC = MC_CGM_PCFS_DIVC_RATE(DivcRate) | MC_CGM_PCFS_DIVC_INIT(DivcInit);
+                CgmPcfsBase->PCFS[HwIndex].DIVE = MC_CGM_PCFS_DIVE_DIVE(DivEndValue);
+                CgmPcfsBase->PCFS[HwIndex].DIVS = MC_CGM_PCFS_DIVS_DIVS(DivStartValue);
+        #if (defined(CLOCK_IP_HAS_P5_AE_CLK) && defined(CLOCK_IP_HAS_FIRC_AE_CLK))
+            }
+        #endif
         }
     }
     else
@@ -314,6 +336,7 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *C
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
 
+
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
@@ -326,14 +349,15 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *C
 const Clock_Ip_PcfsCallbackType Clock_Ip_axPcfsCallbacks[CLOCK_IP_PCFS_CALLBACKS_COUNT] =
 {
     {
-        Clock_Ip_ProgressiveFrequencyClockSwitchEmpty,     /* Set */
+        &Clock_Ip_ProgressiveFrequencyClockSwitchEmpty,     /* Set */
 
     },
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
     {
-        Clock_Ip_CgmXPcfsSdurDivcDiveDivs,              /* Set */
+        &Clock_Ip_CgmXPcfsSdurDivcDiveDivs,              /* Set */
     },
 #endif
+
 };
 
 /* Clock stop constant section data */

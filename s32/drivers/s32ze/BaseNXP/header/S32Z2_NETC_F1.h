@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_F1.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_NETC_F1
  *
  * This file contains register definitions and macros for easy access to their
@@ -88,7 +88,7 @@ typedef struct {
 } NETC_F1_Type, *NETC_F1_MemMapPtr;
 
 /** Number of instances of the NETC_F1 module. */
-#define NETC_F1_INSTANCE_COUNT                   (1)
+#define NETC_F1_INSTANCE_COUNT                   (1u)
 
 /* NETC_F1 - Peripheral instance base addresses */
 /** Peripheral NETC__EMDIO_BASE base address */

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SPFU.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_SPFU
  *
  * This file contains register definitions and macros for easy access to their
@@ -73,7 +73,7 @@
 
 /** SPFU - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x100 */
+  struct SPFU_PFN {                                /* offset: 0x0, array step: 0x100 */
     __IO uint32_t PF_CFG;                            /**< Prefetch Configuration, array offset: 0x0, array step: 0x100 */
     uint8_t RESERVED_0[252];
   } PFN[SPFU_PFN_COUNT];

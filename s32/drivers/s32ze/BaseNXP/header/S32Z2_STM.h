@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_STM.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_STM
  *
  * This file contains register definitions and macros for easy access to their
@@ -76,7 +76,7 @@ typedef struct {
   __IO uint32_t CR;                                /**< Control, offset: 0x0 */
   __IO uint32_t CNT;                               /**< Count, offset: 0x4 */
   uint8_t RESERVED_0[8];
-  struct {                                         /* offset: 0x10, array step: 0x10 */
+  struct STM_CHANNEL {                             /* offset: 0x10, array step: 0x10 */
     __IO uint32_t CCR;                               /**< Channel Control, array offset: 0x10, array step: 0x10 */
     __IO uint32_t CIR;                               /**< Channel Interrupt, array offset: 0x14, array step: 0x10 */
     __IO uint32_t CMP;                               /**< Channel Compare, array offset: 0x18, array step: 0x10 */
@@ -85,7 +85,7 @@ typedef struct {
 } STM_Type, *STM_MemMapPtr;
 
 /** Number of instances of the STM module. */
-#define STM_INSTANCE_COUNT                       (13)
+#define STM_INSTANCE_COUNT                       (13u)
 
 /* STM - Peripheral instance base addresses */
 /** Peripheral CE_STM_0 base address */

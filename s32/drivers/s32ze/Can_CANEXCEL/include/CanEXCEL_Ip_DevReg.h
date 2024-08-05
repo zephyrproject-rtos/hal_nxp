@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,6 +22,8 @@
 
 #define IP_CANXL_TBS_BASE_PTRS { IP_CANXL_0_TBS, IP_CANXL_1_TBS }
 
+#define CANXL_IP_HAS_ABORT (STD_OFF)
+
 /**
 * @brief Default value for the BCFG2 register
 */
@@ -42,6 +44,11 @@
 * @brief Clear Mask for Default value for the SYSS register
 */
 #define CANEXCEL_IP_SYSS_CLEAR_DEFAULT_VALUE_U32           ((uint32)0xFFFF0F03U)
+/**
+* @brief Clear Mask for Default value for the CH1_MBSTAT register for CANEXCEL MRU
+*/
+#define CANEXCEL_IP_CH1_MBSTAT_CLEAR_DEFAULT_VALUE_U32       ((uint32)0x0000F000U)
+
 /** @} */
 
 #endif /* CANEXCEL_IP_DEVREG_H_ */

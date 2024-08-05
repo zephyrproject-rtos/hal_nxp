@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GPR4_PCTL.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_GPR4_PCTL
  *
  * This file contains register definitions and macros for easy access to their
@@ -81,7 +81,7 @@ typedef struct {
   __IO uint32_t LIN8PCTL;                          /**< LINFlex_8 Clock Control Enable, offset: 0x20 */
   __IO uint32_t SDHCPCTL;                          /**< uSDHC Clock Control Enable, offset: 0x24 */
   __IO uint32_t SRX1PCTL;                          /**< SRX_1 Clock Control Enable, offset: 0x28 */
-  __IO uint32_t I3C2PCTL;                          /**< I3C_2 Clock Control Enable, offset: 0x2C */
+  __IO uint32_t I3C2PCTL;                          /**< LPI2C_2 Clock Control Enable, offset: 0x2C */
   __IO uint32_t PSI51PCTL;                         /**< PSI5_1 Clock Control Enable, offset: 0x30 */
   __IO uint32_t SIUL4PCTL;                         /**< SIUL2_4 Clock Control Enable, offset: 0x34 */
   __IO uint32_t PSI5S1PCTL;                        /**< PSI5_S_1 Clock Control Enable, offset: 0x38 */
@@ -223,7 +223,7 @@ typedef struct {
 #define GPR4_PCTL_SRX1PCTL_PCTL(x)               (((uint32_t)(((uint32_t)(x)) << GPR4_PCTL_SRX1PCTL_PCTL_SHIFT)) & GPR4_PCTL_SRX1PCTL_PCTL_MASK)
 /*! @} */
 
-/*! @name I3C2PCTL - I3C_2 Clock Control Enable */
+/*! @name I3C2PCTL - LPI2C_2 Clock Control Enable */
 /*! @{ */
 
 #define GPR4_PCTL_I3C2PCTL_PCTL_MASK             (0x1U)

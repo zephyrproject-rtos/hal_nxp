@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file           Mcal.h
 *   @implements     Mcal.h_Artifact
-*   @version 1.0.0
+*   @version 2.0.0
 *
 *   @brief   AUTOSAR BaseNXP - SWS Compiler abstraction specific for MCAL.
 *   @details The file Mcal.h provides MCAL specific macros used for compiler abstraction.
@@ -39,7 +39,9 @@ extern "C"{
 * @file        Mcal.h
 * @brief Include standard types
 */
-#include "StandardTypes.h"
+#include "Std_Types.h"
+
+#include "DeviceDefinition.h"
 
 #include "Soc_Ips.h"
 
@@ -55,7 +57,7 @@ extern "C"{
 #define MCAL_AR_RELEASE_MAJOR_VERSION     4
 #define MCAL_AR_RELEASE_MINOR_VERSION     7
 #define MCAL_AR_RELEASE_REVISION_VERSION  0
-#define MCAL_SW_MAJOR_VERSION             1
+#define MCAL_SW_MAJOR_VERSION             2
 #define MCAL_SW_MINOR_VERSION             0
 #define MCAL_SW_PATCH_VERSION             0
 
@@ -71,15 +73,15 @@ extern "C"{
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if source file and StandardTypes.h header file are of the same Autosar version */
+    /* Check if source file and Std_Types.h header file are of the same Autosar version */
     #if ((MCAL_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
          (MCAL_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version Numbers of Mcal.h and StandardTypes.h are different"
+        #error "AutoSar Version Numbers of Mcal.h and Std_Types.h are different"
     #endif
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if source file and StandardTypes.h header file are of the same Autosar version */
+    /* Check if source file and Reg_eSys.h header file are of the same Autosar version */
     #if ((MCAL_AR_RELEASE_MAJOR_VERSION != REG_ESYS_AR_RELEASE_MAJOR_VERSION) || \
          (MCAL_AR_RELEASE_MINOR_VERSION != REG_ESYS_AR_RELEASE_MINOR_VERSION))
         #error "AutoSar Version Numbers of Mcal.h and Reg_eSys.h are different"
@@ -170,8 +172,8 @@ extern "C"{
     */
     #define EXECUTE_WAIT()  ASM_KEYWORD("  wait");
 #endif /* #ifdef _HITECH_C_S32ZE_ */
-/**************************************** Linaro *********************************************/
-#ifdef _LINARO_C_S32ZE_
+/**************************************** GCC *********************************************/
+#ifdef _GCC_C_S32ZE_
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
@@ -189,7 +191,7 @@ extern "C"{
         #define MCAL_FAULT_INJECTION_POINT(label)
     #endif
   
-#endif /* #ifdef _LINARO_C_S32ZE_ */
+#endif /* #ifdef _GCC_C_S32ZE_ */
 
 /**************************************** DS5 *********************************************/
 #ifdef _ARM_DS5_C_S32ZE_
@@ -244,7 +246,7 @@ extern "C"{
     #ifndef _DIABDATA_C_S32ZE_
         #ifndef _CODEWARRIOR_C_S32ZE_
             #ifndef _HITECH_C_S32ZE_
-                #ifndef _LINARO_C_S32ZE_
+                #ifndef _GCC_C_S32ZE_
                     #ifndef _ARM_DS5_C_S32ZE_
                         #ifndef _IAR_C_S32ZE_
                             #error "Unsupported compiler. Compiler abstraction needs to be updated to use this compiler."

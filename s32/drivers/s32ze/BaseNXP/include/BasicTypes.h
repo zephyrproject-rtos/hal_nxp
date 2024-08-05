@@ -1,22 +1,22 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef BASICTYPES_H
 #define BASICTYPES_H
 
-#include "PlatformTypes.h"
+#include "Platform_Types.h"
 
 #if defined(INT8_MIN) && defined(INT16_MIN) && defined(INT16_MIN) && defined(INT32_MIN) && defined(INT64_MIN)  && \
     defined(INT8_MAX) && defined(INT16_MAX) && defined(INT16_MAX) && defined(INT32_MAX) && defined(INT64_MAX)  && \
     defined(UINT8_MAX) && defined(UINT16_MAX) && defined(UINT16_MAX) && defined(UINT32_MAX) && defined(UINT64_MAX)
-/* if stdint.h included in PlatformTypes.h, we are set */
+/* if stdint.h included in Platform_Types.h, we are set */
 #else
     #if !defined(NO_STDINT_H)
         #include <stdint.h>
     #else
-/* define stdint.h-like types over PlatformTypes.h */
+/* define stdint.h-like types over Platform_Types.h */
 
 /**
 @brief Unsigned 8 bit integer with range of 0 ..+255 (0x00..0xFF) -

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CANXL_RAMECC.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_CANXL_RAMECC
  *
  * This file contains register definitions and macros for easy access to their
@@ -70,7 +70,7 @@
 
 /** CANXL_RAMECC - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t DRMEC;                             /**< Data RAM Memory Error Control, offset: 0x0 */
+  __IO uint32_t DRMEC;                             /**< Data RAM Error Control, offset: 0x0 */
   __IO uint32_t DRERRIA;                           /**< Data RAM Error Injection Address, offset: 0x4 */
   __IO uint32_t DRERRIDP;                          /**< Data RAM Error Injection Data Pattern, offset: 0x8 */
   __IO uint32_t DRERRIPP;                          /**< Data RAM Error Injection Parity Pattern, offset: 0xC */
@@ -106,7 +106,7 @@ typedef struct {
  * @{
  */
 
-/*! @name DRMEC - Data RAM Memory Error Control */
+/*! @name DRMEC - Data RAM Error Control */
 /*! @{ */
 
 #define CANXL_RAMECC_DRMEC_ECCDIS_MASK           (0x100U)

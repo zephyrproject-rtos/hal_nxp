@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_FEED_DMA_TCD.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_FEED_DMA_TCD
  *
  * This file contains register definitions and macros for easy access to their
@@ -73,7 +73,7 @@
 
 /** FEED_DMA_TCD - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x1000 */
+  struct FEED_DMA_TCD_TCD {                        /* offset: 0x0, array step: 0x1000 */
     __IO uint32_t CH_CSR;                            /**< Channel Control and Status, array offset: 0x0, array step: 0x1000 */
     __IO uint32_t CH_ES;                             /**< Channel Error Status, array offset: 0x4, array step: 0x1000 */
     __IO uint32_t CH_INT;                            /**< Channel Interrupt Status, array offset: 0x8, array step: 0x1000 */
@@ -143,6 +143,11 @@ typedef struct {
 #define FEED_DMA_TCD_CH_CSR_EEI_SHIFT            (2U)
 #define FEED_DMA_TCD_CH_CSR_EEI_WIDTH            (1U)
 #define FEED_DMA_TCD_CH_CSR_EEI(x)               (((uint32_t)(((uint32_t)(x)) << FEED_DMA_TCD_CH_CSR_EEI_SHIFT)) & FEED_DMA_TCD_CH_CSR_EEI_MASK)
+
+#define FEED_DMA_TCD_CH_CSR_EBW_MASK             (0x8U)
+#define FEED_DMA_TCD_CH_CSR_EBW_SHIFT            (3U)
+#define FEED_DMA_TCD_CH_CSR_EBW_WIDTH            (1U)
+#define FEED_DMA_TCD_CH_CSR_EBW(x)               (((uint32_t)(((uint32_t)(x)) << FEED_DMA_TCD_CH_CSR_EBW_SHIFT)) & FEED_DMA_TCD_CH_CSR_EBW_MASK)
 
 #define FEED_DMA_TCD_CH_CSR_DONE_MASK            (0x40000000U)
 #define FEED_DMA_TCD_CH_CSR_DONE_SHIFT           (30U)
