@@ -538,7 +538,7 @@ void DSI_SetDpiConfig(const MIPI_DSI_Type *base,
     assert(NULL != config);
 
     /* coefficient DPI event size to number of DSI bytes. */
-    float coff = ((float)numLanes * (float)dsiHsBitClkFreq_Hz) / ((float)dpiPixelClkFreq_Hz * 8.0);
+    float coff = ((float)numLanes * (float)dsiHsBitClkFreq_Hz) / ((float)dpiPixelClkFreq_Hz * 8.0f);
 
     DSI_HOST_DPI_INTFC_Type *dpi = base->dpi;
 
