@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Spi_Ip_Cfg.h
-*   @version 1.0.0
+*   @version 2.0.0
 *
 *   @brief   AUTOSAR Spi - Spi configuration header file.
 *   @details This file is the header containing all the necessary information for SPI
@@ -31,8 +31,6 @@ extern "C"
 * 3) internal and external interfaces from this unit
 * 4) user callback header files
 ==================================================================================================*/
-#include <zephyr/devicetree.h>
-
 #include "Mcal.h"
 #include "OsIf.h"
 #include "Spi_Ip_Sa_Init_PBcfg.h"
@@ -44,7 +42,7 @@ extern "C"
 #define SPI_IP_AR_RELEASE_MAJOR_VERSION_CFG        4
 #define SPI_IP_AR_RELEASE_MINOR_VERSION_CFG        7
 #define SPI_IP_AR_RELEASE_REVISION_VERSION_CFG     0
-#define SPI_IP_SW_MAJOR_VERSION_CFG                1
+#define SPI_IP_SW_MAJOR_VERSION_CFG                2
 #define SPI_IP_SW_MINOR_VERSION_CFG                0
 #define SPI_IP_SW_PATCH_VERSION_CFG                0
 
@@ -89,13 +87,16 @@ extern "C"
     SPI_IP_SA_CONFIG_INIT_PB \
 
 /** @brief Total number of SpiPhyUnit configured as SPI. */
-#define SPI_IP_NUMBER_OF_INSTANCES DT_NUM_INST_STATUS_OKAY(nxp_s32_spi)
+#define SPI_IP_NUMBER_OF_INSTANCES (3U)
 
 /** @brief Number of FIFO entries supported */
 #define SPI_IP_FIFO_SIZE_U16    ((uint16)5U)
 
-/** @brief Enable Spi Slave Support */
-#define SPI_IP_SLAVE_SUPPORT  IS_ENABLED(CONFIG_SPI_SLAVE)
+/** @brief HWUnits enabled/disabled */
+#define SPI_IP_0_ENABLED  (STD_ON)
+#define SPI_IP_1_ENABLED  (STD_ON)
+#define SPI_IP_4_ENABLED  (STD_ON)
+#define SPI_IP_SLAVE_SUPPORT  (STD_ON)
 
 /**
 * @brief Defines if transfers are made using DMA or FIFO.
@@ -123,7 +124,7 @@ extern "C"
 *
 * @api
 */
-#define SPI_IP_ENABLE_USER_MODE_SUPPORT           STD_OFF
+#define SPI_IP_ENABLE_USER_MODE_SUPPORT           (STD_OFF)
 
 #ifndef MCAL_ENABLE_USER_MODE_SUPPORT
  #ifdef SPI_IP_ENABLE_USER_MODE_SUPPORT
@@ -158,7 +159,7 @@ extern "C"
 * @brief Define Timeout Method.
 * @details Define a certain timeout method from OsIf will be used in the driver.
 */
-#define SPI_IP_TIMEOUT_METHOD     (OSIF_COUNTER_DUMMY)
+#define SPI_IP_TIMEOUT_METHOD     (OSIF_COUNTER_SYSTEM)
 
 /**
 * @brief Switches ON or OFF for the detection and reporting of development errors(API parameter checking) at IP level.
