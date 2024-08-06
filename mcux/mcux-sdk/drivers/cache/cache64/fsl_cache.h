@@ -79,12 +79,13 @@ uint32_t CACHE64_GetInstance(CACHE64_POLSEL_Type *base);
 #endif
 
 /*!
- * brief Returns an instance number given physical memory address.
+ * brief Returns an instance numbers given physical memory address.
  *
  * param address The physical memory address.
+ * param pointer to store the index of the physical memory index
  * @return CACHE64_CTRL instance number starting from 0.
  */
-uint32_t CACHE64_GetInstanceByAddr(uint32_t address);
+uint32_t CACHE64_GetInstanceByAddr(uint32_t address, uint8_t *bufIndex);
 
 #if (defined(FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT) && (FSL_FEATURE_SOC_CACHE64_POLSEL_COUNT > 0))
 /*!
