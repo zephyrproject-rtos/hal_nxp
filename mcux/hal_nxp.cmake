@@ -250,7 +250,9 @@ include_driver_ifdef(CONFIG_DAC_MCUX_LPDAC		dac_1		driver_dac_1)
 include_driver_ifdef(CONFIG_NXP_IRQSTEER		irqsteer	driver_irqsteer)
 include_driver_ifdef(CONFIG_AUDIO_DMIC_MCUX		dmic		driver_dmic)
 include_driver_ifdef(CONFIG_DMA_NXP_EDMA		edma_rev2	driver_edma_rev2)
+if(NOT DEFINED CONFIG_SOC_SERIES_MCXC)
 include_driver_ifdef(CONFIG_SOC_FAMILY_NXP_MCX		mcx_spc		driver_mcx_spc)
+endif()
 include_driver_ifdef(CONFIG_ADC_MCUX_GAU		cns_adc		driver_cns_adc)
 include_driver_ifdef(CONFIG_DAC_MCUX_GAU		cns_dac		driver_cns_dac)
 include_driver_ifdef(CONFIG_DAI_NXP_ESAI		esai		driver_esai)
@@ -305,13 +307,17 @@ if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_kinetis")
 endif()
 
 if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_mcx")
+  if(CONFIG_SOC_SERIES_MCXC)
+    include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		flash		driver_flash)
+    include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port/driver_port.cmake)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port)
+  else()
+    include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		mcx_romapi	driver_flashiap)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/mcx_romapi/flash)
 
-  include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		mcx_romapi	driver_flashiap)
-  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/mcx_romapi/flash)
-
-  include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port/driver_port.cmake)
-  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port)
-
+    include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port/driver_port.cmake)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port)
+  endif()
 endif()
 
 # Temporary change to handle LPC SOC family name change between HWMv1 and HWMv2
