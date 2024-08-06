@@ -133,7 +133,7 @@ extern "C"{
 #include "Uart_MemMap.h"
 
 /** @brief Array of UART driver runtime state structures */
-Linflexd_Uart_Ip_StateStructureType Linflexd_Uart_Ip_apStateStructure[LINFLEXD_UART_IP_NUMBER_OF_INSTANCES];
+VAR_SEC_NOCACHE(inflexd_Uart_Ip_apStateStructure) Linflexd_Uart_Ip_StateStructureType Linflexd_Uart_Ip_apStateStructure[LINFLEXD_UART_IP_NUMBER_OF_INSTANCES];
 
 #define UART_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Uart_MemMap.h"
@@ -142,10 +142,10 @@ Linflexd_Uart_Ip_StateStructureType Linflexd_Uart_Ip_apStateStructure[LINFLEXD_U
 #include "Uart_MemMap.h"
 
 /** @brief User config structure. */
-static const Linflexd_Uart_Ip_UserConfigType* Linflexd_Uart_Ip_apUserConfig[LINFLEXD_IP_INSTANCE_COUNT];
+VAR_SEC_NOCACHE(Linflexd_Uart_Ip_apUserConfig) static const Linflexd_Uart_Ip_UserConfigType* Linflexd_Uart_Ip_apUserConfig[LINFLEXD_IP_INSTANCE_COUNT];
 
 /** @brief Array of pointers to UART driver runtime state structures */
-static Linflexd_Uart_Ip_StateStructureType* Linflexd_Uart_Ip_apStateStructuresArray[LINFLEXD_IP_INSTANCE_COUNT];
+VAR_SEC_NOCACHE(Linflexd_Uart_Ip_apStateStructuresArray) static Linflexd_Uart_Ip_StateStructureType* Linflexd_Uart_Ip_apStateStructuresArray[LINFLEXD_IP_INSTANCE_COUNT];
 
 #define UART_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Uart_MemMap.h"
