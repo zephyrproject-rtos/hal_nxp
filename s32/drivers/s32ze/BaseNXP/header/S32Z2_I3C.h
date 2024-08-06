@@ -135,7 +135,7 @@ typedef struct {
 } I3C_Type, *I3C_MemMapPtr;
 
 /** Number of instances of the I3C module. */
-#define I3C_INSTANCE_COUNT                       (3u)
+#define I3C_INSTANCE_COUNT                       (3)
 
 /* I3C - Peripheral instance base addresses */
 /** Peripheral I3C_0 base address */

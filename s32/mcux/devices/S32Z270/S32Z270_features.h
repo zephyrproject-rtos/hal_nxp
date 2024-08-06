@@ -25,20 +25,4 @@
 /* @brief Has timer enable control. */
 #define FSL_FEATURE_PIT_HAS_MDIS (1)
 
-
-/* I3C module features */
-
-/* @brief Has TERM bitfile in MERRWARN register. */
-#define FSL_FEATURE_I3C_HAS_NO_MERRWARN_TERM (0)
-/* @brief SOC has no reset driver. */
-#define FSL_FEATURE_I3C_HAS_NO_RESET (1)
-/* @brief Use fixed BAMATCH count, do not provide editable BAMATCH. */
-#define FSL_FEATURE_I3C_HAS_NO_SCONFIG_BAMATCH (0)
-/* @brief Register SCONFIG do not have IDRAND bitfield. */
-#define FSL_FEATURE_I3C_HAS_NO_SCONFIG_IDRAND (1)
-/* @brief Register SCONFIG has HDROK bitfield. */
-#define FSL_FEATURE_I3C_HAS_HDROK (1)
-/* @brief Has ERRATA_051617. */
-#define FSL_FEATURE_I3C_HAS_ERRATA_051617 (1)
-
 #endif /* _S32Z270_FEATURES_H_ */
