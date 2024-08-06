@@ -125,7 +125,7 @@ extern Netc_Eth_Ip_PCIeBaseType *netcPCIePFBase[FEATURE_NETC_NUMBER_OF_FUNC];
 
 #define ETH_43_NETC_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
-extern Netc_Eth_Ip_MACFilterHashTableEntryType *MACFilterHashTableAddrs[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+VAR_SEC_NOCACHE(MACFilterHashTableAddrs) extern Netc_Eth_Ip_MACFilterHashTableEntryType *MACFilterHashTableAddrs[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
 
 #define ETH_43_NETC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
@@ -184,34 +184,34 @@ extern volatile Netc_Eth_Ip_RxTimestampInfoType Netc_Eth_Ip_RxTimestampInfoBuff[
 #if defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE)
 #if (NETC_ETH_IP_FILL_LEVEL_API_ENABLE == STD_ON)
 /** @brief Structures used to measure the usage of the FIFOs*/
-volatile uint16 Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff[FEATURE_NETC_ETH_NUMBER_OF_CTRLS][NETC_ETH_IP_MAX_NUMBER_OF_RXRINGS];
-volatile Netc_Eth_Ip_FillLevelInfo Netc_Eth_Ip_Tx_FillLevelInfo[FEATURE_NETC_ETH_NUMBER_OF_CTRLS][NETC_ETH_IP_MAX_NUMBER_OF_TXRINGS];
+VAR_SEC_NOCACHE(Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff) volatile uint16 Netc_Eth_Ip_RxFifo_MaxNumberOfUsedBuff[FEATURE_NETC_ETH_NUMBER_OF_CTRLS][NETC_ETH_IP_MAX_NUMBER_OF_RXRINGS];
+VAR_SEC_NOCACHE(Netc_Eth_Ip_Tx_FillLevelInfo) volatile Netc_Eth_Ip_FillLevelInfo Netc_Eth_Ip_Tx_FillLevelInfo[FEATURE_NETC_ETH_NUMBER_OF_CTRLS][NETC_ETH_IP_MAX_NUMBER_OF_TXRINGS];
 #endif  /* STD_ON == NETC_ETH_IP_FILL_LEVEL_API_ENABLE  */
 #endif /* defined(NETC_ETH_IP_FILL_LEVEL_API_ENABLE) */
 
 /** @brief Pointers to NETC internal driver state for each controller(SI). */
-Netc_Eth_Ip_StateType *Netc_Eth_Ip_apxState[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+VAR_SEC_NOCACHE(Netc_Eth_Ip_apxState) Netc_Eth_Ip_StateType *Netc_Eth_Ip_apxState[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
 
 /** @brief List of Error Reporting structures that aggregate information for each Pcie function in case of an error reported to the Event Collector. EMDIO, TIMER, SWITCH, ENETC, PSI0, VSI1-7*/
-static volatile Netc_Eth_Ip_PcieFunctionErrorsReported Netc_Eth_Ip_ErrorStatus[FEATURE_NETC_NUMBER_OF_FUNC + FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS];
+VAR_SEC_NOCACHE(Netc_Eth_Ip_ErrorStatus) static volatile Netc_Eth_Ip_PcieFunctionErrorsReported Netc_Eth_Ip_ErrorStatus[FEATURE_NETC_NUMBER_OF_FUNC + FEATURE_NETC_ETH_NUM_OF_VIRTUAL_CTRLS];
 
 /* Enabled status for Time Aware Shaper for PSI */
-static boolean  Netc_Eth_Ip_PortTimeAwareShaperEnabled = FALSE;
+VAR_SEC_NOCACHE(Netc_Eth_Ip_PortTimeAwareShaperEnabled) static boolean  Netc_Eth_Ip_PortTimeAwareShaperEnabled = FALSE;
 
 /* Table entries for Time Aware Shaping configuration */
-static Netc_Eth_Ip_TimeGateSchedulingEntryDataType Netc_Eth_Ip_EthTimeGateSchedulingEntryData;
+VAR_SEC_NOCACHE(Netc_Eth_Ip_EthTimeGateSchedulingEntryData) static Netc_Eth_Ip_TimeGateSchedulingEntryDataType Netc_Eth_Ip_EthTimeGateSchedulingEntryData;
 
 /* The frequency of the NETC module for computing CBS parameters */
-static uint32 Netc_Eth_Ip_NetcClockFrequency = 0U;
+VAR_SEC_NOCACHE(Netc_Eth_Ip_NetcClockFrequency) static uint32 Netc_Eth_Ip_NetcClockFrequency = 0U;
 
 /* a 16 bytes aligned table request data buffer */
-VAR_ALIGN(static volatile Netc_Eth_Ip_EnetcTableDataType Netc_Eth_Ip_EnetcTableDataBuffer, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
-static VAR_ALIGN(Netc_Eth_Ip_ReqHeaderTableOperationDataType Netc_Eth_Ip_OperationData, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+VAR_SEC_NOCACHE(Netc_Eth_Ip_EnetcTableDataBuffer) VAR_ALIGN(static volatile Netc_Eth_Ip_EnetcTableDataType Netc_Eth_Ip_EnetcTableDataBuffer, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+VAR_SEC_NOCACHE(Netc_Eth_Ip_OperationData) static VAR_ALIGN(Netc_Eth_Ip_ReqHeaderTableOperationDataType Netc_Eth_Ip_OperationData, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
 
-static VAR_ALIGN(Netc_Eth_Ip_SetMessageHeaderTableOperationDataType Netc_Eth_Ip_TableData, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+VAR_SEC_NOCACHE(Netc_Eth_Ip_TableData) static VAR_ALIGN(Netc_Eth_Ip_SetMessageHeaderTableOperationDataType Netc_Eth_Ip_TableData, NETC_ETH_IP_TABLE_ALIGNED_SIZE)
 
 /* Local copy of the pointer to the configuration data. */
-static const Netc_Eth_Ip_ConfigType * Netc_Eth_Ip_ConfigPtr[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
+VAR_SEC_NOCACHE(Netc_Eth_Ip_ConfigPtr)  static const Netc_Eth_Ip_ConfigType * Netc_Eth_Ip_ConfigPtr[FEATURE_NETC_ETH_NUMBER_OF_CTRLS];
 
 
 
@@ -221,9 +221,9 @@ static const Netc_Eth_Ip_ConfigType * Netc_Eth_Ip_ConfigPtr[FEATURE_NETC_ETH_NUM
 #define ETH_43_NETC_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
 
-static VAR_ALIGN(uint32 Netc_Eth_Ip_RfsSetDataBuffer[NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE], NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+VAR_SEC_NOCACHE(Netc_Eth_Ip_RfsSetDataBuffer) static VAR_ALIGN(uint32 Netc_Eth_Ip_RfsSetDataBuffer[NETC_ETH_RFS_ENTRY_SET_DATA_BUFFER_SIZE], NETC_ETH_IP_TABLE_ALIGNED_SIZE)
 /* Key element data for ingress port filter table */
-static volatile VAR_ALIGN(uint32 Netc_Eth_Ip_IPFKeyeData[NETC_ETH_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN], NETC_ETH_IP_TABLE_ALIGNED_SIZE)
+VAR_SEC_NOCACHE(Netc_Eth_Ip_IPFKeyeData) static volatile VAR_ALIGN(uint32 Netc_Eth_Ip_IPFKeyeData[NETC_ETH_IP_INGRESSPORTFILTERTABLE_KEYE_DATA_LEN], NETC_ETH_IP_TABLE_ALIGNED_SIZE)
 
 #define ETH_43_NETC_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Eth_43_NETC_MemMap.h"
