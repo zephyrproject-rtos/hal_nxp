@@ -21,6 +21,8 @@
 #define FSL_FEATURE_SOC_LPSPI_COUNT (6)
 /* @brief EDMA availability on the SoC. */
 #define FSL_FEATURE_SOC_EDMA_COUNT (1)
+/* @brief DMAMUX availability on the SoC. */
+#define FSL_FEATURE_SOC_DMAMUX_COUNT (2)
 /* @brief FLEXIO availability on the SoC. */
 #define FSL_FEATURE_SOC_FLEXIO_COUNT (1)
 
