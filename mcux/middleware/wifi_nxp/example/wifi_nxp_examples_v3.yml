@@ -1,0 +1,1256 @@
+# yaml-language-server: $schema=../../../../../../../../bin/generator/sdk_generator/data/sdk_data_schema/v3/software_set_and_project_schema.json
+
+__hierarchy__:
+  tmp_wifi_examples_set:
+    section-type: application
+    belong_to:
+      kex_package: set.board.${board}
+      cmsis_pack: set.board.${board}.wifi
+    contents:
+      configuration:
+        tools:
+          __common__:
+            config:
+              __common__: {}
+              debug:
+                cc-define:
+                  DEBUG:
+                cx-define:
+                  DEBUG:
+          iar:
+            config:
+              __common__: {}
+              release: {}
+          mdk:
+            config:
+              release: {}
+          armgcc:
+            support_open_CMSIS_devtool: false
+      modules:
+        boardset:
+          required: true
+          cc-include:
+          - path: boards/${board}
+            package_path: project-root-path
+            project_path: board
+          as-include:
+          - path: boards/${board}
+            package_path: project-root-path
+            project_path: board
+          files:
+          - source: boards/${board}/board.c
+            package_path: project-root-path
+            project_path: board
+          - source: boards/${board}/board.h
+            package_path: project-root-path
+            project_path: board
+          - source: boards/${board}/clock_config.c
+            package_path: project-root-path
+            project_path: board
+          - source: boards/${board}/clock_config.h
+            package_path: project-root-path
+            project_path: board
+        device_configuration_data:
+          required: false
+          cc-include:
+          - path: boards/${board}
+            package_path: project-root-path
+            project_path: board
+          files:
+          - source: boards/${board}/dcd.c
+            package_path: project-root-path
+            project_path: board
+          - source: boards/${board}/dcd.h
+            package_path: project-root-path
+            project_path: board
+        pinset:
+          required: false
+          cc-include:
+          - path: boards/${board}/wifi_examples/common/${multicore_foldername}
+            project_path: board
+          files:
+          - source: boards/${board}/wifi_examples/common/${multicore_foldername}/hardware_init.c
+            merge-to-main: sub
+            project_path: board
+          - source: boards/${board}/wifi_examples/common/${multicore_foldername}/app.h
+            merge-to-main: sub
+            project_path: board
+        readme:
+          files:
+          - source: project-root-path/readme.txt
+            toolchains: iar mdk mcux armgcc
+            project_path: doc
+        preinclude_file:
+          required: false
+          cc-include:
+          - path: boards/${board}/wifi_examples/common/app_config
+            package_path: project-root-path
+            project_path: source
+          files:
+          - source: boards/${board}/wifi_examples/common/app_config/app_config.h
+            package_path: project-root-path
+            project_path: source
+        sdmmc_config:
+          required: false
+          cc-include:
+          - path: boards/${board}
+            project_path: board
+          files:
+          - source: boards/${board}/sdmmc_config.c
+            project_path: board
+            package_path: project-root-path
+          - source: boards/${board}/sdmmc_config.h
+            project_path: board
+            package_path: project-root-path
+          - source: boards/${board}/wifi_bt_config.c
+            project_path: board
+            package_path: project-root-path
+          - source: boards/${board}/wifi_bt_config.h
+            project_path: board
+            package_path: project-root-path
+wifi_palladium_iperf:
+  internal: true
+  section-type: application
+  dependency:
+  - middleware.freertos-kernel
+  - middleware.freertos-kernel.heap_4
+  - middleware.wifi.osa_free_rtos
+  - middleware.wifi
+  - middleware.lwip
+  - middleware.lwip.apps.lwiperf
+  __remove__:
+    merge_segment:
+    - middleware.lwip.default_heap_stack
+  contents:
+    document:
+      name: wifi_palladium_iperf
+      readme:
+      - boards/${board}/wifi_examples/common/board.readme
+      - middleware/wifi_nxp/example/wifi_palladium_iperf/wifi_palladium_iperf.readme
+      category: wifi_examples
+      brief: wifi_palladium_iperf
+    project-root-path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                USE_RTOS: 1
+                PRINTF_ADVANCED_ENABLE: 1
+        iar:
+          config:
+            __common__:
+              ad-flags:
+              - __stack_size__=0x400
+              - __heap_size__=0x400
+              cx-flags:
+              - "--no_clustering"
+        mdk:
+          config:
+            __common__:
+              ad-flags:
+              - --predefine="-D__stack_size__=0x400"
+              - --predefine="-D__heap_size__=0x400"
+        armgcc:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+        mcux:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+              ld-flags:
+              - "-lib=newlibnano.nohost"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_palladium_iperf
+          package_path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}
+          package_path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}/wifi_examples/common
+          package_path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+          project_path: board
+        as-include:
+        - path: middleware/wifi_nxp/example/wifi_palladium_iperf
+          package_path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_palladium_iperf/main.c
+          merge-to-main: main
+          package_path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_palladium_iperf/lwipopts.h
+          package_path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_palladium_iperf/lwippools.h
+          package_path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_palladium_iperf/FreeRTOSConfig.h
+          merge-to-freertosconfig: main
+          package_path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/FreeRTOSConfigBoard.h
+          merge-to-freertosconfig: sub
+          package_path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/wifi_examples/common/pin_mux.c
+          package_path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/common/pin_mux.h
+          package_path: boards/${board}/wifi_examples/wifi_palladium_iperf/${multicore_foldername}
+          project_path: board
+      wifi_config:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_palladium_iperf/wifi_config
+          package_path: project-root-path
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_palladium_iperf/wifi_config/wifi_config.h
+          package_path: project-root-path
+          project_path: source
+      pinset:
+        required: true
+      sdmmc_config:
+        required: true
+      preinclude_file:
+        required: true
+wifi_cert:
+  section-type: application
+  dependency:
+  - middleware.freertos-kernel
+  - middleware.freertos-kernel.heap_4
+  - middleware.wifi.osa_free_rtos
+  - middleware.wifi
+  - middleware.lwip
+  - middleware.lwip.apps.lwiperf
+  - middleware.wifi.cli
+  __remove__:
+    merge_segment:
+    - middleware.lwip.default_heap_stack
+  contents:
+    document:
+      name: wifi_cert
+      readme:
+      - boards/${board}/wifi_examples/common/board.readme
+      - middleware/wifi_nxp/example/wifi_cert/wifi_cert.readme
+      category: wifi_examples
+      brief: wifi_cert
+    project-root-path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                USE_RTOS: 1
+                PRINTF_ADVANCED_ENABLE: 1
+        iar:
+          config:
+            __common__:
+              ad-flags:
+              - __stack_size__=0x400
+              - __heap_size__=0x400
+              cx-flags:
+              - "--no_clustering"
+        mdk:
+          config:
+            __common__:
+              ad-flags:
+              - --predefine="-D__stack_size__=0x400"
+              - --predefine="-D__heap_size__=0x400"
+        armgcc:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+        mcux:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+              ld-flags:
+              - "-lib=newlibnano.nohost"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_cert
+          package_path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}
+          package_path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}/wifi_examples/common
+          package_path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+          project_path: board
+        - path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+        - path: boards/${board}/wifi_examples/wifi_cert
+        - path: boards/${board}/wifi_examples/common/${multicore_foldername}
+        as-include:
+        - path: middleware/wifi_nxp/example/wifi_cert
+          package_path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}/wifi_examples/wifi_cert
+        - path: boards/${board}/
+        - path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+        - path: boards/${board}/wifi_examples/common
+        files:
+        - source: middleware/wifi_nxp/example/wifi_cert/main.c
+          merge-to-main: main
+          package_path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cert/lwipopts.h
+          package_path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cert/lwippools.h
+          package_path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cert/FreeRTOSConfig.h
+          merge-to-freertosconfig: main
+          package_path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/FreeRTOSConfigBoard.h
+          merge-to-freertosconfig: sub
+          package_path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/wifi_examples/common/pin_mux.c
+          package_path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/common/pin_mux.h
+          package_path: boards/${board}/wifi_examples/wifi_cert/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/readme_modules.txt
+          package_path: project-root-path
+          project_path: doc
+          exclude: true
+      wifi_config:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_cert/wifi_config
+          package_path: project-root-path
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_cert/wifi_config/wifi_config.h
+          package_path: project-root-path
+          project_path: source
+      pinset:
+        required: true
+      sdmmc_config:
+        required: true
+      preinclude_file:
+        required: true
+wifi_cli:
+  section-type: application
+  dependency:
+  - middleware.freertos-kernel
+  - middleware.freertos-kernel.heap_4
+  - middleware.wifi.osa_free_rtos
+  - middleware.wifi
+  - middleware.lwip
+  - middleware.lwip.apps.lwiperf
+  - middleware.wifi.cli
+  __remove__:
+    merge_segment:
+    - middleware.lwip.default_heap_stack
+  contents:
+    document:
+      support_CMSIS_PACK: false
+      name: wifi_cli
+      readme:
+      - boards/${board}/wifi_examples/common/board.readme
+      - middleware/wifi_nxp/example/wifi_cli/wifi_cli.readme
+      category: wifi_examples
+      brief: wifi_cli
+    project-root-path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                USE_RTOS: 1
+                PRINTF_ADVANCED_ENABLE: 1
+        iar:
+          config:
+            __common__:
+              ad-flags:
+              - __stack_size__=0x400
+              - __heap_size__=0x400
+              cx-flags:
+              - "--no_clustering"
+        mdk:
+          config:
+            __common__:
+              ad-flags:
+              - --predefine="-D__stack_size__=0x400"
+              - --predefine="-D__heap_size__=0x400"
+        armgcc:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+        mcux:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+              ld-flags:
+              - "-lib=newlibnano.nohost"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: boards/${board}
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}/wifi_examples/common
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: board
+        files:
+        - source: middleware/wifi_nxp/example/wifi_cli/main.c
+          merge-to-main: main
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/FreeRTOSConfigBoard.h
+          merge-to-freertosconfig: sub
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/wifi_examples/common/pin_mux.c
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/common/pin_mux.h
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/readme_modules.txt
+          package_path: project-root-path
+          project_path: doc
+          exclude: true
+      demo_configs:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_cli
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: source
+        as-include:
+        - path: middleware/wifi_nxp/example/wifi_cli
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_cli/lwippools.h
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli/lwiphooks.h
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli/FreeRTOSConfig.h
+          merge-to-freertosconfig: main
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: source
+      demo_config_lwipopts:
+        required: true
+        files:
+        - source: middleware/wifi_nxp/example/wifi_cli/lwipopts.h
+          package_path: boards/${board}/wifi_examples/wifi_cli/${multicore_foldername}
+          project_path: source
+      wifi_config:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_cli/wifi_config
+          package_path: project-root-path
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_cli/wifi_config/wifi_config.h
+          package_path: project-root-path
+          project_path: source
+      pinset:
+        required: true
+      sdmmc_config:
+        required: true
+      preinclude_file:
+        required: true
+wifi_wpa_supplicant:
+  section-type: application
+  dependency:
+  - middleware.freertos-kernel
+  - middleware.freertos-kernel.heap_4
+  - middleware.wifi.osa_free_rtos
+  - middleware.wifi
+  - middleware.lwip
+  - middleware.lwip.apps.lwiperf
+  - middleware.wifi.cli
+  - middleware.wifi.wls
+  __remove__:
+    merge_segment:
+    - middleware.lwip.default_heap_stack
+  contents:
+    document:
+      support_CMSIS_PACK: false
+      name: wifi_wpa_supplicant
+      readme:
+      - boards/${board}/wifi_examples/common/board.readme
+      - middleware/wifi_nxp/example/wifi_wpa_supplicant/wifi_wpa_supplicant.readme
+      category: wifi_examples
+      brief: wifi_wpa_supplicant
+    project-root-path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                USE_RTOS: 1
+                PRINTF_ADVANCED_ENABLE: 1
+        iar:
+          config:
+            __common__:
+              ad-flags:
+              - __stack_size__=0x400
+              - __heap_size__=0x400
+              cx-flags:
+              - "--no_clustering"
+        mdk:
+          config:
+            __common__:
+              ad-flags:
+              - --predefine="-D__stack_size__=0x400"
+              - --predefine="-D__heap_size__=0x400"
+        armgcc:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+        mcux:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+              ld-flags:
+              - "-lib=newlibnano.nohost"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: boards/${board}
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}/wifi_examples/common
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: board
+        files:
+        - source: middleware/wifi_nxp/example/wifi_wpa_supplicant/main.c
+          merge-to-main: main
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/FreeRTOSConfigBoard.h
+          merge-to-freertosconfig: sub
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/wifi_examples/common/pin_mux.c
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/common/pin_mux.h
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/readme_modules.txt
+          package_path: project-root-path
+          project_path: doc
+          exclude: true
+      demo_configs:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_wpa_supplicant
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: source
+        as-include:
+        - path: middleware/wifi_nxp/example/wifi_wpa_supplicant
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_wpa_supplicant/lwippools.h
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_wpa_supplicant/lwiphooks.h
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_wpa_supplicant/FreeRTOSConfig.h
+          merge-to-freertosconfig: main
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: source
+      demo_config_lwipopts:
+        required: true
+        files:
+        - source: middleware/wifi_nxp/example/wifi_wpa_supplicant/lwipopts.h
+          package_path: boards/${board}/wifi_examples/wifi_wpa_supplicant/${multicore_foldername}
+          project_path: source
+      wifi_config:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_wpa_supplicant/wifi_config
+          package_path: project-root-path
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_wpa_supplicant/wifi_config/wifi_config.h
+          package_path: project-root-path
+          project_path: source
+      pinset:
+        required: true
+      sdmmc_config:
+        required: true
+      preinclude_file:
+        required: true
+uart_wifi_bridge:
+  section-type: application
+  dependency:
+  - middleware.freertos-kernel
+  - middleware.freertos-kernel.heap_4
+  - middleware.wifi.osa_free_rtos
+  - middleware.wifi
+  - middleware.lwip
+  - middleware.lwip.apps.lwiperf
+  - middleware.wifi.cli
+  __remove__:
+    merge_segment:
+    - middleware.lwip.default_heap_stack
+  contents:
+    document:
+      support_CMSIS_PACK: false
+      name: uart_wifi_bridge
+      readme:
+      - boards/${board}/wifi_examples/common/board.readme
+      - middleware/wifi_nxp/example/uart_wifi_bridge/uart_wifi_bridge.readme
+      category: wifi_examples
+      brief: uart_wifi_bridge
+    project-root-path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                USE_RTOS: 1
+                PRINTF_ADVANCED_ENABLE: 1
+        iar:
+          config:
+            __common__:
+              ad-flags:
+              - __stack_size__=0x400
+              - __heap_size__=0x400
+              cx-flags:
+              - "--no_clustering"
+        mdk:
+          config:
+            __common__:
+              ad-flags:
+              - --predefine="-D__stack_size__=0x400"
+              - --predefine="-D__heap_size__=0x400"
+        armgcc:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+        mcux:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+              ld-flags:
+              - "-lib=newlibnano.nohost"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: boards/${board}
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}/wifi_examples/common
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+          project_path: board
+        files:
+        - source: middleware/wifi_nxp/example/uart_wifi_bridge/main.c
+          merge-to-main: main
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/FreeRTOSConfigBoard.h
+          merge-to-freertosconfig: sub
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/wifi_examples/uart_wifi_bridge/pin_mux.c
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/uart_wifi_bridge/pin_mux.h
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/readme_modules.txt
+          package_path: project-root-path
+          project_path: doc
+          exclude: true
+      demo_configs:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/uart_wifi_bridge
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+          project_path: source
+        - path: middleware/wifi_nxp/example/uart_wifi_bridge/mfg_wifi_bt_firmware
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}/mfg_wifi_bt_firmware
+          project_path: source
+        as-include:
+        - path: middleware/wifi_nxp/example/uart_wifi_bridge
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/uart_wifi_bridge/lwipopts.h
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/uart_wifi_bridge/lwippools.h
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/uart_wifi_bridge/mfg_wifi_bt_firmware/mfg_wlan_bt_fw.h
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}/mfg_wifi_bt_firmware
+          project_path: source
+        - source: middleware/wifi_nxp/example/uart_wifi_bridge/mfg_wifi_bt_firmware/sd8801_mfg_wlan.h
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}/mfg_wifi_bt_firmware
+          project_path: source
+        - source: middleware/wifi_nxp/example/uart_wifi_bridge/mfg_wifi_bt_firmware/sduart8987_mfg_wlan_bt.h
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}/mfg_wifi_bt_firmware
+          project_path: source
+        - source: middleware/wifi_nxp/example/uart_wifi_bridge/mfg_wifi_bt_firmware/sduartIW416_mfg_wlan_bt.h
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}/mfg_wifi_bt_firmware
+          project_path: source
+        - source: middleware/wifi_nxp/example/uart_wifi_bridge/mfg_wifi_bt_firmware/sduart_nw61x_mfg_se.h
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}/mfg_wifi_bt_firmware
+          project_path: source
+        - source: middleware/wifi_nxp/example/uart_wifi_bridge/FreeRTOSConfig.h
+          merge-to-freertosconfig: main
+          package_path: boards/${board}/wifi_examples/uart_wifi_bridge/${multicore_foldername}
+          project_path: source
+      wifi_config:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/uart_wifi_bridge/wifi_config
+          package_path: project-root-path
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/uart_wifi_bridge/wifi_config/wifi_config.h
+          package_path: project-root-path
+          project_path: source
+      pinset:
+        required: true
+      sdmmc_config:
+        required: true
+      preinclude_file:
+        required: true
+wifi_test_mode:
+  section-type: application
+  dependency:
+  - middleware.freertos-kernel
+  - middleware.freertos-kernel.heap_4
+  - middleware.wifi.osa_free_rtos
+  - middleware.wifi
+  - middleware.lwip
+  - middleware.lwip.apps.lwiperf
+  - middleware.wifi.cli
+  __remove__:
+    merge_segment:
+    - middleware.lwip.default_heap_stack
+  contents:
+    document:
+      name: wifi_test_mode
+      readme:
+      - boards/${board}/wifi_examples/common/board.readme
+      - middleware/wifi_nxp/example/wifi_test_mode/wifi_test_mode.readme
+      category: wifi_examples
+      brief: wifi_test_mode
+    project-root-path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                USE_RTOS: 1
+                PRINTF_ADVANCED_ENABLE: 1
+        iar:
+          config:
+            __common__:
+              ad-flags:
+              - __stack_size__=0x400
+              - __heap_size__=0x400
+              cx-flags:
+              - "--no_clustering"
+        mdk:
+          config:
+            __common__:
+              ad-flags:
+              - --predefine="-D__stack_size__=0x400"
+              - --predefine="-D__heap_size__=0x400"
+        armgcc:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+        mcux:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+              ld-flags:
+              - "-lib=newlibnano.nohost"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_test_mode
+          package_path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}
+          package_path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}/wifi_examples/common
+          package_path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+          project_path: board
+        as-include:
+        - path: middleware/wifi_nxp/example/wifi_test_mode
+          package_path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_test_mode/main.c
+          merge-to-main: main
+          package_path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_test_mode/lwipopts.h
+          package_path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_test_mode/lwippools.h
+          package_path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_test_mode/FreeRTOSConfig.h
+          merge-to-freertosconfig: main
+          package_path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/FreeRTOSConfigBoard.h
+          merge-to-freertosconfig: sub
+          package_path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/wifi_examples/common/pin_mux.c
+          package_path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/common/pin_mux.h
+          package_path: boards/${board}/wifi_examples/wifi_test_mode/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/readme_modules.txt
+          package_path: project-root-path
+          project_path: doc
+          exclude: true
+      wifi_config:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_test_mode/wifi_config
+          package_path: project-root-path
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_test_mode/wifi_config/wifi_config.h
+          package_path: project-root-path
+          project_path: source
+      pinset:
+        required: true
+      sdmmc_config:
+        required: true
+      preinclude_file:
+        required: true
+wifi_cli_fw_dump:
+  section-type: application
+  dependency:
+  - middleware.freertos-kernel
+  - middleware.freertos-kernel.heap_4
+  - middleware.wifi.osa_free_rtos
+  - middleware.wifi
+  - middleware.lwip
+  - middleware.lwip.apps.lwiperf
+  - middleware.wifi.cli
+  - middleware.fatfs.usb
+  - middleware.fatfs
+  __remove__:
+    merge_segment:
+    - middleware.lwip.default_heap_stack
+  contents:
+    document:
+      name: wifi_cli_fw_dump
+      readme:
+      - boards/${board}/wifi_examples/common/board.readme
+      - middleware/wifi_nxp/example/wifi_cli_fw_dump/wifi_cli_fw_dump.readme
+      category: wifi_examples
+      brief: wifi_cli_fw_dump
+    project-root-path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                USE_RTOS: 1
+                PRINTF_ADVANCED_ENABLE: 1
+        iar:
+          config:
+            __common__:
+              ad-flags:
+              - __stack_size__=0x400
+              - __heap_size__=0x400
+              cx-flags:
+              - "--no_clustering"
+        mdk:
+          config:
+            __common__:
+              ad-flags:
+              - --predefine="-D__stack_size__=0x400"
+              - --predefine="-D__heap_size__=0x400"
+        armgcc:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+        mcux:
+          config:
+            __common__:
+              cc-define:
+                LWIP_TIMEVAL_PRIVATE: 0
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+              ld-flags:
+              - "-lib=newlibnano.nohost"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_cli_fw_dump
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: source
+        - path: middleware/wifi_nxp/example/wifi_cli_fw_dump/usb
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}/usb
+          project_path: source
+        - path: boards/${board}/wifi_examples/wifi_cli_fw_dump
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}/usb
+          project_path: source
+        - path: boards/${board}
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}/wifi_examples/wifi_cli_fw_dump
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: board
+        as-include:
+        - path: boards/${board}
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: source
+        - path: middleware/wifi_nxp/example/wifi_cli_fw_dump
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_cli_fw_dump/main.c
+          merge-to-main: main
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_fw_dump/lwipopts.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_fw_dump/lwippools.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_fw_dump/usb/usb_support.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_fw_dump/usb/usb_support.c
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}/usb
+          project_path: source
+        - source: boards/${board}/wifi_examples/wifi_cli_fw_dump/usb_host_config.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_fw_dump/usb/usb_api.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_fw_dump/usb/host_msd_fatfs.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_fw_dump/usb/host_msd_fatfs.c
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_fw_dump/usb/ffconf.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_fw_dump/FreeRTOSConfig.h
+          merge-to-freertosconfig: main
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/FreeRTOSConfigBoard.h
+          merge-to-freertosconfig: sub
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/wifi_examples/wifi_cli_fw_dump/pin_mux.c
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/wifi_cli_fw_dump/pin_mux.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/readme_modules.txt
+          package_path: project-root-path
+          project_path: doc
+          exclude: true
+      pinset_config:
+        required: true
+        cc-include:
+        - path: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}
+          project_path: board
+        files:
+        - source: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}/hardware_init.c
+          merge-to-main: sub
+          project_path: board
+        - source: boards/${board}/wifi_examples/wifi_cli_fw_dump/${multicore_foldername}/app.h
+          merge-to-main: sub
+          project_path: board
+      wifi_config:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_cli_fw_dump/wifi_config
+          package_path: project-root-path
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_cli_fw_dump/wifi_config/wifi_config.h
+          package_path: project-root-path
+          project_path: source
+      sdmmc_config:
+        required: true
+      preinclude_file:
+        required: true
+wifi_cli_prov:
+  section-type: application
+  dependency:
+  - middleware.freertos-kernel
+  - middleware.freertos-kernel.heap_4
+  - middleware.wifi.osa_free_rtos
+  - middleware.wifi
+  - middleware.lwip
+  - middleware.lwip.apps.lwiperf
+  - middleware.wifi.cli
+  - middleware.wifi.wps
+  - middleware.fatfs.usb
+  - middleware.fatfs
+  __remove__:
+    merge_segment:
+    - middleware.lwip.default_heap_stack
+  contents:
+    document:
+      name: wifi_cli_prov
+      readme:
+      - boards/${board}/wifi_examples/common/board.readme
+      - middleware/wifi_nxp/example/wifi_cli_prov/wifi_cli_prov.readme
+      category: wifi_examples
+      brief: wifi_cli_prov
+    project-root-path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+    configuration:
+      tools:
+        __common__:
+          config:
+            __common__:
+              cc-define:
+                USE_RTOS: 1
+                PRINTF_ADVANCED_ENABLE: 1
+                MBEDTLS_CONFIG_FILE: '"els_pkc_mbedtls_config.h"'
+                MBEDTLS_USER_CONFIG_FILE: '"wifi_mbedtls_config.h"'
+        iar:
+          config:
+            __common__:
+              ad-flags:
+              - __stack_size__=0x400
+              - __heap_size__=0x400
+              cx-flags:
+              - "--no_clustering"
+        mdk:
+          config:
+            __common__:
+              ad-flags:
+              - --predefine="-D__stack_size__=0x400"
+              - --predefine="-D__heap_size__=0x400"
+        armgcc:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+        mcux:
+          config:
+            __common__:
+              ad-flags:
+              - "-Xlinker --defsym=__stack_size__=0x400"
+              - "-Xlinker --defsym=__heap_size__=0x400"
+              ld-flags:
+              - "-lib=newlibnano.nohost"
+    modules:
+      demo:
+        required: true
+        cc-include:
+        - path: boards/${board}
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}/wifi_examples/common
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: board
+        files:
+        - source: middleware/wifi_nxp/example/wifi_cli_prov/main.c
+          merge-to-main: main
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/FreeRTOSConfigBoard.h
+          merge-to-freertosconfig: sub
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: source
+        - source: boards/${board}/wifi_examples/common/pin_mux.c
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/common/pin_mux.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: board
+        - source: boards/${board}/wifi_examples/readme_modules.txt
+          package_path: project-root-path
+          project_path: doc
+          exclude: true
+      demo_configs:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_cli_prov
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: source
+        - path: boards/${board}/wifi_examples/wifi_cli_prov
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: board
+        - path: middleware/wifi_nxp/example/common/usb/usb_host_msd
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}/usb
+          project_path: source
+        - path: boards/${board}/wifi_examples/wifi_cli_prov
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}/usb
+          project_path: source
+        as-include:
+        - path: middleware/wifi_nxp/example/wifi_cli_prov
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_cli_prov/lwipopts.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_prov/lwippools.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/common/usb/usb_host_msd/usb_support.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/common/usb/usb_host_msd/usb_support.c
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}/usb
+          project_path: source
+        - source: boards/${board}/wifi_examples/wifi_cli_prov/usb_host_config.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/common/usb/usb_host_msd/usb_api.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/common/usb/usb_host_msd/host_msd_fatfs.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/common/usb/usb_host_msd/host_msd_fatfs.c
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/common/usb/usb_host_msd/ffconf.h
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}/usb
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_prov/FreeRTOSConfig.h
+          merge-to-freertosconfig: main
+          package_path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: source
+        - source: middleware/wifi_nxp/example/wifi_cli_prov/wifi_mbedtls_config.h
+          package_path: project-root-path
+          project_path: source
+      pinset_config:
+        required: true
+        cc-include:
+        - path: boards/${board}/wifi_examples/common/${multicore_foldername}
+          project_path: board
+        - path: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}
+          project_path: board
+        files:
+        - source: boards/${board}/wifi_examples/wifi_cli_prov/${multicore_foldername}/hardware_init.c
+          merge-to-main: sub
+          project_path: board
+        - source: boards/${board}/wifi_examples/common/${multicore_foldername}/app.h
+          merge-to-main: sub
+          project_path: board
+      wifi_config:
+        required: true
+        cc-include:
+        - path: middleware/wifi_nxp/example/wifi_cli_prov/wifi_config
+          package_path: project-root-path
+          project_path: source
+        files:
+        - source: middleware/wifi_nxp/example/wifi_cli_prov/wifi_config/wifi_config.h
+          package_path: project-root-path
+          project_path: source
+      sdmmc_config:
+        required: true
+      preinclude_file:
+        required: true
+set.board.${board}.wifi:
+  section-type: set
+  belong_to: set.board.${board}.wifi
+  section_info:
+    fixed_id: board_${board}
+    display_name: "${board}"
+    full_name: NXP board ${board}
+    description: NXP MCUXpresso board ${board}
+    type: board
+    version: 1.0.0
+    set_location:
+      repo_base_path: "./boards/${board}/wifi_examples"
+    product:
+      cmsis_pack:
+        supported: false
+        scr:
+        - scr.SDK_Examples
+        - scr.middleware.wifi
+        vendor: NXP
+        pack_root:
+          pack_type: sBSP
+          pack_name: "${board}_WIFI_BSP"
+      kex_package:
+        supported: false
+  dependency:
+    allOf:
+      - set.middleware.wifi
+
+scr.board.${board}.wifi:
+  section-type: scr
+  belong_to: set.board.${board}.wifi
+  contents:
+    Name: SDK Wi-Fi examples
+    license:
+    - license.bsd-3
+    Format: source code, binary, project files, linker files
+    Description: SDK Wi-Fi examples.
+    Origin: NXP (BSD-3-Clause)
+    Location: "./boards/${board}/wifi_examples"
