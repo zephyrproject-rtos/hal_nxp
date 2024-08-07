@@ -786,4 +786,33 @@ typedef struct {
  * @}
  */ /* end of group RTC_Peripheral_Access_Layer */
 
+/* ----------------------------------------------------------------------------
+   -- ADC Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup ADC_Peripheral_Access_Layer ADC Peripheral Access Layer
+ * @{
+ */
+
+/* ADC - Peripheral instance base addresses */
+/** Peripheral ADC0 base address */
+#define ADC0_BASE                                IP_ADC0_BASE
+/** Peripheral ADC0 base pointer */
+#define ADC0                                     IP_ADC0
+/** Peripheral ADC1 base address */
+#define ADC1_BASE                                IP_ADC1_BASE
+/** Peripheral ADC1 base pointer */
+#define ADC1                                     IP_ADC1
+/** Array initializer of ADC peripheral base addresses */
+#define ADC_BASE_ADDRS                           IP_ADC_BASE_ADDRS
+/** Array initializer of ADC peripheral base pointers */
+#define ADC_BASE_PTRS                            IP_ADC_BASE_PTRS
+/** Interrupt vectors for the ADC peripheral type */
+#define ADC_IRQS                                 { ADC0_IRQn, ADC1_IRQn }
+
+/*!
+ * @}
+ */ /* end of group ADC_Peripheral_Access_Layer */
+
 #endif /* _S32K146_DEVICE_H_ */
