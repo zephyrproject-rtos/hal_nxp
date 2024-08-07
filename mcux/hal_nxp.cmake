@@ -99,7 +99,7 @@ include(driver_common)
 #Include system_xxx file
 #This can be extended to other SoC series if needed
 if (DEFINED CONFIG_SOC_RESET_HOOK OR DEFINED CONFIG_SOC_SERIES_IMXRT6XX
-    OR DEFINED CONFIG_SOC_SERIES_LPC55XXX OR DEFINED CONFIG_SOC_SERIES_MCXNX4X)
+    OR DEFINED CONFIG_SOC_SERIES_LPC55XXX OR DEFINED CONFIG_SOC_SERIES_MCXN)
 if (CONFIG_SOC_MIMXRT1166_CM4)
 include(device_system_MIMXRT1166_cm4)
 elseif (CONFIG_SOC_MIMXRT1166_CM7)
@@ -254,9 +254,8 @@ include_driver_ifdef(CONFIG_DAC_MCUX_LPDAC		dac_1		driver_dac_1)
 include_driver_ifdef(CONFIG_NXP_IRQSTEER		irqsteer	driver_irqsteer)
 include_driver_ifdef(CONFIG_AUDIO_DMIC_MCUX		dmic		driver_dmic)
 include_driver_ifdef(CONFIG_DMA_NXP_EDMA		edma_rev2	driver_edma_rev2)
-if(NOT DEFINED CONFIG_SOC_SERIES_MCXC)
-include_driver_ifdef(CONFIG_SOC_FAMILY_NXP_MCX		mcx_spc		driver_mcx_spc)
-endif()
+include_driver_ifdef(CONFIG_SOC_SERIES_MCXN		mcx_spc		driver_mcx_spc)
+include_driver_ifdef(CONFIG_SOC_SERIES_MCXA		mcx_spc		driver_mcx_spc)
 include_driver_ifdef(CONFIG_ADC_MCUX_GAU		cns_adc		driver_cns_adc)
 include_driver_ifdef(CONFIG_DAC_MCUX_GAU		cns_dac		driver_cns_dac)
 include_driver_ifdef(CONFIG_DAI_NXP_ESAI		esai		driver_esai)
@@ -264,6 +263,7 @@ include_driver_ifdef(CONFIG_MCUX_LPCMP		        lpcmp		driver_lpcmp)
 include_driver_ifdef(CONFIG_NXP_RF_IMU			imu		driver_imu)
 include_driver_ifdef(CONFIG_TRDC_MCUX_TRDC              trdc            driver_trdc)
 include_driver_ifdef(CONFIG_S3MU_MCUX_S3MU              s3mu            driver_s3mu)
+include_driver_ifdef(CONFIG_PINCTRL_NXP_KINETIS         port            driver_port)
 
 if (${MCUX_DEVICE} MATCHES "MIMXRT1189")
   include_driver_ifdef(CONFIG_ETH_NXP_IMX_NETC	netc/socs/imxrt1180	driver_netc_soc_imxrt1180)
@@ -323,23 +323,12 @@ if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_kinetis")
 
 endif()
 
-if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_mcx")
-  if(CONFIG_SOC_SERIES_MCXC)
+if(CONFIG_SOC_SERIES_MCXC)
     include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		flash		driver_flash)
-    include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port/driver_port.cmake)
-    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port)
-  elseif(CONFIG_SOC_SERIES_MCXA)
-    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/mcxa_romapi)
-
-    include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port/driver_port.cmake)
-    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port)
-  else()
+elseif(CONFIG_SOC_SERIES_MCXN OR CONFIG_SOC_SERIES_MCXA)
     include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		mcx_romapi	driver_flashiap)
-    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/mcx_romapi/flash)
-
-    include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port/driver_port.cmake)
-    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port)
-  endif()
+elseif(CONFIG_SOC_SERIES_MCXW)
+    include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		flash_k4	driver_flash_k4)
 endif()
 
 # Temporary change to handle LPC SOC family name change between HWMv1 and HWMv2
@@ -458,4 +447,13 @@ if(CONFIG_NXP_RF_IMU)
         ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/gdma
     )
     include(component_wireless_imu_adapter)
+endif()
+
+if(${MCUX_DEVICE} MATCHES "MCXW")
+  list(APPEND CMAKE_MODULE_PATH
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/ccm32k
+  )
+
+  include(driver_ccm32k)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/ccm32k)
 endif()
