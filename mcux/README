@@ -67,9 +67,9 @@ License Link:
 Patch List:
   - mcux-sdk/drivers/caam/fsl_caam.c: Move used job descriptors in the CAAM driver from the stack to noncacheable section. At time of writing, there should
      be four being used for entropy in zephyr.
-     
+
   - Patched middleware\mcux-sdk-middleware-usb\middleware_usb_common_header.cmake to remove "#include(component_osa)". PR submitted to upstream
-  
+
   - exclude the following directories and files from mcux-sdk update to reduce HAL size:
      - All *.a binary archive files. Files are still present in the SDK github repo but are not allowed in Zephyr Project
      - mcux-sdk\manifests
@@ -91,7 +91,7 @@ Patch List:
   - Patched mcux-sdk\components\conn_fwloader\mcux-sdk\components\conn_fwloader\driver_conn_fwloader.cmake for TFM support
   - mcux-sdk/drivers/s3mu/fsl_s3mu.c: rename _BIT macro to avoid collision from util_macro.h in Zephyr
   - Modifed mcux\mcux-sdk\drivers\mipi_dsi_split\fsl_mipi_dsi.c line 541 to force 8.0 to float (8.0f) to avoid [-Double-promotion] warning
-  - Wrap conditional code setting SCB->VTOR with !defined(__ZEPHYR__) in system c files of the folloing parts: 
+  - Wrap conditional code setting SCB->VTOR with !defined(__ZEPHYR__) in system c files of the following parts:
       - MCXN94x family
       - MCXA14x family
       - MCXA15x family
@@ -105,3 +105,6 @@ Patch List:
   - drivers: edma_rev2: support MUX register in MP space
   - drivers: edma_rev2: support 64-bit TCD registers
   - devices: MIMX9596: add EDMA rev2 soc layer definition
+  - Add missing CMAKE files device_system.cmake device_CMSIS.cmake and drivers/driver_reset.cmake to MCXW716C.
+  - Add missing CMAKE file to ccm32k driver driver_ccm32k.cmake.
+  - Add missing CMAKE file to flash_k4 driver driver_flash_k4.cmake.
