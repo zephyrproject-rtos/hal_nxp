@@ -408,6 +408,13 @@ endif()
 
 if(${MCUX_DEVICE} MATCHES "RW61")
   set(CONFIG_USE_component_osa_zephyr true)
+  if(CONFIG_NXP_FW_LOADER)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk/components/flash/mflash)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk/components/flash/mflash/rdrw612bga)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk/drivers/cache/cache64)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk/drivers/flexspi)
+    include(component_mflash_rdrw610)
+  endif()
 endif()
 
 include_ifdef(CONFIG_USE_component_osa_zephyr set_component_osa)
