@@ -87,3 +87,4 @@ Patch List:
   - mcux-sdk-middleware-connectivity-framework: Add new CMake file connectivity_framework.cmake
   - mcux-sdk-middleware-connectivity-framework: rw61x: Fix assertion OSA Mutex Alloc fail
   - mcux-sdk-middleware-connectivity-framework: rw61x: Remove static from hci_cal_data buffers to be used inside Zephyr
+  - Patched mcux-sdk\components\conn_fwloader\mcux-sdk\components\conn_fwloader\driver_conn_fwloader.cmake for TFM support
