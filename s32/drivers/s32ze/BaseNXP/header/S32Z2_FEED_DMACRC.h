@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_FEED_DMACRC.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_FEED_DMACRC
  *
  * This file contains register definitions and macros for easy access to their
@@ -75,7 +75,7 @@
 typedef struct {
   __IO uint32_t GEC;                               /**< Global Enable CRC Register, offset: 0x0 */
   uint8_t RESERVED_0[12];
-  struct {                                         /* offset: 0x10, array step: 0x10 */
+  struct FEED_DMACRC_CONTROL_REGISTER {            /* offset: 0x10, array step: 0x10 */
     __IO uint32_t CTL;                               /**< CRC Control Register, array offset: 0x10, array step: 0x10 */
     __IO uint32_t ICRC;                              /**< Initial CRC Value Register, array offset: 0x14, array step: 0x10 */
     __I  uint32_t FCRC;                              /**< Final CRC Value Register, array offset: 0x18, array step: 0x10 */

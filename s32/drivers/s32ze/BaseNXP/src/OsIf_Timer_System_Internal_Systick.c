@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -32,7 +32,7 @@ extern "C"{
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_MAJOR_VERSION_C     4
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_MINOR_VERSION_C     7
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_REVISION_VERSION_C  0
-#define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MAJOR_VERSION_C             1
+#define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MAJOR_VERSION_C             2
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MINOR_VERSION_C             0
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_PATCH_VERSION_C             0
 
@@ -177,16 +177,24 @@ uint32 OsIf_Timer_System_Internal_GetElapsed(uint32 * const CurrentRef)
 {
     uint32 CurrentVal = SYSTICK_GET_COUNTER();
     uint32 dif = 0U;
-
-    if (SYSTICK_OVERFLOWED((CurrentVal), (*CurrentRef)))
-    {
-        /* overflow occurred */
-        dif = SYSTICK_DELTA_OUTER(CurrentVal, *CurrentRef, SYSTICK_MAX);
+    /* RVR value shall be always greater than the current counter */
+    if(S32_SysTick->RVR >= CurrentVal)
+    {        
+        if (SYSTICK_OVERFLOWED((CurrentVal), (*CurrentRef)))
+        {
+            /* Overflow occurred */
+            dif = SYSTICK_DELTA_OUTER(CurrentVal, *CurrentRef, S32_SysTick->RVR);            
+        }
+        else
+        {
+            /* Overflow did not occur */
+            dif = SYSTICK_DELTA_INNER(*CurrentRef, CurrentVal);
+        }
     }
+    /* This case never happen but need to avoid misra when dif variable is not used */
     else
     {
-        /* overflow did not occur */
-        dif = SYSTICK_DELTA_INNER(*CurrentRef, CurrentVal);
+        (void)dif;
     }
     *CurrentRef = CurrentVal;
 

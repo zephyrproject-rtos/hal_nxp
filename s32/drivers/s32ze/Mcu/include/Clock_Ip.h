@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file    Clock_Ip.h
-*   @version    1.0.0
+*   @version    2.0.0
 *
 *   @brief   CLOCK IP driver header file.
 *   @details CLOCK IP driver header file.
@@ -38,7 +38,7 @@ extern "C"{
 #define CLOCK_IP_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_SW_MAJOR_VERSION                1
+#define CLOCK_IP_SW_MAJOR_VERSION                2
 #define CLOCK_IP_SW_MINOR_VERSION                0
 #define CLOCK_IP_SW_PATCH_VERSION                0
 
@@ -246,7 +246,7 @@ void Clock_Ip_SetUserAccessAllowed(void);
  * @param[in] ClockName Clock names defined in Clock_Ip_NameType
  * @return frequency    Returned clock frequency value in Hertz
  */
-uint32 Clock_Ip_GetClockFrequency(Clock_Ip_NameType ClockName);
+uint64 Clock_Ip_GetClockFrequency(Clock_Ip_NameType ClockName);
   #endif
 #endif
 

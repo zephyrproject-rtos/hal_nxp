@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NVIC.h
- * @version 1.3
- * @date 2021-07-14
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_NVIC
  *
  * This file contains register definitions and macros for easy access to their

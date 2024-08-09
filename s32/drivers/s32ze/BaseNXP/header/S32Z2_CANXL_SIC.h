@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CANXL_SIC.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_CANXL_SIC
  *
  * This file contains register definitions and macros for easy access to their
@@ -87,7 +87,7 @@ typedef struct {
   __IO uint32_t BFDCBT;                            /**< BCANXL FD Data Phase Bit Timing, offset: 0x94 */
   __IO uint32_t BXDCBT;                            /**< BCANXL XL Data Phase Bit Timing, offset: 0x98 */
   __IO uint32_t BTDCC;                             /**< BCANXL Transceiver Delay Compensation Control, offset: 0x9C */
-  __IO uint32_t BMICI;                             /**< BCANXL Medium Independent CAN interface, offset: 0xA0 */
+  __IO uint32_t BMICI;                             /**< BCANXL PWM Configuration, offset: 0xA0 */
 } CANXL_SIC_Type, *CANXL_SIC_MemMapPtr;
 
 /** Number of instances of the CANXL_SIC module. */
@@ -227,10 +227,10 @@ typedef struct {
 #define CANXL_SIC_SYSIE_CDPERRIE_WIDTH           (1U)
 #define CANXL_SIC_SYSIE_CDPERRIE(x)              (((uint32_t)(((uint32_t)(x)) << CANXL_SIC_SYSIE_CDPERRIE_SHIFT)) & CANXL_SIC_SYSIE_CDPERRIE_MASK)
 
-#define CANXL_SIC_SYSIE_CTFOERRIR_MASK           (0x2000000U)
-#define CANXL_SIC_SYSIE_CTFOERRIR_SHIFT          (25U)
-#define CANXL_SIC_SYSIE_CTFOERRIR_WIDTH          (1U)
-#define CANXL_SIC_SYSIE_CTFOERRIR(x)             (((uint32_t)(((uint32_t)(x)) << CANXL_SIC_SYSIE_CTFOERRIR_SHIFT)) & CANXL_SIC_SYSIE_CTFOERRIR_MASK)
+#define CANXL_SIC_SYSIE_CTFUERRIR_MASK           (0x2000000U)
+#define CANXL_SIC_SYSIE_CTFUERRIR_SHIFT          (25U)
+#define CANXL_SIC_SYSIE_CTFUERRIR_WIDTH          (1U)
+#define CANXL_SIC_SYSIE_CTFUERRIR(x)             (((uint32_t)(((uint32_t)(x)) << CANXL_SIC_SYSIE_CTFUERRIR_SHIFT)) & CANXL_SIC_SYSIE_CTFUERRIR_MASK)
 
 #define CANXL_SIC_SYSIE_CRFOERRIR_MASK           (0x4000000U)
 #define CANXL_SIC_SYSIE_CRFOERRIR_SHIFT          (26U)
@@ -647,7 +647,7 @@ typedef struct {
 #define CANXL_SIC_BTDCC_XTDCEN(x)                (((uint32_t)(((uint32_t)(x)) << CANXL_SIC_BTDCC_XTDCEN_SHIFT)) & CANXL_SIC_BTDCC_XTDCEN_MASK)
 /*! @} */
 
-/*! @name BMICI - BCANXL Medium Independent CAN interface */
+/*! @name BMICI - BCANXL PWM Configuration */
 /*! @{ */
 
 #define CANXL_SIC_BMICI_PWMO_MASK                (0x3FU)

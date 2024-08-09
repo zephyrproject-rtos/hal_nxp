@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CANXL_RXFIFO.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_CANXL_RXFIFO
  *
  * This file contains register definitions and macros for easy access to their
@@ -90,11 +90,11 @@ typedef struct {
   uint8_t RESERVED_1[16];
   __IO uint32_t VAFLT[CANXL_RXFIFO_VCANACPTFLTAR_COUNT]; /**< VCAN Acceptance Filter, array offset: 0x124, array step: 0x4 */
   __IO uint32_t SAFLT[CANXL_RXFIFO_SDUACPTFLTAR_COUNT]; /**< SDU Acceptance Filter, array offset: 0x164, array step: 0x4 */
-  struct {                                         /* offset: 0x1A4, array step: 0x8 */
+  struct CANXL_RXFIFO_ADDRACPTFLTAR {              /* offset: 0x1A4, array step: 0x8 */
     __IO uint32_t AAFLTL;                            /**< ADDR Acceptance Filter Element Low, array offset: 0x1A4, array step: 0x8 */
     __IO uint32_t AAFLTH;                            /**< ADDR Acceptance Filter Element High, array offset: 0x1A8, array step: 0x8 */
   } ADDRACPTFLTAR[CANXL_RXFIFO_ADDRACPTFLTAR_COUNT];
-  struct {                                         /* offset: 0x2A4, array step: 0x8 */
+  struct CANXL_RXFIFO_IDACPTFLTAR {                /* offset: 0x2A4, array step: 0x8 */
     __IO uint32_t IDAFLTL;                           /**< ID Acceptance Filter Element Low, array offset: 0x2A4, array step: 0x8 */
     __IO uint32_t IDAFLTH;                           /**< ID Acceptance Filter Element High, array offset: 0x2A8, array step: 0x8 */
   } IDACPTFLTAR[CANXL_RXFIFO_IDACPTFLTAR_COUNT];

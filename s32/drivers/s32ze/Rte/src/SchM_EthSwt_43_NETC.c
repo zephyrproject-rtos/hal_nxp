@@ -1,12 +1,12 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file    SchM_EthSwt_43_NETC.c
-*   @version 1.0.0
+*   @version 2.0.0
 *
 *   @brief   AUTOSAR Rte - module implementation
 *   @details This module implements stubs for the AUTOSAR Rte
@@ -40,7 +40,7 @@ extern "C"{
 #define SCHM_ETHSWT_43_NETC_AR_RELEASE_MAJOR_VERSION_C     4
 #define SCHM_ETHSWT_43_NETC_AR_RELEASE_MINOR_VERSION_C     7
 #define SCHM_ETHSWT_43_NETC_AR_RELEASE_REVISION_VERSION_C  0
-#define SCHM_ETHSWT_43_NETC_SW_MAJOR_VERSION_C             1
+#define SCHM_ETHSWT_43_NETC_SW_MAJOR_VERSION_C             2
 #define SCHM_ETHSWT_43_NETC_SW_MINOR_VERSION_C             0
 #define SCHM_ETHSWT_43_NETC_SW_PATCH_VERSION_C             0
 
@@ -223,6 +223,10 @@ VAR_SEC_NOCACHE(msr_ETHSWT_EXCLUSIVE_AREA_60) static volatile uint32 msr_ETHSWT_
 VAR_SEC_NOCACHE(reentry_guard_ETHSWT_EXCLUSIVE_AREA_60) static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_60[NUMBER_OF_CORES];
 VAR_SEC_NOCACHE(msr_ETHSWT_EXCLUSIVE_AREA_61) static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
 VAR_SEC_NOCACHE(reentry_guard_ETHSWT_EXCLUSIVE_AREA_61) static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_61[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_ETHSWT_EXCLUSIVE_AREA_62) static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_62[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_ETHSWT_EXCLUSIVE_AREA_62) static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_62[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_ETHSWT_EXCLUSIVE_AREA_63) static volatile uint32 msr_ETHSWT_EXCLUSIVE_AREA_63[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_ETHSWT_EXCLUSIVE_AREA_63) static volatile uint32 reentry_guard_ETHSWT_EXCLUSIVE_AREA_63[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -389,7 +393,7 @@ uint32 EthSwt_43_NETC_schm_read_msr(void)
 
 #endif  /*HighTec compiler only*/
  /*================================================================================================*/
-#ifdef _LINARO_C_S32ZE_
+#ifdef _GCC_C_S32ZE_
 /** 
 * @brief   This function returns the MSR register value (32 bits). 
 * @details This function returns the MSR register value (32 bits). 
@@ -417,7 +421,7 @@ uint32 EthSwt_43_NETC_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _LINARO_C_S32ZE_*/
+#endif   /* _GCC_C_S32ZE_*/
 /*================================================================================================*/
 
 #ifdef _ARM_DS5_C_S32ZE_
@@ -2841,6 +2845,81 @@ void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_61(void)
     }
 }
 
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_62(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_62[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_62[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_62[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_62(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_62[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_62[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_62[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
+
+void SchM_Enter_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_63(void)
+{
+    uint32 msr;
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    if(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_63[u32CoreId])
+    {
+#if (defined MCAL_ENABLE_USER_MODE_SUPPORT)
+        msr = OsIf_Trusted_Call_Return(EthSwt_43_NETC_schm_read_msr);
+#else
+        msr = EthSwt_43_NETC_schm_read_msr();  /*read MSR (to store interrupts state)*/
+#endif /* MCAL_ENABLE_USER_MODE_SUPPORT */
+        if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
+        {
+            OsIf_SuspendAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+            ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+        }
+        msr_ETHSWT_EXCLUSIVE_AREA_63[u32CoreId] = msr;
+    }
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_63[u32CoreId]++;
+}
+
+void SchM_Exit_EthSwt_43_NETC_ETHSWT_EXCLUSIVE_AREA_63(void)
+{
+    uint32 u32CoreId = (uint32)OsIf_GetCoreID();
+
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_63[u32CoreId]--;
+    if ((ISR_ON(msr_ETHSWT_EXCLUSIVE_AREA_63[u32CoreId]))&&(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_63[u32CoreId]))         /*if interrupts were enabled*/
+    {
+        OsIf_ResumeAllInterrupts();
+#ifdef _ARM_DS5_C_S32ZE_
+        ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
+#endif
+    }
+}
 
 #ifdef MCAL_TESTING_ENVIRONMENT
 /** 
@@ -3047,7 +3126,12 @@ void SchM_Check_ethswt_43_netc(void)
 
     EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_61[u32CoreId]);
     reentry_guard_ETHSWT_EXCLUSIVE_AREA_61[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_61 for the next test in the suite*/
+    
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_62[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_62[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_62 for the next test in the suite*/
 
+    EU_ASSERT(0UL == reentry_guard_ETHSWT_EXCLUSIVE_AREA_63[u32CoreId]);
+    reentry_guard_ETHSWT_EXCLUSIVE_AREA_63[u32CoreId] = 0UL; /*reset reentry_guard_ETHSWT_EXCLUSIVE_AREA_62 for the next test in the suite*/
 
 }
 #endif /*MCAL_TESTING_ENVIRONMENT*/

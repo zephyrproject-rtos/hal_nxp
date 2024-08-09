@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_F3_SI3.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_NETC_F3_SI3
  *
  * This file contains register definitions and macros for easy access to their
@@ -102,7 +102,7 @@ typedef struct {
   __IO uint32_t SIIPVBDRMR0;                       /**< Station interface IPV to ring mapping register, offset: 0x150 */
   uint8_t RESERVED_8[176];
   union {                                          /* offset: 0x204 */
-    struct {                                         /* offset: 0x204 */
+    struct NETC_F3_SI3_MSGSR_VSI_A {                 /* offset: 0x204 */
       __I  uint32_t VSIMSGSR;                          /**< Virtual station interface message send register, offset: 0x204 */
       __I  uint32_t VSIMSGRR;                          /**< Virtual station interface message receive register, offset: 0x208 */
       uint8_t RESERVED_0[4];
@@ -147,7 +147,7 @@ typedef struct {
   __I  uint32_t SICAPR2;                           /**< Station interface capability register 2, offset: 0x908 */
   uint8_t RESERVED_15[244];
   union {                                          /* offset: 0xA00 */
-    struct {                                         /* offset: 0xA00 */
+    struct NETC_F3_SI3_INTERRUPT_VSI {               /* offset: 0xA00 */
       __IO uint32_t VSIIER;                            /**< Virtual station interface interrupt enable register, offset: 0xA00 */
       uint8_t RESERVED_0[4];
       __IO uint32_t VSIIDR;                            /**< Virtual station interface interrupt detect register, offset: 0xA08 */
@@ -207,7 +207,7 @@ typedef struct {
   uint8_t RESERVED_31[252];
   __I  uint32_t SIRFSCAPR;                         /**< Station interface RFS capability register, offset: 0x1200 */
   uint8_t RESERVED_32[28156];
-  struct {                                         /* offset: 0x8000, array step: 0x200 */
+  struct NETC_F3_SI3_BDR_NUM {                     /* offset: 0x8000, array step: 0x200 */
     __IO uint32_t TBMR;                              /**< Tx BDR 0 mode register..Tx BDR 17 mode register, array offset: 0x8000, array step: 0x200 */
     __IO uint32_t TBSR;                              /**< Tx BDR 0 status register..Tx BDR 17 status register, array offset: 0x8004, array step: 0x200 */
     uint8_t RESERVED_0[8];
@@ -1060,11 +1060,6 @@ typedef struct {
 #define NETC_F3_SI3_SICAPR0_NUM_RX_BDR_SHIFT     (16U)
 #define NETC_F3_SI3_SICAPR0_NUM_RX_BDR_WIDTH     (8U)
 #define NETC_F3_SI3_SICAPR0_NUM_RX_BDR(x)        (((uint32_t)(((uint32_t)(x)) << NETC_F3_SI3_SICAPR0_NUM_RX_BDR_SHIFT)) & NETC_F3_SI3_SICAPR0_NUM_RX_BDR_MASK)
-
-#define NETC_F3_SI3_SICAPR0_NUM_MAC_ADDR_MASK    (0xF0000000U)
-#define NETC_F3_SI3_SICAPR0_NUM_MAC_ADDR_SHIFT   (28U)
-#define NETC_F3_SI3_SICAPR0_NUM_MAC_ADDR_WIDTH   (4U)
-#define NETC_F3_SI3_SICAPR0_NUM_MAC_ADDR(x)      (((uint32_t)(((uint32_t)(x)) << NETC_F3_SI3_SICAPR0_NUM_MAC_ADDR_SHIFT)) & NETC_F3_SI3_SICAPR0_NUM_MAC_ADDR_MASK)
 /*! @} */
 
 /*! @name SICAPR1 - Station interface capability register 1 */

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_XBIC.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_XBIC
  *
  * This file contains register definitions and macros for easy access to their
@@ -71,8 +71,8 @@
 /** XBIC - Register Layout Typedef */
 typedef struct {
   __IO uint32_t MCR;                               /**< XBIC Module Control, offset: 0x0 */
-  __IO uint32_t EIR;                               /**< XBIC Error Injection, offset: 0x4 */
-  __IO uint32_t ESR;                               /**< XBIC Error Status, offset: 0x8 */
+  __IO uint32_t EIR;                               /**< XBIC Error Injection Attributes, offset: 0x4 */
+  __IO uint32_t ESR;                               /**< XBIC Error Status Attributes, offset: 0x8 */
   __I  uint32_t EAR;                               /**< XBIC Error Address, offset: 0xC */
 } XBIC_Type, *XBIC_MemMapPtr;
 
@@ -184,7 +184,7 @@ typedef struct {
 #define XBIC_MCR_SE0(x)                          (((uint32_t)(((uint32_t)(x)) << XBIC_MCR_SE0_SHIFT)) & XBIC_MCR_SE0_MASK)
 /*! @} */
 
-/*! @name EIR - XBIC Error Injection */
+/*! @name EIR - XBIC Error Injection Attributes */
 /*! @{ */
 
 #define XBIC_EIR_SYN_MASK                        (0xFFU)
@@ -208,7 +208,7 @@ typedef struct {
 #define XBIC_EIR_EIE(x)                          (((uint32_t)(((uint32_t)(x)) << XBIC_EIR_EIE_SHIFT)) & XBIC_EIR_EIE_MASK)
 /*! @} */
 
-/*! @name ESR - XBIC Error Status */
+/*! @name ESR - XBIC Error Status Attributes */
 /*! @{ */
 
 #define XBIC_ESR_SYN_MASK                        (0xFFU)

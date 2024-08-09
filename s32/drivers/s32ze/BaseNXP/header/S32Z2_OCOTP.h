@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_OCOTP.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_OCOTP
  *
  * This file contains register definitions and macros for easy access to their
@@ -182,11 +182,6 @@ typedef struct {
 #define OCOTP_CTRL_FBX_SEC_MODE_SHIFT            (8U)
 #define OCOTP_CTRL_FBX_SEC_MODE_WIDTH            (1U)
 #define OCOTP_CTRL_FBX_SEC_MODE(x)               (((uint32_t)(((uint32_t)(x)) << OCOTP_CTRL_FBX_SEC_MODE_SHIFT)) & OCOTP_CTRL_FBX_SEC_MODE_MASK)
-
-#define OCOTP_CTRL_FBX_FBX_PD_MASK               (0x10000U)
-#define OCOTP_CTRL_FBX_FBX_PD_SHIFT              (16U)
-#define OCOTP_CTRL_FBX_FBX_PD_WIDTH              (1U)
-#define OCOTP_CTRL_FBX_FBX_PD(x)                 (((uint32_t)(((uint32_t)(x)) << OCOTP_CTRL_FBX_FBX_PD_SHIFT)) & OCOTP_CTRL_FBX_FBX_PD_MASK)
 
 #define OCOTP_CTRL_FBX_IPG_STOP_MASK             (0x20000U)
 #define OCOTP_CTRL_FBX_IPG_STOP_SHIFT            (17U)

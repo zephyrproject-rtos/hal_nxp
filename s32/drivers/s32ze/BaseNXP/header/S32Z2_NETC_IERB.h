@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_IERB.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_NETC_IERB
  *
  * This file contains register definitions and macros for easy access to their
@@ -97,7 +97,7 @@ typedef struct {
   __IO uint32_t SMDTR;                             /**< Shared memory depletion threshold register, offset: 0x80 */
   __IO uint32_t ERSMBAR;                           /**< ENETC receive shared memory buffer allotment register, offset: 0x84 */
   uint8_t RESERVED_4[56];
-  struct {                                         /* offset: 0xC0, array step: 0x8 */
+  struct NETC_IERB_HTA_NUM {                       /* offset: 0xC0, array step: 0x8 */
     __IO uint32_t HTAHPCR;                           /**< HTA 0 HP configuration register, array offset: 0xC0, array step: 0x8 */
     __IO uint32_t HTALPCR;                           /**< HTA 0 LP configuration register, array offset: 0xC4, array step: 0x8 */
   } HTA_NUM[NETC_IERB_HTA_NUM_COUNT];
@@ -115,7 +115,7 @@ typedef struct {
   uint8_t RESERVED_8[8];
   __IO uint32_t SGLTTR;                            /**< Stream gating lag time for refresh register, offset: 0x190 */
   uint8_t RESERVED_9[108];
-  struct {                                         /* offset: 0x200, array step: 0x10 */
+  struct NETC_IERB_ARRAY_NUM_RC {                  /* offset: 0x200, array step: 0x10 */
     __I  uint32_t RBCR;                              /**< Root complex 0 binding configuration register, array offset: 0x200, array step: 0x10 */
     uint8_t RESERVED_0[4];
     __IO uint32_t RCMSICAR;                          /**< Root complex 0 MSI-X cache attribute register, array offset: 0x208, array step: 0x10 */
@@ -132,7 +132,7 @@ typedef struct {
   __IO uint32_t EMDIOBLPR[NETC_IERB_EMDIO_PF_BOOT_LOAD_COUNT]; /**< EMDIO boot loader parameter register 0..EMDIO boot loader parameter register 1, array offset: 0x348, array step: 0x4 */
   __IO uint32_t EMDIO_CFG;                         /**< EMDIO configuration register, offset: 0x350 */
   uint8_t RESERVED_14[172];
-  struct {                                         /* offset: 0x400, array step: 0x50 */
+  struct NETC_IERB_NUM_TMR_ARRAY {                 /* offset: 0x400, array step: 0x50 */
     __I  uint32_t TBCR;                              /**< Timer 0 binding configuration register, array offset: 0x400, array step: 0x50 */
     uint8_t RESERVED_0[16];
     __IO uint32_t TMCR;                              /**< Timer 0 MSI-X configuration register, array offset: 0x414, array step: 0x50 */
@@ -174,7 +174,7 @@ typedef struct {
   __IO uint32_t L2E1MAR0;                          /**< Link 2 end 1 MAC address register 0, offset: 0x10A8 */
   __IO uint32_t L2E1MAR1;                          /**< Link 2 end 1 MAC address register 1, offset: 0x10AC */
   uint8_t RESERVED_24[3920];
-  struct {                                         /* offset: 0x2000, array step: 0x21C */
+  struct NETC_IERB_CFG_SW_INST {                   /* offset: 0x2000, array step: 0x21C */
     __I  uint32_t SBCR;                              /**< Switch 0 binding configuration register, array offset: 0x2000, array step: 0x21C */
     uint8_t RESERVED_0[16];
     __IO uint32_t SMCR;                              /**< Switch 0 MSI-X configuration register, array offset: 0x2014, array step: 0x21C */
@@ -214,7 +214,7 @@ typedef struct {
     __IO uint32_t SVFHTDECR2;                        /**< Switch 0 VLAN filter hash table default entry configuration registers 2, array offset: 0x2218, array step: 0x21C */
   } CFG_SW_INST[NETC_IERB_CFG_SW_INST_COUNT];
   uint8_t RESERVED_25[3556];
-  struct {                                         /* offset: 0x3000, array step: 0xF8 */
+  struct NETC_IERB_CFG_ENETC_INST {                /* offset: 0x3000, array step: 0xF8 */
     __I  uint32_t EBCR0;                             /**< ENETC 0 binding configuration register 0, array offset: 0x3000, array step: 0xF8 */
     __I  uint32_t EBCR1;                             /**< ENETC 0 binding configuration register 1, array offset: 0x3004, array step: 0xF8 */
     __I  uint32_t EBCR2;                             /**< ENETC 0 binding configuration register 2, array offset: 0x3008, array step: 0xF8 */
@@ -256,7 +256,7 @@ typedef struct {
     __IO uint32_t ETGSLR;                            /**< ENETC 0 time gate scheduling lookahead register, array offset: 0x30F4, array step: 0xF8 */
   } CFG_ENETC_INST[NETC_IERB_CFG_ENETC_INST_COUNT];
   uint8_t RESERVED_26[3848];
-  struct {                                         /* offset: 0x4000, array step: 0x40 */
+  struct NETC_IERB_CFG_VSI_INST {                  /* offset: 0x4000, array step: 0x40 */
     __IO uint32_t VAMQR;                             /**< VSI 0 access management qualifier register..VSI 6 access management qualifier register, array offset: 0x4000, array step: 0x40 */
     uint8_t RESERVED_0[4];
     __IO uint32_t VBLPR[NETC_IERB_CFG_VSI_INST_VSI_PF_BOOT_LOAD_COUNT];   /**< VSI 0 boot loader parameter register 0..VSI 6 boot loader parameter register 1, array offset: 0x4008, array step: index*0x40, index2*0x4 */

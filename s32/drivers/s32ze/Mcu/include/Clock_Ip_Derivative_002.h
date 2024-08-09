@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -9,7 +9,7 @@
 
 /**
 *   @file       Clock_Ip_Derivative_002.h
-*   @version    1.0.0
+*   @version    2.0.0
 *
 *   @brief   AUTOSAR Mcu - Post-Build(PB) configuration file code template.
 *   @details Code template for Post-Build(PB) configuration file generation.
@@ -37,7 +37,7 @@ extern "C"{
 #define CLOCK_IP_DERIVATIVE_002_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_DERIVATIVE_002_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_DERIVATIVE_002_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_DERIVATIVE_002_SW_MAJOR_VERSION                1
+#define CLOCK_IP_DERIVATIVE_002_SW_MAJOR_VERSION                2
 #define CLOCK_IP_DERIVATIVE_002_SW_MINOR_VERSION                0
 #define CLOCK_IP_DERIVATIVE_002_SW_PATCH_VERSION                0
 

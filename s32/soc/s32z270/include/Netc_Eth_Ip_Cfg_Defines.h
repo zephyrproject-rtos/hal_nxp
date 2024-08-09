@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -48,19 +48,13 @@ extern "C"{
 #include "S32Z2_NETC_F1_PCI_HDR_TYPE0.h"
 #include "S32Z2_NETC_F2_PCI_HDR_TYPE0.h"
 #include "S32Z2_NETC_F3_PCI_HDR_TYPE0.h"
-#include "S32Z2_ENETC_PORT.h"
-#include "S32Z2_NETC_F3_COMMON.h"
 
 #include "S32Z2_TMR0_BASE.h"
 
 #include "S32Z2_IERC_PCI.h"
 
-#include "S32Z2_NETC_F1_GLOBAL.h"
 #include "S32Z2_SW_ETH_MAC_PORT0.h"
 #include "S32Z2_SW_ETH_MAC_PORT1.h"
-#include "S32Z2_NETC_F0_GLOBAL.h"
-
-#include "S32Z2_IERC_PCI.h"
 
 #include "S32Z2_NETC_F1_GLOBAL.h"
 #include "S32Z2_NETC_F0_GLOBAL.h"
@@ -80,7 +74,7 @@ extern "C"{
 #define NETC_ETH_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION     4
 #define NETC_ETH_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION     7
 #define NETC_ETH_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION  0
-#define NETC_ETH_IP_CFG_DEFINES_SW_MAJOR_VERSION             1
+#define NETC_ETH_IP_CFG_DEFINES_SW_MAJOR_VERSION             2
 #define NETC_ETH_IP_CFG_DEFINES_SW_MINOR_VERSION             0
 #define NETC_ETH_IP_CFG_DEFINES_SW_PATCH_VERSION             0
 
@@ -113,8 +107,12 @@ extern "C"{
 
 /** @brief Development error enable/disable. */
 #define NETC_ETH_IP_DEV_ERROR_DETECT            (STD_OFF)
+
 /*! @brief Extended buffer support enable/disable */
 #define NETC_ETH_IP_EXTENDED_BUFF            (STD_OFF)
+
+/*! @brief Custom tag support enable/disable */
+#define NETC_ETH_IP_CUSTOM_TAG_SUPPORT      (STD_OFF)
 
 /** @brief Minimum number of bytes supported by a frame. */
 #define NETC_ETH_IP_MIN_FRAME_LENGTH         (16U)
@@ -265,7 +263,7 @@ extern "C"{
 /** @brief Define the bit used by VSI-to-PSI messaging to show if the process is still in progress. */
 #define NETC_ETH_IP_VSI_MSG_PROGRESS_STATUS      (0x00000001UL)
 /** @brief Define the bit used to show the message status. */
-#define NETC_ETH_IP_VSI_MSG_STATUS               (0x00000002UL)
+#define NETC_ETH_IP_VSI_MSG_STATUS               (0x0002U)
 /** @brief Define used to code the 32 bytes message. */
 #define NETC_ETH_IP_VSITOPSI_MSG_SIZE            (0x00000001UL)
 /** @brief Define VSI Enable value for PSIMSGSR register. */
@@ -297,6 +295,20 @@ extern "C"{
 #define NETC_ETH_IP_RATEPOLICERTABLE_REQBUFFER_LEN          (27U) 
 /*!< the length of response data buffer in bytes for rate policer table */  
 #define NETC_ETH_IP_RATEPOLICERTABLE_RSPBUFFER_LEN          (108U) 
+/*!< the length of request data buffer in bytes for add and update cmd for ingress stream identification table */  
+#define NETC_ETH_IP_ISITABLE_ADD_REQBUFFER_LEN              (28U) 
+/*!< the length of request data buffer in bytes for query and delete cmd for ingress stream identification table */  
+#define NETC_ETH_IP_ISITABLE_QUERY_REQBUFFER_LEN            (24U) 
+/*!< 0 the length of response data buffer in bytes for query cmd for ingress stream identification table */  
+#define NETC_ETH_IP_ISITABLE_RSQBUFFER_LEN                  (32U) 
+/*!< the length of request data buffer in bytes for add and update cmd for stream gate instance table */  
+#define NETC_ETH_IP_SGITABLE_REQBUFFER_LEN                  (26U) 
+/*!< the length of response data buffer in bytes for stream gate instance table */  
+#define NETC_ETH_IP_SGITABLE_RSPBUFFER_LEN                  (48U) 
+/*!< the length of request data buffer in bytes for add and update cmd for ingress stream table */  
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_REQBUFFER_LEN        (46U) 
+/*!< the length of response data buffer in bytes for ingress stream table */  
+#define NETC_ETH_IP_INGRESSSTREAMTABLE_RSPBUFFER_LEN        (42U) 
 /*!< 0 bytes response data buffer length for add, update and delete cmd for tables */  
 #define NETC_ETH_IP_TABLE_COMMON_RSPBUFFER_0BYTE_LEN        (0U) 
 /*!< 4 bytes response data buffer length for add, update and delete cmd for tables */  
@@ -309,17 +321,36 @@ extern "C"{
 #define NETC_ETH_IP_TABLE_ALIGNED_SIZE                      (16U)
 /* The maximum number of VLAN Filter Table entries */
 #define NETC_ETH_IP_NUMBER_OF_VLAN_FILTER_ENTRIES              (0U)
+/* The maximum number of Rate Policer Table entries */
+#define NETC_ETH_IP_NUMBER_OF_RP_ENTRIES                       (0U)
+/* The maximum number of Stream Identification Table entries */
+#define NETC_ETH_NUMBER_OF_STREAMIDENTIFICATION_ENTRIES        (0U)
+/* The maximum number of Ingress Stream Table entries */
+#define NETC_ETH_NUMBER_OF_INGRESSSTREAM_ENTRIES               (0U)
+/* The maximum number of Stream Gate Control List entries */
+#define NETC_ETH_NUMBER_OF_SGCL_ENTRIES                        (0U)
+/* The maximum number of Stream Gate Instance entries */
+#define NETC_ETH_NUMBER_OF_SGI_ENTRIES                         (0U)
 /* The maximum number of gate control list */
 #define NETC_ETH_MAX_NUMBER_OF_GATECONTROLLIST_ENTRIES      (2U)
 /* The maximum number of static ingress port filter table list */
-#define NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST              (3U)
-#define NETC_ETH_IP_TABLEDATA_BUFFER_LENGTH  ((236)/4)
+#define NETC_ETH_MAX_NUMBER_OF_IPFTABLE_LIST              (0U)
+/*!< The length of response data buffer in bytes for time gate scheduling table. */
+#define NETC_ETH_IP_TGSTABLE_ADD_REQBUFFER_LEN     (44U)
+#define NETC_ETH_IP_TABLEDATA_BUFFER_LENGTH  (59U)
  
 /* Maxim number of registers that can be interrogated in case of the correctable errors */
 #define NETC_ETH_IP_MAX_CORRECTABLE_ERROR_REPORTING_STATISTICS_LENGTH (1U)
 
 /* Maxim number of registers that can be interrogated in case of the uncorrectable errors */
-#define NETC_ETH_IP_MAX_UNCORRECTABLE_ERROR_REPORTING_STATISTICS_LENGTH (27u)
+#define NETC_ETH_IP_MAX_UNCORRECTABLE_ERROR_REPORTING_STATISTICS_LENGTH (27U)
+
+
+#if !defined(Netc_EthSwt_Ip_TimerBase)
+#define Netc_EthSwt_Ip_TimerBase                   IP_NETC__TMR0_BASE
+#endif
+
+
 /*==================================================================================================
                                              ENUMS
 ==================================================================================================*/

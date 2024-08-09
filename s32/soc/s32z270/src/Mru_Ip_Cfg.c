@@ -1,12 +1,12 @@
 /*
- * Copyright 2022-2023 NXP
- *
+ * Copyright 2022-2024 NXP
+*
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-/**
+/**   
 *   @file    Mru_Ip_Cfg.c
-*   @version 1.0.0
+*   @version 2.0.0
 *
 *   @brief   AUTOSAR Platform - Pre-Compile configuration file code template.
 *   @details Code template for Pre-Compile configuration file generation.
@@ -33,12 +33,11 @@ extern "C"
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 
-#define CDD_PLATFORM_MRU_IP_MODULE_ID_CFG_C                        255
 #define CDD_PLATFORM_MRU_IP_VENDOR_ID_CFG_C                        43
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_MAJOR_VERSION_CFG_C         4
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_MINOR_VERSION_CFG_C         7
 #define CDD_PLATFORM_MRU_IP_AR_RELEASE_REVISION_VERSION_CFG_C      0
-#define CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_CFG_C                 1
+#define CDD_PLATFORM_MRU_IP_SW_MAJOR_VERSION_CFG_C                 2
 #define CDD_PLATFORM_MRU_IP_SW_MINOR_VERSION_CFG_C                 0
 #define CDD_PLATFORM_MRU_IP_SW_PATCH_VERSION_CFG_C                 0
 

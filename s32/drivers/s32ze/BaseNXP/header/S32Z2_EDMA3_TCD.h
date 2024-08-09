@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_EDMA3_TCD.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_EDMA3_TCD
  *
  * This file contains register definitions and macros for easy access to their
@@ -73,7 +73,7 @@
 
 /** EDMA3_TCD - Register Layout Typedef */
 typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x10000 */
+  struct EDMA3_TCD_TCD {                           /* offset: 0x0, array step: 0x10000 */
     __IO uint32_t CH_CSR;                            /**< Channel Control and Status, array offset: 0x0, array step: 0x10000, irregular array, not all indices are valid */
     __IO uint32_t CH_ES;                             /**< Channel Error Status, array offset: 0x4, array step: 0x10000, irregular array, not all indices are valid */
     __IO uint32_t CH_INT;                            /**< Channel Interrupt Status, array offset: 0x8, array step: 0x10000, irregular array, not all indices are valid */

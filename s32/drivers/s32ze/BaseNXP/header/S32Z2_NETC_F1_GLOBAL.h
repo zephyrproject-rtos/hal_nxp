@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_NETC_F1_GLOBAL.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_NETC_F1_GLOBAL
  *
  * This file contains register definitions and macros for easy access to their
@@ -93,14 +93,14 @@ typedef struct {
   __I  uint32_t SMERBOR0;                          /**< Shared memory ENETC receive buffer operational register 0, offset: 0x44 */
   __I  uint32_t SMERBOR1;                          /**< Shared memory ENETC receive buffer operational 1, offset: 0x48 */
   uint8_t RESERVED_3[180];
-  struct {                                         /* offset: 0x100, array step: 0x8 */
+  struct NETC_F1_GLOBAL_PCE_SL {                   /* offset: 0x100, array step: 0x8 */
     __I  uint32_t PCEOR;                             /**< PCE 0 operational register, array offset: 0x100, array step: 0x8 */
     __I  uint32_t RFEOR;                             /**< Replication Forwarding Engine 0 operational register, array offset: 0x104, array step: 0x8 */
   } PCE_SL[NETC_F1_GLOBAL_PCE_SL_COUNT];
   uint8_t RESERVED_4[92];
   __I  uint32_t NETCCLKR;                          /**< NETC clock register, offset: 0x164 */
   uint8_t RESERVED_5[152];
-  struct {                                         /* offset: 0x200, array step: 0x28 */
+  struct NETC_F1_GLOBAL_HTA_LOOP {                 /* offset: 0x200, array step: 0x28 */
     __I  uint32_t HTACAPR;                           /**< HTA 0 capability register, array offset: 0x200, array step: 0x28 */
     __I  uint32_t HTARFCOR;                          /**< HTA 0 receive frame count operational register, array offset: 0x204, array step: 0x28 */
     __I  uint32_t HTAHPBCOR;                         /**< HTA 0 high priority byte count operational register, array offset: 0x208, array step: 0x28 */
@@ -109,7 +109,7 @@ typedef struct {
     __I  uint32_t HTATFCOR;                          /**< HTA 0 transmit frame count operational register, array offset: 0x224, array step: 0x28 */
   } HTA_LOOP[NETC_F1_GLOBAL_HTA_LOOP_COUNT];
   uint8_t RESERVED_6[216];
-  struct {                                         /* offset: 0x300, array step: 0x10 */
+  struct NETC_F1_GLOBAL_ARRAY_NUM_RC {             /* offset: 0x300, array step: 0x10 */
     __IO uint32_t RCSBRLAR;                          /**< Root complex 0 system bus read latency average register, array offset: 0x300, array step: 0x10 */
     __I  uint32_t RCSBRLHWMR;                        /**< Root complex 0 system bus read latency high watermark register, array offset: 0x304, array step: 0x10 */
     __IO uint32_t RCSBWLAR;                          /**< Root complex 0 system bus write latency average register, array offset: 0x308, array step: 0x10 */
@@ -122,7 +122,7 @@ typedef struct {
   __I  uint32_t FBLPR[NETC_F1_GLOBAL_G_BOOT_COUNT]; /**< Function boot loader parameter register 0..Function boot loader parameter register 1, array offset: 0xD00, array step: 0x4 */
   uint8_t RESERVED_9[280];
   union {                                          /* offset: 0xE20 */
-    struct {                                         /* offset: 0xE20 */
+    struct NETC_F1_GLOBAL_ERROR_EMDIO {              /* offset: 0xE20 */
       __IO uint32_t EMDIOUFSBECR;                      /**< EMDIO uncorrectable fatal system bus error configuration register, offset: 0xE20 */
       __IO uint32_t EMDIOUFSBESR;                      /**< EMDIO uncorrectable fatal system bus error status register, offset: 0xE24 */
       uint8_t RESERVED_0[40];

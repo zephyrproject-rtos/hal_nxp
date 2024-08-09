@@ -1,12 +1,12 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /**
 *   @file       Clock_Ip_Cfg_Defines.h
-*   @version    1.0.0
+*   @version    2.0.0
 *
 *   @brief   AUTOSAR Mcu - Post-Build(PB) configuration file code template.
 *   @details Code template for Post-Build(PB) configuration file generation.
@@ -58,7 +58,7 @@ extern "C"{
 #define CLOCK_IP_CFG_DEFINES_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_CFG_DEFINES_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_CFG_DEFINES_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_CFG_DEFINES_SW_MAJOR_VERSION                1
+#define CLOCK_IP_CFG_DEFINES_SW_MAJOR_VERSION                2
 #define CLOCK_IP_CFG_DEFINES_SW_MINOR_VERSION                0
 #define CLOCK_IP_CFG_DEFINES_SW_PATCH_VERSION                0
 
@@ -139,8 +139,8 @@ extern "C"{
 */
 #define CLOCK_IP_CONFIGURED_XOSCS_0_NO       (1U)
 #define CLOCK_IP_CONFIGURED_PLLS_0_NO       (5U)
-#define CLOCK_IP_CONFIGURED_SELECTORS_0_NO       (63U)
-#define CLOCK_IP_CONFIGURED_DIVIDERS_0_NO       (85U)
+#define CLOCK_IP_CONFIGURED_SELECTORS_0_NO       (61U)
+#define CLOCK_IP_CONFIGURED_DIVIDERS_0_NO       (83U)
 #define CLOCK_IP_CONFIGURED_DIVIDER_TRIGGERS_0_NO       (1U)
 #define CLOCK_IP_CONFIGURED_FRACTIONAL_DIVIDERS_0_NO       (12U)
 #define CLOCK_IP_CONFIGURED_EXT_CLKS_0_NO       (8U)

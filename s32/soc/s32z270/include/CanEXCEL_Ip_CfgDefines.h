@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 NXP
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,8 +25,8 @@ extern "C"{
 * 3) internal and external interfaces from this unit
 
 ==================================================================================================*/
-    #include "S32Z2.h"
-    
+#include "S32Z2.h"
+
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -37,7 +37,7 @@ extern "C"{
 #define CANEXCEL_IP_CFGDEFINES_AR_RELEASE_MAJOR_VERSION_H       4
 #define CANEXCEL_IP_CFGDEFINES_AR_RELEASE_MINOR_VERSION_H       7
 #define CANEXCEL_IP_CFGDEFINES_AR_RELEASE_REVISION_VERSION_H    0
-#define CANEXCEL_IP_CFGDEFINES_SW_MAJOR_VERSION_H               1
+#define CANEXCEL_IP_CFGDEFINES_SW_MAJOR_VERSION_H               2
 #define CANEXCEL_IP_CFGDEFINES_SW_MINOR_VERSION_H               0
 #define CANEXCEL_IP_CFGDEFINES_SW_PATCH_VERSION_H               0
 /*==================================================================================================
@@ -60,3 +60,4 @@ extern "C"{
 /** @} */
 
 #endif /* CANEXCEL_IP_CFGDEFINES_H */
+

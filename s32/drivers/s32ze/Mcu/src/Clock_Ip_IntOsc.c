@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /**
 *   @file       Clock_Ip_IntOsc.c
-*   @version    1.0.0
+*   @version    2.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -36,7 +36,7 @@ extern "C"{
 #define CLOCK_IP_INTOSC_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_INTOSC_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_INTOSC_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_INTOSC_SW_MAJOR_VERSION_C               1
+#define CLOCK_IP_INTOSC_SW_MAJOR_VERSION_C               2
 #define CLOCK_IP_INTOSC_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_INTOSC_SW_PATCH_VERSION_C               0
 
@@ -126,11 +126,10 @@ static void Clock_Ip_InternalOscillatorEmpty_Disable(Clock_Ip_NameType Name)
 }
 
 
-
-
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
+
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
@@ -147,14 +146,11 @@ static void Clock_Ip_InternalOscillatorEmpty_Disable(Clock_Ip_NameType Name)
 const Clock_Ip_IntOscCallbackType Clock_Ip_axIntOscCallbacks[CLOCK_IP_IRCOSC_CALLBACKS_COUNT] =
 {
     {
-        Clock_Ip_InternalOscillatorEmpty,          /* Set */
-        Clock_Ip_InternalOscillatorEmpty,          /* Enable */
-        Clock_Ip_InternalOscillatorEmpty_Disable,  /* Disable */
+        &Clock_Ip_InternalOscillatorEmpty,          /* Set */
+        &Clock_Ip_InternalOscillatorEmpty,          /* Enable */
+        &Clock_Ip_InternalOscillatorEmpty_Disable,  /* Disable */
     },
 };
-
-
-
 
 /* Clock stop constant section data */
 #define MCU_STOP_SEC_CONST_UNSPECIFIED

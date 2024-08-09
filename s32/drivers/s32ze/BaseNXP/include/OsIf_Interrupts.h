@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -25,7 +25,7 @@ extern "C"{
 ==================================================================================================*/
 #include "OsIf_Cfg.h"
 
-#if defined(USING_OS_ZEPHYR)
+#if (defined(USING_OS_ZEPHYR) || defined(USING_OS_FREERTOS))
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -33,7 +33,7 @@ extern "C"{
 #define OSIF_INTERRUPTS_AR_RELEASE_MAJOR_VERSION     4
 #define OSIF_INTERRUPTS_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_INTERRUPTS_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_INTERRUPTS_SW_MAJOR_VERSION             1
+#define OSIF_INTERRUPTS_SW_MAJOR_VERSION             2
 #define OSIF_INTERRUPTS_SW_MINOR_VERSION             0
 #define OSIF_INTERRUPTS_SW_PATCH_VERSION             0
 
@@ -100,7 +100,7 @@ void OsIf_Interrupts_SuspendAllInterrupts(void);
 #define BASENXP_STOP_SEC_CODE
 #include "BaseNXP_MemMap.h"
 
-#endif /* defined(USING_OS_ZEPHYR) */
+#endif /* defined(USING_OS_ZEPHYR) || defined(USING_OS_FREERTOS) */
 
 #ifdef __cplusplus
 }

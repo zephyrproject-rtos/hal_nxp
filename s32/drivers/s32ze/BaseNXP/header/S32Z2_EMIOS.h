@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_eMIOS.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_eMIOS
  *
  * This file contains register definitions and macros for easy access to their
@@ -79,7 +79,7 @@ typedef struct {
   __IO uint32_t OUDIS;                             /**< Output Update Disable, offset: 0x8 */
   uint8_t RESERVED_0[20];
   union {                                          /* offset: 0x20 */
-    struct {                                         /* offset: 0x20, array step: 0x20 */
+    struct eMIOS_CH_UC {                             /* offset: 0x20, array step: 0x20 */
       __IO uint32_t A;                                 /**< UC A 0..UC A 31, array offset: 0x20, array step: 0x20, valid indices: [0-7, 16-31] */
       __IO uint32_t B;                                 /**< UC B 0..UC B 31, array offset: 0x24, array step: 0x20, valid indices: [0-7, 16-31] */
       __IO uint32_t CNT;                               /**< UC Counter 0..UC Counter 31, array offset: 0x28, array step: 0x20, valid indices: [0-7, 16-31] */
@@ -89,7 +89,7 @@ typedef struct {
       __IO uint32_t C2;                                /**< UC Control 2 0..UC Control 2 31, array offset: 0x38, array step: 0x20, valid indices: [0-7, 16-31] */
       uint8_t RESERVED_0[4];
     } UC[eMIOS_CH_UC_UC_COUNT];
-    struct {                                         /* offset: 0x20, array step: 0x40 */
+    struct eMIOS_CH_WSC {                            /* offset: 0x20, array step: 0x40 */
       __IO uint32_t WSCAEC;                            /**< WSC Capture A and Event Counter 8..WSC Capture A and Event Counter 14, array offset: 0x20, array step: 0x40, valid indices: [4-7] */
       __I  uint32_t WSCAPB;                            /**< WSC Capture B 8..WSC Capture B 14, array offset: 0x24, array step: 0x40, valid indices: [4-7] */
       __IO uint32_t WSC1;                              /**< WSC Control 1 8..WSC Control 1 14, array offset: 0x28, array step: 0x40, valid indices: [4-7] */

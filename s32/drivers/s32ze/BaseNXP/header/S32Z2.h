@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2
  *
  * This file contains register definitions and macros for easy access to their
@@ -117,6 +117,7 @@
 #include "S32Z2_LLC_CSR.h"
 #include "S32Z2_LLC_FSC.h"
 #include "S32Z2_LMEM64.h"
+#include "S32Z2_LPI2C.h"
 #include "S32Z2_LSTCU.h"
 #include "S32Z2_LSTCU_14_15_17_18.h"
 #include "S32Z2_L_VFCCU.h"

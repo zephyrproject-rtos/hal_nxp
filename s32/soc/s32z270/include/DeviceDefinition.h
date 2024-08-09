@@ -1,33 +1,23 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2022-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+
+#ifndef DEVICEDEFINITION_H
+#define DEVICEDEFINITION_H
+
 /**
-*   @file           Platform_Types.h
-*   @implements     Platform_Types.h_Artifact
-*   @version 1.0.0
-*
-*   @brief   AUTOSAR BaseNXP - Platform dependend data type definitions.
-*   @details AUTOSAR platform types header file. It contains all 
-*            platform dependent types and symbols. Those types must be abstracted in order to 
-*            become platform and compiler independent.
+*   @file   DeviceDefinition.h
 *
 *   @addtogroup BASENXP_COMPONENT
 *   @{
 */
 
-/**   
-* @note         It is not allowed to add any extension to this file. Any extension invalidates the 
-*               AUTOSAR conformity
-*/
-
-#ifndef PLATFORM_TYPES_H
-#define PLATFORM_TYPES_H
-
 #ifdef __cplusplus
 extern "C"{
 #endif
+
 
 /*==================================================================================================
 *                                         INCLUDE FILES
@@ -35,12 +25,25 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "PlatformTypes.h"
 
 /*==================================================================================================
 *                               SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 
+/** 
+@{
+* @brief Parameters that shall be published within the modules header file.
+*       The integration of incompatible files shall be avoided.
+*/
+#define DEVICEDEFINITION_VENDOR_ID                       43
+#define DEVICEDEFINITION_MODULE_ID                       0
+#define DEVICEDEFINITION_AR_RELEASE_MAJOR_VERSION_H      4
+#define DEVICEDEFINITION_AR_RELEASE_MINOR_VERSION_H      7
+#define DEVICEDEFINITION_AR_RELEASE_REVISION_VERSION_H   0
+#define DEVICEDEFINITION_SW_MAJOR_VERSION_H              2
+#define DEVICEDEFINITION_SW_MINOR_VERSION_H              0
+#define DEVICEDEFINITION_SW_PATCH_VERSION_H              0
+/**@}*/
 /*==================================================================================================
 *                                      FILE VERSION CHECKS
 ==================================================================================================*/
@@ -52,13 +55,33 @@ extern "C"{
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
+/** 
+* @brief This macro define specific derivative and sub derivative.
+*/
+#ifndef S32Z2XX
+#define S32Z2XX
+#endif
+
+#ifndef S32Z2X
+#define S32Z2X
+#endif
+
+#ifndef DERIVATIVE_S32Z2XX
+#define DERIVATIVE_S32Z2XX
+#endif
+/** 
+* @brief This macro define specific platform.
+*/
+#ifndef S32ZSE
+#define S32ZSE
+#endif
 
 /*==================================================================================================
-                                             ENUMS
+*                                             ENUMS
 ==================================================================================================*/
 
 /*==================================================================================================
-                                 STRUCTURES AND OTHER TYPEDEFS
+*                                 STRUCTURES AND OTHER TYPEDEFS
 ==================================================================================================*/
 
 /*==================================================================================================
@@ -66,7 +89,7 @@ extern "C"{
 ==================================================================================================*/
 
 /*==================================================================================================
-*                                    FUNCTION PROTOTYPES
+*                                     FUNCTION PROTOTYPES
 ==================================================================================================*/
 
 #ifdef __cplusplus
@@ -74,6 +97,7 @@ extern "C"{
 #endif
 
 
-#endif /* #ifndef PLATFORM_TYPES_H */
-
 /** @} */
+
+#endif /* DEVICEDEFINITION_H */
+

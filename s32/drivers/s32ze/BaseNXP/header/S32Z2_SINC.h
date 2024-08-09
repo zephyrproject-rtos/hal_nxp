@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_SINC.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_SINC
  *
  * This file contains register definitions and macros for easy access to their
@@ -84,7 +84,7 @@ typedef struct {
   __IO uint32_t FIFOIS;                            /**< FIFO And CAD Error Interrupt Status, offset: 0x20 */
   __I  uint32_t SR;                                /**< Status, offset: 0x24 */
   uint8_t RESERVED_0[16];
-  struct {                                         /* offset: 0x38, array step: 0x30 */
+  struct SINC_CHANNEL {                            /* offset: 0x38, array step: 0x30 */
     __IO uint32_t CCR;                               /**< Channel 0 Control..Channel 3 Control, array offset: 0x38, array step: 0x30 */
     __IO uint32_t CDR;                               /**< Channel 0 Data Rate..Channel 3 Data Rate, array offset: 0x3C, array step: 0x30 */
     __IO uint32_t CCFR;                              /**< Channel 0 Configuration..Channel 3 Configuration, array offset: 0x40, array step: 0x30 */
@@ -990,11 +990,6 @@ typedef struct {
 
 /*! @name CACFR - Channel 0 Advanced Configuration..Channel 3 Advanced Configuration */
 /*! @{ */
-
-#define SINC_CACFR_ADMASEL_MASK                  (0xF000U)
-#define SINC_CACFR_ADMASEL_SHIFT                 (12U)
-#define SINC_CACFR_ADMASEL_WIDTH                 (4U)
-#define SINC_CACFR_ADMASEL(x)                    (((uint32_t)(((uint32_t)(x)) << SINC_CACFR_ADMASEL_SHIFT)) & SINC_CACFR_ADMASEL_MASK)
 
 #define SINC_CACFR_HPFA_MASK                     (0xF0000U)
 #define SINC_CACFR_HPFA_SHIFT                    (16U)

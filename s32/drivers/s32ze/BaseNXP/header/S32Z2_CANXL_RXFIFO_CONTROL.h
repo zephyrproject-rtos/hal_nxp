@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_CANXL_RXFIFO_CONTROL.h
- * @version 1.8
- * @date 2022-07-13
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_CANXL_RXFIFO_CONTROL
  *
  * This file contains register definitions and macros for easy access to their

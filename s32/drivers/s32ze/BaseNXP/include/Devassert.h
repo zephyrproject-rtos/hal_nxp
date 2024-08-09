@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 M4_SRC_COPYRIGHTED_TOs
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -7,7 +7,7 @@
 #ifndef DEVASSERT_H
 #define DEVASSERT_H
 
-#include "PlatformTypes.h"
+#include "Platform_Types.h"
 #include "Mcal.h"
 
 /*
@@ -24,7 +24,7 @@
 #define DEVASSERT_AR_RELEASE_MAJOR_VERSION     4
 #define DEVASSERT_AR_RELEASE_MINOR_VERSION     7
 #define DEVASSERT_AR_RELEASE_REVISION_VERSION  0
-#define DEVASSERT_SW_MAJOR_VERSION             1
+#define DEVASSERT_SW_MAJOR_VERSION             2
 #define DEVASSERT_SW_MINOR_VERSION             0
 #define DEVASSERT_SW_PATCH_VERSION             0
 
@@ -32,11 +32,11 @@
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if the files Devassert.h and PlatformTypes.h are of the same version */
+    /* Check if the files Devassert.h and Platform_Types.h are of the same version */
     #if ((DEVASSERT_AR_RELEASE_MAJOR_VERSION != PLATFORM_AR_RELEASE_MAJOR_VERSION) || \
          (DEVASSERT_AR_RELEASE_MINOR_VERSION != PLATFORM_AR_RELEASE_MINOR_VERSION)     \
         )
-        #error "AUTOSAR Version Numbers of Devassert.h and PlatformTypes.h are different"
+        #error "AUTOSAR Version Numbers of Devassert.h and Platform_Types.h are different"
     #endif
     /* Check if the files Devassert.h and Mcal.h are of the same version */
     #if ((DEVASSERT_AR_RELEASE_MAJOR_VERSION != MCAL_AR_RELEASE_MAJOR_VERSION) || \

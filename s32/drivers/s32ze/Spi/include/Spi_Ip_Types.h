@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP NXP
+ * Copyright 2021-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -28,7 +28,7 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "StandardTypes.h"
+#include "Std_Types.h"
 #include "Spi_Ip_Cfg.h"
 
 /*==================================================================================================
@@ -38,7 +38,7 @@ extern "C"{
 #define SPI_IP_TYPES_AR_RELEASE_MAJOR_VERSION     4
 #define SPI_IP_TYPES_AR_RELEASE_MINOR_VERSION     7
 #define SPI_IP_TYPES_AR_RELEASE_REVISION_VERSION  0
-#define SPI_IP_TYPES_SW_MAJOR_VERSION             1
+#define SPI_IP_TYPES_SW_MAJOR_VERSION             2
 #define SPI_IP_TYPES_SW_MINOR_VERSION             0
 #define SPI_IP_TYPES_SW_PATCH_VERSION             0
 
@@ -84,6 +84,7 @@ extern "C"{
 /*==================================================================================================
 *                                  STRUCTURES AND OTHER TYPEDEFS
 ==================================================================================================*/
+
 /** @brief   Enum defining the possible events which triggers end of transfer callback.
 *
 * @implements Spi_Ip_EventType_enum
@@ -231,13 +232,23 @@ typedef struct
    uint16 ExpectedFifoWrites;   /**< Store number of frames needs to be transmit for current transfer */
    uint16 ExpectedCmdFifoWrites;   /**< Store number of frames needs to be transmit for current transfer */
    uint16 PushrCmd;   /**< PUSHR CMD Fifo register which contains CS and continuos mode. */
-   uint16 PushrCmdLast;   /**< PUSHR CMD Fifo register which contains CS and disable continuos mode. */
    boolean KeepCs;   /**< Keep CS signal after tranfers completed. */
    uint16 CurrentTxFifoSlot;   /**< Number of TX FIFO slots are current available. */
-   boolean CtareDtcpSupport;   /**< Save CTARE DTCP value */
+   uint16 Pushr0Repeat; /**< Number of times to write PushrCmds[0] to FIFO >*/
+   uint16 Pushr0RepeatIndex; /**< Counter for Pushr0Repeat >*/
+   uint16 PushrCmds[3]; /**< Pushr Cmds to be written to FIFO >*/
+   uint16 DTCPValue[3]; /**< Values of DTCP to be written in CTARE0-3 >*/
+   uint16 NbCmds; /**< Number of different Cmds >*/
+   uint16 NbCmdsIndex; /**< Counter for NbCmds >*/
    const Spi_Ip_ConfigType *PhyUnitConfig;
    const Spi_Ip_ExternalDeviceType *ExternalDevice;
 } Spi_Ip_StateStructureType;
+
+typedef struct
+{
+   boolean KeepCs; /**< Keep CS asserted after the next transfer */
+   Spi_Ip_DeviceParamsType *DeviceParams; /**< Device params to be updated. If null, device params are not updated */
+} Spi_Ip_TransferAdjustmentType;
 
 /*==================================================================================================
 *                                  GLOBAL VARIABLE DECLARATIONS

@@ -1,14 +1,14 @@
 /*
  * Copyright 1997-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 /*!
  * @file S32Z2_GPR1_PCTL.h
- * @version 2.1
- * @date 2023-07-20
+ * @version 2.3
+ * @date 2024-05-03
  * @brief Peripheral Access Layer for S32Z2_GPR1_PCTL
  *
  * This file contains register definitions and macros for easy access to their
@@ -70,7 +70,7 @@
 
 /** GPR1_PCTL - Register Layout Typedef */
 typedef struct {
-  __IO uint32_t I3C1PCTL;                          /**< I3C_1 Clock Control Enable, offset: 0x0 */
+  __IO uint32_t I3C1PCTL;                          /**< LPI2C_1 Clock Control Enable, offset: 0x0 */
   __IO uint32_t EDMA1PCTL;                         /**< eDMA_1 Clock Control Enable, offset: 0x4 */
   __IO uint32_t DSPI2PCTL;                         /**< SPI_2 Clock Control Enable, offset: 0x8 */
   __IO uint32_t DSPI3PCTL;                         /**< SPI_3 Clock Control Enable, offset: 0xC */
@@ -109,7 +109,7 @@ typedef struct {
  * @{
  */
 
-/*! @name I3C1PCTL - I3C_1 Clock Control Enable */
+/*! @name I3C1PCTL - LPI2C_1 Clock Control Enable */
 /*! @{ */
 
 #define GPR1_PCTL_I3C1PCTL_PCTL_MASK             (0x1U)
