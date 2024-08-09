@@ -33,10 +33,6 @@
 #include "usb_device_dwc3.h"
 #endif
 
-#if (defined(USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE) && (USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-#include "fsl_cache.h"
-#endif
-
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -44,12 +40,6 @@
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "middleware.usb.device_stack"
-#endif
-
-#if defined __CORTEX_M && (__CORTEX_M == 7U)
-#if (defined(USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE) && (USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-#warning USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE is not supported.
-#endif
 #endif
 
 /*******************************************************************************
@@ -291,12 +281,6 @@ static usb_status_t USB_DeviceTransfer(usb_device_handle handle,
         OSA_EXIT_CRITICAL();
         if (0U != (endpointAddress & USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_MASK))
         {
-#if (defined(USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE) && (USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-            if (0U != length)
-            {
-                DCACHE_CleanByRange((uint32_t)buffer, length);
-            }
-#endif
             /* Call the controller send interface, the callbackFn is initialized in
             USB_DeviceGetControllerInterface */
             status = deviceHandle->controllerInterface->deviceSend(deviceHandle->controllerHandle, endpointAddress,
@@ -304,12 +288,6 @@ static usb_status_t USB_DeviceTransfer(usb_device_handle handle,
         }
         else
         {
-#if (defined(USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE) && (USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-            if (length)
-            {
-                DCACHE_CleanInvalidateByRange((uint32_t)buffer, length);
-            }
-#endif
             /* Call the controller receive interface, the callbackFn is initialized in
             USB_DeviceGetControllerInterface */
             status = deviceHandle->controllerInterface->deviceRecv(deviceHandle->controllerHandle, endpointAddress,
@@ -581,6 +559,26 @@ static usb_status_t USB_DeviceDcdDetectFinihsedNotification(usb_device_struct_t 
 }
 #endif
 
+#if (defined(USB_DEVICE_CONFIG_SOF_NOTIFICATIONS) && (USB_DEVICE_CONFIG_SOF_NOTIFICATIONS > 0U))
+/*!
+ * @brief Handle the SOF notification.
+ *
+ * This function is used to handle the SOF notification.
+ *
+ * @param handle                 The device handle. It equals the value returned from USB_DeviceInit.
+ * @param message                The device callback message handle.
+ *
+ * @return A USB error code or kStatus_USB_Success.
+ */
+static usb_status_t USB_DeviceSOFNotification(usb_device_struct_t *handle,
+                                                 usb_device_callback_message_struct_t *message)
+{
+    /* Call device callback to notify the application that the SOF packet is received.
+    the deviceCallback is the second parameter of USB_DeviceInit */
+    return handle->deviceCallback(handle, kUSB_DeviceEventSOF, NULL);
+}
+#endif
+
 /*!
  * @brief Handle the attach notification.
  *
@@ -634,6 +632,11 @@ static usb_status_t USB_DeviceNotification(usb_device_struct_t *handle, usb_devi
 #if (defined(USB_DEVICE_CONFIG_CHARGER_DETECT) && (USB_DEVICE_CONFIG_CHARGER_DETECT > 0U))
         case kUSB_DeviceNotifyDcdDetectFinished:
             status = USB_DeviceDcdDetectFinihsedNotification(handle, message);
+            break;
+#endif
+#if (defined(USB_DEVICE_CONFIG_SOF_NOTIFICATIONS) && (USB_DEVICE_CONFIG_SOF_NOTIFICATIONS > 0U))
+        case kUSB_DeviceNotifySOF:
+            status = USB_DeviceSOFNotification(handle, message);
             break;
 #endif
 

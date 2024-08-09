@@ -1,4 +1,78 @@
 ---
+middleware.usb.phydcd_config_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: source
+    cc-include:
+    - repo_relative_path: output/npw/dcd_config/phydcd
+      project_relative_path: generated
+      target_file:
+      - usb_phydcd_config.h
+      package_relative_path: output/npw/dcd_config/phydcd
+    files:
+    - source: middleware/usb/output/npw/dcd_config/phydcd/usb_phydcd_config.h
+      project_relative_path: generated
+      repo_relative_path: output/npw/dcd_config/phydcd
+      package_relative_path: output/npw/dcd_config/phydcd
+      type: c_include
+      config: true
+    - source: middleware/usb/middleware_usb_phydcd_config_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    description: USB device phydcd config header
+    version: 2.8.4
+    type: project_template
+    full_name: USB device phydcd config header
+    display_name: USB device phydcd config header
+    taxonomy:
+      csub: phydcd_config_header
+      cclass: USB
+      cgroup: USB DCD
+    vendor: NXP
+  meta-name: middleware.usb.phydcd_config_header
+  cmake_module_name: middleware_usb_phydcd_config_header
+middleware.usb.hsdcd_config_header:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: source
+    cc-include:
+    - repo_relative_path: output/npw/dcd_config/hsdcd
+      project_relative_path: generated
+      target_file:
+      - usb_hsdcd_config.h
+      package_relative_path: output/npw/dcd_config/hsdcd
+    files:
+    - source: middleware/usb/output/npw/dcd_config/hsdcd/usb_hsdcd_config.h
+      project_relative_path: generated
+      repo_relative_path: output/npw/dcd_config/hsdcd
+      package_relative_path: output/npw/dcd_config/hsdcd
+      type: c_include
+      config: true
+    - source: middleware/usb/middleware_usb_hsdcd_config_header.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  belong_to: set.middleware.usb
+  section_info:
+    description: USB device hsdcd config header
+    version: 2.8.4
+    type: project_template
+    full_name: USB device hsdcd config header
+    display_name: USB device hsdcd config header
+    taxonomy:
+      csub: hsdcd_config_header
+      cclass: USB
+      cgroup: USB DCD
+    vendor: NXP
+  meta-name: middleware.usb.hsdcd_config_header
+  cmake_module_name: middleware_usb_hsdcd_config_header
 set.middleware.usb:
   section-type: set
   belong_to: set.middleware.usb
@@ -11,7 +85,7 @@ set.middleware.usb:
   section_info:
     fixed_id: nxp_usb
     type: middleware
-    version: 2.9.0
+    version: 2.9.1
     display_name: USB Host, Device, OTG Stack
     description: Host, Device, OTG
     set_location:
@@ -54,6 +128,9 @@ set.middleware.usb:
       usb.host.stack:
         cclass: USB
         cgroup: USB Host
+      usb.dcd:
+        cclass: USB
+        cgroup: USB DCD
 scr.middleware.usb:
   belong_to: set.middleware.usb
   section-type: scr
@@ -61,7 +138,7 @@ scr.middleware.usb:
     license:
     - license.bsd-3
     Name: USB
-    Version: 2.9.0
+    Version: 2.9.1
     Format: source code
     Description: NXP USB stack. This is a version of the USB stack that has been integrated
       with the MCUXpresso SDK.
@@ -162,7 +239,7 @@ middleware.usb.device.khci_config_header:
   belong_to: set.middleware.usb
   section_info:
     description: USB device khci config header
-    version: 2.9.0
+    version: 2.9.1
     type: project_template
     full_name: USB device khci config header
     display_name: USB device khci config header
@@ -212,7 +289,7 @@ middleware.usb.device.ip3511fs_config_header:
   belong_to: set.middleware.usb
   section_info:
     description: USB device ip3511fs config header
-    version: 2.9.0
+    version: 2.9.1
     type: project_template
     full_name: USB device ip3511fs config header
     display_name: USB device ip3511fs config header
@@ -251,10 +328,13 @@ middleware.usb.device.ip3511fs_config_header:
       - LPC5516
       - LPC5526
       - LPC5528
+      - LPC5534
+      - LPC5536
       - LPC55S14
       - LPC55S16
       - LPC55S26
       - LPC55S28
+      - LPC55S36
       - LPC55S66
       - LPC55S69
   meta-name: middleware.usb.device.ip3511fs_config_header
@@ -285,7 +365,7 @@ middleware.usb.device.ip3511hs_config_header:
   belong_to: set.middleware.usb
   section_info:
     description: USB device ip3511hs config header
-    version: 2.9.0
+    version: 2.9.1
     type: project_template
     full_name: USB device ip3511hs config header
     display_name: USB device ip3511hs config header
@@ -361,7 +441,7 @@ middleware.usb.device.ehci_config_header:
   belong_to: set.middleware.usb
   section_info:
     description: USB device ehci config header
-    version: 2.9.0
+    version: 2.9.1
     type: project_template
     full_name: USB device ehci config header
     display_name: USB device ehci config header
@@ -382,6 +462,7 @@ middleware.usb.device.ehci_config_header:
       - MIMXRT1062xxxxA
       - MIMXRT1062xxxxB
       - MIMXRT1064xxxxA
+      - MIMXRT1064xxxxB
       - MIMXRT1011xxxxx
       - MIMXRT1015xxxxx
       - MIMXRT1021xxxxx
@@ -427,7 +508,7 @@ middleware.usb.common_header:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Common Header
     description: Middleware usb common_header
@@ -472,7 +553,7 @@ middleware.usb.device.common_header:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device Common Header
     description: Middleware usb device common_header
@@ -519,7 +600,7 @@ middleware.usb.device.ip3511fs:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device IP3511FS Controller Driver(FS)
     description: Middleware usb device ip3511fs
@@ -559,10 +640,13 @@ middleware.usb.device.ip3511fs:
       - LPC5516
       - LPC5526
       - LPC5528
+      - LPC5534
+      - LPC5536
       - LPC55S14
       - LPC55S16
       - LPC55S26
       - LPC55S28
+      - LPC55S36
       - LPC55S66
       - LPC55S69
     - middleware.usb.device.ip3511fs_config_header
@@ -599,7 +683,7 @@ middleware.usb.device.ip3511hs:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device IP3511HS Controller Driver(HS)
     description: Middleware usb device ip3511hs
@@ -656,6 +740,11 @@ middleware.usb.device.ip3511hs:
         - device_id:
           - MCIMX7U3xxxxx
           - MCIMX7U5xxxxx
+          - MIMX8UD3xxx08
+          - MIMX8UD5xxx08
+          - MIMX8UD7xxx08
+          - MIMX8US3xxx08
+          - MIMX8US5xxx08
           - MIMXRT1011xxxxx
           - MIMXRT1015xxxxx
           - MIMXRT1021xxxxx
@@ -669,6 +758,7 @@ middleware.usb.device.ip3511hs:
           - MIMXRT1062xxxxA
           - MIMXRT1062xxxxB
           - MIMXRT1064xxxxA
+          - MIMXRT1064xxxxB
           - MIMXRT1165xxxxx
           - MIMXRT1166xxxxx
           - MIMXRT1171xxxxx
@@ -695,6 +785,11 @@ middleware.usb.device.ip3511hs:
           device_id:
           - MCIMX7U3xxxxx
           - MCIMX7U5xxxxx
+          - MIMX8UD3xxx08
+          - MIMX8UD5xxx08
+          - MIMX8UD7xxx08
+          - MIMX8US3xxx08
+          - MIMX8US5xxx08
           - MIMXRT1011xxxxx
           - MIMXRT1015xxxxx
           - MIMXRT1021xxxxx
@@ -708,6 +803,7 @@ middleware.usb.device.ip3511hs:
           - MIMXRT1062xxxxA
           - MIMXRT1062xxxxB
           - MIMXRT1064xxxxA
+          - MIMXRT1064xxxxB
           - MIMXRT1165xxxxx
           - MIMXRT1166xxxxx
           - MIMXRT1171xxxxx
@@ -767,7 +863,7 @@ middleware.usb.device.khci:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device KHCI Controller Driver(FS)
     description: Middleware usb device khci
@@ -824,7 +920,7 @@ middleware.usb.device.ehci:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device EHCI Controller Driver(HS)
     description: Middleware usb device ehci
@@ -846,6 +942,7 @@ middleware.usb.device.ehci:
       - MIMXRT1062xxxxA
       - MIMXRT1062xxxxB
       - MIMXRT1064xxxxA
+      - MIMXRT1064xxxxB
       - MIMXRT1011xxxxx
       - MIMXRT1015xxxxx
       - MIMXRT1021xxxxx
@@ -865,6 +962,11 @@ middleware.usb.device.ehci:
         - device_id:
           - MCIMX7U3xxxxx
           - MCIMX7U5xxxxx
+          - MIMX8UD3xxx08
+          - MIMX8UD5xxx08
+          - MIMX8UD7xxx08
+          - MIMX8US3xxx08
+          - MIMX8US5xxx08
           - MIMXRT1011xxxxx
           - MIMXRT1015xxxxx
           - MIMXRT1021xxxxx
@@ -878,6 +980,7 @@ middleware.usb.device.ehci:
           - MIMXRT1062xxxxA
           - MIMXRT1062xxxxB
           - MIMXRT1064xxxxA
+          - MIMXRT1064xxxxB
           - MIMXRT1165xxxxx
           - MIMXRT1166xxxxx
           - MIMXRT1171xxxxx
@@ -904,6 +1007,11 @@ middleware.usb.device.ehci:
           device_id:
           - MCIMX7U3xxxxx
           - MCIMX7U5xxxxx
+          - MIMX8UD3xxx08
+          - MIMX8UD5xxx08
+          - MIMX8UD7xxx08
+          - MIMX8US3xxx08
+          - MIMX8US5xxx08
           - MIMXRT1011xxxxx
           - MIMXRT1015xxxxx
           - MIMXRT1021xxxxx
@@ -917,6 +1025,7 @@ middleware.usb.device.ehci:
           - MIMXRT1062xxxxA
           - MIMXRT1062xxxxB
           - MIMXRT1064xxxxA
+          - MIMXRT1064xxxxB
           - MIMXRT1165xxxxx
           - MIMXRT1166xxxxx
           - MIMXRT1171xxxxx
@@ -968,7 +1077,7 @@ middleware.usb.phy:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB PHY
     description: Middleware usb phy
@@ -983,6 +1092,11 @@ middleware.usb.phy:
     - device_id:
       - MCIMX7U3xxxxx
       - MCIMX7U5xxxxx
+      - MIMX8UD3xxx08
+      - MIMX8UD5xxx08
+      - MIMX8UD7xxx08
+      - MIMX8US3xxx08
+      - MIMX8US5xxx08
       - MIMXRT1011xxxxx
       - MIMXRT1015xxxxx
       - MIMXRT1021xxxxx
@@ -996,6 +1110,7 @@ middleware.usb.phy:
       - MIMXRT1062xxxxA
       - MIMXRT1062xxxxB
       - MIMXRT1064xxxxA
+      - MIMXRT1064xxxxB
       - MIMXRT1165xxxxx
       - MIMXRT1166xxxxx
       - MIMXRT1171xxxxx
@@ -1025,8 +1140,6 @@ middleware.usb.phy:
         - device_id:
           - MIMXRT1165xxxxx
           - MIMXRT1166xxxxx
-          - MIMXRT1171xxxxx
-          - MIMXRT1172xxxxx
           - MIMXRT1173xxxxx
           - MIMXRT1175xxxxx
           - MIMXRT1176xxxxx
@@ -1034,8 +1147,6 @@ middleware.usb.phy:
           device_id:
           - MIMXRT1165xxxxx
           - MIMXRT1166xxxxx
-          - MIMXRT1171xxxxx
-          - MIMXRT1172xxxxx
           - MIMXRT1173xxxxx
           - MIMXRT1175xxxxx
           - MIMXRT1176xxxxx
@@ -1086,7 +1197,7 @@ middleware.usb.device.stack.external:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device Stack
     description: Middleware usb device stack external
@@ -1132,7 +1243,7 @@ middleware.usb.device.audio.external:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device Audio
     description: Middleware usb device audio external
@@ -1177,7 +1288,7 @@ middleware.usb.device.cdc.external:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device CDC
     description: Middleware usb device cdc external
@@ -1222,7 +1333,7 @@ middleware.usb.device.cdc.rndis.external:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device CDC RNDIS
     description: Middleware usb device cdc rndis external
@@ -1268,7 +1379,7 @@ middleware.usb.device.hid.external:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device HID
     description: Middleware usb device hid external
@@ -1313,7 +1424,7 @@ middleware.usb.device.dfu.external:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device DFU
     description: Middleware usb device dfu external
@@ -1368,7 +1479,7 @@ middleware.usb.device.msd.external:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device MSD
     description: Middleware usb device msd external
@@ -1413,7 +1524,7 @@ middleware.usb.device.phdc.external:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device PHDC
     description: Middleware usb device phdc external
@@ -1458,7 +1569,7 @@ middleware.usb.device.video.external:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device Video
     description: Middleware usb device video external
@@ -1503,7 +1614,7 @@ middleware.usb.device.ccid.external:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device CCID
     description: Middleware usb device ccid external
@@ -1548,7 +1659,7 @@ middleware.usb.device.printer.external:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device Printer
     description: Middleware usb device printer external
@@ -1563,6 +1674,128 @@ middleware.usb.device.printer.external:
     - middleware.usb.device.stack.external
   meta-name: middleware.usb.device.printer.external
   cmake_module_name: middleware_usb_device_printer_external
+middleware.usb.phydcd:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: dcd
+      project_relative_path: dcd
+      package_relative_path: dcd
+    files:
+    - source: middleware/usb/dcd/usb_phydcd.c
+      project_relative_path: dcd
+      repo_relative_path: dcd
+      package_relative_path: dcd
+      type: src
+    - source: middleware/usb/dcd/usb_phydcd.h
+      project_relative_path: dcd
+      repo_relative_path: dcd
+      package_relative_path: dcd
+      type: c_include
+    - source: middleware/usb/dcd/usb_charger_detect.h
+      project_relative_path: dcd
+      repo_relative_path: dcd
+      package_relative_path: dcd
+      type: c_include
+    - source: middleware/usb/middleware_usb_phydcd.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  section_info:
+    version: 2.8.4
+    type: middleware
+    full_name: USB PHYDCD
+    description: Middleware usb PHYDCD (Select manually if needed)
+    taxonomy:
+      csub: phydcd_driver
+      cclass: USB
+      cgroup: USB DCD
+    display_name: USB PHYDCD
+    vendor: NXP
+  belong_to: set.middleware.usb
+  dependency:
+    allOf:
+    - middleware.usb.phydcd_config_header
+    - device_id:
+      - MIMXRT1011xxxxx
+      - MIMXRT1015xxxxx
+      - MIMXRT1021xxxxx
+      - MIMXRT1024xxxxx
+      - MIMXRT1041xxxxB
+      - MIMXRT1042xxxxB
+      - MIMXRT1051xxxxB
+      - MIMXRT1052xxxxB
+      - MIMXRT1061xxxxA
+      - MIMXRT1061xxxxB
+      - MIMXRT1062xxxxA
+      - MIMXRT1062xxxxB
+      - MIMXRT1064xxxxA
+      - MIMXRT1064xxxxB
+  meta-name: middleware.usb.phydcd
+  cmake_module_name: middleware_usb_phydcd
+middleware.usb.hsdcd:
+  section-type: component
+  contents:
+    repo_base_path: middleware/usb
+    project_base_path: usb
+    cc-include:
+    - repo_relative_path: dcd
+      project_relative_path: dcd
+      package_relative_path: dcd
+    files:
+    - source: middleware/usb/dcd/usb_hsdcd.c
+      project_relative_path: dcd
+      repo_relative_path: dcd
+      package_relative_path: dcd
+      type: src
+    - source: middleware/usb/dcd/usb_hsdcd.h
+      project_relative_path: dcd
+      repo_relative_path: dcd
+      package_relative_path: dcd
+      type: c_include
+    - source: middleware/usb/dcd/usb_charger_detect.h
+      project_relative_path: dcd
+      repo_relative_path: dcd
+      package_relative_path: dcd
+      type: c_include
+    - source: middleware/usb/middleware_usb_hsdcd.cmake
+      type: workspace
+      toolchains: armgcc
+      hidden: true
+    package_base_path: middleware/usb
+  section_info:
+    version: 2.8.4
+    type: middleware
+    full_name: USB HSDCD
+    description: Middleware usb HSDCD (Select manually if needed)
+    taxonomy:
+      csub: hsdcd_driver
+      cclass: USB
+      cgroup: USB DCD
+    display_name: USB HSDCD
+    vendor: NXP
+  belong_to: set.middleware.usb
+  dependency:
+    allOf:
+    - middleware.usb.hsdcd_config_header
+    - device_id:
+      - MIMXRT1165xxxxx
+      - MIMXRT1166xxxxx
+      - MIMXRT1171xxxxx
+      - MIMXRT1172xxxxx
+      - MIMXRT1173xxxxx
+      - MIMXRT1175xxxxx
+      - MIMXRT1176xxxxx
+      - MIMXRT533S
+      - MIMXRT555S
+      - MIMXRT595S
+      - MIMXRT633S
+      - MIMXRT685S
+  meta-name: middleware.usb.hsdcd
+  cmake_module_name: middleware_usb_hsdcd
 middleware.usb.device.controller.driver:
   section-type: component
   contents:
@@ -1605,7 +1838,7 @@ middleware.usb.device.controller.driver:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Device Common Controller
     description: Middleware usb device controller driver
@@ -1656,7 +1889,7 @@ middleware.usb.host.khci:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host KHCI Controller Driver(FS)
     description: Middleware usb host khci
@@ -1710,7 +1943,7 @@ middleware.usb.host.ohci:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host OHCI Controller Driver(FS)
     description: Middleware usb host ohci
@@ -1749,10 +1982,13 @@ middleware.usb.host.ohci:
       - LPC5516
       - LPC5526
       - LPC5528
+      - LPC5534
+      - LPC5536
       - LPC55S14
       - LPC55S16
       - LPC55S26
       - LPC55S28
+      - LPC55S36
       - LPC55S66
       - LPC55S69
     - middleware.usb.host.ohci_config_header
@@ -1789,7 +2025,7 @@ middleware.usb.host.ip3516hs:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host IP3516HS Controller Driver(HS)
     description: Middleware usb host ip3516hs
@@ -1846,6 +2082,11 @@ middleware.usb.host.ip3516hs:
         - device_id:
           - MCIMX7U3xxxxx
           - MCIMX7U5xxxxx
+          - MIMX8UD3xxx08
+          - MIMX8UD5xxx08
+          - MIMX8UD7xxx08
+          - MIMX8US3xxx08
+          - MIMX8US5xxx08
           - MIMXRT1011xxxxx
           - MIMXRT1015xxxxx
           - MIMXRT1021xxxxx
@@ -1859,6 +2100,7 @@ middleware.usb.host.ip3516hs:
           - MIMXRT1062xxxxA
           - MIMXRT1062xxxxB
           - MIMXRT1064xxxxA
+          - MIMXRT1064xxxxB
           - MIMXRT1165xxxxx
           - MIMXRT1166xxxxx
           - MIMXRT1171xxxxx
@@ -1885,6 +2127,11 @@ middleware.usb.host.ip3516hs:
           device_id:
           - MCIMX7U3xxxxx
           - MCIMX7U5xxxxx
+          - MIMX8UD3xxx08
+          - MIMX8UD5xxx08
+          - MIMX8UD7xxx08
+          - MIMX8US3xxx08
+          - MIMX8US5xxx08
           - MIMXRT1011xxxxx
           - MIMXRT1015xxxxx
           - MIMXRT1021xxxxx
@@ -1898,6 +2145,7 @@ middleware.usb.host.ip3516hs:
           - MIMXRT1062xxxxA
           - MIMXRT1062xxxxB
           - MIMXRT1064xxxxA
+          - MIMXRT1064xxxxB
           - MIMXRT1165xxxxx
           - MIMXRT1166xxxxx
           - MIMXRT1171xxxxx
@@ -1952,7 +2200,7 @@ middleware.usb.host.ehci:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host EHCI Controller Driver(HS)
     description: Middleware usb host ehci
@@ -1974,6 +2222,7 @@ middleware.usb.host.ehci:
       - MIMXRT1062xxxxA
       - MIMXRT1062xxxxB
       - MIMXRT1064xxxxA
+      - MIMXRT1064xxxxB
       - MIMXRT1011xxxxx
       - MIMXRT1015xxxxx
       - MIMXRT1021xxxxx
@@ -1993,6 +2242,11 @@ middleware.usb.host.ehci:
         - device_id:
           - MCIMX7U3xxxxx
           - MCIMX7U5xxxxx
+          - MIMX8UD3xxx08
+          - MIMX8UD5xxx08
+          - MIMX8UD7xxx08
+          - MIMX8US3xxx08
+          - MIMX8US5xxx08
           - MIMXRT1011xxxxx
           - MIMXRT1015xxxxx
           - MIMXRT1021xxxxx
@@ -2006,6 +2260,7 @@ middleware.usb.host.ehci:
           - MIMXRT1062xxxxA
           - MIMXRT1062xxxxB
           - MIMXRT1064xxxxA
+          - MIMXRT1064xxxxB
           - MIMXRT1165xxxxx
           - MIMXRT1166xxxxx
           - MIMXRT1171xxxxx
@@ -2032,6 +2287,11 @@ middleware.usb.host.ehci:
           device_id:
           - MCIMX7U3xxxxx
           - MCIMX7U5xxxxx
+          - MIMX8UD3xxx08
+          - MIMX8UD5xxx08
+          - MIMX8UD7xxx08
+          - MIMX8US3xxx08
+          - MIMX8US5xxx08
           - MIMXRT1011xxxxx
           - MIMXRT1015xxxxx
           - MIMXRT1021xxxxx
@@ -2045,6 +2305,7 @@ middleware.usb.host.ehci:
           - MIMXRT1062xxxxA
           - MIMXRT1062xxxxB
           - MIMXRT1064xxxxA
+          - MIMXRT1064xxxxB
           - MIMXRT1165xxxxx
           - MIMXRT1166xxxxx
           - MIMXRT1171xxxxx
@@ -2096,7 +2357,7 @@ middleware.usb.host.audio:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host Audio
     description: Middleware usb host audio
@@ -2138,7 +2399,7 @@ middleware.usb.host.cdc:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host CDC
     description: Middleware usb host cdc
@@ -2180,7 +2441,7 @@ middleware.usb.host.cdc_rndis:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host CDC RNDIS
     description: Middleware usb host cdc_rndis
@@ -2223,7 +2484,7 @@ middleware.usb.host.hid:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host HID
     description: Middleware usb host hid
@@ -2270,7 +2531,7 @@ middleware.usb.host.msd:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host MSD
     description: Middleware usb host msd
@@ -2312,7 +2573,7 @@ middleware.usb.host.video:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host Video
     description: Middleware usb host video
@@ -2354,7 +2615,7 @@ middleware.usb.host.phdc:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host PHDC
     description: Middleware usb host phdc
@@ -2396,7 +2657,7 @@ middleware.usb.host.printer:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host Printer
     description: Middleware usb host printer
@@ -2447,7 +2708,7 @@ middleware.usb.host.common_header:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host Common Header
     description: Middleware usb host common_header
@@ -2489,7 +2750,7 @@ middleware.usb.host.khci_config_header:
   belong_to: set.middleware.usb
   section_info:
     description: USB host khci config header
-    version: 2.9.0
+    version: 2.9.1
     type: project_template
     full_name: USB host khci config header
     display_name: USB host khci config header
@@ -2536,7 +2797,7 @@ middleware.usb.host.ohci_config_header:
   belong_to: set.middleware.usb
   section_info:
     description: USB host ohci config header
-    version: 2.9.0
+    version: 2.9.1
     type: project_template
     full_name: USB host ohci config header
     display_name: USB host ohci config header
@@ -2574,10 +2835,13 @@ middleware.usb.host.ohci_config_header:
       - LPC5516
       - LPC5526
       - LPC5528
+      - LPC5534
+      - LPC5536
       - LPC55S14
       - LPC55S16
       - LPC55S26
       - LPC55S28
+      - LPC55S36
       - LPC55S66
       - LPC55S69
   meta-name: middleware.usb.host.ohci_config_header
@@ -2608,7 +2872,7 @@ middleware.usb.host.ip3516hs_config_header:
   belong_to: set.middleware.usb
   section_info:
     description: USB host ip3516hs config header
-    version: 2.9.0
+    version: 2.9.1
     type: project_template
     full_name: USB host ip3516hs config header
     display_name: USB host ip3516hs config header
@@ -2684,7 +2948,7 @@ middleware.usb.host.ehci_config_header:
   belong_to: set.middleware.usb
   section_info:
     description: USB host ehci config header
-    version: 2.9.0
+    version: 2.9.1
     type: project_template
     full_name: USB host ehci config header
     display_name: USB host ehci config header
@@ -2705,6 +2969,7 @@ middleware.usb.host.ehci_config_header:
       - MIMXRT1062xxxxA
       - MIMXRT1062xxxxB
       - MIMXRT1064xxxxA
+      - MIMXRT1064xxxxB
       - MIMXRT1011xxxxx
       - MIMXRT1015xxxxx
       - MIMXRT1021xxxxx
@@ -2796,7 +3061,7 @@ middleware.usb.host.stack:
     package_base_path: middleware/usb
   belong_to: set.middleware.usb
   section_info:
-    version: 2.9.0
+    version: 2.9.1
     type: middleware
     full_name: USB Host Stack
     description: Middleware usb host stack

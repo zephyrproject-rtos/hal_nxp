@@ -167,6 +167,11 @@ typedef struct _usb_device_ehci_state_struct
     uint8_t controllerId;                          /*!< Controller ID */
     uint8_t speed;                                 /*!< Current speed of EHCI */
     uint8_t isSuspending;                          /*!< Is suspending of the PORT */
+#if (defined(USB_DEVICE_CONFIG_LOW_POWER_MODE) && (USB_DEVICE_CONFIG_LOW_POWER_MODE > 0U))
+#if (defined(USB_DEVICE_CONFIG_LPM_L1) && (USB_DEVICE_CONFIG_LPM_L1 > 0U))
+    uint8_t lpmRemoteWakeUp;
+#endif
+#endif
 } usb_device_ehci_state_struct_t;
 
 #if defined(__cplusplus)

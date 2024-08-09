@@ -116,8 +116,8 @@ typedef struct _usb_host_csw
 /*! @brief MSC UFI command information structure */
 typedef struct _usb_host_msd_command
 {
-    usb_host_cbw_t cbwBlock;       /*!< CBW data block*/
-    usb_host_csw_t cswBlock;       /*!< CSW data block*/
+    usb_host_cbw_t *cbwBlock;       /*!< CBW data block*/
+    usb_host_csw_t *cswBlock;       /*!< CSW data block*/
     uint8_t *dataBuffer;           /*!< Data buffer pointer*/
     uint32_t dataLength;           /*!< Data buffer length*/
     uint32_t dataSofar;            /*!< Successful transfer data length*/

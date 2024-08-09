@@ -131,6 +131,9 @@ typedef enum _usb_device_event
     kUSB_DeviceEventGetConfiguration,             /*!< Get current configuration index */
     kUSB_DeviceEventGetInterface,                 /*!< Get current interface alternate setting value */
     kUSB_DeviceEventSetBHNPEnable,
+#if (defined(USB_DEVICE_CONFIG_SOF_NOTIFICATIONS) && (USB_DEVICE_CONFIG_SOF_NOTIFICATIONS > 0U))
+    kUSB_DeviceEventSOF,                          /*!< Start of Frame received */
+#endif
 #if (defined(USB_DEVICE_CONFIG_CHARGER_DETECT) && (USB_DEVICE_CONFIG_CHARGER_DETECT > 0U))
     kUSB_DeviceEventDcdDetectionfinished, /*!< The DCD detection finished */
 #endif

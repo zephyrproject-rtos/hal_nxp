@@ -240,14 +240,20 @@ static void USB_DeviceKhciSetDefaultState(usb_device_khci_state_struct_t *khciSt
                     | USB_INTEN_TOKDNEEN_MASK | USB_INTEN_STALLEN_MASK;
 
 #if (defined(USB_DEVICE_CONFIG_LOW_POWER_MODE) && (USB_DEVICE_CONFIG_LOW_POWER_MODE > 0U))
-    /* Enable suspend interruprt */
+    /* Enable suspend interrupt */
     interruptFlag |= USB_INTEN_SLEEPEN_MASK;
 #endif /* USB_DEVICE_CONFIG_LOW_POWER_MODE */
 
 #if defined(USB_DEVICE_CONFIG_ERROR_HANDLING) && (USB_DEVICE_CONFIG_ERROR_HANDLING > 0U)
-    /* Enable error interruprt */
+    /* Enable error interrupt */
     interruptFlag |= USB_INTEN_ERROREN_MASK;
 #endif /* USB_DEVICE_CONFIG_ERROR_HANDLING */
+
+#if defined(USB_DEVICE_CONFIG_SOF_NOTIFICATIONS) && (USB_DEVICE_CONFIG_SOF_NOTIFICATIONS > 0U)
+    /* Enable SOF interrupt */
+    interruptFlag |= USB_INTEN_SOFTOKEN_MASK;
+#endif /* USB_DEVICE_CONFIG_SOF_NOTIFICATIONS */
+
     /* Write the interrupt enable register */
     khciState->registerBase->INTEN = interruptFlag;
 
@@ -953,7 +959,9 @@ static void USB_DeviceKhciInterruptSleep(usb_device_khci_state_struct_t *khciSta
 #if (defined(USB_DEVICE_CONFIG_RETURN_VALUE_CHECK) && (USB_DEVICE_CONFIG_RETURN_VALUE_CHECK > 0U))
     if (kStatus_USB_Success != USB_DeviceNotificationTrigger(khciState->deviceHandle, &message))
     {
-        return kStatus_USB_Error;
+#if (defined(DEVICE_ECHO) && (DEVICE_ECHO > 0U))
+        usb_echo("notification error\n");
+#endif
     }
 #else
     (void)USB_DeviceNotificationTrigger(khciState->deviceHandle, &message);
@@ -993,7 +1001,9 @@ static void USB_DeviceKhciInterruptResume(usb_device_khci_state_struct_t *khciSt
 #if (defined(USB_DEVICE_CONFIG_RETURN_VALUE_CHECK) && (USB_DEVICE_CONFIG_RETURN_VALUE_CHECK > 0U))
     if (kStatus_USB_Success != USB_DeviceNotificationTrigger(khciState->deviceHandle, &message))
     {
-        return kStatus_USB_Error;
+#if (defined(DEVICE_ECHO) && (DEVICE_ECHO > 0U))
+        usb_echo("notification error\n");
+#endif
     }
 #else
     (void)USB_DeviceNotificationTrigger(khciState->deviceHandle, &message);
@@ -1028,7 +1038,9 @@ static void USB_DeviceKhciInterruptVbusRising(usb_device_khci_state_struct_t *kh
 #if (defined(USB_DEVICE_CONFIG_RETURN_VALUE_CHECK) && (USB_DEVICE_CONFIG_RETURN_VALUE_CHECK > 0U))
     if (kStatus_USB_Success != USB_DeviceNotificationTrigger(khciState->deviceHandle, &message))
     {
-        return kStatus_USB_Error;
+#if (defined(DEVICE_ECHO) && (DEVICE_ECHO > 0U))
+        usb_echo("notification error\n");
+#endif
     }
 #else
     (void)USB_DeviceNotificationTrigger(khciState->deviceHandle, &message);
@@ -1061,7 +1073,9 @@ static void USB_DeviceKhciInterruptVbusFalling(usb_device_khci_state_struct_t *k
 #if (defined(USB_DEVICE_CONFIG_RETURN_VALUE_CHECK) && (USB_DEVICE_CONFIG_RETURN_VALUE_CHECK > 0U))
     if (kStatus_USB_Success != USB_DeviceNotificationTrigger(khciState->deviceHandle, &message))
     {
-        return kStatus_USB_Error;
+#if (defined(DEVICE_ECHO) && (DEVICE_ECHO > 0U))
+        usb_echo("notification error\n");
+#endif
     }
 #else
     (void)USB_DeviceNotificationTrigger(khciState->deviceHandle, &message);
@@ -1069,22 +1083,40 @@ static void USB_DeviceKhciInterruptVbusFalling(usb_device_khci_state_struct_t *k
 }
 #endif /* USB_DEVICE_CONFIG_DETACH_ENABLE || FSL_FEATURE_USB_KHCI_VBUS_DETECT_ENABLED */
 
-#if 0U
+#if (defined(USB_DEVICE_CONFIG_SOF_NOTIFICATIONS) && (USB_DEVICE_CONFIG_SOF_NOTIFICATIONS > 0U))
 /*!
- * @brief Handle the sof interrupt.
+ * @brief Handle Start of Frame (SOF) Interrupt.
  *
  * The function is used to handle the sof interrupt.
  *
  * @param khciState       Pointer of the device KHCI state structure.
  *
  */
-void USB_DeviceKhciInterruptSof(usb_device_khci_state_struct_t *khciState)
+static void USB_DeviceKhciInterruptSOF(usb_device_khci_state_struct_t *khciState)
 {
-    khciState->registerBase->ISTAT = (USB_INTEN_SOFTOKEN_MASK);
+    usb_device_callback_message_struct_t message;
 
+    khciState->registerBase->ISTAT = (USB_INTEN_SOFTOKEN_MASK);
     khciState->registerBase->ISTAT = (USB_INTEN_RESUMEEN_MASK);
-}
+
+    message.buffer  = (uint8_t *)NULL;
+    message.code    = (uint8_t)kUSB_DeviceNotifySOF;
+    message.length  = 0U;
+    message.isSetup = 0U;
+
+    /* Notify upper layer */
+#if (defined(USB_DEVICE_CONFIG_RETURN_VALUE_CHECK) && (USB_DEVICE_CONFIG_RETURN_VALUE_CHECK > 0U))
+    if (kStatus_USB_Success != USB_DeviceNotificationTrigger(khciState->deviceHandle, &message))
+    {
+#if (defined(DEVICE_ECHO) && (DEVICE_ECHO > 0U))
+        usb_echo("notification error\n");
 #endif
+    }
+#else
+    (void)USB_DeviceNotificationTrigger(khciState->deviceHandle, &message);
+#endif
+}
+#endif /* USB_DEVICE_CONFIG_SOF_NOTIFICATIONS */
 
 /*!
  * @brief Handle endpoint stalled interrupt.
@@ -1143,7 +1175,9 @@ static void USB_DeviceKhciInterruptError(usb_device_khci_state_struct_t *khciSta
 #if (defined(USB_DEVICE_CONFIG_RETURN_VALUE_CHECK) && (USB_DEVICE_CONFIG_RETURN_VALUE_CHECK > 0U))
     if (kStatus_USB_Success != USB_DeviceNotificationTrigger(khciState->deviceHandle, &message))
     {
-        return kStatus_USB_Error;
+#if (defined(DEVICE_ECHO) && (DEVICE_ECHO > 0U))
+        usb_echo("notification error\n");
+#endif
     }
 #else
     (void)USB_DeviceNotificationTrigger(khciState->deviceHandle, &message);
@@ -1756,11 +1790,11 @@ void USB_DeviceKhciIsrFunction(void *deviceHandle)
     }
 #endif /* USB_DEVICE_CONFIG_DETACH_ENABLE && FSL_FEATURE_USB_KHCI_VBUS_DETECT_ENABLED */
 
-#if 0U
-    /* Sof token interrupt */
+#if (defined(USB_DEVICE_CONFIG_SOF_NOTIFICATIONS) && (USB_DEVICE_CONFIG_SOF_NOTIFICATIONS > 0U))
+    /* SOF token interrupt */
     if (0U != (status & USB_INTEN_SOFTOKEN_MASK))
     {
-        USB_DeviceKhciInterruptSof(khciState);
+        USB_DeviceKhciInterruptSOF(khciState);
     }
 #endif
 

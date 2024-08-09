@@ -26,7 +26,7 @@ set(APPLICATION_BINARY_DIR ${CMAKE_SOURCE_DIR}/build CACHE PATH
     "Application Binary Directory"
 )
 
-set(AUTOCONF_H ${APPLICATION_BINARY_DIR}/kconfig/include/generated/zephyr/autoconf.h)
+set(AUTOCONF_H ${APPLICATION_BINARY_DIR}/kconfig/include/generated/autoconf.h)
 
 message("APPLICATION_BINARY_DIR ${APPLICATION_BINARY_DIR}")
 

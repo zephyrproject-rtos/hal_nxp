@@ -185,6 +185,9 @@
 /*! @brief Whether handle the USB bus error. */
 #define USB_DEVICE_CONFIG_ERROR_HANDLING (0U)
 
+/*! @brief Whether the SOF interrupt is enabled or not. */
+#define USB_DEVICE_CONFIG_SOF_NOTIFICATIONS (0U)
+
 /* @} */
 
 #endif /* _USB_DEVICE_CONFIG_H_ */

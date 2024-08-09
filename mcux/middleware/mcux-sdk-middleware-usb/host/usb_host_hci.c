@@ -12,9 +12,6 @@
 #include "usb_host_hci.h"
 #include "usb_host_devices.h"
 #include "fsl_device_registers.h"
-#if ((defined USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE))
-#include "fsl_cache.h"
-#endif
 
 /*******************************************************************************
  * Definitions
@@ -23,12 +20,6 @@
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "middleware.usb.host_stack"
-#endif
-
-#if defined __CORTEX_M && (__CORTEX_M == 7U)
-#if (defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-#warning USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE is not supported.
-#endif
 #endif
 
 /*******************************************************************************
@@ -407,12 +398,6 @@ usb_status_t USB_HostSend(usb_host_handle hostHandle, usb_host_pipe_handle pipeH
     }
 #endif
 /* call controller write pipe interface */
-#if ((defined USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE))
-    if (transfer->transferLength > 0)
-    {
-        DCACHE_CleanByRange((uint32_t)transfer->transferBuffer, transfer->transferLength);
-    }
-#endif
     /* the callbackFn is initialized in USB_HostGetControllerInterface */
     status = hostInstance->controllerTable->controllerWritePipe(hostInstance->controllerHandle, pipeHandle, transfer);
 
@@ -456,13 +441,6 @@ usb_status_t USB_HostSendSetup(usb_host_handle hostHandle,
     }
 #endif
 /* call controller write pipe interface */
-#if ((defined USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE))
-    DCACHE_CleanByRange((uint32_t)&transfer->setupPacket->bmRequestType, sizeof(usb_setup_struct_t));
-    if (transfer->transferLength > 0)
-    {
-        DCACHE_CleanInvalidateByRange((uint32_t)transfer->transferBuffer, transfer->transferLength);
-    }
-#endif
     /* the callbackFn is initialized in USB_HostGetControllerInterface */
     status = hostInstance->controllerTable->controllerWritePipe(hostInstance->controllerHandle, pipeHandle, transfer);
 
@@ -495,12 +473,6 @@ usb_status_t USB_HostRecv(usb_host_handle hostHandle, usb_host_pipe_handle pipeH
     }
 #endif
 
-#if ((defined USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE))
-    if (transfer->transferLength > 0)
-    {
-        DCACHE_CleanInvalidateByRange((uint32_t)transfer->transferBuffer, transfer->transferLength);
-    }
-#endif
     /* the callbackFn is initialized in USB_HostGetControllerInterface */
     status = hostInstance->controllerTable->controllerReadPipe(hostInstance->controllerHandle, pipeHandle, transfer);
 

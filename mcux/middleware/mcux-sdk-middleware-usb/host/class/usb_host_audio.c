@@ -455,13 +455,19 @@ usb_status_t USB_HostAudioStreamSetInterface(usb_host_class_handle classHandle,
                                              void *callbackParam)
 {
     usb_status_t status;
-    audio_instance_t *audioPtr = (audio_instance_t *)classHandle;
-    usb_host_interface_t *interface_ptr;
-    usb_host_transfer_t *transfer;
-    audio_descriptor_union_t ptr1;
+    uint8_t entity_id = 0U;
     uint32_t length = 0U, ep = 0U;
     void *temp;
+    audio_instance_t *audioPtr = (audio_instance_t *)classHandle;
+    usb_host_interface_t *interface_ptr = NULL;
+    usb_host_interface_t *ctrlInterface_ptr = NULL;
+    usb_host_transfer_t *transfer;
+    audio_descriptor_union_t ptr1;
+    usb_audio_2_0_ctrl_fu_desc_t *fu_ptr;
+    audio_descriptor_union_t ctrl_ptr;
     usb_descriptor_endpoint_t *endpointDesc;
+    usb_audio_stream_spepific_as_intf_desc_t *as_general;
+
     if (classHandle == NULL)
     {
         return kStatus_USB_InvalidParameter;
@@ -598,6 +604,393 @@ usb_status_t USB_HostAudioStreamSetInterface(usb_host_class_handle classHandle,
         ptr1.bufr += ptr1.common->bLength;
     }
 
+    if (NULL != audioPtr->asIntfDesc)
+    {
+        as_general = (usb_audio_stream_spepific_as_intf_desc_t *)audioPtr->asIntfDesc;
+        entity_id = as_general->bterminallink;
+        ctrlInterface_ptr = (usb_host_interface_t *)audioPtr->controlIntfHandle;
+        ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+        length = 0U;
+        /* find audio input or output terminal firstly bases on as general descriptor */
+        while (length < ctrlInterface_ptr->interfaceExtensionLength)
+        {
+            if (ctrl_ptr.common->bDescriptorType == 0x24U)
+            {
+                temp = (void *)ctrl_ptr.bufr;
+                if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_INPUT)
+                {
+                    if ((audioPtr->itDesc == NULL) && (ctrl_ptr.common->bData[1] == entity_id))
+                    {
+                        audioPtr->itDesc = (void *)temp;
+                        break;
+                    }
+                }
+                else if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_OUTPUT)
+                {
+                    if ((audioPtr->otDesc == NULL) && (ctrl_ptr.common->bData[1] == entity_id))
+                    {
+                        audioPtr->otDesc = (void *)temp;
+                        entity_id = ctrl_ptr.common->bData[5]; /* entity_id is fu or su id */
+                        break;
+                    }
+                }
+                else
+                {
+                    /*no action*/
+                }
+            }
+            ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+            length += ctrl_ptr.common->bLength;
+        }
+        
+        if (NULL != audioPtr->itDesc)
+        {
+            ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+            length = 0U;
+            while (length < ctrlInterface_ptr->interfaceExtensionLength)
+            {
+                if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                {
+                    temp = (void *)ctrl_ptr.bufr;
+                    if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_FEATURE)
+                    {
+                        if ((audioPtr->fuDesc == NULL) && (ctrl_ptr.common->bData[2] == entity_id))
+                        {
+                            audioPtr->fuDesc = (void *)temp;
+                            break;
+                        }
+                    }
+                    else if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_MIXER)
+                    {
+                        if (audioPtr->fuDesc == NULL)
+                        {
+                            usb_audio_2_0_ctrl_mu_desc_t *mix_unit = (usb_audio_2_0_ctrl_mu_desc_t *)temp;
+                            for (uint8_t i = 0; i < mix_unit->bNrInPins; i++)
+                            {
+                                if (entity_id == mix_unit->baSourceID[i])
+                                {
+                                    /* save entity id for mix unit */
+                                    entity_id = mix_unit->bunitid;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        /*no action*/
+                    }
+                }
+                ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                length += ctrl_ptr.common->bLength;
+            }
+            
+            if (NULL != audioPtr->fuDesc)
+            {
+                ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+                length = 0U;
+                fu_ptr= (usb_audio_2_0_ctrl_fu_desc_t *)audioPtr->fuDesc;
+                while (length < ctrlInterface_ptr->interfaceExtensionLength)
+                {
+                    if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                    {
+                        temp = (void *)ctrl_ptr.bufr;
+                        if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_OUTPUT)
+                        {
+                            if ((audioPtr->otDesc == NULL) && (ctrl_ptr.common->bData[5] == fu_ptr->bunitid))
+                            {
+                                audioPtr->otDesc = (void *)temp;
+                                if (AUDIO_DEVICE_VERSION_02 == audioPtr->deviceAudioVersion)
+                                {
+                                    entity_id = ctrl_ptr.common->bData[6]; /* clock source id */
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                    length += ctrl_ptr.common->bLength;
+                }
+                
+                if (AUDIO_DEVICE_VERSION_02 == audioPtr->deviceAudioVersion)
+                {
+                    ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+                    length = 0U;
+                    while (length < ctrlInterface_ptr->interfaceExtensionLength)
+                    {
+                        if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                        {
+                            temp = (void *)ctrl_ptr.bufr;
+                            if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_CLOCK_SOURE)
+                            {
+                                if ((audioPtr->clockSource == NULL) && (ctrl_ptr.common->bData[1] == entity_id))
+                                {
+                                    audioPtr->clockSource = (void *)temp;
+                                    break;
+                                }
+                            }
+                        }
+                        ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                        length += ctrl_ptr.common->bLength;
+                    }
+
+                }
+            }
+            else if (entity_id != as_general->bterminallink) /* entity_id is mix unit id */
+            {
+                ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+                length = 0U;
+                while (length < ctrlInterface_ptr->interfaceExtensionLength)
+                {
+                    if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                    {
+                        temp = (void *)ctrl_ptr.bufr;
+                        if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_FEATURE)
+                        {
+                            if ((audioPtr->fuDesc == NULL) && (ctrl_ptr.common->bData[2] == entity_id))
+                            {
+                                audioPtr->fuDesc = (void *)temp;
+                                entity_id = ctrl_ptr.common->bData[1]; /* entity_id is fu id */
+                                break; 
+                            }
+                        }
+                    }
+                    ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                    length += ctrl_ptr.common->bLength;
+
+                }
+                
+                ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+                length = 0U;
+                while (length < ctrlInterface_ptr->interfaceExtensionLength)
+                {
+                    if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                    {
+                        temp = (void *)ctrl_ptr.bufr;
+                        if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_OUTPUT)
+                        {
+                            if ((audioPtr->otDesc == NULL) && (ctrl_ptr.common->bData[5] == entity_id))
+                            {
+                                audioPtr->otDesc = (void *)temp;
+                                if (AUDIO_DEVICE_VERSION_02 == audioPtr->deviceAudioVersion)
+                                {
+                                    entity_id = ctrl_ptr.common->bData[6]; /* clock source id */
+                                }
+                                break; 
+                            }
+                        }
+                    }
+                    ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                    length += ctrl_ptr.common->bLength;
+                }
+                
+                if (AUDIO_DEVICE_VERSION_02 == audioPtr->deviceAudioVersion)
+                {
+                    ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+                    length = 0U;
+                    while (length < ctrlInterface_ptr->interfaceExtensionLength)
+                    {
+                        if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                        {
+                            temp = (void *)ctrl_ptr.bufr;
+                            if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_CLOCK_SOURE)
+                            {
+                                if ((audioPtr->clockSource == NULL) && (ctrl_ptr.common->bData[1] == entity_id))
+                                {
+                                    audioPtr->clockSource = (void *)temp;
+                                    break;
+                                }
+                            }
+                        }
+                        ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                        length += ctrl_ptr.common->bLength;
+                    }
+                }
+            }
+            else
+            {
+                /* no action */
+            } 
+        }
+        else if (NULL != audioPtr->otDesc)
+        {
+            ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+            length = 0U;
+            while (length < ctrlInterface_ptr->interfaceExtensionLength)
+            {
+                if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                {
+                    temp = (void *)ctrl_ptr.bufr;
+                    if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_FEATURE)
+                    {
+                        if ((audioPtr->fuDesc == NULL) && (ctrl_ptr.common->bData[1] == entity_id)) /* entity_id is fu id */
+                        {
+                            audioPtr->fuDesc = (void *)temp;
+                            entity_id = ctrl_ptr.common->bData[2]; /* entity_id is it id */
+                            break; 
+                        }
+                    }
+                    else if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_SELECTOR)
+                    {
+                        if ((audioPtr->fuDesc == NULL) && (ctrl_ptr.common->bData[1] == entity_id)) /* entity_id is su id */
+                        {
+                            entity_id = ctrl_ptr.common->bData[3]; /* entity_id is fu id */
+                            break; 
+                        }
+                    }
+                    else
+                    {
+                        /* no action */
+                    }
+                }
+                ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                length += ctrl_ptr.common->bLength;
+
+            }
+            
+            if (NULL != audioPtr->fuDesc)
+            {
+                ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+                length = 0U;
+                while (length < ctrlInterface_ptr->interfaceExtensionLength)
+                {
+                    if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                    {
+                        temp = (void *)ctrl_ptr.bufr;
+                        if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_INPUT)
+                        {
+                            if ((audioPtr->itDesc == NULL) && (ctrl_ptr.common->bData[1] == entity_id)) /* entity_id is it id */
+                            {
+                                audioPtr->itDesc = (void *)temp;
+                                if (AUDIO_DEVICE_VERSION_02 == audioPtr->deviceAudioVersion)
+                                {
+                                    entity_id = ctrl_ptr.common->bData[5]; /* entity_id is clock source id */
+                                }
+                                break; 
+                            }
+                        }
+                    }
+                    ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                    length += ctrl_ptr.common->bLength;
+                }
+                
+                if (AUDIO_DEVICE_VERSION_02 == audioPtr->deviceAudioVersion)
+                {
+                    if (NULL == audioPtr->itDesc)
+                    {
+                        return kStatus_USB_Error;
+                    }
+                    
+                    ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+                    length = 0U;
+                    while (length < ctrlInterface_ptr->interfaceExtensionLength)
+                    {
+                        if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                        {
+                            temp = (void *)ctrl_ptr.bufr;
+                            if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_CLOCK_SOURE)
+                            {
+                                if ((audioPtr->clockSource == NULL) && (ctrl_ptr.common->bData[1] == entity_id)) /* entity_id is clock source id */
+                                {
+                                    audioPtr->clockSource = (void *)temp;
+                                    break;
+                                }
+                            }
+                        }
+                        ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                        length += ctrl_ptr.common->bLength;
+                    }
+                }
+                
+                  
+            }
+            else
+            {
+                ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+                length = 0U;
+                while (length < ctrlInterface_ptr->interfaceExtensionLength)
+                {
+                    if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                    {
+                        temp = (void *)ctrl_ptr.bufr;
+                        if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_FEATURE)
+                        {
+                            if ((audioPtr->fuDesc == NULL) && (ctrl_ptr.common->bData[1] == entity_id)) /* entity_id is fu id */
+                            {
+                                audioPtr->fuDesc = (void *)temp;
+                                entity_id = ctrl_ptr.common->bData[2]; /* entity_id is it id */
+                                break;  
+                            }
+                        }
+                    }
+                    ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                    length += ctrl_ptr.common->bLength;
+                }
+                
+                if (NULL == audioPtr->fuDesc)
+                {
+                    return kStatus_USB_Error;
+                }
+                
+                ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+                length = 0U;
+                while (length < ctrlInterface_ptr->interfaceExtensionLength)
+                {
+                    if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                    {
+                        temp = (void *)ctrl_ptr.bufr;
+                        if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_INPUT)
+                        {
+                            if ((audioPtr->itDesc == NULL) && (ctrl_ptr.common->bData[1] == entity_id)) /* entity_id is it id */
+                            {
+                                audioPtr->itDesc = (void *)temp;
+                                if (AUDIO_DEVICE_VERSION_02 == audioPtr->deviceAudioVersion)
+                                {
+                                    entity_id = ctrl_ptr.common->bData[5]; /* entity_id is clock source id */
+                                }
+                                break; 
+                            }
+                        }
+                        ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                        length += ctrl_ptr.common->bLength;
+                    }
+                }
+                
+                if (AUDIO_DEVICE_VERSION_02 == audioPtr->deviceAudioVersion)
+                {
+                    if (NULL == audioPtr->itDesc)
+                    {
+                        return kStatus_USB_Error;
+                    }
+                    
+                    ctrl_ptr.bufr = ctrlInterface_ptr->interfaceExtension;
+                    length = 0U;
+                    while (length < ctrlInterface_ptr->interfaceExtensionLength)
+                    {
+                        if (ctrl_ptr.common->bDescriptorType == 0x24U)
+                        {
+                            temp = (void *)ctrl_ptr.bufr;
+                            if (ctrl_ptr.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_CLOCK_SOURE)
+                            {
+                                if ((audioPtr->itDesc == NULL) && (ctrl_ptr.common->bData[1] == entity_id)) /* entity_id is clock source id */
+                                {
+                                    audioPtr->clockSource = (void *)temp;
+                                    break;
+                                }
+                            }
+                        }
+                        ctrl_ptr.bufr += ctrl_ptr.common->bLength;
+                        length += ctrl_ptr.common->bLength;
+                    }
+                } 
+            }
+        }
+    }
+    else
+    {
+        return kStatus_USB_Error;
+    }
+
     if (alternateSetting == 0U)
     {
         if (callbackFn != NULL)
@@ -717,34 +1110,6 @@ usb_status_t USB_HostAudioControlSetInterface(usb_host_class_handle classHandle,
                 commonHeader                 = (usb_audio_ctrl_common_header_desc_t *)temp;
                 header                       = (void *)&commonHeader->bcdcdc;
                 audioPtr->deviceAudioVersion = USB_SHORT_FROM_LITTLE_ENDIAN_ADDRESS(((uint8_t *)header));
-            }
-            else if (ptr1.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_INPUT)
-            {
-                if (audioPtr->itDesc == NULL)
-                {
-                    audioPtr->itDesc = (void *)temp;
-                }
-            }
-            else if (ptr1.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_OUTPUT)
-            {
-                if (audioPtr->otDesc == NULL)
-                {
-                    audioPtr->otDesc = (void *)temp;
-                }
-            }
-            else if (ptr1.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_FEATURE)
-            {
-                if (audioPtr->fuDesc == NULL)
-                {
-                    audioPtr->fuDesc = (void *)temp;
-                }
-            }
-            else if (ptr1.common->bData[0] == USB_AUDIO_DESC_SUBTYPE_CS_CLOCK_SOURE)
-            {
-                if (audioPtr->clockSource == NULL)
-                {
-                    audioPtr->clockSource = (void *)temp;
-                }
             }
             else
             {

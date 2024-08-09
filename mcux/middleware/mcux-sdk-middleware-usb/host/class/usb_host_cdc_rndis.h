@@ -144,12 +144,26 @@
 #define RNDIS_MAX_TRANSFER_PACKET_SIZE (0x4000U)
 #define RNDIS_FRAME_MAX_FRAMELEN (1518U) /*!< Default maximum Ethernet frame size. */
 
-/*! @brief CDC class-specific code, Base Class E0h (Wireless Controller) */
-#define USB_HOST_CDC_RNDIS_CLASS_CODE 0xE0U
-/*! @brief RF Controller*/
-#define USB_HOST_CDC_RNDIS_SUBCLASS_CODE 0x01U
-/*Remote NDIS. */
-#define USB_HOST_CDC_RNDIS_PROTOCOL_CODE 0x03U
+/*! @brief Communications Device class-specific code, Base Class 02h (Communications and CDC Control) */
+#define USB_HOST_CDC_RNDIS_CLASS_CODE (0x02U)
+/*! @brief Communication Interface Class SubClass code for Abstract Control Model */
+#define USB_HOST_CDC_RNDIS_SUBCLASS_CODE (0x02U)
+/*! @brief Communication Interface Class Protocol code for vendor specific protocol */
+#define USB_HOST_CDC_RNDIS_PROTOCOL_CODE (0xFFU)
+
+/*! @brief Wireless Controller class-specific code, Base Class E0h (Wireless Controller) */
+#define USB_HOST_WC_RNDIS_CLASS_CODE (0xE0U)
+/*! @brief Wireless Controller Class SubClass code */
+#define USB_HOST_WC_RNDIS_SUBCLASS_CODE (0x01U)
+/*! @brief Wireless Controller Class Protocol code for Remote NDIS */
+#define USB_HOST_WC_RNDIS_PROTOCOL_CODE (0x03U)
+
+/*! @brief Miscellaneous class-specific code, Base Class EFh (Miscellaneous) */
+#define USB_HOST_MISC_RNDIS_CLASS_CODE (0xEFU)
+/*! @brief Miscellaneous Class SubClass code */
+#define USB_HOST_MISC_RNDIS_SUBCLASS_CODE (0x04U)
+/*! @brief Miscellaneous Class Protocol code for RNDIS over Ethernet */
+#define USB_HOST_MISC_RNDIS_PROTOCOL_CODE (0x01U)
 
 /*this is the minimum byte length of the buffer posted by host*/
 

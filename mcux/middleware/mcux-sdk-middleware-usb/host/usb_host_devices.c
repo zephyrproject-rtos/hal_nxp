@@ -453,7 +453,7 @@ static usb_status_t USB_HostProcessCallback(usb_host_device_instance_t *deviceIn
             if (deviceInstance->configurationDesc != NULL)
             {
 #if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-                SDK_Free(deviceInstance->configurationDesc);
+                OSA_MemoryFreeAlign(deviceInstance->configurationDesc);
 #else
                 OSA_MemoryFree(deviceInstance->configurationDesc);
 #endif
@@ -475,7 +475,7 @@ static usb_status_t USB_HostProcessCallback(usb_host_device_instance_t *deviceIn
             {
 #if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
                 deviceInstance->configurationDesc =
-                    (uint8_t *)SDK_Malloc((deviceInstance->configurationLen & 0xFFFCu) + 4, USB_CACHE_LINESIZE);
+                    (uint8_t *)OSA_MemoryAllocateAlign((deviceInstance->configurationLen & 0xFFFCu) + 4, USB_CACHE_LINESIZE);
 #else
                 deviceInstance->configurationDesc =
                     (uint8_t *)OSA_MemoryAllocate((((uint32_t)deviceInstance->configurationLen) & 0xFFFCU) + 4UL);
@@ -485,7 +485,7 @@ static usb_status_t USB_HostProcessCallback(usb_host_device_instance_t *deviceIn
             {
 #if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
                 deviceInstance->configurationDesc =
-                    (uint8_t *)SDK_Malloc(deviceInstance->configurationLen, USB_CACHE_LINESIZE);
+                    (uint8_t *)OSA_MemoryAllocateAlign(deviceInstance->configurationLen, USB_CACHE_LINESIZE);
 #else
                 deviceInstance->configurationDesc = (uint8_t *)OSA_MemoryAllocate(deviceInstance->configurationLen);
 #endif
@@ -751,7 +751,7 @@ static void USB_HostReleaseDeviceResource(usb_host_instance_t *hostInstance, usb
     if (deviceInstance->configurationDesc != NULL)
     {
 #if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-        SDK_Free(deviceInstance->configurationDesc);
+        OSA_MemoryFreeAlign(deviceInstance->configurationDesc);
 #else
         OSA_MemoryFree(deviceInstance->configurationDesc);
 #endif
@@ -761,7 +761,7 @@ static void USB_HostReleaseDeviceResource(usb_host_instance_t *hostInstance, usb
     level = deviceInstance->level;
 #endif
 #if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-    SDK_Free(deviceInstance->deviceDescriptor);
+    OSA_MemoryFreeAlign(deviceInstance->deviceDescriptor);
 #else
     OSA_MemoryFree(deviceInstance->deviceDescriptor);
 #endif
@@ -1091,7 +1091,7 @@ usb_status_t USB_HostAttachDevice(usb_host_handle hostHandle,
     newInstance->deviceAttachState = (uint8_t)kStatus_device_Attached;
 #if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
     newInstance->deviceDescriptor =
-        (usb_descriptor_device_t *)SDK_Malloc(sizeof(usb_descriptor_device_t) + 9, USB_CACHE_LINESIZE);
+        (usb_descriptor_device_t *)OSA_MemoryAllocateAlign(sizeof(usb_descriptor_device_t) + 9, USB_CACHE_LINESIZE);
 #else
     newInstance->deviceDescriptor = (usb_descriptor_device_t *)OSA_MemoryAllocate(sizeof(usb_descriptor_device_t) + 9U);
 #endif
@@ -1101,7 +1101,7 @@ usb_status_t USB_HostAttachDevice(usb_host_handle hostHandle,
         usb_echo("allocate newInstance->deviceDescriptor fail\r\n");
 #endif
 #if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-        SDK_Free(newInstance->deviceDescriptor);
+        OSA_MemoryFreeAlign(newInstance->deviceDescriptor);
 #else
         OSA_MemoryFree(newInstance->deviceDescriptor);
 #endif
@@ -1138,7 +1138,7 @@ usb_status_t USB_HostAttachDevice(usb_host_handle hostHandle,
 #endif
         (void)USB_HostUnlock();
 #if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-        SDK_Free(newInstance->deviceDescriptor);
+        OSA_MemoryFreeAlign(newInstance->deviceDescriptor);
 #else
         OSA_MemoryFree(newInstance->deviceDescriptor);
 #endif
@@ -1168,7 +1168,7 @@ usb_status_t USB_HostAttachDevice(usb_host_handle hostHandle,
         /* don't need release resource, resource is released when detach */
         *deviceHandle = newInstance;
 #if ((defined(USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE)) && (USB_HOST_CONFIG_BUFFER_PROPERTY_CACHEABLE > 0U))
-        SDK_Free(newInstance->deviceDescriptor);
+        OSA_MemoryFreeAlign(newInstance->deviceDescriptor);
 #else
         OSA_MemoryFree(newInstance->deviceDescriptor);
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022,2023 NXP
+ * Copyright 2022-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -99,7 +99,7 @@ void TRDC_GetMbcHardwareConfig(TRDC_Type *base,
 {
     assert(NULL != config);
 #if defined(TRDC_MBC_COUNT) && TRDC_MBC_COUNT
-    assert(mbcIdx < TRDC_MBC_COUNT);
+    assert(mbcIdx < (uint8_t)TRDC_MBC_COUNT);
 #else
     assert(mbcIdx < (uint8_t)((TRDC_GENERAL_BASE(base)->TRDC_HWCFG0 & TRDC_TRDC_HWCFG0_NMBC_MASK) >>
                               TRDC_TRDC_HWCFG0_NMBC_SHIFT));
