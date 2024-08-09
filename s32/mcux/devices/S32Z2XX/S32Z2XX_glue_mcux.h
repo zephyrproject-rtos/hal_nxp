@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _S32Z270_GLUE_MCUX_H_
-#define _S32Z270_GLUE_MCUX_H_
+#ifndef _S32Z2XX_GLUE_MCUX_H_
+#define _S32Z2XX_GLUE_MCUX_H_
 
-#include "S32Z270_device.h"
+#include "S32Z2XX_device.h"
 
 /* PIT - Peripheral instance base addresses */
 /** Peripheral PIT0 base address */

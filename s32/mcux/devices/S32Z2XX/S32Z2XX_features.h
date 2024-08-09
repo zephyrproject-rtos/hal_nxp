@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _S32Z270_FEATURES_H_
-#define _S32Z270_FEATURES_H_
+#ifndef _S32Z2XX_FEATURES_H_
+#define _S32Z2XX_FEATURES_H_
 
 /* SOC module features */
 

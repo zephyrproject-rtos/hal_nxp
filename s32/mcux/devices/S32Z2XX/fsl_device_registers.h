@@ -13,12 +13,12 @@
  * The CPU macro should be declared in the project or makefile.
  */
 
-#if defined(CPU_S32Z270)
+#if defined(CPU_S32Z2XX)
 
 /* CMSIS-style register definitions */
 #include "S32Z2.h"
 /* CPU specific feature definitions */
-#include "S32Z270_features.h"
+#include "S32Z2XX_features.h"
 
 /* Define the IRQ types for RTU sub-system */
 #define IRQn_Type       RTU_IRQn_Type
@@ -28,7 +28,7 @@
  * In order to reuse RTD CMSIS-based headers for the MCUX drivers, is needed
  * to redefine the peripheral macros from IP_PERIPHERAL_n to PERIPHERALn.
  */
-#include "S32Z270_glue_mcux.h"
+#include "S32Z2XX_glue_mcux.h"
 
 /* Dummy implementations just to build mcux/mcux-sdk/drivers/common/fsl_common_arm.h */
 #define __GIC_PRESENT   0

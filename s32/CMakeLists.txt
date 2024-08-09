@@ -1,14 +1,10 @@
 # Copyright 2022-2024 NXP
 
 # Set the SoC specific drivers and configuration to build
-if(HWMv2)
-  set(SOC_BASE ${CONFIG_SOC})
+if(${CONFIG_SOC} MATCHES "s32z2")
+  set(SOC_BASE "s32z2xx")
 else()
-  if(${CONFIG_SOC} STREQUAL "s32z27")
-    set(SOC_BASE "s32z270")
-  else()
-    set(SOC_BASE ${CONFIG_SOC})
-  endif()
+  set(SOC_BASE ${CONFIG_SOC})
 endif()
 
 add_subdirectory(drivers/${SOC_SERIES})
