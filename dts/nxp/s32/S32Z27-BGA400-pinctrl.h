@@ -626,12 +626,11 @@
 #define PE0_DSPI_3_PCS1                 NXP_S32_PINMUX(1, 1, 48, 5, 0, 0)
 #define PE1_DSPI_3_PCS2                 NXP_S32_PINMUX(1, 1, 49, 5, 0, 0)
 
-/* I3C_1 */
-#define PE7_I3C_1_PUR                   NXP_S32_PINMUX(1, 1, 55, 4, 0, 0)
-#define PE8_I3C_1_SCL_O                 NXP_S32_PINMUX(1, 1, 56, 3, 0, 0)
-#define PE8_I3C_1_SCL_I                 NXP_S32_PINMUX(1, 1, 56, 0, 180, 3)
-#define PE9_I3C_1_SDA0_O                NXP_S32_PINMUX(1, 1, 57, 3, 0, 0)
-#define PE9_I3C_1_SDA0_I                NXP_S32_PINMUX(1, 1, 57, 0, 181, 3)
+/* LPI2C_1 */
+#define PE8_I2C_1_SCL_O                 NXP_S32_PINMUX(1, 1, 56, 3, 0, 0)
+#define PE8_I2C_1_SCL_I                 NXP_S32_PINMUX(1, 1, 56, 0, 180, 3)
+#define PE9_I2C_1_SDA_O                 NXP_S32_PINMUX(1, 1, 57, 3, 0, 0)
+#define PE9_I2C_1_SDA_I                 NXP_S32_PINMUX(1, 1, 57, 0, 181, 3)
 
 /* LINFLEX_4 */
 #define PD15_LIN_4_TX                   NXP_S32_PINMUX(1, 1, 47, 6, 0, 0)
@@ -756,23 +755,15 @@
 #define PL0_DSPI_6_PCS1                 NXP_S32_PINMUX(4, 4, 144, 2, 0, 0)
 #define PL1_DSPI_6_PCS2                 NXP_S32_PINMUX(4, 4, 145, 2, 0, 0)
 
-/* I3C_2 */
-#define PI10_I3C_2_SCL_O                NXP_S32_PINMUX(4, 4, 106, 6, 0, 0)
-#define PI10_I3C_2_SCL_I                NXP_S32_PINMUX(4, 4, 106, 0, 311, 2)
-#define PI11_I3C_2_PUR                  NXP_S32_PINMUX(4, 4, 107, 4, 0, 0)
-#define PI12_I3C_2_SDA0_O               NXP_S32_PINMUX(4, 4, 108, 5, 0, 0)
-#define PI12_I3C_2_SDA0_I               NXP_S32_PINMUX(4, 4, 108, 0, 312, 2)
-#define PI13_I3C_2_SDA1_O               NXP_S32_PINMUX(4, 4, 109, 5, 0, 0)
-#define PI13_I3C_2_SDA1_I               NXP_S32_PINMUX(4, 4, 109, 0, 313, 2)
-#define PI14_I3C_2_SDA2_O               NXP_S32_PINMUX(4, 4, 110, 6, 0, 0)
-#define PI14_I3C_2_SDA2_I               NXP_S32_PINMUX(4, 4, 110, 0, 314, 2)
-#define PI15_I3C_2_SDA3_O               NXP_S32_PINMUX(4, 4, 111, 4, 0, 0)
-#define PI15_I3C_2_SDA3_I               NXP_S32_PINMUX(4, 4, 111, 0, 315, 2)
-#define PJ9_I3C_2_PUR                   NXP_S32_PINMUX(4, 4, 121, 5, 0, 0)
-#define PJ10_I3C_2_SCL_O                NXP_S32_PINMUX(4, 4, 122, 4, 0, 0)
-#define PJ10_I3C_2_SCL_I                NXP_S32_PINMUX(4, 4, 122, 0, 311, 3)
-#define PJ11_I3C_2_SDA0_O               NXP_S32_PINMUX(4, 4, 123, 5, 0, 0)
-#define PJ11_I3C_2_SDA0_I               NXP_S32_PINMUX(4, 4, 123, 0, 312, 3)
+/* LPI2C_2 */
+#define PI10_I2C_2_SCL_O                NXP_S32_PINMUX(4, 4, 106, 6, 0, 0)
+#define PI10_I2C_2_SCL_I                NXP_S32_PINMUX(4, 4, 106, 0, 311, 2)
+#define PI12_I2C_2_SDA_O                NXP_S32_PINMUX(4, 4, 108, 5, 0, 0)
+#define PI12_I2C_2_SDA_I                NXP_S32_PINMUX(4, 4, 108, 0, 312, 2)
+#define PJ10_I2C_2_SCL_O                NXP_S32_PINMUX(4, 4, 122, 4, 0, 0)
+#define PJ10_I2C_2_SCL_I                NXP_S32_PINMUX(4, 4, 122, 0, 311, 3)
+#define PJ11_I2C_2_SDA_O                NXP_S32_PINMUX(4, 4, 123, 5, 0, 0)
+#define PJ11_I2C_2_SDA_I                NXP_S32_PINMUX(4, 4, 123, 0, 312, 3)
 
 /* SPI_5 */
 #define PJ0_DSPI_5_SOUT                 NXP_S32_PINMUX(4, 4, 112, 3, 0, 0)
