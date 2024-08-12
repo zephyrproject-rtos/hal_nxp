@@ -97,3 +97,5 @@ Patch List:
       - MCXA15x family
       - MCXN23x family
   - add kUSB_DeviceNotifySOF to usb_device_mcux_drv_port.h SDK USB stack already supports it in SDK 2.16.0
+  - mcux-sdk/drivers/adc12/fsl_adc12.c: add guards to avoid compilation warnings when building
+      with SDK clock control driver disabled.
