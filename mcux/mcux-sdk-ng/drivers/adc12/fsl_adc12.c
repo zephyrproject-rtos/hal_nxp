@@ -30,7 +30,9 @@
  *
  * @param base ADC12 peripheral base address
  */
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 static uint32_t ADC12_GetInstance(ADC_Type *base);
+#endif
 
 /*!
  * @brief Check calibration failed status.
@@ -62,8 +64,8 @@ static status_t ADC12_GetCalibrationStatus(ADC_Type *base);
  * Variables
  ******************************************************************************/
 /*! @brief Pointers to ADC12 bases for each instance. */
-static ADC_Type *const s_adc12Bases[] = ADC_BASE_PTRS;
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
+static ADC_Type *const s_adc12Bases[] = ADC_BASE_PTRS;
 /*! @brief Pointers to ADC12 clocks for each instance. */
 static const clock_ip_name_t s_adc12Clocks[] = ADC12_CLOCKS;
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
@@ -71,6 +73,7 @@ static const clock_ip_name_t s_adc12Clocks[] = ADC12_CLOCKS;
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 static uint32_t ADC12_GetInstance(ADC_Type *base)
 {
     uint32_t instance;
@@ -88,6 +91,7 @@ static uint32_t ADC12_GetInstance(ADC_Type *base)
 
     return instance;
 }
+#endif
 
 static status_t ADC12_GetCalibrationStatus(ADC_Type *base)
 {
