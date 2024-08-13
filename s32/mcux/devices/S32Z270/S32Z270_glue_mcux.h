@@ -226,4 +226,25 @@
 
 #define CAN_ORed_Message_buffer_IRQS                CAN_ORed_Message_buffer_0_31_IRQS
 
+/*!
+ * @addtogroup LPI2C_Peripheral_Access_Layer LPI2C Peripheral Access Layer
+ * @{
+ */
+
+/* LPI2C - Peripheral instance base addresses */
+/** Peripheral LPI2C1 base address */
+#define LPI2C1_BASE                              IP_LPI2C_1_BASE
+/** Peripheral LPI2C1 base pointer */
+#define LPI2C1                                   IP_LPI2C_1
+/** Peripheral LPI2C2 base address */
+#define LPI2C2_BASE                              IP_LPI2C_2_BASE
+/** Peripheral LPI2C2 base pointer */
+#define LPI2C2                                   IP_LPI2C_2
+/** Array initializer of LPI2C peripheral base addresses */
+#define LPI2C_BASE_ADDRS                         IP_LPI2C_BASE_ADDRS
+/** Array initializer of LPI2C peripheral base pointers */
+#define LPI2C_BASE_PTRS                          IP_LPI2C_BASE_PTRS
+/** Interrupt vectors for the LPI2C peripheral type */
+#define LPI2C_IRQS                               { RTU_LPI2C1_IRQn, RTU_LPI2C2_IRQn }
+
 #endif /* _S32Z270_GLUE_MCUX_H_ */
