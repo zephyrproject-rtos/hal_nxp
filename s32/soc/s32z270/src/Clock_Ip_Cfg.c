@@ -557,7 +557,7 @@ static const Clock_Ip_SelectorConfigType Clock_Ip_SelectorConfigurations_0[CLOCK
     #if CLOCK_IP_CONFIGURED_SELECTORS_0_NO > 41U
     {
         P4_QSPI0_2X_CLK,                    /* Clock name associated to selector */
-        FIRC_CLK,                    /* Name of the selected input source */
+        PERIPHPLL_DFS0_CLK,                    /* Name of the selected input source */
     },
     #endif
 
@@ -571,7 +571,7 @@ static const Clock_Ip_SelectorConfigType Clock_Ip_SelectorConfigurations_0[CLOCK
     #if CLOCK_IP_CONFIGURED_SELECTORS_0_NO > 43U
     {
         P4_SDHC_CLK,                    /* Clock name associated to selector */
-        FIRC_CLK,                    /* Name of the selected input source */
+        PERIPHPLL_DFS2_CLK,                    /* Name of the selected input source */
     },
     #endif
 
@@ -1345,7 +1345,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 63U
     {
         P4_QSPI0_2X_CLK,                    /* name */
-        1U,                              /* value */
+        2U,                              /* value */
         {
             0U,
         }
@@ -1555,7 +1555,7 @@ static const Clock_Ip_DividerConfigType Clock_Ip_DividerConfigurations_0[CLOCK_I
     #if CLOCK_IP_CONFIGURED_DIVIDERS_0_NO > 84U
     {
         P4_SDHC_CLK,                    /* name */
-        1U,                              /* value */
+        2U,                              /* value */
         {
             0U,
         }
@@ -1672,7 +1672,7 @@ static const Clock_Ip_FracDivConfigType Clock_Ip_FracDivsConfigurations_0[CLOCK_
         1U,          /* Enabled */
         {
             2U,          /* integer part */
-            18U,          /* fractional part */
+            0U,          /* fractional part */
         },
     },
     #endif
