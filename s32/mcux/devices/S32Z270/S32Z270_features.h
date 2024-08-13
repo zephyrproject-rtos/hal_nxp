@@ -91,4 +91,13 @@
 /* @brief Does not support Supervisor Mode (bitfield MCR[SUPV]. */
 #define FSL_FEATURE_FLEXCAN_HAS_NO_SUPV_SUPPORT (1)
 
+/* I2C module features */
+
+/* @brief LPI2C availability on the SoC. */
+#define FSL_FEATURE_SOC_LPI2C_COUNT (2)
+/* @brief Has separate DMA RX and TX requests. */
+#define FSL_FEATURE_LPI2C_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
+/* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
+#define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (8)
+
 #endif /* _S32Z270_FEATURES_H_ */
