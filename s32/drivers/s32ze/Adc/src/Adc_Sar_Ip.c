@@ -249,7 +249,7 @@ static TEMPSENSE_Type * const Adc_Sar_Ip_apxTempsenseBase[TEMPSENSE_INSTANCE_COU
 #define ADC_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Adc_MemMap.h"
 /* Global state structure */
-static Adc_Sar_Ip_StateStructType Adc_Sar_Ip_axAdcSarState[ADC_SAR_IP_INSTANCE_COUNT];
+VAR_SEC_NOCACHE(Adc_Sar_Ip_axAdcSarState) static Adc_Sar_Ip_StateStructType Adc_Sar_Ip_axAdcSarState[ADC_SAR_IP_INSTANCE_COUNT];
 
 #define ADC_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Adc_MemMap.h"
