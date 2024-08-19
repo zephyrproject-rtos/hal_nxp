@@ -27,6 +27,7 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
+#include <zephyr/devicetree.h>
 
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
@@ -48,9 +49,9 @@ extern "C"{
 ==================================================================================================*/
 
 
-#define QSPI_IP_SFP_ENABLE_GLOBAL                    (STD_ON)
-#define QSPI_IP_SFP_ENABLE_MDAD                      (STD_ON)
-#define QSPI_IP_SFP_ENABLE_FRAD                      (STD_ON)
+#define QSPI_IP_SFP_ENABLE_MDAD   DT_HAS_COMPAT_STATUS_OKAY(nxp_s32_qspi_sfp_mdad)
+#define QSPI_IP_SFP_ENABLE_FRAD   DT_HAS_COMPAT_STATUS_OKAY(nxp_s32_qspi_sfp_frad)
+#define QSPI_IP_SFP_ENABLE_GLOBAL UTIL_OR(QSPI_IP_SFP_ENABLE_MDAD, QSPI_IP_SFP_ENABLE_FRAD)		
 
 
 /* Enable Multicore support when using MemAcc*/
