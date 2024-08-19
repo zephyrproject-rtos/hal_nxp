@@ -71,8 +71,8 @@
 /** QuadSPI - Size of Registers Arrays */
 #define QuadSPI_RBDR_COUNT                        64u
 #define QuadSPI_LUT_COUNT                         80u
-#define QuadSPI_FRAD_COUNT                        8u
-#define QuadSPI_MDAD_COUNT                        2u
+#define QuadSPI_FRAD_COUNT                        8
+#define QuadSPI_MDAD_COUNT                        2
 
 /** QuadSPI - Register Layout Typedef */
 typedef struct {
