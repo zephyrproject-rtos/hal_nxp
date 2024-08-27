@@ -240,10 +240,10 @@ void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
     if (size_byte > 0UL)
     {
-        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size_byte - 0x01U);
+        uint32_t endAddr = MSDK_REG_NONSECURE_ADDR(address + size_byte - 0x01U);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
-        uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
+        uint32_t startAddr = MSDK_REG_NONSECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
         uint32_t instance  = CACHE64_GetInstanceByAddr(address);
         uint32_t endLim;
         CACHE64_CTRL_Type *base;
@@ -257,7 +257,7 @@ void CACHE64_InvalidateCacheByRange(uint32_t address, uint32_t size_byte)
             return;
         }
         base    = s_cache64ctrlBases[instance];
-        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
+        endLim  = MSDK_REG_NONSECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
         endAddr = endAddr > endLim ? endLim : endAddr;
 
         /* Set the invalidate by line command and use the physical address. */
@@ -310,10 +310,10 @@ void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
 {
     if (size_byte > 0UL)
     {
-        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size_byte - 0x01U);
+        uint32_t endAddr = MSDK_REG_NONSECURE_ADDR(address + size_byte - 0x01U);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
-        uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
+        uint32_t startAddr = MSDK_REG_NONSECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
         uint32_t instance  = CACHE64_GetInstanceByAddr(address);
         uint32_t endLim;
         CACHE64_CTRL_Type *base;
@@ -327,7 +327,7 @@ void CACHE64_CleanCacheByRange(uint32_t address, uint32_t size_byte)
             return;
         }
         base    = s_cache64ctrlBases[instance];
-        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
+        endLim  = MSDK_REG_NONSECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
         endAddr = endAddr > endLim ? endLim : endAddr;
 
         /* Set the push by line command. */
@@ -382,10 +382,10 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
 {
     if (size_byte > 0UL)
     {
-        uint32_t endAddr = MSDK_REG_SECURE_ADDR(address + size_byte - 0x01U);
+        uint32_t endAddr = MSDK_REG_NONSECURE_ADDR(address + size_byte - 0x01U);
         uint32_t pccReg  = 0;
         /* Align address to cache line size. */
-        uint32_t startAddr = MSDK_REG_SECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
+        uint32_t startAddr = MSDK_REG_NONSECURE_ADDR(address & ~((uint32_t)CACHE64_LINESIZE_BYTE - 1U));
         uint32_t instance  = CACHE64_GetInstanceByAddr(address);
         uint32_t endLim;
         CACHE64_CTRL_Type *base;
@@ -399,7 +399,7 @@ void CACHE64_CleanInvalidateCacheByRange(uint32_t address, uint32_t size_byte)
             return;
         }
         base    = s_cache64ctrlBases[instance];
-        endLim  = MSDK_REG_SECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
+        endLim  = MSDK_REG_NONSECURE_ADDR(phyMemBase[instance][g_cache64MemPhyAliasId] + phyMemSize[instance][g_cache64MemPhyAliasId] - 0x01U);
         endAddr = endAddr > endLim ? endLim : endAddr;
 
         /* Set the push by line command. */
