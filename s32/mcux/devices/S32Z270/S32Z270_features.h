@@ -81,7 +81,15 @@
 /* @brief CAN instance support Flexible Data rate (CAN FD) protocol. */
 #define FSL_FEATURE_FLEXCAN_INSTANCE_HAS_FLEXIBLE_DATA_RATEn(x) (1)
 /* @brief Has memory error control (register MECR). */
-#define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL (0)
+#define FSL_FEATURE_FLEXCAN_HAS_MEMORY_ERROR_CONTROL (1)
+/* @brief Init memory base 1 */
+#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_1 (0x80)
+/* @brief Init memory size 1 */
+#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_1 (0xA60)
+/* @brief Init memory base 2 */
+#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_BASE_2 (0xC20)
+/* @brief Init memory size 2 */
+#define FSL_FEATURE_FLEXCAN_INIT_MEMORY_SIZE_2 (0x25E0)
 /* @brief Has enhanced bit timing register (register EPRS, ENCBT, EDCBT and ETDC). */
 #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_BIT_TIMING_REG (0)
 /* @brief Has Pretended Networking mode support. */
@@ -90,6 +98,18 @@
 #define FSL_FEATURE_FLEXCAN_HAS_ENHANCED_RX_FIFO (0)
 /* @brief Does not support Supervisor Mode (bitfield MCR[SUPV]. */
 #define FSL_FEATURE_FLEXCAN_HAS_NO_SUPV_SUPPORT (1)
+/* @brief Does not support Memory Error Control (bitfield MECR[HANCEI]. */
+#define FSL_FEATURE_FLEXCAN_HAS_NO_HANCEI_SUPPORT (1)
+/* @brief Does not support Memory Error Control (bitfield MECR[FANCEI]. */
+#define FSL_FEATURE_FLEXCAN_HAS_NO_FANCEI_SUPPORT (1)
+/* @brief Does not support Memory Error Control (bitfield MECR[CEI]. */
+#define FSL_FEATURE_FLEXCAN_HAS_NO_CEI_SUPPORT (1)
+/* @brief Does not support Wake Up interrupt (bitfield MCR[WAKMSK]. */
+#define FSL_FEATURE_FLEXCAN_HAS_NO_WAKMSK_SUPPORT (1)
+/* @brief Does not support Self Wake Up (bitfield MCR[SLFWAK]. */
+#define FSL_FEATURE_FLEXCAN_HAS_NO_SLFWAK_SUPPORT (1)
+/* @brief Does not support Wake Up Source (bitfield MCR[WAKSRC]. */
+#define FSL_FEATURE_FLEXCAN_HAS_NO_WAKSRC_SUPPORT (1)
 
 /* I2C module features */
 
