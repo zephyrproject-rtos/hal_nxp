@@ -100,3 +100,4 @@ Patch List:
   - mcux-sdk/drivers/adc12/fsl_adc12.c: add guards to avoid compilation warnings when building
       with SDK clock control driver disabled.
   - Update the driver in mcux-sdk/drivers/cache/cache64/fsl_cache.c to use the non-secure flash address during cache invalidation.
+  - mcux-sdk/drivers/flexcan/fsl_flexcan.c and mcux-sdk/drivers/flexcan/fsl_flexcan.h: add the guards for unsupport features on S32Z27x devices
