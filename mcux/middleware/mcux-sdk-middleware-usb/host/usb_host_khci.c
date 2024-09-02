@@ -8,12 +8,19 @@
 
 #include "usb_host_config.h"
 #if ((defined USB_HOST_CONFIG_KHCI) && (USB_HOST_CONFIG_KHCI))
+/* CONFIG_UHC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
+#if (defined CONFIG_UHC_DRIVER)
+#include "usb_host_mcux_drv_port.h"
+#include "fsl_device_registers.h"
+#include "usb_host_khci.h"
+#else
 #include "usb_host.h"
 #include "usb_host_hci.h"
 #include "fsl_device_registers.h"
 #include "usb_host_khci.h"
 #include "usb_host_devices.h"
 #include "usb_host_framework.h"
+#endif
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -1703,7 +1710,7 @@ usb_status_t USB_HostKhciOpenPipe(usb_host_controller_handle controllerHandle,
 {
     usb_khci_host_state_struct_t *usbHostPointer = (usb_khci_host_state_struct_t *)controllerHandle;
     usb_host_pipe_t *pipePointer;
-    usb_host_pipe_t *prePipePointer;
+    usb_host_pipe_t *prePipePointer = NULL;
     usb_host_pipe_t *tempPipePointer;
 
     OSA_SR_ALLOC();

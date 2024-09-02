@@ -8,11 +8,17 @@
 
 #include "usb_host_config.h"
 #if (defined(USB_HOST_CONFIG_IP3516HS) && (USB_HOST_CONFIG_IP3516HS > 0U))
+#if (defined CONFIG_UHC_DRIVER)
+#include "usb_host_mcux_drv_port.h"
+#include "fsl_device_registers.h"
+#include "usb_host_ip3516hs.h"
+#else
 #include "usb_host.h"
 #include "usb_host_hci.h"
 #include "fsl_device_registers.h"
 #include "usb_host_ip3516hs.h"
 #include "usb_host_devices.h"
+#endif
 #if ((defined FSL_FEATURE_SOC_USBPHY_COUNT) && (FSL_FEATURE_SOC_USBPHY_COUNT > 0U))
 #include "usb_phy.h"
 #endif
@@ -352,6 +358,15 @@ static void USB_HostIp3516HsDelay(usb_host_ip3516hs_state_struct_t *usbHostState
             (USB_HOST_IP3516HS_FLADJ_FRINDEX_MASK >> USB_HOST_IP3516HS_FLADJ_FRINDEX_SHIFT));
     } while ((distance) < (ms)); /* compute the distance between sofStart and SofEnd */
 }
+
+static uint8_t USB_HostIp3516HsGetDeviceInfo(usb_device_handle deviceHandle, uint32_t infoCode)
+{
+    uint32_t info_val;
+
+    USB_HostHelperGetPeripheralInformation(deviceHandle, (uint32_t)infoCode, &info_val);
+    return (uint8_t)info_val;
+}
+
 /*seperate bus control to standlone alone function for misra Rule17.2*/
 static usb_status_t USB_HostIp3516HsControlBusReset(usb_host_ip3516hs_state_struct_t *usbHostState)
 {
@@ -471,14 +486,11 @@ static usb_status_t USB_HostIp3516HsControlBus(usb_host_ip3516hs_state_struct_t 
                     ((uint32_t)usbHostState->L1remoteWakeupEnable << USB_HOST_IP3516HS_USBCMD_LPM_RWU_SHIFT));
                 usbHostState->usbRegBase->USBCMD = portStatus;
 
-                usb_host_device_instance_t *deviceInstance;
-
                 usbHostState->busSuspendStatus = (uint8_t)kBus_Ip3516HsL1StartSleep;
 
-                deviceInstance = (usb_host_device_instance_t *)hostPointer->suspendedDevice;
                 usbHostState->usbRegBase->PORTSC1 |= (uint32_t)(
                     (uint32_t)USB_HOST_IP3516HS_PORTSC1_SUSP_MASK | (uint32_t)USB_HOST_IP3516HS_PORTSC1_SUS_L1_MASK |
-                    (((uint32_t)deviceInstance->setAddress << USB_HOST_IP3516HS_PORTSC1_DEV_ADD_SHIFT) &
+                    (((uint32_t)USB_HostIp3516HsGetDeviceInfo(hostPointer->suspendedDevice, kUSB_HostGetDeviceAddress) << USB_HOST_IP3516HS_PORTSC1_DEV_ADD_SHIFT) &
                      (uint32_t)USB_HOST_IP3516HS_PORTSC1_DEV_ADD_MASK));
 #if (defined(FSL_FEATURE_USBHSH_VERSION) && (FSL_FEATURE_USBHSH_VERSION >= 300U))
 #else
@@ -1126,7 +1138,7 @@ static usb_status_t USB_HostIp3516HsFindStartFrame(usb_host_ip3516hs_state_struc
     uint32_t total = 0U;
     void *temp;
     uint8_t slotTime[8];
-    uint8_t speed = ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed;
+    uint8_t speed = USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed);
 
     pipe->startUFrame = 0U;
 
@@ -1280,7 +1292,7 @@ static usb_status_t USB_HostIp3516BaudWidthCheck(usb_host_ip3516hs_state_struct_
                                                  usb_host_ip3516hs_pipe_struct_t *pipe)
 {
     usb_status_t error;
-    uint8_t speed = ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed;
+    uint8_t speed = USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed);
     OSA_SR_ALLOC();
 
     pipe->busHsTime = (uint16_t)USB_HostIp3516HsBusTime(
@@ -1334,11 +1346,11 @@ static usb_status_t USB_HostIp3516HsOpenControlBulkPipe(usb_host_ip3516hs_state_
     atl->control1Union.stateBitField.Mult = pipe->pipeCommon.numberPerUframe;
     atl->control2Union.stateBitField.EP   = pipe->pipeCommon.endpointAddress;
     atl->control2Union.stateBitField.DeviceAddress =
-        ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->setAddress;
+        USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceAddress);
     if (USB_SPEED_HIGH == usbHostState->portState[0].portSpeed)
     {
         atl->control2Union.stateBitField.S =
-            (USB_SPEED_HIGH == ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed) ? 0U : 1U;
+            (USB_SPEED_HIGH == USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed)) ? 0U : 1U;
     }
     else
     {
@@ -1347,16 +1359,16 @@ static usb_status_t USB_HostIp3516HsOpenControlBulkPipe(usb_host_ip3516hs_state_
     atl->control2Union.stateBitField.RL  = 0xFU;
     atl->stateUnion.stateBitField.NakCnt = 0xFU;
     atl->control2Union.stateBitField.SE =
-        (USB_SPEED_LOW == ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed) ? 2U : 0U;
+        (USB_SPEED_LOW == USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed)) ? 2U : 0U;
     atl->control2Union.stateBitField.PortNumber =
 #if (defined(USB_HOST_CONFIG_HUB) && (USB_HOST_CONFIG_HUB > 0U))
-        ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->hsHubPort;
+        USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceHSHubPort);
 #else
         0U;
 #endif
     atl->control2Union.stateBitField.HubAddress =
 #if (defined(USB_HOST_CONFIG_HUB) && (USB_HOST_CONFIG_HUB > 0U))
-        ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->hsHubNumber;
+        USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceHSHubNumber);
 #else
         0U;
 #endif
@@ -1433,11 +1445,11 @@ static usb_status_t USB_HostIp3516HsOpenIsoPipe(usb_host_ip3516hs_state_struct_t
         ptl->control1Union.stateBitField.Mult = pipe->pipeCommon.numberPerUframe;
         ptl->control2Union.stateBitField.EP   = pipe->pipeCommon.endpointAddress;
         ptl->control2Union.stateBitField.DeviceAddress =
-            ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->setAddress;
+            USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceAddress);
         if (USB_SPEED_HIGH == usbHostState->portState[0].portSpeed)
         {
             ptl->control2Union.stateBitField.S =
-                (USB_SPEED_HIGH == ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed) ? 0U : 1U;
+                (USB_SPEED_HIGH == USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed)) ? 0U : 1U;
         }
         else
         {
@@ -1446,18 +1458,18 @@ static usb_status_t USB_HostIp3516HsOpenIsoPipe(usb_host_ip3516hs_state_struct_t
         ptl->control2Union.stateBitField.RL  = 0U;
         ptl->stateUnion.stateBitField.NakCnt = 0U;
         ptl->control2Union.stateBitField.SE =
-            (USB_SPEED_LOW == ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed) ? 2U : 0U;
+            (USB_SPEED_LOW == USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed)) ? 2U : 0U;
         if (0U != ptl->control2Union.stateBitField.S)
         {
             sptl->control2Union.stateBitField.PortNumber =
 #if (defined(USB_HOST_CONFIG_HUB) && (USB_HOST_CONFIG_HUB > 0U))
-                ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->hsHubPort;
+                USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceHSHubPort);
 #else
                 0U;
 #endif
             sptl->control2Union.stateBitField.HubAddress =
 #if (defined(USB_HOST_CONFIG_HUB) && (USB_HOST_CONFIG_HUB > 0U))
-                ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->hsHubNumber;
+                USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceHSHubNumber);
 #else
                 0U;
 #endif
@@ -1523,11 +1535,11 @@ static usb_status_t USB_HostIp3516HsOpenInterruptPipe(usb_host_ip3516hs_state_st
     ptl->control1Union.stateBitField.Mult = pipe->pipeCommon.numberPerUframe;
     ptl->control2Union.stateBitField.EP   = pipe->pipeCommon.endpointAddress;
     ptl->control2Union.stateBitField.DeviceAddress =
-        ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->setAddress;
+        USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceAddress);
     if (USB_SPEED_HIGH == usbHostState->portState[0].portSpeed)
     {
         ptl->control2Union.stateBitField.S =
-            (USB_SPEED_HIGH == ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed) ? 0U : 1U;
+            (USB_SPEED_HIGH == USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed)) ? 0U : 1U;
     }
     else
     {
@@ -1536,18 +1548,18 @@ static usb_status_t USB_HostIp3516HsOpenInterruptPipe(usb_host_ip3516hs_state_st
     ptl->control2Union.stateBitField.RL  = 0xFU;
     ptl->stateUnion.stateBitField.NakCnt = 0xFU;
     ptl->control2Union.stateBitField.SE =
-        (USB_SPEED_LOW == ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed) ? 2U : 0U;
+        (USB_SPEED_LOW == USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed)) ? 2U : 0U;
     if (0U != ptl->control2Union.stateBitField.S)
     {
         sptl->control2Union.stateBitField.PortNumber =
 #if (defined(USB_HOST_CONFIG_HUB) && (USB_HOST_CONFIG_HUB > 0U))
-            ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->hsHubPort;
+            USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceHSHubPort);
 #else
             0U;
 #endif
         sptl->control2Union.stateBitField.HubAddress =
 #if (defined(USB_HOST_CONFIG_HUB) && (USB_HOST_CONFIG_HUB > 0U))
-            ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->hsHubNumber;
+            USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceHSHubNumber);
 #else
             0U;
 #endif
@@ -2221,7 +2233,7 @@ static usb_status_t USB_HostIp3516HsWriteIsoPipe(usb_host_ip3516hs_state_struct_
     indexLength_t indexLength;
     uint8_t *bufferAddress;
     void *temp;
-    uint8_t speed = ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed;
+    uint8_t speed = USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed);
     OSA_SR_ALLOC();
 
     OSA_ENTER_CRITICAL();
@@ -2425,7 +2437,7 @@ static usb_status_t USB_HostIp3516HsWriteInterruptPipe(usb_host_ip3516hs_state_s
     uint32_t insertUFrame;
     uint8_t *bufferAddress;
     void *temp;
-    uint8_t speed = ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed;
+    uint8_t speed = USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed);
     temp          = (void *)ptl;
     sptl          = (usb_host_ip3516hs_sptl_struct_t *)temp;
     OSA_SR_ALLOC();
@@ -3586,7 +3598,7 @@ usb_status_t USB_HostIp3516HsOpenPipe(usb_host_controller_handle controllerHandl
     }
     else if (USB_ENDPOINT_INTERRUPT == pipe->pipeCommon.pipeType)
     {
-        if (USB_SPEED_HIGH != ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed)
+        if (USB_SPEED_HIGH != USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed))
         {
             uint32_t interval = 0U;
             /* FS/LS interrupt interval should be the power of 2, it is used for ip3516hs bandwidth */
@@ -3613,7 +3625,7 @@ usb_status_t USB_HostIp3516HsOpenPipe(usb_host_controller_handle controllerHandl
         pipe->pipeCommon.interval = 0U;
     }
 
-    if (USB_SPEED_HIGH != ((usb_host_device_instance_t *)pipe->pipeCommon.deviceHandle)->speed)
+    if (USB_SPEED_HIGH != USB_HostIp3516HsGetDeviceInfo(pipe->pipeCommon.deviceHandle, kUSB_HostGetDeviceSpeed))
     {
         pipe->pipeCommon.interval = pipe->pipeCommon.interval << 3;
     }

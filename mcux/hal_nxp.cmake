@@ -417,6 +417,28 @@ if (CONFIG_UDC_DRIVER)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/include)
 endif()
 
+if (CONFIG_UHC_DRIVER)
+  set(CONFIG_USE_component_osa_zephyr true)
+
+  list(APPEND CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa
+  )
+  list(APPEND CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb
+  )
+  include_ifdef(CONFIG_DT_HAS_NXP_USBPHY_ENABLED  middleware_usb_phy)
+  include_ifdef(CONFIG_UHC_NXP_EHCI               middleware_usb_host_ehci)
+  include_ifdef(CONFIG_UHC_NXP_KHCI               middleware_usb_host_khci)
+  include_ifdef(CONFIG_UHC_NXP_OHCI               middleware_usb_host_ohci)
+  include_ifdef(CONFIG_UHC_NXP_IP3516HS           middleware_usb_host_ip3516hs)
+  include(set_component_osa)
+
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/host)
+  zephyr_include_directories_ifdef(CONFIG_DT_HAS_NXP_USBPHY_ENABLED, ${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/phy)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/include)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa)
+endif()
+
 if(${MCUX_DEVICE} MATCHES "RW61")
   set(CONFIG_USE_component_osa_zephyr true)
   if(CONFIG_NXP_FW_LOADER)
