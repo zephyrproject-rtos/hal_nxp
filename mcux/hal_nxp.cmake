@@ -398,12 +398,19 @@ if(CONFIG_ETH_MCUX)
 endif()
 
 if (CONFIG_USB_DEVICE_DRIVER)
+  set(CONFIG_USE_component_osa_zephyr true)
+
+  list(APPEND CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa
+  )
+
   list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb
   )
   include(middleware_usb_phy)
   include_ifdef(CONFIG_USB_DC_NXP_EHCI         middleware_usb_device_ehci)
   include_ifdef(CONFIG_USB_DC_NXP_LPCIP3511    middleware_usb_device_ip3511fs)
+  include(set_component_osa)
 
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/device)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/phy)
@@ -412,12 +419,19 @@ endif()
 
 
 if (CONFIG_UDC_DRIVER)
+  set(CONFIG_USE_component_osa_zephyr true)
+
+  list(APPEND CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa
+  )
+
   list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb
   )
   include_ifdef(CONFIG_DT_HAS_NXP_USBPHY_ENABLED  middleware_usb_phy)
   include_ifdef(CONFIG_UDC_NXP_EHCI               middleware_usb_device_ehci)
   include_ifdef(CONFIG_UDC_NXP_IP3511             middleware_usb_device_ip3511fs)
+  include(set_component_osa)
 
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/device)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-usb/phy)
@@ -433,6 +447,10 @@ if(${MCUX_DEVICE} MATCHES "RW61")
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk/drivers/flexspi)
     include(component_mflash_rdrw610)
   endif()
+endif()
+
+if(${CONFIG_USE_component_osa_zephyr})
+  zephyr_include_directories(${CMAKE_CURRENT_SOURCE_DIR}/mcux-sdk/components/osa)
 endif()
 
 include_ifdef(CONFIG_USE_component_osa_zephyr set_component_osa)
