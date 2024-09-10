@@ -73,7 +73,7 @@
 
 /** DMAMUX - Register Layout Typedef */
 typedef struct {
-  __IO uint8_t CHCONF[DMAMUX_CHCFG_COUNT];         /**< Channel Configuration, array offset: 0x0, array step: 0x1, irregular array, not all indices are valid */
+  __IO uint8_t CHCFG[DMAMUX_CHCFG_COUNT];         /**< Channel Configuration, array offset: 0x0, array step: 0x1, irregular array, not all indices are valid */
 } DMAMUX_Type, *DMAMUX_MemMapPtr;
 
 /** Number of instances of the DMAMUX module. */
