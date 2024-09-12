@@ -222,4 +222,33 @@
 /* @brief Capacity (number of entries) of the transmit/receive FIFO (or zero if no FIFO is available). */
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (8)
 
+/* DSPI module features */
+
+/* @brief DSPI availability on the SoC. */
+#define FSL_FEATURE_SOC_DSPI_COUNT (1)
+/* @brief Receive/transmit FIFO size in number of items. */
+#define FSL_FEATURE_DSPI_FIFO_SIZEn(x) (16)
+/* @brief Maximum transfer data width in bits. */
+#define FSL_FEATURE_DSPI_MAX_DATA_WIDTH (16)
+/* @brief Maximum number of chip select pins. (Reflects the width of register bit field PUSHR[PCS].) */
+#define FSL_FEATURE_DSPI_MAX_CHIP_SELECT_COUNT (3)
+/* @brief Number of chip select pins. */
+#define FSL_FEATURE_DSPI_CHIP_SELECT_COUNT (3)
+/* @brief Number of CTAR registers. */
+#define FSL_FEATURE_DSPI_CTAR_COUNT (6)
+/* @brief Has chip select strobe capability on the PCS5 pin. */
+#define FSL_FEATURE_DSPI_HAS_CHIP_SELECT_STROBE (0)
+/* @brief Has separated TXDATA and CMD FIFOs (register SREX). */
+#define FSL_FEATURE_DSPI_HAS_SEPARATE_TXDATA_CMD_FIFO (0)
+/* @brief Has 16-bit data transfer support. */
+#define FSL_FEATURE_DSPI_16BIT_TRANSFERS (1)
+/* @brief Has separate DMA RX and TX requests. */
+#define FSL_FEATURE_DSPI_HAS_SEPARATE_DMA_RX_TX_REQn(x) (1)
+/* @brief Does not support Transmit FIFO Fill Flag (bitfield SR[TFUF]. */
+#define FSL_FEATURE_DSPI_HAS_NO_SR_TFUF_SUPPORT (1)
+/* @brief Does not support Transmit FIFO Underflow Request Enable (bitfield RSER[TFUF_RE]. */
+#define FSL_FEATURE_DSPI_HAS_NO_RSER_TFUF_RE_SUPPORT (1)
+/* @brief  Does not support Slave mode . */
+#define FSL_FEATURE_DSPI_HAS_NO_SLAVE_SUPPORT (1)
+
 #endif /* _S32Z270_FEATURES_H_ */
