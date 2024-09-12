@@ -101,3 +101,7 @@ Patch List:
       with SDK clock control driver disabled.
   - Update the driver in mcux-sdk/drivers/cache/cache64/fsl_cache.c to use the non-secure flash address during cache invalidation.
   - mcux-sdk/drivers/flexcan/fsl_flexcan.c and mcux-sdk/drivers/flexcan/fsl_flexcan.h: add the guards for unsupport features on S32Z27x devices
+  - drivers: edma_rev2: drop grouping of EDMA register indexes
+  - drivers: edma_rev2: support MUX register in MP space
+  - drivers: edma_rev2: support 64-bit TCD registers
+  - devices: MIMX9596: add EDMA rev2 soc layer definition
