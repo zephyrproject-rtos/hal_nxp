@@ -464,6 +464,9 @@
 #define PA11_DSPI_10_PCS0_O             NXP_S32_PINMUX(0, 0, 11, 1, 0, 0)
 #define PA12_DSPI_10_PCS1               NXP_S32_PINMUX(0, 0, 12, 1, 0, 0)
 #define PB6_DSPI_10_PCS2                NXP_S32_PINMUX(0, 0, 22, 6, 0, 0)
+#define LVDS_DSPI_10_SIN                NXP_S32_PINMUX(0, 0, 500, 0, 0, 0)
+#define LVDS_DSPI_10_SOUT               NXP_S32_PINMUX(0, 0, 501, 0, 0, 0)
+#define LVDS_DSPI_10_SCK                NXP_S32_PINMUX(0, 0, 502, 0, 0, 0)
 
 /* SPI_1 */
 #define PA11_DSPI_1_PCS4                NXP_S32_PINMUX(0, 0, 11, 5, 0, 0)
