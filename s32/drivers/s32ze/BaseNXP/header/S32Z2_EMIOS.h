@@ -109,7 +109,7 @@ typedef struct {
 } eMIOS_Type, *eMIOS_MemMapPtr;
 
 /** Number of instances of the eMIOS module. */
-#define eMIOS_INSTANCE_COUNT                     (2u)
+#define eMIOS_INSTANCE_COUNT                     (2)
 
 /* eMIOS - Peripheral instance base addresses */
 /** Peripheral EMIOS_0 base address */
