@@ -67,13 +67,6 @@ extern "C"{
 /** @brief        Timer width*/
 #define  EMIOS_PWM_IP_TIMER_WIDTH_24BITS
 
-/** @brief        Macros to indicate eMIOS channels used. */
-#ifndef EMIOS_0_CH_0_USED
-    #define EMIOS_0_CH_0_USED
-#else
-    #error "EMIOS_0_CH_0 channel cannot be used by Pwm. Channel locked by another driver!"
-#endif
-
 /**
 * @brief        Macro to indicate that PWM driver can support call IP layer directly or must be using HLD (Autosar mode).
 * @note         In current implementation, this macro is defined equal to STD_ON if EB tresos
