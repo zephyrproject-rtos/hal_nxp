@@ -139,9 +139,9 @@ static const PSI5_MemMapPtr Psi5_Ip_axBaseAddresses[PSI5_INSTANCE_COUNT] = IP_PS
 #define PSI5_START_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Psi5_MemMap.h"
 
-static Psi5_Ip_ConfigType const *Psi5_Ip_pUsedConfig  = NULL_PTR;
-static Psi5_Ip_AvailableMessagesType Psi5_Ip_axMessages[PSI5_INSTANCE_COUNT][PSI5_CHANNEL_COUNT];
-static boolean Psi5_Ip_bDriverInitialized = FALSE;
+VAR_SEC_NOCACHE(Psi5_Ip_pUsedConfig) static Psi5_Ip_ConfigType const *Psi5_Ip_pUsedConfig  = NULL_PTR;
+VAR_SEC_NOCACHE(Psi5_Ip_axMessages) static Psi5_Ip_AvailableMessagesType Psi5_Ip_axMessages[PSI5_INSTANCE_COUNT][PSI5_CHANNEL_COUNT];
+VAR_SEC_NOCACHE(Psi5_Ip_bDriverInitialized) static boolean Psi5_Ip_bDriverInitialized = FALSE;
 
 #define PSI5_STOP_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Psi5_MemMap.h"

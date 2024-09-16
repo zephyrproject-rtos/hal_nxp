@@ -99,18 +99,18 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_00) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_00) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_01) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_01) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_02) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_02) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_03) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_03) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_04) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_04) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_05) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_05) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
