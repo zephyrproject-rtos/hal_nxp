@@ -118,3 +118,5 @@ Patch List:
   - Add missing CMAKE file to ccm32k driver driver_ccm32k.cmake.
   - Add missing CMAKE file to flash_k4 driver driver_flash_k4.cmake.
   - Add missing CMAKE file to spc driver driver_spc.cmake
+  - mcux-sdk/drivers/dspi/fsl_dspi.c, mcux-sdk/drivers/dspi/fsl_dspi.h, mcux-sdk/drivers/dspi/fsl_dspi_edma.c,
+  mcux-sdk/drivers/dspi/fsl_dspi_edma.h: add the guards for unsupport features on S32Z27x devices
