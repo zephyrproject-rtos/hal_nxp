@@ -25,6 +25,8 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
+#include <zephyr/devicetree.h>
+
 /* Standard Types */
 #include "Std_Types.h"
 
@@ -92,6 +94,15 @@ extern "C"{
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
+#define DT_DRV_COMPAT   nxp_s32_emios_pwm
+
+#define NUM_CHANNEL_USED(node_id)           COND_CODE_1(DT_ENUM_HAS_VALUE(node_id, pwm_mode, SAIC), (+ 0), (+ 1))
+#define EMIOS_NUM_CHANNELS_USED(n)          DT_INST_FOREACH_CHILD_STATUS_OKAY(n, NUM_CHANNEL_USED)
+
+#define SET_INITIAL_MODE(node_id)           IF_ENABLED(UTIL_NOT(DT_ENUM_HAS_VALUE(node_id, pwm_mode, SAIC)),    \
+                                                       (EMIOS_PWM_IP_MODE_NODEFINE,))
+#define EMIOS_PWM_IP_SET_INITIAL_MODE(n)    DT_INST_FOREACH_CHILD_STATUS_OKAY(n, SET_INITIAL_MODE)
+
 /** @brief      Enable the Emios Ip */
 #define EMIOS_PWM_IP_USED                       (STD_ON)
 
@@ -131,11 +142,11 @@ extern "C"{
 }
 
 /** @brief    Calculate the supported eMios channels */
-#define EMIOS_PWM_IP_NUM_OF_CHANNELS_USED_U8       ((uint8)1U)
+#define EMIOS_PWM_IP_NUM_OF_CHANNELS_USED_U8   0 DT_INST_FOREACH_STATUS_OKAY(EMIOS_NUM_CHANNELS_USED)
 
-#define EMIOS_PWM_IP_INITIAL_MODES        \
-{\
-        EMIOS_PWM_IP_MODE_NODEFINE\
+#define EMIOS_PWM_IP_INITIAL_MODES                                                \
+{                                                                                 \
+    DT_INST_FOREACH_STATUS_OKAY(EMIOS_PWM_IP_SET_INITIAL_MODE)                    \
 }
 
 /*==================================================================================================
