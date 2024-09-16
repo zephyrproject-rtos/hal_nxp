@@ -68,11 +68,7 @@ extern "C"{
 ==================================================================================================*/
 #if (STD_ON == EMIOS_ICU_IP_USED)
 
-#define EMIOS_ICU_CONFIG_SA_INIT_PB \
-        extern const eMios_Icu_Ip_ChannelConfigType  eMios_Icu_Ip_0_ChannelConfig_PB_Init[24U]; \
-        extern const eMios_Icu_Ip_ConfigType         eMios_Icu_Ip_0_Config_PB_Init; \
-        extern const eMios_Icu_Ip_ChannelConfigType  eMios_Icu_Ip_1_ChannelConfig_PB_Init[24U]; \
-        extern const eMios_Icu_Ip_ConfigType         eMios_Icu_Ip_1_Config_PB_Init; \
+#define EMIOS_ICU_CONFIG_SA_INIT_PB 
 
 #endif  /* EMIOS_ICU_IP_USED */
 
