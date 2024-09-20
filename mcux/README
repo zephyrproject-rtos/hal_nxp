@@ -19,6 +19,14 @@ Origin:
    https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-connectivity-framework
    TAG: MCUX_2.15.000_RW610_RC1 - MCUX_2.16.000(For connected_mcu platform files used by MCXW71)
 
+   NXP MCUXpresso SDK Multicore middleware
+   https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-multicore
+   TAG: MCUX_2.16.000
+
+   RPMsg Component
+   https://github.com/nxp-mcuxpresso/rpmsg-lite
+   TAG: v5.1.2
+
 Status:
    Some older Kinetis W family SoCs are not supported in MCUXpresso SDK, but
    instead are supported by the Kinetis Connectivity Software. This
