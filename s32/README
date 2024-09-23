@@ -69,3 +69,6 @@ Patch List for S32Z/E:
      a conversion is started inside the previous end of conversion completed callback.
    - Rename the DMAMUX_Type member CHCONF to CHCFG so that the MCUX DMA driver can be reused
      for S32Z.
+   - Remove #include "S32Z2_SPI.h" from s32/drivers/s32ze/BaseNXP/header/S32Z2.h to support
+     DSPI using the MCUX driver. This removal won't affect SPI shim driver because this header
+     file is already included inside the RTD SPI driver
