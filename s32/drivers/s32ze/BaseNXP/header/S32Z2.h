@@ -211,7 +211,6 @@
 #include "S32Z2_SMU_SRG_S.h"
 #include "S32Z2_SMU_XRDC.h"
 #include "S32Z2_SPFU.h"
-#include "S32Z2_SPI.h"
 #include "S32Z2_SRAMCTL.h"
 #include "S32Z2_SRX.h"
 #include "S32Z2_SW_ETH_MAC_PORT0.h"
