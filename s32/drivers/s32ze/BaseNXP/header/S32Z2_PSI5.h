@@ -71,8 +71,8 @@
 /** PSI5 - Size of Registers Arrays */
 #define PSI5_CHANNEL_CH_PMR_COUNT                 32u
 #define PSI5_CHANNEL_CH_SFR_COUNT                 6u
-#define PSI5_CHANNEL_CH_SFCR_COUNT                6u
-#define PSI5_CHANNEL_COUNT                        4u
+#define PSI5_CHANNEL_CH_SFCR_COUNT                6
+#define PSI5_CHANNEL_COUNT                        4
 
 /** PSI5 - Register Layout Typedef */
 typedef struct {
@@ -132,7 +132,7 @@ typedef struct {
 } PSI5_Type, *PSI5_MemMapPtr;
 
 /** Number of instances of the PSI5 module. */
-#define PSI5_INSTANCE_COUNT                      (2u)
+#define PSI5_INSTANCE_COUNT                      2
 
 /* PSI5 - Peripheral instance base addresses */
 /** Peripheral PSI5_0 base address */
