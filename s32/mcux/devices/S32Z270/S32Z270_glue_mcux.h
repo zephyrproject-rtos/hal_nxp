@@ -50,6 +50,18 @@
 #define I3C_IBIEXT2_EXT6(x)                     0
 #define I3C_IBIEXT2_EXT7(x)                     0
 
+/* SPI - Peripheral instance base addresses */
+/** Peripheral MSC_0_DSPI base address */
+#define SPI0_BASE                                  IP_MSC_0_DSPI_BASE
+/** Peripheral MSC_0_DSPI base pointer */
+#define SPI0                                       ((SPI_Type *)SPI0_BASE)
+/** Array initializer of DSPI peripheral base addresses */
+#define SPI_BASE_ADDRS                             { SPI0_BASE }
+/** Array initializer of DSPI peripheral base pointers */
+#define SPI_BASE_PTRS                              { SPI0 }
+
+#define SPI_IRQS                                   { RTU_MSC0_DSPI_IRQn }
+
 /* CAN - Peripheral instance base addresses */
 /** Peripheral CAN_0 base address */
 #define CAN0_BASE                                   IP_CE_CAN_0_BASE
