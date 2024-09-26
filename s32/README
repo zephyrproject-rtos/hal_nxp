@@ -67,3 +67,5 @@ Patch List for S32Z/E:
    - Clear the EOC flag before Adc_Sar_CheckAndCallEocNotification() is called to avoid the
      race condition that prevents the next end of conversion callback to be executed, when
      a conversion is started inside the previous end of conversion completed callback.
+   - Rename the DMAMUX_Type member CHCONF to CHCFG so that the MCUX DMA driver can be reused
+     for S32Z.

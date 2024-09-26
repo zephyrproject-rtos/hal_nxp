@@ -247,4 +247,56 @@
 /** Interrupt vectors for the LPI2C peripheral type */
 #define LPI2C_IRQS                               { RTU_LPI2C1_IRQn, RTU_LPI2C2_IRQn }
 
+/* EDMA3 - Peripheral instance base addresses */
+
+/** Peripheral DMA0 base pointer */
+#define DMA0                                      ((DMA_Type *)IP_EDMA_0_MP_BASE)
+/** Interrupt vectors for the DMA0 peripheral type */
+#define DMA0_IRQS                                 { RTU_DMA0_0_IRQn, RTU_DMA0_1_IRQn, RTU_DMA0_2_IRQn, RTU_DMA0_3_IRQn,    \
+                                                    RTU_DMA0_4_IRQn, RTU_DMA0_5_IRQn, RTU_DMA0_6_IRQn, RTU_DMA0_7_IRQn,    \
+                                                    RTU_DMA0_8_IRQn, RTU_DMA0_9_IRQn, RTU_DMA0_10_IRQn, RTU_DMA0_11_IRQn,  \
+                                                    RTU_DMA0_12_IRQn, RTU_DMA0_13_IRQn, RTU_DMA0_14_IRQn, RTU_DMA0_15_IRQn,\
+                                                    RTU_DMA0_16_IRQn, RTU_DMA0_17_IRQn, RTU_DMA0_18_IRQn, RTU_DMA0_19_IRQn,\
+                                                    RTU_DMA0_20_IRQn, RTU_DMA0_21_IRQn, RTU_DMA0_22_IRQn, RTU_DMA0_23_IRQn,\
+                                                    RTU_DMA0_24_IRQn, RTU_DMA0_25_IRQn, RTU_DMA0_26_IRQn, RTU_DMA0_27_IRQn,\
+                                                    RTU_DMA0_28_IRQn, RTU_DMA0_29_IRQn, RTU_DMA0_30_IRQn, RTU_DMA0_31_IRQn }
+
+#define DMA0_ERROR_IRQS                           { RTU_DMA0_ERR_IRQn }
+
+/** Peripheral DMA1 base pointer */
+#define DMA1                                      ((DMA_Type *)IP_EDMA_1_MP_BASE)
+/** Interrupt vectors for the DMA1 peripheral type */
+#define DMA1_IRQS                                 { RTU_DMA1_0_IRQn, RTU_DMA1_1_IRQn, RTU_DMA1_2_IRQn, RTU_DMA1_3_IRQn,    \
+                                                    RTU_DMA1_4_IRQn, RTU_DMA1_5_IRQn, RTU_DMA1_6_IRQn, RTU_DMA1_7_IRQn,    \
+                                                    RTU_DMA1_8_IRQn, RTU_DMA1_9_IRQn, RTU_DMA1_10_IRQn, RTU_DMA1_11_IRQn,  \
+                                                    RTU_DMA1_12_IRQn, RTU_DMA1_13_IRQn, RTU_DMA1_14_IRQn, RTU_DMA1_15_IRQn }
+
+#define DMA1_ERROR_IRQS                           { RTU_DMA1_ERR_IRQn }
+
+/** Peripheral DMA4 base pointer */
+#define DMA4                                      ((DMA_Type *)IP_EDMA_4_MP_BASE)
+/** Interrupt vectors for the DMA4 peripheral type */
+#define DMA4_IRQS                                 { RTU_DMA4_0_IRQn, RTU_DMA4_1_IRQn, RTU_DMA4_2_IRQn, RTU_DMA4_3_IRQn,    \
+                                                    RTU_DMA4_4_IRQn, RTU_DMA4_5_IRQn, RTU_DMA4_6_IRQn, RTU_DMA4_7_IRQn,    \
+                                                    RTU_DMA4_8_IRQn, RTU_DMA4_9_IRQn, RTU_DMA4_10_IRQn, RTU_DMA4_11_IRQn,  \
+                                                    RTU_DMA4_12_IRQn, RTU_DMA4_13_IRQn, RTU_DMA4_14_IRQn, RTU_DMA4_15_IRQn }
+
+#define DMA4_ERROR_IRQS                           { RTU_DMA4_ERR_IRQn }
+
+/** Peripheral DMA5 base pointer */
+#define DMA5                                      ((DMA_Type *)IP_EDMA_5_MP_BASE)
+/** Interrupt vectors for the DMA5 peripheral type */
+#define DMA5_IRQS                                 { RTU_DMA5_0_IRQn, RTU_DMA5_1_IRQn, RTU_DMA5_2_IRQn, RTU_DMA5_3_IRQn,    \
+                                                    RTU_DMA5_4_IRQn, RTU_DMA5_5_IRQn, RTU_DMA5_6_IRQn, RTU_DMA5_7_IRQn,    \
+                                                    RTU_DMA5_8_IRQn, RTU_DMA5_9_IRQn, RTU_DMA5_10_IRQn, RTU_DMA5_11_IRQn,  \
+                                                    RTU_DMA5_12_IRQn, RTU_DMA5_13_IRQn, RTU_DMA5_14_IRQn, RTU_DMA5_15_IRQn }
+
+#define DMA5_ERROR_IRQS                           { RTU_DMA5_ERR_IRQn }
+
+/** Array initializer of DMA peripheral base pointers */
+#define DMA_BASE_PTRS                             { DMA0, DMA1, DMA4, DMA5 }
+/** Interrupt vectors for the DMA peripheral type */
+#define DMA_IRQS                                  { DMA0_IRQS, DMA1_IRQS, DMA4_IRQS, DMA5_IRQS }
+#define DMA_ERROR_IRQS                            { DMA0_ERROR_IRQS, DMA1_ERROR_IRQS, DMA4_ERROR_IRQS, DMA5_ERROR_IRQS }
+
 #endif /* _S32Z270_GLUE_MCUX_H_ */
