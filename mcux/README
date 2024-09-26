@@ -117,3 +117,4 @@ Patch List:
   - Add missing CMAKE files device_system.cmake device_CMSIS.cmake and drivers/driver_reset.cmake to MCXW716C.
   - Add missing CMAKE file to ccm32k driver driver_ccm32k.cmake.
   - Add missing CMAKE file to flash_k4 driver driver_flash_k4.cmake.
+  - Add missing CMAKE file to spc driver driver_spc.cmake
