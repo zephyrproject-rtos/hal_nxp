@@ -135,9 +135,9 @@ static const PSI5_S_MemMapPtr s_psi5BaseAddresses[PSI5_S_INSTANCE_COUNT] = IP_PS
 #define PSI5_START_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Psi5_MemMap.h"
 
-static Psi5_S_Ip_ConfigType const * Psi5_S_UsedConfig  = NULL_PTR;
-static boolean Psi5_S_DriverInitialized = (boolean)FALSE;
-static uint32 g_psi5_s_sram_mailbox[PSI5_S_INSTANCE_COUNT][PSI5_S_CH_COUNT+1][6*3];
+VAR_SEC_NOCACHE(Psi5_S_UsedConfig) static Psi5_S_Ip_ConfigType const * Psi5_S_UsedConfig  = NULL_PTR;
+VAR_SEC_NOCACHE(Psi5_S_DriverInitialized) static boolean Psi5_S_DriverInitialized = (boolean)FALSE;
+VAR_SEC_NOCACHE(g_psi5_s_sram_mailbox) static uint32 g_psi5_s_sram_mailbox[PSI5_S_INSTANCE_COUNT][PSI5_S_CH_COUNT+1][6*3];
 
 #define PSI5_STOP_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Psi5_MemMap.h"
@@ -161,7 +161,7 @@ static boolean Psi5_S_DriverInitialized = (boolean)FALSE;
 #define PSI5_START_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
 #include "Psi5_MemMap.h"
 
-static uint32 g_psi5_s_sram_mailbox[PSI5_S_INSTANCE_COUNT][PSI5_S_CH_COUNT+1][6*3];
+VAR_SEC_NOCACHE(g_psi5_s_sram_mailbox) static uint32 g_psi5_s_sram_mailbox[PSI5_S_INSTANCE_COUNT][PSI5_S_CH_COUNT+1][6*3];
 
 #define PSI5_STOP_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
 #include "Psi5_MemMap.h"
@@ -170,7 +170,7 @@ static uint32 g_psi5_s_sram_mailbox[PSI5_S_INSTANCE_COUNT][PSI5_S_CH_COUNT+1][6*
 #define PSI5_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Psi5_MemMap.h"
 
-VAR_ALIGN(static Dma_Ip_SwTcdRegType STcd[4], 32U)
+VAR_SEC_NOCACHE(STcd) VAR_ALIGN(static Dma_Ip_SwTcdRegType STcd[4], 32U)
 
 #define PSI5_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Psi5_MemMap.h"
