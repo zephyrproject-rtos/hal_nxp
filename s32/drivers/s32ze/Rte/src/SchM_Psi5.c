@@ -1,8 +1,25 @@
-/*
- * Copyright 2021-2024 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.7
+*   Platform             : CORTEXM
+*   Peripheral           : 
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.7.0
+*   Autosar Revision     : ASR_REL_4_7_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 2.0.0
+*   Build Version        : S32ZE_RTD_2_0_0_D2407_ASR_REL_4_7_REV_0000_20240726
+*
+*   Copyright 2021-2024 NXP
+*
+*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
+*   used strictly in accordance with the applicable license terms.  By expressly 
+*   accepting such terms or by downloading, installing, activating and/or otherwise 
+*   using the software, you are agreeing that you have read, and that you agree to 
+*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
 
 /**
 *   @file    SchM_Psi5.c
@@ -99,18 +116,18 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_00) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_00) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_01) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_01) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_02) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_02) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_03) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_03) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_04) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_04) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_PSI5_EXCLUSIVE_AREA_05) static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_PSI5_EXCLUSIVE_AREA_05) static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_03[NUMBER_OF_CORES];
+static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_04[NUMBER_OF_CORES];
+static volatile uint32 msr_PSI5_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_PSI5_EXCLUSIVE_AREA_05[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"

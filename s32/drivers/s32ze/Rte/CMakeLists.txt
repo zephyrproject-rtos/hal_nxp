@@ -11,3 +11,4 @@ zephyr_library_sources_ifdef(CONFIG_CAN_NXP_S32_CANXL src/SchM_Can_43_CANEXCEL.c
 zephyr_library_sources_ifdef(CONFIG_ETH_NXP_S32_NETC src/SchM_Eth_43_NETC.c)
 zephyr_library_sources_ifdef(CONFIG_ETH_NXP_S32_NETC src/SchM_EthSwt_43_NETC.c)
 zephyr_library_sources_ifdef(CONFIG_PSI5_NXP_S32 src/SchM_Psi5.c)
+zephyr_library_sources_ifdef(CONFIG_PSI5_S_NXP_S32 src/SchM_Psi5.c)
