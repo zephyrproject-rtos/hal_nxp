@@ -59,10 +59,10 @@ extern "C"{
 #define HSE_IP_MU_7                          ((uint8)7U)
 
 /* Max number of MU instances */
-#define HSE_IP_NUM_OF_MU_INSTANCES               (8U)
+#define HSE_IP_NUM_OF_MU_INSTANCES               (8)
 
 /* Max number of channels per MU interface */
-#define HSE_IP_NUM_OF_CHANNELS_PER_MU            (16U)
+#define HSE_IP_NUM_OF_CHANNELS_PER_MU            (16)
 
 /* Pre-processor switch to enable/disable development error detection for Hse Ip API */
 #define HSE_IP_DEV_ERROR_DETECT                  (STD_OFF)
