@@ -1,0 +1,10 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_flash_config_mimxrt700evk
+config MCUX_USE_driver_flash_config_mimxrt700evk
+    bool "Flash config"
+    select MCUX_USE_driver_iap
+    help
+      flash config block
