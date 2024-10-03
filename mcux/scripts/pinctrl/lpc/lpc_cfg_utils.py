@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2022, NXP
+# Copyright 2022,2024 NXP
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -43,7 +43,7 @@ class MUXOption:
         if imx_rt:
             # RT 6xx/5xx series has different function register
             func_name = 'FSEL'
-            pio_regex = re.compile(r'IOPCTL_PIO(\d+)_(\d+)')
+            pio_regex = re.compile(r'IOPCTL(\d+)_PIO(\d+)_(\d+)')
         else:
             func_name = 'FUNC'
             pio_regex = re.compile(r'IOCON_PIO(\d)_*(\d+)')
@@ -211,12 +211,18 @@ class SignalPin:
         """
         # lpc pin names are formatted as PIOx_y
         pin_regex = re.search(r'PIO(\d+)_(\d+)', pin.attrib['name'])
-        if (imx_rt and (pin.attrib['name'] == 'PMIC_I2C_SCL' or
-            pin.attrib['name'] == 'PMIC_I2C_SDA')):
-            # iMX RT has special pins without a mux setting
+        if (imx_rt and (pin.attrib['name'] == 'PMIC_I2C_SDA')):
+            # iMX RT700 has special pins without a mux setting
+            # Other RT 3 digtal platforms don't care port/pin parameter
             self._name = pin.attrib['name']
-            self._port = 0
-            self._pin = 0
+            self._port = 10
+            self._pin = 30
+        elif (imx_rt and (pin.attrib['name'] == 'PMIC_I2C_SCL')):
+            # iMX RT700 has special pins without a mux setting
+             # Other RT 3 digtal platforms don't care port/pin parameter
+            self._name = pin.attrib['name']
+            self._port = 10
+            self._pin = 31
         elif pin_regex is None:
             logging.debug('Could not match pin name %s', pin.attrib['name'])
             self._name = ''
@@ -606,15 +612,20 @@ class NXPSdkUtil:
         signal_root = signal_tree.getroot()
 
         self._part_num = signal_root.find("./part_information/part_number").get('id')
+        print(self._part_num)
         if 'MIMXRT' in self._part_num:
             # IMX RT600/500 series part. Different register layout and pin names
             self._imx_rt = True
         else:
             self._imx_rt = False
 
+        if 'MIMXRT7' in self._part_num:
+            self._imx_rt700 = True
+
         logging.info("Loaded XML for %s", self._part_num)
 
         pins_node = signal_root.find("pins")
+        print(self._imx_rt)
         for pin in pins_node:
             signal = SignalPin(pin, self._imx_rt)
             # Only add valid signal pins to list
@@ -642,7 +653,21 @@ class NXPSdkUtil:
             " */\n"
             "\n")
 
-        if self._imx_rt:
+        if self._imx_rt & self._imx_rt700:
+            # Notes on the below macro:
+            # We store the pin and port values as an offset, because some pins
+            # do not follow a consistent offset. We use 12 bits to store this
+            # offset.
+            # Mux values range from 0-15, so we give 4 bits
+            # shift the offset to the MSBs of the mux value, so they
+            # don't conflict with pin configuration settings
+            # Store the mux value at the offset it will actually be written to the
+            # configuration register
+            mux_macro = ("#define IOPCTL_MUX(port_no, pin_no, mux)\t\t\\\n"
+                "\t((((port_no) & 0xFF) << 24) |\t\t\\\n"
+                "\t(((pin_no) & 0xFF) << 16) |\t\t\\\n"                
+                "\t(((mux) & 0xF) << 0))\n\n")
+        elif self._imx_rt:
             # Notes on the below macro:
             # We store the pin and port values as an offset, because some pins
             # do not follow a consistent offset. We use 12 bits to store this
@@ -698,7 +723,10 @@ class NXPSdkUtil:
                     offset = mux.get_offset()
                     label = mux.get_name()
                     mux = mux.get_mux()
-                    if self._imx_rt:
+                    if self._imx_rt & self._imx_rt700:
+                        file.write(f"#define {label}_{sig_pin} IOPCTL_MUX({sig_port}, {sig_pin}, {mux}) "
+                            f"/* PIO{sig_port}_{sig_pin} */\n")
+                    elif self._imx_rt:
                         file.write(f"#define {label} IOPCTL_MUX({offset}, {mux}) "
                             f"/* PIO{sig_port}_{sig_pin} */\n")
                     else:
