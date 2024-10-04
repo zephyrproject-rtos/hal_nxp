@@ -38,3 +38,10 @@ blobs:
     url: https://github.com/nxp-mcuxpresso/mcux-sdk/raw/MCUX_2.15.000_RW610_K32W1/components/conn_fwloader/fw_bin/rw61x_sb_wifi_a2.bin
     description: "WiFi firmware for RW612 A2 boards"
     doc-url: https://github.com/nxp-mcuxpresso/mcux-sdk/tree/main/components/conn_fwloader/readme.txt
+  - path: mcxw71/mcxw71_nbu_ble.sb3
+    sha256: 4da8eee6dbc14ef52ec3b1ed678d024a4df78151e350490aaa468ffd1b07f64c
+    type: img
+    version: '1.9.14.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-bluetooth-controller/raw/refs/tags/MCUX_2.16.000/bin/mcxw71_nbu_ble_1_9_14_0.sb3
+    description: "BLE Controller for MCXW71 boards"
