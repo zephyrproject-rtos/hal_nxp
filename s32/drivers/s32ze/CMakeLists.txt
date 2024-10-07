@@ -1,4 +1,4 @@
-# Copyright 2022-2024 NXP
+# Copyright 2022-2025 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 add_subdirectory(BaseNXP)
@@ -17,3 +17,4 @@ add_subdirectory_ifdef(CONFIG_CAN_NXP_S32_CANXL Can_CANEXCEL)
 add_subdirectory_ifdef(CONFIG_NXP_S32_EMIOS Mcl)
 add_subdirectory_ifdef(CONFIG_PWM_NXP_S32_EMIOS Pwm)
 add_subdirectory_ifdef(CONFIG_MEMC_NXP_S32_QSPI Mem_EXFLS)
+add_subdirectory_ifdef(CONFIG_SENT_NXP_S32 Sent)
