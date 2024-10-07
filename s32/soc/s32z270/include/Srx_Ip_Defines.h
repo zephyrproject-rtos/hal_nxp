@@ -28,6 +28,8 @@ extern "C"{
 
 #include "Mcal.h"
 
+#define DT_DRV_COMPAT nxp_s32_sent_controller
+#include <zephyr/devicetree.h>
 
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
@@ -126,14 +128,7 @@ extern "C"{
 * @details       Number of configured controllers as defined by user in configuration tool
 *
 */
-#define SRX_IP_INSTANCE_COUNT    1U
-/*
-* @brief         Max number of configured channels
-* @details       Max number of configured channels as defined by user in configuration tool
-*
-*/
-
-#define SRX_IP_CHANNEL_COUNT    1U
+#define SRX_IP_INSTANCE_COUNT    DT_NUM_INST_STATUS_OKAY(DT_DRV_COMPAT)
 
 #define SRX_IP_ISR_PROCESS_ERROR_HANDLER_CTRL0_COMBINED
 
