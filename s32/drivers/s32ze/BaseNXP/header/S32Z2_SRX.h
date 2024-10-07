@@ -69,7 +69,7 @@
  */
 
 /** SRX - Size of Registers Arrays */
-#define SRX_CNL_COUNT                             8u
+#define SRX_CNL_COUNT                             8
 
 /** SRX - Register Layout Typedef */
 typedef struct {
@@ -111,7 +111,7 @@ typedef struct {
 } SRX_Type, *SRX_MemMapPtr;
 
 /** Number of instances of the SRX module. */
-#define SRX_INSTANCE_COUNT                       (2u)
+#define SRX_INSTANCE_COUNT                       2
 
 /* SRX - Peripheral instance base addresses */
 /** Peripheral SRX_0 base address */
