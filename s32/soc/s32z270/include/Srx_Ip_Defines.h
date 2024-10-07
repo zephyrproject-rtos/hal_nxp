@@ -28,6 +28,7 @@ extern "C"{
 
 #include "Mcal.h"
 
+#include <zephyr/devicetree.h>
 
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
@@ -126,14 +127,7 @@ extern "C"{
 * @details       Number of configured controllers as defined by user in configuration tool
 *
 */
-#define SRX_IP_INSTANCE_COUNT    1U
-/*
-* @brief         Max number of configured channels
-* @details       Max number of configured channels as defined by user in configuration tool
-*
-*/
-
-#define SRX_IP_CHANNEL_COUNT    1U
+#define SRX_IP_INSTANCE_COUNT    DT_NUM_INST_STATUS_OKAY(nxp_s32_sent)
 
 #define SRX_IP_ISR_PROCESS_ERROR_HANDLER_CTRL0_COMBINED
 
