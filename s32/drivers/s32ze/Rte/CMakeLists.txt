@@ -1,4 +1,4 @@
-# Copyright 2022-2024 NXP
+# Copyright 2022-2025 NXP
 # SPDX-License-Identifier: BSD-3-Clause
 
 zephyr_include_directories(include)
@@ -16,3 +16,4 @@ if(CONFIG_PWM_NXP_S32_EMIOS AND CONFIG_PWM_CAPTURE)
     zephyr_library_sources(src/SchM_Icu.c)
 endif()
 zephyr_library_sources_ifdef(CONFIG_MEMC_NXP_S32_QSPI src/SchM_Mem_43_EXFLS.c)
+zephyr_library_sources_ifdef(CONFIG_SENT_NXP_S32 src/SchM_Sent.c)
