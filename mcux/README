@@ -17,7 +17,15 @@ Origin:
 
    NXP MCUXpresso SDK Connectivity Framework
    https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-connectivity-framework
-   TAG: MCUX_2.15.000_RW610_RC1
+   TAG: MCUX_2.15.000_RW610_RC1 - MCUX_2.16.000(For connected_mcu platform files used by MCXW71)
+
+   NXP MCUXpresso SDK Multicore middleware
+   https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-multicore
+   TAG: MCUX_2.16.000
+
+   RPMsg Component
+   https://github.com/nxp-mcuxpresso/rpmsg-lite
+   TAG: v5.1.2
 
 Status:
    Some older Kinetis W family SoCs are not supported in MCUXpresso SDK, but
@@ -88,6 +96,7 @@ Patch List:
   - mcux-sdk-middleware-connectivity-framework: Add new CMake file connectivity_framework.cmake
   - mcux-sdk-middleware-connectivity-framework: rw61x: Fix assertion OSA Mutex Alloc fail
   - mcux-sdk-middleware-connectivity-framework: rw61x: Remove static from hci_cal_data buffers to be used inside Zephyr
+  - mcux-sdk-middleware-connectivity-framework: connected_mcu: Modified to remove a large amount of dependencies and adapt code to be supported with Zephyr
   - Patched mcux-sdk\components\conn_fwloader\mcux-sdk\components\conn_fwloader\driver_conn_fwloader.cmake for TFM support
   - mcux-sdk/drivers/s3mu/fsl_s3mu.c: rename _BIT macro to avoid collision from util_macro.h in Zephyr
   - Modifed mcux\mcux-sdk\drivers\mipi_dsi_split\fsl_mipi_dsi.c line 541 to force 8.0 to float (8.0f) to avoid [-Double-promotion] warning
@@ -108,3 +117,4 @@ Patch List:
   - Add missing CMAKE files device_system.cmake device_CMSIS.cmake and drivers/driver_reset.cmake to MCXW716C.
   - Add missing CMAKE file to ccm32k driver driver_ccm32k.cmake.
   - Add missing CMAKE file to flash_k4 driver driver_flash_k4.cmake.
+  - Add missing CMAKE file to spc driver driver_spc.cmake

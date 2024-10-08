@@ -32,3 +32,20 @@ if(CONFIG_SOC_SERIES_RW6XX)
                                           COMBO_FW_ADDRESS=0U)
     endif()
 endif()
+
+if(CONFIG_SOC_SERIES_MCXW)
+    target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform.c
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform_ble.c
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform_ics.c
+    )
+
+    zephyr_include_directories(
+        ${CMAKE_CURRENT_LIST_DIR}/Common
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/configs
+    )
+
+    set(CONFIG_USE_component_osa_zephyr true)
+    include(set_component_osa)
+endif()

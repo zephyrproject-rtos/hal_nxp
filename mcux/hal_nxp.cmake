@@ -7,6 +7,7 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flexio
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/dmamux
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/lists
 )
 
 if(CONFIG_CPU_CORTEX_A)
@@ -264,6 +265,9 @@ include_driver_ifdef(CONFIG_NXP_RF_IMU			imu		driver_imu)
 include_driver_ifdef(CONFIG_TRDC_MCUX_TRDC              trdc            driver_trdc)
 include_driver_ifdef(CONFIG_S3MU_MCUX_S3MU              s3mu            driver_s3mu)
 include_driver_ifdef(CONFIG_PINCTRL_NXP_KINETIS         port            driver_port)
+if(CONFIG_BT_NXP)
+include_driver_ifdef(CONFIG_SOC_SERIES_MCXW		spc		driver_spc)
+endif()
 
 if (${MCUX_DEVICE} MATCHES "MIMXRT1189")
   include_driver_ifdef(CONFIG_ETH_NXP_IMX_NETC	netc/socs/imxrt1180	driver_netc_soc_imxrt1180)
@@ -444,12 +448,19 @@ if(CONFIG_NXP_FW_LOADER)
 endif()
 
 if(CONFIG_NXP_RF_IMU)
-    list(APPEND CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/rpmsg
-        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/imu
-        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/gdma
-    )
+  if(CONFIG_SOC_SERIES_RW6XX)
+      list(APPEND CMAKE_MODULE_PATH
+          ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/rpmsg
+          ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/imu
+          ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/gdma
+      )
     include(component_wireless_imu_adapter)
+  elseif(CONFIG_SOC_SERIES_MCXW)
+      zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/rpmsg)
+      zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/rpmsg/fsl_adapter_rpmsg.c)
+      include(component_lists)
+      zephyr_compile_definitions(HAL_RPMSG_SELECT_ROLE=0U)
+  endif()
 endif()
 
 if(${MCUX_DEVICE} MATCHES "MCXW")
