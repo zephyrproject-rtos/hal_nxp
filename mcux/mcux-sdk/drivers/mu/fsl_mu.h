@@ -374,6 +374,28 @@ static inline uint32_t MU_GetStatusFlags(MU_Type *base)
 }
 
 /*!
+ * brief Return the RX status flags in reverse order.
+ *
+ * This function return the RX status flags in reverse order.
+ * 
+ * @code
+ * status_reg = MU_GetRxStatusFlags(base);
+ * @endcode
+ *
+ * @param base MU peripheral base address.
+ * @return MU RX status
+ */
+
+static inline uint32_t MU_GetRxStatusFlags(MU_Type *base)
+{
+    uint32_t flags = 0;
+
+    flags = ((MU_GetStatusFlags(base)>>kMU_Rx0FullFlag) | 0x0000000F);
+
+    return flags;
+}
+
+/*!
  * @brief Gets the MU IRQ pending status.
  *
  * This function returns the bit mask of the pending MU IRQs.
