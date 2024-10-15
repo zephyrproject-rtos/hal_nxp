@@ -4660,6 +4660,29 @@ endif()
 
 endif()
 
+if (CONFIG_USE_driver_rtwdog)
+# Add set(CONFIG_USE_driver_rtwdog true) in config.cmake to use this component
+
+message("driver_rtwdog component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MIMXRT1176xxxxx) AND CONFIG_USE_driver_common)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rtwdog/fsl_rtwdog.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/rtwdog/.
+)
+
+else()
+
+message(SEND_ERROR "driver_rtwdog.MIMXRT1176 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
 
 if (CONFIG_USE_driver_xbara)
 # Add set(CONFIG_USE_driver_xbara true) in config.cmake to use this component
