@@ -1544,16 +1544,16 @@ static void HAL_ImuTaskDeinit(uint8_t link)
 #ifndef __ZEPHYR__
         (void)OSA_EventDestroy((osa_event_handle_t)ImuQ13FlagsRef);
         (void)OSA_TaskDestroy(ImuTaskHandleCpu13);
-#endif
         imu_task_flag &= ~(1U << link);
+#endif
     }
     else if (link == kIMU_LinkCpu2Cpu3 && (imu_task_flag & (1U << link)) != 0)
     {
 #ifndef __ZEPHYR__
         (void)OSA_EventDestroy((osa_event_handle_t)ImuQ23FlagsRef);
         (void)OSA_TaskDestroy(ImuTaskHandleCpu23);
-#endif
         imu_task_flag &= ~(1U << link);
+#endif
     }
     else
     {
