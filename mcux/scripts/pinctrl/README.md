@@ -25,6 +25,7 @@ for documentation on how to download data sources.
 The following SOC lines are supported:
 - i.MX RT10xx series
 - i.MX RT11xx series
+- i.MX RT7xx series
 - i.MX RT6xx series
 - i.MX RT5xx series
 - Kinetis K8x, K6x, K2x series
