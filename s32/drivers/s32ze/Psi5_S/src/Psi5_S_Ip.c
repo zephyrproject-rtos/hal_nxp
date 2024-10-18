@@ -170,7 +170,9 @@ VAR_SEC_NOCACHE(g_psi5_s_sram_mailbox) static uint32 g_psi5_s_sram_mailbox[PSI5_
 #define PSI5_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Psi5_MemMap.h"
 
-VAR_SEC_NOCACHE(STcd) VAR_ALIGN(static Dma_Ip_SwTcdRegType STcd[4], 32U)
+#if (STD_ON == PSI5_S_IP_DMA_IS_USED)
+VAR_ALIGN(static Dma_Ip_SwTcdRegType STcd[4], 32U)
+#endif
 
 #define PSI5_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #include "Psi5_MemMap.h"
