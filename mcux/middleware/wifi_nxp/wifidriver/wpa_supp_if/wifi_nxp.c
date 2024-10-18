@@ -162,7 +162,6 @@ static const wifi_nxp_callbk_fns_t supp_callbk_fns = {
     .mgmt_rx_callbk_fn                  = wifi_nxp_wpa_supp_event_proc_mgmt_rx,
     .get_wiphy_callbk_fn                = wifi_nxp_wpa_supp_event_get_wiphy,
     .is_supp_scan_in_progress_callbk_fn = wifi_nxp_wpa_is_supp_scan_in_progress,
-    .signal_change_callbk_fn            = wifi_nxp_wpa_supp_event_signal_change,
 };
 
 int wifi_supp_init(void)
