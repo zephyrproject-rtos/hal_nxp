@@ -894,6 +894,33 @@ static inline void MU_ClearGeneralPurposeStatusFlags(MU_Type *base, uint32_t fla
 }
 
 /*!
+ * brief Return the RX status flags in reverse order.
+ *
+ * This function return the RX status flags in reverse order.
+ * 
+ * @code
+ * status_reg = MU_GetRxStatusFlags(base);
+ * @endcode
+ *
+ * @param base MU peripheral base address.
+ * @return MU RX status flags in reverse order
+ */
+
+static inline uint32_t MU_GetRxStatusFlags(MU_Type *base)
+{
+    uint32_t flags = 0;
+
+    flags = ((MU_GetStatusFlags(base)>>kMU_Rx0FullFlag) | 0x0000000F);
+
+    flags = (((flags>>MU_RSR_RF3_SHIFT)<<MU_RSR_RF0_SHIFT) |
+             ((flags>>MU_RSR_RF2_SHIFT)<<MU_RSR_RF1_SHIFT) |
+             ((flags>>MU_RSR_RF1_SHIFT)<<MU_RSR_RF2_SHIFT) |
+             ((flags>>MU_RSR_RF0_SHIFT)<<MU_RSR_RF3_SHIFT));
+
+    return flags;
+}
+
+/*!
  * @brief Triggers general purpose interrupts to the other core.
  *
  * This function triggers the specific general purpose interrupts to the other core.
