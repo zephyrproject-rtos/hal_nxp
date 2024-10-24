@@ -11,6 +11,12 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 )
 
 #OR Logic component
+if(${MCUX_DEVICE} STREQUAL "MIMXRT798S_cm33_core0")
+    include(driver_lpuart_edma)
+endif()
+if(${MCUX_DEVICE} STREQUAL "MIMXRT798S_cm33_core1")
+    include(driver_lpuart_edma)
+endif()
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1166_cm4")
     include(driver_lpuart_edma)
 endif()
