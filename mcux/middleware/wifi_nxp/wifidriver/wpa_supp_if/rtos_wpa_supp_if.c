@@ -2669,6 +2669,25 @@ void wifi_nxp_wpa_supp_event_proc_dfs_cac_finished(void *if_priv, nxp_wifi_dfs_c
     }
 }
 
+void wifi_nxp_wpa_supp_event_signal_change(void *if_priv, t_s16 *curr_rssi)
+{
+    struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
+    union wpa_event_data event;
+
+    wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
+
+    if (wifi_if_ctx_rtos == NULL)
+    {
+        wifi_e("%s: wifi_if_ctx_rtos is NULL", __func__);
+        return;
+    }
+    memset(&event, 0, sizeof(event));
+    event.signal_change.above_threshold = 0;
+    event.signal_change.current_signal = abs(*curr_rssi);
+
+    wifi_if_ctx_rtos->supp_callbk_fns.signal_change(wifi_if_ctx_rtos->supp_drv_if_ctx, &event);
+}
+
 #if CONFIG_WIFI_SOFTAP_SUPPORT
 int wifi_nxp_wpa_supp_init_ap(void *if_priv, struct wpa_driver_associate_params *params)
 {
