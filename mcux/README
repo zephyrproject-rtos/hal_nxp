@@ -120,3 +120,4 @@ Patch List:
   - Add missing CMAKE file to spc driver driver_spc.cmake
   - mcux-sdk/drivers/dspi/fsl_dspi.c, mcux-sdk/drivers/dspi/fsl_dspi.h, mcux-sdk/drivers/dspi/fsl_dspi_edma.c,
   mcux-sdk/drivers/dspi/fsl_dspi_edma.h: add the guards for unsupport features on S32Z27x devices
+  - drivers: irqsteer: adjust CHn_MASK index computation
