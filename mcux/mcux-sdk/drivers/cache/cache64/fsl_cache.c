@@ -108,7 +108,6 @@ uint32_t CACHE64_GetInstanceByAddr(uint32_t address)
         i++;
     }
 		
-    assert(false);
     return 0xFFFFFFFFUL;
 }
 

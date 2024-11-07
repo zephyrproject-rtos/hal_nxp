@@ -121,3 +121,6 @@ Patch List:
   - mcux-sdk/drivers/dspi/fsl_dspi.c, mcux-sdk/drivers/dspi/fsl_dspi.h, mcux-sdk/drivers/dspi/fsl_dspi_edma.c,
   mcux-sdk/drivers/dspi/fsl_dspi_edma.h: add the guards for unsupport features on S32Z27x devices
   - drivers: irqsteer: adjust CHn_MASK index computation
+  - mcux-sdk/drivers/cache/cache64/fsl_cache.c: remove invalid assertion when
+    CACHE64_GetInstanceByAddr() is passed an address not managed by the CACHE64
+    controller
