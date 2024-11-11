@@ -827,4 +827,35 @@ typedef struct {
  * @}
  */ /* end of group ADC_Peripheral_Access_Layer */
 
+ /* ----------------------------------------------------------------------------
+   -- ENET Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup ENET_Peripheral_Access_Layer ENET Peripheral Access Layer
+ * @{
+ */
+
+ /* ENET - Peripheral instance base addresses */
+/** Peripheral ENET base address */
+#define ENET_BASE                                IP_ENET_BASE
+/** Peripheral ENET base pointer */
+#define ENET                                     IP_ENET
+/** Array initializer of ENET peripheral base addresses */
+#define ENET_BASE_ADDRS                          IP_ENET_BASE_ADDRS
+/** Array initializer of ENET peripheral base pointers */
+#define ENET_BASE_PTRS                           IP_ENET_BASE_PTRS
+/** Interrupt vectors for the ENET peripheral type */
+#define ENET_Transmit_IRQS                       { ENET_TX_Buffer_IRQn }
+#define ENET_Receive_IRQS                        { ENET_RX_Buffer_IRQn }
+#define ENET_Error_IRQS                          { ENET_PRE_IRQn }
+#define ENET_1588_Timer_IRQS                     { ENET_Timer_IRQn }
+#define ENET_Ts_IRQS                             { ENET_Timer_IRQn }
+/* ENET Buffer Descriptor and Buffer Address Alignment. */
+#define ENET_BUFF_ALIGNMENT                      (16U)
+
+/*!
+ * @}
+ */ /* end of group ENET_Peripheral_Access_Layer */
+
 #endif /* _S32K148_DEVICE_H_ */
