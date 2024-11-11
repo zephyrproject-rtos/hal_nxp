@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2022, NXP
+# Copyright (c) 2022,2024 NXP
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -23,7 +23,7 @@ class MUXOption:
     """
     Internal class representing a mux option on the SOC
     """
-    def __init__(self, connection, imx_rt = False):
+    def __init__(self, connection, imx_rt = ''):
         """
         Initializes a mux option
         @param connection XML connection option from signal_configuration.xml
@@ -35,12 +35,18 @@ class MUXOption:
             return
         # Get MUX settings
         self._offset = -1
+        # Get default instance index
+        self._index = 0
         for periph in connection.iter('peripheral_signal_ref'):
             self._periph = periph.attrib.get('peripheral')
             self._signal = periph.attrib.get('signal')
             self._channel = periph.attrib.get('channel')
         self._mux_overrides = {}
-        if imx_rt:
+        if imx_rt == 'MIMXRT7XX':
+            # RT 7xx series has different function register and instance number
+            func_name = 'FSEL'
+            pio_regex = re.compile(r'IOPCTL(\d+)_PIO(\d+)_(\d+)')
+        elif imx_rt == 'MIMXRT5/6XX':
             # RT 6xx/5xx series has different function register
             func_name = 'FSEL'
             pio_regex = re.compile(r'IOPCTL_PIO(\d+)_(\d+)')
@@ -60,11 +66,23 @@ class MUXOption:
                     # {Peripheral}_{Signal}{Channel}_{Pin}
                     self._name = f"{self._periph}_{self._signal}{self._channel}"
                 # Append name of pin
-                self._name += f"_PIO{match.group(1)}_{match.group(2)}"
-                port = int(match.group(1))
-                pin = int(match.group(2))
+                if imx_rt == 'MIMXRT7XX':
+                    self._name += f"_PIO{match.group(2)}_{match.group(3)}"
+                    self._index = int(match.group(1))
+                    port = int(match.group(2))
+                    pin = int(match.group(3))
+                    if port < 4:
+                        self._offset = (port * 32) + pin
+                    elif port < 8:
+                        self._offset = ((port - 4) * 32) + pin
+                    else:
+                        self._offset = ((port - 8) * 32) + pin
+                else:
+                    self._name += f"_PIO{match.group(1)}_{match.group(2)}"
+                    port = int(match.group(1))
+                    pin = int(match.group(2))
+                    self._offset = (port * 32) + pin
                 self._mux = int(val, 16)
-                self._offset = (port * 32) + pin
             elif match and field == 'MODE':
                 # MUX overrides pullup/pulldown mode
                 if val == '0':
@@ -95,12 +113,20 @@ class MUXOption:
                 if val == '0x1':
                     self._mux_overrides['amena'] = 'enabled'
 
-        if self._name == 'PMIC_I2C_SCL' and imx_rt:
+        if self._name == 'PMIC_I2C_SCL' and imx_rt == "MIMXRT5/6XX":
             # RT600/500 have special pmic I2C pins
             self._offset = 0x100
             self._mux = 0
-        elif self._name == 'PMIC_I2C_SDA' and imx_rt:
+        elif self._name == 'PMIC_I2C_SDA' and imx_rt == "MIMXRT5/6XX":
             self._offset = 0x101
+            self._mux = 0
+        elif self._name == 'PMIC_I2C_SCL' and imx_rt == "MIMXRT7XX":
+            self._index = 1
+            self._offset = 0x96
+            self._mux = 0
+        elif self._name == 'PMIC_I2C_SDA' and imx_rt == "MIMXRT7XX":
+            self._index = 1
+            self._offset = 0x97
             self._mux = 0
         if re.match(r'^\d', self._name):
             # If string starts with a digit, it will not be a valid C name
@@ -160,6 +186,12 @@ class MUXOption:
         """
         return self._pin
 
+    def get_index(self):
+        """
+        Get mux instance index
+        """
+        return self._index
+
     def get_mux(self):
         """
         Get mux register write value
@@ -204,7 +236,7 @@ class SignalPin:
     """
     Internal class representing a signal on the SOC
     """
-    def __init__(self, pin, imx_rt = False):
+    def __init__(self, pin, imx_rt = ''):
         """
         Initializes a SignalPin object
         @param pin: pin XML object from signal_configuration.xml
@@ -353,7 +385,7 @@ class PinGroup:
     """
     Internal class representing pin group
     """
-    def __init__(self, function, signal_map, imx_rt = False):
+    def __init__(self, function, signal_map, imx_rt = ''):
         """
         Creates a pin group
         @param function: function xml structure from MEX configuration file
@@ -606,11 +638,14 @@ class NXPSdkUtil:
         signal_root = signal_tree.getroot()
 
         self._part_num = signal_root.find("./part_information/part_number").get('id')
-        if 'MIMXRT' in self._part_num:
+        if 'MIMXRT7' in self._part_num:
             # IMX RT600/500 series part. Different register layout and pin names
-            self._imx_rt = True
+            self._imx_rt = 'MIMXRT7XX'
+        elif 'MIMXRT' in self._part_num:
+            # IMX RT600/500 series part. Different register layout and pin names
+            self._imx_rt = 'MIMXRT5/6XX'    
         else:
-            self._imx_rt = False
+            self._imx_rt = ''
 
         logging.info("Loaded XML for %s", self._part_num)
 
@@ -644,6 +679,9 @@ class NXPSdkUtil:
 
         if self._imx_rt:
             # Notes on the below macro:
+            # Due to IOPCTL instance number is nonunique, index variable is
+            # introduced to represent the label of IOPCTL instance. We use
+            # 4 bits to store index value.
             # We store the pin and port values as an offset, because some pins
             # do not follow a consistent offset. We use 12 bits to store this
             # offset.
@@ -652,8 +690,9 @@ class NXPSdkUtil:
             # don't conflict with pin configuration settings
             # Store the mux value at the offset it will actually be written to the
             # configuration register
-            mux_macro = ("#define IOPCTL_MUX(offset, mux)\t\t\\\n"
-                "\t((((offset) & 0xFFF) << 20) |\t\t\\\n"
+            mux_macro = ("#define IOPCTL_MUX(index, offset, mux)\t\t\\\n"
+                "\t((((index) & 0xF) << 16) |\t\t\\\n"
+                "\t(((offset) & 0xFFF) << 20) |\t\t\\\n"
                 "\t(((mux) & 0xF) << 0))\n\n")
         else:
             # Notes on the below macro:
@@ -695,11 +734,12 @@ class NXPSdkUtil:
                 sig_port = pin.get_port()
                 sig_pin = pin.get_pin()
                 for mux in sorted(pin.get_mux_options()):
+                    index = mux.get_index()
                     offset = mux.get_offset()
                     label = mux.get_name()
                     mux = mux.get_mux()
                     if self._imx_rt:
-                        file.write(f"#define {label} IOPCTL_MUX({offset}, {mux}) "
+                        file.write(f"#define {label} IOPCTL_MUX({index}, {offset}, {mux}) "
                             f"/* PIO{sig_port}_{sig_pin} */\n")
                     else:
                         file.write(f"#define {label} IOCON_MUX({offset}, {pin_type}, {mux}) "
