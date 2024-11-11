@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright 2023, NXP
+# Copyright 2023,2024 NXP
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -63,6 +63,9 @@ def processor_to_controller(processor_name):
     if "IMXRT1" in processor_name:
         # Use IMX config tools
         return 'IOMUX'
+    if "IMXRT7" in processor_name:
+        # LPC config tools
+        return 'IOCON'
     if "IMXRT6" in processor_name:
         # LPC config tools
         return 'IOCON'
