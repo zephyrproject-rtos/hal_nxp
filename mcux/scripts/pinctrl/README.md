@@ -36,7 +36,7 @@ See [unsupported SOCs](#unsupported-socs) for more information.
 
 ## Data Packs
 Data packs for processors can be downloaded from
-[NXP's MCUXpresso SDK builder](https://mcuxpresso.nxp.com/en/select_config_tools_data).
+[NXP's MCUXpresso SDK builder](https://mcuxpresso.nxp.com/en/select-config-tools-data).
 Select the "offline data"
 section under "MCUXpresso Config Tools" in the sidebar, and locate your
 processor to download the relevant data pack. Make sure you select version 13.
