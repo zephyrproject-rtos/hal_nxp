@@ -72,10 +72,19 @@ def processor_to_controller(processor_name):
     if "IMXRT5" in processor_name:
         # LPC config tools
         return 'IOCON'
-    if "LPC55" in processor_name:
+    if "IMX8M" in processor_name:
+        # IMX config tools
+        return 'IOMUX'
+    if "IMX9" in processor_name:
+        # IMX config tools
+        return 'IOMUX'
+    if "LPC5" in processor_name:
         # LPC config tools
         return 'IOCON'
     if "MK" in processor_name:
+        # Kinetis config tools
+        return 'PORT'
+    if "K32" in processor_name:
         # Kinetis config tools
         return 'PORT'
     if "MCX" in processor_name:
