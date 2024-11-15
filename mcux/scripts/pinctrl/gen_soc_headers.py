@@ -69,10 +69,19 @@ def processor_to_controller(processor_name):
     if "IMXRT5" in processor_name:
         # LPC config tools
         return 'IOCON'
-    if "LPC55" in processor_name:
+    if "IMX8M" in processor_name:
+        # IMX config tools
+        return 'IOMUX'
+    if "IMX9" in processor_name:
+        # IMX config tools
+        return 'IOMUX'
+    if "LPC5" in processor_name:
         # LPC config tools
         return 'IOCON'
     if "MK" in processor_name:
+        # Kinetis config tools
+        return 'PORT'
+    if "K32" in processor_name:
         # Kinetis config tools
         return 'PORT'
     if "MCX" in processor_name:
@@ -117,8 +126,8 @@ def main():
 
     data_version = get_pack_version(temp_dir.name)
     print(f"Found data pack version {data_version}")
-    if round(data_version) != 14:
-        print("Warning: This tool is only verified for data pack version 14, "
+    if round(data_version) != 16:
+        print("Warning: This tool is only verified for data pack version 16, "
             "other versions may not work")
 
     # Attempt to locate the signal XML files we will generate from
