@@ -45,4 +45,10 @@ blobs:
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
     url: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-bluetooth-controller/raw/refs/tags/MCUX_2.16.000/bin/mcxw71_nbu_ble_1_9_14_0.sb3
     description: "BLE Controller for MCXW71 boards"
-
+  - path: mcxw71/mcxw71_nbu_ble_15_4_dyn.sb3
+    sha256: 42429eaca2ecaa9a0c8dd3d6dcb50f1e34b88946436be7ee99d15b8096d553dc
+    type: img
+    version: '1.0.17.2'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-ieee_802.15.4/raw/MCUX_2.16.100/bin/mcxw71/mcxw71_nbu_ble_15_4_dyn_1_0_17_2.sb3
+    description: "BLE Controller and IEEE 802.15.4 PHY combo firmware for MCXW71 boards"
