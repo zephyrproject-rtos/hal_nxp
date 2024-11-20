@@ -1873,12 +1873,12 @@ static int wifi_rate_to_signal_info(wlan_ds_rate *ds_rate, struct wpa_signal_inf
     if (datarate->tx_rate_format == MLAN_RATE_FORMAT_LG && datarate->tx_data_rate < 12)
     {
         /* Legacy rates */
-        si->current_txrate = lg_rate[datarate->tx_data_rate];
+        si->data.current_tx_rate = lg_rate[datarate->tx_data_rate];
     }
     else if (datarate->tx_rate_format <= 3)
     {
         /* HT, VHT, HE rates */
-        si->current_txrate = datarate->tx_data_rate >> 1;
+        si->data.current_tx_rate = datarate->tx_data_rate >> 1;
     }
 
     return WM_SUCCESS;
@@ -1909,9 +1909,9 @@ int wifi_nxp_wpa_supp_signal_poll(void *if_priv, struct wpa_signal_info *si, uns
     memset(si, 0x00, sizeof(struct wpa_signal_info));
 
     si->frequency         = wifi_if_ctx_rtos->assoc_freq;
-    si->current_signal    = signal_params.current_signal;
-    si->avg_signal        = signal_params.avg_signal;
-    si->avg_beacon_signal = signal_params.avg_beacon_signal;
+    si->data.signal    = signal_params.current_signal;
+    si->data.avg_signal        = signal_params.avg_signal;
+    si->data.avg_beacon_signal = signal_params.avg_beacon_signal;
     si->current_noise     = signal_params.current_noise;
 
     ds_rate.sub_command = WIFI_DS_GET_DATA_RATE;
@@ -2683,7 +2683,7 @@ void wifi_nxp_wpa_supp_event_signal_change(void *if_priv, t_s16 *curr_rssi)
     }
     memset(&event, 0, sizeof(event));
     event.signal_change.above_threshold = 0;
-    event.signal_change.current_signal = abs(*curr_rssi);
+    event.signal_change.data.signal = abs(*curr_rssi);
 
     wifi_if_ctx_rtos->supp_callbk_fns.signal_change(wifi_if_ctx_rtos->supp_drv_if_ctx, &event);
 }
