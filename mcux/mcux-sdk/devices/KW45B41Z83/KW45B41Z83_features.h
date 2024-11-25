@@ -1,26 +1,25 @@
-/*
-** ###################################################################
-**     Version:             rev. 1.0, 2020-05-12
-**     Build:               b220804
-**
-**     Abstract:
-**         Chip specific module features.
-**
-**     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
-**     SPDX-License-Identifier: BSD-3-Clause
-**
-**     http:                 www.nxp.com
-**     mail:                 support@nxp.com
-**
-**     Revisions:
-**     - rev. 1.0 (2020-05-12)
-**         Initial version.
-**
-** ###################################################################
-*/
+/* SPDX-License-Identifier: BSD-3-Clause
+ * Copyright 2024 NXP
+ * ###################################################################
+ *     Version:             rev. 1.0, 2020-05-12
+ *     Build:               b220804
+ *
+ *     Abstract:
+ *         Chip specific module features.
+ *
+ *     Copyright 2016 Freescale Semiconductor, Inc.
+ *     Copyright 2016-2022 NXP
+ *     All rights reserved.
+ *
+ *     http:                 www.nxp.com
+ *     mail:                 support@nxp.com
+ *
+ *     Revisions:
+ *     - rev. 1.0 (2020-05-12)
+ *         Initial version.
+ *
+ * ###################################################################
+ */
 
 #ifndef _KW45B41Z83_FEATURES_H_
 #define _KW45B41Z83_FEATURES_H_
@@ -497,22 +496,22 @@
 
 /* @brief CTRL Has CUT_PIN_EN (bitfield CTRL[CUT_PIN_EN]). */
 #define FSL_FEATURE_SFA_CTRL_HAS_CUT_PIN_ENn(x) \
-    (((x) == SFA0) ? (1) : \
-    (((x) == RF_SFA) ? (0) : (-1)))
+	(((x) == SFA0) ? (1) : \
+	(((x) == RF_SFA) ? (0) : (-1)))
 /* @brief CTRL_EXT has CUT_PIN_EN (bitfield CTRL_EXT[CUT_PIN_EN]). */
 #define FSL_FEATURE_SFA_CTRL_EXT_HAS_CUT_PIN_EN (0)
 /* @brief Trigger selection is configured outside the SFA peripheral. */
 #define FSL_FEATURE_SFA_TRIGGER_SELECTION_OUTSIDEn(x) \
-    (((x) == SFA0) ? (0) : \
-    (((x) == RF_SFA) ? (1) : (-1)))
+	(((x) == SFA0) ? (0) : \
+	(((x) == RF_SFA) ? (1) : (-1)))
 /* @brief SFA instance support trigger. */
 #define FSL_FEATURE_SFA_INSTANCE_HAS_TRIGGERn(x) \
-    (((x) == SFA0) ? (0) : \
-    (((x) == RF_SFA) ? (1) : (-1)))
+	(((x) == SFA0) ? (0) : \
+	(((x) == RF_SFA) ? (1) : (-1)))
 /* @brief SFA instance support interrupt. */
 #define FSL_FEATURE_SFA_INSTANCE_HAS_INTERRUPTn(x) \
-    (((x) == SFA0) ? (1) : \
-    (((x) == RF_SFA) ? (0) : (-1)))
+	(((x) == SFA0) ? (1) : \
+	(((x) == RF_SFA) ? (0) : (-1)))
 
 /* RTC module features */
 
@@ -578,9 +577,9 @@
 
 /* @brief Number of channels. */
 #define FSL_FEATURE_TPM_CHANNEL_COUNTn(x) \
-    (((x) == TPM0) ? (6) : \
-    (((x) == TPM1) ? (6) : \
-    (((x) == TPM2) ? (2) : (-1))))
+	(((x) == TPM0) ? (6) : \
+	(((x) == TPM1) ? (6) : \
+	(((x) == TPM2) ? (2) : (-1))))
 /* @brief Has counter reset by the selected input capture event (register bits C0SC[ICRST], C1SC[ICRST], ...). */
 #define FSL_FEATURE_TPM_HAS_COUNTER_RESET_BY_CAPTURE_EVENT (0)
 /* @brief Has TPM_PARAM. */
@@ -593,9 +592,9 @@
 #define FSL_FEATURE_TPM_HAS_TRIG (1)
 /* @brief Whether TRIG register has effect. */
 #define FSL_FEATURE_TPM_TRIG_HAS_EFFECTn(x) \
-    (((x) == TPM0) ? (1) : \
-    (((x) == TPM1) ? (1) : \
-    (((x) == TPM2) ? (0) : (-1))))
+	(((x) == TPM0) ? (1) : \
+	(((x) == TPM1) ? (1) : \
+	(((x) == TPM2) ? (0) : (-1))))
 /* @brief Has counter pause on trigger. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_COUNTER_ON_TRIGGER (1)
 /* @brief Has external trigger selection. */
@@ -608,9 +607,9 @@
 #define FSL_FEATURE_TPM_HAS_POL (1)
 /* @brief Whether POL register has effect. */
 #define FSL_FEATURE_TPM_POL_HAS_EFFECTn(x) \
-    (((x) == TPM0) ? (1) : \
-    (((x) == TPM1) ? (1) : \
-    (((x) == TPM2) ? (0) : (-1))))
+	(((x) == TPM0) ? (1) : \
+	(((x) == TPM1) ? (1) : \
+	(((x) == TPM2) ? (0) : (-1))))
 /* @brief Has TPM_FILTER register. */
 #define FSL_FEATURE_TPM_HAS_FILTER (1)
 /* @brief Whether FILTER register has effect. */
@@ -619,9 +618,9 @@
 #define FSL_FEATURE_TPM_HAS_QDCTRL (1)
 /* @brief Whether QDCTRL register has effect. */
 #define FSL_FEATURE_TPM_QDCTRL_HAS_EFFECTn(x) \
-    (((x) == TPM0) ? (1) : \
-    (((x) == TPM1) ? (1) : \
-    (((x) == TPM2) ? (0) : (-1))))
+	(((x) == TPM0) ? (1) : \
+	(((x) == TPM1) ? (1) : \
+	(((x) == TPM2) ? (0) : (-1))))
 /* @brief Has pause level select. */
 #define FSL_FEATURE_TPM_HAS_PAUSE_LEVEL_SELECT (1)
 /* @brief Whether 32 bits counter has effect. */

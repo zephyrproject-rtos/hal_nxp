@@ -1,8 +1,7 @@
+// SPDX-License-Identifier: BSD-3-Clause
 /*
  * Copyright 2024 NXP
  * All rights reserved.
- *
- * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include <stdint.h>
@@ -20,9 +19,9 @@
 /* Initialize debug console. */
 void BOARD_InitDebugConsole(void)
 {
-    uint32_t uartClkSrcFreq = BOARD_DEBUG_UART_CLK_FREQ;
+	uint32_t uartClkSrcFreq = BOARD_DEBUG_UART_CLK_FREQ;
 
-    CLOCK_SetIpSrc(kCLOCK_Lpuart1, kCLOCK_IpSrcFro6M);
+	CLOCK_SetIpSrc(kCLOCK_Lpuart1, kCLOCK_IpSrcFro6M);
 
-    DbgConsole_Init(BOARD_DEBUG_UART_INSTANCE, BOARD_DEBUG_UART_BAUDRATE, BOARD_DEBUG_UART_TYPE, uartClkSrcFreq);
+	DbgConsole_Init(BOARD_DEBUG_UART_INSTANCE, BOARD_DEBUG_UART_BAUDRATE, BOARD_DEBUG_UART_TYPE, uartClkSrcFreq);
 }

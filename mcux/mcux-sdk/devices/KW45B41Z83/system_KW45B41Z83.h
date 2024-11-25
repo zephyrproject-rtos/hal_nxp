@@ -1,37 +1,36 @@
-/*
-** ###################################################################
-**     Processors:          KW45B41Z83AFPA
-**                          KW45B41Z83AFTA
-**
-**     Compilers:           GNU C Compiler
-**                          IAR ANSI C/C++ Compiler for ARM
-**                          Keil ARM C/C++ Compiler
-**                          MCUXpresso Compiler
-**
-**     Reference manual:    Rev. 6, 05/22/2022
-**     Version:             rev. 1.0, 2020-05-12
-**     Build:               b220810
-**
-**     Abstract:
-**         Provides a system configuration function and a global variable that
-**         contains the system frequency. It configures the device and initializes
-**         the oscillator (PLL) that is part of the microcontroller device.
-**
-**     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2022 NXP
-**     All rights reserved.
-**
-**     SPDX-License-Identifier: BSD-3-Clause
-**
-**     http:                 www.nxp.com
-**     mail:                 support@nxp.com
-**
-**     Revisions:
-**     - rev. 1.0 (2020-05-12)
-**         Initial version.
-**
-** ###################################################################
-*/
+/* SPDX-License-Identifier: BSD-3-Clause
+ * Copyright 2024 NXP
+ * ###################################################################
+ *     Processors:          KW45B41Z83AFPA
+ *                          KW45B41Z83AFTA
+ *
+ *     Compilers:           GNU C Compiler
+ *                          IAR ANSI C/C++ Compiler for ARM
+ *                          Keil ARM C/C++ Compiler
+ *                          MCUXpresso Compiler
+ *
+ *     Reference manual:    Rev. 6, 05/22/2022
+ *     Version:             rev. 1.0, 2020-05-12
+ *     Build:               b220810
+ *
+ *     Abstract:
+ *         Provides a system configuration function and a global variable that
+ *         contains the system frequency. It configures the device and initializes
+ *         the oscillator (PLL) that is part of the microcontroller device.
+ *
+ *     Copyright 2016 Freescale Semiconductor, Inc.
+ *     Copyright 2016-2022 NXP
+ *     All rights reserved.
+ *
+ *     http:                 www.nxp.com
+ *     mail:                 support@nxp.com
+ *
+ *     Revisions:
+ *     - rev. 1.0 (2020-05-12)
+ *         Initial version.
+ *
+ * ###################################################################
+ */
 
 /*!
  * @file KW45B41Z83
@@ -80,7 +79,7 @@ extern uint32_t SystemCoreClock;
  * microcontroller device. For systems with variable clock speed it also updates
  * the variable SystemCoreClock. SystemInit is called from startup_device file.
  */
-void SystemInit (void);
+void SystemInit(void);
 
 /**
  * @brief Updates the SystemCoreClock variable.
@@ -89,7 +88,7 @@ void SystemInit (void);
  * execution. SystemCoreClockUpdate() evaluates the clock register settings and calculates
  * the current core clock.
  */
-void SystemCoreClockUpdate (void);
+void SystemCoreClockUpdate(void);
 
 /**
  * @brief SystemInit function hook.
@@ -101,7 +100,7 @@ void SystemCoreClockUpdate (void);
  * NOTE: No global r/w variables can be used in this hook function because the
  * initialization of these variables happens after this function.
  */
-void SystemInitHook (void);
+void SystemInitHook(void);
 
 #ifdef __cplusplus
 }
