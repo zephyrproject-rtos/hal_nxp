@@ -33,7 +33,7 @@ if(CONFIG_SOC_SERIES_RW6XX)
     endif()
 endif()
 
-if(CONFIG_SOC_SERIES_MCXW)
+if(CONFIG_SOC_SERIES_MCXW OR CONFIG_SOC_SERIES_KINETIS_KW45)
     target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform.c
         ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform_ble.c
