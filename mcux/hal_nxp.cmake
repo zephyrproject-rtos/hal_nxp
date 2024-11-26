@@ -286,7 +286,7 @@ elseif(CONFIG_SOC_MIMXRT1189_CM33)
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE    cache/xcache  driver_cache_xcache)
 endif()
 
-if ((${MCUX_DEVICE} MATCHES "MIMX9596") OR (${MCUX_DEVICE} MATCHES "MIMX8UD7"))
+if ((${MCUX_DEVICE} MATCHES "MIMX9596") OR (${MCUX_DEVICE} MATCHES "MIMX8UD7") OR (${MCUX_DEVICE} MATCHES "MIMXRT118"))
   include_driver_ifdef(CONFIG_IPM_IMX			mu1		driver_mu1)
   include_driver_ifdef(CONFIG_MBOX_NXP_IMX_MU		mu1		driver_mu1)
 else()
