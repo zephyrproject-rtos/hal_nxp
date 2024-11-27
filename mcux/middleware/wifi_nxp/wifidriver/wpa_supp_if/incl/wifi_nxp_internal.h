@@ -618,63 +618,16 @@ typedef MLAN_PACK_START struct _wifi_nxp_callbk_fns
 
 typedef struct _chan_to_freq_t
 {
-    /** Channel */
-    t_u16 channel;
     /** Frequency */
     t_u32 freq;
+    /** Channel */
+    t_u16 channel;
     /** Band */
     t_u8 band;
 } chan_to_freq_t;
-static const chan_to_freq_t chan_to_freq[] = {
-    {1, 2412, 0},   {2, 2417, 0},   {3, 2422, 0},   {4, 2427, 0},   {5, 2432, 0},   {6, 2437, 0},   {7, 2442, 0},
-    {8, 2447, 0},   {9, 2452, 0},   {10, 2457, 0},  {11, 2462, 0},  {12, 2467, 0},  {13, 2472, 0},  {14, 2484, 0},
-    {183, 4915, 1}, {184, 4920, 1}, {185, 4925, 1}, {187, 4935, 1}, {188, 4940, 1}, {189, 4945, 1}, {192, 4960, 1},
-    {196, 4980, 1}, {7, 5035, 1},   {8, 5040, 1},   {9, 5045, 1},   {11, 5055, 1},  {12, 5060, 1},  {16, 5080, 1},
-    {34, 5170, 1},  {36, 5180, 1},  {38, 5190, 1},  {40, 5200, 1},  {42, 5210, 1},  {44, 5220, 1},  {46, 5230, 1},
-    {48, 5240, 1},  {52, 5260, 1},  {56, 5280, 1},  {60, 5300, 1},  {64, 5320, 1},  {100, 5500, 1}, {104, 5520, 1},
-    {108, 5540, 1}, {112, 5560, 1}, {116, 5580, 1}, {120, 5600, 1}, {124, 5620, 1}, {128, 5640, 1}, {132, 5660, 1},
-    {136, 5680, 1}, {140, 5700, 1}, {144, 5720, 1}, {149, 5745, 1}, {153, 5765, 1}, {157, 5785, 1}, {161, 5805, 1},
-#if CONFIG_UNII4_BAND_SUPPORT
-    {165, 5825, 1}, {169, 5845, 1}, {173, 5865, 1}, {177, 5885, 1},
-#else
-    {165, 5825, 1},
-#endif
-};
-/** Convertion from/to frequency/channel */
-/**
- *  @brief Get frequency for channel in given band
- *
- *  @param channel      channel
- *  @param band         band
- *
- *  @return             freq
- */
-static inline int channel_to_frequency(t_u16 channel, t_u8 band)
-{
-    int i = 0;
-    for (i = 0; i < (int)ARRAY_SIZE(chan_to_freq); i++)
-    {
-        if (channel == chan_to_freq[i].channel && band == chan_to_freq[i].band)
-        {
-            return chan_to_freq[i].freq;
-        }
-    }
-    return 0;
-}
 
-static inline t_u16 freq_to_chan(unsigned int freq)
-{
-    int i = 0;
-    for (i = 0; i < (int)ARRAY_SIZE(chan_to_freq); i++)
-    {
-        if (freq == chan_to_freq[i].freq)
-        {
-            return chan_to_freq[i].channel;
-        }
-    }
-    return 0;
-}
-
+int channel_to_frequency(t_u16 channel, t_u8 band);
+t_u16 freq_to_chan(unsigned int freq);
 #endif
 
 #endif /* __WIFI_NXP_INTERNAL_H__ */

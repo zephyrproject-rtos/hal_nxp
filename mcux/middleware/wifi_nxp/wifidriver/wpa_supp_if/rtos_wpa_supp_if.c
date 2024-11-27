@@ -22,6 +22,22 @@
 
 #define MAX_MGMT_TX_FRAME_SIZE 1500
 
+static const chan_to_freq_t chan_to_freq[] = {
+    {2412, 1, 0},   {2417, 2, 0},   {2422, 3, 0},   {2427, 4, 0},   {2432, 5, 0},   {2437, 6, 0},   {2442, 7, 0},
+    {2447, 8, 0},   {2452, 9, 0},   {2457, 10, 0},  {2462, 11, 0},  {2467, 12, 0},  {2472, 13, 0},  {2484, 14, 0},
+    {4915, 183, 1}, {4920, 184, 1}, {4925, 185, 1}, {4935, 187, 1}, {4940, 188, 1}, {4945, 189, 1}, {4960, 192, 1},
+    {4980, 196, 1}, {5035, 7, 1},   {5040, 8, 1},   {5045, 9, 1},   {5055, 11, 1},  {5060, 12, 1},  {5080, 16, 1},
+    {5170, 34, 1},  {5180, 36, 1},  {5190, 38, 1},  {5200, 40, 1},  {5210, 42, 1},  {5220, 44, 1},  {5230, 46, 1},
+    {5240, 48, 1},  {5260, 52, 1},  {5280, 56, 1},  {5300, 60, 1},  {5320, 64, 1},  {5500, 100, 1}, {5520, 104, 1},
+    {5540, 108, 1}, {5560, 112, 1}, {5580, 116, 1}, {5600, 120, 1}, {5620, 124, 1}, {5640, 128, 1}, {5660, 132, 1},
+    {5680, 136, 1}, {5700, 140, 1}, {5720, 144, 1}, {5745, 149, 1}, {5765, 153, 1}, {5785, 157, 1}, {5805, 161, 1},
+#if CONFIG_UNII4_BAND_SUPPORT
+    {5825, 165, 1}, {5845, 169, 1}, {5865, 173, 1}, {5885, 177, 1},
+#else
+    {5825, 165, 1},
+#endif
+};
+
 static uint8_t *g_extended_capa = NULL;
 static uint8_t *g_extended_capa_mask = NULL;
 
@@ -133,6 +149,41 @@ static enum chan_width drv2supp_chan_width(int width)
 	return CHAN_WIDTH_UNKNOWN;
 }
 #endif
+
+/** Convertion from/to frequency/channel */
+/**
+ *  @brief Get frequency for channel in given band
+ *
+ *  @param channel      channel
+ *  @param band         band
+ *
+ *  @return             freq
+ */
+int channel_to_frequency(t_u16 channel, t_u8 band)
+{
+    int i = 0;
+    for (i = 0; i < (int)ARRAY_SIZE(chan_to_freq); i++)
+    {
+        if (channel == chan_to_freq[i].channel && band == chan_to_freq[i].band)
+        {
+            return chan_to_freq[i].freq;
+        }
+    }
+    return 0;
+}
+
+t_u16 freq_to_chan(unsigned int freq)
+{
+    int i = 0;
+    for (i = 0; i < (int)ARRAY_SIZE(chan_to_freq); i++)
+    {
+        if (freq == chan_to_freq[i].freq)
+        {
+            return chan_to_freq[i].channel;
+        }
+    }
+    return 0;
+}
 
 void wifi_nxp_wpa_supp_event_proc_chan_list_changed(void *if_priv, const char *alpha2)
 {
@@ -1812,9 +1863,12 @@ int wifi_nxp_wpa_supp_set_country(void *if_priv, const char *alpha2)
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     int ret                                    = -WM_FAIL;
     char *country                              = NULL;
+    t_u8 region_code                           = 0;
+    unsigned char country3                     = 0x20;
 
-    country = OSA_MemoryAllocate(COUNTRY_CODE_LEN);
+    country    = OSA_MemoryAllocate(COUNTRY_CODE_LEN);
     (void)memcpy(country, alpha2, COUNTRY_CODE_LEN - 1);
+    country[2] = country3;
 
     if ((!if_priv) || (!alpha2))
     {
@@ -1832,13 +1886,34 @@ int wifi_nxp_wpa_supp_set_country(void *if_priv, const char *alpha2)
         wm_wifi.hostapd_op = true;
     }
 #endif
+    ret = wlan_11d_region_2_code(mlan_adap, (t_u8 *)country, &region_code);
+    if(ret != WM_SUCCESS)
+    {
+        wlcm_e("%s: Invalid country code.", country);
+        goto out;
+    }
 
     ret              = wifi_nxp_set_country(wifi_if_ctx_rtos->bss_type, alpha2);
-
-    if (ret == WM_SUCCESS)
+    if (ret != WM_SUCCESS)
     {
-        (void)wifi_event_completion(WIFI_EVENT_REGION_POWER_CFG, WIFI_EVENT_REASON_SUCCESS, (void *)country);
+        goto out;
     }
+
+#if CONFIG_COMPRESS_TX_PWTBL
+    ret = wlan_set_rg_power_cfg(region_code);
+    if (ret != WM_SUCCESS)
+    {
+        goto out;
+    }
+#endif
+
+#if defined(RW610) && ((CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX))
+    ret = wlan_set_ru_power_cfg(region_code);
+    if (ret != WM_SUCCESS)
+    {
+        return -WM_FAIL;
+    }
+#endif
 
     return ret;
 

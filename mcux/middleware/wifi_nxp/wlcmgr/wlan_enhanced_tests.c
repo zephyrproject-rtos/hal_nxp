@@ -141,32 +141,32 @@ static void wlan_ed_mac_mode_set(int argc, char *argv[])
     interface = (t_u8)strtol(argv[1], NULL, 16);
     if (errno != 0)
     {
-        (void)PRINTF("Error during strtoul errno:%d", errno);
+        (void)PRINTF("Error during strtol errno:%d", errno);
     }
     errno                       = 0;
     wlan_ed_mac_ctrl.ed_ctrl_2g = (t_u16)strtol(argv[2], NULL, 16);
     if (errno != 0)
     {
-        (void)PRINTF("Error during strtoul errno:%d", errno);
+        (void)PRINTF("Error during strtol errno:%d", errno);
     }
     errno                         = 0;
     wlan_ed_mac_ctrl.ed_offset_2g = (t_s16)strtol(argv[3], NULL, 16);
     if (errno != 0)
     {
-        (void)PRINTF("Error during strtoul errno:%d", errno);
+        (void)PRINTF("Error during strtol errno:%d", errno);
     }
 #if CONFIG_5GHz_SUPPORT
     errno                       = 0;
     wlan_ed_mac_ctrl.ed_ctrl_5g = (t_u16)strtol(argv[4], NULL, 16);
     if (errno != 0)
     {
-        (void)PRINTF("Error during strtoul errno:%d", errno);
+        (void)PRINTF("Error during strtol errno:%d", errno);
     }
     errno                         = 0;
     wlan_ed_mac_ctrl.ed_offset_5g = (t_s16)strtol(argv[5], NULL, 16);
     if (errno != 0)
     {
-        (void)PRINTF("Error during strtoul errno:%d", errno);
+        (void)PRINTF("Error during strtol errno:%d", errno);
     }
 #endif
 
@@ -187,10 +187,16 @@ static void wlan_ed_mac_mode_set(int argc, char *argv[])
     {
         ret = wlan_set_ed_mac_mode(wlan_ed_mac_ctrl);
     }
-    else
+    else if (interface == MLAN_BSS_TYPE_UAP)
     {
         ret = wlan_set_uap_ed_mac_mode(wlan_ed_mac_ctrl);
     }
+    else
+    {
+        ret = -WM_FAIL;
+        (void)PRINTF("Error invalid interface\r\n");
+    }
+
     if (ret == WM_SUCCESS)
     {
         (void)PRINTF("ED MAC MODE settings configuration successful\r\n");
@@ -227,17 +233,23 @@ static void wlan_ed_mac_mode_get(int argc, char *argv[])
     interface = (t_u8)strtol(argv[1], NULL, 16);
     if (errno != 0)
     {
-        (void)PRINTF("Error during strtoul errno:%d", errno);
+        (void)PRINTF("Error during strtol errno:%d", errno);
     }
 
     if (interface == MLAN_BSS_TYPE_STA)
     {
         ret = wlan_get_ed_mac_mode(&wlan_ed_mac_ctrl);
     }
-    else
+    else if (interface == MLAN_BSS_TYPE_UAP)
     {
         ret = wlan_get_uap_ed_mac_mode(&wlan_ed_mac_ctrl);
     }
+    else
+    {
+        ret = -WM_FAIL;
+        (void)PRINTF("Error invalid interface\r\n");
+    }
+
     if (ret == WM_SUCCESS)
     {
         (void)PRINTF("EU adaptivity for 2.4GHz band : %s\r\n",
@@ -1360,24 +1372,29 @@ static void dump_wlan_set_txomi_usage()
 static void test_wlan_set_rutxpwrlimit(int argc, char **argv)
 {
     int rv;
-    uint32_t board_type;
+    uint32_t region_code = (t_u16)strtol(argv[1], NULL, 0);
 #if CONFIG_COMPRESS_RU_TX_PWTBL
-    board_type = wlan_get_board_type();
 #ifdef RW610
-    switch (board_type)
+    switch (region_code)
     {
-        case RW610_PACKAGE_TYPE_QFN:
-            rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_qfn_cfg_set, sizeof(rutxpowerlimit_qfn_cfg_set));
+        case RW610_PACKAGE_TYPE_WW:
+            rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_cfg_set_WW, sizeof(rutxpowerlimit_cfg_set_WW));
             break;
-        case RW610_PACKAGE_TYPE_CSP:
-            rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_csp_cfg_set, sizeof(rutxpowerlimit_csp_cfg_set));
+        case RW610_PACKAGE_TYPE_FCC:
+            rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_cfg_set_FCC, sizeof(rutxpowerlimit_cfg_set_FCC));
             break;
-        case RW610_PACKAGE_TYPE_BGA:
-            rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_bga_cfg_set, sizeof(rutxpowerlimit_bga_cfg_set));
+        case RW610_PACKAGE_TYPE_EU:
+            rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_cfg_set_EU, sizeof(rutxpowerlimit_cfg_set_EU));
+            break;
+        case RW610_PACKAGE_TYPE_CN:
+            rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_cfg_set_CN, sizeof(rutxpowerlimit_cfg_set_CN));
+            break;
+        case RW610_PACKAGE_TYPE_JP:
+            rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_cfg_set_JP, sizeof(rutxpowerlimit_cfg_set_JP));
             break;
         default:
-            PRINTF("Unknown board type, use BGA rutx power limit cfg \r\n");
-            rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_bga_cfg_set, sizeof(rutxpowerlimit_bga_cfg_set));
+            PRINTF("Unknown region code, use WW rutx power limit cfg \r\n");
+            rv = wlan_set_11ax_rutxpowerlimit(rutxpowerlimit_cfg_set_WW, sizeof(rutxpowerlimit_cfg_set_WW));
             break;
     }
 #else
@@ -1574,7 +1591,7 @@ static test_cfg_param_t g_twt_setup_cfg_param[] = {
     {"hard_constraint", 7, 1,
      "0: FW can tweak the TWT setup parameters if it is rejected by AP, 1: FW should not tweak any parameters"},
     {"twt_interval_exponent", 8, 1, "Range: [0-63]"},
-    {"twt_interval_mantissa", 9, 2, "TWT interval= mantissa * 2^exponent μs. Range: [0-maxof(UINT16)]"},
+    {"twt_interval_mantissa", 9, 2, "TWT interval= mantissa * 2^exponent μs. Range: [0 - (2^16-1)]"},
     {"twt_request", 11, 1, "Type, 0: REQUEST_TWT, 1: SUGGEST_TWT"},
     /* Skip field: t_u8 twt_setup_state. Needless to input */
     {"bcnMiss_threshold", 13, 2, "Link lost timeout threshold when TWT active. Unit in seconds. Range [1-maxof(UINT16)]"},
@@ -1617,22 +1634,50 @@ static void test_wlan_twt_report(int argc, char **argv)
     int j;
     int num;
     wlan_twt_report_t info;
+    bool tipOnce = MTRUE;
 
     memset(&info, 0x00, sizeof(info));
     wlan_get_twt_report(&info);
 
+    if (info.length == 0)
+    {
+        (void)PRINTF("twt_report results:\r\n Ex-AP's beacon doesn't contain BTWT IE.\r\n");
+        return;
+    }
+
     num = info.length / WLAN_BTWT_REPORT_LEN;
     num = num <= WLAN_BTWT_REPORT_MAX_NUM ? num : WLAN_BTWT_REPORT_MAX_NUM;
 
-    (void)PRINTF("twt_report len %hu, num %d, info:\r\n", info.length, num);
+    (void)PRINTF("twt_report results:\r\n Received B-TWT schedule from ex-AP's beacon. Total buff len = %hu, count of schedules = %d, detail:\r\n", info.length, num);
     for (i = 0; i < num; i++)
     {
-        (void)PRINTF("id[%d]:\r\n", i);
+        t_u8 *p = &info.data[i * WLAN_BTWT_REPORT_LEN];
+
+        t_u16 req_typ = p[0] | p[1] << 8;
+        t_u8 wake_dur = p[4];
+        t_u16 mantissa= p[5] | p[6] << 8;
+        t_u16 twt_info= p[7] | p[8] << 8;
+        t_u8 btwt_id  = (twt_info & 0xF8) >> 3;
+    
+        (void)PRINTF("Schedule-[%d]:\r\n", i);
         for (j = 0; j < WLAN_BTWT_REPORT_LEN; j++)
         {
             (void)PRINTF(" 0x%02x", info.data[i * WLAN_BTWT_REPORT_LEN + j]);
         }
         (void)PRINTF("\r\n");
+        
+        (void)PRINTF(" ## Explain: Broadcast TWT ID = %2d; %s, %s; Interval Exponent = %2d, Mantissa = %2d; Wake Duration = %2d\r\n",
+                    btwt_id, 
+                    (req_typ & BIT(4)) ? "Trigger":"No trigger",
+                    (req_typ & BIT(6)) ? "Unannounced":"Announced",
+                    (req_typ & 0x7C00) >> 10, //IntervalExponent
+                    mantissa,
+                    wake_dur);
+        if (btwt_id == 0 && tipOnce)
+        {
+            tipOnce = MFALSE;
+            (void)PRINTF(" ## BTWT_ID[0] will be auto joined when STA join other BTWT schedule. Don't manually join it.\r\n");
+        }
     }
 }
 
@@ -2099,10 +2144,10 @@ static struct cli_command wlan_enhanced_commands[] = {
     {"wlan-set-rutxpwrlimit", NULL, test_wlan_set_rutxpwrlimit},
     {"wlan-11ax-cfg", "<11ax_cfg>", test_wlan_11ax_cfg},
 #if CONFIG_11AX_TWT
-    {"wlan-11ax-bcast-twt", "<bcast_twt_cfg>", test_wlan_bcast_twt},
-    {"wlan-11ax-twt-setup", "<twt_cfg>", test_wlan_twt_setup},
-    {"wlan-11ax-twt-teardown", "<twt_cfg>", test_wlan_twt_teardown},
-    {"wlan-11ax-twt-report", "<twt_report_get>", test_wlan_twt_report},
+    {"wlan-11ax-bcast-twt", "<dump/set/done> [<param_id> <param_data>]", test_wlan_bcast_twt},
+    {"wlan-11ax-twt-setup", "<dump/set/done> [<param_id> <param_data>]", test_wlan_twt_setup},
+    {"wlan-11ax-twt-teardown", "<dump/set/done> [<param_id> <param_data>]", test_wlan_twt_teardown},
+    {"wlan-11ax-twt-report", "", test_wlan_twt_report},
     {"wlan-11ax-twt-information", "<flow_identifier> <suspend_duration>", test_wlan_twt_information},
 #endif /* CONFIG_11AX_TWT */
 #endif /* CONFIG_11AX */

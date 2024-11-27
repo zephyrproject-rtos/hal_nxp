@@ -215,8 +215,8 @@ mlan_status wlan_init_priv(pmlan_private priv)
     priv->uap_host_based  = MFALSE;
 #endif
 
-#if CONFIG_WPA_SUPP
     reset_ie_index();
+#if CONFIG_WPA_SUPP
     priv->default_scan_ies_len = 0;
     priv->probe_req_index      = -1;
 #if CONFIG_WPA_SUPP_WPS

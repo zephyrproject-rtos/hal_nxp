@@ -105,6 +105,120 @@ exit:
 #endif
 
 /**
+ *  @brief Set/Get Infra/Ad-hoc band configuration
+ *
+ *  @param pmadapter	A pointer to mlan_adapter structure
+ *  @param pioctl_req	A pointer to ioctl request buffer
+ *
+ *  @return		MLAN_STATUS_SUCCESS --success, otherwise fail
+ */
+static mlan_status wlan_radio_ioctl_band_cfg(IN pmlan_adapter pmadapter, IN pmlan_ioctl_req pioctl_req)
+{
+    t_u8 i = 0;
+    t_u16 global_band = 0;
+    t_u16 infra_band              = 0;
+    mlan_ds_radio_cfg *radio_cfg = MNULL;
+    mlan_private *pmpriv         = pmadapter->priv[pioctl_req->bss_index];
+
+    ENTER();
+
+    radio_cfg = (mlan_ds_radio_cfg *)pioctl_req->pbuf;
+    if (pioctl_req->action == MLAN_ACT_SET)
+    {
+        infra_band    = radio_cfg->param.band_cfg.config_bands;
+
+        /* SET Infra band */
+        if ((infra_band | pmadapter->fw_bands) & ~pmadapter->fw_bands)
+        {
+            pioctl_req->status_code = MLAN_ERROR_INVALID_PARAMETER;
+            LEAVE();
+            return MLAN_STATUS_FAILURE;
+        }
+
+        for (i = 0; i < pmadapter->priv_num; i++)
+        {
+            if (pmadapter->priv[i] && pmadapter->priv[i] != pmpriv &&
+                GET_BSS_ROLE(pmadapter->priv[i]) == MLAN_BSS_ROLE_STA)
+                global_band |= pmadapter->priv[i]->config_bands;
+        }
+        global_band |= infra_band;
+
+        if (wlan_set_regiontable(pmpriv, (t_u8)pmadapter->region_code, global_band))
+        {
+            pioctl_req->status_code = MLAN_ERROR_IOCTL_FAIL;
+            LEAVE();
+            return MLAN_STATUS_FAILURE;
+        }
+
+        if (wlan_11d_set_universaltable(pmpriv, global_band))
+        {
+            pioctl_req->status_code = MLAN_ERROR_IOCTL_FAIL;
+            LEAVE();
+            return MLAN_STATUS_FAILURE;
+        }
+        pmpriv->config_bands    = infra_band;
+        pmadapter->config_bands = global_band;
+    }
+    else
+    {
+        /* Infra Bands */
+        radio_cfg->param.band_cfg.config_bands = pmpriv->config_bands;
+        /* Adhoc Band */
+        radio_cfg->param.band_cfg.adhoc_start_band = pmadapter->adhoc_start_band;
+        /* Adhoc Channel */
+        radio_cfg->param.band_cfg.adhoc_channel = pmpriv->adhoc_channel;
+        /* FW support Bands */
+        radio_cfg->param.band_cfg.fw_bands = pmadapter->fw_bands;
+        PRINTM(MINFO, "Global config band = %d\n", pmadapter->config_bands);
+        /* adhoc channel bandwidth */
+        radio_cfg->param.band_cfg.sec_chan_offset = pmadapter->chan_bandwidth;
+    }
+
+    LEAVE();
+    return MLAN_STATUS_SUCCESS;
+}
+
+/**
+ *  @brief Radio command handler
+ *
+ *  @param pmadapter	A pointer to mlan_adapter structure
+ *  @param pioctl_req	A pointer to ioctl request buffer
+ *
+ *  @return		MLAN_STATUS_SUCCESS --success, otherwise fail
+ */
+static mlan_status wlan_radio_ioctl(IN pmlan_adapter pmadapter, IN pmlan_ioctl_req pioctl_req)
+{
+    mlan_status status           = MLAN_STATUS_SUCCESS;
+    mlan_ds_radio_cfg *radio_cfg = MNULL;
+
+    ENTER();
+
+    if (pioctl_req->buf_len < sizeof(mlan_ds_radio_cfg))
+    {
+        PRINTM(MWARN, "MLAN IOCTL information buffer length is too short.\n");
+        pioctl_req->data_read_written = 0;
+        pioctl_req->buf_len_needed    = sizeof(mlan_ds_radio_cfg);
+        pioctl_req->status_code       = MLAN_ERROR_INVALID_PARAMETER;
+        LEAVE();
+        return MLAN_STATUS_RESOURCE;
+    }
+    radio_cfg = (mlan_ds_radio_cfg *)pioctl_req->pbuf;
+    switch (radio_cfg->sub_command)
+    {
+        case MLAN_OID_BAND_CFG:
+            status = wlan_radio_ioctl_band_cfg(pmadapter, pioctl_req);
+            break;
+        default:
+            pioctl_req->status_code = MLAN_ERROR_IOCTL_INVALID;
+            status                  = MLAN_STATUS_FAILURE;
+            break;
+    }
+
+    LEAVE();
+    return status;
+}
+
+/**
  *  @brief Start BSS
  *
  *  @param pmadapter	A pointer to mlan_adapter structure
@@ -1564,6 +1678,9 @@ mlan_status wlan_ops_sta_ioctl(t_void *adapter, pmlan_ioctl_req pioctl_req)
     {
         case MLAN_IOCTL_BSS:
             status = wlan_bss_ioctl(pmadapter, pioctl_req);
+            break;
+        case MLAN_IOCTL_RADIO_CFG:
+            status = wlan_radio_ioctl(pmadapter, pioctl_req);
             break;
 #if (CONFIG_WIFI_RTS_THRESHOLD) || (CONFIG_WIFI_FRAG_THRESHOLD)
         case MLAN_IOCTL_SNMP_MIB:
