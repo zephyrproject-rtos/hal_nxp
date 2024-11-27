@@ -3159,7 +3159,7 @@ typedef MLAN_PACK_START struct _mlan_ds_twt_report
     t_u8 length;
     t_u8 reserve[2];
     /** TWT report payload for FW response to fill, 4 * 9bytes */
-    t_u8 data[36];
+    t_u8 data[54]; //WLAN_BTWT_REPORT_LEN* WLAN_BTWT_REPORT_MAX_NUM
 } MLAN_PACK_END mlan_ds_twt_report, *pmlan_ds_twt_report;
 
 /** Type definition of mlan_ds_twt_report for MLAN_OID_11AX_TWT_CFG */

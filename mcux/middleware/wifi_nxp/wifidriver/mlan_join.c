@@ -901,7 +901,11 @@ mlan_status wlan_cmd_802_11_associate(IN mlan_private *pmpriv, IN HostCmd_DS_COM
     /* Add the Authentication type to be used for Auth frames if needed */
     if ((pmpriv->sec_info.authentication_mode != MLAN_AUTH_MODE_AUTO)
 #if CONFIG_DRIVER_OWE
-        || (pbss_desc->owe_transition_mode == OWE_TRANS_MODE_OWE)
+        || (
+#if CONFIG_HOST_MLME
+            !pmpriv->curr_bss_params.host_mlme &&
+#endif
+            (pbss_desc->owe_transition_mode == OWE_TRANS_MODE_OWE))
 #endif
     )
     {

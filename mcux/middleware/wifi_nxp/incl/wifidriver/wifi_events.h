@@ -165,6 +165,7 @@ enum wifi_event
 #if CONFIG_CSI
     /* Recv csi data */
     WIFI_EVENT_CSI,
+    WIFI_EVENT_CSI_STATUS,
 #endif
 #if (CONFIG_11MC) || (CONFIG_11AZ)
     /* Event to trigger or stop ftm*/

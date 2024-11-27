@@ -5147,6 +5147,45 @@ int wifi_set_rx_mgmt_indication(unsigned int bss_type, unsigned int mgmt_subtype
     return wm_wifi.cmd_resp_status;
 }
 
+int wifi_get_set_bandcfg(wifi_bandcfg_t *bandcfg, mlan_act_ioctl action)
+{
+    mlan_ioctl_req req;
+    mlan_ds_radio_cfg radio_cfg;
+
+    if ((action != MLAN_ACT_GET) && (action != MLAN_ACT_SET))
+    {
+        return -WM_FAIL;
+    }
+
+    (void)memset(&req, 0x00, sizeof(mlan_ioctl_req));
+    (void)memset(&radio_cfg, 0x00, sizeof(mlan_ds_radio_cfg));
+    radio_cfg.sub_command = MLAN_OID_BAND_CFG;
+
+    req.pbuf      = (t_u8 *)&radio_cfg;
+    req.buf_len   = sizeof(mlan_ds_radio_cfg);
+    req.bss_index = 0;
+    req.req_id    = MLAN_IOCTL_RADIO_CFG;
+    req.action    = action;
+    if (action == MLAN_ACT_SET)
+    {
+        radio_cfg.param.band_cfg.config_bands = bandcfg->config_bands;
+    }
+
+    mlan_status rv = wlan_ops_sta_ioctl(mlan_adap, &req);
+    if (rv != MLAN_STATUS_SUCCESS)
+    {
+        return -WM_FAIL;
+    }
+
+    if (action == MLAN_ACT_GET)
+    {
+        bandcfg->config_bands = radio_cfg.param.band_cfg.config_bands;
+        bandcfg->fw_bands = radio_cfg.param.band_cfg.fw_bands;
+    }
+
+    return WM_SUCCESS;
+}
+
 #if CONFIG_WPS2
 /* enable/disable WPS session */
 int wifi_send_wps_cfg_cmd(int option)

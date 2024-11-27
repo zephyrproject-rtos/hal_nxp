@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 NXP
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ * The BSD-3-Clause license can be found at https://spdx.org/licenses/BSD-3-Clause.html
+ */
+/*!\file osa.h
+ *\brief This file contains OSA wrapper declarations for timer, read/write lock and idle hook.
+ */
 
 #ifndef _OSA_H_
 #define _OSA_H_

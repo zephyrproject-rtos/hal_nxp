@@ -140,7 +140,14 @@ static int __scan_cb(unsigned int count)
         }
         else
         {
-            (void)PRINTF("802.11BG ");
+            if (res.channel <= 14)
+            {
+                (void)PRINTF("802.11BG ");
+            }
+            else
+            {
+                (void)PRINTF("802.11A ");
+            }
         }
         (void)PRINTF("\r\n");
 
@@ -6091,6 +6098,121 @@ static void test_wlan_get_signal(int argc, char **argv)
 }
 #endif
 
+static void dump_wlan_bandcfg_bit_usage(void)
+{
+    (void)PRINTF("        Bits in Band:\r\n");
+    (void)PRINTF("        bit 0: B (Not support set)\r\n");
+    (void)PRINTF("        bit 1: G (Not support set)\r\n");
+    (void)PRINTF("        bit 2: A (Not support set)\r\n");
+    (void)PRINTF("        bit 3: GN (Not support set)\r\n");
+    (void)PRINTF("        bit 4: AN (Not support set)\r\n");
+#if CONFIG_11AC
+    (void)PRINTF("        bit 5: AC 2.4G (Not support set)\r\n");
+    (void)PRINTF("        bit 6: AC 5G (Not support set)\r\n");
+#endif
+#if CONFIG_11AX
+    (void)PRINTF("        bit 8: AX 2.4G\r\n");
+    (void)PRINTF("        bit 9: AX 5G\r\n");
+#endif
+}
+
+static void test_wlan_get_bandcfg(int argc, char **argv)
+{
+    wlan_bandcfg_t bandcfg;
+    int ret = WM_SUCCESS;
+
+    (void)memset(&bandcfg, 0, sizeof(bandcfg));
+
+    ret = wlan_get_bandcfg(&bandcfg);
+    if (ret != WM_SUCCESS)
+    {
+        (void)PRINTF("Unable to get bandcfg\r\n");
+        return;
+    }
+    (void)PRINTF("\tconfig band: 0x%x\r\n", bandcfg.config_bands);
+    (void)PRINTF("\tfw band: 0x%x\r\n", bandcfg.fw_bands);
+    dump_wlan_bandcfg_bit_usage();
+}
+
+#if CONFIG_11AX
+static void dump_wlan_set_bandcfg(void)
+{
+    (void)PRINTF("Usage:\r\n");
+    (void)PRINTF("    wlan-set-bandcfg <value>\r\n");
+    dump_wlan_bandcfg_bit_usage();
+}
+#endif
+
+static void test_wlan_set_bandcfg(int argc, char **argv)
+{
+#if CONFIG_11AX
+    wlan_bandcfg_t bandcfg;
+    uint32_t bandcfg_11ax_2G = 0;
+    uint32_t bandcfg_11ax_5G = 0;
+    uint32_t val = 0;
+    int ret = WM_SUCCESS;
+#endif
+
+#if !CONFIG_11AX
+    (void)PRINTF("Block set bandcfg when 11AX is not supported.\r\n");
+    return;
+#else
+
+    if (argc != 2)
+    {
+        (void)PRINTF("Error: invalid number of arguments\r\n");
+        dump_wlan_set_bandcfg();
+        return;
+    }
+
+    val = a2hex_or_atoi(argv[1]);
+
+    bandcfg_11ax_2G = (val & MBIT(8));
+    bandcfg_11ax_5G = (val & MBIT(9));
+
+    if ((bandcfg_11ax_2G && !bandcfg_11ax_5G) ||
+        (!bandcfg_11ax_2G && bandcfg_11ax_5G))
+    {
+        (void)PRINTF("Please set 11ax 2G/5G bit both 0 or both 1.\r\n");
+        dump_wlan_set_bandcfg();
+        return;
+    }
+
+    (void)memset(&bandcfg, 0, sizeof(bandcfg));
+    ret = wlan_get_bandcfg(&bandcfg);
+    if (ret != WM_SUCCESS)
+    {
+        (void)PRINTF("Unable to get bandcfg\r\n");
+        return;
+    }
+
+    if (bandcfg_11ax_2G)
+    {
+        bandcfg.config_bands |= (MBIT(8));
+    }
+    else
+    {
+        bandcfg.config_bands &= ~(MBIT(8));
+    }
+
+    if (bandcfg_11ax_5G)
+    {
+        bandcfg.config_bands |= (MBIT(9));
+    }
+    else
+    {
+        bandcfg.config_bands &= ~(MBIT(9));
+    }
+
+    ret = wlan_set_bandcfg(&bandcfg);
+    if (ret != WM_SUCCESS)
+    {
+        (void)PRINTF("Unable to set bandcfg\r\n");
+        return;
+    }
+#endif
+}
+
 static void dump_wlan_set_multiple_dtim_usage(void)
 {
     (void)PRINTF("Usage:\r\n");
@@ -6658,6 +6780,44 @@ static void test_wlan_enable_disable_htc(int argc, char **argv)
     }
 }
 #endif
+
+static void dump_wlan_set_country_ie_ignore_usage(void)
+{
+    (void)PRINTF("Usage:\r\n");
+    (void)PRINTF("    wlan-set-country-ignore-ie <0/1>\r\n");
+    (void)PRINTF("    <enable/disable>: 1 -- Ignore country ie\r\n");
+    (void)PRINTF("                      0 -- Use country ie(default)\r\n");
+}
+
+static void test_wlan_set_country_ie_ignore(int argc, char **argv)
+{
+    int ret        = -WM_FAIL;
+    uint8_t ignore = 0;
+
+    if (argc > 2)
+    {
+        (void)PRINTF("Error: invalid number of arguments\r\n");
+        dump_wlan_set_country_ie_ignore_usage();
+        return;
+    }
+
+    /* SET */
+    if (argc == 2)
+    {
+        ignore = atoi(argv[1]);
+    }
+
+    ret = wlan_set_country_ie_ignore(&ignore);
+
+    if (ret != WM_SUCCESS)
+    {
+        (void)PRINTF("Set country ie ignore is failed\r\n");
+    }
+    else
+    {
+        (void)PRINTF("Country ie \"%s\" is set\r\n", ignore == 0 ? "follow" : "ignore");
+    }
+}
 
 #if CONFIG_COEX_DUTY_CYCLE
 static void dump_wlan_single_ant_duty_cycle_usage()
@@ -8734,6 +8894,8 @@ static struct cli_command tests[] = {
 #if STA_SUPPORT
     {"wlan-get-signal", NULL, test_wlan_get_signal},
 #endif
+    {"wlan-set-bandcfg", NULL, test_wlan_set_bandcfg},
+    {"wlan-get-bandcfg", NULL, test_wlan_get_bandcfg},
 #if (CONFIG_IPS)
     {"wlan-set-ips", "<option>", test_wlan_set_ips},
 #endif
@@ -8764,6 +8926,7 @@ static struct cli_command tests[] = {
     {"wlan-cloud-keep-alive", "<start/stop/reset>", test_wlan_cloud_keep_alive},
     {"wlan_tcp_client", "dst_ip <dst_ip> src_port <src_port> dst_port <dst_port>", test_wlan_tcp_client},
 #endif
+    {"wlan-set-country-ie-ignore", "<0/1>", test_wlan_set_country_ie_ignore},
 #if CONFIG_COEX_DUTY_CYCLE
     {"wlan-single-ant-duty-cycle", "<enable/disable> [<Ieee154Duration> <TotalDuration>]",
      test_wlan_single_ant_duty_cycle},

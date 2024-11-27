@@ -20,16 +20,61 @@
 #error "Region tx power config not defined"
 #endif
 
-#if defined(RW610) && (CONFIG_COMPRESS_TX_PWTBL)
-#define MAX_SOC_OTP_LINE 64
-#define OTP_PKG_TAG      0x15D
-#define PKG_TYPE_MAX     3
-
+#if defined(RW610) && (CONFIG_COMPRESS_TX_PWTBL || ((CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX)))
 typedef struct _rg_power_info
 {
     t_u8 *rg_power_table;
     t_u16 rg_len;
 } rg_power_info;
+#endif
+
+#if defined(RW610) && ((CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX))
+
+typedef struct _ru_power_cfg
+{
+    t_u16 region_code;
+    rg_power_info power_info;
+} ru_power_cfg;
+
+/* All type boards ru txpwr data is same, */
+ru_power_cfg ru_power_cfg_rw610[] = {
+    {0x00, .power_info = {(t_u8 *)rutxpowerlimit_cfg_set_WW, sizeof(rutxpowerlimit_cfg_set_WW)}},
+    {0x10, .power_info = {(t_u8 *)rutxpowerlimit_cfg_set_FCC, sizeof(rutxpowerlimit_cfg_set_FCC)}},
+    {0x30, .power_info = {(t_u8 *)rutxpowerlimit_cfg_set_EU, sizeof(rutxpowerlimit_cfg_set_EU)}},
+    {0x50, .power_info = {(t_u8 *)rutxpowerlimit_cfg_set_CN, sizeof(rutxpowerlimit_cfg_set_CN)}},
+    {0xFF, .power_info = {(t_u8 *)rutxpowerlimit_cfg_set_JP, sizeof(rutxpowerlimit_cfg_set_JP)}},
+};
+
+int wlan_set_ru_power_cfg(t_u16 region_code)
+{
+    int i  = 0;
+    int rv = -WM_FAIL;
+
+    for (i = 0; i < sizeof(ru_power_cfg_rw610) / sizeof(ru_power_cfg); i++)
+    {
+        if (region_code == ru_power_cfg_rw610[i].region_code)
+        {
+            rv = wlan_set_11ax_rutxpowerlimit(ru_power_cfg_rw610[i].power_info.rg_power_table,
+                                              ru_power_cfg_rw610[i].power_info.rg_len);
+
+            return rv;
+        }
+    }
+
+    /* Set default world wide ru txpwr if ru_power_cfg_rw610 does not have a corresponding region_code temporarily */
+    wlcm_d("power_info of region_code %d not available, use default world wide ru txpwr by default.", region_code);
+
+    rv = wlan_set_11ax_rutxpowerlimit(ru_power_cfg_rw610[0].power_info.rg_power_table,
+                                      ru_power_cfg_rw610[0].power_info.rg_len);
+
+    return rv;
+}
+#endif
+
+#if defined(RW610) && (CONFIG_COMPRESS_TX_PWTBL)
+#define MAX_SOC_OTP_LINE 64
+#define OTP_PKG_TAG      0x15D
+#define PKG_TYPE_MAX     3
 
 typedef struct _rg_power_cfg
 {
@@ -194,6 +239,13 @@ int wlan_set_wwsm_txpwrlimit()
 #ifdef RW610
     wlan_get_region_code(&region_code);
     rv = wlan_set_rg_power_cfg(region_code);
+#if (CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX)
+    rv = wlan_set_ru_power_cfg(region_code);
+    if (rv != WM_SUCCESS)
+    {
+        return -WM_FAIL;
+    }
+#endif
 #else
     rv = wlan_set_region_power_cfg(rg_table_fc, rg_table_fc_len);
 #endif

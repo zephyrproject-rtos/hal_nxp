@@ -1633,6 +1633,7 @@ retry:
 
 #ifdef RW610
     wifi_cau_temperature_enable();
+    wifi_pmip_v33_enable();
     temperature_val = wifi_cau_temperature_write_to_firmware();
     PRINTF("Wi-Fi cau temperature : %d\r\n", temperature_val);
 #endif

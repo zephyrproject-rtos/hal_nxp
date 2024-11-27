@@ -330,37 +330,75 @@ int wifi_uap_prepare_and_send_cmd(mlan_private *pmpriv,
 int wifi_uap_downld_domain_params(int band)
 {
     int rv;
-    mlan_private *priv_uap   = mlan_adap->priv[1];
-    int region_code          = mlan_adap->region_code;
+    mlan_adapter *pmadapter = mlan_adap;
+    mlan_private *priv_uap   = pmadapter->priv[1];
+    int region_code          = pmadapter->region_code;
     const t_u8 *country_code = NULL;
-    t_u8 nr_sb;
-    wifi_sub_band_set_t *sub_band_list = NULL;
+    int chan_spacing = 1;
+    int no_of_chan = 0;
+    t_u16 first_chan = 0, next_chan = 0, max_tx_power = 0;
+    wlan_802_11d_domain_reg_t *pdomain = &pmadapter->domain_reg;
+    const chan_freq_power_t *cfp;
 
     /* get band and sub band lists */
 #if CONFIG_5GHz_SUPPORT
     if (band == BAND_A)
     {
-        sub_band_list = get_sub_band_from_region_code_5ghz(region_code, &nr_sb);
+        chan_spacing = 4;
+        no_of_chan = pmadapter->region_channel[BAND_5GHZ].num_cfp;
+        cfp = pmadapter->region_channel[BAND_5GHZ].pcfp;
     }
     else
-    {
-        sub_band_list = get_sub_band_from_region_code(region_code, &nr_sb);
-    }
-#else
-    sub_band_list = get_sub_band_from_region_code(region_code, &nr_sb);
 #endif
+    {
+        no_of_chan = pmadapter->region_channel[BAND_2GHZ].num_cfp;
+        cfp = pmadapter->region_channel[BAND_2GHZ].pcfp;
+    }
 
     /* get country code string from region code */
-    country_code = wlan_11d_code_2_region(mlan_adap, (t_u8)region_code);
+    country_code = wlan_11d_code_2_region(pmadapter, (t_u8)region_code);
     if (country_code == NULL)
     {
         wuap_e("wifi_uap_downld_domain_params get country_code from region_code failed");
         return -WM_FAIL;
     }
 
-    /* restore domain info params for fw command */
-    wlan_11d_set_domain_info(priv_uap, band, country_code, nr_sb, (IEEEtypes_SubbandSet_t *)sub_band_list);
+    (void)__memset(pmadapter, pdomain, 0, sizeof(wlan_802_11d_domain_reg_t));
+    (void)__memcpy(pmadapter, pdomain->country_code, country_code, COUNTRY_CODE_LEN);
+    pdomain->band = band;
 
+    for (int i = 0; i < no_of_chan; i++)
+    {
+        if (first_chan && next_chan &&
+            next_chan + chan_spacing == cfp[i].channel &&
+            max_tx_power == cfp[i].max_tx_power)
+        {
+            next_chan = cfp[i].channel;
+            continue;
+        }
+
+        if (first_chan && next_chan)
+        {
+            pdomain->sub_band[pdomain->no_of_sub_band].first_chan = first_chan;
+            pdomain->sub_band[pdomain->no_of_sub_band].no_of_chan =
+                    (next_chan - first_chan) / chan_spacing + 1;
+            pdomain->sub_band[pdomain->no_of_sub_band].max_tx_pwr = max_tx_power;
+            pdomain->no_of_sub_band ++;
+            first_chan = 0;
+        }
+
+        first_chan = next_chan = cfp[i].channel;
+        max_tx_power = cfp[i].max_tx_power;
+    }
+
+    if (first_chan)
+    {
+        pdomain->sub_band[pdomain->no_of_sub_band].first_chan = first_chan;
+        pdomain->sub_band[pdomain->no_of_sub_band].no_of_chan =
+                (next_chan - first_chan) / chan_spacing + 1;
+        pdomain->sub_band[pdomain->no_of_sub_band].max_tx_pwr = max_tx_power;
+        pdomain->no_of_sub_band ++;
+    }
     rv = wifi_uap_prepare_and_send_cmd(priv_uap, HostCmd_CMD_802_11D_DOMAIN_INFO, HostCmd_ACT_GEN_SET, 0, NULL, NULL,
                                        MLAN_BSS_TYPE_UAP, NULL);
     if (rv != 0)

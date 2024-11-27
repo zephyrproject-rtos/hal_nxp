@@ -1205,7 +1205,7 @@ typedef PACK_START struct
 } PACK_END wifi_btwt_config_t;
 
 #define WLAN_BTWT_REPORT_LEN     9
-#define WLAN_BTWT_REPORT_MAX_NUM 4
+#define WLAN_BTWT_REPORT_MAX_NUM 6
 /** Wi-Fi TWT Report Configuration */
 typedef PACK_START struct
 {

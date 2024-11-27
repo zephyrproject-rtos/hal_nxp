@@ -59,12 +59,20 @@
 #define WLAN_CAU_TEMPERATURE_ADDR    (0x4500400CU)
 #define WLAN_CAU_TEMPERATURE_FW_ADDR (0x41382490U)
 #define WLAN_FW_WAKE_STATUS_ADDR     (0x40031068U)
+#define WLAN_PMIP_TSEN_ADDR          (0x45004010U)
+#define WLAN_V33_VSEN_ADDR           (0x45004028U)
+#define WLAN_ADC_CTRL_ADDR           (0x45004000U)
 #endif
 
 #ifdef RW610
 #define RW610_PACKAGE_TYPE_QFN 0
 #define RW610_PACKAGE_TYPE_CSP 1
 #define RW610_PACKAGE_TYPE_BGA 2
+#define RW610_PACKAGE_TYPE_WW  0x00
+#define RW610_PACKAGE_TYPE_FCC 0x10
+#define RW610_PACKAGE_TYPE_EU  0x30
+#define RW610_PACKAGE_TYPE_CN  0x50
+#define RW610_PACKAGE_TYPE_JP  0xFF
 #endif
 
 #define WIFI_COMMAND_RESPONSE_WAIT_MS 20000
@@ -1854,6 +1862,25 @@ typedef struct _wifi_ecsa_info
     t_u8 channel;
 } wifi_ecsa_info;
 
+#if CONFIG_CSI
+typedef enum _csi_state
+{
+    csi_enabled = 0,
+    csi_disabled,
+    csiconfig_wrong,
+    csiinternal_restart,
+    csiinternal_stop,
+    csiinternal_disabled,
+} csi_state;
+
+typedef MLAN_PACK_START struct _wifi_csi_status_info
+{
+    csi_state status;
+    t_u8 channel;
+    t_u16 cnt;
+} MLAN_PACK_END wifi_csi_status_info;
+#endif
+
 #ifdef RW610
 #if CONFIG_HOST_SLEEP
 extern int wakeup_by;
@@ -1991,6 +2018,7 @@ int wifi_dual_ant_duty_cycle(t_u16 enable, t_u16 nbTime, t_u16 wlanTime, t_u16 w
 void wifi_cau_temperature_enable(void);
 int wifi_cau_temperature_write_to_firmware(void);
 int32_t wifi_get_temperature(void);
+void wifi_pmip_v33_enable();
 #endif
 
 #if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)

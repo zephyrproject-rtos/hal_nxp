@@ -79,6 +79,10 @@
 #include "app_notify.h"
 #endif
 
+#if CONFIG_WIFI_RECOVERY
+#include "zephyr/net/dhcpv4_server.h"
+#endif
+
 #if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
 #include "board.h"
 
@@ -358,12 +362,10 @@ static struct wifi_scan_params_t g_wifi_scan_params = {NULL,
                                                        60,
                                                        250};
 
-#define CONFIG_WLCMGR_STACK_SIZE (5120)
-
 static void wlcmgr_task(osa_task_param_t arg);
 
 /* OSA_TASKS: name, priority, instances, stackSz, useFloat */
-static OSA_TASK_DEFINE(wlcmgr_task, OSA_PRIORITY_HIGH, 1, CONFIG_WLCMGR_STACK_SIZE, 0);
+static OSA_TASK_DEFINE(wlcmgr_task, CONFIG_NXP_WIFI_WLCMGR_TASK_PRIO, 1, CONFIG_NXP_WIFI_WLCMGR_TASK_STACK_SIZE, 0);
 
 #if CONFIG_WPS2
 #define CONFIG_WPS_STACK_SIZE (5120)
@@ -420,14 +422,10 @@ static struct wps_config wps_conf = {
 };
 #endif /* CONFIG_WPS2 */
 #ifdef RW610
-
-/*wlmon_mon_task takes 2640B with supplicant control interface API*/
-#define CONFIG_WLCMGR_MON_STACK_SIZE (3072)
-
 static void wlcmgr_mon_task(osa_task_param_t arg);
 
 /* OSA_TASKS: name, priority, instances, stackSz, useFloat */
-static OSA_TASK_DEFINE(wlcmgr_mon_task, OSA_PRIORITY_NORMAL , 1, CONFIG_WLCMGR_MON_STACK_SIZE, 0);
+static OSA_TASK_DEFINE(wlcmgr_mon_task, CONFIG_NXP_WIFI_MON_TASK_PRIO , 1, CONFIG_NXP_WIFI_MON_TASK_STACK_SIZE, 0);
 
 /* The monitor thread event queue receives events from the power manager
  * wlan notifier when idle hook is invoked and host is ready to enter
@@ -1789,7 +1787,7 @@ static bool is_sta_idle(void)
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
     int state = wifi_nxp_supp_state();
 
-    return (state == WPA_DISCONNECTED);
+    return (state <= WPA_INACTIVE);
 #else
     return (wlan.sta_state == CM_STA_IDLE);
 #endif
@@ -3175,6 +3173,33 @@ static void wlcm_process_channel_switch_ann(enum cm_sta_state *next, struct wlan
     }
 }
 
+#if CONFIG_CSI
+void wlcm_process_csi_status_report(struct wifi_message *msg)
+{
+    if (msg->data != NULL)
+    {
+        wifi_csi_status_info *pcsi_status = (wifi_csi_status_info *)msg->data;
+        if (pcsi_status->status == csi_enabled)
+            (void)PRINTF("csi status report: enable and start csi on channel %d \r\n", pcsi_status->channel);
+        if (pcsi_status->status == csi_disabled)
+            (void)PRINTF("csi status report: stop and disable csi\r\n");
+        if (pcsi_status->status == csiconfig_wrong)
+            (void)PRINTF("csi status report: channel or bandwidth config wrong\r\n");
+        if (pcsi_status->status == csiinternal_restart)
+            (void)PRINTF("csi status report: FW internal restart csi on channel %d \r\n", pcsi_status->channel);
+        if (pcsi_status->status == csiinternal_stop)
+            (void)PRINTF("csi status report: FW internal stop csi\r\n");
+        if (pcsi_status->status == csiinternal_disabled)
+            (void)PRINTF("csi status report: FW internal stop and disable csi, user should put in csi cmd to enable csi\r\n");
+#if !CONFIG_MEM_POOLS
+        OSA_MemoryFree((void *)msg->data);
+#else
+        OSA_MemoryPoolFree(buf_32_MemoryPool, msg->data);
+#endif
+    }
+}
+#endif
+
 #if CONFIG_WPA_SUPP
 enum mlan_channel_type wlan_get_chan_type(nxp_wifi_ch_switch_info chandef)
 {
@@ -4400,6 +4425,7 @@ static int wlan_set_uap_ecsa_cfg(
 {
     mlan_private *pmpriv = (mlan_private *)mlan_adap->priv[1];
     bool block_tx_flag   = (1 == block_tx) ? true : false;
+    int ret = WM_SUCCESS;
 
     if (wlan_11h_radar_detect_required(pmpriv, channel))
     {
@@ -4435,12 +4461,19 @@ static int wlan_set_uap_ecsa_cfg(
         if (0 != switch_count)
         {
             set_ecsa_block_tx_time(switch_count);
-            return wifi_set_ecsa_cfg(block_tx, oper_class, channel, switch_count, band_width, ecsa);
+            ret = wifi_set_ecsa_cfg(block_tx, oper_class, channel, switch_count, band_width, ecsa);
         }
         else
         {
-            return wifi_set_action_ecsa_cfg(block_tx, oper_class, channel, switch_count);
+            ret = wifi_set_action_ecsa_cfg(block_tx, oper_class, channel, switch_count);
         }
+
+        if(WM_SUCCESS != ret)
+        {
+            set_ecsa_block_tx_flag(false);
+        }
+
+        return ret;
     }
     else
     {
@@ -7063,6 +7096,12 @@ static enum cm_sta_state handle_message(struct wifi_message *msg)
             wlcm_process_channel_switch(msg);
 #endif
             break;
+#if CONFIG_CSI
+        case WIFI_EVENT_CSI_STATUS:
+            wlcm_d("got event: csi status report");
+            wlcm_process_csi_status_report(msg);
+            break;
+#endif
 
         case WIFI_EVENT_SLEEP:
 #if CONFIG_WIFI_PS_DEBUG
@@ -8113,6 +8152,14 @@ int wlan_stop(void)
         wlcm_w("failed to get scan lock: %d.", ret);
         return WLAN_ERROR_STATE;
     }
+#else
+#if CONFIG_WIFI_RECOVERY
+    /* If CONFIG_WIFI_RECOVERY is defined, 0xb2 CMD will be skipped, but dhcp_server_stop()
+     * is called in 0xb2 CMD response. So it needs to be called here to stop DHCP server
+     */
+    if (wifi_recovery_enable)
+        net_dhcpv4_server_stop((struct net_if *)net_get_uap_interface());
+#endif
 #endif
     status = OSA_SemaphoreDestroy((osa_semaphore_handle_t)wlan.scan_lock);
     if (status != KOSA_StatusSuccess)
@@ -10527,6 +10574,7 @@ static void wlcmgr_mon_task(void * data)
 #if CONFIG_WIFI_RECOVERY
             else if (msg.id == WIFI_RECOVERY_REQ)
             {
+                CONNECTION_EVENT(WLAN_REASON_FW_HANG, NULL);
                 wlan_reset(CLI_RESET_WIFI);
                 wifi_recovery_cnt ++;
             }
@@ -12615,16 +12663,6 @@ int wlan_uap_set_hidden_ssid(const t_u8 hidden_ssid)
         (void)PRINTF("Pls set hidden_ssid before start uAP.\r\n");
         return -WM_FAIL;
     }
-
-#if CONFIG_WPA_SUPP
-#if CONFIG_WPA_SUPP_AP
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
-    struct netif *netif = net_get_uap_interface();
-
-    wpa_supp_set_ap_hidden_ssid(netif, hidden_ssid);
-#endif
-#endif
-#endif
 
     wifi_uap_set_hidden_ssid(hidden_ssid);
 
@@ -15353,6 +15391,16 @@ int wlan_get_signal_info(wlan_rssi_info_t *signal)
 }
 #endif
 
+int wlan_set_bandcfg(wlan_bandcfg_t *bandcfg)
+{
+    return wifi_get_set_bandcfg(bandcfg, MLAN_ACT_SET);
+}
+
+int wlan_get_bandcfg(wlan_bandcfg_t *bandcfg)
+{
+    return wifi_get_set_bandcfg(bandcfg, MLAN_ACT_GET);
+}
+
 #if CONFIG_TURBO_MODE
 int wlan_get_turbo_mode(t_u8 *mode)
 {
@@ -15448,10 +15496,22 @@ int wlan_set_country_code(const char *alpha2)
         return ret;
 
 #if defined(RW610) && (CONFIG_COMPRESS_TX_PWTBL)
-    return wlan_set_rg_power_cfg(region_code_rw610);
-#else
-    return ret;
+    ret = wlan_set_rg_power_cfg(region_code_rw610);
+    if (ret != WM_SUCCESS)
+    {
+        return -WM_FAIL;
+    }
 #endif
+
+#if defined(RW610) && ((CONFIG_COMPRESS_RU_TX_PWTBL) && (CONFIG_11AX))
+    ret = wlan_set_ru_power_cfg(region_code_rw610);
+    if (ret != WM_SUCCESS)
+    {
+        return -WM_FAIL;
+    }
+#endif
+
+    return ret;
 }
 
 int wlan_set_country_ie_ignore(uint8_t *ignore)
