@@ -88,7 +88,7 @@ static uint8_t imu_task_flag = 0;
 #ifndef CPU2
 /*! Sleep flag address between CPU1 and CPU3 or CPU2 and CPU3 */
 #define IMU_SLEEP_FLAG13 0x4138248C
-#define IMU_SLEEP_FLAG23 0x443CFE88
+#define IMU_SLEEP_FLAG23 0x443C2588
 #define IMU_SLEEP_FLAG_ADDR(imuLinkId) \
     (((imuLinkId) == kIMU_LinkCpu1Cpu3) ? ((uint32_t *)IMU_SLEEP_FLAG13) : ((uint32_t *)IMU_SLEEP_FLAG23))
 #endif
