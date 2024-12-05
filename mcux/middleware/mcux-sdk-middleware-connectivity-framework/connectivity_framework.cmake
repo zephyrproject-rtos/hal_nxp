@@ -19,17 +19,19 @@ if(CONFIG_SOC_SERIES_RW6XX)
 
     zephyr_compile_definitions(gPlatformDisableVendorSpecificInit=1U)
 
-    if (CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_BT OR CONFIG_NXP_MONOLITHIC_IEEE802154)
-        zephyr_compile_definitions(gPlatformMonolithicApp_d=1U)
+    if (CONFIG_NXP_MONOLITHIC_WIFI OR CONFIG_NXP_MONOLITHIC_NBU)
+        zephyr_compile_definitions(
+            gPlatformMonolithicApp_d=1U
+            fw_cpu2_ble=fw_cpu2
+            fw_cpu2_combo=fw_cpu2
+        )
 
-        zephyr_compile_definitions_ifndef(CONFIG_NXP_MONOLITHIC_BT
-                                          BLE_FW_ADDRESS=0U)
+        zephyr_compile_definitions_ifndef(CONFIG_NXP_MONOLITHIC_NBU
+                                          BLE_FW_ADDRESS=0U
+                                          COMBO_FW_ADDRESS=0U)
 
         zephyr_compile_definitions_ifndef(CONFIG_NXP_MONOLITHIC_WIFI
                                           WIFI_FW_ADDRESS=0U)
-
-        zephyr_compile_definitions_ifndef(CONFIG_NXP_MONOLITHIC_IEEE802154
-                                          COMBO_FW_ADDRESS=0U)
     endif()
 endif()
 
