@@ -9,14 +9,9 @@
 
 #include <stdint.h>
 
-#if defined(CONFIG_NXP_MONOLITHIC_IEEE802154)
-__attribute__ ((__section__(".fw_cpu2_combo"), used))
-const uint8_t fw_cpu2_combo[] = {
-    #include <rw61x_combo_fw.bin.inc>
-};
-#elif defined(CONFIG_NXP_MONOLITHIC_BT)
-__attribute__ ((__section__(".fw_cpu2_ble"), used))
-const uint8_t fw_cpu2_ble[] = {
-    #include <rw61x_ble_fw.bin.inc>
+#if defined(CONFIG_NXP_MONOLITHIC_NBU)
+__attribute__ ((__section__(".fw_cpu2"), used))
+const uint8_t fw_cpu2[] = {
+    #include <rw61x_cpu2_fw.bin.inc>
 };
 #endif
