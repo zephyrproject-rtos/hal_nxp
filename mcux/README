@@ -124,3 +124,4 @@ Patch List:
   - mcux-sdk/drivers/cache/cache64/fsl_cache.c: remove invalid assertion when
     CACHE64_GetInstanceByAddr() is passed an address not managed by the CACHE64
     controller
+  - drivers: edma_rev2: add macro for CHn_CSR's ACTIVE bit
