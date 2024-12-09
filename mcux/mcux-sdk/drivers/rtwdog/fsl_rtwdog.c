@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2019, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -144,5 +144,8 @@ void RTWDOG_Deinit(RTWDOG_Type *base)
     primaskValue = DisableGlobalIRQ();
     RTWDOG_Unlock(base);
     RTWDOG_Disable(base);
+    while ((base->CS & RTWDOG_CS_RCS_MASK) == 0U)
+    {
+    }
     EnableGlobalIRQ(primaskValue);
 }
