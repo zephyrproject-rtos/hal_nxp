@@ -125,3 +125,4 @@ Patch List:
     CACHE64_GetInstanceByAddr() is passed an address not managed by the CACHE64
     controller
   - drivers: edma_rev2: add macro for CHn_CSR's ACTIVE bit
+  - drivers: rtwdog: Fix the issue that driver doesn't wait the over status after CS register operation
