@@ -7,13 +7,15 @@
  *  SPDX-License-Identifier: BSD-3-Clause
  *
  */
-#include <wmerrno.h>
-#include <board.h>
-#include <wifi_bt_config.h>
+
 
 #include <mlan_sdio_api.h>
 #include <osa.h>
+#include <fsl_common.h>
+#include <fsl_gpio.h>
 #include <zephyr/sd/sdio.h>
+
+#include <zephyr/drivers/gpio.h>
 
 #define SDIO_CMD_TIMEOUT 2000
 
@@ -87,15 +89,104 @@ void sdio_enable_interrupt(void)
     return;
 }
 
+struct wifi_gpio_config
+{
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), pdn_gpios)
+    const struct gpio_dt_spec pdn;
+#endif
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), wl_rst_gpios)
+    const struct gpio_dt_spec wl_rst;
+#endif
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), bt_rst_gpios)
+    const struct gpio_dt_spec bt_rst;
+#endif
+};
+
+static const struct wifi_gpio_config wifi_gpio = {
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), pdn_gpios)
+    .pdn = GPIO_DT_SPEC_GET(DT_NODELABEL(wifi), pdn_gpios),
+#endif
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), wl_rst_gpios)
+    .wl_rst = GPIO_DT_SPEC_GET(DT_NODELABEL(wifi), wl_rst_gpios),
+#endif
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), bt_rst_gpios)
+    .bt_rst = GPIO_DT_SPEC_GET(DT_NODELABEL(wifi), bt_rst_gpios),
+#endif
+};
+
+void BOARD_WIFI_BT_Enable(bool enable)
+{
+    if (enable)
+    {
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), pdn_gpios)
+        gpio_pin_set_dt(&wifi_gpio.pdn, 1);
+        k_msleep(100);
+#endif
+
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), wl_rst_gpios)
+        gpio_pin_set_dt(&wifi_gpio.wl_rst, 1);
+#endif
+
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), bt_rst_gpios)
+        gpio_pin_set_dt(&wifi_gpio.bt_rst, 1);
+#endif
+
+        k_msleep(100);
+    }
+    else
+    {
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), wl_rst_gpios)
+        gpio_pin_set_dt(&wifi_gpio.wl_rst, 0);
+#endif
+
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), bt_rst_gpios)
+        gpio_pin_set_dt(&wifi_gpio.bt_rst, 0);
+#endif
+
+        k_msleep(10);
+
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), pdn_gpios)
+        gpio_pin_set_dt(&wifi_gpio.pdn, 0);
+#endif
+
+        k_msleep(100);
+    }
+}
+
 static void sdio_controller_init(void)
 {
     (void)memset(&wm_g_sd, 0, sizeof(struct sd_card));
+
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), wl_rst_gpios)
+    if (gpio_pin_configure_dt(&wifi_gpio.wl_rst, GPIO_OUTPUT) < 0)
+    {
+        sdio_e("Failed to configure WiFi reset pin");
+    }
+#endif
+
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), pdn_gpios)
+    if (gpio_pin_configure_dt(&wifi_gpio.pdn, GPIO_OUTPUT) < 0)
+    {
+        sdio_e("Failed to configure power down pin");
+    }
+#endif
+
+#if DT_NODE_HAS_PROP(DT_NODELABEL(wifi), bt_rst_gpios)
+    if (gpio_pin_configure_dt(&wifi_gpio.bt_rst, GPIO_OUTPUT) < 0)
+    {
+        sdio_e("Failed to configure BT reset pin");
+    }
+#endif
+
+    BOARD_WIFI_BT_Enable(false);
 }
 
 static int sdio_card_init(void)
 {
     int ret = WM_SUCCESS;
     uint32_t resp;
+
+    BOARD_WIFI_BT_Enable(true);
 
     if (!device_is_ready(sdhc_dev))
     {

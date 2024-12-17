@@ -233,6 +233,7 @@ static void wifi_sdio_wait_for_cmdresp()
     {
         /* assert as command flow cannot work anymore */
         assert(0);
+        wifi_e("wifi_sdio_wait_for_cmdresp failed");
     }
 }
 
@@ -654,7 +655,7 @@ static mlan_status wlan_decode_rx_packet(t_u8 *pmbuf, t_u32 upld_type)
     }
     else
 #endif /* CONFIG_P2P */
-        if ((fw_init_cfg == 0U) && (bus.event_queue != NULL))
+    if ((fw_init_cfg == 0U) && (bus.event_queue != NULL))
     {
         if (upld_type == MLAN_TYPE_CMD)
         {
@@ -2757,8 +2758,8 @@ void handle_cdint(int error)
     if (!error && g_txrx_flag)
     {
         g_txrx_flag = false;
-#if CONFIG_ZEPHYR
-        (void)OSA_EventNotifyPost(wm_wifi.wifi_core_task_Handle);
+#ifdef __ZEPHYR__
+        (void)OSA_TaskNotifyPost(wm_wifi.wifi_core_task_Handle);
 #else
         (void)OSA_EventSet((osa_event_handle_t)wm_wifi.wifi_event_Handle, WIFI_EVENT_SDIO);
 #endif

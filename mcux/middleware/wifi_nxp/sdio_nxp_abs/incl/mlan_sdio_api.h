@@ -45,6 +45,7 @@
 #define sdio_d(...)
 #endif /* CONFIG_WIFI_SDIO_DEBUG */
 
+#ifndef __ZEPHYR__
 #define SDIO_GO_IDLE_STATE      ((uint8_t)0)
 #define SDIO_SET_REL_ADDR       ((uint8_t)3)
 #define SDIO_SDIO_SEN_OP_COND   ((uint8_t)5)
@@ -54,6 +55,7 @@
 
 /* Depends on DMA_BUFSZ */
 #define DMA_BOUNDARY_SIZE (512 * 1024)
+#endif
 
 /** Read Card Register
  *

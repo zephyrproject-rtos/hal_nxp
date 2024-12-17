@@ -3405,24 +3405,6 @@ int wifi_process_cmd_response(HostCmd_DS_COMMAND *resp)
                 rv = wlan_ops_sta_process_cmdresp(pmpriv, command, resp, NULL);
             }
             break;
-#ifdef SD8801
-            case HostCmd_CMD_ROBUST_COEX:
-            {
-                const HostCmd_DS_ExtBLECoex_Config_t *coex = &resp->params.ext_ble_coex_cfg;
-                if (coex->action == HostCmd_ACT_GEN_GET)
-                {
-                    if (wm_wifi.cmd_resp_priv != NULL)
-                    {
-                        wifi_ext_coex_stats_t *stats = (wifi_ext_coex_stats_t *)wm_wifi.cmd_resp_priv;
-                        stats->ext_radio_req_count   = coex->coex_cfg_data.EXT_RADIO_REQ_count;
-                        stats->ext_radio_pri_count   = coex->coex_cfg_data.EXT_RADIO_PRI_count;
-                        stats->wlan_grant_count      = coex->coex_cfg_data.WLAN_GRANT_count;
-                    }
-                }
-                wm_wifi.cmd_resp_status = WM_SUCCESS;
-            }
-            break;
-#endif
 #if CONFIG_11N
             case HostCmd_CMD_11N_CFG:
                 rv = wlan_ret_11n_cfg(pmpriv, resp, NULL);
@@ -4697,14 +4679,33 @@ int wifi_process_cmd_response(HostCmd_DS_COMMAND *resp)
                     wm_wifi.cmd_resp_status = -WM_FAIL;
                 break;
 #endif
-#if (CONFIG_COEX_DUTY_CYCLE) || (CONFIG_EXTERNAL_COEX_PTA) || (CONFIG_IMD3_CFG)
             case HostCmd_CMD_ROBUST_COEX:
+            {
+
+#ifdef SD8801
+                const HostCmd_DS_ExtBLECoex_Config_t *coex = &resp->params.ext_ble_coex_cfg;
+                if (coex->action == HostCmd_ACT_GEN_GET)
+                {
+                    if (wm_wifi.cmd_resp_priv != NULL)
+                    {
+                        wifi_ext_coex_stats_t *stats = (wifi_ext_coex_stats_t *)wm_wifi.cmd_resp_priv;
+                        stats->ext_radio_req_count   = coex->coex_cfg_data.EXT_RADIO_REQ_count;
+                        stats->ext_radio_pri_count   = coex->coex_cfg_data.EXT_RADIO_PRI_count;
+                        stats->wlan_grant_count      = coex->coex_cfg_data.WLAN_GRANT_count;
+                    }
+                }
+                wm_wifi.cmd_resp_status = WM_SUCCESS;
+#endif
+
+#if (CONFIG_COEX_DUTY_CYCLE) || (CONFIG_EXTERNAL_COEX_PTA) || (CONFIG_IMD3_CFG)
                 if (resp->result == HostCmd_RESULT_OK)
                     wm_wifi.cmd_resp_status = WM_SUCCESS;
                 else
                     wm_wifi.cmd_resp_status = -WM_FAIL;
-                break;
 #endif
+            }
+            break;
+
 #if (CONFIG_WIFI_IND_RESET) && (CONFIG_WIFI_IND_DNLD)
             case HostCmd_CMD_INDEPENDENT_RESET_CFG:
             {
