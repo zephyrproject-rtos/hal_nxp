@@ -500,8 +500,15 @@ void SAI_TxEnable(I2S_Type *base, bool enable)
         /* If clock is sync with Rx, should enable RE bit. */
         if (((base->TCR2 & I2S_TCR2_SYNC_MASK) >> I2S_TCR2_SYNC_SHIFT) == 0x1U)
         {
+            base->RCSR = ((base->RCSR & 0xFFE3FFFFU) | I2S_RCSR_BCE_MASK);
             base->RCSR = ((base->RCSR & 0xFFE3FFFFU) | I2S_RCSR_RE_MASK);
         }
+        /* Sometimes, bit clock starts just 3 clocks before frame synchronization
+         * signal, which cause the 1st frame sync is ignored by the RX side as
+         * described in RT1170 RM 58.3.3. To make bit clock at least 4 clocks earlier,
+         * here, we enable bit clock firstly.
+        */
+        base->TCSR = ((base->TCSR & 0xFFE3FFFFU) | I2S_TCSR_BCE_MASK);
         base->TCSR = ((base->TCSR & 0xFFE3FFFFU) | I2S_TCSR_TE_MASK);
         /* Also need to clear the FIFO error flag before start */
         SAI_TxClearStatusFlags(base, kSAI_FIFOErrorFlag);
@@ -530,8 +537,15 @@ void SAI_RxEnable(I2S_Type *base, bool enable)
         /* If clock is sync with Tx, should enable TE bit. */
         if (((base->RCR2 & I2S_RCR2_SYNC_MASK) >> I2S_RCR2_SYNC_SHIFT) == 0x1U)
         {
+            base->TCSR = ((base->TCSR & 0xFFE3FFFFU) | I2S_TCSR_BCE_MASK);
             base->TCSR = ((base->TCSR & 0xFFE3FFFFU) | I2S_TCSR_TE_MASK);
         }
+        /* Sometimes, bit clock starts just 3 clocks before frame synchronization
+         * signal, which cause the 1st frame sync is ignored by the RX side as
+         * described in RT1170 RM 58.3.3. To make bit clock at least 4 clocks earlier,
+         * here, we enable bit clock firstly.
+        */
+        base->RCSR = ((base->RCSR & 0xFFE3FFFFU) | I2S_RCSR_BCE_MASK);
         base->RCSR = ((base->RCSR & 0xFFE3FFFFU) | I2S_RCSR_RE_MASK);
         /* Also need to clear the FIFO error flag before start */
         SAI_RxClearStatusFlags(base, kSAI_FIFOErrorFlag);
@@ -842,7 +856,8 @@ void SAI_TxSetBitclockConfig(I2S_Type *base, sai_master_slave_t masterSlave, sai
     }
     else
     {
-        tcr2 &= ~(I2S_TCR2_BCD_MASK);
+        /* Clear BCP bit before set it. */
+        tcr2 &= ~(I2S_TCR2_BCD_MASK | I2S_TCR2_BCP_MASK);
         tcr2 |= I2S_TCR2_BCP(config->bclkPolarity);
     }
 
@@ -870,7 +885,8 @@ void SAI_RxSetBitclockConfig(I2S_Type *base, sai_master_slave_t masterSlave, sai
     }
     else
     {
-        rcr2 &= ~(I2S_RCR2_BCD_MASK);
+        /* Clear BCP bit before set it. */
+        rcr2 &= ~(I2S_RCR2_BCD_MASK | I2S_RCR2_BCP_MASK);
         rcr2 |= I2S_RCR2_BCP(config->bclkPolarity);
     }
 
