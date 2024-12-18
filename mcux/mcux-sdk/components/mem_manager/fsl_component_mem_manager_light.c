@@ -124,7 +124,6 @@
 #define ENABLE_GLOBAL_IRQ(reg) \
     D_BARRIER;                 \
     EnableGlobalIRQ(reg)
-#define KB(x) ((x) << 10u)
 
 /************************************************************************************
 *************************************************************************************
@@ -532,7 +531,7 @@ mem_status_t MEM_RegisterExtendedArea(memAreaCfg_t *area_desc, uint8_t *p_area_i
                 break;
             }
             area_sz = new_area_desc->end_address.raw_address - new_area_desc->start_address.raw_address;
-            if (area_sz <= (uint32_t)KB((uint32_t)1U))
+            if (area_sz <= (uint32_t)(1U << 10U))
             {
                 /* doesn't make sense to register an area smaller than 1024 bytes */
                 st = kStatus_MemInitError;
