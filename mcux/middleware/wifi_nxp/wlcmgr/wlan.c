@@ -6002,7 +6002,7 @@ static enum cm_uap_state uap_state_machine(struct wifi_message *msg)
             break;
         case CM_UAP_USER_REQUEST_STOP:
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
-            supplicant_ap_disable(net_if_get_device((void *)netif));
+            net_mgmt(NET_REQUEST_WIFI_AP_DISABLE, (struct net_if *)netif, NULL, 0);
 #else
             if (wlan.uap_state < CM_UAP_CONFIGURED)
             {
