@@ -19,6 +19,7 @@
 #include "rtos_wpa_supp_if.h"
 #include "wifi-internal.h"
 #include "supp_main.h"
+#include "hapd_main.h"
 
 #define MAX_MGMT_TX_FRAME_SIZE 1500
 
