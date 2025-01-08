@@ -43,6 +43,7 @@ Patch List for S32K1:
    - Rename fields and macros of FTM device headers to allow compatibility with MCUX FTM driver.
    - Rename fields and macros of FlexCAN device headers to allow compatibility with MCUX FlexCAN driver.
    - Rename fields and macros of ADC device headers to allow compatibility with MCUX ADC driver.
+   - Add/rename macros of S32K148 ENET device header to allow compatibility with MCUX ENET driver.
 
 Patch List for S32K3:
    - Relocate uninitialized non-cacheable variables into .nocache section defined by Zephyr.
