@@ -29,6 +29,8 @@
 #define FSL_FEATURE_SOC_WDOG_COUNT (1)
 /* @brief RTC availability on the SoC. */
 #define FSL_FEATURE_SOC_RTC_COUNT (1)
+/* @brief ENET availability on the SoC. */
+#define FSL_FEATURE_SOC_ENET_COUNT (1)
 
 /* SYSMPU module features */
 
@@ -305,5 +307,10 @@
 #define FSL_FEATURE_ADC12_HAS_DMA_SUPPORT (1)
 /* @brief Conversion control count (related to number of registers SC1n and Rn). */
 #define FSL_FEATURE_ADC12_CONVERSION_CONTROL_COUNT (32)
+
+/* ENET module features */
+
+/* @brief Queue Size for each instance. */
+#define FSL_FEATURE_ENET_INSTANCE_QUEUEn(x) (1)
 
 #endif /* _S32K148_FEATURES_H_ */
