@@ -29,6 +29,8 @@
 #define FSL_FEATURE_SOC_WDOG_COUNT (1)
 /* @brief RTC availability on the SoC. */
 #define FSL_FEATURE_SOC_RTC_COUNT (1)
+/* @brief ENET availability on the SoC. */
+#define FSL_FEATURE_SOC_ENET_COUNT (1)
 
 /* SYSMPU module features */
 
