@@ -74,12 +74,12 @@ extern "C"{
 /**
 * @brief            Max number of selectors
 */
-#define CLOCK_IP_SELECTORS_COUNT       (32U)
+#define CLOCK_IP_SELECTORS_COUNT       (33U)
 
 /**
 * @brief            Max number of dividers
 */
-#define CLOCK_IP_DIVIDERS_COUNT       (20U)
+#define CLOCK_IP_DIVIDERS_COUNT       (21U)
 
 /**
 * @brief            Max number of divider triggers
@@ -104,7 +104,7 @@ extern "C"{
 /**
 * @brief            Max number of clock gates
 */
-#define CLOCK_IP_GATES_COUNT       (43U)
+#define CLOCK_IP_GATES_COUNT       (44U)
 
 /**
 * @brief            Max number of clock monitoring units
@@ -233,40 +233,41 @@ extern "C"{
 #define CLOCK_IP_HAS_DMA0_CLK         55U
 #define CLOCK_IP_HAS_DMAMUX0_CLK         56U
 #define CLOCK_IP_HAS_EIM0_CLK         57U
-#define CLOCK_IP_HAS_ERM0_CLK         58U
-#define CLOCK_IP_HAS_EWM0_CLK         59U
-#define CLOCK_IP_HAS_FLEXCAN0_CLK         60U
-#define CLOCK_IP_HAS_FLEXCAN1_CLK         61U
-#define CLOCK_IP_HAS_FLEXCAN2_CLK         62U
-#define CLOCK_IP_HAS_FlexIO_CLK         63U
-#define CLOCK_IP_HAS_FTFC_CLK         64U
-#define CLOCK_IP_HAS_FTM0_CLK         65U
-#define CLOCK_IP_HAS_FTM1_CLK         66U
-#define CLOCK_IP_HAS_FTM2_CLK         67U
-#define CLOCK_IP_HAS_FTM3_CLK         68U
-#define CLOCK_IP_HAS_FTM4_CLK         69U
-#define CLOCK_IP_HAS_FTM5_CLK         70U
-#define CLOCK_IP_HAS_LPI2C0_CLK         71U
-#define CLOCK_IP_HAS_LPIT0_CLK         72U
-#define CLOCK_IP_HAS_LPSPI0_CLK         73U
-#define CLOCK_IP_HAS_LPSPI1_CLK         74U
-#define CLOCK_IP_HAS_LPSPI2_CLK         75U
-#define CLOCK_IP_HAS_LPTMR0_CLK         76U
-#define CLOCK_IP_HAS_LPUART0_CLK         77U
-#define CLOCK_IP_HAS_LPUART1_CLK         78U
-#define CLOCK_IP_HAS_LPUART2_CLK         79U
-#define CLOCK_IP_HAS_MPU0_CLK         80U
-#define CLOCK_IP_HAS_MSCM0_CLK         81U
-#define CLOCK_IP_HAS_PDB0_CLK         82U
-#define CLOCK_IP_HAS_PDB1_CLK         83U
-#define CLOCK_IP_HAS_PORTA_CLK         84U
-#define CLOCK_IP_HAS_PORTB_CLK         85U
-#define CLOCK_IP_HAS_PORTC_CLK         86U
-#define CLOCK_IP_HAS_PORTD_CLK         87U
-#define CLOCK_IP_HAS_PORTE_CLK         88U
-#define CLOCK_IP_HAS_RTC0_CLK         89U
-#define CLOCK_IP_HAS_TRACE_CLK         90U
-#define CLOCK_IP_FEATURE_NAMES_NO         91U
+#define CLOCK_IP_HAS_ENET_CLK         58U
+#define CLOCK_IP_HAS_ERM0_CLK         59U
+#define CLOCK_IP_HAS_EWM0_CLK         60U
+#define CLOCK_IP_HAS_FLEXCAN0_CLK         61U
+#define CLOCK_IP_HAS_FLEXCAN1_CLK         62U
+#define CLOCK_IP_HAS_FLEXCAN2_CLK         63U
+#define CLOCK_IP_HAS_FlexIO_CLK         64U
+#define CLOCK_IP_HAS_FTFC_CLK         65U
+#define CLOCK_IP_HAS_FTM0_CLK         66U
+#define CLOCK_IP_HAS_FTM1_CLK         67U
+#define CLOCK_IP_HAS_FTM2_CLK         68U
+#define CLOCK_IP_HAS_FTM3_CLK         69U
+#define CLOCK_IP_HAS_FTM4_CLK         70U
+#define CLOCK_IP_HAS_FTM5_CLK         71U
+#define CLOCK_IP_HAS_LPI2C0_CLK         72U
+#define CLOCK_IP_HAS_LPIT0_CLK         73U
+#define CLOCK_IP_HAS_LPSPI0_CLK         74U
+#define CLOCK_IP_HAS_LPSPI1_CLK         75U
+#define CLOCK_IP_HAS_LPSPI2_CLK         76U
+#define CLOCK_IP_HAS_LPTMR0_CLK         77U
+#define CLOCK_IP_HAS_LPUART0_CLK         78U
+#define CLOCK_IP_HAS_LPUART1_CLK         79U
+#define CLOCK_IP_HAS_LPUART2_CLK         80U
+#define CLOCK_IP_HAS_MPU0_CLK         81U
+#define CLOCK_IP_HAS_MSCM0_CLK         82U
+#define CLOCK_IP_HAS_PDB0_CLK         83U
+#define CLOCK_IP_HAS_PDB1_CLK         84U
+#define CLOCK_IP_HAS_PORTA_CLK         85U
+#define CLOCK_IP_HAS_PORTB_CLK         86U
+#define CLOCK_IP_HAS_PORTC_CLK         87U
+#define CLOCK_IP_HAS_PORTD_CLK         88U
+#define CLOCK_IP_HAS_PORTE_CLK         89U
+#define CLOCK_IP_HAS_RTC0_CLK         90U
+#define CLOCK_IP_HAS_TRACE_CLK         91U
+#define CLOCK_IP_FEATURE_NAMES_NO         92U
 
 /*==================================================================================================
                                              ENUMS
