@@ -127,8 +127,11 @@ def main():
     # Pathlib glob returns an iteration, so use sum to count the length
     package_count = sum(1 for _ in proc_root.glob(search_pattern))
     if package_count == 0:
-        print("No signal configuration files were found in this data pack")
-        sys.exit(255)
+        search_pattern = "*/i_mx_2_0/*/signal_configuration.xml"
+        package_count = sum(1 for _ in proc_root.glob(search_pattern))
+        if package_count == 0:
+            print("No signal configuration files were found in this data pack")
+            sys.exit(255)
     if args.copyright:
         # Add default copyright
         nxp_copyright = (f"Copyright {datetime.datetime.today().year}, NXP\n"
