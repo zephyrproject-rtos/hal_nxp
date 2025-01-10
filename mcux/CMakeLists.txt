@@ -9,6 +9,10 @@ set(MCUX_SDK_PROJECT_NAME ${ZEPHYR_CURRENT_LIBRARY})
 # MCU_DEVICE_PATH: SOC name without core suffix. Must match the name of the
 #              folder in MCUX HAL. IE MIMXRT595S, or LPC55S36
 
+if((DEFINED CMAKE_C_COMPILER) AND (${CMAKE_C_COMPILER} MATCHES "xtensa"))
+  set(MCUX_IS_DSP true)
+endif()
+
 if(NOT HWMv2)
   # Include HWMv1 logic for MCUX variables
   include(${CMAKE_CURRENT_LIST_DIR}/hwmv1.cmake)
@@ -46,11 +50,22 @@ zephyr_compile_definitions(${MCUX_CPU})
 # Build mcux device-specific objects. Although it is not normal
 # practice, drilling down like this avoids the need for repetitive
 # build scripts for every mcux device.
+
 zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_clock.c)
 if (${MCUX_DEVICE} MATCHES "LPC|MIMXRT6|MIMXRT5|RW6|MCXN.4.")
-  zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_power.c)
+  # fsl_power.c does not build on DSPs because of missing symbols in fsl_device_registers.h
+  if(NOT MCUX_IS_DSP)
+    zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_power.c)
+  endif()
   zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_reset.c)
   zephyr_library_sources_ifdef(CONFIG_HWINFO_RW61X mcux-sdk/devices/${MCUX_DEVICE}/drivers/fsl_ocotp.c)
+endif()
+
+# i.MXRT500 and i.MXRT600 have DSPs - DSP support expected.
+# Don't include DSP support while building for DSP cores, as it
+# doesn't serve any purpose and depends on fsl_power.c.
+if (${MCUX_DEVICE} MATCHES "MIMXRT6|MIMXRT5" AND NOT MCUX_IS_DSP)
+    zephyr_library_sources(mcux-sdk/devices/${MCUX_DEVICE_PATH}/drivers/fsl_dsp.c)
 endif()
 
 # RT11xx SOC initialization file requires additional drivers, import them
