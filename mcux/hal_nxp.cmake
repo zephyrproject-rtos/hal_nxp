@@ -288,9 +288,8 @@ elseif((${MCUX_DEVICE} MATCHES "MIMXRT(5|6|7)") OR (${MCUX_DEVICE} MATCHES "RW61
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/cache64	driver_cache_cache64)
 elseif((${MCUX_DEVICE} MATCHES "MK(28|66)") OR (${MCUX_DEVICE} MATCHES "MKE(14|16|18)") OR (CONFIG_SOC_MIMXRT1166_CM4) OR (CONFIG_SOC_MIMXRT1176_CM4))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/lmem	driver_cache_lmem)
-elseif(CONFIG_SOC_MIMXRT1189_CM33)
-  include_driver_ifdef(CONFIG_HAS_MCUX_CACHE    cache/xcache  driver_cache_xcache)
 endif()
+  include_driver_ifdef(CONFIG_HAS_MCUX_XCACHE		cache/xcache	driver_cache_xcache)
 
 if ((${MCUX_DEVICE} MATCHES "MIMX9596") OR (${MCUX_DEVICE} MATCHES "MIMX8UD7") OR (${MCUX_DEVICE} MATCHES "MIMXRT118"))
   include_driver_ifdef(CONFIG_IPM_IMX			mu1		driver_mu1)
