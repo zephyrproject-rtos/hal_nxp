@@ -1260,7 +1260,7 @@ typedef MLAN_PACK_START struct _MrvlIEtypes_fw_cap_info_t
 /** Host Command ID: Channel TRPC Config */
 #define HostCmd_CMD_CHANNEL_TRPC_CONFIG 0x00fb
 
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
 /**  Host Command id: SYS_INFO */
 #define HOST_CMD_APCMD_SYS_INFO 0x00ae
 /** Host Command id: sys_reset */
@@ -1774,7 +1774,7 @@ typedef enum _ENH_PS_MODES
 #define EVENT_AUTO_LINK_SWITCH_NEW_NODE 0X00000125
 #endif
 
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
 /** Event ID: STA deauth */
 #define EVENT_MICRO_AP_STA_DEAUTH 0x0000002c
 /** Event ID: STA assoicated */
@@ -2171,58 +2171,6 @@ typedef MLAN_PACK_START struct _RxPD
 #endif
 } MLAN_PACK_END RxPD, *PRxPD;
 
-#ifdef UAP_SUPPORT
-/** TxPD descriptor */
-typedef MLAN_PACK_START struct _UapTxPD
-{
-    /** BSS type */
-    t_u8 bss_type;
-    /** BSS number */
-    t_u8 bss_num;
-    /** Tx packet length */
-    t_u16 tx_pkt_length;
-    /** Tx packet offset */
-    t_u16 tx_pkt_offset;
-    /** Tx packet type */
-    t_u16 tx_pkt_type;
-    /** Tx Control */
-    t_u32 tx_control;
-    /** Pkt Priority */
-    t_u8 priority;
-    /** Transmit Pkt Flags*/
-    t_u8 flags;
-    /** Amount of time the packet has been queued in the driver (units = 2ms)*/
-    t_u8 pkt_delay_2ms;
-    /** Reserved */
-    t_u8 reserved1;
-    /** Reserved */
-    t_u32 reserved;
-} MLAN_PACK_END UapTxPD, *PUapTxPD;
-
-/** RxPD Descriptor */
-typedef MLAN_PACK_START struct _UapRxPD
-{
-    /** BSS Type */
-    t_u8 bss_type;
-    /** BSS number*/
-    t_u8 bss_num;
-    /** Rx packet length */
-    t_u16 rx_pkt_length;
-    /** Rx packet offset */
-    t_u16 rx_pkt_offset;
-    /** Rx packet type */
-    t_u16 rx_pkt_type;
-    /** Sequence number */
-    t_u16 seq_num;
-    /** Packet Priority */
-    t_u8 priority;
-    /** reserved */
-    t_u8 reserved1;
-} MLAN_PACK_END UapRxPD, *PUapRxPD;
-
-/** Fixed size of station association event */
-#define ASSOC_EVENT_FIX_SIZE 12U
-
 /** IEEEtypes_FrameCtl_t*/
 #ifdef BIG_ENDIAN_SUPPORT
 typedef MLAN_PACK_START struct _IEEEtypes_FrameCtl_t
@@ -2278,8 +2226,59 @@ typedef MLAN_PACK_START struct _IEEEtypes_FrameCtl_t
 } MLAN_PACK_END IEEEtypes_FrameCtl_t;
 #endif
 
-#ifdef UAP_HOST_MLME
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
+/** TxPD descriptor */
+typedef MLAN_PACK_START struct _UapTxPD
+{
+    /** BSS type */
+    t_u8 bss_type;
+    /** BSS number */
+    t_u8 bss_num;
+    /** Tx packet length */
+    t_u16 tx_pkt_length;
+    /** Tx packet offset */
+    t_u16 tx_pkt_offset;
+    /** Tx packet type */
+    t_u16 tx_pkt_type;
+    /** Tx Control */
+    t_u32 tx_control;
+    /** Pkt Priority */
+    t_u8 priority;
+    /** Transmit Pkt Flags*/
+    t_u8 flags;
+    /** Amount of time the packet has been queued in the driver (units = 2ms)*/
+    t_u8 pkt_delay_2ms;
+    /** Reserved */
+    t_u8 reserved1;
+    /** Reserved */
+    t_u32 reserved;
+} MLAN_PACK_END UapTxPD, *PUapTxPD;
+
+/** RxPD Descriptor */
+typedef MLAN_PACK_START struct _UapRxPD
+{
+    /** BSS Type */
+    t_u8 bss_type;
+    /** BSS number*/
+    t_u8 bss_num;
+    /** Rx packet length */
+    t_u16 rx_pkt_length;
+    /** Rx packet offset */
+    t_u16 rx_pkt_offset;
+    /** Rx packet type */
+    t_u16 rx_pkt_type;
+    /** Sequence number */
+    t_u16 seq_num;
+    /** Packet Priority */
+    t_u8 priority;
+    /** reserved */
+    t_u8 reserved1;
+} MLAN_PACK_END UapRxPD, *PUapRxPD;
+
+/** Fixed size of station association event */
+#define ASSOC_EVENT_FIX_SIZE 12U
+
+#if UAP_HOST_MLME
 /** action add station */
 #define HostCmd_ACT_ADD_STA 0x1
 /** remove station */
@@ -2313,7 +2312,6 @@ typedef MLAN_PACK_START struct _MrvlIEtypes_StaFlag_t
     /** station flag     */
     t_u32 sta_flags;
 } MLAN_PACK_END MrvlIEtypes_StaFlag_t;
-#endif
 #endif
 
 /** MrvlIETypes_MgmtFrameSet_t */
@@ -5869,7 +5867,7 @@ typedef MLAN_PACK_START struct _HostCmd_DS_ExtBLECoex_Config_t
 /** Action frame */
 #define SUBTYPE_ACTION 13
 
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT || CONFIG_NET_MONITOR
 /** TLV type : AP Channel band Config */
 #define TLV_TYPE_UAP_CHAN_BAND_CONFIG (PROPRIETARY_TLV_BASE_ID + 0x2aU) // 0x012a
 /** TLV type : AP Mac address */
@@ -5920,18 +5918,19 @@ typedef MLAN_PACK_START struct _HostCmd_DS_ExtBLECoex_Config_t
 #define TLV_TYPE_UAP_RSN_REPLAY_PROTECT (PROPRIETARY_TLV_BASE_ID + 0x64) // 0x0164
 /** TLV ID : Management Frame */
 #define TLV_TYPE_UAP_MGMT_FRAME (PROPRIETARY_TLV_BASE_ID + 0x68U) // 0x0168
+#endif /* UAP_SUPPORT || CONFIG_NET_MONITOR */
 /** TLV: Management IE list */
 #define MRVL_MGMT_IE_LIST_TLV_ID (PROPRIETARY_TLV_BASE_ID + 0x69U)
-#ifdef UAP_SUPPORT
-/**TLV type: AP mgmt IE passthru mask */
-#define TLV_TYPE_UAP_MGMT_IE_PASSTHRU_MASK (PROPRIETARY_TLV_BASE_ID + 0x70U) // 0x0170
-#endif
-/** TLV type : AP ECSA CONFIG TLV */
-#define TLV_TYPE_UAP_ECSA_CONFIG (PROPRIETARY_TLV_BASE_ID + 289)
 
 #if CONFIG_IMD3_CFG
 #define TLV_TYPE_IMD_VALIDATION (PROPRIETARY_TLV_BASE_ID + 0x60) // 0x0160
 #endif
+
+#if UAP_SUPPORT
+/**TLV type: AP mgmt IE passthru mask */
+#define TLV_TYPE_UAP_MGMT_IE_PASSTHRU_MASK (PROPRIETARY_TLV_BASE_ID + 0x70U) // 0x0170
+/** TLV type : AP ECSA CONFIG TLV */
+#define TLV_TYPE_UAP_ECSA_CONFIG (PROPRIETARY_TLV_BASE_ID + 289)
 
 /** TLV : 20/40 coex config */
 #define TLV_TYPE_2040_BSS_COEX_CONTROL (PROPRIETARY_TLV_BASE_ID + 0x98) // 0x0198
@@ -5951,6 +5950,7 @@ typedef MLAN_PACK_START struct _HostCmd_DS_ExtBLECoex_Config_t
 #define TLV_TYPE_GWK_CIPHER (PROPRIETARY_TLV_BASE_ID + 0x92) // 0x0192
 /** TLV type : BSS Status */
 #define TLV_TYPE_BSS_STATUS (PROPRIETARY_TLV_BASE_ID + 0x93) // 0x0193
+#endif /* UAP_SUPPORT */
 
 #if CONFIG_11AX
 /** TLV type: Extension ID for 11AX Capability */
@@ -5967,6 +5967,7 @@ typedef MLAN_PACK_START struct _HostCmd_DS_ExtBLECoex_Config_t
 #define TLV_TYPE_ROBUST_COEX (PROPRIETARY_TLV_BASE_ID + 0x138) // 0x0238
 #endif
 
+#if UAP_SUPPORT
 /** TLV type : WPA3 SAE Passowrd */
 #define TLV_TYPE_UAP_WPA3_SAE_PASSWORD (PROPRIETARY_TLV_BASE_ID + 0x141) // 0x0241
 
@@ -6177,7 +6178,7 @@ typedef MLAN_PACK_START struct _MrvlIEtypes_eapol_gwk_hsk_retries_t
     t_u32 gwk_retries;
 } MLAN_PACK_END MrvlIEtypes_eapol_gwk_hsk_retries_t;
 
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
 /** MrvlIEtypes_mgmt_ie_passthru_t */
 typedef MLAN_PACK_START struct _MrvlIEtypes_mgmt_ie_passthru_t
 {
@@ -6218,6 +6219,7 @@ typedef MLAN_PACK_START struct _MrvlIEtypes_mac_filter_t
 /** setting for band_config - channel 173 */
 #define BAND_CONFIG_CH_173 0x11U
 #endif
+#endif /* UAP_SUPPORT */
 
 /** MrvlIEtypes_retry_limit_t */
 typedef MLAN_PACK_START struct _MrvlIEtypes_channel_band_t
@@ -6235,6 +6237,7 @@ typedef MLAN_PACK_START struct _MrvlIEtypes_channel_band_t
     t_u8 channel;
 } MLAN_PACK_END MrvlIEtypes_channel_band_t;
 
+#if UAP_SUPPORT
 /** MrvlIEtypes_auth_type_t */
 typedef MLAN_PACK_START struct _MrvlIEtypes_auth_type_t
 {
@@ -7973,7 +7976,7 @@ typedef MLAN_PACK_START struct _HostCmd_DS_COMMAND
         HostCmd_DS_HS_WAKEUP_REASON hs_wakeup_reason;
         /** Inactivity timeout extend */
         HostCmd_DS_INACTIVITY_TIMEOUT_EXT inactivity_to;
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
         HostCmd_DS_SYS_CONFIG sys_config;
         HostCmd_DS_SYS_INFO sys_info;
         HostCmd_DS_STA_DEAUTH sta_deauth;
@@ -7987,7 +7990,7 @@ typedef MLAN_PACK_START struct _HostCmd_DS_COMMAND
         HostCMD_DS_APCMD_ACS_SCAN acs_scan;
 #endif
 #endif /* UAP_SUPPORT */
-#ifdef UAP_HOST_MLME
+#if UAP_HOST_MLME
         HostCmd_DS_ADD_STATION sta_info;
 #endif
         /** Sleep period command */

@@ -114,7 +114,7 @@ static mlan_status wlan_11n_dispatch_pkt(t_void *priv, t_void *payload, RxReorde
     }
 #endif
 
-#if defined(STA_SUPPORT) || defined(UAP_SUPPORT)
+#if defined(STA_SUPPORT) || UAP_SUPPORT
     if (MLAN_STATUS_SUCCESS == wlan_11n_dispatch_amsdu_pkt((mlan_private *)priv, (pmlan_buffer)payload))
     {
         LEAVE();

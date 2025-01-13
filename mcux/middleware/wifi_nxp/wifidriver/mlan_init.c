@@ -156,11 +156,9 @@ mlan_status wlan_init_priv(pmlan_private priv)
     wlan_11d_priv_init(priv);
     wlan_11h_priv_init(priv);
 
-#if defined(UAP_SUPPORT)
+#if UAP_SUPPORT
     priv->uap_bss_started = MFALSE;
     (void)__memset(pmadapter, &priv->uap_state_chan_cb, 0, sizeof(priv->uap_state_chan_cb));
-#endif
-#if defined(UAP_SUPPORT)
     priv->num_drop_pkts = 0;
 #endif
     priv->wpa_is_gtk_set = MFALSE;
@@ -210,7 +208,7 @@ mlan_status wlan_init_priv(pmlan_private priv)
 #if CONFIG_ROAMING
     priv->roaming_enabled = MFALSE;
 #endif
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
     priv->uap_bss_started = MFALSE;
     priv->uap_host_based  = MFALSE;
 #endif

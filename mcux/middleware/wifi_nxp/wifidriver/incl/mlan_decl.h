@@ -84,7 +84,11 @@ Change log:
 
 /** Maximum BSS numbers */
 /* fixme: We have reduced this from 16 to 2. Ensure that this is Ok */
+#if UAP_SUPPORT
 #define MLAN_MAX_BSS_NUM 2U
+#else
+#define MLAN_MAX_BSS_NUM 1U
+#endif
 
 /** NET IP alignment */
 #define MLAN_NET_IP_ALIGN 0
@@ -128,7 +132,7 @@ Change log:
 #endif
 #endif /* STA_SUPPORT */
 
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
 /** Default Win size attached during ADDBA request */
 #ifndef MLAN_UAP_AMPDU_DEF_TXWINSIZE
 #if defined(SD9177) && defined(COEX_APP_SUPPORT)
@@ -460,7 +464,7 @@ typedef enum _mlan_event_id
 #ifdef WIFI_DIRECT_SUPPORT
     MLAN_EVENT_ID_FW_REMAIN_ON_CHAN_EXPIRED,
 #endif
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
     MLAN_EVENT_ID_UAP_FW_BSS_START,
     MLAN_EVENT_ID_UAP_FW_BSS_ACTIVE,
     MLAN_EVENT_ID_UAP_FW_BSS_IDLE,

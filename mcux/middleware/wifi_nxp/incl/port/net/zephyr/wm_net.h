@@ -306,6 +306,28 @@ static inline void *net_stack_buffer_get_payload(void *buf)
     return net_pkt_data((struct net_pkt *)buf);
 }
 
+#if CONFIG_WIFI_PKT_FWD
+/** Send packet from Wi-Fi driver
+ *
+ * \param[in] interface Wi-Fi interface.
+ * \param[in] stack_buffer net stack buffer pointer.
+ *
+ * \return WM_SUCCESS on success
+ * \return -WM_FAIL otherwise
+ */
+int net_wifi_packet_send(uint8_t interface, void *stack_buffer);
+
+/** Generate TX net packet buffer
+ *
+ * \param[in] interface Wi-Fi interface.
+ * \param[in] payload source data payload pointer.
+ * \param[in] datalen data length.
+ *
+ * \return net packet
+ */
+struct net_pkt *gen_tx_pkt_from_data(uint8_t interface, uint8_t *payload, uint16_t datalen);
+#endif
+
 /** Converts Internet host address in network byte order to a string in IPv4
  * dotted-decimal notation
  *
@@ -370,12 +392,14 @@ int net_wlan_deinit(void);
  */
 struct netif *net_get_sta_interface(void);
 
+#if UAP_SUPPORT
 /** Get uAP interface netif structure pointer
  *
  * \rerurn A pointer to uAP interface netif structure
  *
  */
 struct netif *net_get_uap_interface(void);
+#endif
 
 /** Get interface name for given netif
  *
@@ -405,6 +429,7 @@ int net_alloc_client_data_id();
 void *net_get_sta_handle(void);
 #define net_get_mlan_handle() net_get_sta_handle()
 
+#if UAP_SUPPORT
 /** Get micro-AP interface handle
  *
  * Some APIs require the interface handle to be passed to them. The handle can
@@ -413,6 +438,7 @@ void *net_get_sta_handle(void);
  * \return micro-AP interface handle
  */
 void *net_get_uap_handle(void);
+#endif
 
 /** Take interface up
  *

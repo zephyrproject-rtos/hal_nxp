@@ -4776,9 +4776,9 @@ mlan_status wlan_cmd_bgscan_config(IN mlan_private *pmpriv,
 #endif
 
 #if CONFIG_11AX
-    if (IS_FW_SUPPORT_11AX(pmadapter) && ((pmpriv->config_bands & BAND_GAX) ||
+    if (IS_FW_SUPPORT_11AX(pmadapter) && ((pmpriv->config_bands & BAND_GAX)
 #if CONFIG_5GHz_SUPPORT
-                                          (pmpriv->config_bands & BAND_AAX)
+                                       || (pmpriv->config_bands & BAND_AAX)
 #endif
                                               ))
     {

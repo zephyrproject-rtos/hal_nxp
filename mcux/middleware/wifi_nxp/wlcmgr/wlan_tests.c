@@ -49,6 +49,9 @@ wlan_net_monitor_t g_net_monitor_param;
 extern uint64_t rtc_timeout;
 #endif
 extern char *net_sprint_addr(sa_family_t af, const void *addr);
+#if defined(RW610)
+extern int wlan_send_hostcmd(const void *cmd_buf, uint32_t cmd_buf_len, void *host_resp_buf, uint32_t resp_buf_len, uint32_t *reqd_resp_len);
+#endif
 
 static const char *print_role(enum wlan_bss_role role)
 {
@@ -194,17 +197,17 @@ static int __scan_cb(unsigned int count)
             {
                 (void)PRINTF("WPA2 Enterprise ");
             }
-            if (res.wpa2_entp_sha256 != 0U)
+            if (res.wpa3_entp  != 0U)
             {
-                (void)PRINTF("WPA2-SHA256 Enterprise ");
+                (void)PRINTF("WPA3 Enterprise ");
             }
             if (res.wpa3_1x_sha256 != 0U)
             {
-                (void)PRINTF("WPA3-SHA256 Enterprise ");
+                (void)PRINTF("WPA3 Enterprise SuiteB ");
             }
             if (res.wpa3_1x_sha384 != 0U)
             {
-                (void)PRINTF("WPA3-SHA384 Enterprise ");
+                (void)PRINTF("WPA3 Enterprise SuiteB-192 ");
             }
         }
 #if (CONFIG_11R)
@@ -230,7 +233,7 @@ static int __scan_cb(unsigned int count)
 #if CONFIG_DRIVER_OWE
               (res.owe != 0U) ||
 #endif
-              (res.wpa2_entp_sha256 != 0U) || (res.wpa3_1x_sha256 != 0U) || (res.wpa3_1x_sha384 != 0U)))
+              (res.wpa3_entp  != 0U) || (res.wpa3_1x_sha256 != 0U) || (res.wpa3_1x_sha384 != 0U)))
         {
             (void)PRINTF("OPEN ");
         }
@@ -6672,7 +6675,7 @@ static void test_wlan_set_turbo_mode(int argc, char **argv)
 #endif
 
 #if CONFIG_11AX
-
+#if CONFIG_WIFI_HTC_DEBUG
 static void dump_wlan_set_debug_htc_usage(void)
 {
     (void)PRINTF("Usage:\r\n");
@@ -6739,6 +6742,7 @@ static void test_wlan_set_debug_htc(int argc, char **argv)
     else
         (void)PRINTF("Failed to set HTC parameter\r\n");
 }
+#endif
 
 static void dump_wlan_enable_disable_htc_usage()
 {
@@ -7811,6 +7815,7 @@ static void test_wlan_auto_null_tx(int argc, char **argv)
                 return;
             }
         }
+#if UAP_SUPPORT
         if (bss_type == MLAN_BSS_TYPE_UAP)
         {
             wifi_sta_list_t *sl = NULL;
@@ -7863,6 +7868,7 @@ static void test_wlan_auto_null_tx(int argc, char **argv)
                     (void)PRINTF("There is no STA connected to uAP\r\n");
             }
         }
+#endif
     }
     else if (string_equal("stop", argv[2]))
     {
@@ -8709,6 +8715,47 @@ start_detect:
 }
 #endif
 
+static void test_wlan_get_max_clients_count(int argc, char **argv)
+{
+    unsigned int max_sta_num;
+    int ret = -WM_FAIL;
+
+    ret = wlan_get_uap_max_clients(&max_sta_num);
+    if (ret != WM_SUCCESS)
+    {
+        (void)PRINTF("Failed to get maximum number of stations\r\n");
+        return;
+    }
+
+    (void)PRINTF("Maximum number of stations: %d\r\n", max_sta_num);
+}
+
+static void test_wlan_get_ps_cfg(int argc, char **argv)
+{
+    struct {
+        uint8_t cm_ieeeps_configured : 1;
+        uint8_t cm_deepsleepps_configured : 1;
+#if CONFIG_WNM_PS
+        uint8_t cm_wnmps_configured : 1;
+#endif
+    } ps_mode_cfg = {0};
+    int ret = -WM_FAIL;
+
+    ret = wlan_get_ps_mode_cfg((uint8_t *)&ps_mode_cfg);
+    if (ret != WM_SUCCESS)
+    {
+        (void)PRINTF("Failed to get power save mode setting\r\n");
+        return;
+    }
+
+    (void)PRINTF("Power save mode setting: \r\n");
+    (void)PRINTF("    IEEE ps   : %d\r\n", ps_mode_cfg.cm_ieeeps_configured);
+    (void)PRINTF("    Deep sleep: %d\r\n", ps_mode_cfg.cm_deepsleepps_configured);
+#if CONFIG_WNM_PS
+    (void)PRINTF("    WNM ps    : %d\r\n", ps_mode_cfg.cm_wnmps_configured);
+#endif
+}
+
 static struct cli_command tests[] = {
     {"wlan-thread-info", NULL, test_wlan_thread_info},
 #if CONFIG_SCHED_SWITCH_TRACE
@@ -8900,9 +8947,11 @@ static struct cli_command tests[] = {
     {"wlan-set-ips", "<option>", test_wlan_set_ips},
 #endif
 #if CONFIG_11AX
+#if CONFIG_WIFI_HTC_DEBUG
     {"wlan-set-debug-htc",
      "<count> <vht> <he> <rxNss> <channelWidth> <ulMuDisable> <txNSTS> <erSuDisable> <erSuDisable> <erSuDisable>",
      test_wlan_set_debug_htc},
+#endif
     {"wlan-enable-disable-htc", "<option>", test_wlan_enable_disable_htc},
 #endif
 #if CONFIG_SET_SU
@@ -8967,6 +9016,8 @@ static struct cli_command tests[] = {
 #if CONFIG_WIFI_RECOVERY
     {"wlan-recovery-test", NULL, test_wlan_recovery_test},
 #endif
+    {"wlan-get-max-clients-count", NULL, test_wlan_get_max_clients_count},
+    {"wlan-get-ps-cfg", NULL, test_wlan_get_ps_cfg}
 };
 
 /* Register our commands with the MTF. */

@@ -151,7 +151,7 @@ t_void wlan_clean_txrx(pmlan_private priv)
 #endif /* CONFIG_WMM */
     (void)__memcpy(pmadapter, tos_to_tid, ac_to_tid, sizeof(tos_to_tid));
 
-#if defined(UAP_SUPPORT)
+#if UAP_SUPPORT
     priv->num_drop_pkts = 0;
 #endif
     (void)pmadapter->callbacks.moal_spin_unlock(pmadapter->pmoal_handle, priv->wmm.ra_list_spinlock);
@@ -286,7 +286,7 @@ t_void wlan_wmm_init(pmlan_adapter pmadapter)
                 priv->add_ba_param.rx_win_size = MLAN_STA_AMPDU_DEF_RXWINSIZE;
             }
 #endif
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
             if (priv->bss_type == MLAN_BSS_TYPE_UAP
 #ifdef WIFI_DIRECT_SUPPORT
                 || priv->bss_type == MLAN_BSS_TYPE_WIFIDIRECT
@@ -569,12 +569,15 @@ void wifi_wmm_da_to_ra(uint8_t *da, uint8_t *ra)
 static uint8_t wifi_wmm_is_tx_pause(const uint8_t interface, mlan_wmm_ac_e queue, uint8_t *ra)
 {
     t_u8 is_tx_pause   = MFALSE;
+#if UAP_SUPPORT
     raListTbl *ra_list = MNULL;
+#endif
 
     if (interface == MLAN_BSS_TYPE_STA)
     {
         is_tx_pause = mlan_adap->priv[0]->tx_pause;
     }
+#if UAP_SUPPORT
     else if (interface == MLAN_BSS_TYPE_UAP)
     {
         if (mlan_adap->priv[1]->tx_pause == MTRUE)
@@ -594,6 +597,10 @@ static uint8_t wifi_wmm_is_tx_pause(const uint8_t interface, mlan_wmm_ac_e queue
                                                     &mlan_adap->priv[interface]->wmm.tid_tbl_ptr[queue].ra_list.plock);
         }
     }
+#else
+    (void)queue;
+    (void)ra;
+#endif
 
     return is_tx_pause;
 }
@@ -737,12 +744,10 @@ int wlan_wmm_add_buf_txqueue_enh(const uint8_t interface, const uint8_t *buffer,
     t_u8 ra[MLAN_MAC_ADDR_LENGTH] = {0x0};
     raListTbl *ralist             = MNULL;
 
-    if (interface == MLAN_BSS_TYPE_STA)
-        priv = mlan_adap->priv[0];
-    else
-        priv = mlan_adap->priv[1];
+    CHECK_BSS_TYPE(interface, MLAN_STATUS_FAILURE);
+    priv = mlan_adap->priv[interface];
 
-        /* refer to low_level_output payload memcpy */
+    /* refer to low_level_output payload memcpy */
 #if CONFIG_TX_RX_ZERO_COPY
     wifi_wmm_da_to_ra(&((outbuf_t *)buffer)->eth_header[0], ra);
 #else
@@ -1090,42 +1095,32 @@ void wlan_ralist_deinit_enh(mlan_private *priv)
 /* debug statistics */
 void wifi_wmm_drop_err_mem(const uint8_t interface)
 {
-    if (interface == MLAN_BSS_TYPE_STA)
-        mlan_adap->priv[0]->driver_error_cnt.tx_err_mem++;
-    else if (interface == MLAN_BSS_TYPE_UAP)
-        mlan_adap->priv[1]->driver_error_cnt.tx_err_mem++;
+    CHECK_BSS_TYPE_RET_VOID(interface);
+    mlan_adap->priv[interface]->driver_error_cnt.tx_err_mem++;
 }
 
 void wifi_wmm_drop_no_media(const uint8_t interface)
 {
-    if (interface == MLAN_BSS_TYPE_STA)
-        mlan_adap->priv[0]->driver_error_cnt.tx_no_media++;
-    else if (interface == MLAN_BSS_TYPE_UAP)
-        mlan_adap->priv[1]->driver_error_cnt.tx_no_media++;
+    CHECK_BSS_TYPE_RET_VOID(interface);
+    mlan_adap->priv[interface]->driver_error_cnt.tx_no_media++;
 }
 
 void wifi_wmm_drop_retried_drop(const uint8_t interface)
 {
-    if (interface == MLAN_BSS_TYPE_STA)
-        mlan_adap->priv[0]->driver_error_cnt.tx_wmm_retried_drop++;
-    else if (interface == MLAN_BSS_TYPE_UAP)
-        mlan_adap->priv[1]->driver_error_cnt.tx_wmm_retried_drop++;
+    CHECK_BSS_TYPE_RET_VOID(interface);
+    mlan_adap->priv[interface]->driver_error_cnt.tx_wmm_retried_drop++;
 }
 
 void wifi_wmm_drop_pause_drop(const uint8_t interface)
 {
-    if (interface == MLAN_BSS_TYPE_STA)
-        mlan_adap->priv[0]->driver_error_cnt.tx_wmm_pause_drop++;
-    else if (interface == MLAN_BSS_TYPE_UAP)
-        mlan_adap->priv[1]->driver_error_cnt.tx_wmm_pause_drop++;
+    CHECK_BSS_TYPE_RET_VOID(interface);
+    mlan_adap->priv[interface]->driver_error_cnt.tx_wmm_pause_drop++;
 }
 
 void wifi_wmm_drop_pause_replaced(const uint8_t interface)
 {
-    if (interface == MLAN_BSS_TYPE_STA)
-        mlan_adap->priv[0]->driver_error_cnt.tx_wmm_pause_replaced++;
-    else if (interface == MLAN_BSS_TYPE_UAP)
-        mlan_adap->priv[1]->driver_error_cnt.tx_wmm_pause_replaced++;
+    CHECK_BSS_TYPE_RET_VOID(interface);
+    mlan_adap->priv[interface]->driver_error_cnt.tx_wmm_pause_replaced++;
 }
 
 void wlan_get_bypass_lock(uint8_t interface)
@@ -1186,6 +1181,8 @@ void wlan_cleanup_bypass_txq(uint8_t interface)
 {
     bypass_outbuf_t *buf;
     pmlan_private priv = mlan_adap->priv[interface];
+
+    CHECK_BSS_TYPE_RET_VOID(interface);
 
     /*Free hold buff*/
     while (!wlan_bypass_txq_empty(interface))

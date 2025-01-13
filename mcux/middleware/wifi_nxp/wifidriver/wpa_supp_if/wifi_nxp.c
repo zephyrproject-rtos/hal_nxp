@@ -25,7 +25,9 @@
 
 static t_u8 wifi_supp_init_done;
 static struct wifi_nxp_ctx_rtos *g_wifi_if_ctx_rtos = NULL;
+#if CONFIG_WIFI_NM_HOSTAPD_AP
 static struct wifi_nxp_ctx_rtos *g_wifi_hapd_if_ctx_rtos = NULL;
+#endif
 
 int wifi_nxp_set_mac_addr(const t_u8 *mac);
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT

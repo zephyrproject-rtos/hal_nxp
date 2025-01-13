@@ -142,7 +142,7 @@ void wlan_wmm_setup_queue_priorities(pmlan_private priv, IEEEtypes_WmmParameter_
 void wlan_wmm_setup_ac_downgrade(pmlan_private priv);
 /** select WMM queue */
 t_u8 wlan_wmm_select_queue(mlan_private *pmpriv, t_u8 tid);
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
 t_void wlan_wmm_delete_peer_ralist(pmlan_private priv, t_u8 *mac);
 #endif
 
@@ -187,7 +187,7 @@ extern mlan_status wlan_cmd_wmm_delts_req(IN pmlan_private pmpriv, OUT HostCmd_D
 
 #endif /* STA_SUPPORT */
 
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
 t_void wlan_wmm_delete_peer_ralist(pmlan_private priv, t_u8 *mac);
 #endif
 

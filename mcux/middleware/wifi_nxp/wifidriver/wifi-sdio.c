@@ -982,6 +982,7 @@ static void wlan_get_mac_addr_sta(void)
 
 }
 
+#if UAP_SUPPORT
 static void wlan_get_mac_addr_uap(void)
 {
     t_u32 tx_blocks = 1, buflen = MLAN_SDIO_BLOCK_SIZE;
@@ -1013,6 +1014,7 @@ static void wlan_get_mac_addr_uap(void)
     wifi_sdio_wait_for_cmdresp();
 
 }
+#endif
 
 void wifi_prepare_get_fw_ver_ext_cmd(HostCmd_DS_COMMAND *cmd, int seq_number, int version_str_sel);
 static void wlan_get_fw_ver_ext(int version_str_sel)
@@ -1453,7 +1455,9 @@ static void wlan_fw_init_cfg(void)
     }
 #endif
 
+#if UAP_SUPPORT
     wlan_get_mac_addr_uap();
+#endif
 
     if (wm_wifi.wifi_init_done == 0U)
     {

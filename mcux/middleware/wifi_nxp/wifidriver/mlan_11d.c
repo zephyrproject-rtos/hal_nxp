@@ -805,7 +805,9 @@ static wlan_11d_apis_t wlan_11d_apis = {
     .wlan_11d_cfg_ioctl_p              = wlan_11d_cfg_ioctl,
     .wlan_11d_cfg_domain_info_p        = wlan_11d_cfg_domain_info,
     .wlan_cmd_802_11d_domain_info_p    = wlan_cmd_802_11d_domain_info,
+#if UAP_SUPPORT
     .wlan_11d_handle_uap_domain_info_p = wlan_11d_handle_uap_domain_info,
+#endif
 };
 
 static void *wlan_11d_support_apis = (wlan_11d_apis_t *)&wlan_11d_apis;
@@ -1580,7 +1582,7 @@ done:
 }
 #endif /* STA_SUPPORT */
 
-#if defined(UAP_SUPPORT)
+#if UAP_SUPPORT
 /**
  *  @brief This function handles domain info data from UAP interface.
  *         Checks conditions, sets up domain_reg, then downloads CMD.

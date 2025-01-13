@@ -46,7 +46,7 @@ static mlan_operations mlan_sta_ops = {
     MLAN_BSS_ROLE_STA,
 };
 #endif
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
 static mlan_operations mlan_uap_ops = {
     /* cmd handler */
     wlan_ops_uap_prepare_cmd,
@@ -62,7 +62,7 @@ static mlan_operations *mlan_ops[] = {
 #ifdef STA_SUPPORT
     &mlan_sta_ops,
 #endif
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
     &mlan_uap_ops,
 #endif
     MNULL,

@@ -175,12 +175,8 @@ mlan_status wlan_cmd_enh_power_mode(pmlan_private pmpriv,
             }
             auto_ds->deep_sleep_timeout = wlan_cpu_to_le16(idletime);
         }
-        /* fixme :
-         * This macro is not defined as if now
-         * once full fledged support is added in the SDK
-         * for UAP this macro will be defined and
-         * line below will be uncommented*/
-        /* #if defined(UAP_SUPPORT)*/
+
+#if UAP_SUPPORT
         if ((pdata_buf != MNULL) && (ps_bitmap & (BITMAP_UAP_INACT_PS | BITMAP_UAP_DTIM_PS)))
         {
             mlan_ds_ps_mgmt *ps_mgmt                   = (mlan_ds_ps_mgmt *)pdata_buf;
@@ -211,7 +207,7 @@ mlan_status wlan_cmd_enh_power_mode(pmlan_private pmpriv,
                 tlv += (t_u8)sizeof(MrvlIEtypes_inact_sleep_param_t);
             }
         }
-        /*#endif*/
+#endif
         cmd->size = wlan_cpu_to_le16(cmd_size);
     }
 #if (CONFIG_WNM_PS)

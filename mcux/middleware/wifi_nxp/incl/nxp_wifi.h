@@ -130,16 +130,16 @@ extern "C" {
 #define CONFIG_ECSA 1
 #endif
 
-#if CONFIG_NXP_TX_AMPDU_PROT_MODE
-#define CONFIG_TX_AMPDU_PROT_MODE 1
-#endif
-
 #if CONFIG_NXP_WIFI_UNII4_BAND_SUPPORT
 #define CONFIG_UNII4_BAND_SUPPORT 1
 #endif
 
 #if CONFIG_NXP_WIFI_RECOVERY
 #define CONFIG_WIFI_RECOVERY 1
+#endif
+
+#if CONFIG_NXP_WIFI_PKT_FWD
+#define CONFIG_WIFI_PKT_FWD 1
 #endif
 
 #if CONFIG_NXP_WIFI_TSP
@@ -249,6 +249,39 @@ extern "C" {
 #if CONFIG_NXP_WIFI_WLAN_CALDATA_3ANT_DIVERSITY
 #define CONFIG_WLAN_CALDATA_3ANT_DIVERSITY 1
 #endif
+
+#if CONFIG_NXP_OVERRIDE_CALIBRATION_DATA
+#define OVERRIDE_CALIBRATION_DATA "wifi_cal_data_rw61x_override.h"
+#endif
+
+#if !CONFIG_NXP_OVERRIDE_CALIBRATION_DATA
+#if defined(RW610)
+/*
+ * FRDMRW610
+ */
+#if defined(FRDMRW610)
+/* FRDMRW610 1ANT */
+#define DEFAULT_CALDATA_RW610 "wifi_cal_data_frdmrw61x_1ant.h"
+#else
+/*
+ * RW610
+ */
+/* RW610 1ANT */
+#if CONFIG_WLAN_CALDATA_1ANT
+#define DEFAULT_CALDATA_RW610 "wifi_cal_data_rw61x_1ant.h"
+/* RW610 3ANT_DIVERSITY */
+#elif CONFIG_WLAN_CALDATA_3ANT_DIVERSITY
+#define DEFAULT_CALDATA_RW610 "wifi_cal_data_rw61x_3ant_diversity.h"
+/* RW610 1ANT_DIVERSITY */
+#elif CONFIG_WLAN_CALDATA_1ANT_WITH_DIVERSITY
+#define DEFAULT_CALDATA_RW610 "wifi_cal_data_rw61x_1ant_diversity.h"
+/* RW610 2ANT */
+#else
+#define DEFAULT_CALDATA_RW610 "wifi_cal_data_rw61x_2ant.h"
+#endif
+#endif
+#endif /* RW610 */
+#endif /* CONFIG_NXP_OVERRIDE_CALIBRATION_DATA */
 
 #if CONFIG_NXP_WIFI_EU_VALIDATION
 #define CONFIG_EU_VALIDATION 1
@@ -451,6 +484,10 @@ extern "C" {
 #define CONFIG_DHCP_SERVER_DEBUG 1
 #endif
 
+#if CONFIG_NXP_WIFI_HTC_DEBUG
+#define CONFIG_WIFI_HTC_DEBUG 1
+#endif
+
 #if CONFIG_NXP_WIFI_SMOKE_TESTS
 #define CONFIG_WIFI_SMOKE_TESTS 1
 #endif
@@ -461,10 +498,6 @@ extern "C" {
 
 #if CONFIG_NXP_WIFI_SIGMA_AGENT
 #define CONFIG_SIGMA_AGENT 1
-#endif
-
-#if CONFIG_NXP_WIFI_CUSTOM_CALDATA
-#define CONFIG_CUSTOM_CALDATA 1
 #endif
 
 #if CONFIG_WIFI_NM_WPA_SUPPLICANT
@@ -516,18 +549,32 @@ extern "C" {
 
 #if CONFIG_11AX
 
-#if !CONFIG_11K
-#define CONFIG_11K 1
-#endif
-
-#if !CONFIG_11V
-#define CONFIG_11V 1
-#endif
-
 #if !CONFIG_WPA_SUPP
 #define CONFIG_DRIVER_MBO 1
 #endif
 
+#endif
+
+#ifndef CONFIG_NXP_WIFI_SOFTAP_SUPPORT
+#if UAP_SUPPORT
+#undef UAP_SUPPORT
+#define UAP_SUPPORT 0
+#endif
+
+#if UAP_HOST_MLME
+#undef UAP_HOST_MLME
+#define UAP_HOST_MLME 0
+#endif
+
+#if CONFIG_UAP_AMPDU_TX
+#undef CONFIG_UAP_AMPDU_TX
+#define CONFIG_UAP_AMPDU_TX 0
+#endif
+
+#if CONFIG_UAP_AMPDU_RX
+#undef CONFIG_UAP_AMPDU_RX
+#define CONFIG_UAP_AMPDU_RX 0
+#endif
 #endif
 
 #ifdef __cplusplus
