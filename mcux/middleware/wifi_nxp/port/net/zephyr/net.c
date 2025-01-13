@@ -103,7 +103,9 @@ static struct net_mgmt_event_callback net_event_supp_cb;
 static bool g_supp_ready = 0;
 #endif
 interface_t g_mlan;
+#if UAP_SUPPORT
 interface_t g_uap;
+#endif
 
 static int net_wlan_init_done = 0;
 OSA_TIMER_HANDLE_DEFINE(dhcp_timer);
@@ -171,10 +173,11 @@ void deliver_packet_above(struct net_pkt *p, int recv_interface)
     }
 }
 
+#define MAX_RETRY_GEN_PKT 3
 static struct net_pkt *gen_pkt_from_data(t_u8 interface, t_u8 *payload, t_u16 datalen)
 {
     struct net_pkt *pkt = NULL;
-    t_u8 retry_cnt      = 3;
+    t_u8 retry_cnt      = MAX_RETRY_GEN_PKT;
 
 retry:
     /* We allocate a network buffer */
@@ -205,11 +208,47 @@ retry:
     return pkt;
 }
 
+#if CONFIG_WIFI_PKT_FWD
+struct net_pkt *gen_tx_pkt_from_data(uint8_t interface, uint8_t *payload, uint16_t datalen)
+{
+    struct net_pkt *pkt = NULL;
+    uint8_t retry_cnt      = MAX_RETRY_GEN_PKT;
+
+retry:
+    /* We allocate a network buffer */
+#if CONFIG_WIFI_SOFTAP_SUPPORT
+    if (interface == WLAN_BSS_TYPE_UAP)
+        pkt = net_pkt_alloc_with_buffer(g_uap.netif, datalen, AF_INET, 0, K_NO_WAIT);
+    else
+#endif
+        pkt = net_pkt_alloc_with_buffer(g_mlan.netif, datalen, AF_INET, 0, K_NO_WAIT);
+
+    if (pkt == NULL)
+    {
+        if (retry_cnt)
+        {
+            retry_cnt--;
+            k_yield();
+            goto retry;
+        }
+        return NULL;
+    }
+
+    if (net_pkt_write(pkt, payload, datalen) < 0)
+    {
+        net_pkt_unref(pkt);
+        pkt = NULL;
+    }
+
+    net_pkt_cursor_init(pkt);
+    return pkt;
+}
+#endif
 #if CONFIG_TX_RX_ZERO_COPY
 static struct net_pkt *gen_pkt_from_data_for_zerocopy(t_u8 interface, t_u8 *payload, t_u16 datalen)
 {
     struct net_pkt *pkt = NULL;
-    t_u8 retry_cnt      = 3;
+    t_u8 retry_cnt      = MAX_RETRY_GEN_PKT;
 
 retry:
     /* We allocate a network buffer */
@@ -466,7 +505,9 @@ bool wrapper_net_is_ip_or_ipv6(const t_u8 *buffer)
 }
 
 extern int retry_attempts;
-
+#if CONFIG_WIFI_PKT_FWD
+#define MAX_RETRY_PKT_FWD 3
+#endif
 int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt)
 {
     int ret;
@@ -492,6 +533,13 @@ int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt)
     {
         return -ENOMEM;
     }
+
+#if !UAP_SUPPORT
+    if (interface > WLAN_BSS_ROLE_STA)
+    {
+        return -ENOMEM;
+    }
+#endif
 
 #if CONFIG_WMM
     if (net_pkt_len > ETH_HDR_LEN)
@@ -531,17 +579,33 @@ int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt)
         }
         else
         {
-            retry = retry_attempts;
+#if CONFIG_WIFI_PKT_FWD
+            if (interface == WLAN_BSS_TYPE_UAP)
+            {
+                retry = MAX_RETRY_PKT_FWD;
+            }
+            else
+#endif
+            {
+                retry = retry_attempts;
+            }
         }
 
         wmm_outbuf = wifi_wmm_get_outbuf_enh(&outbuf_len, (mlan_wmm_ac_e)pkt_prio, interface, ra, &is_tx_pause);
         ret        = (wmm_outbuf == NULL) ? true : false;
 
-        if (ret == true && is_tx_pause == true)
+        /* uAP case doesn't need to delay to let powersave task run,
+         * as FW won't go into sleep mode when uAP enabled. And this
+         * delay will block uAP packet forward case */
+#if CONFIG_WIFI_PKT_FWD
+        if (interface != WLAN_BSS_TYPE_UAP)
+#endif
         {
-            OSA_TimeDelay(1);
+            if (ret == true && is_tx_pause == true)
+            {
+                OSA_TimeDelay(1);
+            }
         }
-
         retry--;
     } while (ret == true && retry > 0);
 
@@ -619,6 +683,16 @@ int nxp_wifi_internal_tx(const struct device *dev, struct net_pkt *pkt)
 
     return ret;
 }
+
+#if CONFIG_WIFI_PKT_FWD
+int net_wifi_packet_send(uint8_t interface, void *stack_buffer)
+{
+    if (interface == WLAN_BSS_TYPE_UAP)
+        return nxp_wifi_internal_tx(net_if_get_device((void *)g_uap.netif), (struct net_pkt *)stack_buffer);
+    else
+        return nxp_wifi_internal_tx(net_if_get_device((void *)g_mlan.netif), (struct net_pkt *)stack_buffer);
+}
+#endif
 
 /* Below struct is used for creating IGMP IPv4 multicast list */
 typedef struct group_ip4_addr
@@ -879,20 +953,24 @@ void *net_get_sta_handle(void)
     return &g_mlan;
 }
 
+#if UAP_SUPPORT
 void *net_get_uap_handle(void)
 {
     return &g_uap;
 }
+#endif
 
 struct netif *net_get_sta_interface(void)
 {
     return (struct netif *)g_mlan.netif;
 }
 
+#if UAP_SUPPORT
 struct netif *net_get_uap_interface(void)
 {
     return (struct netif *)g_uap.netif;
 }
+#endif
 
 int net_get_if_name_netif(char *pif_name, struct netif *iface)
 {
@@ -1007,7 +1085,7 @@ static void wifi_net_event_handler(struct net_mgmt_event_callback *cb, uint32_t 
             break;
         case NET_EVENT_IPV6_DAD_SUCCEED:
             net_d("Receive zephyr ipv6 dad finished event.");
-#if !CONFIG_WIFI_NM_HOSTAPD_AP
+#if UAP_SUPPORT && !CONFIG_WIFI_NM_HOSTAPD_AP
             /*Wi-Fi driver will recevie NET_EVENT_IPV6_DAD_SUCCEED from zephyr kernel after IPV6 DAD finished.
             Can notify wlcmgr_task task to get address.*/
             (void)wlan_wlcmgr_send_msg(WIFI_EVENT_UAP_NET_ADDR_CONFIG, WIFI_EVENT_REASON_SUCCESS, NULL);
@@ -1098,6 +1176,7 @@ int net_configure_address(struct net_ip_config *addr, void *intrfc_handle)
          * WD_EVENT_NET_DHCP_CONFIG, should be sent to the wlcmgr.
          */
     }
+#if UAP_SUPPORT
     else if (if_handle == &g_uap
 #if CONFIG_P2P
         || ((if_handle == &g_wfd) && (netif_get_bss_type() == BSS_TYPE_UAP))
@@ -1108,6 +1187,7 @@ int net_configure_address(struct net_ip_config *addr, void *intrfc_handle)
          * zephyr.*/
         net_if_dormant_off(if_handle->netif);
     }
+#endif
     else
     { /* Do Nothing */
     }
@@ -1408,6 +1488,11 @@ int net_wlan_init(void)
 
     if (!net_wlan_init_done)
     {
+        wifi_mac_addr_t mac_addr = {0};
+
+        wifi_get_device_mac_addr(&mac_addr);
+        wlan_set_mac_addr(&mac_addr.mac[0]);
+
         /* init STA netif */
         ret = wlan_get_mac_address(g_mlan.state.ethaddr.addr);
         if (ret != 0)
@@ -1498,6 +1583,15 @@ static int net_netif_deinit(struct net_if *netif)
         mem_free(netif->state);
 #endif
         netif->state = NULL;
+    }
+#endif
+#if CONFIG_NET_STATISTICS_WIFI
+    const struct device *dev = net_if_get_device(netif);
+    struct interface *if_handle = (struct interface *)dev->data;
+
+    if (dev && if_handle)
+    {
+        memset(&if_handle->stats, 0, sizeof(if_handle->stats));
     }
 #endif
     return WM_SUCCESS;

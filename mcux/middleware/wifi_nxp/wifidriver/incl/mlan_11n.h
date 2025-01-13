@@ -192,7 +192,7 @@ INLINE
 static t_u8
 wlan_is_ampdu_allowed(mlan_private * priv, raListTbl * ptr, int tid)
 {
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
     if (GET_BSS_ROLE(priv) == MLAN_BSS_ROLE_UAP)
         return is_station_ampdu_allowed(priv, ptr, tid);
 #endif /* UAP_SUPPORT */
@@ -242,7 +242,7 @@ INLINE
 static t_u8
 wlan_is_amsdu_allowed(mlan_private * priv, raListTbl * ptr, int tid)
 {
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
     sta_node *sta_ptr = MNULL;
     if (GET_BSS_ROLE(priv) == MLAN_BSS_ROLE_UAP) {
         if ((sta_ptr = wlan_get_station_entry(priv, ptr->ra))) {
@@ -322,7 +322,7 @@ static int wlan_is_11n_enabled(mlan_private *priv, t_u8 *ra)
 {
     int ret = MFALSE;
     ENTER();
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
     if (GET_BSS_ROLE(priv) == MLAN_BSS_ROLE_UAP)
     {
         if ((!(ra[0] & 0x01U)) && (priv->is_11n_enabled))

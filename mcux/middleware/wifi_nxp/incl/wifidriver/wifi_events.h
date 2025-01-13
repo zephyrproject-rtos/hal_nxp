@@ -29,6 +29,8 @@ enum wifi_event
     WIFI_EVENT_UAP_NET_ADDR_CONFIG,
     /** uAP Stopped */
     WIFI_EVENT_UAP_STOPPED,
+    /** uAP TX Data Pause */
+    WIFI_EVENT_UAP_TX_DATA_PAUSE,
     /** uAP Last */
     WIFI_EVENT_UAP_LAST,
     /* All the uAP related events need to be above and STA related events
@@ -132,8 +134,10 @@ enum wifi_event
     /** 802.11K/11V neighbor report */
     WIFI_EVENT_NLIST_REPORT,
     /* Add Block Ack */
-    /** 802.11N add block ack */
-    WIFI_EVENT_11N_ADDBA,
+    /** 802.11N send add block ack */
+    WIFI_EVENT_11N_SEND_ADDBA,
+    /** 802.11N receive add block ack */
+    WIFI_EVENT_11N_RECV_ADDBA,
     /** 802.11N block Ack stream timeout */
     WIFI_EVENT_11N_BA_STREAM_TIMEOUT,
     /** 802.11n Delete block add */
@@ -176,6 +180,8 @@ enum wifi_event
 #endif
     /** Event to set region power*/
     WIFI_EVENT_REGION_POWER_CFG,
+    /** TX Data Pause */
+    WIFI_EVENT_TX_DATA_PAUSE,
     /** Event to indicate end of Wi-Fi events */
     WIFI_EVENT_LAST,
     /* other events can be added after this, however this must

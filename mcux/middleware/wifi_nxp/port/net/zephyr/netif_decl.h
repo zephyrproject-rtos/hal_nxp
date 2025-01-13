@@ -81,11 +81,11 @@ void (*wps_rx_callback)(const t_u8 *buf, size_t len);
 // void (*l2_packet_rx_callback)(const struct pbuf *p);
 #endif /* CONFIG_HOST_SUPP */
 
+#if UAP_SUPPORT
 void wrapper_wlan_update_uap_rxrate_info(RxPD *rxpd);
+#endif
 
 int wrapper_wlan_handle_rx_packet(t_u16 datalen, RxPD *rxpd, void *p, void *payload);
-
-int wrapper_wlan_handle_amsdu_rx_packet(const t_u8 *rcvdata, const t_u16 datalen);
 
 #if CONFIG_NET_MONITOR
 void user_recv_monitor_data(const t_u8 *rcvdata);

@@ -26,6 +26,7 @@
  * NXP Test Framework (MTF) functions
  */
 
+#if UAP_SUPPORT
 static void dump_wlan_uap_get_pmfcfg_usage()
 {
     (void)PRINTF("Usage:\r\n");
@@ -57,6 +58,7 @@ static void wlan_uap_pmfcfg_get(int argc, char *argv[])
         dump_wlan_uap_get_pmfcfg_usage();
     }
 }
+#endif /* UAP_SUPPORT */
 
 static void dump_wlan_get_pmfcfg_usage(void)
 {
@@ -2130,7 +2132,9 @@ static struct cli_command wlan_enhanced_commands[] = {
     {"wlan-get-txratecfg", "<sta/uap>", test_wlan_get_txratecfg},
     {"wlan-get-data-rate", "<sta/uap>", test_wlan_get_data_rate},
     {"wlan-get-pmfcfg", NULL, wlan_pmfcfg_get},
+#if UAP_SUPPORT
     {"wlan-uap-get-pmfcfg", NULL, wlan_uap_pmfcfg_get},
+#endif
 #if CONFIG_5GHz_SUPPORT
     {"wlan-set-ed-mac-mode", "<interface> <ed_ctrl_2g> <ed_offset_2g> <ed_ctrl_5g> <ed_offset_5g>",
      wlan_ed_mac_mode_set},

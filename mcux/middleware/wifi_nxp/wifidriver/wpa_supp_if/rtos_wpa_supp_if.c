@@ -675,6 +675,11 @@ int wifi_nxp_hapd_state(void)
     char if_name[CONFIG_NET_INTERFACE_NAME_LEN + 1];
     int ret;
 
+    if (!get_supp_ready_state())
+    {
+        return 0;
+    }
+
     ret = net_if_get_name(iface, if_name, sizeof(if_name));
     if (!ret) {
         supp_e("Cannot get interface name (%d)", ret);
@@ -1850,7 +1855,7 @@ int wifi_nxp_wpa_supp_set_supp_port(void *if_priv, int authorized, char *bssid)
         wifi_user_scan_config_cleanup();
     }
 
-#if CONFIG_WIFI_NM_WPA_SUPPLICANT
+#if CONFIG_ROAMING
     wlan_subscribe_rssi_low_event();
 #endif
     ret = 0;
@@ -1862,19 +1867,24 @@ int wifi_nxp_wpa_supp_set_country(void *if_priv, const char *alpha2)
 {
     struct wifi_nxp_ctx_rtos *wifi_if_ctx_rtos = NULL;
     int ret                                    = -WM_FAIL;
-    char *country                              = NULL;
+    char country[COUNTRY_CODE_LEN]             = {0};
     t_u8 region_code                           = 0;
     unsigned char country3                     = 0x20;
-
-    country    = OSA_MemoryAllocate(COUNTRY_CODE_LEN);
-    (void)memcpy(country, alpha2, COUNTRY_CODE_LEN - 1);
-    country[2] = country3;
 
     if ((!if_priv) || (!alpha2))
     {
         supp_e("%s: Invalid params", __func__);
         goto out;
     }
+
+    if ((alpha2[2] == 0x4f) || (alpha2[2] == 0x49) || (alpha2[2] == 0x58) || (alpha2[2] == 0x04))
+    {
+        country3 = alpha2[2];
+    }
+
+    country[0] = alpha2[0];
+    country[1] = alpha2[1];
+    country[2] = country3;
 
     wifi_if_ctx_rtos = (struct wifi_nxp_ctx_rtos *)if_priv;
 
@@ -1947,13 +1957,13 @@ static int wifi_rate_to_signal_info(wlan_ds_rate *ds_rate, struct wpa_signal_inf
 
     if (datarate->tx_rate_format == MLAN_RATE_FORMAT_LG && datarate->tx_data_rate < 12)
     {
-        /* Legacy rates */
-        si->data.current_tx_rate = lg_rate[datarate->tx_data_rate];
+        /* Legacy rates (in Kbps) */
+        si->data.current_tx_rate = lg_rate[datarate->tx_data_rate]*1000;
     }
     else if (datarate->tx_rate_format <= 3)
     {
-        /* HT, VHT, HE rates */
-        si->data.current_tx_rate = datarate->tx_data_rate >> 1;
+        /* HT, VHT, HE rates (in Kbps) */
+        si->data.current_tx_rate = (datarate->tx_data_rate >> 1)*1000;
     }
 
     return WM_SUCCESS;
@@ -2036,16 +2046,18 @@ void wifi_nxp_wpa_supp_event_acs_channel_selected(void *if_priv, nxp_wifi_acs_pa
     event.acs_selected_channels.ch_width = acs_params->ch_width;
     event.acs_selected_channels.hw_mode  = (enum hostapd_hw_mode)acs_params->hw_mode;
 
+#if CONFIG_WPA_SUPP_AP
     if (wifi_if_ctx_rtos->hostapd)
     {
         wifi_if_ctx_rtos->hostapd_callbk_fns.acs_channel_sel(wifi_if_ctx_rtos->hapd_drv_if_ctx, &event);
     }
-#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
     else
-    {
-        wifi_if_ctx_rtos->supp_callbk_fns.acs_channel_sel(wifi_if_ctx_rtos->supp_drv_if_ctx, &event);
-    }
 #endif
+    {
+#if !CONFIG_WIFI_NM_WPA_SUPPLICANT
+        wifi_if_ctx_rtos->supp_callbk_fns.acs_channel_sel(wifi_if_ctx_rtos->supp_drv_if_ctx, &event);
+#endif
+    }
 }
 
 void wifi_nxp_wpa_supp_event_mgmt_tx_status(void *if_priv, nxp_wifi_event_mlme_t *mlme_event, unsigned int event_len)
@@ -2324,12 +2336,14 @@ void wifi_nxp_wpa_supp_event_get_wiphy(void *if_priv,
                 wifi_if_ctx_rtos->supp_callbk_fns.get_wiphy_res(wifi_if_ctx_rtos->supp_drv_if_ctx, &band);
             }
         }
+#if CONFIG_WPA_SUPP_AP
         else
         {
            if (wifi_if_ctx_rtos->hapd_drv_if_ctx && wifi_if_ctx_rtos->hostapd_callbk_fns.get_wiphy_res) {
                 wifi_if_ctx_rtos->hostapd_callbk_fns.get_wiphy_res(wifi_if_ctx_rtos->hapd_drv_if_ctx, &band);
            }
         }
+#endif
     }
 
     if (wifi_if_ctx_rtos->bss_type == BSS_TYPE_STA)
@@ -2338,12 +2352,14 @@ void wifi_nxp_wpa_supp_event_get_wiphy(void *if_priv,
              wifi_if_ctx_rtos->supp_callbk_fns.get_wiphy_res(wifi_if_ctx_rtos->supp_drv_if_ctx, NULL);
         }
     }
+#if CONFIG_WPA_SUPP_AP
     else
     {
         if (wifi_if_ctx_rtos->hapd_drv_if_ctx && wifi_if_ctx_rtos->hostapd_callbk_fns.get_wiphy_res) {
              wifi_if_ctx_rtos->hostapd_callbk_fns.get_wiphy_res(wifi_if_ctx_rtos->hapd_drv_if_ctx, NULL);
         }
     }
+#endif
 }
 
 int wifi_nxp_wpa_supp_get_wiphy(void *if_priv)

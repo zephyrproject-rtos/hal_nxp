@@ -138,13 +138,25 @@ mlan_status wlan_process_rx_packet(pmlan_adapter pmadapter, pmlan_buffer pmbuf)
 #else
     priv->rxpd_rate_info = prx_pd->rate_info;
 #endif
+
+#if CONFIG_WIFI_PKT_FWD
+    if ((GET_BSS_ROLE(priv) == MLAN_BSS_ROLE_UAP) && priv->pkt_fwd)
+    {
+        /* Check if needs to do packet forwarding */
+        ret = wlan_process_uap_rx_packet(priv, pmbuf);
+        goto done;
+    }
+#endif
     ret = pmadapter->callbacks.moal_recv_packet(pmadapter->pmoal_handle, pmbuf);
     if (ret == MLAN_STATUS_FAILURE)
     {
         pmbuf->status_code = (t_u32)MLAN_ERROR_PKT_INVALID;
-        PRINTM(MERROR, "STA Rx Error: moal_recv_packet returned error\n");
+        PRINTM(MERROR, "Rx Error: moal_recv_packet returned error\n");
     }
-    /* done: */
+
+#if CONFIG_WIFI_PKT_FWD
+done:
+#endif
     if (ret != MLAN_STATUS_PENDING)
     {
         wlan_free_mlan_buffer(pmadapter, pmbuf);

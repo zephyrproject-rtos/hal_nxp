@@ -48,6 +48,19 @@ Change log:
     } while (0)
 #endif /* BIG_ENDIAN_SUPPORT */
 
+/** Guard mlan_private access when uAP disabled */
+#if UAP_SUPPORT
+#define CHECK_BSS_TYPE(id, rvl)
+#define CHECK_BSS_TYPE_RET_VOID(id)
+#else
+#define CHECK_BSS_TYPE(id, rvl) \
+    if ((int)(id) > MLAN_BSS_ROLE_STA) \
+        return (rvl)
+#define CHECK_BSS_TYPE_RET_VOID(id) \
+    if ((int)(id) > MLAN_BSS_ROLE_STA) \
+        return
+#endif
+
 /** Band config 5GHz */
 #define UAP_BAND_CONFIG_5GHZ 0x01
 
@@ -66,6 +79,7 @@ Change log:
 /** Enable Host PKT forwarding */
 #define PKT_FWD_ENABLE_BIT 0x01U
 
+#if UAP_SUPPORT
 mlan_status wlan_ops_uap_ioctl(t_void *adapter, pmlan_ioctl_req pioctl_req);
 
 mlan_status wlan_ops_uap_prepare_cmd(IN t_void *priv,
@@ -97,4 +111,13 @@ void wifi_uap_set_hidden_ssid(const t_u8 bcast_ssid_ctl);
 void wifi_uap_set_htcapinfo(const t_u16 ht_cap_info);
 
 void wifi_uap_set_beacon_period(const t_u16 beacon_period);
+
+#else
+static inline mlan_status wlan_ops_uap_ioctl(t_void *adapter, pmlan_ioctl_req pioctl_req)
+{
+    (void)PRINTF("wlan_ops_uap_ioctl UAP not supported %s:%d\r\n", __func__, __LINE__);
+    return MLAN_STATUS_FAILURE;
+}
+#endif /* UAP_SUPPORT */
+
 #endif /* _MLAN_UAP_H_ */

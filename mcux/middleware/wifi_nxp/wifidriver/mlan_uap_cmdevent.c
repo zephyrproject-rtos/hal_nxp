@@ -325,6 +325,7 @@ static mlan_status wlan_uap_cmd_ap_config(pmlan_private pmpriv,
         (bss->param.bss_config.wmm_para.qos_info & 0x80 || bss->param.bss_config.wmm_para.qos_info == 0x00))
     {
         tlv_wmm_parameter              = (MrvlIEtypes_wmm_parameter_t *)tlv;
+        (void)__memset(pmpriv->adapter, tlv_wmm_parameter, 0x00, sizeof(MrvlIEtypes_wmm_parameter_t));
         tlv_wmm_parameter->header.type = wlan_cpu_to_le16(TLV_TYPE_VENDOR_SPECIFIC_IE);
         tlv_wmm_parameter->header.len  = wlan_cpu_to_le16(sizeof(bss->param.bss_config.wmm_para));
         (void)__memcpy(pmpriv->adapter, tlv_wmm_parameter->wmm_para.ouitype, bss->param.bss_config.wmm_para.ouitype,
@@ -992,7 +993,7 @@ void wlan_check_sta_capability(pmlan_private priv, pmlan_buffer pevent, sta_node
     return;
 }
 
-#ifdef UAP_HOST_MLME
+#if UAP_HOST_MLME
 /**
  *  @brief	Check 11B support Rates
  *
@@ -1284,13 +1285,13 @@ done:
  **/
 static mlan_status wlan_uap_cmd_bss_start(pmlan_private pmpriv, HostCmd_DS_COMMAND *cmd)
 {
-#ifdef UAP_HOST_MLME
+#if UAP_HOST_MLME
     MrvlIEtypes_HostMlme_t *tlv;
 #endif
     ENTER();
     cmd->command = wlan_cpu_to_le16(HOST_CMD_APCMD_BSS_START);
     cmd->size    = S_DS_GEN;
-#ifdef UAP_HOST_MLME
+#if UAP_HOST_MLME
     if (pmpriv->uap_host_based)
     {
         tlv              = (MrvlIEtypes_HostMlme_t *)((t_u8 *)cmd + cmd->size);
@@ -1380,7 +1381,7 @@ mlan_status wlan_ops_uap_prepare_cmd(IN t_void *priv,
         case HostCmd_CMD_11N_DELBA:
             ret = wlan_cmd_11n_delba(pmpriv, cmd_ptr, pdata_buf);
             break;
-#ifdef UAP_HOST_MLME
+#if UAP_HOST_MLME
         case HostCmd_CMD_ADD_NEW_STATION:
             ret = wlan_uap_cmd_add_station(pmpriv, cmd_ptr, cmd_action, (pmlan_ioctl_req)pioctl_buf);
             break;

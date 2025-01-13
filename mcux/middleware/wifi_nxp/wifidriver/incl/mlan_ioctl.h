@@ -42,19 +42,19 @@ typedef enum _mlan_ioctl_req_id
     MLAN_OID_IBSS_BCN_INTERVAL,
     MLAN_OID_IBSS_ATIM_WINDOW,
     MLAN_OID_IBSS_CHANNEL,
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
     MLAN_OID_UAP_BSS_CONFIG,
     MLAN_OID_UAP_DEAUTH_STA,
     MLAN_OID_UAP_BSS_RESET,
 #endif
-#if defined(STA_SUPPORT) && defined(UAP_SUPPORT)
+#if defined(STA_SUPPORT) && UAP_SUPPORT
     MLAN_OID_BSS_ROLE,
 #endif
 #ifdef WIFI_DIRECT_SUPPORT
     MLAN_OID_WIFI_DIRECT_MODE,
 #endif
-#ifdef UAP_HOST_MLME
-#ifdef UAP_SUPPORT
+#if UAP_HOST_MLME
+#if UAP_SUPPORT
     MLAN_OID_UAP_ADD_STATION = 0x0002001C,
 #endif
 #endif
@@ -76,7 +76,7 @@ typedef enum _mlan_ioctl_req_id
     MLAN_OID_SNMP_MIB_RTS_THRESHOLD,
     MLAN_OID_SNMP_MIB_FRAG_THRESHOLD,
     MLAN_OID_SNMP_MIB_RETRY_COUNT,
-#if defined(UAP_SUPPORT)
+#if UAP_SUPPORT
     MLAN_OID_SNMP_MIB_DOT11D,
     MLAN_OID_SNMP_MIB_DOT11H,
 #endif
@@ -91,7 +91,7 @@ typedef enum _mlan_ioctl_req_id
     MLAN_OID_GET_VER_EXT,
     MLAN_OID_GET_BSS_INFO,
     MLAN_OID_GET_DEBUG_INFO,
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
     MLAN_OID_UAP_STA_LIST,
 #endif
 
@@ -130,7 +130,7 @@ typedef enum _mlan_ioctl_req_id
     MLAN_OID_PM_CFG_SLEEP_PD,
     MLAN_OID_PM_CFG_PS_CFG,
     MLAN_OID_PM_CFG_SLEEP_PARAMS,
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
     MLAN_OID_PM_CFG_PS_MODE,
 #endif /* UAP_SUPPORT */
     MLAN_OID_PM_INFO,
@@ -662,238 +662,6 @@ typedef struct _mlan_ssid_bssid
     t_u32 idx;
 } mlan_ssid_bssid;
 
-#ifdef UAP_SUPPORT
-/** UAP FLAG: Host based */
-#define UAP_FLAG_HOST_BASED MBIT(0)
-#ifdef UAP_HOST_MLME
-/** UAP FLAG: Host mlme */
-#define UAP_FLAG_HOST_MLME MBIT(1)
-#endif
-#endif
-
-#if CONFIG_11AX
-#define MLAN_11AXCMD_SR_SUBID           0x102
-#define MLAN_11AXCMD_BEAM_SUBID         0x103
-#define MLAN_11AXCMD_HTC_SUBID          0x104
-#define MLAN_11AXCMD_TXOMI_SUBID        0x105
-#define MLAN_11AXCMD_OBSS_TOLTIME_SUBID 0x106
-#define MLAN_11AXCMD_TXOPRTS_SUBID      0x108
-#define MLAN_11AXCMD_RUPOWER_SUBID      0x117
-
-#if CONFIG_11AX_TWT
-#define MLAN_11AX_TWT_SETUP_SUBID       0x114
-#define MLAN_11AX_TWT_TEARDOWN_SUBID    0x115
-#define MLAN_11AX_TWT_REPORT_SUBID      0x116
-#define MLAN_11AX_TWT_INFORMATION_SUBID 0x119
-#endif /* CONFIG_11AX_TWT */
-
-#if CONFIG_MMSF
-#define MLAN_11AX_DEBUG_MMSF_SUBID 0x12d
-#endif
-#endif /* CONFIG_11AX */
-
-#if CONFIG_WIFI_RECOVERY
-#define MLAN_RECOVERY_TEST_SUBID 0x117
-#endif
-
-#ifdef UAP_SUPPORT
-/** Maximum packet forward control value */
-#define MAX_PKT_FWD_CTRL 15
-/** Maximum BEACON period */
-#define MAX_BEACON_PERIOD 4000U
-/** Minimum BEACON period */
-#define MIN_BEACON_PERIOD 50U
-/** Maximum Channel Switch count */
-#define MAX_CHSW_COUNT 15U
-/** Minimum Channel Switch count */
-#define MIN_CHSW_COUNT 5U
-/** Maximum DTIM period */
-#define MAX_DTIM_PERIOD 100U
-/** Minimum DTIM period */
-#define MIN_DTIM_PERIOD 1U
-/** Maximum TX Power Limit */
-#define MAX_TX_POWER 20
-/** Minimum TX Power Limit */
-#define MIN_TX_POWER 0
-/** MAX station count */
-#define MAX_UAP_STA_COUNT 10
-/** Maximum RTS threshold */
-#define MAX_RTS_THRESHOLD 2347
-/** Maximum fragmentation threshold */
-#define MAX_FRAG_THRESHOLD 2346
-/** Minimum fragmentation threshold */
-#define MIN_FRAG_THRESHOLD 256
-/** data rate 54 M */
-#define DATA_RATE_54M 108
-/** Maximum value of bcast_ssid_ctl */
-#define MAX_BCAST_SSID_CTL 2
-/** antenna A */
-#define ANTENNA_MODE_A 0
-/** antenna B */
-#define ANTENNA_MODE_B 1
-/** transmit antenna */
-#define TX_ANTENNA 1
-/** receive antenna */
-#define RX_ANTENNA 0
-/** Maximum stage out time */
-#define MAX_STAGE_OUT_TIME 864000
-/** Minimum stage out time */
-#define MIN_STAGE_OUT_TIME 300
-/** Maximum Retry Limit */
-#define MAX_RETRY_LIMIT 14
-
-/** Maximum group key timer in seconds */
-#define MAX_GRP_TIMER 86400
-
-/** Maximum value of 4 byte configuration */
-#define MAX_VALID_DWORD 0x7FFFFFFF /* (1 << 31) - 1 */
-
-/** Band config ACS mode */
-#define BAND_CONFIG_ACS_MODE 0x40U
-/** Band config manual */
-#define BAND_CONFIG_MANUAL 0x00
-
-/** Maximum channel number in bg mode */
-#define MAX_CHANNELS_BG 14U
-
-/** Maximum data rates */
-#define MAX_DATA_RATES 14U
-
-/** auto data rate */
-#define DATA_RATE_AUTO 0
-
-/**filter mode: disable */
-#define MAC_FILTER_MODE_DISABLE 0
-/**filter mode: block mac address */
-#define MAC_FILTER_MODE_ALLOW_MAC 1
-/**filter mode: block mac address */
-#define MAC_FILTER_MODE_BLOCK_MAC 2
-/** Maximum mac filter num */
-#define MAX_MAC_FILTER_NUM 16
-
-/* Bitmap for protocol to use */
-/** No security */
-#define PROTOCOL_NO_SECURITY 0x01
-/** Static WEP */
-#define PROTOCOL_STATIC_WEP 0x02
-/** WPA */
-#define PROTOCOL_WPA 0x08U
-/** WPA2 */
-#define PROTOCOL_WPA2 0x20U
-/** WP2 Mixed */
-#define PROTOCOL_WPA2_MIXED 0x28U
-/** EAP */
-#define PROTOCOL_EAP 0x40U
-/** WAPI */
-#define PROTOCOL_WAPI 0x80U
-/** WPA3 SAE */
-#define PROTOCOL_WPA3_SAE 256U
-#if CONFIG_DRIVER_OWE
-/** OWE */
-#define PROTOCOL_OWE 512U
-#endif
-
-/** Key_mgmt_psk_sha256 */
-#define KEY_MGMT_PSK_SHA256 0x100
-/** Key_mgmt_sae */
-#define KEY_MGMT_SAE 0x400
-#if CONFIG_DRIVER_OWE
-/** Key_mgmt_owe */
-#define KEY_MGMT_OWE 0x200
-#endif
-/** Key_mgmt_none */
-#define KEY_MGMT_NONE 0x04
-/** Key_mgmt_psk */
-#define KEY_MGMT_PSK 0x02
-/** Key_mgmt_psk_sha256 */
-#define KEY_MGMT_PSK_SHA256 0x100
-/** Key_mgmt_eap  */
-#define KEY_MGMT_EAP 0x01
-/** Key_mgmt_psk sha256 */
-#define KEY_MGMT_PSK_SHA256 0x100
-
-/** TKIP */
-#define CIPHER_TKIP 0x04
-/** AES CCMP */
-#define CIPHER_AES_CCMP 0x08
-
-/** Valid cipher bitmap */
-#define VALID_CIPHER_BITMAP 0x0cU
-
-#if CONFIG_NET_MONITOR
-/** Maximum monior mac filter num */
-#define MAX_MONIT_MAC_FILTER_NUM 3
-#endif
-
-/** Channel List Entry */
-typedef struct _channel_list
-{
-    /** Channel Number */
-    t_u8 chan_number;
-    /** Band Config */
-    t_u8 band_config_type;
-} scan_chan_list;
-
-/** mac_filter data structure */
-typedef struct _mac_filter
-{
-    /** mac filter mode */
-    t_u16 filter_mode;
-    /** mac adress count */
-    t_u16 mac_count;
-    /** mac address list */
-    mlan_802_11_mac_addr mac_list[MAX_MAC_FILTER_NUM];
-} mac_filter;
-
-/** wpa parameter */
-typedef struct _wpa_param
-{
-    /** Pairwise cipher WPA */
-    t_u8 pairwise_cipher_wpa;
-    /** Pairwise cipher WPA2 */
-    t_u8 pairwise_cipher_wpa2;
-    /** group cipher */
-    t_u8 group_cipher;
-    /** RSN replay protection */
-    t_u8 rsn_protection;
-    /** passphrase length */
-    t_u32 length;
-    /** passphrase */
-    t_u8 passphrase[64];
-    /** password length */
-    t_u32 password_length;
-    /** wpa3 sae password */
-    t_u8 password[255];
-    /**group key rekey time in seconds */
-    t_u32 gk_rekey_time;
-} wpa_param;
-
-/** wep key */
-typedef struct _wep_key
-{
-    /** key index 0-3 */
-    t_u8 key_index;
-    /** is default */
-    t_u8 is_default;
-    /** length */
-    t_u16 length;
-    /** key data */
-    t_u8 key[26];
-} wep_key;
-
-/** wep param */
-typedef struct _wep_param
-{
-    /** key 0 */
-    wep_key key0;
-    /** key 1 */
-    wep_key key1;
-    /** key 2 */
-    wep_key key2;
-    /** key 3 */
-    wep_key key3;
-} wep_param;
-
 /** Data structure of WMM QoS information */
 typedef struct _wmm_qos_info_t
 {
@@ -978,6 +746,238 @@ typedef struct _wmm_parameter_t
     /** AC Parameters Record WMM_AC_BE, WMM_AC_BK, WMM_AC_VI, WMM_AC_VO */
     wmm_ac_parameters_t ac_params[MAX_AC_QUEUES];
 } wmm_parameter_t, *pwmm_parameter_t;
+
+#if UAP_SUPPORT
+/** UAP FLAG: Host based */
+#define UAP_FLAG_HOST_BASED MBIT(0)
+#if UAP_HOST_MLME
+/** UAP FLAG: Host mlme */
+#define UAP_FLAG_HOST_MLME MBIT(1)
+#endif
+#endif
+
+#if CONFIG_11AX
+#define MLAN_11AXCMD_SR_SUBID           0x102
+#define MLAN_11AXCMD_BEAM_SUBID         0x103
+#define MLAN_11AXCMD_HTC_SUBID          0x104
+#define MLAN_11AXCMD_TXOMI_SUBID        0x105
+#define MLAN_11AXCMD_OBSS_TOLTIME_SUBID 0x106
+#define MLAN_11AXCMD_TXOPRTS_SUBID      0x108
+#define MLAN_11AXCMD_RUPOWER_SUBID      0x117
+
+#if CONFIG_11AX_TWT
+#define MLAN_11AX_TWT_SETUP_SUBID       0x114
+#define MLAN_11AX_TWT_TEARDOWN_SUBID    0x115
+#define MLAN_11AX_TWT_REPORT_SUBID      0x116
+#define MLAN_11AX_TWT_INFORMATION_SUBID 0x119
+#endif /* CONFIG_11AX_TWT */
+
+#if CONFIG_MMSF
+#define MLAN_11AX_DEBUG_MMSF_SUBID 0x12d
+#endif
+#endif /* CONFIG_11AX */
+
+#if CONFIG_WIFI_RECOVERY
+#define MLAN_RECOVERY_TEST_SUBID 0x117
+#endif
+
+#if CONFIG_NET_MONITOR
+/** Maximum monior mac filter num */
+#define MAX_MONIT_MAC_FILTER_NUM 3
+#endif
+
+/** Maximum data rates */
+#define MAX_DATA_RATES 14U
+
+/** Maximum channel number in bg mode */
+#define MAX_CHANNELS_BG 14U
+
+#if UAP_SUPPORT
+/** Maximum packet forward control value */
+#define MAX_PKT_FWD_CTRL 15
+/** Maximum BEACON period */
+#define MAX_BEACON_PERIOD 4000U
+/** Minimum BEACON period */
+#define MIN_BEACON_PERIOD 50U
+/** Maximum Channel Switch count */
+#define MAX_CHSW_COUNT 15U
+/** Minimum Channel Switch count */
+#define MIN_CHSW_COUNT 5U
+/** Maximum DTIM period */
+#define MAX_DTIM_PERIOD 100U
+/** Minimum DTIM period */
+#define MIN_DTIM_PERIOD 1U
+/** Maximum TX Power Limit */
+#define MAX_TX_POWER 20
+/** Minimum TX Power Limit */
+#define MIN_TX_POWER 0
+/** MAX station count */
+#define MAX_UAP_STA_COUNT 10
+/** Maximum RTS threshold */
+#define MAX_RTS_THRESHOLD 2347
+/** Maximum fragmentation threshold */
+#define MAX_FRAG_THRESHOLD 2346
+/** Minimum fragmentation threshold */
+#define MIN_FRAG_THRESHOLD 256
+/** data rate 54 M */
+#define DATA_RATE_54M 108
+/** Maximum value of bcast_ssid_ctl */
+#define MAX_BCAST_SSID_CTL 2
+/** antenna A */
+#define ANTENNA_MODE_A 0
+/** antenna B */
+#define ANTENNA_MODE_B 1
+/** transmit antenna */
+#define TX_ANTENNA 1
+/** receive antenna */
+#define RX_ANTENNA 0
+/** Maximum stage out time */
+#define MAX_STAGE_OUT_TIME 864000
+/** Minimum stage out time */
+#define MIN_STAGE_OUT_TIME 300
+/** Maximum Retry Limit */
+#define MAX_RETRY_LIMIT 14
+
+/** Maximum group key timer in seconds */
+#define MAX_GRP_TIMER 86400
+
+/** Maximum value of 4 byte configuration */
+#define MAX_VALID_DWORD 0x7FFFFFFF /* (1 << 31) - 1 */
+
+/** Band config ACS mode */
+#define BAND_CONFIG_ACS_MODE 0x40U
+/** Band config manual */
+#define BAND_CONFIG_MANUAL 0x00
+
+/** auto data rate */
+#define DATA_RATE_AUTO 0
+
+/**filter mode: disable */
+#define MAC_FILTER_MODE_DISABLE 0
+/**filter mode: block mac address */
+#define MAC_FILTER_MODE_ALLOW_MAC 1
+/**filter mode: block mac address */
+#define MAC_FILTER_MODE_BLOCK_MAC 2
+/** Maximum mac filter num */
+#define MAX_MAC_FILTER_NUM 16
+
+/* Bitmap for protocol to use */
+/** No security */
+#define PROTOCOL_NO_SECURITY 0x01
+/** Static WEP */
+#define PROTOCOL_STATIC_WEP 0x02
+/** WPA */
+#define PROTOCOL_WPA 0x08U
+/** WPA2 */
+#define PROTOCOL_WPA2 0x20U
+/** WP2 Mixed */
+#define PROTOCOL_WPA2_MIXED 0x28U
+/** EAP */
+#define PROTOCOL_EAP 0x40U
+/** WAPI */
+#define PROTOCOL_WAPI 0x80U
+/** WPA3 SAE */
+#define PROTOCOL_WPA3_SAE 256U
+#if CONFIG_DRIVER_OWE
+/** OWE */
+#define PROTOCOL_OWE 512U
+#endif
+
+/** Key_mgmt_psk_sha256 */
+#define KEY_MGMT_PSK_SHA256 0x100
+/** Key_mgmt_sae */
+#define KEY_MGMT_SAE 0x400
+#if CONFIG_DRIVER_OWE
+/** Key_mgmt_owe */
+#define KEY_MGMT_OWE 0x200
+#endif
+/** Key_mgmt_none */
+#define KEY_MGMT_NONE 0x04
+/** Key_mgmt_psk */
+#define KEY_MGMT_PSK 0x02
+/** Key_mgmt_psk_sha256 */
+#define KEY_MGMT_PSK_SHA256 0x100
+/** Key_mgmt_eap  */
+#define KEY_MGMT_EAP 0x01
+/** Key_mgmt_psk sha256 */
+#define KEY_MGMT_PSK_SHA256 0x100
+
+/** TKIP */
+#define CIPHER_TKIP 0x04
+/** AES CCMP */
+#define CIPHER_AES_CCMP 0x08
+
+/** Valid cipher bitmap */
+#define VALID_CIPHER_BITMAP 0x0cU
+
+/** Channel List Entry */
+typedef struct _channel_list
+{
+    /** Channel Number */
+    t_u8 chan_number;
+    /** Band Config */
+    t_u8 band_config_type;
+} scan_chan_list;
+
+/** mac_filter data structure */
+typedef struct _mac_filter
+{
+    /** mac filter mode */
+    t_u16 filter_mode;
+    /** mac adress count */
+    t_u16 mac_count;
+    /** mac address list */
+    mlan_802_11_mac_addr mac_list[MAX_MAC_FILTER_NUM];
+} mac_filter;
+
+/** wpa parameter */
+typedef struct _wpa_param
+{
+    /** Pairwise cipher WPA */
+    t_u8 pairwise_cipher_wpa;
+    /** Pairwise cipher WPA2 */
+    t_u8 pairwise_cipher_wpa2;
+    /** group cipher */
+    t_u8 group_cipher;
+    /** RSN replay protection */
+    t_u8 rsn_protection;
+    /** passphrase length */
+    t_u32 length;
+    /** passphrase */
+    t_u8 passphrase[64];
+    /** password length */
+    t_u32 password_length;
+    /** wpa3 sae password */
+    t_u8 password[255];
+    /**group key rekey time in seconds */
+    t_u32 gk_rekey_time;
+} wpa_param;
+
+/** wep key */
+typedef struct _wep_key
+{
+    /** key index 0-3 */
+    t_u8 key_index;
+    /** is default */
+    t_u8 is_default;
+    /** length */
+    t_u16 length;
+    /** key data */
+    t_u8 key[26];
+} wep_key;
+
+/** wep param */
+typedef struct _wep_param
+{
+    /** key 0 */
+    wep_key key0;
+    /** key 1 */
+    wep_key key1;
+    /** key 2 */
+    wep_key key2;
+    /** key 3 */
+    wep_key key3;
+} wep_param;
 
 /** mlan_bss_param
  * Note: For each entry you must enter an invalid value
@@ -1155,7 +1155,7 @@ typedef struct _mlan_uap_acs_scan
     t_u8 chan;
 } mlan_uap_acs_scan;
 
-#ifdef UAP_HOST_MLME
+#if UAP_HOST_MLME
 /** station is authorized (802.1X) */
 #define STA_FLAG_AUTHORIZED MBIT(1)
 /** Station is capable of receiving frames with short barker preamble */
@@ -1237,7 +1237,7 @@ typedef struct _mlan_ds_bss
         /** ATIM window for MLAN_OID_IBSS_ATIM_WINDOW */
         t_u32 atim_window;
 #endif
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
         /** BSS param for AP mode */
         mlan_uap_bss_param bss_config;
 #if CONFIG_ECSA
@@ -1249,7 +1249,7 @@ typedef struct _mlan_ds_bss
         mlan_deauth_param deauth_param;
 #endif
 #endif
-#if defined(STA_SUPPORT) && defined(UAP_SUPPORT)
+#if defined(STA_SUPPORT) && UAP_SUPPORT
         /** BSS role */
         mlan_bss_role bss_role;
 #endif
@@ -1260,8 +1260,8 @@ typedef struct _mlan_ds_bss
         mlan_uap_acs_scan ap_acs_scan;
         /** host based flag for MLAN_OID_BSS_START */
         t_u8 host_based;
-#ifdef UAP_HOST_MLME
-#ifdef UAP_SUPPORT
+#if UAP_HOST_MLME
+#if UAP_SUPPORT
         /** STA info for MLAN_OID_UAP_ADD_STATION */
         mlan_ds_sta_info sta_info;
 #endif
@@ -1430,7 +1430,7 @@ typedef struct _mlan_ds_snmp_mib
         t_u32 frag_threshold;
         /** Retry count for MLAN_OID_SNMP_MIB_RETRY_COUNT */
         t_u32 retry_count;
-#if defined(UAP_SUPPORT)
+#if UAP_SUPPORT
         /** OID value for MLAN_OID_SNMP_MIB_DOT11D/H */
         t_u32 oid_value;
 #endif
@@ -1859,7 +1859,7 @@ typedef struct _mlan_debug_info
     t_u8 event_received;
     /**  pendig tx pkts */
     t_u32 tx_pkts_queued;
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
     /**  pending bridge pkts */
     t_u16 num_bridge_pkts;
     /**  dropped pkts */
@@ -1867,7 +1867,7 @@ typedef struct _mlan_debug_info
 #endif
 } mlan_debug_info, *pmlan_debug_info;
 
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
 /** Maximum number of clients supported by AP */
 #define MAX_NUM_CLIENTS 16U
 
@@ -1913,7 +1913,7 @@ typedef struct _mlan_ds_get_info
         mlan_bss_info bss_info;
         /** Debug information for MLAN_OID_GET_DEBUG_INFO */
         mlan_debug_info debug_info;
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
         /** UAP Statistics information for MLAN_OID_GET_STATS */
         mlan_ds_uap_stats ustats;
         /** UAP station list for MLAN_OID_UAP_STA_LIST */
@@ -3360,7 +3360,7 @@ typedef struct _mlan_ds_11d_cfg
         /** Domain info for MLAN_OID_11D_DOMAIN_INFO */
         mlan_ds_11d_domain_info domain_info;
 #endif /* STA_SUPPORT */
-#ifdef UAP_SUPPORT
+#if UAP_SUPPORT
         /** tlv data for MLAN_OID_11D_DOMAIN_INFO */
         t_u8 domain_tlv[MAX_IE_SIZE];
 #endif /* UAP_SUPPORT */

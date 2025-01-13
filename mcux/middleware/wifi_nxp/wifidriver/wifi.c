@@ -2080,10 +2080,12 @@ static int wifi_core_init(void)
 
     wm_wifi.wifi_core_init_done = 1;
 
+#if UAP_SUPPORT
 #if defined(SD8801) || defined(RW610)
     wifi_uap_set_bandwidth(BANDWIDTH_20MHZ);
 #else
     wifi_uap_set_bandwidth(BANDWIDTH_40MHZ);
+#endif
 #endif
 
     return WM_SUCCESS;
@@ -2806,8 +2808,8 @@ static mlan_status wlan_process_802dot11_mgmt_pkt2(mlan_private *priv, t_u8 *pay
 #ifdef DOT1AS_SUPPORT
     struct timestamps tstamps;
 #endif
-#ifdef UAP_HOST_MLME
-#ifdef UAP_SUPPORT
+#if UAP_HOST_MLME
+#if UAP_SUPPORT
     // t_u8 *sta_addr = NULL;
     // sta_node *sta_ptr = MNULL;
     // MrvlIETypes_MgmtFrameSet_t *tlv;
@@ -2839,8 +2841,8 @@ static mlan_status wlan_process_802dot11_mgmt_pkt2(mlan_private *priv, t_u8 *pay
     {
         case SUBTYPE_ASSOC_REQUEST:
         case SUBTYPE_REASSOC_REQUEST:
-#ifdef UAP_HOST_MLME
-#ifdef UAP_SUPPORT
+#if UAP_HOST_MLME
+#if UAP_SUPPORT
             if (priv->uap_host_based)
             {
                 if (!memcmp(pieee_pkt_hdr->addr3, priv->curr_addr, MLAN_MAC_ADDR_LENGTH))
@@ -2932,8 +2934,8 @@ static mlan_status wlan_process_802dot11_mgmt_pkt2(mlan_private *priv, t_u8 *pay
         case SUBTYPE_DEAUTH:
             if (memcmp(pieee_pkt_hdr->addr1, broadcast, MLAN_MAC_ADDR_LENGTH))
                 unicast = MTRUE;
-#ifdef UAP_HOST_MLME
-#ifdef UAP_SUPPORT
+#if UAP_HOST_MLME
+#if UAP_SUPPORT
             if (priv->uap_host_based)
             {
                 if (!memcmp(pieee_pkt_hdr->addr3, priv->curr_addr, MLAN_MAC_ADDR_LENGTH))
@@ -3348,6 +3350,13 @@ static t_u8 rfc1042_eth_hdr[MLAN_MAC_ADDR_LENGTH] = {0xaa, 0xaa, 0x03, 0x00, 0x0
 
 static int wifi_low_level_input(const uint8_t interface, const uint8_t *buffer, const uint16_t len)
 {
+#if !UAP_SUPPORT
+    if (interface > MLAN_BSS_ROLE_STA)
+    {
+        wifi_w("wifi_low_level_input receive UAP packet when UAP not supported");
+        return -WM_FAIL;
+    }
+#endif
 #if CONFIG_WPA_SUPP
 #if !CONFIG_WIFI_NM_WPA_SUPPLICANT
     RxPD *prx_pd  = (RxPD *)(void *)((t_u8 *)buffer + INTF_HEADER_LEN);
@@ -3861,6 +3870,7 @@ int send_wifi_driver_tx_data_event(t_u8 interface)
 {
     osa_event_flags_t events;
 
+    CHECK_BSS_TYPE(interface, -1);
     events = (1U << interface) | WIFI_EVENT_TX_DATA;
 
     if(1 != wm_wifi.wifi_core_init_done)
@@ -3875,6 +3885,7 @@ int send_wifi_driver_tx_null_data_event(t_u8 interface)
 {
     osa_event_flags_t events;
 
+    CHECK_BSS_TYPE(interface, -1);
     events = (1U << interface) | WIFI_EVENT_TX_NULL_DATA;
 
     notify_wifi_driver_tx_event(events);
@@ -3886,6 +3897,7 @@ int send_wifi_driver_bypass_data_event(t_u8 interface)
 {
     osa_event_flags_t events;
 
+    CHECK_BSS_TYPE(interface, -1);
     events = (1U << interface) | WIFI_EVENT_TX_BYPASS_DATA;
 
     notify_wifi_driver_tx_event(events);
@@ -3924,6 +3936,14 @@ static void wifi_drv_tx_task(osa_task_param_t arg)
             interface = msg.reason;
         }
         pmadapter = mlan_adap;
+
+#if !UAP_SUPPORT
+        if (interface > MLAN_BSS_ROLE_STA)
+        {
+            wifi_w("TX task receive UAP packet when UAP not supported");
+            continue;
+        }
+#endif
 
 #if CONFIG_HOST_SLEEP
         wakelock_get();
@@ -4538,6 +4558,13 @@ void wifi_show_os_mem_stat()
  */
 static int raw_low_level_output(const t_u8 interface, const t_u8 *buf, t_u32 len)
 {
+#if !UAP_SUPPORT
+    if (interface > MLAN_BSS_ROLE_STA)
+    {
+        wifi_w("raw_low_level_output receive UAP pkt when UAP not supported");
+        return -WM_FAIL;
+    }
+#endif
     mlan_private *pmpriv = NULL;
 #if (CONFIG_WMM)
     t_u32 pkt_len            = 0;
@@ -4692,7 +4719,7 @@ int wifi_set_country_code(const char *alpha2)
     pmadapter->cfp_code_a = pmadapter->region_code;
 #endif
 
-    if (wlan_set_regiontable(pmadapter->priv[1], pmadapter->region_code, pmadapter->config_bands))
+    if (wlan_set_regiontable(pmadapter->priv[0], pmadapter->region_code, pmadapter->config_bands))
     {
         wifi_e("%s set regiontable fail", __func__);
         return -WM_FAIL;
@@ -4906,6 +4933,13 @@ mlan_status raw_wlan_xmit_pkt(t_u8 *buffer, t_u32 txlen, t_u8 interface, t_u32 t
 
 static int supp_low_level_output(const t_u8 interface, const t_u8 *buf, t_u32 len)
 {
+#if !UAP_SUPPORT
+    if (interface > MLAN_BSS_ROLE_STA)
+    {
+        wifi_w("supp_low_level_output receive UAP pkt when UAP not supported");
+        return -WM_FAIL;
+    }
+#endif
 #if (CONFIG_WMM)
     t_u32 pkt_len            = 0;
     t_u32 link_point_len     = 0;

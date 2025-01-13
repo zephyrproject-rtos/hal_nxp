@@ -398,7 +398,14 @@ void *wifi_mem_malloc_cmdrespbuf(void);
 void *wifi_malloc_eventbuf(size_t size);
 void wifi_free_eventbuf(void *buffer);
 
+#if UAP_SUPPORT
 void wifi_uap_handle_cmd_resp(HostCmd_DS_COMMAND *resp);
+#else
+static inline void wifi_uap_handle_cmd_resp(HostCmd_DS_COMMAND *resp)
+{
+    (void)PRINTF("wifi_uap_handle_cmd_resp UAP not supported %s:%d\r\n", __func__, __LINE__);
+}
+#endif
 
 mlan_status wrapper_moal_malloc(t_void *pmoal_handle, t_u32 size, t_u32 flag, t_u8 **ppbuf);
 mlan_status wrapper_moal_mfree(t_void *pmoal_handle, t_u8 *pbuf);
@@ -468,6 +475,7 @@ int wifi_nxp_get_country(unsigned int bss_type, char *alpha2);
 int wifi_nxp_get_signal(unsigned int bss_type, nxp_wifi_signal_info_t *signal_params);
 int wifi_nxp_scan_res_num(void);
 int wifi_nxp_scan_res_get2(t_u32 table_idx, nxp_wifi_event_new_scan_result_t *scan_res);
+int wifi_get_bandwidth(void);
 #endif /* CONFIG_WPA_SUPP */
 
 #if CONFIG_WIFI_RX_REORDER

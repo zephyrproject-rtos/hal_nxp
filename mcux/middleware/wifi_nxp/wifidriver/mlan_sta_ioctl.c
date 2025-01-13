@@ -1666,6 +1666,7 @@ mlan_status wlan_ops_sta_ioctl(t_void *adapter, pmlan_ioctl_req pioctl_req)
 
     if (pioctl_req != MNULL)
     {
+        CHECK_BSS_TYPE(pioctl_req->bss_index, MLAN_STATUS_FAILURE);
         pmpriv = pmadapter->priv[pioctl_req->bss_index];
     }
     else

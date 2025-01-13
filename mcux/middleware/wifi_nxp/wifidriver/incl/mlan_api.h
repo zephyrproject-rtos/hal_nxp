@@ -205,6 +205,7 @@ mlan_status wifi_prepare_and_send_cmd(IN mlan_private *pmpriv,
                                       IN t_void *pdata_buf,
                                       mlan_bss_type bss_type,
                                       void *priv);
+#if UAP_SUPPORT
 int wifi_uap_prepare_and_send_cmd(mlan_private *pmpriv,
                                   t_u16 cmd_no,
                                   t_u16 cmd_action,
@@ -213,6 +214,20 @@ int wifi_uap_prepare_and_send_cmd(mlan_private *pmpriv,
                                   t_void *pdata_buf,
                                   mlan_bss_type bss_type,
                                   void *priv);
+#else
+static inline int wifi_uap_prepare_and_send_cmd(mlan_private *pmpriv,
+                                                t_u16 cmd_no,
+                                                t_u16 cmd_action,
+                                                t_u32 cmd_oid,
+                                                t_void *pioctl_buf,
+                                                t_void *pdata_buf,
+                                                mlan_bss_type bss_type,
+                                                void *priv)
+{
+    (void)PRINTF("wifi_uap_prepare_and_send_cmd UAP not suppored %s:%d\r\n", __func__, __LINE__);
+    return -1;
+}
+#endif
 
 bool wmsdk_is_11N_enabled(void);
 
@@ -293,16 +308,6 @@ void wifi_get_scan_table(mlan_private *pmpriv, mlan_scan_resp *pscan_resp);
 int wifi_get_eeprom_data(uint32_t offset, uint32_t byte_count, uint8_t *buf);
 int wifi_get_mgmt_ie(mlan_bss_type bss_type, IEEEtypes_ElementId_t index, void *buf, unsigned int *buf_len);
 int wifi_send_remain_on_channel_cmd(unsigned int bss_type, wifi_remain_on_channel_t *remain_on_channel);
-int wifi_set_smart_mode_cfg(char *ssid,
-                            int beacon_period,
-                            wifi_chan_list_param_set_t *chan_list,
-                            uint8_t *smc_start_addr,
-                            uint8_t *smc_end_addr,
-                            uint16_t filter_type,
-                            int smc_frame_filter_len,
-                            uint8_t *smc_frame_filter,
-                            int custom_ie_len,
-                            uint8_t *custom_ie);
 int wifi_set_mgmt_ie(mlan_bss_type bss_type, IEEEtypes_ElementId_t id, void *buf, unsigned int buf_len);
 #ifdef SD8801
 int wifi_get_ext_coex_stats(wifi_ext_coex_stats_t *ext_coex_stats);
@@ -343,8 +348,23 @@ int wifi_get_firmware_version_ext(wifi_fw_version_ext_t *version_ext);
  * @return WM_SUCCESS on success or error code.
  */
 int wifi_get_firmware_version(wifi_fw_version_t *ver);
+
+#if UAP_SUPPORT
+int wifi_set_smart_mode_cfg(char *ssid,
+                            int beacon_period,
+                            wifi_chan_list_param_set_t *chan_list,
+                            uint8_t *smc_start_addr,
+                            uint8_t *smc_end_addr,
+                            uint16_t filter_type,
+                            int smc_frame_filter_len,
+                            uint8_t *smc_frame_filter,
+                            int custom_ie_len,
+                            uint8_t *custom_ie);
 int wifi_get_smart_mode_cfg(void);
 int wifi_start_smart_mode(void);
+int wifi_stop_smart_mode(void);
+#endif
+
 /**
  * Get Calibration data from WLAN firmware
  *
@@ -400,7 +420,6 @@ int wifi_send_scan_cmd(t_u8 bss_mode,
 #endif
                        const bool keep_previous_scan,
                        const bool active_scan_triggered);
-int wifi_stop_smart_mode(void);
 int wifi_remove_key(int bss_index, bool is_pairwise, const uint8_t key_index, const uint8_t *mac_addr);
 int wifi_enable_ecsa_support(void);
 int wifi_set_ed_mac_mode(wifi_ed_mac_ctrl_t *wifi_ed_mac_ctrl, int bss_type);
@@ -410,7 +429,9 @@ int wifi_set_pmfcfg(t_u8 mfpc, t_u8 mfpr);
 int wifi_set_chanlist(wifi_chanlist_t *chanlist);
 int wifi_get_txpwrlimit(wifi_SubBand_t subband, wifi_txpwrlimit_t *txpwrlimit);
 int wifi_get_data_rate(wifi_ds_rate *ds_rate, mlan_bss_type bss_type);
+#if UAP_SUPPORT
 void wifi_get_active_channel_list(t_u8 *chan_list, t_u8 *num_chans, t_u16 acs_band);
+#endif
 bool wifi_is_ecsa_enabled(void);
 int wifi_set_txpwrlimit(wifi_txpwrlimit_t *txpwrlimit);
 int wifi_send_rssi_info_cmd(wifi_rssi_info_t *rssi_info);
@@ -470,10 +491,12 @@ void wls_csi_process_event(void *p_data);
 #endif
 #endif
 
+#if UAP_SUPPORT
 int wifi_set_custom_ie(custom_ie *beacon_ies_data,
                        custom_ie *beacon_wps_ies_data,
                        custom_ie *proberesp_ies_data,
                        custom_ie *assocresp_ies_data);
+#endif
 
 #if CONFIG_11K
 /**
@@ -615,6 +638,8 @@ int wifi_external_coex_pta_cfg(ext_coex_pta_cfg coex_pta_config);
 #if CONFIG_IMD3_CFG
 int wifi_imd3_cfg(t_u8 imd3_value);
 #endif
+
+int send_wifi_driver_bypass_data_event(t_u8 interface);
 
 #if CONFIG_AUTO_RECONNECT
 int wifi_auto_reconnect_enable(wifi_auto_reconnect_config_t auto_reconnect_config);
