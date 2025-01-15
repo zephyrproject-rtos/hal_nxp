@@ -135,7 +135,7 @@ typedef struct {
 } PSI5_S_Type, *PSI5_S_MemMapPtr;
 
 /** Number of instances of the PSI5_S module. */
-#define PSI5_S_INSTANCE_COUNT                    (2u)
+#define PSI5_S_INSTANCE_COUNT                    2
 
 /* PSI5_S - Peripheral instance base addresses */
 /** Peripheral PSI5_S_0 base address */
