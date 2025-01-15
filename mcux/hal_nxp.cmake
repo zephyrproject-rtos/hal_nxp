@@ -100,7 +100,8 @@ include(driver_common)
 #Include system_xxx file
 #This can be extended to other SoC series if needed
 if (DEFINED CONFIG_SOC_RESET_HOOK OR DEFINED CONFIG_SOC_SERIES_IMXRT6XX
-    OR DEFINED CONFIG_SOC_SERIES_LPC55XXX OR DEFINED CONFIG_SOC_SERIES_MCXN)
+    OR DEFINED CONFIG_SOC_SERIES_LPC55XXX OR DEFINED CONFIG_SOC_SERIES_MCXN
+    OR DEFINED CONFIG_SOC_MCXW727C)
 if (CONFIG_SOC_MIMXRT1166_CM4)
 include(device_system_MIMXRT1166_cm4)
 elseif (CONFIG_SOC_MIMXRT1166_CM7)
@@ -131,6 +132,8 @@ elseif (CONFIG_SOC_MIMXRT798S_CM33_CPU0)
 include(device_system_MIMXRT798S_cm33_core0)
 elseif (CONFIG_SOC_MIMXRT798S_CM33_CPU1)
 include(device_system_MIMXRT798S_cm33_core1)
+elseif (CONFIG_SOC_MCXW727C_CPU0)
+include(device_system_MCXW727C_cm33_core0)
 else()
 include(device_system)
 endif()
