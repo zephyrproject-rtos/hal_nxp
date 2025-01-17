@@ -287,7 +287,6 @@ if (${MCUX_DEVICE} MATCHES "MIMXRT1189")
 elseif (${MCUX_DEVICE} MATCHES "MIMX9596")
   include_driver_ifdef(CONFIG_ETH_NXP_IMX_NETC	netc/socs/imx95		driver_netc_soc_imx95)
   include_driver_ifdef(CONFIG_ETH_NXP_IMX_NETC	msgintr			driver_msgintr)
-  include_driver_ifdef(CONFIG_ETH_NXP_IMX_NETC	irqsteer		driver_irqsteer)
 endif()
 
 if (((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4 OR CONFIG_SOC_MIMXRT1189_CM33))) OR
