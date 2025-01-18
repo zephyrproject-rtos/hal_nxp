@@ -502,3 +502,32 @@ if(${MCUX_DEVICE} MATCHES "MCXW")
   include(driver_ccm32k)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/ccm32k)
 endif()
+
+if(CONFIG_SOC_SERIES_MCXW AND (CONFIG_NET_L2_IEEE802154 OR CONFIG_NET_L2_OPENTHREAD))
+
+  list(APPEND CMAKE_MODULE_PATH
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lptmr
+  )
+
+  include(driver_lptmr)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lptmr)
+
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/lists)
+  zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/lists/fsl_component_generic_list.c)
+
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa)
+  zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa/fsl_os_abstraction_zephyr.c)
+  zephyr_compile_definitions(OSA_USED=1)
+
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/timer_manager)
+  zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/timer_manager/fsl_component_timer_manager.c)
+
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/timer)
+  zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/timer/fsl_adapter_lptmr.c)
+
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/messaging)
+  zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/messaging/fsl_component_messaging.c)
+
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/mem_manager)
+  zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/mem_manager/fsl_component_mem_manager_light.c)
+endif()
