@@ -248,8 +248,10 @@ int32_t firmware_download(const uint8_t *fw_start_addr, const size_t size, void 
 
     if (ret != FWDNLD_STATUS_SUCCESS)
     {
+        fwdnld_io_d("firmware download failed");
         return FWDNLD_STATUS_FAILURE;
     }
+
     if (intf->intf_s.fwdnld_intf_check_ready)
     {
         return intf->intf_s.fwdnld_intf_check_ready(intf, NULL);
