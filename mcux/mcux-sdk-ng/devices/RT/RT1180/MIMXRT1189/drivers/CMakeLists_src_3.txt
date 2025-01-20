@@ -1,0 +1,12 @@
+if (CONFIG_MCUX_COMPONENT_driver.src_3)
+    mcux_component_version(2.0.1)
+
+    mcux_add_source(
+        SOURCES fsl_soc_src.c
+                fsl_soc_src.h
+    )
+
+    mcux_add_include(
+        INCLUDES .
+    )
+endif()
