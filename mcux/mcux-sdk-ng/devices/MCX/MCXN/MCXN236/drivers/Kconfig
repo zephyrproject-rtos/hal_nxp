@@ -5,7 +5,7 @@
 
 menu "Device specific drivers configuration"
 
-    rsource "${SdkRootDirPath}/devices/MCX/MCXN/MCXN947/drivers/romapi/Kconfig"
+    rsource "../../MCXN947/drivers/romapi/Kconfig"
 
     config MCUX_COMPONENT_driver.clock
          bool "Use driver clock"

@@ -1,6 +1,6 @@
 rsource "../../arch/arm/configuration/Kconfig"
 rsource "../../arch/arm/cortexm/Kconfig"
-rsource "../../arch/arm/CMSIS/Kconfig"
+orsource "../../arch/arm/CMSIS/Kconfig"
 
 menu "Device CMSIS system drivers"
     config MCUX_COMPONENT_device.CMSIS
