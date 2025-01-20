@@ -1,0 +1,274 @@
+menu "PD Configurations(usb_pd_config.h)"
+
+comment "USB PD PTN5110 Configurations"
+
+config PD_CONFIG_PTN5110_PORT
+    int "Number of PD PTN5110 PHY Driver Instances"
+    default 1
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_MAX_PORT
+    string
+    default "(PD_CONFIG_PTN5110_PORT)"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_PHY_LOW_POWER_LEVEL
+    int "Set USB PD PHY low power Level"
+    range 0 2
+    default 0
+    help
+        0 - Diable low power function. All PD functions are enabled.
+        1 - Low power level 1. When detecting the detached state, PD PHY will enter low power state.
+        2 - Low power level 2. Include level 1 setting and PD PHY will enter low power state when Type-C
+            is in the attached state and PD stack is idle. In this low power level, PD communicaton can
+            be carried out and partner's message can wake up PD PHY but VBUS functions will be disabled.
+        No prefix in generated macro
+
+comment "USB PD Configurations"
+
+# refer to macro PD_SPEC_REVISION_* in pd/usb_pd.h
+choice
+    prompt "Use USB PD Specification Revision"
+    default MCUX_MISC_USB_PD_SPEC_REVISION_30
+
+config MCUX_MISC_USB_PD_SPEC_REVISION_10
+    bool "1.0"
+
+config MCUX_MISC_USB_PD_SPEC_REVISION_20
+    bool "2.0"
+
+config MCUX_MISC_USB_PD_SPEC_REVISION_30
+    bool "3.0"
+
+endchoice
+
+config PD_CONFIG_REVISION
+    int
+    default 2 if MCUX_MISC_USB_PD_SPEC_REVISION_30
+    default 1 if MCUX_MISC_USB_PD_SPEC_REVISION_20
+    default 0 if MCUX_MISC_USB_PD_SPEC_REVISION_10
+    help
+        No prefix in generated macro
+
+# refer to macro PD_SPEC_STRUCTURED_VDM_VERSION_* in pd/usb_pd.h
+choice
+    prompt "Use USB PD structured VDM version"
+    default MCUX_MISC_USB_PD_SPEC_STRUCTURED_VDM_VERSION_20
+
+config MCUX_MISC_USB_PD_SPEC_STRUCTURED_VDM_VERSION_10
+    bool "1.0"
+
+config MCUX_MISC_USB_PD_SPEC_STRUCTURED_VDM_VERSION_20
+    bool "2.0"
+
+endchoice
+
+config PD_CONFIG_STRUCTURED_VDM_VERSION
+    int
+    default 1 if MCUX_MISC_USB_PD_SPEC_STRUCTURED_VDM_VERSION_20
+    default 0 if MCUX_MISC_USB_PD_SPEC_STRUCTURED_VDM_VERSION_10
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_SOURCE_ROLE_ENABLE
+    bool "Enable Source Role"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_SINK_ROLE_ENABLE
+    bool "Enable Sink Role"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_DUAL_POWER_ROLE_ENABLE
+    bool "Enable Dual Role Power"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_DUAL_DATA_ROLE_ENABLE
+    bool "Enable Dual Role Data"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_ENABLE_AUTO_POLICY
+    bool "Enable Auto Policy"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_ENABLE_AUTO_POLICY_LOG
+    bool "Enable Auto Policy Log Output"
+    depends on PD_CONFIG_ENABLE_AUTO_POLICY
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_ALT_MODE_SUPPORT
+    bool "Enable Alternate Mode"
+    help
+        No prefix in generated macro
+
+if PD_CONFIG_ALT_MODE_SUPPORT
+
+    config PD_CONFIG_ALT_MODE_SLAVE_SUPPORT
+        bool "Enable Alternate Mode Slave"
+        help
+            No prefix in generated macro
+
+    config PD_CONFIG_ALT_MODE_HOST_SUPPORT
+        bool "Enable Alternate Mode Host"
+        help
+            No prefix in generated macro
+
+    config PD_CONFIG_ALT_MODE_DP_SUPPORT
+        bool "Enable DisplayPort Alternate Mode"
+        default y
+        depends on PD_CONFIG_ALT_MODE_SLAVE_SUPPORT || PD_CONFIG_ALT_MODE_HOST_SUPPORT
+        help
+            No prefix in generated macro
+
+    config PD_CONFIG_ALT_MODE_DP_AUTO_SELECT_MODE
+        bool "Enable Auto select DisplayPort Alternate Mode"
+        default y
+        depends on PD_CONFIG_ALT_MODE_DP_SUPPORT
+        help
+            No prefix in generated macro
+
+endif
+
+# refer to macro PD_SINK_DETACH_ON_VBUS_ABSENT in pd/usb_pd.h
+config MCUX_MISC_USB_PD_SINK_DETACH_ON_VBUS_ABSENT
+    bool "Sink Detach Check VBUS Absent"
+    default y
+
+# refer to macro PD_SINK_DETACH_ON_CC_OPEN in pd/usb_pd.h
+config MCUX_MISC_USB_PD_SINK_DETACH_ON_CC_OPEN
+    bool "Sink Detach Check CC Line Open"
+
+config PD_CONFIG_SINK_DETACH_DETECT_WAY
+    int
+    default 1 if MCUX_MISC_USB_PD_SINK_DETACH_ON_VBUS_ABSENT && !MCUX_MISC_USB_PD_SINK_DETACH_ON_CC_OPEN
+    default 2 if !MCUX_MISC_USB_PD_SINK_DETACH_ON_VBUS_ABSENT && MCUX_MISC_USB_PD_SINK_DETACH_ON_CC_OPEN
+    default 3 if MCUX_MISC_USB_PD_SINK_DETACH_ON_VBUS_ABSENT && MCUX_MISC_USB_PD_SINK_DETACH_ON_CC_OPEN
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_VBUS_ALARM_SUPPORT
+    bool "Enable VBUS Voltage Alarm"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_VCONN_SUPPORT
+    bool "Enable VCONN support"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_SRC_AUTO_DISCOVER_CABLE_PLUG
+    bool "Enable Automatic Discovery of Cable Plugs"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_CABLE_COMMUNICATION_ENABLE
+    bool "Enable Cable Communication"
+    help
+        No prefix in generated macro
+
+choice
+    prompt "Set Minimum Discharge Time"
+    default MCUX_MISC_USB_PD_MIN_DISCHARGE_TIME_14MS
+
+config MCUX_MISC_USB_PD_MIN_DISCHARGE_TIME_14MS
+    bool "14ms"
+
+config MCUX_MISC_USB_PD_MIN_DISCHARGE_TIME_650MS
+    bool "650ms"
+
+endchoice
+
+config PD_CONFIG_MIN_DISCHARGE_TIME_ENABLE
+    int
+    default 1 if MCUX_MISC_USB_PD_MIN_DISCHARGE_TIME_14MS
+    default 0 if MCUX_MISC_USB_PD_MIN_DISCHARGE_TIME_650MS
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_VENDOR_DEFINED_MESSAGE_ENABLE
+    bool "Enable Vendor-defined Messages"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_COMMON_TASK
+    bool "Use one task for all PD instances"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_EXTERNAL_POWER_DETECTION_SUPPORT
+    bool "Enable External Power State Detection"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_EXTENDED_MSG_SUPPORT
+    bool "Enable USB PD 3.0 Extended Message Function"
+    default y
+    depends on MCUX_MISC_USB_PD_SPEC_REVISION_30
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_EXTENDED_CHUNK_LAYER_SUPPORT
+    bool "Enable USB PD 3.0 Extended Chunk Layer Function"
+    default y if PD_CONFIG_COMPLIANCE_TEST_ENABLE
+    depends on PD_CONFIG_EXTENDED_MSG_SUPPORT
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_PD3_FAST_ROLE_SWAP_ENABLE
+    bool "Enable USB PD 3.0 Fast Role Swap Function"
+    default y
+    depends on MCUX_MISC_USB_PD_SPEC_REVISION_30
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_PD3_AMS_COLLISION_AVOID_ENABLE
+    bool "Enable USB PD 3.0 AMS Collision Avoid Function"
+    default y
+    depends on MCUX_MISC_USB_PD_SPEC_REVISION_30
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_PD3_PPS_ENABLE
+    bool "Enable USB PD 3.0 PPS Function"
+    depends on MCUX_MISC_USB_PD_SPEC_REVISION_30
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_TRY_SNK_SUPPORT
+    bool "Enable Try.SNK Support"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_TRY_SRC_SUPPORT
+    bool "Enable Try.SRC Support"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_SINK_ACCESSORY_SUPPORT
+    bool "Enable Sink Accessory"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_AUDIO_ACCESSORY_SUPPORT
+    bool "Enable Audio Accessory"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_DEBUG_ACCESSORY_SUPPORT
+    bool "Enable Debug Accessory"
+    help
+        No prefix in generated macro
+
+config PD_CONFIG_COMPLIANCE_TEST_ENABLE
+    bool "Enable Compliance Test Function"
+    help
+        No prefix in generated macro
+
+endmenu

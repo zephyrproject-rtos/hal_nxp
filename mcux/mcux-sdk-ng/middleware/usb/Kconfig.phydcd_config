@@ -1,0 +1,10 @@
+menu "PHYDCD Configurations(usb_phydcd_config.h)"
+
+# This symbol is only used to generate configuration file.
+config USB_PHYDCD_CONFIG_UNUSED
+    int
+    default 0
+    help
+        No prefix in generated macro
+
+endmenu

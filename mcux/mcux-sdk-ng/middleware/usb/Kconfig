@@ -1,0 +1,364 @@
+menuconfig MCUX_COMPONENT_middleware.usb.common_header
+    bool "USB"
+    depends on \
+        MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI || \
+        MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI || \
+        MCUX_HW_IP_DriverType_USB_HOST_KHCI || \
+        MCUX_HW_IP_DriverType_USB_HOST_OHCI || \
+        MCUX_HW_IP_DriverType_USB_HOST_IP3516HS || \
+        MCUX_HW_IP_DriverType_USB_DEVICE_KHCI || \
+        MCUX_HW_IP_DriverType_USB_DEVICE_IP3511FS || \
+        MCUX_HW_IP_DriverType_USB_DEVICE_IP3511HS
+    select MCUX_COMPONENT_component.osa
+    select MCUX_COMPONENT_driver.common if MCUX_HAS_COMPONENT_driver.common
+    select MCUX_COMPONENT_driver.memory if \
+        ( \
+            MCUX_HW_DEVICE_MIMXRT1165 || \
+            MCUX_HW_DEVICE_MIMXRT1166 || \
+            MCUX_HW_DEVICE_MIMXRT1173 || \
+            MCUX_HW_DEVICE_MIMXRT1175 || \
+            MCUX_HW_DEVICE_MIMXRT1176 || \
+            MCUX_HW_DEVICE_MIMXRT1187 || \
+            MCUX_HW_DEVICE_MIMXRT1189 || \
+            MCUX_HW_DEVICE_RW610 || \
+            MCUX_HW_DEVICE_RW612 \
+        )
+    help
+        This option will enable USB Middleware component
+
+if MCUX_COMPONENT_middleware.usb.common_header
+
+    config MCUX_COMPONENT_middleware.usb.device.common_header
+        bool "Enable Device Support"
+        depends on \
+            MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI || \
+            MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI || \
+            MCUX_HW_IP_DriverType_USB_DEVICE_KHCI || \
+            MCUX_HW_IP_DriverType_USB_DEVICE_IP3511FS || \
+            MCUX_HW_IP_DriverType_USB_DEVICE_IP3511HS
+        help
+            This option will enable USB Device support and generate usb_device_config.h to configure USB Device
+
+    if MCUX_COMPONENT_middleware.usb.device.common_header
+
+        config MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+            bool "Generate Configuration Header"
+            default y
+            help
+                Generate the usb_device_config.h, otherwise users need to provide their own.
+
+        if MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+
+            rsource "Kconfig.device_config"
+
+        endif
+
+        config MCUX_MISC_USB_LITE
+            bool "Enable Lite Mode"
+
+        config MCUX_COMPONENT_middleware.usb.device.khci
+            bool "Use middleware.usb.device.khci module" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+            default y
+            depends on MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI || MCUX_HW_IP_DriverType_USB_DEVICE_KHCI
+            select MCUX_COMPONENT_middleware.usb.device.controller.driver
+
+        config MCUX_COMPONENT_middleware.usb.device.ehci
+            bool "Use middleware.usb.device.ehci" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+            default y
+            depends on MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI
+            select MCUX_COMPONENT_middleware.usb.device.controller.driver
+
+        config MCUX_COMPONENT_middleware.usb.device.ip3511fs
+            bool "Use middleware.usb.device.ip3511fs" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+            default y
+            depends on MCUX_HW_IP_DriverType_USB_DEVICE_IP3511FS
+            select MCUX_COMPONENT_middleware.usb.device.controller.driver
+
+        config MCUX_COMPONENT_middleware.usb.device.ip3511hs
+            bool "Use middleware.usb.device.ip3511hs" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+            default y
+            depends on MCUX_HW_IP_DriverType_USB_DEVICE_IP3511HS
+            select MCUX_COMPONENT_middleware.usb.device.controller.driver
+
+        config MCUX_COMPONENT_middleware.usb.device.controller.driver
+            bool
+            select MCUX_COMPONENT_middleware.usb.device.stack if !MCUX_MISC_USB_LITE
+
+        config MCUX_COMPONENT_middleware.usb.device.stack
+            bool
+            depends on MCUX_COMPONENT_middleware.usb.device.controller.driver
+
+        if MCUX_COMPONENT_middleware.usb.device.stack
+
+            config MCUX_COMPONENT_middleware.usb.device.audio
+                bool "Use middleware.usb.device.audio" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_AUDIO > 0
+
+            config MCUX_COMPONENT_middleware.usb.device.cdc
+                bool "Use middleware.usb.device.cdc" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_CDC_ACM > 0
+
+            config MCUX_COMPONENT_middleware.usb.device.cdc.ecm
+                bool "Use middleware.usb.device.cdc.ecm" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_CDC_ECM > 0
+
+            config MCUX_COMPONENT_middleware.usb.device.cdc.rndis
+                bool "Use middleware.usb.device.cdc.rndis" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_CDC_RNDIS > 0
+                depends on MCUX_COMPONENT_middleware.usb.device.cdc
+
+            config MCUX_COMPONENT_middleware.usb.device.hid
+                bool "Use middleware.usb.device.hid" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_HID > 0
+
+            config MCUX_COMPONENT_middleware.usb.device.dfu
+                bool "Use middleware.usb.device.dfu" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_DFU > 0
+
+            config MCUX_COMPONENT_middleware.usb.device.msd
+                bool "Use middleware.usb.device.msd" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_MSC > 0
+
+            config MCUX_COMPONENT_middleware.usb.device.mtp
+                bool "Use middleware.usb.device.mtp" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_MTP > 0
+
+            config MCUX_COMPONENT_middleware.usb.device.phdc
+                bool "Use middleware.usb.device.phdc" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_PHDC > 0
+
+            config MCUX_COMPONENT_middleware.usb.device.video
+                bool "Use middleware.usb.device.video" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_VIDEO > 0
+
+            config MCUX_COMPONENT_middleware.usb.device.ccid
+                bool "Use middleware.usb.device.ccid" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_CCID > 0
+
+            config MCUX_COMPONENT_middleware.usb.device.printer
+                bool "Use middleware.usb.device.printer" if !MCUX_MISC_USB_DEVICE_GENERATE_CONFIG
+                default y if USB_DEVICE_CONFIG_PRINTER > 0
+
+        endif
+
+    endif
+
+    config MCUX_COMPONENT_middleware.usb.host.common_header
+        bool "Enable Host Support"
+        depends on \
+            MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI || \
+            MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI || \
+            MCUX_HW_IP_DriverType_USB_HOST_KHCI || \
+            MCUX_HW_IP_DriverType_USB_HOST_OHCI || \
+            MCUX_HW_IP_DriverType_USB_HOST_IP3516HS
+        help
+            This option will enable USB Host support and generate usb_host_config.h to configure USB Host
+
+    if MCUX_COMPONENT_middleware.usb.host.common_header
+
+        config MCUX_MISC_USB_HOST_GENERATE_CONFIG
+            bool "Generate Configuration Header"
+            default y
+            help
+                Generate the usb_host_config.h, otherwise users need to provide their own.
+
+        if MCUX_MISC_USB_HOST_GENERATE_CONFIG
+
+            rsource "Kconfig.host_config"
+
+        endif
+
+        config MCUX_COMPONENT_middleware.usb.host.khci
+            bool "Use middleware.usb.host.khci" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+            default y
+            depends on MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI || MCUX_HW_IP_DriverType_USB_HOST_KHCI
+            select MCUX_COMPONENT_middleware.usb.host.stack
+
+        config MCUX_COMPONENT_middleware.usb.host.ehci
+            bool "Use middleware.usb.host.ehci" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+            default y
+            depends on MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI
+            select MCUX_COMPONENT_middleware.usb.host.stack
+
+        config MCUX_COMPONENT_middleware.usb.host.ohci
+            bool "Use middleware.usb.host.ohci" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+            default y
+            depends on MCUX_HW_IP_DriverType_USB_HOST_OHCI
+            select MCUX_COMPONENT_middleware.usb.host.stack
+
+        config MCUX_COMPONENT_middleware.usb.host.ip3516hs
+            bool "Use middleware.usb.host.ip3516hs" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+            default y
+            depends on MCUX_HW_IP_DriverType_USB_HOST_IP3516HS
+            select MCUX_COMPONENT_middleware.usb.host.stack
+
+        config MCUX_COMPONENT_middleware.usb.host.stack
+            bool
+
+        if MCUX_COMPONENT_middleware.usb.host.stack
+
+            config MCUX_COMPONENT_middleware.usb.host.audio
+                bool "Use middleware.usb.host.audio" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+                default y if USB_HOST_CONFIG_AUDIO > 0
+
+            config MCUX_COMPONENT_middleware.usb.host.cdc
+                bool "Use middleware.usb.host.cdc" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+                default y if USB_HOST_CONFIG_CDC > 0
+
+            config MCUX_COMPONENT_middleware.usb.host.cdc_ecm
+                bool "Use middleware.usb.host.cdc_ecm" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+                default y if USB_HOST_CONFIG_CDC_ECM > 0
+                depends on MCUX_COMPONENT_middleware.usb.host.cdc
+
+            config MCUX_COMPONENT_middleware.usb.host.cdc_rndis
+                bool "Use middleware.usb.host.cdc_rndis" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+                default y if USB_HOST_CONFIG_CDC_RNDIS > 0
+                depends on MCUX_COMPONENT_middleware.usb.host.cdc
+
+            config MCUX_COMPONENT_middleware.usb.host.hid
+                bool "Use middleware.usb.host.hid" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+                default y if USB_HOST_CONFIG_HID > 0
+
+            config MCUX_COMPONENT_middleware.usb.host.msd
+                bool "Use middleware.usb.host.msd" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+                default y if USB_HOST_CONFIG_MSD > 0
+
+            config MCUX_COMPONENT_middleware.usb.host.video
+                bool "Use middleware.usb.host.video" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+                default y if USB_HOST_CONFIG_VIDEO > 0
+
+            config MCUX_COMPONENT_middleware.usb.host.phdc
+                bool "Use middleware.usb.host.phdc" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+                default y if USB_HOST_CONFIG_PHDC > 0
+
+            config MCUX_COMPONENT_middleware.usb.host.printer
+                bool "Use middleware.usb.host.printer" if !MCUX_MISC_USB_HOST_GENERATE_CONFIG
+                default y if USB_HOST_CONFIG_PRINTER > 0
+
+        endif
+
+    endif
+
+    config MCUX_COMPONENT_middleware.usb.phydcd
+        bool "Enable DCD (Device Charger Detect) Support embedded in USB Controller PHY"
+        default y if USB_DEVICE_CONFIG_CHARGER_DETECT || USB_HOST_CONFIG_BATTERY_CHARGER
+        depends on MCUX_HW_IP_DriverType_USB_PHYDCD
+
+    if MCUX_COMPONENT_middleware.usb.phydcd
+
+        rsource "Kconfig.phydcd_config"
+
+    endif
+
+    config MCUX_COMPONENT_middleware.usb.hsdcd
+        bool "Enable DCD (Device Charger Detect) Support independent of USB Controller"
+        default y if USB_DEVICE_CONFIG_CHARGER_DETECT || USB_HOST_CONFIG_BATTERY_CHARGER
+        depends on MCUX_HW_IP_DriverType_USB_HSDCD
+
+    if MCUX_COMPONENT_middleware.usb.hsdcd
+
+        rsource "Kconfig.hsdcd_config"
+
+    endif
+
+    config MCUX_COMPONENT_middleware.usb_pd.phy.ptn5110
+        bool "Enable PD (Power Delivery) Support"
+        depends on \
+            ( \
+                MCUX_HAS_COMPONENT_driver.gpio || \
+                MCUX_HAS_COMPONENT_driver.igpio || \
+                MCUX_HAS_COMPONENT_driver.rgpio || \
+                MCUX_HAS_COMPONENT_driver.dsc_gpio || \
+                MCUX_HAS_COMPONENT_driver.lpc_gpio || \
+                MCUX_HAS_COMPONENT_driver.rt_gpio \
+            ) && ( \
+                MCUX_HAS_COMPONENT_driver.dsc_i2c || \
+                MCUX_HAS_COMPONENT_driver.flexcomm_i2c || \
+                MCUX_HAS_COMPONENT_driver.ii2c || \
+                MCUX_HAS_COMPONENT_driver.i2c || \
+                MCUX_HAS_COMPONENT_driver.i3c || \
+                MCUX_HAS_COMPONENT_driver.lpc_i2c || \
+                MCUX_HAS_COMPONENT_driver.lpi2c \
+            )
+        select MCUX_COMPONENT_component.i2c_adapter_interface
+
+    if MCUX_COMPONENT_middleware.usb_pd.phy.ptn5110
+
+        config MCUX_MISC_USB_PD_GENERATE_CONFIG
+            bool "Generate Configuration Header"
+            default y
+            help
+                Generate the usb_pd_config.h, otherwise users need to provide their own.
+
+        if MCUX_MISC_USB_PD_GENERATE_CONFIG
+
+            rsource "Kconfig.pd_config"
+
+        endif
+
+        choice
+            prompt "Choice GPIO module Adapter"
+            default MCUX_MISC_USB_PD_USE_GPIO if MCUX_HAS_COMPONENT_driver.gpio
+            default MCUX_MISC_USB_PD_USE_IGPIO if MCUX_HAS_COMPONENT_driver.igpio
+            default MCUX_MISC_USB_PD_USE_RGPIO if MCUX_HAS_COMPONENT_driver.rgpio
+            default MCUX_MISC_USB_PD_USE_DSC_GPIO if MCUX_HAS_COMPONENT_driver.dsc_gpio
+            default MCUX_MISC_USB_PD_USE_LPC_GPIO if MCUX_HAS_COMPONENT_driver.lpc_gpio
+            default MCUX_MISC_USB_PD_USE_RT_GPIO if MCUX_HAS_COMPONENT_driver.rt_gpio
+            default MCUX_MISC_USB_PD_USE_CUSTOMIZED
+   
+        config MCUX_MISC_USB_PD_USE_CUSTOMIZED
+            bool "CUSTOMIZED_GPIO"
+
+        config MCUX_MISC_USB_PD_USE_GPIO
+            bool "GPIO"
+            depends on MCUX_HAS_COMPONENT_driver.gpio
+            select MCUX_COMPONENT_component.gpio_adapter
+
+        config MCUX_MISC_USB_PD_USE_IGPIO
+            bool "IGPIO"
+            depends on MCUX_HAS_COMPONENT_driver.igpio
+            select MCUX_COMPONENT_component.igpio_adapter
+
+        config MCUX_MISC_USB_PD_USE_RGPIO
+            bool "RGPIO"
+            depends on MCUX_HAS_COMPONENT_driver.rgpio
+            select MCUX_COMPONENT_component.rgpio_adapter
+
+        config MCUX_MISC_USB_PD_USE_DSC_GPIO
+            bool "DSC-GPIO"
+            depends on MCUX_HAS_COMPONENT_driver.dsc_gpio
+            select MCUX_COMPONENT_component.dsc_gpio_adapter
+
+        config MCUX_MISC_USB_PD_USE_LPC_GPIO
+            bool "LPC-GPIO"
+            depends on MCUX_HAS_COMPONENT_driver.lpc_gpio
+            select MCUX_COMPONENT_component.lpc_gpio_adapter
+
+        config MCUX_MISC_USB_PD_USE_RT_GPIO
+            bool "RT-GPIO"
+            depends on MCUX_HAS_COMPONENT_driver.rt_gpio
+            select MCUX_COMPONENT_component.rt_gpio_adapter
+
+        endchoice
+
+        config MCUX_COMPONENT_middleware.usb_pd
+            bool "Use middleware.usb_pd" if !MCUX_MISC_USB_PD_GENERATE_CONFIG
+            default y
+
+        config MCUX_COMPONENT_middleware.usb_pd.altmode
+            bool "Use middleware.usb_pd.altmode" if !MCUX_MISC_USB_PD_GENERATE_CONFIG
+            default y if PD_CONFIG_ALT_MODE_SUPPORT
+            depends on MCUX_COMPONENT_middleware.usb_pd
+
+        config MCUX_COMPONENT_middleware.usb_pd.compliance_test_report
+            bool "Use middleware.usb_pd.compliance_test_report" if !MCUX_MISC_USB_PD_GENERATE_CONFIG
+            default y if PD_CONFIG_COMPLIANCE_TEST_ENABLE
+
+    endif
+
+    config MCUX_COMPONENT_middleware.usb.phy
+        bool
+        default y
+        depends on MCUX_HW_IP_DriverType_USB_PHY
+
+endif

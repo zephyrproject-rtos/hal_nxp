@@ -1,0 +1,32 @@
+# Supported boards list
+
+-   FRDM-K22F Rev A
+-   FRDM-K64F Rev C
+-   FRDM-KL27Z Rev A
+-   FRDM-KL28Z Rev A
+-   FRDM-KL32L2A4S Rev A
+-   IMXRT1050-EVKB
+-   LPCXpresso54018 Rev D
+-   LPCXpresso54114 Rev A
+-   LPCXpresso54608 Rev B
+-   LPCXpresso55S16 Rev A
+-   LPCXpresso55S28 Rev A1
+-   LPCXpresso55S69 Rev 1
+-   MIMXRT1015-EVK Rev A
+-   MIMXRT1020-EVK
+-   MIMXRT1040-EVK
+-   MIMXRT1050-EVK
+-   MIMXRT1060-EVK
+-   MIMXRT1064-EVK
+-   MIMXRT1170-EVK Rev B
+-   MIMXRT685-EVK Rev E
+-   MC56F83000-EVK
+-   MIMXRT1060-EVKB
+-   MIMXRT1160-EVK
+-   MIMXRT595-EVK
+-   LPCXpresso55S36
+-   MIMXRT685-AUD-EVK
+-   MIMXRT1170-EVKB
+
+**Parent topic:**[Hardware](../topics/hardware.md)
+

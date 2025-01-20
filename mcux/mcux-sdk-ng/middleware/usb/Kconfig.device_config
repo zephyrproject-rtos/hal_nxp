@@ -1,0 +1,255 @@
+menu "Device Configurations(usb_device_config.h)"
+
+comment "USB Hardware Configurations"
+
+config USB_DEVICE_CONFIG_KHCI
+    int "KHCI Controller Instance Count" if MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI || MCUX_HW_IP_DriverType_USB_DEVICE_KHCI
+    default 1 if (MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI || MCUX_HW_IP_DriverType_USB_DEVICE_KHCI) && (USB_DEVICE_CONFIG_EHCI = 0)
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_KHCI_DMA_ALIGN_BUFFER_LENGTH
+    int "KHCI Controller DMA Buffer Alignment Length" if USB_DEVICE_CONFIG_KHCI > 0
+    default 64
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_EHCI
+    int "EHCI Controller Instance Count" if MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI
+    default 1 if MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_EHCI_MAX_DTD
+    int "Maximum number of DTDs supported by the EHCI Controller" if USB_DEVICE_CONFIG_EHCI > 0
+    default 16
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_EHCI_TEST_MODE
+    bool "Enable Test Mode for EHCI Controller" if USB_DEVICE_CONFIG_EHCI > 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_EHCI_ID_PIN_DETECT
+    bool "Enable ID Pin Detection for EHCI Controller" if USB_DEVICE_CONFIG_EHCI > 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_LPCIP3511FS
+    int "LPC IP3511 FS Controller Instance Count" if MCUX_HW_IP_DriverType_USB_DEVICE_IP3511FS
+    default 1 if MCUX_HW_IP_DriverType_USB_DEVICE_IP3511FS && (USB_DEVICE_CONFIG_LPCIP3511HS = 0)
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_LPCIP3511HS
+    int "LPC IP3511 HS Controller Instance Count" if MCUX_HW_IP_DriverType_USB_DEVICE_IP3511HS
+    default 1 if MCUX_HW_IP_DriverType_USB_DEVICE_IP3511HS && (USB_DEVICE_CONFIG_EHCI = 0)
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_NUM
+    string
+    default "(USB_DEVICE_CONFIG_KHCI + USB_DEVICE_CONFIG_EHCI + USB_DEVICE_CONFIG_LPCIP3511FS + USB_DEVICE_CONFIG_LPCIP3511HS)"
+    help
+        Total number of Device Controller instances
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_CHARGER_DETECT
+    bool "Enable Charger Detection" if MCUX_HW_IP_DriverType_USB_PHYDCD || MCUX_HW_IP_DriverType_USB_HSDCD
+    help
+        No prefix in generated macro
+
+comment "USB Class Configurations"
+
+config USB_DEVICE_CONFIG_AUDIO
+    int "Audio Class Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+if USB_DEVICE_CONFIG_AUDIO > 0
+
+    config USB_DEVICE_CONFIG_AUDIO_CLASS_2_0
+        bool "Enable support for Audio Class 2.0"
+        default y
+        help
+            No prefix in generated macro
+
+endif
+
+config USB_DEVICE_CONFIG_CDC_ACM
+    int "CDC-ACM (Communication Device Class Abstract Control Model) Instance Count"
+    default 1 if USB_DEVICE_CONFIG_CDC_RNDIS > 0
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_CDC_ECM
+    int "CDC-ECM (Communication Device Class Ethernet Control Model) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_CDC_RNDIS
+    int "RNDIS (Remote Network Driver Interface Specification) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_HID
+    int "HID (Human Interface Device) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_PRINTER
+    int "Printer Class Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_MSC
+    int "MSC (Mass Storage Class) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_CCID
+    int "CCID (Chip Card Interface Device) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_VIDEO
+    int "Video Class Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_PHDC
+    int "PHDC (Personal Healthcare Device Class) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_DFU
+    int "DFU (Device Firmware Upgrade) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_MTP
+    int "MTP (Media Transfer Protocol) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+comment "USB Miscellaneous Configurations"
+
+config USB_DEVICE_CONFIG_SELF_POWER
+    bool "Enable self-powered power supply"
+    default y
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_ENDPOINTS
+    int "Number of endpoints used in Device Controller"
+    default 4
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_GET_SOF_COUNT
+    bool "Enable Get USB SOF Count"
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_SOF_NOTIFICATIONS
+    bool "Enable SOF Interrupt"
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_ERROR_HANDLING
+    bool "Enable Bus Error Handling"
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_RETURN_VALUE_CHECK
+    bool "Enable Return Value Checking"
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_USE_TASK
+    bool "Use Device Task"
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_MAX_MESSAGES
+    int "Maximum number of notification messages"
+    default 8
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_DETACH_ENABLE
+    bool "Enable Device Detached Feature"
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_CDC_CIC_EP_DISABLE
+    bool "Disable endpoints of CIC in USB CDC"
+    help
+        note that this feature only can work on windows 10 currently
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_LOW_POWER_MODE
+    bool "Enable Low Power Mode"
+    help
+        No prefix in generated macro
+
+if USB_DEVICE_CONFIG_LOW_POWER_MODE
+
+    config USB_DEVICE_CONFIG_LPM_L1
+        bool "Enable LPM(L1) Support"
+        help
+            No prefix in generated macro
+endif
+
+config USB_DEVICE_CONFIG_REMOTE_WAKEUP
+    bool "Enable Remote Wake-Up Support"
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_ROOT2_TEST
+    bool "Enable ROOT2 Test"
+    default y
+    help
+        ROOT2 is only tested on RT600
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_KEEP_ALIVE_MODE
+    bool "Enable Keep Alive Mode"
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_USB20_TEST_MODE
+    bool "Enable USB 2.0 Test Mode"
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_CV_TEST
+    bool "Enable CV Test"
+    help
+        No prefix in generated macro
+
+config USB_DEVICE_CONFIG_COMPLIANCE_TEST
+    bool "Enable Compliance Test"
+    select USB_DEVICE_CONFIG_USB20_TEST_MODE
+    select USB_DEVICE_CONFIG_CV_TEST
+    help
+        No prefix in generated macro
+
+endmenu

@@ -1,0 +1,316 @@
+menu "Host Configurations(usb_host_config.h)"
+
+comment "USB Hardware Configurations"
+
+config USB_HOST_CONFIG_KHCI
+    int "KHCI Controller Instance Count" if MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI || MCUX_HW_IP_DriverType_USB_HOST_KHCI
+    default 1 if (MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI || MCUX_HW_IP_DriverType_USB_HOST_KHCI) && (USB_HOST_CONFIG_EHCI = 0)
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_KHCI_DMA_ALIGN_BUFFER
+    int "KHCI Controller DMA Buffer Alignment Length" if USB_HOST_CONFIG_KHCI > 0
+    default 64
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_EHCI
+    int "EHCI Controller Instance Count" if MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI
+    default 1 if MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_EHCI_FRAME_LIST_SIZE
+    int
+    default 8 if MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_8
+    default 16 if MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_16
+    default 32 if MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_32
+    default 64 if MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_64
+    default 128 if MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_128
+    default 256 if MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_256
+    default 512 if MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_512
+    default 1024 if MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_1024
+    help
+        No prefix in generated macro
+
+choice
+    prompt "Periodic frame list size supported by the EHCI Controller" if USB_HOST_CONFIG_EHCI > 0
+    default MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_1024
+
+config MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_8
+    bool "8 elements"
+
+config MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_16
+    bool "16 elements"
+
+config MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_32
+    bool "32 elements"
+
+config MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_64
+    bool "64 elements"
+
+config MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_128
+    bool "128 elements"
+
+config MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_256
+    bool "256 elements"
+
+config MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_512
+    bool "512 elements"
+
+config MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_1024
+    bool "1024 elements"
+
+endchoice
+
+config USB_HOST_CONFIG_EHCI_MAX_QH
+    int "Maximum number of QHs supported by the EHCI Controller" if USB_HOST_CONFIG_EHCI > 0
+    default 16 if USB_HOST_CONFIG_VIDEO > 0
+    default 8
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_EHCI_MAX_QTD
+    int "Maximum number of QTDs supported by the EHCI Controller" if USB_HOST_CONFIG_EHCI > 0
+    default 16 if USB_HOST_CONFIG_VIDEO > 0
+    default 8
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_EHCI_MAX_ITD
+    int "Maximum number of ITDs supported by the EHCI Controller" if USB_HOST_CONFIG_EHCI > 0
+    default 16 if USB_HOST_CONFIG_VIDEO > 0
+    default 15 if USB_HOST_CONFIG_AUDIO > 0
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_EHCI_MAX_SITD
+    int "Maximum number of SITDs supported by the EHCI Controller" if USB_HOST_CONFIG_EHCI > 0
+    default 16 if \
+        USB_HOST_CONFIG_AUDIO > 0 || \
+        USB_HOST_CONFIG_VIDEO > 0
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_OHCI
+    int "OHCI Controller Instance Count" if MCUX_HW_IP_DriverType_USB_HOST_OHCI
+    default 1 if MCUX_HW_IP_DriverType_USB_HOST_OHCI && (USB_HOST_CONFIG_IP3516HS = 0)
+    default 0
+    help
+        No prefix in generated macro
+
+
+config USB_HOST_CONFIG_OHCI_MAX_ED
+    int "Maximum number of EDs supported by the OHCI Controller" if USB_HOST_CONFIG_OHCI > 0
+    default 16 if \
+        USB_HOST_CONFIG_AUDIO > 0 || \
+        USB_HOST_CONFIG_MSD > 0 || \
+        USB_HOST_CONFIG_PHDC > 0 || \
+        USB_HOST_CONFIG_PRINTER > 0
+    default 8
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_OHCI_MAX_GTD
+    int "Maximum number of GTDs supported by the OHCI Controller" if USB_HOST_CONFIG_OHCI > 0
+    default 16 if \
+        USB_HOST_CONFIG_AUDIO > 0 || \
+        USB_HOST_CONFIG_MSD > 0 || \
+        USB_HOST_CONFIG_PHDC > 0 || \
+        USB_HOST_CONFIG_PRINTER > 0
+    default 8
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_OHCI_MAX_ITD
+    int "Maximum number of ITDs supported by the OHCI Controller" if USB_HOST_CONFIG_OHCI > 0
+    default 8
+    help
+        No prefix in generated macro
+
+
+config USB_HOST_CONFIG_IP3516HS
+    int "LPC IP3516 HS Controller Instance Count" if MCUX_HW_IP_DriverType_USB_HOST_IP3516HS
+    default 1 if MCUX_HW_IP_DriverType_USB_HOST_IP3516HS && (USB_HOST_CONFIG_EHCI = 0)
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_IP3516HS_MAX_PIPE
+    int "Maximum number of USB pipes supported by the IP3516HS Controller" if USB_HOST_CONFIG_IP3516HS > 0
+    default 32
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_IP3516HS_MAX_ATL
+    int "Maximum number of ATL PTDs supported by the IP3516HS Controller" if USB_HOST_CONFIG_IP3516HS > 0
+    default 32
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_IP3516HS_MAX_INT
+    int "Maximum number of INTL PTDs supported by the IP3516HS Controller" if USB_HOST_CONFIG_IP3516HS > 0
+    default 32
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_IP3516HS_MAX_ISO
+    int "Maximum number of ISO PTDs supported by the IP3516HS Controller" if USB_HOST_CONFIG_IP3516HS > 0
+    default 32 if \
+        USB_HOST_CONFIG_AUDIO > 0 || \
+        USB_HOST_CONFIG_VIDEO > 0
+    default 0
+    help
+        No prefix in generated macro
+
+
+config USB_HOST_CONFIG_MAX_HOST
+    string
+    default "(USB_HOST_CONFIG_KHCI + USB_HOST_CONFIG_EHCI + USB_HOST_CONFIG_OHCI + USB_HOST_CONFIG_IP3516HS)"
+    help
+        Total number of Host Controller instances
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_BATTERY_CHARGER
+    bool "Enable Charger Detect Support"
+    help
+        No prefix in generated macro
+
+comment "USB Class Configurations"
+
+config USB_HOST_CONFIG_AUDIO
+    int "Audio Class Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_CDC
+    int "CDC (Communication Device Class) Instance Count"
+    default 1 if USB_HOST_CONFIG_CDC_ECM > 0 || USB_HOST_CONFIG_CDC_RNDIS > 0
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_CDC_ECM
+    int "CDC-ECM (Communication Device Class Ethernet Control Model) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_CDC_RNDIS
+    int "RNDIS (Remote Network Driver Interface Specification) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_HID
+    int "HID (Human Interface Device) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_PRINTER
+    int "Printer Class Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_MSD
+    int "MSC (Mass Storage Class) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_HUB
+    int "Hub Class Instance Count"
+    default 1
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_VIDEO
+    int "Video Class Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_PHDC
+    int "PHDC (Personal Healthcare Device Class) Instance Count"
+    default 0
+    help
+        No prefix in generated macro
+
+comment "USB Miscellaneous Configurations"
+
+config USB_HOST_CONFIG_MAX_POWER
+    int "Maximum power(mW) supplied by the USB Host"
+    default 250
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_MAX_PIPES
+    int "Maximum number of USB pipes supported by USB Host"
+    default 16
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_MAX_TRANSFERS
+    int "Maximum number of USB transfers supported by USB Host"
+    default 16
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_CONFIGURATION_MAX_INTERFACE
+    int "Maximum number of USB interfaces supported by a USB configuration descriptor"
+    default 5
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_INTERFACE_MAX_EP
+    int "Maximum number of USB endpoint descriptors supported by a USB interface descriptor"
+    default 4
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_ENUMERATION_MAX_RETRIES
+    int "Maximum number of retries for the USB enumeration"
+    default 3
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_ENUMERATION_MAX_STALL_RETRIES
+    int "Maximum number of retries for the USB enumeration STALL"
+    default 1
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_CLASS_AUTO_CLEAR_STALL
+    bool "Enable USB STALL auto-cleaning"
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_LOW_POWER_MODE
+    bool "Enable Low Power Mode"
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_LPM_L1
+    bool "Enable LPM(L1) Support"
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_MAX_NAK
+    int "Maximum NAK count for one USB transaction"
+    default 3000
+    help
+        No prefix in generated macro
+
+config USB_HOST_CONFIG_COMPLIANCE_TEST
+    bool "Enable Compliance Test"
+    help
+        No prefix in generated macro
+
+endmenu

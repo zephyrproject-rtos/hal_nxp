@@ -1,0 +1,11 @@
+NXP Software Content Register
+
+Package: mcux-sdk-middleware-usb
+Version: 2.11.0
+Outgoing License: BSD-3-Clause
+License File: LICENSE
+Type of Content: source code, header files
+Description and comments: NXP USB stack. This is a version of the USB stack that has been integrated with the MCUXpresso SDK.
+Release Location: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-usb
+Origin: 
+      NXP (BSD-3-Clause)

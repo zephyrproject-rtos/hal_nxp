@@ -1,0 +1,9 @@
+menu "HSDCD Configurations(usb_hsdcd_config.h)"
+
+config USB_HSDCD_CLOCK_SPEED
+    int "USB Clock Speed"
+    default 0
+    help
+        No prefix in generated macro
+
+endmenu
