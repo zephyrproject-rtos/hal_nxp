@@ -1,0 +1,22 @@
+  /* Disable the counter before the module init*/
+  ${PERIPHERAL}$->CTRL &= ~(COP_CTRL_CEN_MASK);
+#ifdef ${VPREFIX}$_TOUT_INIT
+  ${PERIPHERAL}$->TOUT = ${VPREFIX}$_TOUT_INIT;
+#else
+  ${PERIPHERAL}$->TOUT = 0xFFFFU;
+#endif /*${VPREFIX}$_TOUT_INIT*/
+#ifdef ${VPREFIX}$_INTVAL_INIT
+  ${PERIPHERAL}$->INTVAL = ${VPREFIX}$_INTVAL_INIT;
+#else
+  ${PERIPHERAL}$->INTVAL = 0xFFU;
+#endif /*${VPREFIX}$_INTVAL_INIT*/
+#ifdef ${VPREFIX}$_WINDOW_INIT
+  ${PERIPHERAL}$->WINDOW = ${VPREFIX}$_WINDOW_INIT;
+#else
+  ${PERIPHERAL}$->WINDOW = 0xFFFFU;
+#endif /*${VPREFIX}$_WINDOW_INIT*/
+#ifdef ${VPREFIX}$_CTRL_INIT
+  ${PERIPHERAL}$->CTRL = ${VPREFIX}$_CTRL_INIT;
+#else
+  ${PERIPHERAL}$->CTRL = 0x302U;
+#endif /*${VPREFIX}$_CTRL_INIT*/

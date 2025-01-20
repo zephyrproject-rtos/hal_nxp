@@ -1,0 +1,102 @@
+/* Software reset ${PERIPHERAL}$ */
+  ${SW_RESET_CONTROL_PERIPHERAL}$->${SW_RESET_CONTROL_REGISTER}$ |= ${SW_RESET_CONTROL_PERIPHERAL}$_${SW_RESET_CONTROL_REGISTER}$_${SW_RESET_CONTROL_BITFIELD}$_MASK;
+  ${SW_RESET_CONTROL_PERIPHERAL}$->${SW_RESET_CONTROL_REGISTER}$ &= ~ ${SW_RESET_CONTROL_PERIPHERAL}$_${SW_RESET_CONTROL_REGISTER}$_${SW_RESET_CONTROL_BITFIELD}$_MASK;
+
+  ${PERIPHERAL}$->SC1[0] = 0x1FUL;
+#if defined(SADC_SC1_COUNT) && (SADC_SC1_COUNT > 1U)
+  ${PERIPHERAL}$->SC1[1] = 0x1FUL;
+#endif /* defined(${PERIPHERAL}$_SC1_COUNT) && (${PERIPHERAL}$_SC1_COUNT > 1U) */
+  ${PERIPHERAL}$->CFG1 = 0x0UL;
+  ${PERIPHERAL}$->CFG2 = 0x0UL;
+  ${PERIPHERAL}$->CV1  = 0x0UL;
+  ${PERIPHERAL}$->CV2  = 0x0UL;
+  ${PERIPHERAL}$->SC2  = 0x0UL;
+  ${PERIPHERAL}$->SC3  = 0x0UL;
+
+#if defined(${VPREFIX}$_CV1_INIT)
+  ${PERIPHERAL}$->CV1 = ${VPREFIX}$_CV1_INIT;
+#endif /* ${VPREFIX}$_CV1_INIT */
+#if defined(${VPREFIX}$_CV2_INIT)
+  ${PERIPHERAL}$->CV2 = ${VPREFIX}$_CV2_INIT;
+#endif /* ${VPREFIX}$_CV2_INIT */
+
+#if defined(${VPREFIX}$_SC3_INIT)
+#if ((${VPREFIX}$_SC3_INIT & SADC_SC3_CAL_MASK) != 0UL)
+  /* Optional auto calibration */
+#if defined(${VPREFIX}$_SC2_INIT)
+  /* Initialize Voltage reference only */
+  ${PERIPHERAL}$->SC2 = (${VPREFIX}$_SC2_INIT & SADC_SC2_REFSEL_MASK);
+#endif /* ${VPREFIX}$_SC2_INIT */
+#if defined(${VPREFIX}$_CFG1_INIT)
+  /* Prepare CFG1 register for the best calibration results: ADC frequency <= 4 MHz, clock source = Asynchronous clock */
+  ${PERIPHERAL}$->CFG1 = ((${VPREFIX}$_CFG1_INIT & (~SADC_CFG1_ADIV_MASK)) | SADC_CFG1_ADICLK_MASK | ${VPREFIX}$_CALIBRATION_PRESCALER_VALUE);
+#endif /* ${VPREFIX}$_CFG1_INIT */
+#if defined(${VPREFIX}$_CFG2_INIT)
+  /* Additionally enable Asynchronous clock output for lower latency between calibration measurement cycles */
+  ${PERIPHERAL}$->CFG2 = (${VPREFIX}$_CFG2_INIT | SADC_CFG2_ADACKEN_MASK);
+#endif /* ${VPREFIX}$_CFG2_INIT */
+  /* Do auto calibration */
+  /* Clear calibration failed flag, enable averaging of 32 samples and start calibration */
+  ${PERIPHERAL}$->SC3 = (SADC_SC3_CAL_MASK | SADC_SC3_CALF_MASK | SADC_SC3_AVGE_MASK | SADC_SC3_AVGS_MASK);
+
+  while(0UL == (${PERIPHERAL}$->SC1[0] & SADC_SC1_COCO_MASK))
+  {
+  }
+  (void)${PERIPHERAL}$->R[0]; /* Dummy read to clear COCO caused by calibration */
+  
+  /* User should check if calibration failed (${PERIPHERAL}$->SC3 & SADC_SC3_CALF_MASK) in own code after initialization */
+  
+  uint32_t tmp32;
+  tmp32 = ${PERIPHERAL}$->CLP0;
+  tmp32 += ${PERIPHERAL}$->CLP1;
+  tmp32 += ${PERIPHERAL}$->CLP2;
+  tmp32 += ${PERIPHERAL}$->CLP3;
+  tmp32 += ${PERIPHERAL}$->CLP4;
+  tmp32 += ${PERIPHERAL}$->CLPS;
+  tmp32 = 0x8000UL | (tmp32 >> 1UL);
+  ${PERIPHERAL}$->PG = tmp32;
+  /* In case of differential mode is available */
+#if defined(SADC_SC1_DIFF_MASK)
+  tmp32 = ${PERIPHERAL}$->CLM0;
+  tmp32 += ${PERIPHERAL}$->CLM1;
+  tmp32 += ${PERIPHERAL}$->CLM2;
+  tmp32 += ${PERIPHERAL}$->CLM3;
+  tmp32 += ${PERIPHERAL}$->CLM4;
+  tmp32 += ${PERIPHERAL}$->CLMS;
+  tmp32 = 0x8000UL | (tmp32 >> 1UL);
+  ${PERIPHERAL}$->MG = tmp32;
+#endif /* defined(SADC_SC1_DIFF_MASK) */
+#elif ((${VPREFIX}$_SC3_INIT & SADC_SC3_CAL_MASK) == 0UL)
+  /* User calibration */
+#if defined(${VPREFIX}$_PG_INIT)
+  ${PERIPHERAL}$->PG = ${VPREFIX}$_PG_INIT;
+#else
+  ${PERIPHERAL}$->PG = 0x8200UL; 
+#endif /* ${VPREFIX}$_PG_INIT */
+
+  /* In case of differential mode is available */
+#if defined(${PERIPHERAL}$_SC1_DIFF_MASK)
+#if defined(${VPREFIX}$_MG_INIT)
+  ${PERIPHERAL}$->MG = ${VPREFIX}$_MG_INIT;
+#else
+  ${PERIPHERAL}$->MG = 0x8200UL;
+#endif /* ${VPREFIX}$_MG_INIT */
+#endif /* defined(${PERIPHERAL}$_SC1_DIFF_MASK) */
+#endif /* ${VPREFIX}$_SC3_INIT & SADC_SC3_CAL_MASK */
+#endif /* ${VPREFIX}$_SC3_INIT */
+
+#if defined(${VPREFIX}$_OFS_INIT)
+  ${PERIPHERAL}$->OFS = ${VPREFIX}$_OFS_INIT;
+#endif /* ${VPREFIX}$_OFS_INIT */
+#if defined(${VPREFIX}$_CFG1_INIT)
+  ${PERIPHERAL}$->CFG1 = ${VPREFIX}$_CFG1_INIT;
+#endif /* ${VPREFIX}$_CFG1_INIT */
+#if defined(${VPREFIX}$_CFG2_INIT)
+  ${PERIPHERAL}$->CFG2 = ${VPREFIX}$_CFG2_INIT;
+#endif /* ${VPREFIX}$_CFG2_INIT */
+#if defined(${VPREFIX}$_SC3_INIT)
+  ${PERIPHERAL}$->SC3 = (${VPREFIX}$_SC3_INIT & (~SADC_SC3_CAL_MASK));
+#endif /* ${VPREFIX}$_SC3_INIT */
+#if defined(${VPREFIX}$_SC2_INIT)
+  ${PERIPHERAL}$->SC2 = ${VPREFIX}$_SC2_INIT;
+#endif /* ${VPREFIX}$_SC2_INIT */

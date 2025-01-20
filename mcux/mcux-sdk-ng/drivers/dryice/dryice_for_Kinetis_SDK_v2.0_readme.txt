@@ -1,0 +1,91 @@
+dryice_for_Kinetis_SDK_v2.0
+
+Content
+-------
+1. Installation.
+2. dryice Add-on for Kinetis SDK 2.0 directory structure.
+3. Try examples with dryice.
+4. How to add dryice support to user applications.
+5. Release Notes
+
+
+1. Installation.
+----------------
+1.1. Install Kinetis SDK 2.0 package
+1.2. Copy content of the dryice add-on to the root directory of the Kinetis SDK 2.0 installation.
+     The package brings new or updates existing SDK 2.0 files. See section 2 for the complete list of the files.
+
+2. dryice_for_Kinetis_SDK_v2.0 directory structure.
+----------------------------------------------------------
+  dryice_for_Kinetis_SDK_v2.0
+  |-- boards
+  |   -- frdmk81z
+  |      -- driver_examples
+  |         -- dryice
+  |            -- *.c, *.h, *.txt, armgcc, atl, iar, kds, mdk
+  |   -- frdmkl81z
+  |      -- driver_examples
+  |         -- dryice
+  |            -- *.c, *.h, *.txt, armgcc, atl, iar, kds, mdk
+  |   -- twrk81f150m
+  |      -- driver_examples
+  |         -- dryice
+  |            -- *.c, *.h, *.txt, armgcc, atl, iar, kds, mdk
+  |   -- twrkl81z72m
+  |      -- driver_examples
+  |         -- dryice
+  |            -- *.c, *.h, *.txt, armgcc, atl, iar, kds, mdk
+  |-- devices
+  |   -- MK11D5
+  |      -- arm, gcc, iar, MK11D5.h, MK11D5.svd, MK11D5_features.h, fsl_clock.h
+  |   -- MK11DA5
+  |      -- arm, gcc, iar, MK11DA5.h, MK11DA5.svd, MK11DA5_features.h, fsl_clock.h
+  |   -- MK21D5
+  |      -- arm, gcc, iar, MK21D5.h, MK21D5.svd, MK21D5_features.h, fsl_clock.h
+  |   -- MK21DA5
+  |      -- arm, gcc, iar, MK21DA5.h, MK21DA5.svd, MK21DA5_features.h, fsl_clock.h
+  |   -- MK21FA12
+  |      -- arm, gcc, iar, MK21FA12.h, MK21FA12.svd, MK21FA12_features.h, fsl_clock.h
+  |   -- MK63F12
+  |      -- arm, gcc, iar, MK63F12.h, MK63F12.svd, MK63F12_features.h, fsl_clock.h
+  |   -- MK65F18
+  |      -- arm, gcc, iar, MK65F18.h, MK65F18.svd, MK65F18_features.h, fsl_clock.h
+  |   -- MK81F25615
+  |      -- arm, gcc, iar, MK81F25615.h, MK81F25615.svd, MK81F25615_features.h, fsl_clock.h
+  |   -- MKL81Z7
+  |      -- arm, gcc, iar, MKL81Z7.h, MKL81Z7.svd, MKL81Z7_features.h, fsl_clock.h
+  |   -- MKW21D5
+  |      -- arm, gcc, iar, MKW21D5.h, MKW21D5.svd, MKW21D5_features.h, fsl_clock.h
+  |   -- MKW22D5
+  |      -- arm, gcc, iar, MKW22D5.h, MKW22D5.svd, MKW22D5_features.h, fsl_clock.h
+  |   -- MKW24D5
+  |      -- arm, gcc, iar, MKW24D5.h, MKW24D5.svd, MKW24D5_features.h, fsl_clock.h
+  |-- docs
+  |   -- DryIce
+  |      -- Kinetis SDK v.2.0 API Reference Manual with Addendum.pdf
+  |-- dryice_for_Kinetis_SDK_v2.0_readme.txt
+  
+    
+3. Try examples with dryice.
+-----------------------------
+The package contains one example application: dryice.
+The build projects can be found in boards/\<BOARD\>/driver_examples/dryice
+
+The following boards are enabled out of the box: 
+
+  frdmk81f, frdmkl81z, twrk81f140m, twrkl81z72m
+
+For the chips that do not have a board, you can create or open "hello_world" type
+of application and then continue to section 4 of this readme file.
+
+4. How to add dryice support to user applications.
+---------------------------------------------------
+4.1. Add "fsl_dryice.h" and "fsl_dryice.c" driver source code to the application build project.
+4.2. Add #include "fsl_dryice.h" directive to the source file where you wish to call the SDK DryIce API.
+4.3. Example API usage is shown in the "boards/\<BOARD\>/driver_examples/dryice/dryice.c". 
+
+5. Release notes.
+-----------------
+
+5.1. dryice 2.0.0
+     Initial version of the driver.

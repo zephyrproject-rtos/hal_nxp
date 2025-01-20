@@ -1,0 +1,12 @@
+1. This template is for ADC peripheral.
+
+2. This init function should do as below
+    function declaration
+    {
+        insert fsl_cadc.template
+        insert fsl_cadc_sample.template (Use the placeholder ${SAMPLE_INDEX}$ to represent dedicate sample slot, for sample0 ~ sample19)
+    }
+
+3. Macro definition
+    fsl_cadc_sample.template
+        ${SAMPLE_INDEX}$ must range from 0 to 19, don't add any suffix for the number, say 0U or 1U is not allowed.

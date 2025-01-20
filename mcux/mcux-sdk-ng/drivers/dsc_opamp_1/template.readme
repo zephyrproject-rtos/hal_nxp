@@ -1,0 +1,13 @@
+1. This template is for OPAMP pheripheral.
+
+2. The init function should do as below
+   function declaration
+   {
+      insert fsl_opamp_start.template
+      insert fsl_opamp_channels.template (Use the placeholder ${CHANNEL}$ to represent dedicate configuration register, for CFG0 ~ CFG3)
+      insert fsl_opamp_end.template 
+   }
+
+3. Macro definition.
+      fsl_opamp_channels.template
+          ${CHANNEL}$ must be 0, 1, 2 or 3, don't add any suffix for the number, say 0U or 1U is not allowed.
