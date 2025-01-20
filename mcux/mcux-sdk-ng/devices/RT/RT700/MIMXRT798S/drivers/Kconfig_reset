@@ -1,0 +1,8 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+    config MCUX_COMPONENT_driver.reset
+         bool "Use driver reset"
+         default y

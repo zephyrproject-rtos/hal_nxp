@@ -1,0 +1,18 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Device specific drivers"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_anadig_pmu_1"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_clock"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_dcdc_3"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_ecat"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_edma_soc"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_ele_base_api"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_gpc_3"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_iomuxc"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_memory"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_misc"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_romapi"
+    rsource "../../../RT1180/MIMXRT1189/drivers/Kconfig_src_3"
+endmenu

@@ -1,0 +1,297 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm4f"
+
+config MCUX_HW_CORE_CM4F
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "core0"
+
+config MCUX_HW_CORE_ID_CORE0
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MK22F12810"
+
+config MCUX_HW_FPU
+    string
+    default "SP_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "fpv4_sp"
+
+config MCUX_HW_FPV4_SP
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 4
+
+config MCUX_HW_SOC_SERIES_KINETIS
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_MK22FN128xxx10
+    bool
+
+choice
+    prompt "Device MK22F12810 Part"
+    config MCUX_HW_DEVICE_PART_MK22FN128VDC10
+    bool "Device part MK22FN128VDC10"
+    select MCUX_HW_DEVICE_ID_MK22FN128xxx10
+    config MCUX_HW_DEVICE_PART_MK22FN128VLL10
+    bool "Device part MK22FN128VLL10"
+    select MCUX_HW_DEVICE_ID_MK22FN128xxx10
+    config MCUX_HW_DEVICE_PART_MK22FN128VLH10
+    bool "Device part MK22FN128VLH10"
+    select MCUX_HW_DEVICE_ID_MK22FN128xxx10
+    config MCUX_HW_DEVICE_PART_MK22FN128VMP10
+    bool "Device part MK22FN128VMP10"
+    select MCUX_HW_DEVICE_ID_MK22FN128xxx10
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "MK22FN128xxx10" if MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "MK22FN128VDC10" if MCUX_HW_DEVICE_PART_MK22FN128VDC10
+    default "MK22FN128VLL10" if MCUX_HW_DEVICE_PART_MK22FN128VLL10
+    default "MK22FN128VLH10" if MCUX_HW_DEVICE_PART_MK22FN128VLH10
+    default "MK22FN128VMP10" if MCUX_HW_DEVICE_PART_MK22FN128VMP10
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MK22FN128xxx10" if MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mk22f12810"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MK22FN128xxx10" if MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MK22FN128VDC10" if MCUX_HW_DEVICE_PART_MK22FN128VDC10
+    default "MK22FN128VLL10" if MCUX_HW_DEVICE_PART_MK22FN128VLL10
+    default "MK22FN128VLH10" if MCUX_HW_DEVICE_PART_MK22FN128VLH10
+    default "MK22FN128VMP10" if MCUX_HW_DEVICE_PART_MK22FN128VMP10
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "MK22FN128xxx10"
+
+# ip information
+config MCUX_HW_IP_DriverType_ADC16
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_AIPS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_AXBS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_CMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_DAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_DMAMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_DSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_EDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_EWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_EzPort
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_FMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_FTFA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_FTM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_GPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_I2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_LLWU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_LPTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_LPUART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_MCG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_MCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_NV
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_OSC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_PDB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_PIT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_PMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_RCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_RFSYS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_RFVBAT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_SAI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_SIM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_SMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_SRTC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_UART_ISO7816
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_VREF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10
+
+config MCUX_HW_IP_DriverType_WDOG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK22FN128xxx10

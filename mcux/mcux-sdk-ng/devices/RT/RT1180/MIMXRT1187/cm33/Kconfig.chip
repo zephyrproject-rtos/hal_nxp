@@ -1,0 +1,81 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_CM33
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_ID_CM33
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MIMXRT1187_cm33"
+
+config MCUX_HW_FPU
+    string
+    default "SP_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "fpv5_sp"
+
+config MCUX_HW_FPV5_SP
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 3
+
+config MCUX_HW_DSP
+    bool
+    default y
+ 
+config MCUX_HW_SAU
+    bool
+    default y
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mimxrt1187_cm33"
+
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MIMXRT1187xxxxx_cm33"
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MIMXRT1187xxx8_M33"
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MIMXRT1187CVM8B:cm33" if MCUX_HW_DEVICE_PART_MIMXRT1187CVM8B
+    default "MIMXRT1187AVM8B:cm33" if MCUX_HW_DEVICE_PART_MIMXRT1187AVM8B
+    default "MIMXRT1187XVM8B:cm33" if MCUX_HW_DEVICE_PART_MIMXRT1187XVM8B
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "MIMXRT1187xxx8_M33"
+
+config MCUX_HW_IP_DriverType_M33_CACHE_MCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_XCACHE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+

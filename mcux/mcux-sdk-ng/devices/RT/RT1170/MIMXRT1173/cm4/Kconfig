@@ -1,0 +1,13 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+
+config MCUX_HW_DEVICE_MIMXRT1173_CORE_ID_CM4
+    bool
+    default y
+
+    imply MCUX_COMPONENT_driver.cache_lmem if MCUX_PRJSEG_module.device.suite
+
+rsource "Kconfig.chip"
+rsource "Kconfig.defconfig"

@@ -1,0 +1,40 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Device specific drivers configuration"
+
+    config MCUX_COMPONENT_driver.clock
+         bool "Use driver clock"
+         default y
+
+    config MCUX_COMPONENT_driver.fusion
+         bool "Use driver fusion"
+         default n
+
+    config MCUX_COMPONENT_driver.iomuxc
+         bool "Use driver iomuxc"
+         default y
+
+    config MCUX_COMPONENT_driver.memory
+         bool "Use driver memory"
+         default y
+
+    config MCUX_COMPONENT_driver.reset
+         bool "Use driver reset"
+         default y
+
+    config MCUX_COMPONENT_driver.sentinel
+         bool "Use driver sentinel"
+         default y
+
+    config MCUX_COMPONENT_driver.mipi_dsi_soc
+         bool "Use driver mipi_dsi_soc"
+         default y
+
+    config MCUX_COMPONENT_driver.upower
+         bool "Use driver upower"
+         default y
+
+endmenu

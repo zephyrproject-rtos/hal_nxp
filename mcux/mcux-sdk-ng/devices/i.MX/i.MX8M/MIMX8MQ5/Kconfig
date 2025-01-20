@@ -1,0 +1,35 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "Kconfig.chip"
+rsource "drivers/Kconfig"
+rsource "../../../arm/Kconfig.common"
+rsource "Kconfig.defconfig"
+
+## pinmux dependency
+config MCUX_DEPENDENCY_PINMUX
+    bool
+    default n
+
+    imply MCUX_COMPONENT_driver.igpio
+    imply MCUX_COMPONENT_driver.port
+
+## Project segment and component dependency data
+config MCUX_HW_DEVICE_MIMX8MQ5
+    # bool "Device MIMX8MQ5 Configuration"
+    bool
+    default y
+    ## Project segment dependency data
+
+    select MCUX_COMPONENT_driver.port if MCUX_PRJSEG_module.board.pinmux
+    select MCUX_COMPONENT_driver.igpio if MCUX_PRJSEG_module.board.pinmux
+    select MCUX_COMPONENT_driver.clock if MCUX_PRJSEG_module.board.clock
+    select MCUX_COMPONENT_component.iuart_adapter if MCUX_PRJSEG_module.board.console_lite
+    select MCUX_COMPONENT_driver.iuart if MCUX_PRJSEG_module.board.console_lite
+    select MCUX_COMPONENT_driver.rdc
+
+    # component dependency
+    select MCUX_COMPONENT_component.iuart_adapter if MCUX_COMPONENT_component.serial_manager_uart
+    select MCUX_COMPONENT_component.iuart_adapter if MCUX_COMPONENT_utility.debug_console_lite

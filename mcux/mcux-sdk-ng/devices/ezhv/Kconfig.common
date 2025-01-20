@@ -1,0 +1,28 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "../../arch/riscv/configuration/Kconfig"
+rsource "../../arch/riscv/core/Kconfig"
+rsource "../../arch/riscv/headers/Kconfig"
+
+menu "Device CMSIS system drivers"
+    config MCUX_COMPONENT_device.CMSIS
+        bool "Use device CMSIS"
+
+    config MCUX_COMPONENT_device.system
+        bool "Use device.system"
+        imply MCUX_COMPONENT_device.CMSIS
+
+    config MCUX_COMPONENT_device.startup
+        bool "Use device.startup"
+        imply MCUX_COMPONENT_device.system
+
+    config MCUX_COMPONENT_device.RTE
+        bool "Use device.rte driver"        
+endmenu
+
+menu "Device Suite"
+    config MCUX_PRJSEG_module.device.suite
+        bool "Use default device suite"
+endmenu

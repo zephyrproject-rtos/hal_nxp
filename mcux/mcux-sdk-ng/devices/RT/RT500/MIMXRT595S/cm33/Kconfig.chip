@@ -1,0 +1,76 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_CM33
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_ID_CM33
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MIMXRT595S_cm33"
+
+config MCUX_HW_FPU
+    string
+    default "SP_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "fpv5_sp"
+
+config MCUX_HW_FPV5_SP
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 3
+
+config MCUX_HW_DSP
+    bool
+    default y
+
+config MCUX_HW_SAU
+    bool
+    default y
+
+config MCUX_HW_SOC_SERIES_RT
+    bool
+    default y
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MIMXRT595Sxxxx_cm33" if MCUX_HW_DEVICE_ID_MIMXRT595S
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mimxrt595s_cm33"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MIMXRT595S_M33" if MCUX_HW_DEVICE_ID_MIMXRT595S
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MIMXRT595SFFOC:cm33" if MCUX_HW_DEVICE_PART_MIMXRT595SFFOC
+    default "MIMXRT595SFAWC:cm33" if MCUX_HW_DEVICE_PART_MIMXRT595SFAWC
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "MIMXRT595S_M33"

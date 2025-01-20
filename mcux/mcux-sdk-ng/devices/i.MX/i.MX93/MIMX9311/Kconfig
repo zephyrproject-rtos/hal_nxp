@@ -1,0 +1,46 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "Kconfig.chip"
+rsource "drivers/Kconfig"
+rsource "../../../arm/Kconfig.common"
+rsource "Kconfig.defconfig"
+
+## pinmux dependency
+config MCUX_DEPENDENCY_PINMUX
+    bool
+    default n
+
+    imply MCUX_COMPONENT_driver.rgpio
+    imply MCUX_COMPONENT_driver.port
+
+## Project segment and component dependency data
+config MCUX_HW_DEVICE_MIMX9311
+    # bool "Device MIMX9311 Configuration"
+    bool
+    default y
+    ## Project segment dependency data
+
+    select MCUX_COMPONENT_driver.port if MCUX_PRJSEG_module.board.pinmux
+    select MCUX_COMPONENT_driver.rgpio if MCUX_PRJSEG_module.board.pinmux
+    select MCUX_COMPONENT_driver.clock if MCUX_PRJSEG_module.board.clock
+    select MCUX_COMPONENT_component.lpuart_adapter if MCUX_PRJSEG_module.board.console_lite
+    select MCUX_COMPONENT_driver.lpuart if MCUX_PRJSEG_module.board.console_lite
+    select MCUX_COMPONENT_driver.cache_xcache
+
+    # component dependency
+    select MCUX_COMPONENT_driver.edma4 if MCUX_COMPONENT_driver.sai_edma
+    select MCUX_COMPONENT_driver.edma4 if MCUX_COMPONENT_driver.lpi2c_edma
+    select MCUX_COMPONENT_driver.edma4 if MCUX_COMPONENT_driver.lpspi_edma
+    select MCUX_COMPONENT_driver.edma4 if MCUX_COMPONENT_driver.lpuart_edma
+    select MCUX_COMPONENT_driver.edma4 if MCUX_COMPONENT_driver.flexspi_edma
+    select MCUX_COMPONENT_driver.edma4 if MCUX_COMPONENT_driver.pdm_edma
+    select MCUX_COMPONENT_driver.edma4 if MCUX_COMPONENT_driver.flexcan_edma
+    select MCUX_COMPONENT_component.lpuart_adapter if MCUX_COMPONENT_component.serial_manager_uart
+    select MCUX_COMPONENT_component.lpuart_adapter if MCUX_COMPONENT_utility.debug_console_lite
+    select MCUX_COMPONENT_driver.edma_soc if MCUX_COMPONENT_driver.edma4
+    select MCUX_COMPONENT_driver.memory if MCUX_COMPONENT_driver.edma4
+    select MCUX_COMPONENT_driver.memory if MCUX_COMPONENT_driver.enet
+    select MCUX_COMPONENT_driver.memory if MCUX_COMPONENT_driver.enet_qos

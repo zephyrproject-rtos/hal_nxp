@@ -1,0 +1,51 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "Kconfig.chip"
+rsource "drivers/Kconfig"
+rsource "../../../arm/Kconfig.common"
+rsource "Kconfig.defconfig"
+
+## pinmux dependency
+config MCUX_DEPENDENCY_PINMUX
+    bool
+    default n
+
+    imply MCUX_COMPONENT_driver.gpio
+    imply MCUX_COMPONENT_driver.port
+
+## Project segment and component dependency data
+config MCUX_HW_DEVICE_MCIMX7U3
+    # bool "Device MCIMX7U3 Configuration"
+    bool
+    default y
+    ## Project segment dependency data
+
+    select MCUX_COMPONENT_driver.port if MCUX_PRJSEG_module.board.pinmux
+    select MCUX_COMPONENT_driver.gpio if MCUX_PRJSEG_module.board.pinmux
+    select MCUX_COMPONENT_driver.clock if MCUX_PRJSEG_module.board.clock
+    select MCUX_COMPONENT_component.lpuart_adapter if MCUX_PRJSEG_module.board.console_lite
+    select MCUX_COMPONENT_driver.lpuart if MCUX_PRJSEG_module.board.console_lite
+    select MCUX_COMPONENT_driver.msmc
+
+    # component dependency
+    select MCUX_COMPONENT_driver.dmamux if MCUX_COMPONENT_device.RTE
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_device.RTE
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_driver.sai_edma
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_driver.lpi2c_edma
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_driver.lpspi_edma
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_driver.lpuart_edma
+    select MCUX_COMPONENT_component.lpuart_adapter if MCUX_COMPONENT_component.serial_manager_uart
+    select MCUX_COMPONENT_component.lpuart_adapter if MCUX_COMPONENT_utility.debug_console_lite
+    select MCUX_COMPONENT_driver.lpspi_edma if MCUX_COMPONENT_driver.cmsis_lpspi
+    select MCUX_COMPONENT_driver.lpi2c_edma if MCUX_COMPONENT_driver.cmsis_lpi2c
+    select MCUX_COMPONENT_driver.lpuart_edma if MCUX_COMPONENT_driver.cmsis_lpuart
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_driver.flexio_camera_edma
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_driver.flexio_i2s_edma
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_driver.flexio_mculcd_edma
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_driver.flexio_spi_edma
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_driver.flexio_uart_edma
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_driver.ltc_edma
+    select MCUX_COMPONENT_driver.edma if MCUX_COMPONENT_driver.qspi_edma

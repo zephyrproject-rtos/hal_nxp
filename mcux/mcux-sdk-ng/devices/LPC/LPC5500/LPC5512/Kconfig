@@ -1,0 +1,25 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "Kconfig.chip"
+rsource "../LPC55S16/drivers/Kconfig"
+rsource "../../../arm/Kconfig.common"
+rsource "Kconfig.defconfig"
+
+## Project segment and component dependency data
+config MCUX_HW_DEVICE_LPC5512
+    # bool "Device LPC5512 Configuration"
+    bool
+    default y
+
+    # component dependency
+    select MCUX_COMPONENT_driver.power if MCUX_COMPONENT_driver.clock
+    select MCUX_COMPONENT_driver.lpc_dma if MCUX_COMPONENT_device.RTE
+    select MCUX_COMPONENT_component.usart_adapter if MCUX_COMPONENT_component.serial_manager_uart
+    select MCUX_COMPONENT_component.usart_adapter if MCUX_COMPONENT_utility.debug_console_lite
+    select MCUX_COMPONENT_driver.lpc_dma if MCUX_COMPONENT_driver.flexcomm_i2c_dma
+    select MCUX_COMPONENT_driver.lpc_dma if MCUX_COMPONENT_driver.flexcomm_i2s_dma
+    select MCUX_COMPONENT_driver.lpc_dma if MCUX_COMPONENT_driver.flexcomm_spi_dma
+    select MCUX_COMPONENT_driver.lpc_dma if MCUX_COMPONENT_driver.flexcomm_usart_dma

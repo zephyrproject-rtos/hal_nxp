@@ -1,0 +1,10 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HW_DEVICE_K32L3A60_CORE_ID_cm0plus
+    bool
+    default y
+
+rsource "Kconfig.chip"

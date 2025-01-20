@@ -1,0 +1,28 @@
+rsource "../../arch/arm/configuration/Kconfig"
+rsource "../../arch/arm/cortexm/Kconfig"
+rsource "../../arch/arm/CMSIS/Kconfig"
+
+menu "Device CMSIS system drivers"
+    config MCUX_COMPONENT_device.CMSIS
+        bool "Use device CMSIS"
+        select MCUX_COMPONENT_CMSIS_Include_core_cm
+
+    config MCUX_COMPONENT_device.system
+        bool "Use device.system"
+        imply MCUX_COMPONENT_device.CMSIS
+
+    config MCUX_COMPONENT_device.startup
+        bool "Use device.startup"
+        imply MCUX_COMPONENT_device.system
+
+    config MCUX_COMPONENT_device.RTE
+        bool "Use device.rte driver"        
+endmenu
+
+menu "Device Suite"
+    config MCUX_PRJSEG_module.device.suite
+        bool "Use default device suite"
+    config FLASH_BASE_ADDRESS
+        hex "Flash base address for the application"
+        default 0x0
+endmenu

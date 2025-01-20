@@ -1,0 +1,284 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm4f"
+
+config MCUX_HW_CORE_CM4F
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "core0"
+
+config MCUX_HW_CORE_ID_CORE0
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MK02F12810"
+
+config MCUX_HW_FPU
+    string
+    default "SP_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "fpv4_sp"
+
+config MCUX_HW_FPV4_SP
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 4
+
+config MCUX_HW_SOC_SERIES_KINETIS
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_MK02FN128xxx10
+    bool
+
+config MCUX_HW_DEVICE_ID_MK02FN64xxx10
+    bool
+
+choice
+    prompt "Device MK02F12810 Part"
+    config MCUX_HW_DEVICE_PART_MK02FN128VFM10
+    bool "Device part MK02FN128VFM10"
+    select MCUX_HW_DEVICE_ID_MK02FN128xxx10
+    config MCUX_HW_DEVICE_PART_MK02FN128VLF10
+    bool "Device part MK02FN128VLF10"
+    select MCUX_HW_DEVICE_ID_MK02FN128xxx10
+    config MCUX_HW_DEVICE_PART_MK02FN128VLH10
+    bool "Device part MK02FN128VLH10"
+    select MCUX_HW_DEVICE_ID_MK02FN128xxx10
+    config MCUX_HW_DEVICE_PART_MK02FN64VLH10
+    bool "Device part MK02FN64VLH10"
+    select MCUX_HW_DEVICE_ID_MK02FN64xxx10
+    config MCUX_HW_DEVICE_PART_MK02FN64VLF10
+    bool "Device part MK02FN64VLF10"
+    select MCUX_HW_DEVICE_ID_MK02FN64xxx10
+    config MCUX_HW_DEVICE_PART_MK02FN64VFM10
+    bool "Device part MK02FN64VFM10"
+    select MCUX_HW_DEVICE_ID_MK02FN64xxx10
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "MK02FN128xxx10" if MCUX_HW_DEVICE_ID_MK02FN128xxx10
+    default "MK02FN64xxx10" if MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "MK02FN128VFM10" if MCUX_HW_DEVICE_PART_MK02FN128VFM10
+    default "MK02FN128VLF10" if MCUX_HW_DEVICE_PART_MK02FN128VLF10
+    default "MK02FN128VLH10" if MCUX_HW_DEVICE_PART_MK02FN128VLH10
+    default "MK02FN64VLH10" if MCUX_HW_DEVICE_PART_MK02FN64VLH10
+    default "MK02FN64VLF10" if MCUX_HW_DEVICE_PART_MK02FN64VLF10
+    default "MK02FN64VFM10" if MCUX_HW_DEVICE_PART_MK02FN64VFM10
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MK02FN128xxx10" if MCUX_HW_DEVICE_ID_MK02FN128xxx10
+    default "MK02FN64xxx10" if MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mk02f12810"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MK02FN128xxx10" if MCUX_HW_DEVICE_ID_MK02FN128xxx10
+    default "MK02FN64xxx10" if MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MK02FN128VFM10" if MCUX_HW_DEVICE_PART_MK02FN128VFM10
+    default "MK02FN128VLF10" if MCUX_HW_DEVICE_PART_MK02FN128VLF10
+    default "MK02FN128VLH10" if MCUX_HW_DEVICE_PART_MK02FN128VLH10
+    default "MK02FN64VLH10" if MCUX_HW_DEVICE_PART_MK02FN64VLH10
+    default "MK02FN64VLF10" if MCUX_HW_DEVICE_PART_MK02FN64VLF10
+    default "MK02FN64VFM10" if MCUX_HW_DEVICE_PART_MK02FN64VFM10
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "MK02FN128xxx10" if MCUX_HW_DEVICE_ID_MK02FN128xxx10
+    default "MK02FN64xxx10" if MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+# ip information
+config MCUX_HW_IP_DriverType_ADC16
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_AIPS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_AXBS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_CMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_DAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_DMAMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_DSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_EDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_EWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_EzPort
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_FMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_FTFA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_FTM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_GPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_I2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_LLWU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_LPTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_MCG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_MCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_NV
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_OSC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_PDB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_PIT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_PMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_RCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_SIM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_SMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_UART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_VREF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10
+
+config MCUX_HW_IP_DriverType_WDOG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MK02FN128xxx10 || MCUX_HW_DEVICE_ID_MK02FN64xxx10

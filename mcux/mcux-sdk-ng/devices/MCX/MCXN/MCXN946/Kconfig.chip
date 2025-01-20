@@ -1,0 +1,457 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# device related
+
+config MCUX_HW_DEVICE_ID_MCXN946
+    bool
+
+choice
+    prompt "Device MCXN946 Part"
+    config MCUX_HW_DEVICE_PART_MCXN946VDF
+    bool "Device part MCXN946VDF"
+    select MCUX_HW_DEVICE_ID_MCXN946
+    config MCUX_HW_DEVICE_PART_MCXN946VPB
+    bool "Device part MCXN946VPB"
+    select MCUX_HW_DEVICE_ID_MCXN946
+    config MCUX_HW_DEVICE_PART_MCXN946VNL
+    bool "Device part MCXN946VNL"
+    select MCUX_HW_DEVICE_ID_MCXN946
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "MCXN946" if MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "MCXN946VDF" if MCUX_HW_DEVICE_PART_MCXN946VDF
+    default "MCXN946VPB" if MCUX_HW_DEVICE_PART_MCXN946VPB
+    default "MCXN946VNL" if MCUX_HW_DEVICE_PART_MCXN946VNL
+
+# ip information
+config MCUX_HW_IP_DriverType_AHBSC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_CACHE64_CTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_CACHE64_POLSEL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_CDOG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_CTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_CoolFlux_BSP32
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_DBGMB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_DIGTMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_EDMA3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_EIM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_EMVSIM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_ERM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_EVTG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_EWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_FLEXCAN
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_FLEXIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_FLEXSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_FLEXSPI_IPED
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_FMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_FMU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_FREQME
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_GDET
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_GPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_HPDAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_I3C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_INPUTMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_INTM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_IPCSS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_ITRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_LPADC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_LPCMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_LPDAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM_LPI2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM_LPSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM_LPUART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_LPTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_MAILBOX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_MCX_CMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_MCX_ENET
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_MCX_SPC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_MCX_VBAT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_MRT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_OPAMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_OSTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_OTPC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_PDM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_PINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_PKC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_PLU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_POWERQUAD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_PRINCE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_PUF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_PUFCTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_PUFV3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_PWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_QDC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_RNG_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_RTC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_RTC_V2
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_SAI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_SCG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_SCTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_SEMA42
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_SINC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_SMARTDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_SWD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_SYSCON_LPCAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_SYSPM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_TRDC_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_TSI_V6
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_USBHSDCD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_USBNC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_USB_HSDCD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_USB_PHY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_USDHC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_USIM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_UTICK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_VREF_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_WUU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946
+
+config MCUX_HW_IP_DriverType_WWDT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN946

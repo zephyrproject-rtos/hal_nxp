@@ -1,0 +1,47 @@
+# Copyright 2024 NXP
+#  
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Device specific drivers configuration"
+
+    config MCUX_COMPONENT_driver.clock
+         bool "Use driver clock"
+         default y
+
+    config MCUX_COMPONENT_driver.i2s_bridge
+         bool "Use driver i2s_bridge"
+         default y
+
+    config MCUX_COMPONENT_driver.inputmux_connections
+         bool "Use driver inputmux_connections"
+         default y
+
+    config MCUX_COMPONENT_driver.io_mux
+         bool "Use driver io_mux"
+         default y
+
+    config MCUX_COMPONENT_driver.iped_rw61x
+         bool "Use driver iped"
+         default y
+
+    config MCUX_COMPONENT_driver.memory
+         bool "Use driver memory"
+         default y
+
+    config MCUX_COMPONENT_driver.ocotp_rw61x
+         bool "Use driver ocotp"
+         default y
+
+    config MCUX_COMPONENT_driver.power
+         bool "Use driver power"
+         default y
+
+    config MCUX_COMPONENT_driver.reset
+         bool "Use driver reset"
+         default y
+
+    config MCUX_COMPONENT_driver.romapi
+         bool "Use driver romapi"
+
+endmenu

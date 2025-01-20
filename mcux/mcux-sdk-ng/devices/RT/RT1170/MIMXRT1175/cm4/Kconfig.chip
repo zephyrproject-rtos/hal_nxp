@@ -1,0 +1,68 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm4f"
+
+config MCUX_HW_CORE_CM4F
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm4"
+
+config MCUX_HW_CORE_ID_CM4
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MIMXRT1175_cm4"
+
+config MCUX_HW_FPU
+    string
+    default "SP_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "fpv4_sp"
+
+config MCUX_HW_FPV4_SP
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 4
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mimxrt1175_cm4"
+
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MIMXRT1175xxxxx_cm4"
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MIMXRT1175xxxA_M4"
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MIMXRT1175DVMAA:cm4" if MCUX_HW_DEVICE_PART_MIMXRT1175DVMAA
+    default "MIMXRT1175AVM8A:cm4" if MCUX_HW_DEVICE_PART_MIMXRT1175AVM8A
+    default "MIMXRT1175CVM8A:cm4" if MCUX_HW_DEVICE_PART_MIMXRT1175CVM8A
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "MIMXRT1175xxxA_M4"
+
+config MCUX_HW_IP_DriverType_LMEM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1175xxxxx
+

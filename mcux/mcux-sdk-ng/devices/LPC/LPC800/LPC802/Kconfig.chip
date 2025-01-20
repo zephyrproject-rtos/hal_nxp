@@ -1,0 +1,207 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm0p"
+
+config MCUX_HW_CORE_CM0P
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "core0"
+
+config MCUX_HW_CORE_ID_CORE0
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "LPC802"
+
+config MCUX_HW_FPU
+    string
+    default "NO_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "no_fpu"
+
+config MCUX_HW_NO_FPU
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 2
+
+config MCUX_HW_SOC_SERIES_LPC
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_LPC802
+    bool
+
+choice
+    prompt "Device LPC802 Part"
+    config MCUX_HW_DEVICE_PART_LPC802M011JDH20
+    bool "Device part LPC802M011JDH20"
+    select MCUX_HW_DEVICE_ID_LPC802
+    config MCUX_HW_DEVICE_PART_LPC802M001JDH16
+    bool "Device part LPC802M001JDH16"
+    select MCUX_HW_DEVICE_ID_LPC802
+    config MCUX_HW_DEVICE_PART_LPC802M001JDH20
+    bool "Device part LPC802M001JDH20"
+    select MCUX_HW_DEVICE_ID_LPC802
+    config MCUX_HW_DEVICE_PART_LPC802M001JHI33
+    bool "Device part LPC802M001JHI33"
+    select MCUX_HW_DEVICE_ID_LPC802
+    config MCUX_HW_DEVICE_PART_LPC802UK
+    bool "Device part LPC802UK"
+    select MCUX_HW_DEVICE_ID_LPC802
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "LPC802" if MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "LPC802M011JDH20" if MCUX_HW_DEVICE_PART_LPC802M011JDH20
+    default "LPC802M001JDH16" if MCUX_HW_DEVICE_PART_LPC802M001JDH16
+    default "LPC802M001JDH20" if MCUX_HW_DEVICE_PART_LPC802M001JDH20
+    default "LPC802M001JHI33" if MCUX_HW_DEVICE_PART_LPC802M001JHI33
+    default "LPC802UK" if MCUX_HW_DEVICE_PART_LPC802UK
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "LPC802" if MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "lpc802"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "LPC802M001" if MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "LPC802M011JDH20" if MCUX_HW_DEVICE_PART_LPC802M011JDH20
+    default "LPC802M001JDH16" if MCUX_HW_DEVICE_PART_LPC802M001JDH16
+    default "LPC802M001JDH20" if MCUX_HW_DEVICE_PART_LPC802M001JDH20
+    default "LPC802M001JHI33" if MCUX_HW_DEVICE_PART_LPC802M001JHI33
+    default "LPC802UK" if MCUX_HW_DEVICE_PART_LPC802UK
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "LPC802" if MCUX_HW_DEVICE_ID_LPC802
+
+# ip information
+config MCUX_HW_IP_DriverType_ACOMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_ADC12_5M
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_CTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_GPIO_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_I2C_SERIALIF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_IAP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_IOCON_LITE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_LPC_CLOCK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_LPC_NVIC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_LPC_PMU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_MCO_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_MINI_SPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_MINI_USART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_MRT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_PINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_SWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_SYSCON
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_WKT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802
+
+config MCUX_HW_IP_DriverType_WWDT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC802

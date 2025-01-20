@@ -1,0 +1,5 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "../../../i.MX8ULP/MIMX8UD7/drivers/Kconfig"

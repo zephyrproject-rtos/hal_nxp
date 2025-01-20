@@ -1,0 +1,45 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Device specific drivers"
+    config MCUX_COMPONENT_driver.clock
+        bool "Use driver clock"
+        # select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.clock
+
+        endif
+
+    config MCUX_COMPONENT_driver.iomuxc
+        bool "Use driver iomuxc"
+        select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.iomuxc
+
+        endif
+
+    config MCUX_COMPONENT_driver.mipi_csi2rx_soc
+        bool "Use driver mipi csi2rx"
+        select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.mipi_csi2rx_soc
+
+        endif
+
+    config MCUX_COMPONENT_driver.mipi_dsi_soc
+        bool "Use driver mipi dsi"
+        select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.mipi_dsi_soc
+
+        endif
+
+    rsource "../../../RT1170/MIMXRT1176/drivers/anatop_ai/Kconfig"
+    rsource "../../../RT1170/MIMXRT1176/drivers/memory/Kconfig"
+    rsource "../../../RT1170/MIMXRT1176/drivers/nic301/Kconfig"
+    rsource "../../../RT1170/MIMXRT1176/drivers/power/Kconfig"
+    rsource "./romapi/Kconfig"
+    rsource "./flexram/Kconfig"
+
+endmenu

@@ -1,0 +1,380 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_CM33
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm33_core0"
+
+config MCUX_HW_CORE_ID_CM33_CORE0
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "LPC5536"
+
+config MCUX_HW_FPU
+    string
+    default "SP_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "fpv5_sp"
+
+config MCUX_HW_FPV5_SP
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 3
+
+config MCUX_HW_DSP
+    bool
+    default y
+
+config MCUX_HW_SAU
+    bool
+    default y
+
+config MCUX_HW_SOC_SERIES_LPC
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_LPC5536
+    bool
+
+choice
+    prompt "Device LPC5536 Part"
+    config MCUX_HW_DEVICE_PART_LPC5536JBD100
+    bool "Device part LPC5536JBD100"
+    select MCUX_HW_DEVICE_ID_LPC5536
+    config MCUX_HW_DEVICE_PART_LPC5536JBD64
+    bool "Device part LPC5536JBD64"
+    select MCUX_HW_DEVICE_ID_LPC5536
+    config MCUX_HW_DEVICE_PART_LPC5536JHI48
+    bool "Device part LPC5536JHI48"
+    select MCUX_HW_DEVICE_ID_LPC5536
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "LPC5536" if MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "LPC5536JBD100" if MCUX_HW_DEVICE_PART_LPC5536JBD100
+    default "LPC5536JBD64" if MCUX_HW_DEVICE_PART_LPC5536JBD64
+    default "LPC5536JHI48" if MCUX_HW_DEVICE_PART_LPC5536JHI48
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "LPC5536" if MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "lpc5536"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "LPC5536" if MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "LPC5536JBD100" if MCUX_HW_DEVICE_PART_LPC5536JBD100
+    default "LPC5536JBD64" if MCUX_HW_DEVICE_PART_LPC5536JBD64
+    default "LPC5536JHI48" if MCUX_HW_DEVICE_PART_LPC5536JHI48
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "LPC5536" if MCUX_HW_DEVICE_ID_LPC5536
+
+# ip information
+config MCUX_HW_IP_DriverType_ANALOGCTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_AOI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_CACHE64_CTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_CACHE64_POLSEL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_CASPER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_CDOG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_CTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_DMIC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_ENC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_FLEXCOMM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_I2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_I2S
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_SPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_USART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_FLEXSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_FREQME
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_GINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_GPIO_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_HASHCRYPT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_HSCMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_I3C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_INPUTMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_IOCON
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_LPADC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_LPC_Debug
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_LPC_FLASH
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_LPC_GPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_LPC_PMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_LPC_RTC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_LPDAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_MCAN
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_MRT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_OPAMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_OSTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_PINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_PLU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_POWERQUAD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_PRINCE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_PUFV3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_PWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_RNG_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_RTC_V2
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_SCTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_SDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_SYSCON_CMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_SYSCON_CMP_LPCAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_SYSCON_LPCAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_SYSCTL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_USB_DEVICE_IP3511FS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_USB_HOST_OHCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_UTICK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_VREF_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536
+
+config MCUX_HW_IP_DriverType_WWDT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC5536

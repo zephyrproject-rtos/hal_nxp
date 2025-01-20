@@ -1,0 +1,364 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# device related
+
+config MCUX_HW_DEVICE_ID_MCXW727DxxxA
+    bool
+
+choice
+    prompt "Device MCXW727D Part"
+    config MCUX_HW_DEVICE_PART_MCXW727DMFTA
+    bool "Device part MCXW727DMFTA"
+    select MCUX_HW_DEVICE_ID_MCXW727DxxxA
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "MCXW727DxxxA" if MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "MCXW727DMFTA" if MCUX_HW_DEVICE_PART_MCXW727DMFTA
+
+# ip information
+config MCUX_HW_IP_DriverType_ATX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_AXBS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_BLE2_REG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_BTLE_RF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_BTRTU1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_BTU2_REG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_CCM32K
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_CE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_CMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_DSB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_DMA3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_ELEMU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_EWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_FLASH_K4
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_FLEXIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_FMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_FRO192
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_GEN4PHY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_GENFSK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_GPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_I3C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_IMU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_LPADC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_LPCMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_LPI2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_LPIT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_LPSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_LPTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_LPUART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_LTC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_MCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_MRCC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_MSCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_MSF1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_MU_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_RADIO_CTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_RADIO_PACKET_RAM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_RBME
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_REGFILE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_RFMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_RF_CMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_SCG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_SFA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_SEMA42
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_SMSCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_SPC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_SRTC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_SYSPM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_TPIU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_TPM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_TRDC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_TRGMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_TSTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_VBAT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_VREF_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_WDOG32
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_WOR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_WUU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_XCVR_ANALOG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_XCVR_MISC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_XCVR_PLL_DIG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_XCVR_RX_DIG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_XCVR_TSM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_XCVR_TX_DIG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_XCVR_ZBDEMOD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA
+
+config MCUX_HW_IP_DriverType_ZLL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXW727DxxxA

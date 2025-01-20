@@ -1,0 +1,43 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+    config MCUX_COMPONENT_driver.dcdc_2
+        bool "Use driver dcdc"
+        select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.dcdc_2
+
+        endif
+
+    config MCUX_COMPONENT_driver.gpc_xxx_ctrl
+        bool "Use driver gpc"
+        select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.gpc_xxx_ctrl
+
+        endif
+
+    config MCUX_COMPONENT_driver.pgmc
+        bool "Use driver pgmc"
+        select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.pgmc
+
+        endif
+
+    config MCUX_COMPONENT_driver.anadig_pmu
+        bool "Use driver pmu"
+        # select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.anadig_pmu
+
+        endif
+
+    config MCUX_COMPONENT_driver.src_2
+        bool "Use driver src"
+        select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.src_2
+
+        endif

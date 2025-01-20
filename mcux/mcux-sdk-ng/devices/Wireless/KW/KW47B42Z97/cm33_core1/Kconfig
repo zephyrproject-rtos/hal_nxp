@@ -1,0 +1,10 @@
+# Copyright 2024 NXP
+#  
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HW_DEVICE_KW47B42Z97_CORE_ID_cm33_core1
+    bool
+    default y
+
+rsource "Kconfig.chip"

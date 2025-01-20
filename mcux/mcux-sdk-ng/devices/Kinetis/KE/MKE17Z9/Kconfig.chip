@@ -1,0 +1,272 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm0p"
+
+config MCUX_HW_CORE_CM0P
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm0plus"
+
+config MCUX_HW_CORE_ID_CM0PLUS
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MKE17Z9"
+
+config MCUX_HW_FPU
+    string
+    default "NO_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "no_fpu"
+
+config MCUX_HW_NO_FPU
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 2
+
+config MCUX_HW_SOC_SERIES_KINETIS
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+    bool
+
+choice
+    prompt "Device MKE17Z9 Part"
+    config MCUX_HW_DEVICE_PART_MKE17Z512VLL9
+    bool "Device part MKE17Z512VLL9"
+    select MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+    config MCUX_HW_DEVICE_PART_MKE17Z512VLH9
+    bool "Device part MKE17Z512VLH9"
+    select MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "MKE17Z512xxx9" if MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "MKE17Z512VLL9" if MCUX_HW_DEVICE_PART_MKE17Z512VLL9
+    default "MKE17Z512VLH9" if MCUX_HW_DEVICE_PART_MKE17Z512VLH9
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MKE17Z512xxx9" if MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mke17z9"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MKE17Z512xxx9" if MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MKE17Z512VLL9" if MCUX_HW_DEVICE_PART_MKE17Z512VLL9
+    default "MKE17Z512VLH9" if MCUX_HW_DEVICE_PART_MKE17Z512VLH9
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "MKE17Z512xxx9"
+
+# ip information
+config MCUX_HW_IP_DriverType_ACMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_ADC12
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_AIPS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_AXBS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_DMAMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_EDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_EWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_FGPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_FLEXIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_FTFE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_FTM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_GPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_LPI2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_LPIT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_LPSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_LPTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_LPUART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_MCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_MTB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_NV
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_PCC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_PMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_PWT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_RCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_SCG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_SIM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_SMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_SRTC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_SYSRAM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_TRGMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_TSI_V5
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_UART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9
+
+config MCUX_HW_IP_DriverType_WDOG32
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MKE17Z512xxx9

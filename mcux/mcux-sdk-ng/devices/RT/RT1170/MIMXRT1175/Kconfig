@@ -1,0 +1,15 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "${core_id}/Kconfig"
+rsource "Kconfig.chip"
+rsource "drivers/Kconfig"
+rsource "../../../arm/Kconfig.common"
+rsource "Kconfig.defconfig"
+
+config MCUX_HW_DEVICE_MIMXRT1175
+    # bool "Device MIMXRT1175 Configuration"
+    bool
+    default y

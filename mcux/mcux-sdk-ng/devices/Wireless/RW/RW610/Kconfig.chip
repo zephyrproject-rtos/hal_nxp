@@ -1,0 +1,470 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_CM33
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_ID_CM33
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "RW610"
+
+    config MCUX_HW_FPU
+        string
+        default "SP_FPU"
+
+    config MCUX_HW_FPU_TYPE
+        string
+        default "fpv5_sp"
+
+    config MCUX_HW_FPV5_SP
+        bool
+        default y
+
+    config MCUX_HW_INT_PRIO_BITS
+        int
+        default 3
+
+config MCUX_HW_DSP
+    bool
+    default n
+
+config MCUX_HW_SAU
+    bool
+    default y
+
+config MCUX_HW_SOC_SERIES_WIRELESS
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_RW610
+    bool
+
+choice
+    prompt "Device RW610 Part"
+    config MCUX_HW_DEVICE_PART_RW610HNA2I
+    bool "Device part RW610HNA2I"
+    select MCUX_HW_DEVICE_ID_RW610
+    config MCUX_HW_DEVICE_PART_RW610ETA2I
+    bool "Device part RW610ETA2I"
+    select MCUX_HW_DEVICE_ID_RW610
+    config MCUX_HW_DEVICE_PART_RW610UKA2I
+    bool "Device part RW610UKA2I"
+    select MCUX_HW_DEVICE_ID_RW610
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "RW610" if MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "RW610HNA2I" if MCUX_HW_DEVICE_PART_RW610HNA2I
+    default "RW610ETA2I" if MCUX_HW_DEVICE_PART_RW610ETA2I
+    default "RW610UKA2I" if MCUX_HW_DEVICE_PART_RW610UKA2I
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "RW610" if MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "rw610"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "RW610" if MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "RW610HNA2I" if MCUX_HW_DEVICE_PART_RW610HNA2I
+    default "RW610ETA2I" if MCUX_HW_DEVICE_PART_RW610ETA2I
+    default "RW610UKA2I" if MCUX_HW_DEVICE_PART_RW610UKA2I
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "RW610"
+
+# ip information
+config MCUX_HW_IP_DriverType_CACHE64_CTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CACHE64_POLSEL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CDOG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_ACOMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_ADC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_APU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_BG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_BLEAPU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_BUCK11
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_BUCK18
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_CAU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_CIU1_IMU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_CIU2_IMU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_DAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_MCI_IO_MUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_PMU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_PUF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_RF_SYSCON
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_SDU_FBR_CARD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_SDU_FN0_CARD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_SDU_FN_CARD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_SENSOR_CTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_SOCCIU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_SOC_OTP_CTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_SYSPLL_T3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_SYSPLL_TCPU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_SYSPLL_TDDR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CNS_WLAPU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_CTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_DMIC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_ELS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_ENET
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_FLEXCOMM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_I2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_I2S
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_SPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_USART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_FLEXSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_FLEXSPI_IPED_RW61X
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_GDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_GPIO_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_INPUTMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_LCDIC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_LPC_AHB_SECURE_CTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_LPC_CLKCTL0
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_LPC_CLKCTL1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_LPC_DBGMAILBOX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_LPC_RSTCTL0
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_LPC_RSTCTL1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_LPC_SYSCTL0
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_LPC_SYSCTL1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_LPC_SYSCTL2
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_MCO_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_MCO_FREQME
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_MEMORY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_MRT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_OSTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_OTP_RW61X
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_PINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_PKC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_POWERLIB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_POWERQUAD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_ROMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_RTC_LITE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_RW_ITRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_SCTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_SDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_TRNG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_USIM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_UTICK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610
+
+config MCUX_HW_IP_DriverType_WWDT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_RW610

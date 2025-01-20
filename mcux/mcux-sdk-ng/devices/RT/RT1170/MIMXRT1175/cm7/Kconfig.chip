@@ -1,0 +1,62 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm7f"
+
+config MCUX_HW_CORE_CM7F
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm7"
+
+config MCUX_HW_CORE_ID_CM7
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MIMXRT1175_cm7"
+
+config MCUX_HW_FPU
+    string
+    default "DP_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "fpv5_dp"
+
+config MCUX_HW_FPV5_DP
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 4
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mimxrt1175_cm7"
+
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MIMXRT1175xxxxx_cm7"
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MIMXRT1175xxxA_M7"
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MIMXRT1175DVMAA:cm7" if MCUX_HW_DEVICE_PART_MIMXRT1175DVMAA
+    default "MIMXRT1175AVM8A:cm7" if MCUX_HW_DEVICE_PART_MIMXRT1175AVM8A
+    default "MIMXRT1175CVM8A:cm7" if MCUX_HW_DEVICE_PART_MIMXRT1175CVM8A
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "MIMXRT1175xxxA_M7"

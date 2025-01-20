@@ -1,0 +1,11 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HW_DEVICE_MIMXRT685S_CORE_ID_hifi4
+    bool
+    default y
+
+rsource "Kconfig.chip"
+rsource "../../../../xtensa/Kconfig.common"

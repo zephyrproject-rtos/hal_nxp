@@ -1,0 +1,21 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "Kconfig.chip"
+rsource "../LPC824/drivers/Kconfig"
+rsource "../../../arm/Kconfig.common"
+rsource "Kconfig.defconfig"
+
+## Project segment and component dependency data
+config MCUX_HW_DEVICE_LPC834
+    # bool "Device LPC834 Configuration"
+    bool
+    default y
+
+    # component dependency
+    select MCUX_COMPONENT_driver.syscon if MCUX_COMPONENT_component.lpc_gpio_adapter
+    select MCUX_COMPONENT_component.miniusart_adapter if MCUX_COMPONENT_utility.debug_console_lite
+    select MCUX_COMPONENT_driver.lpc_dma if MCUX_COMPONENT_driver.flexcomm_i2c_dma
+    select MCUX_COMPONENT_driver.lpc_dma if MCUX_COMPONENT_driver.flexcomm_usart_dma

@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+
+    config MCUX_COMPONENT_driver.ecat
+        bool "Use driver ecat"
+        select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.ecat
+
+        endif

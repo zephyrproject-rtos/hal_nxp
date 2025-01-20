@@ -1,0 +1,28 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+# core related
+config MCUX_HW_CORE
+    string
+    default "dsp"
+
+config MCUX_HW_CORE_DSP
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "hifi1"
+
+config MCUX_HW_CORE_ID_HIFI1
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MIMXRT758S_hifi1"
+
+config MCUX_HW_SOC_SERIES_RT
+    bool
+    default y

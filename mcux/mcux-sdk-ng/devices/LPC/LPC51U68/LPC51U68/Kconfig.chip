@@ -1,0 +1,232 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm0p"
+
+config MCUX_HW_CORE_CM0P
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "core0"
+
+config MCUX_HW_CORE_ID_CORE0
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "LPC51U68"
+
+config MCUX_HW_FPU
+    string
+    default "NO_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "no_fpu"
+
+config MCUX_HW_NO_FPU
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 2
+
+config MCUX_HW_SOC_SERIES_LPC
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_LPC51U68
+    bool
+
+choice
+    prompt "Device LPC51U68 Part"
+    config MCUX_HW_DEVICE_PART_LPC51U68JBD64
+    bool "Device part LPC51U68JBD64"
+    select MCUX_HW_DEVICE_ID_LPC51U68
+    config MCUX_HW_DEVICE_PART_LPC51U68JBD48
+    bool "Device part LPC51U68JBD48"
+    select MCUX_HW_DEVICE_ID_LPC51U68
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "LPC51U68" if MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "LPC51U68JBD64" if MCUX_HW_DEVICE_PART_LPC51U68JBD64
+    default "LPC51U68JBD48" if MCUX_HW_DEVICE_PART_LPC51U68JBD48
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "LPC51U68" if MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "lpc51u68"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "LPC51U68" if MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "LPC51U68JBD64" if MCUX_HW_DEVICE_PART_LPC51U68JBD64
+    default "LPC51U68JBD48" if MCUX_HW_DEVICE_PART_LPC51U68JBD48
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "LPC51U68" if MCUX_HW_DEVICE_ID_LPC51U68
+
+# ip information
+config MCUX_HW_IP_DriverType_ADC12_5M
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_ASYNC_SYSCON_FREQME
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_CTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_FLASHIAP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_FLEXCOMM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_I2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_I2S
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_SPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_USART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_FMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_GINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_GPIO_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_IAP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_INPUTMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_IOCON
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_LPC_ASYNC_SYSCON
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_LPC_SWD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_MCO_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_MRT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_PINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_RTC_LITE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_SCTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_SDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_SYSCON_FREQME
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_USB_DEVICE_IP3511FS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_UTICK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68
+
+config MCUX_HW_IP_DriverType_WWDT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC51U68

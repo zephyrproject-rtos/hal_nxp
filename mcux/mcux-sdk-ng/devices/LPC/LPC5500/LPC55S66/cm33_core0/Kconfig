@@ -1,0 +1,10 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HW_DEVICE_LPC55S66_CORE_ID_cm33_core0
+    bool
+    default y
+
+rsource "Kconfig.chip"

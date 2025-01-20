@@ -1,0 +1,477 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
+
+config MCUX_HW_SOC_SERIES_RT
+    bool
+    default y
+
+config MCUX_HW_SOC_MULTICORE_DEVICE
+    bool
+    default y
+
+# device related
+config MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+    bool
+
+choice
+    prompt "Device MIMXRT1187 Part"
+    config MCUX_HW_DEVICE_PART_MIMXRT1187CVM8B
+        bool "Device part MIMXRT1187CVM8B"
+        select MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+    config MCUX_HW_DEVICE_PART_MIMXRT1187AVM8B
+        bool "Device part MIMXRT1187AVM8B"
+        select MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+    config MCUX_HW_DEVICE_PART_MIMXRT1187XVM8B
+        bool "Device part MIMXRT1187XVM8B"
+        select MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "MIMXRT1187xxxxx" if MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "MIMXRT1187CVM8B" if MCUX_HW_DEVICE_PART_MIMXRT1187CVM8B
+    default "MIMXRT1187AVM8B" if MCUX_HW_DEVICE_PART_MIMXRT1187AVM8B
+    default "MIMXRT1187XVM8B" if MCUX_HW_DEVICE_PART_MIMXRT1187XVM8B
+
+
+# ip information
+config MCUX_HW_IP_DriverType_ACMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_ANADIG_PMU_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_AOI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_ARM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_ASRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_AXBS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_BBNSM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_BLK_CTRL_BBSMMIX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_BLK_CTRL_NS_AONMIX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_BLK_CTRL_S_AONMIX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_BLK_CTRL_WAKEUPMIX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_CCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_CORE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_DAC12
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_DCDC_3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_EDGELOCK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_EDMA3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_EDMA4
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_EIM_EICHD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_EQDC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_ERM_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_EWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_FLEXCAN
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_FLEXIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_FLEXSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_FLEXSPI_SLV
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_GPC_3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_GPT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_I3C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_IEE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_IEE_APC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_IERC_IERB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_IERC_PCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_IOMUXC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_IOMUXC_AON
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_JTAGC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_KPP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_LOGIC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_LPADC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_LPI2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_LPIT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_LPSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_LPTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_LPUART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_MECC64
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_MEMORY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_MOTOR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_MSGINTR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_MU_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_NETC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_NETC_tmr
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_NVIC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_OCOTP_FSB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_OSC_RC_400M
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_OTFAD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_PDM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_PHY_LDO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_PLL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_PWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_RGPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_RTWDOG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_S3MU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_SAFETY_CLK_MON
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_SAI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_SCB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_SEMA42
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_SEMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_SINC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_SPDIF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_SRAMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_SRC_3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_SYSPM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_TMPSNS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_TMR_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_TPM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_TRDC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_TRIGGER_SYNC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_TSTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_USBNC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_USB_HSDCD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_USB_PHY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_USDHC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_VMBANDGAP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_VREF_2
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_XBAR_DSC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx
+
+config MCUX_HW_IP_DriverType_SYSCTR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx

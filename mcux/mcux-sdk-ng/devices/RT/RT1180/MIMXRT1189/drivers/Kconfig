@@ -1,0 +1,18 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Device specific drivers"
+    rsource "./Kconfig_anadig_pmu_1"
+    rsource "./Kconfig_clock"
+    rsource "./Kconfig_dcdc_3"
+    rsource "./Kconfig_ecat"
+    rsource "./Kconfig_edma_soc"
+    rsource "./Kconfig_ele_base_api"
+    rsource "./Kconfig_gpc_3"
+    rsource "./Kconfig_iomuxc"
+    rsource "./Kconfig_memory"
+    rsource "./Kconfig_misc"
+    rsource "./Kconfig_romapi"
+    rsource "./Kconfig_src_3"
+endmenu

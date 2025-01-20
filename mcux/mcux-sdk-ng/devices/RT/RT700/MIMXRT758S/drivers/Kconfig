@@ -1,0 +1,17 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Device specific drivers configuration"
+
+    rsource "../../MIMXRT798S/drivers/Kconfig_clock"
+    rsource "../../MIMXRT798S/drivers/Kconfig_dsp"
+    rsource "../../MIMXRT798S/drivers/Kconfig_edma_soc"
+    rsource "../../MIMXRT798S/drivers/Kconfig_ezhv"
+    rsource "../../MIMXRT798S/drivers/Kconfig_inputmux_connections"
+    rsource "../../MIMXRT798S/drivers/Kconfig_iopctl_soc"
+    rsource "../../MIMXRT798S/drivers/Kconfig_mipi_dsi_soc"
+    rsource "../../MIMXRT798S/drivers/Kconfig_power"
+    rsource "../../MIMXRT798S/drivers/Kconfig_reset"
+    rsource "../../MIMXRT798S/drivers/Kconfig_romapi"
+endmenu

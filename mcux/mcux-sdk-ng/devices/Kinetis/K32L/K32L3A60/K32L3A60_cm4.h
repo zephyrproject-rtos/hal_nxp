@@ -1,0 +1,86 @@
+/*
+** ###################################################################
+**     Processor:           K32L3A60VPJ1A_cm4
+**     Compilers:           GNU C Compiler
+**                          IAR ANSI C/C++ Compiler for ARM
+**                          Keil ARM C/C++ Compiler
+**                          MCUXpresso Compiler
+**
+**     Reference manual:    K32L3ARM, Rev. 0 , 05/2019
+**     Version:             rev. 1.0, 2019-04-22
+**     Build:               b240709
+**
+**     Abstract:
+**         CMSIS Peripheral Access Layer for K32L3A60_cm4
+**
+**     Copyright 1997-2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2024 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+**     Revisions:
+**     - rev. 1.0 (2019-04-22)
+**         Initial version.
+**
+** ###################################################################
+*/
+
+/*!
+ * @file K32L3A60_cm4.h
+ * @version 1.0
+ * @date 2019-04-22
+ * @brief CMSIS Peripheral Access Layer for K32L3A60_cm4
+ *
+ * CMSIS Peripheral Access Layer for K32L3A60_cm4
+ */
+
+#if !defined(K32L3A60_cm4_H_)  /* Check if memory map has not been already included */
+#define K32L3A60_cm4_H_
+
+/* IP Header Files List */
+#include "PERI_ADC.h"
+#include "PERI_AXBS.h"
+#include "PERI_CAU3.h"
+#include "PERI_CRC.h"
+#include "PERI_DMA.h"
+#include "PERI_DMAMUX.h"
+#include "PERI_EMVSIM.h"
+#include "PERI_EWM.h"
+#include "PERI_FB.h"
+#include "PERI_FLEXIO.h"
+#include "PERI_FTFE.h"
+#include "PERI_GPIO.h"
+#include "PERI_I2S.h"
+#include "PERI_LLWU.h"
+#include "PERI_LPCMP.h"
+#include "PERI_LPDAC.h"
+#include "PERI_LPI2C.h"
+#include "PERI_LPIT.h"
+#include "PERI_LPSPI.h"
+#include "PERI_LPTMR.h"
+#include "PERI_LPUART.h"
+#include "PERI_MCM.h"
+#include "PERI_MSCM.h"
+#include "PERI_MU.h"
+#include "PERI_PCC.h"
+#include "PERI_PORT.h"
+#include "PERI_RTC.h"
+#include "PERI_SCG.h"
+#include "PERI_SEMA42.h"
+#include "PERI_SIM.h"
+#include "PERI_SMC.h"
+#include "PERI_SPM.h"
+#include "PERI_TPM.h"
+#include "PERI_TRGMUX.h"
+#include "PERI_TRNG.h"
+#include "PERI_TSTMR.h"
+#include "PERI_USB.h"
+#include "PERI_USBVREG.h"
+#include "PERI_USDHC.h"
+#include "PERI_VREF.h"
+#include "PERI_WDOG.h"
+#include "PERI_XRDC.h"
+
+#endif  /* #if !defined(K32L3A60_cm4_H_) */

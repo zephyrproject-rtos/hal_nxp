@@ -1,0 +1,25 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Device specific drivers"
+    config MCUX_COMPONENT_driver.clock
+        bool "Use driver clock"
+        # select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.clock
+
+        endif
+
+    config MCUX_COMPONENT_driver.iomuxc
+        bool "Use driver iomuxc"
+        select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.iomuxc
+
+        endif
+
+    rsource "./flexram/Kconfig"
+    rsource "./romapi/Kconfig"
+    rsource "./nic301/Kconfig"
+endmenu

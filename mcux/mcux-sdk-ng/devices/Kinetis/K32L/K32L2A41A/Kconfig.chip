@@ -1,0 +1,332 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm0p"
+
+config MCUX_HW_CORE_CM0P
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "core0"
+
+config MCUX_HW_CORE_ID_CORE0
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "K32L2A41A"
+
+config MCUX_HW_FPU
+    string
+    default "NO_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "no_fpu"
+
+config MCUX_HW_NO_FPU
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 2
+
+config MCUX_HW_SOC_SERIES_KINETIS
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+    bool
+
+choice
+    prompt "Device K32L2A41A Part"
+    config MCUX_HW_DEVICE_PART_K32L2A41VLL1A
+    bool "Device part K32L2A41VLL1A"
+    select MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+    config MCUX_HW_DEVICE_PART_K32L2A41VLH1A
+    bool "Device part K32L2A41VLH1A"
+    select MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "K32L2A41xxxxA" if MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "K32L2A41VLL1A" if MCUX_HW_DEVICE_PART_K32L2A41VLL1A
+    default "K32L2A41VLH1A" if MCUX_HW_DEVICE_PART_K32L2A41VLH1A
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "K32L2A41xxxxA" if MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "k32l2a41a"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "K32L2A41xxxxA" if MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "K32L2A41VLL1A" if MCUX_HW_DEVICE_PART_K32L2A41VLL1A
+    default "K32L2A41VLH1A" if MCUX_HW_DEVICE_PART_K32L2A41VLH1A
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "K32L2A41xxxxA"
+
+# ip information
+config MCUX_HW_IP_DriverType_ADC16
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_AIPS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_AXBS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_CMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_DAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_DMAMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_EDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_EMVSIM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_FGPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_FLEXIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_FMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_FTFA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_GPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_INTMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_LLWU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_LPI2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_LPIT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_LPSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_LPTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_LPUART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_MCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_MMCAU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_MMDVSQ
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_MSCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_MTB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_MTB_DWT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_MTB_ROM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_NV
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_PCC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_PMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_RCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_RFSYS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_SCG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_SIM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_SMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_SRAM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_SRTC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_TPM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_TRGMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_TRNG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_TSI_V4
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_TSTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_USB_HOST_DEVICE_KHCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_VREF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA
+
+config MCUX_HW_IP_DriverType_WDOG32
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_K32L2A41xxxxA

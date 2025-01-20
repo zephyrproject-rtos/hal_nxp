@@ -1,0 +1,282 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm0p"
+
+config MCUX_HW_CORE_CM0P
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "core0"
+
+config MCUX_HW_CORE_ID_CORE0
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MCXC244"
+
+config MCUX_HW_FPU
+    string
+    default "NO_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "no_fpu"
+
+config MCUX_HW_NO_FPU
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 2
+
+config MCUX_HW_SOC_SERIES_MCX
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_MCXC244
+    bool
+
+choice
+    prompt "Device MCXC244 Part"
+    config MCUX_HW_DEVICE_PART_MCXC244VFT
+    bool "Device part MCXC244VFT"
+    select MCUX_HW_DEVICE_ID_MCXC244
+    config MCUX_HW_DEVICE_PART_MCXC244VFM
+    bool "Device part MCXC244VFM"
+    select MCUX_HW_DEVICE_ID_MCXC244
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "MCXC244" if MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "MCXC244VFT" if MCUX_HW_DEVICE_PART_MCXC244VFT
+    default "MCXC244VFM" if MCUX_HW_DEVICE_PART_MCXC244VFM
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MCXC244" if MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mcxc244"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MCXC244" if MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MCXC244VFT" if MCUX_HW_DEVICE_PART_MCXC244VFT
+    default "MCXC244VFM" if MCUX_HW_DEVICE_PART_MCXC244VFM
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "MCXC244" if MCUX_HW_DEVICE_ID_MCXC244
+
+# ip information
+config MCUX_HW_IP_DriverType_ADC16
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_CMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_COP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_DAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_DMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_DMAMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_FGPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_FLEXIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_FTFA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_FTFE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_GPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_I2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_LLWU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_LPTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_LPUART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_MCGLITE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_MCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_MTB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_MTBDWT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_NV
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_OSC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_PIT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_PMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_RCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_RFSYS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_ROM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_SAI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_SIM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_SIM_COP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_SMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_SPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_SRTC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_TPM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_UART_ISO7816
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_USB_DEVICE_KHCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244
+
+config MCUX_HW_IP_DriverType_VREF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXC244

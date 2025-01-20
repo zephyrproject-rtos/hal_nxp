@@ -1,0 +1,32 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Device specific drivers configuration"
+
+    config MCUX_COMPONENT_driver.clock
+         bool "Use driver clock"
+         default y
+
+    config MCUX_COMPONENT_driver.inputmux_connections
+         bool "Use driver inputmux_connections"
+         default y
+
+    config MCUX_COMPONENT_driver.power
+         bool "Use driver power"
+         default y
+
+    config MCUX_COMPONENT_driver.reset
+         bool "Use driver reset"
+         default y
+
+    config MCUX_COMPONENT_driver.swm_connections
+         bool "Use driver swm_connections"
+         default y
+
+    config MCUX_COMPONENT_driver.syscon_connections
+         bool "Use driver syscon_connections"
+         default y
+
+endmenu

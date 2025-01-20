@@ -1,0 +1,1 @@
+rsource "${soc_portfolio}/${soc_series}/${device}/Kconfig"

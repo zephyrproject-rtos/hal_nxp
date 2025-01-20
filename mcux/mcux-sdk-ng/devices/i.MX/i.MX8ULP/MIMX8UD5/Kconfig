@@ -1,0 +1,45 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "${core_id}/Kconfig"
+
+rsource "Kconfig.chip"
+rsource "drivers/Kconfig"
+rsource "drivers/upower/Kconfig"
+rsource "Kconfig.defconfig"
+
+## pinmux dependency
+config MCUX_DEPENDENCY_PINMUX
+    bool
+    default n
+
+    imply MCUX_COMPONENT_driver.rgpio
+    imply MCUX_COMPONENT_driver.port
+
+## Project segment and component dependency data
+config MCUX_HW_DEVICE_MIMX8UD5
+    # bool "Device MIMX8UD5 Configuration"
+    bool
+    default y
+    ## Project segment dependency data
+
+    select MCUX_COMPONENT_driver.port if MCUX_PRJSEG_module.board.pinmux
+    select MCUX_COMPONENT_driver.rgpio if MCUX_PRJSEG_module.board.pinmux
+    select MCUX_COMPONENT_driver.clock if MCUX_PRJSEG_module.board.clock
+    select MCUX_COMPONENT_component.lpuart_adapter if MCUX_PRJSEG_module.board.console_lite
+    select MCUX_COMPONENT_driver.lpuart if MCUX_PRJSEG_module.board.console_lite
+    select MCUX_COMPONENT_driver.upower if MCUX_HW_DEVICE_MIMX8ULP_CORE_ID_cm33
+    select MCUX_COMPONENT_driver.upowerlib if MCUX_HW_DEVICE_MIMX8ULP_CORE_ID_cm33
+    select MCUX_COMPONENT_driver.mu1 if MCUX_HW_DEVICE_MIMX8ULP_CORE_ID_cm33
+    select MCUX_COMPONENT_driver.trdc
+
+    # component dependency
+    select MCUX_COMPONENT_driver.dma3 if MCUX_COMPONENT_driver.sai_edma
+    select MCUX_COMPONENT_driver.dma3 if MCUX_COMPONENT_driver.lpi2c_edma
+    select MCUX_COMPONENT_driver.dma3 if MCUX_COMPONENT_driver.lpspi_edma
+    select MCUX_COMPONENT_driver.dma3 if MCUX_COMPONENT_driver.lpuart_edma
+    select MCUX_COMPONENT_driver.dma3 if MCUX_COMPONENT_driver.flexspi_dma3
+    select MCUX_COMPONENT_component.lpuart_adapter if MCUX_COMPONENT_component.serial_manager_uart
+    select MCUX_COMPONENT_component.lpuart_adapter if MCUX_COMPONENT_utility.debug_console_lite

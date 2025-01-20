@@ -1,0 +1,406 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_CM33
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_ID_CM33
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MIMX9321_cm33"
+
+config MCUX_HW_FPU
+    string
+    default "SP_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "fpv5_sp"
+
+config MCUX_HW_FPV5_SP
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 3
+
+config MCUX_HW_DSP
+    bool
+    default y
+
+config MCUX_HW_SAU
+    bool
+    default y
+
+config MCUX_HW_SOC_SERIES_MIMX
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+    bool
+
+choice
+    prompt "Device MIMX9321 Part"
+    config MCUX_HW_DEVICE_PART_MIMX9321DVXXM
+    bool "Device part MIMX9321DVXXM"
+    select MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+    config MCUX_HW_DEVICE_PART_MIMX9321CVXXM
+    bool "Device part MIMX9321CVXXM"
+    select MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+    config MCUX_HW_DEVICE_PART_MIMX9321XVXXM
+    bool "Device part MIMX9321XVXXM"
+    select MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "MIMX9321xxxxM" if MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "MIMX9321DVXXM" if MCUX_HW_DEVICE_PART_MIMX9321DVXXM
+    default "MIMX9321CVXXM" if MCUX_HW_DEVICE_PART_MIMX9321CVXXM
+    default "MIMX9321XVXXM" if MCUX_HW_DEVICE_PART_MIMX9321XVXXM
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MIMX9321xxxxM" if MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mimx9321"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MIMX9321_M33" if MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MIMX9321DVXXM" if MCUX_HW_DEVICE_PART_MIMX9321DVXXM
+    default "MIMX9321CVXXM" if MCUX_HW_DEVICE_PART_MIMX9321CVXXM
+    default "MIMX9321XVXXM" if MCUX_HW_DEVICE_PART_MIMX9321XVXXM
+
+# ip information
+config MCUX_HW_IP_DriverType_
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_AXBS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_BLK_CTRL_NIC_WRAPPER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_BLK_CTRL_WAKEUPMIX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_CoreDebug
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_DDR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_DWT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_D_IP_MX9DUAL_CCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_EDMA3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_ENET
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_ENET_QOS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_ETM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_FLEXCAN
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_FLEXIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_FLEXSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_FPB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_I3C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_ISI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_ITM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_JTAGC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_LCDIFV3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_LPI2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_LPIT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_LPSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_LPTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_LPUART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_MCM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_MECC256
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_MEMORY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_MIPI_CSI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_MIPI_DSI_4L
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_MQS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_MU_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_OTFAD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_PDM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_PXP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_RGPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_S3MUA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_SAI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_SEMA42
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_SPDIF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_SYS_CTR_COMPARE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_SYS_CTR_CONTROL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_SYS_CTR_READ
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_SysTick
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_TMU_3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_TPIU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_TPM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_TRDC_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_TRGMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_TSTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_USDHC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_WDOG32
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_XCACHE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_blk_ctrl_ddrmix
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_blk_ctrl_mlmix
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_blk_ctrl_ns_aonmix
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_blk_ctrl_s_aonmix
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_iomuxc
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM
+
+config MCUX_HW_IP_DriverType_uSDHC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMX9321xxxxM

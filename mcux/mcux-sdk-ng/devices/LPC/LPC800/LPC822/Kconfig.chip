@@ -1,0 +1,222 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm0p"
+
+config MCUX_HW_CORE_CM0P
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "core0"
+
+config MCUX_HW_CORE_ID_CORE0
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "LPC822"
+
+config MCUX_HW_FPU
+    string
+    default "NO_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "no_fpu"
+
+config MCUX_HW_NO_FPU
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 2
+
+config MCUX_HW_SOC_SERIES_LPC
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_LPC822
+    bool
+
+choice
+    prompt "Device LPC822 Part"
+    config MCUX_HW_DEVICE_PART_LPC822M101JHI33
+    bool "Device part LPC822M101JHI33"
+    select MCUX_HW_DEVICE_ID_LPC822
+    config MCUX_HW_DEVICE_PART_LPC822M101JDH20
+    bool "Device part LPC822M101JDH20"
+    select MCUX_HW_DEVICE_ID_LPC822
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "LPC822" if MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "LPC822M101JHI33" if MCUX_HW_DEVICE_PART_LPC822M101JHI33
+    default "LPC822M101JDH20" if MCUX_HW_DEVICE_PART_LPC822M101JDH20
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "LPC822" if MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "lpc822"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "LPC822M101" if MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "LPC822M101JHI33" if MCUX_HW_DEVICE_PART_LPC822M101JHI33
+    default "LPC822M101JDH20" if MCUX_HW_DEVICE_PART_LPC822M101JDH20
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "LPC822" if MCUX_HW_DEVICE_ID_LPC822
+
+# ip information
+config MCUX_HW_IP_DriverType_ACOMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_ADC12_5M
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_I2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_USART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_GPIO_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_I2C_SERIALIF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_IAP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_INPUTMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_IOCON_LITE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_LPC_CLOCK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_LPC_FLASH_CTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_LPC_MTB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_LPC_NVIC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_LPC_PMU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_MCO_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_MINI_SPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_MINI_USART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_MRT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_PINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_SCTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_SDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_SWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_SYSCON
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_WKT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822
+
+config MCUX_HW_IP_DriverType_WWDT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC822

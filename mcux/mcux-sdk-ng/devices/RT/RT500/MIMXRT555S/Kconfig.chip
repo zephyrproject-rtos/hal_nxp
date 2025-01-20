@@ -1,0 +1,410 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_CM33
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_ID_CM33
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MIMXRT555S"
+
+config MCUX_HW_FPU
+    string
+    default "SP_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "fpv5_sp"
+
+config MCUX_HW_FPV5_SP
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 3
+
+config MCUX_HW_DSP
+    bool
+    default y
+
+config MCUX_HW_SAU
+    bool
+    default y
+
+config MCUX_HW_SOC_SERIES_RT
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_MIMXRT555S
+    bool
+
+choice
+    prompt "Device MIMXRT555S Part"
+    config MCUX_HW_DEVICE_PART_MIMXRT555SFFOC
+    bool "Device part MIMXRT555SFFOC"
+    select MCUX_HW_DEVICE_ID_MIMXRT555S
+    config MCUX_HW_DEVICE_PART_MIMXRT555SFAWC
+    bool "Device part MIMXRT555SFAWC"
+    select MCUX_HW_DEVICE_ID_MIMXRT555S
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "MIMXRT555S" if MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "MIMXRT555SFFOC" if MCUX_HW_DEVICE_PART_MIMXRT555SFFOC
+    default "MIMXRT555SFAWC" if MCUX_HW_DEVICE_PART_MIMXRT555SFAWC
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MIMXRT555Sxxxx" if MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mimxrt555s"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MIMXRT555S" if MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MIMXRT555SFFOC" if MCUX_HW_DEVICE_PART_MIMXRT555SFFOC
+    default "MIMXRT555SFAWC" if MCUX_HW_DEVICE_PART_MIMXRT555SFAWC
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "MIMXRT555S_M33"
+
+config MCUX_HW_IP_DriverType_IAP3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+# ip information
+config MCUX_HW_IP_DriverType_ACMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_AIPS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_AXI_SWITCH_AMIB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_AXI_SWITCH_ASIB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_CACHE64_CTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_CACHE64_POLSEL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_CASPER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_CTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_DMIC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_Debug
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_FLEXCOMM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_I2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_I2S
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_SPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_USART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_FLEXIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_FLEXSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_GPIO_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_GPU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_HASHCRYPT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_I3C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_INPUTMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_IOPCTL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_LCDIF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_LPADC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_LPC_AHB_SECURE_CTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_LPC_CLKCTL0
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_LPC_CLKCTL1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_LPC_PMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_LPC_PUF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_LPC_RSTCTL0
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_LPC_RSTCTL1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_SMARTDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_LPC_SYSCTL0
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_LPC_SYSCTL1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_MCO_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_MCO_FREQME
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_MEMORY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_MIPI_DSI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_MRT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_MU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_OSTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_OTFAD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_OTP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_PINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_POWERQUAD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_ROMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_RTC_LITE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_SCTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_SDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_SECGPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_SEMA42
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_TRNG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_USB_DEVICE_IP3511HS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_USB_HOST_IP3516HS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_USB_HSDCD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_USB_PHY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_USDHC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_UTICK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S
+
+config MCUX_HW_IP_DriverType_WWDT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT555S

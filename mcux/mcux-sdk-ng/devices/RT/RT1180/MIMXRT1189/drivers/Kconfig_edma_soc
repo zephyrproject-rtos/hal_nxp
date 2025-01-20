@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+
+    config MCUX_COMPONENT_driver.edma_soc
+        bool "Use driver edma"
+        select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.edma_soc
+
+        endif

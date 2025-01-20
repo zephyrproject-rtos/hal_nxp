@@ -1,0 +1,20 @@
+# FIXME improved shared arch files
+rsource "../../arch/xtensa/configuration/Kconfig"
+rsource "../../arch/xtensa/core/Kconfig"
+
+menu "Device CMSIS system drivers"
+    config MCUX_COMPONENT_device.CMSIS
+        bool "Use device CMSIS"
+
+    config MCUX_COMPONENT_device.system
+        bool "Use device.system"
+        imply MCUX_COMPONENT_device.CMSIS
+
+    config MCUX_COMPONENT_device.RTE
+        bool "Use device.rte driver"        
+endmenu
+
+menu "Device Suite"
+    config MCUX_PRJSEG_module.device.suite
+        bool "Use default device suite"
+endmenu

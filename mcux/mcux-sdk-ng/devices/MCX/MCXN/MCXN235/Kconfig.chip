@@ -1,0 +1,420 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_CM33
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm33_core0"
+
+config MCUX_HW_CORE_ID_CM33_CORE0
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MCXN235"
+
+config MCUX_HW_FPU
+    string
+    default "SP_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "fpv5_sp"
+
+config MCUX_HW_FPV5_SP
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 3
+
+config MCUX_HW_DSP
+    bool
+    default y
+
+config MCUX_HW_SAU
+    bool
+    default y
+
+config MCUX_HW_SOC_SERIES_MCX
+    bool
+    default y
+
+config MCUX_HW_SOC_SINGLECORE_DEVICE
+    bool
+    default y
+
+# device related
+
+config MCUX_HW_DEVICE_ID_MCXN235
+    bool
+
+choice
+    prompt "Device MCXN235 Part"
+    config MCUX_HW_DEVICE_PART_MCXN235VDF
+    bool "Device part MCXN235VDF"
+    select MCUX_HW_DEVICE_ID_MCXN235
+    config MCUX_HW_DEVICE_PART_MCXN235VPB
+    bool "Device part MCXN235VPB"
+    select MCUX_HW_DEVICE_ID_MCXN235
+    config MCUX_HW_DEVICE_PART_MCXN235VNL
+    bool "Device part MCXN235VNL"
+    select MCUX_HW_DEVICE_ID_MCXN235
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "MCXN235" if MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "MCXN235VDF" if MCUX_HW_DEVICE_PART_MCXN235VDF
+    default "MCXN235VPB" if MCUX_HW_DEVICE_PART_MCXN235VPB
+    default "MCXN235VNL" if MCUX_HW_DEVICE_PART_MCXN235VNL
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MCXN235" if MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mcxn235"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MCXN235" if MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MCXN235VDF" if MCUX_HW_DEVICE_PART_MCXN235VDF
+    default "MCXN235VPB" if MCUX_HW_DEVICE_PART_MCXN235VPB
+    default "MCXN235VNL" if MCUX_HW_DEVICE_PART_MCXN235VNL
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "MCXN235" if MCUX_HW_DEVICE_ID_MCXN235
+
+# ip information
+config MCUX_HW_IP_DriverType_AHBSC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_CDOG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_CTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_DBGMB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_DIGTMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_EDMA3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_EIM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_ERM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_EVTG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_EWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_FLEXCAN
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_FLEXIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_FMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_FMU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_FREQME
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_GDET
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_GPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_I3C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_INPUTMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_INTM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_IPCSS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_ITRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_LPADC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_LPCMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM_LPI2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM_LPSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM_LPUART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_LPTMR
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_MCX_CMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_MCX_SPC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_MCX_VBAT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_MRT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_OSTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_OTPC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_PDM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_PINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_PKC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_PUF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_PUFCTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_PUFV3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_PWM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_QDC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_RTC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_RTC_V2
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_SAI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_SCG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_SMARTDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_SWD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_SYSCON_LPCAC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_SYSPM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_TRDC_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_USBNC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_USB_HSDCD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_USB_PHY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_UTICK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_VREF_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_WUU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235
+
+config MCUX_HW_IP_DriverType_WWDT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MCXN235

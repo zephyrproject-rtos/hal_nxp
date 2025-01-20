@@ -1,0 +1,67 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm0p"
+
+config MCUX_HW_CORE_CM0P
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm0plus"
+
+config MCUX_HW_CORE_ID_CM0PLUS
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "K32L3A60_cm0plus"
+
+config MCUX_HW_FPU
+    string
+    default "NO_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "no_fpu"
+
+config MCUX_HW_NO_FPU
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 2
+
+config MCUX_HW_SOC_SERIES_KINETIS
+    bool
+    default y
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "K32L3A60xxx_cm0plus" if MCUX_HW_DEVICE_ID_K32L3A60xxx
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "k32l3a60_cm0plus"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "K32L3A60_M0" if MCUX_HW_DEVICE_ID_K32L3A60xxx
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "K32L3A60VPJ1A:cm0plus" if MCUX_HW_DEVICE_PART_K32L3A60VPJ1A
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "K32L3Axxxxxxxx_M0"

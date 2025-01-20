@@ -1,0 +1,17 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "Kconfig.chip"
+rsource "drivers/Kconfig"
+rsource "../../../arm/Kconfig.common"
+rsource "Kconfig.defconfig"
+rsource "xip/Kconfig"
+
+config MCUX_HW_DEVICE_MIMXRT1062
+    # bool "Device MIMXRT1062 Configuration"
+    bool
+    default y
+
+    imply MCUX_COMPONENT_driver.cache_armv7_m7 if MCUX_PRJSEG_module.device.suite

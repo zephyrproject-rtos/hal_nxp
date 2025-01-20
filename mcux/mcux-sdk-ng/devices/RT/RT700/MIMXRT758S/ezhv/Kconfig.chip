@@ -1,0 +1,48 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# core related
+config MCUX_HW_CORE
+    string
+    default "ezhv"
+
+config MCUX_HW_CORE_EZHV
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "ezhv"
+
+config MCUX_HW_CORE_ID_EZHV
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MIMXRT758S_ezhv"
+
+config MCUX_HW_SOC_SERIES_RT
+    bool
+    default y
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MIMXRT758S_ezhv" if MCUX_HW_DEVICE_ID_MIMXRT758S
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mimxrt758s_ezhv"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MIMXRT758S_ezhv" if MCUX_HW_DEVICE_ID_MIMXRT758S
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MIMXRT758SGFOA:ezhv" if MCUX_HW_DEVICE_PART_MIMXRT758SGFOA
+    default "MIMXRT758SGAWAR:ezhv" if MCUX_HW_DEVICE_PART_MIMXRT758SGAWAR

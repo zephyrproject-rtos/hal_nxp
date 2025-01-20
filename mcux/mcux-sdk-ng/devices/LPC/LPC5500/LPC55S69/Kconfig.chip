@@ -1,0 +1,281 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# device related
+
+config MCUX_HW_DEVICE_ID_LPC55S69
+    bool
+
+choice
+    prompt "Device LPC55S69 Part"
+    config MCUX_HW_DEVICE_PART_LPC55S69JBD100
+    bool "Device part LPC55S69JBD100"
+    select MCUX_HW_DEVICE_ID_LPC55S69
+    config MCUX_HW_DEVICE_PART_LPC55S69JEV98
+    bool "Device part LPC55S69JEV98"
+    select MCUX_HW_DEVICE_ID_LPC55S69
+    config MCUX_HW_DEVICE_PART_LPC55S69JBD64
+    bool "Device part LPC55S69JBD64"
+    select MCUX_HW_DEVICE_ID_LPC55S69
+    config MCUX_HW_DEVICE_PART_LPC55S69JEV59
+    bool "Device part LPC55S69JEV59"
+    select MCUX_HW_DEVICE_ID_LPC55S69
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "LPC55S69" if MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "LPC55S69JBD100" if MCUX_HW_DEVICE_PART_LPC55S69JBD100
+    default "LPC55S69JEV98" if MCUX_HW_DEVICE_PART_LPC55S69JEV98
+    default "LPC55S69JBD64" if MCUX_HW_DEVICE_PART_LPC55S69JBD64
+    default "LPC55S69JEV59" if MCUX_HW_DEVICE_PART_LPC55S69JEV59
+
+# ip information
+config MCUX_HW_IP_DriverType_ANALOGCTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_CASPER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_CTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_FLEXCOMM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_I2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_I2S
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_SPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_FLEXCOMM_USART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_GINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_GPIO_PORT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_HASHCRYPT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_IAP_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_INPUTMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_IOCON
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPADC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPC_AHB_SECURE_CTRL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPC_DBGMAILBOX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPC_FLASH
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPC_FLASH_CFPA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPC_FLASH_CMPA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPC_FLASH_KEY_STORE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPC_PMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPC_POWERLIB
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPC_PUF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPC_SECGPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_LPC_SWD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_MAILBOX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_MCO_CRC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_MRT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_OSTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_PINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_PLU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_POWERQUAD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_PRINCE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_PUF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_RNG_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_RTC_LITE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_SCTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_SDIF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_SDMA
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_SYSCON_CMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_SYSCTL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_USB_DEVICE_IP3511FS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_USB_DEVICE_IP3511HS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_USB_HOST_IP3516HS
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_USB_HOST_OHCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_USB_PHY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_UTICK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69
+
+config MCUX_HW_IP_DriverType_WWDT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_LPC55S69

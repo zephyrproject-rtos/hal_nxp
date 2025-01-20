@@ -1,0 +1,49 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+# core related
+config MCUX_HW_CORE
+    string
+    default "dsp"
+
+config MCUX_HW_CORE_DSP
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "fusionf1"
+
+config MCUX_HW_CORE_ID_FUSIONF1
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MIMX8US5_dsp0"
+
+config MCUX_HW_SOC_SERIES_KINETIS
+    bool
+    default y
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MIMX8US5xxx08_fusionf1" if MCUX_HW_DEVICE_ID_MIMX8US5xxx08
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mimx8us5_fusionf1"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MIMX8US5xxx08_fusionf1" if MCUX_HW_DEVICE_ID_MIMX8US5xxx08
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MIMX8US5CVP08:fusionf1" if MCUX_HW_DEVICE_PART_MIMX8US5CVP08
+    default "MIMX8US5DVP08:fusionf1" if MCUX_HW_DEVICE_PART_MIMX8US5DVP08
+    default "MIMX8US5DVK08:fusionf1" if MCUX_HW_DEVICE_PART_MIMX8US5DVK08

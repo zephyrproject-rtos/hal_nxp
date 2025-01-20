@@ -1,0 +1,16 @@
+# Copyright 2024 NXP
+#  
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Device specific drivers configuration"
+
+    config MCUX_COMPONENT_driver.clock
+         bool "Use driver clock"
+         default y
+
+    config MCUX_COMPONENT_driver.romapi_soc
+         bool "Use driver ROMAPI"
+         default n
+
+endmenu

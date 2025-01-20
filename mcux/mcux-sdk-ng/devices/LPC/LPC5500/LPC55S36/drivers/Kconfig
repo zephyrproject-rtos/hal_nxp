@@ -1,0 +1,54 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.romapi
+    bool
+    default y
+
+menu "Device specific drivers configuration"
+
+    config MCUX_COMPONENT_driver.clock
+         bool "Use driver clock"
+         default y
+
+    config MCUX_COMPONENT_driver.fro_calib
+         bool "Use driver fro_calib"
+
+    config MCUX_COMPONENT_driver.inputmux_connections
+         bool "Use driver inputmux_connections"
+         default y
+
+    config MCUX_COMPONENT_driver.power
+         bool "Use driver power"
+         default y
+
+    config MCUX_COMPONENT_driver.reset
+         bool "Use driver reset"
+         default y
+
+     config MCUX_COMPONENT_driver.romapi
+          bool "Use romapi flash"
+          depends on MCUX_HAS_COMPONENT_driver.romapi
+
+     config MCUX_COMPONENT_driver.romapi_flash
+          bool "Use romapi flash"
+          depends on MCUX_HAS_COMPONENT_driver.romapi
+
+     config MCUX_COMPONENT_driver.romapi_mem_interface
+          bool "Use romapi mem_interface"
+          select MCUX_COMPONENT_driver.romapi_nboot
+          select MCUX_COMPONENT_driver.romapi_flash
+          depends on MCUX_HAS_COMPONENT_driver.romapi
+
+     config MCUX_COMPONENT_driver.romapi_nboot
+          bool "Use romapi romapi_nboot"
+          depends on MCUX_HAS_COMPONENT_driver.romapi
+
+     config MCUX_COMPONENT_driver.romapi_runbootloader
+          bool "Use romapi runbootloader"
+          select MCUX_COMPONENT_driver.romapi_flash
+          depends on MCUX_HAS_COMPONENT_driver.romapi
+
+endmenu

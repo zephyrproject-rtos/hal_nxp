@@ -1,0 +1,394 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+
+# device related
+
+config MCUX_HW_DEVICE_ID_MIMXRT798S
+    bool
+
+choice
+    prompt "Device MIMXRT798S Part"
+    config MCUX_HW_DEVICE_PART_MIMXRT798SGFOA
+    bool "Device part MIMXRT798SGFOA"
+    select MCUX_HW_DEVICE_ID_MIMXRT798S
+    config MCUX_HW_DEVICE_PART_MIMXRT798SGAWAR
+    bool "Device part MIMXRT798SGAWAR"
+    select MCUX_HW_DEVICE_ID_MIMXRT798S
+endchoice
+
+config MCUX_HW_DEVICE_ID
+    string
+    default "MIMXRT798S" if MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_DEVICE_PART
+    string
+    default "MIMXRT798SGFOA" if MCUX_HW_DEVICE_PART_MIMXRT798SGFOA
+    default "MIMXRT798SGAWAR" if MCUX_HW_DEVICE_PART_MIMXRT798SGAWAR
+
+# ip information
+config MCUX_HW_IP_DriverType_ACMP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_AHBSC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_AIPS
+    bool
+    default y if MCUX_HW_CORE_CM33
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_AXBS
+    bool
+    default y if MCUX_HW_CORE_CM33
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_CACHE64_CTRL
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_CACHE64_POLSEL
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_CORE
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_CRC
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_DBGMB
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_EDMA4
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_DMA_TCD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_ELS
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_FLEXIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_FRO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_GDET
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_GLIKEY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_GPIO
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_ITRC
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_JPEGDEC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_JPGDECWRP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_LCDIF
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_LPADC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_CDOG
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_LPC_CLKCTL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_CTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_FREQME
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_I3C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_INPUTMUX
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_IOPCTL_SOC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_MRT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_OSTIMER
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_LPC_OTP
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_PINT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_LPC_PMC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_PUFV3
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_LPC_RSTCTL
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_SCTIMER
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_UTICK
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_WWDT
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM_LPI2C
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM_LPSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_LPFLEXCOMM_LPUART
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_MIPI_DSI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_MMU
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_MU_1
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_NPU
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_OSC32KNP
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_OSCCA
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_PDM
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_PKC
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_PNGDEC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_PUF_CTRL
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_ROMC
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_RTC_V2
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_SAI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_SDADC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_SEMA42
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_SLEEPCON
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_SYSCON0
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_SYSCON1
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core1
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_SYSCON2
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_SYSCON3
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_SYSCON4
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_SYSPM
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_TRNG
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_USB_HOST_DEVICE_EHCI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_USB_HSDCD
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_USBNC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_USB_PHY
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_USDHC
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_XCACHE
+    bool
+    default y if MCUX_HW_DEVICE_MIMXRT798S_CORE_ID_cm33_core0
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S
+
+config MCUX_HW_IP_DriverType_XSPI
+    bool
+    default y
+    depends on MCUX_HW_DEVICE_ID_MIMXRT798S

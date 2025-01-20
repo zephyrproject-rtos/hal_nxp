@@ -1,0 +1,26 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Device specific drivers"
+    config MCUX_COMPONENT_driver.clock
+        bool "Use driver clock"
+        # select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.clock
+
+        endif
+
+    config MCUX_COMPONENT_driver.iomuxc
+        bool "Use driver iomuxc"
+        select MCUX_COMPONENT_driver.common
+
+        if MCUX_COMPONENT_driver.iomuxc
+
+        endif
+
+    rsource "../../../RT1050/MIMXRT1052/drivers/flexram/Kconfig"
+    rsource "../../../RT1060/MIMXRT1062/drivers/nic301/Kconfig"
+    rsource "../../../RT1060/MIMXRT1062/drivers/romapi/Kconfig"
+
+endmenu

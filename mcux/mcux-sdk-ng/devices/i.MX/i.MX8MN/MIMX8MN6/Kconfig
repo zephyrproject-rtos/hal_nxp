@@ -1,0 +1,40 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "Kconfig.chip"
+rsource "drivers/Kconfig"
+rsource "../../../arm/Kconfig.common"
+rsource "Kconfig.defconfig"
+
+## pinmux dependency
+config MCUX_DEPENDENCY_PINMUX
+    bool
+    default n
+
+    imply MCUX_COMPONENT_driver.gpio
+    imply MCUX_COMPONENT_driver.port
+
+## Project segment and component dependency data
+config MCUX_HW_DEVICE_MIMX8MN6
+    # bool "Device MIMX8MN6 Configuration"
+    bool
+    default y
+    ## Project segment dependency data
+
+    select MCUX_COMPONENT_driver.port if MCUX_PRJSEG_module.board.pinmux
+    select MCUX_COMPONENT_driver.gpio if MCUX_PRJSEG_module.board.pinmux
+    select MCUX_COMPONENT_driver.clock if MCUX_PRJSEG_module.board.clock
+    select MCUX_COMPONENT_component.iuart_adapter if MCUX_PRJSEG_module.board.console_lite
+    select MCUX_COMPONENT_driver.iuart if MCUX_PRJSEG_module.board.console_lite
+    select MCUX_COMPONENT_driver.rdc
+
+    # component dependency
+    select MCUX_COMPONENT_driver.memory if MCUX_COMPONENT_driver.sdma
+    select MCUX_COMPONENT_driver.iuart_sdma if MCUX_COMPONENT_driver.cmsis_iuart
+    select MCUX_COMPONENT_component.iuart_adapter if MCUX_COMPONENT_component.serial_manager_uart
+    select MCUX_COMPONENT_component.iuart_adapter if MCUX_COMPONENT_utility.debug_console_lite
+    select MCUX_COMPONENT_driver.sdma if MCUX_COMPONENT_driver.ecspi_sdma
+    select MCUX_COMPONENT_driver.sdma if MCUX_COMPONENT_driver.iuart_sdma
+    select MCUX_COMPONENT_driver.sdma if MCUX_COMPONENT_driver.sai_sdma

@@ -1,0 +1,21 @@
+
+rsource "../../arch/dsp56800/configuration/Kconfig"
+rsource "../../arch/dsp56800/core/Kconfig"
+
+menu "Device CMSIS system drivers"
+    config MCUX_COMPONENT_device.CMSIS
+        bool "Use device CMSIS"
+
+    config MCUX_COMPONENT_device.system
+        bool "Use device.system"
+        imply MCUX_COMPONENT_device.CMSIS
+
+    config MCUX_COMPONENT_device.startup
+        bool "Use device.startup"
+        imply MCUX_COMPONENT_device.system
+endmenu
+
+menu "Device Suite"
+    config MCUX_PRJSEG_module.device.suite
+        bool "Use default device suite"
+endmenu

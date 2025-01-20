@@ -1,0 +1,7 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+
+
+rsource "../../../RT1170/MIMXRT1176/drivers/Kconfig"

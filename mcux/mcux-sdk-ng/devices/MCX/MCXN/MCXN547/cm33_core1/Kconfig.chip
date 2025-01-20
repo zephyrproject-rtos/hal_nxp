@@ -1,0 +1,77 @@
+# Copyright 2024 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+# core related
+config MCUX_HW_CORE
+    string
+    default "cm33"
+
+config MCUX_HW_CORE_CM33
+    bool
+    default y
+
+config MCUX_HW_CORE_ID
+    string
+    default "cm33_core1"
+
+config MCUX_HW_CORE_ID_CM33_CORE1
+    bool
+    default y
+
+config MCUX_HW_DEVICE_CORE
+    string
+    default "MCXN547_cm33_core1"
+
+config MCUX_HW_FPU
+    string
+    default "NO_FPU"
+
+config MCUX_HW_FPU_TYPE
+    string
+    default "no_fpu"
+
+config MCUX_HW_NO_FPU
+    bool
+    default y
+
+config MCUX_HW_INT_PRIO_BITS
+    int
+    default 3
+
+config MCUX_HW_DSP
+    bool
+    default n
+
+config MCUX_HW_SAU
+    bool
+    default n
+
+config MCUX_HW_SOC_SERIES_MCX
+    bool
+    default y
+
+# For chipmodel generated files
+config MCUX_TOOLCHAIN_LINKER_DEVICE_PREFIX
+    string
+    default "MCXN547_cm33_core1" if MCUX_HW_DEVICE_ID_MCXN547
+
+config MCUX_TOOLCHAIN_MCUX_STARTUP
+    string
+    default "mcxn547_cm33_core1"
+
+# Toolchain related
+
+config MCUX_TOOLCHAIN_IAR_CPU_IDENTIFIER
+    string
+    default "MCXN547_core1" if MCUX_HW_DEVICE_ID_MCXN547
+
+config MCUX_TOOLCHAIN_MDK_CPU_IDENTIFIER
+    string
+    default "MCXN547VDF:cm33_core1" if MCUX_HW_DEVICE_PART_MCXN547VDF
+    default "MCXN547VPB:cm33_core1" if MCUX_HW_DEVICE_PART_MCXN547VPB
+    default "MCXN547VNL:cm33_core1" if MCUX_HW_DEVICE_PART_MCXN547VNL
+
+config MCUX_TOOLCHAIN_JLINK_CPU_IDENTIFIER
+    string
+    default "MCXN547_M33_1" if MCUX_HW_DEVICE_ID_MCXN547
