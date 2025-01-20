@@ -1,0 +1,17 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_PRJSEG_config.arm.shared
+    bool
+    imply MCUX_COMPONENT_utilities.misc_utilities
+
+config MCUX_PRJSEG_config.kinetis.shared
+    bool
+    default y if MCUX_HW_SOC_SERIES_KINETIS || MCUX_HW_SOC_SERIES_RT || MCUX_HW_SOC_SERIES_LPC || MCUX_HW_SOC_SERIES_MCX || MCUX_HW_SOC_SERIES_MIMX
+    imply MCUX_PRJSEG_config.arm.shared
+
+config MCUX_PRJSEG_config.wireless.shared
+    bool
+    default y if MCUX_HW_SOC_SERIES_WIRELESS
+    imply MCUX_PRJSEG_config.arm.shared

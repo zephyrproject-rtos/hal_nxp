@@ -1,0 +1,55 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_PRJSEG_config.arm.core.cm4
+    bool
+    default y if MCUX_HW_CORE_CM4
+
+config MCUX_PRJSEG_config.arm.core.cm4f
+    bool
+    default y if MCUX_HW_CORE_CM4F
+
+config MCUX_PRJSEG_config.arm.core.fpu.no_fpu
+    bool
+    default y if MCUX_HW_NO_FPU
+
+config MCUX_PRJSEG_config.arm.core.fpu.fpv4_sp
+    bool
+    default y if MCUX_HW_FPV4_SP
+
+config MCUX_PRJSEG_config.device_core.define
+    bool
+    default y
+
+config MCUX_PRJSEG_config.arm.core.cm7f
+    bool
+    default y if MCUX_HW_CORE_CM7F
+
+config MCUX_PRJSEG_config.arm.core.fpu.fpv5_dp
+    bool
+    default y if MCUX_HW_FPV5_DP
+
+config MCUX_PRJSEG_config.arm.core.fpu.fpv5_sp
+    bool
+    default y if MCUX_HW_FPV5_SP
+
+config MCUX_PRJSEG_config.arm.core.cm33
+    bool
+    default y if MCUX_HW_CORE_CM33 && MCUX_HW_DSP && MCUX_HW_SAU
+
+config MCUX_PRJSEG_config.arm.core.cm33_nodsp_nosau
+    bool
+    default y if MCUX_HW_CORE_CM33 && !MCUX_HW_DSP && !MCUX_HW_SAU
+
+config MCUX_PRJSEG_config.arm.core.cm33_dsp_nosau
+    bool
+    default y if MCUX_HW_CORE_CM33 && MCUX_HW_DSP && !MCUX_HW_SAU
+
+config MCUX_PRJSEG_config.arm.core.cm33_nodsp_sau
+    bool
+    default y if MCUX_HW_CORE_CM33 && !MCUX_HW_DSP && MCUX_HW_SAU
+
+config MCUX_PRJSEG_config.arm.core.cm0p
+    bool
+    default y if MCUX_HW_CORE_CM0P

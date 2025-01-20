@@ -1,0 +1,13 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_PRJSEG_config.syslib.xos
+    bool "Use system lib xos"
+
+config MCUX_PRJSEG_config.syslib.math
+    bool "Use system lib math"
+
+config MCUX_PRJSEG_config.xtensa.shared
+    bool
+    default y if MCUX_HW_CORE_ID_HIFI4 || MCUX_HW_CORE_ID_FUSIONF1 || MCUX_HW_CORE_ID_HIFI1

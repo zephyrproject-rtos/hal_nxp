@@ -1,0 +1,7 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_PRJSEG_config.dsp56800.shared
+    bool
+    default y if MCUX_HW_SOC_SERIES_DSC
