@@ -2,7 +2,7 @@
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
-rsource "${core_id}/Kconfig"
+# rsource "${core_id}/Kconfig"
 
 rsource "Kconfig.chip"
 rsource "../LPC55S69/drivers/Kconfig"

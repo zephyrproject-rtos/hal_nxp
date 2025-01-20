@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-rsource "${core_id}/Kconfig"
+# rsource "${core_id}/Kconfig"
 rsource "Kconfig.chip"
 rsource "drivers/Kconfig"
 rsource "../../../arm/Kconfig.common"
