@@ -1,0 +1,11 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.s3mu
+    bool
+    default y if MCUX_HW_IP_DriverType_S3MU
+
+config MCUX_COMPONENT_driver.s3mu
+    bool "s3mu"
+    depends on MCUX_HAS_COMPONENT_driver.s3mu

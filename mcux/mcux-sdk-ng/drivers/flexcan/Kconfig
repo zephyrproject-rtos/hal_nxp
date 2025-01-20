@@ -1,0 +1,24 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.flexcan_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.flexcan && (MCUX_HAS_COMPONENT_driver.dma3 || MCUX_HAS_COMPONENT_driver.edma || MCUX_HAS_COMPONENT_driver.edma4)
+
+config MCUX_HAS_COMPONENT_driver.flexcan
+    bool
+    default y if MCUX_HW_IP_DriverType_FLEXCAN
+
+config MCUX_COMPONENT_driver.flexcan_edma
+    bool "flexcan_edma"
+    select MCUX_COMPONENT_driver.flexcan
+    select MCUX_COMPONENT_driver.dma3 if MCUX_HAS_COMPONENT_driver.dma3
+    select MCUX_COMPONENT_driver.edma if MCUX_HAS_COMPONENT_driver.edma
+    select MCUX_COMPONENT_driver.edma4 if MCUX_HAS_COMPONENT_driver.edma4
+    depends on MCUX_HAS_COMPONENT_driver.flexcan_edma
+
+config MCUX_COMPONENT_driver.flexcan
+    bool "flexcan"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.flexcan

@@ -1,0 +1,32 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.i2c_dma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.i2c && MCUX_HAS_COMPONENT_driver.dma
+
+config MCUX_HAS_COMPONENT_driver.i2c_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.i2c && MCUX_HAS_COMPONENT_driver.edma
+
+config MCUX_HAS_COMPONENT_driver.i2c
+    bool
+    default y if MCUX_HW_IP_DriverType_I2C
+
+config MCUX_COMPONENT_driver.i2c_dma
+    bool "i2c_dma"
+    select MCUX_COMPONENT_driver.i2c
+    select MCUX_COMPONENT_driver.dma
+    depends on MCUX_HAS_COMPONENT_driver.i2c_dma
+
+config MCUX_COMPONENT_driver.i2c_edma
+    bool "i2c_edma"
+    select MCUX_COMPONENT_driver.i2c
+    select MCUX_COMPONENT_driver.edma
+    depends on MCUX_HAS_COMPONENT_driver.i2c_edma
+
+config MCUX_COMPONENT_driver.i2c
+    bool "i2c"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.i2c

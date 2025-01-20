@@ -1,0 +1,22 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.spi_gpdma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.pn_spi && MCUX_HAS_COMPONENT_driver.gpdma
+
+config MCUX_HAS_COMPONENT_driver.pn_spi
+    bool
+    default y if MCUX_HW_IP_DriverType_PN_SPI
+
+config MCUX_COMPONENT_driver.spi_gpdma
+    bool "spi_gpdma"
+    select MCUX_COMPONENT_driver.gpdma
+    select MCUX_COMPONENT_driver.pn_spi
+    depends on MCUX_HAS_COMPONENT_driver.spi_gpdma
+
+config MCUX_COMPONENT_driver.pn_spi
+    bool "pn_spi"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.pn_spi

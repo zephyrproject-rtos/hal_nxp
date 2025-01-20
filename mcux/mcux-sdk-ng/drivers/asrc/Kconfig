@@ -1,0 +1,23 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.asrc_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.asrc && (MCUX_HAS_COMPONENT_driver.edma || MCUX_HAS_COMPONENT_driver.edma4)
+
+config MCUX_HAS_COMPONENT_driver.asrc
+    bool
+    default y if MCUX_HW_IP_DriverType_ASRC
+
+config MCUX_COMPONENT_driver.asrc_edma
+    bool "asrc_edma"
+    select MCUX_COMPONENT_driver.asrc
+    select MCUX_COMPONENT_driver.edma if MCUX_HAS_COMPONENT_driver.edma
+    select MCUX_COMPONENT_driver.edma4 if MCUX_HAS_COMPONENT_driver.edma4
+    depends on MCUX_HAS_COMPONENT_driver.asrc_edma
+
+config MCUX_COMPONENT_driver.asrc
+    bool "asrc"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.asrc

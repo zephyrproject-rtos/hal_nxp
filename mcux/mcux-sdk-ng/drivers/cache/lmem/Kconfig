@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.cache_lmem
+    bool
+    default y if MCUX_HW_IP_DriverType_LMEM || MCUX_HW_IP_DriverType_AHB_LMEM
+
+config MCUX_COMPONENT_driver.cache_lmem
+    bool "cache_lmem"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.cache_lmem

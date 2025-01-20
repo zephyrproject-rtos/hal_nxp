@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.lpc_dac
+    bool
+    default y if MCUX_HW_IP_DriverType_DAC10
+
+config MCUX_COMPONENT_driver.lpc_dac
+    bool "lpc_dac"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.lpc_dac

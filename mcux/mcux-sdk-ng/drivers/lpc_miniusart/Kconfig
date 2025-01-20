@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.lpc_miniusart
+    bool
+    default y if MCUX_HW_IP_DriverType_MINI_USART
+
+config MCUX_COMPONENT_driver.lpc_miniusart
+    bool "lpc_miniusart"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.lpc_miniusart

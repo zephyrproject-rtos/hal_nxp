@@ -1,0 +1,91 @@
+    /* Software reset ${PERIPHERAL}$ */
+    ${PERIPHERAL}$->SC1A = 0x1FUL;
+    ${PERIPHERAL}$->SC1B = 0x1FUL;
+    ${PERIPHERAL}$->CFG1 = 0x0UL;
+    ${PERIPHERAL}$->CFG2 = 0x0UL;
+    ${PERIPHERAL}$->CV1  = 0x0UL;
+    ${PERIPHERAL}$->CV2  = 0x0UL;
+    ${PERIPHERAL}$->SC2  = 0x0UL;
+    ${PERIPHERAL}$->SC3  = 0x0UL;
+    ${PERIPHERAL}$->OFS  = 0x4UL;
+    ${PERIPHERAL}$->PG   = 0x8200UL;
+    ${PERIPHERAL}$->MG   = 0x8200UL;
+    ${PERIPHERAL}$->CLPD = 0xAUL;
+    ${PERIPHERAL}$->CLPS = 0x20UL;
+    ${PERIPHERAL}$->CLP4 = 0x200UL;
+    ${PERIPHERAL}$->CLP3 = 0x100UL;
+    ${PERIPHERAL}$->CLP2 = 0x80UL;
+    ${PERIPHERAL}$->CLP1 = 0x40UL;
+    ${PERIPHERAL}$->CLP0 = 0x20UL;
+    ${PERIPHERAL}$->CLMD = 0xAUL;
+    ${PERIPHERAL}$->CLMS = 0x20UL;
+    ${PERIPHERAL}$->CLM4 = 0x200UL;
+    ${PERIPHERAL}$->CLM3 = 0x100UL;
+    ${PERIPHERAL}$->CLM2 = 0x80UL;
+    ${PERIPHERAL}$->CLM1 = 0x40UL;
+    ${PERIPHERAL}$->CLM0 = 0x20UL;  
+
+#if defined(${VPREFIX}$_CFG1_INIT)
+    ${PERIPHERAL}$->CFG1 = ${VPREFIX}$_CFG1_INIT;
+#endif /* ${VPREFIX}$_CFG1_INIT */
+
+#if defined(${VPREFIX}$_CFG2_INIT)
+    ${PERIPHERAL}$->CFG2 = ${VPREFIX}$_CFG2_INIT;
+#endif /* ${VPREFIX}$_CFG2_INIT */
+
+#if defined(${VPREFIX}$_CV1_INIT)
+    ${PERIPHERAL}$->CV1 = ${VPREFIX}$_CV1_INIT;
+#endif /* ${VPREFIX}$_CV1_INIT */
+
+#if defined(${VPREFIX}$_CV2_INIT)
+    ${PERIPHERAL}$->CV2 = ${VPREFIX}$_CV2_INIT;
+#endif /* ${VPREFIX}$_CV2_INIT */
+
+#if defined(${VPREFIX}$_SC3_INIT)
+#if ((${VPREFIX}$_SC3_INIT & ADC_SC3_CAL_MASK) != 0UL)
+    /* Do auto calibration. */
+    ${PERIPHERAL}$->SC3 = ${VPREFIX}$_SC3_INIT | ADC_SC3_CALF_MASK;
+
+    while(0UL == (${PERIPHERAL}$->SC1A & ADC_SC1_COCO_MASK))
+    {
+    }
+    (void)${PERIPHERAL}$->R[0]; /* Dummy read to clear COCO caused by calibration. */
+
+    uint32_t tmp32;
+    tmp32 = ${PERIPHERAL}$->CLP0;
+    tmp32 += ${PERIPHERAL}$->CLP1;
+    tmp32 += ${PERIPHERAL}$->CLP2;
+    tmp32 += ${PERIPHERAL}$->CLP3;
+    tmp32 += ${PERIPHERAL}$->CLP4;
+    tmp32 += ${PERIPHERAL}$->CLPS;
+    tmp32 = 0x8000UL | (tmp32 >> 1UL);
+    ${PERIPHERAL}$->PG = tmp32;
+    tmp32 = ${PERIPHERAL}$->CLM0;
+    tmp32 += ${PERIPHERAL}$->CLM1;
+    tmp32 += ${PERIPHERAL}$->CLM2;
+    tmp32 += ${PERIPHERAL}$->CLM3;
+    tmp32 += ${PERIPHERAL}$->CLM4;
+    tmp32 += ${PERIPHERAL}$->CLMS;
+    tmp32 = 0x8000UL | (tmp32 >> 1UL);
+    ${PERIPHERAL}$->MG = tmp32;
+
+#elif ((${VPREFIX}$_SC3_INIT & ADC_SC3_CAL_MASK) == 0UL)
+    /* User calibration */
+#if defined(${VPREFIX}$_PG_INIT)
+    ${PERIPHERAL}$->PG = ${VPREFIX}$_PG_INIT;
+#endif /* ${VPREFIX}$_PG_INIT */
+
+if defined(${VPREFIX}$_MG_INIT)
+    ${PERIPHERAL}$->MG = ${VPREFIX}$_MG_INIT;
+#endif /* ${VPREFIX}$_MG_INIT */
+
+#endif /* ${VPREFIX}$_SC3_INIT & ADC_SC3_CAL_MASK */
+#endif /* ${VPREFIX}$_SC3_INIT */
+
+#if defined(${VPREFIX}$_SC2_INIT)
+    ${PERIPHERAL}$->SC2 = ${VPREFIX}$_SC2_INIT;
+#endif /* ${VPREFIX}$_SC2_INIT */
+
+#if defined(${VPREFIX}$_OFS_INIT)
+    ${PERIPHERAL}$->OFS = ${VPREFIX}$_OFS_INIT;
+#endif /* ${VPREFIX}$_OFS_INIT */

@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.asmc
+    bool
+    default y if MCUX_HW_IP_DriverType_ASMC
+
+config MCUX_COMPONENT_driver.asmc
+    bool "asmc"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.asmc

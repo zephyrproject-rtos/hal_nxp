@@ -1,0 +1,13 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.flexram
+    bool
+    default y if MCUX_HW_IP_DriverType_FLEXRAM
+
+config MCUX_COMPONENT_driver.flexram
+    bool "flexram"
+    select MCUX_COMPONENT_driver.common
+    select MCUX_COMPONENT_driver.flexram_allocate
+    depends on MCUX_HAS_COMPONENT_driver.flexram

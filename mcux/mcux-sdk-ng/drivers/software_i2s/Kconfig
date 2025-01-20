@@ -1,0 +1,9 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_COMPONENT_driver.software_i2s
+    bool "software_i2s"
+    select MCUX_COMPONENT_driver.flexcomm_spi
+    select MCUX_COMPONENT_driver.sctimer
+    depends on MCUX_HAS_COMPONENT_driver.flexcomm_spi && MCUX_HAS_COMPONENT_driver.sctimer

@@ -1,0 +1,13 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.pn76_rng
+    bool
+    default y if MCUX_HW_IP_DriverType_PN_RNG
+
+config MCUX_COMPONENT_driver.pn76_rng
+    bool "pn76_rng"
+    select MCUX_COMPONENT_driver.common
+    select MCUX_COMPONENT_driver.hal_intfs
+    depends on MCUX_HAS_COMPONENT_driver.pn76_rng

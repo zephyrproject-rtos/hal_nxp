@@ -1,0 +1,35 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.flexspi_dma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.flexspi && MCUX_HAS_COMPONENT_driver.lpc_dma
+
+config MCUX_HAS_COMPONENT_driver.flexspi_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.flexspi && (MCUX_HAS_COMPONENT_driver.edma || MCUX_HAS_COMPONENT_driver.edma4)
+
+config MCUX_HAS_COMPONENT_driver.flexspi
+    bool
+    default y if MCUX_HW_IP_DriverType_FLEXSPI
+
+config MCUX_COMPONENT_driver.flexspi_dma
+    bool "flexspi_dma"
+    select MCUX_COMPONENT_driver.flexspi
+    select MCUX_COMPONENT_driver.lpc_dma
+    depends on MCUX_HAS_COMPONENT_driver.flexspi_dma
+
+config MCUX_COMPONENT_driver.flexspi_edma
+    bool "flexspi_edma"
+    select MCUX_COMPONENT_driver.flexspi
+    select MCUX_COMPONENT_driver.edma if MCUX_HAS_COMPONENT_driver.edma
+    select MCUX_COMPONENT_driver.edma4 if MCUX_HAS_COMPONENT_driver.edma4
+    depends on MCUX_HAS_COMPONENT_driver.flexspi_edma
+
+config MCUX_COMPONENT_driver.flexspi
+    bool "flexspi"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.flexspi
+
+orsource "./*/Kconfig"

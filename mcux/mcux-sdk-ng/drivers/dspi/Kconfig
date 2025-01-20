@@ -1,0 +1,32 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.dspi_dma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.dspi && MCUX_HAS_COMPONENT_driver.dma
+
+config MCUX_HAS_COMPONENT_driver.dspi_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.dspi && MCUX_HAS_COMPONENT_driver.edma
+
+config MCUX_HAS_COMPONENT_driver.dspi
+    bool
+    default y if MCUX_HW_IP_DriverType_DSPI
+
+config MCUX_COMPONENT_driver.dspi_dma
+    bool "dspi_dma"
+    select MCUX_COMPONENT_driver.dspi
+    select MCUX_COMPONENT_driver.dma
+    depends on MCUX_HAS_COMPONENT_driver.dspi_dma
+
+config MCUX_COMPONENT_driver.dspi_edma
+    bool "dspi_edma"
+    select MCUX_COMPONENT_driver.dspi
+    select MCUX_COMPONENT_driver.edma
+    depends on MCUX_HAS_COMPONENT_driver.dspi_edma
+
+config MCUX_COMPONENT_driver.dspi
+    bool "dspi"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.dspi

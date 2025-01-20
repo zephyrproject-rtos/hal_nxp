@@ -1,0 +1,27 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.dmic
+    bool
+    default y if MCUX_HW_IP_DriverType_DMIC
+
+config MCUX_HAS_COMPONENT_driver.dmic_dma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.dmic && MCUX_HAS_COMPONENT_driver.lpc_dma
+
+config MCUX_COMPONENT_driver.dmic_dma
+    bool "dmic_dma"
+    select MCUX_COMPONENT_driver.dmic
+    select MCUX_COMPONENT_driver.lpc_dma
+    depends on MCUX_HAS_COMPONENT_driver.dmic_dma
+
+config MCUX_COMPONENT_driver.dmic_hwvad
+    bool "dmic_hwvad"
+    select MCUX_COMPONENT_driver.dmic
+    depends on MCUX_HAS_COMPONENT_driver.dmic
+
+config MCUX_COMPONENT_driver.dmic
+    bool "dmic"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.dmic

@@ -1,0 +1,8 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "./tsi_v6/Kconfig"
+rsource "./tsi_v5/Kconfig"
+rsource "./tsi_v4/Kconfig"
+rsource "./tsi_v2/Kconfig"

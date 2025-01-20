@@ -1,0 +1,20 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.flexio
+    bool
+    default y if MCUX_HW_IP_DriverType_FLEXIO
+
+config MCUX_COMPONENT_driver.flexio
+    bool "flexio"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.flexio
+
+rsource "./uart/Kconfig"
+rsource "./spi/Kconfig"
+rsource "./qspi/Kconfig"
+rsource "./mculcd/Kconfig"
+rsource "./i2s/Kconfig"
+rsource "./i2c/Kconfig"
+rsource "./camera/Kconfig"

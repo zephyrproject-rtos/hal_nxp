@@ -1,0 +1,17 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "./wdt/Kconfig"
+rsource "./spi/Kconfig"
+rsource "./rng/Kconfig"
+rsource "./pn_wrapper/Kconfig"
+rsource "./lpuart/Kconfig"
+rsource "./i2c/Kconfig"
+rsource "./hostif/pnev76fama/Kconfig"
+rsource "./hostif/pnev7642fama/Kconfig"
+rsource "./gpt/Kconfig"
+rsource "./gpdma/Kconfig"
+rsource "./gpadc/Kconfig"
+rsource "./crc_wrapper/Kconfig"
+rsource "./crc/Kconfig"

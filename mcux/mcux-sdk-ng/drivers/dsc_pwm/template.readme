@@ -1,0 +1,57 @@
+1. This template is for eFlexPWM and FlexPWM pheripheral.
+
+2. The init function should do as below
+   function declaration
+   {
+      insert several fsl_pwm_sm.template (optional, for sm0~sm3)
+      insert several fsl_pwm_fault.template (optional, for fault0 ~ fault1)
+      insert fsl_pwm.template
+   }
+
+3. Macro definition.
+      fsl_pwm_fault.template
+          ${FAULT_CHANNEL}$ must be 0 or 1, don't add any suffix for the number, say 0U or 1U is not allowed.
+
+      fsl_pwm_sm.template
+          ${SUBMODULE}$ must be 0, 1, 2 or 3, don't add any suffix for the number, say 0U or 1U is not allowed.
+
+      fsl_pwm.template:
+          ${VPREFIX}$_OUTEN_INIT_MASK rule:
+              mask = 0x0;
+              if(SM0_Init) mask |= 0x111U;
+              if(SM1_Init) mask |= 0x222U;
+              if(SM2_Init) mask |= 0x444U;
+              if(SM3_Init) mask |= 0x888U;
+              ${VPREFIX}$_OUTEN_INIT_MASK = mask;
+
+          ${VPREFIX}$_MASK_INIT_MASK rule:
+              mask = 0x0;
+              if(SM0_Init) mask |= 0x1111U;
+              if(SM1_Init) mask |= 0x2222U;
+              if(SM2_Init) mask |= 0x4444U;
+              if(SM3_Init) mask |= 0x8888U;
+              ${VPREFIX}$_MASK_INIT_MASK = mask;
+
+          ${VPREFIX}$_SWCOUT_INIT_MASK rule:
+              mask = 0x0;
+              if(SM0_Init) mask |= 0x03U;
+              if(SM1_Init) mask |= 0x0CU;
+              if(SM2_Init) mask |= 0x30U;
+              if(SM3_Init) mask |= 0xC0U;
+              ${VPREFIX}$_SWCOUT_INIT_MASK = mask;
+
+          ${VPREFIX}$_DTSRCSEL_INIT_MASK rule:
+              mask = 0x0;
+              if(SM0_Init) mask |= 0xFU;
+              if(SM1_Init) mask |= 0xF0U;
+              if(SM2_Init) mask |= 0xF00U;
+              if(SM3_Init) mask |= 0xF000U;
+              ${VPREFIX}$_DTSRCSEL_INIT_MASK = mask;
+
+          ${VPREFIX}$_MCTRL_INIT_MASK rule:
+              mask = 0x0;
+              if(SM0_Init) mask |= 0x1111U;
+              if(SM1_Init) mask |= 0x2222U;
+              if(SM2_Init) mask |= 0x4444U;
+              if(SM3_Init) mask |= 0x8888U;
+              ${VPREFIX}$_MCTRL_INIT_MASK = mask;

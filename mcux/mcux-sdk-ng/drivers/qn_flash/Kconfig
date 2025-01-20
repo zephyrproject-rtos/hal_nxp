@@ -1,0 +1,13 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_COMPONENT_driver.qn_flash_dma
+    bool "qn_flash_dma"
+    select MCUX_COMPONENT_driver.lpc_dma
+    depends on MCUX_HAS_COMPONENT_driver.lpc_dma && MCUX_HW_QNXXX #TODO: Update with QN908XA/B/C
+
+config MCUX_COMPONENT_driver.qn_flash
+    bool "qn_flash"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HW_QNXXX #TODO: Update with QN908XA/B/C

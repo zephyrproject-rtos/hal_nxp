@@ -1,0 +1,25 @@
+  /* Input filters configuration */
+#ifdef ${VPREFIX}$_FILT0_INIT
+  ${PERIPHERAL}$->CHANNEL[0].FILT = ${VPREFIX}$_FILT0_INIT;
+#else
+  ${PERIPHERAL}$->CHANNEL[0].FILT = 0x0U;
+#endif /*${VPREFIX}$_FILT0_INIT */
+#ifdef ${VPREFIX}$_FILT1_INIT
+  ${PERIPHERAL}$->CHANNEL[1].FILT = ${VPREFIX}$_FILT1_INIT;
+#else
+  ${PERIPHERAL}$->CHANNEL[1].FILT = 0x0U;
+#endif /*${VPREFIX}$_FILT1_INIT */
+#ifdef ${VPREFIX}$_FILT2_INIT
+  ${PERIPHERAL}$->CHANNEL[2].FILT = ${VPREFIX}$_FILT2_INIT;
+#else
+  ${PERIPHERAL}$->CHANNEL[2].FILT = 0x0U;
+#endif /*${VPREFIX}$_FILT2_INIT */
+#ifdef ${VPREFIX}$_FILT3_INIT
+  ${PERIPHERAL}$->CHANNEL[3].FILT = ${VPREFIX}$_FILT3_INIT;
+#else
+  ${PERIPHERAL}$->CHANNEL[3].FILT = 0x0U;
+#endif /*${VPREFIX}$_FILT3_INIT */
+  /* Synchronous start of all channels */
+#if defined(${VPREFIX}$_ENBL_INIT)
+   ${PERIPHERAL}$->CHANNEL[0].ENBL = (${PERIPHERAL}$->CHANNEL[0].ENBL & (~${VPREFIX}$_ENBL_INIT_MASK)) | (${VPREFIX}$_ENBL_INIT & ${VPREFIX}$_ENBL_INIT_MASK);
+#endif /*${VPREFIX}$_${PERIPHERAL}$_ENBL_INIT */

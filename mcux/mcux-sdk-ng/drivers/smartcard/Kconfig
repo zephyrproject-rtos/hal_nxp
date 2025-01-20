@@ -1,0 +1,69 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.smartcard_emvsim
+    bool
+    default y if MCUX_HW_IP_DriverType_EMVSIM
+
+config MCUX_HAS_COMPONENT_driver.smartcard_phy_emvsim
+    bool
+    default y if MCUX_HW_IP_DriverType_EMVSIM
+
+config MCUX_HAS_COMPONENT_driver.smartcard_phy_gpio
+    bool
+    default y if (MCUX_HW_IP_DriverType_TPM || MCUX_HW_IP_DriverType_FTM) && MCUX_HW_IP_DriverType_GPIO && MCUX_HAS_COMPONENT_driver.smartcard_uart
+
+config MCUX_HAS_COMPONENT_driver.smartcard_phy_tda8035
+    bool
+    default y if (MCUX_HAS_COMPONENT_driver.smartcard_uart && MCUX_HW_IP_DriverType_FTM && MCUX_HW_IP_DriverType_GPIO) || MCUX_HAS_COMPONENT_driver.smartcard_emvsim
+
+config MCUX_HAS_COMPONENT_driver.smartcard_phy_usim
+    bool
+    default y if MCUX_HW_IP_DriverType_USIM
+
+config MCUX_HAS_COMPONENT_driver.smartcard_uart
+    bool
+    default y if (MCUX_HW_IP_DriverType_UART_ISO7816 && MCUX_HW_IP_DriverType_PIT)
+
+config MCUX_HAS_COMPONENT_driver.smartcard_usim
+    bool
+    default y if MCUX_HW_IP_DriverType_USIM
+
+config MCUX_COMPONENT_driver.smartcard_emvsim
+    bool "smartcard_emvsim"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.smartcard_emvsim
+
+config MCUX_COMPONENT_driver.smartcard_phy_emvsim
+    bool "smartcard_phy_emvsim"
+    select MCUX_COMPONENT_driver.smartcard_emvsim
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.smartcard_phy_emvsim
+
+config MCUX_COMPONENT_driver.smartcard_phy_gpio
+    bool "smartcard_phy_gpio"
+    select MCUX_COMPONENT_driver.smartcard_uart
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.smartcard_phy_gpio
+
+config MCUX_COMPONENT_driver.smartcard_phy_tda8035
+    bool "smartcard_phy_tda8035"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.smartcard_phy_tda8035
+
+config MCUX_COMPONENT_driver.smartcard_phy_usim
+    bool "smartcard_phy_usim"
+    select MCUX_COMPONENT_driver.smartcard_usim
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.smartcard_phy_usim
+
+config MCUX_COMPONENT_driver.smartcard_uart
+    bool "smartcard_uart"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.smartcard_uart
+
+config MCUX_COMPONENT_driver.smartcard_usim
+    bool "smartcard_usim"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.smartcard_usim

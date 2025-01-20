@@ -1,0 +1,22 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.dsc_lpi2c_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.dsc_lpi2c && MCUX_HAS_COMPONENT_driver.dsc_edma
+
+config MCUX_HAS_COMPONENT_driver.dsc_lpi2c
+    bool
+    default y if MCUX_HW_IP_DriverType_DSC_LPI2C
+
+config MCUX_COMPONENT_driver.dsc_lpi2c_edma
+    bool "dsc_lpi2c_edma"
+    select MCUX_COMPONENT_driver.dsc_lpi2c
+    select MCUX_COMPONENT_driver.dsc_edma
+    depends on MCUX_HAS_COMPONENT_driver.dsc_lpi2c_edma
+
+config MCUX_COMPONENT_driver.dsc_lpi2c
+    bool "dsc_lpi2c"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.dsc_lpi2c

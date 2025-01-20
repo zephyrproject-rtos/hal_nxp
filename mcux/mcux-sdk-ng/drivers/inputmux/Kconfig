@@ -1,0 +1,13 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.inputmux
+    bool
+    default y if MCUX_HW_IP_DriverType_INPUTMUX
+
+config MCUX_COMPONENT_driver.inputmux
+    bool "inputmux"
+    select MCUX_COMPONENT_driver.common
+    select MCUX_COMPONENT_driver.inputmux_connections
+    depends on MCUX_HAS_COMPONENT_driver.inputmux

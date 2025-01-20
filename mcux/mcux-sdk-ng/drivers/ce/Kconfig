@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.ce
+    bool
+    default y if MCUX_HW_IP_DriverType_CE
+
+config MCUX_COMPONENT_driver.ce
+    bool "Compute Engine"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.ce

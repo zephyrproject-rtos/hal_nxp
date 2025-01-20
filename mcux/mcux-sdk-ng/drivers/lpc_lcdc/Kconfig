@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.lpc_lcdc
+    bool
+    default y if MCUX_HW_IP_DriverType_LCD
+
+config MCUX_COMPONENT_driver.lpc_lcdc
+    bool "lpc_lcdc"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.lpc_lcdc

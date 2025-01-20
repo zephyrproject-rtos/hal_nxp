@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.intmux
+    bool
+    default y if MCUX_HW_IP_DriverType_INTMUX
+
+config MCUX_COMPONENT_driver.intmux
+    bool "intmux"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.intmux

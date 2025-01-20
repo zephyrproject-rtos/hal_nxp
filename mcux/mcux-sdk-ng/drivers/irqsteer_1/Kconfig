@@ -1,0 +1,13 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.irqsteer_1
+    bool
+    default y if MCUX_HW_IP_DriverType_IRQSTEER_1
+
+config MCUX_COMPONENT_driver.irqsteer_1
+    bool "irqsteer_1"
+    select MCUX_COMPONENT_driver.common
+    imply MCUX_COMPONENT_driver.irqsteer_1_soc
+    depends on MCUX_HAS_COMPONENT_driver.irqsteer_1

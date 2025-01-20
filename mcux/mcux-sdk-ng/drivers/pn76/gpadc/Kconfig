@@ -1,0 +1,14 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.gpadc
+    bool
+    default y if MCUX_HW_IP_DriverType_GPADC
+
+config MCUX_COMPONENT_driver.gpadc
+    bool "gpadc"
+    select MCUX_COMPONENT_driver.common
+    select MCUX_COMPONENT_driver.pn_wrapper
+    select MCUX_COMPONENT_driver.hal_intfs
+    depends on MCUX_HAS_COMPONENT_driver.gpadc

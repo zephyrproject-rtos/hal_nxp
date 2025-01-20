@@ -1,0 +1,8 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_COMPONENT_driver.qn_rtc
+    bool "qn_rtc"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HW_QNXXX #TODO: Update with QN908XA/B/C

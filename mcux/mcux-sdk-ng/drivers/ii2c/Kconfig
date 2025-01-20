@@ -1,0 +1,11 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.ii2c
+    bool
+    default y if MCUX_HW_IP_DriverType_II2C
+
+config MCUX_COMPONENT_driver.ii2c
+    bool "ii2c"
+    depends on MCUX_HAS_COMPONENT_driver.ii2c

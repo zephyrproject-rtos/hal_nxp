@@ -1,0 +1,11 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.adc_5hc
+    bool
+    default y if MCUX_HW_IP_DriverType_ADC12_3V
+
+config MCUX_COMPONENT_driver.adc_5hc
+    bool "adc_5hc"
+    depends on MCUX_HAS_COMPONENT_driver.adc_5hc

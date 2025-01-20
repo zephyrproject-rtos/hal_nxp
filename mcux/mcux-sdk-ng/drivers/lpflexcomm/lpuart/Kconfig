@@ -1,0 +1,22 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.lpflexcomm_lpuart_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.lpflexcomm_lpuart && MCUX_HAS_COMPONENT_driver.edma4
+
+config MCUX_HAS_COMPONENT_driver.lpflexcomm_lpuart
+    bool
+    default y if MCUX_HW_IP_DriverType_LPFLEXCOMM_LPUART
+
+config MCUX_COMPONENT_driver.lpflexcomm_lpuart
+    bool "lpflexcomm_lpuart"
+    select MCUX_COMPONENT_driver.lpflexcomm
+    depends on MCUX_HAS_COMPONENT_driver.lpflexcomm_lpuart
+
+config MCUX_COMPONENT_driver.lpflexcomm_lpuart_edma
+    bool "lpflexcomm_lpuart_edma"
+    select MCUX_COMPONENT_driver.lpflexcomm_lpuart
+    select MCUX_COMPONENT_driver.edma4
+    depends on MCUX_HAS_COMPONENT_driver.lpflexcomm_lpuart_edma

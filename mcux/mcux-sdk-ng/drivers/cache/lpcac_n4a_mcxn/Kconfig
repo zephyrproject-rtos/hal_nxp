@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.cache_lpcac_n4a_mcxn
+    bool
+    default y if MCUX_HW_IP_DriverType_SYSCON_LPCAC || MCUX_HW_IP_DriverType_SYSCON_CMP_LPCAC
+
+config MCUX_COMPONENT_driver.cache_lpcac_n4a_mcxn
+    bool "cache_lpcac_n4a_mcxn"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.cache_lpcac_n4a_mcxn

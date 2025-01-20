@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.adc_12b1msps_sar
+    bool
+    default y if MCUX_HW_IP_DriverType_ADC
+
+config MCUX_COMPONENT_driver.adc_12b1msps_sar
+    bool "adc_12b1msps_sar"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.adc_12b1msps_sar

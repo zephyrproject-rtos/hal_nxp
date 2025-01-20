@@ -1,0 +1,8 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_COMPONENT_driver.pn_wrapper
+    bool "pn_wrapper"
+    select MCUX_COMPONENT_driver.hal_intfs
+    depends on MCUX_HW_PN76  #TODO: Update with the PN7642 devices name

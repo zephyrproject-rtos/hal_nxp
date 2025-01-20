@@ -1,0 +1,13 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.dsc_flash
+    bool
+    default y if (MCUX_HW_IP_DriverType_DSC_FTFE || MCUX_HW_IP_DriverType_DSC_FTFA || MCUX_HW_IP_DriverType_DSC_FTFL)  \
+      && !(MCUX_HAS_COMPONENT_driver.dsc_flash_romapi)
+
+config MCUX_COMPONENT_driver.dsc_flash
+    bool "dsc_flash"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.dsc_flash

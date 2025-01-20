@@ -1,0 +1,20 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rsource "./*/Kconfig"
+
+config MCUX_PRJSEG_driver.cache
+    bool "cache"
+    default n
+    select MCUX_COMPONENT_driver.cache_xcache if MCUX_HAS_COMPONENT_driver.cache_xcache
+    select MCUX_COMPONENT_driver.cache_lplmem if MCUX_HAS_COMPONENT_driver.cache_lplmem
+    select MCUX_COMPONENT_driver.cache_lpcac if MCUX_HAS_COMPONENT_driver.cache_lpcac
+    select MCUX_COMPONENT_driver.cache_lmem if MCUX_HAS_COMPONENT_driver.cache_lmem
+    select MCUX_COMPONENT_driver.cache_armv7_m7 if MCUX_HAS_COMPONENT_driver.cache_armv7_m7
+    select MCUX_COMPONENT_driver.cache_lpcac_n4a_mcxn if MCUX_HAS_COMPONENT_driver.cache_lpcac_n4a_mcxn
+
+
+config MCUX_PRJSEG_driver.flash_cache
+    bool "flash cache"
+    select MCUX_COMPONENT_driver.cache_cache64 if MCUX_HAS_COMPONENT_driver.cache_cache64

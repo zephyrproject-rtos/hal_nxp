@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.rtwdog
+    bool
+    default y if MCUX_HW_IP_DriverType_RTWDOG
+
+config MCUX_COMPONENT_driver.rtwdog
+    bool "rtwdog"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.rtwdog

@@ -1,0 +1,16 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.spdif
+    bool
+    default y if MCUX_HW_IP_DriverType_SPDIF
+
+config MCUX_COMPONENT_driver.spdif_edma
+    bool "spdif_edma"
+    select MCUX_COMPONENT_driver.spdif
+
+config MCUX_COMPONENT_driver.spdif
+    bool "spdif"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.spdif

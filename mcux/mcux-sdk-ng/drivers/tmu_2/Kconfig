@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.tmu_2
+    bool
+    default y if MCUX_HW_IP_DriverType_TMU_2
+
+config MCUX_COMPONENT_driver.tmu_2
+    bool "tmu_2"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.tmu_2

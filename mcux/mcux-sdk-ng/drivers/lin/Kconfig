@@ -1,0 +1,21 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.lin_stack
+    bool
+    default y if MCUX_HW_IP_DriverType_LPUART
+
+config MCUX_HAS_COMPONENT_driver.lin
+    bool
+    default y if MCUX_HW_IP_DriverType_LPUART
+
+config MCUX_COMPONENT_driver.lin_stack
+    bool "lin_stack"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.lin_stack
+
+config MCUX_COMPONENT_driver.lin
+    bool "lin"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.lin

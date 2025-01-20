@@ -1,0 +1,21 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.iuart_sdma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.iuart && MCUX_HAS_COMPONENT_driver.sdma
+
+config MCUX_HAS_COMPONENT_driver.iuart
+    bool
+    default y if MCUX_HW_IP_DriverType_IUART
+
+config MCUX_COMPONENT_driver.iuart_sdma
+    bool "iuart_sdma"
+    select MCUX_COMPONENT_driver.iuart
+    select MCUX_COMPONENT_driver.sdma
+    depends on MCUX_HAS_COMPONENT_driver.iuart_sdma
+
+config MCUX_COMPONENT_driver.iuart
+    bool "iuart"
+    depends on MCUX_HAS_COMPONENT_driver.iuart

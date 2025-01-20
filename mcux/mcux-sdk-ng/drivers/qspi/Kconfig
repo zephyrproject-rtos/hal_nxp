@@ -1,0 +1,22 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.qspi_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.qspi && MCUX_HAS_COMPONENT_driver.edma
+
+config MCUX_HAS_COMPONENT_driver.qspi
+    bool
+    default y if MCUX_HW_IP_DriverType_QUADSPI
+
+config MCUX_COMPONENT_driver.qspi_edma
+    bool "qspi_edma"
+    select MCUX_COMPONENT_driver.qspi
+    select MCUX_COMPONENT_driver.edma
+    depends on MCUX_HAS_COMPONENT_driver.qspi_edma
+
+config MCUX_COMPONENT_driver.qspi
+    bool "qspi"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.qspi

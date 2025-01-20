@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.dsc_pdb
+    bool
+    default y if MCUX_HW_IP_DriverType_DSC_PDB
+
+config MCUX_COMPONENT_driver.dsc_pdb
+    bool "dsc_pdb"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.dsc_pdb

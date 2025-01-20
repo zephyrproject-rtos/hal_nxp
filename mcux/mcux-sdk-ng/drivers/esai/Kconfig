@@ -1,0 +1,21 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.esai_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.esai && MCUX_HAS_COMPONENT_driver.dma3
+
+config MCUX_HAS_COMPONENT_driver.esai
+    bool
+    default y if MCUX_HW_IP_DriverType_ESAI
+
+config MCUX_COMPONENT_driver.esai_edma
+    bool "esai_edma"
+    select MCUX_COMPONENT_driver.esai
+    select MCUX_COMPONENT_driver.dma3
+    depends on MCUX_HAS_COMPONENT_driver.esai_edma
+
+config MCUX_COMPONENT_driver.esai
+    bool "esai"
+    depends on MCUX_HAS_COMPONENT_driver.esai

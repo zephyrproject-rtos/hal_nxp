@@ -1,0 +1,27 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.ltc_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.ltc && MCUX_HAS_COMPONENT_driver.edma
+
+config MCUX_HAS_COMPONENT_driver.ltc
+    bool
+    default y if MCUX_HW_IP_DriverType_LTC
+
+config MCUX_COMPONENT_driver.ltc_dpa
+    bool "ltc_dpa"
+    select MCUX_COMPONENT_driver.ltc
+    depends on MCUX_HAS_COMPONENT_driver.ltc
+
+config MCUX_COMPONENT_driver.ltc_edma
+    bool "ltc_edma"
+    select MCUX_COMPONENT_driver.ltc
+    select MCUX_COMPONENT_driver.edma
+    depends on MCUX_HAS_COMPONENT_driver.ltc_edma
+
+config MCUX_COMPONENT_driver.ltc
+    bool "ltc"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.ltc

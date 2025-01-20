@@ -1,0 +1,8 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_COMPONENT_driver.flexio_i2c_master
+    bool "flexio_i2c_master"
+    select MCUX_COMPONENT_driver.flexio
+    depends on MCUX_HAS_COMPONENT_driver.flexio

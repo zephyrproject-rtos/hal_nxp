@@ -1,0 +1,23 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.mipi_dsi_smartdma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.mipi_dsi && MCUX_HAS_COMPONENT_driver.smartdma
+
+config MCUX_HAS_COMPONENT_driver.mipi_dsi
+    bool
+    default y if MCUX_HW_IP_DriverType_MIPI_DSI
+
+config MCUX_COMPONENT_driver.mipi_dsi_smartdma
+    bool "mipi_dsi_smartdma"
+    select MCUX_COMPONENT_driver.mipi_dsi
+    select MCUX_COMPONENT_driver.smartdma
+    depends on MCUX_HAS_COMPONENT_driver.mipi_dsi_smartdma
+
+config MCUX_COMPONENT_driver.mipi_dsi
+    bool "mipi_dsi"
+    select MCUX_COMPONENT_driver.common
+    select MCUX_COMPONENT_driver.mipi_dsi_soc
+    depends on MCUX_HAS_COMPONENT_driver.mipi_dsi

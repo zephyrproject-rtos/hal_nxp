@@ -1,0 +1,48 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.netc_rt1180
+    bool
+    default y if MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx || MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx ||\
+                 MCUX_HW_DEVICE_ID_MIMXRT1182xxxxx || MCUX_HW_DEVICE_ID_MIMXRT1181xxxxx
+
+config MCUX_HAS_COMPONENT_driver.netc_imx95
+    bool
+    default y if MCUX_HW_DEVICE_ID_MIMX9596xxxxQ || MCUX_HW_DEVICE_ID_MIMX9596xxxxN || MCUX_HW_DEVICE_ID_MIMX9596xxxxL
+
+config MCUX_HAS_COMPONENT_driver.netc
+    bool
+    default y if MCUX_HW_IP_DriverType_NETC
+
+config MCUX_COMPONENT_driver.netc_rt1180
+    bool
+    depends on MCUX_HW_DEVICE_ID_MIMXRT1189xxxxx || MCUX_HW_DEVICE_ID_MIMXRT1187xxxxx ||\
+               MCUX_HW_DEVICE_ID_MIMXRT1182xxxxx || MCUX_HW_DEVICE_ID_MIMXRT1181xxxxx
+
+config MCUX_COMPONENT_driver.netc_imx95
+    bool
+    depends on MCUX_HW_DEVICE_ID_MIMX9596xxxxQ || MCUX_HW_DEVICE_ID_MIMX9596xxxxN || MCUX_HW_DEVICE_ID_MIMX9596xxxxL
+
+config MCUX_COMPONENT_driver.netc
+    bool "netc"
+    select MCUX_COMPONENT_driver.common
+    select MCUX_COMPONENT_driver.netc_rt1180 if MCUX_HAS_COMPONENT_driver.netc_rt1180
+    select MCUX_COMPONENT_driver.netc_imx95 if MCUX_HAS_COMPONENT_driver.netc_imx95
+    depends on MCUX_HAS_COMPONENT_driver.netc
+
+config MCUX_COMPONENT_driver.netc_switch
+    bool "netc switch"
+    default y
+    depends on MCUX_COMPONENT_driver.netc
+    depends on MCUX_HAS_COMPONENT_driver.netc_rt1180
+
+config MCUX_COMPONENT_driver.netc_phywrapper
+    bool "netc phy wrapper"
+    default y
+    depends on MCUX_COMPONENT_driver.netc
+    depends on MCUX_HAS_COMPONENT_driver.netc_imx95
+
+config MCUX_COMPONENT_driver.netc_msg
+    bool "netc VSI-PSI message"
+    depends on MCUX_COMPONENT_driver.netc

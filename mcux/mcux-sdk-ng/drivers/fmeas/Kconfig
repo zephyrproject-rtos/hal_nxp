@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.fmeas
+    bool
+    default y if MCUX_HW_IP_DriverType_ASYNC_SYSCON_FREQME || MCUX_HW_IP_DriverType_SYSCON_FREQME || MCUX_HW_IP_DriverType_MCO_FREQME
+
+config MCUX_COMPONENT_driver.fmeas
+    bool "fmeas"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.fmeas

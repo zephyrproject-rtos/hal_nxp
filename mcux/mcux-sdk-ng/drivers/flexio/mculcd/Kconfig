@@ -1,0 +1,43 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.flexio_mculcd_dma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.flexio_mculcd && MCUX_HAS_COMPONENT_driver.dma
+
+config MCUX_HAS_COMPONENT_driver.flexio_mculcd_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.flexio_mculcd && (MCUX_HAS_COMPONENT_driver.edma || MCUX_HAS_COMPONENT_driver.edma4)
+
+config MCUX_HAS_COMPONENT_driver.flexio_mculcd_smartdma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.flexio_mculcd && MCUX_HAS_COMPONENT_driver.smartdma
+
+config MCUX_HAS_COMPONENT_driver.flexio_mculcd
+    bool
+    default y if MCUX_HW_IP_DriverType_FLEXIO
+
+config MCUX_COMPONENT_driver.flexio_mculcd_dma
+    bool "flexio_mculcd_dma"
+    select MCUX_COMPONENT_driver.flexio_mculcd
+    select MCUX_COMPONENT_driver.dma
+    depends on MCUX_HAS_COMPONENT_driver.flexio_mculcd_dma
+
+config MCUX_COMPONENT_driver.flexio_mculcd_edma
+    bool "flexio_mculcd_edma"
+    select MCUX_COMPONENT_driver.flexio_mculcd
+    select MCUX_COMPONENT_driver.edma if MCUX_HAS_COMPONENT_driver.edma
+    select MCUX_COMPONENT_driver.edma4 if MCUX_HAS_COMPONENT_driver.edma4
+    depends on MCUX_HAS_COMPONENT_driver.flexio_mculcd_edma
+
+config MCUX_COMPONENT_driver.flexio_mculcd_smartdma
+    bool "flexio_mculcd_smartdma"
+    select MCUX_COMPONENT_driver.flexio_mculcd
+    select MCUX_COMPONENT_driver.smartdma
+    depends on MCUX_HAS_COMPONENT_driver.flexio_mculcd_smartdma
+
+config MCUX_COMPONENT_driver.flexio_mculcd
+    bool "flexio_mculcd"
+    select MCUX_COMPONENT_driver.flexio
+    depends on MCUX_HAS_COMPONENT_driver.flexio_mculcd

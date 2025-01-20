@@ -1,0 +1,34 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_HAS_COMPONENT_driver.lpuart_dma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.lpuart && MCUX_HAS_COMPONENT_driver.dma
+
+config MCUX_HAS_COMPONENT_driver.lpuart_edma
+    bool
+    default y if MCUX_HAS_COMPONENT_driver.lpuart && (MCUX_HAS_COMPONENT_driver.dma3 || MCUX_HAS_COMPONENT_driver.edma || MCUX_HAS_COMPONENT_driver.edma4)
+
+config MCUX_HAS_COMPONENT_driver.lpuart
+    bool
+    default y if MCUX_HW_IP_DriverType_LPUART
+
+config MCUX_COMPONENT_driver.lpuart_dma
+    bool "lpuart_dma"
+    select MCUX_COMPONENT_driver.lpuart
+    select MCUX_COMPONENT_driver.dma
+    depends on MCUX_HAS_COMPONENT_driver.lpuart_dma
+
+config MCUX_COMPONENT_driver.lpuart_edma
+    bool "lpuart_edma"
+    select MCUX_COMPONENT_driver.lpuart
+    select MCUX_COMPONENT_driver.dma3 if MCUX_HAS_COMPONENT_driver.dma3
+    select MCUX_COMPONENT_driver.edma if MCUX_HAS_COMPONENT_driver.edma
+    select MCUX_COMPONENT_driver.edma4 if MCUX_HAS_COMPONENT_driver.edma4
+    depends on MCUX_HAS_COMPONENT_driver.lpuart_edma
+
+config MCUX_COMPONENT_driver.lpuart
+    bool "lpuart"
+    select MCUX_COMPONENT_driver.common
+    depends on MCUX_HAS_COMPONENT_driver.lpuart
