@@ -1,0 +1,21 @@
+#if defined(${VPREFIX}$_IOCR_INIT)
+    ${PERIPHERAL}$->IOCR = ${VPREFIX}$_IOCR_INIT;
+#endif
+#if defined(${VPREFIX}$_BR7_INIT)
+    ${PERIPHERAL}$->BR[7] = ${VPREFIX}$_BR7_INIT;
+#endif
+#if defined(${VPREFIX}$_DBICR0_INIT)
+    ${PERIPHERAL}$->DBICR0 = ${VPREFIX}$_DBICR0_INIT;
+#endif
+#if defined(${VPREFIX}$_DBICR1_INIT)
+    ${PERIPHERAL}$->DBICR1 = ${VPREFIX}$_DBICR1_INIT;
+#endif
+#if defined(${VPREFIX}$_DBICR2_INIT)
+    ${PERIPHERAL}$->DBICR2 = ${VPREFIX}$_DBICR2_INIT;
+#endif
+#if defined(${VPREFIX}$_IPCR1_INIT)
+    ${PERIPHERAL}$->IPCR1 = ${VPREFIX}$_IPCR1_INIT;
+#endif
+#if defined(${VPREFIX}$_IPCR2_INIT)
+    ${PERIPHERAL}$->IPCR2 = ${VPREFIX}$_IPCR2_INIT;
+#endif

@@ -1,0 +1,7 @@
+1. This template is for FLEXCAN pheripheral.
+
+2. The init function should do as below
+   function declaration
+   {
+      insert fsl_flexcan.template
+   }

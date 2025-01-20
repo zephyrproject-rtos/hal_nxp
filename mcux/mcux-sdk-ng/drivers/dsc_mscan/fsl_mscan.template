@@ -1,0 +1,98 @@
+  /* Enable Module for configuration. */
+  ${PERIPHERAL}$->CTL1 |= CAN_CTL1_CANE_MASK;
+  /* Request initialization mode for configuration. */
+  ${PERIPHERAL}$->CTL0 |= CAN_CTL0_INITRQ_MASK;
+  /* Wait MSCAN entry initialization mode. */
+  while (0U == (${PERIPHERAL}$->CTL0 & CAN_CTL1_INITAK_MASK))
+  {}
+#ifdef ${VPREFIX}$_CTL1_INIT
+  /* Config CTL1 bits expect CAN enable bit. */
+  ${PERIPHERAL}$->CTL1 = ${VPREFIX}$_CTL1_INIT | CAN_CTL1_CANE_MASK;
+#endif /* ${VPREFIX}$_CTL1_INIT */
+  /* Config bits timing. */
+#ifdef ${VPREFIX}$_BTR0_INIT
+  ${PERIPHERAL}$->BTR0 = ${VPREFIX}$_BTR0_INIT;
+#endif /* ${VPREFIX}$_BTR0_INIT */
+#ifdef ${VPREFIX}$_BTR1_INIT
+  ${PERIPHERAL}$->BTR1 = ${VPREFIX}$_BTR1_INIT;
+#endif /* ${VPREFIX}$_BTR1_INIT */
+  /* Config identifier acceptance control. */
+#ifdef ${VPREFIX}$_IDAC_INIT
+  ${PERIPHERAL}$->IDAC = ${VPREFIX}$_IDAC_INIT;
+#endif /* ${VPREFIX}$_IDAC_INIT */
+  /* Config identifier acceptance first bank. */
+#ifdef ${VPREFIX}$_IDAR0_INIT
+  ${PERIPHERAL}$->IDAR_BANK_0[0] = ${VPREFIX}$_IDAR0_INIT;
+#endif /* ${VPREFIX}$_IDAR0_INIT */
+#ifdef ${VPREFIX}$_IDAR1_INIT
+  ${PERIPHERAL}$->IDAR_BANK_0[1] = ${VPREFIX}$_IDAR1_INIT;
+#endif /* ${VPREFIX}$_IDAR1_INIT */
+#ifdef ${VPREFIX}$_IDAR2_INIT
+  ${PERIPHERAL}$->IDAR_BANK_0[2] = ${VPREFIX}$_IDAR2_INIT;
+#endif /* ${VPREFIX}$_IDAR2_INIT */
+#ifdef ${VPREFIX}$_IDAR3_INIT
+  ${PERIPHERAL}$->IDAR_BANK_0[3] = ${VPREFIX}$_IDAR3_INIT;
+#endif /* ${VPREFIX}$_IDAR3_INIT */
+  /* Config identifier mask first bank. */
+#ifdef ${VPREFIX}$_IDMR0_INIT
+  ${PERIPHERAL}$->IDMR_BANK_0[0] = ${VPREFIX}$_IDMR0_INIT;
+#endif /* ${VPREFIX}$_IDMR0_INIT */
+#ifdef ${VPREFIX}$_IDMR1_INIT
+  ${PERIPHERAL}$->IDMR_BANK_0[1] = ${VPREFIX}$_IDMR1_INIT;
+#endif /* ${VPREFIX}$_IDMR1_INIT */
+#ifdef ${VPREFIX}$_IDMR2_INIT
+  ${PERIPHERAL}$->IDMR_BANK_0[2] = ${VPREFIX}$_IDMR2_INIT;
+#endif /* ${VPREFIX}$_IDMR2_INIT */
+#ifdef ${VPREFIX}$_IDMR3_INIT
+  ${PERIPHERAL}$->IDMR_BANK_0[3] = ${VPREFIX}$_IDMR3_INIT;
+#endif /* ${VPREFIX}$_IDMR3_INIT */
+  /* Config identifier acceptance second bank. */
+#ifdef ${VPREFIX}$_IDAR4_INIT
+  ${PERIPHERAL}$->IDAR_BANK_1[0] = ${VPREFIX}$_IDAR4_INIT;
+#endif /* ${VPREFIX}$_IDAR4_INIT */
+#ifdef ${VPREFIX}$_IDAR5_INIT
+  ${PERIPHERAL}$->IDAR_BANK_1[1] = ${VPREFIX}$_IDAR5_INIT;
+#endif /* ${VPREFIX}$_IDAR5_INIT */
+#ifdef ${VPREFIX}$_IDAR6_INIT
+  ${PERIPHERAL}$->IDAR_BANK_1[2] = ${VPREFIX}$_IDAR6_INIT;
+#endif /* ${VPREFIX}$_IDAR6_INIT */
+#ifdef ${VPREFIX}$_IDAR7_INIT
+  ${PERIPHERAL}$->IDAR_BANK_1[3] = ${VPREFIX}$_IDAR7_INIT;
+#endif /* ${VPREFIX}$_IDAR7_INIT */
+  /* Config identifier mask second bank. */
+#ifdef ${VPREFIX}$_IDMR4_INIT
+  ${PERIPHERAL}$->IDMR_BANK_1[0] = ${VPREFIX}$_IDMR4_INIT;
+#endif /* ${VPREFIX}$_IDMR4_INIT */
+#ifdef ${VPREFIX}$_IDMR5_INIT
+  ${PERIPHERAL}$->IDMR_BANK_1[1] = ${VPREFIX}$_IDMR5_INIT;
+#endif /* ${VPREFIX}$_IDMR5_INIT */
+#ifdef ${VPREFIX}$_IDMR6_INIT
+  ${PERIPHERAL}$->IDMR_BANK_1[2] = ${VPREFIX}$_IDMR6_INIT;
+#endif /* ${VPREFIX}$_IDMR6_INIT */
+#ifdef ${VPREFIX}$_IDMR7_INIT
+  ${PERIPHERAL}$->IDMR_BANK_1[3] = ${VPREFIX}$_IDMR7_INIT;
+#endif /* ${VPREFIX}$_IDMR7_INIT */
+  /* Request normal mode. */
+  ${PERIPHERAL}$->CTL0 &= ~CAN_CTL0_INITRQ_MASK;
+  /* Wait MSCAN exit initialization mode. */
+  while (0U != (${PERIPHERAL}$->CTL0 & CAN_CTL1_INITAK_MASK))
+  {}
+
+  /* Config receiver interrupts. */
+#ifdef ${VPREFIX}$_RIER_INIT
+  ${PERIPHERAL}$->RIER = ${VPREFIX}$_RIER_INIT;
+#endif /* ${VPREFIX}$_RIER_INIT */
+  /* Config transmitter interrupts. */
+#ifdef ${VPREFIX}$_TIER_INIT
+  ${PERIPHERAL}$->TIER = ${VPREFIX}$_TIER_INIT;
+#endif /* ${VPREFIX}$_TIER_INIT */
+
+#ifdef ${VPREFIX}$_CTL0_INIT
+  ${PERIPHERAL}$->CTL0 = ${VPREFIX}$_CTL0_INIT & (CAN_CTL0_SLPRQ_MASK | CAN_CTL0_WUPE_MASK | CAN_CTL0_TIME_MASK | CAN_CTL0_CSWAI_MASK);
+  if((${VPREFIX}$_CTL0_INIT & CAN_CTL0_SLPRQ_MASK) != 0U)
+  {
+    /* Wait MSCAN enter sleep mode. */
+    while (0U == (${PERIPHERAL}$->CTL1 & CAN_CTL1_SLPAK_MASK))
+    {}
+  }
+#endif /* ${VPREFIX}$_CTL0_INIT */

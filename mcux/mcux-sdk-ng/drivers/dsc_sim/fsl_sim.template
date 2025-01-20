@@ -1,0 +1,30 @@
+#if defined(${VPREFIX}$_CTRL_INIT)
+  ${PERIPHERAL}$->CTRL = ${VPREFIX}$_CTRL_INIT;
+#endif
+#if defined(${VPREFIX}$_SD0_INIT)
+  ${PERIPHERAL}$->SD0 = ${VPREFIX}$_SD0_INIT;
+#endif
+#if defined(${VPREFIX}$_SD1_INIT)
+  ${PERIPHERAL}$->SD1 = ${VPREFIX}$_SD1_INIT;
+#endif
+#if defined(${VPREFIX}$_SD2_INIT)
+  ${PERIPHERAL}$->SD2 = ${VPREFIX}$_SD2_INIT;
+#endif
+#if defined(${VPREFIX}$_SD3_INIT)
+  ${PERIPHERAL}$->SD3 = ${VPREFIX}$_SD3_INIT;
+#endif
+#if defined(${VPREFIX}$_IOSAHI_INIT)
+  ${PERIPHERAL}$->IOSAHI = ${VPREFIX}$_IOSAHI_INIT;
+#endif
+#if defined(${VPREFIX}$_IOSALO_INIT)
+  ${PERIPHERAL}$->IOSALO = ${VPREFIX}$_IOSALO_INIT;
+#endif
+#if defined(${VPREFIX}$_PROT_INIT)
+  ${PERIPHERAL}$->PROT = ${VPREFIX}$_PROT_INIT;
+#endif
+#if defined(${VPREFIX}$_MISC0_INIT)
+  ${PERIPHERAL}$->MISC0 = (${PERIPHERAL}$->MISC0 & (~${VPREFIX}$_MISC0_INIT_MASK)) | (${VPREFIX}$_MISC0_INIT & ${VPREFIX}$_MISC0_INIT_MASK);
+#endif
+#if defined(${VPREFIX}$_BOOT_MODE_OVERRIDE_INIT)
+  ${PERIPHERAL}$->BOOT_MODE_OVERRIDE = ${VPREFIX}$_BOOT_MODE_OVERRIDE_INIT;
+#endif

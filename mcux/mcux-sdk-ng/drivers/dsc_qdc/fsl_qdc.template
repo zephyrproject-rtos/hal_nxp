@@ -1,0 +1,97 @@
+    /* Software reset ${PERIPHERAL}$. */
+    SIM->PSWR2 |= SIM_PSWR2_${PERIPHERAL}$_MASK;
+    SIM->PSWR2 &= ~SIM_PSWR2_${PERIPHERAL}$_MASK;
+
+#if defined(${VPREFIX}$_FILT_INIT)
+    ${PERIPHERAL}$->FILT = ${VPREFIX}$_FILT_INIT;
+#endif /* ${VPREFIX}$_FILT_INIT */
+
+#if defined(${VPREFIX}$_WTR_INIT)
+    ${PERIPHERAL}$->WTR = ${VPREFIX}$_WTR_INIT;
+#else
+    ${PERIPHERAL}$->WTR = 0U;
+#endif /* ${VPREFIX}$_WTR_INIT */
+
+#if defined(${VPREFIX}$_POSD_INIT)
+    ${PERIPHERAL}$->POSD = ${VPREFIX}$_POSD_INIT;
+#else
+    ${PERIPHERAL}$->POSD = 0U;
+#endif /* ${VPREFIX}$_POSD_INIT */
+
+#if defined(${VPREFIX}$_REV_INIT)
+    ${PERIPHERAL}$->REV = ${VPREFIX}$_REV_INIT;
+#else
+    ${PERIPHERAL}$->REV = 0U;
+#endif /* ${VPREFIX}$_REV_INIT */
+
+#if defined(${VPREFIX}$_UPOS_INIT)
+    ${PERIPHERAL}$->UPOS = ${VPREFIX}$_UPOS_INIT;
+#else
+    ${PERIPHERAL}$->UPOS = 0U;
+#endif /* ${VPREFIX}$_UPOS_INIT */
+
+#if defined(${VPREFIX}$_LPOS_INIT)
+    ${PERIPHERAL}$->LPOS = ${VPREFIX}$_LPOS_INIT;
+#else
+    ${PERIPHERAL}$->LPOS = 0U;
+#endif /* ${VPREFIX}$_LPOS_INIT */
+
+#if defined(${VPREFIX}$_UINIT_INIT)
+    ${PERIPHERAL}$->UINIT = ${VPREFIX}$_UINIT_INIT;
+#else
+    ${PERIPHERAL}$->UINIT = 0U;
+#endif /* ${VPREFIX}$_UINIT_INIT */
+
+#if defined(${VPREFIX}$_LINIT_INIT)
+    ${PERIPHERAL}$->LINIT = ${VPREFIX}$_LINIT_INIT;
+#else
+    ${PERIPHERAL}$->LINIT = 0U;
+#endif /* ${VPREFIX}$_LINIT_INIT */
+
+#if defined(${VPREFIX}$_UMOD_INIT)
+    ${PERIPHERAL}$->UMOD = ${VPREFIX}$_UMOD_INIT;
+#else
+    ${PERIPHERAL}$->UMOD = 0U;
+#endif /* ${VPREFIX}$_UMOD_INIT */
+
+#if defined(${VPREFIX}$_LMOD_INIT)
+    ${PERIPHERAL}$->LMOD = ${VPREFIX}$_LMOD_INIT;
+#else
+    ${PERIPHERAL}$->LMOD = 0U;
+#endif /* ${VPREFIX}$_LMOD_INIT */
+
+#if defined(${VPREFIX}$_UCOMP_INIT)
+    ${PERIPHERAL}$->UCOMP = ${VPREFIX}$_UCOMP_INIT;
+#else
+    ${PERIPHERAL}$->UCOMP = 0xFFFFU;
+#endif /* ${VPREFIX}$_UCOMP_INIT */
+
+#if defined(${VPREFIX}$_LCOMP_INIT)
+    ${PERIPHERAL}$->LCOMP = ${VPREFIX}$_LCOMP_INIT;
+#else
+    ${PERIPHERAL}$->LCOMP = 0xFFFFU;
+#endif /* ${VPREFIX}$_LCOMP_INIT */
+
+#if defined(${VPREFIX}$_UCOMP1_INIT)
+    ${PERIPHERAL}$->UCOMP1 = ${VPREFIX}$_UCOMP1_INIT;
+#else
+    ${PERIPHERAL}$->UCOMP1 = 0xFFFFU;
+#endif /* ${VPREFIX}$_UCOMP1_INIT */
+
+#if defined(${VPREFIX}$_LCOMP1_INIT)
+    ${PERIPHERAL}$->LCOMP1 = ${VPREFIX}$_LCOMP1_INIT;
+#else
+    ${PERIPHERAL}$->LCOMP1 = 0xFFFFU;
+#endif /* ${VPREFIX}$_LCOMP1_INIT */
+
+#if defined(${VPREFIX}$_CTRL_INIT)
+    ${PERIPHERAL}$->CTRL = ${VPREFIX}$_CTRL_INIT;
+#endif /* ${VPREFIX}$_CTRL_INIT */
+
+#if defined(${VPREFIX}$_CTRL2_INIT)
+    ${PERIPHERAL}$->CTRL2 = ${VPREFIX}$_CTRL2_INIT;
+#endif /* ${VPREFIX}$_CTRL2_INIT */
+
+#if defined(${VPREFIX}$_CTRL3_INIT)
+    ${PERIPHERAL}$->CTRL3 = ${VPREFIX}$_CTRL3_INIT;
+#endif /* ${VPREFIX}$_CTRL3_INIT */

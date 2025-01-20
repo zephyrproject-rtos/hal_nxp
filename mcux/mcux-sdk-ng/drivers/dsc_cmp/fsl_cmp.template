@@ -1,0 +1,25 @@
+  /* Software reset the ${PERIPHERAL}$. */
+  ${PERIPHERAL}$->CR0   = 0U;
+  ${PERIPHERAL}$->CR1   = 0U;
+  ${PERIPHERAL}$->FPR   = 0U;
+  ${PERIPHERAL}$->SCR   = 0U;
+  ${PERIPHERAL}$->DACCR = 0U;
+  ${PERIPHERAL}$->MUXCR = 0U;
+#if defined(${VPREFIX}$_CR0_INIT)
+  ${PERIPHERAL}$->CR0 = ${VPREFIX}$_CR0_INIT;
+#endif /* ${VPREFIX}$_CR0_INIT */
+#if defined(${VPREFIX}$_FPR_INIT)
+  ${PERIPHERAL}$->FPR = ${VPREFIX}$_FPR_INIT;
+#endif /* ${VPREFIX}$_FPR_INIT */
+#if defined(${VPREFIX}$_SCR_INIT)
+  ${PERIPHERAL}$->SCR = ${VPREFIX}$_SCR_INIT;
+#endif /* ${VPREFIX}$_SCR_INIT */
+#if defined(${VPREFIX}$_DACCR_INIT)
+  ${PERIPHERAL}$->DACCR = ${VPREFIX}$_DACCR_INIT;
+#endif /* ${VPREFIX}$_DACCR_INIT */
+#if defined(${VPREFIX}$_MUXCR_INIT)
+  ${PERIPHERAL}$->MUXCR = ${VPREFIX}$_MUXCR_INIT;
+#endif /* ${VPREFIX}$_MUXCR_INIT */
+#if defined(${VPREFIX}$_CR1_INIT)
+  ${PERIPHERAL}$->CR1 = ${VPREFIX}$_CR1_INIT;
+#endif /* ${VPREFIX}$_CR1_INIT */
