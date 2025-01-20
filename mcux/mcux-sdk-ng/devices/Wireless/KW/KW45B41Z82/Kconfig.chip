@@ -60,7 +60,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_KW45B41Z82xxxA
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_KW45B41Z82
     prompt "Device KW45B41Z82 Part"
     config MCUX_HW_DEVICE_PART_KW45B41Z82AFTA
     bool "Device part KW45B41Z82AFTA"

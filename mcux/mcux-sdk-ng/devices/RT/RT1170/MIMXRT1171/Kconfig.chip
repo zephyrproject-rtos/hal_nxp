@@ -16,7 +16,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MIMXRT1171xxxxx
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MIMXRT1171
     prompt "Device MIMXRT1171 Part"
     config MCUX_HW_DEVICE_PART_MIMXRT1171DVMAA
         bool "Device part MIMXRT1171DVMAA"

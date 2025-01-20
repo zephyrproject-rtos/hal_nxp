@@ -52,7 +52,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MCIMX7U3xxxxx
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MCIMX7U3
     prompt "Device MCIMX7U3 Part"
     config MCUX_HW_DEVICE_PART_MCIMX7U3DVK07
     bool "Device part MCIMX7U3DVK07"

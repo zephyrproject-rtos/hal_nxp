@@ -8,7 +8,7 @@
 config MCUX_HW_DEVICE_ID_MIMXRT758S
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MIMXRT758S
     prompt "Device MIMXRT758S Part"
     config MCUX_HW_DEVICE_PART_MIMXRT758SGFOA
     bool "Device part MIMXRT758SGFOA"

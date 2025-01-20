@@ -7,7 +7,7 @@
 config MCUX_HW_DEVICE_ID_K32L3A60xxx
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_K32L3A60
     prompt "Device K32L3A60 Part"
     config MCUX_HW_DEVICE_PART_K32L3A60VPJ1A
     bool "Device part K32L3A60VPJ1A"

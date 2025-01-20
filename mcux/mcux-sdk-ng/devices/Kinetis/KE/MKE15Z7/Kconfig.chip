@@ -55,7 +55,7 @@ config MCUX_HW_DEVICE_ID_MKE15Z256xxx7
 config MCUX_HW_DEVICE_ID_MKE15Z128xxx7
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MKE15Z7
     prompt "Device MKE15Z7 Part"
     config MCUX_HW_DEVICE_PART_MKE15Z256VLL7
     bool "Device part MKE15Z256VLL7"

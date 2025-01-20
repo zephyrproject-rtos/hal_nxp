@@ -60,7 +60,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MCXA144
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MCXA144
     prompt "Device MCXA144 Part"
     config MCUX_HW_DEVICE_PART_MCXA144VPJ
     bool "Device part MCXA144VPJ"

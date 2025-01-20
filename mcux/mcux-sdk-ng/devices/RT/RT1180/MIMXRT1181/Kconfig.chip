@@ -16,7 +16,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MIMXRT1181xxxxx
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MIMXRT1181
     prompt "Device MIMXRT1181 Part"
     config MCUX_HW_DEVICE_PART_MIMXRT1181CVP2B
         bool "Device part MIMXRT1181CVP2B"

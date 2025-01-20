@@ -52,7 +52,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_LPC834
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_LPC834
     prompt "Device LPC834 Part"
     config MCUX_HW_DEVICE_PART_LPC834M101FHI33
     bool "Device part LPC834M101FHI33"

@@ -60,7 +60,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MIMX9351xxxxM
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MIMX9351
     prompt "Device MIMX9351 Part"
     config MCUX_HW_DEVICE_PART_MIMX9351DVVXM
     bool "Device part MIMX9351DVVXM"

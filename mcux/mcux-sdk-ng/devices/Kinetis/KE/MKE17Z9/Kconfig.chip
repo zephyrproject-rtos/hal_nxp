@@ -52,7 +52,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MKE17Z512xxx9
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MKE17Z9
     prompt "Device MKE17Z9 Part"
     config MCUX_HW_DEVICE_PART_MKE17Z512VLL9
     bool "Device part MKE17Z512VLL9"

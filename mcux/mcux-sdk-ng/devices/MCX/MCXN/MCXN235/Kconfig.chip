@@ -60,7 +60,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MCXN235
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MCXN235
     prompt "Device MCXN235 Part"
     config MCUX_HW_DEVICE_PART_MCXN235VDF
     bool "Device part MCXN235VDF"

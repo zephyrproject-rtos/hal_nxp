@@ -16,7 +16,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MIMXRT1051xxxxB
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MIMXRT1051
     prompt "Device MIMXRT1051 Part"
     config MCUX_HW_DEVICE_PART_MIMXRT1051CVL5B
         bool "Device part MIMXRT1051CVL5B"

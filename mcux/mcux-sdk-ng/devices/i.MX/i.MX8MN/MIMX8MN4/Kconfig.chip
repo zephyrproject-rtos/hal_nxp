@@ -65,7 +65,7 @@ config MCUX_HW_DEVICE_DDR3L
     bool
     default y if $(board) = "evkmimx8mnddr3l"
 
-choice
+choice MCUX_HW_DEVICE_PART_MIMX8MN4
     prompt "Device MIMX8MN4 Part"
     config MCUX_HW_DEVICE_PART_MIMX8MN4DVTJZ
     bool "Device part MIMX8MN4DVTJZ"

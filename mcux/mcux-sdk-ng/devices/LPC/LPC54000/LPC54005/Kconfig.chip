@@ -52,7 +52,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_LPC54005
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_LPC54005
     prompt "Device LPC54005 Part"
     config MCUX_HW_DEVICE_PART_LPC54005JET100
     bool "Device part LPC54005JET100"

@@ -60,7 +60,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MCXA275
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MCXA275
     prompt "Device MCXA275 Part"
     config MCUX_HW_DEVICE_PART_MCXA275VLQ
     bool "Device part MCXA275VLQ"

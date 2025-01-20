@@ -55,7 +55,7 @@ config MCUX_HW_DEVICE_ID_MK22FN128xxx12
 config MCUX_HW_DEVICE_ID_MK22FN256xxx12
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MK22F25612
     prompt "Device MK22F25612 Part"
     config MCUX_HW_DEVICE_PART_MK22FN128CAH12
     bool "Device part MK22FN128CAH12"

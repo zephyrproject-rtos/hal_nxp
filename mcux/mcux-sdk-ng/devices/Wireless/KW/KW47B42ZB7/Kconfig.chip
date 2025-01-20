@@ -7,7 +7,7 @@
 config MCUX_HW_DEVICE_ID_KW47B42ZB7xxxA
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_KW47B42ZB7
     prompt "Device KW47B42ZB7 Part"
     config MCUX_HW_DEVICE_PART_KW47B42ZB7AFTA
     bool "Device part KW47B42ZB7AFTA"

@@ -52,7 +52,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MK22FN512xxx12
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MK22F51212
     prompt "Device MK22F51212 Part"
     config MCUX_HW_DEVICE_PART_MK22FN512VDC12
     bool "Device part MK22FN512VDC12"

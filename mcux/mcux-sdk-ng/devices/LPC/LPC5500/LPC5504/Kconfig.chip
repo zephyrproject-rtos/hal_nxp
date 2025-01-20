@@ -60,7 +60,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_LPC5504
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_LPC5504
     prompt "Device LPC5504 Part"
     config MCUX_HW_DEVICE_PART_LPC5504JBD64
     bool "Device part LPC5504JBD64"

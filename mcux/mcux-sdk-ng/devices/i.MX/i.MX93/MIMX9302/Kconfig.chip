@@ -60,7 +60,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MIMX9302xxxxD
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MIMX9302
     prompt "Device MIMX9302 Part"
     config MCUX_HW_DEVICE_PART_MIMX9302DVVXD
     bool "Device part MIMX9302DVVXD"

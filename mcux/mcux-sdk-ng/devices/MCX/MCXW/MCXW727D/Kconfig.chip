@@ -7,7 +7,7 @@
 config MCUX_HW_DEVICE_ID_MCXW727DxxxA
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MCXW727D
     prompt "Device MCXW727D Part"
     config MCUX_HW_DEVICE_PART_MCXW727DMFTA
     bool "Device part MCXW727DMFTA"

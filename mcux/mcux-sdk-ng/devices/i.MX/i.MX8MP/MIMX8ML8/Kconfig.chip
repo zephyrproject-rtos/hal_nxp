@@ -55,7 +55,7 @@ config MCUX_HW_DEVICE_ID_MIMX8ML8xxxLZ
 config MCUX_HW_DEVICE_ID_MIMX8ML8xxxKZ
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MIMX8ML8
     prompt "Device MIMX8ML8 Part"
     config MCUX_HW_DEVICE_PART_MIMX8ML8DVNLZ
     bool "Device part MIMX8ML8DVNLZ"

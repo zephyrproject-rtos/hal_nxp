@@ -8,7 +8,7 @@
 config MCUX_HW_DEVICE_ID_MIMXRT685S
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MIMXRT685S
     prompt "Device MIMXRT685S Part"
     config MCUX_HW_DEVICE_PART_MIMXRT685SFVKB
     bool "Device part MIMXRT685SFVKB"

@@ -52,7 +52,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_LPC864
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_LPC864
     prompt "Device LPC864 Part"
     config MCUX_HW_DEVICE_PART_LPC864M201JBD64
     bool "Device part LPC864M201JBD64"

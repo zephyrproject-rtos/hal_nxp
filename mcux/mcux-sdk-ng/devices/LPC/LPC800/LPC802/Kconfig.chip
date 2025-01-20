@@ -52,7 +52,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_LPC802
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_LPC802
     prompt "Device LPC802 Part"
     config MCUX_HW_DEVICE_PART_LPC802M011JDH20
     bool "Device part LPC802M011JDH20"

@@ -60,7 +60,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_RW610
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_RW610
     prompt "Device RW610 Part"
     config MCUX_HW_DEVICE_PART_RW610HNA2I
     bool "Device part RW610HNA2I"

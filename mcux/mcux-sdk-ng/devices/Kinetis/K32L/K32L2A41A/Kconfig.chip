@@ -52,7 +52,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_K32L2A41xxxxA
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_K32L2A41A
     prompt "Device K32L2A41A Part"
     config MCUX_HW_DEVICE_PART_K32L2A41VLL1A
     bool "Device part K32L2A41VLL1A"

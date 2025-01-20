@@ -56,7 +56,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_MCXA176
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MCXA176
     prompt "Device MCXA176 Part"
     config MCUX_HW_DEVICE_PART_MCXA176VLQ
     bool "Device part MCXA176VLQ"

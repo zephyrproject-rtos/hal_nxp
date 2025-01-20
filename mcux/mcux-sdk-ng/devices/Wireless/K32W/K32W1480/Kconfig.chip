@@ -60,7 +60,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_K32W1480xxxA
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_K32W1480
     prompt "Device K32W1480 Part"
     config MCUX_HW_DEVICE_PART_K32W1480VFTA
     bool "Device part K32W1480VFTA"

@@ -19,7 +19,7 @@ config MCUX_HW_DEVICE_ID_MIMXRT1061xxxxA
 config MCUX_HW_DEVICE_ID_MIMXRT1061xxxxB
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MIMXRT1061
     prompt "Device MIMXRT1061 Part"
     config MCUX_HW_DEVICE_PART_MIMXRT1061CVL5A
         bool "Device part MIMXRT1061CVL5A"

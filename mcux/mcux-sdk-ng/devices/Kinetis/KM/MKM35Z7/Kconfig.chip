@@ -55,7 +55,7 @@ config MCUX_HW_DEVICE_ID_MKM35Z512xxx7
 config MCUX_HW_DEVICE_ID_MKM35Z256xxx7
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MKM35Z7
     prompt "Device MKM35Z7 Part"
     config MCUX_HW_DEVICE_PART_MKM35Z512VLQ7
     bool "Device part MKM35Z512VLQ7"

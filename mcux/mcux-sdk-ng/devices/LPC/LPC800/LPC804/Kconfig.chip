@@ -52,7 +52,7 @@ config MCUX_HW_SOC_SINGLECORE_DEVICE
 config MCUX_HW_DEVICE_ID_LPC804
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_LPC804
     prompt "Device LPC804 Part"
     config MCUX_HW_DEVICE_PART_LPC804M101JDH24
     bool "Device part LPC804M101JDH24"

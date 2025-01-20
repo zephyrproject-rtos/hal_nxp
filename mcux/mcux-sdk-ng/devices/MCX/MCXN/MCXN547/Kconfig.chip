@@ -7,7 +7,7 @@
 config MCUX_HW_DEVICE_ID_MCXN547
     bool
 
-choice
+choice MCUX_HW_DEVICE_PART_MCXN547
     prompt "Device MCXN547 Part"
     config MCUX_HW_DEVICE_PART_MCXN547VDF
     bool "Device part MCXN547VDF"
