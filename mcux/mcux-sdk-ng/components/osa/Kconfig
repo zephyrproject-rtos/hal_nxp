@@ -1,0 +1,101 @@
+# Copyright 2024 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_COMPONENT_component.osa_template_config
+    bool "OSA template configuration header file"
+    default n
+    help
+        Not generate fsl_os_abstraction_config.h, users need use default template fsl_os_abstraction_config.h.
+
+config MCUX_COMPONENT_component.osa_interface
+    bool "osa interface"
+    select MCUX_COMPONENT_driver.common
+    select MCUX_COMPONENT_component.lists
+    select MCUX_COMPONENT_component.osa_template_config
+
+config MCUX_PRJSEG_component.osa_interface.generated_config
+    bool "Generate OSA configuration header"
+    default y
+    depends on MCUX_COMPONENT_component.osa_interface
+    help
+        Generate the fsl_os_abstraction_config.h, otherwise users need to provide their
+        own fsl_os_abstraction_config.h.
+
+config MCUX_PRJSEG_component.osa_interface.osa_macro_used
+    bool "OSA USED"
+    default y
+    depends on MCUX_COMPONENT_component.osa_interface
+    help
+        Add OSA_USED macro for component osa.
+
+if MCUX_PRJSEG_component.osa_interface.generated_config
+    menu "OSA(fsl_os_abstraction_config.h)"
+        config gMainThreadStackSize_c
+            int "gMainThreadStackSize_c"
+            default 1024
+            help
+                No prefix in generated macro
+
+        config gMainThreadPriority_c
+            int "gMainThreadPriority_c"
+            default 7
+            help
+                No prefix in generated macro
+
+        config gTaskMultipleInstancesManagement_c
+            int "gTaskMultipleInstancesManagement_c"
+            default 0
+            help
+                No prefix in generated macro
+
+        config FSL_OSA_TASK_ENABLE
+            bool "FSL_OSA_TASK_ENABLE"
+            default y
+            help
+                No prefix in generated macro
+
+        config FSL_OSA_MAIN_FUNC_ENABLE
+            bool "FSL_OSA_MAIN_FUNC_ENABLE"
+            default n
+            help
+                No prefix in generated macro
+
+        config FSL_OSA_BM_TIMEOUT_ENABLE
+            bool "FSL_OSA_BM_TIMEOUT_ENABLE"
+            default n
+            help
+                No prefix in generated macro
+
+        config FSL_OSA_ALLOCATED_HEAP
+            bool "FSL_OSA_ALLOCATED_HEAP"
+            default y
+            help
+                No prefix in generated macro
+    endmenu
+endif
+
+config MCUX_COMPONENT_component.osa
+    bool "osa"
+    select MCUX_COMPONENT_component.osa_interface
+    help
+        Enable component.osa component
+
+    if MCUX_COMPONENT_component.osa
+        choice MCUX_COMPONENT_component.osa.selection
+            prompt "OSA selection"
+            config MCUX_COMPONENT_component.osa_bm
+                bool "component.osa_bm"
+                depends on !MCUX_COMPONENT_middleware.freertos-kernel
+                depends on !MCUX_COMPONENT_middleware.azure_rtos.tx
+                depends on !MCUX_COMPONENT_middleware.zephyr
+            config MCUX_COMPONENT_component.osa_free_rtos
+                bool "component.osa_free_rtos"
+                depends on MCUX_COMPONENT_middleware.freertos-kernel
+            config MCUX_COMPONENT_component.osa_threadx
+                bool "component.osa_threadx"
+                depends on MCUX_COMPONENT_middleware.wireless.ble_controller_threadx
+            config MCUX_COMPONENT_component.osa_zephyr
+                bool "component.osa_zephyr"
+                depends on MCUX_COMPONENT_middleware.zephyr
+        endchoice
+    endif
