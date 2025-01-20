@@ -1,0 +1,54 @@
+1. This template is for eDMA pheripheral.
+
+2. The init function should do as below
+   function declaration
+   {
+      insert fsl_edma.template
+      insert several fsl_edma_tcd.template (optional, for tcd0~tcd3)
+      insert several fsl_edma_start.template
+   }
+
+3. Macro definition.
+      fsl_edma_tcd.template
+          ${CHANNEL}$ must be 0, 1, 2 or 3, don't add any suffix for the number, say 0U or 1U is not allowed.
+
+          ${VPREFIX}$_ERQ_INIT_MASK rule:
+              mask = 0x0;
+              if(TCD0_Init) mask |= 0x1U;
+              if(TCD1_Init) mask |= 0x2U;
+              if(TCD2_Init) mask |= 0x4U;
+              if(TCD3_Init) mask |= 0x8U;
+              ${VPREFIX}$_ERQ_INIT_MASK = mask;
+
+      fsl_edma.template:
+          ${VPREFIX}$_INT_INIT_MASK rule:
+              mask = 0x0;
+              if(TCD0_Init) mask |= 0x1U;
+              if(TCD1_Init) mask |= 0x2U;
+              if(TCD2_Init) mask |= 0x4U;
+              if(TCD3_Init) mask |= 0x8U;
+              ${VPREFIX}$_INT_INIT_MASK = mask;
+
+          ${VPREFIX}$_ERR_INIT_MASK rule:
+              mask = 0x0;
+              if(TCD0_Init) mask |= 0x1U;
+              if(TCD1_Init) mask |= 0x2U;
+              if(TCD2_Init) mask |= 0x4U;
+              if(TCD3_Init) mask |= 0x8U;
+              ${VPREFIX}$_ERR_INIT_MASK = mask;
+
+          ${VPREFIX}$_EEI_INIT_MASK rule:
+              mask = 0x0;
+              if(TCD0_Init) mask |= 0x1U;
+              if(TCD1_Init) mask |= 0x2U;
+              if(TCD2_Init) mask |= 0x4U;
+              if(TCD3_Init) mask |= 0x8U;
+              ${VPREFIX}$_EEI_INIT_MASK = mask;
+
+          ${VPREFIX}$_EARS_INIT_MASK rule:
+              mask = 0x0;
+              if(TCD0_Init) mask |= 0x1U;
+              if(TCD1_Init) mask |= 0x2U;
+              if(TCD2_Init) mask |= 0x4U;
+              if(TCD3_Init) mask |= 0x8U;
+              ${VPREFIX}$_EARS_INIT_MASK = mask;

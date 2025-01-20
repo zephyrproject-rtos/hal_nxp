@@ -1,0 +1,20 @@
+  /* Timer control register configuration register TIMCTLn initialization, TIMER is the timer index */
+#ifdef ${VPREFIX}$_TIMCTL${TIMER}$_INIT
+  ${PERIPHERAL}$->TIMCTL[${TIMER}$] = ${VPREFIX}$_TIMCTL${TIMER}$_INIT;
+#else
+  ${PERIPHERAL}$->TIMCTL[${TIMER}$] = 0x0U;
+#endif /* ${VPREFIX}$_TIMCTL${TIMER}$_INIT */
+
+  /* Timer configuration register TIMCFGn initialization, TIMER is the timer index */
+#ifdef ${VPREFIX}$_TIMCFG${TIMER}$_INIT
+  ${PERIPHERAL}$->TIMCFG[${TIMER}$] = ${VPREFIX}$_TIMCFG${TIMER}$_INIT;
+#else
+  ${PERIPHERAL}$->TIMCFG[${TIMER}$] = 0x0U;
+#endif /* ${VPREFIX}$_TIMCFG${TIMER}$_INIT */
+
+  /* Timer compare register TIMCMPn initialization, TIMER is the timer index */
+#ifdef ${VPREFIX}$_TIMCMP${TIMER}$_INIT
+  ${PERIPHERAL}$->TIMCMP[${TIMER}$] = ${VPREFIX}$_TIMCMP${TIMER}$_INIT;
+#else
+  ${PERIPHERAL}$->TIMCMP[${TIMER}$] = 0x0U;
+#endif /* ${VPREFIX}$_TIMCMP${TIMER}$_INIT */

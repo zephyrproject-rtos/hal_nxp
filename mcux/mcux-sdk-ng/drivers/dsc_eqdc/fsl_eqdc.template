@@ -1,0 +1,82 @@
+  /* Software reset ${PERIPHERAL}$. */ 
+  ${SW_RESET_CONTROL_PERIPHERAL}$->${SW_RESET_CONTROL_REGISTER}$ |= ${SW_RESET_CONTROL_PERIPHERAL}$_${SW_RESET_CONTROL_REGISTER}$_${SW_RESET_CONTROL_BITFIELD}$_MASK; 
+  ${SW_RESET_CONTROL_PERIPHERAL}$->${SW_RESET_CONTROL_REGISTER}$ &= ~ ${SW_RESET_CONTROL_PERIPHERAL}$_${SW_RESET_CONTROL_REGISTER}$_${SW_RESET_CONTROL_BITFIELD}$_MASK; 
+#if defined(${VPREFIX}$_FILT_INIT)
+    ${PERIPHERAL}$->FILT = ${VPREFIX}$_FILT_INIT;
+#endif /* ${VPREFIX}$_FILT_INIT */
+#if defined(${VPREFIX}$_WTR_INIT)
+  ${PERIPHERAL}$->WTR = ${VPREFIX}$_WTR_INIT;
+#endif /* ${VPREFIX}$_WTR_INIT */
+#if defined(${VPREFIX}$_POSD_INIT)
+  ${PERIPHERAL}$->POSD = ${VPREFIX}$_POSD_INIT;
+#endif /* ${VPREFIX}$_POSD_INIT */
+#if defined(${VPREFIX}$_REV_INIT)
+  ${PERIPHERAL}$->REV = ${VPREFIX}$_REV_INIT;
+#endif /* ${VPREFIX}$_REV_INIT */
+#if defined(${VPREFIX}$_UPOS_INIT)
+  ${PERIPHERAL}$->UPOS = ${VPREFIX}$_UPOS_INIT;
+#endif /* ${VPREFIX}$_UPOS_INIT */
+#if defined(${VPREFIX}$_LPOS_INIT)
+    ${PERIPHERAL}$->LPOS = ${VPREFIX}$_LPOS_INIT;
+#endif /* ${VPREFIX}$_LPOS_INIT */
+    /* Initialization sequence of double-set registers using the LDOK bit. */
+    /* The LDMODE and LDOK bits are set to zero by using software reset. */
+#if defined(${VPREFIX}$_UINIT_INIT)
+    ${PERIPHERAL}$->UINIT = ${VPREFIX}$_UINIT_INIT;
+#endif /* ${VPREFIX}$_UINIT_INIT */
+#if defined(${VPREFIX}$_LINIT_INIT)
+    ${PERIPHERAL}$->LINIT = ${VPREFIX}$_LINIT_INIT;
+#endif /* ${VPREFIX}$_LINIT_INIT */
+#if defined(${VPREFIX}$_UMOD_INIT)
+    ${PERIPHERAL}$->UMOD = ${VPREFIX}$_UMOD_INIT;
+#endif /* ${VPREFIX}$_UMOD_INIT */
+#if defined(${VPREFIX}$_LMOD_INIT)
+    ${PERIPHERAL}$->LMOD = ${VPREFIX}$_LMOD_INIT;
+#endif /* ${VPREFIX}$_LMOD_INIT */
+#if defined(${VPREFIX}$_UCOMP0_INIT)
+    ${PERIPHERAL}$->UCOMP0 = ${VPREFIX}$_UCOMP0_INIT;
+#endif /* ${VPREFIX}$_UCOMP0_INIT */
+#if defined(${VPREFIX}$_LCOMP0_INIT)
+    ${PERIPHERAL}$->LCOMP0 = ${VPREFIX}$_LCOMP0_INIT;
+#endif /* ${VPREFIX}$_LCOMP0_INIT */
+#if defined(${VPREFIX}$_UCOMP1_INIT)
+    ${PERIPHERAL}$->UCOMP1 = ${VPREFIX}$_UCOMP1_INIT;
+#endif /* ${VPREFIX}$_UCOMP1_INIT */
+#if defined(${VPREFIX}$_LCOMP1_INIT)
+    ${PERIPHERAL}$->LCOMP1 = ${VPREFIX}$_LCOMP1_INIT;
+#endif /* ${VPREFIX}$_LCOMP1_INIT */
+#if defined(${VPREFIX}$_UCOMP2_INIT)
+    ${PERIPHERAL}$->UCOMP2 = ${VPREFIX}$_UCOMP2_INIT;
+#endif /* ${VPREFIX}$_UCOMP2_INIT */
+#if defined(${VPREFIX}$_LCOMP2_INIT)
+    ${PERIPHERAL}$->LCOMP2 = ${VPREFIX}$_LCOMP2_INIT;
+#endif /* ${VPREFIX}$_LCOMP2_INIT */
+#if defined(${VPREFIX}$_UCOMP3_INIT)
+    ${PERIPHERAL}$->UCOMP3 = ${VPREFIX}$_UCOMP3_INIT;
+#endif /* ${VPREFIX}$_UCOMP3_INIT */
+#if defined(${VPREFIX}$_LCOMP3_INIT)
+    ${PERIPHERAL}$->LCOMP3 = ${VPREFIX}$_LCOMP3_INIT;
+#endif /* ${VPREFIX}$_LCOMP3_INIT */
+    /* Set the LDOK bit for loading of outer-set registers into inner-set registers. */
+    ${PERIPHERAL}$->CTRL |= EQDC_CTRL_LDOK_MASK;
+    while(0U != (${PERIPHERAL}$->CTRL & EQDC_CTRL_LDOK_MASK))
+    {
+    }
+#if defined(${VPREFIX}$_CTRL_INIT)
+    ${PERIPHERAL}$->CTRL = ${VPREFIX}$_CTRL_INIT;
+#endif /* ${VPREFIX}$_CTRL_INIT */
+#if defined(${VPREFIX}$_INTCTRL_INIT)
+    ${PERIPHERAL}$->INTCTRL = ${VPREFIX}$_INTCTRL_INIT;
+#endif /* ${VPREFIX}$_INTCTRL_INIT */
+#if defined(${VPREFIX}$_CTRL2_INIT)
+    if ( 0U != (${VPREFIX}$_CTRL_INIT & EQDC_CTRL_DMAEN_MASK))
+    {
+        /* When DMA is enabled, must set CTRL2[LDMODE]. */
+        ${PERIPHERAL}$->CTRL2 = ${VPREFIX}$_CTRL2_INIT | EQDC_CTRL2_LDMOD_MASK;
+        ${PERIPHERAL}$->CTRL |= EQDC_CTRL_LDOK_MASK;
+    }
+    else
+    {
+        ${PERIPHERAL}$->CTRL2 = ${VPREFIX}$_CTRL2_INIT;
+    }
+#endif /* ${VPREFIX}$_CTRL2_INIT */
