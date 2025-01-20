@@ -1,0 +1,1 @@
+mcux_add_cmakelists(${CMAKE_CURRENT_LIST_DIR}/../../../RT1160/MIMXRT1166/drivers)
