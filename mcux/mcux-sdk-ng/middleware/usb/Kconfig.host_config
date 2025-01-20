@@ -35,7 +35,7 @@ config USB_HOST_CONFIG_EHCI_FRAME_LIST_SIZE
     help
         No prefix in generated macro
 
-choice
+choice MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE
     prompt "Periodic frame list size supported by the EHCI Controller" if USB_HOST_CONFIG_EHCI > 0
     default MCUX_MISC_USB_EHCI_FRAME_LIST_SIZE_1024
 

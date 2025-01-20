@@ -29,7 +29,7 @@ config PD_CONFIG_PHY_LOW_POWER_LEVEL
 comment "USB PD Configurations"
 
 # refer to macro PD_SPEC_REVISION_* in pd/usb_pd.h
-choice
+choice MCUX_MISC_USB_PD_SPEC_REVISION
     prompt "Use USB PD Specification Revision"
     default MCUX_MISC_USB_PD_SPEC_REVISION_30
 
@@ -53,7 +53,7 @@ config PD_CONFIG_REVISION
         No prefix in generated macro
 
 # refer to macro PD_SPEC_STRUCTURED_VDM_VERSION_* in pd/usb_pd.h
-choice
+choice MCUX_MISC_USB_PD_SPEC_STRUCTURED_VDM_VERSION
     prompt "Use USB PD structured VDM version"
     default MCUX_MISC_USB_PD_SPEC_STRUCTURED_VDM_VERSION_20
 
@@ -173,7 +173,7 @@ config PD_CONFIG_CABLE_COMMUNICATION_ENABLE
     help
         No prefix in generated macro
 
-choice
+choice MCUX_MISC_USB_PD_MIN_DISCHARGE_TIME
     prompt "Set Minimum Discharge Time"
     default MCUX_MISC_USB_PD_MIN_DISCHARGE_TIME_14MS
 

@@ -296,7 +296,7 @@ if MCUX_COMPONENT_middleware.usb.common_header
 
         endif
 
-        choice
+        choice MCUX_MISC_USB_PD_GPIO_MODULE_ADAPTER
             prompt "Choice GPIO module Adapter"
             default MCUX_MISC_USB_PD_USE_GPIO if MCUX_HAS_COMPONENT_driver.gpio
             default MCUX_MISC_USB_PD_USE_IGPIO if MCUX_HAS_COMPONENT_driver.igpio
