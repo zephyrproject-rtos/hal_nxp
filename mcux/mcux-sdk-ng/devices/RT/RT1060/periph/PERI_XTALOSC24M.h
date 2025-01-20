@@ -1,0 +1,1250 @@
+/*
+** ###################################################################
+**     Processors:          MIMXRT1061CVJ5A
+**                          MIMXRT1061CVJ5B
+**                          MIMXRT1061CVL5A
+**                          MIMXRT1061CVL5B
+**                          MIMXRT1061DVJ6A
+**                          MIMXRT1061DVJ6B
+**                          MIMXRT1061DVL6A
+**                          MIMXRT1061DVL6B
+**                          MIMXRT1061XVN5B
+**                          MIMXRT1062CVJ5A
+**                          MIMXRT1062CVJ5B
+**                          MIMXRT1062CVL5A
+**                          MIMXRT1062CVL5B
+**                          MIMXRT1062DVJ6A
+**                          MIMXRT1062DVJ6B
+**                          MIMXRT1062DVL6A
+**                          MIMXRT1062DVL6B
+**                          MIMXRT1062DVN6B
+**                          MIMXRT1062XVN5B
+**                          MIMXRT106ADVL6A
+**                          MIMXRT106CDVL6A
+**                          MIMXRT106FDVL6A
+**                          MIMXRT106LDVL6A
+**                          MIMXRT106SDVL6A
+**
+**     Version:             rev. 1.4, 2022-03-25
+**     Build:               b240705
+**
+**     Abstract:
+**         CMSIS Peripheral Access Layer for XTALOSC24M
+**
+**     Copyright 1997-2016 Freescale Semiconductor, Inc.
+**     Copyright 2016-2024 NXP
+**     SPDX-License-Identifier: BSD-3-Clause
+**
+**     http:                 www.nxp.com
+**     mail:                 support@nxp.com
+**
+**     Revisions:
+**     - rev. 0.1 (2017-01-10)
+**         Initial version.
+**     - rev. 1.0 (2018-11-16)
+**         Update header files to align with IMXRT1060RM Rev.0.
+**     - rev. 1.1 (2018-11-27)
+**         Update header files to align with IMXRT1060RM Rev.1.
+**     - rev. 1.2 (2019-04-29)
+**         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
+**     - rev. 1.3 (2021-08-10)
+**         Update header files to align with IMXRT1060RM Rev.3.
+**     - rev. 1.4 (2022-03-25)
+**         Add RT1060X device
+**
+** ###################################################################
+*/
+
+/*!
+ * @file XTALOSC24M.h
+ * @version 1.4
+ * @date 2022-03-25
+ * @brief CMSIS Peripheral Access Layer for XTALOSC24M
+ *
+ * CMSIS Peripheral Access Layer for XTALOSC24M
+ */
+
+#if !defined(XTALOSC24M_H_)
+#define XTALOSC24M_H_                            /**< Symbol preventing repeated inclusion */
+
+#if (defined(CPU_MIMXRT1061CVJ5A) || defined(CPU_MIMXRT1061CVJ5B) || defined(CPU_MIMXRT1061CVL5A) || defined(CPU_MIMXRT1061CVL5B) || defined(CPU_MIMXRT1061DVJ6A) || defined(CPU_MIMXRT1061DVJ6B) || defined(CPU_MIMXRT1061DVL6A) || defined(CPU_MIMXRT1061DVL6B) || defined(CPU_MIMXRT1061XVN5B))
+#include "MIMXRT1061_COMMON.h"
+#elif (defined(CPU_MIMXRT1062CVJ5A) || defined(CPU_MIMXRT1062CVJ5B) || defined(CPU_MIMXRT1062CVL5A) || defined(CPU_MIMXRT1062CVL5B) || defined(CPU_MIMXRT1062DVJ6A) || defined(CPU_MIMXRT1062DVJ6B) || defined(CPU_MIMXRT1062DVL6A) || defined(CPU_MIMXRT1062DVL6B) || defined(CPU_MIMXRT1062DVN6B) || defined(CPU_MIMXRT1062XVN5B))
+#include "MIMXRT1062_COMMON.h"
+#elif (defined(CPU_MIMXRT106ADVL6A))
+#include "MIMXRT106A_COMMON.h"
+#elif (defined(CPU_MIMXRT106CDVL6A))
+#include "MIMXRT106C_COMMON.h"
+#elif (defined(CPU_MIMXRT106FDVL6A))
+#include "MIMXRT106F_COMMON.h"
+#elif (defined(CPU_MIMXRT106LDVL6A))
+#include "MIMXRT106L_COMMON.h"
+#elif (defined(CPU_MIMXRT106SDVL6A))
+#include "MIMXRT106S_COMMON.h"
+#else
+  #error "No valid CPU defined!"
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- Device Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup Peripheral_access_layer Device Peripheral Access Layer
+ * @{
+ */
+
+
+/*
+** Start of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic push
+  #else
+    #pragma push
+    #pragma anon_unions
+  #endif
+#elif defined(__CWCC__)
+  #pragma push
+  #pragma cpp_extensions on
+#elif defined(__GNUC__)
+  /* anonymous unions are enabled by default */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=extended
+#else
+  #error Not supported compiler type
+#endif
+
+/* ----------------------------------------------------------------------------
+   -- XTALOSC24M Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup XTALOSC24M_Peripheral_Access_Layer XTALOSC24M Peripheral Access Layer
+ * @{
+ */
+
+/** XTALOSC24M - Register Layout Typedef */
+typedef struct {
+       uint8_t RESERVED_0[336];
+  __IO uint32_t MISC0;                             /**< Miscellaneous Register 0, offset: 0x150 */
+  __IO uint32_t MISC0_SET;                         /**< Miscellaneous Register 0, offset: 0x154 */
+  __IO uint32_t MISC0_CLR;                         /**< Miscellaneous Register 0, offset: 0x158 */
+  __IO uint32_t MISC0_TOG;                         /**< Miscellaneous Register 0, offset: 0x15C */
+       uint8_t RESERVED_1[272];
+  __IO uint32_t LOWPWR_CTRL;                       /**< XTAL OSC (LP) Control Register, offset: 0x270 */
+  __IO uint32_t LOWPWR_CTRL_SET;                   /**< XTAL OSC (LP) Control Register, offset: 0x274 */
+  __IO uint32_t LOWPWR_CTRL_CLR;                   /**< XTAL OSC (LP) Control Register, offset: 0x278 */
+  __IO uint32_t LOWPWR_CTRL_TOG;                   /**< XTAL OSC (LP) Control Register, offset: 0x27C */
+       uint8_t RESERVED_2[32];
+  __IO uint32_t OSC_CONFIG0;                       /**< XTAL OSC Configuration 0 Register, offset: 0x2A0 */
+  __IO uint32_t OSC_CONFIG0_SET;                   /**< XTAL OSC Configuration 0 Register, offset: 0x2A4 */
+  __IO uint32_t OSC_CONFIG0_CLR;                   /**< XTAL OSC Configuration 0 Register, offset: 0x2A8 */
+  __IO uint32_t OSC_CONFIG0_TOG;                   /**< XTAL OSC Configuration 0 Register, offset: 0x2AC */
+  __IO uint32_t OSC_CONFIG1;                       /**< XTAL OSC Configuration 1 Register, offset: 0x2B0 */
+  __IO uint32_t OSC_CONFIG1_SET;                   /**< XTAL OSC Configuration 1 Register, offset: 0x2B4 */
+  __IO uint32_t OSC_CONFIG1_CLR;                   /**< XTAL OSC Configuration 1 Register, offset: 0x2B8 */
+  __IO uint32_t OSC_CONFIG1_TOG;                   /**< XTAL OSC Configuration 1 Register, offset: 0x2BC */
+  __IO uint32_t OSC_CONFIG2;                       /**< XTAL OSC Configuration 2 Register, offset: 0x2C0 */
+  __IO uint32_t OSC_CONFIG2_SET;                   /**< XTAL OSC Configuration 2 Register, offset: 0x2C4 */
+  __IO uint32_t OSC_CONFIG2_CLR;                   /**< XTAL OSC Configuration 2 Register, offset: 0x2C8 */
+  __IO uint32_t OSC_CONFIG2_TOG;                   /**< XTAL OSC Configuration 2 Register, offset: 0x2CC */
+} XTALOSC24M_Type;
+
+/* ----------------------------------------------------------------------------
+   -- XTALOSC24M Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup XTALOSC24M_Register_Masks XTALOSC24M Register Masks
+ * @{
+ */
+
+/*! @name MISC0 - Miscellaneous Register 0 */
+/*! @{ */
+
+#define XTALOSC24M_MISC0_REFTOP_PWD_MASK         (0x1U)
+#define XTALOSC24M_MISC0_REFTOP_PWD_SHIFT        (0U)
+#define XTALOSC24M_MISC0_REFTOP_PWD(x)           (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_REFTOP_PWD_SHIFT)) & XTALOSC24M_MISC0_REFTOP_PWD_MASK)
+
+#define XTALOSC24M_MISC0_REFTOP_SELFBIASOFF_MASK (0x8U)
+#define XTALOSC24M_MISC0_REFTOP_SELFBIASOFF_SHIFT (3U)
+/*! REFTOP_SELFBIASOFF
+ *  0b0..Uses coarse bias currents for startup
+ *  0b1..Uses bandgap-based bias currents for best performance.
+ */
+#define XTALOSC24M_MISC0_REFTOP_SELFBIASOFF(x)   (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_REFTOP_SELFBIASOFF_SHIFT)) & XTALOSC24M_MISC0_REFTOP_SELFBIASOFF_MASK)
+
+#define XTALOSC24M_MISC0_REFTOP_VBGADJ_MASK      (0x70U)
+#define XTALOSC24M_MISC0_REFTOP_VBGADJ_SHIFT     (4U)
+/*! REFTOP_VBGADJ
+ *  0b000..Nominal VBG
+ *  0b001..VBG+0.78%
+ *  0b010..VBG+1.56%
+ *  0b011..VBG+2.34%
+ *  0b100..VBG-0.78%
+ *  0b101..VBG-1.56%
+ *  0b110..VBG-2.34%
+ *  0b111..VBG-3.12%
+ */
+#define XTALOSC24M_MISC0_REFTOP_VBGADJ(x)        (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_REFTOP_VBGADJ_SHIFT)) & XTALOSC24M_MISC0_REFTOP_VBGADJ_MASK)
+
+#define XTALOSC24M_MISC0_REFTOP_VBGUP_MASK       (0x80U)
+#define XTALOSC24M_MISC0_REFTOP_VBGUP_SHIFT      (7U)
+#define XTALOSC24M_MISC0_REFTOP_VBGUP(x)         (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_REFTOP_VBGUP_SHIFT)) & XTALOSC24M_MISC0_REFTOP_VBGUP_MASK)
+
+#define XTALOSC24M_MISC0_STOP_MODE_CONFIG_MASK   (0xC00U)
+#define XTALOSC24M_MISC0_STOP_MODE_CONFIG_SHIFT  (10U)
+/*! STOP_MODE_CONFIG
+ *  0b00..All analog except rtc powered down on stop mode assertion. XtalOsc=on, RCOsc=off;
+ *  0b01..Certain analog functions such as certain regulators left up. XtalOsc=on, RCOsc=off;
+ *  0b10..XtalOsc=off, RCOsc=on, Old BG=on, New BG=off.
+ *  0b11..XtalOsc=off, RCOsc=on, Old BG=off, New BG=on.
+ */
+#define XTALOSC24M_MISC0_STOP_MODE_CONFIG(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_STOP_MODE_CONFIG_SHIFT)) & XTALOSC24M_MISC0_STOP_MODE_CONFIG_MASK)
+
+#define XTALOSC24M_MISC0_DISCON_HIGH_SNVS_MASK   (0x1000U)
+#define XTALOSC24M_MISC0_DISCON_HIGH_SNVS_SHIFT  (12U)
+/*! DISCON_HIGH_SNVS
+ *  0b0..Turn on the switch
+ *  0b1..Turn off the switch
+ */
+#define XTALOSC24M_MISC0_DISCON_HIGH_SNVS(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_DISCON_HIGH_SNVS_SHIFT)) & XTALOSC24M_MISC0_DISCON_HIGH_SNVS_MASK)
+
+#define XTALOSC24M_MISC0_OSC_I_MASK              (0x6000U)
+#define XTALOSC24M_MISC0_OSC_I_SHIFT             (13U)
+/*! OSC_I
+ *  0b00..Nominal
+ *  0b01..Decrease current by 12.5%
+ *  0b10..Decrease current by 25.0%
+ *  0b11..Decrease current by 37.5%
+ */
+#define XTALOSC24M_MISC0_OSC_I(x)                (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_OSC_I_SHIFT)) & XTALOSC24M_MISC0_OSC_I_MASK)
+
+#define XTALOSC24M_MISC0_OSC_XTALOK_MASK         (0x8000U)
+#define XTALOSC24M_MISC0_OSC_XTALOK_SHIFT        (15U)
+#define XTALOSC24M_MISC0_OSC_XTALOK(x)           (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_OSC_XTALOK_SHIFT)) & XTALOSC24M_MISC0_OSC_XTALOK_MASK)
+
+#define XTALOSC24M_MISC0_OSC_XTALOK_EN_MASK      (0x10000U)
+#define XTALOSC24M_MISC0_OSC_XTALOK_EN_SHIFT     (16U)
+#define XTALOSC24M_MISC0_OSC_XTALOK_EN(x)        (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_OSC_XTALOK_EN_SHIFT)) & XTALOSC24M_MISC0_OSC_XTALOK_EN_MASK)
+
+#define XTALOSC24M_MISC0_CLKGATE_CTRL_MASK       (0x2000000U)
+#define XTALOSC24M_MISC0_CLKGATE_CTRL_SHIFT      (25U)
+/*! CLKGATE_CTRL
+ *  0b0..Allow the logic to automatically gate the clock when the XTAL is powered down.
+ *  0b1..Prevent the logic from ever gating off the clock.
+ */
+#define XTALOSC24M_MISC0_CLKGATE_CTRL(x)         (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLKGATE_CTRL_SHIFT)) & XTALOSC24M_MISC0_CLKGATE_CTRL_MASK)
+
+#define XTALOSC24M_MISC0_CLKGATE_DELAY_MASK      (0x1C000000U)
+#define XTALOSC24M_MISC0_CLKGATE_DELAY_SHIFT     (26U)
+/*! CLKGATE_DELAY
+ *  0b000..0.5ms
+ *  0b001..1.0ms
+ *  0b010..2.0ms
+ *  0b011..3.0ms
+ *  0b100..4.0ms
+ *  0b101..5.0ms
+ *  0b110..6.0ms
+ *  0b111..7.0ms
+ */
+#define XTALOSC24M_MISC0_CLKGATE_DELAY(x)        (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLKGATE_DELAY_SHIFT)) & XTALOSC24M_MISC0_CLKGATE_DELAY_MASK)
+
+#define XTALOSC24M_MISC0_RTC_XTAL_SOURCE_MASK    (0x20000000U)
+#define XTALOSC24M_MISC0_RTC_XTAL_SOURCE_SHIFT   (29U)
+/*! RTC_XTAL_SOURCE
+ *  0b0..Internal ring oscillator
+ *  0b1..RTC_XTAL
+ */
+#define XTALOSC24M_MISC0_RTC_XTAL_SOURCE(x)      (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_RTC_XTAL_SOURCE_SHIFT)) & XTALOSC24M_MISC0_RTC_XTAL_SOURCE_MASK)
+
+#define XTALOSC24M_MISC0_XTAL_24M_PWD_MASK       (0x40000000U)
+#define XTALOSC24M_MISC0_XTAL_24M_PWD_SHIFT      (30U)
+#define XTALOSC24M_MISC0_XTAL_24M_PWD(x)         (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_XTAL_24M_PWD_SHIFT)) & XTALOSC24M_MISC0_XTAL_24M_PWD_MASK)
+
+#define XTALOSC24M_MISC0_VID_PLL_PREDIV_MASK     (0x80000000U)
+#define XTALOSC24M_MISC0_VID_PLL_PREDIV_SHIFT    (31U)
+/*! VID_PLL_PREDIV
+ *  0b0..Divide by 1
+ *  0b1..Divide by 2
+ */
+#define XTALOSC24M_MISC0_VID_PLL_PREDIV(x)       (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_VID_PLL_PREDIV_SHIFT)) & XTALOSC24M_MISC0_VID_PLL_PREDIV_MASK)
+/*! @} */
+
+/*! @name MISC0_SET - Miscellaneous Register 0 */
+/*! @{ */
+
+#define XTALOSC24M_MISC0_SET_REFTOP_PWD_MASK     (0x1U)
+#define XTALOSC24M_MISC0_SET_REFTOP_PWD_SHIFT    (0U)
+#define XTALOSC24M_MISC0_SET_REFTOP_PWD(x)       (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_REFTOP_PWD_SHIFT)) & XTALOSC24M_MISC0_SET_REFTOP_PWD_MASK)
+
+#define XTALOSC24M_MISC0_SET_REFTOP_SELFBIASOFF_MASK (0x8U)
+#define XTALOSC24M_MISC0_SET_REFTOP_SELFBIASOFF_SHIFT (3U)
+/*! REFTOP_SELFBIASOFF
+ *  0b0..Uses coarse bias currents for startup
+ *  0b1..Uses bandgap-based bias currents for best performance.
+ */
+#define XTALOSC24M_MISC0_SET_REFTOP_SELFBIASOFF(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_REFTOP_SELFBIASOFF_SHIFT)) & XTALOSC24M_MISC0_SET_REFTOP_SELFBIASOFF_MASK)
+
+#define XTALOSC24M_MISC0_SET_REFTOP_VBGADJ_MASK  (0x70U)
+#define XTALOSC24M_MISC0_SET_REFTOP_VBGADJ_SHIFT (4U)
+/*! REFTOP_VBGADJ
+ *  0b000..Nominal VBG
+ *  0b001..VBG+0.78%
+ *  0b010..VBG+1.56%
+ *  0b011..VBG+2.34%
+ *  0b100..VBG-0.78%
+ *  0b101..VBG-1.56%
+ *  0b110..VBG-2.34%
+ *  0b111..VBG-3.12%
+ */
+#define XTALOSC24M_MISC0_SET_REFTOP_VBGADJ(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_REFTOP_VBGADJ_SHIFT)) & XTALOSC24M_MISC0_SET_REFTOP_VBGADJ_MASK)
+
+#define XTALOSC24M_MISC0_SET_REFTOP_VBGUP_MASK   (0x80U)
+#define XTALOSC24M_MISC0_SET_REFTOP_VBGUP_SHIFT  (7U)
+#define XTALOSC24M_MISC0_SET_REFTOP_VBGUP(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_REFTOP_VBGUP_SHIFT)) & XTALOSC24M_MISC0_SET_REFTOP_VBGUP_MASK)
+
+#define XTALOSC24M_MISC0_SET_STOP_MODE_CONFIG_MASK (0xC00U)
+#define XTALOSC24M_MISC0_SET_STOP_MODE_CONFIG_SHIFT (10U)
+/*! STOP_MODE_CONFIG
+ *  0b00..All analog except rtc powered down on stop mode assertion. XtalOsc=on, RCOsc=off;
+ *  0b01..Certain analog functions such as certain regulators left up. XtalOsc=on, RCOsc=off;
+ *  0b10..XtalOsc=off, RCOsc=on, Old BG=on, New BG=off.
+ *  0b11..XtalOsc=off, RCOsc=on, Old BG=off, New BG=on.
+ */
+#define XTALOSC24M_MISC0_SET_STOP_MODE_CONFIG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_STOP_MODE_CONFIG_SHIFT)) & XTALOSC24M_MISC0_SET_STOP_MODE_CONFIG_MASK)
+
+#define XTALOSC24M_MISC0_SET_DISCON_HIGH_SNVS_MASK (0x1000U)
+#define XTALOSC24M_MISC0_SET_DISCON_HIGH_SNVS_SHIFT (12U)
+/*! DISCON_HIGH_SNVS
+ *  0b0..Turn on the switch
+ *  0b1..Turn off the switch
+ */
+#define XTALOSC24M_MISC0_SET_DISCON_HIGH_SNVS(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_DISCON_HIGH_SNVS_SHIFT)) & XTALOSC24M_MISC0_SET_DISCON_HIGH_SNVS_MASK)
+
+#define XTALOSC24M_MISC0_SET_OSC_I_MASK          (0x6000U)
+#define XTALOSC24M_MISC0_SET_OSC_I_SHIFT         (13U)
+/*! OSC_I
+ *  0b00..Nominal
+ *  0b01..Decrease current by 12.5%
+ *  0b10..Decrease current by 25.0%
+ *  0b11..Decrease current by 37.5%
+ */
+#define XTALOSC24M_MISC0_SET_OSC_I(x)            (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_OSC_I_SHIFT)) & XTALOSC24M_MISC0_SET_OSC_I_MASK)
+
+#define XTALOSC24M_MISC0_SET_OSC_XTALOK_MASK     (0x8000U)
+#define XTALOSC24M_MISC0_SET_OSC_XTALOK_SHIFT    (15U)
+#define XTALOSC24M_MISC0_SET_OSC_XTALOK(x)       (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_OSC_XTALOK_SHIFT)) & XTALOSC24M_MISC0_SET_OSC_XTALOK_MASK)
+
+#define XTALOSC24M_MISC0_SET_OSC_XTALOK_EN_MASK  (0x10000U)
+#define XTALOSC24M_MISC0_SET_OSC_XTALOK_EN_SHIFT (16U)
+#define XTALOSC24M_MISC0_SET_OSC_XTALOK_EN(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_OSC_XTALOK_EN_SHIFT)) & XTALOSC24M_MISC0_SET_OSC_XTALOK_EN_MASK)
+
+#define XTALOSC24M_MISC0_SET_CLKGATE_CTRL_MASK   (0x2000000U)
+#define XTALOSC24M_MISC0_SET_CLKGATE_CTRL_SHIFT  (25U)
+/*! CLKGATE_CTRL
+ *  0b0..Allow the logic to automatically gate the clock when the XTAL is powered down.
+ *  0b1..Prevent the logic from ever gating off the clock.
+ */
+#define XTALOSC24M_MISC0_SET_CLKGATE_CTRL(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_CLKGATE_CTRL_SHIFT)) & XTALOSC24M_MISC0_SET_CLKGATE_CTRL_MASK)
+
+#define XTALOSC24M_MISC0_SET_CLKGATE_DELAY_MASK  (0x1C000000U)
+#define XTALOSC24M_MISC0_SET_CLKGATE_DELAY_SHIFT (26U)
+/*! CLKGATE_DELAY
+ *  0b000..0.5ms
+ *  0b001..1.0ms
+ *  0b010..2.0ms
+ *  0b011..3.0ms
+ *  0b100..4.0ms
+ *  0b101..5.0ms
+ *  0b110..6.0ms
+ *  0b111..7.0ms
+ */
+#define XTALOSC24M_MISC0_SET_CLKGATE_DELAY(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_CLKGATE_DELAY_SHIFT)) & XTALOSC24M_MISC0_SET_CLKGATE_DELAY_MASK)
+
+#define XTALOSC24M_MISC0_SET_RTC_XTAL_SOURCE_MASK (0x20000000U)
+#define XTALOSC24M_MISC0_SET_RTC_XTAL_SOURCE_SHIFT (29U)
+/*! RTC_XTAL_SOURCE
+ *  0b0..Internal ring oscillator
+ *  0b1..RTC_XTAL
+ */
+#define XTALOSC24M_MISC0_SET_RTC_XTAL_SOURCE(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_RTC_XTAL_SOURCE_SHIFT)) & XTALOSC24M_MISC0_SET_RTC_XTAL_SOURCE_MASK)
+
+#define XTALOSC24M_MISC0_SET_XTAL_24M_PWD_MASK   (0x40000000U)
+#define XTALOSC24M_MISC0_SET_XTAL_24M_PWD_SHIFT  (30U)
+#define XTALOSC24M_MISC0_SET_XTAL_24M_PWD(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_XTAL_24M_PWD_SHIFT)) & XTALOSC24M_MISC0_SET_XTAL_24M_PWD_MASK)
+
+#define XTALOSC24M_MISC0_SET_VID_PLL_PREDIV_MASK (0x80000000U)
+#define XTALOSC24M_MISC0_SET_VID_PLL_PREDIV_SHIFT (31U)
+/*! VID_PLL_PREDIV
+ *  0b0..Divide by 1
+ *  0b1..Divide by 2
+ */
+#define XTALOSC24M_MISC0_SET_VID_PLL_PREDIV(x)   (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_SET_VID_PLL_PREDIV_SHIFT)) & XTALOSC24M_MISC0_SET_VID_PLL_PREDIV_MASK)
+/*! @} */
+
+/*! @name MISC0_CLR - Miscellaneous Register 0 */
+/*! @{ */
+
+#define XTALOSC24M_MISC0_CLR_REFTOP_PWD_MASK     (0x1U)
+#define XTALOSC24M_MISC0_CLR_REFTOP_PWD_SHIFT    (0U)
+#define XTALOSC24M_MISC0_CLR_REFTOP_PWD(x)       (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_REFTOP_PWD_SHIFT)) & XTALOSC24M_MISC0_CLR_REFTOP_PWD_MASK)
+
+#define XTALOSC24M_MISC0_CLR_REFTOP_SELFBIASOFF_MASK (0x8U)
+#define XTALOSC24M_MISC0_CLR_REFTOP_SELFBIASOFF_SHIFT (3U)
+/*! REFTOP_SELFBIASOFF
+ *  0b0..Uses coarse bias currents for startup
+ *  0b1..Uses bandgap-based bias currents for best performance.
+ */
+#define XTALOSC24M_MISC0_CLR_REFTOP_SELFBIASOFF(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_REFTOP_SELFBIASOFF_SHIFT)) & XTALOSC24M_MISC0_CLR_REFTOP_SELFBIASOFF_MASK)
+
+#define XTALOSC24M_MISC0_CLR_REFTOP_VBGADJ_MASK  (0x70U)
+#define XTALOSC24M_MISC0_CLR_REFTOP_VBGADJ_SHIFT (4U)
+/*! REFTOP_VBGADJ
+ *  0b000..Nominal VBG
+ *  0b001..VBG+0.78%
+ *  0b010..VBG+1.56%
+ *  0b011..VBG+2.34%
+ *  0b100..VBG-0.78%
+ *  0b101..VBG-1.56%
+ *  0b110..VBG-2.34%
+ *  0b111..VBG-3.12%
+ */
+#define XTALOSC24M_MISC0_CLR_REFTOP_VBGADJ(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_REFTOP_VBGADJ_SHIFT)) & XTALOSC24M_MISC0_CLR_REFTOP_VBGADJ_MASK)
+
+#define XTALOSC24M_MISC0_CLR_REFTOP_VBGUP_MASK   (0x80U)
+#define XTALOSC24M_MISC0_CLR_REFTOP_VBGUP_SHIFT  (7U)
+#define XTALOSC24M_MISC0_CLR_REFTOP_VBGUP(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_REFTOP_VBGUP_SHIFT)) & XTALOSC24M_MISC0_CLR_REFTOP_VBGUP_MASK)
+
+#define XTALOSC24M_MISC0_CLR_STOP_MODE_CONFIG_MASK (0xC00U)
+#define XTALOSC24M_MISC0_CLR_STOP_MODE_CONFIG_SHIFT (10U)
+/*! STOP_MODE_CONFIG
+ *  0b00..All analog except rtc powered down on stop mode assertion. XtalOsc=on, RCOsc=off;
+ *  0b01..Certain analog functions such as certain regulators left up. XtalOsc=on, RCOsc=off;
+ *  0b10..XtalOsc=off, RCOsc=on, Old BG=on, New BG=off.
+ *  0b11..XtalOsc=off, RCOsc=on, Old BG=off, New BG=on.
+ */
+#define XTALOSC24M_MISC0_CLR_STOP_MODE_CONFIG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_STOP_MODE_CONFIG_SHIFT)) & XTALOSC24M_MISC0_CLR_STOP_MODE_CONFIG_MASK)
+
+#define XTALOSC24M_MISC0_CLR_DISCON_HIGH_SNVS_MASK (0x1000U)
+#define XTALOSC24M_MISC0_CLR_DISCON_HIGH_SNVS_SHIFT (12U)
+/*! DISCON_HIGH_SNVS
+ *  0b0..Turn on the switch
+ *  0b1..Turn off the switch
+ */
+#define XTALOSC24M_MISC0_CLR_DISCON_HIGH_SNVS(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_DISCON_HIGH_SNVS_SHIFT)) & XTALOSC24M_MISC0_CLR_DISCON_HIGH_SNVS_MASK)
+
+#define XTALOSC24M_MISC0_CLR_OSC_I_MASK          (0x6000U)
+#define XTALOSC24M_MISC0_CLR_OSC_I_SHIFT         (13U)
+/*! OSC_I
+ *  0b00..Nominal
+ *  0b01..Decrease current by 12.5%
+ *  0b10..Decrease current by 25.0%
+ *  0b11..Decrease current by 37.5%
+ */
+#define XTALOSC24M_MISC0_CLR_OSC_I(x)            (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_OSC_I_SHIFT)) & XTALOSC24M_MISC0_CLR_OSC_I_MASK)
+
+#define XTALOSC24M_MISC0_CLR_OSC_XTALOK_MASK     (0x8000U)
+#define XTALOSC24M_MISC0_CLR_OSC_XTALOK_SHIFT    (15U)
+#define XTALOSC24M_MISC0_CLR_OSC_XTALOK(x)       (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_OSC_XTALOK_SHIFT)) & XTALOSC24M_MISC0_CLR_OSC_XTALOK_MASK)
+
+#define XTALOSC24M_MISC0_CLR_OSC_XTALOK_EN_MASK  (0x10000U)
+#define XTALOSC24M_MISC0_CLR_OSC_XTALOK_EN_SHIFT (16U)
+#define XTALOSC24M_MISC0_CLR_OSC_XTALOK_EN(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_OSC_XTALOK_EN_SHIFT)) & XTALOSC24M_MISC0_CLR_OSC_XTALOK_EN_MASK)
+
+#define XTALOSC24M_MISC0_CLR_CLKGATE_CTRL_MASK   (0x2000000U)
+#define XTALOSC24M_MISC0_CLR_CLKGATE_CTRL_SHIFT  (25U)
+/*! CLKGATE_CTRL
+ *  0b0..Allow the logic to automatically gate the clock when the XTAL is powered down.
+ *  0b1..Prevent the logic from ever gating off the clock.
+ */
+#define XTALOSC24M_MISC0_CLR_CLKGATE_CTRL(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_CLKGATE_CTRL_SHIFT)) & XTALOSC24M_MISC0_CLR_CLKGATE_CTRL_MASK)
+
+#define XTALOSC24M_MISC0_CLR_CLKGATE_DELAY_MASK  (0x1C000000U)
+#define XTALOSC24M_MISC0_CLR_CLKGATE_DELAY_SHIFT (26U)
+/*! CLKGATE_DELAY
+ *  0b000..0.5ms
+ *  0b001..1.0ms
+ *  0b010..2.0ms
+ *  0b011..3.0ms
+ *  0b100..4.0ms
+ *  0b101..5.0ms
+ *  0b110..6.0ms
+ *  0b111..7.0ms
+ */
+#define XTALOSC24M_MISC0_CLR_CLKGATE_DELAY(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_CLKGATE_DELAY_SHIFT)) & XTALOSC24M_MISC0_CLR_CLKGATE_DELAY_MASK)
+
+#define XTALOSC24M_MISC0_CLR_RTC_XTAL_SOURCE_MASK (0x20000000U)
+#define XTALOSC24M_MISC0_CLR_RTC_XTAL_SOURCE_SHIFT (29U)
+/*! RTC_XTAL_SOURCE
+ *  0b0..Internal ring oscillator
+ *  0b1..RTC_XTAL
+ */
+#define XTALOSC24M_MISC0_CLR_RTC_XTAL_SOURCE(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_RTC_XTAL_SOURCE_SHIFT)) & XTALOSC24M_MISC0_CLR_RTC_XTAL_SOURCE_MASK)
+
+#define XTALOSC24M_MISC0_CLR_XTAL_24M_PWD_MASK   (0x40000000U)
+#define XTALOSC24M_MISC0_CLR_XTAL_24M_PWD_SHIFT  (30U)
+#define XTALOSC24M_MISC0_CLR_XTAL_24M_PWD(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_XTAL_24M_PWD_SHIFT)) & XTALOSC24M_MISC0_CLR_XTAL_24M_PWD_MASK)
+
+#define XTALOSC24M_MISC0_CLR_VID_PLL_PREDIV_MASK (0x80000000U)
+#define XTALOSC24M_MISC0_CLR_VID_PLL_PREDIV_SHIFT (31U)
+/*! VID_PLL_PREDIV
+ *  0b0..Divide by 1
+ *  0b1..Divide by 2
+ */
+#define XTALOSC24M_MISC0_CLR_VID_PLL_PREDIV(x)   (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_CLR_VID_PLL_PREDIV_SHIFT)) & XTALOSC24M_MISC0_CLR_VID_PLL_PREDIV_MASK)
+/*! @} */
+
+/*! @name MISC0_TOG - Miscellaneous Register 0 */
+/*! @{ */
+
+#define XTALOSC24M_MISC0_TOG_REFTOP_PWD_MASK     (0x1U)
+#define XTALOSC24M_MISC0_TOG_REFTOP_PWD_SHIFT    (0U)
+#define XTALOSC24M_MISC0_TOG_REFTOP_PWD(x)       (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_REFTOP_PWD_SHIFT)) & XTALOSC24M_MISC0_TOG_REFTOP_PWD_MASK)
+
+#define XTALOSC24M_MISC0_TOG_REFTOP_SELFBIASOFF_MASK (0x8U)
+#define XTALOSC24M_MISC0_TOG_REFTOP_SELFBIASOFF_SHIFT (3U)
+/*! REFTOP_SELFBIASOFF
+ *  0b0..Uses coarse bias currents for startup
+ *  0b1..Uses bandgap-based bias currents for best performance.
+ */
+#define XTALOSC24M_MISC0_TOG_REFTOP_SELFBIASOFF(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_REFTOP_SELFBIASOFF_SHIFT)) & XTALOSC24M_MISC0_TOG_REFTOP_SELFBIASOFF_MASK)
+
+#define XTALOSC24M_MISC0_TOG_REFTOP_VBGADJ_MASK  (0x70U)
+#define XTALOSC24M_MISC0_TOG_REFTOP_VBGADJ_SHIFT (4U)
+/*! REFTOP_VBGADJ
+ *  0b000..Nominal VBG
+ *  0b001..VBG+0.78%
+ *  0b010..VBG+1.56%
+ *  0b011..VBG+2.34%
+ *  0b100..VBG-0.78%
+ *  0b101..VBG-1.56%
+ *  0b110..VBG-2.34%
+ *  0b111..VBG-3.12%
+ */
+#define XTALOSC24M_MISC0_TOG_REFTOP_VBGADJ(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_REFTOP_VBGADJ_SHIFT)) & XTALOSC24M_MISC0_TOG_REFTOP_VBGADJ_MASK)
+
+#define XTALOSC24M_MISC0_TOG_REFTOP_VBGUP_MASK   (0x80U)
+#define XTALOSC24M_MISC0_TOG_REFTOP_VBGUP_SHIFT  (7U)
+#define XTALOSC24M_MISC0_TOG_REFTOP_VBGUP(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_REFTOP_VBGUP_SHIFT)) & XTALOSC24M_MISC0_TOG_REFTOP_VBGUP_MASK)
+
+#define XTALOSC24M_MISC0_TOG_STOP_MODE_CONFIG_MASK (0xC00U)
+#define XTALOSC24M_MISC0_TOG_STOP_MODE_CONFIG_SHIFT (10U)
+/*! STOP_MODE_CONFIG
+ *  0b00..All analog except rtc powered down on stop mode assertion. XtalOsc=on, RCOsc=off;
+ *  0b01..Certain analog functions such as certain regulators left up. XtalOsc=on, RCOsc=off;
+ *  0b10..XtalOsc=off, RCOsc=on, Old BG=on, New BG=off.
+ *  0b11..XtalOsc=off, RCOsc=on, Old BG=off, New BG=on.
+ */
+#define XTALOSC24M_MISC0_TOG_STOP_MODE_CONFIG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_STOP_MODE_CONFIG_SHIFT)) & XTALOSC24M_MISC0_TOG_STOP_MODE_CONFIG_MASK)
+
+#define XTALOSC24M_MISC0_TOG_DISCON_HIGH_SNVS_MASK (0x1000U)
+#define XTALOSC24M_MISC0_TOG_DISCON_HIGH_SNVS_SHIFT (12U)
+/*! DISCON_HIGH_SNVS
+ *  0b0..Turn on the switch
+ *  0b1..Turn off the switch
+ */
+#define XTALOSC24M_MISC0_TOG_DISCON_HIGH_SNVS(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_DISCON_HIGH_SNVS_SHIFT)) & XTALOSC24M_MISC0_TOG_DISCON_HIGH_SNVS_MASK)
+
+#define XTALOSC24M_MISC0_TOG_OSC_I_MASK          (0x6000U)
+#define XTALOSC24M_MISC0_TOG_OSC_I_SHIFT         (13U)
+/*! OSC_I
+ *  0b00..Nominal
+ *  0b01..Decrease current by 12.5%
+ *  0b10..Decrease current by 25.0%
+ *  0b11..Decrease current by 37.5%
+ */
+#define XTALOSC24M_MISC0_TOG_OSC_I(x)            (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_OSC_I_SHIFT)) & XTALOSC24M_MISC0_TOG_OSC_I_MASK)
+
+#define XTALOSC24M_MISC0_TOG_OSC_XTALOK_MASK     (0x8000U)
+#define XTALOSC24M_MISC0_TOG_OSC_XTALOK_SHIFT    (15U)
+#define XTALOSC24M_MISC0_TOG_OSC_XTALOK(x)       (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_OSC_XTALOK_SHIFT)) & XTALOSC24M_MISC0_TOG_OSC_XTALOK_MASK)
+
+#define XTALOSC24M_MISC0_TOG_OSC_XTALOK_EN_MASK  (0x10000U)
+#define XTALOSC24M_MISC0_TOG_OSC_XTALOK_EN_SHIFT (16U)
+#define XTALOSC24M_MISC0_TOG_OSC_XTALOK_EN(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_OSC_XTALOK_EN_SHIFT)) & XTALOSC24M_MISC0_TOG_OSC_XTALOK_EN_MASK)
+
+#define XTALOSC24M_MISC0_TOG_CLKGATE_CTRL_MASK   (0x2000000U)
+#define XTALOSC24M_MISC0_TOG_CLKGATE_CTRL_SHIFT  (25U)
+/*! CLKGATE_CTRL
+ *  0b0..Allow the logic to automatically gate the clock when the XTAL is powered down.
+ *  0b1..Prevent the logic from ever gating off the clock.
+ */
+#define XTALOSC24M_MISC0_TOG_CLKGATE_CTRL(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_CLKGATE_CTRL_SHIFT)) & XTALOSC24M_MISC0_TOG_CLKGATE_CTRL_MASK)
+
+#define XTALOSC24M_MISC0_TOG_CLKGATE_DELAY_MASK  (0x1C000000U)
+#define XTALOSC24M_MISC0_TOG_CLKGATE_DELAY_SHIFT (26U)
+/*! CLKGATE_DELAY
+ *  0b000..0.5ms
+ *  0b001..1.0ms
+ *  0b010..2.0ms
+ *  0b011..3.0ms
+ *  0b100..4.0ms
+ *  0b101..5.0ms
+ *  0b110..6.0ms
+ *  0b111..7.0ms
+ */
+#define XTALOSC24M_MISC0_TOG_CLKGATE_DELAY(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_CLKGATE_DELAY_SHIFT)) & XTALOSC24M_MISC0_TOG_CLKGATE_DELAY_MASK)
+
+#define XTALOSC24M_MISC0_TOG_RTC_XTAL_SOURCE_MASK (0x20000000U)
+#define XTALOSC24M_MISC0_TOG_RTC_XTAL_SOURCE_SHIFT (29U)
+/*! RTC_XTAL_SOURCE
+ *  0b0..Internal ring oscillator
+ *  0b1..RTC_XTAL
+ */
+#define XTALOSC24M_MISC0_TOG_RTC_XTAL_SOURCE(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_RTC_XTAL_SOURCE_SHIFT)) & XTALOSC24M_MISC0_TOG_RTC_XTAL_SOURCE_MASK)
+
+#define XTALOSC24M_MISC0_TOG_XTAL_24M_PWD_MASK   (0x40000000U)
+#define XTALOSC24M_MISC0_TOG_XTAL_24M_PWD_SHIFT  (30U)
+#define XTALOSC24M_MISC0_TOG_XTAL_24M_PWD(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_XTAL_24M_PWD_SHIFT)) & XTALOSC24M_MISC0_TOG_XTAL_24M_PWD_MASK)
+
+#define XTALOSC24M_MISC0_TOG_VID_PLL_PREDIV_MASK (0x80000000U)
+#define XTALOSC24M_MISC0_TOG_VID_PLL_PREDIV_SHIFT (31U)
+/*! VID_PLL_PREDIV
+ *  0b0..Divide by 1
+ *  0b1..Divide by 2
+ */
+#define XTALOSC24M_MISC0_TOG_VID_PLL_PREDIV(x)   (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_MISC0_TOG_VID_PLL_PREDIV_SHIFT)) & XTALOSC24M_MISC0_TOG_VID_PLL_PREDIV_MASK)
+/*! @} */
+
+/*! @name LOWPWR_CTRL - XTAL OSC (LP) Control Register */
+/*! @{ */
+
+#define XTALOSC24M_LOWPWR_CTRL_RC_OSC_EN_MASK    (0x1U)
+#define XTALOSC24M_LOWPWR_CTRL_RC_OSC_EN_SHIFT   (0U)
+/*! RC_OSC_EN
+ *  0b0..Use XTAL OSC to source the 24MHz clock
+ *  0b1..Use RC OSC
+ */
+#define XTALOSC24M_LOWPWR_CTRL_RC_OSC_EN(x)      (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_RC_OSC_EN_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_RC_OSC_EN_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_OSC_SEL_MASK      (0x10U)
+#define XTALOSC24M_LOWPWR_CTRL_OSC_SEL_SHIFT     (4U)
+/*! OSC_SEL
+ *  0b0..XTAL OSC
+ *  0b1..RC OSC
+ */
+#define XTALOSC24M_LOWPWR_CTRL_OSC_SEL(x)        (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_OSC_SEL_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_OSC_SEL_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_LPBG_SEL_MASK     (0x20U)
+#define XTALOSC24M_LOWPWR_CTRL_LPBG_SEL_SHIFT    (5U)
+/*! LPBG_SEL
+ *  0b0..Normal power bandgap
+ *  0b1..Low power bandgap
+ */
+#define XTALOSC24M_LOWPWR_CTRL_LPBG_SEL(x)       (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_LPBG_SEL_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_LPBG_SEL_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_LPBG_TEST_MASK    (0x40U)
+#define XTALOSC24M_LOWPWR_CTRL_LPBG_TEST_SHIFT   (6U)
+#define XTALOSC24M_LOWPWR_CTRL_LPBG_TEST(x)      (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_LPBG_TEST_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_LPBG_TEST_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_REFTOP_IBIAS_OFF_MASK (0x80U)
+#define XTALOSC24M_LOWPWR_CTRL_REFTOP_IBIAS_OFF_SHIFT (7U)
+#define XTALOSC24M_LOWPWR_CTRL_REFTOP_IBIAS_OFF(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_REFTOP_IBIAS_OFF_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_REFTOP_IBIAS_OFF_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_L1_PWRGATE_MASK   (0x100U)
+#define XTALOSC24M_LOWPWR_CTRL_L1_PWRGATE_SHIFT  (8U)
+#define XTALOSC24M_LOWPWR_CTRL_L1_PWRGATE(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_L1_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_L1_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_L2_PWRGATE_MASK   (0x200U)
+#define XTALOSC24M_LOWPWR_CTRL_L2_PWRGATE_SHIFT  (9U)
+#define XTALOSC24M_LOWPWR_CTRL_L2_PWRGATE(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_L2_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_L2_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CPU_PWRGATE_MASK  (0x400U)
+#define XTALOSC24M_LOWPWR_CTRL_CPU_PWRGATE_SHIFT (10U)
+#define XTALOSC24M_LOWPWR_CTRL_CPU_PWRGATE(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CPU_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CPU_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_DISPLAY_PWRGATE_MASK (0x800U)
+#define XTALOSC24M_LOWPWR_CTRL_DISPLAY_PWRGATE_SHIFT (11U)
+#define XTALOSC24M_LOWPWR_CTRL_DISPLAY_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_DISPLAY_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_DISPLAY_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_RCOSC_CG_OVERRIDE_MASK (0x2000U)
+#define XTALOSC24M_LOWPWR_CTRL_RCOSC_CG_OVERRIDE_SHIFT (13U)
+#define XTALOSC24M_LOWPWR_CTRL_RCOSC_CG_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_RCOSC_CG_OVERRIDE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_RCOSC_CG_OVERRIDE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_XTALOSC_PWRUP_DELAY_MASK (0xC000U)
+#define XTALOSC24M_LOWPWR_CTRL_XTALOSC_PWRUP_DELAY_SHIFT (14U)
+/*! XTALOSC_PWRUP_DELAY
+ *  0b00..0.25ms
+ *  0b01..0.5ms
+ *  0b10..1ms
+ *  0b11..2ms
+ */
+#define XTALOSC24M_LOWPWR_CTRL_XTALOSC_PWRUP_DELAY(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_XTALOSC_PWRUP_DELAY_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_XTALOSC_PWRUP_DELAY_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_XTALOSC_PWRUP_STAT_MASK (0x10000U)
+#define XTALOSC24M_LOWPWR_CTRL_XTALOSC_PWRUP_STAT_SHIFT (16U)
+/*! XTALOSC_PWRUP_STAT
+ *  0b0..Not stable
+ *  0b1..Stable and ready to use
+ */
+#define XTALOSC24M_LOWPWR_CTRL_XTALOSC_PWRUP_STAT(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_XTALOSC_PWRUP_STAT_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_XTALOSC_PWRUP_STAT_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_MIX_PWRGATE_MASK  (0x20000U)
+#define XTALOSC24M_LOWPWR_CTRL_MIX_PWRGATE_SHIFT (17U)
+#define XTALOSC24M_LOWPWR_CTRL_MIX_PWRGATE(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_MIX_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_MIX_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_GPU_PWRGATE_MASK  (0x40000U)
+#define XTALOSC24M_LOWPWR_CTRL_GPU_PWRGATE_SHIFT (18U)
+#define XTALOSC24M_LOWPWR_CTRL_GPU_PWRGATE(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_GPU_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_GPU_PWRGATE_MASK)
+/*! @} */
+
+/*! @name LOWPWR_CTRL_SET - XTAL OSC (LP) Control Register */
+/*! @{ */
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_RC_OSC_EN_MASK (0x1U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_RC_OSC_EN_SHIFT (0U)
+/*! RC_OSC_EN
+ *  0b0..Use XTAL OSC to source the 24MHz clock
+ *  0b1..Use RC OSC
+ */
+#define XTALOSC24M_LOWPWR_CTRL_SET_RC_OSC_EN(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_RC_OSC_EN_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_RC_OSC_EN_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_OSC_SEL_MASK  (0x10U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_OSC_SEL_SHIFT (4U)
+/*! OSC_SEL
+ *  0b0..XTAL OSC
+ *  0b1..RC OSC
+ */
+#define XTALOSC24M_LOWPWR_CTRL_SET_OSC_SEL(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_OSC_SEL_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_OSC_SEL_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_LPBG_SEL_MASK (0x20U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_LPBG_SEL_SHIFT (5U)
+/*! LPBG_SEL
+ *  0b0..Normal power bandgap
+ *  0b1..Low power bandgap
+ */
+#define XTALOSC24M_LOWPWR_CTRL_SET_LPBG_SEL(x)   (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_LPBG_SEL_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_LPBG_SEL_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_LPBG_TEST_MASK (0x40U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_LPBG_TEST_SHIFT (6U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_LPBG_TEST(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_LPBG_TEST_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_LPBG_TEST_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_REFTOP_IBIAS_OFF_MASK (0x80U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_REFTOP_IBIAS_OFF_SHIFT (7U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_REFTOP_IBIAS_OFF(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_REFTOP_IBIAS_OFF_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_REFTOP_IBIAS_OFF_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_L1_PWRGATE_MASK (0x100U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_L1_PWRGATE_SHIFT (8U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_L1_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_L1_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_L1_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_L2_PWRGATE_MASK (0x200U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_L2_PWRGATE_SHIFT (9U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_L2_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_L2_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_L2_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_CPU_PWRGATE_MASK (0x400U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_CPU_PWRGATE_SHIFT (10U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_CPU_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_CPU_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_CPU_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_DISPLAY_PWRGATE_MASK (0x800U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_DISPLAY_PWRGATE_SHIFT (11U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_DISPLAY_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_DISPLAY_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_DISPLAY_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_RCOSC_CG_OVERRIDE_MASK (0x2000U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_RCOSC_CG_OVERRIDE_SHIFT (13U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_RCOSC_CG_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_RCOSC_CG_OVERRIDE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_RCOSC_CG_OVERRIDE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_XTALOSC_PWRUP_DELAY_MASK (0xC000U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_XTALOSC_PWRUP_DELAY_SHIFT (14U)
+/*! XTALOSC_PWRUP_DELAY
+ *  0b00..0.25ms
+ *  0b01..0.5ms
+ *  0b10..1ms
+ *  0b11..2ms
+ */
+#define XTALOSC24M_LOWPWR_CTRL_SET_XTALOSC_PWRUP_DELAY(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_XTALOSC_PWRUP_DELAY_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_XTALOSC_PWRUP_DELAY_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_XTALOSC_PWRUP_STAT_MASK (0x10000U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_XTALOSC_PWRUP_STAT_SHIFT (16U)
+/*! XTALOSC_PWRUP_STAT
+ *  0b0..Not stable
+ *  0b1..Stable and ready to use
+ */
+#define XTALOSC24M_LOWPWR_CTRL_SET_XTALOSC_PWRUP_STAT(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_XTALOSC_PWRUP_STAT_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_XTALOSC_PWRUP_STAT_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_MIX_PWRGATE_MASK (0x20000U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_MIX_PWRGATE_SHIFT (17U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_MIX_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_MIX_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_MIX_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_SET_GPU_PWRGATE_MASK (0x40000U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_GPU_PWRGATE_SHIFT (18U)
+#define XTALOSC24M_LOWPWR_CTRL_SET_GPU_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_SET_GPU_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_SET_GPU_PWRGATE_MASK)
+/*! @} */
+
+/*! @name LOWPWR_CTRL_CLR - XTAL OSC (LP) Control Register */
+/*! @{ */
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_RC_OSC_EN_MASK (0x1U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_RC_OSC_EN_SHIFT (0U)
+/*! RC_OSC_EN
+ *  0b0..Use XTAL OSC to source the 24MHz clock
+ *  0b1..Use RC OSC
+ */
+#define XTALOSC24M_LOWPWR_CTRL_CLR_RC_OSC_EN(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_RC_OSC_EN_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_RC_OSC_EN_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_OSC_SEL_MASK  (0x10U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_OSC_SEL_SHIFT (4U)
+/*! OSC_SEL
+ *  0b0..XTAL OSC
+ *  0b1..RC OSC
+ */
+#define XTALOSC24M_LOWPWR_CTRL_CLR_OSC_SEL(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_OSC_SEL_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_OSC_SEL_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_LPBG_SEL_MASK (0x20U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_LPBG_SEL_SHIFT (5U)
+/*! LPBG_SEL
+ *  0b0..Normal power bandgap
+ *  0b1..Low power bandgap
+ */
+#define XTALOSC24M_LOWPWR_CTRL_CLR_LPBG_SEL(x)   (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_LPBG_SEL_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_LPBG_SEL_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_LPBG_TEST_MASK (0x40U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_LPBG_TEST_SHIFT (6U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_LPBG_TEST(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_LPBG_TEST_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_LPBG_TEST_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_REFTOP_IBIAS_OFF_MASK (0x80U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_REFTOP_IBIAS_OFF_SHIFT (7U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_REFTOP_IBIAS_OFF(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_REFTOP_IBIAS_OFF_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_REFTOP_IBIAS_OFF_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_L1_PWRGATE_MASK (0x100U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_L1_PWRGATE_SHIFT (8U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_L1_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_L1_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_L1_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_L2_PWRGATE_MASK (0x200U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_L2_PWRGATE_SHIFT (9U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_L2_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_L2_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_L2_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_CPU_PWRGATE_MASK (0x400U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_CPU_PWRGATE_SHIFT (10U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_CPU_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_CPU_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_CPU_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_DISPLAY_PWRGATE_MASK (0x800U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_DISPLAY_PWRGATE_SHIFT (11U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_DISPLAY_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_DISPLAY_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_DISPLAY_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_RCOSC_CG_OVERRIDE_MASK (0x2000U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_RCOSC_CG_OVERRIDE_SHIFT (13U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_RCOSC_CG_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_RCOSC_CG_OVERRIDE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_RCOSC_CG_OVERRIDE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_XTALOSC_PWRUP_DELAY_MASK (0xC000U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_XTALOSC_PWRUP_DELAY_SHIFT (14U)
+/*! XTALOSC_PWRUP_DELAY
+ *  0b00..0.25ms
+ *  0b01..0.5ms
+ *  0b10..1ms
+ *  0b11..2ms
+ */
+#define XTALOSC24M_LOWPWR_CTRL_CLR_XTALOSC_PWRUP_DELAY(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_XTALOSC_PWRUP_DELAY_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_XTALOSC_PWRUP_DELAY_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_XTALOSC_PWRUP_STAT_MASK (0x10000U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_XTALOSC_PWRUP_STAT_SHIFT (16U)
+/*! XTALOSC_PWRUP_STAT
+ *  0b0..Not stable
+ *  0b1..Stable and ready to use
+ */
+#define XTALOSC24M_LOWPWR_CTRL_CLR_XTALOSC_PWRUP_STAT(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_XTALOSC_PWRUP_STAT_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_XTALOSC_PWRUP_STAT_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_MIX_PWRGATE_MASK (0x20000U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_MIX_PWRGATE_SHIFT (17U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_MIX_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_MIX_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_MIX_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_CLR_GPU_PWRGATE_MASK (0x40000U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_GPU_PWRGATE_SHIFT (18U)
+#define XTALOSC24M_LOWPWR_CTRL_CLR_GPU_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_CLR_GPU_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_CLR_GPU_PWRGATE_MASK)
+/*! @} */
+
+/*! @name LOWPWR_CTRL_TOG - XTAL OSC (LP) Control Register */
+/*! @{ */
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_RC_OSC_EN_MASK (0x1U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_RC_OSC_EN_SHIFT (0U)
+/*! RC_OSC_EN
+ *  0b0..Use XTAL OSC to source the 24MHz clock
+ *  0b1..Use RC OSC
+ */
+#define XTALOSC24M_LOWPWR_CTRL_TOG_RC_OSC_EN(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_RC_OSC_EN_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_RC_OSC_EN_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_OSC_SEL_MASK  (0x10U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_OSC_SEL_SHIFT (4U)
+/*! OSC_SEL
+ *  0b0..XTAL OSC
+ *  0b1..RC OSC
+ */
+#define XTALOSC24M_LOWPWR_CTRL_TOG_OSC_SEL(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_OSC_SEL_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_OSC_SEL_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_LPBG_SEL_MASK (0x20U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_LPBG_SEL_SHIFT (5U)
+/*! LPBG_SEL
+ *  0b0..Normal power bandgap
+ *  0b1..Low power bandgap
+ */
+#define XTALOSC24M_LOWPWR_CTRL_TOG_LPBG_SEL(x)   (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_LPBG_SEL_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_LPBG_SEL_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_LPBG_TEST_MASK (0x40U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_LPBG_TEST_SHIFT (6U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_LPBG_TEST(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_LPBG_TEST_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_LPBG_TEST_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_REFTOP_IBIAS_OFF_MASK (0x80U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_REFTOP_IBIAS_OFF_SHIFT (7U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_REFTOP_IBIAS_OFF(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_REFTOP_IBIAS_OFF_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_REFTOP_IBIAS_OFF_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_L1_PWRGATE_MASK (0x100U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_L1_PWRGATE_SHIFT (8U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_L1_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_L1_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_L1_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_L2_PWRGATE_MASK (0x200U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_L2_PWRGATE_SHIFT (9U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_L2_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_L2_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_L2_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_CPU_PWRGATE_MASK (0x400U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_CPU_PWRGATE_SHIFT (10U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_CPU_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_CPU_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_CPU_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_DISPLAY_PWRGATE_MASK (0x800U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_DISPLAY_PWRGATE_SHIFT (11U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_DISPLAY_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_DISPLAY_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_DISPLAY_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_RCOSC_CG_OVERRIDE_MASK (0x2000U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_RCOSC_CG_OVERRIDE_SHIFT (13U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_RCOSC_CG_OVERRIDE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_RCOSC_CG_OVERRIDE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_RCOSC_CG_OVERRIDE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_XTALOSC_PWRUP_DELAY_MASK (0xC000U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_XTALOSC_PWRUP_DELAY_SHIFT (14U)
+/*! XTALOSC_PWRUP_DELAY
+ *  0b00..0.25ms
+ *  0b01..0.5ms
+ *  0b10..1ms
+ *  0b11..2ms
+ */
+#define XTALOSC24M_LOWPWR_CTRL_TOG_XTALOSC_PWRUP_DELAY(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_XTALOSC_PWRUP_DELAY_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_XTALOSC_PWRUP_DELAY_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_XTALOSC_PWRUP_STAT_MASK (0x10000U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_XTALOSC_PWRUP_STAT_SHIFT (16U)
+/*! XTALOSC_PWRUP_STAT
+ *  0b0..Not stable
+ *  0b1..Stable and ready to use
+ */
+#define XTALOSC24M_LOWPWR_CTRL_TOG_XTALOSC_PWRUP_STAT(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_XTALOSC_PWRUP_STAT_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_XTALOSC_PWRUP_STAT_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_MIX_PWRGATE_MASK (0x20000U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_MIX_PWRGATE_SHIFT (17U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_MIX_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_MIX_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_MIX_PWRGATE_MASK)
+
+#define XTALOSC24M_LOWPWR_CTRL_TOG_GPU_PWRGATE_MASK (0x40000U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_GPU_PWRGATE_SHIFT (18U)
+#define XTALOSC24M_LOWPWR_CTRL_TOG_GPU_PWRGATE(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_LOWPWR_CTRL_TOG_GPU_PWRGATE_SHIFT)) & XTALOSC24M_LOWPWR_CTRL_TOG_GPU_PWRGATE_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG0 - XTAL OSC Configuration 0 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG0_START_MASK        (0x1U)
+#define XTALOSC24M_OSC_CONFIG0_START_SHIFT       (0U)
+#define XTALOSC24M_OSC_CONFIG0_START(x)          (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_START_SHIFT)) & XTALOSC24M_OSC_CONFIG0_START_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_ENABLE_MASK       (0x2U)
+#define XTALOSC24M_OSC_CONFIG0_ENABLE_SHIFT      (1U)
+#define XTALOSC24M_OSC_CONFIG0_ENABLE(x)         (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_ENABLE_SHIFT)) & XTALOSC24M_OSC_CONFIG0_ENABLE_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_BYPASS_MASK       (0x4U)
+#define XTALOSC24M_OSC_CONFIG0_BYPASS_SHIFT      (2U)
+#define XTALOSC24M_OSC_CONFIG0_BYPASS(x)         (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_BYPASS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_BYPASS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_INVERT_MASK       (0x8U)
+#define XTALOSC24M_OSC_CONFIG0_INVERT_SHIFT      (3U)
+#define XTALOSC24M_OSC_CONFIG0_INVERT(x)         (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_INVERT_SHIFT)) & XTALOSC24M_OSC_CONFIG0_INVERT_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_RC_OSC_PROG_MASK  (0xFF0U)
+#define XTALOSC24M_OSC_CONFIG0_RC_OSC_PROG_SHIFT (4U)
+#define XTALOSC24M_OSC_CONFIG0_RC_OSC_PROG(x)    (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_RC_OSC_PROG_SHIFT)) & XTALOSC24M_OSC_CONFIG0_RC_OSC_PROG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_HYST_PLUS_MASK    (0xF000U)
+#define XTALOSC24M_OSC_CONFIG0_HYST_PLUS_SHIFT   (12U)
+#define XTALOSC24M_OSC_CONFIG0_HYST_PLUS(x)      (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_HYST_PLUS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_HYST_PLUS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_HYST_MINUS_MASK   (0xF0000U)
+#define XTALOSC24M_OSC_CONFIG0_HYST_MINUS_SHIFT  (16U)
+#define XTALOSC24M_OSC_CONFIG0_HYST_MINUS(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_HYST_MINUS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_HYST_MINUS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_RC_OSC_PROG_CUR_MASK (0xFF000000U)
+#define XTALOSC24M_OSC_CONFIG0_RC_OSC_PROG_CUR_SHIFT (24U)
+#define XTALOSC24M_OSC_CONFIG0_RC_OSC_PROG_CUR(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_RC_OSC_PROG_CUR_SHIFT)) & XTALOSC24M_OSC_CONFIG0_RC_OSC_PROG_CUR_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG0_SET - XTAL OSC Configuration 0 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG0_SET_START_MASK    (0x1U)
+#define XTALOSC24M_OSC_CONFIG0_SET_START_SHIFT   (0U)
+#define XTALOSC24M_OSC_CONFIG0_SET_START(x)      (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_SET_START_SHIFT)) & XTALOSC24M_OSC_CONFIG0_SET_START_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_SET_ENABLE_MASK   (0x2U)
+#define XTALOSC24M_OSC_CONFIG0_SET_ENABLE_SHIFT  (1U)
+#define XTALOSC24M_OSC_CONFIG0_SET_ENABLE(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_SET_ENABLE_SHIFT)) & XTALOSC24M_OSC_CONFIG0_SET_ENABLE_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_SET_BYPASS_MASK   (0x4U)
+#define XTALOSC24M_OSC_CONFIG0_SET_BYPASS_SHIFT  (2U)
+#define XTALOSC24M_OSC_CONFIG0_SET_BYPASS(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_SET_BYPASS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_SET_BYPASS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_SET_INVERT_MASK   (0x8U)
+#define XTALOSC24M_OSC_CONFIG0_SET_INVERT_SHIFT  (3U)
+#define XTALOSC24M_OSC_CONFIG0_SET_INVERT(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_SET_INVERT_SHIFT)) & XTALOSC24M_OSC_CONFIG0_SET_INVERT_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_SET_RC_OSC_PROG_MASK (0xFF0U)
+#define XTALOSC24M_OSC_CONFIG0_SET_RC_OSC_PROG_SHIFT (4U)
+#define XTALOSC24M_OSC_CONFIG0_SET_RC_OSC_PROG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_SET_RC_OSC_PROG_SHIFT)) & XTALOSC24M_OSC_CONFIG0_SET_RC_OSC_PROG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_SET_HYST_PLUS_MASK (0xF000U)
+#define XTALOSC24M_OSC_CONFIG0_SET_HYST_PLUS_SHIFT (12U)
+#define XTALOSC24M_OSC_CONFIG0_SET_HYST_PLUS(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_SET_HYST_PLUS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_SET_HYST_PLUS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_SET_HYST_MINUS_MASK (0xF0000U)
+#define XTALOSC24M_OSC_CONFIG0_SET_HYST_MINUS_SHIFT (16U)
+#define XTALOSC24M_OSC_CONFIG0_SET_HYST_MINUS(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_SET_HYST_MINUS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_SET_HYST_MINUS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_SET_RC_OSC_PROG_CUR_MASK (0xFF000000U)
+#define XTALOSC24M_OSC_CONFIG0_SET_RC_OSC_PROG_CUR_SHIFT (24U)
+#define XTALOSC24M_OSC_CONFIG0_SET_RC_OSC_PROG_CUR(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_SET_RC_OSC_PROG_CUR_SHIFT)) & XTALOSC24M_OSC_CONFIG0_SET_RC_OSC_PROG_CUR_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG0_CLR - XTAL OSC Configuration 0 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG0_CLR_START_MASK    (0x1U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_START_SHIFT   (0U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_START(x)      (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_CLR_START_SHIFT)) & XTALOSC24M_OSC_CONFIG0_CLR_START_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_CLR_ENABLE_MASK   (0x2U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_ENABLE_SHIFT  (1U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_ENABLE(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_CLR_ENABLE_SHIFT)) & XTALOSC24M_OSC_CONFIG0_CLR_ENABLE_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_CLR_BYPASS_MASK   (0x4U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_BYPASS_SHIFT  (2U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_BYPASS(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_CLR_BYPASS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_CLR_BYPASS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_CLR_INVERT_MASK   (0x8U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_INVERT_SHIFT  (3U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_INVERT(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_CLR_INVERT_SHIFT)) & XTALOSC24M_OSC_CONFIG0_CLR_INVERT_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_CLR_RC_OSC_PROG_MASK (0xFF0U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_RC_OSC_PROG_SHIFT (4U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_RC_OSC_PROG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_CLR_RC_OSC_PROG_SHIFT)) & XTALOSC24M_OSC_CONFIG0_CLR_RC_OSC_PROG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_CLR_HYST_PLUS_MASK (0xF000U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_HYST_PLUS_SHIFT (12U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_HYST_PLUS(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_CLR_HYST_PLUS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_CLR_HYST_PLUS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_CLR_HYST_MINUS_MASK (0xF0000U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_HYST_MINUS_SHIFT (16U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_HYST_MINUS(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_CLR_HYST_MINUS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_CLR_HYST_MINUS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_CLR_RC_OSC_PROG_CUR_MASK (0xFF000000U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_RC_OSC_PROG_CUR_SHIFT (24U)
+#define XTALOSC24M_OSC_CONFIG0_CLR_RC_OSC_PROG_CUR(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_CLR_RC_OSC_PROG_CUR_SHIFT)) & XTALOSC24M_OSC_CONFIG0_CLR_RC_OSC_PROG_CUR_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG0_TOG - XTAL OSC Configuration 0 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG0_TOG_START_MASK    (0x1U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_START_SHIFT   (0U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_START(x)      (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_TOG_START_SHIFT)) & XTALOSC24M_OSC_CONFIG0_TOG_START_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_TOG_ENABLE_MASK   (0x2U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_ENABLE_SHIFT  (1U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_ENABLE(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_TOG_ENABLE_SHIFT)) & XTALOSC24M_OSC_CONFIG0_TOG_ENABLE_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_TOG_BYPASS_MASK   (0x4U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_BYPASS_SHIFT  (2U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_BYPASS(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_TOG_BYPASS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_TOG_BYPASS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_TOG_INVERT_MASK   (0x8U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_INVERT_SHIFT  (3U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_INVERT(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_TOG_INVERT_SHIFT)) & XTALOSC24M_OSC_CONFIG0_TOG_INVERT_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_TOG_RC_OSC_PROG_MASK (0xFF0U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_RC_OSC_PROG_SHIFT (4U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_RC_OSC_PROG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_TOG_RC_OSC_PROG_SHIFT)) & XTALOSC24M_OSC_CONFIG0_TOG_RC_OSC_PROG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_TOG_HYST_PLUS_MASK (0xF000U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_HYST_PLUS_SHIFT (12U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_HYST_PLUS(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_TOG_HYST_PLUS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_TOG_HYST_PLUS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_TOG_HYST_MINUS_MASK (0xF0000U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_HYST_MINUS_SHIFT (16U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_HYST_MINUS(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_TOG_HYST_MINUS_SHIFT)) & XTALOSC24M_OSC_CONFIG0_TOG_HYST_MINUS_MASK)
+
+#define XTALOSC24M_OSC_CONFIG0_TOG_RC_OSC_PROG_CUR_MASK (0xFF000000U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_RC_OSC_PROG_CUR_SHIFT (24U)
+#define XTALOSC24M_OSC_CONFIG0_TOG_RC_OSC_PROG_CUR(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG0_TOG_RC_OSC_PROG_CUR_SHIFT)) & XTALOSC24M_OSC_CONFIG0_TOG_RC_OSC_PROG_CUR_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG1 - XTAL OSC Configuration 1 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG1_COUNT_RC_TRG_MASK (0xFFFU)
+#define XTALOSC24M_OSC_CONFIG1_COUNT_RC_TRG_SHIFT (0U)
+#define XTALOSC24M_OSC_CONFIG1_COUNT_RC_TRG(x)   (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG1_COUNT_RC_TRG_SHIFT)) & XTALOSC24M_OSC_CONFIG1_COUNT_RC_TRG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG1_COUNT_RC_CUR_MASK (0xFFF00000U)
+#define XTALOSC24M_OSC_CONFIG1_COUNT_RC_CUR_SHIFT (20U)
+#define XTALOSC24M_OSC_CONFIG1_COUNT_RC_CUR(x)   (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG1_COUNT_RC_CUR_SHIFT)) & XTALOSC24M_OSC_CONFIG1_COUNT_RC_CUR_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG1_SET - XTAL OSC Configuration 1 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG1_SET_COUNT_RC_TRG_MASK (0xFFFU)
+#define XTALOSC24M_OSC_CONFIG1_SET_COUNT_RC_TRG_SHIFT (0U)
+#define XTALOSC24M_OSC_CONFIG1_SET_COUNT_RC_TRG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG1_SET_COUNT_RC_TRG_SHIFT)) & XTALOSC24M_OSC_CONFIG1_SET_COUNT_RC_TRG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG1_SET_COUNT_RC_CUR_MASK (0xFFF00000U)
+#define XTALOSC24M_OSC_CONFIG1_SET_COUNT_RC_CUR_SHIFT (20U)
+#define XTALOSC24M_OSC_CONFIG1_SET_COUNT_RC_CUR(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG1_SET_COUNT_RC_CUR_SHIFT)) & XTALOSC24M_OSC_CONFIG1_SET_COUNT_RC_CUR_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG1_CLR - XTAL OSC Configuration 1 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG1_CLR_COUNT_RC_TRG_MASK (0xFFFU)
+#define XTALOSC24M_OSC_CONFIG1_CLR_COUNT_RC_TRG_SHIFT (0U)
+#define XTALOSC24M_OSC_CONFIG1_CLR_COUNT_RC_TRG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG1_CLR_COUNT_RC_TRG_SHIFT)) & XTALOSC24M_OSC_CONFIG1_CLR_COUNT_RC_TRG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG1_CLR_COUNT_RC_CUR_MASK (0xFFF00000U)
+#define XTALOSC24M_OSC_CONFIG1_CLR_COUNT_RC_CUR_SHIFT (20U)
+#define XTALOSC24M_OSC_CONFIG1_CLR_COUNT_RC_CUR(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG1_CLR_COUNT_RC_CUR_SHIFT)) & XTALOSC24M_OSC_CONFIG1_CLR_COUNT_RC_CUR_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG1_TOG - XTAL OSC Configuration 1 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG1_TOG_COUNT_RC_TRG_MASK (0xFFFU)
+#define XTALOSC24M_OSC_CONFIG1_TOG_COUNT_RC_TRG_SHIFT (0U)
+#define XTALOSC24M_OSC_CONFIG1_TOG_COUNT_RC_TRG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG1_TOG_COUNT_RC_TRG_SHIFT)) & XTALOSC24M_OSC_CONFIG1_TOG_COUNT_RC_TRG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG1_TOG_COUNT_RC_CUR_MASK (0xFFF00000U)
+#define XTALOSC24M_OSC_CONFIG1_TOG_COUNT_RC_CUR_SHIFT (20U)
+#define XTALOSC24M_OSC_CONFIG1_TOG_COUNT_RC_CUR(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG1_TOG_COUNT_RC_CUR_SHIFT)) & XTALOSC24M_OSC_CONFIG1_TOG_COUNT_RC_CUR_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG2 - XTAL OSC Configuration 2 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG2_COUNT_1M_TRG_MASK (0xFFFU)
+#define XTALOSC24M_OSC_CONFIG2_COUNT_1M_TRG_SHIFT (0U)
+#define XTALOSC24M_OSC_CONFIG2_COUNT_1M_TRG(x)   (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_COUNT_1M_TRG_SHIFT)) & XTALOSC24M_OSC_CONFIG2_COUNT_1M_TRG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_ENABLE_1M_MASK    (0x10000U)
+#define XTALOSC24M_OSC_CONFIG2_ENABLE_1M_SHIFT   (16U)
+#define XTALOSC24M_OSC_CONFIG2_ENABLE_1M(x)      (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_ENABLE_1M_SHIFT)) & XTALOSC24M_OSC_CONFIG2_ENABLE_1M_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_MUX_1M_MASK       (0x20000U)
+#define XTALOSC24M_OSC_CONFIG2_MUX_1M_SHIFT      (17U)
+#define XTALOSC24M_OSC_CONFIG2_MUX_1M(x)         (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_MUX_1M_SHIFT)) & XTALOSC24M_OSC_CONFIG2_MUX_1M_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_CLK_1M_ERR_FL_MASK (0x80000000U)
+#define XTALOSC24M_OSC_CONFIG2_CLK_1M_ERR_FL_SHIFT (31U)
+#define XTALOSC24M_OSC_CONFIG2_CLK_1M_ERR_FL(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_CLK_1M_ERR_FL_SHIFT)) & XTALOSC24M_OSC_CONFIG2_CLK_1M_ERR_FL_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG2_SET - XTAL OSC Configuration 2 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG2_SET_COUNT_1M_TRG_MASK (0xFFFU)
+#define XTALOSC24M_OSC_CONFIG2_SET_COUNT_1M_TRG_SHIFT (0U)
+#define XTALOSC24M_OSC_CONFIG2_SET_COUNT_1M_TRG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_SET_COUNT_1M_TRG_SHIFT)) & XTALOSC24M_OSC_CONFIG2_SET_COUNT_1M_TRG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_SET_ENABLE_1M_MASK (0x10000U)
+#define XTALOSC24M_OSC_CONFIG2_SET_ENABLE_1M_SHIFT (16U)
+#define XTALOSC24M_OSC_CONFIG2_SET_ENABLE_1M(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_SET_ENABLE_1M_SHIFT)) & XTALOSC24M_OSC_CONFIG2_SET_ENABLE_1M_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_SET_MUX_1M_MASK   (0x20000U)
+#define XTALOSC24M_OSC_CONFIG2_SET_MUX_1M_SHIFT  (17U)
+#define XTALOSC24M_OSC_CONFIG2_SET_MUX_1M(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_SET_MUX_1M_SHIFT)) & XTALOSC24M_OSC_CONFIG2_SET_MUX_1M_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_SET_CLK_1M_ERR_FL_MASK (0x80000000U)
+#define XTALOSC24M_OSC_CONFIG2_SET_CLK_1M_ERR_FL_SHIFT (31U)
+#define XTALOSC24M_OSC_CONFIG2_SET_CLK_1M_ERR_FL(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_SET_CLK_1M_ERR_FL_SHIFT)) & XTALOSC24M_OSC_CONFIG2_SET_CLK_1M_ERR_FL_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG2_CLR - XTAL OSC Configuration 2 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG2_CLR_COUNT_1M_TRG_MASK (0xFFFU)
+#define XTALOSC24M_OSC_CONFIG2_CLR_COUNT_1M_TRG_SHIFT (0U)
+#define XTALOSC24M_OSC_CONFIG2_CLR_COUNT_1M_TRG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_CLR_COUNT_1M_TRG_SHIFT)) & XTALOSC24M_OSC_CONFIG2_CLR_COUNT_1M_TRG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_CLR_ENABLE_1M_MASK (0x10000U)
+#define XTALOSC24M_OSC_CONFIG2_CLR_ENABLE_1M_SHIFT (16U)
+#define XTALOSC24M_OSC_CONFIG2_CLR_ENABLE_1M(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_CLR_ENABLE_1M_SHIFT)) & XTALOSC24M_OSC_CONFIG2_CLR_ENABLE_1M_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_CLR_MUX_1M_MASK   (0x20000U)
+#define XTALOSC24M_OSC_CONFIG2_CLR_MUX_1M_SHIFT  (17U)
+#define XTALOSC24M_OSC_CONFIG2_CLR_MUX_1M(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_CLR_MUX_1M_SHIFT)) & XTALOSC24M_OSC_CONFIG2_CLR_MUX_1M_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_CLR_CLK_1M_ERR_FL_MASK (0x80000000U)
+#define XTALOSC24M_OSC_CONFIG2_CLR_CLK_1M_ERR_FL_SHIFT (31U)
+#define XTALOSC24M_OSC_CONFIG2_CLR_CLK_1M_ERR_FL(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_CLR_CLK_1M_ERR_FL_SHIFT)) & XTALOSC24M_OSC_CONFIG2_CLR_CLK_1M_ERR_FL_MASK)
+/*! @} */
+
+/*! @name OSC_CONFIG2_TOG - XTAL OSC Configuration 2 Register */
+/*! @{ */
+
+#define XTALOSC24M_OSC_CONFIG2_TOG_COUNT_1M_TRG_MASK (0xFFFU)
+#define XTALOSC24M_OSC_CONFIG2_TOG_COUNT_1M_TRG_SHIFT (0U)
+#define XTALOSC24M_OSC_CONFIG2_TOG_COUNT_1M_TRG(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_TOG_COUNT_1M_TRG_SHIFT)) & XTALOSC24M_OSC_CONFIG2_TOG_COUNT_1M_TRG_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_TOG_ENABLE_1M_MASK (0x10000U)
+#define XTALOSC24M_OSC_CONFIG2_TOG_ENABLE_1M_SHIFT (16U)
+#define XTALOSC24M_OSC_CONFIG2_TOG_ENABLE_1M(x)  (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_TOG_ENABLE_1M_SHIFT)) & XTALOSC24M_OSC_CONFIG2_TOG_ENABLE_1M_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_TOG_MUX_1M_MASK   (0x20000U)
+#define XTALOSC24M_OSC_CONFIG2_TOG_MUX_1M_SHIFT  (17U)
+#define XTALOSC24M_OSC_CONFIG2_TOG_MUX_1M(x)     (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_TOG_MUX_1M_SHIFT)) & XTALOSC24M_OSC_CONFIG2_TOG_MUX_1M_MASK)
+
+#define XTALOSC24M_OSC_CONFIG2_TOG_CLK_1M_ERR_FL_MASK (0x80000000U)
+#define XTALOSC24M_OSC_CONFIG2_TOG_CLK_1M_ERR_FL_SHIFT (31U)
+#define XTALOSC24M_OSC_CONFIG2_TOG_CLK_1M_ERR_FL(x) (((uint32_t)(((uint32_t)(x)) << XTALOSC24M_OSC_CONFIG2_TOG_CLK_1M_ERR_FL_SHIFT)) & XTALOSC24M_OSC_CONFIG2_TOG_CLK_1M_ERR_FL_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group XTALOSC24M_Register_Masks */
+
+
+/*!
+ * @}
+ */ /* end of group XTALOSC24M_Peripheral_Access_Layer */
+
+
+/*
+** End of section using anonymous unions
+*/
+
+#if defined(__ARMCC_VERSION)
+  #if (__ARMCC_VERSION >= 6010050)
+    #pragma clang diagnostic pop
+  #else
+    #pragma pop
+  #endif
+#elif defined(__CWCC__)
+  #pragma pop
+#elif defined(__GNUC__)
+  /* leave anonymous unions enabled */
+#elif defined(__IAR_SYSTEMS_ICC__)
+  #pragma language=default
+#else
+  #error Not supported compiler type
+#endif
+
+/*!
+ * @}
+ */ /* end of group Peripheral_access_layer */
+
+
+#endif  /* XTALOSC24M_H_ */
+
