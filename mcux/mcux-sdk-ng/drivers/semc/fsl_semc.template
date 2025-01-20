@@ -1,0 +1,26 @@
+${PERIPHERAL}$->BR[0] = 0U;
+${PERIPHERAL}$->BR[1] = 0U;
+${PERIPHERAL}$->BR[2] = 0U;
+${PERIPHERAL}$->BR[3] = 0U;
+${PERIPHERAL}$->BR[4] = 0U;
+${PERIPHERAL}$->BR[5] = 0U;
+${PERIPHERAL}$->BR[6] = 0U;
+${PERIPHERAL}$->BR[7] = 0U;
+${PERIPHERAL}$->BR[8] = 0U;
+
+/* Software reset for SEMC internal logical . */
+${PERIPHERAL}$->MCR = SEMC_MCR_SWRST_MASK;
+while(0UL != (${PERIPHERAL}$->MCR & SEMC_MCR_SWRST_MASK))
+{
+}
+
+#if defined(${VPREFIX}$_MCR_INIT)
+    ${PERIPHERAL}$->MCR = ${VPREFIX}$_MCR_INIT;
+#endif
+#if defined(${VPREFIX}$_BMCR0_INIT)
+    ${PERIPHERAL}$->BMCR0 = ${VPREFIX}$_BMCR0_INIT;
+#endif
+#if defined(${VPREFIX}$_BMCR1_INIT)
+    ${PERIPHERAL}$->BMCR1 = ${VPREFIX}$_BMCR1_INIT;
+#endif
+${PERIPHERAL}$->MCR &= ~SEMC_MCR_MDIS_MASK;

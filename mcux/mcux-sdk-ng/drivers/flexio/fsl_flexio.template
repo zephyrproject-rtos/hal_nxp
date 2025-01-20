@@ -1,0 +1,122 @@
+  /* Control register initialization, set software reset bit then clear it */
+  ${PERIPHERAL}$->CTRL |= FLEXIO_CTRL_SWRST_MASK;
+#ifdef ${VPREFIX}$_CTRL_INIT
+  ${PERIPHERAL}$->CTRL = (${VPREFIX}$_CTRL_INIT & ~FLEXIO_CTRL_SWRST_MASK);
+#else
+  ${PERIPHERAL}$->CTRL = 0x0U;
+#endif /* ${VPREFIX}$_CTRL_INIT */
+
+  /* Write 1 to clear all shifter status */
+  ${PERIPHERAL}$->SHIFTSTAT = 0xFFFFFFFFU;
+
+  /* Write 1 to clear all shifter error */
+  ${PERIPHERAL}$->SHIFTERR = 0xFFFFFFFFU;
+
+  /* Write 1 to clear all timer status */
+  ${PERIPHERAL}$->TIMSTAT = 0xFFFFFFFFU;
+
+  /* Shifter status interrupt register initialization */
+#ifdef ${VPREFIX}$_SHIFTSIEN_INIT
+  ${PERIPHERAL}$->SHIFTSIEN = ${VPREFIX}$_SHIFTSIEN_INIT;
+#else
+  ${PERIPHERAL}$->SHIFTSIEN = 0x0U;
+#endif /* ${VPREFIX}$_SHIFTSIEN_INIT */
+
+  /* Shifter error interrupt register initialization */
+#ifdef ${VPREFIX}$_SHIFTEIEN_INIT
+  ${PERIPHERAL}$->SHIFTEIEN = ${VPREFIX}$_SHIFTEIEN_INIT;
+#else
+  ${PERIPHERAL}$->SHIFTEIEN = 0x0U;
+#endif /* ${VPREFIX}$_SHIFTEIEN_INIT */
+
+  /* Timer interrupt register initialization */
+#ifdef ${VPREFIX}$_TIMIEN_INIT
+  ${PERIPHERAL}$->TIMIEN = ${VPREFIX}$_TIMIEN_INIT;
+#else
+  ${PERIPHERAL}$->TIMIEN = 0x0U;
+#endif /* ${VPREFIX}$_TIMIEN_INIT */
+
+  /* Shifter status DMA register initialization */
+#ifdef ${VPREFIX}$_SHIFTSDEN_INIT
+  ${PERIPHERAL}$->SHIFTSDEN = ${VPREFIX}$_SHIFTSDEN_INIT;
+#else
+  ${PERIPHERAL}$->SHIFTSDEN = 0x0U;
+#endif /* ${VPREFIX}$_SHIFTSDEN_INIT */
+
+  /* Timer status DMA register initialization */
+#ifdef ${VPREFIX}$_TIMERSDEN_INIT
+  ${PERIPHERAL}$->TIMERSDEN = ${VPREFIX}$_TIMERSDEN_INIT;
+#else
+  ${PERIPHERAL}$->TIMERSDEN = 0x0U;
+#endif /* ${VPREFIX}$_TIMERSDEN_INIT */
+
+  /* Shifter state register initialization */
+#ifdef ${VPREFIX}$_SHIFTSTATE_INIT
+  ${PERIPHERAL}$->SHIFTSTATE = ${VPREFIX}$_SHIFTSTATE_INIT;
+#else
+  ${PERIPHERAL}$->SHIFTSTATE = 0x0U;
+#endif /* ${VPREFIX}$_SHIFTSTATE_INIT */
+
+#ifdef FLEXIO_TRGSTAT_ETSF_MASK
+  /* Write 1 to clear all external trigger status */
+  ${PERIPHERAL}$->TRGSTAT = 0xFFFFFFFFU;
+#endif /* FLEXIO_TRGSTAT_ETSF_MASK */
+
+#ifdef FLEXIO_PINSTAT_PSF_MASK
+  /* Write 1 to clear all pin status */
+  ${PERIPHERAL}$->PINSTAT = 0xFFFFFFFFU;
+#endif /* FLEXIO_PINSTAT_PSF_MASK */
+
+#ifdef FLEXIO_TRIGIEN_TRIE_MASK
+  /* Trigger interrupt enable register initialization */
+#ifdef ${VPREFIX}$_TRIGIEN_INIT
+  ${PERIPHERAL}$->TRIGIEN = ${VPREFIX}$_TRIGIEN_INIT;
+#else
+  ${PERIPHERAL}$->TRIGIEN = 0x0U;
+#endif /* ${VPREFIX}$_TRIGIEN_INIT */
+#endif /* FLEXIO_TRIGIEN_TRIE_MASK */
+
+#ifdef FLEXIO_PINIEN_PSIE_MASK
+  /* Pin interrupt enable register */
+#ifdef ${VPREFIX}$_PINIEN_INIT
+  ${PERIPHERAL}$->PINIEN = ${VPREFIX}$_PINIEN_INIT;
+#else
+  ${PERIPHERAL}$->PINIEN = 0x0U;
+#endif /* ${VPREFIX}$_PINIEN_INIT */
+#endif /* FLEXIO_PINIEN_PSIE_MASK */
+
+#ifdef FLEXIO_PINREN_PRE_MASK
+  /* Pin rising edge enable register initialization */
+#ifdef ${VPREFIX}$_PINREN_INIT
+  ${PERIPHERAL}$->PINREN = ${VPREFIX}$_PINREN_INIT;
+#else
+  ${PERIPHERAL}$->PINREN = 0x0U;
+#endif /* ${VPREFIX}$_PINREN_INIT */
+#endif /* FLEXIO_PINREN_PRE_MASK */
+
+#ifdef FLEXIO_PINFEN_PFE_MASK
+  /* Pin falling edge enable register initialization */
+#ifdef ${VPREFIX}$_PINFEN_INIT
+  ${PERIPHERAL}$->PINFEN = ${VPREFIX}$_PINFEN_INIT;
+#else
+  ${PERIPHERAL}$->PINFEN = 0x0U;
+#endif /* ${VPREFIX}$_PINFEN_INIT */
+#endif /* FLEXIO_PINFEN_PFE_MASK */
+
+#ifdef FLEXIO_PINOUTE_OUTE_MASK
+  /* Pin output enable register initialization */
+#ifdef ${VPREFIX}$_PINOUTE_INIT
+  ${PERIPHERAL}$->PINOUTE = ${VPREFIX}$_PINOUTE_INIT;
+#else
+  ${PERIPHERAL}$->PINOUTE = 0x0U;
+#endif /* ${VPREFIX}$_PINOUTE_INIT */
+#endif /* FLEXIO_PINOUTE_OUTE_MASK */
+
+#ifdef FLEXIO_PINOUTD_OUTD_MASK
+  /* Pin output register initialization */
+#ifdef ${VPREFIX}$_PINOUTD_INIT
+  ${PERIPHERAL}$->PINOUTD = ${VPREFIX}$_PINOUTD_INIT;
+#else
+  ${PERIPHERAL}$->PINOUTD = 0x0U;
+#endif /* ${VPREFIX}$_PINOUTD_INIT */
+#endif /* FLEXIO_PINOUTD_OUTD_MASK */

@@ -1,0 +1,28 @@
+${PERIPHERAL}$->MCR |= SEMC_MCR_MDIS_MASK;
+
+#if defined(${VPREFIX}$_MCR_INIT)
+    ${PERIPHERAL}$->MCR = ${VPREFIX}$_MCR_INIT;
+#endif
+#if defined(${VPREFIX}$_BR4_INIT)
+    ${PERIPHERAL}$->BR[4] = ${VPREFIX}$_BR4_INIT;
+#endif
+#if defined(${VPREFIX}$_BR8_INIT)
+    ${PERIPHERAL}$->BR[8] = ${VPREFIX}$_BR8_INIT;
+#endif
+#if defined(${VPREFIX}$_IOCR_INIT)
+    ${PERIPHERAL}$->IOCR = ${VPREFIX}$_IOCR_INIT;
+#endif
+#if defined(${VPREFIX}$_NANDCR0_INIT)
+    ${PERIPHERAL}$->NANDCR0 = ${VPREFIX}$_NANDCR0_INIT;
+#endif
+#if defined(${VPREFIX}$_NANDCR1_INIT)
+    ${PERIPHERAL}$->NANDCR1 = ${VPREFIX}$_NANDCR1_INIT;
+#endif
+#if defined(${VPREFIX}$_NANDCR2_INIT)
+    ${PERIPHERAL}$->NANDCR2 = ${VPREFIX}$_NANDCR2_INIT;
+#endif
+#if defined(${VPREFIX}$_NANDCR3_INIT)
+    ${PERIPHERAL}$->NANDCR3 = ${VPREFIX}$_NANDCR3_INIT;
+#endif
+
+${PERIPHERAL}$->MCR &= ~SEMC_MCR_MDIS_MASK;
