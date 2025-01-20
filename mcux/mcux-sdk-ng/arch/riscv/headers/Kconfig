@@ -1,0 +1,8 @@
+#
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_COMPONENT_RISCV_Include_Core
+    bool "Select core headers for EZHV cores"
+    default y if MCUX_HW_CORE_EZHV
