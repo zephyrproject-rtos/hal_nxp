@@ -1,0 +1,36 @@
+# Copyright 2024 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_COMPONENT_driver.conn_fwloader
+    bool "conn_fwloader"
+    select MCUX_COMPONENT_driver.ocotp_rw61x
+    select MCUX_COMPONENT_component.osa
+    select MCUX_COMPONENT_component.mflash_offchip
+    
+config MCUX_COMPONENT_driver.conn_fwloader_ns
+    bool "conn_fwloader_ns"
+    
+config MCUX_COMPONENT_driver.conn_fwloader.monolithic
+    bool "Monolithic application"
+    help
+        Enable the monolithic property. This will embedd 
+        the CPU1/CPU2 FW in the main application.
+
+if MCUX_COMPONENT_driver.conn_fwloader.monolithic
+
+config MONOLITHIC_WIFI
+    bool "Monolithic Wi-Fi"
+    help
+        Enable monolithic property for WIFI.
+
+config MONOLITHIC_BLE
+    bool "Monolithic BLE"
+    help
+        Enable monolithic property for BLE.
+
+config MONOLITHIC_BLE_15_4
+    bool "Monolithic BLE/15.4 combo"
+    help
+        Enable monolithic property for BLE+15.4 combo.
+
+endif # MCUX_COMPONENT_driver.conn_fwloader.monolithic
