@@ -1,0 +1,12 @@
+# Copyright 2024 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "wifi_bt_module"
+    config MCUX_COMPONENT_component.wifi_bt_module.tx_pwr_limits
+        bool "tx_pwr_limits"
+    config MCUX_COMPONENT_component.wifi_bt_module.config
+        bool "config"
+    config MCUX_COMPONENT_component.wifi_bt_module.board_rw61x
+        bool "board_rw61x"
+        default y if MCUX_HW_DEVICE_RW612 || MCUX_HW_DEVICE_RW610
+endmenu
