@@ -1,0 +1,61 @@
+# Copyright 2024 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "Flash"
+    rsource "mflash/Kconfig"
+    config MCUX_COMPONENT_component.flash_nand_flexspi
+        bool "Nand flash component based on flexspi"
+        default n
+        select MCUX_COMPONENT_driver.flexspi
+
+        if MCUX_COMPONENT_component.flash_nand_flexspi
+
+        endif
+
+
+    config MCUX_COMPONENT_component.flash_nand_semc
+        bool "Nand flash component based on semc"
+        default n
+        select MCUX_COMPONENT_driver.semc
+
+        if MCUX_COMPONENT_component.flash_nand_semc
+
+        endif
+
+
+    config MCUX_COMPONENT_component.flash_nor_flexspi
+        bool "Nor flash component based on flexspi"
+        default n
+        select MCUX_COMPONENT_driver.flexspi
+
+        if MCUX_COMPONENT_component.flash_nor_flexspi
+
+        endif
+
+    config MCUX_COMPONENT_component.flash_nor_lpspi
+        bool "Nor flash component based on lpspi"
+        default n
+        select MCUX_COMPONENT_driver.lpspi
+
+        if MCUX_COMPONENT_component.flash_nor_lpspi
+
+        endif
+
+    config MCUX_COMPONENT_component.flash_nor_spifi
+        bool "Nor flash component based on spifi"
+        default n
+        select MCUX_COMPONENT_driver.spifi
+
+        if MCUX_COMPONENT_component.flash_nor_spifi
+
+        endif
+
+    config MCUX_COMPONENT_component.flash_nor_xspi
+        bool "Nor flash component based on xspi"
+        default n
+        select MCUX_COMPONENT_driver.xspi
+
+        if MCUX_COMPONENT_component.flash_nor_xspi
+
+        endif
+endmenu
