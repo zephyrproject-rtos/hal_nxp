@@ -18,5 +18,9 @@ if(CONFIG_USE_component_osa_bm)
     include(component_osa_bm)
 endif()
 
-include(driver_gdma)
-include(driver_imu)
+# mcux-sdk and mcux-sdk-ng shar the rpmsg, the gdma and imu is
+# included in another way. Need add condition here.
+if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
+  include(driver_gdma)
+  include(driver_imu)
+endif()
