@@ -158,9 +158,12 @@ zephyr_library_compile_definitions(
 
 zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/utilities/misc_utilities/fsl_memcpy.S)
 
-zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/lists/fsl_component_generic_list.c)
-
-zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/osa/fsl_os_abstraction_zephyr.c)
+# mcux-sdk and mcux-sdk-ng shar the wifi_nxp, the lists and osa is
+# included in another way. Need add condition here.
+if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
+  zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/lists/fsl_component_generic_list.c)
+  zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/osa/fsl_os_abstraction_zephyr.c)
+endif()
 
 zephyr_include_directories(
     incl
