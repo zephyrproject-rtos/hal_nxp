@@ -1,0 +1,11 @@
+# Copyright 2024 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_COMPONENT_component.lists
+    # depends on MCUX_COMPONENT_component.lists
+    bool "lists"
+    select MCUX_COMPONENT_driver.common
+
+if MCUX_COMPONENT_component.lists
+
+endif
