@@ -1,6 +1,15 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022-2024 NXP
 
+# Legacy MCUX SDK code is in mcux/mcux-sdk.
+# MCUX SDK NG code is in mcux/mcux-sdk-ng.
+# Use the right code by checking whether the platform is not supported by MCUX SDK NG.
+if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
+    set(MCUX_SDK_DIR ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk)
+else()
+    set(MCUX_SDK_DIR ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng)
+endif()
+
 # define part number for this driver
 
 zephyr_compile_definitions_ifdef(CONFIG_NXP_88W8987
@@ -156,11 +165,13 @@ zephyr_library_compile_definitions(
     CONFIG_OSA_DEBUG_ASSERT_ENABLED=1
 )
 
-zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/utilities/misc_utilities/fsl_memcpy.S)
-
-zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/lists/fsl_component_generic_list.c)
-
-zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/osa/fsl_os_abstraction_zephyr.c)
+# mcux-sdk and mcux-sdk-ng shar the wifi_nxp, the lists and osa is
+# included in another way. Need add condition here.
+if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
+  zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/utilities/misc_utilities/fsl_memcpy.S)
+  zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/lists/fsl_component_generic_list.c)
+  zephyr_library_sources(${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/osa/fsl_os_abstraction_zephyr.c)
+endif()
 
 zephyr_include_directories(
     incl
@@ -181,11 +192,11 @@ zephyr_include_directories(
     wifi_bt_firmware/nw61x
     wifi_bt_firmware/8801
     cli
-    ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/osa/
-    ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/lists/
-    ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/wifi_bt_module/AzureWave/tx_pwr_limits/
-    ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/wifi_bt_module/Murata/tx_pwr_limits/
-    ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/rpmsg/
+    ${MCUX_SDK_DIR}/components/osa/
+    ${MCUX_SDK_DIR}/components/lists/
+    ${MCUX_SDK_DIR}/components/wifi_bt_module/AzureWave/tx_pwr_limits/
+    ${MCUX_SDK_DIR}/components/wifi_bt_module/Murata/tx_pwr_limits/
+    ${MCUX_SDK_DIR}/components/rpmsg/
 )
 
 # OS abstraction layer source
@@ -275,15 +286,25 @@ endif()
 if(CONFIG_NXP_RW610)
 zephyr_code_relocate(FILES
                      wifidriver/wifi-imu.c
-                     ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/drivers/imu/fsl_imu.c
+                     ${MCUX_SDK_DIR}/drivers/imu/fsl_imu.c
+                     # Only legacy SDK has this file.
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/rpmsg/fsl_adapter_rfimu.c
                      LOCATION RAM_TEXT)
 endif()
 
 zephyr_code_relocate(FILES
-                     ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/components/osa/fsl_os_abstraction_zephyr.c
+                     ${MCUX_SDK_DIR}/components/osa/fsl_os_abstraction_zephyr.c
+                     LOCATION RAM_TEXT)
+
+if(DEFINED CONFIG_SOC_SDKNG_UNSUPPORTED)
+zephyr_code_relocate(FILES
                      ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk/utilities/misc_utilities/fsl_memcpy.S
                      LOCATION RAM_TEXT)
+else()
+zephyr_code_relocate(FILES
+                     ${ZEPHYR_HAL_NXP_MODULE_DIR}/mcux/mcux-sdk-ng/components/misc_utilities/fsl_memcpy.S
+                     LOCATION RAM_TEXT)
+endif()
 
 file(GLOB ZPERF_SRC ${ZEPHYR_BASE}/subsys/net/lib/zperf/*.c)
 zephyr_code_relocate(FILES ${ZPERF_SRC} LOCATION RAM_TEXT)
