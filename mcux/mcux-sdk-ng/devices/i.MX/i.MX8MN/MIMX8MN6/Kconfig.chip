@@ -55,16 +55,6 @@ config MCUX_HW_DEVICE_ID_MIMX8MN6xxxJZ
 config MCUX_HW_DEVICE_ID_MIMX8MN6xxxIZ
     bool
 
-config MCUX_HW_DEVICE_DDR3
-    prompt "Device Use DDR3"
-    bool
-    default y if $(board) = "evkmimx8mn"
-
-config MCUX_HW_DEVICE_DDR3L
-    prompt "Device Use DDR3L"
-    bool
-    default y if $(board) = "evkmimx8mnddr3l"
-
 choice MCUX_HW_DEVICE_PART_MIMX8MN6
     prompt "Device MIMX8MN6 Part"
     config MCUX_HW_DEVICE_PART_MIMX8MN6DVTJZ
