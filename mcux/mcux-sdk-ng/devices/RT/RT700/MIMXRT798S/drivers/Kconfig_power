@@ -6,3 +6,4 @@
     config MCUX_COMPONENT_driver.power
          bool "Use driver power"
          depends on MCUX_HW_CORE_CM33
+         default y

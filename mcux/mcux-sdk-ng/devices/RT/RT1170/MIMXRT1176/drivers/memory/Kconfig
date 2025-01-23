@@ -5,6 +5,7 @@
 
     config MCUX_COMPONENT_driver.memory
         bool "Use driver memory"
+        default y
         select MCUX_COMPONENT_driver.common
 
         if MCUX_COMPONENT_driver.memory

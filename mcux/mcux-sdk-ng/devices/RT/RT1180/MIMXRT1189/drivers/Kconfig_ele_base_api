@@ -7,6 +7,7 @@
         bool "Use driver ele_base_api"
         select MCUX_COMPONENT_driver.common
         select MCUX_COMPONENT_driver.s3mu
+        default y
 
         if MCUX_COMPONENT_driver.ele_base_api
 

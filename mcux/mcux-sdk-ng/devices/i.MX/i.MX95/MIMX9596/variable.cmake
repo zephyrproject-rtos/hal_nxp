@@ -6,6 +6,7 @@
 #### chip related
 include(${SdkRootDirPath}/devices/i.MX/variable.cmake)
 mcux_set_variable(device MIMX9596)
+mcux_set_variable(soc_series i.MX95)
 
 mcux_set_variable(soc_periph periph)
 mcux_set_variable(core_id_suffix_name _cm7)

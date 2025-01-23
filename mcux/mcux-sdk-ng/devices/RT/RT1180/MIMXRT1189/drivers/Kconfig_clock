@@ -6,6 +6,7 @@
     config MCUX_COMPONENT_driver.clock
         bool "Use driver clock"
         # select MCUX_COMPONENT_driver.common
+        default y
 
         if MCUX_COMPONENT_driver.clock
 
