@@ -22,7 +22,7 @@ endmenu
 menu "Device Suite"
     config MCUX_PRJSEG_module.device.suite
         bool "Use default device suite"
-    config FLASH_BASE_ADDRESS
+    config MCUX_FLASH_BASE_ADDRESS
         hex "Flash base address for the application"
         default 0x0
 endmenu
