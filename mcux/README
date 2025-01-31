@@ -126,3 +126,5 @@ Patch List:
     controller
   - drivers: edma_rev2: add macro for CHn_CSR's ACTIVE bit
   - drivers: rtwdog: Fix the issue that driver doesn't wait the over status after CS register operation
+  - devices: MIMX8ML8: fsl_clock: fix root clock gating/ungating
+  - devices: MIMX8ML8: fsl_clock: change root clock ID for SAI3
