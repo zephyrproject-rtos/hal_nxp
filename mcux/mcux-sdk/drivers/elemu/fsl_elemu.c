@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2024 NXP
+ * Copyright 2019-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,6 +26,12 @@ static status_t ELEMU_StartupWait(ELEMU_Type *mu);
 #endif
 /* ELEMU driver */
 
+/* undef BIT in case of redefinition
+ * error: "BIT" redefined
+ */
+#ifdef BIT
+#undef BIT
+#endif
 #define BIT(x)         (((uint32_t)1u << (x)))
 #define MU_READ_HEADER (0x01u)
 #define READ_RETRIES   (0x5u)
