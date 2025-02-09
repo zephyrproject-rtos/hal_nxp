@@ -9,4 +9,4 @@ mcux_add_cmakelists(${SdkRootDirPath}/devices/i.MX/i.MX8ULP/MIMX8UD3/drivers)
 mcux_add_cmakelists(${SdkRootDirPath}/devices/i.MX/i.MX8ULP/MIMX8UD3/drivers/upower)
 
 #### i.MX shared drivers/components/middlewares, project segments
-include(${SdkRootDirPath}/devices/i.MX/shared.cmake)
+#include(${SdkRootDirPath}/devices/i.MX/shared.cmake)

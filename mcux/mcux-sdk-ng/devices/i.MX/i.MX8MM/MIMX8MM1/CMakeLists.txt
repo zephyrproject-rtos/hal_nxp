@@ -8,4 +8,4 @@ include(${SdkRootDirPath}/devices/arm/device_header.cmake)
 mcux_add_cmakelists(${SdkRootDirPath}/devices/i.MX/i.MX8MM/MIMX8MM1/drivers)
 
 #### i.MX shared drivers/components/middlewares, project segments
-include(${SdkRootDirPath}/devices/i.MX/shared.cmake)
+#include(${SdkRootDirPath}/devices/i.MX/shared.cmake)

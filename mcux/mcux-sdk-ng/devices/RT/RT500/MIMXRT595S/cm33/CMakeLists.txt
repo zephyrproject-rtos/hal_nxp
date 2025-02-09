@@ -7,7 +7,7 @@
 include(${SdkRootDirPath}/devices/arm/device_header_multicore.cmake)
 
 # middlewares and components
-include(${SdkRootDirPath}/devices/arm/shared.cmake)
+#include(${SdkRootDirPath}/devices/arm/shared.cmake)
 
 # common configuration
-include(${SdkRootDirPath}/arch/arm/configuration/RT.cmake)
+#include(${SdkRootDirPath}/arch/arm/configuration/RT.cmake)

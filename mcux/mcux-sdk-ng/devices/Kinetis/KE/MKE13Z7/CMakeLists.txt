@@ -8,4 +8,4 @@ include(${SdkRootDirPath}/devices/arm/device_header.cmake)
 mcux_add_cmakelists(${SdkRootDirPath}/devices/Kinetis/KE/MKE13Z7/drivers)
 
 #### Kinetis shared drivers/components/middlewares, project segments
-include(${SdkRootDirPath}/devices/Kinetis/shared.cmake)
+#include(${SdkRootDirPath}/devices/Kinetis/shared.cmake)
