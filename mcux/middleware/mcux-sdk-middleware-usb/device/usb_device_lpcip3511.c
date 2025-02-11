@@ -1120,8 +1120,11 @@ static void USB_DeviceLpc3511IpInterruptToken(usb_device_lpc3511ip_state_struct_
     usb_device_callback_message_struct_t message;
     uint32_t length;
     uint32_t remainLength;
+/* CONFIG_UDC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
+#if !((defined CONFIG_UDC_DRIVER) && (CONFIG_UDC_DRIVER))
     usb_setup_struct_t *setupPacket;
     void *temp;
+#endif
     usb_device_lpc3511ip_endpoint_state_struct_t *epState =
         USB_DeviceLpc3511IpGetEndpointStateStruct(lpc3511IpState, endpointIndex);
 #if (defined USB_DEVICE_IP3511_DOUBLE_BUFFER_ENABLE) && (USB_DEVICE_IP3511_DOUBLE_BUFFER_ENABLE)
@@ -1357,6 +1360,8 @@ static void USB_DeviceLpc3511IpInterruptToken(usb_device_lpc3511ip_state_struct_
             if ((0U != (endpointIndex & 0x01U)) && (0U != length) &&
                 (0U == (length % epState->stateUnion.stateBitField.maxPacketSize)))
             {
+/* CONFIG_UDC_DRIVER is for Zephyr, it will not be defined in NXP MCUXpresso SDK */
+#if !((defined CONFIG_UDC_DRIVER) && (CONFIG_UDC_DRIVER))
                 if ((endpointIndex >> 1U) == USB_CONTROL_ENDPOINT)
                 {
                     temp        = (void *)(&(lpc3511IpState->setupData[0]));
@@ -1380,7 +1385,9 @@ static void USB_DeviceLpc3511IpInterruptToken(usb_device_lpc3511ip_state_struct_
                         return;
                     }
                 }
-                else if ((0U != epState->stateUnion.stateBitField.zlt))
+                else
+#endif
+                if ((0U != epState->stateUnion.stateBitField.zlt))
                 {
 #if (defined(USB_DEVICE_CONFIG_RETURN_VALUE_CHECK) && (USB_DEVICE_CONFIG_RETURN_VALUE_CHECK > 0U))
                     if (kStatus_USB_Success !=
