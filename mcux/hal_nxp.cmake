@@ -278,7 +278,7 @@ include_driver_ifdef(CONFIG_S3MU_MCUX_S3MU              s3mu            driver_s
 include_driver_ifdef(CONFIG_PINCTRL_NXP_PORT            port            driver_port)
 include_driver_ifdef(CONFIG_DAI_NXP_MICFIL		pdm		driver_pdm)
 include_driver_ifdef(CONFIG_GLIKEY_MCUX_GLIKEY		glikey		driver_glikey) 
-if(CONFIG_BT_NXP)
+if(CONFIG_BT_NXP OR CONFIG_IEEE802154_MCXW)
 include_driver_ifdef(CONFIG_SOC_SERIES_MCXW		spc		driver_spc)
 endif()
 
@@ -506,4 +506,21 @@ if(${MCUX_DEVICE} MATCHES "MCXW")
 
   include(driver_ccm32k)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/ccm32k)
+endif()
+
+if(CONFIG_SOC_SERIES_MCXW)
+  list(APPEND CMAKE_MODULE_PATH
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/elemu
+  )
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/elemu)
+  zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/elemu/fsl_elemu.c)
+
+  if(CONFIG_NET_L2_IEEE802154 OR CONFIG_NET_L2_OPENTHREAD)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/lists)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/lists/fsl_component_generic_list.c)
+
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa/fsl_os_abstraction_zephyr.c)
+    zephyr_compile_definitions(OSA_USED=1U)
+  endif()
 endif()
