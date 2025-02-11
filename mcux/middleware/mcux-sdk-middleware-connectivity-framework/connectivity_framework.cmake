@@ -38,8 +38,9 @@ endif()
 if(CONFIG_SOC_SERIES_MCXW)
     target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform.c
-        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform_ble.c
         ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform_ics.c
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform_ot.c
+        ${CMAKE_CURRENT_LIST_DIR}/platform/connected_mcu/fwk_platform_ble.c
     )
 
     zephyr_include_directories(
