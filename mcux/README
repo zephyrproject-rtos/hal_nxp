@@ -27,6 +27,14 @@ Origin:
    https://github.com/nxp-mcuxpresso/rpmsg-lite
    TAG: v5.1.2
 
+   NXP MCUXpresso SDK secure subsystem
+   https://github.com/nxp-mcuxpresso/mcux-secure-subsystem
+   TAG: MCUX_2.16.000
+
+   NXP MCUXpresso SDK ieee_802.15.4 middleware
+   https://github.com/nxp-mcuxpresso/mcuxsdk-middleware-ieee_802.15.4
+   TAG: MCUX_2.16.000
+
 Status:
    Some older Kinetis W family SoCs are not supported in MCUXpresso SDK, but
    instead are supported by the Kinetis Connectivity Software. This
@@ -126,3 +134,5 @@ Patch List:
     controller
   - drivers: edma_rev2: add macro for CHn_CSR's ACTIVE bit
   - drivers: rtwdog: Fix the issue that driver doesn't wait the over status after CS register operation
+  - drivers: elemu: undefine BIT macro to avoid collision from util_macro.h in Zephyr
+  - mcux-sdk-middleware-ieee_802.15.4: adapt code to be supported with Zephyr
