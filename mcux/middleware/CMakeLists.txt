@@ -26,20 +26,6 @@ if(CONFIG_BT OR CONFIG_NET_L2_IEEE802154 OR CONFIG_NET_L2_OPENTHREAD)
             ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-multicore/rpmsg_lite/lib/rpmsg_lite/rpmsg_lite.c
         )
 
-        zephyr_include_directories(
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/inc
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/inc/elemu
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/port/kw45_k4w1
-        )
-        zephyr_compile_definitions(SSS_CONFIG_FILE=\"fsl_sss_config_elemu.h\")
-        zephyr_compile_definitions(SSCP_CONFIG_FILE=\"fsl_sscp_config_elemu.h\")
-
-        zephyr_library_sources(
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/port/kw45_k4w1/sss_init.c
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/src/sscp/fsl_sss_sscp.c
-            ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/src/sscp/fsl_sscp_mu.c
-        )
-
         if(CONFIG_NET_L2_IEEE802154 OR CONFIG_NET_L2_OPENTHREAD)
             zephyr_include_directories(
                 ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk-middleware-ieee_802.15.4/ieee_802_15_4/phy/interface
@@ -53,4 +39,20 @@ if(CONFIG_BT OR CONFIG_NET_L2_IEEE802154 OR CONFIG_NET_L2_OPENTHREAD)
             zephyr_compile_definitions(MEM_USE_ZEPHYR=1U)
         endif()
     endif()
+endif()
+
+if(CONFIG_ENTROPY_NXP_ELE_TRNG)
+    zephyr_include_directories(
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/inc
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/inc/elemu
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/port/kw45_k4w1
+    )
+    zephyr_compile_definitions(SSS_CONFIG_FILE=\"fsl_sss_config_elemu.h\")
+    zephyr_compile_definitions(SSCP_CONFIG_FILE=\"fsl_sscp_config_elemu.h\")
+
+    zephyr_library_sources(
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/port/kw45_k4w1/sss_init.c
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/src/sscp/fsl_sss_sscp.c
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-secure-subsystem/src/sscp/fsl_sscp_mu.c
+    )
 endif()
